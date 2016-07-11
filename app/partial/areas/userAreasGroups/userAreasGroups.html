@@ -1,0 +1,67 @@
+<!--
+﻿Developed with the contribution of the European Commission - Directorate General for Maritime Affairs and Fisheries
+© European Union, 2015-2016.
+
+This file is part of the Integrated Fisheries Data Management (IFDM) Suite. The IFDM Suite is free software: you can
+redistribute it and/or modify it under the terms of the GNU General Public License as published by the
+Free Software Foundation, either version 3 of the License, or any later version. The IFDM Suite is distributed in
+the hope that it will be useful, but WITHOUT ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or
+FITNESS FOR A PARTICULAR PURPOSE.  See the GNU General Public License for more details. You should have received a
+copy of the GNU General Public License along with the IFDM Suite. If not, see <http://www.gnu.org/licenses/>.
+-->
+<div class="areasTableContainer" ng-controller="UserareasgroupsCtrl">
+	<!-- USER AREAS GROUPS -->
+	
+	<div class="form-group noPadding">
+		<div class="row area-group-type-selector">
+			<div class="col-md-3 comboLabel">
+				<label class="label-combo-inline" for="editingProjection">{{'spatial.area_selection_modal_area_type_label' | i18n}}</label>
+			</div>
+			<div class="col-md-9">
+				<combobox ng-model="areaGroup.type" items="areaHelper.userAreasGroups" initialtext="{{'spatial.area_selection_modal_area_type_label' | i18n | uppercase}}" uppercase="true" ng-required="true" ng-change="getAreasByType()" components-with-scroll="'#group-area-form-container'" is-loading="areaHelper.isLoadingAreaTypes"></combobox>
+			</div>
+            <button type="button" class="btn btn-primary btn-xs edit-areagroup-btn" ng-click="openAreaGroupEditorModal()" ng-disabled="!areaGroup.type" title="{{'areas.edit_area_group' | i18n}}"><i class="fa fa-pencil" aria-hidden="true"></i></button>
+		</div>
+	</div>
+	
+	
+	<!-- USER AREAS TABLE -->
+	<div st-table="displayedUserAreas" st-safe-src="userAreasList" st-set-filter="stAreas" ng-show="areaGroup.type">
+		<div class="search-field">
+			<input st-search="" class="form-control" placeholder="{{'areas.search_table_placeholder' | i18n}}" type="text"/>
+		</div>
+		<div class="table table-striped tableSmart areas-table">
+			<div class="thead col-md-12">
+                <div class="tr row stColumnHeaders">
+                    <div class="th col-md-4" st-sort="name" st-skip-natural="true" st-class-ascent="sorting_asc" st-class-descent="sorting_desc">{{'areas.area_list_table_name_header' | i18n}}</div>
+                    <div class="th col-md-6"st-sort="desc" st-skip-natural="true" st-class-ascent="sorting_asc" st-class-descent="sorting_desc">{{'areas.area_list_table_desc_header' | i18n}}</div>
+                    <div class="th col-md-2"></div>
+                </div>
+                <div class="tr row" ng-show="tableLoading">
+                    <div class="th col-md-12 loading-spinner-cl"><i class="fa fa-spinner fa-spin loading-spinner"></i></div>
+                </div>
+                <div class="tr row" ng-show="!tableLoading && !displayedUserAreas.length">
+                    <div class="th col-md-12"><table-alert type="'info'" msg="'areas.table_no_data'" visible="!displayedUserAreas.length && !tableLoading"></table-alert></div>
+                </div>
+            </div>
+            <div class="tbody col-md-12">
+                <div ng-repeat="userArea in displayedUserAreas" class="tr row" ng-show="!tableLoading">
+                    <div class="td col-md-4">{{userArea.name}}</div>
+                    <div class="td col-md-6">{{userArea.desc}}</div>
+                    <div class="td col-md-2">
+                        <button type="button" class="btn btn-default btn-xs pull-right tableBtnMargin" title="{{'areas.table_area__details_btn' | i18n }}" ng-click="getAreaDetails($index,displayedUserAreas)"><span class="fa fa-eye"></span></button>
+                        <button type="button" class="btn btn-default btn-xs pull-right tableBtnMargin" title="{{'areas.table_zoom_to_area_btn' | i18n }}" ng-click="zoomToArea($index,displayedUserAreas)"><span class="fa fa-globe"></span></button>
+                    </div>
+                </div>
+            </div>
+            <div class="tfoot col-md-12 stFooterPagination" ng-if="displayedUserAreas.length && !tableLoading">
+                <div class="tr row">
+                    <div class="td col-md-12 text-right">
+                        <div st-pagination st-items-by-page="itemsByPage" st-displayed-pages="7" st-template="partial/common/reportsPagination/reportsPagination.html"></div>
+                    </div>
+                </div>
+            </div>
+		</div>
+	</div>
+		
+</div>

@@ -1,0 +1,158 @@
+/*
+﻿Developed with the contribution of the European Commission - Directorate General for Maritime Affairs and Fisheries
+© European Union, 2015-2016.
+
+This file is part of the Integrated Fisheries Data Management (IFDM) Suite. The IFDM Suite is free software: you can
+redistribute it and/or modify it under the terms of the GNU General Public License as published by the
+Free Software Foundation, either version 3 of the License, or any later version. The IFDM Suite is distributed in
+the hope that it will be useful, but WITHOUT ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or
+FITNESS FOR A PARTICULAR PURPOSE.  See the GNU General Public License for more details. You should have received a
+copy of the GNU General Public License along with the IFDM Suite. If not, see <http://www.gnu.org/licenses/>.
+ */
+/*
+ * Common styling of forms and inputs
+ *
+ */
+
+input[type="text"], input[type="time"], input[type="number"], input[type="email"], input[type="search"]
+{
+    border-radius: @inputBorderRadius;
+    height: 30px;
+    border:1px solid @inputBorderColor;
+    padding-left: 5px;
+
+    &:focus{
+        border:1px solid @formInputActiveBorderColor;
+        outline: 0;
+        -webkit-box-shadow: none;
+        box-shadow: none;
+    }
+}
+
+button.inputHeigth{
+    height: 30px;
+}
+
+.form-control[disabled], .form-control[readonly], fieldset[disabled] .form-control{
+  cursor: not-allowed;
+  background-color: #eeeeee;
+  opacity: 1;
+}
+
+.form-control{
+    background-color: #FFFFFF;
+    height: 30px;
+}
+
+.form-control::-moz-placeholder {
+    color: #999999;
+    opacity: 1;
+}
+*:before, *:after {
+    -moz-box-sizing: border-box;
+}
+*:before, *:after {
+    -moz-box-sizing: border-box;
+}
+
+.form-control:focus {
+    border-color: @formInputActiveBorderColor;
+    outline: 0;
+    -webkit-box-shadow: none;
+    box-shadow: none;
+}
+
+label{
+    font-weight: bold;
+    margin-bottom: 0px;
+}
+
+label.section{
+    font-weight: bold;
+    text-transform: uppercase;
+}
+
+.labelheaders{
+    margin-top:10px;
+    margin-bottom:0px;
+    text-transform: uppercase;
+
+    font-size: 12px;
+
+    @media (min-width: @screen-lg-min) {
+        font-size: 14px;
+    }
+
+
+}
+
+.has-error{
+    .form-control, input, .datepicker > input[date-picker-formatter].ng-valid.ng-dirty.ng-valid-parse.ng-touched, textarea, .periodInput{
+    	&,
+    	&:focus,
+    	&:hover {
+        	border:1px solid red;
+        	box-shadow: none !important;
+        }
+    }
+    box-shadow:none;
+}
+
+
+.form-group{
+    .help-block{
+        display: none;
+    }
+}
+
+.form-group.has-error{
+    .help-block{
+        display: block;
+    }
+}
+
+.inputerrors{
+    .glyphicon{
+        top: 2px;
+    }
+}
+
+select{
+    padding: 10px;
+}
+
+
+.unit-input {
+    @unitWidth:30px;
+    position: relative;
+    text-transform: none;
+    padding-right: @unitWidth;
+    input{
+        border-radius: 0px;
+        &:first-child{
+            border-top-left-radius: @inputBorderRadius;
+            border-bottom-left-radius: @inputBorderRadius;
+        }
+    }
+
+    .unit-box {
+        position: absolute;
+        right:0px;
+        top:0px;
+        width: @unitWidth;
+        height: 100%;
+        padding: 4px 4px 0;
+        background-color: lightgray;
+        border: 1px solid #cccccc;
+        text-align: center;
+
+        &:last-child{
+            border-top-right-radius: @inputBorderRadius;
+            border-bottom-right-radius: @inputBorderRadius;
+        }
+    }
+}
+
+.mandatory {
+    color:red;
+}

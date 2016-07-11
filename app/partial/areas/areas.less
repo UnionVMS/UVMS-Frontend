@@ -1,0 +1,96 @@
+/*
+﻿Developed with the contribution of the European Commission - Directorate General for Maritime Affairs and Fisheries
+© European Union, 2015-2016.
+
+This file is part of the Integrated Fisheries Data Management (IFDM) Suite. The IFDM Suite is free software: you can
+redistribute it and/or modify it under the terms of the GNU General Public License as published by the
+Free Software Foundation, either version 3 of the License, or any later version. The IFDM Suite is distributed in
+the hope that it will be useful, but WITHOUT ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or
+FITNESS FOR A PARTICULAR PURPOSE.  See the GNU General Public License for more details. You should have received a
+copy of the GNU General Public License along with the IFDM Suite. If not, see <http://www.gnu.org/licenses/>.
+ */
+.areaManagement {
+	#area-management-container {
+		.alert-modal-content {
+			.modal-dialog {
+				.modal-content {
+					top: 40px;
+					margin-left: 50px;
+					margin-right: 50px;
+				}
+			}
+		}
+	}
+	.areaCard {
+		position: relative;
+		background-color: white;
+    border: 1px solid #dddddd;
+    border-top: 5px solid #dddddd;
+    border-right: 0;
+    margin-top: 10px;
+    border-radius: 0px;
+    display: table;
+    width: 100%;
+	}
+	.alertContainer {
+		width: 100%;
+	}
+	.area-loading {
+		position: absolute;;
+		background-color: rgba(221, 221, 221, 0.4);
+		z-index: 100;
+		top: 0;
+		bottom: 0;
+		left: 0;
+		right: 0;
+		text-align: center;
+		.area-loading-msg {
+			position: absolute;
+			top: calc(~'50% - 42px');
+			left: calc(~'50% - 34px');
+			div {
+				i {
+					font-size: 45px;
+					color: rgba(40, 40, 40, 0.7);
+					margin-bottom: 20px;
+				}
+				span {
+					border-radius: 5px;
+					padding: 5px;
+					text-transform: uppercase;
+					color: white;
+					background-color: rgba(80, 80, 80, 0.7);
+				}
+			}
+		}
+	}
+	.withoutPadding {
+		padding: 0;
+	}
+	.customPadding {
+		padding: 0px 10px;
+	}
+	.tabMenu {
+		padding: 10px 0px;
+	}
+
+	.areaTb {
+		border-left: 1px solid #dddddd;
+		border-right: 1px solid #dddddd;
+		border-bottom: 1px solid #dddddd;
+		height: 30px;
+	}
+	.areaMap {
+		border-left: 1px solid #dddddd;
+		border-right: 1px solid #dddddd;
+	}
+	.comboLabel{
+	    line-height: 30px;
+	}
+	.loading-getting-attrs {
+		bottom: -10px;
+	}
+	.btn-default.btn-xs .fa-eye {
+		margin-left: -2px;
+	}
+}

@@ -1,0 +1,102 @@
+/*
+﻿Developed with the contribution of the European Commission - Directorate General for Maritime Affairs and Fisheries
+© European Union, 2015-2016.
+
+This file is part of the Integrated Fisheries Data Management (IFDM) Suite. The IFDM Suite is free software: you can
+redistribute it and/or modify it under the terms of the GNU General Public License as published by the
+Free Software Foundation, either version 3 of the License, or any later version. The IFDM Suite is distributed in
+the hope that it will be useful, but WITHOUT ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or
+FITNESS FOR A PARTICULAR PURPOSE.  See the GNU General Public License for more details. You should have received a
+copy of the GNU General Public License along with the IFDM Suite. If not, see <http://www.gnu.org/licenses/>.
+ */
+.visibilitySettings{
+	.noBottomMargin {
+		margin-bottom: -10px;
+	}
+	.checkboxLabel {
+		margin-right: 15px;
+		margin-bottom: 10px;
+	}
+	
+	td.is-attr-visible-row {
+		position: relative;
+	    line-height: 40px;
+	    height: 40px;
+	    color: #777;
+		vertical-align: top;
+	    input[type="checkbox"],
+	    span {
+	    	position: absolute;
+	    }
+	    input[type="checkbox"] {
+	    	top: 10px;
+	    	right: 10px;
+	    }
+	    span {
+		    left: 8px;
+		    font-size: 15px;
+	    }
+	}
+	
+	ul[dnd-list] {
+    	border-bottom: 3px solid #bebebe;
+    }
+	
+	table {
+		border: 0;
+    	th {
+		    border-bottom: 0;
+		    text-align: center;
+		    text-transform: uppercase;
+		    color: #777;
+		    position: relative;
+		    input[type="checkbox"] {
+				position: absolute;
+				right: 10px;
+		    }
+    	}
+	    tbody {
+	    	border: 1px solid #ddd;
+	    	> tr > td {
+		    	padding: 0;
+		    	border-right: 2px solid #ddd;
+		    	&:last-child {
+		    		border-right: 0;
+		    	}
+			    [dnd-list] {
+			    	margin: 0;
+				    li {
+					    line-height: 35px;
+					    background-color: #fff;
+					    padding: 2px 8px;
+		    			border-bottom: 1px solid #ddd;
+		    			text-align: left;
+		    			position: relative;
+			    		&:empty {
+			    			background-color: #ddd;
+			    			height: 40px;
+			    		}
+			    		&.dndDraggingSource {
+			    			display: none;
+			    		}
+			    		&:nth-child(odd) {
+			    			background: #f7f7f7;
+			    		}
+			    		> input {
+			    			position: absolute;
+							right: 10px;
+							top: 10px;
+			    		}
+			    		.handle {
+			    			cursor: move;
+			    			display: inline-block;
+			    		}
+			    		&:last-child {
+			    			border-bottom: 0;
+			    		}
+				    }
+			    }
+		    }
+		}
+	}
+}

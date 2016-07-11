@@ -1,0 +1,170 @@
+<!--
+﻿Developed with the contribution of the European Commission - Directorate General for Maritime Affairs and Fisheries
+© European Union, 2015-2016.
+
+This file is part of the Integrated Fisheries Data Management (IFDM) Suite. The IFDM Suite is free software: you can
+redistribute it and/or modify it under the terms of the GNU General Public License as published by the
+Free Software Foundation, either version 3 of the License, or any later version. The IFDM Suite is distributed in
+the hope that it will be useful, but WITHOUT ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or
+FITNESS FOR A PARTICULAR PURPOSE.  See the GNU General Public License for more details. You should have received a
+copy of the GNU General Public License along with the IFDM Suite. If not, see <http://www.gnu.org/licenses/>.
+-->
+<div>
+    <div static-include="partial/polling/pollingPageHeader/pollingPageHeader.html"></div>
+
+    <div class="container containerWithBottomPadding">
+        <div ng-include="'partial/polling/runningProgramPolls/runningProgramPolls.html'" ng-if="!showPollByID"></div>
+
+        <div class="card pollingLogsContainer">
+            <div class="row">
+                <div search-results-table search="currentSearchResults" class="col-md-12">
+                    <form>
+                        <table class="searchResults colorOdd pollingLogsTable truncate-text">
+                            <thead>
+                                <tr class="searchInputRow dateSearch" ng-if="showPollByID">
+                                    <th colspan="9">&nbsp;</th>
+                                    <th class="printAndExport">
+                                        <button class="btn btn-sm btn-default exportButton">
+                                            <i class="fa fa-lg fa-download" title="{{'common.export_as_csv' | i18n }}" ng-click="exportLogsAsCSVFile()"></i>
+                                        </button>
+                                    </th>
+                                </tr>
+                                <tr class="searchInputRow dateSearch"  ng-if="!showPollByID">
+                                    <th>&nbsp;</th>
+                                    <th colspan="2">
+                                        <dropdown ng-model="advancedSearchObject.TIME_SPAN" items="timeSpanOptions" no-placeholder-item></dropdown>
+                                    </th>
+
+                                    <th colspan="2">
+                                        <datepicker-input model="advancedSearchObject.FROM_DATE" max-date="advancedSearchObject.TO_DATE" placeholder="{{'polling.polling_logs_search_date_from_placeholder' | i18n}}" time="true" input-field-id="polling-logs-search-from-date-picker"></datepicker-input>
+                                    </th>
+
+                                    <th colspan="2">
+                                        <datepicker-input model="advancedSearchObject.TO_DATE" min-date="advancedSearchObject.FROM_DATE"  placeholder="{{'polling.polling_logs_search_date_to_placeholder' | i18n}}" time="true" input-field-id="polling-logs-search-to-date-picker"></datepicker-input>
+                                    </th>
+
+                                    <th class="textAlignCenter">
+                                        <button type="submit" class="btn btn-primary inputHeigth searchButton vmsbtn" ng-click="searchPolls()">
+                                             {{'common.search' | i18n}}
+                                        </button>
+                                    </th>
+                                    <th>
+                                        <button type="button" class="btn btn-default inputHeigth searchButton vmsbtn" ng-click="resetSearch()">
+                                            {{'common.reset' | i18n}}
+                                        </button>
+                                    </th>
+                                    <th class="printAndExport">
+                                        <button class="btn btn-sm btn-default exportButton">
+                                            <i class="fa fa-lg fa-download" title="{{'common.export_as_csv' | i18n }}" ng-click="exportLogsAsCSVFile()"></i>
+                                        </button>
+                                    </th>
+                                </tr>
+                                <tr class="searchInputRow" ng-if="!showPollByID">
+                                    <th>&nbsp;</th>
+                                    <th>
+                                        <input type="text"/ placeholder="{{'common.all' | i18n}}" ng-model="advancedSearchObject.NAME">
+                                    </th>
+
+                                    <th>
+                                        <input type="text"/ placeholder="{{'common.all' | i18n}}" ng-model="advancedSearchObject.EXTERNAL_MARKING">
+                                    </th>
+
+                                    <th>
+                                        <dropdown ng-model="advancedSearchObject.POLL_TYPE" items="pollTypes"  initialtext="{{ 'common.all' | i18n }}" initialtext-selectable></dropdown >
+                                    </th>
+
+                                    <th>
+                                        <dropdown ng-model="advancedSearchObject.TERMINAL_TYPE" items="terminalTypes" initialtext="{{ 'common.all' | i18n }}" initialtext-selectable></dropdown>
+                                    </th>
+
+                                    <th>
+                                        <div class="available-positions-refresh">
+                                            <a ng-if="newPollingLogCount > 0" ng-click="resetSearch()">
+                                                <i class="fa fa-refresh"></i> {{ "polling.new_polling_logs_available" | i18n:[newPollingLogCount] }}
+                                            </a>
+                                        </div>
+                                    </th>
+
+                                    <th>
+                                        <dropdown ng-model="advancedSearchObject.STATUS" items="statusTypes"  initialtext="{{ 'common.all' | i18n }}" initialtext-selectable></dropdown>
+                                    </th>
+
+                                    <th>
+                                        <input type="text" placeholder="{{'common.all' | i18n}}" ng-model="advancedSearchObject.USER" >
+                                    </th>
+                                    <th>&nbsp;</th>
+                                     <th>
+                                    </th>
+
+                                </tr>
+                                <tr>
+                                    <th class="checkboxContainer"><input type="checkbox" ng-checked="isAllChecked()" ng-click="checkAll()" ng-disabled="!currentSearchResults.items.length"/></th>
+                                    <th sortable-table-header by="currentSearchResults.sortBy" reverse="currentSearchResults.sortReverse" order="'vessel.name'">{{'polling.polling_logs_table_header_name' | i18n}}</th>
+
+                                    <th sortable-table-header by="currentSearchResults.sortBy" reverse="currentSearchResults.sortReverse" order="'vessel.externalMarking'">{{'polling.polling_logs_table_header_ext_no' | i18n}}</th>
+
+                                    <th sortable-table-header by="currentSearchResults.sortBy" reverse="currentSearchResults.sortReverse" order="'poll.type'">{{'polling.polling_logs_table_header_poll_type' | i18n}}</th>
+
+                                    <th sortable-table-header by="currentSearchResults.sortBy" reverse="currentSearchResults.sortReverse" order="'poll.attributes.TRANSPONDER | transponderName'">{{'polling.polling_logs_table_header_transponder' | i18n}}</th>
+
+                                    <th sortable-table-header by="currentSearchResults.sortBy" reverse="currentSearchResults.sortReverse" order="'exchangePoll.identifier'">{{'polling.polling_logs_table_header_identifier' | i18n}}</th>
+
+                                    <th sortable-table-header by="currentSearchResults.sortBy" reverse="currentSearchResults.sortReverse" order="'exchangePoll.history[0].time'" class="times">{{'polling.polling_logs_table_header_time' | i18n}}</th>
+
+                                    <th>{{'polling.polling_logs_table_header_user' | i18n}}</th>
+                                    <th>{{'polling.polling_logs_table_header_status_short' | i18n}}</th>
+                                    <th></th>
+                                    <th>&nbsp;</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                            <tr ng-repeat="item in currentSearchResults.items | orderBy:currentSearchResults.sortBy:currentSearchResults.sortReverse" ng-init="isExpanded = false">
+                                <td class="checkboxContainer"><input type="checkbox" ng-checked="isChecked(item)" ng-click="check(item)"/></td>
+                                <td>
+                                    <span ng-show="item.vessel"><a href="#/assets/{{item.vessel.getGuid()}}" title="{{'common.view_details' | i18n}}">{{item.vessel.name}}</a></span>
+                                    <span ng-hide="item.vessel" class="assetNotFound">{{'common.asset_not_found' | i18n}}</span>
+                                </td>
+                                <td ng-attr-title="{{item.vessel.externalMarking}}">{{item.vessel.externalMarking}}</td>
+                                <td ng-attr-title="{{item.poll.type | pollTypeName}}">{{item.poll.type | pollTypeName}}</td>
+                                <td ng-attr-title="{{item.poll.attributes.TRANSPONDER | transponderName}}">{{item.poll.attributes.TRANSPONDER | transponderName}}</td>
+                                <td ng-attr-title="{{item.exchangePoll.identifier}}">{{item.exchangePoll.identifier}}</td>
+                                <td class="statusTime">
+                                    <div class="expandIcon" ng-show="item.exchangePoll.history.length > 1" ng-click="isExpanded = !isExpanded">
+                                        <i class="fa fa-plus-square" ng-show="!isExpanded"></i>
+                                        <i class="fa fa-minus-square" ng-show="isExpanded"></i>
+                                    </div>
+                                    <div class="times">
+                                        <span ng-repeat="status in item.exchangePoll.history" ng-show="isExpanded || $index === 0" ng-attr-title="{{status.time | confDateFormat}}">
+                                            {{ status.time | confDateFormat}}<br>
+                                        </span>
+                                    </div>
+                                </td>
+                                <td ng-attr-title="{{item.poll.attributes.USER}}">{{item.poll.attributes.USER}}</td>
+                                <td class="statusText">
+                                    <div ng-repeat="status in item.exchangePoll.history | orderBy:'status.time'" ng-show="isExpanded || $index === 0">
+                                        <span class="label" ng-class="getStatusLabelClass(status.status)" ng-attr-title="{{status.status | exchangeStatusName | uppercase}}">
+                                            {{status.status | exchangeStatusName | uppercase}}
+                                        </span><br>
+                                    </div>
+                                </td>
+                                <td class="textAlignCenter">
+                                    <button class="btn btn-sm btn-default" ng-click="showComment(item)" title="{{'common.view_comment' | i18n}}">
+                                        <i class="fa fa-commenting"></i>
+                                    </button>
+                                </td>
+                                <td></td>
+                            </tr>
+                            </tbody>
+                        </table>
+                    </form>
+
+                </div>
+
+            </div>
+            <search-results-pagination page='currentSearchResults.page' total='currentSearchResults.totalNumberOfPages' callback='gotoPage'></search-results-pagination >
+        </div>
+
+
+    </div>
+
+</div>

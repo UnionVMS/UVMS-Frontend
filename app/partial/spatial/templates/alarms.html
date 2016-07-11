@@ -1,0 +1,93 @@
+<!--
+﻿Developed with the contribution of the European Commission - Directorate General for Maritime Affairs and Fisheries
+© European Union, 2015-2016.
+
+This file is part of the Integrated Fisheries Data Management (IFDM) Suite. The IFDM Suite is free software: you can
+redistribute it and/or modify it under the terms of the GNU General Public License as published by the
+Free Software Foundation, either version 3 of the License, or any later version. The IFDM Suite is distributed in
+the hope that it will be useful, but WITHOUT ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or
+FITNESS FOR A PARTICULAR PURPOSE.  See the GNU General Public License for more details. You should have received a
+copy of the GNU General Public License along with the IFDM Suite. If not, see <http://www.gnu.org/licenses/>.
+-->
+<!-- POSITION DETAILS -->
+<div class="col-md-12 info-content alarm">
+	{{#alarm}}
+	<div class="row">
+		<div class=col-md-6>
+			<span class="title">{{titles.name}}:</span>
+			<span>{{alarm.name}}</span>
+		</div>
+		<div class=col-md-6>
+			<span class="title">{{titles.fs}}:</span>
+			<span>{{alarm.fs}}</span>
+		</div>
+	</div>
+	<div class="row">
+		<div class=col-md-6>
+			<span class="title">{{titles.extMark}}:</span>
+			<span>{{alarm.extMark}}</span>
+		</div>
+		<div class=col-md-6>
+			<span class="title">{{titles.ircs}}:</span>
+			<span>{{alarm.ircs}}</span>
+		</div>
+	</div>
+	<div class="row">
+		<div class=col-md-12>
+			<span class="title">{{titles.cfr}}:</span>
+			<span>{{alarm.cfr}}</span>
+		</div>
+	</div>
+</div>
+<!-- SEPARATOR -->
+<div class="col-md-12 info-content">
+	<div class="col-md-12 form-separator"></div>
+</div>
+<!-- ALARM DETAILS -->
+<div class="col-md-12">
+	<span class="header">{{alarmTitle}}</span>
+	<div class="alarm-status" style="background-color:{{color}}">{{alarm.status}}</div>
+</div>
+<div class="col-md-12 info-content alarm">
+	<div class="row">
+		<div class=col-md-12>
+			<span class="title">{{titles.ruleName}}:</span>
+			<span>{{alarm.ruleName}}</span>
+		</div>
+	</div>
+	<div class="row">
+		<div class=col-md-12>
+			<span class="title">{{titles.ruleDesc}}:</span>
+			<span>{{alarm.ruleDesc}}</span>
+		</div>
+	</div>
+	<div class="row">
+		<div class=col-md-12>
+			<span class="title">{{titles.openDate}}:</span>
+			<span>{{alarm.openDate}}</span>
+		</div>
+	</div>
+	<div class="row">
+		<div class=col-md-12>
+			<span class="title">{{titles.updateDate}}:</span>
+			<span>{{alarm.updateDate}}</span>
+		</div>
+	</div>
+	<div class="row">
+		<div class=col-md-12>
+			<span class="title">{{titles.updatedBy}}:</span>
+			<span>{{alarm.updatedBy}}</span>
+		</div>
+	</div>
+	<div class="row">
+		<div class=col-md-12>
+			<span class="title">{{titles.ruleDef}}:</span>
+		</div>
+	</div>
+	<div class="row">
+		<div class=col-md-12>
+			<div class="rule-definition">{{alarm.ruleDef}}</div>
+		</div>
+	</div>
+	{{/alarm}}
+</div>

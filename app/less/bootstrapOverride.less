@@ -1,0 +1,272 @@
+/*
+﻿Developed with the contribution of the European Commission - Directorate General for Maritime Affairs and Fisheries
+© European Union, 2015-2016.
+
+This file is part of the Integrated Fisheries Data Management (IFDM) Suite. The IFDM Suite is free software: you can
+redistribute it and/or modify it under the terms of the GNU General Public License as published by the
+Free Software Foundation, either version 3 of the License, or any later version. The IFDM Suite is distributed in
+the hope that it will be useful, but WITHOUT ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or
+FITNESS FOR A PARTICULAR PURPOSE.  See the GNU General Public License for more details. You should have received a
+copy of the GNU General Public License along with the IFDM Suite. If not, see <http://www.gnu.org/licenses/>.
+ */
+/*
+ * Override the default Bootstrap styling here.
+ *
+ */
+
+/*Links*/
+a{
+    outline:none !important;
+}
+
+/*Headers*/
+h5{
+    font-weight: bold;
+    text-transform: uppercase;
+}
+h3{
+    margin-top: 10px;
+    font-size: 16px;
+    font-weight: 700;
+}
+
+/*Lists*/
+ul{
+    padding: 0px;
+}
+ul, li {
+    list-style: none;
+    &:hover,&:active, &:focus{
+        outline:none !important;
+    }
+}
+
+li, li a{
+    cursor: pointer;
+    &:hover,&:active, &:focus{
+        outline:none !important;
+    }
+}
+
+/*Modals*/
+.modal {
+    //Make the modal fade in instead of slide in from the top
+    &.fade {
+        .transition(opacity .3s);
+    }
+    &.fade .modal-dialog {
+        .translate(0,0);
+    }
+}
+
+.modal-backdrop{
+    background-color: @modalBackdropColor;
+}
+.modal-dialog{
+    @modalBorderRadius:2px;
+    .modal-content{
+        padding: 0px;
+        box-shadow: 5px 5px 30px #888888;
+        border: none;
+        border-radius: @modalBorderRadius;
+
+        .modal-header{
+            padding: 20px 0px;
+            border-bottom:none;
+            .modal-title{
+                color:@profileColor_darkgray;
+                font-weight: bold;
+            }
+            .close{
+                color:#000;
+            }
+        }
+        .modal-header, .modal-body, .modal-footer{
+            padding:20px 30px;
+        }
+
+        .modal-header, .modal-footer{
+            background-color:#F0F0F0;
+        }
+        .modal-header{
+            border-top-left-radius:@modalBorderRadius;
+            border-top-right-radius:@modalBorderRadius;
+        }
+        .modal-footer{
+            margin-top: 15px;
+            border-top:none;
+            border-bottom-left-radius:@modalBorderRadius;
+            border-bottom-right-radius:@modalBorderRadius;
+        }
+    }
+}
+
+
+//Modal sizes
+@media (min-width: @screen-sm-min) {
+  .modal-lg { width: @screen-sm - 40px; }
+}
+@media (min-width: @screen-md-min) {
+  .modal-lg { width: @screen-md - 40px; }
+}
+@media (min-width: @screen-lg-min) {
+  .modal-lg { width: @screen-lg - 40px; }
+}
+
+/*Buttons*/
+button{
+    height: 30px;
+    border-radius: 2px !important;
+    box-shadow: inset 0 -2px 0 rgba(0,0,0,.09);
+    &:hover,&:active, &:focus{
+        outline:none !important;
+    }
+}
+.btn-primary{
+    background-color: @primaryColor;
+    color: #fff;
+    border: solid 1px #00416F;
+    box-shadow: inset 0 -2px 0 rgba(0,0,0,.19);
+
+    &:hover, &:active, &:focus{
+        background-color: darken(@primaryColor, 5%);
+        color: #fff;
+        border-color: darken(#00416F, 5%);
+        box-shadow: inset 0 -2px 0 rgba(0,0,0,.19);
+    }
+}
+
+.btn-primary.disabled, .btn-primary[disabled], fieldset[disabled] .btn-primary, .btn-primary.disabled:hover, .btn-primary[disabled]:hover, fieldset[disabled] .btn-primary:hover, .btn-primary.disabled:focus, .btn-primary[disabled]:focus, fieldset[disabled] .btn-primary:focus, .btn-primary.disabled:active, .btn-primary[disabled]:active, fieldset[disabled] .btn-primary:active, .btn-primary.disabled.active, .btn-primary[disabled].active, fieldset[disabled] .btn-primary.active {
+    background-color: #e4e4e4; //lighten(@primaryColor, 10%);
+    color: #fff;
+    border-color: gray;//lighten(@primaryColor, 10%);
+    box-shadow: inset 0 -2px 0 rgba(0,0,0,.09);
+}
+
+.btn-default{
+    background-color: #fff;
+    color: #000;
+    border: solid 1px @profileColor_gray;
+    border-color: darken(@profileColor_gray, 5%);
+    box-shadow: inset 0 -2px 0 rgba(0,0,0,.09);
+
+    &:hover, &:active, &:focus{
+        background-color: darken(#fff, 5%);
+        color: #000;
+        border-color: darken(@profileColor_gray, 5%);
+        box-shadow: inset 0 -2px 0 rgba(0,0,0,.09);
+    }
+}
+
+.btn-lg{
+    border-radius:3px;
+}
+
+
+
+/*Forms*/
+.help-block{
+    margin-top: 0px;
+    margin-bottom: 0px;
+}
+/*TABS*/
+ul.nav-tabs{
+    li{
+        background-color: darken(@primaryColor, 5%);
+        text-transform: uppercase;
+        font-weight: bold;
+
+        a{
+            border-radius: 0px;
+            color:#fff;
+            margin-right: 0px;
+            &:hover, &:focus, &:active{
+                background-color: darken(@primaryColor, 5%);
+                border-color: transparent;
+            }
+        }
+
+        &.active{
+            background: #fff;
+            a{
+                color:#000;
+                &:hover, &:focus, &:active{
+                    background: #fff;
+                }
+            }
+        }
+    }
+}
+/*input groups*/
+.input-group-btn:last-child > .btn{
+    border-radius: 0px;
+    padding: 4px 12px;
+}
+
+.form-control.ng-pristine.ng-valid.ng-touched,
+.form-control.ng-pristine.ng-untouched.ng-valid,
+.form-control.ng-valid.ng-dirty.ng-valid-parse.ng-touched,
+.form-control.ng-valid.ng-touched.ng-dirty.ng-valid-parse,
+.input[type="text"], input[type="time"], input[type="number"], input[type="email"], input[type="search"]
+{
+    box-shadow: inset 0px 0px 0px @inputBorderColor !important;
+    border: 1px solid @inputBorderColor;
+}
+
+.form-control.ng-pristine.ng-valid.ng-touched:hover,
+.form-control.ng-pristine.ng-untouched.ng-valid:hover,
+.form-control.ng-valid.ng-dirty.ng-valid-parse.ng-touched:hover,
+.form-control.ng-valid.ng-touched.ng-dirty.ng-valid-parse:hover,
+input[type="text"]:hover, input[type="time"]:hover, input[type="number"]:hover, input[type="email"]:hover
+.form-control.ng-pristine.ng-valid.ng-touched:focus,
+.form-control.ng-pristine.ng-untouched.ng-valid:focus,
+.form-control.ng-valid.ng-dirty.ng-valid-parse.ng-touched:focus,
+.form-control.ng-valid.ng-touched.ng-dirty.ng-valid-parse:focus,
+input[type="text"]:focus, input[type="time"]:focus, input[type="number"]:focus, input[type="email"]:focus {
+border: 1px solid #3498db;
+outline: 0;
+-webkit-box-shadow: none;
+box-shadow: none;
+}
+.form-control.datetimeinput.ng-valid.ng-isolate-scope.ng-valid-min-date.ng-valid-required.ng-dirty.ng-valid-parse.ng-touched,
+.form-control.datetimeinput.ng-pristine.ng-untouched.ng-valid.ng-isolate-scope.ng-valid-min-date.ng-valid-required
+{
+    box-shadow: inset 0px 0px 0px @inputBorderColor !important;
+    border: 1px solid @inputBorderColor;
+}
+
+
+//datetimepicker
+.xdsoft_datetimepicker {
+    border-color:@inputBorderColor !important;
+    margin-top: 2px !important;
+}
+
+.container {
+    max-width: 1600px;
+    width: auto;
+    margin: auto;
+}
+
+//Style tooltips
+@tooltip-arrow-color:@primaryColor;
+div.tooltip .tooltip-inner{
+    color: #fff;
+    background-color: @primaryColor;
+    box-shadow: 0 6px 12px rgba(0,0,0,.175);
+    font-weight: normal;
+}
+
+
+/*Override variables*/
+//Prevent mobile mobile, min width is now 992px
+@screen-md: 1px;
+@screen-xs: 1px;
+@screen-sm: 1px;
+
+//Use colors from globalVariables.less
+@brand-danger:          @errorColor;
+@brand-primary:         @primaryColor;
+@brand-success:         @successColor;
+@brand-warning:         @warningColor;
+@brand-info:            @infoColor;

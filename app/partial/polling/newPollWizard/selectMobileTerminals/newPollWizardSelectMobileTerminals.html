@@ -1,0 +1,64 @@
+<!--
+﻿Developed with the contribution of the European Commission - Directorate General for Maritime Affairs and Fisheries
+© European Union, 2015-2016.
+
+This file is part of the Integrated Fisheries Data Management (IFDM) Suite. The IFDM Suite is free software: you can
+redistribute it and/or modify it under the terms of the GNU General Public License as published by the
+Free Software Foundation, either version 3 of the License, or any later version. The IFDM Suite is distributed in
+the hope that it will be useful, but WITHOUT ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or
+FITNESS FOR A PARTICULAR PURPOSE.  See the GNU General Public License for more details. You should have received a
+copy of the GNU General Public License along with the IFDM Suite. If not, see <http://www.gnu.org/licenses/>.
+-->
+<!-- step 1 -->
+<div class="newPollWizardStep searchMobileTerminalsStep card with-small-card-header" ng-controller="NewpollwizardselectmobileterminalsCtrl">
+	<new-poll-wizard-progress step="1"></new-poll-wizard-progress>
+    <div class="wizardcontent">
+	    <advanced-search searchfunc="getPollableChannels" vesselGroupCallback="selectGroupCallback()" modeltype="'POLLING_MOBILE_TERMINAL'" advancedsearchvisible="true"></advanced-search>
+        <div class="row">
+            <div search-results-table search="currentSearchResults" class="col-md-12">
+                <div class="scroller">
+                    <table class="searchResults polltable colorOdd truncate-text">
+                        <thead>
+                            <tr>
+                                <th sortable-table-header by="currentSearchResults.sortBy" reverse="currentSearchResults.sortReverse" order="'vesselName'">{{'polling.poll_table_header_vessel_name' | i18n}}</th>
+                                <th sortable-table-header by="currentSearchResults.sortBy" reverse="currentSearchResults.sortReverse" order="'vesselIrcs'">{{'polling.poll_table_header_vessel_ircs' | i18n}}</th>
+                                <th sortable-table-header by="currentSearchResults.sortBy" reverse="currentSearchResults.sortReverse" order="'attributes.DNID'">{{'polling.poll_table_header_vessel_dnid' | i18n}}</th>
+                                <th sortable-table-header by="currentSearchResults.sortBy" reverse="currentSearchResults.sortReverse" order="'attributes.MEMBER_NUMBER'">{{'polling.poll_table_header_vessel_member_no' | i18n}}</th>
+                                <th sortable-table-header by="currentSearchResults.sortBy" reverse="currentSearchResults.sortReverse" order="'mobileTerminalType | transponderName'">{{'polling.poll_table_header_vessel_transponder' | i18n}}</th>
+                                <th>
+                                  <button class="btn btn-primary btn-sm polltablebutton" ng-hide="isTerminalGroupSelected()" ng-click="selectAllVessels()">{{'polling.poll_table_button_add_all' | i18n | uppercase}}</button>
+                                </th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr ng-repeat="item in currentSearchResults.items | orderBy:currentSearchResults.sortBy:currentSearchResults.sortReverse">
+                                <td ng-attr-title="{{item.vesselName}}">{{item.vesselName}}</td>
+                                <td ng-attr-title="{{item.vesselIrcs}}">{{item.vesselIrcs}}</td>
+                                <td ng-attr-title="{{item.mobileTerminalAttributes.DNID}}">{{item.mobileTerminalAttributes.DNID}}</td>
+                                <td ng-attr-title="{{item.mobileTerminalAttributes.MEMBER_NUMBER}}">{{item.mobileTerminalAttributes.MEMBER_NUMBER}}</td>
+                                <td ng-attr-title="{{item.mobileTerminalType | transponderName}}">{{item.mobileTerminalType | transponderName}}</td>
+                                <td>
+                                    <button class="btn btn-primary btn-sm polltablebutton" ng-hide="isTerminalSelected(item)" ng-click="selectChannel(item, $index)">
+                                        {{'polling.poll_table_button_add_selected' | i18n | uppercase}}
+                                    </button>
+                                    <button class="btn btn-success btn-sm polltablebutton" ng-show="isTerminalSelected(item)" ng-click="unselectChannel(item, $index)">
+                                        <span class="fa fa-check"></span>
+                                    </button>
+                                </td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+        <search-results-pagination page='currentSearchResults.page' total='currentSearchResults.totalNumberOfPages' callback='gotoPage'></search-results-pagination >
+    </div>
+
+    <div class="row wizardFooter">
+        <div class="col-md-12 textAlignRight">
+            <button type="button" class="btn btn-primary" ng-disabled="!readyForNextStep()" ng-click="nextStep()">
+                {{'common.next' | i18n | uppercase}}
+            </button>
+        </div>
+    </div>
+</div>

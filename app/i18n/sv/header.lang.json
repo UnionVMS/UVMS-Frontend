@@ -1,0 +1,19 @@
+{
+	"menu_today" : "Today",
+	"menu_reporting" : "Rapporter",
+	"menu_user" : "Användare",
+	"menu_assets" : "Fartyg",
+	"menu_alarmconditions" : "Alarm",
+	"menu_communication" : "Mobila terminaler",
+	"menu_gis" : "Gäss",
+	"menu_movement" : "Positioner",
+	"menu_admin" : "Admin",
+	"menu_exchange" : "Utbyte",
+    "menu_polling": "Frågor",
+    "switch_context": "Switch context",
+    "update_contact_details": "Update contact details",
+    "change_password": "Change password",
+    "change_security_answer": "Change security answer",
+    "sign_in": "Sign in",
+	"sign_out": "Sign out"
+}

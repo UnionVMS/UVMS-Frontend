@@ -1,0 +1,95 @@
+/*
+﻿Developed with the contribution of the European Commission - Directorate General for Maritime Affairs and Fisheries
+© European Union, 2015-2016.
+
+This file is part of the Integrated Fisheries Data Management (IFDM) Suite. The IFDM Suite is free software: you can
+redistribute it and/or modify it under the terms of the GNU General Public License as published by the
+Free Software Foundation, either version 3 of the License, or any later version. The IFDM Suite is distributed in
+the hope that it will be useful, but WITHOUT ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or
+FITNESS FOR A PARTICULAR PURPOSE.  See the GNU General Public License for more details. You should have received a
+copy of the GNU General Public License along with the IFDM Suite. If not, see <http://www.gnu.org/licenses/>.
+ */
+.vessel-fieldset {
+	.search-section {
+		padding-left: 0px;
+		padding-right: 5px;
+	}
+
+	.add-vessels-btn {
+		margin-bottom: 15px;
+	}
+
+	.search-table{
+		margin-bottom: 10px;
+		.check-all-btn,
+		.check-btn {
+			margin: 0;
+		}
+		.tbody {
+			max-height: 320px;
+			overflow: auto;
+			-ms-overflow-style: -ms-autohiding-scrollbar;
+			-webkit-overflow-scrolling: touch;
+			.details-btn {
+				margin-right: 5px;
+			}
+		}
+	}
+
+	.selectionContainer {
+		height: 453px;
+    	margin-bottom: 36px;
+		padding: 15px 0 0 0;
+		.card-header {
+			padding-bottom: 5px;
+		}
+		.row {
+			margin-left: -15px;
+    		margin-right: -15px;
+		}
+		.scroller {
+			padding: 0 15px;
+			max-height: 356px;
+    		overflow-y: auto;
+			> ul > li {
+				cursor: auto;
+				border: 1px solid #c2c9cc;
+				border-radius: 5px;
+				margin: 5px 0 0 0;
+				padding-left: 5px;
+				&.vessel-item {
+					background-color: @primaryColor;
+				}
+				&.vessel-group {
+					background-color: @successColor;
+				}
+				p {    
+					padding: 5px 0 0 5px;
+    				margin: 0;
+					background-color: #f0f0f0;
+				}
+				.pointer {
+					cursor: pointer;
+					color: #df1f26;
+					margin-right: 5px;
+					i {
+						line-height: 27px;
+					}
+				}
+			}
+		}
+	}
+	.blue-badge {
+		background-color: @primaryColor;
+	}
+	.green-badge {
+		background-color: @successColor;
+	}
+	.red-badge {
+		background-color: @profileColor_red;
+	}
+}
+
+.checkbox-margin {
+	margin-left: 5px !important;
+}

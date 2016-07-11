@@ -1,0 +1,53 @@
+<!--
+﻿Developed with the contribution of the European Commission - Directorate General for Maritime Affairs and Fisheries
+© European Union, 2015-2016.
+
+This file is part of the Integrated Fisheries Data Management (IFDM) Suite. The IFDM Suite is free software: you can
+redistribute it and/or modify it under the terms of the GNU General Public License as published by the
+Free Software Foundation, either version 3 of the License, or any later version. The IFDM Suite is distributed in
+the hope that it will be useful, but WITHOUT ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or
+FITNESS FOR A PARTICULAR PURPOSE.  See the GNU General Public License for more details. You should have received a
+copy of the GNU General Public License along with the IFDM Suite. If not, see <http://www.gnu.org/licenses/>.
+-->
+<div class="col-md-12 collapsibleRow generalSettings" ng-controller="GeneralsettingsCtrl">
+	<ng-form name="generalsettingsForm">
+		<accordion close-others="oneAtATime">
+			<accordion-group is-open="status.isOpen">
+				<accordion-heading>
+					<div class="panel-title-link" ng-click="toggleOpen()">
+						{{'spatial.general_settings' | i18n }}
+						<div class="accordionError" ng-show="submitedWithErrors && generalsettingsForm.$error.required">
+							<div class="fa fa-exclamation-circle"></div>
+							{{'spatial.section_errors' | i18n }}
+						</div>
+						<i class="pull-right glyphicon" ng-class="{'glyphicon-chevron-down': status.isOpen, 'glyphicon-chevron-right': !status.isOpen}"></i>
+					</div>
+				</accordion-heading>
+				<div class="row">
+					<div class="form-group col-md-12 noPadding">
+						<div class="col-md-3">
+							<span class="formLabel">{{'spatial.general_configuration_geoserver_url' | i18n}}</span>
+						</div>
+						<div class="col-md-9" ng-class="{'has-error': generalsettingsForm.geoserverUrl.$error.required && (generalsettingsForm.geoserverUrl.$dirty || submitedWithErrors)}">
+							<input type="text" class="form-control" ng-model="configModel.systemSettings.geoserverUrl" name="geoserverUrl" ng-required="true"/>
+							<div class="innerErrorMessages" ng-messages="generalsettingsForm.geoserverUrl.$error" ng-show="generalsettingsForm.geoserverUrl.$dirty || submitedWithErrors">
+								<div ng-message="required">{{'spatial.required_error_message' | i18n }}</div>
+							</div>
+						</div>
+					</div>
+				</div>
+				<div class="row">
+					<div class="form-group col-md-12 noPadding">
+						<div class="col-md-3">
+							<span class="formLabel">{{'spatial.general_configuration_bing_api_key' | i18n}}</span> &nbsp;
+							<a href="https://www.microsoft.com/maps/Licensing/licensing.aspx" target="_blank" title="{{'spatial.general_configuration_bing_key_tooltip' | i18n}}"><span class="fa fa-external-link"></span></a>
+						</div>
+						<div class="col-md-9">
+							<input type="text" class="form-control" ng-model="configModel.systemSettings.bingApiKey" name="bingApiKey"/>
+						</div>
+					</div>
+				</div>
+			</accordion-group>
+		</accordion>
+	</ng-form>
+</div>

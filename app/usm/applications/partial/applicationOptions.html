@@ -1,0 +1,62 @@
+<!--
+﻿Developed with the contribution of the European Commission - Directorate General for Maritime Affairs and Fisheries
+© European Union, 2015-2016.
+
+This file is part of the Integrated Fisheries Data Management (IFDM) Suite. The IFDM Suite is free software: you can
+redistribute it and/or modify it under the terms of the GNU General Public License as published by the
+Free Software Foundation, either version 3 of the License, or any later version. The IFDM Suite is distributed in
+the hope that it will be useful, but WITHOUT ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or
+FITNESS FOR A PARTICULAR PURPOSE.  See the GNU General Public License for more details. You should have received a
+copy of the GNU General Public License along with the IFDM Suite. If not, see <http://www.gnu.org/licenses/>.
+-->
+<div>
+    <table st-table="displayedOptions" st-safe-src="applicationDetails.options" class="table table-striped fixed">
+        <colgroup>
+            <col style="width: 290px;">
+            <col style="width: 550px;">
+            <col style="width: 150px;">
+            <col style="width: 150px;">
+        </colgroup>
+        <thead class="table_heading">
+        <tr>
+            <th st-sort="name" st-sort-default="true" ng-click="changeSorting('name')" st-skip-natural="true" st-class-ascent="dummyClass" st-class-descent="dummyClass">
+                {{'common.name' | translate}}&nbsp;<i class="fa" ng-class="sortIcon('name')"></i>
+            </th>
+            <th st-sort="description" ng-click="changeSorting('description')" st-skip-natural="true" st-class-ascent="dummyClass" st-class-descent="dummyClass">
+                {{'common.description' | translate}}&nbsp;<i class="fa" ng-class="sortIcon('description')"></i>
+            </th>
+            <th st-sort="dataType" ng-click="changeSorting('dataType')" st-skip-natural="true" st-class-ascent="dummyClass" st-class-descent="dummyClass">
+                Data Type&nbsp;<i class="fa" ng-class="sortIcon('dataType')"></i>
+            </th>
+            <th st-sort="defaultValue" ng-click="changeSorting('defaultValue')" st-skip-natural="true" st-class-ascent="dummyClass" st-class-descent="dummyClass">
+                Default Value&nbsp;<i class="fa" ng-class="sortIcon('defaultValue')"></i>
+            </th>
+        </tr>
+        </thead>
+        <tbody ng-if="!emptyDatasetsResult && (checkAccess('manageApplications')||checkAccess('viewApplications'))">
+            <tr ng-repeat="option in displayedOptions">
+                <td ng-bind="option.name"></td>
+                <td ng-bind="option.description"></td>
+                <td ng-bind="option.dataType"></td>
+                <td ng-bind="option.defaultValue" class="rightBorder"></td>
+            </tr>
+        </tbody>
+        <tbody ng-if="emptyOptionsResult && (checkAccess('manageApplications')||checkAccess('viewApplications'))">
+            <tr>
+                <td colspan="4" class="text-center rightBorder">No options are defined by this application.</td>
+            </tr>
+        </tbody>
+        <tbody ng-if="!(checkAccess('manageApplications')||checkAccess('viewApplications'))">
+            <tr>
+                <td colspan="4" class="text-center rightBorder">Not authorised.</td>
+            </tr>
+        </tbody>
+        <tfoot>
+        <tr>
+            <td colspan="5" class="text-right">
+                <div class="st-pagination" st-pagination="" st-items-by-page="itemsByPage" st-displayed-pages="7"></div>
+            </td>
+        </tr>
+        </tfoot>
+    </table>
+</div>

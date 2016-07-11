@@ -1,0 +1,19 @@
+context: ['/vessel/rest', '/mobileterminal/rest/', '/exchange/rest/', '/movement/rest/', '/audit/rest/', '/rules/rest/', '/reporting/rest/', '/usm-authentication/rest', '/usm-authorisation/rest', '/usm-administration/rest']
+# host: 'localhost'
+host: 'cygnus-dev.athens.intrasoft-intl.private'
+#host: 'mare-usm-dev.intrasoft-intl.com'
+#host: 'intrarolli.ngrok.io'
+#port: 8080
+port: 28080
+#port: 80
+
+https: false
+secure: false
+
+# Change origin and headers.host required when trying to reach the server from outside
+# changeOrigin: true
+# headers: {
+#    #'origin': 'w130423.brussels.intrasoft-intl.private:7001'
+#    #host: 'mare-usm-dev.intrasoft-intl.com'
+#    #host: 'intrarolli.ngrok.io'
+# }

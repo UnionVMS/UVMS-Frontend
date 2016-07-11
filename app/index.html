@@ -1,0 +1,458 @@
+<!--
+﻿Developed with the contribution of the European Commission - Directorate General for Maritime Affairs and Fisheries
+© European Union, 2015-2016.
+
+This file is part of the Integrated Fisheries Data Management (IFDM) Suite. The IFDM Suite is free software: you can
+redistribute it and/or modify it under the terms of the GNU General Public License as published by the
+Free Software Foundation, either version 3 of the License, or any later version. The IFDM Suite is distributed in
+the hope that it will be useful, but WITHOUT ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or
+FITNESS FOR A PARTICULAR PURPOSE.  See the GNU General Public License for more details. You should have received a
+copy of the GNU General Public License along with the IFDM Suite. If not, see <http://www.gnu.org/licenses/>.
+-->
+<!DOCTYPE html>
+<html>
+<head>
+    <title page-title>UnionVMS</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+	<meta charset="utf-8">
+    <link href="app.less" type="text/css" rel="stylesheet/less">
+    <link href='https://fonts.googleapis.com/css?family=Roboto' rel='stylesheet' type='text/css' data-concat="false" data-remove="false">
+</head>
+<body>
+
+    <div id="appLoading">
+        <div class="loadingIndicator"><div class="spinnerOverlay"></div><div class="spinner"><div class="spinningShipContainer"><div></div></div></div></div>
+    </div>
+
+    <!-- Livereload script for development only (stripped during dist build) -->
+    <script src="http://localhost:35729/livereload.js" data-concat="false"></script>
+
+    <!-- JS from Bower Components -->
+    <script src="../bower_components/less.js/dist/less.js" data-concat="false"></script>
+    <script src="../bower_components/jquery/jquery.js"></script>
+    <script src="../bower_components/jquery-ui/jquery-ui.js"></script>
+    <script src="../bower_components/bootstrap/dist/js/bootstrap.js"></script>
+    <script src="../bower_components/underscore/underscore.js"></script>
+    <script src="../bower_components/moment/min/moment-with-locales.min.js"></script>
+    <script src="../bower_components/angular/angular.js"></script>
+    <script src="../bower_components/angular-cookies/angular-cookies.min.js"></script>
+    <script src="../bower_components/angular-sanitize/angular-sanitize.min.js"></script>
+    <script src="../bower_components/angular-localization/angular-localization.min.js"></script>
+    <script src="../bower_components/angular-route/angular-route.js"></script>
+    <script src="../bower_components/angular-animate/angular-animate.js"></script>
+    <script src="../bower_components/angular-resource/angular-resource.js"></script>
+    <script src="../bower_components/angular-bootstrap/ui-bootstrap-tpls.js"></script>
+    <script src="../bower_components/angular-ui-utils/ui-utils.js"></script>
+    <script src="../bower_components/datetimepicker/jquery.datetimepicker.js"></script>
+    <script src="../bower_components/angular-dynamic-locale/dist/tmhDynamicLocale.js"></script>
+    <script src="../bower_components/leaflet/dist/leaflet.js"></script>
+    <script src="../bower_components/angular-leaflet-directive/dist/angular-leaflet-directive.js"></script>
+    <script src="assets/spatial/ol.min.js"></script>
+    <script src="assets/spatial/ol_custom_controls.js"></script>
+    <script src="assets/spatial/ol3-layerswitcher/src/ol3-layerswitcher.js"></script>
+    <script src="../bower_components/ng-csv/build/ng-csv.min.js"></script>
+    <script src="../bower_components/fancytree/dist/jquery.fancytree-all.js"></script>
+    <script src="../bower_components/jQuery-contextMenu/dist/jquery.ui.position.min.js"></script>
+    <script src="../bower_components/jQuery-contextMenu/dist/jquery.contextMenu.min.js"></script>
+    <script src="../bower_components/mustache.js/mustache.min.js"></script>
+    <script src="../bower_components/turf/turf.min.js"></script>
+    <script src="../bower_components/checklist-model/checklist-model.js"></script>
+    <script src="../bower_components/screenfull/dist/screenfull.js"></script>
+	<script src="../bower_components/angular-screenfull/dist/angular-screenfull.js"></script>
+	<script src="../bower_components/angular-toggle-switch/angular-toggle-switch.min.js"></script>
+	<script src="../bower_components/angular-bootstrap-colorpicker/js/bootstrap-colorpicker-module.min.js"></script>
+	<script src="../bower_components/angular-file-upload/dist/angular-file-upload.min.js"></script>
+    <script src="../bower_components/file-saver/FileSaver.min.js"></script>
+
+    <!-- USM -->
+    <script src="../bower_components/angular-translate/angular-translate.js"></script>
+    <script src="../bower_components/angular-translate-loader-static-files/angular-translate-loader-static-files.min.js"></script>
+    <script src="../bower_components/angular-ui-router/release/angular-ui-router.js"></script>
+    <script src="../bower_components/angular-ui-router-tabs/src/ui-router-tabs.js"></script>
+    <script src="../bower_components/angular-smart-table/dist/smart-table.min.js"></script>
+    <script src="../bower_components/angular-ui-select/dist/select.js"></script>
+    <script src="../bower_components/ngstorage/ngStorage.min.js"></script>
+    <script src="../bower_components/angular-locker/dist/angular-locker.min.js"></script>
+    <script src="../bower_components/angular-jwt/dist/angular-jwt.js"></script>
+    <script src="../bower_components/angular-breadcrumb/dist/angular-breadcrumb.min.js"></script>
+    <script src="../bower_components/angular-google-chart/ng-google-chart.js"></script>
+    <script src="../bower_components/angular-simple-logger/dist/angular-simple-logger.min.js"></script>
+    <script src="../bower_components/angular-messages/angular-messages.min.js"></script>
+    <script src="../bower_components/angular-drag-and-drop-lists/angular-drag-and-drop-lists.min.js"></script>
+    <script src="../bower_components/seiyria-bootstrap-slider/dist/bootstrap-slider.min.js"></script>
+    <script src="../bower_components/angular-bootstrap-slider/slider.js"></script>
+    <script src="../bower_components/qtip2/jquery.qtip.min.js"></script>
+    <script src="../bower_components/angular-qtip2-directive/qtip2.js"></script>
+    <script src="../bower_components/Chart.js/Chart.js"></script>
+    <script src="../bower_components/angular-chart.js/dist/angular-chart.js"></script>
+    <!-- Add New Bower Component JS Above -->
+
+    <!-- Main App JS -->
+    <script src="app.js"></script>
+
+    <script src="directive/common/datepickerInput/datepickerInput.js"></script>
+    <script src="directive/common/dropdown/dropdown.js"></script>
+    <script src="directive/common/inputValidationMessage/inputValidationMessage.js"></script>
+    <script src="directive/common/periodInput/periodInput.js"></script>
+    <script src="directive/common/search/advancedSearch/advancedSearch.js"></script>
+    <script src="directive/common/search/advancedSearch/mobileTerminal/advancedSearchMobileTerminalForm.js"></script>
+    <script src="directive/common/search/advancedSearch/pollingMobileTerminal/searchPollingMobileTerminalForm.js"></script>
+    <script src="directive/common/search/advancedSearch/vessel/advancedSearchVesselForm.js"></script>
+    <script src="directive/common/searchResultErrorAlert/searchResultErrorAlert.js"></script>
+    <script src="directive/common/sortableTableHeader/sortableTableHeader.js"></script>
+    <script src="directive/common/staticInclude/staticInclude.js"></script>
+    <script src="directive/common/tagSelectInput/tagSelectInput.js"></script>
+    <script src="directive/common/validation/customValidators.js"></script>
+    <script src="directive/common/loadingIndicator/loadingIndicator.js"></script>
+    <script src="directive/common/resize/resize.js"></script>
+    <script src="directive/spatial/layerTree/layerTree.js"></script>
+    <script src="directive/common/transformInput/unitTransformers.js"></script>
+    <script src="directive/common/pageTitle/pageTitle.js"></script>
+
+    <script src="directive/polling/newPollWizardProgress/newPollWizardProgress.js"></script>
+    <script src="directive/vessel/vesselDetails/vesselDetails.js"></script>
+
+    <script src="partial/alerts/alerts.js"></script>
+    <script src="partial/footer/footer.js"></script>
+    <script src="partial/header/header.js"></script>
+    <script src="partial/header/headerMenu/headerMenu.js"></script>
+
+    <script src="partial/mobileTerminal/assignVessel/assignVessel.js"></script>
+    <script src="partial/mobileTerminal/mobileTerminal.js"></script>
+    <script src="partial/mobileTerminal/mobileTerminalDetails/mobileTerminalDetails.js"></script>
+    <script src="partial/mobileTerminal/mobileTerminalForm/mobileTerminalForm.js"></script>
+    <script src="partial/mobileTerminal/mobileTerminalHistoryModal/mobileTerminalHistoryModal.js"></script>
+    <script src="partial/mobileTerminal/mobileTerminalList/mobileTerminalList.js"></script>
+
+    <script src="partial/polling/newPollWizard/newPollWizard.js"></script>
+    <script src="partial/polling/newPollWizard/pollingOptions/newPollWizardPollingOptions.js"></script>
+    <script src="partial/polling/newPollWizard/selection/newPollWizardSelection.js"></script>
+    <script src="partial/polling/newPollWizard/selectMobileTerminals/newPollWizardSelectMobileTerminals.js"></script>
+    <script src="partial/polling/pollingLogs/pollingLogs.js"></script>
+    <script src="partial/polling/runningProgramPolls/runningProgramPolls.js"></script>
+
+    <script src="partial/today/today.js"></script>
+
+    <script src="partial/common/saveSearchModal/saveSearchModal.js"></script>
+    <script src="partial/vessel/vessel.js"></script>
+    <script src="partial/vessel/vesselHistory/vesselHistoryModal/vesselHistoryModal.js"></script>
+    <script src="partial/vessel/vesselList/vesselList.js"></script>
+    <script src="partial/vessel/vesselForm/vesselForm.js"></script>
+
+    <script src="service/common/alertService.js"></script>
+    <script src="service/common/modalComment/modalComment.js"></script>
+    <script src="service/common/model/getListRequestModel.js"></script>
+    <script src="service/common/model/savedSearchGroupModel.js"></script>
+    <script src="service/common/model/searchResultsModel.js"></script>
+    <script src="service/common/model/searchFieldModel.js"></script>
+    <script src="service/common/model/searchResultListPageModel.js"></script>
+    <script src="service/common/searchService.js"></script>
+    <script src="service/common/searchUtilsService.js"></script>
+    <script src="service/common/validationService.js"></script>
+    <script src="directive/common/savedSearchDropdown/savedSearchDropdown.js"></script>
+    <script src="service/common/savedSearchService.js"></script>
+    <script src="service/common/dateTimeService.js"></script>
+    <script src="service/mobileTerminal/mobileTerminalRestService.js"></script>
+    <script src="service/mobileTerminal/model/communicationChannelModel.js"></script>
+    <script src="service/mobileTerminal/model/mobileTerminalHistoryModel.js"></script>
+    <script src="service/mobileTerminal/model/mobileTerminalModel.js"></script>
+    <script src="service/mobileTerminal/model/transpondersConfigModel.js"></script>
+
+    <script src="service/polling/model/mobileTerminalGroupModel.js"></script>
+    <script src="service/polling/model/pollModel.js"></script>
+    <script src="service/polling/model/pollResultModel.js"></script>
+     <script src="service/polling/model/pollingLogModel.js"></script>
+    <script src="service/polling/model/pollStatusModel.js"></script>
+
+    <script src="service/polling/model/getPollableListRequestModel.js"></script>
+    <script src="service/polling/model/pollChannelModel.js"></script>
+
+    <script src="service/polling/pollingService.js"></script>
+    <script src="service/polling/pollingRestService.js"></script>
+    <script src="service/vessel/model/eventHistoryModel.js"></script>
+    <script src="service/vessel/model/vesselListPageModel.js"></script>
+    <script src="service/vessel/model/vesselModel.js"></script>
+    <script src="partial/admin/adminModel.js"></script>
+    <script src="service/vessel/vesselRestService.js"></script>
+    <script src="service/mobileTerminal/mobileTerminalVesselService.js"></script>
+    <script src="partial/movement/movementCsvService.js"></script>
+    <script src="partial/movement/movement.js"></script>
+    <script src="partial/movement/movementList/movementList.js"></script>
+
+    <script src="service/movement/movementModel.js"></script>
+    <script src="service/movement/movementRestService.js"></script>
+
+    <script src="service/movement/manualPositionReports/manualPositionReportsModel.js"></script>
+    <script src="service/movement/manualPositionReports/manualPositionReportsRestService.js"></script>
+
+    <script src="directive/common/search/advancedSearch/movement/advancedSearchMovementForm.js"></script>
+    <script src="partial/movement/manualPositionReports/manualPositionReportModal/manualPositionReportModal.js"></script>
+    <script src="partial/movement/manualPositionReports/manualPositionReports.js"></script>
+    <script src="partial/movement/manualPositionReports/manualMovementList/manualMovementList.js"></script>
+
+    <script src="partial/exchange/exchangeModel.js"></script>
+    <script src="partial/exchange/exchangePollModel.js"></script>
+    <script src="partial/exchange/exchangeServiceModel.js"></script>
+    <script src="partial/exchange/exchangeRestService.js"></script>
+    <script src="partial/exchange/exchangeSendingQueueModel.js"></script>
+
+
+    <script src="partial/common/confirmationModal/confirmationModal.js"></script>
+    <script src="partial/common/infoModal/infoModal.js"></script>
+    <script src="partial/admin/adminConfiguration/adminConfiguration.js"></script>
+    <script src="partial/admin/adminLog/adminLog.js"></script>
+    <script src="partial/admin/adminPageHeader/adminPageHeader.js"></script>
+    <script src="service/audit/auditLogRestService.js"></script>
+    <script src="directive/common/search/advancedSearch/audit/auditSearchForm.js"></script>
+    <script src="directive/common/multiselectDropDown/multiselectDropDown.js"></script>
+    <script src="service/common/configurationService.js"></script>
+    <script src="filter/common/secondsToTimeString/secondsToTimeString.js"></script>
+
+    <script src="service/spatial/mapService.js"></script>
+    <script src="service/spatial/mapFishPrintRestService.js"></script>
+    <script src="service/spatial/mapFishModel.js"></script>
+    <script src="partial/spatial/spatial.js"></script>
+    <script src="partial/spatial/liveViewPanel/liveViewPanel.js"></script>
+    <script src="partial/spatial/reportsPanel/reportsPanel.js"></script>
+    <script src="partial/spatial/liveViewPanel/mapPanel/mapPanel.js"></script>
+    <script src="partial/spatial/liveViewPanel/vmsPanel/vmsPanel.js"></script>
+    <script src="partial/spatial/liveViewPanel/mapPanel/layerPanel/layerPanel.js"></script>
+    <script src="partial/spatial/reportsPanel/reportsList/reportsList.js"></script>
+    <script src="service/reporting/reportRestService.js"></script>
+    <script src="partial/spatial/reportsPanel/reportForm/reportForm.js"></script>
+    <script src="partial/spatial/reportsPanel/reportForm/vesselFieldset/vesselFieldset.js"></script>
+    <script src="partial/spatial/reportsPanel/reportForm/vmsFiltersFieldset/vmsFiltersFieldset.js"></script>
+    <script src="partial/spatial/reportsPanel/reportModel.js"></script>
+
+    <script src="partial/exchange/exchange.js"></script>
+    <script src="directive/common/search/advancedSearch/exchange/exchangeSearch.js"></script>
+    <script src="directive/common/search/advancedSearch/alarm/holdingTableSearchForm.js"></script>
+    <script src="directive/common/search/advancedSearch/alarm/ticketSearchForm.js"></script>
+    <script src="service/common/csvService.js"></script>
+
+    <!-- Assets in zone widget -->
+    <script src="widgets/assetsInZone/assetsInZone.js"></script>
+
+    <!-- Non-transmitting transponders widget -->
+    <script src="widgets/numberWidget/numberWidget.module.js"></script>
+    <script src="widgets/numberWidget/numberWidget.directive.js"></script>
+    <script src="widgets/numberWidget/datasources/draftMovements.js"></script>
+    <script src="widgets/numberWidget/datasources/nonTransmittingTransponders.js"></script>
+    <script src="widgets/numberWidget/datasources/openTickets.js"></script>
+    <script src="widgets/numberWidget/datasources/holdingReports.js"></script>
+
+    <!-- Incoming movements widget -->
+    <script src="widgets/incomingMovements/incomingMovements.controller.js"></script>
+    <script src="widgets/incomingMovements/incomingMovements.directive.js"></script>
+
+    <script src="widgets/exchangeHistory/exchangeHistory.directive.js"></script>
+    <script src="widgets/exchangeHistory/exchangeHistory.service.js"></script>
+    <script src="widgets/exchangeHistory/exchangeHistory.controller.js"></script>
+
+    <!-- USM COMPONENTS -->
+    <script src="usm/usm.js"></script>
+    <script src="usm/users/users.js"></script>
+    <script src="usm/organisations/organisations.js"></script>
+    <script src="usm/roles/roles.js"></script>
+    <script src="usm/scenarios/scenarios.js"></script>
+    <script src="usm/scopes/scopes.js"></script>
+    <script src="usm/applications/applications.js"></script>
+    <script src="usm/shared/shared.js"></script>
+    <script src="usm/applications/partial/applicationsController.js"></script>
+    <script src="usm/applications/service/applicationsService.js"></script>
+    <script src="usm/policies/policies.js"></script>
+    <script src="usm/policies/partial/policiesController.js"></script>
+    <script src="usm/policies/service/policiesService.js"></script>
+    <script src="usm/organisations/partial/organisationsController.js"></script>
+    <script src="usm/organisations/service/organisationsService.js"></script>
+    <script src="usm/roles/partial/rolesCotroller.js"></script>
+    <script src="usm/roles/service/rolesService.js"></script>
+    <script src="usm/scenarios/partial/scenariosController.js"></script>
+    <script src="usm/scenarios/service/scenariosService.js"></script>
+    <script src="usm/scopes/partial/scopesController.js"></script>
+    <script src="usm/scopes/service/scopesService.js"></script>
+    <script src="usm/users/account/account.js"></script>
+    <script src="usm/users/account/partial/accountController.js"></script>
+    <script src="usm/users/account/service/accountService.js"></script>
+    <script src="usm/users/userContexts/userContexts.js"></script>
+    <script src="usm/users/userContexts/partial/userContextsController.js"></script>
+    <script src="usm/users/userContexts/service/userContextsService.js"></script>
+    <script src="usm/users/preferences/preferences.js"></script>
+    <script src="usm/users/preferences/partial/preferencesController.js"></script>
+    <script src="usm/users/preferences/service/preferencesService.js"></script>
+    <script src="usm/users/partial/usersController.js"></script>
+    <script src="usm/users/service/usersService.js"></script>
+    <script src="usm/users/service/personsService.js"></script>
+    <script src="service/common/auth/controllers.js"></script>
+    <script src="service/common/auth/interceptor.js"></script>
+    <script src="service/common/auth/jwt.js"></script>
+    <script src="service/common/auth/usm-ui-router.js"></script>
+    <script src="service/common/auth/user-service.js"></script>
+    <script src="service/common/auth/auth-modules.js"></script>
+    <script src="usm/shared/partial/menu/menu.js"></script>
+    <script src="usm/shared/directive/usmDirectives.js"></script>
+
+    <script src="usm/users/changes/changes.js"></script>
+    <script src="usm/users/changes/service/changesService.js"></script>
+    <script src="usm/users/changes/partial/changesController.js"></script>
+    <script src="usm/shared/providers/policyValuesProvider.js"></script>
+    <script src="config.js"></script>
+    <!-- END OF USM COMPONENTS -->
+
+    <script src="partial/alarms/alarmsPageHeader/alarmsPageHeader.js"></script>
+    <script src="partial/alarms/rules/rules.js"></script>
+    <script src="partial/alarms/holdingTable/holdingTable.js"></script>
+    <script src="partial/alarms/holdingTable/alarmCsvService.js"></script>
+    <script src="partial/alarms/openTickets/openTickets.js"></script>
+    <script src="partial/alarms/rules/rulesForm/rulesForm.js"></script>
+    <script src="service/alarms/model/ruleModel.js"></script>
+    <script src="service/alarms/model/sanityRuleModel.js"></script>
+    <script src="service/alarms/model/ruleSubscriptionUpdateModel.js"></script>
+    <script src="service/alarms/model/alarmModel.js"></script>
+    <script src="service/alarms/model/ticketModel.js"></script>
+    <script src="service/alarms/ruleRestService.js"></script>
+    <script src="partial/admin/adminConfiguration/configurationGeneral/configurationGeneral.js"></script>
+    <script src="partial/admin/adminConfiguration/configurationImport/configurationImport.js"></script>
+    <script src="partial/admin/adminConfiguration/configurationOther/configurationOther.js"></script>
+    <script src="filter/mobileTerminal/transponderName.js"></script>
+    <script src="directive/common/searchResultsTable/searchResultsTable.js"></script>
+    <script src="partial/admin/adminConfiguration/configurationModule/systemMonitor.js"></script>
+
+    <script src="partial/common/error/error.js"></script>
+    <script src="directive/alarms/rules/rulesTableDetails/rulesTableDetails.js"></script>
+    <script src="partial/alarms/alarmReportModal/alarmReportModal.js"></script>
+    <script src="partial/alarms/openTickets/ticketModal.js"></script>
+    <script src="partial/alarms/alarmReportModal/alarmReportModalField.js"></script>
+    <script src="directive/spatial/legendPanel/legendPanel.js"></script>
+    <script src="service/alarms/ruleService.js"></script>
+    <script src="directive/common/showIfAllowed/showIfAllowed.js"></script>
+    <script src="partial/spatial/reportsPanel/reportForm/vesselFieldset/detailsModal/detailsModal.js"></script>
+    <script src="partial/spatial/reportsPanel/reportForm/areasSelectionModal/areasSelectionModal.js"></script>
+    <script src="directive/spatial/layerMenu/layerMenu.js"></script>
+    <script src="filter/vessel/vesselFilters.js"></script>
+    <script src="service/alarms/alarmRestService.js"></script>
+    <script src="service/spatial/spatialRestService.js"></script>
+    <script src="partial/spatial/reportsPanel/reportForm/areasSelectionModal/areaModel.js"></script>
+    <script src="service/common/httpPendingRequestsService.js"></script>
+    <script src="directive/common/searchResultsPagination/searchResultsPagination.js"></script>
+    <script src="service/spatial/csvWKTService.js"></script>
+    <script src="service/reporting/reportService.js"></script>
+    <script src="directive/common/currentTime/currentTime.js"></script>
+    <script src="filter/polling/pollTypeName.js"></script>
+    <script src="directive/common/latLngInput/latLngInput.js"></script>
+    <script src="service/common/coordinateFormatService.js"></script>
+    <script src="partial/login/loginController.js"></script>
+    <script src="service/spatial/spatialHelperService.js"></script>
+    <script src="service/audit/auditOptionsService.js"></script>
+    <script src="partial/spatial/liveViewPanel/mapPanel/layerPanel/layerTreeModel.js"></script>
+    <script src="service/alarms/rulesOptionsService.js"></script>
+    <script src="partial/accessDenied/accessDenied.js"></script>
+    <script src="filter/common/capitalize/capitalize.js"></script>
+    <script src="filter/common/stSearch/stSearch.js"></script>
+    <script src="directive/common/stSearchArgs/stSearchArgs.js"></script>
+    <script src="directive/common/stSortArgs/stSortArgs.js"></script>
+    <script src="filter/common/dateUtc/dateUtc.js"></script>
+    <script src="filter/exchange/exchangeStatusName.js"></script>
+    <script src="service/common/long-polling/long-polling.js"></script>
+    <script src="service/alarms/rulesSuggestionsService.js"></script>
+    <script src="service/common/globalSettingsService.js"></script>
+    <script src="partial/login/start.js"></script>
+    <script src="directive/common/stSelectRowArgs/stSelectRowArgs.js"></script>
+    <script src="partial/spatial/reportsPanel/reportForm/mapConfigurationModal/mapConfigurationModal.js"></script>
+    <script src="filter/spatial/stFieldSearchGeoJson/stFieldSearchGeoJson.js"></script>
+    <script src="directive/spatial/stResetSearch/stResetSearch.js"></script>
+    <script src="partial/admin/adminConfiguration/configurationReporting/configurationReporting.js"></script>
+    <script src="directive/common/stExportData/stExportData.js"></script>
+    <script src="partial/spatial/configurations/configPanel.js"></script>
+    <script src="partial/spatial/configurations/mapSettingsPanel/refreshSettingsForm/refreshSettingsForm.js"></script>
+    <script src="partial/spatial/configurations/mapSettingsPanel/mapSettingsCollapsiblePanel.js"></script>
+    <script src="partial/spatial/configurations/vmsStyles/vmsStylesCollapsiblePanel.js"></script>
+    <script src="partial/help/help.js"></script>
+    <script src="service/vessel/vesselValidationService.js"></script>
+    <script src="partial/spatial/configurations/mapSettingsPanel/mapProjectionSettings/mapProjectionSettings.js"></script>
+    <script src="partial/movement/positionsMapModal/positionsMapModal.js"></script>
+    <script src="partial/spatial/configurations/spatialConfigModel.js"></script>
+    <script src="partial/movement/positionReportModal/positionReportModal.js"></script>
+    <script src="partial/spatial/configurations/generalSettings/generalSettings.js"></script>
+    <script src="service/alarms/openAlarmsAndTicketsService.js"></script>
+    <script src="partial/spatial/configurations/vmsStyles/generalStyles/ruleRow/ruleRow.js"></script>
+    <script src="filter/common/dataNotAvailable/dataNotAvailable.js"></script>
+    <script src="partial/spatial/configurations/visibilitySettings/visibilitySettings.js"></script>
+    <script src="partial/spatial/configurations/visibilitySettings/positionsVisibility/positionsVisibility.js"></script>
+    <script src="partial/spatial/configurations/visibilitySettings/segmentsVisibility/segmentsVisibility.js"></script>
+    <script src="filter/common/removeUnderscore/removeUnderscore.js"></script>
+	<script src="directive/common/combobox/combobox.js"></script>
+	<script src="service/common/comboboxService.js"></script>
+	<script src="service/spatial/spatialConfigRestService.js"></script>
+	<script src="directive/exchange/exchangeSendingQueueDetails/exchangeSendingQueueDetails.js"></script>
+	<script src="filter/spatial/stDateUtc/stDateUtc.js"></script>
+	<script src="filter/spatial/stSpeedunit/stSpeedUnit.js"></script>
+	<script src="filter/spatial/stDistanceUnit/stDistanceUnit.js"></script>
+	<script src="filter/spatial/stHumanizeTime/stHumanizeTime.js"></script>
+	<script src="service/spatial/unitConversionService.js"></script>
+	<script src="directive/spatial/copyrightPanel/copyrightPanel.js"></script>
+	<script src="service/spatial/spatialConfigAlertService.js"></script>
+	<script src="partial/spatial/configurations/visibilitySettings/tracksVisibility/tracksVisibility.js"></script>
+	<script src="partial/spatial/liveViewPanel/vmsPanel/vmsVisibilityService.js"></script>
+	<script src="partial/spatial/configurations/vmsStyles/generalStyles/countryStyles/countryStyles.js"></script>
+	<script src="partial/areas/areas.js"></script>
+	<script src="service/areas/areaMapService.js"></script>
+	<script src="partial/areas/userAreas/userAreas.js"></script>
+	<script src="partial/areas/userAreaModel.js"></script>
+	<script src="service/areas/areaRestService.js"></script>
+	<script src="service/areas/areaAlertService.js"></script>
+	<script src="partial/areas/areaManagementModal/areaManagementModal.js"></script>
+	<script src="partial/areas/uploadAreaModal/uploadAreaModal.js"></script>
+    <script src="service/common/mobileTerminalCsvService.js"></script>
+    <script src="service/common/assetCsvService.js"></script>
+	<script src="partial/spatial/configurations/layerSettings/layerSettings.js"></script>
+	<script src="partial/spatial/configurations/layerSettings/ports/ports.js"></script>
+	<script src="partial/spatial/configurations/layerSettings/areas/areas.js"></script>
+	<script src="partial/spatial/configurations/layerSettings/additionalcartography/additionalcartography.js"></script>
+	<script src="partial/spatial/configurations/layerSettings/background/background.js"></script>
+	<script src="service/spatial/lrDragNDrop.js"></script>
+	<script src="directive/spatial/report/report-visibility.js"></script>
+	<script src="filter/spatial/stAreas/stAreas.js"></script>
+	<script src="partial/spatial/reportsPanel/reportForm/saveAsModal/saveAsModal.js"></script>
+	<script src="service/spatial/projectionService.js"></script>
+	<script src="partial/areas/systemAreas/systemAreas.js"></script>
+	<script src="partial/areas/areaDetails/areaDetails.js"></script>
+	<script src="partial/areas/userAreasGroups/userAreasGroups.js"></script>
+	<script src="service/areas/areaHelperService.js"></script>
+	<script src="service/spatial/defaultMapConfigs.js"></script>
+	<script src="service/spatial/mapAlarmsService.js"></script>
+	<script src="service/common/loadingStatus.js"></script>
+	<script src="directive/common/loadingPanel/loadingPanel.js"></script>
+	<script src="directive/common/numericInput/numericInput.js"></script>
+	<script src="directive/common/alertModal/alertModal.js"></script>
+	<script src="directive/spatial/gazetteerSearch/gazetteerSearch.js"></script>
+	<script src="service/reporting/reportFormService.js"></script>
+	<script src="service/areas/areaClickerService.js"></script>
+	<script src="partial/areas/areaGroupEditorModal/areaGroupEditorModal.js"></script>
+	<script src="partial/areas/systemAreas/uploadSysAreaProgress/uploadSysAreaProgress.js"></script>
+	<script src="partial/areas/systemAreas/attrFieldMappingRule/attrFieldMappingRule.js"></script>
+	<script src="directive/common/tableAlert/tableAlert.js"></script>
+	<script src="partial/spatial/configurations/referenceDataSettings/referenceDataSettings.js"></script>
+	<script src="service/spatial/genericMapService.js"></script>
+	<script src="partial/spatial/configurations/vmsStyles/stylesSettingsTab/stylesSettingsTab.js"></script>
+    <script src="service/common/PreferencesService.js"></script>
+    <script src="partial/common/reportsPagination/reportsPagination.js"></script>
+    <script src="directive/spatial/destroyMapScope/destroyMapScope.js"></script>
+    <script src="directive/spatial/wmsPreview/wmsPreview.js"></script>
+    <!-- Add New Component JS Above --> 
+	
+	<div ui-view name="unionvmsHeader"></div>
+
+    <div id="contentWrapper">
+        <div id="content" loading-indicator="loadingPage" message="loadingPageMessage" ng-class="{'hiddenLoadingIndicator' : loadingPageIconHidden, 'is-loading-new-tab': currentStateName === 'app.reporting-id'}">
+            <div ng-hide="loadingPage">
+                <div ui-view name="unionvmsAlerts"></div>
+                <div ui-view name="unionvmsError"></div>
+                <div ui-view name="app"></div>
+            </div>
+        </div>
+    </div>
+
+    <div ui-view name="unionvmsFooter"></div>
+</body>
+</html>

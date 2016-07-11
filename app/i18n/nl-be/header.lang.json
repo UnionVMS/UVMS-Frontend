@@ -1,0 +1,20 @@
+{
+	"menu_today" : "Today",
+	"menu_reporting" : "Reports",
+	"menu_user" : "User",
+	"menu_assets" : "Assets",
+	"menu_alarmconditions" : "Alarms",
+	"menu_communication" : "Mobile terminals",
+	"menu_gis" : "GIS",
+	"menu_movement" : "Positions",
+	"menu_admin" : "Admin",
+	"menu_exchange" : "Exchange",
+    "menu_polling": "Polling",
+    "switch_context": "Switch context",
+    "update_contact_details": "Update contact details",
+    "change_password": "Change password",
+    "change_security_answer": "Change security answer",
+    "sign_in": "Sign in",
+    "sign_out": "Sign out",
+	"current_time_title": "Current time"
+}

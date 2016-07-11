@@ -1,0 +1,110 @@
+<!--
+﻿Developed with the contribution of the European Commission - Directorate General for Maritime Affairs and Fisheries
+© European Union, 2015-2016.
+
+This file is part of the Integrated Fisheries Data Management (IFDM) Suite. The IFDM Suite is free software: you can
+redistribute it and/or modify it under the terms of the GNU General Public License as published by the
+Free Software Foundation, either version 3 of the License, or any later version. The IFDM Suite is distributed in
+the hope that it will be useful, but WITHOUT ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or
+FITNESS FOR A PARTICULAR PURPOSE.  See the GNU General Public License for more details. You should have received a
+copy of the GNU General Public License along with the IFDM Suite. If not, see <http://www.gnu.org/licenses/>.
+-->
+<div class="reportVesselDetails">
+    <div class="modal-header">
+        <div class="pointer pull-right" ng-click="cancel()">
+             <i class="fa fa-times closeicon"></i>
+        </div>
+        <span class="itemType" ng-if="item.type === 'vessel'">{{'spatial.reports_form_vessels_search_by_vessel' | i18n}}</span>
+        <span class="itemType" ng-if="item.type === 'vgroup'">{{'spatial.reports_form_vessels_search_by_group' | i18n}}</span>
+        <span class="vesselName">{{item.name}}</span>
+    </div>
+    <div class="modal-body">
+        <div class="row" ng-show="hasError === true">
+        	<div class="col-md-12 loading margin-setup">
+        		<div class="alert alert-danger errorAlert" role="alert">
+        			<span class="fa fa-exclamation-circle ng-scope" aria-hidden="true"></span>
+        			{{'spatial.report_form_details_modal_error_message' | i18n }}
+        		</div>
+        	</div>
+        </div>
+        <div class="row" ng-show="isLoading === true && hasError === false">
+        	<div class="col-md-12 loading margin-setup">
+        		<i class="fa fa-spinner fa-spin"></i>
+        	</div>
+        </div>
+        <div class="row withMarginBottom" ng-show="isLoading === false && item.type === 'vgroup' && hasError === false">
+        	<div class="col-md-12 table-responsive-force" st-table="displayedRecords" st-safe-src="vesselGroupList">
+        		<table class="table table-striped">
+        			<thead>
+        				<tr>
+        					<th class="ng-hide"></th>
+        					<th st-sort="name" st-skip-natural="true" st-sort-default="true" st-class-ascent="sorting_asc" st-class-descent="sorting_desc">{{'spatial.reports_form_details_modal_vessel_name_header' | i18n }}</th>
+        				</tr>
+        			</thead>
+        			<tbody>
+        				<tr st-select-row-args="vessel" ng-click="clickHandler(vessel.vesselId.guid)" ng-repeat="vessel in displayedRecords">
+        					<td class="ng-hide">{{vessel.vesselId.guid}}</td>
+        					<td>{{vessel.name}}</td>
+        				</tr>
+        			</tbody>
+        			<tfoot class="stFooterPagination">
+    					<tr>
+    						<td class="text-right">
+    							<div st-pagination st-items-by-page="vesselsByPage" st-displayed-pages="7" st-template="partial/common/reportsPagination/reportsPagination.html"></div>
+    						</td>
+    					</tr>
+    				</tfoot>
+        		</table>
+        	</div>
+        </div>
+        <div class="row" ng-show="isLoading === false && hasError === false">
+        	<div class="col-md-12 grayBorderTop" ng-show="item.type === 'vgroup'">
+                 <h5>{{'vessel.event_history_administrative_information' | i18n}}</h5>
+             </div>
+        	<div class="col-md-6" ng-show="item.type === 'vgroup'">
+                {{'vessel.name' | i18n }}: <b>{{detailedItem.name}}</b>
+            </div>
+        	<div class="col-md-6">
+                {{'vessel.flag_state' | i18n }}: <b>{{detailedItem.countryCode}}</b>
+            </div>
+            <div class="col-md-6">
+                {{'vessel.ircs' | i18n }}: <b>{{detailedItem.ircs}}</b>
+            </div>
+
+            <div class="col-md-6">
+                {{'vessel.ext_marking' | i18n }}: <b>{{detailedItem.externalMarking}}</b>
+            </div>
+            <div class="col-md-6">
+                {{'vessel.cfr' | i18n }}: <b>{{detailedItem.cfr}}</b>
+            </div>
+            <div class="col-md-6">
+                {{'vessel.mmsi_no' | i18n }}: <b>{{detailedItem.mmsiNo}}</b>
+            </div>
+            <div class="col-md-6">
+                    {{'vessel.license' | i18n }}: <b>{{detailedItem.hasLicense ? ('common.yes' | i18n | uppercase) : ('common.no' | i18n | uppercase)}}</b>
+            </div>
+            <div class="col-md-6">
+                {{'vessel.home_port' | i18n }}: <b>{{detailedItem.homePort}}</b>
+            </div>
+
+
+            <div class="col-md-12">
+                <h5>{{'vessel.event_history_technical_information' | i18n}}</h5>
+            </div>
+
+            <div class="col-md-6">
+                {{'vessel.type' | i18n }}: <b>{{detailedItem.vesselType}}</b>
+            </div>
+            <div class="col-md-6">
+                {{'vessel.tonnage_gt' | i18n }}: <b>{{detailedItem.grossTonnage}} {{"common.tons" | i18n}}</b>
+            </div>    
+
+            <div class="col-md-6">
+                {{'vessel.main_power' | i18n }}: <b>{{detailedItem.powerMain}} {{"common.kw" | i18n}}</b>
+            </div>
+            <div class="col-md-6">
+                {{'vessel.length' | i18n }}: <b>{{detailedItem.lengthOverAll}} {{"common.meters_short" | i18n}}</b>
+            </div>  
+        </div>
+    </div>
+</div>

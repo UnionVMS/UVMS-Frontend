@@ -1,0 +1,81 @@
+<!--
+﻿Developed with the contribution of the European Commission - Directorate General for Maritime Affairs and Fisheries
+© European Union, 2015-2016.
+
+This file is part of the Integrated Fisheries Data Management (IFDM) Suite. The IFDM Suite is free software: you can
+redistribute it and/or modify it under the terms of the GNU General Public License as published by the
+Free Software Foundation, either version 3 of the License, or any later version. The IFDM Suite is distributed in
+the hope that it will be useful, but WITHOUT ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or
+FITNESS FOR A PARTICULAR PURPOSE.  See the GNU General Public License for more details. You should have received a
+copy of the GNU General Public License along with the IFDM Suite. If not, see <http://www.gnu.org/licenses/>.
+-->
+<div ng-controller="AssignvesselCtrl">
+    <div class="assignVesselsContainer" ng-show="isVisible.assignVessel">
+
+        <div ng-show="selectedVessel">
+            <vessel-details vessel="selectedVessel" disable-form="true" ></vessel-details>
+            <div class="row detailsFooter">
+                <div class="col-md-6 backLinkContainer">
+                    <span ng-click="goBackToAssignVesselSearchResultsClick()">{{"vessel.assign_back_to_search_result" | i18n | uppercase}}</span>
+                </div>
+                <div class="col-md-6 textAlignRight">
+                    <button type="button" class="btn btn-primary" ng-click="assignToSelectedVessel()"> <i class="fa fa-link"></i> {{"vessel.assign" | i18n | uppercase}}</button>
+                </div>
+            </div>
+        </div>
+        <div class="row" ng-hide="selectedVessel">
+            <div class="col-md-12 searchVesselContainer">
+                <div class="row searchFormContainer">
+                    <form novalidate name="assignVesselSearchForm">
+                        <!-- Search input -->
+                        <div class="col-md-2">
+                            <input type="text" class="form-control searchText"
+                                   placeholder="{{'vessel.search_vessel_placeholder' | i18n}}" ng-model="assignVesselFreeText">
+                        </div>
+
+                        <!-- Type Dropdown -->
+                        <div class="col-md-2">
+                            <dropdown ng-model="assignVesselSearchType" initialtext="" items="assignVesselSearchTypes"></dropdown>
+                        </div>
+
+                        <!-- Search button -->
+                        <div class="col-md-2 mtsearchbuttoncontainer">
+                            <button type="submit" class="btn btn-primary btn-sm vmsbtn"  ng-click="assignVesselSearch()" ng-disabled="!assignVesselFreeText">
+                                {{'common.search' | i18n}}
+                            </button>
+                        </div>
+                    </form>
+                </div>
+                <div class="row">
+                    <div search-results-table search="currentSearchResults" class="col-md-12" ng-hide="assignVesselSearchInProgress">
+                        <table class="searchResults colorOdd truncate-text">
+                            <thead>
+                                <tr>
+                                    <th sortable-table-header by="currentSearchResults.sortBy" reverse="currentSearchResults.sortReverse" order="'ircs'">{{"vessel.ircs" | i18n}}</th>
+                                    <th sortable-table-header by="currentSearchResults.sortBy" reverse="currentSearchResults.sortReverse" order="'name'">{{"vessel.name" | i18n}}</th>
+                                    <th sortable-table-header by="currentSearchResults.sortBy" reverse="currentSearchResults.sortReverse" order="'cfr'">{{"vessel.cfr" | i18n}}</th>
+                                    <th sortable-table-header by="currentSearchResults.sortBy" reverse="currentSearchResults.sortReverse" order="'externalMarking'">{{"vessel.external_marking" | i18n}}</th>
+                                    <th>&nbsp;</th>
+                                </tr>
+                            </thead>
+                            <tr ng-repeat="vessel in currentSearchResults.items | orderBy:currentSearchResults.sortBy:currentSearchResults.sortReverse">
+                                <td ng-attr-title="{{vessel.ircs}}">{{vessel.ircs}}</td>
+                                <td ng-attr-title="{{vessel.name}}">{{vessel.name}}</td>
+                                <td ng-attr-title="{{vessel.cfr}}">{{vessel.cfr}}</td>
+                                <td ng-attr-title="{{vessel.externalMarking}}">{{vessel.externalMarking}}</td>
+                                <td class="textAlignRight">
+                                    <button type="button" class="btn btn-primary" ng-click="selectVessel(vessel)" ng-disabled="!vessel.ircs" title="{{ vessel.ircs ? '' : 'mobileTerminal.assign_vessel_ircs_required' | i18n }}" style="pointer-events: auto;"><i class="fa fa-check"></i></button>
+                                </td>
+                            </tr>
+                        </table>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-md-12">
+                        <search-results-pagination page='currentSearchResults.page' total='currentSearchResults.totalNumberOfPages' callback='gotoPage'></search-results-pagination >
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

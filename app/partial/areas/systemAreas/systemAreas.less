@@ -1,0 +1,116 @@
+/*
+﻿Developed with the contribution of the European Commission - Directorate General for Maritime Affairs and Fisheries
+© European Union, 2015-2016.
+
+This file is part of the Integrated Fisheries Data Management (IFDM) Suite. The IFDM Suite is free software: you can
+redistribute it and/or modify it under the terms of the GNU General Public License as published by the
+Free Software Foundation, either version 3 of the License, or any later version. The IFDM Suite is distributed in
+the hope that it will be useful, but WITHOUT ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or
+FITNESS FOR A PARTICULAR PURPOSE.  See the GNU General Public License for more details. You should have received a
+copy of the GNU General Public License along with the IFDM Suite. If not, see <http://www.gnu.org/licenses/>.
+ */
+.systemAreasContainer{
+	.dataset-table-container {
+		min-height: 52px;
+	}
+	.radioButtons {
+		margin: 15px 0px;
+		.radio-inline {
+			margin-left: 0px;
+			margin-right: 20px;
+		}
+	}
+	.system-area-body {
+		.form-container {
+			padding-top: 15px;
+			border: 1px solid #dddddd;
+			overflow: auto;
+			.form-group {
+				label {
+					margin-right: 5px;
+				}
+			}
+		}
+		.section-title {
+			font-weight: bold;
+			text-transform: uppercase;
+		}
+		.input-group[class*="col-"] {
+			padding-left: 15px;
+			padding-right: 35px;
+		}
+		.metadata-group {
+			textarea {
+				max-width: 100%;
+				min-width: 100%;
+			}
+		}
+	}
+	.btn-container {
+		margin: 15px 0;
+	}
+	.updateMetadata{
+		.btn {
+			margin-right: -15px;
+		}
+	}
+	.metadata-container{
+		overflow-y: auto;
+		height: 100%;
+	}
+	.info-qtip {
+		margin-right: 10px;
+	}
+	.noPadding {
+		padding: 0;
+	}
+	.dataset-form-container {
+		margin-bottom: 20px;
+		.dataset-errorMsg {
+			right: 20px;
+			padding-right: 0;
+		}
+		.dataset-form-row {
+			line-height: 30px;
+		}
+		.selected-area {
+			padding-right: 40px;
+		}
+	}
+	.areaFormSection {
+		font-weight: bold;
+		text-transform: uppercase;
+		border-bottom: 2px solid #ddd;
+		margin: 15px 0;
+		padding-left: 0;
+	}
+	.btn-back {
+		margin-right: 5px;
+	}
+	.table-header-attr-mapping {
+		font-weight: bold;
+	}
+	
+	.sysarea-wizard {
+		overflow-y: auto;
+		.step-panel {
+			.static-text {
+				line-height: 30px;
+			}
+			.btn-add a {
+				color: @primaryColor;
+			}
+			.btn-rm,
+			.btn-add {
+				padding-top: 0;
+			}
+			.btn-rm span {
+				font-size: 16px;
+				padding: 2px 8px;
+			}
+			&.overview-panel .static-text {
+				line-height: 20px;
+			}
+		}
+	}
+}

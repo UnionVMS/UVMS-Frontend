@@ -1,0 +1,56 @@
+<!--
+﻿Developed with the contribution of the European Commission - Directorate General for Maritime Affairs and Fisheries
+© European Union, 2015-2016.
+
+This file is part of the Integrated Fisheries Data Management (IFDM) Suite. The IFDM Suite is free software: you can
+redistribute it and/or modify it under the terms of the GNU General Public License as published by the
+Free Software Foundation, either version 3 of the License, or any later version. The IFDM Suite is distributed in
+the hope that it will be useful, but WITHOUT ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or
+FITNESS FOR A PARTICULAR PURPOSE.  See the GNU General Public License for more details. You should have received a
+copy of the GNU General Public License along with the IFDM Suite. If not, see <http://www.gnu.org/licenses/>.
+-->
+<div class="modal-header" style="text-align:left">
+    <div class="pointer pull-right" ng-click="cancel()"> 
+        <span class="fa fa-times closeicon"></span>
+    </div>
+    <h4 class="modal-title" id="saveSearchModalLabel">{{modalHeader}}</h4>
+</div>
+<div class="modal-body" loading-indicator="waitingForCreateResponse">
+    <alert type="danger" ng-show="error">
+        <span class="fa fa-exclamation-circle"></span>
+        <span>
+            {{errorMessage}}
+        </span>
+    </alert>
+
+    <div ng-show="allowSaving">
+        <form name="saveForm" novalidate>
+            <div class="form-group" ng-class="{'has-error': saveForm.name.$dirty && saveForm.name.$invalid}" ng-if="!append">
+                <input type="text" class="form-control" name="name" placeholder="{{inputPlaceholder}}" ng-model="saveData.name" ng-maxlength="80" ng-change="unsetExistingGroupAsSaveTarget()" autofocus>
+                <input-validation-message types="maxlength" input="saveForm.name"></input-validation-message>
+            </div>
+            <div ng-show="existingGroups.length > 0">
+                <span class="dropdownMessage">{{dropdownHeader}}:</span>
+
+                <div class="dropdown">
+                    <button class="btn btn-lg btn-default dropdown-toggle" type="button" id="saveGroupDropdown"  data-toggle="dropdown" aria-expanded="true">
+                        <div class="dropdowntext">
+                            <span ng-show="saveData.existingGroup">{{saveData.existingGroup.name}}</span>
+                            <span class="noselection" ng-show="!saveData.existingGroup">{{dropdownLabel}}</span>
+                        </div>
+                        <span class="caret"></span>
+                    </button>
+                    <ul class="dropdown-menu" role="menu" aria-labelledby="groupDropdown">
+                        <li ng-repeat="group in existingGroups | orderBy:'name'">
+                           <a ng-click="setExistingGroupAsSaveTarget(group)">{{group.name}}</a>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+        </form>
+    </div>
+</div>
+<div class="modal-footer">
+    <button type="button" class="btn btn-default" ng-click="cancel()">{{'common.cancel' | i18n}}</button>
+    <button type="button" class="btn btn-primary" ng-click="saveSearch()" ng-show="allowSaving" ng-disabled="!isValidSaveData() || waitingForCreateResponse">{{'common.save' | i18n}}</button>
+</div>

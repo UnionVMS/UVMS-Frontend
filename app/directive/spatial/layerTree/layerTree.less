@@ -1,0 +1,91 @@
+/*
+﻿Developed with the contribution of the European Commission - Directorate General for Maritime Affairs and Fisheries
+© European Union, 2015-2016.
+
+This file is part of the Integrated Fisheries Data Management (IFDM) Suite. The IFDM Suite is free software: you can
+redistribute it and/or modify it under the terms of the GNU General Public License as published by the
+Free Software Foundation, either version 3 of the License, or any later version. The IFDM Suite is distributed in
+the hope that it will be useful, but WITHOUT ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or
+FITNESS FOR A PARTICULAR PURPOSE.  See the GNU General Public License for more details. You should have received a
+copy of the GNU General Public License along with the IFDM Suite. If not, see <http://www.gnu.org/licenses/>.
+ */
+span.fancytree-icon, span.fancytree-checkbox, span.fancytree-expander, span.fancytree-radio, span.fancytree-custom-icon {
+  margin-top: 4px;
+  color: @primaryColor;
+}
+
+span.fancytree-title {
+  padding: 0px;
+  margin: 0px;
+  padding-right: 5px;
+  line-height: 23px;
+}
+
+#fancytree-drop-marker.fancytree-drop-after, #fancytree-drop-marker.fancytree-drop-before {
+  width: 1em;
+  height: 1em;
+  color: #7ca;
+}
+
+span.fancytree-clickable {
+  width: 15px;
+  text-align: center;
+  margin-left: 5px;
+  color: @profileColor_darkgray;
+  font-size: 13px;
+  line-height: 25px;
+  &.fa-info-circle,
+  &.fa-tags,
+  &.fancytree-context-menu-btn {
+  	position: absolute;
+  }
+  &.fa-info-circle {
+  	right: 25px;
+  }
+  &.fa-tags,
+  &.fancytree-context-menu-btn {
+  	right: 5px;
+  }
+  &.fancytree-context-menu-btn.context-menu-active {
+    color: @primaryColor !important;
+  }
+}
+
+span.fancytree-clickable.info-disabled,
+span.fancytree-clickable.label-disabled {
+  background: #FFFFFF none repeat scroll 0% 0%;
+  color: #BBBBBB;
+}
+
+span.fancytree-clickable.info-selected {
+  color: @primaryColor;
+}
+
+span.fancytree-clickable.label-selected-vmspos {
+  color: @profileColor_blue;
+}
+
+span.fancytree-clickable.label-selected-vmsseg {
+  color: #0C9F15;
+}
+
+.layertree-baselayer-node > .fancytree-title {
+	padding-left: 20px !important;
+}
+
+.layertree-alarms {
+  span.fancytree-expander {
+    display: none;
+  }
+  span.fancytree-checkbox {
+    margin-left: 0;
+  }
+  span.fancytree-title {
+    padding-left: 22px !important;
+  }
+}
+
+ul.fancytree-container.ui-fancytree {
+	font-family: Roboto, Arial;
+	font-size: 15px;
+}

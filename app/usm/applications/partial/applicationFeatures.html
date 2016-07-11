@@ -1,0 +1,57 @@
+<!--
+﻿Developed with the contribution of the European Commission - Directorate General for Maritime Affairs and Fisheries
+© European Union, 2015-2016.
+
+This file is part of the Integrated Fisheries Data Management (IFDM) Suite. The IFDM Suite is free software: you can
+redistribute it and/or modify it under the terms of the GNU General Public License as published by the
+Free Software Foundation, either version 3 of the License, or any later version. The IFDM Suite is distributed in
+the hope that it will be useful, but WITHOUT ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or
+FITNESS FOR A PARTICULAR PURPOSE.  See the GNU General Public License for more details. You should have received a
+copy of the GNU General Public License along with the IFDM Suite. If not, see <http://www.gnu.org/licenses/>.
+-->
+<div>
+    <table st-table="displayedFeatures" st-safe-src="applicationDetails.features" class="table table-striped fixed">
+        <colgroup>
+            <col style="width: 400px;">
+            <col style="width: 550px;">
+            <col style="width: 190px;">
+        </colgroup>
+        <thead class="table_heading">
+        <tr>
+            <th st-sort="name" st-sort-default="true" ng-click="changeSorting('name')" st-skip-natural="true" st-class-ascent="dummyClass" st-class-descent="dummyClass">
+                {{'common.name' | translate}}&nbsp;<i class="fa" ng-class="sortIcon('name')"></i>
+            </th>
+            <th st-sort="description" ng-click="changeSorting('description')" st-skip-natural="true" st-class-ascent="dummyClass" st-class-descent="dummyClass">
+                {{'common.description' | translate}}&nbsp;<i class="fa" ng-class="sortIcon('description')"></i>
+            </th>
+            <th st-sort="group" ng-click="changeSorting('group')" st-skip-natural="true" st-class-ascent="dummyClass" st-class-descent="dummyClass">
+                Group&nbsp;<i class="fa" ng-class="sortIcon('group')"></i>
+            </th>
+        </tr>
+        </thead>
+        <tbody ng-if="!emptyFeaturesResult && (checkAccess('manageApplications')||checkAccess('viewApplications'))">
+        <tr ng-repeat="feature in displayedFeatures">
+            <td ng-bind="feature.name"></td>
+            <td ng-bind="feature.description"></td>
+            <td ng-bind="feature.group" class="rightBorder"></td>
+        </tr>
+        </tbody>
+        <tbody ng-if="emptyFeaturesResult && (checkAccess('manageApplications')||checkAccess('viewApplications'))">
+            <tr>
+                <td colspan="4" class="text-center rightBorder">No features are defined by this application.</td>
+            </tr>
+        </tbody>
+        <tbody ng-if="!(checkAccess('manageApplications')||checkAccess('viewApplications'))">
+            <tr>
+                <td colspan="4" class="text-center rightBorder">Not authorised.</td>
+            </tr>
+        </tbody>
+        <tfoot>
+        <tr>
+            <td colspan="5" class="text-right">
+                <div class="st-pagination" st-pagination="" st-items-by-page="itemsByPage" st-displayed-pages="7"></div>
+            </td>
+        </tr>
+        </tfoot>
+    </table>
+</div>

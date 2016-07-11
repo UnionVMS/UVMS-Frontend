@@ -1,0 +1,94 @@
+<!--
+﻿Developed with the contribution of the European Commission - Directorate General for Maritime Affairs and Fisheries
+© European Union, 2015-2016.
+
+This file is part of the Integrated Fisheries Data Management (IFDM) Suite. The IFDM Suite is free software: you can
+redistribute it and/or modify it under the terms of the GNU General Public License as published by the
+Free Software Foundation, either version 3 of the License, or any later version. The IFDM Suite is distributed in
+the hope that it will be useful, but WITHOUT ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or
+FITNESS FOR A PARTICULAR PURPOSE.  See the GNU General Public License for more details. You should have received a
+copy of the GNU General Public License along with the IFDM Suite. If not, see <http://www.gnu.org/licenses/>.
+-->
+<div class="panel panel-default" ng-controller="userContextsControllerCtrl">
+	<table st-table="displayedUserContexts" st-safe-src="userContextsList" class="table table-striped fixed">
+		<colgroup>
+			<col style="width: 360px;">
+			<col style="width: 160px;">
+			<col style="width: 360px;">
+			<col style="width: 160px;">
+			<col style="width: 120px;">
+		</colgroup>
+		<thead class="table_heading">
+		<tr>
+			<th st-sort="role" st-sort-default="true">{{'userContexts.role'  | translate}}</th>
+			<th st-sort="roleStatus">{{'userContexts.roleStatus' | translate}}</th>
+			<th st-sort="scope">{{'userContexts.scope' | translate}}</th>
+			<th st-sort="scopeStatus">{{'userContexts.scopeStatus' | translate}}</th>
+			<th class="text-center">
+				<!--div ng-controller="manageUserContextsCtrl" ng-if="checkAccess('manageUserContexts')"-->
+				<div ng-controller="manageUserContextsCtrl" ng-if="checkAccess('manageRoles')">
+					<button id="new_user_context" class="btn btn-primary btn-sm" ng-click='manageUserContext("new", "")' >
+						<span class="fa fa-plus"></span>
+						<span>{{'userContexts.new' | translate}}</span>
+					</button>
+				</div>
+			</th>
+		</tr>
+		</thead>
+
+		<tbody class="table-bordered" ng-if="!isDataLoading && !emptyResult">		     
+			<tr ng-repeat="uc in userContextsList | orderBy:uc.role:sortReverse" ng-if="uc.role !== null">
+				<td>
+					<a ui-sref="app.usm.roles.role({ roleId: uc.roleId })">
+					<span tooltip="{{uc.roleDescription}}">{{ uc.role }}</span>
+				</td>
+				<td>
+					<div class="col-md-3" ng-if="uc.role!==null">
+						<span ng-class="uc.roleClass" ng-bind='"userContexts.status_"+uc.roleStatus | translate'></span>
+					</div>
+				</td>
+				<td>
+					<div ng-if="uc.scope!==null">
+						<a ui-sref="app.usm.scopes.scope({ scopeId: uc.scopeId })">
+						<span tooltip="{{uc.scopeDescription}}">{{ uc.scope }}</span>
+					</div>
+				</td>
+				<td>
+					<div class="col-md-3" ng-if="uc.scope!==null && uc.scopeStatus!==null">
+					<span ng-class="uc.scopeClass" ng-bind='"userContexts.status_"+uc.scopeStatus | translate'></span>
+					</div>
+				</td>
+				<td class="actionTd text-center">
+					<!--span ng-controller="manageUserContextsCtrl" ng-if="(uc.role!==null)&&checkAccess('manageUserContexts')"-->
+					<span ng-controller="manageUserContextsCtrl" ng-if="(uc.role!==null)&&checkAccess('manageRoles')">
+						<button id="user_context_edit" type="button" class="btn btn-sm btn-primary" ng-click='manageUserContext("edit", uc)'>
+							<span><i class="fa fa-pencil"></i></span>
+						</button>
+					</span>
+					<!--span ng-controller="manageUserContextsCtrl" ng-if="checkAccess('manageUserContexts')&&(uc.role!==null)"-->
+					<span ng-controller="manageUserContextsCtrl" ng-if="checkAccess('manageRoles')&&(uc.role!==null)">
+						<button id="user_context_delete" type="button" class="btn btn-sm btn-danger" ng-click='manageUserContext("delete", uc)'>
+							<span><i class="fa fa-remove"></i></span>
+						</button>
+					</span>
+				</td>
+			</tr>
+		</tbody>
+
+		<tbody ng-if="isDataLoading">
+		<tr>
+			<td colspan="8">{{loadingMessage}}</td>
+		</tr>
+		</tbody>
+
+		<tbody ng-if="emptyResult">
+		<tr>
+			<td colspan="8">{{emptyResultMessage}}</td>
+		</tr>
+		</tbody>
+
+		<tfoot> <!-- no pagination maybe no need for footer -->
+		</tfoot>
+
+	</table>
+</div>

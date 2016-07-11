@@ -1,0 +1,65 @@
+<!--
+﻿Developed with the contribution of the European Commission - Directorate General for Maritime Affairs and Fisheries
+© European Union, 2015-2016.
+
+This file is part of the Integrated Fisheries Data Management (IFDM) Suite. The IFDM Suite is free software: you can
+redistribute it and/or modify it under the terms of the GNU General Public License as published by the
+Free Software Foundation, either version 3 of the License, or any later version. The IFDM Suite is distributed in
+the hope that it will be useful, but WITHOUT ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or
+FITNESS FOR A PARTICULAR PURPOSE.  See the GNU General Public License for more details. You should have received a
+copy of the GNU General Public License along with the IFDM Suite. If not, see <http://www.gnu.org/licenses/>.
+-->
+<div ng-controller="CountrystylesCtrl" ng-init="componentStyle = lastComponentStyle + 's'">
+	<div class="form-group table-responsive-force" st-table="displayedRecords" st-safe-src="loadedStyles">
+		<div class="row col-md-6 searchField">
+			<input type="text" class="form-control" ng-model="searchString" st-search="" placeholder="{{'spatial.reports_table_search_header' | i18n}}">
+		</div>
+		<ng-form name="countryListForm" novalidate>
+			<div class="table table-striped table-condensed tableSmart col-md-12">
+			    <div class="thead container-fluid row">
+			        <div class="tr row">
+				    	<div class="th col-md-6" st-sort="name" st-skip-natural="true" st-class-ascent="sorting_asc" st-class-descent="sorting_desc">{{'spatial.tab_vms_pos_table_header_country_name' | i18n }}</div>
+				        <div class="th col-md-2" st-sort="code" st-skip-natural="true" st-class-ascent="sorting_asc" st-class-descent="sorting_desc">{{'spatial.tab_vms_pos_table_header_fs' | i18n }}</div>
+				        <div class="th col-md-4">{{'spatial.tab_config_table_header_vessel_color' | i18n }}</div>
+			        </div>
+			        <div ng-if="alert.visible || !displayedRecords.length" class="tr row">
+						<div class="th col-md-12">
+							<table-alert type="alert.type" msg="alert.msg" visible="alert.visible"></table-alert>
+							<table-alert type="'info'" msg="'spatial.table_no_data'" visible="!alert.visible && !isLoading && !displayedRecords.length"></table-alert>
+						</div>
+			        </div>
+					<div ng-if="isLoading" class="tr row">
+				       	<div class="loading-spinner-cl th col-md-12"><i class="fa fa-spinner fa-spin loading-spinner"></i></div>
+			        </div>
+			    </div>
+			    <div class="tbody container-fluid row" ng-show="displayedRecords && displayedRecords.length > 0 && !isLoading">
+			        <div ng-repeat="report in displayedRecords" class="tr row">
+						<div class="td col-md-6">{{ report.name }}</div>
+						<div class="td col-md-2">{{ report.code }}</div>
+						<div class="td col-md-4">
+							<div class="form-group noBottomPadding" ng-class="{'has-error': prefServ.stylesErrors[settingsLevel][componentStyle][loadedStyles.indexOf(report)]}">
+								<div class="colorPickerComponent">
+									<div ng-style="{'background-color': report.color && report.color.length > 3  && report.color.length <= 7 && report.color.indexOf('#') != -1 ? report.color : '#fff'}" class="form-control pickedcolor">
+										<i class="fa fa-ban" ng-hide="report.color && report.color.length > 3 && report.color.length <= 7 && report.color.indexOf('#') != -1"></i>
+									</div>
+									<input class="form-control" colorpicker ng-model="report.color" type="text" ng-change="validateColor(loadedStyles.indexOf(report));" name="countryColor" autocomplete="off">
+									<div class="innerErrorMessages" ng-show="prefServ.stylesErrors[settingsLevel][componentStyle][loadedStyles.indexOf(report)]">
+										<div ng-show="prefServ.stylesErrors[settingsLevel][componentStyle][loadedStyles.indexOf(report)].required">{{'spatial.required_field_error_message' | i18n }}</div>
+										<div ng-show="!prefServ.stylesErrors[settingsLevel][componentStyle][loadedStyles.indexOf(report)].required && prefServ.stylesErrors[settingsLevel][componentStyle][loadedStyles.indexOf(report)].posColor">{{'spatial.invalid_color_error_message' | i18n }}</div>
+									</div>
+								</div>
+							</div>
+						</div>
+			        </div>
+			    </div>
+				<div class="stFooterPagination tfoot container-fluid row" ng-if="!isLoading && displayedRecords.length">
+					<div class="tr">
+						<div class="td col-md-12">
+							<div st-pagination st-items-by-page="itemsByPage" st-displayed-pages="7" st-template="partial/common/reportsPagination/reportsPagination.html"></div>
+						</div>
+					</div>
+				</div>
+			</div>
+		</ng-form>
+	</div>
+</div>

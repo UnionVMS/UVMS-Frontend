@@ -1,0 +1,80 @@
+<!--
+﻿Developed with the contribution of the European Commission - Directorate General for Maritime Affairs and Fisheries
+© European Union, 2015-2016.
+
+This file is part of the Integrated Fisheries Data Management (IFDM) Suite. The IFDM Suite is free software: you can
+redistribute it and/or modify it under the terms of the GNU General Public License as published by the
+Free Software Foundation, either version 3 of the License, or any later version. The IFDM Suite is distributed in
+the hope that it will be useful, but WITHOUT ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or
+FITNESS FOR A PARTICULAR PURPOSE.  See the GNU General Public License for more details. You should have received a
+copy of the GNU General Public License along with the IFDM Suite. If not, see <http://www.gnu.org/licenses/>.
+-->
+<div class="combobox" ng-class="{'combo-multiple': multiple, 'comboLineStyle': lineStyle === true, 'combo-editable': editable}" ng-model-options="{allowInvalid: true}" combolist-id="{{comboboxId}}">
+	<div class="dropdown fullWidthDropdown">
+		<div class="comboButtonContainer" ng-click="toggleCombo($event)">
+			<div class="btn btn-default dropdown-toggle" data-toggle="dropdown" aria-expanded="true" ng-disabled="ngDisabled" ng-if="!editable">
+				<div ng-class="setplaceholdercolor ? 'placeholderColor':''" class="dropdowntext" ng-if="lineStyle !== true">
+					<!--selected label-->
+					{{currentItemLabel}}
+					<!--MULTIPLE SELECTION-->
+					<ul class="selected-options" ng-if="multiple">
+						<li ng-repeat="item in selectedItems">
+							<span class="item-remover fa fa-times" ng-click="removeSelectedItem(item.code)"></span>
+							{{item.text}}
+						</li>
+					</ul>
+				</div>
+				<!--SVG SELECTION-->
+				<svg height="20px" width="100%" ng-if="lineStyle === true">
+					<g fill="none" stroke="#262626" stroke-width="4">
+						<path stroke-dasharray="{{currentItemLabel}}" d="M0 10 l999 0" />
+					</g>
+				</svg>
+				<!--CARET-->
+				<span ng-class="{'caret': !multiple || selectedItems && selectedItems.length === 0,'clear-all item-remover fa fa-times': multiple && selectedItems.length > 0}" ng-click="removeAllSelected()"></span>
+			</div>
+			<!--INPUT FORM TO VALIDATE-->
+			<ng-form name="comboForm">
+				<input class="form-control combo-editable-input" name="comboEditableInput" ng-model="newItem.text" ng-change="onComboChange()" ng-focus="focus=true" ng-blur="focus=false" placeholder="{{placeholder}}" ng-if="editable">
+				<span ng-class="{'caret': !multiple || selectedItems && selectedItems.length === 0,'clear-all item-remover fa fa-times': multiple && selectedItems.length > 0}" ng-click="removeAllSelected()" ng-show="editable"></span>
+			</ng-form>
+		</div>
+	</div>
+	<div class="comboList fullWidthDropdown" ng-class="{'open': isOpen, 'comboLineStyle': lineStyle === true, 'combo-section': comboSection}">
+		<ul class="dropdown-menu" role="menu">
+			<!--PLACEHOLDER-->
+			<li ng-class="!initialtextSelectable ? 'disabled' : ''" ng-show="initialValue && !multiple && !isLoading" ng-click="selectVal(initialValue)">
+				<a role="menuitem" tabindex="-1" ng-bind="initialValue.text"></a>
+			</li>
+			<!--BASIC COMBO-->
+			<li ng-class="disableItem(item) ? 'disabled' : ''" ng-repeat="item in loadedItems" role="presentation" ng-click="selectVal(item,$index)" ng-show="!lineStyle && !comboSection && !isFilterActive && !isLoading" ng-if="!group || (group && comboboxServ.isAvailableItem(group, ngModel, item.code))">
+				<a role="menuitem" tabindex="-1" ng-bind="getItemLabel(item)"></a>
+			</li>
+			<!--COMBO WITH SECTIONS-->
+			<li class="disabled" ng-repeat="section in loadedItems" role="presentation" ng-show="!isLoading" ng-if="comboSection && !isLoading">
+				<a role="menuitem" tabindex="-1" ng-bind="getItemLabel(section)"></a>
+				<ul class="dropdown-submenu" role="menu">
+					<li ng-class="disableItem(item) ? 'disabled' : ''" ng-repeat="item in section.items" role="presentation" ng-click="selectVal(item,$index)">
+						<a role="menuitem" tabindex="-1" ng-bind="getItemLabel(item)"></a>
+					</li>
+				</ul>
+			</li>
+			<!--COMBO WITH FILTER-->
+			<li ng-class="disableItem(item) ? 'disabled' : ''" ng-repeat="item in loadedItems | filter:newItem" role="presentation" ng-click="selectVal(item,$index)" ng-show="isFilterActive && !isLoading">
+				<a role="menuitem" tabindex="-1" ng-bind="getItemLabel(item)"></a>
+			</li>
+			<!--SVG COMBO-->
+			<li ng-class="disableItem(item) ? 'disabled' : ''" ng-repeat="item in loadedItems" role="presentation" ng-click="selectVal(item,$index)" ng-if="lineStyle === true" ng-show="!isLoading">
+				<svg height="21px" width="100%">
+					<g fill="none" stroke="#262626" stroke-width="4">
+						<path stroke-dasharray="{{getItemLabel(item)}}" d="M0 13 l999 0" />
+					</g>
+				</svg>
+			</li>
+			<!--LOADING LIST-->
+			<li class="loading-msg" ng-if="isLoading">
+				<i class="fa fa-spinner fa-spin"></i>
+			</li>
+		</ul>
+	</div>
+</div>

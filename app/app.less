@@ -1,0 +1,298 @@
+/*
+﻿Developed with the contribution of the European Commission - Directorate General for Maritime Affairs and Fisheries
+© European Union, 2015-2016.
+
+This file is part of the Integrated Fisheries Data Management (IFDM) Suite. The IFDM Suite is free software: you can
+redistribute it and/or modify it under the terms of the GNU General Public License as published by the
+Free Software Foundation, either version 3 of the License, or any later version. The IFDM Suite is distributed in
+the hope that it will be useful, but WITHOUT ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or
+FITNESS FOR A PARTICULAR PURPOSE.  See the GNU General Public License for more details. You should have received a
+copy of the GNU General Public License along with the IFDM Suite. If not, see <http://www.gnu.org/licenses/>.
+ */
+@import "../bower_components/bootstrap/less/bootstrap.less";
+@import "../bower_components/font-awesome/less/font-awesome.less";
+@import "../bower_components/leaflet/dist/leaflet.css";
+@import "../bower_components/OpenLayers/css/ol.css";
+@import "../bower_components/fancytree/dist/skin-awesome/ui.fancytree.css";
+@import "../bower_components/jQuery-contextMenu/dist/jquery.contextMenu.min.css";
+@import "../bower_components/angular-toggle-switch/angular-toggle-switch.css";
+@import "../bower_components/angular-toggle-switch/angular-toggle-switch-bootstrap.css";
+@import "../bower_components/angular-bootstrap-colorpicker/css/colorpicker.min.css";
+@import "../bower_components/seiyria-bootstrap-slider/dist/css/bootstrap-slider.min.css";
+@import "../bower_components/seiyria-bootstrap-slider/dist/css/bootstrap-slider.min.css";
+@import "../bower_components/qtip2/jquery.qtip.min.css";
+@import "../bower_components/angular-chart.js/dist/angular-chart.css";
+@import "../app/assets/spatial/ol3-layerswitcher/src/ol3-layerswitcher.css";
+
+@fa-font-path: "assets/font-awesome/fonts";
+
+@import "less/globalVariables.less";
+@import "less/bootstrapOverride.less";
+@import "less/common.less";
+@import "less/components.less";
+@import "less/forms.less";
+@import "less/jquery.datetimepicker.less";
+
+/* Component LESS */
+@import "partial/common/error/error.less";
+@import "partial/login/login.less";
+@import "partial/header/header.less";
+@import "partial/footer/footer.less";
+@import "partial/header/headerMenu/headerMenu.less";
+@import "partial/today/today.less";
+
+@import "directive/vessel/vesselDetails/vesselDetails.less";
+@import "directive/common/search/advancedSearch/advancedSearch.less";
+@import "directive/common/search/advancedSearch/mobileTerminal/advancedSearchMobileTerminalForm.less";
+@import "directive/common/search/advancedSearch/pollingMobileTerminal/searchPollingMobileTerminalForm.less";
+@import "directive/common/loadingIndicator/loadingIndicator.less";
+@import "directive/common/datepickerInput/datepickerInput.less";
+
+@import "partial/vessel/vessel.less";
+@import "partial/vessel/vesselForm/vesselForm.less";
+@import "partial/vessel/vesselList/vesselList.less";
+@import "partial/common/saveSearchModal/saveSearchModal.less";
+@import "partial/vessel/vesselHistory/vesselHistoryModal/vesselHistoryModal.less";
+
+@import "partial/mobileTerminal/mobileTerminal.less";
+@import "partial/mobileTerminal/mobileTerminalList/mobileTerminalList.less";
+@import "directive/common/dropdown/dropdown.less";
+@import "directive/common/sortableTableHeader/sortableTableHeader.less";
+@import "partial/mobileTerminal/assignVessel/assignVessel.less";
+@import "partial/alerts/alerts.less";
+@import "partial/mobileTerminal/mobileTerminalDetails/mobileTerminalDetails.less";
+@import "partial/mobileTerminal/mobileTerminalForm/mobileTerminalForm.less";
+@import "service/common/modalComment/modalComment.less";
+@import "partial/mobileTerminal/mobileTerminalHistoryModal/mobileTerminalHistoryModal.less";
+
+@import "partial/polling/runningProgramPolls/runningProgramPolls.less";
+@import "partial/polling/newPollWizard/newPollWizard.less";
+@import "partial/polling/newPollWizard/selectMobileTerminals/newPollWizardSelectMobileTerminals.less";
+@import "partial/polling/newPollWizard/pollingOptions/newPollWizardPollingOptions.less";
+@import "partial/polling/newPollWizard/selection/newPollWizardSelection.less";
+@import "directive/polling/newPollWizardProgress/newPollWizardProgress.less";
+@import "partial/polling/pollingLogs/pollingLogs.less";
+@import "partial/polling/pollingPageHeader/pollingPageHeader.less";
+@import "directive/common/inputValidationMessage/inputValidationMessage.less";
+@import "directive/common/periodInput/periodInput.less";
+@import "directive/common/tagSelectInput/tagSelectInput.less";
+@import "directive/common/savedSearchDropdown/savedSearchDropdown.less";
+@import "directive/common/searchResultErrorAlert/searchResultErrorAlert.less";
+@import "partial/movement/movement.less";
+@import "partial/movement/movementList/movementList.less";
+@import "partial/movement/movementPageHeader/movementPageHeader.less";
+@import "directive/common/search/advancedSearch/movement/advancedSearchMovementForm.less";
+@import "directive/common/search/advancedSearch/vessel/advancedSearchVesselForm.less";
+@import "partial/movement/manualPositionReports/manualPositionReports.less";
+@import "partial/movement/manualPositionReports/manualMovementList/manualMovementList.less";
+@import "partial/movement/manualPositionReports/manualPositionReportModal/manualPositionReportModal.less";
+@import "partial/common/confirmationModal/confirmationModal.less";
+@import "partial/common/infoModal/infoModal.less";
+@import "partial/admin/adminConfiguration/adminConfiguration.less";
+@import "partial/admin/adminLog/adminLog.less";
+@import "partial/admin/adminPageHeader/adminPageHeader.less";
+@import "directive/common/search/advancedSearch/audit/auditSearchForm.less";
+@import "directive/common/multiselectDropDown/multiselectDropDown.less";
+
+@import "partial/spatial/spatial.less";
+@import "partial/spatial/liveViewPanel/liveViewPanel.less";
+@import "partial/spatial/reportsPanel/reportsPanel.less";
+@import "partial/spatial/liveViewPanel/mapPanel/mapPanel.less";
+@import "partial/spatial/liveViewPanel/vmsPanel/vmsPanel.less";
+@import "partial/spatial/liveViewPanel/mapPanel/layerPanel/layerPanel.less";
+@import "partial/spatial/reportsPanel/reportsList/reportsList.less";
+@import "partial/spatial/reportsPanel/reportForm/reportForm.less";
+@import "partial/spatial/reportsPanel/reportForm/vesselFieldset/vesselFieldset.less";
+@import "partial/spatial/reportsPanel/reportForm/vmsFiltersFieldset/vmsFiltersFieldset.less";
+@import "partial/exchange/exchange.less";
+@import "partial/exchange/tables/exchangeSendingQueue.less";
+@import "partial/exchange/tables/exchangeTransmissionStatus.less";
+@import "directive/spatial/layerTree/layerTree.less";
+@import "directive/spatial/layerMenu/layerMenu.less";
+@import "partial/help/help.less";
+@import "widgets/assetsInZone/assetsInZone.less";
+@import "widgets/numberWidget/numberWidget.less";
+@import "widgets/incomingMovements/incomingMovements.less";
+@import "widgets/exchangeHistory/exchangeHistory.less";
+
+/*USM*/
+@import "usm/uvms-ui.less";
+
+@import "partial/alarms/alarms.less";
+@import "partial/alarms/rules/rules.less";
+@import "partial/alarms/holdingTable/holdingTable.less";
+@import "partial/alarms/holdingTable/holdingTableList/holdingTableList.less";
+@import "partial/alarms/openTickets/openTickets.less";
+@import "partial/alarms/openTickets/openTicketsList/openTicketsList.less";
+@import "partial/alarms/alarmsPageHeader/alarmsPageHeader.less";
+@import "partial/alarms/rules/rulesTable/rulesTable.less";
+@import "partial/alarms/rules/rulesForm/rulesForm.less";
+@import "partial/admin/adminConfiguration/configurationGeneral/configurationGeneral.less";
+@import "partial/admin/adminConfiguration/configurationImport/configurationImport.less";
+@import "partial/admin/adminConfiguration/configurationOther/configurationOther.less";
+@import "partial/admin/adminConfiguration/configurationModule/configurationModule.less";
+@import "directive/common/searchResultsPagination/searchResultsPagination.less";
+@import "directive/common/searchResultsTable/searchResultsTable.less";
+@import "directive/alarms/rules/rulesTableDetails/rulesTableDetails.less";
+@import "partial/alarms/alarmReportModal/alarmReportModal.less";
+@import "directive/spatial/legendPanel/legendPanel.less";
+@import "partial/spatial/reportsPanel/reportForm/vesselFieldset/detailsModal/detailsModal.less";
+@import "partial/spatial/reportsPanel/reportForm/areasSelectionModal/areasSelectionModal.less";
+@import "partial/admin/adminConfiguration/configurationReporting/configurationReporting.less";
+@import "partial/spatial/configurations/configPanel.less";
+
+@import "partial/spatial/reportsPanel/reportForm/mapConfigurationModal/mapConfigurationModal.less";
+@import "partial/spatial/configurations/mapSettingsPanel/refreshSettingsForm/refreshSettingsForm.less";
+@import "partial/spatial/configurations/mapSettingsPanel/mapSettingsCollapsiblePanel.less";
+@import "partial/spatial/configurations/vmsStyles/vmsStylesCollapsiblePanel.less";
+@import "partial/spatial/configurations/mapSettingsPanel/mapProjectionSettings/mapProjectionSettings.less";
+@import "partial/movement/positionsMapModal/positionsMapModal.less";
+@import "partial/movement/positionReportModal/positionReportModal.less";
+@import "partial/spatial/configurations/generalSettings/generalSettings.less";
+@import "partial/spatial/configurations/vmsStyles/generalStyles/ruleRow/ruleRow.less";
+@import "directive/common/combobox/combobox.less";
+@import "partial/spatial/configurations/visibilitySettings/visibilitySettings.less";
+@import "partial/spatial/configurations/visibilitySettings/positionsVisibility/positionsVisibility.less";
+@import "partial/spatial/configurations/visibilitySettings/segmentsVisibility/segmentsVisibility.less";
+@import "directive/exchange/exchangeSendingQueueDetails/exchangeSendingQueueDetails.less";
+@import "directive/spatial/copyrightPanel/copyrightPanel.less";
+@import "partial/spatial/configurations/visibilitySettings/tracksVisibility/tracksVisibility.less";
+@import "partial/spatial/configurations/vmsStyles/generalStyles/countryStyles/countryStyles.less";
+@import "partial/areas/areas.less";
+@import "partial/areas/userAreas/userAreas.less";
+@import "partial/areas/areaManagementModal/areaManagementModal.less";
+@import "partial/areas/uploadAreaModal/uploadAreaModal.less";
+@import "partial/spatial/configurations/layerSettings/layerSettings.less";
+@import "partial/spatial/configurations/layerSettings/ports/ports.less";
+@import "partial/spatial/configurations/layerSettings/areas/areas.less";
+@import "partial/spatial/configurations/layerSettings/additionalcartography/additionalcartography.less";
+@import "partial/spatial/configurations/layerSettings/background/background.less";
+@import "partial/spatial/reportsPanel/reportForm/saveAsModal/saveAsModal.less";
+@import "partial/areas/systemAreas/systemAreas.less";
+@import "partial/areas/areaDetails/areaDetails.less";
+@import "partial/areas/userAreasGroups/userAreasGroups.less";
+@import "directive/common/loadingPanel/loadingPanel.less";
+@import "directive/common/alertModal/alertModal.less";
+@import "directive/spatial/gazetteerSearch/gazetteerSearch.less";
+@import "directive/common/numericInput/numericInput.less";
+@import "partial/areas/areaGroupEditorModal/areaGroupEditorModal.less";
+@import "partial/areas/systemAreas/uploadSysAreaProgress/uploadSysAreaProgress.less";
+@import "partial/areas/systemAreas/attrFieldMappingRule/attrFieldMappingRule.less";
+@import "directive/common/tableAlert/tableAlert.less";
+@import "partial/spatial/configurations/referenceDataSettings/referenceDataSettings.less";
+@import "partial/spatial/configurations/vmsStyles/stylesSettingsTab/stylesSettingsTab.less";
+@import "partial/common/reportsPagination/reportsPagination.less";
+@import "directive/spatial/wmsPreview/wmsPreview.less";
+/* Add Component LESS Above */
+/* Required for Angular UI Bootstrap */
+.nav, .pagination, .carousel, .panel-title a { cursor: pointer; }
+
+
+html {
+  position: relative;
+  min-height: 100%;
+}
+
+body{
+    width: 100%;
+    background-color: @pageBackgroundColor;
+    font-family: Roboto, Arial;
+}
+
+//Loading indicator shown when app starts
+#appLoading{
+    height: 100%;
+    width: 100%;
+}
+
+//Loading indicator shown when app starts and when a page loads
+#appLoading .loadingIndicator, #content>.loadingIndicator{
+    position:fixed;
+    top:@headerHeight;
+    z-index: 15;
+
+    .spinnerOverlay{
+        background-color:@pageBackgroundColor;
+    }
+}
+
+#contentWrapper{
+    position: relative;
+    #content{
+        min-height: 400px;
+        margin-bottom: @footerHeight;
+
+        //Loading indicator shown when a page loads
+        &>.loadingIndicator{
+            top:@headerHeight;
+            .spinner{
+                top:calc(~"50% - 80px");
+            }
+        }
+        &.hiddenLoadingIndicator{
+            &>.loadingIndicator{
+                .spinner, .loadingText{
+                    display: none,
+                }
+            }
+        }
+        &.is-loading-new-tab>.loadingIndicator{
+        	top: 55px;
+        }
+    }
+}
+
+
+
+//Error message shown when app fails (e.g. when page resolves fail)
+.appErrorContainer {
+    position:absolute;
+    top: 0;
+    bottom: 0;
+    right: 0;
+    left: 0;
+    margin-top: 200px;
+    text-align: center;
+    font-size: 16px;
+
+    div{
+        font-size: 12px;
+    }
+}
+
+//TODO: What is this used for?
+.glyphicon {
+    color: @primaryColor;
+    top: -1px;
+}
+
+//TODO: REMOVE THIS FROM APP.LESS
+.closenewvessel img{
+    cursor: pointer;
+}
+
+
+
+@icon-font-path: "fonts/";
+
+div.tableSmart {
+		&:extend(table all);
+	}
+	div.thead {
+		&:extend(thead all);
+	}
+	div.tbody {
+		&:extend(tbody all);
+	}
+	div.tfoot {
+		&:extend(tfoot all);
+	}
+	div.tr {
+		&:extend(tr all);
+	}
+	div.th {
+		&:extend(th all);
+	}
+	div.td {
+		&:extend(td all);
+	}

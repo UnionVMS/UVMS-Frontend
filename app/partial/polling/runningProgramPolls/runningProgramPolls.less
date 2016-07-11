@@ -1,0 +1,84 @@
+/*
+﻿Developed with the contribution of the European Commission - Directorate General for Maritime Affairs and Fisheries
+© European Union, 2015-2016.
+
+This file is part of the Integrated Fisheries Data Management (IFDM) Suite. The IFDM Suite is free software: you can
+redistribute it and/or modify it under the terms of the GNU General Public License as published by the
+Free Software Foundation, either version 3 of the License, or any later version. The IFDM Suite is distributed in
+the hope that it will be useful, but WITHOUT ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or
+FITNESS FOR A PARTICULAR PURPOSE.  See the GNU General Public License for more details. You should have received a
+copy of the GNU General Public License along with the IFDM Suite. If not, see <http://www.gnu.org/licenses/>.
+ */
+.runningProgramPollsContainer{
+    padding-bottom: 10px;
+
+    .searchResultsContainer.hasError{
+        min-height: 0px;
+    }
+
+    .tableContainer{
+        max-height: 161px; //3 items visible
+        overflow-y: auto;
+        .scrollbar();
+    }
+
+    h5{
+        text-transform: uppercase;
+        font-weight: bold;
+    }
+
+    //Start, stop, delete
+    .actionIcon{
+        @cellWidth:45px;
+        @iconSize:25px;
+        @startColor:@successColor;
+        @stopAndDeleteColor:@errorColor;
+        @inactiveColor:#9B9B9B;
+
+        width: @cellWidth;
+        text-align: center;
+
+        &.inactive{
+            .start, .stop, .delete{
+                background:@inactiveColor !important;
+                cursor: default !important;
+            }
+        }
+
+        .iconWrapper(){
+            cursor: pointer;
+            border-radius: 50px;
+            width:@iconSize;
+            height:@iconSize;
+            line-height:@iconSize;
+            margin: auto;
+            text-align: center;
+            font-size: 10px;
+        }
+
+        .noAccess{
+            cursor: default !important;
+        }
+
+        .start{
+            .iconWrapper();
+            background: @startColor;
+            color:#fff;
+            i{
+                position: relative;
+                left: 1px;
+            }
+        }
+        .stop{
+            .iconWrapper();
+            background: @stopAndDeleteColor;
+            color:#fff;
+        }
+        .delete{
+            .iconWrapper();
+            color: @stopAndDeleteColor;
+            font-size: 20px;
+        }
+    }
+
+}

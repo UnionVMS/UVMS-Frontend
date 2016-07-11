@@ -1,0 +1,82 @@
+/*
+﻿Developed with the contribution of the European Commission - Directorate General for Maritime Affairs and Fisheries
+© European Union, 2015-2016.
+
+This file is part of the Integrated Fisheries Data Management (IFDM) Suite. The IFDM Suite is free software: you can
+redistribute it and/or modify it under the terms of the GNU General Public License as published by the
+Free Software Foundation, either version 3 of the License, or any later version. The IFDM Suite is distributed in
+the hope that it will be useful, but WITHOUT ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or
+FITNESS FOR A PARTICULAR PURPOSE.  See the GNU General Public License for more details. You should have received a
+copy of the GNU General Public License along with the IFDM Suite. If not, see <http://www.gnu.org/licenses/>.
+ */
+.rulesTableDetailsContainer{
+
+    //font-size: 12px;
+    margin-bottom: 10px;
+
+    .searchResultsContainer{
+        margin-bottom: 30px;
+    }
+
+    table.searchResults{
+
+        thead{
+            border-bottom: none;
+            tr{
+                background: inherit !important;
+                border-bottom: none;
+
+                &.searchInputRow{
+                    .searchButton{
+                        button{
+                            width: 100%;
+                        }
+                    }
+                }
+
+            }
+            th{
+                height:30px;
+                >a{
+                    .fa.fa-sort, .fa.fa-caret-down , .fa.fa-caret-up
+                    {
+                        margin-left:7px;
+                    }
+                }
+            }
+
+            th.positions{
+                text-align: center;
+            }
+        }
+        >tbody{
+            tr{
+                background: inherit !important;
+                border-bottom: none;
+                height: 30px;
+
+                td div.iconToTheLeftOfTheTableCell{
+                    position: absolute;
+                    left:-20px;
+                    i{
+                        cursor: default;
+                    }
+                    .closed{
+                        color: @successColor;
+                    }
+                    .pending{
+                        color: @warningColor;
+                    }
+                    .open{
+                        color: @errorColor;
+                    }
+                }
+
+                td.positions,{
+                    text-align: center;
+                    color:@primaryColor;
+                }
+            }
+        }
+    }
+}

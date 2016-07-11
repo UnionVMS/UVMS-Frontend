@@ -1,0 +1,91 @@
+<!--
+﻿Developed with the contribution of the European Commission - Directorate General for Maritime Affairs and Fisheries
+© European Union, 2015-2016.
+
+This file is part of the Integrated Fisheries Data Management (IFDM) Suite. The IFDM Suite is free software: you can
+redistribute it and/or modify it under the terms of the GNU General Public License as published by the
+Free Software Foundation, either version 3 of the License, or any later version. The IFDM Suite is distributed in
+the hope that it will be useful, but WITHOUT ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or
+FITNESS FOR A PARTICULAR PURPOSE.  See the GNU General Public License for more details. You should have received a
+copy of the GNU General Public License along with the IFDM Suite. If not, see <http://www.gnu.org/licenses/>.
+-->
+<div ng-controller="manageUserContextsCtrl">
+    <form novalidate class="form-horizontal" name="manageUserContextsForm" ng-submit="manageUserContextsForm.$valid && saveUpdateDelete(selectedRole, selectedScope)">
+        <div class="modal-header">
+            <div class="row">
+                <div class="col-md-6">
+                    <h3 ng-if="mode=='new'" class="modal-title">{{'userContexts.newContext' | translate}}</h3>
+
+                    <h3 ng-if="mode=='edit'" class="modal-title">{{'userContexts.editContext' | translate}}</h3>
+
+                    <h3 ng-if="mode=='delete'" class="modal-title">{{'userContexts.deleteContext' | translate}}</h3>
+                </div>
+            </div>
+        </div>
+        
+		<div class="modal-body">
+            <div class="row">
+                <div class="col-md-12" ng-class="messageDivClass">
+                    <span ng-bind-html="actionMessage" ng-class="messageClass"></span>
+                </div>
+            </div>
+
+            <div class="row">
+                <div class="form-group">
+                    <label class="col-md-3 col-md-offset-1" for="status">{{'userContexts.role'  | translate}}</label>
+
+                    <div class="col-md-4">
+                        <select class="form-inline form-control dropdown-select"
+                                id="role.roleId"
+                                name="role.name"
+                                ng-model="selectedRole"                               
+                                ng-options="role.name for role in roleList"
+                                required
+                                ng-class="{pointer: pointer}"
+                                ng-mouseenter="pointer=true"
+                                ng-mouseleave="pointer=false"
+                                ng-disabled="mode=='delete' || (showConfirmation && mode=='edit')">
+                        </select>
+                    </div>
+                </div>
+            </div>
+			
+            <div class="row">
+                <div class="form-group">
+                    <label class="col-md-3 col-md-offset-1" for="status">{{'userContexts.scope'  | translate}}</label>
+
+                    <div class="col-md-4">
+                        <select class="form-inline form-control dropdown-select"
+                                id="scope.scopeId"
+                                name="scope.name"
+								ng-model="selectedScope"
+                                ng-options="scope.name for scope in scopeList"
+                                
+                                ng-class="{pointer: pointer}"
+                                ng-mouseenter="pointer=true"
+                                ng-mouseleave="pointer=false"
+                                ng-disabled="mode=='delete' || (showConfirmation && mode=='edit')">
+							<option value=""></option>
+                        </select>
+                    </div>
+                </div>
+            </div>			
+        </div>
+		
+        <div class="modal-footer">
+            <div class="row">
+                <div class="col-md-offset-8 col-md-4">			
+                    <input type="button" class="btn btn-warning btn-sm" ng-show="!contextCreated" ng-click="cancel()" value="Cancel"/>
+                    <input type="submit" class="btn btn-primary btn-sm" value="Save"
+                           ng-disabled="manageUserContextsForm.$invalid || 
+								(initialRoleId === selectedRole.roleId && initialScopeId === selectedScope.scopeId)" ng-show="!contextCreated && !showConfirmation" ng-if="mode=='new' || mode=='edit'"/>
+                    <input type="submit" class="btn btn-primary btn-sm" value="Confirm"
+                           ng-disabled="manageUserContextsForm.$invalid" ng-show="!contextCreated && showConfirmation" ng-if="mode=='delete' || mode=='edit'"/>
+                    <input type="submit" class="btn btn-primary btn-sm" value="Delete"
+                           ng-disabled="manageUserContextsForm.$invalid" ng-show="!contextCreated && !showConfirmation" ng-if="mode=='delete'"/>
+					<label id="btn-success" class="btn btn-success btn-sm fa fa-check" ng-show="contextCreated" />
+                </div>
+            </div>
+        </div>
+    </form>	
+</div>

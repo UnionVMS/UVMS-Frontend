@@ -1,0 +1,47 @@
+/*
+﻿Developed with the contribution of the European Commission - Directorate General for Maritime Affairs and Fisheries
+© European Union, 2015-2016.
+
+This file is part of the Integrated Fisheries Data Management (IFDM) Suite. The IFDM Suite is free software: you can
+redistribute it and/or modify it under the terms of the GNU General Public License as published by the
+Free Software Foundation, either version 3 of the License, or any later version. The IFDM Suite is distributed in
+the hope that it will be useful, but WITHOUT ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or
+FITNESS FOR A PARTICULAR PURPOSE.  See the GNU General Public License for more details. You should have received a
+copy of the GNU General Public License along with the IFDM Suite. If not, see <http://www.gnu.org/licenses/>.
+ */
+.loading-panel {
+	top: 0;
+	bottom: 0;
+	left: 0;
+	right: 0;
+	text-align: center;
+	background-color: rgba(221, 221, 221, 0.4);
+    z-index: 100;
+    margin: 0;
+    padding: 0;
+    max-width: initial;
+	&,
+	.loading-msg {
+		position: absolute;
+	}
+	.loading-msg {
+		top: calc(~"50% - 98px / 2");
+		width: 100%;
+		> .loading-text {
+			margin-top: 30px;
+			> span {
+				border-radius: 5px;
+				padding: 5px;
+				text-transform: uppercase;
+				color: white;
+				background-color: rgba(80, 80, 80, 0.7);
+			}		
+		}
+		> .fa.fa-spinner.fa-spin {
+			font-size: 45px;
+				> i {
+		    	color: rgba(40, 40, 40, 0.7);
+		    }
+		}
+	}
+}

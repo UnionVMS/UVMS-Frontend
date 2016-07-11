@@ -1,0 +1,84 @@
+/*
+﻿Developed with the contribution of the European Commission - Directorate General for Maritime Affairs and Fisheries
+© European Union, 2015-2016.
+
+This file is part of the Integrated Fisheries Data Management (IFDM) Suite. The IFDM Suite is free software: you can
+redistribute it and/or modify it under the terms of the GNU General Public License as published by the
+Free Software Foundation, either version 3 of the License, or any later version. The IFDM Suite is distributed in
+the hope that it will be useful, but WITHOUT ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or
+FITNESS FOR A PARTICULAR PURPOSE.  See the GNU General Public License for more details. You should have received a
+copy of the GNU General Public License along with the IFDM Suite. If not, see <http://www.gnu.org/licenses/>.
+ */
+.tagSelectInputContainer{
+    @minHeight: 30px;
+    @minWidth: 160px;
+    @tagHeight:22px;
+
+    //max-width: 200px;
+    min-width: @minWidth;
+
+    .tagSelectInputContainerWrapper{
+        position: relative;
+        min-height: @minHeight;
+    }
+
+    .tagSelectButton{
+        height: auto !important;
+        min-height: @minHeight !important;
+        padding: 0 2px !important;
+        border-radius: 2px;
+
+        .caretWrapper{
+            .caret{
+                position: absolute !important;
+                right: 10px !important;
+                top:13px !important;
+            }
+        }
+    }
+
+    .placeholderText{
+        color:#999;
+        margin-right: 20px;
+        margin-top: 3px;
+        text-align: left;
+        padding-left: 7px;
+    }
+
+    .selection{
+        width: 100%;
+        margin-right: 50px;
+        .tag{
+            float: left;
+            margin: 3px 2px 1px 0;
+            padding: 0 3px;
+            height: @tagHeight;
+            line-height: @tagHeight;
+            .grayBorder;
+            border-radius: 4px;
+            background: #fff;
+            color:#000;
+            font-size: 12px;
+            font-weight: normal;
+            cursor: default;
+
+            .textWrapper{
+                position: relative;
+                top:-5px;
+
+                .removeTag{
+                    position: relative;
+                    top:3px;
+                    padding-left: 3px;
+                    font-size: 22px;
+                    color:#ccc;
+                    cursor: pointer;
+                    &:hover, &:active, &:focus{
+                        color:#000;
+                    }
+                }
+            }
+        }
+
+    }
+}

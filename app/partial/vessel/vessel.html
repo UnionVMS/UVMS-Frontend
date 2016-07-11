@@ -1,0 +1,41 @@
+<!--
+﻿Developed with the contribution of the European Commission - Directorate General for Maritime Affairs and Fisheries
+© European Union, 2015-2016.
+
+This file is part of the Integrated Fisheries Data Management (IFDM) Suite. The IFDM Suite is free software: you can
+redistribute it and/or modify it under the terms of the GNU General Public License as published by the
+Free Software Foundation, either version 3 of the License, or any later version. The IFDM Suite is distributed in
+the hope that it will be useful, but WITHOUT ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or
+FITNESS FOR A PARTICULAR PURPOSE.  See the GNU General Public License for more details. You should have received a
+copy of the GNU General Public License along with the IFDM Suite. If not, see <http://www.gnu.org/licenses/>.
+-->
+<div>
+    <div class="container containerWithTopBottomPadding">
+        <div class="getvessel" ng-show="isVisible.vesselForm">
+            <div ng-include="'partial/vessel/vesselForm/vesselForm.html'"></div>
+        </div>
+
+        <div ng-show="isVisible.search">
+            <div class="card">
+                <advanced-search searchfunc="searchVessels" modeltype="'VESSEL'"></advanced-search>
+                <div class="vesselcontainerwrapper">
+                    <div class="vesselsearchboxfooter row">
+                        <div class="col-md-2 nopaddingleft">
+                            <dropdown class="" ng-model="editSelection" initialtext="{{'common.actions' | i18n}}" items="editSelectionDropdownItems" menu-style callback="editSelectionCallback"></dropdown>
+                        </div>
+                        <div class="col-md-2">
+                            <button class="btn btn-primary btn-sm addnewassetbtn" ng-click="toggleCreateNewVessel()" type="button" show-if-allowed="manageVessels"><i class="fa fa-plus"></i>  {{'vessel.new_asset' | i18n}}
+                            </button>
+                        </div>
+                        <div class="col-md-2 col-md-offset-6 nopaddingright">
+                            <input type="text" class="pull-right form-control" placeholder="Filter" ng-model="currentSearchResults.filter">
+                        </div>
+
+                    </div>
+                    <div ng-include="'partial/vessel/vesselList/vesselList.html'"></div>
+                </div>
+                <search-results-pagination page='currentSearchResults.page' total='currentSearchResults.totalNumberOfPages' callback='gotoPage'></search-results-pagination >
+            </div>
+        </div>
+    </div>
+</div>

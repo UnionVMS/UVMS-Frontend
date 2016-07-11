@@ -1,0 +1,33 @@
+<!--
+﻿Developed with the contribution of the European Commission - Directorate General for Maritime Affairs and Fisheries
+© European Union, 2015-2016.
+
+This file is part of the Integrated Fisheries Data Management (IFDM) Suite. The IFDM Suite is free software: you can
+redistribute it and/or modify it under the terms of the GNU General Public License as published by the
+Free Software Foundation, either version 3 of the License, or any later version. The IFDM Suite is distributed in
+the hope that it will be useful, but WITHOUT ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or
+FITNESS FOR A PARTICULAR PURPOSE.  See the GNU General Public License for more details. You should have received a
+copy of the GNU General Public License along with the IFDM Suite. If not, see <http://www.gnu.org/licenses/>.
+-->
+<div class="areaGeomConfirmModal">
+    <div class="modal-header">
+        <div class="pointer pull-right" ng-click="cancel()">
+             <i class="fa fa-times closeicon"></i>
+        </div>
+    </div>
+    <div class="modal-body">
+        <div class="row">
+        	<span class="col-md-12">{{'areas.modal_geom_mismatch' | i18n}}</span>
+        </div>	
+    </div>
+    <!-- FOOTER -->
+    <div class="modal-footer">
+        <div class="row">
+        	<div class="col-md-12">
+        		<button class="btn btn-primary" type="button" ng-click="save('map')">{{'areas.modal_save_map_geom' | i18n}}</button>
+        		<button class="btn btn-primary" type="button" ng-click="save('coord')">{{'areas.modal_save_coord_geom' | i18n}}</button>
+        		<button class="btn btn-default" type="button" ng-click="cancel()">{{'common.cancel' | i18n}}</button>
+        	</div>
+        </div>
+    </div>
+</div>

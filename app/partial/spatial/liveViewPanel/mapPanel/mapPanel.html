@@ -1,0 +1,294 @@
+<!--
+﻿Developed with the contribution of the European Commission - Directorate General for Maritime Affairs and Fisheries
+© European Union, 2015-2016.
+
+This file is part of the Integrated Fisheries Data Management (IFDM) Suite. The IFDM Suite is free software: you can
+redistribute it and/or modify it under the terms of the GNU General Public License as published by the
+Free Software Foundation, either version 3 of the License, or any later version. The IFDM Suite is distributed in
+the hope that it will be useful, but WITHOUT ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or
+FITNESS FOR A PARTICULAR PURPOSE.  See the GNU General Public License for more details. You should have received a
+copy of the GNU General Public License along with the IFDM Suite. If not, see <http://www.gnu.org/licenses/>.
+-->
+<div ng-controller="MapCtrl" class="mapPanelContainer" ngsf-fullscreen="fullscreenCtrl">
+    <div class="map-container">
+        <div ng-include="'partial/spatial/liveViewPanel/mapPanel/layerPanel/layerPanel.html'"></div>
+        <div id="map-toolbar">
+            <div class="btn-group-left">
+				<div class="col-md-6">
+					<combobox ng-model="selectedHistory" items="reportsHistory" combo-section="true" callback="selectHistory" init-callback="initComboHistory"></combobox>
+				</div>
+                <div class="btn-group btn-group-xs" role="group" aria-label="Map controls">
+                    <button type="button" class="btn btn-default btn-toolbar" title="{{'spatial.map_tip_refresh_report' | i18n }}" ng-click="refreshReport()"><span class="fa fa-refresh"></span></button>
+                    <button type="button" class="btn btn-default btn-toolbar" title="{{'spatial.map_tip_clear_map' | i18n }}" ng-click="clearMapHighlights()"><span class="fa fa-eraser"></span></button>
+                    <button type="button" class="btn btn-default btn-toolbar" ng-class="{active: graticuleActivated}" title="{{graticuleTip}}" ng-click="toggleGraticule()"><span class="fa fa-th"></span></button>
+                    <button type="button" class="btn btn-default btn-toolbar" title="{{ 'spatial.map_tip_get_alarms' | i18n }}" ng-click="getAlarms()" ng-show="isAllowed('Rules', 'viewAlarmRules')"><span class="fa fa-exclamation-triangle alarms-icon"></span></button>
+                </div>
+                <div class="btn-group btn-group-xs" role="group" aria-label="Map controls">
+                	<button type="button" id="bookmarks-btn" ng-class="{active: activeControl === 'bookmarks'}" class="btn btn-default btn-toolbar" title="{{'spatial.map_tip_bookmarks' | i18n }}" ng-click="toggleToolbarBtn('bookmarks')"><span class="fa fa-bookmark"></span></button>
+                	<button type="button" id="gazetteer-btn" ng-class="{active: activeControl === 'gazetteer'}" class="btn btn-default btn-toolbar" title="{{'spatial.map_tip_gazetteer' | i18n }}" ng-click="toggleToolbarBtn('gazetteer')"><span class="fa fa-binoculars"></span></button>
+                    <button type="button" id="measure-config-btn" ng-class="{active: activeControl === 'measure'}" class="btn btn-default btn-toolbar" title="{{'spatial.map_tip_measure_distance' | i18n }}" ng-click="toggleToolbarBtn('measure')"><span class="fa fa-arrows-h"></span></button>
+                    <!-- <button type="button" id="buffer-config-btn" ng-class="{active: activeControl === 'buffer'}" class="btn btn-default btn-toolbar" title="{{'spatial.map_tip_buffer' | i18n }}" ng-click="toggleToolbarBtn('buffer')"><span class="fa fa-dot-circle-o"></span></button> -->
+                    <button type="button" id="map-fish-print-config-btn" ng-class="{active: activeControl === 'mapFishPrint'}" class="btn btn-default btn-toolbar" title="{{'spatial.mapfish_tip_print' | i18n }}" ng-click="toggleToolbarBtn('mapFishPrint')" ng-show="mapFish.isDeployed && isAllowed('Reporting', 'PRINT_REPORT')"><span class="fa fa-print"></span></button>
+                </div>
+            </div>
+            <div class="btn-group-right">
+                <div class="btn-group btn-group-xs" role="group" aria-label="Map controls">
+                    <button type="button" class="btn btn-default btn-toolbar btn-fullscreen" title="{{'spatial.map_tip_fullscreen' | i18n }}" ng-click="fullscreenCtrl.toggleFullscreen();" ng-show="tbControl.fullscreen"><span class="fa fa-arrows-alt"></span></button>
+                    <button type="button" class="btn btn-default btn-toolbar" title="{{'spatial.map_tip_open_new_tab' | i18n }}" ng-click="openMapOnNewTab();" ng-show="tbControl.newTab"><span class="fa fa-external-link"></span></button>
+                </div>
+            </div>
+        </div>
+        <ng-form name="mapForm">
+	        <div id="map" class="map" tabIndex="0">
+	        	<gazetteer-search ng-if="showGazetteer" placeholder="{{'spatial.map_tip_gazetteer' | i18n}}"></gazetteer-search>
+	        	<!-- BOOKMARKS -->
+	        	<div id="bookmarks" class="map-toolbar-control-panel" ng-show="showBookmarksWin">
+        			<div class="col-md-12 map-control-subpanel">
+        				<span class="title">{{'spatial.map_tip_bookmarks' | i18n}}</span>
+	                	<span class="fa fa-times drag-icon pull-right" ng-click="toggleToolbarBtn('bookmarks')"></span>
+                        <span class="fa fa-arrows drag-icon pull-right"></span>
+                        <span class="fa drag-icon pull-right" ng-class="{'fa-chevron-up': winExpanded, 'fa-chevron-down': !winExpanded}" ng-click="toggleWinStatus()"></span>
+                    </div>
+	        		<div class="col-md-12 book-panel-body panel-collapsible-body" ng-class="{'panel-body-visible': winExpanded}">
+		        		<ng-form name="bookmarksForm">
+			                <div>
+			                    <div class="table-responsive-force form-group" st-table="displayedBookmarks" st-safe-src="bookmarks">
+			                    	<div class="form-group">
+										<input type="text" class="form-control" ng-model="searchBookmark" st-search="name" placeholder="{{'spatial.reports_table_search_header' | i18n}}">
+									</div>
+			    	   				<table class="table table-striped">
+			    	   					<thead>
+			    	   						<tr class="stColumnHeaders">
+			    	   							<th st-sort="name" st-skip-natural="true" st-class-ascent="sorting_asc" st-class-descent="sorting_desc">{{'spatial.map_bookmarks_table_name_header' | i18n}}</th>
+			    	   							<th style="min-width: 80px;"></th>
+			    	   						</tr>
+			    	   						<tr ng-if="isLoading">
+			    					        	<th colspan="3" class="loading-spinner-cl"><i class="fa fa-spinner fa-spin loading-spinner"></i></th>
+			    					        </tr>
+			    	   					</thead>
+			    	   					<tbody>
+			    	   						<tr ng-if="!displayedBookmarks.length && !isLoading">
+			    								<td colspan="3">{{'spatial.table_no_data' | i18n}}</td>
+			    							</tr>
+			    	   						<tr ng-repeat="bookmark in displayedBookmarks">
+			    	   							<td>{{bookmark.name}}</td>
+			    	   							<td class="text-right" style="min-width: 80px;">
+			    	   								<button type="button" class="btn btn-primary btn-xs" title="{{'spatial.map_bookmarks_zoom_to' | i18n }}" ng-click="showBookmarkOnMap(bookmark)"><span class="fa fa-globe"></span></button>
+			    	   								<button type="button" class="btn btn-danger btn-xs btnMargin" title="{{'spatial.map_bookmarks_remove' | i18n }}" ng-click="removeBookmark(bookmark.id)"> <span class="fa fa-trash"></span></button>
+			    	   							</td>
+			    	   						</tr>
+			    	   					</tbody>
+			    	   					<tfoot class="stFooterPagination">
+			    							<tr>
+			    								<td colspan="3" class="text-right">
+			    									<div st-pagination st-items-by-page="bookmarksByPage" st-displayed-pages="3" st-template="partial/spatial/templates/simplePagination.html"></div>
+			    								</td>
+			    							</tr>
+			    						</tfoot>
+			    	   				</table>
+			    	   			</div>
+			                </div>
+			                <div class="btn-bookmark-add text-right" ng-show="winExpanded" ng-class="{'has-error': (bookmarksForm.bookmarkName.$dirty || submitingBookmark === true) && bookmarksForm.bookmarkName.$invalid, 'add-bookmark-visible': isAddBookVisible}" ng-show="isAddBookVisible">
+			                	<input type="text" class="form-control" placeholder="{{'spatial.map_bookmarks_add_input_placeholder' | i18n }}" ng-model="bookmarkNew.name" name="bookmarkName" ng-required="true"/>
+			                	<button type="button" class="btn btn-primary btn-sm" ng-click="createBookmark()">
+									<i class="fa fa-plus-square"></i>&nbsp;
+									<span>{{'spatial.map_bookmarks_add' | i18n}}</span>
+								</button>
+			                </div>
+			        	</ng-form>
+		        	</div>
+		        	<div class="col-md-12 text-center btn-more-details" ng-show="winExpanded" ng-click="isAddBookVisible = !isAddBookVisible">
+		        		<div class="col-md-12 details-text" ng-hide="isAddBookVisible">
+		        			<span>{{'spatial.more_details' | i18n}}</span>
+		        		</div>
+		        		<span class="fa" ng-class="{'fa-angle-double-down': !isAddBookVisible, 'fa-angle-double-up': isAddBookVisible}"></span>
+		        	</div>
+	            </div>
+	            <!-- MEASURE -->
+	            <div id="measure-config" class="map-toolbar-control-panel" ng-show="showMeasureConfigWin">
+	                <div class="row">
+	                    <div class="col-md-12 window-top-tools">
+	                    	<span class="title">{{'spatial.map_measure_window_title' | i18n}}</span>
+	                    	<span class="fa fa-times drag-icon pull-right" ng-click="toggleToolbarBtn('measure')"></span>
+	                        <span class="fa fa-arrows drag-icon pull-right"></span>
+	                        <span class="fa drag-icon pull-right" ng-class="{'fa-chevron-up': winExpanded, 'fa-chevron-down': !winExpanded}" ng-click="toggleWinStatus()"></span>
+	                    </div>
+	                </div>
+	                <div class="row panel-collapsible-body" ng-class="{'panel-body-visible': winExpanded}">
+	                    <div class="form-group col-md-12 measure-content">
+	                        <label>{{'spatial.map_measuring_units_label' | i18n }}</label>
+	                        <combobox dest-combo-list="'.mapPanelContainer'" ng-model="measureConfigs.units" items="measuringUnits" ng-disabled="measureConfigs.disabled"></combobox>
+	                    </div>
+	                    <div class="form-group col-md-12 measure-content">
+	                        <label>{{'spatial.map_speed_label' | i18n }}</label>
+	                        <div class="unit-input">
+	                            <numeric-input class="form-control" ng-model="measureConfigs.speed" name="selectedSpeed" min="0" ng-disabled="measureConfigs.disabled"></numeric-input>
+	                            <div class="unit-box">{{'spatial.reports_form_vms_field_label_speed_unit_knots' | i18n }}</div>
+	                        </div>
+	                    </div>
+	                    <div class="form-group col-md-12 measure-content">
+	                        <label>{{'spatial.map_start_date_label' | i18n }}</label>
+	                        <datepicker-input time="true" model="measureConfigs.startDate" name="selectedDate" ng-disabled="measureConfigs.disabled" input-field-id="map-panel-measure-configs-start-date-picker"></datepicker-input>
+	                    </div>
+	                </div>
+	            </div>
+	            <!-- BUFFER -->
+	            <!-- <div id="buffer-config" class="map-toolbar-control-panel" ng-show="showBufferConfigWin">
+	            	<div class="row">
+	                    <div class="col-md-12 window-top-tools">
+	                    	<span class="title">{{'spatial.map_buffer_window_title' | i18n}}</span>
+	                    	<span class="fa fa-times drag-icon pull-right" ng-click="toggleToolbarBtn('buffer')"></span>
+	                        <span class="fa fa-arrows drag-icon pull-right"></span>
+	                        <span class="fa drag-icon pull-right" ng-class="{'fa-chevron-up': winExpanded, 'fa-chevron-down': !winExpanded}" ng-click="toggleWinStatus()"></span>
+	                    </div>
+	                </div>
+	                <ng-form name="bufferForm">
+		                <div class="row panel-collapsible-body" ng-class="{'panel-body-visible': winExpanded}">
+	                    	<div class="form-group col-md-12 measure-content">
+	                    		<label>{{'spatial.map_buffer_layers_label' | i18n }}</label>
+	                    		<div class="col-md-12 noPadding">
+	                    			<div class="col-md-10 noPadding withRightPadding">
+	                    				<combobox dest-combo-list="'.mapPanelContainer'" ng-model="bufferConfigs.layer" items="bufferLayers"></combobox>		
+	                    			</div>
+	                    			<div class="col-md-2 noPadding">
+	                    				<button type="button" class="btn btn-default pull-right" ng-click="toggleSelectFeatures()" ng-class="{active: bufferConfigs.isSelecting}">
+											<span class="fa fa-thumb-tack"></span>
+										</button>
+	                    			</div>
+	                    		</div>
+	                    	</div>
+	                    	<div ng-show="bufferConfigs.features.length > 0">
+	                    		<div class="form-group col-md-12 measure-content">
+		                    		<label>{{'spatial.map_buffer_radius_label' | i18n }}</label>
+		                    		<div class="col-md-12 noPadding">
+		                    			<div class="col-md-4 noPadding">
+		                    				<input ng-model="bufferConfigs.radius" name="radius" type="number" class="form-control" step="any" min="0" ng-required="true">
+		                    			</div>
+		                    			<div class="col-md-8 noPadding withLeftPadding">
+		                    				<combobox dest-combo-list="'.mapPanelContainer'" ng-model="bufferConfigs.units" items="measuringUnits"></combobox>
+		                    			</div>
+		                    		</div>
+		                    	</div>
+		                    	<div class="form-group col-md-12 measure-content">
+		                    		<div class="col-md-6 noPadding">
+		                    			<button  type="button" class="btn btn-default">{{'spatial.buffer_clear_btn' | i18n}}</button>
+		                    		</div>
+		                    		<div class="col-md-6 noPadding">
+		                    			<button  type="button" class="btn btn-primary pull-right">{{'spatial.buffer_calculate_btn' | i18n}}</button>
+		                    		</div>
+		                    	</div>
+	                    	</div>
+	                    </div>
+                    </ng-form>
+	            </div> -->
+	            <!-- PRINT -->
+	            <div id="map-fish-print-config" class="map-toolbar-control-panel" ng-show="showMapFishConfigWin">
+	                <div class="row">
+	                    <div class="col-md-12 window-top-tools">
+	                    	<span class="title title-export">{{'spatial.map_print_window_title' | i18n}}</span>
+	                    	<span class="fa fa-times drag-icon pull-right" ng-click="toggleToolbarBtn('mapFishPrint')"></span>
+	                        <span class="fa fa-arrows drag-icon pull-right"></span>
+	                        <span class="fa drag-icon pull-right" ng-class="{'fa-chevron-up': winExpanded, 'fa-chevron-down': !winExpanded}" ng-click="toggleWinStatus()"></span>
+	                    </div>
+	                </div>
+	                <div class="panel-collapsible-body" ng-class="{'panel-body-visible': winExpanded}">
+	                	<ng-form name="printForm">
+		                	<div class="row print-row">
+			                    <!-- <div class="form-group col-md-6 print-content">
+			                        <label>{{'spatial.mapfish_template_label' | i18n }}</label>
+			                        <combobox ng-if="mapFish.selected_template !== undefined" dest-combo-list="'.mapPanelContainer'" ng-change="changeTemplate(mapFish.selected_template)" ng-model="mapFish.selected_template" items="mapFish.templates"></combobox>
+			                    </div> -->
+			                    <div class="form-group col-md-6 print-content">
+			                        <label>{{'spatial.mapfish_layouts_label' | i18n }}</label>
+			                        <combobox ng-if="mapFish.selected_layout !== undefined" dest-combo-list="'.mapPanelContainer'" ng-change="toggleLayout(mapFish.selected_layout)" ng-model="mapFish.selected_layout" items="mapFish.layouts" is-loading="isLoadingMapfishPopup"></combobox>
+			                    </div>
+			                    <div class="form-group col-md-6 print-content">
+			                        <label>{{'spatial.mapfish_formats_label' | i18n }}</label>
+			                        <combobox ng-if="mapFish.selected_format !== undefined" dest-combo-list="'.mapPanelContainer'" ng-model="mapFish.selected_format" items="mapFish.formats" is-loading="isLoadingMapfishPopup"></combobox>
+			                    </div>
+			                    <div class="form-group col-md-6 print-content">
+			                        <label>{{'spatial.mapfish_suggestedDpi_label' | i18n }}</label>
+			                        <combobox ng-if="mapFish.selected_dpi !== undefined" dest-combo-list="'.mapPanelContainer'" ng-model="mapFish.selected_dpi" items="mapFish.suggestedDpi" is-loading="isLoadingMapfishPopup"></combobox>
+			                    </div>
+	                    		<div class="form-group col-md-6">
+			                        <label>
+			                        	<input type="checkbox" ng-if="mapFish.includeCoordGrid !== undefined" ng-model="mapFish.includeCoordGrid" ng-checked="mapFish.includeCoordGrid"/>
+			                        	{{'spatial.mapfish_include_coords_grid_label' | i18n }}
+			                        </label>
+			                        <combobox ng-if="mapFish.includeCoordGrid && projections.items.length > 0" dest-combo-list="'.mapPanelContainer'" ng-model="mapFish.projectionId" items="projections.items" name="gridProjection" is-loading="isLoadingMapfishPopup"></combobox>
+			                    </div>
+			                    <div class="row">
+			                        <div class="col-md-12">
+			                            <div class="form-group col-md-6 print-content" ng-repeat="attribute in mapFish.layoutAttributes">
+			                            	<ng-form name="mapfishDetailForm{{$index}}">
+			                            		<div class="print-content-control" ng-class="{'has-error': (printForm.mapfishDetailForm{{$index}}.$dirty || submittedMapFishPrint === true) && printForm.mapfishDetailForm{{$index}}.$invalid}">
+					                                <label>{{attribute.name | capitalize}}</label>
+					                                <input type="text" class="form-control" name="attribute.name" ng-model="mapFishLocalConfig[attribute.name]" ng-init="mapFishLocalConfig[attribute.name] = attribute.default" ng-required="true"/>
+					                                <div class="innerErrorMessagesInputWithUpLabel" ng-messages="printForm.mapfishDetailForm{{$index}}.$error" ng-show="(printForm.mapfishDetailForm{{$index}}.$dirty || submittedMapFishPrint === true) && printForm.mapfishDetailForm{{$index}}.$invalid">
+														<div ng-message="required">{{'spatial.required_field_error_message' | i18n }}</div>
+													</div>
+												</div>
+											</ng-form>
+			                            </div>
+			                        </div>
+			                    </div>
+			                    <div class="form-group col-md-6 measure-content btn-measure-group pull-right">
+			                        <button type="button" class="pull-right btn" ng-class="{'btn-primary': !isRequestingImage, 'btn-warning': isRequestingImage}" ng-click="printMapWithMapFish(mapFish.printJobData.ref)" ng-switch="isRequestingImage">
+			                            <span class="fa" ng-class="{'fa-download': !isRequestingImage, 'fa-refresh fa-spin': isRequestingImage}"></span>&nbsp;
+			                            <span ng-switch-when="true">
+			                            	{{'spatial.mapfish_tip_printing' | i18n }}
+			                            </span>
+			                            <span ng-switch-default>
+			                            	{{'spatial.mapfish_tip_print' | i18n }}
+			                            </span>
+			                        </button>
+			                    </div>
+			                </div>
+		                </ng-form>
+		                <!-- MESSAGES -->
+		                <div class="mapfish-error alert alert-danger" role="alert" ng-show="mapFish.jobStatusData.status === 'error'">
+		                    <span class="fa fa-exclamation-circle" aria-hidden="true"/>
+					        <span ng-show="mapFish.jobStatusData.status === 'error'" class="alert-message">
+		                        <span>{{'spatial.mapfish_error' | i18n }}
+		                           {{mapFish.jobStatusData.error}}
+		                        </span>
+					        </span>
+		                </div>
+	                </div>
+	            </div>
+	        </div>
+	    </ng-form>    
+        <div id="popup" class="ol-popup">
+            <a href ng-click="closePopup()" id="popup-closer" class="ol-popup-closer"><span class="fa fa-times"></span></a>
+            <div class="col-md-12 ol-popup-header">
+				<span class="header" ng-show="infoLayer === 'vmspos' || infoLayer === 'alarms'">{{'spatial.popup_positions_title' | i18n}}</span>
+				<span class="header" ng-show="infoLayer === 'vmsseg'">{{'spatial.popup_segments_title' | i18n}}</span>            	
+				<div class="btn-container" ng-show="infoLayer === 'vmspos' && isAllowed('Vessel', 'getVesselById')">
+					<button type="button" class="btn btn-default btn-xs" title="{{'spatial.popup_vessel_details_btn_title' | i18n}}" ng-click="getVesselDetails()"><i class="fa fa-ship"></i></button>
+				</div>
+			</div>
+            <div id="popup-content"></div>
+            <div class="col-md-12 popup-paginator" ng-show="popupRecContainer.records.length > 1">
+            	<span>{{'spatial.popup_item' | i18n}} {{popupRecContainer.currentIdx + 1}} {{'spatial.popup_out_of' | i18n}} {{popupRecContainer.records.length}}</span>
+            	<ul class="pagination pull-right">
+				    <li class="fa fa-chevron-left" ng-click="changeDisplayedRecord('previous')" ng-class="{disabled: popupRecContainer.currentIdx === 0}"></li>
+				    <li class="fa fa-chevron-right" ng-click="changeDisplayedRecord('next')" ng-class="{disabled: popupRecContainer.currentIdx === popupRecContainer.records.length - 1}"></li>
+			  	</ul>
+            </div>
+        </div>
+    </div>
+    <div class="container map-bottom">
+        <div class="row">
+            <div class="col-md-2 col-xs-5 refresh-container" ng-class="{disabled: !checkSpatialConfigPermission()}">
+				<b>{{'spatial.map_label_auto_refresh_status' | i18n }} </b>
+				<toggle-switch ng-model="refresh.status" ng-change="changeRefreshStatus()"></toggle-switch>
+			</div>
+            <div class="col-md-3 col-xs-5">
+                <div id="map-scale" class="scale-line"></div>
+            </div>
+            <div class="col-md-6 col-xs-13 pull-right">
+                <div id="map-coordinates"></div>
+            </div>
+        </div>
+    </div>
+</div>

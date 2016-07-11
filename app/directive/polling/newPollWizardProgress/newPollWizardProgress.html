@@ -1,0 +1,43 @@
+<!--
+﻿Developed with the contribution of the European Commission - Directorate General for Maritime Affairs and Fisheries
+© European Union, 2015-2016.
+
+This file is part of the Integrated Fisheries Data Management (IFDM) Suite. The IFDM Suite is free software: you can
+redistribute it and/or modify it under the terms of the GNU General Public License as published by the
+Free Software Foundation, either version 3 of the License, or any later version. The IFDM Suite is distributed in
+the hope that it will be useful, but WITHOUT ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or
+FITNESS FOR A PARTICULAR PURPOSE.  See the GNU General Public License for more details. You should have received a
+copy of the GNU General Public License along with the IFDM Suite. If not, see <http://www.gnu.org/licenses/>.
+-->
+<div class="row card-header">
+    <div class="col-md-12">
+    	<div class="step" ng-class="{activestep : isActiveStep(1), finishedstep: isFinishedStep(1)}">
+            <div class="stepIcon">
+                <span ng-show="isFinishedStep(1)"><i class="fa fa-check"></i></span>
+                <span ng-hide="isFinishedStep(1)">1</span>
+            </div>
+            <p>
+                {{'polling.wizard_first_step' | i18n | uppercase}} 
+            </p>
+        </div>
+    	<div class="step" ng-class="{activestep : isActiveStep(2), finishedstep: isFinishedStep(2)}">
+            <div class="stepIcon">
+                <span ng-show="isFinishedStep(2)"><i class="fa fa-check"></i></span>
+                <span ng-hide="isFinishedStep(2)">2</span>
+            </div>
+            <p>
+                {{'polling.wizard_second_step' | i18n | uppercase}}
+            </p>
+        </div>
+    	<div class="step" ng-class="{activestep : isActiveStep(3)}">
+            <div class="stepIcon">
+                <span ng-show="isFinishedStep(3)"><i class="fa fa-check"></i></span>
+                <span ng-hide="isFinishedStep(3)">3</span>
+            </div>
+            <p>
+                {{'polling.wizard_third_step' | i18n | uppercase}}
+            </p>
+        </div>
+        <div class="clearfix"></div>
+    </div>
+</div>

@@ -1,0 +1,94 @@
+/*
+﻿Developed with the contribution of the European Commission - Directorate General for Maritime Affairs and Fisheries
+© European Union, 2015-2016.
+
+This file is part of the Integrated Fisheries Data Management (IFDM) Suite. The IFDM Suite is free software: you can
+redistribute it and/or modify it under the terms of the GNU General Public License as published by the
+Free Software Foundation, either version 3 of the License, or any later version. The IFDM Suite is distributed in
+the hope that it will be useful, but WITHOUT ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or
+FITNESS FOR A PARTICULAR PURPOSE.  See the GNU General Public License for more details. You should have received a
+copy of the GNU General Public License along with the IFDM Suite. If not, see <http://www.gnu.org/licenses/>.
+ */
+.wizardContainer{
+    position: relative;
+
+    .wizardStepHeight(@mediaQueryMinHeight) {
+        @media screen and (min-height: @mediaQueryMinHeight){
+            @maxHeight:@mediaQueryMinHeight - 200px;
+            min-height: @maxHeight;
+            height: @maxHeight;
+            max-height: @maxHeight;
+        }
+    }
+
+    .newPollWizardStep{
+        position: relative;
+        margin-top: 0px;
+        @maxHeight:395px;
+        height: @maxHeight;
+        max-height: @maxHeight;
+        .wizardStepHeight(595px);
+        .wizardStepHeight(695px);
+        .wizardStepHeight(795px);
+        .wizardStepHeight(895px);
+        .wizardStepHeight(995px);
+        .wizardStepHeight(1095px);
+        overflow-y: auto;
+        overflow-x: hidden;
+        .scrollbar();
+    }
+
+    @footerHeight:40px;
+    .wizardFooter{
+        position: absolute;
+        bottom: 10px;
+        height: @footerHeight;
+        width: 100%;
+        background: #fff;
+
+        button{
+            margin-left: 10px;
+        }
+        margin-top: 20px;
+    }
+
+
+    .wizardcontent{
+        padding: 10px;
+    }
+
+    //Step 1 results scroller
+    .searchMobileTerminalsStep{
+
+        .wizardcontentHeight(@mediaQueryMinHeight) {
+            @media screen and (min-height: @mediaQueryMinHeight){
+                @maxHeight:@mediaQueryMinHeight - 475px;
+                max-height: @maxHeight;
+            }
+        }
+        .wizardcontent{
+            .scroller{
+                position: relative;
+                max-height: 120px;
+                .wizardcontentHeight(595px);
+                .wizardcontentHeight(695px);
+                .wizardcontentHeight(795px);
+                .wizardcontentHeight(895px);
+                .wizardcontentHeight(995px);
+                .wizardcontentHeight(1095px);
+                overflow-y: auto;
+                overflow-x: hidden;
+                .scrollbar();
+            }
+        }
+    }
+
+}
+
+//No max height on polling options page
+.pollingOptionsContainer{
+    &.newPollWizardStep{
+        height: auto;
+        max-height: none;
+    }
+}

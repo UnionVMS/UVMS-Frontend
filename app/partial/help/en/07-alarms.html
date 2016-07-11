@@ -1,0 +1,140 @@
+<!--
+ï»¿Developed with the contribution of the European Commission - Directorate General for Maritime Affairs and Fisheries
+Â© European Union, 2015-2016.
+
+This file is part of the Integrated Fisheries Data Management (IFDM) Suite. The IFDM Suite is free software: you can
+redistribute it and/or modify it under the terms of the GNU General Public License as published by the
+Free Software Foundation, either version 3 of the License, or any later version. The IFDM Suite is distributed in
+the hope that it will be useful, but WITHOUT ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or
+FITNESS FOR A PARTICULAR PURPOSE.  See the GNU General Public License for more details. You should have received a
+copy of the GNU General Public License along with the IFDM Suite. If not, see <http://www.gnu.org/licenses/>.
+-->
+<div>
+    <h2 help-section="alarms" index="7">Section 7 Alarms</h2>
+    <p>Click on "Alarms" in the main menu bar to see all active alarms or to set a new rule with demands for the system to track. The Alarms tab is divided into "Holding table", "Notifications" and "Rules".</p>
+    <p>The alarm system works as follow;</p>
+    <p>The <b>“Rules”</b> tab shows activated rules that the system is supposed to check that they are being correctly followed. It is also where setting for new rules is found. For more information, see “Rules” in this chapter.</p>
+    <p><b>"Holding table"</b> lists registered rules that are put in quarantine since they are for some reason incomplete. For more information, see "Holding table" in this chapter. </p>
+    <p><b>"Notifications"</b> shows the alarm reports from discrepancies from the active rules.  For more information, see “Notifications” in this chapter.</p>
+    <img wrapped url="07-alarms1.png" class="lg">
+
+    <h4>Holding Table</h4>
+    <p>Holding table shows set rules that are automatically put in quarantine by the system since they in some way are incomplete.</p>
+    <img wrapped url="07-alarms2.png" class="lg">
+
+    <div class="row legend">
+        <div class="col-md-4"><span class="badge">1</span> Time period from when to get data</div>
+        <div class="col-md-4"><span class="badge">2</span> Set specific date and time</div>
+        <div class="col-md-4"><span class="badge">3</span> Search Button</div>
+        <div class="col-md-4"><span class="badge">4</span> Action dropdown list</div>
+        <div class="col-md-4"><span class="badge">5</span> Holding table result list</div>
+        <div class="col-md-4"><span class="badge">6</span> Status</div>
+        <div class="col-md-4"><span class="badge">7</span> Sorting by All, Open or closed</div>
+        <div class="col-md-4"><span class="badge">8</span> Resolve issue</div>
+    </div>
+
+    <p>There is mainly one of three things making a rule incomplete and appearing in the Holding table;</p>
+
+
+    <h5>1 Incomplete data</h5>
+    <p>The position report misses information. </p>
+    <p>Action:</p>
+    <ul>
+        <li>Reprocess the rule by selecting it in the Holding list and select the alternative “Reprocess reports” in the “Action” dropdown list. See picture below. <img wrapped url="07-alarms3.png"></li>
+    </ul>
+
+    <h5>2 Asset not found.</h5>
+    <p>The position report cannot be matched against an asset.</p>
+    <p>Alternative actions;</p>
+    <ul>
+        <li>Reprocess the rule by selecting it in the Holding list and select the alternative “Reprocess reports” in the “Action” dropdown list. See picture below.</li>
+        <li>Add a new assert to either a national database or a local placeholder. For more information of how to add a new assert, See section 3 Assets. <img wrapped url="07-alarms4.png"></li>
+    </ul>
+
+    <h5>3 Mobile terminals not found. </h5>
+    <p>Alternative actions;</p>
+    <ul>
+        <li>Add a new mobile transfer in the national or in a local place holder. For more information of how to add a new one, see section 4 Mobile transformers. </li>
+        <li>Reprocess the rule by selecting it in the Holding list and select the alternative “Reprocess reports” in the “Action” dropdown list. See picture below.</li>
+    </ul>
+    <img wrapped url="07-alarms5.png">
+
+    <h5>Search</h5>
+    <ul>
+        <li>It is possible to search in the Holding table by choose time period or set specific date and time in the search fields, then click search</li>
+        <li>It is also possible to search by typing name or sender, then click on the search button.</li>
+    </ul>
+    <img wrapped url="07-alarms6.png">
+
+    <h5>Rules</h5>
+    <p>Rules shows activated rules that the system is supposed to check that they are being correctly followed. It is also where setting for new rules is found. </p>
+
+    <img wrapped url="07-alarms7.png">
+
+    <div class="row legend">
+        <div class="col-md-4"><span class="badge">1</span> Create new rule button</div>
+        <div class="col-md-4"><span class="badge">2</span> Action dropdown list</div>
+        <div class="col-md-4"><span class="badge">3</span> Sorting by All, Open or closed</div>
+        <div class="col-md-4"><span class="badge">4</span> Subscription setting </div>
+        <div class="col-md-4"><span class="badge">5</span> Text field for e-mail notification</div>
+        <div class="col-md-4"><span class="badge">6</span> Status Active/Inactive rule</div>
+        <div class="col-md-4"><span class="badge">7</span> Public or private rule icons</div>
+        <div class="col-md-4"><span class="badge">8</span> View details, Delete, Create new rule based on this one.</div>
+    </div>
+
+    <b>Create new rule</b>
+    <ul>
+        <li>Click on the “Create new rule” button to open the settings for creating a new rule. <img wrapped url="07-alarms8.png"></li>
+        <li>Fill in a rule name and a description for what the rule is regarding.</li>
+        <li>Fill in rule availability, if it should it be a <b><i>private</i></b> rule for only the user to see or should it be a <b><i>public</i></b> rule for other users to be able to subscribe to. An admin user also gets the alternative <b><i>global</i></b>; a global rule generates notifications to all users in the organisation.</li>
+        <li>Fill in rule status, if the rule should be active or inactive.</li>
+        <li>Fill in what action the system should take if the rule is broken. It is possible to add several different actions. <img wrapped url="07-alarms9.png"></li>
+    </ul>
+
+    <b>Edit rule</b>
+    <p>When edit an already existing rule, click on the “View Details” button to open up a new window with the rule information.</p>
+    <ul>
+        <li>Change settings in the different rule options available, and then click on the “Update” to save the new settings.</li>
+        <li>Click on the “Close” button to cancel and go back.</li>
+    </ul>
+    <img wrapped url="07-alarms10.png">
+
+    <b>Subscribe on rule</b>
+    <p>It is possible to subscribe on rules in order to get notification regarding them. </p>
+    <ul>
+        <li>Select what rule to subscribe to, click on “Notification” in the dropdown list in the column named “Subscription”. See picture below.</li>
+        <li>There is also an option to be notified by email. Fill in preferred email address in the text field in the column “Notify by email. See picture below.</li>
+    </ul>
+    <img wrapped url="07-alarms11.png">
+
+    <b>Export rule</b>
+    <ul>
+        <li>To export a list of rules, select one or several rules to export by click on the box in the Rule name column.</li>
+        <li>Select “Export selection” in the “Actions” dropdown list.</li>
+        <li>The file will be downloaded to the computers “Downloaded files”.</li>
+    </ul>
+    <img wrapped url="07-alarms12.png">
+
+    <h4>Notification</h4>
+    <p>In notifications shows the alarm reports from discrepancies from the active rules. There are search fields in order to enable the user to find older notifications as well as new ones. </p>
+    <b>Search and sort among notifications</b>
+    <ul>
+        <li>Fill in search field to find specific notification(s). </li>
+        <li>The notifications can also be sorted by “All”, “Open” and “Closed notification. </li>
+    </ul>
+    <b>Close notification</b>
+    <ul>
+        <li>The user can choose to resolve an open notification by clicking on the “Close” button, see picture below.</li>
+    </ul>
+
+    <img wrapped url="07-alarms13.png">
+        <div class="row legend">
+        <div class="col-md-4"><span class="badge">1</span> Time period from when to get data</div>
+        <div class="col-md-4"><span class="badge">2</span> Set specific date and time</div>
+        <div class="col-md-4"><span class="badge">3</span> Search Fields</div>
+        <div class="col-md-4"><span class="badge">4</span> Action dropdown list</div>
+        <div class="col-md-4"><span class="badge">5</span> Sorting by All, Open or closed</div>
+        <div class="col-md-4"><span class="badge">6</span> Close notification</div>
+    </div>
+</div>
+<hr>

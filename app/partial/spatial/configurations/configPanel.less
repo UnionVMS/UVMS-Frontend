@@ -1,0 +1,115 @@
+/*
+﻿Developed with the contribution of the European Commission - Directorate General for Maritime Affairs and Fisheries
+© European Union, 2015-2016.
+
+This file is part of the Integrated Fisheries Data Management (IFDM) Suite. The IFDM Suite is free software: you can
+redistribute it and/or modify it under the terms of the GNU General Public License as published by the
+Free Software Foundation, either version 3 of the License, or any later version. The IFDM Suite is distributed in
+the hope that it will be useful, but WITHOUT ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or
+FITNESS FOR A PARTICULAR PURPOSE.  See the GNU General Public License for more details. You should have received a
+copy of the GNU General Public License along with the IFDM Suite. If not, see <http://www.gnu.org/licenses/>.
+ */
+.spatialConfig,
+.mapConfigurationModal {
+	.containerCollapsible {
+		position: relative;
+		.collapsiblePanel {
+			&:first-of-type .panel-default {
+				padding-top: 15px;
+			}
+			&:last-of-type .panel-default {
+				padding-bottom: 15px;
+			}
+			.panel-default {
+				padding: 0 15px 5px 15px;
+				-webkit-box-shadow: none;
+    			box-shadow: none;
+			}
+		}
+		&.container {
+			border: 1px solid #dddddd;
+    		border-top: 5px solid #dddddd;
+		}
+	}
+	.containerCollapsible,
+	.collapsibleRow {
+		padding: 0;
+	}
+	.configHeader {
+		margin-bottom: 0px;
+	}
+	accordion {
+		.panel {
+			border: 0;
+			margin: 0;
+			border-radius: 0;
+		}
+		.panel-group {
+			margin: 0;
+		}
+		.panel-heading {
+			padding: 0;
+			border: 1px solid #dddddd;
+			.panel-title-link {
+				padding: 10px 15px;
+			}
+		}
+		.panel-heading + .panel-collapse .panel-body {
+			border: 1px solid #dddddd;
+			border-top-width: 0;
+		}
+	}
+	.userPreferencesFormContainer {
+		padding: 15px;
+		display: flex;
+		.userPreferencesForm {
+			border: 1px solid #ddd;
+			padding-top: 10px;
+		}
+	}
+	.colorPickerComponent {
+		position: relative;
+	    text-transform: none;
+	    padding-left: 30px;
+	    .pickedcolor {
+			border: 1px solid #000;
+			border-top-left-radius: 4px;
+			border-bottom-left-radius: 4px;
+			border-top-right-radius: 0;
+			border-bottom-right-radius: 0;
+			color: #ff0000;
+			position: absolute;
+		    left: 0px;
+		    top: 0px;
+		    width: 30px;
+		    height: 100%;
+		    text-align: center;
+		    line-height: 30px;
+		    padding: 0;
+		}
+		[colorpicker] {
+			border-top-left-radius: 0;
+			border-bottom-left-radius: 0;
+		}
+	}
+	.buttonGroup {
+		height: 50px;
+		padding: 5px 15px 10px 15px;
+		background-color: white;
+		> div {
+			float: right;
+		}
+	}
+	.col-btn-no-padding{
+		padding: 0; 
+	}
+}
+
+.card .spatialConfig {
+	margin-left: -30px;
+	margin-right: -30px;
+}
+
+.spatialConfigNoBottomMargin {
+	margin-bottom: @footerHeight;
+}

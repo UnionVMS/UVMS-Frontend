@@ -1,0 +1,538 @@
+/*
+﻿Developed with the contribution of the European Commission - Directorate General for Maritime Affairs and Fisheries
+© European Union, 2015-2016.
+
+This file is part of the Integrated Fisheries Data Management (IFDM) Suite. The IFDM Suite is free software: you can
+redistribute it and/or modify it under the terms of the GNU General Public License as published by the
+Free Software Foundation, either version 3 of the License, or any later version. The IFDM Suite is distributed in
+the hope that it will be useful, but WITHOUT ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or
+FITNESS FOR A PARTICULAR PURPOSE.  See the GNU General Public License for more details. You should have received a
+copy of the GNU General Public License along with the IFDM Suite. If not, see <http://www.gnu.org/licenses/>.
+ */
+/*
+ * Common css classes that can be used everywhere in the application.
+ * Each class should only do one thing, otherwise it should go in components.less
+ *
+ */
+
+.containerWrapper{
+    width: 100%;
+}
+
+.containerWithBottomPadding{
+    padding-bottom:15px;
+}
+
+.containerWithTopBottomPadding{
+    padding-top:15px;
+    padding-bottom:15px;
+}
+
+//Remove outer padding from first and last column in row
+.row.no-outer-padding [class*='col-']:first-child{
+  padding-left: 0;
+}
+.row.no-outer-padding [class*='col-']:last-child{
+  padding-right: 0;
+}
+
+.row-same-height {
+    display: table;
+    width: 100%;
+}
+
+.bottom-column
+{
+    float: none;
+    display: table-cell;
+    vertical-align: bottom;
+}
+
+.top-column
+{
+    float: none;
+    display: table-cell;
+    vertical-align: top;
+}
+
+.colNoPadding{
+    padding: 0px;
+}
+
+.smallerpadding{
+    padding-left: 7px;
+    padding-right: 7px;
+};
+.smallerpaddingleft{
+    padding-left: 7px;
+}
+.smallerpaddingright{
+  padding-right: 7px;
+}
+
+.nopadding{
+    padding-left: 0px;
+    padding-right: 0px;
+}
+
+.nopaddingleft{
+    padding-left: 0px;
+}
+.nopaddingright{
+    padding-right: 0px;
+}
+
+.nomargin{
+    margin: 0px !important;
+}
+
+.nomarginbottom {
+    margin-bottom: 0px;
+}
+
+.nomargintop {
+    margin-top: 0px;
+}
+
+.nomarginleft {
+    margin-left: 0px;
+}
+
+.nomarginright {
+    margin-right: 0px;
+}
+
+.textAlignCenter{
+    text-align: center;
+}
+.textAlignRight{
+    text-align: right;
+}
+.textAlignLeft{
+    text-align: left;
+}
+
+.floatRight{
+    float:right;
+}
+
+.floatLeft{
+    float:left;
+}
+
+.pointer{
+    cursor: pointer;
+}
+
+.prefixWithMinus::before{
+    content: '-';
+}
+
+.prefixWithPlus::before{
+    content: '+';
+}
+
+.link{
+    color:@link-color;
+    cursor: pointer;
+    &:hover{
+        text-decoration: underline;
+    }
+}
+
+.fa[ng-click]{
+    cursor: pointer;
+}
+.assetNotFound, .notAvailable{
+    color:#999;
+}
+.italic{
+    font-style: italic;
+}
+.underline{
+    text-decoration: underline;
+}
+span.error{
+    color: @errorColor;
+}
+
+//TABLES
+.inactiveTableCell{
+    color:#999;
+}
+
+table.fullWidth{
+    width: 100%;
+}
+
+@searchResultsTableRowColor: #fff;
+@searchResultsTableOddRowColor: #f7f7f7;
+@searchResultsTableRowBorderColor: #e0e0e0;
+
+table.searchResults{
+    width: 100%;
+    thead{
+        border-bottom: solid 2px #E5E5E4;
+
+        //Table wrow containing search fields
+        &>tr.searchInputRow{
+            &>th{
+                padding-right: 5px;
+                &>input, &>.dropdown{
+                    width:100%;
+                }
+                input{
+                    font-weight: normal;
+                }
+            }
+        }
+    }
+    th{
+        height:40px;
+        border-top: 0px !important;
+        border-bottom: 0px !important;
+
+        >a{
+            font-weight: bold;
+            color:#383737;
+
+            .fa.fa-sort, .fa.fa-caret-down , .fa.fa-caret-up
+            {
+                color: @primaryColor;
+                margin-left:7px;
+            }
+        }
+
+        &:first-child{
+            padding-left: 5px;
+        }
+        &:last-child{
+            padding-right: 5px;
+        }
+    }
+
+    td.checkboxContainer,
+    th.checkboxContainer {
+        padding-left: 5px;
+        padding-right: 5px;
+        text-align: center;
+    }
+
+    >tbody{
+        tr{
+            background: @searchResultsTableRowColor;
+            border-bottom: solid 1px @searchResultsTableRowBorderColor;
+            height: 40px;
+
+            &:last-child{
+                border-bottom: none;
+            }
+
+            td.inactive{
+                .inactiveTableCell;
+            }
+
+
+            >td{
+                button{
+                    height: 25px;
+                    min-width: 25px;
+                    text-align: center;
+                    padding:0px 0px;
+                    font-size: 14px;
+                    &.btn-sm{
+                        width: 25px;
+                    }
+                    &.btn-default{
+                        color:@primaryColor;
+                    }
+                    &.remove{
+                        color:@errorColor;
+                    }
+                    &.disabled{
+                        color: @profileColor_darkgray;
+                    }
+                }
+                .dropdown{
+                    button{
+                        text-align: left;
+                    }
+                }
+                &:first-child{
+                    padding-left: 5px;
+                }
+                &:last-child{
+                    padding-right: 5px;
+                }
+            }
+        }
+    }
+
+    td, th {
+        max-width: 120px;
+    }
+
+    &.colorOdd{
+        tbody{
+            tr:nth-child(odd) {background: @searchResultsTableOddRowColor}
+        }
+    }
+
+    tbody tr td.truncate-text,
+    &.truncate-text tbody tr td {
+        overflow: hidden;
+        text-overflow: ellipsis;
+        white-space: nowrap;
+    }
+
+    span.label {
+        text-transform: uppercase;
+    }
+}
+
+//USM tables
+.table-striped > tbody > tr:nth-child(odd) > td, .table-striped > tbody > tr:nth-child(odd) > th{
+    background: @searchResultsTableOddRowColor;
+}
+.table{
+    .fa.fa-sort, .fa.fa-sort-asc, .fa.fa-sort-desc {
+        color: @primaryColor;
+    }
+}
+
+td div.iconToTheLeftOfTheTableCell{
+    position: absolute;
+    left:-40px;
+
+    div.tooltip{
+        min-width: 100px;
+    }
+}
+
+div.searchResultsLoading{
+    text-align: center;
+    margin-top:10px;
+}
+
+a{
+    cursor:pointer;
+}
+a:hover{
+    text-decoration: none;
+    color: #428bca;
+}
+
+
+//MODAL
+.modal-header{
+    .headerWithBottomBorder{
+        font-size: 27px;
+        font-width: bold;
+        border-bottom-colors: #e4e4e4;
+        border-bottom-width: 1px;
+        border-bottom-style: solid;
+    }
+
+    .closeIconContainer{
+      position: absolute;
+      right: 20px;
+      top: 20px;
+    }
+    .closeicon{
+        width: 30px;
+        height: 30px;
+        line-height: 30px;
+        cursor: pointer;
+        background: #fff;
+        font-size: 16px;
+        color: #000;
+        border: solid 1px @profileColor_gray;
+        border-radius: 2px;
+        box-shadow: inset 0 -2px 0 rgba(0,0,0,.09);
+        text-align: center;
+        &:hover, &:active, &:focus{
+            background-color: darken(#fff, 5%);
+            color: #000;
+            border-color: darken(@profileColor_gray, 5%);
+            box-shadow: inset 0 -2px 0 rgba(0,0,0,.09);
+        }
+    }
+}
+
+//Fix for when modal-footer is positioned inside the modal-body (that is the same in some USM modals)
+.modal-body{
+    .modal-footer{
+        margin-left: -30px;
+        margin-right: -30px;
+        padding-right: 60px;
+        padding-left: 60px;
+        position: relative;
+        top: 20px;
+    }
+}
+
+
+//Gray border
+@grayBorder:1px solid #DDD;
+.grayBorder{border:@grayBorder}
+.grayBorderBottom{border-bottom:@grayBorder}
+.grayBorderTop{border-top:@grayBorder}
+.grayBorderRight{border-right:@grayBorder}
+.grayBorderLeft{border-left:@grayBorder}
+
+.borderSection{
+    padding: 15px;
+    .grayBorder;
+    border-top-width: 3px;
+}
+
+
+/*Styled scrollbar*/
+.scrollbar(){
+    padding-right: 10px;
+    &::-webkit-scrollbar {
+        width: 8px;
+    }
+
+    &::-webkit-scrollbar-track {
+        background-color:#F1F1F1;
+        width: 4px;
+    }
+
+    &::-webkit-scrollbar-thumb {
+        background-color: #BCBCBC;
+        border: 1px solid #A8A8A8;
+        &:hover{
+            background-color: darken(#BCBCBC, 5%);
+            border-color: darken(#A8A8A8, 5%);
+        }
+        &:active{
+            background-color: darken(#BCBCBC, 10%);
+            border-color: darken(#A8A8A8, 10%);
+        }
+    }
+}
+
+.signouticon{
+    font-size: 24px;
+    position: relative;
+    cursor: pointer;
+    color: @errorColor;
+}
+
+.exportButton{
+    width: 30px;
+    height: 30px;
+    line-height: 30px;
+    text-align: center;
+    padding:0px;
+    color: @primaryColor;
+    &:hover, &:active, &:focus{
+        color: @primaryColor;
+    }
+}
+
+.searchbtntext, .resetbtntext, .vmsbtn{
+    width: 100%;
+    padding: 2px 0 3px 0;
+    font-size: 14px;
+    text-align: center;
+    text-transform: uppercase;
+}
+
+
+.card, .panel {
+    background-color: white;
+    border: 1px solid #dddddd;
+    border-top: 5px solid #dddddd;
+    margin-top: 10px;
+    padding: 15px;
+    border-radius: 0px;
+
+    .card-header {
+        border-bottom: 1px solid #dddddd;
+        padding-bottom: 15px;
+        .metadata{
+            padding-top: 6px;
+            >div{
+                float:left;
+                margin-right: 30px;
+                &:last-child{
+                    margin-right: 0px;
+                }
+                .label{
+                    position: relative;
+                    top:-1px;
+                }
+            }
+        }
+        .actions{
+            float:right;
+            >div{
+                float: left;
+            }
+        }
+        .closeIcon{
+            padding-left: 50px;
+            padding-top: 4px;
+        }
+    }
+
+    &.nomargintop {
+        margin-top: 0px;
+    }
+
+    //use to make the cardHeader smaller (in height)
+    &.with-small-card-header{
+        padding-top: 10px;
+        .card-header{
+            padding-bottom: 0px;
+            h5{
+                margin-top:5px;
+            }
+        }
+
+    }
+}
+
+.nopadding {
+    padding: 0px;
+}
+
+.nopaddingtop {
+    padding-top: 0px;
+}
+
+.nopaddingbottom {
+    padding-bottom: 0px;
+}
+
+.valign {
+    display: inline-block;
+    float: none;
+    vertical-align: middle;
+}
+
+
+
+//LEAFLET maps
+.leaflet-popup-content-wrapper{
+    border-radius: 4px !important;
+}
+.leaflet-popup-content{
+    margin: 10px !important;
+}
+.leaflet-popup-close-button{
+    display: none !important;
+}
+
+.available-positions-refresh {
+    color: green;
+
+    a {
+        color: inherit;
+        &:hover {
+            text-decoration: underline;
+        }   
+    }
+}

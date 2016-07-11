@@ -1,0 +1,75 @@
+<!--
+﻿Developed with the contribution of the European Commission - Directorate General for Maritime Affairs and Fisheries
+© European Union, 2015-2016.
+
+This file is part of the Integrated Fisheries Data Management (IFDM) Suite. The IFDM Suite is free software: you can
+redistribute it and/or modify it under the terms of the GNU General Public License as published by the
+Free Software Foundation, either version 3 of the License, or any later version. The IFDM Suite is distributed in
+the hope that it will be useful, but WITHOUT ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or
+FITNESS FOR A PARTICULAR PURPOSE.  See the GNU General Public License for more details. You should have received a
+copy of the GNU General Public License along with the IFDM Suite. If not, see <http://www.gnu.org/licenses/>.
+-->
+<div class="modal-header" style="text-align:left">
+    <div class="pointer pull-right" ng-click="cancel()">
+        <i class="fa fa-times closeicon"></i>
+    </div>
+    <h4 class="modal-title">{{ 'alarms.position_report_header' | i18n }}</h4>
+</div>
+
+<div class="modal-body">
+
+    <!-- Status -->
+    {{'common.status' | i18n}} <span class="label" ng-class="getStatusLabelClass(alarm.status)">{{getStatusLabel(alarm.status) | uppercase}}</span>
+
+    <!-- Asset section -->
+    <div class="sectionHeader">{{'alarms.position_report_asset_information' | i18n}}</div>
+    <div class="row">
+        <div alarm-report-field="'movement.manual_position_field_label_flag_state'" field-value="alarm.vessel.countryCode" class="col-md-3"></div>
+        <div alarm-report-field="'movement.manual_position_field_label_ircs'" field-value="alarm.vessel.ircs" class="col-md-3"></div>
+        <div alarm-report-field="'movement.manual_position_field_label_cfr'" field-value="alarm.vessel.cfr" class="col-md-3"></div>
+        <div alarm-report-field="'movement.manual_position_field_label_external_marking'" field-value="alarm.vessel.externalMarking" class="col-md-3"></div>
+        <div alarm-report-field="'movement.manual_position_field_label_name'" field-value="alarm.vessel.name" class="col-md-3"></div>
+    </div>
+
+    <!-- Movement section -->
+    <div class="sectionHeader">{{'alarms.position_report_position_information' | i18n}}</div>
+
+    <!-- Possible error message. -->
+    <div class="alert alert-danger" ng-if="loadingMovementError && loadingMovementErrorText">
+        <i class="fa fa-warning"></i> {{loadingMovementErrorText}}
+    </div>
+
+    <div class="row loadingMovementContainer" ng-show="loadingMovement">
+        <div class="col-md-12" loading-indicator="loadingMovement" type="SPINNER" size="small"></div>
+    </div>
+    <div class="row" ng-hide="loadingMovement || loadingMovementError">
+        <div alarm-report-field="'movement.manual_position_field_label_status'" field-value="alarm.movement.movement.status" class="col-md-3"></div>
+        <div alarm-report-field="'movement.manual_position_field_label_date_time'" field-value="alarm.movement.time | confDateFormat" class="col-md-9"></div>
+        <div alarm-report-field="'movement.manual_position_field_label_latitude'" field-value="alarm.movement.movement.latitude | confCoordinateFormat" class="col-md-3"></div>
+        <div alarm-report-field="'movement.manual_position_field_label_longitude'" field-value="alarm.movement.movement.longitude | confCoordinateFormat" class="col-md-3"></div>
+        <div alarm-report-field="'movement.manual_position_field_label_measured_speed'" field-value="toSpeedString(alarm.movement.movement.reportedSpeed)" class="col-md-3"></div>
+        <div alarm-report-field="'movement.manual_position_field_label_course'" field-value="toCourseString(alarm.movement.movement.reportedCourse)" class="col-md-3"></div>
+    </div>
+
+    <!-- Map -->
+    <div class="mapContainer" ng-if="!loadingMovement && !loadingMovementError">
+        <leaflet center="center" markers="markers" height="400px" width="100%"></leaflet>
+    </div>
+</div>
+
+<div class="modal-footer">
+    <div class="row buttons">
+        <div class="buttonGroups">
+            <div class="buttonGroup">
+                <button class="btn btn-default" ng-click="goToPoll(alarm)">
+                    <i class="fa fa-arrow-circle-right"></i> {{'movement.poll' | i18n}}
+                </button>
+            </div>
+            <div class="buttonGroup button-group-right">
+                <button show-if-allowed="Rules:manageAlarmsOpenTickets" type="button" class="btn btn-sm btn-success" ng-click="closeTicket(alarm)" title="{{'alarms.notifications_table_close_title' | i18n}}">
+                    <span class="fa fa-check"></span>
+                </button>
+            </div>
+        </div>
+    </div>
+</div>

@@ -1,0 +1,112 @@
+<!--
+﻿Developed with the contribution of the European Commission - Directorate General for Maritime Affairs and Fisheries
+© European Union, 2015-2016.
+
+This file is part of the Integrated Fisheries Data Management (IFDM) Suite. The IFDM Suite is free software: you can
+redistribute it and/or modify it under the terms of the GNU General Public License as published by the
+Free Software Foundation, either version 3 of the License, or any later version. The IFDM Suite is distributed in
+the hope that it will be useful, but WITHOUT ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or
+FITNESS FOR A PARTICULAR PURPOSE.  See the GNU General Public License for more details. You should have received a
+copy of the GNU General Public License along with the IFDM Suite. If not, see <http://www.gnu.org/licenses/>.
+-->
+<div class="container" ng-controller="roleDetailsCtrl">
+    <!-- INFO PANEL-->
+    <div class="panel panel-default">
+        <div class="panel-body">
+            <div class="row">
+                <div class="col-md-12">
+                    <div class="col-md-1">
+                        <label for="role">Role:</label>
+                    </div>
+                    <div class="col-md-2">
+                        <span class="roleDetailsPanelSpan" id="role" ng-bind="roleDetails.name"></span>
+                    </div>
+                    <div class="col-md-2">
+                        <label for="description">Description:</label>
+                    </div>
+                    <div class="col-md-3">
+                        <span class="roleDetailsPanelSpan" id="description" ng-bind="roleDetails.description"></span>
+                    </div>
+                    <div class="col-md-1">
+                    <label for="status">Status:</label>
+                        </div>
+                    <div class="col-md-1">
+						<span class="roleDetailsPanelSpan" ng-class="{'label label-success': roleDetails.status=='E', 'label label-danger': roleDetails.status=='D'}" id="status">
+							{{"roleDetails.status_"+roleDetails.status | translate}}</span>
+                    </div>
+
+					<span style="float: right" ng-controller="manageRoleCtrl" ng-if="checkAccess('manageRoles')">
+						<button type="button" class="btn btn-sm btn-primary" ng-click='manageRole("edit", roleDetails)'>
+							<span class="fa fa-pencil"></span>
+							<span>&nbsp;Edit</span>
+						</button>
+					</span>
+                </div>
+            </div>
+        </div>
+    </div>
+    <!-- INFO PANEL END-->
+
+    <tabset class="roleDetailsTabs">
+        <!-- PERMISSIONS TABLE -->
+        <tab heading="Permissions">
+            <div ng-controller="managePermissionCtrl">
+                <table st-table="displayedPermissions" st-safe-src="roleDetails.features" class="table table-striped fixed">
+					<colgroup>
+						<col style="width: 300px;">
+						<col style="width: 550px;">
+						<col style="width: 150px;">
+						<col style="width: 140px;">
+					</colgroup>
+                    <thead>
+                    <tr>
+                        <th colspan="4" class="text-right actionTh">
+                        	<span style="float: right" ng-controller="manageRoleCtrl" ng-if="checkAccess('manageRoles')">
+                            	<button class="btn btn-sm btn-primary" ng-click="managePermissions(roleDetails)">
+                                	<span class="fa fa-pencil"></span>
+                                	<span>&nbsp;Edit</span>
+                            	</button>
+                            </span>
+                        </th>
+                    </tr>
+                    <tr>
+                        <th st-sort="name" st-sort-default="true" ng-click="changeSorting('name')" st-skip-natural="true" st-class-ascent="dummyClass" st-class-descent="dummyClass">
+                            Name&nbsp;<i class="fa" ng-class="sortIcon('name')"></i>
+                        </th>
+                        <th st-sort="description" ng-click="changeSorting('description')" st-skip-natural="true" st-class-ascent="dummyClass" st-class-descent="dummyClass">
+                            Description&nbsp;<i class="fa" ng-class="sortIcon('description')"></i>
+                        </th>
+                        <th st-sort="group" ng-click="changeSorting('group')" st-skip-natural="true" st-class-ascent="dummyClass" st-class-descent="dummyClass">
+                            Group&nbsp;<i class="fa" ng-class="sortIcon('group')"></i>
+                        </th>
+                        <th class="actionTh" st-sort="applicationName" ng-click="changeSorting('applicationName')" st-skip-natural="true" st-class-ascent="dummyClass" st-class-descent="dummyClass">
+                            Application&nbsp;<i class="fa" ng-class="sortIcon('applicationName')"></i>
+                        </th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    <tr ng-repeat="permission in displayedPermissions">
+                        <td ng-bind="permission.name"></td>
+                        <td ng-bind="permission.description"></td>
+                        <td ng-bind="permission.group"></td>
+                        <td class="actionTd" ng-bind="permission.applicationName"></td>
+                    </tr>
+                    </tbody>
+                    <tbody ng-if="emptyResult">
+                    <tr>
+                        <td colspan="4" class="text-center">No permissions are assigned to this role.</td>
+                    </tr>
+                    </tbody>
+                    <tfoot>
+                    <tr>
+                        <td colspan="5" class="text-right">
+                            <div class="st-pagination" st-pagination="" st-items-by-page="itemsByPage" st-displayed-pages="7"></div>
+                        </td>
+                    </tr>
+                    </tfoot>
+                </table>
+            </div>
+            <!-- PERMISSIONS TABLE END-->
+        </tab>
+    </tabset>
+</div>

@@ -1,0 +1,42 @@
+<!--
+﻿Developed with the contribution of the European Commission - Directorate General for Maritime Affairs and Fisheries
+© European Union, 2015-2016.
+
+This file is part of the Integrated Fisheries Data Management (IFDM) Suite. The IFDM Suite is free software: you can
+redistribute it and/or modify it under the terms of the GNU General Public License as published by the
+Free Software Foundation, either version 3 of the License, or any later version. The IFDM Suite is distributed in
+the hope that it will be useful, but WITHOUT ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or
+FITNESS FOR A PARTICULAR PURPOSE.  See the GNU General Public License for more details. You should have received a
+copy of the GNU General Public License along with the IFDM Suite. If not, see <http://www.gnu.org/licenses/>.
+-->
+<div class="transmission-status-container card">
+    <div class="row card-header">
+        <div class="col-md-12">
+            <div>
+                <h5>{{'exchange.transmission_status_header' | i18n}}</h5>
+            </div>
+        </div>
+    </div>
+    <div class="row scroller">
+        <div class="col-md-12 nopaddingright">
+            <div search-results-table search="transmissionStatuses">
+            	<table class="searchResults truncate-text">
+            		<tbody>
+            			<tr ng-repeat="item in transmissionStatuses.items">
+                            <td class="tranmission-status">
+                                <span class="label" ng-class="getStatusLabelClass(item.status)" ng-attr-title="{{getTransmissionStatusLabel(item.status) | uppercase}}">
+                                    {{getTransmissionStatusLabel(item.status) | uppercase}}
+                                </span>
+                            </td>
+                            <td class="type" ng-attr-title="{{item.name}}">{{item.name}}</td>
+                            <td class="tranmission-action" show-if-allowed="Exchange:manageExchangeTransmissionStatuses">
+                                <span class="btn btn-default btn-sm" ng-show="item.isOnline()" ng-click="stopTransmissionService(item)" ng-attr-title="{{'exchange.transmission_action_stop' | i18n}}"><i class="fa fa-lg fa-stop-circle"></i></span>
+                                <span class="btn btn-default btn-sm" ng-hide="item.isOnline()" ng-click="startTransmissionService(item)" ng-attr-title="{{'exchange.transmission_action_start' | i18n}}"><i class="fa fa-lg fa-play-circle"></i></span>
+                            </td>
+            			</tr>
+            		</tbody>
+            	</table>
+            </div>
+        </div>
+    </div>
+</div>

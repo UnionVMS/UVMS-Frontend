@@ -1,0 +1,55 @@
+<!--
+﻿Developed with the contribution of the European Commission - Directorate General for Maritime Affairs and Fisheries
+© European Union, 2015-2016.
+
+This file is part of the Integrated Fisheries Data Management (IFDM) Suite. The IFDM Suite is free software: you can
+redistribute it and/or modify it under the terms of the GNU General Public License as published by the
+Free Software Foundation, either version 3 of the License, or any later version. The IFDM Suite is distributed in
+the hope that it will be useful, but WITHOUT ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or
+FITNESS FOR A PARTICULAR PURPOSE.  See the GNU General Public License for more details. You should have received a
+copy of the GNU General Public License along with the IFDM Suite. If not, see <http://www.gnu.org/licenses/>.
+-->
+<div class="text-right" style="margin-top: -20px;">
+    <ul class="pagination usm-pagination">
+        <li ng-class="prevPageDisabled()">
+            <a href ng-click="firstPage()" aria-label="Next">
+                <span aria-hidden="true">&#60;&#60;</span>
+            </a>
+        </li>
+        <li ng-class="prevPageDisabled()">
+            <a href ng-click="prevPage()" aria-label="Previous">
+                <span aria-hidden="true">&#60;</span>
+            </a>
+        </li>
+        <li>
+            <span class="current-page">Page <input type="number"
+            				  min="1"
+            				  max="{{ pageCount }}"
+               				  ng-model="currentPage"
+               				  ng-value="{{currentPage}}"
+               				  id="currentPage"
+               				  name="currentPage"
+               				  style="width: 40px;"> / {{ pageCount }} </span>
+        </li>
+        <li ng-class="nextPageDisabled()">
+            <a href ng-click="nextPage()" aria-label="Next">
+                <span aria-hidden="true">&#62;</span>
+            </a>
+        </li>
+        <li ng-class="nextPageDisabled()">
+            <a href ng-click="lastPage()" aria-label="Next">
+                <span aria-hidden="true">&#62;&#62;</span>
+            </a>
+        </li>
+        <li>
+    		<span style="margin-top: 0px;">{{startItems}} - 
+    		
+    		<!--  {{ totalItems < limitItems ? totalItems : limitItems }}  is not working, < breaks the html parser during the build -->    		    		
+    		<span ng-if="totalItems <= limitItems">{{ totalItems }}</span>
+    		<span ng-if="totalItems > limitItems">{{ limitItems }}</span>
+    		
+    		of {{ totalItems }} items
+    		</span>
+        </li>
+    </ul>
+</div>

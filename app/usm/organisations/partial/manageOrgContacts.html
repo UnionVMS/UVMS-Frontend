@@ -1,0 +1,120 @@
+<!--
+﻿Developed with the contribution of the European Commission - Directorate General for Maritime Affairs and Fisheries
+© European Union, 2015-2016.
+
+This file is part of the Integrated Fisheries Data Management (IFDM) Suite. The IFDM Suite is free software: you can
+redistribute it and/or modify it under the terms of the GNU General Public License as published by the
+Free Software Foundation, either version 3 of the License, or any later version. The IFDM Suite is distributed in
+the hope that it will be useful, but WITHOUT ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or
+FITNESS FOR A PARTICULAR PURPOSE.  See the GNU General Public License for more details. You should have received a
+copy of the GNU General Public License along with the IFDM Suite. If not, see <http://www.gnu.org/licenses/>.
+-->
+<div ng-controller="manageOrganisationContactsCtrl" ng-if="mode=='new'">
+    <form novalidate class="form-horizontal" name="manageOrganisationContactForm" ng-submit="manageOrganisationContactForm.$valid && saveUpdateDelete(selectedContact)">
+        <div class="modal-header">
+            <div class="row">
+                <div class="col-md-6">
+                    <h3 ng-if="mode=='new'" class="modal-title">{{'organisationEndpointsContacts.newEndpointContact' | translate}}</h3>
+                    <h3 ng-if="mode=='delete'" class="modal-title">{{'organisationEndpointsContacts.deleteEndpointContact' | translate}}</h3>
+                </div>
+            </div>
+        </div>
+
+		<div class="modal-body">
+            <div class="row">
+                <div class="col-md-12" ng-class="messageDivClass">
+                    <span ng-bind-html="actionMessage" ng-class="messageClass"></span>
+                </div>
+            </div>
+
+            <div class="row">
+                <div class="form-group">
+                    <label class="col-md-3 col-md-offset-1">{{'organisationEndpointsContacts.person' | translate}}</label>
+                    <div class="col-md-6">
+                        <select class="form-inline form-control dropdown-select"
+                                id="contact.personId"
+                                name="contact.fullNameAndEmail"
+                                ng-model="selectedContact"
+                                ng-options="contact.fullNameAndEmail for contact in contacts"
+                                required
+                                ng-class="{pointer: pointer}"
+                                ng-mouseenter="pointer=true"
+                                ng-mouseleave="pointer=false"
+                                ng-disabled="mode=='delete' || showConfirmation">
+                        </select>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="modal-footer">
+            <div class="row">
+                <div class="col-md-offset-8 col-md-4">
+                    <input type="button" class="btn btn-warning btn-sm" ng-show="!contactCreated" ng-click="cancel()" value="Cancel"/>
+                    <input type="submit" class="btn btn-primary btn-sm" value="Save"
+                           ng-disabled="manageOrganisationContactForm.$invalid" ng-show="!contactCreated && !showConfirmation" ng-if="mode=='new'"/>
+                    <input type="submit" class="btn btn-primary btn-sm" value="Confirm"
+                           ng-disabled="manageOrganisationContactForm.$invalid" ng-show="!contactCreated && showConfirmation" ng-if="mode=='delete'"/>
+                    <input type="submit" class="btn btn-primary btn-sm" value="Delete"
+                           ng-disabled="manageOrganisationContactForm.$invalid" ng-show="!contactCreated && !showConfirmation" ng-if="mode=='delete'"/>
+					<label id="btn-success-contact" class="btn btn-success btn-sm fa fa-check" ng-show="contactCreated"></label>
+                </div>
+            </div>
+        </div>
+    </form>
+</div>
+
+<div ng-controller="manageOrganisationContactsCtrl" ng-if="mode=='delete'">
+    <form novalidate class="form-horizontal" name="manageOrganisationContactForm" ng-submit="manageOrganisationContactForm.$valid && saveUpdateDelete(selectedContact)">
+        <div class="modal-header">
+            <div class="row">
+                <div class="col-md-6">
+                    <h3 ng-if="mode=='new'" class="modal-title">{{'organisationEndpointsContacts.newEndpointContact' | translate}}</h3>
+                    <h3 ng-if="mode=='delete'" class="modal-title">{{'organisationEndpointsContacts.deleteEndpointContact' | translate}}</h3>
+                </div>
+            </div>
+        </div>
+
+		<div class="modal-body">
+			<div class="row">
+				<div class="form-group">
+					<label class="col-md-3 text-right">{{'organisationEndpointsContacts.firstName'  | translate}}</label>
+					<label class="col-md-3" style="font-weight: normal">{{selectedContact.firstName}}</label>
+				</div>
+			</div>
+			<div class="row">
+				<div class="form-group">
+					<label class="col-md-3 text-right">{{'organisationEndpointsContacts.lastName'  | translate}}</label>
+					<label class="col-md-3" style="font-weight: normal">{{selectedContact.lastName}}</label>
+				</div>
+			</div>
+			<div class="row">
+				<div class="form-group">
+					<label class="col-md-3 text-right">{{'organisationEndpointsContacts.email'  | translate}}</label>
+					<label class="col-md-3" style="font-weight: normal">{{selectedContact.email}}</label>
+				</div>
+			</div>
+
+            <div class="row">
+                <div class="col-md-12" ng-class="messageDivClass">
+                    <span ng-bind-html="actionMessage" ng-class="messageClass"></span>
+                </div>
+            </div>
+        </div>
+
+        <div class="modal-footer">
+            <div class="row">
+                <div class="col-md-offset-8 col-md-4">
+                    <input type="button" class="btn btn-warning btn-sm" ng-show="!contactCreated" ng-click="cancel()" value="Cancel"/>
+                    <input type="submit" class="btn btn-primary btn-sm" value="Save"
+                           ng-disabled="manageOrganisationContactForm.$invalid" ng-show="!contactCreated && !showConfirmation" ng-if="mode=='new'"/>
+                    <input type="submit" class="btn btn-primary btn-sm" value="Confirm"
+                           ng-disabled="manageOrganisationContactForm.$invalid" ng-show="!contactCreated && showConfirmation" ng-if="mode=='delete'"/>
+                    <input type="submit" class="btn btn-primary btn-sm" value="Delete"
+                           ng-disabled="manageOrganisationContactForm.$invalid" ng-show="!contactCreated && !showConfirmation" ng-if="mode=='delete'"/>
+					<label id="btn-success" class="btn btn-success btn-sm fa fa-check" ng-show="contactCreated"></label>
+                </div>
+            </div>
+        </div>
+    </form>
+</div>

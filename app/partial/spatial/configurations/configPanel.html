@@ -1,0 +1,57 @@
+<!--
+﻿Developed with the contribution of the European Commission - Directorate General for Maritime Affairs and Fisheries
+© European Union, 2015-2016.
+
+This file is part of the Integrated Fisheries Data Management (IFDM) Suite. The IFDM Suite is free software: you can
+redistribute it and/or modify it under the terms of the GNU General Public License as published by the
+Free Software Foundation, either version 3 of the License, or any later version. The IFDM Suite is distributed in
+the hope that it will be useful, but WITHOUT ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or
+FITNESS FOR A PARTICULAR PURPOSE.  See the GNU General Public License for more details. You should have received a
+copy of the GNU General Public License along with the IFDM Suite. If not, see <http://www.gnu.org/licenses/>.
+-->
+<div class="col-md-12 spatialConfig spatialConfigNoBottomMargin" ng-controller="ConfigpanelCtrl">
+	<div class="containerWrapper">
+		<div class="container containerWithTopBottomPadding">
+			<div class="row configHeader">
+	            <div class="col-md-11">
+	                <h3 class="pull-left">{{'spatial.user_preferences' | i18n }}</h3>
+	            </div>
+	            <div class="col-md-1 textAlignRight" ng-click="toggleUserPreferences()"> 
+	                <i class="fa fa-sign-out signouticon signouticon-extented" title="{{'common.close' | i18n}}"></i>
+	            </div>
+	        </div>
+	    </div>
+	    <div class="container containerWithTopBottomPadding spatial-error" ng-show="alert.hasAlert">
+			<div class="alert alert-container" role="alert" ng-class="{'alert-danger': alert.hasError, 'alert-success': alert.hasSuccess, 'alert-warning': alert.hasWarning}">
+				<span class="fa fa-exclamation-circle" aria-hidden="true" ng-show="alert.hasError"></span>
+				<span class="fa fa-check-circle" aria-hidden="true" ng-show="alert.hasSuccess"></span>
+				<span class="fa fa-exclamation-circle" aria-hidden="true" ng-show="alert.hasWarning"></span>
+				<span class="alert-message">
+					<span>{{alert.alertMessage}}</span>          
+				</span>
+		    </div>
+		</div>
+	    <div class="container containerWithTopBottomPadding containerCollapsible">
+	    	<loading-panel type="Preferences"></loading-panel>
+	    	<loading-panel type="SavePreferences"></loading-panel>
+	    	<loading-panel type="ResetPreferences"></loading-panel>
+	    	<form name="configPanelForm" novalidate>
+				<div class="collapsiblePanel" ng-include="'partial/spatial/configurations/mapSettingsPanel/mapSettingsCollapsiblePanel.html'"></div>
+				<div class="collapsiblePanel" ng-include="'partial/spatial/configurations/vmsStyles/vmsStylesCollapsiblePanel.html'"></div>
+				<div class="collapsiblePanel" ng-include="'partial/spatial/configurations/visibilitySettings/visibilitySettings.html'"></div>
+				<div class="collapsiblePanel" ng-include="'partial/spatial/configurations/layerSettings/layerSettings.html'"></div>
+				<div class="collapsiblePanel" ng-include="'partial/spatial/configurations/referenceDataSettings/referenceDataSettings.html'"></div>
+				<div class="collapsiblePanel">
+					<div class="col-md-12 collapsibleRow">
+						<div class="buttonGroup">
+							<div>
+								<button type="button" class="btn btn-default btn-action" ng-click="cancel()">{{'common.cancel' | i18n}}</button>
+								<button type="button" class="btn btn-primary btn-action" ng-click="save()">{{'common.save' | i18n}}</button>
+							</div>
+						</div>
+					</div>
+				</div>
+			</form>
+		</div>
+	</div>
+</div>

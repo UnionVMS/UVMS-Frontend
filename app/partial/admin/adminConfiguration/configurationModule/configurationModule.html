@@ -1,0 +1,63 @@
+<!--
+﻿Developed with the contribution of the European Commission - Directorate General for Maritime Affairs and Fisheries
+© European Union, 2015-2016.
+
+This file is part of the Integrated Fisheries Data Management (IFDM) Suite. The IFDM Suite is free software: you can
+redistribute it and/or modify it under the terms of the GNU General Public License as published by the
+Free Software Foundation, either version 3 of the License, or any later version. The IFDM Suite is distributed in
+the hope that it will be useful, but WITHOUT ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or
+FITNESS FOR A PARTICULAR PURPOSE.  See the GNU General Public License for more details. You should have received a
+copy of the GNU General Public License along with the IFDM Suite. If not, see <http://www.gnu.org/licenses/>.
+-->
+<div class="config-module">
+	<table class="searchResults colorOdd truncate-text">
+		<thead>
+			<tr>
+				<th sortable-table-header by="sortBy" reverse="reverseSort" order="'key'">
+					{{ "audit.configuration_column_key" | i18n }}
+				</th>
+				<th sortable-table-header by="sortBy" reverse="reverseSort" order="'value'">
+					{{ "audit.configuration_column_value" | i18n }}
+				</th>
+				<th sortable-table-header by="sortBy" reverse="reverseSort" order="'description'">
+					{{ "audit.configuration_column_description" | i18n }}
+				</th>
+				<th sortable-table-header by="sortBy" reverse="reverseSort" order="'lastModified'">
+					{{ "audit.configuration_column_last_modified" | i18n }}
+				</th>
+				<th>
+					<!-- {{ "audit.configuration_column_actions" | i18n }} -->
+				</th>
+			</tr>
+		</thead>
+		<tbody>
+			<tr ng-repeat="c in settings[activeTab] | filter:{global: false} | orderBy:sortBy:reverseSort">
+				<td class="key" ng-attr-title="{{c.key}}">{{ c.key }}</td>
+				<td ng-switch="!!c.editing" class="value" ng-class="{editing: c.editing}">
+					<!-- Value or input -->
+					<span ng-switch-when="false" ng-attr-title="{{c.value}}">
+						<input type="checkbox" ng-if="isLikelyBoolean(c)" ng-checked="isTrue(c.value)" ng-click="toggleSetting(c)"/> {{c.value}}
+					</span>
+					<input ng-switch-when="true" type="text" ng-model="c.value"/>
+				</td>
+				<td ng-switch="!!c.editing" class="description" ng-class="{editing: c.editing}">
+					<!-- Value or input -->
+					<span ng-switch-when="false" ng-attr-title="{{c.description}}">{{c.description}}</span>
+					<input ng-switch-when="true" type="text" ng-model="c.description"/>
+				</td>
+				<td ng-attr-title="{{c.lastModified | confDateFormat}}">{{c.lastModified | confDateFormat }}</td>
+				<td ng-switch on="!!c.editing">
+					<!-- "Edit" or "Done" / "Delete" buttons -->
+					<button ng-switch-when="false" class="btn btn-default" ng-click="setEditing(c, true)" title="{{'common.edit'| i18n}}">
+                        <i class="fa fa-pencil"></i>
+                    </button>
+					<span ng-switch-when="true">
+						<button class="btn btn-primary" ng-click="updateSetting(c)"><i class="fa fa-check"></i></button>
+						<button class="btn btn-default" ng-click="cancelEditing(c)"><i class="fa fa-close"></i></button>
+					</span>
+				</td>
+			</tr>
+		</tbody>
+	</table>
+
+</div>

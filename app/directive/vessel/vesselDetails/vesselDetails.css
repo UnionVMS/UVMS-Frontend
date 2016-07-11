@@ -1,0 +1,43 @@
+/*
+﻿Developed with the contribution of the European Commission - Directorate General for Maritime Affairs and Fisheries
+© European Union, 2015-2016.
+
+This file is part of the Integrated Fisheries Data Management (IFDM) Suite. The IFDM Suite is free software: you can
+redistribute it and/or modify it under the terms of the GNU General Public License as published by the
+Free Software Foundation, either version 3 of the License, or any later version. The IFDM Suite is distributed in
+the hope that it will be useful, but WITHOUT ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or
+FITNESS FOR A PARTICULAR PURPOSE.  See the GNU General Public License for more details. You should have received a
+copy of the GNU General Public License along with the IFDM Suite. If not, see <http://www.gnu.org/licenses/>.
+ */
+.vesselDetailsContainer .vesseldetailsrow {
+  margin-top: 0px !important;
+  margin-bottom: 0px !important;
+}
+.vesselDetailsContainer .inputgroup .labelheaders {
+  height: 20px;
+  margin-bottom: 0;
+  margin-top: 10px;
+}
+.vesselDetailsContainer .inputgroup input[type=text] {
+  background-color: #EBEBEB;
+}
+.vesselDetailsContainer .dropdowntext {
+  float: left;
+}
+.vesselDetailsContainer .caret {
+  clear: both;
+  margin-left: 10px;
+}
+.vesselDetailsContainer .form-group {
+  margin-bottom: 0px;
+}
+.vesselDetailsContainer .has-feedback .form-control-feedback {
+  position: absolute;
+  top: 29px;
+  right: 0;
+  display: block;
+  width: 34px;
+  height: 34px;
+  line-height: 34px;
+  text-align: justify;
+}

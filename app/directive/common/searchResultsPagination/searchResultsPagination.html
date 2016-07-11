@@ -1,0 +1,45 @@
+<!--
+﻿Developed with the contribution of the European Commission - Directorate General for Maritime Affairs and Fisheries
+© European Union, 2015-2016.
+
+This file is part of the Integrated Fisheries Data Management (IFDM) Suite. The IFDM Suite is free software: you can
+redistribute it and/or modify it under the terms of the GNU General Public License as published by the
+Free Software Foundation, either version 3 of the License, or any later version. The IFDM Suite is distributed in
+the hope that it will be useful, but WITHOUT ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or
+FITNESS FOR A PARTICULAR PURPOSE.  See the GNU General Public License for more details. You should have received a
+copy of the GNU General Public License along with the IFDM Suite. If not, see <http://www.gnu.org/licenses/>.
+-->
+<div class="searchResultsPaginationContainer" ng-hide="total === 0 || page === 0">
+    <ul class="pagination">
+        <li ng-class="prevPageDisabled()">
+            <a href ng-click="firstPage()" title="{{'common.search_results_pagination_first_page_title' | i18n}}">
+                <span aria-hidden="true">&#60;&#60;</span>
+            </a>
+        </li>
+        <li ng-class="prevPageDisabled()">
+            <a href ng-click="prevPage()" title="{{'common.search_results_pagination_prev_page_title' | i18n}}">
+                <span aria-hidden="true">&#60;</span>
+            </a>
+        </li>
+        <li class="currentPage disabled">
+            <span>{{'common.search_results_pagination_page' | i18n}} <input type="number"
+                  min="1"
+                  max="{{total}}"
+                  ng-model="inputPage",
+                  ng-change="onInputPageChange()",
+                  id="page"
+                  name="page"> {{'common.search_results_pagination_total' | i18n:[total]}}
+            </span>
+        </li>
+        <li ng-class="nextPageDisabled()">
+            <a href ng-click="nextPage()" title="{{'common.search_results_pagination_next_page_title' | i18n}}">
+                <span aria-hidden="true">&#62;</span>
+            </a>
+        </li>
+        <li ng-class="nextPageDisabled()">
+            <a href ng-click="lastPage()" title="{{'common.search_results_pagination_last_page_title' | i18n}}">
+                <span aria-hidden="true">&#62;&#62;</span>
+            </a>
+        </li>
+    </ul>
+</div>

@@ -1,0 +1,132 @@
+<!--
+﻿Developed with the contribution of the European Commission - Directorate General for Maritime Affairs and Fisheries
+© European Union, 2015-2016.
+
+This file is part of the Integrated Fisheries Data Management (IFDM) Suite. The IFDM Suite is free software: you can
+redistribute it and/or modify it under the terms of the GNU General Public License as published by the
+Free Software Foundation, either version 3 of the License, or any later version. The IFDM Suite is distributed in
+the hope that it will be useful, but WITHOUT ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or
+FITNESS FOR A PARTICULAR PURPOSE.  See the GNU General Public License for more details. You should have received a
+copy of the GNU General Public License along with the IFDM Suite. If not, see <http://www.gnu.org/licenses/>.
+-->
+<div class="container">
+    <!-- SEARCH PANEL-->
+    <div class="panel panel-default">
+        <div class="panel-body">
+            <form class="form-inline" id="searchRoleForm" ng-submit="searchRole(criteria)">
+                <div class="form-group col-md-2">
+                    <label for="role">Role</label>
+
+                    <div>
+                        <input class="form-control" id="role" ng-model="criteria.role"/>
+                    </div>
+                </div>
+                <div class="form-group col-md-2">
+                    <label>Application</label>
+                    <dropdown ng-model="criteria.application" initialText="Application..." data="value" title="label" items="applicationsList"></dropdown>
+                </div>
+                <div class="form-group col-md-2">
+                    <label>Status</label>
+                    <dropdown ng-model="criteria.status" data="value" title="label" items="statusList"></dropdown>
+                </div>
+                <div class="col-md-2">
+                    <label>&nbsp;</label>
+
+                    <div>
+                        <!--button id="searchButton" tooltips tooltip-delay={{toolTipsDelay}} tooltip-title="{{'roles.search_filter' | translate}}" class="btn btn-default" ng-click="searchRole(criteria)"-->
+                        <input type="submit" id="searchButton"
+                                tooltip-popup-delay={{toolTipsDelay}}
+                                tooltip="{{'roles.search_filter' | translate}}"
+                                class="btn btn-primary btn-sm" ng-value="'common.search' | translate" />
+
+                        <!--button type="button" tooltips tooltip-delay={{toolTipsDelay}} tooltip-title="{{'roles.refresh_filter' | translate}}" class="btn btn-default" ng-click="resetForm()"-->
+                        <button type="button"
+                                tooltip-popup-delay={{toolTipsDelay}}
+                                tooltip="{{'roles.refresh_filter' | translate}}"
+                                class="btn btn-link btn-sm" ng-click="resetForm()">
+                            {{'common.reset' | translate}}
+                        </button>
+                    </div>
+                </div>
+            </form>
+        </div>
+    </div>
+    <!-- SEARCH PANEL END-->
+
+    <!-- ROLES TABLE -->
+    <table st-table="displayedRoles" st-safe-src="roleList" class="table table-striped fixed">
+		<colgroup>
+			<col style="width: 300px;">
+			<col style="width: 550px;">
+			<col style="width: 140px;">
+			<col style="width: 150px;">
+		</colgroup>
+        <thead>
+        <tr>
+            <th ng-click="changeSorting('name')">{{'roles.name' | translate}}&nbsp;<i class="fa" ng-class="sortIcon('name')"></i></th>
+            <th ng-click="changeSorting('description')">{{'roles.description' | translate}}&nbsp;<i class="fa" ng-class="sortIcon('description')"></i></th>
+            <th ng-click="changeSorting('status')">{{'roles.status' | translate}}&nbsp;<i class="fa" ng-class="sortIcon('status')"></i></th>
+            <th class="text-center">
+                <div ng-controller="manageRoleCtrl" ng-if="checkAccess('manageRoles')">
+                    <button id="newRoleButton"
+                        tooltip-popup-delay={{toolTipsDelay}}
+                        tooltip="{{'roles.new_button_tooltip' | translate}}"
+                        class="btn btn-primary btn-sm" ng-click='manageRole("new", "")'>
+                        <span class="fa fa-plus"></span>
+                        <span>{{'roles.newRole' | translate}}</span>
+                    </button>
+                </div>
+            </th>
+        </tr>
+        </thead>
+        <tbody class="table-bordered" ng-if="!isDataLoading">
+        <tr ng-repeat="role in displayedRoles">
+            <td ng-bind="role.name"></td>
+            <td ng-bind="role.description"></td>
+            <td>
+                <span ng-class="{'label label-success': role.status=='E', 'label label-danger': role.status=='D'}">{{"role.status_"+role.status | translate}}</span>
+            </td>
+            <td class="actionTd text-center">
+                <span ng-controller="manageRoleCtrl" ng-if="checkAccess('manageRoles')">
+					<button type="button"
+                            tooltip-popup-delay={{toolTipsDelay}}
+                            tooltip="{{'roles.edit_button_tooltip' | translate}}"
+                            class="btn btn-sm btn-primary usm-action-btn" ng-click='manageRole("edit", role)'>
+                        <span><i class="fa fa-pencil"></i></span>
+                    </button>
+                </span>
+                <button type="button"
+                        tooltip-popup-delay={{toolTipsDelay}}
+                        tooltip="{{'roles.view_button_tooltip' | translate}}"
+                        class="btn btn-sm btn-primary usm-action-btn"
+                        ui-sref="app.usm.roles.role({roleId: role.roleId})"
+                        ui-sref-opts="{ inherit : false }">
+                    <span><i class="fa fa-eye"></i></span>
+                </button>
+                <span ng-controller="manageRoleCtrl" ng-if="checkAccess('manageRoles')">
+					<button type="button"
+                            tooltip-popup-delay={{toolTipsDelay}}
+                            tooltip="{{'roles.del_button_tooltip' | translate}}"
+                            class="btn btn-sm btn-danger usm-action-btn" ng-click='manageRole("delete", role)'>
+                        <span><i class="fa fa-remove"></i></span>
+                    </button>
+                </span>
+            </td>
+        </tr>
+        </tbody>
+        <tbody ng-if="isDataLoading">
+        <tr>
+            <td colspan="5" class="text-center">Loading...</td>
+        </tr>
+        </tbody>
+        <tbody ng-if="emptyResult">
+        <tr>
+            <td colspan="5">{{emptyResultMessage}}</td>
+        </tr>
+        </tbody>
+    </table>
+    <!-- ROLES TABLE END-->
+    <div ng-if="showPagination">
+        <usm-pagination config="paginationConfig"></usm-pagination>
+    </div>
+</div>

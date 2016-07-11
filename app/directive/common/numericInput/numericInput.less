@@ -1,0 +1,63 @@
+/*
+﻿Developed with the contribution of the European Commission - Directorate General for Maritime Affairs and Fisheries
+© European Union, 2015-2016.
+
+This file is part of the Integrated Fisheries Data Management (IFDM) Suite. The IFDM Suite is free software: you can
+redistribute it and/or modify it under the terms of the GNU General Public License as published by the
+Free Software Foundation, either version 3 of the License, or any later version. The IFDM Suite is distributed in
+the hope that it will be useful, but WITHOUT ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or
+FITNESS FOR A PARTICULAR PURPOSE.  See the GNU General Public License for more details. You should have received a
+copy of the GNU General Public License along with the IFDM Suite. If not, see <http://www.gnu.org/licenses/>.
+ */
+.numeric-input {
+	position: relative;
+	&[disabled="disabled"] {
+		input[type="text"] {
+			cursor: not-allowed;
+		    background-color: #eeeeee;
+		    opacity: 1;
+		    pointer-events: none;
+		}
+		.numeric-input-spinner-container {
+			.numeric-input-spinner {
+		    	pointer-events: none;
+		    	color: #7a7a7a;
+		    }
+	    }
+	}
+	input[type="text"] {
+		padding-right: 15px;
+	}
+	.numeric-input-spinner-container {
+		position: absolute;
+		top: 1px;
+		right: 1px;
+		font-size: 12px;
+		height: 28px;
+		width: 15px;
+		text-align: center;
+		line-height: 16px;
+		.numeric-input-spinner {
+			color: #000;
+			display: block;
+			background-color: #ddd;
+			height: 50%;
+			border-left: 1px solid @inputBorderColor;
+			&:hover {
+				background-color: @profileColor_gray;
+			}
+		}
+	}
+}
+
+.has-error {
+	.numeric-input > input[type="text"] {
+		&,
+		&:focus,
+		&:hover,
+		&:active {
+			border: 1px solid red !important;
+			box-shadow: none !important;
+		}
+	}
+}

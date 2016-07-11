@@ -1,0 +1,56 @@
+<!--
+﻿Developed with the contribution of the European Commission - Directorate General for Maritime Affairs and Fisheries
+© European Union, 2015-2016.
+
+This file is part of the Integrated Fisheries Data Management (IFDM) Suite. The IFDM Suite is free software: you can
+redistribute it and/or modify it under the terms of the GNU General Public License as published by the
+Free Software Foundation, either version 3 of the License, or any later version. The IFDM Suite is distributed in
+the hope that it will be useful, but WITHOUT ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or
+FITNESS FOR A PARTICULAR PURPOSE.  See the GNU General Public License for more details. You should have received a
+copy of the GNU General Public License along with the IFDM Suite. If not, see <http://www.gnu.org/licenses/>.
+-->
+<div class="container">
+    <!-- INFO PANEL-->
+    <div class="panel panel-default">
+        <div class="panel-body">
+            <div class="row">
+                <div class="col-md-12">
+                    <div class="col-md-2">
+                        <label for="role">{{"common.application" | translate}}</label>
+                    </div>
+                    <div class="col-md-4">
+                        <span id="role" ng-bind="applicationDetails.name"></span>
+                    </div>
+                    <div class="col-md-2">
+                        <label for="description">{{"common.description" | translate}}</label>
+                    </div>
+                    <div class="col-md-4">
+                        <span id="description" ng-bind="applicationDetails.description"></span>
+                    </div>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-md-12">
+                    <div class="col-md-2">
+                        <label for="parent">{{"applications.parent" | translate}}</label>
+                    </div>
+                    <div class="col-md-10">
+						<span id="parent" ng-bind="applicationDetails.parent"></span>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <tabset type="tabs" vertical="false" class="roleDetailsTabs">
+        <tab heading="{{'applications.features' | translate}}">
+            <div ng-include src="'usm/applications/partial/applicationFeatures.html'"></div>
+        </tab>
+        <tab heading="{{'applications.datasets' | translate}}">
+            <div ng-include src="'usm/applications/partial/applicationDatasets.html'"></div>
+        </tab>
+        <tab heading="{{'applications.options' | translate}}">
+            <div ng-include src="'usm/applications/partial/applicationOptions.html'"></div>
+        </tab>
+    </tabset>
+</div>

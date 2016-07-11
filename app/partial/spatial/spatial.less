@@ -1,0 +1,424 @@
+/*
+﻿Developed with the contribution of the European Commission - Directorate General for Maritime Affairs and Fisheries
+© European Union, 2015-2016.
+
+This file is part of the Integrated Fisheries Data Management (IFDM) Suite. The IFDM Suite is free software: you can
+redistribute it and/or modify it under the terms of the GNU General Public License as published by the
+Free Software Foundation, either version 3 of the License, or any later version. The IFDM Suite is distributed in
+the hope that it will be useful, but WITHOUT ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or
+FITNESS FOR A PARTICULAR PURPOSE.  See the GNU General Public License for more details. You should have received a
+copy of the GNU General Public License along with the IFDM Suite. If not, see <http://www.gnu.org/licenses/>.
+ */
+.btn-bottom-mg {
+	margin-bottom: 3px;
+}
+
+.buttonContainer {
+	position: static;
+	.btn-preferences {
+		margin-left: 10px;
+	}
+}
+
+.liveview-loading {
+	height: calc(~'100vh - @{footerHeight} - @{headerHeight}');
+	min-height: 445px;
+}
+
+.is-loading-new-tab {
+	.liveview-loading {
+		height: calc(~'100vh - @{footerHeight} - 55px');
+	}
+}
+
+.spatial-error {
+	padding-top: 0px;
+}
+
+.table-responsive-force {
+    width: 100%;
+    /*margin-bottom: 10px;*/
+    overflow-y: hidden;
+    overflow-x: auto;
+    -ms-overflow-style: -ms-autohiding-scrollbar;
+    -webkit-overflow-scrolling: touch;
+    .pagination > li {
+    	display: table-cell;
+    }
+}
+
+.table,
+table {
+	> thead,
+	.thead {
+		> tr,
+		>.tr {
+			border-bottom: 0;
+			&:first-child {
+				border-bottom: 2px solid #dddddd;
+			}
+			th,
+			.th {
+				border-bottom: 0;
+			}
+		}
+	}
+}
+
+[st-table] {
+	table.table {
+		background-color: transparent;
+		border-width: 0;
+		margin-bottom: 0px;
+		thead,
+		tbody {
+			background-color: #fff;
+			border: 0;
+			border-width: 0 1px;
+			> tr.st-selected > td {
+				background-color: #3498db !important;
+			    color: #FFF;
+			    font-weight: bold;
+			}
+		}
+		tfoot.stFooterPagination {
+			padding-top: 20px;
+			> tr > td {
+				padding: 10px 0 0 0;
+				ul.pagination {
+					margin: 2px;
+				}
+			}
+		}
+	}
+}
+
+div.tableSmart:extend(table all) {}
+div.thead:extend(thead all) {}
+div.tbody:extend(tbody all) {}
+div.tfoot:extend(tfoot all) {}
+div.tr:extend(tr all) {}
+div.th:extend(th all) {}
+div.td:extend(td all) {}
+
+[st-table] {
+	div.tableSmart:extend([st-table] table.table all) {}
+	div.thead:extend([st-table] table.table thead all) {}
+	div.tbody:extend([st-table] table.table tbody all) {}
+	div.tfoot:extend([st-table] table.table tfoot all) {}
+	div.tableSmart.table {
+		> div.thead {
+			div.th:extend([st-table] table.table thead > tr > th all) {}
+			div.th:last-child {
+					border-right: 0;
+				}
+		}
+		> div.tbody {
+			> div.tr:extend([st-table] table.table tbody > tr all) {}
+			> div.tr {
+				&:first-child {
+					div.td {
+						border-top: 0;
+					}
+				}
+				div.td:extend([st-table] table.table tbody > tr > td all) {}
+				div.td:last-child {
+					border-right: 0;
+				}
+			}
+		}
+		> .tfoot {
+			padding: 0;
+			> div.tr:extend([st-table] table.table tfoot > tr all) {}
+			> div.tr {
+				div.td {
+					div.td:extend([st-table] table.table tfoot > tr > td all) {}
+				}
+			}
+		}
+	}
+}
+
+.table-striped > .tbody > .tr:nth-child(odd) {
+	div.th:extend(.table-striped > tbody > tr:nth-child(odd) > th all) {}
+	div.td:extend(.table-striped > tbody > tr:nth-child(odd) > td all) {}
+}
+
+.table-condensed > .thead > .tr {
+	div.th:extend(.table-condensed > thead > tr > th all) {}
+}
+
+.table-condensed > .tbody > .tr {
+	div.td:extend(.table-condensed > tbody > tr > td all) {}
+}
+
+.table {
+	&div.tableSmart:extend(table.table all) {}
+	> div.thead:extend(.table > thead all) {}
+	> div.tbody:extend(.table > tbody all) {}
+	> div.tfoot:extend(.table > tfoot all) {}
+	> div.tbody + .tbody:extend(.table > tbody + tbody) {}
+	> .thead {
+		> div.tr:extend(.table > thead > tr all) {}
+		> .tr {
+			div.th:extend(.table > thead > tr > th all) {
+				display: table-cell;
+			}
+		}
+	}
+	> .thead:first-child > .tr:first-child > .th:extend(.table > thead:first-child > tr:first-child > th all) {}
+	> .tbody {
+		display: block;
+		div.tr:extend(.table > tbody > tr all) {}
+		> .tr {
+			&:not(:first-child){
+				border-top: 1px solid #dddddd;
+			}
+			div.td:extend(.table > tbody > tr > td all) {
+				display: table-cell;
+				border-top: 0;
+			}
+			div.td:last-child {
+				border-right-width: 0;
+			}
+			&:nth-child(odd) {
+				background: #f7f7f7;
+			}
+		}
+	}
+	> .tfoot {
+		> div.tr:extend(.table > tfoot > tr all) {}
+		> .tr {
+			div.td:extend(.table > tfoot > tr > td all) {
+				display: table-cell;
+				width: 100%;
+				float: right;
+				padding: 0;
+				[st-pagination] {
+					float: right;
+				}
+			}
+		}
+	}
+
+	.th,
+	.td {
+		overflow: hidden;
+		text-overflow: ellipsis;
+	}
+}
+
+.sectionMenu {
+    font-size: 14px;
+    font-weight: bold;
+    margin-bottom: 10px;
+    li.active{
+        a{
+            color:#000 !important;
+            cursor: default;
+            border-bottom: 2px solid #000;
+        }
+    }
+}
+
+.spatialModule,
+.spatialConfig,
+.modal-dialog,
+.areaManagement {
+	div[ng-messages] {
+		line-height: 30px;
+    	color: red;
+    	pointer-events: none;
+    	padding-right: inherit;
+	}
+	.belowErrorMessages {
+		position: absolute;
+	    right: 15px;
+    	text-align: right;
+	}
+	.innerErrorMessages,
+	.innerErrorMessagesTimer,
+	.innerErrorMessagesLabelTimer,
+	.innerErrorMessagesCombobox,
+	.innerErrorMessagesFileUpload,
+	.innerErrorMessagesInputWithUpLabel,
+	.innerErrorMessagesDateWithUpLabel {
+		position: absolute;
+		z-index: 10;
+    }
+    .innerErrorMessages {
+    	right: 3px;
+	    top: 0;
+	}
+	.innerErrorMessagesTimer,
+    .innerErrorMessagesLabelTimer {
+    	right: 35px;
+    }
+    .innerErrorMessagesTimer {
+    	top: 0;
+    	right: 30px;
+    }
+	.innerErrorMessagesLabelTimer {
+    	top: 20px;
+    }
+    .innerErrorMessagesCombobox {
+    	right: 40px;
+	    top: 0;
+	}
+	.innerErrorMessagesFileUpload {
+		right: 45px;
+	    top: 0;
+	}
+    .degree-input:after {
+		content: '\00b0';
+		position: absolute;
+		top: 0;
+		right: 35px;
+		color: #999999;
+		font-size: 22px;
+	}
+	.accordionError {
+		display: inline-block;
+		margin-left: 30px;
+		color: red;
+		font-size: 14px;
+		.fa.fa-exclamation-circle {
+		    text-align: center;
+		    color: red;
+		    font-weight: bold;
+		    cursor: default;
+    	}
+	}
+	.innerErrorMessagesInputWithUpLabel,
+	.innerErrorMessagesDateWithUpLabel {
+		top: 0;
+	    line-height: 30px;
+	    margin-top: 20px;
+	}
+
+	.innerErrorMessagesInputWithUpLabel {
+		right: 3px;
+	}
+
+	.innerErrorMessagesDateWithUpLabel {
+	    right: 35px;
+	}
+	textarea.form-control {
+		padding: 6px 12px 6px 5px;
+	}
+	
+	table,
+	.table {
+		.tablerow-has-btn {
+			th,
+			td {
+				line-height: 30px;
+			}
+		}
+		td,
+		.td {
+			vertical-align: middle;
+			button.btn-success,
+			button.btn-default,
+			button.btn-danger,
+			button.btn-warning {
+				width: 25px;
+				height: 25px;
+				font-size: 14px;
+				padding: 0;
+			}
+			button.btn-danger,
+			button.btn-warning {
+				&:hover {
+					background-color: #f2f2f2;
+				}
+			}
+			button.btn-default {
+				color: @profileColor_blue;
+			}
+			button.btn-warning {
+				background-color: #fff;
+				border-color: #b4bdc0;
+				color: @profileColor_lightorange;
+			}
+			button.btn-danger {
+				background-color: #fff;
+				border-color: #b4bdc0;
+				color: @profileColor_red;
+			}
+		}
+		.loading-spinner-cl {
+			background: transparent !important;
+		}
+		
+	}
+
+	.btn-action {
+		text-transform: uppercase;
+    	font-weight: bold;
+	}
+
+	::-webkit-scrollbar {
+        width: 8px;
+		height: 8px;
+    }
+
+    ::-webkit-scrollbar-track {
+        background-color:#F1F1F1;
+        width: 4px;
+		height: 4px;
+    }
+
+    ::-webkit-scrollbar-thumb {
+        background-color: #BCBCBC;
+        border: 1px solid #A8A8A8;
+        &:hover{
+            background-color: darken(#BCBCBC, 5%);
+            border-color: darken(#A8A8A8, 5%);
+        }
+        &:active{
+            background-color: darken(#BCBCBC, 10%);
+            border-color: darken(#A8A8A8, 10%);
+        }
+    }
+
+	.required-field::after {
+		content: "*";
+		color: @profileColor_red;
+		margin-left: 3px;
+	}
+}
+
+.info-qtip {
+    position: absolute;
+    top: 0;
+    right: 0;
+    background-color: transparent;
+    color: @primaryColor;
+    font-size: 16px;
+    line-height: 30px;
+		&.coordsTip {
+			max-width: 300px !important;
+			i.hasError {
+					color: red;
+			}
+		}
+    &:hover {
+			color: #078dbe;
+		}
+    &:focus {
+    	color: @primaryColor;
+    }
+}
+.qtip-content {
+	p {
+		font-weight: bold;
+	}
+}
+.qtip.info-qtip {
+	font-size: 12.5px;
+	line-height: 12.5px;
+	color: #ffffff;
+    background-color: @primaryColor;
+    max-width: 125px;
+}

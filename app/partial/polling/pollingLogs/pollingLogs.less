@@ -1,0 +1,128 @@
+/*
+﻿Developed with the contribution of the European Commission - Directorate General for Maritime Affairs and Fisheries
+© European Union, 2015-2016.
+
+This file is part of the Integrated Fisheries Data Management (IFDM) Suite. The IFDM Suite is free software: you can
+redistribute it and/or modify it under the terms of the GNU General Public License as published by the
+Free Software Foundation, either version 3 of the License, or any later version. The IFDM Suite is distributed in
+the hope that it will be useful, but WITHOUT ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or
+FITNESS FOR A PARTICULAR PURPOSE.  See the GNU General Public License for more details. You should have received a
+copy of the GNU General Public License along with the IFDM Suite. If not, see <http://www.gnu.org/licenses/>.
+ */
+.pollingLogsContainer{
+    //SEARCH BUTTONS
+    .searchButton{
+        width:115px;
+        padding-top:5px;
+        width: 100%;
+    }
+    td.searchButton{
+        max-width: 100%;
+    }
+
+    .searchResultsContainer{
+        min-height: 180px;
+
+        .loadingIndicator{
+            .spinner{
+                margin-top:70px;
+            }
+        }
+
+        &.isEmpty{
+            .loadingIndicator{
+                .spinner{
+                    margin-top:90px;
+                }
+            }
+        }
+    }
+    .datepicker{
+        width: 100%;
+    }
+}
+
+
+
+
+
+table.pollingLogsTable{
+    &>thead, &>tbody{
+        //Table wrow containing search fields
+        &>tr.searchInputRow{
+            &>th{
+                padding-right: 5px;
+                &>input, &>.dropdown{
+                    width:100%;
+                }
+                input{
+                    font-weight: normal;
+                }
+            }
+
+            //Date fields
+            &:first-child{
+                height: 50px;
+            }
+
+            .datepickerStart{
+                .datepicker{
+                    width: 100%;
+                }
+            }
+        }
+
+        &>tr{
+            &>td{
+                padding-top:8px;
+                vertical-align: top;
+                //Search
+                &:last-child {
+                    //width:0%;
+                }
+            }
+            &>td, &>th{
+                width: 10%;
+
+                //Checkbox
+                &:first-child {
+                    padding-left: 10px;
+                    width: 3%;
+                }
+            }
+            &>th{
+              //Search button
+                &:last-child {
+                    text-align: right;
+                    padding-right: 0px;
+                    padding-left: 5px;
+                }
+            }
+            &>td{
+                //Time
+                &:nth-child(7) {
+                    width: 14%;
+                    white-space: nowrap;
+                    padding-bottom:8px;
+                }
+            }
+
+            th.times{
+                padding-left: 25px;
+            }
+
+            td.statusTime{
+                .expandIcon{
+                    position: absolute;
+                    width: 20px;
+                    cursor: pointer;
+                    color:@primaryColor;
+                }
+                div.times{
+                    padding-left: 25px;
+                }
+            }
+        }
+    }
+
+}

@@ -1,0 +1,46 @@
+<!--
+﻿Developed with the contribution of the European Commission - Directorate General for Maritime Affairs and Fisheries
+© European Union, 2015-2016.
+
+This file is part of the Integrated Fisheries Data Management (IFDM) Suite. The IFDM Suite is free software: you can
+redistribute it and/or modify it under the terms of the GNU General Public License as published by the
+Free Software Foundation, either version 3 of the License, or any later version. The IFDM Suite is distributed in
+the hope that it will be useful, but WITHOUT ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or
+FITNESS FOR A PARTICULAR PURPOSE.  See the GNU General Public License for more details. You should have received a
+copy of the GNU General Public License along with the IFDM Suite. If not, see <http://www.gnu.org/licenses/>.
+-->
+<div class="col-md-12">
+    <div class="row nomargin">
+        <!-- Search input -->
+        <div class="col-md-2 nopaddingleft searchcriteria">
+            <input type="text" class="form-control searchText" ng-disabled="advancedSearchVisible" placeholder="{{'vessel.search_input_placeholder' | i18n}}" ng-model="freeText" ng-change="resetSelectedVesselGroup()">
+        </div>
+
+        <div class="col-md-2 col-md-offset-6 smallerpadding">
+            <div class="row nomargin">
+                <div class="col-md-12 colNoPadding searchcriteria">
+                    <saved-search-dropdown type="VESSEL" class="dropdown simpleSearch" ng-model="selectedVesselGroup" initialtext="{{'common.search_group_dropdown' | i18n}}" callback="performSavedSearch" enable-delete="true"></saved-search-dropdown>
+                </div>
+            </div>
+        </div>
+
+        <div class="col-md-1 nopaddingright">
+            <div class="row nomargin">
+                <div class="col-md-12 colNoPadding searchcriteriadropdown">
+                    <button type="submit" class="btn btn-primary btn-sm fullWidth vmsbtn" ng-click="performSearch()">
+                        {{'common.search' | i18n}}
+                    </button>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-1 nopaddingright">
+            <div class="row nomargin">
+                <div class="col-md-12 colNoPadding searchcriteriadropdown">
+                    <button type="submit" class="btn btn-default btn-sm fullWidth vmsbtn" ng-click="resetSearch()">
+                        {{'common.reset' | i18n}}
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

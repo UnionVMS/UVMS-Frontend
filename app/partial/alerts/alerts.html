@@ -1,0 +1,31 @@
+<!--
+﻿Developed with the contribution of the European Commission - Directorate General for Maritime Affairs and Fisheries
+© European Union, 2015-2016.
+
+This file is part of the Integrated Fisheries Data Management (IFDM) Suite. The IFDM Suite is free software: you can
+redistribute it and/or modify it under the terms of the GNU General Public License as published by the
+Free Software Foundation, either version 3 of the License, or any later version. The IFDM Suite is distributed in
+the hope that it will be useful, but WITHOUT ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or
+FITNESS FOR A PARTICULAR PURPOSE.  See the GNU General Public License for more details. You should have received a
+copy of the GNU General Public License along with the IFDM Suite. If not, see <http://www.gnu.org/licenses/>.
+-->
+<div class="container containerWithTopBottomPadding nopaddingbottom" ng-hide="!alert.message">
+    <div class="row">
+        <div class="col-md-12">
+            <div class="alert nomarginbottom" ng-class="{'alert-info' : alert.type==='INFO', 'alert-success' : alert.type==='SUCCESS', 'alert-warning': alert.type === 'WARNING', 'alert-danger' : alert.type==='ERROR'}" role="alert">
+                <div class="icon"> 
+                    <i ng-if="alert.type === 'SUCCESS'" class="fa fa fa-check" style=" vertical-align: middle;"></i>
+                    <i ng-if="alert.type === 'ERROR'" class="fa fa fa-warning" style=" vertical-align: middle;"></i>
+                    <i ng-if="alert.type === 'WARNING'"  class="fa fa fa-warning" style=" vertical-align: middle;"></i>
+                    <i ng-if="alert.type === 'INFO'"  class="fa fa fa-info" style=" vertical-align: middle;"></i>
+                </div>
+                <div class="message"> 
+                    {{alert.message}}
+                </div>
+                <div class="close">
+                    <i class="fa fa-times" ng-click="closeAlert()" title="{{'common.close' | i18n}}"></i>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

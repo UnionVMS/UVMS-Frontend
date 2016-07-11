@@ -1,0 +1,44 @@
+<!--
+﻿Developed with the contribution of the European Commission - Directorate General for Maritime Affairs and Fisheries
+© European Union, 2015-2016.
+
+This file is part of the Integrated Fisheries Data Management (IFDM) Suite. The IFDM Suite is free software: you can
+redistribute it and/or modify it under the terms of the GNU General Public License as published by the
+Free Software Foundation, either version 3 of the License, or any later version. The IFDM Suite is distributed in
+the hope that it will be useful, but WITHOUT ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or
+FITNESS FOR A PARTICULAR PURPOSE.  See the GNU General Public License for more details. You should have received a
+copy of the GNU General Public License along with the IFDM Suite. If not, see <http://www.gnu.org/licenses/>.
+-->
+<div class="holdingTableContainer">
+    <alarms-page-header active-tab="HOLDING_TABLE"></alarms-page-header>
+    <div class="container containerWithBottomPadding">
+
+        <div class="card">
+            <!-- Advanced search -->
+            <advanced-search modeltype="'ALARMS_HOLDING_TABLE'" searchfunc="searchAlarms" advancedsearchvisible="true"></advanced-search>
+
+            <div class="row filterRow">
+                <div class="col-md-1 editSelection">
+                    <dropdown ng-model="editSelection" initialtext="{{'common.actions' | i18n}}" items="editSelectionDropdownItems" menu-style callback="editSelectionCallback"></dropdown>
+                </div>
+                <div class="col-md-2 available-positions-refresh" ng-click="resetSearch()">
+                    <a ng-if="newAlarmsCount > 0"><i class="fa fa-refresh"></i> {{ "alarms.new_items_available" | i18n:[newAlarmsCount] }}</a>
+                </div>
+                <div class="col-md-1 col-md-offset-8 textAlignRight">
+                    <button class="btn btn-sm btn-default exportButton">
+                        <i class="fa fa-lg fa-download" title="{{'common.export_as_csv' | i18n }}" ng-click="exportItemsAsCSVFile()"></i>
+                    </button>
+                </div>
+            </div>
+
+            <div static-include="partial/alarms/holdingTable/holdingTableList/holdingTableList.html"></div>
+            
+            <search-results-pagination
+                page='currentSearchResults.page'
+                total='currentSearchResults.totalNumberOfPages'
+                callback='gotoPage'>
+            </search-results-pagination>
+
+        </div>
+    </div>
+</div>

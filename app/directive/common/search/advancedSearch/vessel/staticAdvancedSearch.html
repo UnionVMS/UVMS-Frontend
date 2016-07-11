@@ -1,0 +1,82 @@
+<!--
+﻿Developed with the contribution of the European Commission - Directorate General for Maritime Affairs and Fisheries
+© European Union, 2015-2016.
+
+This file is part of the Integrated Fisheries Data Management (IFDM) Suite. The IFDM Suite is free software: you can
+redistribute it and/or modify it under the terms of the GNU General Public License as published by the
+Free Software Foundation, either version 3 of the License, or any later version. The IFDM Suite is distributed in
+the hope that it will be useful, but WITHOUT ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or
+FITNESS FOR A PARTICULAR PURPOSE.  See the GNU General Public License for more details. You should have received a
+copy of the GNU General Public License along with the IFDM Suite. If not, see <http://www.gnu.org/licenses/>.
+-->
+<div>
+    <div class="col-md-12 smallerpadding">
+        <div class="row nomargin">
+            <div class="col-md-2 smallerpadding searchcriteria">
+                <dropdown ng-model="advancedSearchObject.FLAG_STATE" initialtext="{{'vessel.advanced_search_placeholder_flag_state' | i18n}}" items="flagStates" callback="resetSelectedVesselGroup"></dropdown>
+            </div>
+            <div class="col-md-2 smallerpadding searchcriteria">
+                <input type="text" id="searchextno" placeholder="{{'vessel.advanced_search_placeholder_external_number' | i18n}}" class="form-control" tabindex="2" ng-model="advancedSearchObject.EXTERNAL_MARKING" ng-change="resetSelectedVesselGroup()">
+            </div>
+            <div class="col-md-2 smallerpadding searchcriteria">
+                <input type="text" id="searchname" placeholder="{{'vessel.advanced_search_placeholder_name' | i18n}}" class="form-control" tabindex="3" ng-model="advancedSearchObject.NAME" ng-change="resetSelectedVesselGroup()">
+            </div>
+            <div class="col-md-2 smallerpadding searchcriteria">
+                <input type="text" id="searchsignal" placeholder="{{'vessel.advanced_search_placeholder_signal_ircs' | i18n}}" class="form-control" tabindex="4" ng-model="advancedSearchObject.IRCS" ng-change="resetSelectedVesselGroup()">
+            </div>
+            <div class="col-md-2 smallerpadding searchcriteria">
+                <input type="text" id="searchcfr" placeholder="{{'vessel.advanced_search_placeholder_cfr' | i18n}}" class="form-control" tabindex="5" ng-model="advancedSearchObject.CFR" ng-change="resetSelectedVesselGroup()">
+            </div>
+            <div class="col-md-2 smallerpadding">
+                <div class="row nomargin">
+                    <div class="col-md-12 colNoPadding searchcriteria">
+                        <saved-search-dropdown type="VESSEL" class="dropdown simpleSearch" ng-model="selectedVesselGroup" initialtext="{{'common.search_group_dropdown' | i18n}}" callback="performSavedSearch" enable-delete="true"></saved-search-dropdown>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="row nomargin">
+            <div class="col-md-2 smallerpadding searchcriteria">
+                <input type="text" name="searchmmsi" id="searchmmsi" placeholder="{{'vessel.advanced_search_placeholder_mmsi' | i18n}}" class="form-control" tabindex="6" ng-model="advancedSearchObject.MMSI" ng-change="resetSelectedVesselGroup()">
+            </div>
+            <div class="col-md-2 smallerpadding searchcriteria">
+                <input type="text" id="searchhomeport" placeholder="{{'vessel.advanced_search_placeholder_homeport_name' | i18n}}" class="form-control" tabindex="7" ng-model="advancedSearchObject.HOMEPORT" ng-change="resetSelectedVesselGroup()">
+            </div>
+            <div class="col-md-2 smallerpadding searchcriteria">
+                <dropdown ng-model="advancedSearchObject.GEAR_TYPE" initialtext="{{'vessel.advanced_search_placeholder_gear_type' | i18n}}" items="gearTypes" callback="resetSelectedVesselGroup"></dropdown>
+            </div>
+            <div class="col-md-2 smallerpadding searchcriteria">
+                <input type="text" id="searchproducername" placeholder="{{'vessel.advanced_search_placeholder_producer_name' | i18n}}" class="form-control" tabindex="8" ng-model="advancedSearchObject.PRODUCER_NAME" ng-change="resetSelectedVesselGroup()">
+            </div>
+            <div class="col-md-1 smallerpadding searchcriteria">
+                <dropdown ng-model="advancedSearchObject.LENGTH_SPAN" initialtext="{{'vessel.advanced_search_placeholder_length' | i18n}}" items="lengthSpans" callback="resetSelectedVesselGroup"></dropdown>
+            </div>
+            <div class="col-md-1 smallerpadding searchcriteria">
+                <dropdown ng-model="advancedSearchObject.POWER_SPAN" initialtext="{{'vessel.advanced_search_placeholder_power' | i18n}}" items="powerSpans" callback="resetSelectedVesselGroup"></dropdown>
+            </div>
+            <div class="col-md-2">
+                <search-button smallerPadding="true" cancel-callback="resetSearch()" search-callback="performSearch()"><search-button>
+            </div>
+            <div class="col-md-1 smallerpadding">
+                <div class="row nomargin">
+                    <div class="col-md-12 colNoPadding searchcriteriadropdown">
+                        <button type="submit" class="btn btn-primary btn-sm fullWidth vmsbtn" ng-disabled="advancedSearchForm.$invalid" ng-click="performSearch()">
+                            {{'common.search' | i18n}}
+                        </button>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-1 smallerpadding">
+                <div class="row nomargin">
+                    <div class="col-md-12 colNoPadding searchcriteriadropdown">
+                        <button type="button" class="btn btn-default btn-sm fullWidth vmsbtn" ng-click="resetSearch()">
+                            {{'common.reset' | i18n}}
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+    </div>
+</div>

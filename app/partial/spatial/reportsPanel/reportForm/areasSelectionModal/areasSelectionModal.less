@@ -1,0 +1,112 @@
+/*
+﻿Developed with the contribution of the European Commission - Directorate General for Maritime Affairs and Fisheries
+© European Union, 2015-2016.
+
+This file is part of the Integrated Fisheries Data Management (IFDM) Suite. The IFDM Suite is free software: you can
+redistribute it and/or modify it under the terms of the GNU General Public License as published by the
+Free Software Foundation, either version 3 of the License, or any later version. The IFDM Suite is distributed in
+the hope that it will be useful, but WITHOUT ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or
+FITNESS FOR A PARTICULAR PURPOSE.  See the GNU General Public License for more details. You should have received a
+copy of the GNU General Public License along with the IFDM Suite. If not, see <http://www.gnu.org/licenses/>.
+ */
+.areasSelectionModal {
+	.card {
+		height: 480px;
+		margin-top: 10px !important;
+	}
+	.blue-badge {
+    	background-color: @profileColor_blue;
+  	}
+	.left-component {
+		margin-top: 10px !important;
+		padding: 0;
+		.alert {
+			margin-left: 15px;
+			margin-right: 15px;
+			margin-bottom: 0; 
+		}
+	}
+	.noPadding {
+		padding: 0;
+	}
+	.area-map {
+		height: 400px;
+		max-height: 400x;
+		min-height: 400px;
+		.ol-viewport {
+			border: 1px solid #DDD;
+		}
+		canvas {
+			margin-bottom: -6px;
+		}
+	}
+	.searchRow {
+		.with-left-padding {
+			padding: 0 0 0 15px;
+		}
+		button {
+			padding: 0;
+      		min-width: 100px;
+			width: 100%;
+			font-weight: bold;
+			span {
+				text-transform: uppercase;
+			}
+    	}
+	}
+	.table {
+		border: 0;
+		margin-top: 15px !important;
+		.thead > .tr > .th {
+			font-weight: bold;
+			vertical-align: middle;
+		}
+		.tbody > .tr > .td {
+			line-height: 26px;
+		}
+	}
+	.check-btn {
+		margin-right: 15px;
+		float: right;
+	}
+	.check-all-btn {
+		padding: 0 5px !important;
+		margin-right: 15px;
+		float: right;
+		width: auto !important;
+	}
+	.area-selection-table {
+		max-height: 260px;
+    	overflow-y: auto;
+    	overflow-x: hidden;
+	}
+	.group-list {
+    	margin-right: 15px;
+  	}
+  	.selectionContainer {
+    	margin: 0;
+    	.scroller {
+      		height: 415px;
+      		overflow-y: auto;
+      		margin-right: -15px;
+      		> ul > li {
+        		cursor: auto;
+        		border: 1px solid @profileColor_gray;
+				border-radius: 5px;
+				margin: 5px 0 0 0;
+				padding: 0 5px;
+				background-color: @profileColor_lightgray; 
+				p {
+				margin: 5px 0 0 0;
+				}
+        		.pointer {
+					i {
+						line-height: 27px;  
+					}
+          			cursor: pointer;
+          			color: @profileColor_red;
+        		}
+      		}
+    	}
+  	}
+}

@@ -1,0 +1,560 @@
+<!--
+﻿Developed with the contribution of the European Commission - Directorate General for Maritime Affairs and Fisheries
+© European Union, 2015-2016.
+
+This file is part of the Integrated Fisheries Data Management (IFDM) Suite. The IFDM Suite is free software: you can
+redistribute it and/or modify it under the terms of the GNU General Public License as published by the
+Free Software Foundation, either version 3 of the License, or any later version. The IFDM Suite is distributed in
+the hope that it will be useful, but WITHOUT ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or
+FITNESS FOR A PARTICULAR PURPOSE.  See the GNU General Public License for more details. You should have received a
+copy of the GNU General Public License along with the IFDM Suite. If not, see <http://www.gnu.org/licenses/>.
+-->
+<div>
+    <h2 help-section="user" index="10">Section 10 User</h2>
+
+    <p>This section is a basic user guide for the USM (User Security Management) application v1.7.1, called the User (Management) module when integrated under U-VMS. Operations that can be performed in the user web interface are described in this section.</p>
+    <p>The main roles of USM cover the user authentication, user authorisation and the management of user data and related data. More precisely:</p>
+
+    <ul>
+        <li>to store data about users that might have access to applications, their access rights and information about organisations;</li>
+        <li>to authenticate users;</li>
+        <li>to verify or disseminate the user access rights;</li>
+        <li>to disseminate information about organisations</li>
+    </ul>
+
+    <h4>Profile: Normal User</h4>
+    <p>This list of actions may be triggered by any user of the U-VMS application.</p>
+    <b>How to change my security answers</b>
+    <p>Option 'Change security answers' from the user contextual menu:</p>
+    <img wrapped url="10-user1.png">
+    <p>A pop-up displays a list of questions and answers (mandatory fields are marked with a red '*'):</p>
+
+    <img wrapped url="10-user2.png">
+    <p>When activated for the first time, the list is empty. The user must choose a question in a list of predefined questions and provide an answer. The number of questions to be replied by the user is a parameter of the system (cfr Policies).</p>
+    <p>If it is not the first time, the list is filled with the previous answers of the user. The user may modify the reply and/or to change the question.</p>
+    <p>The system verifies that a question has not been selected more than once and that an answer has a minimum of three characters.</p>
+    <p>This list of security questions is used when the user has forgotten his password (cfr How to request a password).</p>
+
+    <b>How to update my personal data</b>
+    <p>Option 'Update contact details' from the user contextual menu (mandatory fields are marked by a '*'):</p>
+    <img wrapped url="10-user3.png">
+    <p>A pop-up displays the following user information that may be modified (mandatory fields are marked with a red '*'):</p>
+    <ul>
+        <li>Phone number</li>
+        <li>Mobile number</li>
+        <li>Fax number</li>
+        <li>Email</li>
+    </ul>
+    <img wrapped url="10-user4.png">
+    <p>The "Password" field is not used to modify the password. It is a security channel to confirm the identity of the user. The 'save' button to commit changes is only active when the password has been filled in.</p>
+
+    <b>How to change my password</b>
+    <p>Option 'Change password' from the user contextual menu:</p>
+    <img wrapped url="10-user5.png">
+
+    <p>A pop-up appears where the user must enter the current password and two times the new one (mandatory fields are marked with a red '*'):</p>
+    <img wrapped url="10-user6.png">
+
+    <p>Depending on the password policies put in place in the system (cfr Policies), the system performs some controls based on: a minimum length, minimum number of digits, minimum number of special characters (!""£$%^&’*(),./:@~&lt;&gt;+=-#), recent occurrence in the password history…</p>
+
+    <b>How to request a password</b>
+    <p>Two cases are possible:</p>
+    <ul>
+        <li>The first time: the user must follow the procedure put in place by the organisation for such case. If there is no official procedure, the administrator of the system must be contacted.</li>
+        <li>Forgotten password: In the login screen, the option 'Forgot your password?' can be activated:</li>
+    </ul>
+    <img wrapped url="10-user7.png">
+    <p>A pop-up is displayed to request the username (mandatory fields are marked with a red '*'):</p>
+    <p>Therefore, two cases are possible:</p>
+
+    <ul>
+        <li>The user has already filled-in the security questions (cfr How to change my security answers): if so, the security question panel is displayed with the set of questions chosen by the user. The user must enter the answers and two times a new password. If no problem is detected (i.e. the answers are correct and the new password respects the password policies (cfr How to change my password), a successful message is displayed. The user can enter in the log in screen again with the new password.</li>
+        <li>The user has no security questions (cfr How to change my security answers): the email address of the user registered in the system is used to send him an email with a temporary password. At first log in, the user must change it.</li>
+        <p>Example of email sent by the system:</p>
+        <p>Here is your new password:</p>
+        <p>u2y#rNs*T8</p>
+        <p>Please login and change it.</p>
+    </ul>
+
+    <h4>How to know my different profiles</h4>
+    <p>Option 'Switch context' from the user contextual menu:</p>
+    <img wrapped url="10-user8.png">
+    <p>The list of contexts (role and scope) attached to the user is displayed:</p>
+    <img wrapped url="10-user9.png">
+    <p>The user may choose any context during his session. Depending on the selected context (and the permissions contained in), the web interface is automatically adapted to see only the options that the user may use.</p>
+
+    <h4>How to log out from the system</h4>
+    <p>Option 'Sign out' from the user contextual menu:</p> 
+    <img wrapped url="10-user10.png">
+
+    <h4>Profile: Administrator</h4>
+    <p>This list of actions may be triggered by a user with special rights on the USM system.</p>
+
+    <b>How to find back User information & Access Rights</b>
+    <p>User information is accessible through the 'USERS' option from the main menu:</p>
+    <img wrapped url="10-user11.png">
+    <p>The web screen provides a set of filters to find back the users:</p>
+    <ul>
+        <li>Name search: a set of characters can be provided. The search is performed on the Username, First Name and Last Name. The position of the characters entered for the search in the data is not important; </li>
+        <li>Nation: a selection of one entry in the list of countries registered in the system; </li>
+        <li>Organisation: a selection of one entry in the list of organisations managed by the system;</li>
+        <li>Status: a selection of one entry in the list of user statuses defined in the system;</li>
+        <li>Active from: date from which users can be active in the system;</li>
+        <li>Active to: date until when users can be active in the system</li>
+    </ul>
+    <p>The result of the search is displayed below the set of filters:</p>
+    <img wrapped url="10-user12.png">
+    <p>When there is no data corresponding to the search criteria, the message 'No result found.' is displayed.</p>
+    <p>If the search is successful, the list of users matching the criteria is displayed. For each user, the icon gives access to detailed user information in three tabs:</p>
+    <img wrapped url="10-user13.png">
+    <ul>
+        <li>Contact and Status Details: user information;</li>
+        <li>Contexts: user rights (see context definition);</li>
+        <li>Preferences: user preferences;</li>
+    </ul>
+
+    <h4>How to change a User password</h4>
+    <div class="alert alert-warning">
+        <img wrapped url="10-user14.png">
+       <p>Note that this feature is not possible through USM if the system use an Identity Management (IDM) system.</p>
+    </div>
+    <p>If so, the management of passwords must be done in that system and the corresponding option(s) in USM are not active.</p>
+    <p>If the management of passwords is delegated to USM, the following actions should be done:</p>
+    <ul> 
+        <li>To find back the user: cfr How to find back User information</li>
+        <li>For that user, to select the option for detailed user information. In the web screen, the option 'Set Password' is visible.</li>
+        <li>The administrator may enter twice a new password for the user.   </li>
+    </ul>
+    <p>The communication of that new password to the user is not covered by the system.</p>
+    <img wrapped url="10-user15.png">
+    <h4>How to create a User </h4>
+    <p>The following actions should be done:</p>
+    <ul>
+        <li>To select the option 'USERS' in the main menu</li>
+        <li>In the web screen, the option <b>'New User'</b> is visible:</li>
+    </ul>
+    <img wrapped url="10-user16.png">
+
+    <p>There are two ways of creating a user depending on the technical environment in place:</p>
+
+    <ul>
+        <li>Using a IDM
+            <p>The user interface allows a USM Administrator to pull (copy) information from an external Identity Management (IDM) system (e.g. LDAP,  Active Directory) to complete the user information stored in USM.</p>
+            <p>With an IDM, some user information (depending on how USM is interfaced with: cfr the USM Admin guide & USM IDM setup guide) will be copied into USM. When imported, such information should not be updated anymore because the official source is considered to be the IDM. (a next version of USM will prevent that action)</p>
+            <p>The procedure is the following: the username must be inserted first. Then the option 'Copy Info From LDAP' is triggered. User information from the LDAP is copied in USM if the username entered in the web screen matches an existing username in the IDM. If not, an error message 'User not found' is displayed.</p>
+            <img wrapped url="10-user17.png">
+            <p>Some other user information needs to be filled in before finally saving the data (cfr next point).</p>
+        </li>
+        <li>Using USM as source for all user data
+            <p>The following data should be provided (mandatory fields are marked by a red '*'):</p>
+            <img wrapped url="10-user18.png">
+            <ul>
+                <li>Username: it must be unique. If not , an error 'User already exists' is generated when saving data;</li>
+                <li>First name</li>
+                <li>Last name</li>
+                <li>Email: it must contain a '@' to be valid;</li>
+                <li>Telephone number</li>
+                <li>Mobile number</li>
+                <li>Fax number</li>
+                <li>Active from</li>
+                <li>Active to</li>
+                <li>Organisation: only the 'enable' organisation are proposed (cfr Organisation management)</li>
+                <li>Status:</li>
+                <ul>
+                    <li>Enabled: the user is active. It is the default value.</li>
+                    <li>Disabled: the user is no more active. He may not log-in in any UVMS module.</li>
+                    <li>Locked: the user may not log-in in any UVMS module. This status is mainly managed by the system when the user access should be (temporarily) deactivated due to a violation of a security policy (wrong password entered multiple times …) cfr Policies management.</li>
+                </ul>
+                <p>When data is saved, the user has still no password and no access right. Please see the corresponding entries in this document to complete the process.</p>
+                <li>A note</li>
+            </ul>
+        </li>
+    </ul>
+
+    <h4>How to give access rights to a User</h4>
+    <p>The first action is to find back the user: cfr How to find back User information.</p>
+    <img wrapped url="10-user19.png">
+    <p>Then, two options are possible:</p>
+
+    <ul>
+        <li>To clone an existing user profile
+            <p>In such a case, all access rights (more precisely the contexts) from another user will be copied to this user. To do so, the action is triggered by clicking on the following icon at the level of the user entry in the user panel:</p>
+            <img wrapped url="10-user20.png">
+            <p>A pop-up is displayed where the administrator can pick-up a reference user from whom the contexts (role/scope/preferences) must be copied to the user. All the contexts of the reference user are displayed for information. When the 'Copy profile' option is triggered, a message indicates that any previous access rights of the user receiving the new profile will be deleted.</p>
+            <p>The new profile of the user can be later extended (cfr next option).</p>
+            <img wrapped url="10-user21.png">
+        </li>
+        <li>
+            To create or change contexts
+            <p>To do so, the action is triggered by clicking on the following icon at the level of the user entry in the user panel: </p>
+            <img wrapped url="10-user22.png">
+            <p>In the 'Contexts' tab, the permissions (if any) of the user are available:</p>
+            <img wrapped url="10-user23.png">
+            <p>A new context can be added to the profile of the user with the 'New' option: </p>
+            <p>A pop-up is displayed where the administrator must choose a role and optionally a scope:</p>
+            <img wrapped url="10-user24.png">
+            <p>The system verifies if the context (role/scope) does not exist already for the user. If not, the profile of the user is modified.  If the user is connected in U-VMS when the operation is performed, the impacts (new permissions …) will only take place at the </p>next <p>user session.</p>
+            <p>The same screen is proposed when updating a context with the icon: </p>
+            <img wrapped url="10-user25.png">
+            <p>Deletion of a context is also possible with the icon: </p>
+            <img wrapped url="10-user26.png">
+            <p>By clicking on the existing roles or scopes, the corresponding screens to view the content ( permissions or datasets) are displayed with options to manage them. It should be noted that in such case, the modifications done on a role or a scope affect all users having the element in their context(s) (Cfr How to manage Roles and How to manage Scopes).</p>
+            <img wrapped url="10-user27.png">
+        </li>
+    </ul>
+
+    <h4>How to manage Organisations and related information</h4>
+    <p>The option 'Organisations' in the main menu is the entry point:</p>
+    <img wrapped url="10-user28.png">
+    <p>An organisation may provide technical information for one or multiple endpoints. Each endpoint may have one or more communication channels and a list of contact people.</p>
+
+    <b>Organisation</b>
+    <p>The web screen provides a set of filters to find back an existing organisation:</p>
+    <img wrapped url="10-user29.png">
+    <ul>
+        <li>Name search: a selection of one entry in the list of organisations created in the system; </li>
+        <li>Nation: a selection of one entry in the list of countries proposed by the system;</li>
+        <li>Status: a selection of one entry in the list of organisation statuses defined in the system;</li>
+    </ul>
+
+    <p>The result of the search is displayed below the set of filters. </p>
+    <p>When there is no data corresponding to the search criteria, the message 'No result found.' is displayed.</p>
+    <p>If the search is successful, the list of organisations matching the criteria is displayed. For each entry in that list, the following actions are available:</p>
+    <p><u>The creation</u> of an organisation is done by selection the <b>'New'</b> option: </p>
+    <img wrapped url="10-user30.png">
+    <p><u>The edition</u> of an organisation is done with the icon closed to the organisation entry in the organisation panel:  </p>
+    <img wrapped url="10-user31.png">
+    <p>For both options, the following pop-up is presented: (mandatory fields marked with a red '*'):</p>
+    <img wrapped url="10-user32.png">
+    <ul>
+        <li>Name</li>
+        <li>Description</li>
+        <li>Nation: to select one entry in the predefined list of countries</li>
+        <li>Status:</li>
+        <ul>
+            <li>Enabled: by default. </li>
+            <li>Disabled: with that status, the organisation cannot be selected anymore when creating/updating user information. </li>
+        </ul>
+        <li>Parent: a hierarchy of organisations can be registered. It can be used for defining a service under a certain department or a local organisation linked to an international headquarter.</li>
+        <li>Email</li>
+    </ul>
+
+    <p><u>The deletion</u> of an organisation is done by the icon closed to the organisation entry in the organisation panel: </p>
+    <img wrapped url="10-user33.png">
+    <p>A deletion is only possible if there is no user belonging to that organisation. In case of deletion, all endpoints and communication channels associated with the organisation are deleted as well.</p>
+
+    <b>Endpoint</b>
+    <p>The additional information attached to an organisation is visible when selecting the icon closed to the organisation entry in the organisation panel: </p>
+    <img wrapped url="10-user34.png">
+    <img wrapped url="10-user35.png">
+    <p><u>The creation</u> of an endpoint of an organisation is done by selection the 'New' option: </p>
+    <img wrapped url="10-user36.png">
+    <p><u>The edition</u> of an endpoint is done with the icon closed to the endpoint entry in the endpoint panel: </p>
+    <img wrapped url="10-user37.png">
+    <p>For both options, the following pop-up is presented: (mandatory fields marked with a red '*'):</p>
+    <img wrapped url="10-user38.png">
+    <ul>
+        <li>Name</li>
+        <li>Description</li>
+        <li>URI: Uniform Resource Identifier of the endpoint</li>
+        <li>Email</li>
+        <li>Status:</li>
+        <ul>
+            <li>Enabled: by default. </li>
+            <li>Disabled: means that the endpoint cannot be used for electronic exchanges.</li>
+        </ul>
+    </ul>
+
+    <p><u>The deletion</u> of an endpoint is done by the icon closed to the endpoint entry in the endpoint panel: </p>
+    <img wrapped url="10-user39.png">
+    <p>In case of deletion, all communication channels associated with the endpoint are deleted as well.</p>
+    <b>Communication Channel</b>
+    <p>The additional information attached to an endpoint is visible when selecting the icon closed to the endpoint entry in the endpoint panel: </p>
+    <img wrapped url="10-user40.png">
+    <img wrapped url="10-user41.png">
+
+    <p><u>The creation</u> of a communication channel of an endpoint is done by selection the 'New' option: </p>
+    <img wrapped url="10-user42.png">
+    <p><u>The edition</u> of communication channel is done with the icon closed to the entry in the communication channel panel:</p>
+    <img wrapped url="10-user43.png">
+    <p>For both options, the following pop-up is presented: (mandatory fields marked with a red '*'):</p>
+    <img wrapped url="10-user44.png">
+
+    <ul>
+        <li>Dataflow : name of the datawflow</li>
+        <li>Service: service transiting through the dataflow</li>
+        <li>Priority : value depending on the organisation policy for managing channels</li>
+    </ul>
+    <p>The deletion of an organisation is done by the icon closed to the organisation entry in the organisation panel:</p>
+    <img wrapped url="10-user45.png">
+
+    <b>Endpoint contacts</b>
+    <p>The web screen showing the detailed information of an endpoint is made of two tabs. The second tab is about contacts.</p>
+    <p>The contact panel shows (if any) all the contact points of an endpoint: </p>
+    <img wrapped url="10-user46.png">
+    <p>A new contact can be associated with an endpoint by selecting the 'New' option: </p>
+    <img wrapped url="10-user47.png">
+    <p>A pop-up shows the list of all existing users with their first/last names and the email address. A selection of an entry creates a contact point:</p>
+    <img wrapped url="10-user48.png">
+    <p>A contact point can be deleted by selecting the icon closed to the contact entry in the contact panel:</p>
+    <img wrapped url="10-user49.png">
+    <p>In such case, only the reference to the user (contact role) is deleted, not the user itself.</p>
+
+    <h4>How to manage Policies</h4>
+    <p>Policies are accessible through the 'Policies' option from the main menu:</p>
+    <img wrapped url="10-user50.png">
+    <p>The web screen provides a set of filters to find back the information:</p>
+    <img wrapped url="10-user51.png">
+
+    <ul>
+        <li>Name search: A set of characters can be provided. The search is performed on the policy names. The position in the data of the characters entered for the search is not important; </li>
+        <li>Subject: a selection of an entry in a list of predefined subjects used to classify the policies; </li>
+    </ul>
+    <p>The result of the search is displayed below the set of filters. </p>
+    <p>When there is no data corresponding to the search criteria, the message 'No results found.' is displayed.</p>
+    <p>If the search is successful, the list of policies matching the criteria is displayed. For each policy, the following data is available:</p>
+    <ul>
+        <li>Name</li>
+        <li>Description</li>
+        <li>Subject: used to classify the policy </li>
+        <li>Value: cfr USM Admin guide</li>
+    </ul>
+    <p>A policy can be modified by clicking on the icon closed to the entry in the policies panel.</p>
+    <p>A pop-up is displayed where the description and the value can be modified. A definition of each policy and information about possible values are given in the USM Admin guide:</p>
+    <img wrapped url="10-user52.png">
+
+    <h4>How to manage Roles</h4>
+    <p>Information about roles is accessible through the 'Roles' option from the main menu:</p>
+    <img wrapped url="10-user53.png">
+    <p>The web screen provides a set of filters to find back the roles:</p>
+    <img wrapped url="10-user54.png">
+
+    <ul>
+        <li>Role search: A set of characters can be provided. The search is performed on the role name. The position of the characters in the name is not important; </li>
+        <li>Application: selection of an entry in the list of applications linked with USM;</li>
+        <li>Status: </li>
+        <ul>
+            <li>Enabled: valid/active role with a set of permissions</li>
+            <li>Disabled: inactive role</li>
+        </ul>
+    </ul>
+
+    <p>The result of the search is displayed below the set of filters. </p>
+    <p>When there is no data corresponding to the search criteria, the message 'No result found.' is displayed.</p>
+    <p>If the search is successful, the list of roles matching the criteria is displayed with the following information:</p>
+
+    <ul>
+        <li>Name: </li>
+        <li>Description</li>
+        <li>Status: enabled/disabled</li>
+    </ul>
+
+    <p><u>The creation</u> of a role is done by selection the 'New' option: </p>
+    <img wrapped url="10-user55.png">
+    <p><u>The edition</u> of a scope is done with the icon closed to the scope entry in the scope panel :  </p>
+    <img wrapped url="10-user56.png">
+    <p>For both options, the following pop-up is presented: (mandatory fields marked with a red '*'):</p>
+    <img wrapped url="10-user57.png">
+
+    <ul>
+        <li>Name: it must be unique.</li>
+        <li>Description</li>
+        <li>Status:</li>
+        <ul>
+            <li>Enabled: by default. </li>
+            <li>Disabled: with that status, the role is not active (permissions not set).</li>
+        </ul>
+    </ul>
+
+    <p><u>The deletion</u> of a scope is done by the icon closed to the scope entry in the scope panel:</p>
+    <img wrapped url="10-user58.png">
+
+    <p>When deleting a role, the system raises a warning if the role is associated with a user context. The message mentions the number of users but it is not a blocking issue. It is possible to go forward. If so, there is a risk of having users without any access rights if they had only that role.</p>
+
+    <b>Features/Permissions</b>
+    <p>The additional information attached to a role is visible when selecting the icon closed to the scope entry in the scope panel: </p>
+    <img wrapped url="10-user59.png">
+    <img wrapped url="10-user60.png">
+    <p>For each permission in the role, the following information is available: </p>
+
+    <ul>
+        <li>Name of the feature</li>
+        <li>Description of the feature</li>
+        <li>Group: used to classify filters together when they are applied on a same business object</li>
+        <li>Application: application exposing and using the feature</li>
+    </ul>
+
+
+    <p>It should be noted that a role can be based on permissions coming from multiple applications.</p>
+
+    <b>Modify a role definition</b>
+    <p>In the screen for consulting the datasets of a scope (cfr previous point), the following icon is available to modify the list:</p>
+    <img wrapped url="10-user61.png">
+    <p>A screen displays a set of filters to search for features proposed by all applications: </p>
+    <img wrapped url="10-user62.png">
+
+    <ul>
+        <li>Application: one entry in the list of applications linked to USM and providing permissions;</li>
+        <li>Group: one entry in the list of groups defined in applications. A group is used to gather a list of permissions acting basically on a same functional object inside an application (ex: consulting, editing, deleting a vessel …) </li>
+    </ul>
+    <p>The result of the search is displayed below the set of filters. The list of permissions is displayed with at the end of each entry of the list a check box which is ticked if the permission is already in the role being modified. The management of permissions of the </p>role <p>is done by selecting or deselecting the check boxes for permissions. </p>
+    <p>This process shows that a role can be based on permissions coming from multiple applications.</p>
+
+    <h4>How to manage Scopes</h4>
+    <p>Information about scopes is accessible through the 'Scopes' option from the main menu:</p>
+    <img wrapped url="10-user63.png">
+    <p>The web screen provides a set of filters to find back the scopes: </p>
+    <img wrapped url="10-user64.png">
+
+    <ul>
+        <li>Name: A set of characters can be provided. The search is performed on the scope name. The position of the characters in the name is not important; </li>
+        <li>Application: selection of an entry in the list of applications linked with USM;</li>
+        <li>Status: </li>
+        <ul>
+            <li>Enabled: valid/active scope with a set of filters</li>
+            <li>Disabled: inactive scope</li>
+        </ul>
+    </ul>
+
+    <p>The result of the search is displayed below the set of filters. </p>
+    <p>When there is no data corresponding to the search criteria, the message 'No result found.' is displayed.</p>
+    <p>If the search is successful, the list of scopes matching the criteria is displayed with the following information:</p>
+
+    <ul>
+        <li>Name</li>
+        <li>Description</li>
+        <li>Status</li>
+        <li>Active from  </li>
+        <li>Active to</li>
+        <li>Data From: when specified, date from which any data filtered by the scope will be selected</li>
+        <li>Data To: when specified, date until which any data filtered by the scope will be selected</li>
+    </ul>
+
+    <p>The data from/to is a general filter of the scope.</p>
+
+    <p><u>The creation</u> of a scope is done by selection the 'New' option:  </p>
+    <img wrapped url="10-user65.png">
+    <p><u>The edition</u> of a scope is done with the icon closed to the scope entry in the scope panel :  </p>
+    <img wrapped url="10-user66.png">
+    <p>For both options, the following pop-up is presented: (mandatory fields marked with a red '*'):</p>
+    <img wrapped url="10-user67.png">
+
+    <ul>
+        <li>Name: it must be unique.</li>
+        <li>Description</li>
+        <li>Status:</li>
+        <ul>
+            <li>Enabled: by default. </li>
+            <li>Disabled: with that status, the scope is not active (filters not applied). </li>
+        </ul>
+        <li>Active from  </li>
+        <li>Active to</li>
+        <li>Data From: when specified, date from which any data filtered by the scope will be selected</li>
+        <li>Data To: when specified, date until which any data filtered by the scope will be selected</li>
+    </ul>
+
+    <p>The deletion of a scope is done by the icon closed to the scope entry in the scope panel: </p>
+    <img wrapped url="10-user68.png">
+
+    <b>Datasets</b>
+    <p>The additional information attached to a scope is visible when selecting the icon closed to the scope entry in the scope panel: </p>
+    <img wrapped url="10-user69.png">
+    <img wrapped url="10-user70.png">
+    <p>For each dataset in the scope, the following information is available: </p>
+
+    <ul>
+        <li>Name</li>
+        <li>Description</li>
+        <li>Category: used to group filters together when they are applied on a same business object</li>
+        <li>Application: application exposing and using the filter</li>
+    </ul>
+
+    <b>Modify a scope definition</b>
+    <p>In the screen for consulting the datasets of a scope (cfr  previous point), the following icon is available to modify the list: </p>
+    <img wrapped url="10-user71.png">
+    <p>A screen displays a set of filters to search for datasets proposed by all applications: </p>
+    <img wrapped url="10-user72.png">
+
+    <ul>
+        <li>Application: one entry in the list of applications linked to USM and providing datasets;</li>
+        <li>Category: one entry in the list of categories defined in applications. A category is used to gather a list of datasets acting basically on a same object inside an application.</li>
+    </ul>
+
+    <p>The result of the search is displayed below the set of filters. The list of datasets is displayed with at the end of each entry of the list a check box which is ticked if the datasets is already in the scope being modified. The management of datasets of the scope is done by selecting or deselecting the check boxes for datasets.</p>
+    <p>This process shows that a scope can be based on datasets coming from multiple applications.</p>
+
+    <h4>How to view Application information</h4>
+    <p>Information about applications linked to USM is accessible through the 'Applications' option from the main menu:</p>
+    <img wrapped url="10-user73.png">
+    <p>The web screen provides a set of filters to find back the applications:</p>
+    <img wrapped url="10-user74.png">
+
+    <ul>
+        <li>Name search: A set of characters can be provided. The search is performed on the application name. The position of the characters in the name is not important; </li>
+        <li>Parent: a hierarchy of applications can be registered in USM.  For instance, USM module under U-VMS application. This filter is used to find the 'upper root' of applications;</li>
+    </ul>
+
+    <p>The result of the search is displayed below the set of filters.</p>
+    <p>When there is no data corresponding to the search criteria, the message 'No result found.' is displayed.</p>
+    <p>If the search is successful, the list of applications matching the criteria is displayed with the following information:</p>
+
+    <ul>
+        <li>Name</li>
+        <li>Description</li>
+        <li>Parent</li>
+    </ul>
+
+    <h4>How to view data exposed by Applications</h4>
+    <p>Information about applications linked to USM is accessible through the 'Applications' option from the main menu:</p>
+    <img wrapped url="10-user75.png">
+    <img wrapped url="10-user76.png">
+
+    <p>Data exposed by each application and registered in USM for defining roles and scopes, basis of the user contexts (access rights), are visible by selecting the icon closed to the entry in the organisation panel.</p>
+    <p>The web screen shows a tab by type of data exposed by an application:</p>
+
+    <ul>
+        <img wrapped url="10-user77.png">
+        <li>Features: functions of the application:</li>
+        <ul>
+            <li>Name</li>
+            <li>Description</li>
+            <li>Group: used to classify the features</li>
+        </ul>
+        <img wrapped url="10-user78.png">
+        <li>Datasets</li>
+        <ul>
+            <li>Name</li>
+            <li>Description</li>
+            <li>Category: used to classify the datasets</li>
+        </ul>
+        <img wrapped url="10-user79.png">
+        <li>Options: </li>
+        <ul>
+            <li>Name</li>
+            <li>Description</li>
+            <li>Data type</li>
+            <li>Default value</li>
+        </ul>
+    </ul>
+
+    <h4>How to validate user changes</h4>
+    <p>The system can be configured in such a way that any changes of personal data done by a user must be validated by a USM administrator before to be registered (cfr Policies).</p>
+    <p>If this setting is active, the option 'Changes' appears in the main menu:</p>
+    <img wrapped url="10-user80.png">
+    <p>The list of following information is available when new changes to be validated are pending:</p>
+    <img wrapped url="10-user81.png">
+    <ul>
+        <li>Username: to identify the user</li>
+        <li>Phone number: new value is any</li>
+        <li>Mobile number: new value is any</li>
+        <li>Fax number: new value is any</li>
+        <li>Email: new value is any</li>
+    </ul>
+
+    <p>The icon available in each entry of the list gives access to the validation screen.</p>
+    <p>The old and new values are displayed with options to reject, accept or cancel the operation:</p>
+    <img wrapped url="10-user82.png">
+    <p>If accepted, the user information is immediately updated in the system.</p>
+    <p>In this version of USM, the user is not notified about the decision of the administrator.</p>
+</div>
+<hr>

@@ -1,0 +1,56 @@
+<!--
+﻿Developed with the contribution of the European Commission - Directorate General for Maritime Affairs and Fisheries
+© European Union, 2015-2016.
+
+This file is part of the Integrated Fisheries Data Management (IFDM) Suite. The IFDM Suite is free software: you can
+redistribute it and/or modify it under the terms of the GNU General Public License as published by the
+Free Software Foundation, either version 3 of the License, or any later version. The IFDM Suite is distributed in
+the hope that it will be useful, but WITHOUT ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or
+FITNESS FOR A PARTICULAR PURPOSE.  See the GNU General Public License for more details. You should have received a
+copy of the GNU General Public License along with the IFDM Suite. If not, see <http://www.gnu.org/licenses/>.
+-->
+<div class="sending-queue-container card">
+    <div class="row card-header">
+        <div class="col-md-11">
+            <h5>{{'exchange.sending_queue_header' | i18n}}</h5>
+            <i ng-hide="notifications <= 10" class="fa fa-exclamation-triangle fa-lg warning-icon"></i>
+            <span ng-hide="notifications <= 10" class="warning-text">{{'exchange.sending_queue_warning_part_one' | i18n}}{{notifications}}{{'exchange.sending_queue_warning_part_two' | i18n}}</span>
+        </div>
+    </div>
+    <div class="row scroller" loading-indicator="sendingQueue.loading" size="small" type="SPINNER">
+        <div class="col-md-12 nopaddingright">
+            <table class="sendingQueue searchResults truncate-text">
+                <thead>
+                    <th></th>
+                    <th sortable-table-header by="sendingQueue.sortBy" reverse="sendingQueue.sortReverse" order="'pluginList.recipient'" class="">{{'exchange.sending_queue_table_header_recipient' | i18n}}</th>
+                    <th sortable-table-header by="sendingQueue.sortBy" reverse="sendingQueue.sortReverse" order="'pluginList.messageType'" class="">{{'exchange.sending_queue_table_header_message_type' | i18n}}</th>
+                    <th sortable-table-header by="sendingQueue.sortBy" reverse="sendingQueue.sortReverse" order="'pluginList.sendingLogList.length'" class="">{{'exchange.sending_queue_table_header_unsent_reports' | i18n}}</th>
+                    <th sortable-table-header by="sendingQueue.sortBy" reverse="sendingQueue.sortReverse" order="'pluginList.lastReceived'" class="">{{'exchange.sending_queue_table_header_last_received' | i18n}}</th>
+                    <th class="action"><a title="{{'exchange.sending_queue_table_resend_all_title' | i18n}}" ng-click="resendAllQueued(sendingQueue.items)">{{'exchange.sending_queue_table_resend_all' | i18n}}</a></th>
+                </thead>
+                <tbody ng-repeat="plugIn in sendingQueue.items | orderBy:sendingQueue.sortBy:sendingQueue.sortReverse" class="delimiter">
+                    <tr class="sending-queue-group"><!-- ng-class-odd="'even'" ng-class-even="'odd'"-->
+                        <td>
+                            <i class="fa fa-md" 
+                                ng-class="messageVisible ? 'fa-minus' : 'fa-plus'"
+                                ng-click="messageVisible = !messageVisible"
+                                title="{{ (messageVisible ? 'exchange.sending_queue_collapsegroup' : 'exchange.sending_queue_expandgroup') | i18n }}">
+                            </i>
+                        </td>
+                        <td>{{plugIn.pluginList.recipient}}</td>
+                        <td title="{{plugIn.pluginList.messageType}}">{{plugIn.pluginList.messageType}}</td>
+                        <td>{{plugIn.pluginList.sendingLogList.length}}</td>
+                        <td>{{plugIn.pluginList.lastReceived | confDateFormat}}</td>
+                        <td><a ng-click="resendAllQueueItemsInGroup(plugIn.pluginList.sendingLogList)" title="{{'exchange.sending_queue_resend_all_in_group_title' | i18n}}">{{'exchange.sending_queue_resend_all_in_group' | i18n}}</a></td>
+                    </tr>
+                    <tr ng-show="messageVisible" >
+                        <td colspan="6" class="table-detail-container">
+                            <exchange-sending-queue-details items="plugIn.pluginList.sendingLogList"/>
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
+            <search-result-error-alert ng-show="sendingQueue.errorMessage">{{sendingQueue.errorMessage}}</search-result-error-alert>
+        </div>
+    </div>
+</div>

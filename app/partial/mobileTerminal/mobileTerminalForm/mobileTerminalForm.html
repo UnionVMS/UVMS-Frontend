@@ -1,0 +1,132 @@
+<!--
+﻿Developed with the contribution of the European Commission - Directorate General for Maritime Affairs and Fisheries
+© European Union, 2015-2016.
+
+This file is part of the Integrated Fisheries Data Management (IFDM) Suite. The IFDM Suite is free software: you can
+redistribute it and/or modify it under the terms of the GNU General Public License as published by the
+Free Software Foundation, either version 3 of the License, or any later version. The IFDM Suite is distributed in
+the hope that it will be useful, but WITHOUT ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or
+FITNESS FOR A PARTICULAR PURPOSE.  See the GNU General Public License for more details. You should have received a
+copy of the GNU General Public License along with the IFDM Suite. If not, see <http://www.gnu.org/licenses/>.
+-->
+<div ng-controller="mobileTerminalFormCtrl">
+    <div class="row">
+        <div class="col-md-12">
+            <h3 ng-show="isCreateNewMode()">{{'mobileTerminal.add_new_form_header' | i18n}}</h3>
+            <h3 ng-hide="isCreateNewMode()">{{'mobileTerminal.view_header' | i18n}}</h3>
+        </div>
+    </div>
+
+    <div class="mobileTerminalFormContainer">
+
+        <div class="card" ng-show="currentMobileTerminal.connectId && !isVisible.assignVessel">
+            <div class="row card-header assignedVesselHeader">
+                <div class="col-md-6">
+                    <h5>{{'mobileTerminal.assigned_vessel' | i18n | uppercase}}</h5>
+                </div>
+                <div class="col-md-6 textAlignRight">
+                    <div class="actions">
+                        <div show-if-allowed="manageMobileTerminals">
+                            <button class="btn btn-primary" ng-click="unassignVessel()"><i class="fa fa-chain-broken"></i> {{'mobileTerminal.unassign_vessel' | i18n}}</button>
+                        </div>
+                        <div class="closeIcon" ng-click="toggleMobileTerminalDetails()">
+                            <i class="fa fa-sign-out signouticon" title="{{'common.close' | i18n}}"></i>
+                        </div>
+                        <div class="clearfix"></div>
+                    </div>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-md-12" ng-show="!currentMobileTerminal.associatedVessel">
+                    <search-result-error-alert>{{'mobileTerminal.assigned_vessel_not_found_error' | i18n}}</search-result-error-alert>
+                </div>
+                <vessel-details ng-show="currentMobileTerminal.associatedVessel" vessel="currentMobileTerminal.associatedVessel" disable-form="true" ></vessel-details>
+            </div>
+        </div>
+
+
+        <div class="card with-small-card-header" ng-show="isVisible.assignVessel">
+            <div class="row card-header">
+                <div class="col-md-6">
+                    <h5>{{'mobileTerminal.assign_vessel' | i18n | uppercase}}</h5>
+                </div>
+                <div class="col-md-6 textAlignRight">
+                    <div class="actions">
+                        <div>
+                            <span class="link underline"ng-click="toggleAssignVessel()">{{'common.cancel' | i18n | uppercase}}</span>
+                        </div>
+                        <div class="clearfix"></div>
+                    </div>
+                </div>
+            </div>
+            <div ng-include="'partial/mobileTerminal/assignVessel/assignVessel.html'" ng-show="transponderSystems.length > 0" ></div>
+        </div>
+
+        <div class="row" ng-hide="isVisible.assignVessel" show-if-allowed="manageMobileTerminals">
+            <div class="col-md-12" ng-hide="currentMobileTerminal.connectId">
+                <span id="assignVesselLink" ng-click="toggleAssignVessel()" ng-show="currentMobileTerminal.guid">{{'mobileTerminal.assign_vessel' | i18n}}</span>
+            </div>
+        </div>
+
+        <div class="card mobileInformationContainer" loading-indicator="waitingForCreateResponse">
+            <div class="row card-header">
+                <div class="col-md-6">
+                    <div class="metadata">
+                        <div>
+                            <b>{{currentMobileTerminal.type | transponderName}}</b>
+                        </div>
+                        <div>
+                            {{'common.status' | i18n}}:
+                            <span class="label label-success" ng-show="currentMobileTerminal.active">{{ ('common.active' | i18n)}}</span>
+                            <span class="label label-default" ng-hide="currentMobileTerminal.active">{{ ('common.inactive' | i18n)}}</span>
+                        </div>
+                        <div ng-show="currentMobileTerminal.source">
+                            {{'common.source' | i18n}} : <b>{{currentMobileTerminal.source}}</b>
+                        </div>
+                        <div class="clearfix"></div>
+                    </div>
+                </div>
+                <div class="col-md-6 textAlignRight">
+                    <div class="actions">
+                        <div class="setStatusContainer" show-if-allowed="manageMobileTerminals" ng-hide="isCreateNewMode()">
+                            <button type="button" class="btn btn-default" ng-click="exportTerminalCSV()">
+                                {{'common.export_csv' | i18n}}
+                            </button>
+                            <button ng-if="!currentMobileTerminal.archived" type="button" class="btn btn-default" ng-click="archiveMobileTerminal()">
+                                {{'common.archive' | i18n}}
+                            </button>
+                            <button type="button" class="btn btn-default" ng-show="currentMobileTerminal.active" ng-click="setStatusToInactive()">
+                                {{'mobileTerminal.inactivate_link' | i18n}}
+                            </button>
+                            <button type="button" class="btn btn-default" ng-hide="currentMobileTerminal.active" ng-click="setStatusToActive()">
+                                {{'mobileTerminal.activate_link' | i18n}}
+                            </button>
+                        </div>
+                        <div show-if-allowed="manageMobileTerminals">
+                            <button type="submit" ng-disabled="!currentMobileTerminal.type" class="btn btn-primary" ng-click="createNewMobileTerminal()" ng-hide="!isCreateNewMode() || transponderSystems.length == 0" ng-disabled="waitingForCreateResponse">{{'common.save' | i18n}}</button>
+                            <button  type="submit" ng-disabled="!currentMobileTerminal.type || !isDirty()" class="btn btn-primary" ng-click="updateMobileTerminal()" ng-hide="isCreateNewMode() || transponderSystems.length == 0">{{'common.update' | i18n}}</button>
+                        </div>
+                        <div class="closeIcon" ng-click="toggleMobileTerminalDetails()">
+                            <i class="fa fa-sign-out signouticon" title="{{'common.close' | i18n}}" ng-hide="currentMobileTerminal.connectId"></i>
+                        </div>
+                        <div class="clearfix"></div>
+                    </div>
+                </div>
+            </div>
+            <div class="mobileTerminalDetailsContainer" static-include="partial/mobileTerminal/mobileTerminalDetails/mobileTerminalDetails.html"></div>
+        </div>
+    </div>
+
+
+    <div class="row" ng-show="isCreateNewMode()">
+        <div class="col-md-12">
+            <a ng-click="clearForm()" class="pointer">{{'common.clear_form' | i18n}}</a>
+        </div>
+    </div>
+
+    <div ng-hide="isCreateNewMode()">
+        <a ng-click="onMobileTerminalHistoryClick()">
+            <p>{{'mobileTerminal.history_view_mobileterminal_history' | i18n }}</p>
+        </a>
+    </div>
+</div>

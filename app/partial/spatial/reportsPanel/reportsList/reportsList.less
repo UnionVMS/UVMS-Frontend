@@ -1,0 +1,178 @@
+/*
+﻿Developed with the contribution of the European Commission - Directorate General for Maritime Affairs and Fisheries
+© European Union, 2015-2016.
+
+This file is part of the Integrated Fisheries Data Management (IFDM) Suite. The IFDM Suite is free software: you can
+redistribute it and/or modify it under the terms of the GNU General Public License as published by the
+Free Software Foundation, either version 3 of the License, or any later version. The IFDM Suite is distributed in
+the hope that it will be useful, but WITHOUT ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or
+FITNESS FOR A PARTICULAR PURPOSE.  See the GNU General Public License for more details. You should have received a
+copy of the GNU General Public License along with the IFDM Suite. If not, see <http://www.gnu.org/licenses/>.
+ */
+.reportBtnGroup {
+	margin-bottom: 10px;
+	button {
+		margin-bottom: 3px;
+	}	
+}
+
+.reportsListTable {
+	border: 0px !important;
+	//padding-bottom: 30px !important;
+	.table-responsive-force {
+		padding-bottom: 20px;
+		.break-word-column {
+			word-break: break-word;
+			white-space: initial;
+		}
+		.no-wrap-white-space {
+			white-space: nowrap;
+		}
+	}
+	td .btn-group {
+		.dropdown-menu {
+			left: -100%;
+			max-height: 0 !important;
+			display:block;
+			overflow: hidden;
+			border: 0;
+		    padding: 0;
+		    -moz-transition: max-height 0.3s;
+		    -webkit-transition: max-height 0.3s;
+		    -o-transition: max-height 0.3s;
+		    -ms-transition: max-height 0.3s;
+		    transition: max-height 0.3s;
+		    .dropdown-body {
+		    	border: 1px solid rgba(0, 0, 0, 0.15);
+		    	padding: 5px;
+		    }
+		}
+		&.open {
+			.dropdown-menu {
+				max-height: 100px !important;
+			}
+		}
+		> button.btn-run-default {
+			    border-top-right-radius: 0 !important;
+			    border-bottom-right-radius: 0 !important;
+				width: auto;
+				padding: 0 3px;
+		}
+		> button.btn-run-options {
+			    border-top-left-radius: 0 !important;
+			    border-bottom-left-radius: 0 !important;
+			    line-height: 18px;
+				width: 20px;
+		}
+		.dropdown-run-options {
+		    left: 0;
+		    min-width: 0;
+		    li {
+		    	a {
+		    		padding: 3px 10px;
+		    	}
+		    }
+    	}
+		&.open {
+			.dropdown-run-options {
+			    border: 1px solid rgba(0, 0, 0, 0.15);
+	    	}
+    	}
+	}
+}
+
+div.dataTables_length label,
+div.dataTables_filter label {
+	text-transform: capitalize;
+}
+
+div.dataTables_filter input {
+	margin-left: 10px !important;
+}
+
+div.dataTables_length select {
+	margin: 0px 5px;
+}
+
+div.dataTables_filter {
+	padding-bottom: 40px;
+}
+
+
+table.table thead .sorting_asc:after,
+table.table thead .sorting_desc:after,
+.tableSmart.table .thead .sorting_asc:after,
+.tableSmart.table .thead .sorting_desc:after {
+	color: @primaryColor;
+	font-family: 'FontAwesome';
+	margin-left: 5px;
+	position: absolute;
+}
+
+table.table thead .sorting_asc:after,
+.tableSmart.table .thead .sorting_asc:after {
+	content: '\f0d8';
+}
+
+table.table thead .sorting_desc:after,
+.tableSmart.table .thead .sorting_desc:after {
+	content: '\f0d7';
+}
+
+table.table {
+	border: 1px solid #ddd;
+	background-color: white;
+	width: 100% !important;
+}
+
+.dt-center {
+	text-align: center;
+}
+
+.dt-loading{
+	display: none !important;
+}
+
+//Loading indicator
+.loading-spinner-cl {
+	&,
+	div.th& {
+		text-align: center;
+		border-top: none !important;
+		border-bottom: none !important;
+		background-color: #f9f9f9;
+	}
+}
+
+.loading-spinner {
+	font-size: 30px;
+}
+
+//Columns
+.label-visibility {
+	display: inline-block;
+	width: 60px !important;
+}
+
+//Buttons
+.run-report {
+	text-transform: uppercase;
+}
+
+.alert-container {
+	margin-bottom: 0px !important;	
+}
+
+.alert-message {
+	font-weight: normal !important;
+	padding-left: 5px;
+}
+
+//dropdown 
+div.dropdown-menu {
+	min-width: inherit;
+	margin: 0px;
+	.dropdown-item {
+		display: block;
+	}
+}

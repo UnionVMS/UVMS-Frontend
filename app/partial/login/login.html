@@ -1,0 +1,66 @@
+<!--
+﻿Developed with the contribution of the European Commission - Directorate General for Maritime Affairs and Fisheries
+© European Union, 2015-2016.
+
+This file is part of the Integrated Fisheries Data Management (IFDM) Suite. The IFDM Suite is free software: you can
+redistribute it and/or modify it under the terms of the GNU General Public License as published by the
+Free Software Foundation, either version 3 of the License, or any later version. The IFDM Suite is distributed in
+the hope that it will be useful, but WITHOUT ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or
+FITNESS FOR A PARTICULAR PURPOSE.  See the GNU General Public License for more details. You should have received a
+copy of the GNU General Public License along with the IFDM Suite. If not, see <http://www.gnu.org/licenses/>.
+-->
+<div class="loginoutContainer container-fluid">
+    <div class="background"></div>
+    <div class="loginContent">
+            <div class="logoContainer">
+                <img src="assets/images/logo_uvms.png"></a>
+            </div>
+
+            <div class="row">
+                <div class="col-md-12">
+                    <h1 ng-bind-html="'login.title' | i18n"></h1>
+                    <h2 ng-bind-html="'login.subtitle' | i18n"></h2>
+                </div>
+            </div>
+
+
+            <div class="formContainer">
+                <div class="row errorMessage">
+                    <div class="col-lg-6 col-md-8 col-sm-11">
+                        <span ng-bind="actionMessage"></span>
+                    </div>
+                </div>
+
+                <div class="row">
+                    <form novalidate name="loginForm">
+                    <div class="col-lg-2 col-md-3 col-sm-4">
+                            <div class="form-group" ng-class="{'has-error': (submitAttempted || loginForm.userName.$dirty) && loginForm.userName.$invalid}">
+                                <input class="form-control" id="userId" name="userName" placeholder="{{'login.username_placeholder' | i18n}}" ng-model="login.userName" required>
+                            </div>
+                        </div>
+
+                        <div class="col-lg-2 col-md-3 col-sm-4">
+                            <div class="form-group" ng-class="{'has-error': (submitAttempted || loginForm.password.$dirty) && loginForm.password.$invalid}">
+                                <input type="password" class="form-control" id="password" name="password" placeholder="{{'login.password_placeholder' | i18n}}" ng-model="login.password" required>
+                            </div>
+                        </div>
+
+                        <div class="col-lg-1 col-md-2 col-sm-3">
+                            <div class="form-group">
+                                <button class="btn btn-primary" type="submit" ng-click="performLogin(login)" ng-bind="'login.login_button_text' | i18n"></button>
+                            </div>
+                        </div>
+                    </form>
+
+                </div>
+
+                <div class="row">
+                    <div class="col-md-12">
+                        <a class="forgotPassword" ng-click="resetPassword()" ng-bind="'login.forgot_password_text' | i18n"></a>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+
+</div>

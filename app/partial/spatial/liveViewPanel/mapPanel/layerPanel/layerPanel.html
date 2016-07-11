@@ -1,0 +1,40 @@
+<!--
+﻿Developed with the contribution of the European Commission - Directorate General for Maritime Affairs and Fisheries
+© European Union, 2015-2016.
+
+This file is part of the Integrated Fisheries Data Management (IFDM) Suite. The IFDM Suite is free software: you can
+redistribute it and/or modify it under the terms of the GNU General Public License as published by the
+Free Software Foundation, either version 3 of the License, or any later version. The IFDM Suite is distributed in
+the hope that it will be useful, but WITHOUT ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or
+FITNESS FOR A PARTICULAR PURPOSE.  See the GNU General Public License for more details. You should have received a
+copy of the GNU General Public License along with the IFDM Suite. If not, see <http://www.gnu.org/licenses/>.
+-->
+<div ng-controller="LayerpanelCtrl" class="layer-panel" ng-class="{'layer-expanded': expanded, 'layer-collapsed': !expanded}">
+  <div class="handle" ng-click="toggle()">
+  	<i ng-class="{'fa fa-chevron-left': expanded, 'fa fa-chevron-right': !expanded}"></i>
+  </div>
+  <div id="layer-panel-wrapper" class="tabbed-view">
+    <ul id="layer-tabs-container" class="nav nav-tabs" data-tabs="tabs">
+      <li class="layer-panel-tabs" ng-class="{'active': tab==='LAYERTREE'}">
+        <a ng-click="tabClick('LAYERTREE')">{{ 'spatial.layer_panel_layers' | i18n }}</a>
+      </li>
+      <li class="layer-panel-tabs"  ng-class="{'active': tab==='LEGEND'}">
+        <a ng-click="tabClick('LEGEND')">{{ 'spatial.layer_panel_legend' | i18n }}</a>
+      </li>
+      <li class="layer-panel-tabs"  ng-class="{'active': tab==='COPYRIGHT'}">
+        <a ng-click="tabClick('COPYRIGHT')">{{ 'spatial.layer_panel_copyright' | i18n }}</a>
+      </li>
+    </ul>
+      <div ng-show="tab==='LAYERTREE'" class="legend-panel">
+          <div layer-menu></div>
+          <div id="layer-tree" layer-tree></div>
+
+      </div>
+      <div ng-show="tab==='LEGEND'" class="legend-panel">
+      	<div legend-panel></div>
+      </div>
+      <div ng-show="tab==='COPYRIGHT'" class="legend-panel">
+      	<div copyright-panel></div>
+      </div>
+  </div>
+</div>

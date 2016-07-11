@@ -1,0 +1,52 @@
+<!--
+﻿Developed with the contribution of the European Commission - Directorate General for Maritime Affairs and Fisheries
+© European Union, 2015-2016.
+
+This file is part of the Integrated Fisheries Data Management (IFDM) Suite. The IFDM Suite is free software: you can
+redistribute it and/or modify it under the terms of the GNU General Public License as published by the
+Free Software Foundation, either version 3 of the License, or any later version. The IFDM Suite is distributed in
+the hope that it will be useful, but WITHOUT ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or
+FITNESS FOR A PARTICULAR PURPOSE.  See the GNU General Public License for more details. You should have received a
+copy of the GNU General Public License along with the IFDM Suite. If not, see <http://www.gnu.org/licenses/>.
+-->
+<div class="areaManagement">
+	<div class="container containerWithTopBottomPadding">
+		<alert-modal ng-model="alert.hasAlert" display-msg="alert.alertMessage" target-el-id="area-management-container" display-type="alert.alertType" timeout="4000"></alert-modal>
+        <div class="areaCard" id="area-management-container">
+        	<!-- LOADING OVERLAY -->
+        	<div class="area-loading" ng-show="alert.isLoading">
+        		<div class="area-loading-msg">
+        			<div>
+        				<i class="fa fa-spinner fa-spin"></i>
+        			</div>
+        			<div>
+        				<span>{{alert.loadingMessage}}</span>
+        			</div>
+        			
+        		</div>
+        	</div>
+        	<!-- LEFT SIDE -->
+        	<div class="col-md-6 customPadding">
+				<loading-panel class="loading-getting-attrs" type="GetAttrToMap"></loading-panel>
+				<loading-panel class="loading-getting-attrs" type="SavingSystemArea"></loading-panel>
+        		<!-- TAB MENU -->
+        		<ul class="nav nav-pills tabMenu">
+	        		<li ng-repeat="tab in tabs" ng-click="(helper.isEditing && selectedTab !== '{{tab.tabId}}') || selectTab(tab.tabId)" ng-class="{'active': selectedTab === '{{tab.tabId}}', disabled: helper.isEditing && selectedTab !== '{{tab.tabId}}'}">
+	        			<a>{{tab.title}}</a>
+	        		</li>
+        		</ul>
+        		<!-- USER AREAS -->
+        		<div class="base-area-container" ng-show="selectedTab === 'USERAREAS'" ng-include="'partial/areas/userAreas/userAreas.html'"></div>
+        		<!-- SYSTEM AREAS -->
+        		<div class="base-area-container" id="system-area-form-container" ng-show="selectedTab === 'SYSAREAS'" ng-include="'partial/areas/systemAreas/systemAreas.html'"></div>    
+                <!--USER AREAS GROUPS-->
+                <div class="base-area-container" id="group-area-form-container" ng-show="selectedTab === 'AREAGROUPS'" ng-include="'partial/areas/userAreasGroups/userAreasGroups.html'"></div>
+        	</div>
+        	<!-- RIGHT SIDE WITH MAP -->
+        	<div class="col-md-6 withoutPadding">
+        		<!-- <div class="areaTb"></div> -->
+        		<div class="areaMap" id="areaMap"></div>
+        	</div>
+        </div>
+    </div>
+</div>

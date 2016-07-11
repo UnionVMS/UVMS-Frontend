@@ -1,0 +1,135 @@
+<!--
+﻿Developed with the contribution of the European Commission - Directorate General for Maritime Affairs and Fisheries
+© European Union, 2015-2016.
+
+This file is part of the Integrated Fisheries Data Management (IFDM) Suite. The IFDM Suite is free software: you can
+redistribute it and/or modify it under the terms of the GNU General Public License as published by the
+Free Software Foundation, either version 3 of the License, or any later version. The IFDM Suite is distributed in
+the hope that it will be useful, but WITHOUT ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or
+FITNESS FOR A PARTICULAR PURPOSE.  See the GNU General Public License for more details. You should have received a
+copy of the GNU General Public License along with the IFDM Suite. If not, see <http://www.gnu.org/licenses/>.
+-->
+<div class="col-md-12 vessel-fieldset" ng-controller="VesselfieldsetCtrl">
+	<fieldset class="fieldsetStyle col-md-12" ng-class="{'fieldset-closed': !report.showVesselFilter}">
+		<legend class="fieldsetLegendStyle">
+			<input class="checkbox-margin" type="checkbox" ng-model="report.showVesselFilter" ng-checked="report.showVesselFilter" ng-change="clearSearchProps()">
+			<a data-toggle="collapse" ng-click="report.showVesselFilter = !report.showVesselFilter;clearSearchProps()">{{'spatial.reports_form_vessel_fieldset_label' | i18n }}</a>
+			<span class="badge red-badge" ng-if="report.vesselsSelection.length" title="{{countSelectedItems('asset')}} {{'spatial.assets' | i18n}}&#013;{{countSelectedItems('vgroup')}} {{'spatial.asset_groups_title' | i18n}}">{{report.vesselsSelection.length}}</span>
+		</legend>
+		
+		<div ng-show="report.showVesselFilter">
+			<!-- <div class="row">
+				<div class="form-group col-md-12 fieldsetMenu">
+					<a ng-class="{'menuActive': selectedVesselMenu === 'SIMPLE'}" ng-click="toggleVesselMenuType('SIMPLE')">{{'spatial.reports_form_simple_search' | i18n }}</a> &nbsp; 
+					<a ng-class="{'menuActive': selectedVesselMenu === 'ADVANCED'}" ng-click="toggleVesselMenuType('ADVANCED')">{{'spatial.reports_form_advanced_search' | i18n }}</a> 
+				</div>
+			</div> -->
+			
+			<div class="row" ng-show="isVesselMenuVisible('SIMPLE')">
+				<div class="col-md-8 search-section">
+					<div class="form-group col-md-3">
+						<combobox ng-model="shared.vesselSearchBy" items="vesselSearchItems"></combobox>
+					</div>
+					<div ng-hide="shared.vesselSearchBy === 'vgroup'">
+						<div class="form-group col-md-3">
+							<input type="text" ng-model="shared.searchVesselString" class="form-control searchText" placeholder="{{'spatial.reports_form_vessels_search_text' | i18n }}">
+						</div>
+						<div class="form-group col-md-6">
+							<button type="button" class="btn btn-primary btn-sm btn-action" style="min-width: 100px;" ng-click="searchVessels()">
+								<span>{{'spatial.reports_form_vessels_search_button' | i18n }}</span>
+							</button>
+							<button type="button" class="btn btn-default btn-sm btn-action" style="min-width: 100px;" ng-click="clearSearchProps()">
+								<span>{{'spatial.reset' | i18n }}</span>
+							</button>
+						</div>
+					</div>
+					<div class="form-group col-md-12 search-table" st-table="displayedRecords" st-safe-src="shared.vessels">
+						<div class="table tableSmart table-striped table-condensed">
+							<div class="thead col-md-12">
+								<div class="tr row" ng-class="{'tablerow-has-btn': displayedRecords.length > 0}">
+									<div class="th col-md-2" ng-hide="shared.vesselSearchBy === 'vgroup'" st-sort="countryCode" st-skip-natural="true" st-sort-default="true" st-class-ascent="sorting_asc" st-class-descent="sorting_desc">{{'spatial.reports_form_vessel_search_table_header_flag_state' | i18n }}</div>
+									<div class="th col-md-2" ng-hide="shared.vesselSearchBy === 'vgroup'" st-sort="ircs" st-skip-natural="true"  st-class-ascent="sorting_asc" st-class-descent="sorting_desc">{{'spatial.reports_form_vessel_search_table_header_ircs' | i18n }}</div>
+									<div class="th col-md-2" ng-hide="shared.vesselSearchBy === 'vgroup'" st-sort="cfr" st-skip-natural="true"  st-class-ascent="sorting_asc" st-class-descent="sorting_desc">{{'spatial.reports_form_vessel_search_table_header_cfr' | i18n }}</div>
+									<div class="th col-md-2" ng-hide="shared.vesselSearchBy === 'vgroup'" st-sort="externalMarking" st-skip-natural="true"  st-class-ascent="sorting_asc" st-class-descent="sorting_desc">{{'spatial.reports_form_vessel_search_table_header_external_marking' | i18n }}</div>
+									<div class="th col-md-2" st-skip-natural="true" st-sort="name" st-class-ascent="sorting_asc" st-class-descent="sorting_desc">{{'spatial.reports_form_vessel_search_table_header_name' | i18n }}</div>
+									<div class="th" ng-class="{'col-md-2': shared.vesselSearchBy === 'asset','col-md-10': shared.vesselSearchBy === 'vgroup'}" style="text-align:right;min-width:85px;">
+										<button type="button" class="btn btn-sm btn-success check-all-btn" ng-click="selectAllAssets()" ng-show="displayedRecords.length > 0">
+											<span class="fa fa-plus"></span>&nbsp;
+											{{'spatial.add_all_btn' | i18n}}
+										</button>
+									</div>
+								</div>
+								<div class="tr row" ng-if="hasError || !displayedRecords.length">
+									<div class="th col-md-12">
+										<table-alert type="'error'" msg="errorMessage" visible="hasError"></table-alert>
+										<table-alert type="'info'" msg="'spatial.table_no_data'" visible="!hasError && !displayedRecords.length && !vesselSearchLoading"></table-alert>
+									</div>
+								</div>
+								<div class="tr row" ng-if="vesselSearchLoading">
+									<div class="th loading-spinner-cl col-md-12"><i class="fa fa-spinner fa-spin loading-spinner"></i></div>
+								</div>
+							</div>
+							<div class="tbody col-md-12">
+								<div class="tr row" ng-repeat="vessel in displayedRecords">
+									<div class="td col-md-2" ng-hide="shared.vesselSearchBy === 'vgroup'">{{ vessel.countryCode }}</div>
+									<div class="td col-md-2" ng-hide="shared.vesselSearchBy === 'vgroup'">{{ vessel.ircs }}</div>
+									<div class="td col-md-2" ng-hide="shared.vesselSearchBy === 'vgroup'">{{ vessel.cfr }}</div>
+									<div class="td col-md-2" ng-hide="shared.vesselSearchBy === 'vgroup'">{{ vessel.externalMarking }}</div>
+									<div class="td col-md-2">{{ vessel.name }}</div>
+									<div class="td" ng-class="{'col-md-2': shared.vesselSearchBy === 'asset','col-md-10': shared.vesselSearchBy === 'vgroup'}" style="text-align:right;min-width:85px;">
+										<button type="button" class="btn btn-default btn-xs details-btn" ng-click="viewDetails($index, 'SEARCH')"><span class="fa fa-eye"/></button>
+										<button type="button" class="btn btn-xs check-btn" ng-click="toggleVesselSelection($index)" ng-class="{'btn-default': !vessel.selected, 'btn-success': vessel.selected}"><span class="fa fa-check"/></button>
+									</div>
+								</div>
+							</div>
+							<div class="tfoot stFooterPagination col-md-12" ng-if="!vesselSearchLoading && shared.vessels.length">
+								<div class="tr">
+									<div class="td text-right">
+										<div st-pagination st-items-by-page="vesselsByPage" st-template="partial/common/reportsPagination/reportsPagination.html"></div>
+									</div>
+								</div>
+							</div>
+						</div>
+					</div>
+				</div>
+				
+				
+				<!-- SELECTION CARD -->
+				<div class="col-md-4">
+					<div class="card with-small-card-header selectionContainer">
+						<div class="col-md-12 card-header">
+							<div class="row">
+								<h5 class="col-md-8">
+									{{'spatial.assets_selection' | i18n}}
+								</h5>
+								<div class="col-md-4 textAlignRight textAlignMiddle">
+									<a ng-click="removeSelections()" >{{'spatial.clear_all_btn' | i18n}}</a>
+								</div>
+								<div class="col-md-6">
+									<span title="{{report.vesselsSelection.length}}">{{'spatial.assets' | i18n}}</span>
+									<br/>
+									<span title="{{report.vesselsSelection.length}}">{{'spatial.asset_groups' | i18n}}</span>
+								</div>
+								<div class="col-md-6">
+									<span class="badge blue-badge" title="{{countSelectedItems('asset')}} {{'spatial.assets' | i18n}}">{{countSelectedItems('asset')}}</span>
+									<br/>
+									<span class="badge green-badge" title="{{countSelectedItems('vgroup')}} {{'spatial.asset_groups_title' | i18n}}">{{countSelectedItems('vgroup')}}</span>
+								</div>
+							</div>
+						</div>
+						<div class="col-md-12 scroller">
+							<ul class="group-list">
+								<li ng-repeat="vessel in report.vesselsSelection" ng-class="{'vessel-item': vessel.type === 'asset', 'vessel-group': vessel.type === 'vgroup'}">
+									<div class="pointer pull-right" ng-click="removeSelection(report.vesselsSelection[$index].guid,$index);">
+										<i class="fa fa-times"></i>
+									</div>
+									<p>{{ vessel.name }}</p>
+								</li>
+							</ul>
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+	</fieldset>
+</div>

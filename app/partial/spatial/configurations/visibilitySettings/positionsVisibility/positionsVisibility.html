@@ -1,0 +1,92 @@
+<!--
+﻿Developed with the contribution of the European Commission - Directorate General for Maritime Affairs and Fisheries
+© European Union, 2015-2016.
+
+This file is part of the Integrated Fisheries Data Management (IFDM) Suite. The IFDM Suite is free software: you can
+redistribute it and/or modify it under the terms of the GNU General Public License as published by the
+Free Software Foundation, either version 3 of the License, or any later version. The IFDM Suite is distributed in
+the hope that it will be useful, but WITHOUT ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or
+FITNESS FOR A PARTICULAR PURPOSE.  See the GNU General Public License for more details. You should have received a
+copy of the GNU General Public License along with the IFDM Suite. If not, see <http://www.gnu.org/licenses/>.
+-->
+<div class="positionsVisiblity" ng-controller="PositionsvisibilityCtrl">
+	<div class="row">
+		<div class="col-md-12">
+			<table class="table">
+				<thead>
+					<tr>
+						<th>
+							{{'spatial.visibility_configuration_table' | i18n}}
+							<input type="checkbox" ng-model="selectAll.positions.table" ng-change="selectAllChange('positions','table')">
+						</th>
+						<th ng-if="settingsLevel !== 'report' || (settingsLevel === 'report' && hasMap)">
+							{{'spatial.visibility_configuration_popup' | i18n}}
+							<input type="checkbox" ng-model="selectAll.positions.popup" ng-change="selectAllChange('positions','popup')">
+						</th>
+						<th ng-if="settingsLevel !== 'report' || (settingsLevel === 'report' && hasMap)">
+							{{'spatial.visibility_configuration_label' | i18n}}
+							<input type="checkbox" ng-model="selectAll.positions.label" ng-change="selectAllChange('positions','label')">
+						</th>
+					</tr>
+				</thead>
+				<tbody>
+					<tr ng-if="isPositionVisLoading">
+						<th colspan="3" class="loading-spinner-cl"><i class="fa fa-spinner fa-spin loading-spinner"></i></th>
+					</tr>
+					<tr ng-if="!isPositionVisLoading">
+						<td>
+							<ul dnd-list="configModel.visibilitySettings.positionTableAttrs" dnd-allowed-types="['Table']">
+								<li ng-repeat="attr in configModel.visibilitySettings.positionTableAttrs"
+								dnd-draggable="attr"
+								dnd-type="attr.type"
+								dnd-effect-allowed="move"
+								dnd-moved="configModel.visibilitySettings.positionTableAttrs.splice($index, 1);visibilitySettingsForm.$setDirty();">
+									<div class="handle">:::</div>
+									<span>{{attr.title}}</span>
+									<input type="checkbox" checklist-model="configModel.visibilitySettings.positions.table.values" checklist-value="attr.value" ng-change="selectAllChange('positions','table',true)">
+								</li>
+							</ul>
+						</td>
+						<td ng-if="settingsLevel !== 'report' || (settingsLevel === 'report' && hasMap)">
+							<ul dnd-list="configModel.visibilitySettings.positionPopupAttrs" dnd-allowed-types="['Popup']">
+								<li ng-repeat="attr in configModel.visibilitySettings.positionPopupAttrs"
+								dnd-draggable="attr"
+								dnd-type="attr.type"
+								dnd-effect-allowed="move"
+								dnd-moved="configModel.visibilitySettings.positionPopupAttrs.splice($index, 1);visibilitySettingsForm.$setDirty();">
+									<div class="handle">:::</div>
+									<span>{{attr.title}}</span>
+									<input type="checkbox" checklist-model="configModel.visibilitySettings.positions.popup.values" checklist-value="attr.value" ng-change="selectAllChange('positions','popup',true)">
+								</li>
+							</ul>
+						</td>
+						<td ng-if="settingsLevel !== 'report' || (settingsLevel === 'report' && hasMap)">
+							<ul dnd-list="configModel.visibilitySettings.positionLabelAttrs" dnd-allowed-types="['Label']">
+								<li ng-repeat="attr in configModel.visibilitySettings.positionLabelAttrs"
+								dnd-draggable="attr"
+								dnd-type="attr.type"
+								dnd-effect-allowed="move"
+								dnd-moved="configModel.visibilitySettings.positionLabelAttrs.splice($index, 1);visibilitySettingsForm.$setDirty();">
+									<div class="handle">:::</div>
+									<span>{{attr.title}}</span>
+									<input type="checkbox" checklist-model="configModel.visibilitySettings.positions.labels.values" checklist-value="attr.value" ng-change="selectAllChange('positions','label',true)">
+								</li>
+							</ul>
+						</td>
+					</tr>
+					<tr ng-if="!isPositionVisLoading">
+						<td></td>
+						<td class="is-attr-visible-row" ng-if="settingsLevel !== 'report' || (settingsLevel === 'report' && hasMap)">
+							<span>{{'spatial.visibility_show_attr_names' | i18n}}</span>
+							<input type="checkbox" ng-model="configModel.visibilitySettings.positions.popup.isAttributeVisible">
+						</td>
+						<td class="is-attr-visible-row" ng-if="settingsLevel !== 'report' || (settingsLevel === 'report' && hasMap)">
+							<span>{{'spatial.visibility_show_attr_names' | i18n}}</span>
+							<input type="checkbox" ng-model="configModel.visibilitySettings.positions.labels.isAttributeVisible">
+						</td>
+					</tr>
+				</tbody>
+			</table>
+		</div>
+    </div>
+</div>

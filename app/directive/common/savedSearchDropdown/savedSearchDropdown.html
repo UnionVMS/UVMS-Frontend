@@ -1,0 +1,33 @@
+<!--
+﻿Developed with the contribution of the European Commission - Directorate General for Maritime Affairs and Fisheries
+© European Union, 2015-2016.
+
+This file is part of the Integrated Fisheries Data Management (IFDM) Suite. The IFDM Suite is free software: you can
+redistribute it and/or modify it under the terms of the GNU General Public License as published by the
+Free Software Foundation, either version 3 of the License, or any later version. The IFDM Suite is distributed in
+the hope that it will be useful, but WITHOUT ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or
+FITNESS FOR A PARTICULAR PURPOSE.  See the GNU General Public License for more details. You should have received a
+copy of the GNU General Public License along with the IFDM Suite. If not, see <http://www.gnu.org/licenses/>.
+-->
+<div>
+    <div class="dropdown savedSearchDropdown fullWidthDropdown">
+        <button class="btn btn-default dropdown-toggle" type="button" data-toggle="dropdown" aria-expanded="true" ng-disabled="ngDisabled">
+            <div class="dropdowntext">{{currentItemLabel}}</div>
+            <span class="caret"></span>
+        </button>
+        <ul class="dropdown-menu" role="menu">
+            <li class="disabled" ng-show="initialValue && items.length > 0" ng-click="selectVal(initialValue)">
+                <a role="menuitem" tabindex="-1">
+                    <span role="menuitem" tabindex="-1">{{getItemLabel(initialValue)}}</span>
+                </a>
+            </li>
+            <li ng-repeat="item in items | orderBy : 'name'" role="presentation" ng-click="selectVal(item,$index)">
+                <a role="menuitem" tabindex="-1">
+                	<span role="menuitem" tabindex="-1">{{getItemLabel(item)}}</span>
+                </a>
+                <span ng-if="enableDelete" class="fa fa-trash" ng-click="deleteSavedSearch(item); $event.stopPropagation();"></span>
+            </li>
+            <li ng-show="items.length === 0" class="disabled"><a>{{emptyPlaceholder}}</a></li>
+        </ul>
+    </div>
+</div>

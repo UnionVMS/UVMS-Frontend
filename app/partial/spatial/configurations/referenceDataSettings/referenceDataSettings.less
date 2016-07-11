@@ -1,0 +1,129 @@
+/*
+﻿Developed with the contribution of the European Commission - Directorate General for Maritime Affairs and Fisheries
+© European Union, 2015-2016.
+
+This file is part of the Integrated Fisheries Data Management (IFDM) Suite. The IFDM Suite is free software: you can
+redistribute it and/or modify it under the terms of the GNU General Public License as published by the
+Free Software Foundation, either version 3 of the License, or any later version. The IFDM Suite is distributed in
+the hope that it will be useful, but WITHOUT ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or
+FITNESS FOR A PARTICULAR PURPOSE.  See the GNU General Public License for more details. You should have received a
+copy of the GNU General Public License along with the IFDM Suite. If not, see <http://www.gnu.org/licenses/>.
+ */
+.referenceDataSettings {
+  .inline-combo {
+    display: inline-block;
+    width: 155px;
+    margin-left: 10px;
+  }
+  .with-right-margin {
+    margin-right: 30px;
+  }
+  .card {
+    min-height: 480px;
+    height: 480px;
+    max-height: 480px;
+  }
+  .areas-visualizer {
+    height: 400px;
+    min-height: 400px;
+    max-height: 400px;
+    border: 1px solid #ddd;
+  }
+  .panel-body {
+    position: relative;
+  }
+  .noPadding {
+    padding: 0;
+  }
+  .btn-with-right-margin {
+    margin-right: 12px;
+  }
+  .searchRow {
+    margin-bottom: 10px;
+    button {
+      min-width: 100px;
+      width: 100%;
+      font-weight: bold;
+      span {
+        text-transform: uppercase;
+      }
+    }
+  }
+  
+  .group-list {
+    margin-right: 15px;
+  }
+
+  .selectionContainer {
+    margin: 0;
+    .scroller {
+      height: 430px;
+      overflow-y: auto;
+      margin-right: -15px;
+      > ul > li {
+        cursor: auto;
+        border: 1px solid @profileColor_gray;
+        border-radius: 5px;
+        margin: 5px 0 0 0;
+        padding: 0 5px;
+        background-color: @profileColor_lightgray; 
+        p {
+          margin: 5px 0 0 0;
+        }
+        .pointer {
+          i {
+            line-height: 27px;  
+          }
+          cursor: pointer;
+          color: @profileColor_red;
+        }
+      }
+    }
+  }
+  .ref-data-table {
+    max-height: 278px;
+    overflow-y: auto;
+    overflow-x: hidden;
+  }
+  .footer-with-no-bottom-margin{
+    ul {
+      margin-bottom: 0;
+      padding-bottom: 0;
+      margin-top: 15px;
+    }
+  }
+  .table {
+    .thead > .tr > .th {
+      font-weight: bold;
+    }
+    .tbody > .tr > .td {
+      line-height: 26px;
+    }
+  }
+  .row-expander {
+    color: @profileColor_blue;
+    margin-right: 5px;
+  }
+  .td-details {
+    border-top: 0 !important;
+    font-size: 11px;
+    padding: 0 8px 8px 25px !important;
+    ul {
+      margin: 0;
+      li {
+        line-height: 15px;
+      }
+    }
+  }
+  .reset-row {
+    margin-top: 20px;
+  }
+  .blue-badge {
+    background-color: @profileColor_blue;
+  }
+}
+
+.check-btn-column {
+  text-align: right !important;
+  min-width: 65px;
+}

@@ -1,0 +1,51 @@
+<!--
+﻿Developed with the contribution of the European Commission - Directorate General for Maritime Affairs and Fisheries
+© European Union, 2015-2016.
+
+This file is part of the Integrated Fisheries Data Management (IFDM) Suite. The IFDM Suite is free software: you can
+redistribute it and/or modify it under the terms of the GNU General Public License as published by the
+Free Software Foundation, either version 3 of the License, or any later version. The IFDM Suite is distributed in
+the hope that it will be useful, but WITHOUT ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or
+FITNESS FOR A PARTICULAR PURPOSE.  See the GNU General Public License for more details. You should have received a
+copy of the GNU General Public License along with the IFDM Suite. If not, see <http://www.gnu.org/licenses/>.
+-->
+<div ng-controller="MovementlistCtrl" class="incoming-movements-widget">
+    <div search-results-table class="movementtablecontainer">
+        <table class="searchResults colorOdd movementtable truncate-text">
+            <thead>
+                <tr>
+                    <th>{{'movement.table_header_flag_state' | i18n}}</th>
+                    <th>{{'movement.table_header_external_marking' | i18n}}</th>
+                    <th>{{'movement.table_header_ircs' | i18n}}</th>
+                    <th>{{'movement.table_header_name' | i18n}}</th>
+                    <th>{{'movement.table_header_time' | i18n}}</th>
+                    <th>{{'movement.table_header_latitude' | i18n}}</th>
+                    <th>{{'movement.table_header_longitude' | i18n}}</th>
+                    <th>{{'movement.table_header_status' | i18n}}</th>
+                    <th tooltip-placement="bottom" tooltip="{{'movement.table_header_ms_tooltip' | i18n}}" tooltip-append-to-body="true">{{'movement.table_header_ms' | i18n}}</th>
+                    <th tooltip-placement="bottom" tooltip="{{'movement.table_header_cs_tooltip' | i18n}}" tooltip-append-to-body="true">{{'movement.table_header_cs' | i18n}}</th>
+                    <th>{{'movement.table_header_course' | i18n}}</th>
+                    <th>{{'movement.table_header_movement_type' | i18n}}</th>
+                    <th>{{'movement.table_header_source' | i18n}}</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr ng-repeat="movement in currentSearchResults.items | orderBy:currentSearchResults.sortBy : currentSearchResults.sortReverse | filter:searchFilter">
+                    <td ng-attr-title="{{movement.vessel.countryCode}}" style="padding-left: 15px">{{movement.vessel.countryCode}}</td>
+                    <td ng-attr-title="{{movement.vessel.externalMarking}}">{{movement.vessel.externalMarking}}</td>
+                    <td ng-attr-title="{{movement.vessel.ircs}}">{{movement.vessel.ircs}}</td>
+                    <td><a href="#/assets/{{movement.vessel.getGuid()}}" title="{{'common.view_details' | i18n}}" ng-show="movement.vessel">{{movement.vessel.name}}</a></td>
+                    <td ng-attr-title="{{movement.time | confDateFormat}}">{{movement.time | confDateFormat}}</td>
+                    <td ng-attr-title="{{movement.movement.latitude | confCoordinateFormat}}">{{movement.movement.latitude | confCoordinateFormat}}</td>
+                    <td ng-attr-title="{{movement.movement.longitude | confCoordinateFormat}}">{{movement.movement.longitude | confCoordinateFormat}}</td>
+                    <td ng-attr-title="{{movement.movement.status}}">{{movement.movement.status}}</td>
+                    <td ng-attr-title="{{movement.movement.reportedSpeed | speed | number:2}} {{ 'common.speed_unit_' + speedUnit | i18n }}">{{movement.movement.reportedSpeed | speed | number:2}} {{ "common.speed_unit_" + speedUnit | i18n }}</td>
+                    <td ng-attr-title="{{movement.movement.calculatedSpeed | speed | number:2}} {{ 'common.speed_unit_' + speedUnit | i18n }}">{{movement.movement.calculatedSpeed | speed | number:2}} {{ "common.speed_unit_" + speedUnit | i18n }}</td>
+                    <td ng-attr-title="{{movement.movement.reportedCourse}}&deg;">{{movement.movement.reportedCourse}}&deg;</td>
+                    <td ng-attr-title="{{movement.movement.movementType}}">{{movement.movement.movementType}}</td>
+                    <td ng-attr-title="{{movement.movement.source | transponderName}}">{{movement.movement.source | transponderName}}</td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+</div>

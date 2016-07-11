@@ -1,0 +1,48 @@
+<!--
+﻿Developed with the contribution of the European Commission - Directorate General for Maritime Affairs and Fisheries
+© European Union, 2015-2016.
+
+This file is part of the Integrated Fisheries Data Management (IFDM) Suite. The IFDM Suite is free software: you can
+redistribute it and/or modify it under the terms of the GNU General Public License as published by the
+Free Software Foundation, either version 3 of the License, or any later version. The IFDM Suite is distributed in
+the hope that it will be useful, but WITHOUT ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or
+FITNESS FOR A PARTICULAR PURPOSE.  See the GNU General Public License for more details. You should have received a
+copy of the GNU General Public License along with the IFDM Suite. If not, see <http://www.gnu.org/licenses/>.
+-->
+<div ng-controller="ConfigurationotherCtrl">
+	<div class="row">
+		<div class="col-md-12 section-header">{{'audit.configuration_other_header_polling' | i18n }}</div>
+		<div class="col-md-12 section-text">{{'audit.configuration_other_information_polling' | i18n }}</div>
+		<div class="col-md-12 section-selection">
+			<button ng-if="!mandatoryPolling" ng-click="toogleMandatory(true)" type="button" class="btn btn-success btn-default btn-md">
+	  			<span class="fa fa-check-square-o"></span>{{'audit.yes' | i18n }}
+			</button>
+			<button ng-if="mandatoryPolling" ng-click="toogleMandatory(false)" type="button" class="btn btn-danger btn-default btn-md">
+	  			<span class="fa fa-square-o"></span>{{'audit.no' | i18n }}
+			</button>
+		</div>
+		<div class="col-md-12 section-text">{{'audit.configuration_other_information_sampling' | i18n }}</div>
+		<div class="col-md-12 section-selection">
+			<button ng-if="!restrictSampling" ng-click="toogleRestrict(true)" type="button" class="btn btn-success btn-default btn-md">
+	  			<span class="fa fa-check-square-o"></span>{{'audit.yes' | i18n }}
+			</button>
+			<button ng-if="restrictSampling" ng-click="toogleRestrict(false)" type="button" class="btn btn-danger btn-default btn-md">
+	  			<span class="fa fa-square-o"></span>{{'audit.no' | i18n }}
+			</button>
+		</div>
+	</div>
+	<div class="row">
+		<div class="col-md-12 section-footer">
+			<div class="col-md-1 pull-right">
+				<button ng-click="save()" type="button" class="btn btn-primary btn-md">
+		  			{{'audit.save' | i18n }}
+				</button>
+			</div>
+			<div class="col-md-1 pull-right other-cancel">
+				<a href="#" ng-click="cancel()">
+		  			{{'audit.cancel' | i18n }}
+		  		</a>
+			</div>
+		</div>
+	</div>
+</div>

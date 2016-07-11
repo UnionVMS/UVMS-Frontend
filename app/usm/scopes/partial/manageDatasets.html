@@ -1,0 +1,129 @@
+<!--
+﻿Developed with the contribution of the European Commission - Directorate General for Maritime Affairs and Fisheries
+© European Union, 2015-2016.
+
+This file is part of the Integrated Fisheries Data Management (IFDM) Suite. The IFDM Suite is free software: you can
+redistribute it and/or modify it under the terms of the GNU General Public License as published by the
+Free Software Foundation, either version 3 of the License, or any later version. The IFDM Suite is distributed in
+the hope that it will be useful, but WITHOUT ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or
+FITNESS FOR A PARTICULAR PURPOSE.  See the GNU General Public License for more details. You should have received a
+copy of the GNU General Public License along with the IFDM Suite. If not, see <http://www.gnu.org/licenses/>.
+-->
+<div ng-controller="manageDatasetsCtrl">
+    <form novalidate class="form-horizontal" name="datasetForm">
+        <div class="modal-header">
+            <div class="row">
+                <div class="col-md-12">
+                    <h3 class="modal-title">Manage Datasets</h3>
+                </div>
+            </div>
+        </div>
+        <div class="modal-body">
+            <div class="row">
+                <div class="col-md-12" ng-class="messageDivClass">
+                    <span ng-bind-html="actionMessage" ng-class="messageClass"></span>
+                </div>
+            </div>
+
+            <div class="row panel-body">
+                <div class="form-inline">
+                    <label for="application">{{'common.application' | translate}}</label>
+                    <select class="form-control dropdown-select" style="width: 300px;"
+                            id="application"
+                            name="application"
+                            ng-model="criteria.application"
+                            ng-options="application for application in applicationsList"
+                            ng-class="{pointer: pointer}"
+                            ng-mouseenter="pointer=true"
+                            ng-mouseleave="pointer=false">
+                        <option value="">All</option>
+                    </select>
+
+                    <label for="category" style="margin-left: 4px;">{{'scopes.category' | translate}}</label>
+                    <select class="form-control dropdown-select"
+                            id="category"
+                            name="category"
+                            ng-model="criteria.category"
+                            ng-options="category for category in categoryList"
+                            ng-class="{pointer: pointer}"
+                            ng-mouseenter="pointer=true"
+                            ng-mouseleave="pointer=false">
+                        <option value="">All</option>
+                    </select>
+
+                    <span ng-controller="manageDatasetsCtrl" style="margin-left: 4px;">
+                        <button id="searchButton" class="btn btn-default" ng-click="filterDatasets(criteria)">
+                            <span class="fa fa-search"></span>
+                        </button>
+                    </span>
+                </div>
+            </div>
+
+            <!-- DATASETS TABLE -->
+            <table st-table="displayedDatasets" st-safe-src="datasetsList" class="table table-striped fixed">
+				<colgroup>
+					<col style="width: 260px;">
+					<col style="width: 320px;">
+					<col style="width: 120px;">
+					<col style="width: 140px;">
+					<col style="width: 50px;">
+				</colgroup>
+                <thead>
+                <tr>
+                    <th st-sort="name" st-sort-default="true">{{'common.name' | translate}}</th>
+                    <th st-sort="description">{{'common.description' | translate}}</th>
+                    <th lass="text-center" st-sort="group">{{'scopes.category' | translate}}</th>
+                    <th st-sort="application">{{'common.application' | translate}}</th>
+                    <th>
+                        <input type="checkbox" ng-model="header.selectAll" ng-change="toggleAll()">
+                    </th>
+                </tr>
+                </thead>
+                <tbody class="table-bordered" ng-if="!emptyResult && !isDataLoading">
+                <tr ng-repeat="dataset in displayedDatasets">
+                    <td ng-bind="dataset.name"></td>
+                    <td ng-bind="dataset.description"></td>
+                    <td ng-bind="dataset.category"></td>
+                    <td ng-bind="dataset.application"></td>
+                    <td class="actionTd">
+                        <input type="checkbox" name="" value="" ng-model="dataset.selected" ng-change="toggleItem(dataset.selected)">
+
+                    </td>
+                </tr>
+                </tbody>
+                <tbody ng-if="isDataLoading">
+                <tr>
+                    <td colspan="5" class="text-center">{{loadingMessage}}</td>
+                </tr>
+                </tbody>
+                <tbody ng-if="emptyResult">
+                <tr>
+                    <td colspan="5">{{emptyResultMessage}}</td>
+                </tr>
+                </tbody>
+                <tfoot>
+                <tr>
+                    <td colspan="5" class="text-right">
+                        <div class="st-pagination" st-pagination="" st-items-by-page="itemsByPage" st-displayed-pages="7"></div>
+                    </td>
+                </tr>
+                </tfoot>
+            </table>
+            <!-- DATASETS TABLE END-->
+        </div>
+        <div class="modal-footer">
+            <div class="row">
+                <div class="col-md-8 text-left"></div>
+                <div class="col-md-4">
+                    <input type="button" class="btn btn-warning btn-sm" ng-show="!datasetsSaved" ng-click="cancel()" value="Cancel"/>
+                    <input type="button" class="btn btn-primary btn-sm" value="Save"
+                           ng-show="!datasetsSaved && !showConfirmation" ng-click="saveScopeDatasets()"/>
+                    <input type="button" class="btn btn-primary btn-sm" value="Confirm"
+                           ng-show="!datasetsSaved && showConfirmation" ng-click="saveScopeDatasets()"/>
+                    <button type="button" class="btn btn-success btn-sm fa fa-check" ng-show="datasetsSaved" ng-click=""/>
+                </div>
+            </div>
+        </div>
+    </form>
+
+</div>

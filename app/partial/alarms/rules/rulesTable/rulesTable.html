@@ -1,0 +1,77 @@
+<!--
+﻿Developed with the contribution of the European Commission - Directorate General for Maritime Affairs and Fisheries
+© European Union, 2015-2016.
+
+This file is part of the Integrated Fisheries Data Management (IFDM) Suite. The IFDM Suite is free software: you can
+redistribute it and/or modify it under the terms of the GNU General Public License as published by the
+Free Software Foundation, either version 3 of the License, or any later version. The IFDM Suite is distributed in
+the hope that it will be useful, but WITHOUT ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or
+FITNESS FOR A PARTICULAR PURPOSE.  See the GNU General Public License for more details. You should have received a
+copy of the GNU General Public License along with the IFDM Suite. If not, see <http://www.gnu.org/licenses/>.
+-->
+<div class="row">
+	<div search-results-table search="currentSearchResults" class="col-md-12 rules-table">
+		<table class="searchResults colorOdd">
+			<thead>
+				<tr>
+					<th class="checkboxContainer"><input type="checkbox" ng-checked="isAllChecked()" ng-click="checkAll()" ng-disabled="!currentSearchResults.items.length"/></th>
+					<!-- <th></th> -->
+					<th sortable-table-header by="currentSearchResults.sortBy" reverse="currentSearchResults.sortReverse" order="'name'">{{'alarms.rules_table_name' | i18n}}</th>
+					<th sortable-table-header by="currentSearchResults.sortBy" reverse="currentSearchResults.sortReverse" order="'lastTriggered'">{{'alarms.rules_table_last_triggered' | i18n}}</th>
+                    <th sortable-table-header by="currentSearchResults.sortBy" reverse="currentSearchResults.sortReverse" order="'dateUpdated'">{{'alarms.rules_table_date_updated' | i18n}}</th>
+					<th sortable-table-header by="currentSearchResults.sortBy" reverse="currentSearchResults.sortReverse" order="'updatedBy'">{{'alarms.rules_table_updated_by' | i18n}}</th>
+                    <th class="notifyByTicket">{{'alarms.rules_table_subscription' | i18n}}</th>
+                    <th class="notifyByEmail">{{'alarms.rules_table_notify_by_email' | i18n}}</th>
+                    <th sortable-table-header by="currentSearchResults.sortBy" reverse="currentSearchResults.sortReverse" order="'active'">{{'alarms.rules_table_status' | i18n}}</th>
+                    <th></th>
+                    <th class="actions">{{'alarms.rules_table_actions' | i18n}}</th>
+				</tr>
+			</thead>
+			<tbody>
+				<tr ng-repeat="item in filteredItems = (currentSearchResults.items | orderBy:currentSearchResults.sortBy:currentSearchResults.sortReverse | filter:filterOnType)" ng-class="{'inactive':!item.active}">
+    				<td class="checkboxContainer"><input type="checkbox" ng-checked="isChecked(item)" ng-click="checkItem(item)" /></td>
+    				<td class="statusColored truncate-text" ng-attr-title="{{item.name}}">{{item.name}}</td>
+    				<td class="statusColored truncate-text" ng-attr-title="{{item.lastTriggered | confDateFormat}}">{{item.lastTriggered | confDateFormat}}</td>
+                    <td class="statusColored truncate-text" ng-attr-title="{{item.dateUpdated | confDateFormat}}">{{item.dateUpdated | confDateFormat}}</td>
+                    <td class="statusColored truncate-text" ng-attr-title="{{item.updatedBy}}">{{item.updatedBy}}</td>
+                    <td class="statusColored notifyByTicket">
+                        <dropdown ng-show="mySubscriptions[item.guid]" ng-model="mySubscriptions[item.guid].TICKET" no-placeholder-item items="subscriptionDropdownOptions" callback="onTicketSubscriptionSelect" callback-params="item" ng-disabled="item.isGlobal()"></dropdown>
+                    </td>
+                    <td class="statusColored notifyByEmail">
+                        <dropdown ng-show="mySubscriptions[item.guid]" ng-model="mySubscriptions[item.guid].EMAIL" no-placeholder-item items="subscriptionDropdownOptions" callback="onEmailSubscriptionSelect" callback-params="item"></dropdown>
+                    </td>
+                    <td ng-class="item.active ? 'active' : 'inactive'">
+                        <span class="label" ng-class="item.active ? 'label-success' : 'label-danger'" ng-attr-title="{{getStatusLabelForRule(item)}}">
+                            {{getStatusLabelForRule(item)}}
+                        </span>
+                    </td>
+                    <td class="availability textAlignCenter">
+                        <i ng-show="item.availability === 'PUBLIC'" class="fa fa-lg fa-users" tooltip-placement="bottom" tooltip="{{'alarms.rules_availability_public' | i18n}}"></i>
+                        <i ng-show="item.availability === 'GLOBAL'" class="fa fa-lg fa-users" tooltip-placement="bottom" tooltip="{{'alarms.rules_availability_global' | i18n}}"></i>
+                        <i ng-show="item.availability === 'PRIVATE'" class="fa fa-lg fa-user" tooltip-placement="bottom" tooltip="{{'alarms.rules_availability_private' | i18n}}"></i>
+                    </td>
+    				<td class="actions">
+                        <span>
+                            <button type="button" class="btn btn-sm btn-default" ng-click="toggleRuleDetails(item)" title="{{'common.view_details'| i18n}}">
+                                <i class="fa fa-pencil"></i>
+                            </button>
+                        </span>
+
+                        <span show-if-allowed="Rules:manageAlarmRules">
+                            <button type="button" class="btn btn-sm btn-default" ng-click="copyRule(item)" title="{{'alarms.copy_rule_button_title'| i18n}}">
+                                <i class="fa fa-copy"></i>
+                            </button>
+                        </span>
+
+                        <span show-if-allowed="Rules:manageAlarmRules" ng-if="allowedToDeleteOrUpdateRule(item)">
+                            <button type="button" class="btn btn-sm btn-default remove" ng-click="deleteRule(item)" title="{{'common.delete'| i18n}}">
+                                <i class="fa fa-trash"></i>
+                            </button>
+                        </span>
+
+    				</td>
+				</tr>
+			</tbody>
+		</table>
+    </div>
+</div>

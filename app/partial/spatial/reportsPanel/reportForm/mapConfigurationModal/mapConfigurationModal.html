@@ -1,0 +1,51 @@
+<!--
+﻿Developed with the contribution of the European Commission - Directorate General for Maritime Affairs and Fisheries
+© European Union, 2015-2016.
+
+This file is part of the Integrated Fisheries Data Management (IFDM) Suite. The IFDM Suite is free software: you can
+redistribute it and/or modify it under the terms of the GNU General Public License as published by the
+Free Software Foundation, either version 3 of the License, or any later version. The IFDM Suite is distributed in
+the hope that it will be useful, but WITHOUT ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or
+FITNESS FOR A PARTICULAR PURPOSE.  See the GNU General Public License for more details. You should have received a
+copy of the GNU General Public License along with the IFDM Suite. If not, see <http://www.gnu.org/licenses/>.
+-->
+<div id="mapConfigurationModal" class="mapConfigurationModal">
+	<loading-panel type="Preferences"></loading-panel>
+    <loading-panel type="ResetPreferences"></loading-panel>
+    <div class="modal-header">
+        <div class="pointer pull-right" ng-click="cancel()">
+             <i class="fa fa-times closeicon"></i>
+        </div>
+        <h4 class="modal-title">{{'spatial.report_configuration_modal_title' | i18n}}</h4>
+    </div>
+    <div class="modal-body">
+    	<div class="containerWithTopBottomPadding spatial-error" ng-if="alert.hasAlert">
+			<div class="alert alert-container" role="alert" ng-class="{'alert-danger': alert.hasError, 'alert-success': alert.hasSuccess, 'alert-warning': alert.hasWarning}">
+				<span class="fa fa-exclamation-circle" aria-hidden="true" ng-show="alert.hasError"></span>
+				<span class="fa fa-check-circle" aria-hidden="true" ng-show="alert.hasSuccess"></span>
+				<span class="fa fa-exclamation-circle" aria-hidden="true" ng-show="alert.hasWarning"></span>
+				<span class="alert-message">
+					<span>{{alert.alertMessage}}</span>          
+				</span>
+		    </div>
+		</div>
+       	<div class="row containerCollapsible">
+	    	<ng-form name="mapConfigurationForm" novalidate>
+	    	    <div class="collapsiblePanel" ng-include="'partial/spatial/configurations/mapSettingsPanel/mapSettingsCollapsiblePanel.html'" ng-if="hasMap"></div>
+				<div class="collapsiblePanel" ng-include="'partial/spatial/configurations/vmsStyles/vmsStylesCollapsiblePanel.html'" ng-if="hasMap"></div>
+				<div class="collapsiblePanel" ng-include="'partial/spatial/configurations/visibilitySettings/visibilitySettings.html'"></div>
+				<div class="collapsiblePanel" ng-include="'partial/spatial/configurations/layerSettings/layerSettings.html'" ng-if="hasMap"></div>
+				<div class="collapsiblePanel" ng-include="'partial/spatial/configurations/referenceDataSettings/referenceDataSettings.html'" ng-if="hasMap"></div>
+			</ng-form>
+		</div>
+    </div>
+    <!-- FOOTER -->
+    <div class="modal-footer">
+        <div class="row">
+        	<div class="col-md-12">
+        		<button class="btn btn-default btn-action" type="button" ng-click="cancel()">{{'common.cancel' | i18n}}</button>
+				<button class="btn btn-primary btn-action" type="button" ng-click="save()">{{'common.save' | i18n}}</button>
+        	</div>
+        </div>
+    </div>
+</div>

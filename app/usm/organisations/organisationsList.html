@@ -1,0 +1,130 @@
+<!--
+﻿Developed with the contribution of the European Commission - Directorate General for Maritime Affairs and Fisheries
+© European Union, 2015-2016.
+
+This file is part of the Integrated Fisheries Data Management (IFDM) Suite. The IFDM Suite is free software: you can
+redistribute it and/or modify it under the terms of the GNU General Public License as published by the
+Free Software Foundation, either version 3 of the License, or any later version. The IFDM Suite is distributed in
+the hope that it will be useful, but WITHOUT ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or
+FITNESS FOR A PARTICULAR PURPOSE.  See the GNU General Public License for more details. You should have received a
+copy of the GNU General Public License along with the IFDM Suite. If not, see <http://www.gnu.org/licenses/>.
+-->
+<div class="container">
+
+    <!-- SEARCH PANEL-->
+    <div class="panel panel-default">
+        <div class="panel-body">
+
+            <form class="form-inline" id="searchOrganisationForm" ng-submit="searchOrganisation(search)">
+
+                <div class="form-group col-md-2">
+                    <label>{{'organisations.name' | translate}}</label>
+                    <dropdown ng-model="search.name" initialText="Organisation..." data="value" title="label" items="namesList"></dropdown>
+                </div>
+
+                <div class="form-group col-md-2">
+                    <label>{{'organisations.nation' | translate}}</label>
+                    <dropdown ng-model="search.nation" initialText="Nation..." data="value" title="label" items="nationsList"></dropdown>
+                </div>
+
+                <div class="form-group col-md-2">
+                    <label>{{'organisations.status' | translate}}</label>
+                    <dropdown ng-model="search.status" data="value" title="label" items="statusList"></dropdown>
+                </div>
+
+                <div class="col-md-2">
+                    <label>&nbsp;</label>
+                    <div>
+                        <input type="submit" id="searchButton" class="btn btn-primary btn-sm" ng-value="'common.search' | translate"/>
+                        <button type="button" class="btn btn-link btn-sm" ng-click="resetForm()">
+                            {{'common.reset' | translate}}
+                        </button>
+                    </div>
+                </div>
+            </form>
+
+        </div>
+    </div>
+
+    <!-- SEARCH PANEL END-->
+
+    <!-- ORGANISATIONS TABLE -->
+
+    <table id="organisationsTable" st-table="displayedOrganisations" st-safe-src="organisationsList" class="table table-striped fixed">
+        <colgroup>
+            <col style="width: 150px;">
+            <col style="width: 180px;">
+            <col style="width: 270px;">
+            <col style="width: 120px;">
+            <col style="width: 200px;">
+            <col style="width: 100px;">
+            <col style="width: 120px;">
+        </colgroup>
+        <thead>
+        <tr>
+            <th ng-click="changeSorting('parent')">{{'organisations.parent' | translate}}&nbsp;<i class="fa" ng-class="sortIcon('parent')"></i></th>
+            <th ng-click="changeSorting('name')">{{'organisations.name' | translate}}&nbsp;<i class="fa" ng-class="sortIcon('name')"></i></th>
+            <th ng-click="changeSorting('description')">{{'organisations.description' | translate}}&nbsp;<i class="fa" ng-class="sortIcon('description')"></i></th>
+            <th ng-click="changeSorting('nation')">{{'organisations.nation' | translate}}&nbsp;<i class="fa" ng-class="sortIcon('nation')"></i></th>
+            <th ng-click="changeSorting('email')">{{'organisations.email' | translate}}&nbsp;<i class="fa" ng-class="sortIcon('email')"></i></th>
+            <th ng-click="changeSorting('status')">{{'organisations.status' | translate}}&nbsp;<i class="fa" ng-class="sortIcon('status')"></i></th>
+
+            <th class="text-center">
+                <div ng-controller="manageOrganisationCtrl" ng-if="checkAccess('manageOrganisations')">
+                    <button id="newOrgButton" class="btn btn-primary btn-sm" ng-click='manageOrganisation("new", "")'>
+                        <span class="fa fa-plus"></span>
+                        <span>&nbsp;New</span>
+                    </button>
+                </div>
+            </th>
+        </tr>
+        </thead>
+        <tbody class="table-bordered" ng-if="!isDataLoading">
+        <tr ng-repeat="organisation in displayedOrganisations">
+            <td ng-bind="organisation.parent"></td>
+            <td ng-bind="organisation.name"></td>
+            <td ng-bind="organisation.description"></td>
+            <td ng-bind="organisation.nation"></td>
+            <td ng-bind="organisation.email"></td>
+            <td>
+                <span ng-class="{'label label-success': organisation.status=='E', 'label label-danger': organisation.status=='D'}">{{"organisation.status_"+organisation.status | translate}}</span>
+            </td>
+            <td class="actionTd text-center">
+                <span ng-controller="manageOrganisationCtrl" ng-if="checkAccess('manageOrganisations')">
+                    <button type="button" class="btn btn-sm btn-primary usm-action-btn" ng-click='manageOrganisation("edit", organisation)'>
+                        <span><i class="fa fa-pencil"></i></span>
+                    </button>
+                </span>
+                <button type="button" class="btn btn-sm btn-primary usm-action-btn"
+                        ui-sref="app.usm.organisations.organisation({organisationId: organisation.organisationId})" ui-sref-opts="{ inherit : false }">
+                    <span><i class="fa fa-eye"></i></span>
+                </button>
+                <span ng-controller="manageOrganisationCtrl" ng-if="checkAccess('manageOrganisations')">
+                    <button type="button" class="btn btn-sm btn-danger usm-action-btn" ng-click='manageOrganisation("delete", organisation)'>
+                        <span><i class="fa fa-remove"></i></span>
+                    </button>
+                </span>
+            </td>
+        </tr>
+        </tbody>
+
+        <tbody ng-if="isDataLoading">
+        <tr>
+			<td colspan="7" class="text-center">{{loadingMessage}}</td>
+        </tr>
+        </tbody>
+
+        <tbody ng-if="emptyResult">
+        <tr>
+            <td colspan="7">{{emptyResultMessage}}</td>
+        </tr>
+        </tbody>
+    </table>
+
+    <!-- ORGANISATIONS TABLE END-->
+
+
+    <div ng-if="showPagination">
+        <usm-pagination config="paginationConfig"></usm-pagination>
+    </div>
+</div>

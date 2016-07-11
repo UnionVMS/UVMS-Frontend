@@ -1,0 +1,151 @@
+/*
+﻿Developed with the contribution of the European Commission - Directorate General for Maritime Affairs and Fisheries
+© European Union, 2015-2016.
+
+This file is part of the Integrated Fisheries Data Management (IFDM) Suite. The IFDM Suite is free software: you can
+redistribute it and/or modify it under the terms of the GNU General Public License as published by the
+Free Software Foundation, either version 3 of the License, or any later version. The IFDM Suite is distributed in
+the hope that it will be useful, but WITHOUT ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or
+FITNESS FOR A PARTICULAR PURPOSE.  See the GNU General Public License for more details. You should have received a
+copy of the GNU General Public License along with the IFDM Suite. If not, see <http://www.gnu.org/licenses/>.
+ */
+.vmspages {
+	padding-top: 2px !important;
+	padding-left: 5px !important;
+	display: table-cell;
+}
+
+.vmstables {
+	padding-top: 5px !important;
+	padding-left: 5px !important;
+	border: 0px !important;
+	float: left;
+}
+
+.vms-search-btns {
+	margin-top: 5px;
+}
+
+.vmssourcetab {
+	>a {
+		font-weight: bold;
+	}
+}
+
+.vmssourcetab.active:hover,
+.vmssourcetab.active{
+	>a {
+		background-color: @primaryColor !important;
+		color: #fff !important;
+	}
+}
+
+.vmssourcetab:hover {
+	>a {
+		background-color: #fff !important;
+	}
+}
+
+.vmstab-content {
+	margin-top: 5px;
+}
+
+.hidden-st-control{
+	display: none;
+}
+
+.st-table-filters {
+	margin-bottom: 5px;
+	padding-right: 20px;
+	p.datepicker {
+		width: 100%;
+	}
+}
+
+.twin-controls {
+	input {
+		border-color: @primaryColor;
+	}
+}
+
+.coord-label {
+	padding: 0;
+	color: #999999;
+	line-height: 30px;
+}
+
+input[name="lon|dd"],
+input[name="lat|dd"] {
+	&.coordError{
+		border: 1px solid red;
+	}
+}
+.coord-deg {
+	padding: 0;
+	> input, >input:focus {
+		border-right: 0;
+		border-top-right-radius: 0;
+		border-bottom-right-radius: 0;
+		&.coordError{
+			border: 1px solid red;
+		}
+	}
+	&:after {
+		content: '\00b0';
+		position: absolute;
+		top: 0;
+		right: 0;
+		color: #999999;
+		font-size: 18px;
+	}
+}
+
+.coord-min{
+	padding: 0;
+	> input, >input:focus {
+		border-left: 0;
+		border-top-left-radius: 0;
+		border-bottom-left-radius: 0;
+		&.coordError{
+			border: 1px solid red;
+		}
+	}
+
+	&:after {
+		content: '\2019';
+		position: absolute;
+		top: 0;
+		right: 4px;
+		color: #999999;
+		font-size: 18px;
+	}
+}
+
+.table-tools {
+	cursor: auto !important;
+	i {
+		color: #428bca;
+		cursor: pointer;
+		font-style: normal;
+	}
+	.btnTools {
+		float: right;
+		line-height: 1em;
+	}
+}
+
+.table-tools i:first-child {
+    padding-right: 8px;
+}
+
+div.table-tools i {
+    margin-left: 2px;
+}
+
+.lr-drop-target-before{
+  border-left: 5px solid @primaryColor;
+}
+
+.lr-drop-target-after{
+  border-right: 5px solid @primaryColor;
+}

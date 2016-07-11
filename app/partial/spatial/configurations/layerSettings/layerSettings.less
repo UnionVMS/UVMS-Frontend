@@ -1,0 +1,214 @@
+/*
+﻿Developed with the contribution of the European Commission - Directorate General for Maritime Affairs and Fisheries
+© European Union, 2015-2016.
+
+This file is part of the Integrated Fisheries Data Management (IFDM) Suite. The IFDM Suite is free software: you can
+redistribute it and/or modify it under the terms of the GNU General Public License as published by the
+Free Software Foundation, either version 3 of the License, or any later version. The IFDM Suite is distributed in
+the hope that it will be useful, but WITHOUT ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or
+FITNESS FOR A PARTICULAR PURPOSE.  See the GNU General Public License for more details. You should have received a
+copy of the GNU General Public License along with the IFDM Suite. If not, see <http://www.gnu.org/licenses/>.
+ */
+[name="layerSettingsForm"] {
+	.panel-body {
+		position: relative;
+	}
+}
+
+.layer-selector-container {
+	margin-top: 30px;
+	.container-element {
+		margin-left: auto;
+		margin-right: auto;
+		width: 40%;
+	}
+	div.loading-spinner-cl {
+		pointer-events: none;
+		.loading-spinner {
+			vertical-align: middle;
+		}
+	}
+}
+
+.container-element {
+	border: 1px solid #ccc;
+    border-radius: 4px;
+    background-color: #f5f5f5;
+    margin-top: 60px;
+    margin-bottom: 20px;
+    -webkit-box-shadow: 4px 3px 14px -3px rgba(0, 0, 0, 0.75);
+    -moz-box-shadow: 4px 3px 14px -3px rgba(0, 0, 0, 0.75);
+    box-shadow: 4px 3px 14px -3px rgba(0, 0, 0, 0.75);
+    h3 {
+    	background-color: #f5f5f5;
+	    margin: 0;
+	    padding: 10px;
+	    border-bottom: 1px solid #ccc;
+	    border-radius: 4px 4px 0 0;
+    }
+    h5 {
+		margin: 10px 10px 0 10px;
+		border: 1px solid #089fd7;
+		border-radius: 4px 4px 0 0;
+		padding: 10px;
+		background-color: #089fd7;
+		color: #fff;
+		padding-right: 60px;
+	}
+	.noLayersMessage {
+		background-color: #fff;
+	}
+    ul[dnd-list] {
+    	margin: 0 10px 10px 10px;
+    	border: 1px solid #089fd7;
+    	border-radius: 0 0 4px 4px;
+    	position: relative;
+    	background-color: #fff;
+    	li {
+    		display: block;
+    		position: relative;
+    		padding: 2px 8px;
+    		border-bottom: 1px solid #ddd;
+    		background-color: #fff;
+    		&:last-child {
+    			border-bottom: 0;
+    			border-radius: 0 0 4px 4px;
+    		}
+    		&:hover {
+    			background-color: #f5f5f5;
+    		}
+    		&:empty {
+    			background-color: #ddd;
+    			height: 24px;
+    		}
+    		&.dndDraggingSource[dnd-effect-allowed="move"] {
+    			display: none;
+    		}
+    		.handle {
+    			cursor: move;
+    		}
+    		> * {
+    			display: inline-block;
+    		}
+    	}
+    }
+    &.layerSelection {
+	    ul[dnd-list="selectedAreas"] {
+		    margin-bottom: 0;
+		    background-color: #87BDF3;
+		    > li {
+		    	&:empty {
+	    			background-color: #ddd;
+	    		}
+	    		&[type="userarea"],
+	    		&[type="sysarea"],
+	    		&[type="areagroup"] {
+	    			padding: 0 10px 0 0;
+	    		}
+	    		&[type="userarea"] {
+	    			background-color: #6fc474;
+	    		}
+	    		&[type="sysarea"] {
+	    			background-color: #87bdf3;
+	    		}
+	    		&[type="areagroup"] {
+	    			background-color: #e5a26a;
+	    		}
+	    		&:last-child .area-item {
+    				border-radius: 0 0 0 4px;
+    			}
+	    		.area-item {
+	    			background-color: #fff;
+	    			width: 100%;
+	    			padding: 2px 0 2px 8px;
+	    			&:hover {
+	    				background-color: #f5f5f5;
+	    			}
+	    			> * {
+	    				display: inline-block;
+	    			}
+    			}
+		    }
+	    }
+	    .column {
+	    	position: relative;
+	    }
+    }
+}
+
+.layerSettingChoices .container-element {
+	text-align: center;
+    border: 0;
+    padding: 5px;
+    background-color: #f5f5f5;
+    -webkit-box-shadow: 4px 3px 14px -3px rgba(0,0,0,0.75);
+    -moz-box-shadow: 4px 3px 14px -3px rgba(0,0,0,0.75);
+    box-shadow: 4px 3px 14px -3px rgba(0,0,0,0.75);
+    
+    h5,
+    [dnd-list] {
+    	margin: 0;
+    }
+    [dnd-list] {
+    	max-height: 300px;
+    	overflow-y: auto;
+	    li {
+		    line-height: 30px;
+	    }
+    }
+    
+    h5 {
+    	line-height: 30px;
+    	    padding: 5px;
+    }
+    
+    .sysAreaList {
+    	h5 {
+    		background-color: #66ACF1;
+    	}
+    	h5,
+    	ul {
+    		border-color: #66ACF1;
+    	}
+    }
+    
+    .userAreaList {
+    	h5 {
+    		background-color: #6FC474;
+    	}
+    	h5,
+    	ul {
+    		border-color: #6FC474;
+    		&:empty {
+	    		border: 0;
+	    	}
+    	}
+    }
+    .areaGroupList {
+    	h5 {
+    		background-color: #e5a26a;
+    	}
+    	h5,
+    	ul {
+    		border-color: #e5a26a;
+    		&:empty {
+	    		border: 0;
+	    	}
+    	}
+    }
+}
+
+.baseLayersError {
+	position: absolute;
+    top: 20px;
+    right: 20px;
+}
+
+.btn-clear-list {
+	position: absolute;
+    top: 6px;
+    right: 15px;
+    color: #000;
+    border-radius: 12px !important;
+    height: 25px;
+}

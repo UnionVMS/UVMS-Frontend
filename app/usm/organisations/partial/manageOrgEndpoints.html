@@ -1,0 +1,130 @@
+<!--
+﻿Developed with the contribution of the European Commission - Directorate General for Maritime Affairs and Fisheries
+© European Union, 2015-2016.
+
+This file is part of the Integrated Fisheries Data Management (IFDM) Suite. The IFDM Suite is free software: you can
+redistribute it and/or modify it under the terms of the GNU General Public License as published by the
+Free Software Foundation, either version 3 of the License, or any later version. The IFDM Suite is distributed in
+the hope that it will be useful, but WITHOUT ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or
+FITNESS FOR A PARTICULAR PURPOSE.  See the GNU General Public License for more details. You should have received a
+copy of the GNU General Public License along with the IFDM Suite. If not, see <http://www.gnu.org/licenses/>.
+-->
+<div ng-controller="manageOrganisationEndpointsCtrl">
+    <form novalidate class="form-horizontal" name="manageOrganisationEndpointForm" ng-submit="manageOrganisationEndpointForm.$valid && saveUpdateDelete(endpoint)">
+        <div class="modal-header">
+            <div class="row">
+                <div class="col-md-6">
+                    <h3 ng-if="mode=='new'" class="modal-title">{{'organisationEndpoints.newEndpoint' | translate}}</h3>
+
+                    <h3 ng-if="mode=='edit'" class="modal-title">{{'organisationEndpoints.editEndpoint' | translate}}</h3>
+
+                    <h3 ng-if="mode=='delete'" class="modal-title">{{'organisationEndpoints.deleteEndpoint' | translate}}</h3>
+                </div>
+            </div>
+        </div>
+
+		<div class="modal-body">
+            <div class="row">
+                <div class="col-md-12" ng-class="messageDivClass">
+                    <span ng-bind-html="actionMessage" ng-class="messageClass"></span>
+                </div>
+            </div>
+
+            <div class="row">
+                <div class="form-group">
+                    <label class="col-md-3 col-md-offset-1" for="name">{{'common.name' | translate}}
+                        <sup class="fa fa-asterisk mandatory" ng-if="mode!='delete'"></sup></label>
+
+                    <div class="col-md-5">
+                        <input type="text" class="form-control" id="name" name="name" ng-model="endpoint.name"
+                               required ng-disabled="mode=='delete'||mode=='edit'">
+
+                        <div ng-show="manageOrganisationEndpointForm.name.$dirty">
+                        <span class="text-danger small"
+                              ng-show="manageOrganisationEndpointForm.name.$error.required">Name is required</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="row">
+                <div class="form-group">
+                    <label class="col-md-3 col-md-offset-1" for="description">{{'common.description' | translate}}</label>
+
+                    <div class="col-md-6">
+                        <input type="text" class="form-control" name="description" id="description"
+                               ng-model="endpoint.description"
+                               ng-disabled="mode=='delete'">
+                    </div>
+                </div>
+            </div>
+
+            <div class="row">
+                <div class="form-group">
+
+					<label class="col-md-3 col-md-offset-1" for="uri">{{'organisationEndpoints.uri' | translate}}
+                        <sup class="fa fa-asterisk mandatory" ng-if="mode!='delete'"></sup></label>
+
+                    <div class="col-md-6">
+                        <input type="text" class="form-control" id="uri" name="uri" ng-model="endpoint.uri"
+                               required ng-disabled="mode=='delete'">
+
+                        <div ng-show="manageOrganisationEndpointForm.uri.$dirty">
+                        <span class="text-danger small"
+                              ng-show="manageOrganisationEndpointForm.uri.$error.required">URI is required</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="row">
+                <div class="form-group">
+                    <label class="col-md-3 col-md-offset-1" for="email">{{'organisationEndpoints.email' | translate}}</label>
+
+                    <div class="col-md-6">
+                        <input type="email" class="form-control" name="email" id="email" ng-model="endpoint.email" ng-disabled="mode=='delete'">
+                        <div class="error" ng-show="manageOrganisationEndpointForm.email.$invalid">
+                            <small class="text-danger" ng-show="manageOrganisationEndpointForm.email.$error.email">This is not a valid email</small>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="row">
+                <div class="form-group">
+                    <label class="col-md-3 col-md-offset-1" for="status">{{'common.status' | translate}}
+                        <sup class="fa fa-asterisk mandatory" ng-if="mode!='delete'"></sup>
+                    </label>
+                    <div class="col-md-4">
+                        <select class="form-inline form-control dropdown-select"
+                                id="status"
+                                name="status"
+                                ng-model="endpoint.status"
+                                ng-change="changeStatus(endpoint.status)"
+                                ng-options="'common.status_'+status | translate for status in statusList"
+                                required
+                                ng-class="{pointer: pointer}"
+                                ng-mouseenter="pointer=true"
+                                ng-mouseleave="pointer=false"
+                                ng-disabled="mode=='delete'">
+                        </select>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="modal-footer">
+            <div class="row">
+                <div class="col-md-offset-8 col-md-4">
+                    <input type="button" class="btn btn-warning btn-sm" ng-show="!actionSucceeded" ng-click="cancel()" value="Cancel"/>
+                    <input type="submit" class="btn btn-primary btn-sm" value="Save"
+                           ng-disabled="manageOrganisationEndpointForm.$invalid" ng-show="!actionSucceeded && !showConfirmation" ng-if="mode=='new' || mode=='edit'"/>
+                    <input type="submit" class="btn btn-primary btn-sm" value="Confirm"
+                           ng-disabled="manageOrganisationEndpointForm.$invalid" ng-show="!actionSucceeded && showConfirmation" ng-if="mode=='delete' || mode=='edit'"/>
+                    <input type="submit" class="btn btn-primary btn-sm" value="Delete"
+                           ng-disabled="manageOrganisationEndpointForm.$invalid" ng-show="!actionSucceeded && !showConfirmation" ng-if="mode=='delete'"/>
+					<label id="btn-success" class="btn btn-success btn-sm fa fa-check" ng-show="actionSucceeded"></label>
+                </div>
+            </div>
+        </div>
+    </form>
+</div>

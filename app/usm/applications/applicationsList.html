@@ -1,0 +1,91 @@
+<!--
+﻿Developed with the contribution of the European Commission - Directorate General for Maritime Affairs and Fisheries
+© European Union, 2015-2016.
+
+This file is part of the Integrated Fisheries Data Management (IFDM) Suite. The IFDM Suite is free software: you can
+redistribute it and/or modify it under the terms of the GNU General Public License as published by the
+Free Software Foundation, either version 3 of the License, or any later version. The IFDM Suite is distributed in
+the hope that it will be useful, but WITHOUT ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or
+FITNESS FOR A PARTICULAR PURPOSE.  See the GNU General Public License for more details. You should have received a
+copy of the GNU General Public License along with the IFDM Suite. If not, see <http://www.gnu.org/licenses/>.
+-->
+<div class="container">
+    <!-- SEARCH PANEL-->
+    <div class="panel panel-default">
+        <div class="panel-body">
+            <form class="form-inline" id="searchApplicationForm" ng-submit="searchApplication(criteria)">
+                <div class="form-group col-md-2">
+                    <label for="role">{{'common.name' | translate}}</label>
+
+                    <div>
+                        <input class="form-control" id="role" ng-model="criteria.name"/>
+                    </div>
+                </div>
+                <div class="form-group col-md-2">
+                    <label>{{'applications.parent' | translate}}</label>
+                    <dropdown ng-model="criteria.parent" initialText="Parent..." data="value" title="label" items="parentList"></dropdown>
+                </div>
+                <div class="col-md-2">
+                    <label>&nbsp;</label>
+
+                    <div>
+                        <input type="submit" class="btn btn-primary btn-sm" ng-value="'common.search' | translate" />
+                        <button type="button" class="btn btn-link btn-sm" ng-click="resetForm()">
+                            {{'common.reset' | translate}}
+                        </button>
+                    </div>
+                </div>
+            </form>
+        </div>
+    </div>
+    <!-- SEARCH PANEL END-->
+
+    <!-- SCOPES TABLE -->
+    <table st-table="displayedApplications" st-safe-src="applicationList" class="table table-striped fixed">
+        <colgroup>
+            <col style="width: 300px;">
+            <col style="width: 500px;">
+            <col style="width: 300px;">
+            <col style="width: 40px;">
+        </colgroup>
+        <thead>
+        <tr>
+            <th ng-click="changeSorting('name')">{{'common.name' | translate}}&nbsp;<i class="fa" ng-class="sortIcon('name')"></i></th>
+            <th ng-click="changeSorting('description')">{{'common.description' | translate}}&nbsp;<i class="fa" ng-class="sortIcon('description')"></i></th>
+            <th ng-click="changeSorting('parent')">{{'applications.parent' | translate}}&nbsp;<i class="fa" ng-class="sortIcon('parent')"></i></th>
+            <th class="text-right">&nbsp;</th>
+        </tr>
+        </thead>
+        <tbody class="table-bordered" ng-if="!isDataLoading && !emptyResult">
+        <tr ng-repeat="application in displayedApplications">
+            <td ng-bind="application.name"></td>
+            <td ng-bind="application.description"></td>
+            <td ng-bind="application.parent"></td>
+
+            <td class="actionTd text-center">
+                <span ng-if="checkAccess('manageApplications')||checkAccess('viewApplications')">
+                    <button type="button" class="btn btn-sm btn-primary usm-action-btn"
+                            ui-sref="app.usm.applications.application({applicationName: application.name})"
+                            ui-sref-opts="{ inherit : false }">
+                        <span><i class="fa fa-eye"></i></span>
+                    </button>
+                </span>
+            </td>
+        </tr>
+        </tbody>
+        <tbody ng-if="isDataLoading">
+        <tr>
+            <td colspan="5" class="text-center">Loading...</td>
+        </tr>
+        </tbody>
+        <tbody ng-if="emptyResult">
+        <tr>
+            <td colspan="8">{{emptyResultMessage}}</td>
+        </tr>
+        </tbody>
+    </table>
+    <div ng-if="showPagination">
+        <usm-pagination config="paginationConfig"></usm-pagination>
+    </div>
+    <!-- SCOPES TABLE END-->
+</div>

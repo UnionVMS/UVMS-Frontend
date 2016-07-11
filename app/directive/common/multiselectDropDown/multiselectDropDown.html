@@ -1,0 +1,37 @@
+<!--
+﻿Developed with the contribution of the European Commission - Directorate General for Maritime Affairs and Fisheries
+© European Union, 2015-2016.
+
+This file is part of the Integrated Fisheries Data Management (IFDM) Suite. The IFDM Suite is free software: you can
+redistribute it and/or modify it under the terms of the GNU General Public License as published by the
+Free Software Foundation, either version 3 of the License, or any later version. The IFDM Suite is distributed in
+the hope that it will be useful, but WITHOUT ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or
+FITNESS FOR A PARTICULAR PURPOSE.  See the GNU General Public License for more details. You should have received a
+copy of the GNU General Public License along with the IFDM Suite. If not, see <http://www.gnu.org/licenses/>.
+-->
+<div>{{enablecheckall}}
+	<div class='dropdown fullWidthDropdown multiselectdropdowncontainer' data-ng-class='{open: open}'>
+		<button class="btn btn-default dropdown-toggle" type="button" data-ng-click='open=!open; openDropdown()' ng-disabled="ngDisabled">
+			<div class="dropdowntext">{{dropdownLabel()}}</div>
+			<span class="caret"></span>
+		</button>
+		<ul class='dropdown-menu' aria-labelledby='dropdownMenu'>
+			<li class="multiselectdropdownheaderitem" ng-class="{itemselected : checkedAndSelectedAll()}" ng-hide="disableCheckall">
+				<a data-ng-click='selectAll()'>
+					<i class="fa fa-check-square-o"></i>&nbsp;{{checkAll}}
+				</a>
+			</li>
+			<li class="multiselectdropdownheaderitem" ng-class="{itemselected : checkedAndSelectedNone()}" ng-hide="disableCheckall">
+				<a data-ng-click='deselectAll();'>
+					<i class="fa fa-check-square-o"></i>&nbsp;{{unCheckAll}}
+				</a>
+			</li>
+			<li class='divider' ng-hide="disableCheckall"></li>
+			<li data-ng-repeat='option in options' class="multiselectdropdownitem" ng-class="{itemselected : isChecked(option.code)}">
+				<a data-ng-click='setSelectedItem()'>
+					<i class="fa fa-check"></i>&nbsp;{{option.text}}
+				</a>
+			</li>
+		</ul>
+	</div>
+</div>

@@ -1,0 +1,100 @@
+<!--
+﻿Developed with the contribution of the European Commission - Directorate General for Maritime Affairs and Fisheries
+© European Union, 2015-2016.
+
+This file is part of the Integrated Fisheries Data Management (IFDM) Suite. The IFDM Suite is free software: you can
+redistribute it and/or modify it under the terms of the GNU General Public License as published by the
+Free Software Foundation, either version 3 of the License, or any later version. The IFDM Suite is distributed in
+the hope that it will be useful, but WITHOUT ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or
+FITNESS FOR A PARTICULAR PURPOSE.  See the GNU General Public License for more details. You should have received a
+copy of the GNU General Public License along with the IFDM Suite. If not, see <http://www.gnu.org/licenses/>.
+-->
+<div ng-controller="managePolicyCtlr">
+    <form novalidate class="form-horizontal" name="editPolicyForm" ng-submit="editPolicyForm.$valid && updatePolicy(policy)">
+        <div class="modal-header">
+            <div class="row">
+                <div class="col-md-12">
+                    <h3 class="modal-title">Edit Policy</h3>
+                </div>
+            </div>
+        </div>
+        <div class="modal-body">
+            <div class="row">
+                <div class="col-md-12" ng-class="messageDivClass">
+                    <span ng-bind="actionMessage" ng-class="messageClass"></span>
+                </div>
+            </div>
+            <div class="row">
+                <div class="form-group">
+                    <label for="policyName" class="control-label col-md-3">Name</label>
+
+                    <div class="col-md-8">
+                        <input type="text" class="form-control" id="policyName" name="policyName" ng-disabled="true"
+                               ng-model="policy.name" required>
+                    </div>
+				</div>
+            </div>
+            <div class="row">
+                <div class="form-group">
+                    <label for="policyName" class="control-label col-md-3">Description</label>
+
+                    <div class="col-md-8">
+						<textarea 
+							class="form-control"
+							style="resize:none;height:120px;"
+							id="policyDesc" 
+							name="policyDesc"
+							ng-disabled="formDisabled"
+							ng-model="policy.description" 
+							required>
+						</textarea>
+                    </div>
+				</div>
+            </div>
+            <div class="row">
+                <div class="form-group">
+                    <label for="policyName" class="control-label col-md-3">Subject</label>
+
+                    <div class="col-md-8">
+                        <input type="text" class="form-control" id="policySubj" name="policySubj" ng-disabled="true"
+                               ng-model="policy.subject" required>
+                    </div>
+				</div>
+            </div>
+            <div class="row">
+                <div class="form-group">
+                    <label for="policyName" class="control-label col-md-3">Value</label>
+
+                    <div class="col-md-8">
+						<textarea 
+							class="form-control"
+							style="resize:none;height:120px;"
+							id="policyValue" 
+							name="policyValue"
+							ng-disabled="formDisabled"
+							ng-model="policy.value" 
+							required>
+						</textarea>							
+                    </div>
+				</div>
+            </div>
+        </div>
+        <div class="modal-footer">
+            <div class="row">
+                <div class="col-md-12">
+                    <input type="button" class="btn btn-warning btn-sm" ng-hide="policyUpdated" ng-click="cancel()" value="Cancel"/>
+                    <button ng-show="showEdit && !policyUpdated" ng-click="changeEditForm()" id="editButton" type="button" class="btn btn-primary btn-sm">
+                        Edit
+                    </button>
+                    <button ng-show="showSubmit && !policyUpdated" ng-click="changeEditForm()" type="submit" class="btn btn-primary btn-sm"
+                            ng-disabled="editPolicyForm.$invalid">
+                        Save
+                    </button>
+                    <button type="button" class="btn btn-success btn-sm" ng-show="policyUpdated" ng-disabled="true">
+                        <span class="fa fa-check"></span>
+                    </button>
+                </div>
+            </div>
+        </div>
+    </form>
+</div>

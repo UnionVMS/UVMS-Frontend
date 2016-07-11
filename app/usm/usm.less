@@ -1,0 +1,102 @@
+/*
+﻿Developed with the contribution of the European Commission - Directorate General for Maritime Affairs and Fisheries
+© European Union, 2015-2016.
+
+This file is part of the Integrated Fisheries Data Management (IFDM) Suite. The IFDM Suite is free software: you can
+redistribute it and/or modify it under the terms of the GNU General Public License as published by the
+Free Software Foundation, either version 3 of the License, or any later version. The IFDM Suite is distributed in
+the hope that it will be useful, but WITHOUT ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or
+FITNESS FOR A PARTICULAR PURPOSE.  See the GNU General Public License for more details. You should have received a
+copy of the GNU General Public License along with the IFDM Suite. If not, see <http://www.gnu.org/licenses/>.
+ */
+//@import "bower_components/bootstrap/less/theme.less";
+
+
+/* Component LESS */
+@import "users/users.less";
+@import "organisations/organisations.less";
+@import "roles/roles.less";
+@import "scenarios/scenarios.less";
+@import "scopes/scopes.less";
+@import "applications/applications.less";
+@import "users/account/account.less";
+@import "shared/shared.less";
+@import "users/changes/changes.less";
+@import "users/userContexts/userContexts.less";
+/* Add Component LESS Above */
+
+/* Required for Angular UI Bootstrap */
+.nav, .pagination, .carousel, .panel-title a, .table > thead > tr > th {
+    cursor: pointer;
+}
+
+/*
+ * Datepicker element
+ */
+
+.datepicker.dropdown-menu {
+    width: 250px;
+    height: 270px;
+    button {
+        outline: none;
+        border: 0;
+    }
+    tbody {
+        height: 180px;
+    }
+    tbody button {
+        padding: 6px;
+    }
+    &.datepicker-mode-1, &.datepicker-mode-2 {
+        tbody button {
+            height: 65px;
+        }
+    }
+}
+
+.formUserState {
+    width: 150px;
+}
+
+.ec-header-user{
+    .dropdown {
+        .caret {
+            bottom: -8px;
+        }
+    }
+}
+
+
+
+/* ui-select fixes the width of the choices list*/
+.ui-select-bootstrap > .ui-select-choices {
+    /* width: 100%; */
+    width: auto;
+    height: auto;
+    max-height: 200px;
+    overflow-x: hidden;
+    margin-top: -1px;
+}
+
+/* custom classes*/
+sup.mandatory {
+    font-weight: normal;
+    font-size: 0.6em;
+    color: red;
+}
+
+.pointer {
+    cursor: pointer;
+}
+
+/* Personal preference for BS modal.  The LESS below makes the backdrop white and
+   causes the modal to fade in rather than slide in. */
+//@modal-backdrop-bg: white;
+//.modal {
+//	&.fade {
+//		.transition(opacity .3s);
+//	}
+//	&.fade .modal-dialog {
+//		.translate(0,0);
+//	}
+//}

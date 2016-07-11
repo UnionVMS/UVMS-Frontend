@@ -1,0 +1,55 @@
+<!--
+﻿Developed with the contribution of the European Commission - Directorate General for Maritime Affairs and Fisheries
+© European Union, 2015-2016.
+
+This file is part of the Integrated Fisheries Data Management (IFDM) Suite. The IFDM Suite is free software: you can
+redistribute it and/or modify it under the terms of the GNU General Public License as published by the
+Free Software Foundation, either version 3 of the License, or any later version. The IFDM Suite is distributed in
+the hope that it will be useful, but WITHOUT ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or
+FITNESS FOR A PARTICULAR PURPOSE.  See the GNU General Public License for more details. You should have received a
+copy of the GNU General Public License along with the IFDM Suite. If not, see <http://www.gnu.org/licenses/>.
+-->
+<div class="row">
+    <div search-results-table search="currentSearchResults" class="col-md-12 tickets-table">
+
+        <table class="searchResults colorOdd truncate-text">
+            <thead>
+                <tr>
+                    <th class="checkboxContainer"><input type="checkbox" ng-checked="isAllChecked()" ng-click="checkAll()" ng-disabled="!currentSearchResults.items.length"/></th>
+                    <th sortable-table-header by="currentSearchResults.sortBy" reverse="currentSearchResults.sortReverse" order="'openDate'">{{'alarms.alarms_table_date_openend' | i18n}}</th>
+                    <th sortable-table-header by="currentSearchResults.sortBy" reverse="currentSearchResults.sortReverse" order="'vessel.name'">{{'alarms.alarms_table_object_affected' | i18n}}</th>
+                    <th>{{'alarms.alarms_table_rule' | i18n}}</th>
+                    <th sortable-table-header by="currentSearchResults.sortBy" reverse="currentSearchResults.sortReverse" order="'getResolvedDate()'">{{'alarms.alarms_table_date_resolved' | i18n}}</th>
+                    <th sortable-table-header by="currentSearchResults.sortBy" reverse="currentSearchResults.sortReverse" order="'getResolvedBy()'">{{'alarms.alarms_table_resolved_by' | i18n}}</th>
+                    <th>{{'common.status' | i18n}}</th>
+                    <th class="actions">{{'common.actions' | i18n}}</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr ng-repeat="item in currentSearchResults.items | orderBy:currentSearchResults.sortBy:currentSearchResults.sortReverse">
+                    <td class="checkboxContainer"><input type="checkbox" ng-checked="isChecked(item)" ng-click="checkItem(item)" /></td>
+                    <td ng-attr-title="{{item.openDate | confDateFormat}}">{{item.openDate | confDateFormat}}</td>
+                    <td>
+                        <a ng-show="item.vessel" href="#/assets/{{item.vessel.getGuid()}}" title="{{'common.view_details' | i18n}}">{{item.vessel.name}}</a>
+                        <span ng-show="!item.vessel" class="assetNotFound">{{'common.asset_not_found' | i18n}}</span>
+                    </td>
+                    <td ng-attr-title="{{item.ruleName}}">{{item.ruleName}}<sup ng-if="item.ticketCount > 1">{{item.ticketCount}}</sup></td>
+                    <td ng-attr-title="{{item.getResolvedDate() | confDateFormat}}">{{item.getResolvedDate() | confDateFormat}}</td>
+                    <td ng-attr-title="{{item.getResolvedBy()}}">{{item.getResolvedBy()}}</td>
+                    <td class="status">
+                        <span class="label" ng-class="{CLOSED:'label-success', PENDING:'label-warning', OPEN:'label-danger'}[item.status]" ng-attr-title="{{item.status}}">
+                            {{item.status}}
+                        </span>
+                    </td>
+                    <td>
+                        <button class="btn btn-sm btn-default" ng-show="item.positionGuid || item.ruleName === 'Asset not sending'" ng-click="showOnMap(item)" title="{{'common.show_on_map' | i18n}}">
+                            <span class="fa fa-eye"></span>
+                        </button>
+                        <button show-if-allowed="Rules:manageAlarmsOpenTickets"  ng-if="item.isOpen()" type="button" class="btn btn-sm btn-success" ng-click="closeTicket(item)" title="{{'alarms.notifications_table_close_title' | i18n}}"><span class="fa fa-check"></span></button>
+                    </td>
+                </tr>
+            </tbody>
+        </table>
+
+    </div>
+</div>

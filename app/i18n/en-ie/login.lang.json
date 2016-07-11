@@ -1,0 +1,10 @@
+{
+    "title" : "Union VMS",
+    "subtitle" : "Real-time\n information on ship\n movements and ports.",
+    "username_placeholder" : "Username",
+    "password_placeholder" : "Password",
+    "login_button_text" : "Login",
+    "forgot_password_text" : "Forgot your password?",
+    "logout_message" : "Your are now logged out.",
+    "login_error_no_token_received" : "There was a problem logging you in. No token was received."
+}

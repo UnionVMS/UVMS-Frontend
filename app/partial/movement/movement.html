@@ -1,0 +1,42 @@
+<!--
+﻿Developed with the contribution of the European Commission - Directorate General for Maritime Affairs and Fisheries
+© European Union, 2015-2016.
+
+This file is part of the Integrated Fisheries Data Management (IFDM) Suite. The IFDM Suite is free software: you can
+redistribute it and/or modify it under the terms of the GNU General Public License as published by the
+Free Software Foundation, either version 3 of the License, or any later version. The IFDM Suite is distributed in
+the hope that it will be useful, but WITHOUT ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or
+FITNESS FOR A PARTICULAR PURPOSE.  See the GNU General Public License for more details. You should have received a
+copy of the GNU General Public License along with the IFDM Suite. If not, see <http://www.gnu.org/licenses/>.
+-->
+<div>
+    <div static-include="partial/movement/movementPageHeader/movementPageHeader.html"></div>
+    <div class="container containerWithTopBottomPadding">
+        <div class="card">
+            <div class="row card-header">
+                <div class="col-md-3">
+                    <button type="submit" class="btn btn-primary btn-sm newmanualreport" ng-click="newPosition()" show-if-allowed='Movement:manageManualMovements'>
+                        <i class="fa fa-plus"></i> {{'movement.manual_add_new_manual_report' | i18n }}
+                    </button>
+                </div>
+            </div>
+            <advanced-search searchfunc="searchMovements" vesselGroupCallback="selectGroupCallback()" modeltype="'MOVEMENT'" advancedsearchvisible="true"></advanced-search>
+      		<div class="row editSelectionsContainer">
+
+                <div class="col-md-1 smallerpaddingright">
+                    <dropdown ng-model="editSelection" initialtext="{{'common.actions' | i18n}}" items="editSelectionDropdownItems" menu-style callback="editSelectionCallback"></dropdown>
+                </div>
+                <div class="col-md-4 available-positions-refresh smallerpadding" ng-click="resetSearch()">
+                    <a ng-if="newMovementsCount > 0"><i class="fa fa-refresh"></i> {{ "movement.new_positions_available" | i18n:[newMovementsCount] }}</a>
+                </div>
+                <div class="col-md-6 pull-right textAlignRight printAndExport smallerpaddingleft">
+                    <button class="btn btn-sm btn-default exportButton">
+                        <i class="fa fa-lg fa-download" title="{{'common.export_as_csv' | i18n }}" ng-click="exportAsCSVFile()"></i>
+                    </button>
+                </div>
+            </div>
+    		<div ng-include="'partial/movement/movementList/movementList.html'"></div>
+            <search-results-pagination page='currentSearchResults.page' total='currentSearchResults.totalNumberOfPages' callback='gotoPage'></search-results-pagination>
+        </div>
+    </div>
+</div>

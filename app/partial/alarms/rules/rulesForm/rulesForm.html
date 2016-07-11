@@ -1,0 +1,336 @@
+<!--
+﻿Developed with the contribution of the European Commission - Directorate General for Maritime Affairs and Fisheries
+© European Union, 2015-2016.
+
+This file is part of the Integrated Fisheries Data Management (IFDM) Suite. The IFDM Suite is free software: you can
+redistribute it and/or modify it under the terms of the GNU General Public License as published by the
+Free Software Foundation, either version 3 of the License, or any later version. The IFDM Suite is distributed in
+the hope that it will be useful, but WITHOUT ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or
+FITNESS FOR A PARTICULAR PURPOSE.  See the GNU General Public License for more details. You should have received a
+copy of the GNU General Public License along with the IFDM Suite. If not, see <http://www.gnu.org/licenses/>.
+-->
+<div class="ruleFormContainer" ng-controller="RulesformCtrl">
+
+    <div class="card" loading-indicator="waitingForCreateResponse">
+        <div class="row card-header">
+            <div class="col-md-6">
+                <h5 ng-show="isCreateNewMode()">{{'alarms.rules_add_new_header' | i18n | uppercase}}</h5>
+                <h5 ng-hide="isCreateNewMode()">{{'alarms.rules_view_header' | i18n | uppercase}}</h5>
+            </div>
+            <div class="col-md-6 textAlignRight">
+                <div class="actions">
+                    <div>
+                        <button type="button" class="btn btn-default" ng-click="toggleAddNewRule()">{{'common.cancel' | i18n | uppercase}}</button>
+                    </div>
+                    <div style="margin-left: 10px;">
+                        <button ng-show="isCreateNewMode()" type="submit" class="btn btn-primary" ng-click="createNewRule()" ng-disabled="waitingForCreateResponse">{{'common.save' | i18n | uppercase}}</button>
+                        <button ng-hide="isCreateNewMode() || isRuleArchived()" type="submit" class="btn btn-primary" ng-click="updateRule()">{{'common.update' | i18n | uppercase}}</button>
+                    </div>
+                    <div class="clearfix"></div>
+                </div>
+            </div>
+        </div>
+        <form name="ruleForm" method="post" novalidate>
+            <fieldset ng-disabled="disableForm()">
+                <div class="row nameTypeContainer">
+
+                    <div class="col-md-6">
+                        <div class="row">
+                            <div class="col-md-8">
+                                <div class="form-group" ng-class="{'has-error': ruleForm.name.$invalid && (submitAttempted || ruleForm.name.$dirty)}">
+                                    <label>{{'alarms.rules_form_name_label' | i18n}}</label>
+                                    <input type="text" name="name" class="form-control" ng-model="currentRule.name" required placeholder="{{'alarms.rules_form_name_placeholder' | i18n}}" ng-maxlength="100"/>
+                                    <input-validation-message types="required,maxlength" input="ruleForm.name"></input-validation-message>
+                                </div>
+                            </div>
+                           <div class="col-md-4">
+                                  <div class="form-group" ng-class="{'has-error': ruleForm.availability.$invalid && (submitAttempted || ruleForm.availability.$dirty)}">
+                                    <label>{{'alarms.rules_form_availability_label' | i18n}}</label>
+                                    <dropdown name="availability" ng-model="currentRule.availability" no-placeholder-item items="DROPDOWNS.AVAILABILITY_TYPES" disabled-items="disabledAvailabilityTypes" callback="onAvailabilitySelection" ng-disabled="disableAvailability" required></dropdown>
+                                    <input-validation-message types="required" input="ruleForm.availability"></input-validation-message>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-md-8">
+                                <div class="form-group" ng-class="{'has-error': ruleForm.description.$invalid && (submitAttempted || ruleForm.description.$dirty)}">
+                                    <label>{{'alarms.rules_form_description_label' | i18n}}</label>
+                                    <textarea name="description" class="form-control description" ng-model="currentRule.description" placeholder="{{'alarms.rules_form_description_placeholder' | i18n}}" required ng-maxlength="500"></textarea>
+                                    <input-validation-message types="required,maxlength" input="ruleForm.description"></input-validation-message>
+                                </div>
+                            </div>
+                           <div class="col-md-4">
+                                <div class="form-group" ng-class="{'has-error': ruleForm.active.$invalid && (submitAttempted || ruleForm.active.$dirty)}">
+                                    <label>{{'alarms.rules_form_status_label' | i18n}}</label>
+                                    <dropdown name="active" ng-model="currentRule.active" no-placeholder-item items="DROPDOWNS.ACTIVE_STATUSES" required></dropdown>
+                                    <input-validation-message types="required" input="ruleForm.active"></input-validation-message>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-5 col-md-offset-1">
+                        <label>{{'alarms.rules_time_interval_header' | i18n}}</label>
+                        <div class="timeInterval" ng-repeat="timeInterval in currentRule.timeIntervals">
+                            <div class="row" ng-form="intervalForm">
+                                <div class="col-md-5">
+                                    <div class="form-group" ng-class="{'has-error': intervalForm.start.$invalid && (submitAttempted || intervalForm.start.$dirty)}">
+                                        <datepicker-input name="start" model="timeInterval.start" ng-required="true" time="true" max-date="timeInterval.end" input-field-id="rules-form-search-from-date-picker-{{$index}}"></datepicker-input>
+                                        <input-validation-message types="required,date,maxDate,minDate" input="intervalForm.start"></input-validation-message>
+                                    </div>
+                                </div>
+                                <div class="col-md-1 toText">
+                                    {{'common.date_to' | i18n}}
+                                </div>
+                                <div class="col-md-5">
+                                    <div class="form-group" ng-class="{'has-error': intervalForm.end.$invalid && (submitAttempted || intervalForm.end.$dirty)}">
+                                        <datepicker-input name="end" model="timeInterval.end" ng-required="true" time="true" min-date="timeInterval.start" input-field-id="rules-form-search-to-date-picker-{{$index}}"></datepicker-input>
+                                        <input-validation-message types="required,date,maxDate,minDate" input="intervalForm.end"></input-validation-message>
+                                    </div>
+                                </div>
+                                <div class="col-md-1 remove" ng-hide="disableForm()">
+                                    <i class="fa fa-lg fa-times" title="{{'common.remove' | i18n}}" ng-click="removeTimeIntervalItem(timeInterval)"  ng-required="true"></i>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-md-12">
+                                <span ng-show="currentRule.getNumberOfTimeIntervals() === 0">{{'alarms.rules_form_time_interval_zero' | i18n}}</span>
+                            </div>
+                            <div class="col-md-12" ng-hide="disableForm()">
+                                <div class="addMoreLink" ng-click="addTimeIntervalItem()">
+                                    <span ng-show="currentRule.getNumberOfTimeIntervals() === 0">{{'alarms.rules_form_time_interval_add' | i18n}}</span>
+                                    <span ng-show="currentRule.getNumberOfTimeIntervals() > 0">{{'alarms.rules_form_time_interval_add_another' | i18n}}</span>
+                                </div
+                                >
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+
+                <div class="row">
+                    <div class="col-md-12">
+                        <label>{{'alarms.rules_form_definition_label' | i18n}}</label>
+                    </div>
+
+                    <div class="col-md-12">
+                        <label>{{'alarms.rules_form_definition_if_label' | i18n}}</label>
+                    </div>
+                    <div class="col-md-12 definitionsContainer">
+                        <table class="searchResults colorOdd">
+                            <thead>
+                                <tr>
+                                    <th>{{'alarms.rules_form_definition_operator_label' | i18n}}</th>
+                                    <th>{{'alarms.rules_form_definition_criteria_label' | i18n}}</th>
+                                    <th>{{'alarms.rules_form_definition_subcriteria_label' | i18n}}</th>
+                                    <th>{{'alarms.rules_form_definition_condition_label' | i18n}}</th>
+                                    <th>{{'alarms.rules_form_definition_value_label' | i18n}}</th>
+                                    <th>{{'alarms.rules_form_definition_operator_label' | i18n}}</th>
+                                    <th>{{'alarms.rules_form_definition_logicBoolOperator_label' | i18n}}</th>
+                                    <th></th>
+                                </tr>
+                            </thead>
+                            <tbody>
+
+                                <tr ng-repeat="item in currentRule.definitions" ng-form="definitionForm">
+                                    <td class="startOperator">
+                                        <div class="form-group">
+                                            <dropdown name="startOperator" ng-model="item.startOperator" initialtext="-" initialtext-selectable items="DROPDOWNS.START_OPERATORS"></dropdown>
+                                        </div>
+                                    </td>
+
+                                    <td class="criteria">
+                                        <div class="form-group" ng-class="{'has-error': definitionForm.criteria.$invalid && (submitAttempted || definitionForm.criteria.$dirty)}">
+                                            <dropdown name="criteria" ng-model="item.criteria" no-placeholder-item items="DROPDOWNS.CRITERIAS" callback="onCriteriaSelection" callback-params="item" required></dropdown>
+                                        </div>
+                                    </td>
+                                    <td class="subCriteria">
+                                        <div class="form-group" ng-class="{'has-error': definitionForm.subCriteria.$invalid && (submitAttempted || definitionForm.subCriteria.$dirty)}">
+                                            <dropdown name="subCriteria" ng-model="item.subCriteria" no-placeholder-item items="DROPDOWNS.SUBCRITERIAS[item.criteria]" ng-required="true" callback="onSubCriteriaSelection" callback-params="item"></dropdown>
+                                        </div>
+                                    </td>
+                                    <td class="condition">
+                                        <div class="form-group" ng-class="{'has-error': definitionForm.conditionTypes.$invalid && (submitAttempted || definitionForm.conditionTypes.$dirty)}">
+                                            <dropdown name="conditionTypes" ng-model="item.condition" no-placeholder-item items="DROPDOWNS.CONDITIONS[item.criteria][item.subCriteria]" required></dropdown>
+                                        </div>
+                                    </td>
+                                    <td class="value">
+                                        <div class="form-group" ng-class="{'has-error': definitionForm.value.$invalid && (submitAttempted || definitionForm.value.$dirty)}" ng-if="getRuleDefinitionValueInputType(item) === 'TEXT'">
+                                            <input type="text" class="form-control" ng-model="item.value" name="value" required>
+                                        </div>
+                                        <div class="form-group" ng-class="{'has-error': definitionForm.value.$invalid && (submitAttempted || definitionForm.value.$dirty)}" ng-if="getRuleDefinitionValueInputType(item) === 'SPEED'">
+                                            <div class="unit-input unit-input-speed">
+                                                <input type="number" class="form-control" ng-model="item.value" name="value" min="0" required transform-speed/>
+                                                <div class="unit-box">{{"common.speed_unit_" + speedUnit | i18n}}</div>
+                                            </div>
+                                        </div>
+                                        <div class="form-group" ng-class="{'has-error': definitionForm.value.$invalid && (submitAttempted || definitionForm.value.$dirty)}" ng-if="getRuleDefinitionValueInputType(item) === 'COURSE'">
+                                            <div class="unit-input">
+                                                <input type="number" class="form-control" ng-model="item.value" name="value" min="0" max="360" required>
+                                                <div class="unit-box">{{"movement.manual_position_field_unit_degrees" | i18n}}</div>
+                                            </div>
+                                        </div>
+                                        <div class="form-group" ng-class="{'has-error': definitionForm.value.$invalid && (submitAttempted || definitionForm.value.$dirty)}" ng-if="getRuleDefinitionValueInputType(item) === 'TEXT_WITH_SUGGESTIONS'">
+                                            <div class="autoSuggestionWrapper fullWidthDropdown">
+                                                <input type="text" autocomplete="off" class="form-control" ng-model="item.value" name="value" autocomplete="off"
+                                                typeahead="suggestion for suggestion in getAutoSuggestValues($viewValue, item)"
+                                                typeahead-loading="waitingForAutoSuggest"
+                                                typeahead-on-select="onValueSuggestionSelect($item, $label, item)"
+                                                typeahead-select-on-exact="true"
+                                                typeahead-wait-ms="300"
+                                                required>
+                                                <span class="loadingIcon" ng-show="waitingForAutoSuggest"><i class="fa fa-refresh fa-spin"></i></span>
+                                            </div>
+                                        </div>
+                                        <div class="form-group" ng-class="{'has-error': definitionForm.value.$invalid && (submitAttempted || definitionForm.value.$dirty)}" ng-if="getRuleDefinitionValueInputType(item) === 'DROPDOWN'">
+                                            <dropdown name="value" ng-model="item.value" items="getDropdownValuesForRuleDefinition(item)" no-placeholder-item required class="floatLeft"></dropdown>
+                                        </div>
+                                         <div class="form-group" ng-class="{'has-error': definitionForm.value.$invalid && (submitAttempted || definitionForm.value.$dirty)}" ng-if="getRuleDefinitionValueInputType(item) === 'DROPDOWN_EMPTY'">
+                                            <dropdown name="value" ng-model="item.value" items="getDropdownValuesForRuleDefinition(item)" initialtext="{{'alarms.rules_form_definition_value_dropdown_empty_text' | i18n}}" required class="floatLeft"></dropdown>
+                                        </div>
+                                        <div class="form-group" ng-class="{'has-error': definitionForm.value.$invalid && (submitAttempted || definitionForm.value.$dirty)}" ng-if="getRuleDefinitionValueInputType(item) === 'DATETIME'">
+                                            <datepicker-input model="item.value" time="true" ng-required="true" input-field-id="rule-condition-date-picker-{{$index}}"></datepicker-input>
+                                        </div>
+                                        <div ng-class="{'has-error': definitionForm.value.$invalid && (submitAttempted || definitionForm.value.$dirty)}" ng-if="getRuleDefinitionValueInputType(item) === 'LATITUDE'">
+                                            <lat-input name="value" model="item.value" required ></lat-input>
+                                            <input-validation-message types="pattern, latitude" input="definitionForm.value"></input-validation-message>
+                                        </div>
+                                        <div ng-class="{'has-error': definitionForm.value.$invalid && (submitAttempted || definitionForm.value.$dirty)}" ng-if="getRuleDefinitionValueInputType(item) === 'LONGITUDE'">
+                                            <lng-input name="value" model="item.value" required ></lng-input>
+                                            <input-validation-message types="pattern, longitude" input="definitionForm.value"></input-validation-message>
+                                        </div>
+                                    </td>
+                                    <td class="endOperator">
+                                        <div class="form-group">
+                                            <dropdown name="endOperator" ng-model="item.endOperator" initialtext="-" initialtext-selectable items="DROPDOWNS.END_OPERATORS" class="floatLeft"></dropdown>
+                                        </div>
+                                    </td>
+                                    <td class="logicBoolOperator">
+                                        <div class="form-group" ng-class="{'has-error': definitionForm.logicBoolOperator.$invalid && (submitAttempted || definitionForm.logicBoolOperator.$dirty)}">
+                                            <dropdown name="logicBoolOperator" ng-model="item.logicBoolOperator" no-placeholder-item items="DROPDOWNS.LOGIC_OPERATORS" class="floatLeft"></dropdown ng-required="$index +1 < currentRule.getNumberOfDefinitions()">
+                                        </div>
+                                    </td>
+                                    <td class="remove">
+                                        <i class="fa fa-lg fa-times" ng-click="removeRuleDefinition(item)" ng-show="$index > 0 && !disableForm()" title="{{'alarms.rules_form_definition_remove' | i18n}}"></i>
+                                    </td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                    <div class="col-md-12" ng-hide="disableForm()">
+                        <div class="addMoreLink" ng-click="addDefinitionRow()">{{'alarms.rules_form_definition_add_another' | i18n}}</div>
+                    </div>
+                </div>
+            </fieldset>
+
+            <fieldset ng-disabled="isRuleArchived()">
+                <div class="row">
+
+                    <div class="col-md-12 thenHeader">
+                        <label>{{'alarms.rules_form_definition_then_label' | i18n}}</label>
+                    </div>
+                    <div class="col-md-12 definitionsContainer">
+                        <table class="searchResults colorOdd actionsTable">
+                            <thead>
+                                <tr>
+                                    <th class="action">{{'alarms.rules_form_definition_action_label' | i18n}}</th>
+                                    <th class="value">{{'alarms.rules_form_definition_value_label' | i18n}}</th>
+                                    <th></th>
+                                    <th></th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <td class="action" ng-show="currentRule.isGlobal()">
+                                        <input type="text" class="form-control disabledNotificationAction" disabled value="{{'alarms.rules_definition_then_action_notification_all_users' | i18n}}">
+                                    </td>
+                                    <td class="action" ng-hide="currentRule.isGlobal()">
+                                        <input type="text" class="form-control disabledNotificationAction" disabled value="{{'alarms.rules_definition_then_action_notification' | i18n}}">
+                                    </td>
+                                    <td class="value">
+                                    </td>
+                                    <td class="endOperator">
+                                        <div class="form-group">
+                                            <span ng-bind="'alarms.rules_definition_and' | i18n | uppercase" ng-show="currentRule.getNumberOfActions() > 0"></span>
+                                        </div>
+                                    </td>
+                                    <td class="remove">
+                                    </td>
+                                </tr>
+                                <tr ng-repeat="item in currentRule.actions" ng-form="actionForm">
+                                    <td class="action">
+                                        <div class="form-group" ng-class="{'has-error': actionForm.action.$invalid && (submitAttempted || actionForm.action.$dirty)}">
+                                            <dropdown name="action" ng-model="item.action" no-placeholder-item items="DROPDOWNS.ACTIONS" disabled-items="disabledActions" callback="actionSelected" callback-params="item" required></dropdown>
+                                        </div>
+                                    </td>
+                                    <td class="value">
+                                        <div class="form-group" ng-class="{'has-error': actionForm.value.$invalid && (submitAttempted || actionForm.value.$dirty)}" ng-if="getActionValueInputType(item) ==='TEXT'">
+                                            <input name="value" type="text" class="form-control" ng-model="item.value" name="value" ng-disabled="!actionShouldHaveValue(item.action)" ng-required="actionShouldHaveValue(item.action)">
+                                        </div>
+                                        <div class="form-group" ng-class="{'has-error': actionForm.value.$invalid && (submitAttempted || actionForm.value.$dirty)}" ng-if="getActionValueInputType(item) ==='TEXT_DISABLED'">
+                                            <input name="value" type="text" class="form-control" ng-model="item.value" name="value" ng-disabled="true" ng-required="actionShouldHaveValue(item.action)">
+                                        </div>
+                                       <div class="form-group" ng-class="{'has-error': actionForm.value.$invalid && (submitAttempted || actionForm.value.$dirty)}" ng-if="getActionValueInputType(item) ==='EMAIL'">
+                                            <input name="value" type="email" class="form-control" ng-model="item.value" name="value" ng-disabled="!actionShouldHaveValue(item.action)" ng-required="actionShouldHaveValue(item.action)">
+                                            <input-validation-message types="email" input="actionForm.value"></input-validation-message>
+                                        </div>
+                                        <div class="form-group" ng-class="{'has-error': actionForm.value.$invalid && (submitAttempted || actionForm.value.$dirty)}" ng-if="getActionValueInputType(item) ==='DROPDOWN'">
+                                            <dropdown name="value" ng-model="item.value" items="getDropdownValuesForAction(item)" ng-disabled="!actionShouldHaveValue(item.action)" no-placeholder-item class="floatLeft"></dropdown>
+                                        </div>
+                                         <div class="form-group" ng-class="{'has-error': actionForm.value.$invalid && (submitAttempted || actionForm.value.$dirty)}" ng-if="getActionValueInputType(item) ==='DROPDOWN_EMPTY'">
+                                            <dropdown name="value" ng-model="item.value" items="getDropdownValuesForAction(item)" initialtext="{{'alarms.rules_form_definition_value_dropdown_empty_text' | i18n}}" ng-disabled="!actionShouldHaveValue(item.action)" class="floatLeft"></dropdown>
+                                        </div>
+                                    </td>
+                                    <td class="endOperator">
+                                        <div class="form-group">
+                                            <span ng-bind="'alarms.rules_definition_and' | i18n | uppercase" ng-show="$index < currentRule.getNumberOfActions()-1"></span>
+                                        </div>
+                                    </td>
+                                    <td class="remove">
+                                        <i class="fa fa-lg fa-times" ng-click="removeRuleAction(item)" ng-hide="isRuleArchived()" title="{{'alarms.rules_form_definition_remove' | i18n}}"></i>
+                                    </td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                    <div class="col-md-12">
+                        <div class="addMoreLink" ng-click="addActionRow()" ng-show="getFirstActionThatIsEnabled() && !isRuleArchived()">{{'alarms.rules_form_definition_add' | i18n}}</div>
+                    </div>
+                </div>
+
+                <div class="row ruleTestContainer">
+                    <div class="col-md-8 ruleTestMessage" ng-class="{'outdated' : ruleTest.outdated}">
+                        <span ng-show="ruleTest.message" ng-class="{'success' : ruleTest.success, 'error' : !ruleTest.success}">{{ruleTest.message}}</span>
+                        <div class="testProblemsContainer">
+                            <ul>
+                            <li ng-repeat="problem in ruleTest.problems">
+                                <i class="fa fa-times"></i> {{'alarms.rules_test_error_' +problem | i18n}}
+                            </li>
+                            </ul>
+                        </div>
+                    </div>
+                    <div class="col-md-4 textAlignRight" >
+                        <span class="link" ng-click="testRule()" ng-hide="disableForm()">{{'alarms.rules_form_test_rule' | i18n}}</span>
+                    </div>
+                </div>
+
+                <div class="row ruleAsTextContainer">
+                    <div class="col-md-12">
+                        <div class="ruleAsText" ng-bind="ruleAsText"></div>
+                    </div>
+                </div>
+
+                <div class="row toolbar">
+                    <div class="col-md-6">
+                        <a class="btn btn-link" ng-show="isCreateNewMode()" ng-click="clearForm()">{{'common.clear_form' | i18n}}</a>
+                    </div>
+                    <div class="col-md-6 text-right toolbar-right">
+                        <button type="button" class="btn btn-default" ng-click="toggleAddNewRule()">{{'common.cancel' | i18n | uppercase}}</button>
+                        <button ng-show="isCreateNewMode()" type="submit" class="btn btn-primary" ng-click="createNewRule()" ng-disabled="waitingForCreateResponse">{{'common.save' | i18n | uppercase}}</button>
+                        <button ng-hide="isCreateNewMode() || isRuleArchived()" type="submit" class="btn btn-primary" ng-click="updateRule()">{{'common.update' | i18n | uppercase}}</button>
+                    </div>
+                </div>
+            </fieldset>
+        </form>
+    </div>
+</div>

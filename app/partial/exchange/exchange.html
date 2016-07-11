@@ -1,0 +1,128 @@
+<!--
+﻿Developed with the contribution of the European Commission - Directorate General for Maritime Affairs and Fisheries
+© European Union, 2015-2016.
+
+This file is part of the Integrated Fisheries Data Management (IFDM) Suite. The IFDM Suite is free software: you can
+redistribute it and/or modify it under the terms of the GNU General Public License as published by the
+Free Software Foundation, either version 3 of the License, or any later version. The IFDM Suite is distributed in
+the hope that it will be useful, but WITHOUT ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or
+FITNESS FOR A PARTICULAR PURPOSE.  See the GNU General Public License for more details. You should have received a
+copy of the GNU General Public License along with the IFDM Suite. If not, see <http://www.gnu.org/licenses/>.
+-->
+<div class="container containerWithTopBottomPadding exchangeContainer">
+
+	<div class="row exchange-grid-header">
+		<!-- Sending queue, transmission status, ... -->
+		<div class="col-md-5 smallerpaddingright">
+			<div static-include="partial/exchange/tables/exchangeTransmissionStatus.html"></div>
+		</div>
+        <div class="col-md-7 smallerpaddingleft">
+            <div static-include="partial/exchange/tables/exchangeSendingQueue.html"></div>
+        </div>
+        <div class="clearfix"></div>
+	</div>
+
+    <div class="card exchange-log-wrapper">
+
+		<!-- Exchange log table advanced search -->
+		<div class="row">
+            <div class="col-md-12">
+                <advanced-search modeltype="'EXCHANGE'" searchfunc="searchExchange" advancedsearchvisible="true"></advanced-search>
+            </div>
+		</div>
+
+        <div class="row">
+            <div class="col-md-4 available-positions-refresh">
+                <a ng-click="resetSearch()" ng-if="newExchangeLogCount > 0"><i class="fa fa-refresh"></i> {{ "movement.new_positions_available" | i18n:[newExchangeLogCount] }}</a>
+            </div>
+        </div>
+
+		<!-- Toggle: ALL, INCOMING, OUTGOING -->
+        <div class="row incoming-outgoing-toggle">
+            <div class="col-md-1 editSelection">
+                <dropdown ng-model="editSelection" initialtext="{{'common.actions' | i18n}}" items="editSelectionDropdownItems" menu-style callback="editSelectionCallback"></dropdown>
+            </div>
+
+            <div class="col-md-10">
+                <div class="">
+                    <div class="btn-group">
+                        <label class="btn btn-default" ng-model="exchangeLogsSearchResults.incomingOutgoing" btn-radio="'all'">
+                            {{'exchange.title_all' | i18n}}
+                        </label>
+                        <label class="btn btn-default" ng-model="exchangeLogsSearchResults.incomingOutgoing" btn-radio="'incoming'">
+                            <span class="fa fa-arrow-down incoming"></span>
+                            {{'exchange.title_incoming' | i18n}}
+                        </label>
+                        <label class="btn btn-default" ng-model="exchangeLogsSearchResults.incomingOutgoing" btn-radio="'outgoing'">
+                            <span class="fa fa-arrow-up outgoing"></span>
+                            {{'exchange.title_outgoing' | i18n}}
+                        </label>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-1 textAlignRight printAndExport">
+                <button class="btn btn-sm btn-default exportButton">
+                    <i class="fa fa-lg fa-download" title="{{'common.export_as_csv' | i18n }}" ng-click="exportLogsAsCSVFile()"></i>
+                </button>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-md-12">
+                <div search-results-table search="exchangeLogsSearchResults">
+    				<!-- Exchange log table -->
+    				<table class="searchResults exchangeLog colorOdd truncate-text">
+    					<thead>
+                            <th class="checkboxContainer"><input type="checkbox" ng-checked="isAllChecked()" ng-click="checkAll()" ng-disabled="!exchangeLogsSearchResults.items.length"/></th>
+                            <th></th>
+    						<th></th>
+    						<th	sortable-table-header by="exchangeLogsSearchResults.sortBy" reverse="exchangeLogsSearchResults.sortReverse" order="'dateReceived'">{{'exchange.table_header_date_received' | i18n}}</th>
+                            <th sortable-table-header by="exchangeLogsSearchResults.sortBy" reverse="exchangeLogsSearchResults.sortReverse" order="'source'">{{'exchange.table_header_source' | i18n}}</th>
+                            <th sortable-table-header by="exchangeLogsSearchResults.sortBy" reverse="exchangeLogsSearchResults.sortReverse" order="'logData.type'">{{'exchange.table_header_type' | i18n}}</th>
+    						<th sortable-table-header by="exchangeLogsSearchResults.sortBy" reverse="exchangeLogsSearchResults.sortReverse" order="'senderRecipient'">{{'exchange.table_header_sender_reciever' | i18n}}</th>
+    						<th sortable-table-header by="exchangeLogsSearchResults.sortBy" reverse="exchangeLogsSearchResults.sortReverse" order="'forwardRule'">{{'exchange.table_header_fwd_rule' | i18n}}</th>
+    						<th sortable-table-header by="exchangeLogsSearchResults.sortBy" reverse="exchangeLogsSearchResults.sortReverse" order="'recipient'">{{'exchange.table_header_recipient' | i18n}}</th>
+    						<th sortable-table-header by="exchangeLogsSearchResults.sortBy" reverse="exchangeLogsSearchResults.sortReverse" order="'dateFwd'">{{'exchange.table_header_date_fwd' | i18n}}</th>
+    						<th sortable-table-header by="exchangeLogsSearchResults.sortBy" reverse="exchangeLogsSearchResults.sortReverse" order="'status'">{{'exchange.table_header_status' | i18n}}</th>
+    					</thead>
+    					<tbody>
+    						<tr ng-repeat="message in exchangeLogsSearchResults.items | filter:filterIncomingOutgoing | orderBy:exchangeLogsSearchResults.sortBy:exchangeLogsSearchResults.sortReverse">
+                                <td class="checkboxContainer">
+                                    <input type="checkbox" ng-checked="isChecked(message)" ng-click="check(message)"/>
+                                </td>
+    							<td class="incoming-outgoing" ng-switch="message.incoming">
+    								<span ng-switch-when="true" class="fa fa-arrow-down incoming" title="{{'exchange.title_incoming' | i18n}}"></span>
+    								<span ng-switch-when="false" class="fa fa-arrow-up outgoing" title="{{'exchange.title_outgoing' | i18n}}"></span>
+    							</td>
+                                <td>
+                                    <!--<a ng-show="exchangePath(message)" href="exchangePath(message)" title="{{'exchange.title_details' | i18n}}">
+                                        <span class="fa fa-search-plus details"></span>
+                                    </a>-->
+                                    <a ng-show="false" ng-click="showMessageDetails(message)" title="{{'exchange.title_details' | i18n}}">
+                                        <span class="fa fa-search-plus details"></span>
+                                    </a>
+                                </td>
+    							<td ng-class="{'notAvailable' : !message.dateReceived}" ng-attr-title="{{message.dateReceived | confDateFormat | dataNotAvailable}}">{{message.dateReceived | confDateFormat | dataNotAvailable}}</td>
+                                <td ng-class="{'notAvailable' : !message.source}" ng-attr-title="{{message.source | transponderName | dataNotAvailable}}">{{message.source | transponderName | dataNotAvailable}}</td>
+                                <td ng-class="{'notAvailable' : !message.type}" ng-attr-title="{{message.type | dataNotAvailable | removeUnderscore}}">{{message.type | dataNotAvailable | removeUnderscore}}</td>
+    							<td ng-class="{'notAvailable' : !message.senderRecipient}" ng-attr-title="{{message.senderRecipient | dataNotAvailable}}">{{message.senderRecipient | dataNotAvailable}}</td>
+    							<td ng-class="{'notAvailable' : !message.forwardRule}" ng-attr-title="{{message.forwardRule | dataNotAvailable}}">{{message.forwardRule | dataNotAvailable}}</td>
+    							<td ng-class="{'notAvailable' : !message.recipient}" ng-attr-title="{{message.recipient | dataNotAvailable}}">{{message.recipient | dataNotAvailable}}</td>
+    							<td ng-class="{'notAvailable' : !message.dateFwd}" ng-attr-title="{{message.dateFwd | confDateFormat | dataNotAvailable}}">{{message.dateFwd | confDateFormat | dataNotAvailable}}</td>
+    							<td class="status">
+                                    <span class="label" ng-class="getStatusLabelClass(message.status)">
+                                        {{getStatusLabel(message.status) | uppercase}}
+                                    </span>
+    							</td>
+    						</tr>
+    					</tbody>
+    				</table>
+
+                </div>
+
+            </div>
+        </div>
+        <search-results-pagination page='exchangeLogsSearchResults.page' total='exchangeLogsSearchResults.totalNumberOfPages' callback='gotoPage'></search-results-pagination >
+    </div>
+
+
+</div>

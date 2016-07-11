@@ -1,0 +1,44 @@
+<!--
+﻿Developed with the contribution of the European Commission - Directorate General for Maritime Affairs and Fisheries
+© European Union, 2015-2016.
+
+This file is part of the Integrated Fisheries Data Management (IFDM) Suite. The IFDM Suite is free software: you can
+redistribute it and/or modify it under the terms of the GNU General Public License as published by the
+Free Software Foundation, either version 3 of the License, or any later version. The IFDM Suite is distributed in
+the hope that it will be useful, but WITHOUT ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or
+FITNESS FOR A PARTICULAR PURPOSE.  See the GNU General Public License for more details. You should have received a
+copy of the GNU General Public License along with the IFDM Suite. If not, see <http://www.gnu.org/licenses/>.
+-->
+<div class="mapProjSettings" ng-controller="MapprojectionsettingsCtrl">
+	<div class="row alertContainer" ng-show="hasError">
+		<div class="alert alert-danger alert-container" role="alert">
+			<span class="fa fa-exclamation-circle" aria-hidden="true"></span>
+			<span class="alert-message">
+				<span>{{'spatial.map_configuration_error_loading_configs' | i18n }}</span>          
+			</span>
+	    </div>
+	</div>
+	<ng-form name="mapProjSettingsForm" novalidate>
+		<div class="row">
+		    <div class="form-group col-md-4 noPadding" ng-class="{'has-error': mapProjSettingsForm.mapProjection.$error.required && (mapProjSettingsForm.mapProjection.$dirty || submitedWithErrors)}">
+		        <label for="mapProjection">{{'spatial.map_configuration_map_projection' | i18n}}</label>
+		        <combobox ng-model="configModel.mapSettings.mapProjectionId" items="projections.items" initialtext="{{'spatial.map_configuration_map_projection' | i18n}}" ng-required="!isMapConfigurationModal" name="mapProjection"></combobox>
+		    </div>
+		    <div class="form-group col-md-4 noPadding" ng-class="{'has-error': mapProjSettingsForm.displayProjection.$error.required && (mapProjSettingsForm.displayProjection.$dirty || submitedWithErrors)}">
+		        <label for="displayProjection">{{'spatial.map_configuration_display_projection' | i18n}}</label>
+		        <combobox ng-model="configModel.mapSettings.displayProjectionId" items="projections.items" initialtext="{{'spatial.map_configuration_display_projection' | i18n}}" ng-required="!isMapConfigurationModal" name="displayProjection" ng-change="configModel.mapSettings.coordinatesFormat = undefined"></combobox>
+		    </div>
+		    <!-- <div class="form-group col-md-4 noPadding" ng-show="projectionSelected" ng-class="{'has-error': mapProjSettingsForm.coordinatesFormat.$error.required && mapProjSettingsForm.coordinatesFormat.$dirty}"> -->
+		    <div class="form-group col-md-4 noPadding" ng-show="projectionSelected" ng-class="{'has-error': mapProjSettingsForm.coordinatesFormat.$error.required && (mapProjSettingsForm.coordinatesFormat.$dirty || submitedWithErrors)}">
+		        <label for="coordinatesFormat">{{'spatial.map_configuration_coordinates_format' | i18n}}</label>
+		        <combobox id="coordinatesFormat" ng-model="configModel.mapSettings.coordinatesFormat" items="projections.coordinatesFormatItems" initialtext="{{'spatial.map_configuration_coordinates_format' | i18n}}" ng-required="configModel.mapSettings.displayProjectionId" name="coordinatesFormat"></combobox>
+		    </div>
+		</div>
+		<div class="row">
+		    <div class="form-group col-md-4 noPadding" ng-class="{'has-error': mapProjSettingsForm.scaleBarUnits.$error.required && (mapProjSettingsForm.scaleBarUnits.$dirty || submitedWithErrors)}">
+		        <label for="scaleBarUnits">{{'spatial.map_configuration_scale_bar_units' | i18n}}</label>
+		        <combobox ng-model="configModel.mapSettings.scaleBarUnits" items="scaleBarUnitsItems" initialtext="{{'spatial.map_configuration_scale_bar_units' | i18n}}" ng-required="!isMapConfigurationModal" name="scaleBarUnits"></combobox>
+		    </div>
+		</div>
+	</ng-form>
+</div>

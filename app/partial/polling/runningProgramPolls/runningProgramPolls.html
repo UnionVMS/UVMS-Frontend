@@ -1,0 +1,72 @@
+<!--
+﻿Developed with the contribution of the European Commission - Directorate General for Maritime Affairs and Fisheries
+© European Union, 2015-2016.
+
+This file is part of the Integrated Fisheries Data Management (IFDM) Suite. The IFDM Suite is free software: you can
+redistribute it and/or modify it under the terms of the GNU General Public License as published by the
+Free Software Foundation, either version 3 of the License, or any later version. The IFDM Suite is distributed in
+the hope that it will be useful, but WITHOUT ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or
+FITNESS FOR A PARTICULAR PURPOSE.  See the GNU General Public License for more details. You should have received a
+copy of the GNU General Public License along with the IFDM Suite. If not, see <http://www.gnu.org/licenses/>.
+-->
+<!-- step 3 -->
+<div class="card with-small-card-header runningProgramPollsContainer" ng-controller="RunningProgramPollsCtrl">
+    <div class="row card-header">
+        <div class="col-md-12">
+            <h5>{{'polling.running_program_polls_header' | i18n}}</h5>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-md-12">
+            <div class="tableContainer" search-results-table search="currentSearchResults">
+                <table class="searchResults truncate-text" ng-if="currentSearchResults.items.length > 0">
+                    <thead>
+                        <tr>
+                            <th sortable-table-header by="currentSearchResults.sortBy" reverse="currentSearchResults.sortReverse" order="'vessel.name'">{{'polling.running_program_polls_table_header_name' | i18n}}</th>
+
+                            <th sortable-table-header by="currentSearchResults.sortBy" reverse="currentSearchResults.sortReverse" order="'attributes.TRANSPONDER | transponderName'">{{'polling.running_program_polls_table_header_transponder' | i18n}}</th>
+
+                            <th sortable-table-header by="currentSearchResults.sortBy" reverse="currentSearchResults.sortReverse" order="'attributes.START_DATE'">{{'polling.running_program_polls_table_header_start_date' | i18n}}</th>
+
+                            <th sortable-table-header by="currentSearchResults.sortBy" reverse="currentSearchResults.sortReverse" order="'attributes.END_DATE'">{{'polling.running_program_polls_table_header_end_date' | i18n}}</th>
+                            <th>{{'polling.running_program_polls_table_header_interval' | i18n}}</th>
+
+                            <th>{{'polling.running_program_polls_table_header_user' | i18n}}</th>
+
+                            <th class="actionIcon">{{'polling.running_program_polls_table_header_start' | i18n}}</th>
+                            <th class="actionIcon">{{'polling.running_program_polls_table_header_stop' | i18n}}</th>
+                            <th ng-if="accessToManagePolls" class="actionIcon">{{'polling.running_program_polls_table_header_delete' | i18n}}</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr ng-repeat="item in currentSearchResults.items | orderBy:currentSearchResults.sortBy:currentSearchResults.sortReverse" class="runningPollItem">
+                            <td>
+                                <a href="#/assets/{{item.vessel.getGuid()}}" title="{{'common.view_details' | i18n}}">{{item.vessel.name}}</a>
+                            </td>
+                            <td ng-attr-title="{{item.attributes.TRANSPONDER | transponderName}}">{{item.attributes.TRANSPONDER | transponderName}}</td>
+                            <td ng-attr-title="{{item.startDate | confDateFormat}}">{{item.startDate | confDateFormat}}</td>
+                            <td ng-attr-title="{{item.endDate | confDateFormat}}">{{item.endDate | confDateFormat}}</td>
+                            <td ng-attr-title="{{item.attributes.FREQUENCY | secondsToTimeString}}">{{item.attributes.FREQUENCY | secondsToTimeString}}</td>
+                            <td ng-attr-title="{{item.attributes.USER}}">{{item.attributes.USER}}</td>
+                            <td class="actionIcon" ng-class="{inactive:!possibleToStart(item)}">
+                                <div class="start" ng-click="startProgramPoll(item)" ng-class="{noAccess:!accessToManagePolls}" title="{{'polling.running_program_polls_start_title' | i18n}}">
+                                    <i class="fa fa-play"></i>
+                                </div>
+                            </td>
+                            <td class="actionIcon" ng-class="{inactive:!possibleToStop(item)}">
+                                <div class="stop" ng-click="stopProgramPoll(item)" ng-class="{noAccess:!accessToManagePolls}" title="{{'polling.running_program_polls_stop_title' | i18n}}">
+                                    <i class="fa fa-stop"></i>
+                                </td>
+                            </td>
+                            <td ng-if="accessToManagePolls" class="actionIcon">
+                                <div class="delete" ng-click="deleteProgramPoll(item);" title="{{'polling.running_program_polls_remove_title' | i18n}}">
+                                    <i class="fa fa-times"></i>
+                                </div>
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+</div>

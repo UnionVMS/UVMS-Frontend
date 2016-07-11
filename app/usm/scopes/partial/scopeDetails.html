@@ -1,0 +1,141 @@
+<!--
+﻿Developed with the contribution of the European Commission - Directorate General for Maritime Affairs and Fisheries
+© European Union, 2015-2016.
+
+This file is part of the Integrated Fisheries Data Management (IFDM) Suite. The IFDM Suite is free software: you can
+redistribute it and/or modify it under the terms of the GNU General Public License as published by the
+Free Software Foundation, either version 3 of the License, or any later version. The IFDM Suite is distributed in
+the hope that it will be useful, but WITHOUT ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or
+FITNESS FOR A PARTICULAR PURPOSE.  See the GNU General Public License for more details. You should have received a
+copy of the GNU General Public License along with the IFDM Suite. If not, see <http://www.gnu.org/licenses/>.
+-->
+<div class="container" ng-controller="scopeDetailsCtrl">
+    <!-- INFO PANEL-->
+    <div class="panel panel-default">
+        <div class="panel-body">
+            <div class="row">
+                <div class="col-md-11">
+                    <div class="col-md-12">
+                        <div class="col-md-1">
+                            <label>{{'scopes.scope' | translate}}</label>
+                        </div>
+                        <div class="col-md-2" style="padding-left:40px;">
+                            <span ng-bind="scopeDetails.name"></span>
+                        </div>
+                        <div class="col-md-1">
+                            <label>{{'common.description' | translate}}</label>
+                        </div>
+                        <div class="col-md-4" style="padding-left: 30px;">
+                            <span ng-bind="scopeDetails.description"></span>
+                        </div>
+                        <div class="col-md-1 col-md-offset-1">
+                            <label>{{'common.status' | translate}}</label>
+                        </div>
+                        <div class="col-md-2">
+                            <span ng-class="status.class" ng-bind='"common.status_" + scopeDetails.status | translate' ></span>
+                        </div>
+                    </div>
+                    <div class="col-md-12">
+                        <div class="col-md-1 text-nowrap">
+                            <label>{{'common.activeFrom' | translate}}</label>
+                        </div>
+                        <div class="col-md-2" style="padding-left:40px;">
+                            <span ng-bind='scopeDetails.activeFrom | date:"yyyy-MM-dd"'></span>
+                        </div>
+                        <div class="col-md-1 text-nowrap">
+                            <label>{{'common.activeTo' | translate}}</label>
+                        </div>
+                        <div class="col-md-2" style="padding-left: 30px;">
+                            <span ng-bind='scopeDetails.activeTo | date:"yyyy-MM-dd"'></span>
+                        </div>
+                        <div class="col-md-1 text-nowrap">
+                            <label>{{'scopes.dataFrom' | translate}}</label>
+                        </div>
+                        <div class="col-md-2" style="padding-left:40px;">
+                            <span ng-bind='scopeDetails.dataFrom | date:"yyyy-MM-dd"'></span>
+                        </div>
+                        <div class="col-md-1 text-nowrap">
+                            <label>{{'scopes.dataTo' | translate}}</label>
+                        </div>
+                        <div class="col-md-2">
+                            <span ng-bind='scopeDetails.dataTo | date:"yyyy-MM-dd"'></span>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-1">
+                    <div class="text-right">
+                        <span ng-controller="manageScopeCtrl" ng-if="checkAccess('manageScopes')">
+                            <button type="button" class="btn btn-sm btn-primary" ng-click='manageScope("edit", scopeDetails)'>
+                                <span><i class="fa fa-pencil"></i></span>
+                            </button>
+                        </span>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+    </div>
+    <!-- INFO PANEL END-->
+
+    <tabset class="scopeDetailsTabs">
+        <!-- DATASETS TABLE -->
+        <tab heading="Datasets">
+            <div ng-controller="manageDatasetsCtrl">
+                <table st-table="displayedDatasets" st-safe-src="scopeDetails.dataSets" class="table table-striped fixed">
+					<colgroup>
+						<col style="width: 300px;">
+						<col style="width: 520px;">
+						<col style="width: 160px;">
+						<col style="width: 160px;">
+					</colgroup>
+                    <thead>
+                    <tr>
+                        <th colspan="4" class="text-right actionTh">
+                        	<span ng-controller="manageScopeCtrl" ng-if="checkAccess('manageScopes')">
+                            	<button class="btn btn-primary btn-sm" ng-click="manageDatasets(scopeDetails)">
+                                	<span class="fa fa-pencil"></span>
+                            	</button>
+                            </span>
+                        </th>
+                    </tr>
+                    <tr>
+                        <th st-sort="name" st-sort-default="true" ng-click="changeSorting('name')" st-skip-natural="true" st-class-ascent="dummyClass" st-class-descent="dummyClass">
+                            {{'common.name' | translate}}&nbsp;<i class="fa" ng-class="sortIcon('name')"></i>
+                        </th>
+                        <th st-sort="description" ng-click="changeSorting('description')" st-skip-natural="true" st-class-ascent="dummyClass" st-class-descent="dummyClass">
+                            {{'common.description' | translate}}&nbsp;<i class="fa" ng-class="sortIcon('description')"></i>
+                        </th>
+                        <th st-sort="category" ng-click="changeSorting('category')" st-skip-natural="true" st-class-ascent="dummyClass" st-class-descent="dummyClass">
+                            {{'scopes.category' | translate}}&nbsp;<i class="fa" ng-class="sortIcon('category')"></i>
+                        </th>
+                        <th class="actionTh" st-sort="application" ng-click="changeSorting('application')" st-skip-natural="true" st-class-ascent="dummyClass" st-class-descent="dummyClass">
+                            {{'common.application' | translate}}&nbsp;<i class="fa" ng-class="sortIcon('application')"></i>
+                        </th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    <tr ng-repeat="dataset in displayedDatasets">
+                        <td ng-bind="dataset.name"></td>
+                        <td ng-bind="dataset.description"></td>
+                        <td ng-bind="dataset.category"></td>
+                        <td class="actionTd" ng-bind="dataset.application"></td>
+                    </tr>
+                    </tbody>
+                    <tbody ng-if="emptyResult">
+                    <tr>
+                        <td colspan="4" class="text-center">{{emptyResultMessage}}</td>
+                    </tr>
+                    </tbody>
+                    <tfoot>
+                    <tr>
+                        <td colspan="5" class="text-right">
+                            <div class="st-pagination" st-pagination="" st-items-by-page="itemsByPage" st-displayed-pages="7"></div>
+                        </td>
+                    </tr>
+                    </tfoot>
+                </table>
+            </div>
+            <!-- DATASETS TABLE END-->
+        </tab>
+    </tabset>
+</div>

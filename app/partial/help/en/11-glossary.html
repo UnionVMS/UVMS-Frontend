@@ -1,0 +1,59 @@
+<!--
+﻿Developed with the contribution of the European Commission - Directorate General for Maritime Affairs and Fisheries
+© European Union, 2015-2016.
+
+This file is part of the Integrated Fisheries Data Management (IFDM) Suite. The IFDM Suite is free software: you can
+redistribute it and/or modify it under the terms of the GNU General Public License as published by the
+Free Software Foundation, either version 3 of the License, or any later version. The IFDM Suite is distributed in
+the hope that it will be useful, but WITHOUT ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or
+FITNESS FOR A PARTICULAR PURPOSE.  See the GNU General Public License for more details. You should have received a
+copy of the GNU General Public License along with the IFDM Suite. If not, see <http://www.gnu.org/licenses/>.
+-->
+<div>
+    <h2 help-section="glossary" index="11">Section 11 Glossary</h2>
+
+    <dl>
+        <dt>Application</dt>
+        <dd>
+            <p>it is a computer program designed to perform a group of coordinated functions, tasks, or activities. An application can be linked to USM. If so, it means that:</p>
+            <ul>
+                <li>The application delegates the user authentication task to USM;</li>
+                <li>The application can request to get or to verify the access rights of a user; </li>
+                <li>The application exposes through a USM service a set of information used by USM to create user contexts;</li>
+            </ul>
+        </dd>
+        <dt>Communication channel</dt>
+        <dd>A medium through which a message is transmitted to its intended audience. A communication channel in USM is attached to an endpoint and it specifies the type of messages that could be transmitted through.</dd>
+        <dt>Context</dt>
+        <dd>a context is always for a user but a user may have multiple ones. It is a container of three elements defining his framework for one or multiple applications. In basic terms, the container defines the WWH for each user: 'What can he do', 'What can he see', 'How he wants to see data'. The three elements are: 
+            <ul>
+                <li>Role: list of permissions to limit the actions of the user (The first W). It is the only mandatory element of a context;</li>
+                <li>Scope: list of datasets to limit the access to data for the user (the second W); </li>
+                <li>User preferences: list of options configured by the user (the H);</li>
+            </ul>
+        </dd>
+        <dt>Dataset</dt>
+        <dd> it is a business information of an application that can be used to limit the access to data for a user, so a kind of filter. An application linked to USM may register in USM the list of his datasets that are used to create the context of a user;</dd>
+        <dt>Endpoint</dt>
+        <dd> it is a technical node in a network used for message exchanges. Technical information is stored in USM at the level of an organisation. </dd>
+        <dt>Feature</dt>
+        <dd>it is a function of an application. An application linked to USM must register in USM the list of his features that are used to give permissions to a user;</dd>
+        <dt>IDM system</dt>
+        <dd>Identity Management system used mainly to manage user data and credentials.</dd>
+        <dt>LDAP</dt>
+        <dd>Lightweight Directory Access Protocol system used to share corporate data like user information across an organisation or over internet.</dd>
+        <dt>Module</dt>
+        <dd>
+            <p>it is a synonym of "application" but this notion implies usually that a module is linked to a parent application.</p>
+            <p>Option: it is a parameter of an application that can be used by users to customize the layout (color of lines …) or the behaviour (refresh rate of a report …) of the application. An option has always a default value. When included in a user context, the option (with a specific value chosen by the user) becomes a user preference. An application linked to USM may register in USM the list of his options that are used to configure the context of a user;</p>
+        </dd>
+        <dt>Permission</dt>
+        <dd>it is a feature in a role affected to a user;</dd>
+        <dt>Profile</dt>
+        <dd>it is the set of all contexts attached to a user;</dd>
+        <dt>Role</dt>
+        <dd>it is a set of permissions on one or multiple applications;</dd>
+        <dt>Scope</dt>
+        <dd>it is a set of datasets from one or multiple applications. The scope is defined to limit the access to data when used in a user context;</dd>
+    </dl>
+</div>

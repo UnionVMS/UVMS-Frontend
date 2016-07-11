@@ -1,0 +1,71 @@
+<!--
+﻿Developed with the contribution of the European Commission - Directorate General for Maritime Affairs and Fisheries
+© European Union, 2015-2016.
+
+This file is part of the Integrated Fisheries Data Management (IFDM) Suite. The IFDM Suite is free software: you can
+redistribute it and/or modify it under the terms of the GNU General Public License as published by the
+Free Software Foundation, either version 3 of the License, or any later version. The IFDM Suite is distributed in
+the hope that it will be useful, but WITHOUT ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or
+FITNESS FOR A PARTICULAR PURPOSE.  See the GNU General Public License for more details. You should have received a
+copy of the GNU General Public License along with the IFDM Suite. If not, see <http://www.gnu.org/licenses/>.
+-->
+<div class="areaDetailsModal">
+    <div class="modal-header">
+        <div class="pointer pull-right" ng-click="cancel()">
+             <i class="fa fa-times closeicon"></i>
+        </div>
+        <h4 class="modal-title">{{'areas.area_details_title' | i18n}}</h4>
+    </div>
+    <div class="modal-body">
+    	<div class="form-horizontal">
+    		<div class="form-group">
+    			<label class="col-md-3">{{'areas.user_area_name' | i18n}}</label>
+    			<div class="col-md-9">
+    				<div>{{area.name}}</div>
+    			</div>
+    		</div>
+    		<div class="form-group">
+    			<label class="col-md-3">{{'areas.user_area_description' | i18n}}</label>
+    			<div class="col-md-9">
+    				<div>{{area.areaDesc}}</div>
+    			</div>
+    		</div>
+    		<div class="form-group">
+    			<div class="col-md-12">
+    				<div class="form-inline col-md-6" ng-show="area.startDate">
+    					<div class="form-group">
+	    					<label>{{'areas.user_area_valid_from' | i18n}}</label>
+	    					<div class="form-control">{{area.startDate | stDateUtc}}</div>
+    					</div>
+    				</div>
+    				<div class="form-inline col-md-6" ng-show="area.endDate">
+    					<div class="form-group">
+    						<label>{{'areas.user_area_valid_to' | i18n}}</label>
+    						<div class="form-control">{{area.endDate | stDateUtc}}</div>
+    					</div>
+    				</div>
+    			</div>
+    		</div>
+    		<div class="form-group">
+    			<label class="col-md-3">{{'areas.user_area_type' | i18n}}</label>
+    			<div class="col-md-9">
+    				<div>{{area.subType}}</div>
+    			</div>
+    		</div>
+    		<div class="form-group scopes">
+    			<label class="col-md-3">{{'areas.user_area_scope_selection' | i18n }}</label>
+    			<div class="col-md-9">
+    				<ul>
+    					<li ng-repeat="item in area.scopeSelection">{{item}}</li>
+    				</ul>
+    			</div>
+    		</div>
+    		<div class="form-group">
+    			<label class="col-md-3">{{'areas.user_area_dataset_name' | i18n }}</label>
+    			<div class="col-md-9">
+    				{{area.datasetName}}
+    			</div>
+    		</div>
+    	</div>
+    </div>
+</div>

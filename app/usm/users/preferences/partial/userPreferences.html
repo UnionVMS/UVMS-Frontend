@@ -1,0 +1,98 @@
+<!--
+﻿Developed with the contribution of the European Commission - Directorate General for Maritime Affairs and Fisheries
+© European Union, 2015-2016.
+
+This file is part of the Integrated Fisheries Data Management (IFDM) Suite. The IFDM Suite is free software: you can
+redistribute it and/or modify it under the terms of the GNU General Public License as published by the
+Free Software Foundation, either version 3 of the License, or any later version. The IFDM Suite is distributed in
+the hope that it will be useful, but WITHOUT ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or
+FITNESS FOR A PARTICULAR PURPOSE.  See the GNU General Public License for more details. You should have received a
+copy of the GNU General Public License along with the IFDM Suite. If not, see <http://www.gnu.org/licenses/>.
+-->
+<div class="panel panel-default" ng-controller="userPreferencesCtrl">
+
+    <!-- SEARCH PANEL-->
+    <div class="panel panel-default">
+        <div class="panel-body">
+
+            <form class="form-inline" id="searchApplicationnForm">
+
+                <div class="form-group col-md-2">
+                    <label for="application">Group Name</label>
+
+                    <select class="form-control dropdown-select"
+                            id="groupName"
+                            name="groupName"
+                            ng-model="option.groupName"
+                            ng-options="option.groupName for option in optionsList | unique:'groupName'"
+                            ng-class="{pointer: pointer}"
+                            ng-mouseenter="pointer=true"
+                            ng-mouseleave="pointer=false">
+                        <option value="">Group Name...</option>
+                    </select>
+                </div>
+
+
+                <div class="col-md-2">
+                    <label>&nbsp;</label>
+                    <div>
+                        <button type="button" id="searchButton" class="btn btn-default" ng-click="searchApplications(option)">
+                            <span class="fa fa-search"></span></span>
+                        </button>
+                        <button type="button" class="btn btn-default" ng-click="resetForm()">
+                            <span class="fa fa-refresh"></span>
+                        </button>
+                    </div>
+                </div>
+            </form>
+
+        </div>
+    </div>
+
+    <!-- SEARCH PANEL END-->
+
+    <table st-table="displayedUserPreferences" st-safe-src="userPreferencesList" class="table table-striped fixed">
+        <colgroup>
+            <col style="width: 360px;">
+            <col style="width: 220px;">
+            <col style="width: 360px;">
+            <col style="width: 220px;">
+        </colgroup>
+        <thead class="table_heading">
+        <tr>
+            <th>{{'userPreferences.user' | translate}}</th>
+            <th st-sort="optionName" st-sort-default="true" ng-click="changeSorting('optionName')" st-skip-natural="true" st-class-ascent="dummyClass" st-class-descent="dummyClass">
+                {{'userPreferences.option' | translate}}&nbsp;<i class="fa" ng-class="sortIcon('optionName')"></i>
+            </th>
+            <th st-sort="optionDescription" ng-click="changeSorting('optionDescription')" st-skip-natural="true" st-class-ascent="dummyClass" st-class-descent="dummyClass">
+                {{'userPreferences.optionDesc' | translate}}&nbsp;<i class="fa" ng-class="sortIcon('optionDescription')"></i>
+            </th>
+            <th st-sort="optionValue" ng-click="changeSorting('optionValue')" st-skip-natural="true" st-class-ascent="dummyClass" st-class-descent="dummyClass">
+                {{'userPreferences.value' | translate}}&nbsp;<i class="fa" ng-class="sortIcon('optionValue')"></i>
+            </th>
+        </tr>
+        </thead>
+
+        <tbody class="table-bordered" ng-if="!isPreferencesLoading && !emptyPreferenceResult">
+        <tr ng-repeat="preference in displayedUserPreferences">
+            <td ng-bind="userName"></td>
+            <td ng-bind="preference.optionName"></td>
+            <td ng-bind="preference.optionDescription"></td>
+            <td ng-bind="preference.optionValue"></td>
+        </tr>
+        </tbody>
+
+        <tbody ng-if="isPreferencesLoading">
+        <tr>
+            <td colspan="4">{{loadingMessage}}</td>
+        </tr>
+        </tbody>
+
+        <tbody ng-if="emptyPreferenceResult">
+        <tr>
+            <td colspan="4">{{emptyResultMessage}}</td>
+        </tr>
+        </tbody>
+
+    </table>
+</div>

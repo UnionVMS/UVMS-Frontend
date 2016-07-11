@@ -1,0 +1,126 @@
+<!--
+﻿Developed with the contribution of the European Commission - Directorate General for Maritime Affairs and Fisheries
+© European Union, 2015-2016.
+
+This file is part of the Integrated Fisheries Data Management (IFDM) Suite. The IFDM Suite is free software: you can
+redistribute it and/or modify it under the terms of the GNU General Public License as published by the
+Free Software Foundation, either version 3 of the License, or any later version. The IFDM Suite is distributed in
+the hope that it will be useful, but WITHOUT ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or
+FITNESS FOR A PARTICULAR PURPOSE.  See the GNU General Public License for more details. You should have received a
+copy of the GNU General Public License along with the IFDM Suite. If not, see <http://www.gnu.org/licenses/>.
+-->
+<div class="col-md-12 collapsibleRow" ng-controller="LayersettingsCtrl">
+	<ng-form name="layerSettingsForm">
+		<accordion close-others="oneAtATime">
+			<accordion-group is-open="status.isOpen">
+				<accordion-heading>
+					<div class="panel-title-link" ng-click="toggleOpen()">
+						{{'spatial.layer_settings' | i18n }}
+						<div class="accordionError" ng-show="submitedWithErrors && layerSettingsForm.$invalid">
+							<div class="fa fa-exclamation-circle"></div>
+							{{'spatial.section_errors' | i18n }} - {{'spatial.base_list_error' | i18n }}
+						</div>
+						<i class="pull-right glyphicon" ng-class="{'glyphicon-chevron-down': status.isOpen, 'glyphicon-chevron-right': !status.isOpen}"></i>
+					</div>
+				</accordion-heading>
+				<div class="row" ng-class="{'layerUserConfig': settingsLevel !== 'admin'}">
+					<div class="accordionError baseLayersError" ng-show="(submitedWithErrors || layerSettingsForm.$dirty) && layerSettingsForm.baseLayers.$invalid">
+						<div class="fa fa-exclamation-circle"></div>
+						{{'spatial.base_layers_error' | i18n }}
+					</div>
+					<div class="col-md-8 layerSettingChoices">
+						<div class="containerWithBottomPadding">
+							<div>
+								<div class="sectionMenu">
+									<ul class="horizontal pipeSeparator">
+										<li ng-repeat="menu in headerMenus" ng-click="selectMenu(menu.menu)" ng-class="{'active': selectedMenu === '{{menu.menu}}'}"><a>{{menu.title}}</a></li>
+									</ul>
+								</div>
+							</div>
+						</div>
+						<div ng-if="isMenuSelected('PORTS')" ng-include="'partial/spatial/configurations/layerSettings/ports/ports.html'"></div>
+						<div ng-if="isMenuSelected('AREAS')" ng-include="'partial/spatial/configurations/layerSettings/areas/areas.html'"></div>
+						<div ng-if="isMenuSelected('ADDITIONALCARTOGRAPHY')" ng-include="'partial/spatial/configurations/layerSettings/additionalcartography/additionalcartography.html'"></div>
+						<div ng-if="isMenuSelected('BACKGROUND')" ng-include="'partial/spatial/configurations/layerSettings/background/background.html'"></div>
+					</div>
+					<div class="col-md-4">
+						<div class="container-element layerSelection">
+					        <h3>{{'spatial.layer_tree' | i18n }}</h3>
+					        <div class="column">
+					        	<h5>{{'spatial.layer_settings_port' | i18n }}</h5>
+					        	<button type="button" class="btn btn-default btn-xs btn-clear-list" ng-click="layerSettingsForm.$setDirty();selectedPorts.splice(0, selectedPorts.length);"><span class="fa fa-trash"></span>&nbsp;<span>{{'common.clear' | i18n }}</span></button>
+							    <ul dnd-list="selectedPorts" dnd-allowed-types="['port', 'portarea']" dnd-drop="checkIfExists(item,selectedPorts)">
+							        <li ng-repeat="item in selectedPorts"
+							            dnd-draggable="item"
+							            dnd-type="item.subType"
+							            dnd-effect-allowed="move"
+							            dnd-dragstart="layerSettingsForm.$setDirty();selectedPorts.splice($index, 1);"
+							            dnd-canceled="selectedPorts.splice($index, 1);">
+							            <div class="handle">:::</div>
+   										<div class="item">{{item.name}}</div>
+							        </li>
+							    </ul>
+					        </div>
+					        <div class="column">
+					        	<h5>{{'spatial.layer_settings_area' | i18n }}</h5>
+					        	<button type="button" class="btn btn-default btn-xs btn-clear-list" ng-click="layerSettingsForm.$setDirty();selectedAreas.splice(0, selectedAreas.length);"><span class="fa fa-trash"></span>&nbsp;<span>{{'common.clear' | i18n }}</span></button>
+							    <ul dnd-list="selectedAreas"
+							     dnd-allowed-types="['sysarea','userarea','areagroup']" 
+							     dnd-drop="checkIfExists(item,selectedAreas);">								        
+								 	<li ng-repeat="item in selectedAreas"
+							            dnd-draggable="item"
+							            dnd-type="item.areaType"
+							            dnd-effect-allowed="move"
+							            dnd-dragstart="layerSettingsForm.$setDirty();selectedAreas.splice($index, 1);"
+							            dnd-canceled="selectedAreas.splice($index, 1);"
+							            type='{{item.areaType}}'>
+							            <div class="area-item">
+								            <div class="handle">:::</div>
+    										<div class="item">{{item.name}}</div>
+   										</div>
+							        </li>
+							    </ul>
+					        </div>
+					        <div class="column">
+					        	<h5>{{'spatial.layer_settings_additional' | i18n }}</h5>
+					        	<button type="button" class="btn btn-default btn-xs btn-clear-list" ng-click="layerSettingsForm.$setDirty();selectedAdditionals.splice(0, selectedAdditionals.length);"><span class="fa fa-trash"></span>&nbsp;<span>{{'common.clear' | i18n }}</span></button>
+							    <ul dnd-list="selectedAdditionals" dnd-allowed-types="['additional','others']" dnd-drop="checkIfExists(item,selectedAdditionals)">
+							        <li ng-repeat="item in selectedAdditionals"
+							            dnd-draggable="item"
+							            dnd-type="item.subType"
+							            dnd-effect-allowed="move"
+							            dnd-dragstart="layerSettingsForm.$setDirty();selectedAdditionals.splice($index, 1);"
+							            dnd-canceled="selectedAdditionals.splice($index, 1);">
+							            <div class="handle">:::</div>
+   										<div class="item">{{item.name}}</div>
+							        </li>
+							    </ul>
+					        </div>
+					        <ng-form name="baseLayers">
+						        <div class="column">
+						        	<h5>{{'spatial.layer_settings_base' | i18n }}</h5>
+						        	<button type="button" class="btn btn-default btn-xs btn-clear-list" ng-click="layerSettingsForm.$setDirty();selectedBases.splice(0, selectedBases.length);validateBackGroundLayers();"><span class="fa fa-trash"></span>&nbsp;<span>{{'common.clear' | i18n }}</span></button>
+								    <ul dnd-list="selectedBases" dnd-allowed-types="['background','others']" dnd-drop="checkIfExists(item,selectedBases,true);">
+								        <li ng-repeat="item in selectedBases"
+								            dnd-draggable="item"
+								            dnd-type="item.subType"
+								            dnd-effect-allowed="move"
+								            dnd-dragstart="layerSettingsForm.$setDirty();selectedBases.splice($index, 1);validateBackGroundLayers();"
+								            dnd-canceled="selectedBases.splice($index, 1);">
+								            <div class="handle">:::</div>
+    										<div class="item">{{item.name}}</div>
+								        </li>
+								    </ul>
+						        </div>
+					        </ng-form>
+					        <div class="clearfix"></div>
+					    </div>
+					</div>
+				</div>
+				<div class="col-md-12 col-btn-no-padding" ng-if="settingsLevel !== 'admin'">
+					<button type="button" class="btn btn-default pull-right" ng-click="prefService.reset('layer',layerSettingsForm,configModel,configCopy,settingsLevel)">{{'spatial.settings_reset_btn' | i18n}}</button>
+				</div>
+			</accordion-group>
+		</accordion>
+	</ng-form>
+</div>

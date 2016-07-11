@@ -1,0 +1,183 @@
+{
+  "header": {
+    "pageTitle": "USM",
+    "home": "Accueil",
+    "users": "Utilisateurs",
+    "organisations": "Organisations",
+    "roles": "Roles",
+    "scopes": "Scopes",
+    "applications": "Applications",
+    "endpoint": "Endpoint"
+  },
+  "common": {
+    "all": "Tout",
+    "new": "New",
+    "edit": "Edit",
+    "name": "Nom",
+    "description": "Description",
+    "application": "Application_fr",
+    "status": "Statut",
+    "activeFrom": "Active From",
+    "activeTo": "Active To",
+    "status_E": "Enabled",
+    "status_D": "Disabled",
+    "status_L": "Locked",
+    "status_all": "All"
+  },
+  "users": {
+    "userName": "Utilisateur",
+    "user": "Utilisateur",
+    "firstName": "Nom",
+    "lastName": "Prénom",
+    "phoneNumber": "No de Téléphone",
+    "faxNumber": "No de fax",
+    "mobileNumber": "No de GSM",
+    "email": "Email",
+    "organisation": "Organisation",
+    "status": "Statut",
+    "status_E": "Activé",
+    "status_D": "Désactivé",
+    "status_L": "Verrouillé",
+    "status_all": "All",
+    "nation": "Nation",
+    "activeFrom": "Actif De",
+    "activeTo": "Actif jusqu'à",
+    "notes": "Notes",
+	"copyToUser": "Copie vers utilisateur",
+	"copyFromUser": "Copie de l'utilisateur",
+    "securityQuestions": "Security questions", "securityQuestions_1": "What is the last name of the teacher who gave you your first failing grade?", "securityQuestions_2": "What was the name of your elementary / primary school?",
+    "securityQuestions_3": "In what city or town does your nearest sibling live?",
+    "securityQuestions_4": "What time of the day were you born? (hh:mm)",
+    "securityQuestions_5": "What is your favorite movie?",
+    "securityQuestions_6": "What was the model of your first car?",
+    "securityQuestions_7": "What is the first name of your oldest cousin?",
+    "securityQuestions_8": "What was the name of your first pet?",
+    "securityQuestions_9": "What was the name of the of street where you grew up?",
+    "securityQuestions_10":"What is your mother's maiden name?"
+  },
+  "roles": {
+    "name": "Nom",
+    "description": "Description",
+    "application": "Application_fr",
+    "status": "Statut",
+    "new": " New",
+    "newRole": " New Role",
+    "feature": "Feature",
+    "new_button_tooltip": "Creates a new Role",
+    "edit_button_tooltip": "Modify this Role",
+    "view_button_tooltip": "View Role permission",
+    "del_button_tooltip": "Delete this Role",
+    "search_filter": "Filter results with current parameters",
+    "refresh_filter": "Reset filter parameter to default"
+  },
+  "role": {
+    "status_E": "Enabled",
+    "status_D": "Disabled",
+    "status_L": "Locked"
+  },
+  "roleDetails": {
+    "status_E": "Enabled",
+    "status_D": "Disabled",
+    "status_L": "Locked"
+  },
+  "roleEditPermission": {
+    "windowTitle": "Edit Permission"
+  },
+  "scopes": {
+    "dataFrom": "Data From",
+    "dataTo": "Data To",
+    "scope": "Scope",
+    "newScope": " New Scope",
+    "editScope": " Edit Scope",
+    "deleteScope": " Delete Scope",
+    "category": "Category"
+  },
+  "userContexts": {
+    "role": "Rôle",
+    "roleStatus": "Rôle Status",
+    "scope": "Scope",
+    "scopeStatus": "Scope Status",
+    "new": " Nouveau",
+    "status_E": "Activé",
+    "status_D": "Désactivé",
+    "status_L": "Verrouillé",
+    "newContext": " New User Contexte",
+    "editContext": " Edit User Contexte",
+    "deleteContext": " Remove User Contexte"
+  },
+  "organisations": {
+    "organisation": "Organisation",
+    "parent": "Parent",
+    "name": "Name",
+    "description": "Description",
+    "nation": "Nation",
+    "email": " Email",
+    "description": "Description",
+    "newOrganisation": " New Organisation",
+    "status": " Status",
+    "status_E": "Enabled",
+    "status_D": "Disabled",
+    "status_L": "Locked"
+  },
+  "organisation": {
+    "status_E": "Enabled",
+    "status_D": "Disabled",
+    "status_L": "Locked"
+  },
+  "endPoints": {
+    "name": "Name",
+    "description": "Description",
+    "email": " E-Mail",
+    "description": "Description",
+    "status": " Status",
+    "status_E": "Enabled",
+    "status_D": "Disabled",
+    "status_L": "Locked"
+  },
+  "endPoint": {
+    "status_E": " Enabled",
+    "status_D": " Disabled",
+    "status_L": " Locked"
+  },
+  "channels": {
+    "dataflow": " Dataflow",
+    "service": " Service",
+    "priority": " Priority"
+  },
+  "contacts": {
+    "firstname": "First Name",
+    "lastname": "Last Name",
+    "email": "E-Mail",
+    "phone": "Phone numbers"
+  },
+  "organisationEndpoints": {
+    "name": "Name",
+    "description": "Description",
+    "uri": "URI",
+    "email": "Email",
+    "status": "Status",
+    "new": " New",
+    "status_E": "Enabled",
+    "status_D": "Disabled",
+    "status_L": "Locked",
+    "newEndpoint": " New Endpoint",
+    "editEndpoint": " Edit Endpoint",
+    "deleteEndpoint": " Remove Endpoint"
+  },
+  "organisationEndpointsChannels": {
+    "dataflow": "Dataflow",
+    "service": "Service",
+    "priority": "Priority",
+    "newEndpointChannel": " Add Endpoint Channel",
+    "editEndpointChannel": " Edit Endpoint Channel",
+    "deleteEndpointChannel": " Remove Endpoint Channel"
+  },
+  "organisationEndpointsContacts": {
+    "person": "Contact Person",
+    "firstName": "First Name",
+    "lastName": "Last Name",
+    "email": "E-Mail",
+    "newEndpointContact": " Assign Contact",
+    "deleteEndpointContact": " Remove Contact"
+  }
+}

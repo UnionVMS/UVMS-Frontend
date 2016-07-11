@@ -1,0 +1,86 @@
+<!--
+﻿Developed with the contribution of the European Commission - Directorate General for Maritime Affairs and Fisheries
+© European Union, 2015-2016.
+
+This file is part of the Integrated Fisheries Data Management (IFDM) Suite. The IFDM Suite is free software: you can
+redistribute it and/or modify it under the terms of the GNU General Public License as published by the
+Free Software Foundation, either version 3 of the License, or any later version. The IFDM Suite is distributed in
+the hope that it will be useful, but WITHOUT ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or
+FITNESS FOR A PARTICULAR PURPOSE.  See the GNU General Public License for more details. You should have received a
+copy of the GNU General Public License along with the IFDM Suite. If not, see <http://www.gnu.org/licenses/>.
+-->
+<div class="auditLogContainer">
+	<div static-include="partial/admin/adminPageHeader/adminPageHeader.html"></div>
+	<!-- Nav tabs -->
+    <div class="containerWrapper pollingTabs">
+        <div class="container">
+        	<ul class="nav nav-tabs" role="tablist">
+				<li ng-repeat="tab in tabMenu" class="audittab" ng-click="selectTab(tab.tab)" ng-class="{'active': selectedTab === '{{tab.tab}}'}">
+					<span>{{tab.title}}</span>
+				</li>
+			</ul>
+        </div>
+    </div>
+	<div class="container containerWithTopBottomPadding nopaddingtop">
+		<div class="card nomargintop">
+            <div class="row card-header auditsearchform">
+                <div class="col-md-11">
+                    <advanced-search searchfunc="searchAuditLogs" modeltype="'AUDIT'" advancedsearchvisible="true"></advanced-search>
+                </div>
+                <div class="col-md-1 pull-right textAlignRight printAndExport">
+                    <button class="btn btn-sm btn-default exportButton">
+                        <i class="fa fa-lg fa-download" title="{{'common.export_as_csv' | i18n }}" ng-click="exportLogsAsCSVFile()"></i>
+                    </button>
+                </div>
+            </div>
+
+            <div search-results-table search="currentSearchResults">
+    			<table class="searchResults colorOdd truncate-text">
+    				<thead>
+    					<tr>
+    						<th class="checkboxContainer">
+    							<input type="checkbox" ng-click="toggleCheckAll()" ng-checked="isAllChecked()" ng-disabled="!currentSearchResults.items.length"/>
+    						</th>
+    						<th sortable-table-header by="sortBy" reverse="reverseSort" order="'username'">
+    							{{"audit.column_username" | i18n}}
+    						</th>
+    						<th sortable-table-header by="sortBy" reverse="reverseSort" order="'operation'">
+    							{{"audit.column_operation" | i18n}}
+    						</th>
+    						<th sortable-table-header by="sortBy" reverse="reverseSort" order="'objectType'">
+    							{{"audit.column_object_type" | i18n}}
+    						</th>
+    						<th sortable-table-header by="sortBy" reverse="reverseSort" order="'date'">
+    							{{"audit.column_date" | i18n}}
+    						</th>
+    						<th>
+    							{{"audit.column_object_affected" | i18n}}
+    						</th>
+                            <th></th>
+    					</tr>
+    				</thead>
+    				<tbody>
+    					<tr ng-repeat="audit in currentSearchResults.items | orderBy:sortBy:reverseSort">
+    						<td class="checkboxContainer"><input type="checkbox" ng-click="audit.checked = !audit.checked" ng-checked="audit.checked"/></td>
+    						<td>{{audit.username}}</td>
+    						<td>{{audit.operation}}</td>
+    						<td>{{audit.objectType}}</td>
+    						<td>{{audit.date | confDateFormat}}</td>
+    						<td>
+                                <a ng-href="#{{affectedObjectPath(audit)}}" ng-show="affectedObjectPath(audit)" title="{{'common.view_details' | i18n}}">{{affectedObjectLinkText(audit)}}</a>
+                                <span ng-show="!affectedObjectPath(audit) && affectedObjectText(audit)">{{affectedObjectText(audit)}}</span>
+                            </td>
+                            <td class="textAlignCenter">
+                                <button class="btn btn-sm btn-default" ng-show="itemHasComment(audit)" ng-click="showComment(audit)" title="{{'common.view_comment' | i18n}}">
+                                    <i class="fa fa-commenting"></i>
+                                </button>
+                            </td>
+    					</tr>
+    				</tbody>
+    			</table>
+            </div>
+
+            <search-results-pagination page='currentSearchResults.page' total='currentSearchResults.totalNumberOfPages' callback='gotoPage'></search-results-pagination >
+       </div>
+	</div>
+</div>

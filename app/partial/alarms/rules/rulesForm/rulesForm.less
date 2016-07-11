@@ -1,0 +1,154 @@
+/*
+﻿Developed with the contribution of the European Commission - Directorate General for Maritime Affairs and Fisheries
+© European Union, 2015-2016.
+
+This file is part of the Integrated Fisheries Data Management (IFDM) Suite. The IFDM Suite is free software: you can
+redistribute it and/or modify it under the terms of the GNU General Public License as published by the
+Free Software Foundation, either version 3 of the License, or any later version. The IFDM Suite is distributed in
+the hope that it will be useful, but WITHOUT ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or
+FITNESS FOR A PARTICULAR PURPOSE.  See the GNU General Public License for more details. You should have received a
+copy of the GNU General Public License along with the IFDM Suite. If not, see <http://www.gnu.org/licenses/>.
+ */
+.ruleFormContainer{
+
+    .card{
+        margin-bottom: 20px;
+        padding-top: 5px;
+    }
+
+    .card-header {
+        padding: 5px;
+    }
+
+    .nameTypeContainer{
+        margin-top: 10px;
+        margin-bottom: 10px;
+        .grayBorderBottom;
+    }
+
+    textarea.description{
+        height: 95px;
+        resize:none;
+    }
+
+    .timeInterval{
+        .toText{
+            position: relative;
+            top:4px;
+            text-transform: lowercase;
+        }
+    }
+
+    //Definitions
+    .definitionsContainer{
+        table{
+            th, td{
+                padding:5px 5px;
+            }
+            td{
+                vertical-align: top;
+                text-align: left;
+
+                .form-group{
+                    margin:0px;
+                }
+                &.value{
+                    .dropdown{
+                        min-width: 100%;
+                    }
+                }
+                &.endOperator{
+                    width: 110px;
+                }
+
+                &.logicBoolOperator, &.endOperator{
+                    .dropdown{
+                        min-width: 100px;
+                        margin-right: 5px;
+                    }
+                }
+
+                &.remove{
+                    cursor:default;
+                    text-align: right;
+                    i{
+                        cursor: pointer;
+                    }
+                }
+            }
+
+        }
+
+    }
+    //THEN
+    .thenHeader{
+        margin-top: 10px;
+    }
+    .actionsTable{
+        .disabledNotificationAction{
+            padding:3px 12px;
+            font-size: 12px;
+        }
+        .action, .value{
+            width: 25%;
+        }
+        table{
+            td{
+                vertical-align: middle;
+            }
+        }
+    }
+
+    .ruleAsTextContainer{
+        margin-top: 10px;
+        .ruleAsText{
+            .grayBorder;
+            padding: 10px;
+        }
+    }
+
+    .ruleTestContainer{
+        margin-top: 10px;
+        .outdated{
+            opacity: 0.5;
+        }
+        .ruleTestMessage{
+            .success{
+                color: @brand-success;
+            }
+            .error{
+                color: @brand-danger;
+            }
+        }
+        .testProblemsContainer{
+            ul{
+                li{
+                    cursor:default;
+                }
+            }
+        }
+    }
+
+    .addMoreLink{
+        .link;
+        margin-bottom: 10px;
+    }
+
+    .unit-input.unit-input-speed {
+        padding-right: 40px;
+
+        .unit-box {
+            width: 40px;
+        }
+    }
+
+    .row.toolbar {
+        margin-top: 10px;
+        padding-top: 10px;
+        border-top: 1px solid #dddddd;
+        .toolbar-right button {
+            margin-left: 10px;
+        }
+    }
+
+}

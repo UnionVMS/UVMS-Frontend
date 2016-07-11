@@ -1,0 +1,144 @@
+<!--
+﻿Developed with the contribution of the European Commission - Directorate General for Maritime Affairs and Fisheries
+© European Union, 2015-2016.
+
+This file is part of the Integrated Fisheries Data Management (IFDM) Suite. The IFDM Suite is free software: you can
+redistribute it and/or modify it under the terms of the GNU General Public License as published by the
+Free Software Foundation, either version 3 of the License, or any later version. The IFDM Suite is distributed in
+the hope that it will be useful, but WITHOUT ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or
+FITNESS FOR A PARTICULAR PURPOSE.  See the GNU General Public License for more details. You should have received a
+copy of the GNU General Public License along with the IFDM Suite. If not, see <http://www.gnu.org/licenses/>.
+-->
+<!-- step 2 -->
+<div ng-controller="NewpollwizardpollingoptionsCtrl" class="newPollWizardStep pollingOptionsContainer card with-small-card-header">
+    <new-poll-wizard-progress step="2"></new-poll-wizard-progress>
+    <div class="wizardcontent" loading-indicator="loadingResult" message="loadingMessage">
+        <form name="pollingOptionsForm" method="post" novalidate>
+            <!--MANUAL POLL-->
+            <div class="optionsSection">
+                <div class="row">
+                    <div class="col-md-3">
+                        <input type="radio" ng-model="pollingOptions.type" value="MANUAL"/> <span class="pollType" ng-class="{'activePollType' : isManualPoll()}" ng-click="setPollType('MANUAL')">{{'polling.wizard_second_step_manual_poll' | i18n | uppercase}}</span>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-md-12">
+                        <input type="radio" ng-model="pollingOptions.type" value="PROGRAM"/> <span class="pollType" ng-class="{'activePollType' : isProgramPoll()}" ng-click="setPollType('PROGRAM')">{{'polling.wizard_second_step_program_poll' | i18n | uppercase}}</span>
+                    </div>
+                    <div class="indentedSection">
+                        <div class="col-md-12">
+                            <table>
+                                <thead>
+                                    <tr>
+                                        <th>{{'polling.wizard_second_step_program_poll_start_date' | i18n}}</th>
+                                        <th>{{'polling.wizard_second_step_program_poll_end_date' | i18n}}</th>
+                                        <th>{{'polling.wizard_second_step_program_poll_intervall' | i18n}}</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <tr>
+                                        <td class="form-group" ng-class="{'has-error': pollingOptionsForm.programStartDate.$invalid && (submitAttempted || pollingOptionsForm.programStartDate.$dirty)}">
+                                            <datepicker-input name="programStartDate" model="pollingOptions.programPoll.startDate" min-date="programPollMinDate" max-date="pollingOptions.programPoll.endDate" ng-disabled="!isProgramPoll()" ng-required="isProgramPoll()" time="true" input-field-id="new-program-poll-start-date-picker"></datepicker-input>
+                                            <input-validation-message types="required, date, minDate, maxDate" input="pollingOptionsForm.programStartDate"></input-validation-message>
+                                        </td>
+
+                                        <td class="form-group" ng-class="{'has-error': pollingOptionsForm.programEndDate.$invalid && (submitAttempted || pollingOptionsForm.programEndDate.$dirty)}">
+                                            <datepicker-input name="programEndDate" model="pollingOptions.programPoll.endDate" min-date="pollingOptions.programPoll.startDate" ng-disabled="!isProgramPoll()" ng-required="isProgramPoll()" time="true" input-field-id="new-program-poll-end-date-picker"></datepicker-input>
+                                            <input-validation-message types="required, date, minDate" input="pollingOptionsForm.programEndDate"></input-validation-message>
+                                        </td>
+
+                                        <td class="form-group" ng-class="{'has-error': pollingOptionsForm.programTime.$invalid && (submitAttempted || pollingOptionsForm.programTime.$dirty)}">
+                                            <period-input name="programTime" model="pollingOptions.programPoll.time" ng-disabled="!isProgramPoll()" ng-required="isProgramPoll()"></period-input>
+
+                                            <input-validation-message types="required, period" input="pollingOptionsForm.programTime"></input-validation-message>
+
+                                        </td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!--CONFIGURATION POLL-->
+            <div class="optionsSection">
+                <div class="row">
+                    <div class="col-md-12">
+                        <input type="radio" ng-model="pollingOptions.type" ng-disabled="!isAllSelectedTerminalsOfTheSameType()"value="CONFIGURATION"/>
+                        <span class="pollType" ng-class="{'activePollType' : isConfigurationPoll()}" ng-click="setPollType('CONFIGURATION')">{{'polling.wizard_second_step_configuration_poll' | i18n | uppercase}}</span>
+                        <span ng-show="!isAllSelectedTerminalsOfTheSameType()" class="validation-warning">{{ "polling.wizard_second_step_configuration_poll_different_terminal_types" | i18n }}</span>
+                    </div>
+                </div>
+                <div ng-show="isAllSelectedTerminalsOfTheSameType()">
+                    <div ng-if="enableConfigurationForInmarsatC()" ng-include="'partial/polling/newPollWizard/pollingOptions/configurationPollForms/configurationPollInmarsatC.html'"></div>
+                    <div ng-if="enableConfigurationForIridium()" ng-include="'partial/polling/newPollWizard/pollingOptions/configurationPollForms/configurationPollIridium.html'"></div>
+                </div>
+            </div>
+
+            <!--SAMPLING-->
+            <div class="optionsSection">
+                <div class="row">
+                    <div class="col-md-12">
+                        <input type="radio" ng-disabled="!isSingleMobileTerminalSelected()" ng-model="pollingOptions.type" value="SAMPLING"/>
+                        <span class="pollType" ng-class="{'activePollType' : isSamplingPoll()}" ng-click="setPollType('SAMPLING')">{{'polling.wizard_second_step_sampling_poll' | i18n | uppercase}}</span>
+                        <span ng-hide="isSingleMobileTerminalSelected()" class="validation-warning">{{ "polling.wizard_second_step_sampling_poll_single_carrier_warning" | i18n }}</span>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="indentedSection">
+                        <div class="col-md-12">
+                            <table>
+                                <thead>
+                                    <tr>
+                                        <th>{{'polling.wizard_second_step_sampling_poll_start_date' | i18n}}</th>
+                                        <th>{{'polling.wizard_second_step_sampling_poll_end_date' | i18n}}</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <tr>
+                                        <td class="form-group" ng-class="{'has-error': pollingOptionsForm.samplingStartDate.$invalid && (submitAttempted || pollingOptionsForm.samplingStartDate.$dirty)}">
+                                            <datepicker-input name="samplingStartDate" model="pollingOptions.samplingPoll.startDate" max-date="pollingOptions.samplingPoll.endDate" ng-disabled="!isSamplingPoll()" ng-required="isSamplingPoll()" time="true" input-field-id="new-sampling-poll-start-date-picker"></datepicker-input>
+                                            <input-validation-message types="required, date, maxDate" input="pollingOptionsForm.samplingStartDate"></input-validation-message>
+                                        </td>
+
+                                        <td class="form-group" ng-class="{'has-error': pollingOptionsForm.samplingEndDate.$invalid && (submitAttempted || pollingOptionsForm.samplingEndDate.$dirty)}">
+                                            <datepicker-input name="samplingEndDate" model="pollingOptions.samplingPoll.endDate" min-date="pollingOptions.samplingPoll.startDate" ng-disabled="!isSamplingPoll()" ng-required="isSamplingPoll()" time="true" input-field-id="new-sampling-poll-end-date-picker"></datepicker-input>
+                                            <input-validation-message types="required, date, minDate" input="pollingOptionsForm.samplingEndDate"></input-validation-message>
+                                        </td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!--CHANNELS AND COMMENT-->
+            <div class="optionsSection">
+                <div class="row">
+                    <div class="indentedSection">
+                        <div class="col-md-8 form-group" ng-class="{'has-error': pollingOptionsForm.comment.$invalid && (submitAttempted || pollingOptionsForm.comment.$dirty)}">
+                            <h5>{{'polling.wizard_second_step_comment_header' | i18n}}</h5>
+                            <textarea name="comment" class="form-control" placeholder="{{'polling.wizard_second_step_comment_placeholder' | i18n }}" ng-model="pollingOptions.comment" required></textarea>
+                            <input-validation-message types="required" input="pollingOptionsForm.comment"></input-validation-message>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </form>
+    </div>
+    <div class="row wizardFooter">
+        <div class="col-md-4">
+            <div class="indentedSection">
+                <a ng-click="previousStep()">{{'common.back' | i18n}}</a>
+            </div>
+        </div>
+        <div class="col-md-8 textAlignRight">
+            <a ng-click="startNewPoll()">{{'common.cancel' | i18n}}</a>
+            <button type="button" class="btn btn-primary" ng-click="runPoll()" ng-disabled="getNumberOfSelectedTerminals() === 0 || loadingResult">
+                {{ isProgramPoll() ? 'polling.wizard_second_step_create_program_poll_button' : 'polling.wizard_second_step_run_poll_button' | i18n | uppercase}}
+            </button>
+        </div>
+    </div>
+</div>

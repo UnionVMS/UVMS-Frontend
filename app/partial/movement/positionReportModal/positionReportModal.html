@@ -1,0 +1,130 @@
+<!--
+﻿Developed with the contribution of the European Commission - Directorate General for Maritime Affairs and Fisheries
+© European Union, 2015-2016.
+
+This file is part of the Integrated Fisheries Data Management (IFDM) Suite. The IFDM Suite is free software: you can
+redistribute it and/or modify it under the terms of the GNU General Public License as published by the
+Free Software Foundation, either version 3 of the License, or any later version. The IFDM Suite is distributed in
+the hope that it will be useful, but WITHOUT ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or
+FITNESS FOR A PARTICULAR PURPOSE.  See the GNU General Public License for more details. You should have received a
+copy of the GNU General Public License along with the IFDM Suite. If not, see <http://www.gnu.org/licenses/>.
+-->
+<div class="positionReportModal">
+    <div class="modal-header" style="text-align:left">
+        <div class="pointer pull-right" ng-click="cancel()">
+            <i class="fa fa-times closeicon"></i>
+        </div>
+        <h4 class="modal-title">{{'movement.position_report_header' | i18n}}</h4>
+    </div>
+
+    <div class="modal-body" loading-indicator="waitingForResponse" message="waitingForResponseMessage">
+        <div class="row nomarginbottom nomargintop" ng-show="errorMessage">
+            <div class="col-md-12">
+                <search-result-error-alert>{{errorMessage}}</search-result-error-alert>
+            </div>
+        </div>
+
+        <div class="row sub-section">
+            <div class="col-md-2">
+                <label>{{'movement.manual_position_field_label_type' | i18n}}</label>
+                <p>{{positionReport.movement.movementType}}</p>
+            </div>
+            <div class="col-md-2">
+                <label>{{'movement.manual_position_field_label_source' | i18n}}</label>
+                <p>{{positionReport.movement.source}}</p>
+            </div>
+            <div class="col-md-2" ng-if="positionReport.movement.status !== undefined">
+                <label>{{'movement.manual_position_field_label_transceiver_status' | i18n}}</label>
+                <p>{{positionReport.movement.status}}</p>
+            </div>
+
+        </div>
+
+        <!-- <form name="positionReportForm"  ng-if="!waitingForResponse && positionReport"> -->
+        <div class="row sub-section">
+            <h1>{{'movement.asset' | i18n}}</h1>
+
+            <div class="col-md-2" ng-if="positionReport.vessel.countryCode">
+                <label>{{'movement.manual_position_field_label_flag_state' | i18n}}</label>
+                <p>{{positionReport.vessel.countryCode}}</p>
+            </div>
+            <div class="col-md-2" ng-if="positionReport.vessel.ircs">
+                <label>{{'movement.manual_position_field_label_ircs' | i18n}}</label>
+                <p>{{positionReport.vessel.ircs}}</p>
+            </div>
+            <div class="col-md-2" ng-if="positionReport.vessel.externalMarking">
+                <label>{{'movement.manual_position_field_label_external_marking' | i18n}}</label>
+                <p>{{positionReport.vessel.externalMarking}}</p>
+            </div>
+            <div class="col-md-2" ng-if="positionReport.vessel.cfr">
+                <label>{{'movement.manual_position_field_label_cfr' | i18n}}</label>
+                <p>{{positionReport.vessel.cfr}}</p>
+            </div>
+            <div class="col-md-4" ng-if="positionReport.vessel.imo">
+                <label>{{'movement.manual_position_field_label_imo' | i18n}}</label>
+                <p>{{positionReport.vessel.imo}}</p>
+            </div>
+
+            <div class="col-md-4" ng-if="positionReport.vessel.name">
+                <label>{{'movement.manual_position_field_label_name' | i18n}}</label>
+                <p>{{positionReport.vessel.name}}</p>
+            </div>
+            <div class="col-md-2" ng-if="positionReport.vessel.mmsiNo">
+                <label>{{'movement.manual_position_field_label_mmsi' | i18n}}</label>
+                <p>{{positionReport.vessel.mmsiNo}}</p>
+            </div>
+            <div class="col-md-2" ng-if="positionReport.time">
+                <label>{{'movement.manual_position_field_label_date_time' | i18n}}</label>
+                <p>{{positionReport.time | confDateFormat}}</p>
+            </div>
+        </div>
+
+        <div class="row sub-section">
+            <h1>{{'movement.position' | i18n}}</h1>
+
+            <div class="col-md-2">
+                <label>{{'movement.manual_position_field_label_latitude' | i18n}}</label>
+                <p>{{positionReport.movement.latitude | confCoordinateFormat}}</p>
+            </div>
+            <div class="col-md-2">
+                <label>{{'movement.manual_position_field_label_longitude' | i18n}}</label>
+                <p>{{positionReport.movement.longitude | confCoordinateFormat}}</p>
+            </div>
+            <div class="col-md-2">
+                <label>{{'movement.manual_position_field_label_measured_speed' | i18n}}</label>
+                <p>{{positionReport.movement.reportedSpeed | speed | number:2}} {{'common.speed_unit_' + speedUnit | i18n}}</p>
+            </div>
+            <div class="col-md-2">
+                <label>{{'movement.manual_position_field_label_calculated_speed' | i18n}}</label>
+                <p>{{positionReport.movement.calculatedSpeed | speed | number:2}} {{'common.speed_unit_' + speedUnit | i18n}}</p>
+            </div>
+            <div class="col-md-2">
+                <label>{{'movement.manual_position_field_label_course' | i18n}}</label>
+                <p>{{positionReport.movement.reportedCourse}}{{"movement.manual_position_field_unit_degrees" | i18n}}</p>
+            </div>
+        </div>
+
+        <div class="row">
+            <div class="col-md-12">
+                <div class="mapContainer">
+                  <leaflet center="center" markers="markers" height="400px" bounds="bounds" width="100%"></leaflet>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="modal-footer">
+        <button class="btn btn-default pull-left" ng-click="exportCsv(positionReport)">
+            <i class="fa fa-download"></i> {{'movement.csv' | i18n}}
+        </button>
+
+        <button class="btn btn-default pull-left" ui-sref="app.polling">
+            <i class="fa fa-arrow-circle-right"></i> {{'movement.poll' | i18n}}
+        </button>
+
+        <button class="btn btn-default" ng-click="cancel()">
+            {{'common.close' | i18n}}
+        </button>
+    </div>
+
+</div>

@@ -1,0 +1,139 @@
+<!--
+﻿Developed with the contribution of the European Commission - Directorate General for Maritime Affairs and Fisheries
+© European Union, 2015-2016.
+
+This file is part of the Integrated Fisheries Data Management (IFDM) Suite. The IFDM Suite is free software: you can
+redistribute it and/or modify it under the terms of the GNU General Public License as published by the
+Free Software Foundation, either version 3 of the License, or any later version. The IFDM Suite is distributed in
+the hope that it will be useful, but WITHOUT ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or
+FITNESS FOR A PARTICULAR PURPOSE.  See the GNU General Public License for more details. You should have received a
+copy of the GNU General Public License along with the IFDM Suite. If not, see <http://www.gnu.org/licenses/>.
+-->
+<div ng-controller="manageRoleCtrl">
+    <form novalidate class="form-horizontal" name="newRoleForm" ng-submit="newRoleForm.$valid && saveUpdateDelete(role)">
+        <div class="modal-header">
+            <div class="row">
+                <div class="col-md-4">
+                    <h3 ng-if="mode=='new'" class="modal-title">New Role</h3>
+                    <h3 ng-if="mode=='edit'" class="modal-title">Edit Role</h3>
+                    <h3 ng-if="mode=='delete'" class="modal-title">Delete Role</h3>
+                </div>
+            </div>
+        </div>
+        <div class="modal-body">
+            <div class="row">
+                <div class="col-md-12" ng-class="messageDivClass">
+                    <span ng-bind-html="actionMessage" ng-class="messageClass"></span>
+                </div>
+            </div>
+
+            <div class="row">
+                <div class="form-group">
+                    <label class="col-md-3 col-md-offset-1" for="roleName">Name
+                        <sup class="fa fa-asterisk mandatory" ng-if="mode=='new'"></sup></label>
+
+                    <div class="col-md-5">
+                        <input type="text" class="form-control" id="roleName" name="roleName" ng-model="role.name"
+                               required ng-disabled="mode=='delete'">
+
+                        <div ng-show="newRoleForm.roleName.$dirty">
+                        <span class="text-danger small"
+                              ng-show="newRoleForm.roleName.$error.required">Name is required</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="row">
+                <div class="form-group">
+                    <label class="col-md-3 col-md-offset-1" for="roleDescription">Description</label>
+
+                    <div class="col-md-6">
+                        <input type="text" class="form-control" name="roleDescription" id="roleDescription"
+                               ng-model="role.description"
+                               ng-disabled="mode=='delete'">
+
+                        <div ng-show="newRoleForm.roleDescription.$dirty">
+                            <span class="text-danger small" ng-show="newRoleForm.roleDescription.$error.required">Description is required</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <!--
+            <div class="row">
+                <div class="form-group">
+                    <label class="col-md-3 col-md-offset-1" for="applicationSelect">Application<sup
+                        class="fa fa-asterisk mandatory"></sup></label>
+
+                    <div class="col-md-5">
+                        <select class="form-inline form-control dropdown-select"
+                                id="applicationSelect"
+                                name="applicationSelect"
+                                ng-model="role.application"
+                                ng-options="application for application in applicationsList"
+                                required
+                                ng-class="{pointer: pointer}"
+                                ng-mouseenter="pointer=true"
+                                ng-mouseleave="pointer=false"
+                                ng-disabled="mode=='delete'">
+                            <option value="">Application...</option>
+                        </select>
+                        <div ng-show="newRoleForm.applicationSelect.$dirty">
+                            <span class="text-danger small" ng-show="newRoleForm.applicationSelect.$error.required">Application is required</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            -->
+            <div class="row">
+                <div class="form-group">
+                    <label class="col-md-3 col-md-offset-1" for="statusSelect">Status<sup
+                        class="fa fa-asterisk mandatory"></sup></label>
+
+                    <div class="col-md-4">
+                        <select class="form-inline form-control dropdown-select"
+                                id="statusSelect"
+                                name="statusSelect"
+                                ng-model="role.status"
+                                ng-change="changeStatus(role.status)"
+                                ng-options="'users.status_'+status | translate for status in statusList"
+                                required
+                                ng-class="{pointer: pointer}"
+                                ng-mouseenter="pointer=true"
+                                ng-mouseleave="pointer=false"
+                                ng-disabled="mode=='delete'">
+                        </select>
+                        <div ng-show="newRoleForm.statusSelect.$dirty">
+                            <span class="text-danger small" ng-show="newRoleForm.statusSelect.$error.required">Status is required</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="modal-footer">
+            <div class="row">
+                <div class="col-md-8 text-left">
+                    <!--
+                    <usm-confirmation usm-confirmation-message="Do you want to create the role?"></usm-confirmation>
+                    <!--
+                    <div ng-show="showConfirmation">
+                        <input id="confirmInput" type="checkbox" ng-model="confirmCreate" ng-change="changeConfirm(confirmCreate)"/>
+                        <label class="text-warning" for="confirmInput">Do you want to create the user account?</label>
+                    </div>
+                    -->
+                </div>
+                <div class="col-md-offset-8 col-md-4">
+                    <input type="button" class="btn btn-warning btn-sm" ng-show="!roleCreated" ng-click="cancel()" value="Cancel"/>
+                    <input type="submit" class="btn btn-primary btn-sm" value="Save"
+                           ng-disabled="newRoleForm.$invalid" ng-show="!roleCreated && !showConfirmation" ng-if="mode=='new' || mode=='edit'"/>
+                    <input type="submit" class="btn btn-primary btn-sm" value="Confirm"
+                           ng-disabled="newRoleForm.$invalid" ng-show="!roleCreated && showConfirmation" ng-if="mode=='delete' || mode=='edit'"/>
+                    <input type="submit" class="btn btn-primary btn-sm" value="Delete"
+                           ng-disabled="newRoleForm.$invalid" ng-show="!roleCreated && !showConfirmation" ng-if="mode=='delete'"/>
+                    <label class="btn btn-success btn-sm fa fa-check" ng-show="roleCreated" />
+                </div>
+            </div>
+        </div>
+    </form>
+
+</div>

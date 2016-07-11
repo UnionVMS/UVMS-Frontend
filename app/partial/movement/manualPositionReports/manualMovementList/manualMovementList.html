@@ -1,0 +1,85 @@
+<!--
+﻿Developed with the contribution of the European Commission - Directorate General for Maritime Affairs and Fisheries
+© European Union, 2015-2016.
+
+This file is part of the Integrated Fisheries Data Management (IFDM) Suite. The IFDM Suite is free software: you can
+redistribute it and/or modify it under the terms of the GNU General Public License as published by the
+Free Software Foundation, either version 3 of the License, or any later version. The IFDM Suite is distributed in
+the hope that it will be useful, but WITHOUT ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or
+FITNESS FOR A PARTICULAR PURPOSE.  See the GNU General Public License for more details. You should have received a
+copy of the GNU General Public License along with the IFDM Suite. If not, see <http://www.gnu.org/licenses/>.
+-->
+<div ng-controller="ManualmovementlistCtrl">
+	<div search-results-table search="currentSearchResults" class="movementtablecontainer">
+        <table class="searchResults colorOdd movementtable truncate-text">
+            <thead>
+                <tr class="searchInputRow">
+                    <th>
+                        <input type="text" placeholder="{{'movement.external_marking_filter_external_marking' | i18n}}" ng-model="search.carrier.externalMarking">
+                    </th>
+                    <th>
+                        <input type="text" placeholder="{{'movement.external_marking_filter_ircs' | i18n}}" ng-model="search.carrier.ircs">
+                    </th>
+                    <th>
+                        <input type="text" placeholder="{{'movement.external_marking_filter_cfr' | i18n}}" ng-model="search.carrier.cfr">
+                    </th>
+                    <th>
+                        <input type="text" placeholder="{{'movement.external_marking_filter_name' | i18n}}" ng-model="search.carrier.name">
+                    </th>
+                    <th></th>
+                    <th></th>
+                    <th></th>
+                    <th></th>
+                    <th></th>
+                    <th></th>
+                    <th></th>
+                </tr>
+                <tr>
+                    <th sortable-table-header by="currentSearchResults.sortBy" reverse="currentSearchResults.sortReverse" order="'carrier.externalMarking'">{{'movement.table_header_external_marking' | i18n}}</th>
+                    <th sortable-table-header by="currentSearchResults.sortBy" reverse="currentSearchResults.sortReverse" order="'carrier.ircs'">{{'movement.table_header_ircs' | i18n}}</th>
+					<th sortable-table-header by="currentSearchResults.sortBy" reverse="currentSearchResults.sortReverse" order="'carrier.cfr'">{{'movement.table_header_cfr' | i18n}}</th>
+					<th sortable-table-header by="currentSearchResults.sortBy" reverse="currentSearchResults.sortReverse" order="'carrier.name'">{{'movement.table_header_name' | i18n}}</th>
+					<th sortable-table-header by="currentSearchResults.sortBy" reverse="currentSearchResults.sortReverse" order="'time'">{{'movement.table_header_time' | i18n}}</th>
+                    <th sortable-table-header by="currentSearchResults.sortBy" reverse="currentSearchResults.sortReverse" order="'position.latitude'">{{'movement.table_header_latitude' | i18n}}</th>
+                    <th sortable-table-header by="currentSearchResults.sortBy" reverse="currentSearchResults.sortReverse" order="'position.longitude'">{{'movement.table_header_longitude' | i18n}}</th>
+                    <th sortable-table-header by="currentSearchResults.sortBy" reverse="currentSearchResults.sortReverse" order="'speed'">{{'movement.table_header_measured_speed' | i18n}}</th>
+                    <th sortable-table-header by="currentSearchResults.sortBy" reverse="currentSearchResults.sortReverse" order="'course'">{{'movement.table_header_course' | i18n}}</th>
+                    <th sortable-table-header by="currentSearchResults.sortBy" reverse="currentSearchResults.sortReverse" order="'state'">{{'movement.table_header_status' | i18n}}</td>
+                    <th></th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr ng-repeat="item in filtered = (currentSearchResults.items | orderBy:currentSearchResults.sortBy : currentSearchResults.sortReverse | filter:search)">
+                    <td ng-attr-title="{{item.carrier.externalMarking}}">{{item.carrier.externalMarking}}</td>
+                    <td ng-attr-title="{{item.carrier.ircs}}">{{item.carrier.ircs}}</td>
+                    <td ng-attr-title="{{item.carrier.cfr}}">{{item.carrier.cfr}}</td>
+                    <td ng-attr-title="{{item.carrier.name}}">{{item.carrier.name}}</td>
+                    <td ng-attr-title="{{item.time | confDateFormat}}">{{item.time | confDateFormat}}</td>
+                    <td ng-attr-title="{{item.position.latitude | confCoordinateFormat}}">{{item.position.latitude | confCoordinateFormat}}</td>
+                    <td ng-attr-title="{{item.position.longitude | confCoordinateFormat}}">{{item.position.longitude | confCoordinateFormat}}</td>
+                    <td ng-attr-title="{{item.speed | speed | number:2}} {{ 'common.speed_unit_' + speedUnit | i18n }}">{{item.speed | speed | number:2}} {{ "common.speed_unit_" + speedUnit | i18n }}</td>
+                    <td ng-attr-title="{{item.course}}&deg;">{{item.course}}&deg;</td>
+                    <td>
+                        <span ng-if="item.isDraft()" class="label label-warning" ng-attr-title="{{ 'movement.manual_position_status_draft' | i18n }}">
+                            {{ 'movement.manual_position_status_draft' | i18n }}
+                        </span>
+                        <span ng-if="item.isSent()" class="label label-success" ng-attr-title="{{ 'movement.manual_position_status_sent' | i18n }}">
+                            {{ 'movement.manual_position_status_sent' | i18n }}
+                        </span>
+                    </td>
+                    <td>
+                        <button class="btn btn-default" ng-click="editPosition(item)" title="{{'common.edit'| i18n}}" ng-if="item.guid && item.isDraft()" show-if-allowed='Movement:manageManualMovements'>
+                            <i class="fa fa-pencil"></i>
+                        </button>
+                        <button type="button" class="btn btn-sm btn-default remove" ng-click="deletePosition(item)" title="{{'common.delete'| i18n}}" show-if-allowed='Movement:manageManualMovements' ng-if="item.isDraft()">
+                            <i class="fa fa-trash"></i>
+                        </button>
+                        <button class="btn btn-default" ng-click="viewItemDetails(item)" title="{{'common.view_details'| i18n}}" ng-if="item.guid && !item.isDraft()" show-if-allowed='Movement:manageManualMovements'>
+                            <i class="fa fa-eye"></i>
+                        </button>
+                    </td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+</div>

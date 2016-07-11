@@ -1,0 +1,177 @@
+<!--
+﻿Developed with the contribution of the European Commission - Directorate General for Maritime Affairs and Fisheries
+© European Union, 2015-2016.
+
+This file is part of the Integrated Fisheries Data Management (IFDM) Suite. The IFDM Suite is free software: you can
+redistribute it and/or modify it under the terms of the GNU General Public License as published by the
+Free Software Foundation, either version 3 of the License, or any later version. The IFDM Suite is distributed in
+the hope that it will be useful, but WITHOUT ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or
+FITNESS FOR A PARTICULAR PURPOSE.  See the GNU General Public License for more details. You should have received a
+copy of the GNU General Public License along with the IFDM Suite. If not, see <http://www.gnu.org/licenses/>.
+-->
+<div class="mobileTerminal card" ng-class="{'mobileTerminal-warning': isNonUniqueActiveTerminalType(mt.type)}">
+
+    <div class="row card-header">
+        <div class="col-md-9">
+            <div class="metadata">
+                <div>
+                    <b>{{mt.type | transponderName}}</b>
+                </div>
+                <div>
+                    {{'common.status' | i18n}}:
+                    <span class="label label-success" ng-show="mt.active">{{ ('common.active' | i18n)}}</span>
+                    <span class="label label-default" ng-hide="mt.active">{{ ('common.inactive' | i18n)}}</span>
+                </div>
+                <div>
+                    {{'common.source' | i18n}} : <b>{{mt.source}}</b>
+                </div>
+                <div class="clearfix"></div>
+            </div>
+        </div>
+        <div class="col-md-3 textAlignRight">
+            <div class="actions">
+                <button class="btn btn-default" ng-click="viewMobileTerminalHistory(mt)" ng-attr-id="view-mobile-terminal-history-{{$index}}">
+                    {{ 'vessel.view_mobile_terminal_history' | i18n }}
+                </button>
+                <a class="btn btn-link" show-if-allowed="manageMobileTerminals" href="#/communication/{{mt.guid}}" title="{{'mobileTerminal.edit_mobile_terminal' | i18n}}"ng-attr-id="edit-mobile-terminal-{{$index}}">
+                    <i class="fa fa-pencil-square-o fa-lg editMobileTerminal"></i>
+                </a>
+            </div>
+        </div>
+    </div>
+
+    <div class="row grayBorderBottom infoRow">
+        <div class="col-md-2 mobile-terminal-attribute form-group">
+            <label>{{"mobileTerminal.form_inmarsatc_satellite_number_label" | i18n}}</label>
+            <input ng-model="mt.attributes.SATELLITE_NUMBER" readonly class="form-control"/>
+        </div>
+        <div class="col-md-2 mobile-terminal-attribute form-group">
+            <label>{{"mobileTerminal.form_inmarsatc_serial_no_label" | i18n}}</label>
+            <input ng-model="mt.attributes.SERIAL_NUMBER" class="form-control" readonly/>
+        </div>
+        <div class="col-md-2 mobile-terminal-attribute form-group">
+            <label>{{"mobileTerminal.form_inmarsatc_transceiver_type_label" | i18n}}</label>
+            <input ng-model="mt.attributes.TRANSCEIVER_TYPE" class="form-control" readonly/>
+        </div>
+        <div class="col-md-2 mobile-terminal-attribute form-group">
+            <label>{{"mobileTerminal.form_inmarsatc_software_version_label" | i18n}}</label>
+            <input ng-model="mt.attributes.SOFTWARE_VERSION" class="form-control" readonly/>
+        </div>
+        <div class="col-md-2 mobile-terminal-attribute form-group">
+            <label>{{"mobileTerminal.form_inmarsatc_antenna_label" | i18n}}</label>
+            <input ng-model="mt.attributes.ANTENNA" class="form-control" readonly/>
+        </div>
+        <div class="col-md-2 mobile-terminal-attribute form-group">
+            <label>{{"mobileTerminal.form_inmarsatc_answer_back_label" | i18n}}</label>
+            <input ng-model="mt.attributes.ANSWER_BACK" class="form-control" readonly/>            
+        </div>
+    </div>
+
+    <div class="row mobileTerminalChannels grayBorderBottom">
+        <div class="col-md-12">
+            <label class="section">{{'mobileTerminal.form_inmarsatc_communication_channels_header' | i18n}}</label>
+        </div>
+
+        <div class="channelsHeader">
+            <div class="col-md-2">
+                <label>{{'mobileTerminal.form_inmarsatc_communication_selectedchannel_channel_label' | i18n}}</label>
+            </div>
+            <div class="col-md-2 smallerpadding">
+                <div class="col-md-4 smallerpadding">
+                    <label>{{'mobileTerminal.form_inmarsatc_communication_selectedchannel_poll_label' | i18n}}</label>
+                </div>
+                <div class="col-md-4 smallerpadding">
+                    <label>{{'mobileTerminal.form_inmarsatc_communication_selectedchannel_con_label' | i18n}}</label>
+                </div>
+                <div class="col-md-4 smallerpadding">
+                    <label>{{'mobileTerminal.form_inmarsatc_communication_selectedchannel_def_label' | i18n}}</label>
+                </div>
+            </div>
+            <div class="col-md-1 smallerpadding">
+                <label>{{'mobileTerminal.form_inmarsatc_communication_selectedchannel_dnid_label' | i18n}}</label>
+            </div>
+            <div class="col-md-1 smallerpadding">
+                <label>{{'mobileTerminal.form_inmarsatc_communication_selectedchannel_member_no_label' | i18n}}</label>
+            </div>
+            <div class="col-md-2 smallerpadding">
+                <label>{{'mobileTerminal.form_inmarsatc_communication_selectedchannel_land_station_label' | i18n}}</label>
+            </div>
+            <div class="col-md-2 smallerpadding">
+                <label>{{'mobileTerminal.form_inmarsatc_communication_selectedchannel_started_label' | i18n}}</label>
+            </div>
+            <div class="col-md-2 smallerpadding">
+                <label>{{'mobileTerminal.form_inmarsatc_communication_selectedchannel_stopped_label' | i18n}}</label>
+            </div>
+        </div>
+
+        <div class="col-md-12">
+            <div ng-repeat="communicationChannel in mt.channels" class="row align-middle mobileTerminalChannel" ng-class="{comchannelrow: $index == 0}">
+                <div class="col-md-2 form-group">
+                    <input ng-model="communicationChannel.name" class="form-control" readonly/>
+                </div>
+
+                <div class="col-md-2 smallerpadding">
+                    <div class="col-md-4 smallerpadding">
+                        <input type="radio" ng-model="communicationChannel.capabilities.POLLABLE" ng-value="true" disabled/>
+                    </div>
+                    <div class="col-md-4 smallerpadding">
+                        <input type="radio" ng-model="communicationChannel.capabilities.CONFIGURABLE" ng-value="true" disabled/>
+                    </div>
+                    <div class="col-md-4 smallerpadding">
+                        <input type="radio" ng-model="communicationChannel.capabilities.DEFAULT_REPORTING" ng-value="true" disabled/>
+                    </div>
+                </div>
+
+                <div class="col-md-1 smallerpadding form-group">
+                    <input ng-value="communicationChannel.ids.DNID || '-'" class="form-control" readonly/>
+                </div>
+                <div class="col-md-1 smallerpadding form-group">
+                    <input ng-value="communicationChannel.ids.MEMBER_NUMBER || '-'" class="form-control" readonly/>
+                </div>
+                <div class="col-md-2 smallerpadding form-group">
+                    <input ng-value="communicationChannel.ids.LES_DESCRIPTION || '-'" class="form-control" readonly/>
+                </div>
+                <div class="col-md-2 smallerpadding form-group">
+                    <input ng-value="communicationChannel.ids.START_DATE || '-' | confDateFormat" class="form-control" readonly/>
+                </div>
+                <div class="col-md-2 smallerpadding form-group">
+                    <input ng-value="communicationChannel.ids.END_DATE || '-' | confDateFormat" class="form-control" readonly/>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="row">
+        <div class="col-md-2 form-group mobile-terminal-attribute">
+            <label>{{"mobileTerminal.form_inmarsatc_installed_by_label" | i18n}}</label>
+            <input ng-value="mt.attributes.INSTALLED_BY || '-'" class="form-control" readonly/>
+        </div>
+        <div class="col-md-2 form-group mobile-terminal-attribute">
+            <label>{{"mobileTerminal.form_inmarsatc_installed_on_label" | i18n}}</label>
+            <input ng-value="mt.attributes.INSTALLED_ON || '-' | confDateFormat" class="form-control" readonly/>
+        </div>
+        <div class="col-md-2 form-group mobile-terminal-attribute">
+            <label>{{"mobileTerminal.form_inmarsatc_started_on_label" | i18n}}</label>
+            <input ng-value="mt.attributes.STARTED_ON || '-' | confDateFormat" class="form-control" readonly/>
+        </div>
+        <div class="col-md-2 form-group mobile-terminal-attribute">
+            <label>{{"mobileTerminal.form_inmarsatc_uninstalled_on_label" | i18n}}</label>
+            <input ng-value="mt.attributes.UNINSTALLED_ON || '-' | confDateFormat" class="form-control" readonly/>
+        </div>
+    </div>
+
+    <div class="row">
+        <div class="col-md-2 mobile-terminal-attribute">
+            <label>{{"mobileTerminal.form_inmarsatc_expected_freq_label" | i18n}}</label>
+            <input ng-value="mt.attributes.FREQUENCY_EXPECTED | secondsToTimeString" class="form-control" readonly/>
+        </div>
+        <div class="col-md-2 mobile-terminal-attribute">
+            <label>{{"mobileTerminal.form_inmarsatc_grace_period_label" | i18n}}</label>
+            <input ng-value="mt.attributes.FREQUENCY_GRACE_PERIOD | secondsToTimeString" class="form-control" readonly/>
+        </div>
+        <div class="col-md-2 mobile-terminal-attribute">
+            <label>{{"mobileTerminal.form_inmarsatc_in_port_grace_period_label" | i18n}}</label>
+            <input ng-value="mt.attributes.FREQUENCY_IN_PORT | secondsToTimeString" class="form-control" readonly/>
+        </div>
+    </div>
+</div>

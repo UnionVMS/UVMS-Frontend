@@ -1,0 +1,119 @@
+/*
+﻿Developed with the contribution of the European Commission - Directorate General for Maritime Affairs and Fisheries
+© European Union, 2015-2016.
+
+This file is part of the Integrated Fisheries Data Management (IFDM) Suite. The IFDM Suite is free software: you can
+redistribute it and/or modify it under the terms of the GNU General Public License as published by the
+Free Software Foundation, either version 3 of the License, or any later version. The IFDM Suite is distributed in
+the hope that it will be useful, but WITHOUT ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or
+FITNESS FOR A PARTICULAR PURPOSE.  See the GNU General Public License for more details. You should have received a
+copy of the GNU General Public License along with the IFDM Suite. If not, see <http://www.gnu.org/licenses/>.
+ */
+.alarmReportModal{
+
+    .modal-body{
+
+        //Status label
+        .label{
+            position: relative;
+            top: -1px;
+            margin-right: 20px;
+        }
+
+        .sectionHeader{
+            color: #777;
+            .grayBorderBottom;
+            padding-top: 15px;
+        }
+
+        .assignAssetLink{
+            position: absolute;
+            right: 20px;
+            bottom: 0px;
+            .link;
+            .pointer;
+        }
+
+        //Value header
+        label{
+            font-weight: normal;
+            margin-top: 10px;
+        }
+
+        //Value
+        .value{
+            font-weight: bold;
+
+            &.missing{
+                color:@errorColor;
+                font-style:italic;
+            }
+        }
+
+        .mapContainer{
+            margin-top: 15px;
+        }
+
+        .searchVesselContainer{
+            margin-top: 10px;
+            padding-bottom: 10px;
+            padding:10px;
+            .grayBorder();
+
+            table{
+                td{
+                    button{
+                        width: 100%;
+                    }
+                }
+            }
+        }
+
+        .loadingMovementContainer{
+            position: relative;
+            top: 30px;
+            height: 30px;
+        }
+    }
+
+    .modal-footer{
+        .buttons {
+            margin-bottom: 0;
+
+            .buttonGroups {
+                display: inline-table;
+                width: 100%;
+
+                .buttonGroup {
+                    display: table-cell;
+                    vertical-align: middle;
+                    text-align: left;
+
+                    .button {
+                        margin-left: 10px;
+                        margin-right: 10px;
+                        &.btn-link {
+                            margin-left: 0;
+                            margin-right: 0;
+                        }
+                    }
+                    button{
+                        text-transform: uppercase;
+                    }
+                }
+                .button-group-right {
+                    text-align: right;
+                }
+            }
+        }
+    }
+
+    div.alert {
+        padding: 5px;
+        margin-top: 15px;
+        li {
+            cursor: initial;
+            list-style-type: disc
+        }
+    }
+}

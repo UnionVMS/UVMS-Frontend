@@ -1,0 +1,272 @@
+<!--
+﻿Developed with the contribution of the European Commission - Directorate General for Maritime Affairs and Fisheries
+© European Union, 2015-2016.
+
+This file is part of the Integrated Fisheries Data Management (IFDM) Suite. The IFDM Suite is free software: you can
+redistribute it and/or modify it under the terms of the GNU General Public License as published by the
+Free Software Foundation, either version 3 of the License, or any later version. The IFDM Suite is distributed in
+the hope that it will be useful, but WITHOUT ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or
+FITNESS FOR A PARTICULAR PURPOSE.  See the GNU General Public License for more details. You should have received a
+copy of the GNU General Public License along with the IFDM Suite. If not, see <http://www.gnu.org/licenses/>.
+-->
+<div ng-controller="manageUserCtlr">
+    <form novalidate class="form-horizontal" name="editUserForm" ng-submit="editUserForm.$valid && updateUser(user)">
+        <div class="modal-header">
+            <div class="row">
+                <div class="col-md-12">
+                    <h3 class="modal-title">Edit User</h3>
+                </div>
+            </div>
+        </div>
+
+        <div class="modal-body">
+            <div class="row">
+                <div class="col-md-12" ng-class="messageDivClass">
+                    <span ng-bind="actionMessage" ng-class="messageClass"></span>
+                </div>
+            </div>
+
+            <div class="row">
+                <div class="col-md-12">
+                    <div class="form-group">
+                        <label for="userName" class="col-md-2">{{ 'users.userName' | translate }}</label>
+
+                        <div class="col-md-3">
+                            <input type="text" class="form-control" id="userName" name="userName" ng-disabled="true"
+                                   ng-model="user.userName" required>
+                        </div>
+                        <label for="organisationSelect" class="col-md-2">
+                            {{ 'users.organisation' | translate }}<sup class="fa fa-asterisk mandatory"></sup>
+                        </label>
+
+                        <div class=" col-md-4">
+                            <select class="form-inline form-control dropdown-select"
+                                    id="organisationSelect"
+                                    name="organisationSelect"
+                                    ng-model="user.organisationComplex"
+                                    ng-options="organisation.parentOrgName for organisation in organisationsList"
+                                    ng-disabled="formDisabled"
+                                    required
+                                    ng-class="{pointer: pointer}"
+                                    ng-mouseenter="pointer=true"
+                                    ng-mouseleave="pointer=false">
+                                <option value="">Organisation...</option>
+                            </select>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-md-12">
+                    <div class="form-group">
+                        <label for="firstName" class="col-md-2">{{ 'users.firstName' | translate }}<sup
+                            class="fa fa-asterisk mandatory"></sup></label>
+
+                        <div class="col-md-3">
+                            <input type="text" class="form-control" id="firstName" name="firstName" ng-disabled="formDisabled"
+                                   ng-model="user.person.firstName" required>
+
+                            <div class="error" ng-show="editUserForm.firstName.$dirty">
+                                <small class="text-danger small" ng-show="editUserForm.firstName.$error.required">
+                                    First Name is required
+                                </small>
+                            </div>
+                        </div>
+
+                        <label class="col-md-2">{{ 'users.status' | translate }}</label>
+
+                        <div class="col-md-4">
+                            <div>
+                                <select class="form-inline form-control dropdown-select"
+                                        id="statusSelect"
+                                        name="statusSelect"
+                                        ng-model="user.status"
+                                        ng-options="'users.status_'+status | translate for status in statusList"
+                                        ng-disabled="formDisabled"
+                                        required
+                                        ng-class="{pointer: pointer}"
+                                        ng-mouseenter="pointer=true"
+                                        ng-mouseleave="pointer=false">
+                                </select>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-md-12">
+                    <div class="form-group">
+                        <label for="lastName" class="col-md-2">{{ 'users.lastName' | translate }}<sup
+                            class="fa fa-asterisk mandatory"></sup></label>
+
+                        <div class="col-sm-3">
+                            <input type="text" class="form-control" id="lastName" name="lastName" ng-disabled="formDisabled"
+                                   ng-model="user.person.lastName" required>
+
+                            <div class="error" ng-show="editUserForm.lastName.$dirty">
+                                <small class="text-danger small" ng-show="editUserForm.lastName.$error.required">
+                                    Last Name is required
+                                </small>
+                            </div>
+                        </div>
+                        <label class="col-md-2 ">{{ 'users.activeFrom' | translate }}
+                            <sup class="fa fa-asterisk mandatory"></sup>
+                        </label>
+
+                        <div class="col-md-3">
+                            <!--
+                            <usm-datepicker config="activeFromConfig" value="user.activeFrom"></usm-datepicker>
+                            <div>
+                                <span class="text-danger small" ng-show="activeFormRequiredAlert">Active From date is required</span>
+                            </div>
+                            -->
+                            <datepicker-input name="activeFrom"
+                                              model="user.activeFrom"
+                                              ng-required="true"
+                                              ng-disabled="formDisabled"
+                                              input-field-id="edit-user-active-from-date-picker">
+                            </datepicker-input>
+                            <div class="error" ng-show="editUserForm.activeFrom.$dirty">
+                                <span class="text-danger small" ng-show="editUserForm.activeFrom.$error.required">
+                                    Active From date is required
+                                </span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-md-12">
+                    <div class="form-group">
+                        <label for="phoneNumber" class="col-md-2 ">{{ 'users.phoneNumber' | translate }}
+                        </label>
+
+                        <div class="col-md-3">
+                            <input type="text" class="form-control" id="phoneNumber" name="phoneNumber" ng-disabled="formDisabled"
+                                   ng-model="user.person.phoneNumber">
+                        </div>
+                        <label class="col-md-2 ">{{ 'users.activeTo' | translate }}
+                            <sup class="fa fa-asterisk mandatory"></sup>
+                        </label>
+
+                        <div class="col-md-3">
+                            <!--
+                            <usm-datepicker config="activeToConfig" value="user.activeTo"></usm-datepicker>
+                            <div>
+                                <span class="text-danger small" ng-show="activeToRequiredAlert">Active From date is required</span>
+                            </div>
+                            -->
+                            <datepicker-input name="activeTo"
+                                              model="user.activeTo"
+                                              ng-required="true"
+                                              ng-disabled="formDisabled"
+                                              input-field-id="edit-user-active-to-date-picker">
+                            </datepicker-input>
+                            <div class="error" ng-show="editUserForm.activeTo.$dirty">
+                            <span class="text-danger small" ng-show="editUserForm.activeTo.$error.required">
+                                Active To date is required
+                            </span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="row">
+                <div class="col-md-12">
+                    <div class="form-group">
+                        <label for="mobileNumber" class="col-md-2 ">{{ 'users.mobileNumber' | translate }}</label>
+
+                        <div class="col-md-3">
+                            <input type="text" class="form-control" id="mobileNumber" ng-disabled="formDisabled"
+                                   ng-model="user.person.mobileNumber">
+                        </div>
+
+                        <label class="col-md-2 ">Lockout To</label>
+
+                        <div class="col-md-3">
+                            <datepicker-input model="user.lockoutTo" ng-disabled="formDisabled" input-field-id="edit-user-lockout-to-date"></datepicker-input>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="row">
+                <div class="col-md-12">
+                    <div class="form-group">
+                        <label for="faxNumber" class="col-md-2 ">{{ 'users.faxNumber' | translate }}</label>
+
+                        <div class="col-md-3">
+                            <input type="text" class="form-control" id="faxNumber" ng-disabled="formDisabled"
+                                   ng-model="user.person.faxNumber">
+                        </div>
+
+                        <!-- lockOutReason -->
+                        <label for="lockoutReason" class="col-md-2 ">Lockout reason</label>
+
+                        <div class="col-md-4">
+                            <input type="text" class="form-control" id="lockoutReason" name="lockoutReason"
+                                   ng-disabled="formDisabled" ng-model="user.lockoutReason">
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="row">
+                <div class="col-md-12">
+                    <div class="form-group">
+                        <label for="eMail" class="col-md-2 ">{{ 'users.email' | translate }}<sup
+                            class="fa fa-asterisk mandatory"></sup></label>
+
+                        <div class="col-md-9">
+                            <div class="input-group">
+                                <input type="email" name="email" id="email" class="form-control" ng-disabled="formDisabled"
+                                       ng-model="user.person.email" required>
+                                <span class="input-group-addon"><span class="fa fa-envelope"></span></span>
+                            </div>
+
+                            <div class="error" ng-show="editUserForm.email.$dirty && editUserForm.email.$invalid">
+                                <small class="text-danger" ng-show="editUserForm.email.$error.required">
+                                    Email is required.
+                                </small>
+                                <small class="text-danger" ng-show="editUserForm.email.$error.email">
+                                    That is not a valid email
+                                </small>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-md-12">
+                    <div class="form-group">
+                        <label for="comments" class="col-md-2">{{ 'users.notes' | translate }}</label>
+
+                        <div class="col-md-9">
+                            <textarea class="form-control" id="comments" rows="3" ng-disabled="formDisabled" ng-model="user.notes"></textarea>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="modal-footer">
+            <div class="row">
+                <div class="col-md-12">
+                    <div class="col-md-offset-8 col-md-4">
+                        <input type="button" class="btn btn-warning btn-sm" ng-hide="userUpdated" ng-click="cancel()" value="Cancel"/>
+                        <button ng-show="showEdit && !userUpdated" ng-click="changeEditForm()" id="editButton" type="button" class="btn btn-primary btn-sm">
+                            Edit
+                        </button>
+                        <button ng-show="showSubmit && !userUpdated" ng-click="changeEditForm()" type="submit" class="btn btn-primary btn-sm"
+                                ng-disabled="editUserForm.$invalid">
+                            Save
+                        </button>
+                        <button type="button" class="btn btn-success btn-sm" ng-show="userUpdated" ng-disabled="true">
+                            <span class="fa fa-check"></span>
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </form>
+</div>

@@ -1,0 +1,86 @@
+{
+    "search_zero_results_error" : "No exchange logs matching your search criteria were found.",
+	"search_forward_rule": "Forward rule",
+	"search_from": "From",
+	"search_message_contains": "Message contains",
+	"search_range": "Range",
+	"search_recipient": "Recipient",
+	"search_ircs_cfr_name": "IRCS, CFR, Name",
+	"search_to": "To",
+
+    "message_details_modal_title" : "Message details",
+
+
+	"sending_queue_table_header_date_received": "Date received",
+	"sending_queue_table_header_from": "From",
+	"sending_queue_table_header_recipient": "Recipient",
+	"sending_queue_table_pauseall": "Paus all",
+	"sending_queue_table_pause": "Pause",
+	"sending_queue_table_resendall": "Resend all",
+	"sending_queue_table_resendgroup": "Resend group",
+	"sending_queue_table_resend": "Resend",
+	"sending_queue_table_number_of_reports_start" : "Total ",
+	"sending_queue_table_number_of_reports_end" : " messages in queue",
+	"sending_queue_table_allmessages_in_group": "Group",
+	"sending_queue_date_recieved" : "Date received",
+
+	"sending_queue_table_header_recipient" : "Recipient",
+	"sending_queue_table_header_message_type" : "Msg.type",
+	"sending_queue_table_header_unsent_reports" : "Unsent rep.",
+	"sending_queue_table_header_last_received" : "Last received.",
+
+
+	"table_header_actions": "Actions",
+	"table_header_date_fwd": "Date forwarded",
+	"table_header_date_received": "Date received",
+	"table_header_fwd_rule": "Forward rule",
+	"table_header_recipient": "Recipient",
+	"table_header_sent_by": "From",
+    "table_header_status": "Status",
+    "table_header_source": "Source",
+	"table_header_type": "Type",
+	"table_header_sender_reciever" : "Sender/Receiver",
+
+	"sending_queue_detail_table_header_potision_time" : "Position time",
+	"sending_queue_detail_table_header_sender_recipient":"Sender/recipient",
+	"sending_queue_detail_table_header_date_recieved":"Received",
+	"sending_queue_detail_table_header_asset_name":"Asset name",
+	"sending_queue_detail_table_header_longitude":"Longitude",
+	"sending_queue_detail_table_header_latitude":"Latidude",
+	"sending_queue_detail_table_header_ircs" : "IRCS",
+	"sending_queue_detail_table_header_email" : "Email",
+
+	"sending_queue_expandgroup" : "Expand group",
+	"sending_queue_collapsegroup" : "Collapse group",
+	"sending_queue_resend": "Resend",
+	"sending_queue_resend_title": "Resends this message",
+	"sending_queue_table_resend_all": "Resend all",
+	"sending_queue_table_resend_all_title": "Resends all messages in queue",
+	"sending_queue_resend_all_in_group":"Resend group",
+	"sending_queue_resend_all_in_group_title":"Resends all messages in this group",
+
+	"sending_queue_header" : "Sending queue",
+	"sending_queue_warning_part_one" : "There are currently ",
+	"sending_queue_warning_part_two" : "  messages in queue. This might take a while.",
+	"sending_queue_all_ok" : "Status ok, there are no messages in queue.",
+
+	"transmission_status_header" : "Transmission status",
+	"transmission_status_online" : "Online",
+    "transmission_status_offline" : "Stopped",
+	"transmission_status_stopped" : "Stopped",
+
+    "transmission_action_start" : "Start",
+    "transmission_action_stop" : "Stop",
+    "transmission_start_transmission_error" : "Error. Could not start plugin. Please try again later.",
+    "transmission_start_transmission_successfull" : "Plugin started.",
+    "transmission_stop_transmission_error" : "Error. Could not stop plugin. Please try again later.",
+    "transmission_stop_transmission_successfull" : "Plugin stopped.",
+
+	"title_all": "All",
+    "title_details": "Show details",
+	"title_incoming": "Incoming",
+	"title_outgoing": "Outgoing",
+	"title_forward": "Forward",
+	"title_resend": "Resend"
+
+}

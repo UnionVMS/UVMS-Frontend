@@ -1,0 +1,32 @@
+<!--
+﻿Developed with the contribution of the European Commission - Directorate General for Maritime Affairs and Fisheries
+© European Union, 2015-2016.
+
+This file is part of the Integrated Fisheries Data Management (IFDM) Suite. The IFDM Suite is free software: you can
+redistribute it and/or modify it under the terms of the GNU General Public License as published by the
+Free Software Foundation, either version 3 of the License, or any later version. The IFDM Suite is distributed in
+the hope that it will be useful, but WITHOUT ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or
+FITNESS FOR A PARTICULAR PURPOSE.  See the GNU General Public License for more details. You should have received a
+copy of the GNU General Public License along with the IFDM Suite. If not, see <http://www.gnu.org/licenses/>.
+-->
+<div class="row">
+    <div class="indentedSection">
+        <div class="col-md-12">
+            <table>
+                <thead>
+                    <tr>
+                        <th>{{'polling.wizard_second_step_configuration_poll_reporting_frequence' | i18n}}</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                      <td class="form-group" ng-class="{'has-error': pollingOptionsForm.configurationFreq.$invalid && (submitAttempted || pollingOptionsForm.configurationFreq.$dirty), 'ignored': pollingOptions.configurationPoll.freq === 0}">
+                            <period-input name="configurationFreq" model="pollingOptions.configurationPoll.freq" ng-disabled="!isConfigurationPoll()"></period-input>
+                            <input-validation-message types="period" input="pollingOptionsForm.configurationFreq"></input-validation-message>
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>
