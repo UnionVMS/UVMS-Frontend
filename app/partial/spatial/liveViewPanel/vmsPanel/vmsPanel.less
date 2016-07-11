@@ -9,6 +9,26 @@
 		.collapseicon {
 			padding-right: 5px;
 		}
+		&.tab-panel-layout {
+			height: 42px;
+			ul {
+				height: 42px;
+				li {
+					a {
+						line-height: 40px;
+						border-top: 1px solid @profileColor_neutralgray;
+					}
+					&.active {
+						a {
+							border-bottom: 1px solid  @profileColor_neutralgray;
+							&:hover {
+								border-bottom: 1px solid  @profileColor_neutralgray;
+							}
+						}
+					}
+				}	
+			}
+		}
 	}
 	.top-tabs {
 		height: 65px;
@@ -67,6 +87,9 @@
 		}
 		.no-border {
 			border: 0;
+		}
+		.with-bottom-border {
+			border-bottom-width: 1px;
 		}
 	}
 }

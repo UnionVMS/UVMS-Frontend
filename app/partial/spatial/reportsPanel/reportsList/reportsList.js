@@ -55,7 +55,6 @@ angular.module('unionvmsWeb').controller('ReportslistCtrl',function($scope, $fil
     $scope.runReport = function(index){
         var record = $scope.displayedRecords[index];
         $scope.$emit('runReport', record);
-        reportService.outOfDate = false;
         reportService.id = $scope.displayedRecords[index].id;
     };
     

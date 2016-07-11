@@ -1,4 +1,4 @@
-angular.module('unionvmsWeb').controller('MapCtrl',function($log, $scope, locale, $timeout, $document, $templateRequest, $modal, mapService, loadingStatus, spatialHelperService, reportService, mapFishPrintRestService, MapFish, MapFishPayload, spatialRestService, $window, projectionService, $state, $localStorage, reportFormService, $compile,comboboxService,userService){
+angular.module('unionvmsWeb').controller('MapCtrl',function($log, $scope, locale, $timeout, $document, $templateRequest, $modal, mapService, loadingStatus, spatialHelperService, reportService, mapFishPrintRestService, MapFish, MapFishPayload, spatialRestService, $window, projectionService, $state, $localStorage, reportFormService,comboboxService,userService){
     $scope.activeControl = '';
     $scope.showMeasureConfigWin = false;
     $scope.showMapFishConfigWin = false;
@@ -612,19 +612,6 @@ angular.module('unionvmsWeb').controller('MapCtrl',function($log, $scope, locale
     	}
     	var url = $state.href('app.reporting-id', {id: $scope.repServ.id, guid: guid});
     	$window.open(url,'_blank');
-    };
-
-    $scope.selectHistory = function(item){
-        var report = angular.copy(item);
-        delete report.code;
-        delete report.text;
-        $scope.repServ.runReport(report);
-    };
-
-    $scope.initComboHistory = function(comboId){
-        var comboFooter = angular.element('<li class="combo-history-footer"><div class="footer-item" ng-click="openReportList($event)"><span>Edit List</span></div><div class="footer-item" ng-click="createReportFromLiveview($event)"><span>Create new</span></div></li>');
-        angular.element('#' + comboId + '>.dropdown-menu').append(comboFooter);
-        $compile(comboFooter)($scope);
     };
 
     $scope.openReportList = function(evt){

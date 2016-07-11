@@ -79,6 +79,7 @@ angular.module('unionvmsWeb').factory('reportService',function($rootScope, $time
     
 	rep.runReport = function(report){
 		rep.isReportExecuting = true;
+		rep.outOfDate = false;
 		
 		rep.runInterval = $interval(function(){
 		    var mapContainer = angular.element('#map');
@@ -362,12 +363,13 @@ angular.module('unionvmsWeb').factory('reportService',function($rootScope, $time
         rep.segments = [];
         rep.tracks = [];
         rep.tabs.map = rep.isReportRefreshing ? rep.tabs.map : report.withMap;
-    
+        
+        mapService.resetLabelContainers();
+        
         //This gets executed on initial loading when we have a default report
-        if (!angular.isDefined(mapService.map)){
-            mapService.resetLabelContainers();
+        if (!angular.isDefined(mapService.map) && rep.tabs.map){
             mapService.setMap(defaultMapConfigs);
-        } else {
+        } else if (angular.isDefined(mapService.map)) {
             mapService.clearVectorLayers();
             
             //Reset history control

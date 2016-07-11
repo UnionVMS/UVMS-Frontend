@@ -1,35 +1,19 @@
-angular.module('unionvmsWeb').controller('LiveviewpanelCtrl',function($scope, $timeout, $window, locale, mapService, reportService){
+angular.module('unionvmsWeb').controller('LiveviewpanelCtrl',function($scope, $timeout, $window, locale, mapService, reportService, $compile){
     $scope.selectedTab = 'MAP';
     
-    //Define tabs
-    var setTabs = function(){
-            return [
-                {
-                    'tab': 'MAP',
-                    'title': locale.getString('spatial.tab_map'),
-                    'visible': reportService.tabs.map
-                },
-                {
-                    'tab': 'VMS',
-                    'title': locale.getString('spatial.tab_vms'),
-                    'visible': reportService.tabs.vms
-                }
-            ];
-        };
-        
-   $scope.selectTab = function(tab){
-       $scope.selectedTab = tab;
-       reportService.selectedTab = tab;
-   };
-   
-   $scope.isTabSelected = function(tab){
-       return $scope.selectedTab === tab;
-   };
-   
-   $scope.isTabVisible = function(tabIdx){
-       return $scope.tabMenu[tabIdx].visible;
-   };
-   
+    $scope.selectHistory = function(item){
+        var report = angular.copy(item);
+        delete report.code;
+        delete report.text;
+        $scope.repServ.runReport(report);
+    };
+
+    $scope.initComboHistory = function(comboId){
+        var comboFooter = angular.element('<li class="combo-history-footer"><div class="footer-item" ng-click="openReportList($event)"><span>Edit List</span></div><div class="footer-item" ng-click="createReportFromLiveview($event)"><span>Create new</span></div></li>');
+        angular.element('#' + comboId + '>.dropdown-menu').append(comboFooter);
+        $compile(comboFooter)($scope);
+    };
+    
    //Focus map div
    $scope.focusMap = function(){
        var mapElement = $window.document.getElementById('map');
@@ -38,37 +22,10 @@ angular.module('unionvmsWeb').controller('LiveviewpanelCtrl',function($scope, $t
        }
    };
    
-   //Refresh map size on tab change
-   $scope.$watch('selectedTab', function(newVal, oldVal){
-       if (newVal === 'MAP'){
-           $timeout(mapService.updateMapContainerSize(), 100);
-           $timeout($scope.focusMap, 50);
-       }
-   });
-   
-   $scope.$watch(function(){return reportService.isReportExecuting;}, function(newVal, oldVal){
-       $scope.tabMenu[0].visible = reportService.tabs.map;
-       $scope.tabMenu[1].visible = reportService.tabs.vms;
-       if (reportService.tabs[$scope.selectedTab.toLowerCase()] === false ){
-           var newTab = 'MAP';
-           if ($scope.selectedTab === 'MAP'){
-               newTab = 'VMS';
-           }
-           $scope.selectTab(newTab);
-       }
-       
-//       if (reportService.tabs.map === true){
-//           $scope.selectTab('MAP');
-//       } else {
-//           $scope.selectTab('VMS');
-//       }
-   });
-   
-//   $scope.$on('mapAction', function(){
-//       $scope.selectedTab = 'MAP';
-//   });
-   
-   locale.ready('spatial').then(function(){
-       $scope.tabMenu = setTabs();
+   $scope.$watch('repServ.tabs.map', function(newVal, oldVal){
+      if (newVal){
+          $timeout(mapService.updateMapContainerSize(), 100);
+          $timeout($scope.focusMap, 50);
+      } 
    });
 });

@@ -1590,7 +1590,6 @@ angular.module('unionvmsWeb').factory('mapService', function(locale, $rootScope,
 	            return;
 	        }
 	        
-	        var offset = 120;
 	        var minHeight = 400;
 	        var headerHeight = angular.element('header')[0].offsetHeight;
 	        var newHeight = w.height() - headerHeight;
@@ -1600,6 +1599,7 @@ angular.module('unionvmsWeb').factory('mapService', function(locale, $rootScope,
 	        }
 	        
 	        $('.map-container').css('height', newHeight);
+	        $('#map').css('height', newHeight + 'px');
 	        
 	        ms.updateMapSize();
         }, 100);
