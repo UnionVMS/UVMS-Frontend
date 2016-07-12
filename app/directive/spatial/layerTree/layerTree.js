@@ -81,14 +81,14 @@ angular.module('unionvmsWeb').directive('layerTree', function(mapService, locale
                 }
 
                 //Deal with popups
-                if (mapService.activeLayerType === node.data.type && angular.isDefined(mapService.overlay) && node.isSelected() === false){
-                    mapService.closePopup();
-                    mapService.activeLayerType = undefined;
-                    target = $(node.span).children('.fancytree-title').children('.fa.fa-info-circle');
-                    if (target.hasClass('info-selected')){
-                        target.removeClass('info-selected');
-                    }
-                }
+//                if (mapService.activeLayerType === node.data.type && angular.isDefined(mapService.overlay) && node.isSelected() === false){
+//                    mapService.closePopup();
+//                    mapService.activeLayerType = undefined;
+//                    target = $(node.span).children('.fancytree-title').children('.fa.fa-info-circle');
+//                    if (target.hasClass('info-selected')){
+//                        target.removeClass('info-selected');
+//                    }
+//                }
 			};
 
 			var renderNodeHandler = function( event, data ) {
@@ -102,9 +102,9 @@ angular.module('unionvmsWeb').directive('layerTree', function(mapService, locale
 					addContextMenu( data );
 				}
 
-				if ( data.node.data.popupEnabled === true ) {
-					addInfo( data );
-				}
+//				if ( data.node.data.popupEnabled === true ) {
+//					addInfo( data );
+//				}
 
 				if (data.node.data.labelEnabled === true){
 				    addLabel( data );
@@ -155,47 +155,47 @@ angular.module('unionvmsWeb').directive('layerTree', function(mapService, locale
 			};
 
 			// add info button to activate info-popup on layer
-			var addInfo = function( data ) {
-				var	tip,
-						$title = $( data.node.span ).children( '.fancytree-title' ),
-						$info = $title.children('.fa.fa-info-circle');
-
-				if ( $info.length > 0 ) {
-					return;
-				}
-
-				tip = locale.getString(data.node.data.popupTip);
-				var cls = 'fa fa-info-circle fancytree-clickable';
-
-                var empty = false;
-                if ((data.node.data.type === 'vmspos' && mapService.popupVisibility.positions.length === 0) || (data.node.data.type === 'vmsseg' && mapService.popupVisibility.segments.length === 0)){
-                    tip = locale.getString('spatial.layer_tree_empty_popup_label_visibility_settings');
-                    empty = true;
-                    cls += ' info-disabled';
-                }
-
-				$( '<span class="' + cls + '" title="'+tip+'"></span>' )
-					.appendTo( $title )
-					.on( 'click', function(event){
-						var node, $target = $( event.target );
-
-						if (!empty){
-						    var active = $target.hasClass( 'info-selected' );
-						    if (data.node.isSelected() === true){
-	                            $('.info-selected').removeClass( 'info-selected' );
-
-	                            if ( !active ) {
-	                                node = $.ui.fancytree.getNode( event.target );
-	                                $target.addClass( 'info-selected' );
-	                                mapService.activeLayerType = node.data.type;
-	                            } else {
-	                                mapService.closePopup();
-	                                mapService.activeLayerType = undefined;
-	                            }
-	                        }
-						}
-					});
-			};
+//			var addInfo = function( data ) {
+//				var	tip,
+//						$title = $( data.node.span ).children( '.fancytree-title' ),
+//						$info = $title.children('.fa.fa-info-circle');
+//
+//				if ( $info.length > 0 ) {
+//					return;
+//				}
+//
+//				tip = locale.getString(data.node.data.popupTip);
+//				var cls = 'fa fa-info-circle fancytree-clickable';
+//
+//                var empty = false;
+//                if ((data.node.data.type === 'vmspos' && mapService.popupVisibility.positions.length === 0) || (data.node.data.type === 'vmsseg' && mapService.popupVisibility.segments.length === 0)){
+//                    tip = locale.getString('spatial.layer_tree_empty_popup_label_visibility_settings');
+//                    empty = true;
+//                    cls += ' info-disabled';
+//                }
+//
+//				$( '<span class="' + cls + '" title="'+tip+'"></span>' )
+//					.appendTo( $title )
+//					.on( 'click', function(event){
+//						var node, $target = $( event.target );
+//
+//						if (!empty){
+//						    var active = $target.hasClass( 'info-selected' );
+//						    if (data.node.isSelected() === true){
+//	                            $('.info-selected').removeClass( 'info-selected' );
+//
+//	                            if ( !active ) {
+//	                                node = $.ui.fancytree.getNode( event.target );
+//	                                $target.addClass( 'info-selected' );
+//	                                mapService.activeLayerType = node.data.type;
+//	                            } else {
+//	                                mapService.closePopup();
+//	                                mapService.activeLayerType = undefined;
+//	                            }
+//	                        }
+//						}
+//					});
+//			};
 
 			// add button to open context menu on layer
 			var addContextMenu = function( data ) {

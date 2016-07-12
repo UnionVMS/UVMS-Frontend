@@ -413,8 +413,8 @@ angular.module('unionvmsWeb').factory('TreeModel',function(locale, mapService, u
 	            title: type,
 	            type: type === 'positions' ? 'vmspos' : 'vmsseg',
 	            isBaseLayer: false,
-	            popupEnabled: true,
-	            popupTip: 'spatial.layer_tree_tip_popup',
+//	            popupEnabled: true,
+//	            popupTip: 'spatial.layer_tree_tip_popup',
 	            labelEnabled: true,
 	            labelTip: 'spatial.layer_tree_tip_label_vector',
 	            longAttribution: longCopyright.length > 0 ? longCopyright : undefined,
@@ -463,8 +463,8 @@ angular.module('unionvmsWeb').factory('TreeModel',function(locale, mapService, u
 	            excludeDnd: true,
                 title: title,
                 type: 'alarms',
-                popupEnabled: true,
-                popupTip: 'spatial.layer_tree_tip_popup',
+//                popupEnabled: true,
+//                popupTip: 'spatial.layer_tree_tip_popup',
                 longAttribution: longCopyright.length > 0 ? longCopyright : undefined,
                 geoJson: data
 	        }

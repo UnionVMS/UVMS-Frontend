@@ -8,7 +8,7 @@
 		</div>
 	</div>
 	<div class="layer-panel-content">
-		<div class="dynamic-content">
+		<div class="dynamic-content" ng-class="getClassName()">
 			<div ng-show="tab==='LAYERTREE'" class="legend-panel">
 	        	<div layer-menu></div>
 	        	<div id="layer-tree" layer-tree></div>
@@ -36,7 +36,11 @@
 	     		</li>
 	   		</ul>
 	   	</div>
-	   	<div class="panel-component-item item-clickable" ng-click="goTo('AREAMANAGEMENT')">
+	   	<div class="panel-component-item item-clickable" ng-if="isReportEditable()" ng-click="goTo('AREAMANAGEMENT')">
+	   		<span class="fa fa-pencil"></span>&nbsp;&nbsp;
+	   		{{ 'spatial.reports_table_config_label' | i18n }}
+	   	</div>
+	   	<div class="panel-component-item item-clickable" ng-if="isAllowed('Spatial', 'VIEW_AREA_MANAGEMENT_UI')" ng-click="goTo('AREAMANAGEMENT')">
 	   		<span class="fa fa-map"></span>&nbsp;&nbsp;
 	   		{{ 'header.page_title_areas' | i18n }}
 	   	</div>

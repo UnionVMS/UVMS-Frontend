@@ -1,4 +1,4 @@
-angular.module('unionvmsWeb').controller('LayerpanelCtrl',function($scope, $timeout,$window, mapService, locale){
+angular.module('unionvmsWeb').controller('LayerpanelCtrl',function($scope, $timeout,$window, mapService, locale, reportService){
     $scope.expanded = true;
     $scope.tab = "LAYERTREE";
     $scope.tabTitle = undefined;
@@ -28,5 +28,14 @@ angular.module('unionvmsWeb').controller('LayerpanelCtrl',function($scope, $time
     $scope.tabClick = function( tab ) {
         $scope.tab = tab;
         setTabTitle();
+    };
+    
+    $scope.getClassName = function(){
+        var items = angular.element('.panel-component-item');
+        return 'item-' + items.length;
+    };
+    
+    $scope.isReportEditable = function(){
+        return reportService.editable;
     };
 });

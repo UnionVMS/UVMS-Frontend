@@ -10,7 +10,7 @@ angular.module('unionvmsWeb').controller('MapCtrl',function($log, $scope, locale
     $scope.mapFish = MapFish;
     $scope.tbControl = spatialHelperService.tbControl;
     $scope.mapFishLocalConfig = {};
-    $scope.popupRecContainer = {};
+    $scope.popupRecContainer = mapService.popupRecContainer;
     $scope.bookmarksByPage = 3;
     $scope.bookmarkNew = {};
     $scope.submitingBookmark = false;
@@ -20,7 +20,6 @@ angular.module('unionvmsWeb').controller('MapCtrl',function($log, $scope, locale
     $scope.projections = projectionService;
     $scope.graticuleActivated = false;
     $scope.graticuleTip = [locale.getString('spatial.map_tip_enable'), locale.getString('spatial.map_tip_graticule')].join(' ');
-    $scope.infoLayer = undefined;
     $scope.comboServ = comboboxService;
 
     //Comboboxes
@@ -59,18 +58,6 @@ angular.module('unionvmsWeb').controller('MapCtrl',function($log, $scope, locale
         }
     };
 
-    //Watch to change the source for the popup paginator
-    $scope.$watch(function(){return mapService.activeLayerType;}, function(newVal, oldVal){
-        if (angular.isDefined(newVal) && newVal !== oldVal){
-            $scope.infoLayer = newVal;
-            if (newVal === 'vmsseg'){
-                $scope.popupRecContainer = mapService.popupSegRecContainer;
-            } else if (newVal === 'alarms'){
-                $scope.popupRecContainer = mapService.popupAlarmRecContainer;
-            }
-        }
-    });
-    
     //Open modal with vms data
     $scope.showDataTables = function(){
         loadingStatus.isLoading('LiveviewMap',true,2);
@@ -143,15 +130,9 @@ angular.module('unionvmsWeb').controller('MapCtrl',function($log, $scope, locale
 
     //Update popup content
     $scope.updatePopup = function(){
-        var record, data;
-        if (mapService.activeLayerType === 'vmsseg'){
-            record = mapService.popupSegRecContainer.records[mapService.popupSegRecContainer.currentIdx];
-            data = mapService.setSegmentsObjPopup(record.data);
-        } else if (mapService.activeLayerType === 'alarms'){
-            record = mapService.popupAlarmRecContainer.records[mapService.popupAlarmRecContainer.currentIdx];
-            data = mapService.setAlarmsObjPopup(record.data);
-        }
-        mapService.requestPopupTemplate(data, record.coord, record.fromCluster, true);
+        var record = $scope.popupRecContainer.records[$scope.popupRecContainer.currentIdx];
+        var data = mapService.setObjPopup(record);
+        mapService.requestPopupTemplate(data, record.type, record.coord, record.fromCluster, true);
     };
 
     //Projections
@@ -233,6 +214,7 @@ angular.module('unionvmsWeb').controller('MapCtrl',function($log, $scope, locale
         mapService.addPrintLayer();
         mapService.addDragPrintExtent();
         $scope.openMapFishConfigWin();
+        $scope.closePopup();
         if (!angular.isDefined($scope.mapFish.projectionId)){
             $scope.setDefaultPrintProjection();
         }
@@ -454,6 +436,7 @@ angular.module('unionvmsWeb').controller('MapCtrl',function($log, $scope, locale
 
     //Measure control
     $scope.measureEnable = function(){
+        $scope.closePopup();
         $scope.openMeasureConfigWin();
         mapService.startMeasureControl();
     };

@@ -40,9 +40,6 @@ angular.module('unionvmsWeb').factory('mapService', function(locale, $rootScope,
 	    ms.interactions = [];
 	    ms.overlay = ms.addPopupOverlay();
         
-	    // enables popup on positions and segments
-        ms.activeLayerType = undefined;
-        
 	    //Get all controls and interactions that will be added to the map
 	    var controlsToMap = ms.setControls(config.map.control);
 
@@ -88,73 +85,69 @@ angular.module('unionvmsWeb').factory('mapService', function(locale, $rootScope,
 	        var pixel = evt.pixel;
 	        var coordinate = evt.coordinate;
 	        var selInteraction = ms.getInteractionsByType('Select')[0];
+	        var dragInteraction = ms.getCustomInteraction('Pointer', 'dragExtent')[0];
 	        
-	        var record;
-	        ms.popupSegRecContainer.reset();
-	        var records = [];
+	        
+	        
 	        
 	        //get feature info
-	        if (angular.isDefined(ms.activeLayerType) && ((ms.activeLayerType === 'vmspos' && ms.popupVisibility.positions.length > 0) || (ms.activeLayerType === 'vmsseg' && ms.popupVisibility.segments.length > 0) || ms.activeLayerType === 'alarms')){
+	        if (angular.equals({}, ms.measureInteraction) && !angular.isDefined(dragInteraction)){
+	            ms.popupRecContainer.reset();
+	            var records = [];
 	            map.forEachFeatureAtPixel(pixel, function(feature, layer){
-	                if (angular.isDefined(ms.activeLayerType)){
-	                    if (layer !== null && layer.get('type') === ms.activeLayerType){
-	                        if (ms.activeLayerType === 'vmspos'){
-	                            var positions = feature.get('features');
-	                            if (positions.length === 1){
-	                                record = {
-	                                    data: positions[0].getProperties(),
-	                                    coord: positions[0].getGeometry().getCoordinates(),
-	                                    id: positions[0].getId(),
-	                                    fromCluster: false
-	                                };
-	                            }
-	                        } else{
+	                if (layer !== null) {
+	                    var type = layer.get('type');
+	                    if (type === 'vmspos'){
+	                        var positions = feature.get('features');
+	                        if (positions.length === 1){
 	                            records.push({
-                                    data: feature.getProperties(),
-                                    coord: ms.activeLayerType === 'vmsseg' ? feature.getGeometry().getClosestPoint(coordinate) : feature.getGeometry().getCoordinates(),
-                                    fromCluster: false
-                                });
+	                                type: type,
+	                                data: positions[0].getProperties(),
+	                                coord: positions[0].getGeometry().getCoordinates(),
+	                                id: positions[0].getId(),
+	                                fromCluster: false
+	                            });
 	                        }
+	                    } else if (type === 'vmsseg' || type === 'alarms'){
+	                        records.push({
+	                            type: type,
+	                            data: feature.getProperties(),
+	                            coord: type === 'vmsseg' ? feature.getGeometry().getClosestPoint(coordinate) : feature.getGeometry().getCoordinates(),
+	                            fromCluster: false
+	                        });
 	                    }
 	                }
 	            });
 	            
-	            if (!angular.isDefined(record) && ms.activeLayerType === 'vmspos' && selInteraction.getFeatures().getLength() > 0){
+	            //Check features in exploded cluster
+	            if (selInteraction.getFeatures().getLength() > 0){
 	                var positions = selInteraction.getFeatures().getArray()[0].get('features');
-	                var minDist;
+	                var minDist, record;
 	                positions.forEach(function(position){
 	                    var distance = new ol.geom.LineString([coordinate, position.get('spiderCoords')]).getLength();
 	                    if (!angular.isDefined(minDist) || distance < minDist){
 	                        minDist = distance;
 	                        record = {
+	                            type: 'vmspos',
 	                            data: position.getProperties(),
-	                            coord: position.get('spiderCoords'),
-	                            id: position.getId(),
-	                            fromCluster: true
-	                        };
+                                coord: position.get('spiderCoords'),
+                                id: position.getId(),
+                                fromCluster: true
+                            };
 	                    }
 	                });
+	                
+	                if (angular.isDefined(record)){
+	                    records.push(record);
+	                }
 	            }
 	            
-	            if (angular.isDefined(ms.activeLayerType) && (angular.isDefined(record) || records.length > 0) && angular.equals({}, ms.measureInteraction)){
-	                if (records.length > 0){
-	                    record = records[0];
-	                }
-	                
-	                var data;
-	                if (ms.activeLayerType === 'vmspos'){
-	                    data = ms.setPositionsObjPopup(record.data, record.id);
-	                } else if (ms.activeLayerType === 'vmsseg'){
-	                    data = ms.setSegmentsObjPopup(record.data);
-	                    ms.popupSegRecContainer.records = records;
-	                    ms.popupSegRecContainer.currentIdx = 0;
-	                } else if (ms.activeLayerType === 'alarms'){
-	                    data = ms.setAlarmsObjPopup(record.data);
-	                    ms.popupAlarmRecContainer.records = records;
-                        ms.popupAlarmRecContainer.currentIdx = 0;
-	                }
-	                ms.requestPopupTemplate(data, record.coord, record.fromCluster);
-	            }
+	            if (records.length > 0){
+                    var data = ms.setObjPopup(records[0]);
+                    ms.popupRecContainer.records = records;
+                    ms.popupRecContainer.currentIdx = 0;
+                    ms.requestPopupTemplate(data, records[0].type, records[0].coord, records[0].fromCluster);
+                }
 	        }
 	    });
 	    
@@ -455,7 +448,7 @@ angular.module('unionvmsWeb').factory('mapService', function(locale, $rootScope,
         
         cluster.on('change', function(e){
             //hide popup if position is clustered
-            if (angular.isDefined(ms.overlay) && ms.activeLayerType === 'vmspos'){
+            if (angular.isDefined(ms.overlay)){
                 var id = ms.overlay.get('featureId');
                 var layerSrc = ms.getLayerByType('vmspos').getSource();
                 var features = layerSrc.getFeaturesInExtent(ms.map.getView().calculateExtent(ms.map.getSize()));
@@ -2723,15 +2716,16 @@ angular.module('unionvmsWeb').factory('mapService', function(locale, $rootScope,
 	
     //POPUPS
 	//Render popup info using mustache
-    ms.requestPopupTemplate = function(data, coords, fromCluster){
-        var templateURL = 'partial/spatial/templates/' + ms.activeLayerType + '.html';
+    ms.requestPopupTemplate = function(data, type, coords, fromCluster){
+        ms.popupRecContainer.currentType = type;
+        var templateURL = 'partial/spatial/templates/' + type + '.html';
         $templateRequest(templateURL).then(function(template){
             var rendered = Mustache.render(template, data);
             var content = document.getElementById('popup-content');
             content.innerHTML = rendered;
             ms.overlay.setPosition(coords);
             ms.overlay.set('fromCluster', fromCluster, true);
-            if (ms.activeLayerType === 'vmspos'){
+            if (type === 'vmspos'){
                 ms.overlay.set('featureId', data.id, true);
                 ms.overlay.set('vesselId', data.vesselId, true);
                 ms.overlay.set('vesselName', data.vesselName, true);
@@ -2759,6 +2753,7 @@ angular.module('unionvmsWeb').factory('mapService', function(locale, $rootScope,
 	ms.closePopup = function(){
 	    ms.overlay.set('featureId', undefined, true);
 	    ms.overlay.setPosition(undefined);
+	    ms.popupRecContainer.reset();
 	    return false;
 	};
 	
@@ -2777,6 +2772,32 @@ angular.module('unionvmsWeb').factory('mapService', function(locale, $rootScope,
 	        ms.popupVisibility[type] = [];
 	    }
 	};
+	
+	//POPUP - decide which function to call so that data is properly formated 
+	ms.setObjPopup = function(record){
+	    var type = record.type;
+	    var data;
+	    if (type === 'vmspos'){
+	        data = ms.setPositionsObjPopup(record.data, record.id);
+	    } else if (type === 'vmsseg'){
+	        data = ms.setSegmentsObjPopup(record.data);
+	    } else { //alarms
+	        data = ms.setAlarmsObjPopup(record.data);
+	    }
+	    
+	    return data;
+	};
+	
+	ms.popupRecContainer = {
+	    records: [],
+	    currentType: undefined,
+        currentIdx: undefined,
+        reset: function(){
+            this.records = [];
+            this.currentType = undefined;
+            this.currentIdx = undefined;
+        }
+    };
 
 	//POPUP - Define the object that will be used in the popup for vms positions
     ms.setPositionsObjPopup = function(feature, id){
@@ -2894,15 +2915,6 @@ angular.module('unionvmsWeb').factory('mapService', function(locale, $rootScope,
     };
 
     //POPUP - vms segments
-    ms.popupSegRecContainer = {
-        records: [],
-        currentIdx: undefined,
-        reset: function(){
-            this.records = [];
-            this.currentidx = undefined;
-        }
-    };
-    
     //Define the object that will be used in the popup for vms segments
     ms.setSegmentsObjPopup = function(feature){
         var titles = ms.getSegmentTitles();
@@ -2968,15 +2980,6 @@ angular.module('unionvmsWeb').factory('mapService', function(locale, $rootScope,
     };
     
     //POPUP - alarms
-    ms.popupAlarmRecContainer = {
-        records: [],
-        currentIdx: undefined,
-        reset: function(){
-            this.records = [];
-            this.currentidx = undefined;
-        }
-    };
-    
     //Define the object that will be used in the popup for alarms
     ms.setAlarmsObjPopup = function(feature){
         var titles = ms.getAlarmTitles();

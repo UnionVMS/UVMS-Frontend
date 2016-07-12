@@ -26,7 +26,8 @@ angular.module('unionvmsWeb').factory('reportService',function($rootScope, $time
        outOfDate: undefined,
        getConfigsTime: undefined,
        getReportTime: undefined,
-       mapConfigs: undefined
+       mapConfigs: undefined,
+       editable: false
     };
     
     rep.clearVmsData = function(){
@@ -80,6 +81,7 @@ angular.module('unionvmsWeb').factory('reportService',function($rootScope, $time
 	rep.runReport = function(report){
 		rep.isReportExecuting = true;
 		rep.outOfDate = false;
+		rep.editable = report.editable;
 		
 		rep.runInterval = $interval(function(){
 		    var mapContainer = angular.element('#map');
@@ -118,9 +120,8 @@ angular.module('unionvmsWeb').factory('reportService',function($rootScope, $time
         mapService.resetLabelContainers();
         
         //Deactivate popups
-        if (angular.isDefined(mapService.activeLayerType)){
+        if (mapService.popupRecContainer.records.length > 0){
             mapService.closePopup();
-            mapService.activeLayerType = undefined;
         }
 	};
 	
@@ -381,7 +382,6 @@ angular.module('unionvmsWeb').factory('reportService',function($rootScope, $time
             //Close overlays
             if (angular.isDefined(mapService.overlay)){
                 mapService.closePopup();
-                mapService.activeLayerType = undefined;
             }
             
             if (mapService.vmsposLabels.active === true){

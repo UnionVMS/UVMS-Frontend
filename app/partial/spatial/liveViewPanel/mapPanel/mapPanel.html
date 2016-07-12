@@ -28,6 +28,7 @@
                 <div class="btn-group btn-group-xs" role="group" aria-label="Map controls">
                     <button type="button" class="btn btn-default btn-toolbar btn-fullscreen" title="{{'spatial.map_tip_fullscreen' | i18n }}" ng-click="fullscreenCtrl.toggleFullscreen();" ng-show="tbControl.fullscreen"><span class="fa fa-arrows-alt"></span></button>
                     <button type="button" class="btn btn-default btn-toolbar" title="{{'spatial.map_tip_open_new_tab' | i18n }}" ng-click="openMapOnNewTab();" ng-show="tbControl.newTab"><span class="fa fa-external-link"></span></button>
+                    <button type="button" class="btn btn-default btn-toolbar" title="{{'spatial.user_preferences' | i18n }}" ng-click="" ng-if="isAllowed('Spatial', 'ALLOW_USER_SPATIAL_CONFIGURATIONS')"><span class="fa fa-cogs"></span></button>
                 </div>
             </div>
         </div>
@@ -255,9 +256,9 @@
         <div id="popup" class="ol-popup">
             <a href ng-click="closePopup()" id="popup-closer" class="ol-popup-closer"><span class="fa fa-times"></span></a>
             <div class="col-md-12 ol-popup-header">
-				<span class="header" ng-show="infoLayer === 'vmspos' || infoLayer === 'alarms'">{{'spatial.popup_positions_title' | i18n}}</span>
-				<span class="header" ng-show="infoLayer === 'vmsseg'">{{'spatial.popup_segments_title' | i18n}}</span>            	
-				<div class="btn-container" ng-show="infoLayer === 'vmspos' && isAllowed('Vessel', 'getVesselById')">
+				<span class="header" ng-show="popupRecContainer.currentType === 'vmspos' || popupRecContainer.currentType === 'alarms'">{{'spatial.popup_positions_title' | i18n}}</span>
+				<span class="header" ng-show="popupRecContainer.currentType === 'vmsseg'">{{'spatial.popup_segments_title' | i18n}}</span>            	
+				<div class="btn-container" ng-show="popupRecContainer.currentType === 'vmspos' && isAllowed('Vessel', 'getVesselById')">
 					<button type="button" class="btn btn-default btn-xs" title="{{'spatial.popup_vessel_details_btn_title' | i18n}}" ng-click="getVesselDetails()"><i class="fa fa-ship"></i></button>
 				</div>
 			</div>

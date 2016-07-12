@@ -50,9 +50,17 @@
 	.dynamic-content {
 		padding-left: 7px;
 		padding-right: 7px;
-		height: calc(~'100% - 90px');
 		overflow: auto;
 		padding-bottom: 15px;
+		&.item-0 {
+			height: calc(~'100% - 60px');
+		}
+		&.item-1 {
+			height: calc(~'100% - 90px');
+		}
+		&.item-2 {
+			height: calc(~'100% - 120px');
+		}
 	}
 	.dynamic-switcher, 
 	.panel-component-item {
