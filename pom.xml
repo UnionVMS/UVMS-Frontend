@@ -100,9 +100,6 @@
                 <goals>
                   <goal>deploy-only</goal>
                 </goals>
-                <configuration>
-                  <filename>${project.artifactId}.war</filename>
-                </configuration>
               </execution>
               <execution>
                 <phase>clean</phase>
