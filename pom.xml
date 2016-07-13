@@ -109,7 +109,7 @@
                   <goal>undeploy</goal>
                 </goals>
                 <configuration>
-                  <matchPattern>${project.artifactId}.war</matchPattern>
+                  <matchPattern>${project.artifactId}*.war</matchPattern>
                   <ignoreMissingDeployment>true</ignoreMissingDeployment>
                 </configuration>
               </execution>
