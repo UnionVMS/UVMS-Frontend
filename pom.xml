@@ -87,6 +87,7 @@
             <artifactId>wildfly-maven-plugin</artifactId>
             <version>1.1.0.Alpha1</version>
             <configuration>
+              <filename>${project.artifactId}.war</filename>
               <hostname>${wf.host}</hostname>
               <port>${wf.mgtport}</port>
               <username>${wf.adminUserName}</username>
@@ -109,7 +110,6 @@
                   <goal>undeploy</goal>
                 </goals>
                 <configuration>
-                  <match-pattern>${project.artifactId}*</match-pattern>
                   <ignore-missing-deployment>true</ignore-missing-deployment>
                 </configuration>
               </execution>
