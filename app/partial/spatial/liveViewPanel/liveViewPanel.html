@@ -1,5 +1,5 @@
 <div class="containerWrapper" ng-controller="LiveviewpanelCtrl">
-	<div id="liveview-panel" ng-include="'partial/spatial/liveViewPanel/mapPanel/mapPanel.html'" ng-show="repServ.tabs.map"></div>
+	<div id="liveview-panel" ng-include="'partial/spatial/liveViewPanel/mapPanel/mapPanel.html'" ng-show="repNav.isViewVisible('mapPanel')"></div>
 	<div class="container containerWithTopBottomPadding" ng-show="repServ.tabs.map === false">
 		<div class="card">
 			<div class="row form-group">

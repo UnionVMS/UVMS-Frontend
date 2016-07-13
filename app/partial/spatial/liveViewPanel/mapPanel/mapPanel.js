@@ -597,27 +597,6 @@ angular.module('unionvmsWeb').controller('MapCtrl',function($log, $scope, locale
     	$window.open(url,'_blank');
     };
 
-    $scope.openReportList = function(evt){
-        $scope.comboServ.closeCurrentCombo(evt);
-        var modalInstance = $modal.open({
-            templateUrl: 'partial/spatial/reportsPanel/reportsListModal/reportsListModal.html',
-            controller: 'ReportslistmodalCtrl',
-            size: 'lg'
-            /*resolve: {
-                selectedAreas: function(){
-                    return $scope.report.areas;
-                }
-            }*/
-        });
-
-        modalInstance.result.then(function(data){
-        	/*if(!angular.equals($scope.report.areas,data)){
-        		$scope.reportForm.$setDirty();
-            	$scope.report.areas = data;
-        	}*/
-        });
-    };
-
     function generateGUID() {
         function s4() {
           return Math.floor((1 + Math.random()) * 0x10000)

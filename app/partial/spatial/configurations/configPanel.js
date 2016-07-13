@@ -8,11 +8,8 @@ angular.module('unionvmsWeb').controller('ConfigpanelCtrl',function($scope, $anc
 		$scope.isConfigVisible = !$scope.isConfigVisible;
 		$anchorScroll();
 
-		//Call function from parent to toggle menu visibility
-		$scope.toggleMenuVisibility();
-
 		if($scope.isConfigVisible === false){
-			$scope.$emit('closeUserPreferences', $scope.previousSelection);
+			$scope.repNav.goToPreviousView();
 		}
 	};
 

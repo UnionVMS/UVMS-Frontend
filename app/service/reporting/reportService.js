@@ -1,4 +1,4 @@
-angular.module('unionvmsWeb').factory('reportService',function($rootScope, $timeout, $interval, $anchorScroll, locale, TreeModel, reportRestService, spatialRestService, spatialHelperService, defaultMapConfigs, mapService, unitConversionService, vmsVisibilityService, mapAlarmsService, loadingStatus, spatialConfigRestService, SpatialConfig, Report, globalSettingsService, userService) {
+angular.module('unionvmsWeb').factory('reportService',function($rootScope, $timeout, $interval, $anchorScroll, locale, TreeModel, reportRestService, spatialRestService, spatialHelperService, defaultMapConfigs, mapService, unitConversionService, vmsVisibilityService, mapAlarmsService, loadingStatus, spatialConfigRestService, SpatialConfig, Report, globalSettingsService, userService, reportingNavigatorService) {
 
     var rep = {
        id: undefined,
@@ -92,8 +92,10 @@ angular.module('unionvmsWeb').factory('reportService',function($rootScope, $time
 		        rep.getConfigsTime = moment.utc().format('YYYY-MM-DDTHH:mm:ss');
 		        if (rep.tabs.map === true){
 		            spatialRestService.getConfigsForReport(rep.id, rep.getConfigsTime).then(getConfigSuccess, getConfigError);
+                    reportingNavigatorService.goToView('liveViewPanel','mapPanel');
 		        } else {
-		            spatialRestService.getConfigsForReportWithoutMap(rep.getConfigsTime).then(getConfigWithouMapSuccess, getConfigWithouMapError); 
+		            spatialRestService.getConfigsForReportWithoutMap(rep.getConfigsTime).then(getConfigWithouMapSuccess, getConfigWithouMapError);
+                    reportingNavigatorService.goToView('liveViewPanel','vmsPanel'); 
 		        }
 		    }
 		}, 10);
@@ -104,6 +106,11 @@ angular.module('unionvmsWeb').factory('reportService',function($rootScope, $time
 		rep.isReportExecuting = true;
 		rep.reportToRun = report;
     	spatialConfigRestService.getUserConfigs().then(getUserConfigsSuccess, getUserConfigsFailure);
+        if(rep.reportToRun.withMap){
+            reportingNavigatorService.goToView('liveViewPanel','mapPanel');
+        }else{
+            reportingNavigatorService.goToView('liveViewPanel','vmsPanel');
+        }
 	};
 	
 	rep.clearMapOverlaysOnRefresh = function(){
@@ -126,7 +133,6 @@ angular.module('unionvmsWeb').factory('reportService',function($rootScope, $time
 	};
 	
 	rep.refreshReport = function(){
-		console.log("refrescou");
 	    if (angular.isDefined(rep.id) && rep.tabs.map === true ){
 	        rep.clearMapOverlaysOnRefresh();
 	        rep.isReportRefreshing = true;
@@ -672,6 +678,40 @@ angular.module('unionvmsWeb').factory('reportService',function($rootScope, $time
 			}
 		}
 	    return layerSettings;
+    };
+
+    //load reports on reportsList
+    rep.loadReportList = function(){
+        rep.isLoadingReportsList = true;
+        reportRestService.getReportsList().then(getReportsListSuccess, rep.getReportsListError);
+    };
+    
+    //SUCESS AND FAILURES CALLBACKS
+    
+    //Get Report List Success callback
+    var getReportsListSuccess = function(reports){
+        rep.reportsList = reports.data;
+        rep.isLoadingReportsList = false;
+        if(angular.isDefined(rep.reportsList) && rep.reportsList.length === 0){
+            rep.hasAlert = true;
+            rep.alertType = 'info';
+            rep.message = locale.getString('spatial.table_no_data');
+            /*$scope.tableAlert.visible = true;
+            $scope.tableAlert.type = 'info';
+            $scope.tableAlert.msg = 'spatial.table_no_data';*/
+        }
+    };
+    
+    //Get Report List Failure callback
+    rep.getReportsListError = function(error){
+        rep.isLoadingReportsList = false;
+        rep.hasAlert = true;
+        rep.alertType = 'error';
+        rep.message = locale.getString('spatial.error_get_reports_list');
+        /*$scope.tableAlert.visible = true;
+        $scope.tableAlert.type = 'error';
+        $scope.tableAlert.msg = 'spatial.error_get_reports_list';*/
+        rep.reportsList = [];
     };
 
 	return rep;

@@ -1,11 +1,6 @@
 angular.module('unionvmsWeb').controller('ReportformCtrl',function($scope, $modal, $anchorScroll, reportMsgService, locale, Report, reportRestService, spatialRestService, configurationService, movementRestService, reportService, SpatialConfig, spatialConfigRestService, userService, loadingStatus, reportFormService){
     //Report form mode
-    $scope.formMode = 'CREATE';
     $scope.showVesselFilter = false;
-
-    $scope.getFormMode = function(mode){
-        return mode === $scope.formMode;
-    };
 
     //set visibility types in dropdown option
     $scope.visibilities = [
@@ -42,7 +37,7 @@ angular.module('unionvmsWeb').controller('ReportformCtrl',function($scope, $moda
 
     $scope.showSaveBtn = function(){
         var result = false;
-        if ($scope.getFormMode('CREATE')){
+        if ($scope.formMode === 'CREATE'){
             result = true;
         } else {
             if ((angular.isDefined($scope.reportOwner) && $scope.reportOwner === userService.getUserName()) || $scope.isAllowed('Reporting', 'MANAGE_ALL_REPORTS')){
@@ -242,9 +237,9 @@ angular.module('unionvmsWeb').controller('ReportformCtrl',function($scope, $moda
     	$scope.mergedReport = undefined;
     	$scope.validateRanges();
     	if($scope.reportForm.reportBodyForm.$valid && $scope.vesselsSelectionIsValid){
+            $scope.reportTemp = new SpatialConfig();
+            angular.copy($scope.report,$scope.reportTemp);
     		reportService.runReportWithoutSaving($scope.report);
-    		$scope.$emit('goToLiveView');
-        	$scope.toggleReportForm();
     	}else{
     		var invalidElm = angular.element('#reportForm')[0].querySelector('.ng-invalid');
             var errorElm = angular.element('#reportForm')[0].querySelector('.has-error');
@@ -288,7 +283,7 @@ angular.module('unionvmsWeb').controller('ReportformCtrl',function($scope, $moda
     	
     };
     
-    $scope.$on('openReportForm', function(e, args){
+    /**$scope.$on('openReportForm', function(e, args){
         if(args && args.isLoaded){
             $scope.formMode = 'EDIT-FROM-LIVEVIEW';
             if(reportService.outOfDate && $scope.reportTemp){
@@ -324,7 +319,7 @@ angular.module('unionvmsWeb').controller('ReportformCtrl',function($scope, $moda
         setTimeout(function() {
         	$scope.reportForm.$setPristine();
         }, 100);
-    });
+    });**/
 
     $scope.$watch('report.positionSelector', function(newVal, oldVal){
         if ($scope.report && newVal === 'all'){
@@ -341,9 +336,9 @@ angular.module('unionvmsWeb').controller('ReportformCtrl',function($scope, $moda
     });
 
     var createReportSuccess = function(response){
-        $scope.toggleReportForm();
+        $scope.repNav.goToView('reportsPanel','reportsList');
         reportMsgService.show(locale.getString('spatial.success_create_report'), 'success');
-        $scope.$emit('reloadReportsList');
+        $scope.repServ.loadReportList();
         loadingStatus.isLoading('SaveReport',false);
     };
 
@@ -353,9 +348,9 @@ angular.module('unionvmsWeb').controller('ReportformCtrl',function($scope, $moda
     };
 
     var updateReportSuccess = function(response){
-        $scope.toggleReportForm();
+        $scope.repNav.goToView('reportsPanel','reportsList');
         reportMsgService.show(locale.getString('spatial.success_update_report'), 'success');
-        $scope.$emit('reloadReportsList');
+        $scope.repServ.loadReportList();
         loadingStatus.isLoading('SaveReport',false);
     };
 
@@ -447,5 +442,58 @@ angular.module('unionvmsWeb').controller('ReportformCtrl',function($scope, $moda
 	    	}
     	}
     };
+
+    var loadReportForm = function(){
+        switch($scope.formMode){
+            case 'CREATE':
+            case 'EDIT':
+                if(reportService.outOfDate && !$scope.reportTemp){
+                    $scope.reportTemp = {};
+                    angular.copy($scope.report,$scope.reportTemp);
+                }
+
+                if(!reportService.outOfDate && $scope.reportTemp){
+                    delete $scope.reportTemp;
+                }
+
+                $scope.init();
+                
+                if (angular.isDefined($scope.reportToLoad)){
+                    $scope.reportOwner = $scope.reportToLoad.createdBy;
+                }
+
+                if($scope.formMode === 'EDIT'){
+                    angular.copy($scope.report.fromJson($scope.reportToLoad),$scope.report);
+                    delete $scope.reportToLoad;
+                }
+            break;
+            case 'EDIT-FROM-LIVEVIEW':
+                if(reportService.outOfDate && $scope.reportTemp){
+                    $scope.report = {};
+                    angular.copy($scope.reportTemp,$scope.report);
+                    delete $scope.reportTemp;
+                }else{
+                    $scope.init();
+                
+                    if (angular.isDefined($scope.reportToLoad)){
+                        $scope.reportOwner = $scope.reportToLoad.createdBy;
+                    }
+                    angular.copy($scope.report.fromJson($scope.reportToLoad),$scope.report);
+                    delete $scope.reportToLoad;
+                }
+        }
+
+        $scope.report.currentConfig = {mapConfiguration: {}};
+        angular.copy($scope.report.mapConfiguration,$scope.report.currentConfig.mapConfiguration);
+        setTimeout(function() {
+        	$scope.reportForm.$setPristine();
+        }, 100);
+    };
+    
+    $scope.$watch(function(){return $scope.repNav.isViewVisible('reportForm');}, function(newVal,oldVal){
+        if(newVal===true){
+            loadReportForm();
+        }
+    });
     
 });

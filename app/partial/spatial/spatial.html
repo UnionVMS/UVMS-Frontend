@@ -22,7 +22,7 @@
 	</div> -->
 	<alert-modal ng-model="repServ.hasAlert" display-msg="repServ.message" target-el-id="liveview-panel" display-type="repServ.alertType"></alert-modal>
 	
-	<div ng-include="'partial/spatial/liveViewPanel/liveViewPanel.html'" ng-show="isMenuSelected('LIVEVIEW')"></div>
-	<div ng-include="'partial/spatial/reportsPanel/reportsPanel.html'" ng-show="isMenuSelected('REPORTS')"></div>
-	<div ng-include="'partial/spatial/configurations/configPanel.html'" ng-show="isMenuSelected('PREFERENCES')"></div>
+	<div ng-include="'partial/spatial/liveViewPanel/liveViewPanel.html'" ng-show="repNav.isSectionVisible('liveViewPanel')"></div>
+	<div ng-include="'partial/spatial/reportsPanel/reportsPanel.html'" ng-show="repNav.isSectionVisible('reportsPanel')"></div>
+	<div ng-include="'partial/spatial/configurations/configPanel.html'" ng-show="repNav.isSectionVisible('userPreferences')"></div>
 </div>

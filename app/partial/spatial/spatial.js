@@ -1,5 +1,4 @@
-angular.module('unionvmsWeb').controller('SpatialCtrl',function($scope, $timeout, locale, mapService, spatialHelperService, reportRestService, reportService, $anchorScroll, userService, loadingStatus, $state, $localStorage, comboboxService){
-    $scope.isMenuVisible = true;
+angular.module('unionvmsWeb').controller('SpatialCtrl',function($scope, $timeout, locale, mapService, spatialHelperService, reportRestService, reportService, $anchorScroll, userService, loadingStatus, $state, $localStorage, comboboxService, reportingNavigatorService, $compile, $modal){
     $scope.selectedMenu = 'REPORTS';
     $scope.reports = [];
     $scope.executedReport = {};
@@ -7,6 +6,7 @@ angular.module('unionvmsWeb').controller('SpatialCtrl',function($scope, $timeout
     $scope.loadingStatus = loadingStatus;
     $scope.currentContext = userService.getCurrentContext();
     $scope.comboServ = comboboxService;
+    $scope.repNav = reportingNavigatorService;
     
     //reset repServ
     $scope.repServ.clearVmsData();
@@ -82,7 +82,21 @@ angular.module('unionvmsWeb').controller('SpatialCtrl',function($scope, $timeout
 	               $scope.repServ.isReportExecuting = false;
 	               $scope.repServ.errorLoadingDefault = true;
 	           });
-	       }
+	       }else{
+               //TODO openReportListModal
+               reportRestService.getReportsList().then(function(response){
+                   if(response.data.length){
+                       $scope.repServ.loadReportHistory();
+                       //$scope.openReportList(undefined,true);
+                       $scope.repNav.goToView('liveViewPanel','mapPanel',$scope.openReportList,[undefined,true]);
+                   }else{
+                       $scope.openNewReport();
+                   }
+               }, function(error){
+
+               });
+               
+           }
        }
        $scope.headerMenus = setMenus();
    });
@@ -95,10 +109,6 @@ angular.module('unionvmsWeb').controller('SpatialCtrl',function($scope, $timeout
        return $scope.selectedMenu === menu;
    };
    
-   $scope.toggleMenuVisibility = function(){
-       $scope.isMenuVisible = !$scope.isMenuVisible;
-   };
-   
    $scope.isAllowed = function(module, feature){
        return userService.isAllowed(feature, module, true);
    };
@@ -109,20 +119,22 @@ angular.module('unionvmsWeb').controller('SpatialCtrl',function($scope, $timeout
 	   if(!$scope.repServ.outOfDate){
 	       reportRestService.getReport($scope.repServ.id).then(getReportSuccess, getReportError);
 	   }else{
-		   $scope.$broadcast('goToReportForm','EDIT-FROM-LIVEVIEW');
+            $scope.formMode = 'EDIT-FROM-LIVEVIEW';
+            $scope.repNav.goToView('reportsPanel','reportForm');
+            $scope.repServ.isReportExecuting = false;
 	   }
    };
 
    //Create new report from liveview
    $scope.createReportFromLiveview = function(evt){
        $scope.comboServ.closeCurrentCombo(evt);
-       $scope.$broadcast('goToReportForm','CREATE');
+       $scope.formMode = 'CREATE';
+       $scope.repNav.goToView('reportsPanel','reportForm');
    };
    
    //Get Report Configs Success callback
    var getReportSuccess = function(response){
-	   $scope.$broadcast('openReportForm', {'report': response});
-       $scope.$broadcast('goToReportForm','EDIT');
+       $scope.loadReportEditing('EDIT-FROM-LIVEVIEW',response);
    };
 	   
    //Get Report Configs Failure callback
@@ -135,14 +147,14 @@ angular.module('unionvmsWeb').controller('SpatialCtrl',function($scope, $timeout
    };
    
    //Refresh map size on menu change
-   $scope.$watch('selectedMenu', function(newVal, oldVal){
+   /*$scope.$watch('selectedMenu', function(newVal, oldVal){
        if (newVal === 'LIVEVIEW'){
            $timeout(mapService.updateMapSize, 100);
-           mapService.updateMapContainerSize();  
+           mapService.updateMapContainerSize();
            $scope.repServ.isLiveViewActive = true;   
        } else if  (newVal === 'REPORTS'){
            if ($scope.reports.length === 0){
-               $scope.$broadcast('loadReportsList');
+               $scope.repServ.loadReportList();
            }
            $scope.$broadcast('untoggleToolbarBtns');
            $scope.repServ.isLiveViewActive = false;
@@ -150,32 +162,54 @@ angular.module('unionvmsWeb').controller('SpatialCtrl',function($scope, $timeout
     	   $scope.$broadcast('loadUserPreferences', oldVal);
     	   $scope.repServ.isLiveViewActive = false;
        }
-   });
-   
-   //Change tab to liveview when a user has clicked in run report in the reports page
-   $scope.$on('runReport', function(event, report){
-       $scope.selectMenu('LIVEVIEW');
-       //Getting report data
-       $scope.repServ.runReport(report);
-   });
-   
-   $scope.$watch(function(){return $scope.repServ.name;}, function(newValue, oldValue){
-       if (newValue !== oldValue){
-           $scope.headerMenus[0].title = newValue;
-       }
-   });
-   
-   $scope.$watch(function(){return $scope.repServ.liveviewEnabled;}, function(newValue, oldValue){
-       if (newValue !== oldValue){
-           $scope.headerMenus[0].visible = newValue;
-       }
-   });
-   
-   $scope.$on('closeUserPreferences', function(event, lastSelected){
-       $scope.selectMenu(lastSelected);
-   });
-   
-   $scope.$on('goToLiveView', function(event, lastSelected){
-	   $scope.selectMenu('LIVEVIEW');
-   });
+   });*/
+
+   $scope.selectHistory = function(item){
+        var report = angular.copy(item);
+        delete report.code;
+        delete report.text;
+        $scope.repServ.runReport(report);
+    };
+
+    $scope.initComboHistory = function(comboId){
+        var comboFooter = angular.element('<li class="combo-history-footer"><div class="footer-item" ng-click="openReportList($event)"><span>Edit List</span></div><div class="footer-item" ng-click="createReportFromLiveview($event)"><span>Create new</span></div></li>');
+        angular.element('#' + comboId + '>.dropdown-menu').append(comboFooter);
+        $compile(comboFooter)($scope);
+    };
+
+    $scope.openReportList = function(evt,reportsListLoaded){
+        $scope.comboServ.closeCurrentCombo(evt);
+        $scope.repNav.addStateCallback($scope.openReportList);
+        var modalInstance = $modal.open({
+            templateUrl: 'partial/spatial/reportsPanel/reportsListModal/reportsListModal.html',
+            controller: 'ReportslistmodalCtrl',
+            size: 'lg',
+            resolve: {
+                reportsListLoaded: function(){
+                    return reportsListLoaded;
+                }
+            }
+        });
+
+        modalInstance.result.then(function(data){
+            if(data.action === 'CREATE'){
+                $scope.openNewReport();
+            }else if(data.action === 'EDIT'){
+                $scope.repServ.isReportExecuting = true;
+                $scope.loadReportEditing('EDIT',data.report);
+            }
+        });
+    };
+
+    $scope.openNewReport = function(){
+        $scope.formMode = 'CREATE';
+        $scope.repNav.goToView('reportsPanel','reportForm');
+    };
+
+    $scope.loadReportEditing = function(mode,report){
+        $scope.formMode = mode;
+        $scope.reportToLoad = report;
+        $scope.repNav.goToView('reportsPanel','reportForm');
+        $scope.repServ.isReportExecuting = false;
+    };
 });
