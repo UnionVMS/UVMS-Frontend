@@ -70,6 +70,7 @@
         <endpoint-url>https://${wf.host}:${wf.https.port}/${webroot}/</endpoint-url>
       </properties>
       <build>
+        <finalName>${project.artifactId}</finalName>
         <plugins>
           <plugin>
             <artifactId>maven-release-plugin</artifactId>
