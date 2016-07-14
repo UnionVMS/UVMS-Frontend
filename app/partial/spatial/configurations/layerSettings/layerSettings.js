@@ -45,11 +45,13 @@ angular.module('unionvmsWeb').controller('LayersettingsCtrl',function($scope, lo
 	    		if(angular.equals(item.areaType,list[i].areaType)){
 		    		switch(item.areaType){
 			    		case 'sysarea':
+							item.serviceLayerId = "" + item.serviceLayerId;
 		    				if(angular.equals(item.serviceLayerId,list[i].serviceLayerId)){
 		    					return undefined;
 		    				}
 	    				break;
 		    			case 'userarea':
+							item.gid = "" + item.gid;
 		    				if(angular.equals(item.gid,list[i].gid)){
 		    					return undefined;
 		    				}

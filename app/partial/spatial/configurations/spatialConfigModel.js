@@ -154,7 +154,7 @@ angular.module('unionvmsWeb').factory('SpatialConfig',function() {
             config.mapSettings = checkVisibilitySettings(this,'report',config.mapSettings,form.visibilitySettingsForm.$dirty);
         }
 
-        removeLayerIds(this.layerSettings);
+        removeLayerHashKeys(this.layerSettings);
         if((!angular.equals(userConfig.layerSettings,this.layerSettings) || form.layerSettingsForm.$dirty) && !this.layerSettings.reseted){
             config.mapSettings = checkLayerSettings(this,'report',config.mapSettings,form.layerSettingsForm.$dirty);
         }
@@ -422,11 +422,10 @@ angular.module('unionvmsWeb').factory('SpatialConfig',function() {
         return temp;
     };
 
-    var removeLayerIds = function(obj){
+    var removeLayerHashKeys = function(obj){
         angular.forEach(obj, function(type) {
             angular.forEach(type, function(item) {
                 delete item.$$hashKey;
-                delete item.gid;
             });
     	});
     };
