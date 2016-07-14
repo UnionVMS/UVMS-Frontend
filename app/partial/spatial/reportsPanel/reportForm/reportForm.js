@@ -10,19 +10,22 @@ angular.module('unionvmsWeb').controller('ReportformCtrl',function($scope, $moda
                            ];
     
     //Set positions selector dropdown options
-    $scope.positionItems = [];
-    $scope.positionItems.push({"text": locale.getString('spatial.reports_form_positions_selector_option_all'), "code": "all"});
-    $scope.positionItems.push({"text": locale.getString('spatial.reports_form_positions_selector_option_last'), "code": "last"});
+    $scope.positionItems = [
+        {"text": locale.getString('spatial.reports_form_positions_selector_option_all'), "code": "all"},
+        {"text": locale.getString('spatial.reports_form_positions_selector_option_last'), "code": "last"}
+    ];
 
     //Set positions selector dropdown options
-    $scope.positionTypeItems = [];
-    $scope.positionTypeItems.push({"text": locale.getString('spatial.reports_form_positions_selector_type_option_positions'), "code": "positions"});
-    $scope.positionTypeItems.push({"text": locale.getString('spatial.reports_form_positions_selector_type_option_hours'), "code": "hours"});
+    $scope.positionTypeItems = [
+        {"text": locale.getString('spatial.reports_form_positions_selector_type_option_positions'), "code": "positions"},
+        {"text": locale.getString('spatial.reports_form_positions_selector_type_option_hours'), "code": "hours"}
+    ];
 
     //Set vessel search type dropdown options
-    $scope.vesselSearchItems = [];
-    $scope.vesselSearchItems.push({"text": locale.getString('spatial.reports_form_vessels_search_by_vessel'), "code": "asset"});
-    $scope.vesselSearchItems.push({"text": locale.getString('spatial.reports_form_vessels_search_by_group'), "code": "vgroup"});
+    $scope.vesselSearchItems = [
+        {"text": locale.getString('spatial.reports_form_vessels_search_by_vessel'), "code": "asset"},
+        {"text": locale.getString('spatial.reports_form_vessels_search_by_group'), "code": "vgroup"}
+    ];
 
     //Set movement type dropdown options
     $scope.movementTypes = configurationService.setTextAndCodeForDropDown(configurationService.getValue('MOVEMENT', 'MESSAGE_TYPE'),'MESSAGE_TYPE','MOVEMENT');
@@ -283,44 +286,6 @@ angular.module('unionvmsWeb').controller('ReportformCtrl',function($scope, $moda
     	
     };
     
-    /**$scope.$on('openReportForm', function(e, args){
-        if(args && args.isLoaded){
-            $scope.formMode = 'EDIT-FROM-LIVEVIEW';
-            if(reportService.outOfDate && $scope.reportTemp){
-                $scope.report = {};
-                angular.copy($scope.reportTemp,$scope.report);
-                delete $scope.reportTemp;
-            }
-            return;
-        }
-
-        if(reportService.outOfDate && !$scope.reportTemp){
-            $scope.reportTemp = {};
-            angular.copy($scope.report,$scope.reportTemp);
-        }
-
-        if(!reportService.outOfDate && $scope.reportTemp){
-            delete $scope.reportTemp;
-        }
-
-        $scope.init();
-        
-        if (angular.isDefined(args)){
-            $scope.reportOwner = args.report.createdBy;
-        }
-        
-        $scope.formMode = 'CREATE';
-        if (args){
-            $scope.formMode = 'EDIT';
-            angular.copy($scope.report.fromJson(args.report),$scope.report);
-        }
-        $scope.report.currentConfig = {mapConfiguration: {}};
-        angular.copy($scope.report.mapConfiguration,$scope.report.currentConfig.mapConfiguration);
-        setTimeout(function() {
-        	$scope.reportForm.$setPristine();
-        }, 100);
-    });**/
-
     $scope.$watch('report.positionSelector', function(newVal, oldVal){
         if ($scope.report && newVal === 'all'){
             //Reset X Value field

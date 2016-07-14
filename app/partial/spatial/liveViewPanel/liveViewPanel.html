@@ -8,11 +8,11 @@
 					is-loading="repServ.loadingReportHistory" class="combo-report-history" no-placeholder-on-list="true"></combobox>
 				</div>
 				<div class="col-md-8 textAlignRight buttonContainer">
-					<button type="button" class="btn btn-primary btn-sm" ng-show="isMenuSelected('LIVEVIEW') && repServ.id !== undefined" ng-click="editReport()">
+					<button type="button" class="btn btn-primary btn-sm" ng-show="repServ.id !== undefined" ng-click="editReport()">
 						<i class="fa fa-pencil"></i>&nbsp;
 						<span>{{'spatial.reports_edit_report' | i18n}}</span>
 					</button>
-					<button type="button" class="btn btn-primary btn-sm btn-preferences" ng-click="selectMenu('PREFERENCES')" ng-if="isAllowed('Spatial', 'ALLOW_USER_SPATIAL_CONFIGURATIONS') && curState !== 'app.reporting-id'">
+					<button type="button" class="btn btn-primary btn-sm btn-preferences" ng-click="" ng-if="isAllowed('Spatial', 'ALLOW_USER_SPATIAL_CONFIGURATIONS') && curState !== 'app.reporting-id'">
 						<i class="fa fa-cog"></i>&nbsp;
 						<span>{{'spatial.user_preferences' | i18n}}</span>
 					</button>

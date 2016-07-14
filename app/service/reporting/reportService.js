@@ -21,7 +21,6 @@ angular.module('unionvmsWeb').factory('reportService',function($rootScope, $time
        },
        selectedTab: 'MAP',
        errorLoadingDefault: false,
-       liveviewEnabled: false,
        isLiveViewActive: false,
        outOfDate: undefined,
        getConfigsTime: undefined,
@@ -363,7 +362,6 @@ angular.module('unionvmsWeb').factory('reportService',function($rootScope, $time
     };
     
     var prepareReportToRun = function(report){
-	    rep.liveviewEnabled = true;
 	    rep.id = rep.isReportRefreshing ? rep.id : report.id;
 	    rep.name = rep.isReportRefreshing ? rep.name :  report.name;
         rep.positions = [];

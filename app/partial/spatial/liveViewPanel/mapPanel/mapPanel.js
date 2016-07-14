@@ -23,19 +23,22 @@ angular.module('unionvmsWeb').controller('MapCtrl',function($log, $scope, locale
     $scope.comboServ = comboboxService;
 
     //Comboboxes
-    $scope.measuringUnits = [];
-    $scope.measuringUnits.push({"text": locale.getString('spatial.map_measuring_units_meters'), "code": "m"});
-    $scope.measuringUnits.push({"text": locale.getString('spatial.map_measuring_units_nautical_miles'), "code": "nm"});
-    $scope.measuringUnits.push({"text": locale.getString('spatial.map_measuring_units_miles'), "code": "mi"});
+    $scope.measuringUnits = [
+        {"text": locale.getString('spatial.map_measuring_units_meters'), "code": "m"},
+        {"text": locale.getString('spatial.map_measuring_units_nautical_miles'), "code": "nm"},
+        {"text": locale.getString('spatial.map_measuring_units_miles'), "code": "mi"}
+        ];
 
-    $scope.exportFormats = [];
-    $scope.exportFormats.push({"text": 'PNG', "code": "png"});
-    $scope.exportFormats.push({"text": 'JPEG', "code": "jpeg"});
-    $scope.exportFormats.push({"text": 'PDF', "code": "pdf"});
+    $scope.exportFormats = [
+        {"text": 'PNG', "code": "png"},
+        {"text": 'JPEG', "code": "jpeg"},
+        {"text": 'PDF', "code": "pdf"}
+    ];
 
-    $scope.printLayouts = [];
-    $scope.printLayouts.push({"text": locale.getString('spatial.map_export_layout_portrait'), "code": "portrait"});
-    $scope.printLayouts.push({"text": locale.getString('spatial.map_export_layout_landscape'), "code": "landscape"});
+    $scope.printLayouts = [
+        {"text": locale.getString('spatial.map_export_layout_portrait'), "code": "portrait"},
+        {"text": locale.getString('spatial.map_export_layout_landscape'), "code": "landscape"}
+    ];
 
     /*$scope.bufferLayers = [];
     $scope.bufferLayers.push({"text": locale.getString('spatial.map_buffer_layers_vmspos'), "code": "vmspos"});
