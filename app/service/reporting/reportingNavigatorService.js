@@ -71,6 +71,17 @@ angular.module('unionvmsWeb').factory('reportingNavigatorService',function() {
 		},
 		rmStateParams: function() {
 			delete currentState.params;
+		},
+		clearNavigation: function() {
+			previousState = {
+				section: '',
+				panel: ''
+			};
+
+			currentState = {
+				section: '',
+				panel: ''
+			};
 		}
 	};
 

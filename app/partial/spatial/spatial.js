@@ -7,6 +7,7 @@ angular.module('unionvmsWeb').controller('SpatialCtrl',function($scope, $timeout
     $scope.currentContext = userService.getCurrentContext();
     $scope.comboServ = comboboxService;
     $scope.repNav = reportingNavigatorService;
+    $scope.repNav.clearNavigation();
     
     //reset repServ
     $scope.repServ.clearVmsData();

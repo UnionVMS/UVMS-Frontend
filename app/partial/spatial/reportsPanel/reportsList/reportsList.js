@@ -183,7 +183,6 @@ angular.module('unionvmsWeb').controller('ReportslistCtrl',function($scope, $fil
     var getReportSuccess = function(response){
         $scope.repServ.isLoadingReportsList = false;
         $scope.openReportForm('EDIT',response);
-        $scope.cancel();
     };
     
     //Get Report Configs Failure callback
