@@ -82,6 +82,13 @@ angular.module('unionvmsWeb').factory('reportingNavigatorService',function() {
 				section: '',
 				panel: ''
 			};
+		},
+		hasPreviousState: function() {
+			if(previousState.section || previousState.panel){
+				return true;
+			}else{
+				return false;
+			}
 		}
 	};
 

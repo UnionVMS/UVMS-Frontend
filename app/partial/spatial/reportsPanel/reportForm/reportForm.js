@@ -301,9 +301,8 @@ angular.module('unionvmsWeb').controller('ReportformCtrl',function($scope, $moda
     });
 
     var createReportSuccess = function(response){
-        $scope.repNav.goToView('reportsPanel','reportsList');
+        $scope.repNav.goToView('liveViewPanel','mapPanel',$scope.openReportList);
         reportMsgService.show(locale.getString('spatial.success_create_report'), 'success');
-        $scope.repServ.loadReportList();
         loadingStatus.isLoading('SaveReport',false);
     };
 
@@ -313,9 +312,12 @@ angular.module('unionvmsWeb').controller('ReportformCtrl',function($scope, $moda
     };
 
     var updateReportSuccess = function(response){
-        $scope.repNav.goToView('reportsPanel','reportsList');
+        if($scope.repNav.hasPreviousState()){
+            $scope.repNav.goToPreviousView();
+        }else{
+            $scope.repNav.goToView('liveViewPanel','mapPanel',$scope.openReportList);
+        }
         reportMsgService.show(locale.getString('spatial.success_update_report'), 'success');
-        $scope.repServ.loadReportList();
         loadingStatus.isLoading('SaveReport',false);
     };
 

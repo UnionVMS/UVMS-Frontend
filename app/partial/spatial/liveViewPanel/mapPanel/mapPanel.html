@@ -27,8 +27,8 @@
             	<div id="map-coordinates"></div>
                 <div class="btn-group btn-group-xs" role="group" aria-label="Map controls">
                     <button type="button" class="btn btn-default btn-toolbar btn-fullscreen" title="{{'spatial.map_tip_fullscreen' | i18n }}" ng-click="fullscreenCtrl.toggleFullscreen();" ng-show="tbControl.fullscreen"><span class="fa fa-arrows-alt"></span></button>
-                    <button type="button" class="btn btn-default btn-toolbar" title="{{'spatial.map_tip_open_new_tab' | i18n }}" ng-click="openMapOnNewTab();" ng-show="tbControl.newTab"><span class="fa fa-external-link"></span></button>
-                    <button type="button" class="btn btn-default btn-toolbar" title="{{'spatial.user_preferences' | i18n }}" ng-click="" ng-if="isAllowed('Spatial', 'ALLOW_USER_SPATIAL_CONFIGURATIONS')"><span class="fa fa-cogs"></span></button>
+                    <button type="button" class="btn btn-default btn-toolbar" title="{{'spatial.map_tip_open_new_tab' | i18n }}" ng-click="openMapOnNewTab();" ng-show="tbControl.newTab && repServ.id"><span class="fa fa-external-link"></span></button>
+                    <button type="button" class="btn btn-default btn-toolbar" title="{{'spatial.user_preferences' | i18n }}" ng-click="repNav.goToSection('userPreferences')" ng-if="isAllowed('Spatial', 'ALLOW_USER_SPATIAL_CONFIGURATIONS')"><span class="fa fa-cogs"></span></button>
                 </div>
             </div>
         </div>

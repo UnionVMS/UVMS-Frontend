@@ -40,7 +40,7 @@
 	   		<span class="fa fa-pencil"></span>&nbsp;&nbsp;
 	   		{{ 'spatial.reports_table_config_label' | i18n }}
 	   	</div>
-	   	<div class="panel-component-item item-clickable" ng-if="isAllowed('Spatial', 'VIEW_AREA_MANAGEMENT_UI')" ng-click="goTo('AREAMANAGEMENT')">
+	   	<div class="panel-component-item item-clickable" ng-if="isAllowed('Spatial', 'VIEW_AREA_MANAGEMENT_UI') && curState === 'app.reporting'" ng-click="goTo('AREAMANAGEMENT')">
 	   		<span class="fa fa-map"></span>&nbsp;&nbsp;
 	   		{{ 'header.page_title_areas' | i18n }}
 	   	</div>

@@ -1,31 +1,12 @@
 angular.module('unionvmsWeb').controller('ConfigpanelCtrl',function($scope, $anchorScroll, locale, SpatialConfig, spatialConfigRestService, spatialConfigAlertService, loadingStatus, PreferencesService){
     $scope.settingsLevel = 'user';
-	$scope.isConfigVisible= false;
 	$scope.alert = spatialConfigAlertService;
 	$scope.prefService = PreferencesService;
 	
-	$scope.toggleUserPreferences = function(){
-		$scope.isConfigVisible = !$scope.isConfigVisible;
-		$anchorScroll();
-
-		if($scope.isConfigVisible === false){
-			$scope.repNav.goToPreviousView();
-		}
+	var loadUserPreferences = function(){
+		loadingStatus.isLoading('Preferences',true);
+		spatialConfigRestService.getUserConfigs().then(getConfigsSuccess, getConfigsFailure);
 	};
-
-	$scope.$on('loadUserPreferences', function(serviceName, previousSelection){
-		$scope.toggleUserPreferences();
-		$scope.previousSelection = previousSelection;
-		if (!angular.isDefined($scope.configModel)){
-			loadingStatus.isLoading('Preferences',true);
-		    spatialConfigRestService.getUserConfigs().then(getConfigsSuccess, getConfigsFailure);
-		}
-	});
-	
-	$scope.cancel = function(){
-	    $scope.toggleUserPreferences();
-	};
-	
 	
 	$scope.save = function(){
 		if(_.keys($scope.configPanelForm.$error).length === 0){
@@ -113,5 +94,11 @@ angular.module('unionvmsWeb').controller('ConfigpanelCtrl',function($scope, $anc
 	    $scope.alert.hideAlert();
 	    loadingStatus.isLoading('Preferences',false);
 	};
+
+	$scope.$watch('repNav.isSectionVisible("userPreferences")', function(newVal,oldVal){
+        if(newVal===true){
+            loadUserPreferences();
+        }
+    });
 	
 });
