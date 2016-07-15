@@ -80,7 +80,9 @@ angular.module('unionvmsWeb').factory('reportService',function($rootScope, $time
 	rep.runReport = function(report){
 		rep.isReportExecuting = true;
 		rep.outOfDate = false;
-		rep.editable = report.editable;
+        if(angular.isDefined(report)){
+		    rep.editable = report.editable;
+        }
 		
 		rep.runInterval = $interval(function(){
 		    var mapContainer = angular.element('#map');

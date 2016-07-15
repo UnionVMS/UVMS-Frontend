@@ -13,7 +13,8 @@ angular.module('unionvmsWeb').directive('datepickerInput', ['$compile',function(
             minDate : '=', //should be on format "YYYY-MM-DD HH:mm:ss Z"
             maxDate : '=', //should be on format "YYYY-MM-DD HH:mm:ss Z"
             inputFieldId: '@',
-            updateWhen: '@'
+            updateWhen: '@',
+            fullscreenLocation: '='
 		},
 		templateUrl: 'directive/common/datepickerInput/datepickerInput.html',
 		link: function(scope, element, attrs, ngModel) {
@@ -73,6 +74,16 @@ angular.module('unionvmsWeb')
             }
 
             $scope.datepickerId = "picker-" +$scope.inputFieldId;
+
+            if($scope.fullscreenLocation){
+                $(document).on('webkitfullscreenchange mozfullscreenchange fullscreenchange MSFullscreenChange', function() {
+                    if(document.webkitIsFullScreen || document.mozFullScreen) {
+                        $('#' + $scope.datepickerId).appendTo($scope.fullscreenLocation);
+                    }else{
+                        $('#' + $scope.datepickerId).appendTo('body');
+                    }
+                });
+            }
 
             //Set options
             setStartOptions();
