@@ -22,14 +22,14 @@
 								<i ng-click="toggleFiltersRow('positions')">{{isPosFilterVisible === false ? 'spatial.table_filters_activate' : 'spatial.table_filters_deactivate' | i18n}}</i>
 							</th>
 							<th>
-								<div class="btnTools btn btn-default btn-xs">
-									<i class="fa fa-download" title="{{'spatial.tab_vms_export_csv' | i18n}}" st-export-data export-fn="exportAsCSV(vmsType, data)" vms-type="positions" ng-show="isAllowed('Reporting', 'EXPORT_VMS_REPORT_DATA')"></i>
+								<div class="btnTools btn btn-default btn-xs" ng-show="isAllowed('Reporting', 'EXPORT_VMS_REPORT_DATA')">
+									<i class="fa fa-download" title="{{'spatial.tab_vms_export_csv' | i18n}}" st-export-data export-fn="exportAsCSV(vmsType, data)" vms-type="positions"></i>
 								</div>
 							</th>
 						</tr>
 						<tr ng-show="isPosFilterVisible" class="no-border">
 							<th colspan="16">
-								<div id="posFiltersForm" class="row">
+								<div id="posFiltersForm{{isModal ? 'Modal' : ''}}" class="row">
 									<div class="col-md-2 st-table-filters" ng-show="attrVisibility.positions.fs">
 										<input name="countryCode" placeholder="{{'spatial.tab_vms_pos_table_header_fs' | i18n }}" class="input-sm form-control" type="search">
 										<a href="" qtip at="top left" my="bottom right" content="{{'spatial.tab_vms_pos_table_header_fs' | i18n }}" class="info-qtip qtip-blue"><i class="fa fa-question-circle"></i></a>
@@ -127,8 +127,8 @@
 											<span class="fa fa-search"></span>&nbsp;
 											<span>{{'spatial.reports_table_search_header' | i18n}}</span>
 										</button>
-										<input id="positionsFilters" st-search="positions" class="hidden-st-control" type="search">
-										<st-reset-search form-id="posFiltersForm" clear-dates="clearDateFilters()"></st-reset-search>
+										<input id="positionsFilters{{isModal ? 'Modal' : ''}}" st-search="positions" class="hidden-st-control" type="search">
+										<st-reset-search form-id="posFiltersForm{{isModal ? 'Modal' : ''}}" clear-dates="clearDateFilters()"></st-reset-search>
 				        			</div>
 			        			</div>
 							</th>
@@ -151,7 +151,7 @@
 								<div st-sort="properties.activityType" st-skip-natural="true" st-class-ascent="sorting_asc" st-class-descent="sorting_desc" ng-show="attrVisibility.positions.act_tp" ng-if="column === 'act_tp'">{{'spatial.tab_vms_pos_table_header_activity_type' | i18n }}</div>
 								<div st-sort="properties.source" st-skip-natural="true" st-class-ascent="sorting_asc" st-class-descent="sorting_desc" ng-show="attrVisibility.positions.source" ng-if="column === 'source'">{{'spatial.tab_vms_pos_table_header_source' | i18n }}</div>
 							</th>
-							<th style="min-width:80px;" ng-hide="!executedReport.tabs.map">{{'spatial.table_header_actions' | i18n }}</th>
+							<th style="min-width:80px;" ng-hide="!repNav.isViewVisible('mapPanel')">{{'spatial.table_header_actions' | i18n }}</th>
 						</tr>
 					</thead>
 					<tbody>
@@ -176,7 +176,7 @@
 								<div ng-show="attrVisibility.positions.act_tp" ng-if="column === 'act_tp'">{{ position.properties.activityType }}</div>
 								<div ng-show="attrVisibility.positions.source" ng-if="column === 'source'">{{ position.properties.source }}</div>
 							</td>
-							<td style="min-width:80px;" ng-hide="!executedReport.tabs.map">
+							<td style="min-width:80px;" ng-hide="!repNav.isViewVisible('mapPanel')">
 								<button type="button" class="btn btn-default btn-xs btn-bottom-mg" title="{{'spatial.tab_vms_pos_table_zoom_btn_title' | i18n }}" ng-click="zoomTo($index, 'POSITION')"><span class="fa fa-search-plus"></span></button>
 								<button type="button" class="btn btn-default btn-xs btn-bottom-mg" title="{{'spatial.tab_vms_pos_table_pan_btn_title' | i18n }}" ng-click="panTo($index, 'POSITION')"><span class="fa fa-crosshairs"></span></button>
 							</td>
@@ -199,14 +199,14 @@
 								<i ng-click="toggleFiltersRow('segments')">{{isSegFilterVisible === false ? 'spatial.table_filters_activate' : 'spatial.table_filters_deactivate' | i18n}}</i>
 							</th>
 							<th>
-								<div class="btnTools btn btn-default btn-xs">
-									<i class="fa fa-download" title="{{'spatial.tab_vms_export_csv' | i18n}}" st-export-data export-fn="exportAsCSV(vmsType, data)" vms-type="segments" ng-show="isAllowed('Reporting', 'EXPORT_VMS_REPORT_DATA')"></i>
+								<div class="btnTools btn btn-default btn-xs" ng-show="isAllowed('Reporting', 'EXPORT_VMS_REPORT_DATA')">
+									<i class="fa fa-download" title="{{'spatial.tab_vms_export_csv' | i18n}}" st-export-data export-fn="exportAsCSV(vmsType, data)" vms-type="segments"></i>
 								</div>
 							</th>
 						</tr>
 						<tr ng-show="isSegFilterVisible" class="no-border">
 				        	<th colspan="11">
-				        		<div id="segFiltersForm" class="row">
+				        		<div id="segFiltersForm{{isModal ? 'Modal' : ''}}" class="row">
 				        			<div class="col-md-2 st-table-filters" ng-show="attrVisibility.segments.fs">
 					        			<input name="countryCode" placeholder="{{'spatial.tab_vms_pos_table_header_fs' | i18n }}" class="input-sm form-control" type="search">
 					        			<a href="" qtip at="top left" my="bottom right" content="{{'spatial.tab_vms_pos_table_header_fs' | i18n }}" class="info-qtip qtip-blue"><i class="fa fa-question-circle"></i></a>
@@ -252,8 +252,8 @@
 											<span class="fa fa-search"></span>&nbsp;
 											<span>{{'spatial.reports_table_search_header' | i18n}}</span>
 										</button>
-										<input id="segmentsFilters" st-search="segments" class="hidden-st-control" type="search">
-										<st-reset-search form-id="segFiltersForm"></st-reset-search>
+										<input id="segmentsFilters{{isModal ? 'Modal' : ''}}" st-search="segments" class="hidden-st-control" type="search">
+										<st-reset-search form-id="segFiltersForm{{isModal ? 'Modal' : ''}}"></st-reset-search>
 				        			</div>
 				        		</div>
 				        	</th>
@@ -271,7 +271,7 @@
 					            <div st-sort="properties.courseOverGround" st-skip-natural="true" st-class-ascent="sorting_asc" st-class-descent="sorting_desc" ng-show="attrVisibility.segments.crs" ng-if="column === 'crs'">{{'spatial.tab_vms_seg_table_header_course_ground' | i18n }}</div>
 					            <div st-sort="properties.segmentCategory" st-skip-natural="true" st-class-ascent="sorting_asc" st-class-descent="sorting_desc" ng-show="attrVisibility.segments.cat" ng-if="column === 'cat'">{{'spatial.tab_vms_seg_table_header_category' | i18n }}</div>
 					        </th>
-					        <th style="min-width:80px;" ng-hide="!executedReport.tabs.map">{{'spatial.table_header_actions' | i18n }}</th>
+					        <th style="min-width:80px;" ng-hide="!repNav.isViewVisible('mapPanel')">{{'spatial.table_header_actions' | i18n }}</th>
 				       </tr>
 					</thead>
 					<tbody>
@@ -291,7 +291,7 @@
 					            <div ng-show="attrVisibility.segments.crs" ng-if="column === 'crs'">{{ segment.properties.courseOverGround }}&deg;</div>
 					            <div ng-show="attrVisibility.segments.cat" ng-if="column === 'cat'">{{ segment.properties.segmentCategory }}</div>
 					        </td>
-				            <td style="min-width:80px;" ng-hide="!executedReport.tabs.map">
+				            <td style="min-width:80px;" ng-hide="!repNav.isViewVisible('mapPanel')">
 				            	<button type="button" class="btn btn-default btn-xs btn-bottom-mg" title="{{'spatial.tab_vms_pos_table_zoom_btn_title' | i18n }}" ng-click="zoomTo($index, 'SEGMENT')"><span class="fa fa-search-plus"></span></button>
 				            	<button type="button" class="btn btn-default btn-xs btn-bottom-mg" title="{{'spatial.tab_vms_pos_table_pan_btn_title' | i18n }}" ng-click="panTo($index, 'SEGMENT')"><span class="fa fa-crosshairs"></span></button>
 				            </td>
@@ -314,14 +314,14 @@
 								<i ng-click="toggleFiltersRow('tracks')">{{isTrackFilterVisible === false ? 'spatial.table_filters_activate' : 'spatial.table_filters_deactivate' | i18n}}</i>
 							</th>
 							<th>
-								<div class="btnTools btn btn-default btn-xs">
-									<i class="fa fa-download" title="{{'spatial.tab_vms_export_csv' | i18n}}" st-export-data export-fn="exportAsCSV(vmsType, data)" vms-type="tracks" ng-show="isAllowed('Reporting', 'EXPORT_VMS_REPORT_DATA')"></i>
+								<div class="btnTools btn btn-default btn-xs" ng-show="isAllowed('Reporting', 'EXPORT_VMS_REPORT_DATA')">
+									<i class="fa fa-download" title="{{'spatial.tab_vms_export_csv' | i18n}}" st-export-data export-fn="exportAsCSV(vmsType, data)" vms-type="tracks"></i>
 								</div>
 							</th>
 						</tr>
 						<tr ng-show="isTrackFilterVisible" class="no-border">
 				        	<th colspan="9">
-				        		<div id="trackFiltersForm" class="row">
+				        		<div id="trackFiltersForm{{isModal ? 'Modal' : ''}}" class="row">
 					        		<div class="col-md-2 st-table-filters" ng-show="attrVisibility.tracks.fs">
 					        			<input name="countryCode" placeholder="{{'spatial.tab_vms_pos_table_header_fs' | i18n }}" class="input-sm form-control" type="search">
 					        			<a href="" qtip at="top left" my="bottom right" content="{{'spatial.tab_vms_pos_table_header_fs' | i18n }}" class="info-qtip qtip-blue"><i class="fa fa-question-circle"></i></a>
@@ -359,8 +359,8 @@
 											<span class="fa fa-search"></span>&nbsp;
 											<span>{{'spatial.reports_table_search_header' | i18n}}</span>
 										</button>
-										<input id="tracksFilters" st-search="tracks" class="hidden-st-control" type="search">
-										<st-reset-search form-id="trackFiltersForm"></st-reset-search>
+										<input id="tracksFilters{{isModal ? 'Modal' : ''}}" st-search="tracks" class="hidden-st-control" type="search">
+										<st-reset-search form-id="trackFiltersForm{{isModal ? 'Modal' : ''}}"></st-reset-search>
 				        			</div>
 					        	</div>
 				        	</th>
@@ -376,7 +376,7 @@
 					            <div st-sort="duration" st-skip-natural="true" st-class-ascent="sorting_asc" st-class-descent="sorting_desc" ng-show="attrVisibility.tracks.dur" ng-if="column === 'dur'">{{'spatial.tab_vms_seg_table_header_duration' | i18n }}</div>
 					            <div st-sort="totalTimeAtSea" st-skip-natural="true" st-class-ascent="sorting_asc" st-class-descent="sorting_desc" ng-show="attrVisibility.tracks.timeSea" ng-if="column === 'timeSea'">{{'spatial.tab_vms_tracks_table_header_time_at_sea' | i18n }}</div>
 					        </th>
-				            <th style="min-width:80px;" ng-hide="!executedReport.tabs.map">{{'spatial.table_header_actions' | i18n }}</th>
+				            <th style="min-width:80px;" ng-hide="!repNav.isViewVisible('mapPanel')">{{'spatial.table_header_actions' | i18n }}</th>
 				        </tr>
 				    </thead>
 				    <tbody>
@@ -394,7 +394,7 @@
 					            <div ng-show="attrVisibility.tracks.dur" ng-if="column === 'dur'">{{ track.duration | stHumanizeTime }}</div>
 					            <div ng-show="attrVisibility.tracks.timeSea" ng-if="column === 'timeSea'">{{ track.totalTimeAtSea | stHumanizeTime: track }}</div>
 				            </td>
-				            <td style="min-width:80px;" ng-hide="!executedReport.tabs.map">
+				            <td style="min-width:80px;" ng-hide="!repNav.isViewVisible('mapPanel')">
 				            	<button type="button" class="btn btn-default btn-xs btn-bottom-mg" title="{{'spatial.tab_vms_pos_table_zoom_btn_title' | i18n }}" ng-click="zoomTo($index, 'TRACK')"><span class="fa fa-search-plus"></span></button>
 				            	<button type="button" class="btn btn-default btn-xs btn-bottom-mg" title="{{'spatial.tab_vms_pos_table_pan_btn_title' | i18n }}" ng-click="panTo($index, 'TRACK')"><span class="fa fa-crosshairs"></span></button>
 				            </td>

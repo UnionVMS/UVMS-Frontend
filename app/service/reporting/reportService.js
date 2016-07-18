@@ -8,10 +8,6 @@ angular.module('unionvmsWeb').factory('reportService',function($rootScope, $time
        hasAlert: false, 
        message: undefined,
        alertType: undefined,
-       tabs: {
-           map: true,
-           vms: true
-       },
        positions: [],
        segments: [],
        tracks: [],
@@ -19,7 +15,6 @@ angular.module('unionvmsWeb').factory('reportService',function($rootScope, $time
             status: false,
             rate: undefined
        },
-       selectedTab: 'MAP',
        errorLoadingDefault: false,
        isLiveViewActive: false,
        outOfDate: undefined,
@@ -38,7 +33,6 @@ angular.module('unionvmsWeb').factory('reportService',function($rootScope, $time
     
     rep.resetReport = function(){
         rep.name = locale.getString('spatial.header_live_view');
-        rep.tabs.map = true;
         rep.refresh.status = false;
         rep.refresh.rate = undefined;
         rep.getConfigsTime = undefined;
@@ -91,7 +85,7 @@ angular.module('unionvmsWeb').factory('reportService',function($rootScope, $time
 		        
 		        prepareReportToRun(report);
 		        rep.getConfigsTime = moment.utc().format('YYYY-MM-DDTHH:mm:ss');
-		        if (rep.tabs.map === true){
+		        if ((report && report.withMap) || rep.isReportRefreshing){
 		            spatialRestService.getConfigsForReport(rep.id, rep.getConfigsTime).then(getConfigSuccess, getConfigError);
                     reportingNavigatorService.goToView('liveViewPanel','mapPanel');
 		        } else {
@@ -134,7 +128,7 @@ angular.module('unionvmsWeb').factory('reportService',function($rootScope, $time
 	};
 	
 	rep.refreshReport = function(){
-	    if (angular.isDefined(rep.id) && rep.tabs.map === true ){
+	    if (angular.isDefined(rep.id) && reportingNavigatorService.isViewVisible('mapPanel')){
 	        rep.clearMapOverlaysOnRefresh();
 	        rep.isReportRefreshing = true;
 	        var repConfig = getRepConfig();
@@ -223,6 +217,15 @@ angular.module('unionvmsWeb').factory('reportService',function($rootScope, $time
         rep.getReportTime = moment.utc().format('YYYY-MM-DDTHH:mm:ss');
         var repConfig = getRepConfig();
         reportRestService.executeReport(rep.id,repConfig).then(getVmsDataSuccess, getVmsDataError);
+        var elems = angular.element('[ng-controller="VmspanelCtrl"] .modal-body input');
+        angular.forEach(elems,function(el){
+            var elem = $(el); 
+            elem.val('');
+            if(elem.hasClass('hidden-st-control')){
+                elem.trigger('input');
+            }
+        });
+        
     };
     
     //Get config without map Success callback
@@ -289,7 +292,7 @@ angular.module('unionvmsWeb').factory('reportService',function($rootScope, $time
 		}
         
         //Update map if the report contains the map tab
-        if (rep.tabs.map === true){
+        if (reportingNavigatorService.isViewVisible('mapPanel')){
             if (mapService.styles.positions.attribute === 'countryCode'){
                 mapService.setDisplayedFlagStateCodes('positions', rep.positions);
             }
@@ -305,7 +308,7 @@ angular.module('unionvmsWeb').factory('reportService',function($rootScope, $time
                 
                 $rootScope.$broadcast('addLayerTreeNode', vectorNodeSource);
                 
-                if (rep.selectedTab === 'MAP'){
+                if (reportingNavigatorService.isViewVisible('mapPanel')){
                     mapService.zoomToPositionsLayer();
                 }
             } else if (rep.positions.length === 0 && rep.segments.length === 0){
@@ -324,7 +327,6 @@ angular.module('unionvmsWeb').factory('reportService',function($rootScope, $time
         rep.positions = [];
         rep.segments = [];
         rep.tracks = [];
-        rep.tabs.map = true;
         rep.isReportExecuting = false;
         rep.isReportRefreshing = false;
         rep.hasAlert = true;
@@ -369,12 +371,11 @@ angular.module('unionvmsWeb').factory('reportService',function($rootScope, $time
         rep.positions = [];
         rep.segments = [];
         rep.tracks = [];
-        rep.tabs.map = rep.isReportRefreshing ? rep.tabs.map : report.withMap;
         
         mapService.resetLabelContainers();
         
         //This gets executed on initial loading when we have a default report
-        if (!angular.isDefined(mapService.map) && rep.tabs.map){
+        if (!angular.isDefined(mapService.map) && report.withMap){
             mapService.setMap(defaultMapConfigs);
         } else if (angular.isDefined(mapService.map)) {
             mapService.clearVectorLayers();
@@ -436,7 +437,7 @@ angular.module('unionvmsWeb').factory('reportService',function($rootScope, $time
 	    });
 	    
         //map refresh configs
-        if (rep.tabs.map === true && angular.isDefined(data.map.refresh)){
+        if (reportingNavigatorService.isViewVisible('mapPanel') && angular.isDefined(data.map.refresh)){
         	if(rep.isReportRefreshing === false){
         		rep.refresh.status = data.map.refresh.status;
         	}
@@ -696,9 +697,6 @@ angular.module('unionvmsWeb').factory('reportService',function($rootScope, $time
             rep.hasAlert = true;
             rep.alertType = 'info';
             rep.message = locale.getString('spatial.table_no_data');
-            /*$scope.tableAlert.visible = true;
-            $scope.tableAlert.type = 'info';
-            $scope.tableAlert.msg = 'spatial.table_no_data';*/
         }
     };
     
@@ -708,9 +706,6 @@ angular.module('unionvmsWeb').factory('reportService',function($rootScope, $time
         rep.hasAlert = true;
         rep.alertType = 'error';
         rep.message = locale.getString('spatial.error_get_reports_list');
-        /*$scope.tableAlert.visible = true;
-        $scope.tableAlert.type = 'error';
-        $scope.tableAlert.msg = 'spatial.error_get_reports_list';*/
         rep.reportsList = [];
     };
 

@@ -161,13 +161,13 @@ angular.module('unionvmsWeb').controller('VmspanelCtrl',function($scope, locale,
    };
    
    $scope.getFilters = function(type){
-       var el = angular.element('#' + type + 'Filters');
+       var elId = '#' + type + 'Filters';
+       
        var formId;
        var valid = true;
        switch (type) {
            case 'positions':
                formId = 'posFiltersForm';
-               
                break;
            case 'segments':
                formId = 'segFiltersForm';
@@ -177,6 +177,11 @@ angular.module('unionvmsWeb').controller('VmspanelCtrl',function($scope, locale,
                break;
        }
        
+       if ($scope.isModal){
+           elId += 'Modal';
+           formId += 'Modal';
+       }
+       var el = angular.element(elId);
        
        var data = $scope.getFilterData(formId);
        
@@ -441,11 +446,11 @@ angular.module('unionvmsWeb').controller('VmspanelCtrl',function($scope, locale,
 			    	   }
 		    	   }
 		       });
-			   if((type === 'segments' || (type === 'tracks' && $scope.executedReport.tabs.map === true)) && !gotHeaders){
+			   if((type === 'segments' || (type === 'tracks' && $scope.repnav.isViewVisible('mapPanel'))) && !gotHeaders){
 	        	   header.push(locale.getString('spatial.tab_vms_seg_table_header_geometry'));
 	           }
 	           
-	           if (type === 'tracks' && $scope.executedReport.tabs.map === true){
+	           if (type === 'tracks' && $scope.repnav.isViewVisible('mapPanel')){
 	               var extentPolygon = new ol.geom.Polygon.fromExtent(rec.extent);
 	               extentPolygon.transform('EPSG:4326', mapService.getMapProjectionCode());
 	               var trackGeom = $scope.buildTrackGeomFromId(rec.id, extentPolygon.getExtent());

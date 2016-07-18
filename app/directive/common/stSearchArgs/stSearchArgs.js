@@ -33,7 +33,7 @@ angular.module('smart-table')
 	        var pagination = ctrl.tableState().pagination;
 	        var output;
 	        
-	        var filtered = ctrl.tableState().search.predicateObject ? tableFilter(tableCtrl.tableScope.reports , tableCtrl.tableScope.displayedColumns + '|' + ctrl.tableState().search.predicateObject.$) : tableCtrl.tableScope.reports;
+	        var filtered = ctrl.tableState().search.predicateObject ? tableFilter(tableCtrl.tableScope.repServ.reportsList , tableCtrl.tableScope.displayedColumns + '|' + ctrl.tableState().search.predicateObject.$) : tableCtrl.tableScope.repServ.reportsList;
 	        if (ctrl.tableState().sort.predicate) {
 	          filtered = orderBy(filtered, ctrl.tableState().sort.predicate, ctrl.tableState().sort.reverse);
 	        }
