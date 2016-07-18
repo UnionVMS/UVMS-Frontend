@@ -418,6 +418,7 @@
 	"ref_data_group_tip": "features in group",
 	"ref_data_selection_group_tip": "groups selected",
 	"loading_data": "Loading data",
+	"processing": "Processing",
 	"get_ref_data_type_error": "There was an error while fetching reference data types.",
 	"get_ref_data_details_error": "There was an error while fetching reference data details. Please try again.",
 	"ref_data_group_already_added_msg": "This group is already selected.",

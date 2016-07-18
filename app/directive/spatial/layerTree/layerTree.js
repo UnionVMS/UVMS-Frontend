@@ -1,4 +1,4 @@
-angular.module('unionvmsWeb').directive('layerTree', function(mapService, locale) {
+angular.module('unionvmsWeb').directive('layerTree', function($q, mapService, locale, loadingStatus) {
 	return {
 		restrict: 'AE',
 		replace: true,
@@ -10,12 +10,20 @@ angular.module('unionvmsWeb').directive('layerTree', function(mapService, locale
 			var mapLayers = null;
 			scope.startState = {};
 			scope.endState = {};
+			scope.vmsPosState = [];
 
 			// used to implement selectMode 1 for basemaps
 			var lastSelectedBasemapNode = null;
 
 			// check for impossible selections, restrict deselecting radiobutton
 			var beforeSelectHandler = function( event, data ) {
+			    var nodeTypes = ['vmspos-source', 'vmspos', 'vmsdata'];
+			    if (_.indexOf(nodeTypes, data.node.data.type) !== -1){
+			        scope.$apply(function(){
+			            loadingStatus.isLoading('LiveviewMap', true, 3);
+			        });
+			    }
+			    
 				var selected = scope.$tree.getSelectedNodes(),
 						basemaps = selected.filter( function( node ) {
 							return ( node.data.isBaseLayer && node.isSelected() );
@@ -26,27 +34,147 @@ angular.module('unionvmsWeb').directive('layerTree', function(mapService, locale
 					return ( false );
 				}
 			};
+			
+			var updateVmsPosState = function(nodeData){
+			    if (nodeData.isSelected()){
+			        var idx = _.indexOf(scope.vmsPosState, nodeData.title);
+			        if (idx !== -1){
+			            scope.vmsPosState.splice(idx, 1);
+			            mapService.vmsSources[nodeData.title] = true;
+			        }
+			    } else {
+			        //we add node title when we deactivate to the current state
+			        scope.vmsPosState.push(nodeData.title);
+			        mapService.vmsSources[nodeData.title] = false;
+			    }
+			};
+			
+			function asyncProcessVmsSources (nodeData) {
+			    return $q(function(resolve, reject){
+			        setTimeout(function() {
+			            updateVmsPosState(nodeData);
+			            
+			            var parent = nodeData.getParent();
+                        var childStatus = _.chain(parent.getChildren()).countBy('selected').value();
+			            
+                        var layerSrc = parent.data.mapLayer.getSource();
+                        var featSize = layerSrc.getFeatures().length;
+                        var counter = 0;
+                        layerSrc.forEachFeature(function(cluster){
+                            var originalSize = cluster.get('featNumber');
+                            var containedFeatures = cluster.get('features');
+                            angular.forEach(containedFeatures, function(feat){
+                                var source = feat.get('source');
+                                if (source === nodeData.title){
+                                    feat.set('isVisible', nodeData.isSelected());
+                                } else {
+                                    var availableNode = parent.findAll(source)[0];
+                                    if (childStatus.true === 1 && scope.vmsPosState.length === 0 && feat.get('isVisible') !== availableNode.isSelected()){
+                                        feat.set('isVisible', availableNode.isSelected());
+                                    }
+                                }
+                            });
+                            counter += 1;
+                            if (counter === featSize - 1){
+                                resolve('done');
+                            }
+                        });
+			        });
+			    });
+			}
+			
+			function asyncProcessVmsSourcesFromParent (nodeData) {
+                return $q(function(resolve, reject){
+                    setTimeout(function() {
+                        if (nodeData.isSelected() && scope.vmsPosState.length > 0){
+                            angular.forEach(mapService.vmsSources, function(value, key) {
+                            	this[key] = nodeData.isSelected();
+                            }, mapService.vmsSources);
+                            var layerSrc = nodeData.data.mapLayer.getSource();
+                            var featSize = layerSrc.getFeatures().length;
+                            var counter = 0;
+                            layerSrc.forEachFeature(function(cluster){
+                                var containedFeatures = cluster.get('features');
+                                angular.forEach(containedFeatures, function(feat){
+                                    if (_.indexOf(scope.vmsPosState, feat.get('source'))  !== -1){
+                                        feat.set('isVisible', nodeData.isSelected());
+                                    }
+                                });
+                                counter += 1;
+                                if (counter === featSize - 1){
+                                    scope.vmsPosState = [];
+                                    nodeData.data.mapLayer.set('visible', nodeData.isSelected());
+                                    resolve('done');
+                                }
+                            });
+                        } else {
+                            nodeData.data.mapLayer.set('visible', nodeData.isSelected());
+                            resolve('done');
+                        }
+                        
+                    });
+                });
+            }
 
 			// call tree and map update
 			var selectHandler = function( event, data ){
 				updateBasemap( event, data );
+				var promise;
 				if (data.node.hasChildren() === true){
-				    loopFolderNodes(data.node);
+				    if (data.node.data.type === 'vmspos'){
+				        mapService.collapseClusters();
+				        promise = asyncProcessVmsSourcesFromParent(data.node);
+				        promise.then(function(status){
+                            loadingStatus.isLoading('LiveviewMap', false);
+                        });
+				    } else {
+				        loopFolderNodes(data.node);
+				    }
+				    
 				} else {
-				    data.node.data.mapLayer.set( 'visible', data.node.isSelected() );
-				    vmsVisibilityListener(data.node);
+				    if (angular.isDefined(data.node.data.mapLayer)){
+				        data.node.data.mapLayer.set( 'visible', data.node.isSelected() );
+				    } else {
+				        //here we are checking for vms positions child nodes that contain the source
+				        var parent = data.node.getParent();
+				        mapService.collapseClusters();
+				        promise = asyncProcessVmsSources(data.node);
+				        promise.then(function(status){
+				            var selectedStatus = _.chain(parent.getChildren()).countBy('selected').value();
+				            if (selectedStatus.false === parent.data.sourcesType.length){
+                                parent.data.mapLayer.set( 'visible', false );
+                            }
+				            
+				            if ( ( scope.vmsPosState.length === 0 || scope.vmsPosState.length === parent.data.sourcesType.length - 1 ) && data.node.isSelected() !== parent.data.mapLayer.get('visible') ){
+				                parent.data.mapLayer.set( 'visible', true );
+				            }
+				            
+				            loadingStatus.isLoading('LiveviewMap', false);
+				        });
+				    }
 				}
-
+				vmsVisibilityListener(data.node);
 				scope.$parent.$broadcast('reloadLegend');
 			};
 
 			var loopFolderNodes = function(parent){
                 $.each(parent.children, function(index, node){
                     if (node.hasChildren()){
-                        loopFolderNodes(node);
+                        if (node.data.type === 'vmspos') {
+                            var promise = asyncProcessVmsSourcesFromParent(node);
+                            promise.then(function(status){
+                                loadingStatus.isLoading('LiveviewMap', false);
+                            });
+                            node.data.mapLayer.set('visible', node.isSelected());
+                            vmsVisibilityListener(node);
+                        } else {
+                            loopFolderNodes(node);
+                        }
                     } else {
-                        node.data.mapLayer.set('visible', node.isSelected());
-                        vmsVisibilityListener(node);
+                        if (angular.isDefined(node.data.mapLayer)){
+                            node.data.mapLayer.set('visible', node.isSelected());
+                            vmsVisibilityListener(node);
+                        }
                     }
                 });
             };
@@ -81,14 +209,10 @@ angular.module('unionvmsWeb').directive('layerTree', function(mapService, locale
                 }
 
                 //Deal with popups
-//                if (mapService.activeLayerType === node.data.type && angular.isDefined(mapService.overlay) && node.isSelected() === false){
-//                    mapService.closePopup();
-//                    mapService.activeLayerType = undefined;
-//                    target = $(node.span).children('.fancytree-title').children('.fa.fa-info-circle');
-//                    if (target.hasClass('info-selected')){
-//                        target.removeClass('info-selected');
-//                    }
-//                }
+                var nodeTitles = ['vmsseg', 'vmspos', 'alarms', 'vmspos-source'];
+                if (angular.isDefined(mapService.overlay) && node.isSelected() === false && _.indexOf(nodeTitles, node.data.type) !== -1){
+                    mapService.closePopup();
+                }
 			};
 
 			var renderNodeHandler = function( event, data ) {
@@ -248,6 +372,13 @@ angular.module('unionvmsWeb').directive('layerTree', function(mapService, locale
 						addLayers( value.children );
 						return ( true );// = continue;
 					}
+					
+//					if ( value.folder) {
+//                        if (!angular.isDefined(value.data) || (angular.isDefined(value.data) && value.data.type !== 'vmspos')){
+//                            addLayers( value.children );
+//                            return ( true );// = continue;
+//                        }
+//                    }
 
 					if ( !value.data ) { return ( true ); }
 

@@ -214,6 +214,7 @@ angular.module('unionvmsWeb').controller('MapCtrl',function($log, $scope, locale
 
     //Activate Mapfish
     $scope.mapFishPrintEnable = function(){
+        mapService.collapseClusters();
         mapService.addPrintLayer();
         mapService.addDragPrintExtent();
         $scope.openMapFishConfigWin();

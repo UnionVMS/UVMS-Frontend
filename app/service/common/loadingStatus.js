@@ -13,7 +13,7 @@ angular.module('unionvmsWeb').factory('loadingStatus',function() {
 			value: false
 		},
 		isLoadingLiveviewMap: {
-		    message: ['spatial.map_loading_report_message', 'spatial.map_loading_alarms_message', 'spatial.loading_data'],
+		    message: ['spatial.map_loading_report_message', 'spatial.map_loading_alarms_message', 'spatial.loading_data', 'spatial.processing'],
 		    messageIdx: undefined,
             value: false
 		},

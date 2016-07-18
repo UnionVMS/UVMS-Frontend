@@ -422,6 +422,36 @@ angular.module('unionvmsWeb').factory('TreeModel',function(locale, mapService, u
 	        }
 	    };
 	    
+	    
+	    if (type === 'positions'){
+	        var sourceArray = _.map(data.features, function(feat){
+	            return feat.properties.source;
+	        });
+	        
+	        sourceArray = _.sortBy(_.uniq(sourceArray), function(src){
+	            return src;
+	        });
+	        
+	        mapService.vmsSources = {};
+	        if (sourceArray.length > 0){
+	            var childNodes = [];
+	            var sourcesType = [];
+	            angular.forEach(sourceArray, function(source){
+	                childNodes.push({
+	                    title: source,
+	                    type: 'vmspos-source',
+	                    selected: true
+	                });
+	                sourcesType.push(source);
+	                mapService.vmsSources[source] = true;
+	            });
+	            
+	            node.children = childNodes;
+	            node.expanded = true;
+	            node.data.sourcesType = sourcesType;
+	        }
+	    }
+	    
 	    return node;
 	};
 	
