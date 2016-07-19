@@ -254,7 +254,7 @@ angular.module('unionvmsWeb').controller('MapCtrl',function($log, $scope, locale
 
     //Cancel print job
     $scope.cancelPrint = function (ref){
-        scope.printingStatus = 'ready';
+        $scope.printingStatus = 'ready';
         if (ref === undefined) {
             return;
         }
