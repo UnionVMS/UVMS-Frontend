@@ -809,7 +809,7 @@ angular.module('unionvmsWeb').factory('MapFish',function() {
             angular.forEach(features, function(clusterFeat) {
             	var featuresInCluster = clusterFeat.get('features');
 
-            	if (featuresInCluster.length > 1){
+            	if (featuresInCluster.length > 1 && clusterFeat.get('featNumber') > 1){
             	    var clusterToPrint = new ol.Feature({
             	        geometry: clusterFeat.getGeometry()
             	    });
@@ -827,7 +827,13 @@ angular.module('unionvmsWeb').factory('MapFish',function() {
 
             	    clusters.push(clusterToPrint);
             	} else {
-            	    var feature = angular.copy(featuresInCluster[0]);
+            	    var feature;
+            	    if (featuresInCluster.length === 1){
+            	        feature = angular.copy(featuresInCluster[0]);
+            	    } else {
+            	        feature =  angular.copy(clusterFeat.get('featureToDisplay'));
+            	    }
+            	    
             	    if (mapService.vmsposLabels.active){
             	        if (feature.get('overlayHidden') === false){
             	            var overCoords = mapService.vmsposLabels[feature.get('overlayId')].overlay.getPosition();

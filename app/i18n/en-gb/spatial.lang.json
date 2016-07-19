@@ -43,6 +43,7 @@
 	"map_bookmarks_zoom_to": "Show on map",
     "mapfish_tip_print": "Export map",
     "mapfish_tip_printing": "Cancel job",
+    "mapfish_tip_preparing_print": "Preparing",
     "mapfish_template_label": "Templates",
     "mapfish_formats_label": "Formats",
     "mapfish_layouts_label": "Layouts",

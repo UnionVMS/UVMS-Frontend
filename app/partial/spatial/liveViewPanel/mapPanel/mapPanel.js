@@ -16,7 +16,7 @@ angular.module('unionvmsWeb').controller('MapCtrl',function($log, $scope, locale
     $scope.submitingBookmark = false;
     $scope.isAddBookVisible = false;
     $scope.submittedMapFishPrint = false;
-    $scope.isRequestingImage = false;
+    $scope.printingStatus = 'ready';
     $scope.projections = projectionService;
     $scope.graticuleActivated = false;
     $scope.graticuleTip = [locale.getString('spatial.map_tip_enable'), locale.getString('spatial.map_tip_graticule')].join(' ');
@@ -244,10 +244,17 @@ angular.module('unionvmsWeb').controller('MapCtrl',function($log, $scope, locale
         }
         var mapEl = mapService.map.getTargetElement();
         mapEl.style.cursor = 'default';
+        
+        //Clear the ng-model with title, subtitle, description, etc.
+        angular.forEach($scope.mapFishLocalConfig, function(value, key) {
+        	this[key] = undefined;
+        }, $scope.mapFishLocalConfig);
+        $scope.printForm.$setPristine();
     };
 
     //Cancel print job
     $scope.cancelPrint = function (ref){
+        scope.printingStatus = 'ready';
         if (ref === undefined) {
             return;
         }
@@ -264,7 +271,7 @@ angular.module('unionvmsWeb').controller('MapCtrl',function($log, $scope, locale
     $scope.printMapWithMapFish = function(ref) {
     	$scope.submittedMapFishPrint = true;
     	if($scope.mapForm.printForm.$valid){
-	    	if($scope.mapFish.jobStatusData.status === 'running'){
+	    	if($scope.preparingStatus === 'printing' && $scope.mapFish.jobStatusData.status === 'running'){
 	    	    $scope.cancelPrint(ref);
 	    	}else{
 		        $log.debug("Requesting print job");
@@ -275,7 +282,7 @@ angular.module('unionvmsWeb').controller('MapCtrl',function($log, $scope, locale
 		        var segments = payload.getIconPayload('segments');
 		        var alarms = payload.getIconPayload('alarms');
 
-		        $scope.isRequestingImage = true;
+		        $scope.printingStatus = 'preparing';
 
 		        var iconPayload = {};
 		        if (angular.isDefined(positions) && angular.isDefined(mapService.getLayerByType('vmspos')) && mapService.getLayerByType('vmspos').get('visible')){
@@ -297,6 +304,7 @@ angular.module('unionvmsWeb').controller('MapCtrl',function($log, $scope, locale
 		                payload.createPayloadObj($scope.mapFishLocalConfig, response);
 		                $scope.doPrintRequest(payload);
 		            }, function(error){
+		                $scope.printingStatus = 'ready';
 		                return undefined;
 		            });
 		        } else {
@@ -309,6 +317,7 @@ angular.module('unionvmsWeb').controller('MapCtrl',function($log, $scope, locale
 
     //Do the actual print
     $scope.doPrintRequest = function(payload){
+        $scope.printingStatus = 'printing';
         mapFishPrintRestService.createPrintJob(MapFish.selected_template, MapFish.selected_format, payload).then(
             function(data) {
                 $log.debug(data);
@@ -324,14 +333,14 @@ angular.module('unionvmsWeb').controller('MapCtrl',function($log, $scope, locale
                                 }
                                 if(MapFish.jobStatusData.status === 'finished'){
                                    $scope.download(MapFish.jobStatusData.downloadURL);
-                                   $scope.isRequestingImage = false;
+                                   $scope.printingStatus = 'ready';
                                 }
                                 if(MapFish.jobStatusData.status === 'error'){
-                                    $scope.isRequestingImage = false;
+                                    $scope.printingStatus = 'ready';
                                 }
                             },function (error) {
                                 $log.error(error);
-                                $scope.isRequestingImage = false;
+                                $scope.printingStatus = 'ready';
                             }
                         );
                     }
@@ -339,7 +348,7 @@ angular.module('unionvmsWeb').controller('MapCtrl',function($log, $scope, locale
                 poller();
             },function (error) {
                 $log.error(error);
-                $scope.isRequestingImage = false;
+                $scope.printingStatus = 'ready';
             }
         );
     };

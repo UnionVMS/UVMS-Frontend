@@ -228,12 +228,15 @@
 			                        </div>
 			                    </div>
 			                    <div class="form-group col-md-6 measure-content btn-measure-group pull-right">
-			                        <button type="button" class="pull-right btn" ng-class="{'btn-primary': !isRequestingImage, 'btn-warning': isRequestingImage}" ng-click="printMapWithMapFish(mapFish.printJobData.ref)" ng-switch="isRequestingImage">
-			                            <span class="fa" ng-class="{'fa-download': !isRequestingImage, 'fa-refresh fa-spin': isRequestingImage}"></span>&nbsp;
-			                            <span ng-switch-when="true">
+			                        <button type="button" class="pull-right btn" ng-class="{'btn-primary': printingStatus === 'ready', 'btn-warning': printingStatus !== 'ready'}" ng-click="printMapWithMapFish(mapFish.printJobData.ref)" ng-switch="printingStatus">
+			                            <span class="fa" ng-class="{'fa-download': printingStatus === 'ready', 'fa-refresh fa-spin': printingStatus !== 'ready'}"></span>&nbsp;
+			                            <span ng-switch-when="printing">
 			                            	{{'spatial.mapfish_tip_printing' | i18n }}
 			                            </span>
-			                            <span ng-switch-default>
+			                            <span ng-switch-when="preparing">
+			                            	{{'spatial.mapfish_tip_preparing_print' | i18n }}
+			                            </span>
+			                            <span ng-switch-when="ready">
 			                            	{{'spatial.mapfish_tip_print' | i18n }}
 			                            </span>
 			                        </button>
