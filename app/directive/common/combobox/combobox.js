@@ -164,18 +164,22 @@ angular.module('unionvmsWeb').directive('combobox', function($window, comboboxSe
                     			scope.currentItemLabel = "";
                     		}
                     	}else{
-                    		for(var k = 0; k < scope.loadedItems.length; k++){
+                            var comboItems = scope.loadedItems;
+                            if(scope.comboSection){
+                                comboItems = scope.loadedItems[0].items;
+                            }
+                    		for(var k = 0; k < comboItems.length; k++){
                     			if(scope.editable){
                     				if(scope.comboForm.comboEditableInput.$dirty){
                 						scope.isFilterActive = true;
                     				}
-                    				if(angular.equals(newVal, scope.getItemLabel(scope.loadedItems[k]))) {
-		                        		scope.newItem.text = scope.getItemLabel(scope.loadedItems[k]);
+                    				if(angular.equals(newVal, scope.getItemLabel(comboItems[k]))) {
+		                        		scope.newItem.text = scope.getItemLabel(comboItems[k]);
 		                                break;
 		                            }
                     			}else{
-                    				if(angular.equals(newVal, getItemCode(scope.loadedItems[k]))) {
-		                        		scope.currentItemLabel = scope.getItemLabel(scope.loadedItems[k]);
+                    				if(angular.equals(newVal, getItemCode(comboItems[k]))) {
+		                        		scope.currentItemLabel = scope.getItemLabel(comboItems[k]);
 		                                break;
 		                            }
                     			}
@@ -217,7 +221,9 @@ angular.module('unionvmsWeb').directive('combobox', function($window, comboboxSe
             },true);
 
             scope.$watch('initialtext',function(newVal,oldVal){
-                scope.currentItemLabel = newVal;
+                if(!angular.isDefined(scope.ngModel)){
+                    scope.currentItemLabel = newVal;
+                }
             });
             
             //Select item in dropdown
