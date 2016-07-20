@@ -59,14 +59,33 @@ angular.module('unionvmsWeb').directive('layerTree', function($q, mapService, lo
 			            
                         var layerSrc = parent.data.mapLayer.getSource();
                         var featSize = layerSrc.getFeatures().length;
+                        var mapExtent = mapService.map.getView().calculateExtent(mapService.map.getSize());
+                        var visibility = nodeData.isSelected();
                         var counter = 0;
+                        var labels = {
+                            overlayIds: [],
+                            features: []
+                        };
                         layerSrc.forEachFeature(function(cluster){
-                            var originalSize = cluster.get('featNumber');
                             var containedFeatures = cluster.get('features');
+                            var originalSize = containedFeatures.length;
                             angular.forEach(containedFeatures, function(feat){
                                 var source = feat.get('source');
                                 if (source === nodeData.title){
-                                    feat.set('isVisible', nodeData.isSelected());
+                                    feat.set('isVisible', visibility);
+                                    if (mapService.vmsposLabels.active && (cluster.get('featNumber') === 1 || originalSize === 1)){
+                                        if (visibility){
+                                            var isFeatInExtent = ol.extent.containsExtent(mapExtent, feat.getGeometry().getExtent());
+                                            if ((!angular.isDefined(feat.get('overlayHidden')) || feat.get('overlayHidden') === false) &&  isFeatInExtent){
+                                                labels.features.push(feat);
+                                            }
+                                        } else {
+                                            var id = feat.get('overlayId');
+                                            if (angular.isDefined(id)){
+                                                labels.overlayIds.push(id);
+                                            }
+                                        }
+                                    }
                                 } else {
                                     var availableNode = parent.findAll(source)[0];
                                     if (childStatus.true === 1 && scope.vmsPosState.length === 0 && feat.get('isVisible') !== availableNode.isSelected()){
@@ -76,6 +95,10 @@ angular.module('unionvmsWeb').directive('layerTree', function($q, mapService, lo
                             });
                             counter += 1;
                             if (counter === featSize - 1){
+                                if (labels.overlayIds.length > 0 || labels.features.length > 0){
+                                    labels.visibility = visibility;
+                                    mapService.toggleVectorLabelsForSources(labels);
+                                }
                                 resolve('done');
                             }
                         });
@@ -92,18 +115,42 @@ angular.module('unionvmsWeb').directive('layerTree', function($q, mapService, lo
                             }, mapService.vmsSources);
                             var layerSrc = nodeData.data.mapLayer.getSource();
                             var featSize = layerSrc.getFeatures().length;
+                            var mapExtent = mapService.map.getView().calculateExtent(mapService.map.getSize());
                             var counter = 0;
+                            var visibility = nodeData.isSelected();
+                            var labels = {
+                                overlayIds: [],
+                                features: []
+                            };
                             layerSrc.forEachFeature(function(cluster){
                                 var containedFeatures = cluster.get('features');
+                                var originalSize = containedFeatures.length;
                                 angular.forEach(containedFeatures, function(feat){
                                     if (_.indexOf(scope.vmsPosState, feat.get('source'))  !== -1){
-                                        feat.set('isVisible', nodeData.isSelected());
+                                        feat.set('isVisible', visibility);
+                                        if (mapService.vmsposLabels.active === true  && (cluster.get('featNumber') === 1 || originalSize === 1)){
+                                            if (visibility){
+                                                var isFeatInExtent = ol.extent.containsExtent(mapExtent, feat.getGeometry().getExtent());
+                                                if ((!angular.isDefined(feat.get('overlayHidden')) || feat.get('overlayHidden') === false) &&  isFeatInExtent){
+                                                    labels.features.push(feat);
+                                                }
+                                            } else {
+                                                var id = feat.get('overlayId');
+                                                if (angular.isDefined(id)){
+                                                    labels.overlayIds.push(id);
+                                                }
+                                            }
+                                        }
                                     }
                                 });
                                 counter += 1;
                                 if (counter === featSize - 1){
                                     scope.vmsPosState = [];
-                                    nodeData.data.mapLayer.set('visible', nodeData.isSelected());
+                                    nodeData.data.mapLayer.set('visible', visibility);
+                                    if (labels.overlayIds.length > 0 || labels.features.length > 0){
+                                        labels.visibility = visibility;
+                                        mapService.toggleVectorLabelsForSources(labels);
+                                    }
                                     resolve('done');
                                 }
                             });
@@ -143,6 +190,12 @@ angular.module('unionvmsWeb').directive('layerTree', function($q, mapService, lo
 				            var selectedStatus = _.chain(parent.getChildren()).countBy('selected').value();
 				            if (selectedStatus.false === parent.data.sourcesType.length){
                                 parent.data.mapLayer.set( 'visible', false );
+                                //Deal with labels
+                                if (mapService.vmsposLabels.active === true){
+                                    mapService.deactivateVectorLabels('vmspos');
+                                    var target = $(parent.span).children('.fancytree-title').children('.fa.fa-tags');
+                                    target.removeClass('label-selected-vmspos');
+                                }
                             }
 				            
 				            if ( ( scope.vmsPosState.length === 0 || scope.vmsPosState.length === parent.data.sourcesType.length - 1 ) && data.node.isSelected() !== parent.data.mapLayer.get('visible') ){
@@ -226,10 +279,6 @@ angular.module('unionvmsWeb').directive('layerTree', function($q, mapService, lo
 					addContextMenu( data );
 				}
 
-//				if ( data.node.data.popupEnabled === true ) {
-//					addInfo( data );
-//				}
-
 				if (data.node.data.labelEnabled === true){
 				    addLabel( data );
 				}
@@ -277,49 +326,6 @@ angular.module('unionvmsWeb').directive('layerTree', function($q, mapService, lo
 			            }
 			        });
 			};
-
-			// add info button to activate info-popup on layer
-//			var addInfo = function( data ) {
-//				var	tip,
-//						$title = $( data.node.span ).children( '.fancytree-title' ),
-//						$info = $title.children('.fa.fa-info-circle');
-//
-//				if ( $info.length > 0 ) {
-//					return;
-//				}
-//
-//				tip = locale.getString(data.node.data.popupTip);
-//				var cls = 'fa fa-info-circle fancytree-clickable';
-//
-//                var empty = false;
-//                if ((data.node.data.type === 'vmspos' && mapService.popupVisibility.positions.length === 0) || (data.node.data.type === 'vmsseg' && mapService.popupVisibility.segments.length === 0)){
-//                    tip = locale.getString('spatial.layer_tree_empty_popup_label_visibility_settings');
-//                    empty = true;
-//                    cls += ' info-disabled';
-//                }
-//
-//				$( '<span class="' + cls + '" title="'+tip+'"></span>' )
-//					.appendTo( $title )
-//					.on( 'click', function(event){
-//						var node, $target = $( event.target );
-//
-//						if (!empty){
-//						    var active = $target.hasClass( 'info-selected' );
-//						    if (data.node.isSelected() === true){
-//	                            $('.info-selected').removeClass( 'info-selected' );
-//
-//	                            if ( !active ) {
-//	                                node = $.ui.fancytree.getNode( event.target );
-//	                                $target.addClass( 'info-selected' );
-//	                                mapService.activeLayerType = node.data.type;
-//	                            } else {
-//	                                mapService.closePopup();
-//	                                mapService.activeLayerType = undefined;
-//	                            }
-//	                        }
-//						}
-//					});
-//			};
 
 			// add button to open context menu on layer
 			var addContextMenu = function( data ) {
@@ -372,13 +378,6 @@ angular.module('unionvmsWeb').directive('layerTree', function($q, mapService, lo
 						addLayers( value.children );
 						return ( true );// = continue;
 					}
-					
-//					if ( value.folder) {
-//                        if (!angular.isDefined(value.data) || (angular.isDefined(value.data) && value.data.type !== 'vmspos')){
-//                            addLayers( value.children );
-//                            return ( true );// = continue;
-//                        }
-//                    }
 
 					if ( !value.data ) { return ( true ); }
 

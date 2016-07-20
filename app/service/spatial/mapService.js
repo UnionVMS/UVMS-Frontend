@@ -227,7 +227,6 @@ angular.module('unionvmsWeb').factory('mapService', function(locale, $rootScope,
                 }
             }
             
-            ms.checkLabelStatus();
             $rootScope.$broadcast('reloadLegend');
         });
 	    
@@ -2625,19 +2624,25 @@ angular.module('unionvmsWeb').factory('mapService', function(locale, $rootScope,
             //var resolution = ms.map.getView().getResolution();
             
             var src = layer.getSource();
-            var overlayId;
+            var overlayId, feat;
             src.forEachFeatureInExtent(extent, function(feature){
                 if (type === 'vmspos'){
                     var containedFeatures = feature.get('features');
+                    if (containedFeatures.length === 1){
+                        feat = containedFeatures[0];
+                    }
                     
-                    if (containedFeatures.length === 1 ){
-                        var feat = containedFeatures[0];
+                    if (feature.get('featNumber') === 1 && containedFeatures.length > 1){
+                        feat = feature.get('featureToDisplay');
+                    }
+                    
+                    if (angular.isDefined(feat) && feat.get('isVisible')){
                         overlayId = feat.get('overlayId');
                         if (!angular.isDefined(overlayId)){
                             overlayId = ms.generateOverlayId(ms[containerName]);
                         }
                         ms[containerName].displayedIds.push(overlayId);
-                        if (!angular.isDefined(feat.get('overlayHidden'))){
+                        if (!angular.isDefined(feat.get('overlayHidden')) || (feat.get('overlayHidden') === false && !angular.isDefined(feat.get('overlayId')))){
                             ms.addLabelsOverlay(feat, type, overlayId);
                         }
                     }
@@ -2697,6 +2702,37 @@ angular.module('unionvmsWeb').factory('mapService', function(locale, $rootScope,
         }, ms[containerName]);
         
         ms[containerName].active = false;
+    };
+    
+    /**
+     * Toggle labels for positions which were hidden by source in the layer tree
+     * 
+     * @memberof mapService
+     * @public
+     * @param {Object} overlayStatus - An object conatining an array of overlay ids, array of features and the label visibility status
+     */
+    ms.toggleVectorLabelsForSources = function(overlayStatus){
+        var keys = _.keys(ms.vmsposLabels);
+        keys = _.without(keys, 'active', 'displayedIds');
+        
+        if (overlayStatus.visibility === false){
+            var intersection = _.intersection(keys, overlayStatus.overlayIds);
+            angular.forEach(intersection, function(key) {
+                ms.map.removeOverlay(this[key].overlay);
+                this[key].feature.set('overlayId', undefined);
+                delete this[key];
+                var idx = _.indexOf(this.displayedIds, key);
+                if (idx !== -1){
+                    this.displayedIds.splice(idx, 1);
+                }
+            }, ms.vmsposLabels);
+        } else {
+            angular.forEach(overlayStatus.features, function(feat) {
+                var overlayId = ms.generateOverlayId(ms.vmsposLabels);
+                ms.vmsposLabels.displayedIds.push(overlayId);
+                ms.addLabelsOverlay(feat, 'vmspos', overlayId);
+            });
+        }
     };
     
     ms.addLabelsOverlay = function(feature, type, overlayId){
@@ -2805,6 +2841,10 @@ angular.module('unionvmsWeb').factory('mapService', function(locale, $rootScope,
             ms.map.removeOverlay(ms[container][id].overlay);
             ms[container][id].feature.set('overlayId', undefined);
             ms[container][id].feature.set('overlayHidden', true);
+            var idx = _.indexOf(ms[container].displayedIds, id);
+            if (idx !== -1){
+                ms[container].displayedIds.splice(idx, 1);
+            }
         };
     };
     
