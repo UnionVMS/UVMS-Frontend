@@ -37,7 +37,7 @@ angular.module('unionvmsWeb').factory('loadingStatus',function() {
 		    message: 'spatial.loading_data',
             value: false
 		},
-		isLoadingAreaSelectionModal: {
+		isLoadingAreaSelectionFieldset: {
 		    message: 'spatial.loading_data',
             value: false
 		},

@@ -458,13 +458,17 @@ angular.module('unionvmsWeb').factory('genericMapService',function($localStorage
      * @memberof genericMapService
      * @public
      */
-    var setMapBasicConfigs = function(){
+    var setMapBasicConfigs = function(callback){
         var self = this;
         self.mapBasicConfigs = {};
+        var callbackFunc = callback;
         spatialRestService.getBasicMapConfigurations().then(function(response){
             self.mapBasicConfigs = response.map;
             self.mapBasicConfigs.layers.baseLayers.reverse();
             self.mapBasicConfigs.success = true;
+            if(angular.isDefined(callbackFunc)){
+                callbackFunc();
+            }
         }, function(error){
             self.mapBasicConfigs = {success: false};
         });

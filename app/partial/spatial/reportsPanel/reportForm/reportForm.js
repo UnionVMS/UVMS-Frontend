@@ -147,6 +147,7 @@ angular.module('unionvmsWeb').controller('ReportformCtrl',function($scope, $moda
         $scope.submitingReport = true;
         $scope.validateRanges();
         if ($scope.reportForm.$valid && $scope.vesselsSelectionIsValid){
+            $scope.report.areas = $scope.exportSelectedAreas();
         	$scope.configModel = new SpatialConfig();
             if ($scope.formMode === 'CREATE'){
             	$scope.report.currentConfig.mapConfiguration.layerSettings = reportService.checkLayerSettings($scope.report.currentConfig.mapConfiguration.layerSettings);
@@ -182,8 +183,8 @@ angular.module('unionvmsWeb').controller('ReportformCtrl',function($scope, $moda
 
     $scope.openAreaSelectionModal = function(){
         var modalInstance = $modal.open({
-            templateUrl: 'partial/spatial/reportsPanel/reportForm/areasSelectionModal/areasSelectionModal.html',
-            controller: 'AreasselectionmodalCtrl',
+            templateUrl: 'partial/spatial/reportsPanel/reportForm/areasSelectionFieldset/areasSelectionFieldset.html',
+            controller: 'AreasselectionfieldsetCtrl',
             size: 'lg',
             resolve: {
                 selectedAreas: function(){
@@ -240,6 +241,7 @@ angular.module('unionvmsWeb').controller('ReportformCtrl',function($scope, $moda
     	$scope.mergedReport = undefined;
     	$scope.validateRanges();
     	if($scope.reportForm.reportBodyForm.$valid && $scope.vesselsSelectionIsValid){
+            $scope.report.areas = $scope.exportSelectedAreas();
             $scope.reportTemp = new SpatialConfig();
             angular.copy($scope.report,$scope.reportTemp);
     		reportService.runReportWithoutSaving($scope.report);
@@ -270,6 +272,7 @@ angular.module('unionvmsWeb').controller('ReportformCtrl',function($scope, $moda
             });
 
             modalInstance.result.then(function(data){
+                data.areas = $scope.exportSelectedAreas();
             	data.currentConfig.mapConfiguration.layerSettings = reportService.checkLayerSettings(data.currentConfig.mapConfiguration.layerSettings);
             	data = checkMapConfigDifferences(data);
             	reportRestService.createReport(data).then(createReportSuccess, createReportError);
@@ -380,6 +383,11 @@ angular.module('unionvmsWeb').controller('ReportformCtrl',function($scope, $moda
 	    		$scope.init();
 	    	    $scope.report = $scope.report.fromJson(response);
 	    	    $scope.report.currentConfig = {mapConfiguration: {}};
+                if (angular.isDefined($scope.report.areas) && $scope.report.areas.length > 0){
+                    getAreaProperties(buildAreaPropArray());
+                }else{
+                    $scope.selectedAreas = [];
+                }
 	    	    angular.copy($scope.report.mapConfiguration,$scope.report.currentConfig.mapConfiguration);
 	    	    $scope.reportOwner = response.createdBy;
                 loadingStatus.isLoading('ResetReport',false);
@@ -436,7 +444,7 @@ angular.module('unionvmsWeb').controller('ReportformCtrl',function($scope, $moda
             break;
             case 'EDIT-FROM-LIVEVIEW':
                 if(reportService.outOfDate && $scope.reportTemp){
-                    $scope.report = {};
+                    $scope.report = new Report();
                     angular.copy($scope.reportTemp,$scope.report);
                     delete $scope.reportTemp;
                 }else{
@@ -450,11 +458,94 @@ angular.module('unionvmsWeb').controller('ReportformCtrl',function($scope, $moda
                 }
         }
 
+        $scope.selectedAreas = [];
+        if (angular.isDefined($scope.report.areas) && $scope.report.areas.length > 0){
+            getAreaProperties(buildAreaPropArray());
+        }else{
+            $scope.selectedAreas = [];
+        }
+
         $scope.report.currentConfig = {mapConfiguration: {}};
         angular.copy($scope.report.mapConfiguration,$scope.report.currentConfig.mapConfiguration);
         setTimeout(function() {
         	$scope.reportForm.$setPristine();
         }, 100);
+    };
+
+    /**
+     * Export all selected areas when modal is closed while saving
+     * 
+     * @memberof ReportformCtrl
+     * @public
+     * @alias exportSelectedAreas
+     * @returns {Array} An array containing all selected areas properly formatted to submit to server side
+     */
+    $scope.exportSelectedAreas = function(){
+        var exported = [];
+        for (var i = 0; i < $scope.selectedAreas.length; i++){
+            var area = {
+                gid: parseInt($scope.selectedAreas[i].gid),
+                areaType: $scope.selectedAreas[i].areaType    
+            };
+            exported.push(area);
+        }
+        
+        return exported;
+    };
+
+    /**
+     * Build proper array from the modal resolved selected areas. This is to be used to request area properties to server
+     * 
+     * @memberof AreasselectionfieldsetCtrl
+     * @private
+     */
+    var buildAreaPropArray = function(){
+        var areas = [];
+        for (var i = 0; i < $scope.report.areas.length; i++){
+            areas.push({
+                gid : $scope.report.areas[i].gid,
+                areaType: $scope.report.areas[i].areaType
+            });
+        }
+        return areas;
+    };
+
+    /**
+     * Get area properties from the Spatial REST API
+     * 
+     * @memberof AreasselectionfieldsetCtrl
+     * @private
+     */
+    var getAreaProperties = function(data){
+        spatialRestService.getAreaProperties(data).then(function(response){
+            $scope.selectedAreas = buildSelectedAreasArray(response.data);
+        }, function(error){
+            $anchorScroll();
+            $scope.formAlert.msg = locale.getString('spatial.area_selection_modal_get_selected_sys_area_details_error');
+            $scope.formAlert.visible = true;
+        });
+    };
+
+    /**
+     * Build properly formated array out of the area properties server response data and merge it with the existent modal resolved selected areas.
+     * 
+     * @memberof AreasselectionfieldsetCtrl
+     * @private
+     */
+    var buildSelectedAreasArray = function(data){
+        var finalAreas = [];
+        for (var i = 0; i < data.length; i++){
+            var area = data[i];
+            area.gid = parseInt(area.gid);
+            for (var j = 0; j < $scope.report.areas.length; j++){
+                if (parseInt($scope.report.areas[j].gid) === parseInt(data[i].gid) && $scope.report.areas[j].areaType === data[i].areaType){
+                    area.id = parseInt($scope.report.areas[j].id);
+                }
+            }
+            finalAreas.push(area);
+        }
+        
+        return finalAreas;
     };
     
     $scope.$watch(function(){return $scope.repNav.isViewVisible('reportForm');}, function(newVal,oldVal){

@@ -51,7 +51,8 @@
 		}
 	}
 	.report-configuration-form {
-		border-left: 1px solid #ddd
+		border-left: 1px solid #ddd;
+		padding-bottom: 30px;
 	}
 	.filter-section {
 		margin-top: 10px;
@@ -67,6 +68,26 @@
 		.btn-container {
 			padding-top: 10px;
 			border-top: 1px solid #ddd;
+		}
+	}
+	.red-badge {
+		background-color: @profileColor_red;
+	}
+	.nav-tabs {
+		border-bottom: 2px solid #ddd;
+		.areaTab {
+			border-top: 1px solid #ddd;
+			border-left: 1px solid #ddd;
+			margin-bottom: 0;
+			&:last-child {
+				border-right: 1px solid #ddd;
+			}
+			a {
+				&,
+				&:hover {
+					border: 0;
+				}
+			}
 		}
 	}
 }
