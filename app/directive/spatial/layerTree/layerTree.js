@@ -37,10 +37,24 @@ angular.module('unionvmsWeb').directive('layerTree', function($q, mapService, lo
 			
 			var updateVmsPosState = function(nodeData){
 			    if (nodeData.isSelected()){
-			        var idx = _.indexOf(scope.vmsPosState, nodeData.title);
-			        if (idx !== -1){
-			            scope.vmsPosState.splice(idx, 1);
-			            mapService.vmsSources[nodeData.title] = true;
+			        if (scope.vmsPosState.length > 0){
+			            var idx = _.indexOf(scope.vmsPosState, nodeData.title);
+	                    if (idx !== -1){
+	                        scope.vmsPosState.splice(idx, 1);
+	                        mapService.vmsSources[nodeData.title] = true;
+	                    }
+			        } else {
+			            angular.forEach(mapService.vmsSources, function(value, key) {
+			                var status = false;
+			            	if (key === nodeData.title){
+			            	   status = true; 
+			            	}
+			            	
+			            	this[key] = status;
+			            	if (!status){
+			            	    scope.vmsPosState.push(key);
+			            	}
+			            }, mapService.vmsSources);
 			        }
 			    } else {
 			        //we add node title when we deactivate to the current state
@@ -88,9 +102,18 @@ angular.module('unionvmsWeb').directive('layerTree', function($q, mapService, lo
                                     }
                                 } else {
                                     var availableNode = parent.findAll(source)[0];
-                                    if (childStatus.true === 1 && scope.vmsPosState.length === 0 && feat.get('isVisible') !== availableNode.isSelected()){
-                                        feat.set('isVisible', availableNode.isSelected());
+                                    if (childStatus.true === 1){
+                                        if (scope.vmsPosState.length === 0 && feat.get('isVisible') !== availableNode.isSelected()){
+                                            feat.set('isVisible', availableNode.isSelected());
+                                        }
+                                        
+                                        if (scope.vmsPosState.length !== 0 && _.indexOf(scope.vmsPosState, feat.get('source')) !== -1){
+                                            feat.set('isVisible', false);
+                                        }
                                     }
+//                                    if (childStatus.true === 1 && scope.vmsPosState.length === 0 && feat.get('isVisible') !== availableNode.isSelected()){
+//                                        feat.set('isVisible', availableNode.isSelected());
+//                                    }
                                 }
                             });
                             counter += 1;
