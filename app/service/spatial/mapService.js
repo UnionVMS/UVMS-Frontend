@@ -1247,9 +1247,15 @@ angular.module('unionvmsWeb').factory('mapService', function(locale, $rootScope,
             var mapExtent = ms.map.getView().calculateExtent(ms.map.getSize());
             var mapSize = Math.min(ol.extent.getWidth(mapExtent), ol.extent.getHeight(mapExtent));
             
+            
+            var items = positions.length;
+            if (positions.length !== feature.get('featNumber')){
+                items = feature.get('featNumber');
+            }
+            
             var radius = mapSize / 10;
-            if (positions.length > 20){
-                radius = positions.length * radius / 20;
+            if (items > 20){
+                radius = items * radius / 20;
                 if (radius > mapSize / 2.5){
                     radius = mapSize / 2.5;
                 }
@@ -1260,10 +1266,6 @@ angular.module('unionvmsWeb').factory('mapService', function(locale, $rootScope,
             circlePoly.transform(ms.getMapProjectionCode(), 'EPSG:4326');
             
             var line = turf.linestring(circlePoly.getCoordinates()[0]);
-            var items = positions.length;
-            if (positions.length !== feature.get('featNumber')){
-                items = feature.get('featNumber');
-            }
             
             var length = turf.lineDistance(line, 'radians') / items;
             
