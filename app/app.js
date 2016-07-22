@@ -410,7 +410,7 @@ unionvmsWebApp.config(function($stateProvider, $compileProvider, tmhDynamicLocal
             },
             resolve: {
                 config : function(initService){
-                    return initService.loadConfigFor(["MOVEMENT"]);
+                    return initService.loadConfigFor(["MOVEMENT","MOVEMENT_SOURCE_TYPES"]);
                 }
             },
             data: {
@@ -430,7 +430,7 @@ unionvmsWebApp.config(function($stateProvider, $compileProvider, tmhDynamicLocal
             },
             resolve: {
                 config : function(initService){
-                    return initService.loadConfigFor(["MOVEMENT"]);
+                    return initService.loadConfigFor(["MOVEMENT","MOVEMENT_SOURCE_TYPES"]);
                 }
             },
             data: {
