@@ -271,7 +271,7 @@
 	"area_selection_type_all_areas": "All",
 	"area_selection_type_custom": "Custom",
 
-    "report_configuration_modal_title": "Report configuration",
+    "report_configuration_modal_title": "Map configuration",
     "save_as_modal_title": "Save report as...",
     "map_configuration_map_projection": "Map projection",
     "map_configuration_display_projection": "Display projection",
@@ -306,7 +306,7 @@
 	"layer_tree_tip_popup": "Toggle info popup",
 	"layer_tree_tip_label_vector": "Toggle labels",
 	"layer_tree_empty_popup_label_visibility_settings": "Empty visibility settings. Please check your preferences.",
-	"layer_tree_tip_context_menu": "Options",
+	"layer_tree_tip_context_menu": "Settings",
 	"layer_tree_context_menu_show_title": "Show",
 	"layer_tree_context_menu_all_areas_title": "All areas",
 	"layer_tree_context_menu_active_areas_title": "Active areas",

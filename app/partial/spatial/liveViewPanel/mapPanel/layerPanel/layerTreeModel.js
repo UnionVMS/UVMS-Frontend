@@ -415,6 +415,8 @@ angular.module('unionvmsWeb').factory('TreeModel',function(locale, mapService, u
 	            isBaseLayer: false,
 //	            popupEnabled: true,
 //	            popupTip: 'spatial.layer_tree_tip_popup',
+	            optionsEnabled: true,
+	            optionsTip: 'spatial.layer_tree_tip_context_menu',
 	            labelEnabled: true,
 	            labelTip: 'spatial.layer_tree_tip_label_vector',
 	            longAttribution: longCopyright.length > 0 ? longCopyright : undefined,

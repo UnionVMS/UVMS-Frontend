@@ -1,4 +1,4 @@
-angular.module('unionvmsWeb').directive('layerTree', function($q, mapService, locale, loadingStatus) {
+angular.module('unionvmsWeb').directive('layerTree', function($q, $modal, mapService, locale, loadingStatus, reportService, reportRestService) {
 	return {
 		restrict: 'AE',
 		replace: true,
@@ -10,7 +10,6 @@ angular.module('unionvmsWeb').directive('layerTree', function($q, mapService, lo
 			var mapLayers = null;
 			scope.startState = {};
 			scope.endState = {};
-			scope.vmsPosState = [];
 
 			// used to implement selectMode 1 for basemaps
 			var lastSelectedBasemapNode = null;
@@ -35,43 +34,14 @@ angular.module('unionvmsWeb').directive('layerTree', function($q, mapService, lo
 				}
 			};
 			
-			var updateVmsPosState = function(nodeData){
-			    if (nodeData.isSelected()){
-			        if (scope.vmsPosState.length > 0){
-			            var idx = _.indexOf(scope.vmsPosState, nodeData.title);
-	                    if (idx !== -1){
-	                        scope.vmsPosState.splice(idx, 1);
-	                        mapService.vmsSources[nodeData.title] = true;
-	                    }
-			        } else {
-			            angular.forEach(mapService.vmsSources, function(value, key) {
-			                var status = false;
-			            	if (key === nodeData.title){
-			            	   status = true; 
-			            	}
-			            	
-			            	this[key] = status;
-			            	if (!status){
-			            	    scope.vmsPosState.push(key);
-			            	}
-			            }, mapService.vmsSources);
-			        }
-			    } else {
-			        //we add node title when we deactivate to the current state
-			        scope.vmsPosState.push(nodeData.title);
-			        mapService.vmsSources[nodeData.title] = false;
-			    }
-			};
-			
 			function asyncProcessVmsSources (nodeData) {
 			    return $q(function(resolve, reject){
 			        setTimeout(function() {
-			            updateVmsPosState(nodeData);
-			            
 			            var parent = nodeData.getParent();
                         var childStatus = _.chain(parent.getChildren()).countBy('selected').value();
 			            
                         var layerSrc = parent.data.mapLayer.getSource();
+                        var layerVisibility = parent.data.mapLayer.get('visible');
                         var featSize = layerSrc.getFeatures().length;
                         var mapExtent = mapService.map.getView().calculateExtent(mapService.map.getSize());
                         var visibility = nodeData.isSelected();
@@ -101,30 +71,30 @@ angular.module('unionvmsWeb').directive('layerTree', function($q, mapService, lo
                                         }
                                     }
                                 } else {
-                                    var availableNode = parent.findAll(source)[0];
-                                    if (childStatus.true === 1){
-                                        if (scope.vmsPosState.length === 0 && feat.get('isVisible') !== availableNode.isSelected()){
-                                            feat.set('isVisible', availableNode.isSelected());
-                                        }
-                                        
-                                        if (scope.vmsPosState.length !== 0 && _.indexOf(scope.vmsPosState, feat.get('source')) !== -1){
-                                            feat.set('isVisible', false);
-                                        }
+                                    if (!layerVisibility){
+                                        feat.set('isVisible', false);
                                     }
-//                                    if (childStatus.true === 1 && scope.vmsPosState.length === 0 && feat.get('isVisible') !== availableNode.isSelected()){
-//                                        feat.set('isVisible', availableNode.isSelected());
-//                                    }
                                 }
                             });
-                            counter += 1;
-                            if (counter === featSize - 1){
-                                if (labels.overlayIds.length > 0 || labels.features.length > 0){
-                                    labels.visibility = visibility;
-                                    mapService.toggleVectorLabelsForSources(labels);
-                                }
-                                resolve('done');
-                            }
                         });
+                        
+                        mapService.vmsSources[nodeData.title] = visibility;
+                        if (!layerVisibility){
+                            angular.forEach(mapService.vmsSources, function(value, key){
+                                if (key !== nodeData.title){
+                                    this[key] = false;
+                                }
+                            }, mapService.vmsSources);
+                            parent.data.mapLayer.set('visible', visibility);
+                            
+                        }
+                        
+                        if (labels.overlayIds.length > 0 || labels.features.length > 0){
+                            labels.visibility = visibility;
+                            mapService.toggleVectorLabelsForSources(labels);
+                        }
+                        
+                        resolve('done');
 			        });
 			    });
 			}
@@ -132,56 +102,58 @@ angular.module('unionvmsWeb').directive('layerTree', function($q, mapService, lo
 			function asyncProcessVmsSourcesFromParent (nodeData) {
                 return $q(function(resolve, reject){
                     setTimeout(function() {
-                        if (nodeData.isSelected() && scope.vmsPosState.length > 0){
-                            angular.forEach(mapService.vmsSources, function(value, key) {
-                            	this[key] = nodeData.isSelected();
-                            }, mapService.vmsSources);
-                            var layerSrc = nodeData.data.mapLayer.getSource();
-                            var featSize = layerSrc.getFeatures().length;
-                            var mapExtent = mapService.map.getView().calculateExtent(mapService.map.getSize());
-                            var counter = 0;
-                            var visibility = nodeData.isSelected();
-                            var labels = {
-                                overlayIds: [],
-                                features: []
-                            };
-                            layerSrc.forEachFeature(function(cluster){
-                                var containedFeatures = cluster.get('features');
-                                var originalSize = containedFeatures.length;
-                                angular.forEach(containedFeatures, function(feat){
-                                    if (_.indexOf(scope.vmsPosState, feat.get('source'))  !== -1){
-                                        feat.set('isVisible', visibility);
-                                        if (mapService.vmsposLabels.active === true  && (cluster.get('featNumber') === 1 || originalSize === 1)){
-                                            if (visibility){
-                                                var isFeatInExtent = ol.extent.containsExtent(mapExtent, feat.getGeometry().getExtent());
-                                                if ((!angular.isDefined(feat.get('overlayHidden')) || feat.get('overlayHidden') === false) &&  isFeatInExtent){
-                                                    labels.features.push(feat);
-                                                }
-                                            } else {
-                                                var id = feat.get('overlayId');
-                                                if (angular.isDefined(id)){
-                                                    labels.overlayIds.push(id);
+                        var visibility = nodeData.isSelected();
+                        if (visibility){
+                            var sourcesToProcess = _.map(_.filter(_.pairs(mapService.vmsSources),function(item){
+                                if (!item[1]){
+                                    return true;
+                                }
+                            }), _.first);
+                            if (sourcesToProcess.length !== 0){
+                                var layerSrc = nodeData.data.mapLayer.getSource();
+                                var featSize = layerSrc.getFeatures().length;
+                                var mapExtent = mapService.map.getView().calculateExtent(mapService.map.getSize());
+                                var counter = 0;
+                                var labels = {
+                                    overlayIds: [],
+                                    features: []
+                                };
+                                
+                                layerSrc.forEachFeature(function(cluster){
+                                    var containedFeatures = cluster.get('features');
+                                    var originalSize = containedFeatures.length;
+                                    angular.forEach(containedFeatures, function(feat){
+                                        if (_.indexOf(sourcesToProcess, feat.get('source')) !== -1){
+                                            feat.set('isVisible', visibility);
+                                            if (mapService.vmsposLabels.active === true  && (cluster.get('featNumber') === 1 || originalSize === 1)){
+                                                if (visibility){
+                                                    var isFeatInExtent = ol.extent.containsExtent(mapExtent, feat.getGeometry().getExtent());
+                                                    if ((!angular.isDefined(feat.get('overlayHidden')) || feat.get('overlayHidden') === false) &&  isFeatInExtent){
+                                                        labels.features.push(feat);
+                                                    }
+                                                } else {
+                                                    var id = feat.get('overlayId');
+                                                    if (angular.isDefined(id)){
+                                                        labels.overlayIds.push(id);
+                                                    }
                                                 }
                                             }
                                         }
-                                    }
+                                    });
                                 });
-                                counter += 1;
-                                if (counter === featSize - 1){
-                                    scope.vmsPosState = [];
-                                    nodeData.data.mapLayer.set('visible', visibility);
-                                    if (labels.overlayIds.length > 0 || labels.features.length > 0){
-                                        labels.visibility = visibility;
-                                        mapService.toggleVectorLabelsForSources(labels);
-                                    }
-                                    resolve('done');
+                                if (labels.overlayIds.length > 0 || labels.features.length > 0){
+                                    labels.visibility = visibility;
+                                    mapService.toggleVectorLabelsForSources(labels);
                                 }
-                            });
-                        } else {
-                            nodeData.data.mapLayer.set('visible', nodeData.isSelected());
-                            resolve('done');
+                            }
                         }
                         
+                        angular.forEach(mapService.vmsSources, function(value, key) {
+                        	this[key] = visibility;
+                        }, mapService.vmsSources);
+                        
+                        nodeData.data.mapLayer.set('visible', visibility);
+                        resolve('done');
                     });
                 });
             }
@@ -216,15 +188,10 @@ angular.module('unionvmsWeb').directive('layerTree', function($q, mapService, lo
                                 //Deal with labels
                                 if (mapService.vmsposLabels.active === true){
                                     mapService.deactivateVectorLabels('vmspos');
-                                    var target = $(parent.span).children('.fancytree-title').children('.fa.fa-tags');
+                                    var target = $(parent.span).children('.fancytree-title').children('.fa.fa-tag');
                                     target.removeClass('label-selected-vmspos');
                                 }
                             }
-				            
-				            if ( ( scope.vmsPosState.length === 0 || scope.vmsPosState.length === parent.data.sourcesType.length - 1 ) && data.node.isSelected() !== parent.data.mapLayer.get('visible') ){
-				                parent.data.mapLayer.set( 'visible', true );
-				            }
-				            
 				            loadingStatus.isLoading('LiveviewMap', false);
 				        });
 				    }
@@ -262,7 +229,7 @@ angular.module('unionvmsWeb').directive('layerTree', function($q, mapService, lo
 			    if (node.data.type === 'vmspos' && node.isSelected() === false){
 			        if (mapService.vmsposLabels.active === true){
 			            mapService.deactivateVectorLabels('vmspos');
-	                    target = $(node.span).children('.fancytree-title').children('.fa.fa-tags');
+	                    target = $(node.span).children('.fancytree-title').children('.fa.fa-tag');
 	                    className = 'label-selected-' + node.data.type;
 			        }
 
@@ -276,7 +243,7 @@ angular.module('unionvmsWeb').directive('layerTree', function($q, mapService, lo
 
                 if (node.data.type === 'vmsseg' && mapService.vmssegLabels.active === true && node.isSelected() === false){
                     mapService.deactivateVectorLabels('vmsseg');
-                    target = $(node.span).children('.fancytree-title').children('.fa.fa-tags');
+                    target = $(node.span).children('.fancytree-title').children('.fa.fa-tag');
                     className = 'label-selected-' + node.data.type;
                 }
 
@@ -305,21 +272,109 @@ angular.module('unionvmsWeb').directive('layerTree', function($q, mapService, lo
 				if (data.node.data.labelEnabled === true){
 				    addLabel( data );
 				}
+				
+				if (data.node.data.optionsEnabled === true){
+				    addOptions(data);
+				}
 
 			};
+			
+			//add options button for vectors
+			var addOptions = function(data){
+			    var tip,
+                    $title = $( data.node.span ).children( '.fancytree-title' ),
+                    $options = $title.children('.fa.fa-cog');
+    
+			    if ( $options.length > 0) {
+			        return;
+			    }
+    
+		        tip = locale.getString(data.node.data.optionsTip);
+		        $('<span class="fa fa-cog fancytree-clickable fancytree-vector-options" title="'+tip+'"></span>')
+		            .appendTo($title)
+		            .on('click', function(event){
+		                var type = data.node.data.type;
+		                openSettingsModal(data);
+		            });
+			};
+			
+			var openModal = function(rep){
+			    var modalInstance = $modal.open({
+                    templateUrl: 'partial/spatial/reportsPanel/reportForm/mapConfigurationModal/mapConfigurationModal.html',
+                    controller: 'MapconfigurationmodalCtrl',
+                    size: 'lg',
+                    resolve: {
+                        reportConfigs: function(){
+                            return rep;
+                        },
+                        hasMap: function(){
+                            return true;
+                        }
+                    }
+                });
+			};
+			
+			var openSettingsModal = function(data){
+			    var type = data.node.data.type;
+                if (!angular.isDefined(reportService.mergedReport)){
+                    reportRestService.getReport(reportService.id).then(function(response){
+                        openModal(response);
+                    }, function(error){
+                        //do some stuff
+                    });
+                } else {
+                    //the user already did a run without saving
+                    openModal(reportService.mergedReport);
+                }
+			};
+			
+//			$scope.openMapConfigurationModal = function(){
+//		        var modalInstance = $modal.open({
+//		            templateUrl: 'partial/spatial/reportsPanel/reportForm/mapConfigurationModal/mapConfigurationModal.html',
+//		            controller: 'MapconfigurationmodalCtrl',
+//		            size: 'lg',
+//		            resolve: {
+//		                reportConfigs: function(){
+//		                    if(!angular.isDefined($scope.report.currentConfig) || !angular.isDefined($scope.report.currentConfig.mapConfiguration)){
+//		                        $scope.report.currentConfig = {'mapConfiguration': {}};
+//		                    }else{
+//		                        angular.forEach(_.keys($scope.report.currentConfig.mapConfiguration),function(value,key){
+//		                            if(!angular.isDefined(value)){
+//		                                delete $scope.report.currentConfig.mapConfiguration[key];
+//		                            }
+//		                        });
+//		                    }
+//		                    return $scope.report.currentConfig;
+//		                },
+//		                hasMap: function(){
+//		                    if(!angular.isDefined($scope.report.currentConfig)){
+//		                        $scope.report.currentConfig = {'mapConfiguration': {}};
+//		                    }
+//		                    return $scope.report.withMap;
+//		                }
+//		            }
+//		        });
+//
+//		        modalInstance.result.then(function(data){
+//		            if(!angular.equals($scope.report.currentConfig.mapConfiguration,data.mapSettings)){
+//		                $scope.reportForm.$setDirty();
+//		                $scope.report.currentConfig.mapConfiguration = data.mapSettings;
+//		            }
+//		        });
+//		    };
 
 			//add label button for vectors
 			var addLabel = function(data){
 			    var tip,
 			        $title = $(data.node.span).children('.fancytree-title'),
-			        $info = $title.children('.fa.fa-tags');
+			        $info = $title.children('.fa.fa-tag');
 
 			    if ($info.length > 0){
 			        return;
 			    }
 
 			    tip = locale.getString(data.node.data.labelTip);
-			    var cls = 'fa fa-tags fancytree-clickable';
+			    var cls = 'fa fa-tag fancytree-clickable';
 
 			    var empty = false;
 			    if ((data.node.data.type === 'vmspos' && mapService.labelVisibility.positions.length === 0) || (data.node.data.type === 'vmsseg' && mapService.labelVisibility.segments.length === 0)){
