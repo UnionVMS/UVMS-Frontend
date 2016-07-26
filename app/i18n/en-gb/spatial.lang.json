@@ -146,7 +146,7 @@
 	"reports_form_current_selection": "Current assets selection",
 	"reports_form_simple_search": "Simple search",
 	"reports_form_advanced_search": "Advanced search",
-	"reports_form_vms_fieldset_label": "Select VMS data",
+	"reports_form_vms_fieldset_label": "Select positional data",
 	"reports_form_clear_btn": "Clear",
 	"reports_form_save_btn": "Save",
 	"reports_form_save_as_btn": "Save as...",
@@ -458,5 +458,7 @@
 	"report_history_your_reports": "your reports",
 	"report_history_shared_reports": "shared reports",
 	"error_loading_report_history": "Error loading report history",
-	"report_list_modal_title": "Report list"
+	"report_list_modal_title": "Report list",
+	"report_history_list_btn": "List",
+	"report_history_create_new_btn": "Create new"
 }

@@ -213,15 +213,18 @@
 	text-align: right;
 	margin-top: 5px;
     border-top: 1px solid #ddd;
+	margin-bottom: -5px;
 	.footer-item {
 		display: inline-block;
-		padding: 6px 5px 0 0;
 		font-size: 14px;
 		font-weight: bold;
 		color: @primaryColor;
-		&:last-child span {
+		text-align: center;
+		&:last-child {
 			border-left: 1px solid #ddd;
-			padding-left: 5px;
+		}
+		label {
+			cursor: pointer;
 		}
 	}
 }

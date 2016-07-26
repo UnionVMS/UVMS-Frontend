@@ -108,7 +108,7 @@ angular.module('unionvmsWeb').controller('SpatialCtrl',function($scope, $timeout
     };
 
     $scope.initComboHistory = function(comboId){
-        var comboFooter = angular.element('<li class="combo-history-footer"><div class="footer-item" ng-click="openReportList($event)"><span>Edit List</span></div><div class="footer-item" ng-click="createReportFromLiveview($event)"><span>Create new</span></div></li>');
+        var comboFooter = angular.element('<li class="combo-history-footer col-md-12"><div class="row"><div class="footer-item col-md-5" ng-click="openReportList($event)"><label class="row">{{"spatial.report_history_list_btn" | i18n}}</label></div><div class="footer-item col-md-7" ng-click="createReportFromLiveview($event)"><label class="row">{{"spatial.report_history_create_new_btn" | i18n}}</label></div></div></li>');
         angular.element('#' + comboId + '>.dropdown-menu').append(comboFooter);
         $compile(comboFooter)($scope);
     };
