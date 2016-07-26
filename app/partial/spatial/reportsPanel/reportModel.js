@@ -18,9 +18,6 @@ angular.module('unionvmsWeb').factory('Report',function(unitConversionService) {
 
 	    //VNS filter
 	    this.hasVmsFilter = false;
-	    this.hasPositionsFilter = false;
-	    this.hasSegmentsFilter = false;
-	    this.hasTracksFilter = false;
 	    this.vmsFilters = {
 	        positions: undefined,
 	        segments: undefined,
@@ -107,18 +104,15 @@ angular.module('unionvmsWeb').factory('Report',function(unitConversionService) {
 	        //VMS positions filters
 	        if (angular.isDefined(filter.vms) && angular.isDefined(filter.vms.vmsposition)){
 	            report.vmsFilters.positions = filter.vms.vmsposition;
-	            report.hasPositionsFilter = true;
 	        }
 
 
 	        if (angular.isDefined(filter.vms) && angular.isDefined(filter.vms.vmssegment)){
                 report.vmsFilters.segments = filter.vms.vmssegment;
-                report.hasSegmentsFilter = true;
             }
 
 	        if (angular.isDefined(filter.vms) && angular.isDefined(filter.vms.tracks)){
                 report.vmsFilters.tracks = filter.vms.tracks;
-                report.hasTracksFilter = true;
             }
 
 	        if (!angular.equals({}, filter.vms)){
@@ -154,7 +148,14 @@ angular.module('unionvmsWeb').factory('Report',function(unitConversionService) {
 	Report.prototype.DTO = function(){
 	    var vmsFilters = {};
 	    if (this.hasVmsFilter === true){
-	        if (this.hasPositionsFilter === true && angular.isDefined(this.vmsFilters.positions)){
+			var hasData = false;
+	        if (angular.isDefined(this.vmsFilters.positions) && !_.isEmpty(this.vmsFilters.positions)){
+				angular.forEach(this.vmsFilters.positions,function(value,key){
+					if(key !== 'id' && angular.isDefined(value) && !_.isNull(value)){
+						hasData = true;
+					}
+				});
+
 	            vmsFilters.vmsposition = this.vmsFilters.positions;
 	            vmsFilters.vmsposition.movMinSpeed = vmsFilters.vmsposition.movMinSpeed === null ? undefined : vmsFilters.vmsposition.movMinSpeed;
 	            vmsFilters.vmsposition.movMaxSpeed = vmsFilters.vmsposition.movMaxSpeed === null ? undefined : vmsFilters.vmsposition.movMaxSpeed;
@@ -165,7 +166,14 @@ angular.module('unionvmsWeb').factory('Report',function(unitConversionService) {
 	            }
 	        }
 
-	        if (this.hasSegmentsFilter === true && angular.isDefined(this.vmsFilters.segments)){
+			hasData = false;
+	        if (angular.isDefined(this.vmsFilters.segments) && !_.isEmpty(this.vmsFilters.segments)){
+				angular.forEach(this.vmsFilters.segments,function(value,key){
+					if(key !== 'id' && angular.isDefined(value) && !_.isNull(value)){
+						hasData = true;
+					}
+				});
+
                 vmsFilters.vmssegment = this.vmsFilters.segments;
                 vmsFilters.vmssegment.segMinSpeed = vmsFilters.vmssegment.segMinSpeed === null ? undefined : vmsFilters.vmssegment.segMinSpeed;
                 vmsFilters.vmssegment.segMaxSpeed = vmsFilters.vmssegment.segMaxSpeed === null ? undefined : vmsFilters.vmssegment.segMaxSpeed;
@@ -178,7 +186,14 @@ angular.module('unionvmsWeb').factory('Report',function(unitConversionService) {
                 }
             }
 
-	        if (this.hasTracksFilter === true && angular.isDefined(this.vmsFilters.tracks)){
+			hasData = false;
+	        if (angular.isDefined(this.vmsFilters.tracks) && !_.isEmpty(this.vmsFilters.tracks)){
+				angular.forEach(this.vmsFilters.tracks,function(value,key){
+					if(key !== 'id' && angular.isDefined(value) && !_.isNull(value)){
+						hasData = true;
+					}
+				});
+
                 vmsFilters.vmstrack = this.vmsFilters.tracks;
                 vmsFilters.vmstrack.trkMinTime = vmsFilters.vmstrack.trkMinTime === null ? undefined : vmsFilters.vmstrack.trkMinTime;
                 vmsFilters.vmstrack.trkMaxTime = vmsFilters.vmstrack.trkMaxTime === null ? undefined : vmsFilters.vmstrack.trkMaxTime;
@@ -284,11 +299,19 @@ angular.module('unionvmsWeb').factory('Report',function(unitConversionService) {
         
         report.filterExpression.vms = {};
         if(this.hasVmsFilter === true){
-        	if(this.hasPositionsFilter === true && angular.isDefined(this.vmsFilters.positions)){
+			var hasData = false;
+        	if (angular.isDefined(this.vmsFilters.positions) && !_.isEmpty(this.vmsFilters.positions)){
+				angular.forEach(this.vmsFilters.positions,function(value,key){
+					if(key !== 'id' && angular.isDefined(value) && !_.isNull(value)){
+						hasData = true;
+					}
+				});
+
             	report.filterExpression.vms.vmsposition = {
         			movActivity: this.vmsFilters.positions.movActivity === null ? undefined : this.vmsFilters.positions.movActivity,
     				movMaxSpeed: this.vmsFilters.positions.movMaxSpeed === null ? undefined : this.vmsFilters.positions.movMaxSpeed,
     				movMinSpeed: this.vmsFilters.positions.movMinSpeed === null ? undefined : this.vmsFilters.positions.movMinSpeed,
+					msgSource: this.vmsFilters.positions.msgSource === null ? undefined : this.vmsFilters.positions.msgSource,
     				movType: this.vmsFilters.positions.movType === null ? undefined : this.vmsFilters.positions.movType,
     				type: "vmspos"
             	};
@@ -296,7 +319,14 @@ angular.module('unionvmsWeb').factory('Report',function(unitConversionService) {
         			report.filterExpression.vms.vmsposition = undefined;
 	            }
             }
+			hasData = false;
         	if(this.hasSegmentsFilter === true && angular.isDefined(this.vmsFilters.segments)){
+				angular.forEach(this.vmsFilters.segments,function(value,key){
+					if(key !== 'id' && angular.isDefined(value) && !_.isNull(value)){
+						hasData = true;
+					}
+				});
+
             	report.filterExpression.vms.vmssegment = {
         			segCategory: this.vmsFilters.segments.segCategory === null ? undefined : this.vmsFilters.segments.segCategory,
     				segMaxDuration: this.vmsFilters.segments.segMaxDuration === null ? undefined : this.vmsFilters.segments.segMaxDuration,
@@ -309,7 +339,14 @@ angular.module('unionvmsWeb').factory('Report',function(unitConversionService) {
         			report.filterExpression.vms.vmssegment = undefined;
 	            }
             }
-        	if(this.hasTracksFilter === true && angular.isDefined(this.vmsFilters.tracks)){
+			hasData = false;
+        	if (angular.isDefined(this.vmsFilters.tracks) && !_.isEmpty(this.vmsFilters.tracks)){
+				angular.forEach(this.vmsFilters.tracks,function(value,key){
+					if(key !== 'id' && angular.isDefined(value) && !_.isNull(value)){
+						hasData = true;
+					}
+				});
+
             	report.filterExpression.vms.vmstrack = {
         			trkMaxDuration: this.vmsFilters.tracks.trkMaxDuration === null ? undefined : this.vmsFilters.tracks.trkMaxDuration,
         			trkMaxTime: this.vmsFilters.tracks.trkMaxTime === null ? undefined : this.vmsFilters.tracks.trkMaxTime,
