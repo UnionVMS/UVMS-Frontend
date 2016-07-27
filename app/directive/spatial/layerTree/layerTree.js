@@ -1,4 +1,4 @@
-angular.module('unionvmsWeb').directive('layerTree', function($q, $modal, mapService, locale, loadingStatus, reportService, reportRestService) {
+angular.module('unionvmsWeb').directive('layerTree', function($q, $modal, mapService, locale, loadingStatus, reportService, reportFormService, reportRestService, Report) {
 	return {
 		restrict: 'AE',
 		replace: true,
@@ -293,12 +293,13 @@ angular.module('unionvmsWeb').directive('layerTree', function($q, $modal, mapSer
 		        $('<span class="fa fa-cog fancytree-clickable fancytree-vector-options" title="'+tip+'"></span>')
 		            .appendTo($title)
 		            .on('click', function(event){
-		                var type = data.node.data.type;
+		                loadingStatus.isLoading('LiveviewMap', true, 2);
 		                openSettingsModal(data);
 		            });
 			};
 			
-			var openModal = function(rep){
+			//Options modal
+			var openModal = function(rep, type){
 			    var modalInstance = $modal.open({
                     templateUrl: 'partial/spatial/reportsPanel/reportForm/mapConfigurationModal/mapConfigurationModal.html',
                     controller: 'MapconfigurationmodalCtrl',
@@ -307,10 +308,46 @@ angular.module('unionvmsWeb').directive('layerTree', function($q, $modal, mapSer
                         reportConfigs: function(){
                             return rep;
                         },
-                        hasMap: function(){
-                            return true;
+                        displayComponents: function(){
+                            var types = ['vmspos', 'vmsseg', 'alarms']; //TODO test with alarm
+                            var displayStatus = [];
+                            angular.forEach(types, function(item) {
+                                var status = false;
+                            	if (item === type){
+                            	    status = true;
+                            	}
+                            	displayStatus.push(status);
+                            });
+                            
+                            var components = {
+                                fromLayerTree: locale.getString('spatial.' + type + '_config_modal_title'),
+                                styles: {
+                                    position: displayStatus[0],
+                                    segment: displayStatus[1],
+                                    alarm: displayStatus[2]
+                                }
+                            };
+                            
+                            if (type !== 'alarms'){
+                                components.visibility = {
+                                    position: displayStatus[0],
+                                    segment: displayStatus[1]    
+                                };
+                            }
+                                
+                            return components;
                         }
                     }
+                });
+			    
+			    modalInstance.result.then(function(data){
+		            scope.report.currentConfig.mapConfiguration = data.mapSettings;
+		            reportFormService.report = scope.report;
+		            reportFormService.changedInLiveView = true;
+                    reportService.runReportWithoutSaving(scope.report);
+			        delete scope.report;
+                }, function(){
+                    delete scope.report;
                 });
 			};
 			
@@ -318,51 +355,19 @@ angular.module('unionvmsWeb').directive('layerTree', function($q, $modal, mapSer
 			    var type = data.node.data.type;
                 if (!angular.isDefined(reportService.mergedReport)){
                     reportRestService.getReport(reportService.id).then(function(response){
-                        openModal(response);
+                        scope.report = new Report();
+                        scope.report = scope.report.fromJson(response);
+                        openModal(response, type);
                     }, function(error){
                         //do some stuff
                     });
                 } else {
                     //the user already did a run without saving
-                    openModal(reportService.mergedReport);
+                    scope.report = reportService.mergedReport;
+                    openModal(reportService.mergedReport.currentConfig, type);
                 }
 			};
 			
-//			$scope.openMapConfigurationModal = function(){
-//		        var modalInstance = $modal.open({
-//		            templateUrl: 'partial/spatial/reportsPanel/reportForm/mapConfigurationModal/mapConfigurationModal.html',
-//		            controller: 'MapconfigurationmodalCtrl',
-//		            size: 'lg',
-//		            resolve: {
-//		                reportConfigs: function(){
-//		                    if(!angular.isDefined($scope.report.currentConfig) || !angular.isDefined($scope.report.currentConfig.mapConfiguration)){
-//		                        $scope.report.currentConfig = {'mapConfiguration': {}};
-//		                    }else{
-//		                        angular.forEach(_.keys($scope.report.currentConfig.mapConfiguration),function(value,key){
-//		                            if(!angular.isDefined(value)){
-//		                                delete $scope.report.currentConfig.mapConfiguration[key];
-//		                            }
-//		                        });
-//		                    }
-//		                    return $scope.report.currentConfig;
-//		                },
-//		                hasMap: function(){
-//		                    if(!angular.isDefined($scope.report.currentConfig)){
-//		                        $scope.report.currentConfig = {'mapConfiguration': {}};
-//		                    }
-//		                    return $scope.report.withMap;
-//		                }
-//		            }
-//		        });
-//
-//		        modalInstance.result.then(function(data){
-//		            if(!angular.equals($scope.report.currentConfig.mapConfiguration,data.mapSettings)){
-//		                $scope.reportForm.$setDirty();
-//		                $scope.report.currentConfig.mapConfiguration = data.mapSettings;
-//		            }
-//		        });
-//		    };
-
 			//add label button for vectors
 			var addLabel = function(data){
 			    var tip,
@@ -603,25 +608,7 @@ angular.module('unionvmsWeb').directive('layerTree', function($q, $modal, mapSer
             };
 
 			// Intial liveview source
-			scope.source = [{
-				title: locale.getString('spatial.layer_tree_background_layers'),
-				folder: true,
-				expanded: true,
-				unselectable: true,
-				hideCheckbox: true,
-				extraClasses: 'layertree-baselayer-node',
-				key: 'basemap',
-				children: [{
-					title: 'OpenStreetMap',
-					selected: true,
-					extraClasses: 'layertree-basemap',
-					data: {
-						type: 'OSM',
-						isBaseLayer: true,
-						title: 'OpenStreetMap'
-					}
-				}]
-			}];
+            scope.source = [];
 
 			// font awesome config for fancy tree
 			var glyph_opts = {

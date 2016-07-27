@@ -23,6 +23,31 @@ angular.module('unionvmsWeb').controller('VmsstylescollapsiblepanelCtrl',functio
 	        ];
 	    };
 	    
+	$scope.checkComponents = function(){
+	    var status = false;
+        var menuToSelect = [];
+        var counter = 0;
+        angular.forEach($scope.components.styles, function(value, key) {
+            if (!value){
+                status = true;
+            }
+            menuToSelect.push(value);
+            counter += 1;
+        });
+        
+        if (status){
+            var states = _.countBy(menuToSelect, function(state){return state;});
+            if (states.true === 1){
+                var idx = _.indexOf(menuToSelect, true);
+                if (idx !== -1){
+                    $scope.selectedMenu =  $scope.headerMenus[idx].menu;
+                }
+            }
+        }
+        
+        return status;  
+	};
+	    
 	locale.ready('spatial').then(function(){
 	   $scope.headerMenus = setMenus();
 	});

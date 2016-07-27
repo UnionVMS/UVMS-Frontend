@@ -274,6 +274,11 @@
 	"area_selection_type_custom": "Custom",
 
     "report_configuration_modal_title": "Map configuration",
+    "report_configuration_modal_title_without_map": "Configuration",
+    "vmspos_config_modal_title": "VMS Positions Settings",
+	"vmsseg_config_modal_title": "VMS Segments Settings",
+	"alarms_config_modal_title": "Alarms Settings",
+    
     "save_as_modal_title": "Save report as...",
     "map_configuration_map_projection": "Map projection",
     "map_configuration_display_projection": "Display projection",
@@ -460,5 +465,7 @@
 	"error_loading_report_history": "Error loading report history",
 	"report_list_modal_title": "Report list",
 	"report_history_list_btn": "List",
-	"report_history_create_new_btn": "Create new"
+	"report_history_create_new_btn": "Create new",
+	"report_list_modal_title": "Report list",
+	"apply": "Apply"
 }

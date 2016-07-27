@@ -4,23 +4,48 @@ angular.module('unionvmsWeb').controller('VisibilitysettingsCtrl',function($scop
         isOpen: false
     };
     
-    $scope.selectedMenu = 'POSITIONS';
+    $scope.selectedMenu = 'position';
 
     var setMenus = function(){
         return [
             {
-                'menu': 'POSITIONS',
+                'menu': 'position',
                 'title': locale.getString('spatial.tab_movements')
             },
             {
-                'menu': 'SEGMENTS',
+                'menu': 'segment',
                 'title': locale.getString('spatial.tab_segments')
             },
             {
-                'menu': 'TRACKS',
+                'menu': 'track',
                 'title': locale.getString('spatial.tab_tracks')
             }
         ];
+    };
+    
+    $scope.checkComponents = function(){
+        var status = false;
+        var menuToSelect = [];
+        var counter = 0;
+        angular.forEach($scope.components.visibility, function(value, key) {
+        	if (!value){
+        	    status = true;
+        	}
+        	menuToSelect.push(value);
+        	counter += 1;
+        });
+        
+        if (status){
+            var states = _.countBy(menuToSelect, function(state){return state;});
+            if (states.true === 1){
+                var idx = _.indexOf(menuToSelect, true);
+                if (idx !== -1){
+                    $scope.selectedMenu =  $scope.headerMenus[idx].menu;
+                }
+            }
+        }
+        
+        return status;
     };
     
     $scope.selectAll = {

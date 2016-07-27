@@ -12,7 +12,7 @@
 						<i class="pull-right glyphicon" ng-class="{'glyphicon-chevron-down': status.isOpen, 'glyphicon-chevron-right': !status.isOpen}"></i>
 					</div>
 				</accordion-heading>
-				<div class="containerWithBottomPadding">
+				<div class="containerWithBottomPadding" ng-hide="settingsLevel === 'report' && checkComponents()">
 					<div class="row">
 						<div class="col-md-6 sectionMenu">
 							<ul class="horizontal pipeSeparator">

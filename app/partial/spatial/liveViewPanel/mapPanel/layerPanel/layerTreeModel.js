@@ -495,8 +495,8 @@ angular.module('unionvmsWeb').factory('TreeModel',function(locale, mapService, u
 	            excludeDnd: true,
                 title: title,
                 type: 'alarms',
-//                popupEnabled: true,
-//                popupTip: 'spatial.layer_tree_tip_popup',
+                optionsEnabled: true,
+                optionsTip: 'spatial.layer_tree_tip_context_menu',
                 longAttribution: longCopyright.length > 0 ? longCopyright : undefined,
                 geoJson: data
 	        }

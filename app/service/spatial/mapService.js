@@ -507,7 +507,7 @@ angular.module('unionvmsWeb').factory('mapService', function(locale, $rootScope,
         var layerSrc = ms.getLayerByType('vmspos').getSource();
         var changeListenerKey = layerSrc.on('change', function(e){
             if (layerSrc.getState() === 'ready' && layerSrc.getFeatures().length > 0){
-                var extent = layerSrc.getExtent();
+                var extent = layerSrc.getSource().getExtent();
                 var geom = new ol.geom.Polygon.fromExtent(extent);
                 ms.zoomTo(geom);
                 
@@ -1187,7 +1187,7 @@ angular.module('unionvmsWeb').factory('mapService', function(locale, $rootScope,
                     }
                     
                     //Normalize radius to scale between maxRadius and minRadius
-                    var radius = Math.round((maxRadius - minRadius) * (feature.get('featNumber') - ms.clusterMinFeatureCount) / (ms.clusterMaxFeatureCount - ms.clusterMinFeatureCount));
+                    var radius = Math.round((maxRadius - minRadius) * (Math.abs(feature.get('featNumber') - ms.clusterMinFeatureCount)) / (ms.clusterMaxFeatureCount - ms.clusterMinFeatureCount));
                     if (isNaN(radius) || !isFinite(radius) || radius < 0){
                         radius = 0;
                     }
