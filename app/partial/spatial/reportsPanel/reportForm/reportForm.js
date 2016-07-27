@@ -33,8 +33,11 @@ angular.module('unionvmsWeb').controller('ReportformCtrl',function($scope, $moda
     //Set movemment activity type dropdown options
     $scope.activityTypes = configurationService.setTextAndCodeForDropDown(configurationService.getValue('MOVEMENT', 'ACTIVITY_TYPE'), 'ACTIVITY_TYPE', 'MOVEMENT');
 
-    //Set movemment activity type dropdown options
+    //Set category types dropdown options
     $scope.categoryTypes = configurationService.setTextAndCodeForDropDown(configurationService.getValue('MOVEMENT', 'CATEGORY_TYPE'), 'CATEGORY_TYPE', 'MOVEMENT');
+
+    //Set movement source types dropdown options
+    $scope.movementSourceTypes = configurationService.setTextAndCodeForDropDown(configurationService.getConfig('MOVEMENT_SOURCE_TYPES'),'MOVEMENT_SOURCE_TYPES','MOVEMENT');
 
     $scope.submitingReport = false;
 

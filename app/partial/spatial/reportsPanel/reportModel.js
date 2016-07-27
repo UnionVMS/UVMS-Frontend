@@ -18,6 +18,7 @@ angular.module('unionvmsWeb').factory('Report',function(unitConversionService) {
 
 	    //VNS filter
 	    this.hasVmsFilter = false;
+		this.movSources = [];
 	    this.vmsFilters = {
 	        positions: undefined,
 	        segments: undefined,
@@ -103,6 +104,10 @@ angular.module('unionvmsWeb').factory('Report',function(unitConversionService) {
 
 	        //VMS positions filters
 	        if (angular.isDefined(filter.vms) && angular.isDefined(filter.vms.vmsposition)){
+				if (_.has(filter.vms.vmsposition, 'movsources')){
+					report.movSources = filter.vms.vmsposition.movsources;
+				}
+				delete filter.vms.vmsposition.movsources;
 	            report.vmsFilters.positions = filter.vms.vmsposition;
 	        }
 
@@ -157,6 +162,9 @@ angular.module('unionvmsWeb').factory('Report',function(unitConversionService) {
 				});
 
 	            vmsFilters.vmsposition = this.vmsFilters.positions;
+				if (this.movSources.length > 0){
+					vmsFilters.vmsposition.movsources = this.movSources; 
+				}
 	            vmsFilters.vmsposition.movMinSpeed = vmsFilters.vmsposition.movMinSpeed === null ? undefined : vmsFilters.vmsposition.movMinSpeed;
 	            vmsFilters.vmsposition.movMaxSpeed = vmsFilters.vmsposition.movMaxSpeed === null ? undefined : vmsFilters.vmsposition.movMaxSpeed;
 	            vmsFilters.vmsposition.type = 'vmspos';
@@ -311,10 +319,13 @@ angular.module('unionvmsWeb').factory('Report',function(unitConversionService) {
         			movActivity: this.vmsFilters.positions.movActivity === null ? undefined : this.vmsFilters.positions.movActivity,
     				movMaxSpeed: this.vmsFilters.positions.movMaxSpeed === null ? undefined : this.vmsFilters.positions.movMaxSpeed,
     				movMinSpeed: this.vmsFilters.positions.movMinSpeed === null ? undefined : this.vmsFilters.positions.movMinSpeed,
-					msgSource: this.vmsFilters.positions.msgSource === null ? undefined : this.vmsFilters.positions.msgSource,
+					movsources: this.vmsFilters.positions.movsources === null ? undefined : this.vmsFilters.positions.movsources,
     				movType: this.vmsFilters.positions.movType === null ? undefined : this.vmsFilters.positions.movType,
     				type: "vmspos"
             	};
+				if (this.movSources.length > 0){
+					report.filterExpression.vms.vmsposition.movsources = this.movSources; 
+				}
         		if (validateFilterObject(report.filterExpression.vms.vmsposition,true) === false){
         			report.filterExpression.vms.vmsposition = undefined;
 	            }
