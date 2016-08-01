@@ -92,7 +92,7 @@ angular.module('unionvmsWeb').controller('ReportformCtrl',function($scope, $moda
         var status = true;
 
         //Validate positions speed range
-        if ($scope.report.hasVmsFilter === true && $scope.report.hasPositionsFilter === true && angular.isDefined($scope.report.vmsFilters.positions)){
+        if (angular.isDefined($scope.report.vmsFilters.positions) && !_.isEmpty($scope.report.vmsFilters.positions)){
             min = $scope.report.vmsFilters.positions.movMinSpeed;
             max = $scope.report.vmsFilters.positions.movMaxSpeed;
             
@@ -100,7 +100,7 @@ angular.module('unionvmsWeb').controller('ReportformCtrl',function($scope, $moda
         }
 
         //Validate segments speed and duration ranges
-        if ($scope.report.hasVmsFilter === true && $scope.report.hasSegmentsFilter === true && angular.isDefined($scope.report.vmsFilters.segments)){
+        if (angular.isDefined($scope.report.vmsFilters.segments) && !_.isEmpty($scope.report.vmsFilters.segments)){
             min = $scope.report.vmsFilters.segments.segMinSpeed;
             max = $scope.report.vmsFilters.segments.segMaxSpeed;
             
@@ -113,7 +113,7 @@ angular.module('unionvmsWeb').controller('ReportformCtrl',function($scope, $moda
         }
 
         //Validate tracks time at sea and duration ranges
-        if ($scope.report.hasVmsFilter === true && $scope.report.hasTracksFilter === true && angular.isDefined($scope.report.vmsFilters.tracks)){
+        if (angular.isDefined($scope.report.vmsFilters.tracks) && !_.isEmpty($scope.report.vmsFilters.tracks)){
             min = $scope.report.vmsFilters.tracks.trkMinTime;
             max = $scope.report.vmsFilters.tracks.trkMaxTime;
             

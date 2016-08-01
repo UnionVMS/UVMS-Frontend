@@ -197,7 +197,7 @@ angular.module('unionvmsWeb').controller('numericInputCtrl',['$scope','$interval
 				valueNoLetters = valueNoLetters.replace(/[^0-9.-]/g, '');
 				
 				if(valueNoLetters.split('.').length > 2 || valueNoLetters.charAt(0) === '.' || valueNoLetters.charAt(valueNoLetters.length - 1) === '-'){
-					if(!$scope.changedNumberValue){
+					if(!$scope.changedNumberValue || parseFloat(valueNoLetters) !== $scope.ngModelNumber){
 						$scope.changedTextValue = true;
 						$scope.ngModelNumber = undefined;
 					}
@@ -206,13 +206,13 @@ angular.module('unionvmsWeb').controller('numericInputCtrl',['$scope','$interval
 				if(!angular.equals(newVal, valueNoLetters)){
 					$scope.textValue = valueNoLetters;
 				}else{
-					if(!$scope.changedNumberValue){
+					if(!$scope.changedNumberValue || parseFloat(valueNoLetters) !== $scope.ngModelNumber){
 						$scope.changedTextValue = true;
 						$scope.ngModelNumber = parseFloat(newVal);
 					}
 				}
 			}else{
-				if(!$scope.changedNumberValue){
+				if(!$scope.changedNumberValue || parseFloat(newVal) !== $scope.ngModelNumber){
 					$scope.changedTextValue = true;
 					$scope.ngModelNumber = null;
 				}
