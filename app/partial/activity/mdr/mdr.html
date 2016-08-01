@@ -1,0 +1,82 @@
+<div ng-controller="MdrCtrl">
+    <loading-panel type="Preferences"></loading-panel>
+    <loading-panel type="SavePreferences"></loading-panel>
+    <ng-form name="mdrConfigurationForm">
+        <div class="row">
+            <div class="form-group col-md-12 noPadding">
+                <div class="col-md-2">
+                    <span class="formLabel">{{'activity.cron_job_scheduler' | i18n}}</span>
+                </div>
+                <div class="col-md-8">
+                    <input type="text" class="form-control" ng-model="cronJobExpression" name="cronJobExpression" ng-required="true"/>
+                    <span class="" ng-show="mdrConfigurationForm.cronJobExpression.$invalid">{{'activity.required_error_message' | i18n }}</span>
+                </div>
+               <!--     <div class="innerErrorMessages" ng-messages="generalsettingsForm.geoserverUrl.$error" ng-show="generalsettingsForm.geoserverUrl.$dirty || submitedWithErrors">
+                        <div ng-message="required">{{'activity.required_error_message' | i18n }}</div>
+                    </div>-->
+                <div class="col-md-2" >
+                    <button class="btn btn-primary button btn-action" type="button" ng-click="saveCron()" ng-show="showSaveBtn()">{{"activity.cron_save_btn" | i18n }}</button>
+                </div>
+            </div>
+        </div>
+    </ng-form>
+
+    <div class="row">
+        <div class="form-group col-md-12 noPadding">
+            <button type="button" class="btn btn-primary btn-sm" ng-click="updateAllNow()">
+                &nbsp;
+                <span>{{'activity.update_all_now_btn' | i18n }}</span>
+            </button>
+            <button type="button" class="btn btn-primary btn-sm" ng-click="updateNow()"  ng-disabled="isUpdateNowDisabled">
+                &nbsp;
+                <span>{{'activity.update_now_btn' | i18n }}</span>
+            </button>
+        </div>
+
+     <div st-table="displayedMDRLists" st-safe-src="mdrCodeLists" st-set-filter="stMDRCodeLists">
+            <div class="search-field">
+                <input st-search="" class="form-control" placeholder="{{'activity.search_table_placeholder' | i18n}}" type="text"/>
+            </div>
+            <div id="codeListsTable" class="table table-striped tableSmart areas-table table-condensed">
+                <div class="thead col-md-12">
+                    <div class="tr row stColumnHeaders">
+                        <div class="th col-md-1" st-skip-natural="true" st-class-ascent="sorting_asc" st-class-descent="sorting_desc"><div class="checkbox"><input type="checkbox" name="selectDeselectAll" id="selectDeselectAll" ng-click="selectDeselectAll()"></div></div>
+                        <div class="th col-md-3" st-sort="name" st-skip-natural="true" st-class-ascent="sorting_asc" st-class-descent="sorting_desc">{{'activity.code_list_table_acronym_header' | i18n}}</div>
+                        <div class="th col-md-3" st-sort="name" st-skip-natural="true" st-class-ascent="sorting_asc" st-class-descent="sorting_desc">{{'activity.code_list_table_name_header' | i18n}}</div>
+                        <div class="th col-md-1" st-sort="desc" st-skip-natural="true" st-class-ascent="sorting_asc" st-class-descent="sorting_desc">{{'activity.code_list_table_last_success_header' | i18n}}</div>
+                        <div class="th col-md-1" st-sort="desc" st-skip-natural="true" st-class-ascent="sorting_asc" st-class-descent="sorting_desc">{{'activity.code_list_table_last_attempt_header' | i18n}}</div>
+                        <div class="th col-md-2" st-sort="desc" st-skip-natural="true" st-class-ascent="sorting_asc" st-class-descent="sorting_desc">{{'activity.code_list_table_last_attempt_status_header' | i18n}}</div>
+                        <div class="th col-md-1" st-sort="desc" st-skip-natural="true" st-class-ascent="sorting_asc" st-class-descent="sorting_desc">{{'activity.code_list_table_is_scheduler_enabled_header' | i18n}}</div>
+                    </div>
+                    <div class="tr row" ng-show="!tableLoading && !displayedMDRLists.length">
+                        <div class="th col-md-12"><table-alert type="'info'" msg="'activity.table_no_data'" visible="!displayedMDRLists.length && !tableLoading"></table-alert></div>
+                    </div>
+                    <div class="tr row" ng-if="tableLoading && !alert.isLoading">
+                        <div class="th col-md-12 loading-spinner-cl"><i class="fa fa-spinner fa-spin loading-spinner"></i></div>
+                    </div>
+                </div>
+                <div class="tbody col-md-12">
+                    <div ng-repeat="codeList in displayedMDRLists" class="tr row" ng-show="!tableLoading">
+                        <div class="th col-md-1" st-skip-natural="true" ><div class="checkbox"><input type="checkbox" value="{{codeList.id}}" ng-model="codeList.isSelected" ng-click="enableDisableSynchButton()"></div></div>
+                        <div class="th col-md-3" st-sort="acronym" st-skip-natural="true" st-class-ascent="sorting_asc" st-class-descent="sorting_desc">{{codeList.acronym}}</div>
+                        <div class="th col-md-3" st-sort="name" st-skip-natural="true" st-class-ascent="sorting_asc" st-class-descent="sorting_desc">{{codeList.name}}</div>
+                        <div class="th col-md-1" st-sort="lastSuccess" st-skip-natural="true" st-class-ascent="sorting_asc" st-class-descent="sorting_desc">{{codeList.lastSuccess}}</div>
+                        <div class="th col-md-1" st-sort="lastAttempt" st-skip-natural="true" st-class-ascent="sorting_asc" st-class-descent="sorting_desc">{{codeList.lastAttempt}}</div>
+                        <div class="th col-md-2" st-sort="lastStatus" st-skip-natural="true" st-class-ascent="sorting_asc" st-class-descent="sorting_desc">{{codeList.lastStatus}}</div>
+                        <div class="td col-md-1">
+                            <button type="button" class="btn btn-danger btn-xs pull-right" title="{{'activity.enable_disable_autoupdate' | i18n }}" ng-click="enableDisableAutoUpdate($index)"><span>{{'activity.enable_disable_autoupdate_'+codeList.scheduled | i18n}}</span></button>
+                        </div>
+                    </div>
+                </div>
+                <div class="tfoot col-md-12 stFooterPagination" ng-if="displayedMDRLists.length && !tableLoading">
+                    <div class="tr row">
+                        <div class="td col-md-12 text-right">
+                            <div st-pagination st-items-by-page="itemsByPage" st-displayed-pages="7" st-template="partial/common/reportsPagination/reportsPagination.html"></div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+</div>

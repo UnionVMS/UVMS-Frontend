@@ -37,9 +37,9 @@ angular.module('unionvmsWeb').controller('AuditconfigurationCtrl',function($scop
 				return $scope.settings[module] !== undefined && getNonGlobalSettings($scope.settings[module]).length > 0;
 			});
 
-			$scope.tabs = ["systemMonitor", "globalSettings", "reporting"].concat(modules);
+			$scope.tabs = ["systemMonitor", "globalSettings", "reporting", "mdr"].concat(modules);
 		});
-		
+
 		loadingStatus.isLoading('Preferences',true);
 		spatialConfigRestService.getAdminConfigs().then(function(response){
 		    var model = new SpatialConfig();
@@ -57,7 +57,9 @@ angular.module('unionvmsWeb').controller('AuditconfigurationCtrl',function($scop
 			return "partial/admin/adminConfiguration/configurationGeneral/configurationGeneral.html";
 		} else if ($scope.activeTab === "reporting") {
 			return "partial/admin/adminConfiguration/configurationReporting/configurationReporting.html";
-		}
+		} else if ($scope.activeTab === "mdr") {
+            return "partial/admin/adminConfiguration/configurationMDR/configurationMDR.html";
+        }
 		else {
 			return "partial/admin/adminConfiguration/configurationModule/configurationModule.html";
 		}

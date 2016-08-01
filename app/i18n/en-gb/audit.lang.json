@@ -43,6 +43,7 @@
     "configuration_header_rules": "Rules",
     "configuration_header_audit": "Audit",
     "configuration_header_positions": "Positions",
+    "configuration_header_mdr": "MDR",
 
     "configuration_column_key": "Parameter",
     "configuration_column_value": "Value",

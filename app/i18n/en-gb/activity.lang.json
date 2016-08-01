@@ -1,0 +1,20 @@
+{
+    "cron_job_scheduler": "Cron Job Scheduler:",
+    "required_error_message": "There are empty required fields",
+    "cron_save_btn": "Re-schedule",
+    "update_now_btn": "Synch Now",
+    "update_all_now_btn": "Synch All Now",
+    "search_table_placeholder": "Search: ",
+    "code_list_table_name_header": "Name",
+    "code_list_table_desc_header": "Description",
+    "code_list_table_acronym_header": "Acronym",
+    "code_list_table_name_header": "Name",
+    "code_list_table_last_success_header": "Last Success",
+    "code_list_table_last_attempt_header": "Last Attempt",
+    "code_list_table_last_attempt_status_header": "Last Attempt Status",
+    "code_list_table_is_scheduler_enabled_header": "Auto update",
+    "table_no_data": "No MDR Code Lists available",
+    "enable_disable_autoupdate": "Enable/Disable auto-update",
+    "enable_disable_autoupdate_true": "Disable",
+    "enable_disable_autoupdate_false": "Enable"
+}
