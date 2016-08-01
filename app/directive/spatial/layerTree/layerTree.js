@@ -358,7 +358,7 @@ angular.module('unionvmsWeb').directive('layerTree', function($q, $modal, mapSer
                     }
                 });
 
-				if(screenfull.enabled){
+				if(screenfull.isFullscreen){
 					screenfull.exit();
 				}
 			};

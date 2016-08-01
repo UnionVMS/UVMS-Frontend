@@ -70,7 +70,7 @@ angular.module('unionvmsWeb').controller('MapCtrl',function($log, $scope, locale
             backdrop: false,
             size: 'lg'
         });
-        $scope.deactivateFullscreen();
+        $scope.spatialHelper.deactivateFullscreen();
     };
 
     //Get vessel details from within the positions popup
@@ -94,7 +94,7 @@ angular.module('unionvmsWeb').controller('MapCtrl',function($log, $scope, locale
             });
         }
 
-        $scope.deactivateFullscreen();
+        $scope.spatialHelper.deactivateFullscreen();
     };
 
     //Check for permissions
@@ -607,7 +607,7 @@ angular.module('unionvmsWeb').controller('MapCtrl',function($log, $scope, locale
     });
     
     $scope.openUserPrefs = function(){
-        $scope.deactivateFullscreen();
+        $scope.spatialHelper.deactivateFullscreen();
         $scope.repNav.goToSection('userPreferences');
     };
 

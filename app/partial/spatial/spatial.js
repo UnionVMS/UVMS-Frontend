@@ -6,6 +6,8 @@ angular.module('unionvmsWeb').controller('SpatialCtrl',function($scope, $timeout
     $scope.currentContext = userService.getCurrentContext();
     $scope.comboServ = comboboxService;
     $scope.repNav = reportingNavigatorService;
+    $scope.spatialHelper = spatialHelperService;
+
     $scope.repNav.clearNavigation();
     
     //reset repServ
@@ -20,7 +22,7 @@ angular.module('unionvmsWeb').controller('SpatialCtrl',function($scope, $timeout
        
        $scope.curState = $state.current.name;
        if($state.current.name === 'app.reporting-id'){
-    	   spatialHelperService.tbControl.newTab = false;
+    	   $scope.spatialHelper.tbControl.newTab = false;
            $scope.repServ.isReportExecuting = true;
            loadingStatus.isLoading('LiveviewMap',true);
            
@@ -44,7 +46,7 @@ angular.module('unionvmsWeb').controller('SpatialCtrl',function($scope, $timeout
            }
        }else{
 	       //let's check for the existence of default reports
-	       var defaultRepObj = spatialHelperService.getDefaultReport(true);
+	       var defaultRepObj = $scope.spatialHelper.getDefaultReport(true);
 	       if (angular.isDefined(defaultRepObj) && !_.isNaN(defaultRepObj.id) && defaultRepObj.id !== 0){
 	           $scope.repServ.isReportExecuting = true;
 	           loadingStatus.isLoading('LiveviewMap',true);
@@ -82,7 +84,7 @@ angular.module('unionvmsWeb').controller('SpatialCtrl',function($scope, $timeout
 	   }else{
 	       $scope.loadReportEditing('EDIT-FROM-LIVEVIEW');
 	   }
-       $scope.deactivateFullscreen();
+       $scope.spatialHelper.deactivateFullscreen();
    };
 
    //Create new report from liveview
@@ -90,7 +92,7 @@ angular.module('unionvmsWeb').controller('SpatialCtrl',function($scope, $timeout
        $scope.comboServ.closeCurrentCombo(evt);
        $scope.formMode = 'CREATE';
        $scope.repNav.goToView('reportsPanel','reportForm');
-       $scope.deactivateFullscreen();
+       $scope.spatialHelper.deactivateFullscreen();
    };
    
    //Get Report Configs Success callback
@@ -162,7 +164,7 @@ angular.module('unionvmsWeb').controller('SpatialCtrl',function($scope, $timeout
             }
         });
 
-        $scope.deactivateFullscreen();
+        $scope.spatialHelper.deactivateFullscreen();
     };
 
     $scope.openNewReport = function(){
@@ -176,9 +178,4 @@ angular.module('unionvmsWeb').controller('SpatialCtrl',function($scope, $timeout
         $scope.repServ.isReportExecuting = false;
     };
 
-    $scope.deactivateFullscreen = function() {
-        if(screenfull.enabled){
-            screenfull.exit();
-        }
-    };
 });

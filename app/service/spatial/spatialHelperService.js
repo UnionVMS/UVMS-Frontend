@@ -76,5 +76,11 @@ angular.module('unionvmsWeb').factory('spatialHelperService',function(userServic
 	    }
 	};
 
+    spServ.deactivateFullscreen = function() {
+        if(screenfull.isFullscreen){
+            screenfull.exit();
+        }
+    };
+
 	return spServ;
 });
