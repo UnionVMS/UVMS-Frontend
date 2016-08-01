@@ -1,5 +1,17 @@
 angular.module('unionvmsWeb').factory('reportingNavigatorService',function() {
-
+    
+//    For documentation purposes
+//    var sections = {
+//        reportPanel: {
+//            reportForm : undefined
+//        },
+//        userPreferences: undefined,
+//        liveViewPanel: {
+//            mapPanel : undefined,
+//            vmsPanel: undefined,    
+//        }
+//    }
+    
 	var previousState = {
 		section: '',
 		panel: ''
@@ -42,7 +54,11 @@ angular.module('unionvmsWeb').factory('reportingNavigatorService',function() {
 		},
 		goToSection: function(section,callback,params) {
 			previousState = angular.copy(currentState);
-			currentState.section = section;
+			
+			currentState = {
+		        section: section,
+		        panel: ''
+		    };
 
 			if(angular.isDefined(callback)){
 				currentState.callback = callback;

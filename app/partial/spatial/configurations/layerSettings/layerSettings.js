@@ -51,7 +51,7 @@ angular.module('unionvmsWeb').controller('LayersettingsCtrl',function($scope, lo
 		    				}
 	    				break;
 		    			case 'userarea':
-							item.gid = "" + item.gid;
+							item.gid = parseInt(item.gid);
 		    				if(angular.equals(item.gid,list[i].gid)){
 		    					return undefined;
 		    				}
@@ -99,8 +99,8 @@ angular.module('unionvmsWeb').controller('LayersettingsCtrl',function($scope, lo
 	    	$scope.selectedAreas = $scope.configModel.layerSettings.areaLayers;
 	    	angular.forEach($scope.selectedAreas, function(item) {
 	    		item.serviceLayerId = "" + item.serviceLayerId;
-	            item.gid = "" + item.gid;
 	            if(item.areaType === "userarea"){
+	                item.gid = parseInt(item.gid);
 	            	item.name = angular.isDefined(item.areaName) ? item.areaName : item.name;
 	            }else if(item.areaType === "areagroup"){
 	            	item.name = item.areaGroupName;

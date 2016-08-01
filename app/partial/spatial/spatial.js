@@ -1,4 +1,4 @@
-angular.module('unionvmsWeb').controller('SpatialCtrl',function($scope, $timeout, locale, mapService, spatialHelperService, reportRestService, reportService, $anchorScroll, userService, loadingStatus, $state, $localStorage, comboboxService, reportingNavigatorService, $compile, $modal){
+angular.module('unionvmsWeb').controller('SpatialCtrl',function($scope, $timeout, locale, mapService, spatialHelperService, Report, reportRestService, reportFormService, reportService, $anchorScroll, userService, loadingStatus, $state, $localStorage, comboboxService, reportingNavigatorService, $compile, $modal){
     $scope.reports = [];
     $scope.executedReport = {};
     $scope.repServ = reportService;
@@ -25,7 +25,14 @@ angular.module('unionvmsWeb').controller('SpatialCtrl',function($scope, $timeout
            loadingStatus.isLoading('LiveviewMap',true);
            
            if(angular.isDefined($localStorage['report'+$state.params.id + '-' + $state.params.guid])){
-        	   reportService.runReportWithoutSaving($localStorage['report' + $state.params.id + '-' + $state.params.guid]);
+               angular.copy($localStorage['report' + $state.params.id + '-' + $state.params.guid], reportFormService.liveView);
+               var currentReport = new Report();
+               angular.copy(reportFormService.liveView.currentReport, currentReport);
+               reportFormService.liveView.currentReport = currentReport;
+               var originalReport = new Report();
+               angular.copy(reportFormService.liveView.originalReport, originalReport);
+               reportFormService.liveView.originalReport = originalReport;
+        	   reportService.runReportWithoutSaving(reportFormService.liveView.currentReport);
         	   delete $localStorage['report'+$state.params.id + '-' + $state.params.guid];
            }else{
 	           reportRestService.getReport($state.params.id).then(function(response){
@@ -70,12 +77,10 @@ angular.module('unionvmsWeb').controller('SpatialCtrl',function($scope, $timeout
    //Report filter definitions
    $scope.editReport = function(){
 	   $scope.repServ.isReportExecuting = true;
-	   if(!$scope.repServ.outOfDate){
+	   if(!angular.isDefined(reportFormService.liveView.currentReport)){
 	       reportRestService.getReport($scope.repServ.id).then(getReportSuccess, getReportError);
 	   }else{
-            $scope.formMode = 'EDIT-FROM-LIVEVIEW';
-            $scope.repNav.goToView('reportsPanel','reportForm');
-            $scope.repServ.isReportExecuting = false;
+	       $scope.loadReportEditing('EDIT-FROM-LIVEVIEW');
 	   }
    };
 
@@ -88,7 +93,13 @@ angular.module('unionvmsWeb').controller('SpatialCtrl',function($scope, $timeout
    
    //Get Report Configs Success callback
    var getReportSuccess = function(response){
-       $scope.loadReportEditing('EDIT-FROM-LIVEVIEW',response);
+       var report = new Report();
+       report = report.fromJson(response);
+       reportFormService.liveView.originalReport = report;
+       
+       reportFormService.liveView.currentReport = new Report();
+       angular.copy(report, reportFormService.liveView.currentReport);
+       $scope.loadReportEditing('EDIT-FROM-LIVEVIEW');
    };
 	   
    //Get Report Configs Failure callback
@@ -114,6 +125,10 @@ angular.module('unionvmsWeb').controller('SpatialCtrl',function($scope, $timeout
     };
 
     $scope.openReportList = function(evt,reportsListLoaded){
+        if (angular.isDefined($scope.repServ.autoRefreshInterval)){
+            $scope.repServ.stopAutoRefreshInterval();
+        }
+        
         $scope.comboServ.closeCurrentCombo(evt);
         $scope.repNav.addStateCallback($scope.openReportList);
         var modalInstance = $modal.open({
@@ -128,11 +143,20 @@ angular.module('unionvmsWeb').controller('SpatialCtrl',function($scope, $timeout
         });
 
         modalInstance.result.then(function(data){
+            if (!angular.isDefined(data)){
+                return;
+            }
             if(data.action === 'CREATE'){
                 $scope.openNewReport();
             }else if(data.action === 'EDIT'){
                 $scope.repServ.isReportExecuting = true;
-                $scope.loadReportEditing('EDIT',data.report);
+                var report = new Report();
+                reportFormService.report = report.fromJson(data.report);
+                $scope.loadReportEditing('EDIT');
+            }
+        }, function(){
+            if ($scope.repServ.refresh.status){
+                $scope.repServ.setAutoRefresh();
             }
         });
     };
@@ -142,9 +166,8 @@ angular.module('unionvmsWeb').controller('SpatialCtrl',function($scope, $timeout
         $scope.repNav.goToView('reportsPanel','reportForm');
     };
 
-    $scope.loadReportEditing = function(mode,report){
+    $scope.loadReportEditing = function(mode){
         $scope.formMode = mode;
-        $scope.reportToLoad = report;
         $scope.repNav.goToView('reportsPanel','reportForm');
         $scope.repServ.isReportExecuting = false;
     };

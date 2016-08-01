@@ -4,13 +4,13 @@ describe('ReportformCtrl', function(){
 
     beforeEach(module('unionvmsWeb'));
 
-    beforeEach(inject(function($rootScope, $controller) {
+    beforeEach(inject(function($rootScope, $controller, Report) {
         scope = $rootScope.$new();
         ctrl = $controller('ReportformCtrl', {$scope: scope});
+        scope.report = new Report();
     }));
 
     it('should initialise variables when calling init', inject(function() {
-
         scope.init();
         expect(scope.report).not.toBeNull();
         expect(scope.formAlert).toEqual({
@@ -18,8 +18,9 @@ describe('ReportformCtrl', function(){
             msg: ''
         });
         expect(scope.submitingReport).toEqual(false);
-        expect(scope.vesselsSelectionIsValid).toEqual(true);
         expect(scope.report.vesselsSelection).toEqual([]);
+        expect(scope.showVesselFilter).toEqual(false);
+        expect(scope.selectedAreas).toEqual([]);
         expect(scope.shared).toEqual(scope.shared = {
             vesselSearchBy: 'asset',
             searchVesselString: '',
@@ -29,7 +30,7 @@ describe('ReportformCtrl', function(){
             areas: []
         });
     }));
-
+    
     it('should be false when start date after end date', inject(function() {
 
         var result = scope.validateDates('2010-12-01', '2003-11-01');

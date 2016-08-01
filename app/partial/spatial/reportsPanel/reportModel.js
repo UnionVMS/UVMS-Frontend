@@ -3,6 +3,7 @@ angular.module('unionvmsWeb').factory('Report',function(unitConversionService) {
 	    this.id = undefined;
 	    this.name = undefined;
 	    this.desc = undefined;
+	    this.createdBy = undefined;
 	    this.visibility = 'private';
 	    this.startDateTime = undefined;
 	    this.endDateTime = undefined;
@@ -31,6 +32,9 @@ angular.module('unionvmsWeb').factory('Report',function(unitConversionService) {
     		stylesSettings: undefined,
 	        layerSettings: undefined,
 	        visibilitySettings: undefined
+        };
+        this.currentMapConfig = {
+            mapConfiguration: {}   
         };
 	}
 
@@ -88,6 +92,7 @@ angular.module('unionvmsWeb').factory('Report',function(unitConversionService) {
 	        report.id = data.id;
 	        report.name = data.name;
 	        report.desc = data.desc;
+	        report.createdBy = data.createdBy;
 	        report.withMap = data.withMap;
 	        report.visibility = data.visibility;
 
@@ -139,6 +144,7 @@ angular.module('unionvmsWeb').factory('Report',function(unitConversionService) {
 	        		});
 	        	}
 	            report.mapConfiguration = data.mapConfiguration;
+	            report.currentMapConfig.mapConfiguration = angular.copy(data.mapConfiguration);
 	        }
 	        
 	    }

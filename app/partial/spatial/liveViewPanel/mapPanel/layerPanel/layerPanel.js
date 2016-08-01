@@ -1,4 +1,4 @@
-angular.module('unionvmsWeb').controller('LayerpanelCtrl',function($scope, $timeout,$window, mapService, locale, reportService){
+angular.module('unionvmsWeb').controller('LayerpanelCtrl',function($scope, $timeout,$window, mapService, locale, reportService, reportFormService){
     $scope.expanded = true;
     $scope.tab = "LAYERTREE";
     $scope.tabTitle = undefined;
@@ -36,6 +36,6 @@ angular.module('unionvmsWeb').controller('LayerpanelCtrl',function($scope, $time
     };
     
     $scope.isReportEditable = function(){
-        return reportService.editable;
+        return reportFormService.liveView.editable;
     };
 });

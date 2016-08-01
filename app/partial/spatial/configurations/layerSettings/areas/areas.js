@@ -71,6 +71,7 @@ angular.module('unionvmsWeb').controller('AreaslayersCtrl',function($scope,spati
 						item.subType = response[0].subType;
 						item.serviceLayerId = "" + response[0].serviceLayerId;
 						item.areaType = 'userarea';
+						item.gid = parseInt(item.gid);
 					});
 				}else{
 					$scope.areas.containers[1].lists[0].items = [];

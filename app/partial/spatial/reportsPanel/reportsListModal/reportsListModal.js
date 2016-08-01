@@ -8,6 +8,10 @@ angular.module('unionvmsWeb').controller('ReportslistmodalCtrl',function($scope,
         $modalInstance.dismiss('cancel');
     };
     
+    $scope.close = function(){
+        $modalInstance.close();
+    };
+    
     $modalInstance.rendered.then(function(){
         $scope.repServ.loadReportList();
     });

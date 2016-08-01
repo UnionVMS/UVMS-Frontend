@@ -58,7 +58,7 @@ angular.module('unionvmsWeb').controller('ReportslistCtrl',function($scope, $fil
         var record = $scope.displayedRecords[index];
         reportService.id = $scope.displayedRecords[index].id;
         $scope.repServ.runReport(record);
-        $scope.cancel();
+        $scope.close();
     };
     
     //Report filter definitions

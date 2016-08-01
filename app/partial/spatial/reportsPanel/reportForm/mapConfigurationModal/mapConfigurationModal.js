@@ -1,4 +1,4 @@
-angular.module('unionvmsWeb').controller('MapconfigurationmodalCtrl', function ($scope, $timeout, locale, reportConfigs, $modalInstance, SpatialConfig, spatialRestService, spatialConfigAlertService, $anchorScroll, $location, spatialConfigRestService, loadingStatus, displayComponents, PreferencesService) {
+angular.module('unionvmsWeb').controller('MapconfigurationmodalCtrl', function ($scope, $timeout, locale, reportConfigs, $modalInstance, SpatialConfig, reportService, spatialRestService, spatialConfigAlertService, $anchorScroll, $location, spatialConfigRestService, loadingStatus, displayComponents, PreferencesService) {
 	$scope.settingsLevel = 'report';
 	$scope.alert = spatialConfigAlertService;
 	$scope.alert.hasAlert = false;
@@ -44,7 +44,7 @@ angular.module('unionvmsWeb').controller('MapconfigurationmodalCtrl', function (
     
     $scope.apply = function(){
         if ($scope.validate()){
-            var rep = $scope.configModel.forReportConfig($scope.mapConfigurationForm);
+            var rep = $scope.exportMapConfiguration();
             $modalInstance.close(rep);
             $scope.initialConfig = undefined;
         }
@@ -53,7 +53,7 @@ angular.module('unionvmsWeb').controller('MapconfigurationmodalCtrl', function (
     $scope.exportMapConfiguration = function () {
     	var exported = {};
     	exported = $scope.configModel.forReportConfig($scope.mapConfigurationForm,userConfig);
-
+    	exported.mapSettings.spatialConnectId = $scope.initialConfig.spatialConnectId;
         return exported;
     };
     

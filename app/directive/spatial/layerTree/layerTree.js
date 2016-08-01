@@ -299,17 +299,21 @@ angular.module('unionvmsWeb').directive('layerTree', function($q, $modal, mapSer
 			};
 			
 			//Options modal
-			var openModal = function(rep, type){
+			var openModal = function(type){
+			    if (angular.isDefined(reportService.autoRefreshInterval)){
+			        reportService.stopAutoRefreshInterval();
+		        }
+			    
 			    var modalInstance = $modal.open({
                     templateUrl: 'partial/spatial/reportsPanel/reportForm/mapConfigurationModal/mapConfigurationModal.html',
                     controller: 'MapconfigurationmodalCtrl',
                     size: 'lg',
                     resolve: {
                         reportConfigs: function(){
-                            return rep;
+                            return angular.copy(reportFormService.liveView.currentReport.currentMapConfig);
                         },
                         displayComponents: function(){
-                            var types = ['vmspos', 'vmsseg', 'alarms']; //TODO test with alarm
+                            var types = ['vmspos', 'vmsseg', 'alarms'];
                             var displayStatus = [];
                             angular.forEach(types, function(item) {
                                 var status = false;
@@ -341,31 +345,50 @@ angular.module('unionvmsWeb').directive('layerTree', function($q, $modal, mapSer
                 });
 			    
 			    modalInstance.result.then(function(data){
-		            scope.report.currentConfig.mapConfiguration = data.mapSettings;
-		            reportFormService.report = scope.report;
-		            reportFormService.changedInLiveView = true;
-                    reportService.runReportWithoutSaving(scope.report);
-			        delete scope.report;
+			        if (!angular.equals(reportFormService.liveView.currentReport.currentMapConfig.mapConfiguration, data.mapSettings)){
+			            reportFormService.liveView.currentReport.currentMapConfig.mapConfiguration = data.mapSettings;
+			            reportFormService.liveView.outOfDate = true;
+			            reportService.runReportWithoutSaving(reportFormService.liveView.currentReport);
+			        } else if (reportService.refresh.status){
+                        reportService.setAutoRefresh();
+			        }
                 }, function(){
-                    delete scope.report;
+                    if (reportService.refresh.status){
+                        reportService.setAutoRefresh();
+                    }
                 });
 			};
 			
 			var openSettingsModal = function(data){
 			    var type = data.node.data.type;
-                if (!angular.isDefined(reportService.mergedReport)){
-                    reportRestService.getReport(reportService.id).then(function(response){
-                        scope.report = new Report();
-                        scope.report = scope.report.fromJson(response);
-                        openModal(response, type);
-                    }, function(error){
-                        //do some stuff
-                    });
-                } else {
-                    //the user already did a run without saving
-                    scope.report = reportService.mergedReport;
-                    openModal(reportService.mergedReport.currentConfig, type);
-                }
+			    if (!angular.isDefined(reportFormService.liveView.currentReport)){
+			        reportRestService.getReport(reportService.id).then(function(response){
+			            var report = new Report();
+			            report = report.fromJson(response);
+			            reportFormService.liveView.originalReport = report;
+			            
+			            reportFormService.liveView.currentReport = new Report();
+			            angular.copy(report, reportFormService.liveView.currentReport);
+			            openModal(type);
+			        },function(error){
+			            //TODO
+			        });
+			    } else {
+			        openModal(type);
+			    }
+//                if (!angular.isDefined(reportService.mergedReport)){
+//                    reportRestService.getReport(reportService.id).then(function(response){
+//                        scope.report = new Report();
+//                        scope.report = scope.report.fromJson(response);
+//                        openModal(response, type);
+//                    }, function(error){
+//                        //do some stuff
+//                    });
+//                } else {
+//                    //the user already did a run without saving
+//                    scope.report = reportService.mergedReport;
+//                    openModal(reportService.mergedReport.currentMapConfig, type);
+//                }
 			};
 			
 			//add label button for vectors

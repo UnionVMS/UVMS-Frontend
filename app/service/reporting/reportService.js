@@ -1,4 +1,4 @@
-angular.module('unionvmsWeb').factory('reportService',function($rootScope, $timeout, $interval, $anchorScroll, locale, TreeModel, reportRestService, spatialRestService, spatialHelperService, defaultMapConfigs, mapService, unitConversionService, vmsVisibilityService, mapAlarmsService, loadingStatus, spatialConfigRestService, SpatialConfig, Report, globalSettingsService, userService, reportingNavigatorService) {
+angular.module('unionvmsWeb').factory('reportService',function($rootScope, $timeout, $interval, $anchorScroll, locale, TreeModel, reportRestService, reportFormService, spatialRestService, spatialHelperService, defaultMapConfigs, mapService, unitConversionService, vmsVisibilityService, mapAlarmsService, loadingStatus, spatialConfigRestService, SpatialConfig, Report, globalSettingsService, userService, reportingNavigatorService) {
 
     var rep = {
        id: undefined,
@@ -16,12 +16,9 @@ angular.module('unionvmsWeb').factory('reportService',function($rootScope, $time
             rate: undefined
        },
        errorLoadingDefault: false,
-       isLiveViewActive: false,
-       outOfDate: undefined,
+       lastMapConfigs: undefined,
        getConfigsTime: undefined,
-       getReportTime: undefined,
-       mapConfigs: undefined,
-       editable: false
+       getReportTime: undefined
     };
     
     rep.clearVmsData = function(){
@@ -37,7 +34,6 @@ angular.module('unionvmsWeb').factory('reportService',function($rootScope, $time
         rep.refresh.rate = undefined;
         rep.getConfigsTime = undefined;
         rep.getReportTime = undefined;
-        rep.mapConfigs = undefined;
         
         //Clear data used in tables
         rep.clearVmsData();
@@ -72,19 +68,46 @@ angular.module('unionvmsWeb').factory('reportService',function($rootScope, $time
     };
     
 	rep.runReport = function(report){
-		rep.isReportExecuting = true;
-		rep.outOfDate = false;
-        if(angular.isDefined(report)){
-		    rep.editable = report.editable;
+	    if (angular.isDefined(rep.autoRefreshInterval)){
+            rep.stopAutoRefreshInterval();
         }
+	    
+		rep.isReportExecuting = true;
+		var prevRepId, prevRepEditable;
+		if (angular.isDefined(reportFormService.liveView.currentReport)){
+		    prevRepId = reportFormService.liveView.currentReport.id;
+		    prevRepEditable = reportFormService.liveView.editable;
+		}
+		
+		if (!angular.isDefined(report) && !angular.isDefined(reportFormService.liveView.currentReport)){
+		    prevRepId = rep.id;
+		    prevRepEditable = reportFormService.liveView.editable;
+		}
+		
+		reportFormService.resetLiveView();
+		
+		var editable = false;
+		if (angular.isDefined(report)){
+		    if (angular.isDefined(report.editable)){
+		        editable = report.editable;
+		    } 
+		    
+		    if (angular.isDefined(prevRepId) && prevRepId === report.id && !angular.isDefined(report.editable)){
+		        editable = prevRepEditable;
+		    }
+		} else {
+		    //here we are always refreshing a report
+		    editable = prevRepEditable;
+		}
+		
+		reportFormService.liveView.editable = editable;
 		
 		rep.runInterval = $interval(function(){
 		    var mapContainer = angular.element('#map');
 		    if (mapContainer.length > 0){
-		        rep.stopRunInterval();
-		        
 		        prepareReportToRun(report);
 		        rep.getConfigsTime = moment.utc().format('YYYY-MM-DDTHH:mm:ss');
+		        
 		        if ((report && report.withMap) || rep.isReportRefreshing){
 		            spatialRestService.getConfigsForReport(rep.id, rep.getConfigsTime).then(getConfigSuccess, getConfigError);
                     reportingNavigatorService.goToView('liveViewPanel','mapPanel');
@@ -92,16 +115,20 @@ angular.module('unionvmsWeb').factory('reportService',function($rootScope, $time
 		            spatialRestService.getConfigsForReportWithoutMap(rep.getConfigsTime).then(getConfigWithouMapSuccess, getConfigWithouMapError);
                     reportingNavigatorService.goToView('liveViewPanel','vmsPanel'); 
 		        }
+		        
+		        rep.stopRunInterval();
 		    }
 		}, 10);
 	};
 	
 	rep.runReportWithoutSaving = function(report){
-		rep.outOfDate = true;
+	    if (angular.isDefined(rep.autoRefreshInterval)){
+            rep.stopAutoRefreshInterval();
+        }
 		rep.isReportExecuting = true;
-		rep.reportToRun = report;
+		rep.mergedReport = angular.copy(report); 
     	spatialConfigRestService.getUserConfigs().then(getUserConfigsSuccess, getUserConfigsFailure);
-        if(rep.reportToRun.withMap){
+        if(rep.mergedReport.withMap){
             reportingNavigatorService.goToView('liveViewPanel','mapPanel');
         }else{
             reportingNavigatorService.goToView('liveViewPanel','vmsPanel');
@@ -131,24 +158,29 @@ angular.module('unionvmsWeb').factory('reportService',function($rootScope, $time
 	    if (angular.isDefined(rep.id) && reportingNavigatorService.isViewVisible('mapPanel')){
 	        rep.clearMapOverlaysOnRefresh();
 	        rep.isReportRefreshing = true;
-	        var repConfig = getRepConfig();
-	        if(rep.outOfDate){
-	        	rep.runReportWithoutSaving(rep.reportToRun);
+	        if(reportFormService.liveView.outOfDate){
+	        	rep.runReportWithoutSaving(rep.mergedReport);
 	        }else{
 	        	rep.runReport(undefined);
 	        }
 	    }
 	};
 
-    
-    rep.setAutoRefresh = function() {    
-       $timeout(function() {
-          if (rep.isReportExecuting === false && rep.isLiveViewActive === true && rep.refresh.status === true) {
-            rep.refreshReport();
-          }
-           rep.setAutoRefresh();
+    rep.stopAutoRefreshInterval = function(){
+        $interval.cancel(rep.autoRefreshInterval);
+        rep.autoRefreshInterval = undefined;
+    };
+	
+    rep.setAutoRefresh = function() {
+        if (angular.isDefined(rep.autoRefreshInterval)){
+            rep.stopAutoRefreshInterval();
+        }
+        
+        rep.autoRefreshInterval = $interval(function() {
+            if (rep.isReportExecuting === false && rep.refresh.status === true) {
+                rep.refreshReport();
+            }
         }, rep.refresh.rate*60*1000); //timeout in minutes
-
     };
     
     rep.getAlarms = function(){
@@ -174,17 +206,13 @@ angular.module('unionvmsWeb').factory('reportService',function($rootScope, $time
 	
 	//Get Spatial config Success callback
 	var getConfigSuccess = function(data){
-		if(!angular.equals(rep.lastConfig,data)){
-			rep.lastConfig = data;
+		if(!angular.equals(rep.lastMapConfigs, data)){
+			rep.lastMapConfigs = data;
 			configureMap(data);
 		}
         var repConfig = getRepConfig();
         
 	    reportRestService.executeReport(rep.id,repConfig).then(getVmsDataSuccess, getVmsDataError);
-
-        if (rep.refresh.status === true) {
-            rep.setAutoRefresh();
-        }
 	};
 	
 	//Get Spatial config Error callback
@@ -276,20 +304,6 @@ angular.module('unionvmsWeb').factory('reportService',function($rootScope, $time
 		rep.positions = data.movements.features;
         rep.segments = data.segments.features;
         rep.tracks = data.tracks;
-		
-		if(angular.isDefined(rep.mapConfigs)){
-			if(angular.isDefined(rep.mapConfigs.stylesSettings)){
-				if(angular.isDefined(rep.mapConfigs.styleSettings.positions)){
-					rep.positions = rep.mapConfigs.styleSettings.positions.style;
-				}
-				if(angular.isDefined(rep.mapConfigs.stylesSettings.segments)){
-					rep.segments = rep.mapConfigs.stylesSettings.segments.style;
-				}
-				if(angular.isDefined(rep.mapConfigs.stylesSettings.tracks)){
-					rep.tracks = rep.mapConfigs.stylesSettings.tracks.style;
-				}
-			}
-		}
         
         //Update map if the report contains the map tab
         if (reportingNavigatorService.isViewVisible('mapPanel')){
@@ -319,6 +333,10 @@ angular.module('unionvmsWeb').factory('reportService',function($rootScope, $time
         }
         rep.isReportExecuting = false;
         rep.isReportRefreshing = false;
+        
+        if (rep.refresh.status === true) {
+            rep.setAutoRefresh();
+        }
     };
     
     //Get VMS data Failure callback
@@ -332,6 +350,7 @@ angular.module('unionvmsWeb').factory('reportService',function($rootScope, $time
         rep.hasAlert = true;
         rep.alertType = 'danger';
         rep.message = locale.getString('spatial.map_error_loading_report');
+        rep.refresh.status = false;
     };
     
     //Refresh report success callback
@@ -446,19 +465,17 @@ angular.module('unionvmsWeb').factory('reportService',function($rootScope, $time
         
         mapService.updateMapSize();
         
-	    //Finally load VMS positions and segments
         rep.getReportTime = moment.utc().format('YYYY-MM-DDTHH:mm:ss');
 	};
 	
 	var getUserConfigsSuccess = function(response){
-	    var model = new SpatialConfig();
-	    if(!angular.equals(rep.lastConfig,response)){
-			rep.lastConfig = response;
-			var userConfig = model.forUserPrefFromJson(response);
-	        rep.mergedReport = mergeSettings(userConfig);
-		}
-        
-        spatialConfigRestService.getMapConfigsFromReport(getMapConfigs()).then(getMapConfigsFromReportSuccess, getMapConfigsFromReportFailure);
+	    rep.lastMapConfigs = response;
+	    
+	    var model = new SpatialConfig();	    
+	    var userConfig = model.forUserPrefFromJson(response);
+	    
+	    mergeSettings(userConfig);
+        spatialConfigRestService.getMapConfigsFromReport(getMapConfigs(userConfig)).then(getMapConfigsFromReportSuccess, getMapConfigsFromReportFailure);
 	};
 	
 	var getUserConfigsFailure = function(error){
@@ -471,41 +488,37 @@ angular.module('unionvmsWeb').factory('reportService',function($rootScope, $time
 	};
 	
 	var mergeSettings = function(userConfig){
-    	var mergedReport = new Report();
-    	angular.copy(rep.reportToRun, mergedReport);
-    	
-    	if(!angular.isDefined(mergedReport.currentConfig.mapConfiguration.mapProjectionId) && 
-    			!angular.isDefined(mergedReport.currentConfig.mapConfiguration.displayProjectionId) && !angular.isDefined(mergedReport.currentConfig.mapConfiguration.coordinatesFormat) && 
-    			!angular.isDefined(mergedReport.currentConfig.mapConfiguration.scaleBarUnits)){
+    	if(!angular.isDefined(rep.mergedReport.currentMapConfig.mapConfiguration.mapProjectionId) && 
+    			!angular.isDefined(rep.mergedReport.currentMapConfig.mapConfiguration.displayProjectionId) && !angular.isDefined(rep.mergedReport.currentMapConfig.mapConfiguration.coordinatesFormat) && 
+    			!angular.isDefined(rep.mergedReport.currentMapConfig.mapConfiguration.scaleBarUnits)){
     		
-    		mergedReport.currentConfig.mapConfiguration.spatialConnectId = userConfig.mapSettings.spatialConnectId;
-    		mergedReport.currentConfig.mapConfiguration.mapProjectionId = userConfig.mapSettings.mapProjectionId;
-    		mergedReport.currentConfig.mapConfiguration.displayProjectionId = userConfig.mapSettings.displayProjectionId;
-    		mergedReport.currentConfig.mapConfiguration.coordinatesFormat = userConfig.mapSettings.coordinatesFormat;
-    		mergedReport.currentConfig.mapConfiguration.scaleBarUnits = userConfig.mapSettings.scaleBarUnits;
+    		rep.mergedReport.currentMapConfig.mapConfiguration.spatialConnectId = userConfig.mapSettings.spatialConnectId;
+    		rep.mergedReport.currentMapConfig.mapConfiguration.mapProjectionId = userConfig.mapSettings.mapProjectionId;
+    		rep.mergedReport.currentMapConfig.mapConfiguration.displayProjectionId = userConfig.mapSettings.displayProjectionId;
+    		rep.mergedReport.currentMapConfig.mapConfiguration.coordinatesFormat = userConfig.mapSettings.coordinatesFormat;
+    		rep.mergedReport.currentMapConfig.mapConfiguration.scaleBarUnits = userConfig.mapSettings.scaleBarUnits;
     	}
     	
-    	if(!angular.isDefined(mergedReport.currentConfig.mapConfiguration.stylesSettings)){
-    		mergedReport.currentConfig.mapConfiguration.stylesSettings = userConfig.stylesSettings;
+    	if(!angular.isDefined(rep.mergedReport.currentMapConfig.mapConfiguration.stylesSettings)){
+    	    rep.mergedReport.currentMapConfig.mapConfiguration.stylesSettings = userConfig.stylesSettings;
     	}
     	
-    	if(!angular.isDefined(mergedReport.currentConfig.mapConfiguration.layerSettings)){
-    		mergedReport.currentConfig.mapConfiguration.layerSettings = userConfig.layerSettings;
+    	if(!angular.isDefined(rep.mergedReport.currentMapConfig.mapConfiguration.layerSettings)){
+    	    rep.mergedReport.currentMapConfig.mapConfiguration.layerSettings = userConfig.layerSettings;
     	}
-    	mergedReport.currentConfig.mapConfiguration.layerSettings = rep.checkLayerSettings(mergedReport.currentConfig.mapConfiguration.layerSettings);
+    	rep.mergedReport.currentMapConfig.mapConfiguration.layerSettings = reportFormService.checkLayerSettings(rep.mergedReport.currentMapConfig.mapConfiguration.layerSettings);
     	
-    	if(!angular.isDefined(mergedReport.currentConfig.mapConfiguration.visibilitySettings)){
-    		mergedReport.currentConfig.mapConfiguration.visibilitySettings = userConfig.visibilitySettings;
+    	if(!angular.isDefined(rep.mergedReport.currentMapConfig.mapConfiguration.visibilitySettings)){
+    	    rep.mergedReport.currentMapConfig.mapConfiguration.visibilitySettings = userConfig.visibilitySettings;
     	}
 
-		if(!angular.isDefined(mergedReport.currentConfig.mapConfiguration.referenceDataSettings)){
-    		mergedReport.currentConfig.mapConfiguration.referenceDataSettings = userConfig.referenceDataSettings;
+		if(!angular.isDefined(rep.mergedReport.currentMapConfig.mapConfiguration.referenceDataSettings)){
+		    rep.mergedReport.currentMapConfig.mapConfiguration.referenceDataSettings = userConfig.referenceDataSettings;
     	}
     	
-    	return mergedReport;
     };
     
-    var getMapConfigs = function(){
+    var getMapConfigs = function(userConfig){
 		return {
 			toolSettings: {
 			       "control": [
@@ -535,15 +548,17 @@ angular.module('unionvmsWeb').factory('reportService',function($rootScope, $time
 			               ]
 			           },
 			mapSettings: {
-				mapProjectionId: rep.mergedReport.currentConfig.mapConfiguration.mapProjectionId,
-				displayProjectionId: rep.mergedReport.currentConfig.mapConfiguration.displayProjectionId,
-				coordinatesFormat: rep.mergedReport.currentConfig.mapConfiguration.coordinatesFormat,
-				scaleBarUnits: rep.mergedReport.currentConfig.mapConfiguration.scaleBarUnits
+				mapProjectionId: rep.mergedReport.currentMapConfig.mapConfiguration.mapProjectionId,
+				displayProjectionId: rep.mergedReport.currentMapConfig.mapConfiguration.displayProjectionId,
+				coordinatesFormat: rep.mergedReport.currentMapConfig.mapConfiguration.coordinatesFormat,
+				scaleBarUnits: rep.mergedReport.currentMapConfig.mapConfiguration.scaleBarUnits,
+				refreshStatus: userConfig.mapSettings.refreshStatus,
+				refreshRate: userConfig.mapSettings.refreshRate
 			},
-			stylesSettings: rep.mergedReport.currentConfig.mapConfiguration.stylesSettings,
-			layerSettings: rep.mergedReport.currentConfig.mapConfiguration.layerSettings,
-			visibilitySettings: rep.mergedReport.currentConfig.mapConfiguration.visibilitySettings,
-			referenceDataSettings: rep.mergedReport.currentConfig.mapConfiguration.referenceDataSettings,
+			stylesSettings: rep.mergedReport.currentMapConfig.mapConfiguration.stylesSettings,
+			layerSettings: rep.mergedReport.currentMapConfig.mapConfiguration.layerSettings,
+			visibilitySettings: rep.mergedReport.currentMapConfig.mapConfiguration.visibilitySettings,
+			referenceDataSettings: rep.mergedReport.currentMapConfig.mapConfiguration.referenceDataSettings,
 			reportProperties: {
 		        startDate : rep.mergedReport.startDateTime === undefined ? undefined : moment.utc(rep.mergedReport.startDateTime, globalSettingsService.getDateFormat()).format('YYYY-MM-DDTHH:mm:ss'),
 		        endDate : rep.mergedReport.endDateTime === undefined ? undefined : moment.utc(rep.mergedReport.endDateTime, globalSettingsService.getDateFormat()).format('YYYY-MM-DDTHH:mm:ss')
@@ -552,7 +567,6 @@ angular.module('unionvmsWeb').factory('reportService',function($rootScope, $time
 	};
 	
 	var getMapConfigsFromReportSuccess = function(data){
-		angular.copy(rep.mergedReport.currentConfig.mapConfiguration,rep.mergedReport.mapConfiguration);
 		prepareReportToRun(rep.mergedReport);
 		configureMap(data[0]);
 		
@@ -573,7 +587,7 @@ angular.module('unionvmsWeb').factory('reportService',function($rootScope, $time
 	};
 
 	rep.loadReportHistory = function(){
-       rep.loadingReportHistory = true;
+        rep.loadingReportHistory = true;
         reportRestService.getLastExecuted(10).then(function(response){
             getReportHistory(response);
             rep.loadingReportHistory = false;
@@ -615,72 +629,6 @@ angular.module('unionvmsWeb').factory('reportService',function($rootScope, $time
         }
     };
 	
-	rep.checkLayerSettings = function(layerSettings) {
-        
-	    if(angular.isDefined(layerSettings)){
-	        var layerData = {};
-			if(angular.isDefined(layerSettings.portLayers) && !_.isEmpty(layerSettings.portLayers)){
-	    		var ports = [];
-	    		angular.forEach(layerSettings.portLayers, function(value,key) {
-	    			var port = {'serviceLayerId': value.serviceLayerId, 'order': key};
-		    		ports.push(port);
-		    	});
-	    		layerSettings.portLayers = [];
-	    		angular.copy(ports,layerSettings.portLayers);
-	    	}else if(!angular.isDefined(layerSettings.portLayers)){
-	    		layerSettings.portLayers = undefined;
-	    	}
-		
-	    	if(angular.isDefined(layerSettings.areaLayers && !_.isEmpty(layerSettings.areaLayers))){
-	    		var areas = [];
-	    		angular.forEach(layerSettings.areaLayers, function(value,key) {
-	    			var area;
-	    			switch (value.areaType) {
-		    			case 'sysarea':
-		    				area = {'serviceLayerId': value.serviceLayerId, 'areaType': value.areaType, 'order': key};
-		    				break;
-		    			case 'userarea':
-		    				area = {'serviceLayerId': value.serviceLayerId, 'areaType': value.areaType, 'gid': value.gid, 'order': key};
-		    				break;
-		    			case 'areagroup':
-		    				area = {'serviceLayerId': value.serviceLayerId, 'areaType': value.areaType, 'areaGroupName': value.name, 'order': key};
-		    				break;
-		    		}
-	    			areas.push(area);
-		    	});
-	    		layerSettings.areaLayers = [];
-	    		angular.copy(areas,layerSettings.areaLayers);
-			}else{
-				layerSettings.areaLayers = undefined;
-			}
-	    	
-	    	if(angular.isDefined(layerSettings.additionalLayers) && !_.isEmpty(layerSettings.additionalLayers)){
-	    		var additionals = [];
-	    		angular.forEach(layerSettings.additionalLayers, function(value,key) {
-	    			var additional = {'serviceLayerId': value.serviceLayerId, 'order': key};
-	    			additionals.push(additional);
-		    	});
-	    		layerSettings.additionalLayers = [];
-	    		angular.copy(additionals,layerSettings.additionalLayers);
-	    	}else{
-				layerSettings.additionalLayers = undefined;
-			}
-	    	
-	    	if(angular.isDefined(layerSettings.baseLayers) && !_.isEmpty(layerSettings.baseLayers)){
-	    		var bases = [];
-	    		angular.forEach(layerSettings.baseLayers, function(value,key) {
-	    			var base = {'serviceLayerId': value.serviceLayerId, 'order': key};
-	    			bases.push(base);
-		    	});
-	    		layerSettings.baseLayers = [];
-	    		angular.copy(bases,layerSettings.baseLayers);
-	    	}else{
-				layerSettings.baseLayers = undefined;
-			}
-		}
-	    return layerSettings;
-    };
-
     //load reports on reportsList
     rep.loadReportList = function(){
         rep.isLoadingReportsList = true;

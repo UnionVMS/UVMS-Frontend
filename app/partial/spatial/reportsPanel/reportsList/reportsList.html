@@ -60,7 +60,7 @@
 						<button type="button" class="btn btn-xs" ng-class="{'btn-default': !report.isDefault, 'btn-warning': report.isDefault}" ng-attr-title="{{report.isDefault ? removeDefaultTooltip : makeDefaultTooltip}}" ng-click="makeDefault($index)">
 							<span class="fa fa-star"></span>
 						</button>
-						<button type="button" ng-show="report.editable" class="btn btn-default btn-xs" title="{{'spatial.reports_table_config_label' | i18n }}" ng-click="repServ.outOfDate=false;showFilters($index)"><span class="fa fa-pencil"></span></button>
+						<button type="button" ng-show="report.editable" class="btn btn-default btn-xs" title="{{'spatial.reports_table_config_label' | i18n }}" ng-click="showFilters($index)"><span class="fa fa-pencil"></span></button>
 						<div class="btn-group" ng-show="{{report.shareable && report.shareable.length > 0}}">
 						<!--<button type="button" class="btn btn-secondary dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" >-->
 						<button type="button" class="btn btn-default btn-xs" title="{{'spatial.reports_table_share_label' | i18n }}" data-toggle="dropdown" aria-haspopup="true" ><span class="fa fa-share-alt"></span></button>

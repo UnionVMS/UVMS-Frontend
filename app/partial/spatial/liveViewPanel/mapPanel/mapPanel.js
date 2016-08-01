@@ -598,13 +598,15 @@ angular.module('unionvmsWeb').controller('MapCtrl',function($log, $scope, locale
     $scope.changeRefreshStatus = function() {
 	    if ($scope.repServ.refresh.status === true) {
 	    	$scope.repServ.setAutoRefresh();
+	    } else {
+	        $scope.repServ.stopAutoRefreshInterval();
 	    }
     };
 
     $scope.openMapOnNewTab = function(){
     	var guid = generateGUID();
-    	if($scope.repServ.outOfDate){
-    		$localStorage['report' + $scope.repServ.id + '-' + guid] = angular.copy(reportFormService.report);
+    	if(reportFormService.liveView.outOfDate){
+    		$localStorage['report' + $scope.repServ.id + '-' + guid] = angular.copy(reportFormService.liveView);
     	}
     	var url = $state.href('app.reporting-id', {id: $scope.repServ.id, guid: guid});
     	$window.open(url,'_blank');
@@ -624,6 +626,14 @@ angular.module('unionvmsWeb').controller('MapCtrl',function($log, $scope, locale
     $scope.$on('untoggleToolbarBtns', function (evt) {
         if ($scope.activeControl !== '') {
             $scope.toggleToolbarBtn($scope.activeControl);
+        }
+    });
+    
+    $scope.$watch(function(){return $scope.repNav.isViewVisible('mapPanel');}, function(newVal,oldVal){
+        if(newVal === true && !angular.isDefined($scope.repServ.autoRefreshInterval) && $scope.repServ.refresh.status){
+            $scope.repServ.setAutoRefresh();
+        } else if (newVal === false && angular.isDefined($scope.repServ.autoRefreshInterval)){
+            $scope.repServ.stopAutoRefreshInterval();
         }
     });
 
