@@ -82,6 +82,7 @@ angular.module('unionvmsWeb').controller('SpatialCtrl',function($scope, $timeout
 	   }else{
 	       $scope.loadReportEditing('EDIT-FROM-LIVEVIEW');
 	   }
+       $scope.deactivateFullscreen();
    };
 
    //Create new report from liveview
@@ -89,6 +90,7 @@ angular.module('unionvmsWeb').controller('SpatialCtrl',function($scope, $timeout
        $scope.comboServ.closeCurrentCombo(evt);
        $scope.formMode = 'CREATE';
        $scope.repNav.goToView('reportsPanel','reportForm');
+       $scope.deactivateFullscreen();
    };
    
    //Get Report Configs Success callback
@@ -159,6 +161,8 @@ angular.module('unionvmsWeb').controller('SpatialCtrl',function($scope, $timeout
                 $scope.repServ.setAutoRefresh();
             }
         });
+
+        $scope.deactivateFullscreen();
     };
 
     $scope.openNewReport = function(){
@@ -170,5 +174,11 @@ angular.module('unionvmsWeb').controller('SpatialCtrl',function($scope, $timeout
         $scope.formMode = mode;
         $scope.repNav.goToView('reportsPanel','reportForm');
         $scope.repServ.isReportExecuting = false;
+    };
+
+    $scope.deactivateFullscreen = function() {
+        if(screenfull.enabled){
+            screenfull.exit();
+        }
     };
 });

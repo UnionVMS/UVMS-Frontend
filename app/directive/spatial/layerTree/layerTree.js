@@ -357,6 +357,10 @@ angular.module('unionvmsWeb').directive('layerTree', function($q, $modal, mapSer
                         reportService.setAutoRefresh();
                     }
                 });
+
+				if(screenfull.enabled){
+					screenfull.exit();
+				}
 			};
 			
 			var openSettingsModal = function(data){

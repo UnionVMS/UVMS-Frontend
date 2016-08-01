@@ -70,6 +70,7 @@ angular.module('unionvmsWeb').controller('MapCtrl',function($log, $scope, locale
             backdrop: false,
             size: 'lg'
         });
+        $scope.deactivateFullscreen();
     };
 
     //Get vessel details from within the positions popup
@@ -93,31 +94,7 @@ angular.module('unionvmsWeb').controller('MapCtrl',function($log, $scope, locale
             });
         }
 
-
-        $scope.viewDetails = function(idx, source){
-            var modalInstance = $modal.open({
-                templateUrl: 'partial/spatial/reportsPanel/reportForm/vesselFieldset/detailsModal/detailsModal.html',
-                controller: 'DetailsmodalCtrl',
-                size: '',
-                resolve: {
-                    itemForDetail: function(){
-                        if (source === 'SEARCH'){
-                            idx = $scope.shared.vessels.indexOf($scope.displayedRecords[idx]);
-                            var item = $scope.shared.vessels[idx];
-                            item.type = $scope.shared.vesselSearchBy;
-                            if (item.type === 'asset'){
-                                item.guid = $scope.shared.vessels[idx].vesselId.guid;
-                            }
-
-                            return item;
-                        } else {
-                            idx = $scope.report.vesselsSelection.indexOf($scope.displayedRecordsSelection[idx]);
-                            return $scope.report.vesselsSelection[idx];
-                        }
-                    }
-                }
-            });
-        };
+        $scope.deactivateFullscreen();
     };
 
     //Check for permissions
@@ -629,6 +606,11 @@ angular.module('unionvmsWeb').controller('MapCtrl',function($log, $scope, locale
         }
     });
     
+    $scope.openUserPrefs = function(){
+        $scope.deactivateFullscreen();
+        $scope.repNav.goToSection('userPreferences');
+    };
+
     $scope.$watch(function(){return $scope.repNav.isViewVisible('mapPanel');}, function(newVal,oldVal){
         if(newVal === true && !angular.isDefined($scope.repServ.autoRefreshInterval) && $scope.repServ.refresh.status){
             $scope.repServ.setAutoRefresh();
