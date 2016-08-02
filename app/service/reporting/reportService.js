@@ -657,5 +657,9 @@ angular.module('unionvmsWeb').factory('reportService',function($rootScope, $time
         rep.reportsList = [];
     };
 
+    $rootScope.$on('$stateChangeStart', function() {
+        rep.hasAlert = false;
+    });
+
 	return rep;
 });

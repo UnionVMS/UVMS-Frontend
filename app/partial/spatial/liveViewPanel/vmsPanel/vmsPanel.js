@@ -46,6 +46,11 @@ angular.module('unionvmsWeb').controller('VmspanelCtrl',function($scope, locale,
    
    $scope.toggleCollapse = function(){
        $scope.modalCollapsed = !$scope.modalCollapsed;
+       if($scope.modalCollapsed){
+           angular.element('.vmspanel-modal').addClass('collapsed');
+       }else{
+           angular.element('.vmspanel-modal').removeClass('collapsed');
+       }
    };
    
    $scope.toggleFiltersRow = function(type){

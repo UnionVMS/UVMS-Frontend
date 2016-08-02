@@ -38,6 +38,7 @@ angular.module('unionvmsWeb').directive('alertModal', function($modal, $timeout)
 	                size: 'lg',
 	                windowClass: 'alert-modal-content',
 	                backdropClass: 'alert-modal-backdrop',
+					//appendTo: angular.element('#' + scope.targetElId),
 	                resolve: function(){
 	                    return scope.data;
 	                }

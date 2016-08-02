@@ -633,7 +633,7 @@ unionvmsWebApp.run(function($log, $rootScope, $state, $timeout, errorService, us
     });
 
     //Handle state change start
-    $rootScope.$on('$stateChangeStart', function(event, toState, toParams, fromState, fromParams, $modalStack) {
+    $rootScope.$on('$stateChangeStart', function(event, toState, toParams, fromState, fromParams) {
         var currentState = $state.$current;
         //Do nothing if new state is same as the old one
         if(currentState.name === toState.name){

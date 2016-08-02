@@ -68,7 +68,8 @@ angular.module('unionvmsWeb').controller('MapCtrl',function($log, $scope, locale
             templateUrl: 'partial/spatial/liveViewPanel/vmsPanel/vmsPanelModal.html',
             controller: 'VmspanelmodalCtrl',
             backdrop: false,
-            size: 'lg'
+            size: 'lg',
+            windowTopClass: 'vmspanel-modal'
         });
         $scope.spatialHelper.deactivateFullscreen();
     };

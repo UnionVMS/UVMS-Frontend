@@ -1,6 +1,8 @@
 .alert-modal-content {
   position: absolute;
-  overflow: hidden;
+  overflow: visible;
+  bottom: auto;
+  height: 0;
   .modal-lg {
     width: 100%;
   }
@@ -8,6 +10,7 @@
   .modal-dialog {
     padding: 0px;
     margin: 0px;
+    height: 0;
     .modal-content {
       border-radius: 4px;
       box-shadow: 0 3px 9px rgba(0,0,0,.5);
@@ -64,6 +67,7 @@
   }
 }
 .alert-modal-backdrop {
-	background-color: rgba(221, 221, 221, 0.4);
-	z-index: 1048 !important;
+  background-color: rgba(221, 221, 221, 0.4);
+  z-index: 1048 !important;
+  bottom: auto;
 }
