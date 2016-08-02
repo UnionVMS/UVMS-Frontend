@@ -1,4 +1,8 @@
-angular.module('unionvmsWeb').controller('MdrCtrl',function($scope, activityService){
+angular.module('unionvmsWeb').controller('MdrCtrl',function($scope, activityService, loadingStatus, locale){
+
+    $scope.cronWidgetConfig = {
+          allowMultiple: true
+      };
    	$scope.mdrCodeLists = [];
     $scope.displayedMDRLists = [];
     $scope.isUpdateNowDisabled = true;
@@ -22,9 +26,10 @@ angular.module('unionvmsWeb').controller('MdrCtrl',function($scope, activityServ
 			loadingStatus.isLoading('SavePreferences',true);
 
 			if ($scope.mdrConfigurationForm.$dirty){
+			//TODO get the cron job expression
+			    var cronJobExpression = '';
 		        activityService.updateCronJobExpression(cronJobExpression).then(saveSuccess, saveFailure);
 		    } else {
-		        $anchorScroll();
 		        $scope.alert.hasAlert = true;
 		        $scope.alert.hasWarning = true;
 		        $scope.alert.alertMessage = locale.getString('spatial.user_preferences_warning_saving');
@@ -32,7 +37,6 @@ angular.module('unionvmsWeb').controller('MdrCtrl',function($scope, activityServ
 		        loadingStatus.isLoading('SavePreferences',false);
 		    }
 		} else {
-		    $anchorScroll();
 		    $scope.alert.hasAlert = true;
 		    $scope.alert.hasError = true;
 		    $scope.alert.alertMessage = locale.getString('spatial.invalid_data_saving');
@@ -103,7 +107,7 @@ angular.module('unionvmsWeb').controller('MdrCtrl',function($scope, activityServ
         $scope.cronJobExpression = response;
         $scope.configPanelForm.$setPristine();
         loadingStatus.isLoading('SavePreferences',false);
-    }
+    };
 
     var getCronJobExpressionFailed = function(error){
         $scope.alert.hasAlert = true;
@@ -139,7 +143,7 @@ angular.module('unionvmsWeb').controller('MdrCtrl',function($scope, activityServ
     $scope.$watch(function(){return $scope.displayedMDRLists;}, function(newValue, oldValue) {
         if (newValue.length > 0) {
             var numSelectedItems = _.where(newValue, {'isSelected': true}).length;
-            if (numSelectedItems == newValue.length) {
+            if (numSelectedItems === newValue.length) {
                 $('#selectDeselectAll')[0].checked = true;
             } else {
                 $('#selectDeselectAll')[0].checked = false;
