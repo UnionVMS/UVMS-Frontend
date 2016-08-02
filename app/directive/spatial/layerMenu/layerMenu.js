@@ -1,8 +1,7 @@
 angular.module('unionvmsWeb').directive('layerMenu', function(locale) {
 	return {
 		restrict: 'A',
-		templateUrl: 'directive/spatial/layerMenu/layerMenu.html',
-		// controller ? MV*
+		//templateUrl: 'directive/spatial/layerMenu/layerMenu.html',
 		link: function(scope, element, attrs, fn) {
 			// hide contextmenu
 			scope.hideMenu = function (event) {

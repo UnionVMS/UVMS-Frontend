@@ -150,10 +150,9 @@ angular.module('unionvmsWeb').controller('ReportformCtrl',function($scope, $moda
         $scope.validateRanges();
         if ($scope.reportForm.$valid){
             $scope.report.areas = $scope.exportSelectedAreas();
-        	$scope.configModel = new SpatialConfig();
         	$scope.currentRepCopy = angular.copy($scope.report);
         	$scope.report.currentMapConfig.mapConfiguration.layerSettings = reportFormService.checkLayerSettings($scope.report.currentMapConfig.mapConfiguration.layerSettings);
-            $scope.report = checkMapConfigDifferences($scope.report);
+            $scope.report = reportFormService.checkMapConfigDifferences($scope.report);
             switch ($scope.formMode) {
                 case 'CREATE':
                     reportRestService.createReport($scope.report).then(createReportSuccess, createReportError);
@@ -243,6 +242,8 @@ angular.module('unionvmsWeb').controller('ReportformCtrl',function($scope, $moda
     		
     		if (!angular.equals($scope.report, reportFormService.liveView.originalReport)){
                 reportFormService.liveView.outOfDate = true;
+            } else {
+                reportFormService.liveView.outOfDate = false;
             }
     		reportFormService.liveView.currentTempReport = undefined;
     	}else{
@@ -274,7 +275,7 @@ angular.module('unionvmsWeb').controller('ReportformCtrl',function($scope, $moda
             modalInstance.result.then(function(data){
                 data.areas = $scope.exportSelectedAreas();
             	data.currentMapConfig.mapConfiguration.layerSettings = reportFormService.checkLayerSettings(data.currentMapConfig.mapConfiguration.layerSettings);
-            	data = checkMapConfigDifferences(data);
+            	data = reportFormService.checkMapConfigDifferences(data);
             	reportRestService.createReport(data).then(createReportSuccess, createReportError);
             });
         } else {
@@ -356,38 +357,6 @@ angular.module('unionvmsWeb').controller('ReportformCtrl',function($scope, $moda
         }
         
         $scope.formAlert.msg = errorMsg;
-    };
-    
-    var checkMapConfigDifferences = function(report){
-		if(!angular.equals(report.mapConfiguration, report.currentMapConfig.mapConfiguration)){
-			
-        	if(!angular.equals(report.mapConfiguration.coordinatesFormat, report.currentMapConfig.mapConfiguration.coordinatesFormat)){
-        		report.mapConfiguration.coordinatesFormat = report.currentMapConfig.mapConfiguration.coordinatesFormat;
-        	}
-			if(!angular.equals(report.mapConfiguration.displayProjectionId, report.currentMapConfig.mapConfiguration.displayProjectionId)){
-	    		report.mapConfiguration.displayProjectionId = report.currentMapConfig.mapConfiguration.displayProjectionId;
-	    	}
-			if(!angular.equals(report.mapConfiguration.mapProjectionId, report.currentMapConfig.mapConfiguration.mapProjectionId)){
-	    		report.mapConfiguration.mapProjectionId = report.currentMapConfig.mapConfiguration.mapProjectionId;
-	    	}
-			if(!angular.equals(report.mapConfiguration.scaleBarUnits, report.currentMapConfig.mapConfiguration.scaleBarUnits)){
-	    		report.mapConfiguration.scaleBarUnits = report.currentMapConfig.mapConfiguration.scaleBarUnits;
-	    	}
-			
-			if(!angular.equals(report.mapConfiguration.stylesSettings, report.currentMapConfig.mapConfiguration.stylesSettings)){
-				report.mapConfiguration.stylesSettings = report.currentMapConfig.mapConfiguration.stylesSettings;
-	    	}
-			if(!angular.equals(report.mapConfiguration.visibilitySettings, report.currentMapConfig.mapConfiguration.visibilitySettings)){
-				report.mapConfiguration.visibilitySettings = report.currentMapConfig.mapConfiguration.visibilitySettings;
-	    	}
-			if(!angular.equals(report.mapConfiguration.layerSettings, report.currentMapConfig.mapConfiguration.layerSettings)){
-				report.mapConfiguration.layerSettings = report.currentMapConfig.mapConfiguration.layerSettings;
-	    	}
-            if(!angular.equals(report.mapConfiguration.referenceDataSettings, report.currentMapConfig.mapConfiguration.referenceDataSettings)){
-				report.mapConfiguration.referenceDataSettings = report.currentMapConfig.mapConfiguration.referenceDataSettings;
-	    	}
-    	}
-		return report;
     };
     
     $scope.resetReport = function(){

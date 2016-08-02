@@ -91,6 +91,38 @@ angular.module('unionvmsWeb').factory('reportFormService',function(Report) {
         }
         return layerData;
     };
+    
+    reportFormService.checkMapConfigDifferences = function(report){
+        if(!angular.equals(report.mapConfiguration, report.currentMapConfig.mapConfiguration)){
+            
+            if(!angular.equals(report.mapConfiguration.coordinatesFormat, report.currentMapConfig.mapConfiguration.coordinatesFormat)){
+                report.mapConfiguration.coordinatesFormat = report.currentMapConfig.mapConfiguration.coordinatesFormat;
+            }
+            if(!angular.equals(report.mapConfiguration.displayProjectionId, report.currentMapConfig.mapConfiguration.displayProjectionId)){
+                report.mapConfiguration.displayProjectionId = report.currentMapConfig.mapConfiguration.displayProjectionId;
+            }
+            if(!angular.equals(report.mapConfiguration.mapProjectionId, report.currentMapConfig.mapConfiguration.mapProjectionId)){
+                report.mapConfiguration.mapProjectionId = report.currentMapConfig.mapConfiguration.mapProjectionId;
+            }
+            if(!angular.equals(report.mapConfiguration.scaleBarUnits, report.currentMapConfig.mapConfiguration.scaleBarUnits)){
+                report.mapConfiguration.scaleBarUnits = report.currentMapConfig.mapConfiguration.scaleBarUnits;
+            }
+            
+            if(!angular.equals(report.mapConfiguration.stylesSettings, report.currentMapConfig.mapConfiguration.stylesSettings)){
+                report.mapConfiguration.stylesSettings = report.currentMapConfig.mapConfiguration.stylesSettings;
+            }
+            if(!angular.equals(report.mapConfiguration.visibilitySettings, report.currentMapConfig.mapConfiguration.visibilitySettings)){
+                report.mapConfiguration.visibilitySettings = report.currentMapConfig.mapConfiguration.visibilitySettings;
+            }
+            if(!angular.equals(report.mapConfiguration.layerSettings, report.currentMapConfig.mapConfiguration.layerSettings)){
+                report.mapConfiguration.layerSettings = report.currentMapConfig.mapConfiguration.layerSettings;
+            }
+            if(!angular.equals(report.mapConfiguration.referenceDataSettings, report.currentMapConfig.mapConfiguration.referenceDataSettings)){
+                report.mapConfiguration.referenceDataSettings = report.currentMapConfig.mapConfiguration.referenceDataSettings;
+            }
+        }
+        return report;
+    };
 
 	return reportFormService;
 });

@@ -62,41 +62,91 @@
 			height: calc(~'100% - 120px');
 		}
 	}
-	.dynamic-switcher, 
-	.panel-component-item {
+	.dynamic-switcher {
 		border: 1px solid @profileColor_gray;
 		border-left: none;
 		border-right: none;
 		height: 30px;
-		padding-left: 7px;
-		&.item-clickable {
-			cursor: pointer;
-			&:hover {
-				background-color: @profileColor_lightgray;
-			}
-		}
-	}
-	.dynamic-switcher {
-		ul li {
+		cursor: pointer;
+		ul {
 			line-height: 28px;
-			width: 49%;
+			display: table;
+			width: 100%;
+			table-layout: fixed;
 			color: @primaryColor;
-			span {
-				color: @primaryColor;
+			margin-left: 0px;
+			li {
+				display: table-cell;
+				width: auto;
+				padding: 0 7px;
+				span {
+					color: @primaryColor;
+				}
+				&.item-right {
+					text-align: right;
+				}
+				&:hover {
+					background-color: @profileColor_lightgray;
+				}
 			}
-			&.item-right {
-				text-align: right;
-			}
-			&:hover {
-				background-color: @profileColor_lightgray;
+			&.is-last-tree-item {
+				li:hover {
+					border-bottom-left-radius: 3px;
+					border-bottom-right-radius: 3px;
+				}
 			}
 		}
 	}
 	.panel-component-item {
-		color: @profileColor_blue;
-		border-top: 0;
-		span {
-			line-height: 30px;
+		border: 1px solid @profileColor_gray;
+		border-left: none;
+		border-right: none;
+		border-top: none;
+		height: 30px;
+		cursor: pointer;
+		ul {
+			line-height: 29px;
+			display: table;
+			width: 100%;
+			table-layout: fixed;
+			color: @primaryColor;
+			margin-left: 0px;
+			li {
+				display: table-cell;
+				width: auto;
+				padding: 0 7px;
+				span {
+					color: @primaryColor;
+				}
+				&.item-right {
+					text-align: right;
+				}
+				&:hover {
+					background-color: @profileColor_lightgray;
+				}
+			}
+			&.is-last-tree-item {
+				li:hover {
+					border-bottom-left-radius: 3px;
+					border-bottom-right-radius: 3px;
+				}
+			}
+		}
+		.panel-component-inner-item {
+			color: @profileColor_blue;
+			border-top: 0;
+			padding: 0 7px;
+			span {
+				line-height: 30px;
+			}
+			&:hover {
+				background-color: @profileColor_lightgray;
+				&.is-last-tree-item:hover {
+					border-bottom-left-radius: 3px;
+					border-bottom-right-radius: 3px;
+				}
+			}
+			
 		}
 	}
 }

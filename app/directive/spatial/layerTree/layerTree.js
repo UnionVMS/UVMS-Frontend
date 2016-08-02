@@ -375,24 +375,13 @@ angular.module('unionvmsWeb').directive('layerTree', function($q, $modal, mapSer
 			            angular.copy(report, reportFormService.liveView.currentReport);
 			            openModal(type);
 			        },function(error){
-			            //TODO
+			            reportService.hasAlert = true;
+			            reportService.alertType = 'danger';
+			            reportService.message = locale.getString('spatial.map_error_loading_report_settings');
 			        });
 			    } else {
 			        openModal(type);
 			    }
-//                if (!angular.isDefined(reportService.mergedReport)){
-//                    reportRestService.getReport(reportService.id).then(function(response){
-//                        scope.report = new Report();
-//                        scope.report = scope.report.fromJson(response);
-//                        openModal(response, type);
-//                    }, function(error){
-//                        //do some stuff
-//                    });
-//                } else {
-//                    //the user already did a run without saving
-//                    scope.report = reportService.mergedReport;
-//                    openModal(reportService.mergedReport.currentMapConfig, type);
-//                }
 			};
 			
 			//add label button for vectors

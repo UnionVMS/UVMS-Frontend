@@ -13,9 +13,59 @@ angular.module('unionvmsWeb').directive('wmsPreview', function() {
 		}
 	};
 })
-.controller('wmspreviewCtrl', ['$scope', '$localStorage', 'locale', function($scope, $localStorage, locale){
-    $scope.imgSize = 256;
-    $scope.buildWMSRequest = function(){
+.controller('wmspreviewCtrl', ['$scope', '$localStorage', 'locale', 'genericMapService', function($scope, $localStorage, locale, genericMapService){
+    $scope.click = function(){
+        $scope.createTip();
+    };
+    
+    $scope.createMap = function(){
+        var wmsLayer = $scope.buildWMSLayer();
+        $scope.map = new ol.Map({
+            layers: [
+                new ol.layer.Tile({
+                    source: new ol.source.OSM()
+                })
+            ],
+            controls: [],
+            target: 'wmspreview-tooltip',
+            view: new ol.View({
+                center: [0,0],
+                zoom: 2
+            })
+        });
+        
+        if (angular.isDefined(wmsLayer)){
+            $scope.map.addLayer(wmsLayer);
+        }
+        
+        var extent = $scope.calculateExtent();
+        if (angular.isDefined(extent)){
+            $scope.map.getView().fit(extent, $scope.map.getSize(), true);
+        }
+    };
+    
+    $scope.calculateExtent = function(){
+        var extent, geom;
+        if (angular.isDefined($scope.record.extent)){
+            var wkt = new ol.format.WKT();
+            geom = wkt.readGeometry($scope.record.extent);
+            geom.transform('EPSG:4326', 'EPSG:3857');
+            
+            if ($scope.record.extent.indexOf('POINT') !== -1){
+                extent = ol.extent.buffer(geom.getExtent(), 5000);
+            } else {
+                extent = geom.getExtent();
+            }
+        } else {
+            geom = ol.geom.Polygon.fromExtent([-180,-90,180,90]);
+            geom = geom.transform('EPSG:4326', 'EPSG:3857');
+            extent = geom.getExtent();
+        }
+        
+        return ol.geom.Polygon.fromExtent(extent);
+    };
+    
+    $scope.buildWMSLayer = function(){
         var layerDef = $scope.getLayerTypeDef();
         if (angular.isDefined(layerDef)){
             var url = layerDef.url;
@@ -23,94 +73,44 @@ angular.module('unionvmsWeb').directive('wmsPreview', function() {
                 url += '?';
             }
             
-            url += '&request=GetMap&srs=EPSG:4326&Format=image/png&width=' + $scope.imgSize + '&height=' + $scope.imgSize;
-            url += '&layers=' + layerDef.layer + '&bbox=';
-            url += $scope.getExtent(); 
+            var params = {
+                LAYERS: layerDef.layer,
+                TILED: true
+            };
             
-            
-            url += '&styles='; 
             if (angular.isDefined(layerDef.includeStyle) && layerDef.includeStyle === true){
-                url += layerDef.style;
+                params.STYLES = layerDef.style;
             }
             
             //Build cql filter
             if (angular.isDefined(layerDef.cqlProperty)){
-                var cql = "&cql_filter=" + layerDef.cqlProperty + " = ";
+                var cql = layerDef.cqlProperty + " = ";
                 if (layerDef.propertyType === 'string'){
                     cql += "'" + $scope.record[layerDef.cqlProperty] + "'";
                 } else {
                     cql +=  $scope.record[layerDef.cqlProperty];
                 }
                 
-                url += cql;
+                params.cql_filter = cql;
             }
             
-            return url;
+            var config = {
+                title: 'wmslayer',
+                serverType: 'geoserver',
+                url: url,
+                params: params
+            };
+            
+            var layer = genericMapService.defineWms(config);
+            return layer;
         }
     };
     
-    $scope.getExtent = function(){
-        var extent = '-180,-90,180,90';
-        
-        if (angular.isDefined($scope.record.extent)){
-            var wkt = new ol.format.WKT();
-            var geom = wkt.readGeometry($scope.record.extent);
-            
-            if ($scope.record.extent.indexOf('POINT') !== -1){
-                geom = ol.extent.buffer(geom.getExtent(), 3);
-                extent = geom.toString();
-            } else {
-                extent = geom.getExtent().toString();
-            }
-            
-            
-        }
-        
-        return extent;
-    };
-    
-    $scope.getWMSImgWithUsm = function(url, api){
-        var xhr = new XMLHttpRequest();
-        xhr.open('GET', url, true);
-        xhr.withCredentials = true;
-        xhr.setRequestHeader('Authorization', $localStorage.token);
-        xhr.responseType = 'arraybuffer';
-        xhr.onload = function(){
-            if (typeof window.btoa === 'function'){
-                if (this.status === 200){
-                    var uInt8Array = new Uint8Array(this.response);
-                    var i = uInt8Array.length;
-                    var binaryString = new Array(i);
-                    while (i--){
-                        binaryString[i] = String.fromCharCode(uInt8Array[i]);
-                    }
-                    var data = binaryString.join('');
-                    var type = xhr.getResponseHeader('content-type');
-                    if (type.indexOf('image') === 0) {
-                        $scope.imgSrc = 'data:' + type + ';base64,' + window.btoa(data);
-                        api.set('content.text', '<img src="' + $scope.imgSrc + '"/>');
-                    }
-                }
-            }
-        };
-        xhr.send();
-    };
-    
-    $scope.click = function(){
-        var imgURL = $scope.buildWMSRequest();
-        if (angular.isDefined(imgURL)){
-            $scope.createTip(imgURL);
-        }
-    };
-    
-    $scope.createTip = function(imgURL){
+    $scope.createTip = function(){
         $scope.tip = $scope.el.qtip({
             content: {
                 text: function(evt, api){
-                    $scope.getWMSImgWithUsm(imgURL, api);
-                    var html = '<i class="fa fa-spinner fa-spin"></i>&nbsp;';
-                    html += '<span>' + locale.getString('spatial.loading_data') + '</span>'; 
-                    return html;
+                    return '<div id="wmspreview-tooltip"></div>';
                 }
             },
             position: {
@@ -126,8 +126,12 @@ angular.module('unionvmsWeb').directive('wmsPreview', function() {
             events: {
                 hide: function(event, api) {
                     api.destroy(true); // Destroy it immediately
+                    $scope.map.setTarget(null);
+                    delete $scope.map;
                     delete $scope.tip;
-                    delete $scope.imgSrc;
+                },
+                visible: function(event,api){
+                    $scope.createMap();
                 }
             },
             style: {

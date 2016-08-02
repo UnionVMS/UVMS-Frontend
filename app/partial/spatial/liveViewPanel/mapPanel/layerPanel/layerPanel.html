@@ -21,28 +21,38 @@
 	      	</div>
 		</div>
 		<div class="dynamic-switcher">
-			<ul class="list-inline">
-				<li class="tab-list-item" ng-show="tab !== 'LAYERTREE'" ng-click="tabClick('LAYERTREE')">
+			<ul class="list-inline" ng-class="isLastTreeItem('LayerBtns')">
+				<li ng-show="tab !== 'LAYERTREE'" ng-click="tabClick('LAYERTREE')">
 	       			<span class="fa fa-bars"></span>&nbsp;&nbsp;
 	       			{{ 'spatial.layer_panel_layers' | i18n }}
 	     		</li>
-	     		<li class="tab-list-item" ng-show="tab !== 'LEGEND'" ng-class="{'item-right': tab === 'COPYRIGHT'}" ng-click="tabClick('LEGEND')">
+	     		<li ng-show="tab !== 'LEGEND'" ng-class="{'item-right': tab === 'COPYRIGHT'}" ng-click="tabClick('LEGEND')">
 	     			<span class="fa fa-list"></span>&nbsp;&nbsp;
 	       			{{ 'spatial.layer_panel_legend' | i18n }}
 	     		</li>
-	     		<li class="tab-list-item item-right" ng-show="tab !== 'COPYRIGHT'" ng-click="tabClick('COPYRIGHT')">
+	     		<li class="item-right" ng-show="tab !== 'COPYRIGHT'" ng-click="tabClick('COPYRIGHT')">
 	     			<span class="fa fa-copyright"></span>&nbsp;&nbsp;
 	       			{{ 'spatial.layer_panel_copyright' | i18n }}
 	     		</li>
 	   		</ul>
 	   	</div>
-	   	<div class="panel-component-item item-clickable" ng-if="isReportEditable()" ng-click="editReport()">
-	   		<span class="fa fa-pencil"></span>&nbsp;&nbsp;
-	   		{{ 'spatial.reports_table_config_label' | i18n }}
+	   	<div class="panel-component-item" ng-if="isReportEditable()">
+			<ul class="list-inline" ng-class="isLastTreeItem('ReportBtns')">
+				<li class="tab-list-item" ng-click="editReport()">
+	       			<span class="fa fa-pencil"></span>&nbsp;&nbsp;
+	       			{{ 'spatial.reports_table_config_label' | i18n }}
+	     		</li>
+	     		<li class="tab-list-item item-right" ng-if="isReportDirty()" ng-click="saveReport()">
+	     			<span class="fa fa-floppy-o"></span>&nbsp;&nbsp;
+	     			{{ 'spatial.reports_save_label' | i18n }}
+	     		</li>
+	   		</ul>
 	   	</div>
-	   	<div class="panel-component-item item-clickable" ng-if="isAllowed('Spatial', 'VIEW_AREA_MANAGEMENT_UI') && curState === 'app.reporting'" ng-click="goTo('AREAMANAGEMENT')">
-	   		<span class="fa fa-map"></span>&nbsp;&nbsp;
-	   		{{ 'header.page_title_areas' | i18n }}
+	   	<div class="panel-component-item item-clickable" ng-if="isAllowed('Spatial', 'VIEW_AREA_MANAGEMENT_UI') && curState === 'app.reporting'" ng-click="goToAreas()">
+	   		<div class="panel-component-inner-item" ng-class="isLastTreeItem('AreaBtns')">
+	   			<span class="fa fa-map"></span>&nbsp;&nbsp;
+	   			{{ 'header.page_title_areas' | i18n }}
+	   		</div>
 	   	</div>
 	</div>
 </div>

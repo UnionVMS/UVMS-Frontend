@@ -152,7 +152,17 @@ angular.module('unionvmsWeb').controller('SystemareassettingsCtrl',function($sco
     $scope.clickResultsMap = true;
     $scope.selectAreaFromMap = function(data){
         if ($scope.currentSelection.selectedAreaType === 'PORT'){
-            //TODO
+            spatialRestService.getLocationDetails(data).then(function(response){
+                loadingStatus.isLoading('SearchReferenceData',false);
+                $scope.clickResults = 0;
+                $scope.checkAndAddToSelection(response.data.code);
+            }, function(error){
+                loadingStatus.isLoading('SearchReferenceData',false);
+                $scope.alert.hasAlert = true;
+                $scope.alert.hasError = true;
+                $scope.alert.alertMessage = locale.getString('spatial.get_ref_data_details_error');
+                $scope.alert.hideAlert();
+            });
         } else {
             spatialRestService.getAreaDetails(data).then(function(response){
                 loadingStatus.isLoading('SearchReferenceData',false);

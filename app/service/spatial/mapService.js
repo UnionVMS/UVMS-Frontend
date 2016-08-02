@@ -369,7 +369,7 @@ angular.module('unionvmsWeb').factory('mapService', function(locale, $rootScope,
      */
     ms.createWms = function( config ){
         var layer = genericMapService.defineWms(config);
-        layer.set('serverType', config.serverType); //TODO check where we use this 
+        layer.set('serverType', config.serverType); 
         
         return ( layer );
     };

@@ -65,7 +65,9 @@ angular.module('unionvmsWeb').controller('SpatialCtrl',function($scope, $timeout
                        $scope.openNewReport();
                    }
                }, function(error){
-                   //TODO msg error
+                   $scope.repServ.hasAlert = true;
+                   $scope.repServ.alertType = 'danger';
+                   $scope.repServ.message = locale.getString('spatial.map_error_loading_reports_list');
                });
                
            }
