@@ -54,27 +54,6 @@ angular.module('unionvmsWeb').controller('LayerpanelCtrl',function($scope, $time
         return reportFormService.liveView.editable && reportFormService.liveView.outOfDate;
     };
     
-    $scope.saveReport = function(){
-        loadingStatus.isLoading('LiveviewMap', true, 4);
-        $scope.tempReport = angular.copy(reportFormService.liveView.currentReport);
-        reportFormService.liveView.currentReport.currentMapConfig.mapConfiguration.layerSettings = reportFormService.checkLayerSettings(reportFormService.liveView.currentReport.currentMapConfig.mapConfiguration.layerSettings);
-        reportFormService.liveView.currentReport = reportFormService.checkMapConfigDifferences(reportFormService.liveView.currentReport);
-        reportRestService.updateReport(reportFormService.liveView.currentReport).then(function(response){
-            reportFormService.liveView.outOfDate = false;
-            angular.copy($scope.tempReport, reportFormService.liveView.currentReport);
-            angular.copy(reportFormService.liveView.currentReport, reportFormService.liveView.originalReport);
-            delete $scope.tempReport;
-            loadingStatus.isLoading('LiveviewMap',false);
-        }, function(error){
-            $scope.repServ.hasAlert = true;
-            $scope.repServ.alertType = 'danger';
-            $scope.repServ.message = locale.getString('spatial.error_update_report');
-            angular.copy($scope.tempReport, reportFormService.liveView.currentReport);
-            delete $scope.tempReport;
-            loadingStatus.isLoading('LiveviewMap',false);
-        });
-    };
-    
     $scope.goToAreas = function(){
         $state.go('app.areas');
     };

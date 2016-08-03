@@ -199,6 +199,7 @@
 	"reports_form_vms_message_source": "Message source:",
 	"reports_form_vms_segment_category": "Segment cat.:",
 	"reports_edit_report": "Edit report",
+	"reports_discard_changes": "Your current report contains unsaved changes. Do you want to save them?",
 	"tab_vms_export_csv": "Export data in CSV format",
 	"tab_vms_export_csv_positions_filename": "positions.csv",
 	"tab_vms_export_csv_segments_filename": "segments.csv",

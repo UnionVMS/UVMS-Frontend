@@ -18,6 +18,7 @@
 	</div>
 </form>
 <div class="modal-footer">
-    <button type="button" class="btn btn-default" ng-click="modal.cancel()">{{ modal.labels.cancel }}</button>
+    <button type="button" class="btn btn-default" ng-click="modal.cancel()" ng-show="!modal.yesNo">{{ modal.labels.cancel }}</button>
+    <button type="button" class="btn btn-danger" ng-click="modal.deny()" ng-show="modal.yesNo">{{ modal.labels.deny }}</button>
     <button type="button" class="btn btn-primary" ng-click="modal.confirm()">{{ modal.labels.confirm }}</button>
 </div>

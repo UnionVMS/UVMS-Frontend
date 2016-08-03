@@ -66,7 +66,6 @@ angular.module('unionvmsWeb').controller('ReportslistCtrl',function($scope, $fil
         $scope.repServ.isLoadingReportsList = true;
         reportRestService.getReport($scope.displayedRecords[index].id).then(getReportSuccess, getReportError);
     };
-    
 
     //decides whether share button is needed
     $scope.isReportShareable = function (shareable) {

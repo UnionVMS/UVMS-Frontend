@@ -1,4 +1,4 @@
-angular.module('unionvmsWeb').controller('SpatialCtrl',function($scope, $timeout, locale, mapService, spatialHelperService, Report, reportRestService, reportFormService, reportService, $anchorScroll, userService, loadingStatus, $state, $localStorage, comboboxService, reportingNavigatorService, $compile, $modal){
+angular.module('unionvmsWeb').controller('SpatialCtrl',function($scope, $timeout, locale, mapService, spatialHelperService, Report, reportRestService, reportFormService, reportService, $anchorScroll, userService, loadingStatus, $state, $localStorage, comboboxService, reportingNavigatorService, $compile, $modal, confirmationModal){
     $scope.reports = [];
     $scope.executedReport = {};
     $scope.repServ = reportService;
@@ -93,8 +93,22 @@ angular.module('unionvmsWeb').controller('SpatialCtrl',function($scope, $timeout
    $scope.createReportFromLiveview = function(evt){
        $scope.comboServ.closeCurrentCombo(evt);
        $scope.formMode = 'CREATE';
-       $scope.repNav.goToView('reportsPanel','reportForm');
        $scope.spatialHelper.deactivateFullscreen();
+       if (reportFormService.liveView.outOfDate){
+            var options = {
+                textLabel : locale.getString("spatial.reports_discard_changes"),
+                yesNo : true
+            };
+            confirmationModal.open(function(reason){
+                if(reason !== 'deny'){
+                    $scope.saveReport();
+                }
+                $scope.repNav.goToView('reportsPanel','reportForm');
+            },
+            options);
+        } else {
+            $scope.repNav.goToView('reportsPanel','reportForm');
+        }
    };
    
    //Get Report Configs Success callback
@@ -131,11 +145,33 @@ angular.module('unionvmsWeb').controller('SpatialCtrl',function($scope, $timeout
     };
 
     $scope.openReportList = function(evt,reportsListLoaded){
+        $scope.spatialHelper.deactivateFullscreen();
+        $scope.comboServ.closeCurrentCombo(evt);
+        if (evt && reportFormService.liveView.outOfDate){
+            var options = {
+                textLabel : locale.getString("spatial.reports_discard_changes"),
+                yesNo : true
+            };
+            confirmationModal.open(function(reason){
+                if(reason !== 'deny'){
+                    $scope.saveReport();
+                }
+                openReportsModal(reportsListLoaded);
+            },
+            options);
+        } else {
+            openReportsModal(reportsListLoaded);
+        }
+
+        
+        
+    };
+
+    var openReportsModal = function(reportsListLoaded){
         if (angular.isDefined($scope.repServ.autoRefreshInterval)){
             $scope.repServ.stopAutoRefreshInterval();
         }
         
-        $scope.comboServ.closeCurrentCombo(evt);
         $scope.repNav.addStateCallback($scope.openReportList);
         var modalInstance = $modal.open({
             templateUrl: 'partial/spatial/reportsPanel/reportsListModal/reportsListModal.html',
@@ -165,8 +201,6 @@ angular.module('unionvmsWeb').controller('SpatialCtrl',function($scope, $timeout
                 $scope.repServ.setAutoRefresh();
             }
         });
-
-        $scope.spatialHelper.deactivateFullscreen();
     };
 
     $scope.openNewReport = function(){
@@ -178,6 +212,27 @@ angular.module('unionvmsWeb').controller('SpatialCtrl',function($scope, $timeout
         $scope.formMode = mode;
         $scope.repNav.goToView('reportsPanel','reportForm');
         $scope.repServ.isReportExecuting = false;
+    };
+
+    $scope.saveReport = function(){
+        loadingStatus.isLoading('LiveviewMap', true, 4);
+        $scope.tempReport = angular.copy(reportFormService.liveView.currentReport);
+        reportFormService.liveView.currentReport.currentMapConfig.mapConfiguration.layerSettings = reportFormService.checkLayerSettings(reportFormService.liveView.currentReport.currentMapConfig.mapConfiguration.layerSettings);
+        reportFormService.liveView.currentReport = reportFormService.checkMapConfigDifferences(reportFormService.liveView.currentReport);
+        reportRestService.updateReport(reportFormService.liveView.currentReport).then(function(response){
+            reportFormService.liveView.outOfDate = false;
+            angular.copy($scope.tempReport, reportFormService.liveView.currentReport);
+            angular.copy(reportFormService.liveView.currentReport, reportFormService.liveView.originalReport);
+            delete $scope.tempReport;
+            loadingStatus.isLoading('LiveviewMap',false);
+        }, function(error){
+            $scope.repServ.hasAlert = true;
+            $scope.repServ.alertType = 'danger';
+            $scope.repServ.message = locale.getString('spatial.error_update_report');
+            angular.copy($scope.tempReport, reportFormService.liveView.currentReport);
+            delete $scope.tempReport;
+            loadingStatus.isLoading('LiveviewMap',false);
+        });
     };
 
 });

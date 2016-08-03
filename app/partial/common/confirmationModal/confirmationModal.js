@@ -14,11 +14,14 @@
         var vm = this;
         vm.confirm = confirm;
         vm.cancel = cancel;
+        vm.deny = deny;
         vm.commentsEnabled = options.commentsEnabled;
+        vm.yesNo = options.yesNo;
         vm.labels = {
             title: options.titleLabel || locale.getString("common.are_you_sure"),
             text: options.textLabel || locale.getString("common.are_you_sure"),
             confirm: options.confirmLabel || locale.getString("common.yes"),
+            deny: options.denyLabel || locale.getString("common.no"),
             cancel: options.cancelLabel || locale.getString("common.cancel"),
         };
 
@@ -31,6 +34,10 @@
 
         function cancel() {
             $modalInstance.dismiss();
+        }
+
+        function deny() {
+            $modalInstance.close('deny');
         }
     }
 
