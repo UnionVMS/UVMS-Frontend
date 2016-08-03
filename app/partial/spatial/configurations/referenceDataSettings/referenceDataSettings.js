@@ -85,6 +85,11 @@ angular.module('unionvmsWeb').controller('SystemareassettingsCtrl',function($sco
             selectionType: 'map',
             searchString: undefined
         };
+        
+        if (angular.isDefined($scope.components) && $scope.components.referenceData && angular.isDefined($scope.components.fromLayerTree)){
+            //$scope.status.isOpen = true;
+            $scope.getSysAreaLayers();
+        }
     };
 
     //Selection type change
@@ -106,6 +111,9 @@ angular.module('unionvmsWeb').controller('SystemareassettingsCtrl',function($sco
             	$scope.systemAreaItems.push({"text": item.typeName, "code": item.typeName.toUpperCase()});
             });
             $scope.isLoadingAreaTypes = false;
+            if (angular.isDefined($scope.components) && angular.isDefined($scope.components.referenceDataType)){
+                lazySetupCurrentSelection();
+            }
         }, function(error){
             comboboxService.closeCurrentCombo();
             $scope.alert.hasAlert = true;
@@ -113,6 +121,31 @@ angular.module('unionvmsWeb').controller('SystemareassettingsCtrl',function($sco
             $scope.alert.alertMessage = locale.getString('spatial.get_ref_data_type_error');
             $scope.alert.hideAlert();
         });
+    };
+    
+    $scope.setInitialValues = function(){
+        if (angular.isDefined($scope.components) && angular.isDefined($scope.components.referenceDataType)){
+            $scope.currentSelection.selectedAreaType = $scope.components.referenceDataType.toUpperCase();
+        }
+    };
+    
+    var lazySetupCurrentSelection = function(){
+        if (!angular.isDefined($scope.setupInterval)){
+            $scope.setupInterval = $interval(function(){
+                var keys = _.keys($scope.configModel.referenceDataSettings);
+                var dataset = $scope.components.referenceDataType.toUpperCase();
+                if (keys.length !== 0 && _.indexOf(keys, dataset) !== -1){
+                    $scope.status.isOpen = true;
+                    $scope.currentSelection.selectedAreaType = dataset;
+                    stopSetupInterval();
+                }
+            }, 10);
+        }
+    };
+    
+    var stopSetupInterval = function(){
+        $interval.cancel($scope.setupInterval);
+        delete $scope.setupInterval;
     };
     
     $scope.$watch('status.isOpen', function(newVal){
@@ -242,7 +275,8 @@ angular.module('unionvmsWeb').controller('SystemareassettingsCtrl',function($sco
                         code: rec.code,
                         isSelected: _.indexOf($scope.displayCodes, rec.code) === -1 ? false : true,
                         isExpanded: false,
-                        areaNames: [rec.name]
+                        areaNames: [rec.name],
+                        extent: rec.extent
                     });
                     availableCodes.push(rec.code);
                 } else {

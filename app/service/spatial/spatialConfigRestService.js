@@ -128,7 +128,7 @@ angular.module('unionvmsWeb').factory('spatialConfigRestFactory', function($reso
 	       });
 	       return deferred.promise;
 	    },
-	    getUserConfigs: function(settingsType,configModel,form,isReportConfig,merge){
+	    getUserConfigs: function(settingsType,configModel,form,isReportConfig,merge,callback){
             var deferred = $q.defer();
             spatialConfigRestFactory.getUserConfigs().get(function(response){
                 response.data.settingsType = settingsType;
@@ -136,6 +136,7 @@ angular.module('unionvmsWeb').factory('spatialConfigRestFactory', function($reso
                 response.data.form = form;
                 response.data.isReportConfig = isReportConfig;
                 response.data.merge = merge;
+                response.data.callback = callback;
                 deferred.resolve(response.data);
             }, function(error){
                 error.settingsType = settingsType;

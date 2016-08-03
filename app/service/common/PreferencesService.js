@@ -19,7 +19,7 @@ angular.module('unionvmsWeb').factory('PreferencesService',function(loadingStatu
         	form.$setPristine();
 		}
         configModel[settingsType + 'Settings'].reseted = true;
-        loadingStatus.isLoading('ResetPreferences',false);
+        loadingStatus.isLoading('Preferences',false);
     };
 
 	var resetFailure = function(error){
@@ -29,7 +29,7 @@ angular.module('unionvmsWeb').factory('PreferencesService',function(loadingStatu
         spatialConfigAlertService.hasError = true;
         spatialConfigAlertService.alertMessage = locale.getString('spatial.user_preferences_reset_' + settingsType.toLowerCase() + '_settings_failure');
         spatialConfigAlertService.hideAlert();
-        loadingStatus.isLoading('ResetPreferences',false);
+        loadingStatus.isLoading('Preferences',false);
 	};
 
 	var getConfigsSuccess = function(response){
@@ -69,8 +69,12 @@ angular.module('unionvmsWeb').factory('PreferencesService',function(loadingStatu
 		if(angular.isDefined(form)){
         	form.$setPristine();
 		}
+		
+		if (angular.isDefined(response.callback)){
+		    response.callback();
+		}
         configModel[settingsType + 'Settings'].reseted = true;
-        loadingStatus.isLoading('ResetPreferences',false);
+        loadingStatus.isLoading('Preferences',false);
 	};
 
 	var getConfigsFailure = function(error){
@@ -80,7 +84,7 @@ angular.module('unionvmsWeb').factory('PreferencesService',function(loadingStatu
         spatialConfigAlertService.hasError = true;
         spatialConfigAlertService.alertMessage = locale.getString('spatial.user_preferences_reset_' + settingsType.toLowerCase() + '_settings_failure');
         spatialConfigAlertService.hideAlert();
-	    loadingStatus.isLoading('ResetPreferences',false);
+	    loadingStatus.isLoading('Preferences',false);
 	};
 
 	var PreferencesService = {
@@ -98,15 +102,15 @@ angular.module('unionvmsWeb').factory('PreferencesService',function(loadingStatu
 				segments: {}
 			}
 		},
-		reset : function(settingsType,form,configModel,configCopy,settingsLevel){
-			loadingStatus.isLoading('ResetPreferences',true);
+		reset : function(settingsType,form,configModel,configCopy,settingsLevel,callback){
+			loadingStatus.isLoading('Preferences',true, 1);
 			var item = {};
 			item[settingsType + 'Settings'] = {};
 			
 			if(settingsLevel === 'user'){
 				spatialConfigRestService.resetSettings(item,settingsType,configModel,configCopy,form).then(resetSuccess, resetFailure);
 			}else if(settingsLevel === 'report'){
-				spatialConfigRestService.getUserConfigs(settingsType,configModel,form,true).then(getConfigsSuccess, getConfigsFailure);
+				spatialConfigRestService.getUserConfigs(settingsType,configModel,form,true,undefined,callback).then(getConfigsSuccess, getConfigsFailure);
 			}
 		},
 		clearStylesErrors : function(level){

@@ -36,6 +36,7 @@
 		"turf": true,
         "jsPDF": true,
 		"L": true,
-		"saveAs": true
+		"saveAs": true,
+		"screenfull": true
     }
 }

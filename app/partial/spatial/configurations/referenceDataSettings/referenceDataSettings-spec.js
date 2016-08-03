@@ -6,6 +6,9 @@ describe('SystemareassettingsCtrl', function() {
 
     beforeEach(inject(function($rootScope, $controller) {
       scope = $rootScope.$new();
+      scope.components = {
+          referenceData: false
+      };
       ctrl = $controller('SystemareassettingsCtrl', {$scope: scope});
     }));	
 

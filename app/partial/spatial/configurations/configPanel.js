@@ -4,13 +4,13 @@ angular.module('unionvmsWeb').controller('ConfigpanelCtrl',function($scope, $anc
 	$scope.prefService = PreferencesService;
 	
 	var loadUserPreferences = function(){
-		loadingStatus.isLoading('Preferences',true);
+		loadingStatus.isLoading('Preferences',true,0);
 		spatialConfigRestService.getUserConfigs().then(getConfigsSuccess, getConfigsFailure);
 	};
 	
 	$scope.save = function(){
 		if(_.keys($scope.configPanelForm.$error).length === 0){
-			loadingStatus.isLoading('SavePreferences',true);
+			loadingStatus.isLoading('Preferences',true,2);
 		    
 			if ($scope.configPanelForm.$dirty){
 				var newConfig = new SpatialConfig();
@@ -23,7 +23,7 @@ angular.module('unionvmsWeb').controller('ConfigpanelCtrl',function($scope, $anc
 		        $scope.alert.hasWarning = true;
 		        $scope.alert.alertMessage = locale.getString('spatial.user_preferences_warning_saving');
 		        $scope.alert.hideAlert();
-		        loadingStatus.isLoading('SavePreferences',false);
+		        loadingStatus.isLoading('Preferences',false);
 		    }
 		}else{
 		    $anchorScroll();
@@ -65,7 +65,7 @@ angular.module('unionvmsWeb').controller('ConfigpanelCtrl',function($scope, $anc
 	    $scope.alert.hideAlert(6000);
 	    $scope.updateConfigCopy(response[1]);
 		$scope.configPanelForm.$setPristine();
-	    loadingStatus.isLoading('SavePreferences',false);
+	    loadingStatus.isLoading('Preferences',false);
 	};
 	
 	var saveFailure = function(error){
@@ -74,7 +74,7 @@ angular.module('unionvmsWeb').controller('ConfigpanelCtrl',function($scope, $anc
 	    $scope.alert.hasError = true;
 	    $scope.alert.alertMessage = locale.getString('spatial.user_preferences_error_saving');
 	    $scope.alert.hideAlert();
-	    loadingStatus.isLoading('SavePreferences',false);
+	    loadingStatus.isLoading('Preferences',false);
 	};
 	
 	var getConfigsSuccess = function(response){

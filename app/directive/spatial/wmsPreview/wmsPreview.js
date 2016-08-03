@@ -49,7 +49,7 @@ angular.module('unionvmsWeb').directive('wmsPreview', function() {
         if (angular.isDefined($scope.record.extent)){
             var wkt = new ol.format.WKT();
             geom = wkt.readGeometry($scope.record.extent);
-            geom.transform('EPSG:4326', 'EPSG:3857');
+            geom = genericMapService.intersectGeomWithProj(geom, $scope.map);
             
             if ($scope.record.extent.indexOf('POINT') !== -1){
                 extent = ol.extent.buffer(geom.getExtent(), 5000);
@@ -57,8 +57,7 @@ angular.module('unionvmsWeb').directive('wmsPreview', function() {
                 extent = geom.getExtent();
             }
         } else {
-            geom = ol.geom.Polygon.fromExtent([-180,-90,180,90]);
-            geom = geom.transform('EPSG:4326', 'EPSG:3857');
+            geom = ol.geom.Polygon.fromExtent([-20026376.39,-20048966.10,20026376.39,20048966.10]);
             extent = geom.getExtent();
         }
         
@@ -69,9 +68,6 @@ angular.module('unionvmsWeb').directive('wmsPreview', function() {
         var layerDef = $scope.getLayerTypeDef();
         if (angular.isDefined(layerDef)){
             var url = layerDef.url;
-            if (url.substr(url.length - 1) !== '?'){
-                url += '?';
-            }
             
             var params = {
                 LAYERS: layerDef.layer,

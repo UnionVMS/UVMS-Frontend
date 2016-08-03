@@ -1,15 +1,7 @@
 angular.module('unionvmsWeb').factory('loadingStatus',function() {
 	var loadings = {
 		isLoadingPreferences: {
-			message: 'spatial.loading_preferences',
-			value: false
-		},
-		isLoadingSavePreferences: {
-			message: 'spatial.saving_preferences',
-			value: false
-		},
-		isLoadingResetPreferences: {
-			message: 'spatial.reseting_preferences',
+			message: ['spatial.loading_preferences', 'spatial.reseting_preferences', 'spatial.saving_preferences'], 
 			value: false
 		},
 		isLoadingLiveviewMap: {

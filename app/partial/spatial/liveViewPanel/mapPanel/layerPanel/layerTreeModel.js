@@ -84,6 +84,7 @@ angular.module('unionvmsWeb').factory('TreeModel',function(locale, mapService, u
 	        data: {
 	            type: 'WMS',
 	            title: src.title,
+	            typeName: angular.isDefined(src.typeName) ? src.typeName : undefined, 
 	            isBaseLayer: src.isBaseLayer,
 	            attribution: src.shortCopyright,
 	            longAttribution: angular.isDefined(src.longCopyright) ? src.longCopyright : undefined,
@@ -118,9 +119,23 @@ angular.module('unionvmsWeb').factory('TreeModel',function(locale, mapService, u
 	        }
 	    }
 	    
+	    if ((angular.isDefined(src.areaType) && src.areaType === 'SYSAREA') || (angular.isDefined(src.typeName) && (src.typeName === 'PORT' || src.typeName === 'PORTAREA'))){
+	        _.extend(node.data.contextItems, {sep2: menuSep});
+	        var settings = {
+                settingsMenu: {
+                    name: locale.getString('spatial.layer_tree_tip_context_menu'),
+                    icon: function(opt, $itemElement, itemKey, item){
+                        $itemElement.html('<span class="fa fa-wrench" aria-hidden="true"></span>' + item.name);
+                        return 'context-menu-icon-settings';
+                    }
+                }
+            };
+            _.extend(node.data.contextItems, settings);
+	    }
+	    
 	    if (angular.isDefined(node.data.contextItems)){
 	        node.data.contextTip = locale.getString('spatial.layer_tree_tip_context_menu');
-	        _.extend(node.data.contextItems, {sep2: menuSep});
+	        _.extend(node.data.contextItems, {sep3: menuSep});
 	    }
 	    
 	    return node;
@@ -413,8 +428,6 @@ angular.module('unionvmsWeb').factory('TreeModel',function(locale, mapService, u
 	            title: type,
 	            type: type === 'positions' ? 'vmspos' : 'vmsseg',
 	            isBaseLayer: false,
-//	            popupEnabled: true,
-//	            popupTip: 'spatial.layer_tree_tip_popup',
 	            optionsEnabled: true,
 	            optionsTip: 'spatial.layer_tree_tip_context_menu',
 	            labelEnabled: true,

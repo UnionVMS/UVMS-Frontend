@@ -23,7 +23,7 @@ angular.module('unionvmsWeb').controller('MdrCtrl',function($scope, activityServ
 
 	$scope.saveCron = function(){
 		if(_.keys($scope.mdrConfigurationForm.$error).length === 0){
-			loadingStatus.isLoading('SavePreferences',true);
+			loadingStatus.isLoading('Preferences',true, 2);
 
 			if ($scope.mdrConfigurationForm.$dirty){
 			//TODO get the cron job expression
@@ -34,7 +34,7 @@ angular.module('unionvmsWeb').controller('MdrCtrl',function($scope, activityServ
 		        $scope.alert.hasWarning = true;
 		        $scope.alert.alertMessage = locale.getString('spatial.user_preferences_warning_saving');
 		        $scope.alert.hideAlert();
-		        loadingStatus.isLoading('SavePreferences',false);
+		        loadingStatus.isLoading('Preferences',false);
 		    }
 		} else {
 		    $scope.alert.hasAlert = true;
@@ -106,7 +106,7 @@ angular.module('unionvmsWeb').controller('MdrCtrl',function($scope, activityServ
         $scope.alert.hideAlert(6000);
         $scope.cronJobExpression = response;
         $scope.configPanelForm.$setPristine();
-        loadingStatus.isLoading('SavePreferences',false);
+        loadingStatus.isLoading('Preferences',false);
     };
 
     var getCronJobExpressionFailed = function(error){
@@ -114,7 +114,7 @@ angular.module('unionvmsWeb').controller('MdrCtrl',function($scope, activityServ
         $scope.alert.hasError = true;
         $scope.alert.alertMessage = locale.getString('spatial.user_preferences_error_saving');
         $scope.alert.hideAlert();
-        loadingStatus.isLoading('SavePreferences',false);
+        loadingStatus.isLoading('Preferences',false);
     };
 
 	var saveSuccess = function(response){
@@ -124,7 +124,7 @@ angular.module('unionvmsWeb').controller('MdrCtrl',function($scope, activityServ
 	    $scope.alert.hideAlert(6000);
 	    $scope.updateConfigCopy(response[1]);
 		$scope.configPanelForm.$setPristine();
-	    loadingStatus.isLoading('SavePreferences',false);
+	    loadingStatus.isLoading('Preferences',false);
 	};
 
 	var saveFailure = function(error){
@@ -132,7 +132,7 @@ angular.module('unionvmsWeb').controller('MdrCtrl',function($scope, activityServ
 	    $scope.alert.hasError = true;
 	    $scope.alert.alertMessage = locale.getString('spatial.user_preferences_error_saving');
 	    $scope.alert.hideAlert();
-	    loadingStatus.isLoading('SavePreferences',false);
+	    loadingStatus.isLoading('Preferences',false);
 	};
 
 	$scope.init();

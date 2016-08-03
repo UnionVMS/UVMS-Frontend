@@ -1,4 +1,4 @@
-<div class="col-md-12 collapsibleRow visibilitySettings" ng-controller="VisibilitysettingsCtrl" ng-init="status.isOpen = settingsLevel === 'report' && !components.map && !components.fromLayerTree">
+<div class="col-md-12 collapsibleRow visibilitySettings" ng-controller="VisibilitysettingsCtrl" ng-init="status.isOpen = (settingsLevel === 'report' && !components.map && !components.fromLayerTree)">
 	<ng-form name="visibilitySettingsForm">
 		<accordion close-others="oneAtATime">
 			<accordion-group is-open="status.isOpen">

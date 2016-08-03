@@ -24,7 +24,7 @@
 					<!-- COMBO SELECTION ROW -->
 					<div class="col-md-8">
 						<div class="form-group form-inline">
-							<div class="form-group">
+							<div class="form-group" ng-if="!components.fromLayerTree">
 					    		<label>{{'spatial.ref_data_label' | i18n}}</label>
 					    		<combobox class="inline-combo with-right-margin" ng-model="currentSelection.selectedAreaType" items="systemAreaItems" initialtext="{{'spatial.ref_data_type_label' | i18n}}" is-loading="isLoadingAreaTypes"></combobox>
 					  		</div>
@@ -149,7 +149,7 @@
 				</div>
 				<!-- RESET TO DEFAULTS -->
 				<div class="col-md-12 col-btn-no-padding reset-row" ng-if="settingsLevel !== 'admin'">
-					<button type="button" class="btn btn-default pull-right ng-binding" ng-click="initializeCurrentSelection();prefService.reset('referenceData',referenceDataSettingsForm,configModel,configCopy,settingsLevel)">{{'spatial.settings_reset_btn' | i18n}}</button>
+					<button type="button" class="btn btn-default pull-right ng-binding" ng-click="initializeCurrentSelection();prefService.reset('referenceData',referenceDataSettingsForm,configModel,configCopy,settingsLevel,setInitialValues)">{{'spatial.settings_reset_btn' | i18n}}</button>
 				</div>
 			</accordion-goup>
 		</accordion>
