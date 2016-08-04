@@ -1,4 +1,62 @@
 .areaManagement {
+	#areaMap {
+		width: 100%;
+		min-width: 992px; //According to header.less
+		overflow: hidden;
+		height: 100%;
+		display: block;
+		position: relative;
+
+		.areas-panel {
+			width: 500px;
+			min-height: 300px;
+			
+			position: absolute;
+			top: 56px;
+			bottom: 100px;
+			left: 10px;
+			z-index: 1035;
+			
+			border: 1px solid @profileColor_gray;
+			border-radius: 6px;
+			box-shadow: 0px 2px 10px rgba(0, 0, 0, 0.2);
+			background-color: white;
+
+			.tabMenu {
+				margin-bottom: 10px;
+				cursor: default;
+				li {
+					cursor: pointer;
+					border: 1px solid #dddddd;
+					border-top: 0;
+					border-left: 0;
+					a {
+						border: 0;
+					}
+					&:first-child {
+						&,
+						a {
+							border-top-left-radius: 6px;
+						}
+					}
+					&.active {
+						a {
+							background-color:#ffffff;
+							color: #000000;
+						}
+					}
+				}
+			}
+			.base-area-container {
+				height: calc(~'100% - 50px');
+				/*.area-form-container {
+					max-height: calc(~'100% - 100px');
+					height: calc(~'100% - 100px');
+				}*/
+			}
+		}
+	}
+
 	#area-management-container {
 		.alert-modal-content {
 			.modal-dialog {
@@ -10,6 +68,9 @@
 			}
 		}
 	}
+
+
+
 	.areaCard {
 		position: relative;
 		background-color: white;
@@ -59,9 +120,7 @@
 	.customPadding {
 		padding: 0px 10px;
 	}
-	.tabMenu {
-		padding: 10px 0px;
-	}
+	
 
 	.areaTb {
 		border-left: 1px solid #dddddd;
@@ -69,10 +128,10 @@
 		border-bottom: 1px solid #dddddd;
 		height: 30px;
 	}
-	.areaMap {
+	/*.areaMap {
 		border-left: 1px solid #dddddd;
 		border-right: 1px solid #dddddd;
-	}
+	}*/
 	.comboLabel{
 	    line-height: 30px;
 	}

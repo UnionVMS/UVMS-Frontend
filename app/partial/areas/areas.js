@@ -79,53 +79,74 @@ angular.module('unionvmsWeb').controller('AreasCtrl',function($scope, $window, $
 
     $scope.updateContainerSize = function(){
         setTimeout(function() {
+//            if(evt && (angular.element('.mapPanelContainer.fullscreen').length > 0 ||
+//                    (angular.element('.mapPanelContainer.fullscreen').length === 0 && evt.type.toUpperCase().indexOf("FULLSCREENCHANGE") !== -1))){
+//                
+//                
+//                $('.map-container').css('height', w.height() + 'px');
+//                $('#map').css('height', w.height() + 'px');
+//                ms.updateMapSize();
+//                return;
+//            }
+            
             var w = angular.element(window);
-            var offset = 50;
-            var minHeight = 340;
-            var footerHeight = angular.element('footer')[0].offsetHeight;
+            var minHeight = 400;
             var headerHeight = angular.element('header')[0].offsetHeight;
-            var newHeight = w.height() - headerHeight - footerHeight - offset;
+            var newHeight = w.height() - headerHeight;
             
             if (newHeight < minHeight) {
                 newHeight = minHeight;
             }
             
-            $('.areaCard').css('height', newHeight);
+            $('.areaManagement').css('height', newHeight);
+            $('#areaMap').css('height', newHeight + 'px');
+            areaMapService.updateMapSize();
             
-            angular.forEach($('.base-area-container'), function(item) {
-            	$(item).css('height', newHeight - $('.tabMenu').height() - 30);
-            });
-            
+//            var areasPanel = $('.areas-panel').height();
+//            var tabMenu = $('.tabMenu').height();
             
             //USERAREAS
             //div with table list of user areas
-            $('#user-areas-table .tbody').css('max-height', newHeight - $('.tabMenu').height() - 65 - 36 - 108); // .user-areas-table .thead'
+            //$('#user-areas-table .tbody').css('max-height', newHeight - $('.tabMenu').height() - 65 - 36 - 108); // .user-areas-table .thead'
             
             //User areas form
-            $('.area-form-container').css('height', $($('.base-area-container')[0]).height() - 40 - 50 - 45); //.editingTools and .user-area-btns and slider
+            //console.log($($('.base-area-container')[0]).height());
+            //$('.area-form-container').css('height', $($('.base-area-container')[0]).height() - 40 - 50 - 45); //.editingTools and .user-area-btns and slider
             
-            //SYSAREAS
-            if ($('.sysareas-radio-btns').height() === 0){
-                var base = $($('.base-area-container')[0]).height();
-                $('.updateMetadata').css('height', base - (Math.abs(base - newHeight)) - 15);
-            } else {
-                $('.updateMetadata').css('height', newHeight - $('.tabMenu').height() - 65 - $('.sysareas-radio-btns').height());
-            }
+//            angular.forEach($('.base-area-container'), function(item) {
+//                console.log(item, areasPanel - tabMenu - 10);
+//                $(item).css('height', areasPanel - tabMenu - 10);
+//            });
+//            
+//            $('.areaCard').css('height', newHeight);
+//            
+//            
+//            
+//            //USERAREAS
+//          
+//            
+//            //SYSAREAS
+//            if ($('.sysareas-radio-btns').height() === 0){
+//                var base = $($('.base-area-container')[0]).height();
+//                $('.updateMetadata').css('height', base - (Math.abs(base - newHeight)) - 15);
+//            } else {
+//                $('.updateMetadata').css('height', newHeight - $('.tabMenu').height() - 65 - $('.sysareas-radio-btns').height());
+//            }
+//            
+//            $('.metadata-container').css('height', $('#system-area-form-container').height() - 125);
+//            $('.sysarea-wizard').css('max-height', $('#system-area-form-container').height() - 80);
+//            
+//            var datasetCont = $('.dataset-form-container').height();
+//            if (datasetCont < 80){
+//                datasetCont = 80;
+//            }
+//            
+//            $('.dataset-table-container').css('max-height', newHeight - datasetCont - 240);
+//            
+//            //GENERIC CONTAINERS
+//            //$('.area-loading').css('width', $('.areaCard').width());
+//            $('.areaMap').css('height', newHeight);
             
-            $('.metadata-container').css('height', $('#system-area-form-container').height() - 125);
-            $('.sysarea-wizard').css('max-height', $('#system-area-form-container').height() - 80);
-            
-            var datasetCont = $('.dataset-form-container').height();
-            if (datasetCont < 80){
-                datasetCont = 80;
-            }
-            
-            $('.dataset-table-container').css('max-height', newHeight - datasetCont - 240);
-            
-            //GENERIC CONTAINERS
-            //$('.area-loading').css('width', $('.areaCard').width());
-            $('.areaMap').css('height', newHeight);
-            areaMapService.updateMapSize();
         }, 100);
     };
     

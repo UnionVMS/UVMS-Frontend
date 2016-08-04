@@ -1,5 +1,5 @@
 <div class="areasTableContainer" ng-controller="UserareasCtrl">
-	<div ng-show="editingType === 'list'">
+	<div ng-show="editingType === 'list'" class="editingType">
 		<!-- NEW AREA BTN -->
 		<div class="row newAreaBtn">
 	       <div class="col-md-12">
@@ -51,7 +51,7 @@
 			</div>
 		</div>
 	</div>
-	<div ng-show="editingType === 'edit'">
+	<div ng-show="editingType === 'edit'" class="editingType">
 		<!-- TOOL BUTTONS -->
 		<div class="editingTools text-center">
 			<div class="btn-group" role="group" aria-label="editing buttons">
@@ -115,7 +115,7 @@
 				</button>
 			</div>
 		</div>
-		<div class="form-horizontal">
+		<!-- <div class="form-horizontal">
 			<div class="form-group">
 				<label for="userAreaTransp" class="col-md-4 slider-label">{{'areas.area_transparency' | i18n}}</label>
 				<div class="col-md-8">
@@ -123,7 +123,7 @@
 						on-slide="setTransparency(value, $event)" slider-tooltip-position="bottom" class="form-control noBorder"></slider>
 				</div>
 			</div>
-		</div>
+		</div> -->
 		<div class="area-form-container">
 			<!-- CIRCULAR AREAS -->
 			<div class="circular-areas-form" ng-show="activeTool === 'circular'">
@@ -292,5 +292,5 @@
 				<button class="btn btn-primary btn-action" ng-click="saveFeature('update')" ng-show="isUpdate">{{'areas.update_btn' | i18n}}</button>
 			</div>
 		</div>
-	</div>
+	</div>	
 </div>
