@@ -132,11 +132,11 @@ angular.module('unionvmsWeb').controller('AreasCtrl',function($scope, $window, $
     $scope.updateContainerSize = function(evt){
         setTimeout(function() {
             var w = angular.element(window);
-            if(evt && (angular.element('.areaManagement.fullscreen').length > 0 ||
-                    (angular.element('.areaManagement.fullscreen').length === 0 && evt.type.toUpperCase().indexOf("FULLSCREENCHANGE") !== -1))){
+            if(evt && (angular.element('#areaManagement.fullscreen').length > 0 ||
+                    (angular.element('#areaManagement.fullscreen').length === 0 && evt.type.toUpperCase().indexOf("FULLSCREENCHANGE") !== -1))){
                 
                 
-                $('.areaManagement').css('height', w.height() + 'px');
+                $('#areaManagement').css('height', w.height() + 'px');
                 $('#areaMap').css('height', w.height() + 'px');
                 areaMapService.updateMapSize();
                 return;
@@ -150,7 +150,7 @@ angular.module('unionvmsWeb').controller('AreasCtrl',function($scope, $window, $
                 newHeight = minHeight;
             }
             
-            $('.areaManagement').css('height', newHeight + 'px');
+            $('#areaManagement').css('height', newHeight + 'px');
             $('#areaMap').css('height', newHeight + 'px');
             areaMapService.updateMapSize();
             
