@@ -512,13 +512,119 @@ angular.module('unionvmsWeb').factory('genericMapService',function($localStorage
     };
     
     /**
+     * Create the scale control
+     * 
+     * @memberof genericMapService
+     * @public
+     * @alias addScale
+     * @param {Object} ctrl - An object containing the definitions for the control
+     * @returns {ol.control.ScaleLine} The scale control to be added to the map
+     */
+    var addScaleCtrl = function(ctrl){
+        var olCtrl = new ol.control.ScaleLine({
+            units: ctrl.units,
+            className: 'ol-scale-line'
+        });
+        
+        return olCtrl;
+    };
+    
+    /**
+     * Create Mouse Coordinates control
+     * 
+     * @memberof genericMapService
+     * @public
+     * @alias addMousecoords
+     * @param {Object} ctrl - An object containing the definitions for controls
+     * @param {String} targetId - The ID of the target DOM element where the coordinates will be displayed 
+     * @returns {ol.control.MousePosition} The mouse coordinates OL control
+     */
+    var addMousecoords = function(ctrl, targetId){
+        var olCtrl =  new ol.control.MousePosition({
+            projection: 'EPSG:' + ctrl.epsgCode,
+            coordinateFormat: function(coord){
+                return formatCoords(coord, ctrl);
+            },
+            target: angular.element('#' + targetId)[0],
+            className: 'mouse-position'
+        });
+        
+        return olCtrl;
+    };
+    
+    /**
+     * Format mouse position coordinates according to the report/user preferences
+     * 
+     * @memberof genericMapService
+     * @private
+     * @alias formatCoords
+     * @param {Array<Number>} coord - The pair of coordinates to convert
+     * @param {Object} ctrl - The object containing the definitions to appy in the mouse coordinates contrl
+     * @returns {String} The converted coordinates
+     */
+    var formatCoords = function(coord, ctrl){
+        var x,y;
+        if (ctrl.epsgCode === 4326){
+            if (ctrl.format === 'dd'){
+                return ol.coordinate.format(coord, '<b>LON:</b> {x}\u00b0 \u0090 <b>LAT:</b> {y}\u00b0' , 4);
+            } else if (ctrl.format === 'dms'){
+                x = coordToDMS(coord[0], 'EW');
+                y = coordToDMS(coord[1], 'NS');
+                return '<b>LON:</b> ' + x + '\u0090 <b>LAT:</b> ' + y;
+            } else {
+                x = coordToDDM(coord[0], 'EW');
+                y = coordToDDM(coord[1], 'NS');
+                return '<b>LON:</b> ' + x + '\u0090 <b>LAT:</b> ' + y;
+            }
+        } else {
+            return ol.coordinate.format(coord, '<b>X:</b> {x} m \u0090 <b>Y:</b> {y} m' , 4);
+        }
+    };
+    
+    /**
+     * Convert coordinates from Decimal Degrees to Degrees Minutes Seconds
+     * 
+     * @memberof genericMapService
+     * @private
+     * @alias coordToDMS
+     * @param {Number} degrees
+     * @param {String} hemispheres
+     * @returns {String} The coordinate formated in DMS
+     */
+    var coordToDMS = function(degrees, hemispheres){
+        var normalized = (degrees + 180) % 360 - 180;
+        var x = Math.abs(Math.round(3600 * normalized));
+        return Math.floor(x / 3600) + '\u00b0 ' +
+            Math.floor((x / 60) % 60) + '\u2032 ' +
+            Math.floor(x % 60) + '\u2033 ' +
+            hemispheres.charAt(normalized < 0 ? 1 : 0);
+    };
+
+    /**
+     * Convert coordinates from Decimal Degrees to Degrees Decimal Minutes
+     * 
+     * @memberof genericMapService
+     * @private
+     * @alias coordToDDM
+     * @param {Number} degrees
+     * @param {String} hemispheres
+     * @returns {String} The coordinate formated in DDM
+     */
+    var coordToDDM = function(degrees, hemispheres){
+        var normalized = (degrees + 180) % 360 - 180;
+        var x = Math.abs(Math.round(3600 * normalized));
+        return Math.floor(x / 3600) + '\u00b0 ' +
+            ((x / 60) % 60).toFixed(2) + '\u2032 ' +
+            hemispheres.charAt(normalized < 0 ? 1 : 0);
+    };
+    
+    /**
      * Create OL Zoom control
      * 
      * @memberof genericMapService
      * @public
      * @returns {ol.control.Zoom} The OL Zoom control
      */
-    
     var createZoomCtrl = function(customClass){
         var ctrl = new ol.control.Zoom({
             className: angular.isDefined(customClass) ? customClass : undefined, 
@@ -664,6 +770,8 @@ angular.module('unionvmsWeb').factory('genericMapService',function($localStorage
 	    getGenericLayerConfig: getGenericLayerConfig,
 	    defineWms: defineWms,
 	    refreshWMSLayer: refreshWMSLayer,
+	    addScale: addScaleCtrl,
+	    addMousecoords: addMousecoords,
 	    createZoomCtrl: createZoomCtrl,
 	    createZoomInteractions: createZoomInteractions,
 	    createPanInteractions: createPanInteractions,

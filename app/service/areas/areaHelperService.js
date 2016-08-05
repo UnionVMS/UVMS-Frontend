@@ -41,6 +41,11 @@ angular.module('unionvmsWeb').factory('areaHelperService',function(locale, areaM
 	        shortCopy: undefined,
 	        longCopy: undefined
 	    },
+	    slider: {
+	        active: false,
+	        layer: 'USERAREA',
+	        transparency: 0
+	    },
 	    /**
 	     * Set reference data metadata object
 	     * 
@@ -81,6 +86,17 @@ angular.module('unionvmsWeb').factory('areaHelperService',function(locale, areaM
 	        this.resetMetadata();
 	    },
 	    /**
+	     * Update the slider with new layer and transparency setting
+	     * 
+	     * @memberof areaHelperService
+         * @public
+         * @param {String|Undefined} type - The layer type to associate with the slider or undefined to reset the slider
+	     */
+	    updateSlider: function(type){
+	        this.slider.layer = type;
+            this.slider.transparency = 0;
+	    },
+	    /**
 	     * React to tab changes and remove and add the necessary layers through the areaMapService ({@link unionvmsWeb.areaMapService})
 	     * @memberof areaHelperService
 	     * @public
@@ -96,12 +112,16 @@ angular.module('unionvmsWeb').factory('areaHelperService',function(locale, areaM
 	        if (angular.isDefined(destTab)){
 	            if (destTab === 'USERAREAS'){
 	                getUserAreaLayer(this);
+	                this.updateSlider('USERAREA');
 	            } else if (destTab ===  'SYSAREAS'){
 	                getAreaLocationLayers(this);
 	                if (angular.isDefined(this.displayedSystemAreaLayer)){
 	                    this.displayedLayerType = this.displayedSystemAreaLayer;
 	                    var item = getAreaLocationLayerDef(this);
 	                    areaMapService.addWMS(item);
+	                    this.updateSlider(this.displayedSystemAreaLayer);
+	                } else {
+	                    this.updateSlider(undefined);
 	                }
 	                if (this.sysAreasEditingType === 'dataset'){
 	                    areaClickerService.active = true;
@@ -111,6 +131,9 @@ angular.module('unionvmsWeb').factory('areaHelperService',function(locale, areaM
 	            	if (angular.isDefined(this.displayedUserAreaGroup)){
 	            	    this.displayedLayerType = 'AREAGROUPS';
 	            	    this.getUserAreaGroupLayer(this.displayedUserAreaGroup);
+	            	    this.updateSlider(this.displayedLayerType);
+	            	} else {
+	            	    this.updateSlider(undefined);
 	            	}
 	            }
 	        }

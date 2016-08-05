@@ -110,12 +110,14 @@ angular.module('unionvmsWeb').controller('SystemareasCtrl',function($scope,gener
             areaMapService.removeLayerByType($scope.helper.displayedLayerType);
             $scope.helper.displayedLayerType = undefined;
             $scope.helper.displayedSystemAreaLayer = undefined;
+            $scope.helper.updateSlider(newVal);
         }
         
         if (angular.isDefined(newVal) && newVal !== oldVal){
         	resetDatasetTab();
         	$scope.helper.resetMetadata();
             $scope.helper.displayedSystemAreaLayer = newVal;
+            $scope.helper.updateSlider(newVal);
             var item = $scope.getFullDefForItem(newVal);
             
             if (angular.isDefined(item)){
@@ -137,6 +139,8 @@ angular.module('unionvmsWeb').controller('SystemareasCtrl',function($scope,gener
                 }
             }
         }
+        
+        
     });
     
     //Add system areas by search

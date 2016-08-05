@@ -13,6 +13,7 @@ angular.module('unionvmsWeb').controller('UserareasgroupsCtrl',function($scope, 
 	        //let's remove the layer from the map
 	        areaMapService.removeLayerByType('AREAGROUPS');
 	        $scope.areaHelper.displayedUserAreaGroup = undefined;
+	        $scope.areaHelper.updateSlider(undefined);
 	    }
 	    
 		if(angular.isDefined($scope.areaGroup.type) && $scope.areaGroup.type !== ''){
@@ -30,10 +31,9 @@ angular.module('unionvmsWeb').controller('UserareasgroupsCtrl',function($scope, 
 			            $scope.alert.setError();
 			            $scope.alert.alertMessage = locale.getString('areas.error_getting_user_area_list');
 			        });
-					
-					
 				}
 			});
+			$scope.areaHelper.updateSlider('AREAGROUPS');
 		}else{
 			$scope.userAreasList = [];
 		}

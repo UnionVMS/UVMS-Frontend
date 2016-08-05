@@ -122,18 +122,12 @@
 	.customPadding {
 		padding: 0px 10px;
 	}
-	
-
 	.areaTb {
 		border-left: 1px solid #dddddd;
 		border-right: 1px solid #dddddd;
 		border-bottom: 1px solid #dddddd;
 		height: 30px;
 	}
-	/*.areaMap {
-		border-left: 1px solid #dddddd;
-		border-right: 1px solid #dddddd;
-	}*/
 	.comboLabel{
 	    line-height: 30px;
 	}
@@ -142,5 +136,41 @@
 	}
 	.btn-default.btn-xs .fa-eye {
 		margin-left: -2px;
+	}
+	.transparency-button[disabled] {
+		pointer-events: visible;
+	}
+	.transparency-container {
+		width: 200px;
+		margin-top: 3px;
+		line-height: 25px;
+		height: 25px;
+	}
+
+	.transparency-slider {
+		margin: 0 15px;
+		line-height: 23px;
+		.slider-track {
+			height: 8px;
+			.slider-handle{
+				width: 15px;
+				height: 15px;
+				margin-left: -3px !important;
+    			margin-top: -4px;
+			}
+		}
+		.tooltip {
+			width: 15px !important;
+			margin-left: 0 !important;
+			&.top {
+				margin-top: -32px;
+			}
+		}
+		.tooltip-arrow {
+			margin-left: -8px;
+		}
+		.tooltip-inner {
+			margin: 0 -15px;
+		}
 	}
 }

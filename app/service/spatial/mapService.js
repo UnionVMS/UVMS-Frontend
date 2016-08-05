@@ -1766,73 +1766,6 @@ angular.module('unionvmsWeb').factory('mapService', function(locale, $rootScope,
         return Math.atan2(dy, dx) * -1;
 	};
 
-	/**
-	 * Format mouse position coordinates according to the report/user preferences
-	 * 
-	 * @memberof mapService
-     * @public
-     * @alias formatCoords
-     * @param {Array<Number>} coord - The pair of coordinates to convert
-     * @param {Object} ctrl - The object conatining the definitions to appy in the mouse coordinates contrl
-     * @returns {String} The converted coordinates
-	 */
-    ms.formatCoords = function(coord, ctrl){
-        var x,y;
-        if (ctrl.epsgCode === 4326){
-            if (ctrl.format === 'dd'){
-                return ol.coordinate.format(coord, '<b>LON:</b> {x}\u00b0 \u0090 <b>LAT:</b> {y}\u00b0' , 4);
-            } else if (ctrl.format === 'dms'){
-                x = ms.coordToDMS(coord[0], 'EW');
-                y = ms.coordToDMS(coord[1], 'NS');
-                return '<b>LON:</b> ' + x + '\u0090 <b>LAT:</b> ' + y;
-            } else {
-                x = ms.coordToDDM(coord[0], 'EW');
-                y = ms.coordToDDM(coord[1], 'NS');
-                return '<b>LON:</b> ' + x + '\u0090 <b>LAT:</b> ' + y;
-            }
-        } else {
-            return ol.coordinate.format(coord, '<b>X:</b> {x} m \u0090 <b>Y:</b> {y} m' , 4);
-        }
-    };
-
-    /**
-     * Convert coordinates from Decimal Degrees to Degrees Minutes Seconds
-     * 
-     * @memberof mapService
-     * @public
-     * @alias coordToDMS
-     * @param {Number} degrees
-     * @param {String} hemispheres
-     * @returns {String} The coordinate formated in DMS
-     */
-    ms.coordToDMS = function(degrees, hemispheres){
-        var normalized = (degrees + 180) % 360 - 180;
-        var x = Math.abs(Math.round(3600 * normalized));
-        return Math.floor(x / 3600) + '\u00b0 ' +
-            Math.floor((x / 60) % 60) + '\u2032 ' +
-            Math.floor(x % 60) + '\u2033 ' +
-            hemispheres.charAt(normalized < 0 ? 1 : 0);
-    };
-
-    /**
-     * Convert coordinates from Decimal Degrees to Degrees Decimal Minutes
-     * 
-     * @memberof mapService
-     * @public
-     * @alias coordToDDM
-     * @param {Number} degrees
-     * @param {String} hemispheres
-     * @returns {String} The coordinate formated in DDM
-     */
-    ms.coordToDDM = function(degrees, hemispheres){
-        var normalized = (degrees + 180) % 360 - 180;
-        var x = Math.abs(Math.round(3600 * normalized));
-        return Math.floor(x / 3600) + '\u00b0 ' +
-            ((x / 60) % 60).toFixed(2) + '\u2032 ' +
-            hemispheres.charAt(normalized < 0 ? 1 : 0);
-    };
-
-
     //SETTERS
     /**
      * Set map projection
@@ -2084,10 +2017,7 @@ angular.module('unionvmsWeb').factory('mapService', function(locale, $rootScope,
      * @param {Boolean} initial - Whether it is the initial setup or an update
      */
 	ms.addScale = function(ctrl, initial){
-	    var olCtrl = new ol.control.ScaleLine({
-            units: ctrl.units,
-            className: 'ol-scale-line'
-        });
+	    var olCtrl = genericMapService.addScale(ctrl);
 	    
 	    if (initial){
 	        ms.controls.push(olCtrl);
@@ -2164,14 +2094,7 @@ angular.module('unionvmsWeb').factory('mapService', function(locale, $rootScope,
      * @param {Boolean} initial - Whether it is the initial setup or an update
 	 */
 	ms.addMousecoords = function(ctrl, initial){
-	    var olCtrl =  new ol.control.MousePosition({
-            projection: 'EPSG:' + ctrl.epsgCode,
-            coordinateFormat: function(coord){
-                return ms.formatCoords(coord, ctrl);
-            },
-            target: angular.element('#map-coordinates')[0],
-            className: 'mouse-position'
-        });
+	    var olCtrl = genericMapService.addMousecoords(ctrl, 'map-coordinates');
 	    
 	    if (initial){
 	        ms.controls.push(olCtrl);

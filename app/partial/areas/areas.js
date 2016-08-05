@@ -2,6 +2,8 @@ angular.module('unionvmsWeb').controller('AreasCtrl',function($scope, $window, $
     //$scope.selectedTab = 'USERAREAS';
     $scope.alert = areaAlertService;
     $scope.helper = areaHelperService;
+    $scope.graticuleActivated = false;
+    $scope.graticuleTip = [locale.getString('areas.map_tip_enable'), locale.getString('areas.map_tip_graticule')].join(' ');
     
     var setTabs = function(){
         var context = userService.getCurrentContext();
@@ -76,20 +78,70 @@ angular.module('unionvmsWeb').controller('AreasCtrl',function($scope, $window, $
             }
         }, 10);
     });
+    
+    //Map graticule
+    $scope.toggleGraticule = function(){
+        $scope.graticuleActivated = !$scope.graticuleActivated;
+        areaMapService.setGraticule($scope.graticuleActivated);
+        var firstTitle = locale.getString('areas.map_tip_enable');
+        if ($scope.graticuleActivated){
+            firstTitle = locale.getString('areas.map_tip_disable');
+        }
+        $scope.graticuleTip = [firstTitle, locale.getString('areas.map_tip_graticule')].join(' ');
+    };
+    
+    $scope.getDisplayedLayerType = function(){
+        var type;
+        if ($scope.selectedTab === 'USERAREAS'){
+            type = 'USERAREA';
+        } else if ($scope.selectedTab === 'AREAGROUPS'){
+            type = 'AREAGROUPS';
+        } else {
+            if (angular.isDefined($scope.helper.displayedSystemAreaLayer)){
+                type = $scope.helper.displayedSystemAreaLayer;
+            }
+        }
+        
+        return type;
+    };
+    
+    //Transparency Slider
+    $scope.toggleSlider = function(){
+        $scope.helper.slider.active = !$scope.helper.slider.active; 
+        var layerType = $scope.getDisplayedLayerType();
+        if ($scope.helper.slider.active && angular.isDefined(layerType)){
+            $scope.helper.slider.transparency = areaMapService.getLayerOpacity($scope.helper.slider.layer);
+        } else {
+            $scope.helper.updateSlider(layerType);
+            if (angular.isDefined(layerType)){
+                areaMapService.setLayerOpacity(layerType, 1);
+            }
+        }
+    };
+    
+    $scope.formatTooltip = function (value) {
+        return value + '%';
+    };
+    
+    $scope.setTransparency = function(value, event){
+        if (angular.isDefined($scope.helper.slider.transparency)){
+            areaMapService.setLayerOpacity($scope.helper.slider.layer, (100 - value) / 100);
+        }
+    };
 
-    $scope.updateContainerSize = function(){
+    $scope.updateContainerSize = function(evt){
         setTimeout(function() {
-//            if(evt && (angular.element('.mapPanelContainer.fullscreen').length > 0 ||
-//                    (angular.element('.mapPanelContainer.fullscreen').length === 0 && evt.type.toUpperCase().indexOf("FULLSCREENCHANGE") !== -1))){
-//                
-//                
-//                $('.map-container').css('height', w.height() + 'px');
-//                $('#map').css('height', w.height() + 'px');
-//                ms.updateMapSize();
-//                return;
-//            }
-            
             var w = angular.element(window);
+            if(evt && (angular.element('.areaManagement.fullscreen').length > 0 ||
+                    (angular.element('.areaManagement.fullscreen').length === 0 && evt.type.toUpperCase().indexOf("FULLSCREENCHANGE") !== -1))){
+                
+                
+                $('.areaManagement').css('height', w.height() + 'px');
+                $('#areaMap').css('height', w.height() + 'px');
+                areaMapService.updateMapSize();
+                return;
+            }
+            
             var minHeight = 400;
             var headerHeight = angular.element('header')[0].offsetHeight;
             var newHeight = w.height() - headerHeight;
@@ -98,7 +150,7 @@ angular.module('unionvmsWeb').controller('AreasCtrl',function($scope, $window, $
                 newHeight = minHeight;
             }
             
-            $('.areaManagement').css('height', newHeight);
+            $('.areaManagement').css('height', newHeight + 'px');
             $('#areaMap').css('height', newHeight + 'px');
             areaMapService.updateMapSize();
             
@@ -150,6 +202,18 @@ angular.module('unionvmsWeb').controller('AreasCtrl',function($scope, $window, $
         }, 100);
     };
     
+    //FIXME check which popups to open - probably not necessary
+//    $(document).on('webkitfullscreenchange mozfullscreenchange fullscreenchange MSFullscreenChange', function() {
+//        setTimeout(function() {
+//            if($scope.showMeasureConfigWin){
+//                $scope.openMeasureConfigWin();
+//            }
+//            if($scope.showMapFishConfigWin){
+//                $scope.openMapFishConfigWin();
+//            }
+//        }, 100);
+//    });
+
     $($window).resize($scope.updateContainerSize);
     angular.element(document).ready(function () {
         $scope.updateContainerSize();

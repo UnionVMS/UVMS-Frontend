@@ -1,11 +1,22 @@
-<div class="areaManagement">
+<div class="areaManagement" ngsf-fullscreen="fullscreenCtrl">
 	<alert-modal ng-model="alert.hasAlert" display-msg="alert.alertMessage" target-el-id="area-management-container" display-type="alert.alertType" timeout="4000"></alert-modal>
 	<div id="areaMap-toolbar">
 		<div class="btn-group-left">
 			<div class="btn-group btn-group-xs" role="group" aria-label="Map controls">
 	            <button type="button" class="btn btn-default btn-toolbar" ng-class="{active: graticuleActivated}" title="{{graticuleTip}}" ng-click="toggleGraticule()"><span class="fa fa-th"></span></button>
+	            <button type="button" class="btn btn-default btn-toolbar transparency-button" ng-class="{active: helper.slider.active}" ng-disabled="!helper.slider.layer"title="{{'areas.layer_transparency' | i18n}}" ng-click="toggleSlider()"><span class="fa fa-adjust"></span></button>
+	            <div class="btn btn-default transparency-container" ng-show="helper.slider.active && helper.slider.layer">
+	            	<slider id="areaTransp" ng-model="helper.slider.transparency" min="0" step="5" max="100" formatter="formatTooltip(value)"
+						on-slide="setTransparency(value, $event)" slider-tooltip-position="top" class="transparency-slider"></slider>
+	            </div>
 	        </div>
 		</div>
+		<div class="btn-group-right">
+        	<div id="areaMap-coordinates"></div>
+            <div class="btn-group btn-group-xs" role="group" aria-label="Map controls">
+                <button type="button" class="btn btn-default btn-toolbar btn-fullscreen" title="{{'spatial.map_tip_fullscreen' | i18n }}" ng-click="fullscreenCtrl.toggleFullscreen();"><span class="fa fa-arrows-alt"></span></button>                
+            </div>
+        </div>
 	</div>
 	<div id="areaMap">
 		<div class="areas-panel">

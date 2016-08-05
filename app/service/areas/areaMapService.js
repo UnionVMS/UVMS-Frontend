@@ -15,6 +15,12 @@ angular.module('unionvmsWeb').factory('areaMapService',function(locale, genericM
 
 	var areaMs = {};
 	
+	/**
+	 * Set the area management map
+	 * 
+	 * @memberof areaMapService
+	 * @public
+	 */
 	areaMs.setMap = function(){
 	    var projObj;
 	    if (angular.isDefined(genericMapService.mapBasicConfigs.success)){
@@ -489,7 +495,17 @@ angular.module('unionvmsWeb').factory('areaMapService',function(locale, genericM
             collapsed: false
         }));
 	    
-	    ctrls.push(genericMapService.createZoomCtrl('ol-zoom-right-side'));
+	    ctrls.push(genericMapService.createZoomCtrl('ol-zoom-liveview'));
+	    ctrls.push(areaMs.addScale());
+	    ctrls.push(areaMs.addMouseCoords());
+	    
+	    var iconSpan = document.createElement('span');
+        iconSpan.className = 'fa fa-globe';
+	    ctrls.push(new ol.control.ZoomToExtent({
+	        className: 'ol-zoom-extent ol-zoomextent-areamap',
+	        label: iconSpan,
+	        tipLabel: locale.getString('areas.map_tip_full_extent')
+	    }));
 	    
 	    ctrls.push(new ol.control.ResetLayerFilter({
 	        controlClass: 'ol-resetCql-right-side',
@@ -498,6 +514,72 @@ angular.module('unionvmsWeb').factory('areaMapService',function(locale, genericM
         }));
 	    
 	    return new ol.Collection(ctrls);
+	};
+	
+	/**
+	 * Find control defintions by type
+	 * 
+	 * @memberof areaMapService
+     * @private
+     * @alias findControlByType
+     * @param {String} type - The type of the control to find
+     * @returns {Object} The object containing the control definitions
+	 */
+	var findControlByType = function(type){
+	    var ctrl = _.find(genericMapService.mapBasicConfigs.control, function(item) {
+            return item.type === type;
+        });
+	    
+	    return ctrl;
+	}; 
+	
+	/**
+     * Add the mouse coordinates contrl to the map
+     * 
+     * @memberof areaMapService
+     * @public
+     * @alias addMouseCoords
+     * @returns {ol.control.MousePosition} The mouse position OL control
+     */
+    areaMs.addMouseCoords = function(){
+        var ctrlDef;
+        if (angular.isDefined(genericMapService.mapBasicConfigs.control)){
+            ctrlDef = findControlByType('mousecoords');
+        }
+        
+        if (!angular.isDefined(ctrlDef)){
+            ctrlDef = {
+                epsg: 4326,
+                format: 'dd'
+            };
+        }
+        
+        var olCtrl = genericMapService.addMousecoords(ctrlDef, 'areaMap-coordinates');
+        return olCtrl;
+    };
+	
+	/**
+     * Add the scale contrl to the map
+     * 
+     * @memberof areaMapService
+     * @public
+     * @alias addScale
+     * @returns {ol.control.ScaleLine} The scale line OL control
+     */
+	areaMs.addScale = function(){
+	    var ctrlDef;
+	    if (angular.isDefined(genericMapService.mapBasicConfigs.control)){
+	        ctrlDef = findControlByType('scale');
+	    }
+	    
+	    if (!angular.isDefined(ctrlDef)){
+	        ctrlDef = {
+	            units: 'nautical'
+	        };
+	    }
+	    
+	    var olCtrl = genericMapService.addScale(ctrlDef);
+	    return olCtrl;
 	};
 	
 	/**
@@ -529,6 +611,24 @@ angular.module('unionvmsWeb').factory('areaMapService',function(locale, genericM
                 controlClass: 'right-side'
             });
             areaMs.map.addControl(switcher);
+        }
+    };
+    
+    //Map graticule
+    areaMs.mapGraticule = new ol.Graticule({});
+    /**
+     * Set mapGraticule in the current map according to a specified visibility status
+     * 
+     * @memberof genericMapService
+     * @public
+     * @alias setGraticule
+     * @param {Boolean} status - Whether the graticule is visible or not in the current map
+     */
+    areaMs.setGraticule = function(status){
+        if (!status){
+            areaMs.mapGraticule.setMap(null);
+        } else {
+            areaMs.mapGraticule.setMap(areaMs.map);
         }
     };
 	
@@ -566,6 +666,16 @@ angular.module('unionvmsWeb').factory('areaMapService',function(locale, genericM
 	    if (angular.isDefined(layer)){
 	        layer.setOpacity(value);
 	    }
+	};
+	
+	areaMs.getLayerOpacity = function(type){
+	    var transparency = 0;
+	    var layer = areaMs.getLayerByType(type);
+        if (angular.isDefined(layer)){
+            transparency = (1 - layer.getOpacity()) * 100;
+        } 
+        
+        return transparency;
 	};
 	
 	//toggle layer visibility

@@ -9,7 +9,6 @@ angular.module('unionvmsWeb').controller('UserareasCtrl',function($scope, locale
     $scope.editingType = 'list';
     $scope.isUpdate = false;
     $scope.searchString = '';
-    $scope.userAreaTransp = 0;
     $scope.btnAddArea = true;
     $scope.currentContext = undefined;
     $scope.projections = projectionService;
@@ -92,7 +91,7 @@ angular.module('unionvmsWeb').controller('UserareasCtrl',function($scope, locale
     };
     
     $scope.activateDraw = function(){
-        $scope.createBtnTitle = locale.getString('areas.create_tool') + ' ' + locale.getString('areas.draw_tool').toLowerCase();
+        $scope.createBtnTitle = locale.getString('areas.draw_tool');
         areaMapService.addDrawControl();
     };
     
@@ -102,7 +101,7 @@ angular.module('unionvmsWeb').controller('UserareasCtrl',function($scope, locale
     };
     
     $scope.activateCircular = function(){
-        $scope.createBtnTitle = locale.getString('areas.create_tool') + ' ' + locale.getString('areas.circular_area_tool').toLowerCase();
+        $scope.createBtnTitle = locale.getString('areas.circular_area_tool');
         areaMapService.addCircularControl();
     };
     
@@ -115,7 +114,7 @@ angular.module('unionvmsWeb').controller('UserareasCtrl',function($scope, locale
     };
     
     $scope.activateEdit = function(){
-        $scope.editBtnTitle = locale.getString('areas.edit_tool') + ': ' + locale.getString('areas.modify_tool').toLowerCase();
+        $scope.editBtnTitle = locale.getString('areas.modify_tool');
         areaMapService.addEditControl();
     };
     
@@ -125,7 +124,7 @@ angular.module('unionvmsWeb').controller('UserareasCtrl',function($scope, locale
     };
     
     $scope.activateDrag = function(){
-        $scope.editBtnTitle = locale.getString('areas.edit_tool') + ': ' + locale.getString('areas.drag_tool').toLowerCase();
+        $scope.editBtnTitle = locale.getString('areas.drag_tool');
         areaMapService.addDragControl();
     };
     
@@ -172,15 +171,6 @@ angular.module('unionvmsWeb').controller('UserareasCtrl',function($scope, locale
             $scope.alert.setError();
             $scope.alert.alertMessage = locale.getString('areas.error_getting_user_area_list');
         });
-    };
-    
-    //USER AREAS TRANSPARENCY
-    $scope.formatTooltip = function (value) {
-        return value + '%';
-    };
-    
-    $scope.setTransparency = function(value, event){
-        areaMapService.setLayerOpacity('USERAREA', (100 - value) / 100);
     };
     
     //Table buttons
@@ -285,6 +275,7 @@ angular.module('unionvmsWeb').controller('UserareasCtrl',function($scope, locale
         if (!angular.isDefined($scope.selectedCircularProj)){
             $scope.setMapProjectionOnCombo('selectedCircularProj');
         }
+        $scope.toggleTool('draw');
     }; 
     
     //COMBOBOX PROJECTION
@@ -704,8 +695,6 @@ angular.module('unionvmsWeb').controller('UserareasCtrl',function($scope, locale
         if ($scope.isUpdate === true){
             areaMapService.clearParams('USERAREA');
         }
-        areaMapService.setLayerOpacity('USERAREA');
-        $scope.userAreaTransp = 0;
     };
     
     //CALLBACK FUNCTIONS
