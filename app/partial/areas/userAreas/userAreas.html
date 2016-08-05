@@ -134,7 +134,7 @@
 						<!-- COORDINATE X -->
 						<div class="form-group col-md-12 no-padding">
 							<div class="col-md-3 control-label">
-								<label for="pointx">{{'areas.long_coord_x' | i18n}}</label>
+								<label for="pointx" class="required-field">{{'areas.long_coord_x' | i18n}}</label>
 							</div>
 							<div class="col-md-9 control-input">
 							    <numeric-input ng-model="userArea.centroidCoords[0]" name="pointx" class="form-control" step="any" ng-required="true"></numeric-input>
@@ -143,7 +143,7 @@
 						<!-- COORDINATE Y -->
 						<div class="form-group col-md-12 no-padding">
 							<div class="col-md-3 control-label">
-								<label for="pointy">{{'areas.long_coord_y' | i18n}}</label>
+								<label for="pointy" class="required-field">{{'areas.long_coord_y' | i18n}}</label>
 							</div>
 							<div class="col-md-9 control-input">
 							    <numeric-input ng-model="userArea.centroidCoords[1]" name="pointy" class="form-control" step="any" ng-required="true"></numeric-input>
@@ -152,7 +152,7 @@
 						<!-- DISTANCE -->
 						<div class="form-group col-md-12 no-padding">
 							<div class="col-md-3 control-label">
-								<label for="radius">{{'areas.buffer_radius' | i18n}}</label>
+								<label for="radius" class="required-field">{{'areas.buffer_radius' | i18n}}</label>
 							</div>
 							<div class="col-md-4 control-input">
 							    <numeric-input ng-model="bufferRadius" name="radius" class="form-control" step="any" min="0" ng-required="true"></numeric-input>
@@ -230,7 +230,7 @@
 				</div>
 				<ng-form name="userAreaForm" novalidate>
 					<div class="form-group userAreaNameField" ng-class="{'has-error': (userAreaForm.userAreaName.$dirty || userAreaSubmitted) && userAreaForm.userAreaName.$invalid}">
-						<label for="userAreaName">{{'areas.user_area_name' | i18n }}</label>
+						<label for="userAreaName" class="required-field">{{'areas.user_area_name' | i18n }}</label>
 						<input type="text" class="form-control" name="userAreaName" ng-required="true" ng-model="userArea.name"/>
 						<div class="innerErrorMessagesInputWithUpLabel" ng-messages="userAreaForm.userAreaName.$error" ng-show="(userAreaForm.userAreaName.$dirty || userAreaSubmitted) && userAreaForm.userAreaName.$invalid">
 							<div ng-message="required">{{'spatial.required_field_error_message' | i18n }}</div>
@@ -251,7 +251,7 @@
 						</div>
 					</div>
 					<div class="form-group userAreaTypeGroup" >
-						<label class="col-md-12 withoutPadding" for="userAreaType">{{'areas.user_area_type' | i18n }}</label>
+						<label class="col-md-12 withoutPadding required-field" for="userAreaType">{{'areas.user_area_type' | i18n }}</label>
 						<div class="col-md-12 withoutPadding" ng-class="{'has-error': (userAreaForm.userAreaType.$dirty || userAreaSubmitted) && userAreaForm.userAreaType.$invalid}">
 							<div class="col-md-6 withoutPadding rightPadding">
 								<combobox ng-model="userArea.subType" items="areaTypes" editable="true" components-with-scroll="'div.area-form-container'" uppercase="true" name="userAreaType" initialtext="{{'spatial.area_selection_modal_area_type_label' | i18n | uppercase}}" ng-required="true" is-loading="isLoadingAreaTypes"></combobox>

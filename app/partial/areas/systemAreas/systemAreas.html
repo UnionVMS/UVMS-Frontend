@@ -55,7 +55,7 @@
 							<div class="proj-container col-md-12 form-group form-inline">
 								<div class="row">
 									<div class="col-md-3 proj-label comboLabel">
-										<label class="static-text" for="editingProjection">{{'areas.editing_projection_label' | i18n}}</label>
+										<label class="static-text required-field" for="editingProjection">{{'areas.editing_projection_label' | i18n}}</label>
 									</div>
 									<div class="col-md-9 proj-combo" ng-class="{'has-error': SysareasForm.dataConfigForm.editingProjection.$dirty && SysareasForm.dataConfigForm.editingProjection.$invalid}">
 										<combobox ng-model="dataConfig.selectedProj" items="projections.items" name="editingProjection" initialtext="{{'areas.editing_projection_label' | i18n}}" ng-required="true" components-with-scroll="'#system-area-form-container'"
@@ -69,7 +69,7 @@
 							<div class="col-md-12 form-group">
 								<div class="row">
 									<div class="col-md-3">
-										<label class="static-text" for="name">{{'areas.data_configurations_name' | i18n}}</label>
+										<label class="static-text required-field" for="name">{{'areas.data_configurations_name' | i18n}}</label>
 									</div>
 									<div class="col-md-9" ng-class="{'has-error': SysareasForm.dataConfigForm.name.$dirty && SysareasForm.dataConfigForm.name.$invalid}">
 										<combobox ng-model="dataConfig.name" items="shpAttrs" name="name" initialtext="{{'areas.data_configurations_attr_field_shp' | i18n}}" ng-required="true" components-with-scroll="'#system-area-form-container'" group="shpAttrs"></combobox>
@@ -82,7 +82,7 @@
 							<div class="col-md-12 form-group">
 								<div class="row">
 									<div class="col-md-3">
-										<label class="static-text" for="code">{{'areas.data_configurations_code' | i18n}}</label>
+										<label class="static-text required-field" for="code">{{'areas.data_configurations_code' | i18n}}</label>
 									</div>
 									<div class="col-md-9" ng-class="{'has-error': SysareasForm.dataConfigForm.code.$dirty && SysareasForm.dataConfigForm.code.$invalid}">
 										<combobox ng-model="dataConfig.code" items="shpAttrs" name="code" initialtext="{{'areas.data_configurations_attr_field_shp' | i18n}}" ng-required="true" components-with-scroll="'#system-area-form-container'" group="shpAttrs"></combobox>
@@ -183,7 +183,7 @@
 				<ng-form name="metadataForm">
 					<div class="row form-container metadata-container">
 						<div class="form-group col-md-12 metadata-group" ng-class="{'has-error': metadataForm.areaName.$dirty && metadataForm.areaName.$invalid}">
-							<label for="areaName">{{'areas.metadata_ref_title' | i18n}}</label>
+							<label for="areaName" class="required-field">{{'areas.metadata_ref_title' | i18n}}</label>
 							<input type="text" class="form-control" name="areaName" ng-model="helper.metadata.areaName" ng-required="true">
 							<div class="innerErrorMessagesInputWithUpLabel" ng-messages="metadataForm.areaName.$error" ng-show="metadataForm.areaName.$dirty && metadataForm.areaName.$invalid">
 								<div ng-message="required">{{'spatial.required_field_error_message' | i18n }}</div>
@@ -216,31 +216,19 @@
 						<div class="section">
 							<div class="row">
 								<div class="form-group col-md-12">
-									<div class="row dataset-form-row">
-										<div class="col-md-3">
-											<label>{{'areas.area_selection_selected_area' | i18n}}</label>
-										</div>
-										<div class="col-md-9 selected-area">
-											<span ng-bind="selectedArea"></span>
-											<input type="text" name="areaCode" ng-model="datasetNew.areaGid" ng-show="false" required>
-											<div class="innerErrorMessages dataset-errorMsg" ng-messages="datasetForm.areaCode.$error" ng-show="(datasetForm.areaCode.$dirty || submittedDataset) && datasetForm.areaCode.$invalid">
-												<div ng-message="required"><div class="fa fa-exclamation-circle"></div> {{'spatial.required_field_error_message' | i18n }}</div>
-											</div>
-										</div>
+									<label class="required-field">{{'areas.area_selection_selected_area' | i18n}}</label>
+									<span class="form-span" ng-bind="selectedArea"></span>
+									<input type="text" name="areaCode" ng-model="datasetNew.areaGid" ng-show="false" required>
+									<div class="innerErrorMessages dataset-errorMsg" ng-messages="datasetForm.areaCode.$error" ng-show="(datasetForm.areaCode.$dirty || submittedDataset) && datasetForm.areaCode.$invalid">
+										<div ng-message="required"><div class="fa fa-exclamation-circle"></div> {{'spatial.required_field_error_message' | i18n }}</div>
 									</div>
 								</div>
-								<div class="form-group col-md-12" ng-class="{'has-error': datasetForm.datasetName.$invalid && (datasetForm.datasetName.$dirty || submittedDataset)}">
-									<div class="row dataset-form-row">
-										<div class="col-md-3">
-											<label>{{'areas.area_selection_dataset_name' | i18n}}</label>
-										</div>
-										<div class="col-md-9">
-											<input class="form-control" type="text" name="datasetName" ng-model="datasetNew.datasetName" ng-show="!hasDatasetCreated" ng-required="!hasDatasetCreated">
-											<span ng-bind="savedDatasetName" ng-show="hasDatasetCreated"></span>
-										</div>
-										<div class="innerErrorMessages dataset-errorMsg" ng-messages="datasetForm.datasetName.$error" ng-show="(datasetForm.datasetName.$dirty || submittedDataset) && datasetForm.datasetName.$invalid">
-											<div ng-message="required"><div class="fa fa-exclamation-circle"></div> {{'spatial.required_field_error_message' | i18n }}</div>
-										</div>
+								<div class="form-group col-md-12">
+									<label class="required-field">{{'areas.area_selection_dataset_name' | i18n}}</label>
+									<input class="form-control" type="text" name="datasetName" ng-model="datasetNew.datasetName" ng-show="!hasDatasetCreated" ng-required="!hasDatasetCreated">
+									<span ng-bind="savedDatasetName" ng-show="hasDatasetCreated"></span>
+									<div class="innerErrorMessages dataset-errorMsg" ng-messages="datasetForm.datasetName.$error" ng-show="(datasetForm.datasetName.$dirty || submittedDataset) && datasetForm.datasetName.$invalid">
+										<div ng-message="required"><div class="fa fa-exclamation-circle"></div> {{'spatial.required_field_error_message' | i18n }}</div>
 									</div>
 								</div>
 							</div>
@@ -292,7 +280,7 @@
 												<td>{{sysArea.code}}</td>
 												<td style="min-width: 70px;">
 													<button type="button" class="btn btn-default btn-xs" title="{{'spatial.area_selection_modal_see_on_map_btn' | i18n }}" ng-click="mergeParamsWms($index, displayedRecordsArea, sysAreaSearch)"> <span class="fa fa-globe"></span></button>
-													<button type="button" class="btn btn-default btn-xs" ng-class="{'btn-success': datasetNew.areaGid === sysArea.gid, 'btn-primary': datasetNew.areaGid !== sysArea.gid}" title="{{'areas.area_selection_select_area_btn' | i18n }}" ng-click="selectArea($index,sysArea.gid)"><span class="fa fa-check"></span></button>
+													<button type="button" class="btn btn-xs" ng-class="{'btn-success': datasetNew.areaGid === sysArea.gid, 'btn-default': datasetNew.areaGid !== sysArea.gid}" title="{{'areas.area_selection_select_area_btn' | i18n }}" ng-click="selectArea($index,sysArea.gid)"><span class="fa fa-check"></span></button>
 												</td>
 											</tr>
 										</tbody>
