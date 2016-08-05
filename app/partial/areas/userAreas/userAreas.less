@@ -34,7 +34,14 @@
 			}
 		}
 	}
+	[st-table] {
+		height: 100%;
+	}
+	#user-areas-table .tbody {
+		max-height: calc(~'100% - 180px');
+	}
 	.areas-table {
+		height: 100%;
 		.thead {
 			.tr:first-child {
 				border-bottom: 2px solid #ddd;
@@ -48,6 +55,8 @@
 			}
 		}
 		.tbody{
+			overflow-y: auto;
+			
 			.tr:nth-child(odd) {
 				background: #f7f7f7;
 			}
@@ -62,7 +71,6 @@
 				text-align: center;
 				padding: 10px;
 			}
-			overflow-y: auto;
 		}
 		.tfoot {
 			padding: 0 15px !important;
@@ -239,4 +247,8 @@
 			padding-right: 15px;
 		}
 	}
+}
+
+#group-area-form-container .tbody {
+	max-height: calc(~'100% - 190px');
 }

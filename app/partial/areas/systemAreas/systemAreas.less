@@ -1,4 +1,13 @@
 .systemAreasContainer{
+	height: 100%;
+	[name="SysareasForm"] {
+		height: 100%;
+	}
+	[name="datasetForm"] {
+		max-height: calc(~'100% - 135px');
+		display: block;
+    	overflow: auto;
+	}
 	.dataset-table-container {
 		min-height: 52px;
 	}
@@ -10,10 +19,17 @@
 		}
 	}
 	.system-area-body {
+		height: 100%;
+		.editingTypeTab {
+			height: 100%;
+			.btn-container {
+				text-align: right;
+			}
+		}
 		.form-container {
 			padding-top: 15px;
 			border: 1px solid #dddddd;
-			overflow: auto;
+			max-height: calc(~'100% - 135px');
 			.form-group {
 				label {
 					margin-right: 5px;
@@ -45,7 +61,7 @@
 	}
 	.metadata-container{
 		overflow-y: auto;
-		height: 100%;
+		max-height: calc(~'100% - 135px');
 	}
 	.info-qtip {
 		margin-right: 10px;
@@ -101,5 +117,8 @@
 				line-height: 20px;
 			}
 		}
+	}
+	.sysareas-radio-btns {
+		height: 100%;
 	}
 }
