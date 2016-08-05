@@ -69,6 +69,7 @@ angular.module('unionvmsWeb').controller('UserareasgroupsCtrl',function($scope, 
     
     //Area details modal
     $scope.openAreaDetailsModal = function(data){
+        $scope.areaHelper.deactivateFullscreen();
         var modalInstance = $modal.open({
            templateUrl: 'partial/areas/areaDetails/areaDetails.html',
            controller: 'AreadetailsCtrl',
@@ -82,6 +83,7 @@ angular.module('unionvmsWeb').controller('UserareasgroupsCtrl',function($scope, 
     };
     
     $scope.openAreaGroupEditorModal = function(){
+        $scope.areaHelper.deactivateFullscreen();
     	var modalInstance = $modal.open({
             templateUrl: 'partial/areas/areaGroupEditorModal/areaGroupEditorModal.html',
             controller: 'AreagroupeditormodalCtrl',

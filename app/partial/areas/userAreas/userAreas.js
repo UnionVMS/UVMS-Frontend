@@ -228,6 +228,7 @@ angular.module('unionvmsWeb').controller('UserareasCtrl',function($scope, locale
         areaRestService.getUserAreaAsGeoJSON($scope.displayedUserAreas[idx].gid).then(function(response){
             loadingStatus.isLoading('AreaManagement',false);
             $scope.setEditingType('edit');
+            $scope.toggleTool('edit');
             $scope.loadGeoJSONFeature(response[0]);
             areaMapService.mergeParamsGid($scope.displayedUserAreas[idx].gid, $scope.displayedUserAreas[idx].areaType, false);
             $scope.isUpdate = true;
@@ -547,6 +548,7 @@ angular.module('unionvmsWeb').controller('UserareasCtrl',function($scope, locale
     
     //Import geometry modal
     $scope.importArea = function(){
+        $scope.helper.deactivateFullscreen();
         var modalInstance = $modal.open({
             templateUrl: 'partial/areas/uploadAreaModal/uploadAreaModal.html',
             controller: 'UploadareamodalCtrl',
@@ -581,6 +583,7 @@ angular.module('unionvmsWeb').controller('UserareasCtrl',function($scope, locale
     
     //Area details modal
     $scope.openAreaDetailsModal = function(data){
+        $scope.helper.deactivateFullscreen();
         var modalInstance = $modal.open({
            templateUrl: 'partial/areas/areaDetails/areaDetails.html',
            controller: 'AreadetailsCtrl',

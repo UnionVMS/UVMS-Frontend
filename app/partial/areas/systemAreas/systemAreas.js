@@ -114,6 +114,10 @@ angular.module('unionvmsWeb').controller('SystemareasCtrl',function($scope,gener
         }
         
         if (angular.isDefined(newVal) && newVal !== oldVal){
+            if (newVal === 'PORT' && $scope.helper.sysAreasEditingType === 'dataset'){
+                $scope.helper.sysAreasEditingType = 'upload';
+            }
+            
         	resetDatasetTab();
         	$scope.helper.resetMetadata();
             $scope.helper.displayedSystemAreaLayer = newVal;

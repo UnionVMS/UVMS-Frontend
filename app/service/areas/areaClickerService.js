@@ -1,4 +1,4 @@
-angular.module('unionvmsWeb').factory('areaClickerService',function(areaAlertService, spatialRestService, Area, locale) {
+angular.module('unionvmsWeb').factory('areaClickerService',function(areaAlertService, spatialRestService, Area, locale, loadingStatus) {
 
 	var areaClickerService = {
 	    active: false,
@@ -15,7 +15,7 @@ angular.module('unionvmsWeb').factory('areaClickerService',function(areaAlertSer
             this.clearData();
         },
         getDataFromMap: function(payload){
-            areaAlertService.setLoading(locale.getString('areas.getting_area'));
+            loadingStatus.isLoading('AreaManagement',true,3);
             var self = this;
             self.clearData();
             self.clickResults = 0;
@@ -26,9 +26,9 @@ angular.module('unionvmsWeb').factory('areaClickerService',function(areaAlertSer
                     area = area.fromJson(response.data[i]);
                     self.data.push(area);
                 }
-                areaAlertService.removeLoading();
+                loadingStatus.isLoading('AreaManagement',false);
             }, function(error){
-                areaAlertService.removeLoading();
+                loadingStatus.isLoading('AreaManagement',false);
                 areaAlertService.setError();
                 areaAlertService.alertMessage = locale.getString('areas.error_searching_areas');
             });

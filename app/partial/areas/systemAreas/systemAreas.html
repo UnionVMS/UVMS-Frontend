@@ -19,7 +19,7 @@
 					<input type="radio" value="metadata" ng-model="helper.sysAreasEditingType">
 					{{'areas.metadata_radio_title' | i18n}}
 				</label>
-				<label class="radio-inline">
+				<label class="radio-inline" ng-if="sysAreaType !== 'PORT'">
 					<input type="radio" value="dataset" ng-model="helper.sysAreasEditingType">
 					{{'areas.dataset_radio_title' | i18n}}
 				</label>

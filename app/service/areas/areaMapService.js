@@ -507,8 +507,13 @@ angular.module('unionvmsWeb').factory('areaMapService',function(locale, genericM
 	        tipLabel: locale.getString('areas.map_tip_full_extent')
 	    }));
 	    
+	    var resetStyle = 'ol-resetCql-right-side';
+	    if (genericMapService.mapBasicConfigs.success && genericMapService.mapBasicConfigs.layers.baseLayers.length > 1){
+	        resetStyle = 'ol-resetCql-right-side-with-switcher';
+	    }
+	        	    
 	    ctrls.push(new ol.control.ResetLayerFilter({
-	        controlClass: 'ol-resetCql-right-side',
+	        controlClass: resetStyle,
 	        type: 'areamapservice',
             label: locale.getString('areas.map_tip_reset_layer_filter')
         }));

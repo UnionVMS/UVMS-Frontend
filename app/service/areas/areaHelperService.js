@@ -285,6 +285,12 @@ angular.module('unionvmsWeb').factory('areaHelperService',function(locale, areaM
         	obj.isLoadingAreaTypes = false;
         });
     };
+    
+    areaHelperService.deactivateFullscreen = function() {
+        if(screenfull.isFullscreen){
+            screenfull.exit();
+        }
+    };
 
 	return areaHelperService;
 });
