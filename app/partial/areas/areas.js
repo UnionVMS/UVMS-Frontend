@@ -1,4 +1,4 @@
-angular.module('unionvmsWeb').controller('AreasCtrl',function($scope, $window, $interval, locale, genericMapService, areaMapService, projectionService, areaAlertService, areaHelperService, areaRestService, userService){
+angular.module('unionvmsWeb').controller('AreasCtrl',function($scope, $window, $interval, locale, genericMapService, areaMapService, projectionService, areaAlertService, areaHelperService, areaRestService, userService, loadingStatus){
     //$scope.selectedTab = 'USERAREAS';
     $scope.alert = areaAlertService;
     $scope.helper = areaHelperService;
@@ -47,11 +47,11 @@ angular.module('unionvmsWeb').controller('AreasCtrl',function($scope, $window, $
     $scope.stopInitInterval = function(){
         $interval.cancel($scope.initInterval);
         $scope.initInterval = undefined;
-        areaAlertService.removeLoading();
+        loadingStatus.isLoading('AreaManagement',false);
     };
     
     locale.ready('areas').then(function(){
-        areaAlertService.setLoading(locale.getString('areas.inital_loading'));
+        loadingStatus.isLoading('AreaManagement',true,0);
         genericMapService.setMapBasicConfigs();
         projectionService.getProjections();
         

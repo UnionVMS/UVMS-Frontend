@@ -30,7 +30,7 @@ angular.module('unionvmsWeb').factory('loadingStatus',function() {
             value: false
 		},
 		isLoadingAreaManagement: {
-		    message: ['areas.inital_loading','areas.getting_attributes_to_map','areas.saving_system_area','areas.getting_area','areas.saving_new_area','areas.updating_area','areas.deleting_area'],
+		    message: ['areas.inital_loading','areas.getting_attributes_to_map','areas.saving_system_area','areas.getting_area','areas.saving_new_area','areas.updating_area','areas.deleting_area','areas.uploading_message','areas.updating_metadata','areas.getting_area_metadata','areas.checking_dataset','areas.creating_dataset'],
             value: false
 		}
 	};

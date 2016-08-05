@@ -1,4 +1,4 @@
-angular.module('unionvmsWeb').controller('UserareasCtrl',function($scope, locale, $modal, projectionService, UserArea, areaHelperService, areaMapService, areaRestService, spatialRestService, unitConversionService, userService){
+angular.module('unionvmsWeb').controller('UserareasCtrl',function($scope, locale, $modal, projectionService, UserArea, areaHelperService, areaMapService, areaRestService, spatialRestService, unitConversionService, userService, loadingStatus){
     $scope.createBtnTitle = undefined;
     $scope.editBtnTitle = undefined;
     $scope.selectedProj = undefined;
@@ -190,12 +190,12 @@ angular.module('unionvmsWeb').controller('UserareasCtrl',function($scope, locale
     
     //Get area details
     $scope.getAreaDetails = function(idx){
-        $scope.alert.setLoading(locale.getString('areas.getting_area'));
+        loadingStatus.isLoading('AreaManagement',true,3);
         areaRestService.getUserAreaAsJSON($scope.displayedUserAreas[idx].gid).then(function(response){
-            $scope.alert.removeLoading();
+            loadingStatus.isLoading('AreaManagement',false);
             $scope.openAreaDetailsModal(response);
         }, function(error){
-            $scope.alert.removeLoading();
+            loadingStatus.isLoading('AreaManagement',false);
             $scope.alert.setError();
             $scope.alert.alertMessage = locale.getString('areas.error_getting_user_area_geojson');
         });
@@ -203,17 +203,17 @@ angular.module('unionvmsWeb').controller('UserareasCtrl',function($scope, locale
     
     //Delete
     $scope.deleteUserArea = function(idx){
-        $scope.alert.setLoading(locale.getString('areas.deleting_area'));
+        loadingStatus.isLoading('AreaManagement',true,6);
         areaRestService.deleteUserArea($scope.displayedUserAreas[idx].gid, idx).then(function(response){
             var targetIdx = $scope.userAreasList.indexOf($scope.displayedUserAreas[idx]);
             $scope.userAreasList.splice(targetIdx, 1);
             areaMapService.refreshWMSLayer('USERAREA');
-            $scope.alert.removeLoading();
+            loadingStatus.isLoading('AreaManagement',false);
             $scope.alert.setSuccess();
             $scope.alert.alertMessage = locale.getString('areas.delete_user_area_success');
         }, function(error){
             console.log(error);
-            $scope.alert.removeLoading();
+            loadingStatus.isLoading('AreaManagement',false);
             $scope.alert.setError();
             $scope.alert.alertMessage = locale.getString('areas.delete_user_area_error');
         });
@@ -223,17 +223,16 @@ angular.module('unionvmsWeb').controller('UserareasCtrl',function($scope, locale
 
     //Edit user area
     $scope.editUserArea = function(idx){
-        $scope.alert.setLoading(locale.getString('areas.getting_area'));
+        loadingStatus.isLoading('AreaManagement',true,3);
         $scope.getAreaTypes();
         areaRestService.getUserAreaAsGeoJSON($scope.displayedUserAreas[idx].gid).then(function(response){
-            $scope.alert.removeLoading();
+            loadingStatus.isLoading('AreaManagement',false);
             $scope.setEditingType('edit');
             $scope.loadGeoJSONFeature(response[0]);
             areaMapService.mergeParamsGid($scope.displayedUserAreas[idx].gid, $scope.displayedUserAreas[idx].areaType, false);
             $scope.isUpdate = true;
         }, function(error){
-            console.log(error);
-            $scope.alert.removeLoading();
+            loadingStatus.isLoading('AreaManagement',false);
             $scope.alert.setError();
             $scope.alert.alertMessage = locale.getString('areas.error_getting_user_area_geojson');
         });
@@ -659,14 +658,14 @@ angular.module('unionvmsWeb').controller('UserareasCtrl',function($scope, locale
         if ($scope.userAreaForm.$valid && $scope.coordsForm.$valid){
             var feature = $scope.buildGeoJSON();
             if (mode === 'create'){
-                $scope.alert.setLoading(locale.getString('areas.saving_new_area'));
+                loadingStatus.isLoading('AreaManagement',true,4);
                 areaRestService.createUserArea(angular.toJson(feature)).then(function(response) {
                     createSuccess(response, 'create_user_area_success');
                 }, function(error) {
                     createError(error, 'crud_user_area_error');
                 });
             } else {
-                $scope.alert.setLoading(locale.getString('areas.updating_area'));
+                loadingStatus.isLoading('AreaManagement',true,5);
                 areaRestService.updateUserArea(angular.toJson(feature)).then(function(response) {
                     createSuccess(response, 'update_user_area_success');
                 }, function(error) {
@@ -698,8 +697,8 @@ angular.module('unionvmsWeb').controller('UserareasCtrl',function($scope, locale
     };
     
     //CALLBACK FUNCTIONS
-    var createSuccess = function(response, successMsg){      
-        $scope.alert.removeLoading();
+    var createSuccess = function(response, successMsg){
+        loadingStatus.isLoading('AreaManagement',false);
         $scope.alert.setSuccess();
         $scope.alert.alertMessage = locale.getString('areas.' + successMsg);
         
@@ -716,8 +715,7 @@ angular.module('unionvmsWeb').controller('UserareasCtrl',function($scope, locale
     };
     
     var createError = function(error, defaultMsg){
-        console.log(error);
-        $scope.alert.removeLoading();
+        loadingStatus.isLoading('AreaManagement',false);
         $scope.alert.setError();
 
         if(angular.isDefined(error) && angular.isDefined(error.data) && angular.isDefined(error.data.msg)){

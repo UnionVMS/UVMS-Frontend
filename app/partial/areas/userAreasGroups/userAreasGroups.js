@@ -1,4 +1,4 @@
-angular.module('unionvmsWeb').controller('UserareasgroupsCtrl',function($scope, locale, areaRestService, areaHelperService, areaMapService, $modal, userService){
+angular.module('unionvmsWeb').controller('UserareasgroupsCtrl',function($scope, locale, areaRestService, areaHelperService, areaMapService, $modal, userService, loadingStatus){
 	$scope.areaHelper = areaHelperService;
 	$scope.areaGroup = {'type': ''};
 	$scope.currentContext = undefined;
@@ -56,12 +56,12 @@ angular.module('unionvmsWeb').controller('UserareasgroupsCtrl',function($scope, 
     
     //Get area details
     $scope.getAreaDetails = function(idx){
-        $scope.alert.setLoading(locale.getString('areas.getting_area'));
+        loadingStatus.isLoading('AreaManagement',true,3);
         areaRestService.getUserAreaAsJSON($scope.displayedUserAreas[idx].id).then(function(response){
-            $scope.alert.removeLoading();
+            loadingStatus.isLoading('AreaManagement',false);
             $scope.openAreaDetailsModal(response);
         }, function(error){
-            $scope.alert.removeLoading();
+            loadingStatus.isLoading('AreaManagement',false);
             $scope.alert.setError();
             $scope.alert.alertMessage = locale.getString('areas.error_getting_user_area_geojson');
         });
