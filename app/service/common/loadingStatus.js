@@ -17,14 +17,6 @@ angular.module('unionvmsWeb').factory('loadingStatus',function() {
 			message: 'spatial.reseting_report_message',
             value: false
 		},
-		isLoadingGetAttrToMap: {
-			message: 'areas.getting_attributes_to_map',
-            value: false
-		},
-		isLoadingSavingSystemArea: {
-			message: 'areas.saving_system_area',
-            value: false
-		},
 		isLoadingSearchReferenceData: {
 		    message: 'spatial.loading_data',
             value: false
@@ -35,6 +27,10 @@ angular.module('unionvmsWeb').factory('loadingStatus',function() {
 		},
 		isLoadingEditAreaGroupModal: {
 		    message: 'spatial.loading_data',
+            value: false
+		},
+		isLoadingAreaManagement: {
+		    message: ['areas.inital_loading','areas.getting_attributes_to_map','areas.saving_system_area','areas.getting_area','areas.saving_new_area','areas.updating_area','areas.deleting_area'],
             value: false
 		}
 	};
