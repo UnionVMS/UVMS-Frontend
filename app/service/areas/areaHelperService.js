@@ -22,7 +22,7 @@
  * @description
  *  Service to control the map on the liveview of the reporting tab
  */
-angular.module('unionvmsWeb').factory('areaHelperService',function(locale, areaMapService, spatialRestService, areaAlertService, areaRestService, areaClickerService) {
+angular.module('unionvmsWeb').factory('areaHelperService',function(locale, areaMapService, spatialRestService, areaAlertService, areaRestService, areaClickerService, loadingStatus) {
 	var areaHelperService = {
 	    isEditing: false,
 	    displayedLayerType: undefined,
@@ -34,6 +34,7 @@ angular.module('unionvmsWeb').factory('areaHelperService',function(locale, areaM
 	    userAreasGroups: [],
 	    isLoadingSysAreaTypes: false,
 	    isLoadingAreaTypes: false,
+	    currentTab: undefined,
 	    metadata: {
 	        id: undefined,
 	        areaName: undefined,
@@ -103,21 +104,23 @@ angular.module('unionvmsWeb').factory('areaHelperService',function(locale, areaM
 	     * @param {String} destTab - The destination tab name
 	     */
 	    tabChange: function(destTab){
+	        this.currentTab = destTab;
 	        areaClickerService.deactivate();
-	        if (angular.isDefined(this.displayedLayerType)){
-	            areaMapService.removeLayerByType(this.displayedLayerType);
-	            this.displayedLayerType = undefined;
-	        }
+	        areaMapService.removeAreaLayers();
+	        this.displayedLayerType = undefined;
 	        
 	        if (angular.isDefined(destTab)){
+	            loadingStatus.isLoading('AreaManagementPanel', true);
 	            if (destTab === 'USERAREAS'){
 	                getUserAreaLayer(this);
 	                this.updateSlider('USERAREA');
+	                this.displayedLayerType = 'USERAREAS';
 	            } else if (destTab ===  'SYSAREAS'){
 	                getAreaLocationLayers(this);
 	                if (angular.isDefined(this.displayedSystemAreaLayer)){
 	                    this.displayedLayerType = this.displayedSystemAreaLayer;
 	                    var item = getAreaLocationLayerDef(this);
+	                    item.areaType = 'SYSAREA';
 	                    areaMapService.addWMS(item);
 	                    this.updateSlider(this.displayedSystemAreaLayer);
 	                } else {
@@ -136,6 +139,10 @@ angular.module('unionvmsWeb').factory('areaHelperService',function(locale, areaM
 	            	    this.updateSlider(undefined);
 	            	}
 	            }
+	        }
+	        
+	        if (!angular.isDefined(this.displayedLayerType)){
+	            loadingStatus.isLoading('AreaManagementPanel', false);
 	        }
 	    },
 	    /**
@@ -196,7 +203,7 @@ angular.module('unionvmsWeb').factory('areaHelperService',function(locale, areaM
 	        layer.set('groupCql', groupCql);
 	    } else {
 	        spatialRestService.getUserAreaLayer().then(function(response){
-	            if (!angular.isDefined(areaMapService.getLayerByType('AREAGROUPS'))){
+	            if (!angular.isDefined(areaMapService.getLayerByType('AREAGROUPS')) && obj.currentTab === 'AREAGROUPS'){
 	                //override typename for area groups instead
 	                response.data.typeName = 'AREAGROUPS';
 	                response.data.groupCql = " and type = '" + type + "'";
@@ -222,7 +229,7 @@ angular.module('unionvmsWeb').factory('areaHelperService',function(locale, areaM
     var getUserAreaLayer = function(obj){
         if (angular.isDefined(areaMapService.map)){ //&& areaMapService.map.getLayers().getLength() !== 0
             spatialRestService.getUserAreaLayer().then(function(response){
-                if (!angular.isDefined(areaMapService.getLayerByType('USERAREA'))){
+                if (!angular.isDefined(areaMapService.getLayerByType('USERAREA')) && obj.currentTab === 'USERAREAS'){
                     areaMapService.addUserAreasWMS(response.data);
                     obj.displayedLayerType = response.data.typeName;
                     areaAlertService.removeLoading();

@@ -5,7 +5,6 @@ angular.module('unionvmsWeb').controller('UserareasCtrl',function($scope, locale
     $scope.userAreasList = [];
     $scope.displayedUserAreas = [].concat($scope.userAreasList);
     $scope.itemsByPage = 5;
-    $scope.tableLoading = false;
     $scope.editingType = 'list';
     $scope.isUpdate = false;
     $scope.searchString = '';
@@ -161,13 +160,13 @@ angular.module('unionvmsWeb').controller('UserareasCtrl',function($scope, locale
     
     //USER AREAS LIST
     $scope.getUserAreasList = function(){
-        $scope.tableLoading = true;
+        loadingStatus.isLoading('AreaManagementPanel', true);
         spatialRestService.getUserDefinedAreas().then(function(response){
             $scope.userAreasList = response;
             $scope.displayedUserAreas = [].concat($scope.userAreasList);
-            $scope.tableLoading = false;
+            loadingStatus.isLoading('AreaManagementPanel', false);
         }, function(error){
-            $scope.tableLoading = false;
+            loadingStatus.isLoading('AreaManagementPanel', false);
             $scope.alert.setError();
             $scope.alert.alertMessage = locale.getString('areas.error_getting_user_area_list');
         });

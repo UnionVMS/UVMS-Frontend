@@ -345,6 +345,7 @@ angular.module('unionvmsWeb').factory('genericMapService',function($localStorage
         var config = {
             title: def.title,
             type: def.type,
+            isBaseLayer: def.isBaseLayer,
             url: def.url,
             serverType: serverType,
             params: {

@@ -26,9 +26,9 @@
                     <div class="th col-md-6"st-sort="desc" st-skip-natural="true" st-class-ascent="sorting_asc" st-class-descent="sorting_desc">{{'areas.area_list_table_desc_header' | i18n}}</div>
                     <div class="th col-md-2"></div>
                 </div>
-                <div class="tr row" ng-show="tableLoading">
+                <!-- <div class="tr row" ng-show="tableLoading">
                     <div class="th col-md-12 loading-spinner-cl"><i class="fa fa-spinner fa-spin loading-spinner"></i></div>
-                </div>
+                </div> -->
                 <div class="tr row" ng-show="!tableLoading && !displayedUserAreas.length">
                     <div class="th col-md-12"><table-alert type="'info'" msg="'areas.table_no_data'" visible="!displayedUserAreas.length && !tableLoading"></table-alert></div>
                 </div>

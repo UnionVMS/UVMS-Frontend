@@ -2,7 +2,6 @@ angular.module('unionvmsWeb').controller('UserareasgroupsCtrl',function($scope, 
 	$scope.areaHelper = areaHelperService;
 	$scope.areaGroup = {'type': ''};
 	$scope.currentContext = undefined;
-	$scope.tableLoading = false;
 	
 	var init = function(){
 		$scope.currentContext = userService.getCurrentContext();
@@ -17,7 +16,7 @@ angular.module('unionvmsWeb').controller('UserareasgroupsCtrl',function($scope, 
 	    }
 	    
 		if(angular.isDefined($scope.areaGroup.type) && $scope.areaGroup.type !== ''){
-		    $scope.tableLoading = true;
+		    loadingStatus.isLoading('AreaManagementPanel', true);
 			angular.forEach($scope.areaHelper.userAreasGroups, function(item) {
 				if($scope.areaGroup.type === item.code){
 				    areaHelperService.getUserAreaGroupLayer($scope.areaGroup.type);
@@ -25,9 +24,9 @@ angular.module('unionvmsWeb').controller('UserareasgroupsCtrl',function($scope, 
 					areaRestService.getAreasByType(item.text).then(function(response){
 			            $scope.userAreasList = response;
 			            $scope.displayedUserAreas = [].concat($scope.userAreasList);
-			            $scope.tableLoading = false;
+			            loadingStatus.isLoading('AreaManagementPanel', false);
 			        }, function(error){
-			            $scope.tableLoading = false;
+			            loadingStatus.isLoading('AreaManagementPanel', false);
 			            $scope.alert.setError();
 			            $scope.alert.alertMessage = locale.getString('areas.error_getting_user_area_list');
 			        });

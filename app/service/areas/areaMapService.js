@@ -11,7 +11,7 @@
  * @description
  *  Service to control the map on the area management tab
  */
-angular.module('unionvmsWeb').factory('areaMapService',function(locale, genericMapService, projectionService, UserArea, userService, areaClickerService) {
+angular.module('unionvmsWeb').factory('areaMapService',function(locale, genericMapService, projectionService, UserArea, userService, areaClickerService, loadingStatus) {
 
 	var areaMs = {};
 	
@@ -160,12 +160,14 @@ angular.module('unionvmsWeb').factory('areaMapService',function(locale, genericM
         };
 	    
 	    var layer = genericMapService.defineWms(config);
+	    layer.set('areaType', 'USERAREA');
 	    
 	    layer.set('baseCql', cql);
 	    var groupCql = angular.isDefined(def.groupCql) ? def.groupCql : undefined;
 	    layer.set('groupCql', groupCql);
 	    
 	    areaMs.map.addLayer(layer);
+	    loadingStatus.isLoading('AreaManagementPanel', false);
 	};
 	
 	/**
@@ -186,12 +188,16 @@ angular.module('unionvmsWeb').factory('areaMapService',function(locale, genericM
 	    }
 	    
 	    var layer = genericMapService.defineWms(config);
+	    if (angular.isDefined(def.areaType)){
+	        layer.set('areaType', def.areaType);
+	    }
 	    
 	    if (isBaseLayer){
 	        layer.set('switchertype', 'base'); //Necessary for the layerswitcher control
 	    }
 	    
 	    areaMs.map.addLayer(layer);
+	    loadingStatus.isLoading('AreaManagementPanel', false);
 	};
 	
 	//Add new cql param to wms using gid
@@ -724,6 +730,31 @@ angular.module('unionvmsWeb').factory('areaMapService',function(locale, genericM
      */
     areaMs.removeLayerByType = function(type){
         genericMapService.removeLayerByType(type, areaMs.map);
+    };
+    
+    /**
+     * Remove all WMS Area layers (USER and SYSTEM)
+     * 
+     * @memberof areaMapService
+     * @public
+     * @alias removeAreaLayers
+     */
+    areaMs.removeAreaLayers = function(){
+        if (angular.isDefined(areaMs.map)){
+            var layers = areaMs.map.getLayers().getArray();
+            var filteredLayers = layers.filter(function(layer){
+                var type = layer.get('areaType'); 
+                if (type === 'USERAREA' || type === 'SYSAREA'){
+                    return true;
+                }
+            });
+            
+            if (filteredLayers.length > 0){
+                angular.forEach(filteredLayers, function(layer){
+                    areaMs.map.removeLayer(layer);
+                });
+            }
+        }
     };
     
     //Bring layer to the top of the map

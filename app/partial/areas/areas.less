@@ -9,18 +9,14 @@
 		position: relative;
 
 		.areas-panel {
-			display: flex;
-			flex-wrap: wrap;
 			width: 500px;
 			max-width: 500px;
 			min-height: 300px;
-			
 			position: absolute;
 			top: 56px;
 			bottom: 100px;
 			left: 10px;
 			z-index: 1035;
-			//max-height: calc(~'100% - 100px');
 			
 			border: 1px solid @profileColor_gray;
 			border-radius: 6px;
@@ -33,8 +29,27 @@
 				width: auto;
 			}
 
+			.areas-panel-container {
+				position: relative;
+				height: 100%;
+				.loading-panel {
+					.loading-msg {
+						position: absolute;
+						.loading-text {
+							display: none;
+						}
+						.fa {
+							font-size: 35px !important;
+						}
+					}
+				}	
+			}
+
 			.area-collapse-btn {
-				flex: 1;
+				position: absolute;
+				top: 0;
+				right: 0;
+				width: 40px;
 				border-bottom: 1px solid #dddddd;
 				height: 41px;
 				color: @profileColor_blue;
@@ -51,6 +66,7 @@
 			.tabMenu {
 				margin-bottom: 10px;
 				cursor: default;
+				padding-right: 40px;
 				li {
 					cursor: pointer;
 					border: 1px solid #dddddd;
@@ -71,13 +87,17 @@
 							color: #000000;
 						}
 					}
-					&.collapsed {
+				}
+				&.collapsed {
+					border: 0;
+					li {
 						border-bottom: 0;
 						border-bottom-left-radius: 6px !important;
 						border-top-left-radius: 6px !important;
 						a {
 							border-bottom-left-radius: 6px !important;
 							border-top-left-radius: 6px !important;
+							border-bottom: 0;
 						}
 					}
 				}
@@ -85,10 +105,6 @@
 			.base-area-container {
 				height: calc(~'100% - 50px');
 				overflow-y: hidden;
-				/*.area-form-container {
-					max-height: calc(~'100% - 100px');
-					height: calc(~'100% - 100px');
-				}*/
 			}
 		}
 	}
