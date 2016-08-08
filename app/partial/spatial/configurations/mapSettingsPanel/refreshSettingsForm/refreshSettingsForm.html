@@ -6,7 +6,7 @@
 				<toggle-switch ng-model="configModel.mapSettings.refreshStatus"></toggle-switch>
 			</div>
 			<div class="form-group col-md-4 noPadding" ng-class="{'has-error': refreshSettingsForm.refreshRate.$invalid && (refreshSettingsForm.refreshRate.$dirty || submitedWithErrors)}">
-				<label>
+				<label class="required-field">
 					{{'spatial.preferences_auto_refresh_rate' | i18n }}
 				</label>
 				<numeric-input class="form-control" ng-model="configModel.mapSettings.refreshRate" min="1" name="refreshRate" ng-change="validateRefreshRate()"></numeric-input>

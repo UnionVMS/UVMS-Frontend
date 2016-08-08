@@ -20,19 +20,24 @@
         </div>
 	</div>
 	<div id="areaMap" class="map">
-		<div class="areas-panel">
+		<div class="areas-panel" ng-class="{'panel-collapsed': !expanded}">
 			<!-- TAB MENU -->
        		<ul class="nav nav-tabs tabMenu">
-        		<li ng-repeat="tab in tabs" ng-click="(helper.isEditing && selectedTab !== '{{tab.tabId}}') || selectTab(tab.tabId)" ng-class="{'active': selectedTab === '{{tab.tabId}}', disabled: helper.isEditing && selectedTab !== '{{tab.tabId}}'}">
+        		<li ng-repeat="tab in tabs" ng-click="(helper.isEditing && selectedTab !== '{{tab.tabId}}') || selectTab(tab.tabId)" ng-show="expanded || (!expanded && selectedTab === '{{tab.tabId}}')"ng-class="{'active': selectedTab === '{{tab.tabId}}', disabled: helper.isEditing && selectedTab !== '{{tab.tabId}}', collapsed: !expanded}">
         			<a>{{tab.title}}</a>
         		</li>
        		</ul>
+       		<!-- COLLAPSE BTN -->
+       		<div class="area-collapse-btn" ng-class="{collapsed: !expanded}" ng-click="switchCollapse()">
+				<span class="fa" ng-class="{'fa-angle-double-up': expanded, 'fa-angle-double-down': !expanded}"></span>
+			</div>
+			
        		<!-- USER AREAS -->
-       		<div class="base-area-container col-md-12" ng-show="selectedTab === 'USERAREAS'" ng-include="'partial/areas/userAreas/userAreas.html'"></div>
+       		<div class="base-area-container col-md-12" ng-show="selectedTab === 'USERAREAS' && expanded" ng-include="'partial/areas/userAreas/userAreas.html'"></div>
        		<!-- SYSTEM AREAS -->
-       		<div class="base-area-container col-md-12" id="system-area-form-container" ng-show="selectedTab === 'SYSAREAS'" ng-include="'partial/areas/systemAreas/systemAreas.html'"></div>    
+       		<div class="base-area-container col-md-12" id="system-area-form-container" ng-show="selectedTab === 'SYSAREAS' && expanded" ng-include="'partial/areas/systemAreas/systemAreas.html'"></div>    
             <!-- USER AREAS GROUPS -->
-            <div class="base-area-container col-md-12" id="group-area-form-container" ng-show="selectedTab === 'AREAGROUPS'" ng-include="'partial/areas/userAreasGroups/userAreasGroups.html'"></div>
+            <div class="base-area-container col-md-12" id="group-area-form-container" ng-show="selectedTab === 'AREAGROUPS' && expanded" ng-include="'partial/areas/userAreasGroups/userAreasGroups.html'"></div>
 		</div>
 	</div>
 </div>

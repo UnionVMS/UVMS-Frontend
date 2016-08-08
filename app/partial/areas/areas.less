@@ -9,7 +9,10 @@
 		position: relative;
 
 		.areas-panel {
+			display: flex;
+			flex-wrap: wrap;
 			width: 500px;
+			max-width: 500px;
 			min-height: 300px;
 			
 			position: absolute;
@@ -24,6 +27,27 @@
 			box-shadow: 0px 2px 10px rgba(0, 0, 0, 0.2);
 			background-color: white;
 
+			&.panel-collapsed {
+				height: 42px;
+				min-height: 42px;
+				width: auto;
+			}
+
+			.area-collapse-btn {
+				flex: 1;
+				border-bottom: 1px solid #dddddd;
+				height: 41px;
+				color: @profileColor_blue;
+				cursor: pointer;
+				span {
+					line-height: 41px;
+					margin: auto 15px;
+					float: right;
+				}
+				&.collapsed {
+					border: 0;
+				}
+			}
 			.tabMenu {
 				margin-bottom: 10px;
 				cursor: default;
@@ -45,6 +69,15 @@
 						a {
 							background-color:#ffffff;
 							color: #000000;
+						}
+					}
+					&.collapsed {
+						border-bottom: 0;
+						border-bottom-left-radius: 6px !important;
+						border-top-left-radius: 6px !important;
+						a {
+							border-bottom-left-radius: 6px !important;
+							border-top-left-radius: 6px !important;
 						}
 					}
 				}

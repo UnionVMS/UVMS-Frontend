@@ -28,7 +28,7 @@ angular.module('unionvmsWeb').controller('MapprojectionsettingsCtrl',function($s
         	$scope.projectionSelected = false;
         }
     });
-
+    
     //Initialization
     $scope.init = function () {
         $scope.projectionSelected = false;

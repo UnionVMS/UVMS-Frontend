@@ -1,5 +1,5 @@
 angular.module('unionvmsWeb').controller('AreasCtrl',function($scope, $window, $interval, locale, genericMapService, areaMapService, projectionService, areaAlertService, areaHelperService, areaRestService, userService, loadingStatus){
-    //$scope.selectedTab = 'USERAREAS';
+    $scope.expanded = true;
     $scope.alert = areaAlertService;
     $scope.helper = areaHelperService;
     $scope.graticuleActivated = false;
@@ -38,6 +38,10 @@ angular.module('unionvmsWeb').controller('AreasCtrl',function($scope, $window, $
             $scope.helper.tabChange(tabId);
             $scope.selectedTab = tabId;
         }
+    };
+    
+    $scope.switchCollapse = function(){
+        $scope.expanded = !$scope.expanded;
     };
     
     $scope.isAllowed = function(module, feature){
