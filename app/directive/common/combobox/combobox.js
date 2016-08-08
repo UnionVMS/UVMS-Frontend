@@ -211,11 +211,11 @@ angular.module('unionvmsWeb').directive('combobox', function($window, comboboxSe
 	                			}
 	                		});
                 		}
-                	}else if(!angular.isDefined(scope.initialtext)){                	
-                		var item = getItemObjectByCode(scope.ngModel);
-	                    if (angular.isDefined(item)){
-	                        scope.currentItemLabel = scope.getItemLabel(item);
-	                    }
+                	}else if(angular.isDefined(scope.ngModel)){                   
+                        var item = getItemObjectByCode(scope.ngModel);
+                        if (angular.isDefined(item)){
+                            scope.currentItemLabel = scope.getItemLabel(item);
+                        }
                 	}
                 }
             },true);

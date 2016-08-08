@@ -68,6 +68,7 @@ angular.module('unionvmsWeb').factory('reportService',function($rootScope, $time
     };
     
 	rep.runReport = function(report){
+	    rep.hasAlert = false;
 	    if (angular.isDefined(rep.autoRefreshInterval)){
             rep.stopAutoRefreshInterval();
         }
@@ -122,6 +123,7 @@ angular.module('unionvmsWeb').factory('reportService',function($rootScope, $time
 	};
 	
 	rep.runReportWithoutSaving = function(report){
+	    rep.hasAlert = false;
 	    if (angular.isDefined(rep.autoRefreshInterval)){
             rep.stopAutoRefreshInterval();
         }
