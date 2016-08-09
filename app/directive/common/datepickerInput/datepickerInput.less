@@ -16,7 +16,18 @@
 }
 
 .xdsoft_datetimepicker{
+    &.fullscreen-datepicker {
+        margin-top: -@headerHeight + 2 !important;
+    }
     button{
         box-shadow:0px !important;
+    }
+}
+
+.fullscreen {
+    .xdsoft_datetimepicker{
+        &.fullscreen-datepicker {
+            margin-top: 2px !important;
+        }
     }
 }

@@ -1,4 +1,4 @@
-angular.module('unionvmsWeb').factory('reportService',function($rootScope, $timeout, $interval, $anchorScroll, locale, TreeModel, reportRestService, reportFormService, spatialRestService, spatialHelperService, defaultMapConfigs, mapService, unitConversionService, vmsVisibilityService, mapAlarmsService, loadingStatus, spatialConfigRestService, SpatialConfig, Report, globalSettingsService, userService, reportingNavigatorService) {
+angular.module('unionvmsWeb').factory('reportService',function($rootScope, $timeout, $interval, $anchorScroll, locale, TreeModel, reportRestService, reportFormService, spatialRestService, spatialHelperService, defaultMapConfigs, mapService, unitConversionService, vmsVisibilityService, mapAlarmsService, loadingStatus, spatialConfigRestService, SpatialConfig, Report, globalSettingsService, userService, reportingNavigatorService, $modalStack) {
 
     var rep = {
        id: undefined,
@@ -69,6 +69,7 @@ angular.module('unionvmsWeb').factory('reportService',function($rootScope, $time
     
 	rep.runReport = function(report){
 	    rep.hasAlert = false;
+        $modalStack.dismissAll();
 	    if (angular.isDefined(rep.autoRefreshInterval)){
             rep.stopAutoRefreshInterval();
         }
@@ -124,6 +125,7 @@ angular.module('unionvmsWeb').factory('reportService',function($rootScope, $time
 	
 	rep.runReportWithoutSaving = function(report){
 	    rep.hasAlert = false;
+        $modalStack.dismissAll();
 	    if (angular.isDefined(rep.autoRefreshInterval)){
             rep.stopAutoRefreshInterval();
         }

@@ -1,6 +1,6 @@
 <div class="spatialModule">
-	<loading-panel type="LiveviewMap" ng-model="repServ.isReportExecuting" class="liveview-loading"></loading-panel>
-	<alert-modal ng-model="repServ.hasAlert" display-msg="repServ.message" target-el-id="liveview-panel" display-type="repServ.alertType"></alert-modal>
+	<!--<loading-panel type="LiveviewMap" ng-model="repServ.isReportExecuting" class="liveview-loading"></loading-panel>-->
+	<alert-modal ng-model="repServ.hasAlert" display-msg="repServ.message" target-el-id="map" display-type="repServ.alertType"></alert-modal>
 	
 	<div ng-include="'partial/spatial/liveViewPanel/liveViewPanel.html'" ng-show="repNav.isSectionVisible('liveViewPanel')"></div>
 	<div ng-include="'partial/spatial/reportsPanel/reportsPanel.html'" ng-show="repNav.isSectionVisible('reportsPanel')"></div>

@@ -20,6 +20,7 @@ angular.module('unionvmsWeb').directive('datepickerInput', ['$compile',function(
 		link: function(scope, element, attrs, ngModel) {
             //Add input name if name attribute exists
             var name = attrs.name;
+            scope.element = element;
             
             if(name) {
                 element.find('input').attr('name', name);
@@ -32,6 +33,13 @@ angular.module('unionvmsWeb').directive('datepickerInput', ['$compile',function(
 
             //Create dateTimePicker and save on scope
             scope.dateTimePicker = jQuery("#" +scope.inputFieldId).datetimepicker(scope.options);
+
+            if(scope.fullscreenLocation){
+                element.ready(function () {
+                    jQuery('#' + scope.datepickerId).addClass('fullscreen-datepicker');  
+                    jQuery('#' + scope.datepickerId).appendTo(scope.fullscreenLocation);
+                });
+            }
         }
 	};
 }]);
@@ -74,16 +82,6 @@ angular.module('unionvmsWeb')
             }
 
             $scope.datepickerId = "picker-" +$scope.inputFieldId;
-
-            if($scope.fullscreenLocation){
-                $(document).on('webkitfullscreenchange mozfullscreenchange fullscreenchange MSFullscreenChange', function() {
-                    if(document.webkitIsFullScreen || document.mozFullScreen) {
-                        $('#' + $scope.datepickerId).appendTo($scope.fullscreenLocation);
-                    }else{
-                        $('#' + $scope.datepickerId).appendTo('body');
-                    }
-                });
-            }
 
             //Set options
             setStartOptions();

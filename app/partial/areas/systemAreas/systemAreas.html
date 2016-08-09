@@ -4,7 +4,7 @@
 			<label>{{'areas.sys_areas_data_type_label' | i18n}}</label>
 		</div>
 		<div class="col-md-9">
-			<combobox ng-model="sysAreaType" items="helper.systemAreaItems" name="dataType" initialtext="{{'areas.sys_areas_data_type_label' | i18n}}" ng-required="true" components-with-scroll="'#system-area-form-container'" is-loading="helper.isLoadingSysAreaTypes"></combobox>
+			<combobox ng-model="sysAreaType" items="helper.systemAreaItems" name="dataType" initialtext="{{'areas.sys_areas_data_type_label' | i18n}}" ng-required="true" components-with-scroll="'#system-area-form-container'" is-loading="helper.isLoadingSysAreaTypes" dest-combo-list="'#areaManagement'"></combobox>
 		</div>
 	</div>
 	
@@ -59,7 +59,7 @@
 									</div>
 									<div class="col-md-9 proj-combo" ng-class="{'has-error': SysareasForm.dataConfigForm.editingProjection.$dirty && SysareasForm.dataConfigForm.editingProjection.$invalid}">
 										<combobox ng-model="dataConfig.selectedProj" items="projections.items" name="editingProjection" initialtext="{{'areas.editing_projection_label' | i18n}}" ng-required="true" components-with-scroll="'#system-area-form-container'"
-										is-loading="projections.isLoading"></combobox>
+										is-loading="projections.isLoading" dest-combo-list="'#areaManagement'"></combobox>
 									</div>
 									<div class="innerErrorMessagesCombobox" ng-messages="SysareasForm.dataConfigForm.editingProjection.$error" ng-show="SysareasForm.dataConfigForm.editingProjection.$dirty && SysareasForm.dataConfigForm.editingProjection.$invalid">
 										<div ng-message="required">{{'spatial.required_field_error_message' | i18n }}</div>
@@ -72,7 +72,7 @@
 										<label class="static-text required-field" for="name">{{'areas.data_configurations_name' | i18n}}</label>
 									</div>
 									<div class="col-md-9" ng-class="{'has-error': SysareasForm.dataConfigForm.name.$dirty && SysareasForm.dataConfigForm.name.$invalid}">
-										<combobox ng-model="dataConfig.name" items="shpAttrs" name="name" initialtext="{{'areas.data_configurations_attr_field_shp' | i18n}}" ng-required="true" components-with-scroll="'#system-area-form-container'" group="shpAttrs"></combobox>
+										<combobox ng-model="dataConfig.name" items="shpAttrs" name="name" initialtext="{{'areas.data_configurations_attr_field_shp' | i18n}}" ng-required="true" components-with-scroll="'#system-area-form-container'" group="shpAttrs" dest-combo-list="'#areaManagement'"></combobox>
 									</div>
 									<div class="innerErrorMessagesCombobox" ng-messages="SysareasForm.dataConfigForm.name.$error" ng-show="SysareasForm.dataConfigForm.name.$dirty && SysareasForm.dataConfigForm.name.$invalid">
 										<div ng-message="required">{{'spatial.required_field_error_message' | i18n }}</div>

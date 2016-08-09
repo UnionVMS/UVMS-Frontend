@@ -1,11 +1,9 @@
 <div class="areaManagement" id="areaManagement" ngsf-fullscreen="fullscreenCtrl">
-	<loading-panel type="AreaManagement"></loading-panel>
-	<alert-modal ng-model="alert.hasAlert" display-msg="alert.alertMessage" target-el-id="areaManagement" display-type="alert.alertType" timeout="5000"></alert-modal>
 	<div id="areaMap-toolbar">
 		<div class="btn-group-left">
 			<div class="btn-group btn-group-xs" role="group" aria-label="Map controls">
 	            <button type="button" class="btn btn-default btn-toolbar" ng-class="{active: graticuleActivated}" title="{{graticuleTip}}" ng-click="toggleGraticule()"><span class="fa fa-th"></span></button>
-	            <button type="button" class="btn btn-default btn-toolbar transparency-button" ng-class="{active: helper.slider.active}" ng-disabled="!helper.slider.layer"title="{{'areas.layer_transparency' | i18n}}" ng-click="toggleSlider()"><span class="fa fa-adjust"></span></button>
+	            <button type="button" class="btn btn-default btn-toolbar transparency-button" ng-class="{active: helper.slider.active}" ng-disabled="!helper.slider.layer" title="{{'areas.layer_transparency' | i18n}}" ng-click="toggleSlider()"><span class="fa fa-adjust"></span></button>
 	            <div class="btn btn-default transparency-container" ng-show="helper.slider.active && helper.slider.layer">
 	            	<slider id="areaTransp" ng-model="helper.slider.transparency" min="0" step="5" max="100" formatter="formatTooltip(value)"
 						on-slide="setTransparency(value, $event)" slider-tooltip-position="top" class="transparency-slider"></slider>
@@ -20,26 +18,28 @@
         </div>
 	</div>
 	<div id="areaMap" class="map">
+		<loading-panel type="AreaManagement"></loading-panel>
+		<alert-modal ng-model="alert.hasAlert" display-msg="alert.alertMessage" target-el-id="areaManagement" display-type="alert.alertType" timeout="5000"></alert-modal>
 		<div class="areas-panel" ng-class="{'panel-collapsed': !expanded}">
 			<div class="areas-panel-container">
 				<loading-panel type="AreaManagementPanel"></loading-panel>
 				<!-- TAB MENU -->
-	       		<ul class="nav nav-tabs tabMenu" ng-class="{collapsed: !expanded}">
-	        		<li ng-repeat="tab in tabs" ng-click="(helper.isEditing && selectedTab !== '{{tab.tabId}}') || selectTab(tab.tabId)" ng-show="expanded || (!expanded && selectedTab === '{{tab.tabId}}')" ng-class="{'active': selectedTab === '{{tab.tabId}}', disabled: helper.isEditing && selectedTab !== '{{tab.tabId}}'}">
-	        			<a>{{tab.title}}</a>
-	        		</li>
-	       		</ul>
-	       		<!-- COLLAPSE BTN -->
-	       		<div class="area-collapse-btn" ng-class="{collapsed: !expanded}" ng-click="switchCollapse()">
+				<ul class="nav nav-tabs tabMenu" ng-class="{collapsed: !expanded}">
+					<li ng-repeat="tab in tabs" ng-click="(helper.isEditing && selectedTab !== '{{tab.tabId}}') || selectTab(tab.tabId)" ng-show="expanded || (!expanded && selectedTab === '{{tab.tabId}}')" ng-class="{'active': selectedTab === '{{tab.tabId}}', disabled: helper.isEditing && selectedTab !== '{{tab.tabId}}'}">
+						<a>{{tab.title}}</a>
+					</li>
+				</ul>
+				<!-- COLLAPSE BTN -->
+				<div class="area-collapse-btn" ng-class="{collapsed: !expanded}" ng-click="switchCollapse()">
 					<span class="fa" ng-class="{'fa-angle-double-up': expanded, 'fa-angle-double-down': !expanded}"></span>
 				</div>
 				
-	       		<!-- USER AREAS -->
-	       		<div class="base-area-container col-md-12" ng-show="selectedTab === 'USERAREAS' && expanded" ng-include="'partial/areas/userAreas/userAreas.html'"></div>
-	       		<!-- SYSTEM AREAS -->
-	       		<div class="base-area-container col-md-12" id="system-area-form-container" ng-show="selectedTab === 'SYSAREAS' && expanded" ng-include="'partial/areas/systemAreas/systemAreas.html'"></div>    
-	            <!-- USER AREAS GROUPS -->
-	            <div class="base-area-container col-md-12" id="group-area-form-container" ng-show="selectedTab === 'AREAGROUPS' && expanded" ng-include="'partial/areas/userAreasGroups/userAreasGroups.html'"></div>
+				<!-- USER AREAS -->
+				<div class="base-area-container col-md-12" ng-show="selectedTab === 'USERAREAS' && expanded" ng-include="'partial/areas/userAreas/userAreas.html'"></div>
+				<!-- SYSTEM AREAS -->
+				<div class="base-area-container col-md-12" id="system-area-form-container" ng-show="selectedTab === 'SYSAREAS' && expanded" ng-include="'partial/areas/systemAreas/systemAreas.html'"></div>    
+				<!-- USER AREAS GROUPS -->
+				<div class="base-area-container col-md-12" id="group-area-form-container" ng-show="selectedTab === 'AREAGROUPS' && expanded" ng-include="'partial/areas/userAreasGroups/userAreasGroups.html'"></div>
 			</div>
 		</div>
 	</div>

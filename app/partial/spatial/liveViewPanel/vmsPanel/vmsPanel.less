@@ -238,6 +238,7 @@ div.table-tools i {
 
 .vmspanel-modal {
 	overflow: auto;
+	z-index: 1072 !important;
 	&.collapsed {
 		bottom: auto;
 		.modal-dialog {
@@ -245,3 +246,13 @@ div.table-tools i {
 		}
 	}
 }
+
+.fullscreen {
+	.vmspanel-modal {
+		pointer-events: none;
+		.modal-dialog {
+			pointer-events: auto;
+		}
+	}
+}
+

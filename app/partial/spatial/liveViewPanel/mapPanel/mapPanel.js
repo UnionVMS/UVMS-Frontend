@@ -71,7 +71,7 @@ angular.module('unionvmsWeb').controller('MapCtrl',function($log, $scope, locale
             size: 'lg',
             windowTopClass: 'vmspanel-modal'
         });
-        $scope.spatialHelper.deactivateFullscreen();
+        $scope.spatialHelper.configureFullscreenModal(modalInstance);
     };
 
     //Get vessel details from within the positions popup
@@ -93,9 +93,8 @@ angular.module('unionvmsWeb').controller('MapCtrl',function($log, $scope, locale
                     }
                 }
             });
+            $scope.spatialHelper.configureFullscreenModal(modalInstance);
         }
-
-        $scope.spatialHelper.deactivateFullscreen();
     };
 
     //Check for permissions

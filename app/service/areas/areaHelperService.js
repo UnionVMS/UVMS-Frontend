@@ -293,10 +293,11 @@ angular.module('unionvmsWeb').factory('areaHelperService',function(locale, areaM
         });
     };
     
-    areaHelperService.deactivateFullscreen = function() {
-        if(screenfull.isFullscreen){
-            screenfull.exit();
-        }
+	areaHelperService.configureFullscreenModal = function(modalInstance) {
+        modalInstance.rendered.then(function(){
+            $('body > .modal[uib-modal-window="modal-window"]').not($('.alert-modal-content')).appendTo('#areaMap');
+            $('[uib-modal-backdrop="modal-backdrop"]').not($('.alert-modal-backdrop')).appendTo('#areaMap');
+        });
     };
 
 	return areaHelperService;

@@ -18,14 +18,14 @@
 	    		<div class="col-md-6">
 	    			<label class="col-md-5 control-label area-modal-label">{{'areas.area_upload_modal_src_format' | i18n}}</label>
 	    			<div class="col-md-7 no-padding">
-	    				<combobox ng-model="format" items="formatItems"></combobox>
+	    				<combobox ng-model="format" items="formatItems" dest-combo-list="'.uploadAreaModal'"></combobox>
 	    			</div>
 		    	</div>
 	    		<div class="col-md-6">
 		    		<div ng-show="projections.items.length > 0">
 		    			<label class="col-md-5 control-label area-modal-label">{{'areas.editing_projection_label' | i18n}}</label>
 		    			<div class="col-md-7 no-padding">
-		    				<combobox ng-model="selProjection" items="projections.items"></combobox>
+		    				<combobox ng-model="selProjection" items="projections.items" dest-combo-list="'.uploadAreaModal'"></combobox>
 		    			</div>
 		    		</div>
 		    	</div>
@@ -34,7 +34,7 @@
 		    	<div class="col-md-6">
 	    			<label class="col-md-5 control-label area-modal-label">{{'areas.area_upload_modal_delimiter' | i18n}}</label>
 	    			<div class="col-md-7 no-padding">
-	    				<combobox ng-model="delimiter" items="delimiterItems"></combobox>
+	    				<combobox ng-model="delimiter" items="delimiterItems" dest-combo-list="'.uploadAreaModal'"></combobox>
 	    			</div>
 		    	</div>
 	    		<div class="col-md-6">

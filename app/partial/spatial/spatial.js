@@ -145,7 +145,7 @@ angular.module('unionvmsWeb').controller('SpatialCtrl',function($scope, $timeout
     };
 
     $scope.openReportList = function(evt,reportsListLoaded){
-        $scope.spatialHelper.deactivateFullscreen();
+        //$scope.spatialHelper.deactivateFullscreen();
         $scope.comboServ.closeCurrentCombo(evt);
         if (evt && reportFormService.liveView.outOfDate){
             var options = {
@@ -183,6 +183,8 @@ angular.module('unionvmsWeb').controller('SpatialCtrl',function($scope, $timeout
                 }
             }
         });
+
+        $scope.spatialHelper.configureFullscreenModal(modalInstance);
 
         modalInstance.result.then(function(data){
             if (!angular.isDefined(data)){
@@ -234,5 +236,19 @@ angular.module('unionvmsWeb').controller('SpatialCtrl',function($scope, $timeout
             loadingStatus.isLoading('LiveviewMap',false);
         });
     };
+
+    /*$(document).on('webkitfullscreenchange mozfullscreenchange fullscreenchange MSFullscreenChange', function() {
+        var modals = $('.modal[uib-modal-window="modal-window"]').not($('.alert-modal-content'));
+
+        if (document.fullscreenElement != null) {
+            angular.forEach(function(item) {
+                item.appendTo('#map');
+            });
+        } else {
+            angular.forEach(function(item) {
+                item.appendTo('body');
+            });              
+        }
+	});*/
 
 });

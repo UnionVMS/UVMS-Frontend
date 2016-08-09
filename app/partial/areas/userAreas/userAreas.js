@@ -547,7 +547,6 @@ angular.module('unionvmsWeb').controller('UserareasCtrl',function($scope, locale
     
     //Import geometry modal
     $scope.importArea = function(){
-        $scope.helper.deactivateFullscreen();
         var modalInstance = $modal.open({
             templateUrl: 'partial/areas/uploadAreaModal/uploadAreaModal.html',
             controller: 'UploadareamodalCtrl',
@@ -562,6 +561,8 @@ angular.module('unionvmsWeb').controller('UserareasCtrl',function($scope, locale
                 }
             }
         });
+
+        $scope.helper.configureFullscreenModal(modalInstance);
         
         modalInstance.result.then(function(geom){
             areaMapService.addVectorFeature(geom, true);
@@ -582,7 +583,6 @@ angular.module('unionvmsWeb').controller('UserareasCtrl',function($scope, locale
     
     //Area details modal
     $scope.openAreaDetailsModal = function(data){
-        $scope.helper.deactivateFullscreen();
         var modalInstance = $modal.open({
            templateUrl: 'partial/areas/areaDetails/areaDetails.html',
            controller: 'AreadetailsCtrl',
@@ -593,6 +593,7 @@ angular.module('unionvmsWeb').controller('UserareasCtrl',function($scope, locale
                }
            }
         });
+        $scope.helper.configureFullscreenModal(modalInstance);
     };
     
     //Get centroid coordinates in WGS and Map projection

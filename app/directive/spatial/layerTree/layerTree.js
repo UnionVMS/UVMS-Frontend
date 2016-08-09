@@ -1,4 +1,4 @@
-angular.module('unionvmsWeb').directive('layerTree', function($q, $modal, mapService, locale, loadingStatus, reportService, reportFormService, reportRestService, Report) {
+angular.module('unionvmsWeb').directive('layerTree', function($q, $modal, mapService, locale, loadingStatus, reportService, reportFormService, reportRestService, Report, spatialHelperService) {
 	return {
 		restrict: 'AE',
 		replace: true,
@@ -358,9 +358,7 @@ angular.module('unionvmsWeb').directive('layerTree', function($q, $modal, mapSer
                     }
                 });
 
-				if(screenfull.isFullscreen){
-					screenfull.exit();
-				}
+				spatialHelperService.configureFullscreenModal(modalInstance);
 			};
 			
 			var openSettingsModal = function(data){

@@ -82,5 +82,12 @@ angular.module('unionvmsWeb').factory('spatialHelperService',function(userServic
         }
     };
 
+    spServ.configureFullscreenModal = function(modalInstance) {
+        modalInstance.rendered.then(function(){
+            $('body > .modal[uib-modal-window="modal-window"]').not($('.alert-modal-content')).appendTo('#map');
+            $('[uib-modal-backdrop="modal-backdrop"]').not($('.alert-modal-backdrop')).appendTo('#map');
+        });
+    };
+
 	return spServ;
 });
