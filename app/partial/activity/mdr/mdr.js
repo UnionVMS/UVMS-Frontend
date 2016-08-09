@@ -125,7 +125,7 @@ angular.module('unionvmsWeb').controller('MdrCtrl',function($scope, mdrService, 
                 }
             }
         });
-	}
+	};
 
 	$scope.init();
 
@@ -154,7 +154,7 @@ angular.module('unionvmsWeb').controller('MdrCtrl',function($scope, mdrService, 
     });
 
      $scope.$watch("cronJobExpression", function(newValue, oldValue) {
-        if (angular.isDefined(oldValue) && oldValue !=null && (newValue != oldValue)) {
+        if (angular.isDefined(oldValue) && oldValue !==null && (newValue !== oldValue)) {
             $scope.showSaveBtn = true;
         } else {
             $scope.showSaveBtn = false;
