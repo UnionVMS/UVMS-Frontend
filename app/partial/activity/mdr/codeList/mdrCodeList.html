@@ -1,0 +1,46 @@
+<div>
+    <div class="modal-header">
+        <h4 class="modal-title">{{'activity.mdr_code_list_modal_title' | i18n}}{{acronym}}</h4>
+    </div>
+    <!-- BODY -->
+    <div class="modal-body">
+        <div st-table="displayedMdrCodeList" st-safe-src="mdrCodeList" >
+            <div class="search-field">
+                <input st-search="" class="form-control" placeholder="{{'activity.search_table_placeholder' | i18n}}" type="text"/>
+            </div>
+            <table id="codeListsTable" class="table table-striped tableSmart areas-table table-condensed">
+                <thead class="thead">
+                    <tr class="tr stColumnHeaders">
+                        <th class="th firstRow" ng-repeat="column in allColumns" st-sort="{{column}}">{{'activity.mdr_code_list_field_' + column | i18n}}</th>
+                    </tr>
+                    <tr class="tr" ng-show="!tableLoading && !displayedMdrCodeList.length">
+                        <th class="th" colspan="{{allColumns.length}}"><table-alert type="'info'" msg="'activity.table_no_data'" visible="!displayedMdrCodeList.length && !tableLoading"></table-alert></th>
+                    </tr>
+                    <tr class="tr" ng-if="tableLoading && !alert.isLoading">
+                        <th class="th loading-spinner-cl" colspan="{{allColumns.length}}"><i class="fa fa-spinner fa-spin loading-spinner"></i></th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr ng-repeat="codeListEntry in displayedMdrCodeList" >
+                        <td ng-repeat="column in allColumns">{{codeListEntry[column]}}</td>
+                    </tr>
+                </tbody>
+                <tfoot class="tfoot stFooterPagination" ng-if="displayedMdrCodeList.length && !tableLoading">
+                    <tr class="tr">
+                        <td class="td text-right" colspan="{{allColumns.length}}">
+                            <div  st-pagination st-items-by-page="itemsByPage" st-displayed-pages="7" st-template="partial/common/reportsPagination/reportsPagination.html"></div>
+                        </td>
+                    </tr>
+                </tfoot>
+            </table>
+        </div>
+    <div>
+    <!-- FOOTER -->
+    <div class="modal-footer">
+        <div class="row">
+            <div class="col-md-12">
+                <button class="btn btn-default btn-action" type="button" ng-click="close()" >{{'common.close' | i18n}}</button>
+            </div>
+        </div>
+    </div>
+</div>

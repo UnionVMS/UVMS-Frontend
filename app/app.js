@@ -1,4 +1,4 @@
-var unionvmsWebApp = angular.module('unionvmsWeb', ['ui.bootstrap', 'ui.utils', 'ngRoute', 'ngAnimate', 'ngResource', 'ngLocalize', 'tmh.dynamicLocale', 'leaflet-directive', 'ngCsv', 'ui.router', 'usm', 'checklist-model', 'angularScreenfull', 'ngCookies', 'toggle-switch', 'colorpicker.module', 'ui.select', 'ngMessages', 'angularFileUpload', 'dndLists', 'lrDragNDrop', 'dndLists', 'ui.bootstrap-slider', 'widget.assetsInZone', 'numberWidget', 'unionvmsWeb.longPolling', 'qtip2', 'chart.js', 'ngStorage']);
+var unionvmsWebApp = angular.module('unionvmsWeb', ['ui.bootstrap', 'ui.utils', 'ngRoute', 'ngAnimate', 'ngResource', 'ngLocalize', 'tmh.dynamicLocale', 'leaflet-directive', 'ngCsv', 'ui.router', 'usm', 'checklist-model', 'angularScreenfull', 'ngCookies', 'toggle-switch', 'colorpicker.module', 'ui.select', 'ngMessages', 'angularFileUpload', 'dndLists', 'lrDragNDrop', 'dndLists', 'ui.bootstrap-slider', 'widget.assetsInZone', 'numberWidget', 'unionvmsWeb.longPolling', 'qtip2', 'chart.js', 'ngStorage','angular-cron-jobs']);
 
 var currentUserContextPromise = function(userService) {
     return userService.findSelectedContext();
@@ -804,7 +804,8 @@ unionvmsWebApp.factory('initService',function($log, configurationService, locale
                 'spatial',
                 'exchange',
                 'alarms',
-                'areas'
+                'areas',
+                'activity'
             ]);
         },
     };
@@ -827,7 +828,8 @@ var restApiURLS = [
     '/reporting/rest/',
     '/spatial/rest/',
     '/mapfish-print',
-    '/usm-authentication/rest', '/usm-authorisation/rest', '/usm-administration/rest'
+    '/usm-authentication/rest', '/usm-authorisation/rest', '/usm-administration/rest',
+    '/activity/rest'
 ];
 
 //Request interceptor that routes REST api request to the REST api server
