@@ -126,7 +126,7 @@
 								<label for="circularProjection">{{'areas.editing_projection_label' | i18n}}</label>
 							</div>
 							<div class="col-md-9 proj-combo">
-								<combobox ng-model="selectedCircularProj" items="projections.items" name="circularProjection" ng-change="changeCircularProj(selectedCircularProj)" ng-init="setMapProjectionOnCombo()" components-with-scroll="'div.area-form-container'" ng-if="selectedCircularProj" is-loading="projections.isLoading" dest-combo-list="'#areaManagement'"></combobox>
+								<combobox ng-model="selectedCircularProj" items="projections.items" name="circularProjection" ng-change="changeCircularProj(selectedCircularProj)" ng-init="setMapProjectionOnCombo()" ng-if="selectedCircularProj" is-loading="projections.isLoading" dest-combo-list="'#areaManagement'"></combobox>
 							</div>
 						</div>
 					</div>
@@ -158,7 +158,7 @@
 							    <numeric-input ng-model="bufferRadius" name="radius" class="form-control" step="any" min="0" ng-required="true"></numeric-input>
 							</div>
 							<div class="col-md-5 control-input">
-							    <combobox name="distUnit" ng-model="selectedUnit" items="distUnits" components-with-scroll="'div.area-form-container'" dest-combo-list="'#areaManagement'"></combobox>
+							    <combobox name="distUnit" ng-model="selectedUnit" items="distUnits" dest-combo-list="'#areaManagement'"></combobox>
 							</div>
 						</div>
 					</ng-form>
@@ -178,7 +178,7 @@
 								<label for="editingProjection">{{'areas.editing_projection_label' | i18n}}</label>
 							</div>
 							<div class="col-md-9 proj-combo">
-								<combobox ng-model="selectedProj" items="projections.items" name="editingProjection" ng-change="changeProjection(selectedProj)" ng-init="changeProjection(selectedProj)" components-with-scroll="'div.area-form-container'"
+								<combobox ng-model="selectedProj" items="projections.items" name="editingProjection" ng-change="changeProjection(selectedProj)" ng-init="changeProjection(selectedProj)"
 								is-loading="projections.isLoading" dest-combo-list="'#areaManagement'"></combobox>
 							</div>
 						</div>
@@ -254,7 +254,7 @@
 						<label class="col-md-12 withoutPadding required-field" for="userAreaType">{{'areas.user_area_type' | i18n }}</label>
 						<div class="col-md-12 withoutPadding" ng-class="{'has-error': (userAreaForm.userAreaType.$dirty || userAreaSubmitted) && userAreaForm.userAreaType.$invalid}">
 							<div class="col-md-6 withoutPadding rightPadding">
-								<combobox ng-model="userArea.subType" items="areaTypes" editable="true" components-with-scroll="'div.area-form-container'" uppercase="true" name="userAreaType" initialtext="{{'spatial.area_selection_modal_area_type_label' | i18n | uppercase}}" ng-required="true" is-loading="isLoadingAreaTypes" dest-combo-list="'#areaManagement'"></combobox>
+								<combobox ng-model="userArea.subType" items="areaTypes" editable="true" uppercase="true" name="userAreaType" initialtext="{{'spatial.area_selection_modal_area_type_label' | i18n | uppercase}}" ng-required="true" is-loading="isLoadingAreaTypes" dest-combo-list="'#areaManagement'"></combobox>
 							</div>
 							<div class="col-md-6 withoutPadding leftPadding">
 								<div ng-messages="userAreaForm.userAreaType.$error" ng-show="(userAreaForm.userAreaType.$dirty || userAreaSubmitted) && userAreaForm.userAreaType.$invalid">
@@ -265,7 +265,7 @@
 					</div>
  					<div class="form-group scopeSelection" ng-show="isAllowed('Spatial', 'SHARE_USER_DEFINED_AREAS')">
 						<label for="scopeSelection">{{'areas.user_area_scope_selection' | i18n }}</label>
-						<combobox name="scopeSelection" ng-model="userArea.scopeSelection" multiple="true" items="userScopes"  components-with-scroll="'div.area-form-container'" initialtext="{{'areas.user_area_select_scope' | i18n}}" dest-combo-list="'#areaManagement'"></combobox>
+						<combobox name="scopeSelection" ng-model="userArea.scopeSelection" multiple="true" items="userScopes" initialtext="{{'areas.user_area_select_scope' | i18n}}" dest-combo-list="'#areaManagement'"></combobox>
 					</div>
 					<div class="form-group" ng-show="isAllowed('Spatial', 'CREATE_USER_AREA_DATASET')">
 						<label for="datasetName" class="userAreaNameField">{{'areas.user_area_dataset_name' | i18n }}</label>

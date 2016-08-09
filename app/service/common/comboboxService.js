@@ -40,7 +40,7 @@ angular.module('unionvmsWeb').factory('comboboxService', function($window) {
     		if((activeCombo.loadedItems.length * 26 > 300 ? 300 : activeCombo.loadedItems.length * 26) > bottomSpace){
     			if(topSpace > bottomSpace){
     				var comboHeight = activeCombo.loadedItems.length * 26 + 16;
-    				comboHeight += (activeCombo.initialValue && activeCombo.initialValue.text ? 26 : 0);
+    				comboHeight += (activeCombo.initialValue && activeCombo.initialValue.text && !activeCombo.noPlaceholderOnList && !activeCombo.multiple ? 26 : 0);
     				comboHeight = (comboHeight > 300 ? 300 + 4 : comboHeight);
 					activeCombo.comboContainer.css('top', buttonPosition.top - comboButtonHeight - comboHeight);
     				if(topSpace < activeCombo.loadedItems.length * 26){
@@ -55,25 +55,15 @@ angular.module('unionvmsWeb').factory('comboboxService', function($window) {
     
     var closeCombo = function(evt) {
     	if(activeCombo){
-			if(angular.isDefined(evt)){
+			activeCombo.$apply(function(){
 				activeCombo.isOpen = false;
-			}else{
-				activeCombo.$apply(function(){
-					activeCombo.isOpen = false;
-				});
-			}
-	    	if(activeCombo.componentsWithScroll){
-	    		var scrollableElements = activeCombo.componentsWithScroll.split(',');
-    			angular.forEach(scrollableElements, function(item) {
-					$(item).off('scroll',closeCombo);
-    			});
-    		}
+			});
+			$($(activeCombo.element).scrollParent()).off('scroll', closeCombo);
 	        activeCombo = undefined;
     	}
 		$($window).unbind('mousedown', closeCombo);
 		$('[uib-modal-window]').unbind('mousedown', closeCombo);
 		$($window).unbind('resize', closeCombo);
-		$(window).off("scroll", closeCombo);
     };
     
     cb.closeCurrentCombo = function(evt){
@@ -104,13 +94,7 @@ angular.module('unionvmsWeb').factory('comboboxService', function($window) {
             });
     		$($window).bind('resize', closeCombo);
     		
-    		$(window).scroll(closeCombo);
-    		if(comboScope.componentsWithScroll){
-    			var scrollableElements = comboScope.componentsWithScroll.split(',');
-    			angular.forEach(scrollableElements, function(item) {
-					$(item).scroll(closeCombo);
-    			});
-    		}
+    		$($(comboScope.element).scrollParent()).scroll(closeCombo);
 		}
 		
 		activeCombo = comboScope;

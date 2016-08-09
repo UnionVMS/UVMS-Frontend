@@ -14,7 +14,6 @@ angular.module('unionvmsWeb').directive('combobox', function($window, comboboxSe
             destComboList : '=',
             editable : '=',
             multiple : '=',
-            componentsWithScroll : '=',
             uppercase : '=',
             initialtext : '@',
             isLoading : '=',

@@ -1,13 +1,13 @@
 <ng-form name="attrRow{{$index}}" class="col-md-12 row" ng-controller="AttrfieldmappingruleCtrl">
     <div class="col-md-5" ng-class="{'has-error': wizardStep !== 3 && (attrRow{{$index}}.dbField.$dirty || savedStep2) && attrRow{{$index}}.dbField.$invalid}">
-        <combobox ng-model="selectedAttrs[$index].db" items="dbAttrs" name="dbField" initialtext="{{'areas.data_configurations_attr_field_db' | i18n}}" ng-required="true" components-with-scroll="'#system-area-form-container'" ng-if="wizardStep !== 3" group="dbAttrs" dest-combo-list="'#areaManagement'"></combobox>
+        <combobox ng-model="selectedAttrs[$index].db" items="dbAttrs" name="dbField" initialtext="{{'areas.data_configurations_attr_field_db' | i18n}}" ng-required="true" ng-if="wizardStep !== 3" group="dbAttrs" dest-combo-list="'#areaManagement'"></combobox>
         <div class="innerErrorMessagesCombobox" ng-messages="attrRow{{$index}}.dbField.$error" ng-show="(attrRow{{$index}}.dbField.$dirty || savedStep2) && attrRow{{$index}}.dbField.$invalid" ng-if="wizardStep !== 3">
             <div ng-message="required">{{'spatial.required_field_error_message' | i18n }}</div>
         </div>
         <span class="static-text" ng-bind="selectedAttrs[$index].db" ng-if="wizardStep === 3"></span>
     </div>
     <div class="col-md-5" ng-class="{'has-error': wizardStep !== 3 && (attrRow{{$index}}.shpField.$dirty || savedStep2) && attrRow{{$index}}.shpField.$invalid}">
-        <combobox ng-model="selectedAttrs[$index].shp" items="shpAttrs" name="shpField" initialtext="{{'areas.data_configurations_attr_field_shp' | i18n}}" components-with-scroll="'#system-area-form-container'" ng-required="true" ng-if="wizardStep !== 3" group="shpAttrs" dest-combo-list="'#areaManagement'"></combobox>
+        <combobox ng-model="selectedAttrs[$index].shp" items="shpAttrs" name="shpField" initialtext="{{'areas.data_configurations_attr_field_shp' | i18n}}" ng-required="true" ng-if="wizardStep !== 3" group="shpAttrs" dest-combo-list="'#areaManagement'"></combobox>
         <div class="innerErrorMessagesCombobox" ng-messages="attrRow{{$index}}.shpField.$error" ng-show="(attrRow{{$index}}.shpField.$dirty || savedStep2) && attrRow{{$index}}.shpField.$invalid" ng-if="wizardStep !== 3">
             <div ng-message="required">{{'spatial.required_field_error_message' | i18n }}</div>
         </div>
