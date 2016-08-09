@@ -1,4 +1,4 @@
-angular.controller('pipeCtrl', ['Resource', function (service) {
+angular.module('unionvmsWeb').controller('pipeCtrl', ['Resource', function (service) {
 
   var ctrl = this;
 

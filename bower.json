@@ -66,6 +66,7 @@
     "angular-bootstrap": "~0.14"
   },
   "devDependencies": {
-    "jasmine-collection-matchers": "~0.1.2"
+    "jasmine-collection-matchers": "~0.1.2",
+    "angular-cron-jobs": "^3.0.1"
   }
 }
