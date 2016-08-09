@@ -106,9 +106,8 @@ angular.module('unionvmsWeb').controller('SpatialCtrl',function($scope, $timeout
             };
             confirmationModal.open(function(reason){
                 if(reason !== 'deny'){
-                    $scope.saveReport();
+                    $scope.saveReport('form');
                 }
-                $scope.repNav.goToView('reportsPanel','reportForm');
             },
             options);
         } else {
@@ -159,9 +158,8 @@ angular.module('unionvmsWeb').controller('SpatialCtrl',function($scope, $timeout
             };
             confirmationModal.open(function(reason){
                 if(reason !== 'deny'){
-                    $scope.saveReport();
+                    $scope.saveReport('list',reportsListLoaded);
                 }
-                openReportsModal(reportsListLoaded);
             },
             options);
         } else {
@@ -189,7 +187,9 @@ angular.module('unionvmsWeb').controller('SpatialCtrl',function($scope, $timeout
             }
         });
 
-        $scope.spatialHelper.configureFullscreenModal(modalInstance);
+        if($scope.repNav.isViewVisible('mapPanel')){
+            $scope.spatialHelper.configureFullscreenModal(modalInstance);
+        }
 
         modalInstance.result.then(function(data){
             if (!angular.isDefined(data)){
@@ -222,7 +222,7 @@ angular.module('unionvmsWeb').controller('SpatialCtrl',function($scope, $timeout
         loadingStatus.isLoading('LiveviewMap',false);
     };
 
-    $scope.saveReport = function(){
+    $scope.saveReport = function(action,reportsListLoaded){
         loadingStatus.isLoading('LiveviewMap', true, 4);
         $scope.tempReport = angular.copy(reportFormService.liveView.currentReport);
         reportFormService.liveView.currentReport.currentMapConfig.mapConfiguration.layerSettings = reportFormService.checkLayerSettings(reportFormService.liveView.currentReport.currentMapConfig.mapConfiguration.layerSettings);
@@ -232,6 +232,11 @@ angular.module('unionvmsWeb').controller('SpatialCtrl',function($scope, $timeout
             angular.copy($scope.tempReport, reportFormService.liveView.currentReport);
             angular.copy(reportFormService.liveView.currentReport, reportFormService.liveView.originalReport);
             delete $scope.tempReport;
+            if(action === 'list'){
+                openReportsModal(reportsListLoaded);
+            }else{
+                $scope.repNav.goToView('reportsPanel','reportForm');
+            }
             loadingStatus.isLoading('LiveviewMap',false);
         }, function(error){
             $scope.repServ.hasAlert = true;
