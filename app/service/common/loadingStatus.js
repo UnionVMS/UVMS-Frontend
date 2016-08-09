@@ -5,9 +5,13 @@ angular.module('unionvmsWeb').factory('loadingStatus',function() {
 			value: false,
 			counter: 0
 		},
+		InitialReporting: {
+		    message: 'spatial.map_loading_report_message',
+		    value: false,
+		    counter: 0
+		},
 		LiveviewMap: {
 		    message: ['spatial.map_loading_report_message', 'spatial.map_loading_alarms_message', 'spatial.loading_data', 'spatial.processing', 'spatial.map_saving_report_message'],
-		    messageIdx: undefined,
             value: false,
             counter: 0
 		},
@@ -51,12 +55,17 @@ angular.module('unionvmsWeb').factory('loadingStatus',function() {
 	var loadingStatus = {
 		isLoading : function(type, newVal, messageIdx) {
 			if(angular.isDefined(newVal)){
-				loadings[ type ].value = newVal;
-				loadings[ type ].counter += 1;
-			} else {
-			    loadings[ type ].counter -= 1;
-			    if (loadings[ type ].counter === 0){
+			    if (newVal){
+			        loadings[ type ].counter += 1;
 			        loadings[ type ].value = newVal;
+			    } else {
+			        if (loadings[ type ].counter > 0){
+			            loadings[ type ].counter -= 1;
+			        }
+			        
+			        if (loadings[ type ].counter === 0){
+	                    loadings[ type ].value = newVal;
+	                }
 			    }
 			}
 			
@@ -82,6 +91,7 @@ angular.module('unionvmsWeb').factory('loadingStatus',function() {
 		resetState: function(){
 		    angular.forEach(loadings, function(item){
 		       item.value = false; 
+		       item.counter = 0;
 		    });
 		}
 	};

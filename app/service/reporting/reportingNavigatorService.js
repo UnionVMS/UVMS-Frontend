@@ -24,20 +24,22 @@ angular.module('unionvmsWeb').factory('reportingNavigatorService',function() {
 
 	var reportingNavigatorService = {
 		goToView: function(sectionTo,panelTo,callback,params) {
-			previousState = angular.copy(currentState);
-			currentState = {
-				section: sectionTo,
-				panel: panelTo
-			};
-			if(angular.isDefined(callback)){
-				currentState.callback = callback;
-				if(angular.isDefined(params)){
-					currentState.params = params;
-					callback.apply(this, params);
-				}else{
-					callback();
-				}
-			}
+		    if (currentState.section !== sectionTo || currentState.panel !== panelTo){
+		        previousState = angular.copy(currentState);
+	            currentState = {
+	                section: sectionTo,
+	                panel: panelTo
+	            };
+	            if(angular.isDefined(callback)){
+	                currentState.callback = callback;
+	                if(angular.isDefined(params)){
+	                    currentState.params = params;
+	                    callback.apply(this, params);
+	                }else{
+	                    callback();
+	                }
+	            }
+		    } 
 		},
 		goToPreviousView: function() {
 			var auxState = angular.copy(currentState);

@@ -14,6 +14,8 @@ angular.module('unionvmsWeb').controller('SpatialCtrl',function($scope, $timeout
     $scope.repServ.clearVmsData();
     
    locale.ready('spatial').then(function(){
+       loadingStatus.isLoading('InitialReporting', true);
+       
        //reset the map and remove references to it
        if (angular.isDefined(mapService.map)){
            mapService.map.setTarget(null);
@@ -24,7 +26,6 @@ angular.module('unionvmsWeb').controller('SpatialCtrl',function($scope, $timeout
        if($state.current.name === 'app.reporting-id'){
     	   $scope.spatialHelper.tbControl.newTab = false;
            $scope.repServ.isReportExecuting = true;
-           loadingStatus.isLoading('LiveviewMap',true);
            
            if(angular.isDefined($localStorage['report'+$state.params.id + '-' + $state.params.guid])){
                angular.copy($localStorage['report' + $state.params.id + '-' + $state.params.guid], reportFormService.liveView);
@@ -42,6 +43,7 @@ angular.module('unionvmsWeb').controller('SpatialCtrl',function($scope, $timeout
 	           }, function(error){
 	               $scope.repServ.isReportExecuting = false;
 	               $scope.repServ.errorLoadingDefault = true;
+	               loadingStatus.isLoading('InitialReporting', false);
 	           });
            }
        }else{
@@ -49,12 +51,12 @@ angular.module('unionvmsWeb').controller('SpatialCtrl',function($scope, $timeout
 	       var defaultRepObj = $scope.spatialHelper.getDefaultReport(true);
 	       if (angular.isDefined(defaultRepObj) && !_.isNaN(defaultRepObj.id) && defaultRepObj.id !== 0){
 	           $scope.repServ.isReportExecuting = true;
-	           loadingStatus.isLoading('LiveviewMap',true);
 	           reportRestService.getReport(defaultRepObj.id).then(function(response){
 	               $scope.repServ.runReport(response);
 	           }, function(error){
 	               $scope.repServ.isReportExecuting = false;
 	               $scope.repServ.errorLoadingDefault = true;
+	               loadingStatus.isLoading('InitialReporting', false);
 	           });
 	       }else{
                reportRestService.getReportsList().then(function(response){
@@ -64,10 +66,12 @@ angular.module('unionvmsWeb').controller('SpatialCtrl',function($scope, $timeout
                    }else{
                        $scope.openNewReport();
                    }
+                   loadingStatus.isLoading('InitialReporting', false);
                }, function(error){
                    $scope.repServ.hasAlert = true;
                    $scope.repServ.alertType = 'danger';
                    $scope.repServ.message = locale.getString('spatial.map_error_loading_reports_list');
+                   loadingStatus.isLoading('InitialReporting', false);
                });
                
            }
@@ -81,6 +85,7 @@ angular.module('unionvmsWeb').controller('SpatialCtrl',function($scope, $timeout
    //Report filter definitions
    $scope.editReport = function(){
 	   $scope.repServ.isReportExecuting = true;
+	   loadingStatus.isLoading('LiveviewMap', true, 0);
 	   if(!angular.isDefined(reportFormService.liveView.currentReport)){
 	       reportRestService.getReport($scope.repServ.id).then(getReportSuccess, getReportError);
 	   }else{
@@ -214,6 +219,7 @@ angular.module('unionvmsWeb').controller('SpatialCtrl',function($scope, $timeout
         $scope.formMode = mode;
         $scope.repNav.goToView('reportsPanel','reportForm');
         $scope.repServ.isReportExecuting = false;
+        loadingStatus.isLoading('LiveviewMap',false);
     };
 
     $scope.saveReport = function(){

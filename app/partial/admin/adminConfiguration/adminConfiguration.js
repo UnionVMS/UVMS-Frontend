@@ -40,7 +40,7 @@ angular.module('unionvmsWeb').controller('AuditconfigurationCtrl',function($scop
 			$scope.tabs = ["systemMonitor", "globalSettings", "reporting", "mdr"].concat(modules);
 		});
 
-		loadingStatus.isLoading('Preferences',true);
+		loadingStatus.isLoading('Preferences',true,0);
 		spatialConfigRestService.getAdminConfigs().then(function(response){
 		    var model = new SpatialConfig();
 		    $scope.configModel = model.forAdminConfigFromJson(response);

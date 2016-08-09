@@ -131,7 +131,7 @@ angular.module('unionvmsWeb').controller('MapconfigurationmodalCtrl', function (
     };
     
     var init = function(){
-    	loadingStatus.isLoading('Preferences',true);
+    	loadingStatus.isLoading('Preferences',true, 0);
     	$scope.configModel = new SpatialConfig();
     	$scope.initialConfig = reportConfigs.mapConfiguration || {};
         if(!angular.equals({}, reportConfigs.mapConfiguration)){

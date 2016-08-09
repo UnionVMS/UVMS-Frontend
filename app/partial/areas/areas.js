@@ -1,4 +1,4 @@
-angular.module('unionvmsWeb').controller('AreasCtrl',function($scope, $window, $interval, locale, genericMapService, areaMapService, projectionService, areaAlertService, areaHelperService, areaRestService, userService, loadingStatus){
+angular.module('unionvmsWeb').controller('AreasCtrl',function($scope, $window, $interval, locale, genericMapService, areaMapService, projectionService, areaAlertService, areaHelperService, areaRestService, userService, loadingStatus, alertModalService){
     $scope.expanded = true;
     $scope.alert = areaAlertService;
     $scope.helper = areaHelperService;
@@ -42,6 +42,7 @@ angular.module('unionvmsWeb').controller('AreasCtrl',function($scope, $window, $
     
     $scope.switchCollapse = function(){
         $scope.expanded = !$scope.expanded;
+        alertModalService.resizeModal();
     };
     
     $scope.isAllowed = function(module, feature){

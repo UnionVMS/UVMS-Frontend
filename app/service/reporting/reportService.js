@@ -68,6 +68,7 @@ angular.module('unionvmsWeb').factory('reportService',function($rootScope, $time
     };
     
 	rep.runReport = function(report){
+	    loadingStatus.isLoading('LiveviewMap',true, 0);
 	    rep.hasAlert = false;
         $modalStack.dismissAll();
 	    if (angular.isDefined(rep.autoRefreshInterval)){
@@ -113,9 +114,11 @@ angular.module('unionvmsWeb').factory('reportService',function($rootScope, $time
 		        if ((report && report.withMap) || rep.isReportRefreshing){
 		            spatialRestService.getConfigsForReport(rep.id, rep.getConfigsTime).then(getConfigSuccess, getConfigError);
                     reportingNavigatorService.goToView('liveViewPanel','mapPanel');
+                    loadingStatus.isLoading('InitialReporting', false);
 		        } else {
-		            spatialRestService.getConfigsForReportWithoutMap(rep.getConfigsTime).then(getConfigWithouMapSuccess, getConfigWithouMapError);
-                    reportingNavigatorService.goToView('liveViewPanel','vmsPanel'); 
+		            spatialRestService.getConfigsForReportWithoutMap(rep.getConfigsTime).then(getConfigWithoutMapSuccess, getConfigWithoutMapError);
+                    reportingNavigatorService.goToView('liveViewPanel','vmsPanel');
+                    loadingStatus.isLoading('InitialReporting', false);
 		        }
 		        
 		        rep.stopRunInterval();
@@ -124,6 +127,7 @@ angular.module('unionvmsWeb').factory('reportService',function($rootScope, $time
 	};
 	
 	rep.runReportWithoutSaving = function(report){
+	    loadingStatus.isLoading('LiveviewMap',true, 0);
 	    rep.hasAlert = false;
         $modalStack.dismissAll();
 	    if (angular.isDefined(rep.autoRefreshInterval)){
@@ -134,8 +138,10 @@ angular.module('unionvmsWeb').factory('reportService',function($rootScope, $time
     	spatialConfigRestService.getUserConfigs().then(getUserConfigsSuccess, getUserConfigsFailure);
         if(rep.mergedReport.withMap){
             reportingNavigatorService.goToView('liveViewPanel','mapPanel');
+            loadingStatus.isLoading('InitialReporting', false);
         }else{
             reportingNavigatorService.goToView('liveViewPanel','vmsPanel');
+            loadingStatus.isLoading('InitialReporting', false);
         }
 	};
 	
@@ -228,6 +234,7 @@ angular.module('unionvmsWeb').factory('reportService',function($rootScope, $time
 	    rep.alertType = 'danger';
         rep.message = locale.getString('spatial.map_error_loading_report');
         rep.refresh.status = false;
+        loadingStatus.isLoading('LiveviewMap', false);
 	};
 	
 	var getRepConfig = function(){
@@ -242,7 +249,7 @@ angular.module('unionvmsWeb').factory('reportService',function($rootScope, $time
 	};
 	
 	//Get config without map Success callback
-    var getConfigWithouMapSuccess = function(data){
+    var getConfigWithoutMapSuccess = function(data){
         //Set vms table attribute visibility
         vmsVisibilityService.setVisibility(data.visibilitySettings);
         
@@ -261,7 +268,7 @@ angular.module('unionvmsWeb').factory('reportService',function($rootScope, $time
     };
     
     //Get config without map Success callback
-    var getConfigWithouMapError = function(error){
+    var getConfigWithoutMapError = function(error){
         rep.isReportExecuting = false;
         rep.hasAlert = true;
         rep.alertType = 'danger';
@@ -341,6 +348,7 @@ angular.module('unionvmsWeb').factory('reportService',function($rootScope, $time
         if (rep.refresh.status === true) {
             rep.setAutoRefresh();
         }
+        loadingStatus.isLoading('LiveviewMap', false);
     };
     
     //Get VMS data Failure callback
@@ -355,6 +363,7 @@ angular.module('unionvmsWeb').factory('reportService',function($rootScope, $time
         rep.alertType = 'danger';
         rep.message = locale.getString('spatial.map_error_loading_report');
         rep.refresh.status = false;
+        loadingStatus.isLoading('LiveviewMap', false);
     };
     
     //Refresh report success callback
@@ -489,6 +498,7 @@ angular.module('unionvmsWeb').factory('reportService',function($rootScope, $time
         rep.message = locale.getString('spatial.user_preferences_error_getting_configs');
 	    rep.isReportRefreshing = false;
 		rep.isReportExecuting = false;
+		loadingStatus.isLoading('LiveviewMap', false);
 	};
 	
 	var mergeSettings = function(userConfig){
@@ -588,6 +598,7 @@ angular.module('unionvmsWeb').factory('reportService',function($rootScope, $time
         rep.message = locale.getString('spatial.user_preferences_error_getting_configs');
 	    rep.isReportRefreshing = false;
 		rep.isReportExecuting = false;
+		loadingStatus.isLoading('LiveviewMap', false);
 	};
 
 	rep.loadReportHistory = function(){

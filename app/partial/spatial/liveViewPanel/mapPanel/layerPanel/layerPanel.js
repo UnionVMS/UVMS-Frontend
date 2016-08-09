@@ -1,4 +1,4 @@
-angular.module('unionvmsWeb').controller('LayerpanelCtrl',function($scope, $timeout, $state, $window, mapService, locale, reportService, reportFormService, reportRestService, loadingStatus){
+angular.module('unionvmsWeb').controller('LayerpanelCtrl',function($scope, $timeout, $state, $window, mapService, locale, reportService, reportFormService, reportRestService, loadingStatus, alertModalService){
     $scope.expanded = true;
     $scope.tab = "LAYERTREE";
     $scope.tabTitle = undefined;
@@ -23,6 +23,7 @@ angular.module('unionvmsWeb').controller('LayerpanelCtrl',function($scope, $time
     
     $scope.switchCollapse = function(){
         $scope.expanded = !$scope.expanded;
+        alertModalService.resizeModal();
     };
     
     $scope.tabClick = function( tab ) {

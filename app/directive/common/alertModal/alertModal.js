@@ -1,10 +1,33 @@
-angular.module('unionvmsWeb').directive('alertModal', function($modal, $timeout) {
+angular.module('unionvmsWeb').factory('alertModalService', function($timeout){
+    var alertModalService = {
+        setReference: function(id){
+            this.sidePanelId = id;
+        },
+        clearReference: function(){
+            delete this.sidePanelId;
+        },
+        setSize: function(){
+            var panelWidth = parseInt(angular.element('#' + this.sidePanelId).css('width'));
+            angular.element('.alert-modal-content .modal-content').css('margin-left', panelWidth + 20);
+        },
+        resizeModal: function(){
+            var self = this;
+            $timeout(function(){
+                self.setSize();
+            }, 100);
+        }
+    };
+    
+    return alertModalService;
+})
+.directive('alertModal', function($modal, $timeout, alertModalService) {
 	return {
 		restrict: 'E',
 		replace: true,
 		scope: {
 		    ngModel: '=',
 		    targetElId: '@',
+		    sidePanelId: '@',
 		    timeout: '@',
 		    displayMsg : '=',
 		    displayType: '=' //one of danger, warning, success
@@ -15,6 +38,7 @@ angular.module('unionvmsWeb').directive('alertModal', function($modal, $timeout)
 		        scope.ngModel = false;
                 scope.displayType = undefined;
                 scope.displayMsg = undefined;
+                alertModalService.clearReference();
 		    };
 		    
 		    var modalCtrl = function ($scope, $modalInstance){
@@ -47,6 +71,16 @@ angular.module('unionvmsWeb').directive('alertModal', function($modal, $timeout)
 		        
 		        scope.modalInstance.rendered.then(function(){
 		            angular.element('.alert-modal-content').appendTo('#' + scope.targetElId);
+		            
+		            if (angular.isDefined(scope.sidePanelId)){
+		                alertModalService.setReference(scope.sidePanelId);
+		                alertModalService.setSize();
+		            }
+		        });
+		        
+		        scope.modalInstance.result.then(function(){
+		            resetModalStatus();
+                    delete scope.modalInstance;
 		        });
 		        
 		        if (angular.isDefined(scope.timeout)){
@@ -60,10 +94,6 @@ angular.module('unionvmsWeb').directive('alertModal', function($modal, $timeout)
 		    scope.$watch('ngModel', function(newVal){
 		        if (newVal){
 		            scope.open();
-		        } else if (!newVal && angular.isDefined(scope.modalInstance)) {
-		            resetModalStatus();
-		            scope.modalInstance.close();
-		            delete scope.modalInstance;
 		        }
 		    });
 		}

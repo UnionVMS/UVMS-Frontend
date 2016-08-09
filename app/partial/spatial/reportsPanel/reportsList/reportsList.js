@@ -201,7 +201,6 @@ angular.module('unionvmsWeb').controller('ReportslistCtrl',function($scope, $fil
     	var rep = $scope.displayedRecords[resp.index];
     	if ($scope.repServ.id === rep.id){
     	    $scope.repServ.resetReport();
-    	    $scope.repServ.liveviewEnabled = false;
     	}
     	
         if (index !== -1) {
