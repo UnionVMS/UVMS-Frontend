@@ -67,7 +67,10 @@ angular.module('unionvmsWeb').factory('comboboxService', function($window) {
     };
     
     cb.closeCurrentCombo = function(evt){
-    	closeCombo(evt);
+		if(activeCombo){
+			activeCombo.isOpen = false;
+			cb.setActiveCombo(null);
+		}
     };
 	
 	cb.setActiveCombo = function(comboScope){
