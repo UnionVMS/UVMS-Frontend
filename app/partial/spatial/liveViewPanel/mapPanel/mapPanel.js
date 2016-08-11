@@ -363,21 +363,23 @@ angular.module('unionvmsWeb').controller('MapCtrl',function($log, $scope, locale
         var previousControl = $scope.activeControl;
 
         $scope.winExpanded = true;
-        if (tool !== previousControl && previousControl !== ''){
-            fn = previousControl + 'Disable';
-            $scope.activeControl = tool;
-            $scope[fn]();
-        } else if (tool === previousControl){
-            fn = previousControl + 'Disable';
-            $scope.activeControl = '';
-            $scope[fn]();
-        } else {
-            $scope.activeControl = tool;
-        }
+        if (angular.isDefined(mapService.map)){
+            if (tool !== previousControl && previousControl !== ''){
+                fn = previousControl + 'Disable';
+                $scope.activeControl = tool;
+                $scope[fn]();
+            } else if (tool === previousControl){
+                fn = previousControl + 'Disable';
+                $scope.activeControl = '';
+                $scope[fn]();
+            } else {
+                $scope.activeControl = tool;
+            }
 
-        if ($scope.activeControl !== ''){
-            fn = $scope.activeControl + 'Enable';
-            $scope[fn]();
+            if ($scope.activeControl !== ''){
+                fn = $scope.activeControl + 'Enable';
+                $scope[fn]();
+            }
         }
     };
 
@@ -465,18 +467,22 @@ angular.module('unionvmsWeb').controller('MapCtrl',function($log, $scope, locale
 
     //Map graticule
     $scope.toggleGraticule = function(){
-        $scope.graticuleActivated = !$scope.graticuleActivated;
-        mapService.setGraticule($scope.graticuleActivated);
-        var firstTitle = locale.getString('spatial.map_tip_enable');
-        if ($scope.graticuleActivated){
-            firstTitle = locale.getString('spatial.map_tip_disable');
+        if (angular.isDefined(mapService.map)){
+            $scope.graticuleActivated = !$scope.graticuleActivated;
+            mapService.setGraticule($scope.graticuleActivated);
+            var firstTitle = locale.getString('spatial.map_tip_enable');
+            if ($scope.graticuleActivated){
+                firstTitle = locale.getString('spatial.map_tip_disable');
+            }
+            $scope.graticuleTip = [firstTitle, locale.getString('spatial.map_tip_graticule')].join(' ');
         }
-        $scope.graticuleTip = [firstTitle, locale.getString('spatial.map_tip_graticule')].join(' ');
     };
 
     //Fetch alarms
     $scope.getAlarms = function(){
-        $scope.repServ.getAlarms();
+        if (angular.isDefined(mapService.map)){
+            $scope.repServ.getAlarms();
+        }
     };
 
     //Bookmarks control
@@ -566,9 +572,11 @@ angular.module('unionvmsWeb').controller('MapCtrl',function($log, $scope, locale
 
     //Clear highlight features control
     $scope.clearMapHighlights = function () {
-        var layer = mapService.getLayerByType('highlight');
-        if (angular.isDefined(layer)) {
-            layer.getSource().clear(true);
+        if (angular.isDefined(mapService.map)){
+            var layer = mapService.getLayerByType('highlight');
+            if (angular.isDefined(layer)) {
+                layer.getSource().clear(true);
+            }
         }
     };
 
@@ -611,6 +619,23 @@ angular.module('unionvmsWeb').controller('MapCtrl',function($log, $scope, locale
         $scope.repNav.goToSection('userPreferences');
     };
 
+    var reopenEnabledPopups = function() {
+    	setTimeout(function() {
+    		if($scope.showMeasureConfigWin){
+        		$scope.openMeasureConfigWin();
+        	}
+    		if($scope.showMapFishConfigWin){
+    			$scope.openMapFishConfigWin();
+    		}
+    		if($scope.showGazetteer){
+    			$scope.gazetteerEnable();
+    		}
+            if($scope.showBookmarksWin){
+    			$scope.bookmarksEnable();
+    		}
+    	}, 100);
+	};
+    
     $scope.$watch(function(){return $scope.repNav.isViewVisible('mapPanel');}, function(newVal,oldVal){
         if(newVal === true && !angular.isDefined($scope.repServ.autoRefreshInterval) && $scope.repServ.refresh.status){
             $scope.repServ.setAutoRefresh();
@@ -620,19 +645,15 @@ angular.module('unionvmsWeb').controller('MapCtrl',function($log, $scope, locale
     });
 
     $($window).resize(mapService.updateMapContainerSize);
-    $(document).on('webkitfullscreenchange mozfullscreenchange fullscreenchange MSFullscreenChange', function() {
-    	setTimeout(function() {
-    		if($scope.showMeasureConfigWin){
-        		$scope.openMeasureConfigWin();
-        	}
-    		if($scope.showMapFishConfigWin){
-    			$scope.openMapFishConfigWin();
-    		}
-    	}, 100);
-	});
+    $(document).on('webkitfullscreenchange mozfullscreenchange fullscreenchange MSFullscreenChange', reopenEnabledPopups);
 
     angular.element(document).ready(function () {
         mapService.updateMapContainerSize();
+    });
+
+    $scope.$on('$destroy', function(){
+        $($window).unbind('resize', mapService.updateMapContainerSize);
+        $($window).unbind('webkitfullscreenchange mozfullscreenchange fullscreenchange MSFullscreenChange', reopenEnabledPopups);
     });
 
     //Other controls

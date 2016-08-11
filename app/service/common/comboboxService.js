@@ -96,7 +96,6 @@ angular.module('unionvmsWeb').factory('comboboxService', function($window) {
             	}
             });
     		$($window).bind('resize', closeCombo);
-    		
     		$($(comboScope.element).scrollParent()).scroll(closeCombo);
 		}
 		

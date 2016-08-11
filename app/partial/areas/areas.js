@@ -165,4 +165,8 @@ angular.module('unionvmsWeb').controller('AreasCtrl',function($scope, $window, $
     angular.element(document).ready(function () {
         $scope.updateContainerSize();
     });
+
+    $scope.$on('$destroy', function(){
+        $($window).unbind('resize', $scope.updateContainerSize);
+    });
 });
