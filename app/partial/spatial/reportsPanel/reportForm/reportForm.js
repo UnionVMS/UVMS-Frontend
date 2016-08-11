@@ -61,7 +61,10 @@ angular.module('unionvmsWeb').controller('ReportformCtrl',function($scope, $moda
             msg: ''
         };
         $scope.submitingReport = false;
-        $scope.report.vesselsSelection = [];
+
+        if ($scope.formMode === 'CREATE'){
+            $scope.report.vesselsSelection = [];
+        }
         $scope.showVesselFilter = false;
         $scope.selectedAreas = [];
 
