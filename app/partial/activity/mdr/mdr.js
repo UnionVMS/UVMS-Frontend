@@ -112,9 +112,6 @@ angular.module('unionvmsWeb').controller('MdrCtrl',function($scope, mdrService, 
 	};
 
 	$scope.openCodeListModal = function(acronym) {
-	    //TODO
-	    console.error("openCodeListModal not implemented. Parameter: " + acronym);
-
         var modalInstance = $modal.open({
             templateUrl: 'partial/activity/mdr/codeList/mdrCodeList.html',
             controller: 'MdrcodelistCtrl',

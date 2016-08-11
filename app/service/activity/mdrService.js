@@ -21,10 +21,10 @@ angular.module('unionvmsWeb').factory('mdrServiceFactory',function($resource) {
           //the URL should be /activity/rest/acronyms/details
             return $resource('service/activity/listAcronyms.json');
           },
-           getMDRCodeListByAcronym: function(acronym) {
+           getMDRCodeListByAcronym: function(acronym, offset, size, filter, sortBy, sortReversed) {
             //the URL should be /activity/rest/acronyms/details
               return $resource('service/activity/codeList.json');
-            }
+          }
       };
   })
   .service('mdrService',function($q, mdrServiceFactory) {
@@ -61,9 +61,17 @@ angular.module('unionvmsWeb').factory('mdrServiceFactory',function($resource) {
   	        });
   	        return deferred.promise;
   	    },
-  	    getMDRCodeListByAcronym: function(acronym) {
+  	    getMDRCodeListByAcronym: function(acronym, tableState) {
+      	    var pagination = tableState.pagination;
+            var offset = pagination.start || 0;     // This is NOT the page number, but the index of item in the list that you want to use to display the table.
+            var size = pagination.number || 10;  // Number of entries showed per page.
+            var filter = tableState.search.predicateObject;
+            var sortBy = tableState.sort.predicate;
+            var sortReversed = tableState.sort.reverse;
+
             var deferred = $q.defer();
-            mdrServiceFactory.getMDRCodeListByAcronym(acronym).get(function(response) {
+            mdrServiceFactory.getMDRCodeListByAcronym(acronym, offset, size, filter, sortBy, sortReversed).get(function(response) {
+                tableState.pagination.numberOfPages = response.numberOfPages||10;//set the number of pages so the pagination can update
                 deferred.resolve(response.data);
             }, function(error) {
                 console.error('Error listing code list details');

@@ -1,32 +1,41 @@
-angular.module('unionvmsWeb').controller('MdrcodelistCtrl',function($scope, $modalInstance, acronym, mdrService){
+angular.module('unionvmsWeb').controller('MdrcodelistCtrl',function($scope, $modalInstance, acronym, mdrService, $timeout){
 
-    $scope.mdrCodeList = [];
     $scope.displayedMdrCodeList = [];
     $scope.allColumns = [];
     $scope.acronym = acronym;
     $scope.tableLoading = true;
-
-    $scope.init = function() {
-        mdrService.getMDRCodeListByAcronym(acronym).then(loadSuccess, loadFailed);
-    };
-
-    var loadSuccess = function(response) {
-        if (angular.isDefined(response) && response.length > 0 ) {
-            $scope.mdrCodeList = response;
-            $scope.displayedMdrCodeList = [].concat($scope.mdrCodeList);
-            $scope.allColumns = _.allKeys($scope.mdrCodeList[0]);
-         }
-         $scope.tableLoading = false;
-    };
-
-    var loadFailed = function(error) {
-        //TODO
-        $scope.tableLoading = false;
-    };
-
-    $scope.init();
+    $scope.searchFilter = '';
 
     $scope.close = function() {
         $modalInstance.close();
     };
+
+    $scope.callServer = function callServer(tableState) {
+
+        $scope.tableLoading = true;
+
+        mdrService.getMDRCodeListByAcronym(acronym, tableState).then(function (result) {
+            if (angular.isDefined(result) && result.length > 0 ) {
+                $scope.allColumns = _.allKeys(result[0]);
+                $scope.displayedMdrCodeList = result;
+             }
+
+            $scope.tableLoading = false;
+          });
+    };
+/*
+    $scope.$watch('searchFilter', function(newVal, oldVal){
+        if (angular.isDefined(newVal) && newVal !== ''){
+            $scope.tableLoading = true;
+            if ($scope.requestTimer){
+                $timeout.cancel($scope.requestTimer);
+            }
+
+            $scope.requestTimer = $timeout(function(){
+             //   $scope.doRequest(newVal); TODO
+            }, 1500, true, $scope);
+        } else {
+            $scope.searchFilter = '';
+        }
+    });*/
 });
