@@ -391,6 +391,12 @@ unionvmsWebApp.config(function($stateProvider, $compileProvider, tmhDynamicLocal
             data: {
                 pageTitle: 'header.page_title_reports'
             },
+            onEnter: function($state,locale,userService,errorService){
+                if(_.isNull(userService.getCurrentContext().scope)){
+                    errorService.setErrorMessage(locale.getString('spatial.reports_error_user_without_scope'));
+                    $state.go('error');
+                }
+            },
             onExit: function(loadingStatus){
                 loadingStatus.resetState();
             }
@@ -410,6 +416,12 @@ unionvmsWebApp.config(function($stateProvider, $compileProvider, tmhDynamicLocal
             },
             data: {
                 pageTitle: 'header.page_title_reports'
+            },
+            onEnter: function($state,locale,userService,errorService){
+                if(_.isNull(userService.getCurrentContext().scope)){
+                    errorService.setErrorMessage(locale.getString('spatial.reports_error_user_without_scope'));
+                    $state.go('error');
+                }
             },
             onExit: function(loadingStatus){
                 loadingStatus.resetState();
