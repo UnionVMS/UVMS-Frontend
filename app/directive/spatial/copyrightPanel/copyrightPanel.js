@@ -1,4 +1,4 @@
-angular.module('unionvmsWeb').directive('copyrightPanel', function(mapService) {
+angular.module('unionvmsWeb').directive('copyrightPanel', function(mapService, layerPanelService) {
 	return {
 		restrict: 'EA',
 		replace: true,
@@ -33,9 +33,13 @@ angular.module('unionvmsWeb').directive('copyrightPanel', function(mapService) {
     	link: function(scope, element, attrs, ctrl) {
             scope.records = ctrl.init();
             
-            scope.$on('reloadLegend', function(){
+            layerPanelService.panelToReload.push(function(){
                 scope.records = ctrl.init();
             });
+
+            /*scope.$on('reloadLegend', function(){
+                scope.records = ctrl.init();
+            });*/
         }
 	};
 });

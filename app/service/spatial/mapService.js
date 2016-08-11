@@ -23,7 +23,7 @@
  * @description
  *  Service to control the map on the liveview of the reporting tab
  */
-angular.module('unionvmsWeb').factory('mapService', function(locale, $rootScope, $window, $localStorage, $timeout, $interval, $templateRequest, $filter, spatialHelperService, globalSettingsService, unitConversionService, coordinateFormatService, MapFish, genericMapService) {
+angular.module('unionvmsWeb').factory('mapService', function(locale, $rootScope, $window, $localStorage, $timeout, $interval, $templateRequest, $filter, spatialHelperService, globalSettingsService, unitConversionService, coordinateFormatService, MapFish, genericMapService, layerPanelService) {
 	var ms = {};
 	ms.sp = spatialHelperService;
 
@@ -227,7 +227,8 @@ angular.module('unionvmsWeb').factory('mapService', function(locale, $rootScope,
                 }
             }
             
-            $rootScope.$broadcast('reloadLegend');
+            layerPanelService.reloadPanels();
+            //$rootScope.$broadcast('reloadLegend');
         });
 	    
 	    return view;

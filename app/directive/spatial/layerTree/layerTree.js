@@ -1,4 +1,4 @@
-angular.module('unionvmsWeb').directive('layerTree', function($q, $modal, mapService, locale, loadingStatus, reportService, reportFormService, reportRestService, Report, spatialHelperService) {
+angular.module('unionvmsWeb').directive('layerTree', function($q, $modal, mapService, locale, loadingStatus, reportService, reportFormService, reportRestService, Report, spatialHelperService, layerPanelService) {
 	return {
 		restrict: 'AE',
 		replace: true,
@@ -197,7 +197,8 @@ angular.module('unionvmsWeb').directive('layerTree', function($q, $modal, mapSer
 				    }
 				}
 				vmsVisibilityListener(data.node);
-				scope.$parent.$broadcast('reloadLegend');
+				layerPanelService.reloadPanels();
+				//scope.$parent.$broadcast('reloadLegend');
 			};
 
 			var loopFolderNodes = function(parent){
@@ -452,7 +453,8 @@ angular.module('unionvmsWeb').directive('layerTree', function($q, $modal, mapSer
                     reverseTreeSource( source );
                     mapLayers = mapService.map.getLayers().getArray();
                     addLayers( source );
-                    scope.$parent.$broadcast('reloadLegend');
+					layerPanelService.reloadPanels();
+                    //scope.$parent.$broadcast('reloadLegend');
                 }
 			};
 
@@ -557,19 +559,19 @@ angular.module('unionvmsWeb').directive('layerTree', function($q, $modal, mapSer
 				});
 			};
 
-			var updateLayerTreeSource = function( event, source ) {
+			layerPanelService.updateLayerTreeSource = function(source) {
 			    mapService.removeAllLayers();
 				scope.$tree.reload( source );
 				updateMap();
 			};
 
-			var addLayerTreeNode = function ( event, node ) {
+			layerPanelService.addLayerTreeNode = function(node) {
 				var root = scope.$tree.getRootNode();
-				root.addChildren( node, scope.$tree.getFirstChild() );
+				root.addChildren(node, scope.$tree.getFirstChild());
 				updateMap();
 			};
 
-			var removeVmsNodes = function(event){
+			layerPanelService.removeVmsNodes = function(event){
 				var root = scope.$tree.getRootNode();
 				var nodesOfInterest = ['vmsdata', 'alarms'];
 
@@ -582,7 +584,6 @@ angular.module('unionvmsWeb').directive('layerTree', function($q, $modal, mapSer
 					    root.removeChild(target[i]);
 					}
 				});
-
 			};
 
 			//Get layer index in the ol layers collection
@@ -700,7 +701,8 @@ angular.module('unionvmsWeb').directive('layerTree', function($q, $modal, mapSer
                                 };
                             }
 							changeLayerOrder();
-							scope.$parent.$broadcast('reloadLegend');
+							layerPanelService.reloadPanels();
+							//scope.$parent.$broadcast('reloadLegend');
 						}
 					},
 					glyph: glyph_opts,
@@ -731,9 +733,6 @@ angular.module('unionvmsWeb').directive('layerTree', function($q, $modal, mapSer
 				createTree( scope.source );
 			});
 
-			scope.$on( 'updateLayerTreeSource', updateLayerTreeSource );
-			scope.$on( 'addLayerTreeNode', addLayerTreeNode );
-			scope.$on( 'removeVmsNodes', removeVmsNodes);
 		}
 	};
 });

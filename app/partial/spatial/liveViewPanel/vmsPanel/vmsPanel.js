@@ -135,6 +135,7 @@ angular.module('unionvmsWeb').controller('VmspanelCtrl',function($scope, locale,
            mapService.highlightFeature(trackGeom);
        }
        
+       angular.element('.vmspanel-modal').addClass('collapsed');
        $scope.modalCollapsed = true;
        mapService.zoomTo(geom);
    };

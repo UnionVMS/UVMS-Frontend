@@ -1,4 +1,4 @@
-angular.module('unionvmsWeb').factory('reportService',function($rootScope, $timeout, $interval, $anchorScroll, locale, TreeModel, reportRestService, reportFormService, spatialRestService, spatialHelperService, defaultMapConfigs, mapService, unitConversionService, vmsVisibilityService, mapAlarmsService, loadingStatus, spatialConfigRestService, SpatialConfig, Report, globalSettingsService, userService, reportingNavigatorService, $modalStack) {
+angular.module('unionvmsWeb').factory('reportService',function($rootScope, $timeout, $interval, $anchorScroll, locale, TreeModel, reportRestService, reportFormService, spatialRestService, spatialHelperService, defaultMapConfigs, mapService, unitConversionService, vmsVisibilityService, mapAlarmsService, loadingStatus, spatialConfigRestService, SpatialConfig, Report, globalSettingsService, userService, reportingNavigatorService, $modalStack, layerPanelService) {
 
     var rep = {
        id: undefined,
@@ -59,7 +59,7 @@ angular.module('unionvmsWeb').factory('reportService',function($rootScope, $time
                 type: 'OSM'
             }]
         });
-        $rootScope.$broadcast('updateLayerTreeSource', treeSource);
+        layerPanelService.updateLayerTreeSource(treeSource);
     };
     
     rep.stopRunInterval = function(){
@@ -147,7 +147,7 @@ angular.module('unionvmsWeb').factory('reportService',function($rootScope, $time
 	
 	rep.clearMapOverlaysOnRefresh = function(){
 	    //Check for measuring overlays
-	    $rootScope.$broadcast('untoggleToolbarBtns');
+        rep.untoggleToolbarBtns();
 	    
 	    //Deactivate labels
         if (mapService .vmsposLabels.active === true){
@@ -290,7 +290,7 @@ angular.module('unionvmsWeb').factory('reportService',function($rootScope, $time
                 } else { //if not we create the layer and add the node to the tree
                     var alarmsNode = new TreeModel();
                     alarmsNode = alarmsNode.nodeForAlarms(featureCollection);
-                    $rootScope.$broadcast('addLayerTreeNode', alarmsNode);
+                    layerPanelService.addLayerTreeNode(alarmsNode);
                 }
             }
         } else {
@@ -331,7 +331,7 @@ angular.module('unionvmsWeb').factory('reportService',function($rootScope, $time
                 var vectorNodeSource = new TreeModel();
                 vectorNodeSource = vectorNodeSource.nodeFromData(data);
                 
-                $rootScope.$broadcast('addLayerTreeNode', vectorNodeSource);
+                layerPanelService.addLayerTreeNode(vectorNodeSource);
                 
                 if (reportingNavigatorService.isViewVisible('mapPanel')){
                     mapService.zoomToPositionsLayer();
@@ -368,7 +368,8 @@ angular.module('unionvmsWeb').factory('reportService',function($rootScope, $time
     
     //Refresh report success callback
     var updateVmsDataSuccess = function(data){
-        $rootScope.$broadcast('removeVmsNodes');
+        layerPanelService.removeVmsNodes();
+        //$rootScope.$broadcast('removeVmsNodes');
         rep.positions = data.movements.features;
         rep.segments = data.segments.features;
         rep.tracks = data.tracks;
@@ -380,7 +381,7 @@ angular.module('unionvmsWeb').factory('reportService',function($rootScope, $time
         if (rep.positions.length > 0 || rep.segments.length > 0){
             var vectorNodeSource = new TreeModel();
             vectorNodeSource = vectorNodeSource.nodeFromData(data);
-            $rootScope.$broadcast('addLayerTreeNode', vectorNodeSource);
+            layerPanelService.addLayerTreeNode(vectorNodeSource);
         } else if (rep.positions.length === 0 && rep.segments.length === 0){
             rep.hasAlert = true;
             rep.alertType = 'warning';
@@ -465,7 +466,7 @@ angular.module('unionvmsWeb').factory('reportService',function($rootScope, $time
 	    var treeSource = new TreeModel();
 	    treeSource = treeSource.fromConfig(data.map.layers);
 	    $timeout(function() {
-	        $rootScope.$broadcast('updateLayerTreeSource', treeSource);
+            layerPanelService.updateLayerTreeSource(treeSource);
 	    });
 	    
         //map refresh configs

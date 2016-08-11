@@ -14,7 +14,7 @@ angular.module('unionvmsWeb').directive('imageOnLoad', function(){
         }
     };
 })
-.directive('legendPanel', function(locale, mapService, unitConversionService, $localStorage, $compile) {
+.directive('legendPanel', function(locale, mapService, unitConversionService, $localStorage, $compile, layerPanelService) {
 	return {
 		restrict: 'EA',
 		replace: true,
@@ -284,9 +284,12 @@ angular.module('unionvmsWeb').directive('imageOnLoad', function(){
 		        scope.initialized = true;
 		        scope.legendRecords = ctrl.init();
 	            
-	            scope.$on('reloadLegend', function(){
+				layerPanelService.panelToReload.push(function(){
+					scope.legendRecords = ctrl.init();
+				});
+	            /*scope.$on('reloadLegend', function(){
 	                scope.legendRecords = ctrl.init();
-	            });
+	            });*/
 		        $compile(element)(scope);
             }
 		    

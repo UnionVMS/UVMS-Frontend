@@ -600,11 +600,11 @@ angular.module('unionvmsWeb').controller('MapCtrl',function($log, $scope, locale
       }
 
     //Untoggle any toolbar btn when tab is changed
-    $scope.$on('untoggleToolbarBtns', function (evt) {
+    $scope.repServ.untoggleToolbarBtns = function () {
         if ($scope.activeControl !== '') {
             $scope.toggleToolbarBtn($scope.activeControl);
         }
-    });
+    };
     
     $scope.openUserPrefs = function(){
         $scope.spatialHelper.deactivateFullscreen();

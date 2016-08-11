@@ -1,4 +1,4 @@
-angular.module('unionvmsWeb').directive('layerMenu', function(locale, reportFormService, reportService, reportRestService, Report, $modal, loadingStatus) {
+angular.module('unionvmsWeb').directive('layerMenu', function(locale, reportFormService, reportService, reportRestService, Report, $modal, loadingStatus, layerPanelService) {
 	return {
 		restrict: 'A',
 		//templateUrl: 'directive/spatial/layerMenu/layerMenu.html',
@@ -28,7 +28,8 @@ angular.module('unionvmsWeb').directive('layerMenu', function(locale, reportForm
                         items[i].selected = status;
                     }
                     
-                    scope.$parent.$broadcast('reloadLegend');
+					layerPanelService.reloadPanels();
+                    //scope.$parent.$broadcast('reloadLegend');
                 }
             };
 			
