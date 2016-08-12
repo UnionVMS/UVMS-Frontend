@@ -246,16 +246,8 @@ angular.module('unionvmsWeb')
             updateOptions(newOptions);
         });
         
-        var cleanup = function(){
-            //Remove the datepicker from the DOM
-            jQuery("#" +$scope.datepickerId).remove();
-
-            //Remove event listeners from input field
-            jQuery("#" +$scope.inputFieldId).off();
-        };
-
         $scope.$on('$destroy', function() {
-            cleanup();
+            jQuery("#" +$scope.inputFieldId).datetimepicker('destroy');
         });
 
         init();
