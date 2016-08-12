@@ -1,6 +1,7 @@
 <!-- POSITION DETAILS -->
+{{#alarm}}
+{{#includeAssetDetails}}
 <div class="col-md-12 info-content alarm">
-	{{#alarm}}
 	<div class="row">
 		<div class=col-md-6>
 			<span class="title">{{titles.name}}:</span>
@@ -32,6 +33,7 @@
 <div class="col-md-12 info-content">
 	<div class="col-md-12 form-separator"></div>
 </div>
+{{/includeAssetDetails}}
 <!-- ALARM DETAILS -->
 <div class="col-md-12">
 	<span class="alarm-header">{{alarmTitle}}</span>
@@ -78,5 +80,5 @@
 			<div class="rule-definition">{{alarm.ruleDef}}</div>
 		</div>
 	</div>
-	{{/alarm}}
 </div>
+{{/alarm}}

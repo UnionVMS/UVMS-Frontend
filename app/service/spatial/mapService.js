@@ -3060,15 +3060,18 @@ angular.module('unionvmsWeb').factory('mapService', function(locale, $rootScope,
     
     //POPUP - alarms
     //Define the object that will be used in the popup for alarms
-    ms.setAlarmsObjPopup = function(feature){
+    ms.setAlarmsObjPopup = function(feature, includeAsset){
+        if (!angular.isDefined(includeAsset)){
+            includeAsset = true;
+        }
         var titles = ms.getAlarmTitles();
         var srcData = ms.formatAlarmDataForPopup(feature);
         
         return {
-            //positionTitle: locale.getString('spatial.popup_positions_title'),
             alarmTitle: locale.getString('spatial.popup_alarms_title'),
             titles: titles,
-            alarm: srcData
+            alarm: srcData,
+            includeAssetDetails: includeAsset
         };
     };
     

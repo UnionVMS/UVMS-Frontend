@@ -11,6 +11,7 @@ angular.module('unionvmsWeb').factory('reportService',function($rootScope, $time
        positions: [],
        segments: [],
        tracks: [],
+       alarms: [],
        refresh: {
             status: false,
             rate: undefined
@@ -26,6 +27,7 @@ angular.module('unionvmsWeb').factory('reportService',function($rootScope, $time
         rep.positions = [];
         rep.segments = [];
         rep.tracks = [];
+        rep.alarms = [];
     };
     
     rep.resetReport = function(){
@@ -280,6 +282,7 @@ angular.module('unionvmsWeb').factory('reportService',function($rootScope, $time
         if (angular.isDefined(response.data)){
             var featureCollection = response.data.alarms;
             if (featureCollection.features.length > 0){
+                rep.alarms = response.data.alarms.features;
                 //Check if alarms layer is already added to the map
                 var layer = mapService.getLayerByType('alarms');
                 if (angular.isDefined(layer)){ //if so we clear all features and add new ones

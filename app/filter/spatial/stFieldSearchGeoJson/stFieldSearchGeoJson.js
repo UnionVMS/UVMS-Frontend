@@ -24,7 +24,7 @@ angular.module('smart-table').filter('stFieldSearchGeoJson', function($filter, u
         var timeFields = ['duration', 'totalTimeAtSea'];
         var numberFields = ['reportedSpeed', 'calculatedSpeed', 'speedOverGround', 'distance'];
         
-        if (type === 'positions' || type === 'segments'){
+        if (type !== 'tracks'){
             searchObj.properties = {};
         }
         
@@ -165,7 +165,7 @@ angular.module('smart-table').filter('stFieldSearchGeoJson', function($filter, u
                 }
             }
             
-            if (type === 'positions' || type === 'segments'){
+            if (type !== 'tracks'){
                 if (_.indexOf(numberFields, searchableKeys[i]) === -1 &&  _.indexOf(timeFields, searchableKeys[i]) === -1){
                     if (searchableKeys[i].indexOf('lon') !== -1){
                         keyIn = true;
@@ -195,11 +195,16 @@ angular.module('smart-table').filter('stFieldSearchGeoJson', function($filter, u
                         } else {
                             additionalFilters.lat.min = srcObject[searchableKeys[i]]; 
                         }
-                    } else if (searchableKeys[i] === 'startDate' || searchableKeys[i] === 'endDate') {
+                    } else if (searchableKeys[i] === 'startDate' || searchableKeys[i] === 'endDate' || searchableKeys[i] === 'alarmStartDate' || searchableKeys[i] === 'alarmEndDate') {
                         keyIn = true;
                         additionalFilters[searchableKeys[i]] = srcObject[searchableKeys[i]];
                         var name = searchableKeys[i] + 'Field';
-                        additionalFilters[name] = 'positionTime';
+                        if (type === 'positions'){
+                            additionalFilters[name] = 'positionTime';
+                        } else if (type === 'alarms'){
+                            additionalFilters[name] = 'ticketOpenDate';
+                        }
+                        
                         additionalFilters.doSearch = true;
                     }
                 }

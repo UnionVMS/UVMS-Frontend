@@ -204,6 +204,7 @@
 	"tab_vms_export_csv_positions_filename": "positions.csv",
 	"tab_vms_export_csv_segments_filename": "segments.csv",
 	"tab_vms_export_csv_tracks_filename": "tracks.csv",
+	"tab_vms_export_csv_alarms_filename": "alarms.csv",
 	"table_no_data": "No data available",
 	"table_filters_activate": "Show filters",
 	"table_filters_deactivate": "Hide filters",
@@ -228,6 +229,7 @@
 	"tab_vms_pos_table_header_source": "Source",
 	"tab_vms_pos_table_zoom_btn_title": "Zoom to position",
 	"tab_vms_pos_table_pan_btn_title": "Pan to position",
+	"rule_table_details_btn_title": "Alarm details",
 	"tab_vms_pos_table_lat_dd_qtip": "<p>Lat</p>Value must be between -90 and 90<br>e.g. 10.5",
 	"tab_vms_pos_table_lon_dd_qtip": "<p>Lon</p>Value must be between -180 and 180<br>e.g. 47.5",
 	"tab_vms_pos_table_lon_ddm_qtip": "<p>Lon</p>Degrees must be an integer between -180 and 180.<br>Minutes must be a float between 0 an 60.<br>e.g. 40&deg 15.22&#8242",
@@ -457,6 +459,9 @@
 	"rule_open_date": "Opened on",
 	"rule_update_date": "Updated on",
 	"rule_updated_by": "Updated by",
+	"rule_status": "Status",
+	"rule_table_header_name": "Alarm name",
+	"rule_table_header_desc": "Alarm description",
 	"loading_preferences": "Loading preferences",
 	"saving_preferences": "Saving preferences",
 	"reseting_preferences": "Reseting preferences",
@@ -479,5 +484,9 @@
 	"report_list_modal_title": "Report list",
 	"report_history_list_btn": "List",
 	"report_history_create_new_btn": "Create new",
-	"apply": "Apply"
+	"report_list_modal_title": "Report list",
+	"reports_error_user_without_scope": "Report module not accessable to accounts without a scope.",
+	"apply": "Apply",
+	"wms_preview_btn_tooltip": "Preview data",
+	"alarm_preview_btn_tooltip": "Alarm details"
 }

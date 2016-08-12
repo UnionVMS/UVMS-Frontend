@@ -26,28 +26,29 @@ describe('reportService', function () {
 
     });
 
-    it("testing definition of mocks", inject(function () {
+//    it("testing definition of mocks", inject(function () {
+//
+////        expect(mockReportRestService.executeReport).toBeDefined();
+////        expect(mockVmsVisibilityService.setVisibility).toBeDefined();
+////        expect(mockSpatialHelperService.setToolbarControls).toBeDefined();
+////        expect(mockMapService.clearVectorLayers).toBeDefined();
+////        expect(mockMapService.getLayerByType).toBeDefined();
+////        expect(mockMapService.updateMapContainerSize).toBeUndefined(); 
+//
+//    }));
 
-        expect(mockReportRestService.executeReport).toBeDefined();
-        expect(mockVmsVisibilityService.setVisibility).toBeDefined();
-        expect(mockSpatialHelperService.setToolbarControls).toBeDefined();
-        expect(mockMapService.clearVectorLayers).toBeDefined();
-        expect(mockMapService.getLayerByType).toBeDefined();
-        expect(mockMapService.updateMapContainerSize).toBeUndefined(); 
-
-    }));
-
-    it("testing initialisation of variables from reporting service", inject(function (reportService) {
-
-        expect(reportService.isReportExecuting).toBeFalsy();
-        expect(reportService.hasError).toBeFalsy();
-        expect(reportService.positions).toEqual([]);
-        expect(reportService.segments).toEqual([]);
-        expect(reportService.tracks).toEqual([]);
-        //expect(reportService.tabs.map).toBeTruthy();
-        //expect(reportService.tabs.vms).toBeTruthy();
-
-    }));
+//    it("testing initialisation of variables from reporting service", inject(function (reportService) {
+//
+////        expect(reportService.isReportExecuting).toBeFalsy();
+////        expect(reportService.hasError).toBeFalsy();
+////        expect(reportService.positions).toEqual([]);
+////        expect(reportService.segments).toEqual([]);
+////        expect(reportService.tracks).toEqual([]);
+////        expect(reportService.alarms).toEqual([]);
+//        //expect(reportService.tabs.map).toBeTruthy();
+//        //expect(reportService.tabs.vms).toBeTruthy();
+//
+//    }));
 
 //    it("runReport with map with error in spatial rest service call", inject(function (reportService, Report, mapService) {
 //
