@@ -85,8 +85,10 @@ angular.module('unionvmsWeb').factory('alertModalService', function($timeout){
 		        
 		        if (angular.isDefined(scope.timeout)){
                     $timeout(function(){
-                        resetModalStatus();
-                        scope.modalInstance.close();
+						if(angular.isDefined(scope.modalInstance)){
+							resetModalStatus();
+							scope.modalInstance.close();
+						}
                     }, parseInt(scope.timeout), true, scope.modalInstance);
                 }
 		    };

@@ -124,11 +124,13 @@ angular.module('unionvmsWeb').factory('comboboxService', function($window) {
 	};
 	
 	cb.updateComboListGroup = function(groupName, newVal, oldVal){
-		if(angular.isDefined(oldVal) && selectedItemsGroup[groupName].indexOf(oldVal) !== -1){
-			selectedItemsGroup[groupName].splice(selectedItemsGroup[groupName].indexOf(oldVal),1);
-		}
-		if(angular.isDefined(newVal)){
-			selectedItemsGroup[groupName].push(newVal);
+		if(angular.isDefined(selectedItemsGroup) && angular.isDefined(selectedItemsGroup[groupName])){
+			if(angular.isDefined(oldVal) && selectedItemsGroup[groupName].indexOf(oldVal) !== -1){
+				selectedItemsGroup[groupName].splice(selectedItemsGroup[groupName].indexOf(oldVal),1);
+			}
+			if(angular.isDefined(newVal)){
+				selectedItemsGroup[groupName].push(newVal);
+			}
 		}
 	};
 	

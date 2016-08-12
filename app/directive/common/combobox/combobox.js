@@ -55,13 +55,6 @@ angular.module('unionvmsWeb').directive('combobox', function($window, comboboxSe
             	}
         	}
             
-            if(scope.group){
-        		scope.comboboxServ.initializeGroup(scope.group,scope);
-                scope.$on('$destroy', function() {
-                    scope.comboboxServ.removeCombo(scope.group,scope);
-                });
-        	}
-            
             //Get the label for an item
             //Default item variable "text" is used if no title attr is set
             scope.getItemLabel = function(item){
@@ -355,6 +348,19 @@ angular.module('unionvmsWeb').directive('combobox', function($window, comboboxSe
                 if(scope.initialitem){
                     scope.addDefaultValueToDropDown();
                 }
+
+                scope.$on('$destroy', function() {
+                    if(scope.group){
+                        scope.comboboxServ.initializeGroup(scope.group,scope);
+                        scope.comboboxServ.removeCombo(scope.group,scope);
+                    }
+                    var comboToRemove = $('#' + scope.comboboxId);
+                    if(comboToRemove){
+                        comboToRemove.remove();
+                    }
+                });
+                
+
             };
 
             init();

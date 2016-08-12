@@ -393,7 +393,7 @@ unionvmsWebApp.config(function($stateProvider, $compileProvider, tmhDynamicLocal
             },
             onEnter: function($state,locale,userService,errorService){
                 if(_.isNull(userService.getCurrentContext().scope)){
-                    errorService.setErrorMessage(locale.getString('spatial.reports_error_user_without_scope'));
+                    errorService.setErrorMessage(locale.getString('common.error_user_without_scope'));
                     $state.go('error');
                 }
             },
@@ -419,7 +419,7 @@ unionvmsWebApp.config(function($stateProvider, $compileProvider, tmhDynamicLocal
             },
             onEnter: function($state,locale,userService,errorService){
                 if(_.isNull(userService.getCurrentContext().scope)){
-                    errorService.setErrorMessage(locale.getString('spatial.reports_error_user_without_scope'));
+                    errorService.setErrorMessage(locale.getString('common.error_user_without_scope'));
                     $state.go('error');
                 }
             },
@@ -438,6 +438,12 @@ unionvmsWebApp.config(function($stateProvider, $compileProvider, tmhDynamicLocal
             data: {
                 access: 'VIEW_AREA_MANAGEMENT_UI',
                 pageTitle: 'header.page_title_areas'
+            },
+            onEnter: function($state,locale,userService,errorService){
+                if(_.isNull(userService.getCurrentContext().scope)){
+                    errorService.setErrorMessage(locale.getString('common.error_user_without_scope'));
+                    $state.go('error');
+                }
             },
             onExit: function(loadingStatus){
                 loadingStatus.resetState();

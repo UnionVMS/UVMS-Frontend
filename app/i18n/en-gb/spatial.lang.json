@@ -479,6 +479,5 @@
 	"report_list_modal_title": "Report list",
 	"report_history_list_btn": "List",
 	"report_history_create_new_btn": "Create new",
-	"apply": "Apply",
-	"reports_error_user_without_scope": "Report module not accessable to accounts without a scope."
+	"apply": "Apply"
 }
