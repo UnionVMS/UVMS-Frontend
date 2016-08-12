@@ -48,11 +48,11 @@
 										<a href="" qtip at="top left" my="bottom right" content="{{'spatial.tab_vms_pos_table_header_cfr' | i18n }}" class="info-qtip qtip-blue"><i class="fa fa-question-circle"></i></a>
 									</div>
 									<div class="col-md-2 st-table-filters" ng-show="attrVisibility.positions.posTime">
-										<datepicker-input time="true" model="startDate" max-date="endDate" placeholder="{{'spatial.table_filter_start_date' | i18n }}" ng-change-callback="resetDateTimePicker" input-field-id="vms-panel-filter-start-date-picker"></datepicker-input>
+										<datepicker-input time="true" model="startDate" max-date="endDate" placeholder="{{'spatial.table_filter_start_date' | i18n }}" ng-change-callback="resetDateTimePicker" input-field-id="vms-panel-filter-start-date-picker{{isModal ? '-modal' : ''}}"></datepicker-input>
 										<a href="" qtip at="top left" my="bottom right" content="{{'spatial.table_filter_start_date' | i18n }}" class="info-qtip qtip-blue"><i class="fa fa-question-circle"></i></a>
 									</div>
 									<div class="col-md-2 st-table-filters" ng-show="attrVisibility.positions.posTime">
-										<datepicker-input time="true" model="endDate" min-date="startDate" placeholder="{{'spatial.table_filter_end_date' | i18n }}" ng-change-callback="resetDateTimePicker" input-field-id="vms-panel-filter-end-date-picker"></datepicker-input>
+										<datepicker-input time="true" model="endDate" min-date="startDate" placeholder="{{'spatial.table_filter_end_date' | i18n }}" ng-change-callback="resetDateTimePicker" input-field-id="vms-panel-filter-end-date-picker{{isModal ? '-modal' : ''}}"></datepicker-input>
 										<a href="" qtip at="top left" my="bottom right" content="{{'spatial.table_filter_end_date' | i18n }}" class="info-qtip qtip-blue"><i class="fa fa-question-circle"></i></a>
 									</div>
 									<div class="col-md-2 st-table-filters" ng-show="attrVisibility.positions.name">
@@ -464,11 +464,11 @@
 									</div>
 									<!-- RULE OPEN DATE -->
 									<div class="col-md-2 st-table-filters">
-										<datepicker-input time="true" model="alarmStartDate" max-date="alarmEndDate" placeholder="{{'spatial.table_filter_start_date' | i18n }}" ng-change-callback="resetDateTimePicker" input-field-id="alarm-panel-filter-start-date-picker"></datepicker-input>
+										<datepicker-input time="true" model="alarmStartDate" max-date="alarmEndDate" placeholder="{{'spatial.table_filter_start_date' | i18n }}" ng-change-callback="resetDateTimePicker" input-field-id="alarm-panel-filter-start-date-picker{{isModal ? '-modal' : ''}}"></datepicker-input>
 										<a href="" qtip at="top left" my="bottom right" content="{{'spatial.table_filter_start_date' | i18n }}" class="info-qtip qtip-blue"><i class="fa fa-question-circle"></i></a>
 									</div>
 									<div class="col-md-2 st-table-filters">
-										<datepicker-input time="true" model="alarmEndDate" min-date="alarmStartDate" placeholder="{{'spatial.table_filter_end_date' | i18n }}" ng-change-callback="resetDateTimePicker" input-field-id="alarm-panel-filter-end-date-picker"></datepicker-input>
+										<datepicker-input time="true" model="alarmEndDate" min-date="alarmStartDate" placeholder="{{'spatial.table_filter_end_date' | i18n }}" ng-change-callback="resetDateTimePicker" input-field-id="alarm-panel-filter-end-date-picker{{isModal ? '-modal' : ''}}"></datepicker-input>
 										<a href="" qtip at="top left" my="bottom right" content="{{'spatial.table_filter_end_date' | i18n }}" class="info-qtip qtip-blue"><i class="fa fa-question-circle"></i></a>
 									</div>
 									<!-- RULE STATUS -->
