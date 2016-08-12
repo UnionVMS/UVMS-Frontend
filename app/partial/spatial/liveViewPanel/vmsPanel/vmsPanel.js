@@ -201,10 +201,6 @@ angular.module('unionvmsWeb').controller('VmspanelCtrl',function($scope, locale,
            geom.set('GeometryType', 'MultiLineString');
        }
        
-       if (geomType !== 'ALARM'){
-           geom.transform('EPSG:4326', mapService.getMapProjectionCode());
-       }
-       
        if (geomType !== 'TRACK'){
            mapService.highlightFeature(geom);
        } else {

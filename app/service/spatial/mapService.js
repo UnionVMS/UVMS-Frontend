@@ -87,9 +87,6 @@ angular.module('unionvmsWeb').factory('mapService', function(locale, $rootScope,
 	        var selInteraction = ms.getInteractionsByType('Select')[0];
 	        var dragInteraction = ms.getCustomInteraction('Pointer', 'dragExtent')[0];
 	        
-	        
-	        
-	        
 	        //get feature info
 	        if (angular.equals({}, ms.measureInteraction) && !angular.isDefined(dragInteraction)){
 	            var records = [];

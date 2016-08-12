@@ -506,6 +506,10 @@ angular.module('unionvmsWeb').directive('layerTree', function($q, $modal, mapSer
 					layer.set( 'visible', value.selected );// don't request tiles if not selected
 					if (layer.get('type') === 'vmsseg'){
 					    //Add feature highlight layer before the vms segments and positions
+					    var highlightLayer = mapService.getLayerByType('highlight');
+					    if (angular.isDefined(highlightLayer)){
+					        mapService.map.removeLayer(highlightLayer);
+					    }
 					    mapService.addFeatureOverlay();
 					}
 					mapService.map.addLayer( layer );
