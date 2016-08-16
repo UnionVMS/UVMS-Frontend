@@ -308,6 +308,7 @@ angular.module('unionvmsWeb').controller('ReportformCtrl',function($scope, $moda
     });
 
     var createReportSuccess = function(response){
+        reportService.loadReportHistory();
         if($scope.repNav.hasPreviousState()){
             $scope.repNav.goToPreviousView();
         }else{
@@ -324,6 +325,7 @@ angular.module('unionvmsWeb').controller('ReportformCtrl',function($scope, $moda
     };
 
     var updateReportSuccess = function(response){
+        reportService.loadReportHistory();
         if($scope.repNav.hasPreviousState()){
             $scope.repNav.goToPreviousView();
         }else{

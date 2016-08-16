@@ -110,7 +110,7 @@ module.exports = function (grunt) {
     },
     jsdoc: {
         dist: {
-            src: ['app/service/spatial/*.js', 'app/service/areas/*.js', 'app/partial/spatial/**/*.js', '!*-spec.js'],
+            src: ['app/service/common/*.js', 'app/service/spatial/*.js', 'app/service/reporting/*.js', 'app/service/areas/*.js', '!app/service/common/auth/*.js', 'app/partial/spatial/', '!*-spec.js'],
             options: {
                 destination: 'dist/docs',
                 configure: 'node_modules/angular-jsdoc/common/conf.json',

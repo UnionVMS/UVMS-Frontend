@@ -1,3 +1,11 @@
+/**
+ * @memberof unionvmsWeb
+ * @ngdoc service
+ * @name loadingStatus
+ * @attr {Object} loadings - A property object with the status of all available loading messages
+ * @description
+ *  Service to manage all existent legendPanel(directive) in the application
+ */
 angular.module('unionvmsWeb').factory('loadingStatus',function() {
 	var loadings = {
 		Preferences: {
@@ -53,7 +61,18 @@ angular.module('unionvmsWeb').factory('loadingStatus',function() {
 	};
 	
 	var loadingStatus = {
+		/**
+		 * Get or set the status of a specific loadingPanel
+		 * 
+		 * @memberof loadingStatus
+		 * @public
+		 * @param {String} type
+		 * @param {Boolean} newVal
+		 * @param {Number} messageIdx
+		 * @returns {Boolean} If loadingPanel is visible
+		 */
 		isLoading : function(type, newVal, messageIdx) {
+			//if newVal is defined this function is used as a setter, if not, it's a getter
 			if(angular.isDefined(newVal)){
 			    if (newVal){
 			        loadings[ type ].counter += 1;
@@ -78,6 +97,14 @@ angular.module('unionvmsWeb').factory('loadingStatus',function() {
 			
 			return loadings[ type ].value;
 		},
+		/**
+		 * Get the current message of a specific type of loading
+		 * 
+		 * @memberof loadingStatus
+		 * @public
+		 * @param {String} type
+		 * @returns {String} loading message
+		 */
 		message : function(type) {
 		    if (_.isArray(loadings[ type ].message)){
 		        var idx = 0;
@@ -88,6 +115,12 @@ angular.module('unionvmsWeb').factory('loadingStatus',function() {
 		    } 
 			return loadings[ type ].message;
 		},
+		/**
+		 * Reset all the loadings status
+		 * 
+		 * @memberof loadingStatus
+		 * @public
+		 */
 		resetState: function(){
 		    angular.forEach(loadings, function(item){
 		       item.value = false; 

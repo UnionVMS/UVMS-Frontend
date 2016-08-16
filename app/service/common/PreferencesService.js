@@ -1,5 +1,27 @@
+/**
+ * @memberof unionvmsWeb
+ * @ngdoc service
+ * @name PreferencesService
+ * @param loadingStatus {service} loading status service
+ * @param spatialConfigRestService {service} Spatial REST API service
+ * @param spatialConfigAlertService {service} Spatial REST API service
+ * @param $anchorScroll {service} angular anchorScroll service
+ * @param locale {service} angular locale service
+ * @param $location {service} angular location service
+ * @param SpatialConfig {service} Spatial Config service
+ * @attr {Object} stylesErrors - A property object where are registered all the form errors from styles settings
+ * @description
+ *  Service to manage the Preferences(Admin,User and report levels)
+ */
 angular.module('unionvmsWeb').factory('PreferencesService',function(loadingStatus,spatialConfigRestService, spatialConfigAlertService, $anchorScroll, locale, $location, SpatialConfig) {
 
+	/**
+     * Reset success callback - reset settings of a specific type
+     * 
+     * @memberof PreferencesService
+     * @private
+     * @param {Object} response
+     */
 	var resetSuccess = function(response){
 		var settingsType = response.settingsType;
 		var configModel = response.configModel;
@@ -22,6 +44,13 @@ angular.module('unionvmsWeb').factory('PreferencesService',function(loadingStatu
         loadingStatus.isLoading('Preferences',false);
     };
 
+	/**
+     * Reset failure callback - display error message
+     * 
+     * @memberof PreferencesService
+     * @private
+     * @param {Object} error
+     */
 	var resetFailure = function(error){
 		var settingsType = error.settingsType;
 	    $anchorScroll();
@@ -32,6 +61,13 @@ angular.module('unionvmsWeb').factory('PreferencesService',function(loadingStatu
         loadingStatus.isLoading('Preferences',false);
 	};
 
+	/**
+     * Get config success callback - get and load spatial config settings
+     * 
+     * @memberof PreferencesService
+     * @private
+     * @param {Object} response
+     */
 	var getConfigsSuccess = function(response){
 		var settingsType = response.settingsType;
 		var configModel = response.configModel;
@@ -77,6 +113,13 @@ angular.module('unionvmsWeb').factory('PreferencesService',function(loadingStatu
         loadingStatus.isLoading('Preferences',false);
 	};
 
+	/**
+     * Get config failure callback - display error message
+     * 
+     * @memberof PreferencesService
+     * @private
+     * @param {Object} error
+     */
 	var getConfigsFailure = function(error){
 		var settingsType = error.settingsType;
 	    $anchorScroll();
@@ -102,6 +145,19 @@ angular.module('unionvmsWeb').factory('PreferencesService',function(loadingStatu
 				segments: {}
 			}
 		},
+
+		/**
+		 * Reset preferences of a specific type
+		 * 
+		 * @memberof PreferencesService
+		 * @public
+		 * @param {String} settingsType
+		 * @param {Object} form
+		 * @param {Object} configModel
+		 * @param {Object} configCopy
+		 * @param {String} settingsLevel
+		 * @param {Function} callback
+		 */
 		reset : function(settingsType,form,configModel,configCopy,settingsLevel,callback){
 			loadingStatus.isLoading('Preferences',true, 1);
 			var item = {};
@@ -113,8 +169,16 @@ angular.module('unionvmsWeb').factory('PreferencesService',function(loadingStatu
 				spatialConfigRestService.getUserConfigs(settingsType,configModel,form,true,undefined,callback).then(getConfigsSuccess, getConfigsFailure);
 			}
 		},
-		clearStylesErrors : function(level){
-			this.stylesErrors[level] = {
+
+		/**
+		 * Clear errors in styles settings form from a specified level(Admin,User,Report)
+		 * 
+		 * @memberof PreferencesService
+		 * @public
+		 * @param {String} settingsLevel
+		 */
+		clearStylesErrors : function(settingsLevel){
+			this.stylesErrors[settingsLevel] = {
 				positions: {},
 				segments: {}
 			};
