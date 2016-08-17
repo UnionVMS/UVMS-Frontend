@@ -37,6 +37,7 @@
         "jsPDF": true,
 		"L": true,
 		"saveAs": true,
-		"screenfull": true
+		"screenfull": true,
+		"proj4": true
     }
 }

@@ -7,6 +7,7 @@
  * @param $window {service} angular window service
  * @param locale {service} angular locale service
  * @param spatialRestService {service} Spatial REST API service
+ * @param projectionService {service} map projection service <p>{@link unionvmsWeb.projectionService}</p>
  * @attr {Object} mapBasicConfigs - A property object that will contain basic map configurations (not used in the liveview map)
  * @description
  *  Service for map generic functions that can be used in all maps throughout the application
@@ -138,6 +139,16 @@ angular.module('unionvmsWeb').factory('genericMapService',function($localStorage
      * @returns {ol.prol.Projection} The OL projection
      */
     var setProjection = function(proj){
+        if (!angular.isDefined(proj4.defs('EPSG:' + proj.epsgCode))){
+            proj4.defs('EPSG:' + proj.epsgCode, proj.projDef);
+        }
+        
+        var worldExtent = [-180, -89.99, 180, 89.99];
+        if (angular.isDefined(proj.worldExtent)){
+            var tempExt = proj.worldExtent.split(';');
+            worldExtent = [parseFloat(tempExt[0]), parseFloat(tempExt[1]), parseFloat(tempExt[2]), parseFloat(tempExt[3])];
+        }
+        
         var ext = proj.extent.split(';');
         var projection = new ol.proj.Projection({
             code: 'EPSG:' + proj.epsgCode,
@@ -145,7 +156,7 @@ angular.module('unionvmsWeb').factory('genericMapService',function($localStorage
             axisOrientation: proj.axis,
             global: proj.global,
             extent: [parseFloat(ext[0]), parseFloat(ext[1]), parseFloat(ext[2]), parseFloat(ext[3])],
-            worldExtent: [-180, -89.99, 180, 89.99]
+            worldExtent: worldExtent
         });
 
         return projection;
@@ -484,9 +495,10 @@ angular.module('unionvmsWeb').factory('genericMapService',function($localStorage
      * @returms {ol.View} The OL map view 
      */
     var createView = function(config){
+        var proj = this.setProjection(config);
         var center = ol.proj.transform([-1.81185, 52.44314], 'EPSG:4326', 'EPSG:' + config.epsgCode);
         var view = new ol.View({
-            projection: this.setProjection(config),
+            projection: proj,
             center: center,
             //extent: [-2734750,3305132,1347335,5935055],
             //loadTilesWhileInteracting: true,

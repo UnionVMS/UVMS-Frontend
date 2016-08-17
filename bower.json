@@ -67,6 +67,7 @@
   },
   "devDependencies": {
     "jasmine-collection-matchers": "~0.1.2",
-    "angular-cron-jobs": "^3.0.1"
+    "angular-cron-jobs": "^3.0.1",
+    "proj4": "^2.3.14"
   }
 }

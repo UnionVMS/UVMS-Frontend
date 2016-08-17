@@ -16,10 +16,25 @@
  * @param coordinateFormatService {service} coordinate format service
  * @param MapFish {service} Mapfish service
  * @param genericMapService {service} generic map service<p>{@link unionvmsWeb.genericMapService}</p>
+ * @param layerPanelService {service} layer panel service
  * @attr {ol.Graticule} mapGraticule - The OL map graticule
  * @attr {Number} mapPrintResolution - The current map resolution to use while printing
  * @attr {Object} styles - An object containing the styles definitions for vms positions, segments and alarms
  * @attr {Array<ol.control>} addedControls - An array containing all the controls added to the map
+ * @attr {Object} clusterStyles - An object containing a reference to the cluster styles that were previously computed
+ * @attr {Number} clusterMinFeatureCount - The feature count of the smallest cluster
+ * @attr {Number} clustermaxFeatureCount - The feature count of the biggest cluster
+ * @attr {Number} currentResolution - The current map resolution
+ * @attr {Object} vmsSources - An object containing all the different VMS sources types and their current visibility
+ * @attr {Object} measureInteraction - A quick reference to the measure OL interaction
+ * @attr {Number} measurePointsLength - The number of points defining the linestring of the measure geometry
+ * @attr {Boolean} measureETA - Whether the ETA should be computed while measuring
+ * @attr {Object} measureOverlays - An object containing a reference to all displayed popup overlays
+ * @attr {Object} labelVisibility - An object containing the visibility and attributes to be used in labels for vms positions and segments
+ * @attr {Object} vmsposLabels - An object containing the activity status and the ids of all displayed position labels
+ * @attr {Object} vmssegLabels - An object containing the activity status and the ids of all displayed segment labels
+ * @attr {Object} popupVisibility - An object containing the visibility and attributes to be used in popups for vms positions and segments
+ * @attr {Object} popupRecContainer - An object containing reference to all features to be displayed in the popup, used for looping through features that are on top of each other
  * @description
  *  Service to control the map on the liveview of the reporting tab
  */
@@ -283,6 +298,15 @@ angular.module('unionvmsWeb').factory('mapService', function(locale, $rootScope,
 	};
 	
     //create layer, returns ol.layer.* or undefined
+	/**
+	 * Generic function to create all types of layers
+	 * 
+	 * @memberof mapService
+	 * @public
+	 * @alias createLayer
+	 * @param {Object} config - the object containing all layer configuration options
+	 * @returns {ol.layer.Layer|undefined} The OL layer object or undefined
+	 */
     ms.createLayer = function( config ){
         var layer;
         switch (config.type) {
@@ -1113,16 +1137,6 @@ angular.module('unionvmsWeb').factory('mapService', function(locale, $rootScope,
                 clusterFeat.set('featNumber', counter);
             }
         });
-        
-//        var feature;
-//        for (var i = 0; i < features.length; i++){
-//            feature = features[i];
-//            var includedPositions = feature.get('features');
-//            
-//            feature.set('featNumber', includedPositions.length);
-//            ms.clusterMaxFeatureCount = Math.max(ms.clusterMaxFeatureCount, includedPositions.length);
-//            ms.clusterMinFeatureCount = Math.min(ms.clusterMinFeatureCount, includedPositions.length);
-//        }
     };
     
     /**
@@ -2252,6 +2266,13 @@ angular.module('unionvmsWeb').factory('mapService', function(locale, $rootScope,
 	
 	//Measuring interaction
 	ms.measureInteraction = {};
+	/**
+	 * Add measure control and start it automatically
+	 * 
+	 * @memberof mapService
+	 * @public
+	 * @alias startMeasureControl
+	 */
 	ms.startMeasureControl = function(){
 	    var layer = ms.getLayerByType('measure-vector');
         if (angular.isDefined(layer)){
@@ -2294,6 +2315,13 @@ angular.module('unionvmsWeb').factory('mapService', function(locale, $rootScope,
 	ms.measurePointsLength = 0;
 	ms.measureOverlays = [];
 	ms.measureETA = undefined;
+	/**
+	 * Register all draw events for the measure control
+	 * 
+	 * @memberof mapService
+	 * @public
+	 * @alias registerDrawEvents
+	 */
 	ms.registerDrawEvents = function(draw, layer){
 	    var listener;
 	    draw.on('drawstart', function(evt){
@@ -2331,7 +2359,15 @@ angular.module('unionvmsWeb').factory('mapService', function(locale, $rootScope,
 	    });
 	};
 	
-	//Calculate length over the sphere and bearing
+	/**
+	 * Calculate length over the sphere, bearing and ETA of the measures drawn
+	 *  
+	 *  @memberof mapService
+	 *  @public
+	 *  @alias calculateLengthAndBearingAndETA
+	 *  @param {ol.geom.LineString} line - The OL line geometry
+	 *  @returns {Object} An object containing the measured distances, bearing and ETA
+	 */
 	ms.calculateLengthAndBearingAndETA = function(line){
 	    var coords = line.getCoordinates();
 	    var sourceProj = ms.getMapProjectionCode();
@@ -2407,6 +2443,14 @@ angular.module('unionvmsWeb').factory('mapService', function(locale, $rootScope,
 	    }
 	};
 	
+	/**
+	 * Create the measure tooltips
+	 * 
+	 * @memberof mapService
+	 * @public
+	 * @alias createMeasureTooltip
+	 * @param {Object} data - The object containing the data to be displayed on the tooltip
+	 */
 	ms.createMeasureTooltip = function(data){
 	    var el = document.createElement('div');
 	    el.className = 'map-tooltip map-tooltip-small';
@@ -2457,6 +2501,13 @@ angular.module('unionvmsWeb').factory('mapService', function(locale, $rootScope,
 	    ms.measureOverlays.push(tooltip);
 	};
 	
+	/**
+     * Remove all measure tooltip overlays
+     * 
+     * @memberof mapService
+     * @public
+     * @alias clearMeasureOverlays
+     */
 	ms.clearMeasureOverlays = function(){
 	    for (var i = 0; i < ms.measureOverlays.length; i++){
 	        ms.map.removeOverlay(ms.measureOverlays[i]);
@@ -2464,6 +2515,13 @@ angular.module('unionvmsWeb').factory('mapService', function(locale, $rootScope,
 	    ms.measureOverlays = [];
 	};
 	
+	/**
+     * Clear the measure control by removing it from the map and destroying all tooltip overlyas
+     * 
+     * @memberof mapService
+     * @public
+     * @alias clearMeasureControl
+     */
 	ms.clearMeasureControl = function(){
 	    ms.clearMeasureOverlays();
 	    ms.map.removeInteraction(ms.measureInteraction);
@@ -2471,11 +2529,29 @@ angular.module('unionvmsWeb').factory('mapService', function(locale, $rootScope,
 	    ms.measureInteraction = {};
 	};
 	
+	/**
+	 * Convert point coordinates to GeoJSON so that they can be used in Turf
+	 * 
+	 * @memberof mapService
+	 * @public
+	 * @alias pointCoordsToTurf
+	 * @param {Array<ol.Coordinate>} coords - An array containing ol.Coordinate
+	 * @returns {String} The GeoJSON string of the feature
+	 */
 	ms.pointCoordsToTurf = function(coords){
 	    var geom = new ol.geom.Point(coords);
 	    return genericMapService.geomToGeoJson(geom);
 	};
 	
+	/**
+     * Convert GeoJSON to OL feature
+     * 
+     * @memberof mapService
+     * @public
+     * @alias turfToOlGeom
+     * @param {String} feature - The GeoJSON feature
+     * @returns {ol.geom.Geometry} The OL geometry already reprojected to the current map projection
+     */
 	ms.turfToOlGeom = function(feature){
 	    var geom = genericMapService.geoJsonToOlGeom(feature);
         return geom.transform('EPSG:4326', ms.getMapProjectionCode());
@@ -2490,6 +2566,15 @@ angular.module('unionvmsWeb').factory('mapService', function(locale, $rootScope,
         segmentsTitles: true
     };
     
+    /**
+     * Set labels visibility according to the user configurations
+     * 
+     * @memberof mapService
+     * @public
+     * @alias setLabelVisibility
+     * @param {String} type - The label type (either <b>positions</b> or <b>segments</b>)
+     * @param {Object} config - The label configuration object 
+     */
     ms.setLabelVisibility = function(type, config){
         ms.labelVisibility[type] = config.values;
         ms.labelVisibility[type + 'Titles'] = angular.isDefined(config.isAttributeVisible) ? config.isAttributeVisible : false;
@@ -2509,7 +2594,13 @@ angular.module('unionvmsWeb').factory('mapService', function(locale, $rootScope,
        displayedIds: []
     };
     
-    //Reset labels containers
+    /**
+     * Reset all label container objects
+     * 
+     * @memberof mapService
+     * @public
+     * @alias resetLabelContainers
+     */
     ms.resetLabelContainers = function(){
         ms.vmsposLabels = {
             active: false,
@@ -2522,6 +2613,14 @@ angular.module('unionvmsWeb').factory('mapService', function(locale, $rootScope,
         };
     };
     
+    
+    /**
+     * Check label status and activate them if necessary
+     * 
+     * @memberof mapService
+     * @public
+     * @alias checkLabelStatus
+     */
     //Function called on map moveend and change:resolution to check for new labels
     ms.checkLabelStatus = function(){
         if (ms.vmsposLabels.active === true){
@@ -2534,6 +2633,14 @@ angular.module('unionvmsWeb').factory('mapService', function(locale, $rootScope,
     };
     
     //Activate Vector Label Overlays
+    /**
+     * Activate vector labels
+     * 
+     * @memberof mapService
+     * @public
+     * @alias activateVectorLabels
+     * @param {String} type - The type of labels to be activated (either <b>positions</b> or <b>segments</b>)
+     */
     ms.activateVectorLabels = function(type){
         if ((type === 'vmspos' && ms.labelVisibility.positions.length > 0) || (type === 'vmsseg' && ms.labelVisibility.segments.length > 0)){
             var containerName = type + 'Labels'; 
@@ -2593,6 +2700,14 @@ angular.module('unionvmsWeb').factory('mapService', function(locale, $rootScope,
         }
     };
     
+    /**
+     * Remove labels when map changes (by zooming or panning)
+     *  
+     * @memberof mapService
+     * @public
+     * @alias removeLabelsByMapChange
+     * @param {String} type - The type of labels to be activated (either <b>positions</b> or <b>segments</b>)
+     */
     //Remove labels when zooming and panning (mainly to deal with clusters)
     ms.removeLabelsByMapChange = function(type){
         var containerName = type + 'Labels';
@@ -2611,6 +2726,14 @@ angular.module('unionvmsWeb').factory('mapService', function(locale, $rootScope,
         }, ms[containerName]);
     };
     
+    /**
+     * Remove labels when map changes (by zooming or panning)
+     *  
+     * @memberof mapService
+     * @public
+     * @alias deactivateVectorLabels
+     * @param {String} type - The type of labels to be deactivated (either <b>positions</b> or <b>segments</b>)
+     */
     //Remove all labels when the tool is deactivated
     ms.deactivateVectorLabels = function(type){
         var containerName = type + 'Labels';
@@ -2632,6 +2755,7 @@ angular.module('unionvmsWeb').factory('mapService', function(locale, $rootScope,
      * 
      * @memberof mapService
      * @public
+     * @alias toggleVectorLabelsForSources 
      * @param {Object} overlayStatus - An object conatining an array of overlay ids, array of features and the label visibility status
      */
     ms.toggleVectorLabelsForSources = function(overlayStatus){
@@ -2658,6 +2782,16 @@ angular.module('unionvmsWeb').factory('mapService', function(locale, $rootScope,
         }
     };
     
+    /**
+     * Add label overlay
+     * 
+     * @memberof mapService
+     * @public
+     * @alias addLabelsOverlay
+     * @param {ol.Feature} feature - The OL feature object that will be labeled
+     * @param {String} type - The type of label (either <b>vmspos</b> or <b>vmsseg</b>) 
+     * @param {String} overlayId - The GUID of the overlay
+     */
     ms.addLabelsOverlay = function(feature, type, overlayId){
         var coords;
         if (type === 'vmspos'){
@@ -2705,6 +2839,17 @@ angular.module('unionvmsWeb').factory('mapService', function(locale, $rootScope,
         feature.set('overlayHidden', false);
     };
     
+    /**
+     * Build the label object that will be used with Mustache
+     * 
+     * @memberof mapService
+     * @public
+     * @alias setLabelObj
+     * @param {ol.Feature} feature - The OL feature object
+     * @param {String} type - The label type (either <b>vmspos</b> or <b>vmsseg</b>)
+     * @param {String} id -  The label GUID
+     * @returns {Object} The object containing all the necessary data for the label
+     */
     ms.setLabelObj = function(feature, type, id){
         var titles, srcData, showTitles, i;
         var data = [];
@@ -2747,7 +2892,16 @@ angular.module('unionvmsWeb').factory('mapService', function(locale, $rootScope,
         }
     };
     
-    //Request template and render with Mustache
+    /**
+     * Request label template and render it using Mustache
+     * 
+     * @memberof mapService
+     * @public
+     * @alias requestLabelTemplate
+     * @param {String} type - The label type (either <b>vmspos</b> or <b>vmsseg</b>)
+     * @param {Object} data - The object containing the data to be displayed in the label
+     * @param {Element} el - The html element where the label will be rendered
+     */
     ms.requestLabelTemplate = function(type, data, el){
         var templateURL = 'partial/spatial/templates/label.html';
         $templateRequest(templateURL).then(function(template){
@@ -2758,7 +2912,14 @@ angular.module('unionvmsWeb').factory('mapService', function(locale, $rootScope,
         });
     };
     
-    //Close single label overlay on close btn click evvt
+    /**
+     * Close a single label overlay by id
+     * 
+     * @memberof mapService
+     * @private
+     * @param {String} container - The label container name
+     * @param {String} id - The GUID of the label
+     */
     var closeLabelOverlay = function(container, id){
         return function(e){
             ms.map.removeOverlay(ms[container][id].overlay);
@@ -2771,6 +2932,15 @@ angular.module('unionvmsWeb').factory('mapService', function(locale, $rootScope,
         };
     };
     
+    /**
+     * Generate an overlay id (GUID)
+     * 
+     * @memberof mapService
+     * @public
+     * @alias generateOverlayId
+     * @param {String} container - The label container name
+     * @returns {String} The label GUID
+     */
     ms.generateOverlayId = function(container){
         var id = generateGUID();
         
@@ -2781,6 +2951,13 @@ angular.module('unionvmsWeb').factory('mapService', function(locale, $rootScope,
         }
     };
     
+    /**
+     * Generate random GUID
+     * 
+     * @memberof mapService
+     * @public
+     * @returns {String} The generated GUID 
+     */
     var generateGUID = function(){
         function s4() {
             return Math.floor((1 + Math.random()) * 0x10000)
@@ -2792,6 +2969,17 @@ angular.module('unionvmsWeb').factory('mapService', function(locale, $rootScope,
 	
     //POPUPS
 	//Render popup info using mustache
+    /**
+     * Request popup template and render it using Mustache
+     * 
+     * @memberof mapService
+     * @public
+     * @alias requestPopupTemplate
+     * @param {Object} data - The object containing all the necessary information to be displayed in the popup
+     * @param {String} type - The type of popup. Supported values are: <b>vmspos</b>, <b>vmsseg</b> and <b>alarms</b>
+     * @param {ol.Coordinate} coords - The OL Coordinate where the popup will be attached to
+     * @param {Boolean} fromCluster - Whether the popup is being displayed in a feature that is clustered or not
+     */
     ms.requestPopupTemplate = function(data, type, coords, fromCluster){
         ms.popupRecContainer.currentType = type;
         var templateURL = 'partial/spatial/templates/' + type + '.html';
@@ -2813,7 +3001,13 @@ angular.module('unionvmsWeb').factory('mapService', function(locale, $rootScope,
         });
     };
     
-    //Popup to display vector info
+    /**
+     * Add OL popup overlay
+     * 
+     * @memberof mapService
+     * @public
+     * @alias addPopupOverlay
+     */
 	ms.addPopupOverlay = function(){
 	    var overlay = new ol.Overlay({
 	        element: document.getElementById('popup'),
@@ -2825,7 +3019,14 @@ angular.module('unionvmsWeb').factory('mapService', function(locale, $rootScope,
 
 	    return overlay;
 	};
-
+	
+	/**
+     * Close OL popup overlay
+     * 
+     * @memberof mapService
+     * @public
+     * @alias closePopup
+     */
 	ms.closePopup = function(){
 	    ms.overlay.set('featureId', undefined, true);
 	    ms.overlay.setPosition(undefined);
@@ -2850,6 +3051,15 @@ angular.module('unionvmsWeb').factory('mapService', function(locale, $rootScope,
 	};
 	
 	//POPUP - decide which function to call so that data is properly formated 
+	/**
+	 * Create object containing all the necessary information to be displayed in the popup
+	 * 
+	 * @memberof mapService
+	 * @public
+	 * @alias setObjPopup
+	 * @param {Object} record - The source record for which a popup will be displayed 
+	 * @returns {Object} An object containing the necessary information to be displayed in the popup
+	 */
 	ms.setObjPopup = function(record){
 	    var type = record.type;
 	    var data;
@@ -2876,6 +3086,16 @@ angular.module('unionvmsWeb').factory('mapService', function(locale, $rootScope,
     };
 
 	//POPUP - Define the object that will be used in the popup for vms positions
+	/**
+     * Create object containing all the necessary position information to be displayed in the popup
+     * 
+     * @memberof mapService
+     * @public
+     * @alias setPositionsObjPopup
+     * @param {ol.Feature} feature - The OL feature used to display the popup 
+     * @param {String} [id] - The id of the feature
+     * @returns {Object} An object containing the necessary position information to be displayed in the popup
+     */
     ms.setPositionsObjPopup = function(feature, id){
         var titles = ms.getPositionTitles();
         var srcData = ms.formatPositionDataForPopup(feature);
@@ -2911,6 +3131,14 @@ angular.module('unionvmsWeb').factory('mapService', function(locale, $rootScope,
     };
     
     //Popup attribute names for positions
+    /**
+     * Get attributes names for positional data
+     * 
+     * @memberof mapService
+     * @public
+     * @alias getPositionTitles
+     * @returns {Object} An object containing the regionalized attributes for positional data
+     */
     ms.getPositionTitles = function(){
         return {
             name: locale.getString('spatial.reports_form_vessel_search_table_header_name'),
@@ -2932,6 +3160,15 @@ angular.module('unionvmsWeb').factory('mapService', function(locale, $rootScope,
     };
     
     //Popup data values for positions
+    /**
+     * Format positional data to be displayed in the popup taking into consideration user preferences
+     * 
+     * @memberof mapService
+     * @public
+     * @alias formatPositionDataForPopup
+     * @param {Object} data - The object containing initial data
+     * @returns {Object} An object containing properly formated positional data
+     */
     ms.formatPositionDataForPopup = function(data){
         var coords = data.geometry.getCoordinates();
         var repCoords = ol.proj.transform(coords, ms.getMapProjectionCode(), 'EPSG:4326');
@@ -2955,6 +3192,15 @@ angular.module('unionvmsWeb').factory('mapService', function(locale, $rootScope,
         };
     };
     
+    /**
+     * Do the mapping between application object properties and the source data properties
+     * 
+     * @memberof mapService
+     * @public
+     * @alias getMappingTitlesProperties
+     * @param {String} type - The type of data to map (either <b>vmspos</b> or <b>vmsseg</b>)
+     * @returns {Object} An object containig the mappings
+     */
     ms.getMappingTitlesProperties = function(type){
         if (type === 'vmspos'){
             return {
@@ -2992,6 +3238,15 @@ angular.module('unionvmsWeb').factory('mapService', function(locale, $rootScope,
 
     //POPUP - vms segments
     //Define the object that will be used in the popup for vms segments
+    /**
+     * Create object containing all the necessary segment information to be displayed in the popup
+     * 
+     * @memberof mapService
+     * @public
+     * @alias setSegmentsObjPopup
+     * @param {ol.Feature} feature - The OL feature used to display the popup 
+     * @returns {Object} An object containing the necessary position information to be displayed in the popup
+     */
     ms.setSegmentsObjPopup = function(feature){
         var titles = ms.getSegmentTitles();
         var srcData = ms.formatSegmentDataForPopup(feature);
@@ -3024,6 +3279,14 @@ angular.module('unionvmsWeb').factory('mapService', function(locale, $rootScope,
     };
     
     //Popup attribute names for segments
+    /**
+     * Get attributes names for segment data
+     * 
+     * @memberof mapService
+     * @public
+     * @alias getSegmentTitles
+     * @returns {Object} An object containing the regionalized attributes for segment data
+     */
     ms.getSegmentTitles = function(){
         return {
             name: locale.getString('spatial.reports_form_vessel_search_table_header_name'),
@@ -3040,6 +3303,15 @@ angular.module('unionvmsWeb').factory('mapService', function(locale, $rootScope,
     };
     
     //Popup data values for segments
+    /**
+     * Format segment data to be displayed in the popup taking into consideration user preferences
+     * 
+     * @memberof mapService
+     * @public
+     * @alias formatPositionDataForPopup
+     * @param {Object} data - The object containing initial data
+     * @returns {Object} An object containing properly formated segment data
+     */
     ms.formatSegmentDataForPopup = function(data){
         return {
             name: data.name,
@@ -3057,6 +3329,16 @@ angular.module('unionvmsWeb').factory('mapService', function(locale, $rootScope,
     
     //POPUP - alarms
     //Define the object that will be used in the popup for alarms
+    /**
+     * Create the alarms object that will be used in the popup
+     * 
+     * @memberof mapService
+     * @public
+     * @alias setAlarmsObjPopup
+     * @param {ol.Feature} feature - The OL feature representing the alarm 
+     * @param {Boolean} includeAsset - Whether the details button should be displayed in the popup or not
+     * @returns {Object}  
+     */
     ms.setAlarmsObjPopup = function(feature, includeAsset){
         if (!angular.isDefined(includeAsset)){
             includeAsset = true;
@@ -3073,6 +3355,14 @@ angular.module('unionvmsWeb').factory('mapService', function(locale, $rootScope,
     };
     
     //Popup attribute names for alarms
+    /**
+     * Get attributes names for alarms data
+     * 
+     * @memberof mapService
+     * @public
+     * @alias getAlarmTitles
+     * @returns {Object} An object containing the regionalized attributes for alarms data
+     */
     ms.getAlarmTitles = function(){
         return {
             name: locale.getString('spatial.reports_form_vessels_search_by_vessel'),
@@ -3089,6 +3379,15 @@ angular.module('unionvmsWeb').factory('mapService', function(locale, $rootScope,
         };
     };
     
+    /**
+     * Format alarm data to be displayed in the popup taking into consideration user preferences
+     * 
+     * @memberof mapService
+     * @public
+     * @alias formatAlarmDataForPopup
+     * @param {Object} data - The object containing initial data
+     * @returns {Object} An object containing properly formated alarm data
+     */
     ms.formatAlarmDataForPopup = function(data){        
         return {
             name: data.name,

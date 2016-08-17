@@ -8,6 +8,7 @@
  * @param areaAlertService {service} alert service for the area management tab
  * @param areaRestService {service} Area REST API service
  * @param areaClickerService {service} area map click service
+ * @param loadingStatus {service} loading status service <p>{@link unionvmsWeb.loadingStatus}</p>
  * @attr isEditing {Boolean} Indicates whether there is an active editing session (drawing vectors). Default is <b>false</b>
  * @attr displayedLayerType {String} The type of layer (USERAREA, EEZ, ..)  being displayed in the map
  * @attr displayedSystemAreaLayer {String} The reference data type being last displayed in the reference data tab
@@ -293,6 +294,14 @@ angular.module('unionvmsWeb').factory('areaHelperService',function(locale, areaM
         });
     };
     
+    /**
+     * Configure all modals when in fullscreen mode
+     * 
+     * @memberof areaHelperService
+     * @public
+     * @alias configureFullscreenModal
+     * @param {Object} modalInstance - The modal instance object
+     */
 	areaHelperService.configureFullscreenModal = function(modalInstance) {
         modalInstance.rendered.then(function(){
             $('body > .modal[uib-modal-window="modal-window"]').not($('.alert-modal-content')).appendTo('#areaMap');

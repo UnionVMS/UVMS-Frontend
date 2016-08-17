@@ -4,7 +4,12 @@
  * @name projectionService
  * @param locale {service} angular locale service
  * @param $interval {service} angular interval service
- * @param spatialRestService {service} Spatial REST API service
+ * @param spatialRestService {service} Spatial REST API service~
+ * @attr items {Array} The projection items to be displayed in comboboxes
+ * @attr coordinatesFormatItems {Array} The coordinate format items to be displayed in comboboxes
+ * @attr srcProjections {Array} The source of all projections supported by the application
+ * @attr isLoading {Boolean} Indicates if the projections are still being loaded from the Spatial REST service
+ * @attr isLoaded {Boolean} Indicates if the projections were loaded and properly processed
  * @description
  *  A service to fetch and process all supported map projections. Used throughout the application for comboboxes and map specific functions
  */
@@ -117,6 +122,7 @@ angular.module('unionvmsWeb').factory('projectionService',function(locale, $inte
                 }, 1);
 	        }
 	    },
+	    
 	    /**
 	     * Get local projection id by EPSG code
 	     * 
@@ -139,6 +145,7 @@ angular.module('unionvmsWeb').factory('projectionService',function(locale, $inte
 	            }
 	        }
 	    },
+	    
 	    /**
 	     * Get local projection EPSG code by id
 	     * 
@@ -154,6 +161,7 @@ angular.module('unionvmsWeb').factory('projectionService',function(locale, $inte
 	            }
 	        }
 	    },
+	    
 	    /**
 	     * Get full projection object by EPSG code
 	     * 
@@ -176,6 +184,7 @@ angular.module('unionvmsWeb').factory('projectionService',function(locale, $inte
                 }
             }
 	    },
+	    
 	    /**
 	     * Get Spherical Mercator projection definition for fallback modes
 	     * 
@@ -196,6 +205,13 @@ angular.module('unionvmsWeb').factory('projectionService',function(locale, $inte
 	    }
 	};
 	
+	/**
+	 * Stop interval used in the lazy loading and setting of projections
+	 * 
+	 * @memberof projectionService
+	 * @private
+	 * @param {Object} obj - A reference to the projection service base object
+	 */
 	var stopInterval = function(obj){
         $interval.cancel(obj.intervalPromise);
         obj.intervalPromise = undefined;

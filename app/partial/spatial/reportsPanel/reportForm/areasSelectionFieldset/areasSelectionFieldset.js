@@ -28,36 +28,10 @@
  * @attr searchString {String} The search string to search areas by properties. Default is <b>undefined</b>
  * @attr searchedAreas {Array} An array containing all the areas that were fetched by property search  
  * @description
- *  The controller of the area selection modal used in the report form
+ *  The controller of the area selection fieldset used in the report form
  */
 angular.module('unionvmsWeb').controller('AreasselectionfieldsetCtrl',function($scope, /*$modalInstance,*/ $interval, $timeout, locale, mapReference, loadingStatus, genericMapService, /*selectedAreas,*/ spatialRestService, Area, userService, projectionService){
     mapReference.areaSelection = {};
-    
-    /**
-     * Cancel and close modal without persisting any changes 
-     * 
-     * @memberof AreasselectionfieldsetCtrl
-     * @public
-     * @alias cancel
-     */
-    /*$scope.cancel = function () {
-        $modalInstance.dismiss('cancel');
-    };*/
-    
-    /**
-     * Save selection of areas
-     * 
-     * @memberof AreasselectionfieldsetCtrl
-     * @public
-     * @alias save
-     */
-    /*$scope.save = function(){
-        $modalInstance.close($scope.exportSelectedAreas());
-    };*/
-    
-    /*$modalInstance.rendered.then(function(){
-        init();
-    });*/
     
     /**
      * Initializing function that is called when the modal is opened
@@ -788,7 +762,14 @@ angular.module('unionvmsWeb').controller('AreasselectionfieldsetCtrl',function($
             }
         }
     };
-
+    
+    /**
+     * Update the counter and description displayed in the tooltip of the area selection counter
+     * 
+     * @memberof AreasselectionfieldsetCtrl
+     * @public
+     * @alias updateCounterDescription
+     */
     $scope.updateCounterDescription = function(){
         $scope.areaCountDesc = '';
         var areaTypes = _.pluck($scope.selectedAreas, 'areaType');

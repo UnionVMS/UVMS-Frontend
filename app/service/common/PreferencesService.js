@@ -2,7 +2,7 @@
  * @memberof unionvmsWeb
  * @ngdoc service
  * @name PreferencesService
- * @param loadingStatus {service} loading status service
+ * @param loadingStatus {service} loading status service <p>{@link unionvmsWeb.loadingStatus}</p>
  * @param spatialConfigRestService {service} Spatial REST API service
  * @param spatialConfigAlertService {service} Spatial REST API service
  * @param $anchorScroll {service} angular anchorScroll service
