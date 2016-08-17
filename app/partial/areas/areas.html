@@ -19,7 +19,7 @@
 	</div>
 	<div id="areaMap" class="map">
 		<loading-panel type="AreaManagement"></loading-panel>
-		<alert-modal ng-model="alert.hasAlert" display-msg="alert.alertMessage" target-el-id="areaManagement" display-type="alert.alertType" timeout="5000"></alert-modal>
+		<alert-modal ng-model="alert.hasAlert" display-msg="alert.alertMessage" target-el-id="areaManagement" side-panel-id="area-management-side-panel" display-type="alert.alertType" timeout="5000"></alert-modal>
 		<div id="area-management-side-panel" class="areas-panel" ng-class="{'panel-collapsed': !expanded}">
 			<div class="areas-panel-container">
 				<loading-panel type="AreaManagementPanel"></loading-panel>
