@@ -11,6 +11,10 @@ angular.module('unionvmsWeb').factory('searchUtilsService',function(SearchField,
                     //Values is already in UTC but we need to format it with timezone
                     searchCriterias[i].value = dateTimeService.formatUTCDateWithTimezone(searchCriterias[i].value);
             }
+            
+            if (searchCriterias[i].key === 'TYPE' && searchCriterias[i].value === 'Reporting'){
+                searchCriterias[i].value = searchCriterias[i].value.toUpperCase();
+            }
         }
 
         return searchCriterias;

@@ -29,7 +29,7 @@ angular.module('unionvmsWeb').factory("auditOptionsService", function(searchServ
             TEMPORARY_POSITION_REPORT : 'Temporary position report'
         },
         GIS : {
-            AREA : 'Area', //Mock value
+            REPORTING : 'Reporting',
         },
         EXCHANGE : {
             EXCHANGE_LOG : 'Exchange log',
