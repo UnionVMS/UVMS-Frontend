@@ -1,36 +1,34 @@
 <div ng-controller="MdrCtrl">
     <loading-panel type="Preferences"></loading-panel>
+
+    <!--MDR configuration sheduler-->
     <ng-form name="mdrConfigurationForm">
         <fieldset class="fieldsetStyle col-md-12" >
             <legend class="fieldsetLegendStyle">
                 <a data-toggle="collapse" >{{'activity.scheduler_fieldset_label' | i18n }}</a>
             </legend>
+
             <div class="row">
                 <div class="form-group col-md-12 noPadding">
-                      <!--  <div class="col-md-2">
-                            <span class="formLabel">{{'activity.cron_job_scheduler' | i18n}}</span>
-                        </div>-->
                         <div class="col-md-11">
-                           <!-- <input type="text" class="form-control" ng-model="cronJobExpression" name="cronJobExpression" ng-required="true"/>-->
-                            <cron-selection ng-model="cronJobExpression" config="cronWidgetConfig" ng-if="cronJobExpression!=null"></cron-selection>
-                            <span class="" ng-show="mdrConfigurationForm.cronJobExpression.$invalid">{{'activity.required_error_message' | i18n }}</span>
+                            <cron-selection ng-model="configModel.cronJobExpression" config="cronWidgetConfig" ng-if="configModel.cronJobExpression" ></cron-selection>
+                            <span class="" ng-show="mdrConfigurationForm.configModel.cronJobExpression.$invalid">{{'activity.required_error_message' | i18n }}</span>
                         </div>
-                       <!--     <div class="innerErrorMessages" ng-messages="generalsettingsForm.geoserverUrl.$error" ng-show="generalsettingsForm.geoserverUrl.$dirty || submitedWithErrors">
-                                <div ng-message="required">{{'activity.required_error_message' | i18n }}</div>
-                            </div>-->
                         <div class="col-md-1" >
-                            <button class="btn btn-primary button btn-action" type="button" ng-click="saveCron()" ng-show="showSaveBtn">{{"activity.cron_save_btn" | i18n }}</button>
+                            <button class="btn btn-primary button btn-action" type="button" ng-click="saveCron()" ng-show="configModel.showSaveBtn">{{"activity.cron_save_btn" | i18n }}</button>
                         </div>
 
 
                 </div>
              </div>
             <div class="row position-right">
-                <span class="cronLabel">{{"activity.cron_expression_label" | i18n }}</span><span>{{cronJobExpression}}</span>
+                <span class="cronLabel">{{"activity.cron_expression_label" | i18n }}</span><span>{{configModel.cronJobExpression}}</span>
             </div>
         </fieldset>
     </ng-form>
 
+
+    <!--SMART TABLE containing all the MDR code lists-->
     <div class="row">
         <div class="form-group col-md-12 noPadding">
             <fieldset class="fieldsetStyle col-md-12" >
@@ -48,7 +46,7 @@
                     </button>
                 </div>
 
-                <div st-table="displayedMDRLists" st-safe-src="mdrCodeLists" st-set-filter="stMDRCodeLists">
+                <div st-table="displayedMDRLists" st-safe-src="mdrCodeLists">
                     <div class="search-field">
                         <input st-search="" class="form-control" placeholder="{{'activity.search_table_placeholder' | i18n}}" type="text"/>
                     </div>
@@ -76,11 +74,11 @@
                                 <div class="td col-md-1" st-skip-natural="true" ><div class="checkbox"><input type="checkbox" value="{{codeList.id}}" ng-model="codeList.isSelected" ng-click="enableDisableSynchButton()"></div></div>
                                 <div class="td col-md-3" st-skip-natural="true">{{codeList.acronym}}</div>
                                 <div class="td col-md-3" st-skip-natural="true">{{codeList.name}}</div>
-                                <div class="td col-md-1" st-skip-natural="true">{{codeList.lastSuccess}}</div>
-                                <div class="td col-md-1" st-skip-natural="true">{{codeList.lastAttempt}}</div>
+                                <div class="td col-md-1" st-skip-natural="true">{{codeList.lastSuccess | stActivityDateUtc}}</div>
+                                <div class="td col-md-1" st-skip-natural="true">{{codeList.lastAttempt | stActivityDateUtc}}</div>
                                 <div class="td col-md-1" st-skip-natural="true">{{codeList.lastStatus}}</div>
                                 <div class="td col-md-1">
-                                    <button type="button" class="btn btn-{{codeList.scheduled?'success':'danger'}} btn-xs pull-right" title="{{'activity.enable_disable_autoupdate' | i18n }}" ng-click="enableDisableAutoUpdate($index)"><span>{{'activity.enable_disable_autoupdate_'+codeList.scheduled | i18n}}</span></button>
+                                    <button type="button" class="btn btn-{{codeList.scheduled?'success':'danger'}} btn-xs pull-left" title="{{'activity.enable_disable_autoupdate' | i18n }}" ng-click="enableDisableAutoUpdate($index)"><span>{{'activity.enable_disable_autoupdate_'+codeList.scheduled | i18n}}</span></button>
                                 </div>
                                 <div class="td col-md-1">
                                     <button type="button" class="btn btn-default btn-xs pull-right tableBtnMargin" title="{{'areas.table_area__details_btn' | i18n }}" ng-click="openCodeListModal(codeList.acronym)"><span class="fa fa-eye"></span></button>

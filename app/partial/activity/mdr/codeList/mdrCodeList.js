@@ -5,13 +5,14 @@ angular.module('unionvmsWeb').controller('MdrcodelistCtrl',function($scope, $mod
     $scope.acronym = acronym;
     $scope.tableLoading = true;
     $scope.searchFilter = '';
+    $scope.tableState = null;
 
     $scope.close = function() {
         $modalInstance.close();
     };
 
     $scope.callServer = function callServer(tableState) {
-
+        $scope.tableState = tableState;
         $scope.tableLoading = true;
 
         mdrService.getMDRCodeListByAcronym(acronym, tableState).then(function (result) {
@@ -23,7 +24,7 @@ angular.module('unionvmsWeb').controller('MdrcodelistCtrl',function($scope, $mod
             $scope.tableLoading = false;
           });
     };
-/*
+
     $scope.$watch('searchFilter', function(newVal, oldVal){
         if (angular.isDefined(newVal) && newVal !== ''){
             $scope.tableLoading = true;
@@ -32,10 +33,11 @@ angular.module('unionvmsWeb').controller('MdrcodelistCtrl',function($scope, $mod
             }
 
             $scope.requestTimer = $timeout(function(){
-             //   $scope.doRequest(newVal); TODO
+                $scope.tableState.search.predicateObject = newVal;
+                $scope.callServer($scope.tableState);
             }, 1500, true, $scope);
         } else {
             $scope.searchFilter = '';
         }
-    });*/
+    });
 });

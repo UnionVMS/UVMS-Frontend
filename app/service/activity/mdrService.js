@@ -24,6 +24,19 @@ angular.module('unionvmsWeb').factory('mdrServiceFactory',function($resource) {
            getMDRCodeListByAcronym: function(acronym, offset, size, filter, sortBy, sortReversed) {
             //the URL should be /activity/rest/acronyms/details
               return $resource('service/activity/codeList.json');
+          },
+          syncNow: function(){
+            return $resource('/activity/rest/mdr/sync', {}, {
+                'update': {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    }
+                }
+            });
+           },
+          syncAllNow: function(){
+               return $resource('/activity/rest/mdr/sync');
           }
       };
   })
@@ -71,14 +84,36 @@ angular.module('unionvmsWeb').factory('mdrServiceFactory',function($resource) {
 
             var deferred = $q.defer();
             mdrServiceFactory.getMDRCodeListByAcronym(acronym, offset, size, filter, sortBy, sortReversed).get(function(response) {
-                tableState.pagination.numberOfPages = response.numberOfPages||10;//set the number of pages so the pagination can update
+                tableState.pagination.numberOfPages = response.numberOfPages||0;//set the number of pages so the pagination can update
                 deferred.resolve(response.data);
             }, function(error) {
                 console.error('Error listing code list details');
                 deferred.reject(error);
             });
             return deferred.promise;
-  	    }
+  	    },
+  	    syncNow: function(acronymsArray) {
+  	        var deferred = $q.defer();
+  	        mdrServiceFactory.syncNow().update(acronymsArray, function(response){
+                deferred.resolve(response.data);
+  	        },
+  	        function(error) {
+                console.error('Error requesting synchronization of the following acronyms: ' + acronymsArray);
+                deferred.reject(error);
+  	        });
+  	        return deferred.promise;
+  	    },
+        syncAllNow: function() {
+            var deferred = $q.defer();
+            mdrServiceFactory.syncAllNow().get(function(response){
+                 deferred.resolve(response.data);
+            },
+            function(error) {
+                 console.error('Error requesting synchronization of all acronyms.');
+                 deferred.reject(error);
+            });
+            return deferred.promise;
+        }
   	};
 
   	return mdrService;

@@ -30,6 +30,8 @@
     "mdr_code_list_field_spanishName": "Spanish Name",
     "mdr_code_list_field_author": "Author",
     "mdr_code_list_field_family": "Family",
-    "mdr_code_list_field_order": "Order"
+    "mdr_code_list_field_order": "Order",
+    "error_sync_now": "Unable to synchronize the requested code lists.",
+    "error_sync_all_now": "Unable to synchronize code lists."
 
 }

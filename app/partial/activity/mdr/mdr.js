@@ -6,8 +6,11 @@ angular.module('unionvmsWeb').controller('MdrCtrl',function($scope, mdrService, 
    	$scope.mdrCodeLists = [];
     $scope.displayedMDRLists = [];
     $scope.isUpdateNowDisabled = true;
-    $scope.showSaveBtn = false;
-    $scope.cronJobExpression = null;
+    $scope.configModel = {
+        'cronJobExpression': '',
+        'showSaveBtn' : false,
+        'originalValue': ''
+    };
     $scope.tableLoading = true;
 
 
@@ -18,32 +21,39 @@ angular.module('unionvmsWeb').controller('MdrCtrl',function($scope, mdrService, 
 	};
 
 	$scope.saveCron = function(){
-		if(angular.isDefined($scope.cronJobExpression) && $scope.cronJobExpression.indexOf('NaN') === -1){
+		if(angular.isDefined($scope.configModel.cronJobExpression) && $scope.configModel.cronJobExpression.indexOf('NaN') === -1){
 			loadingStatus.isLoading('Preferences',true, 2);
 
 			if ($scope.mdrConfigurationForm.$dirty){
-		        mdrService.updateCronJobExpression($scope.cronJobExpression).then(saveSuccess, saveFailure);
-		    } /*else {
-		        $scope.alert.hasAlert = true;
-		        $scope.alert.hasWarning = true;
-		        $scope.alert.alertMessage = locale.getString('spatial.user_preferences_warning_saving');
-		        $scope.alert.hideAlert();
-		        loadingStatus.isLoading('Preferences',false);
-		    }*/
+		        mdrService.updateCronJobExpression($scope.configModel.cronJobExpression).then(saveSuccess, saveFailure);
+		    }
 		} else {
 
 		}
 	};
 
     $scope.updateNow = function() {
-    //TODO
-         console.error("Not implemented. Refresh now." );
+        var acronymArray = [];
+        angular.forEach($scope.displayedMDRLists, function (value, key) {
+             if (value.isSelected) {
+                acronymArray.push(value.acronym);
+             }
+        });
+
+        mdrService.syncNow(acronymArray).then(function(response) {
+             $scope.getMDRCodeLists();
+        }, function(error) {
+            alertService.showErrorMessageWithTimeout(locale.getString('activity.error_sync_now'));
+        });
     };
 
      $scope.updateAllNow = function() {
-        //TODO
-             console.error("Not implemented. Refresh all now." );
-        };
+        mdrService.syncAllNow().then(function(response) {
+             $scope.getMDRCodeLists();
+        }, function(error) {
+            alertService.showErrorMessageWithTimeout(locale.getString('activity.error_sync_all_now'));
+        });
+    };
 
     $scope.enableDisableAutoUpdate = function(codeListID) {
     //TODO
@@ -84,15 +94,15 @@ angular.module('unionvmsWeb').controller('MdrCtrl',function($scope, mdrService, 
             $scope.tableLoading = false;
         }, function(error){
             $scope.tableLoading = false;
-            $scope.alert.setError();
-            $scope.alert.alertMessage = locale.getString('activity.error_getting_mdr_code_lists');
+            alertService.showErrorMessageWithTimeout(locale.getString('activity.error_getting_mdr_code_lists'));
         });
     };
 
     var getCronJobExpressionSuccess = function(response) {
         //$scope.alert.hasAlert = true;
        // $scope.alert.hasSuccess = true;
-        $scope.cronJobExpression = response;
+        $scope.configModel.cronJobExpression = response;
+        $scope.configModel.originalValue = response;
         loadingStatus.isLoading('Preferences',false);
     };
 
@@ -103,12 +113,13 @@ angular.module('unionvmsWeb').controller('MdrCtrl',function($scope, mdrService, 
 
 	var saveSuccess = function(response){
 	    loadingStatus.isLoading('Preferences',false);
-	    alertService.showInfoMessageWithTimeout(locale.getString('activity.mdr_cron_save_success'));
+	    alertService.showSuccessMessageWithTimeout(locale.getString('activity.mdr_cron_save_success'));
+	    $scope.configModel.originalValue = $scope.configModel.cronJobExpression;
 	};
 
 	var saveFailure = function(error){
 	    loadingStatus.isLoading('Preferences',false);
-	    alertService.showInfoMessageWithTimeout(locale.getString('activity.mdr_cron_save_failed'));
+	    alertService.showErrorMessageWithTimeout(locale.getString('activity.mdr_cron_save_failed'));
 	};
 
 	$scope.openCodeListModal = function(acronym) {
@@ -123,6 +134,7 @@ angular.module('unionvmsWeb').controller('MdrCtrl',function($scope, mdrService, 
             }
         });
 	};
+
 
 	$scope.init();
 
@@ -150,11 +162,11 @@ angular.module('unionvmsWeb').controller('MdrCtrl',function($scope, mdrService, 
         }
     });
 
-     $scope.$watch("cronJobExpression", function(newValue, oldValue) {
-        if (angular.isDefined(oldValue) && oldValue !==null && (newValue !== oldValue)) {
-            $scope.showSaveBtn = true;
+     $scope.$watch("configModel.cronJobExpression", function(newValue, oldValue) {
+        if (angular.isDefined(oldValue) && oldValue && (newValue !==  $scope.configModel.originalValue)) {
+            $scope.configModel.showSaveBtn = true;
         } else {
-            $scope.showSaveBtn = false;
+            $scope.configModel.showSaveBtn = false;
         }
       });
 });
