@@ -26,23 +26,25 @@ angular.module('unionvmsWeb').factory('TreeModel',function(locale, mapService, u
 	
 	//Build tree node for Bing based layers
 	var buildBingBasedNodes = function(src){
-        baseLayerCounter += 1;
-        
-        var layerTitle = locale.getString('spatial.layer_tree_' + src.title);
-	    var node = {
-	        title: layerTitle,
-	        selected: baseLayerCounter === 1 ? true : false,
-	        extraClasses: 'layertree-basemap',
-	        data: {
-	            type: src.type,
-	            isBaseLayer: true,
+	    if (angular.isDefined(src.apiKey) && src.apiKey !== ''){
+	        baseLayerCounter += 1;
+	        
+	        var layerTitle = locale.getString('spatial.layer_tree_' + src.title);
+	        var node = {
 	            title: layerTitle,
-	            layerGeoName: src.layerGeoName,
-	            apiKey: src.apiKey
-	        }
-	    };
-	    
-	    return node;
+	            selected: baseLayerCounter === 1 ? true : false,
+	            extraClasses: 'layertree-basemap',
+	            data: {
+	                type: src.type,
+	                isBaseLayer: true,
+	                title: layerTitle,
+	                layerGeoName: src.layerGeoName,
+	                apiKey: src.apiKey
+	            }
+	        };
+	        
+	        return node;
+	    }
 	};
 	
 	//Build a tree node for WMS layers
@@ -332,7 +334,10 @@ angular.module('unionvmsWeb').factory('TreeModel',function(locale, mapService, u
                     nodeArray.push(buildOsmBasedNodes(def));
                     break;
                 case 'BING':
-                    nodeArray.push(buildBingBasedNodes(def));
+                    var node = buildBingBasedNodes(def)
+                    if (angular.isDefined(node)){
+                        nodeArray.push(node);
+                    }
                     break;
             }
 	    }
