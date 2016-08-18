@@ -1,4 +1,4 @@
-angular.module('unionvmsWeb').factory('mdrServiceFactory',function($resource) {
+angular.module('unionvmsWeb').factory('mdrRestServiceFactory',function($resource) {
   return {
           getCronJobExpression: function(){
               return $resource('/activity/rest/mdr/schedulerConfig', {}, {
@@ -40,13 +40,13 @@ angular.module('unionvmsWeb').factory('mdrServiceFactory',function($resource) {
           }
       };
   })
-  .service('mdrService',function($q, mdrServiceFactory) {
+  .service('mdrRestService',function($q, mdrRestServiceFactory) {
 
-  	var mdrService = {
+  	var mdrRestService = {
   	    getCronJobExpression: function(){
   	        var deferred = $q.defer();
   	       // deferred.resolve('0 0/1 * 1/1 * ? *'); //mocked
-  	       mdrServiceFactory.getCronJobExpression().get(function(response){
+  	       mdrRestServiceFactory.getCronJobExpression().get(function(response){
   	            deferred.resolve(response.data);
   	        }, function(error){
   	            console.error('Error getting MDR cron job settings.');
@@ -56,7 +56,7 @@ angular.module('unionvmsWeb').factory('mdrServiceFactory',function($resource) {
   	    },
   	    updateCronJobExpression: function(configs){
   	       var deferred = $q.defer();
-  	       mdrServiceFactory.updateCronJobExpression().save(configs, function(response){
+  	       mdrRestServiceFactory.updateCronJobExpression().save(configs, function(response){
   	           deferred.resolve(response);
   	       }, function(error){
   	           console.error('Error saving MDR cron job settings.');
@@ -66,7 +66,7 @@ angular.module('unionvmsWeb').factory('mdrServiceFactory',function($resource) {
   	    },
   	    getMDRCodeLists: function() {
   	        var deferred = $q.defer();
-  	        mdrServiceFactory.getMDRCodeLists().get(function(response) {
+  	        mdrRestServiceFactory.getMDRCodeLists().get(function(response) {
   	            deferred.resolve(response.data);
   	        }, function(error) {
   	            console.error('Error listing the acronyms table');
@@ -83,7 +83,7 @@ angular.module('unionvmsWeb').factory('mdrServiceFactory',function($resource) {
             var sortReversed = tableState.sort.reverse;
 
             var deferred = $q.defer();
-            mdrServiceFactory.getMDRCodeListByAcronym(acronym, offset, size, filter, sortBy, sortReversed).get(function(response) {
+            mdrRestServiceFactory.getMDRCodeListByAcronym(acronym, offset, size, filter, sortBy, sortReversed).get(function(response) {
                 tableState.pagination.numberOfPages = response.numberOfPages||0;//set the number of pages so the pagination can update
                 deferred.resolve(response.data);
             }, function(error) {
@@ -94,7 +94,7 @@ angular.module('unionvmsWeb').factory('mdrServiceFactory',function($resource) {
   	    },
   	    syncNow: function(acronymsArray) {
   	        var deferred = $q.defer();
-  	        mdrServiceFactory.syncNow().update(acronymsArray, function(response){
+  	        mdrRestServiceFactory.syncNow().update(acronymsArray, function(response){
                 deferred.resolve(response.data);
   	        },
   	        function(error) {
@@ -105,7 +105,7 @@ angular.module('unionvmsWeb').factory('mdrServiceFactory',function($resource) {
   	    },
         syncAllNow: function() {
             var deferred = $q.defer();
-            mdrServiceFactory.syncAllNow().get(function(response){
+            mdrRestServiceFactory.syncAllNow().get(function(response){
                  deferred.resolve(response.data);
             },
             function(error) {
@@ -116,5 +116,5 @@ angular.module('unionvmsWeb').factory('mdrServiceFactory',function($resource) {
         }
   	};
 
-  	return mdrService;
+  	return mdrRestService;
 });

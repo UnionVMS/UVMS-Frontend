@@ -1,4 +1,4 @@
-angular.module('unionvmsWeb').controller('MdrCtrl',function($scope, mdrService, loadingStatus, locale, alertService, $modal){
+angular.module('unionvmsWeb').controller('MdrCtrl',function($scope, mdrRestService, loadingStatus, locale, alertService, $modal){
 
     $scope.cronWidgetConfig = {
           allowMultiple: true
@@ -16,7 +16,7 @@ angular.module('unionvmsWeb').controller('MdrCtrl',function($scope, mdrService, 
 
 
 	$scope.init = function() {
-	    mdrService.getCronJobExpression().then(getCronJobExpressionSuccess, getCronJobExpressionFailed);
+	    mdrRestService.getCronJobExpression().then(getCronJobExpressionSuccess, getCronJobExpressionFailed);
         $scope.getMDRCodeLists();
 	};
 
@@ -25,7 +25,7 @@ angular.module('unionvmsWeb').controller('MdrCtrl',function($scope, mdrService, 
 			loadingStatus.isLoading('Preferences',true, 2);
 
 			if ($scope.mdrConfigurationForm.$dirty){
-		        mdrService.updateCronJobExpression($scope.configModel.cronJobExpression).then(saveSuccess, saveFailure);
+		        mdrRestService.updateCronJobExpression($scope.configModel.cronJobExpression).then(saveSuccess, saveFailure);
 		    }
 		} else {
 
@@ -40,7 +40,7 @@ angular.module('unionvmsWeb').controller('MdrCtrl',function($scope, mdrService, 
              }
         });
 
-        mdrService.syncNow(acronymArray).then(function(response) {
+        mdrRestService.syncNow(acronymArray).then(function(response) {
              $scope.getMDRCodeLists();
         }, function(error) {
             alertService.showErrorMessageWithTimeout(locale.getString('activity.error_sync_now'));
@@ -48,7 +48,7 @@ angular.module('unionvmsWeb').controller('MdrCtrl',function($scope, mdrService, 
     };
 
      $scope.updateAllNow = function() {
-        mdrService.syncAllNow().then(function(response) {
+        mdrRestService.syncAllNow().then(function(response) {
              $scope.getMDRCodeLists();
         }, function(error) {
             alertService.showErrorMessageWithTimeout(locale.getString('activity.error_sync_all_now'));
@@ -88,7 +88,7 @@ angular.module('unionvmsWeb').controller('MdrCtrl',function($scope, mdrService, 
     //USER AREAS LIST
     $scope.getMDRCodeLists = function(){
         $scope.tableLoading = true;
-        mdrService.getMDRCodeLists().then(function(response){
+        mdrRestService.getMDRCodeLists().then(function(response){
             $scope.mdrCodeLists = response;
             $scope.displayedMDRLists = [].concat($scope.mdrCodeLists);
             $scope.tableLoading = false;

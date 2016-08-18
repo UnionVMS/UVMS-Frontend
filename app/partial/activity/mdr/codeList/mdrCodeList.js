@@ -1,4 +1,4 @@
-angular.module('unionvmsWeb').controller('MdrcodelistCtrl',function($scope, $modalInstance, acronym, mdrService, $timeout){
+angular.module('unionvmsWeb').controller('MdrcodelistCtrl',function($scope, $modalInstance, acronym, mdrRestService, $timeout){
 
     $scope.displayedMdrCodeList = [];
     $scope.allColumns = [];
@@ -15,7 +15,7 @@ angular.module('unionvmsWeb').controller('MdrcodelistCtrl',function($scope, $mod
         $scope.tableState = tableState;
         $scope.tableLoading = true;
 
-        mdrService.getMDRCodeListByAcronym(acronym, tableState).then(function (result) {
+        mdrRestService.getMDRCodeListByAcronym(acronym, tableState).then(function (result) {
             if (angular.isDefined(result) && result.length > 0 ) {
                 $scope.allColumns = _.allKeys(result[0]);
                 $scope.displayedMdrCodeList = result;
