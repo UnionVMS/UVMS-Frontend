@@ -1,25 +1,75 @@
+ /** This controler is managing all actions triggered within the MDR configuration tab.
+   *
+   * @memberof unionvmsWeb
+   * @ngdoc controller
+   * @name MdrCtrl
+   * @param  $scope  {service} controller scope
+   * @param mdrRestService {service}
+   * @param loadingStatus {service}
+   * @param locale {service}
+   * @param alertService {service}
+   * @param $modal {service}
+   */
 angular.module('unionvmsWeb').controller('MdrCtrl',function($scope, mdrRestService, loadingStatus, locale, alertService, $modal){
 
-    $scope.cronWidgetConfig = {
+    /**
+     * @property {Object} cronWidgetConfig is a configuration object, used by the angularjs-cron-plugin
+     */
+     $scope.cronWidgetConfig = {
           allowMultiple: true
       };
+
+    /**
+     * @property {Array} mdrCodeLists is an  array of code list details objects. It keeps the full list of code lists,
+     * due to the client side pagination we use.
+     */
    	$scope.mdrCodeLists = [];
+
+   	/**
+     * @property {Array} displayedMDRLists is an  array of code list details objects. It keeps only the elements displayed on the current page.
+     */
     $scope.displayedMDRLists = [];
+
+    /**
+     * @property {Boolean} isUpdateNowDisabled is a boolean flag which is used to control the visibility of the 'Update Now' button.
+     */
     $scope.isUpdateNowDisabled = true;
+
+    /**
+     * @property {Object} configModel is an object used to keep the cron job expression and boolean flags used in the buttons logic.
+     */
     $scope.configModel = {
         'cronJobExpression': '',
         'showSaveBtn' : false,
         'originalValue': ''
     };
+
+     /**
+     * @property {Boolean} tableLoading is a flag defining whether we need to show the loading icon.
+     */
     $scope.tableLoading = true;
 
 
-
+    /**
+     * initializes the cron job expression and the MDR code lists
+     *
+     * @memberof MdrCtrl
+     * @function init
+     * @public
+     */
 	$scope.init = function() {
 	    mdrRestService.getCronJobExpression().then(getCronJobExpressionSuccess, getCronJobExpressionFailed);
         $scope.getMDRCodeLists();
 	};
 
+
+    /**
+     * method that saves the crontab expression
+     *
+     * @memberof MdrCtrl
+     * @function saveCron
+     * @public
+     */
 	$scope.saveCron = function(){
 		if(angular.isDefined($scope.configModel.cronJobExpression) && $scope.configModel.cronJobExpression.indexOf('NaN') === -1){
 			loadingStatus.isLoading('Preferences',true, 2);
@@ -27,11 +77,16 @@ angular.module('unionvmsWeb').controller('MdrCtrl',function($scope, mdrRestServi
 			if ($scope.mdrConfigurationForm.$dirty){
 		        mdrRestService.updateCronJobExpression($scope.configModel.cronJobExpression).then(saveSuccess, saveFailure);
 		    }
-		} else {
-
 		}
 	};
 
+    /**
+     * method that sends a MDR update request with a list of selected acronyms and on success response, it updates the MDR code lists table.
+     *
+     * @memberof MdrCtrl
+     * @function updateNow
+     * @public
+     */
     $scope.updateNow = function() {
         var acronymArray = [];
         angular.forEach($scope.displayedMDRLists, function (value, key) {
@@ -47,6 +102,14 @@ angular.module('unionvmsWeb').controller('MdrCtrl',function($scope, mdrRestServi
         });
     };
 
+
+    /**
+     * method that sends a MDR update request for all code lists, it updates the MDR code lists table.
+     *
+     * @memberof MdrCtrl
+     * @function updateAllNow
+     * @public
+     */
      $scope.updateAllNow = function() {
         mdrRestService.syncAllNow().then(function(response) {
              $scope.getMDRCodeLists();
@@ -55,11 +118,27 @@ angular.module('unionvmsWeb').controller('MdrCtrl',function($scope, mdrRestServi
         });
     };
 
+
+    /**
+     * method that enables/disables the scheduled update of a given code list.
+     *
+     * @memberof MdrCtrl
+     * @function enableDisableAutoUpdate
+     * @public
+     * @param {Number} the ID of the code list that needs to be disabled/enabled
+     */
     $scope.enableDisableAutoUpdate = function(codeListID) {
     //TODO
         console.error("Not implemented. Enable/Disable codeList with ID " + codeListID);
     };
 
+    /**
+     * method that ticks/unticks all checkboxes in the MDR code list table
+     *
+     * @memberof MdrCtrl
+     * @function selectDeselectAll
+     * @public
+     */
     $scope.selectDeselectAll = function() {
          if ($('#selectDeselectAll')[0].checked) {
             angular.forEach($scope.displayedMDRLists, function (value, key) {
@@ -77,6 +156,14 @@ angular.module('unionvmsWeb').controller('MdrCtrl',function($scope, mdrRestServi
 
     };
 
+
+    /**
+     * the method checks if we have no checkboxes selected and disables the 'Update Now' button
+     *
+     * @memberof MdrCtrl
+     * @function enableDisableSynchButton
+     * @public
+     */
     $scope.enableDisableSynchButton = function() {
         if ( _.where($scope.displayedMDRLists, {'isSelected': true}).length > 0) {
             $scope.isUpdateNowDisabled = false;
@@ -85,7 +172,14 @@ angular.module('unionvmsWeb').controller('MdrCtrl',function($scope, mdrRestServi
         }
     };
 
-    //USER AREAS LIST
+
+    /**
+     * method that fetches all the MDR Code lists
+     *
+     * @memberof MdrCtrl
+     * @function getMDRCodeLists
+     * @public
+     */
     $scope.getMDRCodeLists = function(){
         $scope.tableLoading = true;
         mdrRestService.getMDRCodeLists().then(function(response){
@@ -99,8 +193,6 @@ angular.module('unionvmsWeb').controller('MdrCtrl',function($scope, mdrRestServi
     };
 
     var getCronJobExpressionSuccess = function(response) {
-        //$scope.alert.hasAlert = true;
-       // $scope.alert.hasSuccess = true;
         $scope.configModel.cronJobExpression = response;
         $scope.configModel.originalValue = response;
         loadingStatus.isLoading('Preferences',false);
@@ -122,6 +214,15 @@ angular.module('unionvmsWeb').controller('MdrCtrl',function($scope, mdrRestServi
 	    alertService.showErrorMessageWithTimeout(locale.getString('activity.mdr_cron_save_failed'));
 	};
 
+
+    /**
+     * this method constructs a modal displaying a table with the content of certain MDR code list
+     *
+     * @memberof MdrCtrl
+     * @function openCodeListModal
+     * @public
+     * @param {String} is the MDR code list acronym
+     */
 	$scope.openCodeListModal = function(acronym) {
         var modalInstance = $modal.open({
             templateUrl: 'partial/activity/mdr/codeList/mdrCodeList.html',
