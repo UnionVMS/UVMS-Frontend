@@ -1,6 +1,8 @@
 {
 	"menu_today" : "Today",
 	"menu_reporting" : "Reports",
+	"menu_areas" : "Area management",
+	"menu_activity" : "Activity",
 	"menu_user" : "User",
 	"menu_assets" : "Assets",
 	"menu_alarmconditions" : "Alarms",
@@ -16,5 +18,23 @@
     "change_security_answer": "Change security answer",
     "sign_in": "Sign in",
     "sign_out": "Sign out",
-	"current_time_title": "Current time"
+	"current_time_title": "Current time",
+
+	"page_title_default": "UnionVMS",
+	"page_title_reports": "Reports",
+	"page_title_areas": "Area management",
+	"page_title_activity": "Activity",
+	"page_title_movements": "Position reports",
+	"page_title_manual_movements": "Manual position reports",
+	"page_title_exchange": "Exchange",
+	"page_title_new_poll": "New poll",
+	"page_title_polling_logs": "Polling logs",
+	"page_title_mobile_terminals": "Mobile terminals",
+	"page_title_assets": "Assets",
+	"page_title_holding_table": "Holding table",
+	"page_title_notifications": "Notifications",
+	"page_title_rules": "Rules",
+	"page_title_audit_logs": "Audit logs",
+	"page_title_configuration": "Configuration",
+	"page_title_help": "Help"
 }

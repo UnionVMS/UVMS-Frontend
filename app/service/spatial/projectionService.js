@@ -13,7 +13,7 @@
  * @description
  *  A service to fetch and process all supported map projections. Used throughout the application for comboboxes and map specific functions
  */
-angular.module('unionvmsWeb').factory('projectionService',function(locale, $interval, spatialRestService) {
+angular.module('unionvmsWeb').factory('projectionService',function(locale, $interval, spatialRestService, genericMapService) {
 
 	var projectionService = {
 	    items: [],
@@ -50,6 +50,8 @@ angular.module('unionvmsWeb').factory('projectionService',function(locale, $inte
                         "text": projectionService.srcProjections[i].name,
                         "code": projectionService.srcProjections[i].id
                     });
+                    
+                    genericMapService.registerProjInProj4(projectionService.srcProjections[i]);
                     
                     if (loadCoords === true){
                         projectionService.setCoordinatesUnitItems(selectedId);

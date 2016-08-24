@@ -449,6 +449,27 @@ unionvmsWebApp.config(function($stateProvider, $compileProvider, tmhDynamicLocal
                 loadingStatus.resetState();
             }
         })
+        .state('app.activity', {
+            url: '/activity',
+            views: {
+                modulepage: {
+                    templateUrl: 'partial/activity/activity.html',
+                    controller: 'ActivityCtrl'
+                }
+            },
+            data: {
+                pageTitle: 'header.page_title_activity'
+            },
+//            onEnter: function($state,locale,userService,errorService){
+//                if(_.isNull(userService.getCurrentContext().scope)){
+//                    errorService.setErrorMessage(locale.getString('common.error_user_without_scope'));
+//                    $state.go('error');
+//                }
+//            },
+            onExit: function(loadingStatus){
+                loadingStatus.resetState();
+            }
+        })
         .state('app.exchange', {
             url: '/exchange',
             views: {

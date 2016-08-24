@@ -7,13 +7,12 @@
  * @param $window {service} angular window service
  * @param locale {service} angular locale service
  * @param spatialRestService {service} Spatial REST API service
- * @param projectionService {service} map projection service <p>{@link unionvmsWeb.projectionService}</p>
  * @attr {Object} mapBasicConfigs - A property object that will contain basic map configurations (not used in the liveview map)
  * @description
  *  Service for map generic functions that can be used in all maps throughout the application
  */
 
-angular.module('unionvmsWeb').factory('genericMapService',function($localStorage, $location, $window, locale, spatialRestService, projectionService) {
+angular.module('unionvmsWeb').factory('genericMapService',function($localStorage, $location, $window, locale, spatialRestService) {
     /**
      * Gets the base projection of the map
      * 
@@ -139,9 +138,7 @@ angular.module('unionvmsWeb').factory('genericMapService',function($localStorage
      * @returns {ol.prol.Projection} The OL projection
      */
     var setProjection = function(proj){
-        if (!angular.isDefined(proj4.defs('EPSG:' + proj.epsgCode))){
-            proj4.defs('EPSG:' + proj.epsgCode, proj.projDef);
-        }
+        registerProjInProj4(proj);
         
         var worldExtent = [-180, -89.99, 180, 89.99];
         if (angular.isDefined(proj.worldExtent)){
@@ -160,6 +157,19 @@ angular.module('unionvmsWeb').factory('genericMapService',function($localStorage
         });
 
         return projection;
+    };
+    
+    /**
+     * Register a specific projection within the proj4js workspace
+     * 
+     * @memberof genericMapService
+     * @public
+     * @param {Object} proj - The definition of the projection
+     */
+    var registerProjInProj4 = function(proj){
+        if (!angular.isDefined(proj4.defs('EPSG:' + proj.epsgCode))){
+            proj4.defs('EPSG:' + proj.epsgCode, proj.projDef);
+        }
     };
     
     /**
@@ -774,6 +784,7 @@ angular.module('unionvmsWeb').factory('genericMapService',function($localStorage
 	    getControlsByType: getControlsByType,
 	    getInteractionsByType: getInteractionsByType,
 	    setProjection: setProjection,
+	    registerProjInProj4: registerProjInProj4,
 	    removeAllLayers: removeAllLayers,
 	    removeLayerByType: removeLayerByType,
 	    defineOsm: defineOsm,
