@@ -47,12 +47,12 @@
                 </div>
 
                 <div st-table="displayedMDRLists" st-safe-src="mdrCodeLists">
-                    <div class="search-field">
+                    <div class="search-field" >
                         <input st-search="" class="form-control" placeholder="{{'activity.search_table_placeholder' | i18n}}" type="text"/>
                     </div>
                     <div id="codeListsTable" class="table table-striped tableSmart areas-table table-condensed">
-                        <div class="thead col-md-12">
-                            <div class="tr row stColumnHeaders">
+                        <div class="thead col-md-12" >
+                            <div class="tr row stColumnHeaders" >
                                 <div class="th col-md-1" st-skip-natural="true" st-class-ascent="sorting_asc" st-class-descent="sorting_desc"><div class="checkbox"><input type="checkbox" name="selectDeselectAll" id="selectDeselectAll" ng-click="selectDeselectAll()"></div></div>
                                 <div class="th col-md-3" st-sort="acronym" st-skip-natural="true" st-class-ascent="sorting_asc" st-class-descent="sorting_desc">{{'activity.code_list_table_acronym_header' | i18n}}</div>
                                 <div class="th col-md-3" st-sort="name" st-skip-natural="true" st-class-ascent="sorting_asc" st-class-descent="sorting_desc">{{'activity.code_list_table_name_header' | i18n}}</div>
@@ -72,16 +72,16 @@
                         <div class="tbody col-md-12">
                             <div ng-repeat="codeList in displayedMDRLists" class="tr row" ng-show="!tableLoading">
                                 <div class="td col-md-1" st-skip-natural="true" ><div class="checkbox"><input type="checkbox" value="{{codeList.id}}" ng-model="codeList.isSelected" ng-click="enableDisableSynchButton()"></div></div>
-                                <div class="td col-md-3" st-skip-natural="true">{{codeList.acronym}}</div>
-                                <div class="td col-md-3" st-skip-natural="true">{{codeList.name}}</div>
+                                <div class="td col-md-3" st-skip-natural="true">{{codeList.objectAcronym}}</div>
+                                <div class="td col-md-3" st-skip-natural="true">{{codeList.objectName}}</div>
                                 <div class="td col-md-1" st-skip-natural="true">{{codeList.lastSuccess | stActivityDateUtc}}</div>
                                 <div class="td col-md-1" st-skip-natural="true">{{codeList.lastAttempt | stActivityDateUtc}}</div>
                                 <div class="td col-md-1" st-skip-natural="true">{{codeList.lastStatus}}</div>
                                 <div class="td col-md-1">
-                                    <button type="button" class="btn btn-{{codeList.scheduled?'success':'danger'}} btn-xs pull-left" title="{{'activity.enable_disable_autoupdate' | i18n }}" ng-click="enableDisableAutoUpdate($index)"><span>{{'activity.enable_disable_autoupdate_'+codeList.scheduled | i18n}}</span></button>
+                                    <button type="button" class="btn btn-{{codeList.schedulable?'success':'danger'}} btn-xs pull-left" title="{{'activity.enable_disable_autoupdate' | i18n }}" ng-click="enableDisableAutoUpdate($index)"><span>{{'activity.enable_disable_autoupdate_'+codeList.schedulable | i18n}}</span></button>
                                 </div>
                                 <div class="td col-md-1">
-                                    <button type="button" class="btn btn-default btn-xs pull-right tableBtnMargin" title="{{'areas.table_area__details_btn' | i18n }}" ng-click="openCodeListModal(codeList.acronym)"><span class="fa fa-eye"></span></button>
+                                    <button type="button" class="btn btn-default btn-xs pull-right tableBtnMargin" title="{{'areas.table_area__details_btn' | i18n }}" ng-click="openCodeListModal(codeList.objectAcronym)"><span class="fa fa-eye"></span></button>
                                 </div>
                             </div>
                         </div>

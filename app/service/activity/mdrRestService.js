@@ -10,14 +10,14 @@
 angular.module('unionvmsWeb').factory('mdrRestServiceFactory',function($resource) {
   return {
           getCronJobExpression: function(){
-              return $resource('/activity/rest/mdr/schedulerConfig', {}, {
+              return $resource('/activity/rest/mdr/scheduler/config', {}, {
                   'get': {
                       method: 'GET'
                   }
               });
           },
           updateCronJobExpression: function(){
-              return $resource('/activity/rest/mdr/schedulerConfig', {}, {
+              return $resource('/activity/rest/mdr/scheduler/config/update', {}, {
                   'save': {
                       method: 'PUT',
                       headers: {
@@ -27,8 +27,7 @@ angular.module('unionvmsWeb').factory('mdrRestServiceFactory',function($resource
               });
           },
           getMDRCodeLists: function() {
-          //the URL should be /activity/rest/acronyms/details
-            return $resource('service/activity/listAcronyms.json');
+            return $resource('/activity/rest/mdr/acronyms/details');
           },
            getMDRCodeListByAcronym: function(acronym, offset, size, filter, sortBy, sortReversed) {
             //the URL should be /activity/rest/acronyms/details

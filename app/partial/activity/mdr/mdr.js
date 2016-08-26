@@ -91,7 +91,7 @@ angular.module('unionvmsWeb').controller('MdrCtrl',function($scope, mdrRestServi
         var acronymArray = [];
         angular.forEach($scope.displayedMDRLists, function (value, key) {
              if (value.isSelected) {
-                acronymArray.push(value.acronym);
+                acronymArray.push(value.objectAcronym);
              }
         });
 
@@ -145,7 +145,9 @@ angular.module('unionvmsWeb').controller('MdrCtrl',function($scope, mdrRestServi
                  value.isSelected = true;
             });
 
-            $scope.isUpdateNowDisabled = false;
+            if ($scope.displayedMDRLists && $scope.displayedMDRLists.length > 0) {
+                $scope.isUpdateNowDisabled = false;
+            }
          } else {
               angular.forEach($scope.displayedMDRLists, function (value, key) {
                   value.isSelected = false;
