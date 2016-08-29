@@ -1,4 +1,4 @@
-angular.module('unionvmsWeb').factory('Report',function(unitConversionService) { //globalSettingsService,
+angular.module('unionvmsWeb').factory('Report',function(unitConversionService, userService) { //globalSettingsService,
 	function Report(){
 	    this.id = undefined;
 	    this.name = undefined;
@@ -95,6 +95,10 @@ angular.module('unionvmsWeb').factory('Report',function(unitConversionService) {
 	        report.createdBy = data.createdBy;
 	        report.withMap = data.withMap;
 	        report.visibility = data.visibility;
+	        
+	        if (report.visibility !== 'private' && !userService.isAllowed('SHARE_REPORT_' + report.visibility.toUpperCase(), 'Reporting', true) && !userService.isAllowed('MANAGE_ALL_REPORTS', 'Reporting', true)){
+	            report.visibility = 'private';
+	        }
 
 	        //Common filters
 			report.commonFilterId = filter.common.id;

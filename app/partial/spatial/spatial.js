@@ -41,9 +41,8 @@ angular.module('unionvmsWeb').controller('SpatialCtrl',function($scope, $timeout
 	           reportRestService.getReport($state.params.id).then(function(response){
 	               $scope.repServ.runReport(response);
 	           }, function(error){
-	               $scope.repServ.isReportExecuting = false;
-	               $scope.repServ.errorLoadingDefault = true;
-	               loadingStatus.isLoading('InitialReporting', false);
+	               reportFormService.resetLiveView();
+                   loadUserReportsList();
 	           });
            }
        }else{
@@ -54,29 +53,32 @@ angular.module('unionvmsWeb').controller('SpatialCtrl',function($scope, $timeout
 	           reportRestService.getReport(defaultRepObj.id).then(function(response){
 	               $scope.repServ.runReport(response);
 	           }, function(error){
-	               $scope.repServ.isReportExecuting = false;
 	               $scope.repServ.errorLoadingDefault = true;
-	               loadingStatus.isLoading('InitialReporting', false);
+	               reportFormService.resetLiveView();
+	               loadUserReportsList();
 	           });
 	       }else{
-               reportRestService.getReportsList().then(function(response){
-                   if(response.data.length){
-                       $scope.repServ.loadReportHistory();
-                       $scope.repNav.goToView('liveViewPanel','mapPanel',$scope.openReportList,[undefined,true]);
-                   }else{
-                       $scope.openNewReport();
-                   }
-                   loadingStatus.isLoading('InitialReporting', false);
-               }, function(error){
-                   $scope.repServ.hasAlert = true;
-                   $scope.repServ.alertType = 'danger';
-                   $scope.repServ.message = locale.getString('spatial.map_error_loading_reports_list');
-                   loadingStatus.isLoading('InitialReporting', false);
-               });
-               
+	           loadUserReportsList();
            }
        }
    });
+   
+   var loadUserReportsList = function(){
+       reportRestService.getReportsList().then(function(response){
+           if(response.data.length){
+               $scope.repServ.loadReportHistory();
+               $scope.repNav.goToView('liveViewPanel','mapPanel',$scope.openReportList,[undefined,true]);
+           }else{
+               $scope.openNewReport();
+           }
+           loadingStatus.isLoading('InitialReporting', false);
+       }, function(error){
+           $scope.repServ.hasAlert = true;
+           $scope.repServ.alertType = 'danger';
+           $scope.repServ.message = locale.getString('spatial.map_error_loading_reports_list');
+           loadingStatus.isLoading('InitialReporting', false);
+       });
+   };
    
    $scope.isAllowed = function(module, feature){
        return userService.isAllowed(feature, module, true);

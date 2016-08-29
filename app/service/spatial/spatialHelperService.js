@@ -2,6 +2,7 @@ angular.module('unionvmsWeb').factory('spatialHelperService',function(userServic
 
 	var spServ = {
 	    defaultReports: [],
+	    roleName: undefined,
 	    tbControl: {
 	        measure: false,
 	        fullscreen: false,
@@ -46,6 +47,10 @@ angular.module('unionvmsWeb').factory('spatialHelperService',function(userServic
     
     spServ.getDefaultReport = function(useService){
         var context = userService.getCurrentContext();
+        if (!angular.isDefined(spServ.roleName) || spServ.roleName !== context.role.roleName){
+            spServ.roleName = context.role.roleName;
+            spServ.defaultReports = [];
+        }
         var defaultRep = _.findWhere(spServ.defaultReports, {scopeName: context.scope.scopeName});
         
         if (!angular.isDefined(defaultRep) && useService){

@@ -15,7 +15,7 @@
  * @param unitConversionService {service} unit conversion service
  * @param coordinateFormatService {service} coordinate format service
  * @param MapFish {service} Mapfish service
- * @param genericMapService {service} generic map service<p>{@link unionvmsWeb.genericMapService}</p>
+ * @param genericMapService {service} generic map service <p>{@link unionvmsWeb.genericMapService}</p>
  * @param layerPanelService {service} layer panel service
  * @attr {ol.Graticule} mapGraticule - The OL map graticule
  * @attr {Number} mapPrintResolution - The current map resolution to use while printing

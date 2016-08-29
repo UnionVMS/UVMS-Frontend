@@ -76,6 +76,27 @@ angular.module('unionvmsWeb').controller('ReportslistCtrl',function($scope, $fil
         }
     };
     
+    //checks and returns all visibility levels that should be shown in the share dropdown menu
+    $scope.getVisibilityLevels = function(report){
+        var visibility = []
+        if (userService.isAllowed('MANAGE_ALL_REPORTS', 'Reporting', true)){
+            visibility = ['PRIVATE', 'SCOPE', 'PUBLIC'];
+        } else {
+            angular.forEach(report.shareable, function(item){
+                if (userService.isAllowed('SHARE_REPORT_' + item, 'Reporting', true)){
+                    visibility.push(item);
+                }
+            });
+            
+            if (visibility.indexOf('PRIVATE') === -1){
+                visibility.push('PRIVATE');
+            }
+        }
+        
+        return visibility;
+    };
+    
+    
     //Set default report
     $scope.makeDefault = function(index){
         var repId = $scope.displayedRecords[index].id;
@@ -139,13 +160,15 @@ angular.module('unionvmsWeb').controller('ReportslistCtrl',function($scope, $fil
     };
 
     //Share report
-    $scope.shareReport = function(index, visibility){ 
-        var options = {
-            textLabel : locale.getString("spatial.reports_share_report_confirmation_text") + $scope.displayedRecords[index].name.toUpperCase()  + '?'
-        };
-        confirmationModal.open(function(){
-            reportRestService.shareReport($scope.displayedRecords[index].id, visibility, index).then(refreshSharedReport, $scope.repServ.getReportsListError);
-        }, options);    
+    $scope.shareReport = function(index, visibility){
+        if ($scope.displayedRecords[index].visibility.toUpperCase() !== visibility){
+            var options = {
+                textLabel : locale.getString("spatial.reports_share_report_confirmation_text") + $scope.displayedRecords[index].name.toUpperCase()  + '?'
+            };
+            confirmationModal.open(function(){
+                reportRestService.shareReport($scope.displayedRecords[index].id, visibility, index).then(refreshSharedReport, $scope.repServ.getReportsListError);
+            }, options);
+        }
     };
 
     var refreshSharedReport = function(response){
@@ -175,6 +198,7 @@ angular.module('unionvmsWeb').controller('ReportslistCtrl',function($scope, $fil
             $scope.tableAlert.type = 'error';
             $scope.tableAlert.msg = 'spatial.map_error_loading_default_report';
             $scope.tableAlert.visible = true;
+            $scope.repServ.errorLoadingDefault = false;
         }
     });
     

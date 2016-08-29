@@ -3,11 +3,7 @@ angular.module('unionvmsWeb').controller('ReportformCtrl',function($scope, $moda
     $scope.showVesselFilter = false;
 
     //set visibility types in dropdown option
-    $scope.visibilities = [
-                           {"text": locale.getString('spatial.reports_table_share_label_private'), "code": "private"},
-                           {"text": locale.getString('spatial.reports_table_share_label_scope'), "code": "scope"},
-                           {"text": locale.getString('spatial.reports_table_share_label_public'), "code": "public"}
-                           ];
+    $scope.visibilities = [];
     
     //Set positions selector dropdown options
     $scope.positionItems = [
@@ -76,6 +72,19 @@ angular.module('unionvmsWeb').controller('ReportformCtrl',function($scope, $moda
             vessels: [],
             areas: []
         };
+        
+        $scope.checkVisibilities();
+    };
+    
+    $scope.checkVisibilities = function(){
+        $scope.visibilities = [{"text": locale.getString('spatial.reports_table_share_label_private'), "code": "private"}];
+        var availableVisibilities = ['SCOPE', 'PUBLIC'];
+        angular.forEach(availableVisibilities, function(visibility) {
+        	if (userService.isAllowed('SHARE_REPORT_' + visibility, 'Reporting', true) || userService.isAllowed('MANAGE_ALL_REPORTS', 'Reporting', true)){
+        	    var name = visibility.toLowerCase();
+        	    $scope.visibilities.push({"text": locale.getString('spatial.reports_table_share_label_' + name), "code": name});
+        	}
+        });
     };
 
     $scope.resetForm = function(){
