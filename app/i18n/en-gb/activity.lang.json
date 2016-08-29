@@ -32,6 +32,8 @@
     "mdr_code_list_field_family": "Family",
     "mdr_code_list_field_order": "Order",
     "error_sync_now": "Unable to synchronize the requested code lists.",
-    "error_sync_all_now": "Unable to synchronize code lists."
+    "error_sync_all_now": "Unable to synchronize code lists.",
+    "error_enable_disable_scheduled_code_list": "Enable/Disable failed for code list: ",
+    "code_lists_fieldset_label": "Code Lists Update Status"
 
 }

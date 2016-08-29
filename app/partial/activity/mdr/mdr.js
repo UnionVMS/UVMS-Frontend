@@ -128,8 +128,13 @@ angular.module('unionvmsWeb').controller('MdrCtrl',function($scope, mdrRestServi
      * @param {Number} the ID of the code list that needs to be disabled/enabled
      */
     $scope.enableDisableAutoUpdate = function(codeListID) {
-    //TODO
-        console.error("Not implemented. Enable/Disable codeList with ID " + codeListID);
+        var selectedCodeList = $scope.displayedMDRLists[codeListID];
+
+        mdrRestService.enableDisableScheduledUpdate(selectedCodeList.objectAcronym, !selectedCodeList.schedulable).then(function(response) {
+            $scope.displayedMDRLists[codeListID].schedulable = !selectedCodeList.schedulable;
+        }, function(error) {
+            alertService.showErrorMessageWithTimeout(locale.getString('activity.error_enable_disable_scheduled_code_list') + selectedCodeList.objectAcronym);
+        });
     };
 
     /**

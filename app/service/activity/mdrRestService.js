@@ -34,7 +34,7 @@ angular.module('unionvmsWeb').factory('mdrRestServiceFactory',function($resource
               return $resource('service/activity/codeList.json');
           },
           syncNow: function(){
-            return $resource('/activity/rest/mdr/sync', {}, {
+            return $resource('/activity/rest/mdr/sync/list', {}, {
                 'update': {
                     method: 'POST',
                     headers: {
@@ -44,7 +44,18 @@ angular.module('unionvmsWeb').factory('mdrRestServiceFactory',function($resource
             });
            },
           syncAllNow: function(){
-               return $resource('/activity/rest/mdr/sync');
+               return $resource('/activity/rest/mdr/sync/all');
+          },
+
+          enableDisableScheduledUpdate: function() {
+               return $resource('/activity/rest/mdr/status/schedulable/update/:acronymID/:schedulableFlag', {
+                     acronymID: '@acronymID',
+                     schedulableFlag: '@schedulableFlag'
+                }, {
+                    'update': {
+                        method:'PUT'
+                    }
+               });
           }
       };
   })
@@ -175,6 +186,28 @@ angular.module('unionvmsWeb').factory('mdrRestServiceFactory',function($resource
                  deferred.reject(error);
             });
             return deferred.promise;
+        },
+
+        /**
+         *  This method enables/disables the automatic update of a given acronym.
+         *
+         * @memberof mdrRestService
+         * @public
+         * @param {String} acronym - is the acronym which automatic update will be modified.
+         * @param {boolean} schedulable - is a boolean flag. When false - the automatic update will be disabled and vice versa.
+         * @returns {Promise} containing a response.
+         */
+        enableDisableScheduledUpdate: function(acronym, schedulable) {
+            var deferred = $q.defer();
+            mdrRestServiceFactory.enableDisableScheduledUpdate().update({acronymID: acronym, schedulableFlag: schedulable},
+                function(response){
+                     deferred.resolve(response.data);
+                },
+                function(error) {
+                     console.error('Error enabling/disabling automatic updates for acronym: ' + acronym);
+                     deferred.reject(error);
+                });
+          return deferred.promise;
         }
   	};
 
