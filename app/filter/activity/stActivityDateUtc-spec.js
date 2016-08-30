@@ -1,12 +1,24 @@
 describe('stActivityDateUtc', function() {
 
-    beforeEach(module('unionvmsWeb'));
+    var mockUnitConversionService = {
+         date: {
+            convertToUserFormat: function(timeInMillisec) {
+                return timeInMillisec + 'mock';
+            }
+         }
+    };
 
-    it('should ...', inject(function($filter) {
+    beforeEach(module('unionvmsWeb', function () {
+      module(function ($provide) {
+                $provide.value('unitConversionService', mockUnitConversionService);
+              });
+            }));
+
+    it('should ...', inject(function($filter ) {
 
         var filter = $filter('stActivityDateUtc');
-
-        expect(filter('input')).toEqual('output');
+        var datetime = new Date().getTime();
+        expect(filter(datetime)).toEqual(new Date(datetime)+'mock');
 
     }));
 
