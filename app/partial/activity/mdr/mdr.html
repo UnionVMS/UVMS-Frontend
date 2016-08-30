@@ -2,7 +2,7 @@
     <loading-panel type="Preferences"></loading-panel>
 
     <!--MDR configuration sheduler-->
-    <ng-form name="mdrConfigurationForm">
+    <ng-form name="mdrConfigurationForm" ng-show="isAllowed('CONFIGURE_MDR_SCHEDULER')">
         <fieldset class="fieldsetStyle col-md-12" >
             <legend class="fieldsetLegendStyle">
                 <a data-toggle="collapse" >{{'activity.scheduler_fieldset_label' | i18n }}</a>
@@ -29,13 +29,13 @@
 
 
     <!--SMART TABLE containing all the MDR code lists-->
-    <div class="row">
+    <div class="row"  ng-show="isAllowed('LIST_MDR_CODE_LISTS')">
         <div class="form-group col-md-12 noPadding">
             <fieldset class="fieldsetStyle col-md-12" >
                 <legend class="fieldsetLegendStyle">
                     <a data-toggle="collapse" >{{'activity.code_lists_fieldset_label' | i18n }}</a>
                 </legend>
-                <div class="form-group col-md-12 noPadding">
+                <div class="form-group col-md-12 noPadding" ng-show="isAllowed('UPDATE_MDR_CODE_LISTS')">
                     <button type="button" class="btn btn-primary btn-sm" ng-click="updateAllNow()">
                         &nbsp;
                         <span>{{'activity.update_all_now_btn' | i18n }}</span>
@@ -78,7 +78,7 @@
                                 <div class="td col-md-1" st-skip-natural="true">{{codeList.lastAttempt | stActivityDateUtc}}</div>
                                 <div class="td col-md-1" st-skip-natural="true">{{codeList.lastStatus}}</div>
                                 <div class="td col-md-1">
-                                    <button type="button" class="btn btn-{{codeList.schedulable?'success':'danger'}} btn-xs pull-left" title="{{'activity.enable_disable_autoupdate' | i18n }}" ng-click="enableDisableAutoUpdate($index)"><span>{{'activity.enable_disable_autoupdate_'+codeList.schedulable | i18n}}</span></button>
+                                    <button ng-show="isAllowed('CODE_LISTS_ENABLE_DISABLE_SCHEDULED_UPDATE')" type="button" class="btn btn-{{codeList.schedulable?'success':'danger'}} btn-xs pull-left" title="{{'activity.enable_disable_autoupdate' | i18n }}" ng-click="enableDisableAutoUpdate($index)"><span>{{'activity.enable_disable_autoupdate_'+codeList.schedulable | i18n}}</span></button>
                                 </div>
                                 <div class="td col-md-1">
                                     <button type="button" class="btn btn-default btn-xs pull-right tableBtnMargin" title="{{'areas.table_area__details_btn' | i18n }}" ng-click="openCodeListModal(codeList.objectAcronym)"><span class="fa fa-eye"></span></button>

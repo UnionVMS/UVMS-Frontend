@@ -10,7 +10,7 @@
    * @param alertService {service}
    * @param $modal {service}
    */
-angular.module('unionvmsWeb').controller('MdrCtrl',function($scope, mdrRestService, loadingStatus, locale, alertService, $modal){
+angular.module('unionvmsWeb').controller('MdrCtrl',function($scope, mdrRestService, loadingStatus, locale, alertService, $modal, userService){
 
     /**
      * @property {Object} cronWidgetConfig is a configuration object, used by the angularjs-cron-plugin
@@ -58,8 +58,13 @@ angular.module('unionvmsWeb').controller('MdrCtrl',function($scope, mdrRestServi
      * @public
      */
 	$scope.init = function() {
-	    mdrRestService.getCronJobExpression().then(getCronJobExpressionSuccess, getCronJobExpressionFailed);
-        $scope.getMDRCodeLists();
+	    if ($scope.isAllowed('CONFIGURE_MDR_SCHEDULER')) {
+            mdrRestService.getCronJobExpression().then(getCronJobExpressionSuccess, getCronJobExpressionFailed);
+        }
+
+	    if ($scope.isAllowed('LIST_MDR_CODE_LISTS')) {
+	        $scope.getMDRCodeLists();
+        }
 	};
 
 
@@ -228,7 +233,7 @@ angular.module('unionvmsWeb').controller('MdrCtrl',function($scope, mdrRestServi
      * @memberof MdrCtrl
      * @function openCodeListModal
      * @public
-     * @param {String} is the MDR code list acronym
+     * @param {String} acronym - is the MDR code list acronym
      */
 	$scope.openCodeListModal = function(acronym) {
         var modalInstance = $modal.open({
@@ -242,6 +247,18 @@ angular.module('unionvmsWeb').controller('MdrCtrl',function($scope, mdrRestServi
             }
         });
 	};
+
+    /**
+     * this method checks if the current user has a specified USM feature
+     * @memberof MdrCtrl
+     * @function isAllowed
+     * @public
+     * @param {String} feature - is the USM feature name to check
+     * @return {Boolean} true if the user has the specified feature in his profile
+     */
+     $scope.isAllowed = function(feature){
+       return userService.isAllowed(feature, 'Activity', true);
+    };
 
 
 	$scope.init();
