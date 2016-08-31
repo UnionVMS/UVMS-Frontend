@@ -110,12 +110,27 @@ module.exports = function (grunt) {
     },
     jsdoc: {
         dist: {
-            src: ['app/service/common/*.js', 'app/service/spatial/*.js', 'app/service/reporting/*.js', 'app/service/areas/*.js', '!app/service/common/auth/*.js', 'app/partial/spatial/**/*.js', 'app/partial/activity/**/*.js', 'app/service/activity/*.js', '!*-spec.js'],
+            src: [
+                  //SERVICES
+                  'app/service/common',
+                  'app/service/spatial',
+                  'app/service/reporting/',
+                  'app/service/areas',
+                  'app/service/activity/',
+                  
+                  //PARTIALS
+                  'app/partial/spatial',
+                  'app/partial/activity',
+                  
+                  //DIRECTIVES
+                  'app/directive/common/breadcrumbNavigator'
+            ],
             options: {
                 destination: 'dist/docs',
-                configure: 'node_modules/angular-jsdoc/common/conf.json',
+                configure: 'jsdoc_conf.json',
                 template: 'node_modules/angular-jsdoc/angular-template',
-                readme: './README_docs.md'
+                readme: './README_docs.md',
+                recurse: true
             }
         }
     },

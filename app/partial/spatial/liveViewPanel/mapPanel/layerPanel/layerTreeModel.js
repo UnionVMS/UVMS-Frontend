@@ -334,7 +334,7 @@ angular.module('unionvmsWeb').factory('TreeModel',function(locale, mapService, u
                     nodeArray.push(buildOsmBasedNodes(def));
                     break;
                 case 'BING':
-                    var node = buildBingBasedNodes(def)
+                    var node = buildBingBasedNodes(def);
                     if (angular.isDefined(node)){
                         nodeArray.push(node);
                     }

@@ -2,9 +2,9 @@ describe('activityService', function() {
 
   beforeEach(module('unionvmsWeb'));
 
-  it('should ...', inject(function() {
+  it('should ...', inject(function(activityService) {
 
-    //expect(activity.doSomething()).toEqual('something');
+	//expect(activityService.doSomething()).toEqual('something');
 
   }));
 

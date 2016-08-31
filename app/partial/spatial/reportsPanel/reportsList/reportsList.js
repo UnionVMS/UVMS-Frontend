@@ -78,7 +78,7 @@ angular.module('unionvmsWeb').controller('ReportslistCtrl',function($scope, $fil
     
     //checks and returns all visibility levels that should be shown in the share dropdown menu
     $scope.getVisibilityLevels = function(report){
-        var visibility = []
+        var visibility = [];
         if (userService.isAllowed('MANAGE_ALL_REPORTS', 'Reporting', true)){
             visibility = ['PRIVATE', 'SCOPE', 'PUBLIC'];
         } else {
