@@ -7,6 +7,8 @@
   <packaging>war</packaging>
   <properties>
     <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+    <maven.release.plugin.version>2.5.2</maven.release.plugin.version>
+    <maven.scm.provider.version>2.1.1</maven.scm.provider.version>
     <release.branch.name>uvms-2.0.6-kili</release.branch.name>
     <webroot>unionvms-web</webroot>
     <karma.phase>integration-test</karma.phase>
@@ -292,6 +294,26 @@
           <skip>true</skip>
 			</configuration>
 		</plugin>
+        <plugin>
+            <groupId>org.apache.maven.plugins</groupId>
+            <artifactId>maven-release-plugin</artifactId>
+            <version>${maven.release.plugin.version}</version>
+            <dependencies>
+                <dependency>
+                    <groupId>com.google.code.maven-scm-provider-svnjava</groupId>
+                    <artifactId>maven-scm-provider-svnjava</artifactId>
+                    <version>${maven.scm.provider.version}</version>
+                </dependency>
+            </dependencies>
+            <configuration>
+                <providerImplementations>
+                    <svn>javasvn</svn>
+                </providerImplementations>
+                <tagBase>https://webgate.ec.europa.eu/CITnet/svn/UNIONVMS/tags/unionvms-web</tagBase>
+                <tagNameFormat>@{project.artifactId}-@{project.version}</tagNameFormat>
+                <autoVersionSubmodules>true</autoVersionSubmodules>
+            </configuration>
+        </plugin>
 	</plugins>
   </build>
   <scm>
