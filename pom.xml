@@ -295,7 +295,7 @@
 	</plugins>
   </build>
   <scm>
-    <developerConnection>scm:svn:https://webgate.ec.europa.eu/CITnet/svn/UNIONVMS/branches/releases/${release.branch.name}/unionvms-web</developerConnection>
+    <developerConnection>scm:svn:https://webgate.ec.europa.eu/CITnet/svn/UNIONVMS/branches/dev/unionvms-web</developerConnection>
    </scm>
   <distributionManagement>
     <repository>
