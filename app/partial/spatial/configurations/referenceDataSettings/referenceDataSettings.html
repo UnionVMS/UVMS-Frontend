@@ -17,7 +17,7 @@
 							<span class="fa fa-check-circle" aria-hidden="true" ng-show="alert.hasSuccess"></span>
 							<span class="fa fa-exclamation-circle" aria-hidden="true" ng-show="alert.hasWarning"></span>
 							<span class="alert-message">
-								<span>{{alert.alertMessage}}</span>          
+								<span>{{alert.alertMessage}}</span>
 							</span>
 						</div>
 					</div>
@@ -98,7 +98,7 @@
 													</div>
 													<div class="td col-md-2" style="text-align: right;">
 														<wms-preview record="rec" get-layer-type-def="getPropsForToolTip()"></wms-preview>
-														<button type="button" class="btn btn-sm check-btn" ng-click="selectAreaFromTable(rec)" ng-class="{'btn-default': !rec.isSelected, 'btn-success': rec.isSelected}"><span class="fa fa-check"></button>
+														<button type="button" class="btn btn-sm check-btn" ng-click="selectAreaFromTable(rec)" ng-class="{'btn-default': !rec.isSelected, 'btn-success': rec.isSelected}"><span class="fa fa-check"/></button>
 													</div>
 													<div class="td td-details col-md-12" ng-show="rec.isExpanded">
 														<ul>
@@ -151,7 +151,7 @@
 				<div class="col-md-12 col-btn-no-padding reset-row" ng-if="settingsLevel !== 'admin'">
 					<button type="button" class="btn btn-default pull-right ng-binding" ng-click="initializeCurrentSelection();prefService.reset('referenceData',referenceDataSettingsForm,configModel,configCopy,settingsLevel,setInitialValues)">{{'spatial.settings_reset_btn' | i18n}}</button>
 				</div>
-			</accordion-goup>
+			</accordion-group>
 		</accordion>
 	</ng-form>
 </div>

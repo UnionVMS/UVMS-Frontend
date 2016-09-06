@@ -7,7 +7,7 @@
 			<combobox ng-model="sysAreaType" items="helper.systemAreaItems" name="dataType" initialtext="{{'areas.sys_areas_data_type_label' | i18n}}" ng-required="true" is-loading="helper.isLoadingSysAreaTypes" dest-combo-list="'#areaManagement'"></combobox>
 		</div>
 	</div>
-	
+
 	<div class="col-md-12 sysareas-radio-btns" ng-show="sysAreaType">
 		<div class="row">
 			<div class="form-group radioButtons">
@@ -25,7 +25,7 @@
 				</label>
 			</div>
 		</div>
-	
+
 		<div class="row system-area-body">
 			<div ng-show="helper.sysAreasEditingType === 'upload'" class="editingTypeTab">
 				<!-- UPLOAD AREA -->
@@ -92,7 +92,7 @@
 									</div>
 								</div>
 							</div>
-							
+
 							<div class="col-md-12">
 								<span class="col-md-12 areaFormSection">{{'areas.data_configurations_attr_fields_mapping' | i18n }}</span>
 							</div>
@@ -104,7 +104,7 @@
 								</a>
 							</div>
 						</ng-form>
-						
+
 						<div class="step-panel overview-panel" ng-show="wizardStep === 3">
 							<div class="col-md-12">
 								<div class="row">
@@ -146,12 +146,12 @@
 									</div>
 								</div>
 							</div>
-							
+
 							<div ng-if="selectedAttrs.length > 0">
 								<div class="col-md-12">
 									<span class="col-md-12 areaFormSection">{{'areas.data_configurations_attr_fields_mapping' | i18n }}</span>
 								</div>
-								
+
 								<div class="col-md-12 row table-header-attr-mapping">
 									<div class="col-md-5">{{'areas.mapping_db_attr' | i18n }}</div>
 									<div class="col-md-5">{{'areas.mapping_shp_attr' | i18n }}</div>
@@ -179,7 +179,7 @@
 				</div>
 			</div>
 			<!-- UPDATE METADATA -->
-			<div class="col-md-12 updateMetadata editingTypeTab"" ng-show="helper.sysAreasEditingType === 'metadata'">
+			<div class="col-md-12 updateMetadata editingTypeTab" ng-show="helper.sysAreasEditingType === 'metadata'">
 				<ng-form name="metadataForm">
 					<div class="row form-container metadata-container">
 						<div class="form-group col-md-12 metadata-group" ng-class="{'has-error': metadataForm.areaName.$dirty && metadataForm.areaName.$invalid}">

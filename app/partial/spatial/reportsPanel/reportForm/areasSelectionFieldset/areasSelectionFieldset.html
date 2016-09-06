@@ -5,7 +5,7 @@
 			<a data-toggle="collapse" ng-click="report.showAreaFilter = !report.showAreaFilter;clearSearchProps()">{{'spatial.reports_form_area_fieldset_label' | i18n }}</a>
 			<span class="badge red-badge" ng-if="selectedAreas.length" title="{{areaCountDesc}}">{{selectedAreas.length}}</span>
 		</legend>
-		
+
 		<div ng-show="report.showAreaFilter" class="areasSelectionFieldset">
 			<div class="row">
 				<div class="col-md-12">
@@ -102,7 +102,7 @@
 										</div>
 										<div class="td col-md-2" style="text-align: right;">
 											<wms-preview record="rec" get-layer-type-def="getPropsForToolTip()"></wms-preview>
-											<button type="button" class="btn btn-sm" ng-click="selectAreaFromTable(rec)" ng-class="{'btn-default': !rec.isSelected, 'btn-success': rec.isSelected}" title="{{'spatial.area_selection_modal_add_area_btn' | i18n }}"><span class="fa fa-check"></button>
+											<button type="button" class="btn btn-sm" ng-click="selectAreaFromTable(rec)" ng-class="{'btn-default': !rec.isSelected, 'btn-success': rec.isSelected}" title="{{'spatial.area_selection_modal_add_area_btn' | i18n }}"><span class="fa fa-check"/></button>
 										</div>
 									</div>
 								</div>
@@ -147,4 +147,3 @@
 		</div>
 	</fieldset>
 </div>
-	

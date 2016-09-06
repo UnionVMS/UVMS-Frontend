@@ -26,6 +26,7 @@
     "grunt-contrib-uglify": "~0.10",
     "grunt-contrib-watch": "~0.6",
     "grunt-dom-munger": "~3.4",
+    "grunt-htmlhint": "^0.9.13",
     "grunt-jsdoc": "^2.1.0",
     "grunt-karma": "~0.8.3",
     "grunt-ng-annotate": "~0.10",

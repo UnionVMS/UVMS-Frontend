@@ -153,7 +153,7 @@
                         </div>
                         <div class="col-md-2 form-group" ng-show="getTerminalConfig().terminalFields.STARTED_ON" ng-class="{'has-error': mobileTerminalForm.started.$invalid && (submitAttempted || mobileTerminalForm.started.$dirty)}">
                             <label>{{'mobileTerminal.form_inmarsatc_started_on_label' | i18n}}</label>
-                            <datepicker-input name="started"model="currentMobileTerminal.attributes.STARTED_ON" time="true" min-date="currentMobileTerminal.attributes.INSTALLED_ON" input-field-id="mobile-terminal-started-on-date-picker"></datepicker-input>
+                            <datepicker-input name="started" model="currentMobileTerminal.attributes.STARTED_ON" time="true" min-date="currentMobileTerminal.attributes.INSTALLED_ON" input-field-id="mobile-terminal-started-on-date-picker"></datepicker-input>
                         </div>
                         <div class="col-md-2 form-group" ng-show="getTerminalConfig().terminalFields.UNINSTALLED_ON" ng-class="{'has-error': mobileTerminalForm.uninstalled.$invalid && (submitAttempted || mobileTerminalForm.uninstalled.$dirty)}">
                             <label>{{'mobileTerminal.form_inmarsatc_uninstalled_on_label' | i18n}}</label>

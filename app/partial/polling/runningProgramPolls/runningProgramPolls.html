@@ -45,7 +45,7 @@
                             <td class="actionIcon" ng-class="{inactive:!possibleToStop(item)}">
                                 <div class="stop" ng-click="stopProgramPoll(item)" ng-class="{noAccess:!accessToManagePolls}" title="{{'polling.running_program_polls_stop_title' | i18n}}">
                                     <i class="fa fa-stop"></i>
-                                </td>
+                               </div>
                             </td>
                             <td ng-if="accessToManagePolls" class="actionIcon">
                                 <div class="delete" ng-click="deleteProgramPoll(item);" title="{{'polling.running_program_polls_remove_title' | i18n}}">

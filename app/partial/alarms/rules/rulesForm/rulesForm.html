@@ -196,7 +196,7 @@
                                     </td>
                                     <td class="logicBoolOperator">
                                         <div class="form-group" ng-class="{'has-error': definitionForm.logicBoolOperator.$invalid && (submitAttempted || definitionForm.logicBoolOperator.$dirty)}">
-                                            <dropdown name="logicBoolOperator" ng-model="item.logicBoolOperator" no-placeholder-item items="DROPDOWNS.LOGIC_OPERATORS" class="floatLeft"></dropdown ng-required="$index +1 < currentRule.getNumberOfDefinitions()">
+                                            <dropdown name="logicBoolOperator" ng-model="item.logicBoolOperator" no-placeholder-item items="DROPDOWNS.LOGIC_OPERATORS" class="floatLeft" ng-required="$index +1 < currentRule.getNumberOfDefinitions()"></dropdown>
                                         </div>
                                     </td>
                                     <td class="remove">

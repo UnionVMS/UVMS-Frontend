@@ -117,11 +117,11 @@ module.exports = function (grunt) {
                   'app/service/reporting/',
                   'app/service/areas',
                   'app/service/activity/',
-                  
+
                   //PARTIALS
                   'app/partial/spatial',
                   'app/partial/activity',
-                  
+
                   //DIRECTIVES
                   'app/directive/common/breadcrumbNavigator'
             ],
@@ -369,6 +369,15 @@ module.exports = function (grunt) {
         }
       }
     },
+	htmlhint: {
+
+	  html: {
+		options: {
+		  'tag-pair': true
+		},
+		src: ['app/**/*.html']
+	  }
+	},
     //Karma testing
     karma: {
       options: {
@@ -444,7 +453,7 @@ module.exports = function (grunt) {
     }
   });
 
-  grunt.registerTask('sub-build',['jshint', 'less','dom_munger','ngtemplates','cssmin','concat','ngAnnotate','uglify','copy:dist','htmlmin','compress:dist','clean:after']);//,'clean:after'
+  grunt.registerTask('sub-build',['htmlhint','jshint', 'less','dom_munger','ngtemplates','cssmin','concat','ngAnnotate','uglify','copy:dist','htmlmin','compress:dist','clean:after']);//,'clean:after'
 
   grunt.registerTask('build', ['test', 'clean:before', 'copy:config', 'sub-build']);
   grunt.registerTask('build-local', ['test', 'clean:before', 'copy:configLocal', 'test', 'sub-build']);
@@ -455,11 +464,12 @@ module.exports = function (grunt) {
   grunt.registerTask('test',['dom_munger:read', 'karma:services', 'karma:controllers', 'karma:directives', 'karma:filters', 'clean:after']);
 
   grunt.registerTask('default',['build-dev']);
-  grunt.registerTask('serve', ['dom_munger:read','jshint', 'configureProxies', 'configureRewriteRules', 'connect:development', 'watch']);
+  grunt.registerTask('serve', ['dom_munger:read','htmlhint','jshint', 'configureProxies', 'configureRewriteRules', 'connect:development', 'watch']);
   grunt.registerTask('serve-copy', ['copy:serve', 'serve']);
   grunt.registerTask('build-docs', ['jsdoc']);
 
     grunt.event.on('watch', function(action, filepath) {
+
         if (filepath.lastIndexOf('.js') !== -1 && filepath.lastIndexOf('.js') === filepath.length - 3) {
 
             //lint the changed js file
@@ -490,6 +500,12 @@ module.exports = function (grunt) {
             }
         }
 
+        if (filepath.lastIndexOf('.htm') !== -1 && filepath.lastIndexOf('.htm') >= (filepath.length - 6)) {
+            //lint the changed html file
+            grunt.config('htmlhint.html.src', filepath);
+            grunt.task.run('htmlhint');
+        }
+
         //if index.html changed, we need to reread the <script> tags so our next run of jasmine
         //will have the correct environment
         if (filepath === 'app\\index.html') {
@@ -497,4 +513,5 @@ module.exports = function (grunt) {
         }
 
     });
+
 };
