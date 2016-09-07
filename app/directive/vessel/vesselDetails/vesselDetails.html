@@ -47,10 +47,8 @@
             </div>
 
             <div class="col-md-3 form-group smallerpadding" ng-class="{'has-error': (submitAttempted || vesselForm.gearType.$dirty) && vesselForm.gearType.$invalid}">
-                <label><span ng-if="createNewMode" class="mandatory">{{ 'common.mandatory_field' | i18n }}</span>{{ 'vessel.vessel_details_gear_type' | i18n }}</label>
-                <dropdown name="gearType" ng-model="vessel.gearType" initialtext="{{ 'vessel.vessel_details_gear_type' | i18n }}" items="vesselGearTypes" required></dropdown>
-                <!--TODO: Add required to type input when enabling it!-->
-                <input-validation-message types="required" input="vesselForm.gearType"></input-validation-message>
+                <label>{{ 'vessel.vessel_details_gear_type' | i18n }}</label>
+                <dropdown name="gearType" ng-model="vessel.gearType" initialtext="{{ 'vessel.vessel_details_gear_type' | i18n }}" items="vesselGearTypes"></dropdown>
             </div>
 
             <div class="col-md-2 form-group smallerpadding" ng-class="{'has-error': (submitAttempted || vesselForm.mmsi.$dirty) && vesselForm.mmsi.$invalid}">
@@ -59,9 +57,8 @@
                 <input-validation-message types="pattern, unique" input="vesselForm.mmsi" custom-messages="{{mmsiValidationMessages}}"></input-validation-message >
             </div>
             <div class="col-md-4 smallerpaddingleft form-group" ng-class="{'has-error': (submitAttempted || vesselForm.licenseType.$dirty) && vesselForm.licenseType.$invalid}">
-                <label><span ng-if="createNewMode" class="mandatory">{{ 'common.mandatory_field' | i18n }}</span>{{ 'vessel.vessel_details_license_type' | i18n }}</label>
-                <dropdown name="licenseType" ng-model="vessel.licenseType" initialtext="{{ 'vessel.vessel_details_license_type' | i18n }}" items="vesselLicensTypes" required></dropdown>
-                <input-validation-message types="required" input="vesselForm.licenseType"></input-validation-message>
+                <label>{{ 'vessel.vessel_details_license_type' | i18n }}</label>
+                <dropdown name="licenseType" ng-model="vessel.licenseType" initialtext="{{ 'vessel.vessel_details_license_type' | i18n }}" items="vesselLicensTypes"></dropdown>
             </div>
         </div>
         <div class="row">
