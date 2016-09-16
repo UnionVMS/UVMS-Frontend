@@ -12,9 +12,12 @@
     <release.branch.name>uvms-2.0.6-kili</release.branch.name>
     <webroot>unionvms-web</webroot>
     <karma.phase>integration-test</karma.phase>
+    <uvms.env.name>Local</uvms.env.name>
+    <uvms.rest.base.url>http://localhost</uvms.rest.base.url>
+    <uvms.rest.base.port>9001</uvms.rest.base.port>
+      <web.app.context.path>unionvms</web.app.context.path>
   </properties>
   <profiles>
-
     <profile>
       <id>proxy</id>
       <activation>
@@ -205,6 +208,15 @@
             </goals>
           </execution>
           <execution>
+            <id>npm cache clean</id>
+              <goals>
+                  <goal>npm</goal>
+              </goals>
+              <configuration>
+                  <arguments>cache clean</arguments>
+              </configuration>
+          </execution>
+          <execution>
             <id>npm install</id>
             <goals>
               <goal>npm</goal>
@@ -241,7 +253,7 @@
             </goals>
             <phase>generate-resources</phase>
             <configuration>
-              <arguments>build build-docs</arguments>
+              <arguments>build-maven build-docs</arguments>
               <outputdir>${basedir}/dist</outputdir>
             </configuration>
           </execution>
@@ -275,6 +287,7 @@
                     </resource>
                     <resource>
                         <directory>${basedir}/WebContent</directory>
+                        <filtering>true</filtering>
                     </resource>
                 </webResources>
             </configuration>
