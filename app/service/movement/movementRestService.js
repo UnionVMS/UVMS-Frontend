@@ -28,6 +28,9 @@ angular.module('unionvmsWeb')
         getMovement: function() {
             return $resource('/movement/rest/movement/:id');
         },
+        getLatestMovement: function() {
+            return $resource('/movement/rest/movement/latest/:id');
+        },
         savedSearch : function() {
             return $resource('/movement/rest/search/group/:groupId', {}, {
                 update: {method: 'PUT'}
@@ -117,6 +120,27 @@ angular.module('unionvmsWeb')
             }
 
             deferred.resolve(Movement.fromJson(response.data));
+        },
+        function(error) {
+            deferred.reject(error);
+        });
+
+        return deferred.promise;
+    };
+
+    var getLatestMovement = function(latestMovementId) {
+        var deferred = $q.defer();
+        movementRestFactory.getLatestMovement().get({id: latestMovementId}, function(response) {
+            if (response.code !== "200") {
+               deferred.reject("Invalid response status");
+               return;
+            }
+            var movementList = [];
+            for (movement in response.data) {
+                var move = Movement.fromJson(response.data[movement]);
+                movementList.push(move);
+            }
+            deferred.resolve(movementList);
         },
         function(error) {
             deferred.reject(error);
@@ -250,6 +274,7 @@ angular.module('unionvmsWeb')
         getMovementList : getMovementList,
         getLatestMovementsByConnectIds : getLatestMovementsByConnectIds,
         getMovement: getMovement,
+        getLatestMovement: getLatestMovement,
         getLastMovement: getLastMovement,
         getSavedSearches : getSavedSearches,
         createNewSavedSearch : createNewSavedSearch,
