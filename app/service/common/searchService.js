@@ -237,6 +237,48 @@ angular.module('unionvmsWeb').factory('searchService',function($q, $log, searchU
 
 	var searchService = {
 
+        //Do the search for vessels based on latest movement
+        searchLatestMovements : function(){
+            var deferred = $q.defer();
+            movementRestService.getLatestMovement(DEFAULT_ITEMS_PER_PAGE).then(function(latestMovements){               
+                $.each(latestMovements, function(index, latestMovement) {
+                    getListRequest.criterias.push({"key":"GUID", "value":latestMovement.connectId});
+                });
+
+                if(checkAccessToFeature('Vessel')){
+                    searchUtilsService.modifySpanAndTimeZones(getListRequest.criterias);
+                    searchUtilsService.replaceCommasWithPoint(getListRequest.criterias);
+                    vesselRestService.getVesselList(getListRequest).then(function(vessels) {
+                        if(vessels.getNumberOfItems() === 0){
+                            return deferred.resolve(vessels);
+                        } else {
+                            var findGuid = function findGuid(connectId) {
+                                return latestMovements.find(function (latestMovementItem) {
+                                  return latestMovementItem.connectId === connectId;
+                                });
+                            }; 
+
+                            $.each(vessels.items, function(index, vesselItem) {
+                                var findMovement = findGuid(vesselItem.vesselId.guid);
+                                var movement = findMovement;
+                                Object.assign(vesselItem, { lastMovement: movement });
+                            });
+                            deferred.resolve(vessels);
+                        }
+                    }, function(error){
+                        $log.error("Error getting vessel list.", error);
+                        deferred.reject(error);
+                    });
+                } else {
+                    return deferred.reject();
+                }
+            }, function(error){
+                $log.error("Error getting latest movements.", error);
+                deferred.reject(error);
+            });
+            return deferred.promise;
+        },
+
         //Do the search for vessels
 		searchVessels : function(){
             var deferred = $q.defer();
