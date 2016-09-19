@@ -38,9 +38,8 @@ angular.module('unionvmsWeb').controller('VesselCtrl', function($scope, $log, lo
 
     //Init function when entering page
     var init = function(){
-        //Load list with vessels
-        searchService.reset();
-        $scope.searchVessels();
+        //Load list with vessels based on latest movements 
+        $scope.searchLatestMovements();
 
         //Load vessel details
         var vesselGUID = $stateParams.id;
@@ -73,6 +72,7 @@ angular.module('unionvmsWeb').controller('VesselCtrl', function($scope, $log, lo
         }
     };
 
+    // Search for vessels
     $scope.searchVessels = function(options) {
         $scope.selectedGroupGuid = angular.isDefined(options) && angular.isDefined(options.savedSearchGroup) ? options.savedSearchGroup.id : undefined;
 
@@ -81,6 +81,18 @@ angular.module('unionvmsWeb').controller('VesselCtrl', function($scope, $log, lo
         $scope.currentSearchResults.filter = '';
         $scope.currentSearchResults.setLoading(true);
         searchService.searchVessels()
+            .then(updateSearchResults, onGetSearchResultsError);
+    };
+
+    // Search for vessels based on latest movements
+    $scope.searchLatestMovements = function(options) {
+        $scope.selectedGroupGuid = angular.isDefined(options) && angular.isDefined(options.savedSearchGroup) ? options.savedSearchGroup.id : undefined;
+
+        $scope.clearSelection();
+        $scope.currentSearchResults.clearErrorMessage();
+        $scope.currentSearchResults.filter = '';
+        $scope.currentSearchResults.setLoading(true);
+        searchService.searchLatestMovements()
             .then(updateSearchResults, onGetSearchResultsError);
     };
 
