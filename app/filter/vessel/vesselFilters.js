@@ -24,6 +24,9 @@ angular.module('unionvmsWeb').filter('vesselGearTypeTranslation', function(local
 
 angular.module('unionvmsWeb').filter('vesselLicenseTypeTranslation', function(locale) {
     return function(input) {
+        if (!input) {
+            return input;
+        }
         var name = input;
         //Lookup name in langugage file
         var localeName = locale.getString('config.VESSEL_LICENSE_TYPE_' +input);

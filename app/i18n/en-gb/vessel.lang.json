@@ -105,6 +105,7 @@
     "set_as_active": "Set as active",
     "set_as_inactive": "Set as inactive",
     "source":"Source",
+    "source_upper_case":"SOURCE",
     "tonnage_gt": "Tonnage G.T",
     "type": "Type",
     "update":"update",
@@ -140,5 +141,6 @@
     "warning_multiple_terminals": "There is more than one active terminal of the same type for this vessel.",
     "zero_connected_mobile_terminals" : "The are no mobile terminals connected to this asset.",
     "view_vessel_on_failed_to_load_error" : "Failed to load the vessel  details.",
-    "warn_max_length": "Must be {1} characters or less"
+    "warn_max_length": "Must be {1} characters or less",
+    "add_new_mobile_terminal": "Add new terminal"
 }

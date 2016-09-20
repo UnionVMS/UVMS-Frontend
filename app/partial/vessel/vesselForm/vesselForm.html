@@ -12,42 +12,11 @@ copy of the GNU General Public License along with the IFDM Suite. If not, see <h
 <div class="vesselForm" ng-controller="VesselFormCtrl">
     <form name="vesselForm" method="post" novalidate >
         <div class="card" loading-indicator="waitingForVesselDataResponse">
-            <div class="row card-header">
-                <div class="col-md-6">
-                    <div class="metadata">
-                        <div>
-                            {{'vessel.source' | i18n}} : <b>{{vesselObj.source}}</b>
-                        </div>
-                        <div class="clearfix"></div>
-                    </div>
-                </div>
-                <div class="col-md-6 textAlignRight">
-                    <div class="actions">
-                        <div class="setStatusContainer">
-                            <button type="button" class="btn btn-default" ng-click="exportAssetToCsv()">
-                                {{'common.export_csv' | i18n}}
-                            </button>
-                        </div>
-                        <div class="setStatusContainer" ng-hide="isCreateNewMode() || disableForm()">
-                            <button type="button" class="btn btn-default" ng-show="vesselObj.active" ng-click="archiveVessel()">
-                                {{'common.archive' | i18n}}
-                            </button>
-                        </div>
-                        <div ng-hide="disableForm()">
-                            <button class="btn btn-primary" type="submit" ng-click="updateVessel()" ng-hide="isCreateNewMode()">
-                                {{'common.update' | i18n}}
-                            </button>
-                            <button type="submit" class="btn btn-primary" ng-click="createNewVessel()" ng-show="isCreateNewMode()" ng-disabled="waitingForCreateResponse">
-                                {{'vessel.save_asset' | i18n}}
-                            </button>
-                        </div>
-                        <div class="closeIcon" ng-click="toggleViewVessel()">
-                            <i class="fa fa-sign-out signouticon" title="{{'common.close' | i18n}}"></i>
-                        </div>
-                        <div class="clearfix"></div>
-                    </div>
-                </div>
-            </div>
+            <menu-bar header="'Create new asset'" modeltype="'VESSEL'" ng-model="vesselObj"
+                      functions="menuBarFunctions"
+                      disable-form="disableForm"
+                      is-create-new-mode="isCreateNewMode">
+            </menu-bar>
             <div class="row">
                 <div class="detailsContainer">
                     <vessel-details vessel="vesselObj" vessel-form="vesselForm" submit-attempted="submitAttempted" disable-form="disableForm()" create-new-mode="isCreateNewMode()" spin="waitingForCreateResponse" existing-values="existingValues"></vessel-details>

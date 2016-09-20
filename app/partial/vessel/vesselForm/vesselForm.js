@@ -141,7 +141,7 @@ angular.module('unionvmsWeb').controller('VesselFormCtrl',function($scope, $log,
         // When you have just created a vessel the getOriginalVessel will return undefined.
         $scope.vesselObj = $scope.getOriginalVessel() || $scope.getVesselObj();
         $scope.vesselObj.active = false;
-        
+
         function getMobileTerminals(archivedVessel) {
             // Fetch all mobile terminals connected to the archived vessel.
             return mobileTerminalRestService.getAllMobileTerminalsWithConnectId(archivedVessel.vesselId.guid);
@@ -351,4 +351,14 @@ angular.module('unionvmsWeb').controller('VesselFormCtrl',function($scope, $log,
         assetCsvService.download($scope.vesselObj);
     };
 
+    $scope.menuBarFunctions = {
+        addMobileTerminal: function() {
+            console.log("Add terminal!");
+        },
+        saveCallback: $scope.createNewVessel,
+        updateCallback: $scope.updateVessel,
+        cancelCallback: $scope.toggleViewVessel,
+        exportToCsvCallback: $scope.exportAssetToCsv,
+        archiveCallback: $scope.archiveVessel
+    };
 });

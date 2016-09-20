@@ -1,0 +1,17 @@
+<div class="row card-header menuBar">
+    <div class="col-md-2 menuTextItem">
+        <b>{{ header }}</b>
+    </div>
+    <div ng-include="formPartial"></div>
+    <div class="col-md-2 textAlignRight">
+        <div class="actions">
+            <div ng-if="includeArchive" ng-include="'directive/common/menuBar/menuBarArchive.html'"></div>
+            <div ng-if="includeUnlink" ng-include="'directive/common/menuBar/menuBarUnlink.html'"></div>
+            <div ng-if="includeCSVDownload" ng-include="'directive/common/menuBar/menuBarCSV.html'"></div>
+            <div class="actionContainer menuTextItem">
+                <b ng-click="functions.cancelCallback()">Cancel</b>
+            </div>
+            <div ng-if="includeSaveUpdate" ng-include="'directive/common/menuBar/menuBarSave.html'"></div>
+        </div>
+    </div>
+</div>
