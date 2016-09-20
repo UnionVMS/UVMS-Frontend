@@ -31,6 +31,11 @@ angular.module('unionvmsWeb')
                     list : { method: 'POST'}
                 });
             },
+            getVesselListCount : function(){
+                return $resource('/asset/rest/asset/listcount/',{},{
+                    list : { method: 'POST'}
+                });
+            },
             vesselGroup : function(){
                 return $resource( '/asset/rest/group/:id', {}, {
                     update: {method: 'PUT'}
@@ -80,6 +85,18 @@ angular.module('unionvmsWeb')
             }
         );
 
+        return deferred.promise;
+    };
+
+    //Count all vessels
+    var getVesselListCount = function(getListRequest){
+        var deferred = $q.defer(),
+            countList = {pagination: {page: 1, listSize: 10000000}, assetSearchCriteria: {isDynamic: true, criterias: []}};
+        vesselRestFactory.getVesselListCount().list(countList,function(response) {
+                var getListRequest = (response.data);
+                deferred.resolve(getListRequest);
+            }
+        );
         return deferred.promise;
     };
 
@@ -343,6 +360,7 @@ angular.module('unionvmsWeb')
 
     return {
         getVesselList: getVesselList,
+        getVesselListCount: getVesselListCount,
         getAllMatchingVessels: getAllMatchingVessels,
         updateVessel: updateVessel,
         archiveVessel: archiveVessel,
