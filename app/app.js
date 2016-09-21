@@ -38,7 +38,8 @@ var unionvmsWebApp = angular.module('unionvmsWeb', [
     'unionvmsWeb.longPolling',
     'qtip2',
     'chart.js',
-    'ngStorage'
+    'ngStorage',
+    'debugConfig'
 ]);
 
 var currentUserContextPromise = function(userService) {
@@ -57,7 +58,7 @@ var loadLocales = function(initService) {
 };
 
 
-unionvmsWebApp.config(function($stateProvider, $compileProvider, tmhDynamicLocaleProvider, $injector, $urlRouterProvider, $httpProvider, ACCESS) {
+unionvmsWebApp.config(function($stateProvider, $compileProvider, tmhDynamicLocaleProvider, $injector, $urlRouterProvider, $httpProvider, ACCESS, DEBUG) {
     //initialize get if not there
     if (!$httpProvider.defaults.headers.get) {
         $httpProvider.defaults.headers.get = {};
@@ -70,7 +71,7 @@ unionvmsWebApp.config(function($stateProvider, $compileProvider, tmhDynamicLocal
     $httpProvider.defaults.headers.get['Pragma'] = 'no-cache';
 
     //Stops angular flooding console with debug info.
-    //$compileProvider.debugInfoEnabled(false);
+    $compileProvider.debugInfoEnabled(DEBUG);
     if ($compileProvider.commentDirectivesEnabled) {
         $compileProvider.commentDirectivesEnabled(false);
     }

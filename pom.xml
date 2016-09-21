@@ -12,6 +12,7 @@
     <karma.phase>integration-test</karma.phase>
     <project.scm.id>github</project.scm.id>
     <maven-release-plugin>2.5.3</maven-release-plugin>
+    <grunt.build>build</grunt.build>
   </properties>
   <profiles>
 
@@ -248,7 +249,7 @@
             </goals>
             <phase>generate-resources</phase>
             <configuration>
-              <arguments>build build-docs</arguments>
+              <arguments>${grunt.build} build-docs</arguments>
               <outputdir>${basedir}/dist</outputdir>
             </configuration>
           </execution>
@@ -312,7 +313,7 @@
         </repository>
     </repositories>
 
-    <distributionManagement> 
+    <distributionManagement>
         <repository>
             <id>focus-releases</id>
             <name>UnionVms Repository</name>

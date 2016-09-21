@@ -5,7 +5,12 @@
     "type": "svn",
     "url": "https://webgate.ec.europa.eu/CITnet/svn/UNIONVMS/branches/dev/unionvms-web"
   },
+  "license": {
+      "type": "GPLv3",
+      "url": "https://github.com/UnionVMS/UVMS-Frontend/blob/master/LICENSE"
+  },
   "devDependencies": {
+    "js2coffee": "~2.2.0",
     "angular-jsdoc": "^1.4.2",
     "bower": "^1.5.1",
     "grunt": "~0.4",
@@ -29,6 +34,7 @@
     "grunt-jsdoc": "^2.1.0",
     "grunt-karma": "~0.8.3",
     "grunt-ng-annotate": "~0.10",
+    "grunt-ng-constant": "~1.0.0",
     "grunt-replace": "~0.8.0",
     "jsdoc": "^3.4.0",
     "karma": "~0.12.6",
