@@ -256,7 +256,7 @@ angular.module('auth.interceptor', ['ngStorage','ui.bootstrap'])
                         var $state = $injector.get('$state');
                         var authRouter = $injector.get('authRouter');
                         _log.debug("Current State",$state.current);
-                        if($state.current && $state.current.name !== authRouter.getLogin()){
+                        if(!$state.current.name === 'uvmsLogin' && $state.current && $state.current.name !== authRouter.getLogin()){
 
                         _log.log("injecting renewLoginPanel");
 
