@@ -229,11 +229,12 @@ angular.module('unionvmsWeb').controller('VesselFormCtrl',function($scope, $log,
             $scope.waitingForCreateResponse = false;
             alertService.showErrorMessage(locale.getString('vessel.add_new_alert_message_on_error'));
 
-            // Set existing values on scope
-            $scope.existingValues.cfr = error.match(/An asset with this CFR value already exists\./) ? cfr : undefined;
-            $scope.existingValues.imo = error.match(/An asset with this IMO value already exists\./) ? imo : undefined;
-            $scope.existingValues.mmsi = error.match(/An asset with this MMSI value already exists\./) ? mmsi : undefined;
-
+            if (error) {
+                // Set existing values on scope
+                $scope.existingValues.cfr = error.match(/An asset with this CFR value already exists\./) ? cfr : undefined;
+                $scope.existingValues.imo = error.match(/An asset with this IMO value already exists\./) ? imo : undefined;
+                $scope.existingValues.mmsi = error.match(/An asset with this MMSI value already exists\./) ? mmsi : undefined;
+            }
             // Update validity, because model did not change here.
             $scope.vesselForm.cfr.$setValidity('unique', $scope.existingValues.cfr === undefined);
             $scope.vesselForm.imo.$setValidity('unique', $scope.existingValues.imo === undefined);
