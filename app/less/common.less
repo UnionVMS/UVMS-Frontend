@@ -562,3 +562,13 @@ a:hover{
     -webkit-order: @val;  
     order: @val;
 }
+
+
+// Clearfix
+.clear {
+    &:after {
+        content: '';
+        display: table;
+        clear: both;
+    }
+}
