@@ -9,15 +9,35 @@ the hope that it will be useful, but WITHOUT ANY WARRANTY; without even the impl
 FITNESS FOR A PARTICULAR PURPOSE.  See the GNU General Public License for more details. You should have received a
 copy of the GNU General Public License along with the IFDM Suite. If not, see <http://www.gnu.org/licenses/>.
  */
-.actionContainer{
-    padding-right:5px;
-    cursor: pointer;
-    color: #089fd7;
-}
-.menuBar{
-    padding-bottom: 5px !important;
-    margin-top: -10px;
-}
-.menuTextItem{
-    padding-top: 5px;
+ .menuBar {
+ 	.flexbox();
+ 	align-items: center;
+ 	padding: 0 15px;
+
+ 	.wrapper {
+ 		.flexbox();
+ 		align-items: center;
+ 	}
+
+ 	.menuTextItem {
+ 		margin-right: 20px;
+ 	}
+
+ 	.textAlignRight {
+ 		margin-left: auto;
+ 	}
+
+ 	.btn-add {
+ 		padding: 3px 10px;
+ 		line-height: 1.5;
+
+ 		i {
+ 			padding-right: 5px;
+ 		}
+ 	}
+
+ 	.btn-cancel {
+ 		cursor: pointer;
+ 		color: @primaryColor;
+ 	}
 }

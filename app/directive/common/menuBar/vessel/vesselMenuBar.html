@@ -1,10 +1,7 @@
-<div class="col-md-8">
-    <div class="col-md-2 menuTextItem">{{'common.source_upper_case' | i18n}} : <b>{{ngModel.source.substr(0, 1)}}{{ngModel.source.substr(1).toLowerCase()}}</b></div>
-    <div class="col-md-10">
-        <div class="actions">
-            <div>
-                <button type="submit" class="btn btn-primary" ng-click="functions.addMobileTerminal()">{{'vessel.add_new_mobile_terminal' | i18n}}</button>
-            </div>
+<div class="menuTextItem">{{'common.source_upper_case' | i18n}} : <b>{{ngModel.source.substr(0, 1)}}{{ngModel.source.substr(1).toLowerCase()}}</b></div>
+    <div class="actions">
+        <div>
+            <button type="submit" class="btn btn-primary btn-add" ng-click="functions.addMobileTerminal()"><i class="fa fa-plus"></i>{{'vessel.add_new_mobile_terminal' | i18n}}</button>
         </div>
     </div>
 </div>

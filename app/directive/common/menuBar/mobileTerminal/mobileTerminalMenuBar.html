@@ -10,7 +10,11 @@
   ~ copy of the GNU General Public License along with the IFDM Suite. If not, see <http://www.gnu.org/licenses/>.
   -->
 
-<div>
-    <div class="col-md-6 menuTextItem">{{'common.status_upper_case' | i18n}} : <b>{{ngModel.status.substr(0, 1)}}{{ngModel.source.substr(1).toLowerCase()}}</b></div>
-    <div class="col-md-6 menuTextItem">{{'common.source_upper_case' | i18n}} : <b>{{ngModel.source.substr(0, 1)}}{{ngModel.source.substr(1).toLowerCase()}}</b></div>
-</div>
+  <div class="menuTextItem">{{'common.source_upper_case' | i18n}} : <b>{{ngModel.source.substr(0, 1)}}{{ngModel.source.substr(1).toLowerCase()}}</b></div>
+      <div class="actions">
+          <div>
+              <button type="submit" class="btn btn-primary" ng-click="functions.addMobileTerminal()">
+              <i class="fa fa-plus"></i>{{'vessel.add_new_mobile_terminal' | i18n}}</button>
+          </div>
+      </div>
+  </div>
