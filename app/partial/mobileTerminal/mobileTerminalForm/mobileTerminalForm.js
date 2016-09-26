@@ -401,7 +401,34 @@ angular.module('unionvmsWeb').controller('mobileTerminalFormCtrl',function($filt
         updateCallback: $scope.updateMobileTerminal,
         cancelCallback: $scope.toggleMobileTerminalDetails,
         exportToCsvCallback: $scope.exportTerminalCSV,
+        showExport: function(mobileTerminal) {
+            if (mobileTerminal) {
+                return angular.isDefined(mobileTerminal.guid) && mobileTerminal.guid != null;
+            }
+            return false;
+        },
         archiveCallback: $scope.archiveMobileTerminal,
-        unlinkCallback: $scope.unassignVessel
+        showArchive: function(mobileTerminal) {
+            if (mobileTerminal) {
+                return angular.isDefined(mobileTerminal.guid) && mobileTerminal.guid != null && !mobileTerminal.archived;
+            }
+            return false;
+        },
+        unlinkCallback: $scope.unassignVessel,
+        showUnlink: function(mobileTerminal) {
+            if (mobileTerminal) {
+                return angular.isDefined(mobileTerminal.connectId) && mobileTerminal.connectId != null;
+            }
+            return false;
+        },
+        historyCallback: function() {
+            console.log("Show history!");
+        },
+        showHistory: function(mobileTerminal) {
+            if (mobileTerminal) {
+                return angular.isDefined(mobileTerminal.vesselId) && mobileTerminal.vesselId != null;
+            }
+            return false;
+        }
     };
 });

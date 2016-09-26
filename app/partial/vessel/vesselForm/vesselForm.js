@@ -360,6 +360,27 @@ angular.module('unionvmsWeb').controller('VesselFormCtrl',function($scope, $log,
         updateCallback: $scope.updateVessel,
         cancelCallback: $scope.toggleViewVessel,
         exportToCsvCallback: $scope.exportAssetToCsv,
-        archiveCallback: $scope.archiveVessel
+        showExport: function(vessel) {
+            if (vessel) {
+                return angular.isDefined(vessel.vesselId) && vessel.vesselId != null;
+            }
+            return false;
+        },
+        archiveCallback: $scope.archiveVessel,
+        showArchive: function(vessel) {
+            if (vessel) {
+                return angular.isDefined(vessel.vesselId) && vessel.vesselId != null && vessel.active;
+            }
+            return false;
+        },
+        historyCallback: function() {
+            console.log("Show history!");
+        },
+        showHistory: function(vessel) {
+            if (vessel) {
+                return angular.isDefined(vessel.vesselId) && vessel.vesselId != null;
+            }
+            return false;
+        }
     };
 });
