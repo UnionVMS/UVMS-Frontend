@@ -47,6 +47,7 @@ angular.module('unionvmsWeb')
     $scope.includeSaveUpdate = angular.isDefined($scope.functions.saveCallback) && angular.isDefined($scope.functions.updateCallback);
     $scope.includeCSVDownload = angular.isDefined($scope.functions.exportToCsvCallback);
     $scope.includeArchive = angular.isDefined($scope.functions.archiveCallback);
+    $scope.includeHistory = angular.isDefined($scope.functions.historyCallback);
     $scope.includeUnlink = angular.isDefined($scope.functions.unlinkCallback);
 
 });
