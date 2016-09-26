@@ -403,4 +403,8 @@ angular.module('unionvmsWeb').controller('VesselFormCtrl',function($scope, $log,
     $scope.vesselDetailsFunctions = {
         addNewContactCallback: $scope.addNewContact
     };
+
+    $scope.vesselDetailsFunctions = {
+        addNewContactCallback: $scope.addNewContact
+    };
 });
