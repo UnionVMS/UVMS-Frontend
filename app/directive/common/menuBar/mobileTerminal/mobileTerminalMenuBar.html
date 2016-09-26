@@ -1,20 +1,8 @@
-<!--
-  ~ Developed with the contribution of the European Commission - Directorate General for Maritime Affairs and Fisheries
-  ~ © European Union, 2015-2016.
-  ~
-  ~ This file is part of the Integrated Fisheries Data Management (IFDM) Suite. The IFDM Suite is free software: you can
-  ~ redistribute it and/or modify it under the terms of the GNU General Public License as published by the
-  ~ Free Software Foundation, either version 3 of the License, or any later version. The IFDM Suite is distributed in
-  ~ the hope that it will be useful, but WITHOUT ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or
-  ~ FITNESS FOR A PARTICULAR PURPOSE.  See the GNU General Public License for more details. You should have received a
-  ~ copy of the GNU General Public License along with the IFDM Suite. If not, see <http://www.gnu.org/licenses/>.
-  -->
-
-  <div class="menuTextItem">{{'common.source_upper_case' | i18n}} : <b>{{ngModel.source.substr(0, 1)}}{{ngModel.source.substr(1).toLowerCase()}}</b></div>
-      <div class="actions">
-          <div>
-              <button type="submit" class="btn btn-primary" ng-click="functions.addMobileTerminal()">
-              <i class="fa fa-plus"></i>{{'vessel.add_new_mobile_terminal' | i18n}}</button>
-          </div>
-      </div>
-  </div>
+<div class="col-md-8">
+    <div class="col-md-2 menuTextItem">
+        {{'common.status_upper_case' | i18n}} :
+        <span class="label label-success" ng-show="ngModel.active">{{ ('common.active' | i18n)}}</span>
+        <span class="label label-default" ng-hide="ngModel.active">{{ ('common.inactive' | i18n)}}</span>
+    </div>
+    <div class="col-md-10 menuTextItem">{{'common.source_upper_case' | i18n}} : <b>{{ngModel.source.substr(0, 1)}}{{ngModel.source.substr(1).toLowerCase()}}</b></div>
+</div>

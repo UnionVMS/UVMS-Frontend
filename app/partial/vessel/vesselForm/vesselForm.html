@@ -19,84 +19,100 @@ copy of the GNU General Public License along with the IFDM Suite. If not, see <h
             </menu-bar>
             <div class="row">
                 <div class="detailsContainer">
-                    <vessel-details vessel="vesselObj" vessel-form="vesselForm" submit-attempted="submitAttempted" disable-form="disableForm()" create-new-mode="isCreateNewMode()" spin="waitingForCreateResponse" existing-values="existingValues"></vessel-details>
+                    <vessel-details vessel="vesselObj" vessel-form="vesselForm" submit-attempted="submitAttempted" disable-form="disableForm()" create-new-mode="isCreateNewMode()" spin="waitingForCreateResponse" existing-values="existingValues" functions="vesselDetailsFunctions"></vessel-details>
                 </div>
 
-                <div class="col-md-12 historyAndTerminalInformation">
-                    <div class="row row-same-height ">
-                        <div class="col-md-3 grayBorderRight historyContainer top-column">
-                            <div class="row" ng-if="!isCreateNewMode()">
-                                <div class="col-md-6">
-                                    <h5>{{'vessel.event_history' | i18n | uppercase}}</h5>
-                                </div>
-                                <div class="col-md-6 textAlignRight">
-                                    <span ng-show="isVisible.showCompleteVesselHistoryLink"><a ng-click="viewCompleteVesselHistory()">{{'common.view_all' | i18n}}</a></span>
-                                </div>
-                                <div class="col-md-12" loading-indicator="waitingForHistoryResponse" size="small" type="SPINNER">
-                                    <table class="fullWidth" ng-hide="waitingForHistoryResponse">
-                                        <thead>
-                                            <tr>
-                                                <th>{{'vessel.event_table_header_code' | i18n}}</th>
-                                                <th>{{'vessel.event_table_header_date' | i18n}}</th>
-                                            </tr>
-                                        </thead>
-                                        <tbody>
-                                            <tr ng-repeat="item in vesselHistory | orderBy :'-eventHistory.eventDate'">
-                                                <td><a ng-click="viewHistoryDetails(item)">{{item.eventHistory.eventCode}}</a></td>
-                                                <td>{{item.eventHistory.eventDate | confDateFormat}}</td>
-                                            </tr>
-                                        </tbody>
-                                    </table>
-                                    <search-result-error-alert ng-show="vesselHistoryError">{{vesselHistoryError}}</search-result-error-alert>
-                                </div>
+                <div class="notesContainer">
+                    <div class="col-md-3 notesHistory">
+                        <h5>Asset notes</h5>
+                        <table class="fullWidth" ng-show="vesselObj.notes.length > 0 && !isCreateNewMode()">
+                            <thead>
+                                <tr>
+                                    <th>{{'vessel.event_table_header_code' | i18n}}</th>
+                                    <th>{{'vessel.event_table_header_date' | i18n}}</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr ng-repeat="item in vesselObj.notes | orderBy :'-vesselObj.notes.eventDate'">
+                                    <td><a ng-click="viewHistoryDetails(item)">{{item.activity}}</a></td>
+                                    <td>{{item.date | confDateFormat}}</td>
+                                </tr>
+                            </tbody>
+                        </table>
+                        <span ng-hide="vesselObj.notes.length > 0">
+                            No notes.
+                        </span>
+                    </div>
+                    <div class="col-md-9 notesForm">
+                        <h5>New note</h5>
+                        <vessel-notes vessel="vesselObj" vessel-form="vesselForm" submit-attempted="submitAttempted" disable-form="disableForm()" create-new-mode="isCreateNewMode()" spin="waitingForCreateResponse" existing-values="existingValues"></vessel-notes>
+                    </div>
+                </div>
+
+                <div class="historyAndTerminalInformation">
+                    <div class="col-md-3 grayBorderRight historyContainer">
+                        <div class="row">
+                            <div class="col-md-6">
+                                <h5>{{'vessel.event_history' | i18n | uppercase}}</h5>
+                            </div>
+                            <div class="col-md-6 textAlignRight">
+                                <span ng-show="isVisible.showCompleteVesselHistoryLink"><a ng-click="viewCompleteVesselHistory()">{{'common.view_all' | i18n}}</a></span>
+                            </div>
+                            <div class="col-md-12" loading-indicator="waitingForHistoryResponse" size="small" type="SPINNER">
+                                <table class="fullWidth" ng-show="vesselHistory.length > 0 && !isCreateNewMode()">
+                                    <thead>
+                                        <tr>
+                                            <th>{{'vessel.event_table_header_code' | i18n}}</th>
+                                            <th>{{'vessel.event_table_header_date' | i18n}}</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        <tr ng-repeat="item in vesselHistory | orderBy :'-eventHistory.eventDate'">
+                                            <td><a ng-click="viewHistoryDetails(item)">{{item.eventHistory.eventCode}}</a></td>
+                                            <td>{{item.eventHistory.eventDate | confDateFormat}}</td>
+                                        </tr>
+                                    </tbody>
+                                </table>
+                                <span ng-hide="waitingForHistoryResponse || !isCreateNewMode()">
+                                    No history.
+                                </span>
+                                <search-result-error-alert ng-show="vesselHistoryError">{{vesselHistoryError}}</search-result-error-alert>
                             </div>
                         </div>
+                    </div>
 
-                        <div class="col-md-5 grayBorderRight terminalsContainer top-column">
-                            <div class="row" ng-if="!isCreateNewMode()">
-                                <div class="col-md-12">
-                                    <h5>{{'vessel.connected_mobile_terminals' | i18n}}</h5>
-                                </div>
-                                <div class="col-md-12" loading-indicator="waitingForMobileTerminalsResponse" size="small" type="SPINNER">
-                                    <table class="fullWidth" ng-show="mobileTerminals.length > 0">
-                                        <thead>
-                                            <tr>
-                                                <th>{{'vessel.mobileTerminal_table_header_serial_number' | i18n}}</th>
-                                                <th>{{'vessel.mobileTerminal_table_header_type' | i18n}}</th>
-                                                <th>{{'vessel.mobileTerminal_table_header_started' | i18n}}</th>
-                                                <th>{{'vessel.mobileTerminal_table_header_stopped' | i18n}}</th>
-                                            </tr>
-                                        </thead>
-                                        <tbody>
-                                            <tr ng-repeat="mt in mobileTerminals | orderBy :'[-active, -started]'" ng-class="{inactive : !mt.active}">
-                                                <td>{{mt.attributes.SERIAL_NUMBER}}</td>
-                                                <td>{{mt.type | transponderName}}</td>
-                                                <td>{{mt.attributes.STARTED_ON || "-" | confDateFormat }}</td>
-                                                <td>{{mt.attributes.UNINSTALLED_ON || "-" | confDateFormat }}</td>
-                                            </tr>
-                                        </tbody>
-                                    </table>
-                                    <span ng-hide="waitingForMobileTerminalsResponse || mobileTerminals.length > 0 || mobileTerminalsError">
-                                        {{'vessel.zero_connected_mobile_terminals' | i18n}}
-                                    </span>
-                                </div>
-                                <div class="col-md-12">
-                                    <search-result-error-alert ng-show="mobileTerminalsError">{{mobileTerminalsError}}</search-result-error-alert>
-                                </div>
+                    <div class="col-md-9 grayBorderRight terminalsContainer">
+                        <div class="row">
+                            <div class="col-md-12">
+                                <h5>{{'vessel.connected_mobile_terminals' | i18n}}</h5>
+                            </div>
+                            <div class="col-md-12" loading-indicator="waitingForMobileTerminalsResponse" size="small" type="SPINNER">
+                                <table class="fullWidth" ng-show="mobileTerminals.length > 0">
+                                    <thead>
+                                        <tr>
+                                            <th>{{'vessel.mobileTerminal_table_header_serial_number' | i18n}}</th>
+                                            <th>{{'vessel.mobileTerminal_table_header_type' | i18n}}</th>
+                                            <th>{{'vessel.mobileTerminal_table_header_started' | i18n}}</th>
+                                            <th>{{'vessel.mobileTerminal_table_header_stopped' | i18n}}</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        <tr ng-repeat="mt in mobileTerminals | orderBy :'[-active, -started]'" ng-class="{inactive : !mt.active}">
+                                            <td>{{mt.attributes.SERIAL_NUMBER}}</td>
+                                            <td>{{mt.type | transponderName}}</td>
+                                            <td>{{mt.attributes.STARTED_ON || "-" | confDateFormat }}</td>
+                                            <td>{{mt.attributes.UNINSTALLED_ON || "-" | confDateFormat }}</td>
+                                        </tr>
+                                    </tbody>
+                                </table>
+                                <span ng-hide="waitingForMobileTerminalsResponse || mobileTerminals.length > 0 || mobileTerminalsError">
+                                    {{'vessel.zero_connected_mobile_terminals' | i18n}}
+                                </span>
+                            </div>
+                            <div class="col-md-12">
+                                <search-result-error-alert ng-show="mobileTerminalsError">{{mobileTerminalsError}}</search-result-error-alert>
                             </div>
                         </div>
-
-                        <div class="col-md-4 notesContainer top-column">
-                            <div class="row">
-                                <div class="col-md-12">
-                                    <h5>{{'vessel.notes' | i18n}}</h5>
-                                </div>
-                                <div class="col-md-12">
-                                    <textarea ng-model="vesselObj.notes" ng-disabled="disableForm()"></textarea>
-                                </div>
-                            </div>
-                        </div>
-
                     </div>
                 </div>
 

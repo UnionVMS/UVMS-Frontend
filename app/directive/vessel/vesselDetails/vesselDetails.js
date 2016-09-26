@@ -22,7 +22,8 @@ angular.module('unionvmsWeb')
             vesselForm : '=',
             submitAttempted : '=',
             spin: '=',
-            existingValues: '='
+            existingValues: '=',
+            functions : '='
         },
 		templateUrl: 'directive/vessel/vesselDetails/vesselDetails.html',
 		link: function(scope, element, attrs, fn) {

@@ -229,11 +229,12 @@ angular.module('unionvmsWeb').controller('VesselFormCtrl',function($scope, $log,
             $scope.waitingForCreateResponse = false;
             alertService.showErrorMessage(locale.getString('vessel.add_new_alert_message_on_error'));
 
-            // Set existing values on scope
-            $scope.existingValues.cfr = error.match(/An asset with this CFR value already exists\./) ? cfr : undefined;
-            $scope.existingValues.imo = error.match(/An asset with this IMO value already exists\./) ? imo : undefined;
-            $scope.existingValues.mmsi = error.match(/An asset with this MMSI value already exists\./) ? mmsi : undefined;
-
+            if (error) {
+                // Set existing values on scope
+                $scope.existingValues.cfr = error.match(/An asset with this CFR value already exists\./) ? cfr : undefined;
+                $scope.existingValues.imo = error.match(/An asset with this IMO value already exists\./) ? imo : undefined;
+                $scope.existingValues.mmsi = error.match(/An asset with this MMSI value already exists\./) ? mmsi : undefined;
+            }
             // Update validity, because model did not change here.
             $scope.vesselForm.cfr.$setValidity('unique', $scope.existingValues.cfr === undefined);
             $scope.vesselForm.imo.$setValidity('unique', $scope.existingValues.imo === undefined);
@@ -250,6 +251,10 @@ angular.module('unionvmsWeb').controller('VesselFormCtrl',function($scope, $log,
     //Update the Vessel
     $scope.updateVessel = function(){
         $scope.submitAttempted = true;
+
+        console.log('sandra');
+        console.log($scope.vesselObj.contact.[0].source);
+
         if($scope.vesselForm.$valid) {
             //MobileTerminals remove them cuz they do not exist in backend yet.
             delete $scope.vesselObj.mobileTerminals;
@@ -351,6 +356,10 @@ angular.module('unionvmsWeb').controller('VesselFormCtrl',function($scope, $log,
         assetCsvService.download($scope.vesselObj);
     };
 
+    $scope.addNewContact = function() {
+        console.log('Add contact');
+    };
+
     $scope.menuBarFunctions = {
         addMobileTerminal: function() {
             console.log("Add terminal!");
@@ -359,6 +368,39 @@ angular.module('unionvmsWeb').controller('VesselFormCtrl',function($scope, $log,
         updateCallback: $scope.updateVessel,
         cancelCallback: $scope.toggleViewVessel,
         exportToCsvCallback: $scope.exportAssetToCsv,
-        archiveCallback: $scope.archiveVessel
+        showExport: function(vessel) {
+            if (vessel) {
+                return angular.isDefined(vessel.vesselId) && vessel.vesselId != null;
+            }
+            return false;
+        },
+        archiveCallback: $scope.archiveVessel,
+        showArchive: function(vessel) {
+            if (vessel) {
+                return angular.isDefined(vessel.vesselId) && vessel.vesselId != null && vessel.active;
+            }
+            return false;
+        },
+        historyCallback: function() {
+            console.log("Show history!");
+        },
+        showHistory: function(vessel) {
+            if (vessel) {
+                return angular.isDefined(vessel.vesselId) && vessel.vesselId != null;
+            }
+            return false;
+        }
+    };
+
+    $scope.vesselDetailsFunctions = {
+        addNewContactCallback: $scope.addNewContact
+    };
+
+    $scope.vesselDetailsFunctions = {
+        addNewContactCallback: $scope.addNewContact
+    };
+
+    $scope.vesselDetailsFunctions = {
+        addNewContactCallback: $scope.addNewContact
     };
 });
