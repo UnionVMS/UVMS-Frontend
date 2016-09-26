@@ -9,7 +9,7 @@ the hope that it will be useful, but WITHOUT ANY WARRANTY; without even the impl
 FITNESS FOR A PARTICULAR PURPOSE.  See the GNU General Public License for more details. You should have received a
 copy of the GNU General Public License along with the IFDM Suite. If not, see <http://www.gnu.org/licenses/>.
  */
-angular.module('unionvmsWeb').controller('mobileTerminalFormCtrl',function($scope, locale, MobileTerminal, alertService, userService, mobileTerminalRestService, modalComment, MobileTerminalHistoryModal, mobileTerminalCsvService){
+angular.module('unionvmsWeb').controller('mobileTerminalFormCtrl',function($filter, $scope, locale, MobileTerminal, alertService, userService, mobileTerminalRestService, modalComment, MobileTerminalHistoryModal, mobileTerminalCsvService){
 
     var checkAccessToFeature = function(feature) {
         return userService.isAllowed(feature, 'Union-VMS', true);
@@ -384,5 +384,24 @@ angular.module('unionvmsWeb').controller('mobileTerminalFormCtrl',function($scop
     //Show/hide assign vessel
     $scope.toggleAssignVessel = function(){
         $scope.isVisible.assignVessel = !$scope.isVisible.assignVessel;
+    };
+
+    $scope.getMenuHeader = function() {
+        if ($scope.currentMobileTerminal && $scope.currentMobileTerminal.type) {
+            return $filter('transponderName')($scope.currentMobileTerminal.type);
+        }
+        return $filter('i18n')('mobileTerminal.add_new_form_transponder_system_label');
+    }
+
+    $scope.menuBarFunctions = {
+        addMobileTerminal: function() {
+            console.log("Add terminal!");
+        },
+        saveCallback: $scope.createNewMobileTerminal,
+        updateCallback: $scope.updateMobileTerminal,
+        cancelCallback: $scope.toggleMobileTerminalDetails,
+        exportToCsvCallback: $scope.exportTerminalCSV,
+        archiveCallback: $scope.archiveMobileTerminal,
+        unlinkCallback: $scope.unassignVessel
     };
 });
