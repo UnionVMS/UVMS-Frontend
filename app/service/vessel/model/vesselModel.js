@@ -10,7 +10,7 @@ FITNESS FOR A PARTICULAR PURPOSE.  See the GNU General Public License for more d
 copy of the GNU General Public License along with the IFDM Suite. If not, see <http://www.gnu.org/licenses/>.
  */
 angular.module('unionvmsWeb')
-.factory('Vessel', function(EventHistory) {
+.factory('Vessel', function(EventHistory, VesselContact, VesselNotes) {
 
     var SOURCE_INTERNAL = "INTERNAL";
 
@@ -19,16 +19,12 @@ angular.module('unionvmsWeb')
         this.source = SOURCE_INTERNAL;
         this.grossTonnageUnit = "LONDON";
         this.lengthType = "LOA";
-        this.contact = {
-            name : undefined,
-            number : undefined,
-            email : undefined
-        };
+        this.contact = [];
         this.producer = {
             code : undefined,
             name : undefined
         };
-        this.notes = '';
+        this.notes = [];
         this.lastMovement = undefined;
     }
 
@@ -68,12 +64,15 @@ angular.module('unionvmsWeb')
         vessel.grossTonnage = data.grossTonnage;
         vessel.grossTonnageUnit = data.grossTonnageUnit;
 
-        vessel.notes = data.notes;
-
-        if(angular.isDefined(data.contact)){
-            vessel.contact.name = data.contact.name;
-            vessel.contact.number = data.contact.number;
-            vessel.contact.email = data.contact.email;
+        if (data.notes) {
+            for (var i = 0; i < data.notes.length; i++) {
+                vessel.notes.push(VesselNotes.fromDTO(data.notes[i]));
+            }
+        }
+        if (data.contact) {
+            for (var i = 0; i < data.contact.length; i++) {
+                vessel.contact.push(VesselContact.fromDTO(data.contact[i]));
+            }
         }
 
         if(angular.isDefined(data.producer)){
@@ -173,11 +172,9 @@ angular.module('unionvmsWeb')
             };
         }
         if(this.contact){
-            copy.contact = {
-                name : this.contact.name,
-                email : this.contact.email,
-                number : this.contact.number
-            };
+            for (var i = 0; i < this.contact.length; i++) {
+                copy.contact.push(this.contact[i].copy());
+            }
         }
         if(this.producer){
             copy.producer = {
@@ -186,7 +183,12 @@ angular.module('unionvmsWeb')
             };
         }
         copy.gearType = this.gearType;
-        copy.notes = this.notes;
+
+        if(this.notes){
+            for (var i = 0; i < this.notes.length; i++) {
+                copy.notes.push(this.notes[i].copy());
+            }
+        }
         return copy;
     };
 
