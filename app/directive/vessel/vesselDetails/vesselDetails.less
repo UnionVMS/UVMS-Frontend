@@ -41,18 +41,27 @@ copy of the GNU General Public License along with the IFDM Suite. If not, see <h
             margin: 0 -15px;
             display: block;
             .clearfix();
+        }
+    }
 
-            &:last-of-type {
-                &:after {
-                    clear: none;
-                    display: inline;
-                }
-            }
+    .btn-removeContact {
+        margin-left: 7px;
+        margin-top: 20px;
+        height: 30px;
+        width: 30px;
+        padding: 0;
+        line-height: 29px;
+        font-size: 100%;
+        color: @primaryColor; 
+        
+        &:hover {
+            color: @errorColor; 
         }
     }
 
     .btn-addContact {
-        margin-top: 20px;
-        color: @primaryColor; 
+        i {
+            margin-right: 3px;
+        }
     }
 }

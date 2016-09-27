@@ -190,7 +190,7 @@ angular.module('unionvmsWeb').controller('VesselFormCtrl',function($scope, $log,
     //Create a new vessel
     $scope.createNewVessel = function(){
         $scope.submitAttempted = true;
-        $scope.vesselContactAddSource();
+        $scope.updateContactItems();
 
         if($scope.vesselForm.$valid) {
             //Create new Vessel
@@ -253,7 +253,7 @@ angular.module('unionvmsWeb').controller('VesselFormCtrl',function($scope, $log,
     //Update the Vessel
     $scope.updateVessel = function(){
         $scope.submitAttempted = true;
-        $scope.vesselContactAddSource();
+        $scope.updateContactItems();
 
         if($scope.vesselForm.$valid) {
             //MobileTerminals remove them cuz they do not exist in backend yet.
@@ -356,19 +356,29 @@ angular.module('unionvmsWeb').controller('VesselFormCtrl',function($scope, $log,
         assetCsvService.download($scope.vesselObj);
     };
 
-    $scope.addNewContact = function() {
-        console.log($scope.vesselObj.contact.length);
-
-        if ($scope.vesselObj.contact.length <= 0) {
-            $scope.vesselObj.contact.push({}, {});
+    $scope.addContactItem = function(vesselContact) {
+        if (vesselContact.length == 0) {
+            vesselContact.push({}, {});
         } else {
-            $scope.vesselObj.contact.push({});
+            vesselContact.push({});
         }
     };
 
-    $scope.vesselContactAddSource = function() {
-        $scope.vesselObj.contact.forEach(function (vesselContact) {
-            Object.assign(vesselContact, { source: 'INTERNAL' });
+    $scope.removeContactItem = function(vesselContact, index){
+        vesselContact.splice(index, 1);
+    }; 
+
+    $scope.updateContactItems = function() {
+        $scope.vesselObj.contact.slice(0).forEach(function (vesselContact) {
+            if (vesselContact.name || vesselContact.email || vesselContact.number) {
+                Object.assign(vesselContact, { source: 'INTERNAL' });
+                // ToDo: Fix this in BE?
+                if (!vesselContact.name){
+                    Object.assign(vesselContact, { name: '' });
+                }
+            } else {
+                $scope.vesselObj.contact.splice($scope.vesselObj.contact.indexOf(vesselContact), 1);
+            }
         });
     };
 
@@ -405,6 +415,7 @@ angular.module('unionvmsWeb').controller('VesselFormCtrl',function($scope, $log,
     };
 
     $scope.vesselDetailsFunctions = {
-        addNewContactCallback: $scope.addNewContact
+        addContactItemCallback: $scope.addContactItem,
+        removeContactItemCallback: $scope.removeContactItem
     };
 });

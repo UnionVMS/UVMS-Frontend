@@ -116,41 +116,46 @@
         </div>
 
         <div class="col-12 contact-wrapper">
+            <div class="contact-list">
+                <div class="contact-item" ng-if="vessel.contact.length == 0">
+                    <div class="col-md-3 form-group smallerpaddingright" ng-class="{'has-error': (submitAttempted || vesselForm.contactName.$dirty) && vesselForm.contactName.$invalid}">
+                        <label>{{ 'vessel.vessel_details_contact_name' | i18n }}</label>
+                        <input type="text" name="contactName" class="form-control" ng-model="vessel.contact[0].name"/>
+                    </div>
+                    <div class="col-md-3 form-group smallerpadding" ng-class="{'has-error': (submitAttempted || vesselForm.email.$dirty) && vesselForm.email.$invalid}">
+                        <label>{{ 'vessel.vessel_details_email' | i18n }}</label>
+                        <input type="text" name="email" class="form-control" ng-model="vessel.contact[0].email"/>
+                        <input-validation-message types="email" input="vesselForm.email"></input-validation-message >
+                    </div>
+                    <div class="col-md-2 form-group smallerpadding" ng-class="{'has-error': (submitAttempted || vesselForm.contactNumber.$dirty) && vesselForm.contactNumber.$invalid}">
+                        <label>{{ 'vessel.vessel_details_contact_number' | i18n }}</label>
+                        <input type="text" name="contactNumber" class="form-control" ng-model="vessel.contact[0].number"/>
+                    </div>
+                </div>
 
-            <div class="contact-item" ng-if="vessel.contact.length == 0">
-                <div class="col-md-3 form-group smallerpaddingright" ng-class="{'has-error': (submitAttempted || vesselForm.contactName.$dirty) && vesselForm.contactName.$invalid}">
-                    <label>{{ 'vessel.vessel_details_contact_name' | i18n }}</label>
-                    <input type="text" name="contactName" class="form-control" ng-model="vessel.contact[0].name"/>
-                </div>
-                <div class="col-md-3 form-group smallerpadding" ng-class="{'has-error': (submitAttempted || vesselForm.email.$dirty) && vesselForm.email.$invalid}">
-                    <label>{{ 'vessel.vessel_details_email' | i18n }}</label>
-                    <input type="text" name="email" class="form-control" ng-model="vessel.contact[0].email"/>
-                    <input-validation-message types="email" input="vesselForm.email"></input-validation-message >
-                </div>
-                <div class="col-md-2 form-group smallerpaddingleft" ng-class="{'has-error': (submitAttempted || vesselForm.contactNumber.$dirty) && vesselForm.contactNumber.$invalid}">
-                    <label>{{ 'vessel.vessel_details_contact_number' | i18n }}</label>
-                    <input type="text" name="contactNumber" class="form-control" ng-model="vessel.contact[0].number"/>
+                <div class="contact-item" ng-repeat="contact in vessel.contact">
+                    <div class="col-md-3 form-group smallerpaddingright" ng-class="{'has-error': (submitAttempted || vesselForm.contactName.$dirty) && vesselForm.contactName.$invalid}">
+                        <label>{{ 'vessel.vessel_details_contact_name' | i18n }}</label>
+                        <input type="text" name="contactName" class="form-control" ng-model="contact.name"/>
+                    </div>
+                    <div class="col-md-3 form-group smallerpadding" ng-class="{'has-error': (submitAttempted || vesselForm.email.$dirty) && vesselForm.email.$invalid}">
+                        <label>{{ 'vessel.vessel_details_email' | i18n }}</label>
+                        <input type="text" name="email" class="form-control" ng-model="contact.email"/>
+                        <input-validation-message types="email" input="vesselForm.email"></input-validation-message >
+                    </div>
+                    <div class="col-md-2 form-group smallerpadding" ng-class="{'has-error': (submitAttempted || vesselForm.contactNumber.$dirty) && vesselForm.contactNumber.$invalid}">
+                        <label>{{ 'vessel.vessel_details_contact_number' | i18n }}</label>
+                        <input type="text" name="contactNumber" class="form-control" ng-model="contact.number"/>
+                    </div>
+                    <div class="btn btn-sm btn-default btn-removeContact" ng-if="vessel.contact.length > 1" ng-click="functions.removeContactItemCallback(vessel.contact, $index)" ng-hide="disableForm">
+                        <i class="fa fa-trash"></i>
+                    </div>
                 </div>
             </div>
-
-            <div class="contact-item" ng-repeat="contact in vessel.contact">
-                <div class="col-md-3 form-group smallerpaddingright" ng-class="{'has-error': (submitAttempted || vesselForm.contactName.$dirty) && vesselForm.contactName.$invalid}">
-                    <label>{{ 'vessel.vessel_details_contact_name' | i18n }}</label>
-                    <input type="text" name="contactName" class="form-control" ng-model="contact.name"/>
-                </div>
-                <div class="col-md-3 form-group smallerpadding" ng-class="{'has-error': (submitAttempted || vesselForm.email.$dirty) && vesselForm.email.$invalid}">
-                    <label>{{ 'vessel.vessel_details_email' | i18n }}</label>
-                    <input type="text" name="email" class="form-control" ng-model="contact.email"/>
-                    <input-validation-message types="email" input="vesselForm.email"></input-validation-message >
-                </div>
-                <div class="col-md-2 form-group smallerpaddingleft" ng-class="{'has-error': (submitAttempted || vesselForm.contactNumber.$dirty) && vesselForm.contactNumber.$invalid}">
-                    <label>{{ 'vessel.vessel_details_contact_number' | i18n }}</label>
-                    <input type="text" name="contactNumber" class="form-control" ng-model="contact.number"/>
-                </div>
-            </div>
+            <a class="btn-addContact" ng-click="functions.addContactItemCallback(vessel.contact)" ng-hide="disableForm">
+                <i class="fa fa-plus"></i> Add contact
+            </a>
         </div>
-        <div class="btn btn-sm btn-default btn-addContact" ng-click="functions.addNewContactCallback()">
-            <i class="fa fa-plus"></i>
-        </div>
+        
     </fieldset>
 </div>
