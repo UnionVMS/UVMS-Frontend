@@ -421,12 +421,10 @@ angular.module('unionvmsWeb').controller('mobileTerminalFormCtrl',function($filt
             }
             return false;
         },
-        historyCallback: function() {
-            console.log("Show history!");
-        },
+        historyCallback: $scope.onMobileTerminalHistoryClick,
         showHistory: function(mobileTerminal) {
             if (mobileTerminal) {
-                return angular.isDefined(mobileTerminal.vesselId) && mobileTerminal.vesselId != null;
+                return angular.isDefined(mobileTerminal.guid) && mobileTerminal.guid != null;
             }
             return false;
         }
