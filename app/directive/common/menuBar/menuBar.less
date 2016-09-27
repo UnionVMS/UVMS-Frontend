@@ -41,12 +41,22 @@ copy of the GNU General Public License along with the IFDM Suite. If not, see <h
  		color: @primaryColor;
  	}
 
- 	.btn-archive {
+ 	.btn-archive,
+ 	.btn-history, 
+ 	.btn-unlink {
  		width: 30px;
  		height: 30px;
- 		line-height: 30px;
+ 		line-height: 28px;
  		text-align: center;
  		padding: 0px;
+ 	}
+
+ 	.btn-archive,
+ 	.btn-unlink {
  		color: @profileColor_red;
+ 	}
+
+ 	.btn-history {
+ 		color: @primaryColor;
  	}
 }

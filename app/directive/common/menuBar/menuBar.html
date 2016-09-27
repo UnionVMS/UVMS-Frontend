@@ -10,7 +10,7 @@
             <div ng-if="includeHistory" ng-include="'directive/common/menuBar/menuHistory.html'"></div>
             <div ng-if="includeCSVDownload" ng-include="'directive/common/menuBar/menuBarCSV.html'"></div>
             <div class="actionContainer menuTextItem">
-                <b ng-click="functions.cancelCallback()" class="btn-cancel">Cancel</b>
+                <a ng-click="functions.cancelCallback()" class="btn-cancel">Cancel</a>
             </div>
             <div ng-if="includeSaveUpdate" ng-include="'directive/common/menuBar/menuBarSave.html'"></div>
         </div>
