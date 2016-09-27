@@ -190,6 +190,8 @@ angular.module('unionvmsWeb').controller('VesselFormCtrl',function($scope, $log,
     //Create a new vessel
     $scope.createNewVessel = function(){
         $scope.submitAttempted = true;
+        $scope.vesselContactAddSource();
+
         if($scope.vesselForm.$valid) {
             //Create new Vessel
             $scope.waitingForCreateResponse = true;
@@ -251,9 +253,7 @@ angular.module('unionvmsWeb').controller('VesselFormCtrl',function($scope, $log,
     //Update the Vessel
     $scope.updateVessel = function(){
         $scope.submitAttempted = true;
-
-        console.log('sandra');
-        console.log($scope.vesselObj.contact.[0].source);
+        $scope.vesselContactAddSource();
 
         if($scope.vesselForm.$valid) {
             //MobileTerminals remove them cuz they do not exist in backend yet.
@@ -357,7 +357,19 @@ angular.module('unionvmsWeb').controller('VesselFormCtrl',function($scope, $log,
     };
 
     $scope.addNewContact = function() {
-        console.log('Add contact');
+        console.log($scope.vesselObj.contact.length);
+
+        if ($scope.vesselObj.contact.length <= 0) {
+            $scope.vesselObj.contact.push({}, {});
+        } else {
+            $scope.vesselObj.contact.push({});
+        }
+    };
+
+    $scope.vesselContactAddSource = function() {
+        $scope.vesselObj.contact.forEach(function (vesselContact) {
+            Object.assign(vesselContact, { source: 'INTERNAL' });
+        });
     };
 
     $scope.menuBarFunctions = {
@@ -390,22 +402,6 @@ angular.module('unionvmsWeb').controller('VesselFormCtrl',function($scope, $log,
             }
             return false;
         }
-    };
-
-    $scope.vesselDetailsFunctions = {
-        addNewContactCallback: $scope.addNewContact
-    };
-
-    $scope.vesselDetailsFunctions = {
-        addNewContactCallback: $scope.addNewContact
-    };
-
-    $scope.vesselDetailsFunctions = {
-        addNewContactCallback: $scope.addNewContact
-    };
-
-    $scope.vesselDetailsFunctions = {
-        addNewContactCallback: $scope.addNewContact
     };
 
     $scope.vesselDetailsFunctions = {
