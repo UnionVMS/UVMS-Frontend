@@ -36,6 +36,21 @@ copy of the GNU General Public License along with the IFDM Suite. If not, see <h
         }
     }
 
+    .contact-wrapper {
+        .contact-item {
+            margin: 0 -15px;
+            display: block;
+            .clearfix();
+
+            &:last-of-type {
+                &:after {
+                    clear: none;
+                    display: inline;
+                }
+            }
+        }
+    }
+
     .btn-addContact {
         margin-top: 20px;
         color: @primaryColor; 

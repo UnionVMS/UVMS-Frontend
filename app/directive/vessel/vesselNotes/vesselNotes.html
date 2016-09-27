@@ -1,0 +1,50 @@
+<div class="vesselNotesContainer" loading-indicator="spin">
+    <fieldset ng-disabled="disableForm">
+        <div class="left-form col-md-6">
+            <div class="row">
+                <div class="col-md-4 form-group smallerpadding">
+                    <label>Date and time</label>
+                    <input type="text" name="date" class="form-control" ng-model="vessel.notes.date">
+                </div>
+                <div class="col-md-4 form-group smallerpadding">
+                    <label>Activity</label>
+                    <input type="text" name="activity" class="form-control" ng-model="vessel.notes.activity">
+                </div>
+                <div class="col-md-4 form-group smallerpadding">
+                    <label>User</label>
+                    <input type="text" name="user" class="form-control" ng-model="vessel.notes.user">
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-md-4 form-group smallerpadding">
+                    <label>Fishing license holder</label>
+                    <input type="text" name="licenseHolder" class="form-control" ng-model="vessel.notes.licenseHolder">
+                </div>
+                <div class="col-md-8 form-group smallerpadding">
+                    <label>Contact</label>
+                    <input type="text" name="contact" class="form-control" ng-model="vessel.notes.contact">
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-md-12 form-group smallerpadding">
+                    <label>{{'vessel.notes' | i18n}}</label>
+                    <textarea name="notes" class="form-control" ng-model="vessel.notes.notes"></textarea>
+                </div>
+            </div>
+        </div>
+        <div class="right-form col-md-4">
+            <div class="row">
+                <div class="col-md-12 form-group smallerpaddingright">
+                    <label>Ready date</label>
+                    <input type="text" name="readyDate" class="form-control" ng-model="vessel.notes.readyDate">
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-md-12 form-group smallerpaddingright">
+                    <label>Sheet number</label>
+                    <input type="text" name="sheetNumber" class="form-control" ng-model="vessel.notes.sheetNumber">
+                </div>
+            </div>
+        </div>
+    </fieldset>
+</div>
