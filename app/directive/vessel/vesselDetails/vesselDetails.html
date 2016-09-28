@@ -132,7 +132,7 @@
                     </div>
                 </div>
 
-                <div class="contact-item" ng-repeat="contact in vessel.contact | orderBy:'-owner'"">
+                <div class="contact-item" ng-repeat="contact in vessel.contact">
                     <div class="col-md-3 form-group smallerpaddingright" ng-class="{'has-error': (submitAttempted || vesselForm.contactName.$dirty) && vesselForm.contactName.$invalid}">
                         <label>{{ 'vessel.vessel_details_contact_name' | i18n }}</label>
                         <input type="text" name="contactName" id="contact-name" class="form-control" ng-model="contact.name"/>
