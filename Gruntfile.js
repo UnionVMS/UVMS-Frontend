@@ -52,8 +52,8 @@ module.exports = function (grunt) {
   grunt.initConfig({
     connect: {
       options: {
-        port: 9001
-        //, keepalive: true
+        port: 9001,
+        keepalive: true
       },
       rules: [
           // Internal rewrite
@@ -76,8 +76,8 @@ module.exports = function (grunt) {
                   '/config/rest',
                   '/mapfish-print',
                   '/usm-authentication/rest', '/usm-authorisation/rest', '/usm-administration/rest'],
-              host: 'livm73u',
-              port: 28080
+              host: 'localhost',
+              port: 8080
         },
 
       development: {
@@ -462,7 +462,8 @@ module.exports = function (grunt) {
   grunt.registerTask('test',['dom_munger:read', 'karma:services', 'karma:controllers', 'karma:directives', 'karma:filters', 'clean:after']);
 
   grunt.registerTask('default',['build-dev']);
-  grunt.registerTask('serve', ['dom_munger:read','jshint', 'configureProxies', 'configureRewriteRules', 'connect:development', 'watch']);
+  grunt.registerTask('serve-no-watch', ['dom_munger:read','jshint', 'configureProxies', 'configureRewriteRules', 'connect:development']);
+  grunt.registerTask('serve', ['serve-no-watch', 'watch']);
   grunt.registerTask('serve-debug', ['ngconstant:development','serve']);
   grunt.registerTask('serve-prod', ['ngconstant:production','serve']);
   grunt.registerTask('serve-copy', ['copy:serve', 'serve']);
