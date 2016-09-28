@@ -356,6 +356,7 @@ angular.module('unionvmsWeb').controller('VesselFormCtrl',function($scope, $log,
         assetCsvService.download($scope.vesselObj);
     };
 
+    // Add new row with contact item 
     $scope.addContactItem = function(vesselContact) {
         if (vesselContact.length == 0) {
             vesselContact.push({}, {});
@@ -364,10 +365,12 @@ angular.module('unionvmsWeb').controller('VesselFormCtrl',function($scope, $log,
         }
     };
 
+    // Remove row with contact item
     $scope.removeContactItem = function(vesselContact, index){
         vesselContact.splice(index, 1);
     }; 
 
+    // Update submitted contacts with default values or remove empty contact item rows
     $scope.updateContactItems = function() {
         $scope.vesselObj.contact.slice(0).forEach(function (vesselContact) {
             if (vesselContact.name || vesselContact.email || vesselContact.number) {
