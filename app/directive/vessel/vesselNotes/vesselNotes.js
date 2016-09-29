@@ -32,7 +32,7 @@ angular.module('unionvmsWeb')
 });
 
 angular.module('unionvmsWeb')
-    .controller('vesselNotesCtrl', function($scope, locale, configurationService, vesselValidationService, globalSettingsService){
+    .controller('vesselNotesCtrl', function($scope, locale, configurationService, vesselValidationService, globalSettingsService, vesselRestService){
 
         //Dropdown values
         $scope.vesselFlagState = configurationService.setTextAndCodeForDropDown(configurationService.getValue('VESSEL', 'FLAG_STATE'), 'FLAG_STATE', 'VESSEL', true);
@@ -65,6 +65,12 @@ angular.module('unionvmsWeb')
         };
 
         $scope.lengthUnit = globalSettingsService.getLengthUnit();
+
+        vesselRestService.getNoteActivityList().then(function(data) {
+            $scope.noteActivityList = data;
+        }, function(error) {
+            console.error(error);
+        });
 
         $scope.getMaxLengthMessage = function(length) {
             return {

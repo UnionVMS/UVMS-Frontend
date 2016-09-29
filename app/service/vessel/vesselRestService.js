@@ -52,6 +52,9 @@ angular.module('unionvmsWeb')
             },
             getConfigParameters : function(){
                 return $resource('/asset/rest/config/parameters');
+            },
+            getNoteActivityList : function(){
+                return $resource('/asset/rest/asset/activitycodes/');
             }
         };
     })
@@ -240,6 +243,10 @@ angular.module('unionvmsWeb')
         return deferred.promise;
     };
 
+    var getNoteActivityList = function(){
+        return getConfigurationFromResource(vesselRestFactory.getNoteActivityList());
+    };
+
     var getConfiguration = function(){
         return getConfigurationFromResource(vesselRestFactory.getConfigValues());
     };
@@ -373,6 +380,7 @@ angular.module('unionvmsWeb')
         updateVesselGroup : updateVesselGroup,
         deleteVesselGroup : deleteVesselGroup ,
         getConfig : getConfiguration,
-        getParameterConfig : getParameterConfiguration
+        getParameterConfig : getParameterConfiguration,
+        getNoteActivityList : getNoteActivityList
     };
 });
