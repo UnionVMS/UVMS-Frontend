@@ -269,7 +269,7 @@
             <artifactId>maven-war-plugin</artifactId>
             <version>2.6</version>
             <configuration>
-                <warName>${project.artifactId}-${project.version}</warName>
+                <warName>${project.artifactId}</warName>
                 <warSourceDirectory>${basedir}/dist</warSourceDirectory>
                 <warSourceExcludes>${basedir}/dist/docs</warSourceExcludes>
                 <packagingExcludes>unionvms-web.zip,app.full.js,app.full.js,app.full.min.js.map,config.js</packagingExcludes>
