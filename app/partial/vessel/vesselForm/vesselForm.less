@@ -23,9 +23,18 @@ copy of the GNU General Public License along with the IFDM Suite. If not, see <h
         .clear();
         .flexbox();
 
-        .notesHistory {
+        .notesListContainer {
             .grayBorderRight();
             padding: 15px; 
+
+            .list td {
+                &:first-child {
+                    width: 30%;
+                }
+                &:nth-child(2) {
+                    width: 70%;
+                }
+            }
         }
 
         .notesForm {
@@ -50,7 +59,7 @@ copy of the GNU General Public License along with the IFDM Suite. If not, see <h
         .historyContainer{
             padding: 15px; 
 
-            td{
+            .list td{
                 &:first-child{
                     width: 30%;
                 }
