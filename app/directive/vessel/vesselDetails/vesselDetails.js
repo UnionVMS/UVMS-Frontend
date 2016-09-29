@@ -72,5 +72,15 @@ angular.module('unionvmsWeb')
                 maxlength: locale.getString('vessel.warn_max_length', length)
             };
         };
+
+        $scope.orderByOwner = function (contact) {
+            switch (contact.owner) {
+                case true:
+                    return 1;
+
+                case false:
+                    return 2;
+            }
+        };
     }
 );

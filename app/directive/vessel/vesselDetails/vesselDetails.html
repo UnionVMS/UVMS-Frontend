@@ -118,30 +118,30 @@
         <div class="col-12 contact-wrapper">
             <div class="contact-list">
                 <div class="contact-item" ng-if="vessel.contact.length == 0">
-                    <div class="col-md-3 form-group smallerpaddingright" ng-class="{'has-error': (submitAttempted || vesselForm.contactName.$dirty) && vesselForm.contactName.$invalid}">
+                    <div class="col-md-3 form-group smallerpaddingright">
                         <label>{{ 'vessel.vessel_details_contact_name' | i18n }}</label>
                         <input type="text" name="contactName" id="contact-name" class="form-control" ng-model="vessel.contact[0].name"/>
                     </div>
-                    <div class="col-md-3 form-group smallerpadding" ng-class="{'has-error': (submitAttempted || vesselForm.contactEmail.$dirty) && vesselForm.contactEmail.$invalid}">
+                    <div class="col-md-3 form-group smallerpadding">
                         <label>{{ 'vessel.vessel_details_contact_email' | i18n }}</label>
                         <input type="text" name="contactEmail" id="contact-email" class="form-control" ng-model="vessel.contact[0].email"/>
                     </div>
-                    <div class="col-md-2 form-group smallerpadding" ng-class="{'has-error': (submitAttempted || vesselForm.contactNumber.$dirty) && vesselForm.contactNumber.$invalid}">
+                    <div class="col-md-2 form-group smallerpadding">
                         <label>{{ 'vessel.vessel_details_contact_number' | i18n }}</label>
                         <input type="text" name="contactNumber" id="contact-number" class="form-control" ng-model="vessel.contact[0].number"/>
                     </div>
                 </div>
 
-                <div class="contact-item" ng-repeat="contact in vessel.contact">
-                    <div class="col-md-3 form-group smallerpaddingright" ng-class="{'has-error': (submitAttempted || vesselForm.contactName.$dirty) && vesselForm.contactName.$invalid}">
+                <div class="contact-item" ng-repeat="contact in vessel.contact | orderBy:orderByOwner">
+                    <div class="col-md-3 form-group smallerpaddingright">
                         <label>{{ 'vessel.vessel_details_contact_name' | i18n }}</label>
                         <input type="text" name="contactName" id="contact-name" class="form-control" ng-model="contact.name"/>
                     </div>
-                    <div class="col-md-3 form-group smallerpadding" ng-class="{'has-error': (submitAttempted || vesselForm.contactEmail.$dirty) && vesselForm.contactEmail.$invalid}">
+                    <div class="col-md-3 form-group smallerpadding">
                         <label>{{ 'vessel.vessel_details_contact_email' | i18n }}</label>
                         <input type="text" name="contactEmail" id="contact-email" class="form-control" ng-model="contact.email"/>
                     </div>
-                    <div class="col-md-2 form-group smallerpadding" ng-class="{'has-error': (submitAttempted || vesselForm.contactNumber.$dirty) && vesselForm.contactNumber.$invalid}">
+                    <div class="col-md-2 form-group smallerpadding">
                         <label>{{ 'vessel.vessel_details_contact_number' | i18n }}</label>
                         <input type="text" name="contactNumber" id="contact-number" class="form-control" ng-model="contact.number"/>
                     </div>
