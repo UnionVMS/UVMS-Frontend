@@ -191,6 +191,7 @@ angular.module('unionvmsWeb').controller('VesselFormCtrl',function($scope, $log,
     $scope.createNewVessel = function(){
         $scope.submitAttempted = true;
         $scope.updateContactItems();
+        $scope.updateNoteItem();
 
         if($scope.vesselForm.$valid) {
             //Create new Vessel
@@ -254,6 +255,7 @@ angular.module('unionvmsWeb').controller('VesselFormCtrl',function($scope, $log,
     $scope.updateVessel = function(){
         $scope.submitAttempted = true;
         $scope.updateContactItems();
+        $scope.updateNoteItem();
 
         if($scope.vesselForm.$valid) {
             //MobileTerminals remove them cuz they do not exist in backend yet.
@@ -348,6 +350,29 @@ angular.module('unionvmsWeb').controller('VesselFormCtrl',function($scope, $log,
         });
     };
 
+    //View notes details
+    $scope.viewVesselNotesDetails = function(vesselNotes) {       
+        $scope.vesselNotes = vesselNotes;
+        openVesselNotesModal();
+    };
+
+    //Open modal for viewing vessel notes 
+    var openVesselNotesModal = function(){
+        var modalInstance = $modal.open({
+          templateUrl: 'partial/vessel/vesselNotes/vesselNotesModal/vesselNotesModal.html',
+          controller: 'vesselNotesModalCtrl',
+          size: "small",
+          resolve: {
+            vesselNotes: function() {
+                return $scope.vesselNotes;
+            }, 
+            vesselName: function() {
+                return $scope.vesselObj.name;
+            }
+          }
+        });
+    };
+
     $scope.viewMobileTerminalHistory = function(mobileTerminal) {
         MobileTerminalHistoryModal.show(mobileTerminal);
     };
@@ -382,6 +407,15 @@ angular.module('unionvmsWeb').controller('VesselFormCtrl',function($scope, $log,
             } else {
                 $scope.vesselObj.contact.splice($scope.vesselObj.contact.indexOf(vesselContact), 1);
             }
+        });
+    };
+
+    // Update notes with source value Internal
+    $scope.updateNoteItem = function() {
+        $scope.vesselObj.notes.forEach(function (vesselNote) {
+            if (!vesselNote.source) {
+                Object.assign(vesselNote, { source: 'INTERNAL' });
+            } 
         });
     };
 

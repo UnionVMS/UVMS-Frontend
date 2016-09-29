@@ -23,8 +23,8 @@ copy of the GNU General Public License along with the IFDM Suite. If not, see <h
                 </div>
 
                 <div class="notesContainer">
-                    <div class="col-md-3 notesHistory">
-                        <h5>Asset notes</h5>
+                    <div class="col-md-3 notesListContainer">
+                        <h5>{{'vessel.vessel_notes' | i18n}}</h5>
                         <table class="fullWidth" ng-show="vesselObj.notes.length > 0 && !isCreateNewMode()">
                             <thead>
                                 <tr>
@@ -33,18 +33,18 @@ copy of the GNU General Public License along with the IFDM Suite. If not, see <h
                                 </tr>
                             </thead>
                             <tbody>
-                                <tr ng-repeat="item in vesselObj.notes | orderBy :'-vesselObj.notes.eventDate'">
-                                    <td><a ng-click="viewHistoryDetails(item)">{{item.activity}}</a></td>
+                                <tr ng-repeat="item in vesselObj.notes | orderBy :'-vesselObj.notes.eventDate'" class="list">
+                                    <td><a ng-click="viewVesselNotesDetails(item)">{{item.activity}}</a></td>
                                     <td>{{item.date | confDateFormat}}</td>
                                 </tr>
                             </tbody>
                         </table>
                         <span ng-hide="vesselObj.notes.length > 0">
-                            No notes.
+                            {{'vessel.vessel_notes_zero_message' | i18n}}
                         </span>
                     </div>
                     <div class="col-md-9 notesForm">
-                        <h5>New note</h5>
+                        <h5>{{'vessel.vesse_notes_new_note' | i18n}}</h5>
                         <vessel-notes vessel="vesselObj" vessel-form="vesselForm" submit-attempted="submitAttempted" disable-form="disableForm()" create-new-mode="isCreateNewMode()" spin="waitingForCreateResponse" existing-values="existingValues"></vessel-notes>
                     </div>
                 </div>
@@ -67,14 +67,14 @@ copy of the GNU General Public License along with the IFDM Suite. If not, see <h
                                         </tr>
                                     </thead>
                                     <tbody>
-                                        <tr ng-repeat="item in vesselHistory | orderBy :'-eventHistory.eventDate'">
+                                        <tr ng-repeat="item in vesselHistory | orderBy :'-eventHistory.eventDate'" class="list">
                                             <td><a ng-click="viewHistoryDetails(item)">{{item.eventHistory.eventCode}}</a></td>
                                             <td>{{item.eventHistory.eventDate | confDateFormat}}</td>
                                         </tr>
                                     </tbody>
                                 </table>
-                                <span ng-hide="waitingForHistoryResponse || !isCreateNewMode()">
-                                    No history.
+                                <span ng-hide="!isCreateNewMode()">
+                                    {{'vessel.event_history_zero_message' | i18n}}
                                 </span>
                                 <search-result-error-alert ng-show="vesselHistoryError">{{vesselHistoryError}}</search-result-error-alert>
                             </div>
