@@ -36,10 +36,10 @@ angular.module('unionvmsWeb')
 
         vesselRestService.getNoteActivityList().then(function(data) {
             $scope.noteActivityList = data;
+            $scope.vesselNotesActivity = configurationService.setTextAndCodeForDropDown(data.code), true;
         }, function(error) {
             console.error(error);
         });
-
-        console.log($scope.noteActivityList);
+        
     }
 );
