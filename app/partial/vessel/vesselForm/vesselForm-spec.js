@@ -149,7 +149,7 @@ describe('VesselFormCtrl', function() {
         expect(vesselRestService.getVesselHistoryListByVesselId).toHaveBeenCalledWith(scope.vesselObj.vesselId.value,5);
 
         //Check that mergeCurrentVesselIntoSearchResults was called afterwards to update the vessel list
-        expect(scope.mergeCurrentVesselIntoSearchResults).toHaveBeenCalledWith();
+        expect(scope.mergeCurrentVesselIntoSearchResults).toHaveBeenCalledWith(scope.vesselObj);
     }));
 
     it('archive a vessel should open confirmation modal, and then update vesselObj with the archived vessel and remove it from the vessel list', inject(function(Vessel, $compile, $q, $httpBackend, vesselRestService, mobileTerminalRestService, alertService, confirmationModal, locale, MobileTerminal) {
