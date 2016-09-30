@@ -14,10 +14,10 @@ angular.module('unionvmsWeb').controller('TripsummaryCtrl',function($scope,repor
         }
     ];
 
-    var tripId = 'NOR-TRP-20160517234053706';
+    $scope.tripId = 'NOR-TRP-20160517234053706';
 
     loadingStatus.isLoading('TripSummary', true);
-    reportRestService.getTripVessel(tripId).then(function(response){
+    reportRestService.getTripVessel($scope.tripId).then(function(response){
         tripSummaryService.tripVessel = response.data;
         tripSummaryService.tripRoles = tripSummaryService.tripVessel.contactPersons;
 

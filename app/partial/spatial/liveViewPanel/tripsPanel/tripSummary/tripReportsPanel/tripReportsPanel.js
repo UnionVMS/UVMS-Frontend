@@ -1,35 +1,18 @@
-angular.module('unionvmsWeb').controller('TripreportspanelCtrl',function($scope){
+angular.module('unionvmsWeb').controller('TripreportspanelCtrl',function($scope,reportRestService,loadingStatus,$anchorScroll,locale,tripSummaryService){
 
-$scope.messages = [
-    {
-        id: "reports",
-        count: 6
-    },
-    {
-        id: "declarations",
-        count: 5
-    },
-    {
-        id: "notifications",
-        count: 1
-    },
-    {
-        id: "corrections",
-        count: 2
-    },
-    {
-        id: "fishing_op",
-        count: 2
-    },
-    {
-        id: "missing_op",
-        count: 1
-    },
-    {
-        id: "anomalies",
-        count: 0
-    }
-];
+loadingStatus.isLoading('TripSummary', true);
+reportRestService.getTripMessageCount($scope.tripId).then(function(response){
+    tripSummaryService.messageCount = response.data;
+    $scope.messageCount = tripSummaryService.messageCount;
+    loadingStatus.isLoading('TripSummary', false);
+}, function(error){
+    $anchorScroll();
+    $scope.alert.hasAlert = true;
+    $scope.alert.hasError = true;
+    $scope.alert.alertMessage = locale.getString('spatial.error_loading_trip_summary_message_counter');
+    $scope.alert.hideAlert();
+    loadingStatus.isLoading('TripSummary', false);
+});
 
 $scope.reportHeaders = [
     {

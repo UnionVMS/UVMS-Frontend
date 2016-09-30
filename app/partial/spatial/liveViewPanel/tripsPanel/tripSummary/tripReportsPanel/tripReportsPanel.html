@@ -54,12 +54,12 @@
                         </tr>
                     </thead>
                     <tbody>
-                        <tr ng-repeat="message in messages">
+                        <tr ng-repeat="(key,value) in messageCount">
                             <td>
-                                {{ 'spatial.reports_panel_message_' + message.id | i18n }}
+                                {{ 'spatial.reports_panel_message_' + key | i18n }}
                             </td>
                             <td class="textAlignCenter">
-                                {{  message.count }}
+                                {{ value }}
                             </td>
                         </tr>
                     </tbody>
