@@ -54,10 +54,14 @@ angular.module('unionvmsWeb').factory('vmsVisibilityService',function() {
             ticketUpdatedBy: true,
             ruleDefinitions: true
         },
+        trips: {
+            name: true
+        },
         positionsColumns: ['fs','extMark','ircs','cfr','name','posTime','lat','lon','stat','m_spd','c_spd','crs','msg_tp','act_tp','source'],
         segmentsColumns: ['fs','extMark','ircs','cfr','name','dist','dur','spd','crs','cat'],
         tracksColumns: ['fs','extMark','ircs','cfr','name','dist','dur','timeSea'],
         alarmsColumns: ['fs', 'extMark', 'ircs', 'cfr', 'name', 'ruleName', 'ruleDesc', 'ticketOpenDate', 'ticketStatus', 'ticketUpdateDate', 'ticketUpdatedBy', 'ruleDefinitions'],
+        tripsColumns: ['name'],
         setVisibility: function(data){
              for (var key in data){
                  this[key] = setItems(this[key], data[key].table.values);

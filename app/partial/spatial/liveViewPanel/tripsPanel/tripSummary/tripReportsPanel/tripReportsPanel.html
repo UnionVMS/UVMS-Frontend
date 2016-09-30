@@ -1,0 +1,70 @@
+<fieldset class="col-md-12 fieldsetStyle trip-reports-section" ng-controller="TripreportspanelCtrl">
+    <legend class="fieldsetLegendStyle">
+        <a>{{'spatial.trip_summary_reports' | i18n }}</a>
+    </legend>
+    <div class="row">
+        <div class="col-md-10">
+            <!--TABLE TREE MESSAGES-->
+            <div class="table-message-container">
+                <div ui-tree="" class="row table tableSmart table-condensed table-responsive angular-ui-tree">
+                    <div class="thead col-md-12">
+                        <div class="tr row">
+                            <div class="th" style="width: 20px;float: left;"></div>
+                            <div class="th col-md-{{header.width}}" ng-repeat="header in reportHeaders" title="{{ header.label | i18n }}">{{ header.label | i18n }}</div>
+                        </div>
+                    </div>
+                    <div ui-tree-nodes="" ng-model="data" class="tbody col-md-12 angular-ui-tree-nodes">
+                        <div ng-repeat="item in data" ui-tree-node="" collapsed="true" class="tr row angular-ui-tree-node" style="background: #f7f7f7;" data-nodrag>
+                            <div class="td" style="width: 20px;float: left; font-size: 15px">
+                                <a ng-if="item.nodes && item.nodes.length > 0" ng-click="toggle(this)"><span class="fa" ng-class="{
+                                'fa-plus-square-o': collapsed,
+                                'fa-minus-square-o': !collapsed
+                                }"></span></a>
+                            </div>
+                            <div class="td col-md-{{header.width}}" ng-repeat="header in reportHeaders" ng-class="{'col-btn': ['corretions','detail'].indexOf(header.id) !== -1}" ng-switch="['corretions','detail'].indexOf(header.id) === -1">
+                                <span ng-switch-when="true">{{item[header.id]}}</span>
+                                <a ng-switch-when="false" class="details-btn"><i class="fa" ng-class="{'fa-pencil-square-o': header.id === 'detail' && item[header.id], 'fa-check-square-o': header.id === 'corretions' && item[header.id], 'fa-square-o': header.id === 'corretions' && item[header.id] === false}"></i></a>
+                            </div>
+                            <div ng-repeat="node in item.nodes" class="tr col-md-12 angular-ui-tree-node" ng-class="{hidden: collapsed}" style="background: #fff;" data-nodrag>
+                                <div class="row">
+                                    <div class="td" style="width: 20px;float: left;"></div>
+                                    <div class="sub-col td col-md-{{header.width}}" ng-repeat="header in reportHeaders" ng-class="{'col-btn': ['corretions','detail'].indexOf(header.id) !== -1}" ng-switch="['corretions','detail'].indexOf(header.id) === -1">
+                                        <span ng-switch-when="true">{{node[header.id]}}</span>
+                                        <a ng-switch-when="false" class="details-btn"><i class="fa" ng-class="{'fa-pencil-square-o': header.id === 'detail' && node[header.id], 'fa-check-square-o': header.id === 'corretions' && node[header.id], 'fa-square-o': header.id === 'corretions' && node[header.id] === false}"></i></a>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-2">
+            <!--TABLE MESSAGE TYPES COUNT-->
+            <div class="row table-message-counter-container">
+                <table class="table table-striped table-condensed">
+                    <thead>
+                        <tr>
+                            <th>
+                                {{ 'spatial.reports_panel_column_messages' | i18n }}
+                            </th>
+                            <th>
+                                {{ 'spatial.reports_panel_column_total' | i18n }}
+                            </th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr ng-repeat="message in messages">
+                            <td>
+                                {{ 'spatial.reports_panel_message_' + message.id | i18n }}
+                            </td>
+                            <td class="textAlignCenter">
+                                {{  message.count }}
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+</fieldset>

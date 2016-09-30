@@ -1,4 +1,4 @@
-var unionvmsWebApp = angular.module('unionvmsWeb', ['ui.bootstrap', 'ui.utils', 'ngRoute', 'ngAnimate', 'ngResource', 'ngLocalize', 'tmh.dynamicLocale', 'leaflet-directive', 'ngCsv', 'ui.router', 'usm', 'checklist-model', 'angularScreenfull', 'ngCookies', 'toggle-switch', 'colorpicker.module', 'ui.select', 'ngMessages', 'angularFileUpload', 'dndLists', 'lrDragNDrop', 'dndLists', 'ui.bootstrap-slider', 'widget.assetsInZone', 'numberWidget', 'unionvmsWeb.longPolling', 'qtip2', 'chart.js', 'ngStorage','angular-cron-jobs']);
+var unionvmsWebApp = angular.module('unionvmsWeb', ['ui.bootstrap', 'ui.utils', 'ngRoute', 'ngAnimate', 'ngResource', 'ngLocalize', 'tmh.dynamicLocale', 'leaflet-directive', 'ngCsv', 'ui.router', 'usm', 'checklist-model', 'angularScreenfull', 'ngCookies', 'toggle-switch', 'colorpicker.module', 'ui.select', 'ngMessages', 'angularFileUpload', 'dndLists', 'lrDragNDrop', 'dndLists', 'ui.bootstrap-slider', 'widget.assetsInZone', 'numberWidget', 'unionvmsWeb.longPolling', 'qtip2', 'chart.js', 'ngStorage','angular-cron-jobs', 'nvd3', 'ui.tree']);
 
 var currentUserContextPromise = function(userService) {
     return userService.findSelectedContext();

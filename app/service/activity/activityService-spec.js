@@ -4,7 +4,7 @@ describe('activityService', function() {
 
   it('should ...', inject(function(activityService) {
 
-	//expect(activityService.doSomething()).toEqual('something');
+    //expect(activity.doSomething()).toEqual('something');
 
   }));
 

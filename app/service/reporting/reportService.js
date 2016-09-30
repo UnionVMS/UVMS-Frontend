@@ -12,6 +12,7 @@ angular.module('unionvmsWeb').factory('reportService',function($rootScope, $time
        segments: [],
        tracks: [],
        alarms: [],
+       trips: [],
        refresh: {
             status: false,
             rate: undefined
@@ -28,6 +29,7 @@ angular.module('unionvmsWeb').factory('reportService',function($rootScope, $time
         rep.segments = [];
         rep.tracks = [];
         rep.alarms = [];
+        rep.trips = [];
     };
     
     rep.resetReport = function(){
@@ -315,9 +317,12 @@ angular.module('unionvmsWeb').factory('reportService',function($rootScope, $time
 	var getVmsDataSuccess = function(data){
 		rep.loadReportHistory();
 
+        data.trips = [{name: 'trip1'},{name: 'trip2'}];
+
 		rep.positions = data.movements.features;
         rep.segments = data.segments.features;
         rep.tracks = data.tracks;
+        rep.trips = data.trips;
         
         //Update map if the report contains the map tab
         if (reportingNavigatorService.isViewVisible('mapPanel')){

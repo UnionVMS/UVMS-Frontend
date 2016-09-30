@@ -3,12 +3,14 @@ angular.module('unionvmsWeb').factory('reportingNavigatorService',function() {
 //    For documentation purposes
 //    var sections = {
 //        reportPanel: {
-//            reportForm : undefined
+//            reportForm : undefined,
+//			  reportsList : undefined
 //        },
 //        userPreferences: undefined,
 //        liveViewPanel: {
 //            mapPanel : undefined,
-//            vmsPanel: undefined,    
+//            vmsPanel: undefined,
+//			  tripsPanel: undefined
 //        }
 //    }
     
@@ -84,7 +86,7 @@ angular.module('unionvmsWeb').factory('reportingNavigatorService',function() {
 		addStateCallback: function(callback) {
 			currentState.callback = callback;
 		},
-		rmStateCallback: function(callback) {
+		rmStateCallback: function() {
 			delete currentState.callback;
 		},
 		rmStateParams: function() {

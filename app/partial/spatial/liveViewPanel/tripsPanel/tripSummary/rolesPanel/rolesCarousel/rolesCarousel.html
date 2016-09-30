@@ -1,0 +1,21 @@
+<div ng-mouseenter="pause()" ng-mouseleave="play()" class="carousel" ng-swipe-right="prev()" ng-swipe-left="next()">
+    <div ng-controller="RolescarouselCtrl">
+        <!--ROLES COMBOLIST-->
+        <combobox class="roles-combo" items="tripSummServ.tripRoles" ng-model="currentRole.index" ng-change="select(slides[currentRole.index]);updateCombo(slides)" ng-if="slides.length > 1"></combobox>
+        <!--CAROUSEL CONTENT-->
+        <div class="carousel-inner" ng-transclude>
+            <div uib-slide ng-repeat="person in tripSummServ.tripRoles track by person.id" index="person.id">
+                <span class="col-md-12"><span class="col-md-12 trip-row-label">{{'spatial.trip_summary_roles_name' | i18n}}: </span><span class="col-md-12">{{person.title}}. {{person.givenName}} {{person.middleName}} {{person.familyName}}</span></span>
+                <span class="col-md-12"><span class="col-md-12 trip-row-label">{{'spatial.trip_summary_roles_address' | i18n}}: </span><span class="col-md-12">{{person.adresses[0].streetname}} {{person.adresses[0].postcode}} {{person.adresses[0].cityName}}</span></span>
+                <span class="col-md-12"><span class="col-md-12"><span class="trip-row-label">{{'spatial.trip_summary_roles' | i18n}}: </span><span ng-repeat="role in person.roles">{{role}}<span ng-if="!$last">, </span></span></span></span>
+            </div>
+        </div>
+        <!--CAROUSEL SIDE BUTTONS-->
+        <a role="button" href class="left carousel-control" ng-click="prev();updateCombo(slides)" ng-show="slides.length > 1">
+            <span aria-hidden="true" class="glyphicon glyphicon-chevron-left"></span>
+        </a>
+        <a role="button" href class="right carousel-control" ng-click="next();updateCombo(slides)" ng-show="slides.length > 1">
+            <span aria-hidden="true" class="glyphicon glyphicon-chevron-right"></span>
+        </a>
+    </div>
+</div>

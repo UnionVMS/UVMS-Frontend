@@ -33,6 +33,10 @@ angular.module('unionvmsWeb').controller('VmspanelCtrl',function($scope, locale,
                 {
                     'tab': 'ALARMS',
                     'title': locale.getString('spatial.tab_alarms')
+                },
+                {
+                    'tab': 'TRIPS',
+                    'title': locale.getString('spatial.tab_trips')
                 }
             ];
         };
@@ -115,6 +119,9 @@ angular.module('unionvmsWeb').controller('VmspanelCtrl',function($scope, locale,
    
    //Alarms table config
    $scope.displayedAlarms = [].concat($scope.executedReport.alarms);
+
+   //Alarms table config
+   $scope.displayedTrips = [].concat($scope.executedReport.trips);
    
    $scope.getAlarmColor = function(status){
        var style = {'background-color': mapService.getColorByStatus(mapService.styles.alarms, status)}; 
@@ -562,7 +569,7 @@ angular.module('unionvmsWeb').controller('VmspanelCtrl',function($scope, locale,
 			    	   }
 		    	   }
 		       });
-			   if((type === 'segments' || (type === 'tracks' && $scope.repnav.isViewVisible('mapPanel'))) && !gotHeaders){
+			   if((type === 'segments' || (type === 'tracks' && $scope.repNav.isViewVisible('mapPanel'))) && !gotHeaders){
 	        	   header.push(locale.getString('spatial.tab_vms_seg_table_header_geometry'));
 	           } else if (type === 'alarms' && !gotHeaders){
 	               header.push(locale.getString('spatial.tab_vms_pos_table_header_lat'));
@@ -571,7 +578,7 @@ angular.module('unionvmsWeb').controller('VmspanelCtrl',function($scope, locale,
 	           
 			   var geom = null;
 			   var feature;
-	           if (type === 'tracks' && $scope.repnav.isViewVisible('mapPanel')){
+	           if (type === 'tracks' && $scope.repNav.isViewVisible('mapPanel')){
 	               var extentPolygon = new ol.geom.Polygon.fromExtent(rec.extent);
 	               extentPolygon.transform('EPSG:4326', mapService.getMapProjectionCode());
 	               var trackGeom = $scope.buildTrackGeomFromId(rec.id, extentPolygon.getExtent());
@@ -603,4 +610,8 @@ angular.module('unionvmsWeb').controller('VmspanelCtrl',function($scope, locale,
        ), 'header': header};
    };
    
+   $scope.testFunc = function(){
+       $scope.$parent.$parent.repNav.goToView('liveViewPanel','tripsPanel');
+   };
+
 });

@@ -1,0 +1,73 @@
+.trip-reports-section {
+    > .row {
+        display: flex;
+        > * {
+            align-items: stretch;
+        }
+        .table-message-container {
+            height: 100%;
+            position: absolute;
+            top: 0;
+            left: 30px;
+            right: 0;
+            .table.angular-ui-tree {
+                position: relative;
+                height: 100%;
+                > .thead {
+                    position: absolute;
+                    z-index: 1;
+                    top: 0;
+                    left: 0;
+                    background: #fff;
+                    > .tr > .th {
+                        text-align: center;
+                    }
+                }
+                .angular-ui-tree-nodes.tbody {
+                    margin-bottom: -20px;
+                    max-height: 288px;
+                    height: 100%;
+                    background: #ddd;
+                    overflow-y: auto;
+                    padding-top: 32px;
+                    > .tr {
+                        border-top: 1px solid #ddd;
+                        &:first-child {
+                            border-top: 0;
+                        }
+                        &:nth-child(odd) {
+                            background: initial;
+                        }
+                        .details-btn {
+                            font-size: 18px;
+                        }
+                        .sub-col {
+                            padding-left: 30px;
+                            &.col-btn {
+                                padding-left: 5px;
+                            }
+                        }
+                        .col-btn {
+                            padding-left: 5px;
+                            text-align: center;
+                        }
+                        .tr.angular-ui-tree-node {
+                            border-top: 1px solid #ddd;
+                        }
+                    }
+                }
+            }
+        }
+        .table-message-counter-container {
+            padding-right: 15px;
+            table {
+                width: 100%;
+                margin-bottom: 0;
+            }
+        }
+    }
+}
+
+.trip-summary .tab-content .trip-summary-tab .summary-row .summary-section fieldset.trip-reports-section {
+    margin-bottom: 10px;
+}

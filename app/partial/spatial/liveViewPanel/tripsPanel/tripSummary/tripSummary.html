@@ -1,0 +1,41 @@
+<div class="row trip-summary" ng-controller="TripsummaryCtrl">
+    <div class="container containerWithTopBottomPadding spatial-error" ng-show="alert.hasAlert">
+        <div class="alert alert-container" role="alert" ng-class="{'alert-danger': alert.hasError, 'alert-success': alert.hasSuccess, 'alert-warning': alert.hasWarning}">
+            <span class="fa fa-exclamation-circle" aria-hidden="true" ng-show="alert.hasError"></span>
+            <span class="fa fa-check-circle" aria-hidden="true" ng-show="alert.hasSuccess"></span>
+            <span class="fa fa-exclamation-circle" aria-hidden="true" ng-show="alert.hasWarning"></span>
+            <span class="alert-message">
+                <span>{{alert.alertMessage}}</span>          
+            </span>
+        </div>
+    </div>
+    <loading-panel type="TripSummary"></loading-panel>
+    <!--TABS-->
+    <uib-tabset active="active">
+        <uib-tab index="$index" ng-repeat="tab in tabTitles" heading="{{tab.title}}">
+            <!--TAB HEADER-->
+            <uib-tab-heading>
+                {{tab.title}}
+                <a class="close-button" ng-click="repNav.goToPreviousView()">
+                    <i class="fa fa-times"></i>
+                </a>
+            </uib-tab-heading>
+            <!--TAB CONTENT-->
+            <div class="trip-summary-tab">
+                <div class="row summary-row">
+                    <div class="col-md-4 summary-section" ng-include="'partial/spatial/liveViewPanel/tripsPanel/tripSummary/fishingTripPanel/fishingTripPanel.html'"></div>
+                    <div class="col-md-3 summary-section" ng-include="'partial/spatial/liveViewPanel/tripsPanel/tripSummary/vesselPanel/vesselPanel.html'"></div>
+                    <div class="col-md-2 summary-section" ng-include="'partial/spatial/liveViewPanel/tripsPanel/tripSummary/rolesPanel/rolesPanel.html'"></div>
+                    <div class="col-md-3 summary-section" ng-include="'partial/spatial/liveViewPanel/tripsPanel/tripSummary/cronologyPanel/cronologyPanel.html'"></div>
+                </div>
+                <div class="row summary-row">
+                    <div class="col-md-4 summary-section" ng-include="'partial/spatial/liveViewPanel/tripsPanel/tripSummary/tripMapPanel/tripMapPanel.html'"></div>
+                    <div class="col-md-8 summary-section" ng-include="'partial/spatial/liveViewPanel/tripsPanel/tripSummary/catchPanel/catchPanel.html'"></div>
+                </div>
+                <div class="row summary-row">
+                    <div class="col-md-12 summary-section" ng-include="'partial/spatial/liveViewPanel/tripsPanel/tripSummary/tripReportsPanel/tripReportsPanel.html'"></div>
+                </div>
+            </div>
+        </uib-tab>
+    </uib-tabset>
+</div>

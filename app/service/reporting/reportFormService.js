@@ -1,3 +1,14 @@
+/**
+ * @memberof unionvmsWeb
+ * @ngdoc service
+ * @name reportFormService
+ * @param Report {service} Report service
+ * @attr {Object} activeCombo - A property object that will be the scope of the current opened combobox
+ * @attr {Object} selectedItemsGroup - A property object that will contain the lists of selected items for each combobox group(with shared combobox list)
+ * @attr {Object} comboList - A property object that will contain the lists of items for each combobox group(with shared combobox list)
+ * @description
+ *  Service to manage all existent combobox(directive) in the application
+ */
 angular.module('unionvmsWeb').factory('reportFormService',function(Report) {
 
 	var reportFormService = {

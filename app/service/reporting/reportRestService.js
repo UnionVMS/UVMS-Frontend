@@ -91,6 +91,142 @@ angular.module('unionvmsWeb').factory('reportRestFactory', function($resource) {
 	                }
 	            }
 	        });
+        },
+        getTripCronology: function(){
+            return {
+                "data": {
+                    "currentTrip": "BEL-TRP-016-2016-0025",
+                    "previousTrips": [
+                        "BEL-TRP-016-2016-0019",
+                        "BEL-TRP-016-2016-0020"
+                    ],
+                    "selectedTrip": "BEL-TRP-016-2016-0021",
+                    "nextTrips": [
+                        "BEL-TRP-016-2016-0022",
+                        "BEL-TRP-016-2016-0023"
+                    ]
+                },
+                "code": 200
+            };
+        },
+        getTripVessel: function(){
+            /*/activity/rest/trip/vessel/details/NOR-TRP-20160517234053706*/
+            return $resource('/activity/rest/trip/vessel/details/:id', {}, {
+	           'get': {
+	               method: 'GET',
+	               headers: {
+	                   'Content-Type': 'application/json'
+	               }
+	           } 
+	        });
+            /*return {
+                "data": {
+                    "name": "vesselGroup1",
+                    "nameEnriched": false,
+                    "exMark": "EXT_MARK123",
+                    "exMarkEnriched": false,
+                    "flagState": "COUNTRYID",
+                    "flagStateEnriched": false,
+                    "ircs": "IRCS123",
+                    "ircsEnriched": false,
+                    "cfr": "CFR123",
+                    "cfrEnriched": false,
+                    "uvi": null,
+                    "uviEnriched": false,
+                    "iccat": null,
+                    "iccatEnriched": false,
+                    "gfcm": null,
+                    "gfcmEnriched": false,
+                    "contactPersons": [
+                    {
+                        "isCaptain": false,
+                        "roles": ["Chief Officer"],
+                        "title": "Mr",
+                        "givenName": "TOM",
+                        "middleName": "DAVID",
+                        "familyName": "BOSE",
+                        "familyNamePrefix": "ARR",
+                        "nameSuffix": "PI",
+                        "gender": "MALE",
+                        "alias": null,
+                        "adresses": [
+                        {
+                            "blockName": "SDS",
+                            "buildingName": "SDS",
+                            "cityName": "CXV",
+                            "citySubdivisionName": "VCVB",
+                            "country": "CVCV",
+                            "countryName": "GHH",
+                            "countrySubdivisionName": "YUU",
+                            "addressId": "JHJ",
+                            "plotId": "JGH",
+                            "postOfficeBox": "CVGH",
+                            "postcode": "GHJ",
+                            "streetname": "TYT"
+                        }
+                        ]
+                    },
+                    {
+                        "isCaptain": false,
+                        "roles": ["Captain","Chief Officer"],
+                        "title": "Mr",
+                        "givenName": "JOHN",
+                        "middleName": "DAVID",
+                        "familyName": "BOSE",
+                        "familyNamePrefix": "ARR",
+                        "nameSuffix": "PI",
+                        "gender": "MALE",
+                        "alias": null,
+                        "adresses": [
+                        {
+                            "blockName": "SDS",
+                            "buildingName": "SDS",
+                            "cityName": "CXV",
+                            "citySubdivisionName": "VCVB",
+                            "country": "CVCV",
+                            "countryName": "GHH",
+                            "countrySubdivisionName": "YUU",
+                            "addressId": "JHJ",
+                            "plotId": "JGH",
+                            "postOfficeBox": "CVGH",
+                            "postcode": "GHJ",
+                            "streetname": "TYT"
+                        }
+                        ]
+                    },
+                    {
+                        "isCaptain": false,
+                        "roles": ["Captain","Chief Officer","Chief Engineer"],
+                        "title": "Mr",
+                        "givenName": "MARK",
+                        "middleName": "DAVID",
+                        "familyName": "BOSE",
+                        "familyNamePrefix": "ARR",
+                        "nameSuffix": "PI",
+                        "gender": "MALE",
+                        "alias": null,
+                        "adresses": [
+                        {
+                            "blockName": "SDS",
+                            "buildingName": "SDS",
+                            "cityName": "CXV",
+                            "citySubdivisionName": "VCVB",
+                            "country": "CVCV",
+                            "countryName": "GHH",
+                            "countrySubdivisionName": "YUU",
+                            "addressId": "JHJ",
+                            "plotId": "JGH",
+                            "postOfficeBox": "CVGH",
+                            "postcode": "GHJ",
+                            "streetname": "TYT"
+                        }
+                        ]
+                    }
+                    ]
+                },
+                "code": 200
+                };*/
+
         }
 	};
 })
@@ -202,8 +338,19 @@ angular.module('unionvmsWeb').factory('reportRestFactory', function($resource) {
                 deferred.reject(error);
             });
             return deferred.promise;
+        },
+        getTripCronology: function(){
+            return reportRestFactory.getTripCronology();
+        },
+        getTripVessel: function(id){
+            var deferred = $q.defer();
+            reportRestFactory.getTripVessel().get({id: id}, {}, function(response){
+                deferred.resolve(response);
+            }, function(error){
+                deferred.reject(error);
+            });
+            return deferred.promise;
         }
     };
-    
     return reportRestService;
 });

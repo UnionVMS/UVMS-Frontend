@@ -57,6 +57,11 @@ angular.module('unionvmsWeb').factory('loadingStatus',function() {
 		    message: 'areas.inital_loading',
             value: false,
             counter: 0
+		},
+		TripSummary: {
+		    message: 'spatial.trip_summary_loading',
+            value: false,
+            counter: 0
 		}
 	};
 	
