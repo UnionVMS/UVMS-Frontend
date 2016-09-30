@@ -7,7 +7,7 @@
   <packaging>war</packaging>
   <properties>
     <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
-    <release.branch.name>uvms-2.0.6-kili</release.branch.name>
+    <release.branch.name>uvms-2.1.0-jessamine-boffin</release.branch.name>
     <webroot>unionvms-web</webroot>
     <karma.phase>integration-test</karma.phase>
     <project.scm.id>github</project.scm.id>
@@ -58,8 +58,7 @@
         <activeByDefault>false</activeByDefault>
       </activation>
       <properties>
-        <!-- these properties can get ovewritten by setting them in your
-          maven user settings -->
+        
         <wf.host>localhost</wf.host>
         <wf.port>8080</wf.port>
         <wf.https.port>8443</wf.https.port>
@@ -124,7 +123,7 @@
               <activeByDefault>false</activeByDefault>
           </activation>
           <properties>
-          </properties>
+          <release.branch.name>uvms-2.1.0-jessamine-boffin</release.branch.name></properties>
           <build>
               <plugins>
                   <plugin>
@@ -137,10 +136,10 @@
                       </configuration>
                       <executions>
                           <execution>
-                              <id>make-assembly</id> <!-- this is used for inheritance merges -->
-                              <phase>package</phase> <!-- append to the packaging phase. -->
+                              <id>make-assembly</id> 
+                              <phase>package</phase> 
                               <goals>
-                                  <goal>single</goal> <!-- goals == mojos -->
+                                  <goal>single</goal> 
                               </goals>
                           </execution>
                       </executions>
@@ -193,14 +192,14 @@
       </plugins>
     </pluginManagement>
 	<plugins>
-      <!-- WILDFLY -->
+      
 		<plugin>
         <groupId>org.wildfly.plugins</groupId>
         <artifactId>wildfly-maven-plugin</artifactId>
         <version>1.1.0.Alpha1</version>
       </plugin>
 
-      <!-- GRUNT -->
+      
       <plugin>
         <groupId>com.github.eirslett</groupId>
         <artifactId>frontend-maven-plugin</artifactId>
