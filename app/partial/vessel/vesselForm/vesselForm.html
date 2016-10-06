@@ -45,7 +45,23 @@ copy of the GNU General Public License along with the IFDM Suite. If not, see <h
                     </div>
                     <div class="col-md-9 notesForm">
                         <h5>{{'vessel.vesse_notes_new_note' | i18n}}</h5>
-                        <vessel-notes vessel="vesselObj" vessel-form="vesselForm" submit-attempted="submitAttempted" disable-form="disableForm()" create-new-mode="isCreateNewMode()" spin="waitingForCreateResponse" existing-values="existingValues"></vessel-notes>
+                        <!--<vessel-notes vessel="vesselObj" vessel-form="vesselForm" submit-attempted="submitAttempted" disable-form="disableForm()" create-new-mode="isCreateNewMode()" spin="waitingForCreateResponse" existing-values="existingValues"></vessel-notes>-->
+                        <div class="vesselNotesContainer" loading-indicator="spin">
+                            <fieldset>
+                                <div class="left-form col-md-6">
+                                    <div class="row">
+                                        <div class="col-md-4 form-group smallerpadding">
+                                            <label>{{ 'vessel.vessel_notes_date' | i18n }}</label>
+                                            <datepicker-input model="noteDate" name="vesselNotesDate" time="true" max-date="advancedSearchObject.TO_DATE" input-field-id="notesDate"></datepicker-input>
+                                        </div>
+                                        <div class="col-md-4 form-group smallerpadding">
+                                            <label>{{ 'vessel.vessel_notes_activity' | i18n }}</label>
+                                            <input type="text" name="vesselNotesActivity" class="form-control" ng-model="noteActivity">
+                                        </div>
+                                    </div>
+                                </div>
+                            </fieldset>
+                        </div>
                     </div>
                 </div>
 

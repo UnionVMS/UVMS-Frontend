@@ -191,12 +191,24 @@ angular.module('unionvmsWeb').controller('VesselFormCtrl',function($scope, $log,
     $scope.createNewVessel = function(){
         $scope.submitAttempted = true;
         $scope.updateContactItems();
-        $scope.updateNoteItem();
 
         if($scope.vesselForm.$valid) {
             //Create new Vessel
             $scope.waitingForCreateResponse = true;
             alertService.hideMessage();
+
+            // this
+            $scope.vesselObj.notes.push({
+                date: $scope.noteDate,
+                activity: $scope.noteActivity, 
+                source: 'INTERNAL'
+            });
+
+            $scope.noteDate = "";
+            $scope.noteActivity = "";
+            $scope.source = "";
+            // 
+
             vesselRestService.createNewVessel($scope.vesselObj)
                 .then(createVesselSuccess, createVesselError($scope.vesselObj));
         }else{
@@ -255,7 +267,6 @@ angular.module('unionvmsWeb').controller('VesselFormCtrl',function($scope, $log,
     $scope.updateVessel = function(){
         $scope.submitAttempted = true;
         $scope.updateContactItems();
-        $scope.updateNoteItem();
 
         if($scope.vesselForm.$valid) {
             //MobileTerminals remove them cuz they do not exist in backend yet.
@@ -264,6 +275,19 @@ angular.module('unionvmsWeb').controller('VesselFormCtrl',function($scope, $log,
             //Update Vessel and take care of the response(eg. the promise) when the update is done.
             $scope.waitingForCreateResponse = true;
             alertService.hideMessage();
+
+            // this
+            $scope.vesselObj.notes.push({
+                date: $scope.noteDate,
+                activity: $scope.noteActivity, 
+                source: 'INTERNAL'
+            });
+
+            $scope.noteDate = "";
+            $scope.noteActivity = "";
+            $scope.source = "";
+            // 
+
             var updateResponse = vesselRestService.updateVessel($scope.vesselObj)
                 .then(updateVesselSuccess, updateVesselError);
         }else{
@@ -282,7 +306,7 @@ angular.module('unionvmsWeb').controller('VesselFormCtrl',function($scope, $log,
         alertService.showSuccessMessageWithTimeout(locale.getString('vessel.update_alert_message_on_success'));
         $scope.vesselObj = updatedVessel;
         $scope.mergeCurrentVesselIntoSearchResults($scope.vesselObj);
-        getVesselHistory();
+        getVesselHistory();        
     };
     //Error updating vessel
     var updateVesselError = function(error){
@@ -410,14 +434,41 @@ angular.module('unionvmsWeb').controller('VesselFormCtrl',function($scope, $log,
         });
     };
 
-    // Update notes with source value Internal
-    $scope.updateNoteItem = function() {
-        $scope.vesselObj.notes.forEach(function (vesselNote) {
-            if (!vesselNote.source) {
-                Object.assign(vesselNote, { source: 'INTERNAL' });
-            } 
+    $scope.addVesselNotes = function() {
+        $scope.vesselObj.notes.push({
+            date: $scope.noteDate,
+            activity: $scope.noteActivity, 
+            source: 'INTERNAL'
         });
-    };
+
+        $scope.noteDate = "";
+        $scope.noteActivity = "";
+        $scope.source = "";
+    }
+
+    // Update notes with source value Internal
+    // $scope.updateNoteItem = function() {
+    //     $scope.vesselObj.notes.forEach(function (vesselNote) {
+    //         if (!vesselNote.source) {
+    //             Object.assign(vesselNote, { source: 'INTERNAL' });
+    //         } 
+    //     });
+    // };
+
+    // Update submitted contacts with default values or remove empty contact item rows
+    // $scope.updateNotesItems = function() {
+    //     $scope.vesselObj.notes.slice(0).forEach(function (vesselNote) {
+    //         if (vesselNote.date) {
+    //             Object.assign(vesselNote, { source: 'INTERNAL' });
+    //             // ToDo: Fix this in BE?
+    //             if (!vesselNote.date){
+    //                 Object.assign(vesselNote, { date: '' });
+    //             }
+    //         } else {
+    //             $scope.vesselObj.notes.splice($scope.vesselObj.notes.indexOf(vesselNote), 1);
+    //         }
+    //     });
+    // };
 
     $scope.menuBarFunctions = {
         addMobileTerminal: function() {
