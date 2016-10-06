@@ -13,6 +13,7 @@ angular.module('unionvmsWeb')
 .factory('VesselNotes', function() {
 
         function VesselNotes() {
+            id = undefined;
             date = undefined;
             activity = undefined;
             user = undefined;
@@ -27,6 +28,7 @@ angular.module('unionvmsWeb')
 
         VesselNotes.fromDTO = function(data){
             var notes = new VesselNotes();
+            notes.id = data.id;
             notes.date = data.date;
             notes.activity = data.activity;
             notes.user = data.user;
@@ -42,6 +44,7 @@ angular.module('unionvmsWeb')
 
         VesselNotes.prototype.copy = function() {
             var copy = new VesselNotes();
+            copy.id = this.id;
             copy.date = this.date;
             copy.activity = this.activity;
             copy.user = this.user;
