@@ -379,6 +379,13 @@ angular.module('unionvmsWeb').controller('VesselFormCtrl',function($scope, $log,
         });
     };
 
+    // Display list of vessel notes
+    $scope.vesselNotesSize = 7;
+    $scope.showVesselNotesList = function() {
+        var vesselNotesSizeAll = $scope.vesselObj.notes.length;
+        $scope.vesselNotesSize += vesselNotesSizeAll;
+    };
+
     //View notes details
     $scope.viewVesselNotesDetails = function(vesselNotes) {       
         $scope.vesselNotes = vesselNotes;
