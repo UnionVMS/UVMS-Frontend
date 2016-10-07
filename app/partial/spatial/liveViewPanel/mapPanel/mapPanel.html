@@ -1,10 +1,9 @@
-<div ng-controller="MapCtrl" class="mapPanelContainer" ngsf-fullscreen="fullscreenCtrl">
+<div ng-controller="MapCtrl" id="mapPanelContainer" ngsf-fullscreen="fullscreenCtrl">
 	<loading-panel type="LiveviewMap" class="liveview-loading"></loading-panel>
     <div class="map-container">
         <div id="map-toolbar">
             <div class="btn-group-left">
-				<combobox ng-model="repServ.selectedHistory" initialtext="{{repServ.name || ('spatial.header_reports' | i18n)}}" items="repServ.reportsHistory" combo-section="true" callback="selectHistory" init-callback="initComboHistory"
-				is-loading="repServ.loadingReportHistory" class="combo-report-history" no-placeholder-on-list="true" dest-combo-list="'.mapPanelContainer'"></combobox>
+				<combobox ng-model="repServ.selectedHistory" initialtext="{{repServ.name || ('spatial.header_reports' | i18n)}}" items="repServ.reportsHistory" combo-section="true" callback="selectHistory" init-callback="initComboHistory" is-loading="repServ.loadingReportHistory" class="combo-report-history" no-placeholder-on-list="true" dest-combo-list="#mapPanelContainer"></combobox>
                 <div class="btn-group btn-group-xs" role="group" aria-label="Map controls">
                 	<div class="btn btn-default refresh-container" ng-class="{disabled: !checkSpatialConfigPermission()}">
 						<span>{{'spatial.map_label_auto_refresh_status' | i18n }}</span>
@@ -113,7 +112,7 @@
 	                <div class="row panel-collapsible-body" ng-class="{'panel-body-visible': winExpanded}">
 	                    <div class="form-group col-md-12 measure-content">
 	                        <label>{{'spatial.map_measuring_units_label' | i18n }}</label>
-	                        <combobox dest-combo-list="'.mapPanelContainer'" ng-model="measureConfigs.units" items="measuringUnits" ng-disabled="measureConfigs.disabled"></combobox>
+	                        <combobox dest-combo-list="#mapPanelContainer" ng-model="measureConfigs.units" items="measuringUnits" ng-disabled="measureConfigs.disabled"></combobox>
 	                    </div>
 	                    <div class="form-group col-md-12 measure-content">
 	                        <label>{{'spatial.map_speed_label' | i18n }}</label>
@@ -196,22 +195,22 @@
 			                    </div> -->
 			                    <div class="form-group col-md-6 print-content">
 			                        <label>{{'spatial.mapfish_layouts_label' | i18n }}</label>
-			                        <combobox ng-if="mapFish.selected_layout !== undefined" dest-combo-list="'.mapPanelContainer'" ng-change="toggleLayout(mapFish.selected_layout)" ng-model="mapFish.selected_layout" items="mapFish.layouts" is-loading="isLoadingMapfishPopup"></combobox>
+			                        <combobox ng-if="mapFish.selected_layout !== undefined" dest-combo-list="#mapPanelContainer" ng-change="toggleLayout(mapFish.selected_layout)" ng-model="mapFish.selected_layout" items="mapFish.layouts" is-loading="isLoadingMapfishPopup"></combobox>
 			                    </div>
 			                    <div class="form-group col-md-6 print-content">
 			                        <label>{{'spatial.mapfish_formats_label' | i18n }}</label>
-			                        <combobox ng-if="mapFish.selected_format !== undefined" dest-combo-list="'.mapPanelContainer'" ng-model="mapFish.selected_format" items="mapFish.formats" is-loading="isLoadingMapfishPopup"></combobox>
+			                        <combobox ng-if="mapFish.selected_format !== undefined" dest-combo-list="#mapPanelContainer" ng-model="mapFish.selected_format" items="mapFish.formats" is-loading="isLoadingMapfishPopup"></combobox>
 			                    </div>
 			                    <div class="form-group col-md-6 print-content">
 			                        <label>{{'spatial.mapfish_suggestedDpi_label' | i18n }}</label>
-			                        <combobox ng-if="mapFish.selected_dpi !== undefined" dest-combo-list="'.mapPanelContainer'" ng-model="mapFish.selected_dpi" items="mapFish.suggestedDpi" is-loading="isLoadingMapfishPopup"></combobox>
+			                        <combobox ng-if="mapFish.selected_dpi !== undefined" dest-combo-list="#mapPanelContainer" ng-model="mapFish.selected_dpi" items="mapFish.suggestedDpi" is-loading="isLoadingMapfishPopup"></combobox>
 			                    </div>
 	                    		<div class="form-group col-md-6">
 			                        <label>
 			                        	<input type="checkbox" ng-if="mapFish.includeCoordGrid !== undefined" ng-model="mapFish.includeCoordGrid" ng-checked="mapFish.includeCoordGrid"/>
 			                        	{{'spatial.mapfish_include_coords_grid_label' | i18n }}
 			                        </label>
-			                        <combobox ng-if="mapFish.includeCoordGrid && projections.items.length > 0" dest-combo-list="'.mapPanelContainer'" ng-model="mapFish.projectionId" items="projections.items" name="gridProjection" is-loading="isLoadingMapfishPopup"></combobox>
+			                        <combobox ng-if="mapFish.includeCoordGrid && projections.items.length > 0" dest-combo-list="#mapPanelContainer" ng-model="mapFish.projectionId" items="projections.items" name="gridProjection" is-loading="isLoadingMapfishPopup"></combobox>
 			                    </div>
 			                    <div class="row">
 			                        <div class="col-md-12">

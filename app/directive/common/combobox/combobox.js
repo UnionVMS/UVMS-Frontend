@@ -11,7 +11,7 @@ angular.module('unionvmsWeb').directive('combobox', function($window, comboboxSe
             callbackParams : '=',
             ngDisabled : '=',
             lineStyle : '=',
-            destComboList : '=',
+            destComboList : '@',
             editable : '=',
             multiple : '=',
             uppercase : '=',
