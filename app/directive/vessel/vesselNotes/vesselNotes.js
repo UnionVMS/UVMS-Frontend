@@ -16,16 +16,36 @@ angular.module('unionvmsWeb')
 		replace: false,
         controller: 'vesselNotesCtrl',
         scope: {
-            vessel : '=',
+            vesselNotes : '=',
             disableForm : '=',
-            createNewMode: '=',
-            vesselForm : '=',
-            submitAttempted : '=',
             spin: '=',
-            existingValues: '='
+            status: '=' 
         },
 		templateUrl: 'directive/vessel/vesselNotes/vesselNotes.html',
 		link: function(scope, element, attrs, fn) {
+
+            scope.required = false;
+
+            // Only display fields as required if input has been modified
+            scope.$watch('vesselNotes', function(value) {
+                for (var key in value) {
+                    if (value[key]) {
+                        scope.required = true;
+                        return false;
+                    } else if (value[key] === undefined || value[key] === '') {
+                        if (!value[key]) {
+                            scope.required = false;
+                        }
+                    } 
+                }
+            }, true);
+
+            // Make sure required status isn't set when list view is displayed
+            scope.$watch('status', function(value) {
+                if (value) {
+                    scope.required = false;
+                }
+            }, true); 
 
 		}
 	};

@@ -3,32 +3,32 @@
         <div class="left-form col-md-6">
             <div class="row">
                 <div class="col-md-4 form-group smallerpadding">
-                    <label>{{ 'vessel.vessel_notes_date' | i18n }}<span ng-if="vessel.notes[vessel.notes.length - 1].activity || vessel.notes[vessel.notes.length - 1].user || vessel.notes[vessel.notes.length - 1].licenseHolder || vessel.notes[vessel.notes.length - 1].contact || vessel.notes[vessel.notes.length - 1].notes || vessel.notes[vessel.notes.length - 1].readyDate || vessel.notes[vessel.notes.length - 1].sheetNumber" class="mandatory">{{ 'common.mandatory_field' | i18n }}</span></label>
-                    <datepicker-input model="vessel.notes[vessel.notes.length - 1].date" name="vesselNotesDate" time="true" max-date="advancedSearchObject.TO_DATE" input-field-id="notesDate" ng-model="vessel.notes[vessel.notes.length - 1].date" ng-required="vessel.notes[vessel.notes.length - 1].activity || vessel.notes[vessel.notes.length - 1].user || vessel.notes[vessel.notes.length - 1].licenseHolder || vessel.notes[vessel.notes.length - 1].contact || vessel.notes[vessel.notes.length - 1].notes || vessel.notes[vessel.notes.length - 1].readyDate || vessel.notes[vessel.notes.length - 1].sheetNumber"></datepicker-input>
+                    <label>{{ 'vessel.vessel_notes_date' | i18n }}<span ng-if="required" class="mandatory">{{ 'common.mandatory_field' | i18n }}</span></label>
+                    <datepicker-input model="vesselNotes.date" name="vesselNotesDate" input-field-id="notesDate" time="true" max-date="advancedSearchObject.TO_DATE" ng-required="required"></datepicker-input>
                 </div>
                 <div class="col-md-4 form-group smallerpadding">
-                    <label>{{ 'vessel.vessel_notes_activity' | i18n }}<span ng-if="vessel.notes[vessel.notes.length - 1].date || vessel.notes[vessel.notes.length - 1].user || vessel.notes[vessel.notes.length - 1].licenseHolder || vessel.notes[vessel.notes.length - 1].contact || vessel.notes[vessel.notes.length - 1].notes || vessel.notes[vessel.notes.length - 1].readyDate || vessel.notes[vessel.notes.length - 1].sheetNumber" class="mandatory">{{ 'common.mandatory_field' | i18n }}</span></label>
-                    <dropdown name="notesActivity" id="notesActivity" ng-model="vessel.notes[vessel.notes.length - 1].activity" initialtext="{{ 'vessel.vessel_notes_activity' | i18n }}" items="vesselNotesActivity" ng-required="vessel.notes[vessel.notes.length - 1].date || vessel.notes[vessel.notes.length - 1].user || vessel.notes[vessel.notes.length - 1].licenseHolder || vessel.notes[vessel.notes.length - 1].contact || vessel.notes[vessel.notes.length - 1].notes || vessel.notes[vessel.notes.length - 1].readyDate || vessel.notes[vessel.notes.length - 1].sheetNumber"></dropdown>
+                    <label>{{ 'vessel.vessel_notes_activity' | i18n }}<span ng-if="required" class="mandatory">{{ 'common.mandatory_field' | i18n }}</span></label>
+                    <dropdown ng-model="vesselNotes.activity" name="notesActivity" id="notesActivity" initialtext="{{ 'vessel.vessel_notes_activity' | i18n }}" items="vesselNotesActivity" ng-required="required"></dropdown>
                 </div>
                 <div class="col-md-4 form-group smallerpadding">
                     <label>{{ 'vessel.vessel_notes_user' | i18n }}</label>
-                    <input type="text" id="notesUser" name="notesUser" class="form-control" ng-model="vessel.notes[vessel.notes.length - 1].user">
+                    <input type="text" ng-model="vesselNotes.user" name="notesUser" id="notesUser" class="form-control">
                 </div>
             </div>
             <div class="row">
                 <div class="col-md-4 form-group smallerpadding">
                     <label>{{ 'vessel.vessel_notes_license_holder' | i18n }}</label>
-                    <input type="text" id="notesLicenseHolder" name="notesLicenseHolder" class="form-control" ng-model="vessel.notes[vessel.notes.length - 1].licenseHolder">
+                    <input type="text" ng-model="vesselNotes.licenseHolder" name="notesLicenseHolder" id="notesLicenseHolder" class="form-control">
                 </div>
                 <div class="col-md-8 form-group smallerpadding">
                     <label>{{ 'vessel.vessel_notes_contact' | i18n }}</label>
-                    <input type="text" id="notesContact" name="notesContact" class="form-control" ng-model="vessel.notes[vessel.notes.length - 1].contact">
+                    <input type="text" ng-model="vesselNotes.contact" name="notesContact" id="notesContact" class="form-control">
                 </div>
             </div>
             <div class="row">
                 <div class="col-md-12 form-group smallerpadding">
                     <label>{{'vessel.notes' | i18n}}</label>
-                    <textarea name="notesNotes" id="notesNotes" class="form-control" ng-model="vessel.notes[vessel.notes.length - 1].notes"></textarea>
+                    <textarea ng-model="vesselNotes.notes" name="notesNotes" id="notesNotes" class="form-control"></textarea>
                 </div>
             </div>
         </div>
@@ -36,13 +36,13 @@
             <div class="row">
                 <div class="col-md-12 form-group smallerpaddingright">
                     <label>{{ 'vessel.vessel_notes_ready_date' | i18n }}</label>                    
-                    <datepicker-input model="vessel.notes[vessel.notes.length - 1].readyDate" time="true" max-date="advancedSearchObject.TO_DATE" input-field-id="notesReadyDate" ng-model="vessel.notes[vessel.notes.length - 1].readyDate"></datepicker-input>
+                    <datepicker-input model="vesselNotes.readyDate" time="true" max-date="advancedSearchObject.TO_DATE" input-field-id="notesReadyDate"></datepicker-input>
                 </div>
             </div>
             <div class="row">
                 <div class="col-md-12 form-group smallerpaddingright">
                     <label>{{ 'vessel.vessel_notes_sheet_number' | i18n }}</label>
-                    <input type="text" name="notesSheetNumber" id="notesSheetNumber" class="form-control" ng-model="vessel.notes[vessel.notes.length - 1].sheetNumber">
+                    <input type="text" ng-model="vesselNotes.sheetNumber" name="notesSheetNumber" id="notesSheetNumber" class="form-control">
                 </div>
             </div>
         </div>
