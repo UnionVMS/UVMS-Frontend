@@ -45,25 +45,22 @@ angular.module('unionvmsWeb').factory('reportService',function($rootScope, $time
         //Reset labels
         mapService.resetLabelContainers();
         
-        //Reset map projection
-        mapService.updateMapView({
-            epsgCode: 3857,
-            units: 'm',
-            global: true,
-            axis: 'enu',
-            extent: '-20026376.39;-20048966.10;20026376.39;20048966.10'
-        });
+        //Clear report form service
+        reportFormService.resetLiveView();
         
-        //Reset layer to OSM
-        var treeSource = new TreeModel();
-        treeSource = treeSource.fromConfig({
-            baseLayers: [{
-                isBaseLayer: true,
-                title: 'OpenStreetMap',
-                type: 'OSM'
-            }]
-        });
-        layerPanelService.updateLayerTreeSource(treeSource);
+        //Reset map projection
+        if (angular.isDefined(mapService.map)){
+            mapService.updateMapView({
+                epsgCode: 3857,
+                units: 'm',
+                global: true,
+                axis: 'enu',
+                extent: '-20026376.39;-20048966.10;20026376.39;20048966.10'
+            });
+            
+            //Reset layer tree
+            layerPanelService.updateLayerTreeSource([]);
+        }
     };
     
     rep.stopRunInterval = function(){

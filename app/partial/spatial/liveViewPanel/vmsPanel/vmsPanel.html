@@ -152,7 +152,7 @@
 								<div st-sort="properties.activityType" st-skip-natural="true" st-class-ascent="sorting_asc" st-class-descent="sorting_desc" ng-show="attrVisibility.positions.act_tp" ng-if="column === 'act_tp'">{{'spatial.tab_vms_pos_table_header_activity_type' | i18n }}</div>
 								<div st-sort="properties.source" st-skip-natural="true" st-class-ascent="sorting_asc" st-class-descent="sorting_desc" ng-show="attrVisibility.positions.source" ng-if="column === 'source'">{{'spatial.tab_vms_pos_table_header_source' | i18n }}</div>
 							</th>
-							<th style="min-width:80px;" ng-hide="repNav.isViewVisible('mapPanel')">{{'spatial.table_header_actions' | i18n }}</th>
+							<th style="min-width:80px;" ng-show="repNav.isViewVisible('mapPanel')">{{'spatial.table_header_actions' | i18n }}</th>
 						</tr>
 					</thead>
 					<tbody>
@@ -177,7 +177,7 @@
 								<div ng-show="attrVisibility.positions.act_tp" ng-if="column === 'act_tp'">{{ position.properties.activityType }}</div>
 								<div ng-show="attrVisibility.positions.source" ng-if="column === 'source'">{{ position.properties.source }}</div>
 							</td>
-							<td style="min-width:80px;" ng-hide="repNav.isViewVisible('mapPanel')">
+							<td style="min-width:80px;" ng-show="repNav.isViewVisible('mapPanel')">
 								<button type="button" class="btn btn-default btn-xs btn-bottom-mg" title="{{'spatial.tab_vms_pos_table_zoom_btn_title' | i18n }}" ng-click="zoomTo($index, 'POSITION')"><span class="fa fa-search-plus"></span></button>
 								<button type="button" class="btn btn-default btn-xs btn-bottom-mg" title="{{'spatial.tab_vms_pos_table_pan_btn_title' | i18n }}" ng-click="panTo($index, 'POSITION')"><span class="fa fa-crosshairs"></span></button>
 							</td>
@@ -272,7 +272,7 @@
 					            <div st-sort="properties.courseOverGround" st-skip-natural="true" st-class-ascent="sorting_asc" st-class-descent="sorting_desc" ng-show="attrVisibility.segments.crs" ng-if="column === 'crs'">{{'spatial.tab_vms_seg_table_header_course_ground' | i18n }}</div>
 					            <div st-sort="properties.segmentCategory" st-skip-natural="true" st-class-ascent="sorting_asc" st-class-descent="sorting_desc" ng-show="attrVisibility.segments.cat" ng-if="column === 'cat'">{{'spatial.tab_vms_seg_table_header_category' | i18n }}</div>
 					        </th>
-					        <th style="min-width:80px;" ng-hide="repNav.isViewVisible('mapPanel')">{{'spatial.table_header_actions' | i18n }}</th>
+					        <th style="min-width:80px;" ng-show="repNav.isViewVisible('mapPanel')">{{'spatial.table_header_actions' | i18n }}</th>
 				       </tr>
 					</thead>
 					<tbody>
@@ -292,7 +292,7 @@
 					            <div ng-show="attrVisibility.segments.crs" ng-if="column === 'crs'">{{ segment.properties.courseOverGround }}&deg;</div>
 					            <div ng-show="attrVisibility.segments.cat" ng-if="column === 'cat'">{{ segment.properties.segmentCategory }}</div>
 					        </td>
-				            <td style="min-width:80px;" ng-hide="repNav.isViewVisible('mapPanel')">
+				            <td style="min-width:80px;" ng-show="repNav.isViewVisible('mapPanel')">
 				            	<button type="button" class="btn btn-default btn-xs btn-bottom-mg" title="{{'spatial.tab_vms_pos_table_zoom_btn_title' | i18n }}" ng-click="zoomTo($index, 'SEGMENT')"><span class="fa fa-search-plus"></span></button>
 				            	<button type="button" class="btn btn-default btn-xs btn-bottom-mg" title="{{'spatial.tab_vms_pos_table_pan_btn_title' | i18n }}" ng-click="panTo($index, 'SEGMENT')"><span class="fa fa-crosshairs"></span></button>
 				            </td>
@@ -377,7 +377,7 @@
 					            <div st-sort="duration" st-skip-natural="true" st-class-ascent="sorting_asc" st-class-descent="sorting_desc" ng-show="attrVisibility.tracks.dur" ng-if="column === 'dur'">{{'spatial.tab_vms_seg_table_header_duration' | i18n }}</div>
 					            <div st-sort="totalTimeAtSea" st-skip-natural="true" st-class-ascent="sorting_asc" st-class-descent="sorting_desc" ng-show="attrVisibility.tracks.timeSea" ng-if="column === 'timeSea'">{{'spatial.tab_vms_tracks_table_header_time_at_sea' | i18n }}</div>
 					        </th>
-				            <th style="min-width:80px;" ng-hide="repNav.isViewVisible('mapPanel')">{{'spatial.table_header_actions' | i18n }}</th>
+				            <th style="min-width:80px;" ng-show="repNav.isViewVisible('mapPanel')">{{'spatial.table_header_actions' | i18n }}</th>
 				        </tr>
 				    </thead>
 				    <tbody>
@@ -395,7 +395,7 @@
 					            <div ng-show="attrVisibility.tracks.dur" ng-if="column === 'dur'">{{ track.duration | stHumanizeTime }}</div>
 					            <div ng-show="attrVisibility.tracks.timeSea" ng-if="column === 'timeSea'">{{ track.totalTimeAtSea | stHumanizeTime: track }}</div>
 				            </td>
-				            <td style="min-width:80px;" ng-hide="repNav.isViewVisible('mapPanel')">
+				            <td style="min-width:80px;" ng-show="repNav.isViewVisible('mapPanel')">
 				            	<button type="button" class="btn btn-default btn-xs btn-bottom-mg" title="{{'spatial.tab_vms_pos_table_zoom_btn_title' | i18n }}" ng-click="zoomTo($index, 'TRACK')"><span class="fa fa-search-plus"></span></button>
 				            	<button type="button" class="btn btn-default btn-xs btn-bottom-mg" title="{{'spatial.tab_vms_pos_table_pan_btn_title' | i18n }}" ng-click="panTo($index, 'TRACK')"><span class="fa fa-crosshairs"></span></button>
 				            </td>
@@ -500,7 +500,7 @@
 								<div st-sort="properties.ticketOpenDate" st-skip-natural="true" st-class-ascent="sorting_asc" st-class-descent="sorting_desc" ng-if="key === 'ticketOpenDate'">{{'spatial.rule_open_date' | i18n }}</div>
 								<div st-sort="properties.ticketStatus" st-skip-natural="true" st-class-ascent="sorting_asc" st-class-descent="sorting_desc" ng-if="key === 'ticketStatus'">{{'spatial.rule_status' | i18n }}</div>
 							</th>
-							<th style="min-width:120px;" ng-hide="repNav.isViewVisible('mapPanel')">{{'spatial.table_header_actions' | i18n }}</th>
+							<th style="min-width:120px;" ng-show="repNav.isViewVisible('mapPanel')">{{'spatial.table_header_actions' | i18n }}</th>
 						</tr>
 						
 					</thead>
@@ -520,7 +520,7 @@
 								<div ng-if="key === 'ticketOpenDate'">{{alarm.properties.ticketOpenDate | stDateUtc}}</div>
 								<div ng-if="key === 'ticketStatus'" class="alarm-status" ng-style="getAlarmColor(alarm.properties.ticketStatus)">{{ alarm.properties.ticketStatus }}</div>
 							</td>
-							<td style="min-width:120px;" ng-hide="repNav.isViewVisible('mapPanel')">
+							<td style="min-width:120px;" ng-show="repNav.isViewVisible('mapPanel')">
 								<alarms-preview record="alarm"></alarms-preview>
 								<button type="button" class="btn btn-default btn-xs btn-bottom-mg" title="{{'spatial.tab_vms_pos_table_zoom_btn_title' | i18n }}" ng-click="zoomTo($index, 'ALARM')"><span class="fa fa-search-plus"></span></button>
 								<button type="button" class="btn btn-default btn-xs btn-bottom-mg" title="{{'spatial.tab_vms_pos_table_pan_btn_title' | i18n }}" ng-click="panTo($index, 'ALARM')"><span class="fa fa-crosshairs"></span></button>
@@ -673,7 +673,7 @@
 								<div st-sort="properties.activityType" st-skip-natural="true" st-class-ascent="sorting_asc" st-class-descent="sorting_desc" ng-show="attrVisibility.positions.act_tp" ng-if="column === 'act_tp'">{{'spatial.tab_vms_pos_table_header_activity_type' | i18n }}</div>
 								<div st-sort="properties.source" st-skip-natural="true" st-class-ascent="sorting_asc" st-class-descent="sorting_desc" ng-show="attrVisibility.positions.source" ng-if="column === 'source'">{{'spatial.tab_vms_pos_table_header_source' | i18n }}</div>-->
 							</th>
-							<th style="min-width:80px;" ng-hide="repNav.isViewVisible('mapPanel')">{{'spatial.table_header_actions' | i18n }}</th>
+							<th style="min-width:80px;" ng-show="repNav.isViewVisible('mapPanel')">{{'spatial.table_header_actions' | i18n }}</th>
 						</tr>
 					</thead>
 					<tbody>

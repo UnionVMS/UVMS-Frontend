@@ -73,8 +73,10 @@
             addMenuItem(locale.getString('header.menu_areas'), '/areas', 'areas');
         }
         //ACTIVITY
-        //FIXME when USM is properly configured with this feature
-        addMenuItem(locale.getString('header.menu_activity'), '/activity', 'activity');
+        if(checkAccess('Activity', 'ACTIVITY_ALLOWED')){
+            addMenuItem(locale.getString('header.menu_activity'), '/activity', 'activity');
+        }
+        
         
         //MOVEMENT
         var movementLink = false;

@@ -22,6 +22,9 @@ angular.module('unionvmsWeb').controller('SpatialCtrl',function($scope, $timeout
            mapService.map = undefined;
        }
        
+       //reset report form service
+       reportFormService.resetLiveView();
+       
        $scope.curState = $state.current.name;
        if($state.current.name === 'app.reporting-id'){
     	   $scope.spatialHelper.tbControl.newTab = false;

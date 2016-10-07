@@ -28,7 +28,7 @@ angular.module('unionvmsWeb').factory('reportMsgService', function($timeout){
     return alert;
 });
 
-angular.module('unionvmsWeb').controller('ReportslistCtrl',function($scope, $filter, globalSettingsService, reportMsgService, $anchorScroll, locale, reportRestService, confirmationModal, reportService, spatialHelperService, $state, $window, userService){
+angular.module('unionvmsWeb').controller('ReportslistCtrl',function($scope, $filter, globalSettingsService, reportMsgService, $anchorScroll, locale, reportRestService, confirmationModal, reportService, spatialHelperService, $state, $window, userService, reportingNavigatorService){
     //config object
     $scope.config = {
         src_format: 'YYYY-MM-DDTHH:mm:ss',
@@ -225,6 +225,9 @@ angular.module('unionvmsWeb').controller('ReportslistCtrl',function($scope, $fil
     	//Check if report is the current liveview report and if so remova data
     	var rep = $scope.displayedRecords[resp.index];
     	if ($scope.repServ.id === rep.id){
+    	    if (rep.withMap === false){
+    	        reportingNavigatorService.goToView('liveViewPanel','mapPanel');
+    	    }
     	    $scope.repServ.resetReport();
     	}
     	

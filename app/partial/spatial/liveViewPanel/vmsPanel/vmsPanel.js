@@ -17,30 +17,31 @@ angular.module('unionvmsWeb').controller('VmspanelCtrl',function($scope, locale,
     
     //Define VMS tabs
     var setVmsTabs = function(){
-        return [
-                {
-                    'tab': 'MOVEMENTS',
-                    'title': locale.getString('spatial.tab_movements')
-                },
-                {
-                    'tab': 'SEGMENTS',
-                    'title': locale.getString('spatial.tab_segments')
-                },
-                {
-                    'tab': 'TRACKS',
-                    'title': locale.getString('spatial.tab_tracks')
-                },
-                {
-                    'tab': 'ALARMS',
-                    'title': locale.getString('spatial.tab_alarms')
-                },
-                {
-                    'tab': 'TRIPS',
-                    'title': locale.getString('spatial.tab_trips')
-                }
-            ];
-        };
-    
+        var tabs = [{
+            'tab': 'MOVEMENTS',
+            'title': locale.getString('spatial.tab_movements')
+        },{
+            'tab': 'SEGMENTS',
+            'title': locale.getString('spatial.tab_segments')
+        },{
+            'tab': 'TRACKS',
+            'title': locale.getString('spatial.tab_tracks')
+        }];
+        
+        if ($scope.isAllowed('Activity', 'ACTIVITY_ALLOWED')){
+            tabs.push({
+               'tab': 'TRIPS',
+               'title': locale.getString('spatial.tab_trips')
+            });
+        }
+        
+        tabs.push({
+            'tab': 'ALARMS',
+            'title': locale.getString('spatial.tab_alarms')
+        });
+        
+        return tabs;
+   };
         
    locale.ready('spatial').then(function(){
        $scope.vmsTabMenu = setVmsTabs();
