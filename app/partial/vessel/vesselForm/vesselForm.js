@@ -407,7 +407,7 @@ angular.module('unionvmsWeb').controller('VesselFormCtrl',function($scope, $log,
 
     // Add new row with contact item
     $scope.addContactItem = function(vesselContact) {
-        if (vesselContact.length == 0) {
+        if (vesselContact.length === 0) {
             vesselContact.push({}, {});
         } else {
             vesselContact.push({});
