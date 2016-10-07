@@ -53,6 +53,12 @@ describe('VesselFormCtrl', function() {
             //Nothing
         };
 
+        scope.vesselNoteValues = {
+            date : "1", 
+            activity : "1", 
+            source : "INTERNAL"
+        };
+
     }));
 
     beforeEach(inject(function($httpBackend) {
@@ -86,6 +92,12 @@ describe('VesselFormCtrl', function() {
         var deferred2 = $q.defer();
         spyOn(vesselRestService, "getVesselHistoryListByVesselId").andReturn(deferred2.promise);
         deferred2.resolve([]);
+
+        scope.vesselNoteValues = {
+            date : "1", 
+            activity : "1", 
+            source : "INTERNAL"
+        };
 
         //CreateMode should be true before creation
         expect(scope.isCreateNewMode()).toEqual(true);
@@ -361,7 +373,7 @@ describe('VesselFormCtrl', function() {
         $compile(element)(scope);
 
         //Show link
-        scope.isVisible.showCompleteVesselHistoryLink = true;
+        scope.isHistoryLinkVisible.showCompleteVesselHistoryLink = true;
 
         //View history
         scope.viewCompleteVesselHistory();
@@ -371,7 +383,7 @@ describe('VesselFormCtrl', function() {
         expect(vesselRestServiceSpy).toHaveBeenCalled();
 
         //The link should be hidden
-        expect(scope.isVisible.showCompleteVesselHistoryLink).toBeFalsy();
+        expect(scope.isHistoryLinkVisible.showCompleteVesselHistoryLink).toBeFalsy();
 
         //The scope.vesselHistory item shold be updated
         expect(scope.vesselHistory).toEqual(historyResult);

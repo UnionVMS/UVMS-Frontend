@@ -16,9 +16,12 @@ angular.module('unionvmsWeb').controller('VesselFormCtrl',function($scope, $log,
     };
 
     $scope.existingValues = {};
+    $scope.vesselNotesObj = {};
 
     //Keep track of visibility statuses
-    $scope.isVisible.showCompleteVesselHistoryLink = false;
+    $scope.isHistoryLinkVisible = {
+        showCompleteVesselHistoryLink : false
+    };
 
     //Watch for changes to the vesselObj
     //$scope.$watch(function () { return $scope.vesselObj;}, function (newVal, oldVal) {
@@ -271,6 +274,8 @@ angular.module('unionvmsWeb').controller('VesselFormCtrl',function($scope, $log,
             for (var key in $scope.vesselNotesObj) {
                 $scope.vesselNotesObj[key] = "";
             }
+        } else {
+            return false;
         }       
     }
 
@@ -316,7 +321,7 @@ angular.module('unionvmsWeb').controller('VesselFormCtrl',function($scope, $log,
 
     //Get all history events for the vessel
     $scope.viewCompleteVesselHistory = function() {
-        $scope.isVisible.showCompleteVesselHistoryLink = false;
+        $scope.isHistoryLinkVisible.showCompleteVesselHistoryLink = false;
         $scope.waitingForHistoryResponse = true;
         $scope.vesselHistoryError = undefined;
         vesselRestService.getVesselHistoryListByVesselId($scope.vesselObj.vesselId.value)
@@ -336,7 +341,7 @@ angular.module('unionvmsWeb').controller('VesselFormCtrl',function($scope, $log,
     var onVesselHistoryListSuccess = function(vesselHistory) {
         $scope.vesselHistory = vesselHistory;
         if($scope.vesselHistory.length === vesselHistorySize){
-            $scope.isVisible.showCompleteVesselHistoryLink = true;
+            $scope.isHistoryLinkVisible.showCompleteVesselHistoryLink = true;
         }
         $scope.waitingForHistoryResponse = false;
     };
