@@ -17,6 +17,8 @@ angular.module('unionvmsWeb')
         controller: 'vesselNotesCtrl',
         scope: {
             vesselNotes : '=',
+            vesselForm : '=',
+            submitAttempted : '=',
             disableForm : '=',
             spin: '=',
             status: '=' 

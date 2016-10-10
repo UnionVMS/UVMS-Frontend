@@ -2,11 +2,12 @@
     <fieldset ng-disabled="disableForm">
         <div class="left-form col-md-6">
             <div class="row">
-                <div class="col-md-4 form-group smallerpadding">
+                <div class="col-md-4 form-group smallerpadding" ng-class="{'has-error': submitAttempted && !vesselForm.notesDate.$valid}">
                     <label>{{ 'vessel.vessel_notes_date' | i18n }}<span ng-if="required" class="mandatory">{{ 'common.mandatory_field' | i18n }}</span></label>
-                    <datepicker-input model="vesselNotes.date" name="vesselNotesDate" input-field-id="notesDate" time="true" max-date="advancedSearchObject.TO_DATE" ng-required="required"></datepicker-input>
+                    <datepicker-input model="vesselNotes.date" name="notesDate" input-field-id="notesDate" time="true" max-date="advancedSearchObject.TO_DATE" ng-required="required"></datepicker-input>
                 </div>
-                <div class="col-md-4 form-group smallerpadding">
+                <div>{{vesselForm.vesselNotesDate.$valid}}</div>
+                <div class="col-md-4 form-group smallerpadding" ng-class="{'has-error': submitAttempted && !vesselForm.notesActivity.$valid}">
                     <label>{{ 'vessel.vessel_notes_activity' | i18n }}<span ng-if="required" class="mandatory">{{ 'common.mandatory_field' | i18n }}</span></label>
                     <dropdown ng-model="vesselNotes.activity" name="notesActivity" id="notesActivity" initialtext="{{ 'vessel.vessel_notes_activity' | i18n }}" items="vesselNotesActivity" ng-required="required"></dropdown>
                 </div>
@@ -18,7 +19,7 @@
             <div class="row">
                 <div class="col-md-4 form-group smallerpadding">
                     <label>{{ 'vessel.vessel_notes_license_holder' | i18n }}</label>
-                    <input type="text" ng-model="vesselNotes.licenseHolder" name="notesLicenseHolder" id="notesLicenseHolder" class="form-control">
+                    <input type="text" ng-model="vesselNotes.licenseHolder" name="notesLicenseHolder" id="notesLicenseHolder" class="form-control" required>
                 </div>
                 <div class="col-md-8 form-group smallerpadding">
                     <label>{{ 'vessel.vessel_notes_contact' | i18n }}</label>
