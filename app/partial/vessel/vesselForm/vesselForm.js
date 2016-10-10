@@ -450,6 +450,12 @@ angular.module('unionvmsWeb').controller('VesselFormCtrl',function($scope, $log,
         addMobileTerminal: function() {
             console.log("Add terminal!");
         },
+        showMobileTerminal: function(vessel) {
+            if (vessel) {
+                return angular.isDefined(vessel.vesselId) && vessel.vesselId != null && vessel.active;
+            }
+            return false;
+        },
         saveCallback: $scope.createNewVessel,
         updateCallback: $scope.updateVessel,
         cancelCallback: $scope.toggleViewVessel,
