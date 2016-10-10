@@ -62,6 +62,8 @@ angular.module('unionvmsWeb').controller('VesselCtrl', function($scope, $log, lo
             $scope.waitingForVesselDataResponse = true;
             toggleFormDetails();
         }
+        // Sort init list on latest time
+        $scope.currentSearchResults.sortBy = '-lastMovement.time';         
     };
 
     //Goto page in the search results
