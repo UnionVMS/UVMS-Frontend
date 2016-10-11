@@ -312,10 +312,11 @@
     "map_configuration_scale_bar_units_imperial": "Miles",
     
     "map_configuration_error_loading_configs": "There was an error while loading available map configurations. Please try again.",
-
+	
 	"layer_panel_layers": "Layers",
 	"layer_panel_legend": "Legend",
 	"layer_panel_copyright": "Copyright",
+	"layer_panel_disclaimer": "Disclaimer",
 	"layer_tree_vms": "VMS",
 	"layer_tree_alarms": "Alarms",
 	"layer_tree_areas": "Areas",
