@@ -137,6 +137,16 @@ angular.module('unionvmsWeb').factory('reportRestFactory', function($resource) {
 	               }
 	           } 
 	        });
+        },
+        getTripReports: function(){
+            return $resource('/activity/rest/trip/reports/:id', {}, {
+	           'get': {
+	               method: 'GET',
+	               headers: {
+	                   'Content-Type': 'application/json'
+	               }
+	           } 
+	        });
         }
 	};
 })
@@ -275,6 +285,140 @@ angular.module('unionvmsWeb').factory('reportRestFactory', function($resource) {
                 deferred.reject(error);
             });
             return deferred.promise;
+        },
+        getTripReports: function(id){
+            /*var deferred = $q.defer();
+            reportRestFactory.getTripReports().get({id: id}, {}, function(response){
+                deferred.resolve(response);
+            }, function(error){
+                deferred.reject(error);
+            });
+            return deferred.promise;*/
+            return {
+  "data": {
+    "fishingTripId": "NOR-TRP-20160517234053706",
+    "summary": {
+      "DEPARTURE": {
+        "date": "2014-05-27 07:47:31",
+        "locations": [
+          "38F1",
+          "GBR",
+          "27.4.b"
+        ]
+      },
+      "ARRIVAL": {
+        "date": "2013-05-27 07:47:31",
+        "locations": [
+          "38F1"
+        ]
+      },
+      "LANDING": {
+        "date": "2016-06-27 07:47:31",
+        "locations": [
+          "38F1"
+        ]
+      }
+    },
+    "activityReports": [
+      {
+        "activityType": "ARRIVAL",
+        "occurence": "2013-05-27 07:47:31",
+        "reason": "FISHING",
+        "fishingGears": [
+          {
+            "gearTypeCode": "GEAR_TYPE"
+          }
+        ],
+        "delimitedPeriod": [
+          {
+            "startDate": "2010-05-27 07:47:31",
+            "endDate": "2016-06-27 07:47:31",
+            "duration": 1
+          }
+        ],
+        "faReportAcceptedDateTime": "2016-06-27 07:47:31 +0000",
+        "faReportDocumentType": "DECLARATION",
+        "locations": [
+          "38F1"
+        ],
+        "correction": true
+      },
+      {
+        "activityType": "DEPARTURE",
+        "occurence": "2014-05-27 07:47:31",
+        "reason": "FISHING",
+        "fishingGears": [
+          {
+            "gearTypeCode": "GEAR_TYPE"
+          }
+        ],
+        "delimitedPeriod": [
+          {
+            "startDate": "2007-02-27 07:47:31",
+            "endDate": "2016-06-27 07:47:31",
+            "duration": 3
+          },
+          {
+            "startDate": "2013-02-27 07:47:31",
+            "endDate": "2016-06-27 07:47:31",
+            "duration": 3
+          },
+          {
+            "startDate": "2010-06-27 07:47:31",
+            "endDate": "2016-06-27 07:47:31",
+            "duration": 1
+          },
+          {
+            "startDate": "2011-02-27 07:47:31",
+            "endDate": "2016-06-27 07:47:31",
+            "duration": 3
+          },
+          {
+            "startDate": "2009-04-27 07:47:31",
+            "endDate": "2016-06-27 07:47:31",
+            "duration": 2
+          },
+          {
+            "startDate": "2010-05-27 07:47:31",
+            "endDate": "2016-06-27 07:47:31",
+            "duration": 1
+          },
+          {
+            "startDate": "2008-02-27 07:47:31",
+            "endDate": "2016-06-27 07:47:31",
+            "duration": 3
+          },
+          {
+            "startDate": "2012-02-27 07:47:31",
+            "endDate": "2016-06-27 07:47:31",
+            "duration": 3
+          }
+        ],
+        "faReportAcceptedDateTime": "2016-06-27 07:47:31 +0000",
+        "faReportDocumentType": "DECLARATION",
+        "locations": [
+          "38F1",
+          "GBR",
+          "27.4.b"
+        ],
+        "correction": false
+      },
+      {
+        "activityType": "LANDING",
+        "occurence": "2016-06-27 07:47:31",
+        "reason": "FISHING",
+        "faReportAcceptedDateTime": "2016-06-27 07:47:31 +0000",
+        "faReportDocumentType": "DECLARATION",
+        "locations": [
+          "38F1"
+        ],
+        "correction": false
+      }
+    ]
+  },
+  "code": 200
+};
+
         }
     };
     return reportRestService;

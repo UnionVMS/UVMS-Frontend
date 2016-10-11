@@ -4,21 +4,27 @@
     </legend>
     <!--TRIP ID-->
     <div class="row">
-        <b class="col-md-12">{{'spatial.trip_id' | i18n }}: BEL-TRP-016-2016-0021</b>
+        <b class="col-md-12">{{'spatial.trip_id' | i18n }}: {{ tripSummServ.currentTripId }}</b>
     </div>
     <!--TRIP DEPARTURE DATE-->
     <div class="row">
-        <span class="col-md-6"><span class="trip-row-label">{{'spatial.trip_departure' | i18n }}:</span> yyyy-mm-dd hh:mm</span>
-        <span class="col-md-6">Harbour: BEZEE - Zeebrugge</span>
+        <span class="col-md-6"><span class="trip-row-label">{{'spatial.trip_departure' | i18n }}:</span> {{ tripSummServ.overview.DEPARTURE.date }}</span>
+        <span class="col-md-6">
+            <span ng-repeat="location in tripSummServ.overview.DEPARTURE.locations">{{location}} </span>
+        </span>
     </div>
     <!--TRIP ARRIVAL DATE-->
     <div class="row">
-        <span class="col-md-6"><span class="trip-row-label">{{'spatial.trip_arrival' | i18n }}:</span> yyyy-mm-dd hh:mm</span>
-        <span class="col-md-6">Harbour: BEOST - Oostende (Ostend)</span>
+        <span class="col-md-6"><span class="trip-row-label">{{'spatial.trip_arrival' | i18n }}:</span>  {{ tripSummServ.overview.ARRIVAL.date }}</span>
+        <span class="col-md-6">
+            <span ng-repeat="location in tripSummServ.overview.ARRIVAL.locations">{{location}} </span>
+        </span>
     </div>
     <!--TRIP LANDING DATE-->
     <div class="row">
-        <span class="col-md-6"><span class="trip-row-label">{{'spatial.trip_landing' | i18n }}:</span> yyyy-mm-dd hh:mm</span>
-        <span class="col-md-6">Harbour: BEOST - Oostende (Ostend)</span>
+        <span class="col-md-6"><span class="trip-row-label">{{'spatial.trip_landing' | i18n }}:</span>  {{ tripSummServ.overview.LANDING.date }}</span>
+        <span class="col-md-6">
+            <span ng-repeat="location in tripSummServ.overview.LANDING.locations">{{location}} </span>
+        </span>
     </div>
 </fieldset>

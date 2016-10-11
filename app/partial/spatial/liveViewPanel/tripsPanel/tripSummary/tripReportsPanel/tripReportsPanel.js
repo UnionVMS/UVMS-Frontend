@@ -41,8 +41,8 @@ $scope.reportHeaders = [
         width: 2
     },
     {
-        id: "corretions",
-        label: "spatial.reports_panel_column_corretions",
+        id: "corrections",
+        label: "spatial.reports_panel_column_corrections",
         width: 1
     },
     {

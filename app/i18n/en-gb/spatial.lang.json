@@ -515,7 +515,7 @@
     "reports_panel_column_location": "Location",
     "reports_panel_column_reason": "Reason",
     "reports_panel_column_remarks": "Remarks",
-    "reports_panel_column_corretions": "Corrections",
+    "reports_panel_column_corrections": "Corrections",
     "reports_panel_column_detail": "Detail",
 	"reports_panel_column_messages": "Messages",
 	"reports_panel_column_total": "Total",
@@ -536,5 +536,16 @@
 	"cronology_view_all": "View all",
 	"error_loading_trip_summary_vessel_data": "Error loading the vessel data in trip summary",
 	"error_loading_trip_summary_cronology": "Error loading the cronology in trip summary",
-	"error_loading_trip_summary_message_counter": "Error loading the message counter in trip summary"
+	"error_loading_trip_summary_message_counter": "Error loading the message counter in trip summary",
+	"error_loading_trip_summary_reports": "Error loading reports in trip summary",
+	"activity_type_arrival": "Arrival",
+	"activity_type_departure": "Departure",
+	"activity_type_landing": "Landing",
+	"activity_type_entry": "Entry",
+	"activity_type_exit": "Exit",
+	"activity_type_transhipment": "Transhipment",
+	"activity_type_relocation": "Relocation",
+	"fa_report_document_type_declaration": "Declaration",
+	"fa_report_document_type_notification": "Notification",
+	"report_reason_fishing": "Fishing"
 }
