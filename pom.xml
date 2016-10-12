@@ -212,12 +212,18 @@
                 <goals>
                     <goal>npm</goal>
                 </goals>
+                <configuration>
+                    <arguments>config set cache C:\temp\npm-cache --global </arguments>
+                </configuration>
             </execution>
             <execution>
                 <id>npm config set prefix C:\temp\npm-cache --global </id>
                 <goals>
                     <goal>npm</goal>
                 </goals>
+                <configuration>
+                    <arguments>config set prefix C:\temp\npm-cache --global </arguments>
+                </configuration>
             </execution>
           <execution>
             <id>npm cache clean</id>
