@@ -207,6 +207,12 @@
               <goal>install-node-and-npm</goal>
             </goals>
           </execution>
+            <execution>
+                <id>npm config set cache C:\temp\npm-cache --global </id>
+                <goals>
+                    <goal>npm</goal>
+                </goals>
+            </execution>
           <execution>
             <id>npm cache clean</id>
               <goals>
@@ -224,12 +230,6 @@
             <configuration>
               <arguments>${npm.args}</arguments>
             </configuration>
-          </execution>
-          <execution>
-            <id>npm config set cache C:\temp\npm-cache --global </id>
-            <goals>
-              <goal>npm</goal>
-            </goals>
           </execution>
           <execution>
             <id>bower install</id>
