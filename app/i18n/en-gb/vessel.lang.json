@@ -136,6 +136,7 @@
     "vessel_details_producer_code_pattern_validation_message": "Must be 3 characters.",
     "vessel_details_max_decimals_pattern_validation_message": "There can be max {1} decimals.",
     "vessel_details_email": "Email",
+    "vessel_details_contacts": "Contacts",
     "vessel_details_contact_name": "Contact name",
     "vessel_details_contact_number": "Contact number",
     "vessel_details_contact_email": "Contact e-mail",
