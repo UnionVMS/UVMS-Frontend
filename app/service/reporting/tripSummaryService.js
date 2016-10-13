@@ -1,6 +1,8 @@
 angular.module('unionvmsWeb').factory('tripSummaryService',function() {
 
-	var tripSummaryService = {};
+	var tripSummaryService = {
+		trip: undefined
+	};
 
 	return tripSummaryService;
 });

@@ -2,5 +2,20 @@
     <!--TRIPS LIST (WHEN RUNNING REPORT WITHOUT MAP)-->
     <div ng-include="'partial/spatial/liveViewPanel/tripsPanel/tripsList/tripsList.html'" ng-if="false"></div>
     <!--TRIP SUMMARY-->
-    <div ng-include="'partial/spatial/liveViewPanel/tripsPanel/tripSummary/tripSummary.html'"></div>
+    <uib-tabset active="active">
+        <uib-tab index="$index" ng-repeat="tab in tabTitles" heading="{{tab.title}}" select="initializeTrip($index)">
+            <!--TAB HEADER-->
+            <uib-tab-heading>
+                {{tab.title}}
+                <a class="close-button" ng-click="closeTab($index)">
+                    <i class="fa fa-times"></i>
+                </a>
+            </uib-tab-heading>
+            <!--TAB CONTENT-->
+            <div class="trip-summary-tab" ng-if="tab.title === trip.id">
+                <div ng-include="'partial/spatial/liveViewPanel/tripsPanel/tripSummary/tripSummary.html'"></div>
+            </div>
+        </uib-tab>
+    </uib-tabset>
+    
 </div>

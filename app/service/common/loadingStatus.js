@@ -59,7 +59,7 @@ angular.module('unionvmsWeb').factory('loadingStatus',function() {
             counter: 0
 		},
 		TripSummary: {
-		    message: 'spatial.trip_summary_loading',
+		    message: 'activity.trip_summary_loading',
             value: false,
             counter: 0
 		}

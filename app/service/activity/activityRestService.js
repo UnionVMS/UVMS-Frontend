@@ -18,6 +18,56 @@ angular.module('unionvmsWeb').factory('activityRestFactory',function($resource, 
                     }
                 }
             });
+        },
+        getTripCronology: function(){
+            return $resource('/activity/rest/trip/cronology/:id/:nrItems', {}, {
+	            'get': {
+	                method: 'GET',
+	                headers: {
+	                    'Content-Type': 'application/json'
+	                }
+	            }
+	        });
+        },
+        getTripVessel: function(){
+            return $resource('/activity/rest/trip/vessel/details/:id', {}, {
+	           'get': {
+	               method: 'GET',
+	               headers: {
+	                   'Content-Type': 'application/json'
+	               }
+	           } 
+	        });
+        },
+        getTripMessageCount: function(){
+            return $resource('/activity/rest/trip/messages/:id', {}, {
+	           'get': {
+	               method: 'GET',
+	               headers: {
+	                   'Content-Type': 'application/json'
+	               }
+	           } 
+	        });
+        },
+        getTripCatches: function(){
+            return $resource('/activity/rest/trip/catches/:id', {}, {
+	           'get': {
+	               method: 'GET',
+	               headers: {
+	                   'Content-Type': 'application/json'
+	               }
+	           } 
+	        });
+        },
+        getTripReports: function(){
+            return $resource('/activity/rest/trip/reports/:id', {}, {
+	           'get': {
+	               method: 'GET',
+	               headers: {
+	                   'Content-Type': 'application/json'
+	               }
+	           } 
+	        });
         }
     };
     
@@ -50,7 +100,53 @@ angular.module('unionvmsWeb').factory('activityRestFactory',function($resource, 
                 deferred.reject(error);
             });
             return deferred.promise;
+        },
+        getTripCronology: function(id,nrItems){
+            var deferred = $q.defer();
+            activityRestFactory.getTripCronology().get({id: id, nrItems: nrItems}, {}, function(response){
+                deferred.resolve(response);
+            }, function(error){
+                deferred.reject(error);
+            });
+            return deferred.promise;
+        },
+        getTripVessel: function(id){
+            var deferred = $q.defer();
+            activityRestFactory.getTripVessel().get({id: id}, {}, function(response){
+                deferred.resolve(response);
+            }, function(error){
+                deferred.reject(error);
+            });
+            return deferred.promise;
+        },
+        getTripMessageCount: function(id){
+            var deferred = $q.defer();
+            activityRestFactory.getTripMessageCount().get({id: id}, {}, function(response){
+                deferred.resolve(response);
+            }, function(error){
+                deferred.reject(error);
+            });
+            return deferred.promise;
+        },
+        getTripCatches: function(id){
+            var deferred = $q.defer();
+            activityRestFactory.getTripCatches().get({id: id}, {}, function(response){
+                deferred.resolve(response);
+            }, function(error){
+                deferred.reject(error);
+            });
+            return deferred.promise;
+        },
+        getTripReports: function(id){
+            var deferred = $q.defer();
+            activityRestFactory.getTripReports().get({id: id}, {}, function(response){
+                deferred.resolve(response);
+            }, function(error){
+                deferred.reject(error);
+            });
+            return deferred.promise;
         }
+
     };
 
     return activityService;

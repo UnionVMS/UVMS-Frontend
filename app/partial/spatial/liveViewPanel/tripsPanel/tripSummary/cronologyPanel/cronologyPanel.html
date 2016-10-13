@@ -1,10 +1,10 @@
 <fieldset class="col-md-12 fieldsetStyle cronology-section" ng-controller="CronologypanelCtrl">
     <legend class="fieldsetLegendStyle">
-        <a>{{'spatial.trip_summary_cronology' | i18n }}</a>
+        <a>{{'activity.trip_summary_cronology' | i18n }}</a>
     </legend>
     <!--CURRENT TRIP-->
     <div class="row current-trip">
-        <a class="col-md-12">{{'spatial.cronology_current_trip' | i18n }} {{cronology.currentTrip}}</a>
+        <a class="col-md-12">{{'activity.cronology_current_trip' | i18n }} {{cronology.currentTrip}}</a>
     </div>
     <!--NEXT TRIPS-->
     <div class="row" ng-repeat="tripName in cronology.nextTrips">
@@ -18,5 +18,5 @@
     <div class="row" ng-repeat="tripName in cronology.previousTrips">
         <a class="col-md-12">{{tripName}}</a>
     </div>
-    <a class="view-all">{{'spatial.cronology_view_all' | i18n }}</a>
+    <a class="view-all">{{'activity.cronology_view_all' | i18n }}</a>
 </fieldset>

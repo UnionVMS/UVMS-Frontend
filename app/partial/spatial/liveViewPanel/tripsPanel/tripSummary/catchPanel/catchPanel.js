@@ -1,9 +1,9 @@
-angular.module('unionvmsWeb').controller('CatchpanelCtrl',function($scope,$element){
+angular.module('unionvmsWeb').controller('CatchpanelCtrl',function($scope,$element,loadingStatus,activityRestService,tripSummaryService,$anchorScroll,locale){
 
     $scope.chartColors = ['#089fd7', '#6fc474'];
 
     /* Chart options */
-    $scope.options = { 
+    $scope.options = {
         chart: {
             type: 'pieChart',
             height: 200,
@@ -26,24 +26,22 @@ angular.module('unionvmsWeb').controller('CatchpanelCtrl',function($scope,$eleme
         }
     };
 
-    $scope.total = 74747 + 45454;
-
-    /* Chart data */
-    $scope.data = [
-        {
-            key: "SOL",
-            count: 74747
-        },
-        {
-            key: "COD",
-            count: 45454
-        }
-    ];
+    loadingStatus.isLoading('TripSummary', true);
+    activityRestService.getTripCatches($scope.trip.id).then(function(response){
+        $scope.trip.fromJson('catch',response.data);
+        loadingStatus.isLoading('TripSummary', false);
+    }, function(error){
+        $anchorScroll();
+        $scope.alert.hasAlert = true;
+        $scope.alert.hasError = true;
+        $scope.alert.alertMessage = locale.getString('activity.error_loading_trip_summary_catch_details');
+        $scope.alert.hideAlert();
+        loadingStatus.isLoading('TripSummary', false);
+    });
 
     //to resize the chart after it's loaded
     $scope.callback = function(scope, element){
         scope.api.refresh();
-        //$(window).trigger('resize');
     };
 
     $scope.$watch('tab.active',function(newVal,oldVal){

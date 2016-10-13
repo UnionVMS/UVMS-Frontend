@@ -1,11 +1,11 @@
 <fieldset class="col-md-12 fieldsetStyle catch-section" ng-controller="CatchpanelCtrl">
     <legend class="fieldsetLegendStyle">
-        <a>{{'spatial.trip_summary_catch' | i18n }}</a>
+        <a>{{'activity.trip_summary_catch' | i18n }}</a>
     </legend>
     <div class="row" ng-if="isTabActive()"> <!--CHECK IF CURRENT TAB IS ACTIVE-->
         <!--CATCH ON BOARD-->
         <div class="col-md-6 catch-subsection">
-            <h2>{{'spatial.catch_panel_title_onboard' | i18n }}</h2>
+            <h2>{{'activity.catch_panel_title_onboard' | i18n }}</h2>
             <div class="col-md-6">
                 <div class="nvd3-chart">
                     <nvd3 options="options" data="data" on-ready="callback"></nvd3>
@@ -17,25 +17,25 @@
                         <table class="table table-striped table-condensed">
                             <thead>
                                 <tr>
-                                    <th>{{'spatial.catch_panel_column_species' | i18n }}</th>
-                                    <th>{{'spatial.catch_panel_column_weight' | i18n }}</th>
+                                    <th>{{'activity.catch_panel_column_species' | i18n }}</th>
+                                    <th>{{'activity.catch_panel_column_weight' | i18n }}</th>
                                 </tr>
                             </thead>
                             <tbody>
-                                <tr ng-repeat="item in data">
-                                    <td>{{item.key}}</td>
-                                    <td>{{item.count}}</td>
+                                <tr ng-repeat="item in onboard.speciesList">
+                                    <td>{{item.speciesCode}}</td>
+                                    <td>{{item.weight}}</td>
                                 </tr>
                             </tbody>
                         </table>
                     </div>
                 </div>
             </div>
-            <span class="chart-caption">{{'spatial.catch_panel_chart_caption_total_catches' | i18n }} 12345 kg</span>
+            <span class="chart-caption">{{'activity.catch_panel_chart_caption_total_catches' | i18n }} {{onboard.total}} kg</span>
         </div>
         <!--CATCH LANDED-->
         <div class="col-md-6 catch-subsection">
-            <h2>{{'spatial.catch_panel_title_landed' | i18n }}</h2>
+            <h2>{{'activity.catch_panel_title_landed' | i18n }}</h2>
             <div class="col-md-6">
                 <div class="nvd3-chart">
                     <nvd3 options="options" data="data" on-ready="callback"></nvd3>
@@ -47,21 +47,21 @@
                         <table class="table table-striped table-condensed">
                             <thead>
                                 <tr>
-                                    <th>{{'spatial.catch_panel_column_species' | i18n }}</th>
-                                    <th>{{'spatial.catch_panel_column_weight' | i18n }}</th>
+                                    <th>{{'activity.catch_panel_column_species' | i18n }}</th>
+                                    <th>{{'activity.catch_panel_column_weight' | i18n }}</th>
                                 </tr>
                             </thead>
                             <tbody>
-                                <tr ng-repeat="item in data">
-                                    <td>{{item.key}}</td>
-                                    <td>{{item.count}}</td>
+                                <tr ng-repeat="item in landed.speciesList">
+                                    <td>{{item.speciesCode}}</td>
+                                    <td>{{item.weight}}</td>
                                 </tr>
                             </tbody>
                         </table>
                     </div>
                 </div>
             </div>
-            <span class="chart-caption">{{'spatial.catch_panel_chart_caption_total_catches' | i18n }} 13579 kg</span>
+            <span class="chart-caption">{{'activity.catch_panel_chart_caption_total_catches' | i18n }} {{landed.total}} kg</span>
         </div>
     </div>
 </fieldset>

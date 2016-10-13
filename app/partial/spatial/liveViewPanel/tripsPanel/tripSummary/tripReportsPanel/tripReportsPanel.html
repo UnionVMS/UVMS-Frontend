@@ -1,6 +1,6 @@
 <fieldset class="col-md-12 fieldsetStyle trip-reports-section" ng-controller="TripreportspanelCtrl">
     <legend class="fieldsetLegendStyle">
-        <a>{{'spatial.trip_summary_reports' | i18n }}</a>
+        <a>{{'activity.trip_summary_reports' | i18n }}</a>
     </legend>
     <div class="row">
         <div class="col-md-10">
@@ -46,17 +46,17 @@
                     <thead>
                         <tr>
                             <th>
-                                {{ 'spatial.reports_panel_column_messages' | i18n }}
+                                {{ 'activity.reports_panel_column_messages' | i18n }}
                             </th>
                             <th>
-                                {{ 'spatial.reports_panel_column_total' | i18n }}
+                                {{ 'activity.reports_panel_column_total' | i18n }}
                             </th>
                         </tr>
                     </thead>
                     <tbody>
                         <tr ng-repeat="(key,value) in messageCount">
                             <td>
-                                {{ 'spatial.reports_panel_message_' + key | i18n }}
+                                {{ 'activity.reports_panel_message_' + key | i18n }}
                             </td>
                             <td class="textAlignCenter">
                                 {{ value }}
