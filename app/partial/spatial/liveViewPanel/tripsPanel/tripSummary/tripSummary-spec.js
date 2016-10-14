@@ -1,6 +1,6 @@
 describe('TripsummaryCtrl', function() {
 
-	beforeEach(module('unionvmsWeb'));
+	/*beforeEach(module('unionvmsWeb'));
 
 	var scope,ctrl;
 
@@ -13,6 +13,6 @@ describe('TripsummaryCtrl', function() {
 
 		expect(1).toEqual(1);
 		
-	}));
+	}));*/
 
 });
