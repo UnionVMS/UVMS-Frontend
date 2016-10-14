@@ -43,3 +43,13 @@ copy of the GNU General Public License along with the IFDM Suite. If not, see <h
 .placeholderColor{
   color: #999999 !important;
 }
+
+.btn.disabled, .btn[disabled], 
+fieldset[disabled] .btn {
+  background: #eeeeee !important;
+  opacity: 1;
+
+  .placeholderColor {
+    visibility: hidden;
+  }
+}
