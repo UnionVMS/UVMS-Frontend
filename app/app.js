@@ -261,7 +261,7 @@ unionvmsWebApp.config(function($stateProvider, $compileProvider, tmhDynamicLocal
             },
             resolve: {
                 config : function(initService){
-                    return initService.loadConfigFor(["VESSEL", "VESSEL_PARAMETERS"]);
+                    return initService.loadConfigFor(["VESSEL", "VESSEL_PARAMETERS", "MOBILETERMINAL", "MOBILE_TERMINAL_TRANSPONDERS", "MOBILE_TERMINAL_CHANNELS"]);
                 }
             },
             data: {
@@ -279,7 +279,7 @@ unionvmsWebApp.config(function($stateProvider, $compileProvider, tmhDynamicLocal
             },
             resolve: {
                 config : function(initService){
-                    return initService.loadConfigFor(["VESSEL", "VESSEL_PARAMETERS"]);
+                    return initService.loadConfigFor(["VESSEL", "VESSEL_PARAMETERS", "MOBILE_TERMINAL_TRANSPONDERS", "MOBILE_TERMINAL_CHANNELS"]);
                 }
             },
             data: {

@@ -23,6 +23,10 @@ angular.module('unionvmsWeb').controller('MobileTerminalCtrl',function($scope, $
         mobileTerminalForm : false
     };
 
+    $scope.createMobileTerminalWithVessel = {
+        visible : false
+    };
+
     $scope.currentSearchResults = new SearchResults('', false, locale.getString('mobileTerminal.search_zero_results_error'));
 
     //Selected by checkboxes
@@ -370,6 +374,11 @@ angular.module('unionvmsWeb').controller('MobileTerminalCtrl',function($scope, $
         if($scope.hideAlertsOnScopeDestroy){
             alertService.hideMessage();
         }
+    });
+
+    $scope.$on("createMobileTerminalWithVessel", function(e) {  
+        $scope.$emit($scope.toggleAddNewMobileTerminal());
+        $scope.createMobileTerminalWithVessel.visible = !$scope.createMobileTerminalWithVessel.visible;
     });
 
     init();

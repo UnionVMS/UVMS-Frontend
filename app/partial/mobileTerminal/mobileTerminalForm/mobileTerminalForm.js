@@ -111,7 +111,7 @@ angular.module('unionvmsWeb').controller('mobileTerminalFormCtrl',function($filt
 
     //Create the mobile terminal
     $scope.createNewMobileTerminal = function(){
-        $scope.submitAttempted = true;
+        $scope.submitAttempted = true;        
 
         //Validate form
         if(!$scope.mobileTerminalForm.$valid){
@@ -134,13 +134,19 @@ angular.module('unionvmsWeb').controller('mobileTerminalFormCtrl',function($filt
 
     //Success creating the new mobile terminal
     var createNewMobileTerminalSuccess = function(mobileTerminal) {
-        $scope.waitingForCreateResponse = false;
-        $scope.existingChannels = [];
-        $scope.existingSerialNumber = undefined;
-        $scope.currentMobileTerminal = mobileTerminal;
-        alertService.showSuccessMessageWithTimeout(locale.getString('mobileTerminal.add_new_alert_message_on_success'));
-
-        $scope.setCreateMode(false, true);
+        if ($scope.$parent.vesselObj) {
+            mobileTerminalRestService.assignMobileTerminal(mobileTerminal, $scope.$parent.vesselObj.getGuid(), "-")
+            .then(function() {
+                alertService.showSuccessMessage(locale.getString('mobileTerminal.add_new_alert_message_on_success'));
+            });
+        } else {
+            alertService.showSuccessMessageWithTimeout(locale.getString('mobileTerminal.add_new_alert_message_on_success'));
+        }
+            $scope.waitingForCreateResponse = false;
+            $scope.existingChannels = [];
+            $scope.existingSerialNumber = undefined;
+            $scope.currentMobileTerminal = mobileTerminal;
+            $scope.setCreateMode(false, true);
     };
 
     //Error creating the new mobile terminal
@@ -394,12 +400,15 @@ angular.module('unionvmsWeb').controller('mobileTerminalFormCtrl',function($filt
     }
 
     $scope.menuBarFunctions = {
-        addMobileTerminal: function() {
-            console.log("Add terminal!");
-        },
         saveCallback: $scope.createNewMobileTerminal,
         updateCallback: $scope.updateMobileTerminal,
         cancelCallback: $scope.toggleMobileTerminalDetails,
+        showCancel: function() {
+            if (!$scope.createMobileTerminalWithVessel.visible) {
+                return true;
+            } 
+            return false;
+        },
         exportToCsvCallback: $scope.exportTerminalCSV,
         showExport: function(mobileTerminal) {
             if (mobileTerminal) {

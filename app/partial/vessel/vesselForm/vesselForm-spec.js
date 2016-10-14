@@ -373,7 +373,7 @@ describe('VesselFormCtrl', function() {
         $compile(element)(scope);
 
         //Show link
-        scope.isHistoryLinkVisible.showCompleteVesselHistoryLink = true;
+        scope.isThisVisible.showCompleteVesselHistoryLink = true;
 
         //View history
         scope.viewCompleteVesselHistory();
@@ -383,7 +383,7 @@ describe('VesselFormCtrl', function() {
         expect(vesselRestServiceSpy).toHaveBeenCalled();
 
         //The link should be hidden
-        expect(scope.isHistoryLinkVisible.showCompleteVesselHistoryLink).toBeFalsy();
+        expect(scope.isThisVisible.showCompleteVesselHistoryLink).toBeFalsy();
 
         //The scope.vesselHistory item shold be updated
         expect(scope.vesselHistory).toEqual(historyResult);

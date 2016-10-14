@@ -9,7 +9,7 @@ the hope that it will be useful, but WITHOUT ANY WARRANTY; without even the impl
 FITNESS FOR A PARTICULAR PURPOSE.  See the GNU General Public License for more details. You should have received a
 copy of the GNU General Public License along with the IFDM Suite. If not, see <http://www.gnu.org/licenses/>.
  */
-angular.module('unionvmsWeb').controller('VesselFormCtrl',function($scope, $log, $modal, Vessel, vesselRestService, alertService, locale, mobileTerminalRestService, confirmationModal, GetListRequest, userService, configurationService, assetCsvService, MobileTerminalHistoryModal, $q) {
+angular.module('unionvmsWeb').controller('VesselFormCtrl',function($scope, $log, $modal, Vessel, vesselRestService, alertService, locale, mobileTerminalRestService, confirmationModal, GetListRequest, userService, configurationService, assetCsvService, MobileTerminalHistoryModal, MobileTerminal, $q) {
 
     var checkAccessToFeature = function(feature) {
         return userService.isAllowed(feature, 'Union-VMS', true);
@@ -19,8 +19,9 @@ angular.module('unionvmsWeb').controller('VesselFormCtrl',function($scope, $log,
     $scope.vesselNotesObj = {};
 
     //Keep track of visibility statuses
-    $scope.isHistoryLinkVisible = {
-        showCompleteVesselHistoryLink : false
+    $scope.isThisVisible = {
+        showCompleteVesselHistoryLink : false, 
+        addNewMobileTerminalForm: false
     };
 
     //Watch for changes to the vesselObj
@@ -92,7 +93,7 @@ angular.module('unionvmsWeb').controller('VesselFormCtrl',function($scope, $log,
             $scope.mobileTerminals = page.items.filter(isConnectedToAsset);
 
             $scope.nonUniqueActiveTerminalTypes = $scope.getNonUniqueActiveTerminalTypes($scope.mobileTerminals);
-			if ($scope.hasNonUniqueActiveTerminalTypes()) {
+            if ($scope.hasNonUniqueActiveTerminalTypes()) {
                 alertService.showWarningMessage(locale.getString("vessel.warning_multiple_terminals"));
             }
             $scope.waitingForMobileTerminalsResponse = false;
@@ -321,7 +322,7 @@ angular.module('unionvmsWeb').controller('VesselFormCtrl',function($scope, $log,
 
     //Get all history events for the vessel
     $scope.viewCompleteVesselHistory = function() {
-        $scope.isHistoryLinkVisible.showCompleteVesselHistoryLink = false;
+        $scope.isThisVisible.showCompleteVesselHistoryLink = false;
         $scope.waitingForHistoryResponse = true;
         $scope.vesselHistoryError = undefined;
         vesselRestService.getVesselHistoryListByVesselId($scope.vesselObj.vesselId.value)
@@ -341,7 +342,7 @@ angular.module('unionvmsWeb').controller('VesselFormCtrl',function($scope, $log,
     var onVesselHistoryListSuccess = function(vesselHistory) {
         $scope.vesselHistory = vesselHistory;
         if($scope.vesselHistory.length === vesselHistorySize){
-            $scope.isHistoryLinkVisible.showCompleteVesselHistoryLink = true;
+            $scope.isThisVisible.showCompleteVesselHistoryLink = true;
         }
         $scope.waitingForHistoryResponse = false;
     };
@@ -446,9 +447,17 @@ angular.module('unionvmsWeb').controller('VesselFormCtrl',function($scope, $log,
         });
     };
 
+    $scope.toggleAddNewMobileTerminalForm = function(){
+        $scope.$broadcast("createMobileTerminalWithVessel");
+        if (!$scope.isThisVisible.addNewMobileTerminalForm) {
+            // ToDo: Scroll down to DOM element 
+        }
+        $scope.isThisVisible.addNewMobileTerminalForm = !$scope.isThisVisible.addNewMobileTerminalForm;
+    };
+
     $scope.menuBarFunctions = {
         addMobileTerminal: function() {
-            console.log("Add terminal!");
+            $scope.toggleAddNewMobileTerminalForm();
         },
         showMobileTerminal: function(vessel) {
             if (vessel) {
@@ -458,7 +467,15 @@ angular.module('unionvmsWeb').controller('VesselFormCtrl',function($scope, $log,
         },
         saveCallback: $scope.createNewVessel,
         updateCallback: $scope.updateVessel,
-        cancelCallback: $scope.toggleViewVessel,
+        cancelCallback: function() {
+            $scope.toggleViewVessel();
+            if ($scope.isThisVisible.addNewMobileTerminalForm) {
+                $scope.toggleAddNewMobileTerminalForm();
+            }
+        },
+        showCancel: function() {
+            return true;
+        },
         exportToCsvCallback: $scope.exportAssetToCsv,
         showExport: function(vessel) {
             if (vessel) {
