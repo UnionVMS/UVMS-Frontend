@@ -8,7 +8,7 @@
             <h2>{{'activity.catch_panel_title_onboard' | i18n }}</h2>
             <div class="col-md-6">
                 <div class="nvd3-chart">
-                    <nvd3 options="options" data="data" on-ready="callback"></nvd3>
+                    <nvd3 options="options" data="trip.catchDetails.onboard.speciesList" on-ready="callback"></nvd3>
                 </div>
             </div>
             <div class="col-md-6">
@@ -22,7 +22,7 @@
                                 </tr>
                             </thead>
                             <tbody>
-                                <tr ng-repeat="item in onboard.speciesList">
+                                <tr ng-repeat="item in trip.catchDetails.onboard.speciesList">
                                     <td>{{item.speciesCode}}</td>
                                     <td>{{item.weight}}</td>
                                 </tr>
@@ -31,14 +31,14 @@
                     </div>
                 </div>
             </div>
-            <span class="chart-caption">{{'activity.catch_panel_chart_caption_total_catches' | i18n }} {{onboard.total}} kg</span>
+            <span class="chart-caption">{{'activity.catch_panel_chart_caption_total_catches' | i18n }} {{trip.catchDetails.onboard.total}} kg</span>
         </div>
         <!--CATCH LANDED-->
         <div class="col-md-6 catch-subsection">
             <h2>{{'activity.catch_panel_title_landed' | i18n }}</h2>
             <div class="col-md-6">
                 <div class="nvd3-chart">
-                    <nvd3 options="options" data="data" on-ready="callback"></nvd3>
+                    <nvd3 options="options" data="trip.catchDetails.landed.speciesList" on-ready="callback"></nvd3>
                 </div>
             </div>
             <div class="col-md-6">
@@ -52,7 +52,7 @@
                                 </tr>
                             </thead>
                             <tbody>
-                                <tr ng-repeat="item in landed.speciesList">
+                                <tr ng-repeat="item in trip.catchDetails.landed.speciesList">
                                     <td>{{item.speciesCode}}</td>
                                     <td>{{item.weight}}</td>
                                 </tr>
@@ -61,7 +61,7 @@
                     </div>
                 </div>
             </div>
-            <span class="chart-caption">{{'activity.catch_panel_chart_caption_total_catches' | i18n }} {{landed.total}} kg</span>
+            <span class="chart-caption">{{'activity.catch_panel_chart_caption_total_catches' | i18n }} {{trip.catchDetails.landed.total}} kg</span>
         </div>
     </div>
 </fieldset>

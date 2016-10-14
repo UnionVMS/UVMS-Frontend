@@ -98,10 +98,12 @@
 	"activity_type_landing": "Landing",
 	"activity_type_entry": "Entry",
 	"activity_type_exit": "Exit",
+	"activity_type_fishing_operation": "Fishing operation",
 	"activity_type_transhipment": "Transhipment",
 	"activity_type_relocation": "Relocation",
 	"fa_report_document_type_declaration": "Declaration",
 	"fa_report_document_type_notification": "Notification",
+	"fa_report_document_type_correction": "Correction",
 	"report_reason_fishing": "Fishing"
 	"activity_overview": "Activity overview",
     "advanced_search_placeholder_com_channel": "Communication Channel",

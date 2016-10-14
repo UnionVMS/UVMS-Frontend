@@ -3,7 +3,7 @@ angular.module('unionvmsWeb').controller('CronologypanelCtrl',function($scope,ac
     loadingStatus.isLoading('TripSummary', true);
     activityRestService.getTripCronology($scope.trip.id,5).then(function(response){
         $scope.trip.fromJson('cronology',response.data);
-        $scope.cronology = tripSummaryService.trip.cronology;
+        $scope.cronology = $scope.trip.cronology;
         loadingStatus.isLoading('TripSummary', false);
     }, function(error){
         $anchorScroll();

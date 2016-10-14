@@ -13,8 +13,8 @@
                             <div class="th col-md-{{header.width}}" ng-repeat="header in reportHeaders" title="{{ header.label | i18n }}">{{ header.label | i18n }}</div>
                         </div>
                     </div>
-                    <div ui-tree-nodes="" ng-model="reportsTable" class="tbody col-md-12 angular-ui-tree-nodes">
-                        <div ng-repeat="item in reportsTable" ui-tree-node="" collapsed="true" class="tr row angular-ui-tree-node" style="background: #f7f7f7;" data-nodrag>
+                    <div ui-tree-nodes="" ng-model="trip.reports" class="tbody col-md-12 angular-ui-tree-nodes">
+                        <div ng-repeat="item in trip.reports" ui-tree-node="" collapsed="true" class="tr row angular-ui-tree-node" style="background: #f7f7f7;" data-nodrag>
                             <div class="td" style="width: 20px;float: left; font-size: 15px">
                                 <a ng-if="item.nodes && item.nodes.length > 0" ng-click="toggle(this)"><span class="fa" ng-class="{
                                 'fa-plus-square-o': collapsed,

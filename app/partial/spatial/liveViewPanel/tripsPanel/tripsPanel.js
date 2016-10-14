@@ -22,8 +22,10 @@ angular.module('unionvmsWeb').controller('TripspanelCtrl',function($scope,tripSu
     };
 
     $scope.initializeTrip = function(index){
-        tripSummaryService.trip = new Trip($scope.tabTitles[index].title);
-        $scope.trip = tripSummaryService.trip;
+        if(angular.isDefined($scope.tabTitles[index])){
+            tripSummaryService.trip = new Trip($scope.tabTitles[index].title);
+            $scope.trip = tripSummaryService.trip;
+        }
     };
 
 });

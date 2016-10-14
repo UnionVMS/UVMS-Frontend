@@ -14,13 +14,13 @@ angular.module('unionvmsWeb').factory('Trip',function(locale) {
 	Trip.prototype.fromJson = function(type,data){
 		switch(type){
 			case 'reports':
-				loadReports(data);
+				loadReports(this,data);
 				break;
 			case 'vessel':
-				loadVesselRoles(data);
+				loadVesselRoles(this,data);
 				break;
 			case 'cronology':
-				loadCronology(data);
+				loadCronology(this,data);
 				break;
 			case 'catch':
 				this.catchDetails = data;
@@ -31,14 +31,14 @@ angular.module('unionvmsWeb').factory('Trip',function(locale) {
 		}
 	};
 
-	var loadReports = function(data){
-		this.overview = data.summary;
+	var loadReports = function(self,data){
+		self.overview = data.summary;
 		//TODO MAP geometries
-		this.reports = loadReportMessages(data.activityReports); 
+		loadReportMessages(self,data.activityReports); 
 	};
 
-	var loadReportMessages = function(activityReports){
-        this.reports = [];
+	var loadReportMessages = function(self,activityReports){
+        self.reports = [];
         angular.forEach(activityReports,function(report){
             var reportItem = {};
             reportItem.type = locale.getString('activity.activity_type_' + report.activityType.toLowerCase());
@@ -51,7 +51,7 @@ angular.module('unionvmsWeb').factory('Trip',function(locale) {
             angular.forEach(report.delimitedPeriod,function(subreport){
                 var subreportItem = {};
 
-                subreportItem.type = (report.correction ? 'Correction: ' : '') + locale.getString('activity.activity_type_' + report.activityType.toLowerCase()) + ' (' + locale.getString('spatial.fa_report_document_type_' + report.faReportDocumentType.toLowerCase()) + ')';
+                subreportItem.type = (report.correction ? locale.getString('fa_report_document_type_correction') + ': ' : '') + locale.getString('activity.activity_type_' + report.activityType.toLowerCase()) + ' (' + locale.getString('activity.fa_report_document_type_' + report.faReportDocumentType.toLowerCase()) + ')';
 
                 subreportItem.date = getReportDate(report.faReportAcceptedDateTime,subreport.startDate,subreport.endDate);
 
@@ -61,7 +61,7 @@ angular.module('unionvmsWeb').factory('Trip',function(locale) {
                         subreportItem.location += location;
                     });
                 }
-                subreportItem.reason = locale.getString('activity.report_reason_' + report.reason.toLowerCase());;
+                subreportItem.reason = locale.getString('activity.report_reason_' + report.reason.toLowerCase());
                 subreportItem.remarks = getRemarks(report);
 
                 subreportItem.corrections = report.correction;
@@ -70,15 +70,17 @@ angular.module('unionvmsWeb').factory('Trip',function(locale) {
                 reportItem.nodes.push(subreportItem);
             });
 
-            this.reports.push(reportItem);
+            self.reports.push(reportItem);
         });
     };
 
 	var getRemarks = function(report){
-        var remarks;
+        var remarks = '';
 
         if(report.activityType === 'DEPARTURE' || report.activityType === 'FISHING_OPERATION'){
-            remarks = report.fishingGears[0].gearTypeCode;
+            if(angular.isDefined(report.fishingGears)){
+                remarks = report.fishingGears[0].gearTypeCode;
+            }
         }else{
             remarks = report.faReportAcceptedDateTime;
         }
@@ -139,18 +141,18 @@ angular.module('unionvmsWeb').factory('Trip',function(locale) {
         return date;
     };
 
-	var loadVesselRoles = function(data){
-		this.tripVessel = data;
-		delete this.tripVessel.contactPersons;
+	var loadVesselRoles = function(self,data){
+		self.tripVessel = data;
+		delete self.tripVessel.contactPersons;
 
 		angular.forEach(data.contactPersons,function(value, key) {
 			value.code = value.id = key;
 			value.text = value.title + ' ' + value.givenName + ' ' + value.middleName + ' ' + value.familyName;
 		});
-		this.tripRoles = data.contactPersons;
+		self.tripRoles = data.contactPersons;
 	};
 
-	var loadCronology = function(data){
+	var loadCronology = function(self,data){
 		if(angular.isDefined(data.previousTrips) && data.previousTrips.length > 0){
 			data.previousTrips = data.previousTrips.reverse();
 		}
@@ -158,7 +160,7 @@ angular.module('unionvmsWeb').factory('Trip',function(locale) {
 			data.nextTrips = data.nextTrips.reverse();
 		}
 
-		this.cronology = data;
+		self.cronology = data;
 	};
 
 	return Trip;
