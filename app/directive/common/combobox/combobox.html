@@ -49,7 +49,7 @@
 				</ul>
 			</li>
 			<!--COMBO WITH FILTER-->
-			<li ng-class="disableItem(item) ? 'disabled' : ''" ng-repeat="item in loadedItems | filter:newItem" role="presentation" ng-click="selectVal(item,$index)" ng-show="isFilterActive && !isLoading">
+			<li ng-class="disableItem(item) ? 'disabled' : ''" ng-repeat="item in loadedItems | filter:newItem" role="presentation" ng-click="selectVal(item,$index)" ng-show="!scope.isLoading" ng-if="isFilterActive">
 				<a role="menuitem" tabindex="-1" ng-bind="getItemLabel(item)"></a>
 			</li>
 			<!--SVG COMBO-->
