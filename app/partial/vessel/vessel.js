@@ -203,7 +203,9 @@ angular.module('unionvmsWeb').controller('VesselCtrl', function($scope, $log, lo
     //Toggle create new vessel
     $scope.toggleCreateNewVessel = function(){
         $scope.createNewMode = true;
-        toggleVesselForm(new Vessel());
+        var newVessel = new Vessel();
+        newVessel.contact.push({});
+        toggleVesselForm(newVessel);
     };
 
     //Toggle viewing of a vessel
