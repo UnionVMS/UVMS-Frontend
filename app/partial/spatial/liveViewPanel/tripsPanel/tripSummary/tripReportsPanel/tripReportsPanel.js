@@ -1,9 +1,9 @@
 angular.module('unionvmsWeb').controller('TripreportspanelCtrl',function($scope,activityRestService,loadingStatus,$anchorScroll,locale,tripSummaryService){
 
     loadingStatus.isLoading('TripSummary', true);
-    activityRestService.getTripMessageCount($scope.tripSummServ.trip.id).then(function(response){
-        $scope.tripSummServ.trip.fromJson('messageCount',response.data);
-        $scope.messageCount = tripSummaryService.trip.messageCount;
+    activityRestService.getTripMessageCount($scope.trip.id).then(function(response){
+        $scope.trip.fromJson('messageCount',response.data);
+        $scope.messageCount = $scope.trip.messageCount;
         loadingStatus.isLoading('TripSummary', false);
     }, function(error){
         $anchorScroll();

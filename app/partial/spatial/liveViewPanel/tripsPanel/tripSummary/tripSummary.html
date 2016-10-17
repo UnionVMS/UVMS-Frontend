@@ -17,7 +17,7 @@
         <div class="col-md-3 summary-section" ng-include="'partial/spatial/liveViewPanel/tripsPanel/tripSummary/cronologyPanel/cronologyPanel.html'"></div>
     </div>
     <div class="row summary-row">
-        <div class="col-md-4 summary-section" ng-include="'partial/spatial/liveViewPanel/tripsPanel/tripSummary/tripMapPanel/tripMapPanel.html'"></div>
+        <map-tile class="col-md-4 summary-section" tile-title="{{'activity.trip_summary_trip_map' | i18n }}" map-data="tripSummServ.mapData" map-height="217"></map-tile>
         <div class="col-md-8 summary-section" ng-include="'partial/spatial/liveViewPanel/tripsPanel/tripSummary/catchPanel/catchPanel.html'"></div>
     </div>
     <div class="row summary-row">

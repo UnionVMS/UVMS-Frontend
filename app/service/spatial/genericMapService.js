@@ -363,12 +363,18 @@ angular.module('unionvmsWeb').factory('genericMapService',function($localStorage
             serverType = def.serverType;
         }
         
+        var attribution;
+        if (angular.isDefined(def.shortCopyright)){
+            attribution = def.shortCopyright;
+        }
+        
         var config = {
             title: def.title,
             type: def.type,
             isBaseLayer: def.isBaseLayer,
             url: def.url,
             serverType: serverType,
+            attribution: attribution,
             params: {
                 time_: (new Date()).getTime(),
                 'LAYERS': def.layerGeoName,
@@ -392,10 +398,17 @@ angular.module('unionvmsWeb').factory('genericMapService',function($localStorage
      */
     var getGenericLayerConfig = function(def, map){
         var mapExtent = map.getView().getProjection().getExtent();
+        
+        var attribution;
+        if (angular.isDefined(def.shortCopyright)){
+            attribution = def.shortCopyright;
+        }
+        
         var config = {
             type: def.typeName,
             url: def.serviceUrl,
             serverType: 'geoserver',
+            attribtution: attribution,
             params: {
                 time_: (new Date()).getTime(),
                 'LAYERS': def.geoName,
@@ -493,6 +506,9 @@ angular.module('unionvmsWeb').factory('genericMapService',function($localStorage
             }
         }, function(error){
             self.mapBasicConfigs = {success: false};
+            if(angular.isDefined(callbackFunc)){
+                callbackFunc();
+            }
         });
     };
     
@@ -675,6 +691,7 @@ angular.module('unionvmsWeb').factory('genericMapService',function($localStorage
             out: true,
             condition: ol.events.condition.altKeyOnly
         }));
+        interactions.push(new ol.interaction.PinchZoom());
         
         return interactions;
     };

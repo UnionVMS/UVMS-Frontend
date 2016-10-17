@@ -1,8 +1,6 @@
 angular.module('unionvmsWeb').controller('TripsummaryCtrl',function($scope,activityRestService,tripSummaryService,loadingStatus,$anchorScroll,locale){
-
     $scope.tripSummServ = tripSummaryService;
 
-    loadingStatus.isLoading('TripSummary', true);
     loadingStatus.isLoading('TripSummary', true);
     activityRestService.getTripVessel($scope.trip.id).then(function(response){
         $scope.trip.fromJson('vessel',response.data);

@@ -558,7 +558,7 @@ angular.module('unionvmsWeb').controller('SystemareassettingsCtrl',function($sco
                         break;
                     case 'BING':
                         layerConf.title = locale.getString('spatial.layer_tree_' + layerConf.title);
-                        $scope.addBing(layerConf, true);
+                        $scope.addBing(layerConf);
                         break;
                 }
             });

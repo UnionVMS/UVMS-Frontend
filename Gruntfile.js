@@ -123,7 +123,8 @@ module.exports = function (grunt) {
                   'app/partial/activity',
 
                   //DIRECTIVES
-                  'app/directive/common/breadcrumbNavigator'
+                  'app/directive/common/breadcrumbNavigator',
+                  'app/directive/activity/'
             ],
             options: {
                 destination: 'dist/docs',
@@ -428,7 +429,7 @@ module.exports = function (grunt) {
       },
       directives: {
         options: {
-            files: karmaFiles.concat(['app/directive/**/*-spec.js']),
+            files: karmaFiles.concat(['app/directive/**/*-spec.js', 'temp/templates.js']),
             junitReporter: {
                 outputDir: 'testResults/directives',
                 outputFile: 'directives.xml'
@@ -499,7 +500,7 @@ module.exports = function (grunt) {
   grunt.registerTask('build-maven', ['test', 'clean:before', 'copy:configMaven', 'sub-build']);
   grunt.registerTask('build-dev', ['test', 'clean:before', 'copy:configDev','sub-build']);
   grunt.registerTask('build-test', ['test', 'clean:before', 'copy:configTest','sub-build']);
-  grunt.registerTask('test',['dom_munger:read', 'karma:services', 'karma:controllers', 'karma:directives', 'karma:filters', 'clean:after']);
+  grunt.registerTask('test',['dom_munger:read', 'ngtemplates', 'karma:services', 'karma:controllers', 'karma:directives', 'karma:filters', 'clean:after']);
 
   grunt.registerTask('default',['build-dev']);
   grunt.registerTask('serve', ['dom_munger:read','htmlhint','jshint', 'configureProxies', 'configureRewriteRules', 'connect:development', 'watch']);

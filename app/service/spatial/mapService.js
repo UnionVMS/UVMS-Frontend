@@ -1813,6 +1813,7 @@ angular.module('unionvmsWeb').factory('mapService', function(locale, $rootScope,
 
 	    //Always add attribution control
 	    ms.controls.push(new ol.control.Attribution({
+	        className: 'ol-attribution reporting-map',
 	        collapsible: false,
 	        collapsed: false
 	    }));
@@ -1984,6 +1985,7 @@ angular.module('unionvmsWeb').factory('mapService', function(locale, $rootScope,
 	    for (var i = 0; i < zoomInteractions.length; i++){
 	        ms.map.removeInteraction(zoomInteractions[i]);
 	    }
+	    ms.map.removeInteraction(ms.getInteractionsByType('PinchZoom')[0]);
 	};
 	
 	/**

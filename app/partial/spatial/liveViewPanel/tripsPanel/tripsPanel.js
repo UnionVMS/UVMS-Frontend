@@ -1,7 +1,13 @@
-angular.module('unionvmsWeb').controller('TripspanelCtrl',function($scope,tripSummaryService,Trip,spatialConfigAlertService){
+angular.module('unionvmsWeb').controller('TripspanelCtrl',function($scope, genericMapService, tripSummaryService, spatialConfigAlertService, Trip){
+    tripSummaryService.resetMapConfigs();
+    
+    var setTripSumServiceMapConfigs = function(){
+        tripSummaryService.mapConfigs = angular.copy(genericMapService.mapBasicConfigs);
+    };
+    
+    genericMapService.setMapBasicConfigs(setTripSumServiceMapConfigs);
 
     $scope.alert = spatialConfigAlertService;
-
     $scope.tabTitles = [
         {
             title: 'NOR-TRP-20160517234053706'

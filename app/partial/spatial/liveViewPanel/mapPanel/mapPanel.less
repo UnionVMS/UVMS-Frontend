@@ -289,7 +289,9 @@
 .ol-attribution {
 	display: inline-table;
 	bottom: 5px !important;
-	margin-left: 180px;
+	&.reporting-map {
+		margin-left: 180px;
+	}
 	ul {
 		line-height: 12px;
 	}
@@ -319,9 +321,12 @@
 
 //Full extent
 .ol-zoom-extent {
-	top: 173px;
-	right: 7px;
-	left: auto;
+	&,
+	&.ol-touch {
+		top: 173px !important;
+		right: 7px;
+		left: auto;
+	}
 }
 
 .ol-zoomextent-areamap {
