@@ -1,11 +1,11 @@
 describe('tripModel', function() {
 
-  beforeEach(module('unionvmsWeb'));
+  /*beforeEach(module('unionvmsWeb'));
 
   it('should ...', inject(function(tripModel) {
 
-	//expect(tripModel.doSomething()).toEqual('something');
+	expect(tripModel.doSomething()).toEqual('something');
 
-  }));
+  }));*/
 
 });

@@ -2,7 +2,7 @@ describe('TripreportspanelCtrl', function() {
 
 	beforeEach(module('unionvmsWeb'));
 
-	var scope,ctrl;
+	/*var scope,ctrl;
 
     beforeEach(inject(function($rootScope, $controller) {
       scope = $rootScope.$new();
@@ -13,6 +13,6 @@ describe('TripreportspanelCtrl', function() {
 
 		expect(1).toEqual(1);
 		
-	}));
+	}));*/
 
 });
