@@ -1,4 +1,4 @@
-angular.module('unionvmsWeb').factory('Trip',function(locale) {
+angular.module('unionvmsWeb').factory('Trip',function(locale,unitConversionService) {
 
 	function Trip(id){
 		this.id = id;
@@ -23,7 +23,7 @@ angular.module('unionvmsWeb').factory('Trip',function(locale) {
 				loadCronology(this,data);
 				break;
 			case 'catch':
-				this.catchDetails = data;
+                loadCatch(this,data);
 				break;
 			case 'messageCount':
 				this.messageCount = data;
@@ -32,10 +32,24 @@ angular.module('unionvmsWeb').factory('Trip',function(locale) {
 	};
 
 	var loadReports = function(self,data){
-		self.overview = data.summary;
+        loadOverview(self,data.summary);
 		//TODO MAP geometries
 		loadReportMessages(self,data.activityReports); 
 	};
+
+    var loadOverview = function(self,data){
+        if(angular.isDefined(data.DEPARTURE)){
+            data.DEPARTURE.date = unitConversionService.date.convertDate(data.DEPARTURE.date, 'from_server');
+        }
+        if(angular.isDefined(data.ARRIVAL)){
+            data.ARRIVAL.date = unitConversionService.date.convertDate(data.ARRIVAL.date, 'from_server');
+        }
+        if(angular.isDefined(data.LANDING)){
+            data.LANDING.date = unitConversionService.date.convertDate(data.LANDING.date, 'from_server');
+        }
+
+        self.overview = data;
+    };
 
 	var loadReportMessages = function(self,activityReports){
         self.reports = [];
@@ -122,6 +136,8 @@ angular.module('unionvmsWeb').factory('Trip',function(locale) {
     var getReportDate = function(acceptedDateTime,startDate,endDate){
         var date;
         if(angular.isDefined(startDate) && angular.isDefined(endDate)){
+            startDate = unitConversionService.date.convertDate(startDate, 'from_server');
+            endDate = unitConversionService.date.convertDate(endDate, 'from_server');
             if(startDate === endDate){
                 date = startDate;
             }else{
@@ -135,6 +151,7 @@ angular.module('unionvmsWeb').factory('Trip',function(locale) {
                 }
             }
         }else{
+            acceptedDateTime = unitConversionService.date.convertDate(acceptedDateTime, 'from_server');
             date = acceptedDateTime;
         }
 
@@ -142,7 +159,7 @@ angular.module('unionvmsWeb').factory('Trip',function(locale) {
     };
 
 	var loadVesselRoles = function(self,data){
-		self.tripVessel = data;
+		self.tripVessel = angular.copy(data);
 		delete self.tripVessel.contactPersons;
 
 		angular.forEach(data.contactPersons,function(value, key) {
@@ -161,6 +178,21 @@ angular.module('unionvmsWeb').factory('Trip',function(locale) {
 		}
 
 		self.cronology = data;
+	};
+
+    var loadCatch = function(self,data){
+
+        angular.forEach(data, function(type){
+            if(angular.isDefined(type.speciesList)){
+                var colors = palette('tol-rainbow', type.speciesList.length);
+                angular.forEach(type.speciesList, function(value,key){
+                    type.speciesList[key].color = '#' + colors[key];
+                    type.speciesList[key].tableColor = {'background-color': tinycolor('#' + colors[key]).setAlpha(0.7).toRgbString()};
+                });
+            }
+        });
+
+		self.catchDetails = data;
 	};
 
 	return Trip;

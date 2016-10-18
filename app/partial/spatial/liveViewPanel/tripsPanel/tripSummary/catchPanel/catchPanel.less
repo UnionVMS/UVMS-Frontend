@@ -14,11 +14,38 @@
             width: 100%;
             left: 0;
         }
+        thead {
+            display: block;
+            tr {
+                display: block;
+                th {
+                    width: 50%;
+                }
+                th.color-column {
+                    width: auto;
+                }
+            }
+        }
+        tbody {
+            display: block;
+            overflow-y: auto;
+            max-height: 120px;
+            width: 100%;
+            tr {
+                display: block;
+                td {
+                    width: 50%;
+                }
+                td.color-column {
+                    width: auto;
+                }
+            }
+        }
     }
     .nvd3-chart {
         margin: 0 -40px;
     }
     .table-responsive-force {
-        margin-top: 65px;
+        margin-top: 25px;
     }
 }

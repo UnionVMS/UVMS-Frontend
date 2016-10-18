@@ -1,28 +1,41 @@
 angular.module('unionvmsWeb').controller('CatchpanelCtrl',function($scope,$element,loadingStatus,activityRestService,tripSummaryService,$anchorScroll,locale){
 
-    $scope.chartColors = ['#089fd7', '#6fc474'];
-
     /* Chart options */
-    $scope.options = {
+    $scope.options1 = {
         chart: {
             type: 'pieChart',
             height: 200,
-            x: function(d){return d.key;},
-            y: function(d){return d.count;},
+            x: function(d){return d.speciesCode;},
+            y: function(d){return d.weight;},
             valueFormat: function(d){
-                var value = d/$scope.total*100;
-                return value.toFixed(2) + '%';
+                var value = d/$scope.trip.catchDetails.onboard.total*100;
+                return d + 'kg ('+ value.toFixed(2) + '%)';
             },
             showLabels: false,
             duration: 500,
-            legend: {
-                margin: {
-                    top: 15,
-                    right: 20,
-                    bottom: 0,
-                    left: 0
-                }
-            }
+            color: function (d, i) {
+                return $scope.trip.catchDetails.onboard.speciesList[i].color;
+            },
+            showLegend: false
+        }
+    };
+
+    $scope.options2 = {
+        chart: {
+            type: 'pieChart',
+            height: 200,
+            x: function(d){return d.speciesCode;},
+            y: function(d){return d.weight;},
+            valueFormat: function(d){
+                var value = d/$scope.trip.catchDetails.landed.total*100;
+                return d + 'kg ('+ value.toFixed(2) + '%)';
+            },
+            showLabels: false,
+            duration: 500,
+             color: function (d, i) {
+                return $scope.trip.catchDetails.landed.speciesList[i].color;
+            },
+            showLegend: false
         }
     };
 

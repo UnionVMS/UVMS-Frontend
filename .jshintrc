@@ -38,6 +38,8 @@
 		"L": true,
 		"saveAs": true,
 		"screenfull": true,
-		"proj4": true
+		"proj4": true,
+        "palette": true,
+        "tinycolor": true
     }
 }

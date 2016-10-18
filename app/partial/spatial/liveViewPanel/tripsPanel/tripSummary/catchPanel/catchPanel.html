@@ -8,7 +8,7 @@
             <h2>{{'activity.catch_panel_title_onboard' | i18n }}</h2>
             <div class="col-md-6">
                 <div class="nvd3-chart">
-                    <nvd3 options="options" data="trip.catchDetails.onboard.speciesList" on-ready="callback"></nvd3>
+                    <nvd3 options="options1" data="trip.catchDetails.onboard.speciesList" on-ready="callback"></nvd3>
                 </div>
             </div>
             <div class="col-md-6">
@@ -17,12 +17,14 @@
                         <table class="table table-striped table-condensed">
                             <thead>
                                 <tr>
+                                    <th class="color-column"></th>
                                     <th>{{'activity.catch_panel_column_species' | i18n }}</th>
                                     <th>{{'activity.catch_panel_column_weight' | i18n }}</th>
                                 </tr>
                             </thead>
                             <tbody>
                                 <tr ng-repeat="item in trip.catchDetails.onboard.speciesList">
+                                    <td ng-style="item.tableColor" class="color-column"></td>
                                     <td>{{item.speciesCode}}</td>
                                     <td>{{item.weight}}</td>
                                 </tr>
@@ -38,7 +40,7 @@
             <h2>{{'activity.catch_panel_title_landed' | i18n }}</h2>
             <div class="col-md-6">
                 <div class="nvd3-chart">
-                    <nvd3 options="options" data="trip.catchDetails.landed.speciesList" on-ready="callback"></nvd3>
+                    <nvd3 options="options2" data="trip.catchDetails.landed.speciesList" on-ready="callback"></nvd3>
                 </div>
             </div>
             <div class="col-md-6">
@@ -47,12 +49,14 @@
                         <table class="table table-striped table-condensed">
                             <thead>
                                 <tr>
+                                    <th class="color-column"></th>
                                     <th>{{'activity.catch_panel_column_species' | i18n }}</th>
                                     <th>{{'activity.catch_panel_column_weight' | i18n }}</th>
                                 </tr>
                             </thead>
                             <tbody>
                                 <tr ng-repeat="item in trip.catchDetails.landed.speciesList">
+                                    <td ng-style="item.tableColor" class="color-column"></td>
                                     <td>{{item.speciesCode}}</td>
                                     <td>{{item.weight}}</td>
                                 </tr>

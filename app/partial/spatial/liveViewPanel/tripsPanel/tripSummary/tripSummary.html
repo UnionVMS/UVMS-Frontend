@@ -1,14 +1,4 @@
 <div class="trip-summary" ng-controller="TripsummaryCtrl">
-    <div class="container containerWithTopBottomPadding spatial-error" ng-show="alert.hasAlert">
-        <div class="alert alert-container" role="alert" ng-class="{'alert-danger': alert.hasError, 'alert-success': alert.hasSuccess, 'alert-warning': alert.hasWarning}">
-            <span class="fa fa-exclamation-circle" aria-hidden="true" ng-show="alert.hasError"></span>
-            <span class="fa fa-check-circle" aria-hidden="true" ng-show="alert.hasSuccess"></span>
-            <span class="fa fa-exclamation-circle" aria-hidden="true" ng-show="alert.hasWarning"></span>
-            <span class="alert-message">
-                <span>{{alert.alertMessage}}</span>          
-            </span>
-        </div>
-    </div>
     <loading-panel type="TripSummary"></loading-panel>
     <div class="row summary-row">
         <div class="col-md-4 summary-section" ng-include="'partial/spatial/liveViewPanel/tripsPanel/tripSummary/fishingTripPanel/fishingTripPanel.html'"></div>
