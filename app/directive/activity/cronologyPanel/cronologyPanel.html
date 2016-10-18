@@ -1,0 +1,24 @@
+<div>
+    <fieldset class="col-md-12 fieldsetStyle cronology-section">
+        <legend class="fieldsetLegendStyle">
+            <a>{{'activity.trip_summary_cronology' | i18n }}</a>
+        </legend>
+        <!--CURRENT TRIP-->
+        <div class="row current-trip">
+            <a class="col-md-12">{{'activity.cronology_current_trip' | i18n }} {{cronology.currentTrip}}</a>
+        </div>
+        <!--NEXT TRIPS-->
+        <div class="row" ng-repeat="tripName in cronology.nextTrips">
+            <a class="col-md-12">{{tripName}}</a>
+        </div>
+        <!--SELECTED TRIP-->
+        <div class="row">
+            <a class="col-md-12">{{cronology.selectedTrip}}</a>
+        </div>
+        <!--PREVIOUS TRIPS-->
+        <div class="row" ng-repeat="tripName in cronology.previousTrips">
+            <a class="col-md-12">{{tripName}}</a>
+        </div>
+        <a class="view-all">{{'activity.cronology_view_all' | i18n }}</a>
+    </fieldset>
+</div>

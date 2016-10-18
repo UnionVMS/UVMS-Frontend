@@ -1,16 +1,16 @@
 <div class="trip-summary" ng-controller="TripsummaryCtrl">
     <loading-panel type="TripSummary"></loading-panel>
     <div class="row summary-row">
-        <div class="col-md-4 summary-section" ng-include="'partial/spatial/liveViewPanel/tripsPanel/tripSummary/fishingTripPanel/fishingTripPanel.html'"></div>
-        <div class="col-md-3 summary-section" ng-include="'partial/spatial/liveViewPanel/tripsPanel/tripSummary/vesselPanel/vesselPanel.html'"></div>
-        <div class="col-md-2 summary-section" ng-include="'partial/spatial/liveViewPanel/tripsPanel/tripSummary/rolesPanel/rolesPanel.html'"></div>
-        <div class="col-md-3 summary-section" ng-include="'partial/spatial/liveViewPanel/tripsPanel/tripSummary/cronologyPanel/cronologyPanel.html'"></div>
+        <fishing-trip-panel class="col-md-4 summary-section" trip="trip"></fishing-trip-panel>
+        <vessel-panel class="col-md-3 summary-section" trip="trip"></vessel-panel>
+        <roles-panel class="col-md-2 summary-section"></roles-panel>
+        <cronology-panel class="col-md-3 summary-section" trip="trip" trip-alert="alert"></cronology-panel>
     </div>
     <div class="row summary-row">
         <map-tile class="col-md-4 summary-section" tile-title="{{'activity.trip_summary_trip_map' | i18n }}" map-data="tripSummServ.mapData" map-height="217"></map-tile>
-        <div class="col-md-8 summary-section" ng-include="'partial/spatial/liveViewPanel/tripsPanel/tripSummary/catchPanel/catchPanel.html'"></div>
+        <catch-panel class="col-md-8 summary-section" trip="trip" trip-alert="alert"></catch-panel>
     </div>
     <div class="row summary-row">
-        <div class="col-md-12 summary-section" ng-include="'partial/spatial/liveViewPanel/tripsPanel/tripSummary/tripReportsPanel/tripReportsPanel.html'"></div>
+        <trip-reports-panel class="col-md-12 summary-section" trip="trip" trip-alert="alert"></trip-reports-panel>
     </div>
 </div>
