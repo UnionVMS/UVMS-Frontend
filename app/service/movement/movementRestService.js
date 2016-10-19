@@ -19,6 +19,12 @@ angular.module('unionvmsWeb')
                 list : { method : 'POST'}
             });
         },
+        getMinimalMovementList : function(){
+            return $resource('/movement/rest/movement/list/minimal',{},
+            {
+                list : { method : 'POST'}
+            });
+        },
         getLatestMovementsByConnectIds : function(){
             return $resource('/movement/rest/movement/latest',{},
             {
@@ -82,6 +88,37 @@ angular.module('unionvmsWeb')
         );
         return deferred.promise;
     };
+
+    var getMinimalMovementList = function(getListRequest){
+
+            var deferred = $q.defer();
+            movementRestFactory.getMinimalMovementList().list(getListRequest.DTOForMovement(),
+                function(response){
+
+                    if(response.code !== "200"){
+                        deferred.reject("Invalid response status");
+                        return;
+                    }
+
+                    var movements = [];
+
+                    if(angular.isArray(response.data.movement)){
+                        for (var i = 0; i < response.data.movement.length; i++){
+                            movements.push(Movement.fromJson(response.data.movement[i]));
+                        }
+                    }
+                    var currentPage = response.data.currentPage;
+                    var totalNumberOfPages = response.data.totalNumberOfPages;
+                    var searchResultListPage = new SearchResultListPage(movements, currentPage, totalNumberOfPages);
+                    deferred.resolve(searchResultListPage);
+                },
+                function(error){
+                    console.log("Error getting movements.", error);
+                    deferred.reject(error);
+                }
+            );
+            return deferred.promise;
+        };
 
     var getLatestMovementsByConnectIds = function(listOfConnectIds){
 
@@ -272,6 +309,7 @@ angular.module('unionvmsWeb')
 
     return {
         getMovementList : getMovementList,
+        getMinimalMovementList : getMinimalMovementList,
         getLatestMovementsByConnectIds : getLatestMovementsByConnectIds,
         getMovement: getMovement,
         getLatestMovement: getLatestMovement,
