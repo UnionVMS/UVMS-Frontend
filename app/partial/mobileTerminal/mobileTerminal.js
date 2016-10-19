@@ -41,7 +41,6 @@ angular.module('unionvmsWeb').controller('MobileTerminalCtrl',function($scope, $
 
 
     $scope.transponderSystems = [];
-    $scope.channelNames = [];
     $scope.currentMobileTerminal = undefined;
 
     //Toggle (show/hide) new mobile terminal
@@ -161,16 +160,6 @@ angular.module('unionvmsWeb').controller('MobileTerminalCtrl',function($scope, $
             $scope.createTransponderSystemDropdownOptions();
         }else{
             alertService.showErrorMessage(locale.getString('mobileTerminal.add_new_alert_message_on_load_transponders_error'));
-        }
-
-        //Get list of channelNames
-        $scope.channelNames = [];
-        if(angular.isDefined(configurationService.getConfig('MOBILE_TERMINAL_TRANSPONDERS'))){
-            $.each(configurationService.getConfig('MOBILE_TERMINAL_CHANNELS'), function(index, name){
-                $scope.channelNames.push({text : name, code : name});
-            });
-        }else{
-            alertService.showErrorMessage(locale.getString('mobileTerminal.add_new_alert_message_on_load_channel_names_error'));
         }
     };
 
@@ -376,7 +365,7 @@ angular.module('unionvmsWeb').controller('MobileTerminalCtrl',function($scope, $
         }
     });
 
-    $scope.$on("createMobileTerminalWithVessel", function(e) {  
+    $scope.$on("createMobileTerminalWithVessel", function(e) {
         $scope.$emit($scope.toggleAddNewMobileTerminal());
         $scope.createMobileTerminalWithVessel.visible = !$scope.createMobileTerminalWithVessel.visible;
     });

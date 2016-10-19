@@ -261,7 +261,7 @@ unionvmsWebApp.config(function($stateProvider, $compileProvider, tmhDynamicLocal
             },
             resolve: {
                 config : function(initService){
-                    return initService.loadConfigFor(["VESSEL", "VESSEL_PARAMETERS", "MOBILETERMINAL", "MOBILE_TERMINAL_TRANSPONDERS", "MOBILE_TERMINAL_CHANNELS"]);
+                    return initService.loadConfigFor(["VESSEL", "VESSEL_PARAMETERS", "MOBILETERMINAL", "MOBILE_TERMINAL_TRANSPONDERS"]);
                 }
             },
             data: {
@@ -279,7 +279,7 @@ unionvmsWebApp.config(function($stateProvider, $compileProvider, tmhDynamicLocal
             },
             resolve: {
                 config : function(initService){
-                    return initService.loadConfigFor(["VESSEL", "VESSEL_PARAMETERS", "MOBILE_TERMINAL_TRANSPONDERS", "MOBILE_TERMINAL_CHANNELS"]);
+                    return initService.loadConfigFor(["VESSEL", "VESSEL_PARAMETERS", "MOBILE_TERMINAL_TRANSPONDERS"]);
                 }
             },
             data: {
@@ -297,7 +297,7 @@ unionvmsWebApp.config(function($stateProvider, $compileProvider, tmhDynamicLocal
             },
             resolve: {
                 config : function(initService){
-                    return initService.loadConfigFor(["MOBILETERMINAL", "MOBILE_TERMINAL_TRANSPONDERS", "MOBILE_TERMINAL_CHANNELS", "VESSEL"]);
+                    return initService.loadConfigFor(["MOBILETERMINAL", "MOBILE_TERMINAL_TRANSPONDERS", "VESSEL"]);
                 }
             },
             data: {
@@ -315,7 +315,7 @@ unionvmsWebApp.config(function($stateProvider, $compileProvider, tmhDynamicLocal
             },
             resolve: {
                 config : function(initService){
-                    return initService.loadConfigFor(["MOBILETERMINAL", "MOBILE_TERMINAL_TRANSPONDERS", "MOBILE_TERMINAL_CHANNELS", "VESSEL"]);
+                    return initService.loadConfigFor(["MOBILETERMINAL", "MOBILE_TERMINAL_TRANSPONDERS", "VESSEL"]);
                 }
             },
             data: {
@@ -568,7 +568,7 @@ unionvmsWebApp.config(function($stateProvider, $compileProvider, tmhDynamicLocal
             },
             resolve: {
                 config : function(initService){
-                    return initService.loadConfigFor(["RULES", "VESSEL", "MOBILETERMINAL", "MOBILE_TERMINAL_CHANNELS", "MOVEMENT", "MOVEMENT_SOURCE_TYPES"]);
+                    return initService.loadConfigFor(["RULES", "VESSEL", "MOBILETERMINAL", "MOVEMENT", "MOVEMENT_SOURCE_TYPES"]);
                 }
             },
             data: {
@@ -586,7 +586,7 @@ unionvmsWebApp.config(function($stateProvider, $compileProvider, tmhDynamicLocal
             },
             resolve: {
                 config : function(initService){
-                    return initService.loadConfigFor(["RULES", "VESSEL", "MOBILETERMINAL", "MOBILE_TERMINAL_CHANNELS", "MOVEMENT", "MOVEMENT_SOURCE_TYPES"]);
+                    return initService.loadConfigFor(["RULES", "VESSEL", "MOBILETERMINAL", "MOVEMENT", "MOVEMENT_SOURCE_TYPES"]);
                 }
             },
             data: {

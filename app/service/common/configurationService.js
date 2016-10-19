@@ -22,7 +22,6 @@ copy of the GNU General Public License along with the IFDM Suite. If not, see <h
             "MOVEMENT_SOURCE_TYPES" : movementRestService.getConfigForSourceTypes,
             "MOBILETERMINAL" : mobileTerminalRestService.getConfig,
             "MOBILE_TERMINAL_TRANSPONDERS" : mobileTerminalRestService.getTranspondersConfig,
-            "MOBILE_TERMINAL_CHANNELS" : mobileTerminalRestService.getChannelNames,
             "AUDIT" : auditLogRestService.getAuditConfiguration,
             "RULES" : ruleRestService.getConfig,
             "ALARM_STATUSES" : alarmRestService.getAlarmStatusConfig,
