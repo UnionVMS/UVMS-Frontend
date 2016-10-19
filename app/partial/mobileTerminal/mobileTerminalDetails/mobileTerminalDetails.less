@@ -11,49 +11,77 @@ copy of the GNU General Public License along with the IFDM Suite. If not, see <h
  */
 .mobileTerminalDetailsContainer{
 
+    // Form
+    @max-width:              1200px;
+    @row-margin:             15px;
+    @field-margin-vertical:  20px;
+    
+    .channel-form {
+        max-width: @max-width;
+        background: #f7f7f7;
+        margin-bottom: @row-margin;
+        padding: @row-margin / 2;
+        margin-left: -@row-margin / 2;
+        margin-right: -@row-margin / 2;
+        
+        .flexrow {
+            margin-bottom: @row-margin;
+
+            &:last-of-type { margin-bottom: 0; }
+            .form-group { margin-bottom: 0; }
+        }
+    }
+    
     .flexrow {
         .flexbox();
         align-items: stretch;
-        
+        max-width: @max-width;
+
         .form-group {
-            margin-right: 20px;
+            margin-right: @field-margin-vertical;
             align-self: flex-end;
-            width: 30%; 
-            
-            &.small-field {
-                width: 20%; 
+
+            &.longer-field {
+                max-width: 230px;
+                flex: 1;
+            } 
+
+            &.long-field {
+                max-width: 180px;
+                flex: 1;
             }
 
-            &.smaller-field {
-                width: 15%;
-            }
-
-            &.auto-field {
-                width: auto;
-            }
-
-            &:last-of-type {
-                margin-right: 0;
+            &.medium-field {
+                max-width: 100px;
+                flex: 1;
             }
 
             &.align-right {
                 margin-left: auto;
             }
 
-            &.radio-buttons label {
-                display: block;
+            &:last-of-type {
+                margin-right: 0;
             }
+        }
+    }
 
-            .tagSelectInputContainer {
-                min-width: 100%;
-            }
+    .delete-channel {
+        .clearfix();
+        margin-bottom: 10px;
+
+        .btn {
+            padding: 5px 10px;
+            font-size: 12px;
+            line-height: 1.5;
+            color: @errorColor;
+            float: right;
         }
     }
     
     .dropdown {
         .dropdowntext {
-            padding-right: 20px;
-            white-space: normal;
+            padding-right: @field-margin-vertical;
         }
 
         .btn.btn-default.dropdown-toggle {
@@ -76,41 +104,58 @@ copy of the GNU General Public License along with the IFDM Suite. If not, see <h
         }
     }
 
-    .communicationChannel{
-        margin-top: 20px;
-        .form-group:first-child{
-            .nopaddingleft();
+    // Radio buttons
+    .radio-buttons {
+        .flexbox();
+
+        .radio-button {
+            position: relative;
+            margin-right: @field-margin-vertical;
+
+            &:last-of-type {
+                margin-right: 0;
+            }
+
+            label.radio-btn {
+                display: block;
+                position: relative;
+                height: 30px;
+            }
+
+            input[type="radio"] {
+                opacity: 0;
+                width: 0px;
+                height: 0px;
+                position: absolute;
+            }
+
+            input[type="radio"] + label:before, 
+            input[type="radio"]:checked + label:after {
+                display: block;
+                border-radius: 50%;
+                cursor: pointer;
+                content: "";
+                z-index: 1;
+                transition: all .5s ease;
+                .postion-absolut-vertical-horizontal();
+            }
+
+            input[type="radio"] + label:before {
+                border: 1px solid #c2c9cc;
+                background: #fff;
+                width: 24px;
+                height: 24px;
+            }
+
+            input[type="radio"]:checked + label:after {
+                background: @profileColor_blue;
+                width: 14px;
+                height: 14px;
+            }
         }
     }
 
-    .comchannelrow {
-        min-height: 20px;
-    };
-
-    .addNewChannelWrapper{
-        margin-bottom: 25px;
-    }
-
-    input[type='radio']{
-        height: 15px;
-        width: 15px;
-        cursor: pointer;
-        margin: 10px 8px;
-    }
-
-    .remove{
-        padding-top: 5px;
-        color:@errorColor;
-        cursor: pointer;
-    }
-
-    .channel-form {
-        background: #f7f7f7;
-        margin-bottom: 20px;
-    }
-
     // Switcher 
-
     @switcher-contianer-width:  60px;
     @switcher-inner-width:      26px;
     @switcher-border-radius:    4px;

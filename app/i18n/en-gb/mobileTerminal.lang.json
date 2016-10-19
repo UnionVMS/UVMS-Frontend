@@ -58,7 +58,7 @@
     "form_inmarsatc_in_port_grace_period_label" : "In port",
     "form_inmarsatc_communication_channels_header" : "Communication channels",
     "form_inmarsatc_communication_channels_notice" : "Note: The first communication channel has to be a VMS. This will be used as a default when polling.",
-    "form_inmarsatc_communication_channels_add_new_button" : "+ Add new channel",
+    "form_inmarsatc_communication_channels_add_new_button" : "Add new channel",
     "form_inmarsatc_communication_channel_dnid_label" : "DNID",
     "form_inmarsatc_communication_channel_channel_label" : "Channel",
     "form_inmarsatc_communication_channel_member_no_label" : "Member no.",
