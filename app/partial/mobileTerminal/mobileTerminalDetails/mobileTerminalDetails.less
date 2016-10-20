@@ -15,10 +15,11 @@ copy of the GNU General Public License along with the IFDM Suite. If not, see <h
     @max-width:              1200px;
     @row-margin:             15px;
     @field-margin-vertical:  20px;
+    @field-height:           30px;
     
     .channel-form {
         max-width: @max-width;
-        background: #f7f7f7;
+        background: @searchResultsTableOddRowColor;
         margin-bottom: @row-margin;
         padding: @row-margin / 2;
         margin-left: -@row-margin / 2;
@@ -75,7 +76,8 @@ copy of the GNU General Public License along with the IFDM Suite. If not, see <h
         margin-bottom: 10px;
 
         .btn {
-            padding: 5px 10px;
+            padding: 5px 0;
+            width: @field-height;
             font-size: 12px;
             line-height: 1.5;
             color: @errorColor;
@@ -123,7 +125,7 @@ copy of the GNU General Public License along with the IFDM Suite. If not, see <h
             label.radio-btn {
                 display: block;
                 position: relative;
-                height: 30px;
+                height: @field-height;
             }
 
             input[type="radio"] {
@@ -140,7 +142,7 @@ copy of the GNU General Public License along with the IFDM Suite. If not, see <h
                 cursor: pointer;
                 content: "";
                 z-index: 1;
-                transition: all .5s ease;
+                .transition-all-ease(500ms);
                 .postion-absolut-vertical-horizontal();
             }
 
@@ -172,7 +174,7 @@ copy of the GNU General Public License along with the IFDM Suite. If not, see <h
         position: relative;
         display: block;
         width: @switcher-contianer-width;
-        height: 30px;
+        height: @field-height;
     }
 
     .switch input {
@@ -188,12 +190,11 @@ copy of the GNU General Public License along with the IFDM Suite. If not, see <h
         bottom: 0;
         border-radius: @switcher-border-radius + 1px;
         background-color: @errorColor;
-        -webkit-transition: .4s;
-        transition: .4s;
+        .transition-all-ease(400ms);
 
         .fa {
             color: rgba(255, 255, 255, 0.95);;
-            line-height: 30px;
+            line-height: @field-height;
 
             &.fa-check {
                 padding-left: 10px;
@@ -215,8 +216,7 @@ copy of the GNU General Public License along with the IFDM Suite. If not, see <h
         bottom: 0px;
         border-radius: @switcher-border-radius;
         background-color: #c2c9cc;
-        -webkit-transition: .4s;
-        transition: .4s;
+        .transition-all-ease(400ms);
     }
 
     input:checked + .slider {
