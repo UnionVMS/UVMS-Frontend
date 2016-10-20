@@ -27,7 +27,7 @@ angular.module('unionvmsWeb').factory('vesselValidationService',function() {
             return new RegExp(/^[0-9]{7}$/);
         },
         getProducerCodePattern: function() {
-            return new RegExp(/^.{3}$/);
+            return new RegExp(/^\d{1,9}$/);
         }
     };
 

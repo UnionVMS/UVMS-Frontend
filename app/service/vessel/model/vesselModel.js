@@ -21,8 +21,14 @@ angular.module('unionvmsWeb')
         this.lengthType = "LOA";
         this.contact = [];
         this.producer = {
-            code : undefined,
-            name : undefined
+            id : undefined,
+            name : undefined,
+            address : undefined,
+            zipcode : undefined,
+            city : undefined,
+            phone : undefined,
+            mobile : undefined,
+            fax : undefined
         };
         this.notes = [];
         this.lastMovement = undefined;
@@ -75,9 +81,15 @@ angular.module('unionvmsWeb')
             }
         }
 
-        if(angular.isDefined(data.producer)){
-            vessel.producer.code = data.producer.code;
+        if(data.producer){
+            vessel.producer.id = data.producer.id;
             vessel.producer.name = data.producer.name;
+            vessel.producer.address = data.producer.address;
+            vessel.producer.zipcode = data.producer.zipcode;
+            vessel.producer.city = data.producer.city;
+            vessel.producer.phone = data.producer.phone;
+            vessel.producer.mobile = data.producer.mobile;
+            vessel.producer.fax = data.producer.fax;
         }
 
         if (data.eventHistory) {
@@ -178,8 +190,14 @@ angular.module('unionvmsWeb')
         }
         if(this.producer){
             copy.producer = {
-                code : this.producer.code,
-                name : this.producer.name
+                id : this.producer.id,
+                name : this.producer.name,
+                address : this.producer.address,
+                zipcode : this.producer.zipcode,
+                city : this.producer.city,
+                phone : this.producer.phone,
+                mobile : this.producer.mobile,
+                fax : this.producer.fax
             };
         }
         copy.gearType = this.gearType;
@@ -198,7 +216,7 @@ angular.module('unionvmsWeb')
         }
     };
 
-    //Check if the vessel is equal another vessel
+    //Check if the vessel is equal to another vessel
     //Equal means same guid
     Vessel.prototype.equals = function(item) {
         return this.getGuid() === item.getGuid();

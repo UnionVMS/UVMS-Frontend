@@ -81,8 +81,14 @@ describe('VesselModel', function() {
            }
            ],
         "producer" : {
-            "code" : "123AB",
-            "name" : "ProducerName"
+            "id" : "123AB",
+            "name" : "ProducerName",
+            "address" : "ProducerAddress",
+            "zipcode" : "ProducerZipcode",
+            "city" : "ProducerCity",
+            "phone" : "ProducerPhone",
+            "mobile" : "ProducerMobile",
+            "fax" : "ProducerFax"
         },
     };
 
@@ -132,9 +138,14 @@ describe('VesselModel', function() {
 
         expect(vessel.contact.length).toEqual(vesselData.contact.length);
         expect(vessel.notes.length).toEqual(vesselData.notes.length);
-        expect(vessel.producer.code).toEqual(vesselData.producer.code);
+        expect(vessel.producer.id).toEqual(vesselData.producer.id);
         expect(vessel.producer.name).toEqual(vesselData.producer.name);
-
+        expect(vessel.producer.address).toEqual(vesselData.producer.address);
+        expect(vessel.producer.zipcode).toEqual(vesselData.producer.zipcode);
+        expect(vessel.producer.city).toEqual(vesselData.producer.city);
+        expect(vessel.producer.phone).toEqual(vesselData.producer.phone);
+        expect(vessel.producer.mobile).toEqual(vesselData.producer.mobile);
+        expect(vessel.producer.fax).toEqual(vesselData.producer.fax);
     }));
 
     it("copy should create an identical object", inject(function(Vessel) {

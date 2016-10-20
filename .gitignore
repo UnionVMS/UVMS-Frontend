@@ -7,3 +7,4 @@ bower_components
 /testResults
 *.iml
 font-awesome
+**/.idea
