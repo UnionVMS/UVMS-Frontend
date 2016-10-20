@@ -7,7 +7,7 @@
  * @description
  *  A reusable tile that will display the cronology of trips related to the current trip
  */
-angular.module('unionvmsWeb').directive('cronologyPanel', function(loadingStatus,activityRestService,$anchorScroll,locale) {
+angular.module('unionvmsWeb').directive('cronologyPanel', function(loadingStatus,activityRestService,$anchorScroll,locale,tripSummaryService) {
 	return {
 		restrict: 'E',
 		replace: true,
@@ -17,6 +17,10 @@ angular.module('unionvmsWeb').directive('cronologyPanel', function(loadingStatus
 		},
 		templateUrl: 'directive/activity/cronologyPanel/cronologyPanel.html',
 		link: function(scope, element, attrs, fn) {
+
+            scope.openTrip = function(tripName){
+                tripSummaryService.openNewTrip(tripName);
+            };
 
             /**
 			 * Initializes the cronology panel directive

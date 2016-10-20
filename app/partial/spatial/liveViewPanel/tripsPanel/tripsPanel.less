@@ -1,9 +1,8 @@
 .trips-panel {
     background-color: #fff;
     padding: 5px 15px;
-    position: relative;
     .tab-content {
-        overflow-y: auto;
+        //overflow-y: auto;
         max-height: calc(~"100vh - 138px");
         .trip-summary-tab {
             border: 1px solid #ddd;
@@ -32,6 +31,21 @@
                     }
                 }
             }
+            .btn-trip-quit,
+            .btn-print {
+                position: absolute;
+            }
+            .btn-trip-quit {
+                right: -1px;
+                top: -26px;
+                color:red;
+                font-size: 20px;
+            }
+            .btn-print {
+                right: 6px;
+                top: 14px;
+                font-size: 18px;
+            }
         }
     }
     .close-button {
@@ -43,6 +57,7 @@
         z-index: 1;
     }
     ul.nav.nav-tabs {
+        cursor: auto;
         li {
             margin-bottom: 0;
             &.active {
@@ -67,17 +82,11 @@
             }
         }
     }
-    .btn-trip-quit {
-        position: absolute;
-        right: 5px;
-        top: 5px;
-        color:red;
-    }
 }
 .in-new-tab {
     .trips-panel {
         .tab-content {
-            overflow-y: auto;
+            //overflow-y: auto;
             max-height: calc(~"100vh - 93px");
         }
     }

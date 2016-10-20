@@ -4,17 +4,17 @@
  * @name tripSummaryService
  * @attr {unionvmsWeb.Trip} trip - The current trip in trip summary
  * @attr {Object} mapConfigs - A property object that will contain the cronology of trips related to the current trip
- * @attr {Array} tripTabs - A property object that will be the catch details
+ * @attr {Array} tabs - A property object that will be the catch details
  * @description
  *  Service to manage the trip summary view in the application
  */
-angular.module('unionvmsWeb').factory('tripSummaryService',function() {
+angular.module('unionvmsWeb').factory('tripSummaryService',function($timeout) {
 	var tripSummaryService = {
 	    trip: undefined,
 	    mapConfigs: undefined,
-        tripTabs: undefined
+        tabs: undefined
 	};
-	
+
     /**
      * Open a new tab with a specific trip
      * 
@@ -24,11 +24,17 @@ angular.module('unionvmsWeb').factory('tripSummaryService',function() {
 	 * @alias openNewTrip
      */
     tripSummaryService.openNewTrip = function(tripId){
-        if(!angular.isDefined(this.tripTabs)){
-            this.tripTabs = [];
+        if(!angular.isDefined(this.tabs)){
+            this.tabs = [];
         }
-        this.tripTabs.push(tripId);
-        this.initializeTrip(this.tripTabs.length-1);
+        if(_.where(this.tabs, {title: tripId}).length === 0){
+            angular.forEach(this.tabs, function(item) {
+                item.active = false;
+            });
+
+            this.tabs.push({title: tripId, active: true});
+            this.initializeTrip(this.tabs.length-1);
+        }
     };
 
     /**

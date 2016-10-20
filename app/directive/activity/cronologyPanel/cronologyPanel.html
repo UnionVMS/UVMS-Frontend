@@ -5,11 +5,11 @@
         </legend>
         <!--CURRENT TRIP-->
         <div class="row current-trip">
-            <a class="col-md-12">{{'activity.cronology_current_trip' | i18n }} {{cronology.currentTrip}}</a>
+            <a class="col-md-12" ng-click="openTrip(cronology.currentTrip)">{{'activity.cronology_current_trip' | i18n }} {{cronology.currentTrip}}</a>
         </div>
         <!--NEXT TRIPS-->
         <div class="row" ng-repeat="tripName in cronology.nextTrips">
-            <a class="col-md-12">{{tripName}}</a>
+            <a class="col-md-12" ng-click="openTrip(tripName)">{{tripName}}</a>
         </div>
         <!--SELECTED TRIP-->
         <div class="row">
@@ -17,7 +17,7 @@
         </div>
         <!--PREVIOUS TRIPS-->
         <div class="row" ng-repeat="tripName in cronology.previousTrips">
-            <a class="col-md-12">{{tripName}}</a>
+            <a class="col-md-12" ng-click="openTrip(tripName)">{{tripName}}</a>
         </div>
         <!--VIEW ALL LINK-->
         <a class="view-all">{{'activity.cronology_view_all' | i18n }}</a>

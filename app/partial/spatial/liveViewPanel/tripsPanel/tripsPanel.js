@@ -38,8 +38,8 @@ angular.module('unionvmsWeb').controller('TripspanelCtrl',function($scope, gener
      * @param {Number} index - The index of the tab to be closed
      */
     $scope.closeTab = function(index){
-        $scope.tripSummServ.tripTabs.splice(index,1);
-        if($scope.tripSummServ.tripTabs.length < 1){
+        $scope.tripSummServ.tabs.splice(index,1);
+        if($scope.tripSummServ.tabs.length < 1){
             $scope.repNav.goToPreviousView();
         }
     };
@@ -53,10 +53,22 @@ angular.module('unionvmsWeb').controller('TripspanelCtrl',function($scope, gener
      * @param {Number} index - The index of the tab to be initialized
      */
     $scope.tripSummServ.initializeTrip = function(index){
-        if(angular.isDefined($scope.tripSummServ.tripTabs[index])){
-            $scope.tripSummServ.trip = new Trip($scope.tripSummServ.tripTabs[index]);
+        if(angular.isDefined($scope.tripSummServ.tabs[index])){
+            $scope.tripSummServ.trip = new Trip($scope.tripSummServ.tabs[index].title);
             $scope.trip = $scope.tripSummServ.trip;
         }
+    };
+
+    /**
+     * Quit the trip summary view
+     * 
+     * @memberof TripspanelCtrl
+     * @public
+     * @alias quitTripSummary
+     */
+    $scope.quitTripSummary = function(){
+        $scope.tripSummServ.tabs = undefined;
+        $scope.repNav.goToPreviousView();
     };
 
 });
