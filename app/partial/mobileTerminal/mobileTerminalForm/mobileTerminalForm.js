@@ -18,6 +18,7 @@ angular.module('unionvmsWeb').controller('mobileTerminalFormCtrl',function($filt
     //Visibility statuses
     $scope.isVisible = {
         assignVessel : false,
+        vesselForm  : false
     };
 
     $scope.typeAndPlugin = undefined;
@@ -135,6 +136,7 @@ angular.module('unionvmsWeb').controller('mobileTerminalFormCtrl',function($filt
     //Success creating the new mobile terminal
     var createNewMobileTerminalSuccess = function(mobileTerminal) {
         if ($scope.$parent.vesselObj) {
+            $scope.isVisible.vesselForm = true;
             mobileTerminalRestService.assignMobileTerminal(mobileTerminal, $scope.$parent.vesselObj.getGuid(), "-")
             .then(function() {
                 alertService.showSuccessMessage(locale.getString('mobileTerminal.add_new_alert_message_on_success'));
