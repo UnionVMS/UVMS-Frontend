@@ -28,6 +28,7 @@
     "table_vessel_name_not_assigned" :"Not linked",
     "table_not_assigned_icon_tooltip" :"This mobile terminal is not linked to any asset.",
     "add_new_form_header" : "New mobile terminal",
+    "add_new_form_mobile_terminal_label" : "Create new mobile terminal",
     "add_new_form_transponder_system_label" : "Transponder system",
     "add_new_form_transponder_system_placeholder" : "Choose transponder system",
     "add_new_form_ocean_region_label" : "Ocean region",

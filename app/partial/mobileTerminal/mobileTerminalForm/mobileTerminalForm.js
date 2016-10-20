@@ -395,10 +395,10 @@ angular.module('unionvmsWeb').controller('mobileTerminalFormCtrl',function($filt
     };
 
     $scope.getMenuHeader = function() {
-        if ($scope.currentMobileTerminal && $scope.currentMobileTerminal.type) {
-            return $filter('transponderName')($scope.currentMobileTerminal.type);
+        if ($scope.createNewMode) {
+            return $filter('i18n')('mobileTerminal.add_new_form_mobile_terminal_label'); 
         }
-        return $filter('i18n')('mobileTerminal.add_new_form_transponder_system_label');
+        return $filter('transponderName')($scope.currentMobileTerminal.type);
     }
 
     $scope.menuBarFunctions = {
