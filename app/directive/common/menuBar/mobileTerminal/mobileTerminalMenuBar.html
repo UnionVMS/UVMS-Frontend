@@ -4,5 +4,5 @@
         <span class="label label-success" ng-show="ngModel.active" id="menu-bar-mob-term-active">{{ ('common.active' | i18n)}}</span>
         <span class="label label-default" ng-hide="ngModel.active" id="menu-bar-mob-term-inactive">{{ ('common.inactive' | i18n)}}</span>
     </div>
-    <div class="menuTextItem">{{'common.source_upper_case' | i18n}} : <b id="menu-bar-mob-term-source">{{ngModel.source.substr(0, 1)}}{{ngModel.source.substr(1).toLowerCase()}}</b></div>
+    <div class="menuTextItem" ng-if="ngModel.source.substr.length > 0">{{'common.source_upper_case' | i18n}} : <b id="menu-bar-mob-term-source">{{ngModel.source.substr(0, 1)}}{{ngModel.source.substr(1).toLowerCase()}}</b></div>
 </div>
