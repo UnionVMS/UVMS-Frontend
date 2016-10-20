@@ -39,10 +39,7 @@
         "phantomjs-prebuilt": "^2.1.3",
         "time-grunt": "^1.1.0"
     },
-    "license": {
-        "type": "GPLv3",
-        "url": "https://github.com/UnionVMS/UVMS-Frontend/blob/master/LICENSE"
-    },
+    "license": "GPL-3.0",
     "name": "unionvmsWeb",
     "repository": {
         "type": "svn",
