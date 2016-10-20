@@ -1,4 +1,6 @@
 <div class="col-md-12 trips-panel" ng-controller="TripspanelCtrl">
+    <!--TRIP SUMMARY LOADING-->
+    <loading-panel type="TripSummary"></loading-panel>
     <!--TRIP SUMMARY ALERT-->
     <div class="container containerWithTopBottomPadding spatial-error" ng-show="alert.hasAlert">
         <div class="alert alert-container" role="alert" ng-class="{'alert-danger': alert.hasError, 'alert-success': alert.hasSuccess, 'alert-warning': alert.hasWarning}">
@@ -14,19 +16,20 @@
     <div ng-include="'partial/spatial/liveViewPanel/tripsPanel/tripsList/tripsList.html'" ng-if="false"></div>
     <!--TRIP SUMMARY-->
     <uib-tabset active="active">
-        <uib-tab index="$index" ng-repeat="tab in tabTitles" heading="{{tab.title}}" select="initializeTrip($index)">
+        <uib-tab index="$index" ng-repeat="tab in tripSummServ.tripTabs" heading="{{tab}}" select="tripSummServ.initializeTrip($index)">
             <!--TAB HEADER-->
             <uib-tab-heading>
-                {{tab.title}}
+                {{tab}}
                 <a class="close-button" ng-click="closeTab($index)">
                     <i class="fa fa-times"></i>
                 </a>
             </uib-tab-heading>
             <!--TAB CONTENT-->
-            <div class="trip-summary-tab" ng-if="tab.title === trip.id">
+            <div class="trip-summary-tab" ng-if="tab === trip.id">
                 <div ng-include="'partial/spatial/liveViewPanel/tripsPanel/tripSummary/tripSummary.html'"></div>
             </div>
         </uib-tab>
     </uib-tabset>
     
+    <a class="btn-trip-quit"><i class="fa fa-share-square-o"></i></a>
 </div>

@@ -314,7 +314,7 @@ angular.module('unionvmsWeb').factory('reportService',function($rootScope, $time
 	var getVmsDataSuccess = function(data){
 		rep.loadReportHistory();
 
-        data.trips = [{name: 'trip1'},{name: 'trip2'}];
+        data.trips = [{name: 'NOR-TRP-20160517234053706'},{name: 'NOR-TRP-20160517234053707'},{name: 'NOR-TRP-20160517234053708'}];
 
 		rep.positions = data.movements.features;
         rep.segments = data.segments.features;

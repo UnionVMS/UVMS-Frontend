@@ -1,5 +1,30 @@
+/**
+ * @memberof unionvmsWeb
+ * @ngdoc model
+ * @name Trip
+ * @param locale {service} angular locale service
+ * @param unitConversionService {service} unit conversion service
+ * @attr {Number} id - A property number that will be the trip id
+ * @attr {Object} overview - A property object that will contain the main events dates and locations(departure,arrival and landing)
+ * @attr {Object} reports - A property object that will contain the report messages
+ * @attr {Object} tripVessel - A property object that will be the vessel details
+ * @attr {Object} tripRoles - A property object that will contain the roles
+ * @attr {Object} cronology - A property object that will contain the cronology of trips related to the current trip
+ * @attr {Object} catchDetails - A property object that will be the catch details
+ * @attr {Object} messageCount - A property object that will contain the message types count
+ * @description
+ *  A model to store all the data related to a trip
+ */
 angular.module('unionvmsWeb').factory('Trip',function(locale,unitConversionService) {
 
+    /**
+     * Trip constructor
+     * 
+     * @memberof Trip
+     * @public
+	 * @alias Trip
+     * @param {Number} id - current trip id
+     */
 	function Trip(id){
 		this.id = id;
 	    this.overview = undefined;
@@ -11,6 +36,15 @@ angular.module('unionvmsWeb').factory('Trip',function(locale,unitConversionServi
 		this.messageCount = undefined;
 	}
 
+    /**
+     * Load the model with the trip data
+     * 
+     * @memberof Trip
+     * @public
+	 * @alias Trip
+     * @param {String} type - current trip object
+     * @param {Object} data - data related to the trip
+     */
 	Trip.prototype.fromJson = function(type,data){
 		switch(type){
 			case 'reports':
@@ -31,26 +65,50 @@ angular.module('unionvmsWeb').factory('Trip',function(locale,unitConversionServi
 		}
 	};
 
+    /**
+     * Load the trip overview and the report messages into the model
+     * 
+     * @memberof Trip
+     * @private
+     * @param {Object} self - current trip object
+     * @param {Object} data - reports and trip overview data
+     */
 	var loadReports = function(self,data){
         loadOverview(self,data.summary);
 		//TODO MAP geometries
 		loadReportMessages(self,data.activityReports); 
 	};
 
+    /**
+     * Load the trip overview into the model
+     * 
+     * @memberof Trip
+     * @private
+     * @param {Object} self - current trip object
+     * @param {Object} data - trip overview data
+     */
     var loadOverview = function(self,data){
         if(angular.isDefined(data.DEPARTURE)){
-            data.DEPARTURE.date = unitConversionService.date.convertDate(data.DEPARTURE.date, 'from_server');
+            data.DEPARTURE.date = unitConversionService.date.convertToUserFormat(data.DEPARTURE.date);
         }
         if(angular.isDefined(data.ARRIVAL)){
-            data.ARRIVAL.date = unitConversionService.date.convertDate(data.ARRIVAL.date, 'from_server');
+            data.ARRIVAL.date = unitConversionService.date.convertToUserFormat(data.ARRIVAL.date);
         }
         if(angular.isDefined(data.LANDING)){
-            data.LANDING.date = unitConversionService.date.convertDate(data.LANDING.date, 'from_server');
+            data.LANDING.date = unitConversionService.date.convertToUserFormat(data.LANDING.date);
         }
 
         self.overview = data;
     };
 
+    /**
+     * Load the report messages into the model
+     * 
+     * @memberof Trip
+     * @private
+     * @param {Object} self - current trip object
+     * @param {Object} activityReports - activity reports data
+     */
 	var loadReportMessages = function(self,activityReports){
         self.reports = [];
         angular.forEach(activityReports,function(report){
@@ -88,6 +146,13 @@ angular.module('unionvmsWeb').factory('Trip',function(locale,unitConversionServi
         });
     };
 
+    /**
+     * Build the remarks column to be displayed in reports panel
+     * 
+     * @memberof Trip
+     * @private
+     * @param {Object} report - report message
+     */
 	var getRemarks = function(report){
         var remarks = '';
 
@@ -96,7 +161,7 @@ angular.module('unionvmsWeb').factory('Trip',function(locale,unitConversionServi
                 remarks = report.fishingGears[0].gearTypeCode;
             }
         }else{
-            remarks = report.faReportAcceptedDateTime;
+            remarks = unitConversionService.date.convertToUserFormat(report.faReportAcceptedDateTime);
         }
 
         switch(report.activityType){
@@ -133,11 +198,20 @@ angular.module('unionvmsWeb').factory('Trip',function(locale,unitConversionServi
         return remarks;
     };
 
+    /**
+     * Build the date column to be displayed in reports panel
+     * 
+     * @memberof Trip
+     * @private
+     * @param {String} acceptedDateTime - accepted report message date time
+     * @param {String} startDate - report message start date time
+     * @param {String} endDate - report message end date time
+     */
     var getReportDate = function(acceptedDateTime,startDate,endDate){
         var date;
         if(angular.isDefined(startDate) && angular.isDefined(endDate)){
-            startDate = unitConversionService.date.convertDate(startDate, 'from_server');
-            endDate = unitConversionService.date.convertDate(endDate, 'from_server');
+            startDate = unitConversionService.date.convertToUserFormat(startDate);
+            endDate = unitConversionService.date.convertToUserFormat(endDate);
             if(startDate === endDate){
                 date = startDate;
             }else{
@@ -151,13 +225,21 @@ angular.module('unionvmsWeb').factory('Trip',function(locale,unitConversionServi
                 }
             }
         }else{
-            acceptedDateTime = unitConversionService.date.convertDate(acceptedDateTime, 'from_server');
+            acceptedDateTime = unitConversionService.date.convertToUserFormat(acceptedDateTime);
             date = acceptedDateTime;
         }
 
         return date;
     };
 
+    /**
+     * Load the vessel details and the trip roles into the model
+     * 
+     * @memberof Trip
+     * @private
+     * @param {Object} self - current trip object
+     * @param {Object} data - vessel and roles data
+     */
 	var loadVesselRoles = function(self,data){
 		self.tripVessel = angular.copy(data);
 		delete self.tripVessel.contactPersons;
@@ -169,6 +251,14 @@ angular.module('unionvmsWeb').factory('Trip',function(locale,unitConversionServi
 		self.tripRoles = data.contactPersons;
 	};
 
+    /**
+     * Load the trip cronology into the model
+     * 
+     * @memberof Trip
+     * @private
+     * @param {Object} self - current trip object
+     * @param {Object} data - cronology data
+     */
 	var loadCronology = function(self,data){
 		if(angular.isDefined(data.previousTrips) && data.previousTrips.length > 0){
 			data.previousTrips = data.previousTrips.reverse();
@@ -180,6 +270,14 @@ angular.module('unionvmsWeb').factory('Trip',function(locale,unitConversionServi
 		self.cronology = data;
 	};
 
+    /**
+     * Load the catch details into the model
+     * 
+     * @memberof Trip
+     * @private
+     * @param {Object} self - current trip object
+     * @param {Object} data - catch details data
+     */
     var loadCatch = function(self,data){
 
         angular.forEach(data, function(type){

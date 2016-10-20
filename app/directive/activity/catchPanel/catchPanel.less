@@ -14,31 +14,27 @@
             width: 100%;
             left: 0;
         }
-        thead {
-            display: block;
-            tr {
-                display: block;
-                th {
-                    width: 50%;
-                }
-                th.color-column {
-                    width: auto;
+        .table {
+            width: auto !important;
+            max-width: none;
+            .tbody {
+                max-height: 120px;
+                overflow-y: auto;
+                padding-right: 16px;
+            }
+            .tr {
+                position: relative;
+                padding-left: 10px;
+                .td:last-child {
+                    text-align: center;
                 }
             }
-        }
-        tbody {
-            display: block;
-            overflow-y: auto;
-            max-height: 120px;
-            width: 100%;
-            tr {
-                display: block;
-                td {
-                    width: 50%;
-                }
-                td.color-column {
-                    width: auto;
-                }
+            .color-column {
+                position: absolute;
+                top: 0;
+                left: 0;
+                bottom: 0;
+                z-index: 1;
             }
         }
     }

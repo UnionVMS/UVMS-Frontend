@@ -10,7 +10,7 @@
                 <span class="col-md-12"><span class="col-md-12"><span class="trip-row-label">{{'activity.trip_summary_roles' | i18n}}: </span><span ng-repeat="role in person.roles">{{role}}<span ng-if="!$last">, </span></span></span></span>
             </div>
         </div>
-        <!--CAROUSEL SIDE BUTTONS-->
+        <!--CAROUSEL NEXT/PREVIOUS BUTTONS-->
         <a role="button" href class="left carousel-control" ng-click="prev();updateCombo(slides)" ng-show="slides.length > 1">
             <span aria-hidden="true" class="glyphicon glyphicon-chevron-left"></span>
         </a>

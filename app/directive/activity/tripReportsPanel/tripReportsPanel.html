@@ -10,25 +10,26 @@
                     <div ui-tree="" class="row table tableSmart table-condensed table-responsive angular-ui-tree">
                         <div class="thead col-md-12">
                             <div class="tr row">
-                                <div class="th" style="width: 20px;float: left;"></div>
+                                <div class="th details-column"></div>
                                 <div class="th col-md-{{header.width}}" ng-repeat="header in reportHeaders" title="{{ header.label | i18n }}">{{ header.label | i18n }}</div>
                             </div>
                         </div>
+                        <!--NODES-->
                         <div ui-tree-nodes="" ng-model="trip.reports" class="tbody col-md-12 angular-ui-tree-nodes">
-                            <div ng-repeat="item in trip.reports" ui-tree-node="" collapsed="true" class="tr row angular-ui-tree-node" style="background: #f7f7f7;" data-nodrag>
-                                <div class="td" style="width: 20px;float: left; font-size: 15px">
+                            <div ng-repeat="item in trip.reports" ui-tree-node="" collapsed="true" class="tr row angular-ui-tree-node" data-nodrag>
+                                <div class="td details-column">
                                     <a ng-if="item.nodes && item.nodes.length > 0" ng-click="toggle(this)"><span class="fa" ng-class="{
                                     'fa-plus-square-o': collapsed,
                                     'fa-minus-square-o': !collapsed
                                     }"></span></a>
                                 </div>
-                                <div class="td col-md-{{header.width}}" ng-repeat="header in reportHeaders" ng-class="{'col-btn': ['corrections','detail'].indexOf(header.id) !== -1}"> <!--ng-switch="['corrections','detail'].indexOf(header.id) === -1"-->
-                                    <span>{{item[header.id]}}</span> <!--ng-switch-when="true"-->
-                                    <!--<a ng-switch-when="false" class="details-btn"><i class="fa" ng-class="{'fa-pencil-square-o': header.id === 'detail' && item[header.id], 'fa-check-square-o': header.id === 'corrections' && item[header.id], 'fa-square-o': header.id === 'corrections' && item[header.id] === false}"></i></a>-->
+                                <div class="td col-md-{{header.width}}" ng-repeat="header in reportHeaders" ng-class="{'col-btn': ['corrections','detail'].indexOf(header.id) !== -1}">
+                                    <span>{{item[header.id]}}</span>
                                 </div>
-                                <div ng-repeat="node in item.nodes" class="tr col-md-12 angular-ui-tree-node" ng-class="{hidden: collapsed}" style="background: #fff;" data-nodrag>
+                                <!--SUBNODES-->
+                                <div ng-repeat="node in item.nodes" class="tr col-md-12 angular-ui-tree-node" ng-class="{hidden: collapsed}" data-nodrag>
                                     <div class="row">
-                                        <div class="td" style="width: 20px;float: left;"></div>
+                                        <div class="td details-column"></div>
                                         <div class="sub-col td col-md-{{header.width}}" ng-repeat="header in reportHeaders" ng-class="{'col-btn': ['corrections','detail'].indexOf(header.id) !== -1}" ng-switch="['corrections','detail'].indexOf(header.id) === -1">
                                             <span ng-switch-when="true">{{node[header.id]}}</span>
                                             <a ng-switch-when="false" class="details-btn"><i class="fa" ng-class="{'fa-pencil-square-o': header.id === 'detail' && node[header.id], 'fa-check-square-o': header.id === 'corrections' && node[header.id], 'fa-square-o': header.id === 'corrections' && node[header.id] === false}"></i></a>

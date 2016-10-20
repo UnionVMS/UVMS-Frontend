@@ -1,3 +1,12 @@
+/**
+ * @memberof unionvmsWeb
+ * @ngdoc directive
+ * @name tripReportsPanel
+ * @attr {unionvmsWeb.Trip} trip - current trip in trip summary
+ * @attr {Object} tripAlert - trip summary alert state
+ * @description
+ *  A reusable tile that will display the report messages and the message types count related to the selected trip
+ */
 angular.module('unionvmsWeb').directive('tripReportsPanel', function(loadingStatus,activityRestService,$anchorScroll,locale) {
 	return {
 		restrict: 'E',
@@ -8,20 +17,6 @@ angular.module('unionvmsWeb').directive('tripReportsPanel', function(loadingStat
 		},
 		templateUrl: 'directive/activity/tripReportsPanel/tripReportsPanel.html',
 		link: function(scope, element, attrs, fn) {
-
-            loadingStatus.isLoading('TripSummary', true);
-            activityRestService.getTripMessageCount(scope.trip.id).then(function(response){
-                scope.trip.fromJson('messageCount',response.data);
-                scope.messageCount = scope.trip.messageCount;
-                loadingStatus.isLoading('TripSummary', false);
-            }, function(error){
-                $anchorScroll();
-                scope.tripAlert.hasAlert = true;
-                scope.tripAlert.hasError = true;
-                scope.tripAlert.alertMessage = locale.getString('activity.error_loading_trip_summary_message_counter');
-                scope.tripAlert.hideAlert();
-                loadingStatus.isLoading('TripSummary', false);
-            });
 
             scope.reportHeaders = [
                 {
@@ -61,6 +56,30 @@ angular.module('unionvmsWeb').directive('tripReportsPanel', function(loadingStat
                 }
             ];
 
+            /**
+			 * Initializes the trip reports panel directive
+			 * 
+			 * @memberof tripReportsPanel
+			 * @private
+			 */
+            var init = function(){
+                //get trip message count
+                loadingStatus.isLoading('TripSummary', true);
+                activityRestService.getTripMessageCount(scope.trip.id).then(function(response){
+                    scope.trip.fromJson('messageCount',response.data);
+                    scope.messageCount = scope.trip.messageCount;
+                    loadingStatus.isLoading('TripSummary', false);
+                }, function(error){
+                    $anchorScroll();
+                    scope.tripAlert.hasAlert = true;
+                    scope.tripAlert.hasError = true;
+                    scope.tripAlert.alertMessage = locale.getString('activity.error_loading_trip_summary_message_counter');
+                    scope.tripAlert.hideAlert();
+                    loadingStatus.isLoading('TripSummary', false);
+                });
+            };
+
+            init();
 		}
 	};
 });

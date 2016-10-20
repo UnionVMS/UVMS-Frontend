@@ -1,9 +1,8 @@
 <div class="trip-summary" ng-controller="TripsummaryCtrl">
-    <loading-panel type="TripSummary"></loading-panel>
     <div class="row summary-row">
         <fishing-trip-panel class="col-md-4 summary-section" trip="trip"></fishing-trip-panel>
-        <vessel-panel class="col-md-3 summary-section" trip="trip"></vessel-panel>
-        <roles-panel class="col-md-2 summary-section"></roles-panel>
+        <vessel-panel class="col-md-2 summary-section" trip="trip"></vessel-panel>
+        <roles-panel class="col-md-3 summary-section"></roles-panel>
         <cronology-panel class="col-md-3 summary-section" trip="trip" trip-alert="alert"></cronology-panel>
     </div>
     <div class="row summary-row">

@@ -31,12 +31,10 @@
                     overflow-y: auto;
                     padding-top: 32px;
                     > .tr {
+                        background: #f7f7f7;
                         border-top: 1px solid #ddd;
                         &:first-child {
                             border-top: 0;
-                        }
-                        &:nth-child(odd) {
-                            background: initial;
                         }
                         .details-btn {
                             font-size: 18px;
@@ -53,8 +51,14 @@
                         }
                         .tr.angular-ui-tree-node {
                             border-top: 1px solid #ddd;
+                            background: #fff;
                         }
                     }
+                }
+                .details-column {
+                    width: 20px;
+                    float: left;
+                    font-size: 15px;
                 }
             }
         }

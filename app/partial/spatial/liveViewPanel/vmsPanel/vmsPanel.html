@@ -686,7 +686,7 @@
 								<div ng-show="attrVisibility.positions.extMark" ng-if="column === 'extMark'">{{ position.properties.externalMarking }}</div>
 								<div ng-show="attrVisibility.positions.ircs" ng-if="column === 'ircs'">{{ position.properties.ircs }}</div>
 								<div ng-show="attrVisibility.positions.cfr" ng-if="column === 'cfr'">{{ position.properties.cfr }}</div>-->
-								<div ng-show="attrVisibility.trips.name" ng-if="column === 'name'">{{ position.properties.name }}</div>
+								<div ng-show="attrVisibility.trips.name" ng-if="column === 'name'">{{ trip.name }}</div>
 								<!--<div ng-show="attrVisibility.positions.posTime" ng-if="column === 'posTime'">{{ position.properties.positionTime | stDateUtc}}</div>
 								<div ng-show="attrVisibility.positions.lat" ng-if="column === 'lat'">{{ position.geometry.coordinates[1] | confCoordinateFormat}}</div>
 								<div ng-show="attrVisibility.positions.lon" ng-if="column === 'lon'">{{ position.geometry.coordinates[0] | confCoordinateFormat}}</div>
@@ -701,7 +701,7 @@
 							<td style="min-width:80px;">
 								<button type="button" class="btn btn-default btn-xs btn-bottom-mg" title="{{'spatial.tab_vms_pos_table_zoom_btn_title' | i18n }}" ng-click="zoomTo($index, 'POSITION')"><span class="fa fa-search-plus"></span></button>
 								<button type="button" class="btn btn-default btn-xs btn-bottom-mg" title="{{'spatial.tab_vms_pos_table_pan_btn_title' | i18n }}" ng-click="panTo($index, 'POSITION')"><span class="fa fa-crosshairs"></span></button>
-								<button type="button" class="btn btn-default btn-xs btn-bottom-mg" title="Details" ng-click="repNav.rmStateCallback();repNav.goToView('liveViewPanel','tripsPanel')"><span class="fa fa-eye"></span></button>
+								<button type="button" class="btn btn-default btn-xs btn-bottom-mg" title="Details" ng-click="tripSummServ.openNewTrip(trip.name);repNav.rmStateCallback();repNav.goToView('liveViewPanel','tripsPanel')"><span class="fa fa-eye"></span></button>
 							</td>
 						</tr>
 					</tbody>
