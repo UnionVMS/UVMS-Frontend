@@ -40,14 +40,17 @@ copy of the GNU General Public License along with the IFDM Suite. If not, see <h
                         <label class="normal" style="display: block;">{{'common.active' | i18n}}</label>
                         <label class="switch">
                             <input type="checkbox" ng-model="currentMobileTerminal.active" id="mob-term-form-details-active">
-                            <div class="slider"></div>
+                            <div class="slider">
+                                <i class="fa fa-check"></i>
+                                <i class="fa fa-times"></i>
+                            </div>
                         </label>
                     </div>
                 </div> 
             </div>
             <div class="currentMobileTerminalTypes">
                 <div ng-show="currentMobileTerminal.type">
-                    <div class="flexrow">
+                    <div class="flexrow section-1">
                         <div class="form-group long-field" ng-show="getTerminalConfig().terminalFields.SOFTWARE_VERSION">
                             <label class="normal">{{'mobileTerminal.form_inmarsatc_software_version_label' | i18n}}</label>
                             <input type="text" class="form-control" ng-model="currentMobileTerminal.attributes.SOFTWARE_VERSION" id="mob-term-form-details-software-version">

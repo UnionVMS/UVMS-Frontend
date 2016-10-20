@@ -64,6 +64,10 @@ copy of the GNU General Public License along with the IFDM Suite. If not, see <h
                 margin-right: 0;
             }
         }
+
+        &.section-1 {
+            margin-bottom: @field-margin-vertical;
+        }
     }
 
     .delete-channel {
@@ -186,6 +190,20 @@ copy of the GNU General Public License along with the IFDM Suite. If not, see <h
         background-color: @errorColor;
         -webkit-transition: .4s;
         transition: .4s;
+
+        .fa {
+            color: rgba(255, 255, 255, 0.95);;
+            line-height: 30px;
+
+            &.fa-check {
+                padding-left: 10px;
+            }
+
+            &.fa-times {
+                float: right;
+                padding-right: 12px;
+            }
+        }
     }
 
     .slider:before {
