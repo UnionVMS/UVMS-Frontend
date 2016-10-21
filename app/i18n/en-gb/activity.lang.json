@@ -138,5 +138,6 @@
     "advanced_search_placeholder_weight_max": "Max",
     "advanced_search_weight_range": "Weight range: ",
     "advanced_search_min": "Min",
-    "advanced_search_max": "Max"
+    "advanced_search_max": "Max",
+    "error_getting_mdr_code_lists": "Error getting mdr code lists"
 }

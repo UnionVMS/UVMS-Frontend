@@ -1,33 +1,41 @@
-.cron-select-wrap {
-    vertical-align: top;
-}
+.mdr-admin-tab {
+    .cron-wrap {
+        &,
+        .select-options {
+            > * {
+                vertical-align: top;
+                line-height: 30px;
+                font-weight: bold;
+            }
+        }
+        .select-options {
+            > span {
+                margin-left: 5px;
+                margin-right: 5px;
+            }
+        }
+    }
 
-.select-options {
-    display: inline-flex;
-}
+    .btn-container {
+        text-align: right;
+        height: 30px;
+    }
 
+    .cron-job-exp {
+        text-align: right;
+        .cronLabel {
+            font-weight: bold;
+        }
+        span {
+            font-style: italic;
+        }
+    }
 
-.position-right{
-    float: right;
-    padding-right: 30px;
-    padding-bottom: 10px;
-}
-
-.cronLabel{
-    font-weight: bold;
-}
-
-.position-right span {
-    font-style: italic;
-}
-
-.cron-select-wrap {
-    margin-left: 10px;
-    margin-right: 10px;
-}
-
-.th {
-    border-bottom: 2px solid #dddddd;
-    border-top: 1px solid #dddddd;
-    font-weight: bold;
+    #codeListsTable {
+        .tr:first-child {
+            .th {
+                padding: 0 15px;
+            }
+        }
+    }
 }

@@ -1,4 +1,4 @@
-<div ng-controller="MdrCtrl">
+<div ng-controller="MdrCtrl" class="mdr-admin-tab">
     <loading-panel type="Preferences"></loading-panel>
 
     <!--MDR configuration sheduler-->
@@ -9,19 +9,15 @@
             </legend>
 
             <div class="row">
-                <div class="form-group col-md-12 noPadding">
-                        <div class="col-md-11">
-                            <cron-selection ng-model="configModel.cronJobExpression" config="cronWidgetConfig" ng-if="configModel.cronJobExpression" ></cron-selection>
-                            <span class="" ng-show="mdrConfigurationForm.configModel.cronJobExpression.$invalid">{{'activity.required_error_message' | i18n }}</span>
-                        </div>
-                        <div class="col-md-1" >
-                            <button class="btn btn-primary button btn-action" type="button" ng-click="saveCron()" ng-show="configModel.showSaveBtn">{{"activity.cron_save_btn" | i18n }}</button>
-                        </div>
-
-
+                <div class="form-group col-md-12">
+                    <cron-selection ng-model="configModel.cronJobExpression" config="cronWidgetConfig" ng-if="configModel.cronJobExpression" ></cron-selection>
+                    <span ng-show="mdrConfigurationForm.configModel.cronJobExpression.$invalid">{{'activity.required_error_message' | i18n }}</span>
+                </div>
+                <div class="form-group col-md-12 btn-container">
+                    <button class="btn btn-primary button btn-action" type="button" ng-click="saveCron()" ng-show="configModel.showSaveBtn">{{"activity.cron_save_btn" | i18n }}</button>
                 </div>
              </div>
-            <div class="row position-right">
+            <div class="cron-job-exp">
                 <span class="cronLabel">{{"activity.cron_expression_label" | i18n }}</span><span>{{configModel.cronJobExpression}}</span>
             </div>
         </fieldset>
@@ -29,73 +25,80 @@
 
 
     <!--SMART TABLE containing all the MDR code lists-->
-    <div class="row"  ng-show="isAllowed('LIST_MDR_CODE_LISTS')">
-        <div class="form-group col-md-12 noPadding">
-            <fieldset class="fieldsetStyle col-md-12" >
-                <legend class="fieldsetLegendStyle">
-                    <a data-toggle="collapse" >{{'activity.code_lists_fieldset_label' | i18n }}</a>
-                </legend>
-                <div class="form-group col-md-12 noPadding" ng-show="isAllowed('UPDATE_MDR_CODE_LISTS')">
+    <fieldset class="fieldsetStyle col-md-12" ng-show="isAllowed('LIST_MDR_CODE_LISTS')">
+        <legend class="fieldsetLegendStyle">
+            <a data-toggle="collapse" >{{'activity.code_lists_fieldset_label' | i18n }}</a>
+        </legend>
+
+        <div st-table="displayedMDRLists" st-safe-src="mdrCodeLists">
+            <div class="form-group row" ng-show="isAllowed('UPDATE_MDR_CODE_LISTS')">
+                <div class="col-md-6">
                     <button type="button" class="btn btn-primary btn-sm" ng-click="updateAllNow()">
                         &nbsp;
                         <span>{{'activity.update_all_now_btn' | i18n }}</span>
                     </button>
-                    <button type="button" class="btn btn-primary btn-sm" ng-click="updateNow()"  ng-disabled="isUpdateNowDisabled">
+                    <button type="button" class="btn btn-primary btn-sm" ng-click="updateNow()" ng-disabled="isUpdateNowDisabled">
                         &nbsp;
                         <span>{{'activity.update_now_btn' | i18n }}</span>
                     </button>
                 </div>
+                <div class="col-md-6">
+                    <input st-search="" class="form-control" placeholder="{{'activity.search_table_placeholder' | i18n}}" type="text"/>
+                </div>
+            </div>
 
-                <div st-table="displayedMDRLists" st-safe-src="mdrCodeLists">
-                    <div class="search-field" >
-                        <input st-search="" class="form-control" placeholder="{{'activity.search_table_placeholder' | i18n}}" type="text"/>
+            <div class="table-responsive-force">
+                <div id="codeListsTable" class="table table-striped tableSmart areas-table table-condensed">
+                    <div class="thead col-md-12" >
+                        <div class="tr row">
+                            <div class="th col-md-1" st-skip-natural="true" st-class-ascent="sorting_asc" st-class-descent="sorting_desc">
+                                <input type="checkbox" name="selectDeselectAll" id="selectDeselectAll" ng-click="selectDeselectAll()">
+                            </div>
+                            <div class="th col-md-3" st-sort="acronym" st-skip-natural="true" st-class-ascent="sorting_asc" st-class-descent="sorting_desc">{{'activity.code_list_table_acronym_header' | i18n}}</div>
+                            <div class="th col-md-3" st-sort="name" st-skip-natural="true" st-class-ascent="sorting_asc" st-class-descent="sorting_desc">{{'activity.code_list_table_name_header' | i18n}}</div>
+                            <div class="th col-md-1" st-sort="lastSuccess" st-skip-natural="true" st-class-ascent="sorting_asc" st-class-descent="sorting_desc">{{'activity.code_list_table_last_success_header' | i18n}}</div>
+                            <div class="th col-md-1" st-sort="lastAttempt" st-skip-natural="true" st-class-ascent="sorting_asc" st-class-descent="sorting_desc">{{'activity.code_list_table_last_attempt_header' | i18n}}</div>
+                            <div class="th col-md-1" st-sort="lastStatus" st-skip-natural="true" st-class-ascent="sorting_asc" st-class-descent="sorting_desc">{{'activity.code_list_table_last_attempt_status_header' | i18n}}</div>
+                            <div class="th col-md-1" st-sort="scheduled" st-skip-natural="true" st-class-ascent="sorting_asc" st-class-descent="sorting_desc">{{'activity.code_list_table_is_scheduler_enabled_header' | i18n}}</div>
+                            <div class="th col-md-1"></div>
+                        </div>
+                        <div class="tr row" ng-show="!tableLoading && !displayedMDRLists.length">
+                            <div class="th col-md-12"><table-alert type="'info'" msg="'activity.table_no_data'" visible="!displayedMDRLists.length && !tableLoading"></table-alert></div>
+                        </div>
+                        <div class="tr row" ng-if="tableLoading && !alert.isLoading">
+                            <div class="th col-md-12 loading-spinner-cl"><i class="fa fa-spinner fa-spin loading-spinner"></i></div>
+                        </div>
                     </div>
-                    <div id="codeListsTable" class="table table-striped tableSmart areas-table table-condensed">
-                        <div class="thead col-md-12" >
-                            <div class="tr row stColumnHeaders" >
-                                <div class="th col-md-1" st-skip-natural="true" st-class-ascent="sorting_asc" st-class-descent="sorting_desc"><div class="checkbox"><input type="checkbox" name="selectDeselectAll" id="selectDeselectAll" ng-click="selectDeselectAll()"></div></div>
-                                <div class="th col-md-3" st-sort="acronym" st-skip-natural="true" st-class-ascent="sorting_asc" st-class-descent="sorting_desc">{{'activity.code_list_table_acronym_header' | i18n}}</div>
-                                <div class="th col-md-3" st-sort="name" st-skip-natural="true" st-class-ascent="sorting_asc" st-class-descent="sorting_desc">{{'activity.code_list_table_name_header' | i18n}}</div>
-                                <div class="th col-md-1" st-sort="lastSuccess" st-skip-natural="true" st-class-ascent="sorting_asc" st-class-descent="sorting_desc">{{'activity.code_list_table_last_success_header' | i18n}}</div>
-                                <div class="th col-md-1" st-sort="lastAttempt" st-skip-natural="true" st-class-ascent="sorting_asc" st-class-descent="sorting_desc">{{'activity.code_list_table_last_attempt_header' | i18n}}</div>
-                                <div class="th col-md-1" st-sort="lastStatus" st-skip-natural="true" st-class-ascent="sorting_asc" st-class-descent="sorting_desc">{{'activity.code_list_table_last_attempt_status_header' | i18n}}</div>
-                                <div class="th col-md-1" st-sort="scheduled" st-skip-natural="true" st-class-ascent="sorting_asc" st-class-descent="sorting_desc">{{'activity.code_list_table_is_scheduler_enabled_header' | i18n}}</div>
-                                <div class="th col-md-1"></div>
+                    <div class="tbody col-md-12">
+                        <div ng-repeat="codeList in displayedMDRLists" class="tr row" ng-show="!tableLoading">
+                            <div class="td col-md-1" st-skip-natural="true" >
+                                <input type="checkbox" value="{{codeList.id}}" ng-model="codeList.isSelected" ng-click="enableDisableSynchButton()">
                             </div>
-                            <div class="tr row" ng-show="!tableLoading && !displayedMDRLists.length">
-                                <div class="th col-md-12"><table-alert type="'info'" msg="'activity.table_no_data'" visible="!displayedMDRLists.length && !tableLoading"></table-alert></div>
+                            <div class="td col-md-3" st-skip-natural="true">{{codeList.objectAcronym}}</div>
+                            <div class="td col-md-3" st-skip-natural="true">{{codeList.objectName}}</div>
+                            <div class="td col-md-1" st-skip-natural="true">{{codeList.lastSuccess | stActivityDateUtc}}</div>
+                            <div class="td col-md-1" st-skip-natural="true">{{codeList.lastAttempt | stActivityDateUtc}}</div>
+                            <div class="td col-md-1" st-skip-natural="true">{{codeList.lastStatus}}</div>
+                            <div class="td col-md-1">
+                                <button ng-show="isAllowed('CODE_LISTS_ENABLE_DISABLE_SCHEDULED_UPDATE')" type="button" class="btn btn-{{codeList.schedulable?'success':'danger'}} btn-xs pull-left" title="{{'activity.enable_disable_autoupdate' | i18n }}" ng-click="enableDisableAutoUpdate($index)">
+                                    <span>{{'activity.enable_disable_autoupdate_'+codeList.schedulable | i18n}}</span>
+                                </button>
                             </div>
-                            <div class="tr row" ng-if="tableLoading && !alert.isLoading">
-                                <div class="th col-md-12 loading-spinner-cl"><i class="fa fa-spinner fa-spin loading-spinner"></i></div>
-                            </div>
-                        </div>
-                        <div class="tbody col-md-12">
-                            <div ng-repeat="codeList in displayedMDRLists" class="tr row" ng-show="!tableLoading">
-                                <div class="td col-md-1" st-skip-natural="true" ><div class="checkbox"><input type="checkbox" value="{{codeList.id}}" ng-model="codeList.isSelected" ng-click="enableDisableSynchButton()"></div></div>
-                                <div class="td col-md-3" st-skip-natural="true">{{codeList.objectAcronym}}</div>
-                                <div class="td col-md-3" st-skip-natural="true">{{codeList.objectName}}</div>
-                                <div class="td col-md-1" st-skip-natural="true">{{codeList.lastSuccess | stActivityDateUtc}}</div>
-                                <div class="td col-md-1" st-skip-natural="true">{{codeList.lastAttempt | stActivityDateUtc}}</div>
-                                <div class="td col-md-1" st-skip-natural="true">{{codeList.lastStatus}}</div>
-                                <div class="td col-md-1">
-                                    <button ng-show="isAllowed('CODE_LISTS_ENABLE_DISABLE_SCHEDULED_UPDATE')" type="button" class="btn btn-{{codeList.schedulable?'success':'danger'}} btn-xs pull-left" title="{{'activity.enable_disable_autoupdate' | i18n }}" ng-click="enableDisableAutoUpdate($index)"><span>{{'activity.enable_disable_autoupdate_'+codeList.schedulable | i18n}}</span></button>
-                                </div>
-                                <div class="td col-md-1">
-                                    <button type="button" class="btn btn-default btn-xs pull-right tableBtnMargin" title="{{'areas.table_area__details_btn' | i18n }}" ng-click="openCodeListModal(codeList.objectAcronym)"><span class="fa fa-eye"></span></button>
-                                </div>
+                            <div class="td col-md-1">
+                                <button type="button" class="btn btn-default btn-xs pull-right tableBtnMargin" title="{{'areas.table_area__details_btn' | i18n }}" ng-click="openCodeListModal(codeList.objectAcronym)"><span class="fa fa-eye"></span></button>
                             </div>
                         </div>
-                        <div class="tfoot col-md-12 stFooterPagination" ng-if="displayedMDRLists.length && !tableLoading">
-                            <div class="tr row">
-                                <div class="td col-md-12 text-right">
-                                    <div st-pagination st-items-by-page="itemsByPage" st-displayed-pages="7" st-template="partial/common/reportsPagination/reportsPagination.html"></div>
-                                </div>
+                    </div>
+                    <div class="tfoot col-md-12 stFooterPagination" ng-if="displayedMDRLists.length && !tableLoading">
+                        <div class="tr row">
+                            <div class="td col-md-12 text-right">
+                                <div st-pagination st-items-by-page="itemsByPage" st-displayed-pages="7" st-template="partial/common/reportsPagination/reportsPagination.html"></div>
                             </div>
                         </div>
                     </div>
                 </div>
-            </fieldset>
+            </div>
         </div>
-    </div>
+    </fieldset>
 
 </div>

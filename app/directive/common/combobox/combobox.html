@@ -2,12 +2,12 @@
 	<div class="dropdown fullWidthDropdown">
 		<div class="comboButtonContainer" ng-click="toggleCombo($event)">
 			<div class="btn btn-default dropdown-toggle" data-toggle="dropdown" aria-expanded="true" ng-disabled="ngDisabled" ng-if="!editable">
-				<div ng-class="setplaceholdercolor ? 'placeholderColor':''" class="dropdowntext" ng-if="lineStyle !== true">
+				<div ng-class="setplaceholdercolor ? 'placeholderColor':''" class="dropdowntext" ng-if="lineStyle !== true" title="{{currentItemLabel}}">
 					<!--selected label-->
 					{{currentItemLabel}}
 					<!--MULTIPLE SELECTION-->
 					<ul class="selected-options" ng-if="multiple">
-						<li ng-repeat="item in selectedItems">
+						<li ng-repeat="item in selectedItems" title="{{item.text}}">
 							<span class="item-remover fa fa-times" ng-click="removeSelectedItem(item.code)"></span>
 							{{item.text}}
 						</li>
@@ -32,24 +32,24 @@
 	<div class="comboList fullWidthDropdown" ng-class="{'open': isOpen, 'comboLineStyle': lineStyle === true, 'combo-section': comboSection}">
 		<ul class="dropdown-menu" role="menu">
 			<!--PLACEHOLDER-->
-			<li ng-class="!initialtextSelectable ? 'disabled' : ''" ng-show="initialValue && !multiple && !isLoading" ng-click="selectVal(initialValue)" ng-if="!noPlaceholderOnList">
+			<li ng-class="!initialtextSelectable ? 'disabled' : ''" ng-show="initialValue && !multiple && !isLoading" ng-click="selectVal(initialValue)" ng-if="!noPlaceholderOnList" title="{{initialValue.text}}">
 				<a role="menuitem" tabindex="-1" ng-bind="initialValue.text"></a>
 			</li>
 			<!--BASIC COMBO-->
-			<li ng-class="disableItem(item) ? 'disabled' : ''" ng-repeat="item in loadedItems" role="presentation" ng-click="selectVal(item,$index)" ng-show="!lineStyle && !comboSection && !isFilterActive && !isLoading" ng-if="!group || (group && comboboxServ.isAvailableItem(group, ngModel, item.code))">
+			<li ng-class="disableItem(item) ? 'disabled' : ''" ng-repeat="item in loadedItems" role="presentation" ng-click="selectVal(item,$index)" ng-show="!lineStyle && !comboSection && !isFilterActive && !isLoading" ng-if="!group || (group && comboboxServ.isAvailableItem(group, ngModel, item.code))" title="{{getItemLabel(item)}}">
 				<a role="menuitem" tabindex="-1" ng-bind="getItemLabel(item)"></a>
 			</li>
 			<!--COMBO WITH SECTIONS-->
 			<li class="disabled" ng-repeat="section in loadedItems" role="presentation" ng-show="!isLoading" ng-if="comboSection && !isLoading">
-				<a role="menuitem" tabindex="-1" ng-bind="getItemLabel(section) | uppercase"></a>
+				<a role="menuitem" tabindex="-1" ng-bind="getItemLabel(section) | uppercase" title="{{getItemLabel(section) | uppercase}}"></a>
 				<ul class="dropdown-submenu" role="menu">
-					<li ng-class="disableItem(item) ? 'disabled' : ''" ng-repeat="item in section.items" role="presentation" ng-click="selectVal(item,$index)">
+					<li ng-class="disableItem(item) ? 'disabled' : ''" ng-repeat="item in section.items" role="presentation" ng-click="selectVal(item,$index)" title="{{getItemLabel(item)}}">
 						<a role="menuitem" tabindex="-1" ng-bind="getItemLabel(item)"></a>
 					</li>
 				</ul>
 			</li>
 			<!--COMBO WITH FILTER-->
-			<li ng-class="disableItem(item) ? 'disabled' : ''" ng-repeat="item in loadedItems | filter:newItem" role="presentation" ng-click="selectVal(item,$index)" ng-show="!scope.isLoading" ng-if="isFilterActive">
+			<li ng-class="disableItem(item) ? 'disabled' : ''" ng-repeat="item in loadedItems | filter:newItem" role="presentation" ng-click="selectVal(item,$index)" ng-show="!scope.isLoading" ng-if="isFilterActive" title="{{getItemLabel(item)}}">
 				<a role="menuitem" tabindex="-1" ng-bind="getItemLabel(item)"></a>
 			</li>
 			<!--SVG COMBO-->
