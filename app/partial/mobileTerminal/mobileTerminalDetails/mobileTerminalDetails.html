@@ -38,8 +38,8 @@ copy of the GNU General Public License along with the IFDM Suite. If not, see <h
                     </div>
                     <div class="form-group align-right" ng-show="typeAndPlugin">
                         <div class="switch-container">
-                            <label class="normal" style="display: block;" ng-show="currentMobileTerminal.active">{{'common.active' | i18n}}</label>
-                            <label class="normal" style="display: block;" ng-show="!currentMobileTerminal.active">{{'common.inactive' | i18n}}</label>
+                            <label class="normal" style="display: block;" ng-if="currentMobileTerminal.active">{{'common.active' | i18n}}</label>
+                            <label class="normal" style="display: block;" ng-if="!currentMobileTerminal.active">{{'common.inactive' | i18n}}</label>
                             <label class="switch">
                                 <input type="checkbox" ng-model="currentMobileTerminal.active" id="mob-term-form-details-active">
                                 <div class="slider">
