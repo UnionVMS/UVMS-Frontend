@@ -55,7 +55,7 @@ copy of the GNU General Public License along with the IFDM Suite. If not, see <h
             <div ng-include="'partial/mobileTerminal/assignVessel/assignVessel.html'" ng-show="transponderSystems.length > 0" ></div>
         </div>
 
-        <div class="row" ng-hide="isVisible.assignVessel || isVisible.vesselForm" show-if-allowed="manageMobileTerminals">
+        <div class="row" ng-hide="isVisible.assignVessel || vesselFormDisplayed()" show-if-allowed="manageMobileTerminals">
             <div class="col-md-12" ng-hide="currentMobileTerminal.connectId">
                 <span id="assignVesselLink" ng-click="toggleAssignVessel()" ng-show="currentMobileTerminal.guid" id="mob-term-form-assign-vessel-2">{{'mobileTerminal.assign_vessel' | i18n}}</span>
             </div>
@@ -71,7 +71,7 @@ copy of the GNU General Public License along with the IFDM Suite. If not, see <h
     </div>
 
 
-    <div class="row" ng-show="isCreateNewMode()">
+    <div class="row" ng-show="isCreateNewMode() && !vesselFormDisplayed()">
         <div class="col-md-12">
             <a ng-click="clearForm()" class="pointer" id="mob-term-form-clear-form">{{'common.clear_form' | i18n}}</a>
         </div>

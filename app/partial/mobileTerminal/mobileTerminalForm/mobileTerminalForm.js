@@ -17,8 +17,7 @@ angular.module('unionvmsWeb').controller('mobileTerminalFormCtrl',function($filt
 
     //Visibility statuses
     $scope.isVisible = {
-        assignVessel : false,
-        vesselForm  : false
+        assignVessel : false
     };
 
     $scope.typeAndPlugin = undefined;
@@ -43,10 +42,17 @@ angular.module('unionvmsWeb').controller('mobileTerminalFormCtrl',function($filt
         }
     });
 
+    //Check if form is displayed from Asset page
+    $scope.vesselFormDisplayed = function(){
+        if(angular.isDefined($scope.$parent.vesselObj)){
+            return true;
+        }
+        return false;
+    };
+
     //Has form submit been atempted?
     $scope.submitAttempted = false;
     $scope.waitingForCreateResponse = false;
-
 
     //Disable form
     $scope.disableForm = function(){
@@ -135,8 +141,7 @@ angular.module('unionvmsWeb').controller('mobileTerminalFormCtrl',function($filt
 
     //Success creating the new mobile terminal
     var createNewMobileTerminalSuccess = function(mobileTerminal) {
-        if ($scope.$parent.vesselObj) {
-            $scope.isVisible.vesselForm = true;
+        if ($scope.vesselFormDisplayed()) {
             mobileTerminalRestService.assignMobileTerminal(mobileTerminal, $scope.$parent.vesselObj.getGuid(), "-")
             .then(function() {
                 alertService.showSuccessMessage(locale.getString('mobileTerminal.add_new_alert_message_on_success'));
