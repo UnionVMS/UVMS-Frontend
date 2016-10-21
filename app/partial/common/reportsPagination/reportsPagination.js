@@ -27,7 +27,7 @@ angular.module('unionvmsWeb').controller('ReportspaginationCtrl',function($scope
     var changeTimeout = function(){
         $timeout.cancel(inputChangeCallbackTimeout);
         inputChangeCallbackTimeout = $timeout(function(){
-            $scope.selectPage($scope.inputPage);
+            $scope.selectPage($scope.inputPage);            
         }, 300);
     };
 

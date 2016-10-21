@@ -124,7 +124,10 @@ module.exports = function (grunt) {
 
                   //DIRECTIVES
                   'app/directive/common/breadcrumbNavigator',
-                  'app/directive/activity/'
+                  'app/directive/activity/',
+                  
+                  //FILTERS
+                  'app/filter/activity/'
             ],
             options: {
                 destination: 'dist/docs',

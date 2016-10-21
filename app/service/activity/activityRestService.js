@@ -94,7 +94,7 @@ angular.module('unionvmsWeb').factory('activityRestFactory',function($resource, 
         getActivityList: function(data){
             var deferred = $q.defer();
             activityRestFactory.getActivityList().get(angular.toJson(data), function(response){
-                deferred.resolve(response);
+                deferred.resolve(response.data);
             }, function(error){
                 console.log('Error getting list of activity reports');
                 deferred.reject(error);

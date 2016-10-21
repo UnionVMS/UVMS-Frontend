@@ -39,10 +39,19 @@
     "breadcrumb_report_details": "Activity Details",
 	"header_fa_report_type": "Report Type",
 	"header_fa_activity_type": "Activity Type",
-	"header_fa_occurence": "Date",
+	"header_fa_occurence": "Occurence",
 	"header_fa_purpose_code": "Purpose Code",
 	"header_fa_data_source": "Data Source",
+	"header_fa_from_name": "From",
+	"header_fa_start_date": "Start date",
+	"header_fa_end_date": "End date",
+	"header_fa_areas": "Areas",
+	"header_fa_port": "Port",
+	"header_fa_gear": "Gears",
+	"header_fa_species": "Species",
+	"header_fa_weight": "Weight",
 	"header_fa_actions": "Actions",
+	"fa_table_error_fetching_reports": "There was an error while fetching fishing activity reports. Please try again.",
 	"activity_overview": "Activity overview",
 
     "trip_summary_loading": "Loading trip summary",
@@ -128,5 +137,6 @@
     "advanced_search_placeholder_weight_min": "Min",
     "advanced_search_placeholder_weight_max": "Max",
     "advanced_search_weight_range": "Weight range: ",
-    "advanced_search_button": "Search"
+    "advanced_search_min": "Min",
+    "advanced_search_max": "Max"
 }
