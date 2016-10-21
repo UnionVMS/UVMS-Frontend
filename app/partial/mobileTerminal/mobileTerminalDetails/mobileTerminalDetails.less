@@ -42,17 +42,17 @@ copy of the GNU General Public License along with the IFDM Suite. If not, see <h
             margin-right: @field-margin-vertical;
             align-self: flex-end;
 
-            &.longer-field {
+            &.long-field {
                 max-width: 230px;
                 flex: 1;
             } 
 
-            &.long-field {
+            &.medium-field {
                 max-width: 180px;
                 flex: 1;
             }
 
-            &.medium-field {
+            &.short-field {
                 max-width: 100px;
                 flex: 1;
             }
@@ -66,8 +66,12 @@ copy of the GNU General Public License along with the IFDM Suite. If not, see <h
             }
         }
 
-        &.section-1 {
+        &.form-section-2 {
             margin-bottom: @field-margin-vertical;
+        }
+
+        &.form-section-header {
+            margin-bottom: 5px;
         }
     }
 

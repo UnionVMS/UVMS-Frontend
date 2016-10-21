@@ -10,13 +10,6 @@ FITNESS FOR A PARTICULAR PURPOSE.  See the GNU General Public License for more d
 copy of the GNU General Public License along with the IFDM Suite. If not, see <http://www.gnu.org/licenses/>.
 -->
 <div ng-controller="mobileTerminalFormCtrl">
-    <div class="row">
-        <div class="col-md-12">
-            <h3 ng-show="isCreateNewMode()">{{'mobileTerminal.add_new_form_header' | i18n}}</h3>
-            <h3 ng-hide="isCreateNewMode()">{{'mobileTerminal.view_header' | i18n}}</h3>
-        </div>
-    </div>
-
     <div class="mobileTerminalFormContainer">
 
         <div class="card" ng-show="currentMobileTerminal.connectId && !isVisible.assignVessel">
