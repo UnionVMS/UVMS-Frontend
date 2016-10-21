@@ -13,7 +13,7 @@
         </div>
         <!--SELECTED TRIP-->
         <div class="row">
-            <a class="col-md-12">{{cronology.selectedTrip}}</a>
+            <a class="col-md-12" ng-click="openTrip(cronology.selectedTrip)">{{cronology.selectedTrip}}</a>
         </div>
         <!--PREVIOUS TRIPS-->
         <div class="row" ng-repeat="tripName in cronology.previousTrips">

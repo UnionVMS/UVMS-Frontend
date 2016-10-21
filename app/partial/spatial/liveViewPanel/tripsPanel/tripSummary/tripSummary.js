@@ -14,6 +14,12 @@
 angular.module('unionvmsWeb').controller('TripsummaryCtrl',function($scope,activityRestService,tripSummaryService,loadingStatus,$anchorScroll,locale){
     $scope.tripSummServ = tripSummaryService;
 
+    $scope.$watch('tripSummServ.isLoadingTrip', function(newVal){
+        if(newVal){
+            init();
+        }
+    });
+
     /**
      * Initialization function
      * 

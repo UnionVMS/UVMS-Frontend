@@ -56,6 +56,10 @@ angular.module('unionvmsWeb').directive('tripReportsPanel', function(loadingStat
                 }
             ];
 
+            scope.$watch('trip',function(){
+				init();
+			});
+
             /**
 			 * Initializes the trip reports panel directive
 			 * 

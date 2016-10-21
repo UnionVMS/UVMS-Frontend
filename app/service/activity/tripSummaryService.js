@@ -12,7 +12,8 @@ angular.module('unionvmsWeb').factory('tripSummaryService',function($timeout) {
 	var tripSummaryService = {
 	    trip: undefined,
 	    mapConfigs: undefined,
-        tabs: undefined
+        tabs: undefined,
+        isLoadingTrip: undefined
 	};
 
     /**
@@ -24,17 +25,33 @@ angular.module('unionvmsWeb').factory('tripSummaryService',function($timeout) {
 	 * @alias openNewTrip
      */
     tripSummaryService.openNewTrip = function(tripId){
+        this.isLoadingTrip = true;
+        var self = this;
+
         if(!angular.isDefined(this.tabs)){
             this.tabs = [];
         }
-        if(_.where(this.tabs, {title: tripId}).length === 0){
-            angular.forEach(this.tabs, function(item) {
-                item.active = false;
-            });
+        
+        angular.forEach(this.tabs, function(item) {
+            item.active = false;
+        });
 
+        if(_.where(this.tabs, {title: tripId}).length === 0){
             this.tabs.push({title: tripId, active: true});
             this.initializeTrip(this.tabs.length-1);
+        }else{
+            angular.forEach(this.tabs, function(value,key){
+                if(value.title === tripId){
+                    value.active = true;
+                    self.initializeTrip(key);
+                }
+            });
         }
+
+        $timeout(function(){
+            self.isLoadingTrip = false;
+        });
+        
     };
 
     /**

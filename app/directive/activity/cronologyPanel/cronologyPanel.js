@@ -18,9 +18,20 @@ angular.module('unionvmsWeb').directive('cronologyPanel', function(loadingStatus
 		templateUrl: 'directive/activity/cronologyPanel/cronologyPanel.html',
 		link: function(scope, element, attrs, fn) {
 
+            /**
+			 * Open trip in new tab
+			 * 
+			 * @memberof cronologyPanel
+			 * @public
+			 * @param {String} tripName - name of the trip
+			 */
             scope.openTrip = function(tripName){
                 tripSummaryService.openNewTrip(tripName);
             };
+
+            scope.$watch('trip',function(){
+				init();
+			});
 
             /**
 			 * Initializes the cronology panel directive

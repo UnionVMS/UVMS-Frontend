@@ -10,7 +10,7 @@
                 <!--SPECIE COUNT CHART-->
                 <div class="col-md-6">
                     <div class="nvd3-chart">
-                        <nvd3 options="options1" data="trip.catchDetails.onboard.speciesList" on-ready="callback"></nvd3>
+                        <nvd3 options="options1" data="trip.catchDetails.onboard.speciesList" on-ready="callback" ng-if="!tripSummServ.isLoadingTrip"></nvd3>
                     </div>
                 </div>
                 <!--SPECIE COUNT TABLE-->
@@ -45,7 +45,7 @@
                 <!--SPECIE COUNT CHART-->
                 <div class="col-md-6">
                     <div class="nvd3-chart">
-                        <nvd3 options="options2" data="trip.catchDetails.landed.speciesList" on-ready="callback"></nvd3>
+                        <nvd3 options="options2" data="trip.catchDetails.landed.speciesList" on-ready="callback" ng-if="!tripSummServ.isLoadingTrip"></nvd3>
                     </div>
                 </div>
                 <!--SPECIE COUNT TABLE-->

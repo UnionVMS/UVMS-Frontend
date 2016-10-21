@@ -7,7 +7,7 @@
  * @description
  *  A reusable tile that will display the catch details(overview) related to the current trip
  */
-angular.module('unionvmsWeb').directive('catchPanel', function(loadingStatus,activityRestService,$anchorScroll,locale) {
+angular.module('unionvmsWeb').directive('catchPanel', function(loadingStatus,activityRestService,$anchorScroll,locale,tripSummaryService) {
 	return {
 		restrict: 'E',
 		replace: true,
@@ -17,6 +17,8 @@ angular.module('unionvmsWeb').directive('catchPanel', function(loadingStatus,act
 		},
 		templateUrl: 'directive/activity/catchPanel/catchPanel.html',
 		link: function(scope, element, attrs, fn) {
+
+			scope.tripSummServ = tripSummaryService;
 
 			/**
 			 * Initialize the charts with nvd3 properties
@@ -77,6 +79,10 @@ angular.module('unionvmsWeb').directive('catchPanel', function(loadingStatus,act
 				scope.api.refresh();
 			};
 
+			scope.$watch('trip',function(){
+				init();
+			});
+
 			/**
 			 * Initializes the catch panel directive
 			 * 
@@ -86,11 +92,14 @@ angular.module('unionvmsWeb').directive('catchPanel', function(loadingStatus,act
 			var init = function(){
 				//get trip catch details
 				loadingStatus.isLoading('TripSummary', true);
+				scope.loadingCharts = true;
 				activityRestService.getTripCatches(scope.trip.id).then(function(response){
 					scope.trip.fromJson('catch',response.data);
 					initCharts();
+					scope.loadingCharts = false;
 					loadingStatus.isLoading('TripSummary', false);
 				}, function(error){
+					scope.loadingCharts = false;
 					$anchorScroll();
 					scope.tripAlert.hasAlert = true;
 					scope.tripAlert.hasError = true;
