@@ -411,6 +411,7 @@
 	"prop_to_error_message": "'To' must be higher than 'From'",
 	"prop_to_max_error_message": "Course degree cannot exceed value 360",
 	"min_value_1_error_message": "Must be higher than 0",
+	"min_value_bigger_than_max": "Must be smaller than the max value",
 	"section_errors": "This section contains errors",
 	"min_value_0_error_message": "Value must be higher than 1",
 	"max_error_message": "'Max' cannot be lower than 'Min'",

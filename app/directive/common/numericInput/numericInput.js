@@ -7,8 +7,8 @@ angular.module('unionvmsWeb').directive('numericInput',['$compile', function($co
 		scope: {
             ngModelNumber: '=ngModel',
             ngChange: '&',
-            min: '@',
-            max: '@',
+            min: '=',
+            max: '=',
             ngRequired: '=',
             step: '@',
 			ngDisabled: '=',
@@ -258,22 +258,51 @@ angular.module('unionvmsWeb').controller('numericInputCtrl',['$scope','$interval
 }]);
 
 angular.module('unionvmsWeb').directive('textInputStatus',function() {
-	  return {
-	      restrict: 'A',
-	      require: 'ngModel',
-	      link: function(scope, elm, attrs, ctrl) {
-			  scope.ctrl = ctrl;
-	    	  var updateFieldStatus = function(value) {
-	    		  var re = /^[-]?\d+(\.?\d*)?$/g;
-	    		  if(re.test(value) || !value){
-	    			  ctrl.$setValidity('invalidNumber',true);
-	    		  }else{
-	    			  ctrl.$setValidity('invalidNumber',false);
-	    		  }
-	              return value;
-	          };
-	          ctrl.$parsers.push(updateFieldStatus);
-	          ctrl.$formatters.push(updateFieldStatus);
-	      }
-	  };
-	});
+  return {
+      restrict: 'A',
+      require: 'ngModel',
+      link: function(scope, elm, attrs, ctrl) {
+		  scope.ctrl = ctrl;
+    	  var updateFieldStatus = function(value) {
+    		  var re = /^[-]?\d+(\.?\d*)?$/g;
+    		  if(re.test(value) || !value){
+    			  ctrl.$setValidity('invalidNumber',true);
+    		  }else{
+    			  ctrl.$setValidity('invalidNumber',false);
+    		  }
+              return value;
+          };
+          ctrl.$parsers.push(updateFieldStatus);
+          ctrl.$formatters.push(updateFieldStatus);
+      }
+  };
+});
+
+angular.module('unionvmsWeb').directive('validateMinInRange', function(){
+    return {
+        restrict: 'A',
+        require: 'ngModel',
+        link: function(scope, el, attrs, ctrl){
+            function checkMinValue(min, max){
+                var valid = true;
+                if (min !== undefined && max!== undefined && min !== null && max !== null && min > max){
+                    valid = false;
+                }
+                
+                ctrl.$setValidity('minBiggerThanMax', valid);
+            }
+            
+            scope.$watch('max', function(newValue){
+                checkMinValue(scope.ngModelNumber, newValue);
+            });
+            
+            var checkValidity = function(min){
+                checkMinValue(min, scope.max);
+                return min;
+            };
+            
+            ctrl.$parsers.push(checkValidity);
+            ctrl.$formatters.push(checkValidity);
+        }
+    };
+});

@@ -9,6 +9,7 @@
  */
 angular.module('unionvmsWeb').controller('AdvancedsearchformCtrl',function($scope, activityService){
     $scope.actServ = activityService;
+    $scope.isFormValid = true;
     
     $scope.codeLists = {
         comChannels: null,
@@ -161,47 +162,51 @@ angular.module('unionvmsWeb').controller('AdvancedsearchformCtrl',function($scop
      * @alias searchFAReports
      */
     $scope.searchFAReports = function(){
-        $scope.actServ.reportsList.isLoading = true;
-        $scope.actServ.resetReportsListTableState();
-        
-        var keyMapper = {
-            reportType: 'REPORT_TYPE',
-            fromId: 'FROM_ID',
-            fromName: 'FROM_NAME',
-            startDateTime: 'PERIOD_START',
-            endDateTime: 'PERIOD_END',
-            vesselName: 'VESSEL_NAME',
-            vesselId: 'VESSEL_IDENTIFIRE',
-            purposeCode: 'PURPOSE',
-            gearType: 'GEAR',
-            species: 'SPECIES',
-            master: 'MASTER',
-            area: 'AREAS',
-            port: 'PORT',
-            minWeight: 'QUNTITY_MIN',
-            maxWeight: 'QUNTITY_MAX',
-            comChannel: 'SOURCE',
-            activityType: 'ACTIVITY_TYPE'
-        };
-        
-        var formatedSearch = {};
-        angular.forEach($scope.advancedSearchObject, function(value, key) {
-            if (key !== 'weightUnit' && (!angular.isDefined(value) || (value !== null && value !== ''))){
-                this[keyMapper[key]] = value;
+        $scope.isFormValid = false;
+        if ($scope.activityAdvancedSearchForm.$valid){
+            $scope.isFormValid = true;
+            $scope.actServ.reportsList.isLoading = true;
+            $scope.actServ.resetReportsListTableState();
+            
+            var keyMapper = {
+                reportType: 'REPORT_TYPE',
+                fromId: 'FROM_ID',
+                fromName: 'FROM_NAME',
+                startDateTime: 'PERIOD_START',
+                endDateTime: 'PERIOD_END',
+                vesselName: 'VESSEL_NAME',
+                vesselId: 'VESSEL_IDENTIFIRE',
+                purposeCode: 'PURPOSE',
+                gearType: 'GEAR',
+                species: 'SPECIES',
+                master: 'MASTER',
+                area: 'AREAS',
+                port: 'PORT',
+                minWeight: 'QUNTITY_MIN',
+                maxWeight: 'QUNTITY_MAX',
+                comChannel: 'SOURCE',
+                activityType: 'ACTIVITY_TYPE'
+            };
+            
+            var formatedSearch = {};
+            angular.forEach($scope.advancedSearchObject, function(value, key) {
+                if (key !== 'weightUnit' && (!angular.isDefined(value) || (value !== null && value !== ''))){
+                    this[keyMapper[key]] = value;
+                }
+            }, formatedSearch);
+            
+            if (angular.isDefined(formatedSearch.QUNTITY_MIN) || angular.isDefined(formatedSearch.QUNTITY_MAX)){
+                formatedSearch.WEIGHT_MEASURE = $scope.advancedSearchObject.weightUnit;
             }
-        }, formatedSearch);
-        
-        if (angular.isDefined(formatedSearch.QUNTITY_MIN) || angular.isDefined(formatedSearch.QUNTITY_MAX)){
-            formatedSearch.WEIGHT_MEASURE = $scope.advancedSearchObject.weightUnit;
+            
+            if (angular.isDefined(formatedSearch.QUNTITY_MAX) && !angular.isDefined(formatedSearch.QUNTITY_MIN)){
+                formatedSearch.QUNTITY_MIN = 0;
+            }
+            
+            $scope.actServ.reportsList.searchObject = formatedSearch;
+            
+            $scope.actServ.getActivityList();
         }
-        
-        if (angular.isDefined(formatedSearch.QUNTITY_MAX) && !angular.isDefined(formatedSearch.QUNTITY_MIN)){
-            formatedSearch.QUNTITY_MIN = 0;
-        }
-        
-        $scope.actServ.reportsList.searchObject = formatedSearch;
-        
-        $scope.actServ.getActivityList();
     };
     
     /**
