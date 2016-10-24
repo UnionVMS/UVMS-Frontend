@@ -1,5 +1,8 @@
 <div class="mdr-code-list-modal">
     <div class="modal-header">
+    <div class="pointer pull-right" ng-click="close()">
+             <i class="fa fa-times closeicon"></i>
+        </div>
         <h4 class="modal-title">{{'activity.mdr_code_list_modal_title' | i18n}}{{acronym}}</h4>
     </div>
     <!-- BODY -->
@@ -12,9 +15,12 @@
             </div>
             <table id="codeListsTable" class="table table-striped areas-table table-condensed">
                 <thead>
-                    <tr class="stColumnHeaders">
-                        <th class="firstRow" ng-repeat="column in allColumns" st-sort="{{column}}">{{'activity.mdr_code_list_field_' + column | i18n}}</th>
-                    </tr>
+                	<tr>
+                		<th ng-repeat="column in allColumns">
+                			<div st-sort="{{column}}" st-sort-default="reverse" st-skip-natural="true" st-class-ascent="sorting_asc" st-class-descent="sorting_desc" ng-show="column === 'code'" ng-if="column === 'code'">{{'activity.mdr_code_list_field_' + column | i18n}}</div>
+                			<div st-sort="{{column}}" st-skip-natural="true" st-class-ascent="sorting_asc" st-class-descent="sorting_desc" ng-show="column !== 'code'" ng-if="column !== 'code'">{{'activity.mdr_code_list_field_' + column | i18n}}</div>
+                		</th>
+                	</tr>
                     <tr ng-show="!tableLoading && !displayedMdrCodeList.length">
                         <th colspan="{{allColumns.length}}"><table-alert type="'info'" msg="'activity.table_no_data'" visible="!displayedMdrCodeList.length && !tableLoading"></table-alert></th>
                     </tr>

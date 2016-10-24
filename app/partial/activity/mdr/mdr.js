@@ -44,10 +44,15 @@ angular.module('unionvmsWeb').controller('MdrCtrl',function($scope, mdrRestServi
         'originalValue': ''
     };
 
-     /**
+    /**
      * @property {Boolean} tableLoading is a flag defining whether we need to show the loading icon.
      */
     $scope.tableLoading = true;
+    
+    /**
+     * @property {Boolean} selectedAll is a flag defining whether all mdr code lists have been selected or not
+     */
+    $scope.selectedAll = false;
 
 
     /**
