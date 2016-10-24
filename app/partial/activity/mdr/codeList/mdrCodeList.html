@@ -1,38 +1,41 @@
-<div>
+<div class="mdr-code-list-modal">
     <div class="modal-header">
         <h4 class="modal-title">{{'activity.mdr_code_list_modal_title' | i18n}}{{acronym}}</h4>
     </div>
     <!-- BODY -->
-    <div class="modal-body">
-            <table id="codeListsTable" st-pipe="callServer" st-table="displayedMdrCodeList" class="table table-striped tableSmart areas-table table-condensed">
-                <thead class="thead">
-                    <tr class="tr search-field">
-                        <input st-search=""  st-table="displayedMdrCodeList" ng-model="searchFilter" class="form-control" placeholder="{{'activity.search_table_placeholder' | i18n}}" type="text"/>
+    <div class="modal-body" st-pipe="callServer" st-table="displayedMdrCodeList">
+        <div class="table-responsive-force">
+            <div class="form-group col-md-6">
+                <div class="row">
+                    <input st-search="" ng-model="searchFzilter" class="form-control" placeholder="{{'activity.search_table_placeholder' | i18n}}"/>
+                </div>
+            </div>
+            <table id="codeListsTable" class="table table-striped areas-table table-condensed">
+                <thead>
+                    <tr class="stColumnHeaders">
+                        <th class="firstRow" ng-repeat="column in allColumns" st-sort="{{column}}">{{'activity.mdr_code_list_field_' + column | i18n}}</th>
                     </tr>
-                    <tr class="tr stColumnHeaders">
-                        <th class="th firstRow" ng-repeat="column in allColumns" st-sort="{{column}}">{{'activity.mdr_code_list_field_' + column | i18n}}</th>
+                    <tr ng-show="!tableLoading && !displayedMdrCodeList.length">
+                        <th colspan="{{allColumns.length}}"><table-alert type="'info'" msg="'activity.table_no_data'" visible="!displayedMdrCodeList.length && !tableLoading"></table-alert></th>
                     </tr>
-                    <tr class="tr" ng-show="!tableLoading && !displayedMdrCodeList.length">
-                        <th class="th" colspan="{{allColumns.length}}"><table-alert type="'info'" msg="'activity.table_no_data'" visible="!displayedMdrCodeList.length && !tableLoading"></table-alert></th>
-                    </tr>
-                    <tr class="tr" ng-if="tableLoading && !alert.isLoading">
-                        <th class="th loading-spinner-cl" colspan="{{allColumns.length}}"><i class="fa fa-spinner fa-spin loading-spinner"></i></th>
+                    <tr ng-if="tableLoading && !alert.isLoading">
+                        <th class="loading-spinner-cl" colspan="{{allColumns.length}}"><i class="fa fa-spinner fa-spin loading-spinner"></i></th>
                     </tr>
                 </thead>
-                <tbody>
-                    <tr ng-repeat="codeListEntry in displayedMdrCodeList" >
+                <tbody ng-show="!tableLoading && displayedMdrCodeList.length">
+                    <tr ng-repeat="codeListEntry in displayedMdrCodeList">
                         <td ng-repeat="column in allColumns">{{codeListEntry[column]}}</td>
                     </tr>
                 </tbody>
-                <tfoot class="tfoot stFooterPagination" ng-if="displayedMdrCodeList.length && !tableLoading">
-                    <tr class="tr">
-                        <td class="td text-right" colspan="{{allColumns.length}}">
-                            <div st-pagination st-items-by-page="itemsByPage" st-displayed-pages="7" st-template="partial/common/reportsPagination/reportsPagination.html"></div>
-                        </td>
-                    </tr>
-                </tfoot>
             </table>
-       <!-- </div>-->
+        </div>
+        <div class="tfoot stFooterPagination" ng-if="displayedMdrCodeList.length && !tableLoading">
+            <div class="tr">
+                <div class="td text-right" colspan="{{allColumns.length}}">
+                    <div st-pagination st-items-by-page="itemsByPage" st-displayed-pages="7" st-template="partial/common/reportsPagination/reportsPagination.html"></div>
+                </div>
+            </div>
+        </div>
     </div>
     <!-- FOOTER -->
     <div class="modal-footer">

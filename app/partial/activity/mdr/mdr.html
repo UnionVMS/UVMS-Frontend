@@ -51,8 +51,8 @@
                 <div id="codeListsTable" class="table table-striped tableSmart areas-table table-condensed">
                     <div class="thead col-md-12" >
                         <div class="tr row">
-                            <div class="th col-md-1" st-skip-natural="true" st-class-ascent="sorting_asc" st-class-descent="sorting_desc">
-                                <input type="checkbox" name="selectDeselectAll" id="selectDeselectAll" ng-click="selectDeselectAll()">
+                            <div class="th col-md-1 ckeckbox-column" st-skip-natural="true" st-class-ascent="sorting_asc" st-class-descent="sorting_desc">
+                                <input type="checkbox" ng-model="selectedAll" ng-change="selectDeselectAll()">
                             </div>
                             <div class="th col-md-3" st-sort="acronym" st-skip-natural="true" st-class-ascent="sorting_asc" st-class-descent="sorting_desc">{{'activity.code_list_table_acronym_header' | i18n}}</div>
                             <div class="th col-md-3" st-sort="name" st-skip-natural="true" st-class-ascent="sorting_asc" st-class-descent="sorting_desc">{{'activity.code_list_table_name_header' | i18n}}</div>
@@ -72,15 +72,15 @@
                     <div class="tbody col-md-12">
                         <div ng-repeat="codeList in displayedMDRLists" class="tr row" ng-show="!tableLoading">
                             <div class="td col-md-1" st-skip-natural="true" >
-                                <input type="checkbox" value="{{codeList.id}}" ng-model="codeList.isSelected" ng-click="enableDisableSynchButton()">
+                                <input type="checkbox" value="{{codeList.id}}" ng-model="codeList.isSelected" ng-change="enableDisableSynchButton()">
                             </div>
                             <div class="td col-md-3" st-skip-natural="true">{{codeList.objectAcronym}}</div>
                             <div class="td col-md-3" st-skip-natural="true">{{codeList.objectName}}</div>
                             <div class="td col-md-1" st-skip-natural="true">{{codeList.lastSuccess | stActivityDateUtc}}</div>
                             <div class="td col-md-1" st-skip-natural="true">{{codeList.lastAttempt | stActivityDateUtc}}</div>
                             <div class="td col-md-1" st-skip-natural="true">{{codeList.lastStatus}}</div>
-                            <div class="td col-md-1">
-                                <button ng-show="isAllowed('CODE_LISTS_ENABLE_DISABLE_SCHEDULED_UPDATE')" type="button" class="btn btn-{{codeList.schedulable?'success':'danger'}} btn-xs pull-left" title="{{'activity.enable_disable_autoupdate' | i18n }}" ng-click="enableDisableAutoUpdate($index)">
+                            <div class="td col-md-1 btn-schedule-state">
+                                <button ng-show="isAllowed('CODE_LISTS_ENABLE_DISABLE_SCHEDULED_UPDATE')" type="button" class="btn btn-{{codeList.schedulable?'success':'danger'}}" title="{{'activity.enable_disable_autoupdate' | i18n }}" ng-click="enableDisableAutoUpdate($index)">
                                     <span>{{'activity.enable_disable_autoupdate_'+codeList.schedulable | i18n}}</span>
                                 </button>
                             </div>
@@ -89,12 +89,12 @@
                             </div>
                         </div>
                     </div>
-                    <div class="tfoot col-md-12 stFooterPagination" ng-if="displayedMDRLists.length && !tableLoading">
-                        <div class="tr row">
-                            <div class="td col-md-12 text-right">
-                                <div st-pagination st-items-by-page="itemsByPage" st-displayed-pages="7" st-template="partial/common/reportsPagination/reportsPagination.html"></div>
-                            </div>
-                        </div>
+                </div>
+            </div>
+            <div class="tfoot col-md-12 stFooterPagination" ng-if="displayedMDRLists.length && !tableLoading">
+                <div class="tr row">
+                    <div class="td col-md-12 text-right">
+                        <div st-pagination st-items-by-page="itemsByPage" st-displayed-pages="7" st-template="partial/common/reportsPagination/reportsPagination.html"></div>
                     </div>
                 </div>
             </div>

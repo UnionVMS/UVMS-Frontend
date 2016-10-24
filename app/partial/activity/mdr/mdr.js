@@ -15,9 +15,9 @@ angular.module('unionvmsWeb').controller('MdrCtrl',function($scope, mdrRestServi
     /**
      * @property {Object} cronWidgetConfig is a configuration object, used by the angularjs-cron-plugin
      */
-     $scope.cronWidgetConfig = {
-          allowMultiple: true
-      };
+    $scope.cronWidgetConfig = {
+        allowMultiple: true
+    };
 
     /**
      * @property {Array} mdrCodeLists is an  array of code list details objects. It keeps the full list of code lists,
@@ -150,7 +150,7 @@ angular.module('unionvmsWeb').controller('MdrCtrl',function($scope, mdrRestServi
      * @public
      */
     $scope.selectDeselectAll = function() {
-         if ($('#selectDeselectAll')[0].checked) {
+         if ($scope.selectedAll) {
             angular.forEach($scope.displayedMDRLists, function (value, key) {
                  value.isSelected = true;
             });
@@ -177,11 +177,12 @@ angular.module('unionvmsWeb').controller('MdrCtrl',function($scope, mdrRestServi
      * @public
      */
     $scope.enableDisableSynchButton = function() {
-        if ( _.where($scope.displayedMDRLists, {'isSelected': true}).length > 0) {
+        if (_.where($scope.displayedMDRLists, {'isSelected': true}).length > 0) {
             $scope.isUpdateNowDisabled = false;
         } else {
             $scope.isUpdateNowDisabled = true;
         }
+        checkSelectedAll();
     };
 
 
@@ -198,6 +199,7 @@ angular.module('unionvmsWeb').controller('MdrCtrl',function($scope, mdrRestServi
             $scope.mdrCodeLists = response;
             $scope.displayedMDRLists = [].concat($scope.mdrCodeLists);
             $scope.tableLoading = false;
+            checkSelectedAll();
         }, function(error){
             $scope.tableLoading = false;
             alertService.showErrorMessageWithTimeout(locale.getString('activity.error_getting_mdr_code_lists'));
@@ -260,6 +262,14 @@ angular.module('unionvmsWeb').controller('MdrCtrl',function($scope, mdrRestServi
        return userService.isAllowed(feature, 'Activity', true);
     };
 
+    var checkSelectedAll = function(){
+        if(_.where($scope.displayedMDRLists, {'isSelected': false}).length > 0){
+            $scope.selectedAll = false;
+        }else{
+            $scope.selectedAll = true;
+        }
+    };
+
 
 	$scope.init();
 
@@ -269,11 +279,7 @@ angular.module('unionvmsWeb').controller('MdrCtrl',function($scope, mdrRestServi
     $scope.$watch(function(){return $scope.displayedMDRLists;}, function(newValue, oldValue) {
         if (newValue.length > 0) {
             var numSelectedItems = _.where(newValue, {'isSelected': true}).length;
-            if (numSelectedItems === newValue.length) {
-                $('#selectDeselectAll')[0].checked = true;
-            } else {
-                $('#selectDeselectAll')[0].checked = false;
-            }
+            checkSelectedAll();
 
             if (numSelectedItems > 0) {
                 $scope.isUpdateNowDisabled = false;

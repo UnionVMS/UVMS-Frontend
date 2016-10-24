@@ -67,7 +67,7 @@ angular.module('unionvmsWeb').controller('TripspanelCtrl',function($scope, gener
      * @alias quitTripSummary
      */
     $scope.quitTripSummary = function(){
-        $scope.tripSummServ.tabs = undefined;
+        $scope.tripSummServ.tabs.splice(0,$scope.tripSummServ.tabs.length);
         $scope.repNav.goToPreviousView();
     };
 

@@ -397,8 +397,9 @@ unionvmsWebApp.config(function($stateProvider, $compileProvider, tmhDynamicLocal
                     $state.go('error');
                 }
             },
-            onExit: function(loadingStatus){
+            onExit: function(loadingStatus,$modalStack){
                 loadingStatus.resetState();
+                $modalStack.dismissAll();
             }
         })
         .state('app.reporting-id', {
