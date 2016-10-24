@@ -9,6 +9,13 @@
  */
 angular.module('unionvmsWeb').factory('activityRestFactory',function($resource, $http) {
     return {
+        getUserPreferences: function(){
+            return $resource('/activity/rest/config/user', {}, {
+                'get': {
+                    method: 'GET'
+                }
+            })
+        },
         getActivityList: function(){
             return $resource('/activity/rest/fa/list', {}, {
                 'get': {
@@ -84,12 +91,29 @@ angular.module('unionvmsWeb').factory('activityRestFactory',function($resource, 
 .service('activityRestService', function($q, activityRestFactory){
     var activityService = {
         /**
+         * Get the user preferences for the activty module
+         * 
+         * @memberof activityRestService
+         * @public
+         * @returns {Promise} A promise with either the user preferences of the activity module or reject error
+         */
+        getUserPreferences: function(){
+            var deferred = $q.defer();
+            activityRestFactory.getUserPreferences().get(function(response){
+                deferred.resolve(response.data);
+            }, function(error){
+                console.log('Error getting user preferences for activity');
+                deferred.reject(error);
+            });
+            return deferred.promise;
+        },
+        /**
          * Get a list of fishing activity reports according to search criteria
          * 
          * @memberof activityRestService
          * @public
          * @param {Object} data - The search criteria and table pagination data object
-         * @returns {Promise} A promise with either the resolved data response or reject error
+         * @returns {Promise} A promise with either the list of activities or reject error
          */
         getActivityList: function(data){
             var deferred = $q.defer();

@@ -12,20 +12,20 @@
  * @description
  *  A service to deal with all activity data
  */
-angular.module('unionvmsWeb').factory('activityService',function(locale, activityRestService) {
+angular.module('unionvmsWeb').factory('activityService',function(locale, activityRestService, visibilityService) {
     var actServ = {};
     var listSize = 25;
     
     actServ.breadcrumbPages = [{
-        title: locale.getString('activity.breadcrumb_reports_list'),
+        title: 'activity.breadcrumb_reports_list',
         type: 'activities',
         visible: true
     },{
-        title: locale.getString('activity.breadcrumb_report_overview'),
+        title: 'activity.breadcrumb_report_overview',
         type: 'overview',
         visible: false
     },{
-        title: locale.getString('activity.breadcrumb_report_details'),
+        title: 'activity.breadcrumb_report_details',
         type: 'details',
         visible: false
     }];
@@ -76,9 +76,9 @@ angular.module('unionvmsWeb').factory('activityService',function(locale, activit
         };
         
         actServ.reportsList.tableState.pagination = {
-                start: 0,
-                number: listSize,
-                numberOfPages: 1
+            start: 0,
+            number: listSize,
+            numberOfPages: 1
         };
     };
     
@@ -156,6 +156,29 @@ angular.module('unionvmsWeb').factory('activityService',function(locale, activit
         }, function(error){
             actServ.reportsList.isLoading = false;
             actServ.reportsList.hasError = true;
+        });
+    };
+    
+    /**
+     * Get the user preferences for the activity
+     * 
+     * @memberof activityService
+     * @public
+     */
+    actServ.getUserPreferences = function(){
+        activityRestService.getUserPreferences().then(function(response){
+            //FIXME when service is fixed with order and values
+            var visibilitySettings = {
+                fishingActivities: {
+                    table: {
+                        values: response.fishingActivityConfig.summaryReport,
+                        order: response.fishingActivityConfig.summaryReport //FIXME
+                    }
+                }
+            };
+            visibilityService.setVisibility(visibilitySettings);
+        }, function(error){
+            //TODO
         });
     };
 

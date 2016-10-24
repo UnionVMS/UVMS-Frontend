@@ -460,14 +460,12 @@ unionvmsWebApp.config(function($stateProvider, $compileProvider, tmhDynamicLocal
             data: {
                 pageTitle: 'header.page_title_activity'
             },
-//            onEnter: function($state,locale,userService,errorService){
-//                if(_.isNull(userService.getCurrentContext().scope)){
-//                    errorService.setErrorMessage(locale.getString('common.error_user_without_scope'));
-//                    $state.go('error');
-//                }
-//            },
-            onExit: function(loadingStatus){
+            onEnter: function($state, locale, activityService){
+                activityService.getUserPreferences();
+            },
+            onExit: function(loadingStatus, activityService){
                 loadingStatus.resetState();
+                activityService.reset();
             }
         })
         .state('app.exchange', {

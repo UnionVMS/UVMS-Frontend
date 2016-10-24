@@ -1,4 +1,4 @@
-angular.module('unionvmsWeb').factory('reportService',function($rootScope, $timeout, $interval, $anchorScroll, locale, TreeModel, reportRestService, reportFormService, spatialRestService, spatialHelperService, defaultMapConfigs, mapService, unitConversionService, vmsVisibilityService, mapAlarmsService, loadingStatus, spatialConfigRestService, SpatialConfig, Report, globalSettingsService, userService, reportingNavigatorService, $modalStack, layerPanelService) {
+angular.module('unionvmsWeb').factory('reportService',function($rootScope, $timeout, $interval, $anchorScroll, locale, TreeModel, reportRestService, reportFormService, spatialRestService, spatialHelperService, defaultMapConfigs, mapService, unitConversionService, visibilityService, mapAlarmsService, loadingStatus, spatialConfigRestService, SpatialConfig, Report, globalSettingsService, userService, reportingNavigatorService, $modalStack, layerPanelService) {
 
     var rep = {
        id: undefined,
@@ -252,7 +252,7 @@ angular.module('unionvmsWeb').factory('reportService',function($rootScope, $time
 	//Get config without map Success callback
     var getConfigWithoutMapSuccess = function(data){
         //Set vms table attribute visibility
-        vmsVisibilityService.setVisibility(data.visibilitySettings);
+        visibilityService.setVisibility(data.visibilitySettings);
         
         rep.getReportTime = moment.utc().format('YYYY-MM-DDTHH:mm:ss');
         var repConfig = getRepConfig();
@@ -457,7 +457,7 @@ angular.module('unionvmsWeb').factory('reportService',function($rootScope, $time
 	    mapService.setAlarmsStylesObj(data.vectorStyles.alarms);
 	    
 	    //Set vms table attribute visibility
-	    vmsVisibilityService.setVisibility(data.visibilitySettings);
+	    visibilityService.setVisibility(data.visibilitySettings);
 	    
 	    //Set popup visibility settings
 	    mapService.setPopupVisibility('positions', data.visibilitySettings.positions.popup);

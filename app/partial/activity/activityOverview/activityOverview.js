@@ -22,5 +22,5 @@ angular.module('unionvmsWeb').controller('ActivityoverviewCtrl',function($scope,
             name: 'Activity details will be here'
         };
         $scope.goToView(2);
-    }
+    };
 });

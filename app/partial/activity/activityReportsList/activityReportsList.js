@@ -8,8 +8,9 @@
  * @description
  *  The controller for the fisihing activity reports table list
  */
-angular.module('unionvmsWeb').controller('ActivityreportslistCtrl',function($scope, activityService){
+angular.module('unionvmsWeb').controller('ActivityreportslistCtrl',function($scope, activityService, visibilityService){
     $scope.actServ = activityService;
+    $scope.attrVisibility = visibilityService;
     $scope.displayedActivities = [].concat($scope.actServ.activities);
     
     /**

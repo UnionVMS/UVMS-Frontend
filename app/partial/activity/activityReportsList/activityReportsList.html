@@ -4,23 +4,30 @@
 			<table class="table table-striped table-condensed">
 				<thead>
 					<tr>
-						<th st-sort="FAReportType"  st-class-ascent="sorting_asc" st-class-descent="sorting_desc" >{{'activity.header_fa_report_type' | i18n }}</th>
-						<th st-sort="activityType" st-sort-default="reverse" st-skip-natural="true" st-class-ascent="sorting_asc" st-class-descent="sorting_desc" >{{'activity.header_fa_activity_type' | i18n }}</th>
-						<th st-sort="occurence" st-skip-natural="true" st-class-ascent="sorting_asc" st-class-descent="sorting_desc" >{{'activity.header_fa_occurence' | i18n }}</th>
-						<th st-sort="purposeCode" st-skip-natural="true" st-class-ascent="sorting_asc" st-class-descent="sorting_desc" >{{'activity.header_fa_purpose_code' | i18n }}</th>
-						<th st-sort="dataSource" st-skip-natural="true" st-class-ascent="sorting_asc" st-class-descent="sorting_desc" >{{'activity.header_fa_data_source' | i18n }}</th>
-						<th st-sort="fromName" st-skip-natural="true" st-class-ascent="sorting_asc" st-class-descent="sorting_desc" >{{'activity.header_fa_from_name' | i18n }}</th>
-						<th st-sort="startDate" st-skip-natural="true" st-class-ascent="sorting_asc" st-class-descent="sorting_desc" >{{'activity.header_fa_start_date' | i18n }}</th>
-						<th st-sort="endDate" st-skip-natural="true" st-class-ascent="sorting_asc" st-class-descent="sorting_desc" >{{'activity.header_fa_end_date' | i18n }}</th>
-						<th class="notSortable">{{'spatial.reports_form_vessel_search_table_header_ircs' | i18n }}</th>
-						<th class="notSortable">{{'spatial.reports_form_vessel_search_table_header_cfr' | i18n }}</th>
-						<th class="notSortable">{{'spatial.reports_form_vessel_search_table_header_external_marking' | i18n }}</th>
-						<th class="notSortable">{{'activity.header_fa_areas' | i18n }}</th>
-						<th class="notSortable">{{'activity.header_fa_port' | i18n }}</th>
-						<th class="notSortable">{{'activity.header_fa_gear' | i18n }}</th>
-						<th class="notSortable">{{'activity.header_fa_species' | i18n }}</th>
-						<th class="notSortable">{{'activity.header_fa_weight' | i18n }}</th>
-						<th class="notSortable">{{'activity.header_fa_actions' | i18n }}</th>
+						<th lr-drag-src="headers" lr-drop-target="headers" ng-repeat="column in attrVisibility.fishingActivitiesColumns" ng-show="attrVisibility.fishingActivities[column]">
+							<div st-sort="FAReportType"  st-class-ascent="sorting_asc" st-class-descent="sorting_desc" ng-show="attrVisibility.fishingActivities[column]" ng-if="column === 'FAReportType'">{{'activity.header_fa_report_type' | i18n }}</div>
+							<div st-sort="activityType" st-sort-default="reverse" st-skip-natural="true" st-class-ascent="sorting_asc" st-class-descent="sorting_desc" ng-show="attrVisibility.fishingActivities[column]" ng-if="column === 'activityType'">{{'activity.header_fa_activity_type' | i18n }}</div>
+							<div st-sort="occurence" st-skip-natural="true" st-class-ascent="sorting_asc" st-class-descent="sorting_desc" ng-show="attrVisibility.fishingActivities[column]" ng-if="column === 'occurence'">{{'activity.header_fa_occurence' | i18n }}</div>
+							<div st-sort="purposeCode" st-skip-natural="true" st-class-ascent="sorting_asc" st-class-descent="sorting_desc" ng-show="attrVisibility.fishingActivities[column]" ng-if="column === 'purposeCode'">{{'activity.header_fa_purpose_code' | i18n }}</div>
+							<div st-sort="dataSource" st-skip-natural="true" st-class-ascent="sorting_asc" st-class-descent="sorting_desc" ng-show="attrVisibility.fishingActivities[column]" ng-if="column === 'dataSource'">{{'activity.header_fa_data_source' | i18n }}</div>
+							<div st-sort="fromName" st-skip-natural="true" st-class-ascent="sorting_asc" st-class-descent="sorting_desc" ng-show="attrVisibility.fishingActivities[column]" ng-if="column === 'fromName'">{{'activity.header_fa_from_name' | i18n }}</div>
+							<div st-sort="startDate" st-skip-natural="true" st-class-ascent="sorting_asc" st-class-descent="sorting_desc"  ng-show="attrVisibility.fishingActivities[column]" ng-if="column === 'startDate'">{{'activity.header_fa_start_date' | i18n }}</div>
+							<div st-sort="endDate" st-skip-natural="true" st-class-ascent="sorting_asc" st-class-descent="sorting_desc" ng-show="attrVisibility.fishingActivities[column]" ng-if="column === 'endDate'">{{'activity.header_fa_end_date' | i18n }}</div>
+							<div ng-show="attrVisibility.fishingActivities[column]" ng-if="column === 'cfr'">{{'spatial.reports_form_vessel_search_table_header_cfr' | i18n }}</div>
+							<div ng-show="attrVisibility.fishingActivities[column]" ng-if="column === 'ircs'">{{'spatial.reports_form_vessel_search_table_header_ircs' | i18n }}</div>
+							<div ng-show="attrVisibility.fishingActivities[column]" ng-if="column === 'extMark'">{{'spatial.reports_form_vessel_search_table_header_external_marking' | i18n }}</div>
+							<div ng-show="attrVisibility.fishingActivities[column]" ng-if="column === 'uvi'">{{'activity.header_fa_uvi' | i18n }}</div>
+							<div ng-show="attrVisibility.fishingActivities[column]" ng-if="column === 'iccat'">{{'activity.header_fa_iccat' | i18n }}</div>
+							<div ng-show="attrVisibility.fishingActivities[column]" ng-if="column === 'gfcm'">{{'activity.header_fa_gfcm' | i18n }}</div>
+							<div ng-show="attrVisibility.fishingActivities[column]" ng-if="column === 'areas'">{{'activity.header_fa_areas' | i18n }}</div>
+							<div ng-show="attrVisibility.fishingActivities[column]" ng-if="column === 'port'">{{'activity.header_fa_port' | i18n }}</div>
+							<div ng-show="attrVisibility.fishingActivities[column]" ng-if="column === 'fishingGear'">{{'activity.header_fa_gear' | i18n }}</div>
+							<div ng-show="attrVisibility.fishingActivities[column]" ng-if="column === 'speciesCode'">{{'activity.header_fa_species' | i18n }}</div>
+							<div ng-show="attrVisibility.fishingActivities[column]" ng-if="column === 'quantity'">{{'activity.header_fa_weight' | i18n }}</div>
+						</th>
+						<th>
+							<div class="notSortable" >{{'activity.header_fa_actions' | i18n }}</div>
+						</th>
 					</tr>
 					<tr>
 						<th colspan="17" ng-if="!actServ.reportsList.isLoading && (actServ.activities.length === 0 || actServ.reportsList.hasError)">
@@ -34,22 +41,27 @@
 				</thead>
 				<tbody>
 					<tr ng-repeat="activity in actServ.activities" ng-if="actServ.activities.length > 0 && !actServ.reportsList.hasError && !actServ.reportsList.isLoading">
-						<td>{{ activity.FAReportType }}</td>
-						<td>{{ activity.activityType }}</td>
-						<td>{{ activity.occurence | stDateUtc}}</td>
-						<td>{{ activity.purposeCode | stPurposeCode }}</td>
-						<td>{{ activity.dataSource }}</td>
-						<td>{{ activity.fromName }}</td>
-						<td>{{ activity.startDate | stDateUtc }}</td>
-						<td>{{ activity.endDate | stDateUtc}}</td>
-						<td>{{ activity.vesselIdTypes | stVessekIdsToColumns: 'ircs'}}</td>
-						<td>{{ activity.vesselIdTypes | stVessekIdsToColumns: 'cfr'}}</td>
-						<td>{{ activity.vesselIdTypes | stVessekIdsToColumns: 'ext_mark'}}</td>
-						<td>{{ activity.areas | stArrayToString: ' - ' }}</td>
-						<td>{{ activity.port | stArrayToString: ' - ' }}</td>
-						<td>{{ activity.fishingGear | stArrayToString: ' - ' }}</td>
-						<td>{{ activity.speciesCode | stArrayToString: ', ' }}</td>
-						<td>{{ activity.quantity | stArrayToString: ', ' }}</td>
+						<td ng-repeat="column in attrVisibility.fishingActivitiesColumns" ng-show="attrVisibility.fishingActivities[column]">
+							<div ng-show="attrVisibility.fishingActivities.FAReportType" ng-if="column === 'FAReportType'">{{ activity.FAReportType }}</div>
+							<div ng-show="attrVisibility.fishingActivities.activityType" ng-if="column === 'activityType'">{{ activity.activityType }}</div>
+							<div ng-show="attrVisibility.fishingActivities.occurence" ng-if="column === 'occurence'">{{ activity.occurence | stDateUtc }}</div>
+							<div ng-show="attrVisibility.fishingActivities.purposeCode" ng-if="column === 'purposeCode'">{{ activity.purposeCode | stPurposeCode }}</div>
+							<div ng-show="attrVisibility.fishingActivities.dataSource" ng-if="column === 'dataSource'">{{ activity.dataSource }}</div>
+							<div ng-show="attrVisibility.fishingActivities.fromName" ng-if="column === 'fromName'">{{ activity.fromName }}</div>
+							<div ng-show="attrVisibility.fishingActivities.startDate" ng-if="column === 'startDate'">{{ activity.startDate | stDateUtc }}</div>
+							<div ng-show="attrVisibility.fishingActivities.endDate" ng-if="column === 'endDate'">{{ activity.endDate | stDateUtc }}</div>
+							<div ng-show="attrVisibility.fishingActivities.cfr" ng-if="column === 'cfr'">{{ activity.vesselIdTypes | stVessekIdsToColumns: 'cfr' }}</div>
+							<div ng-show="attrVisibility.fishingActivities.ircs" ng-if="column === 'ircs'">{{ activity.vesselIdTypes | stVessekIdsToColumns: 'ircs' }}</div>
+							<div ng-show="attrVisibility.fishingActivities.extMark" ng-if="column === 'extMark'">{{ activity.vesselIdTypes | stVessekIdsToColumns: 'ext_mark' }}</div>
+							<div ng-show="attrVisibility.fishingActivities.uvi" ng-if="column === 'uvi'">{{ activity.vesselIdTypes | stVessekIdsToColumns: 'uvi' }}</div>
+							<div ng-show="attrVisibility.fishingActivities.iccat" ng-if="column === 'iccat'">{{ activity.vesselIdTypes | stVessekIdsToColumns: 'iccat' }}</div>
+							<div ng-show="attrVisibility.fishingActivities.gfcm" ng-if="column === 'gfcm'">{{ activity.vesselIdTypes | stVessekIdsToColumns: 'gfcm' }}</div>
+							<div ng-show="attrVisibility.fishingActivities.areas" ng-if="column === 'areas'">{{ activity.areas | stArrayToString: ' - ' }}</div>
+							<div ng-show="attrVisibility.fishingActivities.port" ng-if="column === 'port'">{{ activity.port | stArrayToString: ' - ' }}</div>
+							<div ng-show="attrVisibility.fishingActivities.fishingGear" ng-if="column === 'fishingGear'">{{ activity.fishingGear | stArrayToString: ' - ' }}</div>
+							<div ng-show="attrVisibility.fishingActivities.speciesCode" ng-if="column === 'speciesCode'">{{ activity.speciesCode | stArrayToString: ', ' }}</div>
+							<div ng-show="attrVisibility.fishingActivities.quantity" ng-if="column === ''">{{ activity.quantity | stArrayToString: ', ' }}</div>
+						</td>
 						<td class="no-wrap-white-space">
 							<button type="button" class="btn btn-xs btn-default" title="{{'activity.activity_overview' | i18n }}" ng-click="openOverview($index)">
 								<span class="fa fa-eye"></span>

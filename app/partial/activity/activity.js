@@ -23,7 +23,7 @@ angular.module('unionvmsWeb').controller('ActivityCtrl',function($scope, locale,
      * @private
      */
     var init = function(){
-        $scope.actServ.reset();
+        //$scope.actServ.reset();
     }; 
     
     /**

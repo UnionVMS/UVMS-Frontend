@@ -452,7 +452,7 @@ describe('reportService', function () {
 //        expect(mockMapService.clearVectorLayers).toHaveBeenCalled();
 //        expect(mockMapService.updateMapView.callCount).toBe(0);
 //        expect(mockMapService.updateMapControls.callCount).toBe(0);
-//        expect(mockVmsVisibilityService.setVisibility.callCount).toBe(0);
+//        expect(mockVisibilityService.setVisibility.callCount).toBe(0);
 //        expect(mockMapService.setPopupVisibility.callCount).toBe(0);
 //        expect(mockSpatialHelperService.setToolbarControls.callCount).toBe(0);
 //        expect(mockReportRestService.executeReport.callCount).toBe(0);
