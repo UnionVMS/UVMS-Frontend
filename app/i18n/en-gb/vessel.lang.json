@@ -135,6 +135,7 @@
     "vessel_details_imo_pattern_validation_message": "Must be 7 digits.",
     "vessel_details_producer_code_pattern_validation_message": "Must be 3 characters.",
     "vessel_details_max_decimals_pattern_validation_message": "There can be max {1} decimals.",
+    "vessel_details_get_length_over_all_pattern_validation_message": "There can be max 4 digits followed by max 2 decimals.",
     "vessel_details_email": "Email",
     "vessel_details_contacts": "Contacts",
     "vessel_details_contact_name": "Contact name",

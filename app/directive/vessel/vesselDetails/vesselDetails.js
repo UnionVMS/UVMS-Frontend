@@ -59,7 +59,10 @@ angular.module('unionvmsWeb')
         $scope.maxTwoDecimalsValidationMessages = {
             'pattern' : locale.getString('vessel.vessel_details_max_decimals_pattern_validation_message', "2")
         };
-
+        $scope.getlengthOverAllRegExp = vesselValidationService.getlengthOverAllPattern();
+        $scope.lengthOverAllValidationMessages = {
+            'pattern' : locale.getString('vessel.vessel_details_get_length_over_all_pattern_validation_message')
+        };
         $scope.producerCodePattern = vesselValidationService.getProducerCodePattern();
         $scope.producerCodeValidationMessages = {
             'pattern' : locale.getString('vessel.vessel_details_producer_code_pattern_validation_message')
