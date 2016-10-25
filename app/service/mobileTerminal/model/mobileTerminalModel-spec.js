@@ -137,7 +137,7 @@ describe('MobileTerminalModel', function() {
         expect(mobileTerminal.plugin).toBeDefined();
         expect(Object.keys(mobileTerminal.attributes).length).toEqual(0);
         expect(mobileTerminal.channels.length).toEqual(1);
-        expect(mobileTerminal.active).toEqual(true);
+        expect(mobileTerminal.active).toEqual(false);
     }));
 
     it("should parse JSON correctly", inject(function(MobileTerminal) {
