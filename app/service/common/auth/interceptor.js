@@ -256,7 +256,7 @@ angular.module('auth.interceptor', ['ngStorage','ui.bootstrap'])
                         var $state = $injector.get('$state');
                         var authRouter = $injector.get('authRouter');
                         _log.debug("Current State",$state.current);
-                        if(!$state.current.name === 'uvmsLogin' && $state.current && $state.current.name !== authRouter.getLogin()){
+                        if($state.current && $state.current.name !== authRouter.getLogin() && $state.current.name !== ""){
 
                         _log.log("injecting renewLoginPanel");
 
@@ -281,6 +281,7 @@ angular.module('auth.interceptor', ['ngStorage','ui.bootstrap'])
 							$log.log("retry request failed?");
                             unauth = true;
                             userService.logout();
+                            $modalStack.dismissAll();
 							$rootScope.$broadcast('authenticationNeeded');
 							return $q.reject(rejection);
 						});
