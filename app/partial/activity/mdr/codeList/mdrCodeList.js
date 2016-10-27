@@ -1,3 +1,15 @@
+/**
+ * @memberof unionvmsWeb
+ * @ngdoc controller
+ * @name MdrcodelistCtrl
+ * @param $scope {Service} controller scope
+ * @param $modalInstance {Service} angular service modalInstance
+ * @param acronym {Service} the MDR code 
+ * @param mdrRestService {Service} the mdr REST service <p>{@link unionvmsWeb.mdrRestService}</p>
+ * @param $timeout {Service} angular service timeout
+ * @description
+ *  The controller for the mdr code list
+ */
 angular.module('unionvmsWeb').controller('MdrcodelistCtrl',function($scope, $modalInstance, acronym, mdrRestService, $timeout){
 
     $scope.displayedMdrCodeList = [];
@@ -7,11 +19,26 @@ angular.module('unionvmsWeb').controller('MdrcodelistCtrl',function($scope, $mod
     $scope.searchFilter = '';
     $scope.tableState = null;
 
+    /**
+     * Closes the mdr code list modal
+     *
+     * @memberof MdrcodelistCtrl
+     * @function close
+     * @public
+     */
     $scope.close = function() {
         $modalInstance.close();
     };
 
-    $scope.callServer = function callServer(tableState) {
+    /**
+     * Closes the mdr code list modal
+     *
+     * @memberof MdrcodelistCtrl
+     * @function callServer
+     * @public
+     * @param {Object} tableState - current state of filters and sorting of table
+     */
+    $scope.callServer = function(tableState) {
         $scope.tableState = tableState;
         $scope.tableLoading = true;
 

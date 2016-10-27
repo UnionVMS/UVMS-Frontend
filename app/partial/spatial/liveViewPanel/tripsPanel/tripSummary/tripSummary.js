@@ -53,6 +53,4 @@ angular.module('unionvmsWeb').controller('TripsummaryCtrl',function($scope,activ
         });
     };
 
-    init();
-
 });

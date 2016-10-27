@@ -82,8 +82,6 @@ angular.module('unionvmsWeb').directive('tripReportsPanel', function(loadingStat
                     loadingStatus.isLoading('TripSummary', false);
                 });
             };
-
-            init();
 		}
 	};
 });

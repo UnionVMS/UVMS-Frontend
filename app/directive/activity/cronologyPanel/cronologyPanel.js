@@ -55,8 +55,6 @@ angular.module('unionvmsWeb').directive('cronologyPanel', function(loadingStatus
                     loadingStatus.isLoading('TripSummary', false);
                 });
             };
-
-            init();
 		}
 	};
 });

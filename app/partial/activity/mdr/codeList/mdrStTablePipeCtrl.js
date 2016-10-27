@@ -1,10 +1,18 @@
+/**
+ * @memberof unionvmsWeb
+ * @ngdoc controller
+ * @name pipeCtrl
+ * @param service {Service} service 
+ * @description
+ *  The controller responsable for getting the displayed items of the table (depending on filters and sorting)
+ */
 angular.module('unionvmsWeb').controller('pipeCtrl', ['Resource', function (service) {
 
   var ctrl = this;
 
   this.displayed = [];
 
-  this.callServer = function callServer(tableState) {
+  this.callServer = function(tableState) {
 
     ctrl.isLoading = true;
 

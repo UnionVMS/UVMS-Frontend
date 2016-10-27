@@ -62,11 +62,11 @@ angular.module('unionvmsWeb').factory('mdrRestServiceFactory',function($resource
   .service('mdrRestService',function($q, mdrRestServiceFactory) {
 
   	var mdrRestService = {
-    /**
-     * @memberof mdrRestService
-     * @public
-     * @returns {Promise} containing a response, which might be a String or an Error.
-     */
+        /**
+         * @memberof mdrRestService
+         * @public
+         * @returns {Promise} containing a response, which might be a String or an Error.
+         */
   	    getCronJobExpression: function(){
   	        var deferred = $q.defer();
   	       // deferred.resolve('0 0/1 * 1/1 * ? *'); //mocked
@@ -78,12 +78,12 @@ angular.module('unionvmsWeb').factory('mdrRestServiceFactory',function($resource
   	        });
   	        return deferred.promise;
   	    },
-     /**
-     * @memberof mdrRestService
-     * @public
-     * @param {String} configs - the crontab expression
-     * @returns {Promise} containing a response.
-     */
+        /**
+         * @memberof mdrRestService
+         * @public
+         * @param {String} configs - the crontab expression
+         * @returns {Promise} containing a response.
+         */
   	    updateCronJobExpression: function(configs){
   	       var deferred = $q.defer();
   	       mdrRestServiceFactory.updateCronJobExpression().save(configs, function(response){
@@ -94,12 +94,12 @@ angular.module('unionvmsWeb').factory('mdrRestServiceFactory',function($resource
   	       });
   	       return deferred.promise;
   	    },
-    /**
-     * @memberof mdrRestService
-     * @public
-     * @param {String} configs - the crontab expression
-     * @returns {Promise} containing a response.
-     */
+        /**
+         * @memberof mdrRestService
+         * @public
+         * @param {String} configs - the crontab expression
+         * @returns {Promise} containing a response.
+         */
   	    getMDRCodeLists: function() {
   	        var deferred = $q.defer();
   	        mdrRestServiceFactory.getMDRCodeLists().get(function(response) {
@@ -110,28 +110,28 @@ angular.module('unionvmsWeb').factory('mdrRestServiceFactory',function($resource
   	        });
   	        return deferred.promise;
   	    },
-    /**
-     *  This method requests all code lists belonging to a given acronym, and updates the smart table state according to the response object.
-     *
-     * @memberof mdrRestService
-     * @public
-     * @param {String} acronym - is MDR acronym
-     * @param {String} tableState - is an object representing the smart table state, with the following structure:
-                    {
-                        pagination: {
-                                start: 0,     // This is NOT the page number, but the index of item in the list that you want to use to display the table.
-                                number: 10  // Number of entries showed per page.
-                        },
-                        search: {
-                            predicateObject: 'search text'
-                        },
-                        sort: {
-                            predicate: 'attributeName',
-                            reverse: true
+        /**
+         *  This method requests all code lists belonging to a given acronym, and updates the smart table state according to the response object.
+         *
+         * @memberof mdrRestService
+         * @public
+         * @param {String} acronym - is MDR acronym
+         * @param {String} tableState - is an object representing the smart table state, with the following structure:
+                        {
+                            pagination: {
+                                    start: 0,     // This is NOT the page number, but the index of item in the list that you want to use to display the table.
+                                    number: 10  // Number of entries showed per page.
+                            },
+                            search: {
+                                predicateObject: 'search text'
+                            },
+                            sort: {
+                                predicate: 'attributeName',
+                                reverse: true
+                            }
                         }
-                    }
-     * @returns {Promise} containing a response - either an array of code list objects, or an error.
-     */
+        * @returns {Promise} containing a response - either an array of code list objects, or an error.
+        */
   	    getMDRCodeListByAcronym: function(acronym, tableState) {
       	    var pagination = tableState.pagination;
             var offset = pagination.start || 0;     // This is NOT the page number, but the index of item in the list that you want to use to display the table.

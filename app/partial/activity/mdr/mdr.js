@@ -3,7 +3,7 @@
    * @memberof unionvmsWeb
    * @ngdoc controller
    * @name MdrCtrl
-   * @param  $scope  {service} controller scope
+   * @param $scope {service} controller scope
    * @param mdrRestService {service}
    * @param loadingStatus {service}
    * @param locale {service}

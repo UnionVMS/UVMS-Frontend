@@ -109,7 +109,6 @@ angular.module('unionvmsWeb').directive('catchPanel', function(loadingStatus,act
 				});
 			};
 
-			init();
 		}
 	};
 });

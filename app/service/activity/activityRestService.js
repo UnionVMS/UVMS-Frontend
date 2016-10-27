@@ -125,6 +125,15 @@ angular.module('unionvmsWeb').factory('activityRestFactory',function($resource, 
             });
             return deferred.promise;
         },
+        /**
+         * Get the trip cronology of a specific trip
+         * 
+         * @memberof activityRestService
+         * @public
+         * @param {String} id - The trip id of the selected trip
+         * @param {Number} nrItems - The number of trips to display in trip cronology
+         * @returns {Promise} A promise with either the trip cronology or reject error
+         */
         getTripCronology: function(id,nrItems){
             var deferred = $q.defer();
             activityRestFactory.getTripCronology().get({id: id, nrItems: nrItems}, {}, function(response){
@@ -134,6 +143,14 @@ angular.module('unionvmsWeb').factory('activityRestFactory',function($resource, 
             });
             return deferred.promise;
         },
+        /**
+         * Get the vessel and roles details of a specific trip
+         * 
+         * @memberof activityRestService
+         * @public
+         * @param {String} id - The trip id of the selected trip
+         * @returns {Promise} A promise with either the vessel and roles details or reject error
+         */
         getTripVessel: function(id){
             var deferred = $q.defer();
             activityRestFactory.getTripVessel().get({id: id}, {}, function(response){
@@ -143,6 +160,14 @@ angular.module('unionvmsWeb').factory('activityRestFactory',function($resource, 
             });
             return deferred.promise;
         },
+        /**
+         * Get the message type count of a specific trip
+         * 
+         * @memberof activityRestService
+         * @public
+         * @param {String} id - The trip id of the selected trip
+         * @returns {Promise} A promise with either the vessel and roles details or reject error
+         */
         getTripMessageCount: function(id){
             var deferred = $q.defer();
             activityRestFactory.getTripMessageCount().get({id: id}, {}, function(response){
@@ -152,6 +177,14 @@ angular.module('unionvmsWeb').factory('activityRestFactory',function($resource, 
             });
             return deferred.promise;
         },
+        /**
+         * Get the catch details of a specific trip
+         * 
+         * @memberof activityRestService
+         * @public
+         * @param {String} id - The trip id of the selected trip
+         * @returns {Promise} A promise with either the vessel and roles details or reject error
+         */
         getTripCatches: function(id){
             var deferred = $q.defer();
             activityRestFactory.getTripCatches().get({id: id}, {}, function(response){
@@ -161,6 +194,14 @@ angular.module('unionvmsWeb').factory('activityRestFactory',function($resource, 
             });
             return deferred.promise;
         },
+        /**
+         * Get the trip reports of a specific trip
+         * 
+         * @memberof activityRestService
+         * @public
+         * @param {String} id - The trip id of the selected trip
+         * @returns {Promise} A promise with either the vessel and roles details or reject error
+         */
         getTripReports: function(id){
             var deferred = $q.defer();
             activityRestFactory.getTripReports().get({id: id}, {}, function(response){
