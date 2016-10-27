@@ -225,7 +225,7 @@
                     <arguments>config set prefix C:\temp\npm-cache --global </arguments>
                 </configuration>
             </execution>
-          <execution>
+          <!--<execution>
             <id>npm cache clean</id>
               <goals>
                   <goal>npm</goal>
@@ -233,7 +233,7 @@
               <configuration>
                   <arguments>cache clean</arguments>
               </configuration>
-          </execution>
+          </execution>-->
           <execution>
             <id>npm install</id>
             <goals>
