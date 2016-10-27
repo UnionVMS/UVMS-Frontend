@@ -18,7 +18,10 @@ angular.module('smart-table').filter('stSearch', function() {
     				}
     			}
     		});
+		} else {
+		    filteredTable = array;
 		}
+		
 		return filteredTable;
 	};
 });

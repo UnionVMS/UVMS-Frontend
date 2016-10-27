@@ -79,5 +79,21 @@ describe('stSearch', function() {
 		expect(filter(srcData, predictedObj)).toEqual(jasmine.any(Array));
 		expect(filter(srcData, predictedObj).length).toEqual(0);
 	});
+	
+	it('should return the source array if input is undefined', function(){
+	    var srcData = makeArray();
+	    var predictedObj = makePredictedObj('undefined');
+	    
+	    expect(filter(srcData, predictedObj)).toEqual(jasmine.any(Array));
+	    expect(filter(srcData, predictedObj)).toEqual(srcData);
+	});
+	
+	it('should return the source array if input is empty', function(){
+        var srcData = makeArray();
+        var predictedObj = makePredictedObj(''); 
+        
+        expect(filter(srcData, predictedObj)).toEqual(jasmine.any(Array));
+        expect(filter(srcData, predictedObj)).toEqual(srcData);
+    });
 
 });
