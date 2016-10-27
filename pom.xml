@@ -2,7 +2,7 @@
   <modelVersion>4.0.0</modelVersion>
   <groupId>eu.europa.ec.fisheries.uvms</groupId>
   <artifactId>unionvms-web</artifactId>
-  <version>2.0.12-SNAPSHOT</version>
+  <version>2.0.12</version>
   <name>unionvms-web</name>
   <packaging>war</packaging>
   <properties>
@@ -348,7 +348,7 @@
 	</plugins>
   </build>
   <scm>
-    <developerConnection>scm:svn:https://webgate.ec.europa.eu/CITnet/svn/UNIONVMS/branches/dev/unionvms-web</developerConnection>
+    <developerConnection>scm:svn:https://webgate.ec.europa.eu/CITnet/svn/UNIONVMS/tags/unionvms-web/unionvms-web-2.0.12</developerConnection>
    </scm>
   <distributionManagement>
     <repository>
