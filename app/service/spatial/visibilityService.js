@@ -1,3 +1,11 @@
+/**
+ * @memberof unionvmsWeb
+ * @ngdoc service
+ * @name visibilityService
+ * @description
+ *  A service containing all available fields for positions, segments, tracks, alarms, trips and fishing activities
+ *  and their visibility and order (in the tables) as defined by the admin/user preferences
+ */
 angular.module('unionvmsWeb').factory('visibilityService',function() {
 
 	var visibilityService = {
@@ -84,6 +92,13 @@ angular.module('unionvmsWeb').factory('visibilityService',function() {
         alarmsColumns: ['fs', 'extMark', 'ircs', 'cfr', 'name', 'ruleName', 'ruleDesc', 'ticketOpenDate', 'ticketStatus', 'ticketUpdateDate', 'ticketUpdatedBy', 'ruleDefinitions'],
         tripsColumns: ['name'],
         fishingActivitiesColumns: ['FAReportType','activityType','occurrence','purposeCode','dataSource','fromName','startDate','endDate','cfr','ircs','extMark','uvi','iccat','gfcm','areas','port','fishingGear','speciesCode','quantity'],
+        /**
+         * Set the visibility and order of all table fields
+         * 
+         * @memberof visibilityService
+         * @public
+         * @param {Object} data - The data object containing a table object which in turn should contain two array properties: values and order
+         */
         setVisibility: function(data){
              for (var key in data){
                  this[key] = setItems(this[key], data[key].table.values);
@@ -92,6 +107,15 @@ angular.module('unionvmsWeb').factory('visibilityService',function() {
         }
 	};
 	
+	/**
+	 * Set items boolean flag for visibility purposes
+	 * 
+	 * @memberof visibilityService
+	 * @private
+	 * @param {Object} obj - The target service object which will be updated
+	 * @param {Object} srcData - The source data object containing the visibility status to be applied
+	 * @returns {Object} An object containing all the updated visibility configurations
+	 */
 	var setItems = function(obj, srcData){
 	    var newObj = {};
 	    for (var key in obj){

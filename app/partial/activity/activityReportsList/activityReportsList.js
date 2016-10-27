@@ -4,6 +4,7 @@
  * @name ActivityreportslistCtrl
  * @param $scope {Service} controller scope
  * @param activityService {Service} The activity service
+ * @param visibilityService {Service} The visibility service <p>{@link unionvmsWeb.visibilityService}</p>
  * @attr {Array} displayedActivities - The array of displayed activities used by smart tables
  * @description
  *  The controller for the fisihing activity reports table list
@@ -23,9 +24,15 @@ angular.module('unionvmsWeb').controller('ActivityreportslistCtrl',function($sco
     $scope.callServer = function(tableState){
         $scope.actServ.reportsList.tableState = tableState;
         $scope.actServ.reportsList.isLoading = true;
+        var searchField, sortOrder; 
+        if (angular.isDefined(tableState.sort.predicate)){
+            searchField = getTruePredicate(tableState.sort.predicate);
+            sortOrder = tableState.sort.reverse === true ? 'DESC' : 'ASC';
+        }
+        
         $scope.actServ.reportsList.sortKey = {
-            field: getTruePredicate(tableState.sort.predicate),
-            order: tableState.sort.reverse === true ? 'DESC' : 'ASC'
+            field: searchField,
+            order: sortOrder
         };
         
         $scope.actServ.reportsList.pagination.page = tableState.pagination.start / $scope.actServ.reportsList.pagination.listSize + 1;

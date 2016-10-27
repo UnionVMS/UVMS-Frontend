@@ -4,6 +4,7 @@
  * @name activityService
  * @param locale {Service} angular locale service
  * @param activityRestService {Service} the activity REST service <p>{@link unionvmsWeb.activityRestService}</p>
+ * @param visibilityService {Service} the visibility service <p>{@link unionvmsWeb.visibilityService}</p>
  * @attr {Array} breadcrumbPages - An ordered array containing all possible values for the breadcrumb
  * @attr {Array} activities - An array containing the list of fishing activities reports
  * @attr {Object} overview - An object containing the data to be displayed at the activity overview partial
@@ -75,11 +76,13 @@ angular.module('unionvmsWeb').factory('activityService',function(locale, activit
             totalPageCount: undefined
         };
         
-        actServ.reportsList.tableState.pagination = {
-            start: 0,
-            number: listSize,
-            numberOfPages: 1
-        };
+        if (angular.isDefined(actServ.reportsList.tableState)){
+            actServ.reportsList.tableState.pagination = {
+                start: 0,
+                number: listSize,
+                numberOfPages: 1
+            };
+        }
     };
     
     /**

@@ -4,10 +4,14 @@
  * @name AdvancedsearchformCtrl
  * @param $scope {Service} controller scope
  * @param activityService {Service} The activity service <p>{@link unionvmsWeb.activityService}</p>
+ * @param unitConversionService {Service} The unit conversion service <p>{@link unionvmsWeb.visibilityService}</p>
+ * @attr {Boolean} isFormValid - A flag for validating the search form
+ * @attr {Object} codeLists - An object containing all code lists items
+ * @attr {Object} advancedSearchObject - An object containing all search criterias specified within the form
  * @description
  *  The controller for the advanced search form of the activity tab table  
  */
-angular.module('unionvmsWeb').controller('AdvancedsearchformCtrl',function($scope, activityService){
+angular.module('unionvmsWeb').controller('AdvancedsearchformCtrl',function($scope, activityService, unitConversionService){
     $scope.actServ = activityService;
     $scope.isFormValid = true;
     
@@ -191,6 +195,9 @@ angular.module('unionvmsWeb').controller('AdvancedsearchformCtrl',function($scop
             var formatedSearch = {};
             angular.forEach($scope.advancedSearchObject, function(value, key) {
                 if (key !== 'weightUnit' && (!angular.isDefined(value) || (value !== null && value !== ''))){
+                    if (key === 'startDateTime' || key === 'endDateTime'){
+                        value = unitConversionService.date.convertDate(value, 'to_server');
+                    }
                     this[keyMapper[key]] = value;
                 }
             }, formatedSearch);

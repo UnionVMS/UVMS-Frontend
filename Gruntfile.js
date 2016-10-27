@@ -495,6 +495,7 @@ module.exports = function (grunt) {
       }
     }
   });
+  
   grunt.registerTask('sub-build',['htmlhint','jshint', 'less','dom_munger','ngtemplates','cssmin','concat','ngAnnotate','uglify','copy:dist','htmlmin','compress:dist','clean:after']);//,'clean:after'
 
   grunt.registerTask('build', ['test', 'clean:before', 'copy:config', 'sub-build']);
@@ -504,6 +505,7 @@ module.exports = function (grunt) {
   grunt.registerTask('build-dev', ['test', 'clean:before', 'copy:configDev','sub-build']);
   grunt.registerTask('build-test', ['test', 'clean:before', 'copy:configTest','sub-build']);
   grunt.registerTask('test',['dom_munger:read', 'ngtemplates', 'karma:services', 'karma:controllers', 'karma:directives', 'karma:filters', 'clean:after']);
+  grunt.registerTask('test-dev',['dom_munger:read', 'karma:services', 'clean:after']);
 
   grunt.registerTask('default',['build-dev']);
   grunt.registerTask('serve', ['dom_munger:read','htmlhint','jshint', 'configureProxies', 'configureRewriteRules', 'connect:development', 'watch']);

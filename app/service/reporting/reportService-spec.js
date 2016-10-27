@@ -263,7 +263,7 @@ describe('reportService', function () {
         
         expect(repServ.hasError).toBeFalsy();
         expect(mockRepFormServ.resetLiveView).toHaveBeenCalled();
-        expect(mockSpRestServ.getConfigsForReport).toHaveBeenCalledWith(1, moment.utc().format('YYYY-MM-DDTHH:mm:ss') );
+        expect(mockSpRestServ.getConfigsForReport).toHaveBeenCalledWith(1, repServ.getConfigsTime );
         expect(mockMapServ.resetLabelContainers).toHaveBeenCalled();
         expect(mockMapServ.getControlsByType).toHaveBeenCalledWith('HistoryControl');
         expect(mockMapServ.closePopup).toHaveBeenCalled();
@@ -329,7 +329,7 @@ describe('reportService', function () {
         
         expect(repServ.hasError).toBeFalsy();
         expect(mockRepFormServ.resetLiveView).toHaveBeenCalled();
-        expect(mockSpRestServ.getConfigsForReportWithoutMap).toHaveBeenCalledWith(moment.utc().format('YYYY-MM-DDTHH:mm:ss'));
+        expect(mockSpRestServ.getConfigsForReportWithoutMap).toHaveBeenCalledWith(repServ.getConfigsTime);
         expect(mockMapServ.resetLabelContainers).toHaveBeenCalled();
         expect(mockMapServ.setMap).not.toHaveBeenCalled();
         expect(mockNavServ.isViewVisible).toHaveBeenCalledWith('mapPanel');
