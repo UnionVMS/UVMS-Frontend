@@ -1,14 +1,16 @@
 describe('activityService', function() {
-    var $q, actServ, mockActRestServ;
+    var $q, actServ, mockActRestServ, mockVisServ;
     var listSize = 25;
     
     beforeEach(module('unionvmsWeb'));
     
     beforeEach(function(){
         mockActRestServ = jasmine.createSpyObj('activityRestService', ['getUserPreferences', 'getActivityList']);
+        mockVisServ = jasmine.createSpyObj('visibilityService', ['setVisibility']);
         
         module(function($provide){
             $provide.value('activityRestService', mockActRestServ);
+            $provide.value('visibilityService', mockVisServ);
         });
     });
     
@@ -24,18 +26,28 @@ describe('activityService', function() {
     
     function buildMocks(){
         mockActRestServ.getUserPreferences.andCallFake(function(){
-            var deferred = $q.defer();
-            deferred.resolve('Got User Preferences');
-            return deferred.promise;
-
+            return {
+                then: function(callback){
+                    callback({
+                        fishingActivityConfig: {
+                            summaryReport: ['dataSource','from','startDate','endDate','cfr','ircs','extMark','uvi','iccat','gfcm','purposeCode','reportType','activityType','area','location','gearType','species']
+                        }
+                    })
+                }
+            }
         });
         
         mockActRestServ.getActivityList.andCallFake(function(){
-            var deferred = $q.defer();
-            actServ.reportsList.pagination.totalPageCount = 10;
-            actServ.activities = ['1', '2'];
-            deferred.resolve('Got Activities List');
-            return deferred.promise;
+            return {
+                then: function(callback){
+                    callback({
+                        pagination:{
+                            totalPageCount: 10
+                        },
+                        resultList: ['activity1', 'activity2']
+                    })
+                }
+            }
         });
         
     }
@@ -114,6 +126,72 @@ describe('activityService', function() {
         expect(actServ.reportsList.pagination).toEqual(pag);
     });
     
+    it('should get activity lista and update number of pages', function(){
+        buildMocks();
+        spyOn(actServ, 'clearAttributeByType');
+        
+        actServ.reportsList.tableState = {
+            pagination: {
+                number: listSize,
+                start: 0
+            },
+            search: {},
+            sort: {
+                predicate: 'activityType',
+                reverse: true
+            }
+        };
+        
+        
+        actServ.getActivityList();
+        
+        expect(actServ.clearAttributeByType).toHaveBeenCalled();
+        expect(actServ.activities.length).toBe(2);
+        
+        var pag = {
+            page: 1,
+            listSize: 25,
+            totalPageCount: 10
+        };
+        expect(actServ.reportsList.pagination).toEqual(pag);
+        expect(actServ.reportsList.tableState.pagination.numberOfPages).toEqual(actServ.reportsList.pagination.totalPageCount);
+    });
+    
+    it('should get activity list and execute callback function', function(){
+        buildMocks();
+        spyOn(actServ, 'clearAttributeByType');
+        
+        var callBackSpy = jasmine.createSpy('callbackFn')
+        var callBackObj = {
+            fn: callBackSpy
+        }
+        
+        var tblState = {
+            pagination: {
+                number: listSize,
+                start: 0
+            },
+            search: {},
+            sort: {
+                predicate: 'activityType',
+                reverse: true
+            }
+        };
+        
+        actServ.getActivityList(callBackObj.fn, tblState);
+        
+        expect(actServ.clearAttributeByType).toHaveBeenCalled();
+        expect(actServ.activities.length).toBe(2);
+        
+        var pag = {
+            page: 1,
+            listSize: 25,
+            totalPageCount: 10
+        };
+        expect(actServ.reportsList.pagination).toEqual(pag);
+        expect(callBackSpy).toHaveBeenCalledWith(tblState);
+    });
+    
     it('should reset the state of the service properties', function(){
         mockServiceProperties();
         actServ.reset();
@@ -187,6 +265,7 @@ describe('activityService', function() {
         buildMocks();
         actServ.getUserPreferences();
         expect(mockActRestServ.getUserPreferences).toHaveBeenCalled();
+        expect(mockVisServ.setVisibility).toHaveBeenCalled();
     });
 
 });

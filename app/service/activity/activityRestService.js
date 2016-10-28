@@ -14,7 +14,7 @@ angular.module('unionvmsWeb').factory('activityRestFactory',function($resource, 
                 'get': {
                     method: 'GET'
                 }
-            })
+            });
         },
         getActivityList: function(){
             return $resource('/activity/rest/fa/list', {}, {
@@ -136,7 +136,7 @@ angular.module('unionvmsWeb').factory('activityRestFactory',function($resource, 
          */
         getTripCronology: function(id,nrItems){
             var deferred = $q.defer();
-            activityRestFactory.getTripCronology().get({id: id, nrItems: nrItems}, {}, function(response){
+            activityRestFactory.getTripCronology().get({id: id, nrItems: nrItems}, function(response){
                 deferred.resolve(response);
             }, function(error){
                 deferred.reject(error);
@@ -153,7 +153,7 @@ angular.module('unionvmsWeb').factory('activityRestFactory',function($resource, 
          */
         getTripVessel: function(id){
             var deferred = $q.defer();
-            activityRestFactory.getTripVessel().get({id: id}, {}, function(response){
+            activityRestFactory.getTripVessel().get({id: id}, function(response){
                 deferred.resolve(response);
             }, function(error){
                 deferred.reject(error);
@@ -170,7 +170,7 @@ angular.module('unionvmsWeb').factory('activityRestFactory',function($resource, 
          */
         getTripMessageCount: function(id){
             var deferred = $q.defer();
-            activityRestFactory.getTripMessageCount().get({id: id}, {}, function(response){
+            activityRestFactory.getTripMessageCount().get({id: id}, function(response){
                 deferred.resolve(response);
             }, function(error){
                 deferred.reject(error);
@@ -187,7 +187,7 @@ angular.module('unionvmsWeb').factory('activityRestFactory',function($resource, 
          */
         getTripCatches: function(id){
             var deferred = $q.defer();
-            activityRestFactory.getTripCatches().get({id: id}, {}, function(response){
+            activityRestFactory.getTripCatches().get({id: id}, function(response){
                 deferred.resolve(response);
             }, function(error){
                 deferred.reject(error);
@@ -204,7 +204,7 @@ angular.module('unionvmsWeb').factory('activityRestFactory',function($resource, 
          */
         getTripReports: function(id){
             var deferred = $q.defer();
-            activityRestFactory.getTripReports().get({id: id}, {}, function(response){
+            activityRestFactory.getTripReports().get({id: id}, function(response){
                 deferred.resolve(response);
             }, function(error){
                 deferred.reject(error);

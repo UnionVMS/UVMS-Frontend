@@ -2,7 +2,7 @@ describe('mapTile', function() {
 
     beforeEach(module('unionvmsWeb'));
     
-    var scope, mockTripSumServ, $interval, el, controller;
+    var scope, mockTripSumServ, $interval, el, controller,$httpBackend;
     
     beforeEach(function(){
         mockTripSumServ = jasmine.createSpyObj('tripSummaryService', ['mapConfigs']);
@@ -63,7 +63,7 @@ describe('mapTile', function() {
         });
         
         it('should create a map with vector data', function(){
-            controller.registerZoomToExtentListener = jasmine.createSpy('registerZoomToExtentListener()');
+            controller.registerZoomToExtentListener = jasmine.createSpy('registerZoomToExtentListener');
             mockTripSumServ.mapConfigs = buildMapConfigs();
             scope.mapId = 'mapTile';
             scope.mapData = buildVectorData();
