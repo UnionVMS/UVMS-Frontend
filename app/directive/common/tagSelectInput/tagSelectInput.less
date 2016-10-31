@@ -80,5 +80,86 @@ copy of the GNU General Public License along with the IFDM Suite. If not, see <h
             }
         }
 
+        .multipleSelectionsPlaceholder {
+            float: left;
+            margin-right: 20px;
+            margin-top: 3px;
+            text-align: left;
+            padding-left: 7px;
+            color: #555555;
+            text-transform: lowercase;
+
+            &:first-letter {
+                text-transform: capitalize;
+            }
+        }
+
+    }
+
+    &.multipleSelection {
+        .dropdown-menu {
+            padding-top: 0;
+            padding-bottom: 0;
+
+            .select-all {
+                .clear();
+                background: @searchResultsTableOddRowColor;
+
+                span {
+                    padding: 8px;
+                    color: @profileColor_blue;
+
+                    &.disabled,
+                    &.disabled:hover {
+                        color: #999999;
+                        cursor: default;   
+                    }
+
+                    &:hover {
+                        color: darken(@profileColor_blue, 3%);
+                    }
+
+                    &.left { float: left; text-align: left; width: 50%; }
+                    &.right { float: right; text-align: right; width: 50%; }
+                }            
+            }
+
+            li {
+                position: relative;
+                border-bottom: 1px solid transparent;
+
+                a {
+                    padding-top: 8px;
+                    padding-bottom: 8px;
+
+                    &:focus {
+                        background: transparent;
+                    }
+
+                    &:before {
+                        content: "";
+                        left: 5px;
+                        .postion-absolut-vertical();
+                    }
+                }
+
+                &.disabled, 
+                &.disabled:focus {
+                    background: @profileColor_blue;
+                    color: #fff;
+                    border-color: darken(@profileColor_blue, 3%);
+
+                    a {
+                        color: #fff;
+
+                        &:before {
+                            .icon-font-bootstrap(10px);
+                            content: "\f00c";
+                            margin-top: -1px;
+                        }                    
+                    }
+                }
+            }
+        }
     }
 }
