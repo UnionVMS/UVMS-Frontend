@@ -123,8 +123,18 @@ angular.module('unionvmsWeb').controller('MobileTerminalCtrl',function($scope, $
         });
     };
 
-    //Init function when entering page
-    var init = function(){
+    $scope.getListTransponderSystems = function() {
+        //Get list transponder systems
+        if(angular.isDefined(configurationService.getConfig('MOBILE_TERMINAL_TRANSPONDERS'))){
+            $scope.transpondersConfig = configurationService.getConfig('MOBILE_TERMINAL_TRANSPONDERS');
+            $scope.createTransponderSystemDropdownOptions();
+        }else{
+            alertService.showErrorMessage(locale.getString('mobileTerminal.add_new_alert_message_on_load_transponders_error'));
+        }
+    }
+
+    //Init function when entering mobile terminal page
+    $scope.displayMobileTerminalPage = function(){
         searchService.reset();
 
         //GET mobileterminal GUID from URL and load details for that MobileTerminal
@@ -150,16 +160,6 @@ angular.module('unionvmsWeb').controller('MobileTerminalCtrl',function($scope, $
         else{
             //Load list with mobileTerminals
             $scope.searchMobileTerminals();
-        }
-
-
-
-        //Get list transponder systems
-        if(angular.isDefined(configurationService.getConfig('MOBILE_TERMINAL_TRANSPONDERS'))){
-            $scope.transpondersConfig = configurationService.getConfig('MOBILE_TERMINAL_TRANSPONDERS');
-            $scope.createTransponderSystemDropdownOptions();
-        }else{
-            alertService.showErrorMessage(locale.getString('mobileTerminal.add_new_alert_message_on_load_transponders_error'));
         }
     };
 
@@ -370,6 +370,5 @@ angular.module('unionvmsWeb').controller('MobileTerminalCtrl',function($scope, $
         $scope.createMobileTerminalWithVessel.visible = !$scope.createMobileTerminalWithVessel.visible;
     });
 
-    init();
-
+    $scope.getListTransponderSystems();
 });
