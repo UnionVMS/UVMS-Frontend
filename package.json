@@ -45,5 +45,5 @@
         "type": "svn",
         "url": "https://webgate.ec.europa.eu/CITnet/svn/UNIONVMS/branches/dev/unionvms-web"
     },
-    "version": "2.1.0"
+    "version": "2.1.1"
 }
