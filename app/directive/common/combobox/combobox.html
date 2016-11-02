@@ -2,9 +2,8 @@
 	<div class="dropdown fullWidthDropdown">
 		<div class="comboButtonContainer" ng-click="toggleCombo($event)">
 			<div class="btn btn-default dropdown-toggle" data-toggle="dropdown" aria-expanded="true" ng-disabled="ngDisabled" ng-if="!editable">
-				<div ng-class="setplaceholdercolor ? 'placeholderColor':''" class="dropdowntext" ng-if="lineStyle !== true" title="{{currentItemLabel}}">
-					<!--selected label-->
-					{{currentItemLabel}}
+				<!--selected label-->
+				<div ng-class="setplaceholdercolor ? 'placeholderColor':''" class="dropdowntext" ng-if="lineStyle !== true" title="{{currentItemLabel}}" ng-bind="currentItemLabel">
 					<!--MULTIPLE SELECTION-->
 					<ul class="selected-options" ng-if="multiple">
 						<li ng-repeat="item in selectedItems" title="{{item.text}}">

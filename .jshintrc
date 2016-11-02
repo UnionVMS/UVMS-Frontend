@@ -23,6 +23,7 @@
         "describe": true,
         "ddescribe": true,
         "beforeEach": true,
+        "afterEach": true,
         "module": true,
         "inject": true,
         "it": true,

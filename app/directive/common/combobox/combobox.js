@@ -1,4 +1,4 @@
-angular.module('unionvmsWeb').directive('combobox', function($window, comboboxService) {
+angular.module('unionvmsWeb').directive('combobox', function(comboboxService) {
 	return {
 		restrict: 'E',
 		replace: true,
@@ -19,7 +19,7 @@ angular.module('unionvmsWeb').directive('combobox', function($window, comboboxSe
             isLoading : '=',
             group: '@',
             name: '@',
-            comboSection: '@',
+            comboSection: '=',
             initCallback: '=',
             noPlaceholderOnList: '@'
 		},
@@ -33,16 +33,10 @@ angular.module('unionvmsWeb').directive('combobox', function($window, comboboxSe
         		scope.initialtext = scope.initialtext.toUpperCase();
         	}
 			
-            if('noPlaceholderItem' in attrs){
+            if(scope.noPlaceholderOnList){
                 scope.initialitem = false;
             }
 
-            //Should be able to select the initial text item?
-            scope.initialtextSelectable = false;
-            if(scope.initialtextSelectable){
-                scope.initialtextSelectable = true;
-            }
-            
             if(scope.editable){
             	scope.placeholder = scope.initialtext;
             	scope.newItem = {text : ""};
@@ -60,25 +54,13 @@ angular.module('unionvmsWeb').directive('combobox', function($window, comboboxSe
             }
             
             //Get the label for an item
-            //Default item variable "text" is used if no title attr is set
             scope.getItemLabel = function(item){
-                var label;
-                if(attrs.title){
-                    label = item[attrs.title];
-                }else{
-                    label = item.text;
-                }
-                return label;
+                return item.text;
             };
 
             //Get the code (id) for an item
-            //Default item variable "code" is used if no data attr is set
             var getItemCode = function(item){
-                if(attrs.data){
-                    return item[attrs.data];
-                }else{
-                    return item.code;
-                }
+                return item.code;
             };
             
             //Find initial value
@@ -124,10 +106,6 @@ angular.module('unionvmsWeb').directive('combobox', function($window, comboboxSe
                     scope.comboboxServ.updateComboListGroup(scope.group, newVal, oldVal);
                 }
                 
-            	if(scope.uppercase && newVal && !angular.equals(newVal, newVal.toUpperCase())){
-            		scope.ngModel = newVal.toUpperCase();
-            		return;
-            	}
             	if(scope.multiple){
             		scope.selectedItems = [];
             		scope.currentItemLabel = undefined;
@@ -366,13 +344,6 @@ angular.module('unionvmsWeb').directive('combobox', function($window, comboboxSe
 
             };
             
-            scope.test = function(){
-                if (scope.isFilterActive && !scope.isLoading){
-                    console.log('in');
-                }
-                return true;  
-            };
-
             init();
             if(angular.isDefined(scope.initCallback)){
                 scope.initCallback(scope.comboboxId);
