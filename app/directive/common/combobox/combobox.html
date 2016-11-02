@@ -3,7 +3,8 @@
 		<div class="comboButtonContainer" ng-click="toggleCombo($event)">
 			<div class="btn btn-default dropdown-toggle" data-toggle="dropdown" aria-expanded="true" ng-disabled="ngDisabled" ng-if="!editable">
 				<!--selected label-->
-				<div ng-class="setplaceholdercolor ? 'placeholderColor':''" class="dropdowntext" ng-if="lineStyle !== true" title="{{currentItemLabel}}" ng-bind="currentItemLabel">
+				<div ng-class="setplaceholdercolor ? 'placeholderColor':''" class="dropdowntext" ng-if="lineStyle !== true" title="{{currentItemLabel}}">
+					{{currentItemLabel}}
 					<!--MULTIPLE SELECTION-->
 					<ul class="selected-options" ng-if="multiple">
 						<li ng-repeat="item in selectedItems" title="{{item.text}}">
@@ -31,7 +32,7 @@
 	<div class="comboList fullWidthDropdown" ng-class="{'open': isOpen, 'comboLineStyle': lineStyle === true, 'combo-section': comboSection}">
 		<ul class="dropdown-menu" role="menu">
 			<!--PLACEHOLDER-->
-			<li ng-class="!initialtextSelectable ? 'disabled' : ''" ng-show="initialValue && !multiple && !isLoading" ng-click="selectVal(initialValue)" ng-if="!noPlaceholderOnList" title="{{initialValue.text}}">
+			<li class="combo-placeholder" ng-class="!initialtextSelectable ? 'disabled' : ''" ng-show="initialValue && !multiple && !isLoading" ng-click="selectVal(initialValue)" ng-if="!noPlaceholderOnList" title="{{initialValue.text}}">
 				<a role="menuitem" tabindex="-1" ng-bind="initialValue.text"></a>
 			</li>
 			<!--BASIC COMBO-->
