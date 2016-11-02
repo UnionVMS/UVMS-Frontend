@@ -11,22 +11,21 @@ copy of the GNU General Public License along with the IFDM Suite. If not, see <h
  */
 .tagSelectInputContainer{
     @minHeight: 30px;
-    @minWidth: 160px;
-    @tagHeight:22px;
-
-    //max-width: 200px;
-    min-width: @minWidth;
+    @tagHeight: 22px;
 
     .tagSelectInputContainerWrapper{
         position: relative;
         min-height: @minHeight;
+        
     }
 
     .tagSelectButton{
         height: auto !important;
         min-height: @minHeight !important;
-        padding: 0 2px !important;
+        padding: 0 !important;
         border-radius: 2px;
+        .flexbox();
+        align-items: center;
 
         .caretWrapper{
             .caret{
@@ -37,17 +36,27 @@ copy of the GNU General Public License along with the IFDM Suite. If not, see <h
         }
     }
 
-    .placeholderText{
+    .placeholderText, 
+    .multipleSelectionsPlaceholder {
         color:#999;
         margin-right: 20px;
-        margin-top: 3px;
-        text-align: left;
-        padding-left: 7px;
+        padding-left: 5px;
+        overflow: hidden;
+        text-overflow: ellipsis;
+        line-height: initial;
+    }
+
+    .multipleSelectionsPlaceholder {
+        color: #555555;
+        text-transform: lowercase;
+        &:first-letter {
+            text-transform: capitalize;
+        }
     }
 
     .selection{
-        width: 100%;
-        margin-right: 50px;
+        overflow: hidden;
+
         .tag{
             float: left;
             margin: 3px 2px 1px 0;
@@ -79,27 +88,14 @@ copy of the GNU General Public License along with the IFDM Suite. If not, see <h
                 }
             }
         }
-
-        .multipleSelectionsPlaceholder {
-            float: left;
-            margin-right: 20px;
-            margin-top: 3px;
-            text-align: left;
-            padding-left: 7px;
-            color: #555555;
-            text-transform: lowercase;
-
-            &:first-letter {
-                text-transform: capitalize;
-            }
-        }
-
     }
 
     &.multipleSelection {
         .dropdown-menu {
             padding-top: 0;
             padding-bottom: 0;
+            width: 100%;
+            min-width: 180px;
 
             .select-all {
                 .clear();

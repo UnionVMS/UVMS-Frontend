@@ -9,8 +9,8 @@
                         {{getItemLabel(item)}} <span class="removeTag" ng-click="removeItem(item)">×</span>
                     </span>
                 </div>
-                <div class="multipleSelectionsPlaceholder">
-                    <span class="textWrapper" ng-if="displayMultipleOptionsPlaceholder()">
+                <div class="multipleSelectionsPlaceholder" ng-if="displayMultipleOptionsPlaceholder()">
+                    <span class="textWrapper">
                         {{'common.multiple_items_selected'| i18n:[getPlaceholder()]}}
                     </span>
                 </div>

@@ -130,7 +130,7 @@
     "view_all" : "View all",
     "yes" : "Yes",
     "multiple_selected" :"Two or more selected",
-    "multiple_items_selected": "Multiple {1} selected",
+    "multiple_items_selected": "Multiple {1}",
     "all_selected" : "All selected",
     "multiple_select_dropdown_default_text" : "Select",
     "error_getting_data_from_server" : "Error getting data from server.",
