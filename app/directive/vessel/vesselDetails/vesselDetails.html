@@ -10,7 +10,7 @@
             </div>
             <div class="col-md-2 form-group smallerpadding" ng-class="{'has-error': (submitAttempted || vesselForm.ircs.$dirty) && vesselForm.ircs.$invalid}">
                 <label>{{ 'vessel.vessel_details_IRCS_code' | i18n }}</label>
-                <input type="text" name="ircs" class="form-control" ng-model="vessel.ircs" ng-maxlength="8" ng-disabled="!createNewMode">
+                <input type="text" name="ircs" class="form-control" ng-model="vessel.ircs" ng-maxlength="8">
                 <input-validation-message types="maxlength" input="vesselForm.ircs" custom-messages="{{getMaxLengthMessage(8)}}"></input-validation-message>
             </div>
 
@@ -28,12 +28,12 @@
 
             <div class="col-md-2 form-group smallerpadding" ng-class="{'has-error': (submitAttempted || vesselForm.cfr.$dirty) && vesselForm.cfr.$invalid}">
                 <label>{{ 'vessel.vessel_details_CFR' | i18n }}</label>
-                <input type="text" name="cfr" class="form-control" ng-model="vessel.cfr" ng-required ng-pattern="cfrRegExp" existing="existingValues.cfr" ng-disabled="!createNewMode">
+                <input type="text" name="cfr" class="form-control" ng-model="vessel.cfr" ng-required ng-pattern="cfrRegExp" existing="existingValues.cfr">
                 <input-validation-message types="pattern,required,unique" input="vesselForm.cfr" custom-messages="{{cfrValidationMessages}}"></input-validation-message>
             </div>
             <div class="col-md-2 form-group smallerpaddingleft" ng-class="{'has-error': (submitAttempted || vesselForm.imo.$dirty) && vesselForm.imo.$invalid}">
                 <label>{{ 'vessel.vessel_details_IMO' | i18n }}</label>
-                <input type="text" name="imo" class="form-control" ng-model="vessel.imo" ng-pattern="imoRegExp" existing="existingValues.imo" ng-disabled="!createNewMode">
+                <input type="text" name="imo" class="form-control" ng-model="vessel.imo" ng-pattern="imoRegExp" existing="existingValues.imo">
                 <input-validation-message types="pattern, unique" input="vesselForm.imo" custom-messages="{{imoValidationMessages}}"></input-validation-message>
             </div>
 
@@ -53,7 +53,7 @@
 
             <div class="col-md-2 form-group smallerpadding" ng-class="{'has-error': (submitAttempted || vesselForm.mmsi.$dirty) && vesselForm.mmsi.$invalid}">
                 <label>{{ 'vessel.vessel_details_MMSI_no' | i18n }}</label>
-                <input type="text" name="mmsi" class="form-control" ng-model="vessel.mmsiNo" ng-pattern="mmsiRegExp" existing="existingValues.mmsi" ng-disabled="!createNewMode">
+                <input type="text" name="mmsi" class="form-control" ng-model="vessel.mmsiNo" ng-pattern="mmsiRegExp" existing="existingValues.mmsi">
                 <input-validation-message types="pattern, unique" input="vesselForm.mmsi" custom-messages="{{mmsiValidationMessages}}"></input-validation-message >
             </div>
             <div class="col-md-4 smallerpaddingleft form-group" ng-class="{'has-error': (submitAttempted || vesselForm.licenseType.$dirty) && vesselForm.licenseType.$invalid}">

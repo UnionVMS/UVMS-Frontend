@@ -13,6 +13,8 @@ angular.module('unionvmsWeb').controller('VesselhistorymodalCtrl',function($scop
 
     $scope.vesselHistory = vesselHistory;
 
+    console.log(vesselHistory);
+
     $scope.cancel = function () {
         $modalInstance.dismiss('cancel');
     };
