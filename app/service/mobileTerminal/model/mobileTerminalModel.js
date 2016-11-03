@@ -126,7 +126,8 @@ angular.module('unionvmsWeb').factory('MobileTerminal', function(CommunicationCh
                 channels : jsonChannels,
                 mobileTerminalId : { guid: this.guid },
                 type : this.type,
-                plugin : this.plugin
+                plugin : this.plugin,
+                inactive : !this.active
             };
         };
 
