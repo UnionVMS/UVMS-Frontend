@@ -64,7 +64,7 @@ copy of the GNU General Public License along with the IFDM Suite. If not, see <h
                                     <h5>{{'vessel.event_history' | i18n | uppercase}}</h5>
                                 </div>
                                 <div class="col-md-6 textAlignRight">
-                                    <span ng-show="isHistoryLinkVisible.showCompleteVesselHistoryLink"><a ng-click="viewCompleteVesselHistory()">{{'common.view_all' | i18n}}</a></span>
+                                    <span ng-show="isThisVisible.showCompleteVesselHistoryLink"><a ng-click="viewCompleteVesselHistory()">{{'common.view_all' | i18n}}</a></span>
                                 </div>
                                 <div class="col-md-12" loading-indicator="waitingForHistoryResponse" size="small" type="SPINNER">
                                     <table class="fullWidth" ng-show="vesselHistory.length > 0 && !isCreateNewMode()">
