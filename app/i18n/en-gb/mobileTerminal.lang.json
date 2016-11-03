@@ -118,7 +118,7 @@
     "view_terminal_on_failed_to_load_error" : "Failed to load the mobile terminal details.",
     "history_view_mobileterminal_history" : "View history",
     "history_modal_header" : "Mobile Terminal History",
-    "history_modal_serialnumber" : "Serial number",
+    "history_modal_serialnumber" : "Serial no",
     "history_modal_transpondertype" : "Transponder type",
     "history_modal_eventcode" : "Event code",
     "history_modal_dnid" : "DNID",
