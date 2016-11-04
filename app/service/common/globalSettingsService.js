@@ -21,6 +21,20 @@ angular.module('unionvmsWeb').factory('globalSettingsService',['$resource', '$q'
 
     var settings = {};
 
+    var getSettingsFromServerWithoutUpdate = function(){
+      var deferred = $q.defer();
+      GlobalSettings.get(function(response) {
+          if(String(response.code) !== '200'){
+              return deferred.reject("Failed to load global settings.");
+          }
+          deferred.resolve();
+      }, function(err){
+          $log.error("Failed to get global settings.");
+          deferred.reject("Failed to load global settings.");
+      });
+      return deferred.promise;
+  };
+
     var getSettingFromServer = function(){
         var deferred = $q.defer();
         GlobalSettings.get(function(response) {
@@ -166,7 +180,9 @@ angular.module('unionvmsWeb').factory('globalSettingsService',['$resource', '$q'
                 deferred.resolve();
                 return deferred.promise;
             }
-        }
+        },
+        getSettingsFromServerWithoutUpdate: getSettingsFromServerWithoutUpdate
+
     };
 
     init();
