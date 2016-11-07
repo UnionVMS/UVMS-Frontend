@@ -1,0 +1,67 @@
+<div>
+    <div class="col-md-12" ng-repeat="mobileTerminal in mobileTerminals | orderBy :'[-active, -started]'">
+        <div class="col-md-12">
+            <div class="mobileTerminalDetailsContainer">
+                <form name="mobileTerminalForm" method="post" novalidate>
+                    <fieldset ng-disabled="disableForm()">
+                        <div class="transponderSystemSelects">
+                            <div class="flexrow form-section-1">
+                                <div class="transponderSystemSelect form-group medium-field">
+                                    <label class="normal">{{'mobileTerminal.transceiver_system' | i18n}}</label>
+                                    <dropdown ng-model="mobileTerminal.type" initialtext="{{ 'common.choose' | i18n }}" items="transporderSystems" callback="onTerminalSystemSelect" id="mob-term-form-details-transponder"></dropdown>
+                                </div>
+                                <div class="transponderSystemSelect form-group long-field">
+                                    <label class="normal">{{'mobileTerminal.add_new_form_ocean_region_label' | i18n}}</label>
+                                    <div>
+                                    {{mobileTerminal.attributes.MULTIPLE_OCEAN[0]}}
+                                        <tag-select-input ng-model="mobileTerminal.attributes.MULTIPLE_OCEAN[0]" items="mobileTerminal.attributes.MULTIPLE_OCEAN" ng-placeholder="{{'common.choose' | i18n }}" id="mob-term-form-details-multiple-ocean"></tag-select-input>
+                                    </div>
+                                </div>
+                                <div class="form-group medium-field" ng-class="{'has-error': mobileTerminalForm.serialNumber.$invalid && (submitAttempted || mobileTerminalForm.serialNumber.$dirty)}">
+                                    <label class="normal">{{'mobileTerminal.form_inmarsatc_serial_no_label' | i18n}}<span ng-if="createNewMode" class="mandatory">{{ 'common.mandatory_field' | i18n }}</span></label>
+                                    <input type="text" name="serialNumber" class="form-control" ng-model="mobileTerminal.attributes.SERIAL_NUMBER" ng-required="getTerminalConfig().terminalFields.SERIAL_NUMBER" existing="existingSerialNumber" id="mob-term-form-details-serial-number"/>
+                                    <input-validation-message types="required" input="mobileTerminalForm.serialNumber"></input-validation-message>
+                                </div>
+                                <div class="form-group long-field">
+                                    <label class="normal">{{'mobileTerminal.form_inmarsatc_transceiver_type_label' | i18n}}</label>
+                                    <input type="text" class="form-control" ng-model="mobileTerminal.attributes.TRANSCEIVER_TYPE" id="mob-term-form-details-transceiver-type">
+                                </div>
+                                <div class="form-group align-right">
+                                    <div class="switch-container">
+                                        <label class="normal" style="display: block;" ng-if="mobileTerminal.active">{{'common.active' | i18n}}</label>
+                                        <label class="normal" style="display: block;" ng-if="!mobileTerminal.active">{{'common.inactive' | i18n}}</label>
+                                        <label class="switch">
+                                            <input type="checkbox" ng-model="mobileTerminal.active" id="mob-term-form-details-active">
+                                            <div class="slider" id="mob-term-form-details-slider">
+                                                <i class="fa fa-check"></i>
+                                                <i class="fa fa-times"></i>
+                                            </div>
+                                        </label>
+                                    </div>
+                                </div> 
+                            </div>
+                            <div class="flexrow form-section-2">
+                                <div class="form-group medium-field">
+                                    <label class="normal">{{'mobileTerminal.form_inmarsatc_software_version_label' | i18n}}</label>
+                                    <input type="text" class="form-control" ng-model="mobileTerminal.attributes.SOFTWARE_VERSION" id="mob-term-form-details-software-version">
+                                </div>
+                                <div class="form-group long-field">
+                                    <label class="normal">{{'mobileTerminal.form_inmarsatc_antenna_label' | i18n}}</label>
+                                    <input type="text" class="form-control" ng-model="mobileTerminal.attributes.ANTENNA" id="mob-term-form-details-antenna">
+                                </div>
+                                <div class="form-group medium-field">
+                                    <label class="normal">{{'mobileTerminal.form_inmarsatc_satellite_number_label' | i18n}}</label>
+                                    <input type="text" name="sattelite_number" class="form-control" ng-model="mobileTerminal.attributes.SATELLITE_NUMBER" id="mob-term-form-details-satelite-number"/>
+                                </div>
+                                <div class="form-group long-field">
+                                    <label class="normal">{{'mobileTerminal.form_inmarsatc_answer_back_label' | i18n}}</label>
+                                    <input type="text" class="form-control" ng-model="mobileTerminal.attributes.ANSWER_BACK" id="mob-term-form-details-answer-back">
+                                </div>
+                            </div>
+                        </div>
+                    </fieldset>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
