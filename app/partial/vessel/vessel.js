@@ -62,8 +62,6 @@ angular.module('unionvmsWeb').controller('VesselCtrl', function($scope, $log, lo
             $scope.waitingForVesselDataResponse = true;
             toggleFormDetails();
         }
-        // Sort init list on latest time
-        $scope.currentSearchResults.sortBy = '-lastMovement.time';
     };
 
     //Goto page in the search results
@@ -101,6 +99,12 @@ angular.module('unionvmsWeb').controller('VesselCtrl', function($scope, $log, lo
     //Update the search results
     var updateSearchResults = function(vesselListPage){
         $scope.currentSearchResults.updateWithNewResults(vesselListPage);
+
+        if(vesselListPage.totalNumberOfLatestMovements) {
+            $scope.currentSearchResults.sortBy = '-lastMovement.time';
+        }else{
+            $scope.currentSearchResults.sortBy = 'name';
+        }
     };
 
     //Handle error from search results (listing vessel)

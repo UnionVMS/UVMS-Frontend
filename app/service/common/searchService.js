@@ -258,7 +258,7 @@ angular.module('unionvmsWeb').factory('searchService',function($q, $log, searchU
             var deferred = $q.defer();
             movementRestService.getLatestMovement(DEFAULT_ITEMS_PER_PAGE).then(function(latestMovements){
                 $.each(latestMovements, function(index, latestMovement) {
-                    getListRequest.criterias.push({"key":"GUID", "value":latestMovement.connectId});
+                    getListRequest.addSearchCriteria("GUID", latestMovement.connectId);
                 });
 
                 if(checkAccessToFeature('Vessel')){
@@ -279,6 +279,11 @@ angular.module('unionvmsWeb').factory('searchService',function($q, $log, searchU
                                 var movement = findMovement;
                                 Object.assign(vesselItem, { lastMovement: movement });
                             });
+
+                            if(latestMovements.length >= 0) {
+                                Object.assign(vessels, { 'totalNumberOfLatestMovements': latestMovements.length });                    
+                            }
+
                             deferred.resolve(vessels);
                         }
                     }, function(error){
