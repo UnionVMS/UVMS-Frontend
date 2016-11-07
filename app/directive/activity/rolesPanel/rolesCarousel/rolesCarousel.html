@@ -1,7 +1,7 @@
 <div ng-mouseenter="pause()" ng-mouseleave="play()" class="carousel" ng-swipe-right="prev()" ng-swipe-left="next()">
     <div ng-controller="RolescarouselCtrl">
         <!--ROLES COMBOLIST-->
-        <combobox class="roles-combo" items="tripSummServ.trip.tripRoles" ng-model="currentRole.index" ng-change="select(slides[currentRole.index]);updateCombo(slides)" ng-if="slides.length > 1"></combobox>
+        <!--<combobox class="roles-combo" items="tripSummServ.trip.tripRoles" ng-model="currentRole.index" ng-change="select(slides[currentRole.index]);updateCombo(slides)" ng-if="slides.length > 1"></combobox>-->
         <!--CAROUSEL CONTENT-->
         <div class="carousel-inner" ng-transclude>
             <div uib-slide ng-repeat="person in tripSummServ.trip.tripRoles track by person.id" index="person.id">
