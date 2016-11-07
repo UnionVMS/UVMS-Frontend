@@ -28,7 +28,7 @@ describe('projectionService', function() {
                 then: function(callback){
                     return callback(getProjArray());
                 }
-            }
+            };
         });
     }
     

@@ -2,7 +2,7 @@ describe('combobox', function() {
 
   beforeEach(module('unionvmsWeb'));
 
-  var scope,compile,template;
+  var scope,compile;
 
   //STATES
   var states = {
@@ -25,24 +25,40 @@ describe('combobox', function() {
         'callbackParams': {attr: 'callbackParams', type: '='}
       },
       'testFunc': callbackTest
-    }/*,
+    },
     initCallback: {
-      'initCallback': 'initCallback'
+      attributes: {
+        'initCallback': {attr: 'initCallback', type: '='}
+      },
+      'testFunc': initCallbackTest
     },
     noPlaceholderOnList: {
-      'noPlaceholderOnList': 'noPlaceholderOnList',
-      'exclude': ['lineStyleCombo','multipleCombo']
+      attributes: {
+        'noPlaceholderOnList': {attr: 'noPlaceholderOnList', type: '@'}
+      },
+      'exclude': ['lineStyleCombo','multipleCombo'],
+      'testFunc': noPlaceholderOnListTest
     },
     uppercase: {
-      'uppercase': 'uppercase',
-      'exclude': ['lineStyleCombo']
+      attributes: {
+        'uppercase': {attr: 'uppercase', type: '='}
+      },
+      'exclude': ['lineStyleCombo'],
+      'include': ['initialText'],
+      'testFunc': uppercaseTest
     },
     disabled: {
-      'ngDisabled': 'ngDisabled'
+      attributes: {
+        'ngDisabled': {attr: 'ngDisabled', type: '='}
+      },
+      'testFunc': disabledTest
     },
     loading: {
-      'isLoading': 'isLoading'
-    }*/
+      attributes: {
+        'isLoading': {attr: 'isLoading', type: '='}
+      },
+      'testFunc': loadingTest
+    }
   };
 
   //COMMON COMBO
@@ -80,7 +96,6 @@ describe('combobox', function() {
     var combo = '<combobox ';
 
     angular.forEach(comboProps,function(value,key){
-      console.log('VALUE ON COMPILE - ' + value.attr);
       var propertyValue = value.type === '@' ? scope[value.attr] : value.attr;
 
       combo += key.replace(/([a-z])([A-Z])/g, '$1-$2').toLowerCase() + '=\"' + propertyValue + '\" ';
@@ -97,11 +112,17 @@ describe('combobox', function() {
     scope.$digest();
   }
 
+  function destroyCombo(isolatedScope){
+    var comboToRemove = angular.element('[combolist-id="' + isolatedScope.comboboxId + '"]');
+    if(comboToRemove){
+        comboToRemove.remove();
+    }
+
+    isolatedScope.$destroy();
+  }
+
   function checkComboParameters(comboProps,isolatedScope){
     angular.forEach(comboProps,function(value,key){
-      console.log('KEY - ' + key);
-      console.log('VALUE - ' + value.attr);
-      
 
       if(angular.isArray(isolatedScope[key])){
         angular.forEach(isolatedScope[key],function(item){
@@ -115,7 +136,7 @@ describe('combobox', function() {
       }
 
       if(value.type === '@'){
-        expect(isolatedScope[key]).toEqual(scope[key]);
+        expect('' + isolatedScope[key]).toEqual('' + scope[key]);
       }else{
         expect(isolatedScope[key]).toEqual(scope[value.attr]);
       }
@@ -133,6 +154,11 @@ describe('combobox', function() {
     }
 
     expect(isolatedScope.initialtext).toEqual(placeholder);
+
+    if(comboTypeName === 'editableCombo'){
+      angular.element('#' + isolatedScope.comboboxId + ' .combo-placeholder')[0].click();
+      expect(isolatedScope.ngModel).toEqual('');
+    }
   }
 
   function comboWithDestinationTest(comboTypeName,isolatedScope){
@@ -141,14 +167,32 @@ describe('combobox', function() {
   }
 
   function callbackTest(comboTypeName,isolatedScope){
-    /*spyOn(isolatedScope, 'callback');*/
-
-    console.log(angular.element('body > ' + '#' + isolatedScope.comboboxId));
-
     angular.element('body > ' + '#' + isolatedScope.comboboxId + ' > ul > li')[1].click();
     expect(isolatedScope.callback).toHaveBeenCalled();
-
   }
+
+  function initCallbackTest(comboTypeName,isolatedScope){
+    expect(isolatedScope.initCallback).toHaveBeenCalled();
+  }
+
+  function noPlaceholderOnListTest(comboTypeName,isolatedScope){
+    expect(angular.element('#' + isolatedScope.comboboxId + ' > .combo-placeholder').length).toEqual(0);
+  }
+
+  function uppercaseTest(comboTypeName,isolatedScope){
+    for(var i=0;i<isolatedScope.loadedItems.length;i++){
+      expect(isolatedScope.loadedItems[i].text).toEqual(isolatedScope.loadedItems[i].text.toUpperCase());
+    }
+  }
+
+  function disabledTest(comboTypeName,isolatedScope){
+    expect(angular.element('.combobox[combolist-id="' + isolatedScope.comboboxId + '"] .comboButtonContainer[disabled]').length).toEqual(1);
+  }
+
+  function loadingTest(comboTypeName,isolatedScope){
+    expect(angular.element('#' + isolatedScope.comboboxId + ' .loading-msg').length).toEqual(1);
+  }
+
 
   beforeEach(inject(function($rootScope,$compile) {
     scope = $rootScope.$new();
@@ -163,8 +207,6 @@ describe('combobox', function() {
   }));
 
   beforeEach(inject(function() {
-    scope.model = 'item1';
-    scope.modelMultiple = ['item1','item4','item5'];
 
     scope.items = [
       {code: 'item1', text: 'content1'},
@@ -231,7 +273,27 @@ describe('combobox', function() {
 
         checkComboParameters(combo,isolatedScope);
 
-        isolatedScope.$destroy();
+        angular.element('.combobox[combolist-id="' + isolatedScope.comboboxId + '"] .comboButtonContainer')[0].click();
+        angular.element('.combobox[combolist-id="' + isolatedScope.comboboxId + '"] .comboButtonContainer')[0].click();
+
+        if(comboTypeName === 'editableCombo'){
+          var comboEditableInput = angular.element('[combolist-id="' + isolatedScope.comboboxId + '"] .combo-editable-input');
+          isolatedScope.focus = true;
+          comboEditableInput.val('Some text').trigger('input');
+        }
+
+        var model = isolatedScope.ngModel;
+        if(comboTypeName === 'sectionCombo'){
+          angular.element('body > #' + isolatedScope.comboboxId + ' > ul > li > .dropdown-submenu > li')[2].click();
+        }else{
+          angular.element('body > #' + isolatedScope.comboboxId + ' > ul > li')[2].click();
+        }
+
+        scope.$digest();
+
+        expect(model).toEqual(isolatedScope.ngModel);
+
+        destroyCombo(isolatedScope);
       });
 
       describe('should work with all the states', function() {
@@ -248,20 +310,61 @@ describe('combobox', function() {
                 scope.modelMultiple = [];
               }
 
-              angular.forEach(state.attributes,function(attr,attrName){
-                comboWithState[attrName] = attr;
-              });
+              var statesToInclude = [stateName];
+              if(angular.isDefined(state.include) && state.include.length > 0){
+                statesToInclude = statesToInclude.concat(state.include);
+              }
 
-              console.log(buildComboToCompile(comboWithState));
+              angular.forEach(statesToInclude,function(stateToInclude){
+                angular.forEach(states[stateToInclude].attributes,function(attr,attrName){
+                  comboWithState[attrName] = attr;
+                });
+              });
 
               compileCombo(comboTypeName,comboWithState,comboType);
               var isolatedScope = scope[comboTypeName].isolateScope();
 
+              if(stateName !== 'initialText'){
+                if(comboTypeName === 'multipleCombo'){
+                  scope.modelMultiple = ['item1','item4','item5'];
+                }else{
+                  scope.model = 'item1';
+                }
+                scope.$digest();
+              }
+
               checkComboParameters(comboWithState,isolatedScope);
 
-              state.testFunc(comboTypeName,isolatedScope);
+              if(stateName === 'sectionCombo'){
+                scope.itemsSection = [
+                  {'text': 'group3', 'items': [{code: 'item1', text: 'content1'},{code: 'item2', text: 'content2'}]},
+                  {'text': 'group4', 'items': [{code: 'item3', text: 'content3'},{code: 'item4', text: 'content4'}]}
+                ];
+              }else{
+                scope.items = [
+                  {code: 'item9', text: 'content1'},
+                  {code: 'item2', text: 'content2'},
+                  {code: 'item3', text: 'content3'},
+                  {code: 'item4', text: 'content4'},
+                  {code: 'item5', text: 'content5'},
+                  {code: 'item6', text: 'content6'},
+                  {code: 'item7', text: 'content7'},
+                  {code: 'item1', text: 'content8'}
+                ];
+              }
+              scope.$digest();
 
-              isolatedScope.$destroy();
+              if(comboTypeName === 'multipleCombo' && stateName !== 'initialText'){
+                angular.element('.combobox[combolist-id="' + isolatedScope.comboboxId + '"] .selected-options > li:first-child > .item-remover')[0].click();
+                expect(isolatedScope.ngModel).toEqual(['item4','item5']);
+                
+                angular.element('.combobox[combolist-id="' + isolatedScope.comboboxId + '"] .clear-all')[0].click();
+                expect(isolatedScope.ngModel).toEqual([]);
+              }
+
+              state.testFunc(comboTypeName,isolatedScope);
+              
+              destroyCombo(isolatedScope);
             });
 
           }

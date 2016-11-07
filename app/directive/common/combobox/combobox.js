@@ -30,7 +30,14 @@ angular.module('unionvmsWeb').directive('combobox', function(comboboxService) {
 			scope.initialitem = true;
 			
 			if(scope.uppercase){
-        		scope.initialtext = scope.initialtext.toUpperCase();
+                if(angular.isDefined(scope.initialtext)){
+        		    scope.initialtext = scope.initialtext.toUpperCase();
+                }
+                if(angular.isDefined(scope.items) && scope.items.length > 0){
+                    for(var i=0;i<scope.items.length;i++){
+                        scope.items[i].text = scope.items[i].text.toUpperCase();
+                    }
+                }
         	}
 			
             if(scope.noPlaceholderOnList){
@@ -74,15 +81,8 @@ angular.module('unionvmsWeb').directive('combobox', function(comboboxService) {
 
             //Set the label of the dropdown based on the current value of ngMode
             scope.setLabel = function() {
-                if ((scope.ngModel !== undefined && scope.ngModel === "") || scope.ngModel === null || scope.ngModel === undefined || (_.isArray(scope.ngModel) && scope.ngModel.length === 0)) {
-                    if(scope.initialtext){
-                        scope.currentItemLabel = scope.initialtext;
-                    }else if(!scope.multiple){
-                        if (scope.ngModel && scope.loadedItems){
-                    		scope.currentItemLabel = scope.getItemLabel(scope.ngModel);
-                    		scope.currentItemLabel = scope.getItemLabel(scope.loadedItems[0]);
-                        }
-                    }
+                if ((scope.ngModel === undefined || scope.ngModel === "" || scope.ngModel === null || (_.isArray(scope.ngModel) && scope.ngModel.length === 0)) && scope.initialtext) {
+                    scope.currentItemLabel = scope.initialtext;
                 }
                 
                 if(!scope.multiple){
@@ -132,11 +132,7 @@ angular.module('unionvmsWeb').directive('combobox', function(comboboxService) {
 		                            }
                     			}
                     		}
-                    		if(scope.selectedItems.length === 0){
-                    			scope.currentItemLabel = scope.getItemLabel(scope.initialValue);
-                    		}else{
-                    			scope.currentItemLabel = "";
-                    		}
+                            scope.currentItemLabel = "";
                     	}else{
                             var comboItems = scope.loadedItems;
                             if(scope.comboSection){
@@ -203,7 +199,7 @@ angular.module('unionvmsWeb').directive('combobox', function(comboboxService) {
             //Select item in dropdown
             scope.selectVal = function(item){
                 //Disabled item
-                if(scope.disableItem(item)){
+                if(scope.disabledItem(item)){
                     return;
                 }
 
@@ -247,7 +243,7 @@ angular.module('unionvmsWeb').directive('combobox', function(comboboxService) {
                 }
             };
 
-            scope.disableItem = function(item){
+            scope.disabledItem = function(item){
                 var itemCode = getItemCode(item);
                 if(angular.isDefined(scope.disabledItems)){
                     if(scope.ngModel !== itemCode && scope.disabledItems.indexOf(itemCode) >= 0){
@@ -335,7 +331,7 @@ angular.module('unionvmsWeb').directive('combobox', function(comboboxService) {
                     if(scope.group){
                         scope.comboboxServ.removeCombo(scope.group,scope);
                     }
-                    var comboToRemove = $('#' + scope.comboboxId);
+                    var comboToRemove = angular.element('#' + scope.comboboxId);
                     if(comboToRemove){
                         comboToRemove.remove();
                     }

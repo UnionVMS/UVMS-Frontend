@@ -116,6 +116,14 @@
 }
 
 .combobox .dropdown {
+	.comboButtonContainer[disabled]{
+		pointer-events: none;
+		&,
+		.combo-editable-input,
+		div.btn.btn-default.dropdown-toggle {
+			background-color: #ddd;
+		}
+	}
 	div.btn.btn-default.dropdown-toggle {
 		padding: 3px 20px 3px 12px;
 		position: relative;
