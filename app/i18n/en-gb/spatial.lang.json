@@ -152,6 +152,7 @@
 	"reports_form_simple_search": "Simple search",
 	"reports_form_advanced_search": "Advanced search",
 	"reports_form_vms_fieldset_label": "Select positional data",
+	"reports_form_fishing_activity_fieldset_label": "Select fishing activity data",
 	"reports_form_clear_btn": "Clear",
 	"reports_form_save_btn": "Save",
 	"reports_form_save_as_btn": "Save as...",

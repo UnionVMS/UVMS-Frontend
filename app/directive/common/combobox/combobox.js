@@ -276,12 +276,18 @@ angular.module('unionvmsWeb').directive('combobox', function(comboboxService) {
             		comboboxService.setActiveCombo(null);
             	}
             };
+
+            function closeCombo() {
+                scope.isOpen = false;
+                scope.comboboxServ.setActiveCombo(null);
+            }
             
             function loadLineStyleItems() {
             	scope.loadedItems = [{'code': 'solid', 'text': '5,0'},{'code': 'dashed', 'text': "10,5"},{'code': 'dotted', 'text': "5,5"},{'code': 'dotdashed', 'text': "5,5,10,5"}];
             }
             
             scope.removeSelectedItem = function(code){
+                closeCombo();
             	scope.ngModel.splice(scope.ngModel.indexOf(code),1);
             	var arr = [];
             	angular.copy(scope.ngModel,arr);
@@ -289,6 +295,7 @@ angular.module('unionvmsWeb').directive('combobox', function(comboboxService) {
             };
             
             scope.removeAllSelected = function(){
+                closeCombo();
             	scope.ngModel = [];
             };
             

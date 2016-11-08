@@ -142,5 +142,17 @@
     "advanced_search_weight_range": "Weight range: ",
     "advanced_search_min": "Min",
     "advanced_search_max": "Max",
-    "error_getting_mdr_code_lists": "Error getting mdr code lists"
+    "error_getting_mdr_code_lists": "Error getting mdr code lists",
+	"reports_form_activity_report_type": "Report Type",
+	"reports_form_activity_activity_type": "Activity Type",
+	"reports_form_activity_port": "Port",
+	"reports_form_activity_gear": "Gear",
+	"reports_form_activity_species": "Species",
+	"reports_form_activity_weight": "Weight",
+	"reports_form_activity_port_departure": "Departure",
+	"reports_form_activity_port_arrival": "Arrival",
+	"reports_form_activity_port_landing": "Landing",
+	"reports_form_activity_gear_onboard": "On board",
+	"reports_form_activity_gear_deployed": "Deployed"
+
 }
