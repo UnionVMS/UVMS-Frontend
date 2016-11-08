@@ -153,6 +153,7 @@
 	"reports_form_activity_port_arrival": "Arrival",
 	"reports_form_activity_port_landing": "Landing",
 	"reports_form_activity_gear_onboard": "On board",
-	"reports_form_activity_gear_deployed": "Deployed"
+	"reports_form_activity_gear_deployed": "Deployed",
+	"reports_form_activity_master": "Master"
 
 }

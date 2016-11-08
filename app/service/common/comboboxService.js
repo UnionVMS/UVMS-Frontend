@@ -132,7 +132,7 @@ angular.module('unionvmsWeb').factory('comboboxService', function($window) {
 			activeCombo.isOpen = false;
 		}
 		
-		if(!activeCombo){
+		if(!activeCombo && comboScope){
 			$('[uib-modal-window]').bind('mousedown', function(event){
             	if(activeCombo && activeCombo.isOpen) {
 	                if (clickedInSameCombo(event)){
