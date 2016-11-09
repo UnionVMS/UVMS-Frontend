@@ -15,7 +15,7 @@
  */
 angular.module('unionvmsWeb').factory('activityService',function(locale, activityRestService, visibilityService) {
     var actServ = {};
-    var listSize = 3;
+    var listSize = 25;
     
     actServ.breadcrumbPages = [{
         title: 'activity.breadcrumb_reports_list',
@@ -190,8 +190,6 @@ angular.module('unionvmsWeb').factory('activityService',function(locale, activit
                 }
             };
             visibilityService.setVisibility(visibilitySettings);
-        }, function(error){
-            //TODO
         });
     };
 
