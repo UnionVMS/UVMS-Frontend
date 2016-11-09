@@ -113,10 +113,12 @@ copy of the GNU General Public License along with the IFDM Suite. If not, see <h
     }
 
     // Radio buttons
-    .radio-buttons {
+    .radio-buttons, 
+    .checkboxes-buttons {
         .flexbox();
 
-        .radio-button {
+        .radio-button, 
+        .checkbox-button {
             position: relative;
             margin-right: @field-margin-vertical;
 
@@ -124,10 +126,12 @@ copy of the GNU General Public License along with the IFDM Suite. If not, see <h
                 margin-right: 0;
             }
 
-            label.radio-btn {
+            label.radio-btn, 
+            input[type="checkbox"] {
                 display: block;
                 position: relative;
                 height: @field-height;
+                margin: 0px auto;
             }
 
             input[type="radio"] {
@@ -233,5 +237,9 @@ copy of the GNU General Public License along with the IFDM Suite. If not, see <h
         -webkit-transform: translateX(@switcher-contianer-width - @switcher-inner-width);
         -ms-transform: translateX(@switcher-contianer-width - @switcher-inner-width);
         transform: translateX(@switcher-contianer-width - @switcher-inner-width);
+    }
+
+    input:disabled + .slider {
+        cursor: not-allowed;
     }
 }
