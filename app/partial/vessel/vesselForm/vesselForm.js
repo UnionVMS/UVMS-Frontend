@@ -489,12 +489,6 @@ angular.module('unionvmsWeb').controller('VesselFormCtrl',function($scope, $log,
                 return angular.isDefined(vessel.vesselId) && vessel.vesselId != null && vessel.active;
             }
             return false;
-        },
-        historyCallback: function() {
-            console.log("Show history!");
-        },
-        showHistory: function(vessel) {
-            return false;
         }
     };
 

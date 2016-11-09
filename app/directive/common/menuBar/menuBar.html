@@ -1,18 +1,23 @@
 <div class="row card-header menuBar">
-    <div class="menuTextItem">
-        <b id="menu-bar-header">{{ header }}</b>
+    <div class="textAlignLeft">
+        <div class="wrapper">
+            <div class="menuTextItem item">
+                <b id="menu-bar-header">{{ header }}</b>
+            </div>
+            <div ng-include="formPartial" class="wrapper"></div>
+        </div>
     </div>
-    <div ng-include="formPartial" class="wrapper"></div>
     <div class="textAlignRight">
         <div class="actions wrapper">
-            <div ng-if="includeArchive" ng-include="'directive/common/menuBar/menuBarArchive.html'"></div>
-            <div ng-if="includeUnlink" ng-include="'directive/common/menuBar/menuBarUnlink.html'"></div>
-            <div ng-if="includeHistory" ng-include="'directive/common/menuBar/menuHistory.html'"></div>
-            <div ng-if="includeCSVDownload" ng-include="'directive/common/menuBar/menuBarCSV.html'"></div>
-            <div class="actionContainer menuTextItem">
-                <a ng-click="functions.cancelCallback()" class="btn-cancel" id="menu-bar-cancel" ng-show="functions.showCancel()">Cancel</a>
+            <div ng-if="includeArchive" ng-include="'directive/common/menuBar/menuBarArchive.html'" class="item"></div>
+            <div ng-if="includeUnlink" ng-include="'directive/common/menuBar/menuBarUnlink.html'" class="item"></div>
+            <div ng-if="includeHistory" ng-include="'directive/common/menuBar/menuHistory.html'" class="item"></div>
+            <div ng-if="includeCSVDownload" ng-include="'directive/common/menuBar/menuBarCSV.html'" class="item"></div>
+            <div ng-if="includeEdit" ng-include="'directive/common/menuBar/menuBarEdit.html'" class="item"></div>
+            <div ng-if="functions.showCancel()" class="actionContainer menuTextItem item">
+                <a ng-click="functions.cancelCallback()" class="btn-cancel" id="menu-bar-cancel">Cancel</a>
             </div>
-            <div ng-if="includeSaveUpdate" ng-include="'directive/common/menuBar/menuBarSave.html'"></div>
+            <div ng-if="includeSaveUpdate" ng-include="'directive/common/menuBar/menuBarSave.html'" class="item"></div>
         </div>
     </div>
 </div>
