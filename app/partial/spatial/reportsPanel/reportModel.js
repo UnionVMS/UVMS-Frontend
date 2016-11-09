@@ -150,6 +150,12 @@ angular.module('unionvmsWeb').factory('Report',function(unitConversionService, u
 	            report.hasFaFilter = true;
 	        }
 
+			if(!angular.isDefined(report.faFilters.weight)){
+				report.faFilters.weight = {unit: 'kg'};
+			}else if(!angular.isDefined(report.faFilters.weight.unit)){
+				report.faFilters.weight.unit = 'kg';
+			}
+
 	        report.areas = filter.areas;
 	        
 	        if (angular.isDefined(data.mapConfiguration)){
@@ -220,9 +226,15 @@ angular.module('unionvmsWeb').factory('Report',function(unitConversionService, u
 		}
 
 		//Fishing activity filter
-		var faFilters = {};
-		if (angular.isDefined(this.faFilters) && !_.isEmpty(this.faFilters)){
-			faFilters = this.faFilters;
+		var faFilters = this.faFilters;
+
+		if(angular.isDefined(faFilters.weight) && (!angular.isDefined(faFilters.weight.min) || _.isNull(faFilters.weight.min)) &&
+			(!angular.isDefined(faFilters.weight.max) || _.isNull(faFilters.weight.max))){
+			delete faFilters.weight;
+		}
+
+		if (_.isEmpty(faFilters)){
+			faFilters = undefined;
 		}
 
 
@@ -369,11 +381,18 @@ angular.module('unionvmsWeb').factory('Report',function(unitConversionService, u
 		}
 
 		//Fishing activity filter
-		if (angular.isDefined(this.faFilters) && !_.isEmpty(this.faFilters)){
-			report.filterExpression.fa = this.faFilters;
+
+		report.filterExpression.fa = this.faFilters;
+
+		if(angular.isDefined(report.filterExpression.fa.weight) && (!angular.isDefined(report.filterExpression.fa.weight.min) || _.isNull(report.filterExpression.fa.weight.min)) &&
+			(!angular.isDefined(report.filterExpression.fa.weight.max) || _.isNull(report.filterExpression.fa.weight.max))){
+			delete report.filterExpression.fa.weight;
 		}
 
-        
+		if (_.isEmpty(report.filterExpression.fa)){
+			report.filterExpression.fa = undefined;
+		}
+
         if(this.withMap === true){
         	report.mapConfiguration = {
         		coordinatesFormat: this.mapConfiguration.coordinatesFormat,

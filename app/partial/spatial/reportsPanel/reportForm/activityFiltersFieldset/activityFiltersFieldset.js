@@ -47,9 +47,9 @@ angular.module('unionvmsWeb').controller('ActivityfiltersfieldsetCtrl',function(
     }];
 
     $scope.weightUnits = [{
-        code: 'Kg', text: 'Kg'
+        code: 'kg', text: 'Kg'
     },{
-        code: 'Ton', text: 'Ton'
+        code: 'ton', text: 'Ton'
     }];
 
 });

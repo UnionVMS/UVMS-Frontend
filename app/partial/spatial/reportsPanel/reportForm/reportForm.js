@@ -88,6 +88,8 @@ angular.module('unionvmsWeb').controller('ReportformCtrl',function($scope, $moda
     };
 
     $scope.resetForm = function(){
+        reportFormService.report = new Report();
+        $scope.report = reportFormService.report;
         $scope.init();
         $scope.reportForm.$setPristine();
         $scope.clearVmsErrors();

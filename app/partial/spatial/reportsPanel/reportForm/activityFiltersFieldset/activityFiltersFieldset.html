@@ -93,7 +93,7 @@
 									<label>{{'activity.reports_form_activity_weight' | i18n }}</label>
 								</div>
 								<div class="form-group col-md-5">
-									<div class="unit-input">
+									<div class="unit-input" ng-class="{'has-error': activitySecForm.weightMin.$invalid && submitingReport === true}">
 										<numeric-input validate-min-in-range class="form-control" name="weightMin" ng-model="report.faFilters.weight.min" type="number" min="0" max="report.faFilters.weight.max"></numeric-input>
 										<div class="unit-box">{{'activity.advanced_search_min' | i18n}}</div>
 									</div>
@@ -110,8 +110,8 @@
 									<label></label>
 								</div>
 								<div class="form-group col-md-5">
-									<div class="unit-input">
-										<numeric-input validate-max-in-range class="form-control" ng-model="report.faFilters.weight.max" min="report.faFilters.weight.min"></numeric-input>
+									<div class="unit-input" ng-class="{'has-error': activitySecForm.weightMax.$invalid && submitingReport === true}">
+										<numeric-input validate-max-in-range class="form-control" name="weightMax" ng-model="report.faFilters.weight.max" min="report.faFilters.weight.min"></numeric-input>
 										<div class="unit-box">{{'activity.advanced_search_max' | i18n}}</div>
 									</div>
 								</div>
