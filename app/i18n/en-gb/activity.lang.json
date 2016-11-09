@@ -34,7 +34,7 @@
     "error_sync_all_now": "Unable to synchronize code lists.",
     "error_enable_disable_scheduled_code_list": "Enable/Disable failed for code list: ",
     "code_lists_fieldset_label": "Code Lists Update Status",
-    "breadcrumb_reports_list": "Activity Reports List",
+    "breadcrumb_reports_list": "Activities List",
     "breadcrumb_report_overview": "Activity Report Overview",
     "breadcrumb_report_details": "Activity Details",
 	"header_fa_report_type": "Report Type",

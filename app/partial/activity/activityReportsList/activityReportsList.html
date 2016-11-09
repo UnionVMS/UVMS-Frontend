@@ -30,13 +30,13 @@
 						</th>
 					</tr>
 					<tr>
-						<th colspan="17" ng-if="!actServ.reportsList.isLoading && (actServ.activities.length === 0 || actServ.reportsList.hasError)">
+						<th colspan="20" ng-if="!actServ.reportsList.isLoading && (actServ.activities.length === 0 || actServ.reportsList.hasError)">
 							<table-alert type="'info'" msg="'spatial.table_no_data'" visible="actServ.activities.length === 0 && !actServ.reportsList.hasError"></table-alert>
 							<table-alert type="'error'" msg="'activity.fa_table_error_fetching_reports'" visible="actServ.reportsList.hasError"></table-alert>
 						</th>
 					</tr>
 					<tr ng-if="actServ.reportsList.isLoading">
-						<th colspan="17" class="loading-spinner-cl"><i class="fa fa-spinner fa-spin loading-spinner"></i></th>
+						<th colspan="20" class="loading-spinner-cl"><i class="fa fa-spinner fa-spin loading-spinner"></i></th>
 					</tr>
 				</thead>
 				<tbody>

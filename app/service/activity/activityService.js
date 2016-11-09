@@ -15,7 +15,7 @@
  */
 angular.module('unionvmsWeb').factory('activityService',function(locale, activityRestService, visibilityService) {
     var actServ = {};
-    var listSize = 25;
+    var listSize = 3;
     
     actServ.breadcrumbPages = [{
         title: 'activity.breadcrumb_reports_list',
@@ -119,11 +119,19 @@ angular.module('unionvmsWeb').factory('activityService',function(locale, activit
      * 
      * @memberof activityService
      * @private
+     * @param {Object} [tableState] - the smart table state object
      * @returns {Object} A copy of the reportsList pagination object without the totalPageCount
      */
-    function getPaginationForServer(){
+    function getPaginationForServer(tableState){
         var pag = angular.copy(actServ.reportsList.pagination);
         pag.totalPageCount = undefined;
+        pag.totalPages = 0;
+        if (angular.isDefined(tableState) && angular.isDefined(tableState.pagination.numberOfPages)){
+            //This is used for server side optimization: when we already have the total page count, we avoid counting pages againa
+            //in the backend by providing that value in the payload
+            pag.totalPages = tableState.pagination.numberOfPages;
+        }
+        
         return pag;
     }
 	
@@ -139,13 +147,16 @@ angular.module('unionvmsWeb').factory('activityService',function(locale, activit
         actServ.clearAttributeByType('activities');
         
         var payload = {
-            pagination: getPaginationForServer(),
+            pagination: getPaginationForServer(tableState),
             sortKey: actServ.reportsList.sortKey,
             searchCriteriaMap: actServ.reportsList.searchObject
         };
         
         activityRestService.getActivityList(payload).then(function(response){
-            actServ.reportsList.pagination.totalPageCount = response.pagination.totalPageCount;
+            if (response.pagination.totalPageCount !== 0){
+                actServ.reportsList.pagination.totalPageCount = response.pagination.totalPageCount;
+            }
+            
             actServ.activities = response.resultList;
             if (angular.isDefined(callback) && angular.isDefined(tableState)){
                 callback(tableState);
@@ -170,12 +181,11 @@ angular.module('unionvmsWeb').factory('activityService',function(locale, activit
      */
     actServ.getUserPreferences = function(){
         activityRestService.getUserPreferences().then(function(response){
-            //FIXME when service is fixed with order and values
             var visibilitySettings = {
                 fishingActivities: {
                     table: {
-                        values: response.fishingActivityConfig.summaryReport,
-                        order: response.fishingActivityConfig.summaryReport //FIXME
+                        values: response.fishingActivityConfig.summaryReport.values,
+                        order: response.fishingActivityConfig.summaryReport.order
                     }
                 }
             };

@@ -5,3 +5,5 @@ locales
 fonts
 node_modules
 testResults
+.project
+.tern-project
