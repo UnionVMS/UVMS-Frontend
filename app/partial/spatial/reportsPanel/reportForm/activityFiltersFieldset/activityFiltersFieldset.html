@@ -1,10 +1,10 @@
 <div class="col-md-12 activity-filters-section" ng-controller="ActivityfiltersfieldsetCtrl">
-	<fieldset class="fieldsetStyle col-md-12" ng-class="{'fieldset-closed': !report.hasActivityFilter}">
+	<fieldset class="fieldsetStyle col-md-12" ng-class="{'fieldset-closed': !report.hasFaFilter}">
 		<legend class="fieldsetLegendStyle">
-			<input class="checkbox-margin" type="checkbox" ng-model="report.hasActivityFilter" ng-checked="report.hasActivityFilter">
-			<a data-toggle="collapse" ng-click="report.hasActivityFilter = !report.hasActivityFilter;">{{'spatial.reports_form_fishing_activity_fieldset_label' | i18n }}</a>
+			<input class="checkbox-margin" type="checkbox" ng-model="report.hasFaFilter" ng-checked="report.hasFaFilter">
+			<a data-toggle="collapse" ng-click="report.hasFaFilter = !report.hasFaFilter;">{{'spatial.reports_form_fishing_activity_fieldset_label' | i18n }}</a>
 		</legend>
-		<div ng-show="report.hasActivityFilter" class="row">
+		<div ng-show="report.hasFaFilter" class="row">
 			<div class="form-group col-md-12">
 				<div class="row">
 					<ng-form name="activitySecForm">
@@ -14,7 +14,7 @@
 									<label>{{'activity.reports_form_activity_report_type' | i18n }}</label>
 								</div>
 								<div class="col-md-8">
-									<combobox ng-model="report.activityFilters.reportType" items="reportTypes" initialtext="{{'common.all' | i18n }}"></combobox>
+									<combobox ng-model="report.faFilters.reportType" name="reportType" items="reportTypes" initialtext="{{'common.all' | i18n }}"></combobox>
 								</div>
 							</div>
 							<div class="form-group row">
@@ -22,7 +22,7 @@
 									<label>{{'activity.reports_form_activity_activity_type' | i18n }}</label>
 								</div>
 								<div class="col-md-8">
-									<combobox ng-model="report.activityFilters.activityType" items="activityTypes" initialtext="{{'common.all' | i18n }}"></combobox>
+									<combobox ng-model="report.faFilters.activityType" name="activityType" items="activityTypes" initialtext="{{'common.all' | i18n }}"></combobox>
 								</div>
 							</div>
 							<div class="form-group row">
@@ -30,7 +30,7 @@
 									<label>{{'activity.reports_form_activity_master' | i18n}}</label>
 								</div>
 								<div class="col-md-8">
-									<input type="text" class="form-control" ng-model="advancedSearchObject.master"/>
+									<input type="text" class="form-control" name="master" ng-model="report.faFilters.master"/>
 								</div>
 							</div>
 						</div>
@@ -42,13 +42,13 @@
 								<div class="form-group col-md-5">
 									<label class="above-label">
 										{{'activity.reports_form_activity_port_departure' | i18n }}
-										<combobox ng-model="report.activityFilters.port.departure" initialtext="{{'common.all' | i18n }}" items="ports"></combobox>
+										<combobox ng-model="report.faFilters.port.departure" name="portDeparture" initialtext="{{'common.all' | i18n }}" items="ports"></combobox>
 									</label>
 								</div>
 								<div class="form-group col-md-5">
 									<label class="above-label">
 										{{'activity.reports_form_activity_port_arrival' | i18n }}
-										<combobox ng-model="report.activityFilters.port.arrival" initialtext="{{'common.all' | i18n }}" items="ports"></combobox>
+										<combobox ng-model="report.faFilters.port.arrival" name="portArrival" initialtext="{{'common.all' | i18n }}" items="ports"></combobox>
 									</label>
 								</div>
 								<div class="form-group col-md-2 label-container centerLabelCombo">
@@ -57,7 +57,7 @@
 								<div class="form-group col-md-5">
 									<label class="above-label">
 										{{'activity.reports_form_activity_port_landing' | i18n }}
-										<combobox ng-model="report.activityFilters.port.landing" initialtext="{{'common.all' | i18n }}" items="ports"></combobox>
+										<combobox ng-model="report.faFilters.port.landing" name="portLanding" initialtext="{{'common.all' | i18n }}" items="ports"></combobox>
 									</label>
 								</div>
 							</div>
@@ -68,13 +68,13 @@
 								<div class="col-md-5">
 									<label class="above-label">
 										{{'activity.reports_form_activity_gear_onboard' | i18n }}
-										<combobox ng-model="report.activityFilters.gear.onBoard" initialtext="{{'common.all' | i18n }}" items="gearTypes"></combobox>
+										<combobox ng-model="report.faFilters.gear.onBoard" name="gearOnBoard" initialtext="{{'common.all' | i18n }}" items="gearTypes"></combobox>
 									</label>
 								</div>
 								<div class="col-md-5">
 									<label class="above-label">
 										{{'activity.reports_form_activity_gear_deployed' | i18n }}
-										<combobox ng-model="report.activityFilters.gear.deployed" initialtext="{{'common.all' | i18n }}" items="gearTypes"></combobox>
+										<combobox ng-model="report.faFilters.gear.deployed" name="gearDeployed" initialtext="{{'common.all' | i18n }}" items="gearTypes"></combobox>
 									</label>
 								</div>
 							</div>
@@ -85,7 +85,7 @@
 									<label>{{'activity.reports_form_activity_species' | i18n }}</label>
 								</div>
 								<div class="col-md-10">
-									<combobox ng-model="report.activityFilters.species" initialtext="{{'common.all' | i18n }}" items="species" multiple="true"></combobox>
+									<combobox ng-model="report.faFilters.species" name="species" initialtext="{{'common.all' | i18n }}" items="species" multiple="true"></combobox>
 								</div>
 							</div>
 							<div class="row">
@@ -93,25 +93,25 @@
 									<label>{{'activity.reports_form_activity_weight' | i18n }}</label>
 								</div>
 								<div class="form-group col-md-5">
-									<div class="unit-input" ng-class="{'has-error': (activityAdvancedSearchForm.minWeightFACriterion.$dirty || isFormValid === true) && activityAdvancedSearchForm.minWeightFACriterion.$invalid}">  <!-- && submitingReport === true -->
-										<numeric-input validate-min-in-range class="form-control" ng-model="advancedSearchObject.minWeight" name="minWeightFACriterion" type="number" min="0" max="advancedSearchObject.maxWeight"></numeric-input>
+									<div class="unit-input">
+										<numeric-input validate-min-in-range class="form-control" name="weightMin" ng-model="report.faFilters.weight.min" type="number" min="0" max="report.faFilters.weight.max"></numeric-input>
 										<div class="unit-box">{{'activity.advanced_search_min' | i18n}}</div>
 									</div>
-									<div class="belowErrorMessages" ng-messages="activityAdvancedSearchForm.minWeightFACriterion.$error" ng-show="(activityAdvancedSearchForm.minWeightFACriterion.$dirty || isFormValid === true) && activityAdvancedSearchForm.minWeightFACriterion.$invalid">
+									<!--<div class="belowErrorMessages" ng-messages="activityAdvancedSearchForm.minWeightFACriterion.$error" ng-show="(activityAdvancedSearchForm.minWeightFACriterion.$dirty || isFormValid === true) && activityAdvancedSearchForm.minWeightFACriterion.$invalid">
 										<div ng-message="invalidNumber">{{'spatial.not_numeric_error_message' | i18n }}</div>
 										<div ng-message="min">{{'spatial.min_value_1_error_message' | i18n }}</div>
 										<div ng-message="minBiggerThanMax">{{'spatial.min_value_bigger_than_max' | i18n}}</div>
-									</div>
+									</div>-->
 								</div>
 								<div class="form-group col-md-5">
-									<combobox ng-model="advancedSearchObject.weightUnit" items="weightUnits"></combobox>
+									<combobox ng-model="report.faFilters.weight.unit" items="weightUnits"></combobox>
 								</div>
 								<div class="form-group col-md-2 label-container centerLabelCombo">
 									<label></label>
 								</div>
 								<div class="form-group col-md-5">
-									<div class="unit-input" ng-class="{'has-error': segmentSecForm.segMaxSpeed.$error.$invalid && submitingReport === true}">
-										<numeric-input validate-max-in-range class="form-control" ng-model="advancedSearchObject.maxWeight" name="maxWeightFACriterion" min="advancedSearchObject.minWeight"></numeric-input>
+									<div class="unit-input">
+										<numeric-input validate-max-in-range class="form-control" ng-model="report.faFilters.weight.max" min="report.faFilters.weight.min"></numeric-input>
 										<div class="unit-box">{{'activity.advanced_search_max' | i18n}}</div>
 									</div>
 								</div>

@@ -101,7 +101,7 @@
 						<div class="row">
 							<!-- Map configuration -->
 							<div class="form-group">
-								<button type="button" class="btn btn-primary btn-sm" style="width:100%;" ng-click="openMapConfigurationModal()" ng-switch="report.withMap">
+								<button type="button" class="map-config-btn btn btn-primary btn-sm" ng-click="openMapConfigurationModal()" ng-switch="report.withMap">
 									<span class="fa" ng-class="{'fa-map': report.withMap,'fa-eye': !report.withMap}" aria-hidden="true"></span> &nbsp;
 									<span ng-switch-when="true">{{'spatial.reports_form_map_configuration' | i18n }}</span>
 									<span ng-switch-when="false">{{'spatial.visibility_settings' | i18n }}</span>
@@ -115,7 +115,7 @@
 				<div class="row filter-section">
 					<h3 class="row">{{'spatial.reports_form_filters' | i18n }}</h3>
 
-					<!-- Fieldset Vessels -->
+					<!-- Fieldset Areas -->
 					<div class="row form-group" ng-include="'partial/spatial/reportsPanel/reportForm/areasSelectionFieldset/areasSelectionFieldset.html'"></div>
 
 					<!-- Fieldset Vessels -->
@@ -124,7 +124,7 @@
 					<!-- Fieldset VMS Filters -->
 					<div class="row form-group" ng-include="'partial/spatial/reportsPanel/reportForm/vmsFiltersFieldset/vmsFiltersFieldset.html'"></div>
 
-					<!-- Fieldset ERS Filters -->
+					<!-- Fieldset Activity Filters -->
 					<div class="row form-group" ng-include="'partial/spatial/reportsPanel/reportForm/activityFiltersFieldset/activityFiltersFieldset.html'"></div>
 				</div>
 			</ng-form>

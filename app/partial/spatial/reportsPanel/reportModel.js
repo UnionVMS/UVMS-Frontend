@@ -25,6 +25,10 @@ angular.module('unionvmsWeb').factory('Report',function(unitConversionService, u
 	        segments: {},
 	        tracks: {}
 	    };
+
+		this.hasFaFilter = false;
+		this.faFilters = {};
+
 	    this.areas = [];
 	    
 	    //Spatial configs
@@ -137,6 +141,15 @@ angular.module('unionvmsWeb').factory('Report',function(unitConversionService, u
 	            }
 	        }
 
+			//Fishing activity filters
+	        if (angular.isDefined(filter.fa)){
+                report.faFilters = filter.fa;
+            }
+
+	        if (!angular.equals({}, filter.fa)){
+	            report.hasFaFilter = true;
+	        }
+
 	        report.areas = filter.areas;
 	        
 	        if (angular.isDefined(data.mapConfiguration)){
@@ -206,6 +219,13 @@ angular.module('unionvmsWeb').factory('Report',function(unitConversionService, u
 			}
 		}
 
+		//Fishing activity filter
+		var faFilters = {};
+		if (angular.isDefined(this.faFilters) && !_.isEmpty(this.faFilters)){
+			faFilters = this.faFilters;
+		}
+
+
 	    var filter = {
 	        common: {
 				id: this.commonFilterId,
@@ -217,6 +237,7 @@ angular.module('unionvmsWeb').factory('Report',function(unitConversionService, u
 	        },
             assets: [],
             vms: vmsFilters,
+			fa: faFilters,
             areas: this.areas
 	    };
 
@@ -346,6 +367,12 @@ angular.module('unionvmsWeb').factory('Report',function(unitConversionService, u
 		if (validateFilterObject(report.filterExpression.vms.vmstrack,true) === false){
 			report.filterExpression.vms.vmstrack = undefined;
 		}
+
+		//Fishing activity filter
+		if (angular.isDefined(this.faFilters) && !_.isEmpty(this.faFilters)){
+			report.filterExpression.fa = this.faFilters;
+		}
+
         
         if(this.withMap === true){
         	report.mapConfiguration = {
