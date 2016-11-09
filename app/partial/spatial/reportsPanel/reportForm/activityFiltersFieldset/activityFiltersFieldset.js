@@ -1,3 +1,11 @@
+/**
+ * @memberof unionvmsWeb
+ * @ngdoc controller
+ * @name ActivityfiltersfieldsetCtrl
+ * @param $scope {Service} controller scope
+ * @description
+ *  The controller for the activity filters fieldset
+ */
 angular.module('unionvmsWeb').controller('ActivityfiltersfieldsetCtrl',function($scope){
 
     $scope.reportTypes = [{
