@@ -89,7 +89,7 @@ copy of the GNU General Public License along with the IFDM Suite. If not, see <h
                             </div>
                         </div>
 
-                        <div class="col-md-9 grayBorderRight terminalsContainer">
+                        <div class="col-md-9 terminalsContainer">
                             <div class="row">
                                 <div class="col-md-12">
                                     <h5>{{'vessel.connected_mobile_terminals' | i18n}}</h5>
@@ -137,10 +137,11 @@ copy of the GNU General Public License along with the IFDM Suite. If not, see <h
         <div class="row mobileTerminalsContainer" ng-if="!isCreateNewMode()">
             <div class="col-md-12">
                 <h3 ng-show="mobileTerminals.length > 0">{{'vessel.connected_mobile_terminals' | i18n}}</h3>
+                <div ng-repeat="mobileTerminal in mobileTerminals | orderBy :'[-active, -started]'"">
+                    <mobile-terminal-details ng-model="temp" mobile-terminal="mobileTerminal" modeltype="'VESSEL'"></mobile-terminal-details>
+                </div>
             </div>
-            <div class="col-md-12" ng-repeat="mt in mobileTerminals | orderBy :'[-active, -started]'">
-                <ng-include src="'partial/vessel/vesselForm/mobileTerminal.html'"/>
-            </div>
+            
         </div>
     </form>
     
