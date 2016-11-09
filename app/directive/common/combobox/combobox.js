@@ -51,9 +51,6 @@ angular.module('unionvmsWeb').directive('combobox', function(comboboxService) {
             
             if(scope.multiple){
         		scope.selectedItems = [];
-        		/*if(angular.isUndefined(scope.ngModel)){
-            		scope.ngModel = [];
-            	}*/
         	}
             
             if(scope.group){
