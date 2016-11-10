@@ -32,18 +32,20 @@
 
         <div st-table="displayedMDRLists" st-safe-src="mdrCodeLists">
             <div class="form-group row" ng-show="isAllowed('UPDATE_MDR_CODE_LISTS')">
-                <div class="col-md-6">
-                    <button type="button" class="btn btn-primary btn-sm" ng-click="updateAllNow()">
-                        &nbsp;
-                        <span>{{'activity.update_all_now_btn' | i18n }}</span>
-                    </button>
-                    <button type="button" class="btn btn-primary btn-sm" ng-click="updateNow()" ng-disabled="isUpdateNowDisabled">
-                        &nbsp;
-                        <span>{{'activity.update_now_btn' | i18n }}</span>
-                    </button>
+                <div class="col-md-4">
+                    <input st-search="" class="form-control" placeholder="{{'common.search' | i18n}}" type="text"/>
                 </div>
-                <div class="col-md-6">
-                    <input st-search="" class="form-control" placeholder="{{'activity.search_table_placeholder' | i18n}}" type="text"/>
+                <div class="col-md-8 btn-container">
+                    <button type="button" class="btn btn-default btn-sm" ng-click="updateNow()" ng-disabled="isUpdateNowDisabled">
+                        <span class="fa fa-refresh"></span>
+                        &nbsp;
+                        <span>{{'activity.synch_selected_btn' | i18n }}</span>
+                    </button>
+                    <button type="button" class="btn btn-primary btn-sm" ng-click="updateAllNow()">
+                        <span class="fa fa-refresh"></span>
+                        &nbsp;
+                        <span>{{'activity.synch_all_btn' | i18n }}</span>
+                    </button>
                 </div>
             </div>
 
@@ -79,13 +81,13 @@
                             <div class="td col-md-1" st-skip-natural="true">{{codeList.lastSuccess | stActivityDateUtc}}</div>
                             <div class="td col-md-1" st-skip-natural="true">{{codeList.lastAttempt | stActivityDateUtc}}</div>
                             <div class="td col-md-1" st-skip-natural="true">{{codeList.lastStatus}}</div>
-                            <div class="td col-md-1 btn-schedule-state">
-                                <button ng-show="isAllowed('CODE_LISTS_ENABLE_DISABLE_SCHEDULED_UPDATE')" type="button" class="btn btn-{{codeList.schedulable?'success':'danger'}}" title="{{'activity.enable_disable_autoupdate' | i18n }}" ng-click="enableDisableAutoUpdate($index)">
-                                    <span>{{'activity.enable_disable_autoupdate_'+codeList.schedulable | i18n}}</span>
+                            <div class="td col-md-1 col-btn col-auto-update">
+                                <button ng-show="isAllowed('CODE_LISTS_ENABLE_DISABLE_SCHEDULED_UPDATE')" type="button" class="btn btn-{{ codeList.schedulable ? 'success' : 'danger' }}" title="{{'activity.enable_disable_autoupdate' | i18n }}" ng-click="enableDisableAutoUpdate($index)">
+                                    <span>{{ 'activity.enable_disable_autoupdate_' + codeList.schedulable | i18n}}</span>
                                 </button>
                             </div>
-                            <div class="td col-md-1">
-                                <button type="button" class="btn btn-default btn-xs pull-right tableBtnMargin" title="{{'areas.table_area__details_btn' | i18n }}" ng-click="openCodeListModal(codeList.objectAcronym)"><span class="fa fa-eye"></span></button>
+                            <div class="td col-md-1 col-btn">
+                                <button type="button" class="btn btn-default btn-xs" title="{{'areas.table_area__details_btn' | i18n }}" ng-click="openCodeListModal(codeList.objectAcronym)"><span class="fa fa-eye"></span></button>
                             </div>
                         </div>
                     </div>

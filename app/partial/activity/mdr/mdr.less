@@ -14,6 +14,9 @@
                 margin-right: 5px;
             }
         }
+        .cron-select {
+            margin-bottom: 15px;
+        }
     }
 
     .btn-container {
@@ -35,15 +38,24 @@
         .tr:first-child {
             .th {
                 padding: 0 15px;
+                text-align: center;
                 &.ckeckbox-column {
-                    padding: 5px;
+                    text-align: left;
                 }
             }
         }
-        .btn-schedule-state {
-            text-align: center;
-            button {
-                width: auto;
+        .td {
+            padding: 5px 15px;
+            &.col-btn {
+                text-align: center;
+            }
+            &.col-auto-update {
+                button {
+                    width: auto;
+                    height: 30px;
+                    padding: 3px;
+                }
+                
             }
         }
     }
