@@ -5,15 +5,20 @@
  * @param locale {Service} angular locale service
  * @param activityRestService {Service} the activity REST service <p>{@link unionvmsWeb.activityRestService}</p>
  * @param visibilityService {Service} the visibility service <p>{@link unionvmsWeb.visibilityService}</p>
+ * @param breadcrumbService {Service} the navigator breadcrumb service <p>{@link unionvmsWeb.breadcrumbService}</p>
  * @attr {Array} breadcrumbPages - An ordered array containing all possible values for the breadcrumb
  * @attr {Array} activities - An array containing the list of fishing activities reports
+ * @attr {Array} displayedActivities - An array that is a copy of the activities array and is used in the smart tables
+ * @attr {Array} history - An array containing the history list of a fishing activity report
+ * @attr {Array} displayedHistory - An array that is a copy of the history array and is used in the smart tables
  * @attr {Object} overview - An object containing the data to be displayed at the activity overview partial
  * @attr {Object} details - An object containing the data to be displayed at the activity details partial
  * @attr {Object} reportsList - An object containing the state of the FA reports table such as pagination, sorting, smart table tableState
+ * @attr {Object} historyList - An object containing the state of the FA history table
  * @description
  *  A service to deal with all activity data
  */
-angular.module('unionvmsWeb').factory('activityService',function(locale, activityRestService, visibilityService) {
+angular.module('unionvmsWeb').factory('activityService',function(locale, activityRestService, visibilityService, breadcrumbService) {
     var actServ = {};
     var listSize = 25;
     
@@ -32,10 +37,14 @@ angular.module('unionvmsWeb').factory('activityService',function(locale, activit
     }];
     
     actServ.activities = [];
+    actServ.displayedActivities = [];
     actServ.overview = {};
+    actServ.history= [];
+    actServ.displayedHistory = [];
     actServ.details = {};
     
     actServ.reportsList = getReportsListObject();
+    actServ.historyList = getHistoryListObject();
     
     /**
      * Create an empty reportsList Object with all the necessary properties
@@ -58,6 +67,23 @@ angular.module('unionvmsWeb').factory('activityService',function(locale, activit
             sortKey: {
                 field: undefined,
                 order: undefined,
+            }
+        };
+    }
+    
+    /**
+     * Create an empty historyList object
+     * 
+     * @memberof activityService
+     * @private
+     * @returns {Object} The historyList object
+     */
+    function getHistoryListObject(){
+        return {
+            isLoading: false,
+            hasError: false,
+            pagination: {
+                listSize: listSize
             }
         };
     }
@@ -86,17 +112,26 @@ angular.module('unionvmsWeb').factory('activityService',function(locale, activit
     };
     
     /**
-     * Reset attributes of the activity service (includes activities, overvie, details and reportsList
+     * Reset attributes of the activity service (includes activities, overview, details and reportsList
      * 
      * @memberof activityService
      * @public
      * @alias reset
+     * @param {Boolean} goToInitialPage - Whether the visualized page should be reset to the initial starting page
      */
-    actServ.reset = function(){
+    actServ.reset = function(goToInitialPage){
         this.activities = [];
+        this.displayedActivities = [];
         this.overview = {};
+        this.history = [];
+        this.displayedHistory = [];
         this.details = {};
         this.reportsList = getReportsListObject();
+        this.historyList = getHistoryListObject();
+        
+        if (angular.isDefined(goToInitialPage) && goToInitialPage){
+            breadcrumbService.goToItem(0);
+        }
     };
     
     /**
@@ -109,6 +144,16 @@ angular.module('unionvmsWeb').factory('activityService',function(locale, activit
     actServ.clearAttributeByType = function(type){
         if (this[type] instanceof Array){
             this[type] = [];
+            switch (type) {
+                case 'activities':
+                    this.displayedActivities = [];
+                    break;
+                case 'history':
+                    this.displayedHistory = [];
+                    break;
+                default:
+                    break;
+            }
         } else {
             this[type] = {};
         }
@@ -158,6 +203,7 @@ angular.module('unionvmsWeb').factory('activityService',function(locale, activit
             }
             
             actServ.activities = response.resultList;
+            actServ.displayedActivities = [].concat(actServ.activities);
             if (angular.isDefined(callback) && angular.isDefined(tableState)){
                 callback(tableState);
             }
@@ -178,6 +224,7 @@ angular.module('unionvmsWeb').factory('activityService',function(locale, activit
      * 
      * @memberof activityService
      * @public
+     * @alias getUserPreferences
      */
     actServ.getUserPreferences = function(){
         activityRestService.getUserPreferences().then(function(response){
@@ -190,6 +237,26 @@ angular.module('unionvmsWeb').factory('activityService',function(locale, activit
                 }
             };
             visibilityService.setVisibility(visibilitySettings);
+        });
+    };
+    
+    /**
+     * Get the history for the current selected overview FA report
+     * 
+     * @memberof activityService
+     * @public
+     * @alias getHistory
+     */
+    actServ.getHistory = function(){
+        actServ.historyList.isLoading = true;
+        //FIXME check the uniqueReportIdList, maybe it needs some logic to check which id to use
+        activityRestService.getReportHistory(actServ.overview.fluxReportReferenceId, actServ.overview.uniqueReportIdList[0].fluxReportSchemeId).then(function(response){
+            actServ.historyList.isLoading = false;
+            actServ.history = response;
+            actServ.displayedHistory = [].concat(actServ.history);
+        }, function(error){
+            actServ.historyList.isLoading = false;
+            actServ.historyList.hasError = true;
         });
     };
 

@@ -54,7 +54,12 @@
 	"header_fa_iccat": "ICCAT",
 	"header_fa_gfcm": "GFCM",
 	"header_fa_actions": "Actions",
+	"header_fa_flux_party_name": "Party Name",
+	"header_fa_correction_type": "Correction Type",
+	"header_fa_creation_date": "Date created",
+	"header_fa_accepted_date": "Date accepted",
 	"fa_table_error_fetching_reports": "There was an error while fetching fishing activity reports. Please try again.",
+	"fa_table_error_fetching_history": "There was an error while fetching the fishing activity's history. Please try again",
 	"activity_overview": "Activity overview",
 
     "trip_summary_loading": "Loading trip summary",
