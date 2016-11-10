@@ -62,6 +62,11 @@ angular.module('unionvmsWeb').factory('loadingStatus',function() {
 		    message: 'activity.trip_summary_loading',
             value: false,
             counter: 0
+		},
+		MdrSettings: {
+		    message: 'activity.mdr_settings_loading',
+            value: false,
+            counter: 0
 		}
 	};
 	

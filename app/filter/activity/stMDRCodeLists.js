@@ -7,8 +7,8 @@ angular.module('unionvmsWeb').filter('stMDRCodeLists', function($filter) {
                 return true;
             }
 
-            var name = value.name === null ? -1 : value.name.toLowerCase().indexOf(searchString);
-            var acronym = value.acronym === null ? -1 : value.acronym.toLowerCase().indexOf(searchString);
+            var name = value.name === null ? -1 : value.objectName.toLowerCase().indexOf(searchString);
+            var acronym = value.acronym === null ? -1 : value.objectAcronym.toLowerCase().indexOf(searchString);
 
             if (name !== -1 || acronym !== -1){
                 return true;

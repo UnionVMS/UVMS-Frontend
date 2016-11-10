@@ -1,5 +1,5 @@
 <div ng-controller="MdrCtrl" class="mdr-admin-tab">
-    <loading-panel type="Preferences"></loading-panel>
+    <loading-panel class="mdr-tab-loading" type="MdrSettings"></loading-panel>
 
     <!--MDR configuration sheduler-->
     <ng-form name="mdrConfigurationForm" ng-show="isAllowed('CONFIGURE_MDR_SCHEDULER')">
@@ -13,13 +13,16 @@
                     <cron-selection ng-model="configModel.cronJobExpression" config="cronWidgetConfig" ng-if="configModel.cronJobExpression" ></cron-selection>
                     <span ng-show="mdrConfigurationForm.configModel.cronJobExpression.$invalid">{{'activity.required_error_message' | i18n }}</span>
                 </div>
-                <div class="form-group col-md-12 btn-container">
-                    <button class="btn btn-primary button btn-action" type="button" ng-click="saveCron()" ng-show="configModel.showSaveBtn">{{"activity.cron_save_btn" | i18n }}</button>
-                </div>
-             </div>
-            <div class="cron-job-exp">
-                <span class="cronLabel">{{"activity.cron_expression_label" | i18n }}</span><span>{{configModel.cronJobExpression}}</span>
             </div>
+            <div class="row">
+                <div class="col-md-12 form-group btn-container cron-job-exp">
+                    <span class="cronLabel">{{"activity.cron_expression_label" | i18n }}</span>
+                    <span>{{configModel.cronJobExpression}}</span>
+                    &nbsp;
+                    <button class="btn btn-primary button btn-action" type="button" ng-click="saveCron()">{{"activity.cron_save_btn" | i18n }}</button>
+                </div>
+            </div>
+            
         </fieldset>
     </ng-form>
 
@@ -30,7 +33,7 @@
             <a data-toggle="collapse" >{{'activity.code_lists_fieldset_label' | i18n }}</a>
         </legend>
 
-        <div st-table="displayedMDRLists" st-safe-src="mdrCodeLists">
+        <div st-table="displayedMDRLists" st-safe-src="mdrCodeLists" st-set-filter="stMDRCodeLists">
             <div class="form-group row" ng-show="isAllowed('UPDATE_MDR_CODE_LISTS')">
                 <div class="col-md-4">
                     <input st-search="" class="form-control" placeholder="{{'common.search' | i18n}}" type="text"/>
@@ -56,12 +59,12 @@
                             <div class="th col-md-1 ckeckbox-column" st-skip-natural="true" st-class-ascent="sorting_asc" st-class-descent="sorting_desc">
                                 <input type="checkbox" ng-model="selectedAll" ng-change="selectDeselectAll()">
                             </div>
-                            <div class="th col-md-3" st-sort="acronym" st-skip-natural="true" st-class-ascent="sorting_asc" st-class-descent="sorting_desc">{{'activity.code_list_table_acronym_header' | i18n}}</div>
-                            <div class="th col-md-3" st-sort="name" st-skip-natural="true" st-class-ascent="sorting_asc" st-class-descent="sorting_desc">{{'activity.code_list_table_name_header' | i18n}}</div>
+                            <div class="th col-md-3" st-sort="objectAcronym" st-skip-natural="true" st-class-ascent="sorting_asc" st-class-descent="sorting_desc">{{'activity.code_list_table_acronym_header' | i18n}}</div>
+                            <div class="th col-md-3" st-sort="objectName" st-skip-natural="true" st-class-ascent="sorting_asc" st-class-descent="sorting_desc">{{'activity.code_list_table_name_header' | i18n}}</div>
                             <div class="th col-md-1" st-sort="lastSuccess" st-skip-natural="true" st-class-ascent="sorting_asc" st-class-descent="sorting_desc">{{'activity.code_list_table_last_success_header' | i18n}}</div>
                             <div class="th col-md-1" st-sort="lastAttempt" st-skip-natural="true" st-class-ascent="sorting_asc" st-class-descent="sorting_desc">{{'activity.code_list_table_last_attempt_header' | i18n}}</div>
                             <div class="th col-md-1" st-sort="lastStatus" st-skip-natural="true" st-class-ascent="sorting_asc" st-class-descent="sorting_desc">{{'activity.code_list_table_last_attempt_status_header' | i18n}}</div>
-                            <div class="th col-md-1" st-sort="scheduled" st-skip-natural="true" st-class-ascent="sorting_asc" st-class-descent="sorting_desc">{{'activity.code_list_table_is_scheduler_enabled_header' | i18n}}</div>
+                            <div class="th col-md-1" st-sort="schedulable" st-skip-natural="true" st-class-ascent="sorting_asc" st-class-descent="sorting_desc">{{'activity.code_list_table_is_scheduler_enabled_header' | i18n}}</div>
                             <div class="th col-md-1"></div>
                         </div>
                         <div class="tr row" ng-show="!tableLoading && !displayedMDRLists.length">
