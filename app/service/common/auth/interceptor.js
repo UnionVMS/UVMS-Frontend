@@ -250,47 +250,52 @@ angular.module('auth.interceptor', ['ngStorage','ui.bootstrap'])
                     var userService = $injector.get('userService');
                     var globalSettings = $injector.get('globalSettingsService');
 
+                    var forbidden = function(error) {
+                        _log.log("Request rejected with status 403 and panel injection true");
+                        unauth = true;
+                        // Inject services
+                        var $state = $injector.get('$state');
+                        var authRouter = $injector.get('authRouter');
+                        _log.debug("Current State",$state.current);
+                        if($state.current && $state.current.name !== authRouter.getLogin() && $state.current.name !== ""){
+
+                        _log.log("injecting renewLoginPanel");
+
+                        var Retry = $injector.get('renewloginpanel');
+                        var $http = $injector.get('$http');
+                        var $modalStack = $injector.get('$modalStack');
+
+                        return $timeout(angular.noop, 200).then(function () {
+                            return Retry.show();
+                        }).then(function () {
+                            _log.log("retry request succeeded?");
+                            unauth = false;
+                            _log.debug($state.current);
+                            $modalStack.dismissAll();
+                            //$state.reload($state.current);
+                            //$state.go($state.current, {}, {reload: true});
+                            if (rejection.config.headers[config.authHeader]) {
+                                rejection.config.headers[config.authHeader] = null;
+                            }
+                                return $http(rejection.config);
+                        }, function () {
+                            $log.log("retry request failed?");
+                            unauth = true;
+                            userService.logout();
+                            $modalStack.dismissAll();
+                            $rootScope.$broadcast('authenticationNeeded');
+                            return $q.reject(rejection);
+                        });
+                        }
+                    };
+
                     if (rejection.status === 403 && config.injectPanel && !unauth) {
+                        if (rejection.config.url.indexOf('config/rest/globals') !== -1) {
+                            forbidden();
+                        }
                     	globalSettings.getSettingsFromServerWithoutUpdate().then(function(response){
 							return $q.reject(rejection);
-                    	}, function(error) {
-							_log.log("Request rejected with status 403 and panel injection true");
-							unauth = true;
-							// Inject services
-							var $state = $injector.get('$state');
-							var authRouter = $injector.get('authRouter');
-							_log.debug("Current State",$state.current);
-							if($state.current && $state.current.name !== authRouter.getLogin() && $state.current.name !== ""){
-
-							_log.log("injecting renewLoginPanel");
-
-							var Retry = $injector.get('renewloginpanel');
-							var $http = $injector.get('$http');
-							var $modalStack = $injector.get('$modalStack');
-
-							return $timeout(angular.noop, 200).then(function () {
-								return Retry.show();
-							}).then(function () {
-								_log.log("retry request succeeded?");
-								unauth = false;
-								_log.debug($state.current);
-								$modalStack.dismissAll();
-								//$state.reload($state.current);
-								//$state.go($state.current, {}, {reload: true});
-								if (rejection.config.headers[config.authHeader]) {
-									rejection.config.headers[config.authHeader] = null;
-								}
-									return $http(rejection.config);
-							}, function () {
-								$log.log("retry request failed?");
-								unauth = true;
-								userService.logout();
-								$modalStack.dismissAll();
-								$rootScope.$broadcast('authenticationNeeded');
-								return $q.reject(rejection);
-							});
-							}
-                    	});
+                    	}, forbidden);
                     } else if (rejection.status === 403 && !unauth) {
                         _log.log("Request rejected with status 403");
                         unauth = true;
