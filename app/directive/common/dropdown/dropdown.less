@@ -14,11 +14,16 @@ copy of the GNU General Public License along with the IFDM Suite. If not, see <h
         overflow: hidden;
         text-overflow: ellipsis;
         color: @form-input-textcolor;
+
+        &.placeholderColor {
+            color: @form-input-placeholder-color;
+        }
     }
 
     .dropdown-menu {
         min-width: 100%;
         border-color: @primaryColor;
+        border-radius: 0;
     }
 
     &.open .dropdown-toggle, 
@@ -27,12 +32,11 @@ copy of the GNU General Public License along with the IFDM Suite. If not, see <h
         background-color: @form-input-background;
 
         .placeholderColor{
-            color: @form-input-textcolor;
+            color: @form-input-placeholder-color;
         }
 
         &:hover, &:focus, &:active {
             background-color: @form-input-background;
-            border: 1px solid red;
         }
 
         &:disabled {
