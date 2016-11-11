@@ -106,14 +106,14 @@ copy of the GNU General Public License along with the IFDM Suite. If not, see <h
                                 </div>
                             </div>
                             <div class="form-group short-field" ng-class="{'has-error': channelForm.dnid.$invalid && (submitAttempted || channelForm.dnid.$dirty)}" ng-show="getTerminalConfig().channelFields.DNID">
-                                <label class="normal">{{'mobileTerminal.form_inmarsatc_communication_selectedchannel_dnid_label' | i18n}}<span ng-if="createNewMode" class="mandatory">{{ 'common.mandatory_field' | i18n }}</span></label>
-                                <input type="text" name="dnid" class="form-control" ng-model="communicationChannel.ids.DNID" ng-required="getTerminalConfig().channelFields.DNID" only-digits id="mob-term-form-details-dnid-{{$index}}">
-                                <input-validation-message types="required,onlyDigits" input="channelForm.dnid"></input-validation-message>
+                                <label class="normal">{{'mobileTerminal.form_inmarsatc_communication_selectedchannel_dnid_label' | i18n}}</label>
+                                <input type="text" name="dnid" class="form-control" ng-model="communicationChannel.ids.DNID" only-digits id="mob-term-form-details-dnid-{{$index}}">
+                                <input-validation-message types="onlyDigits" input="channelForm.dnid"></input-validation-message>
                             </div>
                             <div class="form-group short-field" ng-class="{'has-error': channelForm.memberId.$invalid && (submitAttempted || channelForm.memberId.$dirty)}" ng-show="getTerminalConfig().channelFields.MEMBER_NUMBER">
-                                <label class="normal">{{'mobileTerminal.form_inmarsatc_communication_selectedchannel_member_no_label' | i18n}}<span ng-if="createNewMode" class="mandatory">{{ 'common.mandatory_field' | i18n }}</span></label>
-                                <input type="text" name="memberId" class="form-control" ng-model="communicationChannel.ids.MEMBER_NUMBER" only-digits ng-required="getTerminalConfig().channelFields.MEMBER_NUMBER" id="mob-term-form-details-member-number-{{$index}}">
-                                <input-validation-message types="required,onlyDigits" input="channelForm.memberId"></input-validation-message>
+                                <label class="normal">{{'mobileTerminal.form_inmarsatc_communication_selectedchannel_member_no_label' | i18n}}</label>
+                                <input type="text" name="memberId" class="form-control" ng-model="communicationChannel.ids.MEMBER_NUMBER" only-digits id="mob-term-form-details-member-number-{{$index}}">
+                                <input-validation-message types="onlyDigits" input="channelForm.memberId"></input-validation-message>
                             </div>
                             <div class="form-group short-field" ng-show="getTerminalConfig().channelFields.LES_DESCRIPTION">
                                 <label class="normal">{{'mobileTerminal.form_inmarsatc_communication_selectedchannel_land_station_label' | i18n}}</label>
