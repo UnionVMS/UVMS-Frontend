@@ -15,7 +15,7 @@
     <!--TRIPS LIST (WHEN RUNNING REPORT WITHOUT MAP)-->
     <div ng-include="'partial/spatial/liveViewPanel/tripsPanel/tripsList/tripsList.html'" ng-if="false"></div>
     <!--TRIP SUMMARY-->
-    <uib-tabset><!-- active="tripSummServ.activeTab.index"-->
+    <uib-tabset ng-show="false"><!-- active="tripSummServ.activeTab.index"-->
         <uib-tab index="$index" ng-repeat="tab in tripSummServ.tabs" active="tab.active" select="tripSummServ.initializeTrip($index)">
             <!--TAB HEADER-->
             <uib-tab-heading>
@@ -32,4 +32,5 @@
             </div>
         </uib-tab>
     </uib-tabset>
+	<div ng-include="'partial/spatial/liveViewPanel/tripsPanel/catchDetails/catchDetails.html'" ng-show="true"></div>
 </div>

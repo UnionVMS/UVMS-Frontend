@@ -75,6 +75,28 @@ angular.module('unionvmsWeb').factory('activityRestFactory',function($resource, 
 	               }
 	           } 
 	        });
+        },getTripCatchDetail: function () {
+            return {
+
+                "tripID": "BEL-TRP-O16-2016_0021",
+                "vesselName": "Beagle(BEL123456789)",
+                "departure": "yy-mm-dd hh:mm",
+                "departureAt": ["BEZEE","BEZEEF"],
+                "arrival": "yy-mm-dd hh:mm",
+                "arrivalAt": ["BEZEE","BEZEEF"],
+                "Landing": "yy-mm-dd hh:mm",
+                "LandingAt": ["BEZEE","BEZEEF"]
+
+            };
+            
+            /*return $resource('/activity/rest/trip/cronology/:id', {}, {
+	            'get': {
+	                method: 'GET',
+	                headers: {
+	                    'Content-Type': 'application/json'
+	                }
+	            }
+	        });*/
         }
     };
     
@@ -210,7 +232,25 @@ angular.module('unionvmsWeb').factory('activityRestFactory',function($resource, 
                 deferred.reject(error);
             });
             return deferred.promise;
-        }
+        },
+		/**
+             * Get the Catch Details of a specific trip
+             * 
+             * @memberof activityRestService
+             * @public
+             * @param {String} id - The trip id of the selected trip
+             * @returns {Promise} A promise with either the trip catch details or reject error
+             */
+            getTripCatchDetail: function (id) {
+                return activityRestFactory.getTripCatchDetail();
+                /*var deferred = $q.defer();
+                activityRestFactory.getTripCatchDetail().get({ id: id }, function (response) {
+                    deferred.resolve(response);
+                }, function (error) {
+                    deferred.reject(error);
+                });
+                return deferred.promise;*/
+            }
 
     };
 
