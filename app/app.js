@@ -487,7 +487,7 @@ unionvmsWebApp.config(function($stateProvider, $compileProvider, tmhDynamicLocal
             },
         })
         .state('app.holdingTable', {
-            url: '/alarms/holdingtable',
+            url: '/alerts/holdingtable',
             views: {
                 modulepage: {
                     templateUrl: 'partial/alarms/holdingTable/holdingTable.html',
@@ -505,7 +505,7 @@ unionvmsWebApp.config(function($stateProvider, $compileProvider, tmhDynamicLocal
             },
         })
         .state('app.holdingTable-id', {
-            url: '/alarms/holdingtable/:id',
+            url: '/alerts/holdingtable/:id',
             views: {
                 modulepage: {
                     templateUrl: 'partial/alarms/holdingTable/holdingTable.html',
@@ -523,7 +523,7 @@ unionvmsWebApp.config(function($stateProvider, $compileProvider, tmhDynamicLocal
             },
         })
         .state('app.openTickets', {
-            url: '/alarms/notifications',
+            url: '/alerts/notifications',
             views: {
                 modulepage: {
                     templateUrl: 'partial/alarms/openTickets/openTickets.html',
@@ -541,7 +541,7 @@ unionvmsWebApp.config(function($stateProvider, $compileProvider, tmhDynamicLocal
             },
         })
         .state('app.openTickets-id', {
-            url: '/alarms/notifications/:id',
+            url: '/alerts/notifications/:id',
             views: {
                 modulepage: {
                     templateUrl: 'partial/alarms/openTickets/openTickets.html',
@@ -559,7 +559,7 @@ unionvmsWebApp.config(function($stateProvider, $compileProvider, tmhDynamicLocal
             },
         })
         .state('app.rules', {
-            url: '/alarms/rules',
+            url: '/alerts/rules',
             views: {
                 modulepage: {
                     templateUrl: 'partial/alarms/rules/rules.html',
@@ -577,7 +577,7 @@ unionvmsWebApp.config(function($stateProvider, $compileProvider, tmhDynamicLocal
             },
         })
         .state('app.rules-id', {
-            url: '/alarms/rules/:id',
+            url: '/alerts/rules/:id',
             views: {
                 modulepage: {
                     templateUrl: 'partial/alarms/rules/rules.html',
