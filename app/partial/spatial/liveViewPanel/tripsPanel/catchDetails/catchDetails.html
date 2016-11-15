@@ -1,6 +1,6 @@
 <div ng-controller="CatchdetailsCtrl">
 
-	<!--<sampledirective class="col-md-12 summary-section"></sampledirective>-->
+	
 <div class="baseStyle">
 	<fieldset class="col-md-12 fieldsetStyle catch-fieldset">
 		<legend class="fieldsetLegendStyle catch-legend">
@@ -10,17 +10,12 @@
 			<div class="row summary-row">
 				<trip-overview-panel class="col-md-12 summary-section" trip="trip"></trip-overview-panel>
 			</div>
-
-
-			<!--Catches Table-->
+			<!-- Catches Table -->
 			<div>
-				<h4>{{'activity.trip_departure' | i18n }}</h4>
-			</div>
-			<div>
-				<table class="table table-striped table-bordered table-condensed">
+				<table class="table table-striped table-bordered table-condensed tableBorder "> 
 					<thead>
-						<tr>
-							<th colspan="2"></th>
+						<tr tableBorder> 
+							<th colspan="2"><span class="tableTitle">{{'activity.catch_details_catches_table'| i18n }}</span></th>
 							<th colspan="4" class="rows">LSE</th>
 							<th colspan="2" class="rows">BMS</th>
 							<th colspan="2" class="rows">DIS</th>
@@ -28,8 +23,8 @@
 						</tr>
 
 						<tr>
-							<th class="col-md-1" >Date</th>
-							<th class="col-md-2" >Address</th>
+							<th class="col-md-1" >{{'activity.catch_details_column_date'| i18n }}</th>
+							<th class="col-md-2" >{{'activity.trip_summary_roles_address'| i18n }}</th>
 							<th class="rows" class="col-md-1"  ng-repeat="(key, value) in catchesDetailsData.items[0].LSC">{{key}}</th>
 							<th class="rows" class="col-md-1"  ng-repeat="(key, value) in catchesDetailsData.items[0].BMS">{{key}}</th>
 							<th class="rows" class="col-md-1"  ng-repeat="(key, value) in catchesDetailsData.items[0].DIS">{{key}}</th>
@@ -48,7 +43,7 @@
 						</tr>
 						<tr>
 							<td> </td>
-							<td>Total</td>
+							<td>{{'activity.reports_panel_column_total'| i18n }}</td>
 							<td class="rows" ng-repeat="lscColumnTotals in catchesDetailsData.total.LSC">{{lscColumnTotals}}</td>
 							<td class="rows" ng-repeat="bmsColumnTotals in catchesDetailsData.total.BMS">{{bmsColumnTotals}}</td>
 							<td class="rows" ng-repeat="disColumnTotals in catchesDetailsData.total.DIS">{{disColumnTotals}}</td>
@@ -60,14 +55,12 @@
 			</div>
 
 			<!-- Landing Table-->
-            <div>
-				<h4>Landing</h4>
-			</div>
+           
 			<div>
-				<table class="table table-striped table-bordered table-condensed">
+				<table class="table table-striped table-bordered table-condensed tableBorder">
 					<thead>
 						<tr>
-							<th colspan="1" class="rows"></th>
+							<th colspan="1"><span class="LandingTable">{{'activity.catch_details_Landing_table'| i18n }}</span></th>
 							<th colspan={{LSE.length}} class="rows">LSC</th>
 							<th colspan={{BMS.length}} class="rows">BMS</th>
 						</tr>
@@ -79,20 +72,20 @@
 
 						</tr>
 						<tr>
-							<th>Address</th>
+							<th>{{'activity.advanced_search_placeholder_area'| i18n }}</th>
 							<th class="rows" ng-repeat="value in LSE track by $index">{{value.text}}</th>
 							<th class="rows" ng-repeat="value in BMS track by $index">{{value.text}}</th>
 
 						</tr>
 					</thead>
 					<tbody>
-                    	<tr ng-repeat="arr in finalarray" class="first-child">
+                    	<tr ng-repeat="arr in finalarray" class="landingAddress">
 							
 							<td class="rows" ng-repeat="item in arr track by $index">{{item}}</td>
 							
 						</tr>
-						<tr>
-							<td>Totals</td>
+						<tr >
+							<td>{{'activity.reports_panel_column_total'| i18n }}</td>
 							<td class="rows" ng-repeat="value in LSE track by $index">{{value.totals}}</td>
 							<td class="rows" ng-repeat="value in BMS track by $index">{{value.totals}}</td>
 						</tr>
@@ -102,10 +95,10 @@
 
 			</div>
 
-			<!-- Difference percentage Tables-->
+			<!-- Difference percentage Table-->
 
 			<div>
-				<table class="table table-striped table-bordered table-condensed">
+				<table class="table table-striped table-bordered table-condensed tableBorder">
 					<thead>
 						<tr>
 							<th></th>
@@ -123,17 +116,17 @@
 
 					<tbody>
 						<tr>
-							<th>Catches</th>
+							<th>{{'activity.catch_details_catches_table'| i18n }}</th>
 							<td class="rows" ng-repeat="(key, value) in differencePercentage.catches.LSC">{{value}}</td>
 							<td class="rows" ng-repeat="(key, value) in differencePercentage.catches.BMS">{{value}}</td>
 						</tr>
 						<tr>
-							<th>Landed(equivalent live weight)</th>
+							<th>{{'activity.catch_details_Landed_column_type'| i18n }}</th>
 							<td class="rows" ng-repeat="(key, value) in differencePercentage.Landed.LSC">{{value}}</td>
 							<td class="rows" ng-repeat="(key, value) in differencePercentage.Landed.BMS">{{value}}</td>
 						</tr>
 						<tr>
-							<th>Difference(%)</th>
+							<th>{{'activity.catch_details_Difference'| i18n }}</th>
 							<td class="rows" ng-repeat="(key, value) in differencePercentage.Difference.LSC">{{value}}</td>
 							<td class="rows" ng-repeat="(key, value) in differencePercentage.Difference.BMS">{{value}}</td>
 						</tr>
