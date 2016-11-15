@@ -156,5 +156,11 @@
     "activity_summary_reason": "Reason",
     "activity_summary_fishery_type": "Fishery type",
     "activity_summary_target_species": "Targeted species",
-    "activity_location_port_departure": "Port of departure"
+    "activity_location_port_departure": "Port of departure",
+    "activity_report_doc_title": "Fishing activity report document",
+    "activity_related_flux_doc_title": "Related FLUX report document",
+    "type": "Type",
+    "id": "ID",
+    "ref_id": "Ref. ID",
+    "purpose": "Purpose"
 }

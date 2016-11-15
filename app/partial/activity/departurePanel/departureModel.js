@@ -68,6 +68,7 @@ angular.module('unionvmsWeb').factory('Departure',function() {
         }];
         this.reportDoc = {
             type: 'Declaration',
+            dateAccepted: '2014-05-27T07:47:31',
             id: 'b2c32a5d-417c-a44a-00c827b4be32',
             refId: 'b999ef58-4343-946c-31219e75e39d',
             creationDate: '2014-05-27T07:47:31',

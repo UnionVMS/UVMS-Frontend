@@ -8,6 +8,7 @@
 		<div class="row activity-summary-row">
 			<activity-summary-tile class="col-md-4 summary-section" fa-type="{{faServ.activityData.faType}}" summary="faServ.activityData.summary"></activity-summary-tile>
 			<location-tile class="col-md-3 summary-section" is-clickable="isLocationClickable()" field-title="{{'activity.activity_location_port_departure' | i18n}}" location-details="faServ.activityData.port" buffer-dist="5000" click-callback="portClickCallback()"></location-tile>
+			<fa-report-doc-tile class="col-md-5 summary-section" fa-report="faServ.activityData.reportDoc"></fa-report-doc-tile>
 		</div>
 	</div>
 </div>
