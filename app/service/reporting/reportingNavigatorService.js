@@ -9,8 +9,11 @@ angular.module('unionvmsWeb').factory('reportingNavigatorService',function() {
 //        userPreferences: undefined,
 //        liveViewPanel: {
 //            mapPanel : undefined,
-//            vmsPanel: undefined,
-//			  tripsPanel: undefined
+//            vmsPanel: undefined
+//        },
+//		  tripsPanel: {
+//            tripSummary : undefined,
+//	          catchDetails : undefined
 //        }
 //    }
     

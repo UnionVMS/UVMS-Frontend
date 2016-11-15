@@ -88,16 +88,17 @@ angular.module('unionvmsWeb').factory('Trip',function(locale,unitConversionServi
      * @param {Object} data - trip overview data
      */
     var loadOverview = function(self,data){
-        if(angular.isDefined(data.DEPARTURE)){
-            data.DEPARTURE.date = unitConversionService.date.convertToUserFormat(data.DEPARTURE.date);
+        if(angular.isDefined(data)){
+            if(angular.isDefined(data.DEPARTURE)){
+                data.DEPARTURE.date = unitConversionService.date.convertToUserFormat(data.DEPARTURE.date);
+            }
+            if(angular.isDefined(data.ARRIVAL)){
+                data.ARRIVAL.date = unitConversionService.date.convertToUserFormat(data.ARRIVAL.date);
+            }
+            if(angular.isDefined(data.LANDING)){
+                data.LANDING.date = unitConversionService.date.convertToUserFormat(data.LANDING.date);
+            }
         }
-        if(angular.isDefined(data.ARRIVAL)){
-            data.ARRIVAL.date = unitConversionService.date.convertToUserFormat(data.ARRIVAL.date);
-        }
-        if(angular.isDefined(data.LANDING)){
-            data.LANDING.date = unitConversionService.date.convertToUserFormat(data.LANDING.date);
-        }
-
         self.overview = data;
     };
 
