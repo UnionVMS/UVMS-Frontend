@@ -19,7 +19,7 @@
                     <span class="cronLabel">{{"activity.cron_expression_label" | i18n }}</span>
                     <span>{{configModel.cronJobExpression}}</span>
                     &nbsp;
-                    <button class="btn btn-primary button btn-action" type="button" ng-click="saveCron()">{{"activity.cron_save_btn" | i18n }}</button>
+                    <button class="btn btn-primary button btn-action" type="button" ng-click="mdrConfigurationForm.$pristine || saveCron()">{{"activity.cron_save_btn" | i18n }}</button>
                 </div>
             </div>
             
@@ -54,7 +54,7 @@
 
             <div class="table-responsive-force">
                 <div id="codeListsTable" class="table table-striped tableSmart areas-table table-condensed">
-                    <div class="thead col-md-12" >
+                    <div class="thead col-md-12">
                         <div class="tr row">
                             <div class="th col-md-1 ckeckbox-column" st-skip-natural="true" st-class-ascent="sorting_asc" st-class-descent="sorting_desc">
                                 <input type="checkbox" ng-model="selectedAll" ng-change="selectDeselectAll()">
@@ -76,7 +76,7 @@
                     </div>
                     <div class="tbody col-md-12">
                         <div ng-repeat="codeList in displayedMDRLists" class="tr row" ng-show="!tableLoading">
-                            <div class="td col-md-1" st-skip-natural="true" >
+                            <div class="td col-md-1" st-skip-natural="true">
                                 <input type="checkbox" value="{{codeList.id}}" ng-model="codeList.isSelected" ng-change="enableDisableSynchButton()">
                             </div>
                             <div class="td col-md-3" st-skip-natural="true">{{codeList.objectAcronym}}</div>

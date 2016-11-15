@@ -80,12 +80,9 @@ angular.module('unionvmsWeb').controller('MdrCtrl',function($scope, mdrRestServi
      * @public
      */
 	$scope.saveCron = function(){
-		if(angular.isDefined($scope.configModel.cronJobExpression) && $scope.configModel.cronJobExpression.indexOf('NaN') === -1){
-			loadingStatus.isLoading('MdrSettings',true, 2);
-
-			if ($scope.mdrConfigurationForm.$dirty){
-		        mdrRestService.updateCronJobExpression($scope.configModel.cronJobExpression).then(saveSuccess, saveFailure);
-		    }
+		if(angular.isDefined($scope.configModel.cronJobExpression) && $scope.configModel.cronJobExpression.indexOf('NaN') === -1 && $scope.mdrConfigurationForm.$dirty){
+            loadingStatus.isLoading('MdrSettings',true, 2);
+            mdrRestService.updateCronJobExpression($scope.configModel.cronJobExpression).then(saveSuccess, saveFailure);
 		}
 	};
 
@@ -266,11 +263,17 @@ angular.module('unionvmsWeb').controller('MdrCtrl',function($scope, mdrRestServi
        return userService.isAllowed(feature, 'Activity', true);
     };
 
+    /**
+     * this method checks if the global checkbox in the table is checked
+     * @memberof MdrCtrl
+     * @function checkSelectedAll
+     * @private
+     */
     var checkSelectedAll = function(){
-        if(_.where($scope.displayedMDRLists, {'isSelected': false}).length > 0){
-            $scope.selectedAll = false;
-        }else{
+        if(_.where($scope.displayedMDRLists, {'isSelected': true}).length === $scope.displayedMDRLists.length){
             $scope.selectedAll = true;
+        }else{
+            $scope.selectedAll = false;
         }
     };
 
