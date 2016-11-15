@@ -47,12 +47,48 @@ copy of the GNU General Public License along with the IFDM Suite. If not, see <h
                                 <span ng-show="item.mobileTerminal.associatedVessel"><a href="#/assets/{{item.mobileTerminal.associatedVessel.getGuid()}}" title="{{'common.view_details' | i18n}}" ng-click="cancel()" id="mob-term-history-to-vessel">{{item.mobileTerminal.associatedVessel.name}}</a></span>
                                 <span ng-show="item.mobileTerminal.connectId && !item.mobileTerminal.associatedVessel">ConnectId: {{item.mobileTerminal.connectId}}</span>
                             </td>
-                            <td>{{item.mobileTerminal.attributes.SERIAL_NUMBER}}</td>
-                            <td>{{item.mobileTerminal.channels[0].ids.DNID}}</td>
-                            <td>{{item.mobileTerminal.channels[0].ids.MEMBER_NUMBER}}</td>
-                            <td>{{item.mobileTerminal.attributes.INSTALLED_ON | confDateFormat}}</td>
-                            <td>{{item.mobileTerminal.attributes.UNINSTALLED_ON | confDateFormat}}</td>
-                            <td>{{item.mobileTerminal.attributes.SATELLITE_NUMBER}}</td>
+                            <td>{{item.serialNumber}}</td>
+                            <td>
+                                <span ng-repeat="channel in item.comChannelHistory">
+                                    <span ng-if="channel.comChannelInfo">
+                                        <span ng-repeat="channelInfo in channel.comChannelInfo">
+                                            <span ng-repeat="attribute in channelInfo.attributes" ng-if="attribute.type == 'DNID' && attribute.value">
+                                                {{attribute.value}}
+                                            </span>
+                                        </span>
+                                    </span>
+                                </span>
+                            </td>
+                            <td>
+                                <span ng-repeat="channel in item.comChannelHistory">
+                                    <span ng-if="channel.comChannelInfo">
+                                        <span ng-repeat="channelInfo in channel.comChannelInfo">
+                                            <span ng-repeat="attribute in channelInfo.attributes" ng-if="attribute.type == 'MEMBER_NUMBER' && attribute.value">
+                                                {{attribute.value}}
+                                            </span>
+                                        </span>
+                                    </span>
+                                </span>
+                            </td>
+                            <td>
+                                <span ng-repeat="channel in item.comChannelHistory">
+                                    <span ng-if="channel.comChannelInfo">
+                                        <span ng-repeat="channelInfo in channel.comChannelInfo">
+                                            {{channelInfo.installed | confDateFormat}}
+                                        </span>
+                                    </span>
+                                </span>
+                            </td>
+                            <td>
+                                <span ng-repeat="channel in item.comChannelHistory">
+                                    <span ng-if="channel.comChannelInfo">
+                                        <span ng-repeat="channelInfo in channel.comChannelInfo">
+                                            {{channelInfo.uninstalled | confDateFormat}}
+                                        </span>
+                                    </span>
+                                </span>
+                            </td>
+                            <td>{{item.satelliteNumber}}</td>
                             <td>{{item.changeDate | confDateFormat}}</td>
                             <td>{{item.comment}}</td>
                         </tr>

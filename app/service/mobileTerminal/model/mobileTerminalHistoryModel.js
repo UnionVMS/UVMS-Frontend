@@ -15,7 +15,10 @@ angular.module('unionvmsWeb').factory('MobileTerminalHistory', function(MobileTe
         this.changeDate = undefined;
         this.comment = undefined;
         this.eventCode = undefined;
-        this.mobileTerminal = undefined;
+        this.serialNumber = undefined;
+        this.satelliteNumber = undefined;
+        this.connectId = [];
+        this.comChannelHistory = [];
     }
 
     MobileTerminalHistory.fromJson = function(data){
@@ -23,7 +26,17 @@ angular.module('unionvmsWeb').factory('MobileTerminalHistory', function(MobileTe
         history.eventCode = data.eventCode;
         history.changeDate = data.changeDate;
         history.comment = data.comments;
-        history.mobileTerminal = MobileTerminal.fromJson(data.mobileTerminal);
+        history.serialNumber = data.serialNumber;
+        history.satelliteNumber = data.sateliteNumber;
+        if (data.connectId) {
+            history.connectId = data.connectId;
+        }
+        for (var index in data.comChannelHistory) {
+            var channel = data.comChannelHistory[index];
+            if (channel) {
+                history.comChannelHistory.push(channel);
+            }
+        }
         return history;
     };
 
