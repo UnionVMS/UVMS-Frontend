@@ -14,55 +14,47 @@ describe('MobileTerminalHistory', function() {
     beforeEach(module('unionvmsWeb'));
 
     var responseData  = {
-        "changeDate": 1432209400084,
-        "comments": "Automatic create comment",
-        "eventCode": "CREATE",
-        "mobileTerminal": {
-            "attributes": [{
-                "type": "SATELLITE_NUMBER",
-                "value": "3435"
-            },
+      "eventCode": "MODIFY",
+      "connectId": null,
+      "sateliteNumber": "3435",
+      "comChannelHistory": [
+        {
+          "comChannelInfo": [
             {
-                "type": "ANTENNA",
-                "value": "dgnlkj"
-            }],
-            "channels": [{
-                "attributes": [
+              "name": "VMS",
+              "attributes": [
                 {
-                    "type": "DNID",
-                    "value": "1253"
+                  "type": "DNID",
+                  "value": "10745"
                 },
                 {
-                    "type": "MEMBER_NUMBER",
-                    "value": "5370"
-                },
-                {
-                    "type": "START_DATE",
-                    "value": "Thu May 21 13:56:40 CEST 2015"
-                }],
-                "capabilities": null,
-                "defaultReporting": false,
-                "name": "VMS"
-            }],
-            "inactive": false,
-            "mobileTerminalId": {
-                "guid": "909c7e99-0276-4ff1-8574-13221485b42a"
-            },
-            "source": "INTERNAL",
-            "type": "INMARSAT_C"
+                  "type": "MEMBER_NUMBER",
+                  "value": "255"
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "comChannelInfo": null
         }
+      ],
+      "changeDate": "2016-11-14T10:02:22.671Z",
+      "comments": "asdf"
     };
 
     it('fromJson should build a correct object', inject(function(MobileTerminalHistory) {
         var history = MobileTerminalHistory.fromJson(responseData);
-        
-        expect(history.mobileTerminal.attributes.SATELLITE_NUMBER).toEqual("3435");
+
+        expect(history.satelliteNumber).toEqual("3435");
         expect(history.comment).toEqual(responseData.comments);
         expect(history.eventCode).toEqual(responseData.eventCode);
         expect(history.changeDate).toEqual(responseData.changeDate);
-        
-        expect(history.mobileTerminal.channels[0].name).toEqual("VMS");
-        expect(history.mobileTerminal.channels[0].ids.DNID).toEqual("1253");
-        expect(history.mobileTerminal.channels[0].ids.MEMBER_NUMBER).toEqual("5370");
+
+        expect(history.comChannelHistory[0].comChannelInfo[0].name).toEqual("VMS");
+        expect(history.comChannelHistory[0].comChannelInfo[0].attributes[0].type).toEqual("DNID");
+        expect(history.comChannelHistory[0].comChannelInfo[0].attributes[0].value).toEqual("10745");
+        expect(history.comChannelHistory[0].comChannelInfo[0].attributes[1].type).toEqual("MEMBER_NUMBER");
+        expect(history.comChannelHistory[0].comChannelInfo[0].attributes[1].value).toEqual("255");
     }));
 });
