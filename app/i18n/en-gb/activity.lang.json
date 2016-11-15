@@ -147,5 +147,14 @@
     "advanced_search_weight_range": "Weight range: ",
     "advanced_search_min": "Min",
     "advanced_search_max": "Max",
-    "error_getting_mdr_code_lists": "Error getting mdr code lists"
+    "error_getting_mdr_code_lists": "Error getting mdr code lists",
+    
+    "fa_type_departure": "Departure",
+    "departure_optype_correction": "Correction",
+    "title_fishing_activity": "Fishing Activity",
+    "activity_summary_occurrence": "Occurrence",
+    "activity_summary_reason": "Reason",
+    "activity_summary_fishery_type": "Fishery type",
+    "activity_summary_target_species": "Targeted species",
+    "activity_location_port_departure": "Port of departure"
 }

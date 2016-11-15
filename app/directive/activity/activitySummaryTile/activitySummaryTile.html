@@ -1,0 +1,29 @@
+<fieldset class="col-md-12 fieldsetStyle activity-summary-tile">
+	<legend class="fieldsetLegendStyle">
+		<a>{{'activity.title_fishing_activity' | i18n}}: {{translated}}</a>
+	</legend>
+	<div class="row">
+		<div class="col-md-12 item-container">
+			<span class="labels">{{'activity.activity_summary_occurrence' | i18n}}</span>&nbsp;
+			<span>{{summary.occurence | stDateUtc}}</span>
+		</div>
+	</div>
+	<div class="row">
+		<div class="col-md-12 item-container">
+			<span class="labels">{{'activity.activity_summary_reason' | i18n}}</span>&nbsp;
+			<span>{{summary.reason}}</span>
+		</div>
+	</div>
+	<div class="row">
+		<div class="col-md-12 item-container">
+			<span class="labels">{{'activity.activity_summary_fishery_type' | i18n}}</span>&nbsp;
+			<span>{{summary.fisheryType}}</span>
+		</div>
+	</div>
+	<div class="row">
+		<div class="col-md-12 item-container">
+			<span class="labels">{{'activity.activity_summary_target_species' | i18n}}</span>&nbsp;
+			<span>{{summary.targetedSpecies | stArrayToString: ', '}}</span>
+		</div>
+	</div>
+</fieldset>

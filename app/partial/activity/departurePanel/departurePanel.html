@@ -1,0 +1,13 @@
+<div class="col-md-12 departure-panel" ng-controller="DeparturepanelCtrl">
+	<!-- Include directive for fishing trip generic info -->
+	<div class="col-md-12 main-content">
+		<div class="row title">
+			<span ng-class="{useColon: faServ.activityData.operationType}">{{'activity.fa_type_departure' | i18n}}</span>
+			<span class="operationType" ng-if="faServ.activityData.operationType">{{'activity.departure_optype_correction' | i18n}}</span>
+		</div>
+		<div class="row activity-summary-row">
+			<activity-summary-tile class="col-md-4 summary-section" fa-type="{{faServ.activityData.faType}}" summary="faServ.activityData.summary"></activity-summary-tile>
+			<location-tile class="col-md-3 summary-section" is-clickable="isLocationClickable()" field-title="{{'activity.activity_location_port_departure' | i18n}}" location-details="faServ.activityData.port" buffer-dist="5000" click-callback="portClickCallback()"></location-tile>
+		</div>
+	</div>
+</div>

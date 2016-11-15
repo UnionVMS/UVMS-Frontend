@@ -1631,7 +1631,7 @@ angular.module('unionvmsWeb').factory('mapService', function(locale, $rootScope,
 	 * @memberof mapService
 	 * @public
 	 * @alias getLayerByTitle
-	 * @params {String} title - The title of the layer to find
+	 * @param {String} title - The title of the layer to find
 	 * @returns {ol.layer} The OL layer
 	 */
 	ms.getLayerByTitle = function(title){

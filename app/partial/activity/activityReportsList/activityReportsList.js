@@ -55,7 +55,7 @@ angular.module('unionvmsWeb').controller('ActivityreportslistCtrl',function($sco
      * 
      * @memberof ActivityreportslistCtrl
      * @private
-     * @params {String} tablePredicate - The name of the attribute in the client side 
+     * @param {String} tablePredicate - The name of the attribute in the client side 
      * @returns {String} The name of the attribute in the server side
      */
     function getTruePredicate(tablePredicate){

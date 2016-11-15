@@ -1,9 +1,9 @@
 <div class="col-md-12 activity">
-	<div class="container containerWithTopBottomPadding">
+	<!-- <div class="container containerWithTopBottomPadding">
 		<breadcrumb-navigator items="actServ.breadcrumbPages" callback="breadcrumbClick()" ng-if="actServ.breadcrumbPages.length > 0"></breadcrumb-navigator>
         <div class="card">
-        	<!-- <div class="row card-header">
-            </div> -->
+        	<div class="row card-header">
+            </div>
             <div class="row card-body">
             	<div class="col-md-12" ng-include="'partial/activity/advancedSearchForm/advancedSearchForm.html'" ng-if="isPartialVisible(0)"></div>
             	<div ng-include="'partial/activity/activityReportsList/activityReportsList.html'" ng-if="isPartialVisible(0)"></div>
@@ -11,5 +11,6 @@
             	<div ng-include="'partial/activity/activityDetails/activityDetails.html'" ng-if="isPartialVisible(2)"></div>
 		    </div>
         </div>
-    </div>
+    </div> -->
+    <div class="row fullHeight" ng-include="'partial/activity/departurePanel/departurePanel.html'"></div>
 </div>
