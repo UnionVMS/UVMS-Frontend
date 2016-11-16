@@ -162,5 +162,10 @@
     "type": "Type",
     "id": "ID",
     "ref_id": "Ref. ID",
-    "purpose": "Purpose"
+    "purpose": "Purpose",
+    "role": "Role",
+    "characteristics": "Characteristics",
+    "mesh_size": "Mesh size",
+    "beam_length": "Beam length",
+    "number_beams": "Number of beams"
 }

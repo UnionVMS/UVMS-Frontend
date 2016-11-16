@@ -32,12 +32,8 @@
 				<span>{{faReport.creationDate | stDateUtc}}</span>
 			</div>
 			<div class="col-md-12 item-container">
-				<span class="labels">{{'activity.ref_id' | i18n}}</span>&nbsp;
-				<span>{{faReport.refId}}</span>
-			</div>
-			<div class="col-md-12 item-container">
 				<span class="labels">{{'activity.advanced_search_placeholder_purpose_code' | i18n}}</span>&nbsp;
-				<span>{{faReport.purposeCode | stPurposeCode}}</span>
+				<span>{{faReport.purposeCode}} - {{faReport.purposeCode | stPurposeCode}}</span>
 			</div>
 			<div class="col-md-12 item-container">
 				<span class="labels">{{'activity.purpose' | i18n}}</span>&nbsp;

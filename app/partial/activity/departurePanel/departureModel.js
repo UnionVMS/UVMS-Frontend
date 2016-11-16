@@ -60,7 +60,19 @@ angular.module('unionvmsWeb').factory('Departure',function() {
             geometry: 'POINT(5.5 60.5)'
         };
         this.gears = [{
-            type: 'TBB',
+            type: 'TBB: Trowling Beam',
+            role: 'On board',
+            meshSize: '80mm',
+            beamLength: '6m',
+            numBeams: 4
+        },{
+            type: 'SSC: Scottish Seines',
+            role: 'On board',
+            meshSize: '80mm',
+            beamLength: '6m',
+            numBeams: 4
+        },{
+            type: 'GND: Driftnets',
             role: 'On board',
             meshSize: '80mm',
             beamLength: '6m',
