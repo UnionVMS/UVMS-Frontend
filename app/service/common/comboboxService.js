@@ -54,7 +54,7 @@ angular.module('unionvmsWeb').factory('comboboxService', function($window) {
 			$(activeCombo.comboContainer).width($(activeCombo.element).find('.comboButtonContainer').outerWidth());
     		
     		var comboMenu = $('#' + activeCombo.comboboxId + '>.dropdown-menu');
-    		var footerTop = angular.element('footer').length>0 ? $(window).height() - angular.element('footer')[0].offsetHeight : $(window).height();
+    		var footerTop = angular.element('footer').length>0 ? $($window).height() - angular.element('footer')[0].offsetHeight + $window.pageYOffset : $($window).height() + $window.pageYOffset;
     		var bottomSpace = footerTop - buttonPosition.top;
     		var topSpace = $(activeCombo.element).offset().top;
 			//Fullscreen mode
@@ -63,14 +63,18 @@ angular.module('unionvmsWeb').factory('comboboxService', function($window) {
     			topSpace -= relativePos.top;
     		}
 
-    		if((activeCombo.loadedItems.length * 26 > 300 ? 300 : activeCombo.loadedItems.length * 26) > bottomSpace){
+			var comboContainerHeight = activeCombo.loadedItems.length * 26 + 14;
+			if(activeCombo.initialValue && activeCombo.initialValue.text && !activeCombo.noPlaceholderOnList && !activeCombo.multiple){
+				comboContainerHeight += 26;
+			}
+
+    		if((comboContainerHeight > 300 ? 300 : comboContainerHeight) > bottomSpace){
 				// check if there's more space above or below the combobox
     			if(topSpace > bottomSpace){
-    				var comboHeight = activeCombo.loadedItems.length * 26 + 16;
-    				comboHeight += (activeCombo.initialValue && activeCombo.initialValue.text && !activeCombo.noPlaceholderOnList && !activeCombo.multiple ? 26 : 0);
+    				var comboHeight = comboContainerHeight;
     				comboHeight = (comboHeight > 300 ? 300 + 4 : comboHeight);
 					activeCombo.comboContainer.css('top', buttonPosition.top - comboButtonHeight - comboHeight);
-    				if(topSpace < activeCombo.loadedItems.length * 26){
+    				if(topSpace < comboContainerHeight){
     					activeCombo.comboContainer.css('max-height', topSpace);
         			}
     			}else{
@@ -128,7 +132,7 @@ angular.module('unionvmsWeb').factory('comboboxService', function($window) {
 			activeCombo.isOpen = false;
 		}
 		
-		if(!activeCombo){
+		if(!activeCombo && comboScope){
 			$('[uib-modal-window]').bind('mousedown', function(event){
             	if(activeCombo && activeCombo.isOpen) {
 	                if (clickedInSameCombo(event)){
