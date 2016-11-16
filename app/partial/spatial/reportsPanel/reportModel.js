@@ -25,6 +25,10 @@ angular.module('unionvmsWeb').factory('Report',function(unitConversionService, u
 	        segments: {},
 	        tracks: {}
 	    };
+
+		this.hasFaFilter = false;
+		this.faFilters = {};
+
 	    this.areas = [];
 	    
 	    //Spatial configs
@@ -137,6 +141,21 @@ angular.module('unionvmsWeb').factory('Report',function(unitConversionService, u
 	            }
 	        }
 
+			//Fishing activity filters
+	        if (angular.isDefined(filter.fa)){
+                report.faFilters = filter.fa;
+            }
+
+	        if (!angular.equals({}, filter.fa)){
+	            report.hasFaFilter = true;
+	        }
+
+			if(!angular.isDefined(report.faFilters.weight)){
+				report.faFilters.weight = {unit: 'kg'};
+			}else if(!angular.isDefined(report.faFilters.weight.unit)){
+				report.faFilters.weight.unit = 'kg';
+			}
+
 	        report.areas = filter.areas;
 	        
 	        if (angular.isDefined(data.mapConfiguration)){
@@ -206,6 +225,19 @@ angular.module('unionvmsWeb').factory('Report',function(unitConversionService, u
 			}
 		}
 
+		//Fishing activity filter
+		var faFilters = this.faFilters;
+
+		if(angular.isDefined(faFilters.weight) && (!angular.isDefined(faFilters.weight.min) || _.isNull(faFilters.weight.min)) &&
+			(!angular.isDefined(faFilters.weight.max) || _.isNull(faFilters.weight.max))){
+			delete faFilters.weight;
+		}
+
+		if (_.isEmpty(faFilters)){
+			faFilters = undefined;
+		}
+
+
 	    var filter = {
 	        common: {
 				id: this.commonFilterId,
@@ -217,6 +249,7 @@ angular.module('unionvmsWeb').factory('Report',function(unitConversionService, u
 	        },
             assets: [],
             vms: vmsFilters,
+			fa: faFilters,
             areas: this.areas
 	    };
 
@@ -346,7 +379,20 @@ angular.module('unionvmsWeb').factory('Report',function(unitConversionService, u
 		if (validateFilterObject(report.filterExpression.vms.vmstrack,true) === false){
 			report.filterExpression.vms.vmstrack = undefined;
 		}
-        
+
+		//Fishing activity filter
+
+		report.filterExpression.fa = this.faFilters;
+
+		if(angular.isDefined(report.filterExpression.fa.weight) && (!angular.isDefined(report.filterExpression.fa.weight.min) || _.isNull(report.filterExpression.fa.weight.min)) &&
+			(!angular.isDefined(report.filterExpression.fa.weight.max) || _.isNull(report.filterExpression.fa.weight.max))){
+			delete report.filterExpression.fa.weight;
+		}
+
+		if (_.isEmpty(report.filterExpression.fa)){
+			report.filterExpression.fa = undefined;
+		}
+
         if(this.withMap === true){
         	report.mapConfiguration = {
         		coordinatesFormat: this.mapConfiguration.coordinatesFormat,
