@@ -60,10 +60,6 @@ angular.module('unionvmsWeb').factory('searchUtilsService',function(SearchField,
                         searchCriterias.push(new SearchField(fromDateKey, dateTimeService.formatUTCDateWithTimezone(moment().startOf('week').format("YYYY-MM-DD HH:mm"))));
                         searchCriterias.push(new SearchField(toDateKey, dateTimeService.formatUTCDateWithTimezone(moment.utc().format())));
                         break;
-                    case 'LAST_MONTH':
-                        searchCriterias.push(new SearchField(fromDateKey, dateTimeService.formatUTCDateWithTimezone(moment().startOf('month').format("YYYY-MM-DD HH:mm"))));
-                        searchCriterias.push(new SearchField(toDateKey, dateTimeService.formatUTCDateWithTimezone(moment.utc().format())));
-                        break;
                     default:
                         break;
                 }
@@ -172,7 +168,6 @@ angular.module('unionvmsWeb').factory('searchUtilsService',function(SearchField,
         var options = [
             {text: locale.getString('common.time_span_today'), code:'TODAY'},
             {text: locale.getString('common.time_span_this_week'), code:'THIS_WEEK'},
-            {text: locale.getString('common.time_span_last_month'), code:'LAST_MONTH'},
             {text: locale.getString('common.time_span_custom'), code:'CUSTOM'},
         ];
 
