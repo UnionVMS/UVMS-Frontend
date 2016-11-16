@@ -33,11 +33,11 @@ angular.module('unionvmsWeb').controller('TodayCtrl',function($scope, $interval,
                 type: "number"
             }, {
                 id: "desktop-id",
-                label: "Transponder alarms",
+                label: "Transponder alerts",
                 type: "number"
             }, {
                 id: "server-id",
-                label: "Transponder alarms",
+                label: "Transponder alerts",
                 type: "number"
             }, {
                 id: "cost-id",
@@ -46,7 +46,7 @@ angular.module('unionvmsWeb').controller('TodayCtrl',function($scope, $interval,
             }],
             "rows": [{
                 c: [{
-                    v: "Alarms in January"
+                    v: "Alerts in January"
                 }, {
                     v: 19
                 }, {
@@ -58,7 +58,7 @@ angular.module('unionvmsWeb').controller('TodayCtrl',function($scope, $interval,
                 }]
             }, {
                 c: [{
-                    v: "Alarms in February"
+                    v: "Alerts in February"
                 }, {
                     v: 13
                 }, {
@@ -70,7 +70,7 @@ angular.module('unionvmsWeb').controller('TodayCtrl',function($scope, $interval,
                 }]
             }, {
                 c: [{
-                        v: "Alarms in March"
+                        v: "Alerts in March"
                     }, {
                         v: 24
                     }, {
