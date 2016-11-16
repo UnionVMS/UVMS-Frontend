@@ -1,13 +1,12 @@
 /**
  * @memberof unionvmsWeb
  * @ngdoc service
- * @name mdrRestService
- * @param $q {service} A service that helps you run functions asynchronously, and use their return values (or exceptions) when they are done processing.
- * @param mdrRestServiceFactory {service}
+ * @name mdrRestFactory
+ * @param $resource {service} angular resource service
  * @description
- *  A REST service that serves all Master Data Registry requests
+ *  REST factory for the Master Data Registry(MDR)
  */
-angular.module('unionvmsWeb').factory('mdrRestServiceFactory',function($resource) {
+angular.module('unionvmsWeb').factory('mdrRestFactory',function($resource) {
   return {
           getCronJobExpression: function(){
               return $resource('/activity/rest/mdr/scheduler/config', {}, {
@@ -59,18 +58,28 @@ angular.module('unionvmsWeb').factory('mdrRestServiceFactory',function($resource
           }
       };
   })
-  .service('mdrRestService',function($q, mdrRestServiceFactory) {
+  /**
+   * @memberof unionvmsWeb
+   * @ngdoc service
+   * @name mdrRestService
+   * @param $q {service} angular $q service
+   * @param mdrRestFactory {service} The REST factory for the Master Data Registry(MDR) <p>{@link unionvmsWeb.mdrRestFactory}</p> 
+   * @description
+   *  REST services for the Master Data Registry(MDR)
+   */
+  .service('mdrRestService',function($q, mdrRestFactory) {
 
   	var mdrRestService = {
         /**
+         * Get the current cronJob expression
+         * 
          * @memberof mdrRestService
          * @public
-         * @returns {Promise} containing a response, which might be a String or an Error.
+         * @returns {Promise} A promise with either the current cronJob expression or reject error
          */
   	    getCronJobExpression: function(){
   	        var deferred = $q.defer();
-  	       // deferred.resolve('0 0/1 * 1/1 * ? *'); //mocked
-  	       mdrRestServiceFactory.getCronJobExpression().get(function(response){
+  	       mdrRestFactory.getCronJobExpression().get(function(response){
   	            deferred.resolve(response.data);
   	        }, function(error){
   	            console.error('Error getting MDR cron job settings.');
@@ -79,14 +88,15 @@ angular.module('unionvmsWeb').factory('mdrRestServiceFactory',function($resource
   	        return deferred.promise;
   	    },
         /**
+         * Save the current cronJob expression
+         * 
          * @memberof mdrRestService
          * @public
-         * @param {String} configs - the crontab expression
-         * @returns {Promise} containing a response.
+         * @returns {Promise} A promise with either the success code or reject error
          */
   	    updateCronJobExpression: function(configs){
   	       var deferred = $q.defer();
-  	       mdrRestServiceFactory.updateCronJobExpression().save(configs, function(response){
+  	       mdrRestFactory.updateCronJobExpression().save(configs, function(response){
   	           deferred.resolve(response);
   	       }, function(error){
   	           console.error('Error saving MDR cron job settings.');
@@ -95,14 +105,15 @@ angular.module('unionvmsWeb').factory('mdrRestServiceFactory',function($resource
   	       return deferred.promise;
   	    },
         /**
+         * Save the current cronJob expression
+         * 
          * @memberof mdrRestService
          * @public
-         * @param {String} configs - the crontab expression
-         * @returns {Promise} containing a response.
+         * @returns {Promise} A promise with either the MDR code list or reject error
          */
   	    getMDRCodeLists: function() {
   	        var deferred = $q.defer();
-  	        mdrRestServiceFactory.getMDRCodeLists().get(function(response) {
+  	        mdrRestFactory.getMDRCodeLists().get(function(response) {
   	            deferred.resolve(response.data);
   	        }, function(error) {
   	            console.error('Error listing the acronyms table');
@@ -111,27 +122,14 @@ angular.module('unionvmsWeb').factory('mdrRestServiceFactory',function($resource
   	        return deferred.promise;
   	    },
         /**
-         *  This method requests all code lists belonging to a given acronym, and updates the smart table state according to the response object.
+         *  Requests all code lists belonging to a given acronym, and updates the smart table state according to the response object.
          *
          * @memberof mdrRestService
          * @public
          * @param {String} acronym - is MDR acronym
-         * @param {String} tableState - is an object representing the smart table state, with the following structure:
-                        {
-                            pagination: {
-                                    start: 0,     // This is NOT the page number, but the index of item in the list that you want to use to display the table.
-                                    number: 10  // Number of entries showed per page.
-                            },
-                            search: {
-                                predicateObject: 'search text'
-                            },
-                            sort: {
-                                predicate: 'attributeName',
-                                reverse: true
-                            }
-                        }
-        * @returns {Promise} containing a response - either an array of code list objects, or an error.
-        */
+         * @param {String} tableState - is an object representing the smart table state
+         * @returns {Promise} A promise with either the MDR code list or reject error
+         */
   	    getMDRCodeListByAcronym: function(acronym, tableState) {
       	    var pagination = tableState.pagination;
             var offset = pagination.start || 0;     // This is NOT the page number, but the index of item in the list that you want to use to display the table.
@@ -141,7 +139,7 @@ angular.module('unionvmsWeb').factory('mdrRestServiceFactory',function($resource
             var sortReversed = tableState.sort.reverse;
 
             var deferred = $q.defer();
-            mdrRestServiceFactory.getMDRCodeListByAcronym(acronym, offset, size, filter, sortBy, sortReversed).get(function(response) {
+            mdrRestFactory.getMDRCodeListByAcronym(acronym, offset, size, filter, sortBy, sortReversed).get(function(response) {
                 tableState.pagination.numberOfPages = response.numberOfPages||0;//set the number of pages so the pagination can update
                 deferred.resolve(response.data);
             }, function(error) {
@@ -156,11 +154,11 @@ angular.module('unionvmsWeb').factory('mdrRestServiceFactory',function($resource
          * @memberof mdrRestService
          * @public
          * @param {Array} acronymsArray - is an array of acronyms (String).
-         * @returns {Promise} containing a response.
+         * @returns {Promise} containing the updated code list
          */
   	    syncNow: function(acronymsArray) {
   	        var deferred = $q.defer();
-  	        mdrRestServiceFactory.syncNow().update(acronymsArray, function(response){
+  	        mdrRestFactory.syncNow().update(acronymsArray, function(response){
                 deferred.resolve(response.data);
   	        },
   	        function(error) {
@@ -169,16 +167,16 @@ angular.module('unionvmsWeb').factory('mdrRestServiceFactory',function($resource
   	        });
   	        return deferred.promise;
   	    },
-  	     /**
+        /**
          *  This method requests an update of all MDR code lists.
          *
          * @memberof mdrRestService
          * @public
-         * @returns {Promise} containing a response.
+         * @returns {Promise} containing the updated code list
          */
         syncAllNow: function() {
             var deferred = $q.defer();
-            mdrRestServiceFactory.syncAllNow().get(function(response){
+            mdrRestFactory.syncAllNow().get(function(response){
                  deferred.resolve(response.data);
             },
             function(error) {
@@ -195,11 +193,11 @@ angular.module('unionvmsWeb').factory('mdrRestServiceFactory',function($resource
          * @public
          * @param {String} acronym - is the acronym which automatic update will be modified.
          * @param {boolean} schedulable - is a boolean flag. When false - the automatic update will be disabled and vice versa.
-         * @returns {Promise} containing a response.
+         * @returns {Promise} containing either the success code or the reject error
          */
         enableDisableScheduledUpdate: function(acronym, schedulable) {
             var deferred = $q.defer();
-            mdrRestServiceFactory.enableDisableScheduledUpdate().update({acronymID: acronym, schedulableFlag: schedulable},
+            mdrRestFactory.enableDisableScheduledUpdate().update({acronymID: acronym, schedulableFlag: schedulable},
                 function(response){
                      deferred.resolve(response.data);
                 },
