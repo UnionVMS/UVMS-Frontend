@@ -8,12 +8,14 @@
  */
 angular.module('unionvmsWeb').controller('ActivityfiltersfieldsetCtrl',function($scope){
 
+    //TODO replace the mocks when the REST service is ready
     $scope.reportTypes = [{
         code: 'NOTIFICATION', text: 'Notification'
     },{
         code: 'DECLARATION', text: 'Declaration'
     }];
 
+    //TODO replace the mocks when the REST service is ready
     $scope.activityTypes = [{
         code: 'DEPARTURE', text: 'Departure'
     },{
@@ -24,6 +26,7 @@ angular.module('unionvmsWeb').controller('ActivityfiltersfieldsetCtrl',function(
         code: 'AREA_EXIT', text: 'AREA_ENTRY'
     }];
 
+    //TODO replace the mocks when the REST service is ready
     $scope.ports = [{
         code: 'PORT1', text: 'PORT1'
     },{
@@ -34,6 +37,7 @@ angular.module('unionvmsWeb').controller('ActivityfiltersfieldsetCtrl',function(
         code: 'PORT4', text: 'PORT4'
     }];
 
+    //TODO replace the mocks when the REST service is ready
     $scope.gearTypes = [{
         code: 'GNS', text: 'Set gillnets (anchored)'
     },{
@@ -44,6 +48,7 @@ angular.module('unionvmsWeb').controller('ActivityfiltersfieldsetCtrl',function(
         code: 'GTR', text: 'Combined gillnets-trammel nets'
     }];
 
+    //TODO replace the mocks when the REST service is ready
     $scope.species = [{
         code: 'SOL', text: 'SOL'
     },{
@@ -54,6 +59,7 @@ angular.module('unionvmsWeb').controller('ActivityfiltersfieldsetCtrl',function(
         code: 'TUR', text: 'TUR'
     }];
 
+    //TODO replace the mocks when the REST service is ready
     $scope.weightUnits = [{
         code: 'kg', text: 'Kg'
     },{
