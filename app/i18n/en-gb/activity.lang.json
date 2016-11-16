@@ -143,7 +143,6 @@
     "advanced_search_max": "Max",
     "error_getting_mdr_code_lists": "Error getting mdr code lists",
 	"mdr_settings_loading": "Loading MDR settings",
-    "error_getting_mdr_code_lists": "Error getting mdr code lists",
 	"reports_form_activity_report_type": "Report Type",
 	"reports_form_activity_activity_type": "Activity Type",
 	"reports_form_activity_port": "Port",
