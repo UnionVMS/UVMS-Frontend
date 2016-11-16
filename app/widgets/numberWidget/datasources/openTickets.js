@@ -21,7 +21,7 @@ copy of the GNU General Public License along with the IFDM Suite. If not, see <h
 		return {
 			require: 'numberWidget',
 			link: function(scope, element, attrs, numberWidgetCtrl) {
-				numberWidgetCtrl.setTitle('Transponder alarms');
+				numberWidgetCtrl.setTitle('Transponder alerts');
 				function reload() {
 					countAlarms().then(function(count) {
 						numberWidgetCtrl.setValue(count);

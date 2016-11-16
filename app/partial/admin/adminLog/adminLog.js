@@ -175,13 +175,13 @@ angular.module('unionvmsWeb').controller('AuditlogCtrl', function($scope, $q, $f
                 case TYPES.ASSETS_AND_TERMINALS.POLL:
                     return "/polling/logs/" + audit.affectedObject;
                 case TYPES.ALARMS.ALARM:
-                    return "/alarms/holdingtable/" + audit.affectedObject;
+                    return "/alerts/holdingtable/" + audit.affectedObject;
                 case TYPES.ALARMS.TICKET:
-                    return "/alarms/notifications/" + audit.affectedObject;
+                    return "/alerts/notifications/" + audit.affectedObject;
                 case TYPES.ALARMS.CUSTOM_RULE:
                 case TYPES.ALARMS.CUSTOM_RULE_SUBSCRIPTION:
                 case TYPES.ALARMS.CUSTOM_RULE_ACTION_TRIGGERED:
-                    return "/alarms/rules/" + audit.affectedObject;
+                    return "/alerts/rules/" + audit.affectedObject;
                 case TYPES.POSITION_REPORTS.AUTOMATIC_POSITION_REPORT:
                 case TYPES.POSITION_REPORTS.MANUAL_POSITION_REPORT:
                     return "/movement/" + audit.affectedObject;
