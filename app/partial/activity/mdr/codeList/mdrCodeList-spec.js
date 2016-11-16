@@ -39,17 +39,8 @@ describe('MdrcodelistCtrl', function() {
     }));
 
     it('should ...', inject(function() {
-
-        /*scope.searchFilter = 'a';
-        
-          scope.$digest();
-
-        $timeout.flush(2000);
-
-        scope.$digest();*/
-
+        //TODO create unit test
         expect(1).toEqual(1);
-
     }));
 
 });

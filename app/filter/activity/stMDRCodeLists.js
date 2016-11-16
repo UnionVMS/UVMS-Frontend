@@ -1,4 +1,18 @@
+/**
+ * @memberof unionvmsWeb
+ * @ngdoc filter
+ * @name stMDRCodeLists
+ * @param $filter {Service} angular filter service
+ * @desc
+ *      filter the MDR code list table by MDR name and acronym
+ */
 angular.module('unionvmsWeb').filter('stMDRCodeLists', function($filter) {
+    /**
+     * @func filterMdrCodeList
+     * @memberof stMDRCodeLists
+     * @param {String} input - current iterator value
+     * @param {String} predicate - search value
+     */
     return function(input, predicate) {
         var searchString = predicate['$'];
 
