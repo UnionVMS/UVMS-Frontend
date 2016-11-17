@@ -12,7 +12,7 @@
 			</ul>
 		</span>		
 	</legend>
-	<div uib-carousel ng-class="{'without-arrows': ngModel.length <= 1}">
+	<div uib-carousel ng-class="{'without-arrows': ngModel.length <= 1}" ng-if="ngModel.length > 0">
 		<div uib-slide ng-repeat="item in ngModel track by $index" active="item.active" index="$index">
 			<div ng-include="templateUrl"></div>
 		</div>
@@ -23,5 +23,9 @@
         <a role="button" href class="right carousel-control">
             <span aria-hidden="true" class="glyphicon glyphicon-chevron-right"></span>
         </a>
+	</div>
+	<div class="no-data alert alert-info" ng-if="ngModel.length === 0">
+		<span class="fa fa-info-circle "></span>&nbsp;
+		<span>{{'activity.no_data' | i18n}}</span>
 	</div>
 </fieldset>

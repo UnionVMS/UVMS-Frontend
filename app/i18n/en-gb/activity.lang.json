@@ -167,5 +167,6 @@
     "characteristics": "Characteristics",
     "mesh_size": "Mesh size",
     "beam_length": "Beam length",
-    "number_beams": "Number of beams"
+    "number_beams": "Number of beams",
+    "no_data": "No data available"
 }
