@@ -10,23 +10,23 @@
  * @description
  *  The controller for the trip summary tab  
  */
-angular.module('unionvmsWeb').controller('TripspanelCtrl',function($scope, genericMapService, tripSummaryService, spatialConfigAlertService, Trip){
+angular.module('unionvmsWeb').controller('TripspanelCtrl', function ($scope, genericMapService, tripSummaryService, spatialConfigAlertService, Trip) {
 
     $scope.alert = spatialConfigAlertService;
     $scope.tripSummServ = tripSummaryService;
-    
+
     $scope.tripSummServ.resetMapConfigs();
-    
+
     /**
      * Sets map configs in trip summary service
      * 
      * @memberof TripspanelCtrl
      * @private
      */
-    var setTripSumServiceMapConfigs = function(){
+    var setTripSumServiceMapConfigs = function () {
         $scope.tripSummServ.mapConfigs = angular.copy(genericMapService.mapBasicConfigs);
     };
-    
+
     genericMapService.setMapBasicConfigs(setTripSumServiceMapConfigs);
 
     /**
@@ -37,9 +37,9 @@ angular.module('unionvmsWeb').controller('TripspanelCtrl',function($scope, gener
      * @alias closeTab
      * @param {Number} index - The index of the tab to be closed
      */
-    $scope.closeTab = function(index){
-        $scope.tripSummServ.tabs.splice(index,1);
-        if($scope.tripSummServ.tabs.length < 1){
+    $scope.closeTab = function (index) {
+        $scope.tripSummServ.tabs.splice(index, 1);
+        if ($scope.tripSummServ.tabs.length < 1) {
             $scope.repNav.goToPreviousView();
         }
     };
@@ -52,8 +52,8 @@ angular.module('unionvmsWeb').controller('TripspanelCtrl',function($scope, gener
      * @alias initializeTrip
      * @param {Number} index - The index of the tab to be initialized
      */
-    $scope.tripSummServ.initializeTrip = function(index){
-        if(angular.isDefined($scope.tripSummServ.tabs[index])){
+    $scope.tripSummServ.initializeTrip = function (index) {
+        if (angular.isDefined($scope.tripSummServ.tabs[index])) {
             $scope.tripSummServ.trip = new Trip($scope.tripSummServ.tabs[index].title);
             $scope.trip = $scope.tripSummServ.trip;
         }
@@ -66,9 +66,18 @@ angular.module('unionvmsWeb').controller('TripspanelCtrl',function($scope, gener
      * @public
      * @alias quitTripSummary
      */
-    $scope.quitTripSummary = function(){
-        $scope.tripSummServ.tabs.splice(0,$scope.tripSummServ.tabs.length);
-        $scope.repNav.goToPreviousView();
+    $scope.quitTripSummary = function () {
+        var currentView = $scope.repNav.getCurrentView();
+        switch (currentView) {
+            case 'catchDetails':
+                $scope.repNav.goToPreviousView();
+                break;
+            case 'tripSummary':
+                $scope.tripSummServ.tabs.splice(0, $scope.tripSummServ.tabs.length);
+                $scope.repNav.goToView('liveViewPanel', 'mapPanel');
+                break;
+        }
+
     };
 
 });

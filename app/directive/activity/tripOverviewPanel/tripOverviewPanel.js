@@ -1,3 +1,12 @@
+/**
+ * @memberof unionvmsWeb
+ * @ngdoc directive
+ * @name tripOverviewPanel
+ * @attr {Object} trip - current Fishing Trip Details.
+ * @description
+ *  A reusable tile that will display the Fishing Trip Details.
+ */
+
 angular.module('unionvmsWeb').directive('tripOverviewPanel', function () {
     return {
         restrict: 'E',
@@ -7,17 +16,7 @@ angular.module('unionvmsWeb').directive('tripOverviewPanel', function () {
          },
         templateUrl: 'directive/activity/tripOverviewPanel/tripOverviewPanel.html',
         link: function (scope, element, attrs, fn) {
-           /* scope.fieldTripData = {
-
-                tripID: 'BEL-TRP-O16-2016_0021',
-                vesselName: 'Beagle(BEL123456789)',
-                departure: 'yy-mm-dd hh:mm',
-                departureAt: 'BEZEE',
-                arrival: 'yy-mm-dd hh:mm',
-                arrivalAt: 'BEOST',
-                Landing: 'yy-mm-dd hh:mm',
-                LandingAt: 'BEOST'
-            }*/
+          
 
         }
     };
