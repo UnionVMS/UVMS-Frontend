@@ -168,5 +168,13 @@
     "mesh_size": "Mesh size",
     "beam_length": "Beam length",
     "number_beams": "Number of beams",
-    "no_data": "No data available"
+    "no_data": "No data available",
+    "unit": "Unit",
+    "class": "Class",
+    "bms": "BMS",
+    "lsc": "LSC",
+    "weight_means": "Weighting means",
+    "departure_catch_detail": "Retained on board",
+    "location": "Location",
+    "locations": "Locations"
 }

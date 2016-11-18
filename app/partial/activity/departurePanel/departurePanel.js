@@ -27,7 +27,8 @@ angular.module('unionvmsWeb').controller('DeparturepanelCtrl',function($scope, $
             clickable = true;
         }
         
-        return clickable;
+        //return clickable;
+        return true;
     };
     
     /**
@@ -35,9 +36,9 @@ angular.module('unionvmsWeb').controller('DeparturepanelCtrl',function($scope, $
      * 
      * @memberof DeparturepanelCtrl
      * @public
-     * @alias portClickCallback
+     * @alias locationClickCallback
      */
-    $scope.portClickCallback = function(){
+    $scope.locationClickCallback = function(){
         //TODO when we have it running with reports - mainly for hiding/showing stuff
         console.log('This is the click callback');
     };

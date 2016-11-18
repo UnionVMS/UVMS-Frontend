@@ -20,9 +20,15 @@ angular.module('unionvmsWeb').directive('locationTile', function() {
 		    locationDetails: '=',
 		    isClickable: "=",
 		    clickCallback: "&",
-		    bufferDist: '@'
+		    bufferDist: '@?',
+		    multiple: "="
 		},
-		templateUrl: 'directive/activity/locationTile/locationTile.html'
+		templateUrl: 'directive/activity/locationTile/locationTile.html',
+		compile: function(element, attrs){
+		    if (!attrs.multiple) {
+		        attrs.multiple = false;
+		    }
+		}
 	};
 })
 /**
@@ -42,24 +48,39 @@ angular.module('unionvmsWeb').directive('locationTile', function() {
      * @public
      * @alias zoomToLocation
      */
-    $scope.zoomToLocation = function(){
+    $scope.zoomToLocation = function(item){
+        if (!angular.isDefined(item)){
+            item = $scope.locationDetails;
+        }
         //TODO test this function when we have it running with reports
-        if ($scope.isClickable){
+        if ($scope.isItemClickable(item)){
             var wkt = new ol.format.WKT();
-            var geom = wkt.readGeometry($scope.locationDetails.geometry);
+            var geom = wkt.readGeometry(item.geometry);
             
-            var finalGeom;
-            if (!angular.isDefined($scope.bufferDist)){
-                finalGeom = geom;
-            } else {
+            var finalGeom = geom;
+            if (angular.isDefined($scope.bufferDist) && geom instanceof ol.geom.Point){
                 var extent = ol.extent.buffer(geom.getExtent(), parseFloat($scope.bufferDist));
                 finalGeom = ol.geom.Polygon.fromExtent(extent);
             }
             
-            //mapService.zoomTo(geom);
+            //mapService.zoomTo(finalGeom);
             if (angular.isDefined($scope.clickCallback)){
                 $scope.clickCallback();
             }
         }
+    };
+    
+    //item is optional
+    $scope.isItemClickable = function(item){
+        var clickableStatus = false;
+        if ($scope.isClickable){
+            if ($scope.multiple && angular.isDefined(item.geometry) && item.geometry !== '' && item.geometry !== null){
+                clickableStatus = true;
+            } else if (!$scope.mulltiple && angular.isDefined($scope.locationDetails.geometry) && $scope.locationDetails.geometry !== '' && $scope.locationDetails.geometry !== null){
+                clickableStatus = true;
+            }
+        }
+        
+        return clickableStatus;
     };
 });

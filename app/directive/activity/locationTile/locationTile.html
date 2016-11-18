@@ -2,12 +2,17 @@
 	<legend class="fieldsetLegendStyle">
 		<a>{{fieldTitle}}</a>
 	</legend>
-	<div class="row container">
-		<div class="col-md-12" ng-class="{clickable: isClickable}" ng-click="zoomToLocation()">
+	<div class="row" ng-switch="multiple" ng-class="{container: !multiple, 'container-multiple': multiple}">
+		<div class="col-md-12" ng-class="{clickable: isItemClickable()}" ng-click="zoomToLocation()" ng-switch-default>
 			<div class="icon-container">
 				<i class="fa fa-location-arrow" aria-hidden="true"></i>
 			</div>
 			<div class="name">{{locationDetails.name}}</div>
+		</div>
+		<div class="col-md-12 location-list" ng-switch-when="true">
+			<ul>
+				<li ng-repeat="location in locationDetails" ng-class="{'item-clickable': isItemClickable(location)}" ng-click="zoomToLocation(location)">{{location.name}}</li>
+			</ul>
 		</div>
 	</div>
 </fieldset>

@@ -36,7 +36,7 @@ angular.module('unionvmsWeb').factory('Departure',function() {
             purposeCode: undefined,
             purpose: undefined
         };
-        this.fishingData = {}; //TODO explicit fishing data for reference mainly
+        this.fishingData = [];
     }
     
     /**
@@ -87,7 +87,40 @@ angular.module('unionvmsWeb').factory('Departure',function() {
             purposeCode: 5,
             purpose: 'Altered departure port'
         };
-        this.fishingData = {};
+        this.fishingData = [{
+            species: 'COD',
+            speciesName: 'Gadus morhua',
+            lsc: 12000,
+            bms: 345,
+            locations: [{
+                name: '39F6-27.4.b.XEU',
+            }, {
+                name: '39F6-27.4.a.XEU',
+                geometry: 'POLYGON ((30 10, 10 20, 20 40, 40 40, 30 10))'
+            }],
+            details: {
+                type: 'ONB - Onboard',
+                unit: 123,
+                weightMeans: 'EST - Estimated'
+            }
+        },{
+            species: 'SOL',
+            speciesName: 'Sole',
+            lsc: 1200,
+            bms: 34,
+            locations: [{
+                name: '39F6-27.4.b.XEU',
+                geometry: ''
+            }, {
+                name: '39F6-27.4.a.XEU',
+                geometry: 'POINT(5.5 60.5)'
+            }],
+            details: {
+                type: 'ONB - Onboard',
+                unit: 124,
+                weightMeans: 'EST - Estimated'
+            }
+        }];
     };
     
     return Departure;

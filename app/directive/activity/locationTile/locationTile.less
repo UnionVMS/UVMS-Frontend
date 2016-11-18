@@ -1,4 +1,6 @@
 .location-tile {
+    height: 100%;
+    position: relative;
     .container {
         height: calc(~'100% - 20px');
         .col-md-12 {
@@ -8,6 +10,14 @@
                 cursor: pointer;
             }
         }
+    }
+    .container-multiple {
+        position: absolute;
+        top: 30px;
+        bottom: 0;
+        left: 0;
+        right: 15px;
+        overflow-y: auto;
     }
     .icon-container {
         text-align: center;
@@ -19,5 +29,17 @@
     }
     .name {
         text-align: center;
+    }
+    .location-list {
+        text-align: center;
+        li {
+            cursor: default;
+            &.item-clickable {
+                cursor: pointer;
+                &:hover {
+                    text-decoration: underline;
+                }
+            }
+        }
     }
 }
