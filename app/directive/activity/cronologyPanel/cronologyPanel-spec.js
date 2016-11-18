@@ -63,6 +63,7 @@ describe('cronologyPanel', function() {
 
     cronologyPanel.appendTo('#parent-container');
 
+    expect(angular.element('.cronology-section').length).toEqual(1);
     expect(actRestSpy.getTripCronology).toHaveBeenCalled();
 
     angular.element('cronology-panel').remove();

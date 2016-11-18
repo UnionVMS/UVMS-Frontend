@@ -212,6 +212,7 @@ angular.module('unionvmsWeb').factory('Trip',function(locale,unitConversionServi
         if(angular.isDefined(startDate) && angular.isDefined(endDate)){
             startDate = unitConversionService.date.convertToUserFormat(startDate);
             endDate = unitConversionService.date.convertToUserFormat(endDate);
+            
             if(startDate === endDate){
                 date = startDate;
             }else{
@@ -281,7 +282,7 @@ angular.module('unionvmsWeb').factory('Trip',function(locale,unitConversionServi
     var loadCatch = function(self,data){
 
         angular.forEach(data, function(type){
-            if(angular.isDefined(type.speciesList)){
+            if(angular.isDefined(type.speciesList) && type.speciesList.length > 0){
                 var colors = palette('tol-rainbow', type.speciesList.length);
                 angular.forEach(type.speciesList, function(value,key){
                     type.speciesList[key].color = '#' + colors[key];
