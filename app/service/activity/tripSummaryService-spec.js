@@ -71,7 +71,6 @@ describe('tripSummaryService', function() {
     expect(tripSummaryService.tabs[0].active).toBe(true);
     expect(tripSummaryService.tabs[1].title).toEqual('2');
     expect(tripSummaryService.tabs[1].active).toBe(false);
-	//expect(tripSummaryService.doSomething()).toEqual('something');
 
   }));
 
