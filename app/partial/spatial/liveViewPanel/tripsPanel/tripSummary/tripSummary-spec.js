@@ -5,13 +5,13 @@ describe('TripsummaryCtrl', function() {
 	var scope,ctrl,loadingStatus,$anchorScroll,locale,actRestServSpy,tripSumSpy;
 	
 	beforeEach(function(){
-			actRestServSpy = jasmine.createSpyObj('activityRestService', ['getTripVessel','getTripReports']);
-			tripSumSpy = jasmine.createSpy('tripSummaryService');
-			
-			module(function($provide){
-					$provide.value('activityRestService', actRestServSpy);
-					$provide.value('tripSummaryService', tripSumSpy);
-			});
+		actRestServSpy = jasmine.createSpyObj('activityRestService', ['getTripVessel','getTripReports']);
+		tripSumSpy = jasmine.createSpy('tripSummaryService');
+		
+		module(function($provide){
+				$provide.value('activityRestService', actRestServSpy);
+				$provide.value('tripSummaryService', tripSumSpy);
+		});
     });
 	
 	beforeEach(inject(function($httpBackend) {
@@ -23,8 +23,8 @@ describe('TripsummaryCtrl', function() {
 
 	beforeEach(inject(function(_loadingStatus_, _$anchorScroll_, _locale_) {
 		loadingStatus = _loadingStatus_;
-	  $anchorScroll = _$anchorScroll_;
-	  locale = _locale_;
+		$anchorScroll = _$anchorScroll_;
+		locale = _locale_;
 	}));
 
 	beforeEach(inject(function($rootScope, $controller, Trip) {
@@ -273,13 +273,11 @@ describe('TripsummaryCtrl', function() {
 
 	it('should ...', inject(function() {
 		scope.$digest();
-
 		scope.tripSummServ.isLoadingTrip = true;
-
 		scope.$digest();
 
-		expect(1).toEqual(1);
-		
+		expect(actRestServSpy.getTripVessel).toHaveBeenCalled();
+		expect(actRestServSpy.getTripReports).toHaveBeenCalled();
 	}));
 
 });

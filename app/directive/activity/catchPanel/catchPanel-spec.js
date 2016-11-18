@@ -77,6 +77,7 @@ describe('catchPanel', function() {
 
     catchPanel.appendTo('#parent-container');
 
+    expect(angular.element('.catch-section').length).toEqual(1);
     expect(actRestSpy.getTripCatches).toHaveBeenCalled();
 
     angular.element('catch-panel').remove();
