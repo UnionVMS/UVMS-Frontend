@@ -131,5 +131,6 @@
     "history_modal_vesselname" : "Linked asset",
     "history_modal_sattelitenumber" : "Satellite number",
     "history_modal_transpondertype" : "Transponder type",
+    "history_modal_channel_name" : "Name",
     "warning_plugin_inactive" : "The plugin that this terminal uses is inactivated."
 }
