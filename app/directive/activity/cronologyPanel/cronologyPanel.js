@@ -29,6 +29,7 @@ angular.module('unionvmsWeb').directive('cronologyPanel', function(loadingStatus
                 tripSummaryService.openNewTrip(tripName);
             };
 
+            //when tthe trip is initialized
             scope.$watch('trip',function(){
 				init();
 			});

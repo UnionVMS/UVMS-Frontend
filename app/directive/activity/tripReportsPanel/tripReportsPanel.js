@@ -18,6 +18,7 @@ angular.module('unionvmsWeb').directive('tripReportsPanel', function(loadingStat
 		templateUrl: 'directive/activity/tripReportsPanel/tripReportsPanel.html',
 		link: function(scope, element, attrs, fn) {
 
+            //Report table headers
             scope.reportHeaders = [
                 {
                     id: "type",
@@ -56,6 +57,7 @@ angular.module('unionvmsWeb').directive('tripReportsPanel', function(loadingStat
                 }
             ];
 
+            //when tthe trip is initialized
             scope.$watch('trip',function(){
 				init();
 			});
