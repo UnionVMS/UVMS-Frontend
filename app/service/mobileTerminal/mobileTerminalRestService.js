@@ -355,12 +355,7 @@ angular.module('unionvmsWeb')
                         return;
                     }
                     //Create list of MobileTerminalHistory
-                    var history = [];
-                    if(angular.isArray(response.data)){
-                        for (var i = 0; i < response.data.length; i ++) {
-                            history.push(MobileTerminalHistory.fromJson(response.data[i]));
-                        }
-                    }
+                    var history = MobileTerminalHistory.fromJson(response.data);
 
                     deferred.resolve(history);
                 }, function(error) {
@@ -374,20 +369,22 @@ angular.module('unionvmsWeb')
                 this.getHistoryForMobileTerminalByGUID(mobileTerminal.guid).then(function(history){
                     //Get associated carriers for all mobile terminals in the history items
                     var mobileTerminals = [];
-                    $.each(history, function(index, historyItem) {
-                        mobileTerminals.push(historyItem.mobileTerminal);
-                    });
+                    if (history) {
+                        $.each(history.events, function(index, historyItem) {
+                            mobileTerminals.push(historyItem);
+                        });
+                    }
 
                     mobileTerminalVesselService.getVesselsForListOfMobileTerminals(mobileTerminals).then(
                         function(vesselListPage){
                             //Connect the mobileTerminals to the vessels
 
-                            $.each(history, function(index, historyItem){
-                                var connectId = historyItem.connectId[0];
+                            $.each(history.events, function(index, historyItem){
+                                var connectId = historyItem.connectId;
                                 if(angular.isDefined(connectId) && typeof connectId === 'string' && connectId.trim().length >0){
                                     var matchingVessel = vesselListPage.getVesselByGuid(connectId);
                                         if(angular.isDefined(matchingVessel)){
-                                            historyItem.mobileTerminal.associatedVessel = matchingVessel;
+                                            historyItem.associatedVessel = matchingVessel;
                                         }
                                     }
                             });
