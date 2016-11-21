@@ -14,47 +14,131 @@ describe('MobileTerminalHistory', function() {
     beforeEach(module('unionvmsWeb'));
 
     var responseData  = {
-      "eventCode": "MODIFY",
-      "connectId": null,
-      "sateliteNumber": "3435",
-      "comChannelHistory": [
-        {
-          "comChannelInfo": [
-            {
-              "name": "VMS",
-              "attributes": [
-                {
-                  "type": "DNID",
-                  "value": "10745"
-                },
-                {
-                  "type": "MEMBER_NUMBER",
-                  "value": "255"
-                }
-              ]
-            }
-          ]
-        },
-        {
-          "comChannelInfo": null
-        }
-      ],
-      "changeDate": "2016-11-14T10:02:22.671Z",
-      "comments": "asdf"
+        "events": [
+          {
+            "eventCode": "CREATE",
+            "serialNumber": "1",
+            "attributes": [
+              {
+                "type": "ANSWER_BACK",
+                "value": "4"
+              },
+              {
+                "type": "SERIAL_NUMBER",
+                "value": "1"
+              },
+              {
+                "type": "SATELLITE_NUMBER",
+                "value": "3"
+              },
+              {
+                "type": "ANTENNA",
+                "value": "2"
+              },
+              {
+                "type": "TRANSCEIVER_TYPE",
+                "value": "5"
+              },
+              {
+                "type": "MULTIPLE_OCEAN",
+                "value": "581"
+              },
+              {
+                "type": "SOFTWARE_VERSION",
+                "value": "6"
+              }
+            ],
+            "changeDate": "2016-11-18T14:57:30.705Z",
+            "comments": "Automatic create comment"
+          }
+        ],
+        "comChannels": [
+          {
+            "channel": [
+              {
+                "eventCode": "CREATE",
+                "changeDate": "2016-11-18T14:57:30.707Z",
+                "name": "VMS",
+                "attributes": [
+                  {
+                    "type": "FREQUENCY_GRACE_PERIOD",
+                    "value": "0"
+                  },
+                  {
+                    "type": "MEMBER_NUMBER",
+                    "value": "12"
+                  },
+                  {
+                    "type": "FREQUENCY_EXPECTED",
+                    "value": "0"
+                  },
+                  {
+                    "type": "FREQUENCY_IN_PORT",
+                    "value": "0"
+                  },
+                  {
+                    "type": "LES_DESCRIPTION",
+                    "value": "twostage"
+                  },
+                  {
+                    "type": "DNID",
+                    "value": "55"
+                  }
+                ]
+              }
+            ]
+          },
+          {
+            "channel": [
+              {
+                "eventCode": "CREATE",
+                "changeDate": "2016-11-21T08:24:38.125Z",
+                "name": "HAV",
+                "attributes": [
+                  {
+                    "type": "FREQUENCY_GRACE_PERIOD",
+                    "value": "0"
+                  },
+                  {
+                    "type": "MEMBER_NUMBER",
+                    "value": "2"
+                  },
+                  {
+                    "type": "FREQUENCY_EXPECTED",
+                    "value": "0"
+                  },
+                  {
+                    "type": "FREQUENCY_IN_PORT",
+                    "value": "0"
+                  },
+                  {
+                    "type": "LES_DESCRIPTION",
+                    "value": "twostage"
+                  },
+                  {
+                    "type": "DNID",
+                    "value": "1"
+                  }
+                ]
+              }
+            ]
+          }
+        ]
     };
 
     it('fromJson should build a correct object', inject(function(MobileTerminalHistory) {
         var history = MobileTerminalHistory.fromJson(responseData);
 
-        expect(history.satelliteNumber).toEqual("3435");
-        expect(history.comment).toEqual(responseData.comments);
-        expect(history.eventCode).toEqual(responseData.eventCode);
-        expect(history.changeDate).toEqual(responseData.changeDate);
+        expect(history.events[0].eventCode).toEqual(responseData.events[0].eventCode);
+        expect(history.events[0].serialNumber).toEqual(responseData.events[0].serialNumber);
+        expect(history.events[0].changeDate).toEqual(responseData.events[0].changeDate);
 
-        expect(history.comChannelHistory[0].comChannelInfo[0].name).toEqual("VMS");
-        expect(history.comChannelHistory[0].comChannelInfo[0].attributes[0].type).toEqual("DNID");
-        expect(history.comChannelHistory[0].comChannelInfo[0].attributes[0].value).toEqual("10745");
-        expect(history.comChannelHistory[0].comChannelInfo[0].attributes[1].type).toEqual("MEMBER_NUMBER");
-        expect(history.comChannelHistory[0].comChannelInfo[0].attributes[1].value).toEqual("255");
+        expect(history.channels[0].events[0].name).toEqual(responseData.comChannels[0].channel[0].name);
+        expect(history.channels[0].events[0].eventCode).toEqual(responseData.comChannels[0].channel[0].eventCode);
+        expect(history.channels[0].events[0].changeDate).toEqual(responseData.comChannels[0].channel[0].changeDate);
+
+        expect(history.channels[1].events[0].name).toEqual(responseData.comChannels[1].channel[0].name);
+        expect(history.channels[1].events[0].eventCode).toEqual(responseData.comChannels[1].channel[0].eventCode);
+        expect(history.channels[1].events[0].changeDate).toEqual(responseData.comChannels[1].channel[0].changeDate);
     }));
 });
