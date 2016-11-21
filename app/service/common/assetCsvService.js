@@ -21,8 +21,6 @@ copy of the GNU General Public License along with the IFDM Suite. If not, see <h
         };
 
         function getHeader(asset) {
-
-
             return [
                 locale.getString('vessel.vessel_details_flagstate'),
                 locale.getString('vessel.vessel_details_IRCS_code'),
@@ -39,10 +37,7 @@ copy of the GNU General Public License along with the IFDM Suite. If not, see <h
                 getMainPowerHeader(),
                 locale.getString("vessel.po_name"),
                 locale.getString("vessel.po_code"),
-                locale.getString("vessel.vessel_details_contact_name"),
-                locale.getString("vessel.vessel_details_email"),
-                locale.getString("vessel.vessel_details_contact_number"),
-                locale.getString("vessel.notes")
+                locale.getString("vessel.vessel_details_contacts"),
             ];
         }
 
@@ -63,10 +58,7 @@ copy of the GNU General Public License along with the IFDM Suite. If not, see <h
                 asset.powerMain,
                 asset.producer.name,
                 asset.producer.code,
-                asset.contact.name,
-                asset.contact.email,
-                asset.contact.number,
-                asset.notes
+                getContactsDetails(asset)
             ]];
         }
 
@@ -90,6 +82,15 @@ copy of the GNU General Public License along with the IFDM Suite. If not, see <h
             var mainPower = locale.getString("vessel.vessel_details_main_power");
             var unit = locale.getString("common.kw");
             return mainPower + " (" + unit + ")";
+        }
+
+        function getContactsDetails(asset) {
+            var tempContactsDetails = [];
+            for (i = 0; i < asset.contact.length; i++) { 
+                tempContactsDetails.push(asset.contact[i].name + " " + asset.contact[i].email + " " + asset.contact[i].number);
+            }
+            var contactsDetails = tempContactsDetails.join(', ');
+            return [contactsDetails];
         }
     });
 })();

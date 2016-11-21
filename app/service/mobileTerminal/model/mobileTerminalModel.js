@@ -16,7 +16,7 @@ angular.module('unionvmsWeb').factory('MobileTerminal', function(CommunicationCh
 
             //Add an initial channel
             this.channels = [createDefaultChannel()];
-            this.active = true;
+            this.active = false;
             this.connectId = undefined;
             this.associatedVessel = undefined;
             this.guid = undefined;
@@ -126,7 +126,8 @@ angular.module('unionvmsWeb').factory('MobileTerminal', function(CommunicationCh
                 channels : jsonChannels,
                 mobileTerminalId : { guid: this.guid },
                 type : this.type,
-                plugin : this.plugin
+                plugin : this.plugin,
+                inactive : !this.active
             };
         };
 

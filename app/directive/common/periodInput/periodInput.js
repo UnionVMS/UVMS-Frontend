@@ -17,7 +17,8 @@ angular.module('unionvmsWeb').directive('periodInput', function($compile) {
 		scope: {
             model : '=',
             ngDisabled : '=',
-            ngRequired : '='
+            ngRequired : '=',
+            noMinutes : '='
 		},
 		templateUrl: 'directive/common/periodInput/periodInput.html',
 		link: function(scope, element, attrs, fn) {
@@ -80,7 +81,7 @@ angular.module('unionvmsWeb')
             }
             else{
                 setModelValueFromHoursAndMinutes();
-            }            
+            }
         });
 
         var init = function(){
@@ -88,5 +89,5 @@ angular.module('unionvmsWeb')
         };
 
 
-        init();  
+        init();
 });

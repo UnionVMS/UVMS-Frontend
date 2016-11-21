@@ -23,17 +23,16 @@ describe('configurationService', function() {
     beforeEach(inject(function($rootScope, $q, vesselRestService, movementRestService, mobileTerminalRestService) {
 
         var vesselDeffered = $q.defer();
-        vesselDeffered.resolve({LETTER : 'A', COUNTRY : 'SWE'}); 
-        vesselRestSpy = spyOn(vesselRestService, 'getConfig').andReturn(vesselDeffered.promise); 
+        vesselDeffered.resolve({LETTER : 'A', COUNTRY : 'SWE'});
+        vesselRestSpy = spyOn(vesselRestService, 'getConfig').andReturn(vesselDeffered.promise);
 
         var movementDeffered = $q.defer();
-        movementDeffered.resolve({THEME : 'GREEN', NUMBER : 2, BUILDINGS : buildings}); 
-        spyOn(movementRestService, 'getConfig').andReturn(movementDeffered.promise); 
+        movementDeffered.resolve({THEME : 'GREEN', NUMBER : 2, BUILDINGS : buildings});
+        spyOn(movementRestService, 'getConfig').andReturn(movementDeffered.promise);
 
         var deffered = $q.defer();
-        deffered.resolve({THEME : 'GREEN', NUMBER : 2, BUILDINGS : buildings}); 
+        deffered.resolve({THEME : 'GREEN', NUMBER : 2, BUILDINGS : buildings});
         spyOn(mobileTerminalRestService, 'getTranspondersConfig').andReturn(deffered.promise);
-        spyOn(mobileTerminalRestService, 'getChannelNames').andReturn(deffered.promise);
         spyOn(mobileTerminalRestService, 'getConfig').andReturn(deffered.promise);
     }));
 

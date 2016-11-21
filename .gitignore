@@ -1,0 +1,10 @@
+bower_components
+/dist
+/fonts
+/node
+/node_modules
+/target
+/testResults
+*.iml
+font-awesome
+**/.idea

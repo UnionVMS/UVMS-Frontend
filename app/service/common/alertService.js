@@ -65,6 +65,9 @@ angular.module('unionvmsWeb').factory('alertService',function($timeout) {
         showSuccessMessageWithTimeout : function(message){
             showMessageWithTimeout(message, 'SUCCESS');
         },
+        showActionBarMessage : function(message){
+            showMessage(message, 'ACTIONBAR')
+        },
         hideMessage : function(){
             currentAlert.message = "";
         },

@@ -35,7 +35,7 @@ copy of the GNU General Public License along with the IFDM Suite. If not, see <h
 			'04-mobileTerminals.html',
 			'05-positions.html',
 			'06-polling.html',
-			'07-alarms.html',
+			'07-alerts.html',
 			'08-exchange.html',
 			'09-reports.html',
 			'10-user.html',

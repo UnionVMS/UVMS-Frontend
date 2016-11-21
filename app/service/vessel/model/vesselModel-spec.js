@@ -43,15 +43,52 @@ describe('VesselModel', function() {
         "grossTonnage": 34.34,
         "grossTonnageUnit": "LONDON",
         "powerMain": 456.234,
-        "notes" : "Test ship",
-        "contact" : {
-            "name" : "Test Test",
-            "email" : "test@test.com",
-            "number" : "057623234",
-        },
+        "notes" : [
+          {
+            "date": "2016-06-29T08:55:27.795+02:00",
+            "activity": "V02",
+            "user": "ANTFON",
+            "licenseHolder": "170322-1224",
+            "notes": "SEJ 2016-07-17 07:10 11 59 33,40 / 12 21,56\\nsvar på mail fr landkontrollen (Apa Kanin) fartyget ligger vid kaj",
+            "source": "NATIONAL"
+          },
+            {
+              "date": "2016-03-29T08:55:27.795+02:00",
+              "activity": "V02",
+              "user": "VMS_ADMIN_COM",
+              "readyDate": "2016-03-30T18:55:27.795+02:00",
+              "licenseHolder": "781012-1234",
+              "contact": "sten@sture",
+              "sheetNumber": "XYZ-123",
+              "notes": "Hej hej",
+              "document": "how will this work, I wonder?",
+              "source": "INTERNAL"
+            }
+          ],
+        "contact" : [{
+             "name": "Apan",
+             "number": "0701111111",
+             "email": "apa@skogen",
+             "owner": true,
+             "source": "INTERNAL"
+           },
+           {
+             "name": "Kaninen",
+             "number": "0701222222",
+             "email": "kanin@skogen",
+             "owner": false,
+             "source": "INTERNAL"
+           }
+           ],
         "producer" : {
-            "code" : "123AB",
-            "name" : "ProducerName"
+            "id" : "123AB",
+            "name" : "ProducerName",
+            "address" : "ProducerAddress",
+            "zipcode" : "ProducerZipcode",
+            "city" : "ProducerCity",
+            "phone" : "ProducerPhone",
+            "mobile" : "ProducerMobile",
+            "fax" : "ProducerFax"
         },
     };
 
@@ -62,14 +99,14 @@ describe('VesselModel', function() {
         expect(vessel.vesselId).toBeUndefined();
         expect(vessel.active).toEqual(true);
         expect(vessel.source).toEqual("INTERNAL");
-        expect(vessel.notes).toEqual("");
+        expect(vessel.notes).toEqual([]);
+        expect(vessel.contact).toEqual([]);
     }));
 
     it("should parse JSON correctly", inject(function(Vessel) {
         var vessel = Vessel.fromJson(vesselData);
 
         expect(vessel.eventHistory).toBeDefined();
-        expect(vessel.notes).toEqual(vesselData.notes);
 
         expect(vessel.vesselId.guid).toEqual(vesselData.assetId.guid);
         expect(vessel.vesselId.value).toEqual(vesselData.assetId.value);
@@ -99,12 +136,16 @@ describe('VesselModel', function() {
         expect(vessel.powerMain).toEqual(vesselData.powerMain);
         expect(vessel.gearType).toEqual(vesselData.gearType);
 
-        expect(vessel.contact.name).toEqual(vesselData.contact.name);
-        expect(vessel.contact.email).toEqual(vesselData.contact.email);
-        expect(vessel.contact.number).toEqual(vesselData.contact.number);
-        expect(vessel.producer.code).toEqual(vesselData.producer.code);
+        expect(vessel.contact.length).toEqual(vesselData.contact.length);
+        expect(vessel.notes.length).toEqual(vesselData.notes.length);
+        expect(vessel.producer.id).toEqual(vesselData.producer.id);
         expect(vessel.producer.name).toEqual(vesselData.producer.name);
-
+        expect(vessel.producer.address).toEqual(vesselData.producer.address);
+        expect(vessel.producer.zipcode).toEqual(vesselData.producer.zipcode);
+        expect(vessel.producer.city).toEqual(vesselData.producer.city);
+        expect(vessel.producer.phone).toEqual(vesselData.producer.phone);
+        expect(vessel.producer.mobile).toEqual(vesselData.producer.mobile);
+        expect(vessel.producer.fax).toEqual(vesselData.producer.fax);
     }));
 
     it("copy should create an identical object", inject(function(Vessel) {
@@ -112,7 +153,6 @@ describe('VesselModel', function() {
         var vesselCopy = origVessel.copy();
 
         expect(vesselCopy.eventHistory).toBeDefined();
-        expect(vesselCopy.notes).toEqual(origVessel.notes);
 
         expect(vesselCopy.vesselId.guid).toEqual(origVessel.vesselId.guid);
         expect(vesselCopy.vesselId.value).toEqual(origVessel.vesselId.value);
@@ -140,9 +180,8 @@ describe('VesselModel', function() {
         expect(vesselCopy.powerMain).toEqual(origVessel.powerMain);
         expect(vesselCopy.gearType).toEqual(origVessel.gearType);
 
-        expect(vesselCopy.contact.name).toEqual(origVessel.contact.name);
-        expect(vesselCopy.contact.email).toEqual(origVessel.contact.email);
-        expect(vesselCopy.contact.number).toEqual(origVessel.contact.number);
+        expect(vesselCopy.contact.length).toEqual(origVessel.contact.length);
+        expect(vesselCopy.notes.length).toEqual(origVessel.notes.length);
         expect(vesselCopy.producer.code).toEqual(origVessel.producer.code);
         expect(vesselCopy.producer.name).toEqual(origVessel.producer.name);
 

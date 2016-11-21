@@ -36,7 +36,7 @@ describe('VesselCtrl', function() {
 
     it('should search for vessels on init', inject(function(Vessel, $q, searchService) {
         var deferred = $q.defer();
-        var searchVesselSpy = spyOn(searchService, "searchVessels").andReturn(deferred.promise);
+        var searchVesselSpy = spyOn(searchService, "searchLatestMovements").andReturn(deferred.promise);
         var controller = createController();
 
         expect(searchVesselSpy).toHaveBeenCalled();
@@ -44,7 +44,7 @@ describe('VesselCtrl', function() {
 
     it('should get vessel by id on init if state param id is available', inject(function(Vessel, $q, searchService, vesselRestService) {
         var deferred = $q.defer();
-        var searchVesselSpy = spyOn(searchService, "searchVessels").andReturn(deferred.promise);
+        var searchVesselSpy = spyOn(searchService, "searchLatestMovements").andReturn(deferred.promise);
 
         var deferred2 = $q.defer();
         var foundVessel = new Vessel();
@@ -63,7 +63,7 @@ describe('VesselCtrl', function() {
 
     it('should get vessel by id on init if state param id is available should handle error', inject(function(Vessel, $q, searchService, vesselRestService, alertService) {
         var deferred = $q.defer();
-        var searchVesselSpy = spyOn(searchService, "searchVessels").andReturn(deferred.promise);
+        var searchVesselSpy = spyOn(searchService, "searchLatestMovements").andReturn(deferred.promise);
 
         var deferred2 = $q.defer();
         deferred2.reject("ERROR");
@@ -152,6 +152,7 @@ describe('VesselCtrl', function() {
 
             var deferred = $q.defer();
             var searchSpy = spyOn(searchService, "searchVessels").andReturn(deferred.promise);
+            var searchVesselSpy = spyOn(searchService, "searchLatestMovements").andReturn(deferred.promise);
             var vessel = new Vessel();
             vessel.name = "ABCD-123";
             var items = [vessel];
@@ -164,6 +165,7 @@ describe('VesselCtrl', function() {
             expect(scope.currentSearchResults.loading).toBeTruthy();
             scope.$digest();
             expect(searchSpy).toHaveBeenCalled();
+            expect(searchVesselSpy).toHaveBeenCalled();
             expect(scope.currentSearchResults.items[0]).toEqual(vessel);
             expect(scope.currentSearchResults.loading).toBeFalsy();
             expect(scope.currentSearchResults.errorMessage).toEqual('');
@@ -174,6 +176,7 @@ describe('VesselCtrl', function() {
 
             var deferred = $q.defer();
             var searchSpy = spyOn(searchService, "searchVessels").andReturn(deferred.promise);
+            var searchVesselSpy = spyOn(searchService, "searchLatestMovements").andReturn(deferred.promise);
             var localeSpy = spyOn(locale, "getString").andReturn("TRANSLATED_TEXT");
             deferred.reject();
 
@@ -183,6 +186,7 @@ describe('VesselCtrl', function() {
             expect(scope.currentSearchResults.loading).toBeTruthy();
             scope.$digest();
             expect(searchSpy).toHaveBeenCalled();
+            expect(searchVesselSpy).toHaveBeenCalled();
             expect(scope.currentSearchResults.items.length).toEqual(0);
             expect(scope.currentSearchResults.loading).toBeFalsy();
             expect(scope.currentSearchResults.errorMessage).not.toEqual('');
@@ -192,6 +196,7 @@ describe('VesselCtrl', function() {
 
             var deferred = $q.defer();
             var searchSpy = spyOn(searchService, "searchVessels").andReturn(deferred.promise);
+            var searchVesselSpy = spyOn(searchService, "searchLatestMovements").andReturn(deferred.promise);
             var setPageSpy = spyOn(searchService, "setPage");
             deferred.reject();
 
@@ -204,6 +209,7 @@ describe('VesselCtrl', function() {
 
             expect(setPageSpy).toHaveBeenCalledWith(page);
             expect(searchSpy).toHaveBeenCalled();
+            expect(searchVesselSpy).toHaveBeenCalled();
         }));
     });
 

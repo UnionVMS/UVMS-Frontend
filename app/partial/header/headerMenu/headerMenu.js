@@ -117,13 +117,13 @@ angular.module('unionvmsWeb').controller('HeaderMenuCtrl',function($scope, $root
         var alarmsLink = false;
         var alarmsElemId;
         if(checkAccess('Rules', 'viewAlarmsHoldingTable')){
-            alarmsLink = '/alarms/holdingtable';
+            alarmsLink = '/alerts/holdingtable';
             alarmsElemId = 'holding-table';
         }else if(checkAccess('Rules', 'viewAlarmsOpenTickets')){
-            alarmsLink = '/alarms/notifications';
+            alarmsLink = '/alerts/notifications';
             alarmsElemId = 'alarms-notifications';
         }else if(checkAccess('Rules', 'viewAlarmRules')){
-            alarmsLink = '/alarms/rules';
+            alarmsLink = '/alerts/rules';
             alarmsElemId = 'alarms-rules';
         }
         if(alarmsLink){

@@ -12,34 +12,63 @@ copy of the GNU General Public License along with the IFDM Suite. If not, see <h
 .fullWidthDropdown{
     .dropdowntext {
         overflow: hidden;
-        text-overflow:ellipsis;
-        padding-right: 5px;
-        color:#555555;
+        text-overflow: ellipsis;
+        margin-right: 20px;
+        color: @form-input-textcolor;
+
+        &.placeholderColor {
+            color: @form-input-placeholder-color;
+        }
     }
 
     .dropdown-menu {
-      min-width: 100%;
-      border-color: @primaryColor;
+        min-width: 100%;
+        border-color: @primaryColor;
+        border-radius: 0;
+
+        .initial-text {
+            a, a:hover, a:active {
+                cursor: pointer;
+            }
+        }
     }
 
-    .btn{
-     width: 100%;
+    &.open .dropdown-toggle, 
+    .dropdown-toggle {
+        width: 100%;
+        background-color: @form-input-background;
+
+        .placeholderColor{
+            color: @form-input-placeholder-color;
+        }
+
+        &:hover, &:focus, &:active {
+            background-color: @form-input-background;
+        }
+
+        &:disabled {
+            .disabled-input();
+        }
     }
 }
 
-.dropdown-menu {
-  border-radius: 0px;
-  max-height: 300px !important;
-	.disabled {
-		 a:hover{
-		 		cursor: pointer;
-		 	}
-	}
-  li > a{
-    color:#555555;
-  }
-}
+fieldset[disabled] {
+    .dropdown-toggle {
+        .disabled-input();
 
-.placeholderColor{
-  color: #999999 !important;
+        .placeholderColor,
+        .placeholderText {
+            visibility: hidden;
+        }
+    }
+
+    .dropdown {
+        cursor: not-allowed;
+
+        &:hover {
+            .dropdown-toggle {
+                border-color: @primaryColor;
+            }
+        }
+    }
 }

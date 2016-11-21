@@ -15,28 +15,47 @@ copy of the GNU General Public License along with the IFDM Suite. If not, see <h
     .detailsContainer{
         padding-top: 20px;
         padding-bottom: 20px;
+        .clear();
+    }
+
+    .notesContainer {
+        .grayBorderTop();
+        .clear();
+        .flexbox();
+
+        .notesListContainer {
+            .grayBorderRight();
+            padding: 15px; 
+
+            .list td {
+                &:first-child {
+                    width: 30%;
+                }
+                &:nth-child(2) {
+                    width: 70%;
+                }
+            }
+        }
+
+        .notesForm {
+            padding: 15px;
+        }
     }
 
     .historyAndTerminalInformation{
         .grayBorderTop();
-        margin-top: 20px;
-        padding-bottom: 10px;
+        .flexbox();
+
+        margin-bottom: -15px;
 
         >.row{
             padding-top: 10px;
         }
 
-        h5{
-            margin-top: 0px;
-            margin-bottom: 10px;
-        }
-
-        .loadingIndicator{
-            margin-top: 20px;
-        }
-
         .historyContainer{
-            td{
+            padding: 15px; 
+            
+            .list td{
                 &:first-child{
                     width: 30%;
                 }
@@ -47,6 +66,8 @@ copy of the GNU General Public License along with the IFDM Suite. If not, see <h
         }
 
         .terminalsContainer{
+            padding: 15px; 
+
             td{
                 width: 25%;
             }
@@ -54,55 +75,18 @@ copy of the GNU General Public License along with the IFDM Suite. If not, see <h
                 color:#aaa;
             }
         }
+    }
 
-        .notesContainer{
-            textarea{
-                width: 100%;
-                resize: none;
-            }
+    .mobileTerminalsContainer {
+        margin-top: 40px;
+
+        h3 {
+            margin: 0;
         }
     }
 
-    .mobileTerminalsContainer{
-        margin-top: 20px;
-        .mobileTerminal {
-            .borderSection();
-            margin-top: 0;
-            margin-bottom: 15px;
-
-            .infoRow{
-                padding-top:6px;
-            }
-
-            .mobileTerminalChannels {
-                padding-top: 6px;
-                padding-bottom: 6px;
-                margin-bottom: 10px;
-
-                .channelsHeader {
-                    margin-top: 6px;
-                }
-
-                .align-middle {
-                    align-items: center;
-                    display: flex;
-                }
-
-                .mobileTerminalChannel {
-                    padding-top: 0;
-                    min-height: initial;
-                }
-            }
-
-            .mobile-terminal-attribute p {
-                font-weight: normal;
-                white-space: nowrap;
-                overflow: hidden;
-            }
-        }
-
-        .mobileTerminal-warning {
-            border-color: #faebcc;
-        }
+    h5 {
+        margin-top: 0px;
+        margin-bottom: 10px;
     }
 }

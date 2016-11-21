@@ -66,7 +66,6 @@ angular.module('unionvmsWeb')
 
     $scope.advancedSearchObject  = searchService.getAdvancedSearchObject();
 
-
     //Search by the advanced search form inputs
     $scope.performAdvancedSearch = function(){
         //Create criterias
@@ -83,7 +82,12 @@ angular.module('unionvmsWeb')
         if(value === undefined || (typeof value === 'string' && value.trim().length === 0) ){
             delete $scope.advancedSearchObject[key];
         }else{
-            $scope.advancedSearchObject[key] = value;
+            // Flag state should handle multiple search options
+            if(key === 'FLAG_STATE') {
+                $scope.advancedSearchObject[key].push(value);
+            }else{
+                $scope.advancedSearchObject[key] = value;
+            }
         }
     };
 
@@ -106,6 +110,11 @@ angular.module('unionvmsWeb')
         //Update advancedSearchObject with values from the saved search
         searchService.resetAdvancedSearch();
         if(updateAdvancedSearchObject){
+            // Create empty object for each search criteria present
+            for (var i = 0; i < searchService.getSearchCriterias().length; i++) {
+                $scope.advancedSearchObject[searchService.getSearchCriterias()[i].key] = [];
+            }
+
             $.each(searchService.getSearchCriterias(), function(index, searchField){
                 $scope.updateAdvancedSearchObject(searchField.key, searchField.value);
             });

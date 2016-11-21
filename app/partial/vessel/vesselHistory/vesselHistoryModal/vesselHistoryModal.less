@@ -9,20 +9,64 @@ the hope that it will be useful, but WITHOUT ANY WARRANTY; without even the impl
 FITNESS FOR A PARTICULAR PURPOSE.  See the GNU General Public License for more details. You should have received a
 copy of the GNU General Public License along with the IFDM Suite. If not, see <http://www.gnu.org/licenses/>.
  */
-.vesselHistoryContainer{
+.vesselHistoryContainer {
 
-    .sectionHeader{
-        color: #777;
-        .grayBorderBottom;
-        padding-top: 15px;
+    .modal-header {
+        .clearfix();
+
+        .modal-title {
+            line-height: 30px;
+        }
+
+        .modal-description {
+            padding: 10px 0 0 0;
+        }
     }
-
-    .historyValues{
+    
+    .modal-body {
         line-height: 22px;
+        text-transform: uppercase;
+        .clearfix();
+
+        b {
+            text-transform: none;
+        }
+
+        .sectionHeader {
+            color: #777;
+            .grayBorderBottom;
+            padding-top: 20px;
+
+            &:first-of-type {
+                padding-top: 0;
+            }
+        }
+
+        .contacts {
+            .clearfix();
+            margin: 0;
+
+            .contact {
+                .clearfix();
+                padding-bottom: 10px;
+
+                &:last-of-type {
+                    padding-bottom: 0;
+                }
+            }
+
+        }   
     }
 
-    text-transform: uppercase;
-    b{
-        text-transform: none;
+    .modal-footer {
+        .btn {
+            padding-top: 1px;
+            padding-bottom: 0;
+        }
+    }
+
+    [class*="col-md-"] {
+        padding-left: 0;
+        padding-right: 0;
     }
 }

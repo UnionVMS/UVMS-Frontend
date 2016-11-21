@@ -11,22 +11,19 @@ copy of the GNU General Public License along with the IFDM Suite. If not, see <h
  */
 .tagSelectInputContainer{
     @minHeight: 30px;
-    @minWidth: 160px;
-    @tagHeight:22px;
-
-    //max-width: 200px;
-    min-width: @minWidth;
+    @tagHeight: 22px;
 
     .tagSelectInputContainerWrapper{
         position: relative;
-        min-height: @minHeight;
     }
 
     .tagSelectButton{
         height: auto !important;
-        min-height: @minHeight !important;
-        padding: 0 2px !important;
+        min-height: @minHeight;
+        padding: 0 !important;
         border-radius: 2px;
+        .flexbox();
+        align-items: center;
 
         .caretWrapper{
             .caret{
@@ -37,20 +34,30 @@ copy of the GNU General Public License along with the IFDM Suite. If not, see <h
         }
     }
 
-    .placeholderText{
+    .placeholderText, 
+    .multipleSelectionsPlaceholder {
         color:#999;
         margin-right: 20px;
-        margin-top: 3px;
-        text-align: left;
-        padding-left: 7px;
+        padding-left: 5px;
+        overflow: hidden;
+        text-overflow: ellipsis;
+        line-height: initial;
+    }
+
+    .multipleSelectionsPlaceholder {
+        color: #555555;
+        text-transform: lowercase;
+        &:first-letter {
+            text-transform: capitalize;
+        }
     }
 
     .selection{
-        width: 100%;
-        margin-right: 50px;
+        overflow: hidden;
+
         .tag{
             float: left;
-            margin: 3px 2px 1px 0;
+            margin: 2px;
             padding: 0 3px;
             height: @tagHeight;
             line-height: @tagHeight;
@@ -79,6 +86,78 @@ copy of the GNU General Public License along with the IFDM Suite. If not, see <h
                 }
             }
         }
+    }
 
+    &.multipleSelection {
+        .dropdown-menu {
+            padding-top: 0;
+            padding-bottom: 0;
+            width: 100%;
+            min-width: 180px;
+
+            .select-all {
+                .clear();
+                background: @searchResultsTableOddRowColor;
+
+                span {
+                    padding: 8px;
+                    color: @profileColor_blue;
+
+                    &.disabled,
+                    &.disabled:hover {
+                        color: #999999;
+                        cursor: default;   
+                    }
+
+                    &:hover {
+                        color: darken(@profileColor_blue, 3%);
+                    }
+
+                    &.left { float: left; text-align: left; width: 50%; }
+                    &.right { float: right; text-align: right; width: 50%; }
+                }            
+            }
+
+            li {
+                position: relative;
+                border-bottom: 1px solid transparent;
+
+                a {
+                    padding-top: 8px;
+                    padding-bottom: 8px;
+
+                    &:focus {
+                        background: transparent;
+                    }
+
+                    &:before {
+                        content: "";
+                        left: 5px;
+                        .postion-absolut-vertical();
+                    }
+                }
+
+                &.disabled, 
+                &.disabled:focus {
+                    background: @profileColor_blue;
+                    color: #fff;
+                    border-color: darken(@profileColor_blue, 3%);
+
+                    a {
+                        color: #fff;
+
+                        &:hover {
+                            cursor: pointer;
+                        }
+
+                        &:before {
+                            .icon-font-bootstrap(10px);
+                            content: "\f00c";
+                            margin-top: -1px;
+                        }                    
+                    }
+                }
+            }
+        }
     }
 }

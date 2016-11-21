@@ -1,27 +1,14 @@
-<!--
-﻿Developed with the contribution of the European Commission - Directorate General for Maritime Affairs and Fisheries
-© European Union, 2015-2016.
-
-This file is part of the Integrated Fisheries Data Management (IFDM) Suite. The IFDM Suite is free software: you can
-redistribute it and/or modify it under the terms of the GNU General Public License as published by the
-Free Software Foundation, either version 3 of the License, or any later version. The IFDM Suite is distributed in
-the hope that it will be useful, but WITHOUT ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or
-FITNESS FOR A PARTICULAR PURPOSE.  See the GNU General Public License for more details. You should have received a
-copy of the GNU General Public License along with the IFDM Suite. If not, see <http://www.gnu.org/licenses/>.
--->
-<div>
-    <div class="dropdown fullWidthDropdown">
-        <button class="btn btn-default dropdown-toggle" type="button" data-toggle="dropdown" aria-expanded="true" ng-disabled="ngDisabled">
-            <div ng-class="setplaceholdercolor ? 'placeholderColor':''" class="dropdowntext" ng-bind="currentItemLabel"></div>
-            <span class="caret"></span>
-        </button>
-        <ul class="dropdown-menu" role="menu">
-            <li ng-class="!initialtextSelectable ? 'disabled' : ''" ng-show="initialValue" ng-click="selectVal(initialValue)">
-                <a role="menuitem" tabindex="-1" ng-bind="initialValue.text"></a>
-            </li>
-            <li ng-class="disableItem(item) ? 'disabled' : ''" ng-repeat="item in items" role="presentation" ng-click="selectVal(item,$index)">
-                <a role="menuitem" tabindex="-1" ng-bind="getItemLabel(item)"></a>
-            </li>
-        </ul>
-    </div>
+<div class="fullWidthDropdown" uib-dropdown uib-keyboard-nav ng-keyup="keyboardEvent($event)">
+    <button class="btn btn-default" uib-dropdown-toggle type="button" ng-disabled="ngDisabled" tabindex="{{tabIndex}}">
+        <div ng-class="setplaceholdercolor ? 'placeholderColor':''" class="dropdowntext" ng-bind="currentItemLabel"></div>
+        <span class="caret"></span>
+    </button>
+    <ul uib-dropdown-menu role="menu">
+        <li ng-class="!initialtextSelectable ? 'disabled initial-text' : 'initial-text'" ng-show="initialValue" ng-click="selectVal(initialValue)">
+            <a role="menuitem" tabindex="-1" ng-bind="initialValue.text" ng-focus="focusVal(initialValue)"></a>
+        </li>
+        <li ng-class="disableItem(item) ? 'disabled' : ''" ng-repeat="item in items" role="presentation" ng-click="selectVal(item,$index)">
+            <a role="menuitem" tabindex="-1" ng-bind="getItemLabel(item)" ng-focus="focusVal(item,$index)"></a>
+        </li>
+    </ul>
 </div>

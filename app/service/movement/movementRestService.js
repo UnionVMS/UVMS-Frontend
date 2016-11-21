@@ -19,6 +19,12 @@ angular.module('unionvmsWeb')
                 list : { method : 'POST'}
             });
         },
+        getMinimalMovementList : function(){
+            return $resource('/movement/rest/movement/list/minimal',{},
+            {
+                list : { method : 'POST'}
+            });
+        },
         getLatestMovementsByConnectIds : function(){
             return $resource('/movement/rest/movement/latest',{},
             {
@@ -27,6 +33,9 @@ angular.module('unionvmsWeb')
         },
         getMovement: function() {
             return $resource('/movement/rest/movement/:id');
+        },
+        getLatestMovement: function() {
+            return $resource('/movement/rest/movement/latest/:id');
         },
         savedSearch : function() {
             return $resource('/movement/rest/search/group/:groupId', {}, {
@@ -80,6 +89,37 @@ angular.module('unionvmsWeb')
         return deferred.promise;
     };
 
+    var getMinimalMovementList = function(getListRequest){
+
+            var deferred = $q.defer();
+            movementRestFactory.getMinimalMovementList().list(getListRequest.DTOForMovement(),
+                function(response){
+
+                    if(response.code !== "200"){
+                        deferred.reject("Invalid response status");
+                        return;
+                    }
+
+                    var movements = [];
+
+                    if(angular.isArray(response.data.movement)){
+                        for (var i = 0; i < response.data.movement.length; i++){
+                            movements.push(Movement.fromJson(response.data.movement[i]));
+                        }
+                    }
+                    var currentPage = response.data.currentPage;
+                    var totalNumberOfPages = response.data.totalNumberOfPages;
+                    var searchResultListPage = new SearchResultListPage(movements, currentPage, totalNumberOfPages);
+                    deferred.resolve(searchResultListPage);
+                },
+                function(error){
+                    console.log("Error getting movements.", error);
+                    deferred.reject(error);
+                }
+            );
+            return deferred.promise;
+        };
+
     var getLatestMovementsByConnectIds = function(listOfConnectIds){
 
         var deferred = $q.defer();
@@ -117,6 +157,27 @@ angular.module('unionvmsWeb')
             }
 
             deferred.resolve(Movement.fromJson(response.data));
+        },
+        function(error) {
+            deferred.reject(error);
+        });
+
+        return deferred.promise;
+    };
+
+    var getLatestMovement = function(latestMovementId) {
+        var deferred = $q.defer();
+        movementRestFactory.getLatestMovement().get({id: latestMovementId}, function(response) {
+            if (response.code !== "200") {
+               deferred.reject("Invalid response status");
+               return;
+            }
+            var movementList = [];
+            for (movement in response.data) {
+                var move = Movement.fromJson(response.data[movement]);
+                movementList.push(move);
+            }
+            deferred.resolve(movementList);
         },
         function(error) {
             deferred.reject(error);
@@ -248,8 +309,10 @@ angular.module('unionvmsWeb')
 
     return {
         getMovementList : getMovementList,
+        getMinimalMovementList : getMinimalMovementList,
         getLatestMovementsByConnectIds : getLatestMovementsByConnectIds,
         getMovement: getMovement,
+        getLatestMovement: getLatestMovement,
         getLastMovement: getLastMovement,
         getSavedSearches : getSavedSearches,
         createNewSavedSearch : createNewSavedSearch,

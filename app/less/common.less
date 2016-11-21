@@ -341,7 +341,7 @@ a:hover{
     .closeicon{
         width: 30px;
         height: 30px;
-        line-height: 30px;
+        line-height: 28px;
         cursor: pointer;
         background: #fff;
         font-size: 16px;
@@ -535,4 +535,79 @@ a:hover{
             text-decoration: underline;
         }   
     }
+}
+
+
+// Flexbox
+.flexbox() {
+    display: -webkit-box;
+    display: -moz-box;
+    display: -ms-flexbox;
+    display: -webkit-flex;
+    display: flex;
+}
+
+.flex(@values) {
+    -webkit-box-flex: @values;
+    -moz-box-flex: @values;
+    -webkit-flex: @values;
+    -ms-flex: @values;
+    flex: @values;
+}
+
+.flexorder(@val) {
+    -webkit-box-ordinal-group: @val;  
+    -moz-box-ordinal-group: @val;     
+    -ms-flex-order: @val;     
+    -webkit-order: @val;  
+    order: @val;
+}
+
+
+// Clearfix
+.clear {
+    &:after {
+        content: '';
+        display: table;
+        clear: both;
+    }
+}
+
+// Alignments 
+.postion-absolut-vertical-horizontal() {
+    position: absolute;
+    left: 50%;
+    top: 50%;
+    -webkit-transform: translate(-50%,-50%);
+    -moz-transform: translate(-50%,-50%);
+    -ms-transform: translate(-50%,-50%);
+    -o-transform: translate(-50%,-50%);
+    transform: translate(-50%,-50%);
+}
+
+.postion-absolut-vertical() {
+    position: absolute;
+    top: 50%;
+    -webkit-transform: translate(0,-50%);
+    -moz-transform: translate(0,-50%);
+    -ms-transform: translate(0,-50%);
+    -o-transform: translate(0,-50%);
+    transform: translate(0,-50%);
+}
+
+// Transitions
+.transition-all-ease(@val) {
+    -webkit-transition: all @val ease;
+    -moz-transition: all @val ease;
+    -o-transition: all @val ease;
+    transition: all @val ease;
+}
+
+// Icon font 
+.icon-font-bootstrap(@fontSize) {
+    display: inline-block;
+    font: normal normal normal @fontSize/0px FontAwesome;
+    text-rendering: auto;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
 }

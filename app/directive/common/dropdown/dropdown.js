@@ -28,7 +28,8 @@ angular.module('unionvmsWeb')
             ngModel:'=',
             callback : '=',
             callbackParams : '=',
-            ngDisabled : '='
+            ngDisabled : '=',
+            tabIndex : '='
 		},
         templateUrl: 'directive/common/dropdown/dropdown.html',
 		link: function(scope, element, attrs, fn) {
@@ -166,11 +167,29 @@ angular.module('unionvmsWeb')
                 return false;
             };
 
+            // Focused item when selecting using keyboard
+            scope.focusVal = function(item) {
+                scope.focusedItem = item;
+
+            }
+
+            // Keyboard selection
+            scope.keyboardEvent = function($event) { 
+                if ($event.keyCode === 13) {
+                    onClickOutsideMultiSelectDropdown();
+                    if(angular.isDefined(scope.focusedItem)){
+                        scope.selectVal(scope.focusedItem);
+                        angular.element(event.currentTarget).toggleClass('open');
+                        scope.focusedItem = undefined;          
+                    }
+                } 
+            }
+
             scope.setLabel();
             //Create a list item with the initaltext?
             if(scope.initialitem && !scope.menuStyle){
                 scope.addDefaultValueToDropDown();
-            }
+            }  
 		}
 	};
 });

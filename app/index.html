@@ -105,12 +105,15 @@ copy of the GNU General Public License along with the IFDM Suite. If not, see <h
     <script src="directive/common/validation/customValidators.js"></script>
     <script src="directive/common/loadingIndicator/loadingIndicator.js"></script>
     <script src="directive/common/resize/resize.js"></script>
+    <script src="directive/common/menuBar/menuBar.js"></script>
     <script src="directive/spatial/layerTree/layerTree.js"></script>
     <script src="directive/common/transformInput/unitTransformers.js"></script>
     <script src="directive/common/pageTitle/pageTitle.js"></script>
 
     <script src="directive/polling/newPollWizardProgress/newPollWizardProgress.js"></script>
     <script src="directive/vessel/vesselDetails/vesselDetails.js"></script>
+    <script src="directive/vessel/vesselNotes/vesselNotes.js"></script>
+    <script src="directive/mobileTerminal/mobileTerminalDetails/mobileTerminalDetails.js"></script>
 
     <script src="partial/alerts/alerts.js"></script>
     <script src="partial/footer/footer.js"></script>
@@ -136,6 +139,7 @@ copy of the GNU General Public License along with the IFDM Suite. If not, see <h
     <script src="partial/common/saveSearchModal/saveSearchModal.js"></script>
     <script src="partial/vessel/vessel.js"></script>
     <script src="partial/vessel/vesselHistory/vesselHistoryModal/vesselHistoryModal.js"></script>
+    <script src="partial/vessel/vesselNotes/vesselNotesModal/vesselNotesModal.js"></script>
     <script src="partial/vessel/vesselList/vesselList.js"></script>
     <script src="partial/vessel/vesselForm/vesselForm.js"></script>
 
@@ -172,6 +176,8 @@ copy of the GNU General Public License along with the IFDM Suite. If not, see <h
     <script src="service/vessel/model/eventHistoryModel.js"></script>
     <script src="service/vessel/model/vesselListPageModel.js"></script>
     <script src="service/vessel/model/vesselModel.js"></script>
+    <script src="service/vessel/model/contactModel.js"></script>
+    <script src="service/vessel/model/notesModel.js"></script>
     <script src="partial/admin/adminModel.js"></script>
     <script src="service/vessel/vesselRestService.js"></script>
     <script src="service/mobileTerminal/mobileTerminalVesselService.js"></script>
@@ -439,8 +445,10 @@ copy of the GNU General Public License along with the IFDM Suite. If not, see <h
     <script src="partial/common/reportsPagination/reportsPagination.js"></script>
     <script src="directive/spatial/destroyMapScope/destroyMapScope.js"></script>
     <script src="directive/spatial/wmsPreview/wmsPreview.js"></script>
-    <!-- Add New Component JS Above --> 
-	
+
+    <script src="debugConfig.js"></script>
+    <!-- Add New Component JS Above -->
+
 	<div ui-view name="unionvmsHeader"></div>
 
     <div id="contentWrapper">

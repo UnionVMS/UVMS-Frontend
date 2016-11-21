@@ -12,18 +12,19 @@ copy of the GNU General Public License along with the IFDM Suite. If not, see <h
 angular.module('unionvmsWeb').factory('MobileTerminalHistory', function(MobileTerminal) {
 
     function MobileTerminalHistory(){
-        this.changeDate = undefined;
-        this.comment = undefined;
-        this.eventCode = undefined;
-        this.mobileTerminal = undefined;
+        this.events = [];
+        this.channels = [];
     }
 
     MobileTerminalHistory.fromJson = function(data){
         var history = new MobileTerminalHistory();
-        history.eventCode = data.eventCode;
-        history.changeDate = data.changeDate;
-        history.comment = data.comments;
-        history.mobileTerminal = MobileTerminal.fromJson(data.mobileTerminal);
+        history.events = angular.copy(data.events);
+        for (var index in data.comChannels) {
+            var channel = data.comChannels[index];
+            var events = channel.channel;
+            channel = {"events": events};
+            history.channels.push(channel);
+        }
         return history;
     };
 

@@ -9,7 +9,7 @@ the hope that it will be useful, but WITHOUT ANY WARRANTY; without even the impl
 FITNESS FOR A PARTICULAR PURPOSE.  See the GNU General Public License for more details. You should have received a
 copy of the GNU General Public License along with the IFDM Suite. If not, see <http://www.gnu.org/licenses/>.
  */
-angular.module('unionvmsWeb').controller('mobileTerminalFormCtrl',function($scope, locale, MobileTerminal, alertService, userService, mobileTerminalRestService, modalComment, MobileTerminalHistoryModal, mobileTerminalCsvService){
+angular.module('unionvmsWeb').controller('mobileTerminalFormCtrl',function($filter, $scope, locale, MobileTerminal, alertService, userService, mobileTerminalRestService, modalComment, MobileTerminalHistoryModal, mobileTerminalCsvService){
 
     var checkAccessToFeature = function(feature) {
         return userService.isAllowed(feature, 'Union-VMS', true);
@@ -17,7 +17,7 @@ angular.module('unionvmsWeb').controller('mobileTerminalFormCtrl',function($scop
 
     //Visibility statuses
     $scope.isVisible = {
-        assignVessel : false,
+        assignVessel : false
     };
 
     $scope.typeAndPlugin = undefined;
@@ -42,10 +42,17 @@ angular.module('unionvmsWeb').controller('mobileTerminalFormCtrl',function($scop
         }
     });
 
+    //Check if form is displayed from Asset page
+    $scope.vesselFormDisplayed = function(){
+        if(angular.isDefined($scope.$parent.vesselObj)){
+            return true;
+        }
+        return false;
+    };
+
     //Has form submit been atempted?
     $scope.submitAttempted = false;
     $scope.waitingForCreateResponse = false;
-
 
     //Disable form
     $scope.disableForm = function(){
@@ -111,7 +118,7 @@ angular.module('unionvmsWeb').controller('mobileTerminalFormCtrl',function($scop
 
     //Create the mobile terminal
     $scope.createNewMobileTerminal = function(){
-        $scope.submitAttempted = true;
+        $scope.submitAttempted = true;        
 
         //Validate form
         if(!$scope.mobileTerminalForm.$valid){
@@ -134,13 +141,19 @@ angular.module('unionvmsWeb').controller('mobileTerminalFormCtrl',function($scop
 
     //Success creating the new mobile terminal
     var createNewMobileTerminalSuccess = function(mobileTerminal) {
-        $scope.waitingForCreateResponse = false;
-        $scope.existingChannels = [];
-        $scope.existingSerialNumber = undefined;
-        $scope.currentMobileTerminal = mobileTerminal;
-        alertService.showSuccessMessageWithTimeout(locale.getString('mobileTerminal.add_new_alert_message_on_success'));
-
-        $scope.setCreateMode(false, true);
+        if ($scope.vesselFormDisplayed()) {
+            mobileTerminalRestService.assignMobileTerminal(mobileTerminal, $scope.$parent.vesselObj.getGuid(), "-")
+            .then(function() {
+                alertService.showSuccessMessage(locale.getString('mobileTerminal.add_new_alert_message_on_success'));
+            });
+        } else {
+            alertService.showSuccessMessageWithTimeout(locale.getString('mobileTerminal.add_new_alert_message_on_success'));
+        }
+            $scope.waitingForCreateResponse = false;
+            $scope.existingChannels = [];
+            $scope.existingSerialNumber = undefined;
+            $scope.currentMobileTerminal = mobileTerminal;
+            $scope.setCreateMode(false, true);
     };
 
     //Error creating the new mobile terminal
@@ -384,5 +397,52 @@ angular.module('unionvmsWeb').controller('mobileTerminalFormCtrl',function($scop
     //Show/hide assign vessel
     $scope.toggleAssignVessel = function(){
         $scope.isVisible.assignVessel = !$scope.isVisible.assignVessel;
+    };
+
+    $scope.getMenuHeader = function() {
+        if ($scope.createNewMode) {
+            return $filter('i18n')('mobileTerminal.add_new_form_mobile_terminal_label'); 
+        }
+        return $filter('transponderName')($scope.currentMobileTerminal.type);
+    }
+
+    $scope.menuBarFunctions = {
+        saveCallback: $scope.createNewMobileTerminal,
+        updateCallback: $scope.updateMobileTerminal,
+        cancelCallback: $scope.toggleMobileTerminalDetails,
+        showCancel: function() {
+            if (!$scope.createMobileTerminalWithVessel.visible) {
+                return true;
+            } 
+            return false;
+        },
+        exportToCsvCallback: $scope.exportTerminalCSV,
+        showExport: function(mobileTerminal) {
+            if (mobileTerminal) {
+                return angular.isDefined(mobileTerminal.guid) && mobileTerminal.guid != null;
+            }
+            return false;
+        },
+        archiveCallback: $scope.archiveMobileTerminal,
+        showArchive: function(mobileTerminal) {
+            if (mobileTerminal) {
+                return angular.isDefined(mobileTerminal.guid) && mobileTerminal.guid != null && !mobileTerminal.archived;
+            }
+            return false;
+        },
+        unlinkCallback: $scope.unassignVessel,
+        showUnlink: function(mobileTerminal) {
+            if (mobileTerminal) {
+                return angular.isDefined(mobileTerminal.connectId) && mobileTerminal.connectId != null;
+            }
+            return false;
+        },
+        historyCallback: $scope.onMobileTerminalHistoryClick,
+        showHistory: function(mobileTerminal) {
+            if (mobileTerminal) {
+                return angular.isDefined(mobileTerminal.guid) && mobileTerminal.guid != null;
+            }
+            return false;
+        }
     };
 });

@@ -57,8 +57,8 @@ copy of the GNU General Public License along with the IFDM Suite. If not, see <h
                     <span ng-show="item.associatedVessel && !item.associatedVessel.mmsiNo"> - </span>
                 </td>
                 <td>
-                    <span ng-if="item.active" class="label label-success">{{'common.active' | i18n | uppercase}}</span>
-                    <span ng-if="!item.active" class="label label-danger">{{'common.inactive' | i18n | uppercase}}</span>
+                    <span ng-if="item.active" class="mobile-terminal-status label label-success">{{'common.active' | i18n | uppercase}}</span>
+                    <span ng-if="!item.active" class="mobile-terminal-status label label-danger">{{'common.inactive' | i18n | uppercase}}</span>
                 </td>
                 <td>
                     <button class="btn btn-default btn-sm" ng-click="toggleMobileTerminalDetails(item)">

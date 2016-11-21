@@ -47,9 +47,10 @@ angular.module('unionvmsWeb').factory('searchService',function($q, $log, searchU
     };
 
     //First get movements, and the get the matching vessels
-    var getMovements = function(movementRequest) {
+    var getMovements = function(movementRequest, isMinimalRequest) {
         var deferred = $q.defer();
-        movementRestService.getMovementList(movementRequest).then(function(page) {
+
+        var getMovementOk = function(page) {
             //Zero results?
             if(page.getNumberOfItems() === 0){
                 deferred.resolve(page);
@@ -78,15 +79,23 @@ angular.module('unionvmsWeb').factory('searchService',function($q, $log, searchU
             }, function(error){
                 onGetMovementsError(error, deferred);
             });
-        }, function(error){
-            onGetMovementsError(error, deferred);
-        });
+        }
+
+        if (isMinimalRequest) {
+            movementRestService.getMinimalMovementList(movementRequest).then(getMovementOk, function(error){
+                onGetMovementsError(error, deferred);
+            });
+        } else {
+            movementRestService.getMovementList(movementRequest).then(getMovementOk, function(error){
+                onGetMovementsError(error, deferred);
+            });
+        }
 
         return deferred.promise;
     };
 
     //First get vessels, and the get the movements
-    var getMovementsByVessels = function(vesselRequest, movementRequest) {
+    var getMovementsByVessels = function(vesselRequest, movementRequest, isMinimalRequest) {
         var deferred = $q.defer();
         vesselRestService.getAllMatchingVessels(vesselRequest).then(function(vessels) {
             if (vessels.length === 0) {
@@ -102,7 +111,7 @@ angular.module('unionvmsWeb').factory('searchService',function($q, $log, searchU
                 }
             });
 
-            movementRestService.getMovementList(movementRequest).then(function(page) {
+            var getMovementOk = function(page) {
                 $.each(page.items, function(index, movement) {
                     var vessel = vesselsByGuid[movement.connectId];
                     if(angular.isDefined(vessel)){
@@ -111,10 +120,17 @@ angular.module('unionvmsWeb').factory('searchService',function($q, $log, searchU
                 });
 
                 deferred.resolve(page);
+            };
 
-            }, function(error){
-                onGetMovementsError(error, deferred);
-            });
+            if (isMinimalRequest) {
+                movementRestService.getMinimalMovementList(movementRequest).then(getMovementOk, function(error){
+                    onGetMovementsError(error, deferred);
+                });
+            } else {
+                movementRestService.getMovementList(movementRequest).then(getMovementOk, function(error){
+                    onGetMovementsError(error, deferred);
+                });
+            }
         }, function(error){
             onGetMovementsError(error, deferred);
         });
@@ -236,6 +252,53 @@ angular.module('unionvmsWeb').factory('searchService',function($q, $log, searchU
 
 
 	var searchService = {
+
+        //Do the search for vessels based on latest movement
+        searchLatestMovements : function(){
+            var deferred = $q.defer();
+            movementRestService.getLatestMovement(DEFAULT_ITEMS_PER_PAGE).then(function(latestMovements){
+                $.each(latestMovements, function(index, latestMovement) {
+                    getListRequest.addSearchCriteria("GUID", latestMovement.connectId);
+                });
+
+                if(checkAccessToFeature('Vessel')){
+                    searchUtilsService.modifySpanAndTimeZones(getListRequest.criterias);
+                    searchUtilsService.replaceCommasWithPoint(getListRequest.criterias);
+                    vesselRestService.getVesselList(getListRequest).then(function(vessels) {
+                        if(vessels.getNumberOfItems() === 0){
+                            return deferred.resolve(vessels);
+                        } else {
+                            var findGuid = function findGuid(connectId) {
+                                return latestMovements.find(function (latestMovementItem) {
+                                  return latestMovementItem.connectId === connectId;
+                                });
+                            };
+
+                            $.each(vessels.items, function(index, vesselItem) {
+                                var findMovement = findGuid(vesselItem.vesselId.guid);
+                                var movement = findMovement;
+                                Object.assign(vesselItem, { lastMovement: movement });
+                            });
+
+                            if(latestMovements.length >= 0) {
+                                Object.assign(vessels, { 'totalNumberOfLatestMovements': latestMovements.length });                    
+                            }
+
+                            deferred.resolve(vessels);
+                        }
+                    }, function(error){
+                        $log.error("Error getting vessel list.", error);
+                        deferred.reject(error);
+                    });
+                } else {
+                    return deferred.reject();
+                }
+            }, function(error){
+                $log.error("Error getting latest movements.", error);
+                deferred.reject(error);
+            });
+            return deferred.promise;
+        },
 
         //Do the search for vessels
 		searchVessels : function(){
@@ -450,7 +513,7 @@ angular.module('unionvmsWeb').factory('searchService',function($q, $log, searchU
         },
 
         //Do search for movements
-        searchMovements : function(){
+        searchMovements : function(isMinimalRequest){
             //intercept request and set utc timezone on dates.
             searchUtilsService.modifySpanAndTimeZones(getListRequest.criterias);
             searchUtilsService.replaceCommasWithPoint(getListRequest.criterias);
@@ -466,9 +529,9 @@ angular.module('unionvmsWeb').factory('searchService',function($q, $log, searchU
 
             //Get vessels first?
             if(vesselRequest.getNumberOfSearchCriterias() > 0){
-                return getMovementsByVessels(vesselRequest, movementRequest);
+                return getMovementsByVessels(vesselRequest, movementRequest, isMinimalRequest);
             }else{
-                return getMovements(movementRequest);
+                return getMovements(movementRequest, isMinimalRequest);
             }
         },
 

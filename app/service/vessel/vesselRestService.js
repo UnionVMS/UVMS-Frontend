@@ -31,6 +31,11 @@ angular.module('unionvmsWeb')
                     list : { method: 'POST'}
                 });
             },
+            getVesselListCount : function(){
+                return $resource('/asset/rest/asset/listcount/',{},{
+                    list : { method: 'POST'}
+                });
+            },
             vesselGroup : function(){
                 return $resource( '/asset/rest/group/:id', {}, {
                     update: {method: 'PUT'}
@@ -47,6 +52,9 @@ angular.module('unionvmsWeb')
             },
             getConfigParameters : function(){
                 return $resource('/asset/rest/config/parameters');
+            },
+            getNoteActivityList : function(){
+                return $resource('/asset/rest/asset/activitycodes/');
             }
         };
     })
@@ -80,6 +88,18 @@ angular.module('unionvmsWeb')
             }
         );
 
+        return deferred.promise;
+    };
+
+    //Count all vessels
+    var getVesselListCount = function(getListRequest){
+        var deferred = $q.defer(),
+            countList = {pagination: {page: 1, listSize: 10000000}, assetSearchCriteria: {isDynamic: true, criterias: []}};
+        vesselRestFactory.getVesselListCount().list(countList,function(response) {
+                var getListRequest = (response.data);
+                deferred.resolve(getListRequest);
+            }
+        );
         return deferred.promise;
     };
 
@@ -223,6 +243,10 @@ angular.module('unionvmsWeb')
         return deferred.promise;
     };
 
+    var getNoteActivityList = function(){
+        return getConfigurationFromResource(vesselRestFactory.getNoteActivityList());
+    };
+
     var getConfiguration = function(){
         return getConfigurationFromResource(vesselRestFactory.getConfigValues());
     };
@@ -343,6 +367,7 @@ angular.module('unionvmsWeb')
 
     return {
         getVesselList: getVesselList,
+        getVesselListCount: getVesselListCount,
         getAllMatchingVessels: getAllMatchingVessels,
         updateVessel: updateVessel,
         archiveVessel: archiveVessel,
@@ -355,6 +380,7 @@ angular.module('unionvmsWeb')
         updateVesselGroup : updateVesselGroup,
         deleteVesselGroup : deleteVesselGroup ,
         getConfig : getConfiguration,
-        getParameterConfig : getParameterConfiguration
+        getParameterConfig : getParameterConfiguration,
+        getNoteActivityList : getNoteActivityList
     };
 });

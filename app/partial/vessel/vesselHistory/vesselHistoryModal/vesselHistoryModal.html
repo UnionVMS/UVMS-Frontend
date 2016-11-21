@@ -10,96 +10,119 @@ FITNESS FOR A PARTICULAR PURPOSE.  See the GNU General Public License for more d
 copy of the GNU General Public License along with the IFDM Suite. If not, see <http://www.gnu.org/licenses/>.
 -->
 <div class="vesselHistoryContainer">
-    <div class="modal-header" style="text-align:left">
+    <div class="modal-header">
         <div class="pointer pull-right" ng-click="cancel()">
             <i class="fa fa-times closeicon"></i>
         </div>
         <h4 class="modal-title">{{vesselHistory.name}}</h4>
-        <div class="col-md-6 nopaddingleft">{{'vessel.event_code' | i18n }}: <b>{{vesselHistory.eventHistory.eventCode}}</b></div>
-        <div class="col-md-6">{{'vessel.event_date' | i18n }}: <b>{{vesselHistory.eventHistory.eventDate | confDateFormat}}</b></div>
+        <div class="modal-description">
+            <div class="col-md-6 nopaddingleft">{{'vessel.event_code' | i18n }}: <b>{{vesselHistory.eventHistory.eventCode}}</b></div>
+            <div class="col-md-6">{{'vessel.event_date' | i18n }}: <b>{{vesselHistory.eventHistory.eventDate | confDateFormat}}</b></div>
+        </div>
     </div>
 
 	<div class="modal-body">
-        <div class="row">
-            <div class="historyValues">
-                <div class="col-md-12">
-                    <div class="sectionHeader">
-                        {{'vessel.event_history_administrative_information' | i18n}}
-                    </div>
-                </div>
+        <div class="historyValues">
+            <div class="col-md-12 sectionHeader">
+                {{'vessel.event_history_administrative_information' | i18n}}
+            </div>
 
-                <div class="col-md-6">
-                    {{'vessel.flag_state' | i18n }}: <b>{{vesselHistory.countryCode | vesselHistoryReplaceEmptyValueWithDash}}</b>
-                </div>
-                <div class="col-md-6">
-                    {{'vessel.ircs' | i18n }}: <b>{{vesselHistory.ircs | vesselHistoryReplaceEmptyValueWithDash}}</b>
-                </div>
+            <div class="col-md-6">
+                {{'vessel.flag_state' | i18n }}: <b>{{vesselHistory.countryCode | vesselHistoryReplaceEmptyValueWithDash}}</b>
+            </div>
+            <div class="col-md-6">
+                {{'vessel.ircs' | i18n }}: <b>{{vesselHistory.ircs | vesselHistoryReplaceEmptyValueWithDash}}</b>
+            </div>
 
-                <div class="col-md-6">
-                    {{'vessel.ext_marking' | i18n }}: <b>{{vesselHistory.externalMarking | vesselHistoryReplaceEmptyValueWithDash}}</b>
-                </div>
-                <div class="col-md-6">
-                    {{'vessel.name' | i18n }}: <b>{{vesselHistory.name | vesselHistoryReplaceEmptyValueWithDash}}</b>
-                </div>
+            <div class="col-md-6">
+                {{'vessel.name' | i18n }}: <b>{{vesselHistory.name | vesselHistoryReplaceEmptyValueWithDash}}</b>
+            </div>
+            <div class="col-md-6">
+                {{'vessel.ext_marking' | i18n }}: <b>{{vesselHistory.externalMarking | vesselHistoryReplaceEmptyValueWithDash}}</b>
+            </div>
 
-                <div class="col-md-6">
-                    {{'vessel.cfr' | i18n }}: <b>{{vesselHistory.cfr | vesselHistoryReplaceEmptyValueWithDash}}</b>
-                </div>
-                <div class="col-md-6">
-                    {{'vessel.mmsi_no' | i18n }}: <b>{{vesselHistory.mmsiNo|  vesselHistoryReplaceEmptyValueWithDash}}</b>
-                </div>
+            <div class="col-md-6">
+                {{'vessel.cfr' | i18n }}: <b>{{vesselHistory.cfr | vesselHistoryReplaceEmptyValueWithDash}}</b>
+            </div>
+            <div class="col-md-6">
+                {{'vessel.imo' | i18n }}: <b>{{vesselHistory.imo | vesselHistoryReplaceEmptyValueWithDash}}</b>
+            </div>
 
-                <div class="col-md-6">
-                    {{'vessel.license' | i18n }}: <b>{{vesselHistory.hasLicense() ? ('common.yes' | i18n | uppercase) : ('common.no' | i18n | uppercase)}}</b>
-                </div>
-                <div class="col-md-6">
-                    {{'vessel.license_type' | i18n }}: <b>{{licenseType | vesselLicenseTypeTranslation | vesselHistoryReplaceEmptyValueWithDash}}</b>
-                </div>
+            <div class="col-md-6">
+                {{'vessel.home_port' | i18n }}: <b>{{vesselHistory.homePort| vesselHistoryReplaceEmptyValueWithDash}}</b>
+            </div> 
+            <div class="col-md-6">
+                {{'vessel.mmsi_no' | i18n }}: <b>{{vesselHistory.mmsiNo|  vesselHistoryReplaceEmptyValueWithDash}}</b>
+            </div>
 
-                <div class="col-md-6">
-                    {{'vessel.po_code' | i18n }}: <b>{{vesselHistory.producer.code | vesselHistoryReplaceEmptyValueWithDash}}</b>
-                </div>
-                <div class="col-md-6">
-                    {{'vessel.po_name' | i18n }}: <b>{{vesselHistory.producer.name | vesselHistoryReplaceEmptyValueWithDash}}</b>
-                </div>
+            <div class="col-md-6">
+                {{'vessel.license' | i18n }}: <b>{{vesselHistory.hasLicense() ? ('common.yes' | i18n | uppercase) : ('common.no' | i18n | uppercase)}}</b>
+            </div>
+            <div class="col-md-6">
+                {{'vessel.license_type' | i18n }}: <b>{{licenseType | vesselLicenseTypeTranslation | vesselHistoryReplaceEmptyValueWithDash}}</b>
+            </div>
 
-                <div class="col-md-6">
-                    {{'vessel.contact_name' | i18n }}: <b>{{vesselHistory.contact.name | vesselHistoryReplaceEmptyValueWithDash}}</b>
-                </div>
-                <div class="col-md-6">
-                    {{'vessel.contact_email' | i18n }}: <b>{{vesselHistory.contact.email | vesselHistoryReplaceEmptyValueWithDash}}</b>
-                </div>
-                <div class="col-md-12">
-                    {{'vessel.contact_number' | i18n }}: <b>{{vesselHistory.contact.number | vesselHistoryReplaceEmptyValueWithDash}}</b>
-                </div>
+            <div class="col-md-6">
+                {{'vessel.po_name' | i18n }}: <b>{{vesselHistory.producer.name | vesselHistoryReplaceEmptyValueWithDash}}</b>
+            </div>
+            <div class="col-md-6">
+                {{'vessel.po_code' | i18n }}: <b>{{vesselHistory.producer.code | vesselHistoryReplaceEmptyValueWithDash}}</b>
+            </div>
 
-                <div class="col-md-12">
-                    {{'vessel.home_port' | i18n }}: <b>{{vesselHistory.homePort| vesselHistoryReplaceEmptyValueWithDash}}</b>
-                </div>
+            <div class="col-md-12 sectionHeader">
+               {{'vessel.event_history_contact_information' | i18n}}
+            </div>
+            <div class="col-md-12">
+                <ul class="contacts">
+                    <li class="contact" ng-if="vesselHistory.contact.length <= 0">
+                        <div class="col-md-6">
+                            {{'vessel.contact_name' | i18n }}: <b>-</b>
+                        </div>
+                        <div class="col-md-6">
+                            {{'vessel.contact_email' | i18n }}: <b>-</b>
+                        </div>
+                        <div class="col-md-12">
+                            {{'vessel.contact_number' | i18n }}: <b>-</b>
+                        </div>
+                    </li>
+                    <li class="contact" ng-repeat="contact in vesselHistory.contact" >
+                        <div class="col-md-6">
+                            {{'vessel.contact_name' | i18n }}: <b>{{contact.name | vesselHistoryReplaceEmptyValueWithDash}}</b>
+                        </div>
+                        <div class="col-md-6">
+                            {{'vessel.contact_email' | i18n }}: <b>{{contact.email | vesselHistoryReplaceEmptyValueWithDash}}</b>
+                        </div>
+                        <div class="col-md-12">
+                            {{'vessel.contact_number' | i18n }}: <b>{{contact.number | vesselHistoryReplaceEmptyValueWithDash}}</b>
+                        </div>
+                    </li>
+                </ul>
+            </div>
 
+            <div class="col-md-12 sectionHeader">
+                {{'vessel.event_history_technical_information' | i18n}}
+            </div>
 
-                <div class="col-md-12">
-                    <div class="sectionHeader">
-                        {{'vessel.event_history_technical_information' | i18n}}
-                    </div>
-                </div>
+            <div class="col-md-6">
+                {{'vessel.gear_type' | i18n }}: 
+                <b>{{vesselHistory.gearType | vesselGearTypeTranslation | vesselHistoryReplaceEmptyValueWithDash}}</b>
+            </div>
+            <div class="col-md-6">
+                {{'vessel.tonnage_gt' | i18n }}: 
+                <b>{{vesselHistory.grossTonnage | vesselHistoryReplaceEmptyValueWithDash}} 
+                <span ng-if="vesselHistory.grossTonnage">{{"common.tons" | i18n}} {{vesselHistory.grossTonnageUnit | vesselHistoryReplaceEmptyValueWithDash}}<span></b>
+            </div>
 
-                <div class="col-md-6">
-                    {{'vessel.gear_type' | i18n }}: <b>{{vesselHistory.gearType | vesselGearTypeTranslation | vesselHistoryReplaceEmptyValueWithDash}}</b>
-                </div>
-                <div class="col-md-6">
-                    {{'vessel.tonnage_gt' | i18n }}: <b>{{vesselHistory.grossTonnage | vesselHistoryReplaceEmptyValueWithDash}} {{"common.tons" | i18n}} {{vesselHistory.grossTonnageUnit | vesselHistoryReplaceEmptyValueWithDash}}</b>
-                </div>
-
-                <div class="col-md-6">
-                    {{'vessel.main_power' | i18n }}: <b>{{vesselHistory.powerMain | vesselHistoryReplaceEmptyValueWithDash}} {{"common.kw" | i18n}}</b>
-                </div>
-                <div class="col-md-6">
-                    {{'vessel.length' | i18n }}: <b>{{vesselHistory.lengthValue | vesselHistoryReplaceEmptyValueWithDash}} {{"common.meters_short" | i18n}} {{vesselHistory.lengthType | vesselHistoryReplaceEmptyValueWithDash}}</b>
-                </div>
+            <div class="col-md-6">
+                {{'vessel.main_power' | i18n }}: 
+                <b>{{vesselHistory.powerMain | vesselHistoryReplaceEmptyValueWithDash}}
+                <span ng-if="vesselHistory.powerMain">{{"common.kw" | i18n}}</span></b>
+            </div>
+            <div class="col-md-6">
+                {{'vessel.length' | i18n }}: <b>{{vesselHistory.lengthValue | vesselHistoryReplaceEmptyValueWithDash}}
+                <span ng-if="vesselHistory.lengthValue">{{"common.meters_short" | i18n}} {{vesselHistory.lengthType | vesselHistoryReplaceEmptyValueWithDash}}</span></b>
             </div>
         </div>
-
 	</div>
 	<div class="modal-footer">
     	<button type="button" class="btn btn-primary" ng-click="cancel()">{{'vessel.close' | i18n | uppercase}}</button></button>

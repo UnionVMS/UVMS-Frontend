@@ -28,7 +28,7 @@ angular.module('unionvmsWeb').controller('MovementCtrl',function($scope, $timeou
     $scope.isManualMovement = false;
 
     var updateSearchWithGuid = function(guid) {
-        searchService.searchMovements().then(function(page) {
+        searchService.searchMovements(true).then(function(page) {
             if (page.hasItemWithGuid(guid)) {
                 $scope.clearSelection();
                 retriveMovementsSuccess(page);
@@ -62,7 +62,7 @@ angular.module('unionvmsWeb').controller('MovementCtrl',function($scope, $timeou
         $scope.clearSelection();
         $scope.currentSearchResults.clearErrorMessage();
         $scope.currentSearchResults.setLoading(true);
-        searchService.searchMovements()
+        searchService.searchMovements(true)
             .then(retriveMovementsSuccess, retriveMovementsError);
     };
 

@@ -38,7 +38,8 @@ var unionvmsWebApp = angular.module('unionvmsWeb', [
     'unionvmsWeb.longPolling',
     'qtip2',
     'chart.js',
-    'ngStorage'
+    'ngStorage',
+    'debugConfig'
 ]);
 
 var currentUserContextPromise = function(userService) {
@@ -57,14 +58,11 @@ var loadLocales = function(initService) {
 };
 
 
-unionvmsWebApp.config(function($stateProvider, $compileProvider, tmhDynamicLocaleProvider, $injector, $urlRouterProvider, $httpProvider, ACCESS) {
+unionvmsWebApp.config(function($stateProvider, $compileProvider, tmhDynamicLocaleProvider, $injector, $urlRouterProvider, $httpProvider, ACCESS, DEBUG) {
     //initialize get if not there
     if (!$httpProvider.defaults.headers.get) {
         $httpProvider.defaults.headers.get = {};
     }
-
-    // Answer edited to include suggestions from comments
-    // because previous version of code introduced browser-related errors
 
     //disable IE ajax request caching
     $httpProvider.defaults.headers.get['If-Modified-Since'] = 'Mon, 26 Jul 1997 05:00:00 GMT';
@@ -73,7 +71,10 @@ unionvmsWebApp.config(function($stateProvider, $compileProvider, tmhDynamicLocal
     $httpProvider.defaults.headers.get['Pragma'] = 'no-cache';
 
     //Stops angular flooding console with debug info.
-    //$compileProvider.debugInfoEnabled(false);
+    $compileProvider.debugInfoEnabled(DEBUG);
+    if ($compileProvider.commentDirectivesEnabled) {
+        $compileProvider.commentDirectivesEnabled(false);
+    }
 
     tmhDynamicLocaleProvider.localeLocationPattern("assets/locales/angular-locale_{{locale}}.js");
 
@@ -260,7 +261,7 @@ unionvmsWebApp.config(function($stateProvider, $compileProvider, tmhDynamicLocal
             },
             resolve: {
                 config : function(initService){
-                    return initService.loadConfigFor(["VESSEL", "VESSEL_PARAMETERS"]);
+                    return initService.loadConfigFor(["VESSEL", "VESSEL_PARAMETERS", "MOBILETERMINAL", "MOBILE_TERMINAL_TRANSPONDERS"]);
                 }
             },
             data: {
@@ -278,7 +279,7 @@ unionvmsWebApp.config(function($stateProvider, $compileProvider, tmhDynamicLocal
             },
             resolve: {
                 config : function(initService){
-                    return initService.loadConfigFor(["VESSEL", "VESSEL_PARAMETERS"]);
+                    return initService.loadConfigFor(["VESSEL", "VESSEL_PARAMETERS", "MOBILE_TERMINAL_TRANSPONDERS"]);
                 }
             },
             data: {
@@ -296,7 +297,7 @@ unionvmsWebApp.config(function($stateProvider, $compileProvider, tmhDynamicLocal
             },
             resolve: {
                 config : function(initService){
-                    return initService.loadConfigFor(["MOBILETERMINAL", "MOBILE_TERMINAL_TRANSPONDERS", "MOBILE_TERMINAL_CHANNELS", "VESSEL"]);
+                    return initService.loadConfigFor(["MOBILETERMINAL", "MOBILE_TERMINAL_TRANSPONDERS", "VESSEL"]);
                 }
             },
             data: {
@@ -314,7 +315,7 @@ unionvmsWebApp.config(function($stateProvider, $compileProvider, tmhDynamicLocal
             },
             resolve: {
                 config : function(initService){
-                    return initService.loadConfigFor(["MOBILETERMINAL", "MOBILE_TERMINAL_TRANSPONDERS", "MOBILE_TERMINAL_CHANNELS", "VESSEL"]);
+                    return initService.loadConfigFor(["MOBILETERMINAL", "MOBILE_TERMINAL_TRANSPONDERS", "VESSEL"]);
                 }
             },
             data: {
@@ -486,7 +487,7 @@ unionvmsWebApp.config(function($stateProvider, $compileProvider, tmhDynamicLocal
             },
         })
         .state('app.holdingTable', {
-            url: '/alarms/holdingtable',
+            url: '/alerts/holdingtable',
             views: {
                 modulepage: {
                     templateUrl: 'partial/alarms/holdingTable/holdingTable.html',
@@ -504,7 +505,7 @@ unionvmsWebApp.config(function($stateProvider, $compileProvider, tmhDynamicLocal
             },
         })
         .state('app.holdingTable-id', {
-            url: '/alarms/holdingtable/:id',
+            url: '/alerts/holdingtable/:id',
             views: {
                 modulepage: {
                     templateUrl: 'partial/alarms/holdingTable/holdingTable.html',
@@ -522,7 +523,7 @@ unionvmsWebApp.config(function($stateProvider, $compileProvider, tmhDynamicLocal
             },
         })
         .state('app.openTickets', {
-            url: '/alarms/notifications',
+            url: '/alerts/notifications',
             views: {
                 modulepage: {
                     templateUrl: 'partial/alarms/openTickets/openTickets.html',
@@ -540,7 +541,7 @@ unionvmsWebApp.config(function($stateProvider, $compileProvider, tmhDynamicLocal
             },
         })
         .state('app.openTickets-id', {
-            url: '/alarms/notifications/:id',
+            url: '/alerts/notifications/:id',
             views: {
                 modulepage: {
                     templateUrl: 'partial/alarms/openTickets/openTickets.html',
@@ -558,7 +559,7 @@ unionvmsWebApp.config(function($stateProvider, $compileProvider, tmhDynamicLocal
             },
         })
         .state('app.rules', {
-            url: '/alarms/rules',
+            url: '/alerts/rules',
             views: {
                 modulepage: {
                     templateUrl: 'partial/alarms/rules/rules.html',
@@ -567,7 +568,7 @@ unionvmsWebApp.config(function($stateProvider, $compileProvider, tmhDynamicLocal
             },
             resolve: {
                 config : function(initService){
-                    return initService.loadConfigFor(["RULES", "VESSEL", "MOBILETERMINAL", "MOBILE_TERMINAL_CHANNELS", "MOVEMENT", "MOVEMENT_SOURCE_TYPES"]);
+                    return initService.loadConfigFor(["RULES", "VESSEL", "MOBILETERMINAL", "MOVEMENT", "MOVEMENT_SOURCE_TYPES"]);
                 }
             },
             data: {
@@ -576,7 +577,7 @@ unionvmsWebApp.config(function($stateProvider, $compileProvider, tmhDynamicLocal
             },
         })
         .state('app.rules-id', {
-            url: '/alarms/rules/:id',
+            url: '/alerts/rules/:id',
             views: {
                 modulepage: {
                     templateUrl: 'partial/alarms/rules/rules.html',
@@ -585,7 +586,7 @@ unionvmsWebApp.config(function($stateProvider, $compileProvider, tmhDynamicLocal
             },
             resolve: {
                 config : function(initService){
-                    return initService.loadConfigFor(["RULES", "VESSEL", "MOBILETERMINAL", "MOBILE_TERMINAL_CHANNELS", "MOVEMENT", "MOVEMENT_SOURCE_TYPES"]);
+                    return initService.loadConfigFor(["RULES", "VESSEL", "MOBILETERMINAL", "MOVEMENT", "MOVEMENT_SOURCE_TYPES"]);
                 }
             },
             data: {

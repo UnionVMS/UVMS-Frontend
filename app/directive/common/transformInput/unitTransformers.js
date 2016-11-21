@@ -99,7 +99,9 @@ copy of the GNU General Public License along with the IFDM Suite. If not, see <h
                 });
 
                 model.$formatters.push(function(newValue) {
-                    return threeDecimals(newValue * unitScaleFactors.getLengthScaleFactor());
+                    if (newValue) {
+                        return threeDecimals(newValue * unitScaleFactors.getLengthScaleFactor());
+                    }
                 });
             }
         };

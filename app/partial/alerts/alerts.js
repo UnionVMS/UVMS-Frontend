@@ -18,4 +18,10 @@ angular.module('unionvmsWeb').controller('AlertsCtrl',function($scope, alertServ
         alertService.hideMessage();
     };
 
+    //Cancel search
+    $scope.cancelSearch = function(){
+        // Todo: Cancel search
+        alertService.hideMessage();
+    };
+
 });

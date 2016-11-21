@@ -9,7 +9,7 @@ the hope that it will be useful, but WITHOUT ANY WARRANTY; without even the impl
 FITNESS FOR A PARTICULAR PURPOSE.  See the GNU General Public License for more details. You should have received a
 copy of the GNU General Public License along with the IFDM Suite. If not, see <http://www.gnu.org/licenses/>.
  */
-angular.module('unionvmsWeb').controller('VesselCtrl', function($scope, $log, locale, savedSearchService, Vessel, searchService, vesselRestService, alertService, $stateParams, csvService, SearchResults, userService, PositionReportModal, $filter) {
+angular.module('unionvmsWeb').controller('VesselCtrl', function($scope, $log, locale, savedSearchService, Vessel, VesselContact, searchService, vesselRestService, alertService, $stateParams, csvService, SearchResults, userService, PositionReportModal, $filter) {
 
     var checkAccessToFeature = function(feature) {
         return userService.isAllowed(feature, 'Union-VMS', true);
@@ -38,9 +38,8 @@ angular.module('unionvmsWeb').controller('VesselCtrl', function($scope, $log, lo
 
     //Init function when entering page
     var init = function(){
-        //Load list with vessels
-        searchService.reset();
-        $scope.searchVessels();
+        //Load list with vessels based on latest movements
+        $scope.searchLatestMovements();
 
         //Load vessel details
         var vesselGUID = $stateParams.id;
@@ -73,6 +72,7 @@ angular.module('unionvmsWeb').controller('VesselCtrl', function($scope, $log, lo
         }
     };
 
+    // Search for vessels
     $scope.searchVessels = function(options) {
         $scope.selectedGroupGuid = angular.isDefined(options) && angular.isDefined(options.savedSearchGroup) ? options.savedSearchGroup.id : undefined;
 
@@ -84,9 +84,27 @@ angular.module('unionvmsWeb').controller('VesselCtrl', function($scope, $log, lo
             .then(updateSearchResults, onGetSearchResultsError);
     };
 
+    // Search for vessels based on latest movements
+    $scope.searchLatestMovements = function(options) {
+        $scope.selectedGroupGuid = angular.isDefined(options) && angular.isDefined(options.savedSearchGroup) ? options.savedSearchGroup.id : undefined;
+
+        $scope.clearSelection();
+        $scope.currentSearchResults.clearErrorMessage();
+        $scope.currentSearchResults.filter = '';
+        $scope.currentSearchResults.setLoading(true);
+        searchService.searchLatestMovements()
+            .then(updateSearchResults, onGetSearchResultsError);
+    };
+
     //Update the search results
     var updateSearchResults = function(vesselListPage){
         $scope.currentSearchResults.updateWithNewResults(vesselListPage);
+
+        if(vesselListPage.totalNumberOfLatestMovements) {
+            $scope.currentSearchResults.sortBy = '-lastMovement.time';
+        }else{
+            $scope.currentSearchResults.sortBy = 'name';
+        }
     };
 
     //Handle error from search results (listing vessel)
@@ -116,11 +134,15 @@ angular.module('unionvmsWeb').controller('VesselCtrl', function($scope, $log, lo
     };
 
     $scope.mergeCurrentVesselIntoSearchResults = function() {
+        $scope.mergeCurrentVesselIntoSearchResults($scope.vesselObj);
+    };
+
+    $scope.mergeCurrentVesselIntoSearchResults = function(vesselObj) {
         var vesselsInList = $scope.currentSearchResults.items;
         for (var i = 0; i < vesselsInList.length; i++) {
-            if (vesselsInList[i].equals($scope.vesselObj)) {
-                vesselsInList[i] = $scope.vesselObj;
-                $scope.vesselObj = vesselsInList[i].copy();
+            if (vesselsInList[i].equals(vesselObj)) {
+                vesselsInList[i] = vesselObj;
+                vesselObj = vesselsInList[i].copy();
             }
         }
     };
@@ -185,7 +207,9 @@ angular.module('unionvmsWeb').controller('VesselCtrl', function($scope, $log, lo
     //Toggle create new vessel
     $scope.toggleCreateNewVessel = function(){
         $scope.createNewMode = true;
-        toggleVesselForm(new Vessel());
+        var newVessel = new Vessel();
+        newVessel.contact.push(new VesselContact());
+        toggleVesselForm(newVessel);
     };
 
     //Toggle viewing of a vessel
