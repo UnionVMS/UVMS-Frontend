@@ -10,9 +10,9 @@ describe('TripspanelCtrl', function() {
 		repNavSpy = jasmine.createSpyObj('reportingNavigatorService',['goToPreviousView']);
 		
 		module(function($provide){
-				$provide.value('genericMapService', genMapServSpy);
-				$provide.value('tripSummaryService', tripSumSpy);
-				$provide.value('reportingNavigatorService', repNavSpy);
+			$provide.value('genericMapService', genMapServSpy);
+			$provide.value('tripSummaryService', tripSumSpy);
+			$provide.value('reportingNavigatorService', repNavSpy);
 		});
 	});
 
@@ -35,29 +35,29 @@ describe('TripspanelCtrl', function() {
 	}));
 
 	function buildMocks(){
-			tripSumSpy.resetMapConfigs.andCallFake(function(){
-				return {
-						then: function(callback){
-								return callback(resetMapConfigs());
-						}
-				};
-			});
+		tripSumSpy.resetMapConfigs.andCallFake(function(){
+			return {
+				then: function(callback){
+						return callback(resetMapConfigs());
+				}
+			};
+		});
 
-			tripSumSpy.openNewTrip.andCallFake(function(){
-				return;
-			});
+		tripSumSpy.openNewTrip.andCallFake(function(){
+			return;
+		});
 
-			genMapServSpy.setMapBasicConfigs.andCallFake(function(){
-				return {
-						then: function(callback){
-								return callback(setMapBasicConfigs());
-						}
-				};
-			});
+		genMapServSpy.setMapBasicConfigs.andCallFake(function(){
+			return {
+				then: function(callback){
+						return callback(setMapBasicConfigs());
+				}
+			};
+		});
 
-			repNavSpy.goToPreviousView.andCallFake(function(){
-				return;
-			});
+		repNavSpy.goToPreviousView.andCallFake(function(){
+			return;
+		});
 	}
 
 	function resetMapConfigs(){
