@@ -79,6 +79,7 @@ angular.module('unionvmsWeb').directive('catchPanel', function(loadingStatus,act
 				scope.api.refresh();
 			};
 
+			//when tthe trip is initialized
 			scope.$watch('trip',function(){
 				init();
 			});

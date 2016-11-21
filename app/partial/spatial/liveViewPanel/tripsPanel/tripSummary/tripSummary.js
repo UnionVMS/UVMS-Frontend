@@ -14,6 +14,7 @@
 angular.module('unionvmsWeb').controller('TripsummaryCtrl',function($scope,activityRestService,tripSummaryService,loadingStatus,$anchorScroll,locale){
     $scope.tripSummServ = tripSummaryService;
 
+    //when tthe trip is being initialized
     $scope.$watch('tripSummServ.isLoadingTrip', function(newVal){
         if(newVal){
             init();
@@ -28,6 +29,7 @@ angular.module('unionvmsWeb').controller('TripsummaryCtrl',function($scope,activ
      */
     var init = function(){
         loadingStatus.isLoading('TripSummary', true);
+        //get vessel and role data for the specified trip
         activityRestService.getTripVessel($scope.trip.id).then(function(response){
             $scope.trip.fromJson('vessel',response.data);
             loadingStatus.isLoading('TripSummary', false);
@@ -40,6 +42,7 @@ angular.module('unionvmsWeb').controller('TripsummaryCtrl',function($scope,activ
             loadingStatus.isLoading('TripSummary', false);
         });
 
+        //get activity reports data for the specified trip
         activityRestService.getTripReports($scope.trip.id).then(function(response){
             $scope.trip.fromJson('reports',response.data);
             loadingStatus.isLoading('TripSummary', false);

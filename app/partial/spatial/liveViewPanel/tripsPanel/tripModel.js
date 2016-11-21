@@ -111,6 +111,8 @@ angular.module('unionvmsWeb').factory('Trip',function(locale,unitConversionServi
      */
 	var loadReportMessages = function(self,activityReports){
         self.reports = [];
+
+        //one main node per activity report
         angular.forEach(activityReports,function(report){
             var reportItem = {};
             reportItem.type = locale.getString('activity.activity_type_' + report.activityType.toLowerCase());
@@ -120,6 +122,7 @@ angular.module('unionvmsWeb').factory('Trip',function(locale,unitConversionServi
                 report.delimitedPeriod = [{}];
             }
 
+            //one sub node per period
             angular.forEach(report.delimitedPeriod,function(subreport){
                 var subreportItem = {};
 
@@ -147,7 +150,7 @@ angular.module('unionvmsWeb').factory('Trip',function(locale,unitConversionServi
     };
 
     /**
-     * Build the remarks column to be displayed in reports panel
+     * Builds the remarks column to be displayed in reports panel
      * 
      * @memberof Trip
      * @private
