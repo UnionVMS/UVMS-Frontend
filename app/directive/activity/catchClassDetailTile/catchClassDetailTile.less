@@ -3,6 +3,9 @@
         margin-bottom: 10px !important;
     }
     .navigator {
+        z-index: 2;
+        position: absolute;
+        right: 15px;
         color: @primaryColor;
         &:hover {
             cursor: pointer;
@@ -46,5 +49,21 @@
                 content: ':'
             }
         }
+    }
+    .nv-wrap {
+        padding-bottom: -20px;
+    }
+    .nv-x .tick line { display: none; }
+}
+
+.catch-class-detail-chart {
+    thead > tr {
+        border-bottom: none !important;
+    }
+    td.value {
+        font-weight: normal !important;
+    }
+    td.key {
+        font-weight: bold !important;
     }
 }

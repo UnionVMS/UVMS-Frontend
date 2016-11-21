@@ -3,15 +3,15 @@
 		<a>{{tileTitle}}</a>
 	</legend>
 	<div class="row global-container">
+		<div class="navigator">
+			<i class="fa fa-th-large"></i>
+		</div>
 		<div class="col-md-6">
-			CHART
+			<nvd3 options="options" data="chartData"></nvd3>
 		</div>
 		<div class="col-md-6">
 			<div class="row">
-				<div class="col-md-11 species-title">{{selected.species}} - {{selected.speciesName}}</div>
-				<div class="col-md-1">
-					<i class="fa fa-th-large pull-right navigator"></i>
-				</div>
+				<div class="col-md-12 species-title">{{selected.species}} - {{selected.speciesName}}</div>
 			</div>
 			<div class="row global-container">
 				<div class="col-md-6">
