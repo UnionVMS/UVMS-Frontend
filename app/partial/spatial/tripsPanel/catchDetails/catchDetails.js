@@ -11,7 +11,7 @@
  */
 
 
-angular.module('unionvmsWeb').controller('CatchdetailsCtrl', function ($scope, activityRestService) {
+angular.module('unionvmsWeb').controller('CatchdetailsCtrl', function($scope, activityRestService) {
 
     /**
     * Initialization function
@@ -20,86 +20,73 @@ angular.module('unionvmsWeb').controller('CatchdetailsCtrl', function ($scope, a
     * @private
     */
 
-    var init = function () {
-
-        /** @function getTripCatchDetail 
-         * data of current Fish Trip from activityRestService.
-        */
-        var response = activityRestService.getTripCatchDetail('1234');
-        $scope.fishingTripDetails = response;
-
-
-        /** @function getTripCatchesLandingDetails 
-          * data for Catches, Landing and Difference % tables from activityRestService.
-        */
-
-        $scope.tables = activityRestService.getTripCatchesLandingDetails('1234');
-
-        // Catches Table :: column lengths
-        $scope.catchesLSC = _.keys($scope.tables.catchesDetailsData.total.LSC).length;
-        $scope.catchesBMS = _.keys($scope.tables.catchesDetailsData.total.BMS).length;
-        $scope.catchesDIS = _.keys($scope.tables.catchesDetailsData.total.DIS).length;
-        $scope.catchesDIM = _.keys($scope.tables.catchesDetailsData.total.DIM).length;
-
-        // Difference Table :: column lengths
-        $scope.differenceLSC = _.keys($scope.tables.differencePercentage.catches.LSC).length;
-        $scope.differenceBMS = _.keys($scope.tables.differencePercentage.catches.BMS).length;
-        // Landing Table:: headers
-
+    var init = function() {
 
         var lseLandingData = [];
         var bmsLandingData = [];
-        $scope.headerLSE = [];
-        $scope.headerBSE = [];
-        angular.forEach($scope.tables.landingDetailsData.total.LSC, function (value, key) {
-            var nrColumns = 0;
-            angular.forEach(value, function (value, key) {
-                lseLandingData.push({ text: key, totals: value });
-                nrColumns++;
-            });
-            $scope.headerLSE.push({ text: key, width: nrColumns });
+        $scope.outerHeaders = [];//  data for outer headers and colspan :: Landing table
+        var fishCat = ['lsc', 'bms', 'dis', 'dim'];
+        $scope.finalarray = [];
+        $scope.fishCategoryLength = [];
+        $scope.fishingTripDetails = activityRestService.getTripCatchDetail('1234');
+        $scope.tables = activityRestService.getTripCatchesLandingDetails('1234');
 
-        });
+
+
+        // calculates the colspan for the headers of catches and Difference % tables
+
+        function calcHeaderLength() {
+            for (var i = 0; i < fishCat.length; i++) {
+                $scope.fishCategoryLength.push(_.keys($scope.tables.catchesDetailsData.total[fishCat[i]]).length);
+            }
+            for (var i = 0; i < 2; i++) {
+                $scope.fishCategoryLength.push(_.keys($scope.tables.differencePercentage.catches[fishCat[i]]).length);
+            }
+        }
+        calcHeaderLength();
+
+       // prepares the data needed to display the LANDING HEADERS
+
+        for (i = 0; i < 2; i++) {
+
+            angular.forEach($scope.tables.landingDetailsData.total[fishCat[i]], function(value, key) {
+                var nrColumns = 0;
+                if (i == 0) {
+                    angular.forEach(value, function(value, key) {
+                        lseLandingData.push({ text: key, totals: value });
+                        nrColumns++;
+                    });
+                }
+                else {
+                    angular.forEach(value, function(value, key) {
+                        bmsLandingData.push({ text: key, totals: value });
+                        nrColumns++;
+                    });
+                }
+                $scope.outerHeaders.push({ text: key, width: nrColumns });
+            });
+        }
 
         $scope.LSE = lseLandingData;
-
-        angular.forEach($scope.tables.landingDetailsData.total.BMS, function (value, key) {
-
-            var nrColumns = 0;
-            angular.forEach(value, function (value, key) {
-                bmsLandingData.push({ text: key, totals: value });
-
-                nrColumns++;
-
-            });
-            $scope.headerBSE.push({ text: key, width: nrColumns });
-        });
         $scope.BMS = bmsLandingData;
 
 
 
-        // Landing Table :: Rows
+        // prepares an array with data needed to display the LANDING ROWS
 
-        $scope.finalarray = [];
 
-        angular.forEach($scope.tables.landingDetailsData.items, function (item) {
+        angular.forEach($scope.tables.landingDetailsData.items, function(item) {
             var record = [];
-            record.push(item.Area);
+            record.push(item.area);
 
+            for (i = 0; i < 2; i++) {
+                angular.forEach(item[fishCat[i]], function(value, key) {
+                    angular.forEach(value, function(innerVal, innerKey) {
+                        record.push(innerVal);
 
-            angular.forEach(item.LSC, function (value, key) {
-                angular.forEach(value, function (innerVal, innerKey) {
-                    record.push(innerVal);
-
+                    });
                 });
-            });
-
-            angular.forEach(item.BMS, function (value, key) {
-                angular.forEach(value, function (innerVal, innerKey) {
-                    record.push(innerVal);
-
-                });
-            });
+            }
             $scope.finalarray.push(record);
         });
 

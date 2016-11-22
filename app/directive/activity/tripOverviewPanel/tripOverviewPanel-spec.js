@@ -21,11 +21,11 @@ describe('tripOverviewPanel', function() {
 
                 "tripID": "BEL-TRP-O16-2016_002",
                 "vesselName": "Beagle(BEL123456789)",
-                "departure": "yy-mm-dd hh:mm",
+                "departure": "2016-10-21T08:28:21",
                 "departureAt": ["BEZEE","BEZEEF"],
-                "arrival": "yy-mm-dd hh:mm",
+                "arrival": "2016-10-21T08:28:21",
                 "arrivalAt": ["BEZEE","BEZEEF"],
-                "Landing": "yy-mm-dd hh:mm",
+                "Landing": "2016-10-21T08:28:21",
                 "LandingAt": ["BEZEE","BEZEEF"]
 
             };

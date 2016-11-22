@@ -1,57 +1,57 @@
-.catch-fieldset{
-    padding: 10px 0px 0px 10px;
+.catch-details{
+    .catch-fieldset{
+        padding: 10px 0px 0px 10px;
     
-    .catch-legend{
-        margin-bottom: 0px;
+        .catch-legend{
+            margin-bottom: 0px;
+        }
     }
-}
-.baseStyle{
-    margin-top:-20px;
-    padding: 20px 40px 0 0;
-    
-    overflow-y:auto;
-    
-    width:100%;
-    height: calc(~"100vh - 150px");
-}
-.rows{
-    
-    text-align: center;
-}
-table.tableBorder{
-    border: 0;
+    .catch-details-container{
+        margin-top:-20px;
+        padding: 20px 40px 0 0;
+        overflow-y:auto;
+        width:100%;
+        height: calc(~"100vh - 150px");
+    }
+    .rows{
+        text-transform: uppercase;
+        text-align: center;
+        }
+    table.table-border{
+        border: 0;
      
-    > thead:first-child {
-        > tr {
-            &:not(:last-child) {
-                border-bottom: 0;
-                > th {
-                    border-top: 1px solid #dddddd;
-                    &:first-child {
-                        position:relative;
-                        border-top: 0;
-                        border-left: 0;
+        > thead:first-child {
+            > tr {
+                &:not(:last-child) {
+                    border-bottom: 0;
+                    > th {
+                        border-top: 1px solid #dddddd;
+                        &:first-child {
+                            position:relative;
+                            border-top: 0;
+                            border-left: 0;
+                        }
                     }
                 }
             }
         }
-    }
     
-}
-.tableTitle{
-   top:0px;
-   font-size:20px;
-   padding-bottom:20px;
-   position:absolute;
+    }
+    .table-title{
+        top:0px;
+        font-size:20px;
+        padding-bottom:20px;
+        position:absolute;
 
    
+    }
+    .landing-table{
+        top:20px;
+        font-size:20px;
+        padding-bottom:20px;
+        position:absolute;
+    }
+    .landing-address{
+        td:first-child { text-align: left };
+    }
 }
-.LandingTable{
-    top:20px;
-    font-size:20px;
-    padding-bottom:20px;
-    position:absolute;
-}
- .landingAddress{
-    td:first-child { text-align: left };
- }

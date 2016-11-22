@@ -12,12 +12,9 @@ angular.module('unionvmsWeb').directive('tripOverviewPanel', function () {
         restrict: 'E',
         replace: true,
         scope: {
-           trip: '='
-         },
+            trip: '='
+        },
         templateUrl: 'directive/activity/tripOverviewPanel/tripOverviewPanel.html',
-        link: function (scope, element, attrs, fn) {
-          
 
-        }
     };
 });

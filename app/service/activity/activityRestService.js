@@ -80,12 +80,12 @@ angular.module('unionvmsWeb').factory('activityRestFactory', function ($resource
 
                 "tripID": "BEL-TRP-O16-2016_0021",
                 "vesselName": "Beagle(BEL123456789)",
-                "departure": "yy-mm-dd hh:mm",
+                "departure": "2016-10-21T08:28:21",
                 "departureAt": ["BEZEE"],
-                "arrival": "yy-mm-dd hh:mm",
+                "arrival": "2016-10-21T08:28:21",
                 "arrivalAt": ["BEOST"],
-                "Landing": "yy-mm-dd hh:mm",
-                "LandingAt": ["BEOST"]
+                "landing": "2016-10-21T08:28:21",
+                "landingAt": ["BEOST"]
 
             };
 
@@ -94,232 +94,232 @@ angular.module('unionvmsWeb').factory('activityRestFactory', function ($resource
             return {
                 "differencePercentage": {
                     "catches": {
-                        "LSC": {
-                            "COD": "1222",
-                            "SOL": "1222",
-                            "LEM": "1333",
-                            "TUR": "1333"
+                        "lsc": {
+                            "cod": "1222",
+                            "sol": "1222",
+                            "lem": "1333",
+                            "tur": "1333"
                         },
-                        "BMS": {
-                            "COD": "23",
-                            "SOL": "22"
+                        "bms": {
+                            "cod": "23",
+                            "sol": "22"
                         }
                     },
                     "Landed": {
-                        "LSC": {
-                            "COD": "1283",
-                            "SOL": "1161",
-                            "LEM": "1666",
-                            "TUR": "1466"
+                        "lsc": {
+                            "cod": "1283",
+                            "sol": "1161",
+                            "lem": "1666",
+                            "tur": "1466"
                         },
-                        "BMS": {
-                            "COD": "24",
-                            "SOL": "20"
+                        "bms": {
+                            "cod": "24",
+                            "sol": "20"
                         }
 
                     },
                     "Difference": {
-                        "LSC": {
-                            "COD": "615(+5)",
-                            "SOL": "1161(+5)",
-                            "LEM": "1666(+5)",
-                            "TUR": "1466(+5)"
+                        "lsc": {
+                            "cod": "615(+5)",
+                            "sol": "1161(+5)",
+                            "lem": "1666(+5)",
+                            "tur": "1466(+5)"
                         },
-                        "BMS": {
-                            "COD": "24(+5)",
-                            "SOL": "20(+5)"
+                        "bms": {
+                            "cod": "24(+5)",
+                            "sol": "20(+5)"
                         }
                     }
                 },
                 "catchesDetailsData": {
                     "total": {
-                        "LSC": {
-                            "COD": "5555",
-                            "SOL": "6666",
-                            "LEM": "7777",
-                            "TUR": "8888"
+                        "lsc": {
+                            "cod": "5555",
+                            "sol": "6666",
+                            "lem": "7777",
+                            "tur": "8888"
                         },
-                        "BMS": {
-                            "COD": "9999",
-                            "SOL": "9999"
+                        "bms": {
+                            "cod": "9999",
+                            "sol": "9999"
                         },
-                        "DIS": {
-                            "COD": "1111",
-                            "LEM": "5555"
+                        "dis": {
+                            "cod": "1111",
+                            "lem": "5555"
                         },
-                        "DIM": {
-                            "SOL": "9876"
+                        "dim": {
+                            "sol": "9876"
                         }
                     },
                     "items": [{
-                        "Date": "21-04-1879",
-                        "Area": "235 RUE DU PROGRESS",
-                        "LSC": {
-                            "COD": "1111",
-                            "SOL": "1111",
-                            "LEM": "00001",
-                            "TUR": "12341"
+                        "date": "21-04-1879",
+                        "area": "235 RUE DU PROGRESS",
+                        "lsc": {
+                            "cod": "1111",
+                            "sol": "1111",
+                            "lem": "00001",
+                            "tur": "12341"
                         },
-                        "BMS": {
-                            "COD": "1231",
-                            "SOL": "1111"
+                        "bms": {
+                            "cod": "1231",
+                            "sol": "1111"
                         },
-                        "DIS": {
-                            "COD": "3451",
-                            "LEM": "1231"
+                        "dis": {
+                            "cod": "3451",
+                            "lem": "1231"
                         },
-                        "DIM": {
-                            "SOL": "5671"
+                        "dim": {
+                            "sol": "5671"
                         }
                     }, {
-                        "Date": "21-04-1880",
-                        "Area": "236 RUE DU PROGRESS1",
-                        "LSC": {
-                            "COD": "1112",
-                            "SOL": "1112",
-                            "LEM": "00002",
-                            "TUR": "12342"
+                        "date": "21-04-1880",
+                        "area": "236 RUE DU PROGRESS1",
+                        "lsc": {
+                            "cod": "1112",
+                            "sol": "1112",
+                            "lem": "00002",
+                            "tur": "12342"
                         },
-                        "BMS": {
-                            "COD": "1232",
-                            "SOL": "1112"
+                        "bms": {
+                            "cod": "1232",
+                            "sol": "1112"
                         },
-                        "DIS": {
-                            "COD": "3452",
-                            "LEM": "1232"
+                        "dis": {
+                            "cod": "3452",
+                            "lem": "1232"
                         },
-                        "DIM": {
-                            "SOL": "5672"
+                        "dim": {
+                            "sol": "5672"
                         }
                     }, {
-                        "Date": "21-04-1881",
-                        "Area": "237 RUE DU PROGRESS2",
-                        "LSC": {
-                            "COD": "1113",
-                            "SOL": "1113",
-                            "LEM": "00003",
-                            "TUR": "12343"
+                        "date": "21-04-1881",
+                        "area": "237 RUE DU PROGRESS2",
+                        "lsc": {
+                            "cod": "1113",
+                            "sol": "1113",
+                            "lem": "00003",
+                            "tur": "12343"
                         },
-                        "BMS": {
-                            "COD": "5363",
-                            "SOL": "1113"
+                        "bms": {
+                            "cod": "5363",
+                            "sol": "1113"
                         },
-                        "DIS": {
-                            "COD": "8753",
-                            "LEM": "1233"
+                        "dis": {
+                            "cod": "8753",
+                            "lem": "1233"
                         },
-                        "DIM": {
-                            "SOL": "5673"
+                        "dim": {
+                            "sol": "5673"
                         }
                     }]
                 },
                 "landingDetailsData": {
                     "total": {
-                        "LSC": {
-                            "COD": {
-                                "WHL": "777",
-                                "GUT": "444"
+                        "lsc": {
+                            "cod": {
+                                "whl": "777",
+                                "gut": "444"
                             },
-                            "SOL": {
-                                "WHL": "123",
-                                "GUT": "876"
+                            "sol": {
+                                "whl": "123",
+                                "gut": "876"
                             },
-                            "LEM": {
-                                "WHL": "666"
+                            "lem": {
+                                "whl": "666"
                             },
-                            "TUR": {
-                                "WHL": "000"
+                            "tur": {
+                                "whl": "000"
                             }
                         },
-                        "BMS": {
-                            "COD": {
-                                "GUT": "444"
+                        "bms": {
+                            "cod": {
+                                "gut": "444"
                             },
-                            "SOL": {
-                                "WHL": "777",
-                                "GUT": "444"
+                            "sol": {
+                                "whl": "777",
+                                "gut": "444"
                             }
                         }
                     },
                     "items": [{
-                        "Area": "235 RUE DU PROGRESS",
-                        "LSC": {
-                            "COD": {
-                                "WHL": "777",
-                                "GUT": "444"
+                        "area": "235 RUE DU PROGRESS",
+                        "lsc": {
+                            "cod": {
+                                "whl": "777",
+                                "gut": "444"
                             },
-                            "SOL": {
-                                "WHL": "777",
-                                "GUT": "444"
+                            "sol": {
+                                "whl": "777",
+                                "gut": "444"
                             },
-                            "LEM": {
-                                "WHL": "888"
+                            "lem": {
+                                "whl": "888"
                             },
-                            "TUR": {
-                                "WHL": "777"
+                            "tur": {
+                                "whl": "777"
                             }
                         },
-                        "BMS": {
-                            "COD": {
-                                "GUT": "444"
+                        "bms": {
+                            "cod": {
+                                "gut": "444"
                             },
-                            "SOL": {
-                                "WHL": "777",
-                                "GUT": "444"
+                            "sol": {
+                                "whl": "777",
+                                "gut": "444"
                             }
                         }
                     }, {
-                        "Area": "235 RUE DU PROGRESS1",
-                        "LSC": {
-                            "COD": {
-                                "WHL": "7772",
-                                "GUT": "4442"
+                        "area": "235 RUE DU PROGRESS1",
+                        "lsc": {
+                            "cod": {
+                                "whl": "7772",
+                                "gut": "4442"
                             },
-                            "SOL": {
-                                "WHL": "7772",
-                                "GUT": "4442"
+                            "sol": {
+                                "whl": "7772",
+                                "gut": "4442"
                             },
-                            "LEM": {
-                                "WHL": "7772"
+                            "lem": {
+                                "whl": "7772"
                             },
-                            "TUR": {
-                                "WHL": "7772"
+                            "tur": {
+                                "whl": "7772"
                             }
                         },
-                        "BMS": {
-                            "COD": {
-                                "GUT": "4442"
+                        "bms": {
+                            "cod": {
+                                "gut": "4442"
                             },
-                            "SOL": {
-                                "WHL": "7772",
-                                "GUT": "4442"
+                            "sol": {
+                                "whl": "7772",
+                                "gut": "4442"
                             }
                         }
                     }, {
-                        "Area": "235 RUE DU PROGRESS2",
-                        "LSC": {
-                            "COD": {
-                                "WHL": "7773",
-                                "GUT": "4443"
+                        "area": "235 RUE DU PROGRESS2",
+                        "lsc": {
+                            "cod": {
+                                "whl": "7773",
+                                "gut": "4443"
                             },
-                            "SOL": {
-                                "WHL": "7773",
-                                "GUT": "4443"
+                            "sol": {
+                                "whl": "7773",
+                                "gut": "4443"
                             },
-                            "LEM": {
-                                "WHL": "7773"
+                            "lem": {
+                                "whl": "7773"
                             },
-                            "TUR": {
-                                "WHL": "7773"
+                            "tur": {
+                                "whl": "7773"
                             }
                         },
-                        "BMS": {
-                            "COD": {
-                                "GUT": "444"
+                        "bms": {
+                            "cod": {
+                                "gut": "444"
                             },
-                            "SOL": {
-                                "WHL": "777",
-                                "GUT": "444"
+                            "sol": {
+                                "whl": "777",
+                                "gut": "444"
                             }
                         }
                     }]

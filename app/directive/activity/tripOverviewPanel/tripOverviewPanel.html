@@ -1,4 +1,4 @@
-<div>
+<div class="trip-overview-panel">
 	<fieldset class="col-md-12 fieldsetStyle">
 		<legend class="fieldsetLegendStyle">
 			<a>{{'activity.fishing_trip' | i18n }}</a>
@@ -18,7 +18,7 @@
 			<div class="col-md-3">
 				<div class="row">
 				<span>{{'activity.trip_departure' | i18n }}:</span>
-                <span>{{ trip.departure }}</span>
+                <span>{{ trip.departure | stDateUtc }}</span>
 				<span>{{'activity.catch_details_trip_overview_at' | i18n }}:</span>
 				<span ng-repeat="location in trip.departureAt ">{{location}} </span>
 				</div>
@@ -26,7 +26,7 @@
 			<div class="col-md-3">
 				<div class="row">
 				<span>{{'activity.trip_arrival' | i18n }}:</span>
-                <span>{{ trip.arrival }}</span>
+                <span>{{ trip.arrival | stDateUtc }}</span>
 				<span>{{'activity.catch_details_trip_overview_at' | i18n }}:</span>
                 <span ng-repeat="location in trip.arrivalAt">{{location}} </span>
 				</div>
@@ -34,9 +34,9 @@
 			<div class="col-md-2">
 				<div class="row">
 				<span>{{'activity.trip_landing' | i18n }}:</span>
-                <span> {{ trip.Landing }}</span>
+                <span> {{ trip.landing | stDateUtc }}</span>
 				<span>{{'activity.catch_details_trip_overview_at' | i18n }}:</span>
-				<span ng-repeat="location in trip.LandingAt">{{location}} </span>
+				<span ng-repeat="location in trip.landingAt">{{location}} </span>
                 </div>
 			</div>
 		</div>
