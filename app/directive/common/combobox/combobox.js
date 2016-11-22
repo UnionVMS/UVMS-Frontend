@@ -184,6 +184,8 @@ angular.module('unionvmsWeb').directive('combobox', function(comboboxService) {
                             scope.currentItemLabel = scope.getItemLabel(item);
                         }
                 	}
+                }else{
+                    scope.loadedItems = [];
                 }
             },true);
 
@@ -201,6 +203,9 @@ angular.module('unionvmsWeb').directive('combobox', function(comboboxService) {
                 }
 
                 if(scope.multiple){
+                    if(!angular.isDefined(scope.ngModel)){
+                        scope.ngModel = [];
+                    }
                 	if(scope.ngModel.indexOf(item.code) === -1){
                 		var arr = [].concat(scope.ngModel);
                 		arr.push(getItemCode(item));

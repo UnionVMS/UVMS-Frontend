@@ -71,7 +71,7 @@
 				</tbody>
 			</table>
 		</div>
-		<div class="stFooterPagination" ng-show="actServ.activities.length > 0 && !repServ.isLoadingReportsList">
+		<div class="stFooterPagination" ng-show="actServ.activities.length > 0 && !actServ.reportsList.isLoading">
 			<div class="tr">
 				<div class="td text-right">
 					<div st-pagination st-items-by-page="actServ.reportsList.pagination.listSize" st-template="partial/common/reportsPagination/reportsPagination.html"></div>
