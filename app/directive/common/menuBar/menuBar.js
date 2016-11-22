@@ -49,5 +49,4 @@ angular.module('unionvmsWeb')
     $scope.includeArchive = angular.isDefined($scope.functions.archiveCallback);
     $scope.includeHistory = angular.isDefined($scope.functions.historyCallback);
     $scope.includeUnlink = angular.isDefined($scope.functions.unlinkCallback);
-    $scope.includeEdit = angular.isDefined($scope.functions.editCallback);
 });
