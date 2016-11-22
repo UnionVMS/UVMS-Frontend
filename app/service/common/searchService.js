@@ -269,19 +269,19 @@ angular.module('unionvmsWeb').factory('searchService',function($q, $log, searchU
                             return deferred.resolve(vessels);
                         } else {
                             var findGuid = function findGuid(connectId) {
-                                return latestMovements.find(function (latestMovementItem) {
-                                  return latestMovementItem.connectId === connectId;
-                                });
-                            };
+                                for (var i = 0; i < latestMovements.length; i++) {
+                                    if (latestMovements[i].connectId === connectId) {
+                                        return latestMovements[i];
+                                    }
+                                }
+                            }
 
-                            $.each(vessels.items, function(index, vesselItem) {
-                                var findMovement = findGuid(vesselItem.vesselId.guid);
-                                var movement = findMovement;
-                                Object.assign(vesselItem, { lastMovement: movement });
+                            $.each(vessels.items, function(index, vessel) {
+                                vessel.lastMovement = findGuid(vessel.vesselId.guid);
                             });
 
-                            if(latestMovements.length >= 0) {
-                                Object.assign(vessels, { 'totalNumberOfLatestMovements': latestMovements.length });                    
+                            if(latestMovements.length > 0) {
+                                vessels.totalNumberOfLatestMovements = latestMovements.length;                
                             }
 
                             deferred.resolve(vessels);
