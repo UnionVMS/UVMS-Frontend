@@ -27,8 +27,7 @@ angular.module('unionvmsWeb').controller('DeparturepanelCtrl',function($scope, $
             clickable = true;
         }
         
-        //return clickable;
-        return true;
+        return clickable;
     };
     
     /**

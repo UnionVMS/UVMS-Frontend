@@ -30,23 +30,99 @@ angular.module('unionvmsWeb').directive('catchClassDetailTile', function() {
  * @name CatchClassDetailTileCtrl
  * @param $scope {Service} The controller scope
  * @param locale {Service} The angular locale service
+ * @attr {Object} selected - The selected record that is used to display information on the location tile, catch table and summary (it always refers to a specific fish species)
+ * @attr {Object} options - An object containing all NVD3 chart options
+ * @attr {Array} chartData - An array of objects used as data source in the chart
  * @description
  *  The controller for the catchClassDetailTile directive ({@link unionvmsWeb.catchClassDetailTile})
  */
 controller('CatchClassDetailTileCtrl', function($scope, locale){
     $scope.selected = {};
+    
+    /**
+     * The initialization function that will process the ngModel to properly formatted objects that are used within the directive
+     * 
+     * @memberof CatchClassDetailTileCtrl
+     * @public
+     * @alias init
+     */
     $scope.init = function(){
-        $scope.selected = $scope.ngModel[0];
+        selectRecordAndSetLocationTitle(0);
+        generateChartData();
+    };
+    
+    $scope.options = {
+        chart: {
+            type: 'multiBarChart',
+            stacked: true,
+            showLegend: true,
+            showControls: false,
+            useInteractiveGuideline: true,
+            yAxis: {
+                axisLabel: locale.getString('activity.header_fa_weight'),
+                showMaxMin: false,
+                ticks: 5
+            },
+            xAxis: {
+                rotateYLabel: true,
+                rotateLabels: -45,
+                tickFormat: function(xValue){
+                    return $scope.ngModel[xValue].species;
+                }
+            },
+            multibar: {
+                dispatch: {
+                    elementClick: function(e){
+                        selectRecordAndSetLocationTitle(e.data.idx);
+                    }
+                }
+            },
+            interactiveLayer: {
+                tooltip: {
+                    headerFormatter: function (xValue) {
+                        return $scope.ngModel[xValue].species;
+                    },
+                    contentGenerator: function(data){
+                        var html = '<table class="catch-class-detail-chart"><thead><tr><td colspan="3"><strong>SOL</strong></td></tr></thead><tbody>';
+                        for (var i = 0; i < data.series.length; i++){
+                            html += '<tr><td class="legend-color-guide"><div style="background-color: #' + data.series[i].color + '"></div></td>';
+                            html += '<td class="key">' + data.series[i].key + '</td>';
+                            html += '<td class="value">' + data.series[i].value + ' kg' + '</td></tr>';
+                        }
+                        html += '</tbody></table';
+                        
+                        return html;
+                    }
+                }
+            }
+        }        
+    };
+    
+    /**
+     * Select the record that should be used to display information on the location tile, table and summary sections. Set the location tile title according
+     * to the number of locations available for a given record
+     * 
+     * @memberof CatchClassDetailTileCtrl
+     * @private
+     * @param {Number} idx - The index of the item to be selected
+     */
+    function selectRecordAndSetLocationTitle (idx){
+        $scope.selected = $scope.ngModel[idx];
         $scope.selected.total = parseFloat($scope.selected.lsc) + parseFloat($scope.selected.bms);
+        
         var title = 'activity.location';
         if ($scope.selected.locations.length > 1){
             title += 's';
         }
         $scope.locationTitle = locale.getString(title);
-        
-        generateChartData();
-    };
+    }
     
+    /**
+     * Generate properly formatted data series that will be used as data source in the chart.
+     * 
+     * @memberof CatchClassDetailTileCtrl
+     * @private
+     */
     function generateChartData(){
         var colors = palette('tol-rainbow', 2);
         var lscSeries = {
@@ -71,6 +147,16 @@ controller('CatchClassDetailTileCtrl', function($scope, locale){
         $scope.chartData = [lscSeries, bmsSeries];
     }
     
+    /**
+     * Generate a proper record to be used in the chart data series
+     * 
+     * @memberof CatchClassDetailTileCtrl
+     * @private
+     * @param {Object} data - The object containing the source data
+     * @param {String} type - The record type that should be generated (supported options: 'lms' and 'bms')
+     * @param {Number} idx - The index of the source object
+     * @returns {Object} The record object to be used as input for the chart data series
+     */
     function generateChartRecord (data, type, idx){
         return {
             idx: idx,
@@ -79,45 +165,5 @@ controller('CatchClassDetailTileCtrl', function($scope, locale){
             x: idx,
             y: data[type]
         };
-    } 
-    
-    $scope.options = {
-        chart: {
-            type: 'multiBarChart',
-            stacked: true,
-            showLegend: true,
-            showControls: false,
-            useInteractiveGuideline: true,
-            yAxis: {
-                axisLabel: locale.getString('activity.header_fa_weight'),
-                showMaxMin: false,
-                ticks: 5
-            },
-            xAxis: {
-                rotateYLabel: true,
-                rotateLabels: -45,
-                tickFormat: function(xValue){
-                    return $scope.ngModel[xValue].species;
-                }
-            },
-            interactiveLayer: {
-                tooltip: {
-                    headerFormatter: function (xValue) {
-                        return $scope.ngModel[xValue].species;
-                    },
-                    contentGenerator: function(data){
-                        var html = '<table class="catch-class-detail-chart"><thead><tr><td colspan="3"><strong>SOL</strong></td></tr></thead><tbody>';
-                        for (var i = 0; i < data.series.length; i++){
-                            html += '<tr><td class="legend-color-guide"><div style="background-color: #' + data.series[i].color + '"></div></td>'
-                            html += '<td class="key">' + data.series[i].key + '</td>';
-                            html += '<td class="value">' + data.series[i].value + ' kg' + '</td></tr>';
-                        }
-                        html += '</tbody></table';
-                        
-                        return html;
-                    }
-                }
-            }
-        }        
-    };
+    }
 });

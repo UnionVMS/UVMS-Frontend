@@ -1,6 +1,9 @@
 .location-tile {
     height: 100%;
     position: relative;
+    .fieldsetLegendStyle {
+        margin-bottom: 10px !important;
+    }
     .container {
         height: calc(~'100% - 20px');
         .col-md-12 {
@@ -39,6 +42,24 @@
                 &:hover {
                     text-decoration: underline;
                 }
+            }
+        }
+    }
+    .no-data {
+        text-align: center;
+        top: 0;
+        bottom: 0;
+        left: 15px;
+        right: 15px;
+        position: absolute;
+        div {
+            display: table;
+            height: 100%;
+            span {
+                display: table-cell;
+                vertical-align: middle;
+                font-size: 22px;
+                color: #ddd;
             }
         }
     }

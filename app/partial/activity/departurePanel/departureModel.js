@@ -111,7 +111,7 @@ angular.module('unionvmsWeb').factory('Departure',function() {
             locations: [{
                 name: '39F6-27.4.b.XEU',
                 geometry: ''
-            }, {
+            },{
                 name: '39F6-27.4.a.XEU',
                 geometry: 'POINT(5.5 60.5)'
             }],
