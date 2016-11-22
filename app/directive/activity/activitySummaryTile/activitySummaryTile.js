@@ -2,7 +2,7 @@
  * @memberof unionvmsWeb
  * @ngdoc directive
  * @name activitySummaryTile
- * @attr {String} faType - The title of the fieldset tile
+ * @attr {String} faType - The title of the fieldset tile that needs to be translated
  * @attr {Object} summary - An object containing the data that should be displayed in the tile
  * @description
  *  A reusable tile that will display the summary tile of a fishing activity
