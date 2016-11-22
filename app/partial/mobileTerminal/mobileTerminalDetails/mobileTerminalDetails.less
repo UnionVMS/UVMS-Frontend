@@ -32,29 +32,38 @@ copy of the GNU General Public License along with the IFDM Suite. If not, see <h
             .form-group { margin-bottom: 0; }
         }
     }
+
+    .transponderSystemSelects {
+        align-items: center;
+        .flexbox();
+        flex-flow: column nowrap;
+        justify-content: center;
+        max-width: @max-width;
+    }
     
     .flexrow {
+        align-items: center;
         .flexbox();
-        align-items: stretch;
-        max-width: @max-width;
+        width: 100%;
 
         .form-group {
             margin-right: @field-margin-vertical;
             align-self: flex-end;
 
             &.long-field {
-                max-width: 230px;
-                flex: 1;
+                flex-basis: 230px;
             } 
 
             &.medium-field {
-                max-width: 180px;
-                flex: 1;
+                flex-basis: 180px;
+            }
+
+            &.medium-field-static {
+                width: 180px;
             }
 
             &.short-field {
-                max-width: 100px;
-                flex: 1;
+                flex-basis: 100px;
             }
 
             &.align-right {

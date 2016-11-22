@@ -14,7 +14,7 @@ copy of the GNU General Public License along with the IFDM Suite. If not, see <h
         <fieldset ng-disabled="disableForm()">
             <div class="transponderSystemSelects">
                 <div class="flexrow form-section-1">
-                    <div class="transponderSystemSelect form-group medium-field">
+                    <div class="transponderSystemSelect form-group medium-field-static">
                         <label class="normal">{{'mobileTerminal.transceiver_system' | i18n}}</label>
                         <dropdown ng-model="typeAndPlugin" initialtext="{{ 'common.choose' | i18n }}" items="transponderSystems" callback="onTerminalSystemSelect" ng-disabled="!isCreateNewMode()" data="typeAndPlugin" id="mob-term-form-details-transponder"></dropdown>
                     </div>
