@@ -1,15 +1,11 @@
 describe('activitySummaryTile', function() {
-    var scope,compile,controller,tile,$httpBackend;
+    var scope,compile,tile,$httpBackend;
     
     beforeEach(module('unionvmsWeb'));
     
-    beforeEach(inject(function($rootScope, $compile, $injector, $controller) {
+    beforeEach(inject(function($rootScope, $compile, $injector) {
         scope = $rootScope.$new();
         compile = $compile;
-        
-        controller = $controller('ActivitySummaryTileCtrl', {
-            $scope: scope
-        });
         
         if(!angular.element('#parent-container').length){
             var parentElement = angular.element('<div id="parent-container"></div>');
@@ -44,9 +40,9 @@ describe('activitySummaryTile', function() {
         scope.$digest();
         
         expect(angular.element('activity-summary-tile').length).toBe(1);
-        expect(angular.element('.item-container').children().eq(1).text()).toBe($filter('stDateUtc')(scope.summary.occurence));
-        expect(angular.element('.item-container').children().eq(3).text()).toBe(scope.summary.reason);
-        expect(angular.element('.item-container').children().eq(5).text()).toBe(scope.summary.fisheryType);
-        expect(angular.element('.item-container').children().eq(7).text()).toBe($filter('stArrayToString')(scope.summary.targetedSpecies, ', '));
+        expect(angular.element('.item-container').children().eq(1).text()).toEqual($filter('stDateUtc')(scope.summary.occurence));
+        expect(angular.element('.item-container').children().eq(3).text()).toEqual(scope.summary.reason);
+        expect(angular.element('.item-container').children().eq(5).text()).toEqual(scope.summary.fisheryType);
+        expect(angular.element('.item-container').children().eq(7).text()).toEqual($filter('stArrayToString')(scope.summary.targetedSpecies, ', '));
     }));
 });
