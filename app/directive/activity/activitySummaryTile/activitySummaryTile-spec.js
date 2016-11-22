@@ -48,10 +48,5 @@ describe('activitySummaryTile', function() {
         expect(angular.element('.item-container').children().eq(3).text()).toBe(scope.summary.reason);
         expect(angular.element('.item-container').children().eq(5).text()).toBe(scope.summary.fisheryType);
         expect(angular.element('.item-container').children().eq(7).text()).toBe($filter('stArrayToString')(scope.summary.targetedSpecies, ', '));
-//        console.log('HEREEEEEEEEEE:::::' + scope.faType);
-//        console.log('HEREEEEEEEEEE:::::' + scope.translated);
-        
-        console.log('YEAAAAAH' + angular.element('legend').children().eq(0).text());
-        //angular.element('.item-container').children().eq(3).text()
     }));
 });
