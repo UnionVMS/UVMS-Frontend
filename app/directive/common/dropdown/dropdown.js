@@ -176,7 +176,6 @@ angular.module('unionvmsWeb')
             // Keyboard selection
             scope.keyboardEvent = function($event) { 
                 if ($event.keyCode === 13) {
-                    onClickOutsideMultiSelectDropdown();
                     if(angular.isDefined(scope.focusedItem)){
                         scope.selectVal(scope.focusedItem);
                         angular.element(event.currentTarget).toggleClass('open');
