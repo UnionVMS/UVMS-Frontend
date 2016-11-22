@@ -30,7 +30,7 @@ angular.module('unionvmsWeb')
 });
 
 angular.module('unionvmsWeb')
-    .controller('mobileTerminalDetailsCtrl', function($scope, $location, $filter, locale, SystemTypeAndPlugin, configurationService, MobileTerminalHistoryModal){
+    .controller('mobileTerminalDetailsCtrl', function($scope, $location, $filter, locale, SystemTypeAndPlugin, configurationService, MobileTerminalHistoryModal, mobileTerminalRestService, alertService, modalComment, mobileTerminalCsvService){
 
         $scope.transponderSystems = [];
 
@@ -48,10 +48,10 @@ angular.module('unionvmsWeb')
             }
         };
 
-        //Disable form
+        //Disable form (Temporary solution)
         $scope.disableForm = function() {
             if ($scope.modeltype === 'VESSEL') {
-                return true;
+                return false;
             }
             return false;
         }
@@ -93,23 +93,83 @@ angular.module('unionvmsWeb')
             });
         };
 
+        //Is multiple channels allowed for the terminal?
+        $scope.isMultipleChannelsAllowed = function(){
+            if(angular.isDefined($scope.mobileTerminal) && angular.isDefined($scope.getTerminalConfig())){
+                return $scope.getTerminalConfig().capabilities.SUPPORT_MULTIPLE_CHANNEL;
+            }
+            return false;
+        };
+
+        //Add a new channel to the end of the list of channels
+        $scope.addNewChannel = function(){
+            var newChannel = $scope.mobileTerminal.addNewChannel();
+            //Set LES for new channel
+            if(angular.isDefined($scope.mobileTerminal.plugin.labelName)){
+                //Set LES_DESCRIPTION if attribute is used for the channel
+                if($scope.getTerminalConfig().channelFields.LES_DESCRIPTION){
+                    newChannel.setLESDescription($scope.mobileTerminal.plugin.labelName);
+                }
+            }
+        };
+
+        //Remove a channel from the list of channels
+        $scope.removeChannel = function(channelIndex){
+            $scope.mobileTerminal.removeChannel(channelIndex);
+        };
+
+        // Update mobile terminal, add comment
+        $scope.updateMobileTerminal = function() {
+            modalComment.open($scope.updateMobileTerminalWithComment, {
+                titleLabel: locale.getString("mobileTerminal.updating"),
+                saveLabel: locale.getString("common.update")
+            });
+        };
+
+        //Update the mobile terminal
+        $scope.updateMobileTerminalWithComment = function(comment){
+            $scope.waitingForCreateResponse = true;
+            alertService.hideMessage();
+            mobileTerminalRestService.updateMobileTerminal($scope.mobileTerminal, comment)
+                    .then(updateMobileTerminalSuccess, updateMobileTerminalError);
+        };
+
+        // Success createing the mobile terminal
+        var updateMobileTerminalSuccess = function(updatedMobileTerminal){
+            $scope.waitingForCreateResponse = false;
+            alertService.showSuccessMessageWithTimeout(locale.getString('mobileTerminal.update_alert_message_on_success'));
+        };
+
+        //Error creating the new mobile terminal
+        var updateMobileTerminalError = function(error){
+            $scope.waitingForCreateResponse = false;
+            alertService.showErrorMessage(locale.getString('mobileTerminal.update_alert_message_on_error'));
+        };
+
+        $scope.createNewMobileTerminal = function() {
+            console.log('Create a new Mobile Terminal');
+        };
+
         //Open history modal
         $scope.onMobileTerminalHistoryClick = function(){
             MobileTerminalHistoryModal.show($scope.mobileTerminal);
         };
 
-        //Edit current mobile terminal
-        $scope.editMobileTerminalDetails = function(){
-            $location.path('/communication/' + $scope.mobileTerminal.guid);
-        };    
+        //Export single mobile terminal
+        $scope.exportTerminalCSV = function() {
+            mobileTerminalCsvService.download($scope.mobileTerminal);
+        };
 
+        // Menu bar functions
         $scope.menuBarFunctions = {
+            saveCallback: $scope.createNewMobileTerminal,
+            updateCallback: $scope.updateMobileTerminal,
             historyCallback: $scope.onMobileTerminalHistoryClick,
             showHistory: function(mobileTerminal) {
                 return true;
-            },
-            editCallback: $scope.editMobileTerminalDetails,
-            showEdit: function(mobileTerminal) {
+            }, 
+            exportToCsvCallback: $scope.exportTerminalCSV,
+            showExport: function(mobileTerminal) {
                 return true;
             }
         };
