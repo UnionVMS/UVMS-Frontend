@@ -650,34 +650,6 @@ angular.module('unionvmsWeb').factory('reportService',function($rootScope, $time
         }
     };
 	
-    //load reports on reportsList
-    rep.loadReportList = function(){
-        rep.isLoadingReportsList = true;
-        reportRestService.getReportsList().then(getReportsListSuccess, rep.getReportsListError);
-    };
-    
-    //SUCESS AND FAILURES CALLBACKS
-    
-    //Get Report List Success callback
-    var getReportsListSuccess = function(reports){
-        rep.reportsList = reports.data;
-        rep.isLoadingReportsList = false;
-        if(angular.isDefined(rep.reportsList) && rep.reportsList.length === 0){
-            rep.hasAlert = true;
-            rep.alertType = 'info';
-            rep.message = locale.getString('spatial.table_no_data');
-        }
-    };
-    
-    //Get Report List Failure callback
-    rep.getReportsListError = function(error){
-        rep.isLoadingReportsList = false;
-        rep.hasAlert = true;
-        rep.alertType = 'error';
-        rep.message = locale.getString('spatial.error_get_reports_list');
-        rep.reportsList = [];
-    };
-
     $rootScope.$on('$stateChangeStart', function() {
         rep.hasAlert = false;
     });

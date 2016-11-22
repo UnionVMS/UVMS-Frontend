@@ -167,7 +167,11 @@ describe('combobox', function() {
   }
 
   function callbackTest(comboTypeName,isolatedScope){
-    angular.element('body > ' + '#' + isolatedScope.comboboxId + ' > ul > li')[1].click();
+    if(comboTypeName === 'sectionCombo'){
+      angular.element('body > ' + '#' + isolatedScope.comboboxId + ' > ul > li > .dropdown-submenu > li')[0].click();
+    }else{
+      angular.element('body > ' + '#' + isolatedScope.comboboxId + ' > ul > li')[1].click();
+    }
     expect(isolatedScope.callback).toHaveBeenCalled();
   }
 
@@ -279,12 +283,15 @@ describe('combobox', function() {
         if(comboTypeName === 'editableCombo'){
           var comboEditableInput = angular.element('[combolist-id="' + isolatedScope.comboboxId + '"] .combo-editable-input');
           isolatedScope.focus = true;
-          comboEditableInput.val('Some text').trigger('input');
+          comboEditableInput.val('content1').trigger('input');
         }
 
         var model = isolatedScope.ngModel;
         if(comboTypeName === 'sectionCombo'){
           angular.element('body > #' + isolatedScope.comboboxId + ' > ul > li > .dropdown-submenu > li')[2].click();
+        }else if(comboTypeName === 'editableCombo'){
+          model = model.toLowerCase();
+          angular.element('body > #' + isolatedScope.comboboxId + ' > ul > li')[1].click();
         }else{
           angular.element('body > #' + isolatedScope.comboboxId + ' > ul > li')[2].click();
         }

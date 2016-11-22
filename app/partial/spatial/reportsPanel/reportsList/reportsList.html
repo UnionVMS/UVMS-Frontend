@@ -1,7 +1,7 @@
-<div ng-controller="ReportslistCtrl as rt" class="reportsListTable" st-table="displayedRecords" st-safe-src="repServ.reportsList">
+<div ng-controller="ReportslistCtrl as rt" class="reportsListTable" st-table="displayedRecords" st-safe-src="reportsList">
 	<div class="row reportBtnGroup">
 		<div class="col-md-6 report-btn-group">
-			<button type="button" class="btn btn-primary btn-sm" ng-click="repServ.loadReportList()">
+			<button type="button" class="btn btn-primary btn-sm" ng-click="loadReportList()">
 				<span class="fa fa-refresh" aria-hidden="true"></span>
 			</button>
 			<button type="button" class="btn btn-primary btn-sm" ng-click="openReportForm('CREATE')" ng-show="isAllowed('Reporting', 'CREATE_REPORT')">
@@ -27,17 +27,17 @@
 					<th style="min-width: 135px;">{{'spatial.table_header_actions' | i18n }}</th>
 				</tr>
 				<tr>
-					<th colspan="7" ng-if="!repServ.isLoadingReportsList && (tableAlert.visible || !displayedRecords.length)">
+					<th colspan="7" ng-if="!isLoadingReportsList && (tableAlert.visible || !displayedRecords.length)">
 						<table-alert type="tableAlert.type" msg="tableAlert.msg" visible="tableAlert.visible" timeout="tableAlert.timeout"></table-alert>
-						<table-alert type="'info'" msg="'spatial.table_no_data'" visible="!tableAlert.visible && !repServ.isLoadingReportsList && !displayedRecords.length"></table-alert>
+						<table-alert type="'info'" msg="'spatial.table_no_data'" visible="!tableAlert.visible && !isLoadingReportsList && !displayedRecords.length"></table-alert>
 					</th>
 				</tr>
-				<tr ng-if="repServ.isLoadingReportsList">
+				<tr ng-if="isLoadingReportsList">
 					<th colspan="7" class="loading-spinner-cl"><i class="fa fa-spinner fa-spin loading-spinner"></i></th>
 				</tr>
 			</thead>
 			<tbody>
-				<tr ng-repeat="report in displayedRecords" ng-if="displayedRecords.length && !repServ.isLoadingReportsList">
+				<tr ng-repeat="report in displayedRecords" ng-if="displayedRecords.length && !isLoadingReportsList">
 					<td class="break-word-column">{{ report.name }}</td>
 					<td class="break-word-column">{{ report.desc }}</td>
 					<td class="no-wrap-white-space">{{ report.createdOn | stDateUtc }}</td>
@@ -76,7 +76,7 @@
 					</td>
 				</tr>
 			</tbody>
-			<tfoot class="stFooterPagination" ng-show="displayedRecords.length && !repServ.isLoadingReportsList">
+			<tfoot class="stFooterPagination" ng-show="displayedRecords.length && !isLoadingReportsList">
 				<tr>
 					<td colspan="7" class="text-right">
 						<div st-pagination st-items-by-page="itemsByPage" st-displayed-pages="7" st-template="partial/common/reportsPagination/reportsPagination.html"></div>

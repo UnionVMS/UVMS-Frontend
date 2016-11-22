@@ -153,7 +153,7 @@ angular.module('unionvmsWeb').controller('SpatialCtrl',function($scope, $timeout
         $compile(comboFooter)($scope);
     };
 
-    $scope.openReportList = function(evt,reportsListLoaded){
+    $scope.openReportList = function(evt){
         //$scope.spatialHelper.deactivateFullscreen();
         $scope.comboServ.closeCurrentCombo(evt);
         if (evt && reportFormService.liveView.outOfDate){
@@ -163,19 +163,19 @@ angular.module('unionvmsWeb').controller('SpatialCtrl',function($scope, $timeout
             };
             confirmationModal.open(function(reason){
                 if(reason !== 'deny'){
-                    $scope.saveReport('list',reportsListLoaded);
+                    $scope.saveReport('list');
                 }
             },
             options);
         } else {
-            openReportsModal(reportsListLoaded);
+            openReportsModal();
         }
 
         
         
     };
 
-    var openReportsModal = function(reportsListLoaded){
+    var openReportsModal = function(){
         if (angular.isDefined($scope.repServ.autoRefreshInterval)){
             $scope.repServ.stopAutoRefreshInterval();
         }
@@ -184,12 +184,7 @@ angular.module('unionvmsWeb').controller('SpatialCtrl',function($scope, $timeout
         var modalInstance = $modal.open({
             templateUrl: 'partial/spatial/reportsPanel/reportsListModal/reportsListModal.html',
             controller: 'ReportslistmodalCtrl',
-            size: 'lg',
-            resolve: {
-                reportsListLoaded: function(){
-                    return reportsListLoaded;
-                }
-            }
+            size: 'lg'
         });
 
         if($scope.repNav.isViewVisible('mapPanel')){
@@ -227,7 +222,7 @@ angular.module('unionvmsWeb').controller('SpatialCtrl',function($scope, $timeout
         loadingStatus.isLoading('LiveviewMap',false);
     };
 
-    $scope.saveReport = function(action,reportsListLoaded){
+    $scope.saveReport = function(action){
         loadingStatus.isLoading('LiveviewMap', true, 4);
         $scope.tempReport = angular.copy(reportFormService.liveView.currentReport);
         reportFormService.liveView.currentReport.currentMapConfig.mapConfiguration.layerSettings = reportFormService.checkLayerSettings(reportFormService.liveView.currentReport.currentMapConfig.mapConfiguration.layerSettings);
@@ -238,7 +233,7 @@ angular.module('unionvmsWeb').controller('SpatialCtrl',function($scope, $timeout
             angular.copy(reportFormService.liveView.currentReport, reportFormService.liveView.originalReport);
             delete $scope.tempReport;
             if(action === 'list'){
-                openReportsModal(reportsListLoaded);
+                openReportsModal();
             }else{
                 $scope.repNav.goToView('reportsPanel','reportForm');
             }

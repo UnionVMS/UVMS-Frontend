@@ -35,12 +35,10 @@ angular.module('unionvmsWeb').controller('ReportslistCtrl',function($scope, $fil
         target_format: globalSettingsService.getDateFormat()
     };
     
-    $scope.repServ = reportService;
-
-    $scope.repServ.isLoadingReportsList = true;
+    $scope.isLoadingReportsList = true;
     $scope.tableAlert = reportMsgService;
     
-    $scope.repServ.reportsList = [];
+    $scope.reportsList = [];
     $scope.reportTableInstance = {};
     $scope.searchString = '';
     
@@ -51,19 +49,19 @@ angular.module('unionvmsWeb').controller('ReportslistCtrl',function($scope, $fil
     
     $scope.itemsByPage = 13;
     
-    $scope.displayedRecords = [].concat($scope.repServ.reportsList);
+    $scope.displayedRecords = [].concat($scope.reportsList);
     
     //Run the report
     $scope.runReport = function(index){
         var record = $scope.displayedRecords[index];
-        reportService.id = $scope.displayedRecords[index].id;
+        $scope.repServ.id = $scope.displayedRecords[index].id;
         $scope.repServ.runReport(record);
         $scope.close();
     };
     
     //Report filter definitions
     $scope.showFilters = function(index){
-        $scope.repServ.isLoadingReportsList = true;
+        $scope.isLoadingReportsList = true;
         reportRestService.getReport($scope.displayedRecords[index].id).then(getReportSuccess, getReportError);
     };
 
@@ -115,24 +113,24 @@ angular.module('unionvmsWeb').controller('ReportslistCtrl',function($scope, $fil
                 finalRepId = 0;
             }
             confirmationModal.open(function(){
-                $scope.repServ.isLoadingReportsList = true;
+                $scope.isLoadingReportsList = true;
                 reportRestService.setDefaultReport(finalRepId, true).then(setDefaultSuccess, setDefaultError);
             }, options);
         } else {
-            $scope.repServ.isLoadingReportsList = true;
+            $scope.isLoadingReportsList = true;
             reportRestService.setDefaultReport(repId, true).then(setDefaultSuccess, setDefaultError);
         }
     };
     
     $scope.setDefaultRepLocally = function(id, status){
-        var rec = $filter('filter')($scope.repServ.reportsList, {id: id})[0];
+        var rec = $filter('filter')($scope.reportsList, {id: id})[0];
         if (angular.isDefined(rec)){
             rec.isDefault = status;
         }
     };
     
     var setDefaultSuccess = function(response){
-        $scope.repServ.isLoadingReportsList = false;
+        $scope.isLoadingReportsList = false;
         
         //first check if there was a default report and set isDefault to false
         var defRep = spatialHelperService.getDefaultReport(false);
@@ -153,7 +151,7 @@ angular.module('unionvmsWeb').controller('ReportslistCtrl',function($scope, $fil
     }; 
     
     var setDefaultError = function(error){
-        $scope.repServ.isLoadingReportsList = false;
+        $scope.isLoadingReportsList = false;
         $scope.tableAlert.type = 'error';
         $scope.tableAlert.msg = 'spatial.reports_set_default_report_error';
         $scope.tableAlert.visible = true;
@@ -166,20 +164,20 @@ angular.module('unionvmsWeb').controller('ReportslistCtrl',function($scope, $fil
                 textLabel : locale.getString("spatial.reports_share_report_confirmation_text") + $scope.displayedRecords[index].name.toUpperCase()  + '?'
             };
             confirmationModal.open(function(){
-                reportRestService.shareReport($scope.displayedRecords[index].id, visibility, index).then(refreshSharedReport, $scope.repServ.getReportsListError);
+                reportRestService.shareReport($scope.displayedRecords[index].id, visibility, index).then(refreshSharedReport, $scope.getReportsListError);
             }, options);
         }
     };
 
     var refreshSharedReport = function(response){
-        var index = $scope.repServ.reportsList.indexOf($scope.displayedRecords[response.reportIdx]);
+        var index = $scope.reportsList.indexOf($scope.displayedRecords[response.reportIdx]);
        
         if (index !== -1) {
-            $scope.repServ.reportsList[index].shareable = response.data;
-            $scope.repServ.reportsList[index].visibility = response.visibility;      
+            $scope.reportsList[index].shareable = response.data;
+            $scope.reportsList[index].visibility = response.visibility;      
         }
 
-        $scope.repServ.isLoadingReportsList = false;
+        $scope.isLoadingReportsList = false;
         $anchorScroll();
     };
 
@@ -204,13 +202,13 @@ angular.module('unionvmsWeb').controller('ReportslistCtrl',function($scope, $fil
     
    //Get Report Configs Success callback
     var getReportSuccess = function(response){
-        $scope.repServ.isLoadingReportsList = false;
+        $scope.isLoadingReportsList = false;
         $scope.openReportForm('EDIT',response);
     };
     
     //Get Report Configs Failure callback
     var getReportError = function(error){
-        $scope.repServ.isLoadingReportsList = false;
+        $scope.isLoadingReportsList = false;
         $anchorScroll();
         $scope.tableAlert.type = 'error';
         $scope.tableAlert.msg = 'spatial.error_entry_not_found';
@@ -219,8 +217,8 @@ angular.module('unionvmsWeb').controller('ReportslistCtrl',function($scope, $fil
     
     //Delete report Success callback
     var deleteReportSuccess = function(resp){
-        reportService.loadReportHistory();
-    	var index = $scope.repServ.reportsList.indexOf($scope.displayedRecords[resp.index]);
+        $scope.repServ.loadReportHistory();
+    	var index = $scope.reportsList.indexOf($scope.displayedRecords[resp.index]);
     	
     	//Check if report is the current liveview report and if so remova data
     	var rep = $scope.displayedRecords[resp.index];
@@ -232,9 +230,9 @@ angular.module('unionvmsWeb').controller('ReportslistCtrl',function($scope, $fil
     	}
     	
         if (index !== -1) {
-            $scope.repServ.reportsList.splice(index, 1);
+            $scope.reportsList.splice(index, 1);
         }
-        $scope.repServ.isLoadingReportsList = false;
+        $scope.isLoadingReportsList = false;
         $anchorScroll();
         $scope.tableAlert.type = 'success';
         $scope.tableAlert.msg = 'spatial.success_delete_report';
@@ -243,7 +241,7 @@ angular.module('unionvmsWeb').controller('ReportslistCtrl',function($scope, $fil
     
     //Delete report Failure callback
     var deleteReportError = function(error){
-        $scope.repServ.isLoadingReportsList = false;
+        $scope.isLoadingReportsList = false;
         $anchorScroll();
         var searchString = 'spatial.' + error.msg;
         $scope.tableAlert.type = 'error';
@@ -251,11 +249,6 @@ angular.module('unionvmsWeb').controller('ReportslistCtrl',function($scope, $fil
         $scope.tableAlert.timeout = 8000;
         $scope.tableAlert.visible = true;
     };
-    
-    //Finally we check if we should automatically load reports
-    if (!$scope.reportsListLoaded){
-        $scope.repServ.loadReportList();
-    }
     
     $scope.openMapOnNewTab = function(repId){
         if (!angular.isDefined(repId)){
@@ -280,4 +273,37 @@ angular.module('unionvmsWeb').controller('ReportslistCtrl',function($scope, $fil
        return userService.isAllowed(feature, module, true);
    };
 
+   //load reports on reportsList
+    $scope.loadReportList = function(){
+        $scope.isLoadingReportsList = true;
+        reportRestService.getReportsList().then(getReportsListSuccess, getReportsListError);
+    };
+    
+    //SUCESS AND FAILURES CALLBACKS
+    
+    //Get Report List Success callback
+    var getReportsListSuccess = function(reports){
+        $scope.reportsList = reports.data;
+        $scope.isLoadingReportsList = false;
+        if(angular.isDefined($scope.reportsList) && $scope.reportsList.length === 0){
+            $scope.tableAlert.visible = true;
+            $scope.tableAlert.type = 'info';
+            $scope.tableAlert.msg = locale.getString('spatial.table_no_data');
+        }
+    };
+    
+    //Get Report List Failure callback
+    var getReportsListError = function(error){
+        $scope.isLoadingReportsList = false;
+        $scope.tableAlert.visible = true;
+        $scope.tableAlert.type = 'error';
+        $scope.tableAlert.msg = locale.getString('spatial.error_get_reports_list');
+        $scope.reportsList = [];
+    };
+
+    var init = function() {
+        $scope.loadReportList();
+    };
+    
+    init();
 });
