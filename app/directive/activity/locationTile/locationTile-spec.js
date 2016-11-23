@@ -15,16 +15,12 @@ describe('locationTile', function() {
         scope = $rootScope.$new();
         compile = $compile;
         
-//        controller = $controller('LocationTileCtrl', {
-//            $scope: scope
-//        }); 
-        
         if(!angular.element('#parent-container').length){
             var parentElement = angular.element('<div id="parent-container"></div>');
             parentElement.appendTo('body');
         }
         
-        $httpBackend = $httpBackend = $injector.get('$httpBackend');;
+        $httpBackend = $injector.get('$httpBackend');;
         $httpBackend.whenGET(/usm/).respond();
         $httpBackend.whenGET(/i18n/).respond();
         $httpBackend.whenGET(/globals/).respond({data : []});
