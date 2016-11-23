@@ -1,5 +1,4 @@
 describe('faReportDocTile', function() {
-    //TODO
     beforeEach(module('unionvmsWeb'));
     
     var scope,compile,$httpBackend,tile;

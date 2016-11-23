@@ -93,10 +93,10 @@ angular.module('unionvmsWeb').factory('Departure',function() {
             lsc: 12000,
             bms: 345,
             locations: [{
-                name: '39F6-27.4.b.XEU',
-            }, {
-                name: '39F6-27.4.a.XEU',
-                geometry: 'POLYGON ((30 10, 10 20, 20 40, 40 40, 30 10))'
+                name: '39F6-27.4.b.XEU'
+//            }, {
+//                name: '39F6-27.4.a.XEU',
+//                geometry: 'POLYGON ((30 10, 10 20, 20 40, 40 40, 30 10))'
             }],
             details: {
                 type: 'ONB - Onboard',
@@ -107,7 +107,7 @@ angular.module('unionvmsWeb').factory('Departure',function() {
             species: 'SOL',
             speciesName: 'Sole',
             lsc: 1200,
-            bms: 34,
+            bms: 540,
             locations: [{
                 name: '39F6-27.4.b.XEU',
                 geometry: ''

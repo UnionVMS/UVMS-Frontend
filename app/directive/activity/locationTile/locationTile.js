@@ -6,7 +6,8 @@
  * @attr {Object} locationDetails - An object containing the data to be used witin the tile (e.g. location name and geometry)
  * @attr {Boolean} isClickable - Whether the tile should be clickable or not so that we can zoom to the location in the main map controlled by the mapService ({@link unionvmsWeb.mapService})
  * @attr {Function} [clickCallback] - An optional click callback function
- * @attr {String | Number} [bufferDist] - An optional buffer distance that will be applied to the location geometry for the purpose of calculating the extent into which the map should be zoomed to
+ * @attr {String | Number} [bufferDist] - An optional buffer distance that will be applied to the location geometry (only if it is a point geometry type) for the purpose of calculating the
+ *       extent into which the map should be zoomed to
  * @description
  *  A reusable tile that will display location details (as a single location or a list of locations) and, optionally, allow to zoom the main map (controlled by the mapService) to the specified location
  */
@@ -51,7 +52,11 @@ angular.module('unionvmsWeb').directive('locationTile', function() {
      */
     $scope.zoomToLocation = function(item){
         if (!angular.isDefined(item)){
-            item = $scope.locationDetails;
+            if (_.isArray($scope.locationDetails)){
+                item = $scope.locationDetails[0];
+            } else {
+                item = $scope.locationDetails;
+            }
         }
         //TODO test this function when we have it running with reports
         if ($scope.isItemClickable(item)){
@@ -64,7 +69,7 @@ angular.module('unionvmsWeb').directive('locationTile', function() {
                 finalGeom = ol.geom.Polygon.fromExtent(extent);
             }
             
-            //mapService.zoomTo(finalGeom);
+            mapService.zoomTo(finalGeom);
             if (angular.isDefined($scope.clickCallback)){
                 $scope.clickCallback();
             }
@@ -107,6 +112,24 @@ angular.module('unionvmsWeb').directive('locationTile', function() {
             status = false;
         } else if ($scope.multiple && $scope.locationDetails.length === 0){
             status = false;
+        }
+        
+        return status;
+    };
+    
+    /**
+     * Check if the directive should behave as multiple or not. This is needed to check if locationDeatils is an array of a single item, where
+     * in such case it should behave as not multiple
+     * 
+     * @memberof LocationTileCtrl
+     * @public
+     * @alias checkIsMultiple
+     * @returns {Boolean} Whether the directive is using a multiple data source or not
+     */
+    $scope.checkIsMultiple = function(){
+        var status = false;
+        if ($scope.multiple && $scope.locationDetails.length > 1){
+            status = true;
         }
         
         return status;
