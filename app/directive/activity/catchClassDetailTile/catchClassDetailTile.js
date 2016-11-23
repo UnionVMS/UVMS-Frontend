@@ -83,13 +83,15 @@ controller('CatchClassDetailTileCtrl', function($scope, locale){
                         return $scope.ngModel[xValue].species;
                     },
                     contentGenerator: function(data){
-                        var html = '<table class="catch-class-detail-chart"><thead><tr><td colspan="3"><strong>SOL</strong></td></tr></thead><tbody>';
+                        var html = '<table class="catch-class-detail-chart"><thead><tr><td colspan="3"><strong>';
+                        html += data.series[0].data.species; 
+                        html += '</strong></td></tr></thead><tbody>';
                         for (var i = 0; i < data.series.length; i++){
                             html += '<tr><td class="legend-color-guide"><div style="background-color: #' + data.series[i].color + '"></div></td>';
                             html += '<td class="key">' + data.series[i].key + '</td>';
                             html += '<td class="value">' + data.series[i].value + ' kg' + '</td></tr>';
                         }
-                        html += '</tbody></table';
+                        html += '</tbody></table>';
                         
                         return html;
                     }
@@ -153,15 +155,15 @@ controller('CatchClassDetailTileCtrl', function($scope, locale){
      * @memberof CatchClassDetailTileCtrl
      * @private
      * @param {Object} data - The object containing the source data
-     * @param {String} type - The record type that should be generated (supported options: 'lms' and 'bms')
+     * @param {String} type - The record type that should be generated (supported options: 'lsc' and 'bms')
      * @param {Number} idx - The index of the source object
      * @returns {Object} The record object to be used as input for the chart data series
      */
     function generateChartRecord (data, type, idx){
         return {
             idx: idx,
-            key: data.species,
-            series: type === 'lms' ? 0 : 1,
+            species: data.species,
+            series: type === 'lsc' ? 0 : 1,
             x: idx,
             y: data[type]
         };
