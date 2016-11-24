@@ -12,18 +12,6 @@
 angular.module('unionvmsWeb').controller('ActivityCtrl',function($scope, locale, activityService, breadcrumbService){
     $scope.actServ = activityService;
     
-    //FIXME - this should be removed when reverting back to normal activity
-    locale.ready('activity').then(function(){
-        init();
-    });
-    
-    //FIXME to be removed when reverting to normal activity
-    var init = function(){
-        //$scope.actServ.reset();
-        
-    }; 
-    
-    /*************************************************************************************/
     /**
      * Check if partial should be visible according to the breadcrumbPages item status
      * 
