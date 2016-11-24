@@ -73,13 +73,6 @@ describe('catchClassDetailTile', function() {
             expect(record.series).toEqual(0);
             expect(record.x).toBe(0);
             expect(record.y).toEqual(scope.ngModel[0].lsc);
-            
-//            scope.ngModel.shift();
-//            scope.init();
-//            expect(scope.selected).toEqual(scope.ngModel[0]);
-//            expect(scope.selected.total).toEqual(scope.ngModel[0].lsc + scope.ngModel[0].bms);
-//            expect(scope.chartData.length).toBe(2);
-            
         });
         
         it('should retrieve species as ticks', function(){
@@ -144,6 +137,31 @@ describe('catchClassDetailTile', function() {
             expect(scope.selected).toEqual(scope.ngModel[1]);
         });
         
-    });    
-    //<catch-class-detail-tile class="col-md-12 summary-section" ng-model="faServ.activityData.fishingData" tile-title="{{'activity.departure_catch_detail' | i18n}}" is-location-clickable="isLocationClickable()" buffer-distance="5000" click-callback="locationClickCallback()"></catch-class-detail-tile>
+    });
+    
+    describe('testing the directive: catchClassDetailTile', function(){
+        afterEach(function(){
+            angular.element('catch-class-detail-tile').remove();
+        });
+        
+        it('should properly render the tile', function(){
+            scope.ngModel = builMockData();
+            
+            tile = compile('<catch-class-detail-tile ng-model="ngModel" tile-title="test"></catch-class-detail-tile>')(scope);
+            tile.appendTo('#parent-container');
+            scope.$digest();
+            
+            var testScope = tile.isolateScope();
+            
+            expect(angular.element('legend').children().text()).toEqual('test');
+            expect(angular.element('rect').length).toEqual(scope.ngModel.length * 2 + 1);
+            expect(angular.element('.species-title').text()).toEqual(testScope.selected.species + ' - ' + testScope.selected.speciesName);
+            expect(angular.element('.section').find('span').eq(1).text()).toEqual(testScope.selected.details.type);
+            expect(angular.element('.section').find('span').eq(3).text()).toEqual(testScope.selected.details.unit.toString());
+            expect(angular.element('.section').find('span').eq(5).text()).toEqual(testScope.selected.total + ' kg');
+            expect(angular.element('.section').find('span').eq(7).text()).toEqual(testScope.selected.details.weightMeans);
+            expect(angular.element('td:not(.uppercase)').eq(0).text()).toEqual(testScope.selected.lsc.toString());
+            expect(angular.element('td:not(.uppercase)').eq(1).text()).toEqual(testScope.selected.bms.toString());
+        });
+    });
 });
