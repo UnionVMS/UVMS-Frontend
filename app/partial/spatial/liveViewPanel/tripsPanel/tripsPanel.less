@@ -1,3 +1,28 @@
+.activity-summary-row {
+    display: flex;
+    .summary-section {
+        padding-left: 0;
+        padding-right: 15px;
+        align-items: stretch;
+        display: flex;
+        &:first-child {
+            padding-left: 15px;
+        }
+        fieldset {
+            padding-bottom: 10px;
+            margin-bottom: 5px;
+            align-items: stretch;
+            legend {
+                margin: 0 5px 0 -5px;
+                padding: 0 5px;
+                a {
+                    cursor: default;
+                }
+            }
+        }
+    }
+}
+
 .trips-panel {
     background-color: #fff;
     padding-top: 10px;
@@ -11,27 +36,6 @@
             margin-top: -1px;
             padding: 5px 30px 5px 15px;
             position: relative;
-            .summary-row {
-                display: flex;
-                .summary-section {
-                    padding-left: 0;
-                    padding-right: 15px;
-                    align-items: stretch;
-                    display: flex;
-                    &:first-child {
-                        padding-left: 15px;
-                    }
-                    fieldset {
-                        padding-bottom: 10px;
-                        margin-bottom: 5px;
-                        align-items: stretch;
-                        legend {
-                            margin: 0 5px 0 -5px;
-                            padding: 0 5px;
-                        }
-                    }
-                }
-            }
             .btn-trip-quit,
             .btn-print {
                 position: absolute;

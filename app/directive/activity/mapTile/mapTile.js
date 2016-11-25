@@ -12,7 +12,7 @@ angular.module('unionvmsWeb').directive('mapTile', function($timeout) {
 	return {
 		restrict: 'E',
 		replace: false,
-		controller: 'mapTileCtrl',
+		controller: 'MapTileCtrl',
 		scope: {
 		    tileTitle: '@',
 		    mapHeight: '@',
@@ -33,7 +33,7 @@ angular.module('unionvmsWeb').directive('mapTile', function($timeout) {
 /**
  * @memberof unionvmsWeb
  * @ngdoc controller
- * @name mapTileCtrl
+ * @name MapTileCtrl
  * @param $scope {Service} The controller scope
  * @param locale {Service} The angular locale service
  * @param $interval {Service} The angular interval
@@ -46,14 +46,14 @@ angular.module('unionvmsWeb').directive('mapTile', function($timeout) {
  * @description
  *  The controller for the mapTile directive ({@link unionvmsWeb.mapTile})
  */
-.controller('mapTileCtrl', function($scope, locale, $interval, genericMapService, tripSummaryService, projectionService){
+.controller('MapTileCtrl', function($scope, locale, $interval, genericMapService, tripSummaryService, projectionService){
     var self = this;
     $scope.mapHeight = '200';
     
     /**
      * Generates a map id to be used in the div containing the map
      * 
-     * @memberof mapTileCtrl
+     * @memberof MapTileCtrl
      * @public
      * @alias generateMapId
      * @returns {String} The generated map ID 
@@ -70,7 +70,7 @@ angular.module('unionvmsWeb').directive('mapTile', function($timeout) {
     /**
      * Creates an interval to get the basic configurations for the OL map
      * 
-     * @memberof mapTileCtrl
+     * @memberof MapTileCtrl
      * @public
      * @alias getMapConfigs
      */
@@ -86,7 +86,7 @@ angular.module('unionvmsWeb').directive('mapTile', function($timeout) {
     /**
      * Stop the interval that sets up the map
      * 
-     * @memberof mapTileCtrl
+     * @memberof MapTileCtrl
      * @private
      * @alias stopInterval
      */
@@ -98,7 +98,7 @@ angular.module('unionvmsWeb').directive('mapTile', function($timeout) {
     /**
      * Creates the OL map
      * 
-     * @memberof mapTileCtrl
+     * @memberof MapTileCtrl
      * @public
      * @alias createMap
      */
@@ -154,7 +154,7 @@ angular.module('unionvmsWeb').directive('mapTile', function($timeout) {
     /**
      * Add base layers to the map
      * 
-     * @memberof mapTileCtrl
+     * @memberof MapTileCtrl
      * @private
      */
     function addBaseLayers(){
@@ -181,7 +181,7 @@ angular.module('unionvmsWeb').directive('mapTile', function($timeout) {
     /**
      * Add OSM layer to the map
      * 
-     * @memberof mapTileCtrl
+     * @memberof MapTileCtrl
      * @private
      * @param {Object} [config={}] - The object containing the layer definitions
      */
@@ -197,7 +197,7 @@ angular.module('unionvmsWeb').directive('mapTile', function($timeout) {
     /**
      * Add WMS layers to the map
      * 
-     * @memberof mapTileCtrl
+     * @memberof MapTileCtrl
      * @private
      * @param {Object} [config={}] - The object containing the layer definitions
      */
@@ -212,7 +212,7 @@ angular.module('unionvmsWeb').directive('mapTile', function($timeout) {
     /**
      * Add Bing layers to the map
      * 
-     * @memberof mapTileCtrl
+     * @memberof MapTileCtrl
      * @private
      * @param {Object} [config={}] - The object containing the layer definitions
      */
@@ -228,7 +228,7 @@ angular.module('unionvmsWeb').directive('mapTile', function($timeout) {
     /**
      * Create vector layer and add it to the map
      * 
-     * @memberof mapTileCtrl
+     * @memberof MapTileCtrl
      * @private
      * @returns {ol.layer.Vector} The OL vector layer
      */
@@ -259,9 +259,9 @@ angular.module('unionvmsWeb').directive('mapTile', function($timeout) {
     /**
      * Add vector data to the vector layer
      * 
-     * @memberof mapTileCtrl
+     * @memberof MapTileCtrl
      * @private
-     * @params {ol.layer.Vector} layer - The OL vector layer
+     * @param {ol.layer.Vector} layer - The OL vector layer
      */
     function addVectorData(layer){
         var features = (new ol.format.GeoJSON()).readFeatures($scope.mapData, {
@@ -275,7 +275,7 @@ angular.module('unionvmsWeb').directive('mapTile', function($timeout) {
     /**
      * Register listener that will zoom to the extent of the vector source data
      * 
-     * @memberof mapTileCtrl
+     * @memberof MapTileCtrl
      * @public
      * @alias registerZoomToExtentListener
      * @param {ol.layer.Vector} layer - The OL vector layer

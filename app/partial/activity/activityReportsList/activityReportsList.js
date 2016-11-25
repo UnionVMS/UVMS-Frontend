@@ -55,7 +55,7 @@ angular.module('unionvmsWeb').controller('ActivityreportslistCtrl',function($sco
      * 
      * @memberof ActivityreportslistCtrl
      * @private
-     * @params {String} tablePredicate - The name of the attribute in the client side 
+     * @param {String} tablePredicate - The name of the attribute in the client side 
      * @returns {String} The name of the attribute in the server side
      */
     function getTruePredicate(tablePredicate){
@@ -82,7 +82,11 @@ angular.module('unionvmsWeb').controller('ActivityreportslistCtrl',function($sco
      * @param {Number} idx - The index of the activity record to use to fetch the overview data
      */
     $scope.openOverview = function(idx){
-        $scope.actServ.overview = $scope.displayedActivities[idx];
-        $scope.goToView(1);
+        $scope.actServ.overview = $scope.actServ.displayedActivities[idx];
+        //FIXME check this when all backend services are ready
+        if (angular.isDefined($scope.actServ.overview.fluxReportReferenceId) && $scope.actServ.overview.uniqueReportIdList.length > 0){
+            $scope.actServ.getHistory();
+            $scope.goToView(1);
+        }
     };
 });

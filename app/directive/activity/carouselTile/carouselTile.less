@@ -1,0 +1,68 @@
+.carousel-tile {
+    .no-data {
+        text-align: center;
+        top: 0;
+        bottom: 0;
+        left: 15px;
+        right: 15px;
+        position: absolute;
+        div {
+            display: table;
+            height: 100%;
+            span {
+                display: table-cell;
+                vertical-align: middle;
+                font-size: 22px;
+                color: #ddd;
+            }
+        }
+    }
+    .dropdown-menu {
+        max-height: 150px !important;
+    }
+    .active-menu {
+        font-weight: bold;
+    }
+    .fieldsetLegendStyle {
+        margin-bottom: 10px !important;
+        .fa {
+            color: @primaryColor;
+            cursor: pointer;
+        }
+    }
+    .item-container {
+        display: flex;
+        .labels {
+            font-weight: bold;
+            white-space: nowrap;
+            &::after {
+                content: ':'
+            }
+        }
+    }
+    [uib-carousel] {
+        &.without-arrows {
+            .carousel-control {
+                display: none;
+            }
+        }
+        .carousel-indicators {
+            display: none;
+        }
+        .carousel-control {
+            top: 30px;
+            width: 17px;
+            background: #fff;
+            span {
+                margin-left: 0;
+                font-size: 20px;
+            }
+            &.left span {
+                left: 0;
+            }
+            &.right span {
+                right: 0;
+            }
+        }
+    }
+}

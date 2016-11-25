@@ -15,7 +15,7 @@
 						<div class="col-md-4 reportSubform activity-form">
 							<div class="form-group row">
 								<div class="col-md-4 label-container centerLabelCombo">
-									<label>{{'activity.reports_form_activity_report_type' | i18n }}</label>
+									<label>{{'spatial.reports_form_activity_report_type' | i18n }}</label>
 								</div>
 								<div class="col-md-8">
 									<combobox ng-model="report.faFilters.reportType" name="reportType" items="reportTypes" initialtext="{{'common.all' | i18n }}"></combobox>
@@ -23,7 +23,7 @@
 							</div>
 							<div class="form-group row">
 								<div class="col-md-4 label-container centerLabelCombo">
-									<label>{{'activity.reports_form_activity_activity_type' | i18n }}</label>
+									<label>{{'spatial.reports_form_activity_activity_type' | i18n }}</label>
 								</div>
 								<div class="col-md-8">
 									<combobox ng-model="report.faFilters.activityType" name="activityType" items="activityTypes" initialtext="{{'common.all' | i18n }}"></combobox>
@@ -31,7 +31,7 @@
 							</div>
 							<div class="form-group row">
 								<div class="col-md-4 label-container centerLabelCombo">
-									<label>{{'activity.reports_form_activity_master' | i18n}}</label>
+									<label>{{'spatial.reports_form_activity_master' | i18n}}</label>
 								</div>
 								<div class="col-md-8">
 									<input type="text" class="form-control" name="master" ng-model="report.faFilters.master"/>
@@ -42,17 +42,17 @@
 						<div class="col-md-4 reportSubform technical-form">
 							<div class="row port-form-group">
 								<div class="form-group col-md-2 label-container centerLabelCombo label-top-space">
-									<label>{{'activity.reports_form_activity_port' | i18n }}</label>
+									<label>{{'spatial.reports_form_activity_port' | i18n }}</label>
 								</div>
 								<div class="form-group col-md-5">
 									<label class="above-label">
-										{{'activity.reports_form_activity_port_departure' | i18n }}
+										{{'spatial.reports_form_activity_port_departure' | i18n }}
 										<combobox ng-model="report.faFilters.port.departure" name="portDeparture" initialtext="{{'common.all' | i18n }}" items="ports"></combobox>
 									</label>
 								</div>
 								<div class="form-group col-md-5">
 									<label class="above-label">
-										{{'activity.reports_form_activity_port_arrival' | i18n }}
+										{{'spatial.reports_form_activity_port_arrival' | i18n }}
 										<combobox ng-model="report.faFilters.port.arrival" name="portArrival" initialtext="{{'common.all' | i18n }}" items="ports"></combobox>
 									</label>
 								</div>
@@ -61,24 +61,24 @@
 								</div>
 								<div class="form-group col-md-5">
 									<label class="above-label">
-										{{'activity.reports_form_activity_port_landing' | i18n }}
+										{{'spatial.reports_form_activity_port_landing' | i18n }}
 										<combobox ng-model="report.faFilters.port.landing" name="portLanding" initialtext="{{'common.all' | i18n }}" items="ports"></combobox>
 									</label>
 								</div>
 							</div>
 							<div class="row form-group">
 								<div class="col-md-2 label-container centerLabelCombo label-top-space">
-									<label>{{'activity.reports_form_activity_gear' | i18n }}</label>
+									<label>{{'spatial.reports_form_activity_gear' | i18n }}</label>
 								</div>
 								<div class="col-md-5">
 									<label class="above-label">
-										{{'activity.reports_form_activity_gear_onboard' | i18n }}
+										{{'spatial.reports_form_activity_gear_onboard' | i18n }}
 										<combobox ng-model="report.faFilters.gear.onboard" name="gearOnBoard" initialtext="{{'common.all' | i18n }}" items="gearTypes"></combobox>
 									</label>
 								</div>
 								<div class="col-md-5">
 									<label class="above-label">
-										{{'activity.reports_form_activity_gear_deployed' | i18n }}
+										{{'spatial.reports_form_activity_gear_deployed' | i18n }}
 										<combobox ng-model="report.faFilters.gear.deployed" name="gearDeployed" initialtext="{{'common.all' | i18n }}" items="gearTypes"></combobox>
 									</label>
 								</div>
@@ -88,7 +88,7 @@
 						<div class="col-md-4 reportSubform species-form">
 							<div class="row form-group">
 								<div class="col-md-2 label-container center-label-multiple-combo">
-									<label>{{'activity.reports_form_activity_species' | i18n }}</label>
+									<label>{{'spatial.reports_form_activity_species' | i18n }}</label>
 								</div>
 								<div class="col-md-10">
 									<combobox ng-model="report.faFilters.species" name="species" initialtext="{{'common.all' | i18n }}" items="species" multiple="true"></combobox>
@@ -96,12 +96,12 @@
 							</div>
 							<div class="row">
 								<div class="form-group col-md-2 label-container centerLabelCombo">
-									<label>{{'activity.reports_form_activity_weight' | i18n }}</label>
+									<label>{{'spatial.reports_form_activity_weight' | i18n }}</label>
 								</div>
 								<div class="form-group col-md-5">
 									<div class="unit-input" ng-class="{'has-error': activitySecForm.weightMin.$invalid && submitingReport === true}">
 										<numeric-input validate-min-in-range class="form-control" name="weightMin" ng-model="report.faFilters.weight.min" type="number" min="0" max="report.faFilters.weight.max"></numeric-input>
-										<div class="unit-box">{{'activity.advanced_search_min' | i18n}}</div>
+										<div class="unit-box">{{'spatial.reports_form_vms_min_speed' | i18n}}</div>
 									</div>
 								</div>
 								<div class="form-group col-md-5">
@@ -113,7 +113,7 @@
 								<div class="form-group col-md-5">
 									<div class="unit-input" ng-class="{'has-error': activitySecForm.weightMax.$invalid && submitingReport === true}">
 										<numeric-input validate-max-in-range class="form-control" name="weightMax" ng-model="report.faFilters.weight.max" min="report.faFilters.weight.min"></numeric-input>
-										<div class="unit-box">{{'activity.advanced_search_max' | i18n}}</div>
+										<div class="unit-box">{{'spatial.reports_form_vms_max_speed' | i18n}}</div>
 									</div>
 								</div>
 							</div>

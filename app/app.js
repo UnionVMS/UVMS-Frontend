@@ -466,7 +466,7 @@ unionvmsWebApp.config(function($stateProvider, $compileProvider, tmhDynamicLocal
             },
             onExit: function(loadingStatus, activityService){
                 loadingStatus.resetState();
-                activityService.reset();
+                activityService.reset(true);
             }
         })
         .state('app.exchange', {

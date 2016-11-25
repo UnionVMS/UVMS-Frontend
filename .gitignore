@@ -6,3 +6,5 @@ fonts
 node_modules
 testResults
 temp
+.project
+.tern-project

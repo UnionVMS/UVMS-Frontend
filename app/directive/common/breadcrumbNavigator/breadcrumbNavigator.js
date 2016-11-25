@@ -16,13 +16,13 @@ angular.module('unionvmsWeb').directive('breadcrumbNavigator', function() {
 		    callback: "&"
 		},
 		templateUrl: 'directive/common/breadcrumbNavigator/breadcrumbNavigator.html',
-		controller: 'breadcrumbnavigatorCtrl'
+		controller: 'BreadcrumbnavigatorCtrl'
 	};
 })
 /**
  * @memberof unionvmsWeb
  * @ngdoc controller
- * @name breadcrumbnavigatorCtrl
+ * @name BreadcrumbnavigatorCtrl
  * @param $scope {Service} The controller scope
  * @param breadcrumbService {Service} The breadcrumb service <p>{@link unionvmsWeb.breadcrumbService}</p>
  * @attr items {Array} - An array containing the items that should be used for the breadcrumbs and their visibility status
@@ -30,13 +30,13 @@ angular.module('unionvmsWeb').directive('breadcrumbNavigator', function() {
  * @description
  *  The controller for the breadcrumb navigator directive ({@link unionvmsWeb.breadcrumbNavigator})
  */
-.controller('breadcrumbnavigatorCtrl', ['$scope', 'breadcrumbService', function($scope, breadcrumbService){
+.controller('BreadcrumbnavigatorCtrl', ['$scope', 'breadcrumbService', function($scope, breadcrumbService){
     $scope.activeItemIdx = 0;
     
     /**
      * Function that is fired when a breadcrumb's item is clicked
      * 
-     * @memberof breadcrumbnavigatorCtrl
+     * @memberof BreadcrumbnavigatorCtrl
      * @public
      * @alias handleClick
      * @param {Number} idx - The index of the breadcrumb's clicked item 
@@ -54,7 +54,7 @@ angular.module('unionvmsWeb').directive('breadcrumbNavigator', function() {
     /**
      * Go to breadcrumbs item by index. This function is accessible through the breadcrumb service ({@link unionvmsWeb.breadcrumbService})
      * 
-     * @memberof breadcrumbnavigatorCtrl
+     * @memberof BreadcrumbnavigatorCtrl
      * @public
      * @alias goToItem
      * @param {Number} idx - The index of the breadcrumb's item to go to 
@@ -69,7 +69,7 @@ angular.module('unionvmsWeb').directive('breadcrumbNavigator', function() {
     /**
      * Get the index of the current and active breadcrumb item. This function is accessible through the breadcrumb service ({@link unionvmsWeb.breadcrumbService})
      * 
-     * @memberof breadcrumbnavigatorCtrl
+     * @memberof BreadcrumbnavigatorCtrl
      * @public
      * @alias getActiveItemIdx
      * @returns {Number} The index of the active breadcrumb

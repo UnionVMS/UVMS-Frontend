@@ -42,7 +42,7 @@
 								<div class="row">
 									<div class="form-group col-md-6">
 										<label class="vms-labels">
-											{{'spatial.reports_form_vms_min_speed' | i18n }}
+											<span class="with-dot-notation">{{'spatial.reports_form_vms_min_speed' | i18n }}</span>
 											<div class="unit-input" ng-class="{'has-error': positionSecForm.movMinSpeed.$invalid && submitingReport === true}">
 												<numeric-input class="form-control" ng-model="report.vmsFilters.positions.movMinSpeed" name="movMinSpeed"></numeric-input>
 												<div class="unit-box">{{'spatial.reports_form_vms_field_label_speed_unit_knots' | i18n }}</div>
@@ -51,7 +51,7 @@
 									</div>
 									<div class="form-group col-md-6">
 										<label class="vms-labels">
-											{{'spatial.reports_form_vms_max_speed' | i18n }}
+											<span class="with-dot-notation">{{'spatial.reports_form_vms_max_speed' | i18n }}</span>
 											<div class="unit-input" ng-class="{'has-error': positionSecForm.movMaxSpeed.$invalid && submitingReport === true}">
 												<numeric-input class="form-control" ng-model="report.vmsFilters.positions.movMaxSpeed" name="movMaxSpeed" type="number"></numeric-input>
 												<div class="unit-box">{{'spatial.reports_form_vms_field_label_speed_unit_knots' | i18n }}</div>
@@ -134,7 +134,7 @@
 								<div class="row">
 									<div class="form-group col-md-6">
 										<label class="vms-labels">
-											{{'spatial.reports_form_vms_min_speed' | i18n }}
+											<span class="with-dot-notation">{{'spatial.reports_form_vms_min_speed' | i18n }}</span>
 											<div class="unit-input" ng-class="{'has-error': segmentSecForm.segMinSpeed.$invalid && submitingReport === true}">
 												<numeric-input class="form-control" ng-model="report.vmsFilters.segments.segMinSpeed" name="segMinSpeed" type="number"></numeric-input>
 												<div class="unit-box">{{'spatial.reports_form_vms_field_label_speed_unit_knots' | i18n }}</div>
@@ -143,7 +143,7 @@
 									</div>
 									<div class="form-group col-md-6">
 										<label class="vms-labels">
-											{{'spatial.reports_form_vms_max_speed' | i18n }}
+											<span class="with-dot-notation">{{'spatial.reports_form_vms_max_speed' | i18n }}</span>
 											<div class="unit-input" ng-class="{'has-error': segmentSecForm.segMaxSpeed.$error.$invalid && submitingReport === true}">
 												<numeric-input class="form-control" ng-model="report.vmsFilters.segments.segMaxSpeed" name="segMaxSpeed"></numeric-input>
 												<div class="unit-box">{{'spatial.reports_form_vms_field_label_speed_unit_knots' | i18n }}</div>

@@ -1,15 +1,15 @@
 <div class="trip-summary" ng-controller="TripsummaryCtrl">
-    <div class="row summary-row">
+    <div class="row activity-summary-row">
         <fishing-trip-panel class="col-md-4 summary-section" trip="trip"></fishing-trip-panel>
         <vessel-panel class="col-md-2 summary-section" trip="trip"></vessel-panel>
         <roles-panel class="col-md-3 summary-section"></roles-panel>
         <cronology-panel class="col-md-3 summary-section" trip="trip" trip-alert="alert"></cronology-panel>
     </div>
-    <div class="row summary-row">
+    <div class="row activity-summary-row">
         <map-tile class="col-md-4 summary-section" tile-title="{{'activity.trip_summary_trip_map' | i18n }}" map-data="tripSummServ.mapData" map-height="217"></map-tile>
         <catch-panel class="col-md-8 summary-section" trip="trip" trip-alert="alert"></catch-panel>
     </div>
-    <div class="row summary-row">
+    <div class="row activity-summary-row">
         <trip-reports-panel class="col-md-12 summary-section" trip="trip" trip-alert="alert"></trip-reports-panel>
     </div>
 </div>
