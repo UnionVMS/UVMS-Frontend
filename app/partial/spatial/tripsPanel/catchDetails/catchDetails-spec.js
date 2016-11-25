@@ -45,7 +45,7 @@ describe('CatchdetailsCtrl', function () {
 
     function getTripCatchesLandingDetails() {
         return {
-            "differencePercentage": {
+            "difference": {
                 "catches": {
                     "lsc": {
                         "cod": "1222",
@@ -58,7 +58,7 @@ describe('CatchdetailsCtrl', function () {
                         "sol": "22"
                     }
                 },
-                "Landed": {
+                "landed": {
                     "lsc": {
                         "cod": "1283",
                         "sol": "1161",
@@ -71,7 +71,7 @@ describe('CatchdetailsCtrl', function () {
                     }
 
                 },
-                "Difference": {
+                "difference": {
                     "lsc": {
                         "cod": "615(+5)",
                         "sol": "1161(+5)",
@@ -84,7 +84,7 @@ describe('CatchdetailsCtrl', function () {
                     }
                 }
             },
-            "catchesDetailsData": {
+            "catches": {
                 "total": {
                     "lsc": {
                         "cod": "5555",
@@ -166,7 +166,7 @@ describe('CatchdetailsCtrl', function () {
                     }
                 }]
             },
-            "landingDetailsData": {
+            "landing": {
                 "total": {
                     "lsc": {
                         "cod": {

@@ -11,7 +11,93 @@
  */
 
 
-angular.module('unionvmsWeb').controller('CatchdetailsCtrl', function($scope, activityRestService) {
+angular.module('unionvmsWeb').controller('CatchdetailsCtrl', function($scope, activityRestService, locale) {
+
+    function convertDataToTable(data) {
+        var table;
+        if(data.items.length > 0){
+            table = getTableHeaders(data.items[0]);
+            table.rows = getTableRows(data.items);
+            table.totals = data.total ? getTableRow(data.total) : undefined;
+        }else{
+            table = {};
+        }
+        return table;
+    }
+
+    function getTableHeaders(obj, headers, level) {
+        headers = headers || [];
+        level = angular.isDefined(level) ? level + 1 : 0;
+        headers[level] = headers[level] || [];
+        var globalHeaders = level ? undefined : [];
+
+
+        angular.forEach(obj, function(property,propertyName){
+            if(angular.isObject(property)){
+
+                headers[level].push({title: propertyName, width: getColWidth(property)});
+                headers[level+1] = headers[level+1] || [];
+                headers[level+1].concat(getTableHeaders(property, headers, level));
+            }else{
+                if(level === 0){
+                    globalHeaders.push({title: propertyName === '_' ? '' : locale.getString('activity.catch_details_column_' + propertyName), width: 1});
+                }else{
+                    headers[level].push({title: propertyName, width: 1});
+                }
+            }
+        });
+
+        if(level === 0){
+            headers[headers.length-1] = globalHeaders.concat(headers[headers.length-1]);
+        }
+
+        return {
+            nrGlobalHeaders: globalHeaders ? globalHeaders.length : undefined,
+            headers: headers
+        };
+    }
+
+    function getColWidth(col) {
+        var colWidth = 0;
+
+        angular.forEach(col, function(prop){
+            if(angular.isObject(prop)){
+                colWidth += getColWidth(prop);
+            }else{
+                colWidth++;
+            }
+        });
+
+        return colWidth;
+    }
+
+    function getTableRows(arr) {
+        var rows = [];
+        angular.forEach(arr, function(item){
+            rows.push(getTableRow(item));
+        });
+
+        return rows;
+    }
+    
+    function getTableRow(obj, rows) {
+        rows = rows || [];
+
+        angular.forEach(obj, function(property){
+            if(!angular.isObject(property)){
+                rows.push(property);
+            }
+        });
+
+        angular.forEach(obj, function(property){
+            if(angular.isObject(property)){
+                rows.concat(getTableRow(property, rows));
+            }
+        });
+
+        return rows;
+    }
+
 
     /**
     * Initialization function
@@ -19,78 +105,42 @@ angular.module('unionvmsWeb').controller('CatchdetailsCtrl', function($scope, ac
     * @memberof CatchdetailsCtrl
     * @private
     */
-
     var init = function() {
 
-        var lseLandingData = [];
-        var bmsLandingData = [];
-        $scope.outerHeaders = [];//  data for outer headers and colspan :: Landing table
-        var fishCat = ['lsc', 'bms', 'dis', 'dim'];
-        $scope.finalarray = [];
-        $scope.fishCategoryLength = [];
+        var tableOrder = {
+            catches: 0,
+            landing: 1,
+            difference: 2
+        };
+
         $scope.fishingTripDetails = activityRestService.getTripCatchDetail('1234');
         $scope.tables = activityRestService.getTripCatchesLandingDetails('1234');
 
-
-
-        // calculates the colspan for the headers of catches and Difference % tables
-
-        function calcHeaderLength() {
-            for (var i = 0; i < fishCat.length; i++) {
-                $scope.fishCategoryLength.push(_.keys($scope.tables.catchesDetailsData.total[fishCat[i]]).length);
-            }
-            for (var i = 0; i < 2; i++) {
-                $scope.fishCategoryLength.push(_.keys($scope.tables.differencePercentage.catches[fishCat[i]]).length);
-            }
-        }
-        calcHeaderLength();
-
-       // prepares the data needed to display the LANDING HEADERS
-
-        for (i = 0; i < 2; i++) {
-
-            angular.forEach($scope.tables.landingDetailsData.total[fishCat[i]], function(value, key) {
-                var nrColumns = 0;
-                if (i == 0) {
-                    angular.forEach(value, function(value, key) {
-                        lseLandingData.push({ text: key, totals: value });
-                        nrColumns++;
-                    });
-                }
-                else {
-                    angular.forEach(value, function(value, key) {
-                        bmsLandingData.push({ text: key, totals: value });
-                        nrColumns++;
-                    });
-                }
-                $scope.outerHeaders.push({ text: key, width: nrColumns });
-            });
-        }
-
-        $scope.LSE = lseLandingData;
-        $scope.BMS = bmsLandingData;
-
-
-
-        // prepares an array with data needed to display the LANDING ROWS
-
-
-        angular.forEach($scope.tables.landingDetailsData.items, function(item) {
-            var record = [];
-            record.push(item.area);
-
-            for (i = 0; i < 2; i++) {
-                angular.forEach(item[fishCat[i]], function(value, key) {
-                    angular.forEach(value, function(innerVal, innerKey) {
-                        record.push(innerVal);
-
-                    });
-                });
-            }
-            $scope.finalarray.push(record);
+        var newItems = [];
+        angular.forEach($scope.tables.difference.items,function(value,key) {
+            var item = angular.copy(value);
+            item._ = locale.getString('activity.catch_details_' + key);
+            newItems.push(item);
         });
+        $scope.tables.difference.items = newItems;
 
-    }
+        if(angular.isDefined($scope.tables) && _.keys($scope.tables).length){
+            var newTables = [];
+            angular.forEach($scope.tables, function(tableData,tableName){
+                var newtable = convertDataToTable(tableData);
+                if(tableName !== 'difference'){
+                    newtable.title = tableName;
+                }
+                newtable.order = tableOrder[tableName];
+                newTables.push(newtable);
+            });
+
+            $scope.tables = newTables;
+
+            $scope.isCatchDetailsLoaded = true;
+        }
+
+    };
 
     init();
 

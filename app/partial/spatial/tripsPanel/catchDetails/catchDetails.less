@@ -13,45 +13,55 @@
         width:100%;
         height: calc(~"100vh - 150px");
     }
-    .rows{
-        text-transform: uppercase;
-        text-align: center;
-        }
-    table.table-border{
-        border: 0;
-     
-        > thead:first-child {
-            > tr {
-                &:not(:last-child) {
-                    border-bottom: 0;
-                    > th {
-                        border-top: 1px solid #dddddd;
-                        &:first-child {
-                            position:relative;
-                            border-top: 0;
-                            border-left: 0;
+    .table-container {
+        margin-top: 20px;
+        table {
+            border: 0;
+            thead {
+                &:first-child {
+                    tr:first-child {
+                        border-bottom: 0;
+                        th {
+                            border-top: 1px solid #ddd;
+                            &.invisible-header {
+                                border-top-width: 0;
+                            }
                         }
                     }
                 }
+                .table-title{
+                    text-align: left;
+                    position: relative;
+                    span {
+                        position: absolute;
+                        bottom: 0;
+                        font-size: 18px;
+                    }
+                }
+                .upperHeader,
+                .species-code {
+                    text-transform: uppercase;
+                }
+            }
+            tr {
+                th,
+                td {
+                    text-align: center;
+                }
+                .global-table-attr {
+                    text-align: left;
+                }
+                .invisible-header {
+                    border-top: 0;
+                    border-left: 0;
+                    cursor: default;
+                }
+                .total-col {
+                    text-align: right;
+                    font-weight: bold;
+                    padding-right: 15px;
+                }
             }
         }
-    
-    }
-    .table-title{
-        top:0px;
-        font-size:20px;
-        padding-bottom:20px;
-        position:absolute;
-
-   
-    }
-    .landing-table{
-        top:20px;
-        font-size:20px;
-        padding-bottom:20px;
-        position:absolute;
-    }
-    .landing-address{
-        td:first-child { text-align: left };
     }
 }

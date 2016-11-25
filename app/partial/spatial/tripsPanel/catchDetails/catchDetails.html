@@ -7,125 +7,29 @@
 			<div class="row summary-row">
 				<trip-overview-panel class="col-md-12 summary-section" trip="fishingTripDetails"></trip-overview-panel>
 			</div>
-			<!-- Catches Table -->
-			<div>
-				<table class="table table-striped table-bordered table-condensed table-border ">
-					<thead>
-						<tr>
-							<th colspan="2"><span class="table-title">{{'activity.catch_details_catches_table'| i18n }}</span></th>
-							<th colspan={{fishCategoryLength[0]}} class="rows">{{'activity.catch_details_column_LSC'| i18n }}</th>
-							<th colspan={{fishCategoryLength[1]}} class="rows">{{'activity.catch_details_column_BMS'| i18n }}</th>
-							<th colspan={{fishCategoryLength[2]}} class="rows">{{'activity.catch_details_column_DIS'| i18n }}</th>
-							<th colspan={{fishCategoryLength[3]}} class="rows">{{'activity.catch_details_column_DIM'| i18n }}</th>
-						</tr>
 
-						<tr>
-							<th class="col-md-1">{{'activity.catch_details_column_date'| i18n }}</th>
-							<th class="col-md-2">{{'activity.trip_summary_roles_address'| i18n }}</th>
-							<th class="rows" class="col-md-1" ng-repeat="(key, value) in tables.catchesDetailsData.total.lsc">{{key}}</th>
-							<th class="rows" class="col-md-1" ng-repeat="(key, value) in tables.catchesDetailsData.total.bms">{{key}}</th>
-							<th class="rows" class="col-md-1" ng-repeat="(key, value) in tables.catchesDetailsData.total.dis">{{key}}</th>
-							<th class="rows" class="col-md-1" ng-repeat="(key, value) in tables.catchesDetailsData.total.dim">{{key}}</th>
-						</tr>
-
-					</thead>
-					<tbody>
-						<tr ng-repeat="item in tables.catchesDetailsData.items">
-							<td>{{item.date}}</td>
-							<td>{{item.area}}</td>
-							<td class="rows" ng-repeat="item in item.lsc">{{item}}</td>
-							<td class="rows" ng-repeat="item in item.bms">{{item}}</td>
-							<td class="rows" ng-repeat="item in item.dis">{{item}}</td>
-							<td class="rows" ng-repeat="item in item.dim">{{item}}</td>
-						</tr>
-						<tr>
-							<td> </td>
-							<td>{{'activity.reports_panel_column_total'| i18n }}</td>
-							<td class="rows" ng-repeat="lscColumnTotals in tables.catchesDetailsData.total.lsc">{{lscColumnTotals}}</td>
-							<td class="rows" ng-repeat="bmsColumnTotals in tables.catchesDetailsData.total.bms">{{bmsColumnTotals}}</td>
-							<td class="rows" ng-repeat="disColumnTotals in tables.catchesDetailsData.total.dis">{{disColumnTotals}}</td>
-							<td class="rows" ng-repeat="dimColumnTotals in tables.catchesDetailsData.total.dim">{{dimColumnTotals}}</td>
-
-						</tr>
-					</tbody>
-				</table>
-			</div>
-
-			<!-- Landing Table-->
-
-			<div>
-				<table class="table table-striped table-bordered table-condensed table-border">
-					<thead>
-						<tr>
-							<th><span class="landing-table">{{'activity.catch_details_Landing_table'| i18n }}</span></th>
-							<th colspan={{LSE.length}} class="rows">{{'activity.catch_details_column_LSC'| i18n }}</th>
-							<th colspan={{BMS.length}} class="rows">{{'activity.catch_details_column_BMS'| i18n }}</th>
-						</tr>
-						<tr>
-							<th class="rows" colspan="1"></th>
-							<th class="rows" colspan={{value.width}} ng-repeat="value in outerHeaders track by $index">{{value.text}}</th>
-						</tr>
-						<tr>
-							<th>{{'activity.advanced_search_placeholder_area'| i18n }}</th>
-							<th class="rows" ng-repeat="value in LSE track by $index">{{value.text}}</th>
-							<th class="rows" ng-repeat="value in BMS track by $index">{{value.text}}</th>
-
-						</tr>
-					</thead>
-					<tbody>
-						<tr ng-repeat="arr in finalarray" class="landing-address">
-
-							<td class="rows" ng-repeat="item in arr track by $index">{{item}}</td>
-
-						</tr>
-						<tr>
-							<td>{{'activity.reports_panel_column_total'| i18n }}</td>
-							<td class="rows" ng-repeat="value in LSE track by $index">{{value.totals}}</td>
-							<td class="rows" ng-repeat="value in BMS track by $index">{{value.totals}}</td>
-						</tr>
-
-					</tbody>
-				</table>
-
-			</div>
-
-			<!-- Difference percentage Table-->
-
-			<div>
-				<table class="table table-striped table-bordered table-condensed table-border">
-					<thead>
-						<tr>
-							<th></th>
-							<th class="rows" colspan={{fishCategoryLength[4]}}>{{'activity.catch_details_column_LSC'| i18n }}</th>
-							<th class="rows" colspan={{fishCategoryLength[5]}}>{{'activity.catch_details_column_BMS'| i18n }}</th>
-						</tr>
-						<tr>
-							<th></th>
-							<th class="rows" ng-repeat="(key, value) in tables.differencePercentage.catches.lsc">{{key}}</th>
-							<th class="rows" ng-repeat="(key, value) in tables.differencePercentage.catches.bms">{{key}}</th>
-
-						</tr>
-
-					</thead>
-
-					<tbody>
-						<tr>
-							<th>{{'activity.catch_details_catches_table'| i18n }}</th>
-							<td class="rows" ng-repeat="(key, value) in tables.differencePercentage.catches.lsc">{{value}}</td>
-							<td class="rows" ng-repeat="(key, value) in tables.differencePercentage.catches.bms">{{value}}</td>
-						</tr>
-						<tr>
-							<th>{{'activity.catch_details_Landed_column_type'| i18n }}</th>
-							<td class="rows" ng-repeat="(key, value) in tables.differencePercentage.Landed.lsc">{{value}}</td>
-							<td class="rows" ng-repeat="(key, value) in tables.differencePercentage.Landed.bms">{{value}}</td>
-						</tr>
-						<tr>
-							<th>{{'activity.catch_details_Difference'| i18n }}</th>
-							<td class="rows" ng-repeat="(key, value) in tables.differencePercentage.Difference.lsc">{{value}}</td>
-							<td class="rows" ng-repeat="(key, value) in tables.differencePercentage.Difference.bms">{{value}}</td>
-						</tr>
-					</tbody>
-				</table>
+			<div class="table-container">
+				<div class="table-responsive-force" ng-repeat="table in tables | orderBy: 'order'" ng-if="isCatchDetailsLoaded">
+					<table class="table table-striped table-condensed table-bordered">
+						<thead>
+							<tr ng-repeat="headerRow in table.headers" ng-class="{'upperHeader': !$last}">
+								<th ng-if="$first && table.nrGlobalHeaders" rowspan="{{table.headers.length-1}}" colspan="{{table.nrGlobalHeaders}}" class="invisible-header table-title">
+									<span ng-if="table.title">{{'activity.catch_details_table_name_' + table.title | i18n }}</span>
+								</th>
+								<th ng-repeat="header in headerRow track by $index" colspan="{{header.width}}" ng-class="{'species-code': $index >= table.nrGlobalHeaders }">{{header.title}}</th>
+							</tr>
+						</thead>
+						<tbody>
+							<tr ng-repeat="row in table.rows">
+								<td ng-repeat="item in row track by $index" ng-class="{'global-table-attr': $index < table.nrGlobalHeaders}">{{item}}</td>
+							</tr>
+							<tr ng-if="table.totals">
+								<td ng-if="table.nrGlobalHeaders" colspan="{{table.nrGlobalHeaders}}" class="total-col">{{'activity.catch_details_table_total' | i18n}}</td>
+								<td ng-repeat="total in table.totals track by $index">{{total}}</td>
+							</tr>
+						</tbody>
+					</table>
+				</div>
 			</div>
 
 		</div>

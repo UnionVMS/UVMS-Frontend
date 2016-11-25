@@ -92,46 +92,48 @@ angular.module('unionvmsWeb').factory('activityRestFactory', function ($resource
         }, getTripCatchesLandingDetails: function () {
 
             return {
-                "differencePercentage": {
-                    "catches": {
-                        "lsc": {
-                            "cod": "1222",
-                            "sol": "1222",
-                            "lem": "1333",
-                            "tur": "1333"
+                "difference": {
+                    "items": {
+                        "catches": {
+                            "lsc": {
+                                "cod": "1222",
+                                "sol": "1222",
+                                "lem": "1333",
+                                "tur": "1333"
+                            },
+                            "bms": {
+                                "cod": "23",
+                                "sol": "22"
+                            }
                         },
-                        "bms": {
-                            "cod": "23",
-                            "sol": "22"
-                        }
-                    },
-                    "Landed": {
-                        "lsc": {
-                            "cod": "1283",
-                            "sol": "1161",
-                            "lem": "1666",
-                            "tur": "1466"
-                        },
-                        "bms": {
-                            "cod": "24",
-                            "sol": "20"
-                        }
+                        "landed": {
+                            "lsc": {
+                                "cod": "1283",
+                                "sol": "1161",
+                                "lem": "1666",
+                                "tur": "1466"
+                            },
+                            "bms": {
+                                "cod": "24",
+                                "sol": "20"
+                            }
 
-                    },
-                    "Difference": {
-                        "lsc": {
-                            "cod": "615(+5)",
-                            "sol": "1161(+5)",
-                            "lem": "1666(+5)",
-                            "tur": "1466(+5)"
                         },
-                        "bms": {
-                            "cod": "24(+5)",
-                            "sol": "20(+5)"
+                        "difference": {
+                            "lsc": {
+                                "cod": "615(+5)",
+                                "sol": "1161(+5)",
+                                "lem": "1666(+5)",
+                                "tur": "1466(+5)"
+                            },
+                            "bms": {
+                                "cod": "24(+5)",
+                                "sol": "20(+5)"
+                            }
                         }
                     }
                 },
-                "catchesDetailsData": {
+                "catches": {
                     "total": {
                         "lsc": {
                             "cod": "5555",
@@ -213,7 +215,7 @@ angular.module('unionvmsWeb').factory('activityRestFactory', function ($resource
                         }
                     }]
                 },
-                "landingDetailsData": {
+                "landing": {
                     "total": {
                         "lsc": {
                             "cod": {
