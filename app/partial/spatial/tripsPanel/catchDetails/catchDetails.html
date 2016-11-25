@@ -3,11 +3,13 @@
 		<legend class="fieldsetLegendStyle catch-legend">
 			<a>{{'activity.catch_details_title' | i18n }}</a>
 		</legend>
+		<!-- CATCH DETAILS CONTAINER -->
 		<div class="catch-details-container">
+			<!-- TRIP OVERVIEW PANEL -->
 			<div class="row summary-row">
 				<trip-overview-panel class="col-md-12 summary-section" trip="fishingTripDetails"></trip-overview-panel>
 			</div>
-
+			<!-- TABLE CONTAINER -->
 			<div class="table-container">
 				<div class="table-responsive-force" ng-repeat="table in tables | orderBy: 'order'" ng-if="isCatchDetailsLoaded">
 					<table class="table table-striped table-condensed table-bordered">
@@ -31,9 +33,7 @@
 					</table>
 				</div>
 			</div>
-
 		</div>
-
 	</fieldset>
 
 </div>
