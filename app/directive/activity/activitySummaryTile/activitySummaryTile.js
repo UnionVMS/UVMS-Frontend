@@ -25,10 +25,10 @@ angular.module('unionvmsWeb').directive('activitySummaryTile', function() {
  * @name ActivitySummaryTileCtrl
  * @param $scope {Service} The controller scope
  * @param locale {Service} The angular locale service
- * @attr {String} translated - The translated string of the fishing activity type (faType)
+ * @attr {String} translatedFaType - The translated string of the fishing activity type (faType)
  * @description
  *  The controller for the activitySummaryTile directive ({@link unionvmsWeb.activitySummaryTile})
  */
 .controller('ActivitySummaryTileCtrl', function($scope, locale){
-    $scope.translated = locale.getString('activity.' + $scope.faType);
+    $scope.translatedFaType = locale.getString('activity.' + $scope.faType);
 });
