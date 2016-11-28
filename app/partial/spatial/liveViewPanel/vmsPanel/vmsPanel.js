@@ -611,6 +611,12 @@ angular.module('unionvmsWeb').controller('VmspanelCtrl',function($scope, locale,
            }, []
        ), 'header': header};
    };
+
+   $scope.openTripSummary = function(tripName){
+       $scope.tripSummServ.openNewTrip(tripName);
+       $scope.repNav.goToView('tripsPanel','tripSummary');
+   };
+   
    
    $scope.testFunc = function(){
        $scope.$parent.$parent.repNav.goToView('liveViewPanel','tripsPanel');

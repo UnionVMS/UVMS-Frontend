@@ -9,8 +9,11 @@ angular.module('unionvmsWeb').factory('reportingNavigatorService',function() {
 //        userPreferences: undefined,
 //        liveViewPanel: {
 //            mapPanel : undefined,
-//            vmsPanel: undefined,
-//			  tripsPanel: undefined
+//            vmsPanel: undefined
+//        },
+//		  tripsPanel: {
+//            tripSummary : undefined,
+//	          catchDetails : undefined
 //        }
 //    }
     
@@ -82,6 +85,12 @@ angular.module('unionvmsWeb').factory('reportingNavigatorService',function() {
 		},
 		isSectionVisible: function(section) {
 			return angular.isDefined(currentState.section) && currentState.section === section; 
+		},
+		getCurrentView:function(){
+			return currentState.panel;
+		},
+		getCurrentSection:function(){
+			return currentState.section;
 		},
 		addStateCallback: function(callback) {
 			currentState.callback = callback;

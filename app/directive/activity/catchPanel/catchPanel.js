@@ -7,7 +7,7 @@
  * @description
  *  A reusable tile that will display the catch details(overview) related to the current trip
  */
-angular.module('unionvmsWeb').directive('catchPanel', function(loadingStatus,activityRestService,$anchorScroll,locale,tripSummaryService) {
+angular.module('unionvmsWeb').directive('catchPanel', function(loadingStatus,activityRestService,$anchorScroll,locale,tripSummaryService,reportingNavigatorService) {
 	return {
 		restrict: 'E',
 		replace: true,
@@ -17,7 +17,7 @@ angular.module('unionvmsWeb').directive('catchPanel', function(loadingStatus,act
 		},
 		templateUrl: 'directive/activity/catchPanel/catchPanel.html',
 		link: function(scope, element, attrs, fn) {
-
+			scope.repNav = reportingNavigatorService;
 			scope.tripSummServ = tripSummaryService;
 
 			/**
