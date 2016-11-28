@@ -2,7 +2,7 @@
   <modelVersion>4.0.0</modelVersion>
   <groupId>eu.europa.ec.fisheries.uvms</groupId>
   <artifactId>unionvms-web</artifactId>
-  <version>2.0.14-SNAPSHOT</version>
+  <version>2.0.14</version>
   <name>unionvms-web</name>
   <packaging>war</packaging>
   <properties>
@@ -348,7 +348,8 @@
       <connection>scm:git:https://emserveje@webgate.ec.europa.eu/CITnet/stash/scm/unionvms/uvms-frontend.git</connection>
       <developerConnection>scm:git:https://emserveje@webgate.ec.europa.eu/CITnet/stash/scm/unionvms/uvms-frontend.git</developerConnection>
       <url>https://emserveje@webgate.ec.europa.eu/CITnet/stash/scm/unionvms/</url>
-   </scm>
+     <tag>unionvms-web-2.0.14</tag>
+  </scm>
   <distributionManagement>
     <repository>
       <id>digit-releases</id>
