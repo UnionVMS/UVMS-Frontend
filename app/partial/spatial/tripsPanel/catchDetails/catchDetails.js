@@ -13,6 +13,13 @@
 
 angular.module('unionvmsWeb').controller('CatchdetailsCtrl', function($scope, activityRestService, locale) {
 
+    /**
+     * Converts data received from the service into table data
+     * 
+     * @memberof CatchdetailsCtrl
+     * @private
+     * @param {Object} data - contains the data related to the catch details table
+     */
     function convertDataToTable(data) {
         var table;
         if(data.items.length > 0){
@@ -25,6 +32,15 @@ angular.module('unionvmsWeb').controller('CatchdetailsCtrl', function($scope, ac
         return table;
     }
 
+    /**
+     * Get the headers data in table format
+     * 
+     * @memberof CatchdetailsCtrl
+     * @private
+     * @param {Object} obj - contains the property, to be converted, in the current level
+     * @param {Object} headers - converted headers
+     * @param {Object} level - current object level
+     */
     function getTableHeaders(obj, headers, level) {
         headers = headers || [];
         level = angular.isDefined(level) ? level + 1 : 0;
@@ -57,6 +73,13 @@ angular.module('unionvmsWeb').controller('CatchdetailsCtrl', function($scope, ac
         };
     }
 
+    /**
+     * Get the width of a specified column to be used as colspan
+     * 
+     * @memberof CatchdetailsCtrl
+     * @private
+     * @param {Object | String | Number} col - table column
+     */
     function getColWidth(col) {
         var colWidth = 0;
 
@@ -71,6 +94,13 @@ angular.module('unionvmsWeb').controller('CatchdetailsCtrl', function($scope, ac
         return colWidth;
     }
 
+    /**
+     * Get the table rows from the service data
+     * 
+     * @memberof CatchdetailsCtrl
+     * @private
+     * @param {Array} arr - array with the table rows
+     */
     function getTableRows(arr) {
         var rows = [];
         angular.forEach(arr, function(item){
@@ -80,6 +110,14 @@ angular.module('unionvmsWeb').controller('CatchdetailsCtrl', function($scope, ac
         return rows;
     }
     
+    /**
+     * Get the table row data from the service data
+     * 
+     * @memberof CatchdetailsCtrl
+     * @private
+     * @param {Array} obj - source of data to build the table row
+     * @param {Array} rows - table rows to be displayed
+     */
     function getTableRow(obj, rows) {
         rows = rows || [];
 
