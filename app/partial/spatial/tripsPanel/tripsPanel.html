@@ -32,8 +32,5 @@
         </uib-tab>
     </uib-tabset>
 	<div ng-if="repNav.isViewVisible('catchDetails')" ng-include="'partial/spatial/tripsPanel/catchDetails/catchDetails.html'"></div>
-    <div ng-class="{'trip-summary-btns': repNav.isViewVisible('tripSummary')}">
-        <a class="btn-trip-quit" title="{{'activity.trip_summary_quit_trip_detail' | i18n }}" ng-click="quitTripSummary()"><i class="fa fa-share-square-o"></i></a>
-        <a class="btn-print" title="{{'activity.trip_summary_export_trip' | i18n }}"><i class="fa fa-print"></i></a>
-    </div>
+	<div ng-if="repNav.isViewVisible('tripDeparturePanel')" ng-include="'partial/spatial/tripsPanel/tripDeparturePanel/tripDeparturePanel.html'"></div>
 </div>

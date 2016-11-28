@@ -10,6 +10,7 @@
  */
 angular.module('unionvmsWeb').factory('tripSummaryService',function($timeout) {
 	var tripSummaryService = {
+	    withMap: undefined,
 	    trip: undefined,
 	    mapConfigs: undefined,
         tabs: undefined,

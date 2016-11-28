@@ -1,4 +1,6 @@
 <div class="trip-summary" ng-controller="TripsummaryCtrl">
+    <a class="btn-trip-quit" title="{{'activity.trip_summary_quit_trip_detail' | i18n }}" ng-click="quitTripSummary()"><i class="fa fa-share-square-o"></i></a>
+    <a class="btn-print" title="{{'activity.trip_summary_export_trip' | i18n }}"><i class="fa fa-print"></i></a>
     <div class="row activity-summary-row">
         <fishing-trip-panel class="col-md-4 summary-section" trip="trip"></fishing-trip-panel>
         <vessel-panel class="col-md-2 summary-section" trip="trip"></vessel-panel>

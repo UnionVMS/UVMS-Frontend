@@ -7,7 +7,7 @@ describe('TripspanelCtrl', function() {
 	beforeEach(function(){
 		tripSumSpy = jasmine.createSpyObj('tripSummaryService',['resetMapConfigs','openNewTrip']);
 		genMapServSpy = jasmine.createSpyObj('genericMapService',['setMapBasicConfigs']);
-		repNavSpy = jasmine.createSpyObj('reportingNavigatorService',['goToPreviousView']);
+		repNavSpy = jasmine.createSpyObj('reportingNavigatorService',['goToPreviousView', 'getCurrentView', 'goToView']);
 		
 		module(function($provide){
 			$provide.value('genericMapService', genMapServSpy);
@@ -58,6 +58,14 @@ describe('TripspanelCtrl', function() {
 		repNavSpy.goToPreviousView.andCallFake(function(){
 			return;
 		});
+		
+		repNavSpy.getCurrentView.andCallFake(function(){
+            return 'tripSummary';
+        });
+		
+		repNavSpy.goToView.andCallFake(function(){
+            return;
+        });
 	}
 
 	function resetMapConfigs(){
