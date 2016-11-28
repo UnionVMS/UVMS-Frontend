@@ -1,7 +1,7 @@
 angular.module('unionvmsWeb').filter('stPurposeCode', function() {
     var cachedCodes = [];
     function convertCode(mdrCode){
-        var rec = _.findWhere(cachedCodes, {code: mdrCode});
+        var rec = _.findWhere(cachedCodes, {code: mdrCode.toString()});
         var code;
         if (angular.isDefined(rec)){
             return rec.text;

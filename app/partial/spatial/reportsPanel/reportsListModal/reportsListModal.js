@@ -1,6 +1,5 @@
-angular.module('unionvmsWeb').controller('ReportslistmodalCtrl',function($scope,$modalInstance,$timeout,reportService,reportsListLoaded,reportingNavigatorService){
+angular.module('unionvmsWeb').controller('ReportslistmodalCtrl',function($scope,$modalInstance,$timeout,reportService,reportingNavigatorService){
     $scope.repServ = reportService;
-    $scope.reportsListLoaded = reportsListLoaded;
 
     $scope.cancel = function () {
         reportingNavigatorService.rmStateParams();
@@ -14,10 +13,6 @@ angular.module('unionvmsWeb').controller('ReportslistmodalCtrl',function($scope,
         $modalInstance.close();
     };
     
-    $modalInstance.rendered.then(function(){
-        $scope.repServ.loadReportList();
-    });
-
     $scope.openReportForm = function(mode,report) {
         reportingNavigatorService.rmStateParams();
         $modalInstance.close({action: mode, report: report});

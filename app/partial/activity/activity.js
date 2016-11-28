@@ -12,20 +12,6 @@
 angular.module('unionvmsWeb').controller('ActivityCtrl',function($scope, locale, activityService, breadcrumbService){
     $scope.actServ = activityService;
     
-    locale.ready('activity').then(function(){
-        init();
-    });
-    
-    /**
-     * Initialization function
-     * 
-     * @memberof ActivityCtrl
-     * @private
-     */
-    var init = function(){
-        //$scope.actServ.reset();
-    }; 
-    
     /**
      * Check if partial should be visible according to the breadcrumbPages item status
      * 

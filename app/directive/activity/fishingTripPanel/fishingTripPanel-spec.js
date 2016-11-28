@@ -30,6 +30,7 @@ describe('fishingTripPanel', function() {
 		scope.$digest();
 
     fishTripPanel.appendTo('#parent-container');
+		expect(angular.element('.fishing-trip-panel').length).toEqual(1);
 
     angular.element('fishing-trip-panel').remove();
 		fishTripPanel.isolateScope().$destroy();

@@ -20,12 +20,12 @@ describe('mapTile', function() {
         
         scope = $rootScope.$new();
         
-        controller = $controller('mapTileCtrl', {
+        controller = $controller('MapTileCtrl', {
             $scope: scope
         }); 
     }));
     
-    describe('Testing the controller: mapTileCtrl', function(){
+    describe('Testing the controller: MapTileCtrl', function(){
         beforeEach(inject(function(_$interval_){
             $interval = _$interval_;
         }));
@@ -91,7 +91,6 @@ describe('mapTile', function() {
             el = angular.element('<map-tile tile-title="tileTitle" map-data="mapData" map-height="mapHeight"></div>');
             $compile(el)(scope);
             scope.$digest();
-            
         }));
         
         it('should generate the directive with a legend and map html elements', function(){

@@ -26,6 +26,13 @@ angular.module('unionvmsWeb').factory('activityRestFactory', function ($resource
                 }
             });
         },
+        getReportHistory: function(){
+            return $resource('/activity/rest/fa/history/:referenceId/:schemeId', {}, {
+                'get': {
+                    method: 'GET',
+                }
+            });
+        },
         getTripCronology: function () {
             return $resource('/activity/rest/trip/cronology/:id/:nrItems', {}, {
                 'get': {
@@ -379,6 +386,24 @@ angular.module('unionvmsWeb').factory('activityRestFactory', function ($resource
                 });
                 return deferred.promise;
             },
+            /**
+    	     * Get the history for a FA report
+	         * 
+        	 * @memberof activityRestService
+    	     * @public
+	         * @param {Number} refId - The reference ID
+	         * @param {Number} schId - The scheme ID
+        	 * @returns {Promise} A promise with either the history list of the FA report or reject error
+    	     */
+	        getReportHistory: function (refId, schId){
+    	        var deferred = $q.defer();
+	            activityRestFactory.getReportHistory().get({referenceId: refId, schemeId: schId}, function(response){
+            	    deferred.resolve(response.data);
+        	    }, function(error){
+    	            deferred.reject(error);
+	            });
+            	return deferred.promise;
+        	},
             /**
              * Get the trip cronology of a specific trip
              * 

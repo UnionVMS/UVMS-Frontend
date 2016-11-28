@@ -9,9 +9,7 @@ angular.module('unionvmsWeb').directive('tableAlert', function() {
 			visible: '=',
 			timeout: '='
 		},
-		templateUrl: 'directive/common/tableAlert/tableAlert.html',
-		link: function(scope, element, attrs, fn) {
-		}
+		templateUrl: 'directive/common/tableAlert/tableAlert.html'
 	};
 });
 

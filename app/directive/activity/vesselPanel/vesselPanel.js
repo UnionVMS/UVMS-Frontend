@@ -13,10 +13,6 @@ angular.module('unionvmsWeb').directive('vesselPanel', function() {
 		scope: {
 			trip: '='
 		},
-		templateUrl: 'directive/activity/vesselPanel/vesselPanel.html',
-		link: function(scope, element, attrs, fn) {
-
-
-		}
+		templateUrl: 'directive/activity/vesselPanel/vesselPanel.html'
 	};
 });

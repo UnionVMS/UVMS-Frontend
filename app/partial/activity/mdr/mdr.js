@@ -40,7 +40,6 @@ angular.module('unionvmsWeb').controller('MdrCtrl',function($scope, mdrRestServi
      */
     $scope.configModel = {
         'cronJobExpression': '',
-        'showSaveBtn' : false,
         'originalValue': ''
     };
 
@@ -81,12 +80,9 @@ angular.module('unionvmsWeb').controller('MdrCtrl',function($scope, mdrRestServi
      * @public
      */
 	$scope.saveCron = function(){
-		if(angular.isDefined($scope.configModel.cronJobExpression) && $scope.configModel.cronJobExpression.indexOf('NaN') === -1){
-			loadingStatus.isLoading('Preferences',true, 2);
-
-			if ($scope.mdrConfigurationForm.$dirty){
-		        mdrRestService.updateCronJobExpression($scope.configModel.cronJobExpression).then(saveSuccess, saveFailure);
-		    }
+		if(angular.isDefined($scope.configModel.cronJobExpression) && $scope.configModel.cronJobExpression.indexOf('NaN') === -1 && $scope.mdrConfigurationForm.$dirty){
+            loadingStatus.isLoading('MdrSettings',true, 2);
+            mdrRestService.updateCronJobExpression($scope.configModel.cronJobExpression).then(saveSuccess, saveFailure);
 		}
 	};
 
@@ -214,22 +210,22 @@ angular.module('unionvmsWeb').controller('MdrCtrl',function($scope, mdrRestServi
     var getCronJobExpressionSuccess = function(response) {
         $scope.configModel.cronJobExpression = response;
         $scope.configModel.originalValue = response;
-        loadingStatus.isLoading('Preferences',false);
+        loadingStatus.isLoading('MdrSettings',false);
     };
 
     var getCronJobExpressionFailed = function(error){
-        loadingStatus.isLoading('Preferences',false);
+        loadingStatus.isLoading('MdrSettings',false);
         alertService.showErrorMessageWithTimeout(locale.getString('activity.mdr_cron_load_failed'));
     };
 
 	var saveSuccess = function(response){
-	    loadingStatus.isLoading('Preferences',false);
+	    loadingStatus.isLoading('MdrSettings',false);
 	    alertService.showSuccessMessageWithTimeout(locale.getString('activity.mdr_cron_save_success'));
 	    $scope.configModel.originalValue = $scope.configModel.cronJobExpression;
 	};
 
 	var saveFailure = function(error){
-	    loadingStatus.isLoading('Preferences',false);
+	    loadingStatus.isLoading('MdrSettings',false);
 	    alertService.showErrorMessageWithTimeout(locale.getString('activity.mdr_cron_save_failed'));
 	};
 
@@ -267,11 +263,17 @@ angular.module('unionvmsWeb').controller('MdrCtrl',function($scope, mdrRestServi
        return userService.isAllowed(feature, 'Activity', true);
     };
 
+    /**
+     * this method checks if the global checkbox in the table is checked
+     * @memberof MdrCtrl
+     * @function checkSelectedAll
+     * @private
+     */
     var checkSelectedAll = function(){
-        if(_.where($scope.displayedMDRLists, {'isSelected': false}).length > 0){
-            $scope.selectedAll = false;
-        }else{
+        if(_.where($scope.displayedMDRLists, {'isSelected': true}).length === $scope.displayedMDRLists.length){
             $scope.selectedAll = true;
+        }else{
+            $scope.selectedAll = false;
         }
     };
 
@@ -298,11 +300,4 @@ angular.module('unionvmsWeb').controller('MdrCtrl',function($scope, mdrRestServi
         }
     });
 
-     $scope.$watch("configModel.cronJobExpression", function(newValue, oldValue) {
-        if (angular.isDefined(oldValue) && oldValue && (newValue !==  $scope.configModel.originalValue)) {
-            $scope.configModel.showSaveBtn = true;
-        } else {
-            $scope.configModel.showSaveBtn = false;
-        }
-      });
 });
