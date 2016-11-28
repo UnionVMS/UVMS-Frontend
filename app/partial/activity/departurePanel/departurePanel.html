@@ -1,6 +1,10 @@
 <div class="col-md-12 departure-panel" ng-controller="DeparturepanelCtrl">
-	<!-- TODO Include directive for fishing trip generic info -->
+	
+	<div class="row summary-row">
+		<trip-overview-panel class="col-md-12 summary-section" trip="fishingTripDetails"></trip-overview-panel>
+	</div>
 	<div class="col-md-12 main-content">
+		<a class="btn-trip-quit" title="{{'activity.trip_summary_quit_trip_detail' | i18n }}" ng-click="quitTripSummary()"><i class="fa fa-share-square-o"></i></a>
 		<div class="row title">
 			<span ng-class="{useColon: faServ.activityData.operationType}">{{'activity.fa_type_departure' | i18n}}</span>
 			<span class="operationType" ng-if="faServ.activityData.operationType">{{'activity.departure_optype_correction' | i18n}}</span>

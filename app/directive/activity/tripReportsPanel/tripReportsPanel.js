@@ -7,7 +7,7 @@
  * @description
  *  A reusable tile that will display the report messages and the message types count related to the selected trip
  */
-angular.module('unionvmsWeb').directive('tripReportsPanel', function(loadingStatus,activityRestService,$anchorScroll,locale) {
+angular.module('unionvmsWeb').directive('tripReportsPanel', function(loadingStatus,activityRestService,$anchorScroll,locale,reportingNavigatorService) {
 	return {
 		restrict: 'E',
 		replace: true,
@@ -83,6 +83,10 @@ angular.module('unionvmsWeb').directive('tripReportsPanel', function(loadingStat
                     scope.tripAlert.hideAlert();
                     loadingStatus.isLoading('TripSummary', false);
                 });
+            };
+            
+            scope.navigate = function(){
+                reportingNavigatorService.goToView('tripsPanel','tripDeparturePanel');
             };
 		}
 	};

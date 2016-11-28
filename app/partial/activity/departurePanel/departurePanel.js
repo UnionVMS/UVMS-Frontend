@@ -9,7 +9,7 @@
  * @description
  *  The controller for the departure panel partial
  */
-angular.module('unionvmsWeb').controller('DeparturepanelCtrl',function($scope, $state, fishingActivityService, reportFormService){
+angular.module('unionvmsWeb').controller('DeparturepanelCtrl',function($scope, $state, fishingActivityService, tripSummaryService){
     $scope.faServ = fishingActivityService;
     $scope.faServ.getData('departure', {}); //FIXME to move to other place
     
@@ -23,7 +23,7 @@ angular.module('unionvmsWeb').controller('DeparturepanelCtrl',function($scope, $
      */
     $scope.isLocationClickable = function(){
         var clickable = false;
-        if (($state.current.name === 'app.reporting-id' || $state.current.name === 'app.reporting') && reportFormService.currentReport.withMap){
+        if (($state.current.name === 'app.reporting-id' || $state.current.name === 'app.reporting') && tripSummaryService.withMap){
             clickable = true;
         }
         

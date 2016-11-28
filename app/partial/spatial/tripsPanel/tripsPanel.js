@@ -69,6 +69,7 @@ angular.module('unionvmsWeb').controller('TripspanelCtrl', function ($scope, gen
     $scope.quitTripSummary = function () {
         var currentView = $scope.repNav.getCurrentView();
         switch (currentView) {
+            case 'tripDeparturePanel':
             case 'catchDetails':
                 $scope.repNav.goToPreviousView();
                 break;

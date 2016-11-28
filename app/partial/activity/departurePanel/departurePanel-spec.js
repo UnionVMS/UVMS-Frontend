@@ -13,19 +13,17 @@ describe('DeparturepanelCtrl', function() {
 	beforeEach(module('unionvmsWeb'));
 	beforeEach(module('stateMock'));
 
-	var scope,ctrl,mockState, $httpBackend, $state, mockRepFormServ, appStates;
+	var scope,ctrl,mockState, $httpBackend, $state, mockTripSumServ, appStates;
 	
 	beforeEach(function(){
 	    appStates = ['','app.reporting', 'app.reporting-id'];
 	    
-	    mockRepFormServ = {
-            currentReport: {
-                withMap: false
-            }
+	    mockTripSumServ = {
+            withMap: false
         };
         
         module(function($provide){
-            $provide.value('reportFormService', mockRepFormServ);
+            $provide.value('tripSummaryService', mockTripSumServ);
         });
 	});
 
@@ -42,7 +40,7 @@ describe('DeparturepanelCtrl', function() {
     }));
     
     function setWithMap(newState){
-        mockRepFormServ.currentReport.withMap = newState;
+        mockTripSumServ.withMap = newState;
     }
 
 	it('should allow a location to be clickable when report has map and the application is on the reporting router', inject(function() {
