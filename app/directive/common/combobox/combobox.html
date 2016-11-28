@@ -35,7 +35,7 @@
 			<li class="combo-placeholder" ng-class="!initialtextSelectable ? 'disabled' : ''" ng-show="initialValue && !multiple && !isLoading" ng-click="selectVal(initialValue)" ng-if="!noPlaceholderOnList" title="{{initialValue.text}}">
 				<a ng-bind="initialValue.text"></a>
 			</li>
-			<li class="disabled" ng-if="!loadedItems || !loadedItems.length" title="{{'common.no_data_available' | i18n}}">
+			<li class="disabled" ng-if="comboSection && (!loadedItems || !loadedItems.length)" title="{{'common.no_data_available' | i18n}}">
 				<a ng-bind="('common.no_data_available' | i18n)"></a>
 			</li>
 			<!--BASIC COMBO-->
