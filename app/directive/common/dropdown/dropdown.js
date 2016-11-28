@@ -189,12 +189,14 @@ angular.module('unionvmsWeb')
 
             // Add extra events to a toggled dropdown menu
             scope.toggleDropdown = function(e) {
-                e.preventDefault();
-                e.stopPropagation();
-
-                angular.element(scope.currentTarget).toggleClass('open');
-                scope.currentTarget = event.currentTarget;
-                scope.status.isopen = !scope.status.isopen;
+                if(!scope.ngDisabled) {
+                    e.preventDefault();
+                    e.stopPropagation();
+                    
+                    angular.element(scope.currentTarget).toggleClass('open');
+                    scope.currentTarget = event.currentTarget;
+                    scope.status.isopen = !scope.status.isopen;
+                } 
             };
 
             // Make sure dropdown isn't toggled on menu events
