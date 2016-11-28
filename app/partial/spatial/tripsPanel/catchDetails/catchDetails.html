@@ -18,7 +18,7 @@
 								<th ng-if="$first && table.nrGlobalHeaders" rowspan="{{table.headers.length-1}}" colspan="{{table.nrGlobalHeaders}}" class="invisible-header table-title">
 									<span ng-if="table.title">{{'activity.catch_details_table_name_' + table.title | i18n }}</span>
 								</th>
-								<th ng-repeat="header in headerRow track by $index" colspan="{{header.width}}" ng-class="{'species-code': $index >= table.nrGlobalHeaders }">{{header.title}}</th>
+								<th ng-repeat="header in headerRow track by $index" colspan="{{header.width}}" ng-class="{'species-code': $index >= table.nrGlobalHeaders,'invisible-header': !header.title }">{{header.title}}</th>
 							</tr>
 						</thead>
 						<tbody>
