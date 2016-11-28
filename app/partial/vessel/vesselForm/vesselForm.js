@@ -83,7 +83,6 @@ angular.module('unionvmsWeb').controller('VesselFormCtrl',function($scope, $log,
     }
 
     var getMobileTerminals = function() {
-        $scope.mobileTerminals = undefined;
         $scope.mobileTerminalsError = undefined;
         var request = new GetListRequest(1, 1000, false, []);
         request.addSearchCriteria("CONNECT_ID", $scope.vesselObj.vesselId.guid);
@@ -447,12 +446,20 @@ angular.module('unionvmsWeb').controller('VesselFormCtrl',function($scope, $log,
         });
     };
 
+    // Add new Mobile Terminal to Vessel
     $scope.toggleAddNewMobileTerminalForm = function(){
-        $scope.$broadcast("createMobileTerminalWithVessel");
-        if (!$scope.isThisVisible.addNewMobileTerminalForm) {
-            // ToDo: Scroll down to DOM element 
+        toggleMobileTerminalForm(new MobileTerminal());
+    };
+
+    var toggleMobileTerminalForm = function(newMobileTerminal){
+        newMobileTerminal.isCreateNewMode = true;
+        $scope.mobileTerminals.push(newMobileTerminal);
+    };
+
+    $scope.mobileTerminalForm = {
+        updateMobileTerminals: function() {
+            getMobileTerminals();
         }
-        $scope.isThisVisible.addNewMobileTerminalForm = !$scope.isThisVisible.addNewMobileTerminalForm;
     };
 
     $scope.menuBarFunctions = {

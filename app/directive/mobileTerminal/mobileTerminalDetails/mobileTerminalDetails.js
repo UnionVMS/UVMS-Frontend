@@ -20,7 +20,10 @@ angular.module('unionvmsWeb')
             ngModel : '=',
             mobileTerminal : '=',
             transporderSystems : '=', 
-            modeltype: '='
+            modeltype: '=', 
+            createNew: '=', 
+            vesselId : '=',
+            callback : '='
         },
 		templateUrl: 'directive/mobileTerminal/mobileTerminalDetails/mobileTerminalDetails.html',
 		link: function(scope, element, attrs, fn) {
@@ -30,7 +33,7 @@ angular.module('unionvmsWeb')
 });
 
 angular.module('unionvmsWeb')
-    .controller('mobileTerminalDetailsCtrl', function($scope, $location, $filter, locale, SystemTypeAndPlugin, configurationService, MobileTerminalHistoryModal, mobileTerminalRestService, alertService, modalComment, mobileTerminalCsvService){
+    .controller('mobileTerminalDetailsCtrl', function($scope, $location, $filter, locale, SystemTypeAndPlugin, configurationService, MobileTerminalHistoryModal, mobileTerminalRestService, alertService, modalComment, mobileTerminalCsvService, MobileTerminal){
 
         $scope.transponderSystems = [];
 
@@ -48,20 +51,38 @@ angular.module('unionvmsWeb')
             }
         };
 
-        //Disable form (Temporary solution)
+        //Set status - Disabled !TODO!
         $scope.disableForm = function() {
             if ($scope.modeltype === 'VESSEL') {
                 return false;
             }
             return false;
-        }
+        };
 
-        //Get terminal config for the selected terminal type
-        $scope.getTerminalConfig = function(){
-            if(angular.isDefined($scope.mobileTerminal)){
-                var systemName = $scope.mobileTerminal.type;
-                return $scope.transpondersConfig.getTerminalConfigBySystemName(systemName);
+        //Set status - Visible
+        $scope.displayMobileTerminalForm = function(){
+            if($scope.modeltype === 'VESSEL' && !$scope.isCreateNewMode()){
+                if(!$scope.mobileTerminal.associatedVessel || $scope.mobileTerminal.archived) {
+                    return false;
+                } 
+            } 
+            return true;
+        };
+
+        //Set status - Create New 
+        $scope.isCreateNewMode = function(){
+            if($scope.mobileTerminal.guid) {
+                return false;
             }
+            return true;
+        };
+
+        //Set header text on menu bar
+        $scope.getMenuHeader = function(){
+            if($scope.isCreateNewMode()){
+                return $filter('i18n')('mobileTerminal.add_new_form_mobile_terminal_label'); 
+            }
+            return $filter('transponderName')($scope.mobileTerminal.type);
         };
 
         //Get model value for the transponder system dropdown by system type and plugin
@@ -93,7 +114,48 @@ angular.module('unionvmsWeb')
             });
         };
 
-        //Is multiple channels allowed for the terminal?
+        //Get terminal config for the selected terminal type
+        $scope.getTerminalConfig = function(){
+            if(angular.isDefined($scope.mobileTerminal)){
+                var systemName = $scope.mobileTerminal.type;
+                return $scope.transpondersConfig.getTerminalConfigBySystemName(systemName);
+            }
+        };
+
+        //Selected terminal type
+        $scope.onTerminalSystemSelect = function(selectedItem){
+            if(angular.isDefined(selectedItem) && angular.isDefined(selectedItem.typeAndPlugin)){
+                $scope.mobileTerminal.type = selectedItem.typeAndPlugin.type;
+
+                //Reset channels
+                $scope.mobileTerminal.resetChannels();
+
+                var selectedLabelName = selectedItem.typeAndPlugin.plugin.labelName;
+                var selectedServiceName = selectedItem.typeAndPlugin.plugin.serviceName;
+                if(angular.isDefined(selectedLabelName) && angular.isDefined(selectedServiceName)){
+                    $scope.mobileTerminal.plugin.labelName = selectedLabelName;
+                    $scope.mobileTerminal.plugin.serviceName = selectedServiceName;
+                    
+                    //Set LES_DESCRIPTION if attribute is used for the channel, otherwise set to undefined
+                    $.each($scope.mobileTerminal.channels, function(index, channel){
+                        if($scope.getTerminalConfig().channelFields.LES_DESCRIPTION){
+                            channel.setLESDescription(selectedLabelName);
+                        }else{
+                            channel.setLESDescription(undefined);
+                        }
+                    });
+                }else{
+                    delete $scope.mobileTerminal.plugin.labelName;
+                    delete $scope.mobileTerminal.plugin.serviceName;
+                }
+            }else{
+                $scope.currentMobileTerminal.type = undefined;
+                delete $scope.mobileTerminal.plugin.labelName;
+                delete $scope.mobileTerminal.plugin.serviceName;
+            }
+        };
+
+        //Channels - Check if multiple channels is allowed
         $scope.isMultipleChannelsAllowed = function(){
             if(angular.isDefined($scope.mobileTerminal) && angular.isDefined($scope.getTerminalConfig())){
                 return $scope.getTerminalConfig().capabilities.SUPPORT_MULTIPLE_CHANNEL;
@@ -101,7 +163,145 @@ angular.module('unionvmsWeb')
             return false;
         };
 
-        //Add a new channel to the end of the list of channels
+        //Create new Mobile Terminal - Request
+        $scope.createNewMobileTerminal = function(){
+            mobileTerminalRestService.createNewMobileTerminal($scope.mobileTerminal)
+                    .then(createNewMobileTerminalSuccess, createNewMobileTerminalError);
+        };
+
+        //Create new Mobile Terminal - Success
+        var createNewMobileTerminalSuccess = function(newMobileTerminal){
+            if($scope.vesselId){
+                mobileTerminalRestService.assignMobileTerminal(newMobileTerminal, $scope.vesselId, "-")
+                    .then(createNewMobileTerminalWithVesselSuccess, createNewMobileTerminalWithVesselError);
+            } else {
+                alertService.showSuccessMessage(locale.getString('mobileTerminal.add_new_alert_message_on_success'));
+                $scope.mobileTerminal = newMobileTerminal;
+            }
+        };
+
+        //Create new Mobile Terminal - Error
+        var createNewMobileTerminalError = function(error){
+            if(error.code === 522) {
+                alertService.showErrorMessage(locale.getString('mobileTerminal.mobile_terminal_already_exists'));
+            } else {
+                alertService.showErrorMessage(locale.getString('mobileTerminal.add_new_alert_message_on_error'));
+            }
+        };
+
+        //Create new Mobile Terminal With Vessel - Success
+        var createNewMobileTerminalWithVesselSuccess = function(){
+            $scope.callback.updateMobileTerminals();
+            alertService.showSuccessMessage(locale.getString('mobileTerminal.add_new_alert_message_on_success'));
+        }
+
+        //Create new Mobile Terminal With Vessel - Error
+        var createNewMobileTerminalWithVesselError = function(error){
+            if(error.code === 522) {
+                alertService.showErrorMessage(locale.getString('mobileTerminal.mobile_terminal_already_exists'));
+            } else {
+                alertService.showErrorMessage(locale.getString('mobileTerminal.add_new_alert_message_on_error'));
+            }
+        };
+
+        //Update Mobile Terminal - Add Comment
+        $scope.updateMobileTerminal = function() {
+            modalComment.open($scope.updateMobileTerminalWithComment, {
+                titleLabel: locale.getString("mobileTerminal.updating"),
+                saveLabel: locale.getString("common.update")
+            });
+        };
+
+        //Update Mobile Terminal - Request
+        $scope.updateMobileTerminalWithComment = function(comment){
+            $scope.waitingForCreateResponse = true;
+            alertService.hideMessage();
+            mobileTerminalRestService.updateMobileTerminal($scope.mobileTerminal, comment)
+                    .then(updateMobileTerminalSuccess, updateMobileTerminalError);
+        };
+
+        //Update Mobile Terminal - Success
+        var updateMobileTerminalSuccess = function(updatedMobileTerminal){
+            $scope.waitingForCreateResponse = false;
+            alertService.showSuccessMessageWithTimeout(locale.getString('mobileTerminal.update_alert_message_on_success'));
+        };
+
+        //Update Mobile Terminal - Error
+        var updateMobileTerminalError = function(error){
+            $scope.waitingForCreateResponse = false;
+            if(error.code === 522) {
+                alertService.showErrorMessage(locale.getString('mobileTerminal.mobile_terminal_already_exists'));
+            } else {
+                alertService.showErrorMessage(locale.getString('mobileTerminal.add_new_alert_message_on_error'));
+            }
+        };     
+
+        //Archive Mobile Terminal - Add Comment
+        $scope.archiveMobileTerminal = function() {
+            modalComment.open($scope.archiveMobileTerminaWithComment, {
+                titleLabel: locale.getString("mobileTerminal.archive_modal_title", [$scope.mobileTerminal.getSerialNumber()]),
+                saveLabel: locale.getString('common.archive')
+            });
+        };
+
+        //Archive Mobile Terminal - Request
+        $scope.archiveMobileTerminaWithComment = function(comment){
+            mobileTerminalRestService.removeMobileTerminal($scope.mobileTerminal, comment)
+                .then(archiveMobileTerminalSuccess, archiveMobileTerminalError);
+        };
+
+        //Archive Mobile Terminal - Success
+        var archiveMobileTerminalSuccess = function(archivedMobileTerminal){
+            $scope.mobileTerminal.archived = true;
+            alertService.showSuccessMessageWithTimeout(locale.getString('mobileTerminal.archive_message_on_success'));
+            if($scope.modeltype === 'VESSEL') {
+                $scope.callback.updateMobileTerminals();
+            }
+
+            if($scope.modeltype === 'MOBILE_TERMINAL') {
+                $scope.callback.displayMobileTerminalList();
+            }
+        };
+
+        //Archive Mobile Terminal - Error
+        var archiveMobileTerminalError = function(archivedMobileTerminal){
+            alertService.showErrorMessage(locale.getString('mobileTerminal.archive_message_on_error'));
+        };
+
+        //Unassign Mobile Terminal - Add Comment
+        $scope.unassignVessel = function(){
+            var vesselName = "";
+            if(angular.isDefined($scope.mobileTerminal.associatedVessel)){
+                vesselName = $scope.mobileTerminal.associatedVessel.name;
+            }
+            modalComment.open($scope.unassignVesselWithComment, {
+                titleLabel: locale.getString("mobileTerminal.unassigning_from_vessel", [$scope.mobileTerminal.getSerialNumber(), vesselName]),
+                saveLabel: locale.getString("mobileTerminal.unassign")
+            });
+        };
+
+        //Unassign Mobile Terminal - Request
+        $scope.unassignVesselWithComment = function(comment){
+            mobileTerminalRestService.unassignMobileTerminal($scope.mobileTerminal, comment)
+                .then(unassignMobileTerminalSuccess, unassignMobileTerminalError); 
+        };
+
+        //Unassign Mobile Terminal - Success
+        var unassignMobileTerminalSuccess = function(){
+            $scope.mobileTerminal.unassign();
+            alertService.showSuccessMessageWithTimeout(locale.getString('mobileTerminal.unassign_vessel_message_on_success'));
+            
+            if($scope.modeltype === 'VESSEL') {
+                $scope.callback.updateMobileTerminals();
+            }
+        };
+
+        //Unassign Mobile Terminal - Error
+        var unassignMobileTerminalError = function(){
+            alertService.showErrorMessage(locale.getString('mobileTerminal.unassign_vessel_message_on_error'));
+        };
+
+        //Channels - Add a new channel
         $scope.addNewChannel = function(){
             var newChannel = $scope.mobileTerminal.addNewChannel();
             //Set LES for new channel
@@ -113,41 +313,9 @@ angular.module('unionvmsWeb')
             }
         };
 
-        //Remove a channel from the list of channels
+        //Channels - Remove a channel
         $scope.removeChannel = function(channelIndex){
             $scope.mobileTerminal.removeChannel(channelIndex);
-        };
-
-        // Update mobile terminal, add comment
-        $scope.updateMobileTerminal = function() {
-            modalComment.open($scope.updateMobileTerminalWithComment, {
-                titleLabel: locale.getString("mobileTerminal.updating"),
-                saveLabel: locale.getString("common.update")
-            });
-        };
-
-        //Update the mobile terminal
-        $scope.updateMobileTerminalWithComment = function(comment){
-            $scope.waitingForCreateResponse = true;
-            alertService.hideMessage();
-            mobileTerminalRestService.updateMobileTerminal($scope.mobileTerminal, comment)
-                    .then(updateMobileTerminalSuccess, updateMobileTerminalError);
-        };
-
-        // Success createing the mobile terminal
-        var updateMobileTerminalSuccess = function(updatedMobileTerminal){
-            $scope.waitingForCreateResponse = false;
-            alertService.showSuccessMessageWithTimeout(locale.getString('mobileTerminal.update_alert_message_on_success'));
-        };
-
-        //Error creating the new mobile terminal
-        var updateMobileTerminalError = function(error){
-            $scope.waitingForCreateResponse = false;
-            alertService.showErrorMessage(locale.getString('mobileTerminal.update_alert_message_on_error'));
-        };
-
-        $scope.createNewMobileTerminal = function() {
-            console.log('Create a new Mobile Terminal');
         };
 
         //Open history modal
@@ -155,22 +323,49 @@ angular.module('unionvmsWeb')
             MobileTerminalHistoryModal.show($scope.mobileTerminal);
         };
 
-        //Export single mobile terminal
-        $scope.exportTerminalCSV = function() {
+        //Export Mobile Terminal
+        $scope.exportTerminalCSV = function(){
             mobileTerminalCsvService.download($scope.mobileTerminal);
         };
 
-        // Menu bar functions
+        //Menu bar functions
         $scope.menuBarFunctions = {
             saveCallback: $scope.createNewMobileTerminal,
             updateCallback: $scope.updateMobileTerminal,
-            historyCallback: $scope.onMobileTerminalHistoryClick,
-            showHistory: function(mobileTerminal) {
-                return true;
-            }, 
+            cancelCallback: $scope.callback.displayMobileTerminalList,
+            showCancel: function() {
+                if ($scope.modeltype === 'MOBILE_TERMINAL') {
+                    return true;
+                } 
+                return false;
+            },
             exportToCsvCallback: $scope.exportTerminalCSV,
             showExport: function(mobileTerminal) {
-                return true;
+                if (mobileTerminal) {
+                    return angular.isDefined(mobileTerminal.guid) && mobileTerminal.guid != null;
+                }
+                return false;
+            }, 
+            archiveCallback: $scope.archiveMobileTerminal,
+            showArchive: function(mobileTerminal) {
+                if (mobileTerminal) {
+                    return angular.isDefined(mobileTerminal.guid) && mobileTerminal.guid != null && !mobileTerminal.archived;
+                }
+                return false;
+            },
+            unlinkCallback: $scope.unassignVessel,
+            showUnlink: function(mobileTerminal) {
+                if (mobileTerminal) {
+                    return angular.isDefined(mobileTerminal.connectId) && mobileTerminal.connectId != null;
+                }
+                return false;
+            },
+            historyCallback: $scope.onMobileTerminalHistoryClick,
+            showHistory: function(mobileTerminal) {
+                if (mobileTerminal) {
+                    return angular.isDefined(mobileTerminal.guid) && mobileTerminal.guid != null;
+                }
+                return false;
             }
         };
 

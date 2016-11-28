@@ -1,6 +1,6 @@
 <div>
-    <div class="col-md-12 card mobileInformationContainer" loading-indicator="waitingForCreateResponse" size="small" type="SPINNER">
-        <menu-bar header="mobileTerminal.type | transponderName" modeltype="'MOBILE_TERMINAL'" ng-model="mobileTerminal"
+    <div class="col-md-12 card mobileInformationContainer" loading-indicator="waitingForCreateResponse" size="small" type="SPINNER" ng-if="displayMobileTerminalForm()">
+        <menu-bar header="getMenuHeader()" modeltype="'MOBILE_TERMINAL'" ng-model="mobileTerminal"
                   functions="menuBarFunctions"
                   is-create-new-mode="isCreateNewMode">
         </menu-bar>
@@ -23,7 +23,7 @@
                                 </div>
                             </div>
                             <div class="form-group medium-field" ng-if="typeAndPlugin && getTerminalConfig().terminalFields.SERIAL_NUMBER" ng-class="{'has-error': mobileTerminalForm.serialNumber.$invalid && (submitAttempted || mobileTerminalForm.serialNumber.$dirty)}">
-                                <label class="normal">{{'mobileTerminal.form_inmarsatc_serial_no_label' | i18n}}<span ng-if="createNewMode" class="mandatory">{{ 'common.mandatory_field' | i18n }}</span></label>
+                                <label class="normal">{{'mobileTerminal.form_inmarsatc_serial_no_label' | i18n}}<span ng-if="isCreateNewMode" class="mandatory">{{ 'common.mandatory_field' | i18n }}</span></label>
                                 <input type="text" name="serialNumber" class="form-control" ng-model="mobileTerminal.attributes.SERIAL_NUMBER" ng-required="getTerminalConfig().terminalFields.SERIAL_NUMBER" existing="existingSerialNumber" id="mob-term-form-details-serial-number"/>
                                 <input-validation-message types="required" input="mobileTerminalForm.serialNumber"></input-validation-message>
                             </div>
@@ -73,8 +73,8 @@
                             <div ng-repeat="communicationChannel in mobileTerminal.channels" ng-controller="mobileTerminal.channelController">
                                 <div ng-form="channelForm" class="channel-form">
                                     <div class="delete-channel" ng-show="!disableForm() && $index > 0">
-                                        <div class="btn btn-default">
-                                            <i class="fa fa-trash" title="{{'common.remove' | i18n}}" ng-click="removeChannel($index)"></i>
+                                        <div class="btn btn-default" ng-click="removeChannel($index)">
+                                            <i class="fa fa-trash" title="{{'common.remove' | i18n}}"></i>
                                         </div>
                                     </div>  
                                     <div class="flexrow form-section-3">

@@ -123,7 +123,6 @@ copy of the GNU General Public License along with the IFDM Suite. If not, see <h
                             </div>
                         </div>
                     </div>
-
                 </div>
             </div>
         </div>
@@ -137,19 +136,11 @@ copy of the GNU General Public License along with the IFDM Suite. If not, see <h
         <div class="row mobileTerminalsContainer" ng-if="!isCreateNewMode()">
             <div class="col-md-12">
                 <h3 ng-show="mobileTerminals.length > 0">{{'vessel.connected_mobile_terminals' | i18n}}</h3>
-                <div ng-repeat="mobileTerminal in mobileTerminals | orderBy :'[-active, -started]'">
-                    <mobile-terminal-details ng-model="temp" mobile-terminal="mobileTerminal" modeltype="'VESSEL'"></mobile-terminal-details>
+                <div ng-repeat="mobileTerminal in mobileTerminals">
+                    <mobile-terminal-details ng-model="temp" mobile-terminal="mobileTerminal" vessel-id="vesselObj.vesselId.guid" modeltype="'VESSEL'" callback="mobileTerminalForm"></mobile-terminal-details>
                 </div>
             </div>
-
         </div>
+
     </form>
-
-    <div id="addNewMobileTerminalFormContainer">
-        <div ng-controller="MobileTerminalCtrl">
-            <div ng-controller="mobileTerminalFormCtrl" ng-if="isVisible.mobileTerminalForm">
-                <div ng-include="'partial/mobileTerminal/mobileTerminalForm/mobileTerminalForm.html'"></div>
-            </div>
-        </div>
-    </div>
 </div>
