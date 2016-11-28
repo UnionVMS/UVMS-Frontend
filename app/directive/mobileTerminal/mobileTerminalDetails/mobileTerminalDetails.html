@@ -5,7 +5,7 @@
                   is-create-new-mode="isCreateNewMode">
         </menu-bar>
         <div class="mobileTerminalDetailsContainer">
-            <form name="mobileTerminalForm" method="post" novalidate>
+            <form name="mobileTerminalForm" method="post" novalidate ng-init="setFormScope(this)">
                 <fieldset ng-disabled="disableForm()">
                     <div class="transponderSystemSelects">
                         <div class="flexrow form-section-1">
@@ -24,10 +24,10 @@
                             </div>
                             <div class="form-group medium-field" ng-if="typeAndPlugin && getTerminalConfig().terminalFields.SERIAL_NUMBER" ng-class="{'has-error': mobileTerminalForm.serialNumber.$invalid && (submitAttempted || mobileTerminalForm.serialNumber.$dirty)}">
                                 <label class="normal">{{'mobileTerminal.form_inmarsatc_serial_no_label' | i18n}}<span ng-if="isCreateNewMode" class="mandatory">{{ 'common.mandatory_field' | i18n }}</span></label>
-                                <input type="text" name="serialNumber" class="form-control" ng-model="mobileTerminal.attributes.SERIAL_NUMBER" ng-required="getTerminalConfig().terminalFields.SERIAL_NUMBER" existing="existingSerialNumber" id="mob-term-form-details-serial-number"/>
+                                <input type="text" name="serialNumber" class="form-control" ng-model="mobileTerminal.attributes.SERIAL_NUMBER" ng-required="true" id="mob-term-form-details-serial-number"/>
                                 <input-validation-message types="required" input="mobileTerminalForm.serialNumber"></input-validation-message>
                             </div>
-                            <div class="form-group long-field"  ng-if="typeAndPlugin" ng-show="getTerminalConfig().terminalFields.TRANSCEIVER_TYPE">
+                            <div class="form-group long-field" ng-if="typeAndPlugin" ng-show="getTerminalConfig().terminalFields.TRANSCEIVER_TYPE">
                                 <label class="normal">{{'mobileTerminal.form_inmarsatc_transceiver_type_label' | i18n}}</label>
                                 <input type="text" class="form-control" ng-model="mobileTerminal.attributes.TRANSCEIVER_TYPE" id="mob-term-form-details-transceiver-type">
                             </div>
@@ -151,7 +151,7 @@
                                 </div>
                             </div>
                         </div>
-                        <div class="flexrow" ng-hide="!isMultipleChannelsAllowed()">
+                        <div class="flexrow" ng-show="isMultipleChannelsAllowed()">
                             <a class="btn-addChannel" ng-click="addNewChannel()" id="mob-term-form-details-add-channel"><i class="fa fa-plus"></i> {{'mobileTerminal.form_inmarsatc_communication_channels_add_new_button' | i18n}}</a>
                         </div>
                     </div>

@@ -60,14 +60,8 @@ copy of the GNU General Public License along with the IFDM Suite. If not, see <h
                 <span id="assignVesselLink" ng-click="toggleAssignVessel()" ng-show="currentMobileTerminal.guid" id="mob-term-form-assign-vessel-2">{{'mobileTerminal.assign_vessel' | i18n}}</span>
             </div>
         </div>
-
-        <div class="card mobileInformationContainer" loading-indicator="waitingForCreateResponse">
-            <menu-bar header="getMenuHeader()" modeltype="'MOBILE_TERMINAL'" ng-model="currentMobileTerminal"
-                      functions="menuBarFunctions"
-                      is-create-new-mode="isCreateNewMode">
-            </menu-bar>
-            <div class="mobileTerminalDetailsContainer" static-include="partial/mobileTerminal/mobileTerminalDetails/mobileTerminalDetails.html"></div>
-        </div>
+        
+        <mobile-terminal-details ng-model="temp" mobile-terminal="currentMobileTerminal" modeltype="'MOBILE_TERMINAL'" callback="mobileTerminalFormFunctions" disabled="disableMobileTerminalForm()"></mobile-terminal-details>        
     </div>
 
 

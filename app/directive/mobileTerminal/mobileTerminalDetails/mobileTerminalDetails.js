@@ -20,14 +20,14 @@ angular.module('unionvmsWeb')
             ngModel : '=',
             mobileTerminal : '=',
             transporderSystems : '=', 
-            modeltype: '=', 
-            createNew: '=', 
+            modeltype : '=', 
+            createNew : '=', 
             vesselId : '=',
-            callback : '='
+            callback : '=', 
+            disabled : '='
         },
 		templateUrl: 'directive/mobileTerminal/mobileTerminalDetails/mobileTerminalDetails.html',
 		link: function(scope, element, attrs, fn) {
-
 		}
 	};
 });
@@ -36,6 +36,9 @@ angular.module('unionvmsWeb')
     .controller('mobileTerminalDetailsCtrl', function($scope, $location, $filter, locale, SystemTypeAndPlugin, configurationService, MobileTerminalHistoryModal, mobileTerminalRestService, alertService, modalComment, mobileTerminalCsvService, MobileTerminal){
 
         $scope.transponderSystems = [];
+        $scope.typeAndPlugin = undefined;
+        $scope.submitAttempted = false;
+        $scope.formScope = undefined;
 
         var init = function(){
              //Get list transponder systems
@@ -51,12 +54,17 @@ angular.module('unionvmsWeb')
             }
         };
 
-        //Set status - Disabled !TODO!
-        $scope.disableForm = function() {
-            if ($scope.modeltype === 'VESSEL') {
+        //Set form scope 
+        $scope.setFormScope = function(scope){
+           $scope.formScope = scope;
+        }
+
+        //Set status - Disabled 
+        $scope.disableForm = function(){
+            if(angular.isDefined($scope.mobileTerminal) && !$scope.disabled){
                 return false;
             }
-            return false;
+            return true;
         };
 
         //Set status - Visible
@@ -165,8 +173,12 @@ angular.module('unionvmsWeb')
 
         //Create new Mobile Terminal - Request
         $scope.createNewMobileTerminal = function(){
-            mobileTerminalRestService.createNewMobileTerminal($scope.mobileTerminal)
-                    .then(createNewMobileTerminalSuccess, createNewMobileTerminalError);
+            $scope.submitAttempted = true;
+
+            if($scope.formScope.mobileTerminalForm.$valid){
+                mobileTerminalRestService.createNewMobileTerminal($scope.mobileTerminal)
+                        .then(createNewMobileTerminalSuccess, createNewMobileTerminalError);
+            }
         };
 
         //Create new Mobile Terminal - Success
@@ -182,11 +194,7 @@ angular.module('unionvmsWeb')
 
         //Create new Mobile Terminal - Error
         var createNewMobileTerminalError = function(error){
-            if(error.code === 522) {
-                alertService.showErrorMessage(locale.getString('mobileTerminal.mobile_terminal_already_exists'));
-            } else {
-                alertService.showErrorMessage(locale.getString('mobileTerminal.add_new_alert_message_on_error'));
-            }
+            alertService.showErrorMessage(locale.getString('mobileTerminal.add_new_alert_message_on_error'));
         };
 
         //Create new Mobile Terminal With Vessel - Success
@@ -197,24 +205,23 @@ angular.module('unionvmsWeb')
 
         //Create new Mobile Terminal With Vessel - Error
         var createNewMobileTerminalWithVesselError = function(error){
-            if(error.code === 522) {
-                alertService.showErrorMessage(locale.getString('mobileTerminal.mobile_terminal_already_exists'));
-            } else {
-                alertService.showErrorMessage(locale.getString('mobileTerminal.add_new_alert_message_on_error'));
-            }
+            alertService.showErrorMessage(locale.getString('mobileTerminal.add_new_alert_message_on_error'));
         };
 
         //Update Mobile Terminal - Add Comment
         $scope.updateMobileTerminal = function() {
-            modalComment.open($scope.updateMobileTerminalWithComment, {
-                titleLabel: locale.getString("mobileTerminal.updating"),
-                saveLabel: locale.getString("common.update")
-            });
+            $scope.submitAttempted = true;
+
+            if($scope.formScope.mobileTerminalForm.$valid){
+                modalComment.open($scope.updateMobileTerminalWithComment, {
+                    titleLabel: locale.getString("mobileTerminal.updating"),
+                    saveLabel: locale.getString("common.update")
+                });
+            }
         };
 
         //Update Mobile Terminal - Request
         $scope.updateMobileTerminalWithComment = function(comment){
-            $scope.waitingForCreateResponse = true;
             alertService.hideMessage();
             mobileTerminalRestService.updateMobileTerminal($scope.mobileTerminal, comment)
                     .then(updateMobileTerminalSuccess, updateMobileTerminalError);
@@ -222,18 +229,12 @@ angular.module('unionvmsWeb')
 
         //Update Mobile Terminal - Success
         var updateMobileTerminalSuccess = function(updatedMobileTerminal){
-            $scope.waitingForCreateResponse = false;
             alertService.showSuccessMessageWithTimeout(locale.getString('mobileTerminal.update_alert_message_on_success'));
         };
 
         //Update Mobile Terminal - Error
         var updateMobileTerminalError = function(error){
-            $scope.waitingForCreateResponse = false;
-            if(error.code === 522) {
-                alertService.showErrorMessage(locale.getString('mobileTerminal.mobile_terminal_already_exists'));
-            } else {
-                alertService.showErrorMessage(locale.getString('mobileTerminal.add_new_alert_message_on_error'));
-            }
+            alertService.showErrorMessage(locale.getString('mobileTerminal.add_new_alert_message_on_error'));
         };     
 
         //Archive Mobile Terminal - Add Comment
