@@ -337,18 +337,17 @@
                 </dependency>
             </dependencies>
             <configuration>
-                <providerImplementations>
-                    <svn>javasvn</svn>
-                </providerImplementations>
-                <tagBase>https://webgate.ec.europa.eu/CITnet/svn/UNIONVMS/tags/unionvms-web</tagBase>
                 <tagNameFormat>@{project.artifactId}-@{project.version}</tagNameFormat>
                 <autoVersionSubmodules>true</autoVersionSubmodules>
             </configuration>
         </plugin>
 	</plugins>
   </build>
+
   <scm>
-    <developerConnection>scm:svn:https://webgate.ec.europa.eu/CITnet/svn/UNIONVMS/branches/dev/unionvms-web</developerConnection>
+      <connection>scm:git:https://emserveje@webgate.ec.europa.eu/CITnet/stash/scm/unionvms/uvms-frontend.git</connection>
+      <developerConnection>scm:git:https://emserveje@webgate.ec.europa.eu/CITnet/stash/scm/unionvms/uvms-frontend.git</developerConnection>
+      <url>https://emserveje@webgate.ec.europa.eu/CITnet/stash/scm/unionvms/</url>
    </scm>
   <distributionManagement>
     <repository>
