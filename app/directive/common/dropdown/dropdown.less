@@ -50,20 +50,9 @@ copy of the GNU General Public License along with the IFDM Suite. If not, see <h
             .disabled-input();
         }
     }
-}
 
-fieldset[disabled] {
-    .dropdown-toggle {
+    &.disabled {
         .disabled-input();
-
-        .placeholderColor,
-        .placeholderText {
-            visibility: hidden;
-        }
-    }
-
-    .dropdown {
-        cursor: not-allowed;
 
         &:hover {
             .dropdown-toggle {
