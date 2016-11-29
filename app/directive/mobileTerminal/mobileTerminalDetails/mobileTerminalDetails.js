@@ -156,7 +156,7 @@ angular.module('unionvmsWeb')
                     delete $scope.mobileTerminal.plugin.serviceName;
                 }
             }else{
-                $scope.currentMobileTerminal.type = undefined;
+                $scope.mobileTerminal.type = undefined;
                 delete $scope.mobileTerminal.plugin.labelName;
                 delete $scope.mobileTerminal.plugin.serviceName;
             }

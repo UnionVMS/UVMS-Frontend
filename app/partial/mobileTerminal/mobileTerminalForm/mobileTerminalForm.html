@@ -37,7 +37,6 @@ copy of the GNU General Public License along with the IFDM Suite. If not, see <h
             </div>
         </div>
 
-
         <div class="card with-small-card-header" ng-show="isVisible.assignVessel">
             <div class="row card-header">
                 <div class="col-md-6">
@@ -62,13 +61,6 @@ copy of the GNU General Public License along with the IFDM Suite. If not, see <h
         </div>
         
         <mobile-terminal-details ng-model="temp" mobile-terminal="currentMobileTerminal" modeltype="'MOBILE_TERMINAL'" callback="mobileTerminalFormFunctions" disabled="disableMobileTerminalForm()"></mobile-terminal-details>        
-    </div>
-
-
-    <div class="row" ng-show="isCreateNewMode() && !vesselFormDisplayed()">
-        <div class="col-md-12">
-            <a ng-click="clearForm()" class="pointer" id="mob-term-form-clear-form">{{'common.clear_form' | i18n}}</a>
-        </div>
     </div>
 
 </div>

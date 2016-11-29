@@ -5,45 +5,50 @@
                   is-create-new-mode="isCreateNewMode">
         </menu-bar>
         <div class="mobileTerminalDetailsContainer">
-            <form name="mobileTerminalForm" method="post" novalidate ng-init="setFormScope(this)">
+            <form name="mobileTerminalForm" method="post" ng-init="setFormScope(this)">
                 <fieldset ng-disabled="disableForm()">
                     <div class="transponderSystemSelects">
                         <div class="flexrow form-section-1">
-                            <div class="transponderSystemSelect form-group medium-field-static">
-                                <label class="normal">{{'mobileTerminal.transceiver_system' | i18n}}</label>
-                                <dropdown ng-model="typeAndPlugin" initialtext="{{ 'common.choose' | i18n }}" items="transponderSystems" callback="onTerminalSystemSelect" ng-disabled="!isCreateNewMode()" data="typeAndPlugin" id="mob-term-form-details-transponder"></dropdown>
+                            <div class="transponderSystemSelect form-group medium-field-static" ng-class="{'has-error': mobileTerminalForm.typeAndPlugin.$invalid && (submitAttempted || mobileTerminalForm.typeAndPlugin.$dirty)}">
+                                <label class="normal">{{'mobileTerminal.transceiver_system' | i18n}}
+                                <span ng-show="mobileTerminal.type.length < 0 || isCreateNewMode()" class="mandatory">{{ 'common.mandatory_field' | i18n }}</span></label>
+                                <dropdown ng-model="typeAndPlugin" name="typeAndPlugin" initialtext="{{ 'common.choose' | i18n }}" items="transponderSystems" callback="onTerminalSystemSelect" ng-disabled="!isCreateNewMode()" data="typeAndPlugin" ng-required="true" id="mob-term-form-details-transponder"></dropdown>
+                                <input-validation-message types="required" input="mobileTerminalForm.typeAndPlugin"></input-validation-message>
                             </div>
-                            <div class="transponderSystemSelect form-group long-field" ng-if="typeAndPlugin && getTerminalConfig().capabilities.SUPPORT_SINGLE_OCEAN || getTerminalConfig().capabilities.SUPPORT_MULTIPLE_OCEAN">
-                                <label class="normal">{{'mobileTerminal.add_new_form_ocean_region_label' | i18n}}</label>
-                                <div ng-if="getTerminalConfig().capabilities.SUPPORT_SINGLE_OCEAN">
-                                    <dropdown ng-model="mobileTerminal.attributes.SINGLE_OCEAN" initialtext="{{ 'common.choose' | i18n }}" items="getTerminalConfig().capabilities.SUPPORT_MULTIPLE_OCEAN" id="mob-term-form-details-single-ocean"></dropdown>
+                            <div class="flexrow" ng-if="typeAndPlugin">
+                                <div class="transponderSystemSelect form-group long-field" ng-show="getTerminalConfig().capabilities.SUPPORT_SINGLE_OCEAN || getTerminalConfig().capabilities.SUPPORT_MULTIPLE_OCEAN">
+                                    <label class="normal">{{'mobileTerminal.add_new_form_ocean_region_label' | i18n}}</label>
+                                    <div ng-show="getTerminalConfig().capabilities.SUPPORT_SINGLE_OCEAN">
+                                        <dropdown ng-model="mobileTerminal.attributes.SINGLE_OCEAN" initialtext="{{ 'common.choose' | i18n }}" items="getTerminalConfig().capabilities.SUPPORT_SINGLE_OCEAN" id="mob-term-form-details-single-ocean"></dropdown>
+                                    </div>
+                                    <div ng-hide="getTerminalConfig().capabilities.SUPPORT_SINGLE_OCEAN">
+                                        <tag-select-input ng-model="mobileTerminal.attributes.MULTIPLE_OCEAN" ng-placeholder="{{'common.choose' | i18n }}" items="getTerminalConfig().capabilities.SUPPORT_MULTIPLE_OCEAN" id="mob-term-form-details-multiple-ocean"></tag-select-input>
+                                    </div>
                                 </div>
-                                <div ng-if="getTerminalConfig().capabilities.SUPPORT_MULTIPLE_OCEAN">
-                                    <tag-select-input ng-model="mobileTerminal.attributes.MULTIPLE_OCEAN" ng-placeholder="{{'common.choose' | i18n }}" items="getTerminalConfig().capabilities.SUPPORT_MULTIPLE_OCEAN" id="mob-term-form-details-multiple-ocean"></tag-select-input>
+                                <div class="form-group medium-field" ng-show="typeAndPlugin && getTerminalConfig().terminalFields.SERIAL_NUMBER" ng-class="{'has-error': mobileTerminalForm.serialNumber.$invalid && (submitAttempted || mobileTerminalForm.serialNumber.$dirty)}">
+                                    <label class="normal">{{'mobileTerminal.form_inmarsatc_serial_no_label' | i18n}}
+                                    <span ng-show="mobileTerminal.attributes.SERIAL_NUMBER.length < 0 || isCreateNewMode()" class="mandatory">{{ 'common.mandatory_field' | i18n }}</span></label>
+                                    <input type="text" name="serialNumber" class="form-control" ng-model="mobileTerminal.attributes.SERIAL_NUMBER" ng-required="true" id="mob-term-form-details-serial-number"/>
+                                    <input-validation-message types="required" input="mobileTerminalForm.serialNumber"></input-validation-message>
+                                </div>
+                                <div class="form-group long-field" ng-show="typeAndPlugin" ng-show="getTerminalConfig().terminalFields.TRANSCEIVER_TYPE">
+                                    <label class="normal">{{'mobileTerminal.form_inmarsatc_transceiver_type_label' | i18n}}</label>
+                                    <input type="text" class="form-control" ng-model="mobileTerminal.attributes.TRANSCEIVER_TYPE" id="mob-term-form-details-transceiver-type">
+                                </div>
+                                <div class="form-group align-right" ng-show="typeAndPlugin">
+                                    <div class="switch-container">
+                                        <label class="normal" style="display: block;" ng-if="mobileTerminal.active">{{'common.active' | i18n}}</label>
+                                        <label class="normal" style="display: block;" ng-if="!mobileTerminal.active">{{'common.inactive' | i18n}}</label>
+                                        <label class="switch">
+                                            <input type="checkbox" ng-model="mobileTerminal.active" id="mob-term-form-details-active">
+                                            <div class="slider" id="mob-term-form-details-slider">
+                                                <i class="fa fa-check"></i>
+                                                <i class="fa fa-times"></i>
+                                            </div>
+                                        </label>
+                                    </div>
                                 </div>
                             </div>
-                            <div class="form-group medium-field" ng-if="typeAndPlugin && getTerminalConfig().terminalFields.SERIAL_NUMBER" ng-class="{'has-error': mobileTerminalForm.serialNumber.$invalid && (submitAttempted || mobileTerminalForm.serialNumber.$dirty)}">
-                                <label class="normal">{{'mobileTerminal.form_inmarsatc_serial_no_label' | i18n}}<span ng-if="isCreateNewMode" class="mandatory">{{ 'common.mandatory_field' | i18n }}</span></label>
-                                <input type="text" name="serialNumber" class="form-control" ng-model="mobileTerminal.attributes.SERIAL_NUMBER" ng-required="true" id="mob-term-form-details-serial-number"/>
-                                <input-validation-message types="required" input="mobileTerminalForm.serialNumber"></input-validation-message>
-                            </div>
-                            <div class="form-group long-field" ng-if="typeAndPlugin" ng-show="getTerminalConfig().terminalFields.TRANSCEIVER_TYPE">
-                                <label class="normal">{{'mobileTerminal.form_inmarsatc_transceiver_type_label' | i18n}}</label>
-                                <input type="text" class="form-control" ng-model="mobileTerminal.attributes.TRANSCEIVER_TYPE" id="mob-term-form-details-transceiver-type">
-                            </div>
-                            <div class="form-group align-right" ng-if="typeAndPlugin">
-                                <div class="switch-container">
-                                    <label class="normal" style="display: block;" ng-if="mobileTerminal.active">{{'common.active' | i18n}}</label>
-                                    <label class="normal" style="display: block;" ng-if="!mobileTerminal.active">{{'common.inactive' | i18n}}</label>
-                                    <label class="switch">
-                                        <input type="checkbox" ng-model="mobileTerminal.active" id="mob-term-form-details-active">
-                                        <div class="slider" id="mob-term-form-details-slider">
-                                            <i class="fa fa-check"></i>
-                                            <i class="fa fa-times"></i>
-                                        </div>
-                                    </label>
-                                </div>
-                            </div> 
                         </div>
                         <div class="flexrow form-section-2" ng-if="typeAndPlugin">
                             <div class="form-group medium-field" ng-show="getTerminalConfig().terminalFields.SOFTWARE_VERSION">
@@ -63,7 +68,7 @@
                                 <input type="text" class="form-control" ng-model="mobileTerminal.attributes.ANSWER_BACK" id="mob-term-form-details-answer-back">
                             </div>
                         </div>
-                        <div class="currentMobileTerminalTypes" ng-if="typeAndPlugin">
+                        <div class="currentMobileTerminalTypes" ng-show="typeAndPlugin">
                             <div class="flexrow form-section-header">
                                 <label>{{'mobileTerminal.form_inmarsatc_communication_channels_header' | i18n}}</label>
                             </div>

@@ -95,13 +95,12 @@ label.section{
     	&,
     	&:focus,
     	&:hover {
-        	border:1px solid red;
+        	border: 1px solid @errorColor;
         	box-shadow: none !important;
         }
     }
     box-shadow:none;
 }
-
 
 .form-group{
     .help-block{
@@ -112,6 +111,8 @@ label.section{
 .form-group.has-error{
     .help-block{
         display: block;
+        font-size: 95%;
+        color: darken(@errorColor, 5%);
     }
 }
 
@@ -158,7 +159,7 @@ select{
 }
 
 .mandatory {
-    color: red;
+    color: @errorColor;
     padding-left: 3px;
 }
 
