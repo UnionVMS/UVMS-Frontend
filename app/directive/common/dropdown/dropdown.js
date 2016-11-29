@@ -29,7 +29,9 @@ angular.module('unionvmsWeb')
             callback : '=',
             callbackParams : '=',
             ngDisabled : '=',
-            tabIndex : '='
+            tabIndex : '=', 
+            ngRequired : '=', 
+            name : '='
 		},
         templateUrl: 'directive/common/dropdown/dropdown.html',
 		link: function(scope, element, attrs, fn, deepBlur) {
