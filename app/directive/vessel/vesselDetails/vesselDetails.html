@@ -4,8 +4,8 @@
 
             <div class="col-md-1 form-group smallerpaddingright" ng-class="{'has-error': (submitAttempted || vesselForm.countryCode.$dirty) && vesselForm.countryCode.$invalid}">
                 <label>{{ 'vessel.vessel_details_flagstate' | i18n }}<span ng-if="createNewMode" class="mandatory">{{ 'common.mandatory_field' | i18n }}</span></label>
-                <dropdown name="countryCode" ng-model="vessel.countryCode" initialtext="{{ 'vessel.vessel_details_flagstate' | i18n }}" items="vesselFlagState" required ng-if="!countryCode"></dropdown>
-                <dropdown name="countryCode" ng-model="vessel.countryCode" initialtext="{{countryCode}}" items="vesselFlagState" required ng-if="countryCode"></dropdown>
+                <dropdown name="countryCode" ng-model="vessel.countryCode" initialtext="{{ 'vessel.vessel_details_flagstate' | i18n }}" items="vesselFlagState" required ng-if="!countryCode" ng-disabled="disableForm"></dropdown>
+                <dropdown name="countryCode" ng-model="vessel.countryCode" initialtext="{{countryCode}}" items="vesselFlagState" required ng-if="countryCode" ng-disabled="disableForm"></dropdown>
                 <input-validation-message types="required" input="vesselForm.countryCode"></input-validation-message>
             </div>
             <div class="col-md-2 form-group smallerpadding" ng-class="{'has-error': (submitAttempted || vesselForm.ircs.$dirty) && vesselForm.ircs.$invalid}">
@@ -48,7 +48,7 @@
 
             <div class="col-md-3 form-group smallerpadding" ng-class="{'has-error': (submitAttempted || vesselForm.gearType.$dirty) && vesselForm.gearType.$invalid}">
                 <label>{{ 'vessel.vessel_details_gear_type' | i18n }}</label>
-                <dropdown name="gearType" ng-model="vessel.gearType" initialtext="{{ 'vessel.vessel_details_gear_type' | i18n }}" items="vesselGearTypes"></dropdown>
+                <dropdown name="gearType" ng-model="vessel.gearType" initialtext="{{ 'vessel.vessel_details_gear_type' | i18n }}" items="vesselGearTypes" ng-disabled="disableForm"></dropdown>
             </div>
 
             <div class="col-md-2 form-group smallerpadding" ng-class="{'has-error': (submitAttempted || vesselForm.mmsi.$dirty) && vesselForm.mmsi.$invalid}">
@@ -58,7 +58,7 @@
             </div>
             <div class="col-md-4 smallerpaddingleft form-group" ng-class="{'has-error': (submitAttempted || vesselForm.licenseType.$dirty) && vesselForm.licenseType.$invalid}">
                 <label>{{ 'vessel.vessel_details_license_type' | i18n }}</label>
-                <dropdown name="licenseType" ng-model="vessel.licenseType" initialtext="{{ 'vessel.vessel_details_license_type' | i18n }}" items="vesselLicensTypes"></dropdown>
+                <dropdown name="licenseType" ng-model="vessel.licenseType" initialtext="{{ 'vessel.vessel_details_license_type' | i18n }}" items="vesselLicensTypes" ng-disabled="disableForm"></dropdown>
             </div>
         </div>
         <div class="row">
@@ -74,7 +74,7 @@
                 </div>
                 <div class="col-md-4 nopaddingleft nopaddingright">
                     <label></label>
-                    <dropdown class="lengthTypeUnit" ng-model="vessel.lengthType" no-placeholder-item items="vesselLengthTypes" ></dropdown>
+                    <dropdown class="lengthTypeUnit" ng-model="vessel.lengthType" no-placeholder-item items="vesselLengthTypes" ng-disabled="disableForm"></dropdown>
                 </div>
             </div>
 
@@ -90,7 +90,7 @@
                 </div>
                 <div class="col-md-4 nopaddingleft nopaddingright">
                     <label></label>
-                    <dropdown class="grossTonnageUnit" ng-model="vessel.grossTonnageUnit" no-placeholder-item  items="vesselGrossTonnageUnits" ></dropdown>
+                    <dropdown class="grossTonnageUnit" ng-model="vessel.grossTonnageUnit" no-placeholder-item  items="vesselGrossTonnageUnits" ng-disabled="disableForm"></dropdown>
                 </div>
             </div>
 
