@@ -54,7 +54,7 @@ angular.module('unionvmsWeb')
             }
         };
 
-        //Set form scope 
+        //Set form scope - To be able to validate form in FE
         $scope.setFormScope = function(scope){
            $scope.formScope = scope;
         }
@@ -109,7 +109,6 @@ angular.module('unionvmsWeb')
 
         //Create dropdown for transponder system
         $scope.createTransponderSystemDropdownOptions = function(){
-            //Create dropdown values
             $.each($scope.transpondersConfig.terminalConfigs, function(key, config){
                 //LES capability
                 if(config.capabilities["PLUGIN"] && _.isArray(config.capabilities["PLUGIN"])){
@@ -329,11 +328,18 @@ angular.module('unionvmsWeb')
             mobileTerminalCsvService.download($scope.mobileTerminal);
         };
 
+        //Close Mobile Terminal form
+        $scope.closeMobileTerminalForm = function(){
+            if ($scope.modeltype === 'MOBILE_TERMINAL') {
+                $scope.callback.displayMobileTerminalList();
+            }
+        };
+
         //Menu bar functions
         $scope.menuBarFunctions = {
             saveCallback: $scope.createNewMobileTerminal,
             updateCallback: $scope.updateMobileTerminal,
-            cancelCallback: $scope.callback.displayMobileTerminalList,
+            cancelCallback: $scope.closeMobileTerminalForm,
             showCancel: function() {
                 if ($scope.modeltype === 'MOBILE_TERMINAL') {
                     return true;
