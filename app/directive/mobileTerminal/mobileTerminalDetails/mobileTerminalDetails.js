@@ -22,7 +22,7 @@ angular.module('unionvmsWeb')
             createNew : '=',
             vesselId : '=',
             callback : '=', 
-            disabled : '='
+            ngDisabled : '='
         },
 		templateUrl: 'directive/mobileTerminal/mobileTerminalDetails/mobileTerminalDetails.html',
 		link: function(scope, element, attrs, fn) {
@@ -59,7 +59,7 @@ angular.module('unionvmsWeb')
 
         //Set status - Disabled 
         $scope.disableForm = function(){
-            if(angular.isDefined($scope.mobileTerminal) && !$scope.disabled){
+            if(angular.isDefined($scope.mobileTerminal) && !$scope.ngDisabled){
                 return false;
             }
             return true;
