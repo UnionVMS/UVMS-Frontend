@@ -90,15 +90,15 @@
                                         <div class="form-group checkboxes-buttons">
                                             <div class="checkbox-button">
                                                 <label class="normal">{{'mobileTerminal.form_inmarsatc_communication_selectedchannel_poll_label' | i18n}}</label>
-                                                <input type="checkbox" name="polling" ng-value="$index" ng-model="communicationChannel.capabilities.POLLABLE" ng-model-options="{getterSetter: false}" id="mob-term-form-details-pollable-{{$index}}">
+                                                <input type="checkbox" name="polling" ng-value="$index" ng-model="communicationChannel.capabilities.POLLABLE" id="mob-term-form-details-pollable-{{$index}}" ng-disabled="disableChannels.pollable($index)">
                                             </div>
                                             <div class="checkbox-button">
                                                 <label class="normal">{{'mobileTerminal.form_inmarsatc_communication_selectedchannel_con_label' | i18n}}</label>
-                                                <input type="checkbox" name="config" ng-value="$index" ng-model="communicationChannel.capabilities.CONFIGURABLE" ng-model-options="{getterSetter: false}" id="mob-term-form-details-configurable-{{$index}}"/>
+                                                <input type="checkbox" name="config" ng-value="$index" ng-model="communicationChannel.capabilities.CONFIGURABLE" id="mob-term-form-details-configurable-{{$index}}" ng-disabled="disableChannels.configurable($index)"/>
                                             </div>
                                             <div class="checkbox-button">
                                                 <label class="normal">{{'mobileTerminal.form_inmarsatc_communication_selectedchannel_def_label' | i18n}}</label>
-                                                <input type="checkbox" name="default" ng-value="$index" ng-model="communicationChannel.capabilities.DEFAULT_REPORTING" ng-model-options="{getterSetter: false}" id="mob-term-form-details-default-{{$index}}"/>
+                                                <input type="checkbox" name="default" ng-value="$index" ng-model="communicationChannel.capabilities.DEFAULT_REPORTING" id="mob-term-form-details-default-{{$index}}" ng-disabled="disableChannels.defaultReporting($index)"/>
                                             </div>
                                         </div>
                                         <div class="form-group short-field" ng-class="{'has-error': channelForm.dnid.$invalid && (submitAttempted || channelForm.dnid.$dirty)}" ng-show="getTerminalConfig().channelFields.DNID">

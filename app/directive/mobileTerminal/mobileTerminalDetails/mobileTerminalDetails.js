@@ -15,13 +15,11 @@ angular.module('unionvmsWeb')
 		restrict: 'E',
 		replace: true,
         controller: 'mobileTerminalDetailsCtrl',
-        require: "^ngModel",
         scope: {
-            ngModel : '=',
             mobileTerminal : '=',
-            transporderSystems : '=', 
+            transporderSystems : '=',
             modeltype : '=', 
-            createNew : '=', 
+            createNew : '=',
             vesselId : '=',
             callback : '=', 
             disabled : '='
@@ -332,6 +330,41 @@ angular.module('unionvmsWeb')
         $scope.closeMobileTerminalForm = function(){
             if ($scope.modeltype === 'MOBILE_TERMINAL') {
                 $scope.callback.displayMobileTerminalList();
+            }
+        };
+
+        $scope.disableChannels = {
+            pollable: function(index) {
+                for (var i = 0; i < $scope.mobileTerminal.channels.length; i++) {
+                    if ($scope.mobileTerminal.channels[i].capabilities.POLLABLE === true) {
+                        if (index === i) {
+                            return false;
+                        }
+                        return true;
+                    }
+                }
+            },
+            configurable: function(index) {
+                for (var i = 0; i < $scope.mobileTerminal.channels.length; i++) {
+                    if ($scope.mobileTerminal.channels[i].capabilities.CONFIGURABLE === true) {
+                        if (index === i) {
+                            return false;
+                        }
+                        return true;
+                    }
+                }
+            }, 
+            defaultReporting: function(index) {
+                for (var i = 0; i < $scope.mobileTerminal.channels.length; i++) {
+                    if ($scope.mobileTerminal.channels[i].capabilities.DEFAULT_REPORTING === true) {
+                        if (index === i) {
+                            return false;
+                        } else {
+                            return true;
+                        }
+                        return true;
+                    }
+                }
             }
         };
 
