@@ -249,13 +249,6 @@ angular.module('unionvmsWeb').controller('VesselFormCtrl',function($scope, $log,
         };
     };
 
-    //Clear the form
-    $scope.clearForm = function(){
-        $scope.vesselObj = new Vessel();
-        $scope.setDefaultCountryCode();
-        $scope.vesselNotesObj = {};
-    };
-
     // Add notes to Vessel object
     $scope.addNotes = function(){
         if ($scope.vesselNotesObj.date && $scope.vesselNotesObj.activity) {
