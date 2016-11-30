@@ -1,26 +1,27 @@
 .activity-filters-section {
-    .reportSubform {
-        padding-top: 10px;
-        &.activity-form {
-            border-right: 1px solid #ddd;
+    [name="activitySecForm"] {
+        display: flex;
+        .reportSubform {
+            padding-top: 10px;
+            &.technical-form {
+                border-left: 1px solid #ddd;
+                border-right: 1px solid #ddd;
+            }
         }
-        &.species-form {
-            border-left: 1px solid #ddd;
+        .unit-input {
+            padding-right: 35px;
+            .unit-box {
+                width: 35px;
+            }
         }
-    }
-    .unit-input {
-        padding-right: 35px;
-        .unit-box {
-            width: 35px;
+        .label-container {
+            padding-right: 0;
+            &.center-label-multiple-combo {
+                line-height: 41px;
+            }
         }
-    }
-    .label-container {
-        padding-right: 0;
-        &.center-label-multiple-combo {
-            line-height: 41px;
+        .above-label {
+            width: 100%;
         }
-    }
-    .above-label {
-        width: 100%;
     }
 }
