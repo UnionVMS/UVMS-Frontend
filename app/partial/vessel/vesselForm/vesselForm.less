@@ -64,17 +64,6 @@ copy of the GNU General Public License along with the IFDM Suite. If not, see <h
                 }
             }
         }
-
-        .terminalsContainer{
-            padding: 15px; 
-
-            td{
-                width: 25%;
-            }
-            tr.inactive{
-                color:#aaa;
-            }
-        }
     }
 
     .mobileTerminalsContainer {
@@ -82,6 +71,15 @@ copy of the GNU General Public License along with the IFDM Suite. If not, see <h
 
         h3 {
             margin: 0;
+        }
+
+        .loadingIndicator {
+            position: relative;
+            .clear();
+
+            .spinnerOverlay {
+                display: none;
+            }
         }
     }
 

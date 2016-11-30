@@ -88,40 +88,6 @@ copy of the GNU General Public License along with the IFDM Suite. If not, see <h
                                 </div>
                             </div>
                         </div>
-
-                        <div class="col-md-9 terminalsContainer">
-                            <div class="row">
-                                <div class="col-md-12">
-                                    <h5>{{'vessel.connected_mobile_terminals' | i18n}}</h5>
-                                </div>
-                                <div class="col-md-12" loading-indicator="waitingForMobileTerminalsResponse" size="small" type="SPINNER">
-                                    <table class="fullWidth" ng-show="mobileTerminals.length > 0">
-                                        <thead>
-                                            <tr>
-                                                <th>{{'vessel.mobileTerminal_table_header_serial_number' | i18n}}</th>
-                                                <th>{{'vessel.mobileTerminal_table_header_type' | i18n}}</th>
-                                                <th>{{'vessel.mobileTerminal_table_header_started' | i18n}}</th>
-                                                <th>{{'vessel.mobileTerminal_table_header_stopped' | i18n}}</th>
-                                            </tr>
-                                        </thead>
-                                        <tbody>
-                                            <tr ng-repeat="mt in mobileTerminals | orderBy :'[-active, -started]'" ng-class="{inactive : !mt.active}">
-                                                <td>{{mt.attributes.SERIAL_NUMBER}}</td>
-                                                <td>{{mt.type | transponderName}}</td>
-                                                <td>{{mt.attributes.STARTED_ON || "-" | confDateFormat }}</td>
-                                                <td>{{mt.attributes.UNINSTALLED_ON || "-" | confDateFormat }}</td>
-                                            </tr>
-                                        </tbody>
-                                    </table>
-                                    <span ng-hide="waitingForMobileTerminalsResponse || mobileTerminals.length > 0 || mobileTerminalsError">
-                                        {{'vessel.zero_connected_mobile_terminals' | i18n}}
-                                    </span>
-                                </div>
-                                <div class="col-md-12">
-                                    <search-result-error-alert ng-show="mobileTerminalsError">{{mobileTerminalsError}}</search-result-error-alert>
-                                </div>
-                            </div>
-                        </div>
                     </div>
                 </div>
             </div>
@@ -134,9 +100,9 @@ copy of the GNU General Public License along with the IFDM Suite. If not, see <h
         </div>
 
         <div class="row mobileTerminalsContainer" ng-if="!isCreateNewMode()">
-            <div class="col-md-12">
-                <h3 ng-show="mobileTerminals.length > 0">{{'vessel.connected_mobile_terminals' | i18n}}</h3>
-                <div ng-repeat="mobileTerminal in mobileTerminals">
+            <div ng-show="mobileTerminals.length > 0" class="col-md-12">
+                <h3>{{'vessel.connected_mobile_terminals' | i18n}}</h3>
+                <div ng-repeat="mobileTerminal in mobileTerminals | orderBy :'[-isCreateNewMode]'" loading-indicator="waitingForMobileTerminalsResponse" size="small" type="SPINNER">
                     <mobile-terminal-details ng-model="temp" mobile-terminal="mobileTerminal" vessel-id="vesselObj.vesselId.guid" modeltype="'VESSEL'" callback="mobileTerminalForm"></mobile-terminal-details>
                 </div>
             </div>
