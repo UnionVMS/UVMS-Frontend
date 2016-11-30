@@ -21,7 +21,8 @@ angular.module('unionvmsWeb').directive('combobox', function(comboboxService) {
             name: '@',
             comboSection: '=',
             initCallback: '=',
-            noPlaceholderOnList: '@'
+            noPlaceholderOnList: '@',
+            defaultValue: '@'
 		},
         templateUrl: 'directive/common/combobox/combobox.html',
 		link: function(scope, element, attrs, ctrl) {
@@ -55,6 +56,10 @@ angular.module('unionvmsWeb').directive('combobox', function(comboboxService) {
             
             if(scope.group){
                 scope.comboboxServ.initializeGroup(scope.group,scope);
+            }
+
+            if(scope.defaultValue){
+                scope.ngModel = scope.defaultValue;
             }
             
             //Get the label for an item

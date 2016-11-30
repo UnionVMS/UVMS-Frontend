@@ -58,6 +58,13 @@ describe('combobox', function() {
         'isLoading': {attr: 'isLoading', type: '='}
       },
       'testFunc': loadingTest
+    },
+    defaultValue: {
+      attributes: {
+        'defaultValue': {attr: 'defaultValue', type: '@'}
+      },
+      'exclude': ['lineStyleCombo','multipleCombo'],
+      'testFunc': defaultValueTest
     }
   };
 
@@ -197,6 +204,9 @@ describe('combobox', function() {
     expect(angular.element('#' + isolatedScope.comboboxId + ' .loading-msg').length).toEqual(1);
   }
 
+  function defaultValueTest(comboTypeName,isolatedScope){
+    expect(isolatedScope.ngModel).toEqual(scope.model);
+  }
 
   beforeEach(inject(function($rootScope,$compile) {
     scope = $rootScope.$new();
@@ -260,6 +270,8 @@ describe('combobox', function() {
     scope.initCallback = jasmine.createSpy('initCallback');
 
     scope.noPlaceholderOnList = true;
+
+    scope.defaultValue = 'item1';
   }));
 
 
