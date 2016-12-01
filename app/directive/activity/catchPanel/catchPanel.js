@@ -2,7 +2,7 @@
  * @memberof unionvmsWeb
  * @ngdoc directive
  * @name catchPanel
- * @attr {unionvmsWeb.Trip} trip - current trip in trip summary
+ * @attr {unionvmsWeb.Trip} ngModel - current trip in trip summary
  * @attr {Object} tripAlert - trip summary alert state
  * @description
  *  A reusable tile that will display the catch details(overview) related to the current trip
@@ -12,7 +12,7 @@ angular.module('unionvmsWeb').directive('catchPanel', function (loadingStatus, a
 		restrict: 'E',
 		replace: true,
 		scope: {
-			trip: '=',
+			ngModel: '=',
 			tripAlert: '=',
 			fieldData: '='
 		},
@@ -36,12 +36,12 @@ angular.module('unionvmsWeb').directive('catchPanel', function (loadingStatus, a
 						y: function (d) { return d.weight; },
 						valueFormat: function (d) {
 
-							return scope.formatWeight(d, scope.trip.onboard.total, 'KG');
+							return scope.formatWeight(d, scope.ngModel.onboard.total, 'KG');
 						},
 						showLabels: false,
 						duration: 500,
 						color: function (d, i) {
-							return scope.trip.onboard.speciesList[i].color;
+							return scope.ngModel.onboard.speciesList[i].color;
 						},
 						showLegend: false
 					}
@@ -54,12 +54,12 @@ angular.module('unionvmsWeb').directive('catchPanel', function (loadingStatus, a
 						x: function (d) { return d.speciesCode; },
 						y: function (d) { return d.weight; },
 						valueFormat: function (d) {
-							return scope.formatWeight(d, scope.trip.landed.total, 'KG');
+							return scope.formatWeight(d, scope.ngModel.landed.total, 'KG');
 						},
 						showLabels: false,
 						duration: 500,
 						color: function (d, i) {
-							return scope.trip.landed.speciesList[i].color;
+							return scope.ngModel.landed.speciesList[i].color;
 						},
 						showLegend: false
 					}
@@ -108,7 +108,7 @@ angular.module('unionvmsWeb').directive('catchPanel', function (loadingStatus, a
 			};
 
 			//when tthe trip is initialized
-			scope.$watch('trip', function () {
+			scope.$watch('ngModel', function () {
 				init();
 
 			});
@@ -123,8 +123,8 @@ angular.module('unionvmsWeb').directive('catchPanel', function (loadingStatus, a
 				loadingStatus.isLoading(scope.fieldData.loadingScreen, true);
 				scope.loadingCharts = true;
 				initCharts();
-				if (angular.isDefined(scope.trip)) {
-					sortWeights(scope.trip);
+				if (angular.isDefined(scope.ngModel)) {
+					sortWeights(scope.ngModel);
 				}
 				loadingStatus.isLoading(scope.fieldData.loadingScreen, false);
 			};
