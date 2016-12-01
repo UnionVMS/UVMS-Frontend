@@ -48,7 +48,7 @@ angular.module('unionvmsWeb').directive('datepickerInput', ['$compile',function(
 
 angular.module('unionvmsWeb')
     .controller('datepickerInputCtrl',['$scope', 'dateTimeService','globalSettingsService', function($scope, dateTimeService, globalSettingsService){
-
+        
         var iso8601Dates = globalSettingsService.getDateFormat() === 'YYYY-MM-DD HH:mm:ss';
 
         //Formats used by momentjs and the picker

@@ -85,7 +85,7 @@
                                     <div class="flexrow form-section-3">
                                         <div class="form-group short-field">
                                             <label class="normal">{{'mobileTerminal.form_inmarsatc_communication_selectedchannel_channel_label' | i18n}}</label>
-                                            <input type="text" name="communicationChannel" class="form-control" ng-model="communicationChannel.name">
+                                            <input type="text" name="communicationChannel" class="form-control" ng-model="communicationChannel.name" id="mob-term-form-details-communication-channel-{{$index}}">
                                         </div>
                                         <div class="form-group checkboxes-buttons">
                                             <div class="checkbox-button">
@@ -103,12 +103,12 @@
                                         </div>
                                         <div class="form-group short-field" ng-class="{'has-error': channelForm.dnid.$invalid && (submitAttempted || channelForm.dnid.$dirty)}" ng-show="getTerminalConfig().channelFields.DNID">
                                             <label class="normal">{{'mobileTerminal.form_inmarsatc_communication_selectedchannel_dnid_label' | i18n}}<span ng-if="createNewMode" class="mandatory">{{ 'common.mandatory_field' | i18n }}</span></label>
-                                            <input type="text" name="dnid" class="form-control" ng-model="communicationChannel.ids.DNID" only-digits>
+                                            <input type="text" name="dnid" class="form-control" ng-model="communicationChannel.ids.DNID" id="mob-term-form-details-dnid-{{$index}}" only-digits>
                                             <input-validation-message types="onlyDigits" input="channelForm.dnid"></input-validation-message>
                                         </div>
                                         <div class="form-group short-field" ng-class="{'has-error': channelForm.memberId.$invalid && (submitAttempted || channelForm.memberId.$dirty)}" ng-show="getTerminalConfig().channelFields.MEMBER_NUMBER">
                                             <label class="normal">{{'mobileTerminal.form_inmarsatc_communication_selectedchannel_member_no_label' | i18n}}<span ng-if="createNewMode" class="mandatory">{{ 'common.mandatory_field' | i18n }}</span></label>
-                                            <input type="text" name="memberId" class="form-control" ng-model="communicationChannel.ids.MEMBER_NUMBER" only-digits>
+                                            <input type="text" name="memberId" class="form-control" ng-model="communicationChannel.ids.MEMBER_NUMBER" id="mob-term-form-details-memberId-{{$index}}" only-digits>
                                             <input-validation-message types="onlyDigits" input="channelForm.memberId"></input-validation-message>
                                         </div>
                                         <div class="form-group short-field" ng-show="getTerminalConfig().channelFields.LES_DESCRIPTION">
@@ -117,39 +117,39 @@
                                         </div>
                                         <div class="form-group medium-field" ng-class="{'has-error': channelForm.started.$invalid && (submitAttempted || channelForm.started.$dirty)}" ng-show="getTerminalConfig().channelFields.START_DATE">
                                             <label class="normal">{{'mobileTerminal.form_inmarsatc_communication_selectedchannel_started_label' | i18n}}</label>
-                                            <datepicker-input name="started" model="communicationChannel.ids.START_DATE" time="true" max-date="communicationChannel.ids.END_DATE"></datepicker-input>
+                                            <datepicker-input name="started" model="communicationChannel.ids.START_DATE" time="true" max-date="communicationChannel.ids.END_DATE" input-field-id="mob-term-form-details-start-date-{{$index}}"></datepicker-input>
                                         </div>
                                         <div class="form-group medium-field" ng-class="{'has-error': channelForm.stopped.$invalid && (submitAttempted || channelForm.stopped.$dirty)}" ng-show="getTerminalConfig().channelFields.END_DATE">
                                             <label class="normal">{{'mobileTerminal.form_inmarsatc_communication_selectedchannel_stopped_label' | i18n}}</label>
-                                            <datepicker-input name="stopped" time="true" model="communicationChannel.ids.END_DATE" min-date="communicationChannel.ids.START_DATE"></datepicker-input>
+                                            <datepicker-input name="stopped" time="true" model="communicationChannel.ids.END_DATE" min-date="communicationChannel.ids.START_DATE" input-field-id="mob-term-form-details-end-date-{{$index}}"></datepicker-input>
                                         </div>
                                     </div>
                                     <div class="flexrow form-section-4">
                                         <div class="form-group medium-field" ng-show="getTerminalConfig().channelFields.INSTALLED_BY">
                                             <label class="normal">{{'mobileTerminal.form_inmarsatc_installed_by_label' | i18n}}</label>
-                                            <input type="text" class="form-control" ng-model="communicationChannel.ids.INSTALLED_BY">
+                                            <input type="text" class="form-control" ng-model="communicationChannel.ids.INSTALLED_BY" id="mob-term-form-details-installed-by-{{$index}}">
                                         </div>
                                         <div class="form-group medium-field" ng-show="getTerminalConfig().channelFields.INSTALLED_ON">
                                             <label class="normal">{{'mobileTerminal.form_inmarsatc_installed_on_label' | i18n}}</label>
-                                            <datepicker-input model="communicationChannel.ids.INSTALLED_ON" time="true"></datepicker-input>
+                                            <datepicker-input model="communicationChannel.ids.INSTALLED_ON" time="true" input-field-id="mob-term-form-details-installed-on-{{$index}}"></datepicker-input>
                                         </div>
                                         <div class="form-group medium-field" ng-show="getTerminalConfig().channelFields.UNINSTALLED_ON" ng-class="{'has-error': mobileTerminalForm.uninstalled.$invalid && (submitAttempted || mobileTerminalForm.uninstalled.$dirty)}">
                                             <label class="normal">{{'mobileTerminal.form_inmarsatc_uninstalled_on_label' | i18n}}</label>
-                                            <datepicker-input name="uninstalled" model="communicationChannel.ids.UNINSTALLED_ON" time="true" min-date="communicationChannel.ids.INSTALLED_ON"></datepicker-input>
+                                            <datepicker-input name="uninstalled" model="communicationChannel.ids.UNINSTALLED_ON" time="true" min-date="communicationChannel.ids.INSTALLED_ON" input-field-id="mob-term-form-details-uninstalled-on-{{$index}}"></datepicker-input>
                                         </div>
                                         <div class="form-group" ng-show="getTerminalConfig().channelFields.FREQUENCY_EXPECTED" ng-class="{'has-error': mobileTerminalForm.frequency_expected.$invalid && (submitAttempted || mobileTerminalForm.frequency_expected.$dirty)}">
                                             <label class="normal">{{'mobileTerminal.form_inmarsatc_expected_freq_label' | i18n}}</label>
-                                            <period-input name="frequency_expected" model="communicationChannel.ids.FREQUENCY_EXPECTED" no-minutes="true"></period-input>
+                                            <period-input name="frequency_expected" model="communicationChannel.ids.FREQUENCY_EXPECTED" no-minutes="true" input-field-id="mob-term-form-details-frequency-expected-{{$index}}"></period-input>
                                             <input-validation-message types="number" input="mobileTerminalForm.frequency_expected"></input-validation-message>
                                         </div>
                                         <div class="form-group" ng-show="getTerminalConfig().channelFields.FREQUENCY_GRACE_PERIOD" ng-class="{'has-error': mobileTerminalForm.frequency_grace.$invalid && (submitAttempted || mobileTerminalForm.frequency_grace.$dirty)}">
                                             <label class="normal">{{'mobileTerminal.form_inmarsatc_grace_period_label' | i18n}}</label>
-                                            <period-input name="frequency_grace" model="communicationChannel.ids.FREQUENCY_GRACE_PERIOD" no-minutes="true"></period-input>
+                                            <period-input name="frequency_grace" model="communicationChannel.ids.FREQUENCY_GRACE_PERIOD" no-minutes="true" input-field-id="mob-term-form-details-frequency-grace-period-{{$index}}"></period-input>
                                             <input-validation-message types="number" input="mobileTerminalForm.frequency_grace"></input-validation-message>
                                         </div>
                                         <div class="form-group" ng-show="getTerminalConfig().channelFields.FREQUENCY_IN_PORT" ng-class="{'has-error': mobileTerminalForm.frequency_port.$invalid && (submitAttempted || mobileTerminalForm.frequency_port.$dirty)}">
                                             <label class="normal">{{'mobileTerminal.form_inmarsatc_in_port_grace_period_label' | i18n}}</label>
-                                            <period-input name="frequency_port" model="communicationChannel.ids.FREQUENCY_IN_PORT" no-minutes="true"></period-input>
+                                            <period-input name="frequency_port" model="communicationChannel.ids.FREQUENCY_IN_PORT" no-minutes="true" input-field-id="mob-term-form-details-frequency-in-port-{{$index}}"></period-input>
                                             <input-validation-message types="number" input="mobileTerminalForm.frequency_port"></input-validation-message>
                                         </div>
                                     </div>

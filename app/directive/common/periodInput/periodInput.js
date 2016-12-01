@@ -18,7 +18,8 @@ angular.module('unionvmsWeb').directive('periodInput', function($compile) {
             model : '=',
             ngDisabled : '=',
             ngRequired : '=',
-            noMinutes : '='
+            noMinutes : '=', 
+            inputFieldId : '@'
 		},
 		templateUrl: 'directive/common/periodInput/periodInput.html',
 		link: function(scope, element, attrs, fn) {
