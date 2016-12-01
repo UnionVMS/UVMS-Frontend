@@ -69,12 +69,12 @@ angular.module('unionvmsWeb').controller('TripsummaryCtrl', function ($scope, ac
             $scope.loadingCharts = false;
             loadingStatus.isLoading('TripSummary', false);
         }, function (error) {
-            scope.loadingCharts = false;
+            $scope.loadingCharts = false;
             $anchorScroll();
-            scope.tripAlert.hasAlert = true;
-            scope.tripAlert.hasError = true;
-            scope.tripAlert.alertMessage = locale.getString('activity.error_loading_trip_summary_catch_details');
-            scope.tripAlert.hideAlert();
+            $scope.tripAlert.hasAlert = true;
+            $scope.tripAlert.hasError = true;
+            $scope.tripAlert.alertMessage = locale.getString('activity.error_loading_trip_summary_catch_details');
+            $scope.tripAlert.hideAlert();
             loadingStatus.isLoading('TripSummary', false);
         });
     };
