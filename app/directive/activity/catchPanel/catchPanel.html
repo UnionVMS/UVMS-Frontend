@@ -1,32 +1,32 @@
 <div class="catch-details-container">
     <fieldset class="col-md-12 fieldsetStyle catch-section">
         <legend class="fieldsetLegendStyle">
-            <a>{{'activity.trip_summary_catch' | i18n }}</a>
+             <a>{{fieldData.legendTitle| i18n }}</a>
         </legend>
         <div class="row">
             <!--CATCH ON BOARD-->
             <div class="col-md-6 catch-subsection">
-                <h2>{{'activity.catch_panel_title_onboard' | i18n }}</h2>
+               <h2>{{fieldData.onboardTitle }}</h2>
                 <!--SPECIE COUNT CHART-->
-                <div class="col-md-6">
+                <div class="col-md-{{fieldData.colWidth}}">
                     <div class="nvd3-chart">
-                        <nvd3 options="options1" data="trip.catchDetails.onboard.speciesList" on-ready="callback" ng-if="!tripSummServ.isLoadingTrip"></nvd3>
+                        <nvd3 options="options1" data="trip.onboard.speciesList" on-ready="callback" ng-if="!tripSummServ.isLoadingTrip"></nvd3>
                     </div>
                 </div>
                 <!--SPECIE COUNT TABLE-->
-                <div class="col-md-6">
+                <div class="col-md-6" ng-if="fieldData.tableShown">
                     <div class="row">
-                        <div class="table-responsive-force col-md-12">
+                        <div class="table-responsive-force col-md-12" st-table="displayedCatch" st-safe-src="trip.onboard.speciesList" >
                             <div class="table tableSmart table-striped table-condensed row">
                                 <div class="thead col-md-12">
                                     <div class="tr row">
                                         <div class="th color-column"></div>
-                                        <div class="th col-md-7" title="{{'activity.catch_panel_column_species' | i18n }}">{{'activity.catch_panel_column_species' | i18n }}</div>
-                                        <div class="th col-md-5" title="{{'activity.catch_panel_column_weight' | i18n }}">{{'activity.catch_panel_column_weight' | i18n }}</div>
+                                        <div class="th col-md-7" st-sort="speciesCode" title="{{'activity.catch_panel_column_species' | i18n }}">{{'activity.catch_panel_column_species' | i18n }}</div>
+                                        <div class="th col-md-5" st-sort="weight" title="{{'activity.catch_panel_column_weight' | i18n }}">{{'activity.catch_panel_column_weight' | i18n }}</div>
                                     </div>
                                 </div>
                                 <div class="tbody col-md-12">
-                                    <div class="tr row" ng-repeat="item in trip.catchDetails.onboard.speciesList">
+                                    <div class="tr row" ng-repeat="item in displayedCatch">
                                         <div ng-style="item.tableColor" class="td color-column"></div>
                                         <div class="td col-md-7" title="{{item.speciesCode}}">{{item.speciesCode}}</div>
                                         <div class="td col-md-5" title="{{item.weight}}">{{item.weight}}</div>
@@ -37,31 +37,31 @@
                     </div>
                 </div>
                 <!--CHART CAPTION-->
-                <span class="chart-caption">{{'activity.catch_panel_chart_caption_total_catches' | i18n }} {{trip.catchDetails.onboard.total}} kg</span>
+                <span class="chart-caption">{{'activity.catch_panel_chart_caption_total_catches' | i18n }} {{trip.onboard.total}} kg</span>
             </div>
             <!--CATCH LANDED-->
             <div class="col-md-6 catch-subsection">
-                <h2>{{'activity.catch_panel_title_landed' | i18n }}</h2>
+                <h2>{{fieldData.landedTitle}}</h2>
                 <!--SPECIE COUNT CHART-->
-                <div class="col-md-6">
+                <div class="col-md-{{fieldData.colWidth}}">
                     <div class="nvd3-chart">
-                        <nvd3 options="options2" data="trip.catchDetails.landed.speciesList" on-ready="callback" ng-if="!tripSummServ.isLoadingTrip"></nvd3>
+                        <nvd3 options="options2" data="trip.landed.speciesList" on-ready="callback" ng-if="!tripSummServ.isLoadingTrip"></nvd3>
                     </div>
                 </div>
                 <!--SPECIE COUNT TABLE-->
-                <div class="col-md-6">
+                <div class="col-md-6" ng-if="fieldData.tableShown">
                     <div class="row">
-                        <div class="table-responsive-force col-md-12">
+                        <div class="table-responsive-force col-md-12" st-table="displayedLanded" st-safe-src="trip.landed.speciesList">
                             <div class="table tableSmart table-striped table-condensed row">
                                 <div class="thead col-md-12">
                                     <div class="tr row">
                                         <div class="th color-column"></div>
-                                        <div class="th col-md-7" title="{{'activity.catch_panel_column_species' | i18n }}">{{'activity.catch_panel_column_species' | i18n }}</div>
-                                        <div class="th col-md-5" title="{{'activity.catch_panel_column_weight' | i18n }}">{{'activity.catch_panel_column_weight' | i18n }}</div>
+                                        <div class="th col-md-7" st-sort="speciesCode" title="{{'activity.catch_panel_column_species' | i18n }}">{{'activity.catch_panel_column_species' | i18n }}</div>
+                                        <div class="th col-md-5" st-sort="weight" title="{{'activity.catch_panel_column_weight' | i18n }}">{{'activity.catch_panel_column_weight' | i18n }}</div>
                                     </div>
                                 </div>
                                 <div class="tbody col-md-12">
-                                    <div class="tr row" ng-repeat="item in trip.catchDetails.landed.speciesList">
+                                    <div class="tr row" ng-repeat="item in displayedLanded">
                                         <div ng-style="item.tableColor" class="td color-column"></div>
                                         <div class="td col-md-7" title="{{item.speciesCode}}">{{item.speciesCode}}</div>
                                         <div class="td col-md-5" title="{{item.weight}}">{{item.weight}}</div>
@@ -72,7 +72,7 @@
                     </div>
                 </div>
                 <!--CHART CAPTION-->
-                <span class="chart-caption">{{'activity.catch_panel_chart_caption_total_catches' | i18n }} {{trip.catchDetails.landed.total}} kg</span>
+                <span class="chart-caption">{{'activity.catch_panel_chart_caption_total_catches' | i18n }} {{trip.landed.total}} kg</span>
             </div>
         </div>
     </fieldset>

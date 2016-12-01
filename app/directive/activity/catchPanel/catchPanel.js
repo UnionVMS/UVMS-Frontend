@@ -7,16 +7,17 @@
  * @description
  *  A reusable tile that will display the catch details(overview) related to the current trip
  */
-angular.module('unionvmsWeb').directive('catchPanel', function(loadingStatus,activityRestService,$anchorScroll,locale,tripSummaryService,reportingNavigatorService) {
+angular.module('unionvmsWeb').directive('catchPanel', function (loadingStatus, activityRestService, $anchorScroll, locale, tripSummaryService, reportingNavigatorService) {
 	return {
 		restrict: 'E',
 		replace: true,
 		scope: {
 			trip: '=',
-			tripAlert: '='
+			tripAlert: '=',
+			fieldData: '='
 		},
 		templateUrl: 'directive/activity/catchPanel/catchPanel.html',
-		link: function(scope, element, attrs, fn) {
+		link: function (scope, element, attrs, fn) {
 			scope.repNav = reportingNavigatorService;
 			scope.tripSummServ = tripSummaryService;
 
@@ -26,21 +27,21 @@ angular.module('unionvmsWeb').directive('catchPanel', function(loadingStatus,act
 			 * @memberof catchPanel
 			 * @private
 			 */
-			var initCharts = function(){
+			var initCharts = function () {
 				scope.options1 = {
 					chart: {
 						type: 'pieChart',
 						height: 200,
-						x: function(d){return d.speciesCode;},
-						y: function(d){return d.weight;},
-						valueFormat: function(d){
-							var value = d/scope.trip.catchDetails.onboard.total*100;
-							return d + 'kg ('+ value.toFixed(2) + '%)';
+						x: function (d) { return d.speciesCode; },
+						y: function (d) { return d.weight; },
+						valueFormat: function (d) {
+
+							return scope.formatWeight(d, scope.trip.onboard.total, 'KG');
 						},
 						showLabels: false,
 						duration: 500,
 						color: function (d, i) {
-							return scope.trip.catchDetails.onboard.speciesList[i].color;
+							return scope.trip.onboard.speciesList[i].color;
 						},
 						showLegend: false
 					}
@@ -50,22 +51,49 @@ angular.module('unionvmsWeb').directive('catchPanel', function(loadingStatus,act
 					chart: {
 						type: 'pieChart',
 						height: 200,
-						x: function(d){return d.speciesCode;},
-						y: function(d){return d.weight;},
-						valueFormat: function(d){
-							var value = d/scope.trip.catchDetails.landed.total*100;
-							return d + 'kg ('+ value.toFixed(2) + '%)';
+						x: function (d) { return d.speciesCode; },
+						y: function (d) { return d.weight; },
+						valueFormat: function (d) {
+							return scope.formatWeight(d, scope.trip.landed.total, 'KG');
 						},
 						showLabels: false,
 						duration: 500,
 						color: function (d, i) {
-							return scope.trip.catchDetails.landed.speciesList[i].color;
+							return scope.trip.landed.speciesList[i].color;
 						},
 						showLegend: false
 					}
 				};
 			};
 
+			/**
+			 * function to calculate species Weight Percentage
+			 * 
+			 * @memberof catchPanel
+			 * @public
+			 * @param {Object} specieWeight - individual specie weight.
+			 * @param {Object} weightType - unit of the weight.
+			 * @param {Object} totalWeight - total weight of the specie.
+			 */
+			scope.formatWeight = function (specieWeight, totalWeight, weightType) {
+
+				var value = specieWeight / totalWeight * 100;
+				return specieWeight + 'weightType (' + value.toFixed(2) + '%)';
+			};
+            /**
+			 * function to sort species Weight.
+			 * 
+			 * @memberof catchPanel
+			 * @public
+			 * @param {Object} sortdata - data to be sorted.
+			 * 
+			 */
+			var sortWeights = function (sortdata) {
+				scope.displayedCatch = [].concat(sortdata.onboard.speciesList);
+				scope.displayedLanded = [].concat(sortdata.landed.speciesList);
+			};
+
+			
 			/**
 			 * Callback function to refresh the charts after their loading
 			 * 
@@ -74,14 +102,15 @@ angular.module('unionvmsWeb').directive('catchPanel', function(loadingStatus,act
 			 * @param {Object} scope - nvd3 directive scope
 			 * @param {Object} element - chart element
 			 */
-			scope.callback = function(scope, element){
+			scope.callback = function (scope, element) {
 				//to resize the chart after it's loaded
 				scope.api.refresh();
 			};
 
 			//when tthe trip is initialized
-			scope.$watch('trip',function(){
+			scope.$watch('trip', function () {
 				init();
+
 			});
 
 			/**
@@ -90,24 +119,14 @@ angular.module('unionvmsWeb').directive('catchPanel', function(loadingStatus,act
 			 * @memberof catchPanel
 			 * @private
 			 */
-			var init = function(){
-				//get trip catch details
-				loadingStatus.isLoading('TripSummary', true);
+			var init = function () {
+				loadingStatus.isLoading(scope.fieldData.loadingScreen, true);
 				scope.loadingCharts = true;
-				activityRestService.getTripCatches(scope.trip.id).then(function(response){
-					scope.trip.fromJson('catch',response.data);
-					initCharts();
-					scope.loadingCharts = false;
-					loadingStatus.isLoading('TripSummary', false);
-				}, function(error){
-					scope.loadingCharts = false;
-					$anchorScroll();
-					scope.tripAlert.hasAlert = true;
-					scope.tripAlert.hasError = true;
-					scope.tripAlert.alertMessage = locale.getString('activity.error_loading_trip_summary_catch_details');
-					scope.tripAlert.hideAlert();
-					loadingStatus.isLoading('TripSummary', false);
-				});
+				initCharts();
+				if (angular.isDefined(scope.trip)) {
+					sortWeights(scope.trip);
+				}
+				loadingStatus.isLoading(scope.fieldData.loadingScreen, false);
 			};
 
 		}
