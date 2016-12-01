@@ -17,17 +17,6 @@ copy of the GNU General Public License along with the IFDM Suite. If not, see <h
                 <div class="col-md-6">
                     <h5>{{'mobileTerminal.assigned_vessel' | i18n | uppercase}}</h5>
                 </div>
-                <div class="col-md-6 textAlignRight">
-                    <div class="actions">
-                        <div show-if-allowed="manageMobileTerminals">
-                            <button class="btn btn-primary" ng-click="unassignVessel()"><i class="fa fa-chain-broken"></i> {{'mobileTerminal.unassign_vessel' | i18n}}</button>
-                        </div>
-                        <div class="closeIcon" ng-click="toggleMobileTerminalDetails()">
-                            <i class="fa fa-sign-out signouticon" title="{{'common.close' | i18n}}"></i>
-                        </div>
-                        <div class="clearfix"></div>
-                    </div>
-                </div>
             </div>
             <div class="row">
                 <div class="col-md-12" ng-show="!currentMobileTerminal.associatedVessel">
