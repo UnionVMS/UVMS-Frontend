@@ -83,7 +83,7 @@ describe('activityRestService', function() {
         expect(callback).toHaveBeenCalled();
     });
     
-    it('should get a list of fishing activities', function(){
+    /*it('should get a list of fishing activities', function(){
         actListSpy = createSpy('actListSpy', true);
         var payload = {
             pagination: {
@@ -101,7 +101,7 @@ describe('activityRestService', function() {
         expect(actListSpy).toHaveBeenCalledWith(angular.toJson(payload), jasmine.any(Function), jasmine.any(Function));
         scope.$digest();
         expect(callback).toHaveBeenCalled();
-    });
+    });*/
     
     it('should get the trip cronology', function(){
         tripCronSpy = createSpy('tripCronSpy', true);

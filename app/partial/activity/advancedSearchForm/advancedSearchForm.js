@@ -155,7 +155,7 @@ angular.module('unionvmsWeb').controller('AdvancedsearchformCtrl',function($scop
         	}
         });
         $scope.actServ.resetReportsListTableState();
-        $scope.actServ.clearAttributeByType('activities');
+        $scope.actServ.getActivityList();
     };
     
     /**

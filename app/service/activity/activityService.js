@@ -64,9 +64,9 @@ angular.module('unionvmsWeb').factory('activityService',function(locale, activit
                 listSize: listSize,
                 totalPageCount: undefined
             },
-            sortKey: {
+            sorting: {
                 field: undefined,
-                order: undefined,
+                reverse: undefined,
             }
         };
     }
@@ -101,14 +101,6 @@ angular.module('unionvmsWeb').factory('activityService',function(locale, activit
             listSize: listSize,
             totalPageCount: undefined
         };
-        
-        if (angular.isDefined(actServ.reportsList.tableState)){
-            actServ.reportsList.tableState.pagination = {
-                start: 0,
-                number: listSize,
-                numberOfPages: 1
-            };
-        }
     };
     
     /**
@@ -146,10 +138,10 @@ angular.module('unionvmsWeb').factory('activityService',function(locale, activit
             this[type] = [];
             switch (type) {
                 case 'activities':
-                    this.displayedActivities = [];
+                    this.activities = [];
                     break;
                 case 'history':
-                    this.displayedHistory = [];
+                    this.history = [];
                     break;
                 default:
                     break;
@@ -168,14 +160,11 @@ angular.module('unionvmsWeb').factory('activityService',function(locale, activit
      * @returns {Object} A copy of the reportsList pagination object without the totalPageCount
      */
     function getPaginationForServer(tableState){
-        var pag = angular.copy(actServ.reportsList.pagination);
-        pag.totalPageCount = undefined;
-        pag.totalPages = 0;
-        if (angular.isDefined(tableState) && angular.isDefined(tableState.pagination.numberOfPages)){
-            //This is used for server side optimization: when we already have the total page count, we avoid counting pages againa
-            //in the backend by providing that value in the payload
-            pag.totalPages = tableState.pagination.numberOfPages;
-        }
+
+        var pag = {
+            offset: tableState ? tableState.pagination.start : 0,
+            pageSize: listSize
+        };
         
         return pag;
     }
@@ -193,11 +182,13 @@ angular.module('unionvmsWeb').factory('activityService',function(locale, activit
         
         var payload = {
             pagination: getPaginationForServer(tableState),
-            sortKey: actServ.reportsList.sortKey,
-            searchCriteriaMap: actServ.reportsList.searchObject
+            sorting: actServ.reportsList.sorting,
+            searchCriteriaMap: {
+                REPORT_TYPE: actServ.reportsList.searchObject.REPORT_TYPE
+            }
         };
         
-        activityRestService.getActivityList(payload).then(function(response){
+        /*activityRestService.getActivityList(payload).then(function(response){
             if (response.pagination.totalPageCount !== 0){
                 actServ.reportsList.pagination.totalPageCount = response.pagination.totalPageCount;
             }
@@ -216,7 +207,24 @@ angular.module('unionvmsWeb').factory('activityService',function(locale, activit
         }, function(error){
             actServ.reportsList.isLoading = false;
             actServ.reportsList.hasError = true;
-        });
+        });*/
+
+        //TODO integrate service
+        var response = activityRestService.getActivityList(payload);
+
+        if (response.totalItemsCount !== 0){
+            actServ.reportsList.pagination.totalPageCount = parseInt(response.totalItemsCount/listSize + 1);
+        }
+
+        actServ.activities = response.resultList;
+        actServ.displayedActivities = [].concat(actServ.activities);
+        if (angular.isDefined(callback) && angular.isDefined(tableState)){
+            callback(tableState);
+        }
+        
+        actServ.reportsList.isLoading = false;
+        ///////////////////////////
+
     };
     
     /**

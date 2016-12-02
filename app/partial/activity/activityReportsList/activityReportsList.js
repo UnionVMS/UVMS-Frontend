@@ -24,18 +24,15 @@ angular.module('unionvmsWeb').controller('ActivityreportslistCtrl',function($sco
     $scope.callServer = function(tableState){
         $scope.actServ.reportsList.tableState = tableState;
         $scope.actServ.reportsList.isLoading = true;
-        var searchField, sortOrder; 
+        
         if (angular.isDefined(tableState.sort.predicate)){
-            searchField = getTruePredicate(tableState.sort.predicate);
-            sortOrder = tableState.sort.reverse === true ? 'DESC' : 'ASC';
+            $scope.actServ.reportsList.sorting = {
+                field: getTruePredicate(tableState.sort.predicate),
+                reverse: tableState.sort.reverse
+            };
         }
         
-        $scope.actServ.reportsList.sortKey = {
-            field: searchField,
-            order: sortOrder
-        };
-        
-        $scope.actServ.reportsList.pagination.page = tableState.pagination.start / $scope.actServ.reportsList.pagination.listSize + 1;
+        /*$scope.actServ.reportsList.pagination.page = tableState.pagination.start / $scope.actServ.reportsList.pagination.listSize + 1;*/
         
         $scope.actServ.getActivityList(callServerCallback, tableState);
     };
