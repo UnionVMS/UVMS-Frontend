@@ -31,12 +31,16 @@ angular.module('unionvmsWeb')
 });
 
 angular.module('unionvmsWeb')
-    .controller('mobileTerminalDetailsCtrl', function($scope, $location, $filter, locale, SystemTypeAndPlugin, configurationService, MobileTerminalHistoryModal, mobileTerminalRestService, alertService, modalComment, mobileTerminalCsvService, MobileTerminal){
+    .controller('mobileTerminalDetailsCtrl', function($scope, $location, $filter, locale, SystemTypeAndPlugin, configurationService, MobileTerminalHistoryModal, mobileTerminalRestService, alertService, modalComment, mobileTerminalCsvService, MobileTerminal, userService){
 
         $scope.transponderSystems = [];
         $scope.typeAndPlugin = undefined;
         $scope.submitAttempted = false;
         $scope.formScope = undefined;
+
+        var checkAccessToFeature = function(feature) {
+            return userService.isAllowed(feature, 'Union-VMS', true);
+        };
 
         var init = function(){
              //Get list transponder systems
@@ -388,14 +392,14 @@ angular.module('unionvmsWeb')
             }, 
             archiveCallback: $scope.archiveMobileTerminal,
             showArchive: function(mobileTerminal) {
-                if (mobileTerminal) {
+                if (mobileTerminal && checkAccessToFeature('manageMobileTerminals')) {
                     return angular.isDefined(mobileTerminal.guid) && mobileTerminal.guid != null && !mobileTerminal.archived;
                 }
                 return false;
             },
             unlinkCallback: $scope.unassignVessel,
             showUnlink: function(mobileTerminal) {
-                if (mobileTerminal) {
+                if (mobileTerminal && checkAccessToFeature('manageMobileTerminals')) {
                     return angular.isDefined(mobileTerminal.connectId) && mobileTerminal.connectId != null;
                 }
                 return false;
@@ -406,6 +410,15 @@ angular.module('unionvmsWeb')
                     return angular.isDefined(mobileTerminal.guid) && mobileTerminal.guid != null;
                 }
                 return false;
+            }, 
+            showUpdateButton: function(mobileTerminal) {
+                return true; 
+            },
+            isNotAllowed: function(mobileTerminal) {
+                if (mobileTerminal && checkAccessToFeature('manageMobileTerminals')) {
+                    return false;
+                }
+                return true;
             }
         };
 

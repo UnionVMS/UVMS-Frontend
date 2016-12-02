@@ -156,7 +156,7 @@
                                 </div>
                             </div>
                         </div>
-                        <div class="flexrow" ng-show="isMultipleChannelsAllowed()">
+                        <div class="flexrow" ng-show="isMultipleChannelsAllowed() && !disableForm()">
                             <a class="btn-addChannel" ng-click="addNewChannel()" id="mob-term-form-details-add-channel"><i class="fa fa-plus"></i> {{'mobileTerminal.form_inmarsatc_communication_channels_add_new_button' | i18n}}</a>
                         </div>
                     </div>
