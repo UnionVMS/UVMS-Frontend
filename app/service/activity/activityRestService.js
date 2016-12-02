@@ -70,20 +70,19 @@ angular.module('unionvmsWeb').factory('activityRestFactory', function ($resource
                     "fluxReportReferenceSchemeId": "fhty58-gh586t-5tjf8-t58rjewe"
                     }
                 ],
-                    "totalItemsCount": 80,
-                    "code": 200
-                };
+                "totalItemsCount": 80,
+                "code": 200
+            };
 
-                var offset = data.pagination.offset;
-                for(var i=0;i<24;i++){
-                    var item = angular.copy(response.resultList[0]);
-                    item.faReportID = offset + i + 3;
-                    item.vesselIdTypes.CFR += offset + i;
-                    response.resultList.push(item);
-                }
+            var offset = data.pagination.offset;
+            for(var i=0;i<24;i++){
+                var item = angular.copy(response.resultList[0]);
+                item.faReportID = offset + i + 3;
+                item.vesselIdTypes.CFR += offset + i;
+                response.resultList.push(item);
+            }
 
-                return response;
-
+            return response;
         },
         getReportHistory: function(){
             return $resource('/activity/rest/fa/history/:referenceId/:schemeId', {}, {
