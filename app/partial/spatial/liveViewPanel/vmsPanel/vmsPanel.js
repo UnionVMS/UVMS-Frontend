@@ -167,8 +167,10 @@ angular.module('unionvmsWeb').controller('VmspanelCtrl',function($scope, locale,
        } else if (geomType === 'SEGMENT'){
            geom = new ol.geom.LineString($scope.displayedSegments[index].geometry.coordinates);
            geom.set('GeometryType', 'LineString');
-       } else {
+       } else if (geomType === 'TRACK') {
            geom = new ol.geom.Polygon.fromExtent($scope.displayedTracks[index].extent);
+       } else if (geomType === 'TRIP') {
+           geom = new ol.geom.Polygon.fromExtent($scope.displayedTrips[index].extent);
        }
        
        if (geomType !== 'ALARM'){
@@ -616,5 +618,11 @@ angular.module('unionvmsWeb').controller('VmspanelCtrl',function($scope, locale,
        $scope.tripSummServ.withMap = $scope.repNav.isViewVisible('mapPanel');
        $scope.tripSummServ.openNewTrip(tripName);
        $scope.repNav.goToView('tripsPanel','tripSummary');
+   };
+
+   $scope.dropSuccess = function(e, item, collection){
+       console.log(e);
+       console.log(item);
+       console.log(collection);
    };
 });

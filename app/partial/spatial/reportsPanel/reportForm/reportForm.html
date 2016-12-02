@@ -125,7 +125,7 @@
 					<div class="row form-group" ng-include="'partial/spatial/reportsPanel/reportForm/vmsFiltersFieldset/vmsFiltersFieldset.html'"></div>
 
 					<!-- Fieldset Activity Filters -->
-					<div class="row form-group" ng-include="'partial/spatial/reportsPanel/reportForm/activityFiltersFieldset/activityFiltersFieldset.html'"></div>
+					<div ng-if="isAllowed('Activity', 'ACTIVITY_ALLOWED')" class="row form-group" ng-include="'partial/spatial/reportsPanel/reportForm/activityFiltersFieldset/activityFiltersFieldset.html'"></div>
 				</div>
 			</ng-form>
 			

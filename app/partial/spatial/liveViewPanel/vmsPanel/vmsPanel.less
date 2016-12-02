@@ -91,6 +91,9 @@
 		.with-bottom-border {
 			border-bottom-width: 1px;
 		}
+		.alarms-icon {
+			color: red;
+		}
 	}
 }
 
@@ -229,11 +232,15 @@ div.table-tools i {
 }
 
 .lr-drop-target-before{
-  border-left: 5px solid @primaryColor;
+	border-left: 5px solid @primaryColor;
+}
+
+th:first-child .lr-drop-target-before {
+	display: none;
 }
 
 .lr-drop-target-after{
-  border-right: 5px solid @primaryColor;
+	border-right: 5px solid @primaryColor;
 }
 
 .vmspanel-modal {

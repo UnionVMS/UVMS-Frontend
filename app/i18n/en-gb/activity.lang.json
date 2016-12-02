@@ -187,5 +187,12 @@
     "weight_means": "Weighting means",
     "departure_catch_detail": "Retained on board",
     "location": "Location",
-    "locations": "Locations"
+    "locations": "Locations",
+    "tab_trip_table_header_id": "Trip id",
+    "tab_trip_table_header_event": "Last event",
+    "tab_trip_table_header_vesselId": "Vessel id",
+    "tab_trip_table_header_duration": "Duration",
+    "tab_trip_table_header_nCorrections": "Corrections",
+    "tab_trip_table_header_nPositions": "Positions",
+    "tab_trip_table_header_alarm": "Alarm"
 }
