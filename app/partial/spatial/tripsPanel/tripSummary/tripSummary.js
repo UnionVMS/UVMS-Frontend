@@ -13,7 +13,17 @@
  */
 angular.module('unionvmsWeb').controller('TripsummaryCtrl', function ($scope, activityRestService, tripSummaryService, loadingStatus, $anchorScroll, locale) {
     $scope.tripSummServ = tripSummaryService;
-
+    $scope.panelData = {
+        tableShown: true,
+        legendTitle: locale.getString('activity.trip_summary_catch'),
+        title: {
+            onboard: locale.getString('activity.catch_panel_title_onboard'),
+            landed: locale.getString('activity.catch_panel_title_landed')
+        },
+        loadingScreen: 'TripSummary',
+        colWidth: 6
+    };
+     ($scope.panelData.tableShown) ? ($scope.panelData.colWidth = 6) : ($scope.panelData.colWidth = 12);
     //when tthe trip is being initialized
     $scope.$watch('tripSummServ.isLoadingTrip', function (newVal) {
         if (newVal) {
@@ -29,15 +39,8 @@ angular.module('unionvmsWeb').controller('TripsummaryCtrl', function ($scope, ac
      */
     var init = function () {
         loadingStatus.isLoading('TripSummary', true);
-        $scope.panelData = {
-            tableShown: true,
-            legendTitle: locale.getString('activity.trip_summary_catch'),
-            onboardTitle: locale.getString('activity.catch_panel_title_onboard'),
-            landedTitle: locale.getString('activity.catch_panel_title_landed'),
-            loadingScreen: 'TripSummary',
-            colWidth: 6
-        };
-        ($scope.panelData.tableShown) ? ($scope.panelData.colWidth = 6) : ($scope.panelData.colWidth = 12);
+
+       
         //get vessel and role data for the specified trip
         activityRestService.getTripVessel($scope.trip.id).then(function (response) {
             $scope.trip.fromJson('vessel', response.data);
