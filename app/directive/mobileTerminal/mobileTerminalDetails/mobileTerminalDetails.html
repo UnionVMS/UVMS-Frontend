@@ -22,7 +22,7 @@
                                         <dropdown ng-model="mobileTerminal.attributes.SINGLE_OCEAN" initialtext="{{ 'common.choose' | i18n }}" items="getTerminalConfig().capabilities.SUPPORT_SINGLE_OCEAN" id="mob-term-form-details-single-ocean"></dropdown>
                                     </div>
                                     <div ng-hide="getTerminalConfig().capabilities.SUPPORT_SINGLE_OCEAN">
-                                        <tag-select-input ng-model="mobileTerminal.attributes.MULTIPLE_OCEAN" ng-placeholder="{{'common.choose' | i18n }}" items="getTerminalConfig().capabilities.SUPPORT_MULTIPLE_OCEAN" id="mob-term-form-details-multiple-ocean"></tag-select-input>
+                                        <tag-select-input ng-model="mobileTerminal.attributes.MULTIPLE_OCEAN" ng-placeholder="{{'common.choose' | i18n }}" items="getTerminalConfig().capabilities.SUPPORT_MULTIPLE_OCEAN" id="mob-term-form-details-multiple-ocean" ng-disabled="disableForm()"></tag-select-input>
                                     </div>
                                 </div>
                                 <div class="form-group medium-field" ng-show="typeAndPlugin && getTerminalConfig().terminalFields.SERIAL_NUMBER" ng-class="{'has-error': mobileTerminalForm.serialNumber.$invalid && (submitAttempted || mobileTerminalForm.serialNumber.$dirty)}">
