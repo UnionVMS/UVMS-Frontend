@@ -53,6 +53,7 @@ angular.module('unionvmsWeb').controller('TripsummaryCtrl',function($scope,activ
             loadingStatus.isLoading('TripSummary', false);
         });
 
+        loadingStatus.isLoading('TripSummary', true);
         //get activity reports data for the specified trip
         activityRestService.getTripReports($scope.trip.id).then(function(response){
             $scope.trip.fromJson('reports',response.data);
