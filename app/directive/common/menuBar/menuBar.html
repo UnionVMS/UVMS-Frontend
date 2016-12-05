@@ -18,7 +18,7 @@
                     <a ng-click="functions.cancelCallback()" class="btn-cancel" id="menu-bar-cancel">Cancel</a>
                 </div>
             </div>
-            <div ng-if="includeSaveUpdate && !functions.isNotAllowed()" ng-include="'directive/common/menuBar/menuBarSave.html'" class="item"></div>
+            <div ng-if="includeSaveUpdate && !functions.isNotAllowed(ngModel)" ng-include="'directive/common/menuBar/menuBarSave.html'" class="item"></div>
         </div>
     </div>
 </div>

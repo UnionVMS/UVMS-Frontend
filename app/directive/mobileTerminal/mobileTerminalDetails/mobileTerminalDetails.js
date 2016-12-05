@@ -411,9 +411,6 @@ angular.module('unionvmsWeb')
                 }
                 return false;
             }, 
-            showUpdateButton: function(mobileTerminal) {
-                return true; 
-            },
             isNotAllowed: function(mobileTerminal) {
                 if (mobileTerminal && checkAccessToFeature('manageMobileTerminals')) {
                     return false;
