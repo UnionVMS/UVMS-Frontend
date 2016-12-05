@@ -376,6 +376,12 @@ angular.module('unionvmsWeb')
         $scope.menuBarFunctions = {
             saveCallback: $scope.createNewMobileTerminal,
             updateCallback: $scope.updateMobileTerminal,
+            disableUpdate: function() {
+                if ($scope.formScope.mobileTerminalForm.$dirty) {
+                    return false;
+                }
+                return true;
+            },
             cancelCallback: $scope.closeMobileTerminalForm,
             showCancel: function() {
                 if ($scope.modeltype === 'MOBILE_TERMINAL') {
