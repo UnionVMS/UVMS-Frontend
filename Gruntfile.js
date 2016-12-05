@@ -170,9 +170,12 @@ module.exports = function (grunt) {
     less: {
       production: {
         options: {
+          sourceMap: true,
+          sourceMapFilename: 'app/app.css.map',
+          sourceMapRootpath: '../'
         },
         files: {
-          'temp/app.css': 'app/app.less'
+          'app/app.css': 'app/app.less'
         }
       }
     },
@@ -508,7 +511,7 @@ module.exports = function (grunt) {
   grunt.registerTask('test-dev',['dom_munger:read', 'karma:services', 'clean:after']);
 
   grunt.registerTask('default',['build-dev']);
-  grunt.registerTask('serve', ['dom_munger:read','htmlhint','jshint', 'configureProxies', 'configureRewriteRules', 'connect:development', 'watch']);
+  grunt.registerTask('serve', ['dom_munger:read','htmlhint','jshint', 'configureProxies', 'configureRewriteRules', 'connect:development', 'watch', 'ngtemplates']);
   grunt.registerTask('serve-copy', ['copy:serve', 'serve']);
   grunt.registerTask('build-docs', ['jsdoc']);
 
