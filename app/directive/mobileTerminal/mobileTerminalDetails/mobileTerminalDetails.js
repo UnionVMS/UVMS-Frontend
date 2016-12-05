@@ -63,7 +63,7 @@ angular.module('unionvmsWeb')
 
         //Set status - Disabled 
         $scope.disableForm = function(){
-            if(angular.isDefined($scope.mobileTerminal) && !$scope.ngDisabled){
+            if(angular.isDefined($scope.mobileTerminal) && !$scope.ngDisabled && checkAccessToFeature('manageMobileTerminals')){
                 return false;
             }
             return true;
