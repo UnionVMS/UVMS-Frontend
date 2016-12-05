@@ -75,7 +75,7 @@
                             <div class="flexrow form-section-header">
                                 <label class="normal">{{'mobileTerminal.form_inmarsatc_communication_channels_notice' | i18n}}</label>
                             </div>
-                            <div ng-repeat="communicationChannel in mobileTerminal.channels" ng-controller="mobileTerminal.channelController">
+                            <div ng-repeat="communicationChannel in mobileTerminal.channels">
                                 <div ng-form="channelForm" class="channel-form">
                                     <div class="delete-channel" ng-show="!disableForm() && $index > 0">
                                         <div class="btn btn-default" ng-click="removeChannel($index)">
