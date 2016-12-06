@@ -26,7 +26,7 @@ angular.module('unionvmsWeb').factory('activityRestFactory', function ($resource
                 }
             });
         },
-        getReportHistory: function(){
+        getReportHistory: function () {
             return $resource('/activity/rest/fa/history/:referenceId/:schemeId', {}, {
                 'get': {
                     method: 'GET',
@@ -82,7 +82,8 @@ angular.module('unionvmsWeb').factory('activityRestFactory', function ($resource
                     }
                 }
             });
-        }, getTripCatchDetail: function () {
+        },
+        getTripCatchDetail: function () {
             return {
 
                 "tripID": "BEL-TRP-O16-2016_0021",
@@ -96,7 +97,8 @@ angular.module('unionvmsWeb').factory('activityRestFactory', function ($resource
 
             };
 
-        }, getTripCatchesLandingDetails: function () {
+        },
+        getTripCatchesLandingDetails: function () {
 
             return {
                 "difference": {
@@ -335,6 +337,486 @@ angular.module('unionvmsWeb').factory('activityRestFactory', function ($resource
                 }
             };
 
+        },
+        getTripCatchesEvolution: function () {
+            return [{
+
+                "onboard": {
+                    "speciesList": [{
+                        "speciesCode": "BEAGLE",
+                        "weight": 111,
+                        "color": "#781c81",
+                        "tableColor": {
+                            "background-color": "rgba(120, 28, 129, 0.7)"
+                        }
+                    }, {
+                        "speciesCode": "SEAFOOD",
+                        "weight": 111,
+                        "color": "#447cbf",
+                        "tableColor": {
+                            "background-color": "rgba(68, 124, 191, 0.7)"
+                        }
+                    }, {
+                        "speciesCode": "SEAFOOD_2",
+                        "weight": 111,
+                        "color": "#83ba6d",
+                        "tableColor": {
+                            "background-color": "rgba(131, 186, 109, 0.7)"
+                        }
+                    }, {
+                        "speciesCode": "SEAFOOD_3",
+                        "weight": 111,
+                        "color": "#dbab3b",
+                        "tableColor": {
+                            "background-color": "rgba(219, 171, 59, 0.7)"
+                        }
+                    }, {
+                        "speciesCode": "BEAGLE",
+                        "weight": 111,
+                        "color": "#d92120",
+                        "tableColor": {
+                            "background-color": "rgba(217, 33, 32, 0.7)"
+                        }
+                    }],
+                    "total": 555
+                },
+                "cumulated": {
+                    "speciesList": [{
+                        "speciesCode": "BEAGLE",
+                        "weight": 111,
+                        "color": "#781c81",
+                        "tableColor": {
+                            "background-color": "rgba(120, 28, 129, 0.7)"
+                        }
+                    }, {
+                        "speciesCode": "SEAFOOD",
+                        "weight": 111,
+                        "color": "#d92120",
+                        "tableColor": {
+                            "background-color": "rgba(217, 33, 32, 0.7)"
+                        }
+                    }],
+                    "total": 222
+                }
+
+
+            }, {
+                "onboard": {
+                    "speciesList": [{
+                        "speciesCode": "BEAGLE",
+                        "weight": 111,
+                        "color": "#781c81",
+                        "tableColor": {
+                            "background-color": "rgba(120, 28, 129, 0.7)"
+                        }
+                    }, {
+                        "speciesCode": "SEAFOOD",
+                        "weight": 111,
+                        "color": "#447cbf",
+                        "tableColor": {
+                            "background-color": "rgba(68, 124, 191, 0.7)"
+                        }
+                    }, {
+                        "speciesCode": "SEAFOOD_2",
+                        "weight": 111,
+                        "color": "#83ba6d",
+                        "tableColor": {
+                            "background-color": "rgba(131, 186, 109, 0.7)"
+                        }
+                    }, {
+                        "speciesCode": "SEAFOOD_3",
+                        "weight": 111,
+                        "color": "#dbab3b",
+                        "tableColor": {
+                            "background-color": "rgba(219, 171, 59, 0.7)"
+                        }
+                    }, {
+                        "speciesCode": "BEAGLE",
+                        "weight": 111,
+                        "color": "#d92120",
+                        "tableColor": {
+                            "background-color": "rgba(217, 33, 32, 0.7)"
+                        }
+                    }],
+                    "total": 555
+                },
+                "cumulated": {
+                    "speciesList": [{
+                        "speciesCode": "BEAGLE",
+                        "weight": 111,
+                        "color": "#781c81",
+                        "tableColor": {
+                            "background-color": "rgba(120, 28, 129, 0.7)"
+                        }
+                    }, {
+                        "speciesCode": "SEAFOOD",
+                        "weight": 111,
+                        "color": "#d92120",
+                        "tableColor": {
+                            "background-color": "rgba(217, 33, 32, 0.7)"
+                        }
+                    }],
+                    "total": 222
+                }
+
+
+            }, {
+                "onboard": {
+                    "speciesList": [{
+                        "speciesCode": "BEAGLE",
+                        "weight": 111,
+                        "color": "#781c81",
+                        "tableColor": {
+                            "background-color": "rgba(120, 28, 129, 0.7)"
+                        }
+                    }, {
+                        "speciesCode": "SEAFOOD",
+                        "weight": 111,
+                        "color": "#447cbf",
+                        "tableColor": {
+                            "background-color": "rgba(68, 124, 191, 0.7)"
+                        }
+                    }, {
+                        "speciesCode": "SEAFOOD_2",
+                        "weight": 111,
+                        "color": "#83ba6d",
+                        "tableColor": {
+                            "background-color": "rgba(131, 186, 109, 0.7)"
+                        }
+                    }, {
+                        "speciesCode": "SEAFOOD_3",
+                        "weight": 111,
+                        "color": "#dbab3b",
+                        "tableColor": {
+                            "background-color": "rgba(219, 171, 59, 0.7)"
+                        }
+                    }, {
+                        "speciesCode": "BEAGLE",
+                        "weight": 111,
+                        "color": "#d92120",
+                        "tableColor": {
+                            "background-color": "rgba(217, 33, 32, 0.7)"
+                        }
+                    }],
+                    "total": 555
+                },
+                "cumulated": {
+                    "speciesList": [{
+                        "speciesCode": "BEAGLE",
+                        "weight": 111,
+                        "color": "#781c81",
+                        "tableColor": {
+                            "background-color": "rgba(120, 28, 129, 0.7)"
+                        }
+                    }, {
+                        "speciesCode": "SEAFOOD",
+                        "weight": 111,
+                        "color": "#d92120",
+                        "tableColor": {
+                            "background-color": "rgba(217, 33, 32, 0.7)"
+                        }
+                    }],
+                    "total": 222
+                }
+
+
+            }, {
+                "onboard": {
+                    "speciesList": [{
+                        "speciesCode": "BEAGLE",
+                        "weight": 111,
+                        "color": "#781c81",
+                        "tableColor": {
+                            "background-color": "rgba(120, 28, 129, 0.7)"
+                        }
+                    }, {
+                        "speciesCode": "SEAFOOD",
+                        "weight": 111,
+                        "color": "#447cbf",
+                        "tableColor": {
+                            "background-color": "rgba(68, 124, 191, 0.7)"
+                        }
+                    }, {
+                        "speciesCode": "SEAFOOD_2",
+                        "weight": 111,
+                        "color": "#83ba6d",
+                        "tableColor": {
+                            "background-color": "rgba(131, 186, 109, 0.7)"
+                        }
+                    }, {
+                        "speciesCode": "SEAFOOD_3",
+                        "weight": 111,
+                        "color": "#dbab3b",
+                        "tableColor": {
+                            "background-color": "rgba(219, 171, 59, 0.7)"
+                        }
+                    }, {
+                        "speciesCode": "BEAGLE",
+                        "weight": 111,
+                        "color": "#d92120",
+                        "tableColor": {
+                            "background-color": "rgba(217, 33, 32, 0.7)"
+                        }
+                    }],
+                    "total": 555
+                },
+                "cumulated": {
+                    "speciesList": [{
+                        "speciesCode": "BEAGLE",
+                        "weight": 111,
+                        "color": "#781c81",
+                        "tableColor": {
+                            "background-color": "rgba(120, 28, 129, 0.7)"
+                        }
+                    }, {
+                        "speciesCode": "SEAFOOD",
+                        "weight": 111,
+                        "color": "#d92120",
+                        "tableColor": {
+                            "background-color": "rgba(217, 33, 32, 0.7)"
+                        }
+                    }],
+                    "total": 222
+                }
+
+
+            }, {
+                "onboard": {
+                    "speciesList": [{
+                        "speciesCode": "BEAGLE",
+                        "weight": 111,
+                        "color": "#781c81",
+                        "tableColor": {
+                            "background-color": "rgba(120, 28, 129, 0.7)"
+                        }
+                    }, {
+                        "speciesCode": "SEAFOOD",
+                        "weight": 111,
+                        "color": "#447cbf",
+                        "tableColor": {
+                            "background-color": "rgba(68, 124, 191, 0.7)"
+                        }
+                    }, {
+                        "speciesCode": "SEAFOOD_2",
+                        "weight": 111,
+                        "color": "#83ba6d",
+                        "tableColor": {
+                            "background-color": "rgba(131, 186, 109, 0.7)"
+                        }
+                    }, {
+                        "speciesCode": "SEAFOOD_3",
+                        "weight": 111,
+                        "color": "#dbab3b",
+                        "tableColor": {
+                            "background-color": "rgba(219, 171, 59, 0.7)"
+                        }
+                    }, {
+                        "speciesCode": "BEAGLE",
+                        "weight": 111,
+                        "color": "#d92120",
+                        "tableColor": {
+                            "background-color": "rgba(217, 33, 32, 0.7)"
+                        }
+                    }],
+                    "total": 555
+                },
+                "cumulated": {
+                    "speciesList": [{
+                        "speciesCode": "BEAGLE",
+                        "weight": 111,
+                        "color": "#781c81",
+                        "tableColor": {
+                            "background-color": "rgba(120, 28, 129, 0.7)"
+                        }
+                    }, {
+                        "speciesCode": "SEAFOOD",
+                        "weight": 111,
+                        "color": "#d92120",
+                        "tableColor": {
+                            "background-color": "rgba(217, 33, 32, 0.7)"
+                        }
+                    }],
+                    "total": 222
+                }
+
+
+            }, {
+                "onboard": {
+                    "speciesList": [{
+                        "speciesCode": "BEAGLE",
+                        "weight": 111,
+                        "color": "#781c81",
+                        "tableColor": {
+                            "background-color": "rgba(120, 28, 129, 0.7)"
+                        }
+                    }, {
+                        "speciesCode": "SEAFOOD",
+                        "weight": 111,
+                        "color": "#447cbf",
+                        "tableColor": {
+                            "background-color": "rgba(68, 124, 191, 0.7)"
+                        }
+                    }, {
+                        "speciesCode": "SEAFOOD_2",
+                        "weight": 111,
+                        "color": "#83ba6d",
+                        "tableColor": {
+                            "background-color": "rgba(131, 186, 109, 0.7)"
+                        }
+                    }, {
+                        "speciesCode": "SEAFOOD_3",
+                        "weight": 111,
+                        "color": "#dbab3b",
+                        "tableColor": {
+                            "background-color": "rgba(219, 171, 59, 0.7)"
+                        }
+                    }, {
+                        "speciesCode": "BEAGLE",
+                        "weight": 111,
+                        "color": "#d92120",
+                        "tableColor": {
+                            "background-color": "rgba(217, 33, 32, 0.7)"
+                        }
+                    }],
+                    "total": 555
+                },
+                "cumulated": {
+                    "speciesList": [{
+                        "speciesCode": "BEAGLE",
+                        "weight": 111,
+                        "color": "#781c81",
+                        "tableColor": {
+                            "background-color": "rgba(120, 28, 129, 0.7)"
+                        }
+                    }, {
+                        "speciesCode": "SEAFOOD",
+                        "weight": 111,
+                        "color": "#d92120",
+                        "tableColor": {
+                            "background-color": "rgba(217, 33, 32, 0.7)"
+                        }
+                    }],
+                    "total": 222
+                }
+
+
+            }, {
+                "onboard": {
+                    "speciesList": [{
+                        "speciesCode": "BEAGLE",
+                        "weight": 111,
+                        "color": "#781c81",
+                        "tableColor": {
+                            "background-color": "rgba(120, 28, 129, 0.7)"
+                        }
+                    }, {
+                        "speciesCode": "SEAFOOD",
+                        "weight": 111,
+                        "color": "#447cbf",
+                        "tableColor": {
+                            "background-color": "rgba(68, 124, 191, 0.7)"
+                        }
+                    }, {
+                        "speciesCode": "SEAFOOD_2",
+                        "weight": 111,
+                        "color": "#83ba6d",
+                        "tableColor": {
+                            "background-color": "rgba(131, 186, 109, 0.7)"
+                        }
+                    }, {
+                        "speciesCode": "SEAFOOD_3",
+                        "weight": 111,
+                        "color": "#dbab3b",
+                        "tableColor": {
+                            "background-color": "rgba(219, 171, 59, 0.7)"
+                        }
+                    }, {
+                        "speciesCode": "BEAGLE",
+                        "weight": 111,
+                        "color": "#d92120",
+                        "tableColor": {
+                            "background-color": "rgba(217, 33, 32, 0.7)"
+                        }
+                    }],
+                    "total": 555
+                },
+                "cumulated": {
+                    "speciesList": [{
+                        "speciesCode": "BEAGLE",
+                        "weight": 111,
+                        "color": "#781c81",
+                        "tableColor": {
+                            "background-color": "rgba(120, 28, 129, 0.7)"
+                        }
+                    }, {
+                        "speciesCode": "SEAFOOD",
+                        "weight": 111,
+                        "color": "#d92120",
+                        "tableColor": {
+                            "background-color": "rgba(217, 33, 32, 0.7)"
+                        }
+                    }],
+                    "total": 222
+                }
+            }, {
+                "onboard": {
+                    "speciesList": [{
+                        "speciesCode": "BEAGLE",
+                        "weight": 111,
+                        "color": "#781c81",
+                        "tableColor": {
+                            "background-color": "rgba(120, 28, 129, 0.7)"
+                        }
+                    }, {
+                        "speciesCode": "SEAFOOD",
+                        "weight": 111,
+                        "color": "#447cbf",
+                        "tableColor": {
+                            "background-color": "rgba(68, 124, 191, 0.7)"
+                        }
+                    }, {
+                        "speciesCode": "SEAFOOD_2",
+                        "weight": 111,
+                        "color": "#83ba6d",
+                        "tableColor": {
+                            "background-color": "rgba(131, 186, 109, 0.7)"
+                        }
+                    }, {
+                        "speciesCode": "SEAFOOD_3",
+                        "weight": 111,
+                        "color": "#dbab3b",
+                        "tableColor": {
+                            "background-color": "rgba(219, 171, 59, 0.7)"
+                        }
+                    }, {
+                        "speciesCode": "BEAGLE",
+                        "weight": 111,
+                        "color": "#d92120",
+                        "tableColor": {
+                            "background-color": "rgba(217, 33, 32, 0.7)"
+                        }
+                    }],
+                    "total": 555
+                },
+                "cumulated": {
+                    "speciesList": [{
+                        "speciesCode": "BEAGLE",
+                        "weight": 111,
+                        "color": "#781c81",
+                        "tableColor": {
+                            "background-color": "rgba(120, 28, 129, 0.7)"
+                        }
+                    }, {
+                        "speciesCode": "SEAFOOD",
+                        "weight": 111,
+                        "color": "#d92120",
+                        "tableColor": {
+                            "background-color": "rgba(217, 33, 32, 0.7)"
+                        }
+                    }],
+                    "total": 222
+                }
+            }];
         }
 
     };
@@ -395,15 +877,15 @@ angular.module('unionvmsWeb').factory('activityRestFactory', function ($resource
 	         * @param {Number} schId - The scheme ID
         	 * @returns {Promise} A promise with either the history list of the FA report or reject error
     	     */
-	        getReportHistory: function (refId, schId){
-    	        var deferred = $q.defer();
-	            activityRestFactory.getReportHistory().get({referenceId: refId, schemeId: schId}, function(response){
-            	    deferred.resolve(response.data);
-        	    }, function(error){
-    	            deferred.reject(error);
-	            });
-            	return deferred.promise;
-        	},
+            getReportHistory: function (refId, schId) {
+                var deferred = $q.defer();
+                activityRestFactory.getReportHistory().get({ referenceId: refId, schemeId: schId }, function (response) {
+                    deferred.resolve(response.data);
+                }, function (error) {
+                    deferred.reject(error);
+                });
+                return deferred.promise;
+            },
             /**
              * Get the trip cronology of a specific trip
              * 
@@ -512,6 +994,18 @@ angular.module('unionvmsWeb').factory('activityRestFactory', function ($resource
              */
             getTripCatchesLandingDetails: function (id) {
                 return activityRestFactory.getTripCatchesLandingDetails();
+
+            },
+            /**
+             * Get the Catches Evolution Details. 
+             * 
+             * @memberof activityRestService
+             * @public
+             * @param {String} id - The trip id of the selected trip
+             * @returns {Promise} A promise with either the trip catch details or reject error
+             */
+            getTripCatchesEvolution: function (id) {
+                return activityRestFactory.getTripCatchesEvolution();
 
             }
 

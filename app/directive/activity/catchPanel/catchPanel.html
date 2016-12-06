@@ -1,35 +1,39 @@
 <div class="catch-details-container">
     <fieldset class="col-md-12 fieldsetStyle catch-section">
         <legend class="fieldsetLegendStyle">
-            <a>{{fieldData.legendTitle| i18n }}</a>
+            <a>{{title}}</a>
         </legend>
-
         <div class="col-md-6 catch-subsection" ng-repeat="(title, data) in ngModel">
             <!--TITLE-->
-            <h2>{{fieldData.title[title]| i18n }}</h2>
-            <!--SPECIE COUNT CHART-->
-            <div class="col-md-{{fieldData.colWidth}}">
-                <div class="nvd3-chart">
-                    <nvd3 options="options[title]" data="data.speciesList" on-ready="callback" ng-if="!tripSummServ.isLoadingTrip"></nvd3>
-                </div>
+            <div class="chart-title" ng-show="repNav.isViewVisible('catchEvolution')">
+                <span class=" panel-subtitle">{{fieldData.subTitle[$index]| i18n}}</span>
             </div>
-            <!--SPECIE COUNT TABLE-->
-            <div class="col-md-6" ng-if="fieldData.tableShown">
-                <div class="row">
-                    <div class="table-responsive-force col-md-12" st-table="displayedCatch" st-safe-src="data.speciesList">
-                        <div class="table tableSmart table-striped table-condensed row">
-                            <div class="thead col-md-12">
-                                <div class="tr row">
-                                    <div class="th color-column"></div>
-                                    <div class="th col-md-7" st-sort="speciesCode" title="{{'activity.catch_panel_column_species' | i18n }}">{{'activity.catch_panel_column_species' | i18n }}</div>
-                                    <div class="th col-md-5" st-sort="weight" st-sort-default="reverse" title="{{'activity.catch_panel_column_weight' | i18n }}">{{'activity.catch_panel_column_weight' | i18n }}</div>
+            <h2 ng-show="repNav.isViewVisible('tripSummary')">{{fieldData.subTitle[$index]| i18n}}</h2>
+            <!--SPECIE COUNT CHART-->
+            <div class="col-md-12">
+                <div class="col-md-{{fieldData.colWidth}}">
+                    <div class="nvd3-chart">
+                        <nvd3 options="options[title]" data="data.speciesList" on-ready="callback" ng-if="!tripSummServ.isLoadingTrip"></nvd3>
+                    </div>
+                </div>
+                <!--SPECIE COUNT TABLE-->
+                <div class="col-md-6" ng-if="fieldData.tableShown">
+                    <div class="row">
+                        <div class="table-responsive-force col-md-12" st-table="displayedCatch" st-safe-src="data.speciesList">
+                            <div class="table tableSmart table-striped table-condensed row">
+                                <div class="thead col-md-12">
+                                    <div class="tr row">
+                                        <div class="th color-column"></div>
+                                        <div class="th col-md-7" st-sort="speciesCode" title="{{'activity.catch_panel_column_species' | i18n }}">{{'activity.catch_panel_column_species' | i18n }}</div>
+                                        <div class="th col-md-5" st-sort="weight" st-sort-default="reverse" title="{{'activity.catch_panel_column_weight' | i18n }}">{{'activity.catch_panel_column_weight' | i18n }}</div>
+                                    </div>
                                 </div>
-                            </div>
-                            <div class="tbody col-md-12">
-                                <div class="tr row" ng-repeat="item in displayedCatch">
-                                    <div ng-style="item.tableColor" class="td color-column"></div>
-                                    <div class="td col-md-7" title="{{item.speciesCode}}">{{item.speciesCode}}</div>
-                                    <div class="td col-md-5" title="{{item.weight}}">{{item.weight}}</div>
+                                <div class="tbody col-md-12">
+                                    <div class="tr row" ng-repeat="item in displayedCatch">
+                                        <div ng-style="item.tableColor" class="td color-column"></div>
+                                        <div class="td col-md-7" title="{{item.speciesCode}}">{{item.speciesCode}}</div>
+                                        <div class="td col-md-5" title="{{item.weight}}">{{item.weight}}</div>
+                                    </div>
                                 </div>
                             </div>
                         </div>
@@ -37,10 +41,12 @@
                 </div>
             </div>
             <!--CHART CAPTION-->
-             <span class="chart-caption">{{'activity.catch_panel_chart_caption_total_catches' | i18n }} {{data.total}} kg</span>
+            <span class="col-md-12 chart-caption" ng-hide="repNav.isViewVisible('catchEvolution')">{{'activity.catch_panel_chart_caption_total_catches' | i18n }} {{data.total}} kg</span>
         </div>
-        
+
     </fieldset>
-    <a class="btn-detail-form" title="{{'activity.catch_panel_see_catch_details' | i18n }}" ng-click="repNav.goToView('tripsPanel','catchDetails')"><i class="fa fa-table"></i></a>
-    <a class="btn-trip-evolution" title="{{'activity.catch_panel_see_trip_evolution' | i18n }}"><i class="fa fa-line-chart"></i></a>
+    <a class="btn-detail-form" title="{{'activity.catch_panel_see_catch_details' | i18n }}" ng-click="repNav.goToView('tripsPanel','catchDetails')"
+        ng-hide="repNav.isViewVisible('catchEvolution')"><i class="fa fa-table" ></i></a>
+    <a class="btn-trip-evolution" title="{{'activity.catch_panel_see_trip_evolution' | i18n }}" ng-click="repNav.goToView('tripsPanel','catchEvolution')"
+        ng-hide="repNav.isViewVisible('catchEvolution')"><i class="fa fa-line-chart"></i></a>
 </div>

@@ -8,14 +8,15 @@
             <span class="fa fa-check-circle" aria-hidden="true" ng-show="alert.hasSuccess"></span>
             <span class="fa fa-exclamation-circle" aria-hidden="true" ng-show="alert.hasWarning"></span>
             <span class="alert-message">
-                <span>{{alert.alertMessage}}</span>          
+                <span>{{alert.alertMessage}}</span>
             </span>
         </div>
     </div>
     <!--TRIPS LIST (WHEN RUNNING REPORT WITHOUT MAP)-->
     <div ng-include="'partial/spatial/tripsPanel/tripsList/tripsList.html'" ng-if="false"></div>
     <!--TRIP SUMMARY-->
-    <uib-tabset ng-show="repNav.isViewVisible('tripSummary')"><!-- active="tripSummServ.activeTab.index"-->
+    <uib-tabset ng-show="repNav.isViewVisible('tripSummary')">
+        <!-- active="tripSummServ.activeTab.index"-->
         <uib-tab index="$index" ng-repeat="tab in tripSummServ.tabs" active="tab.active" select="tripSummServ.initializeTrip($index)">
             <!--TAB HEADER-->
             <uib-tab-heading>
@@ -27,13 +28,14 @@
             <!--TAB CONTENT-->
             <div class="trip-summary-tab" ng-if="tab.title === trip.id">
                 <div ng-include="'partial/spatial/tripsPanel/tripSummary/tripSummary.html'"></div>
-               
+
             </div>
         </uib-tab>
     </uib-tabset>
-	<div ng-if="repNav.isViewVisible('catchDetails')" ng-include="'partial/spatial/tripsPanel/catchDetails/catchDetails.html'"></div>
+    <div ng-if="repNav.isViewVisible('catchDetails')" ng-include="'partial/spatial/tripsPanel/catchDetails/catchDetails.html'"></div>
+    <div ng-if="repNav.isViewVisible('catchEvolution')" ng-include="'partial/spatial/tripsPanel/catchEvolution/catchEvolution.html'"></div>
     <div ng-class="{'trip-summary-btns': repNav.isViewVisible('tripSummary')}">
-        <a class="btn-trip-quit" title="{{'activity.trip_summary_quit_trip_detail' | i18n }}" ng-click="quitTripSummary()"><i class="fa fa-share-square-o"></i></a>
-        <a class="btn-print" title="{{'activity.trip_summary_export_trip' | i18n }}"><i class="fa fa-print"></i></a>
+            <a class="btn-trip-quit" title="{{'activity.trip_summary_quit_trip_detail' | i18n }}" ng-click="quitTripSummary()"><i class="fa fa-share-square-o"></i></a>
+            <a class="btn-print" title="{{'activity.trip_summary_export_trip' | i18n }}"><i class="fa fa-print" ng-hide="repNav.isViewVisible('catchEvolution')" ></i></a>
     </div>
 </div>

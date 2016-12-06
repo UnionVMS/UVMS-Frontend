@@ -72,6 +72,9 @@ angular.module('unionvmsWeb').controller('TripspanelCtrl', function ($scope, gen
             case 'catchDetails':
                 $scope.repNav.goToPreviousView();
                 break;
+            case 'catchEvolution':
+                $scope.repNav.goToPreviousView();
+                break;    
             case 'tripSummary':
                 $scope.tripSummServ.tabs.splice(0, $scope.tripSummServ.tabs.length);
                 $scope.repNav.goToView('liveViewPanel', 'mapPanel');

@@ -144,7 +144,7 @@ angular.module('unionvmsWeb').controller('CatchdetailsCtrl', function($scope, ac
     * @private
     */
     var init = function() {
-
+       console.log("catch DEtails yaar");
         var tableOrder = {
             catches: 0,
             landing: 1,

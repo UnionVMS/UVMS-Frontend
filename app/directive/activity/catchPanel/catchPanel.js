@@ -2,22 +2,25 @@
  * @memberof unionvmsWeb
  * @ngdoc directive
  * @name catchPanel
- * @attr {unionvmsWeb.Trip} ngModel - current trip in trip summary
- * @attr {Object} tripAlert - trip summary alert state
+ * @attr {unionvmsWeb.Trip} ngModel - current trip in trip summary.
+ * @attr {Object} tripAlert - trip alert state.
+ * @attr {Object} fieldData - data for subtitles,tableShown,colwidth.
+ * @attr {Object} title - title for the catch Panel.
  * @description
  *  A reusable tile that will display the catch details(overview) related to the current trip
  */
-angular.module('unionvmsWeb').directive('catchPanel', function (loadingStatus, activityRestService, $anchorScroll, locale, tripSummaryService, reportingNavigatorService) {
+angular.module('unionvmsWeb').directive('catchPanel', function(loadingStatus, activityRestService, $anchorScroll, locale, tripSummaryService, reportingNavigatorService) {
     return {
         restrict: 'E',
         replace: true,
         scope: {
             ngModel: '=',
             tripAlert: '=',
-            fieldData: '='
+            fieldData: '=',
+            title: '@'
         },
         templateUrl: 'directive/activity/catchPanel/catchPanel.html',
-        link: function (scope, element, attrs, fn) {
+        link: function(scope, element, attrs, fn) {
             scope.repNav = reportingNavigatorService;
             scope.tripSummServ = tripSummaryService;
 
@@ -28,22 +31,22 @@ angular.module('unionvmsWeb').directive('catchPanel', function (loadingStatus, a
 			 * @private
 			 */
 
-            var initCharts = function () {
+            var initCharts = function() {
                 scope.options = {};
-                angular.forEach(scope.ngModel, function (chartData, currentChart) {
+                angular.forEach(scope.ngModel, function(chartData, currentChart) {
 
                     var chartOptions = {
                         chart: {
                             type: 'pieChart',
                             height: 200,
-                            x: function (d) { return d.speciesCode; },
-                            y: function (d) { return d.weight; },
-                            valueFormat: function (d) {
+                            x: function(d) { return d.speciesCode; },
+                            y: function(d) { return d.weight; },
+                            valueFormat: function(d) {
                                 return scope.formatWeight(d, chartData.total, 'KG');
                             },
                             showLabels: false,
                             duration: 500,
-                            color: function (d, i) {
+                            color: function(d, i) {
                                 return chartData.speciesList[i].color;
                             },
                             showLegend: false
@@ -63,8 +66,7 @@ angular.module('unionvmsWeb').directive('catchPanel', function (loadingStatus, a
 			 * @param {Object} weightType - unit of the weight.
 			 * @param {Object} totalWeight - total weight of the specie.
 			 */
-            scope.formatWeight = function (specieWeight, totalWeight, weightType) {
-                console.log("hello");
+            scope.formatWeight = function(specieWeight, totalWeight, weightType) {
                 var value = specieWeight / totalWeight * 100;
                 return specieWeight + weightType + '(' + value.toFixed(2) + '%)';
             };
@@ -77,13 +79,13 @@ angular.module('unionvmsWeb').directive('catchPanel', function (loadingStatus, a
 			 * @param {Object} scope - nvd3 directive scope
 			 * @param {Object} element - chart element
 			 */
-            scope.callback = function (scope, element) {
+            scope.callback = function(scope, element) {
                 //to resize the chart after it's loaded
                 scope.api.refresh();
             };
 
             //when tthe trip is initialized
-            scope.$watch('ngModel', function () {
+            scope.$watch('ngModel', function() {
                 init();
 
             });
@@ -94,9 +96,8 @@ angular.module('unionvmsWeb').directive('catchPanel', function (loadingStatus, a
 			 * @memberof catchPanel
 			 * @private
 			 */
-            var init = function () {
+            var init = function() {
                 loadingStatus.isLoading(scope.fieldData.loadingScreen, true);
-                scope.loadingCharts = true;
                 initCharts();
                 loadingStatus.isLoading(scope.fieldData.loadingScreen, false);
 
