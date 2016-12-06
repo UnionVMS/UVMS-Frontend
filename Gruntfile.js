@@ -496,10 +496,33 @@ module.exports = function (grunt) {
           src: ['**/*'],
           dest: '/'}]
       }
+    },
+    parallel: {
+      options: {
+        stream: true
+      },
+      'sub-build': {
+        tasks: [{
+          grunt: true,
+          args: ['htmlhint','jshint']
+        }, {
+          grunt: true,
+          args: ['less','dom_munger','ngtemplates','cssmin','concat','ngAnnotate','uglify','copy:dist','htmlmin','compress:dist','clean:after']
+        }]
+      },
+      serve: {
+        tasks: [{
+          grunt: true,
+          args: ['htmlhint','jshint']
+        }, {
+          grunt: true,
+          args: ['dom_munger:read','configureProxies', 'configureRewriteRules', 'connect:development', 'watch', 'ngtemplates'],
+        }]
+      }
     }
   });
   
-  grunt.registerTask('sub-build',['htmlhint','jshint', 'less','dom_munger','ngtemplates','cssmin','concat','ngAnnotate','uglify','copy:dist','htmlmin','compress:dist','clean:after']);//,'clean:after'
+  grunt.registerTask('sub-build',['parallel:sub-build']);//,'clean:after'
 
   grunt.registerTask('build', ['test', 'clean:before', 'copy:config', 'sub-build']);
   grunt.registerTask('build-local', ['test', 'clean:before', 'copy:configLocal', 'test', 'sub-build']);
@@ -511,7 +534,7 @@ module.exports = function (grunt) {
   grunt.registerTask('test-dev',['dom_munger:read', 'karma:services', 'clean:after']);
 
   grunt.registerTask('default',['build-dev']);
-  grunt.registerTask('serve', ['dom_munger:read','htmlhint','jshint', 'configureProxies', 'configureRewriteRules', 'connect:development', 'watch', 'ngtemplates']);
+  grunt.registerTask('serve', ['parallel:serve']);
   grunt.registerTask('serve-copy', ['copy:serve', 'serve']);
   grunt.registerTask('build-docs', ['jsdoc']);
 
@@ -555,8 +578,6 @@ module.exports = function (grunt) {
 
         if (filepath.lastIndexOf('.less') !== -1 && filepath.lastIndexOf('.less') === filepath.length - 5) {
             grunt.task.run('less');
-        }else{
-           console.log('failed' + filepath);
         }
 
         //if index.html changed, we need to reread the <script> tags so our next run of jasmine
