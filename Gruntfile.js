@@ -553,6 +553,12 @@ module.exports = function (grunt) {
             grunt.task.run('htmlhint');
         }
 
+        if (filepath.lastIndexOf('.less') !== -1 && filepath.lastIndexOf('.less') === filepath.length - 5) {
+            grunt.task.run('less');
+        }else{
+           console.log('failed' + filepath);
+        }
+
         //if index.html changed, we need to reread the <script> tags so our next run of jasmine
         //will have the correct environment
         if (filepath === 'app\\index.html') {
