@@ -1,0 +1,31 @@
+<div class="col-md-12 gear-tile">
+	<div class="row">
+		<div class="col-md-12 gear-type">{{item.type}}</div>
+	</div>
+	<div class="row">
+		<div class="col-md-12"><b>{{'activity.role' | i18n}}:</b> {{item.role}}</div>
+	</div>
+	<fieldset class="col-md-12 fieldsetStyle">
+		<legend class="fieldsetLegendStyle">
+			<a>{{'activity.characteristics' | i18n}}</a>
+		</legend>
+		<div class="row">
+			<div class="col-md-12 item-container">
+				<span class="labels">{{'activity.mesh_size' | i18n}}</span>&nbsp;
+				<span>{{item.meshSize}}</span>
+			</div>
+		</div>
+		<div class="row">
+			<div class="col-md-12 item-container">
+				<span class="labels">{{'activity.beam_length' | i18n}}</span>&nbsp;
+				<span>{{item.beamLength}}</span>
+			</div>
+		</div>
+		<div class="row">
+			<div class="col-md-12 item-container">
+				<span class="labels">{{'activity.number_beams' | i18n}}</span>&nbsp;
+				<span>{{item.numBeams}}</span>
+			</div>
+		</div>
+	</fieldset>
+</div>

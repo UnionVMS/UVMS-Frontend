@@ -1,5 +1,5 @@
 <!--
-﻿Developed with the contribution of the European Commission - Directorate General for Maritime Affairs and Fisheries
+Developed with the contribution of the European Commission - Directorate General for Maritime Affairs and Fisheries
 © European Union, 2015-2016.
 
 This file is part of the Integrated Fisheries Data Management (IFDM) Suite. The IFDM Suite is free software: you can
@@ -10,8 +10,9 @@ FITNESS FOR A PARTICULAR PURPOSE.  See the GNU General Public License for more d
 copy of the GNU General Public License along with the IFDM Suite. If not, see <http://www.gnu.org/licenses/>.
 -->
 <!-- POSITION DETAILS -->
+{{#alarm}}
+{{#includeAssetDetails}}
 <div class="col-md-12 info-content alarm">
-	{{#alarm}}
 	<div class="row">
 		<div class=col-md-6>
 			<span class="title">{{titles.name}}:</span>
@@ -43,9 +44,10 @@ copy of the GNU General Public License along with the IFDM Suite. If not, see <h
 <div class="col-md-12 info-content">
 	<div class="col-md-12 form-separator"></div>
 </div>
+{{/includeAssetDetails}}
 <!-- ALARM DETAILS -->
 <div class="col-md-12">
-	<span class="header">{{alarmTitle}}</span>
+	<span class="alarm-header">{{alarmTitle}}</span>
 	<div class="alarm-status" style="background-color:{{color}}">{{alarm.status}}</div>
 </div>
 <div class="col-md-12 info-content alarm">
@@ -89,5 +91,5 @@ copy of the GNU General Public License along with the IFDM Suite. If not, see <h
 			<div class="rule-definition">{{alarm.ruleDef}}</div>
 		</div>
 	</div>
-	{{/alarm}}
 </div>
+{{/alarm}}

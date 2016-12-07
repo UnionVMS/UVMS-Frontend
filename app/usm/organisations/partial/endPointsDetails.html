@@ -1,4 +1,4 @@
-<!--
+﻿<!--
 ﻿Developed with the contribution of the European Commission - Directorate General for Maritime Affairs and Fisheries
 © European Union, 2015-2016.
 
@@ -29,7 +29,7 @@ copy of the GNU General Public License along with the IFDM Suite. If not, see <h
 				</div>
                 <div class="col-md-1 text-right">
 					<span ng-controller="manageOrganisationEndpointsCtrl" ng-if="checkAccess('manageOrganisations')"> <!-- Edit Endpoint Detail from his own detail page -->
-						<button type="button" class="btn btn-sm btn-primary" ng-click='manageEndpoint("edit",endpoint, endpoint.organisationName)'>
+						<button type="button" class="btn btn-sm btn-primary" ng-click="manageEndpoint('edit',endpoint, endpoint.organisationName)">
 							<span><i class="fa fa-pencil"></i></span>
 						</button>
 					</span>
@@ -53,7 +53,7 @@ copy of the GNU General Public License along with the IFDM Suite. If not, see <h
 				<div class="col-md-2 text-nowrap">
 					<label>{{'common.description' | translate}}</label>
 				</div>
-				<div class="col-md-5"">
+				<div class="col-md-5">
 					<span ng-bind="endpoint.description"></span>
 				</div>
 				<div class="col-md-1 text-nowrap">

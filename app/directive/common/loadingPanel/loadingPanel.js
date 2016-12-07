@@ -1,5 +1,5 @@
 /*
-﻿Developed with the contribution of the European Commission - Directorate General for Maritime Affairs and Fisheries
+Developed with the contribution of the European Commission - Directorate General for Maritime Affairs and Fisheries
 © European Union, 2015-2016.
 
 This file is part of the Integrated Fisheries Data Management (IFDM) Suite. The IFDM Suite is free software: you can
@@ -8,24 +8,18 @@ Free Software Foundation, either version 3 of the License, or any later version.
 the hope that it will be useful, but WITHOUT ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or
 FITNESS FOR A PARTICULAR PURPOSE.  See the GNU General Public License for more details. You should have received a
 copy of the GNU General Public License along with the IFDM Suite. If not, see <http://www.gnu.org/licenses/>.
- */
+*/
 angular.module('unionvmsWeb').directive('loadingPanel', function(loadingStatus) {
 	return {
 		restrict: 'E',
 		replace: true,
 		scope: {
-			type: '@',
-			ngModel : '='
+			type: '@'
 		},
 		templateUrl: 'directive/common/loadingPanel/loadingPanel.html',
 		link: function(scope, element, attrs, fn) {
 			scope.loadingStatus = loadingStatus;
-			
-			scope.$watch(function () { return scope.ngModel;}, function (newVal, oldVal) {
-                if (angular.isDefined(newVal) && newVal !== oldVal && _.isBoolean(newVal)){
-                    scope.loadingStatus.isLoading(scope.type, newVal);
-                }
-            });
 		}
 	};
 });
+

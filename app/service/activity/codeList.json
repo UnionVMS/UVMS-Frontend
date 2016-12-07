@@ -1,0 +1,1696 @@
+{
+    "code": 200,
+    "numberOfPages": 13,
+    "data": [
+        {
+            "code": "AAA",
+            "scientificName": "Acipenser naccarii",
+            "englishName": "Adriatic sturgeon",
+            "frenchName": "Esturgeon de l'Adriatique",
+            "spanishName": "Esturi�n del Adri�tico",
+            "author": "Bonaparte 1836",
+            "family": "Acipenseridae",
+            "order": "ACIPENSERIFORMES"
+        },
+        {
+            "code": "AAB",
+            "scientificName": "Acanthopagrus bifasciatus",
+            "englishName": "Twobar seabream",
+            "frenchName": "Pagre double bande",
+            "spanishName": "Sargo de dos bandas",
+            "author": "Forssk�l 1775",
+            "family": "Sparidae",
+            "order": "PERCOIDEI"
+        },
+        {
+            "code": "AAC",
+            "scientificName": "Amia calva",
+            "englishName": "Bowfin",
+            "frenchName": "",
+            "spanishName": "",
+            "author": "Linnaeus 1766",
+            "family": "Amiidae",
+            "order": "AMIIFORMES"
+        },
+        {
+            "code": "AAD",
+            "scientificName": "Acipenser dabryanus",
+            "englishName": "Yangtze sturgeon",
+            "frenchName": "",
+            "spanishName": "",
+            "author": "Dum�ril 1869",
+            "family": "Acipenseridae",
+            "order": "ACIPENSERIFORMES"
+        },
+        {
+            "code": "AAE",
+            "scientificName": "Antennarius analis",
+            "englishName": "Tailjet frogfish",
+            "frenchName": "",
+            "spanishName": "",
+            "author": "(Gosline 1957)",
+            "family": "Antennariidae",
+            "order": "LOPHIIFORMES"
+        },
+        {
+            "code": "AAF",
+            "scientificName": "Acipenser fulvescens",
+            "englishName": "Lake sturgeon",
+            "frenchName": "",
+            "spanishName": "",
+            "author": "Rafinesque 1817",
+            "family": "Acipenseridae",
+            "order": "ACIPENSERIFORMES"
+        },
+        {
+            "code": "AAG",
+            "scientificName": "Anguilla bengalensis",
+            "englishName": "Indian mottled eel",
+            "frenchName": "",
+            "spanishName": "",
+            "author": "(Gray 1831)",
+            "family": "Anguillidae",
+            "order": "ANGUILLIFORMES"
+        },
+        {
+            "code": "AAH",
+            "scientificName": "Acipenser schrenckii",
+            "englishName": "Amur sturgeon",
+            "frenchName": "",
+            "spanishName": "",
+            "author": "Brandt 1869",
+            "family": "Acipenseridae",
+            "order": "ACIPENSERIFORMES"
+        },
+        {
+            "code": "AAI",
+            "scientificName": "Acipenser sinensis",
+            "englishName": "Chinese sturgeon",
+            "frenchName": "",
+            "spanishName": "",
+            "author": "Gray 1835",
+            "family": "Acipenseridae",
+            "order": "ACIPENSERIFORMES"
+        },
+        {
+            "code": "AAJ",
+            "scientificName": "Anguilla mossambica",
+            "englishName": "African longfin eel",
+            "frenchName": "",
+            "spanishName": "",
+            "author": "(Peters 1852)",
+            "family": "Anguillidae",
+            "order": "ANGUILLIFORMES"
+        },
+        {
+            "code": "AAK",
+            "scientificName": "Acipenser mikadoi",
+            "englishName": "Sakhalin sturgeon",
+            "frenchName": "",
+            "spanishName": "",
+            "author": "Hilgendorf 1892",
+            "family": "Acipenseridae",
+            "order": "ACIPENSERIFORMES"
+        },
+        {
+            "code": "AAL",
+            "scientificName": "Anguilla marmorata",
+            "englishName": "Giant mottled eel",
+            "frenchName": "",
+            "spanishName": "",
+            "author": "Quoy & Gaimard 1824",
+            "family": "Anguillidae",
+            "order": "ANGUILLIFORMES"
+        },
+        {
+            "code": "AAM",
+            "scientificName": "Acipenser medirostris",
+            "englishName": "Green sturgeon",
+            "frenchName": "Esturgeon vert",
+            "spanishName": "Esturi�n verde",
+            "author": "Ayres 1854",
+            "family": "Acipenseridae",
+            "order": "ACIPENSERIFORMES"
+        },
+        {
+            "code": "AAN",
+            "scientificName": "Acipenser nudiventris",
+            "englishName": "Fringebarbel sturgeon",
+            "frenchName": "Esturgeon barbillons frang�s",
+            "spanishName": "Esturi�n barba de flecos",
+            "author": "Lovetzky 1828",
+            "family": "Acipenseridae",
+            "order": "ACIPENSERIFORMES"
+        },
+        {
+            "code": "AAO",
+            "scientificName": "Acipenser oxyrinchus",
+            "englishName": "Atlantic sturgeon",
+            "frenchName": "",
+            "spanishName": "",
+            "author": "Mitchill 1815",
+            "family": "Acipenseridae",
+            "order": "ACIPENSERIFORMES"
+        },
+        {
+            "code": "AAP",
+            "scientificName": "Acipenser persicus",
+            "englishName": "Persian sturgeon",
+            "frenchName": "",
+            "spanishName": "",
+            "author": "Borodin 1897",
+            "family": "Acipenseridae",
+            "order": "ACIPENSERIFORMES"
+        },
+        {
+            "code": "AAQ",
+            "scientificName": "Anguilla dieffenbachii",
+            "englishName": "New Zealand longfin eel",
+            "frenchName": "",
+            "spanishName": "",
+            "author": "Gray 1842",
+            "family": "Anguillidae",
+            "order": "ANGUILLIFORMES"
+        },
+        {
+            "code": "AAR",
+            "scientificName": "Anguilla reinhardtii",
+            "englishName": "Speckled longfin eel",
+            "frenchName": "",
+            "spanishName": "",
+            "author": "Steindachner 1867",
+            "family": "Anguillidae",
+            "order": "ANGUILLIFORMES"
+        },
+        {
+            "code": "AAS",
+            "scientificName": "Astacus astacus",
+            "englishName": "Noble crayfish",
+            "frenchName": "�crevisse � pieds rouges",
+            "spanishName": "Cangrejo de r�o de patas rojas",
+            "author": "(Linnaeus 1758)",
+            "family": "Astacidae",
+            "order": "REPTANTIA"
+        },
+        {
+            "code": "AAT",
+            "scientificName": "Anguilla bicolor",
+            "englishName": "",
+            "frenchName": "",
+            "spanishName": "",
+            "author": "Schmidt 1928",
+            "family": "Anguillidae",
+            "order": "ANGUILLIFORMES"
+        },
+        {
+            "code": "AAU",
+            "scientificName": "Acipenser multiscutatus",
+            "englishName": "Japanese sturgeon",
+            "frenchName": "",
+            "spanishName": "",
+            "author": "Tanaka 1908",
+            "family": "Acipenseridae",
+            "order": "ACIPENSERIFORMES"
+        },
+        {
+            "code": "AAV",
+            "scientificName": "Acaronia vultuosa",
+            "englishName": "",
+            "frenchName": "",
+            "spanishName": "",
+            "author": "Kullander 1989",
+            "family": "Cichlidae",
+            "order": "PERCOIDEI"
+        },
+        {
+            "code": "AAW",
+            "scientificName": "Anableps anableps",
+            "englishName": "Largescale foureyes",
+            "frenchName": "",
+            "spanishName": "",
+            "author": "Meuschen 1778",
+            "family": "Anablepidae",
+            "order": "CYPRINODONTIFORMES"
+        },
+        {
+            "code": "AAX",
+            "scientificName": "Aaptosyax grypus",
+            "englishName": "",
+            "frenchName": "",
+            "spanishName": "",
+            "author": "Rainboth 1991",
+            "family": "Cyprinidae",
+            "order": "CYPRINIFORMES"
+        },
+        {
+            "code": "AAY",
+            "scientificName": "Acipenser brevirostrum",
+            "englishName": "Shortnose sturgeon",
+            "frenchName": "",
+            "spanishName": "",
+            "author": "Lesueur 1818",
+            "family": "Acipenseridae",
+            "order": "ACIPENSERIFORMES"
+        },
+        {
+            "code": "AAZ",
+            "scientificName": "Aploactis aspera",
+            "englishName": "",
+            "frenchName": "",
+            "spanishName": "",
+            "author": "Richardson 1844",
+            "family": "Aploactinidae",
+            "order": "SCORPAENIFORMES"
+        },
+        {
+            "code": "ABA",
+            "scientificName": "Albulichthys albuloides",
+            "englishName": "",
+            "frenchName": "",
+            "spanishName": "",
+            "author": "(Bleeker 1855)",
+            "family": "Cyprinidae",
+            "order": "CYPRINIFORMES"
+        },
+        {
+            "code": "ABB",
+            "scientificName": "Abbottina rivularis",
+            "englishName": "Chinese false gudgeon",
+            "frenchName": "",
+            "spanishName": "",
+            "author": "(Basilewsky 1855)",
+            "family": "Cyprinidae",
+            "order": "CYPRINIFORMES"
+        },
+        {
+            "code": "ABC",
+            "scientificName": "Amblypharyngodon microlepis",
+            "englishName": "",
+            "frenchName": "",
+            "spanishName": "",
+            "author": "(Bleeker 1853)",
+            "family": "Cyprinidae",
+            "order": "CYPRINIFORMES"
+        },
+        {
+            "code": "ABD",
+            "scientificName": "Alburnus albidus",
+            "englishName": "",
+            "frenchName": "",
+            "spanishName": "",
+            "author": "(Costa 1838)",
+            "family": "Cyprinidae",
+            "order": "CYPRINIFORMES"
+        },
+        {
+            "code": "ABE",
+            "scientificName": "Aborichthys elongatus",
+            "englishName": "",
+            "frenchName": "",
+            "spanishName": "",
+            "author": "Hora 1921",
+            "family": "Balitoridae",
+            "order": "CYPRINIFORMES"
+        },
+        {
+            "code": "ABF",
+            "scientificName": "Haliotis rufescens",
+            "englishName": "Red abalone",
+            "frenchName": "Ormeau rouge",
+            "spanishName": "Abul�n colorado",
+            "author": "Swainson 1822",
+            "family": "Haliotidae",
+            "order": "GASTROPODA"
+        },
+        {
+            "code": "ABG",
+            "scientificName": "Haliotis gigantea",
+            "englishName": "Giant abalone",
+            "frenchName": "Ormeau g�ant",
+            "spanishName": "Abul�n gigante",
+            "author": "Gmelin 1791",
+            "family": "Haliotidae",
+            "order": "GASTROPODA"
+        },
+        {
+            "code": "ABH",
+            "scientificName": "Astroblepus chotae",
+            "englishName": "",
+            "frenchName": "",
+            "spanishName": "",
+            "author": "(Regan 1904)",
+            "family": "Astroblepidae",
+            "order": "SILURIFORMES"
+        },
+        {
+            "code": "ABI",
+            "scientificName": "Alburnoides bipunctatus",
+            "englishName": "Schneider",
+            "frenchName": "",
+            "spanishName": "",
+            "author": "(Bloch 1782)",
+            "family": "Cyprinidae",
+            "order": "CYPRINIFORMES"
+        },
+        {
+            "code": "ABJ",
+            "scientificName": "Haliotis discus",
+            "englishName": "Japanese abalone",
+            "frenchName": "Ormeau japonais",
+            "spanishName": "Abul�n japon�s",
+            "author": "Ino 1953",
+            "family": "Haliotidae",
+            "order": "GASTROPODA"
+        },
+        {
+            "code": "ABK",
+            "scientificName": "Blicca bjoerkna",
+            "englishName": "White bream",
+            "frenchName": "",
+            "spanishName": "",
+            "author": "(Linnaeus 1758)",
+            "family": "Cyprinidae",
+            "order": "CYPRINIFORMES"
+        },
+        {
+            "code": "ABL",
+            "scientificName": "Amblypharyngodon melettinus",
+            "englishName": "Attentive carplet",
+            "frenchName": "",
+            "spanishName": "",
+            "author": "(Valenciennes 1844)",
+            "family": "Cyprinidae",
+            "order": "CYPRINIFORMES"
+        },
+        {
+            "code": "ABM",
+            "scientificName": "Haliotis diversicolor",
+            "englishName": "Small abalone",
+            "frenchName": "",
+            "spanishName": "",
+            "author": "Reeve 1846",
+            "family": "Haliotidae",
+            "order": "GASTROPODA"
+        },
+        {
+            "code": "ABN",
+            "scientificName": "Acanthobunocephalus nicoi",
+            "englishName": "",
+            "frenchName": "",
+            "spanishName": "",
+            "author": "Friel 1995",
+            "family": "Aspredinidae",
+            "order": "SILURIFORMES"
+        },
+        {
+            "code": "ABO",
+            "scientificName": "Amblypharyngodon mola",
+            "englishName": "Mola carplet",
+            "frenchName": "",
+            "spanishName": "",
+            "author": "(Hamilton 1822)",
+            "family": "Cyprinidae",
+            "order": "CYPRINIFORMES"
+        },
+        {
+            "code": "ABP",
+            "scientificName": "Haliotis midae",
+            "englishName": "Perlemoen abalone",
+            "frenchName": "Ormeau de Mida",
+            "spanishName": "Oreja de mar",
+            "author": "(Linnaeus 1758)",
+            "family": "Haliotidae",
+            "order": "GASTROPODA"
+        },
+        {
+            "code": "ABQ",
+            "scientificName": "Abramites eques",
+            "englishName": "",
+            "frenchName": "",
+            "spanishName": "",
+            "author": "(Steindachner 1878)",
+            "family": "Anostomidae",
+            "order": "CHARACIFORMES"
+        },
+        {
+            "code": "ABR",
+            "scientificName": "Haliotis rubra",
+            "englishName": "Blacklip abalone",
+            "frenchName": "Ormeau � l�vres noires",
+            "spanishName": "Oreja de mar de labios negros",
+            "author": "Leach 1814",
+            "family": "Haliotidae",
+            "order": "GASTROPODA"
+        },
+        {
+            "code": "ABS",
+            "scientificName": "Penaeus aztecus",
+            "englishName": "Northern brown shrimp",
+            "frenchName": "Crevette royale grise",
+            "spanishName": "Camar�n caf� norte�o",
+            "author": "Ives 1891",
+            "family": "Penaeidae",
+            "order": "NATANTIA"
+        },
+        {
+            "code": "ABT",
+            "scientificName": "Amblyrhynchichthys truncatus",
+            "englishName": "",
+            "frenchName": "",
+            "spanishName": "",
+            "author": "(Bleeker 1851)",
+            "family": "Cyprinidae",
+            "order": "CYPRINIFORMES"
+        },
+        {
+            "code": "ABU",
+            "scientificName": "Abudefduf saxatilis",
+            "englishName": "Sergeant-major",
+            "frenchName": "",
+            "spanishName": "",
+            "author": "(Linnaeus 1758)",
+            "family": "Pomacentridae",
+            "order": "PERCOIDEI"
+        },
+        {
+            "code": "ABV",
+            "scientificName": "Alabes parvulus",
+            "englishName": "Pygmy shore-eel",
+            "frenchName": "",
+            "spanishName": "",
+            "author": "(McCulloch 1909)",
+            "family": "Gobiesocidae",
+            "order": "GOBIESOCIFORMES"
+        },
+        {
+            "code": "ABW",
+            "scientificName": "Ablabys binotatus",
+            "englishName": "Redskinfish",
+            "frenchName": "",
+            "spanishName": "",
+            "author": "(Peters 1855)",
+            "family": "Tetrarogidae",
+            "order": "SCORPAENIFORMES"
+        },
+        {
+            "code": "ABX",
+            "scientificName": "Haliotis spp",
+            "englishName": "Abalones nei",
+            "frenchName": "Ormeaux nca",
+            "spanishName": "Orejas de mar nep",
+            "author": "",
+            "family": "Haliotidae",
+            "order": "GASTROPODA"
+        },
+        {
+            "code": "ABY",
+            "scientificName": "Amblyopsis rosae",
+            "englishName": "Ozark cavefish",
+            "frenchName": "",
+            "spanishName": "",
+            "author": "(Eigenmann 1897)",
+            "family": "Amblyopsidae",
+            "order": "PERCOPSIFORMES"
+        },
+        {
+            "code": "ABZ",
+            "scientificName": "Ammodytes tobianus",
+            "englishName": "Small sandeel",
+            "frenchName": "�quille",
+            "spanishName": "Aguacioso",
+            "author": "Linnaeus 1758",
+            "family": "Ammodytidae",
+            "order": "TRACHINOIDEI"
+        },
+        {
+            "code": "ACA",
+            "scientificName": "Acromycter nezumi",
+            "englishName": "",
+            "frenchName": "",
+            "spanishName": "",
+            "author": "(Asano 1958)",
+            "family": "Congridae",
+            "order": "ANGUILLIFORMES"
+        },
+        {
+            "code": "ACB",
+            "scientificName": "Scapharca broughtonii",
+            "englishName": "Inflated ark",
+            "frenchName": "",
+            "spanishName": "",
+            "author": "(Schrenck 1867)",
+            "family": "Arcidae",
+            "order": "BIVALVIA"
+        },
+        {
+            "code": "ACC",
+            "scientificName": "Gymnocephalus cernuus",
+            "englishName": "Ruffe",
+            "frenchName": "Gr�mille",
+            "spanishName": "Acerina",
+            "author": "(Linnaeus 1758)",
+            "family": "Percidae",
+            "order": "PERCOIDEI"
+        },
+        {
+            "code": "ACD",
+            "scientificName": "Chlopsis dentatus",
+            "englishName": "Mottled false moray",
+            "frenchName": "",
+            "spanishName": "",
+            "author": "(Seale 1917)",
+            "family": "Chlopsidae",
+            "order": "ANGUILLIFORMES"
+        },
+        {
+            "code": "ACE",
+            "scientificName": "Paruroconger drachi",
+            "englishName": "",
+            "frenchName": "",
+            "spanishName": "",
+            "author": "Blache & Bauchot 1976",
+            "family": "Congridae",
+            "order": "ANGUILLIFORMES"
+        },
+        {
+            "code": "ACF",
+            "scientificName": "Acestrorhynchus falcatus",
+            "englishName": "",
+            "frenchName": "",
+            "spanishName": "",
+            "author": "(Bloch 1794)",
+            "family": "Acestrorhynchidae",
+            "order": "CHARACIFORMES"
+        },
+        {
+            "code": "ACG",
+            "scientificName": "Acanthogobius ommaturus",
+            "englishName": "",
+            "frenchName": "",
+            "spanishName": "",
+            "author": "(Richardson 1845)",
+            "family": "Gobiidae",
+            "order": "GOBIOIDEI"
+        },
+        {
+            "code": "ACH",
+            "scientificName": "Salvelinus alpinus",
+            "englishName": "Arctic char",
+            "frenchName": "Omble-chevalier",
+            "spanishName": "Trucha alpina",
+            "author": "(Linnaeus 1758)",
+            "family": "Salmonidae",
+            "order": "SALMONIFORMES"
+        },
+        {
+            "code": "ACI",
+            "scientificName": "Acnodon normani",
+            "englishName": "",
+            "frenchName": "",
+            "spanishName": "",
+            "author": "Gosline 1951",
+            "family": "Characidae",
+            "order": "CHARACIFORMES"
+        },
+        {
+            "code": "ACJ",
+            "scientificName": "Japonoconger africanus",
+            "englishName": "",
+            "frenchName": "",
+            "spanishName": "",
+            "author": "(Poll 1953)",
+            "family": "Congridae",
+            "order": "ANGUILLIFORMES"
+        },
+        {
+            "code": "ACK",
+            "scientificName": "Kaupichthys hyoproroides",
+            "englishName": "False moray",
+            "frenchName": "",
+            "spanishName": "",
+            "author": "(Str�mman 1896)",
+            "family": "Chlopsidae",
+            "order": "ANGUILLIFORMES"
+        },
+        {
+            "code": "ACL",
+            "scientificName": "Heteroconger longissimus",
+            "englishName": "",
+            "frenchName": "",
+            "spanishName": "",
+            "author": "G�nther 1870",
+            "family": "Congridae",
+            "order": "ANGUILLIFORMES"
+        },
+        {
+            "code": "ACM",
+            "scientificName": "Macrocephenchelys brachialis",
+            "englishName": "",
+            "frenchName": "",
+            "spanishName": "",
+            "author": "Fowler 1934",
+            "family": "Congridae",
+            "order": "ANGUILLIFORMES"
+        },
+        {
+            "code": "ACN",
+            "scientificName": "Aculeola nigra",
+            "englishName": "Hooktooth dogfish",
+            "frenchName": "Squale noir",
+            "spanishName": "Tollo negro de cachos",
+            "author": "de Buen 1959",
+            "family": "Squalidae",
+            "order": "SQUALIFORMES"
+        },
+        {
+            "code": "ACO",
+            "scientificName": "Coloconger raniceps",
+            "englishName": "",
+            "frenchName": "",
+            "spanishName": "",
+            "author": "Alcock 1889",
+            "family": "Colocongridae",
+            "order": "ANGUILLIFORMES"
+        },
+        {
+            "code": "ACP",
+            "scientificName": "Chilorhinus platyrhynchus",
+            "englishName": "Flatnose xenocongrid eel",
+            "frenchName": "",
+            "spanishName": "",
+            "author": "(Norman 1922)",
+            "family": "Chlopsidae",
+            "order": "ANGUILLIFORMES"
+        },
+        {
+            "code": "ACQ",
+            "scientificName": "Astrocottus leprops",
+            "englishName": "",
+            "frenchName": "",
+            "spanishName": "",
+            "author": "Bolin 1936",
+            "family": "Cottidae",
+            "order": "SCORPAENIFORMES"
+        },
+        {
+            "code": "ACR",
+            "scientificName": "Acropomatidae",
+            "englishName": "Glow-bellies, splitfins nei",
+            "frenchName": "Macondes, etc. nca",
+            "spanishName": "Farolitos nep",
+            "author": "",
+            "family": "Acropomatidae",
+            "order": "PERCOIDEI"
+        },
+        {
+            "code": "ACS",
+            "scientificName": "Heteroconger hassi",
+            "englishName": "Spotted garden-eel",
+            "frenchName": "",
+            "spanishName": "",
+            "author": "(Klausewitz & Eibl-Eibesfeldt 1959)",
+            "family": "Congridae",
+            "order": "ANGUILLIFORMES"
+        },
+        {
+            "code": "ACT",
+            "scientificName": "Paraconger caudilimbatus",
+            "englishName": "Margintail conger",
+            "frenchName": "",
+            "spanishName": "",
+            "author": "(Poey 1867)",
+            "family": "Congridae",
+            "order": "ANGUILLIFORMES"
+        },
+        {
+            "code": "ACU",
+            "scientificName": "Lumiconger arafura",
+            "englishName": "",
+            "frenchName": "",
+            "spanishName": "",
+            "author": "Castle & Paxton 1984",
+            "family": "Congridae",
+            "order": "ANGUILLIFORMES"
+        },
+        {
+            "code": "ACV",
+            "scientificName": "Acanthocepola abbreviata",
+            "englishName": "Bandfish",
+            "frenchName": "",
+            "spanishName": "",
+            "author": "(Valenciennes 1835)",
+            "family": "Cepolidae",
+            "order": "PERCOIDEI"
+        },
+        {
+            "code": "ACW",
+            "scientificName": "Amblycirrhitus earnshawi",
+            "englishName": "",
+            "frenchName": "",
+            "spanishName": "",
+            "author": "Lubbock 1978",
+            "family": "Cirrhitidae",
+            "order": "PERCOIDEI"
+        },
+        {
+            "code": "ACX",
+            "scientificName": "Acanthaxius caespitosa",
+            "englishName": "Deep-water mud lobster",
+            "frenchName": "Langouste poilue de profondeur",
+            "spanishName": "Langosta peluda de profundidad",
+            "author": "(Squires 1979)",
+            "family": "Axiidae",
+            "order": "REPTANTIA"
+        },
+        {
+            "code": "ACY",
+            "scientificName": "Parabathymyrus macrophthalmus",
+            "englishName": "",
+            "frenchName": "",
+            "spanishName": "",
+            "author": "Kamohara 1938",
+            "family": "Congridae",
+            "order": "ANGUILLIFORMES"
+        },
+        {
+            "code": "ACZ",
+            "scientificName": "Cambaridae",
+            "englishName": "American crayfishes nei",
+            "frenchName": "�crevisses am�ricaines nca",
+            "spanishName": "Cangrejos r�o americanos nep",
+            "author": "",
+            "family": "Cambaridae",
+            "order": "REPTANTIA"
+        },
+        {
+            "code": "ADA",
+            "scientificName": "Aspidoras albater",
+            "englishName": "",
+            "frenchName": "",
+            "spanishName": "",
+            "author": "Nijssen & Isbr�cker 1976",
+            "family": "Callichthyidae",
+            "order": "SILURIFORMES"
+        },
+        {
+            "code": "ADB",
+            "scientificName": "Adontosternarchus balaenops",
+            "englishName": "",
+            "frenchName": "",
+            "spanishName": "",
+            "author": "Cope 1878",
+            "family": "Apteronotidae",
+            "order": "GYMNOTIFORMES"
+        },
+        {
+            "code": "ADC",
+            "scientificName": "Acrochordonichthys chamaeleon",
+            "englishName": "",
+            "frenchName": "",
+            "spanishName": "",
+            "author": "(Vaillant 1902)",
+            "family": "Akysidae",
+            "order": "SILURIFORMES"
+        },
+        {
+            "code": "ADD",
+            "scientificName": "Derichthys serpentinus",
+            "englishName": "Narrownecked oceanic eel",
+            "frenchName": "",
+            "spanishName": "",
+            "author": "Gill 1884",
+            "family": "Derichthyidae",
+            "order": "ANGUILLIFORMES"
+        },
+        {
+            "code": "ADE",
+            "scientificName": "Allotoca dugesii",
+            "englishName": "Opal allotoca",
+            "frenchName": "",
+            "spanishName": "",
+            "author": "(Bean 1887)",
+            "family": "Goodeidae",
+            "order": "CYPRINODONTIFORMES"
+        },
+        {
+            "code": "ADF",
+            "scientificName": "Aspredinichthys filamentosus",
+            "englishName": "Sevenbarbed banjo",
+            "frenchName": "",
+            "spanishName": "",
+            "author": "(Valenciennes 1840)",
+            "family": "Aspredinidae",
+            "order": "SILURIFORMES"
+        },
+        {
+            "code": "ADG",
+            "scientificName": "Anadoras grypus",
+            "englishName": "",
+            "frenchName": "",
+            "spanishName": "",
+            "author": "(Cope 1872)",
+            "family": "Doradidae",
+            "order": "SILURIFORMES"
+        },
+        {
+            "code": "ADH",
+            "scientificName": "Amblyglyphidodon aureus",
+            "englishName": "Golden damselfish",
+            "frenchName": "",
+            "spanishName": "",
+            "author": "(Cuvier 1830)",
+            "family": "Pomacentridae",
+            "order": "PERCOIDEI"
+        },
+        {
+            "code": "ADI",
+            "scientificName": "Aplocheilus dayi",
+            "englishName": "Ceylon killifish",
+            "frenchName": "",
+            "spanishName": "",
+            "author": "(Steindachner 1892)",
+            "family": "Aplocheilidae",
+            "order": "CYPRINODONTIFORMES"
+        },
+        {
+            "code": "ADJ",
+            "scientificName": "Pardachirus pavoninus",
+            "englishName": "Peacock sole",
+            "frenchName": "",
+            "spanishName": "",
+            "author": "(Lac�p�de 1802)",
+            "family": "Soleidae",
+            "order": "PLEURONECTIFORMES"
+        },
+        {
+            "code": "ADK",
+            "scientificName": "Artedidraco skottsbergi",
+            "englishName": "",
+            "frenchName": "",
+            "spanishName": "",
+            "author": "L�nnberg 1905",
+            "family": "Artedidraconidae",
+            "order": "PERCOIDEI"
+        },
+        {
+            "code": "ADL",
+            "scientificName": "Antipodocottus elegans",
+            "englishName": "",
+            "frenchName": "",
+            "spanishName": "",
+            "author": "Fricke & Brunken 1984",
+            "family": "Cottidae",
+            "order": "SCORPAENIFORMES"
+        },
+        {
+            "code": "ADM",
+            "scientificName": "Autanadoras milesi",
+            "englishName": "",
+            "frenchName": "",
+            "spanishName": "",
+            "author": "Fern�ndez-Y�pez 1950",
+            "family": "Doradidae",
+            "order": "SILURIFORMES"
+        },
+        {
+            "code": "ADN",
+            "scientificName": "Nessorhamphus ingolfianus",
+            "englishName": "Duckbill oceanic eel",
+            "frenchName": "",
+            "spanishName": "",
+            "author": "(Schmidt 1912)",
+            "family": "Derichthyidae",
+            "order": "ANGUILLIFORMES"
+        },
+        {
+            "code": "ADO",
+            "scientificName": "Artediellus dydymovi",
+            "englishName": "",
+            "frenchName": "",
+            "spanishName": "",
+            "author": "Soldatov 1915",
+            "family": "Cottidae",
+            "order": "SCORPAENIFORMES"
+        },
+        {
+            "code": "ADP",
+            "scientificName": "Austrofundulus dolichopterus",
+            "englishName": "Saberfin killie",
+            "frenchName": "",
+            "spanishName": "",
+            "author": "Weitzman & Wourms 1967",
+            "family": "Aplocheilidae",
+            "order": "CYPRINODONTIFORMES"
+        },
+        {
+            "code": "ADQ",
+            "scientificName": "Antipathes dichotoma",
+            "englishName": "Black coral",
+            "frenchName": "",
+            "spanishName": "",
+            "author": "(Pallas)",
+            "family": "Antipathidae",
+            "order": "ANTHOZOA"
+        },
+        {
+            "code": "ADR",
+            "scientificName": "Aspredo aspredo",
+            "englishName": "Banjo",
+            "frenchName": "",
+            "spanishName": "",
+            "author": "(Linnaeus 1758)",
+            "family": "Aspredinidae",
+            "order": "SILURIFORMES"
+        },
+        {
+            "code": "ADS",
+            "scientificName": "Arnoldichthys spilopterus",
+            "englishName": "Niger tetra",
+            "frenchName": "",
+            "spanishName": "",
+            "author": "(Boulenger 1909)",
+            "family": "Alestidae",
+            "order": "CHARACIFORMES"
+        },
+        {
+            "code": "ADT",
+            "scientificName": "Pardachirus marmoratus",
+            "englishName": "Finless sole",
+            "frenchName": "",
+            "spanishName": "",
+            "author": "(Lac�p�de 1802)",
+            "family": "Soleidae",
+            "order": "PLEURONECTIFORMES"
+        },
+        {
+            "code": "ADU",
+            "scientificName": "Allodontichthys hubbsi",
+            "englishName": "Whitepatched splitfin",
+            "frenchName": "",
+            "spanishName": "",
+            "author": "Miller & Uyeno 1980",
+            "family": "Goodeidae",
+            "order": "CYPRINODONTIFORMES"
+        },
+        {
+            "code": "ADV",
+            "scientificName": "Apuredoras rivasi",
+            "englishName": "",
+            "frenchName": "",
+            "spanishName": "",
+            "author": "Fern�ndez-Y�pez 1950",
+            "family": "Doradidae",
+            "order": "SILURIFORMES"
+        },
+        {
+            "code": "ADW",
+            "scientificName": "Artedius corallinus",
+            "englishName": "Coralline sculpin",
+            "frenchName": "",
+            "spanishName": "",
+            "author": "(Hubbs 1926)",
+            "family": "Cottidae",
+            "order": "SCORPAENIFORMES"
+        },
+        {
+            "code": "ADX",
+            "scientificName": "Adinia xenica",
+            "englishName": "Diamond killifish",
+            "frenchName": "",
+            "spanishName": "",
+            "author": "(Jordan & Gilbert 1882)",
+            "family": "Fundulidae",
+            "order": "CYPRINODONTIFORMES"
+        },
+        {
+            "code": "ADY",
+            "scientificName": "Aspredo cotylephorus",
+            "englishName": "Banded banjo",
+            "frenchName": "",
+            "spanishName": "",
+            "author": "(Bloch 1794)",
+            "family": "Aspredinidae",
+            "order": "SILURIFORMES"
+        },
+        {
+            "code": "ADZ",
+            "scientificName": "Artedidraco glareobarbatus",
+            "englishName": "",
+            "frenchName": "",
+            "spanishName": "",
+            "author": "Eastman & Eakin 1999",
+            "family": "Artedidraconidae",
+            "order": "PERCOIDEI"
+        },
+        {
+            "code": "AEA",
+            "scientificName": "Alestes lateralis",
+            "englishName": "Stripped robber",
+            "frenchName": "",
+            "spanishName": "",
+            "author": "Boulenger 1900",
+            "family": "Alestidae",
+            "order": "CHARACIFORMES"
+        },
+        {
+            "code": "AEB",
+            "scientificName": "Alestes baremoze",
+            "englishName": "",
+            "frenchName": "",
+            "spanishName": "",
+            "author": "(Joannis 1835)",
+            "family": "Alestidae",
+            "order": "CHARACIFORMES"
+        },
+        {
+            "code": "AEC",
+            "scientificName": "Astronesthes cyclophotus",
+            "englishName": "",
+            "frenchName": "",
+            "spanishName": "",
+            "author": "Regan & Trewavas 1929",
+            "family": "Stomiidae",
+            "order": "STOMIIFORMES"
+        },
+        {
+            "code": "AED",
+            "scientificName": "Alestes dentex",
+            "englishName": "",
+            "frenchName": "",
+            "spanishName": "",
+            "author": "(Linnaeus 1758)",
+            "family": "Alestidae",
+            "order": "CHARACIFORMES"
+        },
+        {
+            "code": "AEE",
+            "scientificName": "Einara edentula",
+            "englishName": "Toothless smooth-head",
+            "frenchName": "",
+            "spanishName": "",
+            "author": "(Alcock 1892)",
+            "family": "Alepocephalidae",
+            "order": "SALMONIFORMES"
+        },
+        {
+            "code": "AEF",
+            "scientificName": "Apteronotus albifrons",
+            "englishName": "Black ghost",
+            "frenchName": "",
+            "spanishName": "",
+            "author": "(Linnaeus 1766)",
+            "family": "Apteronotidae",
+            "order": "GYMNOTIFORMES"
+        },
+        {
+            "code": "AEG",
+            "scientificName": "Astronesthes gemmifer",
+            "englishName": "",
+            "frenchName": "",
+            "spanishName": "",
+            "author": "Goode & Bean 1896",
+            "family": "Stomiidae",
+            "order": "STOMIIFORMES"
+        },
+        {
+            "code": "AEH",
+            "scientificName": "Alestopetersius brichardi",
+            "englishName": "",
+            "frenchName": "",
+            "spanishName": "",
+            "author": "Poll 1967",
+            "family": "Alestidae",
+            "order": "CHARACIFORMES"
+        },
+        {
+            "code": "AEI",
+            "scientificName": "Auchenipterus nigripinnis",
+            "englishName": "",
+            "frenchName": "",
+            "spanishName": "",
+            "author": "(Boulenger 1895)",
+            "family": "Auchenipteridae",
+            "order": "SILURIFORMES"
+        },
+        {
+            "code": "AEJ",
+            "scientificName": "Astronesthes indicus",
+            "englishName": "",
+            "frenchName": "",
+            "spanishName": "",
+            "author": "Brauer 1902",
+            "family": "Stomiidae",
+            "order": "STOMIIFORMES"
+        },
+        {
+            "code": "AEK",
+            "scientificName": "Herwigia kreffti",
+            "englishName": "Krefft's smooth-head",
+            "frenchName": "",
+            "spanishName": "",
+            "author": "(Nielsen & Larsen 1970)",
+            "family": "Alepocephalidae",
+            "order": "SALMONIFORMES"
+        },
+        {
+            "code": "AEL",
+            "scientificName": "Leptoderma lubricum",
+            "englishName": "",
+            "frenchName": "",
+            "spanishName": "",
+            "author": "Abe, Marumo & Kawaguchi 1965",
+            "family": "Alepocephalidae",
+            "order": "SALMONIFORMES"
+        },
+        {
+            "code": "AEM",
+            "scientificName": "Aethotaxis mitopteryx",
+            "englishName": "Longfin icedevil",
+            "frenchName": "Calandre fil",
+            "spanishName": "Diablillo de hebra",
+            "author": "DeWitt 1962",
+            "family": "Nototheniidae",
+            "order": "PERCOIDEI"
+        },
+        {
+            "code": "AEN",
+            "scientificName": "Ericara niger",
+            "englishName": "",
+            "frenchName": "",
+            "spanishName": "",
+            "author": "(G�nther 1878)",
+            "family": "Alepocephalidae",
+            "order": "SALMONIFORMES"
+        },
+        {
+            "code": "AEO",
+            "scientificName": "Astronesthes leucopogon",
+            "englishName": "",
+            "frenchName": "",
+            "spanishName": "",
+            "author": "Regan & Trewavas 1929",
+            "family": "Stomiidae",
+            "order": "STOMIIFORMES"
+        },
+        {
+            "code": "AEP",
+            "scientificName": "Astronesthes neopogon",
+            "englishName": "",
+            "frenchName": "",
+            "spanishName": "",
+            "author": "Regan & Trewavas 1929",
+            "family": "Stomiidae",
+            "order": "STOMIIFORMES"
+        },
+        {
+            "code": "AER",
+            "scientificName": "Aequidens rivulatus",
+            "englishName": "Green terror",
+            "frenchName": "",
+            "spanishName": "Vieja azul",
+            "author": "(G�nther 1860)",
+            "family": "Cichlidae",
+            "order": "PERCOIDEI"
+        },
+        {
+            "code": "AES",
+            "scientificName": "Pandalus montagui",
+            "englishName": "Aesop shrimp",
+            "frenchName": "Crevette �sope",
+            "spanishName": "Camar�n es�pico",
+            "author": "Leach 1814",
+            "family": "Pandalidae",
+            "order": "NATANTIA"
+        },
+        {
+            "code": "AET",
+            "scientificName": "Aetapcus maculatus",
+            "englishName": "Warty prowfish",
+            "frenchName": "",
+            "spanishName": "",
+            "author": "(G�nther 1861)",
+            "family": "Pataecidae",
+            "order": "SCORPAENIFORMES"
+        },
+        {
+            "code": "AEU",
+            "scientificName": "Auchenoceros punctatus",
+            "englishName": "Ahuru",
+            "frenchName": "",
+            "spanishName": "",
+            "author": "(Hutton 1873)",
+            "family": "Moridae",
+            "order": "GADIFORMES"
+        },
+        {
+            "code": "AEV",
+            "scientificName": "Asemichthys taylori",
+            "englishName": "Spinynose sculpin",
+            "frenchName": "",
+            "spanishName": "",
+            "author": "Gilbert 1912",
+            "family": "Cottidae",
+            "order": "SCORPAENIFORMES"
+        },
+        {
+            "code": "AEW",
+            "scientificName": "Atherinosoma wallacei",
+            "englishName": "",
+            "frenchName": "",
+            "spanishName": "",
+            "author": "Prince, Ivantsoff & Potter 1982",
+            "family": "Atherinidae",
+            "order": "ATHERINIFORMES"
+        },
+        {
+            "code": "AEX",
+            "scientificName": "Mastacembelus sexdecimspinus",
+            "englishName": "",
+            "frenchName": "",
+            "spanishName": "",
+            "author": "(Roberts & Travers 1986)",
+            "family": "Mastacembelidae",
+            "order": "SYNBRANCHIFORMES"
+        },
+        {
+            "code": "AEY",
+            "scientificName": "Apteronotus leptorhynchus",
+            "englishName": "",
+            "frenchName": "",
+            "spanishName": "",
+            "author": "(Ellis 1912)",
+            "family": "Apteronotidae",
+            "order": "GYMNOTIFORMES"
+        },
+        {
+            "code": "AEZ",
+            "scientificName": "Abyssocottus elochini",
+            "englishName": "",
+            "frenchName": "",
+            "spanishName": "",
+            "author": "Taliev 1955",
+            "family": "Abyssocottidae",
+            "order": "SCORPAENIFORMES"
+        },
+        {
+            "code": "AFA",
+            "scientificName": "Forbesichthys agassizi",
+            "englishName": "Spring cavefish",
+            "frenchName": "",
+            "spanishName": "",
+            "author": "(Putnam 1872)",
+            "family": "Amblyopsidae",
+            "order": "PERCOPSIFORMES"
+        },
+        {
+            "code": "AFB",
+            "scientificName": "Aphyoplatys duboisi",
+            "englishName": "",
+            "frenchName": "",
+            "spanishName": "",
+            "author": "(Poll 1952)",
+            "family": "Aplocheilidae",
+            "order": "CYPRINODONTIFORMES"
+        },
+        {
+            "code": "AFC",
+            "scientificName": "Atherinopsis californiensis",
+            "englishName": "Jack silverside",
+            "frenchName": "",
+            "spanishName": "",
+            "author": "Girard 1854",
+            "family": "Atherinidae",
+            "order": "ATHERINIFORMES"
+        },
+        {
+            "code": "AFD",
+            "scientificName": "Aphanius dispar",
+            "englishName": "",
+            "frenchName": "",
+            "spanishName": "",
+            "author": "(R�ppell 1829)",
+            "family": "Cyprinodontidae",
+            "order": "CYPRINODONTIFORMES"
+        },
+        {
+            "code": "AFE",
+            "scientificName": "Aplocheilichthys fuelleborni",
+            "englishName": "",
+            "frenchName": "",
+            "spanishName": "",
+            "author": "(Ahl 1924)",
+            "family": "Poeciliidae",
+            "order": "CYPRINODONTIFORMES"
+        },
+        {
+            "code": "AFF",
+            "scientificName": "Atherion africanus",
+            "englishName": "Pricklenose silverside",
+            "frenchName": "",
+            "spanishName": "",
+            "author": "Smith 1965",
+            "family": "Atherinidae",
+            "order": "ATHERINIFORMES"
+        },
+        {
+            "code": "AFG",
+            "scientificName": "Asthenomacrurus fragilis",
+            "englishName": "Fragile grenadier",
+            "frenchName": "",
+            "spanishName": "",
+            "author": "(Garman 1899)",
+            "family": "Macrouridae",
+            "order": "GADIFORMES"
+        },
+        {
+            "code": "AFH",
+            "scientificName": "Aphyosemion ahli",
+            "englishName": "",
+            "frenchName": "",
+            "spanishName": "",
+            "author": "Myers 1933",
+            "family": "Aplocheilidae",
+            "order": "CYPRINODONTIFORMES"
+        },
+        {
+            "code": "AFI",
+            "scientificName": "Conocara fiolenti",
+            "englishName": "Fiolenti's smooth-head",
+            "frenchName": "",
+            "spanishName": "",
+            "author": "Sazonov & Ivanov 1979",
+            "family": "Alepocephalidae",
+            "order": "SALMONIFORMES"
+        },
+        {
+            "code": "AFJ",
+            "scientificName": "Aphanius iberus",
+            "englishName": "Spanish toothcarp",
+            "frenchName": "",
+            "spanishName": "",
+            "author": "(Valenciennes 1846)",
+            "family": "Cyprinodontidae",
+            "order": "CYPRINODONTIFORMES"
+        },
+        {
+            "code": "AFK",
+            "scientificName": "Apsilus fuscus",
+            "englishName": "African forktail snapper",
+            "frenchName": "Vivaneau fourche d'Afrique",
+            "spanishName": "Pargo tijera",
+            "author": "Valenciennes 1830",
+            "family": "Lutjanidae",
+            "order": "PERCOIDEI"
+        },
+        {
+            "code": "AFL",
+            "scientificName": "Antennatus flagellatus",
+            "englishName": "",
+            "frenchName": "",
+            "spanishName": "",
+            "author": "Ohnishi, Iwata & Hiramatsu 1997",
+            "family": "Antennariidae",
+            "order": "LOPHIIFORMES"
+        },
+        {
+            "code": "AFM",
+            "scientificName": "Adamas formosus",
+            "englishName": "Starhead killi",
+            "frenchName": "",
+            "spanishName": "",
+            "author": "Huber 1979",
+            "family": "Aplocheilidae",
+            "order": "CYPRINODONTIFORMES"
+        },
+        {
+            "code": "AFN",
+            "scientificName": "Antennarius nummifer",
+            "englishName": "Spotfin frogfish",
+            "frenchName": "",
+            "spanishName": "",
+            "author": "(Cuvier 1817)",
+            "family": "Antennariidae",
+            "order": "LOPHIIFORMES"
+        },
+        {
+            "code": "AFO",
+            "scientificName": "Aspidophoroides bartoni",
+            "englishName": "Aleutian alligatorfish",
+            "frenchName": "",
+            "spanishName": "",
+            "author": "Gilbert 1896",
+            "family": "Agonidae",
+            "order": "SCORPAENIFORMES"
+        },
+        {
+            "code": "AFP",
+            "scientificName": "Amphiprion akallopisos",
+            "englishName": "Skunk clownfish",
+            "frenchName": "",
+            "spanishName": "",
+            "author": "Bleeker 1853",
+            "family": "Pomacentridae",
+            "order": "PERCOIDEI"
+        },
+        {
+            "code": "AFQ",
+            "scientificName": "Paphies australis",
+            "englishName": "Pipi wedge clam",
+            "frenchName": "",
+            "spanishName": "",
+            "author": "(Gmelin 1791)",
+            "family": "Mesodesmatidae",
+            "order": "BIVALVIA"
+        },
+        {
+            "code": "AFR",
+            "scientificName": "Alloophorus robustus",
+            "englishName": "Bulldog goodeid",
+            "frenchName": "",
+            "spanishName": "",
+            "author": "(Bean 1892)",
+            "family": "Goodeidae",
+            "order": "CYPRINODONTIFORMES"
+        },
+        {
+            "code": "AFS",
+            "scientificName": "Aphanius fasciatus",
+            "englishName": "",
+            "frenchName": "",
+            "spanishName": "",
+            "author": "(Valenciennes 1821)",
+            "family": "Cyprinodontidae",
+            "order": "CYPRINODONTIFORMES"
+        },
+        {
+            "code": "AFT",
+            "scientificName": "Agonus cataphractus",
+            "englishName": "Hooknose",
+            "frenchName": "",
+            "spanishName": "",
+            "author": "(Linnaeus 1758)",
+            "family": "Agonidae",
+            "order": "SCORPAENIFORMES"
+        },
+        {
+            "code": "AFU",
+            "scientificName": "Alfaro cultratus",
+            "englishName": "",
+            "frenchName": "",
+            "spanishName": "",
+            "author": "(Regan 1908)",
+            "family": "Poeciliidae",
+            "order": "CYPRINODONTIFORMES"
+        },
+        {
+            "code": "AFV",
+            "scientificName": "Aulorhynchus flavidus",
+            "englishName": "Tube-snout",
+            "frenchName": "",
+            "spanishName": "",
+            "author": "Gill 1861",
+            "family": "Aulorhynchidae",
+            "order": "GASTEROSTEIFORMES"
+        },
+        {
+            "code": "AFW",
+            "scientificName": "Assessor flavissimus",
+            "englishName": "Yellow devilfish",
+            "frenchName": "",
+            "spanishName": "",
+            "author": "Allen & Kuiter 1976",
+            "family": "Plesiopidae",
+            "order": "PERCOIDEI"
+        },
+        {
+            "code": "AFX",
+            "scientificName": "Amphibolis antarctica",
+            "englishName": "Sea nymph",
+            "frenchName": "",
+            "spanishName": "",
+            "author": "(Labillardi�re) Sonder & Ascherson ex Ascherson 1867",
+            "family": "Cymodoceaceae",
+            "order": "ANGIOSPERMAE"
+        },
+        {
+            "code": "AFY",
+            "scientificName": "Amphiprion akindynos",
+            "englishName": "Barrier reef anemonefish",
+            "frenchName": "",
+            "spanishName": "",
+            "author": "Allen 1972",
+            "family": "Pomacentridae",
+            "order": "PERCOIDEI"
+        },
+        {
+            "code": "AFZ",
+            "scientificName": "Afronandus sheljuzhkoi",
+            "englishName": "Fourspine leaffish",
+            "frenchName": "",
+            "spanishName": "",
+            "author": "(Meinken 1954)",
+            "family": "Nandidae",
+            "order": "PERCOIDEI"
+        },
+        {
+            "code": "AGA",
+            "scientificName": "Guentherus altivela",
+            "englishName": "Jellynose",
+            "frenchName": "",
+            "spanishName": "",
+            "author": "Os�rio 1917",
+            "family": "Ateleopodidae",
+            "order": "LAMPRIFORMES"
+        },
+        {
+            "code": "AGB",
+            "scientificName": "Antipathes grandis",
+            "englishName": "Umimatsu, pine coral",
+            "frenchName": "",
+            "spanishName": "",
+            "author": "",
+            "family": "Antipathidae",
+            "order": "ANTHOZOA"
+        },
+        {
+            "code": "AGC",
+            "scientificName": "Amblygaster clupeoides",
+            "englishName": "Bleeker smoothbelly sardinella",
+            "frenchName": "Sardinelle coulat",
+            "spanishName": "Sardinela vientre liso",
+            "author": "Bleeker 1849",
+            "family": "Clupeidae",
+            "order": "CLUPEIFORMES"
+        },
+        {
+            "code": "AGD",
+            "scientificName": "Gymnothorax maderensis",
+            "englishName": "Sharktooth moray",
+            "frenchName": "",
+            "spanishName": "",
+            "author": "(Johnson 1862)",
+            "family": "Muraenidae",
+            "order": "ANGUILLIFORMES"
+        },
+        {
+            "code": "AGE",
+            "scientificName": "Agosia chrysogaster",
+            "englishName": "Longfin dace",
+            "frenchName": "",
+            "spanishName": "",
+            "author": "Girard 1856",
+            "family": "Cyprinidae",
+            "order": "CYPRINIFORMES"
+        },
+        {
+            "code": "AGF",
+            "scientificName": "Agmus lyriformis",
+            "englishName": "Gnarled catfish",
+            "frenchName": "",
+            "spanishName": "",
+            "author": "Eigenmann 1912",
+            "family": "Aspredinidae",
+            "order": "SILURIFORMES"
+        },
+        {
+            "code": "AGG",
+            "scientificName": "Gymnothorax moringa",
+            "englishName": "Spotted moray",
+            "frenchName": "",
+            "spanishName": "Morena manchada",
+            "author": "(Cuvier 1829)",
+            "family": "Muraenidae",
+            "order": "ANGUILLIFORMES"
+        },
+        {
+            "code": "AGH",
+            "scientificName": "Gymnotus pantherinus",
+            "englishName": "",
+            "frenchName": "",
+            "spanishName": "",
+            "author": "(Steindachner 1908)",
+            "family": "Muraenidae",
+            "order": "ANGUILLIFORMES"
+        },
+        {
+            "code": "AGI",
+            "scientificName": "Gymnothorax polygonius",
+            "englishName": "Polygon moray",
+            "frenchName": "",
+            "spanishName": "Morena pol�gona",
+            "author": "Poey 1875",
+            "family": "Muraenidae",
+            "order": "ANGUILLIFORMES"
+        },
+        {
+            "code": "AGJ",
+            "scientificName": "Argobuccinum olearium",
+            "englishName": "Oil-vessel triton",
+            "frenchName": "Ranelle geante",
+            "spanishName": "",
+            "author": "(Linnaeus 1758)",
+            "family": "Ranellidae",
+            "order": "GASTROPODA"
+        },
+        {
+            "code": "AGK",
+            "scientificName": "Gymnothorax unicolor",
+            "englishName": "Brown moray",
+            "frenchName": "Mur�ne brune",
+            "spanishName": "Morena negra",
+            "author": "(Delaroche 1809)",
+            "family": "Muraenidae",
+            "order": "ANGUILLIFORMES"
+        },
+        {
+            "code": "AGL",
+            "scientificName": "Amblygaster leiogaster",
+            "englishName": "Smoothbelly sardinella",
+            "frenchName": "Sardinelle daniva",
+            "spanishName": "Sardinela daniva",
+            "author": "(Valenciennes 1847)",
+            "family": "Clupeidae",
+            "order": "CLUPEIFORMES"
+        },
+        {
+            "code": "AGM",
+            "scientificName": "Alligator mississippiensis",
+            "englishName": "American alligator",
+            "frenchName": "Alligator am�ricain",
+            "spanishName": "Caim�n americano",
+            "author": "(Daudin 1803)",
+            "family": "Crocodylidae",
+            "order": "CROCODILIA"
+        },
+        {
+            "code": "AGN",
+            "scientificName": "Squatina squatina",
+            "englishName": "Angelshark",
+            "frenchName": "Ange de mer commun",
+            "spanishName": "Angelote",
+            "author": "(Linnaeus 1758)",
+            "family": "Squatinidae",
+            "order": "SQUALIFORMES"
+        }
+    ]
+}

@@ -1,5 +1,5 @@
 /*
-﻿Developed with the contribution of the European Commission - Directorate General for Maritime Affairs and Fisheries
+Developed with the contribution of the European Commission - Directorate General for Maritime Affairs and Fisheries
 © European Union, 2015-2016.
 
 This file is part of the Integrated Fisheries Data Management (IFDM) Suite. The IFDM Suite is free software: you can
@@ -8,8 +8,17 @@ Free Software Foundation, either version 3 of the License, or any later version.
 the hope that it will be useful, but WITHOUT ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or
 FITNESS FOR A PARTICULAR PURPOSE.  See the GNU General Public License for more details. You should have received a
 copy of the GNU General Public License along with the IFDM Suite. If not, see <http://www.gnu.org/licenses/>.
- */
+*/
 .systemAreasContainer{
+	height: 100%;
+	[name="SysareasForm"] {
+		height: 100%;
+	}
+	[name="datasetForm"] {
+		max-height: calc(~'100% - 135px');
+		display: block;
+    	overflow: auto;
+	}
 	.dataset-table-container {
 		min-height: 52px;
 	}
@@ -20,11 +29,23 @@ copy of the GNU General Public License along with the IFDM Suite. If not, see <h
 			margin-right: 20px;
 		}
 	}
+	.form-span {
+		display: block;
+		/*line-height: 30px;*/
+		min-height: 30px;
+	}
 	.system-area-body {
+		height: 100%;
+		.editingTypeTab {
+			height: 100%;
+			.btn-container {
+				text-align: right;
+			}
+		}
 		.form-container {
 			padding-top: 15px;
 			border: 1px solid #dddddd;
-			overflow: auto;
+			max-height: calc(~'100% - 135px');
 			.form-group {
 				label {
 					margin-right: 5px;
@@ -56,7 +77,7 @@ copy of the GNU General Public License along with the IFDM Suite. If not, see <h
 	}
 	.metadata-container{
 		overflow-y: auto;
-		height: 100%;
+		max-height: calc(~'100% - 135px');
 	}
 	.info-qtip {
 		margin-right: 10px;
@@ -67,6 +88,7 @@ copy of the GNU General Public License along with the IFDM Suite. If not, see <h
 	.dataset-form-container {
 		margin-bottom: 20px;
 		.dataset-errorMsg {
+			top: 21px;
 			right: 20px;
 			padding-right: 0;
 		}
@@ -112,5 +134,8 @@ copy of the GNU General Public License along with the IFDM Suite. If not, see <h
 				line-height: 20px;
 			}
 		}
+	}
+	.sysareas-radio-btns {
+		height: 100%;
 	}
 }

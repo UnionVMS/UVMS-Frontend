@@ -1,5 +1,5 @@
 /*
-﻿Developed with the contribution of the European Commission - Directorate General for Maritime Affairs and Fisheries
+Developed with the contribution of the European Commission - Directorate General for Maritime Affairs and Fisheries
 © European Union, 2015-2016.
 
 This file is part of the Integrated Fisheries Data Management (IFDM) Suite. The IFDM Suite is free software: you can
@@ -8,7 +8,7 @@ Free Software Foundation, either version 3 of the License, or any later version.
 the hope that it will be useful, but WITHOUT ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or
 FITNESS FOR A PARTICULAR PURPOSE.  See the GNU General Public License for more details. You should have received a
 copy of the GNU General Public License along with the IFDM Suite. If not, see <http://www.gnu.org/licenses/>.
- */
+*/
 angular.module('smart-table')
   .directive('stSearchargs', ['stConfig', '$timeout','$parse', '$filter', function (stConfig, $timeout, $parse, $filter) {
     return {
@@ -44,7 +44,7 @@ angular.module('smart-table')
 	        var pagination = ctrl.tableState().pagination;
 	        var output;
 	        
-	        var filtered = ctrl.tableState().search.predicateObject ? tableFilter(tableCtrl.tableScope.reports , tableCtrl.tableScope.displayedColumns + '|' + ctrl.tableState().search.predicateObject.$) : tableCtrl.tableScope.reports;
+	        var filtered = ctrl.tableState().search.predicateObject ? tableFilter(tableCtrl.tableScope.reportsList , tableCtrl.tableScope.displayedColumns + '|' + ctrl.tableState().search.predicateObject.$) : tableCtrl.tableScope.reportsList;
 	        if (ctrl.tableState().sort.predicate) {
 	          filtered = orderBy(filtered, ctrl.tableState().sort.predicate, ctrl.tableState().sort.reverse);
 	        }

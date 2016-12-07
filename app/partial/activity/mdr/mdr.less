@@ -1,0 +1,83 @@
+/*
+Developed with the contribution of the European Commission - Directorate General for Maritime Affairs and Fisheries
+© European Union, 2015-2016.
+
+This file is part of the Integrated Fisheries Data Management (IFDM) Suite. The IFDM Suite is free software: you can
+redistribute it and/or modify it under the terms of the GNU General Public License as published by the
+Free Software Foundation, either version 3 of the License, or any later version. The IFDM Suite is distributed in
+the hope that it will be useful, but WITHOUT ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or
+FITNESS FOR A PARTICULAR PURPOSE.  See the GNU General Public License for more details. You should have received a
+copy of the GNU General Public License along with the IFDM Suite. If not, see <http://www.gnu.org/licenses/>.
+*/
+.mdr-admin-tab {
+    .mdr-tab-loading {
+        margin-top: -15px;
+        margin-bottom: -3px;
+    }
+    .cron-wrap {
+        &,
+        .select-options {
+            > * {
+                vertical-align: top;
+                line-height: 30px;
+                font-weight: bold;
+            }
+        }
+        .select-options {
+            > span {
+                margin-left: 5px;
+                margin-right: 5px;
+            }
+        }
+        .cron-select {
+            margin-bottom: 15px;
+        }
+    }
+
+    .btn-container {
+        text-align: right;
+    }
+
+    .cron-job-exp {
+        text-align: right;
+        .cronLabel {
+            font-weight: bold;
+        }
+        span {
+            font-style: italic;
+        }
+    }
+
+    #codeListsTable {
+        .tr:first-child {
+            .th {
+                padding: 0 15px;
+                text-align: center;
+                &.ckeckbox-column {
+                    text-align: left;
+                }
+            }
+        }
+        .td {
+            padding: 5px 15px;
+            &.col-btn {
+                text-align: center;
+            }
+            &.col-auto-update {
+                button {
+                    width: auto;
+                    height: 30px;
+                    padding: 3px;
+                }
+                
+            }
+        }
+    }
+
+    .table-pagination {
+        margin: 0;
+        margin-bottom: 20px;
+    }
+}
+
+

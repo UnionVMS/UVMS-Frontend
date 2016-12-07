@@ -1,5 +1,5 @@
 /*
-﻿Developed with the contribution of the European Commission - Directorate General for Maritime Affairs and Fisheries
+Developed with the contribution of the European Commission - Directorate General for Maritime Affairs and Fisheries
 © European Union, 2015-2016.
 
 This file is part of the Integrated Fisheries Data Management (IFDM) Suite. The IFDM Suite is free software: you can
@@ -8,11 +8,13 @@ Free Software Foundation, either version 3 of the License, or any later version.
 the hope that it will be useful, but WITHOUT ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or
 FITNESS FOR A PARTICULAR PURPOSE.  See the GNU General Public License for more details. You should have received a
 copy of the GNU General Public License along with the IFDM Suite. If not, see <http://www.gnu.org/licenses/>.
- */
-angular.module('unionvmsWeb').controller('AreasCtrl',function($scope, $window, $interval, locale, genericMapService, areaMapService, projectionService, areaAlertService, areaHelperService, areaRestService, userService){
-    //$scope.selectedTab = 'USERAREAS';
+*/
+angular.module('unionvmsWeb').controller('AreasCtrl',function($scope, $window, $interval, locale, genericMapService, areaMapService, projectionService, areaAlertService, areaHelperService, areaRestService, userService, loadingStatus, alertModalService){
+    $scope.expanded = true;
     $scope.alert = areaAlertService;
     $scope.helper = areaHelperService;
+    $scope.graticuleActivated = false;
+    $scope.graticuleTip = [locale.getString('areas.map_tip_enable'), locale.getString('areas.map_tip_graticule')].join(' ');
     
     var setTabs = function(){
         var context = userService.getCurrentContext();
@@ -49,6 +51,11 @@ angular.module('unionvmsWeb').controller('AreasCtrl',function($scope, $window, $
         }
     };
     
+    $scope.switchCollapse = function(){
+        $scope.expanded = !$scope.expanded;
+        alertModalService.resizeModal();
+    };
+    
     $scope.isAllowed = function(module, feature){
         return userService.isAllowed(feature, module, true);
     };
@@ -56,11 +63,11 @@ angular.module('unionvmsWeb').controller('AreasCtrl',function($scope, $window, $
     $scope.stopInitInterval = function(){
         $interval.cancel($scope.initInterval);
         $scope.initInterval = undefined;
-        areaAlertService.removeLoading();
+        loadingStatus.isLoading('AreaManagement',false);
     };
     
     locale.ready('areas').then(function(){
-        areaAlertService.setLoading(locale.getString('areas.inital_loading'));
+        loadingStatus.isLoading('AreaManagement',true,0);
         genericMapService.setMapBasicConfigs();
         projectionService.getProjections();
         
@@ -87,55 +94,80 @@ angular.module('unionvmsWeb').controller('AreasCtrl',function($scope, $window, $
             }
         }, 10);
     });
+    
+    //Map graticule
+    $scope.toggleGraticule = function(){
+        $scope.graticuleActivated = !$scope.graticuleActivated;
+        areaMapService.setGraticule($scope.graticuleActivated);
+        var firstTitle = locale.getString('areas.map_tip_enable');
+        if ($scope.graticuleActivated){
+            firstTitle = locale.getString('areas.map_tip_disable');
+        }
+        $scope.graticuleTip = [firstTitle, locale.getString('areas.map_tip_graticule')].join(' ');
+    };
+    
+    $scope.getDisplayedLayerType = function(){
+        var type;
+        if ($scope.selectedTab === 'USERAREAS'){
+            type = 'USERAREA';
+        } else if ($scope.selectedTab === 'AREAGROUPS'){
+            type = 'AREAGROUPS';
+        } else {
+            if (angular.isDefined($scope.helper.displayedSystemAreaLayer)){
+                type = $scope.helper.displayedSystemAreaLayer;
+            }
+        }
+        
+        return type;
+    };
+    
+    //Transparency Slider
+    $scope.toggleSlider = function(){
+        $scope.helper.slider.active = !$scope.helper.slider.active; 
+        var layerType = $scope.getDisplayedLayerType();
+        if ($scope.helper.slider.active && angular.isDefined(layerType)){
+            $scope.helper.slider.transparency = areaMapService.getLayerOpacity($scope.helper.slider.layer);
+        } else {
+            $scope.helper.updateSlider(layerType);
+            if (angular.isDefined(layerType)){
+                areaMapService.setLayerOpacity(layerType, 1);
+            }
+        }
+    };
+    
+    $scope.formatTooltip = function (value) {
+        return value + '%';
+    };
+    
+    $scope.setTransparency = function(value, event){
+        if (angular.isDefined($scope.helper.slider.transparency)){
+            areaMapService.setLayerOpacity($scope.helper.slider.layer, (100 - value) / 100);
+        }
+    };
 
-    $scope.updateContainerSize = function(){
+    $scope.updateContainerSize = function(evt){
         setTimeout(function() {
             var w = angular.element(window);
-            var offset = 50;
-            var minHeight = 340;
-            var footerHeight = angular.element('footer')[0].offsetHeight;
+            if(evt && (angular.element('#areaManagement.fullscreen').length > 0 ||
+                    (angular.element('#areaManagement.fullscreen').length === 0 && evt.type.toUpperCase().indexOf("FULLSCREENCHANGE") !== -1))){
+                
+                
+                $('#areaManagement').css('height', w.height() + 'px');
+                $('#areaMap').css('height', w.height() + 'px');
+                areaMapService.updateMapSize();
+                return;
+            }
+            
+            var minHeight = 400;
             var headerHeight = angular.element('header')[0].offsetHeight;
-            var newHeight = w.height() - headerHeight - footerHeight - offset;
+            var newHeight = w.height() - headerHeight;
             
             if (newHeight < minHeight) {
                 newHeight = minHeight;
             }
             
-            $('.areaCard').css('height', newHeight);
-            
-            angular.forEach($('.base-area-container'), function(item) {
-            	$(item).css('height', newHeight - $('.tabMenu').height() - 30);
-            });
-            
-            
-            //USERAREAS
-            //div with table list of user areas
-            $('#user-areas-table .tbody').css('max-height', newHeight - $('.tabMenu').height() - 65 - 36 - 108); // .user-areas-table .thead'
-            
-            //User areas form
-            $('.area-form-container').css('height', $($('.base-area-container')[0]).height() - 40 - 50 - 45); //.editingTools and .user-area-btns and slider
-            
-            //SYSAREAS
-            if ($('.sysareas-radio-btns').height() === 0){
-                var base = $($('.base-area-container')[0]).height();
-                $('.updateMetadata').css('height', base - (Math.abs(base - newHeight)) - 15);
-            } else {
-                $('.updateMetadata').css('height', newHeight - $('.tabMenu').height() - 65 - $('.sysareas-radio-btns').height());
-            }
-            
-            $('.metadata-container').css('height', $('#system-area-form-container').height() - 125);
-            $('.sysarea-wizard').css('max-height', $('#system-area-form-container').height() - 80);
-            
-            var datasetCont = $('.dataset-form-container').height();
-            if (datasetCont < 80){
-                datasetCont = 80;
-            }
-            
-            $('.dataset-table-container').css('max-height', newHeight - datasetCont - 240);
-            
-            //GENERIC CONTAINERS
-            //$('.area-loading').css('width', $('.areaCard').width());
-            $('.areaMap').css('height', newHeight);
+            $('#areaManagement').css('height', newHeight + 'px');
+            $('#areaMap').css('height', newHeight + 'px');
             areaMapService.updateMapSize();
         }, 100);
     };
@@ -143,5 +175,9 @@ angular.module('unionvmsWeb').controller('AreasCtrl',function($scope, $window, $
     $($window).resize($scope.updateContainerSize);
     angular.element(document).ready(function () {
         $scope.updateContainerSize();
+    });
+
+    $scope.$on('$destroy', function(){
+        $($window).unbind('resize', $scope.updateContainerSize);
     });
 });

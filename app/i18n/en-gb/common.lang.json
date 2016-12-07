@@ -141,5 +141,7 @@
     "speed_unit_kph": "km/h",
     "speed_unit_mph": "mph",
     "clear": "Clear",
-    "mandatory_field":"*"
+    "mandatory_field":"*",
+    "error_user_without_scope": "Module not accessible to accounts without a scope.",
+    "no_data_available": "No data available"
 }

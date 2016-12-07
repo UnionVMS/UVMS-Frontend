@@ -1,5 +1,5 @@
 /*
-﻿Developed with the contribution of the European Commission - Directorate General for Maritime Affairs and Fisheries
+Developed with the contribution of the European Commission - Directorate General for Maritime Affairs and Fisheries
 © European Union, 2015-2016.
 
 This file is part of the Integrated Fisheries Data Management (IFDM) Suite. The IFDM Suite is free software: you can
@@ -8,7 +8,7 @@ Free Software Foundation, either version 3 of the License, or any later version.
 the hope that it will be useful, but WITHOUT ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or
 FITNESS FOR A PARTICULAR PURPOSE.  See the GNU General Public License for more details. You should have received a
 copy of the GNU General Public License along with the IFDM Suite. If not, see <http://www.gnu.org/licenses/>.
- */
+*/
 /**
  * @memberof unionvmsWeb
  * @ngdoc service
@@ -19,6 +19,7 @@ copy of the GNU General Public License along with the IFDM Suite. If not, see <h
  * @param areaAlertService {service} alert service for the area management tab
  * @param areaRestService {service} Area REST API service
  * @param areaClickerService {service} area map click service
+ * @param loadingStatus {service} loading status service <p>{@link unionvmsWeb.loadingStatus}</p>
  * @attr isEditing {Boolean} Indicates whether there is an active editing session (drawing vectors). Default is <b>false</b>
  * @attr displayedLayerType {String} The type of layer (USERAREA, EEZ, ..)  being displayed in the map
  * @attr displayedSystemAreaLayer {String} The reference data type being last displayed in the reference data tab
@@ -33,7 +34,7 @@ copy of the GNU General Public License along with the IFDM Suite. If not, see <h
  * @description
  *  Service to control the map on the liveview of the reporting tab
  */
-angular.module('unionvmsWeb').factory('areaHelperService',function(locale, areaMapService, spatialRestService, areaAlertService, areaRestService, areaClickerService) {
+angular.module('unionvmsWeb').factory('areaHelperService',function(locale, areaMapService, spatialRestService, areaAlertService, areaRestService, areaClickerService, loadingStatus) {
 	var areaHelperService = {
 	    isEditing: false,
 	    displayedLayerType: undefined,
@@ -45,12 +46,18 @@ angular.module('unionvmsWeb').factory('areaHelperService',function(locale, areaM
 	    userAreasGroups: [],
 	    isLoadingSysAreaTypes: false,
 	    isLoadingAreaTypes: false,
+	    currentTab: undefined,
 	    metadata: {
 	        id: undefined,
 	        areaName: undefined,
 	        areaDesc: undefined,
 	        shortCopy: undefined,
 	        longCopy: undefined
+	    },
+	    slider: {
+	        active: false,
+	        layer: 'USERAREA',
+	        transparency: 0
 	    },
 	    /**
 	     * Set reference data metadata object
@@ -92,27 +99,44 @@ angular.module('unionvmsWeb').factory('areaHelperService',function(locale, areaM
 	        this.resetMetadata();
 	    },
 	    /**
+	     * Update the slider with new layer and transparency setting
+	     * 
+	     * @memberof areaHelperService
+         * @public
+         * @param {String|Undefined} type - The layer type to associate with the slider or undefined to reset the slider
+	     */
+	    updateSlider: function(type){
+	        this.slider.layer = type;
+            this.slider.transparency = 0;
+	    },
+	    /**
 	     * React to tab changes and remove and add the necessary layers through the areaMapService ({@link unionvmsWeb.areaMapService})
 	     * @memberof areaHelperService
 	     * @public
 	     * @param {String} destTab - The destination tab name
 	     */
 	    tabChange: function(destTab){
+	        this.currentTab = destTab;
 	        areaClickerService.deactivate();
-	        if (angular.isDefined(this.displayedLayerType)){
-	            areaMapService.removeLayerByType(this.displayedLayerType);
-	            this.displayedLayerType = undefined;
-	        }
+	        areaMapService.removeAreaLayers();
+	        this.displayedLayerType = undefined;
 	        
 	        if (angular.isDefined(destTab)){
+	            loadingStatus.isLoading('AreaManagementPanel', true);
 	            if (destTab === 'USERAREAS'){
 	                getUserAreaLayer(this);
+	                this.updateSlider('USERAREA');
+	                this.displayedLayerType = 'USERAREAS';
 	            } else if (destTab ===  'SYSAREAS'){
 	                getAreaLocationLayers(this);
 	                if (angular.isDefined(this.displayedSystemAreaLayer)){
 	                    this.displayedLayerType = this.displayedSystemAreaLayer;
 	                    var item = getAreaLocationLayerDef(this);
+	                    item.areaType = 'SYSAREA';
 	                    areaMapService.addWMS(item);
+	                    this.updateSlider(this.displayedSystemAreaLayer);
+	                } else {
+	                    this.updateSlider(undefined);
 	                }
 	                if (this.sysAreasEditingType === 'dataset'){
 	                    areaClickerService.active = true;
@@ -122,8 +146,15 @@ angular.module('unionvmsWeb').factory('areaHelperService',function(locale, areaM
 	            	if (angular.isDefined(this.displayedUserAreaGroup)){
 	            	    this.displayedLayerType = 'AREAGROUPS';
 	            	    this.getUserAreaGroupLayer(this.displayedUserAreaGroup);
+	            	    this.updateSlider(this.displayedLayerType);
+	            	} else {
+	            	    this.updateSlider(undefined);
 	            	}
 	            }
+	        }
+	        
+	        if (!angular.isDefined(this.displayedLayerType)){
+	            loadingStatus.isLoading('AreaManagementPanel', false);
 	        }
 	    },
 	    /**
@@ -184,7 +215,7 @@ angular.module('unionvmsWeb').factory('areaHelperService',function(locale, areaM
 	        layer.set('groupCql', groupCql);
 	    } else {
 	        spatialRestService.getUserAreaLayer().then(function(response){
-	            if (!angular.isDefined(areaMapService.getLayerByType('AREAGROUPS'))){
+	            if (!angular.isDefined(areaMapService.getLayerByType('AREAGROUPS')) && obj.currentTab === 'AREAGROUPS'){
 	                //override typename for area groups instead
 	                response.data.typeName = 'AREAGROUPS';
 	                response.data.groupCql = " and type = '" + type + "'";
@@ -210,7 +241,7 @@ angular.module('unionvmsWeb').factory('areaHelperService',function(locale, areaM
     var getUserAreaLayer = function(obj){
         if (angular.isDefined(areaMapService.map)){ //&& areaMapService.map.getLayers().getLength() !== 0
             spatialRestService.getUserAreaLayer().then(function(response){
-                if (!angular.isDefined(areaMapService.getLayerByType('USERAREA'))){
+                if (!angular.isDefined(areaMapService.getLayerByType('USERAREA')) && obj.currentTab === 'USERAREAS'){
                     areaMapService.addUserAreasWMS(response.data);
                     obj.displayedLayerType = response.data.typeName;
                     areaAlertService.removeLoading();
@@ -271,6 +302,21 @@ angular.module('unionvmsWeb').factory('areaHelperService',function(locale, areaM
         	areaAlertService.alertMessage = locale.getString('areas.error_getting_userarea_types');
         	areaAlertService.hideAlert();
         	obj.isLoadingAreaTypes = false;
+        });
+    };
+    
+    /**
+     * Configure all modals when in fullscreen mode
+     * 
+     * @memberof areaHelperService
+     * @public
+     * @alias configureFullscreenModal
+     * @param {Object} modalInstance - The modal instance object
+     */
+	areaHelperService.configureFullscreenModal = function(modalInstance) {
+        modalInstance.rendered.then(function(){
+            $('body > .modal[uib-modal-window="modal-window"]').not($('.alert-modal-content')).appendTo('#areaMap');
+            $('[uib-modal-backdrop="modal-backdrop"]').not($('.alert-modal-backdrop')).appendTo('#areaMap');
         });
     };
 

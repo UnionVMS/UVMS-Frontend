@@ -2,39 +2,40 @@
     <div class="tagSelectInputContainerWrapper">
         <div class="dropdown fullWidthDropdown">
 
-        <div class="btn btn-default tagSelectButton dropdown-toggle" type="button" data-toggle="dropdown" aria-expanded="true" ng-disabled="ngDisabled">
-            <div class="selection">
-                <div class="tag" ng-repeat="item in selectedItems track by $index" ng-click="stopPropagation($event)" ng-if="!displayMultipleOptionsPlaceholder()">
-                    <span class="textWrapper">
-                        {{getItemLabel(item)}} <span class="removeTag" ng-click="removeItem(item)">×</span>
-                    </span>
-                </div>
-                <div class="multipleSelectionsPlaceholder" ng-if="displayMultipleOptionsPlaceholder()">
-                    <span class="textWrapper">
-                        {{'common.multiple_items_selected'| i18n:[getPlaceholder()]}}
-                    </span>
-                </div>
-            </div>
-            <div class="placeholderText" ng-show="selectedItems.length === 0">
-                {{getPlaceholder()}}
-            </div>
-            <div class="caretWrapper">
-                <span class="caret"></span>
-            </div>
-        </div>
-        <ul class="dropdown-menu" role="menu" ng-click="stopPropagation($event)">
-            <li ng-class="{'disabled': isSelected(item)}" ng-repeat="item in items track by $index" ng-click="selectItem(item)" ng-hide="isMaxLimitReached()">
-                <a role="menuitem" tabindex="-1">{{getItemLabel(item)}}</a>
-            </li>
-            <li ng-show="isMaxLimitReached()"><a>{{'common.tag_select_input_max_limit_reached'| i18n:[maxLimit]}}</a></li>
-            <li class="select-all" ng-if="displayMultipleSelectionDropdown()">
-                <span class="right" ng-click="selectAllItems(items)" ng-class="{'disabled': items.length === selectedItems.length}">
-                    {{'common.select_all' | i18n}}
-                </span>
-                <span class="left" ng-click="removeAllItems(items)" ng-if="selectedItems.length > 0">
-                    {{'common.unselect_all' | i18n}}
-                </span>
-            </li>
-        </ul>
+	        <div class="btn btn-default tagSelectButton dropdown-toggle" type="button" data-toggle="dropdown" aria-expanded="true" ng-disabled="ngDisabled">
+	            <div class="selection">
+	                <div class="tag" ng-repeat="item in selectedItems track by $index" ng-click="stopPropagation($event)" ng-if="!displayMultipleOptionsPlaceholder()">
+	                    <span class="textWrapper">
+	                        {{getItemLabel(item)}} <span class="removeTag" ng-click="removeItem(item)">×</span>
+	                    </span>
+	                </div>
+	                <div class="multipleSelectionsPlaceholder" ng-if="displayMultipleOptionsPlaceholder()">
+	                    <span class="textWrapper">
+	                        {{'common.multiple_items_selected'| i18n:[getPlaceholder()]}}
+	                    </span>
+	                </div>
+	            </div>
+	            <div class="placeholderText" ng-show="selectedItems.length === 0">
+	                {{getPlaceholder()}}
+	            </div>
+	            <div class="caretWrapper">
+	                <span class="caret"></span>
+	            </div>
+	        </div>
+	        <ul class="dropdown-menu" role="menu" ng-click="stopPropagation($event)">
+	            <li ng-class="{'disabled': isSelected(item)}" ng-repeat="item in items track by $index" ng-click="selectItem(item)" ng-hide="isMaxLimitReached()">
+	                <a role="menuitem" tabindex="-1">{{getItemLabel(item)}}</a>
+	            </li>
+	            <li ng-show="isMaxLimitReached()"><a>{{'common.tag_select_input_max_limit_reached'| i18n:[maxLimit]}}</a></li>
+	            <li class="select-all" ng-if="displayMultipleSelectionDropdown()">
+	                <span class="right" ng-click="selectAllItems(items)" ng-class="{'disabled': items.length === selectedItems.length}">
+	                    {{'common.select_all' | i18n}}
+	                </span>
+	                <span class="left" ng-click="removeAllItems(items)" ng-if="selectedItems.length > 0">
+	                    {{'common.unselect_all' | i18n}}
+	                </span>
+	            </li>
+	        </ul>
+		</div>
     </div>
 </div>

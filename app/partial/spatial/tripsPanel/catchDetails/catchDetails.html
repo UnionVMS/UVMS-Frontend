@@ -1,0 +1,52 @@
+<!--
+Developed with the contribution of the European Commission - Directorate General for Maritime Affairs and Fisheries
+© European Union, 2015-2016.
+
+This file is part of the Integrated Fisheries Data Management (IFDM) Suite. The IFDM Suite is free software: you can
+redistribute it and/or modify it under the terms of the GNU General Public License as published by the
+Free Software Foundation, either version 3 of the License, or any later version. The IFDM Suite is distributed in
+the hope that it will be useful, but WITHOUT ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or
+FITNESS FOR A PARTICULAR PURPOSE.  See the GNU General Public License for more details. You should have received a
+copy of the GNU General Public License along with the IFDM Suite. If not, see <http://www.gnu.org/licenses/>.
+-->
+<div ng-controller="CatchdetailsCtrl" class="catch-details">
+	<fieldset class="col-md-12 fieldsetStyle catch-fieldset">
+		<legend class="fieldsetLegendStyle catch-legend">
+			<a>{{'activity.catch_details_title' | i18n }}</a>
+		</legend>
+		<!-- CATCH DETAILS CONTAINER -->
+		<div class="catch-details-container">
+			<a class="btn-trip-quit" title="{{'activity.trip_summary_quit_trip_detail' | i18n }}" ng-click="quitTripSummary()"><i class="fa fa-share-square-o"></i></a>
+    		<a class="btn-print" title="{{'activity.trip_summary_export_trip' | i18n }}"><i class="fa fa-print"></i></a>
+			<!-- TRIP OVERVIEW PANEL -->
+			<div class="row summary-row">
+				<trip-overview-panel class="col-md-12 summary-section" trip="fishingTripDetails"></trip-overview-panel>
+			</div>
+			<!-- TABLE CONTAINER -->
+			<div class="table-container">
+				<div class="table-responsive-force" ng-repeat="table in tables | orderBy: 'order'" ng-if="isCatchDetailsLoaded">
+					<table class="table table-striped table-condensed table-bordered">
+						<thead>
+							<tr ng-repeat="headerRow in table.headers" ng-class="{'upperHeader': !$last}">
+								<th ng-if="$first && table.nrGlobalHeaders" rowspan="{{table.headers.length-1}}" colspan="{{table.nrGlobalHeaders}}" class="invisible-header table-title">
+									<span ng-if="table.title">{{'activity.catch_details_table_name_' + table.title | i18n }}</span>
+								</th>
+								<th ng-repeat="header in headerRow track by $index" colspan="{{header.width}}" ng-class="{'species-code': $index >= table.nrGlobalHeaders,'invisible-header': !header.title }">{{header.title}}</th>
+							</tr>
+						</thead>
+						<tbody>
+							<tr ng-repeat="row in table.rows">
+								<td ng-repeat="item in row track by $index" ng-class="{'global-table-attr': $index < table.nrGlobalHeaders}">{{item}}</td>
+							</tr>
+							<tr ng-if="table.totals">
+								<td ng-if="table.nrGlobalHeaders" colspan="{{table.nrGlobalHeaders}}" class="total-col">{{'activity.catch_details_table_total' | i18n}}</td>
+								<td ng-repeat="total in table.totals track by $index">{{total}}</td>
+							</tr>
+						</tbody>
+					</table>
+				</div>
+			</div>
+		</div>
+	</fieldset>
+
+</div>

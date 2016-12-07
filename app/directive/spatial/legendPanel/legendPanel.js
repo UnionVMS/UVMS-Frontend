@@ -1,5 +1,5 @@
 /*
-﻿Developed with the contribution of the European Commission - Directorate General for Maritime Affairs and Fisheries
+Developed with the contribution of the European Commission - Directorate General for Maritime Affairs and Fisheries
 © European Union, 2015-2016.
 
 This file is part of the Integrated Fisheries Data Management (IFDM) Suite. The IFDM Suite is free software: you can
@@ -8,7 +8,7 @@ Free Software Foundation, either version 3 of the License, or any later version.
 the hope that it will be useful, but WITHOUT ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or
 FITNESS FOR A PARTICULAR PURPOSE.  See the GNU General Public License for more details. You should have received a
 copy of the GNU General Public License along with the IFDM Suite. If not, see <http://www.gnu.org/licenses/>.
- */
+*/
 angular.module('unionvmsWeb').directive('imageOnLoad', function(){
     return {
         restrict: 'A',
@@ -25,7 +25,7 @@ angular.module('unionvmsWeb').directive('imageOnLoad', function(){
         }
     };
 })
-.directive('legendPanel', function(locale, mapService, unitConversionService, $localStorage, $compile) {
+.directive('legendPanel', function(locale, mapService, unitConversionService, $localStorage, $compile, layerPanelService) {
 	return {
 		restrict: 'EA',
 		replace: true,
@@ -295,12 +295,16 @@ angular.module('unionvmsWeb').directive('imageOnLoad', function(){
 		        scope.initialized = true;
 		        scope.legendRecords = ctrl.init();
 	            
-	            scope.$on('reloadLegend', function(){
+				layerPanelService.panelToReload.push(function(){
+					scope.legendRecords = ctrl.init();
+				});
+	            /*scope.$on('reloadLegend', function(){
 	                scope.legendRecords = ctrl.init();
-	            });
+	            });*/
 		        $compile(element)(scope);
             }
 		    
 		}
 	};
 });
+

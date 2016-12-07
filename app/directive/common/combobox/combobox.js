@@ -1,5 +1,5 @@
 /*
-﻿Developed with the contribution of the European Commission - Directorate General for Maritime Affairs and Fisheries
+Developed with the contribution of the European Commission - Directorate General for Maritime Affairs and Fisheries
 © European Union, 2015-2016.
 
 This file is part of the Integrated Fisheries Data Management (IFDM) Suite. The IFDM Suite is free software: you can
@@ -8,8 +8,8 @@ Free Software Foundation, either version 3 of the License, or any later version.
 the hope that it will be useful, but WITHOUT ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or
 FITNESS FOR A PARTICULAR PURPOSE.  See the GNU General Public License for more details. You should have received a
 copy of the GNU General Public License along with the IFDM Suite. If not, see <http://www.gnu.org/licenses/>.
- */
-angular.module('unionvmsWeb').directive('combobox', function($window, comboboxService) {
+*/
+angular.module('unionvmsWeb').directive('combobox', function(comboboxService) {
 	return {
 		restrict: 'E',
 		replace: true,
@@ -22,17 +22,17 @@ angular.module('unionvmsWeb').directive('combobox', function($window, comboboxSe
             callbackParams : '=',
             ngDisabled : '=',
             lineStyle : '=',
-            destComboList : '=',
+            destComboList : '@',
             editable : '=',
             multiple : '=',
-            componentsWithScroll : '=',
             uppercase : '=',
             initialtext : '@',
             isLoading : '=',
             group: '@',
             name: '@',
-            comboSection: '@',
-            initCallback: '='
+            comboSection: '=',
+            initCallback: '=',
+            noPlaceholderOnList: '@'
 		},
         templateUrl: 'directive/common/combobox/combobox.html',
 		link: function(scope, element, attrs, ctrl) {
@@ -41,19 +41,20 @@ angular.module('unionvmsWeb').directive('combobox', function($window, comboboxSe
 			scope.initialitem = true;
 			
 			if(scope.uppercase){
-        		scope.initialtext = scope.initialtext.toUpperCase();
+                if(angular.isDefined(scope.initialtext)){
+        		    scope.initialtext = scope.initialtext.toUpperCase();
+                }
+                if(angular.isDefined(scope.items) && scope.items.length > 0){
+                    for(var i=0;i<scope.items.length;i++){
+                        scope.items[i].text = scope.items[i].text.toUpperCase();
+                    }
+                }
         	}
 			
-            if('noPlaceholderItem' in attrs){
+            if(scope.noPlaceholderOnList){
                 scope.initialitem = false;
             }
 
-            //Should be able to select the initial text item?
-            scope.initialtextSelectable = false;
-            if('initialtextSelectable' in attrs){
-                scope.initialtextSelectable = true;
-            }
-            
             if(scope.editable){
             	scope.placeholder = scope.initialtext;
             	scope.newItem = {text : ""};
@@ -61,38 +62,20 @@ angular.module('unionvmsWeb').directive('combobox', function($window, comboboxSe
             
             if(scope.multiple){
         		scope.selectedItems = [];
-        		if(angular.isUndefined(scope.ngModel)){
-            		scope.ngModel = [];
-            	}
         	}
             
             if(scope.group){
-        		scope.comboboxServ.initializeGroup(scope.group,scope);
-                scope.$on('$destroy', function() {
-                    scope.comboboxServ.removeCombo(scope.group,scope);
-                });
-        	}
+                scope.comboboxServ.initializeGroup(scope.group,scope);
+            }
             
             //Get the label for an item
-            //Default item variable "text" is used if no title attr is set
             scope.getItemLabel = function(item){
-                var label;
-                if(attrs.title){
-                    label = item[attrs.title];
-                }else{
-                    label = item.text;
-                }
-                return label;
+                return item.text;
             };
 
             //Get the code (id) for an item
-            //Default item variable "code" is used if no data attr is set
             var getItemCode = function(item){
-                if(attrs.data){
-                    return item[attrs.data];
-                }else{
-                    return item.code;
-                }
+                return item.code;
             };
             
             //Find initial value
@@ -106,15 +89,8 @@ angular.module('unionvmsWeb').directive('combobox', function($window, comboboxSe
 
             //Set the label of the dropdown based on the current value of ngMode
             scope.setLabel = function() {
-                if ((scope.ngModel !== undefined && scope.ngModel === "") || scope.ngModel === null || scope.ngModel === undefined || (_.isArray(scope.ngModel) && scope.ngModel.length === 0)) {
-                    if(scope.initialtext){
-                        scope.currentItemLabel = scope.initialtext;
-                    }else if(!scope.multiple){
-                        if (scope.ngModel && scope.loadedItems){
-                    		scope.currentItemLabel = scope.getItemLabel(scope.ngModel);
-                    		scope.currentItemLabel = scope.getItemLabel(scope.loadedItems[0]);
-                        }
-                    }
+                if ((scope.ngModel === undefined || scope.ngModel === "" || scope.ngModel === null || (_.isArray(scope.ngModel) && scope.ngModel.length === 0)) && scope.initialtext) {
+                    scope.currentItemLabel = scope.initialtext;
                 }
                 
                 if(!scope.multiple){
@@ -138,10 +114,6 @@ angular.module('unionvmsWeb').directive('combobox', function($window, comboboxSe
                     scope.comboboxServ.updateComboListGroup(scope.group, newVal, oldVal);
                 }
                 
-            	if(scope.uppercase && newVal && !angular.equals(newVal, newVal.toUpperCase())){
-            		scope.ngModel = newVal.toUpperCase();
-            		return;
-            	}
             	if(scope.multiple){
             		scope.selectedItems = [];
             		scope.currentItemLabel = undefined;
@@ -168,24 +140,24 @@ angular.module('unionvmsWeb').directive('combobox', function($window, comboboxSe
 		                            }
                     			}
                     		}
-                    		if(scope.selectedItems.length === 0){
-                    			scope.currentItemLabel = scope.getItemLabel(scope.initialValue);
-                    		}else{
-                    			scope.currentItemLabel = "";
-                    		}
+                            scope.currentItemLabel = "";
                     	}else{
-                    		for(var k = 0; k < scope.loadedItems.length; k++){
+                            var comboItems = scope.loadedItems;
+                            if(scope.comboSection){
+                                comboItems = scope.loadedItems[0].items;
+                            }
+                    		for(var k = 0; k < comboItems.length; k++){
                     			if(scope.editable){
                     				if(scope.comboForm.comboEditableInput.$dirty){
                 						scope.isFilterActive = true;
                     				}
-                    				if(angular.equals(newVal, scope.getItemLabel(scope.loadedItems[k]))) {
-		                        		scope.newItem.text = scope.getItemLabel(scope.loadedItems[k]);
+                    				if(angular.equals(newVal, scope.getItemLabel(comboItems[k]))) {
+		                        		scope.newItem.text = scope.getItemLabel(comboItems[k]);
 		                                break;
 		                            }
                     			}else{
-                    				if(angular.equals(newVal, getItemCode(scope.loadedItems[k]))) {
-		                        		scope.currentItemLabel = scope.getItemLabel(scope.loadedItems[k]);
+                    				if(angular.equals(newVal, getItemCode(comboItems[k]))) {
+		                        		scope.currentItemLabel = scope.getItemLabel(comboItems[k]);
 		                                break;
 		                            }
                     			}
@@ -217,23 +189,34 @@ angular.module('unionvmsWeb').directive('combobox', function($window, comboboxSe
 	                			}
 	                		});
                 		}
-                	}else{                	
-                		var item = getItemObjectByCode(scope.ngModel);
-	                    if (angular.isDefined(item)){
-	                        scope.currentItemLabel = scope.getItemLabel(item);
-	                    }
+                	}else if(angular.isDefined(scope.ngModel)){                   
+                        var item = getItemObjectByCode(scope.ngModel);
+                        if (angular.isDefined(item)){
+                            scope.currentItemLabel = scope.getItemLabel(item);
+                        }
                 	}
+                }else{
+                    scope.loadedItems = [];
                 }
             },true);
+
+            scope.$watch('initialtext',function(newVal,oldVal){
+                if(!angular.isDefined(scope.ngModel)){
+                    scope.currentItemLabel = newVal;
+                }
+            });
             
             //Select item in dropdown
             scope.selectVal = function(item){
                 //Disabled item
-                if(scope.disableItem(item)){
+                if(scope.disabledItem(item)){
                     return;
                 }
 
                 if(scope.multiple){
+                    if(!angular.isDefined(scope.ngModel)){
+                        scope.ngModel = [];
+                    }
                 	if(scope.ngModel.indexOf(item.code) === -1){
                 		var arr = [].concat(scope.ngModel);
                 		arr.push(getItemCode(item));
@@ -273,7 +256,7 @@ angular.module('unionvmsWeb').directive('combobox', function($window, comboboxSe
                 }
             };
 
-            scope.disableItem = function(item){
+            scope.disabledItem = function(item){
                 var itemCode = getItemCode(item);
                 if(angular.isDefined(scope.disabledItems)){
                     if(scope.ngModel !== itemCode && scope.disabledItems.indexOf(itemCode) >= 0){
@@ -306,12 +289,18 @@ angular.module('unionvmsWeb').directive('combobox', function($window, comboboxSe
             		comboboxService.setActiveCombo(null);
             	}
             };
+
+            function closeCombo() {
+                scope.isOpen = false;
+                scope.comboboxServ.setActiveCombo(null);
+            }
             
             function loadLineStyleItems() {
             	scope.loadedItems = [{'code': 'solid', 'text': '5,0'},{'code': 'dashed', 'text': "10,5"},{'code': 'dotted', 'text': "5,5"},{'code': 'dotdashed', 'text': "5,5,10,5"}];
             }
             
             scope.removeSelectedItem = function(code){
+                closeCombo();
             	scope.ngModel.splice(scope.ngModel.indexOf(code),1);
             	var arr = [];
             	angular.copy(scope.ngModel,arr);
@@ -319,6 +308,7 @@ angular.module('unionvmsWeb').directive('combobox', function($window, comboboxSe
             };
             
             scope.removeAllSelected = function(){
+                closeCombo();
             	scope.ngModel = [];
             };
             
@@ -356,8 +346,20 @@ angular.module('unionvmsWeb').directive('combobox', function($window, comboboxSe
                 if(scope.initialitem){
                     scope.addDefaultValueToDropDown();
                 }
-            };
 
+                scope.$on('$destroy', function() {
+                    if(scope.group){
+                        scope.comboboxServ.removeCombo(scope.group,scope);
+                    }
+                    var comboToRemove = angular.element('#' + scope.comboboxId);
+                    if(comboToRemove){
+                        comboToRemove.remove();
+                    }
+                });
+                
+
+            };
+            
             init();
             if(angular.isDefined(scope.initCallback)){
                 scope.initCallback(scope.comboboxId);
@@ -365,3 +367,4 @@ angular.module('unionvmsWeb').directive('combobox', function($window, comboboxSe
 		}
 	};
 });
+

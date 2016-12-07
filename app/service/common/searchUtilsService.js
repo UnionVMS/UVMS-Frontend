@@ -1,5 +1,5 @@
 /*
-﻿Developed with the contribution of the European Commission - Directorate General for Maritime Affairs and Fisheries
+Developed with the contribution of the European Commission - Directorate General for Maritime Affairs and Fisheries
 © European Union, 2015-2016.
 
 This file is part of the Integrated Fisheries Data Management (IFDM) Suite. The IFDM Suite is free software: you can
@@ -21,6 +21,10 @@ angular.module('unionvmsWeb').factory('searchUtilsService',function(SearchField,
             if ( dateCriterias.indexOf(searchCriterias[i].key) >= 0){
                     //Values is already in UTC but we need to format it with timezone
                     searchCriterias[i].value = dateTimeService.formatUTCDateWithTimezone(searchCriterias[i].value);
+            }
+            
+            if (searchCriterias[i].key === 'TYPE' && searchCriterias[i].value === 'Reporting'){
+                searchCriterias[i].value = searchCriterias[i].value.toUpperCase();
             }
         }
 

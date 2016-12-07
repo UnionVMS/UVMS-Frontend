@@ -1,5 +1,5 @@
 /*
-﻿Developed with the contribution of the European Commission - Directorate General for Maritime Affairs and Fisheries
+Developed with the contribution of the European Commission - Directorate General for Maritime Affairs and Fisheries
 © European Union, 2015-2016.
 
 This file is part of the Integrated Fisheries Data Management (IFDM) Suite. The IFDM Suite is free software: you can
@@ -8,7 +8,7 @@ Free Software Foundation, either version 3 of the License, or any later version.
 the hope that it will be useful, but WITHOUT ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or
 FITNESS FOR A PARTICULAR PURPOSE.  See the GNU General Public License for more details. You should have received a
 copy of the GNU General Public License along with the IFDM Suite. If not, see <http://www.gnu.org/licenses/>.
- */
+*/
 angular.module('unionvmsWeb').directive('numericInput',['$compile', function($compile) {
 	return {
 		restrict: 'E',
@@ -18,8 +18,8 @@ angular.module('unionvmsWeb').directive('numericInput',['$compile', function($co
 		scope: {
             ngModelNumber: '=ngModel',
             ngChange: '&',
-            min: '@',
-            max: '@',
+            min: '=',
+            max: '=',
             ngRequired: '=',
             step: '@',
 			ngDisabled: '=',
@@ -208,7 +208,7 @@ angular.module('unionvmsWeb').controller('numericInputCtrl',['$scope','$interval
 				valueNoLetters = valueNoLetters.replace(/[^0-9.-]/g, '');
 				
 				if(valueNoLetters.split('.').length > 2 || valueNoLetters.charAt(0) === '.' || valueNoLetters.charAt(valueNoLetters.length - 1) === '-'){
-					if(!$scope.changedNumberValue){
+					if(!$scope.changedNumberValue || parseFloat(valueNoLetters) !== $scope.ngModelNumber){
 						$scope.changedTextValue = true;
 						$scope.ngModelNumber = undefined;
 					}
@@ -217,13 +217,13 @@ angular.module('unionvmsWeb').controller('numericInputCtrl',['$scope','$interval
 				if(!angular.equals(newVal, valueNoLetters)){
 					$scope.textValue = valueNoLetters;
 				}else{
-					if(!$scope.changedNumberValue){
+					if(!$scope.changedNumberValue || parseFloat(valueNoLetters) !== $scope.ngModelNumber){
 						$scope.changedTextValue = true;
 						$scope.ngModelNumber = parseFloat(newVal);
 					}
 				}
 			}else{
-				if(!$scope.changedNumberValue){
+				if(!$scope.changedNumberValue || parseFloat(newVal) !== $scope.ngModelNumber){
 					$scope.changedTextValue = true;
 					$scope.ngModelNumber = null;
 				}
@@ -269,22 +269,52 @@ angular.module('unionvmsWeb').controller('numericInputCtrl',['$scope','$interval
 }]);
 
 angular.module('unionvmsWeb').directive('textInputStatus',function() {
-	  return {
-	      restrict: 'A',
-	      require: 'ngModel',
-	      link: function(scope, elm, attrs, ctrl) {
-			  scope.ctrl = ctrl;
-	    	  var updateFieldStatus = function(value) {
-	    		  var re = /^[-]?\d+(\.?\d*)?$/g;
-	    		  if(re.test(value) || !value){
-	    			  ctrl.$setValidity('invalidNumber',true);
-	    		  }else{
-	    			  ctrl.$setValidity('invalidNumber',false);
-	    		  }
-	              return value;
-	          };
-	          ctrl.$parsers.push(updateFieldStatus);
-	          ctrl.$formatters.push(updateFieldStatus);
-	      }
-	  };
-	});
+  return {
+      restrict: 'A',
+      require: 'ngModel',
+      link: function(scope, elm, attrs, ctrl) {
+		  scope.ctrl = ctrl;
+    	  var updateFieldStatus = function(value) {
+    		  var re = /^[-]?\d+(\.?\d*)?$/g;
+    		  if(re.test(value) || !value){
+    			  ctrl.$setValidity('invalidNumber',true);
+    		  }else{
+    			  ctrl.$setValidity('invalidNumber',false);
+    		  }
+              return value;
+          };
+          ctrl.$parsers.push(updateFieldStatus);
+          ctrl.$formatters.push(updateFieldStatus);
+      }
+  };
+});
+
+angular.module('unionvmsWeb').directive('validateMinInRange', function(){
+    return {
+        restrict: 'A',
+        require: 'ngModel',
+        link: function(scope, el, attrs, ctrl){
+            function checkMinValue(min, max){
+                var valid = true;
+                if (min !== undefined && max!== undefined && min !== null && max !== null && min > max){
+                    valid = false;
+                }
+                
+                ctrl.$setValidity('minBiggerThanMax', valid);
+            }
+            
+            scope.$watch('max', function(newValue){
+                checkMinValue(scope.ngModelNumber, newValue);
+            });
+            
+            var checkValidity = function(min){
+                checkMinValue(min, scope.max);
+                return min;
+            };
+            
+            ctrl.$parsers.push(checkValidity);
+            ctrl.$formatters.push(checkValidity);
+        }
+    };
+});
+

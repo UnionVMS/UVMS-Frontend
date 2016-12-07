@@ -1,5 +1,5 @@
 <!--
-﻿Developed with the contribution of the European Commission - Directorate General for Maritime Affairs and Fisheries
+Developed with the contribution of the European Commission - Directorate General for Maritime Affairs and Fisheries
 © European Union, 2015-2016.
 
 This file is part of the Integrated Fisheries Data Management (IFDM) Suite. The IFDM Suite is free software: you can
@@ -10,7 +10,7 @@ FITNESS FOR A PARTICULAR PURPOSE.  See the GNU General Public License for more d
 copy of the GNU General Public License along with the IFDM Suite. If not, see <http://www.gnu.org/licenses/>.
 -->
 <div class="areasTableContainer" ng-controller="UserareasCtrl">
-	<div ng-show="editingType === 'list'">
+	<div ng-show="editingType === 'list'" class="editingType">
 		<!-- NEW AREA BTN -->
 		<div class="row newAreaBtn">
 	       <div class="col-md-12">
@@ -36,9 +36,9 @@ copy of the GNU General Public License along with the IFDM Suite. If not, see <h
                      <div class="tr row" ng-show="!tableLoading && !displayedUserAreas.length">
                          <div class="th col-md-12"><table-alert type="'info'" msg="'areas.table_no_data'" visible="!displayedUserAreas.length && !tableLoading"></table-alert></div>
                      </div>
-					 <div class="tr row" ng-if="tableLoading && !alert.isLoading">
+					 <!-- <div class="tr row" ng-if="tableLoading && !alert.isLoading">
                          <div class="th col-md-12 loading-spinner-cl"><i class="fa fa-spinner fa-spin loading-spinner"></i></div>
-                     </div>
+                     </div> -->
                  </div>
                  <div class="tbody col-md-12">
                      <div ng-repeat="userArea in displayedUserAreas" class="tr row" ng-show="!tableLoading">
@@ -62,7 +62,7 @@ copy of the GNU General Public License along with the IFDM Suite. If not, see <h
 			</div>
 		</div>
 	</div>
-	<div ng-show="editingType === 'edit'">
+	<div ng-show="editingType === 'edit'" class="editingType">
 		<!-- TOOL BUTTONS -->
 		<div class="editingTools text-center">
 			<div class="btn-group" role="group" aria-label="editing buttons">
@@ -126,15 +126,6 @@ copy of the GNU General Public License along with the IFDM Suite. If not, see <h
 				</button>
 			</div>
 		</div>
-		<div class="form-horizontal">
-			<div class="form-group">
-				<label for="userAreaTransp" class="col-md-4 slider-label">{{'areas.area_transparency' | i18n}}</label>
-				<div class="col-md-8">
-					<slider id="userAreaTransp" ng-model="userAreaTransp" min="0" step="5" max="100" formatter="formatTooltip(value)"
-						on-slide="setTransparency(value, $event)" slider-tooltip-position="bottom" class="form-control noBorder"></slider>
-				</div>
-			</div>
-		</div>
 		<div class="area-form-container">
 			<!-- CIRCULAR AREAS -->
 			<div class="circular-areas-form" ng-show="activeTool === 'circular'">
@@ -146,7 +137,7 @@ copy of the GNU General Public License along with the IFDM Suite. If not, see <h
 								<label for="circularProjection">{{'areas.editing_projection_label' | i18n}}</label>
 							</div>
 							<div class="col-md-9 proj-combo">
-								<combobox ng-model="selectedCircularProj" items="projections.items" name="circularProjection" ng-change="changeCircularProj(selectedCircularProj)" ng-init="setMapProjectionOnCombo()" components-with-scroll="'div.area-form-container'" ng-if="selectedCircularProj" is-loading="projections.isLoading"></combobox>
+								<combobox ng-model="selectedCircularProj" items="projections.items" name="circularProjection" ng-change="changeCircularProj(selectedCircularProj)" ng-init="setMapProjectionOnCombo()" ng-if="selectedCircularProj" is-loading="projections.isLoading" dest-combo-list="#areaManagement"></combobox>
 							</div>
 						</div>
 					</div>
@@ -154,7 +145,7 @@ copy of the GNU General Public License along with the IFDM Suite. If not, see <h
 						<!-- COORDINATE X -->
 						<div class="form-group col-md-12 no-padding">
 							<div class="col-md-3 control-label">
-								<label for="pointx">{{'areas.long_coord_x' | i18n}}</label>
+								<label for="pointx" class="required-field">{{'areas.long_coord_x' | i18n}}</label>
 							</div>
 							<div class="col-md-9 control-input">
 							    <numeric-input ng-model="userArea.centroidCoords[0]" name="pointx" class="form-control" step="any" ng-required="true"></numeric-input>
@@ -163,7 +154,7 @@ copy of the GNU General Public License along with the IFDM Suite. If not, see <h
 						<!-- COORDINATE Y -->
 						<div class="form-group col-md-12 no-padding">
 							<div class="col-md-3 control-label">
-								<label for="pointy">{{'areas.long_coord_y' | i18n}}</label>
+								<label for="pointy" class="required-field">{{'areas.long_coord_y' | i18n}}</label>
 							</div>
 							<div class="col-md-9 control-input">
 							    <numeric-input ng-model="userArea.centroidCoords[1]" name="pointy" class="form-control" step="any" ng-required="true"></numeric-input>
@@ -172,13 +163,13 @@ copy of the GNU General Public License along with the IFDM Suite. If not, see <h
 						<!-- DISTANCE -->
 						<div class="form-group col-md-12 no-padding">
 							<div class="col-md-3 control-label">
-								<label for="radius">{{'areas.buffer_radius' | i18n}}</label>
+								<label for="radius" class="required-field">{{'areas.buffer_radius' | i18n}}</label>
 							</div>
 							<div class="col-md-4 control-input">
 							    <numeric-input ng-model="bufferRadius" name="radius" class="form-control" step="any" min="0" ng-required="true"></numeric-input>
 							</div>
 							<div class="col-md-5 control-input">
-							    <combobox name="distUnit" ng-model="selectedUnit" items="distUnits" components-with-scroll="'div.area-form-container'">
+							    <combobox name="distUnit" ng-model="selectedUnit" items="distUnits" dest-combo-list="#areaManagement"></combobox>
 							</div>
 						</div>
 					</ng-form>
@@ -198,8 +189,8 @@ copy of the GNU General Public License along with the IFDM Suite. If not, see <h
 								<label for="editingProjection">{{'areas.editing_projection_label' | i18n}}</label>
 							</div>
 							<div class="col-md-9 proj-combo">
-								<combobox ng-model="selectedProj" items="projections.items" name="editingProjection" ng-change="changeProjection(selectedProj)" ng-init="changeProjection(selectedProj)" components-with-scroll="'div.area-form-container'"
-								is-loading="projections.isLoading"></combobox>
+								<combobox ng-model="selectedProj" items="projections.items" name="editingProjection" ng-change="changeProjection(selectedProj)" ng-init="changeProjection(selectedProj)"
+								is-loading="projections.isLoading" dest-combo-list="#areaManagement"></combobox>
 							</div>
 						</div>
 					</div>
@@ -250,7 +241,7 @@ copy of the GNU General Public License along with the IFDM Suite. If not, see <h
 				</div>
 				<ng-form name="userAreaForm" novalidate>
 					<div class="form-group userAreaNameField" ng-class="{'has-error': (userAreaForm.userAreaName.$dirty || userAreaSubmitted) && userAreaForm.userAreaName.$invalid}">
-						<label for="userAreaName">{{'areas.user_area_name' | i18n }}</label>
+						<label for="userAreaName" class="required-field">{{'areas.user_area_name' | i18n }}</label>
 						<input type="text" class="form-control" name="userAreaName" ng-required="true" ng-model="userArea.name"/>
 						<div class="innerErrorMessagesInputWithUpLabel" ng-messages="userAreaForm.userAreaName.$error" ng-show="(userAreaForm.userAreaName.$dirty || userAreaSubmitted) && userAreaForm.userAreaName.$invalid">
 							<div ng-message="required">{{'spatial.required_field_error_message' | i18n }}</div>
@@ -263,18 +254,18 @@ copy of the GNU General Public License along with the IFDM Suite. If not, see <h
 					<div class="form-group datesGroup">
 						<div class="col-md-6 withoutPadding rightPadding">
 							<label for="userAreaFrom">{{'areas.user_area_valid_from' | i18n }}</label>
-							<datepicker-input time="true" model="userArea.startDate" name="userAreaFrom" max-date="userArea.endDate" ng-change-callback="resetDateTimePicker" input-field-id="user-area-start-date-picker"></datepicker-input>
+							<datepicker-input time="true" model="userArea.startDate" name="userAreaFrom" max-date="userArea.endDate" ng-change-callback="resetDateTimePicker" input-field-id="user-area-start-date-picker" fullscreen-location="'#areaManagement'"></datepicker-input>
 						</div>
 						<div class="col-md-6 withoutPadding leftPadding">
 							<label for="userAreaTo">{{'areas.user_area_valid_to' | i18n }}</label>
-							<datepicker-input time="true" model="userArea.endDate" name="userAreaTo" min-date="userArea.startDate" ng-change-callback="resetDateTimePicker" input-field-id="user-area-end-date-picker"></datepicker-input>
+							<datepicker-input time="true" model="userArea.endDate" name="userAreaTo" min-date="userArea.startDate" ng-change-callback="resetDateTimePicker" input-field-id="user-area-end-date-picker" fullscreen-location="'#areaManagement'"></datepicker-input>
 						</div>
 					</div>
 					<div class="form-group userAreaTypeGroup" >
-						<label class="col-md-12 withoutPadding" for="userAreaType">{{'areas.user_area_type' | i18n }}</label>
+						<label class="col-md-12 withoutPadding required-field" for="userAreaType">{{'areas.user_area_type' | i18n }}</label>
 						<div class="col-md-12 withoutPadding" ng-class="{'has-error': (userAreaForm.userAreaType.$dirty || userAreaSubmitted) && userAreaForm.userAreaType.$invalid}">
 							<div class="col-md-6 withoutPadding rightPadding">
-								<combobox ng-model="userArea.subType" items="areaTypes" editable="true" components-with-scroll="'div.area-form-container'" uppercase="true" name="userAreaType" initialtext="{{'spatial.area_selection_modal_area_type_label' | i18n | uppercase}}" ng-required="true" is-loading="isLoadingAreaTypes"></combobox>
+								<combobox ng-model="userArea.subType" items="areaTypes" editable="true" uppercase="true" name="userAreaType" initialtext="{{'spatial.area_selection_modal_area_type_label' | i18n | uppercase}}" ng-required="true" is-loading="isLoadingAreaTypes" dest-combo-list="#areaManagement"></combobox>
 							</div>
 							<div class="col-md-6 withoutPadding leftPadding">
 								<div ng-messages="userAreaForm.userAreaType.$error" ng-show="(userAreaForm.userAreaType.$dirty || userAreaSubmitted) && userAreaForm.userAreaType.$invalid">
@@ -285,7 +276,7 @@ copy of the GNU General Public License along with the IFDM Suite. If not, see <h
 					</div>
  					<div class="form-group scopeSelection" ng-show="isAllowed('Spatial', 'SHARE_USER_DEFINED_AREAS')">
 						<label for="scopeSelection">{{'areas.user_area_scope_selection' | i18n }}</label>
-						<combobox name="scopeSelection" ng-model="userArea.scopeSelection" multiple="true" items="userScopes"  components-with-scroll="'div.area-form-container'" initialtext="{{'areas.user_area_select_scope' | i18n}}"></combobox>
+						<combobox name="scopeSelection" ng-model="userArea.scopeSelection" multiple="true" items="userScopes" initialtext="{{'areas.user_area_select_scope' | i18n}}" dest-combo-list="#areaManagement"></combobox>
 					</div>
 					<div class="form-group" ng-show="isAllowed('Spatial', 'CREATE_USER_AREA_DATASET')">
 						<label for="datasetName" class="userAreaNameField">{{'areas.user_area_dataset_name' | i18n }}</label>
@@ -303,5 +294,6 @@ copy of the GNU General Public License along with the IFDM Suite. If not, see <h
 				<button class="btn btn-primary btn-action" ng-click="saveFeature('update')" ng-show="isUpdate">{{'areas.update_btn' | i18n}}</button>
 			</div>
 		</div>
-	</div>
+	</div>	
 </div>
+

@@ -1,5 +1,5 @@
 /*
-﻿Developed with the contribution of the European Commission - Directorate General for Maritime Affairs and Fisheries
+Developed with the contribution of the European Commission - Directorate General for Maritime Affairs and Fisheries
 © European Union, 2015-2016.
 
 This file is part of the Integrated Fisheries Data Management (IFDM) Suite. The IFDM Suite is free software: you can
@@ -8,11 +8,12 @@ Free Software Foundation, either version 3 of the License, or any later version.
 the hope that it will be useful, but WITHOUT ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or
 FITNESS FOR A PARTICULAR PURPOSE.  See the GNU General Public License for more details. You should have received a
 copy of the GNU General Public License along with the IFDM Suite. If not, see <http://www.gnu.org/licenses/>.
- */
+*/
 angular.module('unionvmsWeb').factory('spatialHelperService',function(userService, $state) {
 
 	var spServ = {
 	    defaultReports: [],
+	    roleName: undefined,
 	    tbControl: {
 	        measure: false,
 	        fullscreen: false,
@@ -57,6 +58,10 @@ angular.module('unionvmsWeb').factory('spatialHelperService',function(userServic
     
     spServ.getDefaultReport = function(useService){
         var context = userService.getCurrentContext();
+        if (!angular.isDefined(spServ.roleName) || spServ.roleName !== context.role.roleName){
+            spServ.roleName = context.role.roleName;
+            spServ.defaultReports = [];
+        }
         var defaultRep = _.findWhere(spServ.defaultReports, {scopeName: context.scope.scopeName});
         
         if (!angular.isDefined(defaultRep) && useService){
@@ -86,6 +91,19 @@ angular.module('unionvmsWeb').factory('spatialHelperService',function(userServic
 	        spServ.tbControl[config.map.tbControl[i].type] = true;
 	    }
 	};
+
+    spServ.deactivateFullscreen = function() {
+        if(screenfull.isFullscreen){
+            screenfull.exit();
+        }
+    };
+
+    spServ.configureFullscreenModal = function(modalInstance) {
+        modalInstance.rendered.then(function(){
+            $('body > .modal[uib-modal-window="modal-window"]').not($('.alert-modal-content')).appendTo('#map');
+            $('[uib-modal-backdrop="modal-backdrop"]').not($('.alert-modal-backdrop')).appendTo('#map');
+        });
+    };
 
 	return spServ;
 });

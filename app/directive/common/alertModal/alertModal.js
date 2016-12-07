@@ -1,5 +1,5 @@
 /*
-﻿Developed with the contribution of the European Commission - Directorate General for Maritime Affairs and Fisheries
+Developed with the contribution of the European Commission - Directorate General for Maritime Affairs and Fisheries
 © European Union, 2015-2016.
 
 This file is part of the Integrated Fisheries Data Management (IFDM) Suite. The IFDM Suite is free software: you can
@@ -8,24 +8,48 @@ Free Software Foundation, either version 3 of the License, or any later version.
 the hope that it will be useful, but WITHOUT ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or
 FITNESS FOR A PARTICULAR PURPOSE.  See the GNU General Public License for more details. You should have received a
 copy of the GNU General Public License along with the IFDM Suite. If not, see <http://www.gnu.org/licenses/>.
- */
-angular.module('unionvmsWeb').directive('alertModal', function($modal, $timeout) {
+*/
+angular.module('unionvmsWeb').factory('alertModalService', function($timeout){
+    var alertModalService = {
+        setReference: function(id){
+            this.sidePanelId = id;
+        },
+        clearReference: function(){
+            delete this.sidePanelId;
+        },
+        setSize: function(){
+            var panelWidth = parseInt(angular.element('#' + this.sidePanelId).css('width'));
+            angular.element('.alert-modal-content .modal-content').css('margin-left', panelWidth + 20);
+        },
+        resizeModal: function(){
+            var self = this;
+            $timeout(function(){
+                self.setSize();
+            }, 100);
+        }
+    };
+    
+    return alertModalService;
+})
+.directive('alertModal', function($modal, $timeout, alertModalService) {
 	return {
 		restrict: 'E',
 		replace: true,
 		scope: {
 		    ngModel: '=',
 		    targetElId: '@',
+		    sidePanelId: '@',
 		    timeout: '@',
 		    displayMsg : '=',
 		    displayType: '=' //one of danger, warning, success
 		},
 		require: 'ngModel',
-		link: function(scope, element, attrs, ngModel) {
+		link: function(scope, element, attrs, ctrl) {
 		    var resetModalStatus = function(){
 		        scope.ngModel = false;
                 scope.displayType = undefined;
                 scope.displayMsg = undefined;
+                alertModalService.clearReference();
 		    };
 		    
 		    var modalCtrl = function ($scope, $modalInstance){
@@ -35,12 +59,13 @@ angular.module('unionvmsWeb').directive('alertModal', function($modal, $timeout)
 		            close: function(){
 		                resetModalStatus();
 		                $modalInstance.close();
+		                delete scope.modalInstance;
 		            }
 		        };
 		    };
 		    
 		    scope.open = function(){
-		        var modalInstance = $modal.open({
+		        scope.modalInstance = $modal.open({
 	                templateUrl: 'directive/common/alertModal/alertModal.html',
 	                controller: modalCtrl,
 	                animation: true,
@@ -48,20 +73,34 @@ angular.module('unionvmsWeb').directive('alertModal', function($modal, $timeout)
 	                keyboard: false,
 	                size: 'lg',
 	                windowClass: 'alert-modal-content',
+	                backdropClass: 'alert-modal-backdrop',
+					openedClass: 'alert-open',
 	                resolve: function(){
 	                    return scope.data;
 	                }
 	            });
 		        
-		        modalInstance.rendered.then(function(){
+		        scope.modalInstance.rendered.then(function(){
 		            angular.element('.alert-modal-content').appendTo('#' + scope.targetElId);
+		            
+		            if (angular.isDefined(scope.sidePanelId)){
+		                alertModalService.setReference(scope.sidePanelId);
+		                alertModalService.setSize();
+		            }
+		        });
+		        
+		        scope.modalInstance.result.then(function(){
+		            resetModalStatus();
+                    delete scope.modalInstance;
 		        });
 		        
 		        if (angular.isDefined(scope.timeout)){
                     $timeout(function(){
-                        resetModalStatus();
-                        modalInstance.close();
-                    }, parseInt(scope.timeout), true, modalInstance);
+						if(angular.isDefined(scope.modalInstance)){
+							resetModalStatus();
+							scope.modalInstance.close();
+						}
+                    }, parseInt(scope.timeout), true, scope.modalInstance);
                 }
 		    };
 		    

@@ -1,5 +1,5 @@
 /*
-﻿Developed with the contribution of the European Commission - Directorate General for Maritime Affairs and Fisheries
+Developed with the contribution of the European Commission - Directorate General for Maritime Affairs and Fisheries
 © European Union, 2015-2016.
 
 This file is part of the Integrated Fisheries Data Management (IFDM) Suite. The IFDM Suite is free software: you can
@@ -8,48 +8,83 @@ Free Software Foundation, either version 3 of the License, or any later version.
 the hope that it will be useful, but WITHOUT ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or
 FITNESS FOR A PARTICULAR PURPOSE.  See the GNU General Public License for more details. You should have received a
 copy of the GNU General Public License along with the IFDM Suite. If not, see <http://www.gnu.org/licenses/>.
- */
-angular.module('unionvmsWeb').controller('VmspanelCtrl',function($scope, locale, globalSettingsService, reportService, mapService, csvWKTService, unitConversionService, vmsVisibilityService){
+*/
+angular.module('unionvmsWeb').controller('VmspanelCtrl',function($scope, locale, globalSettingsService, reportService, mapService, csvWKTService, unitConversionService, visibilityService, userService, tripSummaryService){
     $scope.selectedVmsTab = 'MOVEMENTS';
     $scope.isPosFilterVisible = false;
     $scope.isSegFilterVisible = false;
     $scope.isTrackFilterVisible = false;
+    $scope.isAlarmFilterVisible = false;
     $scope.itemsByPage = 25;
+    $scope.itemsByPageModal = 15;
+    $scope.modalCollapsed = false;
     $scope.executedReport = reportService;
     $scope.startDate = undefined;
     $scope.endDate = undefined;
+    $scope.alarmStartDate = undefined;
+    $scope.alarmEndDate = undefined;
     $scope.decimalDegrees = true;
-    $scope.attrVisibility = vmsVisibilityService;
+    $scope.attrVisibility = visibilityService;
+    $scope.tripSummServ = tripSummaryService;
     
     //Define VMS tabs
     var setVmsTabs = function(){
-        return [
-                {
-                    'tab': 'MOVEMENTS',
-                    'title': locale.getString('spatial.tab_movements')
-                },
-                {
-                    'tab': 'SEGMENTS',
-                    'title': locale.getString('spatial.tab_segments')
-                },
-                {
-                    'tab': 'TRACKS',
-                    'title': locale.getString('spatial.tab_tracks')
-                }
-            ];
-        };
-    
+        var tabs = [{
+            'tab': 'MOVEMENTS',
+            'title': locale.getString('spatial.tab_movements')
+        },{
+            'tab': 'SEGMENTS',
+            'title': locale.getString('spatial.tab_segments')
+        },{
+            'tab': 'TRACKS',
+            'title': locale.getString('spatial.tab_tracks')
+        }];
+        
+        if ($scope.isAllowed('Activity', 'ACTIVITY_ALLOWED')){
+            tabs.push({
+               'tab': 'TRIPS',
+               'title': locale.getString('spatial.tab_trips')
+            });
+        }
+        
+        tabs.push({
+            'tab': 'ALARMS',
+            'title': locale.getString('spatial.tab_alarms')
+        });
+        
+        return tabs;
+   };
         
    locale.ready('spatial').then(function(){
        $scope.vmsTabMenu = setVmsTabs();
    });
    
+   $scope.isTabVisible = function(tab){
+       var visible = true;
+       if (tab === 'ALARMS' && $scope.executedReport.alarms.length === 0){
+           visible = false;
+       }
+       
+       return visible;
+   };
+   
    $scope.selectVmsTab = function(tab){
        $scope.selectedVmsTab = tab;
+       $scope.modalCollapsed = false;
+       angular.element('.vmspanel-modal').removeClass('collapsed');
    };
    
    $scope.isVmsTabSelected = function(tab){
        return $scope.selectedVmsTab === tab;
+   };
+   
+   $scope.toggleCollapse = function(){
+       $scope.modalCollapsed = !$scope.modalCollapsed;
+       if($scope.modalCollapsed){
+           angular.element('.vmspanel-modal').addClass('collapsed');
+       }else{
+           angular.element('.vmspanel-modal').removeClass('collapsed');
+       }
    };
    
    $scope.toggleFiltersRow = function(type){
@@ -70,12 +105,20 @@ angular.module('unionvmsWeb').controller('VmspanelCtrl',function($scope, locale,
            case 'tracks':
                $scope.isTrackFilterVisible = !$scope.isTrackFilterVisible;
                break;
+           case 'alarms':
+               $scope.isAlarmFilterVisible = !$scope.isAlarmFilterVisible;
+               break;
        }
    };
    
    $scope.clearDateFilters = function(){
-       $scope.startDate = undefined;
-       $scope.endDate = undefined;
+       if ($scope.selectedVmsTab === 'MOVEMENTS'){
+           $scope.startDate = undefined;
+           $scope.endDate = undefined;
+       } else if ($scope.selectedVmsTab === 'ALARMS'){
+           $scope.alarmStartDate = undefined;
+           $scope.alarmEndDate = undefined;
+       }
    };
    
    //Positions table config
@@ -86,6 +129,21 @@ angular.module('unionvmsWeb').controller('VmspanelCtrl',function($scope, locale,
    
    //Tracks table config
    $scope.displayedTracks = [].concat($scope.executedReport.tracks);
+   
+   //Alarms table config
+   $scope.displayedAlarms = [].concat($scope.executedReport.alarms);
+
+   //Alarms table config
+   $scope.displayedTrips = [].concat($scope.executedReport.trips);
+   
+   $scope.getAlarmColor = function(status){
+       var style = {'background-color': mapService.getColorByStatus(mapService.styles.alarms, status)}; 
+       return style;
+   };
+   
+   $scope.isAllowed = function(module, feature){
+       return userService.isAllowed(feature, module, true);
+   };
    
    $scope.buildTrackGeomFromId = function(id, extent){
        var segLayer = mapService.getLayerByType('vmsseg');
@@ -114,6 +172,9 @@ angular.module('unionvmsWeb').controller('VmspanelCtrl',function($scope, locale,
        if (geomType === 'POSITION'){
            geom = new ol.geom.Point($scope.displayedPositions[index].geometry.coordinates);
            geom.set('GeometryType', 'Point');
+       } else if (geomType === 'ALARM'){
+           geom = new ol.geom.Point($scope.displayedAlarms[index].geometry.coordinates);
+           geom.set('GeometryType', 'Point');
        } else if (geomType === 'SEGMENT'){
            geom = new ol.geom.LineString($scope.displayedSegments[index].geometry.coordinates);
            geom.set('GeometryType', 'LineString');
@@ -121,7 +182,10 @@ angular.module('unionvmsWeb').controller('VmspanelCtrl',function($scope, locale,
            geom = new ol.geom.Polygon.fromExtent($scope.displayedTracks[index].extent);
        }
        
-       geom.transform('EPSG:4326', mapService.getMapProjectionCode());
+       if (geomType !== 'ALARM'){
+           geom.transform('EPSG:4326', mapService.getMapProjectionCode());
+       }
+       
        if (geomType !== 'TRACK'){
            mapService.highlightFeature(geom);
        } else {
@@ -129,8 +193,9 @@ angular.module('unionvmsWeb').controller('VmspanelCtrl',function($scope, locale,
            mapService.highlightFeature(trackGeom);
        }
        
+       angular.element('.vmspanel-modal').addClass('collapsed');
+       $scope.modalCollapsed = true;
        mapService.zoomTo(geom);
-       $scope.$emit('mapAction');
    };
    
    $scope.panTo = function(index, geomType){
@@ -139,33 +204,43 @@ angular.module('unionvmsWeb').controller('VmspanelCtrl',function($scope, locale,
            coords = ol.proj.transform($scope.displayedPositions[index].geometry.coordinates, 'EPSG:4326', mapService.getMapProjectionCode());
            geom = new ol.geom.Point(coords);
            geom.set('GeometryType', 'Point');
-           mapService.highlightFeature(geom);
+       } else if (geomType === 'ALARM'){
+           coords = $scope.displayedAlarms[index].geometry.coordinates;
+           geom = new ol.geom.Point(coords);
+           geom.set('GeometryType', 'Point');
        } else if (geomType === 'SEGMENT'){
            geom = new ol.geom.LineString($scope.displayedSegments[index].geometry.coordinates);
            geom.transform('EPSG:4326', mapService.getMapProjectionCode());
            geom.set('GeometryType', 'LineString');
            coords = mapService.getMiddlePoint(geom);
-           mapService.highlightFeature(geom);
        } else{
            coords = ol.proj.transform($scope.displayedTracks[index].nearestPoint, 'EPSG:4326', mapService.getMapProjectionCode());
            var polyExtent = new ol.geom.Polygon.fromExtent($scope.displayedTracks[index].extent);
            polyExtent.transform('EPSG:4326', mapService.getMapProjectionCode());
            geom = $scope.buildTrackGeomFromId($scope.displayedTracks[index].id, polyExtent.getExtent());
            geom.set('GeometryType', 'MultiLineString');
-           mapService.highlightFeature(geom);
        }
+       
+       if (geomType !== 'TRACK'){
+           mapService.highlightFeature(geom);
+       } else {
+           var trackGeom = $scope.buildTrackGeomFromId($scope.displayedTracks[index].id, geom.getExtent());
+           mapService.highlightFeature(trackGeom);
+       }
+       
+       angular.element('.vmspanel-modal').addClass('collapsed');
+       $scope.modalCollapsed = true;
        mapService.panTo(coords);
-       $scope.$emit('mapAction');
    };
    
    $scope.getFilters = function(type){
-       var el = angular.element('#' + type + 'Filters');
+       var elId = '#' + type + 'Filters';
+       
        var formId;
        var valid = true;
        switch (type) {
            case 'positions':
                formId = 'posFiltersForm';
-               
                break;
            case 'segments':
                formId = 'segFiltersForm';
@@ -173,8 +248,16 @@ angular.module('unionvmsWeb').controller('VmspanelCtrl',function($scope, locale,
            case 'tracks':
                formId = 'trackFiltersForm';
                break;
+           case 'alarms':
+               formId = 'alarmFiltersForm';
+               break;
        }
        
+       if ($scope.isModal){
+           elId += 'Modal';
+           formId += 'Modal';
+       }
+       var el = angular.element(elId);
        
        var data = $scope.getFilterData(formId);
        
@@ -196,13 +279,26 @@ angular.module('unionvmsWeb').controller('VmspanelCtrl',function($scope, locale,
            }
        );
        
-       //Get the dates
-       if (angular.isDefined($scope.startDate)){
-           obj.startDate = $scope.startDate;
+       //Get the dates for positions
+       if (selector.indexOf('posFilters') !== -1){
+           if (angular.isDefined($scope.startDate)){
+               obj.startDate = $scope.startDate;
+           }
+           
+           if (angular.isDefined($scope.endDate)){
+               obj.endDate = $scope.endDate;
+           }
        }
        
-       if (angular.isDefined($scope.endDate)){
-           obj.endDate = $scope.endDate;
+       //Get the dates for alarms
+       if (selector.indexOf('alarmFilters') !== -1){
+           if (angular.isDefined($scope.alarmStartDate)){
+               obj.startDate = $scope.alarmStartDate;
+           }
+           
+           if (angular.isDefined($scope.alarmEndDate)){
+               obj.endDate = $scope.alarmEndDate;
+           }
        }
        
        obj = _.pick(obj, function(value, key, obj){
@@ -281,17 +377,10 @@ angular.module('unionvmsWeb').controller('VmspanelCtrl',function($scope, locale,
    
    var getOrderedDataToExport = function(type, data){
 	   var header = [];
-	   var wkt;
 	   var speedUnit = unitConversionService.speed.getUnit();
        var distanceUnit = unitConversionService.distance.getUnit();
-       var geoJson;
-	   
-	   if(['segments','tracks'].indexOf(type) !== -1){
-		   wkt = new ol.format.WKT();
-	   }
-	   if(type === 'segments'){
-		   geoJson = new ol.format.GeoJSON();
-	   }
+       var wkt = new ol.format.WKT();
+       var geoJson = new ol.format.GeoJSON();
 	   
 	   var gotHeaders = false;
        return {'exportData': data.reduce(
@@ -305,14 +394,26 @@ angular.module('unionvmsWeb').controller('VmspanelCtrl',function($scope, locale,
 			    	   			if(!gotHeaders){
 			    	   				header.push(locale.getString('spatial.tab_vms_pos_table_header_fs'));
 			    	   			}
-			    	   			itemProperty = type === 'tracks'? rec.countryCode : rec.properties.countryCode;
+			    	   			if (type === 'tracks'){
+			    	   			    itemProperty = rec.countryCode; 
+			    	   			} else if (type === 'alarms'){
+			    	   			    itemProperty = rec.properties.fs;
+			    	   			} else {
+			    	   			    itemProperty = rec.properties.countryCode;
+			    	   			}
 			    	   			row.push(itemProperty);
 			    	   			break;
 			    	   		case 'extMark':
 			    	   			if(!gotHeaders){
 			    	   				header.push(locale.getString('spatial.tab_vms_pos_table_header_ext_mark'));
 			    	   			}
-			    	   			itemProperty = type === 'tracks'? rec.externalMarking : rec.properties.externalMarking;
+			    	   			if (type === 'tracks'){
+                                    itemProperty = rec.externalMarking; 
+                                } else if (type === 'alarms'){
+                                    itemProperty = rec.properties.extMark;
+                                } else {
+                                    itemProperty = rec.properties.externalMarking;
+                                }
 			    	   			row.push(itemProperty);
 			    	   			break;
 			    	   		case 'ircs':
@@ -436,31 +537,95 @@ angular.module('unionvmsWeb').controller('VmspanelCtrl',function($scope, locale,
 			    	   			}
 			    	   			row.push(unitConversionService.duration.timeToHuman(rec.totalTimeAtSea));
 			    	   			break;
+			    	   		case 'ruleName':
+    			    	   		 if(!gotHeaders){
+                                     header.push(locale.getString('spatial.rule_table_header_name'));
+                                 }
+    			    	   		 row.push(rec.properties.ruleName);
+			    	   		     break;
+			    	   		case 'ruleDesc':
+    			    	   		 if(!gotHeaders){
+                                     header.push(locale.getString('spatial.rule_table_header_desc'));
+                                 }
+                                 row.push(rec.properties.ruleDesc);
+                                 break;
+			    	   		case 'ticketOpenDate':
+    			    	   		 if(!gotHeaders){
+                                     header.push(locale.getString('spatial.rule_open_date'));
+                                 }
+                                 row.push(rec.properties.ticketOpenDate);
+                                 break;
+			    	   		case 'ticketStatus':
+    			    	   		 if(!gotHeaders){
+                                     header.push(locale.getString('spatial.rule_status'));
+                                 }
+                                 row.push(rec.properties.ticketStatus);
+                                 break;
+			    	   		case 'ticketUpdateDate':
+    			    	   		 if(!gotHeaders){
+                                     header.push(locale.getString('spatial.rule_update_date'));
+                                 }
+                                 row.push(rec.properties.ticketUpdateDate);
+                                 break;
+			    	   		case 'ticketUpdatedBy':
+    			    	   		 if(!gotHeaders){
+                                     header.push(locale.getString('spatial.rule_updated_by'));
+                                 }
+                                 row.push(rec.properties.ticketUpdatedBy);
+                                 break;
+			    	   		case 'ruleDefinitions':
+    			    	   		 if(!gotHeaders){
+                                     header.push(locale.getString('spatial.rule_definition'));
+                                 }
+                                 row.push(rec.properties.ruleDefinitions);
+                                 break;
 			    	   }
 		    	   }
 		       });
-			   if((type === 'segments' || (type === 'tracks' && $scope.executedReport.tabs.map === true)) && !gotHeaders){
+			   if((type === 'segments' || (type === 'tracks' && $scope.repNav.isViewVisible('mapPanel'))) && !gotHeaders){
 	        	   header.push(locale.getString('spatial.tab_vms_seg_table_header_geometry'));
+	           } else if (type === 'alarms' && !gotHeaders){
+	               header.push(locale.getString('spatial.tab_vms_pos_table_header_lat'));
+	               header.push(locale.getString('spatial.tab_vms_pos_table_header_lon'));
 	           }
 	           
-	           if (type === 'tracks' && $scope.executedReport.tabs.map === true){
+			   var geom = null;
+			   var feature;
+	           if (type === 'tracks' && $scope.repNav.isViewVisible('mapPanel')){
 	               var extentPolygon = new ol.geom.Polygon.fromExtent(rec.extent);
 	               extentPolygon.transform('EPSG:4326', mapService.getMapProjectionCode());
 	               var trackGeom = $scope.buildTrackGeomFromId(rec.id, extentPolygon.getExtent());
 	               trackGeom.transform(mapService.getMapProjectionCode(), 'EPSG:4326');
 	               
-	               var geom = null;
+	               
 	               if (trackGeom.getLineString().getLength() !== 0){
 	                   geom = wkt.writeGeometry(trackGeom);
 	               }
-	               
 	               row.push(geom);
-	           }   
+	           }  else if (type === 'segments'){
+	               feature = geoJson.readFeature(rec);
+	               var segGeom = feature.getGeometry();
+	               if (segGeom.getLength() !== 0){
+	                   geom = wkt.writeGeometry(segGeom);
+	               }
+	               row.push(geom);
+               } else if (type === 'alarms'){
+                   feature = geoJson.readFeature(rec);
+                   var alarmGeom = feature.getGeometry().transform(mapService.getMapProjectionCode(), 'EPSG:4326');
+                   var coords = alarmGeom.getCoordinates();
+                   row.push(coords[1]);
+                   row.push(coords[0]);
+               }
 		   gotHeaders = true;
 		   csvObj.push(row);
 	       return csvObj;
            }, []
        ), 'header': header};
    };
-   
+
+   $scope.openTripSummary = function(tripName){
+       $scope.tripSummServ.withMap = $scope.repNav.isViewVisible('mapPanel');
+       $scope.tripSummServ.openNewTrip(tripName);
+       $scope.repNav.goToView('tripsPanel','tripSummary');
+   };
 });

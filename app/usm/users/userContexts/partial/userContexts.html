@@ -1,4 +1,4 @@
-<!--
+﻿<!--
 ﻿Developed with the contribution of the European Commission - Directorate General for Maritime Affairs and Fisheries
 © European Union, 2015-2016.
 
@@ -40,7 +40,8 @@ copy of the GNU General Public License along with the IFDM Suite. If not, see <h
 			<tr ng-repeat="uc in userContextsList | orderBy:uc.role:sortReverse" ng-if="uc.role !== null">
 				<td>
 					<a ui-sref="app.usm.roles.role({ roleId: uc.roleId })">
-					<span tooltip="{{uc.roleDescription}}">{{ uc.role }}</span>
+					    <span tooltip="{{uc.roleDescription}}">{{ uc.role }}</span>
+					</a>
 				</td>
 				<td>
 					<div class="col-md-3" ng-if="uc.role!==null">
@@ -50,7 +51,8 @@ copy of the GNU General Public License along with the IFDM Suite. If not, see <h
 				<td>
 					<div ng-if="uc.scope!==null">
 						<a ui-sref="app.usm.scopes.scope({ scopeId: uc.scopeId })">
-						<span tooltip="{{uc.scopeDescription}}">{{ uc.scope }}</span>
+						    <span tooltip="{{uc.scopeDescription}}">{{ uc.scope }}</span>
+						</a>
 					</div>
 				</td>
 				<td>
