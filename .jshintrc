@@ -23,6 +23,7 @@
         "describe": true,
         "ddescribe": true,
         "beforeEach": true,
+        "afterEach": true,
         "module": true,
         "inject": true,
         "it": true,
@@ -36,6 +37,10 @@
 		"turf": true,
         "jsPDF": true,
 		"L": true,
-		"saveAs": true
+		"saveAs": true,
+		"screenfull": true,
+		"proj4": true,
+        "palette": true,
+        "tinycolor": true
     }
 }

@@ -1,0 +1,73 @@
+<div>
+    <fieldset class="col-md-12 fieldsetStyle trip-reports-section">
+        <legend class="fieldsetLegendStyle">
+            <a>{{'activity.trip_summary_reports' | i18n }}</a>
+        </legend>
+        <div class="row">
+            <div class="col-md-10">
+                <!--TABLE TREE MESSAGES-->
+                <div class="table-message-container">
+                    <div ui-tree="" class="row table tableSmart table-condensed table-responsive angular-ui-tree">
+                        <div class="thead col-md-12">
+                            <div class="tr row">
+                                <div class="th details-column"></div>
+                                <div class="th col-md-{{header.width}}" ng-repeat="header in reportHeaders" title="{{ header.label | i18n }}">{{ header.label | i18n }}</div>
+                            </div>
+                        </div>
+                        <!--NODES-->
+                        <div ui-tree-nodes="" ng-model="trip.reports" class="tbody col-md-12 angular-ui-tree-nodes">
+                            <div ng-repeat="item in trip.reports" ui-tree-node="" collapsed="true" class="tr row angular-ui-tree-node" data-nodrag>
+                                <div class="td details-column">
+                                    <a ng-if="item.nodes && item.nodes.length > 0" ng-click="toggle(this)"><span class="fa" ng-class="{
+                                    'fa-plus-square-o': collapsed,
+                                    'fa-minus-square-o': !collapsed
+                                    }"></span></a>
+                                </div>
+                                <div class="td col-md-{{header.width}}" ng-repeat="header in reportHeaders" ng-class="{'col-btn': ['corrections','detail'].indexOf(header.id) !== -1}">
+                                    <span>{{item[header.id]}}</span>
+                                </div>
+                                <!--SUBNODES-->
+                                <div ng-repeat="node in item.nodes" class="tr col-md-12 angular-ui-tree-node" ng-class="{hidden: collapsed}" data-nodrag>
+                                    <div class="row">
+                                        <div class="td details-column"></div>
+                                        <div class="sub-col td col-md-{{header.width}}" ng-repeat="header in reportHeaders" ng-class="{'col-btn': ['corrections','detail'].indexOf(header.id) !== -1}" ng-switch="['corrections','detail'].indexOf(header.id) === -1">
+                                            <span ng-switch-when="true">{{node[header.id]}}</span>
+                                            <a ng-switch-when="false" class="details-btn" ng-click="navigate()"><i class="fa" ng-class="{'fa-eye': header.id === 'detail' && node[header.id], 'fa-check-square-o': header.id === 'corrections' && node[header.id], 'fa-square-o': header.id === 'corrections' && node[header.id] === false}"></i></a>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-2">
+                <!--TABLE MESSAGE TYPES COUNT-->
+                <div class="row table-message-counter-container">
+                    <table class="table table-striped table-condensed">
+                        <thead>
+                            <tr>
+                                <th>
+                                    {{ 'activity.reports_panel_column_messages' | i18n }}
+                                </th>
+                                <th>
+                                    {{ 'activity.reports_panel_column_total' | i18n }}
+                                </th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr ng-repeat="(key,value) in messageCount">
+                                <td>
+                                    {{ 'activity.reports_panel_message_' + key | i18n }}
+                                </td>
+                                <td class="textAlignCenter">
+                                    {{ value }}
+                                </td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </fieldset>
+</div>

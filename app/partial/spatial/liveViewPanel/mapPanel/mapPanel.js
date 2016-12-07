@@ -1,5 +1,5 @@
 /*
-﻿Developed with the contribution of the European Commission - Directorate General for Maritime Affairs and Fisheries
+Developed with the contribution of the European Commission - Directorate General for Maritime Affairs and Fisheries
 © European Union, 2015-2016.
 
 This file is part of the Integrated Fisheries Data Management (IFDM) Suite. The IFDM Suite is free software: you can
@@ -8,8 +8,8 @@ Free Software Foundation, either version 3 of the License, or any later version.
 the hope that it will be useful, but WITHOUT ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or
 FITNESS FOR A PARTICULAR PURPOSE.  See the GNU General Public License for more details. You should have received a
 copy of the GNU General Public License along with the IFDM Suite. If not, see <http://www.gnu.org/licenses/>.
- */
-angular.module('unionvmsWeb').controller('MapCtrl',function($log, $scope, locale, $timeout, $document, $templateRequest, $modal, mapService, spatialHelperService, reportService, mapFishPrintRestService, MapFish, MapFishPayload, spatialRestService, $window, projectionService, $state, $localStorage, reportFormService,$compile,comboboxService,userService){
+*/
+angular.module('unionvmsWeb').controller('MapCtrl',function($log, $scope, locale, $timeout, $document, $templateRequest, $modal, mapService, loadingStatus, spatialHelperService, reportService, mapFishPrintRestService, MapFish, MapFishPayload, spatialRestService, $window, projectionService, $state, $localStorage, reportFormService,comboboxService,userService){
     $scope.activeControl = '';
     $scope.showMeasureConfigWin = false;
     $scope.showMapFishConfigWin = false;
@@ -20,35 +20,36 @@ angular.module('unionvmsWeb').controller('MapCtrl',function($log, $scope, locale
     //$scope.bufferConfigs = spatialHelperService.buffer;
     $scope.mapFish = MapFish;
     $scope.tbControl = spatialHelperService.tbControl;
-    $scope.refresh = reportService.refresh;
     $scope.mapFishLocalConfig = {};
-    $scope.popupRecContainer = {};
+    $scope.popupRecContainer = mapService.popupRecContainer;
     $scope.bookmarksByPage = 3;
     $scope.bookmarkNew = {};
     $scope.submitingBookmark = false;
     $scope.isAddBookVisible = false;
     $scope.submittedMapFishPrint = false;
-    $scope.isRequestingImage = false;
+    $scope.printingStatus = 'ready';
     $scope.projections = projectionService;
     $scope.graticuleActivated = false;
     $scope.graticuleTip = [locale.getString('spatial.map_tip_enable'), locale.getString('spatial.map_tip_graticule')].join(' ');
-    $scope.infoLayer = undefined;
     $scope.comboServ = comboboxService;
 
     //Comboboxes
-    $scope.measuringUnits = [];
-    $scope.measuringUnits.push({"text": locale.getString('spatial.map_measuring_units_meters'), "code": "m"});
-    $scope.measuringUnits.push({"text": locale.getString('spatial.map_measuring_units_nautical_miles'), "code": "nm"});
-    $scope.measuringUnits.push({"text": locale.getString('spatial.map_measuring_units_miles'), "code": "mi"});
+    $scope.measuringUnits = [
+        {"text": locale.getString('spatial.map_measuring_units_meters'), "code": "m"},
+        {"text": locale.getString('spatial.map_measuring_units_nautical_miles'), "code": "nm"},
+        {"text": locale.getString('spatial.map_measuring_units_miles'), "code": "mi"}
+        ];
 
-    $scope.exportFormats = [];
-    $scope.exportFormats.push({"text": 'PNG', "code": "png"});
-    $scope.exportFormats.push({"text": 'JPEG', "code": "jpeg"});
-    $scope.exportFormats.push({"text": 'PDF', "code": "pdf"});
+    $scope.exportFormats = [
+        {"text": 'PNG', "code": "png"},
+        {"text": 'JPEG', "code": "jpeg"},
+        {"text": 'PDF', "code": "pdf"}
+    ];
 
-    $scope.printLayouts = [];
-    $scope.printLayouts.push({"text": locale.getString('spatial.map_export_layout_portrait'), "code": "portrait"});
-    $scope.printLayouts.push({"text": locale.getString('spatial.map_export_layout_landscape'), "code": "landscape"});
+    $scope.printLayouts = [
+        {"text": locale.getString('spatial.map_export_layout_portrait'), "code": "portrait"},
+        {"text": locale.getString('spatial.map_export_layout_landscape'), "code": "landscape"}
+    ];
 
     /*$scope.bufferLayers = [];
     $scope.bufferLayers.push({"text": locale.getString('spatial.map_buffer_layers_vmspos'), "code": "vmspos"});
@@ -71,17 +72,18 @@ angular.module('unionvmsWeb').controller('MapCtrl',function($log, $scope, locale
         }
     };
 
-    //Watch to change the source for the popup paginator
-    $scope.$watch(function(){return mapService.activeLayerType;}, function(newVal, oldVal){
-        if (angular.isDefined(newVal) && newVal !== oldVal){
-            $scope.infoLayer = newVal;
-            if (newVal === 'vmsseg'){
-                $scope.popupRecContainer = mapService.popupSegRecContainer;
-            } else if (newVal === 'alarms'){
-                $scope.popupRecContainer = mapService.popupAlarmRecContainer;
-            }
-        }
-    });
+    //Open modal with vms data
+    $scope.showDataTables = function(){
+        loadingStatus.isLoading('LiveviewMap',true,2);
+        var modalInstance = $modal.open({
+            templateUrl: 'partial/spatial/liveViewPanel/vmsPanel/vmsPanelModal.html',
+            controller: 'VmspanelmodalCtrl',
+            backdrop: false,
+            size: 'lg',
+            windowTopClass: 'vmspanel-modal'
+        });
+        $scope.spatialHelper.configureFullscreenModal(modalInstance);
+    };
 
     //Get vessel details from within the positions popup
     $scope.getVesselDetails = function(){
@@ -102,33 +104,8 @@ angular.module('unionvmsWeb').controller('MapCtrl',function($log, $scope, locale
                     }
                 }
             });
+            $scope.spatialHelper.configureFullscreenModal(modalInstance);
         }
-
-
-        $scope.viewDetails = function(idx, source){
-            var modalInstance = $modal.open({
-                templateUrl: 'partial/spatial/reportsPanel/reportForm/vesselFieldset/detailsModal/detailsModal.html',
-                controller: 'DetailsmodalCtrl',
-                size: '',
-                resolve: {
-                    itemForDetail: function(){
-                        if (source === 'SEARCH'){
-                            idx = $scope.shared.vessels.indexOf($scope.displayedRecords[idx]);
-                            var item = $scope.shared.vessels[idx];
-                            item.type = $scope.shared.vesselSearchBy;
-                            if (item.type === 'asset'){
-                                item.guid = $scope.shared.vessels[idx].vesselId.guid;
-                            }
-
-                            return item;
-                        } else {
-                            idx = $scope.report.vesselsSelection.indexOf($scope.displayedRecordsSelection[idx]);
-                            return $scope.report.vesselsSelection[idx];
-                        }
-                    }
-                }
-            });
-        };
     };
 
     //Check for permissions
@@ -144,15 +121,9 @@ angular.module('unionvmsWeb').controller('MapCtrl',function($log, $scope, locale
 
     //Update popup content
     $scope.updatePopup = function(){
-        var record, data;
-        if (mapService.activeLayerType === 'vmsseg'){
-            record = mapService.popupSegRecContainer.records[mapService.popupSegRecContainer.currentIdx];
-            data = mapService.setSegmentsObjPopup(record.data);
-        } else if (mapService.activeLayerType === 'alarms'){
-            record = mapService.popupAlarmRecContainer.records[mapService.popupAlarmRecContainer.currentIdx];
-            data = mapService.setAlarmsObjPopup(record.data);
-        }
-        mapService.requestPopupTemplate(data, record.coord, record.fromCluster, true);
+        var record = $scope.popupRecContainer.records[$scope.popupRecContainer.currentIdx];
+        var data = mapService.setObjPopup(record);
+        mapService.requestPopupTemplate(data, record.type, record.coord, record.fromCluster, true);
     };
 
     //Projections
@@ -231,9 +202,11 @@ angular.module('unionvmsWeb').controller('MapCtrl',function($log, $scope, locale
 
     //Activate Mapfish
     $scope.mapFishPrintEnable = function(){
+        mapService.collapseClusters();
         mapService.addPrintLayer();
         mapService.addDragPrintExtent();
         $scope.openMapFishConfigWin();
+        $scope.closePopup();
         if (!angular.isDefined($scope.mapFish.projectionId)){
             $scope.setDefaultPrintProjection();
         }
@@ -259,10 +232,17 @@ angular.module('unionvmsWeb').controller('MapCtrl',function($log, $scope, locale
         }
         var mapEl = mapService.map.getTargetElement();
         mapEl.style.cursor = 'default';
+        
+        //Clear the ng-model with title, subtitle, description, etc.
+        angular.forEach($scope.mapFishLocalConfig, function(value, key) {
+        	this[key] = undefined;
+        }, $scope.mapFishLocalConfig);
+        $scope.printForm.$setPristine();
     };
 
     //Cancel print job
     $scope.cancelPrint = function (ref){
+        $scope.printingStatus = 'ready';
         if (ref === undefined) {
             return;
         }
@@ -279,7 +259,7 @@ angular.module('unionvmsWeb').controller('MapCtrl',function($log, $scope, locale
     $scope.printMapWithMapFish = function(ref) {
     	$scope.submittedMapFishPrint = true;
     	if($scope.mapForm.printForm.$valid){
-	    	if($scope.mapFish.jobStatusData.status === 'running'){
+	    	if($scope.preparingStatus === 'printing' && $scope.mapFish.jobStatusData.status === 'running'){
 	    	    $scope.cancelPrint(ref);
 	    	}else{
 		        $log.debug("Requesting print job");
@@ -290,7 +270,7 @@ angular.module('unionvmsWeb').controller('MapCtrl',function($log, $scope, locale
 		        var segments = payload.getIconPayload('segments');
 		        var alarms = payload.getIconPayload('alarms');
 
-		        $scope.isRequestingImage = true;
+		        $scope.printingStatus = 'preparing';
 
 		        var iconPayload = {};
 		        if (angular.isDefined(positions) && angular.isDefined(mapService.getLayerByType('vmspos')) && mapService.getLayerByType('vmspos').get('visible')){
@@ -312,6 +292,7 @@ angular.module('unionvmsWeb').controller('MapCtrl',function($log, $scope, locale
 		                payload.createPayloadObj($scope.mapFishLocalConfig, response);
 		                $scope.doPrintRequest(payload);
 		            }, function(error){
+		                $scope.printingStatus = 'ready';
 		                return undefined;
 		            });
 		        } else {
@@ -324,6 +305,7 @@ angular.module('unionvmsWeb').controller('MapCtrl',function($log, $scope, locale
 
     //Do the actual print
     $scope.doPrintRequest = function(payload){
+        $scope.printingStatus = 'printing';
         mapFishPrintRestService.createPrintJob(MapFish.selected_template, MapFish.selected_format, payload).then(
             function(data) {
                 $log.debug(data);
@@ -339,14 +321,14 @@ angular.module('unionvmsWeb').controller('MapCtrl',function($log, $scope, locale
                                 }
                                 if(MapFish.jobStatusData.status === 'finished'){
                                    $scope.download(MapFish.jobStatusData.downloadURL);
-                                   $scope.isRequestingImage = false;
+                                   $scope.printingStatus = 'ready';
                                 }
                                 if(MapFish.jobStatusData.status === 'error'){
-                                    $scope.isRequestingImage = false;
+                                    $scope.printingStatus = 'ready';
                                 }
                             },function (error) {
                                 $log.error(error);
-                                $scope.isRequestingImage = false;
+                                $scope.printingStatus = 'ready';
                             }
                         );
                     }
@@ -354,7 +336,7 @@ angular.module('unionvmsWeb').controller('MapCtrl',function($log, $scope, locale
                 poller();
             },function (error) {
                 $log.error(error);
-                $scope.isRequestingImage = false;
+                $scope.printingStatus = 'ready';
             }
         );
     };
@@ -392,21 +374,23 @@ angular.module('unionvmsWeb').controller('MapCtrl',function($log, $scope, locale
         var previousControl = $scope.activeControl;
 
         $scope.winExpanded = true;
-        if (tool !== previousControl && previousControl !== ''){
-            fn = previousControl + 'Disable';
-            $scope.activeControl = tool;
-            $scope[fn]();
-        } else if (tool === previousControl){
-            fn = previousControl + 'Disable';
-            $scope.activeControl = '';
-            $scope[fn]();
-        } else {
-            $scope.activeControl = tool;
-        }
+        if (angular.isDefined(mapService.map)){
+            if (tool !== previousControl && previousControl !== ''){
+                fn = previousControl + 'Disable';
+                $scope.activeControl = tool;
+                $scope[fn]();
+            } else if (tool === previousControl){
+                fn = previousControl + 'Disable';
+                $scope.activeControl = '';
+                $scope[fn]();
+            } else {
+                $scope.activeControl = tool;
+            }
 
-        if ($scope.activeControl !== ''){
-            fn = $scope.activeControl + 'Enable';
-            $scope[fn]();
+            if ($scope.activeControl !== ''){
+                fn = $scope.activeControl + 'Enable';
+                $scope[fn]();
+            }
         }
     };
 
@@ -421,9 +405,10 @@ angular.module('unionvmsWeb').controller('MapCtrl',function($log, $scope, locale
         }
         var mapEl = mapService.map.getTargetElement();
         var mapRect = mapEl.getBoundingClientRect();
-        win[0].style.marginTop = '8px';
+        win[0].style.marginTop = angular.element('#map-toolbar').height() + 6 + 'px';
         win[0].style.top = 'auto';
         win[0].style.left = buttonPosition.left + 'px';
+        win[0].style.zIndex = 1038;
     };
 
     //Expand or collapse draggable windows
@@ -454,6 +439,7 @@ angular.module('unionvmsWeb').controller('MapCtrl',function($log, $scope, locale
 
     //Measure control
     $scope.measureEnable = function(){
+        $scope.closePopup();
         $scope.openMeasureConfigWin();
         mapService.startMeasureControl();
     };
@@ -492,18 +478,22 @@ angular.module('unionvmsWeb').controller('MapCtrl',function($log, $scope, locale
 
     //Map graticule
     $scope.toggleGraticule = function(){
-        $scope.graticuleActivated = !$scope.graticuleActivated;
-        mapService.setGraticule($scope.graticuleActivated);
-        var firstTitle = locale.getString('spatial.map_tip_enable');
-        if ($scope.graticuleActivated){
-            firstTitle = locale.getString('spatial.map_tip_disable');
+        if (angular.isDefined(mapService.map)){
+            $scope.graticuleActivated = !$scope.graticuleActivated;
+            mapService.setGraticule($scope.graticuleActivated);
+            var firstTitle = locale.getString('spatial.map_tip_enable');
+            if ($scope.graticuleActivated){
+                firstTitle = locale.getString('spatial.map_tip_disable');
+            }
+            $scope.graticuleTip = [firstTitle, locale.getString('spatial.map_tip_graticule')].join(' ');
         }
-        $scope.graticuleTip = [firstTitle, locale.getString('spatial.map_tip_graticule')].join(' ');
     };
 
     //Fetch alarms
     $scope.getAlarms = function(){
-        reportService.getAlarms();
+        if (angular.isDefined(mapService.map)){
+            $scope.repServ.getAlarms();
+        }
     };
 
     //Bookmarks control
@@ -588,43 +578,34 @@ angular.module('unionvmsWeb').controller('MapCtrl',function($log, $scope, locale
 
     //Refresh report control
     $scope.refreshReport = function () {
-        reportService.refreshReport();
+        $scope.repServ.refreshReport();
     };
 
     //Clear highlight features control
     $scope.clearMapHighlights = function () {
-        var layer = mapService.getLayerByType('highlight');
-        if (angular.isDefined(layer)) {
-            layer.getSource().clear(true);
+        if (angular.isDefined(mapService.map)){
+            var layer = mapService.getLayerByType('highlight');
+            if (angular.isDefined(layer)) {
+                layer.getSource().clear(true);
+            }
         }
     };
 
     $scope.changeRefreshStatus = function() {
-	    if ($scope.refresh.status === true) {
-	    	reportService.setAutoRefresh();
+	    if ($scope.repServ.refresh.status === true) {
+	    	$scope.repServ.setAutoRefresh();
+	    } else {
+	        $scope.repServ.stopAutoRefreshInterval();
 	    }
     };
 
     $scope.openMapOnNewTab = function(){
     	var guid = generateGUID();
-    	if(reportService.outOfDate){
-    		$localStorage['report' + reportService.id + '-' + guid] = angular.copy(reportFormService.report);
+    	if(reportFormService.liveView.outOfDate){
+    		$localStorage['report' + $scope.repServ.id + '-' + guid] = angular.copy(reportFormService.liveView);
     	}
-    	var url = $state.href('app.reporting-id', {id: reportService.id, guid: guid});
+    	var url = $state.href('app.reporting-id', {id: $scope.repServ.id, guid: guid});
     	$window.open(url,'_blank');
-    };
-
-    $scope.selectHistory = function(item){
-        var report = angular.copy(item);
-        delete report.code;
-        delete report.text;
-        reportService.runReport(report);
-    };
-
-    $scope.initComboHistory = function(comboId){
-        var comboFooter = angular.element('<li class="combo-history-footer"><div class="footer-item"><span>Edit List</span></div><div class="footer-item" ng-click="createReportFromLiveview($event)"><span>Create new</span></div></li>');
-        angular.element('#' + comboId + '>.dropdown-menu').append(comboFooter);
-        $compile(comboFooter)($scope);
     };
 
     function generateGUID() {
@@ -638,14 +619,18 @@ angular.module('unionvmsWeb').controller('MapCtrl',function($log, $scope, locale
       }
 
     //Untoggle any toolbar btn when tab is changed
-    $scope.$on('untoggleToolbarBtns', function (evt) {
+    $scope.repServ.untoggleToolbarBtns = function () {
         if ($scope.activeControl !== '') {
             $scope.toggleToolbarBtn($scope.activeControl);
         }
-    });
+    };
+    
+    $scope.openUserPrefs = function(){
+        $scope.spatialHelper.deactivateFullscreen();
+        $scope.repNav.goToSection('userPreferences');
+    };
 
-    $($window).resize(mapService.updateMapContainerSize);
-    $(document).on('webkitfullscreenchange mozfullscreenchange fullscreenchange MSFullscreenChange', function() {
+    var reopenEnabledPopups = function() {
     	setTimeout(function() {
     		if($scope.showMeasureConfigWin){
         		$scope.openMeasureConfigWin();
@@ -653,46 +638,34 @@ angular.module('unionvmsWeb').controller('MapCtrl',function($log, $scope, locale
     		if($scope.showMapFishConfigWin){
     			$scope.openMapFishConfigWin();
     		}
+    		if($scope.showGazetteer){
+    			$scope.gazetteerEnable();
+    		}
+            if($scope.showBookmarksWin){
+    			$scope.bookmarksEnable();
+    		}
     	}, 100);
-	});
+	};
+    
+    $scope.$watch(function(){return $scope.repNav.isViewVisible('mapPanel');}, function(newVal,oldVal){
+        if(newVal === true && !angular.isDefined($scope.repServ.autoRefreshInterval) && $scope.repServ.refresh.status){
+            $scope.repServ.setAutoRefresh();
+        } else if (newVal === false && angular.isDefined($scope.repServ.autoRefreshInterval)){
+            $scope.repServ.stopAutoRefreshInterval();
+        }
+    });
+
+    $($window).resize(mapService.updateMapContainerSize);
+    $(document).on('webkitfullscreenchange mozfullscreenchange fullscreenchange MSFullscreenChange', reopenEnabledPopups);
 
     angular.element(document).ready(function () {
         mapService.updateMapContainerSize();
     });
 
-
-    var response = {"data":[{"id":5,"name":"asd","visibility":"private","createdOn":"2016-07-05T12:47:20","executedOn":null,"createdBy":"rep_power","withMap":true,"isDefault":false,"editable":true,"shareable":["PRIVATE","SCOPE","PUBLIC"],"deletable":true},{"id":6,"name":"aaa","visibility":"private","createdOn":"2016-07-05T12:47:31","executedOn":null,"createdBy":"rep_power","withMap":true,"isDefault":false,"editable":true,"shareable":["PRIVATE","SCOPE","PUBLIC"],"deletable":true},{"id":7,"name":"da","visibility":"private","createdOn":"2016-07-05T12:47:40","executedOn":null,"createdBy":"rep_power","withMap":true,"isDefault":false,"editable":true,"shareable":["PRIVATE","SCOPE","PUBLIC"],"deletable":true},{"id":8,"name":"asdasd","visibility":"private","createdOn":"2016-07-05T12:47:56","executedOn":null,"createdBy":"rep_power","withMap":true,"isDefault":false,"editable":true,"shareable":["PRIVATE","SCOPE","PUBLIC"],"deletable":true},{"id":9,"name":"asdddfd","visibility":"private","createdOn":"2016-07-05T12:48:05","executedOn":null,"createdBy":"rep_power","withMap":true,"isDefault":false,"editable":true,"shareable":["PRIVATE","SCOPE","PUBLIC"],"deletable":true},{"id":10,"name":"aacccc","visibility":"private","createdOn":"2016-07-05T12:48:16","executedOn":null,"createdBy":"rep_power","withMap":true,"isDefault":false,"editable":true,"shareable":["PRIVATE","SCOPE","PUBLIC"],"deletable":true},{"id":11,"name":"vvvvvvvvvv","visibility":"public","createdOn":"2016-07-05T12:48:38","executedOn":null,"createdBy":"rep_power","withMap":true,"isDefault":false,"editable":true,"shareable":["PRIVATE","SCOPE","PUBLIC"],"deletable":true},{"id":12,"name":"gg44","visibility":"public","createdOn":"2016-07-05T12:48:58","executedOn":null,"createdBy":"rep_power","withMap":true,"isDefault":false,"editable":true,"shareable":["PRIVATE","SCOPE","PUBLIC"],"deletable":true},{"id":13,"name":"ppppp","visibility":"public","createdOn":"2016-07-05T12:49:21","executedOn":null,"createdBy":"rep_private","withMap":true,"isDefault":false,"editable":true,"shareable":["PRIVATE","SCOPE","PUBLIC"],"deletable":true},{"id":14,"name":"ljk58","visibility":"private","createdOn":"2016-07-05T12:49:43","executedOn":null,"createdBy":"rep_power","withMap":true,"isDefault":false,"editable":true,"shareable":["PRIVATE","SCOPE","PUBLIC"],"deletable":true},{"id":15,"name":"poo","visibility":"public","createdOn":"2016-07-05T12:50:01","executedOn":null,"createdBy":"rep_private","withMap":true,"isDefault":false,"editable":true,"shareable":["PRIVATE","SCOPE","PUBLIC"],"deletable":true},{"id":16,"name":"kknnn","visibility":"public","createdOn":"2016-07-05T12:50:19","executedOn":null,"createdBy":"rep_private","withMap":true,"isDefault":false,"editable":true,"shareable":["PRIVATE","SCOPE","PUBLIC"],"deletable":true},{"id":17,"name":"pppp","visibility":"public","createdOn":"2016-07-05T12:51:02","executedOn":null,"createdBy":"rep_power","withMap":true,"isDefault":false,"editable":true,"shareable":["PRIVATE","SCOPE","PUBLIC"],"deletable":true},{"id":18,"name":"bnhg","visibility":"public","createdOn":"2016-07-05T12:51:15","executedOn":null,"createdBy":"rep_power","withMap":true,"isDefault":false,"editable":true,"shareable":["PRIVATE","SCOPE","PUBLIC"],"deletable":true},{"id":19,"name":"ppqqq","visibility":"scope","createdOn":"2016-07-05T12:51:31","executedOn":null,"createdBy":"rep_power","withMap":true,"isDefault":false,"editable":true,"shareable":["PRIVATE","SCOPE","PUBLIC"],"deletable":true},{"id":20,"name":"mmm","desc":"aksjdhaskjdhaskjxcncvkjdfhamcnasjjjjjjjjjjjjjjjjjjjj aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa","visibility":"scope","createdOn":"2016-07-05T12:52:01","executedOn":null,"createdBy":"rep_power","withMap":true,"isDefault":false,"editable":true,"shareable":["PRIVATE","SCOPE","PUBLIC"],"deletable":true},{"id":21,"name":"bbbbbbbbbbbb","visibility":"scope","createdOn":"2016-07-05T12:52:21","executedOn":null,"createdBy":"rep_power","withMap":true,"isDefault":false,"editable":true,"shareable":["PRIVATE","SCOPE","PUBLIC"],"deletable":true},{"id":22,"name":"jjjdajdsbn","visibility":"scope","createdOn":"2016-07-05T12:52:56","executedOn":null,"createdBy":"rep_power","withMap":true,"isDefault":false,"editable":true,"shareable":["PRIVATE","SCOPE","PUBLIC"],"deletable":true},{"id":23,"name":"tyur","visibility":"scope","createdOn":"2016-07-05T12:53:19","executedOn":null,"createdBy":"rep_power","withMap":true,"isDefault":false,"editable":true,"shareable":["PRIVATE","SCOPE","PUBLIC"],"deletable":true},{"id":24,"name":"ddd","visibility":"scope","createdOn":"2016-07-05T12:55:09","executedOn":null,"createdBy":"rep_private","withMap":true,"isDefault":false,"editable":true,"shareable":["PRIVATE","SCOPE","PUBLIC"],"deletable":true},{"id":25,"name":"fff","visibility":"scope","createdOn":"2016-07-05T12:55:32","executedOn":null,"createdBy":"rep_power","withMap":true,"isDefault":false,"editable":true,"shareable":["PRIVATE","SCOPE","PUBLIC"],"deletable":true},{"id":26,"name":"444","visibility":"scope","createdOn":"2016-07-05T12:55:44","executedOn":null,"createdBy":"rep_power","withMap":true,"isDefault":false,"editable":true,"shareable":["PRIVATE","SCOPE","PUBLIC"],"deletable":true},{"id":27,"name":"test111","visibility":"scope","createdOn":"2016-07-05T13:43:21","executedOn":null,"createdBy":"rep_power","withMap":true,"isDefault":false,"editable":true,"shareable":["PRIVATE","SCOPE","PUBLIC"],"deletable":true},{"id":28,"name":"vvvv","visibility":"public","createdOn":"2016-07-05T13:43:47","executedOn":null,"createdBy":"rep_power","withMap":true,"isDefault":false,"editable":true,"shareable":["PRIVATE","SCOPE","PUBLIC"],"deletable":true},{"id":29,"name":"zzzz","visibility":"private","createdOn":"2016-07-05T14:14:58","executedOn":null,"createdBy":"rep_power","withMap":true,"isDefault":false,"editable":true,"shareable":["PRIVATE","SCOPE","PUBLIC"],"deletable":true},{"id":30,"name":"mmm","visibility":"private","createdOn":"2016-07-05T14:17:19","executedOn":"2016-07-05T15:21:33","createdBy":"rep_power","withMap":true,"isDefault":true,"editable":true,"shareable":["PRIVATE","SCOPE","PUBLIC"],"deletable":true}],"code":200};
-
-    $scope.reportsHistory = [];
-    var username = userService.getUserName();
-    var sectionMine = {'text': 'YOUR REPORTS', 'items': []};
-    var sectionShared = {'text': 'PUBLIC REPORTS', 'items': []};
-
-    var nrMine = 0;
-    var nrShared = 0;
-    angular.forEach(response.data,function(item) {
-        var newItem;
-        if(username === item.createdBy && nrMine < 3){
-            newItem = item;
-            newItem.code = item.id;
-            newItem.text = item.name;
-            sectionMine.items.push(newItem);
-            nrMine += 1; 
-        }else if(item.visibility !== 'private' && nrShared < 3){
-            newItem = item;
-            newItem.code = item.id;
-            newItem.text = item.name;
-            sectionShared.items.push(newItem);
-            nrShared += 1; 
-        }
+    $scope.$on('$destroy', function(){
+        $($window).unbind('resize', mapService.updateMapContainerSize);
+        $($window).unbind('webkitfullscreenchange mozfullscreenchange fullscreenchange MSFullscreenChange', reopenEnabledPopups);
     });
-
-    if(nrMine){
-        $scope.reportsHistory.push(sectionMine);
-    }
-    if(nrShared){
-        $scope.reportsHistory.push(sectionShared);
-    }
 
     //Other controls
 //    $scope.otherEnable = function(){
@@ -703,3 +676,4 @@ angular.module('unionvmsWeb').controller('MapCtrl',function($log, $scope, locale
 //        console.log('disable other');
 //    };
 });
+

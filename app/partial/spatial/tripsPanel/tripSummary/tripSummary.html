@@ -1,0 +1,29 @@
+<!--
+Developed with the contribution of the European Commission - Directorate General for Maritime Affairs and Fisheries
+© European Union, 2015-2016.
+
+This file is part of the Integrated Fisheries Data Management (IFDM) Suite. The IFDM Suite is free software: you can
+redistribute it and/or modify it under the terms of the GNU General Public License as published by the
+Free Software Foundation, either version 3 of the License, or any later version. The IFDM Suite is distributed in
+the hope that it will be useful, but WITHOUT ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or
+FITNESS FOR A PARTICULAR PURPOSE.  See the GNU General Public License for more details. You should have received a
+copy of the GNU General Public License along with the IFDM Suite. If not, see <http://www.gnu.org/licenses/>.
+-->
+<div class="trip-summary" ng-controller="TripsummaryCtrl">
+    <a class="btn-trip-quit" title="{{'activity.trip_summary_quit_trip_detail' | i18n }}" ng-click="quitTripSummary()"><i class="fa fa-share-square-o"></i></a>
+    <a class="btn-print" title="{{'activity.trip_summary_export_trip' | i18n }}"><i class="fa fa-print"></i></a>
+    <div class="row activity-summary-row">
+        <fishing-trip-panel class="col-md-4 summary-section" trip="trip"></fishing-trip-panel>
+        <vessel-panel class="col-md-2 summary-section" trip="trip"></vessel-panel>
+        <roles-panel class="col-md-3 summary-section"></roles-panel>
+        <cronology-panel class="col-md-3 summary-section" trip="trip" trip-alert="alert"></cronology-panel>
+    </div>
+    <div class="row activity-summary-row">
+        <map-tile class="col-md-4 summary-section" tile-title="{{'activity.trip_summary_trip_map' | i18n }}" map-data="tripSummServ.mapData" map-height="217"></map-tile>
+        <catch-panel class="col-md-8 summary-section" trip="trip" trip-alert="alert"></catch-panel>
+    </div>
+    <div class="row activity-summary-row">
+        <trip-reports-panel class="col-md-12 summary-section" trip="trip" trip-alert="alert"></trip-reports-panel>
+    </div>
+</div>
+

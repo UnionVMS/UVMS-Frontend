@@ -1,5 +1,5 @@
 <!--
-﻿Developed with the contribution of the European Commission - Directorate General for Maritime Affairs and Fisheries
+Developed with the contribution of the European Commission - Directorate General for Maritime Affairs and Fisheries
 © European Union, 2015-2016.
 
 This file is part of the Integrated Fisheries Data Management (IFDM) Suite. The IFDM Suite is free software: you can
@@ -50,11 +50,11 @@ copy of the GNU General Public License along with the IFDM Suite. If not, see <h
 			</ng-form>
 		</div>
 
-        <div class="row defaultItem" ng-if="styleTab.menu === 'segment' || styleTab.menu === 'position' && configModel.positionStyle.attribute && ['countryCode','type','activity'].indexOf(configModel.positionStyle.attribute) === -1">
+        <div class="row defaultItem">
 			<ng-form name="defaultForm" novalidate>
 				<div class="row col-md-12">
-					<div class="form-group col-md-3" ng-if="['countryCode','segmentCategory'].indexOf(configModel[styleTab.menu + 'Style'].attribute) === -1" ng-class="{'has-error': defaultForm.defaultColor.$error.hasError && (defaultForm.defaultColor.$dirty || submitedWithErrors)}">
-						<label>{{'spatial.default_color' | i18n}}</label>
+					<div class="form-group col-md-3" ng-if="['countryCode','segmentCategory','type','activity'].indexOf(configModel[styleTab.menu + 'Style'].attribute) === -1 && styleTab.menu !== 'alarm'" ng-class="{'has-error': defaultForm.defaultColor.$error.hasError && (defaultForm.defaultColor.$dirty || submitedWithErrors)}">
+						<label class="required-field">{{'spatial.default_color' | i18n}}</label>
 						<div class="colorPickerComponent">
 							<div ng-style="{'background-color': configModel[styleTab.menu + 'Style'].defaultColor && configModel[styleTab.menu + 'Style'].defaultColor.length > 3 && configModel[styleTab.menu + 'Style'].defaultColor.length <= 7 && configModel.{{styleTab.menu}}Style.defaultColor.indexOf('#') != -1 ? configModel[styleTab.menu + 'Style'].defaultColor : '#fff'}" class="form-control pickedcolor">
 					       		<i class="fa fa-ban" ng-hide="configModel[styleTab.menu + 'Style'].defaultColor && configModel[styleTab.menu + 'Style'].defaultColor.length > 3 && configModel[styleTab.menu + 'Style'].defaultColor.length <= 7 && configModel.{{styleTab.menu}}Style.defaultColor.indexOf('#') != -1"></i>
@@ -71,7 +71,7 @@ copy of the GNU General Public License along with the IFDM Suite. If not, see <h
 						<combobox ng-model="configModel.segmentStyle.lineStyle" line-style="true"></combobox>
 					</div>
 					<div class="form-group col-md-2" ng-class="{'has-error': defaultForm.lineWidth.$error.hasError && (defaultForm.lineWidth.$dirty || submitedWithErrors)}" ng-if="styleTab.menu === 'segment'">
-						<label>{{'spatial.line_width' | i18n}}</label>
+						<label class="required-field">{{'spatial.line_width' | i18n}}</label>
 						<numeric-input class="form-control" ng-model="configModel.segmentStyle.lineWidth" ng-required="true" name="lineWidth" ng-change="validateLineWidth();"></numeric-input>
 						<div class="belowErrorMessages" ng-messages="defaultForm.lineWidth.$error" ng-show="defaultForm.lineWidth.$dirty || submitedWithErrors">
 							<div ng-message="requiredField">{{'spatial.required_field_error_message' | i18n }}</div>
@@ -79,7 +79,7 @@ copy of the GNU General Public License along with the IFDM Suite. If not, see <h
 						</div>
 					</div>
                     <div class="form-group col-md-2" ng-if="styleTab.menu === 'alarm'" ng-class="{'has-error': defaultForm.alarmSize.$invalid && (defaultForm.alarmSize.$dirty || submitedWithErrors)}">
-						<label>{{'spatial.size' | i18n}}</label>
+						<label class="required-field">{{'spatial.size' | i18n}}</label>
 						<numeric-input class="form-control" ng-model="configModel.alarmStyle.size" ng-required="true" name="alarmSize" min="1" max="6" ></numeric-input> <!-- ng-change="validateLineWidth();" -->
 						<div class="belowErrorMessages" ng-messages="defaultForm.alarmSize.$error" ng-show="defaultForm.alarmSize.$dirty || submitedWithErrors">
 							<div ng-message="required">{{'spatial.required_field_error_message' | i18n }}</div>
@@ -95,3 +95,4 @@ copy of the GNU General Public License along with the IFDM Suite. If not, see <h
 
     </ng-form>
 </div>
+

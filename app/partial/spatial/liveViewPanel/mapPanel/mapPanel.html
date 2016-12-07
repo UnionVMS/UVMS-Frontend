@@ -1,5 +1,5 @@
 <!--
-﻿Developed with the contribution of the European Commission - Directorate General for Maritime Affairs and Fisheries
+Developed with the contribution of the European Commission - Directorate General for Maritime Affairs and Fisheries
 © European Union, 2015-2016.
 
 This file is part of the Integrated Fisheries Data Management (IFDM) Suite. The IFDM Suite is free software: you can
@@ -9,19 +9,22 @@ the hope that it will be useful, but WITHOUT ANY WARRANTY; without even the impl
 FITNESS FOR A PARTICULAR PURPOSE.  See the GNU General Public License for more details. You should have received a
 copy of the GNU General Public License along with the IFDM Suite. If not, see <http://www.gnu.org/licenses/>.
 -->
-<div ng-controller="MapCtrl" class="mapPanelContainer" ngsf-fullscreen="fullscreenCtrl">
+<div ng-controller="MapCtrl" id="mapPanelContainer" ngsf-fullscreen="fullscreenCtrl">
+	<loading-panel type="LiveviewMap" class="liveview-loading"></loading-panel>
     <div class="map-container">
-        <div ng-include="'partial/spatial/liveViewPanel/mapPanel/layerPanel/layerPanel.html'"></div>
         <div id="map-toolbar">
             <div class="btn-group-left">
-				<div class="col-md-6">
-					<combobox ng-model="selectedHistory" items="reportsHistory" combo-section="true" callback="selectHistory" init-callback="initComboHistory"></combobox>
-				</div>
+				<combobox ng-model="repServ.selectedHistory" initialtext="{{repServ.name || ('spatial.header_reports' | i18n)}}" items="repServ.reportsHistory" combo-section="true" callback="selectHistory" init-callback="initComboHistory" is-loading="repServ.loadingReportHistory" class="combo-report-history" no-placeholder-on-list="true" dest-combo-list="#mapPanelContainer"></combobox>
                 <div class="btn-group btn-group-xs" role="group" aria-label="Map controls">
-                    <button type="button" class="btn btn-default btn-toolbar" title="{{'spatial.map_tip_refresh_report' | i18n }}" ng-click="refreshReport()"><span class="fa fa-refresh"></span></button>
+                	<div class="btn btn-default refresh-container" ng-class="{disabled: !checkSpatialConfigPermission()}">
+						<span>{{'spatial.map_label_auto_refresh_status' | i18n }}</span>
+						<toggle-switch ng-model="repServ.refresh.status" ng-change="changeRefreshStatus()"></toggle-switch>
+					</div>
+                    <button type="button" class="btn btn-default btn-toolbar refresh-btn" title="{{'spatial.map_tip_refresh_report' | i18n }}" ng-click="refreshReport()"><span class="fa fa-refresh"></span></button>
                     <button type="button" class="btn btn-default btn-toolbar" title="{{'spatial.map_tip_clear_map' | i18n }}" ng-click="clearMapHighlights()"><span class="fa fa-eraser"></span></button>
                     <button type="button" class="btn btn-default btn-toolbar" ng-class="{active: graticuleActivated}" title="{{graticuleTip}}" ng-click="toggleGraticule()"><span class="fa fa-th"></span></button>
                     <button type="button" class="btn btn-default btn-toolbar" title="{{ 'spatial.map_tip_get_alarms' | i18n }}" ng-click="getAlarms()" ng-show="isAllowed('Rules', 'viewAlarmRules')"><span class="fa fa-exclamation-triangle alarms-icon"></span></button>
+                    <button type="button" class="btn btn-default btn-toolbar" title="{{ 'spatial.map_tip_tabular_view' | i18n }}" ng-click="showDataTables()"><span class="fa fa-table"></span></button>
                 </div>
                 <div class="btn-group btn-group-xs" role="group" aria-label="Map controls">
                 	<button type="button" id="bookmarks-btn" ng-class="{active: activeControl === 'bookmarks'}" class="btn btn-default btn-toolbar" title="{{'spatial.map_tip_bookmarks' | i18n }}" ng-click="toggleToolbarBtn('bookmarks')"><span class="fa fa-bookmark"></span></button>
@@ -32,14 +35,17 @@ copy of the GNU General Public License along with the IFDM Suite. If not, see <h
                 </div>
             </div>
             <div class="btn-group-right">
+            	<div id="map-coordinates"></div>
                 <div class="btn-group btn-group-xs" role="group" aria-label="Map controls">
                     <button type="button" class="btn btn-default btn-toolbar btn-fullscreen" title="{{'spatial.map_tip_fullscreen' | i18n }}" ng-click="fullscreenCtrl.toggleFullscreen();" ng-show="tbControl.fullscreen"><span class="fa fa-arrows-alt"></span></button>
-                    <button type="button" class="btn btn-default btn-toolbar" title="{{'spatial.map_tip_open_new_tab' | i18n }}" ng-click="openMapOnNewTab();" ng-show="tbControl.newTab"><span class="fa fa-external-link"></span></button>
+                    <button type="button" class="btn btn-default btn-toolbar" title="{{'spatial.map_tip_open_new_tab' | i18n }}" ng-click="openMapOnNewTab();" ng-show="tbControl.newTab && repServ.id"><span class="fa fa-external-link"></span></button>
+                    <button type="button" class="btn btn-default btn-toolbar" title="{{'spatial.user_preferences' | i18n }}" ng-click="openUserPrefs()" ng-if="isAllowed('Spatial', 'ALLOW_USER_SPATIAL_CONFIGURATIONS')"><span class="fa fa-cogs"></span></button>
                 </div>
             </div>
         </div>
         <ng-form name="mapForm">
-	        <div id="map" class="map" tabIndex="0">
+	        <div id="map" class="map">
+	        	<div ng-include="'partial/spatial/liveViewPanel/mapPanel/layerPanel/layerPanel.html'"></div>
 	        	<gazetteer-search ng-if="showGazetteer" placeholder="{{'spatial.map_tip_gazetteer' | i18n}}"></gazetteer-search>
 	        	<!-- BOOKMARKS -->
 	        	<div id="bookmarks" class="map-toolbar-control-panel" ng-show="showBookmarksWin">
@@ -54,7 +60,7 @@ copy of the GNU General Public License along with the IFDM Suite. If not, see <h
 			                <div>
 			                    <div class="table-responsive-force form-group" st-table="displayedBookmarks" st-safe-src="bookmarks">
 			                    	<div class="form-group">
-										<input type="text" class="form-control" ng-model="searchBookmark" st-search="name" placeholder="{{'spatial.reports_table_search_header' | i18n}}">
+										<input type="text" class="form-control" ng-model="searchBookmark" st-search="name" placeholder="{{'spatial.reports_table_search_header' | i18n}}" st-simple-reset-search>
 									</div>
 			    	   				<table class="table table-striped">
 			    	   					<thead>
@@ -117,7 +123,7 @@ copy of the GNU General Public License along with the IFDM Suite. If not, see <h
 	                <div class="row panel-collapsible-body" ng-class="{'panel-body-visible': winExpanded}">
 	                    <div class="form-group col-md-12 measure-content">
 	                        <label>{{'spatial.map_measuring_units_label' | i18n }}</label>
-	                        <combobox dest-combo-list="'.mapPanelContainer'" ng-model="measureConfigs.units" items="measuringUnits" ng-disabled="measureConfigs.disabled"></combobox>
+	                        <combobox dest-combo-list="#mapPanelContainer" ng-model="measureConfigs.units" items="measuringUnits" ng-disabled="measureConfigs.disabled"></combobox>
 	                    </div>
 	                    <div class="form-group col-md-12 measure-content">
 	                        <label>{{'spatial.map_speed_label' | i18n }}</label>
@@ -128,7 +134,7 @@ copy of the GNU General Public License along with the IFDM Suite. If not, see <h
 	                    </div>
 	                    <div class="form-group col-md-12 measure-content">
 	                        <label>{{'spatial.map_start_date_label' | i18n }}</label>
-	                        <datepicker-input time="true" model="measureConfigs.startDate" name="selectedDate" ng-disabled="measureConfigs.disabled" input-field-id="map-panel-measure-configs-start-date-picker"></datepicker-input>
+	                        <datepicker-input time="true" model="measureConfigs.startDate" name="selectedDate" ng-disabled="measureConfigs.disabled" input-field-id="map-panel-measure-configs-start-date-picker" fullscreen-location="'.mapPanelContainer'"></datepicker-input>
 	                    </div>
 	                </div>
 	            </div>
@@ -200,22 +206,22 @@ copy of the GNU General Public License along with the IFDM Suite. If not, see <h
 			                    </div> -->
 			                    <div class="form-group col-md-6 print-content">
 			                        <label>{{'spatial.mapfish_layouts_label' | i18n }}</label>
-			                        <combobox ng-if="mapFish.selected_layout !== undefined" dest-combo-list="'.mapPanelContainer'" ng-change="toggleLayout(mapFish.selected_layout)" ng-model="mapFish.selected_layout" items="mapFish.layouts" is-loading="isLoadingMapfishPopup"></combobox>
+			                        <combobox ng-if="mapFish.selected_layout !== undefined" dest-combo-list="#mapPanelContainer" ng-change="toggleLayout(mapFish.selected_layout)" ng-model="mapFish.selected_layout" items="mapFish.layouts" is-loading="isLoadingMapfishPopup"></combobox>
 			                    </div>
 			                    <div class="form-group col-md-6 print-content">
 			                        <label>{{'spatial.mapfish_formats_label' | i18n }}</label>
-			                        <combobox ng-if="mapFish.selected_format !== undefined" dest-combo-list="'.mapPanelContainer'" ng-model="mapFish.selected_format" items="mapFish.formats" is-loading="isLoadingMapfishPopup"></combobox>
+			                        <combobox ng-if="mapFish.selected_format !== undefined" dest-combo-list="#mapPanelContainer" ng-model="mapFish.selected_format" items="mapFish.formats" is-loading="isLoadingMapfishPopup"></combobox>
 			                    </div>
 			                    <div class="form-group col-md-6 print-content">
 			                        <label>{{'spatial.mapfish_suggestedDpi_label' | i18n }}</label>
-			                        <combobox ng-if="mapFish.selected_dpi !== undefined" dest-combo-list="'.mapPanelContainer'" ng-model="mapFish.selected_dpi" items="mapFish.suggestedDpi" is-loading="isLoadingMapfishPopup"></combobox>
+			                        <combobox ng-if="mapFish.selected_dpi !== undefined" dest-combo-list="#mapPanelContainer" ng-model="mapFish.selected_dpi" items="mapFish.suggestedDpi" is-loading="isLoadingMapfishPopup"></combobox>
 			                    </div>
 	                    		<div class="form-group col-md-6">
 			                        <label>
 			                        	<input type="checkbox" ng-if="mapFish.includeCoordGrid !== undefined" ng-model="mapFish.includeCoordGrid" ng-checked="mapFish.includeCoordGrid"/>
 			                        	{{'spatial.mapfish_include_coords_grid_label' | i18n }}
 			                        </label>
-			                        <combobox ng-if="mapFish.includeCoordGrid && projections.items.length > 0" dest-combo-list="'.mapPanelContainer'" ng-model="mapFish.projectionId" items="projections.items" name="gridProjection" is-loading="isLoadingMapfishPopup"></combobox>
+			                        <combobox ng-if="mapFish.includeCoordGrid && projections.items.length > 0" dest-combo-list="#mapPanelContainer" ng-model="mapFish.projectionId" items="projections.items" name="gridProjection" is-loading="isLoadingMapfishPopup"></combobox>
 			                    </div>
 			                    <div class="row">
 			                        <div class="col-md-12">
@@ -233,12 +239,15 @@ copy of the GNU General Public License along with the IFDM Suite. If not, see <h
 			                        </div>
 			                    </div>
 			                    <div class="form-group col-md-6 measure-content btn-measure-group pull-right">
-			                        <button type="button" class="pull-right btn" ng-class="{'btn-primary': !isRequestingImage, 'btn-warning': isRequestingImage}" ng-click="printMapWithMapFish(mapFish.printJobData.ref)" ng-switch="isRequestingImage">
-			                            <span class="fa" ng-class="{'fa-download': !isRequestingImage, 'fa-refresh fa-spin': isRequestingImage}"></span>&nbsp;
-			                            <span ng-switch-when="true">
+			                        <button type="button" class="pull-right btn" ng-class="{'btn-primary': printingStatus === 'ready', 'btn-warning': printingStatus !== 'ready'}" ng-click="printMapWithMapFish(mapFish.printJobData.ref)" ng-switch="printingStatus">
+			                            <span class="fa" ng-class="{'fa-download': printingStatus === 'ready', 'fa-refresh fa-spin': printingStatus !== 'ready'}"></span>&nbsp;
+			                            <span ng-switch-when="printing">
 			                            	{{'spatial.mapfish_tip_printing' | i18n }}
 			                            </span>
-			                            <span ng-switch-default>
+			                            <span ng-switch-when="preparing">
+			                            	{{'spatial.mapfish_tip_preparing_print' | i18n }}
+			                            </span>
+			                            <span ng-switch-when="ready">
 			                            	{{'spatial.mapfish_tip_print' | i18n }}
 			                            </span>
 			                        </button>
@@ -261,9 +270,9 @@ copy of the GNU General Public License along with the IFDM Suite. If not, see <h
         <div id="popup" class="ol-popup">
             <a href ng-click="closePopup()" id="popup-closer" class="ol-popup-closer"><span class="fa fa-times"></span></a>
             <div class="col-md-12 ol-popup-header">
-				<span class="header" ng-show="infoLayer === 'vmspos' || infoLayer === 'alarms'">{{'spatial.popup_positions_title' | i18n}}</span>
-				<span class="header" ng-show="infoLayer === 'vmsseg'">{{'spatial.popup_segments_title' | i18n}}</span>            	
-				<div class="btn-container" ng-show="infoLayer === 'vmspos' && isAllowed('Vessel', 'getVesselById')">
+				<span class="header" ng-show="popupRecContainer.currentType === 'vmspos' || popupRecContainer.currentType === 'alarms'">{{'spatial.popup_positions_title' | i18n}}</span>
+				<span class="header" ng-show="popupRecContainer.currentType === 'vmsseg'">{{'spatial.popup_segments_title' | i18n}}</span>            	
+				<div class="btn-container" ng-show="popupRecContainer.currentType === 'vmspos' && isAllowed('Vessel', 'getVesselById')">
 					<button type="button" class="btn btn-default btn-xs" title="{{'spatial.popup_vessel_details_btn_title' | i18n}}" ng-click="getVesselDetails()"><i class="fa fa-ship"></i></button>
 				</div>
 			</div>
@@ -274,20 +283,6 @@ copy of the GNU General Public License along with the IFDM Suite. If not, see <h
 				    <li class="fa fa-chevron-left" ng-click="changeDisplayedRecord('previous')" ng-class="{disabled: popupRecContainer.currentIdx === 0}"></li>
 				    <li class="fa fa-chevron-right" ng-click="changeDisplayedRecord('next')" ng-class="{disabled: popupRecContainer.currentIdx === popupRecContainer.records.length - 1}"></li>
 			  	</ul>
-            </div>
-        </div>
-    </div>
-    <div class="container map-bottom">
-        <div class="row">
-            <div class="col-md-2 col-xs-5 refresh-container" ng-class="{disabled: !checkSpatialConfigPermission()}">
-				<b>{{'spatial.map_label_auto_refresh_status' | i18n }} </b>
-				<toggle-switch ng-model="refresh.status" ng-change="changeRefreshStatus()"></toggle-switch>
-			</div>
-            <div class="col-md-3 col-xs-5">
-                <div id="map-scale" class="scale-line"></div>
-            </div>
-            <div class="col-md-6 col-xs-13 pull-right">
-                <div id="map-coordinates"></div>
             </div>
         </div>
     </div>

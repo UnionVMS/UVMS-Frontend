@@ -1,5 +1,5 @@
 /*
-﻿Developed with the contribution of the European Commission - Directorate General for Maritime Affairs and Fisheries
+Developed with the contribution of the European Commission - Directorate General for Maritime Affairs and Fisheries
 © European Union, 2015-2016.
 
 This file is part of the Integrated Fisheries Data Management (IFDM) Suite. The IFDM Suite is free software: you can
@@ -8,18 +8,23 @@ Free Software Foundation, either version 3 of the License, or any later version.
 the hope that it will be useful, but WITHOUT ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or
 FITNESS FOR A PARTICULAR PURPOSE.  See the GNU General Public License for more details. You should have received a
 copy of the GNU General Public License along with the IFDM Suite. If not, see <http://www.gnu.org/licenses/>.
- */
+*/
 /**
  * @memberof unionvmsWeb
  * @ngdoc service
  * @name projectionService
  * @param locale {service} angular locale service
  * @param $interval {service} angular interval service
- * @param spatialRestService {service} Spatial REST API service
+ * @param spatialRestService {service} Spatial REST API service~
+ * @attr items {Array} The projection items to be displayed in comboboxes
+ * @attr coordinatesFormatItems {Array} The coordinate format items to be displayed in comboboxes
+ * @attr srcProjections {Array} The source of all projections supported by the application
+ * @attr isLoading {Boolean} Indicates if the projections are still being loaded from the Spatial REST service
+ * @attr isLoaded {Boolean} Indicates if the projections were loaded and properly processed
  * @description
  *  A service to fetch and process all supported map projections. Used throughout the application for comboboxes and map specific functions
  */
-angular.module('unionvmsWeb').factory('projectionService',function(locale, $interval, spatialRestService) {
+angular.module('unionvmsWeb').factory('projectionService',function(locale, $interval, spatialRestService, genericMapService) {
 
 	var projectionService = {
 	    items: [],
@@ -56,6 +61,8 @@ angular.module('unionvmsWeb').factory('projectionService',function(locale, $inte
                         "text": projectionService.srcProjections[i].name,
                         "code": projectionService.srcProjections[i].id
                     });
+                    
+                    genericMapService.registerProjInProj4(projectionService.srcProjections[i]);
                     
                     if (loadCoords === true){
                         projectionService.setCoordinatesUnitItems(selectedId);
@@ -128,6 +135,7 @@ angular.module('unionvmsWeb').factory('projectionService',function(locale, $inte
                 }, 1);
 	        }
 	    },
+	    
 	    /**
 	     * Get local projection id by EPSG code
 	     * 
@@ -150,6 +158,7 @@ angular.module('unionvmsWeb').factory('projectionService',function(locale, $inte
 	            }
 	        }
 	    },
+	    
 	    /**
 	     * Get local projection EPSG code by id
 	     * 
@@ -165,6 +174,7 @@ angular.module('unionvmsWeb').factory('projectionService',function(locale, $inte
 	            }
 	        }
 	    },
+	    
 	    /**
 	     * Get full projection object by EPSG code
 	     * 
@@ -187,6 +197,7 @@ angular.module('unionvmsWeb').factory('projectionService',function(locale, $inte
                 }
             }
 	    },
+	    
 	    /**
 	     * Get Spherical Mercator projection definition for fallback modes
 	     * 
@@ -207,6 +218,13 @@ angular.module('unionvmsWeb').factory('projectionService',function(locale, $inte
 	    }
 	};
 	
+	/**
+	 * Stop interval used in the lazy loading and setting of projections
+	 * 
+	 * @memberof projectionService
+	 * @private
+	 * @param {Object} obj - A reference to the projection service base object
+	 */
 	var stopInterval = function(obj){
         $interval.cancel(obj.intervalPromise);
         obj.intervalPromise = undefined;

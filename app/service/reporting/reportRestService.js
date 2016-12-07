@@ -1,5 +1,5 @@
 /*
-﻿Developed with the contribution of the European Commission - Directorate General for Maritime Affairs and Fisheries
+Developed with the contribution of the European Commission - Directorate General for Maritime Affairs and Fisheries
 © European Union, 2015-2016.
 
 This file is part of the Integrated Fisheries Data Management (IFDM) Suite. The IFDM Suite is free software: you can
@@ -8,7 +8,7 @@ Free Software Foundation, either version 3 of the License, or any later version.
 the hope that it will be useful, but WITHOUT ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or
 FITNESS FOR A PARTICULAR PURPOSE.  See the GNU General Public License for more details. You should have received a
 copy of the GNU General Public License along with the IFDM Suite. If not, see <http://www.gnu.org/licenses/>.
- */
+*/
 angular.module('unionvmsWeb').factory('reportRestFactory', function($resource) {
     
 	return {
@@ -92,7 +92,17 @@ angular.module('unionvmsWeb').factory('reportRestFactory', function($resource) {
 	                }
 	            }
 	        });
-	    }
+	    },
+        getLastExecuted: function(){
+            return $resource('/reporting/rest/report/list/lastexecuted/:nrReports', {}, {
+	            'get': {
+	                method: 'GET',
+	                headers: {
+	                    'Content-Type': 'application/json'
+	                }
+	            }
+	        });
+        }
 	};
 })
 .service('reportRestService', function($q, reportRestFactory){
@@ -194,8 +204,16 @@ angular.module('unionvmsWeb').factory('reportRestFactory', function($resource) {
                 deferred.reject(error);
             });
             return deferred.promise;
+        },
+        getLastExecuted: function(nrReports){
+            var deferred = $q.defer();
+            reportRestFactory.getLastExecuted().get({nrReports: nrReports}, {}, function(response){
+                deferred.resolve(response);
+            }, function(error){
+                deferred.reject(error);
+            });
+            return deferred.promise;
         }
     };
-    
     return reportRestService;
 });

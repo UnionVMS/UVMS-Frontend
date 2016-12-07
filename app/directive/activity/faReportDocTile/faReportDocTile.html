@@ -1,0 +1,44 @@
+<fieldset class="col-md-12 fieldsetStyle fa-report-tile">
+	<legend class="fieldsetLegendStyle">
+		<a>{{'activity.activity_report_doc_title' | i18n}}</a>
+	</legend>
+	<div class="row">
+		<div class="col-md-12 item-container">
+			<span class="labels">{{'activity.type' | i18n}}</span>&nbsp;
+			<span>{{faReport.type}}</span>
+		</div>
+	</div>
+	<div class="row">
+		<div class="col-md-12 item-container">
+			<span class="labels">{{'activity.header_fa_accepted_date' | i18n}}</span>&nbsp;
+			<span>{{faReport.dateAccepted | stDateUtc}}</span>
+		</div>
+	</div>
+	<fieldset class="col-md-12 fieldsetStyle inner-fieldset">
+		<legend class="fieldsetLegendStyle">
+			<a>{{'activity.activity_related_flux_doc_title' | i18n}}</a>
+		</legend>
+		<div class="row">
+			<div class="col-md-12 item-container">
+				<span class="labels">{{'activity.id' | i18n}}</span>&nbsp;
+				<span>{{faReport.id}}</span>
+			</div>
+			<div class="col-md-12 item-container">
+				<span class="labels">{{'activity.ref_id' | i18n}}</span>&nbsp;
+				<span>{{faReport.refId}}</span>
+			</div>
+			<div class="col-md-12 item-container">
+				<span class="labels">{{'activity.header_fa_creation_date' | i18n}}</span>&nbsp;
+				<span>{{faReport.creationDate | stDateUtc}}</span>
+			</div>
+			<div class="col-md-12 item-container">
+				<span class="labels">{{'activity.advanced_search_placeholder_purpose_code' | i18n}}</span>&nbsp;
+				<span>{{faReport.purposeCode}} - {{faReport.purposeCode | stPurposeCode}}</span>
+			</div>
+			<div class="col-md-12 item-container">
+				<span class="labels">{{'activity.purpose' | i18n}}</span>&nbsp;
+				<span>{{faReport.purpose}}</span>
+			</div>
+		</div>
+	</fieldset>
+</fieldset>

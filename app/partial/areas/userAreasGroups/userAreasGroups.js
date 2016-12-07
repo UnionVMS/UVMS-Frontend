@@ -1,5 +1,5 @@
 /*
-﻿Developed with the contribution of the European Commission - Directorate General for Maritime Affairs and Fisheries
+Developed with the contribution of the European Commission - Directorate General for Maritime Affairs and Fisheries
 © European Union, 2015-2016.
 
 This file is part of the Integrated Fisheries Data Management (IFDM) Suite. The IFDM Suite is free software: you can
@@ -8,12 +8,11 @@ Free Software Foundation, either version 3 of the License, or any later version.
 the hope that it will be useful, but WITHOUT ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or
 FITNESS FOR A PARTICULAR PURPOSE.  See the GNU General Public License for more details. You should have received a
 copy of the GNU General Public License along with the IFDM Suite. If not, see <http://www.gnu.org/licenses/>.
- */
-angular.module('unionvmsWeb').controller('UserareasgroupsCtrl',function($scope, locale, areaRestService, areaHelperService, areaMapService, $modal, userService){
+*/
+angular.module('unionvmsWeb').controller('UserareasgroupsCtrl',function($scope, locale, areaRestService, areaHelperService, areaMapService, $modal, userService, loadingStatus){
 	$scope.areaHelper = areaHelperService;
 	$scope.areaGroup = {'type': ''};
 	$scope.currentContext = undefined;
-	$scope.tableLoading = false;
 	
 	var init = function(){
 		$scope.currentContext = userService.getCurrentContext();
@@ -24,10 +23,11 @@ angular.module('unionvmsWeb').controller('UserareasgroupsCtrl',function($scope, 
 	        //let's remove the layer from the map
 	        areaMapService.removeLayerByType('AREAGROUPS');
 	        $scope.areaHelper.displayedUserAreaGroup = undefined;
+	        $scope.areaHelper.updateSlider(undefined);
 	    }
 	    
 		if(angular.isDefined($scope.areaGroup.type) && $scope.areaGroup.type !== ''){
-		    $scope.tableLoading = true;
+		    loadingStatus.isLoading('AreaManagementPanel', true);
 			angular.forEach($scope.areaHelper.userAreasGroups, function(item) {
 				if($scope.areaGroup.type === item.code){
 				    areaHelperService.getUserAreaGroupLayer($scope.areaGroup.type);
@@ -35,16 +35,15 @@ angular.module('unionvmsWeb').controller('UserareasgroupsCtrl',function($scope, 
 					areaRestService.getAreasByType(item.text).then(function(response){
 			            $scope.userAreasList = response;
 			            $scope.displayedUserAreas = [].concat($scope.userAreasList);
-			            $scope.tableLoading = false;
+			            loadingStatus.isLoading('AreaManagementPanel', false);
 			        }, function(error){
-			            $scope.tableLoading = false;
+			            loadingStatus.isLoading('AreaManagementPanel', false);
 			            $scope.alert.setError();
 			            $scope.alert.alertMessage = locale.getString('areas.error_getting_user_area_list');
 			        });
-					
-					
 				}
 			});
+			$scope.areaHelper.updateSlider('AREAGROUPS');
 		}else{
 			$scope.userAreasList = [];
 		}
@@ -67,12 +66,12 @@ angular.module('unionvmsWeb').controller('UserareasgroupsCtrl',function($scope, 
     
     //Get area details
     $scope.getAreaDetails = function(idx){
-        $scope.alert.setLoading(locale.getString('areas.getting_area'));
+        loadingStatus.isLoading('AreaManagement',true,3);
         areaRestService.getUserAreaAsJSON($scope.displayedUserAreas[idx].id).then(function(response){
-            $scope.alert.removeLoading();
+            loadingStatus.isLoading('AreaManagement',false);
             $scope.openAreaDetailsModal(response);
         }, function(error){
-            $scope.alert.removeLoading();
+            loadingStatus.isLoading('AreaManagement',false);
             $scope.alert.setError();
             $scope.alert.alertMessage = locale.getString('areas.error_getting_user_area_geojson');
         });
@@ -90,6 +89,7 @@ angular.module('unionvmsWeb').controller('UserareasgroupsCtrl',function($scope, 
                }
            }
         });
+        $scope.helper.configureFullscreenModal(modalInstance);
     };
     
     $scope.openAreaGroupEditorModal = function(){
@@ -103,6 +103,7 @@ angular.module('unionvmsWeb').controller('UserareasgroupsCtrl',function($scope, 
                 }
             }
          });
+         $scope.helper.configureFullscreenModal(modalInstance);
 
          modalInstance.result.then(function(data){
         	if(data !== 'cancel'){

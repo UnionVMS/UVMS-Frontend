@@ -1,5 +1,5 @@
 /*
-﻿Developed with the contribution of the European Commission - Directorate General for Maritime Affairs and Fisheries
+Developed with the contribution of the European Commission - Directorate General for Maritime Affairs and Fisheries
 © European Union, 2015-2016.
 
 This file is part of the Integrated Fisheries Data Management (IFDM) Suite. The IFDM Suite is free software: you can
@@ -48,10 +48,10 @@ angular.module('unionvmsWeb').controller('AuditconfigurationCtrl',function($scop
 				return $scope.settings[module] !== undefined && getNonGlobalSettings($scope.settings[module]).length > 0;
 			});
 
-			$scope.tabs = ["systemMonitor", "globalSettings", "reporting"].concat(modules);
+			$scope.tabs = ["systemMonitor", "globalSettings", "reporting", "mdr"].concat(modules);
 		});
-		
-		loadingStatus.isLoading('Preferences',true);
+
+		loadingStatus.isLoading('Preferences',true,0);
 		spatialConfigRestService.getAdminConfigs().then(function(response){
 		    var model = new SpatialConfig();
 		    $scope.configModel = model.forAdminConfigFromJson(response);
@@ -68,7 +68,9 @@ angular.module('unionvmsWeb').controller('AuditconfigurationCtrl',function($scop
 			return "partial/admin/adminConfiguration/configurationGeneral/configurationGeneral.html";
 		} else if ($scope.activeTab === "reporting") {
 			return "partial/admin/adminConfiguration/configurationReporting/configurationReporting.html";
-		}
+		} else if ($scope.activeTab === "mdr") {
+            return "partial/admin/adminConfiguration/configurationMDR/configurationMDR.html";
+        }
 		else {
 			return "partial/admin/adminConfiguration/configurationModule/configurationModule.html";
 		}

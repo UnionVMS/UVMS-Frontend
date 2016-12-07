@@ -1,5 +1,5 @@
 <!--
-﻿Developed with the contribution of the European Commission - Directorate General for Maritime Affairs and Fisheries
+Developed with the contribution of the European Commission - Directorate General for Maritime Affairs and Fisheries
 © European Union, 2015-2016.
 
 This file is part of the Integrated Fisheries Data Management (IFDM) Suite. The IFDM Suite is free software: you can
@@ -15,13 +15,13 @@ copy of the GNU General Public License along with the IFDM Suite. If not, see <h
 			<label>{{'areas.sys_areas_data_type_label' | i18n}}</label>
 		</div>
 		<div class="col-md-9">
-			<combobox ng-model="sysAreaType" items="helper.systemAreaItems" name="dataType" initialtext="{{'areas.sys_areas_data_type_label' | i18n}}" ng-required="true" components-with-scroll="'#system-area-form-container'" is-loading="helper.isLoadingSysAreaTypes"></combobox>
+			<combobox ng-model="sysAreaType" items="helper.systemAreaItems" name="dataType" initialtext="{{'areas.sys_areas_data_type_label' | i18n}}" ng-required="true" is-loading="helper.isLoadingSysAreaTypes" dest-combo-list="#areaManagement"></combobox>
 		</div>
 	</div>
-	
-	<div class="sysareas-radio-btns" ng-show="sysAreaType">
+
+	<div class="col-md-12 sysareas-radio-btns" ng-show="sysAreaType">
 		<div class="row">
-			<div class="col-md-12 form-group radioButtons">
+			<div class="form-group radioButtons">
 				<label class="radio-inline">
 					<input type="radio" value="upload" ng-model="helper.sysAreasEditingType">
 					{{'areas.upload_radio_title' | i18n}}
@@ -30,16 +30,15 @@ copy of the GNU General Public License along with the IFDM Suite. If not, see <h
 					<input type="radio" value="metadata" ng-model="helper.sysAreasEditingType">
 					{{'areas.metadata_radio_title' | i18n}}
 				</label>
-				<label class="radio-inline">
+				<label class="radio-inline" ng-if="sysAreaType !== 'PORT'">
 					<input type="radio" value="dataset" ng-model="helper.sysAreasEditingType">
 					{{'areas.dataset_radio_title' | i18n}}
 				</label>
 			</div>
 		</div>
-	
-		<div class="system-area-body">
-			<div ng-show="helper.sysAreasEditingType === 'upload'">
-				
+
+		<div class="row system-area-body">
+			<div ng-show="helper.sysAreasEditingType === 'upload'" class="editingTypeTab">
 				<!-- UPLOAD AREA -->
 				<ng-form name="SysareasForm">
 					<div class="form-container sysarea-wizard">
@@ -67,11 +66,11 @@ copy of the GNU General Public License along with the IFDM Suite. If not, see <h
 							<div class="proj-container col-md-12 form-group form-inline">
 								<div class="row">
 									<div class="col-md-3 proj-label comboLabel">
-										<label class="static-text" for="editingProjection">{{'areas.editing_projection_label' | i18n}}</label>
+										<label class="static-text required-field" for="editingProjection">{{'areas.editing_projection_label' | i18n}}</label>
 									</div>
 									<div class="col-md-9 proj-combo" ng-class="{'has-error': SysareasForm.dataConfigForm.editingProjection.$dirty && SysareasForm.dataConfigForm.editingProjection.$invalid}">
-										<combobox ng-model="dataConfig.selectedProj" items="projections.items" name="editingProjection" initialtext="{{'areas.editing_projection_label' | i18n}}" ng-required="true" components-with-scroll="'#system-area-form-container'"
-										is-loading="projections.isLoading"></combobox>
+										<combobox ng-model="dataConfig.selectedProj" items="projections.items" name="editingProjection" initialtext="{{'areas.editing_projection_label' | i18n}}" ng-required="true"
+										is-loading="projections.isLoading" dest-combo-list="#areaManagement"></combobox>
 									</div>
 									<div class="innerErrorMessagesCombobox" ng-messages="SysareasForm.dataConfigForm.editingProjection.$error" ng-show="SysareasForm.dataConfigForm.editingProjection.$dirty && SysareasForm.dataConfigForm.editingProjection.$invalid">
 										<div ng-message="required">{{'spatial.required_field_error_message' | i18n }}</div>
@@ -81,10 +80,10 @@ copy of the GNU General Public License along with the IFDM Suite. If not, see <h
 							<div class="col-md-12 form-group">
 								<div class="row">
 									<div class="col-md-3">
-										<label class="static-text" for="name">{{'areas.data_configurations_name' | i18n}}</label>
+										<label class="static-text required-field" for="name">{{'areas.data_configurations_name' | i18n}}</label>
 									</div>
 									<div class="col-md-9" ng-class="{'has-error': SysareasForm.dataConfigForm.name.$dirty && SysareasForm.dataConfigForm.name.$invalid}">
-										<combobox ng-model="dataConfig.name" items="shpAttrs" name="name" initialtext="{{'areas.data_configurations_attr_field_shp' | i18n}}" ng-required="true" components-with-scroll="'#system-area-form-container'" group="shpAttrs"></combobox>
+										<combobox ng-model="dataConfig.name" items="shpAttrs" name="name" initialtext="{{'areas.data_configurations_attr_field_shp' | i18n}}" ng-required="true" group="shpAttrs" dest-combo-list="#areaManagement"></combobox>
 									</div>
 									<div class="innerErrorMessagesCombobox" ng-messages="SysareasForm.dataConfigForm.name.$error" ng-show="SysareasForm.dataConfigForm.name.$dirty && SysareasForm.dataConfigForm.name.$invalid">
 										<div ng-message="required">{{'spatial.required_field_error_message' | i18n }}</div>
@@ -94,19 +93,19 @@ copy of the GNU General Public License along with the IFDM Suite. If not, see <h
 							<div class="col-md-12 form-group">
 								<div class="row">
 									<div class="col-md-3">
-										<label class="static-text" for="code">{{'areas.data_configurations_code' | i18n}}</label>
+										<label class="static-text required-field" for="code">{{'areas.data_configurations_code' | i18n}}</label>
 									</div>
 									<div class="col-md-9" ng-class="{'has-error': SysareasForm.dataConfigForm.code.$dirty && SysareasForm.dataConfigForm.code.$invalid}">
-										<combobox ng-model="dataConfig.code" items="shpAttrs" name="code" initialtext="{{'areas.data_configurations_attr_field_shp' | i18n}}" ng-required="true" components-with-scroll="'#system-area-form-container'" group="shpAttrs"></combobox>
+										<combobox ng-model="dataConfig.code" items="shpAttrs" name="code" initialtext="{{'areas.data_configurations_attr_field_shp' | i18n}}" ng-required="true" group="shpAttrs"></combobox>
 									</div>
 									<div class="innerErrorMessagesCombobox" ng-messages="SysareasForm.dataConfigForm.code.$error" ng-show="SysareasForm.dataConfigForm.code.$dirty && SysareasForm.dataConfigForm.code.$invalid">
 										<div ng-message="required">{{'spatial.required_field_error_message' | i18n }}</div>
 									</div>
 								</div>
 							</div>
-							
+
 							<div class="col-md-12">
-				  				<span class="col-md-12 areaFormSection">{{'areas.data_configurations_attr_fields_mapping' | i18n }}</span>
+								<span class="col-md-12 areaFormSection">{{'areas.data_configurations_attr_fields_mapping' | i18n }}</span>
 							</div>
 							<div ng-include="'partial/areas/systemAreas/attrFieldMappingRule/attrFieldMappingRule.html'" ng-repeat="attr in selectedAttrs"></div>
 							<div class="form-group col-md-4 btn-add">
@@ -116,7 +115,7 @@ copy of the GNU General Public License along with the IFDM Suite. If not, see <h
 								</a>
 							</div>
 						</ng-form>
-						
+
 						<div class="step-panel overview-panel" ng-show="wizardStep === 3">
 							<div class="col-md-12">
 								<div class="row">
@@ -158,12 +157,12 @@ copy of the GNU General Public License along with the IFDM Suite. If not, see <h
 									</div>
 								</div>
 							</div>
-							
+
 							<div ng-if="selectedAttrs.length > 0">
 								<div class="col-md-12">
 									<span class="col-md-12 areaFormSection">{{'areas.data_configurations_attr_fields_mapping' | i18n }}</span>
 								</div>
-								
+
 								<div class="col-md-12 row table-header-attr-mapping">
 									<div class="col-md-5">{{'areas.mapping_db_attr' | i18n }}</div>
 									<div class="col-md-5">{{'areas.mapping_shp_attr' | i18n }}</div>
@@ -171,32 +170,31 @@ copy of the GNU General Public License along with the IFDM Suite. If not, see <h
 								<div ng-include="'partial/areas/systemAreas/attrFieldMappingRule/attrFieldMappingRule.html'" ng-repeat="attr in selectedAttrs"></div>
 							</div>
 						</div>
-						
-						<div class="col-md-12 btn-container">
-							<button class="btn btn-primary btn-action pull-right" ng-class="{'disabled': validateForm()}" type="button" ng-click="nextStep();" ng-disabled="validateForm()">
-								<span ng-if="wizardStep !== 3">
-									{{'common.next' | i18n}}
-								</span>
-								<span class="fa" ng-class="{'fa-refresh fa-spin': isSaving === true, 'fa-upload': isSaving === false}" ng-if="wizardStep === 3"></span>
-								<span ng-if="wizardStep === 3">
-									{{'areas.area_upload_modal_upload_btn' | i18n}}
-								</span>
-							</button>
-							<button class="btn btn-default btn-back btn-action pull-right" type="button" ng-click="previousStep();" ng-show="wizardStep > 1">
-								<span>
-									{{'common.back' | i18n}}
-								</span>
-							</button>
-						</div>
 					</div>
 				</ng-form>
+				<div class="btn-container">
+					<button class="btn btn-primary btn-action pull-right" ng-class="{'disabled': validateForm()}" type="button" ng-click="nextStep();" ng-disabled="validateForm()">
+						<span ng-if="wizardStep !== 3">
+							{{'common.next' | i18n}}
+						</span>
+						<span class="fa" ng-class="{'fa-refresh fa-spin': isSaving === true, 'fa-upload': isSaving === false}" ng-if="wizardStep === 3"></span>
+						<span ng-if="wizardStep === 3">
+							{{'areas.area_upload_modal_upload_btn' | i18n}}
+						</span>
+					</button>
+					<button class="btn btn-default btn-back btn-action pull-right" type="button" ng-click="previousStep();" ng-show="wizardStep > 1">
+						<span>
+							{{'common.back' | i18n}}
+						</span>
+					</button>
+				</div>
 			</div>
 			<!-- UPDATE METADATA -->
-			<div class="updateMetadata col-md-12" ng-show="helper.sysAreasEditingType === 'metadata'">
+			<div class="col-md-12 updateMetadata editingTypeTab" ng-show="helper.sysAreasEditingType === 'metadata'">
 				<ng-form name="metadataForm">
 					<div class="row form-container metadata-container">
 						<div class="form-group col-md-12 metadata-group" ng-class="{'has-error': metadataForm.areaName.$dirty && metadataForm.areaName.$invalid}">
-							<label for="areaName">{{'areas.metadata_ref_title' | i18n}}</label>
+							<label for="areaName" class="required-field">{{'areas.metadata_ref_title' | i18n}}</label>
 							<input type="text" class="form-control" name="areaName" ng-model="helper.metadata.areaName" ng-required="true">
 							<div class="innerErrorMessagesInputWithUpLabel" ng-messages="metadataForm.areaName.$error" ng-show="metadataForm.areaName.$dirty && metadataForm.areaName.$invalid">
 								<div ng-message="required">{{'spatial.required_field_error_message' | i18n }}</div>
@@ -217,117 +215,106 @@ copy of the GNU General Public License along with the IFDM Suite. If not, see <h
 					</div>
 				</ng-form>
 				<div class="row btn-container">
-			   		<button class="btn btn-primary btn-action pull-right" type="button" ng-click="saveMetadata()" ng-class="{disabled: !metadataAvailable}">
-				   		<span>{{'areas.update_metadata_btn' | i18n}}</span>
-			   		</button>
-			   	</div>
+					<button class="btn btn-primary btn-action pull-right" type="button" ng-click="saveMetadata()" ng-class="{disabled: !metadataAvailable}">
+						<span>{{'areas.update_metadata_btn' | i18n}}</span>
+					</button>
+				</div>
 			</div>
 			<!-- CREATE DATASET -->
-			<div ng-show="helper.sysAreasEditingType === 'dataset'">
+			<div ng-show="helper.sysAreasEditingType === 'dataset'" class="editingTypeTab">
 				<ng-form name="datasetForm">
 					<div class="col-md-12 dataset-form-container form-container">
 						<div class="section">
-			        		<div class="row">
-				    	   		<div class="form-group col-md-12">
-				    	   			<div class="row dataset-form-row">
-					    	   			<div class="col-md-3">
-					       					<label>{{'areas.area_selection_selected_area' | i18n}}</label>
-					       				</div>
-					       				<div class="col-md-9 selected-area">
-					       					<span ng-bind="selectedArea"></span>
-					       					<input type="text" name="areaCode" ng-model="datasetNew.areaGid" ng-show="false" required>
-					       					<div class="innerErrorMessages dataset-errorMsg" ng-messages="datasetForm.areaCode.$error" ng-show="(datasetForm.areaCode.$dirty || submittedDataset) && datasetForm.areaCode.$invalid">
-												<div ng-message="required"><div class="fa fa-exclamation-circle"></div> {{'spatial.required_field_error_message' | i18n }}</div>
-											</div>
-										</div>
+							<div class="row">
+								<div class="form-group col-md-12">
+									<label class="required-field">{{'areas.area_selection_selected_area' | i18n}}</label>
+									<span class="form-span" ng-bind="selectedArea"></span>
+									<input type="text" name="areaCode" ng-model="datasetNew.areaGid" ng-show="false" required>
+									<div class="innerErrorMessages dataset-errorMsg" ng-messages="datasetForm.areaCode.$error" ng-show="(datasetForm.areaCode.$dirty || submittedDataset) && datasetForm.areaCode.$invalid">
+										<div ng-message="required"><div class="fa fa-exclamation-circle"></div> {{'spatial.required_field_error_message' | i18n }}</div>
 									</div>
-				       			</div>
-				       			<div class="form-group col-md-12" ng-class="{'has-error': datasetForm.datasetName.$invalid && (datasetForm.datasetName.$dirty || submittedDataset)}">
-				       				<div class="row dataset-form-row">
-					       				<div class="col-md-3">
-					       					<label>{{'areas.area_selection_dataset_name' | i18n}}</label>
-					       				</div>
-					       				<div class="col-md-9">
-					       					<input class="form-control" type="text" name="datasetName" ng-model="datasetNew.datasetName" ng-show="!hasDatasetCreated" ng-required="!hasDatasetCreated">
-					       					<span ng-bind="savedDatasetName" ng-show="hasDatasetCreated"></span>
-					       				</div>
-					       				<div class="innerErrorMessages dataset-errorMsg" ng-messages="datasetForm.datasetName.$error" ng-show="(datasetForm.datasetName.$dirty || submittedDataset) && datasetForm.datasetName.$invalid">
-											<div ng-message="required"><div class="fa fa-exclamation-circle"></div> {{'spatial.required_field_error_message' | i18n }}</div>
-										</div>
+								</div>
+								<div class="form-group col-md-12">
+									<label class="required-field">{{'areas.area_selection_dataset_name' | i18n}}</label>
+									<input class="form-control" type="text" name="datasetName" ng-model="datasetNew.datasetName" ng-show="!hasDatasetCreated" ng-required="!hasDatasetCreated">
+									<span ng-bind="savedDatasetName" ng-show="hasDatasetCreated"></span>
+									<div class="innerErrorMessages dataset-errorMsg" ng-messages="datasetForm.datasetName.$error" ng-show="(datasetForm.datasetName.$dirty || submittedDataset) && datasetForm.datasetName.$invalid">
+										<div ng-message="required"><div class="fa fa-exclamation-circle"></div> {{'spatial.required_field_error_message' | i18n }}</div>
 									</div>
-				       			</div>
-			       			</div>
-			       		</div>
-			       	</div>
+								</div>
+							</div>
+						</div>
+					</div>
 					<div class="col-md-12 dataset-table-container form-container">
 						<!-- SYSTEM WIDE AREAS -->
-			        	<div class="section">
-			       			<div class="form-group col-md-12 noPadding" ng-show="sysAreaType !== undefined">
-			       				<label class="radio-inline radioselector">
-			       					<input type="radio" name="sysSelect" value="map" ng-model="sysSelection">
-			       					{{'spatial.area_selection_modal_select_on_map_radio' | i18n}}
-			       				</label>
-			       				<label class="radio-inline radioselector">
-			       					<input type="radio" name="sysSelect" value="search" ng-model="sysSelection">
-			       					{{'spatial.area_selection_modal_search_area' | i18n}}
-			       				</label>
-			       			</div>
-			       			<div ng-show="sysSelection === 'search' || (sysSelection === 'map' && clickerServ.clickResults > 1)">
-			    	   			<div class="form-group col-md-12 noPadding" ng-hide="sysSelection === 'map'">
-			    	   				<div class="form-group col-md-8 noPadding">
-			    		   				<input type="text" ng-model="searchSysString" class="form-control" placeholder="{{'spatial.reports_form_vessels_search_text' | i18n }}">
-			    		   			</div>
-			    		   			<div class="form-group col-md-4 noPadding">
-			    		   				<button type="button" class="btn btn-primary btn-sm btn-action pull-right" style="min-width: 100px;" ng-click="searchSysAreas()">
-			    		   					<span>{{'spatial.reports_form_vessels_search_button' | i18n }}</span>
-			    		   				</button>
-			    		   			</div>
-			    	   			</div>
-			    	   			<!-- Search results table -->
-			    	   			<div class="table-responsive-force form-group" st-table="displayedRecordsArea" st-safe-src="sysAreaSearch">
-			    	   				<table class="table table-striped">
-			    	   					<thead>
-			    	   						<tr class="stColumnHeaders">
-			    	   							<th st-sort="name" st-skip-natural="true" st-class-ascent="sorting_asc" st-class-descent="sorting_desc">{{'spatial.area_selection_modal_table_name_header' | i18n}}</th>
-			    	   							<th st-sort="code" st-skip-natural="true" st-class-ascent="sorting_asc" st-class-descent="sorting_desc">{{'spatial.area_selection_modal_table_code_header' | i18n}}</th>
-			    	   							<th style="min-width: 70px;"></th>
-			    	   						</tr>
-			    	   						<tr ng-if="searchLoading">
-			    					        	<th colspan="3" class="loading-spinner-cl"><i class="fa fa-spinner fa-spin loading-spinner"></i></th>
-			    					        </tr>
-			    	   					</thead>
-			    	   					<tbody>
-			    	   						<tr ng-if="!displayedRecordsArea.length && !searchLoading">
-			    								<td colspan="3">{{'spatial.table_no_data' | i18n}}</td>
-			    							</tr>
-			    	   						<tr ng-repeat="sysArea in displayedRecordsArea">
-			    	   							<td>{{sysArea.name}}</td>
-			    	   							<td>{{sysArea.code}}</td>
-			    	   							<td style="min-width: 70px;">
-			    	   								<button type="button" class="btn btn-default btn-xs" title="{{'spatial.area_selection_modal_see_on_map_btn' | i18n }}" ng-click="mergeParamsWms($index, displayedRecordsArea, sysAreaSearch)"> <span class="fa fa-globe"></span></button>
-			    	   								<button type="button" class="btn btn-default btn-xs" ng-class="{'btn-success': datasetNew.areaGid === sysArea.gid, 'btn-primary': datasetNew.areaGid !== sysArea.gid}" title="{{'areas.area_selection_select_area_btn' | i18n }}" ng-click="selectArea($index,sysArea.gid)"><span class="fa fa-check"></span></button>
-			    	   							</td>
-			    	   						</tr>
-			    	   					</tbody>
-			    	   					<tfoot class="stFooterPagination">
-			    							<tr>
-			    								<td colspan="3" class="text-right">
-			    									<div st-pagination st-items-by-page="itemsByPage" st-displayed-pages="7" st-template="partial/common/reportsPagination/reportsPagination.html"></div>
-			    								</td>
-			    							</tr>
-			    						</tfoot>
-			    	   				</table>
-			    	   			</div>
-			    	   		</div>
-			        	</div>
+						<div class="section">
+							<div class="form-group col-md-12 noPadding" ng-show="sysAreaType !== undefined">
+								<label class="radio-inline radioselector">
+									<input type="radio" name="sysSelect" value="map" ng-model="sysSelection">
+									{{'spatial.area_selection_modal_select_on_map_radio' | i18n}}
+								</label>
+								<label class="radio-inline radioselector">
+									<input type="radio" name="sysSelect" value="search" ng-model="sysSelection">
+									{{'spatial.area_selection_modal_search_area' | i18n}}
+								</label>
+							</div>
+							<div ng-show="sysSelection === 'search' || (sysSelection === 'map' && clickerServ.clickResults > 1)">
+								<div class="form-group col-md-12 noPadding" ng-hide="sysSelection === 'map'">
+									<div class="form-group col-md-8 noPadding">
+										<input type="text" ng-model="searchSysString" class="form-control" placeholder="{{'spatial.reports_form_vessels_search_text' | i18n }}">
+									</div>
+									<div class="form-group col-md-4 noPadding">
+										<button type="button" class="btn btn-primary btn-sm btn-action pull-right" style="min-width: 100px;" ng-click="searchSysAreas()">
+											<span>{{'spatial.reports_form_vessels_search_button' | i18n }}</span>
+										</button>
+									</div>
+								</div>
+								<!-- Search results table -->
+								<div class="table-responsive-force form-group" st-table="displayedRecordsArea" st-safe-src="sysAreaSearch">
+									<table class="table table-striped">
+										<thead>
+											<tr class="stColumnHeaders">
+												<th st-sort="name" st-skip-natural="true" st-class-ascent="sorting_asc" st-class-descent="sorting_desc">{{'spatial.area_selection_modal_table_name_header' | i18n}}</th>
+												<th st-sort="code" st-skip-natural="true" st-class-ascent="sorting_asc" st-class-descent="sorting_desc">{{'spatial.area_selection_modal_table_code_header' | i18n}}</th>
+												<th style="min-width: 70px;"></th>
+											</tr>
+											<tr ng-if="searchLoading">
+												<th colspan="3" class="loading-spinner-cl"><i class="fa fa-spinner fa-spin loading-spinner"></i></th>
+											</tr>
+										</thead>
+										<tbody>
+											<tr ng-if="!displayedRecordsArea.length && !searchLoading">
+												<td colspan="3">{{'spatial.table_no_data' | i18n}}</td>
+											</tr>
+											<tr ng-repeat="sysArea in displayedRecordsArea">
+												<td>{{sysArea.name}}</td>
+												<td>{{sysArea.code}}</td>
+												<td style="min-width: 70px;">
+													<button type="button" class="btn btn-default btn-xs" title="{{'spatial.area_selection_modal_see_on_map_btn' | i18n }}" ng-click="mergeParamsWms($index, displayedRecordsArea, sysAreaSearch)"> <span class="fa fa-globe"></span></button>
+													<button type="button" class="btn btn-xs" ng-class="{'btn-success': datasetNew.areaGid === sysArea.gid, 'btn-default': datasetNew.areaGid !== sysArea.gid}" title="{{'areas.area_selection_select_area_btn' | i18n }}" ng-click="selectArea($index,sysArea.gid)"><span class="fa fa-check"></span></button>
+												</td>
+											</tr>
+										</tbody>
+										<tfoot class="stFooterPagination">
+											<tr>
+												<td colspan="3" class="text-right">
+													<div st-pagination st-items-by-page="itemsByPage" st-displayed-pages="7" st-template="partial/common/reportsPagination/reportsPagination.html"></div>
+												</td>
+											</tr>
+										</tfoot>
+									</table>
+								</div>
+							</div>
+						</div>
 					</div>
 				</ng-form>
-				<div class="col-md-12 btn-container">
-			   		<button class="btn btn-primary btn-action row pull-right" type="button" ng-click="createDataset()" ng-disabled="hasDatasetCreated">
-				   		<span>{{'areas.create_dataset_btn' | i18n}}</span>
-			   		</button>
-			   	</div>
+				<div class="btn-container">
+					<button class="btn btn-primary btn-action" type="button" ng-click="createDataset()" ng-disabled="hasDatasetCreated">
+						<span>{{'areas.create_dataset_btn' | i18n}}</span>
+					</button>
+				</div>
 			</div>
 		</div>
 	</div>
 </div>
+

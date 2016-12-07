@@ -1,5 +1,5 @@
 /*
-﻿Developed with the contribution of the European Commission - Directorate General for Maritime Affairs and Fisheries
+Developed with the contribution of the European Commission - Directorate General for Maritime Affairs and Fisheries
 © European Union, 2015-2016.
 
 This file is part of the Integrated Fisheries Data Management (IFDM) Suite. The IFDM Suite is free software: you can
@@ -8,37 +8,55 @@ Free Software Foundation, either version 3 of the License, or any later version.
 the hope that it will be useful, but WITHOUT ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or
 FITNESS FOR A PARTICULAR PURPOSE.  See the GNU General Public License for more details. You should have received a
 copy of the GNU General Public License along with the IFDM Suite. If not, see <http://www.gnu.org/licenses/>.
- */
-angular.module('unionvmsWeb').controller('MapconfigurationmodalCtrl', function ($scope, $timeout, locale, reportConfigs, $modalInstance, SpatialConfig, spatialRestService, spatialConfigAlertService, $anchorScroll, $location, spatialConfigRestService, loadingStatus, hasMap, PreferencesService) {
+*/
+angular.module('unionvmsWeb').controller('MapconfigurationmodalCtrl', function ($scope, $timeout, locale, reportConfigs, $modalInstance, SpatialConfig, reportService, spatialRestService, spatialConfigAlertService, $anchorScroll, $location, spatialConfigRestService, loadingStatus, displayComponents, PreferencesService) {
 	$scope.settingsLevel = 'report';
 	$scope.alert = spatialConfigAlertService;
 	$scope.alert.hasAlert = false;
 	$scope.alert.hasError = false;
 	$scope.alert.hasSuccess = false;
 	$scope.alert.hasWarning = false;
-	$scope.hasMap = hasMap;
+	$scope.components = displayComponents;
 	$scope.prefService = PreferencesService;
 	var userConfig;
+	
+	$modalInstance.opened.then(function(){
+	    loadingStatus.isLoading('LiveviewMap', false);
+	});
 	
     $scope.cancel = function () {
         $modalInstance.dismiss('cancel');
         $scope.initialConfig = undefined;
     };
-
-    $scope.save = function () {
-    	if(_.keys($scope.mapConfigurationForm.$error).length > 0 || angular.isDefined($scope.configModel.mapSettings.displayProjectionId) && !angular.isDefined($scope.configModel.mapSettings.coordinatesFormat)){
-    		$location.hash('mapConfigurationModal');
-    		$anchorScroll();
-    		$location.hash('');
-    		$anchorScroll();
-		    $scope.alert.hasAlert = true;
-		    $scope.alert.hasError = true;
-		    $scope.alert.alertMessage = locale.getString('spatial.invalid_data_saving');
-		    $scope.alert.hideAlert();
-		    $scope.submitedWithErrors = true;
+    
+    $scope.validate = function(){
+        if(_.keys($scope.mapConfigurationForm.$error).length > 0 || angular.isDefined($scope.configModel.mapSettings.displayProjectionId) && !angular.isDefined($scope.configModel.mapSettings.coordinatesFormat)){
+            $location.hash('mapConfigurationModal');
+            $anchorScroll();
+            $location.hash('');
+            $anchorScroll();
+            $scope.alert.hasAlert = true;
+            $scope.alert.hasError = true;
+            $scope.alert.alertMessage = locale.getString('spatial.invalid_data_saving');
+            $scope.alert.hideAlert();
+            $scope.submitedWithErrors = true;
             return false;
         } else {
+            return true;
+        }
+    };
+
+    $scope.save = function () {
+        if ($scope.validate()){
             $modalInstance.close($scope.exportMapConfiguration());
+            $scope.initialConfig = undefined;
+        }
+    };
+    
+    $scope.apply = function(){
+        if ($scope.validate()){
+            var rep = $scope.exportMapConfiguration();
+            $modalInstance.close(rep);
             $scope.initialConfig = undefined;
         }
     };
@@ -46,7 +64,7 @@ angular.module('unionvmsWeb').controller('MapconfigurationmodalCtrl', function (
     $scope.exportMapConfiguration = function () {
     	var exported = {};
     	exported = $scope.configModel.forReportConfig($scope.mapConfigurationForm,userConfig);
-
+    	exported.mapSettings.spatialConnectId = $scope.initialConfig.spatialConnectId;
         return exported;
     };
     
@@ -124,7 +142,7 @@ angular.module('unionvmsWeb').controller('MapconfigurationmodalCtrl', function (
     };
     
     var init = function(){
-    	loadingStatus.isLoading('Preferences',true);
+    	loadingStatus.isLoading('Preferences',true, 0);
     	$scope.configModel = new SpatialConfig();
     	$scope.initialConfig = reportConfigs.mapConfiguration || {};
         if(!angular.equals({}, reportConfigs.mapConfiguration)){
@@ -143,3 +161,4 @@ angular.module('unionvmsWeb').controller('MapconfigurationmodalCtrl', function (
     
     init();
 });
+

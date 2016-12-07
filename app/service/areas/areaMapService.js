@@ -1,5 +1,5 @@
 /*
-﻿Developed with the contribution of the European Commission - Directorate General for Maritime Affairs and Fisheries
+Developed with the contribution of the European Commission - Directorate General for Maritime Affairs and Fisheries
 © European Union, 2015-2016.
 
 This file is part of the Integrated Fisheries Data Management (IFDM) Suite. The IFDM Suite is free software: you can
@@ -8,24 +8,32 @@ Free Software Foundation, either version 3 of the License, or any later version.
 the hope that it will be useful, but WITHOUT ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or
 FITNESS FOR A PARTICULAR PURPOSE.  See the GNU General Public License for more details. You should have received a
 copy of the GNU General Public License along with the IFDM Suite. If not, see <http://www.gnu.org/licenses/>.
- */
+*/
 /**
  * @memberof unionvmsWeb
  * @ngdoc service
  * @name areaMapService
  * @param locale {service} angular locale service
  * @param genericMapService {service} generic map service<p>{@link unionvmsWeb.genericMapService}</p>
- * @param projectionService {service} projection service <p>{@link unionvmsWeb.projectionService}</p>
+ * @param projectionService {service} map projection service <p>{@link unionvmsWeb.projectionService}</p>
  * @param UserArea {service} user area service
  * @param userService {service} USM user service
  * @param areaClickerService {service} area map click service
+ * @param loadingStatus {service} loading status service <p>{@link unionvmsWeb.loadingStatus}</p>
+ * @attr mapGraticule {ol.Graticule} - The base OL graticule component
  * @description
  *  Service to control the map on the area management tab
  */
-angular.module('unionvmsWeb').factory('areaMapService',function(locale, genericMapService, projectionService, UserArea, userService, areaClickerService) {
+angular.module('unionvmsWeb').factory('areaMapService',function(locale, genericMapService, projectionService, UserArea, userService, areaClickerService, loadingStatus) {
 
 	var areaMs = {};
 	
+	/**
+	 * Set the area management map
+	 * 
+	 * @memberof areaMapService
+	 * @public
+	 */
 	areaMs.setMap = function(){
 	    var projObj;
 	    if (angular.isDefined(genericMapService.mapBasicConfigs.success)){
@@ -165,12 +173,14 @@ angular.module('unionvmsWeb').factory('areaMapService',function(locale, genericM
         };
 	    
 	    var layer = genericMapService.defineWms(config);
+	    layer.set('areaType', 'USERAREA');
 	    
 	    layer.set('baseCql', cql);
 	    var groupCql = angular.isDefined(def.groupCql) ? def.groupCql : undefined;
 	    layer.set('groupCql', groupCql);
 	    
 	    areaMs.map.addLayer(layer);
+	    loadingStatus.isLoading('AreaManagementPanel', false);
 	};
 	
 	/**
@@ -191,15 +201,28 @@ angular.module('unionvmsWeb').factory('areaMapService',function(locale, genericM
 	    }
 	    
 	    var layer = genericMapService.defineWms(config);
+	    if (angular.isDefined(def.areaType)){
+	        layer.set('areaType', def.areaType);
+	    }
 	    
 	    if (isBaseLayer){
 	        layer.set('switchertype', 'base'); //Necessary for the layerswitcher control
 	    }
 	    
 	    areaMs.map.addLayer(layer);
+	    loadingStatus.isLoading('AreaManagementPanel', false);
 	};
 	
-	//Add new cql param to wms using gid
+	/**
+	 * Merge new CQL params to WMS layers using GID
+	 * 
+	 * @memberof areaMapService
+	 * @public
+	 * @alias mergeParamsGid
+	 * @param {Integer|String} gid - the geoemtry id
+	 * @param {String} type - the layer type
+	 * @param {Boolean} isEqual - whether the cql condition shoulb be equal (true) or different (false)
+	 */
 	areaMs.mergeParamsGid = function(gid, type, isEqual){
 	    var layer = areaMs.getLayerByType(type);
 	    if (angular.isDefined(layer)){
@@ -218,7 +241,14 @@ angular.module('unionvmsWeb').factory('areaMapService',function(locale, genericM
 	    }
 	};
 	
-	//Clear WMS params
+	/**
+	 * Reset WMS CQL params
+	 * 
+	 * @memberof areaMapService
+	 * @public
+	 * @alias clearParams
+	 * @param {String} type - the layer type
+	 */
 	areaMs.clearParams = function(type){
 	    var layer = areaMs.getLayerByType(type);
 	    if (angular.isDefined(layer)){
@@ -232,7 +262,13 @@ angular.module('unionvmsWeb').factory('areaMapService',function(locale, genericM
 	    }
 	};
 	
-	//Vector drawing layer
+	/**
+	 * Add vector layers for drawing purposes
+	 * 
+	 * @memberof areaMapService
+	 * @public
+	 * @alias addVector
+	 */
 	areaMs.addVector = function(){
 	    var features = new ol.Collection();
 	    var layer = new ol.layer.Vector({
@@ -261,6 +297,16 @@ angular.module('unionvmsWeb').factory('areaMapService',function(locale, genericM
 	    areaMs.map.addLayer(pointLayer);
 	};
 	
+	/**
+	 * Set the style for the polygons in the drawing layer
+	 * 
+	 * @memberof areaMapService
+	 * @public
+	 * @alias setVectorStyle
+	 * @param {ol.Feature} feature 
+	 * @param {Number} resolution - the current map resolution 
+	 * @returns {Array} - Array of ol.Style objects
+	 */
 	areaMs.setVectorStyle = function(feature, resolution){
 	    var styles = [];
 	    var coords = feature.getGeometry().getCoordinates()[0];
@@ -306,6 +352,16 @@ angular.module('unionvmsWeb').factory('areaMapService',function(locale, genericM
 	    return styles;
 	};
 	
+	/**
+     * Set the style for the points in the drawing layer
+     * 
+     * @memberof areaMapService
+     * @public
+     * @alias setPointStyle
+     * @param {ol.Feature} feature 
+     * @param {Number} resolution - the current map resolution 
+     * @returns {Array} - Array of ol.Style objects
+     */
 	areaMs.setPointStyle = function(feature, resolution){
 	    var style = new ol.style.Style({
 	        image: new ol.style.Circle({
@@ -323,6 +379,14 @@ angular.module('unionvmsWeb').factory('areaMapService',function(locale, genericM
 	    return [style];
 	};
 	
+	/**
+	 * Remove all vector features from a vector layer
+	 * 
+	 * @memberof areaMapService
+	 * @public
+	 * @alias removeVectorFeatures
+	 * @param {String} type - the layer type
+	 */
 	areaMs.removeVectorFeatures = function(type){
 	    var layer = areaMs.getLayerByType(type);
         if (angular.isDefined(layer)){
@@ -330,6 +394,17 @@ angular.module('unionvmsWeb').factory('areaMapService',function(locale, genericM
         }
 	};
 	
+	/**
+	 * Add polygon feature from input coordinates
+	 * 
+	 * @memberof areaMapService
+	 * @public
+	 * @alias addVectorFeatureFromCoords
+	 * @param {Array} coords - array of coordinates
+	 * @param {String} srcProj - The EPSG projection code for the input coordinates
+	 * @param {Boolean} doZoom - Boolean indicating whether the map should be zoomed into the new area
+	 * @returns {Boolean} Boolean indicating if area was valid and inserted into the layer
+	 */
 	areaMs.addVectorFeatureFromCoords = function(coords, srcProj, doZoom){
 	    var geom = new ol.geom.Polygon();
         geom.setCoordinates([coords]);
@@ -347,6 +422,15 @@ angular.module('unionvmsWeb').factory('areaMapService',function(locale, genericM
         return status;
 	};
 	
+	/**
+	 * Add polygon feature from geometry
+	 * 
+	 * @memberof areaMapService
+	 * @public
+	 * @alias addVectorFeature
+	 * @param {ol.geom.Geometry} geom - The OL geometry object
+	 * @param {Boolean} doZoom - Boolean indicating whether the map should be zoomed into the new area
+	 */
 	areaMs.addVectorFeature = function(geom, doZoom){
 	    var feature = new ol.Feature({
             geometry: geom
@@ -366,6 +450,13 @@ angular.module('unionvmsWeb').factory('areaMapService',function(locale, genericM
 	};
 	
 	//CONTROLS AND INTERACTIONS
+	/**
+	 * Add draw controls to the map
+	 * 
+	 * @memberof areaMapService
+	 * @public
+	 * @alias addDrawControl
+	 */
 	areaMs.addDrawControl = function(){
 	    var layer = areaMs.getLayerByType('drawlayer');
         if (angular.isDefined(layer)){
@@ -395,10 +486,24 @@ angular.module('unionvmsWeb').factory('areaMapService',function(locale, genericM
         }
 	};
 	
+	/**
+     * Remove draw controls from the map
+     * 
+     * @memberof areaMapService
+     * @public
+     * @alias removeDrawControl
+     */
 	areaMs.removeDrawControl = function(){
 	    areaMs.map.removeInteraction(areaMs.getInteractionsByType('Draw')[0]);
 	};
 	
+	/**
+	 * Add circular areas draw control to the map
+	 * 
+	 * @memberof areaMapService
+	 * @public
+	 * @alias addCircularControl
+	 */
 	areaMs.addCircularControl = function(){
 	    var layer = areaMs.getLayerByType('pointdraw');
 	    if (angular.isDefined(layer)){
@@ -434,10 +539,24 @@ angular.module('unionvmsWeb').factory('areaMapService',function(locale, genericM
         }
 	};
 	
+	/**
+     * Remove circular areas draw control from the map
+     * 
+     * @memberof areaMapService
+     * @public
+     * @alias removeCircularControl
+     */
 	areaMs.removeCircularControl = function(){
         areaMs.map.removeInteraction(areaMs.getInteractionsByType('Draw')[0]);
     };
 	
+    /**
+     * Add edit control to the map
+     * 
+     * @memberof areaMapService
+     * @public
+     * @alias addEditControl
+     */
 	areaMs.addEditControl = function(){
 	    var layer = areaMs.getLayerByType('drawlayer');
         if (angular.isDefined(layer)){
@@ -459,10 +578,24 @@ angular.module('unionvmsWeb').factory('areaMapService',function(locale, genericM
         }
 	};
 	
+	/**
+     * Remove edit control from the map
+     * 
+     * @memberof areaMapService
+     * @public
+     * @alias removeEditControl
+     */
 	areaMs.removeEditControl = function(){
         areaMs.map.removeInteraction(areaMs.getInteractionsByType('Modify')[0]);
     };
     
+    /**
+     * Add drag control to the map
+     * 
+     * @memberof areaMapService
+     * @public
+     * @alias addDragControl
+     */
     areaMs.addDragControl = function(){
         var layer = areaMs.getLayerByType('drawlayer');
         if (angular.isDefined(layer)){
@@ -480,6 +613,13 @@ angular.module('unionvmsWeb').factory('areaMapService',function(locale, genericM
         }
     };
     
+    /**
+     * Remove drag control to the map
+     * 
+     * @memberof areaMapService
+     * @public
+     * @alias removeDragControl
+     */
     areaMs.removeDragControl = function(){
         areaMs.map.removeInteraction(areaMs.getInteractionsByType('Translate')[0]);
     };
@@ -500,15 +640,96 @@ angular.module('unionvmsWeb').factory('areaMapService',function(locale, genericM
             collapsed: false
         }));
 	    
-	    ctrls.push(genericMapService.createZoomCtrl('ol-zoom-right-side'));
+	    ctrls.push(genericMapService.createZoomCtrl('ol-zoom-liveview'));
+	    ctrls.push(areaMs.addScale());
+	    ctrls.push(areaMs.addMouseCoords());
 	    
+	    var iconSpan = document.createElement('span');
+        iconSpan.className = 'fa fa-globe';
+	    ctrls.push(new ol.control.ZoomToExtent({
+	        className: 'ol-zoom-extent ol-zoomextent-areamap',
+	        label: iconSpan,
+	        tipLabel: locale.getString('areas.map_tip_full_extent')
+	    }));
+	    
+	    var resetStyle = 'ol-resetCql-right-side';
+	    if (genericMapService.mapBasicConfigs.success && genericMapService.mapBasicConfigs.layers.baseLayers.length > 1){
+	        resetStyle = 'ol-resetCql-right-side-with-switcher';
+	    }
+	        	    
 	    ctrls.push(new ol.control.ResetLayerFilter({
-	        controlClass: 'ol-resetCql-right-side',
+	        controlClass: resetStyle,
 	        type: 'areamapservice',
             label: locale.getString('areas.map_tip_reset_layer_filter')
         }));
 	    
 	    return new ol.Collection(ctrls);
+	};
+	
+	/**
+	 * Find control defintions by type
+	 * 
+	 * @memberof areaMapService
+     * @private
+     * @alias findControlByType
+     * @param {String} type - The type of the control to find
+     * @returns {Object} The object containing the control definitions
+	 */
+	var findControlByType = function(type){
+	    var ctrl = _.find(genericMapService.mapBasicConfigs.control, function(item) {
+            return item.type === type;
+        });
+	    
+	    return ctrl;
+	}; 
+	
+	/**
+     * Add the mouse coordinates contrl to the map
+     * 
+     * @memberof areaMapService
+     * @public
+     * @alias addMouseCoords
+     * @returns {ol.control.MousePosition} The mouse position OL control
+     */
+    areaMs.addMouseCoords = function(){
+        var ctrlDef;
+        if (angular.isDefined(genericMapService.mapBasicConfigs.control)){
+            ctrlDef = findControlByType('mousecoords');
+        }
+        
+        if (!angular.isDefined(ctrlDef)){
+            ctrlDef = {
+                epsg: 4326,
+                format: 'dd'
+            };
+        }
+        
+        var olCtrl = genericMapService.addMousecoords(ctrlDef, 'areaMap-coordinates');
+        return olCtrl;
+    };
+	
+	/**
+     * Add the scale contrl to the map
+     * 
+     * @memberof areaMapService
+     * @public
+     * @alias addScale
+     * @returns {ol.control.ScaleLine} The scale line OL control
+     */
+	areaMs.addScale = function(){
+	    var ctrlDef;
+	    if (angular.isDefined(genericMapService.mapBasicConfigs.control)){
+	        ctrlDef = findControlByType('scale');
+	    }
+	    
+	    if (!angular.isDefined(ctrlDef)){
+	        ctrlDef = {
+	            units: 'nautical'
+	        };
+	    }
+	    
+	    var olCtrl = genericMapService.addScale(ctrlDef);
+	    return olCtrl;
 	};
 	
 	/**
@@ -542,8 +763,35 @@ angular.module('unionvmsWeb').factory('areaMapService',function(locale, genericM
             areaMs.map.addControl(switcher);
         }
     };
+    
+    //Map graticule
+    areaMs.mapGraticule = new ol.Graticule({});
+    /**
+     * Set mapGraticule in the current map according to a specified visibility status
+     * 
+     * @memberof genericMapService
+     * @public
+     * @alias setGraticule
+     * @param {Boolean} status - Whether the graticule is visible or not in the current map
+     */
+    areaMs.setGraticule = function(status){
+        if (!status){
+            areaMs.mapGraticule.setMap(null);
+        } else {
+            areaMs.mapGraticule.setMap(areaMs.map);
+        }
+    };
 	
 	//TURF
+    /**
+     * Convert point coordinates to GeoJSON to use in Turf
+     * 
+     * @memberof areaMapService
+     * @public
+     * @alias pointCoordsToTurf
+     * @param {Array} coords - An array of point coordinates
+     * @returns {String} - a GeoJSON string of the point geometry 
+     */
 	areaMs.pointCoordsToTurf = function(coords){
         var format = new ol.format.GeoJSON();
         var point = new ol.Feature(
@@ -553,6 +801,15 @@ angular.module('unionvmsWeb').factory('areaMapService',function(locale, genericM
         return format.writeFeatureObject(point);
     };
     
+    /**
+     * Convert Turf GeoJSON feature to OL feature
+     * 
+     * @memberof areaMapService
+     * @public
+     * @alias turfToOlGeom
+     * @param {String} feature - A GeoJSON string of the feature
+     * @returns {ol.Feature} - The OL feature
+     */
     areaMs.turfToOlGeom = function(feature){
         var format = new ol.format.GeoJSON();
         return format.readFeatures(feature)[0].getGeometry().transform('EPSG:4326', areaMs.getMapProjectionCode());
@@ -571,7 +828,15 @@ angular.module('unionvmsWeb').factory('areaMapService',function(locale, genericM
 	    genericMapService.refreshWMSLayer(type, areaMs.map);
 	};
 	
-	//Set layer opacity
+	/**
+	 * Set the opacity of a map layer
+	 *
+	 * @memberof areaMapService
+	 * @public
+	 * @alias setLayerOpacity
+	 * @param {String} type - the layer type
+	 * @param {Number} value - the opacity level for the specified layer 
+	 */
 	areaMs.setLayerOpacity = function(type, value){
 	    var layer = areaMs.getLayerByType(type);
 	    if (angular.isDefined(layer)){
@@ -579,7 +844,33 @@ angular.module('unionvmsWeb').factory('areaMapService',function(locale, genericM
 	    }
 	};
 	
-	//toggle layer visibility
+	/**
+	 * Get the opacity level of a map layer
+	 * 
+	 * @memberof areaMapService
+	 * @public
+	 * @alias getLayerOpacity
+	 * @param {String} type - the layer type
+	 * @returns {Number} - The opacity of the layer converted into transparency
+	 */
+	areaMs.getLayerOpacity = function(type){
+	    var transparency = 0;
+	    var layer = areaMs.getLayerByType(type);
+        if (angular.isDefined(layer)){
+            transparency = (1 - layer.getOpacity()) * 100;
+        } 
+        
+        return transparency;
+	};
+	
+	/**
+	 * Toggle visibility for a layer 
+	 * 
+	 * @memberof areaMapService
+     * @public
+     * @alias toggleLayerVisibility
+     * @param {String} type - the layer type
+	 */
 	areaMs.toggleLayerVisibility = function(type){
 	    var layer = areaMs.getLayerByType(type);
 	    var currentVis = layer.get('visible');
@@ -622,7 +913,39 @@ angular.module('unionvmsWeb').factory('areaMapService',function(locale, genericM
         genericMapService.removeLayerByType(type, areaMs.map);
     };
     
-    //Bring layer to the top of the map
+    /**
+     * Remove all WMS Area layers (USER and SYSTEM)
+     * 
+     * @memberof areaMapService
+     * @public
+     * @alias removeAreaLayers
+     */
+    areaMs.removeAreaLayers = function(){
+        if (angular.isDefined(areaMs.map)){
+            var layers = areaMs.map.getLayers().getArray();
+            var filteredLayers = layers.filter(function(layer){
+                var type = layer.get('areaType'); 
+                if (type === 'USERAREA' || type === 'SYSAREA'){
+                    return true;
+                }
+            });
+            
+            if (filteredLayers.length > 0){
+                angular.forEach(filteredLayers, function(layer){
+                    areaMs.map.removeLayer(layer);
+                });
+            }
+        }
+    };
+    
+    /**
+     * Raise a layer to the top of the map
+     * 
+     * @memberof areaMapService
+     * @public
+     * @alias raiseLayer
+     * @param {String} type - The type of the layer
+     */
     areaMs.raiseLayer = function(type){
         var layer = areaMs.getLayerByType(type);
         
@@ -653,12 +976,26 @@ angular.module('unionvmsWeb').factory('areaMapService',function(locale, genericM
         return genericMapService.getMapProjectionCode(areaMs.map);
     };
     
-    //Zoom to geom
+    /**
+     * Zoom to a geometry
+     * 
+     * @memberof areaMapService
+     * @public
+     * @alias zoomToGeom
+     * @param {ol.geom.Geometry} geom - the geometry to zoom to
+     */
     areaMs.zoomToGeom = function(geom){
         areaMs.map.getView().fit(geom, areaMs.map.getSize(), {maxZoom:19});
     };
     
 	//Get array of interactions by type
+    /**
+     * Get an array of interactions by their type
+     * @memberof areaMapService
+     * @public
+     * @alias getInteractionsByType
+     * @param {String} type - the interaction type
+     */
     areaMs.getInteractionsByType = function(type){
         var interactions = areaMs.map.getInteractions().getArray();
         var ints = interactions.filter(function(int){

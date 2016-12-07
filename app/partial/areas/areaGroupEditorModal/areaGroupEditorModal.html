@@ -1,5 +1,5 @@
 <!--
-﻿Developed with the contribution of the European Commission - Directorate General for Maritime Affairs and Fisheries
+Developed with the contribution of the European Commission - Directorate General for Maritime Affairs and Fisheries
 © European Union, 2015-2016.
 
 This file is part of the Integrated Fisheries Data Management (IFDM) Suite. The IFDM Suite is free software: you can
@@ -30,13 +30,13 @@ copy of the GNU General Public License along with the IFDM Suite. If not, see <h
     	<label class="area-group-name-label">{{'areas.area_group' | i18n | uppercase}} - {{areaGroup.type}}</label>
 		<div class="row form-group datesGroup">
 			<ng-form name="areaGroupActiveForm">
-				<div class="col-md-6 withoutPadding rightPadding" ng-class="{'has-error': areaGroupActiveForm.areaGroupFrom.$invalid && (areaGroupActiveForm.areaGroupFrom.$dirty || isSubmitted)}">
+				<div class="col-md-6" ng-class="{'has-error': areaGroupActiveForm.areaGroupFrom.$invalid && (areaGroupActiveForm.areaGroupFrom.$dirty || isSubmitted)}">
 					<label for="areaGroupFrom">{{'areas.user_area_valid_from' | i18n }}</label>
-					<datepicker-input time="true" model="areaGroup.startDate" name="areaGroupFrom" max-date="areaGroup.endDate" ng-change-callback="resetDateTimePicker" input-field-id="area-group-start-date-picker"></datepicker-input>
+					<datepicker-input time="true" model="areaGroup.startDate" name="areaGroupFrom" max-date="areaGroup.endDate" ng-change-callback="resetDateTimePicker" input-field-id="area-group-start-date-picker" fullscreen-location="'#areaManagement'"></datepicker-input>
 				</div>
-				<div class="col-md-6 withoutPadding leftPadding" ng-class="{'has-error': areaGroupActiveForm.areaGroupTo.$invalid && (areaGroupActiveForm.areaGroupTo.$dirty || isSubmitted)}">
+				<div class="col-md-6" ng-class="{'has-error': areaGroupActiveForm.areaGroupTo.$invalid && (areaGroupActiveForm.areaGroupTo.$dirty || isSubmitted)}">
 					<label for="areaGroupTo">{{'areas.user_area_valid_to' | i18n }}</label>
-					<datepicker-input time="true" model="areaGroup.endDate" name="areaGroupTo" min-date="areaGroup.startDate" ng-change-callback="resetDateTimePicker" input-field-id="area-group-end-date-picker"></datepicker-input>
+					<datepicker-input time="true" model="areaGroup.endDate" name="areaGroupTo" min-date="areaGroup.startDate" ng-change-callback="resetDateTimePicker" input-field-id="area-group-end-date-picker" fullscreen-location="'#areaManagement'"></datepicker-input>
 				</div>
 			</ng-form>
 		</div>
@@ -52,3 +52,4 @@ copy of the GNU General Public License along with the IFDM Suite. If not, see <h
         </div>
     </div>
 </div>
+

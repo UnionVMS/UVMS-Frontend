@@ -1,5 +1,5 @@
 /*
-﻿Developed with the contribution of the European Commission - Directorate General for Maritime Affairs and Fisheries
+Developed with the contribution of the European Commission - Directorate General for Maritime Affairs and Fisheries
 © European Union, 2015-2016.
 
 This file is part of the Integrated Fisheries Data Management (IFDM) Suite. The IFDM Suite is free software: you can
@@ -8,7 +8,7 @@ Free Software Foundation, either version 3 of the License, or any later version.
 the hope that it will be useful, but WITHOUT ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or
 FITNESS FOR A PARTICULAR PURPOSE.  See the GNU General Public License for more details. You should have received a
 copy of the GNU General Public License along with the IFDM Suite. If not, see <http://www.gnu.org/licenses/>.
- */
+*/
 angular.module('unionvmsWeb').controller('LayersettingsCtrl',function($scope, locale, $anchorScroll, spatialConfigRestService, spatialConfigAlertService, SpatialConfig, $location, loadingStatus){
 
 	$scope.status = {
@@ -56,11 +56,13 @@ angular.module('unionvmsWeb').controller('LayersettingsCtrl',function($scope, lo
 	    		if(angular.equals(item.areaType,list[i].areaType)){
 		    		switch(item.areaType){
 			    		case 'sysarea':
+							item.serviceLayerId = "" + item.serviceLayerId;
 		    				if(angular.equals(item.serviceLayerId,list[i].serviceLayerId)){
 		    					return undefined;
 		    				}
 	    				break;
 		    			case 'userarea':
+							item.gid = parseInt(item.gid);
 		    				if(angular.equals(item.gid,list[i].gid)){
 		    					return undefined;
 		    				}
@@ -108,8 +110,8 @@ angular.module('unionvmsWeb').controller('LayersettingsCtrl',function($scope, lo
 	    	$scope.selectedAreas = $scope.configModel.layerSettings.areaLayers;
 	    	angular.forEach($scope.selectedAreas, function(item) {
 	    		item.serviceLayerId = "" + item.serviceLayerId;
-	            item.gid = "" + item.gid;
 	            if(item.areaType === "userarea"){
+	                item.gid = parseInt(item.gid);
 	            	item.name = angular.isDefined(item.areaName) ? item.areaName : item.name;
 	            }else if(item.areaType === "areagroup"){
 	            	item.name = item.areaGroupName;

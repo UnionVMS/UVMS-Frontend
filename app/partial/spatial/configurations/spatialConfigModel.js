@@ -1,5 +1,5 @@
 /*
-﻿Developed with the contribution of the European Commission - Directorate General for Maritime Affairs and Fisheries
+Developed with the contribution of the European Commission - Directorate General for Maritime Affairs and Fisheries
 © European Union, 2015-2016.
 
 This file is part of the Integrated Fisheries Data Management (IFDM) Suite. The IFDM Suite is free software: you can
@@ -8,7 +8,7 @@ Free Software Foundation, either version 3 of the License, or any later version.
 the hope that it will be useful, but WITHOUT ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or
 FITNESS FOR A PARTICULAR PURPOSE.  See the GNU General Public License for more details. You should have received a
 copy of the GNU General Public License along with the IFDM Suite. If not, see <http://www.gnu.org/licenses/>.
- */
+*/
 angular.module('unionvmsWeb').factory('SpatialConfig',function() {
     
     function SpatialConfig(){
@@ -145,33 +145,42 @@ angular.module('unionvmsWeb').factory('SpatialConfig',function() {
     //Report level configs
     SpatialConfig.prototype.forReportConfig = function(form,userConfig){
         var config = {};
-        
+        var formStatus = {
+            mapSettingsForm: angular.isDefined(form.mapSettingsForm) ? form.mapSettingsForm.$dirty : false,
+            stylesSettingsForm: angular.isDefined(form.stylesSettingsForm) ? form.stylesSettingsForm.$dirty : false,
+            visibilitySettings: angular.isDefined(form.visibilitySettings) ? form.visibilitySettings.$dirty : false,
+            layerSettingsForm: angular.isDefined(form.layerSettingsForm) ? form.layerSettingsForm.$dirty : false,
+            referenceDataSettingsForm: angular.isDefined(form.referenceDataSettingsForm) ? form.referenceDataSettingsForm.$dirty : false
+        };
+       
         if(userConfig.mapSettings.spatialConnectId !== this.mapSettings.spatialConnectId || userConfig.mapSettings.mapProjectionId !== this.mapSettings.mapProjectionId ||
         userConfig.mapSettings.displayProjectionId !== this.mapSettings.displayProjectionId || userConfig.mapSettings.coordinatesFormat !== this.mapSettings.coordinatesFormat ||
-        userConfig.mapSettings.scaleBarUnits !== this.mapSettings.scaleBarUnits || form.mapSettingsForm.$dirty){
-            config = checkMapSettings(this,'report',config,form.mapSettingsForm.$dirty);
+        userConfig.mapSettings.scaleBarUnits !== this.mapSettings.scaleBarUnits || formStatus.mapSettingsForm){
+            config = checkMapSettings(this,'report',config,formStatus.mapSettingsForm);
         }else{
             config.mapSettings = {};
         }
 
-        if(!angular.equals(userConfig.stylesSettings,this.stylesSettings) || form.stylesSettingsForm.$dirty){
-            config.mapSettings = checkStylesSettings(this,'report',config.mapSettings,form.stylesSettingsForm.$dirty);
+        if(!angular.equals(userConfig.stylesSettings,this.stylesSettings) || formStatus.stylesSettingsForm){
+            config.mapSettings = checkStylesSettings(this,'report',config.mapSettings,formStatus.stylesSettingsForm);
         }
 
         if(!angular.equals(userConfig.visibilitySettings.positions,this.visibilitySettings.positions) ||
         !angular.equals(userConfig.visibilitySettings.segments,this.visibilitySettings.segments) ||
         !angular.equals(userConfig.visibilitySettings.tracks,this.visibilitySettings.tracks) ||
-        form.visibilitySettingsForm.$dirty){
-            config.mapSettings = checkVisibilitySettings(this,'report',config.mapSettings,form.visibilitySettingsForm.$dirty);
+        formStatus.visibilitySettingsForm){
+            config.mapSettings = checkVisibilitySettings(this,'report',config.mapSettings,formStatus.visibilitySettingsForm);
         }
 
-        removeLayerIds(this.layerSettings);
-        if((!angular.equals(userConfig.layerSettings,this.layerSettings) || form.layerSettingsForm.$dirty) && !this.layerSettings.reseted){
-            config.mapSettings = checkLayerSettings(this,'report',config.mapSettings,form.layerSettingsForm.$dirty);
+        removeLayerHashKeys(this.layerSettings);
+        fixIndividualUserAreas(userConfig.layerSettings);
+        fixIndividualUserAreas(this.layerSettings);
+        if((!angular.equals(userConfig.layerSettings,this.layerSettings) || formStatus.layerSettingsForm) && !this.layerSettings.reseted){
+            config.mapSettings = checkLayerSettings(this,'report',config.mapSettings,formStatus.layerSettingsForm);
         }
 
-        if(!angular.equals(userConfig.referenceDataSettings,this.referenceDataSettings) || form.referenceDataSettingsForm.$dirty){
-            config.mapSettings = checkReferenceDataSettings(this,'report',config.mapSettings,form.referenceDataSettingsForm.$dirty);
+        if(!angular.equals(userConfig.referenceDataSettings,this.referenceDataSettings) || formStatus.referenceDataSettingsForm){
+            config.mapSettings = checkReferenceDataSettings(this,'report',config.mapSettings,formStatus.referenceDataSettingsForm);
         }
 
         return config;
@@ -334,13 +343,12 @@ angular.module('unionvmsWeb').factory('SpatialConfig',function() {
 	};
 
     var checkVisibilitySettings = function(model,settingsLevel,config,changed){
+        var visibilityTypes = ['position','segment','track'];
+        var contentTypes = ['Table','Popup','Label'];
         if(!changed && (model.visibilitySettings && model.visibilitySettings.reseted || settingsLevel === 'user')){
             config.visibilitySettings = undefined;
         }else if((changed && model.visibilitySettings) || (!changed && settingsLevel !== 'user')){
-            var visibilityTypes = ['position','segment','track'];
-            var contentTypes = ['Table','Popup','Label'];
             config.visibilitySettings = {};
-            
             angular.forEach(visibilityTypes, function(visibType) {
                 config.visibilitySettings[visibType + 's'] = {};
                 angular.forEach(contentTypes, function(contentType) {
@@ -368,10 +376,19 @@ angular.module('unionvmsWeb').factory('SpatialConfig',function() {
                     }
                     config.visibilitySettings[visibType + 's'][contentType.toLowerCase() === 'label' ? contentType.toLowerCase() + 's' : contentType.toLowerCase()] =
                     model.visibilitySettings[visibType + 's'][contentType.toLowerCase() === 'label' ? contentType.toLowerCase() + 's' : contentType.toLowerCase()];
+                    //delete config.visibilitySettings[visibType + contentType + 'Attrs'];
+                });
+            });
+        }
+        
+        if (angular.isDefined(config.visibilitySettings)){
+            angular.forEach(visibilityTypes, function(visibType){
+                angular.forEach(contentTypes, function(contentType){
                     delete config.visibilitySettings[visibType + contentType + 'Attrs'];
                 });
             });
         }
+        
         return config;
     };
 
@@ -432,12 +449,21 @@ angular.module('unionvmsWeb').factory('SpatialConfig',function() {
         
         return temp;
     };
+    
+    var fixIndividualUserAreas = function (layerSettings){
+        if (angular.isDefined(layerSettings.areaLayers) && layerSettings.areaLayers.length > 0){
+            angular.forEach(layerSettings.areaLayers, function(item) {
+            	if (item.areaType === 'userarea'){
+            	    item.name = item.areaName;
+            	}
+            }, layerSettings.areaLayers);
+        }
+    };
 
-    var removeLayerIds = function(obj){
+    var removeLayerHashKeys = function(obj){
         angular.forEach(obj, function(type) {
             angular.forEach(type, function(item) {
                 delete item.$$hashKey;
-                delete item.gid;
             });
     	});
     };
