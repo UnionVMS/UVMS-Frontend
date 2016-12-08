@@ -1,5 +1,5 @@
 /*
-﻿Developed with the contribution of the European Commission - Directorate General for Maritime Affairs and Fisheries
+Developed with the contribution of the European Commission - Directorate General for Maritime Affairs and Fisheries
 © European Union, 2015-2016.
 
 This file is part of the Integrated Fisheries Data Management (IFDM) Suite. The IFDM Suite is free software: you can
@@ -8,12 +8,11 @@ Free Software Foundation, either version 3 of the License, or any later version.
 the hope that it will be useful, but WITHOUT ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or
 FITNESS FOR A PARTICULAR PURPOSE.  See the GNU General Public License for more details. You should have received a
 copy of the GNU General Public License along with the IFDM Suite. If not, see <http://www.gnu.org/licenses/>.
- */
-angular.module('unionvmsWeb').directive('layerMenu', function(locale) {
+*/
+angular.module('unionvmsWeb').directive('layerMenu', function(locale, reportFormService, reportService, reportRestService, Report, $modal, loadingStatus, layerPanelService) {
 	return {
 		restrict: 'A',
-		templateUrl: 'directive/spatial/layerMenu/layerMenu.html',
-		// controller ? MV*
+		//templateUrl: 'directive/spatial/layerMenu/layerMenu.html',
 		link: function(scope, element, attrs, fn) {
 			// hide contextmenu
 			scope.hideMenu = function (event) {
@@ -40,7 +39,8 @@ angular.module('unionvmsWeb').directive('layerMenu', function(locale) {
                         items[i].selected = status;
                     }
                     
-                    scope.$parent.$broadcast('reloadLegend');
+					layerPanelService.reloadPanels();
+                    //scope.$parent.$broadcast('reloadLegend');
                 }
             };
 			
@@ -81,14 +81,78 @@ angular.module('unionvmsWeb').directive('layerMenu', function(locale) {
                     };
 				}
 			};
-
-			// handler for 'regular' items - (type === undefined)
-			// currently only for development
-			scope.clickHandler = function ( key, options ) {
-				if ( !options.commands[ key ].dev ) {
-					return;
-				}
+			
+			scope.setupSettingsCallbak = function(item, node){
+			    item.callback = scope.openSettingsModal;
 			};
+			
+			scope.openSettingsModal = function(itemKey, opt){
+                var node = $.ui.fancytree.getNode(opt.$trigger);
+                var typeName = node.data.typeName;
+                
+                loadingStatus.isLoading('LiveviewMap', true, 2);
+                if (!angular.isDefined(reportFormService.liveView.currentReport)){
+                    reportRestService.getReport(reportService.id).then(function(response){
+                        var rep = new Report();
+                        rep = rep.fromJson(response);
+                        reportFormService.liveView.originalReport = rep;
+                        reportFormService.liveView.currentReport = new Report();
+                        angular.copy(rep, reportFormService.liveView.currentReport);
+                        openModal(typeName);
+                    }, function(error){
+                        reportService.hasAlert = true;
+                        reportService.alertType = 'danger';
+                        reportService.message = locale.getString('spatial.map_error_loading_report_settings');
+                    });
+                } else {
+                    openModal(typeName);
+                }
+            };
+            
+            //Options modal
+            var openModal = function(type){
+                if (angular.isDefined(reportService.autoRefreshInterval)){
+                    reportService.stopAutoRefreshInterval();
+                }
+                
+                var modalInstance = $modal.open({
+                    templateUrl: 'partial/spatial/reportsPanel/reportForm/mapConfigurationModal/mapConfigurationModal.html',
+                    controller: 'MapconfigurationmodalCtrl',
+                    size: 'lg',
+                    resolve: {
+                        reportConfigs: function(){
+                            return angular.copy(reportFormService.liveView.currentReport.currentMapConfig);
+                        },
+                        displayComponents: function(){
+                            var components = {
+                                fromLayerTree: locale.getString('spatial.' + type.toLowerCase() + '_config_modal_title'),
+                                referenceData: true,
+                                referenceDataType: type
+                            };
+                            
+                            return components;
+                        }
+                    }
+                });
+                
+                modalInstance.result.then(function(data){
+                    if (!angular.equals(reportFormService.liveView.currentReport.currentMapConfig.mapConfiguration, data.mapSettings)){
+                        reportFormService.liveView.currentReport.currentMapConfig.mapConfiguration = data.mapSettings;
+                        reportFormService.liveView.outOfDate = true;
+                        reportService.runReportWithoutSaving(reportFormService.liveView.currentReport);
+                    } else if (reportService.refresh.status){
+                        reportService.setAutoRefresh();
+                    }
+                }, function(){
+                    if (reportService.refresh.status){
+                        reportService.setAutoRefresh();
+                    }
+                });
+
+                if(screenfull.isFullscreen){
+                    screenfull.exit();
+                }
+            };
 
 			$.contextMenu({
 				selector: '.layertree-menu > span',
@@ -103,10 +167,14 @@ angular.module('unionvmsWeb').directive('layerMenu', function(locale) {
 						if ( !items.hasOwnProperty( rootProp ) ) {
 							continue;
 						}
-
+						
 						item = items[ rootProp ];
-
-						scope.setupRadioButton( item, node );
+						
+						if (rootProp === 'settingsMenu'){
+						    scope.setupSettingsCallbak(item, node);
+						} else {
+						    scope.setupRadioButton( item, node );
+						}
 					}
 					
 					var quit = {
@@ -116,15 +184,14 @@ angular.module('unionvmsWeb').directive('layerMenu', function(locale) {
 		                        $itemElement.html('<span class="fa fa-times" aria-hidden="true"></span>' + item.name);
 		                        return 'context-menu-icon-quit';
 		                    },
-		                    events: {
-		                        click: scope.hideMenu
+		                    callback: function(itemKey, opt){
+		                        return true;
 		                    }
 		                }
 		            };
 			        _.extend(node.data.contextItems, quit);
 
 					return {
-						callback: scope.clickHandler,
 						items: node.data.contextItems
 					};
 				}
@@ -132,3 +199,4 @@ angular.module('unionvmsWeb').directive('layerMenu', function(locale) {
 		}
 	};
 });
+

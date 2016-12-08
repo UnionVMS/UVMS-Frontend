@@ -1,5 +1,5 @@
 /*
-﻿Developed with the contribution of the European Commission - Directorate General for Maritime Affairs and Fisheries
+Developed with the contribution of the European Commission - Directorate General for Maritime Affairs and Fisheries
 © European Union, 2015-2016.
 
 This file is part of the Integrated Fisheries Data Management (IFDM) Suite. The IFDM Suite is free software: you can
@@ -8,7 +8,7 @@ Free Software Foundation, either version 3 of the License, or any later version.
 the hope that it will be useful, but WITHOUT ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or
 FITNESS FOR A PARTICULAR PURPOSE.  See the GNU General Public License for more details. You should have received a
 copy of the GNU General Public License along with the IFDM Suite. If not, see <http://www.gnu.org/licenses/>.
- */
+*/
 angular.module('unionvmsWeb').factory('MapFish',function() {
 
     var model = {
@@ -820,7 +820,7 @@ angular.module('unionvmsWeb').factory('MapFish',function() {
             angular.forEach(features, function(clusterFeat) {
             	var featuresInCluster = clusterFeat.get('features');
 
-            	if (featuresInCluster.length > 1){
+            	if (featuresInCluster.length > 1 && clusterFeat.get('featNumber') > 1){
             	    var clusterToPrint = new ol.Feature({
             	        geometry: clusterFeat.getGeometry()
             	    });
@@ -838,7 +838,13 @@ angular.module('unionvmsWeb').factory('MapFish',function() {
 
             	    clusters.push(clusterToPrint);
             	} else {
-            	    var feature = angular.copy(featuresInCluster[0]);
+            	    var feature;
+            	    if (featuresInCluster.length === 1){
+            	        feature = angular.copy(featuresInCluster[0]);
+            	    } else {
+            	        feature =  angular.copy(clusterFeat.get('featureToDisplay'));
+            	    }
+            	    
             	    if (mapService.vmsposLabels.active){
             	        if (feature.get('overlayHidden') === false){
             	            var overCoords = mapService.vmsposLabels[feature.get('overlayId')].overlay.getPosition();
@@ -1068,3 +1074,4 @@ angular.module('unionvmsWeb').factory('MapFish',function() {
 
     return mapFishPayload;
 });
+

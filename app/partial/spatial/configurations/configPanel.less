@@ -1,5 +1,5 @@
 /*
-﻿Developed with the contribution of the European Commission - Directorate General for Maritime Affairs and Fisheries
+Developed with the contribution of the European Commission - Directorate General for Maritime Affairs and Fisheries
 © European Union, 2015-2016.
 
 This file is part of the Integrated Fisheries Data Management (IFDM) Suite. The IFDM Suite is free software: you can
@@ -8,9 +8,22 @@ Free Software Foundation, either version 3 of the License, or any later version.
 the hope that it will be useful, but WITHOUT ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or
 FITNESS FOR A PARTICULAR PURPOSE.  See the GNU General Public License for more details. You should have received a
 copy of the GNU General Public License along with the IFDM Suite. If not, see <http://www.gnu.org/licenses/>.
- */
+*/
 .spatialConfig,
 .mapConfigurationModal {
+	&[ng-controller="ConfigpanelCtrl"] {
+		padding-top: 15px;
+	}
+	.preferences-form-header {
+		background-color: #fff;
+		padding-top: 10px;
+    	padding-bottom: 10px;
+    	border-bottom: 1px solid #ddd;
+		h3 {
+			margin: 0;
+    		line-height: 30px;
+		}
+	}
 	.containerCollapsible {
 		position: relative;
 		.collapsiblePanel {
@@ -111,5 +124,5 @@ copy of the GNU General Public License along with the IFDM Suite. If not, see <h
 }
 
 .spatialConfigNoBottomMargin {
-	margin-bottom: @footerHeight;
+	margin-bottom: 15px;
 }

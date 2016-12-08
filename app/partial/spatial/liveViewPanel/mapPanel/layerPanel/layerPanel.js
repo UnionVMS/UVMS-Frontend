@@ -1,5 +1,5 @@
 /*
-﻿Developed with the contribution of the European Commission - Directorate General for Maritime Affairs and Fisheries
+Developed with the contribution of the European Commission - Directorate General for Maritime Affairs and Fisheries
 © European Union, 2015-2016.
 
 This file is part of the Integrated Fisheries Data Management (IFDM) Suite. The IFDM Suite is free software: you can
@@ -8,46 +8,66 @@ Free Software Foundation, either version 3 of the License, or any later version.
 the hope that it will be useful, but WITHOUT ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or
 FITNESS FOR A PARTICULAR PURPOSE.  See the GNU General Public License for more details. You should have received a
 copy of the GNU General Public License along with the IFDM Suite. If not, see <http://www.gnu.org/licenses/>.
- */
-angular.module('unionvmsWeb').controller('LayerpanelCtrl',function($scope, $timeout,$window, mapService, locale){
-    $scope.expanded = false;
-
+*/
+angular.module('unionvmsWeb').controller('LayerpanelCtrl',function($scope, $timeout, $state, $window, mapService, locale, reportService, reportFormService, reportRestService, loadingStatus, alertModalService){
+    $scope.expanded = true;
     $scope.tab = "LAYERTREE";
-  
-    $scope.toggle = function() {
-        $scope.expanded = !$scope.expanded;
-        if ($scope.expanded) {
-        	$( '#layer-panel-wrapper' ).addClass('expanded');
-            $timeout($scope.setHeight, 150);
-        }else{
-        	$( '#layer-panel-wrapper' ).removeClass('expanded');
-        }
-        $timeout(mapService.updateMapSize, 50);
-    };
-
-    angular.element( $window ).bind( 'resize', function(){
-        $timeout($scope.setHeight, 150);
+    $scope.tabTitle = undefined;
+    
+    locale.ready('spatial').then(function(){
+         setTabTitle();
     });
 
+    var setTabTitle = function(){
+        switch ($scope.tab) {
+            case 'LEGEND':
+                $scope.tabTitle = locale.getString('spatial.layer_panel_legend');
+                break;
+            case 'COPYRIGHT':
+                $scope.tabTitle = locale.getString('spatial.layer_panel_copyright');
+                break;
+            default:
+                $scope.tabTitle = locale.getString('spatial.layer_panel_layers');
+                break;
+        }
+    };
+    
+    $scope.switchCollapse = function(){
+        $scope.expanded = !$scope.expanded;
+        alertModalService.resizeModal();
+    };
+    
     $scope.tabClick = function( tab ) {
         $scope.tab = tab;
-    };
-
-    $scope.setHeight = function() {
-    	setTimeout(function() {
-	    	var wh = $( '#layer-panel-wrapper' ).height();
-	        var th = $( '#layer-tabs-container' ).height()+2;
-	        $( '.fancytree-container' ).css( 'height', wh-th+'px' );
-    	}, 100);
+        setTabTitle();
     };
     
-	$('.layer-panel').on('transitionend webkitTransitionEnd oTransitionEnd MSTransitionEnd', function(e) {
-		mapService.updateMapSize();
-    });
+    $scope.getClassName = function(){
+        var items = angular.element('.panel-component-item');
+        return 'item-' + items.length;
+    };
     
-    angular.element(document).ready(function () {
-        if (angular.isDefined(mapService.map)){
-            mapService.updateMapContainerSize();
+    $scope.isLastTreeItem = function(component){
+        //Components might be: LayerBtns, ReportBtns, AreaBtns
+        var className;
+        var items = angular.element('.panel-component-item');
+        if ((component === 'LayerBtns' && items.length === 0) || (component === 'ReportBtns' && items.length === 1) || (component === 'AreaBtns') && items.length === 2){
+            className = 'is-last-tree-item';
         }
-    });
+        
+        return className;
+    };
+    
+    $scope.isReportEditable = function(){
+        return reportFormService.liveView.editable;
+    };
+    
+    $scope.isReportDirty = function(){
+        return reportFormService.liveView.editable && reportFormService.liveView.outOfDate;
+    };
+    
+    $scope.goToAreas = function(){
+        $state.go('app.areas');
+    };
 });
+

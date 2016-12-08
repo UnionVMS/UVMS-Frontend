@@ -1,0 +1,66 @@
+<!--
+Developed with the contribution of the European Commission - Directorate General for Maritime Affairs and Fisheries
+© European Union, 2015-2016.
+
+This file is part of the Integrated Fisheries Data Management (IFDM) Suite. The IFDM Suite is free software: you can
+redistribute it and/or modify it under the terms of the GNU General Public License as published by the
+Free Software Foundation, either version 3 of the License, or any later version. The IFDM Suite is distributed in
+the hope that it will be useful, but WITHOUT ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or
+FITNESS FOR A PARTICULAR PURPOSE.  See the GNU General Public License for more details. You should have received a
+copy of the GNU General Public License along with the IFDM Suite. If not, see <http://www.gnu.org/licenses/>.
+-->
+<div class="mdr-code-list-modal">
+    <div class="modal-header">
+    <div class="pointer pull-right" ng-click="close()">
+             <i class="fa fa-times closeicon"></i>
+        </div>
+        <h4 class="modal-title">{{'activity.mdr_code_list_modal_title' | i18n}}{{acronym}}</h4>
+    </div>
+    <!-- BODY -->
+    <div class="modal-body" st-pipe="callServer" st-table="displayedMdrCodeList">
+        <div class="table-responsive-force">
+            <div class="form-group col-md-4">
+                <div class="row">
+                    <input st-search="" ng-model="searchFilter" class="form-control" placeholder="{{'common.search' | i18n}}"/>
+                </div>
+            </div>
+            <table id="codeListsTable" class="table table-striped areas-table table-condensed">
+                <thead>
+                	<tr>
+                		<th ng-repeat="column in allColumns">
+                			<div st-sort="{{column}}" st-sort-default="reverse" st-skip-natural="true" st-class-ascent="sorting_asc" st-class-descent="sorting_desc" ng-show="column === 'code'" ng-if="column === 'code'">{{'activity.mdr_code_list_field_' + column | i18n}}</div>
+                			<div st-sort="{{column}}" st-skip-natural="true" st-class-ascent="sorting_asc" st-class-descent="sorting_desc" ng-show="column !== 'code'" ng-if="column !== 'code'">{{'activity.mdr_code_list_field_' + column | i18n}}</div>
+                		</th>
+                	</tr>
+                    <tr ng-show="!tableLoading && !displayedMdrCodeList.length">
+                        <th colspan="{{allColumns.length}}"><table-alert type="'info'" msg="'activity.table_no_data'" visible="!displayedMdrCodeList.length && !tableLoading"></table-alert></th>
+                    </tr>
+                    <tr ng-if="tableLoading && !alert.isLoading">
+                        <th class="loading-spinner-cl" colspan="{{allColumns.length}}"><i class="fa fa-spinner fa-spin loading-spinner"></i></th>
+                    </tr>
+                </thead>
+                <tbody ng-show="!tableLoading && displayedMdrCodeList.length">
+                    <tr ng-repeat="codeListEntry in displayedMdrCodeList">
+                        <td ng-repeat="column in allColumns">{{codeListEntry[column]}}</td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+        <div class="tfoot stFooterPagination" ng-if="displayedMdrCodeList.length && !tableLoading">
+            <div class="tr">
+                <div class="td text-right" colspan="{{allColumns.length}}">
+                    <div st-pagination st-items-by-page="itemsByPage" st-displayed-pages="7" st-template="partial/common/reportsPagination/reportsPagination.html"></div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <!-- FOOTER -->
+    <div class="modal-footer">
+        <div class="row">
+            <div class="col-md-12">
+                <button class="btn btn-default btn-action" type="button" ng-click="close()" >{{'common.close' | i18n}}</button>
+            </div>
+        </div>
+    </div>
+</div>
+

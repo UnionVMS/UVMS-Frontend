@@ -1,5 +1,5 @@
 /*
-﻿Developed with the contribution of the European Commission - Directorate General for Maritime Affairs and Fisheries
+Developed with the contribution of the European Commission - Directorate General for Maritime Affairs and Fisheries
 © European Union, 2015-2016.
 
 This file is part of the Integrated Fisheries Data Management (IFDM) Suite. The IFDM Suite is free software: you can
@@ -8,37 +8,31 @@ Free Software Foundation, either version 3 of the License, or any later version.
 the hope that it will be useful, but WITHOUT ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or
 FITNESS FOR A PARTICULAR PURPOSE.  See the GNU General Public License for more details. You should have received a
 copy of the GNU General Public License along with the IFDM Suite. If not, see <http://www.gnu.org/licenses/>.
- */
+*/
 angular.module('unionvmsWeb').controller('ReportformCtrl',function($scope, $modal, $anchorScroll, reportMsgService, locale, Report, reportRestService, spatialRestService, configurationService, movementRestService, reportService, SpatialConfig, spatialConfigRestService, userService, loadingStatus, reportFormService){
     //Report form mode
-    $scope.formMode = 'CREATE';
     $scope.showVesselFilter = false;
 
-    $scope.getFormMode = function(mode){
-        return mode === $scope.formMode;
-    };
-
     //set visibility types in dropdown option
-    $scope.visibilities = [
-                           {"text": locale.getString('spatial.reports_table_share_label_private'), "code": "private"},
-                           {"text": locale.getString('spatial.reports_table_share_label_scope'), "code": "scope"},
-                           {"text": locale.getString('spatial.reports_table_share_label_public'), "code": "public"}
-                           ];
+    $scope.visibilities = [];
     
     //Set positions selector dropdown options
-    $scope.positionItems = [];
-    $scope.positionItems.push({"text": locale.getString('spatial.reports_form_positions_selector_option_all'), "code": "all"});
-    $scope.positionItems.push({"text": locale.getString('spatial.reports_form_positions_selector_option_last'), "code": "last"});
+    $scope.positionItems = [
+        {"text": locale.getString('spatial.reports_form_positions_selector_option_all'), "code": "all"},
+        {"text": locale.getString('spatial.reports_form_positions_selector_option_last'), "code": "last"}
+    ];
 
     //Set positions selector dropdown options
-    $scope.positionTypeItems = [];
-    $scope.positionTypeItems.push({"text": locale.getString('spatial.reports_form_positions_selector_type_option_positions'), "code": "positions"});
-    $scope.positionTypeItems.push({"text": locale.getString('spatial.reports_form_positions_selector_type_option_hours'), "code": "hours"});
+    $scope.positionTypeItems = [
+        {"text": locale.getString('spatial.reports_form_positions_selector_type_option_positions'), "code": "positions"},
+        {"text": locale.getString('spatial.reports_form_positions_selector_type_option_hours'), "code": "hours"}
+    ];
 
     //Set vessel search type dropdown options
-    $scope.vesselSearchItems = [];
-    $scope.vesselSearchItems.push({"text": locale.getString('spatial.reports_form_vessels_search_by_vessel'), "code": "asset"});
-    $scope.vesselSearchItems.push({"text": locale.getString('spatial.reports_form_vessels_search_by_group'), "code": "vgroup"});
+    $scope.vesselSearchItems = [
+        {"text": locale.getString('spatial.reports_form_vessels_search_by_vessel'), "code": "asset"},
+        {"text": locale.getString('spatial.reports_form_vessels_search_by_group'), "code": "vgroup"}
+    ];
 
     //Set movement type dropdown options
     $scope.movementTypes = configurationService.setTextAndCodeForDropDown(configurationService.getValue('MOVEMENT', 'MESSAGE_TYPE'),'MESSAGE_TYPE','MOVEMENT');
@@ -46,17 +40,22 @@ angular.module('unionvmsWeb').controller('ReportformCtrl',function($scope, $moda
     //Set movemment activity type dropdown options
     $scope.activityTypes = configurationService.setTextAndCodeForDropDown(configurationService.getValue('MOVEMENT', 'ACTIVITY_TYPE'), 'ACTIVITY_TYPE', 'MOVEMENT');
 
-    //Set movemment activity type dropdown options
+    //Set category types dropdown options
     $scope.categoryTypes = configurationService.setTextAndCodeForDropDown(configurationService.getValue('MOVEMENT', 'CATEGORY_TYPE'), 'CATEGORY_TYPE', 'MOVEMENT');
 
+    //Set movement source types dropdown options
+    $scope.movementSourceTypes = configurationService.setTextAndCodeForDropDown(configurationService.getConfig('MOVEMENT_SOURCE_TYPES'),'MOVEMENT_SOURCE_TYPES','MOVEMENT');
+
     $scope.submitingReport = false;
+    
+    $scope.repFormServ = reportFormService;
 
     $scope.showSaveBtn = function(){
         var result = false;
-        if ($scope.getFormMode('CREATE')){
+        if ($scope.formMode === 'CREATE'){
             result = true;
         } else {
-            if ((angular.isDefined($scope.reportOwner) && $scope.reportOwner === userService.getUserName()) || $scope.isAllowed('Reporting', 'MANAGE_ALL_REPORTS')){
+            if ((angular.isDefined($scope.report) && $scope.report.createdBy === userService.getUserName()) || $scope.isAllowed('Reporting', 'MANAGE_ALL_REPORTS')){
                 result = true;
             }
         }
@@ -64,17 +63,17 @@ angular.module('unionvmsWeb').controller('ReportformCtrl',function($scope, $moda
     };
     
     $scope.init = function(){
-    	reportFormService.report = new Report();
-        $scope.report = reportFormService.report;
         $scope.formAlert = {
             visible: false,
             msg: ''
         };
-        $scope.reportOwner = undefined;
         $scope.submitingReport = false;
-        $scope.vesselsSelectionIsValid = true;
-        $scope.report.vesselsSelection = [];
+
+        if ($scope.formMode === 'CREATE'){
+            $scope.report.vesselsSelection = [];
+        }
         $scope.showVesselFilter = false;
+        $scope.selectedAreas = [];
 
         $scope.shared = {
             vesselSearchBy: 'asset',
@@ -84,9 +83,24 @@ angular.module('unionvmsWeb').controller('ReportformCtrl',function($scope, $moda
             vessels: [],
             areas: []
         };
+        
+        $scope.checkVisibilities();
+    };
+    
+    $scope.checkVisibilities = function(){
+        $scope.visibilities = [{"text": locale.getString('spatial.reports_table_share_label_private'), "code": "private"}];
+        var availableVisibilities = ['SCOPE', 'PUBLIC'];
+        angular.forEach(availableVisibilities, function(visibility) {
+        	if (userService.isAllowed('SHARE_REPORT_' + visibility, 'Reporting', true) || userService.isAllowed('MANAGE_ALL_REPORTS', 'Reporting', true)){
+        	    var name = visibility.toLowerCase();
+        	    $scope.visibilities.push({"text": locale.getString('spatial.reports_table_share_label_' + name), "code": name});
+        	}
+        });
     };
 
     $scope.resetForm = function(){
+        reportFormService.report = new Report();
+        $scope.report = reportFormService.report;
         $scope.init();
         $scope.reportForm.$setPristine();
         $scope.clearVmsErrors();
@@ -103,7 +117,7 @@ angular.module('unionvmsWeb').controller('ReportformCtrl',function($scope, $moda
         var status = true;
 
         //Validate positions speed range
-        if ($scope.report.hasVmsFilter === true && $scope.report.hasPositionsFilter === true && angular.isDefined($scope.report.vmsFilters.positions)){
+        if (angular.isDefined($scope.report.vmsFilters.positions) && !_.isEmpty($scope.report.vmsFilters.positions)){
             min = $scope.report.vmsFilters.positions.movMinSpeed;
             max = $scope.report.vmsFilters.positions.movMaxSpeed;
             
@@ -111,7 +125,7 @@ angular.module('unionvmsWeb').controller('ReportformCtrl',function($scope, $moda
         }
 
         //Validate segments speed and duration ranges
-        if ($scope.report.hasVmsFilter === true && $scope.report.hasSegmentsFilter === true && angular.isDefined($scope.report.vmsFilters.segments)){
+        if (angular.isDefined($scope.report.vmsFilters.segments) && !_.isEmpty($scope.report.vmsFilters.segments)){
             min = $scope.report.vmsFilters.segments.segMinSpeed;
             max = $scope.report.vmsFilters.segments.segMaxSpeed;
             
@@ -124,7 +138,7 @@ angular.module('unionvmsWeb').controller('ReportformCtrl',function($scope, $moda
         }
 
         //Validate tracks time at sea and duration ranges
-        if ($scope.report.hasVmsFilter === true && $scope.report.hasTracksFilter === true && angular.isDefined($scope.report.vmsFilters.tracks)){
+        if (angular.isDefined($scope.report.vmsFilters.tracks) && !_.isEmpty($scope.report.vmsFilters.tracks)){
             min = $scope.report.vmsFilters.tracks.trkMinTime;
             max = $scope.report.vmsFilters.tracks.trkMaxTime;
             
@@ -148,7 +162,7 @@ angular.module('unionvmsWeb').controller('ReportformCtrl',function($scope, $moda
         }else{
             $scope.reportForm.reportBodyForm[subForm][fieldMax].$setValidity('minError', true);
     	}
-        if(angular.isDefined(min) && angular.isDefined(max) && min !== null && max != null && min > max){
+        if(angular.isDefined(min) && angular.isDefined(max) && min !== null && max !== null && min > max){
             $scope.reportForm.reportBodyForm[subForm][fieldMax].$setValidity('maxError', false);
         }else{
             $scope.reportForm.reportBodyForm[subForm][fieldMax].$setValidity('maxError', true);
@@ -159,16 +173,26 @@ angular.module('unionvmsWeb').controller('ReportformCtrl',function($scope, $moda
     	loadingStatus.isLoading('SaveReport',true);
         $scope.submitingReport = true;
         $scope.validateRanges();
-        if ($scope.reportForm.$valid && $scope.vesselsSelectionIsValid){
-        	$scope.configModel = new SpatialConfig();
-            if ($scope.formMode === 'CREATE'){
-            	$scope.report.currentConfig.mapConfiguration.layerSettings = reportService.checkLayerSettings($scope.report.currentConfig.mapConfiguration.layerSettings);
-            	$scope.report = checkMapConfigDifferences($scope.report);
-                reportRestService.createReport($scope.report).then(createReportSuccess, createReportError);
-            } else if ($scope.formMode === 'EDIT' || $scope.formMode === 'EDIT-FROM-LIVEVIEW'){
-        		$scope.report.currentConfig.mapConfiguration.layerSettings = reportService.checkLayerSettings($scope.report.currentConfig.mapConfiguration.layerSettings);
-            	$scope.report = checkMapConfigDifferences($scope.report);
-                reportRestService.updateReport($scope.report).then(updateReportSuccess, updateReportError);
+        if ($scope.reportForm.$valid){
+            $scope.report.areas = $scope.exportSelectedAreas();
+        	$scope.currentRepCopy = angular.copy($scope.report);
+        	$scope.report.currentMapConfig.mapConfiguration.layerSettings = reportFormService.checkLayerSettings($scope.report.currentMapConfig.mapConfiguration.layerSettings);
+            $scope.report = reportFormService.checkMapConfigDifferences($scope.report);
+            switch ($scope.formMode) {
+                case 'CREATE':
+                    reportRestService.createReport($scope.report).then(createReportSuccess, createReportError);
+                    break;
+                case 'EDIT':
+                    reportRestService.updateReport($scope.report).then(updateReportSuccess, updateReportError);
+                    break;
+                case 'EDIT-FROM-LIVEVIEW':
+                    if (!angular.equals($scope.currentRepCopy, reportFormService.liveView.originalReport)){
+                        reportRestService.updateReport($scope.report).then(updateReportSuccess, updateReportError);
+                    } else {
+                        loadingStatus.isLoading('SaveReport',false);
+                        $scope.repNav.goToPreviousView();
+                    }
+                    break;
             }
         } else {
         	loadingStatus.isLoading('SaveReport',false);
@@ -193,26 +217,6 @@ angular.module('unionvmsWeb').controller('ReportformCtrl',function($scope, $moda
         }
     };
 
-    $scope.openAreaSelectionModal = function(){
-        var modalInstance = $modal.open({
-            templateUrl: 'partial/spatial/reportsPanel/reportForm/areasSelectionModal/areasSelectionModal.html',
-            controller: 'AreasselectionmodalCtrl',
-            size: 'lg',
-            resolve: {
-                selectedAreas: function(){
-                    return $scope.report.areas;
-                }
-            }
-        });
-
-        modalInstance.result.then(function(data){
-        	if(!angular.equals($scope.report.areas,data)){
-        		$scope.reportForm.$setDirty();
-            	$scope.report.areas = data;
-        	}
-        });
-    };
-    
     $scope.openMapConfigurationModal = function(){
         var modalInstance = $modal.open({
             templateUrl: 'partial/spatial/reportsPanel/reportForm/mapConfigurationModal/mapConfigurationModal.html',
@@ -220,42 +224,53 @@ angular.module('unionvmsWeb').controller('ReportformCtrl',function($scope, $moda
             size: 'lg',
             resolve: {
                 reportConfigs: function(){
-                    if(!angular.isDefined($scope.report.currentConfig) || !angular.isDefined($scope.report.currentConfig.mapConfiguration)){
-                        $scope.report.currentConfig = {'mapConfiguration': {}};
-                    }else{
-                        angular.forEach(_.keys($scope.report.currentConfig.mapConfiguration),function(value,key){
-                            if(!angular.isDefined(value)){
-                                delete $scope.report.currentConfig.mapConfiguration[key];
-                            }
-                        });
-                    }
-                    return $scope.report.currentConfig;
+                    return angular.copy($scope.report.currentMapConfig);
                 },
-                hasMap: function(){
-                    if(!angular.isDefined($scope.report.currentConfig)){
-                        $scope.report.currentConfig = {'mapConfiguration': {}};
+                displayComponents: function(){
+                    var components = {
+                        visibility: {
+                            position: true,
+                            segment: true
+                        }
+                    };
+                    
+                    if ($scope.report.withMap){
+                        components.map = true;
+                        components.layers = true;
+                        components.referenceData = true;
+                        components.styles = {
+                            position: true,
+                            segment: true,
+                            alarm: true
+                        };
                     }
-                    return $scope.report.withMap;
+                    
+                    return components;
                 }
             }
         });
 
         modalInstance.result.then(function(data){
-        	if(!angular.equals($scope.report.currentConfig.mapConfiguration,data.mapSettings)){
+        	if(!angular.equals($scope.report.currentMapConfig.mapConfiguration,data.mapSettings)){
         		$scope.reportForm.$setDirty();
-        		$scope.report.currentConfig.mapConfiguration = data.mapSettings;
+        		$scope.report.currentMapConfig.mapConfiguration = data.mapSettings;
         	}
         });
     };
     
     $scope.runReport = function() {
     	$scope.submitingReport = true;
-    	$scope.mergedReport = undefined;
     	$scope.validateRanges();
-    	if($scope.reportForm.reportBodyForm.$valid && $scope.vesselsSelectionIsValid){
+    	if($scope.reportForm.reportBodyForm.$valid){
+    	    $scope.report.areas = $scope.exportSelectedAreas();
     		reportService.runReportWithoutSaving($scope.report);
-    		$scope.$emit('goToLiveView');
-        	$scope.toggleReportForm();
+    		
+    		if (!angular.equals($scope.report, reportFormService.liveView.originalReport)){
+                reportFormService.liveView.outOfDate = true;
+            } else {
+                reportFormService.liveView.outOfDate = false;
+            }
+    		reportFormService.liveView.currentTempReport = undefined;
     	}else{
     		var invalidElm = angular.element('#reportForm')[0].querySelector('.ng-invalid');
             var errorElm = angular.element('#reportForm')[0].querySelector('.has-error');
@@ -270,7 +285,7 @@ angular.module('unionvmsWeb').controller('ReportformCtrl',function($scope, $moda
     $scope.saveAsReport = function() {
     	$scope.submitingReport = true;
         $scope.validateRanges();
-        if ($scope.reportForm.reportBodyForm.$valid && $scope.vesselsSelectionIsValid){
+        if ($scope.reportForm.reportBodyForm.$valid){
         	var modalInstance = $modal.open({
                 templateUrl: 'partial/spatial/reportsPanel/reportForm/saveAsModal/saveAsModal.html',
                 controller: 'SaveasmodalCtrl',
@@ -283,8 +298,9 @@ angular.module('unionvmsWeb').controller('ReportformCtrl',function($scope, $moda
             });
 
             modalInstance.result.then(function(data){
-            	data.currentConfig.mapConfiguration.layerSettings = reportService.checkLayerSettings(data.currentConfig.mapConfiguration.layerSettings);
-            	data = checkMapConfigDifferences(data);
+                data.areas = $scope.exportSelectedAreas();
+            	data.currentMapConfig.mapConfiguration.layerSettings = reportFormService.checkLayerSettings(data.currentMapConfig.mapConfiguration.layerSettings);
+            	data = reportFormService.checkMapConfigDifferences(data);
             	reportRestService.createReport(data).then(createReportSuccess, createReportError);
             });
         } else {
@@ -299,44 +315,6 @@ angular.module('unionvmsWeb').controller('ReportformCtrl',function($scope, $moda
     	
     };
     
-    $scope.$on('openReportForm', function(e, args){
-        if(args && args.isLoaded){
-            $scope.formMode = 'EDIT-FROM-LIVEVIEW';
-            if(reportService.outOfDate && $scope.reportTemp){
-                $scope.report = {};
-                angular.copy($scope.reportTemp,$scope.report);
-                delete $scope.reportTemp;
-            }
-            return;
-        }
-
-        if(reportService.outOfDate && !$scope.reportTemp){
-            $scope.reportTemp = {};
-            angular.copy($scope.report,$scope.reportTemp);
-        }
-
-        if(!reportService.outOfDate && $scope.reportTemp){
-            delete $scope.reportTemp;
-        }
-
-        $scope.init();
-        
-        if (angular.isDefined(args)){
-            $scope.reportOwner = args.report.createdBy;
-        }
-        
-        $scope.formMode = 'CREATE';
-        if (args){
-            $scope.formMode = 'EDIT';
-            angular.copy($scope.report.fromJson(args.report),$scope.report);
-        }
-        $scope.report.currentConfig = {mapConfiguration: {}};
-        angular.copy($scope.report.mapConfiguration,$scope.report.currentConfig.mapConfiguration);
-        setTimeout(function() {
-        	$scope.reportForm.$setPristine();
-        }, 100);
-    });
-
     $scope.$watch('report.positionSelector', function(newVal, oldVal){
         if ($scope.report && newVal === 'all'){
             //Reset X Value field
@@ -352,9 +330,14 @@ angular.module('unionvmsWeb').controller('ReportformCtrl',function($scope, $moda
     });
 
     var createReportSuccess = function(response){
-        $scope.toggleReportForm();
+        reportService.loadReportHistory();
+        if($scope.repNav.hasPreviousState()){
+            $scope.repNav.goToPreviousView();
+        }else{
+            $scope.repNav.goToView('liveViewPanel','mapPanel',$scope.openReportList);
+        }
+        reportFormService.report = undefined;
         reportMsgService.show(locale.getString('spatial.success_create_report'), 'success');
-        $scope.$emit('reloadReportsList');
         loadingStatus.isLoading('SaveReport',false);
     };
 
@@ -364,20 +347,34 @@ angular.module('unionvmsWeb').controller('ReportformCtrl',function($scope, $moda
     };
 
     var updateReportSuccess = function(response){
-        $scope.toggleReportForm();
+        reportService.loadReportHistory();
+        if($scope.repNav.hasPreviousState()){
+            $scope.repNav.goToPreviousView();
+        }else{
+            $scope.repNav.goToView('liveViewPanel','mapPanel',$scope.openReportList);
+        }
         reportMsgService.show(locale.getString('spatial.success_update_report'), 'success');
-        $scope.$emit('reloadReportsList');
+        if ($scope.formMode === 'EDIT'){
+            reportFormService.report = undefined;
+        } else if ($scope.formMode === 'EDIT-FROM-LIVEVIEW'){
+            angular.copy($scope.currentRepCopy,reportFormService.liveView.currentReport);
+            delete $scope.currentRepCopy;
+            angular.copy(reportFormService.liveView.currentReport, reportFormService.liveView.originalReport);
+            reportFormService.liveView.outOfDate = false;
+            reportService.runReport($scope.report);
+        }
         loadingStatus.isLoading('SaveReport',false);
     };
 
     var updateReportError = function(error){
+        angular.copy($scope.currentRepCopy,reportFormService.liveView.currentReport);
+        delete $scope.currentRepCopy;
         reportError(error,'spatial.error_update_report');
         loadingStatus.isLoading('SaveReport',false);
     };
 
     var reportError = function(error, defaultMsg) {
         $scope.formAlert.visible = true;
-        //var errorMsgCode = error.data.msg?'spatial.' + error.data.msg:'spatial.error_create_report';
         var errorMsg = defaultMsg;
 
         if (angular.isDefined(error.data.msg)) {
@@ -389,74 +386,145 @@ angular.module('unionvmsWeb').controller('ReportformCtrl',function($scope, $moda
         $scope.formAlert.msg = errorMsg;
     };
     
-    var checkMapConfigDifferences = function(report){
-		if(!angular.equals(report.mapConfiguration, report.currentConfig.mapConfiguration)){
-			
-        	if(!angular.equals(report.mapConfiguration.coordinatesFormat, report.currentConfig.mapConfiguration.coordinatesFormat)){
-        		report.mapConfiguration.coordinatesFormat = report.currentConfig.mapConfiguration.coordinatesFormat;
-        	}
-			if(!angular.equals(report.mapConfiguration.displayProjectionId, report.currentConfig.mapConfiguration.displayProjectionId)){
-	    		report.mapConfiguration.displayProjectionId = report.currentConfig.mapConfiguration.displayProjectionId;
-	    	}
-			if(!angular.equals(report.mapConfiguration.mapProjectionId, report.currentConfig.mapConfiguration.mapProjectionId)){
-	    		report.mapConfiguration.mapProjectionId = report.currentConfig.mapConfiguration.mapProjectionId;
-	    	}
-			if(!angular.equals(report.mapConfiguration.scaleBarUnits, report.currentConfig.mapConfiguration.scaleBarUnits)){
-	    		report.mapConfiguration.scaleBarUnits = report.currentConfig.mapConfiguration.scaleBarUnits;
-	    	}
-			
-			if(!angular.equals(report.mapConfiguration.stylesSettings, report.currentConfig.mapConfiguration.stylesSettings)){
-				report.mapConfiguration.stylesSettings = report.currentConfig.mapConfiguration.stylesSettings;
-	    	}
-			if(!angular.equals(report.mapConfiguration.visibilitySettings, report.currentConfig.mapConfiguration.visibilitySettings)){
-				report.mapConfiguration.visibilitySettings = report.currentConfig.mapConfiguration.visibilitySettings;
-	    	}
-			if(!angular.equals(report.mapConfiguration.layerSettings, report.currentConfig.mapConfiguration.layerSettings)){
-				report.mapConfiguration.layerSettings = report.currentConfig.mapConfiguration.layerSettings;
-	    	}
-            if(!angular.equals(report.mapConfiguration.referenceDataSettings, report.currentConfig.mapConfiguration.referenceDataSettings)){
-				report.mapConfiguration.referenceDataSettings = report.currentConfig.mapConfiguration.referenceDataSettings;
-	    	}
-    	}
-		return report;
-    };
-    
     $scope.resetReport = function(){
-    	if($scope.reportForm.$dirty){
-            loadingStatus.isLoading('ResetReport',true);
-	    	$scope.reportForm.$setPristine();
-	    	reportRestService.getReport($scope.report.id).then(function(response){
-	    		$scope.init();
-	    	    $scope.report = $scope.report.fromJson(response);
-	    	    $scope.report.currentConfig = {mapConfiguration: {}};
-	    	    angular.copy($scope.report.mapConfiguration,$scope.report.currentConfig.mapConfiguration);
-	    	    $scope.reportOwner = response.createdBy;
-                loadingStatus.isLoading('ResetReport',false);
-	    	}, function(error){
-	    		$anchorScroll();
-	    		$scope.formAlert.msg = locale.getString('spatial.error_entry_not_found');
-	    		$scope.formAlert.visible = true;
-                loadingStatus.isLoading('ResetReport',false);
-	    	});
-    	}
+        loadingStatus.isLoading('ResetReport',true);
+    	$scope.reportForm.$setPristine();
+    	reportRestService.getReport($scope.report.id).then(function(response){
+    		$scope.init();
+    	    angular.copy($scope.report.fromJson(response), $scope.report);
+    	    $scope.report.currentMapConfig = {mapConfiguration: {}};
+            if (angular.isDefined($scope.report.areas) && $scope.report.areas.length > 0){
+                getAreaProperties(buildAreaPropArray());
+            }
+    	    angular.copy($scope.report.mapConfiguration,$scope.report.currentMapConfig.mapConfiguration);
+            loadingStatus.isLoading('ResetReport',false);
+    	}, function(error){
+    		$anchorScroll();
+    		$scope.formAlert.msg = locale.getString('spatial.error_entry_not_found');
+    		$scope.formAlert.visible = true;
+            loadingStatus.isLoading('ResetReport',false);
+    	});
     };
     
-    $scope.onActivateVmsFilter = function(type,value){
-    	if(value === false){
-	    	$scope.reportForm.$setDirty();
-	    	if(type === 'all' || type === 'positions'){
-	    		$scope.report.hasPositionsFilter = false;
-	    		$scope.report.vmsFilters.positions = undefined;
-	    	}
-	    	if(type === 'all' || type === 'segments'){
-	    		$scope.report.hasSegmentsFilter = false;
-	    		$scope.report.vmsFilters.segments = undefined;
-	    	}
-	    	if(type === 'all' || type === 'tracks'){
-	    		$scope.report.hasTracksFilter = false;
-	    		$scope.report.vmsFilters.tracks = undefined;
-	    	}
-    	}
+    $scope.cancel = function(){
+        if ($scope.formMode === 'EDIT-FROM-LIVEVIEW'){
+            angular.copy(reportFormService.liveView.currentTempReport, reportFormService.liveView.currentReport);
+            if (!angular.equals(reportFormService.liveView.currentReport, reportFormService.liveView.originalReport)){
+                reportFormService.liveView.outOfDate = true;
+            }
+            reportFormService.liveView.currentTempReport = undefined;
+        } else {
+            reportFormService.report = undefined;
+        }
+        $scope.repNav.goToPreviousView();
     };
+    
+    var loadReportForm = function(){
+        switch($scope.formMode){
+            case 'CREATE':
+                reportFormService.report = new Report();
+                $scope.report = reportFormService.report;
+                $scope.init();
+                break;
+            case 'EDIT':
+                $scope.report = reportFormService.report;
+                $scope.init();
+            break;
+            case 'EDIT-FROM-LIVEVIEW':
+                $scope.report = reportFormService.liveView.currentReport;
+                reportFormService.liveView.currentTempReport = angular.copy($scope.report);
+                $scope.init();
+        }
+
+        if (angular.isDefined($scope.report.areas) && $scope.report.areas.length > 0){
+            getAreaProperties(buildAreaPropArray());
+        }
+        setTimeout(function() {
+        	$scope.reportForm.$setPristine();
+        }, 100);
+    };
+
+    /**
+     * Export all selected areas when modal is closed while saving
+     * 
+     * @memberof ReportformCtrl
+     * @public
+     * @alias exportSelectedAreas
+     * @returns {Array} An array containing all selected areas properly formatted to submit to server side
+     */
+    $scope.exportSelectedAreas = function(){
+        var exported = [];
+        for (var i = 0; i < $scope.selectedAreas.length; i++){
+            var area = {
+                gid: parseInt($scope.selectedAreas[i].gid),
+                areaType: $scope.selectedAreas[i].areaType    
+            };
+            exported.push(area);
+        }
+        
+        return exported;
+    };
+
+    /**
+     * Build proper array from the modal resolved selected areas. This is to be used to request area properties to server
+     * 
+     * @memberof AreasselectionfieldsetCtrl
+     * @private
+     */
+    var buildAreaPropArray = function(){
+        var areas = [];
+        for (var i = 0; i < $scope.report.areas.length; i++){
+            areas.push({
+                gid : $scope.report.areas[i].gid,
+                areaType: $scope.report.areas[i].areaType
+            });
+        }
+        return areas;
+    };
+
+    /**
+     * Get area properties from the Spatial REST API
+     * 
+     * @memberof AreasselectionfieldsetCtrl
+     * @private
+     */
+    var getAreaProperties = function(data){
+        spatialRestService.getAreaProperties(data).then(function(response){
+            $scope.selectedAreas = buildSelectedAreasArray(response.data);
+        }, function(error){
+            $anchorScroll();
+            $scope.formAlert.msg = locale.getString('spatial.area_selection_modal_get_selected_sys_area_details_error');
+            $scope.formAlert.visible = true;
+        });
+    };
+
+    /**
+     * Build properly formated array out of the area properties server response data and merge it with the existent modal resolved selected areas.
+     * 
+     * @memberof AreasselectionfieldsetCtrl
+     * @private
+     */
+    var buildSelectedAreasArray = function(data){
+        var finalAreas = [];
+        for (var i = 0; i < data.length; i++){
+            var area = data[i];
+            area.gid = parseInt(area.gid);
+            for (var j = 0; j < $scope.report.areas.length; j++){
+                if (parseInt($scope.report.areas[j].gid) === parseInt(data[i].gid) && $scope.report.areas[j].areaType === data[i].areaType){
+                    area.id = parseInt($scope.report.areas[j].id);
+                }
+            }
+            finalAreas.push(area);
+        }
+        
+        return finalAreas;
+    };
+    
+    $scope.$watch(function(){return $scope.repNav.isViewVisible('reportForm');}, function(newVal,oldVal){
+        if(newVal===true){
+            loadReportForm();
+        }
+    });
     
 });
+

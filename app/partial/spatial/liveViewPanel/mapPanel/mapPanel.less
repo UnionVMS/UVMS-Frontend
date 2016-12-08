@@ -1,5 +1,5 @@
 /*
-﻿Developed with the contribution of the European Commission - Directorate General for Maritime Affairs and Fisheries
+Developed with the contribution of the European Commission - Directorate General for Maritime Affairs and Fisheries
 © European Union, 2015-2016.
 
 This file is part of the Integrated Fisheries Data Management (IFDM) Suite. The IFDM Suite is free software: you can
@@ -8,7 +8,7 @@ Free Software Foundation, either version 3 of the License, or any later version.
 the hope that it will be useful, but WITHOUT ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or
 FITNESS FOR A PARTICULAR PURPOSE.  See the GNU General Public License for more details. You should have received a
 copy of the GNU General Public License along with the IFDM Suite. If not, see <http://www.gnu.org/licenses/>.
- */
+*/
 .mapPanelContainer{
 	position: relative;
 	&.fullscreen{
@@ -18,18 +18,18 @@ copy of the GNU General Public License along with the IFDM Suite. If not, see <h
 }
 
 .map-container{
-	width: 100%;
+	/*width: 100%;
+	height: 100%;*/
 	min-height: 30px;
-	margin-left: 3px;
+	/*margin-left: 3px;*/
 }
 
 .map {
-	width: auto;
+	width: 100%;
+	min-width: 992px; //According to header.less
 	overflow: hidden;
 	height: 100%;
-	margin-left: 3px;
 	display: block;
-	border: 1px solid #DDD;
 	position: relative;
 }
 
@@ -38,10 +38,19 @@ copy of the GNU General Public License along with the IFDM Suite. If not, see <h
 }
 
 //Map top Toolbar
+#areaMap-toolbar,
 #map-toolbar {
-	display: flex;
-	border: 1px solid #DDD;
-	background-color: rgba(51, 51, 51, 0.09);
+	position: absolute;
+	width: 100%;
+	min-width: 992px; //According to header.less
+	margin: auto;
+	display: inline-flex;
+	flex-wrap: nowrap;
+	z-index: 1035;
+	background-color: rgba(54, 54, 54, 0.3);
+	height: 50px;
+	line-height: 50px;
+	justify-content: space-between;
 	> div {
 		padding: 0 3px;
 	}
@@ -54,7 +63,6 @@ copy of the GNU General Public License along with the IFDM Suite. If not, see <h
 	.btn-group-left,
 	.btn-group-right {
 		padding: 0;
-		width: 50%;
 		padding-left: 4px;
 		>div button {
 			margin-top: 3px;
@@ -79,10 +87,89 @@ copy of the GNU General Public License along with the IFDM Suite. If not, see <h
 	}
 	.btn-group-left {
 		text-align: left;
+		.combo-report-history {
+			margin-left: 7px;
+			width: 150px;
+			display: inline-block;
+			line-height: 20px;
+			.dropdown-toggle {
+				height: 25px;
+				.dropdowntext {
+					line-height: 16px;
+				}
+			}
+		}
+		.refresh-btn {
+			border-top-left-radius: 0 !important;
+			border-bottom-left-radius: 0 !important;
+			margin-left: 0 !important;
+		}
+		.refresh-container {
+			margin-top: 3px;
+			height: 25px;
+			line-height: 22px;
+			border-right: 0;
+			padding-right: 5px;
+			padding-left: 5px;
+			span {
+				color: @profileColor_darkgray;
+				font-weight: bold;
+			}
+			&.disabled {
+				cursor: default;
+				.toggle-switch {
+					background-color: #aaa;
+					cursor: default;
+					pointer-events: none;
+					div {
+						pointer-events: none;
+						cursor: default;
+					}
+					span {
+						pointer-events: none;
+						cursor: default;
+					}
+					> div > span.knob {
+						pointer-events: none;
+						background-color: inherit;
+					}
+				}
+			}
+			&:active,
+			&:focus,
+			&:hover{
+				background-color: white;
+				cursor: default;
+			}
+			.toggle-switch {
+				min-width: 42px;
+				width: 20px;
+				margin-bottom: 2px;
+				.toggle-switch-animate {
+					width: 150%;
+					height: 15px;
+					> span {
+						font-size: 12px;
+						padding: 0 10px 0 2px;
+						line-height: 15px;
+					}
+					.switch-left {
+						background-color: @profileColor_green;
+						color: #fff;
+					}
+					.switch-right {
+						background-color: @profileColor_gray;
+						color: #000;
+					}
+				}
+			}
+		}
 	}
 	.btn-group-right {
 		text-align: right;
-		padding-right: 4px;
+		padding-right: 8px;
+		display: flex;
+		align-items: center;
 	}
 	.alarms-icon {
 		color: @errorColor;
@@ -105,56 +192,6 @@ copy of the GNU General Public License along with the IFDM Suite. If not, see <h
 	line-height: 25px;
 	> .row {
 		margin-left: 0;
-	}
-	.refresh-container {
-		padding-left: 0px;
-		&.disabled {
-			cursor: default;
-			.toggle-switch {
-				background-color: #aaa;
-				cursor: default;
-				pointer-events: none;
-				div {
-					pointer-events: none;
-					cursor: default;
-				}
-				span {
-					pointer-events: none;
-					cursor: default;
-				}
-				> div > span.knob {
-					pointer-events: none;
-					background-color: inherit;
-				}
-			}
-		}
-		.toggle-switch {
-			border-radius: 20px;
-			min-width: 42px;
-			width: 20px;
-			background-color: #fff;
-			border-color: #c6c6c6;
-			.toggle-switch-animate {
-				width: 150%;
-				> span {
-					font-size: 12px;
-				    padding: 0 10px 0 2px;
-				    line-height: 22px;
-				}
-				.switch-left,
-				.switch-right {
-					border-radius: 15px;
-				}
-				.switch-left {
-					background-color: #3498db;
-					color: #fff;
-				}
-				.switch-right {
-					background-color: #eee;
-					color: #000;
-				}
-			}
-		}
 	}
 }
 
@@ -194,6 +231,12 @@ copy of the GNU General Public License along with the IFDM Suite. If not, see <h
 	left: auto;
 }
 
+.ol-zoom-liveview {
+	top: 57px;
+    right: 7px;
+	left: auto;
+}
+
 //Reset cql
 .ol-resetCql {
 	top: 65px;
@@ -204,6 +247,13 @@ copy of the GNU General Public License along with the IFDM Suite. If not, see <h
 }
 
 .ol-resetCql-right-side {
+	top: 144px;
+	right: 7px;
+	float: right;
+}
+
+.ol-resetCql-right-side-with-switcher {
+	top: 173px;
 	right: 7px;
 	float: right;
 }
@@ -215,10 +265,11 @@ copy of the GNU General Public License along with the IFDM Suite. If not, see <h
 }
 
 .ol-scale-line {
-	top: 4px;
-	left: 2px;
-	height: 22px;
+	bottom: 5px;
+	left: 10px;
 	background-color: #ecf0f1 !important;
+	border: 1px solid @profileColor_gray;
+	padding: 5px;
 }
 
 .ol-scale-line-inner {
@@ -226,8 +277,8 @@ copy of the GNU General Public License along with the IFDM Suite. If not, see <h
 	line-height: 11px;
 	font-weight: bold;
 	font-size: 12px !important;
-	color: #428bca !important;
-	border-color: #428bca !important;
+	color: @profileColor_blue !important;
+	border-color: @profileColor_blue !important;
 }
 
 .ol-dragzoom {
@@ -240,12 +291,18 @@ copy of the GNU General Public License along with the IFDM Suite. If not, see <h
 .mouse-position {
 	display: inherit;
 	text-align: right;
+	color: white;
+	font-size: 18px;
+	margin-right: 20px;
 }
 
 //Attribution
 .ol-attribution {
 	display: inline-table;
-	bottom: 0px !important;
+	bottom: 5px !important;
+	&.reporting-map {
+		margin-left: 180px;
+	}
 	ul {
 		line-height: 12px;
 	}
@@ -261,8 +318,8 @@ copy of the GNU General Public License along with the IFDM Suite. If not, see <h
 
 //History
 .ol-history {
-	top: 65px;
-	left: .5em;
+	top: 115px;
+	right: 7px;
 }
 
 .ol-history-back {
@@ -275,7 +332,17 @@ copy of the GNU General Public License along with the IFDM Suite. If not, see <h
 
 //Full extent
 .ol-zoom-extent {
-	top: 123px;
+	&,
+	&.ol-touch {
+		top: 173px !important;
+		right: 7px;
+		left: auto;
+	}
+}
+
+.ol-zoomextent-areamap {
+	top: 115px;
+	right: 7px;
 }
 
 //Toolbar map toolbar controls
@@ -404,6 +471,35 @@ copy of the GNU General Public License along with the IFDM Suite. If not, see <h
 	}
 }
 
+.tabular-view,
+.alarms-preview,
+#popup-content {
+	.alarm-status {
+		display: inline-block;
+		border-radius: 4px;
+		padding: 2px 5px;
+		font-weight: bold;
+		text-transform: capitalize;
+		color: #fff;
+		font-size: 12px;
+	}
+}
+
+.tabular-view {
+	.alarm-status {
+		text-align: center;
+	}
+}
+
+.alarms-preview,
+#popup-content{
+	.alarm-status {
+		margin-top: 2px;
+		float: right;
+	}
+}
+
+.alarms-preview,
 #popup-content {
 	.name {
 		font-size: 14px;
@@ -411,15 +507,14 @@ copy of the GNU General Public License along with the IFDM Suite. If not, see <h
 		text-transform: uppercase;
 	}
 
-	.alarm-status {
-		display: inline-block;
-		float: right;
-		border-radius: 4px;
-		padding: 2px 5px;
+	.alarm-header {
+		font-size: 14px;
 		font-weight: bold;
-		text-transform: capitalize;
-		color: #fff;
-		font-size: 12px;
+		text-transform: uppercase;
+		color: #777;
+		background-color: white;
+		margin-right: 15px;
+		line-height: 30px;
 	}
 
 	.info-content{
@@ -498,7 +593,7 @@ copy of the GNU General Public License along with the IFDM Suite. If not, see <h
 	width: 190px;
 	position: fixed;
 	background-color: white;
-	z-index: 9999;
+	z-index: 1038;
 	border: 1px solid #DDD;
 	border-radius: 6px;
 	box-shadow: 0px 2px 10px rgba(0, 0, 0, 0.2);
@@ -687,3 +782,4 @@ copy of the GNU General Public License along with the IFDM Suite. If not, see <h
 .mapPanelContainer.fullscreen {
 	background-color: @pageBackgroundColor;
 }
+

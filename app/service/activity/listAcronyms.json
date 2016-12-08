@@ -1,0 +1,15 @@
+{
+    "code": 200,
+    "data": [{"id": 1, "acronym": "GEAR_TYPE", "name": "Gear Type", "lastSuccess": 1469788560000, "lastAttempt": 1469615760000, "lastStatus": "failed", "scheduled": true},
+            {"id": 2, "acronym": "ACTION_TYPE", "name": "Action Type", "lastSuccess": 1469788560000, "lastAttempt": 1469615760000, "lastStatus": "in progress", "scheduled": true},
+            {"id": 3, "acronym": "COUNTRY", "name": "Countries", "lastSuccess": 1469788560000, "lastAttempt": 1469788560000, "lastStatus": "success", "scheduled": false},
+            {"id": 4, "acronym": "GEAR_TYPE", "name": "Gear Type", "lastSuccess": 1469788560000, "lastAttempt": 1469615760000, "lastStatus": "failed", "scheduled": true},
+            {"id": 5, "acronym": "ACTION_TYPE", "name": "Action Type", "lastSuccess": 1469788560000, "lastAttempt": 1469615760000, "lastStatus": "in progress", "scheduled": true},
+            {"id": 6, "acronym": "COUNTRY", "name": "Countries", "lastSuccess": 1469788560000, "lastAttempt": 1469788560000, "lastStatus": "success", "scheduled": false},
+            {"id": 7, "acronym": "GEAR_TYPE", "name": "Gear Type", "lastSuccess": 1469788560000, "lastAttempt": 1469615760000, "lastStatus": "failed", "scheduled": true},
+            {"id": 8, "acronym": "ACTION_TYPE", "name": "Action Type", "lastSuccess": 1469788560000, "lastAttempt": 1469615760000, "lastStatus": "in progress", "scheduled": true},
+            {"id": 9, "acronym": "COUNTRY", "name": "Countries", "lastSuccess": 1469788560000, "lastAttempt": 1469788560000, "lastStatus": "success", "scheduled": false},
+            {"id": 10, "acronym": "GEAR_TYPE", "name": "Gear Type", "lastSuccess": 1469788560000, "lastAttempt": 1469615760000, "lastStatus": "failed", "scheduled": true},
+            {"id": 11, "acronym": "ACTION_TYPE", "name": "Action Type", "lastSuccess": 1469788560000, "lastAttempt": 1469615760000, "lastStatus": "in progress", "scheduled": true},
+            {"id": 12, "acronym": "COUNTRY", "name": "Countries", "lastSuccess": 1469788560000, "lastAttempt": 1469788560000, "lastStatus": "success", "scheduled": false}]
+}

@@ -1,5 +1,5 @@
 /*
-﻿Developed with the contribution of the European Commission - Directorate General for Maritime Affairs and Fisheries
+Developed with the contribution of the European Commission - Directorate General for Maritime Affairs and Fisheries
 © European Union, 2015-2016.
 
 This file is part of the Integrated Fisheries Data Management (IFDM) Suite. The IFDM Suite is free software: you can
@@ -8,14 +8,9 @@ Free Software Foundation, either version 3 of the License, or any later version.
 the hope that it will be useful, but WITHOUT ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or
 FITNESS FOR A PARTICULAR PURPOSE.  See the GNU General Public License for more details. You should have received a
 copy of the GNU General Public License along with the IFDM Suite. If not, see <http://www.gnu.org/licenses/>.
- */
-.signouticon-extented {
-	margin-top: 6px;
-}
-
+*/
 .reportFormContainer {
 	padding: 0;
-	border: 1px solid #dddddd;
 }
 
 .reportForm {
@@ -27,6 +22,9 @@ copy of the GNU General Public License along with the IFDM Suite. If not, see <h
 	}
 	.belowErrorMessages {
 		right: 0;
+	}
+	.map-config-btn {
+		width: 100%;
 	}
 	.input-with-combo {
 		.combobox,
@@ -63,7 +61,8 @@ copy of the GNU General Public License along with the IFDM Suite. If not, see <h
 		}
 	}
 	.report-configuration-form {
-		border-left: 1px solid #ddd
+		border-left: 1px solid #ddd;
+		padding-bottom: 30px;
 	}
 	.filter-section {
 		margin-top: 10px;
@@ -81,6 +80,26 @@ copy of the GNU General Public License along with the IFDM Suite. If not, see <h
 			border-top: 1px solid #ddd;
 		}
 	}
+	.red-badge {
+		background-color: @profileColor_red;
+	}
+	.nav-tabs {
+		border-bottom: 2px solid #ddd;
+		.areaTab {
+			border-top: 1px solid #ddd;
+			border-left: 1px solid #ddd;
+			margin-bottom: 0;
+			&:last-child {
+				border-right: 1px solid #ddd;
+			}
+			a {
+				&,
+				&:hover {
+					border: 0;
+				}
+			}
+		}
+	}
 }
 
 .general-form {
@@ -88,10 +107,6 @@ copy of the GNU General Public License along with the IFDM Suite. If not, see <h
 	.report-name-group {
 		position: relative;
 	}
-}
-
-.reportSubform {
-	margin-top: 30px;
 }
 
 .field-noLabel {
@@ -198,25 +213,23 @@ copy of the GNU General Public License along with the IFDM Suite. If not, see <h
 	}
 }
 
-[ng-controller="ReportformCtrl"] {
-	.signouticon-extented {
-		margin-top: 3px;
-	}
-}
-
 .combo-history-footer {
 	text-align: right;
 	margin-top: 5px;
     border-top: 1px solid #ddd;
+	margin-bottom: -5px;
 	.footer-item {
 		display: inline-block;
-		padding: 6px 5px 0 0;
 		font-size: 14px;
 		font-weight: bold;
 		color: @primaryColor;
-		&:last-child span {
+		text-align: center;
+		&:last-child {
 			border-left: 1px solid #ddd;
-			padding-left: 5px;
+		}
+		label {
+			cursor: pointer;
 		}
 	}
 }
+

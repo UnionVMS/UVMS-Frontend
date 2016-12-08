@@ -1,5 +1,5 @@
 /*
-﻿Developed with the contribution of the European Commission - Directorate General for Maritime Affairs and Fisheries
+Developed with the contribution of the European Commission - Directorate General for Maritime Affairs and Fisheries
 © European Union, 2015-2016.
 
 This file is part of the Integrated Fisheries Data Management (IFDM) Suite. The IFDM Suite is free software: you can
@@ -8,16 +8,20 @@ Free Software Foundation, either version 3 of the License, or any later version.
 the hope that it will be useful, but WITHOUT ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or
 FITNESS FOR A PARTICULAR PURPOSE.  See the GNU General Public License for more details. You should have received a
 copy of the GNU General Public License along with the IFDM Suite. If not, see <http://www.gnu.org/licenses/>.
- */
+*/
 .alert-modal-content {
   position: absolute;
-  overflow: hidden;
+  overflow: visible;
+  bottom: auto;
+  height: 0;
   .modal-lg {
     width: 100%;
   }
+  z-index: 1049 !important;
   .modal-dialog {
     padding: 0px;
     margin: 0px;
+    height: 0;
     .modal-content {
       border-radius: 4px;
       box-shadow: 0 3px 9px rgba(0,0,0,.5);
@@ -25,6 +29,16 @@ copy of the GNU General Public License along with the IFDM Suite. If not, see <h
     .modal-body {
       padding: 0px;
       .alert {
+        padding: 10px;
+        .close {
+          line-height: 44px;
+          top: 4px;
+          right: 5px;
+          font-size: 22px;
+        }
+        span.fa {
+          margin-left: 5px;
+        }
         .alert-message {
         	padding-left: 5px;
         }
@@ -63,3 +77,9 @@ copy of the GNU General Public License along with the IFDM Suite. If not, see <h
     }
   }
 }
+.alert-modal-backdrop {
+  background-color: rgba(221, 221, 221, 0.4);
+  z-index: 1048 !important;
+  bottom: auto;
+}
+

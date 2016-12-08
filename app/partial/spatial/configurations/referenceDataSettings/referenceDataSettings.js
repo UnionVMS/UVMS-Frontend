@@ -1,5 +1,5 @@
 /*
-﻿Developed with the contribution of the European Commission - Directorate General for Maritime Affairs and Fisheries
+Developed with the contribution of the European Commission - Directorate General for Maritime Affairs and Fisheries
 © European Union, 2015-2016.
 
 This file is part of the Integrated Fisheries Data Management (IFDM) Suite. The IFDM Suite is free software: you can
@@ -8,7 +8,7 @@ Free Software Foundation, either version 3 of the License, or any later version.
 the hope that it will be useful, but WITHOUT ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or
 FITNESS FOR A PARTICULAR PURPOSE.  See the GNU General Public License for more details. You should have received a
 copy of the GNU General Public License along with the IFDM Suite. If not, see <http://www.gnu.org/licenses/>.
- */
+*/
 angular.module('unionvmsWeb').controller('SystemareassettingsCtrl',function($scope, locale, $localStorage, $interval, $timeout, mapReference, genericMapService, projectionService, spatialRestService, comboboxService, spatialConfigAlertService, $anchorScroll, loadingStatus, spatialConfigRestService, SpatialConfig, $location){
     mapReference.refData = {};
     $scope.status = {
@@ -96,6 +96,11 @@ angular.module('unionvmsWeb').controller('SystemareassettingsCtrl',function($sco
             selectionType: 'map',
             searchString: undefined
         };
+        
+        if (angular.isDefined($scope.components) && $scope.components.referenceData && angular.isDefined($scope.components.fromLayerTree)){
+            //$scope.status.isOpen = true;
+            $scope.getSysAreaLayers();
+        }
     };
 
     //Selection type change
@@ -117,6 +122,9 @@ angular.module('unionvmsWeb').controller('SystemareassettingsCtrl',function($sco
             	$scope.systemAreaItems.push({"text": item.typeName, "code": item.typeName.toUpperCase()});
             });
             $scope.isLoadingAreaTypes = false;
+            if (angular.isDefined($scope.components) && angular.isDefined($scope.components.referenceDataType)){
+                lazySetupCurrentSelection();
+            }
         }, function(error){
             comboboxService.closeCurrentCombo();
             $scope.alert.hasAlert = true;
@@ -124,6 +132,31 @@ angular.module('unionvmsWeb').controller('SystemareassettingsCtrl',function($sco
             $scope.alert.alertMessage = locale.getString('spatial.get_ref_data_type_error');
             $scope.alert.hideAlert();
         });
+    };
+    
+    $scope.setInitialValues = function(){
+        if (angular.isDefined($scope.components) && angular.isDefined($scope.components.referenceDataType)){
+            $scope.currentSelection.selectedAreaType = $scope.components.referenceDataType.toUpperCase();
+        }
+    };
+    
+    var lazySetupCurrentSelection = function(){
+        if (!angular.isDefined($scope.setupInterval)){
+            $scope.setupInterval = $interval(function(){
+                var keys = _.keys($scope.configModel.referenceDataSettings);
+                var dataset = $scope.components.referenceDataType.toUpperCase();
+                if (keys.length !== 0 && _.indexOf(keys, dataset) !== -1){
+                    $scope.status.isOpen = true;
+                    $scope.currentSelection.selectedAreaType = dataset;
+                    stopSetupInterval();
+                }
+            }, 10);
+        }
+    };
+    
+    var stopSetupInterval = function(){
+        $interval.cancel($scope.setupInterval);
+        delete $scope.setupInterval;
     };
     
     $scope.$watch('status.isOpen', function(newVal){
@@ -163,7 +196,17 @@ angular.module('unionvmsWeb').controller('SystemareassettingsCtrl',function($sco
     $scope.clickResultsMap = true;
     $scope.selectAreaFromMap = function(data){
         if ($scope.currentSelection.selectedAreaType === 'PORT'){
-            //TODO
+            spatialRestService.getLocationDetails(data).then(function(response){
+                loadingStatus.isLoading('SearchReferenceData',false);
+                $scope.clickResults = 0;
+                $scope.checkAndAddToSelection(response.data.code);
+            }, function(error){
+                loadingStatus.isLoading('SearchReferenceData',false);
+                $scope.alert.hasAlert = true;
+                $scope.alert.hasError = true;
+                $scope.alert.alertMessage = locale.getString('spatial.get_ref_data_details_error');
+                $scope.alert.hideAlert();
+            });
         } else {
             spatialRestService.getAreaDetails(data).then(function(response){
                 loadingStatus.isLoading('SearchReferenceData',false);
@@ -243,7 +286,8 @@ angular.module('unionvmsWeb').controller('SystemareassettingsCtrl',function($sco
                         code: rec.code,
                         isSelected: _.indexOf($scope.displayCodes, rec.code) === -1 ? false : true,
                         isExpanded: false,
-                        areaNames: [rec.name]
+                        areaNames: [rec.name],
+                        extent: rec.extent
                     });
                     availableCodes.push(rec.code);
                 } else {
@@ -525,7 +569,7 @@ angular.module('unionvmsWeb').controller('SystemareassettingsCtrl',function($sco
                         break;
                     case 'BING':
                         layerConf.title = locale.getString('spatial.layer_tree_' + layerConf.title);
-                        $scope.addBing(layerConf, true);
+                        $scope.addBing(layerConf);
                         break;
                 }
             });

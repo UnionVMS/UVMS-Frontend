@@ -1,5 +1,5 @@
 /*
-﻿Developed with the contribution of the European Commission - Directorate General for Maritime Affairs and Fisheries
+Developed with the contribution of the European Commission - Directorate General for Maritime Affairs and Fisheries
 © European Union, 2015-2016.
 
 This file is part of the Integrated Fisheries Data Management (IFDM) Suite. The IFDM Suite is free software: you can
@@ -8,42 +8,20 @@ Free Software Foundation, either version 3 of the License, or any later version.
 the hope that it will be useful, but WITHOUT ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or
 FITNESS FOR A PARTICULAR PURPOSE.  See the GNU General Public License for more details. You should have received a
 copy of the GNU General Public License along with the IFDM Suite. If not, see <http://www.gnu.org/licenses/>.
- */
+*/
 angular.module('unionvmsWeb').controller('ConfigpanelCtrl',function($scope, $anchorScroll, locale, SpatialConfig, spatialConfigRestService, spatialConfigAlertService, loadingStatus, PreferencesService){
     $scope.settingsLevel = 'user';
-	$scope.isConfigVisible= false;
 	$scope.alert = spatialConfigAlertService;
 	$scope.prefService = PreferencesService;
 	
-	$scope.toggleUserPreferences = function(){
-		$scope.isConfigVisible = !$scope.isConfigVisible;
-		$anchorScroll();
-
-		//Call function from parent to toggle menu visibility
-		$scope.toggleMenuVisibility();
-
-		if($scope.isConfigVisible === false){
-			$scope.$emit('closeUserPreferences', $scope.previousSelection);
-		}
+	var loadUserPreferences = function(){
+		loadingStatus.isLoading('Preferences',true,0);
+		spatialConfigRestService.getUserConfigs().then(getConfigsSuccess, getConfigsFailure);
 	};
-
-	$scope.$on('loadUserPreferences', function(serviceName, previousSelection){
-		$scope.toggleUserPreferences();
-		$scope.previousSelection = previousSelection;
-		if (!angular.isDefined($scope.configModel)){
-			loadingStatus.isLoading('Preferences',true);
-		    spatialConfigRestService.getUserConfigs().then(getConfigsSuccess, getConfigsFailure);
-		}
-	});
-	
-	$scope.cancel = function(){
-	    $scope.toggleUserPreferences();
-	};
-	
 	
 	$scope.save = function(){
 		if(_.keys($scope.configPanelForm.$error).length === 0){
-			loadingStatus.isLoading('SavePreferences',true);
+			loadingStatus.isLoading('Preferences',true,2);
 		    
 			if ($scope.configPanelForm.$dirty){
 				var newConfig = new SpatialConfig();
@@ -56,7 +34,7 @@ angular.module('unionvmsWeb').controller('ConfigpanelCtrl',function($scope, $anc
 		        $scope.alert.hasWarning = true;
 		        $scope.alert.alertMessage = locale.getString('spatial.user_preferences_warning_saving');
 		        $scope.alert.hideAlert();
-		        loadingStatus.isLoading('SavePreferences',false);
+		        loadingStatus.isLoading('Preferences',false);
 		    }
 		}else{
 		    $anchorScroll();
@@ -98,7 +76,7 @@ angular.module('unionvmsWeb').controller('ConfigpanelCtrl',function($scope, $anc
 	    $scope.alert.hideAlert(6000);
 	    $scope.updateConfigCopy(response[1]);
 		$scope.configPanelForm.$setPristine();
-	    loadingStatus.isLoading('SavePreferences',false);
+	    loadingStatus.isLoading('Preferences',false);
 	};
 	
 	var saveFailure = function(error){
@@ -107,7 +85,7 @@ angular.module('unionvmsWeb').controller('ConfigpanelCtrl',function($scope, $anc
 	    $scope.alert.hasError = true;
 	    $scope.alert.alertMessage = locale.getString('spatial.user_preferences_error_saving');
 	    $scope.alert.hideAlert();
-	    loadingStatus.isLoading('SavePreferences',false);
+	    loadingStatus.isLoading('Preferences',false);
 	};
 	
 	var getConfigsSuccess = function(response){
@@ -127,5 +105,11 @@ angular.module('unionvmsWeb').controller('ConfigpanelCtrl',function($scope, $anc
 	    $scope.alert.hideAlert();
 	    loadingStatus.isLoading('Preferences',false);
 	};
+
+	$scope.$watch('repNav.isSectionVisible("userPreferences")', function(newVal,oldVal){
+        if(newVal===true){
+            loadUserPreferences();
+        }
+    });
 	
 });

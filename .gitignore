@@ -1,10 +1,15 @@
 bower_components
 /dist
 /fonts
+locales
 /node
 /node_modules
 /target
 /testResults
+/temp
 *.iml
 font-awesome
 **/.idea
+.project
+.tern-project
+.settings

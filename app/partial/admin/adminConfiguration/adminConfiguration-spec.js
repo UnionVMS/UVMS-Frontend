@@ -1,5 +1,5 @@
 /*
-﻿Developed with the contribution of the European Commission - Directorate General for Maritime Affairs and Fisheries
+Developed with the contribution of the European Commission - Directorate General for Maritime Affairs and Fisheries
 © European Union, 2015-2016.
 
 This file is part of the Integrated Fisheries Data Management (IFDM) Suite. The IFDM Suite is free software: you can
@@ -47,7 +47,7 @@ describe('AuditconfigurationCtrl', function() {
 
 	it('should only show tabs with at least one non-global setting', function() {
 		var controller = createController();
-		expect(scope.tabs).toEqual(["systemMonitor", "globalSettings", "reporting", "mobileTerminal"]);
+		expect(scope.tabs).toEqual(["systemMonitor", "globalSettings", "reporting", "mdr", "mobileTerminal"]);
 	});
 
 	it('should provide the right partial URLs', function() {

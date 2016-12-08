@@ -1,4 +1,4 @@
-<!--
+﻿<!--
 ﻿Developed with the contribution of the European Commission - Directorate General for Maritime Affairs and Fisheries
 © European Union, 2015-2016.
 
@@ -75,7 +75,7 @@ copy of the GNU General Public License along with the IFDM Suite. If not, see <h
                                 </div>
                             </div>
                             <div class="sign-in" ng-if="!isAuthenticated">
-                                <span ng-click="signIn()"><i class="fa fa-lg fa-user"></i><span ng-bind="'header.sign_in' | i18n"></span></a>
+                                <a ng-click="signIn()"><i class="fa fa-lg fa-user"></i><span ng-bind="'header.sign_in' | i18n"></span></a>
                             </div>
                             <div class="notifications" ng-if="isAuthenticated && appState !== 'app.reporting-id'">
                                 <button class="btn btn-sm btn-default" ng-click="viewNotifications()">

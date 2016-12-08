@@ -10,7 +10,7 @@ var pkg = require('./package.json');
 //This enables users to create any directory structure they desire.
 var createFolderGlobs = function(fileTypePatterns) {
   fileTypePatterns = Array.isArray(fileTypePatterns) ? fileTypePatterns : [fileTypePatterns];
-  var ignore = ['node_modules','bower_components','dist','temp','node','target'];
+  var ignore = ['node_modules','bower_components','dist','temp','node','target', 'testResults'];
   var fs = require('fs');
   return fs.readdirSync(process.cwd())
           .map(function(file){
@@ -75,7 +75,8 @@ module.exports = function (grunt) {
                   '/spatial/image/',
                   '/config/rest',
                   '/mapfish-print',
-                  '/usm-authentication/rest', '/usm-authorisation/rest', '/usm-administration/rest'],
+                  '/usm-authentication/rest', '/usm-authorisation/rest', '/usm-administration/rest',
+                  '/activity/rest'],
               host: 'localhost',
               port: 8080
         },
@@ -110,12 +111,31 @@ module.exports = function (grunt) {
     },
     jsdoc: {
         dist: {
-            src: ['app/service/spatial/*.js', 'app/service/areas/*.js', 'app/partial/spatial/**/*.js', '!*-spec.js'],
+            src: [
+                  //SERVICES
+                  'app/service/common',
+                  'app/service/spatial',
+                  'app/service/reporting/',
+                  'app/service/areas',
+                  'app/service/activity/',
+
+                  //PARTIALS
+                  'app/partial/spatial',
+                  'app/partial/activity',
+
+                  //DIRECTIVES
+                  'app/directive/common/breadcrumbNavigator',
+                  'app/directive/activity/',
+                  
+                  //FILTERS
+                  'app/filter/activity/'
+            ],
             options: {
                 destination: 'dist/docs',
-                configure: 'node_modules/angular-jsdoc/common/conf.json',
+                configure: 'jsdoc_conf.json',
                 template: 'node_modules/angular-jsdoc/angular-template',
-                readme: './README_docs.md'
+                readme: './README_docs.md',
+                recurse: true
             }
         }
     },
@@ -354,9 +374,25 @@ module.exports = function (grunt) {
         }
       }
     },
+    htmlhint: {
+
+      html: {
+        options: {
+          'tag-pair': true
+        },
+        src: ['app/**/*.html']
+      }
+    },
     //Karma testing
     karma: {
       options: {
+        plugins: [
+                'karma-jasmine',
+                'karma-phantomjs-launcher',
+                'karma-junit-reporter',
+                'karma-coverage',
+                'karma-mocha-reporter'
+        ],
         frameworks: ['jasmine'],
         //browsers: ['PhantomJS', 'Chrome'],
         browsers: ['PhantomJS'],
@@ -366,10 +402,14 @@ module.exports = function (grunt) {
             '/partial/': 'http://localhost:9876/base/app/partial/'
         },
         logLevel:'INFO',
-        reporters:['mocha', 'junit'],
+        reporters:['mocha', 'junit', 'coverage'],
         junitReporter: {
             outputDir: 'testResults',
             outputFile: 'test-results.xml'
+        },
+        coverageReporter: {
+            dir: 'testResults/coverage',
+            type: 'html'
         },
         autoWatch: false, //watching is handled by grunt-contrib-watch
         singleRun: true
@@ -379,36 +419,64 @@ module.exports = function (grunt) {
         options: {
             files: karmaFiles.concat(['app/partial/**/*-spec.js']),
             junitReporter: {
-                outputDir: 'testResults',
-                outputFile: 'controllers.xml'
-        }
+                outputDir: 'testResults/controllers',
+                outputFile: 'controllers.xml',
+            },
+            preprocessors: {
+                'app/partial/**/!(*-spec).js': ['coverage']
+            },
+            coverageReporter: {
+                dir: 'testResults/controllers/coverage',
+                type: 'html'
+            }
         }
       },
       directives: {
         options: {
-            files: karmaFiles.concat(['app/directive/**/*-spec.js']),
+            files: karmaFiles.concat(['app/directive/**/*-spec.js', 'temp/templates.js']),
             junitReporter: {
-                outputDir: 'testResults',
+                outputDir: 'testResults/directives',
                 outputFile: 'directives.xml'
-        }
+            },
+            preprocessors: {
+                'app/directive/**/!(*-spec).js': ['coverage']
+            },
+            coverageReporter: {
+                dir: 'testResults/directives/coverage',
+                type: 'html'
+            }
         }
       },
       services: {
         options: {
             files: karmaFiles.concat(['app/service/**/*-spec.js']),
             junitReporter: {
-                outputDir: 'testResults',
+                outputDir: 'testResults/services',
                 outputFile: 'services.xml'
-        }
+            },
+            preprocessors: {
+                'app/service/**/!(*-spec).js': ['coverage']
+            },
+            coverageReporter: {
+                dir: 'testResults/services/coverage',
+                type: 'html'
+            }
         }
       },
       filters: {
         options: {
             files: karmaFiles.concat(['app/filter/**/*-spec.js']),
             junitReporter: {
-                outputDir: 'testResults',
+                outputDir: 'testResults/filters',
                 outputFile: 'filters.xml'
-        }
+            },
+            preprocessors: {
+                'app/filter/**/!(*-spec).js': ['coverage']
+            },
+            coverageReporter: {
+                dir: 'testResults/filters/coverage',
+                type: 'html'
+            }
         }
       },
       during_watch: {
@@ -450,8 +518,8 @@ module.exports = function (grunt) {
       }
     }
   });
-
-  grunt.registerTask('sub-build',['jshint', 'less','dom_munger','ngtemplates','cssmin','concat','ngAnnotate','uglify','copy:dist','htmlmin','compress:dist','clean:after']);//,'clean:after'
+  
+  grunt.registerTask('sub-build',['htmlhint','jshint', 'less','dom_munger','ngtemplates','cssmin','concat','ngAnnotate','uglify','copy:dist','htmlmin','compress:dist','clean:after']);//,'clean:after'
 
   grunt.registerTask('build', ['ngconstant:production', 'test', 'clean:before', 'copy:config', 'sub-build']);
   grunt.registerTask('build-test', ['ngconstant:development', 'test', 'clean:before', 'copy:configTest','sub-build']);
@@ -459,7 +527,7 @@ module.exports = function (grunt) {
   grunt.registerTask('build-cygnus', ['ngconstant:development', 'test', 'clean:before', 'copy:configCygnus', 'sub-build']);
   grunt.registerTask('build-maven', ['ngconstant:development', 'test', 'clean:before', 'copy:configMaven', 'sub-build']);
   grunt.registerTask('build-dev', ['ngconstant:development', 'test', 'clean:before', 'copy:configDev','sub-build']);
-  grunt.registerTask('test',['dom_munger:read', 'karma:services', 'karma:controllers', 'karma:directives', 'karma:filters', 'clean:after']);
+  grunt.registerTask('test',['dom_munger:read', 'ngtemplates', 'karma:services', 'karma:controllers', 'karma:directives', 'karma:filters', 'clean:after']);
 
   grunt.registerTask('default',['build-dev']);
   grunt.registerTask('serve-no-watch', ['dom_munger:read','jshint', 'configureProxies', 'configureRewriteRules', 'connect:development']);
@@ -469,20 +537,20 @@ module.exports = function (grunt) {
   grunt.registerTask('serve-copy', ['copy:serve', 'serve']);
   grunt.registerTask('build-docs', ['jsdoc']);
   grunt.registerTask('constants', ['ngconstant:development']);
-
+  
     grunt.event.on('watch', function(action, filepath) {
         if (filepath.lastIndexOf('.js') !== -1 && filepath.lastIndexOf('.js') === filepath.length - 3) {
-
+    
             //lint the changed js file
             grunt.config('jshint.main.src', filepath);
             grunt.task.run('jshint');
-
+    
             //find the appropriate unit test for the changed file
             var spec = filepath;
             if (filepath.lastIndexOf('-spec.js') === -1 || filepath.lastIndexOf('-spec.js') !== filepath.length - 8) {
                 spec = filepath.substring(0, filepath.length - 3) + '-spec.js';
             }
-
+    
             //if the spec exists then lets run it
             if (grunt.file.exists(spec)) {
                 //grunt.config('jasmine.unit.options.specs', spec);
@@ -495,17 +563,23 @@ module.exports = function (grunt) {
                     'test/envConfigForTest.js',
                     spec
                 ];
-
+    
                 grunt.config('karma.options.files', files);
                 grunt.task.run('karma:during_watch');
             }
         }
-
+    
+        if (filepath.lastIndexOf('.htm') !== -1 && filepath.lastIndexOf('.htm') >= (filepath.length - 6)) {
+            //lint the changed html file
+            grunt.config('htmlhint.html.src', filepath);
+            grunt.task.run('htmlhint');
+        }
+    
         //if index.html changed, we need to reread the <script> tags so our next run of jasmine
         //will have the correct environment
         if (filepath === 'app\\index.html') {
             grunt.task.run('dom_munger:read');
         }
-
+    
     });
 };

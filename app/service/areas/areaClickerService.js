@@ -1,5 +1,5 @@
 /*
-﻿Developed with the contribution of the European Commission - Directorate General for Maritime Affairs and Fisheries
+Developed with the contribution of the European Commission - Directorate General for Maritime Affairs and Fisheries
 © European Union, 2015-2016.
 
 This file is part of the Integrated Fisheries Data Management (IFDM) Suite. The IFDM Suite is free software: you can
@@ -8,8 +8,8 @@ Free Software Foundation, either version 3 of the License, or any later version.
 the hope that it will be useful, but WITHOUT ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or
 FITNESS FOR A PARTICULAR PURPOSE.  See the GNU General Public License for more details. You should have received a
 copy of the GNU General Public License along with the IFDM Suite. If not, see <http://www.gnu.org/licenses/>.
- */
-angular.module('unionvmsWeb').factory('areaClickerService',function(areaAlertService, spatialRestService, Area, locale) {
+*/
+angular.module('unionvmsWeb').factory('areaClickerService',function(areaAlertService, spatialRestService, Area, locale, loadingStatus) {
 
 	var areaClickerService = {
 	    active: false,
@@ -26,7 +26,7 @@ angular.module('unionvmsWeb').factory('areaClickerService',function(areaAlertSer
             this.clearData();
         },
         getDataFromMap: function(payload){
-            areaAlertService.setLoading(locale.getString('areas.getting_area'));
+            loadingStatus.isLoading('AreaManagement',true,3);
             var self = this;
             self.clearData();
             self.clickResults = 0;
@@ -37,9 +37,9 @@ angular.module('unionvmsWeb').factory('areaClickerService',function(areaAlertSer
                     area = area.fromJson(response.data[i]);
                     self.data.push(area);
                 }
-                areaAlertService.removeLoading();
+                loadingStatus.isLoading('AreaManagement',false);
             }, function(error){
-                areaAlertService.removeLoading();
+                loadingStatus.isLoading('AreaManagement',false);
                 areaAlertService.setError();
                 areaAlertService.alertMessage = locale.getString('areas.error_searching_areas');
             });

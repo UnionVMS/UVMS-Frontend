@@ -1,5 +1,5 @@
 /*
-﻿Developed with the contribution of the European Commission - Directorate General for Maritime Affairs and Fisheries
+Developed with the contribution of the European Commission - Directorate General for Maritime Affairs and Fisheries
 © European Union, 2015-2016.
 
 This file is part of the Integrated Fisheries Data Management (IFDM) Suite. The IFDM Suite is free software: you can
@@ -8,7 +8,7 @@ Free Software Foundation, either version 3 of the License, or any later version.
 the hope that it will be useful, but WITHOUT ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or
 FITNESS FOR A PARTICULAR PURPOSE.  See the GNU General Public License for more details. You should have received a
 copy of the GNU General Public License along with the IFDM Suite. If not, see <http://www.gnu.org/licenses/>.
- */
+*/
 /**
  * @memberof unionvmsWeb
  * @ngdoc service
@@ -23,7 +23,7 @@ copy of the GNU General Public License along with the IFDM Suite. If not, see <h
  *  Service for map generic functions that can be used in all maps throughout the application
  */
 
-angular.module('unionvmsWeb').factory('genericMapService',function($localStorage, $location, $window, locale, spatialRestService, projectionService) {
+angular.module('unionvmsWeb').factory('genericMapService',function($localStorage, $location, $window, locale, spatialRestService) {
     /**
      * Gets the base projection of the map
      * 
@@ -149,6 +149,14 @@ angular.module('unionvmsWeb').factory('genericMapService',function($localStorage
      * @returns {ol.prol.Projection} The OL projection
      */
     var setProjection = function(proj){
+        registerProjInProj4(proj);
+        
+        var worldExtent = [-180, -89.99, 180, 89.99];
+        if (angular.isDefined(proj.worldExtent)){
+            var tempExt = proj.worldExtent.split(';');
+            worldExtent = [parseFloat(tempExt[0]), parseFloat(tempExt[1]), parseFloat(tempExt[2]), parseFloat(tempExt[3])];
+        }
+        
         var ext = proj.extent.split(';');
         var projection = new ol.proj.Projection({
             code: 'EPSG:' + proj.epsgCode,
@@ -156,10 +164,23 @@ angular.module('unionvmsWeb').factory('genericMapService',function($localStorage
             axisOrientation: proj.axis,
             global: proj.global,
             extent: [parseFloat(ext[0]), parseFloat(ext[1]), parseFloat(ext[2]), parseFloat(ext[3])],
-            worldExtent: [-180, -89.99, 180, 89.99]
+            worldExtent: worldExtent
         });
 
         return projection;
+    };
+    
+    /**
+     * Register a specific projection within the proj4js workspace
+     * 
+     * @memberof genericMapService
+     * @public
+     * @param {Object} proj - The definition of the projection
+     */
+    var registerProjInProj4 = function(proj){
+        if (!angular.isDefined(proj4.defs('EPSG:' + proj.epsgCode))){
+            proj4.defs('EPSG:' + proj.epsgCode, proj.projDef);
+        }
     };
     
     /**
@@ -353,11 +374,18 @@ angular.module('unionvmsWeb').factory('genericMapService',function($localStorage
             serverType = def.serverType;
         }
         
+        var attribution;
+        if (angular.isDefined(def.shortCopyright)){
+            attribution = def.shortCopyright;
+        }
+        
         var config = {
             title: def.title,
             type: def.type,
+            isBaseLayer: def.isBaseLayer,
             url: def.url,
             serverType: serverType,
+            attribution: attribution,
             params: {
                 time_: (new Date()).getTime(),
                 'LAYERS': def.layerGeoName,
@@ -381,10 +409,17 @@ angular.module('unionvmsWeb').factory('genericMapService',function($localStorage
      */
     var getGenericLayerConfig = function(def, map){
         var mapExtent = map.getView().getProjection().getExtent();
+        
+        var attribution;
+        if (angular.isDefined(def.shortCopyright)){
+            attribution = def.shortCopyright;
+        }
+        
         var config = {
             type: def.typeName,
             url: def.serviceUrl,
             serverType: 'geoserver',
+            attribtution: attribution,
             params: {
                 time_: (new Date()).getTime(),
                 'LAYERS': def.geoName,
@@ -469,15 +504,22 @@ angular.module('unionvmsWeb').factory('genericMapService',function($localStorage
      * @memberof genericMapService
      * @public
      */
-    var setMapBasicConfigs = function(){
+    var setMapBasicConfigs = function(callback){
         var self = this;
         self.mapBasicConfigs = {};
+        var callbackFunc = callback;
         spatialRestService.getBasicMapConfigurations().then(function(response){
             self.mapBasicConfigs = response.map;
             self.mapBasicConfigs.layers.baseLayers.reverse();
             self.mapBasicConfigs.success = true;
+            if(angular.isDefined(callbackFunc)){
+                callbackFunc();
+            }
         }, function(error){
             self.mapBasicConfigs = {success: false};
+            if(angular.isDefined(callbackFunc)){
+                callbackFunc();
+            }
         });
     };
     
@@ -490,9 +532,10 @@ angular.module('unionvmsWeb').factory('genericMapService',function($localStorage
      * @returms {ol.View} The OL map view 
      */
     var createView = function(config){
+        var proj = this.setProjection(config);
         var center = ol.proj.transform([-1.81185, 52.44314], 'EPSG:4326', 'EPSG:' + config.epsgCode);
         var view = new ol.View({
-            projection: this.setProjection(config),
+            projection: proj,
             center: center,
             //extent: [-2734750,3305132,1347335,5935055],
             //loadTilesWhileInteracting: true,
@@ -519,13 +562,119 @@ angular.module('unionvmsWeb').factory('genericMapService',function($localStorage
     };
     
     /**
+     * Create the scale control
+     * 
+     * @memberof genericMapService
+     * @public
+     * @alias addScale
+     * @param {Object} ctrl - An object containing the definitions for the control
+     * @returns {ol.control.ScaleLine} The scale control to be added to the map
+     */
+    var addScaleCtrl = function(ctrl){
+        var olCtrl = new ol.control.ScaleLine({
+            units: ctrl.units,
+            className: 'ol-scale-line'
+        });
+        
+        return olCtrl;
+    };
+    
+    /**
+     * Create Mouse Coordinates control
+     * 
+     * @memberof genericMapService
+     * @public
+     * @alias addMousecoords
+     * @param {Object} ctrl - An object containing the definitions for controls
+     * @param {String} targetId - The ID of the target DOM element where the coordinates will be displayed 
+     * @returns {ol.control.MousePosition} The mouse coordinates OL control
+     */
+    var addMousecoords = function(ctrl, targetId){
+        var olCtrl =  new ol.control.MousePosition({
+            projection: 'EPSG:' + ctrl.epsgCode,
+            coordinateFormat: function(coord){
+                return formatCoords(coord, ctrl);
+            },
+            target: angular.element('#' + targetId)[0],
+            className: 'mouse-position'
+        });
+        
+        return olCtrl;
+    };
+    
+    /**
+     * Format mouse position coordinates according to the report/user preferences
+     * 
+     * @memberof genericMapService
+     * @private
+     * @alias formatCoords
+     * @param {Array<Number>} coord - The pair of coordinates to convert
+     * @param {Object} ctrl - The object containing the definitions to appy in the mouse coordinates contrl
+     * @returns {String} The converted coordinates
+     */
+    var formatCoords = function(coord, ctrl){
+        var x,y;
+        if (ctrl.epsgCode === 4326){
+            if (ctrl.format === 'dd'){
+                return ol.coordinate.format(coord, '<b>LON:</b> {x}\u00b0 \u0090 <b>LAT:</b> {y}\u00b0' , 4);
+            } else if (ctrl.format === 'dms'){
+                x = coordToDMS(coord[0], 'EW');
+                y = coordToDMS(coord[1], 'NS');
+                return '<b>LON:</b> ' + x + '\u0090 <b>LAT:</b> ' + y;
+            } else {
+                x = coordToDDM(coord[0], 'EW');
+                y = coordToDDM(coord[1], 'NS');
+                return '<b>LON:</b> ' + x + '\u0090 <b>LAT:</b> ' + y;
+            }
+        } else {
+            return ol.coordinate.format(coord, '<b>X:</b> {x} m \u0090 <b>Y:</b> {y} m' , 4);
+        }
+    };
+    
+    /**
+     * Convert coordinates from Decimal Degrees to Degrees Minutes Seconds
+     * 
+     * @memberof genericMapService
+     * @private
+     * @alias coordToDMS
+     * @param {Number} degrees
+     * @param {String} hemispheres
+     * @returns {String} The coordinate formated in DMS
+     */
+    var coordToDMS = function(degrees, hemispheres){
+        var normalized = (degrees + 180) % 360 - 180;
+        var x = Math.abs(Math.round(3600 * normalized));
+        return Math.floor(x / 3600) + '\u00b0 ' +
+            Math.floor((x / 60) % 60) + '\u2032 ' +
+            Math.floor(x % 60) + '\u2033 ' +
+            hemispheres.charAt(normalized < 0 ? 1 : 0);
+    };
+
+    /**
+     * Convert coordinates from Decimal Degrees to Degrees Decimal Minutes
+     * 
+     * @memberof genericMapService
+     * @private
+     * @alias coordToDDM
+     * @param {Number} degrees
+     * @param {String} hemispheres
+     * @returns {String} The coordinate formated in DDM
+     */
+    var coordToDDM = function(degrees, hemispheres){
+        var normalized = (degrees + 180) % 360 - 180;
+        var x = Math.abs(Math.round(3600 * normalized));
+        return Math.floor(x / 3600) + '\u00b0 ' +
+            ((x / 60) % 60).toFixed(2) + '\u2032 ' +
+            hemispheres.charAt(normalized < 0 ? 1 : 0);
+    };
+    
+    /**
      * Create OL Zoom control
      * 
      * @memberof genericMapService
      * @public
      * @returns {ol.control.Zoom} The OL Zoom control
      */
-    
     var createZoomCtrl = function(customClass){
         var ctrl = new ol.control.Zoom({
             className: angular.isDefined(customClass) ? customClass : undefined, 
@@ -553,6 +702,7 @@ angular.module('unionvmsWeb').factory('genericMapService',function($localStorage
             out: true,
             condition: ol.events.condition.altKeyOnly
         }));
+        interactions.push(new ol.interaction.PinchZoom());
         
         return interactions;
     };
@@ -662,6 +812,7 @@ angular.module('unionvmsWeb').factory('genericMapService',function($localStorage
 	    getControlsByType: getControlsByType,
 	    getInteractionsByType: getInteractionsByType,
 	    setProjection: setProjection,
+	    registerProjInProj4: registerProjInProj4,
 	    removeAllLayers: removeAllLayers,
 	    removeLayerByType: removeLayerByType,
 	    defineOsm: defineOsm,
@@ -671,6 +822,8 @@ angular.module('unionvmsWeb').factory('genericMapService',function($localStorage
 	    getGenericLayerConfig: getGenericLayerConfig,
 	    defineWms: defineWms,
 	    refreshWMSLayer: refreshWMSLayer,
+	    addScale: addScaleCtrl,
+	    addMousecoords: addMousecoords,
 	    createZoomCtrl: createZoomCtrl,
 	    createZoomInteractions: createZoomInteractions,
 	    createPanInteractions: createPanInteractions,
