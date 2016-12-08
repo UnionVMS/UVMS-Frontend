@@ -52,7 +52,8 @@ module.exports = function (grunt) {
   grunt.initConfig({
     connect: {
       options: {
-        port: 9001
+        port: 9001,
+        keepalive: false
       },
       rules: [
           // Internal rewrite
@@ -516,42 +517,68 @@ module.exports = function (grunt) {
           args: ['htmlhint','jshint']
         }, {
           grunt: true,
-          args: ['dom_munger:read','configureProxies', 'configureRewriteRules', 'connect:development', 'watch', 'ngtemplates'],
+          args: ['serve-no-watch', 'watch', 'ngtemplates'],
         }]
+      }
+    },
+    ngconstant: {
+      options: {
+        name: 'debugConfig',
+        space: '  '
+      },
+      development: {
+        options: {
+          dest: 'app/debugConfig.js'
+        },
+        constants: {
+          DEBUG: true
+        }
+      },
+      production: {
+        options: {
+          dest: 'app/debugConfig.js'
+        },
+        constants: {
+          DEBUG: false
+        }
       }
     }
   });
   
   grunt.registerTask('sub-build',['parallel:sub-build']);//,'clean:after'
 
-  grunt.registerTask('build', ['test', 'clean:before', 'copy:config', 'sub-build']);
-  grunt.registerTask('build-local', ['test', 'clean:before', 'copy:configLocal', 'test', 'sub-build']);
-  grunt.registerTask('build-cygnus', ['test', 'clean:before', 'copy:configCygnus', 'sub-build']);
-  grunt.registerTask('build-maven', ['test', 'clean:before', 'copy:configMaven', 'sub-build']);
-  grunt.registerTask('build-dev', ['test', 'clean:before', 'copy:configDev','sub-build']);
-  grunt.registerTask('build-test', ['test', 'clean:before', 'copy:configTest','sub-build']);
+  grunt.registerTask('build', ['ngconstant:production', 'test', 'clean:before', 'copy:config', 'sub-build']);
+  grunt.registerTask('build-local', ['ngconstant:development', 'test', 'clean:before', 'copy:configLocal', 'test', 'sub-build']);
+  grunt.registerTask('build-cygnus', ['ngconstant:development', 'test', 'clean:before', 'copy:configCygnus', 'sub-build']);
+  grunt.registerTask('build-maven', ['ngconstant:development', 'test', 'clean:before', 'copy:configMaven', 'sub-build']);
+  grunt.registerTask('build-dev', ['ngconstant:development', 'test', 'clean:before', 'copy:configDev','sub-build']);
+  grunt.registerTask('build-test', ['ngconstant:development', 'test', 'clean:before', 'copy:configTest','sub-build']);
   grunt.registerTask('test',['dom_munger:read', 'ngtemplates', 'karma:services', 'karma:controllers', 'karma:directives', 'karma:filters', 'clean:after']);
-  grunt.registerTask('test-dev',['dom_munger:read', 'karma:services', 'clean:after']);
 
   grunt.registerTask('default',['build-dev']);
+  
+  grunt.registerTask('serve-no-watch', ['dom_munger:read', 'configureProxies', 'configureRewriteRules', 'connect:development']);
   grunt.registerTask('serve', ['parallel:serve']);
+  grunt.registerTask('serve-debug', ['ngconstant:development','serve']);
+  grunt.registerTask('serve-prod', ['ngconstant:production','serve']);
   grunt.registerTask('serve-copy', ['copy:serve', 'serve']);
+  
   grunt.registerTask('build-docs', ['jsdoc']);
-
+  grunt.registerTask('constants', ['ngconstant:development']);
+  
     grunt.event.on('watch', function(action, filepath) {
-
         if (filepath.lastIndexOf('.js') !== -1 && filepath.lastIndexOf('.js') === filepath.length - 3) {
-
+    
             //lint the changed js file
             grunt.config('jshint.main.src', filepath);
             grunt.task.run('jshint');
-
+    
             //find the appropriate unit test for the changed file
             var spec = filepath;
             if (filepath.lastIndexOf('-spec.js') === -1 || filepath.lastIndexOf('-spec.js') !== filepath.length - 8) {
                 spec = filepath.substring(0, filepath.length - 3) + '-spec.js';
             }
-
+    
             //if the spec exists then lets run it
             if (grunt.file.exists(spec)) {
                 //grunt.config('jasmine.unit.options.specs', spec);
@@ -564,18 +591,18 @@ module.exports = function (grunt) {
                     'test/envConfigForTest.js',
                     spec
                 ];
-
+    
                 grunt.config('karma.options.files', files);
                 grunt.task.run('karma:during_watch');
             }
         }
-
+    
         if (filepath.lastIndexOf('.htm') !== -1 && filepath.lastIndexOf('.htm') >= (filepath.length - 6)) {
             //lint the changed html file
             grunt.config('htmlhint.html.src', filepath);
             grunt.task.run('htmlhint');
         }
-
+    
         if (filepath.lastIndexOf('.less') !== -1 && filepath.lastIndexOf('.less') === filepath.length - 5) {
             grunt.task.run('less');
         }
@@ -585,7 +612,6 @@ module.exports = function (grunt) {
         if (filepath === 'app\\index.html') {
             grunt.task.run('dom_munger:read');
         }
-
+    
     });
-
 };

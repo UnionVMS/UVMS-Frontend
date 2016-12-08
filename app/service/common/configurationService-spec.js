@@ -1,3 +1,14 @@
+/*
+Developed with the contribution of the European Commission - Directorate General for Maritime Affairs and Fisheries
+© European Union, 2015-2016.
+
+This file is part of the Integrated Fisheries Data Management (IFDM) Suite. The IFDM Suite is free software: you can
+redistribute it and/or modify it under the terms of the GNU General Public License as published by the
+Free Software Foundation, either version 3 of the License, or any later version. The IFDM Suite is distributed in
+the hope that it will be useful, but WITHOUT ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or
+FITNESS FOR A PARTICULAR PURPOSE.  See the GNU General Public License for more details. You should have received a
+copy of the GNU General Public License along with the IFDM Suite. If not, see <http://www.gnu.org/licenses/>.
+ */
 describe('configurationService', function() {
 
     var buildings = {HOUSE : 1, CABIN : 2, TENT : 3};
@@ -12,17 +23,16 @@ describe('configurationService', function() {
     beforeEach(inject(function($rootScope, $q, vesselRestService, movementRestService, mobileTerminalRestService) {
 
         var vesselDeffered = $q.defer();
-        vesselDeffered.resolve({LETTER : 'A', COUNTRY : 'SWE'}); 
-        vesselRestSpy = spyOn(vesselRestService, 'getConfig').andReturn(vesselDeffered.promise); 
+        vesselDeffered.resolve({LETTER : 'A', COUNTRY : 'SWE'});
+        vesselRestSpy = spyOn(vesselRestService, 'getConfig').andReturn(vesselDeffered.promise);
 
         var movementDeffered = $q.defer();
-        movementDeffered.resolve({THEME : 'GREEN', NUMBER : 2, BUILDINGS : buildings}); 
-        spyOn(movementRestService, 'getConfig').andReturn(movementDeffered.promise); 
+        movementDeffered.resolve({THEME : 'GREEN', NUMBER : 2, BUILDINGS : buildings});
+        spyOn(movementRestService, 'getConfig').andReturn(movementDeffered.promise);
 
         var deffered = $q.defer();
-        deffered.resolve({THEME : 'GREEN', NUMBER : 2, BUILDINGS : buildings}); 
+        deffered.resolve({THEME : 'GREEN', NUMBER : 2, BUILDINGS : buildings});
         spyOn(mobileTerminalRestService, 'getTranspondersConfig').andReturn(deffered.promise);
-        spyOn(mobileTerminalRestService, 'getChannelNames').andReturn(deffered.promise);
         spyOn(mobileTerminalRestService, 'getConfig').andReturn(deffered.promise);
     }));
 

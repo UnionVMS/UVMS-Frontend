@@ -5,7 +5,7 @@
 	"menu_activity" : "Activity",
 	"menu_user" : "User",
 	"menu_assets" : "Assets",
-	"menu_alarmconditions" : "Alarms",
+	"menu_alarmconditions" : "Alerts",
 	"menu_communication" : "Mobile terminals",
 	"menu_gis" : "GIS",
 	"menu_movement" : "Positions",

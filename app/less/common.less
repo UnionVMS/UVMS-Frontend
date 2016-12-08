@@ -1,4 +1,14 @@
+/*
+﻿Developed with the contribution of the European Commission - Directorate General for Maritime Affairs and Fisheries
+© European Union, 2015-2016.
 
+This file is part of the Integrated Fisheries Data Management (IFDM) Suite. The IFDM Suite is free software: you can
+redistribute it and/or modify it under the terms of the GNU General Public License as published by the
+Free Software Foundation, either version 3 of the License, or any later version. The IFDM Suite is distributed in
+the hope that it will be useful, but WITHOUT ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or
+FITNESS FOR A PARTICULAR PURPOSE.  See the GNU General Public License for more details. You should have received a
+copy of the GNU General Public License along with the IFDM Suite. If not, see <http://www.gnu.org/licenses/>.
+ */
 /*
  * Common css classes that can be used everywhere in the application.
  * Each class should only do one thing, otherwise it should go in components.less
@@ -331,7 +341,7 @@ a:hover{
     .closeicon{
         width: 30px;
         height: 30px;
-        line-height: 30px;
+        line-height: 28px;
         cursor: pointer;
         background: #fff;
         font-size: 16px;
@@ -525,4 +535,79 @@ a:hover{
             text-decoration: underline;
         }   
     }
+}
+
+
+// Flexbox
+.flexbox() {
+    display: -webkit-box;
+    display: -moz-box;
+    display: -ms-flexbox;
+    display: -webkit-flex;
+    display: flex;
+}
+
+.flex(@values) {
+    -webkit-box-flex: @values;
+    -moz-box-flex: @values;
+    -webkit-flex: @values;
+    -ms-flex: @values;
+    flex: @values;
+}
+
+.flexorder(@val) {
+    -webkit-box-ordinal-group: @val;  
+    -moz-box-ordinal-group: @val;     
+    -ms-flex-order: @val;     
+    -webkit-order: @val;  
+    order: @val;
+}
+
+
+// Clearfix
+.clear {
+    &:after {
+        content: '';
+        display: table;
+        clear: both;
+    }
+}
+
+// Alignments 
+.postion-absolut-vertical-horizontal() {
+    position: absolute;
+    left: 50%;
+    top: 50%;
+    -webkit-transform: translate(-50%,-50%);
+    -moz-transform: translate(-50%,-50%);
+    -ms-transform: translate(-50%,-50%);
+    -o-transform: translate(-50%,-50%);
+    transform: translate(-50%,-50%);
+}
+
+.postion-absolut-vertical() {
+    position: absolute;
+    top: 50%;
+    -webkit-transform: translate(0,-50%);
+    -moz-transform: translate(0,-50%);
+    -ms-transform: translate(0,-50%);
+    -o-transform: translate(0,-50%);
+    transform: translate(0,-50%);
+}
+
+// Transitions
+.transition-all-ease(@val) {
+    -webkit-transition: all @val ease;
+    -moz-transition: all @val ease;
+    -o-transition: all @val ease;
+    transition: all @val ease;
+}
+
+// Icon font 
+.icon-font-bootstrap(@fontSize) {
+    display: inline-block;
+    font: normal normal normal @fontSize/0px FontAwesome;
+    text-rendering: auto;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
 }

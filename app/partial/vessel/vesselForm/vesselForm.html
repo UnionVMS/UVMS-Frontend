@@ -1,59 +1,73 @@
+<!--
+﻿Developed with the contribution of the European Commission - Directorate General for Maritime Affairs and Fisheries
+© European Union, 2015-2016.
+
+This file is part of the Integrated Fisheries Data Management (IFDM) Suite. The IFDM Suite is free software: you can
+redistribute it and/or modify it under the terms of the GNU General Public License as published by the
+Free Software Foundation, either version 3 of the License, or any later version. The IFDM Suite is distributed in
+the hope that it will be useful, but WITHOUT ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or
+FITNESS FOR A PARTICULAR PURPOSE.  See the GNU General Public License for more details. You should have received a
+copy of the GNU General Public License along with the IFDM Suite. If not, see <http://www.gnu.org/licenses/>.
+-->
 <div class="vesselForm" ng-controller="VesselFormCtrl">
     <form name="vesselForm" method="post" novalidate >
         <div class="card" loading-indicator="waitingForVesselDataResponse">
-            <div class="row card-header">
-                <div class="col-md-6">
-                    <div class="metadata">
-                        <div>
-                            {{'vessel.source' | i18n}} : <b>{{vesselObj.source}}</b>
-                        </div>
-                        <div class="clearfix"></div>
+            <div loading-indicator="waitingForCreateResponse">
+                <menu-bar header="'Create new asset'" modeltype="'VESSEL'" ng-model="vesselObj"
+                          functions="menuBarFunctions"
+                          disable-form="disableForm"
+                          is-create-new-mode="isCreateNewMode">
+                </menu-bar>
+                <div class="row">
+                    <div class="detailsContainer">
+                        <vessel-details vessel="vesselObj" vessel-form="vesselForm" submit-attempted="submitAttempted" disable-form="disableForm()" create-new-mode="isCreateNewMode()" existing-values="existingValues" functions="vesselDetailsFunctions"></vessel-details>
                     </div>
-                </div>
-                <div class="col-md-6 textAlignRight">
-                    <div class="actions">
-                        <div class="setStatusContainer">
-                            <button type="button" class="btn btn-default" ng-click="exportAssetToCsv()">
-                                {{'common.export_csv' | i18n}}
-                            </button>
-                        </div>
-                        <div class="setStatusContainer" ng-hide="isCreateNewMode() || disableForm()">
-                            <button type="button" class="btn btn-default" ng-show="vesselObj.active" ng-click="archiveVessel()">
-                                {{'common.archive' | i18n}}
-                            </button>
-                        </div>
-                        <div ng-hide="disableForm()">
-                            <button class="btn btn-primary" type="submit" ng-click="updateVessel()" ng-hide="isCreateNewMode()">
-                                {{'common.update' | i18n}}
-                            </button>
-                            <button type="submit" class="btn btn-primary" ng-click="createNewVessel()" ng-show="isCreateNewMode()" ng-disabled="waitingForCreateResponse">
-                                {{'vessel.save_asset' | i18n}}
-                            </button>
-                        </div>
-                        <div class="closeIcon" ng-click="toggleViewVessel()">
-                            <i class="fa fa-sign-out signouticon" title="{{'common.close' | i18n}}"></i>
-                        </div>
-                        <div class="clearfix"></div>
-                    </div>
-                </div>
-            </div>
-            <div class="row">
-                <div class="detailsContainer">
-                    <vessel-details vessel="vesselObj" vessel-form="vesselForm" submit-attempted="submitAttempted" disable-form="disableForm()" create-new-mode="isCreateNewMode()" spin="waitingForCreateResponse" existing-values="existingValues"></vessel-details>
-                </div>
 
-                <div class="col-md-12 historyAndTerminalInformation">
-                    <div class="row row-same-height ">
-                        <div class="col-md-3 grayBorderRight historyContainer top-column">
-                            <div class="row" ng-if="!isCreateNewMode()">
+                    <div class="notesContainer">
+                        <div class="col-md-3 notesListContainer">
+                            <div class="row">
+                                <div class="col-md-6">
+                                    <h5>{{'vessel.vessel_notes' | i18n}}</h5>
+                                </div>
+                                <div class="col-md-6 textAlignRight">
+                                    <span ng-show="vesselObj.notes.length > vesselNotesSize"><a ng-click="showVesselNotesList()">{{'common.view_all' | i18n}}</a></span>
+                                </div>
+                            </div>
+                            <table class="fullWidth" ng-show="vesselObj.notes.length > 0 && !isCreateNewMode()">
+                                <thead>
+                                    <tr>
+                                        <th>{{'vessel.event_table_header_code' | i18n}}</th>
+                                        <th>{{'vessel.event_table_header_date' | i18n}}</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <tr ng-repeat="item in vesselObj.notes | orderBy :'-date' | limitTo: vesselNotesSize track by item.id" class="list">
+                                        <td><a ng-click="viewVesselNotesDetails(item)">{{item.activity}}</a></td>
+                                        <td>{{item.date | confDateFormat}}</td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                            <span ng-hide="vesselObj.notes.length > 0">
+                                {{'vessel.vessel_notes_zero_message' | i18n}}
+                            </span>
+                        </div>
+                        <div class="col-md-9 notesForm">
+                            <h5>{{'vessel.vesse_notes_new_note' | i18n}}</h5>
+                            <vessel-notes vessel-notes="vesselNotesObj" vessel-form="vesselForm" disable-form="disableForm()" status="isVisible.vesselForm" submit-attempted="submitAttempted"></vessel-notes>
+                        </div>
+                    </div>
+
+                    <div class="historyAndTerminalInformation">
+                        <div class="col-md-3 grayBorderRight historyContainer">
+                            <div class="row">
                                 <div class="col-md-6">
                                     <h5>{{'vessel.event_history' | i18n | uppercase}}</h5>
                                 </div>
                                 <div class="col-md-6 textAlignRight">
-                                    <span ng-show="isVisible.showCompleteVesselHistoryLink"><a ng-click="viewCompleteVesselHistory()">{{'common.view_all' | i18n}}</a></span>
+                                    <span ng-show="isThisVisible.showCompleteVesselHistoryLink"><a ng-click="viewCompleteVesselHistory()">{{'common.view_all' | i18n}}</a></span>
                                 </div>
                                 <div class="col-md-12" loading-indicator="waitingForHistoryResponse" size="small" type="SPINNER">
-                                    <table class="fullWidth" ng-hide="waitingForHistoryResponse">
+                                    <table class="fullWidth" ng-show="vesselHistory.length > 0 && !isCreateNewMode()">
                                         <thead>
                                             <tr>
                                                 <th>{{'vessel.event_table_header_code' | i18n}}</th>
@@ -61,82 +75,32 @@
                                             </tr>
                                         </thead>
                                         <tbody>
-                                            <tr ng-repeat="item in vesselHistory | orderBy :'-eventHistory.eventDate'">
+                                            <tr ng-repeat="item in vesselHistory | orderBy :'-eventHistory.eventDate'" class="list">
                                                 <td><a ng-click="viewHistoryDetails(item)">{{item.eventHistory.eventCode}}</a></td>
                                                 <td>{{item.eventHistory.eventDate | confDateFormat}}</td>
                                             </tr>
                                         </tbody>
                                     </table>
+                                    <span ng-hide="!isCreateNewMode()">
+                                        {{'vessel.event_history_zero_message' | i18n}}
+                                    </span>
                                     <search-result-error-alert ng-show="vesselHistoryError">{{vesselHistoryError}}</search-result-error-alert>
                                 </div>
                             </div>
                         </div>
-
-                        <div class="col-md-5 grayBorderRight terminalsContainer top-column">
-                            <div class="row" ng-if="!isCreateNewMode()">
-                                <div class="col-md-12">
-                                    <h5>{{'vessel.connected_mobile_terminals' | i18n}}</h5>
-                                </div>
-                                <div class="col-md-12" loading-indicator="waitingForMobileTerminalsResponse" size="small" type="SPINNER">
-                                    <table class="fullWidth" ng-show="mobileTerminals.length > 0">
-                                        <thead>
-                                            <tr>
-                                                <th>{{'vessel.mobileTerminal_table_header_serial_number' | i18n}}</th>
-                                                <th>{{'vessel.mobileTerminal_table_header_type' | i18n}}</th>
-                                                <th>{{'vessel.mobileTerminal_table_header_started' | i18n}}</th>
-                                                <th>{{'vessel.mobileTerminal_table_header_stopped' | i18n}}</th>
-                                            </tr>
-                                        </thead>
-                                        <tbody>
-                                            <tr ng-repeat="mt in mobileTerminals | orderBy :'[-active, -started]'" ng-class="{inactive : !mt.active}">
-                                                <td>{{mt.attributes.SERIAL_NUMBER}}</td>
-                                                <td>{{mt.type | transponderName}}</td>
-                                                <td>{{mt.attributes.STARTED_ON || "-" | confDateFormat }}</td>
-                                                <td>{{mt.attributes.UNINSTALLED_ON || "-" | confDateFormat }}</td>
-                                            </tr>
-                                        </tbody>
-                                    </table>
-                                    <span ng-hide="waitingForMobileTerminalsResponse || mobileTerminals.length > 0 || mobileTerminalsError">
-                                        {{'vessel.zero_connected_mobile_terminals' | i18n}}
-                                    </span>
-                                </div>
-                                <div class="col-md-12">
-                                    <search-result-error-alert ng-show="mobileTerminalsError">{{mobileTerminalsError}}</search-result-error-alert>
-                                </div>
-                            </div>
-                        </div>
-
-                        <div class="col-md-4 notesContainer top-column">
-                            <div class="row">
-                                <div class="col-md-12">
-                                    <h5>{{'vessel.notes' | i18n}}</h5>
-                                </div>
-                                <div class="col-md-12">
-                                    <textarea ng-model="vesselObj.notes" ng-disabled="disableForm()"></textarea>
-                                </div>
-                            </div>
-                        </div>
-
                     </div>
                 </div>
-
-            </div>
-        </div>
-
-        <div class="row" ng-if="isCreateNewMode()">
-            <div class="col-md-12">
-                <a ng-click="clearForm()">{{'vessel.clear_form' | i18n}}</a>
-            </div>
-        </div>
-
-        <div class="row mobileTerminalsContainer" ng-if="!isCreateNewMode()">
-            <div class="col-md-12">
-                <h3 ng-show="mobileTerminals.length > 0">{{'vessel.connected_mobile_terminals' | i18n}}</h3>
-            </div>
-            <div class="col-md-12" ng-repeat="mt in mobileTerminals | orderBy :'[-active, -started]'">
-                <ng-include src="'partial/vessel/vesselForm/mobileTerminal.html'"/>
             </div>
         </div>
     </form>
+
+    <div class="row mobileTerminalsContainer" ng-if="!isCreateNewMode()">
+        <div ng-show="mobileTerminals.length > 0" class="col-md-12">
+            <h3>{{'vessel.connected_mobile_terminals' | i18n}}</h3>
+            <div ng-repeat="mobileTerminal in mobileTerminals | orderBy :'[-isCreateNewMode]'" loading-indicator="waitingForMobileTerminalsResponse" size="small" type="SPINNER">
+                <mobile-terminal-details mobile-terminal="mobileTerminal" vessel-id="vesselObj.vesselId.guid" modeltype="'VESSEL'" callback="mobileTerminalForm"></mobile-terminal-details>
+            </div>
+        </div>
+    </div>
 
 </div>

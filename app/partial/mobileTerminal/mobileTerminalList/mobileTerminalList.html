@@ -1,3 +1,14 @@
+<!--
+﻿Developed with the contribution of the European Commission - Directorate General for Maritime Affairs and Fisheries
+© European Union, 2015-2016.
+
+This file is part of the Integrated Fisheries Data Management (IFDM) Suite. The IFDM Suite is free software: you can
+redistribute it and/or modify it under the terms of the GNU General Public License as published by the
+Free Software Foundation, either version 3 of the License, or any later version. The IFDM Suite is distributed in
+the hope that it will be useful, but WITHOUT ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or
+FITNESS FOR A PARTICULAR PURPOSE.  See the GNU General Public License for more details. You should have received a
+copy of the GNU General Public License along with the IFDM Suite. If not, see <http://www.gnu.org/licenses/>.
+-->
 <div class="row" ng-controller="MobileterminallistCtrl">
     <div search-results-table search="currentSearchResults" class="col-md-12">
         <table class="searchResults colorOdd mobileTerminalsTable truncate-text">
@@ -43,11 +54,10 @@
                 <td class="statusColored" ng-attr-title="{{item.attributes.SATELLITE_NUMBER}}">{{item.attributes.SATELLITE_NUMBER}}</td>
                 <td>
                     <span ng-show="item.associatedVessel">{{item.associatedVessel.mmsiNo}}</span>
-                    <span ng-show="item.associatedVessel && !item.associatedVessel.mmsiNo"> - </span>
                 </td>
                 <td>
-                    <span ng-if="item.active" class="label label-success">{{'common.active' | i18n | uppercase}}</span>
-                    <span ng-if="!item.active" class="label label-danger">{{'common.inactive' | i18n | uppercase}}</span>
+                    <span ng-if="item.active" class="mobile-terminal-status label label-success">{{'common.active' | i18n | uppercase}}</span>
+                    <span ng-if="!item.active" class="mobile-terminal-status label label-danger">{{'common.inactive' | i18n | uppercase}}</span>
                 </td>
                 <td>
                     <button class="btn btn-default btn-sm" ng-click="toggleMobileTerminalDetails(item)">
@@ -62,4 +72,3 @@
 
 
 </div>
-

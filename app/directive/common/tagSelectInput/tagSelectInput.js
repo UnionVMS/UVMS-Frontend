@@ -1,5 +1,16 @@
+/*
+Developed with the contribution of the European Commission - Directorate General for Maritime Affairs and Fisheries
+© European Union, 2015-2016.
+
+This file is part of the Integrated Fisheries Data Management (IFDM) Suite. The IFDM Suite is free software: you can
+redistribute it and/or modify it under the terms of the GNU General Public License as published by the
+Free Software Foundation, either version 3 of the License, or any later version. The IFDM Suite is distributed in
+the hope that it will be useful, but WITHOUT ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or
+FITNESS FOR A PARTICULAR PURPOSE.  See the GNU General Public License for more details. You should have received a
+copy of the GNU General Public License along with the IFDM Suite. If not, see <http://www.gnu.org/licenses/>.
+ */
 angular.module('unionvmsWeb').directive('tagSelectInput', function() {
-	return {
+    return {
         restrict: 'E',
         replace: true,
         controller: 'tagSelectInputCtrl',
@@ -12,8 +23,9 @@ angular.module('unionvmsWeb').directive('tagSelectInput', function() {
             maxLimit : '@',
             titleField : '@',
             valueField : '@',
+            multipleSelectionDropdown : '@'
         },
-		templateUrl: 'directive/common/tagSelectInput/tagSelectInput.html',
+        templateUrl: 'directive/common/tagSelectInput/tagSelectInput.html',
         link: function(scope, element, attrs, fn) {
         }
     };
@@ -64,6 +76,25 @@ angular.module('unionvmsWeb')
             }
         };
 
+        // Display as dropdown with multiple select option
+        $scope.displayMultipleSelectionDropdown = function() {
+            if(angular.isDefined($scope.multipleSelectionDropdown)) {
+                return true;
+            }
+
+        }
+
+        // Set "Multiple options selected placeholder" (When placeholder should be displayed is specified in controller)
+        $scope.displayMultipleOptionsPlaceholder = function(){ 
+            if(angular.isUndefined($scope.multipleSelectionDropdown) || isNaN($scope.multipleSelectionDropdown)){
+                return false;
+            } else {
+                if ($scope.selectedItems.length >= $scope.multipleSelectionDropdown) {
+                    return true;
+                }
+            }   
+        };
+
         $scope.removeItem = function(item){
             var index = $scope.selectedItems.indexOf(item);
             if(index >= 0){
@@ -82,19 +113,34 @@ angular.module('unionvmsWeb')
         };
 
         //Select item in dropdown
-        $scope.selectItem = function(item){
+        $scope.selectItem = function(item, selectAll, removeAll){
             //Add
-            if(!$scope.isSelected(item)){
+            if(!$scope.isSelected(item) && !removeAll){
                 $scope.selectedItems.push(item);                
                 watchModelChanges = false;
                 updateNgModel();
             }
             //Remove
             else{
-                $scope.removeItem(item);
+                if (!selectAll) {
+                    $scope.removeItem(item);
+                }
             }
         };
-        
+
+        // Select all items in dropdown
+        $scope.selectAllItems = function(items){
+            for (var i = 0; i < items.length; i++) {
+                $scope.selectItem(items[i], true);
+            }
+        }
+
+        // Remove all items in dropdown
+        $scope.removeAllItems = function(items){
+            for (var i = 0; i < items.length; i++) {
+                $scope.selectItem(items[i], false, true);
+            }
+        }
 
         //Watch for changes to the ngModel and update the selectedItems
         var watchModelChanges = true;

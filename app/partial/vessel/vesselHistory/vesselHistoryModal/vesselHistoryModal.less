@@ -1,17 +1,72 @@
-.vesselHistoryContainer{
+/*
+﻿Developed with the contribution of the European Commission - Directorate General for Maritime Affairs and Fisheries
+© European Union, 2015-2016.
 
-    .sectionHeader{
-        color: #777;
-        .grayBorderBottom;
-        padding-top: 15px;
+This file is part of the Integrated Fisheries Data Management (IFDM) Suite. The IFDM Suite is free software: you can
+redistribute it and/or modify it under the terms of the GNU General Public License as published by the
+Free Software Foundation, either version 3 of the License, or any later version. The IFDM Suite is distributed in
+the hope that it will be useful, but WITHOUT ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or
+FITNESS FOR A PARTICULAR PURPOSE.  See the GNU General Public License for more details. You should have received a
+copy of the GNU General Public License along with the IFDM Suite. If not, see <http://www.gnu.org/licenses/>.
+ */
+.vesselHistoryContainer {
+
+    .modal-header {
+        .clearfix();
+
+        .modal-title {
+            line-height: 30px;
+        }
+
+        .modal-description {
+            padding: 10px 0 0 0;
+        }
     }
-
-    .historyValues{
+    
+    .modal-body {
         line-height: 22px;
+        text-transform: uppercase;
+        .clearfix();
+
+        b {
+            text-transform: none;
+        }
+
+        .sectionHeader {
+            color: #777;
+            .grayBorderBottom;
+            padding-top: 20px;
+
+            &:first-of-type {
+                padding-top: 0;
+            }
+        }
+
+        .contacts {
+            .clearfix();
+            margin: 0;
+
+            .contact {
+                .clearfix();
+                padding-bottom: 10px;
+
+                &:last-of-type {
+                    padding-bottom: 0;
+                }
+            }
+
+        }   
     }
 
-    text-transform: uppercase;
-    b{
-        text-transform: none;
+    .modal-footer {
+        .btn {
+            padding-top: 1px;
+            padding-bottom: 0;
+        }
+    }
+
+    [class*="col-md-"] {
+        padding-left: 0;
+        padding-right: 0;
     }
 }

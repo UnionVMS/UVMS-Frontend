@@ -1,3 +1,14 @@
+/*
+Developed with the contribution of the European Commission - Directorate General for Maritime Affairs and Fisheries
+© European Union, 2015-2016.
+
+This file is part of the Integrated Fisheries Data Management (IFDM) Suite. The IFDM Suite is free software: you can
+redistribute it and/or modify it under the terms of the GNU General Public License as published by the
+Free Software Foundation, either version 3 of the License, or any later version. The IFDM Suite is distributed in
+the hope that it will be useful, but WITHOUT ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or
+FITNESS FOR A PARTICULAR PURPOSE.  See the GNU General Public License for more details. You should have received a
+copy of the GNU General Public License along with the IFDM Suite. If not, see <http://www.gnu.org/licenses/>.
+ */
 angular.module('unionvmsWeb').controller('AuditlogCtrl', function($scope, $q, $filter, locale, Audit, auditLogRestService, searchService, auditOptionsService, SearchResults, GetListRequest, infoModal, pollingRestService, mobileTerminalRestService, csvService) {
 
     //Names used in the backend
@@ -164,13 +175,13 @@ angular.module('unionvmsWeb').controller('AuditlogCtrl', function($scope, $q, $f
                 case TYPES.ASSETS_AND_TERMINALS.POLL:
                     return "/polling/logs/" + audit.affectedObject;
                 case TYPES.ALARMS.ALARM:
-                    return "/alarms/holdingtable/" + audit.affectedObject;
+                    return "/alerts/holdingtable/" + audit.affectedObject;
                 case TYPES.ALARMS.TICKET:
-                    return "/alarms/notifications/" + audit.affectedObject;
+                    return "/alerts/notifications/" + audit.affectedObject;
                 case TYPES.ALARMS.CUSTOM_RULE:
                 case TYPES.ALARMS.CUSTOM_RULE_SUBSCRIPTION:
                 case TYPES.ALARMS.CUSTOM_RULE_ACTION_TRIGGERED:
-                    return "/alarms/rules/" + audit.affectedObject;
+                    return "/alerts/rules/" + audit.affectedObject;
                 case TYPES.POSITION_REPORTS.AUTOMATIC_POSITION_REPORT:
                 case TYPES.POSITION_REPORTS.MANUAL_POSITION_REPORT:
                     return "/movement/" + audit.affectedObject;
