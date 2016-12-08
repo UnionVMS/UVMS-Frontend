@@ -1,3 +1,14 @@
+/*
+Developed with the contribution of the European Commission - Directorate General for Maritime Affairs and Fisheries
+© European Union, 2015-2016.
+
+This file is part of the Integrated Fisheries Data Management (IFDM) Suite. The IFDM Suite is free software: you can
+redistribute it and/or modify it under the terms of the GNU General Public License as published by the
+Free Software Foundation, either version 3 of the License, or any later version. The IFDM Suite is distributed in
+the hope that it will be useful, but WITHOUT ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or
+FITNESS FOR A PARTICULAR PURPOSE.  See the GNU General Public License for more details. You should have received a
+copy of the GNU General Public License along with the IFDM Suite. If not, see <http://www.gnu.org/licenses/>.
+ */
 angular.module('unionvmsWeb').directive('datepickerInput', ['$compile',function($compile) {
 	return {
 		restrict: 'E',
@@ -13,14 +24,12 @@ angular.module('unionvmsWeb').directive('datepickerInput', ['$compile',function(
             minDate : '=', //should be on format "YYYY-MM-DD HH:mm:ss Z"
             maxDate : '=', //should be on format "YYYY-MM-DD HH:mm:ss Z"
             inputFieldId: '@',
-            updateWhen: '@',
-            fullscreenLocation: '='
+            updateWhen: '@'
 		},
 		templateUrl: 'directive/common/datepickerInput/datepickerInput.html',
 		link: function(scope, element, attrs, ngModel) {
             //Add input name if name attribute exists
             var name = attrs.name;
-            scope.element = element;
             
             if(name) {
                 element.find('input').attr('name', name);
@@ -33,20 +42,13 @@ angular.module('unionvmsWeb').directive('datepickerInput', ['$compile',function(
 
             //Create dateTimePicker and save on scope
             scope.dateTimePicker = jQuery("#" +scope.inputFieldId).datetimepicker(scope.options);
-
-            if(scope.fullscreenLocation){
-                element.ready(function () {
-                    jQuery('#' + scope.datepickerId).addClass('fullscreen-datepicker');  
-                    jQuery('#' + scope.datepickerId).appendTo(scope.fullscreenLocation);
-                });
-            }
         }
 	};
 }]);
 
 angular.module('unionvmsWeb')
     .controller('datepickerInputCtrl',['$scope', 'dateTimeService','globalSettingsService', function($scope, dateTimeService, globalSettingsService){
-
+        
         var iso8601Dates = globalSettingsService.getDateFormat() === 'YYYY-MM-DD HH:mm:ss';
 
         //Formats used by momentjs and the picker
@@ -246,8 +248,16 @@ angular.module('unionvmsWeb')
             updateOptions(newOptions);
         });
         
+        var cleanup = function(){
+            //Remove the datepicker from the DOM
+            jQuery("#" +$scope.datepickerId).remove();
+
+            //Remove event listeners from input field
+            jQuery("#" +$scope.inputFieldId).off();
+        };
+
         $scope.$on('$destroy', function() {
-            jQuery("#" +$scope.inputFieldId).datetimepicker('destroy');
+            cleanup();
         });
 
         init();

@@ -2,7 +2,7 @@
     <div class="col-md-12 smallerpadding">
         <div class="row nomargin">
             <div class="col-md-2 smallerpadding searchcriteria">
-                <dropdown ng-model="advancedSearchObject.FLAG_STATE" initialtext="{{'vessel.advanced_search_placeholder_flag_state' | i18n}}" items="flagStates" callback="resetSelectedVesselGroup"></dropdown>
+                <tag-select-input ng-model="advancedSearchObject.FLAG_STATE" ng-placeholder="{{'vessel.advanced_search_placeholder_flag_state' | i18n}}" items="flagStates" id="searchFlagstate" multiple-selection-dropdown="2" callback="resetSelectedVesselGroup"></tag-select-input>
             </div>
             <div class="col-md-2 smallerpadding searchcriteria">
                 <input type="text" id="searchextno" placeholder="{{'vessel.advanced_search_placeholder_external_number' | i18n}}" class="form-control" tabindex="2" ng-model="advancedSearchObject.EXTERNAL_MARKING" ng-change="resetSelectedVesselGroup()">
@@ -33,16 +33,16 @@
                 <input type="text" id="searchhomeport" placeholder="{{'vessel.advanced_search_placeholder_homeport_name' | i18n}}" class="form-control" tabindex="7" ng-model="advancedSearchObject.HOMEPORT" ng-change="resetSelectedVesselGroup()">
             </div>
             <div class="col-md-2 smallerpadding searchcriteria">
-                <dropdown ng-model="advancedSearchObject.GEAR_TYPE" initialtext="{{'vessel.advanced_search_placeholder_gear_type' | i18n}}" items="gearTypes" callback="resetSelectedVesselGroup"></dropdown>
+                <dropdown ng-model="advancedSearchObject.GEAR_TYPE" initialtext="{{'vessel.advanced_search_placeholder_gear_type' | i18n}}" items="gearTypes" callback="resetSelectedVesselGroup" tab-index="8"></dropdown>
             </div>
             <div class="col-md-2 smallerpadding searchcriteria">
-                <input type="text" id="searchproducername" placeholder="{{'vessel.advanced_search_placeholder_producer_name' | i18n}}" class="form-control" tabindex="8" ng-model="advancedSearchObject.PRODUCER_NAME" ng-change="resetSelectedVesselGroup()">
+                <input type="text" id="searchproducername" placeholder="{{'vessel.advanced_search_placeholder_producer_name' | i18n}}" class="form-control" tabindex="9" ng-model="advancedSearchObject.PRODUCER_NAME" ng-change="resetSelectedVesselGroup()">
             </div>
             <div class="col-md-1 smallerpadding searchcriteria">
-                <dropdown ng-model="advancedSearchObject.LENGTH_SPAN" initialtext="{{'vessel.advanced_search_placeholder_length' | i18n}}" items="lengthSpans" callback="resetSelectedVesselGroup"></dropdown>
+                <dropdown ng-model="advancedSearchObject.LENGTH_SPAN" initialtext="{{'vessel.advanced_search_placeholder_length' | i18n}}" items="lengthSpans" callback="resetSelectedVesselGroup" tab-index="10"></dropdown>
             </div>
             <div class="col-md-1 smallerpadding searchcriteria">
-                <dropdown ng-model="advancedSearchObject.POWER_SPAN" initialtext="{{'vessel.advanced_search_placeholder_power' | i18n}}" items="powerSpans" callback="resetSelectedVesselGroup"></dropdown>
+                <dropdown ng-model="advancedSearchObject.POWER_SPAN" initialtext="{{'vessel.advanced_search_placeholder_power' | i18n}}" items="powerSpans" callback="resetSelectedVesselGroup" tab-index="11"></dropdown>
             </div>
             <div class="col-md-2">
                 <search-button smallerPadding="true" cancel-callback="resetSearch()" search-callback="performSearch()"></search-button>
@@ -50,7 +50,7 @@
             <div class="col-md-1 smallerpadding">
                 <div class="row nomargin">
                     <div class="col-md-12 colNoPadding searchcriteriadropdown">
-                        <button type="submit" class="btn btn-primary btn-sm fullWidth vmsbtn" ng-disabled="advancedSearchForm.$invalid" ng-click="performSearch()">
+                        <button type="submit" class="btn btn-primary btn-sm fullWidth vmsbtn" ng-disabled="advancedSearchForm.$invalid" ng-click="performSearch()" tabindex="12">
                             {{'common.search' | i18n}}
                         </button>
                     </div>
@@ -59,7 +59,7 @@
             <div class="col-md-1 smallerpadding">
                 <div class="row nomargin">
                     <div class="col-md-12 colNoPadding searchcriteriadropdown">
-                        <button type="button" class="btn btn-default btn-sm fullWidth vmsbtn" ng-click="resetSearch()">
+                        <button type="button" class="btn btn-default btn-sm fullWidth vmsbtn" ng-click="resetSearch()" tabindex="13">
                             {{'common.reset' | i18n}}
                         </button>
                     </div>

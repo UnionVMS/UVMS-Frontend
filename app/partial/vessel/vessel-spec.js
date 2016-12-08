@@ -1,3 +1,14 @@
+/*
+Developed with the contribution of the European Commission - Directorate General for Maritime Affairs and Fisheries
+© European Union, 2015-2016.
+
+This file is part of the Integrated Fisheries Data Management (IFDM) Suite. The IFDM Suite is free software: you can
+redistribute it and/or modify it under the terms of the GNU General Public License as published by the
+Free Software Foundation, either version 3 of the License, or any later version. The IFDM Suite is distributed in
+the hope that it will be useful, but WITHOUT ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or
+FITNESS FOR A PARTICULAR PURPOSE.  See the GNU General Public License for more details. You should have received a
+copy of the GNU General Public License along with the IFDM Suite. If not, see <http://www.gnu.org/licenses/>.
+ */
 describe('VesselCtrl', function() {
 
     beforeEach(module('unionvmsWeb'));
@@ -25,7 +36,7 @@ describe('VesselCtrl', function() {
 
     it('should search for vessels on init', inject(function(Vessel, $q, searchService) {
         var deferred = $q.defer();
-        var searchVesselSpy = spyOn(searchService, "searchVessels").andReturn(deferred.promise);
+        var searchVesselSpy = spyOn(searchService, "searchLatestMovements").andReturn(deferred.promise);
         var controller = createController();
 
         expect(searchVesselSpy).toHaveBeenCalled();
@@ -33,7 +44,7 @@ describe('VesselCtrl', function() {
 
     it('should get vessel by id on init if state param id is available', inject(function(Vessel, $q, searchService, vesselRestService) {
         var deferred = $q.defer();
-        var searchVesselSpy = spyOn(searchService, "searchVessels").andReturn(deferred.promise);
+        var searchVesselSpy = spyOn(searchService, "searchLatestMovements").andReturn(deferred.promise);
 
         var deferred2 = $q.defer();
         var foundVessel = new Vessel();
@@ -52,7 +63,7 @@ describe('VesselCtrl', function() {
 
     it('should get vessel by id on init if state param id is available should handle error', inject(function(Vessel, $q, searchService, vesselRestService, alertService) {
         var deferred = $q.defer();
-        var searchVesselSpy = spyOn(searchService, "searchVessels").andReturn(deferred.promise);
+        var searchVesselSpy = spyOn(searchService, "searchLatestMovements").andReturn(deferred.promise);
 
         var deferred2 = $q.defer();
         deferred2.reject("ERROR");
@@ -141,6 +152,7 @@ describe('VesselCtrl', function() {
 
             var deferred = $q.defer();
             var searchSpy = spyOn(searchService, "searchVessels").andReturn(deferred.promise);
+            var searchVesselSpy = spyOn(searchService, "searchLatestMovements").andReturn(deferred.promise);
             var vessel = new Vessel();
             vessel.name = "ABCD-123";
             var items = [vessel];
@@ -153,6 +165,7 @@ describe('VesselCtrl', function() {
             expect(scope.currentSearchResults.loading).toBeTruthy();
             scope.$digest();
             expect(searchSpy).toHaveBeenCalled();
+            expect(searchVesselSpy).toHaveBeenCalled();
             expect(scope.currentSearchResults.items[0]).toEqual(vessel);
             expect(scope.currentSearchResults.loading).toBeFalsy();
             expect(scope.currentSearchResults.errorMessage).toEqual('');
@@ -163,6 +176,7 @@ describe('VesselCtrl', function() {
 
             var deferred = $q.defer();
             var searchSpy = spyOn(searchService, "searchVessels").andReturn(deferred.promise);
+            var searchVesselSpy = spyOn(searchService, "searchLatestMovements").andReturn(deferred.promise);
             var localeSpy = spyOn(locale, "getString").andReturn("TRANSLATED_TEXT");
             deferred.reject();
 
@@ -172,6 +186,7 @@ describe('VesselCtrl', function() {
             expect(scope.currentSearchResults.loading).toBeTruthy();
             scope.$digest();
             expect(searchSpy).toHaveBeenCalled();
+            expect(searchVesselSpy).toHaveBeenCalled();
             expect(scope.currentSearchResults.items.length).toEqual(0);
             expect(scope.currentSearchResults.loading).toBeFalsy();
             expect(scope.currentSearchResults.errorMessage).not.toEqual('');
@@ -181,6 +196,7 @@ describe('VesselCtrl', function() {
 
             var deferred = $q.defer();
             var searchSpy = spyOn(searchService, "searchVessels").andReturn(deferred.promise);
+            var searchVesselSpy = spyOn(searchService, "searchLatestMovements").andReturn(deferred.promise);
             var setPageSpy = spyOn(searchService, "setPage");
             deferred.reject();
 
@@ -193,6 +209,7 @@ describe('VesselCtrl', function() {
 
             expect(setPageSpy).toHaveBeenCalledWith(page);
             expect(searchSpy).toHaveBeenCalled();
+            expect(searchVesselSpy).toHaveBeenCalled();
         }));
     });
 

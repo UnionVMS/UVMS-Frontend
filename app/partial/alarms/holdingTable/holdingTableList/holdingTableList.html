@@ -1,3 +1,14 @@
+﻿<!--
+﻿Developed with the contribution of the European Commission - Directorate General for Maritime Affairs and Fisheries
+© European Union, 2015-2016.
+
+This file is part of the Integrated Fisheries Data Management (IFDM) Suite. The IFDM Suite is free software: you can
+redistribute it and/or modify it under the terms of the GNU General Public License as published by the
+Free Software Foundation, either version 3 of the License, or any later version. The IFDM Suite is distributed in
+the hope that it will be useful, but WITHOUT ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or
+FITNESS FOR A PARTICULAR PURPOSE.  See the GNU General Public License for more details. You should have received a
+copy of the GNU General Public License along with the IFDM Suite. If not, see <http://www.gnu.org/licenses/>.
+-->
 <div class="row">
     <div search-results-table search="currentSearchResults" class="col-md-12 holding-table">
 
@@ -24,7 +35,7 @@
                     </td>
                     <td>
                         <span ng-show="item.alarmItems.length === 1" tooltip-placement="bottom" tooltip="{{getRuleNamesTooltip(item)}}">{{item.alarmItems[0].ruleName}}</span>
-                        <span ng-show="item.alarmItems.length > 1" tooltip-placement="bottom" tooltip="{{getRuleNamesTooltip(item)}}">{{'alarms.alarms_table_number_of_rules' | i18n:item.alarmItems.length}}</span>
+                        <span ng-show="item.alarmItems.length > 1 " tooltip-placement="bottom" tooltip="{{getRuleNamesTooltip(item)}}">{{'alarms.alarms_table_number_of_rules' | i18n:item.alarmItems.length}}</span>
                     </td>
                     <td ng-attr-title="{{item.getResolvedDate() | confDateFormat}}">{{item.getResolvedDate() | confDateFormat}}</td>
                     <td ng-attr-title="{{item.getResolvedBy()}}">{{item.getResolvedBy()}}</td>

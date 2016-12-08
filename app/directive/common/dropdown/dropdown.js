@@ -1,3 +1,14 @@
+/*
+Developed with the contribution of the European Commission - Directorate General for Maritime Affairs and Fisheries
+© European Union, 2015-2016.
+
+This file is part of the Integrated Fisheries Data Management (IFDM) Suite. The IFDM Suite is free software: you can
+redistribute it and/or modify it under the terms of the GNU General Public License as published by the
+Free Software Foundation, either version 3 of the License, or any later version. The IFDM Suite is distributed in
+the hope that it will be useful, but WITHOUT ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or
+FITNESS FOR A PARTICULAR PURPOSE.  See the GNU General Public License for more details. You should have received a
+copy of the GNU General Public License along with the IFDM Suite. If not, see <http://www.gnu.org/licenses/>.
+ */
 /**
 * Attributes used in the directive:
 * - noPlaceholderItem : use when you dont want to add a defaultItem to the dropdown
@@ -17,10 +28,17 @@ angular.module('unionvmsWeb')
             ngModel:'=',
             callback : '=',
             callbackParams : '=',
-            ngDisabled : '='
+            ngDisabled : '=',
+            tabIndex : '=', 
+            ngRequired : '=', 
+            name : '='
 		},
         templateUrl: 'directive/common/dropdown/dropdown.html',
-		link: function(scope, element, attrs, fn) {
+		link: function(scope, element, attrs, fn, deepBlur) {
+
+            scope.status = {
+                isopen: false
+            };
 
             scope.initialitem = true;
             if('noPlaceholderItem' in attrs){
@@ -155,12 +173,54 @@ angular.module('unionvmsWeb')
                 return false;
             };
 
+            // Select dropdown items on focus
+            scope.focusVal = function(item) {
+                scope.focusedItem = item;
+                if(angular.isDefined(scope.focusedItem)){
+                    scope.selectVal(scope.focusedItem);
+                }
+            };
+
+            // Close dropdown menu
+            scope.closeDropdownMenu = function() {
+                if(scope.status.isopen){
+                    angular.element(scope.currentTarget).removeClass('open');
+                    scope.status.isopen = false;
+                }
+            };
+
+            // Add extra events to a toggled dropdown menu
+            scope.toggleDropdown = function(e) {
+                if(!scope.ngDisabled) {
+                    e.preventDefault();
+                    e.stopPropagation();
+                    
+                    angular.element(scope.currentTarget).toggleClass('open');
+                    scope.currentTarget = event.currentTarget;
+                    scope.status.isopen = !scope.status.isopen;
+                } 
+            };
+
+            // Make sure dropdown isn't toggled on menu events
+            scope.dropdownMenuClick = function() {
+                scope.status.isopen = true;
+            };
+
+            // Close menu on enter 
+            scope.dropdownMenuKeyboardEvent = function(e) {
+                e.preventDefault();
+                e.stopPropagation();
+                
+                if(e.keyCode === 13) {
+                    scope.closeDropdownMenu();
+                } 
+            };
+
             scope.setLabel();
             //Create a list item with the initaltext?
             if(scope.initialitem && !scope.menuStyle){
                 scope.addDefaultValueToDropDown();
-            }
+            }  
 		}
 	};
 });
-

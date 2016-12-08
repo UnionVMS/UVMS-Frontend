@@ -1,3 +1,14 @@
+﻿<!--
+﻿Developed with the contribution of the European Commission - Directorate General for Maritime Affairs and Fisheries
+© European Union, 2015-2016.
+
+This file is part of the Integrated Fisheries Data Management (IFDM) Suite. The IFDM Suite is free software: you can
+redistribute it and/or modify it under the terms of the GNU General Public License as published by the
+Free Software Foundation, either version 3 of the License, or any later version. The IFDM Suite is distributed in
+the hope that it will be useful, but WITHOUT ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or
+FITNESS FOR A PARTICULAR PURPOSE.  See the GNU General Public License for more details. You should have received a
+copy of the GNU General Public License along with the IFDM Suite. If not, see <http://www.gnu.org/licenses/>.
+-->
 <!-- step 3 -->
 <div class="card with-small-card-header runningProgramPollsContainer" ng-controller="RunningProgramPollsCtrl">
     <div class="row card-header">
@@ -45,7 +56,7 @@
                             <td class="actionIcon" ng-class="{inactive:!possibleToStop(item)}">
                                 <div class="stop" ng-click="stopProgramPoll(item)" ng-class="{noAccess:!accessToManagePolls}" title="{{'polling.running_program_polls_stop_title' | i18n}}">
                                     <i class="fa fa-stop"></i>
-                               </div>
+                                </div>
                             </td>
                             <td ng-if="accessToManagePolls" class="actionIcon">
                                 <div class="delete" ng-click="deleteProgramPoll(item);" title="{{'polling.running_program_polls_remove_title' | i18n}}">
@@ -59,4 +70,3 @@
         </div>
     </div>
 </div>
-

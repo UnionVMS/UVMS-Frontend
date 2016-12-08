@@ -1,3 +1,14 @@
+/*
+Developed with the contribution of the European Commission - Directorate General for Maritime Affairs and Fisheries
+© European Union, 2015-2016.
+
+This file is part of the Integrated Fisheries Data Management (IFDM) Suite. The IFDM Suite is free software: you can
+redistribute it and/or modify it under the terms of the GNU General Public License as published by the
+Free Software Foundation, either version 3 of the License, or any later version. The IFDM Suite is distributed in
+the hope that it will be useful, but WITHOUT ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or
+FITNESS FOR A PARTICULAR PURPOSE.  See the GNU General Public License for more details. You should have received a
+copy of the GNU General Public License along with the IFDM Suite. If not, see <http://www.gnu.org/licenses/>.
+ */
 angular.module('unionvmsWeb').factory('searchUtilsService',function(SearchField, dateTimeService, locale) {
 
     //Modify span and times zones in list of search criterias
@@ -51,10 +62,6 @@ angular.module('unionvmsWeb').factory('searchUtilsService',function(SearchField,
                         break;
                     case 'THIS_WEEK':
                         searchCriterias.push(new SearchField(fromDateKey, dateTimeService.formatUTCDateWithTimezone(moment().startOf('week').format("YYYY-MM-DD HH:mm"))));
-                        searchCriterias.push(new SearchField(toDateKey, dateTimeService.formatUTCDateWithTimezone(moment.utc().format())));
-                        break;
-                    case 'LAST_MONTH':
-                        searchCriterias.push(new SearchField(fromDateKey, dateTimeService.formatUTCDateWithTimezone(moment().startOf('month').format("YYYY-MM-DD HH:mm"))));
                         searchCriterias.push(new SearchField(toDateKey, dateTimeService.formatUTCDateWithTimezone(moment.utc().format())));
                         break;
                     default:
@@ -165,7 +172,6 @@ angular.module('unionvmsWeb').factory('searchUtilsService',function(SearchField,
         var options = [
             {text: locale.getString('common.time_span_today'), code:'TODAY'},
             {text: locale.getString('common.time_span_this_week'), code:'THIS_WEEK'},
-            {text: locale.getString('common.time_span_last_month'), code:'LAST_MONTH'},
             {text: locale.getString('common.time_span_custom'), code:'CUSTOM'},
         ];
 

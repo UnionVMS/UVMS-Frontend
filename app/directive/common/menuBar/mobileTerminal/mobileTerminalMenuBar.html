@@ -1,0 +1,10 @@
+<div>
+	<div class="menuTextItem item" ng-hide="isCreateNewMode()">
+		{{'common.source_upper_case' | i18n}} : <b id="menu-bar-mob-term-source">{{ngModel.source.substr(0, 1)}}{{ngModel.source.substr(1).toLowerCase()}}</b>
+	</div>
+    <div class="menuTextItem item" ng-hide="isCreateNewMode()">
+        {{'common.status_upper_case' | i18n}} :
+        <span class="mobile-terminal-status label label-success" ng-show="ngModel.active" id="menu-bar-mob-term-active">{{ ('common.active' | i18n | uppercase)}}</span>
+        <span class="mobile-terminal-status label label-danger" ng-hide="ngModel.active" id="menu-bar-mob-term-inactive">{{ ('common.inactive' | i18n | uppercase)}}</span>
+    </div>
+</div>

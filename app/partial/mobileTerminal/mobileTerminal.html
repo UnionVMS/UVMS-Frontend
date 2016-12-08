@@ -1,3 +1,14 @@
+<!--
+﻿Developed with the contribution of the European Commission - Directorate General for Maritime Affairs and Fisheries
+© European Union, 2015-2016.
+
+This file is part of the Integrated Fisheries Data Management (IFDM) Suite. The IFDM Suite is free software: you can
+redistribute it and/or modify it under the terms of the GNU General Public License as published by the
+Free Software Foundation, either version 3 of the License, or any later version. The IFDM Suite is distributed in
+the hope that it will be useful, but WITHOUT ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or
+FITNESS FOR A PARTICULAR PURPOSE.  See the GNU General Public License for more details. You should have received a
+copy of the GNU General Public License along with the IFDM Suite. If not, see <http://www.gnu.org/licenses/>.
+-->
 <div>
     <div class="container containerWithTopBottomPadding">
         <div ng-if="isVisible.mobileTerminalForm" ng-include="'partial/mobileTerminal/mobileTerminalForm/mobileTerminalForm.html'"></div>
@@ -14,10 +25,10 @@
                             <div class="col-md-10">
                                 <div class="row">
                                     <div class="col-md-2">
-                                        <dropdown ng-model="editSelection" initialtext="{{'common.actions' | i18n}}" menu-style items="editSelectionDropdownItems" callback="editSelectionCallback"></dropdown>
+                                        <dropdown ng-model="editSelection" initialtext="{{'common.actions' | i18n}}" menu-style items="editSelectionDropdownItems" callback="editSelectionCallback" id="mob-term-actions"></dropdown>
                                     </div>
                                     <div class="col-md-2">
-                                        <button show-if-allowed="manageMobileTerminals" type="button" class="btn btn-sm btn-primary" ng-click="toggleAddNewMobileTerminal()"><i class="fa fa-plus"></i> {{'mobileTerminal.new_terminal' | i18n}}</button>
+                                        <button show-if-allowed="manageMobileTerminals" type="button" class="btn btn-sm btn-primary" ng-click="toggleAddNewMobileTerminal()" id="mob-term-add-terminal"><i class="fa fa-plus"></i> {{'mobileTerminal.new_terminal' | i18n}}</button>
                                     </div>
                                 </div>
                             </div>
@@ -30,4 +41,3 @@
         </div>
     </div>
 </div>
-

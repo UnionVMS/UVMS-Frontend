@@ -1,3 +1,14 @@
+/*
+Developed with the contribution of the European Commission - Directorate General for Maritime Affairs and Fisheries
+© European Union, 2015-2016.
+
+This file is part of the Integrated Fisheries Data Management (IFDM) Suite. The IFDM Suite is free software: you can
+redistribute it and/or modify it under the terms of the GNU General Public License as published by the
+Free Software Foundation, either version 3 of the License, or any later version. The IFDM Suite is distributed in
+the hope that it will be useful, but WITHOUT ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or
+FITNESS FOR A PARTICULAR PURPOSE.  See the GNU General Public License for more details. You should have received a
+copy of the GNU General Public License along with the IFDM Suite. If not, see <http://www.gnu.org/licenses/>.
+ */
 describe('VesselFormCtrl', function() {
 
 	beforeEach(module('unionvmsWeb'));
@@ -42,6 +53,12 @@ describe('VesselFormCtrl', function() {
             //Nothing
         };
 
+        scope.vesselNoteValues = {
+            date : "1", 
+            activity : "1", 
+            source : "INTERNAL"
+        };
+
     }));
 
     beforeEach(inject(function($httpBackend) {
@@ -75,6 +92,12 @@ describe('VesselFormCtrl', function() {
         var deferred2 = $q.defer();
         spyOn(vesselRestService, "getVesselHistoryListByVesselId").andReturn(deferred2.promise);
         deferred2.resolve([]);
+
+        scope.vesselNoteValues = {
+            date : "1", 
+            activity : "1", 
+            source : "INTERNAL"
+        };
 
         //CreateMode should be true before creation
         expect(scope.isCreateNewMode()).toEqual(true);
@@ -138,7 +161,7 @@ describe('VesselFormCtrl', function() {
         expect(vesselRestService.getVesselHistoryListByVesselId).toHaveBeenCalledWith(scope.vesselObj.vesselId.value,5);
 
         //Check that mergeCurrentVesselIntoSearchResults was called afterwards to update the vessel list
-        expect(scope.mergeCurrentVesselIntoSearchResults).toHaveBeenCalledWith();
+        expect(scope.mergeCurrentVesselIntoSearchResults).toHaveBeenCalledWith(scope.vesselObj);
     }));
 
     it('archive a vessel should open confirmation modal, and then update vesselObj with the archived vessel and remove it from the vessel list', inject(function(Vessel, $compile, $q, $httpBackend, vesselRestService, mobileTerminalRestService, alertService, confirmationModal, locale, MobileTerminal) {
@@ -350,7 +373,7 @@ describe('VesselFormCtrl', function() {
         $compile(element)(scope);
 
         //Show link
-        scope.isVisible.showCompleteVesselHistoryLink = true;
+        scope.isThisVisible.showCompleteVesselHistoryLink = true;
 
         //View history
         scope.viewCompleteVesselHistory();
@@ -360,7 +383,7 @@ describe('VesselFormCtrl', function() {
         expect(vesselRestServiceSpy).toHaveBeenCalled();
 
         //The link should be hidden
-        expect(scope.isVisible.showCompleteVesselHistoryLink).toBeFalsy();
+        expect(scope.isThisVisible.showCompleteVesselHistoryLink).toBeFalsy();
 
         //The scope.vesselHistory item shold be updated
         expect(scope.vesselHistory).toEqual(historyResult);

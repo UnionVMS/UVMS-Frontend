@@ -1,11 +1,19 @@
+/*
+Developed with the contribution of the European Commission - Directorate General for Maritime Affairs and Fisheries
+© European Union, 2015-2016.
+
+This file is part of the Integrated Fisheries Data Management (IFDM) Suite. The IFDM Suite is free software: you can
+redistribute it and/or modify it under the terms of the GNU General Public License as published by the
+Free Software Foundation, either version 3 of the License, or any later version. The IFDM Suite is distributed in
+the hope that it will be useful, but WITHOUT ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or
+FITNESS FOR A PARTICULAR PURPOSE.  See the GNU General Public License for more details. You should have received a
+copy of the GNU General Public License along with the IFDM Suite. If not, see <http://www.gnu.org/licenses/>.
+ */
 angular.module('unionvmsWeb')
     .factory('mobileTerminalRestFactory',function($resource, $log){
         return {
             getTranspondersConfig : function(){
                 return $resource('/mobileterminal/rest/config/transponders');
-            },
-            getChannelNames : function(){
-                return $resource('/mobileterminal/rest/config/channelnames');
             },
             getMobileTerminalByGuid : function(){
                 return $resource('/mobileterminal/rest/mobileterminal/:id');
@@ -106,24 +114,6 @@ angular.module('unionvmsWeb')
                     deferred.resolve(TranspondersConfig.fromJson(response.data));
                 }, function(error) {
                     $log.error("Error getting transponders config");
-                    deferred.reject(error);
-                });
-                return deferred.promise;
-            },
-
-
-            getChannelNames : function(){
-                var deferred = $q.defer();
-                mobileTerminalRestFactory.getChannelNames().get({
-                }, function(response) {
-                    if(response.code !== 200){
-                        deferred.reject("Invalid response status");
-                        return;
-                    }
-                    //Return array of names
-                    deferred.resolve(response.data);
-                }, function(error) {
-                    $log.error("Error getting channel names from config");
                     deferred.reject(error);
                 });
                 return deferred.promise;
@@ -365,12 +355,7 @@ angular.module('unionvmsWeb')
                         return;
                     }
                     //Create list of MobileTerminalHistory
-                    var history = [];
-                    if(angular.isArray(response.data)){
-                        for (var i = 0; i < response.data.length; i ++) {
-                            history.push(MobileTerminalHistory.fromJson(response.data[i]));
-                        }
-                    }
+                    var history = MobileTerminalHistory.fromJson(response.data);
 
                     deferred.resolve(history);
                 }, function(error) {
@@ -384,20 +369,22 @@ angular.module('unionvmsWeb')
                 this.getHistoryForMobileTerminalByGUID(mobileTerminal.guid).then(function(history){
                     //Get associated carriers for all mobile terminals in the history items
                     var mobileTerminals = [];
-                    $.each(history, function(index, historyItem) {
-                        mobileTerminals.push(historyItem.mobileTerminal);
-                    });
+                    if (history) {
+                        $.each(history.events, function(index, historyItem) {
+                            mobileTerminals.push(historyItem);
+                        });
+                    }
 
                     mobileTerminalVesselService.getVesselsForListOfMobileTerminals(mobileTerminals).then(
                         function(vesselListPage){
                             //Connect the mobileTerminals to the vessels
 
-                            $.each(history, function(index, historyItem){
-                                var connectId = historyItem.mobileTerminal.connectId;
+                            $.each(history.events, function(index, historyItem){
+                                var connectId = historyItem.connectId;
                                 if(angular.isDefined(connectId) && typeof connectId === 'string' && connectId.trim().length >0){
                                     var matchingVessel = vesselListPage.getVesselByGuid(connectId);
                                         if(angular.isDefined(matchingVessel)){
-                                            historyItem.mobileTerminal.associatedVessel = matchingVessel;
+                                            historyItem.associatedVessel = matchingVessel;
                                         }
                                     }
                             });
