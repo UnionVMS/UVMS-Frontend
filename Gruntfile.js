@@ -53,7 +53,7 @@ module.exports = function (grunt) {
     connect: {
       options: {
         port: 9001,
-        keepalive: true
+        keepalive: false
       },
       rules: [
           // Internal rewrite
@@ -142,7 +142,7 @@ module.exports = function (grunt) {
     watch: {
       main: {
         options: {
-            livereload: false,
+            livereload: true,
             livereloadOnError: false,
             spawn: false
         },
@@ -171,9 +171,12 @@ module.exports = function (grunt) {
     less: {
       production: {
         options: {
+          sourceMap: true,
+          sourceMapFilename: 'app/app.css.map',
+          sourceMapRootpath: '../'
         },
         files: {
-          'temp/app.css': 'app/app.less'
+          'app/app.css': 'app/app.less'
         }
       }
     },
@@ -495,6 +498,29 @@ module.exports = function (grunt) {
           dest: '/'}]
       }
     },
+    parallel: {
+      options: {
+        stream: true
+      },
+      'sub-build': {
+        tasks: [{
+          grunt: true,
+          args: ['htmlhint','jshint']
+        }, {
+          grunt: true,
+          args: ['less','dom_munger','ngtemplates','cssmin','concat','ngAnnotate','uglify','copy:dist','htmlmin','compress:dist','clean:after']
+        }]
+      },
+      serve: {
+        tasks: [{
+          grunt: true,
+          args: ['htmlhint','jshint']
+        }, {
+          grunt: true,
+          args: ['serve-no-watch', 'watch', 'ngtemplates'],
+        }]
+      }
+    },
     ngconstant: {
       options: {
         name: 'debugConfig',
@@ -519,22 +545,24 @@ module.exports = function (grunt) {
     }
   });
   
-  grunt.registerTask('sub-build',['htmlhint','jshint', 'less','dom_munger','ngtemplates','cssmin','concat','ngAnnotate','uglify','copy:dist','htmlmin','compress:dist','clean:after']);//,'clean:after'
+  grunt.registerTask('sub-build',['parallel:sub-build']);//,'clean:after'
 
   grunt.registerTask('build', ['ngconstant:production', 'test', 'clean:before', 'copy:config', 'sub-build']);
-  grunt.registerTask('build-test', ['ngconstant:development', 'test', 'clean:before', 'copy:configTest','sub-build']);
   grunt.registerTask('build-local', ['ngconstant:development', 'test', 'clean:before', 'copy:configLocal', 'test', 'sub-build']);
   grunt.registerTask('build-cygnus', ['ngconstant:development', 'test', 'clean:before', 'copy:configCygnus', 'sub-build']);
   grunt.registerTask('build-maven', ['ngconstant:development', 'test', 'clean:before', 'copy:configMaven', 'sub-build']);
   grunt.registerTask('build-dev', ['ngconstant:development', 'test', 'clean:before', 'copy:configDev','sub-build']);
+  grunt.registerTask('build-test', ['ngconstant:development', 'test', 'clean:before', 'copy:configTest','sub-build']);
   grunt.registerTask('test',['dom_munger:read', 'ngtemplates', 'karma:services', 'karma:controllers', 'karma:directives', 'karma:filters', 'clean:after']);
 
   grunt.registerTask('default',['build-dev']);
-  grunt.registerTask('serve-no-watch', ['dom_munger:read','jshint', 'configureProxies', 'configureRewriteRules', 'connect:development']);
-  grunt.registerTask('serve', ['serve-no-watch', 'watch']);
+  
+  grunt.registerTask('serve-no-watch', ['dom_munger:read', 'configureProxies', 'configureRewriteRules', 'connect:development']);
+  grunt.registerTask('serve', ['parallel:serve']);
   grunt.registerTask('serve-debug', ['ngconstant:development','serve']);
   grunt.registerTask('serve-prod', ['ngconstant:production','serve']);
   grunt.registerTask('serve-copy', ['copy:serve', 'serve']);
+  
   grunt.registerTask('build-docs', ['jsdoc']);
   grunt.registerTask('constants', ['ngconstant:development']);
   
@@ -575,6 +603,10 @@ module.exports = function (grunt) {
             grunt.task.run('htmlhint');
         }
     
+        if (filepath.lastIndexOf('.less') !== -1 && filepath.lastIndexOf('.less') === filepath.length - 5) {
+            grunt.task.run('less');
+        }
+
         //if index.html changed, we need to reread the <script> tags so our next run of jasmine
         //will have the correct environment
         if (filepath === 'app\\index.html') {

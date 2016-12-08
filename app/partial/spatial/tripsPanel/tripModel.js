@@ -261,8 +261,7 @@ angular.module('unionvmsWeb').factory('Trip',function(locale,unitConversionServi
 		delete self.tripVessel.contactPersons;
 
 		angular.forEach(data.contactPersons,function(value, key) {
-			value.code = value.id = key;
-			value.text = value.title + ' ' + value.givenName + ' ' + value.middleName + ' ' + value.familyName;
+			value.type = value.title + ' ' + value.givenName + ' ' + value.middleName + ' ' + value.familyName;
 		});
 		self.tripRoles = data.contactPersons;
 	};
