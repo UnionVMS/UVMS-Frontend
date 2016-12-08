@@ -13,12 +13,6 @@
  */
 angular.module('unionvmsWeb').controller('TripsummaryCtrl', function ($scope, activityRestService, tripSummaryService, loadingStatus, $anchorScroll, locale) {
     $scope.tripSummServ = tripSummaryService;
-    $scope.panelData = {
-        tableShown: true,
-        subTitle: [locale.getString('activity.catch_panel_title_onboard'), locale.getString('activity.catch_panel_title_landed')],
-        loadingScreen: 'TripSummary',
-        colWidth: 6
-    };
     
     //when the trip is being initialized
     $scope.$watch('tripSummServ.isLoadingTrip', function (newVal) {
@@ -34,9 +28,8 @@ angular.module('unionvmsWeb').controller('TripsummaryCtrl', function ($scope, ac
      * @private
      */
     var init = function () {
+        
         loadingStatus.isLoading('TripSummary', true);
-
-       
         //get vessel and role data for the specified trip
         activityRestService.getTripVessel($scope.trip.id).then(function (response) {
             $scope.trip.fromJson('vessel', response.data);
@@ -50,6 +43,7 @@ angular.module('unionvmsWeb').controller('TripsummaryCtrl', function ($scope, ac
             loadingStatus.isLoading('TripSummary', false);
         });
 
+        loadingStatus.isLoading('TripSummary', true);
         //get activity reports data for the specified trip
         activityRestService.getTripReports($scope.trip.id).then(function (response) {
             $scope.trip.fromJson('reports', response.data);
@@ -62,6 +56,8 @@ angular.module('unionvmsWeb').controller('TripsummaryCtrl', function ($scope, ac
             $scope.alert.hideAlert();
             loadingStatus.isLoading('TripSummary', false);
         });
+
+        loadingStatus.isLoading('TripSummary', true);
         // get trip catches data for the specific trip
         activityRestService.getTripCatches($scope.trip.id).then(function (response) {
             $scope.trip.fromJson('catch', response.data);

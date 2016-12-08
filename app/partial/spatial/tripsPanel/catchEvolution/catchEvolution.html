@@ -1,25 +1,28 @@
 <div ng-controller="CatchevolutionCtrl" class="catch-evolution">
-    <fieldset class="col-md-12 fieldsetStyle catch-evolution-fieldset">
-        <legend class="fieldsetLegendStyle catch-evolution-legend">
+    <fieldset class="col-md-12 fieldsetStyle">
+        <legend class="fieldsetLegendStyle">
             <a>{{'activity.catch_evolution_title' | i18n }}</a>
         </legend>
         <!-- CATCH EVOLUTION CONTAINER -->
-        <div class="catch-evolution-container">
+        <div class="row catch-evolution-container">
             <!-- TRIP OVERVIEW PANEL -->
-            <div class="row summary-row">
-                <trip-overview-panel class="col-md-12 summary-section" trip="fishingTripDetails"></trip-overview-panel>
-            </div>
+            <trip-overview-panel class="col-md-12 summary-section" trip="fishingTripDetails"></trip-overview-panel>
             <!-- CHARTS PANEL -->
-            <div class="chart-panel row">
-                <div ng-repeat="item in catchEvolutionData">
-                    <catch-panel class="col-md-3" ng-model="item" trip-alert="alert" field-data="panelDataWithOutTable" title="{{'activity.activity_type_day'| i18n }}{{$index+1}}"></catch-panel>
+            <div class="col-md-12">
+                <div class="col-md-12 chart-panel">
+                    <div class="row">
+                        <div class="row">
+                            <div ng-repeat="item in catchEvolutionData.catchProgress track by $index">
+                                <catch-panel class="col-md-3" ng-model="item" title="{{'activity.activity_type_day'| i18n }}{{$index+1}}" unit="kg"></catch-panel>
+                            </div>
+                        </div>
+                    </div>
                 </div>
             </div>
-            <div class="row divider">
-            </div>
-            <div class="chart-panel-table row">
-                <catch-panel class="col-md-6 center" ng-model="catchEvolutionData[catchEvolutionData.length-1]" trip-alert="alert" field-data="panelData"
-                    title="{{'activity.activity_type_landing'| i18n }}"></catch-panel>
+            <div class="col-md-12 chart-panel-table">
+                <div class="row">
+                    <catch-panel class="col-md-6" ng-model="catchEvolutionData.finalCatch" title="{{'activity.activity_type_landing'| i18n }}" unit="kg" with-table="true"></catch-panel>
+                </div>
             </div>
         </div>
     </fieldset>

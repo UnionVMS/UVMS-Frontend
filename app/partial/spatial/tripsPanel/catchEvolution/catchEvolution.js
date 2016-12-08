@@ -12,20 +12,7 @@
  *  The controller for the Catch Evolution.  
  */
 angular.module('unionvmsWeb').controller('CatchevolutionCtrl', function($scope, activityRestService, loadingStatus, $anchorScroll, locale) {
-   // data for field-data attribute with tables.
-    $scope.panelData = {
-        tableShown: true,
-        subTitle: [locale.getString('activity.catch_panel_title_landed'), locale.getString('activity.catch_evolution_title_cumulated_catch')],
-        loadingScreen: "CatchEvolution",
-        colWidth: 6
-    };
-     // data for field-data attribute without tables.
-    $scope.panelDataWithOutTable = {
-        "tableShown": false,
-        "subTitle": ["", locale.getString('activity.catch_evolution_title_cumulated')],
-        "loadingScreen": "CatchEvolution",
-        "colWidth": "12"
-    };
+    
     /**
        * Initialization function
        * 
@@ -38,6 +25,37 @@ angular.module('unionvmsWeb').controller('CatchevolutionCtrl', function($scope, 
         // get Catches Evolution details.
         $scope.catchEvolutionData = activityRestService.getTripCatchesEvolution('1234');
 
-    }
+        angular.forEach($scope.catchEvolutionData.catchProgress, function(item){
+            angular.forEach(item, function(chart,chartName){
+                if(chartName === 'cumulated'){
+                    chart.title = locale.getString('activity.catch_evolution_title_cumulated');
+                }
+
+                if(angular.isDefined(chart.speciesList) && chart.speciesList.length > 0){
+                    var colors = palette('tol-rainbow', chart.speciesList.length);
+                    angular.forEach(chart.speciesList, function(value,key){
+                        chart.speciesList[key].color = '#' + colors[key];
+                    });
+                }
+            });
+        });
+
+        angular.forEach($scope.catchEvolutionData.finalCatch, function(chart,chartName){
+            if(chartName === 'cumulated'){
+                chart.title = locale.getString('activity.catch_evolution_title_cumulated_catch');
+            }else if(chartName === 'landed'){
+                chart.title = locale.getString('activity.catch_panel_title_landed');
+            }
+
+            if(angular.isDefined(chart.speciesList) && chart.speciesList.length > 0){
+                var colors = palette('tol-rainbow', chart.speciesList.length);
+                angular.forEach(chart.speciesList, function(value,key){
+                    chart.speciesList[key].color = '#' + colors[key];
+                    chart.speciesList[key].tableColor = {'background-color': tinycolor('#' + colors[key]).setAlpha(0.7).toRgbString()};
+                });
+            }
+        });
+    };
+
     init();
 });

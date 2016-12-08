@@ -15,14 +15,14 @@ angular.module('unionvmsWeb').directive('catchPanel', function(loadingStatus, ac
         replace: true,
         scope: {
             ngModel: '=',
-            tripAlert: '=',
-            fieldData: '=',
-            title: '@'
+            withTable: '@',
+            title: '@',
+            isLoading: '=',
+            unit: '@',
+            height: '@'
         },
         templateUrl: 'directive/activity/catchPanel/catchPanel.html',
         link: function(scope, element, attrs, fn) {
-            scope.repNav = reportingNavigatorService;
-            scope.tripSummServ = tripSummaryService;
 
 			/**
 			 * Initialize the charts with nvd3 properties
@@ -30,19 +30,17 @@ angular.module('unionvmsWeb').directive('catchPanel', function(loadingStatus, ac
 			 * @memberof catchPanel
 			 * @private
 			 */
-
             var initCharts = function() {
                 scope.options = {};
-                angular.forEach(scope.ngModel, function(chartData, currentChart) {
-
+                angular.forEach(scope.ngModel, function(chartData, currentChart){
                     var chartOptions = {
                         chart: {
                             type: 'pieChart',
-                            height: 200,
+                            height: scope.height,
                             x: function(d) { return d.speciesCode; },
                             y: function(d) { return d.weight; },
                             valueFormat: function(d) {
-                                return scope.formatWeight(d, chartData.total, 'KG');
+                                return scope.formatWeight(d, chartData.total, scope.displayedUnit);
                             },
                             showLabels: false,
                             duration: 500,
@@ -53,7 +51,6 @@ angular.module('unionvmsWeb').directive('catchPanel', function(loadingStatus, ac
                         }
                     };
                     scope.options[currentChart] = chartOptions;
-
                 });
             };
 
@@ -66,9 +63,9 @@ angular.module('unionvmsWeb').directive('catchPanel', function(loadingStatus, ac
 			 * @param {Object} weightType - unit of the weight.
 			 * @param {Object} totalWeight - total weight of the specie.
 			 */
-            scope.formatWeight = function(specieWeight, totalWeight, weightType) {
+            scope.formatWeight = function(specieWeight, totalWeight, weightUnit) {
                 var value = specieWeight / totalWeight * 100;
-                return specieWeight + weightType + '(' + value.toFixed(2) + '%)';
+                return specieWeight + weightUnit + ' (' + value.toFixed(2) + '%)';
             };
 
 			/**
@@ -87,7 +84,6 @@ angular.module('unionvmsWeb').directive('catchPanel', function(loadingStatus, ac
             //when tthe trip is initialized
             scope.$watch('ngModel', function() {
                 init();
-
             });
 
 			/**
@@ -97,10 +93,8 @@ angular.module('unionvmsWeb').directive('catchPanel', function(loadingStatus, ac
 			 * @private
 			 */
             var init = function() {
-                loadingStatus.isLoading(scope.fieldData.loadingScreen, true);
+                scope.displayedUnit = locale.getString('activity.weight_unit_' + scope.unit);
                 initCharts();
-                loadingStatus.isLoading(scope.fieldData.loadingScreen, false);
-
             };
 
         }

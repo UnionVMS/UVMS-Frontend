@@ -88,16 +88,28 @@ div.dataTables_filter {
 }
 
 
-table.table thead .sorting_asc:after,
-table.table thead .sorting_desc:after,
-table.table thead [st-sort]:after,
-.tableSmart.table .thead .sorting_asc:after,
-.tableSmart.table .thead .sorting_desc:after,
-.tableSmart.table .thead [st-sort]:after {
-	font-family: 'FontAwesome';
-	margin-left: 5px;
-	position: absolute;
-	line-height: 21px;
+table.table thead .sorting_asc,
+table.table thead .sorting_desc,
+table.table thead [st-sort],
+.tableSmart.table div.thead div.th.sorting_asc,
+.tableSmart.table div.thead div.th.sorting_desc,
+.tableSmart.table div.thead div.th[st-sort] {
+	position: relative;
+	padding-right: 15px;
+	&:after {
+		font-family: 'FontAwesome';
+		margin-left: 5px;
+		position: absolute;
+		line-height: 30px;
+		right: 5px;
+		top: 0;
+	}
+}
+
+table.table.table-condensed thead [st-sort] {
+	&:after {
+		line-height: 20px;
+	}
 }
 
 table.table thead [st-sort].sorting_asc:after,

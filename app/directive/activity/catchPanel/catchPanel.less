@@ -1,81 +1,69 @@
 .catch-details-container {
     .catch-section {
-        .catch-subsection {
-            
-            h2 {
-                text-align: center;
-                margin: 0 0 -30px 0;
-            }
-            .chart-title{
-                 height:14px;
-                 margin: 0 0 -40px 0;
-                 text-align: center;
-                 .panel-subtitle{
-                    font-size: 14px;
-                    font-family: Roboto, Arial;
+        .catch-details-body {
+            display: flex;
+            .catch-subsection {
+                &.has-caption {
+                    padding-bottom: 30px;
                 }
-            }
-            
-            &:last-child {
-                border-left: 1px solid #ddd;
-            }
-            .chart-caption {
-                //margin:0; 
-               // position: absolute;
-                //bottom: 0;
-                padding-top:10px;
-                text-align: center;
-                width: 100%;
-               // left: 0;
-            }
-            .table {
-                width: auto !important;
-                max-width: none;
-                border: 1px solid #ddd;
-                .tbody {
-                    max-height: 120px;
-                    overflow-y: auto;
-                    padding-right: 16px;
+                h2 {
+                    text-align: center;
+                    margin: 0 0 -30px 0;
                 }
-                .tr {
-                    position: relative;
-                    padding-left: 10px;
-                    .td:last-child {
-                        text-align: center;
+                .chart-title{
+                    margin: 0 0 -40px 0;
+                    text-align: center;
+                    min-height: 21px;
+                    .panel-subtitle{
+                        font-size: 15px;
+                        font-family: Roboto, Arial;
                     }
                 }
-                .color-column {
+                
+                &:last-child {
+                    border-left: 1px solid #ddd;
+                }
+                .chart-caption {
                     position: absolute;
-                    top: 0;
-                    left: 0;
                     bottom: 0;
-                    z-index: 1;
+                    text-align: center;
+                    width: 100%;
+                }
+                .table {
+                    width: auto !important;
+                    max-width: none;
+                    border: 1px solid #ddd;
+                    .tbody {
+                        max-height: 120px;
+                        overflow-y: auto;
+                        padding-right: 16px;
+                    }
+                    .tr {
+                        position: relative;
+                        padding-left: 10px;
+                        .td:last-child {
+                            text-align: center;
+                        }
+                    }
+                    .color-column {
+                        position: absolute;
+                        top: 0;
+                        left: 0;
+                        bottom: 0;
+                        z-index: 1;
+                    }
                 }
             }
-        }
-        .nvd3-chart {
-            margin: -10px -40px;
-            .nvd3-svg {
-            padding:15px 0;
+            .nvd3-chart {
+                margin: 0 -15px;
+                .nvd3-svg {
+                    padding:15px 0;
+                }
+            }
+            .table-responsive-force {
+                margin-top: 50px;
             }
         }
-
-        .table-responsive-force {
-            margin-top: 50px;
-        }
-    }
-    .btn-detail-form,
-    .btn-trip-evolution {
-        position: absolute;
-        font-size: 18px;
-        right: -8px;
-    }
-    .btn-detail-form {
-        top: 15px;
-    }
-    .btn-trip-evolution {
-        top: 45px;
-        right: -10px;
     }
     fieldset {
             padding-bottom: 10px;
