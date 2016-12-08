@@ -19,20 +19,22 @@ copy of the GNU General Public License along with the IFDM Suite. If not, see <h
             padding-right: @unitWidth;
             .unit-box {
                 width: 55px;
+                border-radius: 0px !important;
             }
         }
     }
 
-    .unit-box{
-        border-top-right-radius: 0px !important;
-        border-bottom-right-radius: 0px !important;
+    .lengthValue {
+        .unit-box {
+            border-radius: 0px !important;
+        }
     }
-    .lengthTypeUnit, .grossTonnageUnit{
-        .dropdown{
-            button{
-                border-top-left-radius: 0px !important;
-                border-bottom-left-radius: 0px !important;
-            }
+
+    .border-radius-right {
+        button {
+            border-radius: 0px !important;
+            border-top-right-radius: @inputBorderRadius !important;
+            border-bottom-right-radius: @inputBorderRadius !important;
         }
     }
 

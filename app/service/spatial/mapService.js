@@ -1,5 +1,5 @@
 /*
-﻿Developed with the contribution of the European Commission - Directorate General for Maritime Affairs and Fisheries
+Developed with the contribution of the European Commission - Directorate General for Maritime Affairs and Fisheries
 © European Union, 2015-2016.
 
 This file is part of the Integrated Fisheries Data Management (IFDM) Suite. The IFDM Suite is free software: you can
@@ -8,7 +8,7 @@ Free Software Foundation, either version 3 of the License, or any later version.
 the hope that it will be useful, but WITHOUT ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or
 FITNESS FOR A PARTICULAR PURPOSE.  See the GNU General Public License for more details. You should have received a
 copy of the GNU General Public License along with the IFDM Suite. If not, see <http://www.gnu.org/licenses/>.
- */
+*/
 /**
  * @memberof unionvmsWeb
  * @ngdoc service
@@ -26,15 +26,30 @@ copy of the GNU General Public License along with the IFDM Suite. If not, see <h
  * @param unitConversionService {service} unit conversion service
  * @param coordinateFormatService {service} coordinate format service
  * @param MapFish {service} Mapfish service
- * @param genericMapService {service} generic map service<p>{@link unionvmsWeb.genericMapService}</p>
+ * @param genericMapService {service} generic map service <p>{@link unionvmsWeb.genericMapService}</p>
+ * @param layerPanelService {service} layer panel service
  * @attr {ol.Graticule} mapGraticule - The OL map graticule
  * @attr {Number} mapPrintResolution - The current map resolution to use while printing
  * @attr {Object} styles - An object containing the styles definitions for vms positions, segments and alarms
  * @attr {Array<ol.control>} addedControls - An array containing all the controls added to the map
+ * @attr {Object} clusterStyles - An object containing a reference to the cluster styles that were previously computed
+ * @attr {Number} clusterMinFeatureCount - The feature count of the smallest cluster
+ * @attr {Number} clustermaxFeatureCount - The feature count of the biggest cluster
+ * @attr {Number} currentResolution - The current map resolution
+ * @attr {Object} vmsSources - An object containing all the different VMS sources types and their current visibility
+ * @attr {Object} measureInteraction - A quick reference to the measure OL interaction
+ * @attr {Number} measurePointsLength - The number of points defining the linestring of the measure geometry
+ * @attr {Boolean} measureETA - Whether the ETA should be computed while measuring
+ * @attr {Object} measureOverlays - An object containing a reference to all displayed popup overlays
+ * @attr {Object} labelVisibility - An object containing the visibility and attributes to be used in labels for vms positions and segments
+ * @attr {Object} vmsposLabels - An object containing the activity status and the ids of all displayed position labels
+ * @attr {Object} vmssegLabels - An object containing the activity status and the ids of all displayed segment labels
+ * @attr {Object} popupVisibility - An object containing the visibility and attributes to be used in popups for vms positions and segments
+ * @attr {Object} popupRecContainer - An object containing reference to all features to be displayed in the popup, used for looping through features that are on top of each other
  * @description
  *  Service to control the map on the liveview of the reporting tab
  */
-angular.module('unionvmsWeb').factory('mapService', function(locale, $rootScope, $window, $localStorage, $timeout, $interval, $templateRequest, $filter, spatialHelperService, globalSettingsService, unitConversionService, coordinateFormatService, MapFish, genericMapService) {
+angular.module('unionvmsWeb').factory('mapService', function(locale, $rootScope, $window, $localStorage, $timeout, $interval, $templateRequest, $filter, spatialHelperService, globalSettingsService, unitConversionService, coordinateFormatService, MapFish, genericMapService, layerPanelService) {
 	var ms = {};
 	ms.sp = spatialHelperService;
 
@@ -50,9 +65,6 @@ angular.module('unionvmsWeb').factory('mapService', function(locale, $rootScope,
 	    ms.controls = [];
 	    ms.interactions = [];
 	    ms.overlay = ms.addPopupOverlay();
-        
-	    // enables popup on positions and segments
-        ms.activeLayerType = undefined;
         
 	    //Get all controls and interactions that will be added to the map
 	    var controlsToMap = ms.setControls(config.map.control);
@@ -99,73 +111,77 @@ angular.module('unionvmsWeb').factory('mapService', function(locale, $rootScope,
 	        var pixel = evt.pixel;
 	        var coordinate = evt.coordinate;
 	        var selInteraction = ms.getInteractionsByType('Select')[0];
-	        
-	        var record;
-	        ms.popupSegRecContainer.reset();
-	        var records = [];
+	        var dragInteraction = ms.getCustomInteraction('Pointer', 'dragExtent')[0];
 	        
 	        //get feature info
-	        if (angular.isDefined(ms.activeLayerType) && ((ms.activeLayerType === 'vmspos' && ms.popupVisibility.positions.length > 0) || (ms.activeLayerType === 'vmsseg' && ms.popupVisibility.segments.length > 0) || ms.activeLayerType === 'alarms')){
+	        if (angular.equals({}, ms.measureInteraction) && !angular.isDefined(dragInteraction)){
+	            var records = [];
 	            map.forEachFeatureAtPixel(pixel, function(feature, layer){
-	                if (angular.isDefined(ms.activeLayerType)){
-	                    if (layer !== null && layer.get('type') === ms.activeLayerType){
-	                        if (ms.activeLayerType === 'vmspos'){
-	                            var positions = feature.get('features');
-	                            if (positions.length === 1){
-	                                record = {
-	                                    data: positions[0].getProperties(),
-	                                    coord: positions[0].getGeometry().getCoordinates(),
-	                                    id: positions[0].getId(),
-	                                    fromCluster: false
-	                                };
-	                            }
-	                        } else{
+	                if (layer !== null) {
+	                    var type = layer.get('type');
+	                    if (type === 'vmspos'){
+	                        var positions = feature.get('features');
+	                        var selFeat;
+	                        if (positions.length === 1){
+	                            selFeat = positions[0];
+	                        } 
+	                        
+	                        if (feature.get('featNumber') === 1 && !angular.isDefined(selFeat)) {
+	                            selFeat = feature.get('featureToDisplay');
+	                        }
+	                        
+	                        if (angular.isDefined(selFeat)){
 	                            records.push({
-                                    data: feature.getProperties(),
-                                    coord: ms.activeLayerType === 'vmsseg' ? feature.getGeometry().getClosestPoint(coordinate) : feature.getGeometry().getCoordinates(),
+                                    type: type,
+                                    data: selFeat.getProperties(),
+                                    coord: selFeat.getGeometry().getCoordinates(),
+                                    id: selFeat.getId(),
                                     fromCluster: false
                                 });
 	                        }
+	                    } else if (type === 'vmsseg' || type === 'alarms'){
+	                        records.push({
+	                            type: type,
+	                            data: feature.getProperties(),
+	                            coord: type === 'vmsseg' ? feature.getGeometry().getClosestPoint(coordinate) : feature.getGeometry().getCoordinates(),
+	                            fromCluster: false
+	                        });
 	                    }
 	                }
 	            });
 	            
-	            if (!angular.isDefined(record) && ms.activeLayerType === 'vmspos' && selInteraction.getFeatures().getLength() > 0){
+	            //Check features in exploded cluster
+	            if (angular.isDefined(selInteraction) && selInteraction.getFeatures().getLength() > 0){
 	                var positions = selInteraction.getFeatures().getArray()[0].get('features');
-	                var minDist;
+	                var minDist, record;
 	                positions.forEach(function(position){
-	                    var distance = new ol.geom.LineString([coordinate, position.get('spiderCoords')]).getLength();
-	                    if (!angular.isDefined(minDist) || distance < minDist){
-	                        minDist = distance;
-	                        record = {
-	                            data: position.getProperties(),
-	                            coord: position.get('spiderCoords'),
-	                            id: position.getId(),
-	                            fromCluster: true
-	                        };
+	                    if (position.get('isVisible')){
+	                        var distance = new ol.geom.LineString([coordinate, position.get('spiderCoords')]).getLength();
+	                        if (!angular.isDefined(minDist) || distance < minDist){
+	                            minDist = distance;
+	                            record = {
+	                                type: 'vmspos',
+	                                data: position.getProperties(),
+	                                coord: position.get('spiderCoords'),
+	                                id: position.getId(),
+	                                fromCluster: true
+	                            };
+	                        }
 	                    }
 	                });
+	                
+	                if (angular.isDefined(record)){
+	                    records.push(record);
+	                }
 	            }
 	            
-	            if (angular.isDefined(ms.activeLayerType) && (angular.isDefined(record) || records.length > 0) && angular.equals({}, ms.measureInteraction)){
-	                if (records.length > 0){
-	                    record = records[0];
-	                }
-	                
-	                var data;
-	                if (ms.activeLayerType === 'vmspos'){
-	                    data = ms.setPositionsObjPopup(record.data, record.id);
-	                } else if (ms.activeLayerType === 'vmsseg'){
-	                    data = ms.setSegmentsObjPopup(record.data);
-	                    ms.popupSegRecContainer.records = records;
-	                    ms.popupSegRecContainer.currentIdx = 0;
-	                } else if (ms.activeLayerType === 'alarms'){
-	                    data = ms.setAlarmsObjPopup(record.data);
-	                    ms.popupAlarmRecContainer.records = records;
-                        ms.popupAlarmRecContainer.currentIdx = 0;
-	                }
-	                ms.requestPopupTemplate(data, record.coord, record.fromCluster);
-	            }
+	            if (records.length > 0){
+	                ms.popupRecContainer.reset();
+                    var data = ms.setObjPopup(records[0]);
+                    ms.popupRecContainer.records = records;
+                    ms.popupRecContainer.currentIdx = 0;
+                    ms.requestPopupTemplate(data, records[0].type, records[0].coord, records[0].fromCluster);
+                }
 	        }
 	    });
 	    
@@ -194,8 +210,11 @@ angular.module('unionvmsWeb').factory('mapService', function(locale, $rootScope,
                             if (selFeatures.getLength() > 0){
                                 selFeatures.clear();
                             }
-                            selFeatures.push(feature);
-                            foundedFeatures = true;
+                            
+                            if (feature.get('featNumber') > 1){
+                                selFeatures.push(feature);
+                                foundedFeatures = true;
+                            }
                         }
                     });
                     
@@ -231,8 +250,8 @@ angular.module('unionvmsWeb').factory('mapService', function(locale, $rootScope,
                 }
             }
             
-            ms.checkLabelStatus();
-            $rootScope.$broadcast('reloadLegend');
+            layerPanelService.reloadPanels();
+            //$rootScope.$broadcast('reloadLegend');
         });
 	    
 	    return view;
@@ -290,6 +309,15 @@ angular.module('unionvmsWeb').factory('mapService', function(locale, $rootScope,
 	};
 	
     //create layer, returns ol.layer.* or undefined
+	/**
+	 * Generic function to create all types of layers
+	 * 
+	 * @memberof mapService
+	 * @public
+	 * @alias createLayer
+	 * @param {Object} config - the object containing all layer configuration options
+	 * @returns {ol.layer.Layer|undefined} The OL layer object or undefined
+	 */
     ms.createLayer = function( config ){
         var layer;
         switch (config.type) {
@@ -374,7 +402,7 @@ angular.module('unionvmsWeb').factory('mapService', function(locale, $rootScope,
      */
     ms.createWms = function( config ){
         var layer = genericMapService.defineWms(config);
-        layer.set('serverType', config.serverType); //TODO check where we use this 
+        layer.set('serverType', config.serverType); 
         
         return ( layer );
     };
@@ -448,6 +476,7 @@ angular.module('unionvmsWeb').factory('mapService', function(locale, $rootScope,
         angular.forEach(features, function(feature) {
             count += 1;
         	feature.setId(count);
+        	feature.set('isVisible', true);
         });
         
         var source = new ol.source.Vector({
@@ -466,7 +495,7 @@ angular.module('unionvmsWeb').factory('mapService', function(locale, $rootScope,
         
         cluster.on('change', function(e){
             //hide popup if position is clustered
-            if (angular.isDefined(ms.overlay) && ms.activeLayerType === 'vmspos'){
+            if (angular.isDefined(ms.overlay)){
                 var id = ms.overlay.get('featureId');
                 var layerSrc = ms.getLayerByType('vmspos').getSource();
                 var features = layerSrc.getFeaturesInExtent(ms.map.getView().calculateExtent(ms.map.getSize()));
@@ -511,7 +540,7 @@ angular.module('unionvmsWeb').factory('mapService', function(locale, $rootScope,
         var layerSrc = ms.getLayerByType('vmspos').getSource();
         var changeListenerKey = layerSrc.on('change', function(e){
             if (layerSrc.getState() === 'ready' && layerSrc.getFeatures().length > 0){
-                var extent = layerSrc.getExtent();
+                var extent = layerSrc.getSource().getExtent();
                 var geom = new ol.geom.Polygon.fromExtent(extent);
                 ms.zoomTo(geom);
                 
@@ -539,6 +568,19 @@ angular.module('unionvmsWeb').factory('mapService', function(locale, $rootScope,
         });
 
         ms.map.addInteraction(exploder);
+    };
+    
+    /**
+     * Collapse expanded clusters
+     * 
+     * @memberof mapService
+     * @public
+     */
+    ms.collapseClusters = function(){
+        var select = ms.getInteractionsByType('Select')[0];
+        if (angular.isDefined(select)){
+            select.getFeatures().clear();
+        }
     };
     
     /**
@@ -1038,21 +1080,25 @@ angular.module('unionvmsWeb').factory('mapService', function(locale, $rootScope,
      * @returns {String} The hexadecimal color code
      */
     ms.getColorForPosition = function(feature){
-        switch (ms.styles.positions.attribute) {
-            case 'countryCode':
-                return ms.getColorByFlagState(ms.styles.positions, feature.get('countryCode'));
-            case 'type':
-                return ms.getColorByStaticFields(ms.styles.positions, feature.get('movementType'));
-            case 'activity':
-                return ms.getColorByStaticFields(ms.styles.positions, feature.get('activityType'));
-            case 'reportedSpeed':
-                return ms.getColorByRange(ms.styles.positions, feature.get('reportedSpeed'));
-            case 'reportedCourse':
-                return ms.getColorByRange(ms.styles.positions, feature.get('reportedCourse'));
-            case 'calculatedSpeed':
-                return ms.getColorByRange(ms.styles.positions, feature.get('calculatedSpeed'));
-            default:
-                return '#0066FF'; //default color
+        if (feature.get('isVisible')){
+            switch (ms.styles.positions.attribute) {
+                case 'countryCode':
+                    return ms.getColorByFlagState(ms.styles.positions, feature.get('countryCode'));
+                case 'type':
+                    return ms.getColorByStaticFields(ms.styles.positions, feature.get('movementType'));
+                case 'activity':
+                    return ms.getColorByStaticFields(ms.styles.positions, feature.get('activityType'));
+                case 'reportedSpeed':
+                    return ms.getColorByRange(ms.styles.positions, feature.get('reportedSpeed'));
+                case 'reportedCourse':
+                    return ms.getColorByRange(ms.styles.positions, feature.get('reportedCourse'));
+                case 'calculatedSpeed':
+                    return ms.getColorByRange(ms.styles.positions, feature.get('calculatedSpeed'));
+                default:
+                    return '#0066FF'; //default color
+            }
+        } else {
+            return 'rgba(0,0,0,0)';
         }
     };
     
@@ -1061,6 +1107,7 @@ angular.module('unionvmsWeb').factory('mapService', function(locale, $rootScope,
     ms.currentResolution = undefined;
     ms.clusterMaxFeatureCount = 1;
     ms.clusterMinFeatureCount = 100000;
+    ms.vmsSources = {};
     
     //Calculate necessary max and min amount of features of the available map clusters at each resolution
     /**
@@ -1074,15 +1121,52 @@ angular.module('unionvmsWeb').factory('mapService', function(locale, $rootScope,
         var layer = ms.getLayerByType('vmspos');
         var features = layer.getSource().getFeatures();
         
-        var feature;
-        for (var i = 0; i < features.length; i++){
-            feature = features[i];
-            var includedPositions = feature.get('features');
-            
-            feature.set('featNumber', includedPositions.length);
-            ms.clusterMaxFeatureCount = Math.max(ms.clusterMaxFeatureCount, includedPositions.length);
+        angular.forEach(features, function(clusterFeat) {
+        	var includedPositions = clusterFeat.get('features');
+        	clusterFeat.set('featNumber', includedPositions.length);
+        	ms.clusterMaxFeatureCount = Math.max(ms.clusterMaxFeatureCount, includedPositions.length);
             ms.clusterMinFeatureCount = Math.min(ms.clusterMinFeatureCount, includedPositions.length);
-        }
+            
+            var counter = 0;
+            var displayedFeature;
+            if (includedPositions.length > 1){
+                angular.forEach(includedPositions, function(singleFeat){
+                    if (singleFeat.get('isVisible')){
+                        counter += 1;
+                        displayedFeature = singleFeat;
+                    }
+                });
+            }
+            
+            if (counter === 1){
+                clusterFeat.set('featureToDisplay', displayedFeature);
+            } else {
+                clusterFeat.set('featureToDisplay', undefined);
+            }
+            
+            if (clusterFeat.get('featNumber') !== counter && clusterFeat.get('featNumber') > 1){
+                clusterFeat.set('featNumber', counter);
+            }
+        });
+    };
+    
+    /**
+     * Builds the name of the cluster style
+     * 
+     * @memberof mapService
+     * @private
+     * @returns {String} The style name to be cached
+     */
+    var buildStyleName = function(){
+        var name = '';
+        angular.forEach(ms.vmsSources, function(value, key) {
+            if (value === true){
+                name += key;
+            }
+        });
+        
+        name.replace(/\s/g, '');
+        return name;
     };
     
     /**
@@ -1096,60 +1180,73 @@ angular.module('unionvmsWeb').factory('mapService', function(locale, $rootScope,
      * @returns {Array<ol.style.Style>} An array with all styles to be applied
      */
     ms.setClusterStyle = function(feature, resolution){
-        if (resolution !== ms.currentResolution || !angular.isDefined(ms.currentResolution)) {
+        if (!angular.isDefined(feature.get('featNumber'))){
             ms.calculateClusterInfo();
             ms.currentResolution = resolution;
         }
+        var size = feature.get('featNumber');
+        var inFeatures = feature.get('features');
         
-        var size = feature.get('features').length;
-        var style = ms.clusterStyles[size];
-        
-        if (size > 1 && !style){
-            //Normalize radius to scale between 40 and 10
-            var maxRadius = 35;
-            var minRadius = 10;
-            if (ms.clusterMaxFeatureCount <= 50){
-                maxRadius = 15;
-                minRadius = 7;
-            } else if (ms.clusterMaxFeatureCount > 50 && ms.clusterMaxFeatureCount <= 100){
-                maxRadius = 20;
+        var style;
+        if (inFeatures.length === 1){ //caso de um cluster so com uma feature
+            style = ms.setPosStyle(inFeatures[0]);
+        } else {
+            if (size === 0){
+                style = new ol.style.Style();
+            } else if (size === 1){
+                style = ms.setPosStyle(feature.get('featureToDisplay'));
+            } else {
+                var styleName = buildStyleName() + '-' + size;
+                style = ms.clusterStyles[styleName];
+                if (!style){
+                  //Normalize radius to scale between 40 and 10
+                    var maxRadius = 35;
+                    var minRadius = 10;
+                    if (ms.clusterMaxFeatureCount <= 50){
+                        maxRadius = 15;
+                        minRadius = 7;
+                    } else if (ms.clusterMaxFeatureCount > 50 && ms.clusterMaxFeatureCount <= 100){
+                        maxRadius = 20;
+                    }
+                    
+                    //Normalize radius to scale between maxRadius and minRadius
+                    var radius = Math.round((maxRadius - minRadius) * (Math.abs(feature.get('featNumber') - ms.clusterMinFeatureCount)) / (ms.clusterMaxFeatureCount - ms.clusterMinFeatureCount));
+                    if (isNaN(radius) || !isFinite(radius) || radius < 0){
+                        radius = 0;
+                    }
+                    radius += minRadius;
+                    feature.set('radius', radius);
+                    
+                    if (!angular.isDefined(size)){
+                        var a = 'test';
+                    }
+                    
+                    //Apply cluster style
+                    style = new ol.style.Style({
+                        image: new ol.style.Circle({
+                            radius: radius,
+                            stroke: new ol.style.Stroke({
+                                color: '#F7580D',
+                                width: 2    
+                            }),
+                            fill: new ol.style.Fill({
+                                color: 'rgba(255, 255, 255, 0.7)',
+                            })
+                        }),
+                        text: new ol.style.Text({
+                            text: size.toString(),
+                            fill: new ol.style.Fill({
+                                color: 'rgb(80, 80, 80)'
+                            }),
+                            stroke: new ol.style.Stroke({
+                                color: 'rgb(80, 80, 80)'
+                            })
+                        })
+                    });
+                    
+                    ms.clusterStyles[styleName] = style;
+                }
             }
-            
-            //Normalize radius to scale between maxRadius and minRadius
-            var radius = Math.round((maxRadius - minRadius) * (feature.get('featNumber') - ms.clusterMinFeatureCount) / (ms.clusterMaxFeatureCount - ms.clusterMinFeatureCount));
-            if (isNaN(radius) || !isFinite(radius)){
-                radius = 0;
-            }
-            radius += minRadius;
-            feature.set('radius', radius);
-            
-            //Apply cluster style
-            style = new ol.style.Style({
-                
-                image: new ol.style.Circle({
-                    radius: radius,
-                    stroke: new ol.style.Stroke({
-                        color: '#F7580D',
-                        width: 2    
-                    }),
-                    fill: new ol.style.Fill({
-                        color: 'rgba(255, 255, 255, 0.7)',
-                    })
-                }),
-                text: new ol.style.Text({
-                    text: size.toString(),
-                    fill: new ol.style.Fill({
-                        color: 'rgb(80, 80, 80)'
-                    }),
-                    stroke: new ol.style.Stroke({
-                        color: 'rgb(80, 80, 80)'
-                    })
-                })
-            });
-            ms.clusterStyles[size] = style;
-        } else if (size === 1){
-            var orignalFeature = feature.get('features')[0];
-            style = ms.setPosStyle(orignalFeature);
         }
         
         return [style];
@@ -1173,9 +1270,15 @@ angular.module('unionvmsWeb').factory('mapService', function(locale, $rootScope,
             var mapExtent = ms.map.getView().calculateExtent(ms.map.getSize());
             var mapSize = Math.min(ol.extent.getWidth(mapExtent), ol.extent.getHeight(mapExtent));
             
+            
+            var items = positions.length;
+            if (positions.length !== feature.get('featNumber')){
+                items = feature.get('featNumber');
+            }
+            
             var radius = mapSize / 10;
-            if (positions.length > 20){
-                radius = positions.length * radius / 20;
+            if (items > 20){
+                radius = items * radius / 20;
                 if (radius > mapSize / 2.5){
                     radius = mapSize / 2.5;
                 }
@@ -1186,14 +1289,19 @@ angular.module('unionvmsWeb').factory('mapService', function(locale, $rootScope,
             circlePoly.transform(ms.getMapProjectionCode(), 'EPSG:4326');
             
             var line = turf.linestring(circlePoly.getCoordinates()[0]);
-            var length = turf.lineDistance(line, 'radians') / positions.length;
+            
+            var length = turf.lineDistance(line, 'radians') / items;
             
             var styles = [];
+            var j = 0;
             for (var i = 0; i < positions.length; i++){
-                var pointCoords = ms.pointCoordsToTurf(ol.proj.transform(positions[i].getGeometry().getCoordinates(), ms.getMapProjectionCode(), 'EPSG:4326'));
-                var targetPoint = ms.turfToOlGeom(turf.along(line, length * i, 'radians'));
-                positions[i].set('spiderCoords', targetPoint.getCoordinates(), true);
-                styles.push(ms.setSpiderStyle(positions[i], targetPoint.getCoordinates()));
+                if (positions[i].get('isVisible')){
+                    var pointCoords = ms.pointCoordsToTurf(ol.proj.transform(positions[i].getGeometry().getCoordinates(), ms.getMapProjectionCode(), 'EPSG:4326'));
+                    var targetPoint = ms.turfToOlGeom(turf.along(line, length * j, 'radians'));
+                    positions[i].set('spiderCoords', targetPoint.getCoordinates(), true);
+                    styles.push(ms.setSpiderStyle(positions[i], targetPoint.getCoordinates()));
+                    j += 1;
+                }
             }
             
             return _.flatten(styles);
@@ -1218,12 +1326,12 @@ angular.module('unionvmsWeb').factory('mapService', function(locale, $rootScope,
             text: new ol.style.Text({
                 text: '\uf124',
                 font: 'normal 22px FontAwesome',
-                  textBaseline: 'middle',
-                  textAlign: 'center',
-                  rotation: -0.78 + ms.degToRad(feature.get('reportedCourse')),
-                  fill: new ol.style.Fill({
-                      color: ms.getColorForPosition(feature)
-                  })
+                textBaseline: 'middle',
+                textAlign: 'center',
+                rotation: -0.78 + ms.degToRad(feature.get('reportedCourse')),
+                fill: new ol.style.Fill({
+                    color: ms.getColorForPosition(feature)
+                })
             }),
             geometry: function(){
                 return new ol.geom.Point(pointCoords);
@@ -1280,7 +1388,14 @@ angular.module('unionvmsWeb').factory('mapService', function(locale, $rootScope,
                 fill: new ol.style.Fill({
                     color: ms.getColorForPosition(feature)
                 })
-            })
+            }),
+            geometry: function(feature){
+                if (angular.isDefined(feature.get('featureToDisplay'))){
+                    return new ol.geom.Point(feature.get('featureToDisplay').getGeometry().getCoordinates());
+                } else {
+                    return feature.getGeometry();
+                }
+            }
         });
         
         return style;
@@ -1387,37 +1502,41 @@ angular.module('unionvmsWeb').factory('mapService', function(locale, $rootScope,
         if (width > 2){
             fontSize = Math.round((width - 2) * 2.5 + 10);
         }
-
-        var style = [
-            new ol.style.Style({
-                stroke: new ol.style.Stroke({
-                    color: 'white',
-                    width: width + 2,
-                    lineDash: lineDash
-                })
-            }),
-            new ol.style.Style({
-                stroke: new ol.style.Stroke({
-                    color: color,
-                    width: width,
-                    lineDash: lineDash
-                })
-            }),
-            new ol.style.Style({
-                geometry: new ol.geom.Point(ms.getMiddlePoint(geometry)),
-                text: new ol.style.Text({
-                    text: '\uf054',
-                    font: 'bold ' + fontSize + 'px FontAwesome',
-                    //textBaseline: 'middle',
-                    //textAlign: 'center',
-                    rotation: ms.getRotationForArrow(geometry),
-                    fill: new ol.style.Fill({
-                        color: color
-                    })
-                })
-            })
-        ];
         
+        var style;
+        if (feature.getGeometry().getLength() > 0){
+            style = [
+                     new ol.style.Style({
+                         stroke: new ol.style.Stroke({
+                             color: 'white',
+                             width: width + 2,
+                             lineDash: lineDash
+                         })
+                     }),
+                     new ol.style.Style({
+                         stroke: new ol.style.Stroke({
+                             color: color,
+                             width: width,
+                             lineDash: lineDash
+                         })
+                     }),
+                     new ol.style.Style({
+                         geometry: new ol.geom.Point(ms.getMiddlePoint(geometry)),
+                         text: new ol.style.Text({
+                             text: '\uf054',
+                             font: 'bold ' + fontSize + 'px FontAwesome',
+                             //textBaseline: 'middle',
+                             //textAlign: 'center',
+                             rotation: ms.getRotationForArrow(geometry),
+                             fill: new ol.style.Fill({
+                                 color: color
+                             })
+                         })
+                     })
+                 ];
+        } else {
+            style = new ol.style.Style();
+        }
 
         return style;
     };
@@ -1523,7 +1642,7 @@ angular.module('unionvmsWeb').factory('mapService', function(locale, $rootScope,
 	 * @memberof mapService
 	 * @public
 	 * @alias getLayerByTitle
-	 * @params {String} title - The title of the layer to find
+	 * @param {String} title - The title of the layer to find
 	 * @returns {ol.layer} The OL layer
 	 */
 	ms.getLayerByTitle = function(title){
@@ -1591,37 +1710,26 @@ angular.module('unionvmsWeb').factory('mapService', function(locale, $rootScope,
     	
     	setTimeout(function() {
 	        var w = angular.element(window);
-	        
 	        if(evt && (angular.element('.mapPanelContainer.fullscreen').length > 0 ||
 	        		(angular.element('.mapPanelContainer.fullscreen').length === 0 && evt.type.toUpperCase().indexOf("FULLSCREENCHANGE") !== -1))){
 	        	
 	        	
-	    		$('.map-container').css('height', w.height() - parseInt($('.map-bottom').css('height')) + 'px');
-	    		$('.layer-panel').css('height', w.height() - parseInt($('#map-toolbar').css('height')) + 'px');
-	            $('#map').css('height', w.height() - parseInt($('#map-toolbar').css('height')) - parseInt($('.map-bottom').css('height')) + 'px');
+	    		$('.map-container').css('height', w.height() + 'px');
+	            $('#map').css('height', w.height() + 'px');
 	            ms.updateMapSize();
-	      	  return;
+	            return;
 	        }
 	        
-	        var offset = 120;
-	        var minHeight = 340;
-	        var footerHeight = angular.element('footer')[0].offsetHeight;
+	        var minHeight = 400;
 	        var headerHeight = angular.element('header')[0].offsetHeight;
-	        var newHeight = w.height() - headerHeight - footerHeight - offset;
+	        var newHeight = w.height() - headerHeight;
 	        
 	        if (newHeight < minHeight) {
 	            newHeight = minHeight;
 	        }
 	        
 	        $('.map-container').css('height', newHeight);
-	        $('.layer-panel').css('height', newHeight);
-	
-	        var mapToolbarHeight = parseInt($('#map-toolbar').css('height'));
-	        if(mapToolbarHeight > 31){
-	        	$('#map').css('height', newHeight - (mapToolbarHeight - 31) - parseInt($('.map-bottom').css('height')) + 'px');
-	        }else{
-	        	$('#map').css('height', newHeight - parseInt($('.map-bottom').css('height')) + 'px');
-	        }
+	        $('#map').css('height', newHeight + 'px');
 	        
 	        ms.updateMapSize();
         }, 100);
@@ -1681,73 +1789,6 @@ angular.module('unionvmsWeb').factory('mapService', function(locale, $rootScope,
         return Math.atan2(dy, dx) * -1;
 	};
 
-	/**
-	 * Format mouse position coordinates according to the report/user preferences
-	 * 
-	 * @memberof mapService
-     * @public
-     * @alias formatCoords
-     * @param {Array<Number>} coord - The pair of coordinates to convert
-     * @param {Object} ctrl - The object conatining the definitions to appy in the mouse coordinates contrl
-     * @returns {String} The converted coordinates
-	 */
-    ms.formatCoords = function(coord, ctrl){
-        var x,y;
-        if (ctrl.epsgCode === 4326){
-            if (ctrl.format === 'dd'){
-                return ol.coordinate.format(coord, '<b>Lon:</b> {x}\u00b0 \u0090 <b>Lat:</b> {y}\u00b0' , 4);
-            } else if (ctrl.format === 'dms'){
-                x = ms.coordToDMS(coord[0], 'EW');
-                y = ms.coordToDMS(coord[1], 'NS');
-                return '<b>Lon:</b> ' + x + '\u0090 <b>Lat:</b> ' + y;
-            } else {
-                x = ms.coordToDDM(coord[0], 'EW');
-                y = ms.coordToDDM(coord[1], 'NS');
-                return '<b>Lon:</b> ' + x + '\u0090 <b>Lat:</b> ' + y;
-            }
-        } else {
-            return ol.coordinate.format(coord, '<b>X:</b> {x} m \u0090 <b>Y:</b> {y} m' , 4);
-        }
-    };
-
-    /**
-     * Convert coordinates from Decimal Degrees to Degrees Minutes Seconds
-     * 
-     * @memberof mapService
-     * @public
-     * @alias coordToDMS
-     * @param {Number} degrees
-     * @param {String} hemispheres
-     * @returns {String} The coordinate formated in DMS
-     */
-    ms.coordToDMS = function(degrees, hemispheres){
-        var normalized = (degrees + 180) % 360 - 180;
-        var x = Math.abs(Math.round(3600 * normalized));
-        return Math.floor(x / 3600) + '\u00b0 ' +
-            Math.floor((x / 60) % 60) + '\u2032 ' +
-            Math.floor(x % 60) + '\u2033 ' +
-            hemispheres.charAt(normalized < 0 ? 1 : 0);
-    };
-
-    /**
-     * Convert coordinates from Decimal Degrees to Degrees Decimal Minutes
-     * 
-     * @memberof mapService
-     * @public
-     * @alias coordToDDM
-     * @param {Number} degrees
-     * @param {String} hemispheres
-     * @returns {String} The coordinate formated in DDM
-     */
-    ms.coordToDDM = function(degrees, hemispheres){
-        var normalized = (degrees + 180) % 360 - 180;
-        var x = Math.abs(Math.round(3600 * normalized));
-        return Math.floor(x / 3600) + '\u00b0 ' +
-            ((x / 60) % 60).toFixed(2) + '\u2032 ' +
-            hemispheres.charAt(normalized < 0 ? 1 : 0);
-    };
-
-
     //SETTERS
     /**
      * Set map projection
@@ -1783,6 +1824,7 @@ angular.module('unionvmsWeb').factory('mapService', function(locale, $rootScope,
 
 	    //Always add attribution control
 	    ms.controls.push(new ol.control.Attribution({
+	        className: 'ol-attribution reporting-map',
 	        collapsible: false,
 	        collapsed: false
 	    }));
@@ -1913,7 +1955,7 @@ angular.module('unionvmsWeb').factory('mapService', function(locale, $rootScope,
      * @param {Boolean} initial - Whether it is the initial setup or an update
      */
 	ms.addZoom = function(ctrl, initial){
-        var olCtrl = genericMapService.createZoomCtrl();
+        var olCtrl = genericMapService.createZoomCtrl('ol-zoom-liveview');
         
         var iconSpan = document.createElement('span');
         iconSpan.className = 'fa fa-globe';
@@ -1954,6 +1996,7 @@ angular.module('unionvmsWeb').factory('mapService', function(locale, $rootScope,
 	    for (var i = 0; i < zoomInteractions.length; i++){
 	        ms.map.removeInteraction(zoomInteractions[i]);
 	    }
+	    ms.map.removeInteraction(ms.getInteractionsByType('PinchZoom')[0]);
 	};
 	
 	/**
@@ -1999,11 +2042,7 @@ angular.module('unionvmsWeb').factory('mapService', function(locale, $rootScope,
      * @param {Boolean} initial - Whether it is the initial setup or an update
      */
 	ms.addScale = function(ctrl, initial){
-	    var olCtrl = new ol.control.ScaleLine({
-            units: ctrl.units,
-            target: angular.element('#map-scale')[0],
-            className: 'ol-scale-line'
-        });
+	    var olCtrl = genericMapService.addScale(ctrl);
 	    
 	    if (initial){
 	        ms.controls.push(olCtrl);
@@ -2080,14 +2119,7 @@ angular.module('unionvmsWeb').factory('mapService', function(locale, $rootScope,
      * @param {Boolean} initial - Whether it is the initial setup or an update
 	 */
 	ms.addMousecoords = function(ctrl, initial){
-	    var olCtrl =  new ol.control.MousePosition({
-            projection: 'EPSG:' + ctrl.epsgCode,
-            coordinateFormat: function(coord){
-                return ms.formatCoords(coord, ctrl);
-            },
-            target: angular.element('#map-coordinates')[0],
-            className: 'mouse-position'
-        });
+	    var olCtrl = genericMapService.addMousecoords(ctrl, 'map-coordinates');
 	    
 	    if (initial){
 	        ms.controls.push(olCtrl);
@@ -2247,6 +2279,13 @@ angular.module('unionvmsWeb').factory('mapService', function(locale, $rootScope,
 	
 	//Measuring interaction
 	ms.measureInteraction = {};
+	/**
+	 * Add measure control and start it automatically
+	 * 
+	 * @memberof mapService
+	 * @public
+	 * @alias startMeasureControl
+	 */
 	ms.startMeasureControl = function(){
 	    var layer = ms.getLayerByType('measure-vector');
         if (angular.isDefined(layer)){
@@ -2289,6 +2328,13 @@ angular.module('unionvmsWeb').factory('mapService', function(locale, $rootScope,
 	ms.measurePointsLength = 0;
 	ms.measureOverlays = [];
 	ms.measureETA = undefined;
+	/**
+	 * Register all draw events for the measure control
+	 * 
+	 * @memberof mapService
+	 * @public
+	 * @alias registerDrawEvents
+	 */
 	ms.registerDrawEvents = function(draw, layer){
 	    var listener;
 	    draw.on('drawstart', function(evt){
@@ -2326,7 +2372,15 @@ angular.module('unionvmsWeb').factory('mapService', function(locale, $rootScope,
 	    });
 	};
 	
-	//Calculate length over the sphere and bearing
+	/**
+	 * Calculate length over the sphere, bearing and ETA of the measures drawn
+	 *  
+	 *  @memberof mapService
+	 *  @public
+	 *  @alias calculateLengthAndBearingAndETA
+	 *  @param {ol.geom.LineString} line - The OL line geometry
+	 *  @returns {Object} An object containing the measured distances, bearing and ETA
+	 */
 	ms.calculateLengthAndBearingAndETA = function(line){
 	    var coords = line.getCoordinates();
 	    var sourceProj = ms.getMapProjectionCode();
@@ -2402,6 +2456,14 @@ angular.module('unionvmsWeb').factory('mapService', function(locale, $rootScope,
 	    }
 	};
 	
+	/**
+	 * Create the measure tooltips
+	 * 
+	 * @memberof mapService
+	 * @public
+	 * @alias createMeasureTooltip
+	 * @param {Object} data - The object containing the data to be displayed on the tooltip
+	 */
 	ms.createMeasureTooltip = function(data){
 	    var el = document.createElement('div');
 	    el.className = 'map-tooltip map-tooltip-small';
@@ -2452,6 +2514,13 @@ angular.module('unionvmsWeb').factory('mapService', function(locale, $rootScope,
 	    ms.measureOverlays.push(tooltip);
 	};
 	
+	/**
+     * Remove all measure tooltip overlays
+     * 
+     * @memberof mapService
+     * @public
+     * @alias clearMeasureOverlays
+     */
 	ms.clearMeasureOverlays = function(){
 	    for (var i = 0; i < ms.measureOverlays.length; i++){
 	        ms.map.removeOverlay(ms.measureOverlays[i]);
@@ -2459,6 +2528,13 @@ angular.module('unionvmsWeb').factory('mapService', function(locale, $rootScope,
 	    ms.measureOverlays = [];
 	};
 	
+	/**
+     * Clear the measure control by removing it from the map and destroying all tooltip overlyas
+     * 
+     * @memberof mapService
+     * @public
+     * @alias clearMeasureControl
+     */
 	ms.clearMeasureControl = function(){
 	    ms.clearMeasureOverlays();
 	    ms.map.removeInteraction(ms.measureInteraction);
@@ -2466,11 +2542,29 @@ angular.module('unionvmsWeb').factory('mapService', function(locale, $rootScope,
 	    ms.measureInteraction = {};
 	};
 	
+	/**
+	 * Convert point coordinates to GeoJSON so that they can be used in Turf
+	 * 
+	 * @memberof mapService
+	 * @public
+	 * @alias pointCoordsToTurf
+	 * @param {Array<ol.Coordinate>} coords - An array containing ol.Coordinate
+	 * @returns {String} The GeoJSON string of the feature
+	 */
 	ms.pointCoordsToTurf = function(coords){
 	    var geom = new ol.geom.Point(coords);
 	    return genericMapService.geomToGeoJson(geom);
 	};
 	
+	/**
+     * Convert GeoJSON to OL feature
+     * 
+     * @memberof mapService
+     * @public
+     * @alias turfToOlGeom
+     * @param {String} feature - The GeoJSON feature
+     * @returns {ol.geom.Geometry} The OL geometry already reprojected to the current map projection
+     */
 	ms.turfToOlGeom = function(feature){
 	    var geom = genericMapService.geoJsonToOlGeom(feature);
         return geom.transform('EPSG:4326', ms.getMapProjectionCode());
@@ -2485,6 +2579,15 @@ angular.module('unionvmsWeb').factory('mapService', function(locale, $rootScope,
         segmentsTitles: true
     };
     
+    /**
+     * Set labels visibility according to the user configurations
+     * 
+     * @memberof mapService
+     * @public
+     * @alias setLabelVisibility
+     * @param {String} type - The label type (either <b>positions</b> or <b>segments</b>)
+     * @param {Object} config - The label configuration object 
+     */
     ms.setLabelVisibility = function(type, config){
         ms.labelVisibility[type] = config.values;
         ms.labelVisibility[type + 'Titles'] = angular.isDefined(config.isAttributeVisible) ? config.isAttributeVisible : false;
@@ -2504,7 +2607,13 @@ angular.module('unionvmsWeb').factory('mapService', function(locale, $rootScope,
        displayedIds: []
     };
     
-    //Reset labels containers
+    /**
+     * Reset all label container objects
+     * 
+     * @memberof mapService
+     * @public
+     * @alias resetLabelContainers
+     */
     ms.resetLabelContainers = function(){
         ms.vmsposLabels = {
             active: false,
@@ -2517,6 +2626,14 @@ angular.module('unionvmsWeb').factory('mapService', function(locale, $rootScope,
         };
     };
     
+    
+    /**
+     * Check label status and activate them if necessary
+     * 
+     * @memberof mapService
+     * @public
+     * @alias checkLabelStatus
+     */
     //Function called on map moveend and change:resolution to check for new labels
     ms.checkLabelStatus = function(){
         if (ms.vmsposLabels.active === true){
@@ -2529,6 +2646,14 @@ angular.module('unionvmsWeb').factory('mapService', function(locale, $rootScope,
     };
     
     //Activate Vector Label Overlays
+    /**
+     * Activate vector labels
+     * 
+     * @memberof mapService
+     * @public
+     * @alias activateVectorLabels
+     * @param {String} type - The type of labels to be activated (either <b>positions</b> or <b>segments</b>)
+     */
     ms.activateVectorLabels = function(type){
         if ((type === 'vmspos' && ms.labelVisibility.positions.length > 0) || (type === 'vmsseg' && ms.labelVisibility.segments.length > 0)){
             var containerName = type + 'Labels'; 
@@ -2542,19 +2667,25 @@ angular.module('unionvmsWeb').factory('mapService', function(locale, $rootScope,
             //var resolution = ms.map.getView().getResolution();
             
             var src = layer.getSource();
-            var overlayId;
+            var overlayId, feat;
             src.forEachFeatureInExtent(extent, function(feature){
                 if (type === 'vmspos'){
                     var containedFeatures = feature.get('features');
+                    if (containedFeatures.length === 1){
+                        feat = containedFeatures[0];
+                    }
                     
-                    if (containedFeatures.length === 1 ){
-                        var feat = containedFeatures[0];
+                    if (feature.get('featNumber') === 1 && containedFeatures.length > 1){
+                        feat = feature.get('featureToDisplay');
+                    }
+                    
+                    if (angular.isDefined(feat) && feat.get('isVisible')){
                         overlayId = feat.get('overlayId');
                         if (!angular.isDefined(overlayId)){
                             overlayId = ms.generateOverlayId(ms[containerName]);
                         }
                         ms[containerName].displayedIds.push(overlayId);
-                        if (!angular.isDefined(feat.get('overlayHidden'))){
+                        if (!angular.isDefined(feat.get('overlayHidden')) || (feat.get('overlayHidden') === false && !angular.isDefined(feat.get('overlayId')))){
                             ms.addLabelsOverlay(feat, type, overlayId);
                         }
                     }
@@ -2582,6 +2713,14 @@ angular.module('unionvmsWeb').factory('mapService', function(locale, $rootScope,
         }
     };
     
+    /**
+     * Remove labels when map changes (by zooming or panning)
+     *  
+     * @memberof mapService
+     * @public
+     * @alias removeLabelsByMapChange
+     * @param {String} type - The type of labels to be activated (either <b>positions</b> or <b>segments</b>)
+     */
     //Remove labels when zooming and panning (mainly to deal with clusters)
     ms.removeLabelsByMapChange = function(type){
         var containerName = type + 'Labels';
@@ -2600,6 +2739,14 @@ angular.module('unionvmsWeb').factory('mapService', function(locale, $rootScope,
         }, ms[containerName]);
     };
     
+    /**
+     * Remove labels when map changes (by zooming or panning)
+     *  
+     * @memberof mapService
+     * @public
+     * @alias deactivateVectorLabels
+     * @param {String} type - The type of labels to be deactivated (either <b>positions</b> or <b>segments</b>)
+     */
     //Remove all labels when the tool is deactivated
     ms.deactivateVectorLabels = function(type){
         var containerName = type + 'Labels';
@@ -2616,6 +2763,48 @@ angular.module('unionvmsWeb').factory('mapService', function(locale, $rootScope,
         ms[containerName].active = false;
     };
     
+    /**
+     * Toggle labels for positions which were hidden by source in the layer tree
+     * 
+     * @memberof mapService
+     * @public
+     * @alias toggleVectorLabelsForSources 
+     * @param {Object} overlayStatus - An object conatining an array of overlay ids, array of features and the label visibility status
+     */
+    ms.toggleVectorLabelsForSources = function(overlayStatus){
+        var keys = _.keys(ms.vmsposLabels);
+        keys = _.without(keys, 'active', 'displayedIds');
+        
+        if (overlayStatus.visibility === false){
+            var intersection = _.intersection(keys, overlayStatus.overlayIds);
+            angular.forEach(intersection, function(key) {
+                ms.map.removeOverlay(this[key].overlay);
+                this[key].feature.set('overlayId', undefined);
+                delete this[key];
+                var idx = _.indexOf(this.displayedIds, key);
+                if (idx !== -1){
+                    this.displayedIds.splice(idx, 1);
+                }
+            }, ms.vmsposLabels);
+        } else {
+            angular.forEach(overlayStatus.features, function(feat) {
+                var overlayId = ms.generateOverlayId(ms.vmsposLabels);
+                ms.vmsposLabels.displayedIds.push(overlayId);
+                ms.addLabelsOverlay(feat, 'vmspos', overlayId);
+            });
+        }
+    };
+    
+    /**
+     * Add label overlay
+     * 
+     * @memberof mapService
+     * @public
+     * @alias addLabelsOverlay
+     * @param {ol.Feature} feature - The OL feature object that will be labeled
+     * @param {String} type - The type of label (either <b>vmspos</b> or <b>vmsseg</b>) 
+     * @param {String} overlayId - The GUID of the overlay
+     */
     ms.addLabelsOverlay = function(feature, type, overlayId){
         var coords;
         if (type === 'vmspos'){
@@ -2663,6 +2852,17 @@ angular.module('unionvmsWeb').factory('mapService', function(locale, $rootScope,
         feature.set('overlayHidden', false);
     };
     
+    /**
+     * Build the label object that will be used with Mustache
+     * 
+     * @memberof mapService
+     * @public
+     * @alias setLabelObj
+     * @param {ol.Feature} feature - The OL feature object
+     * @param {String} type - The label type (either <b>vmspos</b> or <b>vmsseg</b>)
+     * @param {String} id -  The label GUID
+     * @returns {Object} The object containing all the necessary data for the label
+     */
     ms.setLabelObj = function(feature, type, id){
         var titles, srcData, showTitles, i;
         var data = [];
@@ -2705,7 +2905,16 @@ angular.module('unionvmsWeb').factory('mapService', function(locale, $rootScope,
         }
     };
     
-    //Request template and render with Mustache
+    /**
+     * Request label template and render it using Mustache
+     * 
+     * @memberof mapService
+     * @public
+     * @alias requestLabelTemplate
+     * @param {String} type - The label type (either <b>vmspos</b> or <b>vmsseg</b>)
+     * @param {Object} data - The object containing the data to be displayed in the label
+     * @param {Element} el - The html element where the label will be rendered
+     */
     ms.requestLabelTemplate = function(type, data, el){
         var templateURL = 'partial/spatial/templates/label.html';
         $templateRequest(templateURL).then(function(template){
@@ -2716,15 +2925,35 @@ angular.module('unionvmsWeb').factory('mapService', function(locale, $rootScope,
         });
     };
     
-    //Close single label overlay on close btn click evvt
+    /**
+     * Close a single label overlay by id
+     * 
+     * @memberof mapService
+     * @private
+     * @param {String} container - The label container name
+     * @param {String} id - The GUID of the label
+     */
     var closeLabelOverlay = function(container, id){
         return function(e){
             ms.map.removeOverlay(ms[container][id].overlay);
             ms[container][id].feature.set('overlayId', undefined);
             ms[container][id].feature.set('overlayHidden', true);
+            var idx = _.indexOf(ms[container].displayedIds, id);
+            if (idx !== -1){
+                ms[container].displayedIds.splice(idx, 1);
+            }
         };
     };
     
+    /**
+     * Generate an overlay id (GUID)
+     * 
+     * @memberof mapService
+     * @public
+     * @alias generateOverlayId
+     * @param {String} container - The label container name
+     * @returns {String} The label GUID
+     */
     ms.generateOverlayId = function(container){
         var id = generateGUID();
         
@@ -2735,6 +2964,13 @@ angular.module('unionvmsWeb').factory('mapService', function(locale, $rootScope,
         }
     };
     
+    /**
+     * Generate random GUID
+     * 
+     * @memberof mapService
+     * @public
+     * @returns {String} The generated GUID 
+     */
     var generateGUID = function(){
         function s4() {
             return Math.floor((1 + Math.random()) * 0x10000)
@@ -2746,15 +2982,27 @@ angular.module('unionvmsWeb').factory('mapService', function(locale, $rootScope,
 	
     //POPUPS
 	//Render popup info using mustache
-    ms.requestPopupTemplate = function(data, coords, fromCluster){
-        var templateURL = 'partial/spatial/templates/' + ms.activeLayerType + '.html';
+    /**
+     * Request popup template and render it using Mustache
+     * 
+     * @memberof mapService
+     * @public
+     * @alias requestPopupTemplate
+     * @param {Object} data - The object containing all the necessary information to be displayed in the popup
+     * @param {String} type - The type of popup. Supported values are: <b>vmspos</b>, <b>vmsseg</b> and <b>alarms</b>
+     * @param {ol.Coordinate} coords - The OL Coordinate where the popup will be attached to
+     * @param {Boolean} fromCluster - Whether the popup is being displayed in a feature that is clustered or not
+     */
+    ms.requestPopupTemplate = function(data, type, coords, fromCluster){
+        ms.popupRecContainer.currentType = type;
+        var templateURL = 'partial/spatial/templates/' + type + '.html';
         $templateRequest(templateURL).then(function(template){
             var rendered = Mustache.render(template, data);
             var content = document.getElementById('popup-content');
             content.innerHTML = rendered;
             ms.overlay.setPosition(coords);
             ms.overlay.set('fromCluster', fromCluster, true);
-            if (ms.activeLayerType === 'vmspos'){
+            if (type === 'vmspos'){
                 ms.overlay.set('featureId', data.id, true);
                 ms.overlay.set('vesselId', data.vesselId, true);
                 ms.overlay.set('vesselName', data.vesselName, true);
@@ -2766,7 +3014,13 @@ angular.module('unionvmsWeb').factory('mapService', function(locale, $rootScope,
         });
     };
     
-    //Popup to display vector info
+    /**
+     * Add OL popup overlay
+     * 
+     * @memberof mapService
+     * @public
+     * @alias addPopupOverlay
+     */
 	ms.addPopupOverlay = function(){
 	    var overlay = new ol.Overlay({
 	        element: document.getElementById('popup'),
@@ -2778,10 +3032,18 @@ angular.module('unionvmsWeb').factory('mapService', function(locale, $rootScope,
 
 	    return overlay;
 	};
-
+	
+	/**
+     * Close OL popup overlay
+     * 
+     * @memberof mapService
+     * @public
+     * @alias closePopup
+     */
 	ms.closePopup = function(){
 	    ms.overlay.set('featureId', undefined, true);
 	    ms.overlay.setPosition(undefined);
+	    ms.popupRecContainer.reset();
 	    return false;
 	};
 	
@@ -2800,8 +3062,53 @@ angular.module('unionvmsWeb').factory('mapService', function(locale, $rootScope,
 	        ms.popupVisibility[type] = [];
 	    }
 	};
+	
+	//POPUP - decide which function to call so that data is properly formated 
+	/**
+	 * Create object containing all the necessary information to be displayed in the popup
+	 * 
+	 * @memberof mapService
+	 * @public
+	 * @alias setObjPopup
+	 * @param {Object} record - The source record for which a popup will be displayed 
+	 * @returns {Object} An object containing the necessary information to be displayed in the popup
+	 */
+	ms.setObjPopup = function(record){
+	    var type = record.type;
+	    var data;
+	    if (type === 'vmspos'){
+	        data = ms.setPositionsObjPopup(record.data, record.id);
+	    } else if (type === 'vmsseg'){
+	        data = ms.setSegmentsObjPopup(record.data);
+	    } else { //alarms
+	        data = ms.setAlarmsObjPopup(record.data);
+	    }
+	    
+	    return data;
+	};
+	
+	ms.popupRecContainer = {
+	    records: [],
+	    currentType: undefined,
+        currentIdx: undefined,
+        reset: function(){
+            this.records = [];
+            this.currentType = undefined;
+            this.currentIdx = undefined;
+        }
+    };
 
 	//POPUP - Define the object that will be used in the popup for vms positions
+	/**
+     * Create object containing all the necessary position information to be displayed in the popup
+     * 
+     * @memberof mapService
+     * @public
+     * @alias setPositionsObjPopup
+     * @param {ol.Feature} feature - The OL feature used to display the popup 
+     * @param {String} [id] - The id of the feature
+     * @returns {Object} An object containing the necessary position information to be displayed in the popup
+     */
     ms.setPositionsObjPopup = function(feature, id){
         var titles = ms.getPositionTitles();
         var srcData = ms.formatPositionDataForPopup(feature);
@@ -2837,6 +3144,14 @@ angular.module('unionvmsWeb').factory('mapService', function(locale, $rootScope,
     };
     
     //Popup attribute names for positions
+    /**
+     * Get attributes names for positional data
+     * 
+     * @memberof mapService
+     * @public
+     * @alias getPositionTitles
+     * @returns {Object} An object containing the regionalized attributes for positional data
+     */
     ms.getPositionTitles = function(){
         return {
             name: locale.getString('spatial.reports_form_vessel_search_table_header_name'),
@@ -2858,6 +3173,15 @@ angular.module('unionvmsWeb').factory('mapService', function(locale, $rootScope,
     };
     
     //Popup data values for positions
+    /**
+     * Format positional data to be displayed in the popup taking into consideration user preferences
+     * 
+     * @memberof mapService
+     * @public
+     * @alias formatPositionDataForPopup
+     * @param {Object} data - The object containing initial data
+     * @returns {Object} An object containing properly formated positional data
+     */
     ms.formatPositionDataForPopup = function(data){
         var coords = data.geometry.getCoordinates();
         var repCoords = ol.proj.transform(coords, ms.getMapProjectionCode(), 'EPSG:4326');
@@ -2881,6 +3205,15 @@ angular.module('unionvmsWeb').factory('mapService', function(locale, $rootScope,
         };
     };
     
+    /**
+     * Do the mapping between application object properties and the source data properties
+     * 
+     * @memberof mapService
+     * @public
+     * @alias getMappingTitlesProperties
+     * @param {String} type - The type of data to map (either <b>vmspos</b> or <b>vmsseg</b>)
+     * @returns {Object} An object containig the mappings
+     */
     ms.getMappingTitlesProperties = function(type){
         if (type === 'vmspos'){
             return {
@@ -2917,16 +3250,16 @@ angular.module('unionvmsWeb').factory('mapService', function(locale, $rootScope,
     };
 
     //POPUP - vms segments
-    ms.popupSegRecContainer = {
-        records: [],
-        currentIdx: undefined,
-        reset: function(){
-            this.records = [];
-            this.currentidx = undefined;
-        }
-    };
-    
     //Define the object that will be used in the popup for vms segments
+    /**
+     * Create object containing all the necessary segment information to be displayed in the popup
+     * 
+     * @memberof mapService
+     * @public
+     * @alias setSegmentsObjPopup
+     * @param {ol.Feature} feature - The OL feature used to display the popup 
+     * @returns {Object} An object containing the necessary position information to be displayed in the popup
+     */
     ms.setSegmentsObjPopup = function(feature){
         var titles = ms.getSegmentTitles();
         var srcData = ms.formatSegmentDataForPopup(feature);
@@ -2959,6 +3292,14 @@ angular.module('unionvmsWeb').factory('mapService', function(locale, $rootScope,
     };
     
     //Popup attribute names for segments
+    /**
+     * Get attributes names for segment data
+     * 
+     * @memberof mapService
+     * @public
+     * @alias getSegmentTitles
+     * @returns {Object} An object containing the regionalized attributes for segment data
+     */
     ms.getSegmentTitles = function(){
         return {
             name: locale.getString('spatial.reports_form_vessel_search_table_header_name'),
@@ -2975,6 +3316,15 @@ angular.module('unionvmsWeb').factory('mapService', function(locale, $rootScope,
     };
     
     //Popup data values for segments
+    /**
+     * Format segment data to be displayed in the popup taking into consideration user preferences
+     * 
+     * @memberof mapService
+     * @public
+     * @alias formatPositionDataForPopup
+     * @param {Object} data - The object containing initial data
+     * @returns {Object} An object containing properly formated segment data
+     */
     ms.formatSegmentDataForPopup = function(data){
         return {
             name: data.name,
@@ -2991,29 +3341,41 @@ angular.module('unionvmsWeb').factory('mapService', function(locale, $rootScope,
     };
     
     //POPUP - alarms
-    ms.popupAlarmRecContainer = {
-        records: [],
-        currentIdx: undefined,
-        reset: function(){
-            this.records = [];
-            this.currentidx = undefined;
-        }
-    };
-    
     //Define the object that will be used in the popup for alarms
-    ms.setAlarmsObjPopup = function(feature){
+    /**
+     * Create the alarms object that will be used in the popup
+     * 
+     * @memberof mapService
+     * @public
+     * @alias setAlarmsObjPopup
+     * @param {ol.Feature} feature - The OL feature representing the alarm 
+     * @param {Boolean} includeAsset - Whether the details button should be displayed in the popup or not
+     * @returns {Object}  
+     */
+    ms.setAlarmsObjPopup = function(feature, includeAsset){
+        if (!angular.isDefined(includeAsset)){
+            includeAsset = true;
+        }
         var titles = ms.getAlarmTitles();
         var srcData = ms.formatAlarmDataForPopup(feature);
         
         return {
-            //positionTitle: locale.getString('spatial.popup_positions_title'),
             alarmTitle: locale.getString('spatial.popup_alarms_title'),
             titles: titles,
-            alarm: srcData
+            alarm: srcData,
+            includeAssetDetails: includeAsset
         };
     };
     
     //Popup attribute names for alarms
+    /**
+     * Get attributes names for alarms data
+     * 
+     * @memberof mapService
+     * @public
+     * @alias getAlarmTitles
+     * @returns {Object} An object containing the regionalized attributes for alarms data
+     */
     ms.getAlarmTitles = function(){
         return {
             name: locale.getString('spatial.reports_form_vessels_search_by_vessel'),
@@ -3030,6 +3392,15 @@ angular.module('unionvmsWeb').factory('mapService', function(locale, $rootScope,
         };
     };
     
+    /**
+     * Format alarm data to be displayed in the popup taking into consideration user preferences
+     * 
+     * @memberof mapService
+     * @public
+     * @alias formatAlarmDataForPopup
+     * @param {Object} data - The object containing initial data
+     * @returns {Object} An object containing properly formated alarm data
+     */
     ms.formatAlarmDataForPopup = function(data){        
         return {
             name: data.name,
@@ -3050,3 +3421,4 @@ angular.module('unionvmsWeb').factory('mapService', function(locale, $rootScope,
 
 	return ms;
 });
+

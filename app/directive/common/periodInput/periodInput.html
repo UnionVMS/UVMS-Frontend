@@ -1,11 +1,11 @@
 <div class="periodInput" ng-class="{'disabled' : ngDisabled}">
     <div class="unit-input">
-        <input type="number" ng-model="hours" min="0" max="99" step="1" ng-disabled="ngDisabled" title="{{'common.hours' | i18n}}">
+        <input type="number" ng-model="hours" min="0" max="99" step="1" ng-disabled="ngDisabled" title="{{'common.hours' | i18n}}" id="{{inputFieldId}}">
         <div class="unit-box unit-box-hours">{{"common.time_hour_short" | i18n}}</div>
     </div>
 
     <div class="unit-input" ng-hide="noMinutes">
-        <input type="number" class="minutes" ng-model="minutes" min="0" max="59" step="5" ng-disabled="ngDisabled" title="{{'common.minutes' | i18n}}">
+        <input type="number" class="minutes" ng-model="minutes" min="0" max="59" step="5" ng-disabled="ngDisabled" title="{{'common.minutes' | i18n}}" id="{{inputFieldId}}">
         <div class="unit-box">{{"common.time_minute_short" | i18n}}</div>
     </div>
     <input type="hidden" ng-model="model" ng-disabled="ngDisabled" ng-required="ngRequired" period="ngRequired">

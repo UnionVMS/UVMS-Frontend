@@ -54,7 +54,6 @@ copy of the GNU General Public License along with the IFDM Suite. If not, see <h
                 <td class="statusColored" ng-attr-title="{{item.attributes.SATELLITE_NUMBER}}">{{item.attributes.SATELLITE_NUMBER}}</td>
                 <td>
                     <span ng-show="item.associatedVessel">{{item.associatedVessel.mmsiNo}}</span>
-                    <span ng-show="item.associatedVessel && !item.associatedVessel.mmsiNo"> - </span>
                 </td>
                 <td>
                     <span ng-if="item.active" class="mobile-terminal-status label label-success">{{'common.active' | i18n | uppercase}}</span>

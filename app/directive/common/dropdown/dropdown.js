@@ -1,5 +1,5 @@
 /*
-﻿Developed with the contribution of the European Commission - Directorate General for Maritime Affairs and Fisheries
+Developed with the contribution of the European Commission - Directorate General for Maritime Affairs and Fisheries
 © European Union, 2015-2016.
 
 This file is part of the Integrated Fisheries Data Management (IFDM) Suite. The IFDM Suite is free software: you can
@@ -29,10 +29,16 @@ angular.module('unionvmsWeb')
             callback : '=',
             callbackParams : '=',
             ngDisabled : '=',
-            tabIndex : '='
+            tabIndex : '=', 
+            ngRequired : '=', 
+            name : '='
 		},
         templateUrl: 'directive/common/dropdown/dropdown.html',
-		link: function(scope, element, attrs, fn) {
+		link: function(scope, element, attrs, fn, deepBlur) {
+
+            scope.status = {
+                isopen: false
+            };
 
             scope.initialitem = true;
             if('noPlaceholderItem' in attrs){
@@ -167,23 +173,48 @@ angular.module('unionvmsWeb')
                 return false;
             };
 
-            // Focused item when selecting using keyboard
+            // Select dropdown items on focus
             scope.focusVal = function(item) {
                 scope.focusedItem = item;
+                if(angular.isDefined(scope.focusedItem)){
+                    scope.selectVal(scope.focusedItem);
+                }
+            };
 
-            }
+            // Close dropdown menu
+            scope.closeDropdownMenu = function() {
+                if(scope.status.isopen){
+                    angular.element(scope.currentTarget).removeClass('open');
+                    scope.status.isopen = false;
+                }
+            };
 
-            // Keyboard selection
-            scope.keyboardEvent = function($event) { 
-                if ($event.keyCode === 13) {
-                    onClickOutsideMultiSelectDropdown();
-                    if(angular.isDefined(scope.focusedItem)){
-                        scope.selectVal(scope.focusedItem);
-                        angular.element(event.currentTarget).toggleClass('open');
-                        scope.focusedItem = undefined;          
-                    }
+            // Add extra events to a toggled dropdown menu
+            scope.toggleDropdown = function(e) {
+                if(!scope.ngDisabled) {
+                    e.preventDefault();
+                    e.stopPropagation();
+                    
+                    angular.element(scope.currentTarget).toggleClass('open');
+                    scope.currentTarget = event.currentTarget;
+                    scope.status.isopen = !scope.status.isopen;
                 } 
-            }
+            };
+
+            // Make sure dropdown isn't toggled on menu events
+            scope.dropdownMenuClick = function() {
+                scope.status.isopen = true;
+            };
+
+            // Close menu on enter 
+            scope.dropdownMenuKeyboardEvent = function(e) {
+                e.preventDefault();
+                e.stopPropagation();
+                
+                if(e.keyCode === 13) {
+                    scope.closeDropdownMenu();
+                } 
+            };
 
             scope.setLabel();
             //Create a list item with the initaltext?

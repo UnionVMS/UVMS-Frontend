@@ -1,5 +1,5 @@
 /*
-﻿Developed with the contribution of the European Commission - Directorate General for Maritime Affairs and Fisheries
+Developed with the contribution of the European Commission - Directorate General for Maritime Affairs and Fisheries
 © European Union, 2015-2016.
 
 This file is part of the Integrated Fisheries Data Management (IFDM) Suite. The IFDM Suite is free software: you can
@@ -48,7 +48,7 @@ angular.module('unionvmsWeb').directive('datepickerInput', ['$compile',function(
 
 angular.module('unionvmsWeb')
     .controller('datepickerInputCtrl',['$scope', 'dateTimeService','globalSettingsService', function($scope, dateTimeService, globalSettingsService){
-
+        
         var iso8601Dates = globalSettingsService.getDateFormat() === 'YYYY-MM-DD HH:mm:ss';
 
         //Formats used by momentjs and the picker

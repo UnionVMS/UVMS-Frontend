@@ -1,5 +1,5 @@
 /*
-﻿Developed with the contribution of the European Commission - Directorate General for Maritime Affairs and Fisheries
+Developed with the contribution of the European Commission - Directorate General for Maritime Affairs and Fisheries
 © European Union, 2015-2016.
 
 This file is part of the Integrated Fisheries Data Management (IFDM) Suite. The IFDM Suite is free software: you can
@@ -49,5 +49,4 @@ angular.module('unionvmsWeb')
     $scope.includeArchive = angular.isDefined($scope.functions.archiveCallback);
     $scope.includeHistory = angular.isDefined($scope.functions.historyCallback);
     $scope.includeUnlink = angular.isDefined($scope.functions.unlinkCallback);
-    $scope.includeEdit = angular.isDefined($scope.functions.editCallback);
 });

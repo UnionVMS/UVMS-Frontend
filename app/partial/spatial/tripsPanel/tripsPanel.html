@@ -1,0 +1,48 @@
+<!--
+Developed with the contribution of the European Commission - Directorate General for Maritime Affairs and Fisheries
+© European Union, 2015-2016.
+
+This file is part of the Integrated Fisheries Data Management (IFDM) Suite. The IFDM Suite is free software: you can
+redistribute it and/or modify it under the terms of the GNU General Public License as published by the
+Free Software Foundation, either version 3 of the License, or any later version. The IFDM Suite is distributed in
+the hope that it will be useful, but WITHOUT ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or
+FITNESS FOR A PARTICULAR PURPOSE.  See the GNU General Public License for more details. You should have received a
+copy of the GNU General Public License along with the IFDM Suite. If not, see <http://www.gnu.org/licenses/>.
+-->
+<div class="col-md-12 trips-panel" ng-controller="TripspanelCtrl">
+    <!--TRIP SUMMARY LOADING-->
+    <loading-panel type="TripSummary"></loading-panel>
+    <!--TRIP SUMMARY ALERT-->
+    <div class="container containerWithTopBottomPadding spatial-error" ng-show="alert.hasAlert">
+        <div class="alert alert-container" role="alert" ng-class="{'alert-danger': alert.hasError, 'alert-success': alert.hasSuccess, 'alert-warning': alert.hasWarning}">
+            <span class="fa fa-exclamation-circle" aria-hidden="true" ng-show="alert.hasError"></span>
+            <span class="fa fa-check-circle" aria-hidden="true" ng-show="alert.hasSuccess"></span>
+            <span class="fa fa-exclamation-circle" aria-hidden="true" ng-show="alert.hasWarning"></span>
+            <span class="alert-message">
+                <span>{{alert.alertMessage}}</span>          
+            </span>
+        </div>
+    </div>
+    <!--TRIPS LIST (WHEN RUNNING REPORT WITHOUT MAP)-->
+    <div ng-include="'partial/spatial/tripsPanel/tripsList/tripsList.html'" ng-if="false"></div>
+    <!--TRIP SUMMARY-->
+    <uib-tabset ng-show="repNav.isViewVisible('tripSummary')"><!-- active="tripSummServ.activeTab.index"-->
+        <uib-tab index="$index" ng-repeat="tab in tripSummServ.tabs" active="tab.active" select="tripSummServ.initializeTrip($index)">
+            <!--TAB HEADER-->
+            <uib-tab-heading>
+                {{tab.title}}
+                <a class="close-button" ng-click="closeTab($index)">
+                    <i class="fa fa-times"></i>
+                </a>
+            </uib-tab-heading>
+            <!--TAB CONTENT-->
+            <div class="trip-summary-tab" ng-if="tab.title === trip.id">
+                <div ng-include="'partial/spatial/tripsPanel/tripSummary/tripSummary.html'"></div>
+               
+            </div>
+        </uib-tab>
+    </uib-tabset>
+	<div ng-if="repNav.isViewVisible('catchDetails')" ng-include="'partial/spatial/tripsPanel/catchDetails/catchDetails.html'"></div>
+	<div ng-if="repNav.isViewVisible('tripDeparturePanel')" ng-include="'partial/spatial/tripsPanel/tripDeparturePanel/tripDeparturePanel.html'"></div>
+</div>
+

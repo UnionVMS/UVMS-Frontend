@@ -1,5 +1,5 @@
 <!--
-﻿Developed with the contribution of the European Commission - Directorate General for Maritime Affairs and Fisheries
+Developed with the contribution of the European Commission - Directorate General for Maritime Affairs and Fisheries
 © European Union, 2015-2016.
 
 This file is part of the Integrated Fisheries Data Management (IFDM) Suite. The IFDM Suite is free software: you can
@@ -26,7 +26,7 @@ copy of the GNU General Public License along with the IFDM Suite. If not, see <h
 				<div class="row">
 					<div class="form-group col-md-12 noPadding">
 						<div class="col-md-3">
-							<span class="formLabel">{{'spatial.general_configuration_geoserver_url' | i18n}}</span>
+							<span class="formLabel required-field">{{'spatial.general_configuration_geoserver_url' | i18n}}</span>
 						</div>
 						<div class="col-md-9" ng-class="{'has-error': generalsettingsForm.geoserverUrl.$error.required && (generalsettingsForm.geoserverUrl.$dirty || submitedWithErrors)}">
 							<input type="text" class="form-control" ng-model="configModel.systemSettings.geoserverUrl" name="geoserverUrl" ng-required="true"/>
@@ -51,3 +51,4 @@ copy of the GNU General Public License along with the IFDM Suite. If not, see <h
 		</accordion>
 	</ng-form>
 </div>
+

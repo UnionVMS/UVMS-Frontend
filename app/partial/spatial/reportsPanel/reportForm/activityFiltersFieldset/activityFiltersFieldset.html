@@ -1,0 +1,138 @@
+<!--
+Developed with the contribution of the European Commission - Directorate General for Maritime Affairs and Fisheries
+© European Union, 2015-2016.
+
+This file is part of the Integrated Fisheries Data Management (IFDM) Suite. The IFDM Suite is free software: you can
+redistribute it and/or modify it under the terms of the GNU General Public License as published by the
+Free Software Foundation, either version 3 of the License, or any later version. The IFDM Suite is distributed in
+the hope that it will be useful, but WITHOUT ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or
+FITNESS FOR A PARTICULAR PURPOSE.  See the GNU General Public License for more details. You should have received a
+copy of the GNU General Public License along with the IFDM Suite. If not, see <http://www.gnu.org/licenses/>.
+-->
+<div class="col-md-12 activity-filters-section" ng-controller="ActivityfiltersfieldsetCtrl">
+	<!--FIELDSET-->
+	<fieldset class="fieldsetStyle col-md-12" ng-class="{'fieldset-closed': !report.hasFaFilter}">
+		<!--LEGEND-->
+		<legend class="fieldsetLegendStyle">
+			<input class="checkbox-margin" type="checkbox" ng-model="report.hasFaFilter" ng-checked="report.hasFaFilter">
+			<a data-toggle="collapse" ng-click="report.hasFaFilter = !report.hasFaFilter;">{{'spatial.reports_form_fishing_activity_fieldset_label' | i18n }}</a>
+		</legend>
+		<!--FIELDSET CONTENT-->
+		<div ng-show="report.hasFaFilter" class="row">
+			<div class="form-group col-md-12">
+				<div class="row">
+					<ng-form name="activitySecForm">
+						<!--ACTIVITY GENERAL FILTERS-->
+						<div class="col-md-4 reportSubform activity-form">
+							<div class="form-group row">
+								<div class="col-md-4 label-container centerLabelCombo">
+									<label>{{'spatial.reports_form_activity_report_type' | i18n }}</label>
+								</div>
+								<div class="col-md-8">
+									<combobox ng-model="report.faFilters.reportType" name="reportType" items="reportTypes" initialtext="{{'common.all' | i18n }}"></combobox>
+								</div>
+							</div>
+							<div class="form-group row">
+								<div class="col-md-4 label-container centerLabelCombo">
+									<label>{{'spatial.reports_form_activity_activity_type' | i18n }}</label>
+								</div>
+								<div class="col-md-8">
+									<combobox ng-model="report.faFilters.activityType" name="activityType" items="activityTypes" initialtext="{{'common.all' | i18n }}"></combobox>
+								</div>
+							</div>
+							<div class="form-group row">
+								<div class="col-md-4 label-container centerLabelCombo">
+									<label>{{'spatial.reports_form_activity_master' | i18n}}</label>
+								</div>
+								<div class="col-md-8">
+									<input type="text" class="form-control" name="master" ng-model="report.faFilters.master"/>
+								</div>
+							</div>
+						</div>
+						<!--ACTIVITY TECHNICAL FILTERS-->
+						<div class="col-md-4 reportSubform technical-form">
+							<div class="row port-form-group">
+								<div class="form-group col-md-2 label-container centerLabelCombo label-top-space">
+									<label>{{'spatial.reports_form_activity_port' | i18n }}</label>
+								</div>
+								<div class="form-group col-md-5">
+									<label class="above-label">
+										{{'spatial.reports_form_activity_port_departure' | i18n }}
+										<combobox ng-model="report.faFilters.port.departure" name="portDeparture" initialtext="{{'common.all' | i18n }}" items="ports"></combobox>
+									</label>
+								</div>
+								<div class="form-group col-md-5">
+									<label class="above-label">
+										{{'spatial.reports_form_activity_port_arrival' | i18n }}
+										<combobox ng-model="report.faFilters.port.arrival" name="portArrival" initialtext="{{'common.all' | i18n }}" items="ports"></combobox>
+									</label>
+								</div>
+								<div class="form-group col-md-2 label-container centerLabelCombo">
+									<label></label>
+								</div>
+								<div class="form-group col-md-5">
+									<label class="above-label">
+										{{'spatial.reports_form_activity_port_landing' | i18n }}
+										<combobox ng-model="report.faFilters.port.landing" name="portLanding" initialtext="{{'common.all' | i18n }}" items="ports"></combobox>
+									</label>
+								</div>
+							</div>
+							<div class="row form-group">
+								<div class="col-md-2 label-container centerLabelCombo label-top-space">
+									<label>{{'spatial.reports_form_activity_gear' | i18n }}</label>
+								</div>
+								<div class="col-md-5">
+									<label class="above-label">
+										{{'spatial.reports_form_activity_gear_onboard' | i18n }}
+										<combobox ng-model="report.faFilters.gear.onboard" name="gearOnBoard" initialtext="{{'common.all' | i18n }}" items="gearTypes"></combobox>
+									</label>
+								</div>
+								<div class="col-md-5">
+									<label class="above-label">
+										{{'spatial.reports_form_activity_gear_deployed' | i18n }}
+										<combobox ng-model="report.faFilters.gear.deployed" name="gearDeployed" initialtext="{{'common.all' | i18n }}" items="gearTypes"></combobox>
+									</label>
+								</div>
+							</div>
+						</div>
+						<!--ACTIVITY SPECIES FILTERS-->
+						<div class="col-md-4 reportSubform species-form">
+							<div class="row form-group">
+								<div class="col-md-2 label-container center-label-multiple-combo">
+									<label>{{'spatial.reports_form_activity_species' | i18n }}</label>
+								</div>
+								<div class="col-md-10">
+									<combobox ng-model="report.faFilters.species" name="species" initialtext="{{'common.all' | i18n }}" items="species" multiple="true"></combobox>
+								</div>
+							</div>
+							<div class="row">
+								<div class="form-group col-md-2 label-container centerLabelCombo">
+									<label>{{'spatial.reports_form_activity_weight' | i18n }}</label>
+								</div>
+								<div class="form-group col-md-5">
+									<div class="unit-input" ng-class="{'has-error': activitySecForm.weightMin.$invalid && submitingReport === true}">
+										<numeric-input validate-min-in-range class="form-control" name="weightMin" ng-model="report.faFilters.weight.min" type="number" min="0" max="report.faFilters.weight.max"></numeric-input>
+										<div class="unit-box">{{'spatial.reports_form_vms_min_speed' | i18n}}</div>
+									</div>
+								</div>
+								<div class="form-group col-md-5">
+									<combobox ng-model="report.faFilters.weight.unit" items="weightUnits"></combobox>
+								</div>
+								<div class="form-group col-md-2 label-container centerLabelCombo">
+									<label></label>
+								</div>
+								<div class="form-group col-md-5">
+									<div class="unit-input" ng-class="{'has-error': activitySecForm.weightMax.$invalid && submitingReport === true}">
+										<numeric-input validate-max-in-range class="form-control" name="weightMax" ng-model="report.faFilters.weight.max" min="report.faFilters.weight.min"></numeric-input>
+										<div class="unit-box">{{'spatial.reports_form_vms_max_speed' | i18n}}</div>
+									</div>
+								</div>
+							</div>
+						</div>
+					</ng-form>
+				</div>
+			</div>
+		</div>
+	</fieldset>
+</div>
+

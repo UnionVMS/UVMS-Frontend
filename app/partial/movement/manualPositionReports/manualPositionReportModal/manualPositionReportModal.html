@@ -1,4 +1,4 @@
-<!--
+﻿<!--
 ﻿Developed with the contribution of the European Commission - Directorate General for Maritime Affairs and Fisheries
 © European Union, 2015-2016.
 
@@ -29,7 +29,7 @@ copy of the GNU General Public License along with the IFDM Suite. If not, see <h
                     </div>
                     <div class="row">
             			<div ng-class="{'has-error': (submitAttempted || manualPositionReportForm.flagState.$dirty) && manualPositionReportForm.flagState.$invalid}" class="col-md-3 smallerpaddingright">
-            				<label>{{'movement.manual_position_field_label_flag_state' | i18n}}</span></label>
+            				<label>{{'movement.manual_position_field_label_flag_state' | i18n}}</label>
                             <dropdown ng-model="positionReport.carrier.flagState" items="flagStates"></dropdown>
             			</div>
             			<div ng-class="{'has-error': (submitAttempted || manualPositionReportForm.ircs.$dirty) && manualPositionReportForm.ircs.$invalid}" class="col-md-3 smallerpadding" ng-disabled="confirmSend">

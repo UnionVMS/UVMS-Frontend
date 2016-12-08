@@ -1,5 +1,5 @@
 <!--
-﻿Developed with the contribution of the European Commission - Directorate General for Maritime Affairs and Fisheries
+Developed with the contribution of the European Commission - Directorate General for Maritime Affairs and Fisheries
 © European Union, 2015-2016.
 
 This file is part of the Integrated Fisheries Data Management (IFDM) Suite. The IFDM Suite is free software: you can
@@ -10,26 +10,28 @@ FITNESS FOR A PARTICULAR PURPOSE.  See the GNU General Public License for more d
 copy of the GNU General Public License along with the IFDM Suite. If not, see <http://www.gnu.org/licenses/>.
 -->
 <!-- <div>Showing {{currentPage}} to {{pages.length}} of {{displayedReports.length}} entries</div> -->
-<ul class="pagination table-pagination" ng-controller="ReportspaginationCtrl">
-    <li ng-class="{disabled: currentPage===1}">
-        <a ng-click="currentPage===1 || onInputPageChange(1);" class="previous" title="{{'common.search_results_pagination_first_page_title' | i18n}}">&#60;&#60;</a>
-    </li>
-    <li ng-class="{disabled: currentPage===1}">
-        <a ng-click="currentPage===1 || onInputPageChange(inputPage - 1);" class="previous" title="{{'common.search_results_pagination_prev_page_title' | i18n}}">&#60;</a>
-    </li>
-    <li class="currentPage disabled">
-        <span>{{'common.search_results_pagination_page' | i18n}}
-            <input type="number" ng-model="inputPage" ng-change="onInputPageChange()" ng-disabled="numPages===1">
-            {{'common.search_results_pagination_total' | i18n:[numPages]}}
-        </span>
-    </li>
-    <!--<li ng-repeat="page in pages" ng-class="{active: page===currentPage}" ng-if="numPages > 0">
-        <a ng-click="selectPage(page)" class="ng-binding">{{ page }}</a>
-    </li>-->
-    <li ng-class="{disabled: currentPage===numPages}">
-        <a ng-click="currentPage===numPages || onInputPageChange(inputPage + 1);" class="next" title="{{'common.search_results_pagination_next_page_title' | i18n}}">&#62;</a>
-    </li>
-    <li ng-class="{disabled: currentPage===numPages}">
-        <a ng-click="currentPage===numPages || onInputPageChange(numPages);" class="next" title="{{'common.search_results_pagination_last_page_title' | i18n}}">&#62;&#62;</a>
-    </li>
-</ul>
+<div class="text-right">
+	<ul class="pagination table-pagination" ng-controller="ReportspaginationCtrl">
+	    <li ng-class="{disabled: currentPage===1}">
+	        <a ng-click="currentPage===1 || onInputPageChange(1);" class="previous" title="{{'common.search_results_pagination_first_page_title' | i18n}}">&#60;&#60;</a>
+	    </li>
+	    <li ng-class="{disabled: currentPage===1}">
+	        <a ng-click="currentPage===1 || onInputPageChange(inputPage - 1);" class="previous" title="{{'common.search_results_pagination_prev_page_title' | i18n}}">&#60;</a>
+	    </li>
+	    <li class="currentPage disabled">
+	        <span>{{'common.search_results_pagination_page' | i18n}}
+	            <input type="number" ng-model="inputPage" ng-change="onInputPageChange()" ng-disabled="numPages===1">
+	            {{'common.search_results_pagination_total' | i18n:[numPages]}}
+	        </span>
+	    </li>
+	    <!--<li ng-repeat="page in pages" ng-class="{active: page===currentPage}" ng-if="numPages > 0">
+	        <a ng-click="selectPage(page)" class="ng-binding">{{ page }}</a>
+	    </li>-->
+	    <li ng-class="{disabled: currentPage===numPages}">
+	        <a ng-click="currentPage===numPages || onInputPageChange(inputPage + 1);" class="next" title="{{'common.search_results_pagination_next_page_title' | i18n}}">&#62;</a>
+	    </li>
+	    <li ng-class="{disabled: currentPage===numPages}">
+	        <a ng-click="currentPage===numPages || onInputPageChange(numPages);" class="next" title="{{'common.search_results_pagination_last_page_title' | i18n}}">&#62;&#62;</a>
+	    </li>
+	</ul>
+</div>

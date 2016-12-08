@@ -45,12 +45,12 @@
                 <dropdown ng-model="advancedSearchObject.POWER_SPAN" initialtext="{{'vessel.advanced_search_placeholder_power' | i18n}}" items="powerSpans" callback="resetSelectedVesselGroup" tab-index="11"></dropdown>
             </div>
             <div class="col-md-2">
-                <search-button smallerPadding="true" cancel-callback="resetSearch()" search-callback="performSearch()"><search-button>
+                <search-button smallerPadding="true" cancel-callback="resetSearch()" search-callback="performSearch()"></search-button>
             </div>
             <div class="col-md-1 smallerpadding">
                 <div class="row nomargin">
                     <div class="col-md-12 colNoPadding searchcriteriadropdown">
-                        <button type="button" class="btn btn-primary btn-sm fullWidth vmsbtn" ng-disabled="advancedSearchForm.$invalid" ng-click="performSearch()" tabindex="12">
+                        <button type="submit" class="btn btn-primary btn-sm fullWidth vmsbtn" ng-disabled="advancedSearchForm.$invalid" ng-click="performSearch()" tabindex="12">
                             {{'common.search' | i18n}}
                         </button>
                     </div>

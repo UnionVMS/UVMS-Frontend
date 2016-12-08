@@ -1,0 +1,8 @@
+<div class="breadcrumbNavigator">
+	<ol class="breadcrumb">
+		<li ng-repeat="item in items" ng-show="$index <= activeItemIdx" ng-class="{active: activeItemIdx === $index}">
+			<span ng-show="activeItemIdx === $index">{{item.title | i18n}}</span>
+			<a ng-click="handleClick($index)" ng-show="$index < activeItemIdx">{{item.title | i18n}}</a>
+		</li>
+	</ol>
+</div>

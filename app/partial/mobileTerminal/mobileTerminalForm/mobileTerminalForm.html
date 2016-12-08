@@ -17,17 +17,6 @@ copy of the GNU General Public License along with the IFDM Suite. If not, see <h
                 <div class="col-md-6">
                     <h5>{{'mobileTerminal.assigned_vessel' | i18n | uppercase}}</h5>
                 </div>
-                <div class="col-md-6 textAlignRight">
-                    <div class="actions">
-                        <div show-if-allowed="manageMobileTerminals">
-                            <button class="btn btn-primary" ng-click="unassignVessel()"><i class="fa fa-chain-broken"></i> {{'mobileTerminal.unassign_vessel' | i18n}}</button>
-                        </div>
-                        <div class="closeIcon" ng-click="toggleMobileTerminalDetails()">
-                            <i class="fa fa-sign-out signouticon" title="{{'common.close' | i18n}}"></i>
-                        </div>
-                        <div class="clearfix"></div>
-                    </div>
-                </div>
             </div>
             <div class="row">
                 <div class="col-md-12" ng-show="!currentMobileTerminal.associatedVessel">
@@ -36,7 +25,6 @@ copy of the GNU General Public License along with the IFDM Suite. If not, see <h
                 <vessel-details ng-show="currentMobileTerminal.associatedVessel" vessel="currentMobileTerminal.associatedVessel" disable-form="true" ></vessel-details>
             </div>
         </div>
-
 
         <div class="card with-small-card-header" ng-show="isVisible.assignVessel">
             <div class="row card-header">
@@ -61,20 +49,7 @@ copy of the GNU General Public License along with the IFDM Suite. If not, see <h
             </div>
         </div>
 
-        <div class="card mobileInformationContainer" loading-indicator="waitingForCreateResponse">
-            <menu-bar header="getMenuHeader()" modeltype="'MOBILE_TERMINAL'" ng-model="currentMobileTerminal"
-                      functions="menuBarFunctions"
-                      is-create-new-mode="isCreateNewMode">
-            </menu-bar>
-            <div class="mobileTerminalDetailsContainer" static-include="partial/mobileTerminal/mobileTerminalDetails/mobileTerminalDetails.html"></div>
-        </div>
-    </div>
-
-
-    <div class="row" ng-show="isCreateNewMode() && !vesselFormDisplayed()">
-        <div class="col-md-12">
-            <a ng-click="clearForm()" class="pointer" id="mob-term-form-clear-form">{{'common.clear_form' | i18n}}</a>
-        </div>
+        <mobile-terminal-details mobile-terminal="currentMobileTerminal" modeltype="'MOBILE_TERMINAL'" callback="mobileTerminalFormFunctions" ng-disabled="disableMobileTerminalForm()"></mobile-terminal-details>        
     </div>
 
 </div>

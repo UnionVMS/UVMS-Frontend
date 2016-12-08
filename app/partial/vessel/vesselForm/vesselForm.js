@@ -1,5 +1,5 @@
 /*
-﻿Developed with the contribution of the European Commission - Directorate General for Maritime Affairs and Fisheries
+Developed with the contribution of the European Commission - Directorate General for Maritime Affairs and Fisheries
 © European Union, 2015-2016.
 
 This file is part of the Integrated Fisheries Data Management (IFDM) Suite. The IFDM Suite is free software: you can
@@ -20,7 +20,7 @@ angular.module('unionvmsWeb').controller('VesselFormCtrl',function($scope, $log,
 
     //Keep track of visibility statuses
     $scope.isThisVisible = {
-        showCompleteVesselHistoryLink : false, 
+        showCompleteVesselHistoryLink : false,
         addNewMobileTerminalForm: false
     };
 
@@ -83,7 +83,6 @@ angular.module('unionvmsWeb').controller('VesselFormCtrl',function($scope, $log,
     }
 
     var getMobileTerminals = function() {
-        $scope.mobileTerminals = undefined;
         $scope.mobileTerminalsError = undefined;
         var request = new GetListRequest(1, 1000, false, []);
         request.addSearchCriteria("CONNECT_ID", $scope.vesselObj.vesselId.guid);
@@ -250,13 +249,6 @@ angular.module('unionvmsWeb').controller('VesselFormCtrl',function($scope, $log,
         };
     };
 
-    //Clear the form
-    $scope.clearForm = function(){
-        $scope.vesselObj = new Vessel();
-        $scope.setDefaultCountryCode();
-        $scope.vesselNotesObj = {};
-    };
-
     // Add notes to Vessel object
     $scope.addNotes = function(){
         if ($scope.vesselNotesObj.date && $scope.vesselNotesObj.activity) {
@@ -264,11 +256,11 @@ angular.module('unionvmsWeb').controller('VesselFormCtrl',function($scope, $log,
                 date: $scope.vesselNotesObj.date,
                 activity: $scope.vesselNotesObj.activity,
                 user: $scope.vesselNotesObj.user,
-                readyDate: $scope.vesselNotesObj.readyDate, 
-                licenseHolder: $scope.vesselNotesObj.licenseHolder, 
-                contact: $scope.vesselNotesObj.contact, 
-                sheetNumber: $scope.vesselNotesObj.sheetNumber, 
-                notes: $scope.vesselNotesObj.notes, 
+                readyDate: $scope.vesselNotesObj.readyDate,
+                licenseHolder: $scope.vesselNotesObj.licenseHolder,
+                contact: $scope.vesselNotesObj.contact,
+                sheetNumber: $scope.vesselNotesObj.sheetNumber,
+                notes: $scope.vesselNotesObj.notes,
                 source: 'INTERNAL'
             });
 
@@ -277,7 +269,7 @@ angular.module('unionvmsWeb').controller('VesselFormCtrl',function($scope, $log,
             }
         } else {
             return false;
-        }       
+        }
     }
 
     //Update the Vessel
@@ -312,7 +304,7 @@ angular.module('unionvmsWeb').controller('VesselFormCtrl',function($scope, $log,
         alertService.showSuccessMessageWithTimeout(locale.getString('vessel.update_alert_message_on_success'));
         $scope.vesselObj = updatedVessel;
         $scope.mergeCurrentVesselIntoSearchResults($scope.vesselObj);
-        getVesselHistory();        
+        getVesselHistory();
     };
     //Error updating vessel
     var updateVesselError = function(error){
@@ -388,12 +380,12 @@ angular.module('unionvmsWeb').controller('VesselFormCtrl',function($scope, $log,
     };
 
     //View notes details
-    $scope.viewVesselNotesDetails = function(vesselNotes) {       
+    $scope.viewVesselNotesDetails = function(vesselNotes) {
         $scope.vesselNotes = vesselNotes;
         openVesselNotesModal();
     };
 
-    //Open modal for viewing vessel notes 
+    //Open modal for viewing vessel notes
     var openVesselNotesModal = function(){
         var modalInstance = $modal.open({
           templateUrl: 'partial/vessel/vesselNotes/vesselNotesModal/vesselNotesModal.html',
@@ -402,7 +394,7 @@ angular.module('unionvmsWeb').controller('VesselFormCtrl',function($scope, $log,
           resolve: {
             vesselNotes: function() {
                 return $scope.vesselNotes;
-            }, 
+            },
             vesselName: function() {
                 return $scope.vesselObj.name;
             }
@@ -447,12 +439,20 @@ angular.module('unionvmsWeb').controller('VesselFormCtrl',function($scope, $log,
         });
     };
 
+    // Add new Mobile Terminal to Vessel
     $scope.toggleAddNewMobileTerminalForm = function(){
-        $scope.$broadcast("createMobileTerminalWithVessel");
-        if (!$scope.isThisVisible.addNewMobileTerminalForm) {
-            // ToDo: Scroll down to DOM element 
+        toggleMobileTerminalForm(new MobileTerminal());
+    };
+
+    var toggleMobileTerminalForm = function(newMobileTerminal){
+        newMobileTerminal.isCreateNewMode = true;
+        $scope.mobileTerminals.push(newMobileTerminal);
+    };
+
+    $scope.mobileTerminalForm = {
+        updateMobileTerminals: function() {
+            getMobileTerminals();
         }
-        $scope.isThisVisible.addNewMobileTerminalForm = !$scope.isThisVisible.addNewMobileTerminalForm;
     };
 
     $scope.menuBarFunctions = {
@@ -462,6 +462,12 @@ angular.module('unionvmsWeb').controller('VesselFormCtrl',function($scope, $log,
         showMobileTerminal: function(vessel) {
             if (vessel) {
                 return angular.isDefined(vessel.vesselId) && vessel.vesselId != null && vessel.active;
+            }
+            return false;
+        },
+        disableAddMobileTerminal: function(vessel) {
+            if (vessel) {
+                return $scope.vesselForm.cfr.$invalid || $scope.vesselForm.ircs.$invalid || !vessel.ircs || !vessel.cfr;
             }
             return false;
         },

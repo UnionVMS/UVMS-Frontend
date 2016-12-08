@@ -9,7 +9,7 @@
                 <div>{{vesselForm.vesselNotesDate.$valid}}</div>
                 <div class="col-md-4 form-group smallerpadding" ng-class="{'has-error': submitAttempted && !vesselForm.notesActivity.$valid}">
                     <label>{{ 'vessel.vessel_notes_activity' | i18n }}<span ng-if="required" class="mandatory">{{ 'common.mandatory_field' | i18n }}</span></label>
-                    <dropdown ng-model="vesselNotes.activity" name="notesActivity" id="notesActivity" initialtext="{{ 'vessel.vessel_notes_activity' | i18n }}" items="vesselNotesActivity" ng-required="required"></dropdown>
+                    <dropdown ng-model="vesselNotes.activity" name="notesActivity" id="notesActivity" initialtext="{{ 'vessel.vessel_notes_activity' | i18n }}" items="vesselNotesActivity" ng-required="required" ng-disabled="disableForm"></dropdown>
                 </div>
                 <div class="col-md-4 form-group smallerpadding">
                     <label>{{ 'vessel.vessel_notes_user' | i18n }}</label>

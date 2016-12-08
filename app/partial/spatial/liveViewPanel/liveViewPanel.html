@@ -1,5 +1,5 @@
 <!--
-﻿Developed with the contribution of the European Commission - Directorate General for Maritime Affairs and Fisheries
+Developed with the contribution of the European Commission - Directorate General for Maritime Affairs and Fisheries
 © European Union, 2015-2016.
 
 This file is part of the Integrated Fisheries Data Management (IFDM) Suite. The IFDM Suite is free software: you can
@@ -10,19 +10,31 @@ FITNESS FOR A PARTICULAR PURPOSE.  See the GNU General Public License for more d
 copy of the GNU General Public License along with the IFDM Suite. If not, see <http://www.gnu.org/licenses/>.
 -->
 <div class="containerWrapper" ng-controller="LiveviewpanelCtrl">
-	<div class="container spatialpages">
-		<div class="spatialtabpanel">
-			<ul class="nav nav-tabs tabs-left sideways" role="tablist">
-				<li ng-repeat="tab in tabMenu" class="sourcetab" ng-click="selectTab(tab.tab)" ng-class="{'active': selectedTab === '{{tab.tab}}'}" ng-if="tab.visible"><a>{{tab.title}}</a></li>
-			</ul>
-		</div>
-		<div id="liveview-panel">
-			<div class="spatialtab-content" ng-show="isTabSelected('MAP') && isTabVisible(0)">
-				<div ng-include="'partial/spatial/liveViewPanel/mapPanel/mapPanel.html'"></div>
+	<div id="liveview-panel" ng-include="'partial/spatial/liveViewPanel/mapPanel/mapPanel.html'" ng-show="repNav.isViewVisible('mapPanel')"></div>
+	<div class="container containerWithTopBottomPadding" ng-show="repNav.isViewVisible('vmsPanel')">
+		<div class="card">
+			<div class="row form-group">
+				<div class="col-md-4">
+					<combobox ng-model="repServ.selectedHistory" initialtext="{{repServ.name}}" items="repServ.reportsHistory" combo-section="true" callback="selectHistory" init-callback="initComboHistory"
+					is-loading="repServ.loadingReportHistory" class="combo-report-history" no-placeholder-on-list="true"></combobox>
+				</div>
+				<div class="col-md-8 textAlignRight buttonContainer">
+					<button type="button" class="btn btn-primary btn-sm" ng-show="repServ.id !== undefined" ng-click="editReport()">
+						<i class="fa fa-pencil"></i>&nbsp;
+						<span>{{'spatial.reports_edit_report' | i18n}}</span>
+					</button>
+					<button type="button" class="btn btn-primary btn-sm btn-preferences" ng-click="repNav.goToSection('userPreferences')" ng-if="isAllowed('Spatial', 'ALLOW_USER_SPATIAL_CONFIGURATIONS') && curState !== 'app.reporting-id'">
+						<i class="fa fa-cog"></i>&nbsp;
+						<span>{{'spatial.user_preferences' | i18n}}</span>
+					</button>
+				</div>
 			</div>
-			<div class="vmstabContainer" ng-show="isTabSelected('VMS') && isTabVisible(1)">
-				<div ng-include="'partial/spatial/liveViewPanel/vmsPanel/vmsPanel.html'"></div>
+			<div class="row">
+				<div class="col-md-12">
+					<div ng-include="'partial/spatial/liveViewPanel/vmsPanel/vmsPanel.html'"></div>
+				</div>
 			</div>
 		</div>
 	</div>
 </div>
+
