@@ -59,7 +59,7 @@ angular.module('unionvmsWeb')
         //Set form scope - To be able to validate form in FE
         $scope.setFormScope = function(scope){
            $scope.formScope = scope;
-        }
+        };
 
         //Set status - Disabled
         $scope.disableForm = function(){
@@ -202,7 +202,7 @@ angular.module('unionvmsWeb')
         var createNewMobileTerminalWithVesselSuccess = function(){
             $scope.callback.updateMobileTerminals();
             alertService.showSuccessMessage(locale.getString('mobileTerminal.add_new_alert_message_on_success'));
-        }
+        };
 
         //Create new Mobile Terminal With Vessel - Error
         var createNewMobileTerminalWithVesselError = function(error){

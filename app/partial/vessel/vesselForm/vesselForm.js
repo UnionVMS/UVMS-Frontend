@@ -270,7 +270,7 @@ angular.module('unionvmsWeb').controller('VesselFormCtrl',function($scope, $log,
         } else {
             return false;
         }
-    }
+    };
 
     //Update the Vessel
     $scope.updateVessel = function(){

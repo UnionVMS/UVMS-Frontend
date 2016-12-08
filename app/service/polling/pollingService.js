@@ -140,7 +140,7 @@ angular.module('unionvmsWeb').factory('pollingService',function(pollingRestServi
     }
 
     function isNonEmptyString(value) {
-        return typeof value === 'string' && value.length > 0
+        return typeof value === 'string' && value.length > 0; 
     }
 
     /* Pushes an attribute onto an array, checking validity. */
@@ -164,10 +164,11 @@ angular.module('unionvmsWeb').factory('pollingService',function(pollingRestServi
             var attrs = [];
             switch (getSelectedMobileTerminalType()) {
                 case 'INMARSAT_C':
-                pushAttribute(attrs, "GRACE_PERIOD", pollingOptions.configurationPoll.gracePeriod, isNonZero);
-                pushAttribute(attrs, "IN_PORT_GRACE", pollingOptions.configurationPoll.inPortGrace, isNonZero);
-                pushAttribute(attrs, "DNID", pollingOptions.configurationPoll.newDNID, isNonEmptyString);
-                pushAttribute(attrs, "MEMBER_NUMBER", pollingOptions.configurationPoll.newMemberNo, isNonEmptyString);
+                    pushAttribute(attrs, "GRACE_PERIOD", pollingOptions.configurationPoll.gracePeriod, isNonZero);
+                    pushAttribute(attrs, "IN_PORT_GRACE", pollingOptions.configurationPoll.inPortGrace, isNonZero);
+                    pushAttribute(attrs, "DNID", pollingOptions.configurationPoll.newDNID, isNonEmptyString);
+                    pushAttribute(attrs, "MEMBER_NUMBER", pollingOptions.configurationPoll.newMemberNo, isNonEmptyString);
+                    break;
                 case 'IRIDIUM':
                 pushAttribute(attrs, "REPORT_FREQUENCY", pollingOptions.configurationPoll.freq, isNonZero);
             }

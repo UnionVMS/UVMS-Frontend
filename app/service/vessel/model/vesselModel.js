@@ -36,6 +36,7 @@ angular.module('unionvmsWeb')
 
     Vessel.fromJson = function(data){
         var vessel = new Vessel();
+        var i;
 
         if(angular.isDefined(data.assetId)){
             vessel.vesselId = {
@@ -71,12 +72,12 @@ angular.module('unionvmsWeb')
         vessel.grossTonnageUnit = data.grossTonnageUnit;
 
         if (data.notes) {
-            for (var i = 0; i < data.notes.length; i++) {
+            for (i = 0; i < data.notes.length; i++) {
                 vessel.notes.push(VesselNotes.fromDTO(data.notes[i]));
             }
         }
         if (data.contact) {
-            for (var i = 0; i < data.contact.length; i++) {
+            for (i = 0; i < data.contact.length; i++) {
                 vessel.contact.push(VesselContact.fromDTO(data.contact[i]));
             }
         }
@@ -155,6 +156,7 @@ angular.module('unionvmsWeb')
 
     Vessel.prototype.copy = function() {
         var copy = new Vessel();
+        var i;
         copy.active = this.active;
         copy.cfr = this.cfr;
         copy.countryCode = this.countryCode;
@@ -184,7 +186,7 @@ angular.module('unionvmsWeb')
             };
         }
         if(this.contact){
-            for (var i = 0; i < this.contact.length; i++) {
+            for (i = 0; i < this.contact.length; i++) {
                 copy.contact.push(this.contact[i].copy());
             }
         }
@@ -203,7 +205,7 @@ angular.module('unionvmsWeb')
         copy.gearType = this.gearType;
 
         if(this.notes){
-            for (var i = 0; i < this.notes.length; i++) {
+            for (i = 0; i < this.notes.length; i++) {
                 copy.notes.push(this.notes[i].copy());
             }
         }

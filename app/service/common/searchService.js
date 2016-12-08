@@ -79,7 +79,7 @@ angular.module('unionvmsWeb').factory('searchService',function($q, $log, searchU
             }, function(error){
                 onGetMovementsError(error, deferred);
             });
-        }
+        };
 
         if (isMinimalRequest) {
             movementRestService.getMinimalMovementList(movementRequest).then(getMovementOk, function(error){
@@ -274,7 +274,7 @@ angular.module('unionvmsWeb').factory('searchService',function($q, $log, searchU
                                         return latestMovements[i];
                                     }
                                 }
-                            }
+                            };
 
                             $.each(vessels.items, function(index, vessel) {
                                 vessel.lastMovement = findGuid(vessel.vesselId.guid);
@@ -375,7 +375,7 @@ angular.module('unionvmsWeb').factory('searchService',function($q, $log, searchU
             //Search in exchange
             if (exchangePollCriteria.length === 0) {
                 // Since there is no way to get info from exchange for multiple pollGuid, get all from the beginning of time if nothing else is set
-                exchangeSearchCriteria = [{"key":"FROM_DATE", "value":"1970-01-01 00:00:00 +00:00"}];
+                var exchangeSearchCriteria = [{"key":"FROM_DATE", "value":"1970-01-01 00:00:00 +00:00"}];
             }
             var exchangeDeferred = $q.defer();
             promises.push(exchangeDeferred.promise);
