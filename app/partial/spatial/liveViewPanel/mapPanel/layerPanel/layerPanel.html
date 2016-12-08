@@ -1,5 +1,5 @@
 <!--
-﻿Developed with the contribution of the European Commission - Directorate General for Maritime Affairs and Fisheries
+Developed with the contribution of the European Commission - Directorate General for Maritime Affairs and Fisheries
 © European Union, 2015-2016.
 
 This file is part of the Integrated Fisheries Data Management (IFDM) Suite. The IFDM Suite is free software: you can
@@ -9,32 +9,62 @@ the hope that it will be useful, but WITHOUT ANY WARRANTY; without even the impl
 FITNESS FOR A PARTICULAR PURPOSE.  See the GNU General Public License for more details. You should have received a
 copy of the GNU General Public License along with the IFDM Suite. If not, see <http://www.gnu.org/licenses/>.
 -->
-<div ng-controller="LayerpanelCtrl" class="layer-panel" ng-class="{'layer-expanded': expanded, 'layer-collapsed': !expanded}">
-  <div class="handle" ng-click="toggle()">
-  	<i ng-class="{'fa fa-chevron-left': expanded, 'fa fa-chevron-right': !expanded}"></i>
-  </div>
-  <div id="layer-panel-wrapper" class="tabbed-view">
-    <ul id="layer-tabs-container" class="nav nav-tabs" data-tabs="tabs">
-      <li class="layer-panel-tabs" ng-class="{'active': tab==='LAYERTREE'}">
-        <a ng-click="tabClick('LAYERTREE')">{{ 'spatial.layer_panel_layers' | i18n }}</a>
-      </li>
-      <li class="layer-panel-tabs"  ng-class="{'active': tab==='LEGEND'}">
-        <a ng-click="tabClick('LEGEND')">{{ 'spatial.layer_panel_legend' | i18n }}</a>
-      </li>
-      <li class="layer-panel-tabs"  ng-class="{'active': tab==='COPYRIGHT'}">
-        <a ng-click="tabClick('COPYRIGHT')">{{ 'spatial.layer_panel_copyright' | i18n }}</a>
-      </li>
-    </ul>
-      <div ng-show="tab==='LAYERTREE'" class="legend-panel">
-          <div layer-menu></div>
-          <div id="layer-tree" layer-tree></div>
-
-      </div>
-      <div ng-show="tab==='LEGEND'" class="legend-panel">
-      	<div legend-panel></div>
-      </div>
-      <div ng-show="tab==='COPYRIGHT'" class="legend-panel">
-      	<div copyright-panel></div>
-      </div>
-  </div>
+<div ng-controller="LayerpanelCtrl" id="liveview-layer-panel" class="layer-panel" ng-class="{'panel-collapsed': !expanded}">
+	<div class="panel-header">
+		<div class="title">
+			<span>{{tabTitle}}</span>
+		</div>
+		<div class="collapse-btn" ng-click="switchCollapse()">
+			<span class="fa" ng-class="{'fa-angle-double-up': expanded, 'fa-angle-double-down': !expanded}"></span>
+		</div>
+	</div>
+	<div class="layer-panel-content">
+		<div class="dynamic-content" ng-class="getClassName()">
+			<div ng-show="tab==='LAYERTREE'" class="legend-panel">
+	        	<div layer-menu></div>
+	        	<div id="layer-tree" layer-tree></div>
+	      	</div>
+	      	<div ng-show="tab==='LEGEND'" class="legend-panel">
+	      		<div legend-panel></div>
+	      	</div>
+	      	<div ng-show="tab==='COPYRIGHT'" class="legend-panel">
+	      		<div copyright-panel></div>
+	      	</div>
+		</div>
+		<div class="dynamic-switcher">
+			<ul class="list-inline" ng-class="isLastTreeItem('LayerBtns')">
+				<li ng-show="tab !== 'LAYERTREE'" ng-click="tabClick('LAYERTREE')">
+	       			<span class="fa fa-bars"></span>&nbsp;&nbsp;
+	       			{{ 'spatial.layer_panel_layers' | i18n }}
+	     		</li>
+	     		<li ng-show="tab !== 'LEGEND'" ng-class="{'item-right': tab === 'COPYRIGHT'}" ng-click="tabClick('LEGEND')">
+	     			<span class="fa fa-list"></span>&nbsp;&nbsp;
+	       			{{ 'spatial.layer_panel_legend' | i18n }}
+	     		</li>
+	     		<li class="item-right" ng-show="tab !== 'COPYRIGHT'" ng-click="tabClick('COPYRIGHT')">
+	     			<span class="fa fa-copyright"></span>&nbsp;&nbsp;
+	       			{{ 'spatial.layer_panel_copyright' | i18n }}
+	     		</li>
+	   		</ul>
+	   	</div>
+	   	<div class="panel-component-item" ng-if="isReportEditable()">
+			<ul class="list-inline" ng-class="isLastTreeItem('ReportBtns')">
+				<li class="tab-list-item" ng-click="editReport()">
+	       			<span class="fa fa-pencil"></span>&nbsp;&nbsp;
+	       			{{ 'spatial.reports_table_config_label' | i18n }}
+	     		</li>
+	     		<li class="tab-list-item item-right" ng-if="isReportDirty()" ng-click="saveReport()">
+	     			<span class="fa fa-floppy-o"></span>&nbsp;&nbsp;
+	     			{{ 'spatial.reports_save_label' | i18n }}
+	     		</li>
+	   		</ul>
+	   	</div>
+	   	<div class="panel-component-item item-clickable" ng-if="isAllowed('Spatial', 'VIEW_AREA_MANAGEMENT_UI') && curState === 'app.reporting'" ng-click="goToAreas()">
+	   		<div class="panel-component-inner-item" ng-class="isLastTreeItem('AreaBtns')">
+	   			<span class="fa fa-map"></span>&nbsp;&nbsp;
+	   			{{ 'header.page_title_areas' | i18n }}
+	   		</div>
+	   	</div>
+	</div>
 </div>
+

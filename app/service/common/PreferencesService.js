@@ -1,5 +1,5 @@
 /*
-﻿Developed with the contribution of the European Commission - Directorate General for Maritime Affairs and Fisheries
+Developed with the contribution of the European Commission - Directorate General for Maritime Affairs and Fisheries
 © European Union, 2015-2016.
 
 This file is part of the Integrated Fisheries Data Management (IFDM) Suite. The IFDM Suite is free software: you can
@@ -9,8 +9,30 @@ the hope that it will be useful, but WITHOUT ANY WARRANTY; without even the impl
 FITNESS FOR A PARTICULAR PURPOSE.  See the GNU General Public License for more details. You should have received a
 copy of the GNU General Public License along with the IFDM Suite. If not, see <http://www.gnu.org/licenses/>.
  */
+/**
+ * @memberof unionvmsWeb
+ * @ngdoc service
+ * @name PreferencesService
+ * @param loadingStatus {service} loading status service <p>{@link unionvmsWeb.loadingStatus}</p>
+ * @param spatialConfigRestService {service} Spatial REST API service
+ * @param spatialConfigAlertService {service} Spatial REST API service
+ * @param $anchorScroll {service} angular anchorScroll service
+ * @param locale {service} angular locale service
+ * @param $location {service} angular location service
+ * @param SpatialConfig {service} Spatial Config service
+ * @attr {Object} stylesErrors - A property object where are registered all the form errors from styles settings
+ * @description
+ *  Service to manage the Preferences(Admin,User and report levels)
+ */
 angular.module('unionvmsWeb').factory('PreferencesService',function(loadingStatus,spatialConfigRestService, spatialConfigAlertService, $anchorScroll, locale, $location, SpatialConfig) {
 
+	/**
+     * Reset success callback - reset settings of a specific type
+     * 
+     * @memberof PreferencesService
+     * @private
+     * @param {Object} response
+     */
 	var resetSuccess = function(response){
 		var settingsType = response.settingsType;
 		var configModel = response.configModel;
@@ -30,9 +52,16 @@ angular.module('unionvmsWeb').factory('PreferencesService',function(loadingStatu
         	form.$setPristine();
 		}
         configModel[settingsType + 'Settings'].reseted = true;
-        loadingStatus.isLoading('ResetPreferences',false);
+        loadingStatus.isLoading('Preferences',false);
     };
 
+	/**
+     * Reset failure callback - display error message
+     * 
+     * @memberof PreferencesService
+     * @private
+     * @param {Object} error
+     */
 	var resetFailure = function(error){
 		var settingsType = error.settingsType;
 	    $anchorScroll();
@@ -40,9 +69,16 @@ angular.module('unionvmsWeb').factory('PreferencesService',function(loadingStatu
         spatialConfigAlertService.hasError = true;
         spatialConfigAlertService.alertMessage = locale.getString('spatial.user_preferences_reset_' + settingsType.toLowerCase() + '_settings_failure');
         spatialConfigAlertService.hideAlert();
-        loadingStatus.isLoading('ResetPreferences',false);
+        loadingStatus.isLoading('Preferences',false);
 	};
 
+	/**
+     * Get config success callback - get and load spatial config settings
+     * 
+     * @memberof PreferencesService
+     * @private
+     * @param {Object} response
+     */
 	var getConfigsSuccess = function(response){
 		var settingsType = response.settingsType;
 		var configModel = response.configModel;
@@ -80,10 +116,21 @@ angular.module('unionvmsWeb').factory('PreferencesService',function(loadingStatu
 		if(angular.isDefined(form)){
         	form.$setPristine();
 		}
+		
+		if (angular.isDefined(response.callback)){
+		    response.callback();
+		}
         configModel[settingsType + 'Settings'].reseted = true;
-        loadingStatus.isLoading('ResetPreferences',false);
+        loadingStatus.isLoading('Preferences',false);
 	};
 
+	/**
+     * Get config failure callback - display error message
+     * 
+     * @memberof PreferencesService
+     * @private
+     * @param {Object} error
+     */
 	var getConfigsFailure = function(error){
 		var settingsType = error.settingsType;
 	    $anchorScroll();
@@ -91,7 +138,7 @@ angular.module('unionvmsWeb').factory('PreferencesService',function(loadingStatu
         spatialConfigAlertService.hasError = true;
         spatialConfigAlertService.alertMessage = locale.getString('spatial.user_preferences_reset_' + settingsType.toLowerCase() + '_settings_failure');
         spatialConfigAlertService.hideAlert();
-	    loadingStatus.isLoading('ResetPreferences',false);
+	    loadingStatus.isLoading('Preferences',false);
 	};
 
 	var PreferencesService = {
@@ -109,19 +156,40 @@ angular.module('unionvmsWeb').factory('PreferencesService',function(loadingStatu
 				segments: {}
 			}
 		},
-		reset : function(settingsType,form,configModel,configCopy,settingsLevel){
-			loadingStatus.isLoading('ResetPreferences',true);
+
+		/**
+		 * Reset preferences of a specific type
+		 * 
+		 * @memberof PreferencesService
+		 * @public
+		 * @param {String} settingsType
+		 * @param {Object} form
+		 * @param {Object} configModel
+		 * @param {Object} configCopy
+		 * @param {String} settingsLevel
+		 * @param {Function} callback
+		 */
+		reset : function(settingsType,form,configModel,configCopy,settingsLevel,callback){
+			loadingStatus.isLoading('Preferences',true, 1);
 			var item = {};
 			item[settingsType + 'Settings'] = {};
 			
 			if(settingsLevel === 'user'){
 				spatialConfigRestService.resetSettings(item,settingsType,configModel,configCopy,form).then(resetSuccess, resetFailure);
 			}else if(settingsLevel === 'report'){
-				spatialConfigRestService.getUserConfigs(settingsType,configModel,form,true).then(getConfigsSuccess, getConfigsFailure);
+				spatialConfigRestService.getUserConfigs(settingsType,configModel,form,true,undefined,callback).then(getConfigsSuccess, getConfigsFailure);
 			}
 		},
-		clearStylesErrors : function(level){
-			this.stylesErrors[level] = {
+
+		/**
+		 * Clear errors in styles settings form from a specified level(Admin,User,Report)
+		 * 
+		 * @memberof PreferencesService
+		 * @public
+		 * @param {String} settingsLevel
+		 */
+		clearStylesErrors : function(settingsLevel){
+			this.stylesErrors[settingsLevel] = {
 				positions: {},
 				segments: {}
 			};

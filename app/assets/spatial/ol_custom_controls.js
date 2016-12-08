@@ -223,7 +223,7 @@ ol.control.ResetLayerFilter= function(opt_options){
     
     ol.control.Control.call(this, {
         element: element,
-        target: options.target,
+        target: options.target
     });
 };
 ol.inherits(ol.control.ResetLayerFilter, ol.control.Control);

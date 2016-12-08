@@ -1,5 +1,5 @@
 /*
-﻿Developed with the contribution of the European Commission - Directorate General for Maritime Affairs and Fisheries
+Developed with the contribution of the European Commission - Directorate General for Maritime Affairs and Fisheries
 © European Union, 2015-2016.
 
 This file is part of the Integrated Fisheries Data Management (IFDM) Suite. The IFDM Suite is free software: you can
@@ -39,7 +39,10 @@ var unionvmsWebApp = angular.module('unionvmsWeb', [
     'qtip2',
     'chart.js',
     'ngStorage',
-    'debugConfig'
+    'debugConfig',
+    'angular-cron-jobs',
+    'nvd3',
+    'ui.tree'
 ]);
 
 var currentUserContextPromise = function(userService) {
@@ -405,6 +408,11 @@ unionvmsWebApp.config(function($stateProvider, $compileProvider, tmhDynamicLocal
                     controller: 'AuditconfigurationCtrl'
                 }
             },
+            resolve: {
+                config : function(initService){
+                    return initService.loadConfigFor(["MOVEMENT"]);
+                }
+            },
             data: {
                 pageTitle: 'header.page_title_configuration'
             },
@@ -422,14 +430,21 @@ unionvmsWebApp.config(function($stateProvider, $compileProvider, tmhDynamicLocal
             },
             resolve: {
                 config : function(initService){
-                    return initService.loadConfigFor(["MOVEMENT"]);
+                    return initService.loadConfigFor(["MOVEMENT","MOVEMENT_SOURCE_TYPES"]);
                 }
             },
             data: {
                 pageTitle: 'header.page_title_reports'
             },
-            onExit: function(loadingStatus){
+            onEnter: function($state,locale,userService,errorService){
+                if(_.isNull(userService.getCurrentContext().scope)){
+                    errorService.setErrorMessage(locale.getString('common.error_user_without_scope'));
+                    $state.go('error');
+                }
+            },
+            onExit: function(loadingStatus,$modalStack){
                 loadingStatus.resetState();
+                $modalStack.dismissAll();
             }
         })
         .state('app.reporting-id', {
@@ -442,11 +457,17 @@ unionvmsWebApp.config(function($stateProvider, $compileProvider, tmhDynamicLocal
             },
             resolve: {
                 config : function(initService){
-                    return initService.loadConfigFor(["MOVEMENT"]);
+                    return initService.loadConfigFor(["MOVEMENT","MOVEMENT_SOURCE_TYPES"]);
                 }
             },
             data: {
                 pageTitle: 'header.page_title_reports'
+            },
+            onEnter: function($state,locale,userService,errorService){
+                if(_.isNull(userService.getCurrentContext().scope)){
+                    errorService.setErrorMessage(locale.getString('common.error_user_without_scope'));
+                    $state.go('error');
+                }
             },
             onExit: function(loadingStatus){
                 loadingStatus.resetState();
@@ -464,8 +485,33 @@ unionvmsWebApp.config(function($stateProvider, $compileProvider, tmhDynamicLocal
                 access: 'VIEW_AREA_MANAGEMENT_UI',
                 pageTitle: 'header.page_title_areas'
             },
+            onEnter: function($state,locale,userService,errorService){
+                if(_.isNull(userService.getCurrentContext().scope)){
+                    errorService.setErrorMessage(locale.getString('common.error_user_without_scope'));
+                    $state.go('error');
+                }
+            },
             onExit: function(loadingStatus){
                 loadingStatus.resetState();
+            }
+        })
+        .state('app.activity', {
+            url: '/activity',
+            views: {
+                modulepage: {
+                    templateUrl: 'partial/activity/activity.html',
+                    controller: 'ActivityCtrl'
+                }
+            },
+            data: {
+                pageTitle: 'header.page_title_activity'
+            },
+            onEnter: function($state, locale, activityService){
+                activityService.getUserPreferences();
+            },
+            onExit: function(loadingStatus, activityService){
+                loadingStatus.resetState();
+                activityService.reset(true);
             }
         })
         .state('app.exchange', {

@@ -1,14 +1,3 @@
-/*
-﻿Developed with the contribution of the European Commission - Directorate General for Maritime Affairs and Fisheries
-© European Union, 2015-2016.
-
-This file is part of the Integrated Fisheries Data Management (IFDM) Suite. The IFDM Suite is free software: you can
-redistribute it and/or modify it under the terms of the GNU General Public License as published by the
-Free Software Foundation, either version 3 of the License, or any later version. The IFDM Suite is distributed in
-the hope that it will be useful, but WITHOUT ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or
-FITNESS FOR A PARTICULAR PURPOSE.  See the GNU General Public License for more details. You should have received a
-copy of the GNU General Public License along with the IFDM Suite. If not, see <http://www.gnu.org/licenses/>.
- */
 angular.module('smart-table').filter('stFieldSearchGeoJson', function($filter, unitConversionService, coordinateFormatService){
     return function(array, predictedObject){
         //check predicted object type and parse it back
@@ -35,7 +24,7 @@ angular.module('smart-table').filter('stFieldSearchGeoJson', function($filter, u
         var timeFields = ['duration', 'totalTimeAtSea'];
         var numberFields = ['reportedSpeed', 'calculatedSpeed', 'speedOverGround', 'distance'];
         
-        if (type === 'positions' || type === 'segments'){
+        if (type !== 'tracks'){
             searchObj.properties = {};
         }
         
@@ -176,7 +165,7 @@ angular.module('smart-table').filter('stFieldSearchGeoJson', function($filter, u
                 }
             }
             
-            if (type === 'positions' || type === 'segments'){
+            if (type !== 'tracks'){
                 if (_.indexOf(numberFields, searchableKeys[i]) === -1 &&  _.indexOf(timeFields, searchableKeys[i]) === -1){
                     if (searchableKeys[i].indexOf('lon') !== -1){
                         keyIn = true;
@@ -206,11 +195,16 @@ angular.module('smart-table').filter('stFieldSearchGeoJson', function($filter, u
                         } else {
                             additionalFilters.lat.min = srcObject[searchableKeys[i]]; 
                         }
-                    } else if (searchableKeys[i] === 'startDate' || searchableKeys[i] === 'endDate') {
+                    } else if (searchableKeys[i] === 'startDate' || searchableKeys[i] === 'endDate' || searchableKeys[i] === 'alarmStartDate' || searchableKeys[i] === 'alarmEndDate') {
                         keyIn = true;
                         additionalFilters[searchableKeys[i]] = srcObject[searchableKeys[i]];
                         var name = searchableKeys[i] + 'Field';
-                        additionalFilters[name] = 'positionTime';
+                        if (type === 'positions'){
+                            additionalFilters[name] = 'positionTime';
+                        } else if (type === 'alarms'){
+                            additionalFilters[name] = 'ticketOpenDate';
+                        }
+                        
                         additionalFilters.doSearch = true;
                     }
                 }

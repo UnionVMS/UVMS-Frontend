@@ -1,5 +1,5 @@
 /*
-﻿Developed with the contribution of the European Commission - Directorate General for Maritime Affairs and Fisheries
+Developed with the contribution of the European Commission - Directorate General for Maritime Affairs and Fisheries
 © European Union, 2015-2016.
 
 This file is part of the Integrated Fisheries Data Management (IFDM) Suite. The IFDM Suite is free software: you can
@@ -8,115 +8,156 @@ Free Software Foundation, either version 3 of the License, or any later version.
 the hope that it will be useful, but WITHOUT ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or
 FITNESS FOR A PARTICULAR PURPOSE.  See the GNU General Public License for more details. You should have received a
 copy of the GNU General Public License along with the IFDM Suite. If not, see <http://www.gnu.org/licenses/>.
- */
+*/
 .layer-panel {
-  float: left;
-  -webkit-transition: width 0.3s;
-  -moz-transition: width 0.3s;
-  -o-transition: width 0.3s;
-  -ms-transition: width 0.3s;
-  transition: width 0.3s;
-}
-
-.layer-panel.layer-collapsed {
-  width: 10px;
-  overflow: hidden;
-  .ui-fancytree {
-  	overflow: hidden;
-  }
-}
-
-.layer-panel.layer-expanded {
-  width: 250px;
-  &.ng-animate {
-	  overflow: hidden;
-	  .ui-fancytree {
-	  	overflow: hidden;
-	  }
-  }
-}
-
-.layer-panel .tabbed-view {
-  overflow: hidden;
-  height: 100%;
-  border: 1px solid #DDD;
-}
-
-.layer-panel .handle {
-  float: right;
-  width: 10px;
-  height: 100%;
-  background-color: @profileColor_blue;
-  cursor: pointer;
-  padding: 0 2px;
-  &:hover {
-  	background-color: darken(@profileColor_blue, 5%);
-  }
-  > i {
-  	position: absolute;
-  	top: 50%;
-  	font-weight: bold;
-  	font-size: 10px;
-  	color: #fff;
-  }
-}
-
-.layer-panel-tabs {
-	border: none !important;
-	> a {
-		color: @profileColor_blue !important;
-		background-color: #ecf0f1;
-		border-bottom: 1px solid #ddd !important;
-		border-right: 1px solid #ddd !important;
-		font-weight: normal;
-	}
-}
-
-.layer-panel-tabs.active{
-	> a {
-		border: none !important;
-		border-right: 1px solid #ddd !important;
-		border-bottom: none !important;
-    	background-color: @primaryColor !important;
-		font-weight: bold;
-		color: #FFFFFF !important;
-	}
-}
-
-.layer-panel-tabs>a:hover {
-	background-color: white !important;
-}
-
-.layer-panel-tabs.active>a:hover {
-	background-color: @primaryColor !important;
-}
-
-.legend-panel {
-	background-color: #FFFFFF;
-	height: calc(~"100% - 42px");
-	overflow-y: auto;
-}
-
-#layer-tabs-container {
-	background-color: @pageBackgroundColor;
-    overflow: hidden;
-	height: 42px;
-}
-
-.layer-panel {
-	#layer-panel-wrapper {
-		display: none;
-		&.expanded {
-			display:block;
+	width: 250px;
+	min-height: 300px;
+	overflow-y: hidden;
+	position: absolute;
+	top: 56px;
+	bottom: 200px;
+	left: 10px;
+	z-index: 1035;
+	
+	border: 1px solid @profileColor_gray;
+    border-radius: 6px;
+    box-shadow: 0px 2px 10px rgba(0, 0, 0, 0.2);
+	background-color: white;
+	&.panel-collapsed {
+		height: 30px;
+		min-height: 30px;
+		width: auto;
+		.layer-panel-content {
+			height: 0;
+			width: 0;
+			overflow: hidden;
 		}
 	}
-	&.ng-animate {
-		#layer-panel-wrapper {
-			display:block;
+	.panel-header {
+		color: @profileColor_blue;
+		border-bottom: 1px solid @profileColor_gray;
+		height: 30px;
+		.title {
+			float: left;
+			line-height: 30px;
+			margin-left: 10px;
+			margin-right: 10px;
+			text-transform: uppercase;
+			font-weight: bold;
+		}
+		.collapse-btn {
+			float: right;
+			width: 30px;
+			line-height: 30px;
+			border-left: 1px solid @profileColor_gray;
+			text-align: center;
+			cursor: pointer;
+		} 
+	}
+	.layer-panel-content {
+		height: 100%;
+		width: 100%;
+	}
+	.dynamic-content {
+		padding-left: 7px;
+		padding-right: 7px;
+		overflow: auto;
+		padding-bottom: 15px;
+		&.item-0 {
+			height: calc(~'100% - 60px');
+		}
+		&.item-1 {
+			height: calc(~'100% - 90px');
+		}
+		&.item-2 {
+			height: calc(~'100% - 120px');
 		}
 	}
-}
-
-ul.fancytree-container {
-	border-color: transparent;
+	.dynamic-switcher {
+		border: 1px solid @profileColor_gray;
+		border-left: none;
+		border-right: none;
+		height: 30px;
+		cursor: pointer;
+		ul {
+			line-height: 28px;
+			display: table;
+			width: 100%;
+			table-layout: fixed;
+			color: @primaryColor;
+			margin-left: 0px;
+			li {
+				display: table-cell;
+				width: auto;
+				padding: 0 7px;
+				span {
+					color: @primaryColor;
+				}
+				&.item-right {
+					text-align: right;
+				}
+				&:hover {
+					background-color: @profileColor_lightgray;
+				}
+			}
+			&.is-last-tree-item {
+				li:hover {
+					border-bottom-left-radius: 3px;
+					border-bottom-right-radius: 3px;
+				}
+			}
+		}
+	}
+	.panel-component-item {
+		border: 1px solid @profileColor_gray;
+		border-left: none;
+		border-right: none;
+		border-top: none;
+		height: 30px;
+		cursor: pointer;
+		ul {
+			line-height: 29px;
+			display: table;
+			width: 100%;
+			table-layout: fixed;
+			color: @primaryColor;
+			margin-left: 0px;
+			li {
+				display: table-cell;
+				width: auto;
+				padding: 0 7px;
+				span {
+					color: @primaryColor;
+				}
+				&.item-right {
+					text-align: right;
+				}
+				&:hover {
+					background-color: @profileColor_lightgray;
+				}
+			}
+			&.is-last-tree-item {
+				li:hover {
+					border-bottom-left-radius: 3px;
+					border-bottom-right-radius: 3px;
+				}
+			}
+		}
+		.panel-component-inner-item {
+			color: @profileColor_blue;
+			border-top: 0;
+			padding: 0 7px;
+			span {
+				line-height: 30px;
+			}
+			&:hover {
+				background-color: @profileColor_lightgray;
+				&.is-last-tree-item:hover {
+					border-bottom-left-radius: 3px;
+					border-bottom-right-radius: 3px;
+				}
+			}
+			
+		}
+	}
 }

@@ -1,5 +1,5 @@
 /*
-﻿Developed with the contribution of the European Commission - Directorate General for Maritime Affairs and Fisheries
+Developed with the contribution of the European Commission - Directorate General for Maritime Affairs and Fisheries
 © European Union, 2015-2016.
 
 This file is part of the Integrated Fisheries Data Management (IFDM) Suite. The IFDM Suite is free software: you can
@@ -8,7 +8,7 @@ Free Software Foundation, either version 3 of the License, or any later version.
 the hope that it will be useful, but WITHOUT ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or
 FITNESS FOR A PARTICULAR PURPOSE.  See the GNU General Public License for more details. You should have received a
 copy of the GNU General Public License along with the IFDM Suite. If not, see <http://www.gnu.org/licenses/>.
- */
+*/
 .reportBtnGroup {
 	margin-bottom: 10px;
 	button {
@@ -101,22 +101,35 @@ div.dataTables_filter {
 
 table.table thead .sorting_asc:after,
 table.table thead .sorting_desc:after,
+table.table thead [st-sort]:after,
 .tableSmart.table .thead .sorting_asc:after,
-.tableSmart.table .thead .sorting_desc:after {
-	color: @primaryColor;
+.tableSmart.table .thead .sorting_desc:after,
+.tableSmart.table .thead [st-sort]:after {
 	font-family: 'FontAwesome';
 	margin-left: 5px;
 	position: absolute;
+	line-height: 21px;
 }
 
-table.table thead .sorting_asc:after,
-.tableSmart.table .thead .sorting_asc:after {
+table.table thead [st-sort].sorting_asc:after,
+.tableSmart.table .thead [st-sort].sorting_asc:after {
 	content: '\f0d8';
+	color: @primaryColor;
+	font-size: 14px;
 }
 
-table.table thead .sorting_desc:after,
-.tableSmart.table .thead .sorting_desc:after {
+table.table thead [st-sort].sorting_desc:after,
+.tableSmart.table .thead [st-sort].sorting_desc:after {
 	content: '\f0d7';
+	color: @primaryColor;
+	font-size: 14px;
+}
+
+table.table thead [st-sort]:after,
+.tableSmart.table .thead [st-sort]:after {
+	content: '\f0dc';
+	color: @profileColor_darkgray;
+	font-size: 10px;
 }
 
 table.table {

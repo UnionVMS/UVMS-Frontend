@@ -1,5 +1,5 @@
 <!--
-﻿Developed with the contribution of the European Commission - Directorate General for Maritime Affairs and Fisheries
+Developed with the contribution of the European Commission - Directorate General for Maritime Affairs and Fisheries
 © European Union, 2015-2016.
 
 This file is part of the Integrated Fisheries Data Management (IFDM) Suite. The IFDM Suite is free software: you can
@@ -9,7 +9,7 @@ the hope that it will be useful, but WITHOUT ANY WARRANTY; without even the impl
 FITNESS FOR A PARTICULAR PURPOSE.  See the GNU General Public License for more details. You should have received a
 copy of the GNU General Public License along with the IFDM Suite. If not, see <http://www.gnu.org/licenses/>.
 -->
-<div class="col-md-12 collapsibleRow visibilitySettings" ng-controller="VisibilitysettingsCtrl" ng-init="status.isOpen = settingsLevel === 'report' && !hasMap">
+<div class="col-md-12 collapsibleRow visibilitySettings" ng-controller="VisibilitysettingsCtrl" ng-init="status.isOpen = (settingsLevel === 'report' && !components.map && !components.fromLayerTree)">
 	<ng-form name="visibilitySettingsForm">
 		<accordion close-others="oneAtATime">
 			<accordion-group is-open="status.isOpen">
@@ -23,7 +23,7 @@ copy of the GNU General Public License along with the IFDM Suite. If not, see <h
 					<i class="pull-right glyphicon" ng-class="{'glyphicon-chevron-down': status.isOpen, 'glyphicon-chevron-right': !status.isOpen}"></i>
 				</div>
 				</accordion-heading>
-				<div class="containerWithBottomPadding">
+				<div class="containerWithBottomPadding" ng-hide="settingsLevel === 'report' && checkComponents()">
 					<div class="row noBottomMargin">
 						<div class="col-md-6 sectionMenu">
 							<ul class="horizontal pipeSeparator">
@@ -32,9 +32,9 @@ copy of the GNU General Public License along with the IFDM Suite. If not, see <h
 						</div>
 					</div>
 				</div>
-				<div ng-show="isMenuSelected('POSITIONS')" ng-include="'partial/spatial/configurations/visibilitySettings/positionsVisibility/positionsVisibility.html'"></div>
-				<div ng-show="isMenuSelected('SEGMENTS')" ng-include="'partial/spatial/configurations/visibilitySettings/segmentsVisibility/segmentsVisibility.html'"></div>
-				<div ng-show="isMenuSelected('TRACKS')" ng-include="'partial/spatial/configurations/visibilitySettings/tracksVisibility/tracksVisibility.html'"></div>
+				<div ng-show="isMenuSelected('position')" ng-include="'partial/spatial/configurations/visibilitySettings/positionsVisibility/positionsVisibility.html'"></div>
+				<div ng-show="isMenuSelected('segment')" ng-include="'partial/spatial/configurations/visibilitySettings/segmentsVisibility/segmentsVisibility.html'"></div>
+				<div ng-show="isMenuSelected('track')" ng-include="'partial/spatial/configurations/visibilitySettings/tracksVisibility/tracksVisibility.html'"></div>
 				<div class="col-md-12 col-btn-no-padding" ng-if="settingsLevel !== 'admin'">
 					<button type="button" class="btn btn-default pull-right" ng-click="prefService.reset('visibility',visibilitySettingsForm,configModel,configCopy,settingsLevel)">{{'spatial.settings_reset_btn' | i18n}}</button>
 				</div>

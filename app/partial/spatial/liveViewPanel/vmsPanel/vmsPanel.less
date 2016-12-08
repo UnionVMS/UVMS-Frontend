@@ -1,5 +1,5 @@
 /*
-﻿Developed with the contribution of the European Commission - Directorate General for Maritime Affairs and Fisheries
+Developed with the contribution of the European Commission - Directorate General for Maritime Affairs and Fisheries
 © European Union, 2015-2016.
 
 This file is part of the Integrated Fisheries Data Management (IFDM) Suite. The IFDM Suite is free software: you can
@@ -8,7 +8,103 @@ Free Software Foundation, either version 3 of the License, or any later version.
 the hope that it will be useful, but WITHOUT ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or
 FITNESS FOR A PARTICULAR PURPOSE.  See the GNU General Public License for more details. You should have received a
 copy of the GNU General Public License along with the IFDM Suite. If not, see <http://www.gnu.org/licenses/>.
- */
+*/
+.tabular-view {
+	.modal-header {
+		height: 65px;
+		padding: 0 !important;
+		.pointer {
+			padding-top: 20px;
+			padding-right: 30px;
+		}
+		.collapseicon {
+			padding-right: 5px;
+		}
+		&.tab-panel-layout {
+			height: 42px;
+			ul {
+				height: 42px;
+				li {
+					a {
+						line-height: 40px;
+						border-top: 1px solid @profileColor_neutralgray;
+					}
+					&.active {
+						a {
+							border-bottom: 1px solid  @profileColor_neutralgray;
+							&:hover {
+								border-bottom: 1px solid  @profileColor_neutralgray;
+							}
+						}
+					}
+				}	
+			}
+		}
+	}
+	.top-tabs {
+		height: 65px;
+		li {
+			&.active {
+				background-color: white;
+				border-bottom: 0;
+				a {
+					background-color: white;
+					color: @profileColor_darkgray;
+					border-bottom: 1px solid white;
+					&:hover {
+						background-color: white;
+						color: @profileColor_darkgray;
+						border-bottom: 1px solid white;
+					}
+				}
+			}
+			a {
+				padding: 0 15px;
+				line-height: 64px;
+				color: @primaryColor;
+				background-color: @profileColor_lightgray;
+				border: 1px solid @profileColor_neutralgray;
+				border-top: 0;
+				border-left: 0;
+				&:hover {
+					border: 1px solid @profileColor_neutralgray;
+					border-top: 0;
+					border-left: 0;
+				}
+			}
+			&:first-child {
+				a {
+					border-left: 1px solid @profileColor_neutralgray;	
+				}
+			}
+		}
+	}
+	.modal-body {
+		padding-top: 10px !important;
+		.table-tools {
+			cursor: auto !important;
+		}
+		.btnTools {
+			height: 25px;
+			width: 25px;
+			float: right;
+			margin-right: 17px;
+			i {
+				line-height: 25px;
+				font-size: 14px;
+				color: @primaryColor;
+				text-align: center;
+			}
+		}
+		.no-border {
+			border: 0;
+		}
+		.with-bottom-border {
+			border-bottom-width: 1px;
+		}
+	}
+}
+
 .vmspages {
 	padding-top: 2px !important;
 	padding-left: 5px !important;
@@ -24,9 +120,10 @@ copy of the GNU General Public License along with the IFDM Suite. If not, see <h
 
 .vms-search-btns {
 	margin-top: 5px;
+	margin-bottom: 5px;
 }
 
-.vmssourcetab {
+/*.vmssourcetab {
 	>a {
 		font-weight: bold;
 	}
@@ -44,7 +141,7 @@ copy of the GNU General Public License along with the IFDM Suite. If not, see <h
 	>a {
 		background-color: #fff !important;
 	}
-}
+}*/
 
 .vmstab-content {
 	margin-top: 5px;
@@ -124,7 +221,7 @@ input[name="lat|dd"] {
 .table-tools {
 	cursor: auto !important;
 	i {
-		color: #428bca;
+		color: @primaryColor;
 		cursor: pointer;
 		font-style: normal;
 	}
@@ -149,3 +246,32 @@ div.table-tools i {
 .lr-drop-target-after{
   border-right: 5px solid @primaryColor;
 }
+
+.vmspanel-modal {
+	overflow: auto;
+	z-index: 1072 !important;
+	&.collapsed {
+		bottom: auto;
+		.modal-dialog {
+			margin: 30px auto 5px auto;
+		}
+	}
+}
+
+.fullscreen,
+.is-loading-new-tab
+ {
+	.vmspanel-modal {
+		pointer-events: none;
+		.modal-dialog {
+			pointer-events: auto;
+		}
+	}
+}
+
+.loading-panel.vms-panel-loading {
+	margin-top: -60px;
+    margin-bottom: -15px;
+}
+
+

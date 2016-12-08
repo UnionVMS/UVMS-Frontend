@@ -1,4 +1,4 @@
-<!--
+﻿<!--
 ﻿Developed with the contribution of the European Commission - Directorate General for Maritime Affairs and Fisheries
 © European Union, 2015-2016.
 
@@ -50,6 +50,7 @@ copy of the GNU General Public License along with the IFDM Suite. If not, see <h
     <script src="assets/spatial/ol.min.js"></script>
     <script src="assets/spatial/ol_custom_controls.js"></script>
     <script src="assets/spatial/ol3-layerswitcher/src/ol3-layerswitcher.js"></script>
+    <script src="../bower_components/proj4/dist/proj4.js"></script>
     <script src="../bower_components/ng-csv/build/ng-csv.min.js"></script>
     <script src="../bower_components/fancytree/dist/jquery.fancytree-all.js"></script>
     <script src="../bower_components/jQuery-contextMenu/dist/jquery.ui.position.min.js"></script>
@@ -63,6 +64,11 @@ copy of the GNU General Public License along with the IFDM Suite. If not, see <h
 	<script src="../bower_components/angular-bootstrap-colorpicker/js/bootstrap-colorpicker-module.min.js"></script>
 	<script src="../bower_components/angular-file-upload/dist/angular-file-upload.min.js"></script>
     <script src="../bower_components/file-saver/FileSaver.min.js"></script>
+    <script src="../bower_components/angular-cron-jobs/dist/angular-cron-jobs.min.js"></script>
+    <script src="../bower_components/d3/d3.min.js"></script>
+    <script src="../bower_components/nvd3/build/nv.d3.min.js"></script>
+    <script src="../bower_components/angular-nvd3/dist/angular-nvd3.min.js"></script>
+    <script src="../bower_components/angular-ui-tree/dist/angular-ui-tree.min.js"></script>
 
     <!-- USM -->
     <script src="../bower_components/angular-translate/angular-translate.js"></script>
@@ -85,6 +91,8 @@ copy of the GNU General Public License along with the IFDM Suite. If not, see <h
     <script src="../bower_components/angular-qtip2-directive/qtip2.js"></script>
     <script src="../bower_components/Chart.js/Chart.js"></script>
     <script src="../bower_components/angular-chart.js/dist/angular-chart.js"></script>
+    <script src="../bower_components/palette/palette.js"></script>
+    <script src="../bower_components/tinycolor/dist/tinycolor-min.js"></script>
     <!-- Add New Bower Component JS Above -->
 
     <!-- Main App JS -->
@@ -222,6 +230,7 @@ copy of the GNU General Public License along with the IFDM Suite. If not, see <h
     <script src="partial/spatial/reportsPanel/reportsPanel.js"></script>
     <script src="partial/spatial/liveViewPanel/mapPanel/mapPanel.js"></script>
     <script src="partial/spatial/liveViewPanel/vmsPanel/vmsPanel.js"></script>
+    <script src="partial/spatial/liveViewPanel/vmsPanel/vmsPanelModal.js"></script>
     <script src="partial/spatial/liveViewPanel/mapPanel/layerPanel/layerPanel.js"></script>
     <script src="partial/spatial/reportsPanel/reportsList/reportsList.js"></script>
     <script src="service/reporting/reportRestService.js"></script>
@@ -333,12 +342,12 @@ copy of the GNU General Public License along with the IFDM Suite. If not, see <h
     <script src="service/alarms/ruleService.js"></script>
     <script src="directive/common/showIfAllowed/showIfAllowed.js"></script>
     <script src="partial/spatial/reportsPanel/reportForm/vesselFieldset/detailsModal/detailsModal.js"></script>
-    <script src="partial/spatial/reportsPanel/reportForm/areasSelectionModal/areasSelectionModal.js"></script>
+    <script src="partial/spatial/reportsPanel/reportForm/areasSelectionFieldset/areasSelectionFieldset.js"></script>
     <script src="directive/spatial/layerMenu/layerMenu.js"></script>
     <script src="filter/vessel/vesselFilters.js"></script>
     <script src="service/alarms/alarmRestService.js"></script>
     <script src="service/spatial/spatialRestService.js"></script>
-    <script src="partial/spatial/reportsPanel/reportForm/areasSelectionModal/areaModel.js"></script>
+    <script src="partial/spatial/reportsPanel/reportForm/areasSelectionFieldset/areaModel.js"></script>
     <script src="service/common/httpPendingRequestsService.js"></script>
     <script src="directive/common/searchResultsPagination/searchResultsPagination.js"></script>
     <script src="service/spatial/csvWKTService.js"></script>
@@ -399,7 +408,7 @@ copy of the GNU General Public License along with the IFDM Suite. If not, see <h
 	<script src="directive/spatial/copyrightPanel/copyrightPanel.js"></script>
 	<script src="service/spatial/spatialConfigAlertService.js"></script>
 	<script src="partial/spatial/configurations/visibilitySettings/tracksVisibility/tracksVisibility.js"></script>
-	<script src="partial/spatial/liveViewPanel/vmsPanel/vmsVisibilityService.js"></script>
+	<script src="service/spatial/visibilityService.js"></script>
 	<script src="partial/spatial/configurations/vmsStyles/generalStyles/countryStyles/countryStyles.js"></script>
 	<script src="partial/areas/areas.js"></script>
 	<script src="service/areas/areaMapService.js"></script>
@@ -445,7 +454,55 @@ copy of the GNU General Public License along with the IFDM Suite. If not, see <h
     <script src="partial/common/reportsPagination/reportsPagination.js"></script>
     <script src="directive/spatial/destroyMapScope/destroyMapScope.js"></script>
     <script src="directive/spatial/wmsPreview/wmsPreview.js"></script>
-
+    <script src="partial/spatial/reportsPanel/reportsListModal/reportsListModal.js"></script>
+    <script src="service/reporting/reportingNavigatorService.js"></script>
+    <script src="partial/admin/adminConfiguration/configurationMDR/configurationMDR.js"></script>
+    <script src="partial/activity/activity.js"></script>
+    <script src="service/activity/activityRestService.js"></script>
+    <script src="partial/activity/mdr/mdr.js"></script>
+    <script src="service/activity/mdrRestService.js"></script>
+    <script src="service/common/alertService.js"></script>
+    <script src="partial/activity/mdr/codeList/mdrCodeList.js"></script>
+    <script src="service/spatial/layerPanelService.js"></script>
+    <script src="directive/spatial/alarmsPreview/alarmsPreview.js"></script>
+    <script src="filter/activity/stActivityDateUtc.js"></script>
+    <script src="directive/spatial/stSimpleResetSearch/stSimpleResetSearch.js"></script>
+    <script src="directive/common/breadcrumbNavigator/breadcrumbNavigator.js"></script>
+    <script src="partial/activity/activityReportsList/activityReportsList.js"></script>
+    <script src="partial/activity/activityOverview/activityOverview.js"></script>
+    <script src="service/activity/activityService.js"></script>
+    <script src="partial/activity/activityDetails/activityDetails.js"></script>
+    <script src="partial/activity/advancedSearchForm/advancedSearchForm.js"></script>
+    <script src="partial/spatial/tripsPanel/tripsPanel.js"></script>
+    <script src="partial/spatial/tripsPanel/tripsList/tripsList.js"></script>
+    <script src="partial/spatial/tripsPanel/tripSummary/tripSummary.js"></script>
+    <script src="service/activity/tripSummaryService.js"></script>
+    <script src="partial/spatial/tripsPanel/tripModel.js"></script>
+    <script src="directive/activity/mapTile/mapTile.js"></script>
+    <script src="directive/activity/catchPanel/catchPanel.js"></script>
+    <script src="directive/activity/cronologyPanel/cronologyPanel.js"></script>
+    <script src="directive/activity/fishingTripPanel/fishingTripPanel.js"></script>
+    <script src="directive/activity/rolesPanel/rolesPanel.js"></script>
+    <script src="directive/activity/tripReportsPanel/tripReportsPanel.js"></script>
+    <script src="directive/activity/vesselPanel/vesselPanel.js"></script>
+    <script src="directive/activity/rolesPanel/rolesCarousel/rolesCarousel.js"></script>
+    <script src="filter/activity/stPurposeCode.js"></script>
+    <script src="filter/activity/stArrayToString.js"></script>
+    <script src="filter/activity/stVessekIdsToColumns.js"></script>
+	<script src="directive/activity/tripOverviewPanel/tripOverviewPanel.js"></script>
+    <script src="partial/spatial/tripsPanel/catchDetails/catchDetails.js"></script>
+    <script src="filter/activity/stMDRCodeLists.js"></script>
+    <script src="partial/spatial/reportsPanel/reportForm/activityFiltersFieldset/activityFiltersFieldset.js"></script>
+    <script src="partial/activity/departurePanel/departurePanel.js"></script>
+    <script src="service/activity/fishingActivityService.js"></script>
+    <script src="partial/activity/departurePanel/departureModel.js"></script>
+    <script src="directive/activity/activitySummaryTile/activitySummaryTile.js"></script>
+    <script src="directive/activity/locationTile/locationTile.js"></script>
+    <script src="directive/activity/faReportDocTile/faReportDocTile.js"></script>
+    <script src="directive/activity/carouselTile/carouselTile.js"></script>
+    <script src="directive/activity/catchClassDetailTile/catchClassDetailTile.js"></script>
+    <script src="partial/spatial/tripsPanel/tripDeparturePanel/tripDeparturePanel.js"></script>
+    
     <script src="debugConfig.js"></script>
     <!-- Add New Component JS Above -->
 
@@ -461,6 +518,6 @@ copy of the GNU General Public License along with the IFDM Suite. If not, see <h
         </div>
     </div>
 
-    <div ui-view name="unionvmsFooter"></div>
+    <div ui-view name="unionvmsFooter" ng-if="currentStateName !== 'app.reporting' && currentStateName !== 'app.reporting-id' && currentStateName !== 'app.areas'"></div>
 </body>
 </html>

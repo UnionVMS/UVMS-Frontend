@@ -1,5 +1,5 @@
 /*
-﻿Developed with the contribution of the European Commission - Directorate General for Maritime Affairs and Fisheries
+Developed with the contribution of the European Commission - Directorate General for Maritime Affairs and Fisheries
 © European Union, 2015-2016.
 
 This file is part of the Integrated Fisheries Data Management (IFDM) Suite. The IFDM Suite is free software: you can
@@ -18,10 +18,10 @@ angular.module('unionvmsWeb')
         scope: {
             mobileTerminal : '=',
             transporderSystems : '=',
-            modeltype : '=', 
+            modeltype : '=',
             createNew : '=',
             vesselId : '=',
-            callback : '=', 
+            callback : '=',
             ngDisabled : '='
         },
 		templateUrl: 'directive/mobileTerminal/mobileTerminalDetails/mobileTerminalDetails.html',
@@ -61,7 +61,7 @@ angular.module('unionvmsWeb')
            $scope.formScope = scope;
         }
 
-        //Set status - Disabled 
+        //Set status - Disabled
         $scope.disableForm = function(){
             if(angular.isDefined($scope.mobileTerminal) && !$scope.ngDisabled && checkAccessToFeature('manageMobileTerminals')){
                 return false;
@@ -74,12 +74,12 @@ angular.module('unionvmsWeb')
             if($scope.modeltype === 'VESSEL' && !$scope.isCreateNewMode()){
                 if(!$scope.mobileTerminal.associatedVessel || $scope.mobileTerminal.archived) {
                     return false;
-                } 
-            } 
+                }
+            }
             return true;
         };
 
-        //Set status - Create New 
+        //Set status - Create New
         $scope.isCreateNewMode = function(){
             if($scope.mobileTerminal.guid) {
                 return false;
@@ -90,7 +90,7 @@ angular.module('unionvmsWeb')
         //Set header text on menu bar
         $scope.getMenuHeader = function(){
             if($scope.isCreateNewMode()){
-                return $filter('i18n')('mobileTerminal.add_new_form_mobile_terminal_label'); 
+                return $filter('i18n')('mobileTerminal.add_new_form_mobile_terminal_label');
             }
             return $filter('transponderName')($scope.mobileTerminal.type);
         };
@@ -144,7 +144,7 @@ angular.module('unionvmsWeb')
                 if(angular.isDefined(selectedLabelName) && angular.isDefined(selectedServiceName)){
                     $scope.mobileTerminal.plugin.labelName = selectedLabelName;
                     $scope.mobileTerminal.plugin.serviceName = selectedServiceName;
-                    
+
                     //Set LES_DESCRIPTION if attribute is used for the channel, otherwise set to undefined
                     $.each($scope.mobileTerminal.channels, function(index, channel){
                         if($scope.getTerminalConfig().channelFields.LES_DESCRIPTION){
@@ -236,7 +236,7 @@ angular.module('unionvmsWeb')
         //Update Mobile Terminal - Error
         var updateMobileTerminalError = function(error){
             alertService.showErrorMessage(locale.getString('mobileTerminal.add_new_alert_message_on_error'));
-        };     
+        };
 
         //Archive Mobile Terminal - Add Comment
         $scope.archiveMobileTerminal = function() {
@@ -285,14 +285,14 @@ angular.module('unionvmsWeb')
         //Unassign Mobile Terminal - Request
         $scope.unassignVesselWithComment = function(comment){
             mobileTerminalRestService.unassignMobileTerminal($scope.mobileTerminal, comment)
-                .then(unassignMobileTerminalSuccess, unassignMobileTerminalError); 
+                .then(unassignMobileTerminalSuccess, unassignMobileTerminalError);
         };
 
         //Unassign Mobile Terminal - Success
         var unassignMobileTerminalSuccess = function(){
             $scope.mobileTerminal.unassign();
             alertService.showSuccessMessageWithTimeout(locale.getString('mobileTerminal.unassign_vessel_message_on_success'));
-            
+
             if($scope.modeltype === 'VESSEL') {
                 $scope.callback.updateMobileTerminals();
             }
@@ -357,7 +357,7 @@ angular.module('unionvmsWeb')
                         return true;
                     }
                 }
-            }, 
+            },
             defaultReporting: function(index) {
                 for (var i = 0; i < $scope.mobileTerminal.channels.length; i++) {
                     if ($scope.mobileTerminal.channels[i].capabilities.DEFAULT_REPORTING === true) {
@@ -386,7 +386,7 @@ angular.module('unionvmsWeb')
             showCancel: function() {
                 if ($scope.modeltype === 'MOBILE_TERMINAL') {
                     return true;
-                } 
+                }
                 return false;
             },
             exportToCsvCallback: $scope.exportTerminalCSV,
@@ -395,7 +395,7 @@ angular.module('unionvmsWeb')
                     return angular.isDefined(mobileTerminal.guid) && mobileTerminal.guid != null;
                 }
                 return false;
-            }, 
+            },
             archiveCallback: $scope.archiveMobileTerminal,
             showArchive: function(mobileTerminal) {
                 if (mobileTerminal && checkAccessToFeature('manageMobileTerminals')) {
@@ -416,7 +416,7 @@ angular.module('unionvmsWeb')
                     return angular.isDefined(mobileTerminal.guid) && mobileTerminal.guid != null;
                 }
                 return false;
-            }, 
+            },
             isNotAllowed: function(mobileTerminal) {
                 if (mobileTerminal && checkAccessToFeature('manageMobileTerminals')) {
                     return false;

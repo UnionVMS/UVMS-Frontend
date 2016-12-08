@@ -1,5 +1,5 @@
 /*
-﻿Developed with the contribution of the European Commission - Directorate General for Maritime Affairs and Fisheries
+Developed with the contribution of the European Commission - Directorate General for Maritime Affairs and Fisheries
 © European Union, 2015-2016.
 
 This file is part of the Integrated Fisheries Data Management (IFDM) Suite. The IFDM Suite is free software: you can
@@ -8,7 +8,7 @@ Free Software Foundation, either version 3 of the License, or any later version.
 the hope that it will be useful, but WITHOUT ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or
 FITNESS FOR A PARTICULAR PURPOSE.  See the GNU General Public License for more details. You should have received a
 copy of the GNU General Public License along with the IFDM Suite. If not, see <http://www.gnu.org/licenses/>.
- */
+*/
 span.fancytree-icon, span.fancytree-checkbox, span.fancytree-expander, span.fancytree-radio, span.fancytree-custom-icon {
   margin-top: 4px;
   color: @primaryColor;
@@ -34,17 +34,17 @@ span.fancytree-clickable {
   color: @profileColor_darkgray;
   font-size: 13px;
   line-height: 25px;
-  &.fa-info-circle,
-  &.fa-tags,
+  &.fa-tag,
+  &.fancytree-vector-options,
   &.fancytree-context-menu-btn {
   	position: absolute;
   }
-  &.fa-info-circle {
-  	right: 25px;
-  }
-  &.fa-tags,
+  &.fancytree-vector-options,
   &.fancytree-context-menu-btn {
   	right: 5px;
+  }
+  &.fa-tag {
+    right: 20px;
   }
   &.fancytree-context-menu-btn.context-menu-active {
     color: @primaryColor !important;
@@ -82,10 +82,14 @@ span.fancytree-clickable.label-selected-vmsseg {
   }
   span.fancytree-title {
     padding-left: 22px !important;
+    padding-right: 40px;
   }
 }
 
 ul.fancytree-container.ui-fancytree {
 	font-family: Roboto, Arial;
-	font-size: 15px;
+	font-size: 14px;
+  border: none;
+  overflow: initial;
 }
+

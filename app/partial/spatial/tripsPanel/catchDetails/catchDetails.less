@@ -1,0 +1,87 @@
+/*
+Developed with the contribution of the European Commission - Directorate General for Maritime Affairs and Fisheries
+© European Union, 2015-2016.
+
+This file is part of the Integrated Fisheries Data Management (IFDM) Suite. The IFDM Suite is free software: you can
+redistribute it and/or modify it under the terms of the GNU General Public License as published by the
+Free Software Foundation, either version 3 of the License, or any later version. The IFDM Suite is distributed in
+the hope that it will be useful, but WITHOUT ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or
+FITNESS FOR A PARTICULAR PURPOSE.  See the GNU General Public License for more details. You should have received a
+copy of the GNU General Public License along with the IFDM Suite. If not, see <http://www.gnu.org/licenses/>.
+*/
+.catch-details{
+    .btn-trip-quit {
+        top: 15px;
+        right: 19px;
+    }
+    .btn-print {
+        right: 21px;
+        top: 45px;
+    }
+    .catch-fieldset{
+        padding: 10px 0px 0px 10px;
+    
+        .catch-legend{
+            margin-bottom: 0px;
+        }
+    }
+    .catch-details-container{
+        margin-top:-20px;
+        padding: 20px 40px 0 0;
+        overflow-y:auto;
+        width:100%;
+        height: calc(~"100vh - 150px");
+    }
+    .table-container {
+        margin-top: 20px;
+        table {
+            border: 0;
+            thead {
+                &:first-child {
+                    tr:first-child {
+                        border-bottom: 0;
+                        th {
+                            border-top: 1px solid #ddd;
+                            &.invisible-header {
+                                border-top-width: 0;
+                            }
+                        }
+                    }
+                }
+                .table-title{
+                    text-align: left;
+                    position: relative;
+                    span {
+                        position: absolute;
+                        bottom: 0;
+                        font-size: 20px;
+                        text-transform: none;
+                    }
+                }
+                .upperHeader,
+                .species-code {
+                    text-transform: uppercase;
+                }
+            }
+            tr {
+                th,
+                td {
+                    text-align: center;
+                }
+                .global-table-attr {
+                    text-align: left;
+                }
+                .invisible-header {
+                    border-top: 0;
+                    border-left: 0;
+                    cursor: default;
+                }
+                .total-col {
+                    text-align: right;
+                    font-weight: bold;
+                    padding-right: 15px;
+                }
+            }
+        }
+    }
+}

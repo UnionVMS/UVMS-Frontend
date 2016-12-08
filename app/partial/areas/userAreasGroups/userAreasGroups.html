@@ -1,5 +1,5 @@
 <!--
-﻿Developed with the contribution of the European Commission - Directorate General for Maritime Affairs and Fisheries
+Developed with the contribution of the European Commission - Directorate General for Maritime Affairs and Fisheries
 © European Union, 2015-2016.
 
 This file is part of the Integrated Fisheries Data Management (IFDM) Suite. The IFDM Suite is free software: you can
@@ -18,7 +18,7 @@ copy of the GNU General Public License along with the IFDM Suite. If not, see <h
 				<label class="label-combo-inline" for="editingProjection">{{'spatial.area_selection_modal_area_type_label' | i18n}}</label>
 			</div>
 			<div class="col-md-9">
-				<combobox ng-model="areaGroup.type" items="areaHelper.userAreasGroups" initialtext="{{'spatial.area_selection_modal_area_type_label' | i18n | uppercase}}" uppercase="true" ng-required="true" ng-change="getAreasByType()" components-with-scroll="'#group-area-form-container'" is-loading="areaHelper.isLoadingAreaTypes"></combobox>
+				<combobox ng-model="areaGroup.type" items="areaHelper.userAreasGroups" initialtext="{{'spatial.area_selection_modal_area_type_label' | i18n | uppercase}}" uppercase="true" ng-required="true" ng-change="getAreasByType()" is-loading="areaHelper.isLoadingAreaTypes" dest-combo-list="#areaManagement"></combobox>
 			</div>
             <button type="button" class="btn btn-primary btn-xs edit-areagroup-btn" ng-click="openAreaGroupEditorModal()" ng-disabled="!areaGroup.type" title="{{'areas.edit_area_group' | i18n}}"><i class="fa fa-pencil" aria-hidden="true"></i></button>
 		</div>
@@ -34,12 +34,12 @@ copy of the GNU General Public License along with the IFDM Suite. If not, see <h
 			<div class="thead col-md-12">
                 <div class="tr row stColumnHeaders">
                     <div class="th col-md-4" st-sort="name" st-skip-natural="true" st-class-ascent="sorting_asc" st-class-descent="sorting_desc">{{'areas.area_list_table_name_header' | i18n}}</div>
-                    <div class="th col-md-6"st-sort="desc" st-skip-natural="true" st-class-ascent="sorting_asc" st-class-descent="sorting_desc">{{'areas.area_list_table_desc_header' | i18n}}</div>
+                    <div class="th col-md-6" st-sort="desc" st-skip-natural="true" st-class-ascent="sorting_asc" st-class-descent="sorting_desc">{{'areas.area_list_table_desc_header' | i18n}}</div>
                     <div class="th col-md-2"></div>
                 </div>
-                <div class="tr row" ng-show="tableLoading">
+                <!-- <div class="tr row" ng-show="tableLoading">
                     <div class="th col-md-12 loading-spinner-cl"><i class="fa fa-spinner fa-spin loading-spinner"></i></div>
-                </div>
+                </div> -->
                 <div class="tr row" ng-show="!tableLoading && !displayedUserAreas.length">
                     <div class="th col-md-12"><table-alert type="'info'" msg="'areas.table_no_data'" visible="!displayedUserAreas.length && !tableLoading"></table-alert></div>
                 </div>
@@ -65,3 +65,4 @@ copy of the GNU General Public License along with the IFDM Suite. If not, see <h
 	</div>
 		
 </div>
+

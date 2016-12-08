@@ -1,5 +1,5 @@
 <!--
-﻿Developed with the contribution of the European Commission - Directorate General for Maritime Affairs and Fisheries
+Developed with the contribution of the European Commission - Directorate General for Maritime Affairs and Fisheries
 © European Union, 2015-2016.
 
 This file is part of the Integrated Fisheries Data Management (IFDM) Suite. The IFDM Suite is free software: you can
@@ -19,11 +19,11 @@ copy of the GNU General Public License along with the IFDM Suite. If not, see <h
 							{{'spatial.visibility_configuration_table' | i18n}}
 							<input type="checkbox" ng-model="selectAll.positions.table" ng-change="selectAllChange('positions','table')">
 						</th>
-						<th ng-if="settingsLevel !== 'report' || (settingsLevel === 'report' && hasMap)">
+						<th ng-if="settingsLevel !== 'report' || (settingsLevel === 'report' && (components.map || components.visibility.position))">
 							{{'spatial.visibility_configuration_popup' | i18n}}
 							<input type="checkbox" ng-model="selectAll.positions.popup" ng-change="selectAllChange('positions','popup')">
 						</th>
-						<th ng-if="settingsLevel !== 'report' || (settingsLevel === 'report' && hasMap)">
+						<th ng-if="settingsLevel !== 'report' || (settingsLevel === 'report' && (components.map || components.visibility.position))">
 							{{'spatial.visibility_configuration_label' | i18n}}
 							<input type="checkbox" ng-model="selectAll.positions.label" ng-change="selectAllChange('positions','label')">
 						</th>
@@ -47,7 +47,7 @@ copy of the GNU General Public License along with the IFDM Suite. If not, see <h
 								</li>
 							</ul>
 						</td>
-						<td ng-if="settingsLevel !== 'report' || (settingsLevel === 'report' && hasMap)">
+						<td ng-if="settingsLevel !== 'report' || (settingsLevel === 'report' && (components.map || components.visibility.position))">
 							<ul dnd-list="configModel.visibilitySettings.positionPopupAttrs" dnd-allowed-types="['Popup']">
 								<li ng-repeat="attr in configModel.visibilitySettings.positionPopupAttrs"
 								dnd-draggable="attr"
@@ -60,7 +60,7 @@ copy of the GNU General Public License along with the IFDM Suite. If not, see <h
 								</li>
 							</ul>
 						</td>
-						<td ng-if="settingsLevel !== 'report' || (settingsLevel === 'report' && hasMap)">
+						<td ng-if="settingsLevel !== 'report' || (settingsLevel === 'report' && (components.map || components.visibility.position))">
 							<ul dnd-list="configModel.visibilitySettings.positionLabelAttrs" dnd-allowed-types="['Label']">
 								<li ng-repeat="attr in configModel.visibilitySettings.positionLabelAttrs"
 								dnd-draggable="attr"
@@ -76,11 +76,11 @@ copy of the GNU General Public License along with the IFDM Suite. If not, see <h
 					</tr>
 					<tr ng-if="!isPositionVisLoading">
 						<td></td>
-						<td class="is-attr-visible-row" ng-if="settingsLevel !== 'report' || (settingsLevel === 'report' && hasMap)">
+						<td class="is-attr-visible-row" ng-if="settingsLevel !== 'report' || (settingsLevel === 'report' && (components.map || components.visibility.position))">
 							<span>{{'spatial.visibility_show_attr_names' | i18n}}</span>
 							<input type="checkbox" ng-model="configModel.visibilitySettings.positions.popup.isAttributeVisible">
 						</td>
-						<td class="is-attr-visible-row" ng-if="settingsLevel !== 'report' || (settingsLevel === 'report' && hasMap)">
+						<td class="is-attr-visible-row" ng-if="settingsLevel !== 'report' || (settingsLevel === 'report' && (components.map || components.visibility.position))">
 							<span>{{'spatial.visibility_show_attr_names' | i18n}}</span>
 							<input type="checkbox" ng-model="configModel.visibilitySettings.positions.labels.isAttributeVisible">
 						</td>
@@ -90,3 +90,4 @@ copy of the GNU General Public License along with the IFDM Suite. If not, see <h
 		</div>
     </div>
 </div>
+

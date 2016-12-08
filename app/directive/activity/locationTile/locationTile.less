@@ -1,0 +1,77 @@
+/*
+Developed with the contribution of the European Commission - Directorate General for Maritime Affairs and Fisheries
+© European Union, 2015-2016.
+
+This file is part of the Integrated Fisheries Data Management (IFDM) Suite. The IFDM Suite is free software: you can
+redistribute it and/or modify it under the terms of the GNU General Public License as published by the
+Free Software Foundation, either version 3 of the License, or any later version. The IFDM Suite is distributed in
+the hope that it will be useful, but WITHOUT ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or
+FITNESS FOR A PARTICULAR PURPOSE.  See the GNU General Public License for more details. You should have received a
+copy of the GNU General Public License along with the IFDM Suite. If not, see <http://www.gnu.org/licenses/>.
+*/
+.location-tile {
+    height: 100%;
+    position: relative;
+    .fieldsetLegendStyle {
+        margin-bottom: 10px !important;
+    }
+    .container {
+        height: calc(~'100% - 20px');
+        .col-md-12 {
+            top: 50%;
+            transform: translateY(-50%);
+            &.clickable {
+                cursor: pointer;
+            }
+        }
+    }
+    .container-multiple {
+        position: absolute;
+        top: 30px;
+        bottom: 0;
+        left: 0;
+        right: 15px;
+        overflow-y: auto;
+    }
+    .icon-container {
+        text-align: center;
+        margin-bottom: 10px;
+        i {
+            font-size: 10vw;
+            color: #505050;
+        }
+    }
+    .name {
+        text-align: center;
+    }
+    .location-list {
+        text-align: center;
+        li {
+            cursor: default;
+            &.item-clickable {
+                cursor: pointer;
+                &:hover {
+                    text-decoration: underline;
+                }
+            }
+        }
+    }
+    .no-data {
+        text-align: center;
+        top: 0;
+        bottom: 0;
+        left: 15px;
+        right: 15px;
+        position: absolute;
+        div {
+            display: table;
+            height: 100%;
+            span {
+                display: table-cell;
+                vertical-align: middle;
+                font-size: 22px;
+                color: #ddd;
+            }
+        }
+    }
+}
