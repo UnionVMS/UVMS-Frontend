@@ -12,7 +12,7 @@
 angular.module('unionvmsWeb').directive('catchPanel', function(loadingStatus, activityRestService, $anchorScroll, locale, tripSummaryService, reportingNavigatorService) {
     return {
         restrict: 'E',
-        replace: true,
+        replace: false,
         scope: {
             ngModel: '=',
             withTable: '@',
@@ -68,20 +68,7 @@ angular.module('unionvmsWeb').directive('catchPanel', function(loadingStatus, ac
                 return specieWeight + weightUnit + ' (' + value.toFixed(2) + '%)';
             };
 
-			/**
-			 * Callback function to refresh the charts after their loading
-			 * 
-			 * @memberof catchPanel
-			 * @public
-			 * @param {Object} scope - nvd3 directive scope
-			 * @param {Object} element - chart element
-			 */
-            scope.callback = function(scope, element) {
-                //to resize the chart after it's loaded
-                scope.api.refresh();
-            };
-
-            //when tthe trip is initialized
+            //when the trip is initialized
             scope.$watch('ngModel', function() {
                 init();
             });
