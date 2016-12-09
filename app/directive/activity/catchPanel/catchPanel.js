@@ -2,14 +2,17 @@
  * @memberof unionvmsWeb
  * @ngdoc directive
  * @name catchPanel
- * @attr {unionvmsWeb.Trip} ngModel - current trip in trip summary.
- * @attr {Object} tripAlert - trip alert state.
- * @attr {Object} fieldData - data for subtitles,tableShown,colwidth.
- * @attr {Object} title - title for the catch Panel.
+ * @param locale {Service} The angular locale service
+ * @attr {Object} ngModel - The data object used as input for the directive
+ * @attr {Boolean} withTable - Whether the panel should include or not a data table
+ * @attr {String} title - title for the catch panel
+ * @attr {Boolean} isLoading - Whether teh parent container is still loading or not
+ * @attr {String} unit - The weight unit to be used for the directive
+ * @attr {Number} height - The height for the chart
  * @description
- *  A reusable tile that will display the catch details(overview) related to the current trip
+ *  A reusable tile that will display two pie charts side-by-side, and optionally a table and caption for the input data 
  */
-angular.module('unionvmsWeb').directive('catchPanel', function(loadingStatus, activityRestService, $anchorScroll, locale, tripSummaryService, reportingNavigatorService) {
+angular.module('unionvmsWeb').directive('catchPanel', function(locale) {
     return {
         restrict: 'E',
         replace: false,
@@ -55,13 +58,14 @@ angular.module('unionvmsWeb').directive('catchPanel', function(loadingStatus, ac
             };
 
 			/**
-			 * function to calculate species Weight Percentage
+			 * function to calculate species Weight Percentage and return a string to be displayed in the chart tooltip
 			 * 
 			 * @memberof catchPanel
 			 * @public
-			 * @param {Object} specieWeight - individual specie weight.
-			 * @param {Object} weightType - unit of the weight.
-			 * @param {Object} totalWeight - total weight of the specie.
+			 * @alias formatWeight
+			 * @param {Object} specieWeight - individual species weight
+			 * @param {Object} weightType - weight unit
+			 * @param {Object} totalWeight - total weight for the species
 			 */
             scope.formatWeight = function(specieWeight, totalWeight, weightUnit) {
                 var value = specieWeight / totalWeight * 100;
