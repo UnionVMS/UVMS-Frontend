@@ -126,7 +126,7 @@ module.exports = function (grunt) {
                   //DIRECTIVES
                   'app/directive/common/breadcrumbNavigator',
                   'app/directive/activity/',
-                  
+
                   //FILTERS
                   'app/filter/activity/'
             ],
@@ -518,16 +518,16 @@ module.exports = function (grunt) {
       }
     }
   });
-  
+
   grunt.registerTask('sub-build',['htmlhint','jshint', 'less','dom_munger','ngtemplates','cssmin','concat','ngAnnotate','uglify','copy:dist','htmlmin','compress:dist','clean:after']);//,'clean:after'
 
-  grunt.registerTask('build', ['ngconstant:production', 'test', 'clean:before', 'copy:config', 'sub-build']);
-  grunt.registerTask('build-test', ['ngconstant:development', 'test', 'clean:before', 'copy:configTest','sub-build']);
-  grunt.registerTask('build-local', ['ngconstant:development', 'test', 'clean:before', 'copy:configLocal', 'test', 'sub-build']);
-  grunt.registerTask('build-cygnus', ['ngconstant:development', 'test', 'clean:before', 'copy:configCygnus', 'sub-build']);
-  grunt.registerTask('build-maven', ['ngconstant:development', 'test', 'clean:before', 'copy:configMaven', 'sub-build']);
-  grunt.registerTask('build-dev', ['ngconstant:development', 'test', 'clean:before', 'copy:configDev','sub-build']);
-  grunt.registerTask('test',['dom_munger:read', 'ngtemplates', 'karma:services', 'karma:controllers', 'karma:directives', 'karma:filters', 'clean:after']);
+  grunt.registerTask('build', ['test', 'ngconstant:production', 'clean:before', 'copy:config', 'sub-build']);
+  grunt.registerTask('build-test', ['test', 'ngconstant:development', 'clean:before', 'copy:configTest','sub-build']);
+  grunt.registerTask('build-local', ['test', 'ngconstant:development', 'clean:before', 'copy:configLocal', 'test', 'sub-build']);
+  grunt.registerTask('build-cygnus', ['test', 'ngconstant:development', 'clean:before', 'copy:configCygnus', 'sub-build']);
+  grunt.registerTask('build-maven', ['test', 'ngconstant:development', 'clean:before', 'copy:configMaven', 'sub-build']);
+  grunt.registerTask('build-dev', ['test', 'ngconstant:development', 'clean:before', 'copy:configDev','sub-build']);
+  grunt.registerTask('test',['ngconstant:development', 'dom_munger:read', 'ngtemplates', 'karma:services', 'karma:controllers', 'karma:directives', 'karma:filters', 'clean:after']);
 
   grunt.registerTask('default',['build-dev']);
   grunt.registerTask('serve-no-watch', ['dom_munger:read','jshint', 'configureProxies', 'configureRewriteRules', 'connect:development']);
@@ -537,20 +537,20 @@ module.exports = function (grunt) {
   grunt.registerTask('serve-copy', ['copy:serve', 'serve']);
   grunt.registerTask('build-docs', ['jsdoc']);
   grunt.registerTask('constants', ['ngconstant:development']);
-  
+
     grunt.event.on('watch', function(action, filepath) {
         if (filepath.lastIndexOf('.js') !== -1 && filepath.lastIndexOf('.js') === filepath.length - 3) {
-    
+
             //lint the changed js file
             grunt.config('jshint.main.src', filepath);
             grunt.task.run('jshint');
-    
+
             //find the appropriate unit test for the changed file
             var spec = filepath;
             if (filepath.lastIndexOf('-spec.js') === -1 || filepath.lastIndexOf('-spec.js') !== filepath.length - 8) {
                 spec = filepath.substring(0, filepath.length - 3) + '-spec.js';
             }
-    
+
             //if the spec exists then lets run it
             if (grunt.file.exists(spec)) {
                 //grunt.config('jasmine.unit.options.specs', spec);
@@ -563,23 +563,23 @@ module.exports = function (grunt) {
                     'test/envConfigForTest.js',
                     spec
                 ];
-    
+
                 grunt.config('karma.options.files', files);
                 grunt.task.run('karma:during_watch');
             }
         }
-    
+
         if (filepath.lastIndexOf('.htm') !== -1 && filepath.lastIndexOf('.htm') >= (filepath.length - 6)) {
             //lint the changed html file
             grunt.config('htmlhint.html.src', filepath);
             grunt.task.run('htmlhint');
         }
-    
+
         //if index.html changed, we need to reread the <script> tags so our next run of jasmine
         //will have the correct environment
         if (filepath === 'app\\index.html') {
             grunt.task.run('dom_munger:read');
         }
-    
+
     });
 };
