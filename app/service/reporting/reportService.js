@@ -1,3 +1,14 @@
+/*
+Developed with the contribution of the European Commission - Directorate General for Maritime Affairs and Fisheries
+© European Union, 2015-2016.
+
+This file is part of the Integrated Fisheries Data Management (IFDM) Suite. The IFDM Suite is free software: you can
+redistribute it and/or modify it under the terms of the GNU General Public License as published by the
+Free Software Foundation, either version 3 of the License, or any later version. The IFDM Suite is distributed in
+the hope that it will be useful, but WITHOUT ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or
+FITNESS FOR A PARTICULAR PURPOSE.  See the GNU General Public License for more details. You should have received a
+copy of the GNU General Public License along with the IFDM Suite. If not, see <http://www.gnu.org/licenses/>.
+*/
 angular.module('unionvmsWeb').factory('reportService',function($rootScope, $timeout, $interval, $anchorScroll, locale, TreeModel, reportRestService, reportFormService, spatialRestService, spatialHelperService, defaultMapConfigs, mapService, unitConversionService, visibilityService, mapAlarmsService, loadingStatus, spatialConfigRestService, SpatialConfig, Report, globalSettingsService, userService, reportingNavigatorService, $modalStack, layerPanelService) {
 
     var rep = {
@@ -314,7 +325,26 @@ angular.module('unionvmsWeb').factory('reportService',function($rootScope, $time
 	var getVmsDataSuccess = function(data){
 		rep.loadReportHistory();
 
-        data.trips = [{name: 'NOR-TRP-20160517234053706'},{name: 'NOR-TRP-20160517234053707'},{name: 'NOR-TRP-20160517234053708'}];
+        var trip = {
+            id: 'NOR-TRP-2016051723405370',
+            event: 'Arrival: 03-05-2016 14:20',
+            vesselId: 'vessel-guid-54515-16445',
+            duration: '5d 6h 30m',
+            nCorrections: 8,
+            nPositions: 20,
+            alarm: true,
+            extent: [17.149, 60.745, 18.174, 61.257]
+        };
+
+        data.trips = [];
+        for(var i=0;i<5;i++){
+            var newTrip = angular.copy(trip);
+            newTrip.id += i+6;
+            if(i%2){
+                newTrip.alarm = false;
+            }
+            data.trips.push(newTrip);
+        }
 
 		rep.positions = data.movements.features;
         rep.segments = data.segments.features;

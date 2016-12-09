@@ -1,3 +1,14 @@
+/*
+Developed with the contribution of the European Commission - Directorate General for Maritime Affairs and Fisheries
+© European Union, 2015-2016.
+
+This file is part of the Integrated Fisheries Data Management (IFDM) Suite. The IFDM Suite is free software: you can
+redistribute it and/or modify it under the terms of the GNU General Public License as published by the
+Free Software Foundation, either version 3 of the License, or any later version. The IFDM Suite is distributed in
+the hope that it will be useful, but WITHOUT ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or
+FITNESS FOR A PARTICULAR PURPOSE.  See the GNU General Public License for more details. You should have received a
+copy of the GNU General Public License along with the IFDM Suite. If not, see <http://www.gnu.org/licenses/>.
+*/
 /**
  * @memberof unionvmsWeb
  * @ngdoc service
@@ -16,15 +27,73 @@ angular.module('unionvmsWeb').factory('activityRestFactory', function ($resource
                 }
             });
         },
-        getActivityList: function () {
-            return $resource('/activity/rest/fa/list', {}, {
+        getActivityList: function (data) {
+            //TODO integrate service
+            /*return $resource('/activity/rest/fa/list', {}, {
                 'get': {
                     method: 'POST',
                     headers: {
                         'Content-Type': 'application/json'
                     }
                 }
-            });
+            });*/
+            var response = {
+                "resultList": [
+                    {
+                    "uniqueReportIdList": [
+                        {
+                        "fluxReportId": "New Id 1",
+                        "fluxReportSchemeId": "New scheme Id 1"
+                        }
+                    ],
+                    "faReportID": 2,
+                    "activityType": "FISHING_OPERATION",
+                    "occurence": "2016-06-08T13:53:00",
+                    "dataSource": "FLUX",
+                    "fromId": [
+                        "Owner flux party id 1"
+                    ],
+                    "fromName": "This is sample text for owner flux party",
+                    "vesselIdTypes": {
+                        "CFR": "ID 1"
+                    },
+                    "vesselTransportMeansName": "Test Name",
+                    "purposeCode": "5",
+                    "FAReportType": "DECLARATION",
+                    "areas": [
+                        "25.5b"
+                    ],
+                    "fishingGear": [
+                        "Code Type 1"
+                    ],
+                    "speciesCode": [
+                        "ONBOARD",
+                        "Species 1"
+                    ],
+                    "quantity": [
+                        123,
+                        123
+                    ],
+                    "startDate": "2011-07-01T11:14:00",
+                    "endDate": "2016-07-01T11:14:00",
+                    "hasCorrection": true,
+                    "fluxReportReferenceId": "ID 1",
+                    "fluxReportReferenceSchemeId": "fhty58-gh586t-5tjf8-t58rjewe"
+                    }
+                ],
+                "totalItemsCount": 80,
+                "code": 200
+            };
+
+            var offset = data.pagination.offset;
+            for(var i=0;i<24;i++){
+                var item = angular.copy(response.resultList[0]);
+                item.faReportID = offset + i + 3;
+                item.vesselIdTypes.CFR += offset + i;
+                response.resultList.push(item);
+            }
+
+            return response;
         },
         getReportHistory: function () {
             return $resource('/activity/rest/fa/history/:referenceId/:schemeId', {}, {
@@ -452,14 +521,17 @@ angular.module('unionvmsWeb').factory('activityRestFactory', function ($resource
              * @returns {Promise} A promise with either the list of activities or reject error
              */
             getActivityList: function (data) {
-                var deferred = $q.defer();
+                /*var deferred = $q.defer();
                 activityRestFactory.getActivityList().get(angular.toJson(data), function (response) {
                     deferred.resolve(response.data);
                 }, function (error) {
                     console.log('Error getting list of activity reports');
                     deferred.reject(error);
                 });
-                return deferred.promise;
+                return deferred.promise;*/
+
+                return activityRestFactory.getActivityList(data);
+
             },
             /**
     	     * Get the history for a FA report
@@ -606,3 +678,4 @@ angular.module('unionvmsWeb').factory('activityRestFactory', function ($resource
 
         return activityService;
     });
+

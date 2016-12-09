@@ -1,3 +1,14 @@
+/*
+Developed with the contribution of the European Commission - Directorate General for Maritime Affairs and Fisheries
+© European Union, 2015-2016.
+
+This file is part of the Integrated Fisheries Data Management (IFDM) Suite. The IFDM Suite is free software: you can
+redistribute it and/or modify it under the terms of the GNU General Public License as published by the
+Free Software Foundation, either version 3 of the License, or any later version. The IFDM Suite is distributed in
+the hope that it will be useful, but WITHOUT ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or
+FITNESS FOR A PARTICULAR PURPOSE.  See the GNU General Public License for more details. You should have received a
+copy of the GNU General Public License along with the IFDM Suite. If not, see <http://www.gnu.org/licenses/>.
+ */
 angular.module('auth.interceptor', ['ngStorage','ui.bootstrap'])
 
 /**
@@ -237,43 +248,54 @@ angular.module('auth.interceptor', ['ngStorage','ui.bootstrap'])
 						return rejection;
 					}
                     var userService = $injector.get('userService');
+                    var globalSettings = $injector.get('globalSettingsService');
 
-                    if (rejection.status === 403 && config.injectPanel && !unauth) {
+                    var forbidden = function(error) {
                         _log.log("Request rejected with status 403 and panel injection true");
-						unauth = true;
-						// Inject services
+                        unauth = true;
+                        // Inject services
                         var $state = $injector.get('$state');
                         var authRouter = $injector.get('authRouter');
                         _log.debug("Current State",$state.current);
-                        if($state.current && $state.current.name !== authRouter.getLogin()){
+                        if($state.current && $state.current.name !== authRouter.getLogin() && $state.current.name !== ""){
 
                         _log.log("injecting renewLoginPanel");
 
-						var Retry = $injector.get('renewloginpanel');
-						var $http = $injector.get('$http');
-						var $modalStack = $injector.get('$modalStack');
+                        var Retry = $injector.get('renewloginpanel');
+                        var $http = $injector.get('$http');
+                        var $modalStack = $injector.get('$modalStack');
 
-						return $timeout(angular.noop, 200).then(function () {
-							return Retry.show();
-						}).then(function () {
+                        return $timeout(angular.noop, 200).then(function () {
+                            return Retry.show();
+                        }).then(function () {
                             _log.log("retry request succeeded?");
-							unauth = false;
+                            unauth = false;
                             _log.debug($state.current);
-							$modalStack.dismissAll();
-							//$state.reload($state.current);
-							//$state.go($state.current, {}, {reload: true});
+                            $modalStack.dismissAll();
+                            //$state.reload($state.current);
+                            //$state.go($state.current, {}, {reload: true});
                             if (rejection.config.headers[config.authHeader]) {
                                 rejection.config.headers[config.authHeader] = null;
                             }
-								return $http(rejection.config);
-						}, function () {
-							$log.log("retry request failed?");
+                                return $http(rejection.config);
+                        }, function () {
+                            $log.log("retry request failed?");
                             unauth = true;
                             userService.logout();
-							$rootScope.$broadcast('authenticationNeeded');
-							return $q.reject(rejection);
-						});
+                            $modalStack.dismissAll();
+                            $rootScope.$broadcast('authenticationNeeded');
+                            return $q.reject(rejection);
+                        });
                         }
+                    };
+
+                    if (rejection.status === 403 && config.injectPanel && !unauth) {
+                        if (rejection.config.url.indexOf('config/rest/globals') !== -1) {
+                            forbidden();
+                        }
+                    	globalSettings.getSettingsFromServerWithoutUpdate().then(function(response){
+							return $q.reject(rejection);
+                    	}, forbidden);
                     } else if (rejection.status === 403 && !unauth) {
                         _log.log("Request rejected with status 403");
                         unauth = true;

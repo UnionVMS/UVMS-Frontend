@@ -1,3 +1,14 @@
+/*
+Developed with the contribution of the European Commission - Directorate General for Maritime Affairs and Fisheries
+© European Union, 2015-2016.
+
+This file is part of the Integrated Fisheries Data Management (IFDM) Suite. The IFDM Suite is free software: you can
+redistribute it and/or modify it under the terms of the GNU General Public License as published by the
+Free Software Foundation, either version 3 of the License, or any later version. The IFDM Suite is distributed in
+the hope that it will be useful, but WITHOUT ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or
+FITNESS FOR A PARTICULAR PURPOSE.  See the GNU General Public License for more details. You should have received a
+copy of the GNU General Public License along with the IFDM Suite. If not, see <http://www.gnu.org/licenses/>.
+*/
 angular.module('stateMock',[]);
 angular.module('stateMock').service("$state", function($q){
     this.current = {
@@ -13,19 +24,17 @@ describe('DeparturepanelCtrl', function() {
 	beforeEach(module('unionvmsWeb'));
 	beforeEach(module('stateMock'));
 
-	var scope,ctrl,mockState, $httpBackend, $state, mockRepFormServ, appStates;
+	var scope,ctrl,mockState, $httpBackend, $state, mockTripSumServ, appStates;
 	
 	beforeEach(function(){
 	    appStates = ['','app.reporting', 'app.reporting-id'];
 	    
-	    mockRepFormServ = {
-            currentReport: {
-                withMap: false
-            }
+	    mockTripSumServ = {
+            withMap: false
         };
         
         module(function($provide){
-            $provide.value('reportFormService', mockRepFormServ);
+            $provide.value('tripSummaryService', mockTripSumServ);
         });
 	});
 
@@ -42,7 +51,7 @@ describe('DeparturepanelCtrl', function() {
     }));
     
     function setWithMap(newState){
-        mockRepFormServ.currentReport.withMap = newState;
+        mockTripSumServ.withMap = newState;
     }
 
 	it('should allow a location to be clickable when report has map and the application is on the reporting router', inject(function() {

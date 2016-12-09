@@ -1,27 +1,70 @@
-.alert{
-    padding:15px;
+/*
+﻿Developed with the contribution of the European Commission - Directorate General for Maritime Affairs and Fisheries
+© European Union, 2015-2016.
 
-    .icon{
-        position: absolute;
-        top:5px;
-        text-align: center; 
-        color:#fff;
-        //.opacity(0.5);
-        font-size:2em;
-        width:30px;
+This file is part of the Integrated Fisheries Data Management (IFDM) Suite. The IFDM Suite is free software: you can
+redistribute it and/or modify it under the terms of the GNU General Public License as published by the
+Free Software Foundation, either version 3 of the License, or any later version. The IFDM Suite is distributed in
+the hope that it will be useful, but WITHOUT ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or
+FITNESS FOR A PARTICULAR PURPOSE.  See the GNU General Public License for more details. You should have received a
+copy of the GNU General Public License along with the IFDM Suite. If not, see <http://www.gnu.org/licenses/>.
+ */
+.alert {
+    .flexbox();
+    align-items: center;
+    padding: 12px;
+
+    .icon {
+        color: #fff;
+        font-size: 2em;
+        line-height: 0;
+        
+        i {
+            margin-right: 10px;
+        }
     }
 
-    .message{
-        position:relative;
-        padding-left:40px;
-        padding-right:40px;
+    .message {
         font-weight: bold;
     }
 
-    .close{
-        position: absolute;
-        right: 15px;
-        top:15px;
-        width:30px;
+    .close {
+        margin-left: auto;
+        line-height: 0;
+
+        i {
+            line-height: 0;
+        }
+    }
+
+    &.alert-actionbar {
+        background-color: @state-warning-bg;
+        border-color: @state-warning-border;
+        color: @state-warning-text;
+
+        .action-buttons {
+            margin-left: auto;
+
+            button {
+                text-transform: uppercase;
+                font-size: 1em;
+                line-height: 0;
+
+                &.cancel {
+                    background: #f2ae42;
+                    border: 1px solid darken(#f2ae42, 15%);
+                    color: #fff;
+
+                    i {
+                        margin-right: 3px;
+                    }
+
+                    &:hover, &:active, &:focus {
+                        background: darken(#f2ae42, 5%);
+                        border: 1px solid darken(#f2ae42, 20%);
+                    }
+                }
+            }
+        }
     }
 }

@@ -1,3 +1,14 @@
+/*
+Developed with the contribution of the European Commission - Directorate General for Maritime Affairs and Fisheries
+© European Union, 2015-2016.
+
+This file is part of the Integrated Fisheries Data Management (IFDM) Suite. The IFDM Suite is free software: you can
+redistribute it and/or modify it under the terms of the GNU General Public License as published by the
+Free Software Foundation, either version 3 of the License, or any later version. The IFDM Suite is distributed in
+the hope that it will be useful, but WITHOUT ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or
+FITNESS FOR A PARTICULAR PURPOSE.  See the GNU General Public License for more details. You should have received a
+copy of the GNU General Public License along with the IFDM Suite. If not, see <http://www.gnu.org/licenses/>.
+ */
 angular.module('unionvmsWeb').controller('MobileTerminalCtrl',function($scope, $filter, searchService, alertService, MobileTerminal, SystemTypeAndPlugin, mobileTerminalRestService, pollingService, GetPollableListRequest, pollingRestService, configurationService, $location, locale, $stateParams, csvService, SearchResults, userService){
 
     $scope.hideAlertsOnScopeDestroy = true;
@@ -10,6 +21,10 @@ angular.module('unionvmsWeb').controller('MobileTerminalCtrl',function($scope, $
     $scope.isVisible = {
         search : true,
         mobileTerminalForm : false
+    };
+
+    $scope.createMobileTerminalWithVessel = {
+        visible : false
     };
 
     $scope.currentSearchResults = new SearchResults('', false, locale.getString('mobileTerminal.search_zero_results_error'));
@@ -26,7 +41,6 @@ angular.module('unionvmsWeb').controller('MobileTerminalCtrl',function($scope, $
 
 
     $scope.transponderSystems = [];
-    $scope.channelNames = [];
     $scope.currentMobileTerminal = undefined;
 
     //Toggle (show/hide) new mobile terminal
@@ -109,7 +123,7 @@ angular.module('unionvmsWeb').controller('MobileTerminalCtrl',function($scope, $
         });
     };
 
-    //Init function when entering page
+    //Init function when entering mobile terminal page
     var init = function(){
         searchService.reset();
 
@@ -138,24 +152,12 @@ angular.module('unionvmsWeb').controller('MobileTerminalCtrl',function($scope, $
             $scope.searchMobileTerminals();
         }
 
-
-
         //Get list transponder systems
         if(angular.isDefined(configurationService.getConfig('MOBILE_TERMINAL_TRANSPONDERS'))){
             $scope.transpondersConfig = configurationService.getConfig('MOBILE_TERMINAL_TRANSPONDERS');
             $scope.createTransponderSystemDropdownOptions();
         }else{
             alertService.showErrorMessage(locale.getString('mobileTerminal.add_new_alert_message_on_load_transponders_error'));
-        }
-
-        //Get list of channelNames
-        $scope.channelNames = [];
-        if(angular.isDefined(configurationService.getConfig('MOBILE_TERMINAL_TRANSPONDERS'))){
-            $.each(configurationService.getConfig('MOBILE_TERMINAL_CHANNELS'), function(index, name){
-                $scope.channelNames.push({text : name, code : name});
-            });
-        }else{
-            alertService.showErrorMessage(locale.getString('mobileTerminal.add_new_alert_message_on_load_channel_names_error'));
         }
     };
 
@@ -361,6 +363,10 @@ angular.module('unionvmsWeb').controller('MobileTerminalCtrl',function($scope, $
         }
     });
 
-    init();
+    $scope.$on("createMobileTerminalWithVessel", function(e) {
+        $scope.$emit($scope.toggleAddNewMobileTerminal());
+        $scope.createMobileTerminalWithVessel.visible = !$scope.createMobileTerminalWithVessel.visible;
+    });
 
+    init();
 });

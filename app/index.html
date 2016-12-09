@@ -1,10 +1,21 @@
+﻿<!--
+﻿Developed with the contribution of the European Commission - Directorate General for Maritime Affairs and Fisheries
+© European Union, 2015-2016.
+
+This file is part of the Integrated Fisheries Data Management (IFDM) Suite. The IFDM Suite is free software: you can
+redistribute it and/or modify it under the terms of the GNU General Public License as published by the
+Free Software Foundation, either version 3 of the License, or any later version. The IFDM Suite is distributed in
+the hope that it will be useful, but WITHOUT ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or
+FITNESS FOR A PARTICULAR PURPOSE.  See the GNU General Public License for more details. You should have received a
+copy of the GNU General Public License along with the IFDM Suite. If not, see <http://www.gnu.org/licenses/>.
+-->
 <!DOCTYPE html>
 <html>
 <head>
     <title page-title>UnionVMS</title>
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
 	<meta charset="utf-8">
-    <link href="app.less" type="text/css" rel="stylesheet/less">
+    <link href="app.css" type="text/css" rel="stylesheet">
     <link href='https://fonts.googleapis.com/css?family=Roboto' rel='stylesheet' type='text/css' data-concat="false" data-remove="false">
 </head>
 <body>
@@ -88,6 +99,7 @@
     <script src="app.js"></script>
 
     <script src="directive/common/datepickerInput/datepickerInput.js"></script>
+    <script src="directive/common/deepBlur/deepBlur.js"></script>
     <script src="directive/common/dropdown/dropdown.js"></script>
     <script src="directive/common/inputValidationMessage/inputValidationMessage.js"></script>
     <script src="directive/common/periodInput/periodInput.js"></script>
@@ -102,12 +114,15 @@
     <script src="directive/common/validation/customValidators.js"></script>
     <script src="directive/common/loadingIndicator/loadingIndicator.js"></script>
     <script src="directive/common/resize/resize.js"></script>
+    <script src="directive/common/menuBar/menuBar.js"></script>
     <script src="directive/spatial/layerTree/layerTree.js"></script>
     <script src="directive/common/transformInput/unitTransformers.js"></script>
     <script src="directive/common/pageTitle/pageTitle.js"></script>
 
     <script src="directive/polling/newPollWizardProgress/newPollWizardProgress.js"></script>
     <script src="directive/vessel/vesselDetails/vesselDetails.js"></script>
+    <script src="directive/vessel/vesselNotes/vesselNotes.js"></script>
+    <script src="directive/mobileTerminal/mobileTerminalDetails/mobileTerminalDetails.js"></script>
 
     <script src="partial/alerts/alerts.js"></script>
     <script src="partial/footer/footer.js"></script>
@@ -116,7 +131,6 @@
 
     <script src="partial/mobileTerminal/assignVessel/assignVessel.js"></script>
     <script src="partial/mobileTerminal/mobileTerminal.js"></script>
-    <script src="partial/mobileTerminal/mobileTerminalDetails/mobileTerminalDetails.js"></script>
     <script src="partial/mobileTerminal/mobileTerminalForm/mobileTerminalForm.js"></script>
     <script src="partial/mobileTerminal/mobileTerminalHistoryModal/mobileTerminalHistoryModal.js"></script>
     <script src="partial/mobileTerminal/mobileTerminalList/mobileTerminalList.js"></script>
@@ -133,6 +147,7 @@
     <script src="partial/common/saveSearchModal/saveSearchModal.js"></script>
     <script src="partial/vessel/vessel.js"></script>
     <script src="partial/vessel/vesselHistory/vesselHistoryModal/vesselHistoryModal.js"></script>
+    <script src="partial/vessel/vesselNotes/vesselNotesModal/vesselNotesModal.js"></script>
     <script src="partial/vessel/vesselList/vesselList.js"></script>
     <script src="partial/vessel/vesselForm/vesselForm.js"></script>
 
@@ -169,6 +184,8 @@
     <script src="service/vessel/model/eventHistoryModel.js"></script>
     <script src="service/vessel/model/vesselListPageModel.js"></script>
     <script src="service/vessel/model/vesselModel.js"></script>
+    <script src="service/vessel/model/contactModel.js"></script>
+    <script src="service/vessel/model/notesModel.js"></script>
     <script src="partial/admin/adminModel.js"></script>
     <script src="service/vessel/vesselRestService.js"></script>
     <script src="service/mobileTerminal/mobileTerminalVesselService.js"></script>
@@ -468,7 +485,6 @@
     <script src="directive/activity/rolesPanel/rolesPanel.js"></script>
     <script src="directive/activity/tripReportsPanel/tripReportsPanel.js"></script>
     <script src="directive/activity/vesselPanel/vesselPanel.js"></script>
-    <script src="directive/activity/rolesPanel/rolesCarousel/rolesCarousel.js"></script>
     <script src="filter/activity/stPurposeCode.js"></script>
     <script src="filter/activity/stArrayToString.js"></script>
     <script src="filter/activity/stVessekIdsToColumns.js"></script>
@@ -485,6 +501,9 @@
     <script src="directive/activity/carouselTile/carouselTile.js"></script>
     <script src="directive/activity/catchClassDetailTile/catchClassDetailTile.js"></script>
     <script src="partial/spatial/tripsPanel/catchEvolution/catchEvolution.js"></script>
+    <script src="partial/spatial/tripsPanel/tripDeparturePanel/tripDeparturePanel.js"></script>
+    
+    <script src="debugConfig.js"></script>
     <!-- Add New Component JS Above -->
 
 	<div ui-view name="unionvmsHeader"></div>

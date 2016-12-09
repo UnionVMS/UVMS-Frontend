@@ -1,30 +1,38 @@
+/*
+Developed with the contribution of the European Commission - Directorate General for Maritime Affairs and Fisheries
+© European Union, 2015-2016.
+
+This file is part of the Integrated Fisheries Data Management (IFDM) Suite. The IFDM Suite is free software: you can
+redistribute it and/or modify it under the terms of the GNU General Public License as published by the
+Free Software Foundation, either version 3 of the License, or any later version. The IFDM Suite is distributed in
+the hope that it will be useful, but WITHOUT ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or
+FITNESS FOR A PARTICULAR PURPOSE.  See the GNU General Public License for more details. You should have received a
+copy of the GNU General Public License along with the IFDM Suite. If not, see <http://www.gnu.org/licenses/>.
+*/
 .activity-filters-section {
-    .reportSubform {
-        padding-top: 10px;
-        &.technical-form {
-            border-left: 1px solid #ddd;
-            border-right: 1px solid #ddd;
-            .port-form-group {
-                margin-bottom: 5px;
+    [name="activitySecForm"] {
+        display: flex;
+        .reportSubform {
+            padding-top: 10px;
+            &.technical-form {
+                border-left: 1px solid #ddd;
+                border-right: 1px solid #ddd;
             }
         }
-    }
-    .unit-input {
-        padding-right: 35px;
-        .unit-box {
-            width: 35px;
+        .unit-input {
+            padding-right: 35px;
+            .unit-box {
+                width: 35px;
+            }
         }
-    }
-    .label-container {
-        padding-right: 0;
-        &.label-top-space {
-            margin-top: 20px;
+        .label-container {
+            padding-right: 0;
+            &.center-label-multiple-combo {
+                line-height: 41px;
+            }
         }
-        &.center-label-multiple-combo {
-            line-height: 41px;
+        .above-label {
+            width: 100%;
         }
-    }
-    .above-label {
-        width: 100%;
     }
 }

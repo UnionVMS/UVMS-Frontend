@@ -1,31 +1,61 @@
+/*
+﻿Developed with the contribution of the European Commission - Directorate General for Maritime Affairs and Fisheries
+© European Union, 2015-2016.
+
+This file is part of the Integrated Fisheries Data Management (IFDM) Suite. The IFDM Suite is free software: you can
+redistribute it and/or modify it under the terms of the GNU General Public License as published by the
+Free Software Foundation, either version 3 of the License, or any later version. The IFDM Suite is distributed in
+the hope that it will be useful, but WITHOUT ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or
+FITNESS FOR A PARTICULAR PURPOSE.  See the GNU General Public License for more details. You should have received a
+copy of the GNU General Public License along with the IFDM Suite. If not, see <http://www.gnu.org/licenses/>.
+ */
 .vesselForm{
     margin-bottom: 20px;
 
     .detailsContainer{
         padding-top: 20px;
         padding-bottom: 20px;
+        .clear();
+    }
+
+    .notesContainer {
+        .grayBorderTop();
+        .clear();
+        .flexbox();
+
+        .notesListContainer {
+            .grayBorderRight();
+            padding: 15px; 
+
+            .list td {
+                &:first-child {
+                    width: 30%;
+                }
+                &:nth-child(2) {
+                    width: 70%;
+                }
+            }
+        }
+
+        .notesForm {
+            padding: 15px;
+        }
     }
 
     .historyAndTerminalInformation{
         .grayBorderTop();
-        margin-top: 20px;
-        padding-bottom: 10px;
+        .flexbox();
+
+        margin-bottom: -15px;
 
         >.row{
             padding-top: 10px;
         }
 
-        h5{
-            margin-top: 0px;
-            margin-bottom: 10px;
-        }
-
-        .loadingIndicator{
-            margin-top: 20px;
-        }
-
         .historyContainer{
-            td{
+            padding: 15px; 
+            
+            .list td{
                 &:first-child{
                     width: 30%;
                 }
@@ -34,64 +64,27 @@
                 }
             }
         }
+    }
 
-        .terminalsContainer{
-            td{
-                width: 25%;
-            }
-            tr.inactive{
-                color:#aaa;
-            }
+    .mobileTerminalsContainer {
+        margin-top: 40px;
+
+        h3 {
+            margin: 0;
         }
 
-        .notesContainer{
-            textarea{
-                width: 100%;
-                resize: none;
+        .loadingIndicator {
+            position: relative;
+            .clear();
+
+            .spinnerOverlay {
+                display: none;
             }
         }
     }
 
-    .mobileTerminalsContainer{
-        margin-top: 20px;
-        .mobileTerminal {
-            .borderSection();
-            margin-top: 0;
-            margin-bottom: 15px;
-
-            .infoRow{
-                padding-top:6px;
-            }
-
-            .mobileTerminalChannels {
-                padding-top: 6px;
-                padding-bottom: 6px;
-                margin-bottom: 10px;
-
-                .channelsHeader {
-                    margin-top: 6px;
-                }
-
-                .align-middle {
-                    align-items: center;
-                    display: flex;
-                }
-
-                .mobileTerminalChannel {
-                    padding-top: 0;
-                    min-height: initial;
-                }
-            }
-
-            .mobile-terminal-attribute p {
-                font-weight: normal;
-                white-space: nowrap;
-                overflow: hidden;
-            }
-        }
-
-        .mobileTerminal-warning {
-            border-color: #faebcc;
-        }
+    h5 {
+        margin-top: 0px;
+        margin-bottom: 10px;
     }
 }

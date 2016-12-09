@@ -1,3 +1,14 @@
+/*
+﻿Developed with the contribution of the European Commission - Directorate General for Maritime Affairs and Fisheries
+© European Union, 2015-2016.
+
+This file is part of the Integrated Fisheries Data Management (IFDM) Suite. The IFDM Suite is free software: you can
+redistribute it and/or modify it under the terms of the GNU General Public License as published by the
+Free Software Foundation, either version 3 of the License, or any later version. The IFDM Suite is distributed in
+the hope that it will be useful, but WITHOUT ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or
+FITNESS FOR A PARTICULAR PURPOSE.  See the GNU General Public License for more details. You should have received a
+copy of the GNU General Public License along with the IFDM Suite. If not, see <http://www.gnu.org/licenses/>.
+ */
 @import "../bower_components/bootstrap/less/bootstrap.less";
 @import "../bower_components/font-awesome/less/font-awesome.less";
 @import "../bower_components/leaflet/dist/leaflet.css";
@@ -34,17 +45,21 @@
 @import "partial/today/today.less";
 
 @import "directive/vessel/vesselDetails/vesselDetails.less";
+@import "directive/vessel/vesselNotes/vesselNotes.less";
+@import "directive/mobileTerminal/mobileTerminalDetails/mobileTerminalDetails.less";
 @import "directive/common/search/advancedSearch/advancedSearch.less";
 @import "directive/common/search/advancedSearch/mobileTerminal/advancedSearchMobileTerminalForm.less";
 @import "directive/common/search/advancedSearch/pollingMobileTerminal/searchPollingMobileTerminalForm.less";
 @import "directive/common/loadingIndicator/loadingIndicator.less";
 @import "directive/common/datepickerInput/datepickerInput.less";
+@import "directive/common/menuBar/menuBar.less";
 
 @import "partial/vessel/vessel.less";
 @import "partial/vessel/vesselForm/vesselForm.less";
 @import "partial/vessel/vesselList/vesselList.less";
 @import "partial/common/saveSearchModal/saveSearchModal.less";
 @import "partial/vessel/vesselHistory/vesselHistoryModal/vesselHistoryModal.less";
+@import "partial/vessel/vesselNotes/vesselNotesModal/vesselNotesModal.less";
 
 @import "partial/mobileTerminal/mobileTerminal.less";
 @import "partial/mobileTerminal/mobileTerminalList/mobileTerminalList.less";
@@ -52,7 +67,6 @@
 @import "directive/common/sortableTableHeader/sortableTableHeader.less";
 @import "partial/mobileTerminal/assignVessel/assignVessel.less";
 @import "partial/alerts/alerts.less";
-@import "partial/mobileTerminal/mobileTerminalDetails/mobileTerminalDetails.less";
 @import "partial/mobileTerminal/mobileTerminalForm/mobileTerminalForm.less";
 @import "service/common/modalComment/modalComment.less";
 @import "partial/mobileTerminal/mobileTerminalHistoryModal/mobileTerminalHistoryModal.less";
@@ -197,7 +211,6 @@
 @import "directive/activity/rolesPanel/rolesPanel.less";
 @import "directive/activity/tripReportsPanel/tripReportsPanel.less";
 @import "directive/activity/vesselPanel/vesselPanel.less";
-@import "directive/activity/rolesPanel/rolesCarousel/rolesCarousel.less";
 @import "directive/activity/tripOverviewPanel/tripOverviewPanel.less";
 @import "partial/spatial/tripsPanel/catchDetails/catchDetails.less";
 @import "partial/spatial/reportsPanel/reportForm/activityFiltersFieldset/activityFiltersFieldset.less";
@@ -209,6 +222,7 @@
 @import "directive/activity/carouselTile/templates/gearTile/gearTile.less";
 @import "directive/activity/catchClassDetailTile/catchClassDetailTile.less";
 @import "partial/spatial/tripsPanel/catchEvolution/catchEvolution.less";
+@import "partial/spatial/tripsPanel/tripDeparturePanel/tripDeparturePanel.less";
 /* Add Component LESS Above */
 /* Required for Angular UI Bootstrap */
 .nav, .pagination, .carousel, .panel-title a { cursor: pointer; }

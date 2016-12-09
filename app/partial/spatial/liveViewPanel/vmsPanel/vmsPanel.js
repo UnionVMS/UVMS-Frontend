@@ -1,3 +1,14 @@
+/*
+Developed with the contribution of the European Commission - Directorate General for Maritime Affairs and Fisheries
+© European Union, 2015-2016.
+
+This file is part of the Integrated Fisheries Data Management (IFDM) Suite. The IFDM Suite is free software: you can
+redistribute it and/or modify it under the terms of the GNU General Public License as published by the
+Free Software Foundation, either version 3 of the License, or any later version. The IFDM Suite is distributed in
+the hope that it will be useful, but WITHOUT ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or
+FITNESS FOR A PARTICULAR PURPOSE.  See the GNU General Public License for more details. You should have received a
+copy of the GNU General Public License along with the IFDM Suite. If not, see <http://www.gnu.org/licenses/>.
+*/
 angular.module('unionvmsWeb').controller('VmspanelCtrl',function($scope, locale, globalSettingsService, reportService, mapService, csvWKTService, unitConversionService, visibilityService, userService, tripSummaryService){
     $scope.selectedVmsTab = 'MOVEMENTS';
     $scope.isPosFilterVisible = false;
@@ -167,8 +178,10 @@ angular.module('unionvmsWeb').controller('VmspanelCtrl',function($scope, locale,
        } else if (geomType === 'SEGMENT'){
            geom = new ol.geom.LineString($scope.displayedSegments[index].geometry.coordinates);
            geom.set('GeometryType', 'LineString');
-       } else {
+       } else if (geomType === 'TRACK') {
            geom = new ol.geom.Polygon.fromExtent($scope.displayedTracks[index].extent);
+       } else if (geomType === 'TRIP') {
+           geom = new ol.geom.Polygon.fromExtent($scope.displayedTrips[index].extent);
        }
        
        if (geomType !== 'ALARM'){
@@ -613,13 +626,14 @@ angular.module('unionvmsWeb').controller('VmspanelCtrl',function($scope, locale,
    };
 
    $scope.openTripSummary = function(tripName){
+       $scope.tripSummServ.withMap = $scope.repNav.isViewVisible('mapPanel');
        $scope.tripSummServ.openNewTrip(tripName);
        $scope.repNav.goToView('tripsPanel','tripSummary');
    };
-   
-   
-   $scope.testFunc = function(){
-       $scope.$parent.$parent.repNav.goToView('liveViewPanel','tripsPanel');
-   };
 
+   $scope.dropSuccess = function(e, item, collection){
+       console.log(e);
+       console.log(item);
+       console.log(collection);
+   };
 });

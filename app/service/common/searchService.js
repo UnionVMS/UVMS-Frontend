@@ -1,3 +1,14 @@
+/*
+Developed with the contribution of the European Commission - Directorate General for Maritime Affairs and Fisheries
+© European Union, 2015-2016.
+
+This file is part of the Integrated Fisheries Data Management (IFDM) Suite. The IFDM Suite is free software: you can
+redistribute it and/or modify it under the terms of the GNU General Public License as published by the
+Free Software Foundation, either version 3 of the License, or any later version. The IFDM Suite is distributed in
+the hope that it will be useful, but WITHOUT ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or
+FITNESS FOR A PARTICULAR PURPOSE.  See the GNU General Public License for more details. You should have received a
+copy of the GNU General Public License along with the IFDM Suite. If not, see <http://www.gnu.org/licenses/>.
+ */
 angular.module('unionvmsWeb').factory('searchService',function($q, $log, searchUtilsService, GetListRequest, VesselListPage, SearchField, vesselRestService, mobileTerminalRestService, pollingRestService, movementRestService, manualPositionRestService, GetPollableListRequest, SearchResultListPage, auditLogRestService, exchangeRestService, alarmRestService, userService) {
 
     var DEFAULT_ITEMS_PER_PAGE = 20;
@@ -36,9 +47,10 @@ angular.module('unionvmsWeb').factory('searchService',function($q, $log, searchU
     };
 
     //First get movements, and the get the matching vessels
-    var getMovements = function(movementRequest) {
+    var getMovements = function(movementRequest, isMinimalRequest) {
         var deferred = $q.defer();
-        movementRestService.getMovementList(movementRequest).then(function(page) {
+
+        var getMovementOk = function(page) {
             //Zero results?
             if(page.getNumberOfItems() === 0){
                 deferred.resolve(page);
@@ -67,15 +79,23 @@ angular.module('unionvmsWeb').factory('searchService',function($q, $log, searchU
             }, function(error){
                 onGetMovementsError(error, deferred);
             });
-        }, function(error){
-            onGetMovementsError(error, deferred);
-        });
+        }
+
+        if (isMinimalRequest) {
+            movementRestService.getMinimalMovementList(movementRequest).then(getMovementOk, function(error){
+                onGetMovementsError(error, deferred);
+            });
+        } else {
+            movementRestService.getMovementList(movementRequest).then(getMovementOk, function(error){
+                onGetMovementsError(error, deferred);
+            });
+        }
 
         return deferred.promise;
     };
 
     //First get vessels, and the get the movements
-    var getMovementsByVessels = function(vesselRequest, movementRequest) {
+    var getMovementsByVessels = function(vesselRequest, movementRequest, isMinimalRequest) {
         var deferred = $q.defer();
         vesselRestService.getAllMatchingVessels(vesselRequest).then(function(vessels) {
             if (vessels.length === 0) {
@@ -91,7 +111,7 @@ angular.module('unionvmsWeb').factory('searchService',function($q, $log, searchU
                 }
             });
 
-            movementRestService.getMovementList(movementRequest).then(function(page) {
+            var getMovementOk = function(page) {
                 $.each(page.items, function(index, movement) {
                     var vessel = vesselsByGuid[movement.connectId];
                     if(angular.isDefined(vessel)){
@@ -100,10 +120,17 @@ angular.module('unionvmsWeb').factory('searchService',function($q, $log, searchU
                 });
 
                 deferred.resolve(page);
+            };
 
-            }, function(error){
-                onGetMovementsError(error, deferred);
-            });
+            if (isMinimalRequest) {
+                movementRestService.getMinimalMovementList(movementRequest).then(getMovementOk, function(error){
+                    onGetMovementsError(error, deferred);
+                });
+            } else {
+                movementRestService.getMovementList(movementRequest).then(getMovementOk, function(error){
+                    onGetMovementsError(error, deferred);
+                });
+            }
         }, function(error){
             onGetMovementsError(error, deferred);
         });
@@ -225,6 +252,53 @@ angular.module('unionvmsWeb').factory('searchService',function($q, $log, searchU
 
 
 	var searchService = {
+
+        //Do the search for vessels based on latest movement
+        searchLatestMovements : function(){
+            var deferred = $q.defer();
+            movementRestService.getLatestMovement(DEFAULT_ITEMS_PER_PAGE).then(function(latestMovements){
+                $.each(latestMovements, function(index, latestMovement) {
+                    getListRequest.addSearchCriteria("GUID", latestMovement.connectId);
+                });
+
+                if(checkAccessToFeature('Vessel')){
+                    searchUtilsService.modifySpanAndTimeZones(getListRequest.criterias);
+                    searchUtilsService.replaceCommasWithPoint(getListRequest.criterias);
+                    vesselRestService.getVesselList(getListRequest).then(function(vessels) {
+                        if(vessels.getNumberOfItems() === 0){
+                            return deferred.resolve(vessels);
+                        } else {
+                            var findGuid = function findGuid(connectId) {
+                                for (var i = 0; i < latestMovements.length; i++) {
+                                    if (latestMovements[i].connectId === connectId) {
+                                        return latestMovements[i];
+                                    }
+                                }
+                            }
+
+                            $.each(vessels.items, function(index, vessel) {
+                                vessel.lastMovement = findGuid(vessel.vesselId.guid);
+                            });
+
+                            if(latestMovements.length > 0) {
+                                vessels.totalNumberOfLatestMovements = latestMovements.length;                
+                            }
+
+                            deferred.resolve(vessels);
+                        }
+                    }, function(error){
+                        $log.error("Error getting vessel list.", error);
+                        deferred.reject(error);
+                    });
+                } else {
+                    return deferred.reject();
+                }
+            }, function(error){
+                $log.error("Error getting latest movements.", error);
+                deferred.reject(error);
+            });
+            return deferred.promise;
+        },
 
         //Do the search for vessels
 		searchVessels : function(){
@@ -439,7 +513,7 @@ angular.module('unionvmsWeb').factory('searchService',function($q, $log, searchU
         },
 
         //Do search for movements
-        searchMovements : function(){
+        searchMovements : function(isMinimalRequest){
             //intercept request and set utc timezone on dates.
             searchUtilsService.modifySpanAndTimeZones(getListRequest.criterias);
             searchUtilsService.replaceCommasWithPoint(getListRequest.criterias);
@@ -455,9 +529,9 @@ angular.module('unionvmsWeb').factory('searchService',function($q, $log, searchU
 
             //Get vessels first?
             if(vesselRequest.getNumberOfSearchCriterias() > 0){
-                return getMovementsByVessels(vesselRequest, movementRequest);
+                return getMovementsByVessels(vesselRequest, movementRequest, isMinimalRequest);
             }else{
-                return getMovements(movementRequest);
+                return getMovements(movementRequest, isMinimalRequest);
             }
         },
 

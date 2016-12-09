@@ -1,7 +1,22 @@
 /*
+﻿Developed with the contribution of the European Commission - Directorate General for Maritime Affairs and Fisheries
+© European Union, 2015-2016.
+
+This file is part of the Integrated Fisheries Data Management (IFDM) Suite. The IFDM Suite is free software: you can
+redistribute it and/or modify it under the terms of the GNU General Public License as published by the
+Free Software Foundation, either version 3 of the License, or any later version. The IFDM Suite is distributed in
+the hope that it will be useful, but WITHOUT ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or
+FITNESS FOR A PARTICULAR PURPOSE.  See the GNU General Public License for more details. You should have received a
+copy of the GNU General Public License along with the IFDM Suite. If not, see <http://www.gnu.org/licenses/>.
+ */
+/*
  * Common styling of forms and inputs
  *
  */
+
+@form-input-background:        #ffffff;
+@form-input-textcolor:         #555555; 
+@form-input-placeholder-color: #999999;
 
 input[type="text"], input[type="time"], input[type="number"], input[type="email"], input[type="search"]
 {
@@ -23,18 +38,18 @@ button.inputHeigth{
 }
 
 .form-control[disabled], .form-control[readonly], fieldset[disabled] .form-control{
-  cursor: not-allowed;
-  background-color: #eeeeee;
-  opacity: 1;
+  .disabled-input();
 }
 
 .form-control{
-    background-color: #FFFFFF;
+    background-color: @form-input-background;
     height: 30px;
+    -webkit-box-shadow: none;
+    box-shadow: none;
 }
 
 .form-control::-moz-placeholder {
-    color: #999999;
+    color: @form-input-placeholder-color;
     opacity: 1;
 }
 *:before, *:after {
@@ -76,17 +91,16 @@ label.section{
 }
 
 .has-error{
-    .form-control, input, .datepicker > input[date-picker-formatter].ng-valid.ng-dirty.ng-valid-parse.ng-touched, textarea, .periodInput{
+    .form-control, input, .datepicker > input[date-picker-formatter].ng-valid.ng-dirty.ng-valid-parse.ng-touched, textarea, .periodInput, .btn.btn-default.dropdown-toggle {
     	&,
     	&:focus,
     	&:hover {
-        	border:1px solid red;
+        	border: 1px solid @errorColor;
         	box-shadow: none !important;
         }
     }
     box-shadow:none;
 }
-
 
 .form-group{
     .help-block{
@@ -97,6 +111,8 @@ label.section{
 .form-group.has-error{
     .help-block{
         display: block;
+        font-size: 95%;
+        color: darken(@errorColor, 5%);
     }
 }
 
@@ -143,5 +159,12 @@ select{
 }
 
 .mandatory {
-    color:red;
+    color: @errorColor;
+    padding-left: 3px;
+}
+
+.disabled-input() {
+    cursor: not-allowed;
+    background-color: #eeeeee;
+    opacity: 1;
 }

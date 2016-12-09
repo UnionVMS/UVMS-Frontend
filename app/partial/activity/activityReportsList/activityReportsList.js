@@ -1,3 +1,14 @@
+/*
+Developed with the contribution of the European Commission - Directorate General for Maritime Affairs and Fisheries
+© European Union, 2015-2016.
+
+This file is part of the Integrated Fisheries Data Management (IFDM) Suite. The IFDM Suite is free software: you can
+redistribute it and/or modify it under the terms of the GNU General Public License as published by the
+Free Software Foundation, either version 3 of the License, or any later version. The IFDM Suite is distributed in
+the hope that it will be useful, but WITHOUT ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or
+FITNESS FOR A PARTICULAR PURPOSE.  See the GNU General Public License for more details. You should have received a
+copy of the GNU General Public License along with the IFDM Suite. If not, see <http://www.gnu.org/licenses/>.
+*/
 /**
  * @memberof unionvmsWeb
  * @ngdoc controller
@@ -24,18 +35,15 @@ angular.module('unionvmsWeb').controller('ActivityreportslistCtrl',function($sco
     $scope.callServer = function(tableState){
         $scope.actServ.reportsList.tableState = tableState;
         $scope.actServ.reportsList.isLoading = true;
-        var searchField, sortOrder; 
+        
         if (angular.isDefined(tableState.sort.predicate)){
-            searchField = getTruePredicate(tableState.sort.predicate);
-            sortOrder = tableState.sort.reverse === true ? 'DESC' : 'ASC';
+            $scope.actServ.reportsList.sorting = {
+                field: getTruePredicate(tableState.sort.predicate),
+                reverse: tableState.sort.reverse
+            };
         }
         
-        $scope.actServ.reportsList.sortKey = {
-            field: searchField,
-            order: sortOrder
-        };
-        
-        $scope.actServ.reportsList.pagination.page = tableState.pagination.start / $scope.actServ.reportsList.pagination.listSize + 1;
+        /*$scope.actServ.reportsList.pagination.page = tableState.pagination.start / $scope.actServ.reportsList.pagination.listSize + 1;*/
         
         $scope.actServ.getActivityList(callServerCallback, tableState);
     };

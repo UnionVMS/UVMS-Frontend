@@ -32,7 +32,7 @@
                                         <div class="td details-column"></div>
                                         <div class="sub-col td col-md-{{header.width}}" ng-repeat="header in reportHeaders" ng-class="{'col-btn': ['corrections','detail'].indexOf(header.id) !== -1}" ng-switch="['corrections','detail'].indexOf(header.id) === -1">
                                             <span ng-switch-when="true">{{node[header.id]}}</span>
-                                            <a ng-switch-when="false" class="details-btn"><i class="fa" ng-class="{'fa-pencil-square-o': header.id === 'detail' && node[header.id], 'fa-check-square-o': header.id === 'corrections' && node[header.id], 'fa-square-o': header.id === 'corrections' && node[header.id] === false}"></i></a>
+                                            <a ng-switch-when="false" class="details-btn" ng-click="navigate()"><i class="fa" ng-class="{'fa-eye': header.id === 'detail' && node[header.id], 'fa-check-square-o': header.id === 'corrections' && node[header.id], 'fa-square-o': header.id === 'corrections' && node[header.id] === false}"></i></a>
                                         </div>
                                     </div>
                                 </div>

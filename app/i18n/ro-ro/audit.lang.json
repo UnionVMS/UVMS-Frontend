@@ -35,7 +35,7 @@
 
     "configuration_header_systemMonitor": "System monitor",
     "configuration_header_globalSettings": "Global settings",
-    "configuration_header_asset": "Assets",
+    "configuration_header_vessel": "Assets",
     "configuration_header_mobileTerminal": "Mobile terminals",
     "configuration_header_reporting": "Reporting",
     "configuration_header_movement": "Movement",
@@ -43,7 +43,6 @@
     "configuration_header_rules": "Rules",
     "configuration_header_audit": "Audit",
     "configuration_header_positions": "Positions",
-    "configuration_header_mdr": "MDR",
 
     "configuration_column_key": "Parameter",
     "configuration_column_value": "Value",
@@ -84,6 +83,6 @@
     "system_status_module_mobileTerminal": "Mobile terminal",
     "system_status_module_movement": "Movement",
     "system_status_module_rules": "Rules",
-    "system_status_module_asset": "Asset"
+    "system_status_module_vessel": "Vessel"
 
 }
