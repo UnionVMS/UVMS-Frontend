@@ -1,0 +1,40 @@
+<!--
+Developed with the contribution of the European Commission - Directorate General for Maritime Affairs and Fisheries
+© European Union, 2015-2016.
+
+This file is part of the Integrated Fisheries Data Management (IFDM) Suite. The IFDM Suite is free software: you can
+redistribute it and/or modify it under the terms of the GNU General Public License as published by the
+Free Software Foundation, either version 3 of the License, or any later version. The IFDM Suite is distributed in
+the hope that it will be useful, but WITHOUT ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or
+FITNESS FOR A PARTICULAR PURPOSE.  See the GNU General Public License for more details. You should have received a
+copy of the GNU General Public License along with the IFDM Suite. If not, see <http://www.gnu.org/licenses/>.
+-->
+<div ng-controller="CatchevolutionCtrl" class="catch-evolution">
+    <fieldset class="col-md-12 fieldsetStyle">
+        <legend class="fieldsetLegendStyle">
+            <a>{{'activity.catch_evolution_title' | i18n }}</a>
+        </legend>
+        <!-- CATCH EVOLUTION CONTAINER -->
+        <div class="row catch-evolution-container">
+            <!-- TRIP OVERVIEW PANEL -->
+            <trip-overview-panel class="col-md-12 summary-section" trip="fishingTripDetails"></trip-overview-panel>
+            <!-- CHARTS PANEL -->
+            <div class="col-md-12">
+                <div class="col-md-12 chart-panel">
+                    <div class="row">
+                        <div class="row">
+                            <div ng-repeat="item in catchEvolutionData.catchProgress track by $index">
+                                <catch-panel class="col-md-3" ng-model="item" title="{{'activity.activity_type_day'| i18n }}{{$index+1}}" unit="kg"></catch-panel>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-12 chart-panel-table">
+                <div class="row">
+                    <catch-panel class="col-md-6" ng-model="catchEvolutionData.finalCatch" title="{{'activity.activity_type_landing'| i18n }}" unit="kg" with-table="true"></catch-panel>
+                </div>
+            </div>
+        </div>
+    </fieldset>
+</div>
