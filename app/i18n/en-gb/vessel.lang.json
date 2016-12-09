@@ -1,5 +1,5 @@
 {
-    "archive_confirm_text" : "Are you sure you want to archive this vessel?",
+    "archive_confirm_text" : "Are you sure you want to archive this asset?",
     "archive_message_on_success" : "The vessel has been archived.",
     "archive_message_on_error" : "Failed to archive the vessel.",
     "add_new_alert_message_on_success" : "The vessel has now been created.",
