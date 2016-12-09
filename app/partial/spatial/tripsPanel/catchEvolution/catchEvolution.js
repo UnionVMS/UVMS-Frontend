@@ -1,17 +1,25 @@
+/*
+Developed with the contribution of the European Commission - Directorate General for Maritime Affairs and Fisheries
+© European Union, 2015-2016.
 
+This file is part of the Integrated Fisheries Data Management (IFDM) Suite. The IFDM Suite is free software: you can
+redistribute it and/or modify it under the terms of the GNU General Public License as published by the
+Free Software Foundation, either version 3 of the License, or any later version. The IFDM Suite is distributed in
+the hope that it will be useful, but WITHOUT ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or
+FITNESS FOR A PARTICULAR PURPOSE.  See the GNU General Public License for more details. You should have received a
+copy of the GNU General Public License along with the IFDM Suite. If not, see <http://www.gnu.org/licenses/>.
+*/
 /**
  * @memberof unionvmsWeb
  * @ngdoc controller
  * @name CatchevolutionCtrl
  * @param $scope {Service} controller scope
  * @param activityRestService {Service} the activity REST service <p>{@link unionvmsWeb.activityRestService}</p>
- * @param loadingStatus {Service} the loading status service <p>{@link unionvmsWeb.loadingStatus}</p>
- * @param $anchorScroll {Service} angular $anchorScroll service
  * @param locale {Service} angular locale service
  * @description
- *  The controller for the Catch Evolution.  
+ *  The controller for the Catch Evolution panel  
  */
-angular.module('unionvmsWeb').controller('CatchevolutionCtrl', function($scope, activityRestService, loadingStatus, $anchorScroll, locale) {
+angular.module('unionvmsWeb').controller('CatchevolutionCtrl', function($scope, activityRestService, locale) {
     
     /**
        * Initialization function
