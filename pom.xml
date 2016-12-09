@@ -208,7 +208,7 @@
                             <goal>install-node-and-npm</goal>
                         </goals>
                         <configuration>
-                            <downloadRoot>https://nodejs.org/</downloadRoot>
+                            <downloadRoot>https://nodejs.org/dist/</downloadRoot>
                         </configuration>
                     </execution>
                     <execution>
