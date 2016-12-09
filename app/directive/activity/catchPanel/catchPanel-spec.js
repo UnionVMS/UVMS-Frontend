@@ -1,5 +1,5 @@
 describe('catchPanel', function() {
-    var scope,compile,actRestSpy;
+    var scope,compile,actRestSpy, $httpBackend;
     
     beforeEach(module('unionvmsWeb'));
 
