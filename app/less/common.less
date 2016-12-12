@@ -191,11 +191,12 @@ table.searchResults{
         height:40px;
         border-top: 0px !important;
         border-bottom: 0px !important;
+        font-weight: 500;
+        font-size: 15px;
 
         >a{
-            font-weight: bold;
             color:#383737;
-
+            
             .fa.fa-sort, .fa.fa-caret-down , .fa.fa-caret-up
             {
                 color: @primaryColor;
@@ -610,4 +611,11 @@ a:hover{
     text-rendering: auto;
     -webkit-font-smoothing: antialiased;
     -moz-osx-font-smoothing: grayscale;
+}
+
+// Font Smoothing
+.font-smoothing() {
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+    font-smooth: always;
 }
