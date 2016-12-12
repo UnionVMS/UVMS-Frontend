@@ -78,7 +78,7 @@
     "search_from": "From",
     "search_to": "To",
     "search_advanced_link" : "Advanced search",
-    "search_failed_error" : "The search failed.",
+    "search_failed_error" : "No result could be retrieved at this time. Please try later or with other search criterias.",
     "search_group_dropdown" : "Saved groups",
     "search_group_save" : "Save group",
     "search_results_pagination_page" : "Page",
