@@ -30,8 +30,8 @@ describe('catchPanel', function() {
     }));
     
     afterEach(function(){
-        console.log('HEEEEEEEEREEEEEEEEE: ' + angular.element('catch-panel').length)
-        angular.element('catch-panel').remove();
+        
+        angular.element('#parent-container').remove();
     });
 
     function getEvolutionData(){

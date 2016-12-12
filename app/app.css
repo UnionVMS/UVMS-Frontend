@@ -1,15 +1,3 @@
-﻿/*
-Developed with the contribution of the European Commission - Directorate General for Maritime Affairs and Fisheries
-© European Union, 2015-2016.
-
-This file is part of the Integrated Fisheries Data Management (IFDM) Suite. The IFDM Suite is free software: you can
-redistribute it and/or modify it under the terms of the GNU General Public License as published by the
-Free Software Foundation, either version 3 of the License, or any later version. The IFDM Suite is distributed in
-the hope that it will be useful, but WITHOUT ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or
-FITNESS FOR A PARTICULAR PURPOSE.  See the GNU General Public License for more details. You should have received a
-copy of the GNU General Public License along with the IFDM Suite. If not, see <http://www.gnu.org/licenses/>.
-*/
-/*! normalize.css v3.0.0 | MIT License | git.io/normalize */
 @import "../bower_components/leaflet/dist/leaflet.css";
 @import "../bower_components/OpenLayers/css/ol.css";
 @import "../bower_components/fancytree/dist/skin-awesome/ui.fancytree.css";
@@ -25,6 +13,18 @@ copy of the GNU General Public License along with the IFDM Suite. If not, see <h
 @import "../app/assets/spatial/ol3-layerswitcher/src/ol3-layerswitcher.css";
 @import "../bower_components/nvd3/build/nv.d3.min.css";
 @import "../bower_components/angular-ui-tree/dist/angular-ui-tree.min.css";
+/*
+﻿Developed with the contribution of the European Commission - Directorate General for Maritime Affairs and Fisheries
+© European Union, 2015-2016.
+
+This file is part of the Integrated Fisheries Data Management (IFDM) Suite. The IFDM Suite is free software: you can
+redistribute it and/or modify it under the terms of the GNU General Public License as published by the
+Free Software Foundation, either version 3 of the License, or any later version. The IFDM Suite is distributed in
+the hope that it will be useful, but WITHOUT ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or
+FITNESS FOR A PARTICULAR PURPOSE.  See the GNU General Public License for more details. You should have received a
+copy of the GNU General Public License along with the IFDM Suite. If not, see <http://www.gnu.org/licenses/>.
+ */
+/*! normalize.css v3.0.0 | MIT License | git.io/normalize */
 html {
   font-family: sans-serif;
   -ms-text-size-adjust: 100%;
@@ -9495,6 +9495,17 @@ button.close {
   clip: auto;
 }
 /*
+﻿Developed with the contribution of the European Commission - Directorate General for Maritime Affairs and Fisheries
+© European Union, 2015-2016.
+
+This file is part of the Integrated Fisheries Data Management (IFDM) Suite. The IFDM Suite is free software: you can
+redistribute it and/or modify it under the terms of the GNU General Public License as published by the
+Free Software Foundation, either version 3 of the License, or any later version. The IFDM Suite is distributed in
+the hope that it will be useful, but WITHOUT ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or
+FITNESS FOR A PARTICULAR PURPOSE.  See the GNU General Public License for more details. You should have received a
+copy of the GNU General Public License along with the IFDM Suite. If not, see <http://www.gnu.org/licenses/>.
+ */
+/*
  * Global variables.
  *
  */
@@ -9504,6 +9515,17 @@ button.close {
 /*Inputs*/
 /*Modal*/
 /*Forms*/
+/*
+﻿Developed with the contribution of the European Commission - Directorate General for Maritime Affairs and Fisheries
+© European Union, 2015-2016.
+
+This file is part of the Integrated Fisheries Data Management (IFDM) Suite. The IFDM Suite is free software: you can
+redistribute it and/or modify it under the terms of the GNU General Public License as published by the
+Free Software Foundation, either version 3 of the License, or any later version. The IFDM Suite is distributed in
+the hope that it will be useful, but WITHOUT ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or
+FITNESS FOR A PARTICULAR PURPOSE.  See the GNU General Public License for more details. You should have received a
+copy of the GNU General Public License along with the IFDM Suite. If not, see <http://www.gnu.org/licenses/>.
+ */
 /*
  * Override the default Bootstrap styling here.
  *
@@ -9769,6 +9791,17 @@ div.tooltip .tooltip-inner {
   font-weight: normal;
 }
 /*Override variables*/
+/*
+﻿Developed with the contribution of the European Commission - Directorate General for Maritime Affairs and Fisheries
+© European Union, 2015-2016.
+
+This file is part of the Integrated Fisheries Data Management (IFDM) Suite. The IFDM Suite is free software: you can
+redistribute it and/or modify it under the terms of the GNU General Public License as published by the
+Free Software Foundation, either version 3 of the License, or any later version. The IFDM Suite is distributed in
+the hope that it will be useful, but WITHOUT ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or
+FITNESS FOR A PARTICULAR PURPOSE.  See the GNU General Public License for more details. You should have received a
+copy of the GNU General Public License along with the IFDM Suite. If not, see <http://www.gnu.org/licenses/>.
+ */
 /*
  * Common css classes that can be used everywhere in the application.
  * Each class should only do one thing, otherwise it should go in components.less
@@ -10245,7 +10278,7 @@ a:hover {
 .modal-header .closeicon {
   width: 30px;
   height: 30px;
-  line-height: 30px;
+  line-height: 28px;
   cursor: pointer;
   background: #fff;
   font-size: 16px;
@@ -10413,6 +10446,22 @@ a:hover {
 .available-positions-refresh a:hover {
   text-decoration: underline;
 }
+.clear:after {
+  content: '';
+  display: table;
+  clear: both;
+}
+/*
+﻿Developed with the contribution of the European Commission - Directorate General for Maritime Affairs and Fisheries
+© European Union, 2015-2016.
+
+This file is part of the Integrated Fisheries Data Management (IFDM) Suite. The IFDM Suite is free software: you can
+redistribute it and/or modify it under the terms of the GNU General Public License as published by the
+Free Software Foundation, either version 3 of the License, or any later version. The IFDM Suite is distributed in
+the hope that it will be useful, but WITHOUT ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or
+FITNESS FOR A PARTICULAR PURPOSE.  See the GNU General Public License for more details. You should have received a
+copy of the GNU General Public License along with the IFDM Suite. If not, see <http://www.gnu.org/licenses/>.
+ */
 /*
  * Components that are reused in different places in the application
  *
@@ -10437,19 +10486,25 @@ a:hover {
   width: 100%;
   color: #ffffff;
 }
-.dropdown .caret {
-  position: relative;
-  bottom: 10px;
-  float: right;
-}
 .dropdown .btn.btn-default.dropdown-toggle {
-  background-color: white;
   height: 30px;
   border: solid 1px #c2c9cc;
   color: black;
-  padding: 3px 12px;
+  display: -webkit-box;
+  display: -moz-box;
+  display: -ms-flexbox;
+  display: -webkit-flex;
+  display: flex;
+  align-items: center;
+  margin-right: 20px;
+  padding: 0;
+  padding-left: 5px;
+  transition: border-color ease-in-out 0.15s, box-shadow ease-in-out 0.15s;
 }
 .dropdown .btn.btn-default.dropdown-toggle .caret {
+  position: absolute;
+  right: 10px;
+  top: 13px;
   color: #089fd7;
 }
 .dropdown .btn.btn-default.dropdown-toggle:focus,
@@ -10554,6 +10609,17 @@ ul.links li.active {
   border-bottom: 1px solid #000;
 }
 /*
+﻿Developed with the contribution of the European Commission - Directorate General for Maritime Affairs and Fisheries
+© European Union, 2015-2016.
+
+This file is part of the Integrated Fisheries Data Management (IFDM) Suite. The IFDM Suite is free software: you can
+redistribute it and/or modify it under the terms of the GNU General Public License as published by the
+Free Software Foundation, either version 3 of the License, or any later version. The IFDM Suite is distributed in
+the hope that it will be useful, but WITHOUT ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or
+FITNESS FOR A PARTICULAR PURPOSE.  See the GNU General Public License for more details. You should have received a
+copy of the GNU General Public License along with the IFDM Suite. If not, see <http://www.gnu.org/licenses/>.
+ */
+/*
  * Common styling of forms and inputs
  *
  */
@@ -10588,8 +10654,10 @@ fieldset[disabled] .form-control {
   opacity: 1;
 }
 .form-control {
-  background-color: #FFFFFF;
+  background-color: #ffffff;
   height: 30px;
+  -webkit-box-shadow: none;
+  box-shadow: none;
 }
 .form-control::-moz-placeholder {
   color: #999999;
@@ -10636,17 +10704,20 @@ label.section {
 .has-error .datepicker > input[date-picker-formatter].ng-valid.ng-dirty.ng-valid-parse.ng-touched,
 .has-error textarea,
 .has-error .periodInput,
+.has-error .btn.btn-default.dropdown-toggle,
 .has-error .form-control:focus,
 .has-error input:focus,
 .has-error .datepicker > input[date-picker-formatter].ng-valid.ng-dirty.ng-valid-parse.ng-touched:focus,
 .has-error textarea:focus,
 .has-error .periodInput:focus,
+.has-error .btn.btn-default.dropdown-toggle:focus,
 .has-error .form-control:hover,
 .has-error input:hover,
 .has-error .datepicker > input[date-picker-formatter].ng-valid.ng-dirty.ng-valid-parse.ng-touched:hover,
 .has-error textarea:hover,
-.has-error .periodInput:hover {
-  border: 1px solid red;
+.has-error .periodInput:hover,
+.has-error .btn.btn-default.dropdown-toggle:hover {
+  border: 1px solid #df1f26;
   box-shadow: none !important;
 }
 .form-group .help-block {
@@ -10654,6 +10725,8 @@ label.section {
 }
 .form-group.has-error .help-block {
   display: block;
+  font-size: 95%;
+  color: #c91c22;
 }
 .inputerrors .glyphicon {
   top: 2px;
@@ -10689,8 +10762,20 @@ select {
   border-bottom-right-radius: 2px;
 }
 .mandatory {
-  color: red;
+  color: #df1f26;
+  padding-left: 3px;
 }
+/*
+﻿Developed with the contribution of the European Commission - Directorate General for Maritime Affairs and Fisheries
+© European Union, 2015-2016.
+
+This file is part of the Integrated Fisheries Data Management (IFDM) Suite. The IFDM Suite is free software: you can
+redistribute it and/or modify it under the terms of the GNU General Public License as published by the
+Free Software Foundation, either version 3 of the License, or any later version. The IFDM Suite is distributed in
+the hope that it will be useful, but WITHOUT ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or
+FITNESS FOR A PARTICULAR PURPOSE.  See the GNU General Public License for more details. You should have received a
+copy of the GNU General Public License along with the IFDM Suite. If not, see <http://www.gnu.org/licenses/>.
+ */
 .xdsoft_datetimepicker {
   box-shadow: 0 5px 15px -5px rgba(0, 0, 0, 0.506);
   background: #fff;
@@ -11254,6 +11339,17 @@ select {
   /* IE6-9 */
 }
 /* Component LESS */
+/*
+﻿Developed with the contribution of the European Commission - Directorate General for Maritime Affairs and Fisheries
+© European Union, 2015-2016.
+
+This file is part of the Integrated Fisheries Data Management (IFDM) Suite. The IFDM Suite is free software: you can
+redistribute it and/or modify it under the terms of the GNU General Public License as published by the
+Free Software Foundation, either version 3 of the License, or any later version. The IFDM Suite is distributed in
+the hope that it will be useful, but WITHOUT ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or
+FITNESS FOR A PARTICULAR PURPOSE.  See the GNU General Public License for more details. You should have received a
+copy of the GNU General Public License along with the IFDM Suite. If not, see <http://www.gnu.org/licenses/>.
+ */
 .errorContainer .errorMessage {
   margin-top: 20px;
   margin-bottom: 40px;
@@ -11263,6 +11359,17 @@ select {
   margin-top: 40px;
   font-weight: bold;
 }
+/*
+﻿Developed with the contribution of the European Commission - Directorate General for Maritime Affairs and Fisheries
+© European Union, 2015-2016.
+
+This file is part of the Integrated Fisheries Data Management (IFDM) Suite. The IFDM Suite is free software: you can
+redistribute it and/or modify it under the terms of the GNU General Public License as published by the
+Free Software Foundation, either version 3 of the License, or any later version. The IFDM Suite is distributed in
+the hope that it will be useful, but WITHOUT ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or
+FITNESS FOR A PARTICULAR PURPOSE.  See the GNU General Public License for more details. You should have received a
+copy of the GNU General Public License along with the IFDM Suite. If not, see <http://www.gnu.org/licenses/>.
+ */
 .loginoutContainer .background {
   position: fixed;
   top: 0px;
@@ -11346,6 +11453,17 @@ select {
 .loginoutContainer .loginContent .formContainer .forgotPassword:focus {
   text-decoration: underline;
 }
+/*
+﻿Developed with the contribution of the European Commission - Directorate General for Maritime Affairs and Fisheries
+© European Union, 2015-2016.
+
+This file is part of the Integrated Fisheries Data Management (IFDM) Suite. The IFDM Suite is free software: you can
+redistribute it and/or modify it under the terms of the GNU General Public License as published by the
+Free Software Foundation, either version 3 of the License, or any later version. The IFDM Suite is distributed in
+the hope that it will be useful, but WITHOUT ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or
+FITNESS FOR A PARTICULAR PURPOSE.  See the GNU General Public License for more details. You should have received a
+copy of the GNU General Public License along with the IFDM Suite. If not, see <http://www.gnu.org/licenses/>.
+ */
 .header {
   width: 100%;
   background-color: #363636;
@@ -11429,17 +11547,13 @@ select {
   box-shadow: none !important;
 }
 .headercontainer .btn.btn-default.dropdown-toggle .caret {
-  position: relative;
-  top: 9px;
-  color: white;
-  float: left;
-  margin-left: 4px;
+  color: #ffffff;
 }
 .headercontainer .btn.btn-default.dropdown-toggle:hover {
   background-color: #303030;
 }
 .headercontainer .language-select .flag {
-  float: left;
+  margin-right: 4px;
 }
 .headercontainer .language-select .flag .flag-icon {
   background-size: contain;
@@ -11557,7 +11671,7 @@ select {
   color: white;
 }
 .headercontainer .signed-in .login-drop-down .username {
-  float: left;
+  margin-right: 4px;
 }
 .headercontainer .signed-in .login-drop-down i {
   margin-right: 5px;
@@ -11586,6 +11700,17 @@ select {
   font-size: 15px;
   margin-right: 5px;
 }
+/*
+﻿Developed with the contribution of the European Commission - Directorate General for Maritime Affairs and Fisheries
+© European Union, 2015-2016.
+
+This file is part of the Integrated Fisheries Data Management (IFDM) Suite. The IFDM Suite is free software: you can
+redistribute it and/or modify it under the terms of the GNU General Public License as published by the
+Free Software Foundation, either version 3 of the License, or any later version. The IFDM Suite is distributed in
+the hope that it will be useful, but WITHOUT ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or
+FITNESS FOR A PARTICULAR PURPOSE.  See the GNU General Public License for more details. You should have received a
+copy of the GNU General Public License along with the IFDM Suite. If not, see <http://www.gnu.org/licenses/>.
+ */
 footer {
   position: absolute;
   bottom: 0;
@@ -11616,6 +11741,17 @@ footer a:hover {
   color: white;
   text-decoration: underline;
 }
+/*
+﻿Developed with the contribution of the European Commission - Directorate General for Maritime Affairs and Fisheries
+© European Union, 2015-2016.
+
+This file is part of the Integrated Fisheries Data Management (IFDM) Suite. The IFDM Suite is free software: you can
+redistribute it and/or modify it under the terms of the GNU General Public License as published by the
+Free Software Foundation, either version 3 of the License, or any later version. The IFDM Suite is distributed in
+the hope that it will be useful, but WITHOUT ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or
+FITNESS FOR A PARTICULAR PURPOSE.  See the GNU General Public License for more details. You should have received a
+copy of the GNU General Public License along with the IFDM Suite. If not, see <http://www.gnu.org/licenses/>.
+ */
 .headerMenuWrapper {
   position: relative;
   bottom: 0px;
@@ -11671,6 +11807,17 @@ footer a:hover {
 .headermenu .headercontainer ul li:last-child div {
   box-shadow: 1px 0 0 0px #000;
 }
+/*
+﻿Developed with the contribution of the European Commission - Directorate General for Maritime Affairs and Fisheries
+© European Union, 2015-2016.
+
+This file is part of the Integrated Fisheries Data Management (IFDM) Suite. The IFDM Suite is free software: you can
+redistribute it and/or modify it under the terms of the GNU General Public License as published by the
+Free Software Foundation, either version 3 of the License, or any later version. The IFDM Suite is distributed in
+the hope that it will be useful, but WITHOUT ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or
+FITNESS FOR A PARTICULAR PURPOSE.  See the GNU General Public License for more details. You should have received a
+copy of the GNU General Public License along with the IFDM Suite. If not, see <http://www.gnu.org/licenses/>.
+ */
 .todayContainer .chart-card {
   margin-bottom: 20px;
 }
@@ -11715,6 +11862,17 @@ footer a:hover {
 .todayContainer .non-transmitting-container .reports {
   color: #089fd7;
 }
+/*
+﻿Developed with the contribution of the European Commission - Directorate General for Maritime Affairs and Fisheries
+© European Union, 2015-2016.
+
+This file is part of the Integrated Fisheries Data Management (IFDM) Suite. The IFDM Suite is free software: you can
+redistribute it and/or modify it under the terms of the GNU General Public License as published by the
+Free Software Foundation, either version 3 of the License, or any later version. The IFDM Suite is distributed in
+the hope that it will be useful, but WITHOUT ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or
+FITNESS FOR A PARTICULAR PURPOSE.  See the GNU General Public License for more details. You should have received a
+copy of the GNU General Public License along with the IFDM Suite. If not, see <http://www.gnu.org/licenses/>.
+ */
 .vesselDetailsContainer {
   padding-top: 10px;
 }
@@ -11723,16 +11881,384 @@ footer a:hover {
 }
 .vesselDetailsContainer .grossTonage .unit-input .unit-box {
   width: 55px;
+  border-radius: 0px !important;
 }
-.vesselDetailsContainer .unit-box {
-  border-top-right-radius: 0px !important;
-  border-bottom-right-radius: 0px !important;
+.vesselDetailsContainer .lengthValue .unit-box {
+  border-radius: 0px !important;
 }
-.vesselDetailsContainer .lengthTypeUnit .dropdown button,
-.vesselDetailsContainer .grossTonnageUnit .dropdown button {
-  border-top-left-radius: 0px !important;
-  border-bottom-left-radius: 0px !important;
+.vesselDetailsContainer .border-radius-right button {
+  border-radius: 0px !important;
+  border-top-right-radius: 2px !important;
+  border-bottom-right-radius: 2px !important;
 }
+.vesselDetailsContainer .contact-wrapper .contact-item {
+  margin: 0 -15px;
+  display: block;
+}
+.vesselDetailsContainer .contact-wrapper .contact-item:before,
+.vesselDetailsContainer .contact-wrapper .contact-item:after {
+  content: " ";
+  display: table;
+}
+.vesselDetailsContainer .contact-wrapper .contact-item:after {
+  clear: both;
+}
+.vesselDetailsContainer .contact-wrapper .contact-item:before,
+.vesselDetailsContainer .contact-wrapper .contact-item:after {
+  content: " ";
+  display: table;
+}
+.vesselDetailsContainer .contact-wrapper .contact-item:after {
+  clear: both;
+}
+.vesselDetailsContainer .btn-removeContact {
+  margin-left: 7px;
+  margin-top: 20px;
+  height: 30px;
+  width: 30px;
+  padding: 0;
+  line-height: 29px;
+  font-size: 100%;
+  color: #089fd7;
+}
+.vesselDetailsContainer .btn-removeContact:hover {
+  color: #df1f26;
+}
+.vesselDetailsContainer .btn-addContact i {
+  margin-right: 3px;
+}
+/*
+﻿Developed with the contribution of the European Commission - Directorate General for Maritime Affairs and Fisheries
+© European Union, 2015-2016.
+
+This file is part of the Integrated Fisheries Data Management (IFDM) Suite. The IFDM Suite is free software: you can
+redistribute it and/or modify it under the terms of the GNU General Public License as published by the
+Free Software Foundation, either version 3 of the License, or any later version. The IFDM Suite is distributed in
+the hope that it will be useful, but WITHOUT ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or
+FITNESS FOR A PARTICULAR PURPOSE.  See the GNU General Public License for more details. You should have received a
+copy of the GNU General Public License along with the IFDM Suite. If not, see <http://www.gnu.org/licenses/>.
+ */
+.vesselNotesContainer .row {
+  margin-left: -7px;
+  margin-right: -7px;
+}
+.vesselNotesContainer textarea {
+  border-radius: 2px;
+  padding-left: 5px;
+  resize: vertical;
+}
+.vesselNotesContainer .left-form {
+  float: left;
+  width: 70%;
+  padding: 0;
+}
+.vesselNotesContainer .right-form {
+  float: right;
+  width: 21.5%;
+  padding: 0;
+}
+.vesselNotesContainer .right-form .row {
+  float: right;
+  width: 100%;
+}
+.vesselNotesContainer .right-form .row .form-group {
+  padding-left: 0;
+}
+/*
+﻿Developed with the contribution of the European Commission - Directorate General for Maritime Affairs and Fisheries
+© European Union, 2015-2016.
+
+This file is part of the Integrated Fisheries Data Management (IFDM) Suite. The IFDM Suite is free software: you can
+redistribute it and/or modify it under the terms of the GNU General Public License as published by the
+Free Software Foundation, either version 3 of the License, or any later version. The IFDM Suite is distributed in
+the hope that it will be useful, but WITHOUT ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or
+FITNESS FOR A PARTICULAR PURPOSE.  See the GNU General Public License for more details. You should have received a
+copy of the GNU General Public License along with the IFDM Suite. If not, see <http://www.gnu.org/licenses/>.
+ */
+.mobileTerminalDetailsContainer .channel-form {
+  max-width: 1200px;
+  background: #f7f7f7;
+  margin-bottom: 15px;
+  padding: 7.5px;
+  margin-left: -7.5px;
+  margin-right: -7.5px;
+}
+.mobileTerminalDetailsContainer .channel-form .flexrow {
+  margin-bottom: 15px;
+}
+.mobileTerminalDetailsContainer .channel-form .flexrow:last-of-type {
+  margin-bottom: 0;
+}
+.mobileTerminalDetailsContainer .channel-form .flexrow .form-group {
+  margin-bottom: 0;
+}
+.mobileTerminalDetailsContainer .transponderSystemSelects {
+  align-items: center;
+  display: -webkit-box;
+  display: -moz-box;
+  display: -ms-flexbox;
+  display: -webkit-flex;
+  display: flex;
+  flex-flow: column nowrap;
+  justify-content: center;
+  max-width: 1200px;
+}
+.mobileTerminalDetailsContainer .currentMobileTerminalTypes {
+  width: 100%;
+}
+.mobileTerminalDetailsContainer .flexrow {
+  align-items: center;
+  display: -webkit-box;
+  display: -moz-box;
+  display: -ms-flexbox;
+  display: -webkit-flex;
+  display: flex;
+  width: 100%;
+}
+.mobileTerminalDetailsContainer .flexrow .form-group {
+  margin-right: 20px;
+  align-self: flex-end;
+}
+.mobileTerminalDetailsContainer .flexrow .form-group.long-field {
+  flex-basis: 230px;
+}
+.mobileTerminalDetailsContainer .flexrow .form-group.medium-field {
+  flex-basis: 180px;
+}
+.mobileTerminalDetailsContainer .flexrow .form-group.medium-field-static {
+  width: 180px;
+}
+.mobileTerminalDetailsContainer .flexrow .form-group.short-field {
+  flex-basis: 100px;
+}
+.mobileTerminalDetailsContainer .flexrow .form-group.align-right {
+  margin-left: auto;
+}
+.mobileTerminalDetailsContainer .flexrow .form-group:last-of-type {
+  margin-right: 0;
+}
+.mobileTerminalDetailsContainer .flexrow .form-group .help-block {
+  position: absolute;
+}
+.mobileTerminalDetailsContainer .flexrow.form-section-1 {
+  margin-bottom: 5px;
+}
+.mobileTerminalDetailsContainer .flexrow.form-section-2 {
+  margin-bottom: 20px;
+}
+.mobileTerminalDetailsContainer .flexrow.form-section-header {
+  margin-bottom: 5px;
+}
+.mobileTerminalDetailsContainer .delete-channel {
+  margin-bottom: 10px;
+}
+.mobileTerminalDetailsContainer .delete-channel:before,
+.mobileTerminalDetailsContainer .delete-channel:after {
+  content: " ";
+  display: table;
+}
+.mobileTerminalDetailsContainer .delete-channel:after {
+  clear: both;
+}
+.mobileTerminalDetailsContainer .delete-channel:before,
+.mobileTerminalDetailsContainer .delete-channel:after {
+  content: " ";
+  display: table;
+}
+.mobileTerminalDetailsContainer .delete-channel:after {
+  clear: both;
+}
+.mobileTerminalDetailsContainer .delete-channel .btn {
+  padding: 4px 9px 3px;
+  font-size: 100%;
+  color: #df1f26;
+  float: right;
+}
+.mobileTerminalDetailsContainer .dropdown .dropdowntext {
+  padding-right: 20px;
+}
+.mobileTerminalDetailsContainer .dropdown .btn.btn-default.dropdown-toggle {
+  display: -webkit-box;
+  display: -moz-box;
+  display: -ms-flexbox;
+  display: -webkit-flex;
+  display: flex;
+  align-items: center;
+  padding-left: 5px;
+}
+.mobileTerminalDetailsContainer .dropdown .btn.btn-default.dropdown-toggle .placeholderText {
+  position: absolute;
+  left: 5px;
+  margin-right: 0;
+  margin-top: 0;
+  padding-left: 0px;
+}
+.mobileTerminalDetailsContainer .dropdown .btn.btn-default.dropdown-toggle span {
+  bottom: 0;
+  margin-left: auto;
+}
+.mobileTerminalDetailsContainer .radio-buttons,
+.mobileTerminalDetailsContainer .checkboxes-buttons {
+  display: -webkit-box;
+  display: -moz-box;
+  display: -ms-flexbox;
+  display: -webkit-flex;
+  display: flex;
+}
+.mobileTerminalDetailsContainer .radio-buttons .radio-button,
+.mobileTerminalDetailsContainer .checkboxes-buttons .radio-button,
+.mobileTerminalDetailsContainer .radio-buttons .checkbox-button,
+.mobileTerminalDetailsContainer .checkboxes-buttons .checkbox-button {
+  position: relative;
+  margin-right: 20px;
+}
+.mobileTerminalDetailsContainer .radio-buttons .radio-button:last-of-type,
+.mobileTerminalDetailsContainer .checkboxes-buttons .radio-button:last-of-type,
+.mobileTerminalDetailsContainer .radio-buttons .checkbox-button:last-of-type,
+.mobileTerminalDetailsContainer .checkboxes-buttons .checkbox-button:last-of-type {
+  margin-right: 0;
+}
+.mobileTerminalDetailsContainer .radio-buttons .radio-button label.radio-btn,
+.mobileTerminalDetailsContainer .checkboxes-buttons .radio-button label.radio-btn,
+.mobileTerminalDetailsContainer .radio-buttons .checkbox-button label.radio-btn,
+.mobileTerminalDetailsContainer .checkboxes-buttons .checkbox-button label.radio-btn,
+.mobileTerminalDetailsContainer .radio-buttons .radio-button input[type="checkbox"],
+.mobileTerminalDetailsContainer .checkboxes-buttons .radio-button input[type="checkbox"],
+.mobileTerminalDetailsContainer .radio-buttons .checkbox-button input[type="checkbox"],
+.mobileTerminalDetailsContainer .checkboxes-buttons .checkbox-button input[type="checkbox"] {
+  display: block;
+  position: relative;
+  height: 30px;
+  margin: 0px auto;
+}
+.mobileTerminalDetailsContainer .radio-buttons .radio-button input[type="radio"],
+.mobileTerminalDetailsContainer .checkboxes-buttons .radio-button input[type="radio"],
+.mobileTerminalDetailsContainer .radio-buttons .checkbox-button input[type="radio"],
+.mobileTerminalDetailsContainer .checkboxes-buttons .checkbox-button input[type="radio"] {
+  opacity: 0;
+  width: 0px;
+  height: 0px;
+  position: absolute;
+}
+.mobileTerminalDetailsContainer .radio-buttons .radio-button input[type="radio"] + label:before,
+.mobileTerminalDetailsContainer .checkboxes-buttons .radio-button input[type="radio"] + label:before,
+.mobileTerminalDetailsContainer .radio-buttons .checkbox-button input[type="radio"] + label:before,
+.mobileTerminalDetailsContainer .checkboxes-buttons .checkbox-button input[type="radio"] + label:before,
+.mobileTerminalDetailsContainer .radio-buttons .radio-button input[type="radio"]:checked + label:after,
+.mobileTerminalDetailsContainer .checkboxes-buttons .radio-button input[type="radio"]:checked + label:after,
+.mobileTerminalDetailsContainer .radio-buttons .checkbox-button input[type="radio"]:checked + label:after,
+.mobileTerminalDetailsContainer .checkboxes-buttons .checkbox-button input[type="radio"]:checked + label:after {
+  display: block;
+  border-radius: 50%;
+  cursor: pointer;
+  content: "";
+  z-index: 1;
+  -webkit-transition: all 500ms ease;
+  -moz-transition: all 500ms ease;
+  -o-transition: all 500ms ease;
+  transition: all 500ms ease;
+  position: absolute;
+  left: 50%;
+  top: 50%;
+  -webkit-transform: translate(-50%, -50%);
+  -moz-transform: translate(-50%, -50%);
+  -ms-transform: translate(-50%, -50%);
+  -o-transform: translate(-50%, -50%);
+  transform: translate(-50%, -50%);
+}
+.mobileTerminalDetailsContainer .radio-buttons .radio-button input[type="radio"] + label:before,
+.mobileTerminalDetailsContainer .checkboxes-buttons .radio-button input[type="radio"] + label:before,
+.mobileTerminalDetailsContainer .radio-buttons .checkbox-button input[type="radio"] + label:before,
+.mobileTerminalDetailsContainer .checkboxes-buttons .checkbox-button input[type="radio"] + label:before {
+  border: 1px solid #c2c9cc;
+  background: #fff;
+  width: 24px;
+  height: 24px;
+}
+.mobileTerminalDetailsContainer .radio-buttons .radio-button input[type="radio"]:checked + label:after,
+.mobileTerminalDetailsContainer .checkboxes-buttons .radio-button input[type="radio"]:checked + label:after,
+.mobileTerminalDetailsContainer .radio-buttons .checkbox-button input[type="radio"]:checked + label:after,
+.mobileTerminalDetailsContainer .checkboxes-buttons .checkbox-button input[type="radio"]:checked + label:after {
+  background: #089fd7;
+  width: 14px;
+  height: 14px;
+}
+.mobileTerminalDetailsContainer .switch-container {
+  float: right;
+}
+.mobileTerminalDetailsContainer .switch {
+  position: relative;
+  display: block;
+  width: 60px;
+  height: 30px;
+}
+.mobileTerminalDetailsContainer .switch input {
+  display: none;
+}
+.mobileTerminalDetailsContainer .slider {
+  position: absolute;
+  cursor: pointer;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  border-radius: 5px;
+  background-color: #df1f26;
+  -webkit-transition: all 400ms ease;
+  -moz-transition: all 400ms ease;
+  -o-transition: all 400ms ease;
+  transition: all 400ms ease;
+}
+.mobileTerminalDetailsContainer .slider .fa {
+  color: rgba(255, 255, 255, 0.95);
+  line-height: 30px;
+}
+.mobileTerminalDetailsContainer .slider .fa.fa-check {
+  padding-left: 10px;
+}
+.mobileTerminalDetailsContainer .slider .fa.fa-times {
+  float: right;
+  padding-right: 12px;
+}
+.mobileTerminalDetailsContainer .slider:before {
+  position: absolute;
+  content: '';
+  height: 100%;
+  width: 26px;
+  left: 0px;
+  bottom: 0px;
+  border-radius: 4px;
+  background-color: #c2c9cc;
+  -webkit-transition: all 400ms ease;
+  -moz-transition: all 400ms ease;
+  -o-transition: all 400ms ease;
+  transition: all 400ms ease;
+}
+.mobileTerminalDetailsContainer input:checked + .slider {
+  background-color: #6fc474;
+}
+.mobileTerminalDetailsContainer input:focus + .slider {
+  box-shadow: 0 0 1px #6fc474;
+}
+.mobileTerminalDetailsContainer input:checked + .slider:before {
+  -webkit-transform: translateX(34px);
+  -ms-transform: translateX(34px);
+  transform: translateX(34px);
+}
+.mobileTerminalDetailsContainer input:disabled + .slider {
+  cursor: not-allowed;
+}
+/*
+﻿Developed with the contribution of the European Commission - Directorate General for Maritime Affairs and Fisheries
+© European Union, 2015-2016.
+
+This file is part of the Integrated Fisheries Data Management (IFDM) Suite. The IFDM Suite is free software: you can
+redistribute it and/or modify it under the terms of the GNU General Public License as published by the
+Free Software Foundation, either version 3 of the License, or any later version. The IFDM Suite is distributed in
+the hope that it will be useful, but WITHOUT ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or
+FITNESS FOR A PARTICULAR PURPOSE.  See the GNU General Public License for more details. You should have received a
+copy of the GNU General Public License along with the IFDM Suite. If not, see <http://www.gnu.org/licenses/>.
+ */
 .advancedSearch .row {
   margin-bottom: 15px;
   margin-top: 15px;
@@ -11783,9 +12309,31 @@ footer a:hover {
 .alarmSearchContainer .no-padding {
   padding: 0;
 }
+/*
+﻿Developed with the contribution of the European Commission - Directorate General for Maritime Affairs and Fisheries
+© European Union, 2015-2016.
+
+This file is part of the Integrated Fisheries Data Management (IFDM) Suite. The IFDM Suite is free software: you can
+redistribute it and/or modify it under the terms of the GNU General Public License as published by the
+Free Software Foundation, either version 3 of the License, or any later version. The IFDM Suite is distributed in
+the hope that it will be useful, but WITHOUT ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or
+FITNESS FOR A PARTICULAR PURPOSE.  See the GNU General Public License for more details. You should have received a
+copy of the GNU General Public License along with the IFDM Suite. If not, see <http://www.gnu.org/licenses/>.
+ */
 .advancedSearch .resetAndSearchContainer button {
   width: 100%;
 }
+/*
+﻿Developed with the contribution of the European Commission - Directorate General for Maritime Affairs and Fisheries
+© European Union, 2015-2016.
+
+This file is part of the Integrated Fisheries Data Management (IFDM) Suite. The IFDM Suite is free software: you can
+redistribute it and/or modify it under the terms of the GNU General Public License as published by the
+Free Software Foundation, either version 3 of the License, or any later version. The IFDM Suite is distributed in
+the hope that it will be useful, but WITHOUT ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or
+FITNESS FOR A PARTICULAR PURPOSE.  See the GNU General Public License for more details. You should have received a
+copy of the GNU General Public License along with the IFDM Suite. If not, see <http://www.gnu.org/licenses/>.
+ */
 .pollingmobileterminalform button {
   width: 100%;
 }
@@ -11939,6 +12487,17 @@ div.loadingIndicator.small .loadingText {
   top: calc(50% + 40px / 2 + 10px);
   left: calc(50% - 150px / 2);
 }
+/*
+﻿Developed with the contribution of the European Commission - Directorate General for Maritime Affairs and Fisheries
+© European Union, 2015-2016.
+
+This file is part of the Integrated Fisheries Data Management (IFDM) Suite. The IFDM Suite is free software: you can
+redistribute it and/or modify it under the terms of the GNU General Public License as published by the
+Free Software Foundation, either version 3 of the License, or any later version. The IFDM Suite is distributed in
+the hope that it will be useful, but WITHOUT ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or
+FITNESS FOR A PARTICULAR PURPOSE.  See the GNU General Public License for more details. You should have received a
+copy of the GNU General Public License along with the IFDM Suite. If not, see <http://www.gnu.org/licenses/>.
+ */
 .datepicker .btn-cal {
   height: 28px;
   width: 30px;
@@ -11953,15 +12512,98 @@ div.loadingIndicator.small .loadingText {
   border-top-right-radius: 2px !important;
   border-bottom-right-radius: 2px !important;
 }
-.xdsoft_datetimepicker.fullscreen-datepicker {
-  margin-top: -98px !important;
-}
 .xdsoft_datetimepicker button {
   box-shadow: 0px !important;
 }
-.fullscreen .xdsoft_datetimepicker.fullscreen-datepicker {
-  margin-top: 2px !important;
+/*
+﻿Developed with the contribution of the European Commission - Directorate General for Maritime Affairs and Fisheries
+© European Union, 2015-2016.
+
+This file is part of the Integrated Fisheries Data Management (IFDM) Suite. The IFDM Suite is free software: you can
+redistribute it and/or modify it under the terms of the GNU General Public License as published by the
+Free Software Foundation, either version 3 of the License, or any later version. The IFDM Suite is distributed in
+the hope that it will be useful, but WITHOUT ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or
+FITNESS FOR A PARTICULAR PURPOSE.  See the GNU General Public License for more details. You should have received a
+copy of the GNU General Public License along with the IFDM Suite. If not, see <http://www.gnu.org/licenses/>.
+ */
+.menuBar {
+  display: -webkit-box;
+  display: -moz-box;
+  display: -ms-flexbox;
+  display: -webkit-flex;
+  display: flex;
+  align-items: center;
+  padding: 0 15px;
 }
+.menuBar .textAlignRight {
+  margin-left: auto;
+}
+.menuBar .textAlignRight .wrapper {
+  display: -webkit-box;
+  display: -moz-box;
+  display: -ms-flexbox;
+  display: -webkit-flex;
+  display: flex;
+  align-items: center;
+}
+.menuBar .textAlignRight .wrapper .item .menuTextItem {
+  margin-right: 20px;
+}
+.menuBar .textAlignRight .wrapper .item:last-of-type .menuTextItem {
+  margin-right: 0;
+}
+.menuBar .textAlignLeft .wrapper {
+  display: -webkit-box;
+  display: -moz-box;
+  display: -ms-flexbox;
+  display: -webkit-flex;
+  display: flex;
+  align-items: center;
+}
+.menuBar .textAlignLeft .wrapper .item {
+  margin-right: 20px;
+  display: inline-block;
+}
+.menuBar .btn-add {
+  padding: 3px 10px;
+  line-height: 1.5;
+}
+.menuBar .btn-add i {
+  padding-right: 5px;
+}
+.menuBar .btn-cancel {
+  cursor: pointer;
+  color: #089fd7;
+}
+.menuBar .btn-archive,
+.menuBar .btn-history,
+.menuBar .btn-unlink,
+.menuBar .btn-edit {
+  width: 30px;
+  height: 30px;
+  line-height: 28px;
+  text-align: center;
+  padding: 0px;
+}
+.menuBar .btn-archive,
+.menuBar .btn-unlink {
+  color: #df1f26;
+}
+.menuBar .btn-history,
+.menuBar .btn-edit {
+  color: #089fd7;
+}
+/*
+﻿Developed with the contribution of the European Commission - Directorate General for Maritime Affairs and Fisheries
+© European Union, 2015-2016.
+
+This file is part of the Integrated Fisheries Data Management (IFDM) Suite. The IFDM Suite is free software: you can
+redistribute it and/or modify it under the terms of the GNU General Public License as published by the
+Free Software Foundation, either version 3 of the License, or any later version. The IFDM Suite is distributed in
+the hope that it will be useful, but WITHOUT ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or
+FITNESS FOR A PARTICULAR PURPOSE.  See the GNU General Public License for more details. You should have received a
+copy of the GNU General Public License along with the IFDM Suite. If not, see <http://www.gnu.org/licenses/>.
+ */
 .vesselsearchboxcontainer {
   background-color: white;
 }
@@ -12052,6 +12694,17 @@ div.loadingIndicator.small .loadingText {
 .archived {
   color: #999;
 }
+/*
+﻿Developed with the contribution of the European Commission - Directorate General for Maritime Affairs and Fisheries
+© European Union, 2015-2016.
+
+This file is part of the Integrated Fisheries Data Management (IFDM) Suite. The IFDM Suite is free software: you can
+redistribute it and/or modify it under the terms of the GNU General Public License as published by the
+Free Software Foundation, either version 3 of the License, or any later version. The IFDM Suite is distributed in
+the hope that it will be useful, but WITHOUT ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or
+FITNESS FOR A PARTICULAR PURPOSE.  See the GNU General Public License for more details. You should have received a
+copy of the GNU General Public License along with the IFDM Suite. If not, see <http://www.gnu.org/licenses/>.
+ */
 .vesselForm {
   margin-bottom: 20px;
 }
@@ -12059,82 +12712,109 @@ div.loadingIndicator.small .loadingText {
   padding-top: 20px;
   padding-bottom: 20px;
 }
+.vesselForm .detailsContainer:after {
+  content: '';
+  display: table;
+  clear: both;
+}
+.vesselForm .notesContainer {
+  border-top: 1px solid #dddddd;
+  display: -webkit-box;
+  display: -moz-box;
+  display: -ms-flexbox;
+  display: -webkit-flex;
+  display: flex;
+}
+.vesselForm .notesContainer:after {
+  content: '';
+  display: table;
+  clear: both;
+}
+.vesselForm .notesContainer .notesListContainer {
+  border-right: 1px solid #dddddd;
+  padding: 15px;
+}
+.vesselForm .notesContainer .notesListContainer .list td:first-child,
+.vesselForm .notesContainer .notesListContainer .list div.td:first-child,
+.vesselForm .notesContainer .notesListContainer .list div.td:first-child {
+  width: 30%;
+}
+.vesselForm .notesContainer .notesListContainer .list td:nth-child(2),
+.vesselForm .notesContainer .notesListContainer .list div.td:nth-child(2),
+.vesselForm .notesContainer .notesListContainer .list div.td:nth-child(2) {
+  width: 70%;
+}
+.vesselForm .notesContainer .notesForm {
+  padding: 15px;
+}
 .vesselForm .historyAndTerminalInformation {
   border-top: 1px solid #dddddd;
-  margin-top: 20px;
-  padding-bottom: 10px;
+  display: -webkit-box;
+  display: -moz-box;
+  display: -ms-flexbox;
+  display: -webkit-flex;
+  display: flex;
+  margin-bottom: -15px;
 }
 .vesselForm .historyAndTerminalInformation > .row {
   padding-top: 10px;
 }
-.vesselForm .historyAndTerminalInformation h5 {
+.vesselForm .historyAndTerminalInformation .historyContainer {
+  padding: 15px;
+}
+.vesselForm .historyAndTerminalInformation .historyContainer .list td:first-child,
+.vesselForm .historyAndTerminalInformation .historyContainer .list div.td:first-child,
+.vesselForm .historyAndTerminalInformation .historyContainer .list div.td:first-child {
+  width: 30%;
+}
+.vesselForm .historyAndTerminalInformation .historyContainer .list td:nth-child(2),
+.vesselForm .historyAndTerminalInformation .historyContainer .list div.td:nth-child(2),
+.vesselForm .historyAndTerminalInformation .historyContainer .list div.td:nth-child(2) {
+  width: 70%;
+}
+.vesselForm .mobileTerminalsContainer {
+  margin-top: 40px;
+}
+.vesselForm .mobileTerminalsContainer h3 {
+  margin: 0;
+}
+.vesselForm .mobileTerminalsContainer .loadingIndicator {
+  position: relative;
+}
+.vesselForm .mobileTerminalsContainer .loadingIndicator:after {
+  content: '';
+  display: table;
+  clear: both;
+}
+.vesselForm .mobileTerminalsContainer .loadingIndicator .spinnerOverlay {
+  display: none;
+}
+.vesselForm h5 {
   margin-top: 0px;
   margin-bottom: 10px;
 }
-.vesselForm .historyAndTerminalInformation .loadingIndicator {
-  margin-top: 20px;
-}
-.vesselForm .historyAndTerminalInformation .historyContainer td:first-child,
-.vesselForm .historyAndTerminalInformation .historyContainer div.td:first-child,
-.vesselForm .historyAndTerminalInformation .historyContainer div.td:first-child {
-  width: 30%;
-}
-.vesselForm .historyAndTerminalInformation .historyContainer td:nth-child(2),
-.vesselForm .historyAndTerminalInformation .historyContainer div.td:nth-child(2),
-.vesselForm .historyAndTerminalInformation .historyContainer div.td:nth-child(2) {
-  width: 70%;
-}
-.vesselForm .historyAndTerminalInformation .terminalsContainer td,
-.vesselForm .historyAndTerminalInformation .terminalsContainer div.td,
-.vesselForm .historyAndTerminalInformation .terminalsContainer div.td {
-  width: 25%;
-}
-.vesselForm .historyAndTerminalInformation .terminalsContainer tr.inactive,
-.vesselForm .historyAndTerminalInformation .terminalsContainer div.tr.inactive,
-.vesselForm .historyAndTerminalInformation .terminalsContainer div.tr.inactive {
-  color: #aaa;
-}
-.vesselForm .historyAndTerminalInformation .notesContainer textarea {
-  width: 100%;
-  resize: none;
-}
-.vesselForm .mobileTerminalsContainer {
-  margin-top: 20px;
-}
-.vesselForm .mobileTerminalsContainer .mobileTerminal {
-  padding: 15px;
-  border: 1px solid #dddddd;
-  border-top-width: 3px;
-  margin-top: 0;
-  margin-bottom: 15px;
-}
-.vesselForm .mobileTerminalsContainer .mobileTerminal .infoRow {
-  padding-top: 6px;
-}
-.vesselForm .mobileTerminalsContainer .mobileTerminal .mobileTerminalChannels {
-  padding-top: 6px;
-  padding-bottom: 6px;
-  margin-bottom: 10px;
-}
-.vesselForm .mobileTerminalsContainer .mobileTerminal .mobileTerminalChannels .channelsHeader {
-  margin-top: 6px;
-}
-.vesselForm .mobileTerminalsContainer .mobileTerminal .mobileTerminalChannels .align-middle {
-  align-items: center;
-  display: flex;
-}
-.vesselForm .mobileTerminalsContainer .mobileTerminal .mobileTerminalChannels .mobileTerminalChannel {
-  padding-top: 0;
-  min-height: initial;
-}
-.vesselForm .mobileTerminalsContainer .mobileTerminal .mobile-terminal-attribute p {
-  font-weight: normal;
-  white-space: nowrap;
-  overflow: hidden;
-}
-.vesselForm .mobileTerminalsContainer .mobileTerminal-warning {
-  border-color: #faebcc;
-}
+/*
+﻿Developed with the contribution of the European Commission - Directorate General for Maritime Affairs and Fisheries
+© European Union, 2015-2016.
+
+This file is part of the Integrated Fisheries Data Management (IFDM) Suite. The IFDM Suite is free software: you can
+redistribute it and/or modify it under the terms of the GNU General Public License as published by the
+Free Software Foundation, either version 3 of the License, or any later version. The IFDM Suite is distributed in
+the hope that it will be useful, but WITHOUT ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or
+FITNESS FOR A PARTICULAR PURPOSE.  See the GNU General Public License for more details. You should have received a
+copy of the GNU General Public License along with the IFDM Suite. If not, see <http://www.gnu.org/licenses/>.
+ */
+/*
+﻿Developed with the contribution of the European Commission - Directorate General for Maritime Affairs and Fisheries
+© European Union, 2015-2016.
+
+This file is part of the Integrated Fisheries Data Management (IFDM) Suite. The IFDM Suite is free software: you can
+redistribute it and/or modify it under the terms of the GNU General Public License as published by the
+Free Software Foundation, either version 3 of the License, or any later version. The IFDM Suite is distributed in
+the hope that it will be useful, but WITHOUT ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or
+FITNESS FOR A PARTICULAR PURPOSE.  See the GNU General Public License for more details. You should have received a
+copy of the GNU General Public License along with the IFDM Suite. If not, see <http://www.gnu.org/licenses/>.
+ */
 .saveSearchModal {
   overflow-y: auto;
 }
@@ -12174,26 +12854,195 @@ div.loadingIndicator.small .loadingText {
   background-color: #089fd7;
   color: #ffffff;
 }
-.vesselHistoryContainer {
+/*
+﻿Developed with the contribution of the European Commission - Directorate General for Maritime Affairs and Fisheries
+© European Union, 2015-2016.
+
+This file is part of the Integrated Fisheries Data Management (IFDM) Suite. The IFDM Suite is free software: you can
+redistribute it and/or modify it under the terms of the GNU General Public License as published by the
+Free Software Foundation, either version 3 of the License, or any later version. The IFDM Suite is distributed in
+the hope that it will be useful, but WITHOUT ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or
+FITNESS FOR A PARTICULAR PURPOSE.  See the GNU General Public License for more details. You should have received a
+copy of the GNU General Public License along with the IFDM Suite. If not, see <http://www.gnu.org/licenses/>.
+ */
+.vesselHistoryContainer .modal-header:before,
+.vesselHistoryContainer .modal-header:after {
+  content: " ";
+  display: table;
+}
+.vesselHistoryContainer .modal-header:after {
+  clear: both;
+}
+.vesselHistoryContainer .modal-header:before,
+.vesselHistoryContainer .modal-header:after {
+  content: " ";
+  display: table;
+}
+.vesselHistoryContainer .modal-header:after {
+  clear: both;
+}
+.vesselHistoryContainer .modal-header .modal-title {
+  line-height: 30px;
+}
+.vesselHistoryContainer .modal-header .modal-description {
+  padding: 10px 0 0 0;
+}
+.vesselHistoryContainer .modal-body {
+  line-height: 22px;
   text-transform: uppercase;
 }
-.vesselHistoryContainer .sectionHeader {
-  color: #777;
-  border-bottom: 1px solid #dddddd;
-  padding-top: 15px;
+.vesselHistoryContainer .modal-body:before,
+.vesselHistoryContainer .modal-body:after {
+  content: " ";
+  display: table;
 }
-.vesselHistoryContainer .historyValues {
-  line-height: 22px;
+.vesselHistoryContainer .modal-body:after {
+  clear: both;
 }
-.vesselHistoryContainer b {
+.vesselHistoryContainer .modal-body:before,
+.vesselHistoryContainer .modal-body:after {
+  content: " ";
+  display: table;
+}
+.vesselHistoryContainer .modal-body:after {
+  clear: both;
+}
+.vesselHistoryContainer .modal-body b {
   text-transform: none;
 }
+.vesselHistoryContainer .modal-body .sectionHeader {
+  color: #777;
+  border-bottom: 1px solid #dddddd;
+  padding-top: 20px;
+}
+.vesselHistoryContainer .modal-body .sectionHeader:first-of-type {
+  padding-top: 0;
+}
+.vesselHistoryContainer .modal-body .contacts {
+  margin: 0;
+}
+.vesselHistoryContainer .modal-body .contacts:before,
+.vesselHistoryContainer .modal-body .contacts:after {
+  content: " ";
+  display: table;
+}
+.vesselHistoryContainer .modal-body .contacts:after {
+  clear: both;
+}
+.vesselHistoryContainer .modal-body .contacts:before,
+.vesselHistoryContainer .modal-body .contacts:after {
+  content: " ";
+  display: table;
+}
+.vesselHistoryContainer .modal-body .contacts:after {
+  clear: both;
+}
+.vesselHistoryContainer .modal-body .contacts .contact {
+  padding-bottom: 10px;
+}
+.vesselHistoryContainer .modal-body .contacts .contact:before,
+.vesselHistoryContainer .modal-body .contacts .contact:after {
+  content: " ";
+  display: table;
+}
+.vesselHistoryContainer .modal-body .contacts .contact:after {
+  clear: both;
+}
+.vesselHistoryContainer .modal-body .contacts .contact:before,
+.vesselHistoryContainer .modal-body .contacts .contact:after {
+  content: " ";
+  display: table;
+}
+.vesselHistoryContainer .modal-body .contacts .contact:after {
+  clear: both;
+}
+.vesselHistoryContainer .modal-body .contacts .contact:last-of-type {
+  padding-bottom: 0;
+}
+.vesselHistoryContainer .modal-footer .btn {
+  padding-top: 1px;
+  padding-bottom: 0;
+}
+.vesselHistoryContainer [class*="col-md-"] {
+  padding-left: 0;
+  padding-right: 0;
+}
+/*
+﻿Developed with the contribution of the European Commission - Directorate General for Maritime Affairs and Fisheries
+© European Union, 2015-2016.
+
+This file is part of the Integrated Fisheries Data Management (IFDM) Suite. The IFDM Suite is free software: you can
+redistribute it and/or modify it under the terms of the GNU General Public License as published by the
+Free Software Foundation, either version 3 of the License, or any later version. The IFDM Suite is distributed in
+the hope that it will be useful, but WITHOUT ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or
+FITNESS FOR A PARTICULAR PURPOSE.  See the GNU General Public License for more details. You should have received a
+copy of the GNU General Public License along with the IFDM Suite. If not, see <http://www.gnu.org/licenses/>.
+ */
+.vesselNotesModalContainer {
+  line-height: 22px;
+  text-transform: uppercase;
+}
+.vesselNotesModalContainer .modal-header {
+  display: -webkit-box;
+  display: -moz-box;
+  display: -ms-flexbox;
+  display: -webkit-flex;
+  display: flex;
+  align-items: center;
+}
+.vesselNotesModalContainer .sectionHeader {
+  color: #777;
+  padding-top: 15px;
+  border-bottom: 1px solid #dddddd;
+}
+.vesselNotesModalContainer .sectionHeader.no-padding-top {
+  padding-top: 0;
+}
+.vesselNotesModalContainer .textarea-notes {
+  margin: 15px 0;
+}
+.vesselNotesModalContainer .lowercase {
+  text-transform: lowercase;
+}
+.vesselNotesModalContainer .cancel {
+  margin-left: auto;
+}
+.vesselNotesModalContainer .btn {
+  padding-top: 1px;
+  padding-bottom: 0;
+}
+/*
+﻿Developed with the contribution of the European Commission - Directorate General for Maritime Affairs and Fisheries
+© European Union, 2015-2016.
+
+This file is part of the Integrated Fisheries Data Management (IFDM) Suite. The IFDM Suite is free software: you can
+redistribute it and/or modify it under the terms of the GNU General Public License as published by the
+Free Software Foundation, either version 3 of the License, or any later version. The IFDM Suite is distributed in
+the hope that it will be useful, but WITHOUT ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or
+FITNESS FOR A PARTICULAR PURPOSE.  See the GNU General Public License for more details. You should have received a
+copy of the GNU General Public License along with the IFDM Suite. If not, see <http://www.gnu.org/licenses/>.
+ */
 .editSelectionsContainer {
   padding-bottom: 15px;
 }
 .editrow {
   margin-bottom: 10px;
 }
+.mobile-terminal-status.label {
+  padding: 3px 6px;
+  letter-spacing: 0.5px;
+}
+/*
+﻿Developed with the contribution of the European Commission - Directorate General for Maritime Affairs and Fisheries
+© European Union, 2015-2016.
+
+This file is part of the Integrated Fisheries Data Management (IFDM) Suite. The IFDM Suite is free software: you can
+redistribute it and/or modify it under the terms of the GNU General Public License as published by the
+Free Software Foundation, either version 3 of the License, or any later version. The IFDM Suite is distributed in
+the hope that it will be useful, but WITHOUT ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or
+FITNESS FOR A PARTICULAR PURPOSE.  See the GNU General Public License for more details. You should have received a
+copy of the GNU General Public License along with the IFDM Suite. If not, see <http://www.gnu.org/licenses/>.
+ */
 .unassignedIcon {
   position: absolute;
   top: 3px;
@@ -12220,32 +13069,92 @@ div.loadingIndicator.small .loadingText {
 .mobileTerminalsTable .plugin-inactive {
   color: red;
 }
+/*
+﻿Developed with the contribution of the European Commission - Directorate General for Maritime Affairs and Fisheries
+© European Union, 2015-2016.
+
+This file is part of the Integrated Fisheries Data Management (IFDM) Suite. The IFDM Suite is free software: you can
+redistribute it and/or modify it under the terms of the GNU General Public License as published by the
+Free Software Foundation, either version 3 of the License, or any later version. The IFDM Suite is distributed in
+the hope that it will be useful, but WITHOUT ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or
+FITNESS FOR A PARTICULAR PURPOSE.  See the GNU General Public License for more details. You should have received a
+copy of the GNU General Public License along with the IFDM Suite. If not, see <http://www.gnu.org/licenses/>.
+ */
 .fullWidthDropdown .dropdowntext {
   overflow: hidden;
   text-overflow: ellipsis;
-  padding-right: 5px;
+  margin-right: 20px;
   color: #555555;
+}
+.fullWidthDropdown .dropdowntext.placeholderColor {
+  color: #999999;
 }
 .fullWidthDropdown .dropdown-menu {
   min-width: 100%;
   border-color: #089fd7;
+  border-radius: 0;
 }
-.fullWidthDropdown .btn {
-  width: 100%;
-}
-.dropdown-menu {
-  border-radius: 0px;
-  max-height: 300px !important;
-}
-.dropdown-menu .disabled a:hover {
+.fullWidthDropdown .dropdown-menu .initial-text a,
+.fullWidthDropdown .dropdown-menu .initial-text a:hover,
+.fullWidthDropdown .dropdown-menu .initial-text a:active {
   cursor: pointer;
 }
-.dropdown-menu li > a {
-  color: #555555;
+.fullWidthDropdown.open .dropdown-toggle,
+.fullWidthDropdown .dropdown-toggle {
+  width: 100%;
+  background-color: #ffffff;
 }
-.placeholderColor {
-  color: #999999 !important;
+.fullWidthDropdown.open .dropdown-toggle .placeholderColor,
+.fullWidthDropdown .dropdown-toggle .placeholderColor {
+  color: #999999;
 }
+.fullWidthDropdown.open .dropdown-toggle:hover,
+.fullWidthDropdown .dropdown-toggle:hover,
+.fullWidthDropdown.open .dropdown-toggle:focus,
+.fullWidthDropdown .dropdown-toggle:focus,
+.fullWidthDropdown.open .dropdown-toggle:active,
+.fullWidthDropdown .dropdown-toggle:active {
+  background-color: #ffffff;
+}
+.fullWidthDropdown.open .dropdown-toggle:disabled,
+.fullWidthDropdown .dropdown-toggle:disabled {
+  cursor: not-allowed;
+  background-color: #eeeeee;
+  opacity: 1;
+}
+.fullWidthDropdown.disabled {
+  cursor: not-allowed;
+  background-color: #eeeeee;
+  opacity: 1;
+}
+.fullWidthDropdown.disabled:hover .dropdown-toggle {
+  border-color: #089fd7;
+}
+.fullWidthDropdown.disabled .placeholderColor {
+  display: none;
+}
+/*
+﻿Developed with the contribution of the European Commission - Directorate General for Maritime Affairs and Fisheries
+© European Union, 2015-2016.
+
+This file is part of the Integrated Fisheries Data Management (IFDM) Suite. The IFDM Suite is free software: you can
+redistribute it and/or modify it under the terms of the GNU General Public License as published by the
+Free Software Foundation, either version 3 of the License, or any later version. The IFDM Suite is distributed in
+the hope that it will be useful, but WITHOUT ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or
+FITNESS FOR A PARTICULAR PURPOSE.  See the GNU General Public License for more details. You should have received a
+copy of the GNU General Public License along with the IFDM Suite. If not, see <http://www.gnu.org/licenses/>.
+ */
+/*
+﻿Developed with the contribution of the European Commission - Directorate General for Maritime Affairs and Fisheries
+© European Union, 2015-2016.
+
+This file is part of the Integrated Fisheries Data Management (IFDM) Suite. The IFDM Suite is free software: you can
+redistribute it and/or modify it under the terms of the GNU General Public License as published by the
+Free Software Foundation, either version 3 of the License, or any later version. The IFDM Suite is distributed in
+the hope that it will be useful, but WITHOUT ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or
+FITNESS FOR A PARTICULAR PURPOSE.  See the GNU General Public License for more details. You should have received a
+copy of the GNU General Public License along with the IFDM Suite. If not, see <http://www.gnu.org/licenses/>.
+ */
 .assignVesselsContainer {
   width: 100%;
   margin-bottom: 20px;
@@ -12286,58 +13195,82 @@ div.loadingIndicator.small .loadingText {
   padding-left: 20px;
   text-decoration: underline;
 }
+/*
+﻿Developed with the contribution of the European Commission - Directorate General for Maritime Affairs and Fisheries
+© European Union, 2015-2016.
+
+This file is part of the Integrated Fisheries Data Management (IFDM) Suite. The IFDM Suite is free software: you can
+redistribute it and/or modify it under the terms of the GNU General Public License as published by the
+Free Software Foundation, either version 3 of the License, or any later version. The IFDM Suite is distributed in
+the hope that it will be useful, but WITHOUT ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or
+FITNESS FOR A PARTICULAR PURPOSE.  See the GNU General Public License for more details. You should have received a
+copy of the GNU General Public License along with the IFDM Suite. If not, see <http://www.gnu.org/licenses/>.
+ */
 .alert {
-  padding: 15px;
+  display: -webkit-box;
+  display: -moz-box;
+  display: -ms-flexbox;
+  display: -webkit-flex;
+  display: flex;
+  align-items: center;
+  padding: 12px;
 }
 .alert .icon {
-  position: absolute;
-  top: 5px;
-  text-align: center;
   color: #fff;
   font-size: 2em;
-  width: 30px;
+  line-height: 0;
+}
+.alert .icon i {
+  margin-right: 10px;
 }
 .alert .message {
-  position: relative;
-  padding-left: 40px;
-  padding-right: 40px;
   font-weight: bold;
 }
 .alert .close {
-  position: absolute;
-  right: 15px;
-  top: 15px;
-  width: 30px;
+  margin-left: auto;
+  line-height: 0;
 }
-.mobileTerminalDetailsContainer .transponderSystemSelects .transponderSystemSelect {
-  float: left;
+.alert .close i {
+  line-height: 0;
 }
-.mobileTerminalDetailsContainer .communicationChannel {
-  margin-top: 20px;
+.alert.alert-actionbar {
+  background-color: #fcf8e3;
+  border-color: #faebcc;
+  color: #8a6d3b;
 }
-.mobileTerminalDetailsContainer .communicationChannel .form-group:first-child {
-  padding-left: 0px;
+.alert.alert-actionbar .action-buttons {
+  margin-left: auto;
 }
-.mobileTerminalDetailsContainer .comchannelrow {
-  background-color: #f9f9f9;
-  padding-top: 14px;
-  margin-bottom: 10px;
-  min-height: 67px;
+.alert.alert-actionbar .action-buttons button {
+  text-transform: uppercase;
+  font-size: 1em;
+  line-height: 0;
 }
-.mobileTerminalDetailsContainer .addNewChannelWrapper {
-  margin-bottom: 20px;
+.alert.alert-actionbar .action-buttons button.cancel {
+  background: #f2ae42;
+  border: 1px solid #d98b0f;
+  color: #fff;
 }
-.mobileTerminalDetailsContainer input[type='radio'] {
-  height: 15px;
-  width: 15px;
-  cursor: pointer;
-  margin: 10px 8px;
+.alert.alert-actionbar .action-buttons button.cancel i {
+  margin-right: 3px;
 }
-.mobileTerminalDetailsContainer .remove {
-  padding-top: 5px;
-  color: #df1f26;
-  cursor: pointer;
+.alert.alert-actionbar .action-buttons button.cancel:hover,
+.alert.alert-actionbar .action-buttons button.cancel:active,
+.alert.alert-actionbar .action-buttons button.cancel:focus {
+  background: #f0a42a;
+  border: 1px solid #c17b0d;
 }
+/*
+﻿Developed with the contribution of the European Commission - Directorate General for Maritime Affairs and Fisheries
+© European Union, 2015-2016.
+
+This file is part of the Integrated Fisheries Data Management (IFDM) Suite. The IFDM Suite is free software: you can
+redistribute it and/or modify it under the terms of the GNU General Public License as published by the
+Free Software Foundation, either version 3 of the License, or any later version. The IFDM Suite is distributed in
+the hope that it will be useful, but WITHOUT ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or
+FITNESS FOR A PARTICULAR PURPOSE.  See the GNU General Public License for more details. You should have received a
+copy of the GNU General Public License along with the IFDM Suite. If not, see <http://www.gnu.org/licenses/>.
+ */
 #assignVesselLink {
   font-weight: bold;
   text-transform: uppercase;
@@ -12354,19 +13287,53 @@ div.loadingIndicator.small .loadingText {
   cursor: pointer;
 }
 .mobileInformationContainer {
-  margin: 20px 0px;
+  margin: 10px 0px;
 }
 .mobileTerminalDetailsContainer {
   margin: 20px 0px;
 }
-.mobileTerminalHistoryModal .transponderType {
-  margin-left: 20px;
+label.normal {
+  font-weight: normal;
+  margin-bottom: 0px;
 }
+/*
+﻿Developed with the contribution of the European Commission - Directorate General for Maritime Affairs and Fisheries
+© European Union, 2015-2016.
+
+This file is part of the Integrated Fisheries Data Management (IFDM) Suite. The IFDM Suite is free software: you can
+redistribute it and/or modify it under the terms of the GNU General Public License as published by the
+Free Software Foundation, either version 3 of the License, or any later version. The IFDM Suite is distributed in
+the hope that it will be useful, but WITHOUT ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or
+FITNESS FOR A PARTICULAR PURPOSE.  See the GNU General Public License for more details. You should have received a
+copy of the GNU General Public License along with the IFDM Suite. If not, see <http://www.gnu.org/licenses/>.
+ */
+/*
+﻿Developed with the contribution of the European Commission - Directorate General for Maritime Affairs and Fisheries
+© European Union, 2015-2016.
+
+This file is part of the Integrated Fisheries Data Management (IFDM) Suite. The IFDM Suite is free software: you can
+redistribute it and/or modify it under the terms of the GNU General Public License as published by the
+Free Software Foundation, either version 3 of the License, or any later version. The IFDM Suite is distributed in
+the hope that it will be useful, but WITHOUT ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or
+FITNESS FOR A PARTICULAR PURPOSE.  See the GNU General Public License for more details. You should have received a
+copy of the GNU General Public License along with the IFDM Suite. If not, see <http://www.gnu.org/licenses/>.
+ */
 .mobileTerminalHistoryModal table,
 .mobileTerminalHistoryModal div.tableSmart,
 .mobileTerminalHistoryModal div.tableSmart {
   margin-top: 20px;
 }
+/*
+﻿Developed with the contribution of the European Commission - Directorate General for Maritime Affairs and Fisheries
+© European Union, 2015-2016.
+
+This file is part of the Integrated Fisheries Data Management (IFDM) Suite. The IFDM Suite is free software: you can
+redistribute it and/or modify it under the terms of the GNU General Public License as published by the
+Free Software Foundation, either version 3 of the License, or any later version. The IFDM Suite is distributed in
+the hope that it will be useful, but WITHOUT ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or
+FITNESS FOR A PARTICULAR PURPOSE.  See the GNU General Public License for more details. You should have received a
+copy of the GNU General Public License along with the IFDM Suite. If not, see <http://www.gnu.org/licenses/>.
+ */
 .runningProgramPollsContainer {
   padding-bottom: 10px;
 }
@@ -12454,6 +13421,17 @@ div.loadingIndicator.small .loadingText {
   color: #df1f26;
   font-size: 20px;
 }
+/*
+﻿Developed with the contribution of the European Commission - Directorate General for Maritime Affairs and Fisheries
+© European Union, 2015-2016.
+
+This file is part of the Integrated Fisheries Data Management (IFDM) Suite. The IFDM Suite is free software: you can
+redistribute it and/or modify it under the terms of the GNU General Public License as published by the
+Free Software Foundation, either version 3 of the License, or any later version. The IFDM Suite is distributed in
+the hope that it will be useful, but WITHOUT ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or
+FITNESS FOR A PARTICULAR PURPOSE.  See the GNU General Public License for more details. You should have received a
+copy of the GNU General Public License along with the IFDM Suite. If not, see <http://www.gnu.org/licenses/>.
+ */
 .wizardContainer {
   position: relative;
 }
@@ -12601,6 +13579,17 @@ div.loadingIndicator.small .loadingText {
   height: auto;
   max-height: none;
 }
+/*
+﻿Developed with the contribution of the European Commission - Directorate General for Maritime Affairs and Fisheries
+© European Union, 2015-2016.
+
+This file is part of the Integrated Fisheries Data Management (IFDM) Suite. The IFDM Suite is free software: you can
+redistribute it and/or modify it under the terms of the GNU General Public License as published by the
+Free Software Foundation, either version 3 of the License, or any later version. The IFDM Suite is distributed in
+the hope that it will be useful, but WITHOUT ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or
+FITNESS FOR A PARTICULAR PURPOSE.  See the GNU General Public License for more details. You should have received a
+copy of the GNU General Public License along with the IFDM Suite. If not, see <http://www.gnu.org/licenses/>.
+ */
 .searchMobileTerminalsStep .polltable td,
 .searchMobileTerminalsStep .polltable div.td,
 .searchMobileTerminalsStep .polltable div.td {
@@ -12620,6 +13609,17 @@ div.loadingIndicator.small .loadingText {
 .searchMobileTerminalsStep .polltable button span {
   color: white;
 }
+/*
+﻿Developed with the contribution of the European Commission - Directorate General for Maritime Affairs and Fisheries
+© European Union, 2015-2016.
+
+This file is part of the Integrated Fisheries Data Management (IFDM) Suite. The IFDM Suite is free software: you can
+redistribute it and/or modify it under the terms of the GNU General Public License as published by the
+Free Software Foundation, either version 3 of the License, or any later version. The IFDM Suite is distributed in
+the hope that it will be useful, but WITHOUT ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or
+FITNESS FOR A PARTICULAR PURPOSE.  See the GNU General Public License for more details. You should have received a
+copy of the GNU General Public License along with the IFDM Suite. If not, see <http://www.gnu.org/licenses/>.
+ */
 .pollingOptionsContainer span.pollType {
   cursor: pointer;
 }
@@ -12683,6 +13683,17 @@ div.loadingIndicator.small .loadingText {
 .pollingOptionsContainer div.td.ignored input[type="number"] {
   color: lightgray;
 }
+/*
+﻿Developed with the contribution of the European Commission - Directorate General for Maritime Affairs and Fisheries
+© European Union, 2015-2016.
+
+This file is part of the Integrated Fisheries Data Management (IFDM) Suite. The IFDM Suite is free software: you can
+redistribute it and/or modify it under the terms of the GNU General Public License as published by the
+Free Software Foundation, either version 3 of the License, or any later version. The IFDM Suite is distributed in
+the hope that it will be useful, but WITHOUT ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or
+FITNESS FOR A PARTICULAR PURPOSE.  See the GNU General Public License for more details. You should have received a
+copy of the GNU General Public License along with the IFDM Suite. If not, see <http://www.gnu.org/licenses/>.
+ */
 .newPollWizardSelectionContainer {
   overflow-y: auto;
 }
@@ -12714,6 +13725,17 @@ div.loadingIndicator.small .loadingText {
 .newPollWizardSelectionContainer .pointer {
   margin: 5px 10px 0 0;
 }
+/*
+﻿Developed with the contribution of the European Commission - Directorate General for Maritime Affairs and Fisheries
+© European Union, 2015-2016.
+
+This file is part of the Integrated Fisheries Data Management (IFDM) Suite. The IFDM Suite is free software: you can
+redistribute it and/or modify it under the terms of the GNU General Public License as published by the
+Free Software Foundation, either version 3 of the License, or any later version. The IFDM Suite is distributed in
+the hope that it will be useful, but WITHOUT ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or
+FITNESS FOR A PARTICULAR PURPOSE.  See the GNU General Public License for more details. You should have received a
+copy of the GNU General Public License along with the IFDM Suite. If not, see <http://www.gnu.org/licenses/>.
+ */
 .step {
   float: left;
   margin-right: 50px;
@@ -12746,6 +13768,17 @@ div.loadingIndicator.small .loadingText {
 .activestep {
   color: black;
 }
+/*
+﻿Developed with the contribution of the European Commission - Directorate General for Maritime Affairs and Fisheries
+© European Union, 2015-2016.
+
+This file is part of the Integrated Fisheries Data Management (IFDM) Suite. The IFDM Suite is free software: you can
+redistribute it and/or modify it under the terms of the GNU General Public License as published by the
+Free Software Foundation, either version 3 of the License, or any later version. The IFDM Suite is distributed in
+the hope that it will be useful, but WITHOUT ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or
+FITNESS FOR A PARTICULAR PURPOSE.  See the GNU General Public License for more details. You should have received a
+copy of the GNU General Public License along with the IFDM Suite. If not, see <http://www.gnu.org/licenses/>.
+ */
 .pollingLogsContainer .searchButton {
   width: 115px;
   padding-top: 5px;
@@ -13083,6 +14116,17 @@ table.pollingLogsTable > thead > tr div.td.statusTime div.times,
 table.pollingLogsTable > tbody > tr div.td.statusTime div.times {
   padding-left: 25px;
 }
+/*
+﻿Developed with the contribution of the European Commission - Directorate General for Maritime Affairs and Fisheries
+© European Union, 2015-2016.
+
+This file is part of the Integrated Fisheries Data Management (IFDM) Suite. The IFDM Suite is free software: you can
+redistribute it and/or modify it under the terms of the GNU General Public License as published by the
+Free Software Foundation, either version 3 of the License, or any later version. The IFDM Suite is distributed in
+the hope that it will be useful, but WITHOUT ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or
+FITNESS FOR A PARTICULAR PURPOSE.  See the GNU General Public License for more details. You should have received a
+copy of the GNU General Public License along with the IFDM Suite. If not, see <http://www.gnu.org/licenses/>.
+ */
 .pollingTabs ul {
   position: relative;
 }
@@ -13093,6 +14137,28 @@ table.pollingLogsTable > tbody > tr div.td.statusTime div.times {
 .pollingTabs .nav-tabs {
   border-bottom: none;
 }
+/*
+﻿Developed with the contribution of the European Commission - Directorate General for Maritime Affairs and Fisheries
+© European Union, 2015-2016.
+
+This file is part of the Integrated Fisheries Data Management (IFDM) Suite. The IFDM Suite is free software: you can
+redistribute it and/or modify it under the terms of the GNU General Public License as published by the
+Free Software Foundation, either version 3 of the License, or any later version. The IFDM Suite is distributed in
+the hope that it will be useful, but WITHOUT ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or
+FITNESS FOR A PARTICULAR PURPOSE.  See the GNU General Public License for more details. You should have received a
+copy of the GNU General Public License along with the IFDM Suite. If not, see <http://www.gnu.org/licenses/>.
+ */
+/*
+﻿Developed with the contribution of the European Commission - Directorate General for Maritime Affairs and Fisheries
+© European Union, 2015-2016.
+
+This file is part of the Integrated Fisheries Data Management (IFDM) Suite. The IFDM Suite is free software: you can
+redistribute it and/or modify it under the terms of the GNU General Public License as published by the
+Free Software Foundation, either version 3 of the License, or any later version. The IFDM Suite is distributed in
+the hope that it will be useful, but WITHOUT ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or
+FITNESS FOR A PARTICULAR PURPOSE.  See the GNU General Public License for more details. You should have received a
+copy of the GNU General Public License along with the IFDM Suite. If not, see <http://www.gnu.org/licenses/>.
+ */
 .periodInput {
   padding: 0px !important;
 }
@@ -13106,41 +14172,81 @@ table.pollingLogsTable > tbody > tr div.td.statusTime div.times {
 .periodInput .unit-input input.minutes {
   border-radius: 0px !important;
 }
+.periodInput .unit-input input:disabled {
+  cursor: not-allowed;
+  background-color: #eeeeee;
+  opacity: 1;
+}
 .periodInput .unit-input .unit-box.unit-box-hours {
   border-radius: 0px !important;
 }
-.tagSelectInputContainer {
-  min-width: 160px;
-}
+/*
+﻿Developed with the contribution of the European Commission - Directorate General for Maritime Affairs and Fisheries
+© European Union, 2015-2016.
+
+This file is part of the Integrated Fisheries Data Management (IFDM) Suite. The IFDM Suite is free software: you can
+redistribute it and/or modify it under the terms of the GNU General Public License as published by the
+Free Software Foundation, either version 3 of the License, or any later version. The IFDM Suite is distributed in
+the hope that it will be useful, but WITHOUT ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or
+FITNESS FOR A PARTICULAR PURPOSE.  See the GNU General Public License for more details. You should have received a
+copy of the GNU General Public License along with the IFDM Suite. If not, see <http://www.gnu.org/licenses/>.
+ */
 .tagSelectInputContainer .tagSelectInputContainerWrapper {
   position: relative;
-  min-height: 30px;
+}
+.tagSelectInputContainer .tagSelectInputContainerWrapper.disabled .tagSelectButton {
+  cursor: not-allowed;
+  background-color: #eeeeee;
+  opacity: 1;
+}
+.tagSelectInputContainer .tagSelectInputContainerWrapper.disabled:hover {
+  cursor: not-allowed;
+}
+.tagSelectInputContainer .tagSelectInputContainerWrapper.disabled:hover .dropdown-toggle {
+  border-color: #089fd7;
+}
+.tagSelectInputContainer .tagSelectInputContainerWrapper .dropdown a:hover {
+  cursor: pointer;
 }
 .tagSelectInputContainer .tagSelectButton {
   height: auto !important;
-  min-height: 30px !important;
-  padding: 0 2px !important;
+  min-height: 30px;
+  padding: 0 !important;
   border-radius: 2px;
+  display: -webkit-box;
+  display: -moz-box;
+  display: -ms-flexbox;
+  display: -webkit-flex;
+  display: flex;
+  align-items: center;
 }
 .tagSelectInputContainer .tagSelectButton .caretWrapper .caret {
   position: absolute !important;
   right: 10px !important;
   top: 13px !important;
 }
-.tagSelectInputContainer .placeholderText {
+.tagSelectInputContainer .placeholderText,
+.tagSelectInputContainer .multipleSelectionsPlaceholder {
   color: #999;
   margin-right: 20px;
-  margin-top: 3px;
-  text-align: left;
-  padding-left: 7px;
+  padding-left: 5px;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  line-height: initial;
+}
+.tagSelectInputContainer .multipleSelectionsPlaceholder {
+  color: #555555;
+  text-transform: lowercase;
+}
+.tagSelectInputContainer .multipleSelectionsPlaceholder:first-letter {
+  text-transform: capitalize;
 }
 .tagSelectInputContainer .selection {
-  width: 100%;
-  margin-right: 50px;
+  overflow: hidden;
 }
 .tagSelectInputContainer .selection .tag {
   float: left;
-  margin: 3px 2px 1px 0;
+  margin: 2px;
   padding: 0 3px;
   height: 22px;
   line-height: 22px;
@@ -13169,6 +14275,99 @@ table.pollingLogsTable > tbody > tr div.td.statusTime div.times {
 .tagSelectInputContainer .selection .tag .textWrapper .removeTag:focus {
   color: #000;
 }
+.tagSelectInputContainer.multipleSelection .dropdown-menu {
+  padding-top: 0;
+  padding-bottom: 0;
+  width: 100%;
+  min-width: 180px;
+}
+.tagSelectInputContainer.multipleSelection .dropdown-menu .select-all {
+  background: #f7f7f7;
+}
+.tagSelectInputContainer.multipleSelection .dropdown-menu .select-all:after {
+  content: '';
+  display: table;
+  clear: both;
+}
+.tagSelectInputContainer.multipleSelection .dropdown-menu .select-all span {
+  padding: 8px;
+  color: #089fd7;
+}
+.tagSelectInputContainer.multipleSelection .dropdown-menu .select-all span.disabled,
+.tagSelectInputContainer.multipleSelection .dropdown-menu .select-all span.disabled:hover {
+  color: #999999;
+  cursor: default;
+}
+.tagSelectInputContainer.multipleSelection .dropdown-menu .select-all span:hover {
+  color: #0794c8;
+}
+.tagSelectInputContainer.multipleSelection .dropdown-menu .select-all span.left {
+  float: left;
+  text-align: left;
+  width: 50%;
+}
+.tagSelectInputContainer.multipleSelection .dropdown-menu .select-all span.right {
+  float: right;
+  text-align: right;
+  width: 50%;
+}
+.tagSelectInputContainer.multipleSelection .dropdown-menu li {
+  position: relative;
+  border-bottom: 1px solid transparent;
+}
+.tagSelectInputContainer.multipleSelection .dropdown-menu li a {
+  padding-top: 8px;
+  padding-bottom: 8px;
+}
+.tagSelectInputContainer.multipleSelection .dropdown-menu li a:focus {
+  background: transparent;
+}
+.tagSelectInputContainer.multipleSelection .dropdown-menu li a:before {
+  content: "";
+  left: 5px;
+  position: absolute;
+  top: 50%;
+  -webkit-transform: translate(0, -50%);
+  -moz-transform: translate(0, -50%);
+  -ms-transform: translate(0, -50%);
+  -o-transform: translate(0, -50%);
+  transform: translate(0, -50%);
+}
+.tagSelectInputContainer.multipleSelection .dropdown-menu li.disabled,
+.tagSelectInputContainer.multipleSelection .dropdown-menu li.disabled:focus {
+  background: #089fd7;
+  color: #fff;
+  border-color: #0794c8;
+}
+.tagSelectInputContainer.multipleSelection .dropdown-menu li.disabled a,
+.tagSelectInputContainer.multipleSelection .dropdown-menu li.disabled:focus a {
+  color: #fff;
+}
+.tagSelectInputContainer.multipleSelection .dropdown-menu li.disabled a:hover,
+.tagSelectInputContainer.multipleSelection .dropdown-menu li.disabled:focus a:hover {
+  cursor: pointer;
+}
+.tagSelectInputContainer.multipleSelection .dropdown-menu li.disabled a:before,
+.tagSelectInputContainer.multipleSelection .dropdown-menu li.disabled:focus a:before {
+  display: inline-block;
+  font: normal normal normal 10px/0px FontAwesome;
+  text-rendering: auto;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  content: "\f00c";
+  margin-top: -1px;
+}
+/*
+﻿Developed with the contribution of the European Commission - Directorate General for Maritime Affairs and Fisheries
+© European Union, 2015-2016.
+
+This file is part of the Integrated Fisheries Data Management (IFDM) Suite. The IFDM Suite is free software: you can
+redistribute it and/or modify it under the terms of the GNU General Public License as published by the
+Free Software Foundation, either version 3 of the License, or any later version. The IFDM Suite is distributed in
+the hope that it will be useful, but WITHOUT ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or
+FITNESS FOR A PARTICULAR PURPOSE.  See the GNU General Public License for more details. You should have received a
+copy of the GNU General Public License along with the IFDM Suite. If not, see <http://www.gnu.org/licenses/>.
+ */
 .savedSearchDropdown .selectablegroup {
   font-weight: normal;
   line-height: 1.42857143;
@@ -13192,12 +14391,34 @@ table.pollingLogsTable > tbody > tr div.td.statusTime div.times {
   top: 3px;
   width: 20px;
 }
+/*
+﻿Developed with the contribution of the European Commission - Directorate General for Maritime Affairs and Fisheries
+© European Union, 2015-2016.
+
+This file is part of the Integrated Fisheries Data Management (IFDM) Suite. The IFDM Suite is free software: you can
+redistribute it and/or modify it under the terms of the GNU General Public License as published by the
+Free Software Foundation, either version 3 of the License, or any later version. The IFDM Suite is distributed in
+the hope that it will be useful, but WITHOUT ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or
+FITNESS FOR A PARTICULAR PURPOSE.  See the GNU General Public License for more details. You should have received a
+copy of the GNU General Public License along with the IFDM Suite. If not, see <http://www.gnu.org/licenses/>.
+ */
 .searchResultErrorAlertContainer {
   margin-top: 20px;
 }
 .searchResultErrorAlertContainer .nosearchresulttext {
   padding-left: 5px;
 }
+/*
+﻿Developed with the contribution of the European Commission - Directorate General for Maritime Affairs and Fisheries
+© European Union, 2015-2016.
+
+This file is part of the Integrated Fisheries Data Management (IFDM) Suite. The IFDM Suite is free software: you can
+redistribute it and/or modify it under the terms of the GNU General Public License as published by the
+Free Software Foundation, either version 3 of the License, or any later version. The IFDM Suite is distributed in
+the hope that it will be useful, but WITHOUT ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or
+FITNESS FOR A PARTICULAR PURPOSE.  See the GNU General Public License for more details. You should have received a
+copy of the GNU General Public License along with the IFDM Suite. If not, see <http://www.gnu.org/licenses/>.
+ */
 .movementsearchresults {
   width: 100%;
 }
@@ -13208,6 +14429,39 @@ table.pollingLogsTable > tbody > tr div.td.statusTime div.times {
   margin-bottom: 20px;
   margin-top: 40px;
 }
+/*
+﻿Developed with the contribution of the European Commission - Directorate General for Maritime Affairs and Fisheries
+© European Union, 2015-2016.
+
+This file is part of the Integrated Fisheries Data Management (IFDM) Suite. The IFDM Suite is free software: you can
+redistribute it and/or modify it under the terms of the GNU General Public License as published by the
+Free Software Foundation, either version 3 of the License, or any later version. The IFDM Suite is distributed in
+the hope that it will be useful, but WITHOUT ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or
+FITNESS FOR A PARTICULAR PURPOSE.  See the GNU General Public License for more details. You should have received a
+copy of the GNU General Public License along with the IFDM Suite. If not, see <http://www.gnu.org/licenses/>.
+ */
+/*
+﻿Developed with the contribution of the European Commission - Directorate General for Maritime Affairs and Fisheries
+© European Union, 2015-2016.
+
+This file is part of the Integrated Fisheries Data Management (IFDM) Suite. The IFDM Suite is free software: you can
+redistribute it and/or modify it under the terms of the GNU General Public License as published by the
+Free Software Foundation, either version 3 of the License, or any later version. The IFDM Suite is distributed in
+the hope that it will be useful, but WITHOUT ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or
+FITNESS FOR A PARTICULAR PURPOSE.  See the GNU General Public License for more details. You should have received a
+copy of the GNU General Public License along with the IFDM Suite. If not, see <http://www.gnu.org/licenses/>.
+ */
+/*
+﻿Developed with the contribution of the European Commission - Directorate General for Maritime Affairs and Fisheries
+© European Union, 2015-2016.
+
+This file is part of the Integrated Fisheries Data Management (IFDM) Suite. The IFDM Suite is free software: you can
+redistribute it and/or modify it under the terms of the GNU General Public License as published by the
+Free Software Foundation, either version 3 of the License, or any later version. The IFDM Suite is distributed in
+the hope that it will be useful, but WITHOUT ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or
+FITNESS FOR A PARTICULAR PURPOSE.  See the GNU General Public License for more details. You should have received a
+copy of the GNU General Public License along with the IFDM Suite. If not, see <http://www.gnu.org/licenses/>.
+ */
 .movementsearch button {
   width: 100%;
 }
@@ -13215,6 +14469,17 @@ table.pollingLogsTable > tbody > tr div.td.statusTime div.times {
   margin-bottom: 3px;
   margin-top: 3px;
 }
+/*
+﻿Developed with the contribution of the European Commission - Directorate General for Maritime Affairs and Fisheries
+© European Union, 2015-2016.
+
+This file is part of the Integrated Fisheries Data Management (IFDM) Suite. The IFDM Suite is free software: you can
+redistribute it and/or modify it under the terms of the GNU General Public License as published by the
+Free Software Foundation, either version 3 of the License, or any later version. The IFDM Suite is distributed in
+the hope that it will be useful, but WITHOUT ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or
+FITNESS FOR A PARTICULAR PURPOSE.  See the GNU General Public License for more details. You should have received a
+copy of the GNU General Public License along with the IFDM Suite. If not, see <http://www.gnu.org/licenses/>.
+ */
 .searchFormContainer {
   margin-top: 10px;
   margin-bottom: 20px;
@@ -13231,11 +14496,44 @@ table.pollingLogsTable > tbody > tr div.td.statusTime div.times {
 .advancedsearchbuttoncontainer {
   margin-top: 15px;
 }
+/*
+﻿Developed with the contribution of the European Commission - Directorate General for Maritime Affairs and Fisheries
+© European Union, 2015-2016.
+
+This file is part of the Integrated Fisheries Data Management (IFDM) Suite. The IFDM Suite is free software: you can
+redistribute it and/or modify it under the terms of the GNU General Public License as published by the
+Free Software Foundation, either version 3 of the License, or any later version. The IFDM Suite is distributed in
+the hope that it will be useful, but WITHOUT ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or
+FITNESS FOR A PARTICULAR PURPOSE.  See the GNU General Public License for more details. You should have received a
+copy of the GNU General Public License along with the IFDM Suite. If not, see <http://www.gnu.org/licenses/>.
+ */
 .newmanualreport {
   font-size: 14px;
   padding-top: 3px;
   padding-bottom: 3px;
 }
+/*
+﻿Developed with the contribution of the European Commission - Directorate General for Maritime Affairs and Fisheries
+© European Union, 2015-2016.
+
+This file is part of the Integrated Fisheries Data Management (IFDM) Suite. The IFDM Suite is free software: you can
+redistribute it and/or modify it under the terms of the GNU General Public License as published by the
+Free Software Foundation, either version 3 of the License, or any later version. The IFDM Suite is distributed in
+the hope that it will be useful, but WITHOUT ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or
+FITNESS FOR A PARTICULAR PURPOSE.  See the GNU General Public License for more details. You should have received a
+copy of the GNU General Public License along with the IFDM Suite. If not, see <http://www.gnu.org/licenses/>.
+ */
+/*
+﻿Developed with the contribution of the European Commission - Directorate General for Maritime Affairs and Fisheries
+© European Union, 2015-2016.
+
+This file is part of the Integrated Fisheries Data Management (IFDM) Suite. The IFDM Suite is free software: you can
+redistribute it and/or modify it under the terms of the GNU General Public License as published by the
+Free Software Foundation, either version 3 of the License, or any later version. The IFDM Suite is distributed in
+the hope that it will be useful, but WITHOUT ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or
+FITNESS FOR A PARTICULAR PURPOSE.  See the GNU General Public License for more details. You should have received a
+copy of the GNU General Public License along with the IFDM Suite. If not, see <http://www.gnu.org/licenses/>.
+ */
 .manualPositionReportModal .modal-body .row,
 .positionReportModal .modal-body .row {
   margin-bottom: 15px;
@@ -13285,6 +14583,39 @@ table.pollingLogsTable > tbody > tr div.td.statusTime div.times {
 .positionReportModal ul.dropdown-menu {
   z-index: 1001;
 }
+/*
+﻿Developed with the contribution of the European Commission - Directorate General for Maritime Affairs and Fisheries
+© European Union, 2015-2016.
+
+This file is part of the Integrated Fisheries Data Management (IFDM) Suite. The IFDM Suite is free software: you can
+redistribute it and/or modify it under the terms of the GNU General Public License as published by the
+Free Software Foundation, either version 3 of the License, or any later version. The IFDM Suite is distributed in
+the hope that it will be useful, but WITHOUT ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or
+FITNESS FOR A PARTICULAR PURPOSE.  See the GNU General Public License for more details. You should have received a
+copy of the GNU General Public License along with the IFDM Suite. If not, see <http://www.gnu.org/licenses/>.
+ */
+/*
+﻿Developed with the contribution of the European Commission - Directorate General for Maritime Affairs and Fisheries
+© European Union, 2015-2016.
+
+This file is part of the Integrated Fisheries Data Management (IFDM) Suite. The IFDM Suite is free software: you can
+redistribute it and/or modify it under the terms of the GNU General Public License as published by the
+Free Software Foundation, either version 3 of the License, or any later version. The IFDM Suite is distributed in
+the hope that it will be useful, but WITHOUT ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or
+FITNESS FOR A PARTICULAR PURPOSE.  See the GNU General Public License for more details. You should have received a
+copy of the GNU General Public License along with the IFDM Suite. If not, see <http://www.gnu.org/licenses/>.
+ */
+/*
+﻿Developed with the contribution of the European Commission - Directorate General for Maritime Affairs and Fisheries
+© European Union, 2015-2016.
+
+This file is part of the Integrated Fisheries Data Management (IFDM) Suite. The IFDM Suite is free software: you can
+redistribute it and/or modify it under the terms of the GNU General Public License as published by the
+Free Software Foundation, either version 3 of the License, or any later version. The IFDM Suite is distributed in
+the hope that it will be useful, but WITHOUT ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or
+FITNESS FOR A PARTICULAR PURPOSE.  See the GNU General Public License for more details. You should have received a
+copy of the GNU General Public License along with the IFDM Suite. If not, see <http://www.gnu.org/licenses/>.
+ */
 .audit-configuration .card {
   padding-left: 0px;
   padding-right: 0px;
@@ -13331,6 +14662,17 @@ table.pollingLogsTable > tbody > tr div.td.statusTime div.times {
 .audit-configuration .other-cancel {
   margin-top: 8px;
 }
+/*
+﻿Developed with the contribution of the European Commission - Directorate General for Maritime Affairs and Fisheries
+© European Union, 2015-2016.
+
+This file is part of the Integrated Fisheries Data Management (IFDM) Suite. The IFDM Suite is free software: you can
+redistribute it and/or modify it under the terms of the GNU General Public License as published by the
+Free Software Foundation, either version 3 of the License, or any later version. The IFDM Suite is distributed in
+the hope that it will be useful, but WITHOUT ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or
+FITNESS FOR A PARTICULAR PURPOSE.  See the GNU General Public License for more details. You should have received a
+copy of the GNU General Public License along with the IFDM Suite. If not, see <http://www.gnu.org/licenses/>.
+ */
 .audittab {
   padding: 10px 15px;
   background: #fff !important;
@@ -13360,9 +14702,42 @@ table.pollingLogsTable > tbody > tr div.td.statusTime div.times {
   position: relative;
   top: 15px;
 }
+/*
+﻿Developed with the contribution of the European Commission - Directorate General for Maritime Affairs and Fisheries
+© European Union, 2015-2016.
+
+This file is part of the Integrated Fisheries Data Management (IFDM) Suite. The IFDM Suite is free software: you can
+redistribute it and/or modify it under the terms of the GNU General Public License as published by the
+Free Software Foundation, either version 3 of the License, or any later version. The IFDM Suite is distributed in
+the hope that it will be useful, but WITHOUT ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or
+FITNESS FOR A PARTICULAR PURPOSE.  See the GNU General Public License for more details. You should have received a
+copy of the GNU General Public License along with the IFDM Suite. If not, see <http://www.gnu.org/licenses/>.
+ */
+/*
+﻿Developed with the contribution of the European Commission - Directorate General for Maritime Affairs and Fisheries
+© European Union, 2015-2016.
+
+This file is part of the Integrated Fisheries Data Management (IFDM) Suite. The IFDM Suite is free software: you can
+redistribute it and/or modify it under the terms of the GNU General Public License as published by the
+Free Software Foundation, either version 3 of the License, or any later version. The IFDM Suite is distributed in
+the hope that it will be useful, but WITHOUT ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or
+FITNESS FOR A PARTICULAR PURPOSE.  See the GNU General Public License for more details. You should have received a
+copy of the GNU General Public License along with the IFDM Suite. If not, see <http://www.gnu.org/licenses/>.
+ */
 .auditSearchForm .reset {
   margin-top: 5px;
 }
+/*
+﻿Developed with the contribution of the European Commission - Directorate General for Maritime Affairs and Fisheries
+© European Union, 2015-2016.
+
+This file is part of the Integrated Fisheries Data Management (IFDM) Suite. The IFDM Suite is free software: you can
+redistribute it and/or modify it under the terms of the GNU General Public License as published by the
+Free Software Foundation, either version 3 of the License, or any later version. The IFDM Suite is distributed in
+the hope that it will be useful, but WITHOUT ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or
+FITNESS FOR A PARTICULAR PURPOSE.  See the GNU General Public License for more details. You should have received a
+copy of the GNU General Public License along with the IFDM Suite. If not, see <http://www.gnu.org/licenses/>.
+ */
 .multiselectdropdowncontainer .dropdown-menu {
   min-width: 100%;
   padding: 0px;
@@ -15836,6 +17211,9 @@ copy of the GNU General Public License along with the IFDM Suite. If not, see <h
 .tabular-view .modal-body .with-bottom-border {
   border-bottom-width: 1px;
 }
+.tabular-view .modal-body .alarms-icon {
+  color: red;
+}
 .vmspages {
   padding-top: 2px !important;
   padding-left: 5px !important;
@@ -15957,6 +17335,11 @@ div.table-tools i {
 }
 .lr-drop-target-before {
   border-left: 5px solid #089fd7;
+}
+th:first-child .lr-drop-target-before,
+div.th:first-child .lr-drop-target-before,
+div.th:first-child .lr-drop-target-before {
+  display: none;
 }
 .lr-drop-target-after {
   border-right: 5px solid #089fd7;
@@ -16244,9 +17627,9 @@ div.dataTables_filter {
 table.table thead .sorting_asc:after,
 table.table thead .sorting_desc:after,
 table.table thead [st-sort]:after,
-.tableSmart.table .thead .sorting_asc:after,
-.tableSmart.table .thead .sorting_desc:after,
-.tableSmart.table .thead [st-sort]:after,
+.tableSmart.table div.thead div.th.sorting_asc:after,
+.tableSmart.table div.thead div.th.sorting_desc:after,
+.tableSmart.table div.thead div.th[st-sort]:after,
 div.tableSmart.table thead .sorting_asc:after,
 div.tableSmart.table thead .sorting_desc:after,
 div.tableSmart.table thead [st-sort]:after,
@@ -16264,17 +17647,107 @@ table.table div.thead .sorting_desc:after,
 table.table div.thead [st-sort]:after {
   font-family: 'FontAwesome';
   margin-left: 5px;
-  position: absolute;
-  line-height: 21px;
 }
+table.table thead th[st-class-ascent="sorting_sm_asc"],
+.tableSmart.table .thead .th[st-class-ascent="sorting_sm_asc"],
+table.table thead th[st-class-ascent="sorting_sm_asc"].sorting_sm_asc,
+.tableSmart.table .thead .th[st-class-ascent="sorting_sm_asc"].sorting_sm_asc,
+table.table thead th[st-class-ascent="sorting_sm_asc"].sorting_sm_desc,
+.tableSmart.table .thead .th[st-class-ascent="sorting_sm_asc"].sorting_sm_desc,
+div.tableSmart.table thead th[st-class-ascent="sorting_sm_asc"],
+div.tableSmart.table thead th[st-class-ascent="sorting_sm_asc"].sorting_sm_asc,
+div.tableSmart.table thead th[st-class-ascent="sorting_sm_asc"].sorting_sm_desc,
+table.table div.thead th[st-class-ascent="sorting_sm_asc"],
+table.table div.thead th[st-class-ascent="sorting_sm_asc"].sorting_sm_asc,
+table.table div.thead th[st-class-ascent="sorting_sm_asc"].sorting_sm_desc,
+table.table thead div.th[st-class-ascent="sorting_sm_asc"],
+table.table thead div.th[st-class-ascent="sorting_sm_asc"].sorting_sm_asc,
+table.table thead div.th[st-class-ascent="sorting_sm_asc"].sorting_sm_desc,
+.tablediv.tableSmart thead th[st-class-ascent="sorting_sm_asc"],
+.tablediv.tableSmart thead th[st-class-ascent="sorting_sm_asc"].sorting_sm_asc,
+.tablediv.tableSmart thead th[st-class-ascent="sorting_sm_asc"].sorting_sm_desc,
+div.tableSmart.table thead th[st-class-ascent="sorting_sm_asc"],
+div.tableSmart.table thead th[st-class-ascent="sorting_sm_asc"].sorting_sm_asc,
+div.tableSmart.table thead th[st-class-ascent="sorting_sm_asc"].sorting_sm_desc,
+table.table div.thead th[st-class-ascent="sorting_sm_asc"],
+table.table div.thead th[st-class-ascent="sorting_sm_asc"].sorting_sm_asc,
+table.table div.thead th[st-class-ascent="sorting_sm_asc"].sorting_sm_desc,
+table.table thead div.th[st-class-ascent="sorting_sm_asc"],
+table.table thead div.th[st-class-ascent="sorting_sm_asc"].sorting_sm_asc,
+table.table thead div.th[st-class-ascent="sorting_sm_asc"].sorting_sm_desc {
+  position: relative;
+  padding-right: 15px;
+}
+table.table thead th[st-class-ascent="sorting_sm_asc"]:after,
+.tableSmart.table .thead .th[st-class-ascent="sorting_sm_asc"]:after,
+table.table thead th[st-class-ascent="sorting_sm_asc"].sorting_sm_asc:after,
+.tableSmart.table .thead .th[st-class-ascent="sorting_sm_asc"].sorting_sm_asc:after,
+table.table thead th[st-class-ascent="sorting_sm_asc"].sorting_sm_desc:after,
+.tableSmart.table .thead .th[st-class-ascent="sorting_sm_asc"].sorting_sm_desc:after,
+div.tableSmart.table thead th[st-class-ascent="sorting_sm_asc"]:after,
+div.tableSmart.table thead th[st-class-ascent="sorting_sm_asc"].sorting_sm_asc:after,
+div.tableSmart.table thead th[st-class-ascent="sorting_sm_asc"].sorting_sm_desc:after,
+table.table div.thead th[st-class-ascent="sorting_sm_asc"]:after,
+table.table div.thead th[st-class-ascent="sorting_sm_asc"].sorting_sm_asc:after,
+table.table div.thead th[st-class-ascent="sorting_sm_asc"].sorting_sm_desc:after,
+table.table thead div.th[st-class-ascent="sorting_sm_asc"]:after,
+table.table thead div.th[st-class-ascent="sorting_sm_asc"].sorting_sm_asc:after,
+table.table thead div.th[st-class-ascent="sorting_sm_asc"].sorting_sm_desc:after,
+.tablediv.tableSmart thead th[st-class-ascent="sorting_sm_asc"]:after,
+.tablediv.tableSmart thead th[st-class-ascent="sorting_sm_asc"].sorting_sm_asc:after,
+.tablediv.tableSmart thead th[st-class-ascent="sorting_sm_asc"].sorting_sm_desc:after,
+div.tableSmart.table thead th[st-class-ascent="sorting_sm_asc"]:after,
+div.tableSmart.table thead th[st-class-ascent="sorting_sm_asc"].sorting_sm_asc:after,
+div.tableSmart.table thead th[st-class-ascent="sorting_sm_asc"].sorting_sm_desc:after,
+table.table div.thead th[st-class-ascent="sorting_sm_asc"]:after,
+table.table div.thead th[st-class-ascent="sorting_sm_asc"].sorting_sm_asc:after,
+table.table div.thead th[st-class-ascent="sorting_sm_asc"].sorting_sm_desc:after,
+table.table thead div.th[st-class-ascent="sorting_sm_asc"]:after,
+table.table thead div.th[st-class-ascent="sorting_sm_asc"].sorting_sm_asc:after,
+table.table thead div.th[st-class-ascent="sorting_sm_asc"].sorting_sm_desc:after {
+  position: absolute;
+  right: 5px;
+  top: 0;
+  line-height: 30px;
+}
+/*table.table.table-condensed thead [st-sort] {
+	&:after {
+		line-height: 19px;
+	}
+}*/
 table.table thead [st-sort].sorting_asc:after,
 .tableSmart.table .thead [st-sort].sorting_asc:after,
+table.table thead [st-sort].sorting_sm_asc:after,
+.tableSmart.table .thead [st-sort].sorting_sm_asc:after,
 div.tableSmart.table thead [st-sort].sorting_asc:after,
+div.tableSmart.table thead [st-sort].sorting_sm_asc:after,
 table.table div.thead [st-sort].sorting_asc:after,
+table.table div.thead [st-sort].sorting_sm_asc:after,
 .tablediv.tableSmart thead [st-sort].sorting_asc:after,
+.tablediv.tableSmart thead [st-sort].sorting_sm_asc:after,
 div.tableSmart.table thead [st-sort].sorting_asc:after,
-table.table div.thead [st-sort].sorting_asc:after {
+div.tableSmart.table thead [st-sort].sorting_sm_asc:after,
+table.table div.thead [st-sort].sorting_asc:after,
+table.table div.thead [st-sort].sorting_sm_asc:after {
   content: '\f0d8';
+  color: #089fd7;
+  font-size: 14px;
+}
+table.table thead [st-sort].sorting_desc:after,
+.tableSmart.table .thead [st-sort].sorting_desc:after,
+table.table thead [st-sort].sorting_sm_desc:after,
+.tableSmart.table .thead [st-sort].sorting_sm_desc:after,
+div.tableSmart.table thead [st-sort].sorting_desc:after,
+div.tableSmart.table thead [st-sort].sorting_sm_desc:after,
+table.table div.thead [st-sort].sorting_desc:after,
+table.table div.thead [st-sort].sorting_sm_desc:after,
+.tablediv.tableSmart thead [st-sort].sorting_desc:after,
+.tablediv.tableSmart thead [st-sort].sorting_sm_desc:after,
+div.tableSmart.table thead [st-sort].sorting_desc:after,
+div.tableSmart.table thead [st-sort].sorting_sm_desc:after,
+table.table div.thead [st-sort].sorting_desc:after,
+table.table div.thead [st-sort].sorting_sm_desc:after {
+  content: '\f0d7';
   color: #089fd7;
   font-size: 14px;
 }
@@ -16677,6 +18150,17 @@ copy of the GNU General Public License along with the IFDM Suite. If not, see <h
   border-left: 1px solid #ddd;
   border-right: 1px solid #ddd;
 }
+/*
+﻿Developed with the contribution of the European Commission - Directorate General for Maritime Affairs and Fisheries
+© European Union, 2015-2016.
+
+This file is part of the Integrated Fisheries Data Management (IFDM) Suite. The IFDM Suite is free software: you can
+redistribute it and/or modify it under the terms of the GNU General Public License as published by the
+Free Software Foundation, either version 3 of the License, or any later version. The IFDM Suite is distributed in
+the hope that it will be useful, but WITHOUT ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or
+FITNESS FOR A PARTICULAR PURPOSE.  See the GNU General Public License for more details. You should have received a
+copy of the GNU General Public License along with the IFDM Suite. If not, see <http://www.gnu.org/licenses/>.
+ */
 .exchangeContainer .incoming-outgoing-toggle,
 .exchangeContainer .exchange-log-wrapper table.searchResults td.incoming-outgoing,
 .exchangeContainer .exchange-log-wrapper div.tableSmart.searchResults td.incoming-outgoing,
@@ -16818,6 +18302,17 @@ copy of the GNU General Public License along with the IFDM Suite. If not, see <h
   margin-left: 10px;
   color: orange;
 }
+/*
+﻿Developed with the contribution of the European Commission - Directorate General for Maritime Affairs and Fisheries
+© European Union, 2015-2016.
+
+This file is part of the Integrated Fisheries Data Management (IFDM) Suite. The IFDM Suite is free software: you can
+redistribute it and/or modify it under the terms of the GNU General Public License as published by the
+Free Software Foundation, either version 3 of the License, or any later version. The IFDM Suite is distributed in
+the hope that it will be useful, but WITHOUT ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or
+FITNESS FOR A PARTICULAR PURPOSE.  See the GNU General Public License for more details. You should have received a
+copy of the GNU General Public License along with the IFDM Suite. If not, see <http://www.gnu.org/licenses/>.
+ */
 td.table-detail-container,
 div.td.table-detail-container,
 div.td.table-detail-container {
@@ -16849,6 +18344,17 @@ div.td.table-detail-container {
 .table-detail-container .date-recieved {
   padding-left: 35px !important;
 }
+/*
+﻿Developed with the contribution of the European Commission - Directorate General for Maritime Affairs and Fisheries
+© European Union, 2015-2016.
+
+This file is part of the Integrated Fisheries Data Management (IFDM) Suite. The IFDM Suite is free software: you can
+redistribute it and/or modify it under the terms of the GNU General Public License as published by the
+Free Software Foundation, either version 3 of the License, or any later version. The IFDM Suite is distributed in
+the hope that it will be useful, but WITHOUT ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or
+FITNESS FOR A PARTICULAR PURPOSE.  See the GNU General Public License for more details. You should have received a
+copy of the GNU General Public License along with the IFDM Suite. If not, see <http://www.gnu.org/licenses/>.
+ */
 .transmission-status-container .tranmission-status {
   width: 70px;
 }
@@ -17017,6 +18523,17 @@ copy of the GNU General Public License along with the IFDM Suite. If not, see <h
   color: #3498db;
   margin-right: 5px;
 }
+/*
+﻿Developed with the contribution of the European Commission - Directorate General for Maritime Affairs and Fisheries
+© European Union, 2015-2016.
+
+This file is part of the Integrated Fisheries Data Management (IFDM) Suite. The IFDM Suite is free software: you can
+redistribute it and/or modify it under the terms of the GNU General Public License as published by the
+Free Software Foundation, either version 3 of the License, or any later version. The IFDM Suite is distributed in
+the hope that it will be useful, but WITHOUT ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or
+FITNESS FOR A PARTICULAR PURPOSE.  See the GNU General Public License for more details. You should have received a
+copy of the GNU General Public License along with the IFDM Suite. If not, see <http://www.gnu.org/licenses/>.
+ */
 #help-page img {
   margin: 10px;
 }
@@ -17113,6 +18630,17 @@ copy of the GNU General Public License along with the IFDM Suite. If not, see <h
 #help-page dd {
   margin-left: 20px;
 }
+/*
+﻿Developed with the contribution of the European Commission - Directorate General for Maritime Affairs and Fisheries
+© European Union, 2015-2016.
+
+This file is part of the Integrated Fisheries Data Management (IFDM) Suite. The IFDM Suite is free software: you can
+redistribute it and/or modify it under the terms of the GNU General Public License as published by the
+Free Software Foundation, either version 3 of the License, or any later version. The IFDM Suite is distributed in
+the hope that it will be useful, but WITHOUT ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or
+FITNESS FOR A PARTICULAR PURPOSE.  See the GNU General Public License for more details. You should have received a
+copy of the GNU General Public License along with the IFDM Suite. If not, see <http://www.gnu.org/licenses/>.
+ */
 .assets-in-zone {
   width: 100%;
   height: 100%;
@@ -17261,6 +18789,17 @@ copy of the GNU General Public License along with the IFDM Suite. If not, see <h
 .assets-in-zone .row .flag-SWE {
   background-image: url('data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAADgAAAAqCAYAAADmmJiOAAAABGdBTUEAALGPC/xhBQAAACBjSFJNAAB6JgAAgIQAAPoAAACA6AAAdTAAAOpgAAA6mAAAF3CculE8AAABWWlUWHRYTUw6Y29tLmFkb2JlLnhtcAAAAAAAPHg6eG1wbWV0YSB4bWxuczp4PSJhZG9iZTpuczptZXRhLyIgeDp4bXB0az0iWE1QIENvcmUgNS40LjAiPgogICA8cmRmOlJERiB4bWxuczpyZGY9Imh0dHA6Ly93d3cudzMub3JnLzE5OTkvMDIvMjItcmRmLXN5bnRheC1ucyMiPgogICAgICA8cmRmOkRlc2NyaXB0aW9uIHJkZjphYm91dD0iIgogICAgICAgICAgICB4bWxuczp0aWZmPSJodHRwOi8vbnMuYWRvYmUuY29tL3RpZmYvMS4wLyI+CiAgICAgICAgIDx0aWZmOk9yaWVudGF0aW9uPjE8L3RpZmY6T3JpZW50YXRpb24+CiAgICAgIDwvcmRmOkRlc2NyaXB0aW9uPgogICA8L3JkZjpSREY+CjwveDp4bXBtZXRhPgpMwidZAAABNElEQVRoBWNky135n4FMcD5yKYMm2yacuo98CmVwWR+CU54eEiy//v4j2x5CIfPvPyMDJeaT7TAkjUxI7GHJHPXgUI/W0RgcjcFBHgKjSXSQRxBB543GIMEgGuQKRmNwkEcQQeeNxiDBIBrkCliC1N6R7URulj949XIzf2fQkWDHq4bWkoz/zjAQ6tbhdgOXMQPDt7O45VnlGBh+P8ItTweZ0TxIh0CmqRWjMUjT4KWD4aMxSIdApqkVwz4GWeJPTiQ7BJtNdzDI4Qmi8x90GVKP9JNtPjU0siy+Kka2OeWGrAwMbLi1f/7DzXDu6S/cCugggyf86WA7HawY9SAdApmmVozGIE2Dlw6Gj8YgHQKZplaMxiBNg5cOho/GIB0CmaZWjMYgTYOXDoaPxiAdApmmVgAAt40pvKgMk9EAAAAASUVORK5CYII=');
 }
+/*
+﻿Developed with the contribution of the European Commission - Directorate General for Maritime Affairs and Fisheries
+© European Union, 2015-2016.
+
+This file is part of the Integrated Fisheries Data Management (IFDM) Suite. The IFDM Suite is free software: you can
+redistribute it and/or modify it under the terms of the GNU General Public License as published by the
+Free Software Foundation, either version 3 of the License, or any later version. The IFDM Suite is distributed in
+the hope that it will be useful, but WITHOUT ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or
+FITNESS FOR A PARTICULAR PURPOSE.  See the GNU General Public License for more details. You should have received a
+copy of the GNU General Public License along with the IFDM Suite. If not, see <http://www.gnu.org/licenses/>.
+ */
 .number-widget {
   background-color: #569ac0;
   border-radius: 4px;
@@ -17312,6 +18851,17 @@ copy of the GNU General Public License along with the IFDM Suite. If not, see <h
 .number-widget .value .placeholder {
   opacity: 0.5;
 }
+/*
+﻿Developed with the contribution of the European Commission - Directorate General for Maritime Affairs and Fisheries
+© European Union, 2015-2016.
+
+This file is part of the Integrated Fisheries Data Management (IFDM) Suite. The IFDM Suite is free software: you can
+redistribute it and/or modify it under the terms of the GNU General Public License as published by the
+Free Software Foundation, either version 3 of the License, or any later version. The IFDM Suite is distributed in
+the hope that it will be useful, but WITHOUT ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or
+FITNESS FOR A PARTICULAR PURPOSE.  See the GNU General Public License for more details. You should have received a
+copy of the GNU General Public License along with the IFDM Suite. If not, see <http://www.gnu.org/licenses/>.
+ */
 .incoming-movements-widget {
   background-color: white;
   border-radius: 4px;
@@ -17337,6 +18887,17 @@ copy of the GNU General Public License along with the IFDM Suite. If not, see <h
 .incoming-movements-widget table.searchResults tbody tr div.td:first-child {
   padding-left: 15px;
 }
+/*
+﻿Developed with the contribution of the European Commission - Directorate General for Maritime Affairs and Fisheries
+© European Union, 2015-2016.
+
+This file is part of the Integrated Fisheries Data Management (IFDM) Suite. The IFDM Suite is free software: you can
+redistribute it and/or modify it under the terms of the GNU General Public License as published by the
+Free Software Foundation, either version 3 of the License, or any later version. The IFDM Suite is distributed in
+the hope that it will be useful, but WITHOUT ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or
+FITNESS FOR A PARTICULAR PURPOSE.  See the GNU General Public License for more details. You should have received a
+copy of the GNU General Public License along with the IFDM Suite. If not, see <http://www.gnu.org/licenses/>.
+ */
 .exchange-history {
   background-color: white;
   border-radius: 4px;
@@ -17391,10 +18952,76 @@ copy of the GNU General Public License along with the IFDM Suite. If not, see <h
   right: 0;
 }
 /*USM*/
+/*
+﻿Developed with the contribution of the European Commission - Directorate General for Maritime Affairs and Fisheries
+© European Union, 2015-2016.
+
+This file is part of the Integrated Fisheries Data Management (IFDM) Suite. The IFDM Suite is free software: you can
+redistribute it and/or modify it under the terms of the GNU General Public License as published by the
+Free Software Foundation, either version 3 of the License, or any later version. The IFDM Suite is distributed in
+the hope that it will be useful, but WITHOUT ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or
+FITNESS FOR A PARTICULAR PURPOSE.  See the GNU General Public License for more details. You should have received a
+copy of the GNU General Public License along with the IFDM Suite. If not, see <http://www.gnu.org/licenses/>.
+ */
+/*
+﻿Developed with the contribution of the European Commission - Directorate General for Maritime Affairs and Fisheries
+© European Union, 2015-2016.
+
+This file is part of the Integrated Fisheries Data Management (IFDM) Suite. The IFDM Suite is free software: you can
+redistribute it and/or modify it under the terms of the GNU General Public License as published by the
+Free Software Foundation, either version 3 of the License, or any later version. The IFDM Suite is distributed in
+the hope that it will be useful, but WITHOUT ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or
+FITNESS FOR A PARTICULAR PURPOSE.  See the GNU General Public License for more details. You should have received a
+copy of the GNU General Public License along with the IFDM Suite. If not, see <http://www.gnu.org/licenses/>.
+ */
 /* Component LESS */
+/*
+﻿Developed with the contribution of the European Commission - Directorate General for Maritime Affairs and Fisheries
+© European Union, 2015-2016.
+
+This file is part of the Integrated Fisheries Data Management (IFDM) Suite. The IFDM Suite is free software: you can
+redistribute it and/or modify it under the terms of the GNU General Public License as published by the
+Free Software Foundation, either version 3 of the License, or any later version. The IFDM Suite is distributed in
+the hope that it will be useful, but WITHOUT ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or
+FITNESS FOR A PARTICULAR PURPOSE.  See the GNU General Public License for more details. You should have received a
+copy of the GNU General Public License along with the IFDM Suite. If not, see <http://www.gnu.org/licenses/>.
+ */
 /* Component LESS */
+/*
+﻿Developed with the contribution of the European Commission - Directorate General for Maritime Affairs and Fisheries
+© European Union, 2015-2016.
+
+This file is part of the Integrated Fisheries Data Management (IFDM) Suite. The IFDM Suite is free software: you can
+redistribute it and/or modify it under the terms of the GNU General Public License as published by the
+Free Software Foundation, either version 3 of the License, or any later version. The IFDM Suite is distributed in
+the hope that it will be useful, but WITHOUT ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or
+FITNESS FOR A PARTICULAR PURPOSE.  See the GNU General Public License for more details. You should have received a
+copy of the GNU General Public License along with the IFDM Suite. If not, see <http://www.gnu.org/licenses/>.
+ */
 /* Component LESS */
+/*
+﻿Developed with the contribution of the European Commission - Directorate General for Maritime Affairs and Fisheries
+© European Union, 2015-2016.
+
+This file is part of the Integrated Fisheries Data Management (IFDM) Suite. The IFDM Suite is free software: you can
+redistribute it and/or modify it under the terms of the GNU General Public License as published by the
+Free Software Foundation, either version 3 of the License, or any later version. The IFDM Suite is distributed in
+the hope that it will be useful, but WITHOUT ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or
+FITNESS FOR A PARTICULAR PURPOSE.  See the GNU General Public License for more details. You should have received a
+copy of the GNU General Public License along with the IFDM Suite. If not, see <http://www.gnu.org/licenses/>.
+ */
 /* Add Component LESS Above */
+/*
+﻿Developed with the contribution of the European Commission - Directorate General for Maritime Affairs and Fisheries
+© European Union, 2015-2016.
+
+This file is part of the Integrated Fisheries Data Management (IFDM) Suite. The IFDM Suite is free software: you can
+redistribute it and/or modify it under the terms of the GNU General Public License as published by the
+Free Software Foundation, either version 3 of the License, or any later version. The IFDM Suite is distributed in
+the hope that it will be useful, but WITHOUT ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or
+FITNESS FOR A PARTICULAR PURPOSE.  See the GNU General Public License for more details. You should have received a
+copy of the GNU General Public License along with the IFDM Suite. If not, see <http://www.gnu.org/licenses/>.
+ */
 /* Add Component LESS Above */
 @media (min-width: 1px) {
   .form-inline .form-control {
@@ -17423,9 +19050,53 @@ div.zero-side-padding {
   padding-left: 0;
   padding-right: 0;
 }
+/*
+﻿Developed with the contribution of the European Commission - Directorate General for Maritime Affairs and Fisheries
+© European Union, 2015-2016.
+
+This file is part of the Integrated Fisheries Data Management (IFDM) Suite. The IFDM Suite is free software: you can
+redistribute it and/or modify it under the terms of the GNU General Public License as published by the
+Free Software Foundation, either version 3 of the License, or any later version. The IFDM Suite is distributed in
+the hope that it will be useful, but WITHOUT ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or
+FITNESS FOR A PARTICULAR PURPOSE.  See the GNU General Public License for more details. You should have received a
+copy of the GNU General Public License along with the IFDM Suite. If not, see <http://www.gnu.org/licenses/>.
+ */
 /* Component LESS */
+/*
+﻿Developed with the contribution of the European Commission - Directorate General for Maritime Affairs and Fisheries
+© European Union, 2015-2016.
+
+This file is part of the Integrated Fisheries Data Management (IFDM) Suite. The IFDM Suite is free software: you can
+redistribute it and/or modify it under the terms of the GNU General Public License as published by the
+Free Software Foundation, either version 3 of the License, or any later version. The IFDM Suite is distributed in
+the hope that it will be useful, but WITHOUT ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or
+FITNESS FOR A PARTICULAR PURPOSE.  See the GNU General Public License for more details. You should have received a
+copy of the GNU General Public License along with the IFDM Suite. If not, see <http://www.gnu.org/licenses/>.
+ */
 /* Add Component LESS Above */
+/*
+﻿Developed with the contribution of the European Commission - Directorate General for Maritime Affairs and Fisheries
+© European Union, 2015-2016.
+
+This file is part of the Integrated Fisheries Data Management (IFDM) Suite. The IFDM Suite is free software: you can
+redistribute it and/or modify it under the terms of the GNU General Public License as published by the
+Free Software Foundation, either version 3 of the License, or any later version. The IFDM Suite is distributed in
+the hope that it will be useful, but WITHOUT ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or
+FITNESS FOR A PARTICULAR PURPOSE.  See the GNU General Public License for more details. You should have received a
+copy of the GNU General Public License along with the IFDM Suite. If not, see <http://www.gnu.org/licenses/>.
+ */
 /* Component LESS */
+/*
+﻿Developed with the contribution of the European Commission - Directorate General for Maritime Affairs and Fisheries
+© European Union, 2015-2016.
+
+This file is part of the Integrated Fisheries Data Management (IFDM) Suite. The IFDM Suite is free software: you can
+redistribute it and/or modify it under the terms of the GNU General Public License as published by the
+Free Software Foundation, either version 3 of the License, or any later version. The IFDM Suite is distributed in
+the hope that it will be useful, but WITHOUT ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or
+FITNESS FOR A PARTICULAR PURPOSE.  See the GNU General Public License for more details. You should have received a
+copy of the GNU General Public License along with the IFDM Suite. If not, see <http://www.gnu.org/licenses/>.
+ */
 .roleDetailsTabs {
   /* Rsolves chrome problem with right border
         https://bugs.webkit.org/show_bug.cgi?id=33858
@@ -17482,8 +19153,52 @@ div.zero-side-padding {
 .table.table-hover tr div.th {
   cursor: pointer;
 }
+/*
+﻿Developed with the contribution of the European Commission - Directorate General for Maritime Affairs and Fisheries
+© European Union, 2015-2016.
+
+This file is part of the Integrated Fisheries Data Management (IFDM) Suite. The IFDM Suite is free software: you can
+redistribute it and/or modify it under the terms of the GNU General Public License as published by the
+Free Software Foundation, either version 3 of the License, or any later version. The IFDM Suite is distributed in
+the hope that it will be useful, but WITHOUT ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or
+FITNESS FOR A PARTICULAR PURPOSE.  See the GNU General Public License for more details. You should have received a
+copy of the GNU General Public License along with the IFDM Suite. If not, see <http://www.gnu.org/licenses/>.
+ */
 /* Component LESS */
+/*
+﻿Developed with the contribution of the European Commission - Directorate General for Maritime Affairs and Fisheries
+© European Union, 2015-2016.
+
+This file is part of the Integrated Fisheries Data Management (IFDM) Suite. The IFDM Suite is free software: you can
+redistribute it and/or modify it under the terms of the GNU General Public License as published by the
+Free Software Foundation, either version 3 of the License, or any later version. The IFDM Suite is distributed in
+the hope that it will be useful, but WITHOUT ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or
+FITNESS FOR A PARTICULAR PURPOSE.  See the GNU General Public License for more details. You should have received a
+copy of the GNU General Public License along with the IFDM Suite. If not, see <http://www.gnu.org/licenses/>.
+ */
 /* Add Component LESS Above */
+/*
+﻿Developed with the contribution of the European Commission - Directorate General for Maritime Affairs and Fisheries
+© European Union, 2015-2016.
+
+This file is part of the Integrated Fisheries Data Management (IFDM) Suite. The IFDM Suite is free software: you can
+redistribute it and/or modify it under the terms of the GNU General Public License as published by the
+Free Software Foundation, either version 3 of the License, or any later version. The IFDM Suite is distributed in
+the hope that it will be useful, but WITHOUT ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or
+FITNESS FOR A PARTICULAR PURPOSE.  See the GNU General Public License for more details. You should have received a
+copy of the GNU General Public License along with the IFDM Suite. If not, see <http://www.gnu.org/licenses/>.
+ */
+/*
+﻿Developed with the contribution of the European Commission - Directorate General for Maritime Affairs and Fisheries
+© European Union, 2015-2016.
+
+This file is part of the Integrated Fisheries Data Management (IFDM) Suite. The IFDM Suite is free software: you can
+redistribute it and/or modify it under the terms of the GNU General Public License as published by the
+Free Software Foundation, either version 3 of the License, or any later version. The IFDM Suite is distributed in
+the hope that it will be useful, but WITHOUT ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or
+FITNESS FOR A PARTICULAR PURPOSE.  See the GNU General Public License for more details. You should have received a
+copy of the GNU General Public License along with the IFDM Suite. If not, see <http://www.gnu.org/licenses/>.
+ */
 .scopeDetailsTabs .nav > li > a {
   padding: 2px 5px;
 }
@@ -17493,7 +19208,29 @@ div.zero-side-padding {
 .scopeDetailsTabs .st-sort-descent:after {
   content: '\25BC';
 }
+/*
+﻿Developed with the contribution of the European Commission - Directorate General for Maritime Affairs and Fisheries
+© European Union, 2015-2016.
+
+This file is part of the Integrated Fisheries Data Management (IFDM) Suite. The IFDM Suite is free software: you can
+redistribute it and/or modify it under the terms of the GNU General Public License as published by the
+Free Software Foundation, either version 3 of the License, or any later version. The IFDM Suite is distributed in
+the hope that it will be useful, but WITHOUT ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or
+FITNESS FOR A PARTICULAR PURPOSE.  See the GNU General Public License for more details. You should have received a
+copy of the GNU General Public License along with the IFDM Suite. If not, see <http://www.gnu.org/licenses/>.
+ */
 /* Component LESS */
+/*
+﻿Developed with the contribution of the European Commission - Directorate General for Maritime Affairs and Fisheries
+© European Union, 2015-2016.
+
+This file is part of the Integrated Fisheries Data Management (IFDM) Suite. The IFDM Suite is free software: you can
+redistribute it and/or modify it under the terms of the GNU General Public License as published by the
+Free Software Foundation, either version 3 of the License, or any later version. The IFDM Suite is distributed in
+the hope that it will be useful, but WITHOUT ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or
+FITNESS FOR A PARTICULAR PURPOSE.  See the GNU General Public License for more details. You should have received a
+copy of the GNU General Public License along with the IFDM Suite. If not, see <http://www.gnu.org/licenses/>.
+ */
 /* Add Component LESS Above */
 table tbody td.rightBorder,
 table thead th.rightBorder,
@@ -17514,7 +19251,29 @@ table tbody div.td.rightBorder {
 .table_heading {
   background-color: #E7E7E7;
 }
+/*
+﻿Developed with the contribution of the European Commission - Directorate General for Maritime Affairs and Fisheries
+© European Union, 2015-2016.
+
+This file is part of the Integrated Fisheries Data Management (IFDM) Suite. The IFDM Suite is free software: you can
+redistribute it and/or modify it under the terms of the GNU General Public License as published by the
+Free Software Foundation, either version 3 of the License, or any later version. The IFDM Suite is distributed in
+the hope that it will be useful, but WITHOUT ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or
+FITNESS FOR A PARTICULAR PURPOSE.  See the GNU General Public License for more details. You should have received a
+copy of the GNU General Public License along with the IFDM Suite. If not, see <http://www.gnu.org/licenses/>.
+ */
 /* Component LESS */
+/*
+﻿Developed with the contribution of the European Commission - Directorate General for Maritime Affairs and Fisheries
+© European Union, 2015-2016.
+
+This file is part of the Integrated Fisheries Data Management (IFDM) Suite. The IFDM Suite is free software: you can
+redistribute it and/or modify it under the terms of the GNU General Public License as published by the
+Free Software Foundation, either version 3 of the License, or any later version. The IFDM Suite is distributed in
+the hope that it will be useful, but WITHOUT ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or
+FITNESS FOR A PARTICULAR PURPOSE.  See the GNU General Public License for more details. You should have received a
+copy of the GNU General Public License along with the IFDM Suite. If not, see <http://www.gnu.org/licenses/>.
+ */
 .userDetails-label {
   width: 13%;
 }
@@ -17522,18 +19281,84 @@ table tbody div.td.rightBorder {
   padding-left: 0px;
 }
 /* Add Component LESS Above */
+/*
+﻿Developed with the contribution of the European Commission - Directorate General for Maritime Affairs and Fisheries
+© European Union, 2015-2016.
+
+This file is part of the Integrated Fisheries Data Management (IFDM) Suite. The IFDM Suite is free software: you can
+redistribute it and/or modify it under the terms of the GNU General Public License as published by the
+Free Software Foundation, either version 3 of the License, or any later version. The IFDM Suite is distributed in
+the hope that it will be useful, but WITHOUT ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or
+FITNESS FOR A PARTICULAR PURPOSE.  See the GNU General Public License for more details. You should have received a
+copy of the GNU General Public License along with the IFDM Suite. If not, see <http://www.gnu.org/licenses/>.
+ */
 /* Component LESS */
+/*
+﻿Developed with the contribution of the European Commission - Directorate General for Maritime Affairs and Fisheries
+© European Union, 2015-2016.
+
+This file is part of the Integrated Fisheries Data Management (IFDM) Suite. The IFDM Suite is free software: you can
+redistribute it and/or modify it under the terms of the GNU General Public License as published by the
+Free Software Foundation, either version 3 of the License, or any later version. The IFDM Suite is distributed in
+the hope that it will be useful, but WITHOUT ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or
+FITNESS FOR A PARTICULAR PURPOSE.  See the GNU General Public License for more details. You should have received a
+copy of the GNU General Public License along with the IFDM Suite. If not, see <http://www.gnu.org/licenses/>.
+ */
+/*
+﻿Developed with the contribution of the European Commission - Directorate General for Maritime Affairs and Fisheries
+© European Union, 2015-2016.
+
+This file is part of the Integrated Fisheries Data Management (IFDM) Suite. The IFDM Suite is free software: you can
+redistribute it and/or modify it under the terms of the GNU General Public License as published by the
+Free Software Foundation, either version 3 of the License, or any later version. The IFDM Suite is distributed in
+the hope that it will be useful, but WITHOUT ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or
+FITNESS FOR A PARTICULAR PURPOSE.  See the GNU General Public License for more details. You should have received a
+copy of the GNU General Public License along with the IFDM Suite. If not, see <http://www.gnu.org/licenses/>.
+ */
 .dropdown-menu {
   max-height: none;
 }
 /* Add Component LESS Above */
+/*
+﻿Developed with the contribution of the European Commission - Directorate General for Maritime Affairs and Fisheries
+© European Union, 2015-2016.
+
+This file is part of the Integrated Fisheries Data Management (IFDM) Suite. The IFDM Suite is free software: you can
+redistribute it and/or modify it under the terms of the GNU General Public License as published by the
+Free Software Foundation, either version 3 of the License, or any later version. The IFDM Suite is distributed in
+the hope that it will be useful, but WITHOUT ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or
+FITNESS FOR A PARTICULAR PURPOSE.  See the GNU General Public License for more details. You should have received a
+copy of the GNU General Public License along with the IFDM Suite. If not, see <http://www.gnu.org/licenses/>.
+ */
 .input-oldValue-color {
   background-color: hotpink;
 }
 .input-newValue-color {
   background-color: lightgreen;
 }
+/*
+﻿Developed with the contribution of the European Commission - Directorate General for Maritime Affairs and Fisheries
+© European Union, 2015-2016.
+
+This file is part of the Integrated Fisheries Data Management (IFDM) Suite. The IFDM Suite is free software: you can
+redistribute it and/or modify it under the terms of the GNU General Public License as published by the
+Free Software Foundation, either version 3 of the License, or any later version. The IFDM Suite is distributed in
+the hope that it will be useful, but WITHOUT ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or
+FITNESS FOR A PARTICULAR PURPOSE.  See the GNU General Public License for more details. You should have received a
+copy of the GNU General Public License along with the IFDM Suite. If not, see <http://www.gnu.org/licenses/>.
+ */
 /* Component LESS */
+/*
+﻿Developed with the contribution of the European Commission - Directorate General for Maritime Affairs and Fisheries
+© European Union, 2015-2016.
+
+This file is part of the Integrated Fisheries Data Management (IFDM) Suite. The IFDM Suite is free software: you can
+redistribute it and/or modify it under the terms of the GNU General Public License as published by the
+Free Software Foundation, either version 3 of the License, or any later version. The IFDM Suite is distributed in
+the hope that it will be useful, but WITHOUT ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or
+FITNESS FOR A PARTICULAR PURPOSE.  See the GNU General Public License for more details. You should have received a
+copy of the GNU General Public License along with the IFDM Suite. If not, see <http://www.gnu.org/licenses/>.
+ */
 /* Add Component LESS Above */
 .table_heading {
   background-color: #E7E7E7;
@@ -17707,6 +19532,17 @@ ul.nav-tabs li.active a:active {
 .breadcrumb {
   margin-bottom: 0;
 }
+/*
+﻿Developed with the contribution of the European Commission - Directorate General for Maritime Affairs and Fisheries
+© European Union, 2015-2016.
+
+This file is part of the Integrated Fisheries Data Management (IFDM) Suite. The IFDM Suite is free software: you can
+redistribute it and/or modify it under the terms of the GNU General Public License as published by the
+Free Software Foundation, either version 3 of the License, or any later version. The IFDM Suite is distributed in
+the hope that it will be useful, but WITHOUT ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or
+FITNESS FOR A PARTICULAR PURPOSE.  See the GNU General Public License for more details. You should have received a
+copy of the GNU General Public License along with the IFDM Suite. If not, see <http://www.gnu.org/licenses/>.
+ */
 .rulesContainer .filterRow,
 .holdingTableContainer .filterRow,
 .openTicketsContainer .filterRow {
@@ -17759,6 +19595,17 @@ ul.nav-tabs li.active a:active {
   position: relative;
   top: 15px;
 }
+/*
+﻿Developed with the contribution of the European Commission - Directorate General for Maritime Affairs and Fisheries
+© European Union, 2015-2016.
+
+This file is part of the Integrated Fisheries Data Management (IFDM) Suite. The IFDM Suite is free software: you can
+redistribute it and/or modify it under the terms of the GNU General Public License as published by the
+Free Software Foundation, either version 3 of the License, or any later version. The IFDM Suite is distributed in
+the hope that it will be useful, but WITHOUT ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or
+FITNESS FOR A PARTICULAR PURPOSE.  See the GNU General Public License for more details. You should have received a
+copy of the GNU General Public License along with the IFDM Suite. If not, see <http://www.gnu.org/licenses/>.
+ */
 .rulesContainer .filterRow {
   border: none;
 }
@@ -17807,15 +19654,92 @@ ul.nav-tabs li.active a:active {
 .rulesContainer .btn.full-width {
   width: 100%;
 }
+/*
+﻿Developed with the contribution of the European Commission - Directorate General for Maritime Affairs and Fisheries
+© European Union, 2015-2016.
+
+This file is part of the Integrated Fisheries Data Management (IFDM) Suite. The IFDM Suite is free software: you can
+redistribute it and/or modify it under the terms of the GNU General Public License as published by the
+Free Software Foundation, either version 3 of the License, or any later version. The IFDM Suite is distributed in
+the hope that it will be useful, but WITHOUT ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or
+FITNESS FOR A PARTICULAR PURPOSE.  See the GNU General Public License for more details. You should have received a
+copy of the GNU General Public License along with the IFDM Suite. If not, see <http://www.gnu.org/licenses/>.
+ */
+/*
+﻿Developed with the contribution of the European Commission - Directorate General for Maritime Affairs and Fisheries
+© European Union, 2015-2016.
+
+This file is part of the Integrated Fisheries Data Management (IFDM) Suite. The IFDM Suite is free software: you can
+redistribute it and/or modify it under the terms of the GNU General Public License as published by the
+Free Software Foundation, either version 3 of the License, or any later version. The IFDM Suite is distributed in
+the hope that it will be useful, but WITHOUT ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or
+FITNESS FOR A PARTICULAR PURPOSE.  See the GNU General Public License for more details. You should have received a
+copy of the GNU General Public License along with the IFDM Suite. If not, see <http://www.gnu.org/licenses/>.
+ */
 .holding-table .actions {
   width: 100px;
 }
 .holding-table .tooltip-inner {
   white-space: initial;
 }
+/*
+﻿Developed with the contribution of the European Commission - Directorate General for Maritime Affairs and Fisheries
+© European Union, 2015-2016.
+
+This file is part of the Integrated Fisheries Data Management (IFDM) Suite. The IFDM Suite is free software: you can
+redistribute it and/or modify it under the terms of the GNU General Public License as published by the
+Free Software Foundation, either version 3 of the License, or any later version. The IFDM Suite is distributed in
+the hope that it will be useful, but WITHOUT ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or
+FITNESS FOR A PARTICULAR PURPOSE.  See the GNU General Public License for more details. You should have received a
+copy of the GNU General Public License along with the IFDM Suite. If not, see <http://www.gnu.org/licenses/>.
+ */
+/*
+﻿Developed with the contribution of the European Commission - Directorate General for Maritime Affairs and Fisheries
+© European Union, 2015-2016.
+
+This file is part of the Integrated Fisheries Data Management (IFDM) Suite. The IFDM Suite is free software: you can
+redistribute it and/or modify it under the terms of the GNU General Public License as published by the
+Free Software Foundation, either version 3 of the License, or any later version. The IFDM Suite is distributed in
+the hope that it will be useful, but WITHOUT ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or
+FITNESS FOR A PARTICULAR PURPOSE.  See the GNU General Public License for more details. You should have received a
+copy of the GNU General Public License along with the IFDM Suite. If not, see <http://www.gnu.org/licenses/>.
+ */
 .tickets-table .actions {
   width: 125px;
 }
+/*
+﻿Developed with the contribution of the European Commission - Directorate General for Maritime Affairs and Fisheries
+© European Union, 2015-2016.
+
+This file is part of the Integrated Fisheries Data Management (IFDM) Suite. The IFDM Suite is free software: you can
+redistribute it and/or modify it under the terms of the GNU General Public License as published by the
+Free Software Foundation, either version 3 of the License, or any later version. The IFDM Suite is distributed in
+the hope that it will be useful, but WITHOUT ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or
+FITNESS FOR A PARTICULAR PURPOSE.  See the GNU General Public License for more details. You should have received a
+copy of the GNU General Public License along with the IFDM Suite. If not, see <http://www.gnu.org/licenses/>.
+ */
+/*
+﻿Developed with the contribution of the European Commission - Directorate General for Maritime Affairs and Fisheries
+© European Union, 2015-2016.
+
+This file is part of the Integrated Fisheries Data Management (IFDM) Suite. The IFDM Suite is free software: you can
+redistribute it and/or modify it under the terms of the GNU General Public License as published by the
+Free Software Foundation, either version 3 of the License, or any later version. The IFDM Suite is distributed in
+the hope that it will be useful, but WITHOUT ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or
+FITNESS FOR A PARTICULAR PURPOSE.  See the GNU General Public License for more details. You should have received a
+copy of the GNU General Public License along with the IFDM Suite. If not, see <http://www.gnu.org/licenses/>.
+ */
+/*
+﻿Developed with the contribution of the European Commission - Directorate General for Maritime Affairs and Fisheries
+© European Union, 2015-2016.
+
+This file is part of the Integrated Fisheries Data Management (IFDM) Suite. The IFDM Suite is free software: you can
+redistribute it and/or modify it under the terms of the GNU General Public License as published by the
+Free Software Foundation, either version 3 of the License, or any later version. The IFDM Suite is distributed in
+the hope that it will be useful, but WITHOUT ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or
+FITNESS FOR A PARTICULAR PURPOSE.  See the GNU General Public License for more details. You should have received a
+copy of the GNU General Public License along with the IFDM Suite. If not, see <http://www.gnu.org/licenses/>.
+ */
 .ruleFormContainer .card {
   margin-bottom: 20px;
   padding-top: 5px;
@@ -17968,6 +19892,17 @@ ul.nav-tabs li.active a:active {
 .ruleFormContainer .row.toolbar .toolbar-right button {
   margin-left: 10px;
 }
+/*
+﻿Developed with the contribution of the European Commission - Directorate General for Maritime Affairs and Fisheries
+© European Union, 2015-2016.
+
+This file is part of the Integrated Fisheries Data Management (IFDM) Suite. The IFDM Suite is free software: you can
+redistribute it and/or modify it under the terms of the GNU General Public License as published by the
+Free Software Foundation, either version 3 of the License, or any later version. The IFDM Suite is distributed in
+the hope that it will be useful, but WITHOUT ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or
+FITNESS FOR A PARTICULAR PURPOSE.  See the GNU General Public License for more details. You should have received a
+copy of the GNU General Public License along with the IFDM Suite. If not, see <http://www.gnu.org/licenses/>.
+ */
 .configuration-general label {
   font-weight: normal;
 }
@@ -17999,6 +19934,39 @@ ul.nav-tabs li.active a:active {
   font-size: 24px;
   float: right;
 }
+/*
+﻿Developed with the contribution of the European Commission - Directorate General for Maritime Affairs and Fisheries
+© European Union, 2015-2016.
+
+This file is part of the Integrated Fisheries Data Management (IFDM) Suite. The IFDM Suite is free software: you can
+redistribute it and/or modify it under the terms of the GNU General Public License as published by the
+Free Software Foundation, either version 3 of the License, or any later version. The IFDM Suite is distributed in
+the hope that it will be useful, but WITHOUT ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or
+FITNESS FOR A PARTICULAR PURPOSE.  See the GNU General Public License for more details. You should have received a
+copy of the GNU General Public License along with the IFDM Suite. If not, see <http://www.gnu.org/licenses/>.
+ */
+/*
+﻿Developed with the contribution of the European Commission - Directorate General for Maritime Affairs and Fisheries
+© European Union, 2015-2016.
+
+This file is part of the Integrated Fisheries Data Management (IFDM) Suite. The IFDM Suite is free software: you can
+redistribute it and/or modify it under the terms of the GNU General Public License as published by the
+Free Software Foundation, either version 3 of the License, or any later version. The IFDM Suite is distributed in
+the hope that it will be useful, but WITHOUT ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or
+FITNESS FOR A PARTICULAR PURPOSE.  See the GNU General Public License for more details. You should have received a
+copy of the GNU General Public License along with the IFDM Suite. If not, see <http://www.gnu.org/licenses/>.
+ */
+/*
+﻿Developed with the contribution of the European Commission - Directorate General for Maritime Affairs and Fisheries
+© European Union, 2015-2016.
+
+This file is part of the Integrated Fisheries Data Management (IFDM) Suite. The IFDM Suite is free software: you can
+redistribute it and/or modify it under the terms of the GNU General Public License as published by the
+Free Software Foundation, either version 3 of the License, or any later version. The IFDM Suite is distributed in
+the hope that it will be useful, but WITHOUT ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or
+FITNESS FOR A PARTICULAR PURPOSE.  See the GNU General Public License for more details. You should have received a
+copy of the GNU General Public License along with the IFDM Suite. If not, see <http://www.gnu.org/licenses/>.
+ */
 .config-module tr.add-new td,
 .config-module div.tr.add-new td,
 .config-module tr.add-new div.td,
@@ -18061,6 +20029,17 @@ ul.nav-tabs li.active a:active {
 .system-monitor div.td.system-status {
   text-align: center;
 }
+/*
+﻿Developed with the contribution of the European Commission - Directorate General for Maritime Affairs and Fisheries
+© European Union, 2015-2016.
+
+This file is part of the Integrated Fisheries Data Management (IFDM) Suite. The IFDM Suite is free software: you can
+redistribute it and/or modify it under the terms of the GNU General Public License as published by the
+Free Software Foundation, either version 3 of the License, or any later version. The IFDM Suite is distributed in
+the hope that it will be useful, but WITHOUT ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or
+FITNESS FOR A PARTICULAR PURPOSE.  See the GNU General Public License for more details. You should have received a
+copy of the GNU General Public License along with the IFDM Suite. If not, see <http://www.gnu.org/licenses/>.
+ */
 .searchResultsPaginationContainer {
   text-align: right;
 }
@@ -18074,6 +20053,17 @@ ul.nav-tabs li.active a:active {
 .searchResultsPaginationContainer .pagination input {
   width: 50px;
 }
+/*
+﻿Developed with the contribution of the European Commission - Directorate General for Maritime Affairs and Fisheries
+© European Union, 2015-2016.
+
+This file is part of the Integrated Fisheries Data Management (IFDM) Suite. The IFDM Suite is free software: you can
+redistribute it and/or modify it under the terms of the GNU General Public License as published by the
+Free Software Foundation, either version 3 of the License, or any later version. The IFDM Suite is distributed in
+the hope that it will be useful, but WITHOUT ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or
+FITNESS FOR A PARTICULAR PURPOSE.  See the GNU General Public License for more details. You should have received a
+copy of the GNU General Public License along with the IFDM Suite. If not, see <http://www.gnu.org/licenses/>.
+ */
 .searchResultsContainer {
   min-height: 100px;
 }
@@ -18083,6 +20073,17 @@ ul.nav-tabs li.active a:active {
 .searchResultsContainer.isEmpty .loadingIndicator .spinner {
   margin-top: 50px;
 }
+/*
+﻿Developed with the contribution of the European Commission - Directorate General for Maritime Affairs and Fisheries
+© European Union, 2015-2016.
+
+This file is part of the Integrated Fisheries Data Management (IFDM) Suite. The IFDM Suite is free software: you can
+redistribute it and/or modify it under the terms of the GNU General Public License as published by the
+Free Software Foundation, either version 3 of the License, or any later version. The IFDM Suite is distributed in
+the hope that it will be useful, but WITHOUT ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or
+FITNESS FOR A PARTICULAR PURPOSE.  See the GNU General Public License for more details. You should have received a
+copy of the GNU General Public License along with the IFDM Suite. If not, see <http://www.gnu.org/licenses/>.
+ */
 .rulesTableDetailsContainer {
   margin-bottom: 10px;
 }
@@ -18235,6 +20236,17 @@ ul.nav-tabs li.active a:active {
   text-align: center;
   color: #089fd7;
 }
+/*
+﻿Developed with the contribution of the European Commission - Directorate General for Maritime Affairs and Fisheries
+© European Union, 2015-2016.
+
+This file is part of the Integrated Fisheries Data Management (IFDM) Suite. The IFDM Suite is free software: you can
+redistribute it and/or modify it under the terms of the GNU General Public License as published by the
+Free Software Foundation, either version 3 of the License, or any later version. The IFDM Suite is distributed in
+the hope that it will be useful, but WITHOUT ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or
+FITNESS FOR A PARTICULAR PURPOSE.  See the GNU General Public License for more details. You should have received a
+copy of the GNU General Public License along with the IFDM Suite. If not, see <http://www.gnu.org/licenses/>.
+ */
 .alarmReportModal .modal-body .label {
   position: relative;
   top: -1px;
@@ -18814,6 +20826,28 @@ copy of the GNU General Public License along with the IFDM Suite. If not, see <h
 .mapProjSettings .has-error > .dropdown > button.btn.btn-default {
   border-color: #df1f26;
 }
+/*
+﻿Developed with the contribution of the European Commission - Directorate General for Maritime Affairs and Fisheries
+© European Union, 2015-2016.
+
+This file is part of the Integrated Fisheries Data Management (IFDM) Suite. The IFDM Suite is free software: you can
+redistribute it and/or modify it under the terms of the GNU General Public License as published by the
+Free Software Foundation, either version 3 of the License, or any later version. The IFDM Suite is distributed in
+the hope that it will be useful, but WITHOUT ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or
+FITNESS FOR A PARTICULAR PURPOSE.  See the GNU General Public License for more details. You should have received a
+copy of the GNU General Public License along with the IFDM Suite. If not, see <http://www.gnu.org/licenses/>.
+ */
+/*
+﻿Developed with the contribution of the European Commission - Directorate General for Maritime Affairs and Fisheries
+© European Union, 2015-2016.
+
+This file is part of the Integrated Fisheries Data Management (IFDM) Suite. The IFDM Suite is free software: you can
+redistribute it and/or modify it under the terms of the GNU General Public License as published by the
+Free Software Foundation, either version 3 of the License, or any later version. The IFDM Suite is distributed in
+the hope that it will be useful, but WITHOUT ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or
+FITNESS FOR A PARTICULAR PURPOSE.  See the GNU General Public License for more details. You should have received a
+copy of the GNU General Public License along with the IFDM Suite. If not, see <http://www.gnu.org/licenses/>.
+ */
 .positionReportModal .modal-body {
   min-height: 200px;
 }
@@ -19342,6 +21376,17 @@ copy of the GNU General Public License along with the IFDM Suite. If not, see <h
 .segmentsVisiblity .form-group {
   margin-bottom: 0px;
 }
+/*
+﻿Developed with the contribution of the European Commission - Directorate General for Maritime Affairs and Fisheries
+© European Union, 2015-2016.
+
+This file is part of the Integrated Fisheries Data Management (IFDM) Suite. The IFDM Suite is free software: you can
+redistribute it and/or modify it under the terms of the GNU General Public License as published by the
+Free Software Foundation, either version 3 of the License, or any later version. The IFDM Suite is distributed in
+the hope that it will be useful, but WITHOUT ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or
+FITNESS FOR A PARTICULAR PURPOSE.  See the GNU General Public License for more details. You should have received a
+copy of the GNU General Public License along with the IFDM Suite. If not, see <http://www.gnu.org/licenses/>.
+ */
 .exchangedetails td .even,
 .exchangedetails div.td .even,
 .exchangedetails div.td .even {
@@ -21445,13 +23490,40 @@ copy of the GNU General Public License along with the IFDM Suite. If not, see <h
 .trip-summary .spatial-error {
   padding: 5px 0 5px 0;
 }
+.trip-summary .btn-trip-quit,
+.trip-summary .btn-print {
+  position: absolute;
+  z-index: 1;
+}
 .trip-summary .btn-trip-quit {
-  top: -30px;
   right: -25px;
+  top: 6px;
+  color: red;
+  font-size: 20px;
 }
 .trip-summary .btn-print {
-  right: -23px;
-  top: 10px;
+  right: -24px;
+  top: 37px;
+  font-size: 18px;
+}
+.trip-summary .activity-summary-row {
+  position: relative;
+}
+.trip-summary .activity-summary-row .btn-detail-form,
+.trip-summary .activity-summary-row .btn-trip-evolution {
+  position: absolute;
+  font-size: 18px;
+  right: -8px;
+}
+.trip-summary .activity-summary-row .btn-detail-form {
+  top: 15px;
+}
+.trip-summary .activity-summary-row .btn-trip-evolution {
+  top: 45px;
+  right: -10px;
+}
+.trip-summary .activity-summary-row .catch-section .catch-details-body .chart-title span.panel-subtitle {
+  font-size: 22px;
 }
 /*
 Developed with the contribution of the European Commission - Directorate General for Maritime Affairs and Fisheries
@@ -21480,61 +23552,78 @@ the hope that it will be useful, but WITHOUT ANY WARRANTY; without even the impl
 FITNESS FOR A PARTICULAR PURPOSE.  See the GNU General Public License for more details. You should have received a
 copy of the GNU General Public License along with the IFDM Suite. If not, see <http://www.gnu.org/licenses/>.
 */
-.catch-details-container .catch-section .catch-subsection h2 {
-  text-align: center;
-  margin: 0 0 -15px 0;
+.catch-details-container .catch-section .catch-details-body {
+  display: flex;
 }
-.catch-details-container .catch-section .catch-subsection:last-child {
+.catch-details-container .catch-section .catch-details-body .catch-subsection.has-caption {
+  padding-bottom: 30px;
+}
+.catch-details-container .catch-section .catch-details-body .catch-subsection h2 {
+  text-align: center;
+  margin: 0 0 -30px 0;
+}
+.catch-details-container .catch-section .catch-details-body .catch-subsection .chart-title {
+  margin: 0 0 -40px 0;
+  text-align: center;
+  min-height: 21px;
+}
+.catch-details-container .catch-section .catch-details-body .catch-subsection .chart-title .panel-subtitle {
+  font-size: 15px;
+  font-family: Roboto, Arial;
+}
+.catch-details-container .catch-section .catch-details-body .catch-subsection:last-child {
   border-left: 1px solid #ddd;
 }
-.catch-details-container .catch-section .catch-subsection .chart-caption {
+.catch-details-container .catch-section .catch-details-body .catch-subsection .chart-caption {
   position: absolute;
   bottom: 0;
   text-align: center;
   width: 100%;
-  left: 0;
 }
-.catch-details-container .catch-section .catch-subsection .table {
+.catch-details-container .catch-section .catch-details-body .catch-subsection .table {
   width: auto !important;
   max-width: none;
+  border: 1px solid #ddd;
 }
-.catch-details-container .catch-section .catch-subsection .table .tbody {
+.catch-details-container .catch-section .catch-details-body .catch-subsection .table .tbody {
   max-height: 120px;
   overflow-y: auto;
   padding-right: 16px;
 }
-.catch-details-container .catch-section .catch-subsection .table .tr {
+.catch-details-container .catch-section .catch-details-body .catch-subsection .table .tr {
   position: relative;
   padding-left: 10px;
 }
-.catch-details-container .catch-section .catch-subsection .table .tr .td:last-child {
+.catch-details-container .catch-section .catch-details-body .catch-subsection .table .tr .td:last-child {
   text-align: center;
 }
-.catch-details-container .catch-section .catch-subsection .table .color-column {
+.catch-details-container .catch-section .catch-details-body .catch-subsection .table .color-column {
   position: absolute;
   top: 0;
   left: 0;
   bottom: 0;
   z-index: 1;
 }
-.catch-details-container .catch-section .nvd3-chart {
-  margin: 0 -40px;
+.catch-details-container .catch-section .catch-details-body .nvd3-chart {
+  margin: 0 -15px;
 }
-.catch-details-container .catch-section .table-responsive-force {
-  margin-top: 25px;
+.catch-details-container .catch-section .catch-details-body .nvd3-chart .nvd3-svg {
+  padding: 15px 0;
 }
-.catch-details-container .btn-detail-form,
-.catch-details-container .btn-trip-evolution {
-  position: absolute;
-  font-size: 18px;
-  right: -8px;
+.catch-details-container .catch-section .catch-details-body .table-responsive-force {
+  margin-top: 50px;
 }
-.catch-details-container .btn-detail-form {
-  top: 15px;
+.catch-details-container fieldset {
+  padding-bottom: 10px;
+  margin-bottom: 5px;
+  align-items: stretch;
 }
-.catch-details-container .btn-trip-evolution {
-  top: 45px;
-  right: -10px;
+.catch-details-container fieldset legend {
+  margin: 0 5px 0 -5px;
+  padding: 0 5px;
+}
+.catch-details-container fieldset legend a {
+  cursor: default;
 }
 /*
 Developed with the contribution of the European Commission - Directorate General for Maritime Affairs and Fisheries
@@ -21738,7 +23827,28 @@ FITNESS FOR A PARTICULAR PURPOSE.  See the GNU General Public License for more d
 copy of the GNU General Public License along with the IFDM Suite. If not, see <http://www.gnu.org/licenses/>.
 */
 .trip-overview-panel .fieldsetStyle {
-  padding-bottom: 20px;
+  padding: 0;
+  padding-bottom: 10px;
+  margin: 0;
+}
+.trip-overview-panel .fieldsetStyle .fieldsetLegendStyle {
+  margin: 0 0 10px 10px;
+}
+.trip-overview-panel .trip-overview-container {
+  margin: 0;
+  padding: 0;
+}
+.trip-overview-panel .trip-overview-container .field-format,
+.trip-overview-panel .trip-overview-container .field-width {
+  padding: 0 10px;
+  float: left;
+  word-break: break-all;
+}
+.trip-overview-panel .trip-overview-container .field-format {
+  width: 21%;
+}
+.trip-overview-panel .trip-overview-container .field-width {
+  width: 16%;
 }
 /*
 Developed with the contribution of the European Commission - Directorate General for Maritime Affairs and Fisheries
@@ -21753,21 +23863,18 @@ copy of the GNU General Public License along with the IFDM Suite. If not, see <h
 */
 .catch-details .btn-trip-quit {
   top: 15px;
-  right: 19px;
+  right: 9px;
 }
 .catch-details .btn-print {
-  right: 21px;
+  right: 11px;
   top: 45px;
 }
 .catch-details .catch-fieldset {
   padding: 10px 0px 0px 10px;
 }
-.catch-details .catch-fieldset .catch-legend {
-  margin-bottom: 0px;
-}
 .catch-details .catch-details-container {
   margin-top: -20px;
-  padding: 20px 40px 0 0;
+  padding-right: 40px;
   overflow-y: auto;
   width: 100%;
   height: calc(100vh - 150px);
@@ -21893,32 +24000,29 @@ the hope that it will be useful, but WITHOUT ANY WARRANTY; without even the impl
 FITNESS FOR A PARTICULAR PURPOSE.  See the GNU General Public License for more details. You should have received a
 copy of the GNU General Public License along with the IFDM Suite. If not, see <http://www.gnu.org/licenses/>.
 */
-.activity-filters-section .reportSubform {
+.activity-filters-section [name="activitySecForm"] {
+  display: flex;
+}
+.activity-filters-section [name="activitySecForm"] .reportSubform {
   padding-top: 10px;
 }
-.activity-filters-section .reportSubform.technical-form {
+.activity-filters-section [name="activitySecForm"] .reportSubform.technical-form {
   border-left: 1px solid #ddd;
   border-right: 1px solid #ddd;
 }
-.activity-filters-section .reportSubform.technical-form .port-form-group {
-  margin-bottom: 5px;
-}
-.activity-filters-section .unit-input {
+.activity-filters-section [name="activitySecForm"] .unit-input {
   padding-right: 35px;
 }
-.activity-filters-section .unit-input .unit-box {
+.activity-filters-section [name="activitySecForm"] .unit-input .unit-box {
   width: 35px;
 }
-.activity-filters-section .label-container {
+.activity-filters-section [name="activitySecForm"] .label-container {
   padding-right: 0;
 }
-.activity-filters-section .label-container.label-top-space {
-  margin-top: 20px;
-}
-.activity-filters-section .label-container.center-label-multiple-combo {
+.activity-filters-section [name="activitySecForm"] .label-container.center-label-multiple-combo {
   line-height: 41px;
 }
-.activity-filters-section .above-label {
+.activity-filters-section [name="activitySecForm"] .above-label {
   width: 100%;
 }
 /*
@@ -21939,6 +24043,9 @@ copy of the GNU General Public License along with the IFDM Suite. If not, see <h
   top: 10px;
   right: 15px;
 }
+.departure-panel .summary-row {
+  padding-bottom: 15px;
+}
 .departure-panel .main-content {
   border: 1px solid #ddd;
   height: 100%;
@@ -21956,6 +24063,10 @@ copy of the GNU General Public License along with the IFDM Suite. If not, see <h
 .departure-panel .main-content .title .operationType {
   text-transform: uppercase;
   color: #089fd7;
+}
+.departure-panel .main-content .summary-section {
+  padding-bottom: 15px;
+  margin-bottom: 0;
 }
 /*
 Developed with the contribution of the European Commission - Directorate General for Maritime Affairs and Fisheries
@@ -22266,6 +24377,37 @@ copy of the GNU General Public License along with the IFDM Suite. If not, see <h
 .catch-class-detail-chart div.td.key,
 .catch-class-detail-chart div.td.key {
   font-weight: bold !important;
+}
+/*
+Developed with the contribution of the European Commission - Directorate General for Maritime Affairs and Fisheries
+© European Union, 2015-2016.
+
+This file is part of the Integrated Fisheries Data Management (IFDM) Suite. The IFDM Suite is free software: you can
+redistribute it and/or modify it under the terms of the GNU General Public License as published by the
+Free Software Foundation, either version 3 of the License, or any later version. The IFDM Suite is distributed in
+the hope that it will be useful, but WITHOUT ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or
+FITNESS FOR A PARTICULAR PURPOSE.  See the GNU General Public License for more details. You should have received a
+copy of the GNU General Public License along with the IFDM Suite. If not, see <http://www.gnu.org/licenses/>.
+*/
+.catch-evolution .btn-trip-quit {
+  z-index: 1;
+  right: 28px;
+  top: 31px;
+}
+.catch-evolution .catch-evolution-container {
+  margin-top: -10px;
+  padding-left: 0;
+  padding-right: 30px;
+  overflow-y: auto;
+  height: calc(100vh - 160px);
+}
+.catch-evolution .catch-evolution-container .chart-panel {
+  padding-bottom: 10px;
+  border-bottom: 1px solid #ddd;
+  margin-top: 15px;
+}
+.catch-evolution .catch-evolution-container .chart-panel-table {
+  margin: 10px 0 0 0;
 }
 /*
 Developed with the contribution of the European Commission - Directorate General for Maritime Affairs and Fisheries

@@ -357,7 +357,7 @@ describe('TripsummaryCtrl', function() {
 	it('should get all the necessary data for the trip summary', inject(function() {
 		scope.tripSummServ.isLoadingTrip = true;
 		scope.$digest();
-		console.log('LOGGG: ' + scope.trip.id);
+		
 		expect(actRestServSpy.getTripVessel).toHaveBeenCalled();
 		expect(actRestServSpy.getTripReports).toHaveBeenCalled();
 		expect(actRestServSpy.getTripCatches).toHaveBeenCalled();
