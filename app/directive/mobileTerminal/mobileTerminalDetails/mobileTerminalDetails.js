@@ -245,6 +245,8 @@ angular.module('unionvmsWeb')
 
         //Update Mobile Terminal - Success
         var updateMobileTerminalSuccess = function(updatedMobileTerminal){
+            $scope.disableSave = true;
+            $scope.originalMobileTerminalValue = angular.copy($scope.mobileTerminal);
             alertService.showSuccessMessageWithTimeout(locale.getString('mobileTerminal.update_alert_message_on_success'));
         };
 
