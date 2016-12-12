@@ -41,7 +41,8 @@ angular.module('unionvmsWeb')
         //Update the model value and set it to a time based on the hours and minutes inputs
         var setModelValueFromHoursAndMinutes = function(){
             if(angular.isDefined($scope.hours) && angular.isDefined($scope.minutes)){
-                $scope.model = $scope.hours * 3600 + $scope.minutes * 60;
+                $scope.time = $scope.hours * 3600 + $scope.minutes * 60;
+                $scope.model = $scope.time.toString();
             }
         };
 

@@ -43,6 +43,10 @@ angular.module('unionvmsWeb')
         };
 
         var init = function(){
+
+            //Detect initial values of the Mobile Terminal object 
+            $scope.originalMobileTerminalValue = angular.copy($scope.mobileTerminal);
+
              //Get list transponder systems
             if(angular.isDefined(configurationService.getConfig('MOBILE_TERMINAL_TRANSPONDERS'))){
                 $scope.transpondersConfig = configurationService.getConfig('MOBILE_TERMINAL_TRANSPONDERS');
@@ -55,6 +59,17 @@ angular.module('unionvmsWeb')
                 $scope.typeAndPlugin = $scope.getModelValueForTransponderSystemBySystemTypeAndPlugin($scope.mobileTerminal.type, $scope.mobileTerminal.plugin.labelName, $scope.mobileTerminal.plugin.serviceName);
             }
         };
+
+        //Watch for changes to the Mobile Terminal object compared to the initial object, maily to enable save button if changes has been made
+        $scope.$watch('mobileTerminal', function(newValue, oldValue){
+            if(angular.isDefined($scope.originalMobileTerminalValue)){
+                if (angular.equals(newValue.toJson(), $scope.originalMobileTerminalValue.toJson())) {
+                    $scope.disableSave = true;
+                } else {
+                    $scope.disableSave = false;
+                }
+            }
+        }, true);
 
         //Set form scope - To be able to validate form in FE
         $scope.setFormScope = function(scope){
@@ -376,11 +391,8 @@ angular.module('unionvmsWeb')
         $scope.menuBarFunctions = {
             saveCallback: $scope.createNewMobileTerminal,
             updateCallback: $scope.updateMobileTerminal,
-            disableUpdate: function() {
-                if ($scope.formScope.mobileTerminalForm.$dirty) {
-                    return false;
-                }
-                return true;
+            disableSave: function() {
+                return $scope.disableSave;
             },
             cancelCallback: $scope.closeMobileTerminalForm,
             showCancel: function() {

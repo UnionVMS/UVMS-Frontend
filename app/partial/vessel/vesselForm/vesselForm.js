@@ -31,6 +31,7 @@ angular.module('unionvmsWeb').controller('VesselFormCtrl',function($scope, $log,
         $scope.vesselForm.$setPristine();
         $scope.submitAttempted = false;
         $scope.vesselNotesObj = {};
+        $scope.vesselObjOriginal = angular.copy($scope.vesselObj);
 
         if (typeof newVal !== 'undefined') {
             if($scope.isCreateNewMode()){
@@ -42,6 +43,22 @@ angular.module('unionvmsWeb').controller('VesselFormCtrl',function($scope, $log,
             }
         }
     });
+
+    //Watch for changes to the Vessel object compared to the initial object, maily to enable save button if changes has been made
+    $scope.$watch('vesselObj', function(newValue, oldValue) {
+        if (angular.isDefined($scope.vesselObjOriginal)) {
+            if (angular.equals(angular.copy(newValue).toJson(), $scope.vesselObjOriginal.toJson())) {
+                $scope.noFormChange = true;
+            } else {
+                $scope.noFormChange = false;
+            }
+        }        
+    }, true);
+
+    //Add notes to Vessel object when created 
+    $scope.$watch('vesselNotesObj', function(newValue, oldValue){
+        $scope.addNotes();
+    }, true); 
 
     //Has form submit been atempted?
     $scope.submitAttempted = false;
@@ -194,7 +211,6 @@ angular.module('unionvmsWeb').controller('VesselFormCtrl',function($scope, $log,
     $scope.createNewVessel = function(){
         $scope.submitAttempted = true;
         $scope.updateContactItems();
-        $scope.addNotes();
 
         if($scope.vesselForm.$valid) {
             //Create new Vessel
@@ -215,9 +231,11 @@ angular.module('unionvmsWeb').controller('VesselFormCtrl',function($scope, $log,
         $scope.existingValues.imo = undefined;
         $scope.existingValues.mmsi = undefined;
 
+        $scope.clearNotes();
         $scope.waitingForCreateResponse = false;
         alertService.showSuccessMessageWithTimeout(locale.getString('vessel.add_new_alert_message_on_success'));
         $scope.vesselObj = createdVessel;
+        $scope.vesselObjOriginal = angular.copy($scope.vesselObj);
         $scope.setVesselObj(createdVessel.copy());
         $scope.setCreateMode(false);
         getVesselHistory();
@@ -249,7 +267,7 @@ angular.module('unionvmsWeb').controller('VesselFormCtrl',function($scope, $log,
         };
     };
 
-    // Add notes to Vessel object
+    //Add notes to Vessel object
     $scope.addNotes = function(){
         if ($scope.vesselNotesObj.date && $scope.vesselNotesObj.activity) {
             $scope.vesselObj.notes.push({
@@ -263,12 +281,17 @@ angular.module('unionvmsWeb').controller('VesselFormCtrl',function($scope, $log,
                 notes: $scope.vesselNotesObj.notes,
                 source: 'INTERNAL'
             });
+        } else {
+            return false;
+        }
+    };
 
+    //Clear notes form to be able to submit new ones
+    $scope.clearNotes = function(){
+        if (angular.isDefined($scope.vesselNotesObj.date)) {
             for (var key in $scope.vesselNotesObj) {
                 $scope.vesselNotesObj[key] = "";
             }
-        } else {
-            return false;
         }
     };
 
@@ -276,7 +299,6 @@ angular.module('unionvmsWeb').controller('VesselFormCtrl',function($scope, $log,
     $scope.updateVessel = function(){
         $scope.submitAttempted = true;
         $scope.updateContactItems();
-        $scope.addNotes();
 
         if($scope.vesselForm.$valid) {
             //MobileTerminals remove them cuz they do not exist in backend yet.
@@ -300,9 +322,11 @@ angular.module('unionvmsWeb').controller('VesselFormCtrl',function($scope, $log,
 
     //Vessel was successfully updated
     var updateVesselSuccess = function(updatedVessel){
+        $scope.clearNotes();
         $scope.waitingForCreateResponse = false;
         alertService.showSuccessMessageWithTimeout(locale.getString('vessel.update_alert_message_on_success'));
         $scope.vesselObj = updatedVessel;
+        $scope.vesselObjOriginal = angular.copy($scope.vesselObj);
         $scope.mergeCurrentVesselIntoSearchResults($scope.vesselObj);
         getVesselHistory();
     };
@@ -472,6 +496,13 @@ angular.module('unionvmsWeb').controller('VesselFormCtrl',function($scope, $log,
             return false;
         },
         saveCallback: $scope.createNewVessel,
+        disableSave: function() {
+            if ($scope.noFormChange || $scope.vesselForm.$invalid) {
+                return true;
+            } else {
+                return false;
+            }
+        },
         updateCallback: $scope.updateVessel,
         cancelCallback: function() {
             $scope.toggleViewVessel();
