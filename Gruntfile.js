@@ -140,14 +140,22 @@ module.exports = function (grunt) {
         }
     },
     watch: {
+      options: {
+          livereload: true,
+          livereloadOnError: false,
+          spawn: false
+      },
       main: {
-        options: {
-            livereload: true,
-            livereloadOnError: false,
-            spawn: false
-        },
-        files: [createFolderGlobs(['*.js','*.less','*.html']),'!_SpecRunner.html','!.grunt', '!app/assets/**/*.js'],
-        tasks: [] //all the tasks are run dynamically during the watch event handler
+          files: [createFolderGlobs(['*.js','*.html', '*.css']),'!_SpecRunner.html','!.grunt', '!app/assets/**/*.js'],
+          tasks: [], //all the tasks are run dynamically during the watch event handler
+      },
+      less: {
+          files: [createFolderGlobs('*.less')],
+          tasks: ['less'],
+          options: {
+              livereload: false,
+              spawn: true
+          }
       }
     },
     jshint: {
@@ -547,7 +555,7 @@ module.exports = function (grunt) {
   
   grunt.registerTask('sub-build',['parallel:sub-build']);//,'clean:after'
 
-  grunt.registerTask('build', ['ngconstant:production', 'test', 'clean:before', 'copy:config', 'sub-build']);
+  grunt.registerTask('build', ['ngconstant:development', 'test', 'ngconstant:production', 'clean:before', 'copy:config', 'sub-build']);
   grunt.registerTask('build-local', ['ngconstant:development', 'test', 'clean:before', 'copy:configLocal', 'test', 'sub-build']);
   grunt.registerTask('build-cygnus', ['ngconstant:development', 'test', 'clean:before', 'copy:configCygnus', 'sub-build']);
   grunt.registerTask('build-maven', ['ngconstant:development', 'test', 'clean:before', 'copy:configMaven', 'sub-build']);
@@ -557,7 +565,7 @@ module.exports = function (grunt) {
 
   grunt.registerTask('default',['build-dev']);
   
-  grunt.registerTask('serve-no-watch', ['dom_munger:read', 'configureProxies', 'configureRewriteRules', 'connect:development']);
+  grunt.registerTask('serve-no-watch', ['less', 'dom_munger:read', 'configureProxies', 'configureRewriteRules', 'connect:development']);
   grunt.registerTask('serve', ['parallel:serve']);
   grunt.registerTask('serve-debug', ['ngconstant:development','serve']);
   grunt.registerTask('serve-prod', ['ngconstant:production','serve']);
@@ -603,10 +611,6 @@ module.exports = function (grunt) {
             grunt.task.run('htmlhint');
         }
     
-        if (filepath.lastIndexOf('.less') !== -1 && filepath.lastIndexOf('.less') === filepath.length - 5) {
-            grunt.task.run('less');
-        }
-
         //if index.html changed, we need to reread the <script> tags so our next run of jasmine
         //will have the correct environment
         if (filepath === 'app\\index.html') {

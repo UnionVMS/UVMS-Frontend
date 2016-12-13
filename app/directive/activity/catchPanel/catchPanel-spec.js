@@ -30,7 +30,6 @@ describe('catchPanel', function() {
     }));
     
     afterEach(function(){
-        
         angular.element('#parent-container').remove();
     });
 
