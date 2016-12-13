@@ -38,10 +38,12 @@ angular.module('unionvmsWeb')
         $scope.submitAttempted = false;
         $scope.formScope = undefined;
 
+        //Check if user is allowed to edit Mobile Terminals
         var checkAccessToFeature = function(feature) {
             return userService.isAllowed(feature, 'Union-VMS', true);
         };
 
+        //Init function
         var init = function(){
 
             //Detect initial values of the Mobile Terminal object 
