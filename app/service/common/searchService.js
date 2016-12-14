@@ -152,7 +152,6 @@ angular.module('unionvmsWeb').factory('searchService',function($q, $log, searchU
         if(angular.isUndefined(searchGetListRequest)){
             searchGetListRequest = getListRequest;
         }
-        console.log(searchGetListRequest);
         searchUtilsService.modifySpanAndTimeZones(searchGetListRequest.criterias);
 
         //Split into alarms/tickets and vessel criterias

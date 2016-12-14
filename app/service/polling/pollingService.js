@@ -288,10 +288,7 @@ angular.module('unionvmsWeb').factory('pollingService',function(pollingRestServi
         },
         getPollingOptions: function() {
             return pollingOptions;
-        },
-        getSelectedConfigurationPollFields: function() {
-            return selectedConfigurationPollFields;
-        },
+        }, 
         getWizardStep : function(){
             return wizardStep;
         },
