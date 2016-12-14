@@ -11,7 +11,7 @@ copy of the GNU General Public License along with the IFDM Suite. If not, see <h
 -->
 <div class="vesselForm" ng-controller="VesselFormCtrl">
     <form name="vesselForm" method="post" novalidate >
-        <div class="card" loading-indicator="waitingForVesselDataResponse">
+        <div class="card" loading-indicator="waitingForVesselDataResponse" size="small" type="SPINNER">
             <div loading-indicator="waitingForCreateResponse">
                 <menu-bar header="'Create new asset'" modeltype="'VESSEL'" ng-model="vesselObj"
                           functions="menuBarFunctions"
@@ -94,8 +94,8 @@ copy of the GNU General Public License along with the IFDM Suite. If not, see <h
         </div>
     </form>
 
-    <div class="row mobileTerminalsContainer" ng-if="!isCreateNewMode()">
-        <div ng-show="mobileTerminals.length > 0" class="col-md-12">
+    <div class="row mobileTerminalsContainer" ng-if="mobileTerminals.length > 0">
+        <div class="col-md-12">
             <h3>{{'vessel.connected_mobile_terminals' | i18n}}</h3>
             <div ng-repeat="mobileTerminal in mobileTerminals | orderBy :'[-isCreateNewMode]'" loading-indicator="waitingForMobileTerminalsResponse" size="small" type="SPINNER">
                 <mobile-terminal-details mobile-terminal="mobileTerminal" vessel-id="vesselObj.vesselId.guid" modeltype="'VESSEL'" callback="mobileTerminalForm"></mobile-terminal-details>

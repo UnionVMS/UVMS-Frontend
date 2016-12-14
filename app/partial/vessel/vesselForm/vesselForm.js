@@ -20,8 +20,7 @@ angular.module('unionvmsWeb').controller('VesselFormCtrl',function($scope, $log,
 
     //Keep track of visibility statuses
     $scope.isThisVisible = {
-        showCompleteVesselHistoryLink : false,
-        addNewMobileTerminalForm: false
+        showCompleteVesselHistoryLink : false
     };
 
     //Watch for changes to the vesselObj
@@ -473,12 +472,6 @@ angular.module('unionvmsWeb').controller('VesselFormCtrl',function($scope, $log,
         $scope.mobileTerminals.push(newMobileTerminal);
     };
 
-    $scope.mobileTerminalForm = {
-        updateMobileTerminals: function() {
-            getMobileTerminals();
-        }
-    };
-
     $scope.menuBarFunctions = {
         addMobileTerminal: function() {
             $scope.toggleAddNewMobileTerminalForm();
@@ -506,9 +499,7 @@ angular.module('unionvmsWeb').controller('VesselFormCtrl',function($scope, $log,
         updateCallback: $scope.updateVessel,
         cancelCallback: function() {
             $scope.toggleViewVessel();
-            if ($scope.isThisVisible.addNewMobileTerminalForm) {
-                $scope.toggleAddNewMobileTerminalForm();
-            }
+            $scope.mobileTerminals = [];
         },
         showCancel: function() {
             return true;
