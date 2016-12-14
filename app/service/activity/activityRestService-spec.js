@@ -94,16 +94,16 @@ describe('activityRestService', function() {
         expect(callback).toHaveBeenCalled();
     });
     
-    /*it('should get a list of fishing activities', function(){
+    it('should get a list of fishing activities', function(){
         actListSpy = createSpy('actListSpy', true);
         var payload = {
             pagination: {
-                page: 1,
-                listSize:25
+                offset: 1,
+                pageSize:25
             },
-            sortKey: {
-                field: 'ACTIVITY_TYPE',
-                order: 'DESC'
+            sorting: {
+                sortBy: 'ACTIVITY_TYPE',
+                reversed: true
             },
             searchCriteriaMap: {}
         }
@@ -112,7 +112,7 @@ describe('activityRestService', function() {
         expect(actListSpy).toHaveBeenCalledWith(angular.toJson(payload), jasmine.any(Function), jasmine.any(Function));
         scope.$digest();
         expect(callback).toHaveBeenCalled();
-    });*/
+    });
     
     it('should get the trip cronology', function(){
         tripCronSpy = createSpy('tripCronSpy', true);

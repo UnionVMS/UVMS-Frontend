@@ -28,72 +28,14 @@ angular.module('unionvmsWeb').factory('activityRestFactory', function ($resource
             });
         },
         getActivityList: function (data) {
-            //TODO integrate service
-            /*return $resource('/activity/rest/fa/list', {}, {
+            return $resource('/activity/rest/fa/list', {}, {
                 'get': {
                     method: 'POST',
                     headers: {
                         'Content-Type': 'application/json'
                     }
                 }
-            });*/
-            var response = {
-                "resultList": [
-                    {
-                    "uniqueReportIdList": [
-                        {
-                        "fluxReportId": "New Id 1",
-                        "fluxReportSchemeId": "New scheme Id 1"
-                        }
-                    ],
-                    "faReportID": 2,
-                    "activityType": "FISHING_OPERATION",
-                    "occurence": "2016-06-08T13:53:00",
-                    "dataSource": "FLUX",
-                    "fromId": [
-                        "Owner flux party id 1"
-                    ],
-                    "fromName": "This is sample text for owner flux party",
-                    "vesselIdTypes": {
-                        "CFR": "ID 1"
-                    },
-                    "vesselTransportMeansName": "Test Name",
-                    "purposeCode": "5",
-                    "FAReportType": "DECLARATION",
-                    "areas": [
-                        "25.5b"
-                    ],
-                    "fishingGear": [
-                        "Code Type 1"
-                    ],
-                    "speciesCode": [
-                        "ONBOARD",
-                        "Species 1"
-                    ],
-                    "quantity": [
-                        123,
-                        123
-                    ],
-                    "startDate": "2011-07-01T11:14:00",
-                    "endDate": "2016-07-01T11:14:00",
-                    "hasCorrection": true,
-                    "fluxReportReferenceId": "ID 1",
-                    "fluxReportReferenceSchemeId": "fhty58-gh586t-5tjf8-t58rjewe"
-                    }
-                ],
-                "totalItemsCount": 80,
-                "code": 200
-            };
-
-            var offset = data.pagination.offset;
-            for(var i=0;i<24;i++){
-                var item = angular.copy(response.resultList[0]);
-                item.faReportID = offset + i + 3;
-                item.vesselIdTypes.CFR += offset + i;
-                response.resultList.push(item);
-            }
-
-            return response;
+            });
         },
         getReportHistory: function () {
             return $resource('/activity/rest/fa/history/:referenceId/:schemeId', {}, {
@@ -521,17 +463,14 @@ angular.module('unionvmsWeb').factory('activityRestFactory', function ($resource
              * @returns {Promise} A promise with either the list of activities or reject error
              */
             getActivityList: function (data) {
-                /*var deferred = $q.defer();
+                var deferred = $q.defer();
                 activityRestFactory.getActivityList().get(angular.toJson(data), function (response) {
-                    deferred.resolve(response.data);
+                    deferred.resolve(response);
                 }, function (error) {
                     console.log('Error getting list of activity reports');
                     deferred.reject(error);
                 });
-                return deferred.promise;*/
-
-                return activityRestFactory.getActivityList(data);
-
+                return deferred.promise;
             },
             /**
     	     * Get the history for a FA report

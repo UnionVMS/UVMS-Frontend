@@ -22628,6 +22628,7 @@ copy of the GNU General Public License along with the IFDM Suite. If not, see <h
   top: 4px;
   right: 5px;
   font-size: 22px;
+  position: absolute;
 }
 .alert-modal-content .modal-dialog .modal-body .alert span.fa {
   margin-left: 5px;
