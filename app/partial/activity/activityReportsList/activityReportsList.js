@@ -47,8 +47,6 @@ angular.module('unionvmsWeb').controller('ActivityreportslistCtrl',function($sco
             reversed: sortOrder
         };
         
-        /*$scope.actServ.reportsList.pagination.page = tableState.pagination.start / $scope.actServ.reportsList.pagination.listSize + 1;*/
-        
         $scope.actServ.getActivityList(callServerCallback, tableState);
     };
     

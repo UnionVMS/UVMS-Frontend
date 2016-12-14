@@ -77,7 +77,7 @@ angular.module('unionvmsWeb').factory('activityService',function(locale, activit
             },
             sorting: {
                 sortBy: undefined,
-                reversed: undefined,
+                reversed: undefined
             }
         };
     }
