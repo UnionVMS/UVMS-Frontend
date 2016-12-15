@@ -77,8 +77,8 @@ module.exports = function (grunt) {
                   '/mapfish-print',
                   '/usm-authentication/rest', '/usm-authorisation/rest', '/usm-administration/rest',
                   '/activity/rest'],
-              host: 'localhost',
-              port: 8080
+              host: 'livm73u',
+              port: 28080
         },
 
       development: {
@@ -341,7 +341,7 @@ module.exports = function (grunt) {
     },
     cssmin: {
       main: {
-        src:['temp/app.css','<%= dom_munger.data.appcss %>'],
+        src:['app.css','<%= dom_munger.data.appcss %>'],
         dest:'dist/app.full.min.css'
       }
     },
