@@ -9,28 +9,29 @@ the hope that it will be useful, but WITHOUT ANY WARRANTY; without even the impl
 FITNESS FOR A PARTICULAR PURPOSE.  See the GNU General Public License for more details. You should have received a
 copy of the GNU General Public License along with the IFDM Suite. If not, see <http://www.gnu.org/licenses/>.
 -->
-<div class="modal-header" style="text-align:left">
-    <div class="pointer pull-right" ng-click="cancel()">
-    	 <i class="fa fa-times closeicon"></i>
-   	</div>
-    <h4 class="modal-title">{{ labels.title }}</h4>
-</div>
-
-<div class="modal-body">
-    <form name="commentForm" method="post" novalidate >
-        <div class="row">
-            <div class="col-md-12 form-group" ng-class="{'has-error': (submitAttempted || commentForm.comment.$dirty) && commentForm.comment.$invalid}">
-                <textarea class="form-control"name="comment" autofocus placeholder="{{ labels.placeholder }}" ng-model="comment" required ng-maxlength="400" />
-                <input-validation-message types="required, maxlength" input="commentForm.comment"></input-validation-message>
+<div>
+    <div class="modal-header" style="text-align:left">
+        <div class="pointer pull-right" ng-click="cancel()">
+        	 <i class="fa fa-times closeicon"></i>
+       	</div>
+        <h4 class="modal-title">{{ labels.title }}</h4>
+    </div>
+    <div class="modal-body">
+        <form name="commentForm" method="post" novalidate >
+            <div class="row">
+                <div class="col-md-12 form-group" ng-class="{'has-error': (submitAttempted || commentForm.comment.$dirty) && commentForm.comment.$invalid}">
+                    <textarea class="form-control"name="comment" autofocus placeholder="{{ labels.placeholder }}" ng-model="comment" required ng-maxlength="400"></textarea>
+                    <input-validation-message types="required, maxlength" input="commentForm.comment"></input-validation-message>
+                </div>
             </div>
-        </div>
-    </form>
-</div>
-<div class="modal-footer">
-    <div class="row">
-        <div class="col-md-12">
-            <button type="button" class="btn btn-default" ng-click="cancel()">{{ labels.cancel }}</button>
-            <button type="button" class="btn btn-primary" ng-click="save()" ng-disabled="!commentForm.$valid">{{ labels.save }}</button>
+        </form>
+    </div>
+    <div class="modal-footer">
+        <div class="row">
+            <div class="col-md-12">
+                <button type="button" class="btn btn-default" ng-click="cancel()">{{ labels.cancel }}</button>
+                <button type="button" class="btn btn-primary" ng-click="save()" ng-disabled="!commentForm.$valid">{{ labels.save }}</button>
+            </div>
         </div>
     </div>
 </div>
