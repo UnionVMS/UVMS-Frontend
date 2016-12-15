@@ -555,13 +555,13 @@ module.exports = function (grunt) {
   
   grunt.registerTask('sub-build',['parallel:sub-build']);//,'clean:after'
 
-  grunt.registerTask('build', ['ngconstant:development', 'test', 'ngconstant:production', 'clean:before', 'copy:config', 'sub-build']);
+  grunt.registerTask('build', ['test', 'ngconstant:production', 'clean:before', 'copy:config', 'sub-build']);
   grunt.registerTask('build-local', ['ngconstant:development', 'test', 'clean:before', 'copy:configLocal', 'test', 'sub-build']);
   grunt.registerTask('build-cygnus', ['ngconstant:development', 'test', 'clean:before', 'copy:configCygnus', 'sub-build']);
   grunt.registerTask('build-maven', ['ngconstant:development', 'test', 'clean:before', 'copy:configMaven', 'sub-build']);
   grunt.registerTask('build-dev', ['ngconstant:development', 'test', 'clean:before', 'copy:configDev','sub-build']);
   grunt.registerTask('build-test', ['ngconstant:development', 'test', 'clean:before', 'copy:configTest','sub-build']);
-  grunt.registerTask('test',['dom_munger:read', 'ngtemplates', 'karma:services', 'karma:controllers', 'karma:directives', 'karma:filters', 'clean:after']);
+  grunt.registerTask('test',['ngconstant:development', 'dom_munger:read', 'ngtemplates', 'karma:services', 'karma:controllers', 'karma:directives', 'karma:filters', 'clean:after']);
 
   grunt.registerTask('default',['build-dev']);
   
