@@ -20,7 +20,7 @@ copy of the GNU General Public License along with the IFDM Suite. If not, see <h
         <form name="commentForm" method="post" novalidate >
             <div class="row">
                 <div class="col-md-12 form-group" ng-class="{'has-error': (submitAttempted || commentForm.comment.$dirty) && commentForm.comment.$invalid}">
-                    <textarea class="form-control"name="comment" autofocus placeholder="{{ labels.placeholder }}" ng-model="comment" required ng-maxlength="400"></textarea>
+                    <textarea class="form-control" name="comment" autofocus placeholder="{{ labels.placeholder }}" ng-model="comment" required ng-maxlength="400"></textarea>
                     <input-validation-message types="required, maxlength" input="commentForm.comment"></input-validation-message>
                 </div>
             </div>
