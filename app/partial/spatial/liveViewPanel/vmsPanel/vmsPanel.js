@@ -181,6 +181,7 @@ angular.module('unionvmsWeb').controller('VmspanelCtrl',function($scope, locale,
        } else if (geomType === 'TRACK') {
            geom = new ol.geom.Polygon.fromExtent($scope.displayedTracks[index].extent);
        } else if (geomType === 'TRIP') {
+           //FIXME trip geom
            geom = new ol.geom.Polygon.fromExtent($scope.displayedTrips[index].extent);
        }
        

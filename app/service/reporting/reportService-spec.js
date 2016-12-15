@@ -197,7 +197,12 @@ describe('reportService', function () {
                             'type': 'FeatureCollection',
                             'features': []
                         },
-                        'tracks': []
+                        'tracks': [],
+                        'trips': [],
+                        'activities': {
+                            'type': 'FeatureCollection',
+                            'features': []
+                        }
                     });
                 }
             };
@@ -246,6 +251,8 @@ describe('reportService', function () {
         expect(repServ.positions).toEqual([]);
         expect(repServ.segments).toEqual([]);
         expect(repServ.tracks).toEqual([]);
+        expect(repServ.trips).toEqual([]);
+        expect(repServ.activities).toEqual([]);
         expect(repServ.alarms).toEqual([]);
         
         expect(mockSpRestServ.getConfigsForReport).toBeDefined();
@@ -365,6 +372,8 @@ describe('reportService', function () {
         repServ.positions = [1,2,3];
         repServ.segments = [1,2,3];
         repServ.tracks = [1,2,3];
+        repServ.trips = [1,2,3];
+        repServ.activities = [1,2,3];
         repServ.alarms = [1,2,3];
         
         repServ.resetReport();
@@ -374,6 +383,8 @@ describe('reportService', function () {
         expect(repServ.positions).toEqual([]);
         expect(repServ.segments).toEqual([]);
         expect(repServ.tracks).toEqual([]);
+        expect(repServ.trips).toEqual([]);
+        expect(repServ.activities).toEqual([]);
         expect(repServ.alarms).toEqual([]);
         expect(mockRepFormServ.resetLiveView).toHaveBeenCalled();
         expect(mockLayerPanServ.updateLayerTreeSource).toHaveBeenCalled();
