@@ -31,7 +31,7 @@ copy of the GNU General Public License along with the IFDM Suite. If not, see <h
  */
 angular.module('unionvmsWeb').factory('activityService',function(locale, activityRestService, visibilityService, breadcrumbService) {
     var actServ = {};
-    var listSize = 25;
+    var pageSize = 25;
     
     actServ.breadcrumbPages = [{
         title: 'activity.breadcrumb_reports_list',
@@ -71,13 +71,13 @@ angular.module('unionvmsWeb').factory('activityService',function(locale, activit
             searchObject: {},
             tableState: undefined,
             pagination: {
-                page: 1,
-                listSize: listSize,
-                totalPageCount: undefined
+                offset: 1,
+                pageSize: pageSize,
+                totalPages: undefined
             },
             sorting: {
-                field: undefined,
-                reverse: undefined,
+                sortBy: undefined,
+                reversed: undefined
             }
         };
     }
@@ -94,7 +94,7 @@ angular.module('unionvmsWeb').factory('activityService',function(locale, activit
             isLoading: false,
             hasError: false,
             pagination: {
-                listSize: listSize
+                pageSize: pageSize
             }
         };
     }
@@ -108,9 +108,9 @@ angular.module('unionvmsWeb').factory('activityService',function(locale, activit
      */
     actServ.resetReportsListTableState = function(){
         actServ.reportsList.pagination = {
-            page: 1,
-            listSize: listSize,
-            totalPageCount: undefined
+            offset: 1,
+            pageSize: pageSize,
+            totalPages: undefined
         };
     };
     
@@ -138,7 +138,7 @@ angular.module('unionvmsWeb').factory('activityService',function(locale, activit
     };
     
     /**
-     * Clear attribute of the activity service by its type. Type can be: <b>activities</b>, <b>overview</b>, <b>details</b>
+     * Clear attribute of the activity service by its type. Type can be: <b>activities</b>, <b>overview</b>, <b>details</b>, <b>history</b>
      * 
      * @memberof activityService
      * @public
@@ -149,10 +149,10 @@ angular.module('unionvmsWeb').factory('activityService',function(locale, activit
             this[type] = [];
             switch (type) {
                 case 'activities':
-                    this.activities = [];
+                    this.displayedActivities = [];
                     break;
                 case 'history':
-                    this.history = [];
+                    this.displayedHistory = [];
                     break;
                 default:
                     break;
@@ -168,14 +168,22 @@ angular.module('unionvmsWeb').factory('activityService',function(locale, activit
      * @memberof activityService
      * @private
      * @param {Object} [tableState] - the smart table state object
-     * @returns {Object} A copy of the reportsList pagination object without the totalPageCount
+     * @returns {Object} A pagination object with offset and pageSize
      */
     function getPaginationForServer(tableState){
 
         var pag = {
             offset: tableState ? tableState.pagination.start : 0,
-            pageSize: listSize
+            pageSize: pageSize
         };
+        
+        //FIXME remove the following ifelse block when server side pagination is fixed
+        if(angular.isDefined(tableState)){
+            pag.offset = tableState.pagination.start / tableState.pagination.number + 1;
+        } else {
+            pag.offset = 1;
+        }
+         
         
         return pag;
     }
@@ -194,14 +202,12 @@ angular.module('unionvmsWeb').factory('activityService',function(locale, activit
         var payload = {
             pagination: getPaginationForServer(tableState),
             sorting: actServ.reportsList.sorting,
-            searchCriteriaMap: {
-                REPORT_TYPE: actServ.reportsList.searchObject.REPORT_TYPE
-            }
+            searchCriteriaMap: actServ.reportsList.searchObject
         };
         
-        /*activityRestService.getActivityList(payload).then(function(response){
-            if (response.pagination.totalPageCount !== 0){
-                actServ.reportsList.pagination.totalPageCount = response.pagination.totalPageCount;
+        activityRestService.getActivityList(payload).then(function(response){
+            if (response.totalItemsCount !== 0){
+                actServ.reportsList.pagination.totalPages = Math.ceil(response.totalItemsCount / pageSize);
             }
             
             actServ.activities = response.resultList;
@@ -211,31 +217,14 @@ angular.module('unionvmsWeb').factory('activityService',function(locale, activit
             }
             
             if (!angular.isDefined(callback) && angular.isDefined(actServ.reportsList.tableState)){
-                actServ.reportsList.tableState.pagination.numberOfPages = actServ.reportsList.pagination.totalPageCount; 
+                actServ.reportsList.tableState.pagination.numberOfPages = actServ.reportsList.pagination.totalPages; 
             }
             
             actServ.reportsList.isLoading = false;
         }, function(error){
             actServ.reportsList.isLoading = false;
             actServ.reportsList.hasError = true;
-        });*/
-
-        //TODO integrate service
-        var response = activityRestService.getActivityList(payload);
-
-        if (response.totalItemsCount !== 0){
-            actServ.reportsList.pagination.totalPageCount = parseInt(response.totalItemsCount/listSize + 1);
-        }
-
-        actServ.activities = response.resultList;
-        actServ.displayedActivities = [].concat(actServ.activities);
-        if (angular.isDefined(callback) && angular.isDefined(tableState)){
-            callback(tableState);
-        }
-        
-        actServ.reportsList.isLoading = false;
-        ///////////////////////////
-
+        });
     };
     
     /**

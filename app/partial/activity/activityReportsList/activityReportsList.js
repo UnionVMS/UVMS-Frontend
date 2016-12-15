@@ -36,14 +36,16 @@ angular.module('unionvmsWeb').controller('ActivityreportslistCtrl',function($sco
         $scope.actServ.reportsList.tableState = tableState;
         $scope.actServ.reportsList.isLoading = true;
         
+        var searchField, sortOrder; 
         if (angular.isDefined(tableState.sort.predicate)){
-            $scope.actServ.reportsList.sorting = {
-                field: getTruePredicate(tableState.sort.predicate),
-                reverse: tableState.sort.reverse
-            };
+            searchField = getTruePredicate(tableState.sort.predicate);
+            sortOrder = tableState.sort.reverse;
         }
         
-        /*$scope.actServ.reportsList.pagination.page = tableState.pagination.start / $scope.actServ.reportsList.pagination.listSize + 1;*/
+        $scope.actServ.reportsList.sorting = {
+            sortBy: searchField,
+            reversed: sortOrder
+        };
         
         $scope.actServ.getActivityList(callServerCallback, tableState);
     };
@@ -55,7 +57,7 @@ angular.module('unionvmsWeb').controller('ActivityreportslistCtrl',function($sco
      * @private
      */
     function callServerCallback (tableState){
-        tableState.pagination.numberOfPages = $scope.actServ.reportsList.pagination.totalPageCount;
+        tableState.pagination.numberOfPages = $scope.actServ.reportsList.pagination.totalPages;
     }
     
     /**
