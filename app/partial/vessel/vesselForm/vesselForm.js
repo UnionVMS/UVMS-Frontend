@@ -472,6 +472,12 @@ angular.module('unionvmsWeb').controller('VesselFormCtrl',function($scope, $log,
         $scope.mobileTerminals.push(newMobileTerminal);
     };
 
+    $scope.mobileTerminalForm = {
+        updateMobileTerminals: function() {
+            getMobileTerminals();
+        }
+    };
+
     $scope.menuBarFunctions = {
         addMobileTerminal: function() {
             $scope.toggleAddNewMobileTerminalForm();
