@@ -11,18 +11,22 @@ copy of the GNU General Public License along with the IFDM Suite. If not, see <h
  */
 .datepicker{
     .btn-cal{
-        height: 28px;
-        width:30px;
-        padding-left:0px !important;
-        padding-right:0px !important;
+        height: 100%;
+        width: 30px;
+        padding-left: 0px;
+        padding-right: 0px;
         border: none;
-        border-top-left-radius: 0px !important;
-        border-bottom-left-radius: 0px !important;
+        border-top-left-radius: 0px;
+        border-bottom-left-radius: 0px;
     }
     .input-group-btn{
     	border: solid 1px @inputBorderColor;
-        border-top-right-radius: @inputBorderRadius !important;
-        border-bottom-right-radius: @inputBorderRadius !important;
+        border-top-right-radius: @inputBorderRadius;
+        border-bottom-right-radius: @inputBorderRadius;
+
+        .btn {
+            padding: 0;
+        }
     }
 }
 
