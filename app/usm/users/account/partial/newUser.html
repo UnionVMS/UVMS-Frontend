@@ -96,7 +96,8 @@ copy of the GNU General Public License along with the IFDM Suite. If not, see <h
                     <!--
                     <usm-datepicker config="activeFromConfig"></usm-datepicker>
                     -->
-                    <datepicker-input model="user.activeFrom" ng-required="true" name="activeFrom" input-field-id="new-user-active-from-date-picker"></datepicker-input>
+                    <datepicker-input model="user.activeFrom" ng-required="true" name="activeFrom" input-field-id="new-user-active-from-date-picker" max-date="user.activeTo"></datepicker-input>
+                    {{newUserForm.activeFrom.$valid}}
                     <div>
                         <span class="text-danger small" ng-show="newUserForm.activeFrom.$error.required">
                             Active From date is required
@@ -142,7 +143,8 @@ copy of the GNU General Public License along with the IFDM Suite. If not, see <h
                     <!--
                         <usm-datepicker config="activeToConfig"></usm-datepicker>
                     -->
-                    <datepicker-input model="user.activeTo" ng-required="true" name="activeTo" input-field-id="new-user-active-to-date-picker"></datepicker-input>
+                    <datepicker-input model="user.activeTo" ng-required="true" name="activeTo" input-field-id="new-user-active-to-date-picker" min-date="user.activeFrom"></datepicker-input>
+                    {{newUserForm.activeTo.$valid}}
                     <div>
                         <span class="text-danger small" ng-show="newUserForm.activeTo.$error.required">
                             Active To date is required
