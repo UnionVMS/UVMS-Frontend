@@ -59,7 +59,7 @@ module.exports = function (grunt) {
           // Internal rewrite
           {from: 'app/config.json', to: 'environment/local.json'}
       ],
-       proxies:grunt.file.exists('proxies.yaml')?grunt.file.readYAML('proxies.yaml'):{
+       proxies:grunt.file.exists('proxies.yaml')?grunt.file.readYAML('proxies.yaml'):[{
                 context: [
                   '/asset/rest',
                   '/mobileterminal/rest/',
@@ -79,7 +79,11 @@ module.exports = function (grunt) {
                   '/activity/rest'],
               host: 'localhost',
               port: 8080
-        },
+        },{
+            context: '/mock/',
+            host: 'localhost',
+            port: 8081
+        }],
 
       development: {
           options: {
@@ -562,6 +566,7 @@ module.exports = function (grunt) {
   grunt.registerTask('build-dev', ['ngconstant:development', 'test', 'clean:before', 'copy:configDev','sub-build']);
   grunt.registerTask('build-test', ['ngconstant:development', 'test', 'clean:before', 'copy:configTest','sub-build']);
   grunt.registerTask('test',['ngconstant:development', 'dom_munger:read', 'ngtemplates', 'karma:services', 'karma:controllers', 'karma:directives', 'karma:filters', 'clean:after']);
+  grunt.registerTask('test-dev',['ngconstant:development', 'dom_munger:read', 'karma:services', 'clean:after']);
 
   grunt.registerTask('default',['build-dev']);
   
