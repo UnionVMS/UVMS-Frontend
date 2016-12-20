@@ -304,8 +304,8 @@ copy of the GNU General Public License along with the IFDM Suite. If not, see <h
 					            <div ng-show="attrVisibility.segments.cat" ng-if="column === 'cat'">{{ segment.properties.segmentCategory }}</div>
 					        </td>
 				            <td style="min-width:80px;" ng-show="repNav.isViewVisible('mapPanel')">
-				            	<button type="button" class="btn btn-default btn-xs btn-bottom-mg" title="{{'spatial.tab_vms_pos_table_zoom_btn_title' | i18n }}" ng-click="zoomTo($index, 'SEGMENT')"><span class="fa fa-search-plus"></span></button>
-				            	<button type="button" class="btn btn-default btn-xs btn-bottom-mg" title="{{'spatial.tab_vms_pos_table_pan_btn_title' | i18n }}" ng-click="panTo($index, 'SEGMENT')"><span class="fa fa-crosshairs"></span></button>
+				            	<button type="button" class="btn btn-default btn-xs btn-bottom-mg" title="{{'spatial.tab_vms_seg_table_zoom_btn_title' | i18n }}" ng-click="zoomTo($index, 'SEGMENT')"><span class="fa fa-search-plus"></span></button>
+				            	<button type="button" class="btn btn-default btn-xs btn-bottom-mg" title="{{'spatial.tab_vms_seg_table_pan_btn_title' | i18n }}" ng-click="panTo($index, 'SEGMENT')"><span class="fa fa-crosshairs"></span></button>
 				            </td>
 				        </tr>
 			    	</tbody>
@@ -407,8 +407,8 @@ copy of the GNU General Public License along with the IFDM Suite. If not, see <h
 					            <div ng-show="attrVisibility.tracks.timeSea" ng-if="column === 'timeSea'">{{ track.totalTimeAtSea | stHumanizeTime: track }}</div>
 				            </td>
 				            <td style="min-width:80px;" ng-show="repNav.isViewVisible('mapPanel')">
-				            	<button type="button" class="btn btn-default btn-xs btn-bottom-mg" title="{{'spatial.tab_vms_pos_table_zoom_btn_title' | i18n }}" ng-click="zoomTo($index, 'TRACK')"><span class="fa fa-search-plus"></span></button>
-				            	<button type="button" class="btn btn-default btn-xs btn-bottom-mg" title="{{'spatial.tab_vms_pos_table_pan_btn_title' | i18n }}" ng-click="panTo($index, 'TRACK')"><span class="fa fa-crosshairs"></span></button>
+				            	<button type="button" class="btn btn-default btn-xs btn-bottom-mg" title="{{'spatial.tab_vms_tracks_table_zoom_btn_title' | i18n }}" ng-click="zoomTo($index, 'TRACK')"><span class="fa fa-search-plus"></span></button>
+				            	<button type="button" class="btn btn-default btn-xs btn-bottom-mg" title="{{'spatial.tab_vms_tracks_table_pan_btn_title' | i18n }}" ng-click="panTo($index, 'TRACK')"><span class="fa fa-crosshairs"></span></button>
 				            </td>
 				        </tr>
 			    	</tbody>
@@ -533,8 +533,8 @@ copy of the GNU General Public License along with the IFDM Suite. If not, see <h
 							</td>
 							<td style="min-width:120px;" ng-show="repNav.isViewVisible('mapPanel')">
 								<alarms-preview record="alarm"></alarms-preview>
-								<button type="button" class="btn btn-default btn-xs btn-bottom-mg" title="{{'spatial.tab_vms_pos_table_zoom_btn_title' | i18n }}" ng-click="zoomTo($index, 'ALARM')"><span class="fa fa-search-plus"></span></button>
-								<button type="button" class="btn btn-default btn-xs btn-bottom-mg" title="{{'spatial.tab_vms_pos_table_pan_btn_title' | i18n }}" ng-click="panTo($index, 'ALARM')"><span class="fa fa-crosshairs"></span></button>
+								<button type="button" class="btn btn-default btn-xs btn-bottom-mg" title="{{'spatial.tab_vms_alert_table_zoom_btn_title' | i18n }}" ng-click="zoomTo($index, 'ALARM')"><span class="fa fa-search-plus"></span></button>
+								<button type="button" class="btn btn-default btn-xs btn-bottom-mg" title="{{'spatial.tab_vms_alert_table_pan_btn_title' | i18n }}" ng-click="panTo($index, 'ALARM')"><span class="fa fa-crosshairs"></span></button>
 							</td>
 						</tr>
 					</tbody>
@@ -556,9 +556,9 @@ copy of the GNU General Public License along with the IFDM Suite. If not, see <h
 							</th>-->
 							<th colspan="7"></th>
 							<th>
-								<div class="btnTools btn btn-default btn-xs" ng-show="isAllowed('Reporting', 'EXPORT_VMS_REPORT_DATA')" st-export-data export-fn="exportAsCSV(vmsType, data)" vms-type="trips">
+								<!-- <div class="btnTools btn btn-default btn-xs" ng-show="isAllowed('Reporting', 'EXPORT_VMS_REPORT_DATA')" st-export-data export-fn="exportAsCSV(vmsType, data)" vms-type="trips">
 									<i class="fa fa-download" title="{{'spatial.tab_vms_export_csv' | i18n}}"></i>
-								</div>
+								</div> -->
 							</th>
 						</tr>
 						<!--<tr ng-show="isTripFilterVisible" class="no-border">
@@ -669,27 +669,13 @@ copy of the GNU General Public License along with the IFDM Suite. If not, see <h
 						</tr>-->
 						<tr>
 							<th lr-drag-src="headers" lr-drop-target="headers" ng-repeat="column in attrVisibility.tripsColumns" ng-show="attrVisibility.trips[column]" lr-drop-success="dropSuccess(e, item, collection)">
-								<div st-sort="properties.id" st-skip-natural="true" st-class-ascent="sorting_asc" st-class-descent="sorting_desc" ng-show="attrVisibility.trips.id" ng-if="column === 'id'">{{'activity.tab_trip_table_header_id' | i18n }}</div>
+								<div st-sort="tripId" st-skip-natural="true" st-class-ascent="sorting_asc" st-class-descent="sorting_desc" ng-show="attrVisibility.trips.tripId" ng-if="column === 'tripId'">{{'activity.tab_trip_table_header_id' | i18n }}</div>
 								<div st-sort="properties.event" st-skip-natural="true" st-class-ascent="sorting_asc" st-class-descent="sorting_desc" ng-show="attrVisibility.trips.event" ng-if="column === 'event'">{{'activity.tab_trip_table_header_event' | i18n }}</div>
 								<div st-sort="properties.vesselId" st-skip-natural="true" st-class-ascent="sorting_asc" st-class-descent="sorting_desc" ng-show="attrVisibility.trips.vesselId" ng-if="column === 'vesselId'">{{'activity.tab_trip_table_header_vesselId' | i18n }}</div>
 								<div st-sort="properties.duration" st-skip-natural="true" st-class-ascent="sorting_asc" st-class-descent="sorting_desc" ng-show="attrVisibility.trips.duration" ng-if="column === 'duration'">{{'activity.tab_trip_table_header_duration' | i18n }}</div>
 								<div st-sort="properties.nCorrections" st-skip-natural="true" st-class-ascent="sorting_asc" st-class-descent="sorting_desc" ng-show="attrVisibility.trips.nCorrections" ng-if="column === 'nCorrections'">{{'activity.tab_trip_table_header_nCorrections' | i18n }}</div>
 								<div st-sort="properties.nPositions" st-skip-natural="true" st-class-ascent="sorting_asc" st-class-descent="sorting_desc" ng-show="attrVisibility.trips.nPositions" ng-if="column === 'nPositions'">{{'activity.tab_trip_table_header_nPositions' | i18n }}</div>
 								<div st-sort="properties.alarm" st-skip-natural="true" st-class-ascent="sorting_asc" st-class-descent="sorting_desc" ng-show="attrVisibility.trips.alarm" ng-if="column === 'alarm'">{{'activity.tab_trip_table_header_alarm' | i18n }}</div>
-								<!--<div st-sort="properties.countryCode" st-skip-natural="true" st-class-ascent="sorting_asc" st-class-descent="sorting_desc" ng-show="attrVisibility.positions.fs" ng-if="column === 'fs'">{{'spatial.tab_vms_pos_table_header_fs' | i18n }}</div>
-								<div st-sort="properties.externalMarking" st-skip-natural="true" st-class-ascent="sorting_asc" st-class-descent="sorting_desc" ng-show="attrVisibility.positions.extMark" ng-if="column === 'extMark'">{{'spatial.tab_vms_pos_table_header_ext_mark' | i18n }}</div>
-								<div st-sort="properties.ircs" st-skip-natural="true" st-class-ascent="sorting_asc" st-class-descent="sorting_desc" ng-show="attrVisibility.positions.ircs" ng-if="column === 'ircs'">{{'spatial.tab_vms_pos_table_header_ircs' | i18n }}</div>
-								<div st-sort="properties.cfr" st-skip-natural="true" st-class-ascent="sorting_asc" st-class-descent="sorting_desc" ng-show="attrVisibility.positions.cfr" ng-if="column === 'cfr'">{{'spatial.tab_vms_pos_table_header_cfr' | i18n }}</div>-->
-								<!--<div st-sort="properties.positionTime" st-skip-natural="true" st-class-ascent="sorting_asc" st-class-descent="sorting_desc" ng-show="attrVisibility.positions.posTime" ng-if="column === 'posTime'">{{'spatial.tab_vms_pos_table_header_date' | i18n }}</div>
-								<div st-sort="geometry.coordinates[1]" st-skip-natural="true" st-class-ascent="sorting_asc" st-class-descent="sorting_desc" ng-show="attrVisibility.positions.lat" ng-if="column === 'lat'">{{'spatial.tab_vms_pos_table_header_lat' | i18n }}</div>
-								<div st-sort="geometry.coordinates[0]" st-skip-natural="true" st-class-ascent="sorting_asc" st-class-descent="sorting_desc" ng-show="attrVisibility.positions.lon" ng-if="column === 'lon'">{{'spatial.tab_vms_pos_table_header_lon' | i18n }}</div>
-								<div st-sort="properties.status" st-skip-natural="true" st-class-ascent="sorting_asc" st-class-descent="sorting_desc" ng-show="attrVisibility.positions.stat" ng-if="column === 'stat'">{{'spatial.tab_vms_pos_table_header_status' | i18n }}</div>
-								<div st-sort="properties.reportedSpeed" st-skip-natural="true" st-class-ascent="sorting_asc" st-class-descent="sorting_desc" ng-show="attrVisibility.positions.m_spd" ng-if="column === 'm_spd'">{{'spatial.tab_vms_pos_table_header_measured_speed' | i18n }}</div>
-								<div st-sort="properties.calculatedSpeed" st-skip-natural="true" st-class-ascent="sorting_asc" st-class-descent="sorting_desc" ng-show="attrVisibility.positions.c_spd" ng-if="column === 'c_spd'">{{'spatial.tab_vms_pos_table_header_calculated_speed' | i18n }}</div>
-								<div st-sort="properties.reportedCourse" st-skip-natural="true" st-class-ascent="sorting_asc" st-class-descent="sorting_desc" ng-show="attrVisibility.positions.crs" ng-if="column === 'crs'">{{'spatial.tab_vms_pos_table_header_course' | i18n }}</div>
-								<div st-sort="properties.movementType" st-skip-natural="true" st-class-ascent="sorting_asc" st-class-descent="sorting_desc" ng-show="attrVisibility.positions.msg_tp" ng-if="column === 'msg_tp'">{{'spatial.tab_vms_pos_table_header_msg_type' | i18n }}</div>
-								<div st-sort="properties.activityType" st-skip-natural="true" st-class-ascent="sorting_asc" st-class-descent="sorting_desc" ng-show="attrVisibility.positions.act_tp" ng-if="column === 'act_tp'">{{'spatial.tab_vms_pos_table_header_activity_type' | i18n }}</div>
-								<div st-sort="properties.source" st-skip-natural="true" st-class-ascent="sorting_asc" st-class-descent="sorting_desc" ng-show="attrVisibility.positions.source" ng-if="column === 'source'">{{'spatial.tab_vms_pos_table_header_source' | i18n }}</div>-->
 							</th>
 							<th style="width:65px" ng-show="repNav.isViewVisible('mapPanel')">{{'spatial.table_header_actions' | i18n }}</th>
 						</tr>
@@ -700,7 +686,7 @@ copy of the GNU General Public License along with the IFDM Suite. If not, see <h
 						</tr>
 						<tr ng-repeat="trip in displayedTrips">
 							<td ng-repeat="column in attrVisibility.tripsColumns" ng-show="attrVisibility.trips[column]">
-								<div ng-show="attrVisibility.trips.id" ng-if="column === 'id'">{{ trip.id }}</div>
+								<div ng-show="attrVisibility.trips.tripId" ng-if="column === 'tripId'">{{ trip.tripId }}</div>
 								<div ng-show="attrVisibility.trips.event" ng-if="column === 'event'">{{ trip.event }}</div>
 								<div ng-show="attrVisibility.trips.vesselId" ng-if="column === 'vesselId'">{{ trip.vesselId }}</div>
 								<div ng-show="attrVisibility.trips.duration" ng-if="column === 'duration'">{{ trip.duration }}</div>
@@ -728,9 +714,8 @@ copy of the GNU General Public License along with the IFDM Suite. If not, see <h
 								<div ng-show="attrVisibility.positions.source" ng-if="column === 'source'">{{ position.properties.source }}</div>-->
 							</td>
 							<td style="width:65px">
-								<button type="button" class="btn btn-default btn-xs btn-bottom-mg" title="{{'spatial.tab_vms_pos_table_zoom_btn_title' | i18n }}" ng-click="zoomTo($index, 'TRIP')"><span class="fa fa-search-plus"></span></button>
-								<!--<button type="button" class="btn btn-default btn-xs btn-bottom-mg" title="{{'spatial.tab_vms_pos_table_pan_btn_title' | i18n }}" ng-click="panTo($index, 'POSITION')"><span class="fa fa-crosshairs"></span></button>-->
-								<button type="button" class="btn btn-default btn-xs btn-bottom-mg" title="Details" ng-click="openTripSummary(trip.id)"><span class="fa fa-eye"></span></button>
+								<button type="button" class="btn btn-default btn-xs btn-bottom-mg" title="{{'spatial.tab_vms_trip_table_zoom_btn_title' | i18n }}" ng-click="zoomTo($index, 'TRIP')"><span class="fa fa-search-plus"></span></button>
+								<button type="button" class="btn btn-default btn-xs btn-bottom-mg" title="Details" ng-click="openTripSummary(trip.tripId)"><span class="fa fa-eye"></span></button>
 							</td>
 						</tr>
 					</tbody>

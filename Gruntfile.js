@@ -59,7 +59,7 @@ module.exports = function (grunt) {
           // Internal rewrite
           {from: 'app/config.json', to: 'environment/local.json'}
       ],
-       proxies:grunt.file.exists('proxies.yaml')?grunt.file.readYAML('proxies.yaml'):{
+       proxies:grunt.file.exists('proxies.yaml')?grunt.file.readYAML('proxies.yaml'):[{
                 context: [
                   '/asset/rest',
                   '/mobileterminal/rest/',
@@ -79,7 +79,11 @@ module.exports = function (grunt) {
                   '/activity/rest'],
               host: 'localhost',
               port: 8080
-        },
+        },{
+            context: '/mock/',
+            host: 'localhost',
+            port: 8081
+        }],
 
       development: {
           options: {
