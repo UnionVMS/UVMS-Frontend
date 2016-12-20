@@ -304,8 +304,8 @@ copy of the GNU General Public License along with the IFDM Suite. If not, see <h
 					            <div ng-show="attrVisibility.segments.cat" ng-if="column === 'cat'">{{ segment.properties.segmentCategory }}</div>
 					        </td>
 				            <td style="min-width:80px;" ng-show="repNav.isViewVisible('mapPanel')">
-				            	<button type="button" class="btn btn-default btn-xs btn-bottom-mg" title="{{'spatial.tab_vms_pos_table_zoom_btn_title' | i18n }}" ng-click="zoomTo($index, 'SEGMENT')"><span class="fa fa-search-plus"></span></button>
-				            	<button type="button" class="btn btn-default btn-xs btn-bottom-mg" title="{{'spatial.tab_vms_pos_table_pan_btn_title' | i18n }}" ng-click="panTo($index, 'SEGMENT')"><span class="fa fa-crosshairs"></span></button>
+				            	<button type="button" class="btn btn-default btn-xs btn-bottom-mg" title="{{'spatial.tab_vms_seg_table_zoom_btn_title' | i18n }}" ng-click="zoomTo($index, 'SEGMENT')"><span class="fa fa-search-plus"></span></button>
+				            	<button type="button" class="btn btn-default btn-xs btn-bottom-mg" title="{{'spatial.tab_vms_seg_table_pan_btn_title' | i18n }}" ng-click="panTo($index, 'SEGMENT')"><span class="fa fa-crosshairs"></span></button>
 				            </td>
 				        </tr>
 			    	</tbody>
@@ -407,8 +407,8 @@ copy of the GNU General Public License along with the IFDM Suite. If not, see <h
 					            <div ng-show="attrVisibility.tracks.timeSea" ng-if="column === 'timeSea'">{{ track.totalTimeAtSea | stHumanizeTime: track }}</div>
 				            </td>
 				            <td style="min-width:80px;" ng-show="repNav.isViewVisible('mapPanel')">
-				            	<button type="button" class="btn btn-default btn-xs btn-bottom-mg" title="{{'spatial.tab_vms_pos_table_zoom_btn_title' | i18n }}" ng-click="zoomTo($index, 'TRACK')"><span class="fa fa-search-plus"></span></button>
-				            	<button type="button" class="btn btn-default btn-xs btn-bottom-mg" title="{{'spatial.tab_vms_pos_table_pan_btn_title' | i18n }}" ng-click="panTo($index, 'TRACK')"><span class="fa fa-crosshairs"></span></button>
+				            	<button type="button" class="btn btn-default btn-xs btn-bottom-mg" title="{{'spatial.tab_vms_tracks_table_zoom_btn_title' | i18n }}" ng-click="zoomTo($index, 'TRACK')"><span class="fa fa-search-plus"></span></button>
+				            	<button type="button" class="btn btn-default btn-xs btn-bottom-mg" title="{{'spatial.tab_vms_tracks_table_pan_btn_title' | i18n }}" ng-click="panTo($index, 'TRACK')"><span class="fa fa-crosshairs"></span></button>
 				            </td>
 				        </tr>
 			    	</tbody>
@@ -533,8 +533,8 @@ copy of the GNU General Public License along with the IFDM Suite. If not, see <h
 							</td>
 							<td style="min-width:120px;" ng-show="repNav.isViewVisible('mapPanel')">
 								<alarms-preview record="alarm"></alarms-preview>
-								<button type="button" class="btn btn-default btn-xs btn-bottom-mg" title="{{'spatial.tab_vms_pos_table_zoom_btn_title' | i18n }}" ng-click="zoomTo($index, 'ALARM')"><span class="fa fa-search-plus"></span></button>
-								<button type="button" class="btn btn-default btn-xs btn-bottom-mg" title="{{'spatial.tab_vms_pos_table_pan_btn_title' | i18n }}" ng-click="panTo($index, 'ALARM')"><span class="fa fa-crosshairs"></span></button>
+								<button type="button" class="btn btn-default btn-xs btn-bottom-mg" title="{{'spatial.tab_vms_alert_table_zoom_btn_title' | i18n }}" ng-click="zoomTo($index, 'ALARM')"><span class="fa fa-search-plus"></span></button>
+								<button type="button" class="btn btn-default btn-xs btn-bottom-mg" title="{{'spatial.tab_vms_alert_table_pan_btn_title' | i18n }}" ng-click="panTo($index, 'ALARM')"><span class="fa fa-crosshairs"></span></button>
 							</td>
 						</tr>
 					</tbody>
@@ -556,9 +556,9 @@ copy of the GNU General Public License along with the IFDM Suite. If not, see <h
 							</th>-->
 							<th colspan="7"></th>
 							<th>
-								<div class="btnTools btn btn-default btn-xs" ng-show="isAllowed('Reporting', 'EXPORT_VMS_REPORT_DATA')" st-export-data export-fn="exportAsCSV(vmsType, data)" vms-type="trips">
+								<!-- <div class="btnTools btn btn-default btn-xs" ng-show="isAllowed('Reporting', 'EXPORT_VMS_REPORT_DATA')" st-export-data export-fn="exportAsCSV(vmsType, data)" vms-type="trips">
 									<i class="fa fa-download" title="{{'spatial.tab_vms_export_csv' | i18n}}"></i>
-								</div>
+								</div> -->
 							</th>
 						</tr>
 						<!--<tr ng-show="isTripFilterVisible" class="no-border">
@@ -714,8 +714,7 @@ copy of the GNU General Public License along with the IFDM Suite. If not, see <h
 								<div ng-show="attrVisibility.positions.source" ng-if="column === 'source'">{{ position.properties.source }}</div>-->
 							</td>
 							<td style="width:65px">
-								<button type="button" class="btn btn-default btn-xs btn-bottom-mg" title="{{'spatial.tab_vms_pos_table_zoom_btn_title' | i18n }}" ng-click="zoomTo($index, 'TRIP')"><span class="fa fa-search-plus"></span></button>
-								<!--<button type="button" class="btn btn-default btn-xs btn-bottom-mg" title="{{'spatial.tab_vms_pos_table_pan_btn_title' | i18n }}" ng-click="panTo($index, 'POSITION')"><span class="fa fa-crosshairs"></span></button>-->
+								<button type="button" class="btn btn-default btn-xs btn-bottom-mg" title="{{'spatial.tab_vms_trip_table_zoom_btn_title' | i18n }}" ng-click="zoomTo($index, 'TRIP')"><span class="fa fa-search-plus"></span></button>
 								<button type="button" class="btn btn-default btn-xs btn-bottom-mg" title="Details" ng-click="openTripSummary(trip.tripId)"><span class="fa fa-eye"></span></button>
 							</td>
 						</tr>

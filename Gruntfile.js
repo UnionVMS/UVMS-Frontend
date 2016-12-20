@@ -566,7 +566,6 @@ module.exports = function (grunt) {
   grunt.registerTask('build-dev', ['ngconstant:development', 'test', 'clean:before', 'copy:configDev','sub-build']);
   grunt.registerTask('build-test', ['ngconstant:development', 'test', 'clean:before', 'copy:configTest','sub-build']);
   grunt.registerTask('test',['ngconstant:development', 'dom_munger:read', 'ngtemplates', 'karma:services', 'karma:controllers', 'karma:directives', 'karma:filters', 'clean:after']);
-  grunt.registerTask('test-dev',['ngconstant:development', 'dom_munger:read', 'karma:services', 'clean:after']);
 
   grunt.registerTask('default',['build-dev']);
   

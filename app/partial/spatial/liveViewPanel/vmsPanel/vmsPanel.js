@@ -181,8 +181,9 @@ angular.module('unionvmsWeb').controller('VmspanelCtrl',function($scope, locale,
        } else if (geomType === 'TRACK') {
            geom = new ol.geom.Polygon.fromExtent($scope.displayedTracks[index].extent);
        } else if (geomType === 'TRIP') {
-           //FIXME trip geom
-           geom = new ol.geom.Polygon.fromExtent($scope.displayedTrips[index].extent);
+           var format = new ol.format.WKT();
+           geom = format.readFeature($scope.displayedTrips[index].multipointWkt).getGeometry();
+           geom.set('GeometryType', 'Point');
        }
        
        if (geomType !== 'ALARM'){
@@ -195,6 +196,9 @@ angular.module('unionvmsWeb').controller('VmspanelCtrl',function($scope, locale,
            var trackGeom = $scope.buildTrackGeomFromId($scope.displayedTracks[index].id, geom.getExtent());
            mapService.highlightFeature(trackGeom);
        }
+       
+       //TODO check if layer is visible, if not activate it
+       
        
        angular.element('.vmspanel-modal').addClass('collapsed');
        $scope.modalCollapsed = true;
@@ -216,7 +220,7 @@ angular.module('unionvmsWeb').controller('VmspanelCtrl',function($scope, locale,
            geom.transform('EPSG:4326', mapService.getMapProjectionCode());
            geom.set('GeometryType', 'LineString');
            coords = mapService.getMiddlePoint(geom);
-       } else{
+       } else if (geomType === 'TRACK'){
            coords = ol.proj.transform($scope.displayedTracks[index].nearestPoint, 'EPSG:4326', mapService.getMapProjectionCode());
            var polyExtent = new ol.geom.Polygon.fromExtent($scope.displayedTracks[index].extent);
            polyExtent.transform('EPSG:4326', mapService.getMapProjectionCode());
