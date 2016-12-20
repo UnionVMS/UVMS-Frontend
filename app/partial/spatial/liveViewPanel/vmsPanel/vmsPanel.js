@@ -9,7 +9,7 @@ the hope that it will be useful, but WITHOUT ANY WARRANTY; without even the impl
 FITNESS FOR A PARTICULAR PURPOSE.  See the GNU General Public License for more details. You should have received a
 copy of the GNU General Public License along with the IFDM Suite. If not, see <http://www.gnu.org/licenses/>.
 */
-angular.module('unionvmsWeb').controller('VmspanelCtrl',function($scope, locale, globalSettingsService, reportService, mapService, csvWKTService, unitConversionService, visibilityService, userService, tripSummaryService){
+angular.module('unionvmsWeb').controller('VmspanelCtrl',function($scope, locale, globalSettingsService, reportService, mapService, csvWKTService, unitConversionService, visibilityService, userService, tripSummaryService, layerPanelService){
     $scope.selectedVmsTab = 'MOVEMENTS';
     $scope.isPosFilterVisible = false;
     $scope.isSegFilterVisible = false;
@@ -190,6 +190,7 @@ angular.module('unionvmsWeb').controller('VmspanelCtrl',function($scope, locale,
            geom.transform('EPSG:4326', mapService.getMapProjectionCode());
        }
        
+       $scope.activateLayer(geomType);
        if (geomType !== 'TRACK'){
            mapService.highlightFeature(geom);
        } else {
@@ -203,6 +204,21 @@ angular.module('unionvmsWeb').controller('VmspanelCtrl',function($scope, locale,
        angular.element('.vmspanel-modal').addClass('collapsed');
        $scope.modalCollapsed = true;
        mapService.zoomTo(geom);
+   };
+   
+   $scope.activateLayer = function(lyrType){
+       var layerNames = {
+           POSITION: 'vmspos',
+           SEGMENT: 'vmsseg',
+           TRACK: 'vmsseg',
+           ALARM: 'alarms',
+           TRIP: 'ers'
+       };
+       
+       var layer = mapService.getLayerByType(layerNames[lyrType]);
+       if (angular.isDefined(layer) && layer.get('visible') === false){
+           layerPanelService.toggleCheckNode(layerNames[lyrType], true);
+       }
    };
    
    $scope.panTo = function(index, geomType){
@@ -228,6 +244,7 @@ angular.module('unionvmsWeb').controller('VmspanelCtrl',function($scope, locale,
            geom.set('GeometryType', 'MultiLineString');
        }
        
+       $scope.activateLayer(geomType);
        if (geomType !== 'TRACK'){
            mapService.highlightFeature(geom);
        } else {

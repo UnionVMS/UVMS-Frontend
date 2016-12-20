@@ -29,9 +29,11 @@ angular.module('unionvmsWeb').directive('layerTree', function($q, $modal, mapSer
 			var beforeSelectHandler = function( event, data ) {
 			    var nodeTypes = ['vmspos-source', 'vmspos', 'vmsdata'];
 			    if (_.indexOf(nodeTypes, data.node.data.type) !== -1){
-			        scope.$apply(function(){
-			            loadingStatus.isLoading('LiveviewMap', true, 3);
-			        });
+			        if (!scope.$$phase){
+			            scope.$apply(function(){
+	                        loadingStatus.isLoading('LiveviewMap', true, 3);
+	                    });
+			        }
 			    }
 			    
 				var selected = scope.$tree.getSelectedNodes(),
@@ -601,6 +603,18 @@ angular.module('unionvmsWeb').directive('layerTree', function($q, $modal, mapSer
 					    root.removeChild(target[i]);
 					}
 				});
+			};
+			
+			layerPanelService.toggleCheckNode = function(type, status){
+			    var root = scope.$tree.getRootNode();
+			    var node = root.findAll(function(node){
+			        if (node.data.type === type){
+			            return node;
+			        }
+			    });
+			    if (node.length === 1){
+			        node[0].setSelected(status);
+			    }
 			};
 
 			//Get layer index in the ol layers collection
