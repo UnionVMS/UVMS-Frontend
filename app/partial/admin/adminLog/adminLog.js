@@ -266,7 +266,7 @@ angular.module('unionvmsWeb').controller('AuditlogCtrl', function($scope, $q, $f
                 $scope.currentSearchResults.setLoading(false);
                 $scope.currentSearchResults.setErrorMessage(locale.getString('common.search_failed_error'));
             });
-        }
+        };
         search(1);
     };
 

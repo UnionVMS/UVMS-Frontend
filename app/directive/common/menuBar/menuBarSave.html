@@ -1,4 +1,4 @@
 <div>
-    <button type="submit" class="btn btn-primary btn-add" ng-click="functions.updateCallback()" ng-hide="isCreateNewMode()" ng-disabled="functions.disableUpdate()" id="menu-bar-update">{{'common.save' | i18n}}</button>
+    <button type="submit" class="btn btn-primary btn-add" ng-click="functions.updateCallback()" ng-hide="isCreateNewMode()" ng-disabled="functions.disableSave(ngmodel)" id="menu-bar-update">{{'common.save' | i18n}}</button>
     <button type="submit" class="btn btn-primary btn-add" ng-click="functions.saveCallback()" ng-show="isCreateNewMode()" id="menu-bar-save">{{'common.save' | i18n}}</button>
 </div>

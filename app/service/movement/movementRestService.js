@@ -173,7 +173,7 @@ angular.module('unionvmsWeb')
                return;
             }
             var movementList = [];
-            for (movement in response.data) {
+            for (var movement in response.data) {
                 var move = Movement.fromJson(response.data[movement]);
                 movementList.push(move);
             }

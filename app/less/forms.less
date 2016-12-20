@@ -14,147 +14,101 @@ copy of the GNU General Public License along with the IFDM Suite. If not, see <h
  *
  */
 
-@form-input-background:        #ffffff;
-@form-input-textcolor:         #555555; 
-@form-input-placeholder-color: #999999;
+// Config
+@form-input-background:          #ffffff;
+@form-input-textcolor:           #555555; 
+@form-input-placeholder-color:   #999999;
+@form-input-disabled-background: #eeeeee;
 
-input[type="text"], input[type="time"], input[type="number"], input[type="email"], input[type="search"]
-{
-    border-radius: @inputBorderRadius;
-    height: 30px;
-    border:1px solid @inputBorderColor;
-    padding-left: 5px;
+@form-input-padding:             5px;
+@form-input-height:              30px; 
+@form-input-border-size:         1px;
+@form-input-border:              @form-input-border-size solid @inputBorderColor;
+@form-input-border-radius:       @inputBorderRadius; 
+@form-input-border-active:       1px solid @formInputActiveBorderColor;
 
-    &:focus{
-        border:1px solid @formInputActiveBorderColor;
+// Components that are reused in different places in the application
+.default-form-input() {
+    width: 100%;
+    background: @form-input-background;
+    height: @form-input-height;
+    border: @form-input-border;
+    border-radius: @form-input-border-radius;
+    padding-left: @form-input-padding;
+    -webkit-box-shadow: none;
+    box-shadow: none;
+    -webkit-transition: border-color ease-in-out .15s, box-shadow ease-in-out .15s;
+    transition: border-color ease-in-out .15s, box-shadow ease-in-out .15s;
+
+    &::-moz-placeholder {
+        color: @form-input-placeholder-color;
+        opacity: 1;
+    }
+
+    &:focus, &:hover {
+        border: @form-input-border-active;
         outline: 0;
+        -webkit-box-shadow: none;
+        box-shadow: none;
+    }
+
+    &:disabled {
+        .disabled-input();
+    }
+}
+
+.disabled-input() {
+    cursor: not-allowed;
+    background-color: @form-input-disabled-background;
+    opacity: 1;
+}
+
+.error-form-input() {
+    &,
+    &:focus,
+    &:hover {
+        border-color: @errorColor;
         -webkit-box-shadow: none;
         box-shadow: none;
     }
 }
 
-button.inputHeigth{
-    height: 30px;
+.default-label-for-input() {
+    font-weight: 500;
+    margin-bottom: 0;
 }
 
-.form-control[disabled], .form-control[readonly], fieldset[disabled] .form-control{
-  .disabled-input();
+.form-header() {
+    font-weight: 400;
+    font-size: 1.08em;
+    text-transform: none;
 }
 
-.form-control{
-    background-color: @form-input-background;
-    height: 30px;
-    -webkit-box-shadow: none;
-    box-shadow: none;
+.form-header-bold() {
+    .form-header();
+    font-weight: 600;
 }
 
-.form-control::-moz-placeholder {
-    color: @form-input-placeholder-color;
-    opacity: 1;
-}
-*:before, *:after {
-    -moz-box-sizing: border-box;
-}
-*:before, *:after {
-    -moz-box-sizing: border-box;
+// Common styling of forms and inputs, should preferably be moved to concerned component to easily be maintained 
+label {
+    .default-label-for-input()
 }
 
-.form-control:focus {
-    border-color: @formInputActiveBorderColor;
-    outline: 0;
-    -webkit-box-shadow: none;
-    box-shadow: none;
-}
-
-label{
-    font-weight: bold;
-    margin-bottom: 0px;
-}
-
-label.section{
-    font-weight: bold;
-    text-transform: uppercase;
-}
-
-.labelheaders{
-    margin-top:10px;
-    margin-bottom:0px;
-    text-transform: uppercase;
-
-    font-size: 12px;
-
-    @media (min-width: @screen-lg-min) {
-        font-size: 14px;
-    }
-
-
-}
-
-.has-error{
-    .form-control, input, .datepicker > input[date-picker-formatter].ng-valid.ng-dirty.ng-valid-parse.ng-touched, textarea, .periodInput, .btn.btn-default.dropdown-toggle {
-    	&,
-    	&:focus,
-    	&:hover {
-        	border: 1px solid @errorColor;
-        	box-shadow: none !important;
-        }
-    }
-    box-shadow:none;
-}
-
-.form-group{
+.form-group {
     .help-block{
         display: none;
     }
-}
 
-.form-group.has-error{
-    .help-block{
-        display: block;
-        font-size: 95%;
-        color: darken(@errorColor, 5%);
-    }
-}
-
-.inputerrors{
-    .glyphicon{
-        top: 2px;
-    }
-}
-
-select{
-    padding: 10px;
-}
-
-
-.unit-input {
-    @unitWidth:30px;
-    position: relative;
-    text-transform: none;
-    padding-right: @unitWidth;
-    input{
-        border-radius: 0px;
-        &:first-child{
-            border-top-left-radius: @inputBorderRadius;
-            border-bottom-left-radius: @inputBorderRadius;
+    &.has-error {
+        .help-block{
+            display: block;
+            font-size: 95%;
+            color: darken(@errorColor, 5%);
         }
     }
 
-    .unit-box {
-        position: absolute;
-        right:0px;
-        top:0px;
-        width: @unitWidth;
-        height: 100%;
-        padding: 4px 4px 0;
-        background-color: lightgray;
-        border: 1px solid #cccccc;
-        text-align: center;
-
-        &:last-child{
-            border-top-right-radius: @inputBorderRadius;
-            border-bottom-right-radius: @inputBorderRadius;
-        }
+    &.no-margin {
+        margin: 0;
     }
 }
 
@@ -163,8 +117,47 @@ select{
     padding-left: 3px;
 }
 
-.disabled-input() {
-    cursor: not-allowed;
-    background-color: #eeeeee;
-    opacity: 1;
+.unit-input {
+    height: @form-input-height;
+    @unitWidth: @form-input-height;
+    position: relative;
+    text-transform: none;
+    padding-right: @unitWidth;
+    input {
+        &:first-child{
+            border-radius: 0;
+            border-top-left-radius: @form-input-border-radius;
+            border-bottom-left-radius: @form-input-border-radius;
+        }
+    }
+
+    .unit-box {
+        position: absolute;
+        right: 0px;
+        top: 0px;
+        width: @unitWidth;
+        height: 100%;
+        padding: 0 4px;
+        background-color: #d6d7da;
+        border: @form-input-border;
+        border-left: 0;
+        text-align: center;
+        line-height: @form-input-height;
+
+        &:last-child {
+            border-top-right-radius: @form-input-border-radius;
+            border-bottom-right-radius: @form-input-border-radius;
+        }
+    }
+}
+
+input[type="text"], input[type="time"], input[type="number"], input[type="email"], input[type="search"], 
+.form-control {
+    .default-form-input()
+}
+
+.has-error {
+    .form-control, input, .datepicker > input[date-picker-formatter].ng-valid.ng-dirty.ng-valid-parse.ng-touched, textarea, .periodInput, .btn.btn-default.dropdown-toggle {
+        .error-form-input();
+    }
 }

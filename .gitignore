@@ -13,5 +13,5 @@ font-awesome
 .project
 .tern-project
 .settings
-/app/app.css
-/app/app.css.map
+app/app.css
+app/app.css.map

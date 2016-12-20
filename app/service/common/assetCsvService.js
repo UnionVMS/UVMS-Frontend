@@ -56,8 +56,8 @@ copy of the GNU General Public License along with the IFDM Suite. If not, see <h
                 $filter('length')(asset.lengthValue),
                 asset.grossTonnage,
                 asset.powerMain,
-                asset.producer.name,
-                asset.producer.code,
+                asset.producer.name.split('"'),
+                asset.producer.id,
                 getContactsDetails(asset)
             ]];
         }
@@ -86,7 +86,7 @@ copy of the GNU General Public License along with the IFDM Suite. If not, see <h
 
         function getContactsDetails(asset) {
             var tempContactsDetails = [];
-            for (i = 0; i < asset.contact.length; i++) { 
+            for (var i = 0; i < asset.contact.length; i++) { 
                 tempContactsDetails.push(asset.contact[i].name + " " + asset.contact[i].email + " " + asset.contact[i].number);
             }
             var contactsDetails = tempContactsDetails.join(', ');

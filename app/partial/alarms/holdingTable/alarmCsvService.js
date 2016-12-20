@@ -45,10 +45,10 @@ angular.module('unionvmsWeb').factory('alarmCsvService', function(csvService, $f
         });
     }
 
-    function getRow(alarm) {
-        var row = getRow(alarm);
-        return replaceUndefined(row);
-    }
+    // function getRow(alarm) {
+    //     var row = getRow(alarm);
+    //     return replaceUndefined(row);
+    // }
 
     function replaceUndefined(row) {
         return row.map(function(cell) {
