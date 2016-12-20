@@ -25,7 +25,11 @@ copy of the GNU General Public License along with the IFDM Suite. If not, see <h
 
         .notesListContainer {
             .grayBorderRight();
-            padding: 15px; 
+            padding: 15px 15px 20px 15px;
+
+            th {
+                font-weight: 500;
+            }
 
             .list td {
                 &:first-child {
@@ -38,7 +42,7 @@ copy of the GNU General Public License along with the IFDM Suite. If not, see <h
         }
 
         .notesForm {
-            padding: 15px;
+            padding: 15px 15px 20px 15px; 
         }
     }
 
@@ -53,7 +57,11 @@ copy of the GNU General Public License along with the IFDM Suite. If not, see <h
         }
 
         .historyContainer{
-            padding: 15px; 
+            padding: 15px 15px 20px 15px; 
+
+            th {
+                font-weight: 500;
+            }
             
             .list td{
                 &:first-child{
@@ -83,8 +91,9 @@ copy of the GNU General Public License along with the IFDM Suite. If not, see <h
         }
     }
 
-    h5 {
+    .form-header {
         margin-top: 0px;
-        margin-bottom: 10px;
+        margin-bottom: 20px;
+        .form-header-bold();
     }
 }

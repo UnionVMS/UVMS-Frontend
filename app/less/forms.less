@@ -78,6 +78,17 @@ copy of the GNU General Public License along with the IFDM Suite. If not, see <h
     margin-bottom: 0;
 }
 
+.form-header() {
+    font-weight: 400;
+    font-size: 1.08em;
+    text-transform: none;
+}
+
+.form-header-bold() {
+    .form-header();
+    font-weight: 600;
+}
+
 // Common styling of forms and inputs, should preferably be moved to concerned component to easily be maintained 
 label {
     .default-label-for-input()
@@ -94,6 +105,10 @@ label {
             font-size: 95%;
             color: darken(@errorColor, 5%);
         }
+    }
+
+    &.no-margin {
+        margin: 0;
     }
 }
 

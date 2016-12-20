@@ -1,6 +1,11 @@
 <div class="menuTextItem wrapper">
 	<div class="item">
-    {{'common.source_upper_case' | i18n}} : <b id="menu-bar-vessel-source">{{ngModel.source.substr(0, 1)}}{{ngModel.source.substr(1).toLowerCase()}}</b>
+	    <span class="menu-bar-header">
+	    	{{'common.source_upper_case' | i18n}} :
+	    </span> 
+	    <span class="menu-bar-header bold">
+	    	{{ngModel.source.substr(0, 1)}}{{ngModel.source.substr(1).toLowerCase()}}
+	    </span>
     </div>
     <div class="actions">
         <div>
