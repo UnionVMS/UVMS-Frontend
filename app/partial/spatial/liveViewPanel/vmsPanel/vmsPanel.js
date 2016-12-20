@@ -198,9 +198,6 @@ angular.module('unionvmsWeb').controller('VmspanelCtrl',function($scope, locale,
            mapService.highlightFeature(trackGeom);
        }
        
-       //TODO check if layer is visible, if not activate it
-       
-       
        angular.element('.vmspanel-modal').addClass('collapsed');
        $scope.modalCollapsed = true;
        mapService.zoomTo(geom);
