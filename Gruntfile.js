@@ -145,7 +145,7 @@ module.exports = function (grunt) {
     },
     watch: {
       options: {
-          livereload: true,
+          livereload: false,
           livereloadOnError: false,
           spawn: false
       },
@@ -345,7 +345,7 @@ module.exports = function (grunt) {
     },
     cssmin: {
       main: {
-        src:['temp/app.css','<%= dom_munger.data.appcss %>'],
+        src:['app/app.css','<%= dom_munger.data.appcss %>'],
         dest:'dist/app.full.min.css'
       }
     },
