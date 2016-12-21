@@ -1,44 +1,34 @@
 <div class="trip-overview-panel">
-	<fieldset class="col-md-12 fieldsetStyle">
+	<fieldset class="fieldsetStyle">
 		<legend class="fieldsetLegendStyle">
 			<a>{{'activity.fishing_trip' | i18n }}</a>
 		</legend>
-		<div class=" row col-md-12">
-			<div class="col-md-2">
-				<div class="row">
+		<div class="row trip-overview-container">
+			<div class="field-format">
 				<span>{{'activity.trip_id' | i18n }}:</span>
 				<span>{{trip.tripID}}</span>
-				</div>
-			</div>
-			<div class="col-md-2">
-				<div class="row">
+            </div>
+			<div class="field-width">
 				<i class="fa fa-ship"></i> <span>{{trip.vesselName}}</span>
-                </div>
 			</div>
-			<div class="col-md-3">
-				<div class="row">
-				<span>{{'activity.trip_departure' | i18n }}:</span>
-                <span>{{ trip.departure | stDateUtc }}</span>
+			<div class="field-format">
+                <span>{{'activity.trip_departure' | i18n }}:</span>
+				<span>{{ trip.departure | stDateUtc }}</span>
 				<span>{{'activity.catch_details_trip_overview_at' | i18n }}:</span>
 				<span ng-repeat="location in trip.departureAt ">{{location}} </span>
-				</div>
             </div>
-			<div class="col-md-3">
-				<div class="row">
-				<span>{{'activity.trip_arrival' | i18n }}:</span>
-                <span>{{ trip.arrival | stDateUtc }}</span>
+			<div class="field-format">
+            	<span>{{'activity.trip_arrival' | i18n }}:</span>
+				<span>{{ trip.arrival | stDateUtc }}</span>
 				<span>{{'activity.catch_details_trip_overview_at' | i18n }}:</span>
-                <span ng-repeat="location in trip.arrivalAt">{{location}} </span>
-				</div>
-			</div>
-			<div class="col-md-2">
-				<div class="row">
-				<span>{{'activity.trip_landing' | i18n }}:</span>
-                <span> {{ trip.landing | stDateUtc }}</span>
+				<span ng-repeat="location in trip.arrivalAt">{{location}} </span>
+            </div>
+			<div class="field-format">
+            	<span>{{'activity.trip_landing' | i18n }}:</span>
+				<span> {{ trip.landing | stDateUtc }}</span>
 				<span>{{'activity.catch_details_trip_overview_at' | i18n }}:</span>
 				<span ng-repeat="location in trip.landingAt">{{location}} </span>
-                </div>
-			</div>
+            </div>
 		</div>
 	</fieldset>
 </div>

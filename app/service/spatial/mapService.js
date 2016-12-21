@@ -342,6 +342,9 @@ angular.module('unionvmsWeb').factory('mapService', function(locale, $rootScope,
             case 'alarms':
                 layer = ms.createAlarmsLayer( config );
                 break;
+            case 'ers':
+                layer = ms.createActivityLayer( config );
+                break;
             default:
         }
 
@@ -454,6 +457,42 @@ angular.module('unionvmsWeb').factory('mapService', function(locale, $rootScope,
             style: ms.setAlarmsStyle 
         });
         
+        return( layer );
+    };
+    
+    /**
+     * Create fishing activities layer
+     * 
+     * @memberof mapService
+     * @public
+     * @alias createActivityLayer
+     * @param {Object} config - The configuration object for the fishing activities map layer
+     * @returns {ol.layer.Vector} The fishing activities vector layer
+     */
+    ms.createActivityLayer = function( config ){
+        var attribution = new ol.Attribution({
+            html: locale.getString('spatial.activities_copyright')
+        });
+        
+        var features = (new ol.format.GeoJSON()).readFeatures(config.geoJson, {
+            dataProjection: 'EPSG:4326',
+            featureProjection: ms.getMapProjectionCode()
+        });
+        
+        var source = new ol.source.Vector({
+            attributions: [attribution],
+            features: features
+        });
+        
+        var layer = new ol.layer.Vector({
+            title: config.title,
+            type: config.type,
+            longAttribution: config.longAttribution,
+            isBaseLayer: false,
+            source: source,
+            style: ms.setActivitiesStyle
+        });
+      
         return( layer );
     };
 
@@ -1568,7 +1607,7 @@ angular.module('unionvmsWeb').factory('mapService', function(locale, $rootScope,
     };
     
     /**
-     * 
+     * Set the style for the alarms layer
      * 
      * @memberof mapService
      * @public
@@ -1583,6 +1622,33 @@ angular.module('unionvmsWeb').factory('mapService', function(locale, $rootScope,
                 radius: 2 * ms.styles.alarms.size,
                 fill: new ol.style.Fill({
                     color: color
+                }),
+                stroke: new ol.style.Stroke({
+                    color: 'white',
+                    width: 2
+                })
+            })
+        });
+        
+        return [style];
+    };
+    
+    /**
+     * Set the style for the fishing activities layer
+     * 
+     * @memberof mapService
+     * @public
+     * @alias setActivitiesStyle
+     * @param {ol.Feature} The OL feature to style
+     * @returns {Array<ol.style.Style>} An array with all styles to be applied
+     */
+    ms.setActivitiesStyle = function(feature, resolution){
+        //FIXME the styles should be dynamic after implementing user preferences
+        var style = new ol.style.Style({
+            image: new ol.style.Circle({
+                radius: 6,
+                fill: new ol.style.Fill({
+                    color: '#078dbe'
                 }),
                 stroke: new ol.style.Stroke({
                     color: 'white',

@@ -14,12 +14,45 @@ copy of the GNU General Public License along with the IFDM Suite. If not, see <h
     .spatial-error {
         padding: 5px 0 5px 0;
     }
+    .btn-trip-quit,
+    .btn-print {
+        position: absolute;
+        z-index: 1;
+    }   
     .btn-trip-quit {
-        top: -30px;
         right: -25px;
+        top: 6px;
+        color:red;
+        font-size: 20px;
     }
     .btn-print {
-        right: -23px;
-        top: 10px;
+        right: -24px;
+        top: 37px;
+        font-size: 18px;
+    }
+    .activity-summary-row {
+        position: relative;
+        .btn-detail-form,
+        .btn-trip-evolution {
+            position: absolute;
+            font-size: 18px;
+            right: -8px;
+        }
+        .btn-detail-form {
+            top: 15px;
+        }
+        .btn-trip-evolution {
+            top: 45px;
+            right: -10px;
+        }
+        .catch-section {
+            .catch-details-body {
+                .chart-title {
+                    span.panel-subtitle {
+                        font-size: 22px;
+                    }
+                }
+            }
+        }
     }
 }

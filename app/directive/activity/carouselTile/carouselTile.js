@@ -31,7 +31,11 @@ angular.module('unionvmsWeb').directive('carouselTile', function() {
 		},
 		templateUrl: 'directive/activity/carouselTile/carouselTile.html',
 		link: function(scope, element, attrs, fn) {
-		    scope.init();
+            scope.$watch('ngModel',function(newVal){
+                if(newVal){
+                    scope.init();
+                }
+            });
 		}
 	};
 })

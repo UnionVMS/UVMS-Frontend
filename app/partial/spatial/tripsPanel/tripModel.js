@@ -261,8 +261,7 @@ angular.module('unionvmsWeb').factory('Trip',function(locale,unitConversionServi
 		delete self.tripVessel.contactPersons;
 
 		angular.forEach(data.contactPersons,function(value, key) {
-			value.code = value.id = key;
-			value.text = value.title + ' ' + value.givenName + ' ' + value.middleName + ' ' + value.familyName;
+			value.type = value.title + ' ' + value.givenName + ' ' + value.middleName + ' ' + value.familyName;
 		});
 		self.tripRoles = data.contactPersons;
 	};
@@ -296,7 +295,10 @@ angular.module('unionvmsWeb').factory('Trip',function(locale,unitConversionServi
      */
     var loadCatch = function(self,data){
 
-        angular.forEach(data, function(type){
+        angular.forEach(data, function(type,typeName){
+            type.title = locale.getString('activity.catch_panel_title_' + typeName);
+            type.caption = locale.getString('activity.catch_panel_caption_' + typeName) + ' ' + type.total + ' kg';
+
             if(angular.isDefined(type.speciesList) && type.speciesList.length > 0){
                 var colors = palette('tol-rainbow', type.speciesList.length);
                 angular.forEach(type.speciesList, function(value,key){

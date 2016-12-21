@@ -9,7 +9,7 @@ the hope that it will be useful, but WITHOUT ANY WARRANTY; without even the impl
 FITNESS FOR A PARTICULAR PURPOSE.  See the GNU General Public License for more details. You should have received a
 copy of the GNU General Public License along with the IFDM Suite. If not, see <http://www.gnu.org/licenses/>.
 */
-angular.module('unionvmsWeb').controller('VmspanelCtrl',function($scope, locale, globalSettingsService, reportService, mapService, csvWKTService, unitConversionService, visibilityService, userService, tripSummaryService){
+angular.module('unionvmsWeb').controller('VmspanelCtrl',function($scope, locale, globalSettingsService, reportService, mapService, csvWKTService, unitConversionService, visibilityService, userService, tripSummaryService, layerPanelService){
     $scope.selectedVmsTab = 'MOVEMENTS';
     $scope.isPosFilterVisible = false;
     $scope.isSegFilterVisible = false;
@@ -178,14 +178,19 @@ angular.module('unionvmsWeb').controller('VmspanelCtrl',function($scope, locale,
        } else if (geomType === 'SEGMENT'){
            geom = new ol.geom.LineString($scope.displayedSegments[index].geometry.coordinates);
            geom.set('GeometryType', 'LineString');
-       } else {
+       } else if (geomType === 'TRACK') {
            geom = new ol.geom.Polygon.fromExtent($scope.displayedTracks[index].extent);
+       } else if (geomType === 'TRIP') {
+           var format = new ol.format.WKT();
+           geom = format.readFeature($scope.displayedTrips[index].multipointWkt).getGeometry();
+           geom.set('GeometryType', 'Point');
        }
        
        if (geomType !== 'ALARM'){
            geom.transform('EPSG:4326', mapService.getMapProjectionCode());
        }
        
+       $scope.activateLayer(geomType);
        if (geomType !== 'TRACK'){
            mapService.highlightFeature(geom);
        } else {
@@ -196,6 +201,21 @@ angular.module('unionvmsWeb').controller('VmspanelCtrl',function($scope, locale,
        angular.element('.vmspanel-modal').addClass('collapsed');
        $scope.modalCollapsed = true;
        mapService.zoomTo(geom);
+   };
+   
+   $scope.activateLayer = function(lyrType){
+       var layerNames = {
+           POSITION: 'vmspos',
+           SEGMENT: 'vmsseg',
+           TRACK: 'vmsseg',
+           ALARM: 'alarms',
+           TRIP: 'ers'
+       };
+       
+       var layer = mapService.getLayerByType(layerNames[lyrType]);
+       if (angular.isDefined(layer) && layer.get('visible') === false){
+           layerPanelService.toggleCheckNode(layerNames[lyrType], true);
+       }
    };
    
    $scope.panTo = function(index, geomType){
@@ -213,7 +233,7 @@ angular.module('unionvmsWeb').controller('VmspanelCtrl',function($scope, locale,
            geom.transform('EPSG:4326', mapService.getMapProjectionCode());
            geom.set('GeometryType', 'LineString');
            coords = mapService.getMiddlePoint(geom);
-       } else{
+       } else if (geomType === 'TRACK'){
            coords = ol.proj.transform($scope.displayedTracks[index].nearestPoint, 'EPSG:4326', mapService.getMapProjectionCode());
            var polyExtent = new ol.geom.Polygon.fromExtent($scope.displayedTracks[index].extent);
            polyExtent.transform('EPSG:4326', mapService.getMapProjectionCode());
@@ -221,6 +241,7 @@ angular.module('unionvmsWeb').controller('VmspanelCtrl',function($scope, locale,
            geom.set('GeometryType', 'MultiLineString');
        }
        
+       $scope.activateLayer(geomType);
        if (geomType !== 'TRACK'){
            mapService.highlightFeature(geom);
        } else {
@@ -627,5 +648,11 @@ angular.module('unionvmsWeb').controller('VmspanelCtrl',function($scope, locale,
        $scope.tripSummServ.withMap = $scope.repNav.isViewVisible('mapPanel');
        $scope.tripSummServ.openNewTrip(tripName);
        $scope.repNav.goToView('tripsPanel','tripSummary');
+   };
+
+   $scope.dropSuccess = function(e, item, collection){
+       console.log(e);
+       console.log(item);
+       console.log(collection);
    };
 });
