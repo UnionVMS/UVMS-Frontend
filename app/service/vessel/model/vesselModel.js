@@ -22,6 +22,7 @@ angular.module('unionvmsWeb')
         this.contact = [];
         this.producer = {
             id : undefined,
+            code : undefined,
             name : undefined,
             address : undefined,
             zipcode : undefined,
@@ -84,6 +85,7 @@ angular.module('unionvmsWeb')
 
         if(data.producer){
             vessel.producer.id = data.producer.id;
+            vessel.producer.code = data.producer.code;
             vessel.producer.name = data.producer.name;
             vessel.producer.address = data.producer.address;
             vessel.producer.zipcode = data.producer.zipcode;
@@ -193,6 +195,7 @@ angular.module('unionvmsWeb')
         if(this.producer){
             copy.producer = {
                 id : this.producer.id,
+                code : this.producer.code,
                 name : this.producer.name,
                 address : this.producer.address,
                 zipcode : this.producer.zipcode,
