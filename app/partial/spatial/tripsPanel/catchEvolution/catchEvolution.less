@@ -9,31 +9,25 @@ the hope that it will be useful, but WITHOUT ANY WARRANTY; without even the impl
 FITNESS FOR A PARTICULAR PURPOSE.  See the GNU General Public License for more details. You should have received a
 copy of the GNU General Public License along with the IFDM Suite. If not, see <http://www.gnu.org/licenses/>.
 */
-.trip-overview-panel {
-    .fieldsetStyle{
-        padding: 0;
-        padding-bottom: 10px;
-        margin: 0; 
-        .fieldsetLegendStyle {
-            margin: 0 0 10px 10px;
+.catch-evolution{
+    .btn-trip-quit {
+        z-index: 1;
+        right: 28px;
+        top: 31px;
+    }   
+    .catch-evolution-container{
+        margin-top: -10px;
+        padding-left: 0;
+        padding-right: 30px;
+        overflow-y: auto;
+        height: calc(~"100vh - 160px");
+        .chart-panel{
+            padding-bottom: 10px;
+            border-bottom: 1px solid #ddd;
+            margin-top: 15px;
+        }
+        .chart-panel-table{
+           margin: 10px 0 0 0; 
         }
     }
-    .trip-overview-container {
-        margin: 0;
-        padding: 0;
-        .field-format,
-        .field-width {
-            padding: 0 10px;
-            float:left;
-            word-break: break-all;
-        }
-        .field-format{
-            width: 21%;
-        }
-        .field-width {
-            width: 16%;
-        }
-             
-    }
-    
 }

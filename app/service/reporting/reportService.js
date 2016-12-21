@@ -24,6 +24,7 @@ angular.module('unionvmsWeb').factory('reportService',function($rootScope, $time
        tracks: [],
        alarms: [],
        trips: [],
+       activities: [],
        refresh: {
             status: false,
             rate: undefined
@@ -41,6 +42,7 @@ angular.module('unionvmsWeb').factory('reportService',function($rootScope, $time
         rep.tracks = [];
         rep.alarms = [];
         rep.trips = [];
+        rep.activities = [];
     };
     
     rep.resetReport = function(){
@@ -325,12 +327,22 @@ angular.module('unionvmsWeb').factory('reportService',function($rootScope, $time
 	var getVmsDataSuccess = function(data){
 		rep.loadReportHistory();
 
-        data.trips = [{name: 'NOR-TRP-20160517234053706'},{name: 'NOR-TRP-20160517234053707'},{name: 'NOR-TRP-20160517234053708'}];
+//        var trip = {
+//            tripId: 'NOR-TRP-2016051723405370',
+//            event: 'Arrival: 03-05-2016 14:20',
+//            vesselId: 'vessel-guid-54515-16445',
+//            duration: '5d 6h 30m',
+//            nCorrections: 8,
+//            nPositions: 20,
+//            alarm: true,
+//            extent: [17.149, 60.745, 18.174, 61.257]
+//        };
 
 		rep.positions = data.movements.features;
         rep.segments = data.segments.features;
         rep.tracks = data.tracks;
         rep.trips = data.trips;
+        rep.activities = data.activities.features;
         
         //Update map if the report contains the map tab
         if (reportingNavigatorService.isViewVisible('mapPanel')){

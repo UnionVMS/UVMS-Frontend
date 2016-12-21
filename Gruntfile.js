@@ -59,7 +59,7 @@ module.exports = function (grunt) {
           // Internal rewrite
           {from: 'app/config.json', to: 'environment/local.json'}
       ],
-       proxies:grunt.file.exists('proxies.yaml')?grunt.file.readYAML('proxies.yaml'):{
+       proxies:grunt.file.exists('proxies.yaml')?grunt.file.readYAML('proxies.yaml'):[{
                 context: [
                   '/asset/rest',
                   '/mobileterminal/rest/',
@@ -79,7 +79,11 @@ module.exports = function (grunt) {
                   '/activity/rest'],
               host: 'localhost',
               port: 8080
-        },
+        },{
+            context: '/mock/',
+            host: 'localhost',
+            port: 8081
+        }],
 
       development: {
           options: {
@@ -141,7 +145,7 @@ module.exports = function (grunt) {
     },
     watch: {
       options: {
-          livereload: false,
+          livereload: true,
           livereloadOnError: false,
           spawn: false
       },
@@ -341,7 +345,7 @@ module.exports = function (grunt) {
     },
     cssmin: {
       main: {
-        src:['app/app.css','<%= dom_munger.data.appcss %>'],
+        src:['temp/app.css','<%= dom_munger.data.appcss %>'],
         dest:'dist/app.full.min.css'
       }
     },
@@ -556,11 +560,11 @@ module.exports = function (grunt) {
   grunt.registerTask('sub-build',['parallel:sub-build']);//,'clean:after'
 
   grunt.registerTask('build', ['test', 'ngconstant:production', 'clean:before', 'copy:config', 'sub-build']);
-  grunt.registerTask('build-test', ['test', 'ngconstant:development', 'clean:before', 'copy:configTest','sub-build']);
-  grunt.registerTask('build-local', ['test', 'ngconstant:development', 'clean:before', 'copy:configLocal', 'test', 'sub-build']);
-  grunt.registerTask('build-cygnus', ['test', 'ngconstant:development', 'clean:before', 'copy:configCygnus', 'sub-build']);
-  grunt.registerTask('build-maven', ['test', 'ngconstant:development', 'clean:before', 'copy:configMaven', 'sub-build']);
-  grunt.registerTask('build-dev', ['test', 'ngconstant:development', 'clean:before', 'copy:configDev','sub-build']);
+  grunt.registerTask('build-local', ['ngconstant:development', 'test', 'clean:before', 'copy:configLocal', 'test', 'sub-build']);
+  grunt.registerTask('build-cygnus', ['ngconstant:development', 'test', 'clean:before', 'copy:configCygnus', 'sub-build']);
+  grunt.registerTask('build-maven', ['ngconstant:development', 'test', 'clean:before', 'copy:configMaven', 'sub-build']);
+  grunt.registerTask('build-dev', ['ngconstant:development', 'test', 'clean:before', 'copy:configDev','sub-build']);
+  grunt.registerTask('build-test', ['ngconstant:development', 'test', 'clean:before', 'copy:configTest','sub-build']);
   grunt.registerTask('test',['ngconstant:development', 'dom_munger:read', 'ngtemplates', 'karma:services', 'karma:controllers', 'karma:directives', 'karma:filters', 'clean:after']);
 
   grunt.registerTask('default',['build-dev']);

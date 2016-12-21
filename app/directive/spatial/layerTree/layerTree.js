@@ -29,9 +29,11 @@ angular.module('unionvmsWeb').directive('layerTree', function($q, $modal, mapSer
 			var beforeSelectHandler = function( event, data ) {
 			    var nodeTypes = ['vmspos-source', 'vmspos', 'vmsdata'];
 			    if (_.indexOf(nodeTypes, data.node.data.type) !== -1){
-			        scope.$apply(function(){
-			            loadingStatus.isLoading('LiveviewMap', true, 3);
-			        });
+			        if (!scope.$$phase){
+			            scope.$apply(function(){
+	                        loadingStatus.isLoading('LiveviewMap', true, 3);
+	                    });
+			        }
 			    }
 			    
 				var selected = scope.$tree.getSelectedNodes(),
@@ -465,7 +467,6 @@ angular.module('unionvmsWeb').directive('layerTree', function($q, $modal, mapSer
                     mapLayers = mapService.map.getLayers().getArray();
                     addLayers( source );
 					layerPanelService.reloadPanels();
-                    //scope.$parent.$broadcast('reloadLegend');
                 }
 			};
 
@@ -515,7 +516,7 @@ angular.module('unionvmsWeb').directive('layerTree', function($q, $modal, mapSer
 
 					mapService.map.removeLayer( layer );// remove to have it reordered
 					layer.set( 'visible', value.selected );// don't request tiles if not selected
-					if (layer.get('type') === 'vmsseg'){
+					if (layer.get('type') === 'ers' || (layer.get('type') === 'vmsseg' && !angular.isDefined(mapService.getLayerByType('ers')))){
 					    //Add feature highlight layer before the vms segments and positions
 					    var highlightLayer = mapService.getLayerByType('highlight');
 					    if (angular.isDefined(highlightLayer)){
@@ -579,10 +580,13 @@ angular.module('unionvmsWeb').directive('layerTree', function($q, $modal, mapSer
 				scope.$tree.reload( source );
 				updateMap();
 			};
-
-			layerPanelService.addLayerTreeNode = function(node) {
+			
+			//nodes is an array
+			layerPanelService.addLayerTreeNode = function(nodes) {
 				var root = scope.$tree.getRootNode();
-				root.addChildren(node, scope.$tree.getFirstChild());
+				for (var i = nodes.length - 1; i > -1; i--){
+				    root.addChildren(nodes[i], scope.$tree.getFirstChild());
+				}
 				updateMap();
 			};
 
@@ -599,6 +603,18 @@ angular.module('unionvmsWeb').directive('layerTree', function($q, $modal, mapSer
 					    root.removeChild(target[i]);
 					}
 				});
+			};
+			
+			layerPanelService.toggleCheckNode = function(type, status){
+			    var root = scope.$tree.getRootNode();
+			    var node = root.findAll(function(node){
+			        if (node.data.type === type){
+			            return node;
+			        }
+			    });
+			    if (node.length === 1){
+			        node[0].setSelected(status);
+			    }
 			};
 
 			//Get layer index in the ol layers collection
