@@ -160,7 +160,12 @@ angular.module('unionvmsWeb').controller('CatchdetailsCtrl', function($scope, ac
             difference: 2
         };
 
-        $scope.fishingTripDetails = activityRestService.getTripCatchDetail('1234');
+        //FIXME change with proper trip id
+        activityRestService.getTripCatchDetail('1234').then(function(response){
+            $scope.fishingTripDetails = response;  
+        }, function(error){
+            //TODO deal with error from service
+        });
         $scope.tables = activityRestService.getTripCatchesLandingDetails('1234');
 
         var newItems = [];

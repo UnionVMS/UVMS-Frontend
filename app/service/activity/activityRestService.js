@@ -95,19 +95,14 @@ angular.module('unionvmsWeb').factory('activityRestFactory', function ($resource
             });
         },
         getTripCatchDetail: function () {
-            return {
-
-                "tripID": "BEL-TRP-O16-2016_0021",
-                "vesselName": "Beagle(BEL123456789)",
-                "departure": "2016-10-21T08:28:21",
-                "departureAt": ["BEZEE"],
-                "arrival": "2016-10-21T08:28:21",
-                "arrivalAt": ["BEOST"],
-                "landing": "2016-10-21T08:28:21",
-                "landingAt": ["BEOST"]
-
-            };
-
+            return $resource('/mock/activity/catchdetails/:id', {}, {
+                'get': {
+                    method: 'GET',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    }
+                }
+            });
         },
         getTripCatchesLandingDetails: function () {
 
@@ -585,7 +580,14 @@ angular.module('unionvmsWeb').factory('activityRestFactory', function ($resource
              * @returns {Promise} A promise with either the trip catch details or reject error
              */
             getTripCatchDetail: function (id) {
-                return activityRestFactory.getTripCatchDetail();
+                var deferred = $q.defer();
+                activityRestFactory.getTripCatchDetail().get({ id: id }, function (response) {
+                    deferred.resolve(response.data);
+                }, function (error) {
+                    deferred.reject(error);
+                });
+                return deferred.promise;
+                //return activityRestFactory.getTripCatchDetail();
 
             },
             /**

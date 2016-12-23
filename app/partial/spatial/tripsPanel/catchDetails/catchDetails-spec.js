@@ -296,14 +296,21 @@ describe('CatchdetailsCtrl', function () {
 
 
     function buildMocks() {
-        activityRestServiceSpy.getTripCatchDetail.andCallFake(function (test) {
-            return getTripCatchDetail();
+        activityRestServiceSpy.getTripCatchDetail.andCallFake(function () {
+            return {
+                then: function(callback){
+                    return callback(getTripCatchDetail);
+                }
+            }
         });
         activityRestServiceSpy.getTripCatchesLandingDetails.andCallFake(function (test) {
+//            return {
+//                then: function(callback){
+//                    return callback(getTripCatchesLandingDetails);
+//                }
+//            }
             return getTripCatchesLandingDetails();
         });
-
-
     }
 
 

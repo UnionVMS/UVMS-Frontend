@@ -199,8 +199,8 @@ angular.module('unionvmsWeb').directive('imageOnLoad', function(){
 		        return [{
 		            //title: locale.getString('spatial.legend_panel_alarms_' + keys[i]),
                     color: {"color": '#078dbe'}
-		        }]
-		    }
+		        }];
+		    };
 		    
 		    
 		    //Get styles definition for both positions and segments as type

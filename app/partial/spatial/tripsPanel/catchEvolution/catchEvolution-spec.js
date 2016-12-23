@@ -37,8 +37,13 @@ describe('CatchevolutionCtrl', function() {
 
     function buildMocks() {
         activityRestServiceSpy.getTripCatchDetail.andCallFake(function() {
-            return getTripCatch();
+            return {
+                then: function(callback){
+                    return callback(getTripCatch);
+                }
+            }
         });
+        
         activityRestServiceSpy.getTripCatchesEvolution.andCallFake(function() {
             return getTripCatchesEvolution();
         });

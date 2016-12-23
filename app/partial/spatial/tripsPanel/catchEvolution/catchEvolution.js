@@ -29,7 +29,12 @@ angular.module('unionvmsWeb').controller('CatchevolutionCtrl', function($scope, 
        */
     var init = function() {
         // get fishing trip details.
-        $scope.fishingTripDetails = activityRestService.getTripCatchDetail('1234');
+        //FIXME change with proper trip id
+        activityRestService.getTripCatchDetail('1234').then(function(response){
+            $scope.fishingTripDetails = response;  
+        }, function(error){
+            //TODO deal with error from service
+        });
         // get Catches Evolution details.
         $scope.catchEvolutionData = activityRestService.getTripCatchesEvolution('1234');
 
