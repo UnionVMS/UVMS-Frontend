@@ -115,77 +115,14 @@ angular.module('unionvmsWeb').factory('activityRestFactory', function ($resource
             });
         },
         getTripCatchesEvolution: function () {
-            var dataItem = {
-                "onboard": {
-                    "speciesList": [{
-                        "speciesCode": "BEAGLE",
-                        "weight": 111
-                    }, {
-                        "speciesCode": "SEAFOOD",
-                        "weight": 111
-                    }, {
-                        "speciesCode": "SEAFOOD_2",
-                        "weight": 111
-                    }, {
-                        "speciesCode": "SEAFOOD_3",
-                        "weight": 111
-                    }, {
-                        "speciesCode": "BEAGLE",
-                        "weight": 111
-                    }],
-                    "total": 555
-                },
-                "cumulated": {
-                    "speciesList": [{
-                        "speciesCode": "BEAGLE",
-                        "weight": 111
-                    }, {
-                        "speciesCode": "SEAFOOD",
-                        "weight": 111
-                    }],
-                    "total": 222
+            return $resource('/mock/activity/tripcatchevolution/:id', {}, {
+                'get': {
+                    method: 'GET',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    }
                 }
-            };
-
-            var response = {};
-            response.catchProgress = [];
-
-            for(var i=0;i<8;i++){
-                response.catchProgress.push(dataItem);
-            }
-            response.finalCatch = {
-                "landed": {
-                    "speciesList": [{
-                        "speciesCode": "BEAGLE",
-                        "weight": 111
-                    }, {
-                        "speciesCode": "SEAFOOD",
-                        "weight": 111
-                    }, {
-                        "speciesCode": "SEAFOOD_2",
-                        "weight": 111
-                    }, {
-                        "speciesCode": "SEAFOOD_3",
-                        "weight": 111
-                    }, {
-                        "speciesCode": "BEAGLE",
-                        "weight": 111
-                    }],
-                    "total": 555
-                },
-                "cumulated": {
-                    "speciesList": [{
-                        "speciesCode": "BEAGLE",
-                        "weight": 111
-                    }, {
-                        "speciesCode": "SEAFOOD",
-                        "weight": 111
-                    }],
-                    "total": 222
-                }
-            };
-
-            return response;
+            });
         }
 
     };
@@ -384,7 +321,13 @@ angular.module('unionvmsWeb').factory('activityRestFactory', function ($resource
              * @returns {Promise} A promise with either the trip catch details or reject error
              */
             getTripCatchesEvolution: function (id) {
-                return activityRestFactory.getTripCatchesEvolution();
+                var deferred = $q.defer();
+                activityRestFactory.getTripCatchesEvolution().get({ id: id }, function (response) {
+                    deferred.resolve(response.data);
+                }, function (error) {
+                    deferred.reject(error);
+                });
+                return deferred.promise;
 
             }
 

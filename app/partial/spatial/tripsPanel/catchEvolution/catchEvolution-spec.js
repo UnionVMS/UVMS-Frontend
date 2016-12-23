@@ -45,7 +45,11 @@ describe('CatchevolutionCtrl', function() {
         });
         
         activityRestServiceSpy.getTripCatchesEvolution.andCallFake(function() {
-            return getTripCatchesEvolution();
+            return {
+                then: function(callback){
+                    return callback(getTripCatchesEvolution());
+                }
+            }
         });
 
     }
