@@ -299,17 +299,16 @@ describe('CatchdetailsCtrl', function () {
         activityRestServiceSpy.getTripCatchDetail.andCallFake(function () {
             return {
                 then: function(callback){
-                    return callback(getTripCatchDetail);
+                    return callback(getTripCatchDetail());
                 }
             }
         });
         activityRestServiceSpy.getTripCatchesLandingDetails.andCallFake(function (test) {
-//            return {
-//                then: function(callback){
-//                    return callback(getTripCatchesLandingDetails);
-//                }
-//            }
-            return getTripCatchesLandingDetails();
+            return {
+                then: function(callback){
+                    return callback(getTripCatchesLandingDetails());
+                }
+            }
         });
     }
 
