@@ -462,6 +462,20 @@ angular.module('unionvmsWeb').controller('VesselFormCtrl',function($scope, $log,
         });
     };
 
+    // Clear form on Cancel
+    $scope.clearForm = function() {
+        $scope.mobileTerminals = [];
+
+        // Remove form errors
+        angular.forEach($scope.vesselForm, function(ctrl, name) {
+            if (name.indexOf('$') != 0) {    
+                angular.forEach(ctrl.$error, function(value, name) {
+                    ctrl.$setValidity(name, null);
+                });
+            }
+        });
+    };
+
     // Add new Mobile Terminal to Vessel
     $scope.toggleAddNewMobileTerminalForm = function(){
         toggleMobileTerminalForm(new MobileTerminal());
@@ -504,8 +518,8 @@ angular.module('unionvmsWeb').controller('VesselFormCtrl',function($scope, $log,
         },
         updateCallback: $scope.updateVessel,
         cancelCallback: function() {
+            $scope.clearForm();
             $scope.toggleViewVessel();
-            $scope.mobileTerminals = [];
         },
         showCancel: function() {
             return true;
