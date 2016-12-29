@@ -59,7 +59,7 @@ copy of the GNU General Public License along with the IFDM Suite. If not, see <h
                 </div>
 
                 <div class="col-md-6">
-                    {{'vessel.vessel_notes_ready_date' | i18n }}: <b>{{vesselNotes.readyDate | confDateFormat}}</b>
+                    {{'vessel.vessel_notes_ready_date' | i18n }}: <b>{{vesselNotes.readyDate | confDateFormat | vesselHistoryReplaceEmptyValueWithDash}}</b>
                 </div>
                 <div class="col-md-6">
                     {{'vessel.vessel_notes_sheet_number' | i18n }}: <b>{{vesselNotes.sheetNumber | vesselHistoryReplaceEmptyValueWithDash}}</b>
