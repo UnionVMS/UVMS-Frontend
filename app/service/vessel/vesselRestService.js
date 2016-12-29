@@ -177,8 +177,6 @@ angular.module('unionvmsWeb')
     };
 
     var updateVessel = function(vessel){
-        console.log("ABout to update vessel:");
-        console.log(vessel);
         var deferred = $q.defer();
         vesselRestFactory.vessel().update(vessel.DTO(), function(response) {
             if(response.code !== 200){
