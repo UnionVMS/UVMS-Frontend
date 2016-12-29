@@ -26,6 +26,7 @@ angular.module('unionvmsWeb').controller('VesselFormCtrl',function($scope, $log,
     //Watch for changes to the vesselObj
     $scope.$watch('getVesselObj()', function(newVal) {
         $scope.vesselObj = $scope.getVesselObj();
+        $scope.vesselForm.$setPristine();
         $scope.submitAttempted = false;
         $scope.vesselNotesObj = {};
         $scope.vesselObjOriginal = angular.copy($scope.vesselObj);
