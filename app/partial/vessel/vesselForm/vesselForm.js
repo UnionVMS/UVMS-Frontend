@@ -51,13 +51,15 @@ angular.module('unionvmsWeb').controller('VesselFormCtrl',function($scope, $log,
             } else {
                 $scope.noFormChange = false;
             }
-        }        
+        }       
     }, true);
 
     //Add notes to Vessel object when created 
     $scope.$watch('vesselNotesObj', function(newValue, oldValue){
-        $scope.addNotes();
-    }, true); 
+        if ($scope.vesselNotesObj.date && $scope.vesselNotesObj.activity) {
+            $scope.noFormChange = false;
+        }
+    }, true);
 
     //Has form submit been atempted?
     $scope.submitAttempted = false;
@@ -209,9 +211,11 @@ angular.module('unionvmsWeb').controller('VesselFormCtrl',function($scope, $log,
     //Create a new vessel
     $scope.createNewVessel = function(){
         $scope.submitAttempted = true;
-        $scope.updateContactItems();
 
         if($scope.vesselForm.$valid) {
+            $scope.updateContactItems();
+            $scope.addNotes();
+
             //Create new Vessel
             $scope.waitingForCreateResponse = true;
             alertService.hideMessage();
@@ -297,11 +301,12 @@ angular.module('unionvmsWeb').controller('VesselFormCtrl',function($scope, $log,
     //Update the Vessel
     $scope.updateVessel = function(){
         $scope.submitAttempted = true;
-        $scope.updateContactItems();
 
         if($scope.vesselForm.$valid) {
             //MobileTerminals remove them cuz they do not exist in backend yet.
             delete $scope.vesselObj.mobileTerminals;
+            $scope.updateContactItems();
+            $scope.addNotes();
 
             //Update Vessel and take care of the response(eg. the promise) when the update is done.
             $scope.waitingForCreateResponse = true;
