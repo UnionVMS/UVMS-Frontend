@@ -24,10 +24,8 @@ angular.module('unionvmsWeb').controller('VesselFormCtrl',function($scope, $log,
     };
 
     //Watch for changes to the vesselObj
-    //$scope.$watch(function () { return $scope.vesselObj;}, function (newVal, oldVal) {
     $scope.$watch('getVesselObj()', function(newVal) {
         $scope.vesselObj = $scope.getVesselObj();
-        $scope.vesselForm.$setPristine();
         $scope.submitAttempted = false;
         $scope.vesselNotesObj = {};
         $scope.vesselObjOriginal = angular.copy($scope.vesselObj);
@@ -514,12 +512,11 @@ angular.module('unionvmsWeb').controller('VesselFormCtrl',function($scope, $log,
             return false;
         },
         saveCallback: $scope.createNewVessel,
-        disableSave: function() {
-            if ($scope.noFormChange || $scope.vesselForm.$invalid) {
-                return true;
-            } else {
-                return false;
+        disableSave: function(vessel) {
+            if (vessel) {
+                return $scope.noFormChange || $scope.vesselForm.$invalid;
             }
+            return false;
         },
         updateCallback: $scope.updateVessel,
         cancelCallback: function() {
