@@ -174,6 +174,8 @@ angular.module('unionvmsWeb').controller('AuditlogCtrl', function($scope, $q, $f
                     return "/assets/" + audit.affectedObject;
                 case TYPES.ASSETS_AND_TERMINALS.POLL:
                     return "/polling/logs/" + audit.affectedObject;
+                case TYPES.ASSETS_AND_TERMINALS.POLLING_PROGRAM:
+                    return "/polling/logs/" + audit.affectedObject;
                 case TYPES.ALARMS.ALARM:
                     return "/alerts/holdingtable/" + audit.affectedObject;
                 case TYPES.ALARMS.TICKET:
