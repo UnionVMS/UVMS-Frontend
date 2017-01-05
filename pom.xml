@@ -2,7 +2,7 @@
     <modelVersion>4.0.0</modelVersion>
     <groupId>eu.europa.ec.fisheries.uvms</groupId>
     <artifactId>unionvms-web</artifactId>
-    <version>3.0.0-SNAPSHOT</version>
+    <version>3.0.1-SNAPSHOT</version>
     <name>unionvms-web</name>
     <packaging>war</packaging>
 
@@ -323,5 +323,6 @@
 
     <scm>
         <connection>scm:git:https://github.com/UnionVMS/UVMS-Frontend.git</connection>
-    </scm>
+      <tag>HEAD</tag>
+  </scm>
 </project>
