@@ -337,6 +337,18 @@ angular.module('unionvmsWeb').factory('searchService',function($q, $log, searchU
             return deferred.promise;
 		},
 
+        //Count number of vessels
+        searchNumberOfVessels : function(){
+            var deferred = $q.defer();
+            vesselRestService.getVesselListCount(getListRequest).then(function(countVessels){
+                deferred.resolve(countVessels);
+            }, function(error){
+                $log.error("Error counting vessels.", error);
+                deferred.reject(error);
+            });
+            return deferred.promise;
+        },
+
         //Do the search for polls
         searchPolls : function(){
             var origGetListRequest = getListRequest.copy();
