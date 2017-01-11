@@ -38,11 +38,17 @@ angular.module('unionvmsWeb')
         $scope.submitAttempted = false;
         $scope.formScope = undefined;
 
+        //Check if user is allowed to edit Mobile Terminals
         var checkAccessToFeature = function(feature) {
             return userService.isAllowed(feature, 'Union-VMS', true);
         };
 
+        //Init function
         var init = function(){
+
+            //Detect initial values of the Mobile Terminal object 
+            $scope.originalMobileTerminalValue = angular.copy($scope.mobileTerminal);
+
              //Get list transponder systems
             if(angular.isDefined(configurationService.getConfig('MOBILE_TERMINAL_TRANSPONDERS'))){
                 $scope.transpondersConfig = configurationService.getConfig('MOBILE_TERMINAL_TRANSPONDERS');
@@ -56,10 +62,21 @@ angular.module('unionvmsWeb')
             }
         };
 
+        //Watch for changes to the Mobile Terminal object compared to the initial object, maily to enable save button if changes has been made
+        $scope.$watch('mobileTerminal', function(newValue, oldValue){
+            if(angular.isDefined($scope.originalMobileTerminalValue)){
+                if (angular.equals(newValue.toJson(), $scope.originalMobileTerminalValue.toJson())) {
+                    $scope.disableSave = true;
+                } else {
+                    $scope.disableSave = false;
+                }
+            }
+        }, true);
+
         //Set form scope - To be able to validate form in FE
         $scope.setFormScope = function(scope){
            $scope.formScope = scope;
-        }
+        };
 
         //Set status - Disabled
         $scope.disableForm = function(){
@@ -202,7 +219,7 @@ angular.module('unionvmsWeb')
         var createNewMobileTerminalWithVesselSuccess = function(){
             $scope.callback.updateMobileTerminals();
             alertService.showSuccessMessage(locale.getString('mobileTerminal.add_new_alert_message_on_success'));
-        }
+        };
 
         //Create new Mobile Terminal With Vessel - Error
         var createNewMobileTerminalWithVesselError = function(error){
@@ -230,6 +247,8 @@ angular.module('unionvmsWeb')
 
         //Update Mobile Terminal - Success
         var updateMobileTerminalSuccess = function(updatedMobileTerminal){
+            $scope.disableSave = true;
+            $scope.originalMobileTerminalValue = angular.copy($scope.mobileTerminal);
             alertService.showSuccessMessageWithTimeout(locale.getString('mobileTerminal.update_alert_message_on_success'));
         };
 
@@ -376,11 +395,10 @@ angular.module('unionvmsWeb')
         $scope.menuBarFunctions = {
             saveCallback: $scope.createNewMobileTerminal,
             updateCallback: $scope.updateMobileTerminal,
-            disableUpdate: function() {
-                if ($scope.formScope.mobileTerminalForm.$dirty) {
-                    return false;
+            disableSave: function(mobileTerminal) {
+                if (mobileTerminal) {
+                    return $scope.disableSave;
                 }
-                return true;
             },
             cancelCallback: $scope.closeMobileTerminalForm,
             showCancel: function() {

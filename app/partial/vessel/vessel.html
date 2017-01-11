@@ -11,6 +11,13 @@ copy of the GNU General Public License along with the IFDM Suite. If not, see <h
 -->
 <div>
     <div class="container containerWithTopBottomPadding">
+        <div ng-show="isVisible.notificationCancelSearch" class="cancel-alert alert">
+            <div class="text">{{'vessel.cancel_search_notification' | i18n}}</div>
+            <button type="button" class="btn btn-default btn-sm cancel" ng-click="cancelSearch()">
+                <i class="fa fa-times"></i> {{'common.cancel' | i18n}}
+            </button>
+        </div>
+        
         <div class="getvessel" ng-show="isVisible.vesselForm">
             <div ng-include="'partial/vessel/vesselForm/vesselForm.html'"></div>
         </div>

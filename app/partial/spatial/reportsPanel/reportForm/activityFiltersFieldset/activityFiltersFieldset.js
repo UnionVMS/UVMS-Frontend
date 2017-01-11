@@ -30,15 +30,15 @@ angular.module('unionvmsWeb').controller('ActivityfiltersfieldsetCtrl',function(
     $scope.activityTypes = [{
         code: 'DEPARTURE', text: 'Departure'
     },{
-        code: 'ARRIVAL', text: 'ARRIVAL'
+        code: 'LANDING', text: 'Landing'
     },{
-        code: 'AREA_ENTRY', text: 'AREA_ENTRY'
+        code: 'ARRIVAL', text: 'Arrival'
     },{
-        code: 'AREA_EXIT', text: 'AREA_ENTRY'
+        code: 'FISHING_OPERATION', text: 'Fishing operation'
     }];
 
     //TODO replace the mocks when the REST service is ready
-    $scope.ports = [{
+    /*$scope.ports = [{
         code: 'PORT1', text: 'PORT1'
     },{
         code: 'PORT2', text: 'PORT2'
@@ -46,7 +46,7 @@ angular.module('unionvmsWeb').controller('ActivityfiltersfieldsetCtrl',function(
         code: 'PORT3', text: 'PORT3'
     },{
         code: 'PORT4', text: 'PORT4'
-    }];
+    }];*/
 
     //TODO replace the mocks when the REST service is ready
     $scope.gearTypes = [{
@@ -60,7 +60,7 @@ angular.module('unionvmsWeb').controller('ActivityfiltersfieldsetCtrl',function(
     }];
 
     //TODO replace the mocks when the REST service is ready
-    $scope.species = [{
+    /*$scope.species = [{
         code: 'SOL', text: 'SOL'
     },{
         code: 'COD', text: 'COD'
@@ -68,7 +68,7 @@ angular.module('unionvmsWeb').controller('ActivityfiltersfieldsetCtrl',function(
         code: 'LEM', text: 'LEM'
     },{
         code: 'TUR', text: 'TUR'
-    }];
+    }];*/
 
     //TODO replace the mocks when the REST service is ready
     $scope.weightUnits = [{

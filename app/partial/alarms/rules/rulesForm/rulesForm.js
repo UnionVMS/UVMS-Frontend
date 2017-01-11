@@ -349,22 +349,16 @@ angular.module('unionvmsWeb').controller('RulesformCtrl',function($scope, $timeo
     };
 
     function isAreaTypeDefinition(definition) {
-        return definition.criteria === 'AREA'
-            && (definition.subCriteria === 'AREA_TYPE'
-                || definition.subCriteria === 'AREA_TYPE_ENT'
-                || definition.subCriteria === 'AREA_TYPE_EXT');
+        return definition.criteria === 'AREA' && (definition.subCriteria === 'AREA_TYPE' || definition.subCriteria === 'AREA_TYPE_ENT' || definition.subCriteria === 'AREA_TYPE_EXT');
     }
 
     function isAreaCodeDefinition(definition) {
-        return definition.criteria === 'AREA'
-            && (definition.subCriteria === 'AREA_CODE'
-                || definition.subCriteria === 'AREA_CODE_ENT'
-                || definition.subCriteria === 'AREA_CODE_EXT');
+        return definition.criteria === 'AREA' && (definition.subCriteria === 'AREA_CODE' || definition.subCriteria === 'AREA_CODE_ENT' || definition.subCriteria === 'AREA_CODE_EXT');
     }
 
     function getSelectedAreaTypes() {
         var types = [];
-        if ($scope.currentRule != undefined && $scope.currentRule.definitions !== undefined) {
+        if ($scope.currentRule !== undefined && $scope.currentRule.definitions !== undefined) {
             angular.forEach($scope.currentRule.definitions, function(definition) {
                 if (isAreaTypeDefinition(definition) && types.indexOf(definition.value) < 0) {
                     types.push(definition.value);

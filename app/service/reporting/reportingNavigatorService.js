@@ -24,7 +24,8 @@ angular.module('unionvmsWeb').factory('reportingNavigatorService',function() {
 //        },
 //		  tripsPanel: {
 //            tripSummary : undefined,
-//	          catchDetails : undefined
+//	          catchDetails : undefined,
+//            catchEvolution : undefined 
 //        }
 //    }
     

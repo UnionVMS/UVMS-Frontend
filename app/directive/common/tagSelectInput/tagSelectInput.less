@@ -10,7 +10,7 @@ FITNESS FOR A PARTICULAR PURPOSE.  See the GNU General Public License for more d
 copy of the GNU General Public License along with the IFDM Suite. If not, see <http://www.gnu.org/licenses/>.
  */
 .tagSelectInputContainer{
-    @minHeight: 30px;
+    @minHeight: @form-input-height;
     @tagHeight: 22px;
 
     .tagSelectInputContainerWrapper{
@@ -44,14 +44,6 @@ copy of the GNU General Public License along with the IFDM Suite. If not, see <h
         border-radius: 2px;
         .flexbox();
         align-items: center;
-
-        .caretWrapper{
-            .caret{
-                position: absolute !important;
-                right: 10px !important;
-                top:13px !important;
-            }
-        }
     }
 
     .placeholderText,

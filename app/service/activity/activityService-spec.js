@@ -11,7 +11,7 @@ copy of the GNU General Public License along with the IFDM Suite. If not, see <h
 */
 describe('activityService', function() {
     var $q, actServ, mockActRestServ, mockVisServ;
-    var listSize = 25;
+    var pageSize = 25;
     
     beforeEach(module('unionvmsWeb'));
     
@@ -52,10 +52,8 @@ describe('activityService', function() {
             return {
                 then: function(callback){
                     callback({
-                        pagination:{
-                            totalPageCount: 10
-                        },
-                        resultList: ['activity1', 'activity2']
+                        resultList: ['activity1', 'activity2'],
+                        totalItemsCount: 10
                     })
                 }
             }
@@ -75,18 +73,18 @@ describe('activityService', function() {
             tableState: {
                 pagination: {
                     start: 0,
-                    number: listSize,
-                    numberOfPages: 10
+                    number: pageSize,
+                    numberOfPages: 1
                 }
             },
             pagination: {
-                page: 1,
-                listSize: listSize,
-                totalPageCount: 10
+                offset: 1,
+                pageSize: pageSize,
+                totalPages: 1
             },
-            sortKey: {
-                field: 'report',
-                order: 'ASC',
+            sorting: {
+                sortBy: 'report',
+                reversed: true,
             }
         };
     }
@@ -98,13 +96,13 @@ describe('activityService', function() {
             searchObject: {},
             tableState: undefined,
             pagination: {
-                page: 1,
-                listSize: listSize,
-                totalPageCount: undefined
+                offset: 1,
+                pageSize: pageSize,
+                totalPages: undefined
             },
-            sortKey: {
-                field: undefined,
-                order: undefined,
+            sorting: {
+                sortBy: undefined,
+                reversed: undefined,
             }
         };
         
@@ -130,20 +128,20 @@ describe('activityService', function() {
         expect(actServ.activities.length).toBe(2);
         
         var pag = {
-            page: 1,
-            listSize: 25,
-            totalPageCount: 10
+            offset: 1,
+            pageSize: 25,
+            totalPages: 1
         };
         expect(actServ.reportsList.pagination).toEqual(pag);
     });
     
-    it('should get activity lista and update number of pages', function(){
+    it('should get activity list and update number of pages', function(){
         buildMocks();
         spyOn(actServ, 'clearAttributeByType');
         
         actServ.reportsList.tableState = {
             pagination: {
-                number: listSize,
+                number: pageSize,
                 start: 0
             },
             search: {},
@@ -160,12 +158,12 @@ describe('activityService', function() {
         expect(actServ.activities.length).toBe(2);
         
         var pag = {
-            page: 1,
-            listSize: 25,
-            totalPageCount: 10
+            offset: 1,
+            pageSize: 25,
+            totalPages: 1
         };
         expect(actServ.reportsList.pagination).toEqual(pag);
-        expect(actServ.reportsList.tableState.pagination.numberOfPages).toEqual(actServ.reportsList.pagination.totalPageCount);
+        expect(actServ.reportsList.tableState.pagination.numberOfPages).toEqual(actServ.reportsList.pagination.totalPages);
     });
     
     it('should get activity list and execute callback function', function(){
@@ -179,7 +177,7 @@ describe('activityService', function() {
         
         var tblState = {
             pagination: {
-                number: listSize,
+                number: pageSize,
                 start: 0
             },
             search: {},
@@ -195,9 +193,9 @@ describe('activityService', function() {
         expect(actServ.activities.length).toBe(2);
         
         var pag = {
-            page: 1,
-            listSize: 25,
-            totalPageCount: 10
+            offset: 1,
+            pageSize: 25,
+            totalPages: 1
         };
         expect(actServ.reportsList.pagination).toEqual(pag);
         expect(callBackSpy).toHaveBeenCalledWith(tblState);
@@ -250,7 +248,7 @@ describe('activityService', function() {
         
         var expectedTableState = {
             start: 0,
-            number: listSize,
+            number: pageSize,
             numberOfPages: 1
         };
         expect(actServ.reportsList.tableState.pagination).toEqual(expectedTableState);
@@ -266,7 +264,7 @@ describe('activityService', function() {
         
         var expectedTableState = {
             start: 0,
-            number: listSize,
+            number: pageSize,
             numberOfPages: 1
         };
         expect(actServ.reportsList.tableState).not.toBeDefined();

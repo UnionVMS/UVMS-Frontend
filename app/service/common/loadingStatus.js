@@ -74,6 +74,11 @@ angular.module('unionvmsWeb').factory('loadingStatus',function() {
             value: false,
             counter: 0
 		},
+		CatchEvolution: {
+		    message: 'activity.catch_Evolution_loading',
+            value: false,
+            counter: 0
+		},
 		MdrSettings: {
 		    message: 'activity.mdr_settings_loading',
             value: false,

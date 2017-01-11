@@ -20,6 +20,7 @@ copy of the GNU General Public License along with the IFDM Suite. If not, see <h
     .channel-form {
         max-width: @max-width;
         background: @searchResultsTableOddRowColor;
+        margin-top: @row-margin;
         margin-bottom: @row-margin;
         padding: @row-margin / 2;
         margin-left: -@row-margin / 2;
@@ -43,6 +44,11 @@ copy of the GNU General Public License along with the IFDM Suite. If not, see <h
 
     .currentMobileTerminalTypes {
         width: 100%;
+    }
+
+    .form-header {
+        margin: 0 0 4px 0;
+        .form-header-bold();
     }
     
     .flexrow {
@@ -93,6 +99,7 @@ copy of the GNU General Public License along with the IFDM Suite. If not, see <h
 
         &.form-section-header {
             margin-bottom: 5px;
+            .form-header-bold();
         }
     }
 

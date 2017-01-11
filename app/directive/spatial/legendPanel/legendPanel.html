@@ -17,7 +17,7 @@
 				<span class="fa fa-minus fontMargin" ng-style="style.color"></span>
 				<span class="legend-labels">{{style.title}}</span>
 			</div>
-			<div ng-if="record.type === 'alarms'" ng-repeat="style in record.styles" ng-class="{'legend-bottom-space-vector': $last, 'legend-top-space-vector': $first}">
+			<div ng-if="record.type === 'alarms' || record.type === 'ers'" ng-repeat="style in record.styles" ng-class="{'legend-bottom-space-vector': $last, 'legend-top-space-vector': $first}">
 				<span class="fa fa-circle fontMargin" ng-style="style.color"></span>
 				<span class="legend-labels">{{style.title}}</span>
 			</div>

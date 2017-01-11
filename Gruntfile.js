@@ -53,13 +53,13 @@ module.exports = function (grunt) {
     connect: {
       options: {
         port: 9001,
-        keepalive: true
+        keepalive: false
       },
       rules: [
           // Internal rewrite
           {from: 'app/config.json', to: 'environment/local.json'}
       ],
-       proxies:grunt.file.exists('proxies.yaml')?grunt.file.readYAML('proxies.yaml'):{
+       proxies:grunt.file.exists('proxies.yaml')?grunt.file.readYAML('proxies.yaml'):[{
                 context: [
                   '/asset/rest',
                   '/mobileterminal/rest/',
@@ -79,7 +79,11 @@ module.exports = function (grunt) {
                   '/activity/rest'],
               host: 'localhost',
               port: 8080
-        },
+        },{
+            context: '/mock/',
+            host: 'localhost',
+            port: 8081
+        }],
 
       development: {
           options: {
@@ -140,14 +144,22 @@ module.exports = function (grunt) {
         }
     },
     watch: {
+      options: {
+          livereload: false,
+          livereloadOnError: false,
+          spawn: false
+      },
       main: {
-        options: {
-            livereload: false,
-            livereloadOnError: false,
-            spawn: false
-        },
-        files: [createFolderGlobs(['*.js','*.less','*.html']),'!_SpecRunner.html','!.grunt', '!app/assets/**/*.js'],
-        tasks: [] //all the tasks are run dynamically during the watch event handler
+          files: [createFolderGlobs(['*.js','*.html', '*.css']),'!_SpecRunner.html','!.grunt', '!app/assets/**/*.js'],
+          tasks: [], //all the tasks are run dynamically during the watch event handler
+      },
+      less: {
+          files: [createFolderGlobs('*.less')],
+          tasks: ['less'],
+          options: {
+              livereload: false,
+              spawn: true
+          }
       }
     },
     jshint: {
@@ -171,9 +183,12 @@ module.exports = function (grunt) {
     less: {
       production: {
         options: {
+          sourceMap: true,
+          sourceMapFilename: 'app/app.css.map',
+          sourceMapRootpath: '../'
         },
         files: {
-          'temp/app.css': 'app/app.less'
+          'app/app.css': 'app/app.less'
         }
       }
     },
@@ -330,7 +345,7 @@ module.exports = function (grunt) {
     },
     cssmin: {
       main: {
-        src:['temp/app.css','<%= dom_munger.data.appcss %>'],
+        src:['app/app.css','<%= dom_munger.data.appcss %>'],
         dest:'dist/app.full.min.css'
       }
     },
@@ -495,6 +510,29 @@ module.exports = function (grunt) {
           dest: '/'}]
       }
     },
+    parallel: {
+      options: {
+        stream: true
+      },
+      'sub-build': {
+        tasks: [{
+          grunt: true,
+          args: ['htmlhint','jshint']
+        }, {
+          grunt: true,
+          args: ['less','dom_munger','ngtemplates','cssmin','concat','ngAnnotate','uglify','copy:dist','htmlmin','compress:dist','clean:after']
+        }]
+      },
+      serve: {
+        tasks: [{
+          grunt: true,
+          args: ['htmlhint','jshint']
+        }, {
+          grunt: true,
+          args: ['serve-no-watch', 'watch', 'ngtemplates'],
+        }]
+      }
+    },
     ngconstant: {
       options: {
         name: 'debugConfig',
@@ -519,22 +557,24 @@ module.exports = function (grunt) {
     }
   });
   
-  grunt.registerTask('sub-build',['htmlhint','jshint', 'less','dom_munger','ngtemplates','cssmin','concat','ngAnnotate','uglify','copy:dist','htmlmin','compress:dist','clean:after']);//,'clean:after'
+  grunt.registerTask('sub-build',['parallel:sub-build']);//,'clean:after'
 
-  grunt.registerTask('build', ['ngconstant:production', 'test', 'clean:before', 'copy:config', 'sub-build']);
-  grunt.registerTask('build-test', ['ngconstant:development', 'test', 'clean:before', 'copy:configTest','sub-build']);
+  grunt.registerTask('build', ['test', 'ngconstant:production', 'clean:before', 'copy:config', 'sub-build']);
   grunt.registerTask('build-local', ['ngconstant:development', 'test', 'clean:before', 'copy:configLocal', 'test', 'sub-build']);
   grunt.registerTask('build-cygnus', ['ngconstant:development', 'test', 'clean:before', 'copy:configCygnus', 'sub-build']);
   grunt.registerTask('build-maven', ['ngconstant:development', 'test', 'clean:before', 'copy:configMaven', 'sub-build']);
   grunt.registerTask('build-dev', ['ngconstant:development', 'test', 'clean:before', 'copy:configDev','sub-build']);
-  grunt.registerTask('test',['dom_munger:read', 'ngtemplates', 'karma:services', 'karma:controllers', 'karma:directives', 'karma:filters', 'clean:after']);
+  grunt.registerTask('build-test', ['ngconstant:development', 'test', 'clean:before', 'copy:configTest','sub-build']);
+  grunt.registerTask('test',['ngconstant:development', 'dom_munger:read', 'ngtemplates', 'karma:services', 'karma:controllers', 'karma:directives', 'karma:filters', 'clean:after']);
 
   grunt.registerTask('default',['build-dev']);
-  grunt.registerTask('serve-no-watch', ['dom_munger:read','jshint', 'configureProxies', 'configureRewriteRules', 'connect:development']);
-  grunt.registerTask('serve', ['serve-no-watch', 'watch']);
+  
+  grunt.registerTask('serve-no-watch', ['less', 'dom_munger:read', 'configureProxies', 'configureRewriteRules', 'connect:development']);
+  grunt.registerTask('serve', ['parallel:serve']);
   grunt.registerTask('serve-debug', ['ngconstant:development','serve']);
   grunt.registerTask('serve-prod', ['ngconstant:production','serve']);
   grunt.registerTask('serve-copy', ['copy:serve', 'serve']);
+  
   grunt.registerTask('build-docs', ['jsdoc']);
   grunt.registerTask('constants', ['ngconstant:development']);
   

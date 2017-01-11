@@ -16,7 +16,7 @@ describe('TripsummaryCtrl', function() {
 	var scope,ctrl,loadingStatus,$anchorScroll,locale,actRestServSpy,tripSumSpy;
 	
 	beforeEach(function(){
-		actRestServSpy = jasmine.createSpyObj('activityRestService', ['getTripVessel','getTripReports']);
+		actRestServSpy = jasmine.createSpyObj('activityRestService', ['getTripVessel','getTripReports', 'getTripCatches']);
 		tripSumSpy = jasmine.createSpy('tripSummaryService');
 		
 		module(function($provide){
@@ -263,6 +263,70 @@ describe('TripsummaryCtrl', function() {
 			"code":200
 		};
 	}
+	
+	function getTripCatches (){
+	    return {
+	        "id": "NOR-TRP-20160517234053706",
+	        "tripVessel": {
+	            "name": "Test Name",
+	            "nameEnriched": false,
+	            "exMark": null,
+	            "exMarkEnriched": false,
+	            "flagState": "XEU",
+	            "flagStateEnriched": false,
+	            "ircs": null,
+	            "ircsEnriched": false,
+	            "cfr": "ID 1",
+	            "cfrEnriched": false,
+	            "uvi": null,
+	            "uviEnriched": false,
+	            "iccat": null,
+	            "iccatEnriched": false,
+	            "gfcm": null,
+	            "gfcmEnriched": false
+	        },
+	        "tripRoles": [{
+	            "isCaptain": true,
+	            "roles": ["MASTER"],
+	            "title": "MR",
+	            "givenName": "Test Name",
+	            "middleName": "Test Middle Name",
+	            "familyName": "Test Family Name",
+	            "familyNamePrefix": "Test Prefix",
+	            "nameSuffix": "Test Suffix",
+	            "gender": "Gender",
+	            "alias": "Test Alias",
+	            "adresses": [{
+	                "blockName": "Test Block",
+	                "buildingName": "Test Building",
+	                "cityName": "Test City",
+	                "citySubdivisionName": "Test city subdivision",
+	                "country": "Test Country",
+	                "countryName": "Test Country",
+	                "countrySubdivisionName": "Test country subdivision",
+	                "addressId": "ID type 1",
+	                "plotId": "123",
+	                "postOfficeBox": "548675",
+	                "postcode": "Post code 1",
+	                "streetname": "Test Street"
+	            }],
+	            "type": "MR Test Name Test Middle Name Test Family Name",
+	            "active": true
+	        }],
+	        "catchDetails": {
+	            "onboard": {
+	                "total": 0,
+	                "title": "On board",
+	                "caption": "Total catches: Live weight: 0 kg"
+	            },
+	            "landed": {
+	                "total": 0,
+	                "title": "Landed",
+	                "caption": "Total landed: Live weight equivalent: 0 kg"
+	            }
+	        }
+	    };
+	}
 
 	function buildMocks() {
 		actRestServSpy.getTripVessel.andCallFake(function(){
@@ -280,15 +344,23 @@ describe('TripsummaryCtrl', function() {
 				}
 			};
 		});
+		
+		actRestServSpy.getTripCatches.andCallFake(function(){
+		    return {
+		        then: function(callback){
+		            return callback(getTripCatches());
+		        }
+		    };
+		});
 	}
 
-	it('should ...', inject(function() {
-		scope.$digest();
+	it('should get all the necessary data for the trip summary', inject(function() {
 		scope.tripSummServ.isLoadingTrip = true;
 		scope.$digest();
-
+		
 		expect(actRestServSpy.getTripVessel).toHaveBeenCalled();
 		expect(actRestServSpy.getTripReports).toHaveBeenCalled();
+		expect(actRestServSpy.getTripCatches).toHaveBeenCalled();
 	}));
 
 });

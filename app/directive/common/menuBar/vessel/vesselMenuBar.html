@@ -1,5 +1,12 @@
-<div class="menuTextItem item">
-    {{'common.source_upper_case' | i18n}} : <b id="menu-bar-vessel-source">{{ngModel.source.substr(0, 1)}}{{ngModel.source.substr(1).toLowerCase()}}</b>
+<div class="menuTextItem wrapper">
+	<div class="item">
+	    <span class="menu-bar-header">
+	    	{{'common.source_upper_case' | i18n}} :
+	    </span> 
+	    <span class="menu-bar-header bold">
+	    	{{ngModel.source.substr(0, 1)}}{{ngModel.source.substr(1).toLowerCase()}}
+	    </span>
+    </div>
     <div class="actions">
         <div>
             <button show-if-allowed="manageMobileTerminals" class="btn btn-primary btn-add" ng-click="functions.addMobileTerminal()" id="menu-bar-vessel-add-terminal" ng-show="functions.showMobileTerminal(ngModel)" ng-disabled="functions.disableAddMobileTerminal(ngModel)"><i class="fa fa-plus"></i>{{'vessel.add_new_mobile_terminal' | i18n}}</button>

@@ -237,7 +237,7 @@ angular.module('unionvmsWeb').controller('HoldingtableCtrl',function($scope, $lo
                 $scope.currentSearchResults.setLoading(false);
                 $scope.currentSearchResults.setErrorMessage(locale.getString('common.search_failed_error'));
             });
-        }
+        };
         search(1);
     };
 
@@ -261,7 +261,7 @@ angular.module('unionvmsWeb').controller('HoldingtableCtrl',function($scope, $lo
                             alertService.showErrorMessage(locale.getString('alarms.holding_table_reprocess_reports_error_message'));
                         });
                     }
-                }
+                };
                 if ($scope.isAllChecked()) {
                     $scope.fetchAllItems(processItems);
                 } else {

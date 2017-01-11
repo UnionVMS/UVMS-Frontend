@@ -27,7 +27,7 @@ angular.module('unionvmsWeb').factory('activityRestFactory', function ($resource
                 }
             });
         },
-        getActivityList: function () {
+        getActivityList: function (data) {
             return $resource('/activity/rest/fa/list', {}, {
                 'get': {
                     method: 'POST',
@@ -37,7 +37,7 @@ angular.module('unionvmsWeb').factory('activityRestFactory', function ($resource
                 }
             });
         },
-        getReportHistory: function(){
+        getReportHistory: function () {
             return $resource('/activity/rest/fa/history/:referenceId/:schemeId', {}, {
                 'get': {
                     method: 'GET',
@@ -93,7 +93,8 @@ angular.module('unionvmsWeb').factory('activityRestFactory', function ($resource
                     }
                 }
             });
-        }, getTripCatchDetail: function () {
+        },
+        getTripCatchDetail: function () {
             return {
 
                 "tripID": "BEL-TRP-O16-2016_0021",
@@ -107,7 +108,8 @@ angular.module('unionvmsWeb').factory('activityRestFactory', function ($resource
 
             };
 
-        }, getTripCatchesLandingDetails: function () {
+        },
+        getTripCatchesLandingDetails: function () {
 
             return {
                 "difference": {
@@ -346,6 +348,79 @@ angular.module('unionvmsWeb').factory('activityRestFactory', function ($resource
                 }
             };
 
+        },
+        getTripCatchesEvolution: function () {
+            var dataItem = {
+                "onboard": {
+                    "speciesList": [{
+                        "speciesCode": "BEAGLE",
+                        "weight": 111
+                    }, {
+                        "speciesCode": "SEAFOOD",
+                        "weight": 111
+                    }, {
+                        "speciesCode": "SEAFOOD_2",
+                        "weight": 111
+                    }, {
+                        "speciesCode": "SEAFOOD_3",
+                        "weight": 111
+                    }, {
+                        "speciesCode": "BEAGLE",
+                        "weight": 111
+                    }],
+                    "total": 555
+                },
+                "cumulated": {
+                    "speciesList": [{
+                        "speciesCode": "BEAGLE",
+                        "weight": 111
+                    }, {
+                        "speciesCode": "SEAFOOD",
+                        "weight": 111
+                    }],
+                    "total": 222
+                }
+            };
+
+            var response = {};
+            response.catchProgress = [];
+
+            for(var i=0;i<8;i++){
+                response.catchProgress.push(dataItem);
+            }
+            response.finalCatch = {
+                "landed": {
+                    "speciesList": [{
+                        "speciesCode": "BEAGLE",
+                        "weight": 111
+                    }, {
+                        "speciesCode": "SEAFOOD",
+                        "weight": 111
+                    }, {
+                        "speciesCode": "SEAFOOD_2",
+                        "weight": 111
+                    }, {
+                        "speciesCode": "SEAFOOD_3",
+                        "weight": 111
+                    }, {
+                        "speciesCode": "BEAGLE",
+                        "weight": 111
+                    }],
+                    "total": 555
+                },
+                "cumulated": {
+                    "speciesList": [{
+                        "speciesCode": "BEAGLE",
+                        "weight": 111
+                    }, {
+                        "speciesCode": "SEAFOOD",
+                        "weight": 111
+                    }],
+                    "total": 222
+                }
+            };
+
+            return response;
         }
 
     };
@@ -390,7 +465,7 @@ angular.module('unionvmsWeb').factory('activityRestFactory', function ($resource
             getActivityList: function (data) {
                 var deferred = $q.defer();
                 activityRestFactory.getActivityList().get(angular.toJson(data), function (response) {
-                    deferred.resolve(response.data);
+                    deferred.resolve(response);
                 }, function (error) {
                     console.log('Error getting list of activity reports');
                     deferred.reject(error);
@@ -406,15 +481,15 @@ angular.module('unionvmsWeb').factory('activityRestFactory', function ($resource
 	         * @param {Number} schId - The scheme ID
         	 * @returns {Promise} A promise with either the history list of the FA report or reject error
     	     */
-	        getReportHistory: function (refId, schId){
-    	        var deferred = $q.defer();
-	            activityRestFactory.getReportHistory().get({referenceId: refId, schemeId: schId}, function(response){
-            	    deferred.resolve(response.data);
-        	    }, function(error){
-    	            deferred.reject(error);
-	            });
-            	return deferred.promise;
-        	},
+            getReportHistory: function (refId, schId) {
+                var deferred = $q.defer();
+                activityRestFactory.getReportHistory().get({ referenceId: refId, schemeId: schId }, function (response) {
+                    deferred.resolve(response.data);
+                }, function (error) {
+                    deferred.reject(error);
+                });
+                return deferred.promise;
+            },
             /**
              * Get the trip cronology of a specific trip
              * 
@@ -523,6 +598,18 @@ angular.module('unionvmsWeb').factory('activityRestFactory', function ($resource
              */
             getTripCatchesLandingDetails: function (id) {
                 return activityRestFactory.getTripCatchesLandingDetails();
+
+            },
+            /**
+             * Get the Catches Evolution Details. 
+             * 
+             * @memberof activityRestService
+             * @public
+             * @param {String} id - The trip id of the selected trip
+             * @returns {Promise} A promise with either the trip catch details or reject error
+             */
+            getTripCatchesEvolution: function (id) {
+                return activityRestFactory.getTripCatchesEvolution();
 
             }
 

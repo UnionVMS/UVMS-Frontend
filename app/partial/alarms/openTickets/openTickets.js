@@ -327,7 +327,7 @@ angular.module('unionvmsWeb').controller('OpenticketsCtrl',function($scope, $log
                 $scope.currentSearchResults.setLoading(false);
                 $scope.currentSearchResults.setErrorMessage(locale.getString('common.search_failed_error'));
             });
-        }
+        };
         search(1);
     };
 
@@ -355,7 +355,6 @@ angular.module('unionvmsWeb').controller('OpenticketsCtrl',function($scope, $log
             var query = {"ticketSearchCriteria":guids,"pagination":{"page":1,"listSize":20}};
 
             alarmRestService.updateTicketStatusQuery(query, "CLOSED").then(function(updated) {
-                $scope.selectedItems;
                 for (var i = 0; i < $scope.selectedItems.length; i++) {
                     var ticket = $scope.selectedItems[i];
                     ticket.status = updated[0].status;

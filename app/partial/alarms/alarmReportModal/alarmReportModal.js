@@ -9,7 +9,7 @@ the hope that it will be useful, but WITHOUT ANY WARRANTY; without even the impl
 FITNESS FOR A PARTICULAR PURPOSE.  See the GNU General Public License for more details. You should have received a
 copy of the GNU General Public License along with the IFDM Suite. If not, see <http://www.gnu.org/licenses/>.
  */
-angular.module('unionvmsWeb').controller('AlarmReportModalCtrl', function($scope, $log, $q, $timeout, $modalInstance, locale, alarm, options, GetListRequest, SearchResults, vesselRestService, dateTimeService, alarmRestService,  userService, configurationService, globalSettingsService, $filter, leafletData, $timeout, alarmCsvService) {
+angular.module('unionvmsWeb').controller('AlarmReportModalCtrl', function($scope, $log, $q, $timeout, $modalInstance, locale, alarm, options, GetListRequest, SearchResults, vesselRestService, dateTimeService, alarmRestService,  userService, configurationService, globalSettingsService, $filter, leafletData, alarmCsvService) {
 
     $scope.alarm = alarm;
     $scope.knownVessel = angular.isDefined(alarm.vessel);
@@ -48,7 +48,7 @@ angular.module('unionvmsWeb').controller('AlarmReportModalCtrl', function($scope
     }
 
     function getAlarmWarningActions(ruleNames) {
-        actions = [];
+        var actions = [];
         if (ruleNames.indexOf('Asset not found') >= 0 || ruleNames.indexOf('Terminal not found') >= 0) {
             actions.push(locale.getString('alarms.add_tranceiver_asset_reprocess'));
         }

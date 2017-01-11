@@ -110,7 +110,7 @@
 
             <div class="col-md-2 form-group smallerpaddingleft" ng-class="{'has-error': (submitAttempted || vesselForm.producercode.$dirty) && vesselForm.producercode.$invalid}">
                 <label>{{ 'vessel.po_code' | i18n }}</label>
-                <input type="text" name="producercode" class="form-control" ng-model="vessel.producer.id" ng-pattern="producerCodePattern">
+                <input type="text" name="producercode" class="form-control" ng-model="vessel.producer.code" ng-pattern="producerCodePattern">
                 <input-validation-message types="pattern" input="vesselForm.producercode" custom-messages="{{producerCodeValidationMessages}}"></input-validation-message>
             </div>
         </div>

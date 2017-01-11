@@ -286,11 +286,24 @@ angular.module('unionvmsWeb').directive('datePickerFormatter',['dateTimeService'
             }
 
             var toView = function (newValue) {
-                if (!isBlank(newValue) && !moment(newValue, "YYYY-MM-DD HH:mm:ss Z", true).isValid()) {
-                    ctrl.$setValidity('format', false);
-                    return newValue;
-                }
-                else {
+                if (!isBlank(newValue)) {
+                    if (!useTime) {
+                        if (!moment(newValue, YMD_FORMAT, true).isValid()) {
+                            ctrl.$setValidity('format', false);
+                            return newValue;
+                        }
+                        else {
+                            ctrl.$setValidity('format', true);
+                        }
+                    } else {
+                        if (!moment(newValue, TIMEZONE_FORMAT, true).isValid()) {
+                            ctrl.$setValidity('format', false);
+                            return newValue;
+                        }
+                        else {
+                            ctrl.$setValidity('format', true);
+                        }
+                    }
                     ctrl.$setValidity('format', true);
                 }
 
@@ -310,18 +323,26 @@ angular.module('unionvmsWeb').directive('datePickerFormatter',['dateTimeService'
             };
 
             var toModel = function (newValue) {
-                if (!isBlank(newValue) && !moment(newValue, globalSettingsService.getDateFormat(), true).isValid()) {
-                    ctrl.$setValidity('format', false);
-                    return newValue;
-                }
-                else {
-                    ctrl.$setValidity('format', true);
+                if (!isBlank(newValue)) {
+                    if (!useTime) {
+                        ctrl.$setValidity('format', true);
+                    } else {
+                        if (!moment(newValue, globalSettingsService.getDateFormat(), true).isValid()) {
+                            ctrl.$setValidity('format', true);
+                            return newValue;
+                        }
+                        else {
+                            ctrl.$setValidity('format', true);
+                        }
+                    }
                 }
 
                 ctrl.$setDirty(true);
                 if(angular.isDefined(newValue)){
-                    //Add UTC timezone (+00:00)
-                    newValue = dateTimeService.formatUTCDateWithTimezone(newValue, globalSettingsService.getDateFormat());
+                    //Add UTC timezone (+00:00) if use of time
+                    if (useTime) {
+                        newValue = dateTimeService.formatUTCDateWithTimezone(newValue, globalSettingsService.getDateFormat());
+                    }
                     //Only set model and call callback if newValue is valid
                     if(newValue.indexOf("Invalid date") >= 0){
                         newValue = undefined;
