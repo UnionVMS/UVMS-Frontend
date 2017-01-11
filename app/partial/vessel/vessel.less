@@ -115,3 +115,48 @@ copy of the GNU General Public License along with the IFDM Suite. If not, see <h
 .archived {
     .inactiveTableCell;
 }
+
+.cancel-alert {
+    background-color: @state-warning-bg;
+    border-color: @state-warning-border;
+    height: 56px;
+    overflow: hidden;
+
+    .text {
+        color: @state-warning-text;
+        font-weight: 500;
+    }
+
+    .btn {
+        font-size: 1em;
+        line-height: 1em;
+        margin-left: auto;
+        background: #f2ae42;
+        border: 1px solid darken(#f2ae42, 15%);
+        color: #fff;
+        text-transform: uppercase;
+
+        i {
+            margin-right: 3px;
+        }
+
+        &:hover, &:active, &:focus {
+            background: darken(#f2ae42, 5%);
+            border: 1px solid darken(#f2ae42, 20%);
+        }
+    }
+
+    &.ng-hide {
+        opacity: 0;
+        height: 0;
+        overflow: hidden;
+        padding-top: 0;
+        padding-bottom: 0;
+        margin-bottom: 0;
+    }
+
+    &.ng-hide-add, 
+    &.ng-hide-remove {
+        transition: all linear 300ms;
+    }
+}

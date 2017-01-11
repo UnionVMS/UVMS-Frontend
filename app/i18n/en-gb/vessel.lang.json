@@ -37,6 +37,7 @@
     "assign": "Link",
     "assign_back_to_search_result": "Go back to search result",
     "cancel": "Cancel",
+    "cancel_search_notification": "This search request might take some time. If you would like to you can cancel the search",
     "capacity": "Capacity",
     "cfr": "CFR",
     "clear_form": "Clear form",
