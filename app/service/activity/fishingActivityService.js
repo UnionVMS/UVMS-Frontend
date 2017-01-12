@@ -14,14 +14,17 @@ copy of the GNU General Public License along with the IFDM Suite. If not, see <h
  * @ngdoc service
  * @name fishingActivityService
  * @param Departure {Model} The model for Departure fissing activities <p>{@link unionvmsWeb.Departure}</p>
+ * @param activityRestService {Service} The activity REST service <p>{@link unionvmsWeb.activityRestService}</p>
  * @attr {Object} activityData - An object containing the activity data that will be used in the different views
  * @description
  *  A service to deal with any kind of fishing activity operation (e.g. Departure, Arrival, ...)
  */
-angular.module('unionvmsWeb').factory('fishingActivityService',function(Departure) {
+angular.module('unionvmsWeb').factory('fishingActivityService',function(Departure, activityRestService, loadingStatus) {
 
 	var faServ = {
-        activityData: {}
+        activityData: {},
+        id: undefined,
+        isCorrection: false
 	};
 	
 	/**
@@ -31,29 +34,59 @@ angular.module('unionvmsWeb').factory('fishingActivityService',function(Departur
 	 * @public
 	 * @alias getData
 	 * @param {String} type - The activity type (e.g. departure)
-	 * @param {String} params - The params to be used to get the data from server
 	 */
-	faServ.getData = function(type, params){
+	faServ.getData = function(type){
+	    //faServ.resetActivityData();
 	    var uType = type.toUpperCase(); 
 	    switch (uType) {
             case 'DEPARTURE':
-                getDeparture(params);
+                getDeparture();
                 break;
             //TODO other types of fa operations
         }
 	};
 	
 	/**
+	 * Reset fishing activity service
+	 * 
+	 * @memberof fishingActivityService
+	 * @public
+	 * @alias resetActivity
+	 */
+	faServ.resetActivity = function(){
+	    faServ.activityData = {};
+	    faServ.id = undefined;
+	    faServ.isCorrection = false;
+	};
+	
+	/**
+     * Reset activity data within the service
+     * 
+     * @memberof fishingActivityService
+     * @public
+     * @alias resetActivityData
+     */
+    faServ.resetActivityData = function(){
+        faServ.activityData = {};
+    };
+	
+	/**
 	 * Get data specifically for departure operations
 	 * 
 	 * @memberof fishingActivityService
 	 * @private
-	 * @param {Object} params - The params to be used to get the data from server
 	 */
-	function getDeparture(params){
-	    //TODO call rest service when ready
-	    faServ.activityData = new Departure();
-	    faServ.activityData.fromJson(params);
+	function getDeparture(){
+	    //TODO use fa id in the REST request
+	    loadingStatus.isLoading('FishingActivity', true);
+	    activityRestService.getFishingActivityDetails('departure').then(function(response){
+	        faServ.activityData = new Departure();
+	        faServ.activityData.fromJson(response);
+	        loadingStatus.isLoading('FishingActivity', false);
+	    }, function(error){
+	        //TODO deal with error from rest service
+	        loadingStatus.isLoading('FishingActivity', false);
+	    });
 	}
 
 	return faServ;

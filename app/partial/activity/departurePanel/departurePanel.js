@@ -21,17 +21,18 @@ copy of the GNU General Public License along with the IFDM Suite. If not, see <h
  * @description
  *  The controller for the departure panel partial
  */
-angular.module('unionvmsWeb').controller('DeparturepanelCtrl',function($scope, $state, fishingActivityService, tripSummaryService, activityRestService){
+angular.module('unionvmsWeb').controller('DeparturepanelCtrl',function($scope, $state, fishingActivityService, tripSummaryService, activityRestService, loadingStatus){
     $scope.faServ = fishingActivityService;
     
     var init = function(){
-        $scope.faServ.getData('departure', {}); //FIXME to move to other place
-        // get fishing trip details.
-        //FIXME change with proper trip id
-        activityRestService.getTripCatchDetail('1234').then(function(response){
+        $scope.faServ.getData('departure');
+        loadingStatus.isLoading('FishingActivity', true);
+        activityRestService.getTripCatchDetail($scope.faServ.id).then(function(response){
             $scope.fishingTripDetails = response;  
+            loadingStatus.isLoading('FishingActivity', false);
         }, function(error){
             //TODO deal with error from service
+            loadingStatus.isLoading('FishingActivity', false);
         });
     };
     

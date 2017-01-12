@@ -79,6 +79,11 @@ angular.module('unionvmsWeb').factory('loadingStatus',function() {
             value: false,
             counter: 0
 		},
+		FishingActivity: {
+		    message: 'spatial.loading_data',
+		    value: false,
+		    counter: 0
+		},
 		MdrSettings: {
 		    message: 'activity.mdr_settings_loading',
             value: false,

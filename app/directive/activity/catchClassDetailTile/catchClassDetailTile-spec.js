@@ -42,7 +42,7 @@ describe('catchClassDetailTile', function() {
                 geometry: 'POLYGON ((30 10, 10 20, 20 40, 40 40, 30 10))'
             }],
             details: {
-                type: 'ONB - Onboard',
+                catchType: 'ONB - Onboard',
                 unit: 123,
                 weightMeans: 'EST - Estimated'
             }
@@ -56,7 +56,7 @@ describe('catchClassDetailTile', function() {
                 geometry: 'POINT(5.5 60.5)'
             }],
             details: {
-                type: 'ONB - Onboard',
+                catchType: 'ONB - Onboard',
                 unit: 124,
                 weightMeans: 'EST - Estimated'
             }
@@ -167,7 +167,7 @@ describe('catchClassDetailTile', function() {
             expect(angular.element('legend').children().text()).toEqual('test');
             expect(angular.element('rect').length).toEqual(scope.ngModel.length * 2 + 1);
             expect(angular.element('.species-title').text()).toEqual(testScope.selected.species + ' - ' + testScope.selected.speciesName);
-            expect(angular.element('.section').find('span').eq(1).text()).toEqual(testScope.selected.details.type);
+            expect(angular.element('.section').find('span').eq(1).text()).toEqual(testScope.selected.details.catchType);
             expect(angular.element('.section').find('span').eq(3).text()).toEqual(testScope.selected.details.unit.toString());
             expect(angular.element('.section').find('span').eq(5).text()).toEqual(testScope.selected.total + ' kg');
             expect(angular.element('.section').find('span').eq(7).text()).toEqual(testScope.selected.details.weightMeans);
