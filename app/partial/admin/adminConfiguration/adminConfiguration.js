@@ -9,7 +9,7 @@ the hope that it will be useful, but WITHOUT ANY WARRANTY; without even the impl
 FITNESS FOR A PARTICULAR PURPOSE.  See the GNU General Public License for more details. You should have received a
 copy of the GNU General Public License along with the IFDM Suite. If not, see <http://www.gnu.org/licenses/>.
  */
-angular.module('unionvmsWeb').controller('AuditconfigurationCtrl',function($scope, $stateParams, $resource, alertService, spatialConfigRestService, SpatialConfig, loadingStatus, PreferencesService){
+angular.module('unionvmsWeb').controller('AuditconfigurationCtrl',function($scope, $stateParams, $resource, alertService, spatialConfigRestService, SpatialConfig, loadingStatus, PreferencesService, userService){
 	$scope.isAudit = false;
 	$scope.activeTab = $stateParams.module || "systemMonitor";
 	$scope.prefService = PreferencesService;
@@ -47,8 +47,12 @@ angular.module('unionvmsWeb').controller('AuditconfigurationCtrl',function($scop
 			var modules = uvmsModules.filter(function(module) {
 				return $scope.settings[module] !== undefined && getNonGlobalSettings($scope.settings[module]).length > 0;
 			});
+			
+			$scope.tabs = ["systemMonitor", "globalSettings", "reporting"].concat(modules);
 
-			$scope.tabs = ["systemMonitor", "globalSettings", "reporting", "mdr"].concat(modules);
+			if(userService.isAllowed("CONFIGURE_MDR_SCHEDULER", "Activity", true)){
+				$scope.tabs.concat("mdr");
+			}
 		});
 
 		loadingStatus.isLoading('Preferences',true,0);
