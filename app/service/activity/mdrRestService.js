@@ -56,7 +56,6 @@ angular.module('unionvmsWeb').factory('mdrRestFactory',function($resource) {
           syncAllNow: function(){
                return $resource('/activity/rest/mdr/sync/all');
           },
-
           enableDisableScheduledUpdate: function() {
                return $resource('/activity/rest/mdr/status/schedulable/update/:acronymID/:schedulableFlag', {
                      acronymID: '@acronymID',
@@ -66,6 +65,18 @@ angular.module('unionvmsWeb').factory('mdrRestFactory',function($resource) {
                         method:'PUT'
                     }
                });
+          },
+          getCodeList: function(){
+              return $resource('/mock/mdr/cl/:acronym', {
+                  acronym: '@acronym'
+              }, {
+                  'get': {
+                      method: 'POST',
+                      headers: {
+                          'Content-Type': 'application/json'
+                      }
+                  }
+              });
           }
       };
   })
@@ -217,6 +228,17 @@ angular.module('unionvmsWeb').factory('mdrRestFactory',function($resource) {
                      deferred.reject(error);
                 });
           return deferred.promise;
+        },
+        getCodeList: function(acronym){
+            var deferred = $q.defer();
+            //TODO the payload for pagination
+            mdrRestFactory.getCodeList().get({acronym: acronym}, function(response){
+                deferred.resolve(response.resultList);
+            }, function(error){
+                console.error('Error returning the code list for the acronym: ' + acronym);
+                deferred.reject(error);
+            });
+            return deferred.promise;
         }
   	};
 
