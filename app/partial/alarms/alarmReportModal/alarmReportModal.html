@@ -19,65 +19,65 @@ copy of the GNU General Public License along with the IFDM Suite. If not, see <h
 <div class="modal-body" loading-indicator="waitingForStatusUpdateResponse">
 
     <div class="alert alert-danger">
-        <i class="fa fa-warning"></i> {{warningMessage}}
+        <i class="fa fa-warning"></i>
+        <span>{{warningMessage}}</span>
     </div>
 
     <div class="row">
         <div class="col-md-12">
-            {{'common.status' | i18n}}
-            <span class="label" ng-class="getStatusLabelClass(alarm.status)">{{getStatusLabel(alarm.status) | uppercase}}</span>
-
-            {{'alarms.position_report_recipient' | i18n}}  <b>{{alarm.recipient}}</b>
+            <div>
+                {{'common.status' | i18n}}
+                <span class="label" ng-class="getStatusLabelClass(alarm.status)">{{getStatusLabel(alarm.status) | uppercase}}</span>
+            </div>
+            <div ng-if="alarm.recipient !== undefined">{{'alarms.position_report_recipient' | i18n}}  <b>{{alarm.recipient}}</b></div>
         </div>
     </div>
 
     <div>
         <div class="row">
             <div class="col-md-12">
-                <div class="sectionHeader">
-                    {{'alarms.position_report_asset_information' | i18n}}
-                </div>
                 <!-- Hide link for now. -->
                 <span class="assignAssetLink" ng-click="toggleAssignAsset()" ng-if="!readOnly && !knownVessel && false">{{'alarms.position_report_assign_asset_from_list' | i18n}}</span>
             </div>
         </div>
         <div class="row">
-            <div class="col-md-3">
-                <label>{{'movement.manual_position_field_label_flag_state' | i18n}}</label>
-                <div class="value" ng-show="alarm.placeholderVessel">{{alarm.placeholderVessel.countryCode}}</div>
-                <div class="value" ng-show="!alarm.placeholderVessel && alarm.movement">{{alarm.movement.flagState}}</div>
-                <div class="value" ng-show="!alarm.placeholderVessel && !alarm.movement && alarm.asset.ids.FLAG_STATE">{{alarm.asset.ids.FLAG_STATE}}</div>
-                <div class="value missing" ng-show="!alarm.placeholderVessel && !alarm.movement && !alarm.asset.ids.FLAG_STATE">{{'alarms.position_report_information_value_missing' | i18n}}</div>
+            <div alarm-report-field="'movement.manual_position_field_label_flag_state'"
+                 field-value="alarm.placeholderVessel.countryCode"
+                 field-value-2="alarm.movement.flagState"
+                 field-value-3="alarm.asset.ids.FLAG_STATE"
+                 missing-text="true"
+                 class="col-md-3">
             </div>
-            <div class="col-md-3">
-                <label>{{'movement.manual_position_field_label_ircs' | i18n}}</label>
-                <div class="value" ng-show="alarm.placeholderVessel">{{alarm.placeholderVessel.ircs}}</div>
-                <div class="value" ng-show="!alarm.placeholderVessel && alarm.vessel">{{alarm.vessel.ircs}}</div>
-                <div class="value" ng-show="!alarm.placeholderVessel && !alarm.vessel && alarm.asset.ids.IRCS">{{alarm.asset.ids.IRCS}}</div>
-                <div class="value missing" ng-show="!alarm.placeholderVessel && !alarm.vessel && !alarm.asset.ids.IRCS">{{'alarms.position_report_information_value_missing' | i18n}}</div>
+            <div alarm-report-field="'movement.manual_position_field_label_ircs'"
+                 field-value="alarm.placeholderVessel.ircs"
+                 field-value-2="alarm.vessel.ircs"
+                 field-value-3="alarm.asset.ids.IRCS"
+                 missing-text="true"
+                 class="col-md-3">
             </div>
-            <div class="col-md-3">
-                <label>{{'movement.manual_position_field_label_cfr' | i18n}}</label>
-                <div class="value" ng-show="alarm.placeholderVessel">{{alarm.placeholderVessel.cfr}}</div>
-                <div class="value" ng-show="!alarm.placeholderVessel && alarm.vessel">{{alarm.vessel.cfr}}</div>
-                <div class="value" ng-show="!alarm.placeholderVessel && !alarm.vessel && alarm.asset.ids.CFR">{{alarm.asset.ids.CFR}}</div>
-                <div class="value missing" ng-show="!alarm.placeholderVessel && !alarm.vessel && !alarm.asset.ids.CFR">{{'alarms.position_report_information_value_missing' | i18n}}</div>
+            <div alarm-report-field="'movement.manual_position_field_label_cfr'"
+                 field-value="alarm.placeholderVessel.cfr"
+                 field-value-2="alarm.vessel.cfr"
+                 field-value-3="alarm.asset.ids.CFR"
+                 missing-text="true"
+                 class="col-md-3">
             </div>
-            <div class="col-md-3">
-                <label>{{'movement.manual_position_field_label_external_marking' | i18n}}</label>
-                <div class="value" ng-show="alarm.placeholderVessel">{{alarm.placeholderVessel.externalMarking}}</div>
-                <div class="value" ng-show="!alarm.placeholderVessel && alarm.movement">{{alarm.movement.externalMarking}}</div>
-                <div class="value" ng-show="!alarm.placeholderVessel && !alarm.movement && alarm.asset.ids.EXTERNAL_MARKING">{{alarm.asset.ids.EXTERNAL_MARKING}}</div>
-                <div class="value missing" ng-show="!alarm.placeholderVessel && !alarm.movement && !alarm.asset.ids.EXTERNAL_MARKING">{{'alarms.position_report_information_value_missing' | i18n}}</div>
+            <div alarm-report-field="'movement.manual_position_field_label_external_marking'"
+                 field-value="alarm.placeholderVessel.externalMarking"
+                 field-value-2="alarm.movement.externalMarking"
+                 field-value-3="alarm.asset.ids.EXTERNAL_MARKING"
+                 missing-text="true"
+                 class="col-md-3">
             </div>
         </div>
+        
         <div class="row">
-            <div class="col-md-3">
-                <label>{{'movement.manual_position_field_label_name' | i18n}}</label>
-                <div class="value" ng-show="alarm.placeholderVessel">{{alarm.placeholderVessel.name}}</div>
-                <div class="value" ng-show="!alarm.placeholderVessel && alarm.movement">{{alarm.movement.assetName}}</div>
-                <div class="value" ng-show="!alarm.placeholderVessel && !alarm.movement && alarm.asset.ids.NAME">{{alarm.asset.ids.NAME}}</div>
-                <div class="value missing" ng-show="!alarm.placeholderVessel && !alarm.movement && !alarm.asset.ids.NAME">{{'alarms.position_report_information_value_missing' | i18n}}</div>
+            <div alarm-report-field="'movement.manual_position_field_label_name'"
+                 field-value="alarm.placeholderVessel.name"
+                 field-value-2="alarm.movement.assetName"
+                 field-value-3="alarm.asset.ids.NAME"
+                 missing-text="true"
+                 class="col-md-3">
             </div>
             <div ng-if="showDnid" class="col-md-3">
                 <label>{{'mobileTerminal.table_header_dnid' | i18n}}</label>
@@ -151,22 +151,6 @@ copy of the GNU General Public License along with the IFDM Suite. If not, see <h
                 </div>
             </div>
         </div>
-<!--
-        <div class="row">
-            <div class="col-md-12">
-                <div class="sectionHeader">
-                    {{'alarms.position_report_mobile_terminal_information' | i18n}}
-                </div>
-            </div>
-        </div>
-        <div class="row">
-            <div class="col-md-3">
-                <label>{{'alarms.position_report_mobile_terminal_information_type' | i18n}}</label>
-                <div class="value">???</div>
-            </div>
-        </div>
- -->
-
 
         <div class="row">
             <div class="col-md-12">
@@ -182,34 +166,28 @@ copy of the GNU General Public License along with the IFDM Suite. If not, see <h
 
         <div ng-hide="loadingMovement || loadingMovementError">
             <div class="row">
-                <!-- Status -->
                 <div alarm-report-field="'movement.manual_position_field_label_status'"
                      field-value="alarm.movement.movement.status"
                      class="col-md-3">
                 </div>
-                <!-- Time -->
                 <div alarm-report-field="'movement.manual_position_field_label_date_time'"
                      field-value="alarm.movement.time | confDateFormat"
                      class="col-md-3">
                 </div>
             </div>
             <div class="row">
-                <!-- Latitude -->
                 <div alarm-report-field="'movement.manual_position_field_label_latitude'"
                      field-value="alarm.movement.movement.latitude | confCoordinateFormat"
                      class="col-md-3">
                 </div>
-                <!-- Longitude -->
                 <div alarm-report-field="'movement.manual_position_field_label_longitude'"
                      field-value="alarm.movement.movement.longitude | confCoordinateFormat"
                      class="col-md-3">
                 </div>
-                <!-- Speed -->
                 <div alarm-report-field="'movement.manual_position_field_label_measured_speed'"
                      field-value="toSpeedString(alarm.movement.movement.reportedSpeed)"
                      class="col-md-3">
                 </div>
-                <!-- Course -->
                 <div alarm-report-field="'movement.manual_position_field_label_course'"
                      field-value="toCourseString(alarm.movement.movement.reportedCourse)"
                      class="col-md-3">
@@ -233,14 +211,12 @@ copy of the GNU General Public License along with the IFDM Suite. If not, see <h
             </div>
         </div>
     </div>
-
 </div>
 
 <div class="modal-footer">
     <div class="row buttons" ng-if="!readOnly">
         <div class="buttonGroups">
             <div class="buttonGroup">
-                <a class="button btn btn-link" ng-click="cancel()">{{"common.cancel" | i18n}}</a>
                 <button class="btn btn-default" ng-click="exportCsv(alarm)">
                     <i class="fa fa-download"></i> {{'movement.csv' | i18n}}
                 </button>
