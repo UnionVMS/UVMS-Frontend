@@ -99,9 +99,9 @@ angular.module('unionvmsWeb').directive('locationTile', function() {
     $scope.isItemClickable = function(item){
         var clickableStatus = false;
         if ($scope.isClickable){
-            if ($scope.multiple && angular.isDefined(item.geometry) && item.geometry !== '' && item.geometry !== null){
+            if ($scope.multiple && angular.isDefined(item) && angular.isDefined(item.geometry) && item.geometry !== '' && item.geometry !== null){
                 clickableStatus = true;
-            } else if (!$scope.multiple && angular.isDefined($scope.locationDetails.geometry) && $scope.locationDetails.geometry !== '' && $scope.locationDetails.geometry !== null){
+            } else if (!$scope.multiple && angular.isDefined($scope.locationDetails) && angular.isDefined($scope.locationDetails.geometry) && $scope.locationDetails.geometry !== '' && $scope.locationDetails.geometry !== null){
                 clickableStatus = true;
             }
         }

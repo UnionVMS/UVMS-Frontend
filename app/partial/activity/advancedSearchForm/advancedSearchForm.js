@@ -16,13 +16,14 @@ copy of the GNU General Public License along with the IFDM Suite. If not, see <h
  * @param $scope {Service} controller scope
  * @param activityService {Service} The activity service <p>{@link unionvmsWeb.activityService}</p>
  * @param unitConversionService {Service} The unit conversion service <p>{@link unionvmsWeb.visibilityService}</p>
+ * @param mdrCacheService {Service} The mdr code lists cache service
  * @attr {Boolean} isFormValid - A flag for validating the search form
  * @attr {Object} codeLists - An object containing all code lists items
  * @attr {Object} advancedSearchObject - An object containing all search criterias specified within the form
  * @description
  *  The controller for the advanced search form of the activity tab table  
  */
-angular.module('unionvmsWeb').controller('AdvancedsearchformCtrl',function($scope, activityService, unitConversionService){
+angular.module('unionvmsWeb').controller('AdvancedsearchformCtrl',function($scope, activityService, unitConversionService, mdrCacheService){
     $scope.actServ = activityService;
     $scope.isFormValid = true;
     
@@ -66,7 +67,7 @@ angular.module('unionvmsWeb').controller('AdvancedsearchformCtrl',function($scop
      */
     $scope.getComChannels = function(){
         //FIXME replace with proper service
-        return [{code: 'FLUX', text: 'FLUX'}];
+        $scope.codeLists.comChannels =  [{code: 'FLUX', text: 'FLUX'}];
     };
     
     /**
@@ -78,16 +79,12 @@ angular.module('unionvmsWeb').controller('AdvancedsearchformCtrl',function($scop
      * @returns {Array} An array with all purpose codes
      */
     $scope.getPurposeCodes = function(){
-        //FIXME replace with proper service
-        return [{
-            code: '1', text: 'Cancellation'
-        },{
-            code: '3', text: 'Delete'
-        },{
-            code: '5', text: 'Replacement (correction)'
-        },{
-            code: '9', text: 'Original report'
-        }];
+        $scope.codeLists.purposeCodes = []; 
+        mdrCacheService.getCodeList('flux_gp_purposecode').then(function(response){
+            $scope.codeLists.purposeCodes = convertCodelistToCombolist(response);
+        }, function(error){
+            //TODO deal with error
+        });
     };
     
     /**
@@ -99,12 +96,12 @@ angular.module('unionvmsWeb').controller('AdvancedsearchformCtrl',function($scop
      * @returns {Array} An array with all report types
      */
     $scope.getReportTypes = function(){
-        //FIXME replace with proper service
-        return [{
-            code: 'NOTIFICATION', text: 'Notification'
-        },{
-            code: 'DECLARATION', text: 'Declaration'
-        }];
+        $scope.codeLists.reportTypes = [];
+        mdrCacheService.getCodeList('flux_fa_report_type').then(function(response){
+            $scope.codeLists.reportTypes = convertCodelistToCombolist(response);
+        }, function(error){
+            //TODO deal with error
+        });
     };
     
     /**
@@ -116,16 +113,12 @@ angular.module('unionvmsWeb').controller('AdvancedsearchformCtrl',function($scop
      * @returns {Array} An array with all gear types
      */
     $scope.getGearTypes = function(){
-        //FIXME replace with proper service
-        return [{
-            code: 'GNS', text: 'Set gillnets (anchored)'
-        },{
-            code: 'GND', text: 'Driftnets'
-        },{
-            code: 'GNC', text: 'Encircling gillnets'
-        },{
-            code: 'GTR', text: 'Combined gillnets-trammel nets'
-        }];
+        $scope.codeLists.gearTypes = [];
+        mdrCacheService.getCodeList('gear_type').then(function(response){
+            $scope.codeLists.gearTypes = convertCodelistToCombolist(response);
+        }, function(error){
+            //TODO deal with error
+        });
     };
     
     /**
@@ -137,16 +130,12 @@ angular.module('unionvmsWeb').controller('AdvancedsearchformCtrl',function($scop
      * @returns {Array} An array with all activity types
      */
     $scope.getActivityTypes = function(){
-        //FIXME replace with proper service
-        return [{
-            code: 'DEPARTURE', text: 'Departure'
-        },{
-            code: 'ARRIVAL', text: 'ARRIVAL'
-        },{
-            code: 'AREA_ENTRY', text: 'AREA_ENTRY'
-        },{
-            code: 'AREA_EXIT', text: 'AREA_ENTRY'
-        }];
+        $scope.codeLists.activityTypes = [];
+        mdrCacheService.getCodeList('flux_fa_type').then(function(response){
+            $scope.codeLists.activityTypes = convertCodelistToCombolist(response);
+        }, function(error){
+            //TODO deal with error
+        });
     };
     
     /**
@@ -237,8 +226,28 @@ angular.module('unionvmsWeb').controller('AdvancedsearchformCtrl',function($scop
         var lists = ['comChannels', 'purposeCodes', 'reportTypes', 'gearTypes', 'activityTypes'];
         angular.forEach(lists, function(list) {
         	var fnName = 'get' + list.substring(0,1).toUpperCase() + list.substring(1);
-        	$scope.codeLists[list] = $scope[fnName]();
+        	$scope[fnName]();
         });
+    }
+    
+    /**
+     * Convert code lists array into combobox list array
+     * 
+     * @memberof AdvancedsearchformCtrl
+     * @private
+     * @param {Array} data - The input data array
+     * @returns {Array} An array suitable for combobox use
+     */
+    function convertCodelistToCombolist (data){
+        var comboList = [];
+        angular.forEach(data, function(item) {
+            comboList.push({
+                code: item.code,
+                text: item.description
+            });
+        });
+        
+        return comboList;
     }
     
     /**

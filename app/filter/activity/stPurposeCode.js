@@ -12,22 +12,30 @@ copy of the GNU General Public License along with the IFDM Suite. If not, see <h
 angular.module('unionvmsWeb').filter('stPurposeCode', function() {
     var cachedCodes = [];
     function convertCode(mdrCode){
-        var rec = _.findWhere(cachedCodes, {code: mdrCode.toString()});
-        var code;
-        if (angular.isDefined(rec)){
-            return rec.text;
+        if (angular.isDefined(mdrCode)){
+            var rec = _.findWhere(cachedCodes, {code: mdrCode.toString()});
+            var code;
+            if (angular.isDefined(rec)){
+                return rec.text;
+            } else {
+                cachedCodes = fecthCodes();
+            }
         } else {
             //TODO fetch the codes from mdr rest service
-            cachedCodes = [{
-                code: '1', text: 'Cancellation'
-            },{
-                code: '3', text: 'Delete'
-            },{
-                code: '5', text: 'Replacement (correction)'
-            },{
-                code: '9', text: 'Original report'
-            }];
+            cachedCodes = fecthCodes();
         }
+    }
+    
+    function fecthCodes(){
+        return [{
+            code: '1', text: 'Cancellation'
+        },{
+            code: '3', text: 'Delete'
+        },{
+            code: '5', text: 'Replacement (correction)'
+        },{
+            code: '9', text: 'Original report'
+        }];
     }
     
     convertCode.$stateful = true;

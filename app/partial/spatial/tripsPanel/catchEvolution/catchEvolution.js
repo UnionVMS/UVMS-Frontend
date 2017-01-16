@@ -29,10 +29,23 @@ angular.module('unionvmsWeb').controller('CatchevolutionCtrl', function($scope, 
        */
     var init = function() {
         // get fishing trip details.
-        $scope.fishingTripDetails = activityRestService.getTripCatchDetail('1234');
+        //FIXME change with proper trip id
+        activityRestService.getTripCatchDetail('1234').then(function(response){
+            $scope.fishingTripDetails = response;  
+        }, function(error){
+            //TODO deal with error from service
+        });
         // get Catches Evolution details.
-        $scope.catchEvolutionData = activityRestService.getTripCatchesEvolution('1234');
-
+        //FIXME change with proper trip id
+        activityRestService.getTripCatchesEvolution('1234').then(function(response){
+            $scope.catchEvolutionData = response;
+            processEvolutionData();
+        }, function(error){
+            //TODO deal with error from service
+        });
+    };
+    
+    function processEvolutionData(){
         angular.forEach($scope.catchEvolutionData.catchProgress, function(item){
             angular.forEach(item, function(chart,chartName){
                 if(chartName === 'cumulated'){
@@ -63,7 +76,7 @@ angular.module('unionvmsWeb').controller('CatchevolutionCtrl', function($scope, 
                 });
             }
         });
-    };
+    }
 
     init();
 });
