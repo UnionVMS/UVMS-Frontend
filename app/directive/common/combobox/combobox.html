@@ -40,6 +40,8 @@
 			</li>
 			<!--BASIC COMBO-->
 			<li ng-class="disabledItem(item) ? 'disabled' : ''" ng-repeat="item in loadedItems" ng-click="selectVal(item,$index)" ng-if="(!group || (group && comboboxServ.isAvailableItem(group, ngModel, item.code))) && !lineStyle && !comboSection && !isFilterActive && !isLoading" title="{{getItemLabel(item)}}">
+				<!--<i class="fa fa-check" style="position: absolute;left:3px;top:5px;" ng-if="multiple && ngModel.indexOf(item.code) !== -1"></i>-->
+				<input type="checkbox" style="position: absolute;left:3px;top:2px;z-index:1;" /> <!--ng-click="$event.stopPropagation()"/>-->
 				<a ng-bind="getItemLabel(item)"></a>
 			</li>
 			<!--COMBO WITH SECTIONS-->

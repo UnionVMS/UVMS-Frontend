@@ -14,11 +14,14 @@ copy of the GNU General Public License along with the IFDM Suite. If not, see <h
 	.dropdown-menu {
 		z-index: 1071;
 		width: inherit;
-		> li > a {
-			overflow-x: hidden;
-    		text-overflow: ellipsis;
-			&:empty {
-				display: none;
+		> li {
+			position: relative;
+			& > a {
+				overflow-x: hidden;
+				text-overflow: ellipsis;
+				&:empty {
+					display: none;
+				}
 			}
 		}
 		.loading-msg {

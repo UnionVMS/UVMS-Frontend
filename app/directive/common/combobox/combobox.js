@@ -235,13 +235,15 @@ angular.module('unionvmsWeb').directive('combobox', function(comboboxService) {
                 	}
                 	scope.ngModel = scope.newItem.text;
                 	ctrl.$setViewValue(scope.ngModel);
+                    scope.toggleCombo();
             	}else{
 	                scope.ngModel = getItemCode(item);
 	                scope.currentItemLabel = scope.getItemLabel(item);
 	                ctrl.$setViewValue(scope.ngModel);
+                    scope.toggleCombo();
             	}
                 
-                scope.toggleCombo();
+                /*scope.toggleCombo();*/
                 if(angular.isDefined(scope.callback)){
                     var extraParams;
                     if(angular.isDefined(scope.callbackParams)){
