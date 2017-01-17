@@ -23,6 +23,27 @@ copy of the GNU General Public License along with the IFDM Suite. If not, see <h
 					display: none;
 				}
 			}
+			&.selected-combo-item {
+				.selected-combo-icon {
+					position: absolute;
+					left: 3px;
+					top: 5px;
+					z-index: 1;
+					display: block;
+					color: #fff;
+				}
+				& > a {
+					&,
+					&:hover {
+						background: #089fd7;
+						border-color: #0794c8;
+						color: #fff;
+					}
+				}
+			}
+			.selected-combo-icon {
+				display: none;
+			}
 		}
 		.loading-msg {
 			text-align: center;
@@ -158,19 +179,15 @@ copy of the GNU General Public License along with the IFDM Suite. If not, see <h
 
 .combobox.combo-multiple {
 	div.btn.btn-default.dropdown-toggle {
-		min-height: 41px;
 		height: auto;
 		padding: 3px 20px 3px 12px;
-		.dropdowntext {
-			line-height: 30px;
-		}
+		min-height: 28px;
 		.selected-options {
 		    box-sizing: border-box;
 		    list-style: none;
 		    margin: 0;
-		    padding: 0 5px;
 		    width: 100%;
-		    display: inline-block;
+			display: block;
 		    overflow: hidden;
 		    text-overflow: ellipsis;
 		    white-space: nowrap;
@@ -181,9 +198,8 @@ copy of the GNU General Public License along with the IFDM Suite. If not, see <h
 			    cursor: default;
 			    float: left;
 			    margin-right: 5px;
-			    margin-top: 5px;
 			    padding: 0 5px;
-			    line-height: 20px;
+			    line-height: 18px;
 			    > span {
 			    	color: #999;
 				    cursor: pointer;
