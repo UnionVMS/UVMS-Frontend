@@ -1,0 +1,5 @@
+<ul class="tabs" role="tablist">
+    <li ng-repeat="tab in tabMenu" class="tab" ng-click="selectTab(tab.tab)" ng-class="{'active': selectedTab === '{{tab.tab}}'}">
+        {{tab.title}}
+    </li>
+</ul>

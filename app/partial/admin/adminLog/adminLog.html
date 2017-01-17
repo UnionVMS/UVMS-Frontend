@@ -14,11 +14,10 @@ copy of the GNU General Public License along with the IFDM Suite. If not, see <h
 	<!-- Nav tabs -->
     <div class="containerWrapper pollingTabs">
         <div class="container">
-        	<ul class="nav nav-tabs" role="tablist">
-				<li ng-repeat="tab in tabMenu" class="audittab" ng-click="selectTab(tab.tab)" ng-class="{'active': selectedTab === '{{tab.tab}}'}">
-					<span>{{tab.title}}</span>
-				</li>
-			</ul>
+            <content-tabs 
+                current-tab="selectedTab" 
+                functions="contentTabsFunctions">
+            </content-tabs>
         </div>
     </div>
 	<div class="container containerWithTopBottomPadding nopaddingtop">

@@ -23,55 +23,17 @@ angular.module('unionvmsWeb').controller('AuditlogCtrl', function($scope, $q, $f
     $scope.currentSearchResults = new SearchResults('date', false);
     var modalInstance;
 
-	//Sets tabs
-	var setTabs = function (){
-        return [
-            {
-                'tab': 'ALL',
-                'title': locale.getString('audit.tab_all')
-            },
-            {
-                'tab': 'EXCHANGE',
-                'title': locale.getString('audit.tab_exchange')
-            },
-            {
-                'tab': 'POSITION_REPORTS',
-                'title': locale.getString('audit.tab_position_reports')
-            },
-            {
-                'tab': 'ASSETS_AND_TERMINALS',
-                'title': locale.getString('audit.tab_assets_and_terminals')
-            },
-            {
-                'tab': 'GIS',
-                'title': locale.getString('audit.tab_gis')
-            },
-            {
-                'tab': 'ALARMS',
-                'title': locale.getString('audit.tab_alarms')
-            },
-            {
-                'tab': 'ACCESS_CONTROL',
-                'title': locale.getString('audit.tab_access_control')
-            }
-        ];
-    };
-
     var init = function(){
-        $scope.tabMenu = setTabs();
         auditOptionsService.resetDefaults();
         $scope.searchAuditLogs();
     };
 
-	// ************ Functions and Scope ************
-	$scope.selectTab = function(tab){
-		$scope.selectedTab = tab;
-        auditOptionsService.setOptions($scope.selectedTab);
-
+    $scope.$watch('selectedTab', function(newVal) {
+        auditOptionsService.setOptions(newVal);
         searchService.reset();
         auditOptionsService.resetDefaults();
         $scope.searchAuditLogs();
-	};
+    });
 
     //Do the search
     $scope.searchAuditLogs = function() {
@@ -311,6 +273,44 @@ angular.module('unionvmsWeb').controller('AuditlogCtrl', function($scope, $q, $f
             modalInstance.dismiss();
         }
     });
+
+    $scope.contentTabsFunctions = {
+        setTabs: function() {
+            return [
+                {
+                    'tab': 'ALL',
+                    'title': locale.getString('audit.tab_all')
+                },
+                {
+                    'tab': 'EXCHANGE',
+                    'title': locale.getString('audit.tab_exchange')
+                },
+                {
+                    'tab': 'POSITION_REPORTS',
+                    'title': locale.getString('audit.tab_position_reports')
+                },
+                {
+                    'tab': 'ASSETS_AND_TERMINALS',
+                    'title': locale.getString('audit.tab_assets_and_terminals')
+                },
+                {
+                    'tab': 'GIS',
+                    'title': locale.getString('audit.tab_gis')
+                },
+                {
+                    'tab': 'ALARMS',
+                    'title': locale.getString('audit.tab_alarms')
+                },
+                {
+                    'tab': 'ACCESS_CONTROL',
+                    'title': locale.getString('audit.tab_access_control')
+                }
+            ];
+        },
+        setInitialTab: function() {
+            return 'ALL';
+        }
+    };
 
     init();
 
