@@ -37,12 +37,30 @@ angular.module('unionvmsWeb').directive('breadcrumbNavigator', function() {
  * @param $scope {Service} The controller scope
  * @param breadcrumbService {Service} The breadcrumb service <p>{@link unionvmsWeb.breadcrumbService}</p>
  * @attr items {Array} - An array containing the items that should be used for the breadcrumbs and their visibility status
- * @attr activeItemIdx {Number} - The index of the last displayed item in the breadcrumb (the one that is currently visible)
+ * @attr activeItemIdx {Number} - The index of the active item in the breadcrumb (the one that is currently visible)
+ * @attr visibleItemsIdx {Array} - An array containing the indexes of all breadcrumb pages that should be displayed during the navigation
  * @description
  *  The controller for the breadcrumb navigator directive ({@link unionvmsWeb.breadcrumbNavigator})
  */
 .controller('BreadcrumbnavigatorCtrl', ['$scope', 'breadcrumbService', function($scope, breadcrumbService){
     $scope.activeItemIdx = 0;
+    $scope.visibleItemsIdx = [0];
+    
+    /**
+     * Check if a breadcrumb page item should be visible in the brecrumb navigator
+     * 
+     * @memberof BreadcrumbnavigatorCtrl
+     * @public
+     * @alias isItemVisible
+     * @returns {Boolean} Whether the item is visible or not
+     */
+    $scope.isItemVisible = function(idx){
+        var visible = false;
+        if (_.indexOf($scope.visibleItemsIdx, idx) !== -1){
+            visible = true;
+        }
+        return visible;
+    };
     
     /**
      * Function that is fired when a breadcrumb's item is clicked
@@ -53,6 +71,7 @@ angular.module('unionvmsWeb').directive('breadcrumbNavigator', function() {
      * @param {Number} idx - The index of the breadcrumb's clicked item 
      */
     $scope.handleClick = function(idx){
+        $scope.visibleItemsIdx = $scope.visibleItemsIdx.slice(0, _.indexOf($scope.visibleItemsIdx, idx) + 1);
         $scope.items[$scope.activeItemIdx].visible = false;
         $scope.items[idx].visible = true;
         $scope.activeItemIdx = idx;
@@ -71,6 +90,7 @@ angular.module('unionvmsWeb').directive('breadcrumbNavigator', function() {
      * @param {Number} idx - The index of the breadcrumb's item to go to 
      */
     $scope.goToItem = function(idx){
+        $scope.visibleItemsIdx.push(idx);
         $scope.items[$scope.activeItemIdx].visible = false;
         $scope.items[idx].visible = true;
         $scope.activeItemIdx = idx;

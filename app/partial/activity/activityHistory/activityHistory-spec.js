@@ -9,17 +9,21 @@ the hope that it will be useful, but WITHOUT ANY WARRANTY; without even the impl
 FITNESS FOR A PARTICULAR PURPOSE.  See the GNU General Public License for more details. You should have received a
 copy of the GNU General Public License along with the IFDM Suite. If not, see <http://www.gnu.org/licenses/>.
 */
-.activity-overview {
-    .olabel {
-        font-weight: bold;
-        &::after {
-            content: ':'
-        }
-    }
-    .table-container {
-        padding-top: 35px;
-    }
-    .notSortable {
-        cursor: default;
-    }
-}
+describe('ActivityhistoryCtrl', function() {
+
+	beforeEach(module('unionvmsWeb'));
+
+	var scope,ctrl;
+
+    beforeEach(inject(function($rootScope, $controller) {
+      scope = $rootScope.$new();
+      ctrl = $controller('ActivityhistoryCtrl', {$scope: scope});
+    }));	
+
+	it('should ...', inject(function() {
+
+		expect(1).toEqual(1);
+		
+	}));
+
+});

@@ -23,7 +23,7 @@ copy of the GNU General Public License along with the IFDM Suite. If not, see <h
 angular.module('unionvmsWeb').controller('ActivityreportslistCtrl',function($scope, activityService, visibilityService){
     $scope.actServ = activityService;
     $scope.attrVisibility = visibilityService;
-    $scope.displayedActivities = [].concat($scope.actServ.activities);
+    //$scope.displayedActivities = [].concat($scope.actServ.activities);
     
     /**
      * Pipe function used in the smartTable in order to support server side pagination and sorting
@@ -84,19 +84,32 @@ angular.module('unionvmsWeb').controller('ActivityreportslistCtrl',function($sco
     }
     
     /**
-     * Open the overview partial through the index of the table row record
+     * Open the history partial through the index of the table row record
      * 
      * @memberof ActivityreportslistCtrl
      * @public
      * @alias openOverview
-     * @param {Number} idx - The index of the activity record to use to fetch the overview data
+     * @param {Number} idx - The index of the activity record to use to fetch the history data
      */
-    $scope.openOverview = function(idx){
+    $scope.openHistory = function(idx){
         $scope.actServ.overview = $scope.actServ.displayedActivities[idx];
-        //FIXME check this when all backend services are ready
         if (angular.isDefined($scope.actServ.overview.fluxReportReferenceId) && $scope.actServ.overview.uniqueReportIdList.length > 0){
             $scope.actServ.getHistory();
             $scope.goToView(1);
         }
+    };
+    
+    /**
+     * Open the activity details partial through the index of the table row record
+     * 
+     * @memberof ActivityreportslistCtrl
+     * @public
+     * @alias openDetails
+     * @param {Number} idx - The index of the activity record to use to fetch the detail data
+     */
+    $scope.openDetails = function(idx){
+        //TODO fetch the data and load the partial
+        $scope.actServ.overview = $scope.actServ.displayedActivities[idx];
+        $scope.goToView(2);
     };
 });

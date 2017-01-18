@@ -38,24 +38,31 @@ angular.module('unionvmsWeb').factory('activityService',function(locale, activit
         type: 'activities',
         visible: true
     },{
-        title: 'activity.breadcrumb_report_overview',
-        type: 'overview',
+        title: 'activity.breadcrumb_report_history',
+        type: 'history',
         visible: false
     },{
         title: 'activity.breadcrumb_report_details',
         type: 'details',
+        visible: false
+    },{
+        title: 'activity.breadcrumb_report_hist_activity_list',
+        type: 'hist-activity-list',
         visible: false
     }];
     
     actServ.activities = [];
     actServ.displayedActivities = [];
     actServ.overview = {};
-    actServ.history= [];
+    actServ.history = [];
     actServ.displayedHistory = [];
     actServ.details = {};
+    actServ.activitiesHistory = [];
+    actServ.displayedActivitiesHistory = [];
     
     actServ.reportsList = getReportsListObject();
     actServ.historyList = getHistoryListObject();
+    actServ.activitiesHistoryList = getActivitiesHistoryListObject();
     
     /**
      * Create an empty reportsList Object with all the necessary properties
@@ -100,6 +107,20 @@ angular.module('unionvmsWeb').factory('activityService',function(locale, activit
     }
     
     /**
+     * Create an empty activitiesHistoryList object
+     * 
+     * @memberof activityService
+     * @private
+     * @returns {Object} The activitiesHistoryList object
+     */
+    function getActivitiesHistoryListObject(){
+        return {
+            isLoading: false,
+            hasError: false
+        }
+    }
+    
+    /**
      * Reset the pagination and tableState properties of the reportsList object
      * 
      * @memberof activityService
@@ -131,6 +152,7 @@ angular.module('unionvmsWeb').factory('activityService',function(locale, activit
         this.details = {};
         this.reportsList = getReportsListObject();
         this.historyList = getHistoryListObject();
+        this.activitiesHistoryList = getActivitiesHistoryListObject();
         
         if (angular.isDefined(goToInitialPage) && goToInitialPage){
             breadcrumbService.goToItem(0);
@@ -138,7 +160,8 @@ angular.module('unionvmsWeb').factory('activityService',function(locale, activit
     };
     
     /**
-     * Clear attribute of the activity service by its type. Type can be: <b>activities</b>, <b>overview</b>, <b>details</b>, <b>history</b>
+     * Clear attribute of the activity service by its type. Type can be: <b>activities</b>, <b>overview</b>, <b>details</b>, 
+     * <b>history</b>, <b>activitiesHistory</b>
      * 
      * @memberof activityService
      * @public
@@ -153,6 +176,9 @@ angular.module('unionvmsWeb').factory('activityService',function(locale, activit
                     break;
                 case 'history':
                     this.displayedHistory = [];
+                    break;
+                case 'activitiesHistory':
+                    this.displayedActivitiesHistory = [];
                     break;
                 default:
                     break;
@@ -184,7 +210,6 @@ angular.module('unionvmsWeb').factory('activityService',function(locale, activit
             pag.offset = 1;
         }
          
-        
         return pag;
     }
 	
@@ -199,10 +224,13 @@ angular.module('unionvmsWeb').factory('activityService',function(locale, activit
     actServ.getActivityList = function(callback, tableState){
         actServ.clearAttributeByType('activities');
         
+        //TODO check first request so that we include all purpose codes
+        
         var payload = {
             pagination: getPaginationForServer(tableState),
             sorting: actServ.reportsList.sorting,
-            searchCriteriaMap: actServ.reportsList.searchObject
+            searchCriteriaMap: actServ.reportsList.searchObject.simpleCriteria,
+            searchCriteriaMapMultipleValues: actServ.reportsList.searchObject.multipleCriteria
         };
         
         activityRestService.getActivityList(payload).then(function(response){
@@ -257,14 +285,43 @@ angular.module('unionvmsWeb').factory('activityService',function(locale, activit
      */
     actServ.getHistory = function(){
         actServ.historyList.isLoading = true;
-        //FIXME check the uniqueReportIdList, maybe it needs some logic to check which id to use
-        activityRestService.getReportHistory(actServ.overview.fluxReportReferenceId, actServ.overview.uniqueReportIdList[0].fluxReportSchemeId).then(function(response){
+        activityRestService.getReportHistory(actServ.overview.fluxReportReferenceId, actServ.overview.fluxReportReferenceSchemeId).then(function(response){
             actServ.historyList.isLoading = false;
             actServ.history = response;
             actServ.displayedHistory = [].concat(actServ.history);
         }, function(error){
             actServ.historyList.isLoading = false;
             actServ.historyList.hasError = true;
+        });
+    };
+    
+    actServ.getActivitiesHistory = function(id){
+        actServ.clearAttributeByType('activitiesHistory');
+        
+        var payload = {
+            pagination: {
+                offset: 0,
+                pageSize: 100
+            },
+            sorting: {
+                reversed: true,
+                sortBy: 'ACTIVITY_TYPE'
+            },
+            searchCriteriaMap: {
+                'FA_REPORT_ID': id
+            },
+            searchCriteriaMapMultipleValues: {
+                'PURPOSE': ['1', '3', '5', '9'] //FIXME
+            }
+        };
+        
+        activityRestService.getActivityList(payload).then(function(response){
+            actServ.activitiesHistory = response.resultList;
+            actServ.displayedActivitiesHistory = [].concat(actServ.activitiesHistory);
+            actServ.activitiesHistoryList.isLoading = false;
+        }, function(error){
+            actServ.activitiesHistoryList.isLoading = false;
+            actServ.activitiesHistoryList.hasError = true;
         });
     };
 

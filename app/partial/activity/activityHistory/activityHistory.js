@@ -18,7 +18,7 @@ copy of the GNU General Public License along with the IFDM Suite. If not, see <h
  * @description
  *  The controller for the fishing activity overview page
  */
-angular.module('unionvmsWeb').controller('ActivityoverviewCtrl',function($scope, activityService){
+angular.module('unionvmsWeb').controller('ActivityhistoryCtrl',function($scope, activityService){
     $scope.actServ = activityService;
     
     /**
@@ -29,9 +29,16 @@ angular.module('unionvmsWeb').controller('ActivityoverviewCtrl',function($scope,
      * @alias getDetails
      */
     $scope.getDetails = function(){
+        //FIXME remove mock
         $scope.actServ.details = {
             name: 'Activity details will be here'
         };
         $scope.goToView(2);
     };
+    
+    $scope.openActivityHistory = function(idx){
+        $scope.actServ.activitiesHistoryList.isLoading = true;
+        $scope.actServ.getActivitiesHistory($scope.actServ.displayedHistory[idx].id);
+        $scope.goToView(3);
+    }
 });

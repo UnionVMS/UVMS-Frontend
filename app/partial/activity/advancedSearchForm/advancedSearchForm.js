@@ -16,14 +16,16 @@ copy of the GNU General Public License along with the IFDM Suite. If not, see <h
  * @param $scope {Service} controller scope
  * @param activityService {Service} The activity service <p>{@link unionvmsWeb.activityService}</p>
  * @param unitConversionService {Service} The unit conversion service <p>{@link unionvmsWeb.visibilityService}</p>
- * @param mdrCacheService {Service} The mdr code lists cache service
+ * @param mdrCacheService {Service} The mdr code lists cache service <p>{@link unionvmsWeb.mdrCacheService}</p>
+ * @param vesselRestService {Service} The vessel REST service
+ * @param userService {Service} The user service
  * @attr {Boolean} isFormValid - A flag for validating the search form
  * @attr {Object} codeLists - An object containing all code lists items
  * @attr {Object} advancedSearchObject - An object containing all search criterias specified within the form
  * @description
  *  The controller for the advanced search form of the activity tab table  
  */
-angular.module('unionvmsWeb').controller('AdvancedsearchformCtrl',function($scope, activityService, unitConversionService, mdrCacheService){
+angular.module('unionvmsWeb').controller('AdvancedsearchformCtrl',function($scope, activityService, unitConversionService, mdrCacheService, vesselRestService, userService){
     $scope.actServ = activityService;
     $scope.isFormValid = true;
     
@@ -40,11 +42,11 @@ angular.module('unionvmsWeb').controller('AdvancedsearchformCtrl',function($scop
         weightUnit: "kg", //by default is kg
         comChannel: undefined,
         fromId: undefined,
-        fromName: undefined,
+        onwer: undefined,
         startDateTime: undefined,
         endDateTime: undefined,
-        vesselId: undefined,
-        vesselName: undefined,
+        vessel: undefined,
+        vesselGroup: undefined,
         purposeCode: undefined,
         reportType: undefined,
         activityType: undefined,
@@ -81,7 +83,14 @@ angular.module('unionvmsWeb').controller('AdvancedsearchformCtrl',function($scop
     $scope.getPurposeCodes = function(){
         $scope.codeLists.purposeCodes = []; 
         mdrCacheService.getCodeList('flux_gp_purposecode').then(function(response){
-            $scope.codeLists.purposeCodes = convertCodelistToCombolist(response);
+             var list = convertCodelistToCombolist(response);
+             if (!userService.isAllowed('SHOW_DELETED_FA_REPORTS', 'Activity', true)){
+                 list = _.reject(list, function(item){
+                     return item.code === '3';
+                 });
+             }
+             $scope.codeLists.purposeCodes = list;
+             //TODO set the items that should be selected by default
         }, function(error){
             //TODO deal with error
         });
@@ -139,6 +148,28 @@ angular.module('unionvmsWeb').controller('AdvancedsearchformCtrl',function($scop
     };
     
     /**
+     * Get the list of the user's vessel groups
+     * 
+     * @memberof AdvancedsearchformCtrl
+     * @public
+     * @alias getVesselGroups
+     * @returns {Array} An array with all vessel groups that belong to a user
+     */
+    $scope.getVesselGroups = function(){
+        $scope.vesselGroups = [];
+        vesselRestService.getVesselGroupsForUser().then(function(response){
+            angular.forEach(response, function(item) {
+                $scope.vesselGroups.push({
+            	    code: item.id,
+            	    text: item.name
+            	});
+            });
+        }, function(error){
+            //TODO deal with error
+        });
+    };
+    
+    /**
      * Reset search form and clear table results
      * 
      * @memberof AdvancedsearchformCtrl
@@ -175,12 +206,11 @@ angular.module('unionvmsWeb').controller('AdvancedsearchformCtrl',function($scop
             var keyMapper = {
                 reportType: 'REPORT_TYPE',
                 fromId: 'FROM_ID',
-                fromName: 'FROM_NAME',
+                owner: 'OWNER',
                 startDateTime: 'PERIOD_START',
                 endDateTime: 'PERIOD_END',
-                vesselName: 'VESSEL_NAME',
-                vesselId: 'VESSEL_IDENTIFIRE',
-                purposeCode: 'PURPOSE',
+                vesselGroup: 'VESSEL_GROUP',
+                vessel: 'VESSEL',
                 gearType: 'GEAR',
                 species: 'SPECIES',
                 master: 'MASTER',
@@ -192,15 +222,26 @@ angular.module('unionvmsWeb').controller('AdvancedsearchformCtrl',function($scop
                 activityType: 'ACTIVITY_TYPE'
             };
             
+            //FIXME this is to be used in the future when we start having multiple criteria selection in the form
+//            var multipleKeyMapper = {
+//                purposeCode: 'PURPOSE',  
+//            };
+            
             var formatedSearch = {};
             angular.forEach($scope.advancedSearchObject, function(value, key) {
-                if (key !== 'weightUnit' && (!angular.isDefined(value) || (value !== null && value !== ''))){
+                if (key !== 'weightUnit' && key !== 'purposeCode' && (!angular.isDefined(value) || (value !== null && value !== ''))){
                     if (key === 'startDateTime' || key === 'endDateTime'){
                         value = unitConversionService.date.convertDate(value, 'to_server');
                     }
                     this[keyMapper[key]] = value;
                 }
             }, formatedSearch);
+            
+            var multipleFormatedSearch = {
+                //'PURPOSE': $scope.advancedSearchObject.purposeCode FIXME
+                'PURPOSE': ['1', '3', '5', '9']
+            };
+            
             
             if (angular.isDefined(formatedSearch.QUNTITY_MIN) || angular.isDefined(formatedSearch.QUNTITY_MAX)){
                 formatedSearch.WEIGHT_MEASURE = $scope.advancedSearchObject.weightUnit;
@@ -210,7 +251,10 @@ angular.module('unionvmsWeb').controller('AdvancedsearchformCtrl',function($scop
                 formatedSearch.QUNTITY_MIN = 0;
             }
             
-            $scope.actServ.reportsList.searchObject = formatedSearch;
+            $scope.actServ.reportsList.searchObject = {
+                simpleCriteria: formatedSearch,
+                multipleCriteria: multipleFormatedSearch
+            };
             
             $scope.actServ.getActivityList();
         }
@@ -223,7 +267,7 @@ angular.module('unionvmsWeb').controller('AdvancedsearchformCtrl',function($scop
      * @private
      */
     function getComboboxData(){
-        var lists = ['comChannels', 'purposeCodes', 'reportTypes', 'gearTypes', 'activityTypes'];
+        var lists = ['comChannels', 'purposeCodes', 'reportTypes', 'gearTypes', 'activityTypes', 'vesselGroups'];
         angular.forEach(lists, function(list) {
         	var fnName = 'get' + list.substring(0,1).toUpperCase() + list.substring(1);
         	$scope[fnName]();
