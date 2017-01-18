@@ -509,5 +509,6 @@
 	"reports_error_user_without_scope": "Report module not accessable to accounts without a scope.",
 	"apply": "Apply",
 	"wms_preview_btn_tooltip": "Preview data",
-	"alarm_preview_btn_tooltip": "Alert details"
+	"alarm_preview_btn_tooltip": "Alert details",
+	"last_x_pos_warning": "ERS filtering not applied when getting last positions"
 }
