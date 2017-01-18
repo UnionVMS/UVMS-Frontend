@@ -12,11 +12,19 @@ copy of the GNU General Public License along with the IFDM Suite. If not, see <h
 <div ng-controller="ReportformCtrl">
 	<!-- Warnings -->
 	<div class="row">
-		<div class="form-group col-md-12" ng-if="formAlert.visible">
+		<div class="col-md-12" ng-if="formAlert.visible">
 			<div class="alert alert-danger alert-container" role="alert">
 				<span class="fa fa-exclamation-circle" aria-hidden="true"></span>
 				<span class="alert-message">
 					<span>{{formAlert.msg}}</span>            
+				</span>
+		    </div>
+		</div>
+		<div class="col-md-12" ng-if="report.positionSelector === 'last' && report.positionTypeSelector === 'positions'">
+			<div class="alert alert-warning alert-container" role="alert">
+				<span class="fa fa-exclamation-circle" aria-hidden="true"></span>
+				<span class="alert-message">
+					<span>ERS filtering not applied when getting last positions</span>            
 				</span>
 		    </div>
 		</div>
