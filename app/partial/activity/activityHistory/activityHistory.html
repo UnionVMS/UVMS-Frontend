@@ -21,7 +21,7 @@ copy of the GNU General Public License along with the IFDM Suite. If not, see <h
 						<div class="th col-md-2" st-sort="correctionType" st-class-ascent="sorting_asc" st-class-descent="sorting_desc" st-skip-natural="true">{{'activity.header_fa_correction_type' | i18n}}</div>
 						<div class="th col-md-2" st-sort="creationDate" st-class-ascent="sorting_asc" st-class-descent="sorting_desc" st-skip-natural="true">{{'activity.header_fa_creation_date' | i18n}}</div>
 						<div class="th col-md-2" st-sort="acceptedDate" st-sort-default="reverse" st-class-ascent="sorting_asc" st-class-descent="sorting_desc" st-skip-natural="true">{{'activity.header_fa_accepted_date' | i18n}}</div>
-						<div class="th col-md-2">{{'activity.header_fa_actions' | i18n }}</div>
+						<div class="th col-md-2 notSortable">{{'activity.header_fa_actions' | i18n }}</div>
 					</div>
 					<div class="tr row" ng-if="!actServ.historyList.isLoading && (actServ.displayedHistory.length === 0 || actServ.historyList.hasError)">
 						<div class="th col-md-12">

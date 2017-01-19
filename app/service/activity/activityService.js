@@ -42,12 +42,12 @@ angular.module('unionvmsWeb').factory('activityService',function(locale, activit
         type: 'history',
         visible: false
     },{
-        title: 'activity.breadcrumb_report_details',
-        type: 'details',
+        title: 'activity.breadcrumb_report_hist_activity_list',
+        type: 'activitiesHistory',
         visible: false
     },{
-        title: 'activity.breadcrumb_report_hist_activity_list',
-        type: 'hist-activity-list',
+        title: 'activity.breadcrumb_report_details',
+        type: 'details',
         visible: false
     }];
     

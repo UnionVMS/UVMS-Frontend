@@ -30,12 +30,12 @@
 						</th>
 					</tr>
 					<tr>
-						<th colspan="20" ng-if="!actServ.activitiesHistoryList.isLoading && (actServ.displayedActivitiesHistory.length === 0 || actServ.displayedActivitiesHistory.hasError)">
-							<table-alert type="'info'" msg="'spatial.table_no_data'" visible="actServ.displayedActivities.length === 0 && !actServ.reportsList.hasError"></table-alert>
-							<table-alert type="'error'" msg="'activity.fa_table_error_fetching_reports'" visible="actServ.reportsList.hasError"></table-alert>
+						<th colspan="20" ng-if="!actServ.activitiesHistoryList.isLoading && (actServ.displayedActivitiesHistory.length === 0 || actServ.activitiesHistoryList.hasError)">
+							<table-alert type="'info'" msg="'spatial.table_no_data'" visible="actServ.displayedActivities.length === 0 && !actServ.activitiesHistoryList.hasError"></table-alert>
+							<table-alert type="'error'" msg="'activity.fa_table_error_fetching_reports'" visible="actServ.activitiesHistoryList.hasError"></table-alert>
 						</th>
 					</tr>
-					<tr ng-if="actServ.displayedActivitiesHistory.isLoading">
+					<tr ng-if="actServ.activitiesHistoryList.isLoading">
 						<th colspan="20" class="loading-spinner-cl"><i class="fa fa-spinner fa-spin loading-spinner"></i></th>
 					</tr>
 				</thead>
@@ -71,7 +71,7 @@
 				</tbody>
 			</table>
 		</div>
-		<div class="stFooterPagination" ng-show="actServ.displayedActivitiesHistory.length > 0 && !actServ.displayedActivitiesHistory.isLoading">
+		<div class="stFooterPagination" ng-show="actServ.displayedActivitiesHistory.length > 0 && !actServ.activitiesHistoryList.isLoading">
 			<div class="tr">
 				<div class="td text-right">
 					<div st-pagination st-items-by-page="25" st-template="partial/common/reportsPagination/reportsPagination.html"></div>
@@ -79,5 +79,4 @@
 			</div>
 		</div>
 	</div>
-
 </div>

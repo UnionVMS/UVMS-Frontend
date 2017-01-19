@@ -110,6 +110,6 @@ angular.module('unionvmsWeb').controller('ActivityreportslistCtrl',function($sco
     $scope.openDetails = function(idx){
         //TODO fetch the data and load the partial
         $scope.actServ.overview = $scope.actServ.displayedActivities[idx];
-        $scope.goToView(2);
+        $scope.goToView(3);
     };
 });

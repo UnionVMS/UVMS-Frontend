@@ -23,31 +23,10 @@ copy of the GNU General Public License along with the IFDM Suite. If not, see <h
 angular.module('unionvmsWeb').controller('ActivityhistorylistCtrl',function($scope, activityService, visibilityService){
     $scope.actServ = activityService;
     $scope.attrVisibility = visibilityService;
-    $scope.displayedActivitiesHistory = [].concat($scope.actServ.activitiesHistory);
     
-//    /**
-//     * Pipe function used in the smartTable in order to support server side pagination and sorting
-//     * 
-//     * @memberof ActivityreportslistCtrl
-//     * @public
-//     * @alias callServer
-//     */
-//    $scope.callServer = function(tableState){
-//        $scope.actServ.reportsList.tableState = tableState;
-//        $scope.actServ.reportsList.isLoading = true;
-//        
-//        var searchField, sortOrder; 
-//        if (angular.isDefined(tableState.sort.predicate)){
-//            searchField = getTruePredicate(tableState.sort.predicate);
-//            sortOrder = tableState.sort.reverse;
-//        }
-//        
-//        $scope.actServ.reportsList.sorting = {
-//            sortBy: searchField,
-//            reversed: sortOrder
-//        };
-//        
-//        $scope.actServ.getActivityList(callServerCallback, tableState);
-//    };
-
+    $scope.openDetails = function(idx){
+        //TODO fetch the data and load the partial
+        //$scope.actServ.overview = $scope.actServ.displayedActivities[idx];
+        $scope.goToView(3);
+    };
 });

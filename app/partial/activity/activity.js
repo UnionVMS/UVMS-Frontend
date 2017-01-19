@@ -56,13 +56,13 @@ angular.module('unionvmsWeb').controller('ActivityCtrl',function($scope, locale,
      * @alias breadcrumbClick
      */
     $scope.breadcrumbClick = function(){
-        var idx = breadcrumbService.getActiveItemIdx() + 1;
-        for (var i = idx; i < $scope.actServ.breadcrumbPages.length; i++){
-            if (_.isObject($scope.actServ[$scope.actServ.breadcrumbPages[i].type])){
-                $scope.actServ[$scope.actServ.breadcrumbPages[i].type] = {};
-            } else if (_.isArray($scope.actServ[$scope.actServ.breadcrumbPages[idx].type])){
-                $scope.actServ[$scope.actServ.breadcrumbPages[i].type] = [];
-            }
+        var idxToBeCleared = breadcrumbService.getItemsToBeCleared();
+        angular.forEach(idxToBeCleared, function(idx) {
+            $scope.actServ.clearAttributeByType($scope.actServ.breadcrumbPages[idx].type)
+        });
+        
+        if (breadcrumbService.getActiveItemIdx() === 0){
+            $scope.actServ.clearAttributeByType('overview');
         }
     };
 });
