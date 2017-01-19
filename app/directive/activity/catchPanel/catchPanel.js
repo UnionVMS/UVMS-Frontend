@@ -85,6 +85,7 @@ angular.module('unionvmsWeb').directive('catchPanel', function(locale) {
 
             //when the trip is initialized
             scope.$watch('ngModel', function() {
+                //TODO init must be called if the data is already loaded before the directive compilation
                 init();
             });
 
