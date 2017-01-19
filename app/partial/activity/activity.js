@@ -58,7 +58,7 @@ angular.module('unionvmsWeb').controller('ActivityCtrl',function($scope, locale,
     $scope.breadcrumbClick = function(){
         var idxToBeCleared = breadcrumbService.getItemsToBeCleared();
         angular.forEach(idxToBeCleared, function(idx) {
-            $scope.actServ.clearAttributeByType($scope.actServ.breadcrumbPages[idx].type)
+            $scope.actServ.clearAttributeByType($scope.actServ.breadcrumbPages[idx].type);
         });
         
         if (breadcrumbService.getActiveItemIdx() === 0){

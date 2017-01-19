@@ -117,7 +117,7 @@ angular.module('unionvmsWeb').factory('activityService',function(locale, activit
         return {
             isLoading: false,
             hasError: false
-        }
+        };
     }
     
     /**
@@ -150,6 +150,8 @@ angular.module('unionvmsWeb').factory('activityService',function(locale, activit
         this.history = [];
         this.displayedHistory = [];
         this.details = {};
+        this.activitiesHistory = [];
+        this.displayedActivitiesHistory = [];
         this.reportsList = getReportsListObject();
         this.historyList = getHistoryListObject();
         this.activitiesHistoryList = getActivitiesHistoryListObject();
