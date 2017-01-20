@@ -218,6 +218,22 @@ angular.module('unionvmsWeb').factory('activityService',function(locale, activit
          
         return pag;
     }
+    
+    
+    /**
+     * Reset the reports list search object
+     * 
+     * @memberof activityService
+     * @public
+     * @alias resetReportsListSearchObject
+     */
+    actServ.resetReportsListSearchObject = function(){
+        actServ.reportsList.searchObject = {
+            multipleCriteria: {
+                'PURPOSE': actServ.getAllPurposeCodesArray()
+            }
+        };
+    };
 	
     /**
      * Get the list of activities according to the table pagination and search criteria
@@ -299,6 +315,14 @@ angular.module('unionvmsWeb').factory('activityService',function(locale, activit
         });
     };
     
+    actServ.getAllPurposeCodesArray = function(){
+        var arr = _.map(actServ.allPurposeCodes, function(item){
+            return item.code;
+        });
+        
+        return arr;
+    };
+    
     actServ.getActivitiesHistory = function(id){
         actServ.clearAttributeByType('activitiesHistory');
         
@@ -315,7 +339,7 @@ angular.module('unionvmsWeb').factory('activityService',function(locale, activit
                 'FA_REPORT_ID': id
             },
             searchCriteriaMapMultipleValues: {
-                'PURPOSE': actServ.allPurposeCodes
+                'PURPOSE': actServ.getAllPurposeCodesArray()
             }
         };
         

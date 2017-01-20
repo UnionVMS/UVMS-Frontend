@@ -90,17 +90,15 @@ angular.module('unionvmsWeb').controller('AdvancedsearchformCtrl',function($scop
                  });
              }
              
-             $scope.advancedSearchObject.purposeCode = _.map(list, function(item){
-                 return item.code;
-             });
+             angular.copy(list, $scope.actServ.allPurposeCodes); 
+             
+             $scope.advancedSearchObject.purposeCode = $scope.actServ.getAllPurposeCodesArray();
              
              $scope.actServ.reportsList.searchObject = {
                  multipleCriteria: {
                      'PURPOSE': $scope.advancedSearchObject.purposeCode
                  }
              };
-             
-             angular.copy($scope.advancedSearchObject.purposeCode, $scope.actServ.allPurposeCodes); 
              
              $scope.codeLists.purposeCodes = list;
         }, function(error){
@@ -191,13 +189,17 @@ angular.module('unionvmsWeb').controller('AdvancedsearchformCtrl',function($scop
     $scope.resetSearch = function(){
         var keys = _.keys($scope.advancedSearchObject);
         angular.forEach(keys, function(key) {
-        	if (key !== 'weightUnit'){
-        	    $scope.advancedSearchObject[key] = undefined;
-        	} else {
+        	if (key === 'weightUnit'){
         	    $scope.advancedSearchObject.weightUnit = 'kg';
+        	} else if (key === 'purposeCode'){
+        	    $scope.advancedSearchObject[key] = $scope.actServ.getAllPurposeCodesArray();
+        	} else {
+        	    $scope.advancedSearchObject[key] = undefined;
         	}
         });
         $scope.actServ.resetReportsListTableState();
+        $scope.actServ.resetReportsListSearchObject()
+        $scope.actServ.reportsList.isLoading = true;
         $scope.actServ.getActivityList();
     };
     
