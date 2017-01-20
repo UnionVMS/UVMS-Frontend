@@ -43,7 +43,7 @@ copy of the GNU General Public License along with the IFDM Suite. If not, see <h
 					<tr>
 						<th colspan="20" ng-if="!actServ.reportsList.isLoading && (actServ.displayedActivities.length === 0 || actServ.reportsList.hasError)">
 							<table-alert type="'info'" msg="'spatial.table_no_data'" visible="actServ.displayedActivities.length === 0 && !actServ.reportsList.hasError"></table-alert>
-							<table-alert type="'error'" msg="'activity.fa_table_error_fetching_reports'" visible="actServ.reportsList.hasError"></table-alert>
+							<table-alert type="'error'" msg="'activity.fa_table_error_fetching_reports'" visible="actServ.reportsList.hasError" no-hide="true"></table-alert>
 						</th>
 					</tr>
 					<tr ng-if="actServ.reportsList.isLoading">

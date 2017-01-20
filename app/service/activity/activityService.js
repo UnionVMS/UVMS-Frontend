@@ -269,6 +269,7 @@ angular.module('unionvmsWeb').factory('activityService',function(locale, activit
             }
             
             actServ.reportsList.isLoading = false;
+            actServ.reportsList.hasError = false;
         }, function(error){
             actServ.reportsList.isLoading = false;
             actServ.reportsList.hasError = true;

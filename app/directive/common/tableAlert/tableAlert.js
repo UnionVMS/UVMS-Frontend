@@ -18,7 +18,8 @@ angular.module('unionvmsWeb').directive('tableAlert', function() {
 			type: '=',
 			msg: '=',
 			visible: '=',
-			timeout: '='
+			timeout: '=',
+			noHide: '@'
 		},
 		templateUrl: 'directive/common/tableAlert/tableAlert.html'
 	};
@@ -26,19 +27,23 @@ angular.module('unionvmsWeb').directive('tableAlert', function() {
 
 angular.module('unionvmsWeb').controller('tableAlertCtrl',['$scope','$timeout','locale', function($scope,$timeout,locale){
 	$scope.hide = function(){
-		$timeout(function(){
-			$scope.visible = false;
-		}, angular.isDefined($scope.timeout) ? $scope.timeout : 3000);
+	    if ($scope.noHide){
+	        $scope.visible = false;
+	    } else {
+	        $timeout(function(){
+	            $scope.visible = false;
+	        }, angular.isDefined($scope.timeout) ? $scope.timeout : 3000);
+	    }
 	};
 	
 	$scope.$watch(function(){return $scope.visible;},function(newVal){
-		if(newVal===true && $scope.type !== 'info'){
-			$scope.hide();
-		}
-	});
-	
-	$scope.$watch(function(){return $scope.type;},function(newVal){
-		console.log(newVal);
+	    if (newVal === true){
+	        if (!$scope.noHide && $scope.type !== 'info'){
+	            $scope.hide();
+	        }
+	    } else {
+	        $scope.hide();
+	    }
 	});
 	
 	$scope.$watch(function(){return $scope.msg;},function(newVal){
