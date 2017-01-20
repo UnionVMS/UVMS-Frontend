@@ -23,7 +23,6 @@ copy of the GNU General Public License along with the IFDM Suite. If not, see <h
 angular.module('unionvmsWeb').controller('ActivityreportslistCtrl',function($scope, activityService, visibilityService){
     $scope.actServ = activityService;
     $scope.attrVisibility = visibilityService;
-    //$scope.displayedActivities = [].concat($scope.actServ.activities);
     
     /**
      * Pipe function used in the smartTable in order to support server side pagination and sorting

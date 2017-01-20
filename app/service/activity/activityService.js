@@ -26,6 +26,7 @@ copy of the GNU General Public License along with the IFDM Suite. If not, see <h
  * @attr {Object} details - An object containing the data to be displayed at the activity details partial
  * @attr {Object} reportsList - An object containing the state of the FA reports table such as pagination, sorting, smart table tableState
  * @attr {Object} historyList - An object containing the state of the FA history table
+ * @attr {Array} allPurposeCodes - An array containing all purpose codes available to the user
  * @description
  *  A service to deal with all activity data
  */
@@ -63,6 +64,8 @@ angular.module('unionvmsWeb').factory('activityService',function(locale, activit
     actServ.reportsList = getReportsListObject();
     actServ.historyList = getHistoryListObject();
     actServ.activitiesHistoryList = getActivitiesHistoryListObject();
+    
+    actServ.allPurposeCodes = [];
     
     /**
      * Create an empty reportsList Object with all the necessary properties
@@ -155,6 +158,7 @@ angular.module('unionvmsWeb').factory('activityService',function(locale, activit
         this.reportsList = getReportsListObject();
         this.historyList = getHistoryListObject();
         this.activitiesHistoryList = getActivitiesHistoryListObject();
+        this.allPurposeCodes = [];
         
         if (angular.isDefined(goToInitialPage) && goToInitialPage){
             breadcrumbService.goToItem(0);
@@ -225,8 +229,6 @@ angular.module('unionvmsWeb').factory('activityService',function(locale, activit
      */
     actServ.getActivityList = function(callback, tableState){
         actServ.clearAttributeByType('activities');
-        
-        //TODO check first request so that we include all purpose codes
         
         var payload = {
             pagination: getPaginationForServer(tableState),
@@ -313,7 +315,7 @@ angular.module('unionvmsWeb').factory('activityService',function(locale, activit
                 'FA_REPORT_ID': id
             },
             searchCriteriaMapMultipleValues: {
-                'PURPOSE': ['1', '3', '5', '9'] //FIXME
+                'PURPOSE': actServ.allPurposeCodes
             }
         };
         

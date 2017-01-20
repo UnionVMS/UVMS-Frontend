@@ -89,8 +89,20 @@ angular.module('unionvmsWeb').controller('AdvancedsearchformCtrl',function($scop
                      return item.code === '3';
                  });
              }
+             
+             $scope.advancedSearchObject.purposeCode = _.map(list, function(item){
+                 return item.code;
+             });
+             
+             $scope.actServ.reportsList.searchObject = {
+                 multipleCriteria: {
+                     'PURPOSE': $scope.advancedSearchObject.purposeCode
+                 }
+             };
+             
+             angular.copy($scope.advancedSearchObject.purposeCode, $scope.actServ.allPurposeCodes); 
+             
              $scope.codeLists.purposeCodes = list;
-             //TODO set the items that should be selected by default
         }, function(error){
             //TODO deal with error
         });
@@ -238,8 +250,7 @@ angular.module('unionvmsWeb').controller('AdvancedsearchformCtrl',function($scop
             }, formatedSearch);
             
             var multipleFormatedSearch = {
-                //'PURPOSE': $scope.advancedSearchObject.purposeCode FIXME
-                'PURPOSE': ['1', '3', '5', '9']
+                'PURPOSE': $scope.advancedSearchObject.purposeCode
             };
             
             

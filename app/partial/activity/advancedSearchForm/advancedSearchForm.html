@@ -41,7 +41,7 @@ copy of the GNU General Public License along with the IFDM Suite. If not, see <h
 	    </div>
 	    <div class="col-md-2">
 	        <!-- PURPOSE_CODE criterion -->
-	        <combobox ng-model="advancedSearchObject.purposeCode" items="codeLists.purposeCodes" initialtext="{{'activity.advanced_search_placeholder_purpose_code' | i18n}}" ></combobox>
+	        <combobox ng-model="advancedSearchObject.purposeCode" items="codeLists.purposeCodes" multiple="true" min-selections="1" hide-selected-items="true" initialtext="{{'activity.advanced_search_placeholder_purpose_code' | i18n}}"></combobox>
 	    </div>
 	    <div class="col-md-2">
 	        <!-- REPORT_TYPE criterion -->

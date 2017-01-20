@@ -253,8 +253,10 @@ describe('activityService', function() {
         expect(actServ.activitiesHistory.length).toEqual(0);
         expect(actServ.displayedActivitiesHistory).toEqual(jasmine.any(Array));
         expect(actServ.displayedActivitiesHistory.length).toEqual(0);
-        expect(actServ.historyList).toEqual(getHistoryListObject())
-        expect(actServ.activitiesHistoryList).toEqual(getActivitiesHistoryListObject())
+        expect(actServ.historyList).toEqual(getHistoryListObject());
+        expect(actServ.activitiesHistoryList).toEqual(getActivitiesHistoryListObject());
+        expect(actServ.allPurposeCodes).toEqual(jasmine.any(Array));
+        expect(actServ.allPurposeCodes.length).toEqual(0);
     });
     
     it('should clear data by specifying the attribute type', function(){

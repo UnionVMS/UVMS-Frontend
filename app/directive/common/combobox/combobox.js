@@ -342,14 +342,14 @@ angular.module('unionvmsWeb').directive('combobox', function(comboboxService,loc
             };
             
             scope.removeAllSelected = function(){
-                //closeCombo();
-                scope.ngModel.splice(scope.minSelections, scope.ngModel.length - scope.minSelections);
                 var arr = [];
+                if (angular.isDefined(scope.minSelections)){
+                    scope.ngModel.splice(scope.minSelections, scope.ngModel.length - scope.minSelections);
+                } else {
+                    scope.ngModel.splice(0, scope.ngModel.length);
+                }
                 angular.copy(scope.ngModel,arr);
                 scope.ngModel = arr; 
-
-                //////
-            	//scope.ngModel = [];
             };
             
             scope.onComboChange = function(){
