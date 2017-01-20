@@ -122,6 +122,8 @@ angular.module('unionvmsWeb').factory('reportRestFactory', function($resource) {
             var deferred = $q.defer();
             reportRestFactory.getReport().get({id: reportId}, function(response){
 
+                response.data.reportType = "standard";
+
                 response.data.filterExpression.fa = {
                     reportType: ['NOTIFICATION'],
                     activityType: ['DEPARTURE','LANDING'],
