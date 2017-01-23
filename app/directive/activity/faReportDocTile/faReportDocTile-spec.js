@@ -23,10 +23,28 @@ describe('faReportDocTile', function() {
             parentElement.appendTo('body');
         }
         
-        $httpBackend = $httpBackend = $injector.get('$httpBackend');;
+        $httpBackend = $injector.get('$httpBackend');;
         $httpBackend.whenGET(/usm/).respond();
         $httpBackend.whenGET(/i18n/).respond();
         $httpBackend.whenGET(/globals/).respond({data : []});
+        $httpBackend.whenPOST(/mock/).respond([
+              {
+                "code": "1",
+                "description": "Cancellation"
+              },
+              {
+                "code": "3",
+                "description": "Delete"
+              },
+              {
+                "code": "5",
+                "description": "Replacement (correction)"
+              },
+              {
+                "code": "9",
+                "description": "Original report"
+              }
+         ]);
         
     }));
     
@@ -59,7 +77,7 @@ describe('faReportDocTile', function() {
         expect(angular.element('.item-container').children().eq(5).text()).toEqual(scope.reportDoc.id);
         expect(angular.element('.item-container').children().eq(7).text()).toEqual(scope.reportDoc.refId);
         expect(angular.element('.item-container').children().eq(9).text()).toEqual($filter('stDateUtc')(scope.reportDoc.creationDate));
-        expect(angular.element('.item-container').children().eq(11).text()).toEqual(scope.reportDoc.purposeCode + ' - ' + $filter('stPurposeCode')(scope.reportDoc.purposeCode));
+        expect(angular.element('.item-container').children().eq(11).text()).toEqual(scope.reportDoc.purposeCode + ' - ');
         expect(angular.element('.item-container').children().eq(13).text()).toEqual(scope.reportDoc.purpose);
     }));
 });

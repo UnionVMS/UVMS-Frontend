@@ -1,16 +1,5 @@
-<!--
-Developed with the contribution of the European Commission - Directorate General for Maritime Affairs and Fisheries
-© European Union, 2015-2016.
-
-This file is part of the Integrated Fisheries Data Management (IFDM) Suite. The IFDM Suite is free software: you can
-redistribute it and/or modify it under the terms of the GNU General Public License as published by the
-Free Software Foundation, either version 3 of the License, or any later version. The IFDM Suite is distributed in
-the hope that it will be useful, but WITHOUT ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or
-FITNESS FOR A PARTICULAR PURPOSE.  See the GNU General Public License for more details. You should have received a
-copy of the GNU General Public License along with the IFDM Suite. If not, see <http://www.gnu.org/licenses/>.
--->
-<div class="col-md-12 activityReportsList" ng-controller="ActivityreportslistCtrl">
-	<div st-table="actServ.displayedActivities" st-safe-src="actServ.activities" st-pipe="callServer">
+<div class="col-md-12 activity-history-list" ng-controller="ActivityhistorylistCtrl">
+	<div st-table="actServ.displayedActivitiesHistory" st-safe-src="actServ.activitiesHistory">
 		<div class="table-responsive-force">
 			<table class="table table-striped table-condensed">
 				<thead>
@@ -41,17 +30,17 @@ copy of the GNU General Public License along with the IFDM Suite. If not, see <h
 						</th>
 					</tr>
 					<tr>
-						<th colspan="20" ng-if="!actServ.reportsList.isLoading && (actServ.displayedActivities.length === 0 || actServ.reportsList.hasError)">
-							<table-alert type="'info'" msg="'spatial.table_no_data'" visible="actServ.displayedActivities.length === 0 && !actServ.reportsList.hasError"></table-alert>
-							<table-alert type="'error'" msg="'activity.fa_table_error_fetching_reports'" visible="actServ.reportsList.hasError" no-hide="true"></table-alert>
+						<th colspan="20" ng-if="!actServ.activitiesHistoryList.isLoading && (actServ.displayedActivitiesHistory.length === 0 || actServ.activitiesHistoryList.hasError)">
+							<table-alert type="'info'" msg="'spatial.table_no_data'" visible="actServ.displayedActivities.length === 0 && !actServ.activitiesHistoryList.hasError"></table-alert>
+							<table-alert type="'error'" msg="'activity.fa_table_error_fetching_reports'" visible="actServ.activitiesHistoryList.hasError"></table-alert>
 						</th>
 					</tr>
-					<tr ng-if="actServ.reportsList.isLoading">
+					<tr ng-if="actServ.activitiesHistoryList.isLoading">
 						<th colspan="20" class="loading-spinner-cl"><i class="fa fa-spinner fa-spin loading-spinner"></i></th>
 					</tr>
 				</thead>
 				<tbody>
-					<tr ng-repeat="activity in actServ.displayedActivities" ng-if="actServ.displayedActivities.length > 0 && !actServ.reportsList.hasError && !actServ.reportsList.isLoading">
+					<tr ng-repeat="activity in actServ.displayedActivitiesHistory" ng-if="actServ.displayedActivitiesHistory.length > 0 && !actServ.displayedActivitiesHistory.hasError && !actServ.displayedActivitiesHistory.isLoading">
 						<td ng-repeat="column in attrVisibility.fishingActivitiesColumns" ng-show="attrVisibility.fishingActivities[column]">
 							<div ng-show="attrVisibility.fishingActivities.FAReportType" ng-if="column === 'FAReportType'">{{ activity.FAReportType }}</div>
 							<div ng-show="attrVisibility.fishingActivities.activityType" ng-if="column === 'activityType'">{{ activity.activityType }}</div>
@@ -79,18 +68,15 @@ copy of the GNU General Public License along with the IFDM Suite. If not, see <h
 							<button type="button" class="btn btn-xs btn-default" title="{{'activity.activity_details' | i18n }}" ng-click="openDetails($index)">
 								<span class="fa fa-eye"></span>
 							</button>
-							<button type="button" class="btn btn-xs btn-default" title="{{'activity.activity_history' | i18n }}" ng-show="activity.hasCorrection" ng-click="openHistory($index)">
-								<span class="fa fa-history"></span>
-							</button>
 						</td>
 					</tr>
 				</tbody>
 			</table>
 		</div>
-		<div class="stFooterPagination" ng-show="actServ.displayedActivities.length > 0 && !actServ.reportsList.isLoading">
+		<div class="stFooterPagination" ng-show="actServ.displayedActivitiesHistory.length > 0 && !actServ.activitiesHistoryList.isLoading">
 			<div class="tr">
 				<div class="td text-right">
-					<div st-pagination st-items-by-page="actServ.reportsList.pagination.pageSize" st-template="partial/common/reportsPagination/reportsPagination.html"></div>
+					<div st-pagination st-items-by-page="25" st-template="partial/common/reportsPagination/reportsPagination.html"></div>
 				</div>
 			</div>
 		</div>

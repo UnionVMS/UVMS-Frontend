@@ -31,15 +31,7 @@ copy of the GNU General Public License along with the IFDM Suite. If not, see <h
 					top: 5px;
 					z-index: 1;
 					display: block;
-					color: #fff;
-				}
-				& > a {
-					&,
-					&:hover {
-						background: #089fd7;
-						border-color: #0794c8;
-						color: #fff;
-					}
+					color: @primaryColor;
 				}
 			}
 			.selected-combo-icon {
@@ -166,6 +158,7 @@ copy of the GNU General Public License along with the IFDM Suite. If not, see <h
 		border-radius: 0;
 		.dropdowntext {
 			text-align: left;
+			margin-right: 0;
 		}
 	}
 	.caret {
@@ -201,6 +194,9 @@ copy of the GNU General Public License along with the IFDM Suite. If not, see <h
 			    margin-right: 5px;
 			    padding: 0 5px;
 			    line-height: 18px;
+				max-width: 100%;
+				text-overflow: ellipsis;
+				overflow-x: hidden;
 			    > span {
 			    	color: #999;
 				    cursor: pointer;

@@ -21,7 +21,7 @@ copy of the GNU General Public License along with the IFDM Suite. If not, see <h
 	    </div>
 	    <div class="col-md-2">
 	        <!--FROM_NAME criterion-->
-	        <input id="fromNameFACriterion" type="text" class="form-control" name="fromNameFACriterion" ng-model="advancedSearchObject.fromName" placeholder="{{'activity.advanced_search_placeholder_from_name' | i18n}}"  maxlength="255"/>
+	        <input id="ownerFACriterion" type="text" class="form-control" name="ownerFACriterion" ng-model="advancedSearchObject.owner" placeholder="{{'activity.advanced_search_placeholder_owner' | i18n}}"  maxlength="255"/>
 	    </div>
 	    <div class="col-md-2">
 	        <!--PERIOD_START criterion-->
@@ -33,15 +33,15 @@ copy of the GNU General Public License along with the IFDM Suite. If not, see <h
 	    </div>
 	    <div class="col-md-2">
 	        <!--VESSEL_ID criterion-->
-	        <input id="vesselIdFACriterion" type="text" class="form-control" name="vesselIdFACriterion" ng-model="advancedSearchObject.vesselId" placeholder="{{'activity.advanced_search_placeholder_vessel_id' | i18n}}"  maxlength="255"/>
+	        <input id="vesselFACriterion" type="text" class="form-control" name="vesselFACriterion" ng-model="advancedSearchObject.vessel" placeholder="{{'activity.advanced_search_placeholder_vessel' | i18n}}"  maxlength="255"/>
 	    </div>
 	    <div class="col-md-2">
 	        <!-- VESSEL_NAME criterion -->
-	        <input id="vesselNameFACriterion" type="text" class="form-control" name="vesselNameFACriterion" ng-model="advancedSearchObject.vesselName" placeholder="{{'activity.advanced_search_placeholder_vessel_name' | i18n}}"  maxlength="255"/>
+	        <combobox ng-model="advancedSearchObject.vesselGroup" items="vesselGroups" initialtext="{{'activity.advanced_search_placeholder_vessel_group' | i18n}}" ></combobox>
 	    </div>
 	    <div class="col-md-2">
 	        <!-- PURPOSE_CODE criterion -->
-	        <combobox ng-model="advancedSearchObject.purposeCode" items="codeLists.purposeCodes" initialtext="{{'activity.advanced_search_placeholder_purpose_code' | i18n}}" ></combobox>
+	        <combobox ng-model="advancedSearchObject.purposeCode" items="codeLists.purposeCodes" multiple="true" min-selections="1" hide-selected-items="true" initialtext="{{'activity.advanced_search_placeholder_purpose_code' | i18n}}"></combobox>
 	    </div>
 	    <div class="col-md-2">
 	        <!-- REPORT_TYPE criterion -->

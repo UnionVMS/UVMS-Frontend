@@ -127,26 +127,23 @@ describe('ActivityreportslistCtrl', function() {
         expect(mockActServ.getActivityList).toHaveBeenCalledWith(jasmine.any(Function), tblState);
     }));
 	
-	it('should get history data and go to the overview partial', function(){
+	it('should get history data and go to the history partial', function(){
 	    spyOn(mockActServ, 'getHistory');
 	    spyOn(scope, 'goToView');
 	    
-	    scope.openOverview(0);
+	    scope.openHistory(0);
 	    
 	    expect(mockActServ.overview).toEqual(mockActServ.displayedActivities[0]);
 	    expect(mockActServ.getHistory).toHaveBeenCalled();
 	    expect(scope.goToView).toHaveBeenCalledWith(1);
 	});
 	
-	it('should not go to the overview partial if there is no history data', function(){
-        spyOn(mockActServ, 'getHistory');
+	it('should get activity details data and go to the details partial', function(){
         spyOn(scope, 'goToView');
         
-        mockActServ.displayedActivities[0]['uniqueReportIdList'] = [];
-        scope.openOverview(0);
+        scope.openDetails(0);
         
         expect(mockActServ.overview).toEqual(mockActServ.displayedActivities[0]);
-        expect(mockActServ.getHistory).not.toHaveBeenCalled();
-        expect(scope.goToView).not.toHaveBeenCalled();
+        expect(scope.goToView).toHaveBeenCalledWith(3);
     });
 });

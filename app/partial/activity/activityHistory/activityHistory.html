@@ -1,0 +1,64 @@
+<!--
+Developed with the contribution of the European Commission - Directorate General for Maritime Affairs and Fisheries
+© European Union, 2015-2016.
+
+This file is part of the Integrated Fisheries Data Management (IFDM) Suite. The IFDM Suite is free software: you can
+redistribute it and/or modify it under the terms of the GNU General Public License as published by the
+Free Software Foundation, either version 3 of the License, or any later version. The IFDM Suite is distributed in
+the hope that it will be useful, but WITHOUT ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or
+FITNESS FOR A PARTICULAR PURPOSE.  See the GNU General Public License for more details. You should have received a
+copy of the GNU General Public License along with the IFDM Suite. If not, see <http://www.gnu.org/licenses/>.
+-->
+<div class="col-md-12 activity-history" ng-controller="ActivityhistoryCtrl">
+	<div class="table-container" st-table="actServ.displayedHistory" st-safe-src="actServ.history">
+		<div class="col-md-12 table-responsive-force">
+			<div class="table table-striped table-condensed tableSmart">
+				<!-- THEAD -->
+				<div class="thead row container-fluid">
+					<div class="tr row">
+						<div class="th col-md-2" st-sort="purposeCode" st-class-ascent="sorting_asc" st-class-descent="sorting_desc" st-skip-natural="true">{{'activity.header_fa_purpose_code' | i18n}}</div>
+						<div class="th col-md-2" st-sort="ownerFluxPartyName" st-class-ascent="sorting_asc" st-class-descent="sorting_desc" st-skip-natural="true">{{'activity.header_fa_flux_party_name' | i18n}}</div>
+						<div class="th col-md-2" st-sort="correctionType" st-class-ascent="sorting_asc" st-class-descent="sorting_desc" st-skip-natural="true">{{'activity.header_fa_correction_type' | i18n}}</div>
+						<div class="th col-md-2" st-sort="creationDate" st-class-ascent="sorting_asc" st-class-descent="sorting_desc" st-skip-natural="true">{{'activity.header_fa_creation_date' | i18n}}</div>
+						<div class="th col-md-2" st-sort="acceptedDate" st-sort-default="reverse" st-class-ascent="sorting_asc" st-class-descent="sorting_desc" st-skip-natural="true">{{'activity.header_fa_accepted_date' | i18n}}</div>
+						<div class="th col-md-2 notSortable">{{'activity.header_fa_actions' | i18n }}</div>
+					</div>
+					<div class="tr row" ng-if="!actServ.historyList.isLoading && (actServ.displayedHistory.length === 0 || actServ.historyList.hasError)">
+						<div class="th col-md-12">
+							<table-alert type="'info'" msg="'spatial.table_no_data'" visible="actServ.displayedHistory.length === 0 && !actServ.historyList.hasError"></table-alert>
+							<table-alert type="'error'" msg="'activity.fa_table_error_fetching_history'" visible="actServ.historyList.hasError"></table-alert>
+						</div>
+					</div>
+					<div class="tr row" ng-if="actServ.historyList.isLoading">
+						<div class="th col-md-12 loading-spinner-cl">
+							<i class="fa fa-spinner fa-spin loading-spinner"></i>
+						</div>
+					</div>
+				</div>
+				<!-- TBODY -->
+				<div class="tbody">
+					<div class="tr row" ng-repeat="item in actServ.displayedHistory" ng-if="actServ.displayedHistory.length > 0 && !actServ.historyList.hasError && !actServ.historyList.isLoading">
+						<div class="td col-md-2">{{item.purposeCode | stPurposeCode}}</div>
+						<div class="td col-md-2">{{item.ownerFluxPartyName}}</div>
+						<div class="td col-md-2">{{item.correctionType}}</div>
+						<div class="td col-md-2">{{item.creationDate | stDateUtc}}</div>
+						<div class="td col-md-2">{{item.acceptedDate | stDateUtc}}</div>
+						<div class="td col-md-2 no-wrap-white-space">
+							<button type="button" class="btn btn-xs btn-default" title="{{'activity.activity_history_list' | i18n }}" ng-click="openActivityHistory($index)">
+								<span class="fa fa-list"></span>
+							</button>
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+		<div class="stFooterPagination" ng-show="actServ.displayedHistory.length > 0 && !actServ.historyList.isLoading">
+			<div class="tr">
+				<div class="td text-right">
+					<div st-pagination st-items-by-page="actServ.historySize.pagination.listSize" st-template="partial/common/reportsPagination/reportsPagination.html"></div>
+				</div>
+			</div>
+		</div>
+	</div>
+</div>
+
