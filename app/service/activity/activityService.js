@@ -321,6 +321,14 @@ angular.module('unionvmsWeb').factory('activityService',function(locale, activit
         });
     };
     
+    /**
+     * Get an array with all codes from the MDR Purpose Code list
+     * 
+     * @memberof activityService
+     * @public
+     * @alias getAllPurposeCodesArray
+     * @returns {Array} An array with all MDR purpose codes
+     */
     actServ.getAllPurposeCodesArray = function(){
         var arr = _.map(actServ.allPurposeCodes, function(item){
             return item.code;
@@ -329,6 +337,15 @@ angular.module('unionvmsWeb').factory('activityService',function(locale, activit
         return arr;
     };
     
+    /**
+     * Get activities history from a fishing activity report document
+     * 
+     * @memberof activityService
+     * @public
+     * @alias getActivitiesHistory
+     * @param {Number} id - The id of the fishing activity report document
+     * @returns {Promise} A promise that is either resolved with a list of activities or rejected with the corresponding error
+     */
     actServ.getActivitiesHistory = function(id){
         actServ.clearAttributeByType('activitiesHistory');
         
@@ -359,6 +376,15 @@ angular.module('unionvmsWeb').factory('activityService',function(locale, activit
         });
     };
     
+    /**
+     * Set the activity service alert object properties
+     * 
+     * @memberof activityService
+     * @public
+     * @alias setAlert
+     * @param {Boolean} hasError - If the alert has an error or not
+     * @param {String} message - The internationalization code of message that will be used in the alert (e.g. activity.activity_list) 
+     */
     actServ.setAlert = function(hasError, message){
         actServ.alert.hasError = hasError;
         actServ.alert.msg = message;

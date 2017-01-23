@@ -1,4 +1,4 @@
-<div class="col-md-12" ng-controller="ActivityhistorylistCtrl">
+<div class="col-md-12 activity-history-list" ng-controller="ActivityhistorylistCtrl">
 	<div st-table="actServ.displayedActivitiesHistory" st-safe-src="actServ.activitiesHistory">
 		<div class="table-responsive-force">
 			<table class="table table-striped table-condensed">
@@ -45,7 +45,9 @@
 							<div ng-show="attrVisibility.fishingActivities.FAReportType" ng-if="column === 'FAReportType'">{{ activity.FAReportType }}</div>
 							<div ng-show="attrVisibility.fishingActivities.activityType" ng-if="column === 'activityType'">{{ activity.activityType }}</div>
 							<div ng-show="attrVisibility.fishingActivities.occurence" ng-if="column === 'occurence'">{{ activity.occurence | stDateUtc }}</div>
-							<div ng-show="attrVisibility.fishingActivities.purposeCode" ng-if="column === 'purposeCode'">{{ activity.purposeCode | stPurposeCode }}</div>
+							<div ng-show="attrVisibility.fishingActivities.purposeCode" ng-if="column === 'purposeCode'" class="with-icon">
+								<i class="fa {{ activity.purposeCode | stPurposeCode: true }}" title="{{ activity.purposeCode | stPurposeCode}}"></i>
+							</div>
 							<div ng-show="attrVisibility.fishingActivities.dataSource" ng-if="column === 'dataSource'">{{ activity.dataSource }}</div>
 							<div ng-show="attrVisibility.fishingActivities.fromName" ng-if="column === 'fromName'">{{ activity.fromName }}</div>
 							<div ng-show="attrVisibility.fishingActivities.startDate" ng-if="column === 'startDate'">{{ activity.startDate | stDateUtc }}</div>

@@ -10,7 +10,7 @@ FITNESS FOR A PARTICULAR PURPOSE.  See the GNU General Public License for more d
 copy of the GNU General Public License along with the IFDM Suite. If not, see <http://www.gnu.org/licenses/>.
 */
 describe('activityService', function() {
-    var $q, actServ, mockActRestServ, mockVisServ;
+    var actServ, mockActRestServ, mockVisServ;
     var pageSize = 25;
     
     beforeEach(module('unionvmsWeb'));
@@ -25,8 +25,7 @@ describe('activityService', function() {
         });
     });
     
-    beforeEach(inject(function(activityService, $httpBackend, _$q_){
-        $q = _$q_;
+    beforeEach(inject(function(activityService, $httpBackend){
         actServ = activityService;
   
         $httpBackend.whenGET(/usm/).respond();
