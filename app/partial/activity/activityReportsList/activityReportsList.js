@@ -80,7 +80,7 @@ angular.module('unionvmsWeb').controller('ActivityreportslistCtrl',function($sco
             endDate: 'PERIOD_END',
             FAReportType: 'REPORT_TYPE',
             dataSource: 'SOURCE',
-            fromName: 'FROM_NAME'
+            fromName: 'FROM'
         };
         
         return predicateMapping[tablePredicate];

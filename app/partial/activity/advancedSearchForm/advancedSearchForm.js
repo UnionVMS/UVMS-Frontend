@@ -217,7 +217,7 @@ angular.module('unionvmsWeb').controller('AdvancedsearchformCtrl',function($scop
             
             var keyMapper = {
                 reportType: 'REPORT_TYPE',
-                fromId: 'FROM_ID',
+                fromId: 'FROM',
                 owner: 'OWNER',
                 startDateTime: 'PERIOD_START',
                 endDateTime: 'PERIOD_END',
@@ -228,8 +228,8 @@ angular.module('unionvmsWeb').controller('AdvancedsearchformCtrl',function($scop
                 master: 'MASTER',
                 area: 'AREAS',
                 port: 'PORT',
-                minWeight: 'QUNTITY_MIN',
-                maxWeight: 'QUNTITY_MAX',
+                minWeight: 'QUANTITY_MIN',
+                maxWeight: 'QUANTITY_MAX',
                 comChannel: 'SOURCE',
                 activityType: 'ACTIVITY_TYPE'
             };
