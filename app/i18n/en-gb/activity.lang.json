@@ -63,7 +63,7 @@
 	"activity_details": "See activity details",
 	"activity_history": "See activity history",
 	"activity_history_list": "See activities list",
-
+	"activity_error_getting_code_lists": "There was an error while fetching MDR code lists.",
     "trip_summary_loading": "Loading trip summary",
     "catch_Evolution_loading":"Loading Evolution of the Catch",
 	"fishing_trip": "Fishing Trip",

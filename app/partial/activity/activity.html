@@ -11,6 +11,10 @@ copy of the GNU General Public License along with the IFDM Suite. If not, see <h
 -->
 <div class="col-md-12 activity">
 	<div class="container containerWithTopBottomPadding">
+		<!-- <div class="alert alert-danger" role="alert">TEST</div> -->
+		<div class="alert-container" ng-show="actServ.alert.hasError">
+			<table-alert type="'error'" msg="actServ.alert.msg" visible="actServ.alert.hasError" closable="true"></table-alert>	
+		</div>
 		<breadcrumb-navigator items="actServ.breadcrumbPages" callback="breadcrumbClick()" ng-if="actServ.breadcrumbPages.length > 0"></breadcrumb-navigator>
         <div class="card">
             <div class="row card-body">

@@ -52,6 +52,11 @@ angular.module('unionvmsWeb').factory('activityService',function(locale, activit
         visible: false
     }];
     
+    actServ.alert= {
+        hasError: false,
+        msg: undefined
+    }
+    
     actServ.activities = [];
     actServ.displayedActivities = [];
     actServ.overview = {};
@@ -353,6 +358,11 @@ angular.module('unionvmsWeb').factory('activityService',function(locale, activit
             actServ.activitiesHistoryList.hasError = true;
         });
     };
+    
+    actServ.setAlert = function(hasError, message){
+        actServ.alert.hasError = hasError;
+        actServ.alert.msg = message;
+    }
 
 	return actServ;
 });

@@ -19,7 +19,8 @@ angular.module('unionvmsWeb').directive('tableAlert', function() {
 			msg: '=',
 			visible: '=',
 			timeout: '=',
-			noHide: '@'
+			noHide: '@',
+			closable: '@'
 		},
 		templateUrl: 'directive/common/tableAlert/tableAlert.html'
 	};
@@ -37,14 +38,20 @@ angular.module('unionvmsWeb').controller('tableAlertCtrl',['$scope','$timeout','
 	};
 	
 	$scope.$watch(function(){return $scope.visible;},function(newVal){
-	    if (newVal === true){
-	        if (!$scope.noHide && $scope.type !== 'info'){
+	    if (!$scope.closable){
+	        if (newVal === true){
+	            if (!$scope.noHide && $scope.type !== 'info'){
+	                $scope.hide();
+	            }
+	        } else {
 	            $scope.hide();
 	        }
-	    } else {
-	        $scope.hide();
 	    }
 	});
+	
+	$scope.close = function(){
+	    $scope.visible = false;
+	};
 	
 	$scope.$watch(function(){return $scope.msg;},function(newVal){
 		$scope.message = locale.getString($scope.msg);

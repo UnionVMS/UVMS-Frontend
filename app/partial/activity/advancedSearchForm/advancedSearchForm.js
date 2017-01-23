@@ -81,7 +81,7 @@ angular.module('unionvmsWeb').controller('AdvancedsearchformCtrl',function($scop
      * @returns {Array} An array with all purpose codes
      */
     $scope.getPurposeCodes = function(){
-        $scope.codeLists.purposeCodes = []; 
+        $scope.codeLists.purposeCodes = [];
         mdrCacheService.getCodeList('flux_gp_purposecode').then(function(response){
              var list = convertCodelistToCombolist(response);
              if (!userService.isAllowed('SHOW_DELETED_FA_REPORTS', 'Activity', true)){
@@ -102,7 +102,7 @@ angular.module('unionvmsWeb').controller('AdvancedsearchformCtrl',function($scop
              
              $scope.codeLists.purposeCodes = list;
         }, function(error){
-            //TODO deal with error
+            $scope.actServ.setAlert(true, 'activity.activity_error_getting_code_lists');
         });
     };
     
@@ -119,7 +119,7 @@ angular.module('unionvmsWeb').controller('AdvancedsearchformCtrl',function($scop
         mdrCacheService.getCodeList('flux_fa_report_type').then(function(response){
             $scope.codeLists.reportTypes = convertCodelistToCombolist(response);
         }, function(error){
-            //TODO deal with error
+            $scope.actServ.setAlert(true, 'activity.activity_error_getting_code_lists');
         });
     };
     
@@ -136,7 +136,7 @@ angular.module('unionvmsWeb').controller('AdvancedsearchformCtrl',function($scop
         mdrCacheService.getCodeList('gear_type').then(function(response){
             $scope.codeLists.gearTypes = convertCodelistToCombolist(response);
         }, function(error){
-            //TODO deal with error
+            $scope.actServ.setAlert(true, 'activity.activity_error_getting_code_lists');
         });
     };
     
@@ -153,7 +153,7 @@ angular.module('unionvmsWeb').controller('AdvancedsearchformCtrl',function($scop
         mdrCacheService.getCodeList('flux_fa_type').then(function(response){
             $scope.codeLists.activityTypes = convertCodelistToCombolist(response);
         }, function(error){
-            //TODO deal with error
+            $scope.actServ.setAlert(true, 'activity.activity_error_getting_code_lists');
         });
     };
     
@@ -174,8 +174,6 @@ angular.module('unionvmsWeb').controller('AdvancedsearchformCtrl',function($scop
             	    text: item.name
             	});
             });
-        }, function(error){
-            //TODO deal with error
         });
     };
     
@@ -198,7 +196,7 @@ angular.module('unionvmsWeb').controller('AdvancedsearchformCtrl',function($scop
         	}
         });
         $scope.actServ.resetReportsListTableState();
-        $scope.actServ.resetReportsListSearchObject()
+        $scope.actServ.resetReportsListSearchObject();
         $scope.actServ.reportsList.isLoading = true;
         $scope.actServ.getActivityList();
     };
