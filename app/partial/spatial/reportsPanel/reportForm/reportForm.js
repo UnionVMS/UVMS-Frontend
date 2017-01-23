@@ -15,6 +15,12 @@ angular.module('unionvmsWeb').controller('ReportformCtrl',function($scope, $moda
 
     //set visibility types in dropdown option
     $scope.visibilities = [];
+
+    //Set the available report types to create
+    $scope.reportTypes = [
+        {"text": locale.getString('spatial.reports_form_type_standard'), "code": "standard"},
+        {"text": locale.getString('spatial.reports_form_type_summary'), "code": "summary"}
+    ];
     
     //Set positions selector dropdown options
     $scope.positionItems = [
