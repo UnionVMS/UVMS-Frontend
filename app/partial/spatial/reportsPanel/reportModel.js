@@ -18,7 +18,7 @@ angular.module('unionvmsWeb').factory('Report',function(unitConversionService, u
 	    this.visibility = 'private';
 	    this.startDateTime = undefined;
 	    this.endDateTime = undefined;
-		this.reportType = 'standard';
+		//this.reportType = 'standard'; FIXME uncomment after release
 	    this.positionSelector = 'all';
 	    this.positionTypeSelector = 'positions';
 	    this.xValue = undefined;
@@ -127,9 +127,10 @@ angular.module('unionvmsWeb').factory('Report',function(unitConversionService, u
 	        //Vessel filters
 	        report.vesselsSelection = filter.assets;
 
-			if(angular.isDefined(data.reportType)){
-				report.reportType = data.reportType;
-			}
+	        //FIXME to uncomment after release
+//			if(angular.isDefined(data.reportType)){
+//				report.reportType = data.reportType;
+//			}
 
 	        //VMS positions filters
 	        if (angular.isDefined(filter.vms) && angular.isDefined(filter.vms.vmsposition)){
@@ -284,7 +285,7 @@ angular.module('unionvmsWeb').factory('Report',function(unitConversionService, u
 	        id: this.id,
 	        name: this.name,
 	        desc: this.desc !== '' ? this.desc : undefined,
-			reportType: this.reportType,
+			//reportType: this.reportType, FIXME uncomment after release
 	        visibility: angular.isDefined(this.visibility) ? this.visibility : 'private',
 	        withMap: this.withMap,
 	        filterExpression: filter
@@ -321,7 +322,7 @@ angular.module('unionvmsWeb').factory('Report',function(unitConversionService, u
 		
         report.name = this.name;
         report.desc = this.desc !== '' ? this.desc : undefined;
-		report.reportType = this.reportType;
+		//report.reportType = this.reportType; FIXME uncomment after release
         report.withMap = this.withMap;
         report.visibility = angular.isDefined(this.visibility) ? this.visibility : 'private';
         
