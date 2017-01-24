@@ -39,7 +39,8 @@ angular.module('unionvmsWeb').factory('Report',function(unitConversionService, u
 	    };
 
 		this.hasFaFilter = false;
-		this.faFilters = {};
+		//FIXME uncomment after release
+		//this.faFilters = {};
 
 	    this.areas = [];
 	    
@@ -159,21 +160,22 @@ angular.module('unionvmsWeb').factory('Report',function(unitConversionService, u
 	        }
 
 			//Fishing activity filters
-	        if(!angular.isDefined(filter.fa)){
-				filter.fa = {};
-			}
-
-			report.faFilters = filter.fa;
-
-	        if (!angular.equals({}, filter.fa)){
-	            report.hasFaFilter = true;
-	        }
-
-			if(!angular.isDefined(report.faFilters.weight)){
-				report.faFilters.weight = {unit: 'kg'};
-			}else if(!angular.isDefined(report.faFilters.weight.unit)){
-				report.faFilters.weight.unit = 'kg';
-			}
+	        //FIXME uncomment after release
+//	        if(!angular.isDefined(filter.fa)){
+//				filter.fa = {};
+//			}
+//
+//			report.faFilters = filter.fa;
+//
+//	        if (!angular.equals({}, filter.fa)){
+//	            report.hasFaFilter = true;
+//	        }
+//
+//			if(!angular.isDefined(report.faFilters.weight)){
+//				report.faFilters.weight = {unit: 'kg'};
+//			}else if(!angular.isDefined(report.faFilters.weight.unit)){
+//				report.faFilters.weight.unit = 'kg';
+//			}
 
 	        report.areas = filter.areas;
 	        
@@ -248,19 +250,20 @@ angular.module('unionvmsWeb').factory('Report',function(unitConversionService, u
 		}
 
 		//Fishing activity filter
-		var faFilters;
-		if(this.hasFaFilter){
-			faFilters = this.faFilters;
-
-			if(angular.isDefined(faFilters.weight) && (!angular.isDefined(faFilters.weight.min) || _.isNull(faFilters.weight.min)) &&
-				(!angular.isDefined(faFilters.weight.max) || _.isNull(faFilters.weight.max))){
-				delete faFilters.weight;
-			}
-
-			if (_.isEmpty(faFilters)){
-				faFilters = undefined;
-			}
-		}
+		//FIXME uncomment after release
+//		var faFilters;
+//		if(this.hasFaFilter){
+//			faFilters = this.faFilters;
+//
+//			if(angular.isDefined(faFilters.weight) && (!angular.isDefined(faFilters.weight.min) || _.isNull(faFilters.weight.min)) &&
+//				(!angular.isDefined(faFilters.weight.max) || _.isNull(faFilters.weight.max))){
+//				delete faFilters.weight;
+//			}
+//
+//			if (_.isEmpty(faFilters)){
+//				faFilters = undefined;
+//			}
+//		}
 
 	    var filter = {
 	        common: {
@@ -273,7 +276,7 @@ angular.module('unionvmsWeb').factory('Report',function(unitConversionService, u
 	        },
             assets: [],
             vms: vmsFilters,
-			fa: faFilters,
+			//fa: faFilters, FIXME uncomment after release
             areas: this.areas
 	    };
 
@@ -409,18 +412,19 @@ angular.module('unionvmsWeb').factory('Report',function(unitConversionService, u
 		}
 
 		//Fishing activity filter
-		if(this.hasFaFilter){
-			report.filterExpression.fa = this.faFilters;
-
-			if(angular.isDefined(report.filterExpression.fa.weight) && (!angular.isDefined(report.filterExpression.fa.weight.min) || _.isNull(report.filterExpression.fa.weight.min)) &&
-				(!angular.isDefined(report.filterExpression.fa.weight.max) || _.isNull(report.filterExpression.fa.weight.max))){
-				delete report.filterExpression.fa.weight;
-			}
-
-			if (_.isEmpty(report.filterExpression.fa)){
-				report.filterExpression.fa = undefined;
-			}
-		}
+		//FIXME uncomment after release
+//		if(this.hasFaFilter){
+//			report.filterExpression.fa = this.faFilters;
+//
+//			if(angular.isDefined(report.filterExpression.fa.weight) && (!angular.isDefined(report.filterExpression.fa.weight.min) || _.isNull(report.filterExpression.fa.weight.min)) &&
+//				(!angular.isDefined(report.filterExpression.fa.weight.max) || _.isNull(report.filterExpression.fa.weight.max))){
+//				delete report.filterExpression.fa.weight;
+//			}
+//
+//			if (_.isEmpty(report.filterExpression.fa)){
+//				report.filterExpression.fa = undefined;
+//			}
+//		}
 
         if(this.withMap === true){
         	report.mapConfiguration = {
