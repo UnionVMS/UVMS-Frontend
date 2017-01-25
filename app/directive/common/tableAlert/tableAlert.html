@@ -1,6 +1,9 @@
-<div class="alert alert-container" ng-class="{'alert-danger': type === 'error', 'alert-success': type === 'success', 'alert-info': type === 'info'}" role="alert" ng-show="visible">
+<div class="table-alert alert alert-container" ng-class="{'alert-danger': type === 'error', 'alert-success': type === 'success', 'alert-info': type === 'info'}" role="alert" ng-show="visible">
     <span class="fa" ng-class="{'fa-exclamation-circle': type === 'error', 'fa-check-circle': type === 'success', 'fa-info-circle': type === 'info'}" aria-hidden="true"></span>
     <span class="alert-message">
         <span>{{ message }}</span>            
     </span>
+    <button type="button" class="close-btn" ng-click="close()" ng-if="closable">
+		<span class="glyphicon glyphicon-remove-circle"></span>
+	</button>
 </div>

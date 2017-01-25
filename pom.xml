@@ -1,4 +1,5 @@
-<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
     <modelVersion>4.0.0</modelVersion>
     <groupId>eu.europa.ec.fisheries.uvms</groupId>
     <artifactId>unionvms-web</artifactId>
@@ -14,9 +15,36 @@
         <project.scm.id>github</project.scm.id>
         <maven-release-plugin>2.5.3</maven-release-plugin>
         <grunt.build>build</grunt.build>
+
+        <uvms.env.name>Local</uvms.env.name>
+        <uvms.rest.base.url>http://localhost</uvms.rest.base.url>
+        <uvms.rest.base.port>9001</uvms.rest.base.port>
+        <web.app.context.path>unionvms</web.app.context.path>
+
+        <scm.connection>scm:git:https://github.com/UnionVMS/UVMS-Frontend.git</scm.connection>
     </properties>
 
     <profiles>
+        <profile>
+            <id>dg-mare</id>
+
+            <distributionManagement>
+                <repository>
+                    <id>digit-releases</id>
+                    <name>DG DIGIT Repository</name>
+                    <url>https://webgate.ec.europa.eu/CITnet/nexus/content/repositories/mare/</url>
+                </repository>
+                <snapshotRepository>
+                    <id>digit-snapshots</id>
+                    <name>DG DIGIT Snapshot Repository</name>
+                    <url>https://webgate.ec.europa.eu/CITnet/nexus/content/repositories/mare-snapshots/</url>
+                </snapshotRepository>
+            </distributionManagement>
+
+            <properties>
+                <scm.connection>scm:git:https://emserveje@webgate.ec.europa.eu/CITnet/stash/scm/unionvms/uvms-frontend.git</scm.connection>
+            </properties>
+        </profile>
         <profile>
             <id>proxy</id>
             <activation>
@@ -278,6 +306,7 @@
                         </resource>
                         <resource>
                             <directory>${basedir}/WebContent</directory>
+                        <filtering>true</filtering>
                         </resource>
                     </webResources>
                 </configuration>
@@ -308,6 +337,12 @@
         </repository>
     </repositories>
 
+    <scm>
+        <connection>${scm.connection}</connection>
+        <tag>HEAD</tag>
+    </scm>
+
+
     <distributionManagement>
         <repository>
             <id>focus-releases</id>
@@ -320,9 +355,4 @@
             <url>http://nexus.focus.fish/nexus/content/repositories/snapshots/</url>
         </snapshotRepository>
     </distributionManagement>
-
-    <scm>
-        <connection>scm:git:https://github.com/UnionVMS/UVMS-Frontend.git</connection>
-      <tag>HEAD</tag>
-  </scm>
 </project>

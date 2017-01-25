@@ -10,3 +10,44 @@ FITNESS FOR A PARTICULAR PURPOSE.  See the GNU General Public License for more d
 copy of the GNU General Public License along with the IFDM Suite. If not, see <http://www.gnu.org/licenses/>.
 */
 
+.table-alert {
+    position: relative;
+    button {
+        background-color: transparent;
+        box-shadow: none !important;
+        border: 0;
+        opacity: 0.5;
+        &:hover{
+            opacity: 0.8;
+        }
+    }
+    .close-btn {
+        position: absolute;
+        right: 12px;
+        font-size: 22px;
+        span {
+            vertical-align: middle;
+        }
+    }
+    &.alert-danger {
+        button {
+          span {
+            color: #a94442;
+          }
+        }
+      }
+      &.alert-warning {
+        button {
+          span {
+            color: #8a6d3b;
+          }
+        }
+      }
+      &.alert-success {
+        button {
+          span {
+            color: #3c763d;
+          }
+        }
+      }
+}

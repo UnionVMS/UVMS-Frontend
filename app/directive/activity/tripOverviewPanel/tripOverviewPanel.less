@@ -22,18 +22,42 @@ copy of the GNU General Public License along with the IFDM Suite. If not, see <h
         margin: 0;
         padding: 0;
         .field-format,
+        .date-field,
         .field-width {
             padding: 0 10px;
             float:left;
-            word-break: break-all;
         }
-        .field-format{
+        .field-format,
+        .field-width,
+        .date-container {
+            word-break: break-word;
+            display: flex;
+        }
+        .field-format,
+        .date-field {
             width: 21%;
         }
         .field-width {
             width: 16%;
+            &.icon {
+                display: table;
+                .field-text-icon {
+                    display: table-cell;
+                    vertical-align: middle;
+                }
+            }
         }
-             
+        .field-label,
+        .field-label-icon {
+            white-space: nowrap;
+            margin-right: 5px;
+        }
+        .field-label {
+            font-weight: bold;
+        }
+        .field-label-icon {
+            font-size: 22px;
+        }
     }
     
 }

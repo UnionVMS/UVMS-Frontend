@@ -104,8 +104,23 @@ copy of the GNU General Public License along with the IFDM Suite. If not, see <h
 
 .general-form {
 	position: relative;
+	&.with-border-bottom {
+		border-bottom: 1px solid #ddd;
+		margin-bottom: 15px;
+	}
 	.report-name-group {
 		position: relative;
+	}
+	.inline-group {
+		display: flex;
+		label {
+			display: inline-flex;
+			flex: 0.6;
+			line-height: 30px;
+		}
+		.combobox {
+			flex: 1;
+		}
 	}
 }
 
@@ -201,6 +216,16 @@ copy of the GNU General Public License along with the IFDM Suite. If not, see <h
 	text-align: right;
 	button {
 		margin-left: 15px;
+	}
+	.alert {
+		font-size: 13px;
+		padding: 3px 5px;
+		margin-bottom: 0;
+		position: absolute;
+		line-height: 12px;
+		i {
+			margin-right: 5px;
+		}
 	}
 }
 

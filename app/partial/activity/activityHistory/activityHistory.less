@@ -9,17 +9,19 @@ the hope that it will be useful, but WITHOUT ANY WARRANTY; without even the impl
 FITNESS FOR A PARTICULAR PURPOSE.  See the GNU General Public License for more details. You should have received a
 copy of the GNU General Public License along with the IFDM Suite. If not, see <http://www.gnu.org/licenses/>.
 */
-.activity-overview {
-    .olabel {
-        font-weight: bold;
-        &::after {
-            content: ':'
+.activity-history {
+    .table-responsive-force {
+        width: 100%;
+        overflow-y: hidden;
+        overflow-x: auto;
+        -ms-overflow-style: -ms-autohiding-scrollbar;
+        -webkit-overflow-scrolling: touch;
+        table > thead > tr > th {
+            position: relative;
+            padding: 8px;
         }
     }
-    .table-container {
-        padding-top: 35px;
-    }
     .notSortable {
-        cursor: default;
+        cursor: default !important;
     }
 }

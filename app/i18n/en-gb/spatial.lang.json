@@ -143,6 +143,9 @@
 	"reports_form_positions_selector_type_option_positions": "Positions",
 	"reports_form_positions_selector_type_option_hours": "Hours",
 	"reports_form_positions_x_value": "X value",
+	"reports_form_report_type_label": "Report type",
+	"reports_form_type_standard": "Standard",
+	"reports_form_type_summary": "Summary",
 	"reports_form_select_areas": "Select areas",
 	"reports_form_map_configuration": "Map Configuration",
 	"reports_form_report_configuration": "Configuration",
@@ -509,5 +512,6 @@
 	"reports_error_user_without_scope": "Report module not accessable to accounts without a scope.",
 	"apply": "Apply",
 	"wms_preview_btn_tooltip": "Preview data",
-	"alarm_preview_btn_tooltip": "Alert details"
+	"alarm_preview_btn_tooltip": "Alert details",
+	"last_x_pos_warning": "Fishing activity data cannot be filtered and fetched while running a report with LAST POSITIONS configuration"
 }

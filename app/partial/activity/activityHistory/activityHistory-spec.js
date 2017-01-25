@@ -9,30 +9,21 @@ the hope that it will be useful, but WITHOUT ANY WARRANTY; without even the impl
 FITNESS FOR A PARTICULAR PURPOSE.  See the GNU General Public License for more details. You should have received a
 copy of the GNU General Public License along with the IFDM Suite. If not, see <http://www.gnu.org/licenses/>.
 */
-.activity-filters-section {
-    [name="activitySecForm"] {
-        display: flex;
-        .reportSubform {
-            padding-top: 10px;
-            &.technical-form {
-                border-left: 1px solid #ddd;
-                border-right: 1px solid #ddd;
-            }
-        }
-        .unit-input {
-            padding-right: 35px;
-            .unit-box {
-                width: 35px;
-            }
-        }
-        .label-container {
-            padding-right: 0;
-            &.center-label-multiple-combo {
-                line-height: 30px;
-            }
-        }
-        .above-label {
-            width: 100%;
-        }
-    }
-}
+describe('ActivityhistoryCtrl', function() {
+
+	beforeEach(module('unionvmsWeb'));
+
+	var scope,ctrl;
+
+    beforeEach(inject(function($rootScope, $controller) {
+      scope = $rootScope.$new();
+      ctrl = $controller('ActivityhistoryCtrl', {$scope: scope});
+    }));	
+
+	it('should ...', inject(function() {
+
+		expect(1).toEqual(1);
+		
+	}));
+
+});

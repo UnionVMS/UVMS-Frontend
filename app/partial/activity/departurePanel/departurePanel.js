@@ -17,12 +17,24 @@ copy of the GNU General Public License along with the IFDM Suite. If not, see <h
  * @param $state {Service} state provider service
  * @param fishingActivityService {Service} fishing activity service <p>{@link unionvmsWeb.fishingActivityService}</p>
  * @param reportFormService {Service} report form service <p>{@link unionvmsWeb.reportFormService}</p>
+ * @param activityRestService {Service} activity REST service <p>{@link unionvmsWeb.activityRestService}</p>
  * @description
  *  The controller for the departure panel partial
  */
-angular.module('unionvmsWeb').controller('DeparturepanelCtrl',function($scope, $state, fishingActivityService, tripSummaryService){
+angular.module('unionvmsWeb').controller('DeparturepanelCtrl',function($scope, $state, fishingActivityService, tripSummaryService, activityRestService, loadingStatus){
     $scope.faServ = fishingActivityService;
-    $scope.faServ.getData('departure', {}); //FIXME to move to other place
+    
+    var init = function(){
+        $scope.faServ.getData('departure');
+        loadingStatus.isLoading('FishingActivity', true);
+        activityRestService.getTripCatchDetail($scope.faServ.id).then(function(response){
+            $scope.fishingTripDetails = response;  
+            loadingStatus.isLoading('FishingActivity', false);
+        }, function(error){
+            //TODO deal with error from service
+            loadingStatus.isLoading('FishingActivity', false);
+        });
+    };
     
     /**
      * Check if a location tile should be clickable taking into consideration the route and the report configuration
@@ -52,4 +64,6 @@ angular.module('unionvmsWeb').controller('DeparturepanelCtrl',function($scope, $
         //TODO when we have it running with reports - mainly for hiding/showing stuff
         console.log('This is the click callback');
     };
+    
+    init();
 });
