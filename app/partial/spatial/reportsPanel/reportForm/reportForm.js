@@ -444,7 +444,6 @@ angular.module('unionvmsWeb').controller('ReportformCtrl',function($scope, $moda
                 break;
             case 'EDIT':
                 $scope.report = reportFormService.report;
-                $scope.init();
                 break;
             case 'EDIT-FROM-LIVEVIEW':
                 $scope.report = reportFormService.liveView.currentReport;

@@ -274,13 +274,20 @@ angular.module('unionvmsWeb').controller('AdvancedsearchformCtrl',function($scop
         }
     };
     
+    /**
+     * Get Vessel Group properties object by vessel guid
+     * 
+     * @memberof AdvancedsearchformCtrl
+     * @private
+     * @returns {Object} A vessel group object with the following properties: guid, name and user
+     */
     function getVesselGroupProperties(id){
         var props = {};
         var rec = _.findWhere($scope.vesselGroups, {code: id});
         if (angular.isDefined(rec)){
             props.name = rec.text;
             props.guid = rec.code;
-            props.user = rec.user
+            props.user = rec.user;
         }
         return props;
     }
