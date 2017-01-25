@@ -9,7 +9,7 @@ the hope that it will be useful, but WITHOUT ANY WARRANTY; without even the impl
 FITNESS FOR A PARTICULAR PURPOSE.  See the GNU General Public License for more details. You should have received a
 copy of the GNU General Public License along with the IFDM Suite. If not, see <http://www.gnu.org/licenses/>.
  */
-angular.module('unionvmsWeb').controller('VesselCtrl', function($scope, $log, locale, savedSearchService, Vessel, VesselContact, searchService, vesselRestService, alertService, $stateParams, csvService, SearchResults, userService, PositionReportModal, $filter) {
+angular.module('unionvmsWeb').controller('VesselCtrl', function($scope, $log, locale, savedSearchService, Vessel, VesselContact, searchService, vesselRestService, alertService, $stateParams, csvService, SearchResults, userService, PositionReportModal, $filter, $timeout) {
 
     var checkAccessToFeature = function(feature) {
         return userService.isAllowed(feature, 'Union-VMS', true);
@@ -18,7 +18,8 @@ angular.module('unionvmsWeb').controller('VesselCtrl', function($scope, $log, lo
     //Keep track of visibility statuses
     $scope.isVisible = {
         search : true,
-        vesselForm : false
+        vesselForm : false, 
+        notificationCancelSearch : false
     };
 
     $scope.currentSearchResults = new SearchResults('', false, locale.getString('vessel.search_zero_results_error'));
@@ -82,6 +83,20 @@ angular.module('unionvmsWeb').controller('VesselCtrl', function($scope, $log, lo
         $scope.currentSearchResults.setLoading(true);
         searchService.searchVessels()
             .then(updateSearchResults, onGetSearchResultsError);
+
+        var timeoutDisplayNotificationCancelSearch = 3000;
+        $timeout(function(){
+            if ($scope.currentSearchResults.loading) {
+                $scope.isVisible.notificationCancelSearch = true;
+            }
+        }, timeoutDisplayNotificationCancelSearch);
+    };
+
+    // Cancel search for vessels
+    $scope.cancelSearch = function() {
+        vesselRestService.cancelPendingRequests();
+        $scope.currentSearchResults.setLoading(false);
+        $scope.isVisible.notificationCancelSearch = false;
     };
 
     // Search for vessels based on latest movements
@@ -98,6 +113,7 @@ angular.module('unionvmsWeb').controller('VesselCtrl', function($scope, $log, lo
 
     //Update the search results
     var updateSearchResults = function(vesselListPage){
+        $scope.isVisible.notificationCancelSearch = false;
         $scope.currentSearchResults.updateWithNewResults(vesselListPage);
 
         if(vesselListPage.totalNumberOfLatestMovements) {
@@ -107,11 +123,16 @@ angular.module('unionvmsWeb').controller('VesselCtrl', function($scope, $log, lo
         }
     };
 
-    //Handle error from search results (listing vessel)
+    // Handle error from search results (listing vessel)
     var onGetSearchResultsError = function(response){
-        $scope.currentSearchResults.removeAllItems();
-        $scope.currentSearchResults.setLoading(false);
-        $scope.currentSearchResults.setErrorMessage(locale.getString('common.search_failed_error'));
+        $scope.isVisible.notificationCancelSearch = false;
+
+        // Error functions not to be runned if search has been cancelled 
+        if (response.status !== -1) {
+            $scope.currentSearchResults.removeAllItems();
+            $scope.currentSearchResults.setLoading(false);
+            $scope.currentSearchResults.setErrorMessage(locale.getString('common.search_failed_error'));
+        }
     };
 
     //Is user allowed to edit vessels?

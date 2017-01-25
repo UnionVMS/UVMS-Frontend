@@ -178,7 +178,8 @@ describe('VesselCtrl', function() {
             var searchSpy = spyOn(searchService, "searchVessels").andReturn(deferred.promise);
             var searchVesselSpy = spyOn(searchService, "searchLatestMovements").andReturn(deferred.promise);
             var localeSpy = spyOn(locale, "getString").andReturn("TRANSLATED_TEXT");
-            deferred.reject();
+            var err = {status: 500};
+            deferred.reject(err);
 
             var controller = createController();
 
@@ -198,7 +199,8 @@ describe('VesselCtrl', function() {
             var searchSpy = spyOn(searchService, "searchVessels").andReturn(deferred.promise);
             var searchVesselSpy = spyOn(searchService, "searchLatestMovements").andReturn(deferred.promise);
             var setPageSpy = spyOn(searchService, "setPage");
-            deferred.reject();
+            var err = {status: 500};
+            deferred.reject(err);
 
             var controller = createController();
 

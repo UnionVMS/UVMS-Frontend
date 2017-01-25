@@ -70,10 +70,11 @@
                         </div>
                         <div class="currentMobileTerminalTypes" ng-show="typeAndPlugin">
                             <div class="flexrow">
-                                <label>{{'mobileTerminal.form_inmarsatc_communication_channels_header' | i18n}}</label>
+                                <h5 class="form-header" ng-show="!isMultipleChannelsAllowed()">{{'mobileTerminal.form_inmarsatc_communication_channel_header' | i18n}}</h5>
+                                <h5 class="form-header" ng-show="isMultipleChannelsAllowed()">{{'mobileTerminal.form_inmarsatc_communication_channels_header' | i18n}}</h5>
                             </div>
                             <div class="flexrow">
-                                <label>{{'mobileTerminal.form_inmarsatc_communication_channels_notice' | i18n}}</label>
+                                <span>{{'mobileTerminal.form_inmarsatc_communication_channels_notice' | i18n}}</span>
                             </div>
                             <div ng-repeat="communicationChannel in mobileTerminal.channels">
                                 <div ng-form="channelForm" class="channel-form">

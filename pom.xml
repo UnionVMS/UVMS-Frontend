@@ -3,13 +3,13 @@
     <modelVersion>4.0.0</modelVersion>
     <groupId>eu.europa.ec.fisheries.uvms</groupId>
     <artifactId>unionvms-web</artifactId>
-    <version>3.0.0-SNAPSHOT</version>
+    <version>3.0.1-SNAPSHOT</version>
     <name>unionvms-web</name>
     <packaging>war</packaging>
 
     <properties>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
-        <release.branch.name>uvms-2.1.0-jessamine-boffin</release.branch.name>
+        <release.branch.name>uvms-3.0.0-boba-fett</release.branch.name>
         <webroot>unionvms-web</webroot>
         <karma.phase>integration-test</karma.phase>
         <project.scm.id>github</project.scm.id>
@@ -149,7 +149,7 @@
                 <activeByDefault>false</activeByDefault>
             </activation>
             <properties>
-                <release.branch.name>uvms-2.1.0-jessamine-boffin</release.branch.name>
+                <release.branch.name>uvms-3.0.0-boba-fett</release.branch.name>
             </properties>
             <build>
                 <plugins>
@@ -211,7 +211,7 @@
                                         </goals>
                                     </pluginExecutionFilter>
                                     <action>
-                                        <ignore/>
+                                        <ignore />
                                     </action>
                                 </pluginExecution>
                             </pluginExecutions>

@@ -62,14 +62,23 @@ angular.module('unionvmsWeb').controller('MobileterminallistCtrl',function($scop
         return checked;
     };
 
-    $scope.showLog = function (item){
-        console.log("Show log info for this item:");
-        console.log(item);
+    $scope.getDefaultDnid = function(channels) {
+        var defaultDnid;
+        $.each(channels, function(index, channel){
+            if (channel.capabilities.DEFAULT_REPORTING && channel.ids.DNID !== undefined) {
+                defaultDnid = channel.ids.DNID;
+            }
+        });
+        return defaultDnid;
     };
 
-
-
-
-
-
+    $scope.getDefaultMemberNumber = function(channels) {
+        var defaultMemberNumber;
+        $.each(channels, function(index, channel){
+            if (channel.capabilities.DEFAULT_REPORTING && channel.ids.MEMBER_NUMBER !== undefined) {
+                defaultMemberNumber = channel.ids.MEMBER_NUMBER;
+            }
+        });
+        return defaultMemberNumber;
+    };
 });

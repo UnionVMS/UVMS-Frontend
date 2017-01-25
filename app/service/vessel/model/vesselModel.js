@@ -16,13 +16,25 @@ angular.module('unionvmsWeb')
 
     function Vessel(){
         this.active = true;
-        this.source = SOURCE_INTERNAL;
-        this.grossTonnageUnit = "LONDON";
-        this.lengthType = "LOA";
+        this.cfr = null;
         this.contact = [];
+        this.externalMarking = undefined;
+        this.grossTonnage = null;
+        this.grossTonnageUnit = "LONDON";
+        this.homePort = undefined;
+        this.imo = null;
+        this.ircs = undefined;
+        this.lastMovement = undefined;
+        this.lengthType = "LOA";
+        this.lengthValue = null;
+        this.licenseType = undefined;
+        this.mmsiNo = null;
+        this.name = undefined;
+        this.notes = [];
+        this.powerMain = null;
         this.producer = {
             id : undefined,
-            code : undefined,
+            code : null,
             name : undefined,
             address : undefined,
             zipcode : undefined,
@@ -31,8 +43,7 @@ angular.module('unionvmsWeb')
             mobile : undefined,
             fax : undefined
         };
-        this.notes = [];
-        this.lastMovement = undefined;
+        this.source = SOURCE_INTERNAL;
     }
 
     Vessel.fromJson = function(data){
