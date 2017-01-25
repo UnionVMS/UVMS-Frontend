@@ -15,6 +15,12 @@ angular.module('unionvmsWeb').controller('ReportformCtrl',function($scope, $moda
 
     //set visibility types in dropdown option
     $scope.visibilities = [];
+
+    //Set the available report types to create
+    $scope.reportTypes = [
+        {"text": locale.getString('spatial.reports_form_type_standard'), "code": "standard"},
+        {"text": locale.getString('spatial.reports_form_type_summary'), "code": "summary"}
+    ];
     
     //Set positions selector dropdown options
     $scope.positionItems = [
@@ -83,6 +89,13 @@ angular.module('unionvmsWeb').controller('ReportformCtrl',function($scope, $moda
             vessels: [],
             areas: []
         };
+        
+        if ($scope.report.movSources.length === 0){
+            $scope.report.movSources = [];
+            angular.forEach($scope.movementSourceTypes, function(item){
+                $scope.report.movSources.push(item.code);
+            });
+        }
         
         $scope.checkVisibilities();
     };
@@ -378,9 +391,13 @@ angular.module('unionvmsWeb').controller('ReportformCtrl',function($scope, $moda
         var errorMsg = defaultMsg;
 
         if (angular.isDefined(error.data.msg)) {
-            errorMsg = locale.getString('spatial.'+ error.data.msg);
+            var msg = error.data.msg;
+            if (msg.indexOf('spatial') === -1){
+                msg = 'spatial.' + msg;
+            }
+            errorMsg = locale.getString(msg);
         } else {
-            errorMsg = locale.getString('spatial.'+ defaultMsg);
+            errorMsg = locale.getString(defaultMsg);
         }
         
         $scope.formAlert.msg = errorMsg;
@@ -424,17 +441,17 @@ angular.module('unionvmsWeb').controller('ReportformCtrl',function($scope, $moda
             case 'CREATE':
                 reportFormService.report = new Report();
                 $scope.report = reportFormService.report;
-                $scope.init();
                 break;
             case 'EDIT':
                 $scope.report = reportFormService.report;
-                $scope.init();
-            break;
+                break;
             case 'EDIT-FROM-LIVEVIEW':
                 $scope.report = reportFormService.liveView.currentReport;
                 reportFormService.liveView.currentTempReport = angular.copy($scope.report);
-                $scope.init();
+                break;
         }
+        
+        $scope.init();
 
         if (angular.isDefined($scope.report.areas) && $scope.report.areas.length > 0){
             getAreaProperties(buildAreaPropArray());

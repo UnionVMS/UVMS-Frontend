@@ -9,24 +9,46 @@ the hope that it will be useful, but WITHOUT ANY WARRANTY; without even the impl
 FITNESS FOR A PARTICULAR PURPOSE.  See the GNU General Public License for more details. You should have received a
 copy of the GNU General Public License along with the IFDM Suite. If not, see <http://www.gnu.org/licenses/>.
 */
-angular.module('unionvmsWeb').filter('stPurposeCode', function() {
+angular.module('unionvmsWeb').filter('stPurposeCode', function(mdrCacheService) {
     var cachedCodes = [];
-    function convertCode(mdrCode){
-        var rec = _.findWhere(cachedCodes, {code: mdrCode.toString()});
-        var code;
-        if (angular.isDefined(rec)){
-            return rec.text;
+    var images = {
+        '1': 'fa-ban',
+        '3': 'fa-trash-o',
+        '5': 'fa-retweet',
+        '9': 'fa-certificate'
+    };
+    var isFinished = false;
+    var isInvoked = false;
+    
+    function realFilter(code, isImage){
+        var rec = _.findWhere(cachedCodes, {code: code.toString()});
+        var filtered;
+        if (isImage){
+            filtered = images[rec.code];
         } else {
-            //TODO fetch the codes from mdr rest service
-            cachedCodes = [{
-                code: '1', text: 'Cancellation'
-            },{
-                code: '3', text: 'Delete'
-            },{
-                code: '5', text: 'Replacement (correction)'
-            },{
-                code: '9', text: 'Original report'
-            }];
+            filtered = rec.text;
+        }
+        
+        return filtered;
+    }
+    
+    function convertCode(mdrCode, isImage){
+        if (!isFinished){
+            if (!isInvoked){
+                isInvoked = true;
+                mdrCacheService.getCodeList('flux_gp_purposecode').then(function(response){
+                    angular.forEach(response, function(item){
+                        cachedCodes.push({
+                            code: item.code,
+                            text: item.description
+                        });
+                    });
+                    isFinished = true;
+                }, cachedCodes);
+            }
+            return;
+        } else {
+            return realFilter(mdrCode, isImage);
         }
     }
     

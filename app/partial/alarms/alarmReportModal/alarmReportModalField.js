@@ -21,12 +21,18 @@ copy of the GNU General Public License along with the IFDM Suite. If not, see <h
 			restrict: 'A',
 			scope: {
 				fieldValue: '=',
-				alarmReportField: '='
+				fieldValue2: '=', 
+				fieldValue3: '=',
+				alarmReportField: '=', 
+				missingText: '@'
 			},
 			template:
 				'<label>{{alarmReportField | i18n}}</label>' +
 				'<div ng-if="fieldValue !== undefined" class="value">{{fieldValue}}</div>' +
-				'<div ng-if="fieldValue === undefined" class="value missing">{{"alarms.position_report_information_value_missing" | i18n}}</div>'
+				'<div ng-if="fieldValue === undefined && fieldValue2 !== undefined" class="value">{{fieldValue2}}</div>' +
+				'<div ng-if="fieldValue === undefined && fieldValue2 === undefined && fieldValue3 !== undefined" class="value">{{fieldValue3}}</div>' +
+				'<div ng-if="!missingText && fieldValue === undefined && fieldValue2 === undefined && fieldValue3 === undefined" class="value">{{"-"}}</div>' +
+				'<div ng-if="missingText && fieldValue === undefined && fieldValue2 === undefined && fieldValue3 === undefined" class="value missing">{{"alarms.position_report_information_value_missing" | i18n}}</div>'
 		};
 	}
 

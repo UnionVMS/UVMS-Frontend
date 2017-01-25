@@ -22,7 +22,7 @@ angular.module('unionvmsWeb').controller('mobileTerminalFormCtrl',function($filt
         } else {
             return false;
         }
-    }
+    };
 
     //Show/hide assign vessel
     $scope.toggleAssignVessel = function(){
@@ -35,5 +35,5 @@ angular.module('unionvmsWeb').controller('mobileTerminalFormCtrl',function($filt
             $scope.searchMobileTerminals();
             $scope.toggleMobileTerminalDetails();
         }
-    }
+    };
 });

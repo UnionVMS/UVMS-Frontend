@@ -98,12 +98,12 @@ describe('activityRestService', function() {
         actListSpy = createSpy('actListSpy', true);
         var payload = {
             pagination: {
-                page: 1,
-                listSize:25
+                offset: 1,
+                pageSize:25
             },
-            sortKey: {
-                field: 'ACTIVITY_TYPE',
-                order: 'DESC'
+            sorting: {
+                sortBy: 'ACTIVITY_TYPE',
+                reversed: true
             },
             searchCriteriaMap: {}
         }

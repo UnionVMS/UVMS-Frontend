@@ -21,7 +21,7 @@ copy of the GNU General Public License along with the IFDM Suite. If not, see <h
 							<div st-sort="occurence" st-skip-natural="true" st-class-ascent="sorting_asc" st-class-descent="sorting_desc" ng-show="attrVisibility.fishingActivities[column]" ng-if="column === 'occurence'">{{'activity.header_fa_occurence' | i18n }}</div>
 							<div st-sort="purposeCode" st-skip-natural="true" st-class-ascent="sorting_asc" st-class-descent="sorting_desc" ng-show="attrVisibility.fishingActivities[column]" ng-if="column === 'purposeCode'">{{'activity.header_fa_purpose_code' | i18n }}</div>
 							<div st-sort="dataSource" st-skip-natural="true" st-class-ascent="sorting_asc" st-class-descent="sorting_desc" ng-show="attrVisibility.fishingActivities[column]" ng-if="column === 'dataSource'">{{'activity.header_fa_data_source' | i18n }}</div>
-							<div st-sort="fromName" st-skip-natural="true" st-class-ascent="sorting_asc" st-class-descent="sorting_desc" ng-show="attrVisibility.fishingActivities[column]" ng-if="column === 'fromName'">{{'activity.header_fa_from_name' | i18n }}</div>
+							<div ng-show="attrVisibility.fishingActivities[column]" ng-if="column === 'fromName'">{{'activity.header_fa_from_name' | i18n }}</div>
 							<div st-sort="startDate" st-skip-natural="true" st-class-ascent="sorting_asc" st-class-descent="sorting_desc"  ng-show="attrVisibility.fishingActivities[column]" ng-if="column === 'startDate'">{{'activity.header_fa_start_date' | i18n }}</div>
 							<div st-sort="endDate" st-skip-natural="true" st-class-ascent="sorting_asc" st-class-descent="sorting_desc" ng-show="attrVisibility.fishingActivities[column]" ng-if="column === 'endDate'">{{'activity.header_fa_end_date' | i18n }}</div>
 							<div ng-show="attrVisibility.fishingActivities[column]" ng-if="column === 'cfr'">{{'spatial.reports_form_vessel_search_table_header_cfr' | i18n }}</div>
@@ -43,7 +43,7 @@ copy of the GNU General Public License along with the IFDM Suite. If not, see <h
 					<tr>
 						<th colspan="20" ng-if="!actServ.reportsList.isLoading && (actServ.displayedActivities.length === 0 || actServ.reportsList.hasError)">
 							<table-alert type="'info'" msg="'spatial.table_no_data'" visible="actServ.displayedActivities.length === 0 && !actServ.reportsList.hasError"></table-alert>
-							<table-alert type="'error'" msg="'activity.fa_table_error_fetching_reports'" visible="actServ.reportsList.hasError"></table-alert>
+							<table-alert type="'error'" msg="'activity.fa_table_error_fetching_reports'" visible="actServ.reportsList.hasError" no-hide="true"></table-alert>
 						</th>
 					</tr>
 					<tr ng-if="actServ.reportsList.isLoading">
@@ -56,7 +56,9 @@ copy of the GNU General Public License along with the IFDM Suite. If not, see <h
 							<div ng-show="attrVisibility.fishingActivities.FAReportType" ng-if="column === 'FAReportType'">{{ activity.FAReportType }}</div>
 							<div ng-show="attrVisibility.fishingActivities.activityType" ng-if="column === 'activityType'">{{ activity.activityType }}</div>
 							<div ng-show="attrVisibility.fishingActivities.occurence" ng-if="column === 'occurence'">{{ activity.occurence | stDateUtc }}</div>
-							<div ng-show="attrVisibility.fishingActivities.purposeCode" ng-if="column === 'purposeCode'">{{ activity.purposeCode | stPurposeCode }}</div>
+							<div ng-show="attrVisibility.fishingActivities.purposeCode" ng-if="column === 'purposeCode'" class="with-icon">
+								<i class="fa {{ activity.purposeCode | stPurposeCode: true }}" title="{{ activity.purposeCode | stPurposeCode}}"></i>
+							</div>
 							<div ng-show="attrVisibility.fishingActivities.dataSource" ng-if="column === 'dataSource'">{{ activity.dataSource }}</div>
 							<div ng-show="attrVisibility.fishingActivities.fromName" ng-if="column === 'fromName'">{{ activity.fromName }}</div>
 							<div ng-show="attrVisibility.fishingActivities.startDate" ng-if="column === 'startDate'">{{ activity.startDate | stDateUtc }}</div>
@@ -74,8 +76,11 @@ copy of the GNU General Public License along with the IFDM Suite. If not, see <h
 							<div ng-show="attrVisibility.fishingActivities.quantity" ng-if="column === ''">{{ activity.quantity | stArrayToString: ', ' }}</div>
 						</td>
 						<td class="no-wrap-white-space">
-							<button type="button" class="btn btn-xs btn-default" title="{{'activity.activity_overview' | i18n }}" ng-click="openOverview($index)">
+							<button type="button" class="btn btn-xs btn-default" title="{{'activity.activity_details' | i18n }}" ng-click="openDetails($index)">
 								<span class="fa fa-eye"></span>
+							</button>
+							<button type="button" class="btn btn-xs btn-default" title="{{'activity.activity_history' | i18n }}" ng-show="activity.hasCorrection" ng-click="openHistory($index)">
+								<span class="fa fa-history"></span>
 							</button>
 						</td>
 					</tr>
@@ -85,7 +90,7 @@ copy of the GNU General Public License along with the IFDM Suite. If not, see <h
 		<div class="stFooterPagination" ng-show="actServ.displayedActivities.length > 0 && !actServ.reportsList.isLoading">
 			<div class="tr">
 				<div class="td text-right">
-					<div st-pagination st-items-by-page="actServ.reportsList.pagination.listSize" st-template="partial/common/reportsPagination/reportsPagination.html"></div>
+					<div st-pagination st-items-by-page="actServ.reportsList.pagination.pageSize" st-template="partial/common/reportsPagination/reportsPagination.html"></div>
 				</div>
 			</div>
 		</div>

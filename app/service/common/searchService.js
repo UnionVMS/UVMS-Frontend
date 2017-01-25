@@ -79,7 +79,7 @@ angular.module('unionvmsWeb').factory('searchService',function($q, $log, searchU
             }, function(error){
                 onGetMovementsError(error, deferred);
             });
-        }
+        };
 
         if (isMinimalRequest) {
             movementRestService.getMinimalMovementList(movementRequest).then(getMovementOk, function(error){
@@ -152,7 +152,6 @@ angular.module('unionvmsWeb').factory('searchService',function($q, $log, searchU
         if(angular.isUndefined(searchGetListRequest)){
             searchGetListRequest = getListRequest;
         }
-        console.log(searchGetListRequest);
         searchUtilsService.modifySpanAndTimeZones(searchGetListRequest.criterias);
 
         //Split into alarms/tickets and vessel criterias
@@ -274,7 +273,7 @@ angular.module('unionvmsWeb').factory('searchService',function($q, $log, searchU
                                         return latestMovements[i];
                                     }
                                 }
-                            }
+                            };
 
                             $.each(vessels.items, function(index, vessel) {
                                 vessel.lastMovement = findGuid(vessel.vesselId.guid);
@@ -338,6 +337,18 @@ angular.module('unionvmsWeb').factory('searchService',function($q, $log, searchU
             return deferred.promise;
 		},
 
+        //Count number of vessels
+        searchNumberOfVessels : function(){
+            var deferred = $q.defer();
+            vesselRestService.getVesselListCount(getListRequest).then(function(countVessels){
+                deferred.resolve(countVessels);
+            }, function(error){
+                $log.error("Error counting vessels.", error);
+                deferred.reject(error);
+            });
+            return deferred.promise;
+        },
+
         //Do the search for polls
         searchPolls : function(){
             var origGetListRequest = getListRequest.copy();
@@ -375,7 +386,7 @@ angular.module('unionvmsWeb').factory('searchService',function($q, $log, searchU
             //Search in exchange
             if (exchangePollCriteria.length === 0) {
                 // Since there is no way to get info from exchange for multiple pollGuid, get all from the beginning of time if nothing else is set
-                exchangeSearchCriteria = [{"key":"FROM_DATE", "value":"1970-01-01 00:00:00 +00:00"}];
+                var exchangeSearchCriteria = [{"key":"FROM_DATE", "value":"1970-01-01 00:00:00 +00:00"}];
             }
             var exchangeDeferred = $q.defer();
             promises.push(exchangeDeferred.promise);

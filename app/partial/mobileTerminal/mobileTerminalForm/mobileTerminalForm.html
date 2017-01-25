@@ -14,8 +14,8 @@ copy of the GNU General Public License along with the IFDM Suite. If not, see <h
 
         <div class="card" ng-show="currentMobileTerminal.connectId && !isVisible.assignVessel">
             <div class="row card-header assignedVesselHeader">
-                <div class="col-md-6">
-                    <h5>{{'mobileTerminal.assigned_vessel' | i18n | uppercase}}</h5>
+                <div class="col-md-12">
+                    <span class="form-header">{{'mobileTerminal.assigned_vessel' | i18n}}</span>
                 </div>
             </div>
             <div class="row">
@@ -26,15 +26,15 @@ copy of the GNU General Public License along with the IFDM Suite. If not, see <h
             </div>
         </div>
 
-        <div class="card with-small-card-header" ng-show="isVisible.assignVessel">
+        <div class="card" ng-show="isVisible.assignVessel">
             <div class="row card-header">
                 <div class="col-md-6">
-                    <h5>{{'mobileTerminal.assign_vessel' | i18n | uppercase}}</h5>
+                     <span class="form-header">{{'mobileTerminal.assign_vessel' | i18n}}</span>
                 </div>
                 <div class="col-md-6 textAlignRight">
                     <div class="actions">
                         <div>
-                            <span class="link underline" ng-click="toggleAssignVessel()" id="mob-term-form-assign-vessel-1">{{'common.cancel' | i18n | uppercase}}</span>
+                            <a ng-click="toggleAssignVessel()" id="mob-term-form-assign-vessel-1">{{'common.cancel' | i18n}}</a>
                         </div>
                         <div class="clearfix"></div>
                     </div>

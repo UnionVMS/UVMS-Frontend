@@ -17,8 +17,8 @@ copy of the GNU General Public License along with the IFDM Suite. If not, see <h
 	<div class="col-md-12 main-content">
 		<a class="btn-trip-quit" title="{{'activity.trip_summary_quit_trip_detail' | i18n }}" ng-click="quitTripSummary()"><i class="fa fa-share-square-o"></i></a>
 		<div class="row title">
-			<span ng-class="{useColon: faServ.activityData.operationType}">{{'activity.fa_type_departure' | i18n}}</span>
-			<span class="operationType" ng-if="faServ.activityData.operationType">{{'activity.departure_optype_correction' | i18n}}</span>
+			<span ng-class="{useColon: faServ.isCorrection}">{{'activity.fa_type_departure' | i18n}}</span>
+			<span class="operationType" ng-if="faServ.isCorrection">{{'activity.departure_optype_correction' | i18n}}</span>
 		</div>
 		<div class="row activity-summary-row">
 			<activity-summary-tile class="col-md-3 summary-section" fa-type="{{faServ.activityData.faType}}" summary="faServ.activityData.summary"></activity-summary-tile>

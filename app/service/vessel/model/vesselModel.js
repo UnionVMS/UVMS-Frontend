@@ -16,12 +16,25 @@ angular.module('unionvmsWeb')
 
     function Vessel(){
         this.active = true;
-        this.source = SOURCE_INTERNAL;
-        this.grossTonnageUnit = "LONDON";
-        this.lengthType = "LOA";
+        this.cfr = null;
         this.contact = [];
+        this.externalMarking = undefined;
+        this.grossTonnage = null;
+        this.grossTonnageUnit = "LONDON";
+        this.homePort = undefined;
+        this.imo = null;
+        this.ircs = undefined;
+        this.lastMovement = undefined;
+        this.lengthType = "LOA";
+        this.lengthValue = null;
+        this.licenseType = undefined;
+        this.mmsiNo = null;
+        this.name = undefined;
+        this.notes = [];
+        this.powerMain = null;
         this.producer = {
             id : undefined,
+            code : null,
             name : undefined,
             address : undefined,
             zipcode : undefined,
@@ -30,12 +43,12 @@ angular.module('unionvmsWeb')
             mobile : undefined,
             fax : undefined
         };
-        this.notes = [];
-        this.lastMovement = undefined;
+        this.source = SOURCE_INTERNAL;
     }
 
     Vessel.fromJson = function(data){
         var vessel = new Vessel();
+        var i;
 
         if(angular.isDefined(data.assetId)){
             vessel.vesselId = {
@@ -71,18 +84,19 @@ angular.module('unionvmsWeb')
         vessel.grossTonnageUnit = data.grossTonnageUnit;
 
         if (data.notes) {
-            for (var i = 0; i < data.notes.length; i++) {
+            for (i = 0; i < data.notes.length; i++) {
                 vessel.notes.push(VesselNotes.fromDTO(data.notes[i]));
             }
         }
         if (data.contact) {
-            for (var i = 0; i < data.contact.length; i++) {
+            for (i = 0; i < data.contact.length; i++) {
                 vessel.contact.push(VesselContact.fromDTO(data.contact[i]));
             }
         }
 
         if(data.producer){
             vessel.producer.id = data.producer.id;
+            vessel.producer.code = data.producer.code;
             vessel.producer.name = data.producer.name;
             vessel.producer.address = data.producer.address;
             vessel.producer.zipcode = data.producer.zipcode;
@@ -155,6 +169,7 @@ angular.module('unionvmsWeb')
 
     Vessel.prototype.copy = function() {
         var copy = new Vessel();
+        var i;
         copy.active = this.active;
         copy.cfr = this.cfr;
         copy.countryCode = this.countryCode;
@@ -184,13 +199,14 @@ angular.module('unionvmsWeb')
             };
         }
         if(this.contact){
-            for (var i = 0; i < this.contact.length; i++) {
+            for (i = 0; i < this.contact.length; i++) {
                 copy.contact.push(this.contact[i].copy());
             }
         }
         if(this.producer){
             copy.producer = {
                 id : this.producer.id,
+                code : this.producer.code,
                 name : this.producer.name,
                 address : this.producer.address,
                 zipcode : this.producer.zipcode,
@@ -203,7 +219,7 @@ angular.module('unionvmsWeb')
         copy.gearType = this.gearType;
 
         if(this.notes){
-            for (var i = 0; i < this.notes.length; i++) {
+            for (i = 0; i < this.notes.length; i++) {
                 copy.notes.push(this.notes[i].copy());
             }
         }

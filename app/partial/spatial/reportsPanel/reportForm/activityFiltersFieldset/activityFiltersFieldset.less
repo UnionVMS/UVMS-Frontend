@@ -10,32 +10,29 @@ FITNESS FOR A PARTICULAR PURPOSE.  See the GNU General Public License for more d
 copy of the GNU General Public License along with the IFDM Suite. If not, see <http://www.gnu.org/licenses/>.
 */
 .activity-filters-section {
-    .reportSubform {
-        padding-top: 10px;
-        &.technical-form {
-            border-left: 1px solid #ddd;
-            border-right: 1px solid #ddd;
-            .port-form-group {
-                margin-bottom: 5px;
+    [name="activitySecForm"] {
+        display: flex;
+        .reportSubform {
+            padding-top: 10px;
+            &.technical-form {
+                border-left: 1px solid #ddd;
+                border-right: 1px solid #ddd;
             }
         }
-    }
-    .unit-input {
-        padding-right: 35px;
-        .unit-box {
-            width: 35px;
+        .unit-input {
+            padding-right: 35px;
+            .unit-box {
+                width: 35px;
+            }
         }
-    }
-    .label-container {
-        padding-right: 0;
-        &.label-top-space {
-            margin-top: 20px;
+        .label-container {
+            padding-right: 0;
+            &.center-label-multiple-combo {
+                line-height: 30px;
+            }
         }
-        &.center-label-multiple-combo {
-            line-height: 41px;
+        .above-label {
+            width: 100%;
         }
-    }
-    .above-label {
-        width: 100%;
     }
 }

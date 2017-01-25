@@ -9,7 +9,6 @@ the hope that it will be useful, but WITHOUT ANY WARRANTY; without even the impl
 FITNESS FOR A PARTICULAR PURPOSE.  See the GNU General Public License for more details. You should have received a
 copy of the GNU General Public License along with the IFDM Suite. If not, see <http://www.gnu.org/licenses/>.
 */
-
 /**
  * @memberof unionvmsWeb
  * @ngdoc controller
@@ -23,7 +22,7 @@ copy of the GNU General Public License along with the IFDM Suite. If not, see <h
 
 
 angular.module('unionvmsWeb').controller('CatchdetailsCtrl', function($scope, activityRestService, locale) {
-
+    
     /**
      * Converts data received from the service into table data
      * 
@@ -155,16 +154,29 @@ angular.module('unionvmsWeb').controller('CatchdetailsCtrl', function($scope, ac
     * @private
     */
     var init = function() {
-
+        //FIXME change with proper trip id
+        activityRestService.getTripCatchDetail('1234').then(function(response){
+            $scope.fishingTripDetails = response;  
+        }, function(error){
+            //TODO deal with error from service
+        });
+        
+        //FIXME change with proper trip id
+        activityRestService.getTripCatchesLandingDetails('1234').then(function(response){
+            $scope.tables = response;
+            processTables();
+        }, function(error){
+            //TODO deal with error from service
+        });
+    };
+    
+    function processTables(){
         var tableOrder = {
             catches: 0,
             landing: 1,
             difference: 2
         };
-
-        $scope.fishingTripDetails = activityRestService.getTripCatchDetail('1234');
-        $scope.tables = activityRestService.getTripCatchesLandingDetails('1234');
-
+        
         var newItems = [];
         angular.forEach($scope.tables.difference.items,function(value,key) {
             var item = angular.copy(value);
@@ -172,7 +184,7 @@ angular.module('unionvmsWeb').controller('CatchdetailsCtrl', function($scope, ac
             newItems.push(item);
         });
         $scope.tables.difference.items = newItems;
-
+        
         if(angular.isDefined($scope.tables) && _.keys($scope.tables).length){
             var newTables = [];
             angular.forEach($scope.tables, function(tableData,tableName){
@@ -188,8 +200,7 @@ angular.module('unionvmsWeb').controller('CatchdetailsCtrl', function($scope, ac
 
             $scope.isCatchDetailsLoaded = true;
         }
-
-    };
+    }
 
     init();
 

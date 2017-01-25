@@ -12,7 +12,7 @@ copy of the GNU General Public License along with the IFDM Suite. If not, see <h
 <div ng-controller="ReportformCtrl">
 	<!-- Warnings -->
 	<div class="row">
-		<div class="form-group col-md-12" ng-if="formAlert.visible">
+		<div class="col-md-12" ng-if="formAlert.visible">
 			<div class="alert alert-danger alert-container" role="alert">
 				<span class="fa fa-exclamation-circle" aria-hidden="true"></span>
 				<span class="alert-message">
@@ -20,6 +20,15 @@ copy of the GNU General Public License along with the IFDM Suite. If not, see <h
 				</span>
 		    </div>
 		</div>
+		<!-- FIXME uncomment after release -->
+		<!-- <div class="col-md-12" ng-if="report.positionSelector === 'last' && report.positionTypeSelector === 'positions'">
+			<div class="alert alert-warning alert-container" role="alert">
+				<span class="fa fa-exclamation-circle" aria-hidden="true"></span>
+				<span class="alert-message">
+					<span>{{ 'spatial.last_x_pos_warning' | i18n }}</span>            
+				</span>
+		    </div>
+		</div> -->
 	</div>
 	<div class="card col-md-12 reportFormContainer">
 		<div class="col-md-12 report-form-header">
@@ -37,6 +46,17 @@ copy of the GNU General Public License along with the IFDM Suite. If not, see <h
 			</div>
 		</div>
 		<form name="reportForm" id="reportForm" class="reportForm col-md-12" novalidate>
+			<!-- FIXME uncomment after release -->
+			<!-- <div class="general-form row with-border-bottom">
+				<div class="col-md-12">
+					<div class="row">
+						<div class="form-group col-md-3 inline-group">
+							<label>{{'spatial.reports_form_report_type_label' | i18n}}</label>
+							<combobox ng-model="report.reportType" items="reportTypes" callback="resetForm"></combobox>
+						</div>
+					</div>
+				</div>
+			</div> -->
 			<div class="general-form row">
 				<div class="form-group col-md-3">
 					<div class="form-group report-name-group" ng-class="{'has-error': (reportForm.reportName.$dirty || submitingReport === true) && reportForm.reportName.$invalid}">
@@ -51,29 +71,17 @@ copy of the GNU General Public License along with the IFDM Suite. If not, see <h
 						<textarea class="form-control reportDesc" name="reportDesc" ng-model="report.desc" maxlength="255"></textarea>
 					</div>
 				</div>
-				<div class="col-md-6">
+				<div class="col-md-3">
+					<!-- FIXME uncomment after release -->
+					<!-- <div class="row" ng-if="report.reportType === 'standard'"> -->
 					<div class="row">
-						<div class="form-group col-md-6">
+						<div class="form-group col-md-12">
 							<label>{{'spatial.reports_form_positions_selector_label' | i18n}}</label>
 							<combobox ng-model="report.positionSelector" items="positionItems"></combobox>
 						</div>
-						<div class="form-group col-md-6">
-							<div ng-show="report.positionSelector === 'last'" style="width: 100%;">
-								<div class="form-group input-with-combo field-noLabel" ng-class="{'has-error': (reportForm.xValue.$dirty || submitingReport === true) && reportForm.xValue.$invalid}">
-									<!-- <label for="positionsCounter">{{'spatial.reports_form_positions_x_value' | i18n}}</label> -->
-									<numeric-input id="positionsCounter" class="form-control" min="0" name="xValue" ng-required="report.positionSelector !== 'all' && report" ng-model="report.xValue"></numeric-input>
-									<combobox ng-model="report.positionTypeSelector" items="positionTypeItems"></combobox>
-									<div class="innerErrorMessages" ng-messages="reportForm.xValue.$error" ng-show="(reportForm.xValue.$dirty || submitingReport === true) && reportForm.xValue.$invalid">
-										<div ng-message="required">{{'spatial.required_field_error_message' | i18n }}</div>
-										<div ng-message="invalidNumber">{{'spatial.not_numeric_error_message' | i18n }}</div>
-										<div ng-message="min">{{'spatial.min_value_1_error_message' | i18n }}</div>
-									</div>
-								</div>
-							</div>
-						</div>
 					</div>
 					<div class="row">
-						<div class="form-group col-md-6" ng-hide="report.positionSelector === 'last' && report.positionTypeSelector === 'hours'"  ng-class="{'has-error': (reportForm.startDateTime.$dirty || submitingReport === true) && reportForm.startDateTime.$invalid}">
+						<div class="form-group col-md-12" ng-hide="report.positionSelector === 'last' && report.positionTypeSelector === 'hours'"  ng-class="{'has-error': (reportForm.startDateTime.$dirty || submitingReport === true) && reportForm.startDateTime.$invalid}">
 							<label for="reportStartDate" ng-class="{'required-field': report.positionSelector === 'all'}">{{'spatial.reports_form_start_date_label' | i18n}}</label>
 							<!-- <datepicker-input id="reportStartDate" time="true" model="report.startDateTime" name="startDateTime" ng-required="report.positionSelector === 'all'"></datepicker-input> -->
 							<datepicker-input id="reportStartDate" time="true" model="report.startDateTime" name="startDateTime" max-date="report.endDateTime"  ng-required="report.positionSelector === 'all'" input-field-id="report-start-date-picker" update-when="default"></datepicker-input>
@@ -83,7 +91,7 @@ copy of the GNU General Public License along with the IFDM Suite. If not, see <h
 						</div>
 					</div>
 					<div class="row">
-						<div class="form-group col-md-6" ng-hide="report.positionSelector === 'last' && report.positionTypeSelector === 'hours'" ng-class="{'has-error': (reportForm.endDateTime.$dirty || submitingReport === true) && reportForm.endDateTime.$invalid}">
+						<div class="form-group col-md-12" ng-hide="report.positionSelector === 'last' && report.positionTypeSelector === 'hours'" ng-class="{'has-error': (reportForm.endDateTime.$dirty || submitingReport === true) && reportForm.endDateTime.$invalid}">
 							<label for="reportEndDate" ng-class="{'required-field': report.positionSelector === 'all'}">{{'spatial.reports_form_end_date_label' | i18n}}</label>
 							<!-- <datepicker-input id="reportEndDate" time="true" model="report.endDateTime" name="endDateTime" ng-required="report.positionSelector === 'all'"></datepicker-input> -->
 							<datepicker-input id="reportEndDate" time="true" model="report.endDateTime" name="endDateTime" min-date="report.startDateTime" ng-required="report.positionSelector === 'all'" input-field-id="report-end-date-picker"></datepicker-input>
@@ -93,6 +101,26 @@ copy of the GNU General Public License along with the IFDM Suite. If not, see <h
 						</div>
 					</div>
 				</div>
+				<!-- FIXME uncomment after release -->
+				<!-- <div class="col-md-3" ng-if="report.reportType === 'standard'"> -->
+				<div class="col-md-3">
+					<div class="form-group col-md-12" ng-show="report.positionSelector === 'last'">
+						<div class="row">
+							<div class="form-group input-with-combo field-noLabel" ng-class="{'has-error': (reportForm.xValue.$dirty || submitingReport === true) && reportForm.xValue.$invalid}">
+								<!-- <label for="positionsCounter">{{'spatial.reports_form_positions_x_value' | i18n}}</label> -->
+								<numeric-input id="positionsCounter" class="form-control" min="0" name="xValue" ng-required="report.positionSelector !== 'all' && report" ng-model="report.xValue"></numeric-input>
+								<combobox ng-model="report.positionTypeSelector" items="positionTypeItems"></combobox>
+								<div class="innerErrorMessages" ng-messages="reportForm.xValue.$error" ng-show="(reportForm.xValue.$dirty || submitingReport === true) && reportForm.xValue.$invalid">
+									<div ng-message="required">{{'spatial.required_field_error_message' | i18n }}</div>
+									<div ng-message="invalidNumber">{{'spatial.not_numeric_error_message' | i18n }}</div>
+									<div ng-message="min">{{'spatial.min_value_1_error_message' | i18n }}</div>
+								</div>
+							</div>
+						</div>
+					</div>
+				</div>
+				<!-- FIXME uncomment after release -->
+				<!-- <div class="col-md-3 report-configuration-form" ng-if="report.reportType === 'standard'"> -->
 				<div class="col-md-3 report-configuration-form">
 					<div class="col-md-12">
 						<!-- Report components -->
@@ -133,10 +161,13 @@ copy of the GNU General Public License along with the IFDM Suite. If not, see <h
 					<div class="row form-group" ng-include="'partial/spatial/reportsPanel/reportForm/vesselFieldset/vesselFieldset.html'"></div>
 					
 					<!-- Fieldset VMS Filters -->
+					<!-- FIXME uncomment after release -->
+					<!-- <div ng-if="report.reportType === 'standard'" class="row form-group" ng-include="'partial/spatial/reportsPanel/reportForm/vmsFiltersFieldset/vmsFiltersFieldset.html'"></div> -->
 					<div class="row form-group" ng-include="'partial/spatial/reportsPanel/reportForm/vmsFiltersFieldset/vmsFiltersFieldset.html'"></div>
 
 					<!-- Fieldset Activity Filters -->
-					<div class="row form-group" ng-include="'partial/spatial/reportsPanel/reportForm/activityFiltersFieldset/activityFiltersFieldset.html'"></div>
+					<!-- FIXME uncomment after release -->
+					<!-- <div ng-if="(report.reportType === 'summary' || (report.reportType === 'standard' && (report.positionSelector === 'all' || (report.positionSelector === 'last' && report.positionTypeSelector !== 'positions')))) && isAllowed('Activity', 'ACTIVITY_ALLOWED')" class="row form-group" ng-include="'partial/spatial/reportsPanel/reportForm/activityFiltersFieldset/activityFiltersFieldset.html'"></div> -->
 				</div>
 			</ng-form>
 			
@@ -160,4 +191,3 @@ copy of the GNU General Public License along with the IFDM Suite. If not, see <h
 		</form>
 	</div>
 </div>
-

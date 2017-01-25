@@ -26,11 +26,9 @@ angular.module('unionvmsWeb').directive('deepBlur', [ '$timeout', function ($tim
                 }
 
                 return false;
-            };
+            }
 
             function onBlur(e) {
-                // e.relatedTarget for Chrome
-                // document.activeElement for IE 11
                 var targetElement = e.relatedTarget || document.activeElement;
 
                 if (!containsDom(dom, targetElement)) {
@@ -43,7 +41,7 @@ angular.module('unionvmsWeb').directive('deepBlur', [ '$timeout', function ($tim
             if (dom.addEventListener) {
                 dom.addEventListener('blur', onBlur, true);
             } else {
-                dom.attachEvent('onfocusout', onBlur); // For IE8
+                dom.attachEvent('onfocusout', onBlur);
             }
         }]
     };

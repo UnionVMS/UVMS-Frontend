@@ -18,7 +18,7 @@ copy of the GNU General Public License along with the IFDM Suite. If not, see <h
  * @description
  *  A reusable tile that will display the report messages and the message types count related to the selected trip
  */
-angular.module('unionvmsWeb').directive('tripReportsPanel', function(loadingStatus,activityRestService,$anchorScroll,locale,reportingNavigatorService) {
+angular.module('unionvmsWeb').directive('tripReportsPanel', function(loadingStatus,activityRestService,$anchorScroll,locale,reportingNavigatorService,fishingActivityService) {
 	return {
 		restrict: 'E',
 		replace: true,
@@ -96,8 +96,26 @@ angular.module('unionvmsWeb').directive('tripReportsPanel', function(loadingStat
                 });
             };
             
-            scope.navigate = function(){
-                reportingNavigatorService.goToView('tripsPanel','tripDeparturePanel');
+            /**
+             * Navigate to the proper partial when details button is clicked
+             * 
+             * @memberof tripReportsPanel
+             * @public
+             * @alias navigate
+             * @param {Object} item - the item object used in the table row
+             * @param {Object} node - the node object used as the table subrow
+             * @param {String} type - the node type
+             */
+            scope.navigate = function(item, node, type){
+                //FIXME this needs to be changed when the proper data is displayed in the table
+                if (type !== 'corrections'){
+                    //TODO check the type of fa operation so that we can open the proper partial
+                    //FIXME set proper id and correction in the faservice
+                    fishingActivityService.resetActivity();
+                    fishingActivityService.id = '1234';
+                    fishingActivityService.isCorrection = node.corrections;
+                    reportingNavigatorService.goToView('tripsPanel','tripDeparturePanel'); 
+                }
             };
 		}
 	};

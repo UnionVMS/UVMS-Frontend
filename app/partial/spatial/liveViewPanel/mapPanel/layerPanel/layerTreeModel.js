@@ -429,20 +429,39 @@ angular.module('unionvmsWeb').factory('TreeModel',function(locale, mapService, u
 	
 	//Build vector nodes for positions and segments
 	var buildVectorNodes = function(type, data){
-	    var longCopyright;
-	    if (type === 'positions'){
-	        longCopyright = locale.getString('spatial.vms_positions_long_copyright'); 
-	    } else {
-	        longCopyright = locale.getString('spatial.vms_segments_long_copyright');
-	    }
+	    var title, lyrType, longCopyright, extraCls;
+	    var selected = false;
+	    
+	    switch (type) {
+            case 'positions':
+                title = locale.getString('spatial.layer_tree_positions');
+                selected = true;
+                lyrType = 'vmspos';
+                longCopyright = locale.getString('spatial.vms_positions_long_copyright');
+                break;
+            case 'segments':
+                title = locale.getString('spatial.layer_tree_segments');
+                lyrType = 'vmsseg';
+                longCopyright = locale.getString('spatial.vms_positions_long_copyright');
+                break;
+            case 'activities':
+                title = locale.getString('spatial.layer_tree_activities');
+                lyrType = 'ers';
+                longCopyright = locale.getString('spatial.activities_long_copyright');
+                extraCls = 'layertree-alarms';
+                break;
+            default:
+                break;
+        }
 	    
 	    var node = {
-	        title: type === 'positions' ? locale.getString('spatial.layer_tree_positions') : locale.getString('spatial.layer_tree_segments'),
-	        selected: true,
+	        title: title,
+	        selected: selected,
+	        extraClasses: extraCls,
 	        data: {
 	            excludeDnd: true,
-	            title: type,
-	            type: type === 'positions' ? 'vmspos' : 'vmsseg',
+	            title: title,
+	            type: lyrType,
 	            isBaseLayer: false,
 	            optionsEnabled: true,
 	            optionsTip: 'spatial.layer_tree_tip_context_menu',
@@ -453,6 +472,11 @@ angular.module('unionvmsWeb').factory('TreeModel',function(locale, mapService, u
 	        }
 	    };
 	    
+	    //FIXME this should be removed when we implement conmtext menu options and labels for activities layer
+	    if (type === 'activities'){
+	        node.data.optionsEnabled = false;
+	        node.data.labelEnabled = false;
+	    }
 	    
 	    if (type === 'positions'){
 	        var sourceArray = _.map(data.features, function(feat){
@@ -478,7 +502,7 @@ angular.module('unionvmsWeb').factory('TreeModel',function(locale, mapService, u
 	            });
 	            
 	            node.children = childNodes;
-	            node.expanded = true;
+	            node.expanded = false;
 	            node.data.sourcesType = sourcesType;
 	        }
 	    }
@@ -488,6 +512,7 @@ angular.module('unionvmsWeb').factory('TreeModel',function(locale, mapService, u
 	
 	//Build parent folder node for vms layers
 	TreeModel.prototype.nodeFromData = function(data){
+	    var finalNodes = [];
 	    var vectorNodes = [];
 
 	    if (data.movements.features.length > 0){
@@ -505,8 +530,13 @@ angular.module('unionvmsWeb').factory('TreeModel',function(locale, mapService, u
                 expanded: true,
                 children: vectorNodes
             };
+            finalNodes.push(node);
+            //FIXME uncomment after release
+//            if (data.activities.features.length > 0){
+//                finalNodes.push(buildVectorNodes('activities', data.activities));
+//            }
             
-            return node;
+            return finalNodes;
 	    }
 	};
 	

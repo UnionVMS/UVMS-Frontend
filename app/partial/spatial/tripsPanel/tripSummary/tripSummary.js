@@ -22,12 +22,12 @@ copy of the GNU General Public License along with the IFDM Suite. If not, see <h
  * @description
  *  The controller for the trip summary tab  
  */
-angular.module('unionvmsWeb').controller('TripsummaryCtrl',function($scope,activityRestService,tripSummaryService,loadingStatus,$anchorScroll,locale){
+angular.module('unionvmsWeb').controller('TripsummaryCtrl', function ($scope, activityRestService, tripSummaryService, loadingStatus, $anchorScroll, locale) {
     $scope.tripSummServ = tripSummaryService;
-
-    //when tthe trip is being initialized
-    $scope.$watch('tripSummServ.isLoadingTrip', function(newVal){
-        if(newVal){
+    
+    //when the trip is being initialized
+    $scope.$watch('tripSummServ.isLoadingTrip', function (newVal) {
+        if (newVal) {
             init();
         }
     });
@@ -38,13 +38,14 @@ angular.module('unionvmsWeb').controller('TripsummaryCtrl',function($scope,activ
      * @memberof TripsummaryCtrl
      * @private
      */
-    var init = function(){
+    var init = function () {
+        
         loadingStatus.isLoading('TripSummary', true);
         //get vessel and role data for the specified trip
-        activityRestService.getTripVessel($scope.trip.id).then(function(response){
-            $scope.trip.fromJson('vessel',response.data);
+        activityRestService.getTripVessel($scope.trip.id).then(function (response) {
+            $scope.trip.fromJson('vessel', response.data);
             loadingStatus.isLoading('TripSummary', false);
-        }, function(error){
+        }, function (error) {
             $anchorScroll();
             $scope.alert.hasAlert = true;
             $scope.alert.hasError = true;
@@ -53,15 +54,32 @@ angular.module('unionvmsWeb').controller('TripsummaryCtrl',function($scope,activ
             loadingStatus.isLoading('TripSummary', false);
         });
 
+        loadingStatus.isLoading('TripSummary', true);
         //get activity reports data for the specified trip
-        activityRestService.getTripReports($scope.trip.id).then(function(response){
-            $scope.trip.fromJson('reports',response.data);
+        activityRestService.getTripReports($scope.trip.id).then(function (response) {
+            $scope.trip.fromJson('reports', response.data);
             loadingStatus.isLoading('TripSummary', false);
-        }, function(error){
+        }, function (error) {
             $anchorScroll();
             $scope.alert.hasAlert = true;
             $scope.alert.hasError = true;
             $scope.alert.alertMessage = locale.getString('activity.error_loading_trip_summary_reports');
+            $scope.alert.hideAlert();
+            loadingStatus.isLoading('TripSummary', false);
+        });
+
+        loadingStatus.isLoading('TripSummary', true);
+        // get trip catches data for the specific trip
+        activityRestService.getTripCatches($scope.trip.id).then(function (response) {
+            $scope.trip.fromJson('catch', response.data);
+            $scope.loadingCharts = false;
+            loadingStatus.isLoading('TripSummary', false);
+        }, function (error) {
+            $scope.loadingCharts = false;
+            $anchorScroll();
+            $scope.alert.hasAlert = true;
+            $scope.alert.hasError = true;
+            $scope.alert.alertMessage = locale.getString('activity.error_loading_trip_summary_catch_details');
             $scope.alert.hideAlert();
             loadingStatus.isLoading('TripSummary', false);
         });

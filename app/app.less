@@ -197,7 +197,7 @@ copy of the GNU General Public License along with the IFDM Suite. If not, see <h
 @import "directive/spatial/alarmsPreview/alarmsPreview.less";
 @import "directive/common/breadcrumbNavigator/breadcrumbNavigator.less";
 @import "partial/activity/activityReportsList/activityReportsList.less";
-@import "partial/activity/activityOverview/activityOverview.less";
+@import "partial/activity/activityHistory/activityHistory.less";
 @import "partial/activity/activityDetails/activityDetails.less";
 @import "partial/activity/advancedSearchForm/advancedSearchForm.less";
 
@@ -211,7 +211,6 @@ copy of the GNU General Public License along with the IFDM Suite. If not, see <h
 @import "directive/activity/rolesPanel/rolesPanel.less";
 @import "directive/activity/tripReportsPanel/tripReportsPanel.less";
 @import "directive/activity/vesselPanel/vesselPanel.less";
-@import "directive/activity/rolesPanel/rolesCarousel/rolesCarousel.less";
 @import "directive/activity/tripOverviewPanel/tripOverviewPanel.less";
 @import "partial/spatial/tripsPanel/catchDetails/catchDetails.less";
 @import "partial/spatial/reportsPanel/reportForm/activityFiltersFieldset/activityFiltersFieldset.less";
@@ -222,7 +221,9 @@ copy of the GNU General Public License along with the IFDM Suite. If not, see <h
 @import "directive/activity/carouselTile/carouselTile.less";
 @import "directive/activity/carouselTile/templates/gearTile/gearTile.less";
 @import "directive/activity/catchClassDetailTile/catchClassDetailTile.less";
+@import "partial/spatial/tripsPanel/catchEvolution/catchEvolution.less";
 @import "partial/spatial/tripsPanel/tripDeparturePanel/tripDeparturePanel.less";
+@import "partial/activity/activityHistoryList/activityHistoryList.less";
 /* Add Component LESS Above */
 /* Required for Angular UI Bootstrap */
 .nav, .pagination, .carousel, .panel-title a { cursor: pointer; }
@@ -236,7 +237,8 @@ html {
 body{
     width: 100%;
     background-color: @pageBackgroundColor;
-    font-family: Roboto, Arial;
+    font-family: @primaryFontFamily;
+    overflow-y: auto;
 }
 
 //Loading indicator shown when app starts

@@ -81,8 +81,7 @@ angular.module('unionvmsWeb')
             if(angular.isDefined($scope.multipleSelectionDropdown)) {
                 return true;
             }
-
-        }
+        };
 
         // Set "Multiple options selected placeholder" (When placeholder should be displayed is specified in controller)
         $scope.displayMultipleOptionsPlaceholder = function(){ 
@@ -133,14 +132,14 @@ angular.module('unionvmsWeb')
             for (var i = 0; i < items.length; i++) {
                 $scope.selectItem(items[i], true);
             }
-        }
+        };
 
         // Remove all items in dropdown
         $scope.removeAllItems = function(items){
             for (var i = 0; i < items.length; i++) {
                 $scope.selectItem(items[i], false, true);
             }
-        }
+        };
 
         //Watch for changes to the ngModel and update the selectedItems
         var watchModelChanges = true;

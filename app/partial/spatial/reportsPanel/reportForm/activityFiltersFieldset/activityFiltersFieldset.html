@@ -51,47 +51,21 @@ copy of the GNU General Public License along with the IFDM Suite. If not, see <h
 						</div>
 						<!--ACTIVITY TECHNICAL FILTERS-->
 						<div class="col-md-4 reportSubform technical-form">
-							<div class="row port-form-group">
-								<div class="form-group col-md-2 label-container centerLabelCombo label-top-space">
+							<div class="row">
+								<div class="form-group col-md-2 label-container centerLabelCombo">
 									<label>{{'spatial.reports_form_activity_port' | i18n }}</label>
 								</div>
-								<div class="form-group col-md-5">
-									<label class="above-label">
-										{{'spatial.reports_form_activity_port_departure' | i18n }}
-										<combobox ng-model="report.faFilters.port.departure" name="portDeparture" initialtext="{{'common.all' | i18n }}" items="ports"></combobox>
-									</label>
-								</div>
-								<div class="form-group col-md-5">
-									<label class="above-label">
-										{{'spatial.reports_form_activity_port_arrival' | i18n }}
-										<combobox ng-model="report.faFilters.port.arrival" name="portArrival" initialtext="{{'common.all' | i18n }}" items="ports"></combobox>
-									</label>
-								</div>
-								<div class="form-group col-md-2 label-container centerLabelCombo">
-									<label></label>
-								</div>
-								<div class="form-group col-md-5">
-									<label class="above-label">
-										{{'spatial.reports_form_activity_port_landing' | i18n }}
-										<combobox ng-model="report.faFilters.port.landing" name="portLanding" initialtext="{{'common.all' | i18n }}" items="ports"></combobox>
-									</label>
+								<div class="form-group col-md-10">
+									<!--<combobox ng-model="report.faFilters.port" name="port" initialtext="{{'common.all' | i18n }}" items="ports"></combobox>-->
+									<input type="text" class="form-control" ng-model="report.faFilters.port" name="port">
 								</div>
 							</div>
 							<div class="row form-group">
-								<div class="col-md-2 label-container centerLabelCombo label-top-space">
+								<div class="col-md-2 label-container centerLabelCombo">
 									<label>{{'spatial.reports_form_activity_gear' | i18n }}</label>
 								</div>
-								<div class="col-md-5">
-									<label class="above-label">
-										{{'spatial.reports_form_activity_gear_onboard' | i18n }}
-										<combobox ng-model="report.faFilters.gear.onboard" name="gearOnBoard" initialtext="{{'common.all' | i18n }}" items="gearTypes"></combobox>
-									</label>
-								</div>
-								<div class="col-md-5">
-									<label class="above-label">
-										{{'spatial.reports_form_activity_gear_deployed' | i18n }}
-										<combobox ng-model="report.faFilters.gear.deployed" name="gearDeployed" initialtext="{{'common.all' | i18n }}" items="gearTypes"></combobox>
-									</label>
+								<div class="col-md-10">
+									<combobox ng-model="report.faFilters.gear" name="gear" initialtext="{{'common.all' | i18n }}" items="gearTypes"></combobox>
 								</div>
 							</div>
 						</div>
@@ -102,7 +76,8 @@ copy of the GNU General Public License along with the IFDM Suite. If not, see <h
 									<label>{{'spatial.reports_form_activity_species' | i18n }}</label>
 								</div>
 								<div class="col-md-10">
-									<combobox ng-model="report.faFilters.species" name="species" initialtext="{{'common.all' | i18n }}" items="species" multiple="true"></combobox>
+									<!--<combobox ng-model="report.faFilters.species" name="species" initialtext="{{'common.all' | i18n }}" items="species" multiple="true"></combobox>-->
+									<input type="text" class="form-control" name="species" ng-model="report.faFilters.species"/>
 								</div>
 							</div>
 							<div class="row">
@@ -116,7 +91,7 @@ copy of the GNU General Public License along with the IFDM Suite. If not, see <h
 									</div>
 								</div>
 								<div class="form-group col-md-5">
-									<combobox ng-model="report.faFilters.weight.unit" items="weightUnits"></combobox>
+									<combobox ng-model="report.faFilters.weight.unit" items="weightUnits" default-value="kg"></combobox>
 								</div>
 								<div class="form-group col-md-2 label-container centerLabelCombo">
 									<label></label>
@@ -135,4 +110,3 @@ copy of the GNU General Public License along with the IFDM Suite. If not, see <h
 		</div>
 	</fieldset>
 </div>
-

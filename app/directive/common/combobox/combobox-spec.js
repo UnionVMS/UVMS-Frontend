@@ -69,6 +69,13 @@ describe('combobox', function() {
         'isLoading': {attr: 'isLoading', type: '='}
       },
       'testFunc': loadingTest
+    },
+    defaultValue: {
+      attributes: {
+        'defaultValue': {attr: 'defaultValue', type: '@'}
+      },
+      'exclude': ['lineStyleCombo','multipleCombo'],
+      'testFunc': defaultValueTest
     }
   };
 
@@ -95,7 +102,9 @@ describe('combobox', function() {
     },
     multipleCombo: {
       'multiple': {attr: 'multiple', type: '='},
-      'ngModel': {attr: 'modelMultiple', type: '='}
+      'ngModel': {attr: 'modelMultiple', type: '='},
+      'hideSelectedItems': {attr: 'hideSelectedItems', type: '='},
+      'minSelections': {attr: 'minSelections', type: '='}
     },
     sectionCombo: {
       'comboSection': {attr: 'comboSection', type: '='},
@@ -164,7 +173,9 @@ describe('combobox', function() {
       placeholder = isolatedScope.currentItemLabel;
     }
 
-    expect(isolatedScope.initialtext).toEqual(placeholder);
+    if(comboTypeName !== 'multipleCombo'){
+      expect(isolatedScope.initialtext).toEqual(placeholder);
+    }
 
     if(comboTypeName === 'editableCombo'){
       angular.element('#' + isolatedScope.comboboxId + ' .combo-placeholder')[0].click();
@@ -174,14 +185,14 @@ describe('combobox', function() {
 
   function comboWithDestinationTest(comboTypeName,isolatedScope){
     expect(angular.element(isolatedScope.destComboList > '#' + isolatedScope.comboboxId).length).toEqual(1);
-    expect(angular.element('body > ' + '#' + isolatedScope.comboboxId).length).toEqual(0);
+    expect(angular.element('body > #' + isolatedScope.comboboxId).length).toEqual(0);
   }
 
   function callbackTest(comboTypeName,isolatedScope){
     if(comboTypeName === 'sectionCombo'){
-      angular.element('body > ' + '#' + isolatedScope.comboboxId + ' > ul > li > .dropdown-submenu > li')[0].click();
+      angular.element('body > #' + isolatedScope.comboboxId + ' > ul > li > .dropdown-submenu > li')[0].click();
     }else{
-      angular.element('body > ' + '#' + isolatedScope.comboboxId + ' > ul > li')[1].click();
+      angular.element('body > #' + isolatedScope.comboboxId + ' > ul > li')[1].click();
     }
     expect(isolatedScope.callback).toHaveBeenCalled();
   }
@@ -208,6 +219,9 @@ describe('combobox', function() {
     expect(angular.element('#' + isolatedScope.comboboxId + ' .loading-msg').length).toEqual(1);
   }
 
+  function defaultValueTest(comboTypeName,isolatedScope){
+    expect(isolatedScope.ngModel).toEqual(scope.model);
+  }
 
   beforeEach(inject(function($rootScope,$compile) {
     scope = $rootScope.$new();
@@ -271,6 +285,11 @@ describe('combobox', function() {
     scope.initCallback = jasmine.createSpy('initCallback');
 
     scope.noPlaceholderOnList = true;
+
+    scope.defaultValue = 'item1';
+
+    scope.hideSelectedItems = false;
+    scope.minSelections = 2;
   }));
 
 
@@ -344,7 +363,7 @@ describe('combobox', function() {
 
               if(stateName !== 'initialText'){
                 if(comboTypeName === 'multipleCombo'){
-                  scope.modelMultiple = ['item1','item4','item5'];
+                  scope.modelMultiple = ['item1','item4','item5','item7'];
                 }else{
                   scope.model = 'item1';
                 }
@@ -374,10 +393,11 @@ describe('combobox', function() {
 
               if(comboTypeName === 'multipleCombo' && stateName !== 'initialText'){
                 angular.element('.combobox[combolist-id="' + isolatedScope.comboboxId + '"] .selected-options > li:first-child > .item-remover')[0].click();
-                expect(isolatedScope.ngModel).toEqual(['item4','item5']);
+                expect(isolatedScope.ngModel).toEqual(['item4','item5','item7']);
                 
+                isolatedScope.ngModel.push('item1');
                 angular.element('.combobox[combolist-id="' + isolatedScope.comboboxId + '"] .clear-all')[0].click();
-                expect(isolatedScope.ngModel).toEqual([]);
+                expect(isolatedScope.ngModel.length).toEqual(2);
               }
 
               state.testFunc(comboTypeName,isolatedScope);

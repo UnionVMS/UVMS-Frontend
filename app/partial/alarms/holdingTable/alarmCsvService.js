@@ -35,7 +35,18 @@ angular.module('unionvmsWeb').factory('alarmCsvService', function(csvService, $f
             locale.getString('alarms.alarms_table_rule'),
             locale.getString('alarms.alarms_table_date_resolved'),
             locale.getString('alarms.alarms_table_resolved_by'),
-            locale.getString('alarms.alarms_table_status')
+            locale.getString('alarms.alarms_table_status'),
+            locale.getString('movement.manual_position_field_label_flag_state'),
+            locale.getString('movement.manual_position_field_label_ircs'),
+            locale.getString('movement.manual_position_field_label_cfr'),
+            locale.getString('movement.manual_position_field_label_external_marking'),
+            locale.getString('movement.manual_position_field_label_name'),
+            locale.getString('movement.manual_position_field_label_status'),
+            locale.getString('movement.manual_position_field_label_date_time'),
+            locale.getString('movement.manual_position_field_label_latitude'),
+            locale.getString('movement.manual_position_field_label_longitude'),
+            locale.getString('movement.manual_position_field_label_measured_speed'), 
+            locale.getString('movement.manual_position_field_label_course')
         ];
     }
 
@@ -43,11 +54,6 @@ angular.module('unionvmsWeb').factory('alarmCsvService', function(csvService, $f
         return alarms.map(function(alarm) {
             return getRow(alarm);
         });
-    }
-
-    function getRow(alarm) {
-        var row = getRow(alarm);
-        return replaceUndefined(row);
     }
 
     function replaceUndefined(row) {
@@ -85,6 +91,98 @@ angular.module('unionvmsWeb').factory('alarmCsvService', function(csvService, $f
         }
     }
 
+    function getValues() {
+        var missingValueText = locale.getString('alarms.position_report_information_value_missing');
+
+        return {
+            flagState: function(alarm) {
+                if (angular.isDefined(alarm.placeholderVessel)) {
+                    return alarm.placeholderVessel.countryCode; 
+                } else if (angular.isDefined(alarm.movement.flagState)) {
+                    return alarm.movement.flagState; 
+                } else if (angular.isDefined(alarm.asset.ids.FLAG_STATE)) {
+                    return alarm.asset.ids.FLAG_STATE; 
+                } else {
+                    return missingValueText;
+                }
+            }, 
+            ircs: function(alarm) {
+                if (angular.isDefined(alarm.placeholderVessel)) {
+                    return alarm.placeholderVessel.ircs; 
+                } else if (angular.isDefined(alarm.vessel)) {
+                    return alarm.vessel.ircs; 
+                } else if (angular.isDefined(alarm.asset.ids.IRCS)) {
+                    return alarm.asset.ids.IRCS; 
+                } else {
+                    return missingValueText;
+                }
+            },
+            externalMarking: function(alarm) {
+                if (angular.isDefined(alarm.placeholderVessel)) {
+                    return alarm.placeholderVessel.externalMarking; 
+                } else if (angular.isDefined(alarm.movement.externalMarking)) {
+                    return alarm.movement.externalMarking; 
+                } else if (angular.isDefined(alarm.asset.ids.EXTERNAL_MARKING)) {
+                    return alarm.asset.ids.EXTERNAL_MARKING; 
+                } else {
+                    return missingValueText;
+                }
+            }, 
+            cfr: function(alarm) {
+                if (angular.isDefined(alarm.placeholderVessel)) {
+                    return alarm.placeholderVessel.cfr; 
+                } else if (angular.isDefined(alarm.vessel)) {
+                    return alarm.vessel.cfr; 
+                } else if (angular.isDefined(alarm.asset.ids.CFR)) {
+                    return alarm.asset.ids.CFR; 
+                } else {
+                    return missingValueText;
+                }
+            },
+            assetName: function(alarm) {
+                if (angular.isDefined(alarm.placeholderVessel)) {
+                    return alarm.placeholderVessel.name; 
+                } else if (angular.isDefined(alarm.movement)) {
+                    return alarm.movement.assetName; 
+                } else if (angular.isDefined(alarm.asset.ids.NAME)) {
+                    return alarm.asset.ids.NAME; 
+                } else {
+                    return missingValueText;
+                }
+            }, 
+            movementStatus: function(alarm) {
+                if (angular.isDefined(alarm.movement.movement.status)) {
+                    return alarm.movement.movement.status;
+                }
+            }, 
+            movementDateTime: function(alarm) {
+                if (angular.isDefined(alarm.movement.time)) {
+                    return alarm.movement.time;
+                }
+            }, 
+            movementLatitude: function(alarm) {
+                if (angular.isDefined(alarm.movement.movement.latitude)) {
+                    return alarm.movement.movement.latitude;
+                }
+            }, 
+            movementLongitude: function(alarm) {
+                if (angular.isDefined(alarm.movement.movement.longitude)) {
+                    return alarm.movement.movement.longitude;
+                }
+            }, 
+            movementReportedSpeed: function(alarm) {
+                if (angular.isDefined(alarm.movement.movement.reportedSpeed)) {
+                    return alarm.movement.movement.reportedSpeed;
+                }
+            }, 
+            movementReportedCourse: function(alarm) {
+                if (angular.isDefined(alarm.movement.movement.reportedCourse)) {
+                    return alarm.movement.movement.reportedCourse;
+                }
+            }
+        };
+    }
+
     function getRow(alarm) {
         return [
             $filter('confDateFormat')(alarm.openDate),
@@ -92,7 +190,18 @@ angular.module('unionvmsWeb').factory('alarmCsvService', function(csvService, $f
             getRuleNames(alarm),
             $filter('confDateFormat')(alarm.getResolvedDate()),
             alarm.getResolvedBy(),
-            getStatusLabel(alarm).toUpperCase()
+            getStatusLabel(alarm).toUpperCase(),
+            getValues().flagState(alarm), 
+            getValues().ircs(alarm),
+            getValues().cfr(alarm),
+            getValues().externalMarking(alarm),
+            getValues().assetName(alarm),
+            getValues().movementStatus(alarm),
+            $filter('confDateFormat')(getValues().movementDateTime(alarm)), 
+            $filter('confCoordinateFormat')(getValues().movementLatitude(alarm)),
+            $filter('confCoordinateFormat')(getValues().movementLongitude(alarm)),
+            getValues().movementReportedSpeed(alarm),
+            getValues().movementReportedCourse(alarm)
         ];
     }
 

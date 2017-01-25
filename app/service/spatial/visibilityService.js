@@ -74,7 +74,13 @@ angular.module('unionvmsWeb').factory('visibilityService',function() {
             ruleDefinitions: true
         },
         trips: {
-            name: true
+            tripId: true,
+            event: true,
+            vesselId: true,
+            duration: true,
+            nCorrections: true,
+            nPositions: true,
+            alarm: true
         },
         fishingActivities : {
             FAReportType: true,
@@ -101,7 +107,7 @@ angular.module('unionvmsWeb').factory('visibilityService',function() {
         segmentsColumns: ['fs','extMark','ircs','cfr','name','dist','dur','spd','crs','cat'],
         tracksColumns: ['fs','extMark','ircs','cfr','name','dist','dur','timeSea'],
         alarmsColumns: ['fs', 'extMark', 'ircs', 'cfr', 'name', 'ruleName', 'ruleDesc', 'ticketOpenDate', 'ticketStatus', 'ticketUpdateDate', 'ticketUpdatedBy', 'ruleDefinitions'],
-        tripsColumns: ['name'],
+        tripsColumns: ['tripId','event','vesselId','duration','nCorrections','nPositions','alarm'],
         fishingActivitiesColumns: ['FAReportType','activityType','occurrence','purposeCode','dataSource','fromName','startDate','endDate','cfr','ircs','extMark','uvi','iccat','gfcm','areas','port','fishingGear','speciesCode','quantity'],
         /**
          * Set the visibility and order of all table fields

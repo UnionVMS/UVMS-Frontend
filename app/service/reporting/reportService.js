@@ -24,6 +24,7 @@ angular.module('unionvmsWeb').factory('reportService',function($rootScope, $time
        tracks: [],
        alarms: [],
        trips: [],
+       activities: [],
        refresh: {
             status: false,
             rate: undefined
@@ -41,6 +42,7 @@ angular.module('unionvmsWeb').factory('reportService',function($rootScope, $time
         rep.tracks = [];
         rep.alarms = [];
         rep.trips = [];
+        rep.activities = [];
     };
     
     rep.resetReport = function(){
@@ -325,12 +327,14 @@ angular.module('unionvmsWeb').factory('reportService',function($rootScope, $time
 	var getVmsDataSuccess = function(data){
 		rep.loadReportHistory();
 
-        data.trips = [{name: 'NOR-TRP-20160517234053706'},{name: 'NOR-TRP-20160517234053707'},{name: 'NOR-TRP-20160517234053708'}];
-
 		rep.positions = data.movements.features;
         rep.segments = data.segments.features;
         rep.tracks = data.tracks;
-        rep.trips = data.trips;
+        //FIXME uncomment after release
+        //rep.trips = data.trips;
+        
+        //FIXME uncomment after release
+        //rep.activities = data.activities.features;
         
         //Update map if the report contains the map tab
         if (reportingNavigatorService.isViewVisible('mapPanel')){
@@ -343,6 +347,7 @@ angular.module('unionvmsWeb').factory('reportService',function($rootScope, $time
             }
             
             //Add nodes to the tree and layers to the map
+            //FIXME check for activities in the data
             if (rep.positions.length > 0 || rep.segments.length > 0){
                 var vectorNodeSource = new TreeModel();
                 vectorNodeSource = vectorNodeSource.nodeFromData(data);
@@ -385,10 +390,10 @@ angular.module('unionvmsWeb').factory('reportService',function($rootScope, $time
     //Refresh report success callback
     var updateVmsDataSuccess = function(data){
         layerPanelService.removeVmsNodes();
-        //$rootScope.$broadcast('removeVmsNodes');
         rep.positions = data.movements.features;
         rep.segments = data.segments.features;
         rep.tracks = data.tracks;
+        //TODO activities
         
         //Remove existing vms vector layers from the map
         mapService.clearVectorLayers();
@@ -420,6 +425,7 @@ angular.module('unionvmsWeb').factory('reportService',function($rootScope, $time
         rep.positions = [];
         rep.segments = [];
         rep.tracks = [];
+        //TODO activities
         
         mapService.resetLabelContainers();
         

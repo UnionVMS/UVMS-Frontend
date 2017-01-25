@@ -69,6 +69,7 @@ controller('CatchClassDetailTileCtrl', function($scope, locale){
             showLegend: true,
             showControls: false,
             useInteractiveGuideline: true,
+            reduceXTicks: false,
             yAxis: {
                 axisLabel: locale.getString('activity.header_fa_weight'),
                 showMaxMin: false,

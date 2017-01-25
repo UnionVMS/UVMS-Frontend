@@ -127,6 +127,19 @@ angular.module('unionvmsWeb').directive('imageOnLoad', function(){
 		        return record;
 		    };
 		    
+		    //Fishing activities
+		    this.buildRecActivity = function(layer){
+		        var record = {
+                    title: layer.get('title'),
+                    //subtitle: this.getSubtitle('segments'),
+                    type: 'ers',
+                    visibility: layer.get('visible'),
+                    styles: this.getActivityStyles()
+                };
+                
+                return record;
+		    };
+		    
 		    //Alarms
 		    this.buildRecAlarms = function(layer){
 		        var record = {
@@ -179,6 +192,16 @@ angular.module('unionvmsWeb').directive('imageOnLoad', function(){
 		        
 		        return finalStyles;
 		    };
+		    
+		    //Get styles for fishing activities
+		    //FIXME when user preferences are implemented
+		    this.getActivityStyles = function(){
+		        return [{
+		            //title: locale.getString('spatial.legend_panel_alarms_' + keys[i]),
+                    color: {"color": '#078dbe'}
+		        }];
+		    };
+		    
 		    
 		    //Get styles definition for both positions and segments as type
 		    this.getStyles = function(type){
@@ -271,6 +294,11 @@ angular.module('unionvmsWeb').directive('imageOnLoad', function(){
 	                                    records.push(this.buildRecVmsSeg(layer));
                                     }
                                     break;
+	                            case 'ers':
+	                                if (layer.getSource().getFeatures().length !== 0){
+                                        records.push(this.buildRecActivity(layer));
+                                    }
+	                                break;
 	                            case 'alarms':
 	                                if (layer.getSource().getFeatures().length !== 0){
                                         records.push(this.buildRecAlarms(layer));

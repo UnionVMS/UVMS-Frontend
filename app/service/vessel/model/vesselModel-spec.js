@@ -82,6 +82,7 @@ describe('VesselModel', function() {
            ],
         "producer" : {
             "id" : "123AB",
+            "code" : "ProducerCode",
             "name" : "ProducerName",
             "address" : "ProducerAddress",
             "zipcode" : "ProducerZipcode",
@@ -139,6 +140,7 @@ describe('VesselModel', function() {
         expect(vessel.contact.length).toEqual(vesselData.contact.length);
         expect(vessel.notes.length).toEqual(vesselData.notes.length);
         expect(vessel.producer.id).toEqual(vesselData.producer.id);
+        expect(vessel.producer.code).toEqual(vesselData.producer.code);
         expect(vessel.producer.name).toEqual(vesselData.producer.name);
         expect(vessel.producer.address).toEqual(vesselData.producer.address);
         expect(vessel.producer.zipcode).toEqual(vesselData.producer.zipcode);
