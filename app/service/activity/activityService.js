@@ -27,6 +27,7 @@ copy of the GNU General Public License along with the IFDM Suite. If not, see <h
  * @attr {Object} reportsList - An object containing the state of the FA reports table such as pagination, sorting, smart table tableState
  * @attr {Object} historyList - An object containing the state of the FA history table
  * @attr {Array} allPurposeCodes - An array containing all purpose codes available to the user
+ * @attr {Object} alert - An object to control alert messages
  * @description
  *  A service to deal with all activity data
  */
@@ -55,7 +56,7 @@ angular.module('unionvmsWeb').factory('activityService',function(locale, activit
     actServ.alert= {
         hasError: false,
         msg: undefined
-    }
+    };
     
     actServ.activities = [];
     actServ.displayedActivities = [];
@@ -388,7 +389,7 @@ angular.module('unionvmsWeb').factory('activityService',function(locale, activit
     actServ.setAlert = function(hasError, message){
         actServ.alert.hasError = hasError;
         actServ.alert.msg = message;
-    }
+    };
 
 	return actServ;
 });

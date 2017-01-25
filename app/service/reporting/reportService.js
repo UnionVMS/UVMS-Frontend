@@ -330,7 +330,8 @@ angular.module('unionvmsWeb').factory('reportService',function($rootScope, $time
 		rep.positions = data.movements.features;
         rep.segments = data.segments.features;
         rep.tracks = data.tracks;
-        rep.trips = data.trips;
+        //FIXME uncomment after release
+        //rep.trips = data.trips;
         
         //FIXME uncomment after release
         //rep.activities = data.activities.features;
