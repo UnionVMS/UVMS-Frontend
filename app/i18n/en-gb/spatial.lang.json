@@ -513,5 +513,5 @@
 	"apply": "Apply",
 	"wms_preview_btn_tooltip": "Preview data",
 	"alarm_preview_btn_tooltip": "Alert details",
-	"last_x_pos_warning": "ERS filtering not applied when getting last positions"
+	"last_x_pos_warning": "Fishing activity data cannot be filtered and fetched while running a report with LAST POSITIONS configuration"
 }
