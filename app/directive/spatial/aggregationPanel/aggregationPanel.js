@@ -1,0 +1,94 @@
+/*
+Developed with the contribution of the European Commission - Directorate General for Maritime Affairs and Fisheries
+© European Union, 2015-2016.
+
+This file is part of the Integrated Fisheries Data Management (IFDM) Suite. The IFDM Suite is free software: you can
+redistribute it and/or modify it under the terms of the GNU General Public License as published by the
+Free Software Foundation, either version 3 of the License, or any later version. The IFDM Suite is distributed in
+the hope that it will be useful, but WITHOUT ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or
+FITNESS FOR A PARTICULAR PURPOSE.  See the GNU General Public License for more details. You should have received a
+copy of the GNU General Public License along with the IFDM Suite. If not, see <http://www.gnu.org/licenses/>.
+*/
+/**
+ * @memberof unionvmsWeb
+ * @ngdoc directive
+ * @name aggregationPanel
+ * @attr {Array} ngModel - The data object used as input for the directive
+ * @attr {Array} aggregationTypes - The selectable items that can be sorted
+ * @attr {String} title - title for the aggregation panel
+ * @description
+ *  A reusable tile that will display a tree to sort the selected items
+ */
+angular.module('unionvmsWeb').directive('aggregationPanel', function() {
+	return {
+		restrict: 'E',
+		scope: {
+			ngModel: '=',
+			aggregationTypes: '=',
+			title: '@'
+		},
+		templateUrl: 'directive/spatial/aggregationPanel/aggregationPanel.html',
+		link: function(scope, element, attrs, fn) {
+			scope.selectedTypes = [];
+
+			//checks if the selection of items to sort has changed
+			scope.$watch('selectedTypes', function(newVal) {
+
+				if(Math.abs(newVal.length - scope.ngModel.length) < 2){
+					//if any of the selected filters is not in the tree
+					if(scope.ngModel.length < newVal.length){
+						angular.forEach(newVal,function (type) {
+							if(_.where(scope.ngModel, {code: type}).length === 0){
+								scope.ngModel.push(_.where(scope.aggregationTypes, {code: type})[0]);
+							}
+						});
+					//if any of the tree has more items than the selected ones
+					}else if(scope.ngModel.length > newVal.length){
+						angular.forEach(scope.ngModel,function (item) {
+							var comboIdx = newVal.indexOf(item.code);
+
+							if(comboIdx === -1){
+								var idx = scope.ngModel.indexOf(item);
+								scope.ngModel.splice(idx,1);
+							}
+						});
+					}
+				}
+
+			});
+
+			//checks if the model changed
+			scope.$watch('ngModel', function(newVal) {
+				newVal = angular.isDefined(newVal) ? newVal : [];
+
+				angular.forEach(newVal,function (item) {
+					if(scope.selectedTypes.indexOf(item.code) === -1){
+						scope.selectedTypes.push(item.code);
+					}
+				});
+
+				if(scope.selectedTypes.length > newVal){
+					angular.forEach(scope.selectedTypes,function (type) {
+						if(scope.ngModel.indexOf(type) === -1){
+							scope.selectedTypes.splice(scope.selectedTypes.indexOf(type));
+						}
+					});
+				}
+
+			});
+
+			/**
+			 * function to calculate species Weight Percentage and return a string to be displayed in the chart tooltip
+			 * 
+			 * @memberof aggregationPanel
+			 * @public
+			 * @alias calcIdentation
+			 * @param {Number} idx - index of the line to indent
+			 * @returns {String} The number of pixels to indent the line
+			 */
+			scope.calcIdentation = function(idx){
+				return ((idx-1)*50) + 35  + 'px';
+			};
+		}
+	};
+});

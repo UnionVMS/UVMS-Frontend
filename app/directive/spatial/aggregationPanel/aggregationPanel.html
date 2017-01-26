@@ -1,0 +1,18 @@
+<div class="aggr-panel" ng-init="selectedTypes = []">
+    <!--TITLE-->
+    <h5 class="aggr-title">{{title}}</h5>
+    <!--TREE-->
+    <div ui-tree style="overflow:auto;" class="wrapper">
+        <ul ui-tree-nodes ng-model="ngModel" class="aggr-panel-list">
+            <li ui-tree-node ng-repeat="item in ngModel" data-scroll-container=".wrapper">
+                <div ng-if="!$first" class="identation" ng-style="{'margin-left': calcIdentation($index) }"></div>
+                <div ui-tree-handle>
+                    ::: {{item.text}}
+                </div>
+                <combobox class="sub-aggr-combo" ng-if="item.items" items="item.items" ng-model="item.value" no-placeholder-on-list="true" default-value="item.items[0].code"></combobox>
+            </li>
+        </ul>
+    </div>
+    <!--FILTERS LIST-->
+    <combobox class="aggr-types-combo" items="aggregationTypes" ng-model="selectedTypes" multiple="true" hide-selected-items="true" initialtext="Aggregation types"></combobox><!-- callback="updatePanel"-->
+</div>

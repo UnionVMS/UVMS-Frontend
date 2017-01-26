@@ -510,5 +510,6 @@
 	"apply": "Apply",
 	"wms_preview_btn_tooltip": "Preview data",
 	"alarm_preview_btn_tooltip": "Alert details",
-	"last_x_pos_warning": "ERS filtering not applied when getting last positions"
+	"last_x_pos_warning": "ERS filtering not applied when getting last positions",
+	"output_criteria": "Output criteria"
 }

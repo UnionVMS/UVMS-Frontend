@@ -50,6 +50,82 @@ angular.module('unionvmsWeb').controller('ReportformCtrl',function($scope, $moda
     
     $scope.repFormServ = reportFormService;
 
+
+    $scope.testModel = [
+        {
+            code: "area",
+            text: "Area"
+        },
+        {
+            code: "vessel",
+            text: "Vessel/Vessel group"
+        },
+        {
+            code: "period",
+            text: "Period",
+            items: [
+                {
+                    code: "day",
+                    text: "Day"
+                },
+                {
+                    code: "month",
+                    text: "Month"
+                },
+                {
+                    code: "year",
+                    text: "Year"
+                }
+            ]
+        }
+    ];
+
+    $scope.aggregationTypes = [
+        {
+            code: "fs",
+            text: "Flag state"
+        },
+        {
+            code: "vessel",
+            text: "Vessel/Vessel group"
+        },
+        {
+            code: "period",
+            text: "Period",
+            items: [
+                {
+                    code: "day",
+                    text: "Day"
+                },
+                {
+                    code: "month",
+                    text: "Month"
+                },
+                {
+                    code: "year",
+                    text: "Year"
+                }
+
+            ]
+        },
+        {
+            code: "area",
+            text: "Area"
+        },
+        {
+            code: "geartype",
+            text: "Gear type"
+        },
+        {
+            code: "species",
+            text: "Species"
+        },
+        {
+            code: "presentation",
+            text: "Presentation"
+        }
+    ];
+
     $scope.showSaveBtn = function(){
         var result = false;
         if ($scope.formMode === 'CREATE'){

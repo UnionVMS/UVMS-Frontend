@@ -1,0 +1,72 @@
+.aggr-panel {
+    position: relative;
+    border: 1px solid #ddd;
+    padding: 15px;
+    margin-bottom: 15px;
+    .aggr-types-combo {
+        position: absolute;
+        right: 10px;
+        top: 10px;
+        width: 220px;
+    }
+    .angular-ui-tree-empty {
+        background-image: none;
+        border: 0;
+        background-color: #fff;
+    }
+    .angular-ui-tree {
+        min-height: 100px;
+    }
+    .aggr-title {
+        margin: 0 0 20px 0;
+        color: #089fd7;
+    }
+}
+.sub-aggr-combo {
+    width: 100px;
+}
+
+.angular-ui-tree-drag.aggr-panel-list {
+    li[ui-tree-node] {
+        .identation {
+            border: 0;
+        }
+    }
+}
+
+
+.aggr-panel-list {
+    li[ui-tree-node] {
+        line-height: 30px;
+        > *{
+            display: inline-block;
+            vertical-align: top;
+        }
+        [ui-tree-handle] {
+            line-height: 30px;
+            padding: 0 15px;
+            font-weight: 500;
+        }
+        .identation {
+            height: 50%;
+            border-left: 1px solid #000;
+            border-bottom: 1px solid #000;
+            padding-top: 15px;
+            width: 25px;
+        }
+        &:first-child {
+            .identation {
+                width: 0;
+            }
+        }
+    }
+    .angular-ui-tree-placeholder {
+        background-color: #ddd;
+    }
+    /*.angular-ui-tree-drag {
+        > *{
+            display: inline-block;
+            text-align: center;
+        }
+    }*/
+}
