@@ -34,6 +34,10 @@ angular.module('unionvmsWeb').directive('aggregationPanel', function() {
 			//checks if the selection of items to sort has changed
 			scope.$watch('selectedTypes', function(newVal) {
 
+				if(!angular.isDefined(scope.ngModel)){
+					scope.ngModel = [];
+				}
+
 				if(Math.abs(newVal.length - scope.ngModel.length) < 2){
 					//if any of the selected filters is not in the tree
 					if(scope.ngModel.length < newVal.length){
@@ -87,7 +91,7 @@ angular.module('unionvmsWeb').directive('aggregationPanel', function() {
 			 * @returns {String} The number of pixels to indent the line
 			 */
 			scope.calcIdentation = function(idx){
-				return ((idx-1)*50) + 35  + 'px';
+				return ((idx-1)*50) + 40  + 'px';
 			};
 		}
 	};

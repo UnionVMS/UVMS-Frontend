@@ -134,6 +134,35 @@ angular.module('unionvmsWeb').factory('reportRestFactory', function($resource) {
                     }
                 };
 
+                response.data.filterExpression.sort = [
+                    {
+                        code: "area",
+                        text: "Area"
+                    },
+                    {
+                        code: "vessel",
+                        text: "Vessel/Vessel group"
+                    },
+                    {
+                        code: "period",
+                        text: "Period",
+                        items: [
+                            {
+                                code: "day",
+                                text: "Day"
+                            },
+                            {
+                                code: "month",
+                                text: "Month"
+                            },
+                            {
+                                code: "year",
+                                text: "Year"
+                            }
+                        ]
+                    }
+                ];
+
                 deferred.resolve(response.data);
             }, function(error){
                 deferred.reject(error);

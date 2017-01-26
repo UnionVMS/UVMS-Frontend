@@ -51,7 +51,7 @@ angular.module('unionvmsWeb').controller('ReportformCtrl',function($scope, $moda
     $scope.repFormServ = reportFormService;
 
 
-    $scope.testModel = [
+    /*$scope.testModel = [
         {
             code: "area",
             text: "Area"
@@ -78,7 +78,7 @@ angular.module('unionvmsWeb').controller('ReportformCtrl',function($scope, $moda
                 }
             ]
         }
-    ];
+    ];*/
 
     $scope.aggregationTypes = [
         {
