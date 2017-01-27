@@ -51,35 +51,6 @@ angular.module('unionvmsWeb').controller('ReportformCtrl',function($scope, $moda
     $scope.repFormServ = reportFormService;
 
 
-    /*$scope.testModel = [
-        {
-            code: "area",
-            text: "Area"
-        },
-        {
-            code: "vessel",
-            text: "Vessel/Vessel group"
-        },
-        {
-            code: "period",
-            text: "Period",
-            items: [
-                {
-                    code: "day",
-                    text: "Day"
-                },
-                {
-                    code: "month",
-                    text: "Month"
-                },
-                {
-                    code: "year",
-                    text: "Year"
-                }
-            ]
-        }
-    ];*/
-
     $scope.aggregationTypes = [
         {
             code: "fs",

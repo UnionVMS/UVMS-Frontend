@@ -25,15 +25,35 @@ angular.module('unionvmsWeb').directive('aggregationPanel', function() {
 		scope: {
 			ngModel: '=',
 			aggregationTypes: '=',
-			title: '@'
+			title: '@',
+			minSelections: '@'
 		},
 		templateUrl: 'directive/spatial/aggregationPanel/aggregationPanel.html',
 		link: function(scope, element, attrs, fn) {
 			scope.selectedTypes = [];
 
+			var checkMinSelections = function() {
+				if(angular.isDefined(scope.minSelections)){
+					var minSelections = parseInt(scope.minSelections);
+					if(!angular.isDefined(scope.ngModel)){
+						scope.ngModel = [];
+					}
+					if(scope.ngModel.length < minSelections && angular.isDefined(scope.aggregationTypes) && scope.aggregationTypes.length > 0){
+						var threshold = 0;
+						for(var i=scope.ngModel.length;i<minSelections+threshold;i++){
+							if(_.where(scope.ngModel,{code: scope.aggregationTypes[i].code}).length){
+								threshold++;
+								continue;
+							}
+							scope.ngModel.push(scope.aggregationTypes[i]);
+						}
+					}	
+				}
+			};
+
 			//checks if the selection of items to sort has changed
 			scope.$watch('selectedTypes', function(newVal) {
-
+				
 				if(!angular.isDefined(scope.ngModel)){
 					scope.ngModel = [];
 				}
@@ -59,11 +79,12 @@ angular.module('unionvmsWeb').directive('aggregationPanel', function() {
 					}
 				}
 
-			});
+			},true);
 
 			//checks if the model changed
 			scope.$watch('ngModel', function(newVal) {
 				newVal = angular.isDefined(newVal) ? newVal : [];
+				checkMinSelections();
 
 				angular.forEach(newVal,function (item) {
 					if(scope.selectedTypes.indexOf(item.code) === -1){
@@ -71,15 +92,22 @@ angular.module('unionvmsWeb').directive('aggregationPanel', function() {
 					}
 				});
 
-				if(scope.selectedTypes.length > newVal){
+				if(scope.selectedTypes.length > newVal.length){
 					angular.forEach(scope.selectedTypes,function (type) {
 						if(scope.ngModel.indexOf(type) === -1){
 							scope.selectedTypes.splice(scope.selectedTypes.indexOf(type));
 						}
 					});
 				}
+				var aux = angular.copy(scope.selectedTypes);
+				scope.selectedTypes = [];
+				scope.selectedTypes = angular.copy(aux);
 
-			});
+				var abc;
+				if(abc){
+					scope.selectedTypes.splice(2,1);
+				}
+			},true);
 
 			/**
 			 * function to calculate species Weight Percentage and return a string to be displayed in the chart tooltip
@@ -93,6 +121,8 @@ angular.module('unionvmsWeb').directive('aggregationPanel', function() {
 			scope.calcIdentation = function(idx){
 				return ((idx-1)*50) + 40  + 'px';
 			};
+
+			checkMinSelections();
 		}
 	};
 });

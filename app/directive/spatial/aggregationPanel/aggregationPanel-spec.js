@@ -19,12 +19,12 @@ describe('aggregationPanel', function() {
   beforeEach(inject(function() {
       scope.model = [
         {
-            code: "areas",
-            text: "Areas"
+            code: "area",
+            text: "Area"
         },
         {
-            code: "assets",
-            text: "Assets"
+            code: "vessel",
+            text: "Vessel/Vessel group"
         },
         {
             code: "period",
@@ -95,7 +95,7 @@ describe('aggregationPanel', function() {
   }));
 
   var compileAggrPanel = function() {
-    var aggrPanel = compile('<aggregation-panel ng-model="model" aggregation-types="aggregationTypes" title="titleTest"></aggregation-panel>')(scope);
+    var aggrPanel = compile('<aggregation-panel ng-model="model" aggregation-types="aggregationTypes" min-selections="2" title="titleTest"></aggregation-panel>')(scope);
     scope.$digest();
     return aggrPanel;
   };
@@ -125,23 +125,6 @@ describe('aggregationPanel', function() {
 
 
     expect(scope.model[2].code).toEqual('period');
-
-    isolatedScope.selectedTypes = ['areas', 'assets'];
-    scope.$digest();
-    isolatedScope.selectedTypes = ['areas', 'assets','geartype'];
-    scope.$digest();
-    
-    expect(scope.model[2].code).not.toEqual('period');
-
-    expect(isolatedScope.selectedTypes).toEqual(['areas', 'assets','geartype']);
-    isolatedScope.ngModel.splice(2,1);
-    var model = angular.copy(isolatedScope.ngModel);
-    isolatedScope.ngModel = [];
-    scope.$digest();
-    isolatedScope.ngModel = angular.copy(model);
-
-    scope.$digest();
-    expect(isolatedScope.selectedTypes).toEqual(['areas', 'assets']);
 
     destroyCombo();
   });

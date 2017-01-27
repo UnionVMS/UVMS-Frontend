@@ -150,7 +150,7 @@ copy of the GNU General Public License along with the IFDM Suite. If not, see <h
 					<!--<div  class="row form-group" ng-include="'partial/spatial/reportsPanel/reportForm/aggregationFilterFieldset/aggregationFilterFieldset.html'"></div>-->
 					<!--ng-if="isAllowed('Activity', 'ACTIVITY_ALLOWED')"-->
 					<div class="row form-group aggregation-container">
-						<aggregation-panel class="col-md-12" ng-model="report.sortFilters" aggregation-types="aggregationTypes" title="{{'spatial.output_criteria' | i18n}}"></aggregation-panel>
+						<aggregation-panel class="col-md-12" ng-model="report.sortFilters" aggregation-types="aggregationTypes" min-selections="1" title="{{'spatial.output_criteria' | i18n}}"></aggregation-panel>
 					</div>
 				</div>
 			</ng-form>
