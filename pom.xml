@@ -1,5 +1,4 @@
-<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
     <modelVersion>4.0.0</modelVersion>
     <groupId>eu.europa.ec.fisheries.uvms</groupId>
     <artifactId>unionvms-web</artifactId>
@@ -9,7 +8,7 @@
 
     <properties>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
-        <release.branch.name>uvms-3.0.0-boba-fett</release.branch.name>
+        <release.branch.name>uvms-3.0.5-C3PO</release.branch.name>
         <webroot>unionvms-web</webroot>
         <karma.phase>integration-test</karma.phase>
         <project.scm.id>github</project.scm.id>
@@ -149,7 +148,7 @@
                 <activeByDefault>false</activeByDefault>
             </activation>
             <properties>
-                <release.branch.name>uvms-3.0.0-boba-fett</release.branch.name>
+                <release.branch.name>uvms-3.0.5-C3PO</release.branch.name>
             </properties>
             <build>
                 <plugins>
