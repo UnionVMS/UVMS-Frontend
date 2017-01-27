@@ -22,19 +22,10 @@
         margin: 0 0 20px 0;
         color: #089fd7;
     }
-}
-.sub-aggr-combo {
-    width: 100px;
-}
-
-.angular-ui-tree-drag.aggr-panel-list {
-    li[ui-tree-node] {
-        .identation {
-            border: 0;
-        }
+    .sub-aggr-combo {
+        width: 100px;
     }
 }
-
 
 .aggr-panel-list {
     li[ui-tree-node] {
@@ -63,12 +54,13 @@
         }
     }
     .angular-ui-tree-placeholder {
-        background-color: #ddd;
+        background-color: #eee;
     }
-    /*.angular-ui-tree-drag {
-        > *{
-            display: inline-block;
-            text-align: center;
+    &.angular-ui-tree-drag {
+        li[ui-tree-node] {
+            .identation {
+                border: 0;
+            }
         }
-    }*/
+    }
 }
