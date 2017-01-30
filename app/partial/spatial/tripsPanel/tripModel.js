@@ -45,6 +45,7 @@ angular.module('unionvmsWeb').factory('Trip',function(locale,unitConversionServi
 		this.cronology = undefined;
 		this.catchDetails = undefined;
 		this.messageCount = undefined;
+		this.mapData = undefined;
 	}
 
     /**
@@ -73,7 +74,15 @@ angular.module('unionvmsWeb').factory('Trip',function(locale,unitConversionServi
 			case 'messageCount':
 				this.messageCount = data;
 				break;
+			case 'mapData':
+			    loadMapData(this, data);
+			    break;
 		}
+	};
+	
+	//TODO DOCS
+	var loadMapData = function(self, data){
+	    self.mapData = data;
 	};
 
     /**
@@ -86,7 +95,6 @@ angular.module('unionvmsWeb').factory('Trip',function(locale,unitConversionServi
      */
 	var loadReports = function(self,data){
         loadOverview(self,data.summary);
-		//TODO MAP geometries
 		loadReportMessages(self,data.activityReports); 
 	};
 

@@ -16,7 +16,7 @@ describe('TripsummaryCtrl', function() {
 	var scope,ctrl,loadingStatus,$anchorScroll,locale,actRestServSpy,tripSumSpy;
 	
 	beforeEach(function(){
-		actRestServSpy = jasmine.createSpyObj('activityRestService', ['getTripVessel','getTripReports', 'getTripCatches']);
+		actRestServSpy = jasmine.createSpyObj('activityRestService', ['getTripVessel','getTripReports', 'getTripCatches', 'getTripMapData']);
 		tripSumSpy = jasmine.createSpy('tripSummaryService');
 		
 		module(function($provide){
@@ -327,6 +327,22 @@ describe('TripsummaryCtrl', function() {
 	        }
 	    };
 	}
+	
+	function getTripMapData(){
+	    return {
+	        "type": "FeatureCollection",
+	        "features": [
+	            {
+	                "type": "Feature",
+	                "geometry": {
+	                    "type": "MultiPoint",
+	                    "coordinates": [[10,40],[40,30]]
+	                },
+	                "properties": {}
+	            }
+	        ]
+	    };
+	}
 
 	function buildMocks() {
 		actRestServSpy.getTripVessel.andCallFake(function(){
@@ -352,6 +368,14 @@ describe('TripsummaryCtrl', function() {
 		        }
 		    };
 		});
+		
+		actRestServSpy.getTripMapData.andCallFake(function(){
+            return {
+                then: function(callback){
+                    return callback(getTripMapData());
+                }
+            };
+        });
 	}
 
 	it('should get all the necessary data for the trip summary', inject(function() {
@@ -361,6 +385,7 @@ describe('TripsummaryCtrl', function() {
 		expect(actRestServSpy.getTripVessel).toHaveBeenCalled();
 		expect(actRestServSpy.getTripReports).toHaveBeenCalled();
 		expect(actRestServSpy.getTripCatches).toHaveBeenCalled();
+		expect(actRestServSpy.getTripMapData).toHaveBeenCalled();
 	}));
 
 });

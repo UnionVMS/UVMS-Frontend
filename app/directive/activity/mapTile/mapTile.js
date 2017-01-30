@@ -33,11 +33,23 @@ angular.module('unionvmsWeb').directive('mapTile', function($timeout) {
 		link: function(scope, element, attrs, fn) {
 		    scope.generateMapId();
 		    
-		    $timeout(function(){
-		        if (element.find('#' + scope.mapId)){
-		            scope.getMapConfigs();
-		        }
-		    }, 0); 
+		    scope.$watch('mapData',function(newVal){
+                if(newVal){
+                    $timeout(function(){
+                        if (element.find('#' + scope.mapId)){
+                            if (!angular.isDefined(scope.map)){
+                                scope.getMapConfigs();
+                            } else {
+                                scope.addVectorData();
+                            }
+                        }
+                    }, 0);
+                } else {
+                    if (angular.isDefined(scope.vectorLayer)){
+                        scope.clearVectorData();
+                    }
+                }
+            });
 		}
 	};
 })
@@ -54,6 +66,7 @@ angular.module('unionvmsWeb').directive('mapTile', function($timeout) {
  * @attr {String} mapId - The ID of the div containing the map
  * @attr {ol.Map} map - The OL map object
  * @attr {String} mapHeight - The height for the div containing the map
+ * @attr {ol.layer.Vector} vectorLayer - The vector layer displayed on top of the map
  * @description
  *  The controller for the mapTile directive ({@link unionvmsWeb.mapTile})
  */
@@ -156,10 +169,36 @@ angular.module('unionvmsWeb').directive('mapTile', function($timeout) {
             $scope.map.addControl(switcher);
         }
         
+        $scope.vectorLayer = createVectorLayer();
+        $scope.addVectorData();
+    };
+    
+    
+    /**
+     * Add vector data to the vector layer
+     * 
+     * @memberof MapTileCtrl
+     * @public
+     */
+    $scope.addVectorData = function(){
         if (angular.isDefined($scope.mapData)){
-            var layer = createVectorLayer();
-            addVectorData(layer);
+            var features = (new ol.format.GeoJSON()).readFeatures($scope.mapData, {
+                dataProjection: 'EPSG:4326',
+                featureProjection: genericMapService.getMapProjectionCode($scope.map)
+            });
+            
+            $scope.vectorLayer.getSource().addFeatures(features);
         }
+    };
+    
+    /**
+     * Remove vector data from the vector layer
+     * 
+     * @memberof MapTileCtrl
+     * @public
+     */
+    $scope.clearVectorData = function(){
+        $scope.vectorLayer.getSource().clear();
     };
     
     /**
@@ -265,22 +304,6 @@ angular.module('unionvmsWeb').directive('mapTile', function($timeout) {
         self.registerZoomToExtentListener(layer);
         
         return layer;
-    }
-    
-    /**
-     * Add vector data to the vector layer
-     * 
-     * @memberof MapTileCtrl
-     * @private
-     * @param {ol.layer.Vector} layer - The OL vector layer
-     */
-    function addVectorData(layer){
-        var features = (new ol.format.GeoJSON()).readFeatures($scope.mapData, {
-            dataProjection: 'EPSG:4326',
-            featureProjection: genericMapService.getMapProjectionCode($scope.map)
-        });
-        
-        layer.getSource().addFeatures(features);
     }
     
     /**
