@@ -252,10 +252,15 @@ angular.module('unionvmsWeb').factory('activityService',function(locale, activit
     actServ.getActivityList = function(callback, tableState){
         actServ.clearAttributeByType('activities');
         
+        var simpleCriteria = {};
+        if (angular.isDefined(actServ.reportsList.searchObject.simpleCriteria)){
+            simpleCriteria = actServ.reportsList.searchObject.simpleCriteria;
+        }
+        
         var payload = {
             pagination: getPaginationForServer(tableState),
             sorting: actServ.reportsList.sorting,
-            searchCriteriaMap: actServ.reportsList.searchObject.simpleCriteria,
+            searchCriteriaMap: simpleCriteria,
             searchCriteriaMapMultipleValues: actServ.reportsList.searchObject.multipleCriteria
         };
         

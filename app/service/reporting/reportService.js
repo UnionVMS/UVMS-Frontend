@@ -330,11 +330,9 @@ angular.module('unionvmsWeb').factory('reportService',function($rootScope, $time
 		rep.positions = data.movements.features;
         rep.segments = data.segments.features;
         rep.tracks = data.tracks;
-        //FIXME uncomment after release
-        //rep.trips = data.trips;
+        rep.trips = data.trips;
         
-        //FIXME uncomment after release
-        //rep.activities = data.activities.features;
+        rep.activities = data.activities.features;
         
         //Update map if the report contains the map tab
         if (reportingNavigatorService.isViewVisible('mapPanel')){
