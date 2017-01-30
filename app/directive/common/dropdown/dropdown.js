@@ -31,7 +31,8 @@ angular.module('unionvmsWeb')
             ngDisabled : '=',
             tabIndex : '=', 
             ngRequired : '=', 
-            name : '='
+            name : '=',
+            inputFieldId : '@'
 		},
         templateUrl: 'directive/common/dropdown/dropdown.html',
 		link: function(scope, element, attrs, fn, deepBlur) {

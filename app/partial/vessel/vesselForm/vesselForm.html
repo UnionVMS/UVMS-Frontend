@@ -31,7 +31,9 @@ copy of the GNU General Public License along with the IFDM Suite. If not, see <h
                                 <h5 class="form-header">{{'vessel.vessel_notes' | i18n}}</h5>
                             </div>
                             <div class="col-md-6 textAlignRight">
-                                <span ng-show="vesselObjOriginal.notes.length > vesselNotesSize"><a ng-click="showVesselNotesList()">{{'common.view_all' | i18n}}</a></span>
+                                <span ng-show="vesselObjOriginal.notes.length > vesselNotesSize">
+                                    <a ng-click="showVesselNotesList()" id="asset-btn-notes-view-all">{{'common.view_all' | i18n}}</a>
+                                </span>
                             </div>
                         </div>
                         <table class="fullWidth" ng-show="vesselObjOriginal.notes.length > 0 && !isCreateNewMode()">
@@ -43,7 +45,7 @@ copy of the GNU General Public License along with the IFDM Suite. If not, see <h
                             </thead>
                             <tbody>
                                 <tr ng-repeat="item in vesselObjOriginal.notes | orderBy :'-date' | limitTo: vesselNotesSize track by item.id" class="list">
-                                    <td><a ng-click="viewVesselNotesDetails(item)">{{item.activity}}</a></td>
+                                    <td><a ng-click="viewVesselNotesDetails(item)" id="asset-btn-notes-item">{{item.activity}}</a></td>
                                     <td>{{item.date | confDateFormat}}</td>
                                 </tr>
                             </tbody>
@@ -65,7 +67,9 @@ copy of the GNU General Public License along with the IFDM Suite. If not, see <h
                                 <h5 class="form-header">{{'vessel.event_history' | i18n}}</h5>
                             </div>
                             <div class="col-md-6 textAlignRight">
-                                <span ng-show="isThisVisible.showCompleteVesselHistoryLink"><a ng-click="viewCompleteVesselHistory()">{{'common.view_all' | i18n}}</a></span>
+                                <span ng-show="isThisVisible.showCompleteVesselHistoryLink">
+                                    <a ng-click="viewCompleteVesselHistory()" id="asset-btn-history-all">{{'common.view_all' | i18n}}</a>
+                                </span>
                             </div>
                             <div class="col-md-12" loading-indicator="waitingForHistoryResponse" size="small" type="SPINNER">
                                 <table class="fullWidth" ng-show="vesselHistory.length > 0 && !isCreateNewMode()">
@@ -77,7 +81,7 @@ copy of the GNU General Public License along with the IFDM Suite. If not, see <h
                                     </thead>
                                     <tbody>
                                         <tr ng-repeat="item in vesselHistory | orderBy :'-eventHistory.eventDate'" class="list">
-                                            <td><a ng-click="viewHistoryDetails(item)">{{item.eventHistory.eventCode}}</a></td>
+                                            <td><a ng-click="viewHistoryDetails(item)" id="asset-btn-history-item">{{item.eventHistory.eventCode}}</a></td>
                                             <td>{{item.eventHistory.eventDate | confDateFormat}}</td>
                                         </tr>
                                     </tbody>

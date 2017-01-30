@@ -13,7 +13,7 @@ copy of the GNU General Public License along with the IFDM Suite. If not, see <h
     <div class="container containerWithTopBottomPadding">
         <div ng-show="isVisible.notificationCancelSearch" class="cancel-alert alert">
             <div class="text">{{'vessel.cancel_search_notification' | i18n}}</div>
-            <button type="button" class="btn btn-default btn-sm cancel" ng-click="cancelSearch()">
+            <button type="button" class="btn btn-default btn-sm cancel" ng-click="cancelSearch()" id="asset-btn-cancel-search">
                 <i class="fa fa-times"></i> {{'common.cancel' | i18n}}
             </button>
         </div>
@@ -28,14 +28,14 @@ copy of the GNU General Public License along with the IFDM Suite. If not, see <h
                 <div class="vesselcontainerwrapper">
                     <div class="vesselsearchboxfooter row">
                         <div class="col-md-2 nopaddingleft">
-                            <dropdown class="" ng-model="editSelection" initialtext="{{'common.actions' | i18n}}" items="editSelectionDropdownItems" menu-style callback="editSelectionCallback"></dropdown>
+                            <dropdown class="" ng-model="editSelection" initialtext="{{'common.actions' | i18n}}" items="editSelectionDropdownItems" menu-style callback="editSelectionCallback" input-field-id="asset-dropdown-actions"></dropdown>
                         </div>
                         <div class="col-md-2">
-                            <button class="btn btn-primary btn-sm addnewassetbtn" ng-click="toggleCreateNewVessel()" type="button" show-if-allowed="manageVessels"><i class="fa fa-plus"></i>  {{'vessel.new_asset' | i18n}}
+                            <button class="btn btn-primary btn-sm addnewassetbtn" ng-click="toggleCreateNewVessel()" type="button" show-if-allowed="manageVessels" id="asset-btn-create"><i class="fa fa-plus"></i>  {{'vessel.new_asset' | i18n}}
                             </button>
                         </div>
                         <div class="col-md-2 col-md-offset-6 nopaddingright">
-                            <input type="text" class="pull-right form-control" placeholder="Filter" ng-model="currentSearchResults.filter">
+                            <input type="text" class="pull-right form-control" placeholder="Filter" ng-model="currentSearchResults.filter" id="asset-input-filter">
                         </div>
 
                     </div>
