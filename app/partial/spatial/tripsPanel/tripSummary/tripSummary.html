@@ -12,7 +12,7 @@ copy of the GNU General Public License along with the IFDM Suite. If not, see <h
 <div class="trip-summary" ng-controller="TripsummaryCtrl">
     <a class="btn-trip-quit" title="{{'activity.trip_summary_quit_trip_detail' | i18n }}" ng-click="quitTripSummary()"><i class="fa fa-share-square-o"></i></a>
     <a class="btn-print" title="{{'activity.trip_summary_export_trip' | i18n }}"><i class="fa fa-print"></i></a>
-    <div class="row activity-summary-row">
+    <div class="row activity-summary-row summary-first-row">
         <fishing-trip-panel class="col-md-4 summary-section" trip="trip"></fishing-trip-panel>
         <vessel-panel class="col-md-2 summary-section" trip="trip"></vessel-panel>
         <carousel-tile class="col-md-3 summary-section" tile-title="{{'activity.trip_summary_roles' | i18n}}" ng-model="tripSummServ.trip.tripRoles" template-url="directive/activity/rolesPanel/rolesPanel.html"></carousel-tile>
