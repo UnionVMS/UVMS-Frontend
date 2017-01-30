@@ -3,7 +3,7 @@
         <legend class="fieldsetLegendStyle">
             <a>{{title}}</a>
         </legend>
-        <div class="row catch-details-body">
+        <div class="row catch-details-body" ng-if="ngModel">
             <div class="col-md-6 catch-subsection" ng-repeat="(title, data) in ngModel" ng-class="{'has-caption': data.caption}">
                 <div class="row">
                     <!--TITLE-->
