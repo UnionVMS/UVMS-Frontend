@@ -42,5 +42,10 @@
                 <span class="col-md-12 chart-caption" ng-if="data.caption">{{data.caption}}</span>
             </div>
         </div>
+        <div class="row no-data" ng-if="!ngModel || ngModel.length === 0">
+            <div class="col-md-12">
+                <span>{{'activity.no_data' | i18n}}</span>
+            </div>
+        </div>
     </fieldset>
 </div>

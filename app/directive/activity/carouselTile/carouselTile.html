@@ -24,7 +24,7 @@
             <span aria-hidden="true" class="glyphicon glyphicon-chevron-right"></span>
         </a>
 	</div>
-	<div class="row no-data" ng-if="ngModel.length === 0">
+	<div class="row no-data" ng-if="!ngModel || ngModel.length === 0">
 		<div class="col-md-12">
 			<span>{{'activity.no_data' | i18n}}</span>
 		</div>
