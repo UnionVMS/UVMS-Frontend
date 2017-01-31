@@ -80,7 +80,14 @@ angular.module('unionvmsWeb').factory('Trip',function(locale,unitConversionServi
 		}
 	};
 	
-	//TODO DOCS
+	/**
+	 * Load the map data of a trip into the model
+	 * 
+	 * @memberof Trip
+	 * @private
+	 * @param {Object} self - current trip object
+     * @param {Object} data - reports and trip overview data
+	 */
 	var loadMapData = function(self, data){
 	    self.mapData = data;
 	};
