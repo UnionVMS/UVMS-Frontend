@@ -13,11 +13,14 @@ copy of the GNU General Public License along with the IFDM Suite. If not, see <h
     <div></div>
     <div class="vesselContainer">
         <form name="vesselForm" method="post" novalidate >
-        <div class="card" loading-indicator="waitingForVesselDataResponse || waitingForCreateResponse" size="small" type="SPINNER"> 
-            <menu-bar header="'Create new asset'" modeltype="'VESSEL'" ng-model="vesselObj"
-                      functions="menuBarFunctions"
-                      disable-form="disableForm"
-                      is-create-new-mode="isCreateNewMode">
+        <div class="card" loading-indicator="waitingForVesselDataResponse || waitingForCreateResponse" size="small" type="SPINNER">
+            <menu-bar 
+                header="getMenuBarHeader(vesselObj)" 
+                modeltype="'VESSEL'" 
+                ng-model="vesselObj"
+                functions="menuBarFunctions"
+                disable-form="disableForm"
+                is-create-new-mode="isCreateNewMode">
             </menu-bar>
             <div class="row">
                 <div class="detailsContainer">
