@@ -21,6 +21,7 @@ angular.module('unionvmsWeb').directive('savedSearchDropdown', function() {
             ngModel:'=',
             callback : '=',
             ngDisabled : '=',
+            inputFieldId : '@'
         },
         templateUrl: 'directive/common/savedSearchDropdown/savedSearchDropdown.html',
         link: function(scope, element, attrs, fn) {

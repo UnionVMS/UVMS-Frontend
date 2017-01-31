@@ -14,14 +14,15 @@ angular.module('unionvmsWeb').directive("sortableTableHeader", function() {
         restrict: 'A',
         transclude: true,
         template : 
-        '<a class="pointer" ng-click="onClick()">'+
+        '<a class="pointer" ng-click="onClick()" id="{{inputFieldId}}">'+
         '<span ng-transclude></span>&nbsp;'+ 
         '<i class="fa" ng-class="{\'fa-caret-down\' : order === by && reverse,  \'fa-caret-up\' : order===by && !reverse, \'fa-sort\' : order !== by}"></i>'+
         '</a>',
         scope: {
             order: '=',
             by: '=',
-            reverse : '='
+            reverse : '=',
+            inputFieldId: '@'
         },
         link: function(scope, element, attrs) {
             scope.onClick = function () {

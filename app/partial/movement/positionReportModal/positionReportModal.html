@@ -114,15 +114,15 @@ copy of the GNU General Public License along with the IFDM Suite. If not, see <h
     </div>
 
     <div class="modal-footer">
-        <button class="btn btn-default pull-left" ng-click="exportCsv(positionReport)">
+        <button class="btn btn-default pull-left" ng-click="exportCsv(positionReport)" id="btn-export-movement">
             <i class="fa fa-download"></i> {{'movement.csv' | i18n}}
         </button>
 
-        <button class="btn btn-default pull-left" ui-sref="app.polling">
+        <button class="btn btn-default pull-left" ui-sref="app.polling" id="btn-create-poll">
             <i class="fa fa-arrow-circle-right"></i> {{'movement.poll' | i18n}}
         </button>
 
-        <button class="btn btn-default" ng-click="cancel()">
+        <button class="btn btn-default" ng-click="cancel()" id="btn-close-modal">
             {{'common.close' | i18n}}
         </button>
     </div>

@@ -2,13 +2,13 @@
     <div class="row nomargin">
         <!-- Search input -->
         <div class="col-md-2 nopaddingleft searchcriteria">
-            <input type="text" class="form-control searchText" ng-disabled="advancedSearchVisible" placeholder="{{'vessel.search_input_placeholder' | i18n}}" ng-model="freeText" ng-change="resetSelectedVesselGroup()">
+            <input type="text" class="form-control searchText" ng-disabled="advancedSearchVisible" placeholder="{{'vessel.search_input_placeholder' | i18n}}" ng-model="freeText" ng-change="resetSelectedVesselGroup()" id="asset-input-simple-search">
         </div>
 
         <div class="col-md-2 col-md-offset-6 smallerpadding">
             <div class="row nomargin">
                 <div class="col-md-12 colNoPadding searchcriteria">
-                    <saved-search-dropdown type="VESSEL" class="dropdown simpleSearch" ng-model="selectedVesselGroup" initialtext="{{'common.search_group_dropdown' | i18n}}" callback="performSavedSearch" enable-delete="true"></saved-search-dropdown>
+                    <saved-search-dropdown type="VESSEL" class="dropdown simpleSearch" ng-model="selectedVesselGroup" initialtext="{{'common.search_group_dropdown' | i18n}}" callback="performSavedSearch" enable-delete="true" input-field-id="asset-dropdown-saved-search"></saved-search-dropdown>
                 </div>
             </div>
         </div>
@@ -16,7 +16,7 @@
         <div class="col-md-1 nopaddingright">
             <div class="row nomargin">
                 <div class="col-md-12 colNoPadding searchcriteriadropdown">
-                    <button type="submit" class="btn btn-primary btn-sm fullWidth vmsbtn" ng-click="performSearch()">
+                    <button type="submit" class="btn btn-primary btn-sm fullWidth vmsbtn" ng-click="performSearch()" id="asset-btn-simple-search">
                         {{'common.search' | i18n}}
                     </button>
                 </div>
@@ -25,7 +25,7 @@
         <div class="col-md-1 nopaddingright">
             <div class="row nomargin">
                 <div class="col-md-12 colNoPadding searchcriteriadropdown">
-                    <button type="button" class="btn btn-default btn-sm fullWidth vmsbtn" ng-click="resetSearch()">
+                    <button type="button" class="btn btn-default btn-sm fullWidth vmsbtn" ng-click="resetSearch()" id="asset-btn-reset-search">
                         {{'common.reset' | i18n}}
                     </button>
                 </div>
