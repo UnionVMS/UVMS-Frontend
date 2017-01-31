@@ -304,6 +304,17 @@ angular.module('unionvmsWeb').controller('HoldingtableCtrl',function($scope, $lo
         }
     });
 
+    // Get list value of Object Affected
+    $scope.getObjAffectedValue = function(item) {
+        if (angular.isDefined(item.movement.assetName)) {
+            return item.movement.assetName;
+        } else if (angular.isDefined(item.asset.ids.IRCS)) {
+            return item.asset.ids.IRCS;
+        } else {
+            return $filter('i18n')('alarms.alarms_affected_object_unknown');
+        }
+    };
+
     init();
 
 });

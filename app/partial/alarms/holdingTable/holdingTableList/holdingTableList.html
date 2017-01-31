@@ -30,8 +30,8 @@ copy of the GNU General Public License along with the IFDM Suite. If not, see <h
                     <td class="checkboxContainer"><input type="checkbox" ng-checked="isChecked(item)" ng-click="checkItem(item)" /></td>
                     <td ng-attr-title="{{item.openDate | confDateFormat}}">{{item.openDate | confDateFormat}}</td>
                     <td>
-                        <a ng-show="item.vessel" href="#/assets/{{item.vessel.getGuid()}}" title="{{'common.view_details' | i18n}}">{{item.vessel.name}}</a>
-                        <span ng-show="!item.vessel">{{'alarms.alarms_affected_object_unknown' | i18n}}</span>
+                        <a ng-if="item.vessel" href="#/assets/{{item.vessel.getGuid()}}" title="{{'common.view_details' | i18n}}">{{item.vessel.name}}</a>
+                        <span ng-if="!item.vessel" ng-bind="getObjAffectedValue(item)"></span>
                     </td>
                     <td>
                         <span ng-show="item.alarmItems.length === 1" tooltip-placement="bottom" tooltip="{{getRuleNamesTooltip(item)}}">{{item.alarmItems[0].ruleName}}</span>
