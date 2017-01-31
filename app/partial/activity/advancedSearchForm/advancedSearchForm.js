@@ -171,8 +171,7 @@ angular.module('unionvmsWeb').controller('AdvancedsearchformCtrl',function($scop
             angular.forEach(response, function(item) {
                 $scope.vesselGroups.push({
             	    code: item.id,
-            	    text: item.name,
-            	    user: item.user
+            	    text: item.name
             	});
             });
         });
@@ -245,9 +244,7 @@ angular.module('unionvmsWeb').controller('AdvancedsearchformCtrl',function($scop
                 if (key !== 'weightUnit' && key !== 'purposeCode' && (angular.isDefined(value) && value !== null && value !== '')){
                     if (key === 'startDateTime' || key === 'endDateTime'){
                         value = unitConversionService.date.convertDate(value, 'to_server');
-                    } else if (key === 'vesselGroup'){
-                        value = getVesselGroupProperties(value);
-                    }
+                    } 
                     this[keyMapper[key]] = value;
                 }
             }, formatedSearch);
@@ -273,24 +270,6 @@ angular.module('unionvmsWeb').controller('AdvancedsearchformCtrl',function($scop
             $scope.actServ.getActivityList();
         }
     };
-    
-    /**
-     * Get Vessel Group properties object by vessel guid
-     * 
-     * @memberof AdvancedsearchformCtrl
-     * @private
-     * @returns {Object} A vessel group object with the following properties: guid, name and user
-     */
-    function getVesselGroupProperties(id){
-        var props = {};
-        var rec = _.findWhere($scope.vesselGroups, {code: id});
-        if (angular.isDefined(rec)){
-            props.name = rec.text;
-            props.guid = rec.code;
-            props.user = rec.user;
-        }
-        return props;
-    }
     
     /**
      * Get the data for all comboboxes used in the the advanced search form

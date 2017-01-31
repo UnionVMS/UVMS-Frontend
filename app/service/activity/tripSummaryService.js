@@ -77,38 +77,5 @@ angular.module('unionvmsWeb').factory('tripSummaryService',function($timeout) {
 	    this.mapConfigs = undefined;
 	};
 	
-    /**
-     * Build mock data
-     * 
-     * @memberof tripSummaryService
-     * @private
-     */
-	function buildMock(){
-	    var geojson = {
-            "type": "FeatureCollection",
-            "features": [
-                {
-                    "type": "Feature",
-                    "geometry": {
-                        "type": "MultiPoint",
-                        "coordinates": [[-9.5, 39],[-7.5, 42.5]]
-                    },
-                    "properties": {}
-                },{
-                    "type": "Feature",
-                    "geometry": {
-                        "type": "MultiPoint",
-                        "coordinates": [[-8.5, 38.8],[-8.5, 40.5]]
-                    },
-                    "properties": {}
-                }
-            ]
-        };
-	    
-	    tripSummaryService.mapData = angular.fromJson(geojson);
-	}
-	
-	buildMock(); //FIXME to remove
-	
 	return tripSummaryService;
 });
