@@ -9,31 +9,91 @@ the hope that it will be useful, but WITHOUT ANY WARRANTY; without even the impl
 FITNESS FOR A PARTICULAR PURPOSE.  See the GNU General Public License for more details. You should have received a
 copy of the GNU General Public License along with the IFDM Suite. If not, see <http://www.gnu.org/licenses/>.
  */
-.tabs {
- 	.flexbox-inline();
- 	border-top: 1px solid @sectionBorderColor;
- 	background: #fff;
- 	margin: 0;
 
- 	.tab {
- 		.transition-all-ease(200ms);
- 		padding: 10px 15px 8px 15px;
- 		align-items: center;
- 		color: @primaryColor;
+// Config
+@content-tabs_border-size:		1px;
+@content-tabs_active-bgcolor:	#fff;
+@content-tabs_active-height:    3px;
+@content-tabs_active-color: 	#383a40;
 
- 		text-transform: uppercase;
- 		font-weight: 600;
- 		letter-spacing: 0.01em;
+.content-tabs_row {
+	.flexbox();
+	list-style: none;
+	padding: 0;
+	overflow: hidden;
+	position: relative;
+	margin: 0;
 
-		border-right: 1px solid @sectionBorderColor;
+	li {
+		.flexbox();
+		align-items: center;
+		padding: 12px 25px 11px;
+		border-top: @content-tabs_border-size solid @sectionBorderColor;
+		background: lighten(@sectionBorderColor, 10%);
+		display: inline-block;
+		position: relative;
+		z-index: 0;
+		margin: 0 -@content-tabs_border-size;
+		cursor: pointer;
+		margin-top: @content-tabs_active-height;
+		.transition-specified-ease(background, 300ms);
 
- 		&:first-of-type {
- 			border-left: 1px solid @sectionBorderColor;
- 		}
+		span {
+			color: @primaryColor;
+			text-transform: uppercase;
+			font-weight: 600;
+			letter-spacing: 0.01em;
+			display: block;
 
- 		&.active {
- 			background: @primaryColor;
- 			color: #fff;
- 		}
- 	}
+			&:before {
+				content: '';
+				position: absolute;
+				top: 0;
+				left: 0;				
+				bottom: -@content-tabs_border-size;
+				border-left: @content-tabs_border-size solid @sectionBorderColor;
+			}
+
+			&:after {
+				content: '';
+				position: absolute;
+				top: 0;
+				right: 0;				
+				bottom: -@content-tabs_border-size;
+				border-right: @content-tabs_border-size solid @sectionBorderColor;
+			}
+		}
+
+		&:first-of-type {
+			margin-left: 0;
+		}
+
+		&:hover {
+			background: lighten(@sectionBorderColor, 13%);
+		}
+
+		&.active {
+			background: @content-tabs_active-bgcolor;
+			border-bottom-color: @content-tabs_active-bgcolor;
+			vertical-align: bottom;
+			cursor: default;
+			z-index: 2;
+			margin-top: 0;
+
+			span {
+				color: @content-tabs_active-color;
+				padding-top: @content-tabs_active-height;
+			}
+		}
+	}
+
+	&:before {
+		content: '';
+		position: absolute;
+		width: 100%;
+		left: 0;
+		bottom: 0;
+		border-bottom: @content-tabs_border-size solid @sectionBorderColor;
+		z-index: 1;
+	}
 }

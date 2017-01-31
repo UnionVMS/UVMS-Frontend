@@ -601,12 +601,20 @@ a:hover{
     transform: translate(0,-50%);
 }
 
-// Transitions
+// Transitions all
 .transition-all-ease(@val) {
     -webkit-transition: all @val ease;
     -moz-transition: all @val ease;
     -o-transition: all @val ease;
     transition: all @val ease;
+}
+
+// Transitions specified object
+.transition-specified-ease(@obj, @time) {
+    -webkit-transition: @obj @time ease;
+    -moz-transition: @obj @time ease;
+    -o-transition: @obj @time ease;
+    transition: @obj @time ease;
 }
 
 // Icon font 
