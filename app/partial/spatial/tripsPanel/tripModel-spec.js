@@ -217,7 +217,7 @@ describe('tripModel', function() {
         type: "FeatureCollection",
         features: [
             {
-                type: Feature,
+                type: "Feature",
                 geometry: {
                     type: "MultiPoint",
                     coordinates: [
