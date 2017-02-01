@@ -154,7 +154,6 @@ copy of the GNU General Public License along with the IFDM Suite. If not, see <h
 					
 					<!-- Fieldset VMS Filters -->
 					<div ng-if="report.reportType === 'standard'" class="row form-group" ng-include="'partial/spatial/reportsPanel/reportForm/vmsFiltersFieldset/vmsFiltersFieldset.html'"></div>
-					<div class="row form-group" ng-include="'partial/spatial/reportsPanel/reportForm/vmsFiltersFieldset/vmsFiltersFieldset.html'"></div>
 
 					<!-- Fieldset Activity Filters -->
 					<div ng-if="(report.reportType === 'summary' || (report.reportType === 'standard' && (report.positionSelector === 'all' || (report.positionSelector === 'last' && report.positionTypeSelector !== 'positions')))) && isAllowed('Activity', 'ACTIVITY_ALLOWED')" class="row form-group" ng-include="'partial/spatial/reportsPanel/reportForm/activityFiltersFieldset/activityFiltersFieldset.html'"></div>

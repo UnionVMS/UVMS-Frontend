@@ -23,7 +23,7 @@ copy of the GNU General Public License along with the IFDM Suite. If not, see <h
  * @description
  *  A model to store all the data related to a departure in a standardized way
  */
-angular.module('unionvmsWeb').factory('Departure',function() {
+angular.module('unionvmsWeb').factory('Departure',function(mdrCacheService) {
     
     function Departure(){
         this.faType = 'fa_type_departure';
@@ -60,10 +60,56 @@ angular.module('unionvmsWeb').factory('Departure',function() {
     Departure.prototype.fromJson = function(data){
         this.summary = data.summary;
         this.port = data.port;
-        this.gears = data.gears;
         this.reportDoc = data.reportDoc;
-        this.fishingData = data.fishingData;
+        //this.fishingData = data.fishingData;
+        addGearDescription(this, data.gears);
+        addCatchTypeDescription(this, data.fishingData);
+        
     };
+    
+    /**
+     * Adds gear description from MDR code lists into the gears type attribute.
+     * 
+     * @memberof Departure
+     * @private
+     * @param {Object} departure - A reference to the Departure object
+     * @param {Array} data - An array containing the available gears
+     */
+    function addGearDescription(departure, data){
+        mdrCacheService.getCodeList('gear_type').then(function(response){
+            angular.forEach(data, function(item) {
+                var mdrRec = _.findWhere(response, {code: item.type});
+                if (angular.isDefined(mdrRec)){
+                    item.type = item.type + ' - ' + mdrRec.description;
+                }
+            });
+            departure.gears = data;
+        }, function(error){
+            departure.gears = data;
+        });
+    }
+    
+    /**
+     * Adds catch type description from MDR code lists into the details catchType attribute.
+     * 
+     * @memberof Departure
+     * @private
+     * @param {Object} departure - A reference to the Departure object
+     * @param {Array} data - An array containing the fishing and catch data
+     */
+    function addCatchTypeDescription(departure, data){
+        mdrCacheService.getCodeList('fa_catch_type').then(function(response){
+            angular.forEach(data, function(item) {
+                var mdrRec = _.findWhere(response, {code: item.details.catchType});
+                if (angular.isDefined(mdrRec)){
+                    item.description = mdrRec.description;
+                }
+            });
+            departure.fishingData = data;
+        }, function(error){
+            departure.fishingData = data;
+        });
+    }
     
     return Departure;
 });

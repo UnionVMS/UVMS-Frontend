@@ -21,14 +21,15 @@ angular.module('unionvmsWeb').filter('stPurposeCode', function(mdrCacheService) 
     var isInvoked = false;
     
     function realFilter(code, isImage){
-        var rec = _.findWhere(cachedCodes, {code: code.toString()});
         var filtered;
-        if (isImage){
-            filtered = images[rec.code];
-        } else {
-            filtered = rec.text;
+        if (angular.isDefined(code)){
+            var rec = _.findWhere(cachedCodes, {code: code.toString()});
+            if (isImage){
+                filtered = images[rec.code];
+            } else {
+                filtered = rec.text;
+            }
         }
-        
         return filtered;
     }
     
