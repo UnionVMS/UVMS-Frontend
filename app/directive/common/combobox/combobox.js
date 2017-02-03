@@ -34,7 +34,7 @@ angular.module('unionvmsWeb').directive('combobox', function(comboboxService,loc
             initCallback: '=',
             noPlaceholderOnList: '@',
             defaultValue: '@',
-            hideSelectedItems: '=',
+            hideSelectedItems: '@',
             minSelections: '=',
             listClass: '@'
 		},
@@ -97,6 +97,15 @@ angular.module('unionvmsWeb').directive('combobox', function(comboboxService,loc
             //Get the code (id) for an item
             var getItemCode = function(item){
                 return item.code;
+            };
+
+            //Get the description for an item
+            scope.getItemDesc = function(item){
+                if(item.desc){
+                    return item.desc;
+                }else{
+                    return item.text;
+                }
             };
             
             //Find initial value
