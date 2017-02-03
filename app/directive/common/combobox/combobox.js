@@ -24,7 +24,7 @@ angular.module('unionvmsWeb').directive('combobox', function(comboboxService,loc
             lineStyle : '=',
             destComboList : '@',
             editable : '=',
-            multiple : '=',
+            multiple : '@',
             uppercase : '=',
             initialtext : '@',
             isLoading : '=',
@@ -35,13 +35,17 @@ angular.module('unionvmsWeb').directive('combobox', function(comboboxService,loc
             noPlaceholderOnList: '@',
             defaultValue: '@',
             hideSelectedItems: '=',
-            minSelections: '='
+            minSelections: '=',
+            listClass: '@'
 		},
         templateUrl: 'directive/common/combobox/combobox.html',
 		link: function(scope, element, attrs, ctrl) {
 			scope.comboboxServ = comboboxService;
 			scope.element = element;
 			scope.initialitem = true;
+            if(!angular.isDefined(scope.listClass)){
+                scope.listClass = '';
+            }
 			
 			if(scope.uppercase){
                 if(angular.isDefined(scope.initialtext)){

@@ -182,7 +182,7 @@ copy of the GNU General Public License along with the IFDM Suite. If not, see <h
 						<div class="col-md-6 formSubmitBtn">
 							<button class="btn btn-default button btn-action" type="button" ng-if="repNav.hasPreviousState()" ng-click="cancel()">{{"common.cancel" | i18n }}</button>
 							<button class="btn btn-success button btn-action" type="button" ng-show="formMode === 'EDIT-FROM-LIVEVIEW'" ng-click="runReport()">{{"spatial.reports_table_run_label" | i18n }}</button>
-							<button class="btn btn-primary button btn-action" type="button" ng-show="formMode === 'EDIT-FROM-LIVEVIEW'" ng-click="saveAsReport()">{{"spatial.reports_form_save_as_btn" | i18n }}</button>
+							<button class="btn btn-primary button btn-action" type="button" ng-if="isAllowed('Reporting', 'CREATE_REPORT')" ng-show="formMode === 'EDIT-FROM-LIVEVIEW'" ng-click="saveAsReport()">{{"spatial.reports_form_save_as_btn" | i18n }}</button>
 							<button class="btn btn-primary button btn-action" type="button" ng-click="saveReport()" ng-show="showSaveBtn()">{{"spatial.reports_form_save_btn" | i18n }}</button>
 						</div>
 					</div>

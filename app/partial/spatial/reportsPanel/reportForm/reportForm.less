@@ -242,7 +242,11 @@ copy of the GNU General Public License along with the IFDM Suite. If not, see <h
 	text-align: right;
 	margin-top: 5px;
     border-top: 1px solid #ddd;
-	margin-bottom: -5px;
+	display: none;
+
+	position: absolute;
+    bottom: 0;
+	z-index: 1071;
 	.footer-item {
 		display: inline-block;
 		font-size: 14px;
@@ -252,9 +256,31 @@ copy of the GNU General Public License along with the IFDM Suite. If not, see <h
 		&:last-child {
 			border-left: 1px solid #ddd;
 		}
+		&,
 		label {
 			cursor: pointer;
 		}
 	}
 }
 
+.comboList.combo-report-history-list {
+	border: 1px solid #089fd7;
+	.box-shadow(0 6px 12px rgba(0,0,0,.175));
+	margin-top: 2px;
+	z-index: 1071;
+	display: none;
+	> .dropdown-menu {
+		position: relative;
+		margin-top: 0;
+		margin-bottom: 21px;
+		border: 0;
+		box-shadow: none;
+    	width: initial;
+	}
+	&.open {
+		display: block;
+		.combo-history-footer {
+			display: block;
+		}
+	}
+}

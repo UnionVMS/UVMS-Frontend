@@ -29,7 +29,7 @@
 			</ng-form>
 		</div>
 	</div>
-	<div class="comboList fullWidthDropdown" ng-class="{'open': isOpen, 'comboLineStyle': lineStyle === true, 'combo-section': comboSection}">
+	<div class="comboList fullWidthDropdown {{listClass}}" ng-class="{'open': isOpen, 'comboLineStyle': lineStyle === true, 'combo-section': comboSection}">
 		<ul class="dropdown-menu">
 			<!--PLACEHOLDER-->
 			<li class="combo-placeholder" ng-class="!initialtextSelectable ? 'disabled' : ''" ng-show="initialValue && !isLoading" ng-click="selectVal(initialValue)" ng-if="!noPlaceholderOnList" title="{{initialValue.text}}">
