@@ -84,7 +84,6 @@ angular.module('unionvmsWeb').directive('aggregationPanel', function() {
 			//checks if the model changed
 			scope.$watch('ngModel', function(newVal) {
 				newVal = angular.isDefined(newVal) ? newVal : [];
-				checkMinSelections();
 
 				angular.forEach(newVal,function (item) {
 					if(scope.selectedTypes.indexOf(item.code) === -1){
@@ -94,7 +93,7 @@ angular.module('unionvmsWeb').directive('aggregationPanel', function() {
 
 				if(scope.selectedTypes.length > newVal.length){
 					angular.forEach(scope.selectedTypes,function (type) {
-						if(scope.ngModel.indexOf(type) === -1){
+						if(newVal.indexOf(type) === -1){
 							scope.selectedTypes.splice(scope.selectedTypes.indexOf(type));
 						}
 					});
@@ -102,6 +101,8 @@ angular.module('unionvmsWeb').directive('aggregationPanel', function() {
 				var aux = angular.copy(scope.selectedTypes);
 				scope.selectedTypes = [];
 				scope.selectedTypes = angular.copy(aux);
+
+				checkMinSelections();
 			},true);
 
 			/**
