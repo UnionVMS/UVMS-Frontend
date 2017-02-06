@@ -24,6 +24,7 @@ describe('stPurposeCode', function() {
     
     beforeEach(inject(function($filter){
         filter = $filter('stPurposeCode');
+        buildMocks();
     }));
     
     function getCodes(){
@@ -52,12 +53,39 @@ describe('stPurposeCode', function() {
         });
     }
 
-	it('should ...', function() {
-	    buildMocks();
-	    filter(1, true);
+	it('should get the code description without image', function() {
+	    var codes = getCodes();
+	    filter(1, false);
 	    var result = filter(1, false);
 	    
-	    expect(result).toBe('A');
 	    expect(mockMdrServ.getCodeList).toHaveBeenCalled();
+	    expect(result).toBe(codes[0].description);
+	});
+	
+	it('should get the code description without image by default', function() {
+        var codes = getCodes();
+        filter(9);
+        var result = filter(9);
+        
+        expect(mockMdrServ.getCodeList).toHaveBeenCalled();
+        expect(result).toBe(codes[3].description);
+    });
+	
+	it('should get the font-awesome reference for an input code', function(){
+	    var codes = getCodes();
+        filter(1, true);
+        var result = filter(3, true);
+        
+        expect(mockMdrServ.getCodeList).toHaveBeenCalled();
+        expect(result).toBe('fa-trash-o');
+	});
+	
+	it('should return the code if the filter does not find the a correspondence', function(){
+	    var codes = getCodes();
+        filter(1, true);
+        var result = filter(2, true);
+        
+        expect(mockMdrServ.getCodeList).toHaveBeenCalled();
+        expect(result).toBe(2);
 	});
 });

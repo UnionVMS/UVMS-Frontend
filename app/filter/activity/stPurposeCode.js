@@ -23,30 +23,31 @@ angular.module('unionvmsWeb').filter('stPurposeCode', function(mdrCacheService) 
     function realFilter(code, isImage){
         var filtered;
         if (angular.isDefined(code)){
+            filtered = code;
             var rec = _.findWhere(cachedCodes, {code: code.toString()});
-            if (isImage){
-                filtered = images[rec.code];
-            } else {
-                filtered = rec.text;
+            if (angular.isDefined(rec)){
+                if (isImage){
+                    filtered = images[rec.code];
+                } else {
+                    filtered = rec.text;
+                }
             }
         }
         return filtered;
     }
     
     function convertCode(mdrCode, isImage){
-        if (!isFinished){
-            if (!isInvoked){
-                isInvoked = true;
-                mdrCacheService.getCodeList('flux_gp_purposecode').then(function(response){
-                    angular.forEach(response, function(item){
-                        cachedCodes.push({
-                            code: item.code,
-                            text: item.description
-                        });
+        if (!isFinished && !isInvoked){
+            isInvoked = true;
+            mdrCacheService.getCodeList('flux_gp_purposecode').then(function(response){
+                angular.forEach(response, function(item){
+                    cachedCodes.push({
+                        code: item.code,
+                        text: item.description
                     });
-                    isFinished = true;
-                }, cachedCodes);
-            }
+                });
+                isFinished = true;
+            }, cachedCodes);
             return;
         } else {
             return realFilter(mdrCode, isImage);

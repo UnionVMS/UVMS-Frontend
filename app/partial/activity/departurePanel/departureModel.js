@@ -61,7 +61,6 @@ angular.module('unionvmsWeb').factory('Departure',function(mdrCacheService) {
         this.summary = data.summary;
         this.port = data.port;
         this.reportDoc = data.reportDoc;
-        //this.fishingData = data.fishingData;
         addGearDescription(this, data.gears);
         addCatchTypeDescription(this, data.fishingData);
         
