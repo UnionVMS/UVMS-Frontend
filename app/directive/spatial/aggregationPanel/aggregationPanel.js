@@ -102,11 +102,6 @@ angular.module('unionvmsWeb').directive('aggregationPanel', function() {
 				var aux = angular.copy(scope.selectedTypes);
 				scope.selectedTypes = [];
 				scope.selectedTypes = angular.copy(aux);
-
-				var abc;
-				if(abc){
-					scope.selectedTypes.splice(2,1);
-				}
 			},true);
 
 			/**
