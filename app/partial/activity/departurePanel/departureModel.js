@@ -102,7 +102,7 @@ angular.module('unionvmsWeb').factory('Departure',function(mdrCacheService) {
             angular.forEach(data, function(item) {
                 var mdrRec = _.findWhere(response, {code: item.details.catchType});
                 if (angular.isDefined(mdrRec)){
-                    item.description = mdrRec.description;
+                    item.details.description = mdrRec.description;
                 }
             });
             departure.fishingData = data;

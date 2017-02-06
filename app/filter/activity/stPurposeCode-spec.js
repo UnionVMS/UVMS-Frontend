@@ -12,14 +12,52 @@ copy of the GNU General Public License along with the IFDM Suite. If not, see <h
 describe('stPurposeCode', function() {
 
     beforeEach(module('unionvmsWeb'));
-    var filter;
+    var filter, mockMdrServ;
+    
+    beforeEach(function(){
+        mockMdrServ = jasmine.createSpyObj('mdrCacheService', ['getCodeList']);
+        
+        module(function($provide){
+            $provide.value('mdrCacheService', mockMdrServ);
+        });
+    });
     
     beforeEach(inject(function($filter){
         filter = $filter('stPurposeCode');
     }));
-
+    
+    function getCodes(){
+        return [{
+            "code": "1",
+            "description": "Cancellation"
+          },{
+            "code": "3",
+            "description": "Delete"
+          },{
+            "code": "5",
+            "description": "Replacement (correction)"
+          },{
+            "code": "9",
+            "description": "Original report"
+          }];
+    }
+    
+    function buildMocks(){
+        mockMdrServ.getCodeList.andCallFake(function(){
+            return {
+                then: function(callback){
+                    return callback(getCodes());
+                }
+            };
+        });
+    }
 
 	it('should ...', function() {
-	    //TODO when rest service ready
+	    buildMocks();
+	    filter(1, true);
+	    var result = filter(1, false);
+	    
+	    expect(result).toBe('A');
+	    expect(mockMdrServ.getCodeList).toHaveBeenCalled();
 	});
 });

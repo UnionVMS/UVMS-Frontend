@@ -113,6 +113,45 @@ controller('CatchClassDetailTileCtrl', function($scope, locale){
     };
     
     /**
+     * Create and show a tootlip with a description for the catch details type
+     *  
+     *  @memberof CatchClassDetailTileCtrl
+     *  @public
+     *  @param {String} text - The text to be displayed in the tooltip
+     */
+    $scope.displayDetailsTip = function(text){
+        var target = angular.element('.catch-class-detail-tile .details');
+        var tip;
+        if (angular.isDefined($(target).attr('data-hasqtip'))){
+            tip = $(target);
+        } else {
+            tip = target.qtip({
+                content: {
+                    text: text
+                },
+                position: {
+                    my: 'left center',
+                    at: 'right center',
+                    target: target,
+                    effect: false
+                },
+                show: {
+                    solo: true,
+                    when: false,
+                    effect: false
+                },
+                style: {
+                    classes: 'qtip-bootstrap'
+                }
+            });
+        }
+        
+        var api = tip.qtip('api');
+        api.show();
+    };
+    
+
+    /**
      * Select the record that should be used to display information on the location tile, table and summary sections. Set the location tile title according
      * to the number of locations available for a given record
      * 

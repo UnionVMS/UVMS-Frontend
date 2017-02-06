@@ -126,7 +126,7 @@ angular.module('unionvmsWeb').factory('Report',function(unitConversionService, u
 
 	        //Vessel filters
 	        report.vesselsSelection = filter.assets;
-
+	        
 			if(angular.isDefined(data.reportType)){
 				report.reportType = data.reportType;
 			}
@@ -284,7 +284,7 @@ angular.module('unionvmsWeb').factory('Report',function(unitConversionService, u
 	        id: this.id,
 	        name: this.name,
 	        desc: this.desc !== '' ? this.desc : undefined,
-			reportType: this.reportType,
+			//reportType: this.reportType, FIXME uncomment
 	        visibility: angular.isDefined(this.visibility) ? this.visibility : 'private',
 	        withMap: this.withMap,
 	        filterExpression: filter

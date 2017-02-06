@@ -42,9 +42,10 @@ describe('catchClassDetailTile', function() {
                 geometry: 'POLYGON ((30 10, 10 20, 20 40, 40 40, 30 10))'
             }],
             details: {
-                catchType: 'ONB - Onboard',
+                catchType: 'ONB',
                 unit: 123,
-                weightMeans: 'EST - Estimated'
+                weightMeans: 'EST - Estimated',
+                description: 'On board'
             }
         },{
             species: 'SOL',
@@ -102,7 +103,7 @@ describe('catchClassDetailTile', function() {
             expect(test).toEqual(scope.ngModel[0].species);
         });
         
-        it('should properly generate a tooltip', function(){
+        it('should properly generate a chart tooltip', function(){
             scope.ngModel = builMockData();
             scope.init();
             
@@ -147,7 +148,6 @@ describe('catchClassDetailTile', function() {
             var test = scope.options.chart.multibar.dispatch.elementClick(evt);
             expect(scope.selected).toEqual(scope.ngModel[1]);
         });
-        
     });
     
     describe('testing the directive: catchClassDetailTile', function(){
@@ -167,12 +167,25 @@ describe('catchClassDetailTile', function() {
             expect(angular.element('legend').children().text()).toEqual('test');
             expect(angular.element('rect').length).toEqual(scope.ngModel.length * 2 + 1);
             expect(angular.element('.species-title').text()).toEqual(testScope.selected.species + ' - ' + testScope.selected.speciesName);
-            expect(angular.element('.section').find('span').eq(1).text()).toEqual(testScope.selected.details.catchType);
+            expect(angular.element('.section').find('span').eq(1).text()).toEqual(testScope.selected.details.catchType + ' ');
             expect(angular.element('.section').find('span').eq(3).text()).toEqual(testScope.selected.details.unit.toString());
             expect(angular.element('.section').find('span').eq(5).text()).toEqual(testScope.selected.total + ' kg');
             expect(angular.element('.section').find('span').eq(7).text()).toEqual(testScope.selected.details.weightMeans);
             expect(angular.element('td:not(.uppercase)').eq(0).text()).toEqual(testScope.selected.lsc.toString());
             expect(angular.element('td:not(.uppercase)').eq(1).text()).toEqual(testScope.selected.bms.toString());
+        });
+        
+        it('should create a catch type tooltip', function(){
+            scope.ngModel = builMockData();
+            
+            tile = compile('<catch-class-detail-tile ng-model="ngModel" tile-title="test"></catch-class-detail-tile>')(scope);
+            tile.appendTo('#parent-container');
+            scope.$digest();
+            
+            var testScope = tile.isolateScope();
+            testScope.displayDetailsTip(testScope.ngModel[0].details.description);
+            expect(angular.element('.qtip-bootstrap')).toBeDefined();
+            expect(angular.element('.qtip-bootstrap').text()).toEqual(testScope.ngModel[0].details.description);
         });
     });
 });
