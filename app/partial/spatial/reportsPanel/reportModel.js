@@ -174,6 +174,12 @@ angular.module('unionvmsWeb').factory('Report',function(unitConversionService, u
 				report.faFilters.weight.unit = 'kg';
 			}
 
+			if(!angular.isDefined(filter.sort)){
+				filter.sort = {};
+			}
+
+			report.sortFilters = filter.sort;
+
 	        report.areas = filter.areas;
 	        
 	        if (angular.isDefined(data.mapConfiguration)){
@@ -274,6 +280,8 @@ angular.module('unionvmsWeb').factory('Report',function(unitConversionService, u
             vms: vmsFilters,
 			fa: faFilters,
             areas: this.areas
+			//TODO uncomment when the service is updated
+			//sort: this.sortFilters
 	    };
 
 	    if (angular.isDefined(this.vesselsSelection) && this.vesselsSelection.length){
@@ -420,6 +428,8 @@ angular.module('unionvmsWeb').factory('Report',function(unitConversionService, u
 				report.filterExpression.fa = undefined;
 			}
 		}
+		//TODO uncomment when the service is updated
+		//report.filterExpression.sort = this.sortFilters;
 
         if(this.withMap === true){
         	report.mapConfiguration = {

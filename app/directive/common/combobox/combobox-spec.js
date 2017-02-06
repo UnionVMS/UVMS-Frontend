@@ -72,7 +72,7 @@ describe('combobox', function() {
     },
     defaultValue: {
       attributes: {
-        'defaultValue': {attr: 'defaultValue', type: '@'}
+        'defaultValue': {attr: 'defaultValue', type: '='}
       },
       'exclude': ['lineStyleCombo','multipleCombo'],
       'testFunc': defaultValueTest
