@@ -54,46 +54,46 @@ angular.module('unionvmsWeb').controller('ReportformCtrl',function($scope, $moda
     $scope.aggregationTypes = [
         {
             code: "fs",
-            text: "Flag state"
+            text: locale.getString('spatial.reports_form_aggregation_type_fs')
         },
         {
             code: "vessel",
-            text: "Vessel/Vessel group"
+            text: locale.getString('spatial.reports_form_aggregation_type_vessel')
         },
         {
             code: "period",
-            text: "Period",
+            text: locale.getString('spatial.reports_form_aggregation_type_period'),
             items: [
                 {
                     code: "day",
-                    text: "Day"
+                    text: locale.getString('spatial.reports_form_aggregation_type_period_day')
                 },
                 {
                     code: "month",
-                    text: "Month"
+                    text: locale.getString('spatial.reports_form_aggregation_type_period_month')
                 },
                 {
                     code: "year",
-                    text: "Year"
+                    text: locale.getString('spatial.reports_form_aggregation_type_period_year')
                 }
 
             ]
         },
         {
             code: "area",
-            text: "Area"
+            text: locale.getString('spatial.reports_form_aggregation_type_area')
         },
         {
             code: "geartype",
-            text: "Gear type"
+            text: locale.getString('spatial.reports_form_aggregation_type_geartype')
         },
         {
             code: "species",
-            text: "Species"
+            text: locale.getString('spatial.reports_form_aggregation_type_species')
         },
         {
             code: "presentation",
-            text: "Presentation"
+            text: locale.getString('spatial.reports_form_aggregation_type_presentation')
         }
     ];
 

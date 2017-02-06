@@ -511,5 +511,16 @@
 	"wms_preview_btn_tooltip": "Preview data",
 	"alarm_preview_btn_tooltip": "Alert details",
 	"last_x_pos_warning": "ERS filtering not applied when getting last positions",
-	"output_criteria": "Output criteria"
+	"output_criteria": "Output criteria",
+
+	"reports_form_aggregation_type_fs": "Flag state",
+	"reports_form_aggregation_type_vessel": "Vessel/Vessel group",
+	"reports_form_aggregation_type_period": "Period",
+	"reports_form_aggregation_type_area": "Area",
+	"reports_form_aggregation_type_geartype": "Gear type",
+	"reports_form_aggregation_type_species": "Species",
+	"reports_form_aggregation_type_presentation": "Presentation",
+	"reports_form_aggregation_type_period_day": "Day",
+	"reports_form_aggregation_type_period_month": "Month",
+	"reports_form_aggregation_type_period_year": "Year"
 }
