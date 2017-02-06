@@ -73,5 +73,5 @@
         "angular": "~1.5",
         "angular-bootstrap": "~0.14"
     },
-    "version": "3.0.0"
+    "version": "3.0.2"
 }
