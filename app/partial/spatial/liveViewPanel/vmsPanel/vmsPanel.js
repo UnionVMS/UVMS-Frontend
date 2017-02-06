@@ -61,7 +61,7 @@ angular.module('unionvmsWeb').controller('VmspanelCtrl',function($scope, locale,
    
    $scope.isTabVisible = function(tab){
        var visible = true;
-       if (tab === 'ALARMS' && $scope.executedReport.alarms.length === 0){
+       if ((tab === 'ALARMS' && $scope.executedReport.alarms.length === 0) || (tab === 'TRIPS' && $scope.executedReport.trips.length === 0)){
            visible = false;
        }
        

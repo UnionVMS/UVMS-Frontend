@@ -159,8 +159,20 @@ angular.module('unionvmsWeb').controller('SpatialCtrl',function($scope, $timeout
     };
 
     $scope.initComboHistory = function(comboId){
-        var comboFooter = angular.element('<li class="combo-history-footer col-md-12"><div class="row"><div class="footer-item col-md-5" ng-click="openReportList($event)"><label class="row">{{"spatial.report_history_list_btn" | i18n}}</label></div><div class="footer-item col-md-7" ng-click="createReportFromLiveview($event)"><label class="row">{{"spatial.report_history_create_new_btn" | i18n}}</label></div></div></li>');
-        angular.element('#' + comboId + '>.dropdown-menu').append(comboFooter);
+        var comboFooter = angular.element('<div class="combo-history-footer col-md-12">' + 
+                                            '<div class="row">' +
+                                                '<div class="footer-item" ng-click="openReportList($event)"' +
+                                                ' ng-class="{\'col-md-7\': isAllowed(\'Reporting\', \'CREATE_REPORT\'), \'col-md-12\': !isAllowed(\'Reporting\', \'CREATE_REPORT\')}">' +
+                                                    '<label class="row">{{"spatial.report_history_list_btn" | i18n}}</label>' +
+                                                '</div>' +
+                                                '<div ng-if="isAllowed(\'Reporting\', \'CREATE_REPORT\')" class="footer-item col-md-7"' +
+                                                ' ng-click="createReportFromLiveview($event)">' +
+                                                    '<label class="row">{{"spatial.report_history_create_new_btn" | i18n}}</label>' +
+                                                '</div>' +
+                                            '</div>' +
+                                        '</div>');
+
+        angular.element('#' + comboId).prepend(comboFooter);
         $compile(comboFooter)($scope);
     };
 

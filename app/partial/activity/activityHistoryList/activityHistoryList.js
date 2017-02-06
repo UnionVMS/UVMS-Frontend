@@ -12,26 +12,21 @@ copy of the GNU General Public License along with the IFDM Suite. If not, see <h
 /**
  * @memberof unionvmsWeb
  * @ngdoc controller
- * @name ActivityoverviewCtrl
+ * @name ActivityhistorylistCtrl
  * @param $scope {Service} controller scope
  * @param activityService {Service} The activity service
+ * @param visibilityService {Service} The visibility service <p>{@link unionvmsWeb.visibilityService}</p>
+ * @attr {Array} displayedActivitiesHistory - The array of displayed activities used by smart tables
  * @description
- *  The controller for the fishing activity overview page
+ *  The controller for the fisihing activity reports table list
  */
-angular.module('unionvmsWeb').controller('ActivityoverviewCtrl',function($scope, activityService){
+angular.module('unionvmsWeb').controller('ActivityhistorylistCtrl',function($scope, activityService, visibilityService){
     $scope.actServ = activityService;
+    $scope.attrVisibility = visibilityService;
     
-    /**
-     * Get the details of an activity an open the activity details page
-     * 
-     * @memberof ActivityoverviewCtrl
-     * @public
-     * @alias getDetails
-     */
-    $scope.getDetails = function(){
-        $scope.actServ.details = {
-            name: 'Activity details will be here'
-        };
-        $scope.goToView(2);
+    $scope.openDetails = function(idx){
+        //TODO fetch the data and load the partial
+        //$scope.actServ.overview = $scope.actServ.displayedActivities[idx];
+        $scope.goToView(3);
     };
 });

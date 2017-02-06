@@ -3,7 +3,7 @@
         <legend class="fieldsetLegendStyle">
             <a>{{'activity.trip_summary_vessel' | i18n }}</a>
         </legend>
-        <div class="col-md-12">
+        <div class="col-md-12" ng-if="trip.tripVessel">
             <div class="row">
                 <!--VESSEL NAME-->
                 <div class="row form-row">
@@ -25,6 +25,11 @@
                 <div class="row">
                     <span class="col-md-12"><span class="trip-row-label">{{'activity.trip_summary_vessel_cfr' | i18n }}:</span> {{trip.tripVessel.cfr}}</span>
                 </div>
+            </div>
+        </div>
+        <div class="row no-data" ng-if="!trip.tripVessel">
+            <div class="col-md-12">
+                <span>{{'activity.no_data' | i18n}}</span>
             </div>
         </div>
     </fieldset>

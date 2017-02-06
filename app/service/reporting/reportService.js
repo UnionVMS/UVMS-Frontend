@@ -327,21 +327,11 @@ angular.module('unionvmsWeb').factory('reportService',function($rootScope, $time
 	var getVmsDataSuccess = function(data){
 		rep.loadReportHistory();
 
-//        var trip = {
-//            tripId: 'NOR-TRP-2016051723405370',
-//            event: 'Arrival: 03-05-2016 14:20',
-//            vesselId: 'vessel-guid-54515-16445',
-//            duration: '5d 6h 30m',
-//            nCorrections: 8,
-//            nPositions: 20,
-//            alarm: true,
-//            extent: [17.149, 60.745, 18.174, 61.257]
-//        };
-
 		rep.positions = data.movements.features;
         rep.segments = data.segments.features;
         rep.tracks = data.tracks;
         rep.trips = data.trips;
+        
         rep.activities = data.activities.features;
         
         //Update map if the report contains the map tab
@@ -355,6 +345,7 @@ angular.module('unionvmsWeb').factory('reportService',function($rootScope, $time
             }
             
             //Add nodes to the tree and layers to the map
+            //FIXME check for activities in the data
             if (rep.positions.length > 0 || rep.segments.length > 0){
                 var vectorNodeSource = new TreeModel();
                 vectorNodeSource = vectorNodeSource.nodeFromData(data);
@@ -397,10 +388,10 @@ angular.module('unionvmsWeb').factory('reportService',function($rootScope, $time
     //Refresh report success callback
     var updateVmsDataSuccess = function(data){
         layerPanelService.removeVmsNodes();
-        //$rootScope.$broadcast('removeVmsNodes');
         rep.positions = data.movements.features;
         rep.segments = data.segments.features;
         rep.tracks = data.tracks;
+        //TODO activities
         
         //Remove existing vms vector layers from the map
         mapService.clearVectorLayers();
@@ -432,6 +423,7 @@ angular.module('unionvmsWeb').factory('reportService',function($rootScope, $time
         rep.positions = [];
         rep.segments = [];
         rep.tracks = [];
+        //TODO activities
         
         mapService.resetLabelContainers();
         

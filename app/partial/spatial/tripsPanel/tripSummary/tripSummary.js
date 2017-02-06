@@ -83,6 +83,20 @@ angular.module('unionvmsWeb').controller('TripsummaryCtrl', function ($scope, ac
             $scope.alert.hideAlert();
             loadingStatus.isLoading('TripSummary', false);
         });
+        
+        loadingStatus.isLoading('TripSummary', true);
+        // get trip map data for the specific trip
+        activityRestService.getTripMapData($scope.trip.id).then(function (response) {
+            $scope.trip.fromJson('mapData', response);
+            loadingStatus.isLoading('TripSummary', false);
+        }, function (error) {
+            $anchorScroll();
+            $scope.alert.hasAlert = true;
+            $scope.alert.hasError = true;
+            $scope.alert.alertMessage = locale.getString('activity.error_loading_trip_summary_map_data');
+            $scope.alert.hideAlert();
+            loadingStatus.isLoading('TripSummary', false);
+        });
     };
 
 });

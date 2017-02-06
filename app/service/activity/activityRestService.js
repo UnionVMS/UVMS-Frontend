@@ -94,6 +94,16 @@ angular.module('unionvmsWeb').factory('activityRestFactory', function ($resource
                 }
             });
         },
+        getTripMapData: function(){
+            return $resource('/activity/rest/trip/mapData/:id', {}, {
+                'get': {
+                    method: 'GET',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    }
+                }
+            });
+        },
         getTripCatchDetail: function () {
             return $resource('/mock/activity/catchdetails/:id', {}, {
                 'get': {
@@ -282,6 +292,23 @@ angular.module('unionvmsWeb').factory('activityRestFactory', function ($resource
             var deferred = $q.defer();
             activityRestFactory.getTripReports().get({ id: id }, function (response) {
                 deferred.resolve(response);
+            }, function (error) {
+                deferred.reject(error);
+            });
+            return deferred.promise;
+        },
+        /**
+         * Get the trip map data
+         * 
+         * @memberof activityRestService
+         * @public
+         * @param {String} id - The trip id of the selected trip
+         * @returns {Promise} A promise with either the spatial trip data or reject error
+         */
+        getTripMapData: function(id){
+            var deferred = $q.defer();
+            activityRestFactory.getTripMapData().get({ id: id }, function (response) {
+                deferred.resolve(response.data);
             }, function (error) {
                 deferred.reject(error);
             });

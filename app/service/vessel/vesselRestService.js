@@ -28,7 +28,7 @@ angular.module('unionvmsWeb')
             },
             getVesselList : function(){
                 return $resource('/asset/rest/asset/list/',{},{
-                    list : { method: 'POST'}
+                    list : { method: 'POST', cancellable: true}
                 });
             },
             getVesselListCount : function(){
@@ -58,14 +58,17 @@ angular.module('unionvmsWeb')
             }
         };
     })
-.factory('vesselRestService', function($q, $http, vesselRestFactory, VesselListPage, Vessel, SavedSearchGroup, userService){
+.factory('vesselRestService', function($q, $http, vesselRestFactory, VesselListPage, Vessel, SavedSearchGroup, userService, $timeout){
 
+    //Save pending requests
+    var pendingRequests = [];
+
+    //Get vessel list
     var getVesselList = function(getListRequest){
         var deferred = $q.defer();
 
-        vesselRestFactory.getVesselList().list(getListRequest.DTOForVessel(),
-            function(response) {
-
+        var getVesselListRequest = vesselRestFactory.getVesselList().list(getListRequest.DTOForVessel(),
+            function(response){
                 if(response.code !== 200){
                     deferred.reject("Invalid response status");
                     return;
@@ -80,14 +83,18 @@ angular.module('unionvmsWeb')
                 var currentPage = response.data.currentPage;
                 var totalNumberOfPages = response.data.totalNumberOfPages;
                 var vesselListPage = new VesselListPage(vessels, currentPage, totalNumberOfPages);
+
+                pendingRequests.splice(getVesselListRequest);
                 deferred.resolve(vesselListPage);
             },
             function(err){
                 console.error("Error getting vessels.", err);
+                pendingRequests.splice(getVesselListRequest);
                 deferred.reject(err);
             }
         );
 
+        pendingRequests.push(getVesselListRequest);
         return deferred.promise;
     };
 
@@ -177,8 +184,6 @@ angular.module('unionvmsWeb')
     };
 
     var updateVessel = function(vessel){
-        console.log("ABout to update vessel:");
-        console.log(vessel);
         var deferred = $q.defer();
         vesselRestFactory.vessel().update(vessel.DTO(), function(response) {
             if(response.code !== 200){
@@ -365,6 +370,13 @@ angular.module('unionvmsWeb')
         return deferred.promise;
     };
 
+    //Cancel pending requests
+    var cancelPendingRequests = function(){
+        pendingRequests.forEach(function(request){
+            request.$cancelRequest();
+        });
+    };
+
     return {
         getVesselList: getVesselList,
         getVesselListCount: getVesselListCount,
@@ -381,6 +393,7 @@ angular.module('unionvmsWeb')
         deleteVesselGroup : deleteVesselGroup ,
         getConfig : getConfiguration,
         getParameterConfig : getParameterConfiguration,
-        getNoteActivityList : getNoteActivityList
+        getNoteActivityList : getNoteActivityList,
+        cancelPendingRequests : cancelPendingRequests
     };
 });

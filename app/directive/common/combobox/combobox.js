@@ -24,7 +24,7 @@ angular.module('unionvmsWeb').directive('combobox', function(comboboxService,loc
             lineStyle : '=',
             destComboList : '@',
             editable : '=',
-            multiple : '=',
+            multiple : '@',
             uppercase : '=',
             initialtext : '@',
             isLoading : '=',
@@ -34,14 +34,18 @@ angular.module('unionvmsWeb').directive('combobox', function(comboboxService,loc
             initCallback: '=',
             noPlaceholderOnList: '@',
             defaultValue: '=',
-            hideSelectedItems: '=',
-            minSelections: '='
+            hideSelectedItems: '@',
+            minSelections: '=',
+            listClass: '@'
 		},
         templateUrl: 'directive/common/combobox/combobox.html',
 		link: function(scope, element, attrs, ctrl) {
 			scope.comboboxServ = comboboxService;
 			scope.element = element;
 			scope.initialitem = true;
+            if(!angular.isDefined(scope.listClass)){
+                scope.listClass = '';
+            }
 			
 			if(scope.uppercase){
                 if(angular.isDefined(scope.initialtext)){
@@ -93,6 +97,15 @@ angular.module('unionvmsWeb').directive('combobox', function(comboboxService,loc
             //Get the code (id) for an item
             var getItemCode = function(item){
                 return item.code;
+            };
+
+            //Get the description for an item
+            scope.getItemDesc = function(item){
+                if(item.desc){
+                    return item.desc;
+                }else{
+                    return item.text;
+                }
             };
             
             //Find initial value
@@ -342,14 +355,14 @@ angular.module('unionvmsWeb').directive('combobox', function(comboboxService,loc
             };
             
             scope.removeAllSelected = function(){
-                //closeCombo();
-                scope.ngModel.splice(scope.minSelections, scope.ngModel.length - scope.minSelections);
                 var arr = [];
+                if (angular.isDefined(scope.minSelections)){
+                    scope.ngModel.splice(scope.minSelections, scope.ngModel.length - scope.minSelections);
+                } else {
+                    scope.ngModel.splice(0, scope.ngModel.length);
+                }
                 angular.copy(scope.ngModel,arr);
                 scope.ngModel = arr; 
-
-                //////
-            	//scope.ngModel = [];
             };
             
             scope.onComboChange = function(){

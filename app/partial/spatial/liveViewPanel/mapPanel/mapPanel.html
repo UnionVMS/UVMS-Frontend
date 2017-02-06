@@ -14,7 +14,7 @@ copy of the GNU General Public License along with the IFDM Suite. If not, see <h
     <div class="map-container">
         <div id="map-toolbar">
             <div class="btn-group-left">
-				<combobox ng-model="repServ.selectedHistory" initialtext="{{repServ.name || ('spatial.header_reports' | i18n)}}" items="repServ.reportsHistory" combo-section="true" callback="selectHistory" init-callback="initComboHistory" is-loading="repServ.loadingReportHistory" class="combo-report-history" no-placeholder-on-list="true" dest-combo-list="#mapPanelContainer"></combobox>
+				<combobox ng-model="repServ.selectedHistory" initialtext="{{repServ.name || ('spatial.header_reports' | i18n)}}" items="repServ.reportsHistory" combo-section="true" callback="selectHistory" init-callback="initComboHistory" is-loading="repServ.loadingReportHistory" class="combo-report-history" list-class="combo-report-history-list" no-placeholder-on-list="true" dest-combo-list="#mapPanelContainer"></combobox>
                 <div class="btn-group btn-group-xs" role="group" aria-label="Map controls">
                 	<div class="btn btn-default refresh-container" ng-class="{disabled: !checkSpatialConfigPermission()}">
 						<span>{{'spatial.map_label_auto_refresh_status' | i18n }}</span>

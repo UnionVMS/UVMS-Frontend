@@ -15,7 +15,7 @@ copy of the GNU General Public License along with the IFDM Suite. If not, see <h
 			<button type="button" class="btn btn-primary btn-sm" ng-click="loadReportList()">
 				<span class="fa fa-refresh" aria-hidden="true"></span>
 			</button>
-			<button type="button" class="btn btn-primary btn-sm" ng-click="openReportForm('CREATE')" ng-show="isAllowed('Reporting', 'CREATE_REPORT')">
+			<button type="button" class="btn btn-primary btn-sm" ng-click="openReportForm('CREATE')" ng-if="isAllowed('Reporting', 'CREATE_REPORT')">
 				<span class="fa fa-plus-square" aria-hidden="true"></span> &nbsp;
 				<span>{{'spatial.reports_add_new_report' | i18n }}</span>
 			</button>

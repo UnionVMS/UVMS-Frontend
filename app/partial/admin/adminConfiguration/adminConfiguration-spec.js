@@ -47,7 +47,7 @@ describe('AuditconfigurationCtrl', function() {
 
 	it('should only show tabs with at least one non-global setting', function() {
 		var controller = createController();
-		expect(scope.tabs).toEqual(["systemMonitor", "globalSettings", "reporting", "mdr", "mobileTerminal"]);
+		expect(scope.tabs).toEqual(["systemMonitor", "globalSettings", "reporting", "mobileTerminal"]);
 	});
 
 	it('should provide the right partial URLs', function() {

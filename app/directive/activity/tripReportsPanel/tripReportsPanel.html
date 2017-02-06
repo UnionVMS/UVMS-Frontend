@@ -3,7 +3,7 @@
         <legend class="fieldsetLegendStyle">
             <a>{{'activity.trip_summary_reports' | i18n }}</a>
         </legend>
-        <div class="row">
+        <div class="row" ng-if="trip.reports">
             <div class="col-md-10">
                 <!--TABLE TREE MESSAGES-->
                 <div class="table-message-container">
@@ -67,6 +67,11 @@
                         </tbody>
                     </table>
                 </div>
+            </div>
+        </div>
+        <div class="row no-data" ng-if="!trip.reports">
+            <div class="col-md-12">
+                <span>{{'activity.no_data' | i18n}}</span>
             </div>
         </div>
     </fieldset>

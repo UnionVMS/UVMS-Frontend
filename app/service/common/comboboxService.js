@@ -78,12 +78,13 @@ angular.module('unionvmsWeb').factory('comboboxService', function($window) {
 			if(activeCombo.initialValue && activeCombo.initialValue.text && !activeCombo.noPlaceholderOnList && !activeCombo.multiple){
 				comboContainerHeight += 26;
 			}
-
-    		if((comboContainerHeight > 300 ? 300 : comboContainerHeight) > bottomSpace){
+			
+			var maxComboHeight = parseInt(comboMenu.css('max-height'));
+    		if((comboContainerHeight > maxComboHeight ? maxComboHeight : comboContainerHeight) > bottomSpace){
 				// check if there's more space above or below the combobox
     			if(topSpace > bottomSpace){
     				var comboHeight = comboContainerHeight;
-    				comboHeight = (comboHeight > 300 ? 300 + 4 : comboHeight);
+    				comboHeight = (comboHeight > maxComboHeight ? maxComboHeight + 4 : comboHeight);
 					activeCombo.comboContainer.css('top', buttonPosition.top - comboButtonHeight - comboHeight);
     				if(topSpace < comboContainerHeight){
     					activeCombo.comboContainer.css('max-height', topSpace);

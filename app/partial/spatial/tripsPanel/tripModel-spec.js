@@ -212,6 +212,29 @@ describe('tripModel', function() {
       noOfDeletions: 0,
       noOfCancellations: 0
     };
+    
+    var mapData = {
+        type: "FeatureCollection",
+        features: [
+            {
+                type: "Feature",
+                geometry: {
+                    type: "MultiPoint",
+                    coordinates: [
+                        [
+                            15.86,
+                            55.95
+                        ],
+                        [
+                            17.66,
+                            56.76
+                        ]
+                    ]
+                },
+                properties: {}
+            }
+        ]
+    };
 
 
     var unitConvServSpy;
@@ -295,6 +318,9 @@ describe('tripModel', function() {
       angular.forEach(trip.activityReports,function(report,repKey){
         expect(report.nodes.length).toEqual(reportsData.activityReports[repKey].length);
       });
+      
+      trip.fromJson('mapData', mapData);
+      expect(trip.mapData).toEqual(mapData);
 
     }));
 

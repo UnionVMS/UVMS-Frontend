@@ -77,6 +77,16 @@ angular.module('unionvmsWeb').directive('aggregationPanel', function() {
 							}
 						});
 					}
+				} else if (newVal.length === 1 && Math.abs(newVal.length - scope.ngModel.length) >= 2){
+				    var itemsToRemove = [];
+				    angular.forEach(scope.ngModel, function(item) {
+				    	if (newVal.indexOf(item.code) === -1){
+				    	    itemsToRemove.push(item);
+				    	}
+				    });
+				    scope.ngModel = _.filter(scope.ngModel, function(item){
+				        return !_.findWhere(itemsToRemove, item);
+				    });
 				}
 
 			},true);

@@ -37,18 +37,22 @@ copy of the GNU General Public License along with the IFDM Suite. If not, see <h
 .trips-panel {
     background-color: #fff;
     padding-top: 10px;
-   
     padding: 15px;
-    
-    //overflow-y: auto;
+    overflow-y: auto;
     height: calc(~"100vh - 100px");
+    .trip-panel-content {
+        position: relative;
+    }
     .tab-content {
+        padding-top: 28px;
+        height: calc(~"100vh - 130px");
         .trip-summary-tab {
             border: 1px solid #ddd;
             border-top: 0;
             margin-top: -1px;
             padding: 5px 30px 5px 15px;
             position: relative;
+            height: calc(~"100vh - 175px");
         }
     }
     .close-button {
@@ -61,6 +65,9 @@ copy of the GNU General Public License along with the IFDM Suite. If not, see <h
     }
     ul.nav.nav-tabs {
         cursor: auto;
+        position: absolute;
+        right: 0;
+        left: 0;
         li {
             margin-bottom: 0;
             &.active {
@@ -100,6 +107,25 @@ copy of the GNU General Public License along with the IFDM Suite. If not, see <h
         top: 82px;
         font-size: 18px;
      }
+     .no-data {
+        text-align: center;
+        top: 20px;
+        bottom: 0;
+        left: 15px;
+        right: 15px;
+        position: absolute;
+        background-color: #fff;
+        div {
+            display: table;
+            height: 100%;
+            span {
+                display: table-cell;
+                vertical-align: middle;
+                font-size: 22px;
+                color: #ddd;
+            }
+        }
+    }
 }
 .in-new-tab {
     .trips-panel {

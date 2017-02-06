@@ -76,6 +76,12 @@ describe('combobox', function() {
       },
       'exclude': ['lineStyleCombo','multipleCombo'],
       'testFunc': defaultValueTest
+    },
+    listClass: {
+      attributes: {
+        'listClass': {attr: 'listClass', type: '@'}
+      },
+      'testFunc': listClassTest
     }
   };
 
@@ -101,9 +107,9 @@ describe('combobox', function() {
       'editable': {attr: 'editable', type: '='}
     },
     multipleCombo: {
-      'multiple': {attr: 'multiple', type: '='},
+      'multiple': {attr: 'multiple', type: '@'},
       'ngModel': {attr: 'modelMultiple', type: '='},
-      'hideSelectedItems': {attr: 'hideSelectedItems', type: '='},
+      'hideSelectedItems': {attr: 'hideSelectedItems', type: '@'},
       'minSelections': {attr: 'minSelections', type: '='}
     },
     sectionCombo: {
@@ -223,6 +229,11 @@ describe('combobox', function() {
     expect(isolatedScope.ngModel).toEqual(scope.model);
   }
 
+  function listClassTest(comboTypeName,isolatedScope){
+    expect(angular.element("#" + isolatedScope.comboboxId).hasClass(scope.listClass)).toBe(true);
+  }
+
+
   beforeEach(inject(function($rootScope,$compile) {
     scope = $rootScope.$new();
     compile = $compile;
@@ -289,7 +300,10 @@ describe('combobox', function() {
     scope.defaultValue = 'item1';
 
     scope.hideSelectedItems = false;
-    scope.minSelections = 2;
+    scope.minSelections = 0;
+
+    scope.listClass = 'testClass';
+
   }));
 
 
@@ -392,12 +406,20 @@ describe('combobox', function() {
               scope.$digest();
 
               if(comboTypeName === 'multipleCombo' && stateName !== 'initialText'){
+                isolatedScope.ngModel = ['item4'];
+                isolatedScope.$digest();
                 angular.element('.combobox[combolist-id="' + isolatedScope.comboboxId + '"] .selected-options > li:first-child > .item-remover')[0].click();
-                expect(isolatedScope.ngModel).toEqual(['item4','item5','item7']);
+                expect(isolatedScope.ngModel).toEqual([]);
                 
+                isolatedScope.minSelections = 2;
+                isolatedScope.ngModel = ['item4','item5','item7'];
                 isolatedScope.ngModel.push('item1');
+                isolatedScope.$digest();
+                console.log(angular.element('.combobox[combolist-id="' + isolatedScope.comboboxId + '"] .clear-all')[0]);
                 angular.element('.combobox[combolist-id="' + isolatedScope.comboboxId + '"] .clear-all')[0].click();
                 expect(isolatedScope.ngModel.length).toEqual(2);
+
+                expect(isolatedScope.currentItemLabel.indexOf('2') !== -1).toBe(true);
               }
 
               state.testFunc(comboTypeName,isolatedScope);
