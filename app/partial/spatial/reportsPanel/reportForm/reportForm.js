@@ -488,9 +488,6 @@ angular.module('unionvmsWeb').controller('ReportformCtrl',function($scope, $moda
             case 'CREATE':
                 reportFormService.report = new Report();
                 $scope.report = reportFormService.report;
-                //FIXME remove the following line after fixing aggregation panel
-                //$scope.report.sortFilters = [{"code":"fs","text":"Flag state"},{"code":"area","text":"Area"},{"code":"period","text":"Period","items":[{"code":"day","text":"Day"},{"code":"month","text":"Month"},{"code":"year","text":"Year"}],"value":"day"},{"code":"species","text":"Species"},{"code":"geartype","text":"Gear type"}];
-                
                 break;
             case 'EDIT':
                 $scope.report = reportFormService.report;

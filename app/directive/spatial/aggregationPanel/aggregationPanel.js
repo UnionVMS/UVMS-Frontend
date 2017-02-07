@@ -32,6 +32,12 @@ angular.module('unionvmsWeb').directive('aggregationPanel', function() {
 		link: function(scope, element, attrs, fn) {
 			scope.selectedTypes = [];
 
+			/**
+			 * Limits the minimum of selections
+			 * 
+			 * @memberof aggregationPanel
+			 * @private
+			 */
 			var checkMinSelections = function() {
 				if(angular.isDefined(scope.minSelections)){
 					var minSelections = parseInt(scope.minSelections);
@@ -92,7 +98,17 @@ angular.module('unionvmsWeb').directive('aggregationPanel', function() {
 			},true);
 
 			//checks if the model changed
-			scope.$watch('ngModel', function(newVal) {
+			scope.$watch('ngModel', function(newVal){
+				synchSelectedTypes(newVal);
+			}, true);
+
+			/**
+			 * synchronize the selected types in combobox with the ngModel
+			 * 
+			 * @memberof aggregationPanel
+			 * @private
+			 */
+			var synchSelectedTypes = function(newVal){
 				newVal = angular.isDefined(newVal) ? newVal : [];
 
 				angular.forEach(newVal,function (item) {
@@ -113,7 +129,7 @@ angular.module('unionvmsWeb').directive('aggregationPanel', function() {
 				scope.selectedTypes = angular.copy(aux);
 
 				checkMinSelections();
-			},true);
+			};
 
 			/**
 			 * function to calculate species Weight Percentage and return a string to be displayed in the chart tooltip
@@ -127,6 +143,10 @@ angular.module('unionvmsWeb').directive('aggregationPanel', function() {
 			scope.calcIdentation = function(idx){
 				return ((idx-1)*50) + 40  + 'px';
 			};
+
+			if(angular.isDefined(scope.ngModel)){
+				synchSelectedTypes(scope.ngModel);
+			}
 
 			checkMinSelections();
 		}

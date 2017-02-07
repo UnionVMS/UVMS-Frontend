@@ -3,7 +3,7 @@
         <legend class="fieldsetLegendStyle">
             <a>{{'activity.trip_summary_cronology' | i18n }}</a>
         </legend>
-        <div ng-if="ngModel">
+        <div ng-if="trip.cronology">
             <!--CURRENT TRIP-->
             <div class="row current-trip">
                 <a class="col-md-12 trip-item" ng-click="openTrip(cronology.currentTrip)">{{'activity.cronology_current_trip' | i18n }} {{cronology.currentTrip}}</a>
@@ -23,7 +23,7 @@
             <!--VIEW ALL LINK-->
             <a class="view-all">{{'activity.cronology_view_all' | i18n }}</a>
         </div>
-        <div class="row no-data" ng-if="!ngModel || ngModel.length === 0">
+        <div class="row no-data" ng-if="!trip.cronology">
             <div class="col-md-12">
                 <span>{{'activity.no_data' | i18n}}</span>
             </div>
