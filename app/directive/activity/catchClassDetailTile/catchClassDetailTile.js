@@ -70,14 +70,15 @@ controller('CatchClassDetailTileCtrl', function($scope, locale){
             showControls: false,
             useInteractiveGuideline: true,
             reduceXTicks: false,
+            margin: {
+                bottom: 20
+            },
             yAxis: {
                 axisLabel: locale.getString('activity.header_fa_weight'),
                 showMaxMin: false,
                 ticks: 5
             },
             xAxis: {
-                rotateYLabel: true,
-                rotateLabels: -45,
                 tickFormat: function(xValue){
                     return $scope.ngModel[xValue].species;
                 }
@@ -180,13 +181,13 @@ controller('CatchClassDetailTileCtrl', function($scope, locale){
         var colors = palette('tol-rainbow', 2);
         var lscSeries = {
             key: locale.getString('activity.lsc').toUpperCase(),
-            color: colors[0],
+            color: '7fbc41',
             values: []
         };
         
         var bmsSeries = {
             key: locale.getString('activity.bms').toUpperCase(),
-            color: colors[1],
+            color: 'd92120',
             values: []
         };
         

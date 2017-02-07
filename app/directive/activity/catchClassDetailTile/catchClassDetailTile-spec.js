@@ -43,7 +43,7 @@ describe('catchClassDetailTile', function() {
             }],
             details: {
                 catchType: 'ONB',
-                unit: 123,
+                units: 123,
                 weightMeans: 'EST - Estimated',
                 description: 'On board'
             }
@@ -58,7 +58,7 @@ describe('catchClassDetailTile', function() {
             }],
             details: {
                 catchType: 'ONB - Onboard',
-                unit: 124,
+                units: 124,
                 weightMeans: 'EST - Estimated'
             }
         }];
@@ -168,7 +168,7 @@ describe('catchClassDetailTile', function() {
             expect(angular.element('rect').length).toEqual(scope.ngModel.length * 2 + 1);
             expect(angular.element('.species-title').text()).toEqual(testScope.selected.species + ' - ' + testScope.selected.speciesName);
             expect(angular.element('.section').find('span').eq(1).text()).toEqual(testScope.selected.details.catchType + ' ');
-            expect(angular.element('.section').find('span').eq(3).text()).toEqual(testScope.selected.details.unit.toString());
+            expect(angular.element('.section').find('span').eq(3).text()).toEqual(testScope.selected.details.units.toString());
             expect(angular.element('.section').find('span').eq(5).text()).toEqual(testScope.selected.total + ' kg');
             expect(angular.element('.section').find('span').eq(7).text()).toEqual(testScope.selected.details.weightMeans);
             expect(angular.element('td:not(.uppercase)').eq(0).text()).toEqual(testScope.selected.lsc.toString());
