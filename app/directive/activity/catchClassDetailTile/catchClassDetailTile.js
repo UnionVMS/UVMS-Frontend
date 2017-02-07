@@ -119,9 +119,10 @@ controller('CatchClassDetailTileCtrl', function($scope, locale){
      *  @memberof CatchClassDetailTileCtrl
      *  @public
      *  @param {String} text - The text to be displayed in the tooltip
+     *  @param {String} cssSel - The css selector class of the item against which the tip will be displayed
      */
-    $scope.displayDetailsTip = function(text){
-        var target = angular.element('.catch-class-detail-tile .details');
+    $scope.displayDetailsTip = function(text, cssSel){
+        var target = angular.element('.catch-class-detail-tile .' + cssSel);
         var tip;
         if (angular.isDefined($(target).attr('data-hasqtip'))){
             tip = $(target);
@@ -143,10 +144,14 @@ controller('CatchClassDetailTileCtrl', function($scope, locale){
                 },
                 style: {
                     classes: 'qtip-bootstrap'
+                },
+                events: {
+                    hide: function(evt, api){
+                        api.destroy(true);
+                    }
                 }
             });
-        }
-        
+        } 
         var api = tip.qtip('api');
         api.show();
     };

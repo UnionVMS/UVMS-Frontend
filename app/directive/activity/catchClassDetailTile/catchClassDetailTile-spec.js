@@ -42,7 +42,8 @@ describe('catchClassDetailTile', function() {
                 geometry: 'POLYGON ((30 10, 10 20, 20 40, 40 40, 30 10))'
             }],
             details: {
-                catchType: 'ONB',
+                catchType: 'ONBOARD',
+                typeDesc: 'ONB - ONBOARD',
                 units: 123,
                 weightMeans: 'EST - Estimated',
                 description: 'On board'
@@ -57,9 +58,9 @@ describe('catchClassDetailTile', function() {
                 geometry: 'POINT(5.5 60.5)'
             }],
             details: {
-                catchType: 'ONB - Onboard',
+                catchType: 'ONBOARD',
                 units: 124,
-                weightMeans: 'EST - Estimated'
+                weightMeans: 'ESTIMATED'
             }
         }];
     }
@@ -170,7 +171,7 @@ describe('catchClassDetailTile', function() {
             expect(angular.element('.section').find('span').eq(1).text()).toEqual(testScope.selected.details.catchType + ' ');
             expect(angular.element('.section').find('span').eq(3).text()).toEqual(testScope.selected.details.units.toString());
             expect(angular.element('.section').find('span').eq(5).text()).toEqual(testScope.selected.total + ' kg');
-            expect(angular.element('.section').find('span').eq(7).text()).toEqual(testScope.selected.details.weightMeans);
+            expect(angular.element('.section').find('span').eq(7).text()).toEqual(testScope.selected.details.weightMeans + ' ');
             expect(angular.element('td:not(.uppercase)').eq(0).text()).toEqual(testScope.selected.lsc.toString());
             expect(angular.element('td:not(.uppercase)').eq(1).text()).toEqual(testScope.selected.bms.toString());
         });
@@ -183,9 +184,9 @@ describe('catchClassDetailTile', function() {
             scope.$digest();
             
             var testScope = tile.isolateScope();
-            testScope.displayDetailsTip(testScope.ngModel[0].details.description);
+            testScope.displayDetailsTip(testScope.ngModel[0].details.typeDesc, 'type-desc');
             expect(angular.element('.qtip-bootstrap')).toBeDefined();
-            expect(angular.element('.qtip-bootstrap').text()).toEqual(testScope.ngModel[0].details.description);
+            expect(angular.element('.qtip-bootstrap').text()).toEqual(testScope.ngModel[0].details.typeDesc);
         });
     });
 });

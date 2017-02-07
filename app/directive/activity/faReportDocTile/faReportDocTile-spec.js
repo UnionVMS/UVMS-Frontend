@@ -77,7 +77,7 @@ describe('faReportDocTile', function() {
         expect(angular.element('.item-container').children().eq(5).text()).toEqual(scope.reportDoc.id);
         expect(angular.element('.item-container').children().eq(7).text()).toEqual(scope.reportDoc.refId);
         expect(angular.element('.item-container').children().eq(9).text()).toEqual($filter('stDateUtc')(scope.reportDoc.creationDate));
-        expect(angular.element('.item-container').children().eq(11).text()).toEqual(scope.reportDoc.purposeCode + ' - ');
+        expect(angular.element('.item-container').children().eq(11).text()).toEqual(scope.reportDoc.purposeCode + ' - ' + scope.reportDoc.purposeCode);
         expect(angular.element('.item-container').children().eq(13).text()).toEqual(scope.reportDoc.purpose);
     }));
 });

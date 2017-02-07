@@ -41,6 +41,10 @@ angular.module('unionvmsWeb').directive('activitySummaryTile', function() {
  *  The controller for the activitySummaryTile directive ({@link unionvmsWeb.activitySummaryTile})
  */
 .controller('ActivitySummaryTileCtrl', function($scope, locale){
-    $scope.translatedFaType = locale.getString('activity.' + $scope.faType);
+    $scope.$watch('faType', function(newVal){
+        if (!angular.isDefined($scope.translatedFaType) && newVal !== ''){
+            $scope.translatedFaType = locale.getString('activity.' + $scope.faType);
+        }
+    });
 });
 
