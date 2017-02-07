@@ -3,7 +3,7 @@
         <legend class="fieldsetLegendStyle">
             <a>{{title}}</a>
         </legend>
-        <div class="row catch-details-body" ng-if="trip.catchDetails">
+        <div class="row catch-details-body" ng-if="ngModel">
             <div class="col-md-6 catch-subsection" ng-repeat="(title, data) in ngModel" ng-class="{'has-caption': data.caption}">
                 <div class="row">
                     <!--TITLE-->
@@ -42,7 +42,7 @@
                 <span class="col-md-12 chart-caption" ng-if="data.caption">{{data.caption}}</span>
             </div>
         </div>
-        <div class="row no-data" ng-if="!trip.catchDetails">
+        <div class="row no-data" ng-if="!ngModel">
             <div class="col-md-12">
                 <span>{{'activity.no_data' | i18n}}</span>
             </div>
