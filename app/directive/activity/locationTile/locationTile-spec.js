@@ -68,7 +68,6 @@ describe('locationTile', function() {
             
             expect(angular.element('location-tile').length).toBe(1);
             expect(angular.element('legend').children().text()).toEqual('single');
-            expect(angular.element('.fa-location-arrow').length).toBe(1);
             expect(angular.element('.name').text()).toEqual(scope.locationDetails.name);
         });
         
@@ -96,9 +95,8 @@ describe('locationTile', function() {
             
             expect(angular.element('location-tile').length).toBe(1);
             expect(angular.element('legend').children().text()).toEqual('single');
-            expect(angular.element('.fa-location-arrow').length).toBe(1);
             expect(angular.element('.name').text()).toEqual(scope.locationDetails[0].name);
-        })
+        });
         
         it('should render the location tile with a single clickable location', function(){
             scope.locationDetails = buildSingleMock();

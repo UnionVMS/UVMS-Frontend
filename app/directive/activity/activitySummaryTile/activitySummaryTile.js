@@ -25,7 +25,10 @@ angular.module('unionvmsWeb').directive('activitySummaryTile', function() {
 		controller: 'ActivitySummaryTileCtrl',
 		scope: {
 		    faType: '@',
-		    summary: '='
+		    summary: '=',
+		    isLocClickable: '&',
+		    locClickCallback: '&',
+		    locDetails: '='
 		},
 		templateUrl: 'directive/activity/activitySummaryTile/activitySummaryTile.html'
 	};

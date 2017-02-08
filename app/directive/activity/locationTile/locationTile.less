@@ -18,10 +18,13 @@ copy of the GNU General Public License along with the IFDM Suite. If not, see <h
     .container {
         height: calc(~'100% - 20px');
         .col-md-12 {
-            top: 50%;
-            transform: translateY(-50%);
+            //top: 50%;
+            //transform: translateY(-50%);
             &.clickable {
                 cursor: pointer;
+                &:hover {
+                    text-decoration: underline;
+                }
             }
         }
     }
@@ -33,19 +36,10 @@ copy of the GNU General Public License along with the IFDM Suite. If not, see <h
         right: 15px;
         overflow-y: auto;
     }
-    .icon-container {
-        text-align: center;
-        margin-bottom: 10px;
-        i {
-            font-size: 10vw;
-            color: #505050;
-        }
-    }
     .name {
         text-align: center;
     }
     .location-list {
-        text-align: center;
         li {
             cursor: default;
             &.item-clickable {

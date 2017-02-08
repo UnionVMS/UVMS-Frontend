@@ -27,7 +27,7 @@ describe('faReportDocTile', function() {
         $httpBackend.whenGET(/usm/).respond();
         $httpBackend.whenGET(/i18n/).respond();
         $httpBackend.whenGET(/globals/).respond({data : []});
-        $httpBackend.whenPOST(/mock/).respond([
+        $httpBackend.whenPOST(/mock/).respond({resultList: [
               {
                 "code": "1",
                 "description": "Cancellation"
@@ -44,7 +44,7 @@ describe('faReportDocTile', function() {
                 "code": "9",
                 "description": "Original report"
               }
-         ]);
+         ]});
         
     }));
     
