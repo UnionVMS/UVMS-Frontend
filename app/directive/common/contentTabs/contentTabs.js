@@ -12,33 +12,44 @@ copy of the GNU General Public License along with the IFDM Suite. If not, see <h
 
 angular.module('unionvmsWeb')
     .directive('contentTabs', function() {
-	return {
-		restrict: 'E',
-		replace: true,
+    return {
+        restrict: 'E',
+        replace: true,
         require: "^ngModel",
-		scope: {
-            currentTab : '=',
+        scope: {
+            selectedTab : '=',
             functions : '='
-		},
+        },
         templateUrl: 'directive/common/contentTabs/contentTabs.html',
-		controller: 'contentTabsCtrl',
-	};
+        controller: 'contentTabsCtrl',
+    };
 });
 
 
 angular.module('unionvmsWeb')
     .controller('contentTabsCtrl', function($scope){
 
-    $scope.selectedTab = $scope.functions.setInitialTab();
-    $scope.currentTab = $scope.selectedTab;
+    // A specific tab can be set as initial selected by defining it as default in the object. 
+    // If no tab has been defined, the first will be selected.  
+    $scope.setInitialTab = function() {
+        var tabs = $scope.functions.setTabs();
 
-    var init = function(){
-        $scope.tabMenu = $scope.functions.setTabs();
+        for (var i = 0; i < tabs.length; i++) {
+            if (tabs[i].default) {
+                $scope.selectedTab = tabs[i].tab;
+            } else {
+                $scope.selectedTab = tabs[0].tab;
+            }
+        }
     };
 
-    $scope.selectTab = function(tab){
+    var init = function() {
+        $scope.setInitialTab();
+        $scope.tabMenu = $scope.functions.setTabs();        
+    };
+
+    $scope.selectTab = function(tab) {
         $scope.selectedTab = tab;
-        $scope.currentTab = $scope.selectedTab;
     };
 
     init();

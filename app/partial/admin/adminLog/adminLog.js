@@ -306,9 +306,6 @@ angular.module('unionvmsWeb').controller('AuditlogCtrl', function($scope, $q, $f
                     'title': locale.getString('audit.tab_access_control')
                 }
             ];
-        },
-        setInitialTab: function() {
-            return 'ALL';
         }
     };
 
