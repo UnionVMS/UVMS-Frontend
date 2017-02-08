@@ -29,8 +29,8 @@ angular.module('unionvmsWeb')
 angular.module('unionvmsWeb')
     .controller('contentTabsCtrl', function($scope){
 
-    // A specific tab can be set as initial selected by defining it as default in the object. 
-    // If no tab has been defined, the first will be selected.  
+    // A specific tab can be set as initial selected by defining it as default in the object.
+    // If no tab has been defined, the first will be selected.
     $scope.setInitialTab = function() {
         var tabs = $scope.functions.setTabs();
 
@@ -45,7 +45,7 @@ angular.module('unionvmsWeb')
 
     var init = function() {
         $scope.setInitialTab();
-        $scope.tabMenu = $scope.functions.setTabs();        
+        $scope.tabMenu = $scope.functions.setTabs();
     };
 
     $scope.selectTab = function(tab) {

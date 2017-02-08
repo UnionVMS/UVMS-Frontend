@@ -20,14 +20,14 @@ copy of the GNU General Public License along with the IFDM Suite. If not, see <h
 	.flexbox();
 	list-style: none;
 	padding: 0;
-	overflow: hidden;
-	position: relative;
 	margin: 0;
-
+	position: relative;
+	overflow: hidden;
+	
 	li {
 		.flexbox();
 		align-items: center;
-		padding: 12px 25px 11px;
+		padding: 12px 1.7% 11px;
 		border-top: @content-tabs_border-size solid @sectionBorderColor;
 		background: lighten(@sectionBorderColor, 10%);
 		display: inline-block;
@@ -44,6 +44,10 @@ copy of the GNU General Public License along with the IFDM Suite. If not, see <h
 			font-weight: 600;
 			letter-spacing: 0.01em;
 			display: block;
+			height: 100%; 
+			display: inline-flex;
+			align-items: center;
+			text-align: center;
 
 			&:before {
 				content: '';
@@ -66,6 +70,10 @@ copy of the GNU General Public License along with the IFDM Suite. If not, see <h
 
 		&:first-of-type {
 			margin-left: 0;
+		}
+
+		&:last-of-type {
+			margin-right: 0;
 		}
 
 		&:hover {
