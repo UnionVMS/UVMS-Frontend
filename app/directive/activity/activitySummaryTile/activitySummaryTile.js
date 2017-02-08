@@ -53,7 +53,7 @@ angular.module('unionvmsWeb').directive('activitySummaryTile', function() {
     $scope.hasLocData = function(){
         var status = false;
         if (angular.isDefined($scope.locDetails) && ((_.isArray($scope.locDetails) && $scope.locDetails.length > 0) || (!_.isArray($scope.locDetails) && !_.isEqual($scope.locDetails, {})))){
-            var status = true;
+            status = true;
         }
         return status;
     }

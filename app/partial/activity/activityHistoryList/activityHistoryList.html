@@ -1,4 +1,39 @@
 <div class="col-md-12 activity-history-list" ng-controller="ActivityhistorylistCtrl">
+	<div class="fa-report-form row">
+		<span class="form-title col-md-12">{{'activity.fa_report_doc_form_title' | i18n}}</span>
+		<div class="form-horizontal">
+			<div class="form-group col-md-6">
+				<label class="col-sm-4 control-label">{{'activity.header_fa_purpose_code' | i18n}}</label>
+				<div class="col-sm-8">
+		      		<p class="form-control-static">{{actServ.selReportDoc.purposeCode | stPurposeCode}}</p>
+		    	</div>
+			</div>
+			<div class="form-group col-md-6">
+				<label class="col-sm-4 control-label">{{'activity.header_fa_flux_party_name' | i18n}}</label>
+				<div class="col-sm-8">
+		      		<p class="form-control-static">{{actServ.selReportDoc.ownerFluxPartyName}}</p>
+		    	</div>
+			</div>
+			<div class="form-group col-md-6">
+				<label class="col-sm-4 control-label">{{'activity.header_fa_correction_type' | i18n}}</label>
+				<div class="col-sm-8">
+		      		<p class="form-control-static">{{actServ.selReportDoc.correctionType}}</p>
+		    	</div>
+			</div>
+			<div class="form-group col-md-6">
+				<label class="col-sm-4 control-label">{{'activity.header_fa_creation_date' | i18n}}</label>
+				<div class="col-sm-8">
+		      		<p class="form-control-static">{{actServ.selReportDoc.creationDate | stDateUtc}}</p>
+		    	</div>
+			</div>
+			<div class="form-group col-md-6">
+				<label class="col-sm-4 control-label">{{'activity.header_fa_accepted_date' | i18n}}</label>
+				<div class="col-sm-8">
+		      		<p class="form-control-static">{{actServ.selReportDoc.acceptedDate | stDateUtc}}</p>
+		    	</div>
+			</div>
+		</div>
+	</div>
 	<div st-table="actServ.displayedActivitiesHistory" st-safe-src="actServ.activitiesHistory">
 		<div class="table-responsive-force">
 			<table class="table table-striped table-condensed">
