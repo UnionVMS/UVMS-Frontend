@@ -9,12 +9,13 @@ the hope that it will be useful, but WITHOUT ANY WARRANTY; without even the impl
 FITNESS FOR A PARTICULAR PURPOSE.  See the GNU General Public License for more details. You should have received a
 copy of the GNU General Public License along with the IFDM Suite. If not, see <http://www.gnu.org/licenses/>.
  */
-angular.module('unionvmsWeb').controller('AuditconfigurationCtrl',function($scope, $stateParams, $resource, alertService, spatialConfigRestService, SpatialConfig, loadingStatus, PreferencesService, userService){
+angular.module('unionvmsWeb').controller('AuditconfigurationCtrl',function($scope, $stateParams, $resource, $filter, alertService, spatialConfigRestService, SpatialConfig, loadingStatus, PreferencesService, userService){
 	$scope.isAudit = false;
 	$scope.activeTab = $stateParams.module || "systemMonitor";
 	$scope.prefService = PreferencesService;
 
 	$scope.tabs = [];
+	$scope.setTabs = [];
 
 	var uvmsModules = [
 		"asset",
@@ -52,6 +53,14 @@ angular.module('unionvmsWeb').controller('AuditconfigurationCtrl',function($scop
 
 			if(userService.isAllowed("CONFIGURE_MDR_SCHEDULER", "Activity", true)){
 				$scope.tabs.concat("mdr");
+			}
+
+			// Set tab name and title 
+			for (var i = 0; i < $scope.tabs.length; i++) {
+				$scope.setTabs.push({
+					"tab" : $scope.tabs[i],
+					"title" : $filter('i18n')('audit.configuration_header_'+$scope.tabs[i])
+				});
 			}
 		});
 
@@ -204,6 +213,13 @@ angular.module('unionvmsWeb').controller('AuditconfigurationCtrl',function($scop
     $scope.$on("$destroy", function() {
         alertService.hideMessage();
     });
+
+    // Add tabs to directive
+    $scope.contentTabsFunctions = {
+        setTabs: function() {
+            return $scope.setTabs;
+        }
+    };
 
 	init();
 
