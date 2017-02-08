@@ -1,5 +1,7 @@
-<ul class="content-tabs_row" role="tablist">
-    <li ng-repeat="tab in tabMenu" class="content-tabs_tab" ng-click="selectTab(tab.tab)" ng-class="{'active': selectedTab === '{{tab.tab}}'}" id="{{tab.tab}}">
+<div>
+	<ul class="content-tabs_row" role="tablist">
+	    <li ng-repeat="tab in tabMenu" class="content-tabs_tab" ng-click="selectTab(tab.tab)" ng-class="{'active': selectedTab === '{{tab.tab}}'}" id="{{tab.tab}}">
         <span>{{tab.title}}</span>
     </li>
-</ul>
+	</ul>
+</div>
