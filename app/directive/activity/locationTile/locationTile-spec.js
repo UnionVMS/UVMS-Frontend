@@ -132,21 +132,21 @@ describe('locationTile', function() {
         it('should render the location tile with no data message when locationDetails is an object', function(){
             scope.locationDetails = {};
             
-            tile = compile('<location-tile field-title="nodata" multiple="false" location-details="locationDetails"></location-tile>')(scope);
+            tile = compile('<location-tile class="locTile" field-title="nodata" multiple="false" location-details="locationDetails"></location-tile>')(scope);
             tile.appendTo('#parent-container');
             scope.$digest(); 
             
-            expect(angular.element('.no-data').length).toBe(1);
+            expect(angular.element('.locTile .no-data').length).toBe(1);
         });
         
         it('should render the location tile with no data message when locationDetails is an array', function(){
             scope.locationDetails = [];
             
-            tile = compile('<location-tile field-title="nodata" multiple="true" location-details="locationDetails"></location-tile>')(scope);
+            tile = compile('<location-tile class="locTile" field-title="nodata" multiple="true" location-details="locationDetails"></location-tile>')(scope);
             tile.appendTo('#parent-container');
             scope.$digest(); 
             
-            expect(angular.element('.no-data').length).toBe(1);
+            expect(angular.element('.locTile .no-data').length).toBe(1);
         });
     });
     
