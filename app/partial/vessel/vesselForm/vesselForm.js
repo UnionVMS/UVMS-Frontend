@@ -472,7 +472,7 @@ angular.module('unionvmsWeb').controller('VesselFormCtrl',function($scope, $log,
 
         // Remove form errors
         angular.forEach($scope.vesselForm, function(ctrl, name) {
-            if (name.indexOf('$') != 0) {    
+            if (name.indexOf('$') !== 0) {    
                 angular.forEach(ctrl.$error, function(value, name) {
                     ctrl.$setValidity(name, null);
                 });
@@ -531,7 +531,7 @@ angular.module('unionvmsWeb').controller('VesselFormCtrl',function($scope, $log,
         updateCallback: $scope.updateVessel,
         cancelCallback: function() {
             $scope.clearForm();
-            $scope.toggleViewVessel();
+            $scope.cancelFormView();
         },
         showCancel: function() {
             return true;
