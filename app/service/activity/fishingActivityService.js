@@ -19,7 +19,7 @@ copy of the GNU General Public License along with the IFDM Suite. If not, see <h
  * @description
  *  A service to deal with any kind of fishing activity operation (e.g. Departure, Arrival, ...)
  */
-angular.module('unionvmsWeb').factory('fishingActivityService',function(Departure, activityRestService, loadingStatus) {
+angular.module('unionvmsWeb').factory('fishingActivityService',function(Departure, activityRestService, loadingStatus, FishingOperation) {
 
 	var faServ = {
         activityData: {},
@@ -42,6 +42,9 @@ angular.module('unionvmsWeb').factory('fishingActivityService',function(Departur
             case 'DEPARTURE':
                 getDeparture();
                 break;
+			case 'FISHING_OPERATION':
+				getFishingOperation();
+				break;
             //TODO other types of fa operations
         }
 	};
@@ -81,6 +84,25 @@ angular.module('unionvmsWeb').factory('fishingActivityService',function(Departur
 	    loadingStatus.isLoading('FishingActivity', true);
 	    activityRestService.getFishingActivityDetails('departure').then(function(response){
 	        faServ.activityData = new Departure();
+	        faServ.activityData.fromJson(response);
+	        loadingStatus.isLoading('FishingActivity', false);
+	    }, function(error){
+	        //TODO deal with error from rest service
+	        loadingStatus.isLoading('FishingActivity', false);
+	    });
+	}
+
+	/**
+	 * Get data specifically for fishing operations
+	 * 
+	 * @memberof fishingActivityService
+	 * @private
+	 */
+	function getFishingOperation(){
+	    //TODO use fa id in the REST request
+	    loadingStatus.isLoading('FishingActivity', true);
+	    activityRestService.getFishingActivityDetails('fishing_operation').then(function(response){
+	        faServ.activityData = new FishingOperation();
 	        faServ.activityData.fromJson(response);
 	        loadingStatus.isLoading('FishingActivity', false);
 	    }, function(error){

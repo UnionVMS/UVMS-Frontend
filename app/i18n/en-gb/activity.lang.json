@@ -171,6 +171,7 @@
     "error_getting_mdr_code_lists": "Error getting mdr code lists",
 	"mdr_settings_loading": "Loading MDR settings",
     "fa_type_departure": "Departure",
+    "fa_type_fishing_operation": "Fishing operation",
     "departure_optype_correction": "Correction",
     "title_fishing_activity": "Fishing Activity",
     "activity_summary_occurrence": "Occurrence",
@@ -204,5 +205,23 @@
     "tab_trip_table_header_duration": "Duration",
     "tab_trip_table_header_nCorrections": "Corrections",
     "tab_trip_table_header_nPositions": "Positions",
-    "tab_trip_table_header_alarm": "Alarm"
+    "tab_trip_table_header_alarm": "Alarm",
+
+    "fa_overview_item_occurence": "Occurence:",
+    "fa_overview_item_reason": "Reason:",
+    "fa_overview_item_fishery_type": "Fishery type:",
+    "fa_overview_item_targetted_species": "Targeted species:",
+    "fa_overview_item_type": "Type:",
+    "fa_overview_item_accepted": "Accepted:",
+    "fa_overview_item_id": "ID:",
+    "fa_overview_item_ref_id": "Ref. ID:",
+    "fa_overview_item_creation": "Creation:",
+    "fa_overview_item_purpose_code": "Purpose code:",
+    "fa_overview_item_purpose": "Purpose:",
+    "fa_overview_item_vessel_activity": "Vessel Activity:",
+    "fa_overview_item_no_operations": "Number of operations:",
+    "fa_overview_item_duration": "Duration:",
+    "fa_overview_item_start_landing": "Start of landing:",
+    "fa_overview_item_end_landing": "End of landing:",
+    "fa_overview_item_currency": "Currency:"
 }

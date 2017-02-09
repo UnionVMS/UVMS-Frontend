@@ -1,6 +1,32 @@
-<fieldset class="col-md-12 fieldsetStyle">
+<fieldset class="col-md-12 fieldsetStyle fa-overview-fieldset">
+    <legend class="fieldsetLegendStyle">
+        <a>{{ngModel.title}}</a>
+    </legend>
+    <div ng-repeat="(key,value) in ngModel.items" ng-switch="isArray(value)">
+        <label>{{'activity.fa_overview_item_' + key | i18n}}</label>
+        <span ng-switch-when="false">{{value}}</span>
+        <div ng-switch-when="true">
+            <span ng-repeat="item in value track by $index">
+                {{item}}
+                 <span ng-if="!$last">, </span>    
+            </span>
+        </div>
+    </div>
+
+    <fieldset class="col-md-12 fieldsetStyle fa-overview-fieldset" ng-if="ngModel.subTitle || ngModel.subItems">
         <legend class="fieldsetLegendStyle">
-            <a>TITLE</a>
+            <a>{{ngModel.subTitle}}</a>
         </legend>
-        
+        <div ng-repeat="(key,value) in ngModel.subItems" ng-switch="isArray(value)">
+            <label>{{'activity.fa_overview_item_' + key | i18n}}</label>
+            
+            <span ng-switch-when="false">{{value}}</span>
+            <div ng-switch-when="true">
+                <span ng-repeat="item in value track by $index">
+                    {{item}}
+                    <span ng-if="!$last">, </span>
+                </span>
+            </div>
+        </div>
+    </fieldset>
 </fieldset>
