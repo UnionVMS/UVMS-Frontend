@@ -68,7 +68,6 @@ describe('locationTile', function() {
             
             expect(angular.element('location-tile').length).toBe(1);
             expect(angular.element('legend').children().text()).toEqual('single');
-            expect(angular.element('.fa-location-arrow').length).toBe(1);
             expect(angular.element('.name').text()).toEqual(scope.locationDetails.name);
         });
         
@@ -96,9 +95,8 @@ describe('locationTile', function() {
             
             expect(angular.element('location-tile').length).toBe(1);
             expect(angular.element('legend').children().text()).toEqual('single');
-            expect(angular.element('.fa-location-arrow').length).toBe(1);
             expect(angular.element('.name').text()).toEqual(scope.locationDetails[0].name);
-        })
+        });
         
         it('should render the location tile with a single clickable location', function(){
             scope.locationDetails = buildSingleMock();
@@ -134,21 +132,21 @@ describe('locationTile', function() {
         it('should render the location tile with no data message when locationDetails is an object', function(){
             scope.locationDetails = {};
             
-            tile = compile('<location-tile field-title="nodata" multiple="false" location-details="locationDetails"></location-tile>')(scope);
+            tile = compile('<location-tile class="locTile" field-title="nodata" multiple="false" location-details="locationDetails"></location-tile>')(scope);
             tile.appendTo('#parent-container');
             scope.$digest(); 
             
-            expect(angular.element('.no-data').length).toBe(1);
+            expect(angular.element('.locTile .no-data').length).toBe(1);
         });
         
         it('should render the location tile with no data message when locationDetails is an array', function(){
             scope.locationDetails = [];
             
-            tile = compile('<location-tile field-title="nodata" multiple="true" location-details="locationDetails"></location-tile>')(scope);
+            tile = compile('<location-tile class="locTile" field-title="nodata" multiple="true" location-details="locationDetails"></location-tile>')(scope);
             tile.appendTo('#parent-container');
             scope.$digest(); 
             
-            expect(angular.element('.no-data').length).toBe(1);
+            expect(angular.element('.locTile .no-data').length).toBe(1);
         });
     });
     

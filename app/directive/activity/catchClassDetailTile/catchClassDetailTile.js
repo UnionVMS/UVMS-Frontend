@@ -70,14 +70,15 @@ controller('CatchClassDetailTileCtrl', function($scope, locale){
             showControls: false,
             useInteractiveGuideline: true,
             reduceXTicks: false,
+            margin: {
+                bottom: 20
+            },
             yAxis: {
                 axisLabel: locale.getString('activity.header_fa_weight'),
                 showMaxMin: false,
                 ticks: 5
             },
             xAxis: {
-                rotateYLabel: true,
-                rotateLabels: -45,
                 tickFormat: function(xValue){
                     return $scope.ngModel[xValue].species;
                 }
@@ -118,9 +119,10 @@ controller('CatchClassDetailTileCtrl', function($scope, locale){
      *  @memberof CatchClassDetailTileCtrl
      *  @public
      *  @param {String} text - The text to be displayed in the tooltip
+     *  @param {String} cssSel - The css selector class of the item against which the tip will be displayed
      */
-    $scope.displayDetailsTip = function(text){
-        var target = angular.element('.catch-class-detail-tile .details');
+    $scope.displayDetailsTip = function(text, cssSel){
+        var target = angular.element('.catch-class-detail-tile .' + cssSel);
         var tip;
         if (angular.isDefined($(target).attr('data-hasqtip'))){
             tip = $(target);
@@ -142,10 +144,14 @@ controller('CatchClassDetailTileCtrl', function($scope, locale){
                 },
                 style: {
                     classes: 'qtip-bootstrap'
+                },
+                events: {
+                    hide: function(evt, api){
+                        api.destroy(true);
+                    }
                 }
             });
-        }
-        
+        } 
         var api = tip.qtip('api');
         api.show();
     };
@@ -180,13 +186,13 @@ controller('CatchClassDetailTileCtrl', function($scope, locale){
         var colors = palette('tol-rainbow', 2);
         var lscSeries = {
             key: locale.getString('activity.lsc').toUpperCase(),
-            color: colors[0],
+            color: '7fbc41',
             values: []
         };
         
         var bmsSeries = {
             key: locale.getString('activity.bms').toUpperCase(),
-            color: colors[1],
+            color: 'd92120',
             values: []
         };
         

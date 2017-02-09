@@ -25,7 +25,10 @@ angular.module('unionvmsWeb').directive('activitySummaryTile', function() {
 		controller: 'ActivitySummaryTileCtrl',
 		scope: {
 		    faType: '@',
-		    summary: '='
+		    summary: '=',
+		    isLocClickable: '&',
+		    locClickCallback: '&',
+		    locDetails: '='
 		},
 		templateUrl: 'directive/activity/activitySummaryTile/activitySummaryTile.html'
 	};
@@ -41,6 +44,18 @@ angular.module('unionvmsWeb').directive('activitySummaryTile', function() {
  *  The controller for the activitySummaryTile directive ({@link unionvmsWeb.activitySummaryTile})
  */
 .controller('ActivitySummaryTileCtrl', function($scope, locale){
-    $scope.translatedFaType = locale.getString('activity.' + $scope.faType);
+    $scope.$watch('faType', function(newVal){
+        if (!angular.isDefined($scope.translatedFaType) && newVal !== ''){
+            $scope.translatedFaType = locale.getString('activity.' + $scope.faType);
+        }
+    });
+    
+    $scope.hasLocData = function(){
+        var status = false;
+        if (angular.isDefined($scope.locDetails) && ((_.isArray($scope.locDetails) && $scope.locDetails.length > 0) || (!_.isArray($scope.locDetails) && !_.isEqual($scope.locDetails, {})))){
+            status = true;
+        }
+        return status;
+    }
 });
 

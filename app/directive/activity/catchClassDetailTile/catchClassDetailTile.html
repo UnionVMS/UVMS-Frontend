@@ -21,13 +21,13 @@
 							<div class="row">
 								<div class="col-md-12 item-container">
 									<span class="labels">{{'activity.type' | i18n}}</span>&nbsp;
-									<span>{{selected.details.catchType}} <i class="fa fa-info-circle details" ng-if="selected.details.description" ng-mouseover="displayDetailsTip(selected.details.description)"></i></span>
+									<span>{{selected.details.catchType}} <i class="fa fa-info-circle details type-desc" ng-if="selected.details.typeDesc" ng-mouseover="displayDetailsTip(selected.details.typeDesc, 'type-desc')"></i></span>
 								</div>
 							</div>
 							<div class="row">
 								<div class="col-md-12 item-container">
-									<span class="labels">{{'activity.unit' | i18n}}</span>&nbsp;
-									<span>{{selected.details.unit}}</span>
+									<span class="labels">{{'activity.units' | i18n}}</span>&nbsp;
+									<span>{{selected.details.units}}</span>
 								</div>
 							</div>
 							<div class="row">
@@ -39,7 +39,7 @@
 							<div class="row">
 								<div class="col-md-12 item-container">
 									<span class="labels">{{'activity.weight_means' | i18n}}</span>&nbsp;
-									<span>{{selected.details.weightMeans}}</span>
+									<span>{{selected.details.weightMeans}} <i class="fa fa-info-circle details weight-means-desc" ng-if="selected.details.weightMeansDesc" ng-mouseover="displayDetailsTip(selected.details.weightMeansDesc, 'weight-means-desc')"></i></span>
 								</div>
 							</div>
 						</div>
@@ -49,7 +49,7 @@
 							<thead>
 								<tr>
 									<th>{{'activity.class' | i18n}}</th>
-									<th>{{'activity.header_fa_weight' | i18n}} (kg)</th>
+									<th>{{'activity.header_fa_weight' | i18n}}</th>
 								</tr>
 							</thead>
 							<tbody>

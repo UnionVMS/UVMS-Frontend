@@ -64,6 +64,7 @@ angular.module('unionvmsWeb').factory('activityService',function(locale, activit
     actServ.history = [];
     actServ.displayedHistory = [];
     actServ.details = {};
+    actServ.selReportDoc = {};
     actServ.activitiesHistory = [];
     actServ.displayedActivitiesHistory = [];
     
@@ -163,6 +164,7 @@ angular.module('unionvmsWeb').factory('activityService',function(locale, activit
         this.displayedActivitiesHistory = [];
         this.reportsList = getReportsListObject();
         this.historyList = getHistoryListObject();
+        this.selReportDoc = {};
         this.activitiesHistoryList = getActivitiesHistoryListObject();
         this.allPurposeCodes = [];
         
@@ -349,11 +351,12 @@ angular.module('unionvmsWeb').factory('activityService',function(locale, activit
      * @memberof activityService
      * @public
      * @alias getActivitiesHistory
-     * @param {Number} id - The id of the fishing activity report document
+     * @param {Object} reportDoc - The fa report document for which activities will be fetched
      * @returns {Promise} A promise that is either resolved with a list of activities or rejected with the corresponding error
      */
-    actServ.getActivitiesHistory = function(id){
+    actServ.getActivitiesHistory = function(reportDoc){
         actServ.clearAttributeByType('activitiesHistory');
+        actServ.selReportDoc = reportDoc;
         
         var payload = {
             pagination: {
@@ -365,7 +368,7 @@ angular.module('unionvmsWeb').factory('activityService',function(locale, activit
                 sortBy: 'ACTIVITY_TYPE'
             },
             searchCriteriaMap: {
-                'FA_REPORT_ID': id
+                'FA_REPORT_ID': reportDoc.id
             },
             searchCriteriaMapMultipleValues: {
                 'PURPOSE': actServ.getAllPurposeCodesArray()
