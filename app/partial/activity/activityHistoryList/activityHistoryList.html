@@ -77,8 +77,8 @@
 				<tbody>
 					<tr ng-repeat="activity in actServ.displayedActivitiesHistory" ng-if="actServ.displayedActivitiesHistory.length > 0 && !actServ.displayedActivitiesHistory.hasError && !actServ.displayedActivitiesHistory.isLoading">
 						<td ng-repeat="column in attrVisibility.fishingActivitiesColumns" ng-show="attrVisibility.fishingActivities[column]">
-							<div ng-show="attrVisibility.fishingActivities.FAReportType" ng-if="column === 'FAReportType'">{{ activity.FAReportType }}</div>
-							<div ng-show="attrVisibility.fishingActivities.activityType" ng-if="column === 'activityType'">{{ activity.activityType }}</div>
+							<div ng-show="attrVisibility.fishingActivities.FAReportType" ng-if="column === 'FAReportType'" title="{{ activity.FAReportType }}">{{ 'abbreviations.report_' + activity.FAReportType | i18n }}</div>
+							<div ng-show="attrVisibility.fishingActivities.activityType" ng-if="column === 'activityType'" title="{{ activity.activityType }}">{{ 'abbreviations.activity_' + activity.activityType | i18n }}</div>
 							<div ng-show="attrVisibility.fishingActivities.occurence" ng-if="column === 'occurence'">{{ activity.occurence | stDateUtc }}</div>
 							<div ng-show="attrVisibility.fishingActivities.purposeCode" ng-if="column === 'purposeCode'" class="with-icon">
 								<i class="fa {{ activity.purposeCode | stPurposeCode: true }}" title="{{ activity.purposeCode | stPurposeCode}}"></i>

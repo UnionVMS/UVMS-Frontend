@@ -1,0 +1,17 @@
+{
+    "report_DECLARATION": "DECL",
+    "report_NOTIFICATION": "NOT",
+    "activity_DEPARTURE": "DEP",
+    "activity_ARRIVAL": "ARR",
+    "activity_AREA_ENTRY": "ENTRY",
+    "activity_AREA_EXIT": "EXIT",
+    "activity_FISHING_OPERATION": "FOP",
+    "activity_LANDING": "LAN",
+    "activity_DISCARD": "DIS",
+    "activity_TRANSHIPMENT": "TRA",
+    "activity_RELOCATION": "RLC",
+    "activity_GEAR_SHOT": "GES",
+    "activity_GEAR_RETRIEVAL": "GER",
+    "activity_START_FISHING": "STFSH",
+    "activity_JOINED_FISHING_OPERATION": "JFO"
+}
