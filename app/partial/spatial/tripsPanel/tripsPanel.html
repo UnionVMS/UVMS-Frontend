@@ -25,8 +25,8 @@ copy of the GNU General Public License along with the IFDM Suite. If not, see <h
     </div>
     <!--TRIPS LIST (WHEN RUNNING REPORT WITHOUT MAP)-->
     <div ng-include="'partial/spatial/tripsPanel/tripsList/tripsList.html'" ng-if="false"></div>
-    <!--TRIP SUMMARY-->
-    <uib-tabset ng-show="repNav.isViewVisible('tripSummary')" class="trip-panel-content">
+    <!--TRIP SUMMARY--><!--FIXME: remove ng-if="false"-->
+    <uib-tabset ng-show="repNav.isViewVisible('tripSummary')" class="trip-panel-content" ng-if="false">
         <!-- active="tripSummServ.activeTab.index"-->
         <uib-tab index="$index" ng-repeat="tab in tripSummServ.tabs" active="tab.active" select="tripSummServ.initializeTrip($index)">
             <!--TAB HEADER-->
@@ -39,7 +39,6 @@ copy of the GNU General Public License along with the IFDM Suite. If not, see <h
             <!--TAB CONTENT-->
             <div class="trip-summary-tab" ng-if="tab.title === trip.id">
                 <div ng-include="'partial/spatial/tripsPanel/tripSummary/tripSummary.html'"></div>
-
             </div>
         </uib-tab>
     </uib-tabset>
@@ -47,4 +46,6 @@ copy of the GNU General Public License along with the IFDM Suite. If not, see <h
     <div ng-if="repNav.isViewVisible('catchEvolution')" ng-include="'partial/spatial/tripsPanel/catchEvolution/catchEvolution.html'"></div>
 	<div ng-if="repNav.isViewVisible('tripDeparturePanel')" ng-include="'partial/spatial/tripsPanel/tripDeparturePanel/tripDeparturePanel.html'"></div>
     <div ng-if="repNav.isViewVisible('tripFishingOperationPanel')" ng-include="'partial/spatial/tripsPanel/tripFishingOperationPanel/tripFishingOperationPanel.html'"></div>
+    <div ng-if="true" ng-include="'partial/spatial/tripsPanel/tripFishingOperationPanel/tripFishingOperationPanel.html'"></div>
+    <div ng-if="false" ng-include="'partial/spatial/tripsPanel/tripDeparturePanel/tripDeparturePanel.html'"></div>
 </div>

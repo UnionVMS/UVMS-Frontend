@@ -47,7 +47,7 @@ angular.module('unionvmsWeb').factory('FishingOperation',function() {
             purposeCode: undefined,
             purpose: undefined
         };
-        //this.fishingData = [];
+        this.fishingData = [];
     }
     
     /**
@@ -62,7 +62,7 @@ angular.module('unionvmsWeb').factory('FishingOperation',function() {
         this.port = data.port;
         this.gears = data.gears;
         this.reportDoc = data.reportDoc;
-        //this.fishingData = data.fishingData;
+        this.fishingData = data.fishingData;
     };
 
     var loadSummaryData = function(data){

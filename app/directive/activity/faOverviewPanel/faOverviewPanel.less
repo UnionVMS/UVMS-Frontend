@@ -8,6 +8,16 @@ fa-overview-panel {
             margin-bottom: 0;
             padding-bottom: 15px;
         }
+        .item-container {
+            display: flex;
+            .labels {
+                font-weight: bold;
+                white-space: nowrap;
+                &::after {
+                    content: ':'
+                }
+            }
+        }
     }
     > .fa-overview-fieldset {
         padding-bottom: 15px;

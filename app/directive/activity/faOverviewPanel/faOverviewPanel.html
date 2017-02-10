@@ -2,8 +2,9 @@
     <legend class="fieldsetLegendStyle">
         <a>{{ngModel.title}}</a>
     </legend>
-    <div ng-repeat="(key,value) in ngModel.items" ng-switch="isArray(value)">
-        <label>{{'activity.fa_overview_item_' + key | i18n}}</label>
+    <div class="item-container" ng-repeat="(key,value) in ngModel.items" ng-switch="isArray(value)">
+        <span class="labels">{{'activity.fa_overview_item_' + key | i18n}}</span>
+        &nbsp;
         <span ng-switch-when="false">{{value}}</span>
         <div ng-switch-when="true">
             <span ng-repeat="item in value track by $index">
@@ -17,9 +18,9 @@
         <legend class="fieldsetLegendStyle">
             <a>{{ngModel.subTitle}}</a>
         </legend>
-        <div ng-repeat="(key,value) in ngModel.subItems" ng-switch="isArray(value)">
-            <label>{{'activity.fa_overview_item_' + key | i18n}}</label>
-            
+        <div class="item-container" ng-repeat="(key,value) in ngModel.subItems" ng-switch="isArray(value)">
+            <span class="labels">{{'activity.fa_overview_item_' + key | i18n}}</span>
+            &nbsp;
             <span ng-switch-when="false">{{value}}</span>
             <div ng-switch-when="true">
                 <span ng-repeat="item in value track by $index">
