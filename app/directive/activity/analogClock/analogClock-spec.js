@@ -36,10 +36,10 @@ describe('analogClock', function() {
         return "2018-01-07T08:35:01"
     }
 
-    it('should render analog clock', inject(function($filter) {
+    it('should render analog clock', inject(function() {
         scope.clockData = buildMockData();
 
-        tile = compile('<analog-clock fa-type="faType" summary="summary"></analog-clock>')(scope);
+        tile = compile('<analog-clock clockData="clockData"></analog-clock>')(scope);
         tile.appendTo('#parent-container');
         scope.$digest();
 

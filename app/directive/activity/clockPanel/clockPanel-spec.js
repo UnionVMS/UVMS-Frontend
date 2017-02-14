@@ -51,7 +51,7 @@ describe('clockPanel', function() {
     it('should render clock panel and the properties should be defined', inject(function($filter) {
         scope.clockPanalData = buildMockData();
 
-        tile = compile('<clock-panel fa-type="faType" summary="summary"></clock-panel>')(scope);
+        tile = compile('<clock-panel clockPanalData="clockPanalData"></clock-panel>')(scope);
         tile.appendTo('#parent-container');
         scope.$digest();
 
