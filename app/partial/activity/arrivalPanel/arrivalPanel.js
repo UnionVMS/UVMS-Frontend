@@ -15,6 +15,12 @@ angular.module('unionvmsWeb').controller('ArrivalpanelCtrl', function($scope, $s
     
     var arrivalNotification = true;
 
+      /**
+       * Initialization function
+       * 
+       * @memberof ArrivalpanelCtrl
+       * @private
+       */
     var init = function() {
         if(arrivalNotification){
             $scope.faServ.getData('notification_arrival', arrivalData);
@@ -40,7 +46,6 @@ angular.module('unionvmsWeb').controller('ArrivalpanelCtrl', function($scope, $s
          * @alias arrivalData
          * @returns data for clock panel
          */
-
     var arrivalData = function() {
         $scope.data = [{
             "caption": (arrivalNotification === true) ? locale.getString('activity.clock_panel_estimated_time') : locale.getString('activity.clock_panel_arrival_time'),
