@@ -223,5 +223,12 @@
     "fa_overview_item_duration": "Duration",
     "fa_overview_item_start_landing": "Start of landing",
     "fa_overview_item_end_landing": "End of landing",
-    "fa_overview_item_currency": "Currency"
+    "fa_overview_item_currency": "Currency",
+
+    "catch_class_specie_column_location": "Location",
+    "catch_class_specie_column_specie": "Specie",
+    "catch_class_specie_column_lsc": "LSC",
+    "catch_class_specie_column_bms": "BMS",
+    "catch_class_specie_column_dim": "DIM",
+    "catch_class_specie_column_dis": "DIS"
 }
