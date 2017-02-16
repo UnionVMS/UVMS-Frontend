@@ -92,7 +92,7 @@ angular.module('unionvmsWeb').controller('pollingLogsCtrl',function($scope, $sta
         switch(status){
             case 'SUCCESSFUL' :
                 return 'label-success';
-            case 'FAILTED' :
+            case 'FAILED' :
                 return 'label-danger';
             default:
                 return 'label-warning';
