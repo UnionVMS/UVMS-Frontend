@@ -1,0 +1,41 @@
+<div class="vesselContacts col-md-12">
+    <fieldset ng-disabled="disableForm">
+        <div class="contact-list">
+            <div class="contact-item" ng-if="vessel.contact.length == 0">
+                <div class="col-md-3 form-group smallerpaddingright">
+                    <label>{{ 'vessel.vessel_details_contact_name' | i18n }}</label>
+                    <input type="text" name="contactName" id="asset-input-contact-name-0" class="form-control" ng-model="vessel.contact[0].name"/>
+                </div>
+                <div class="col-md-3 form-group smallerpadding">
+                    <label>{{ 'vessel.vessel_details_contact_email' | i18n }}</label>
+                    <input type="text" name="contactEmail" id="asset-input-contact-email-0" class="form-control" ng-model="vessel.contact[0].email"/>
+                </div>
+                <div class="col-md-2 form-group smallerpadding">
+                    <label>{{ 'vessel.vessel_details_contact_number' | i18n }}</label>
+                    <input type="text" name="contactNumber" id="asset-input-contact-number-0" class="form-control" ng-model="vessel.contact[0].number"/>
+                </div>
+            </div>
+
+            <div class="contact-item" ng-repeat="contact in vessel.contact | orderBy:orderByOwner">
+                <div class="col-md-3 form-group smallerpaddingright">
+                    <label>{{ 'vessel.vessel_details_contact_name' | i18n }}</label>
+                    <input type="text" name="contactName" id="asset-input-contact-name-{{$index}}" class="form-control" ng-model="contact.name"/>
+                </div>
+                <div class="col-md-3 form-group smallerpadding">
+                    <label>{{ 'vessel.vessel_details_contact_email' | i18n }}</label>
+                    <input type="text" name="contactEmail" id="asset-input-contact-email-{{$index}}" class="form-control" ng-model="contact.email"/>
+                </div>
+                <div class="col-md-2 form-group smallerpadding">
+                    <label>{{ 'vessel.vessel_details_contact_number' | i18n }}</label>
+                    <input type="text" name="contactNumber" id="asset-input-contact-number-{{$index}}" class="form-control" ng-model="contact.number"/>
+                </div>
+                <div id="asset-btn-remove-contact" class="btn btn-sm btn-default btn-removeContact" ng-if="vessel.contact.length > 1" ng-click="functions.removeContactItemCallback(vessel.contact, $index)" ng-hide="disableForm">
+                    <i class="fa fa-trash" title="{{ 'vessel.vessel_details_contact_remove' | i18n }}"></i>
+                </div>
+            </div>
+        </div>
+        <a id="asset-btn-add-contact" class="btn-addContact" ng-click="functions.addContactItemCallback(vessel.contact)" ng-hide="disableForm">
+            <i class="fa fa-plus"></i> {{ 'vessel.vessel_details_contact_add' | i18n }}
+        </a>
+    </fieldset>
+</div>

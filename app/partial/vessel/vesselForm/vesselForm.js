@@ -552,7 +552,7 @@ angular.module('unionvmsWeb').controller('VesselFormCtrl',function($scope, $log,
         }
     };
 
-    $scope.vesselDetailsFunctions = {
+    $scope.vesselContactsFunctions = {
         addContactItemCallback: $scope.addContactItem,
         removeContactItemCallback: $scope.removeContactItem
     };

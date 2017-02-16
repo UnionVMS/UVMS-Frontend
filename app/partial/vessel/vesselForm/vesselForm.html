@@ -10,7 +10,6 @@ FITNESS FOR A PARTICULAR PURPOSE.  See the GNU General Public License for more d
 copy of the GNU General Public License along with the IFDM Suite. If not, see <http://www.gnu.org/licenses/>.
 -->
 <div class="vesselForm" ng-controller="VesselFormCtrl">
-    <div></div>
     <div class="vesselContainer">
         <form name="vesselForm" method="post" novalidate >
         <div class="card" loading-indicator="waitingForVesselDataResponse || waitingForCreateResponse" size="small" type="SPINNER">
@@ -24,9 +23,11 @@ copy of the GNU General Public License along with the IFDM Suite. If not, see <h
             </menu-bar>
             <div class="row">
                 <div class="detailsContainer">
-                    <vessel-details vessel="vesselObj" vessel-form="vesselForm" submit-attempted="submitAttempted" disable-form="disableForm()" create-new-mode="isCreateNewMode()" existing-values="existingValues" functions="vesselDetailsFunctions"></vessel-details>
+                    <div>
+                        <vessel-details vessel="vesselObj" vessel-form="vesselForm" submit-attempted="submitAttempted" disable-form="disableForm()" create-new-mode="isCreateNewMode()" existing-values="existingValues"></vessel-details>
+                        <vessel-contacts vessel="vesselObj" disable-form="disableForm()" functions="vesselContactsFunctions"></vessel-contacts>
+                    </div>
                 </div>
-
                 <div class="notesContainer">
                     <div class="col-md-3 notesListContainer">
                         <div class="row">
