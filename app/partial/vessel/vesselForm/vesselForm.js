@@ -506,29 +506,17 @@ angular.module('unionvmsWeb').controller('VesselFormCtrl',function($scope, $log,
     };
 
     $scope.menuBarFunctions = {
-        addMobileTerminal: function() {
-            $scope.toggleAddNewMobileTerminalForm();
-        },
-        showMobileTerminal: function(vessel) {
-            if (vessel) {
-                return angular.isDefined(vessel.vesselId) && vessel.vesselId != null && vessel.active;
-            }
-            return false;
-        },
-        disableAddMobileTerminal: function(vessel) {
-            if (vessel) {
-                return $scope.vesselForm.cfr.$invalid || $scope.vesselForm.ircs.$invalid || !vessel.ircs || !vessel.cfr;
-            }
-            return false;
-        },
         saveCallback: $scope.createNewVessel,
+        updateCallback: $scope.updateVessel,
+        showSave: function(vessel) {
+            return true; 
+        },
         disableSave: function(vessel) {
             if (vessel) {
                 return $scope.noFormChange || $scope.vesselForm.$invalid;
             }
             return false;
         },
-        updateCallback: $scope.updateVessel,
         cancelCallback: function() {
             $scope.clearForm();
             $scope.cancelFormView();
@@ -549,7 +537,22 @@ angular.module('unionvmsWeb').controller('VesselFormCtrl',function($scope, $log,
                 return angular.isDefined(vessel.vesselId) && vessel.vesselId != null && vessel.active;
             }
             return false;
-        }
+        },
+        addMobileTerminal: function() {
+            $scope.toggleAddNewMobileTerminalForm();
+        },
+        showMobileTerminal: function(vessel) {
+            if (vessel) {
+                return angular.isDefined(vessel.vesselId) && vessel.vesselId != null && vessel.active;
+            }
+            return false;
+        },
+        disableAddMobileTerminal: function(vessel) {
+            if (vessel) {
+                return $scope.vesselForm.cfr.$invalid || $scope.vesselForm.ircs.$invalid || !vessel.ircs || !vessel.cfr;
+            }
+            return false;
+        },
     };
 
     $scope.vesselContactsFunctions = {

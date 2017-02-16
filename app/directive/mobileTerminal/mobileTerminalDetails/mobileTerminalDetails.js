@@ -395,6 +395,9 @@ angular.module('unionvmsWeb')
         $scope.menuBarFunctions = {
             saveCallback: $scope.createNewMobileTerminal,
             updateCallback: $scope.updateMobileTerminal,
+            showSave: function(mobileTerminal) {
+                return true; 
+            },
             disableSave: function(mobileTerminal) {
                 if (mobileTerminal) {
                     return $scope.disableSave;
