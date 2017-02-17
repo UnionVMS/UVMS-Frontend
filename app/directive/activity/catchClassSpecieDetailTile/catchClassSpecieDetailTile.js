@@ -3,74 +3,56 @@ angular.module('unionvmsWeb').directive('catchClassSpecieDetailTile', function(l
 		restrict: 'E',
 		replace: true,
 		scope: {
-
+			tileTitle: '@',
+		    ngModel: '=',
+		    isLocationClickable: '=',
+		    bufferDistance: '@',
+		    clickCallback: '&'
 		},
 		templateUrl: 'directive/activity/catchClassSpecieDetailTile/catchClassSpecieDetailTile.html',
 		link: function(scope, element, attrs, fn) {
 
 			scope.columnOrder = [
 				{
-					id: 'location',
-					text: locale.getString('activity.catch_class_specie_column_location')
+					id: 'locations',
+					text: locale.getString('activity.catch_class_specie_column_location'),
+					value: 'name'
 				},
 				{
-					id: 'specie',
+					id: 'species',
 					text: locale.getString('activity.catch_class_specie_column_specie')
 				},
 				{
 					id: 'lsc',
-					text: locale.getString('activity.catch_class_specie_column_lsc')
+					text: locale.getString('activity.catch_class_specie_column_lsc'),
+					value: 'weight'
 				},
 				{
 					id: 'bms',
-					text: locale.getString('activity.catch_class_specie_column_bms')
-				},
-				{
-					id: 'dim',
-					text: locale.getString('activity.catch_class_specie_column_dim')
+					text: locale.getString('activity.catch_class_specie_column_bms'),
+					value: 'weight'
 				},
 				{
 					id: 'dis',
-					text: locale.getString('activity.catch_class_specie_column_dis')
+					text: locale.getString('activity.catch_class_specie_column_dis'),
+					value: 'weight'
+				},
+				{
+					id: 'dim',
+					text: locale.getString('activity.catch_class_specie_column_dim'),
+					value: 'weight'
 				}
 			];
 
+			scope.classColumnOrder = ['lsc', 'bms', 'dis', 'dim'];
 
-			scope.data = [
-				{
-					location: 'location1',
-					specie: 'specie1',
-					lsc: 1,
-					bms: 3,
-					dim: 2,
-					dis: 4
-				},
-				{
-					location: 'location2',
-					specie: 'specie1',
-					lsc: 1,
-					bms: 3,
-					dim: 2,
-					dis: 4
-				},
-				{
-					location: 'location3',
-					specie: 'specie1',
-					lsc: 1,
-					bms: 3,
-					dim: 2,
-					dis: 4
-				},
-				{
-					location: 'location4',
-					specie: 'specie1',
-					lsc: 1,
-					bms: 3,
-					dim: 2,
-					dis: 4
-				}
-			];
+			scope.ngModel[0].selected = true;
+			scope.selectedSpecieLocation = scope.ngModel[0];
+			scope.selectedClass = 'lsc';
 
+			scope.selectClass = function(className){
+				scope.selectedClass = className;
+			};
 		}
 	};
 });

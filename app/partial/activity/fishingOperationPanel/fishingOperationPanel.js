@@ -19,7 +19,7 @@ angular.module('unionvmsWeb').controller('FishingoperationpanelCtrl',function($s
     /**
      * Check if a location tile should be clickable taking into consideration the route and the report configuration
      * 
-     * @memberof DeparturepanelCtrl
+     * @memberof FishingoperationpanelCtrl
      * @public
      * @alias isLocationClickable
      * @returns {Boolean} Whether the location tile should be clickable or not
@@ -36,7 +36,7 @@ angular.module('unionvmsWeb').controller('FishingoperationpanelCtrl',function($s
     /**
      * The click location callback function
      * 
-     * @memberof DeparturepanelCtrl
+     * @memberof FishingoperationpanelCtrl
      * @public
      * @alias locationClickCallback
      */

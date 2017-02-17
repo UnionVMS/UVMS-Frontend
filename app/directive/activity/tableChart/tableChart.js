@@ -4,7 +4,8 @@ angular.module('unionvmsWeb').directive('tableChart', function() {
 		replace: false,
 		scope: {
 			columns: '=',
-			ngModel: '='
+			ngModel: '=',
+			selectedItem: '='
 		},
 		templateUrl: 'directive/activity/tableChart/tableChart.html',
 		link: function(scope, element, attrs, fn) {
@@ -15,6 +16,10 @@ angular.module('unionvmsWeb').directive('tableChart', function() {
 					delete item.selected;
 				});
 				scope.ngModel[idx].selected = true;
+
+				if(angular.isDefined(scope.selectedItem)){
+					scope.selectedItem = scope.ngModel[idx];
+				}
 			};
 
 			scope.switchMode = function(){

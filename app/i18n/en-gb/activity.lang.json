@@ -195,6 +195,8 @@
     "class": "Class",
     "bms": "BMS",
     "lsc": "LSC",
+    "dis": "DIS",
+    "dim": "DIM",
     "weight_means": "Weighting means",
     "departure_catch_detail": "Retained on board",
     "location": "Location",
