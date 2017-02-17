@@ -22,12 +22,12 @@
 							<div class="row">
 								<div class="col-md-12 item-container">
 									<span class="labels">{{'activity.type' | i18n}}</span>&nbsp;
-									<span>{{selectedSpecieLocation[selectedClass].type}}</span>
+									<span>{{selectedSpecieLocation[selectedClass].type}} <i class="fa fa-info-circle details type-desc" ng-if="selected.details.typeDesc" ng-mouseover="displayDetailsTip(selected.details.typeDesc, 'type-desc')"></i></span>
 								</div>
 							</div>
 							<div class="row">
 								<div class="col-md-12 item-container">
-									<span class="labels">{{'activity.unit' | i18n}}</span>&nbsp;
+									<span class="labels">{{'activity.units' | i18n}}</span>&nbsp;
 									<span>{{selectedSpecieLocation[selectedClass].unit}}</span>
 								</div>
 							</div>
@@ -40,7 +40,7 @@
 							<div class="row">
 								<div class="col-md-12 item-container">
 									<span class="labels">{{'activity.weight_means' | i18n}}</span>&nbsp;
-									<span>{{selectedSpecieLocation[selectedClass].weight_mean}}</span>
+									<span>{{selectedSpecieLocation[selectedClass].weight_mean}}  <i class="fa fa-info-circle details weight-means-desc" ng-if="selected.details.weightMeansDesc" ng-mouseover="displayDetailsTip(selected.details.weightMeansDesc, 'weight-means-desc')"></i></span>
 								</div>
 							</div>
 						</div>

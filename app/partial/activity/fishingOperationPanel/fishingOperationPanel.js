@@ -1,9 +1,9 @@
-angular.module('unionvmsWeb').controller('FishingoperationpanelCtrl',function($scope,fishingActivityService,loadingStatus,$state,tripSummaryService,activityRestService){
+angular.module('unionvmsWeb').controller('FishingoperationpanelCtrl',function($scope,fishingActivityService,loadingStatus,$state,tripSummaryService,activityRestService,FishingOperation){
 
     $scope.faServ = fishingActivityService;
     
     var init = function(){
-        $scope.faServ.getData('fishing_operation');
+        $scope.faServ.getFishingActivity(new FishingOperation());
         loadingStatus.isLoading('FishingActivity', true);
         //activityRestService.getTripCatchDetail($scope.faServ.id).then(function(response){
         //FIXME id is hardcoded
