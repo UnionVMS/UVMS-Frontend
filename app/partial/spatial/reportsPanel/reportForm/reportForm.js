@@ -56,6 +56,53 @@ angular.module('unionvmsWeb').controller('ReportformCtrl',function($scope, $moda
     
     $scope.repFormServ = reportFormService;
 
+
+    $scope.aggregationTypes = [
+        {
+            code: "fs",
+            text: locale.getString('spatial.reports_form_aggregation_type_fs')
+        },
+        {
+            code: "vessel",
+            text: locale.getString('spatial.reports_form_aggregation_type_vessel')
+        },
+        {
+            code: "period",
+            text: locale.getString('spatial.reports_form_aggregation_type_period'),
+            items: [
+                {
+                    code: "day",
+                    text: locale.getString('spatial.reports_form_aggregation_type_period_day')
+                },
+                {
+                    code: "month",
+                    text: locale.getString('spatial.reports_form_aggregation_type_period_month')
+                },
+                {
+                    code: "year",
+                    text: locale.getString('spatial.reports_form_aggregation_type_period_year')
+                }
+
+            ]
+        },
+        {
+            code: "area",
+            text: locale.getString('spatial.reports_form_aggregation_type_area')
+        },
+        {
+            code: "geartype",
+            text: locale.getString('spatial.reports_form_aggregation_type_geartype')
+        },
+        {
+            code: "species",
+            text: locale.getString('spatial.reports_form_aggregation_type_species')
+        },
+        {
+            code: "presentation",
+            text: locale.getString('spatial.reports_form_aggregation_type_presentation')
+        }
+    ];
+
     $scope.showSaveBtn = function(){
         var result = false;
         if ($scope.formMode === 'CREATE'){

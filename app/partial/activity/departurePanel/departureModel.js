@@ -23,7 +23,7 @@ copy of the GNU General Public License along with the IFDM Suite. If not, see <h
  * @description
  *  A model to store all the data related to a departure in a standardized way
  */
-angular.module('unionvmsWeb').factory('Departure',function() {
+angular.module('unionvmsWeb').factory('Departure',function(mdrCacheService) {
     
     function Departure(){
         this.faType = 'fa_type_departure';
@@ -60,10 +60,68 @@ angular.module('unionvmsWeb').factory('Departure',function() {
     Departure.prototype.fromJson = function(data){
         this.summary = data.summary;
         this.port = data.port;
-        this.gears = data.gears;
         this.reportDoc = data.reportDoc;
+        this.gears = data.gears;
         this.fishingData = data.fishingData;
+        addGearDescription(this);
+        addCatchTypeDescription(this);
+        addWeightMeansDescription(this);
     };
+    
+    /**
+     * Adds gear description from MDR code lists into the gears type attribute.
+     * 
+     * @memberof Departure
+     * @private
+     * @param {Object} departure - A reference to the Departure object
+     * @param {Array} data - An array containing the available gears
+     */
+    function addGearDescription(departure){
+        mdrCacheService.getCodeList('gear_type').then(function(response){
+            angular.forEach(departure.gears, function(item) {
+                var mdrRec = _.findWhere(response, {code: item.type});
+                if (angular.isDefined(mdrRec)){
+                    item.type = item.type + ' - ' + mdrRec.description;
+                }
+            });
+        });
+    }
+    
+    /**
+     * Adds catch type description from MDR code lists into the details object.
+     * 
+     * @memberof Departure
+     * @private
+     * @param {Object} departure - A reference to the Departure object
+     */
+    function addCatchTypeDescription(departure){
+        mdrCacheService.getCodeList('fa_catch_type').then(function(response){
+            angular.forEach(departure.fishingData, function(item) {
+                var mdrRec = _.findWhere(response, {code: item.details.catchType});
+                if (angular.isDefined(mdrRec)){
+                    item.details.typeDesc = mdrRec.description;
+                }
+            });
+        });
+    }
+    
+    /**
+     * Adds weight means description from MDR code lists into the details object.
+     * 
+     * @memberof Departure
+     * @private
+     * @param {Object} departure - A reference to the Departure object
+     */
+    function addWeightMeansDescription(departure){
+        mdrCacheService.getCodeList('weight_means').then(function(response){
+            angular.forEach(departure.fishingData, function(item) {
+                var mdrRec = _.findWhere(response, {code: item.details.weightMeans});
+                if (angular.isDefined(mdrRec)){
+                    item.details.weightMeansDesc = mdrRec.description;
+                }
+            });
+        });
+    }
     
     return Departure;
 });

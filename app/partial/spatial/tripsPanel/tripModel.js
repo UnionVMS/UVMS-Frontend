@@ -310,20 +310,24 @@ angular.module('unionvmsWeb').factory('Trip',function(locale,unitConversionServi
      */
     var loadCatch = function(self,data){
 
-        angular.forEach(data, function(type,typeName){
-            type.title = locale.getString('activity.catch_panel_title_' + typeName);
-            type.caption = locale.getString('activity.catch_panel_caption_' + typeName) + ' ' + type.total + ' kg';
+        //if has speciesList in the child properties
+        if(_.without(_.pluck(data, 'speciesList'),undefined).length > 0){
+            angular.forEach(data, function(type,typeName){
+                type.title = locale.getString('activity.catch_panel_title_' + typeName);
+                type.caption = locale.getString('activity.catch_panel_caption_' + typeName) + ' ' + type.total + ' kg';
 
-            if(angular.isDefined(type.speciesList) && type.speciesList.length > 0){
-                var colors = palette('tol-rainbow', type.speciesList.length);
-                angular.forEach(type.speciesList, function(value,key){
-                    type.speciesList[key].color = '#' + colors[key];
-                    type.speciesList[key].tableColor = {'background-color': tinycolor('#' + colors[key]).setAlpha(0.7).toRgbString()};
-                });
-            }
-        });
-
-		self.catchDetails = data;
+                if(angular.isDefined(type.speciesList) && type.speciesList.length > 0){
+                    var colors = palette('tol-rainbow', type.speciesList.length);
+                    angular.forEach(type.speciesList, function(value,key){
+                        type.speciesList[key].color = '#' + colors[key];
+                        type.speciesList[key].tableColor = {'background-color': tinycolor('#' + colors[key]).setAlpha(0.7).toRgbString()};
+                    });
+                }
+            });
+            self.catchDetails = data;
+        }else{
+            self.catchDetails = undefined;
+        }
 	};
 
 	return Trip;

@@ -1,4 +1,39 @@
 <div class="col-md-12 activity-history-list" ng-controller="ActivityhistorylistCtrl">
+	<div class="fa-report-form row">
+		<span class="form-title col-md-12">{{'activity.fa_report_doc_form_title' | i18n}}</span>
+		<div class="form-horizontal">
+			<div class="form-group col-md-6">
+				<label class="col-sm-4 control-label">{{'activity.header_fa_purpose_code' | i18n}}</label>
+				<div class="col-sm-8">
+		      		<p class="form-control-static">{{actServ.selReportDoc.purposeCode | stPurposeCode}}</p>
+		    	</div>
+			</div>
+			<div class="form-group col-md-6">
+				<label class="col-sm-4 control-label">{{'activity.header_fa_flux_party_name' | i18n}}</label>
+				<div class="col-sm-8">
+		      		<p class="form-control-static">{{actServ.selReportDoc.ownerFluxPartyName}}</p>
+		    	</div>
+			</div>
+			<div class="form-group col-md-6">
+				<label class="col-sm-4 control-label">{{'activity.header_fa_correction_type' | i18n}}</label>
+				<div class="col-sm-8">
+		      		<p class="form-control-static">{{actServ.selReportDoc.correctionType}}</p>
+		    	</div>
+			</div>
+			<div class="form-group col-md-6">
+				<label class="col-sm-4 control-label">{{'activity.header_fa_creation_date' | i18n}}</label>
+				<div class="col-sm-8">
+		      		<p class="form-control-static">{{actServ.selReportDoc.creationDate | stDateUtc}}</p>
+		    	</div>
+			</div>
+			<div class="form-group col-md-6">
+				<label class="col-sm-4 control-label">{{'activity.header_fa_accepted_date' | i18n}}</label>
+				<div class="col-sm-8">
+		      		<p class="form-control-static">{{actServ.selReportDoc.acceptedDate | stDateUtc}}</p>
+		    	</div>
+			</div>
+		</div>
+	</div>
 	<div st-table="actServ.displayedActivitiesHistory" st-safe-src="actServ.activitiesHistory">
 		<div class="table-responsive-force">
 			<table class="table table-striped table-condensed">
@@ -42,8 +77,8 @@
 				<tbody>
 					<tr ng-repeat="activity in actServ.displayedActivitiesHistory" ng-if="actServ.displayedActivitiesHistory.length > 0 && !actServ.displayedActivitiesHistory.hasError && !actServ.displayedActivitiesHistory.isLoading">
 						<td ng-repeat="column in attrVisibility.fishingActivitiesColumns" ng-show="attrVisibility.fishingActivities[column]">
-							<div ng-show="attrVisibility.fishingActivities.FAReportType" ng-if="column === 'FAReportType'">{{ activity.FAReportType }}</div>
-							<div ng-show="attrVisibility.fishingActivities.activityType" ng-if="column === 'activityType'">{{ activity.activityType }}</div>
+							<div ng-show="attrVisibility.fishingActivities.FAReportType" ng-if="column === 'FAReportType'" title="{{ activity.FAReportType }}">{{ 'abbreviations.report_' + activity.FAReportType | i18n }}</div>
+							<div ng-show="attrVisibility.fishingActivities.activityType" ng-if="column === 'activityType'" title="{{ activity.activityType }}">{{ 'abbreviations.activity_' + activity.activityType | i18n }}</div>
 							<div ng-show="attrVisibility.fishingActivities.occurence" ng-if="column === 'occurence'">{{ activity.occurence | stDateUtc }}</div>
 							<div ng-show="attrVisibility.fishingActivities.purposeCode" ng-if="column === 'purposeCode'" class="with-icon">
 								<i class="fa {{ activity.purposeCode | stPurposeCode: true }}" title="{{ activity.purposeCode | stPurposeCode}}"></i>

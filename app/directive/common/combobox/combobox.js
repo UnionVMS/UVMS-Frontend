@@ -33,7 +33,7 @@ angular.module('unionvmsWeb').directive('combobox', function(comboboxService,loc
             comboSection: '=',
             initCallback: '=',
             noPlaceholderOnList: '@',
-            defaultValue: '@',
+            defaultValue: '=',
             hideSelectedItems: '@',
             minSelections: '=',
             listClass: '@'
@@ -380,7 +380,16 @@ angular.module('unionvmsWeb').directive('combobox', function(comboboxService,loc
                     scope.selectVal(item);
                 }else{
                     scope.removeSelectedItem(item.code);
+                    
+                    if(angular.isDefined(scope.callback)){
+                        var extraParams;
+                        if(angular.isDefined(scope.callbackParams)){
+                            extraParams = scope.callbackParams;
+                        }
+                        scope.callback(item, extraParams);
+                    }
                 }
+                comboboxService.setActiveCombo(scope);
             };
             
             var init = function(){

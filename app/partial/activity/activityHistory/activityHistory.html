@@ -16,7 +16,7 @@ copy of the GNU General Public License along with the IFDM Suite. If not, see <h
 				<!-- THEAD -->
 				<div class="thead row container-fluid">
 					<div class="tr row">
-						<div class="th col-md-2" st-sort="purposeCode" st-class-ascent="sorting_asc" st-class-descent="sorting_desc" st-skip-natural="true">{{'activity.header_fa_purpose_code' | i18n}}</div>
+						<div class="th col-md-2 center-header" st-sort="purposeCode" st-class-ascent="sorting_asc" st-class-descent="sorting_desc" st-skip-natural="true">{{'activity.header_fa_purpose_code' | i18n}}</div>
 						<div class="th col-md-2" st-sort="ownerFluxPartyName" st-class-ascent="sorting_asc" st-class-descent="sorting_desc" st-skip-natural="true">{{'activity.header_fa_flux_party_name' | i18n}}</div>
 						<div class="th col-md-2" st-sort="correctionType" st-class-ascent="sorting_asc" st-class-descent="sorting_desc" st-skip-natural="true">{{'activity.header_fa_correction_type' | i18n}}</div>
 						<div class="th col-md-2" st-sort="creationDate" st-class-ascent="sorting_asc" st-class-descent="sorting_desc" st-skip-natural="true">{{'activity.header_fa_creation_date' | i18n}}</div>
@@ -38,7 +38,9 @@ copy of the GNU General Public License along with the IFDM Suite. If not, see <h
 				<!-- TBODY -->
 				<div class="tbody">
 					<div class="tr row" ng-repeat="item in actServ.displayedHistory" ng-if="actServ.displayedHistory.length > 0 && !actServ.historyList.hasError && !actServ.historyList.isLoading">
-						<div class="td col-md-2">{{item.purposeCode | stPurposeCode}}</div>
+						<div class="td col-md-2 with-icon">
+							<i class="fa {{ item.purposeCode | stPurposeCode: true }}" title="{{ item.purposeCode | stPurposeCode}}"></i>
+						</div>
 						<div class="td col-md-2">{{item.ownerFluxPartyName}}</div>
 						<div class="td col-md-2">{{item.correctionType}}</div>
 						<div class="td col-md-2">{{item.creationDate | stDateUtc}}</div>

@@ -42,7 +42,14 @@ describe('activitySummaryTile', function() {
         };
     }
     
-    it('should render the activity summary tile', inject(function($filter) {
+    function buildPortData(){
+        return {
+            "name": "Test port",
+            "geometry": "POINT(-121.7621 -49.65102)"
+        }
+    }
+    
+    it('should render the activity summary tile without location tile', inject(function($filter) {
         scope.summary = buildMockData();
         scope.faType = 'fa_type_departure';
         
@@ -55,5 +62,22 @@ describe('activitySummaryTile', function() {
         expect(angular.element('.item-container').children().eq(3).text()).toEqual(scope.summary.reason);
         expect(angular.element('.item-container').children().eq(5).text()).toEqual(scope.summary.fisheryType);
         expect(angular.element('.item-container').children().eq(7).text()).toEqual($filter('stArrayToString')(scope.summary.targetedSpecies, ', '));
+    }));
+    
+    it('should render the activity summary tile with location tile', inject(function($filter) {
+        scope.summary = buildMockData();
+        scope.faType = 'fa_type_departure';
+        scope.port = buildPortData();
+        
+        tile = compile('<activity-summary-tile fa-type="faType" summary="summary" loc-details="port"></activity-summary-tile>')(scope); 
+        tile.appendTo('#parent-container');
+        scope.$digest();
+        
+        expect(angular.element('activity-summary-tile').length).toBe(1);
+        expect(angular.element('.item-container').children().eq(1).text()).toEqual($filter('stDateUtc')(scope.summary.occurence));
+        expect(angular.element('.item-container').children().eq(3).text()).toEqual(scope.summary.reason);
+        expect(angular.element('.item-container').children().eq(5).text()).toEqual(scope.summary.fisheryType);
+        expect(angular.element('.item-container').children().eq(7).text()).toEqual($filter('stArrayToString')(scope.summary.targetedSpecies, ', '));
+        expect(angular.element('.location-tile').length).toBe(1);
     }));
 });
