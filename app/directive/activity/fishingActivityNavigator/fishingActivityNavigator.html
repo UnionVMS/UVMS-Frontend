@@ -10,7 +10,7 @@ FITNESS FOR A PARTICULAR PURPOSE.  See the GNU General Public License for more d
 copy of the GNU General Public License along with the IFDM Suite. If not, see <http://www.gnu.org/licenses/>.
 -->
 <div class="fishingActivityNavigator">
-	<div class="activity-slider slider-left" ng-show="timeline.previousItem.idx || timeline.previousItem.idx >= 0">
+	<div class="activity-slider slider-left" ng-if="timeline.previousItem.idx || timeline.previousItem.idx >= 0">
 		<div class="slider-container container-left" ng-click="goToPrevious()">
 			<a>
 				<i class="fa fa-chevron-up"></i>
@@ -21,7 +21,7 @@ copy of the GNU General Public License along with the IFDM Suite. If not, see <h
 		</div>
 	</div>
 	<div ng-include="partial"></div>
-	<div class="activity-slider slider-right" ng-show="timeline.nextItem.idx">
+	<div class="activity-slider slider-right" ng-if="timeline.nextItem.idx">
 		<div class="slider-container container-right" ng-click="goToNext()">
 			<a>
 				<i class="fa fa-chevron-up"></i>
