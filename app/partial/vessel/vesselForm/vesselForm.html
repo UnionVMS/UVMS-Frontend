@@ -48,8 +48,8 @@ copy of the GNU General Public License along with the IFDM Suite. If not, see <h
                                 </tr>
                             </thead>
                             <tbody>
-                                <tr ng-repeat="item in vesselObjOriginal.notes | orderBy :'-date' | limitTo: vesselNotesSize track by item.id" class="list">
-                                    <td><a ng-click="viewVesselNotesDetails(item)" id="asset-btn-notes-item">{{item.activity}}</a></td>
+                                <tr ng-repeat="item in vesselObjOriginal.notes | orderBy :'-date' | limitTo: vesselNotesSize track by item.id" class="list" ng-click="viewVesselNotesDetails(item)" id="asset-btn-notes-item">
+                                    <td>{{item.activity}}</td>
                                     <td>{{item.date | confDateFormat}}</td>
                                 </tr>
                             </tbody>

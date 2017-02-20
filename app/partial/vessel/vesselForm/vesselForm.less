@@ -32,12 +32,21 @@ copy of the GNU General Public License along with the IFDM Suite. If not, see <h
                     font-weight: 500;
                 }
 
-                .list td {
-                    &:first-child {
-                        width: 30%;
+                .list {
+                    color: @primaryColor; 
+                    cursor: pointer;
+
+                    &:hover {
+                        color: @primaryColorHover;
                     }
-                    &:nth-child(2) {
-                        width: 70%;
+
+                    td {
+                        &:first-child {
+                            width: 30%;
+                        }
+                        &:nth-child(2) {
+                            width: 70%;
+                        }
                     }
                 }
             }
