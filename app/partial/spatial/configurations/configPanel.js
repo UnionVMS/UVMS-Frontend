@@ -48,7 +48,7 @@ angular.module('unionvmsWeb').controller('ConfigpanelCtrl',function($scope, $anc
 	
 	$scope.cancel = function(){
 	    $scope.repNav.goToPreviousView();
-	    mapService.updateMapSize()
+	    mapService.updateMapSize();
 	}
 	
     //Update config copy after saving new preferences
