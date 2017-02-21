@@ -7,65 +7,71 @@
 		<!-- <div class="navigator">
 			<i class="fa fa-th-large"></i>
 		</div> -->
-		<div class="col-md-5">
+		<div class="col-md-5 table-chart-container" resizable r-directions="['right']" r-flex="true">
 			<!--<nvd3 options="options" data="chartData"></nvd3>-->
 			<table-chart ng-model="ngModel" columns="columnOrder" selected-item="selectedSpecieLocation"></table-chart>
 		</div>
-		<div class="col-md-7">
-			<div class="row">
-				<div class="col-md-12 species-title">{{selectedSpecieLocation.species}} - {{selectedSpecieLocation.speciesName}}</div>
-			</div>
-			<div class="row global-container">
-				<div class="col-md-4">
-					<div class="row">
-						<div class="col-md-12 section">
-							<div class="row">
-								<div class="col-md-12 item-container">
-									<span class="labels">{{'activity.type' | i18n}}</span>&nbsp;
-									<span>{{selectedSpecieLocation[selectedClass].type}} <i class="fa fa-info-circle details type-desc" ng-if="selected.details.typeDesc" ng-mouseover="displayDetailsTip(selected.details.typeDesc, 'type-desc')"></i></span>
+		<div class="col-md-7 details-content">
+			<div class="col-md-12">
+				<div class="global-container">
+					<div class="col-md-4">
+						<div class="row">
+							<div class="col-md-12 section">
+								<div class="row">
+									<div class="col-md-12 item-container">
+										<span class="labels">{{'activity.type' | i18n}}</span>&nbsp;
+										<span>{{selectedSpecieLocation[selectedClass].type}} <i class="fa fa-info-circle details type-desc" ng-if="selected.details.typeDesc" ng-mouseover="displayDetailsTip(selected.details.typeDesc, 'type-desc')"></i></span>
+									</div>
 								</div>
-							</div>
-							<div class="row">
-								<div class="col-md-12 item-container">
-									<span class="labels">{{'activity.units' | i18n}}</span>&nbsp;
-									<span>{{selectedSpecieLocation[selectedClass].unit}}</span>
+								<div class="row">
+									<div class="col-md-12 item-container">
+										<span class="labels">{{'activity.units' | i18n}}</span>&nbsp;
+										<span>{{selectedSpecieLocation[selectedClass].unit}}</span>
+									</div>
 								</div>
-							</div>
-							<div class="row">
-								<div class="col-md-12 item-container">
-									<span class="labels">{{'activity.header_fa_weight' | i18n}}</span>&nbsp;
-									<span>{{selectedSpecieLocation[selectedClass].weight}} kg</span>
+								<div class="row">
+									<div class="col-md-12 item-container">
+										<span class="labels">{{'activity.header_fa_weight' | i18n}}</span>&nbsp;
+										<span>{{selectedSpecieLocation[selectedClass].weight}} kg</span>
+									</div>
 								</div>
-							</div>
-							<div class="row">
-								<div class="col-md-12 item-container">
-									<span class="labels">{{'activity.weight_means' | i18n}}</span>&nbsp;
-									<span>{{selectedSpecieLocation[selectedClass].weight_mean}}  <i class="fa fa-info-circle details weight-means-desc" ng-if="selected.details.weightMeansDesc" ng-mouseover="displayDetailsTip(selected.details.weightMeansDesc, 'weight-means-desc')"></i></span>
+								<div class="row">
+									<div class="col-md-12 item-container">
+										<span class="labels">{{'activity.weight_means' | i18n}}</span>&nbsp;
+										<span>{{selectedSpecieLocation[selectedClass].weight_mean}}  <i class="fa fa-info-circle details weight-means-desc" ng-if="selected.details.weightMeansDesc" ng-mouseover="displayDetailsTip(selected.details.weightMeansDesc, 'weight-means-desc')"></i></span>
+									</div>
 								</div>
 							</div>
 						</div>
+						<div class="row">
+							<table class="table table-condensed table-striped">
+								<thead>
+									<tr>
+										<th>{{'activity.class' | i18n}}</th>
+										<th>{{'activity.header_fa_weight' | i18n}}</th>
+									</tr>
+								</thead>
+								<tbody>
+									<tr ng-repeat="class in classColumnOrder" ng-class="{'selected-row': selectedClass === class}" ng-click="selectClass(class)">
+										<td>{{'activity.' + class | i18n}}</td>
+										<td>{{selectedSpecieLocation[class].weight}}</td>
+									</tr>
+								</tbody>
+							</table>
+						</div>
 					</div>
-					<div class="row">
-						<table class="table table-condensed table-striped">
-							<thead>
-								<tr>
-									<th>{{'activity.class' | i18n}}</th>
-									<th>{{'activity.header_fa_weight' | i18n}} (kg)</th>
-								</tr>
-							</thead>
-							<tbody>
-								<tr ng-repeat="class in classColumnOrder" ng-class="{'selected-row': selectedClass === class}" ng-click="selectClass(class)">
-									<td>{{'activity.' + class | i18n}}</td>
-									<td>{{selectedSpecieLocation[class].weight}}</td>
-								</tr>
-							</tbody>
-						</table>
+					<div class="col-md-12">
+						<div class="row location-gear-container">
+							<div class="species-title">{{selectedSpecieLocation.species}} - {{selectedSpecieLocation.speciesName}}</div>
+							<div class="location-gear-content">
+								<location-tile class="col-md-6 stretch" field-title="{{'activity.location' | i18n}}" multiple="true" location-details="selectedSpecieLocation.locations" is-clickable="isLocationClickable" click-callback="clickCallback()" buffer-dist="5000"></location-tile>
+								<carousel-tile class="col-md-6 summary-section" tile-title="{{'activity.header_fa_gear' | i18n}}" ng-model="selectedSpecieLocation.gears" template-url="directive/activity/carouselTile/templates/gearTile/gearTile.html"></carousel-tile>
+							</div>
+						</div>
 					</div>
 				</div>
-				<location-tile class="col-md-4 stretch" field-title="{{'activity.location' | i18n}}" multiple="true" location-details="selectedSpecieLocation.locations" is-clickable="isLocationClickable" click-callback="clickCallback()" buffer-dist="5000"></location-tile>
-				<carousel-tile class="col-md-4 summary-section" tile-title="{{'activity.header_fa_gear' | i18n}}" ng-model="selectedSpecieLocation.gears" template-url="directive/activity/carouselTile/templates/gearTile/gearTile.html"></carousel-tile>
+				<a class="catch-details-btn" title="{{'activity.catch_panel_see_catch_details' | i18n }}" ng-click="repNav.goToView('tripsPanel','catchDetails')"><i class="fa fa-table"></i></a>
 			</div>
-			<a class="catch-details-btn" title="{{'activity.catch_panel_see_catch_details' | i18n }}" ng-click="repNav.goToView('tripsPanel','catchDetails')"><i class="fa fa-table"></i></a>
 		</div>
 	</div>
 </fieldset>

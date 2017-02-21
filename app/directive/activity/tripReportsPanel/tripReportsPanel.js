@@ -114,7 +114,7 @@ angular.module('unionvmsWeb').directive('tripReportsPanel', function(loadingStat
                     fishingActivityService.resetActivity();
                     fishingActivityService.id = '1234';
                     fishingActivityService.isCorrection = node.corrections;
-                    reportingNavigatorService.goToView('tripsPanel','tripDeparturePanel'); 
+                    reportingNavigatorService.goToView('tripsPanel','tripFishingOperationPanel'); 
 		           // reportingNavigatorService.goToView('tripsPanel','tripArrivalPanel');
                 }
             };

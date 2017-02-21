@@ -8,8 +8,7 @@
         <span ng-switch-when="false">{{value}}</span>
         <div ng-switch-when="true">
             <span ng-repeat="item in value track by $index">
-                {{item}}
-                 <span ng-if="!$last">, </span>    
+                {{$last ? item : item + ','}}
             </span>
         </div>
     </div>
@@ -24,8 +23,7 @@
             <span ng-switch-when="false">{{value}}</span>
             <div ng-switch-when="true">
                 <span ng-repeat="item in value track by $index">
-                    {{item}}
-                    <span ng-if="!$last">, </span>
+                    {{$last ? item : item + ','}}
                 </span>
             </div>
         </div>
