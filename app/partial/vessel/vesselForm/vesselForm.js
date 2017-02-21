@@ -548,7 +548,7 @@ angular.module('unionvmsWeb').controller('VesselFormCtrl',function($scope, $log,
             return false;
         },
         disableAddMobileTerminal: function(vessel) {
-            if (vessel) {
+            if (angular.isDefined($scope.vesselForm.cfr && $scope.vesselForm.ircs && vessel)) {
                 return $scope.vesselForm.cfr.$invalid || $scope.vesselForm.ircs.$invalid || !vessel.ircs || !vessel.cfr;
             }
             return false;
@@ -558,5 +558,28 @@ angular.module('unionvmsWeb').controller('VesselFormCtrl',function($scope, $log,
     $scope.vesselContactsFunctions = {
         addContactItemCallback: $scope.addContactItem,
         removeContactItemCallback: $scope.removeContactItem
+    };
+
+    $scope.contentTabsFunctions = {
+        setTabs: function() {
+            return [
+                {
+                    'tab': 'MOBILE_TERMINALS',
+                    'title': $filter('i18n')('header.menu_communication')
+                },
+                {
+                    'tab': 'CONTACTS',
+                    'title': $filter('i18n')('vessel.vessel_details_contacts')
+                },
+                {
+                    'tab': 'NOTES',
+                    'title': $filter('i18n')('vessel.notes')
+                },
+                {
+                    'tab': 'HISTORY',
+                    'title': $filter('i18n')('vessel.event_history')
+                },
+            ];
+        }
     };
 });
