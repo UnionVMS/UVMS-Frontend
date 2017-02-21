@@ -13,20 +13,20 @@ copy of the GNU General Public License along with the IFDM Suite. If not, see <h
  * @memberof unionvmsWeb
  * @ngdoc service
  * @name fishingActivityService
- * @param Departure {Model} The model for Departure fissing activities <p>{@link unionvmsWeb.Departure}</p>
+ * @param Departure {Model} The model for Departure fishing activities <p>{@link unionvmsWeb.Departure}</p>
  * @param activityRestService {Service} The activity REST service <p>{@link unionvmsWeb.activityRestService}</p>
  * @attr {Object} activityData - An object containing the activity data that will be used in the different views
  * @description
  *  A service to deal with any kind of fishing activity operation (e.g. Departure, Arrival, ...)
  */
-angular.module('unionvmsWeb').factory('fishingActivityService', function (Departure, ArrivalNotification, Arrival, activityRestService, loadingStatus) {
-
+angular.module('unionvmsWeb').factory('fishingActivityService',function(Departure, activityRestService, loadingStatus) {
+	
     var faServ = {
         activityData: {},
         id: undefined,
         isCorrection: false
-    };
-
+	};
+	
 	/**
 	 * Get fishing activity operation data from server
 	 * 
@@ -34,12 +34,11 @@ angular.module('unionvmsWeb').factory('fishingActivityService', function (Depart
 	 * @public
 	 * @alias getData
 	 * @param {String} type - The activity type (e.g. departure)
+	 * @param {Function} callback - An optional callback function
 	 */
-    faServ.getData = function (type, callback) {
-        //faServ.resetActivityData();
-        var uType = type.toUpperCase();
-
-        switch (uType) {
+	faServ.getData = function(type, callback){
+	    var uType = type.toUpperCase(); 
+	    switch (uType) {
             case 'DEPARTURE':
                 getDeparture();
                 break;
@@ -51,8 +50,8 @@ angular.module('unionvmsWeb').factory('fishingActivityService', function (Depart
                 break;
             //TODO other types of fa operations
         }
-    };
-
+	};
+	
 	/**
 	 * Reset fishing activity service
 	 * 
@@ -60,12 +59,12 @@ angular.module('unionvmsWeb').factory('fishingActivityService', function (Depart
 	 * @public
 	 * @alias resetActivity
 	 */
-    faServ.resetActivity = function () {
-        faServ.activityData = {};
-        faServ.id = undefined;
-        faServ.isCorrection = false;
-    };
-
+	faServ.resetActivity = function(){
+	    faServ.activityData = {};
+	    faServ.id = undefined;
+	    faServ.isCorrection = false;
+	};
+	
 	/**
      * Reset activity data within the service
      * 
@@ -73,39 +72,36 @@ angular.module('unionvmsWeb').factory('fishingActivityService', function (Depart
      * @public
      * @alias resetActivityData
      */
-    faServ.resetActivityData = function () {
+    faServ.resetActivityData = function(){
         faServ.activityData = {};
-
     };
-
+	
 	/**
 	 * Get data specifically for departure operations
 	 * 
 	 * @memberof fishingActivityService
 	 * @private
 	 */
-    function getDeparture() {
-
-        //TODO use fa id in the REST request
-        loadingStatus.isLoading('FishingActivity', true);
-        activityRestService.getFishingActivityDetails('departure').then(function (response) {
-            faServ.activityData = new Departure();
-            faServ.activityData.fromJson(response);
-            loadingStatus.isLoading('FishingActivity', false);
-        }, function (error) {
-            //TODO deal with error from rest service
-            loadingStatus.isLoading('FishingActivity', false);
-        });
-    }
-
+	function getDeparture(){
+	    //TODO use fa id in the REST request
+	    loadingStatus.isLoading('FishingActivity', true);
+	    activityRestService.getFishingActivityDetails('departure').then(function(response){
+	        faServ.activityData = new Departure();
+	        faServ.activityData.fromJson(response);
+	        loadingStatus.isLoading('FishingActivity', false);
+	    }, function(error){
+	        //TODO deal with error from rest service
+	        loadingStatus.isLoading('FishingActivity', false);
+	    });
+	}
+	
 	/**
-	 * Get data specifically for Notification of arrival operations
-	 * 
-	 * @memberof fishingActivityService
-	 * @private
-	 */
+     * Get data specifically for Notification of arrival operations
+     * 
+     * @memberof fishingActivityService
+     * @private
+     */
     function getNotificationArrival(callback) {
-
         //TODO use fa id in the REST request
         loadingStatus.isLoading('FishingActivity', true);
         activityRestService.getFishingActivityDetails('arrival_notification').then(function (response) {
@@ -119,12 +115,12 @@ angular.module('unionvmsWeb').factory('fishingActivityService', function (Depart
         });
     }
     
-	/**
-	 * Get data specifically for Arrival operations
-	 * 
-	 * @memberof fishingActivityService
-	 * @private
-	 */
+    /**
+     * Get data specifically for Arrival operations
+     * 
+     * @memberof fishingActivityService
+     * @private
+     */
     function getArrival(callback) {
         //TODO use fa id in the REST request
         loadingStatus.isLoading('FishingActivity', true);
@@ -139,5 +135,5 @@ angular.module('unionvmsWeb').factory('fishingActivityService', function (Depart
         });
     }
 
-    return faServ;
+	return faServ;
 });

@@ -26,7 +26,7 @@ copy of the GNU General Public License along with the IFDM Suite. If not, see <h
  * @description
  *  A model to store all the data related to a trip
  */
-angular.module('unionvmsWeb').factory('Trip',function(locale,unitConversionService) {
+angular.module('unionvmsWeb').factory('Trip',function(locale,unitConversionService,tripReportsTimeline) {
 
     /**
      * Trip constructor
@@ -139,6 +139,9 @@ angular.module('unionvmsWeb').factory('Trip',function(locale,unitConversionServi
 	var loadReportMessages = function(self,activityReports){
         self.reports = [];
 
+        //one sub node per period
+        var counter = 0; //FIXME remove when backend service ready
+        
         //one main node per activity report
         angular.forEach(activityReports,function(report){
             var reportItem = {};
@@ -149,11 +152,11 @@ angular.module('unionvmsWeb').factory('Trip',function(locale,unitConversionServi
                 report.delimitedPeriod = [{}];
             }
 
-            //one sub node per period
             angular.forEach(report.delimitedPeriod,function(subreport){
                 var subreportItem = {};
-
-                subreportItem.type = (report.correction ? locale.getString('fa_report_document_type_correction') + ': ' : '') + locale.getString('activity.activity_type_' + report.activityType.toLowerCase()) + ' (' + locale.getString('activity.fa_report_document_type_' + report.faReportDocumentType.toLowerCase()) + ')';
+                subreportItem.srcType = report.activityType;
+                
+                subreportItem.type = (report.correction ? locale.getString('activity.fa_report_document_type_correction') + ': ' : '') + locale.getString('activity.activity_type_' + report.activityType.toLowerCase()) + ' (' + locale.getString('activity.fa_report_document_type_' + report.faReportDocumentType.toLowerCase()) + ')';
 
                 subreportItem.date = getReportDate(report.faReportAcceptedDateTime,subreport.startDate,subreport.endDate);
 
@@ -163,13 +166,18 @@ angular.module('unionvmsWeb').factory('Trip',function(locale,unitConversionServi
                         subreportItem.location += location;
                     });
                 }
-                subreportItem.reason = locale.getString('activity.report_reason_' + report.reason.toLowerCase());
+                subreportItem.reason = report.reason;
                 subreportItem.remarks = getRemarks(report);
 
                 subreportItem.corrections = report.correction;
                 subreportItem.detail = true;
                 
+                //FIXME remove id when backend service ready
+                subreportItem.id = counter;
+                counter += 1;
+                
                 reportItem.nodes.push(subreportItem);
+                tripReportsTimeline.reports.push(subreportItem); 
             });
 
             self.reports.push(reportItem);
@@ -193,7 +201,8 @@ angular.module('unionvmsWeb').factory('Trip',function(locale,unitConversionServi
         }else{
             remarks = unitConversionService.date.convertToUserFormat(report.faReportAcceptedDateTime);
         }
-
+        
+        //FIXME This needs to be translatable, check with backend
         switch(report.activityType){
             case 'DEPARTURE':
                 remarks += ' (gear)';

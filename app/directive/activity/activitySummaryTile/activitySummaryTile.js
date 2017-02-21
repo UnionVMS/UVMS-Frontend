@@ -56,6 +56,6 @@ angular.module('unionvmsWeb').directive('activitySummaryTile', function() {
             status = true;
         }
         return status;
-    }
+    };
 });
 

@@ -2,7 +2,7 @@
 	<legend class="fieldsetLegendStyle">
 		<a>{{tileTitle}}</a>
 	</legend>
-	<div class="row global-container">
+	<div class="row global-container" ng-if="ngModel">
 		<!-- FIXME in tripsummary panel -->
 		<!-- <div class="navigator">
 			<i class="fa fa-th-large"></i>
@@ -67,6 +67,11 @@
 				</div>
 				<location-tile class="col-md-6 stretch" field-title="{{locationTitle}}" multiple="true" location-details="selected.locations" is-clickable="isLocationClickable" click-callback="clickCallback()" buffer-dist="bufferDistance"></location-tile>
 			</div>
+		</div>
+	</div>
+	<div class="row no-data" ng-if="!ngModel">
+		<div class="col-md-12">
+			<span>{{'activity.no_data' | i18n}}</span>
 		</div>
 	</div>
 </fieldset>

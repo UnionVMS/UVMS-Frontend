@@ -21,9 +21,15 @@ copy of the GNU General Public License along with the IFDM Suite. If not, see <h
  * @description
  *  The controller for the departure panel partial
  */
-angular.module('unionvmsWeb').controller('DeparturepanelCtrl',function($scope, $state, fishingActivityService, tripSummaryService, activityRestService, loadingStatus){
+angular.module('unionvmsWeb').controller('DeparturepanelCtrl',function($scope, $state, fishingActivityService, tripSummaryService, activityRestService, loadingStatus, reportingNavigatorService){
     $scope.faServ = fishingActivityService;
     
+    /**
+     * Initialization function for the departure panel
+     * 
+     * @memberof DeparturepanelCtrl
+     * @private
+     */
     var init = function(){
         $scope.faServ.getData('departure');
         loadingStatus.isLoading('FishingActivity', true);
@@ -35,6 +41,13 @@ angular.module('unionvmsWeb').controller('DeparturepanelCtrl',function($scope, $
             loadingStatus.isLoading('FishingActivity', false);
         });
     };
+    
+    //The watch is needed for the navigation in the trip summary
+    $scope.$watch('faServ.id', function(newVal, oldVal){
+        if (angular.isDefined(newVal) && newVal !== oldVal){
+            init();
+        }
+    });
     
     /**
      * Check if a location tile should be clickable taking into consideration the route and the report configuration
@@ -51,6 +64,21 @@ angular.module('unionvmsWeb').controller('DeparturepanelCtrl',function($scope, $
         }
         
         return clickable;
+    };
+    
+    /**
+     * Quit departure panel function
+     * 
+     * @memberof DeparturepanelCtrl
+     * @public
+     * @alias quitDeparturePanel
+     */
+    $scope.quitDeparturePanel = function(){
+        if (($state.current.name === 'app.reporting-id' || $state.current.name === 'app.reporting')){
+            reportingNavigatorService.goToPreviousView();
+        } else {
+            //TODO quit logic for the activity tab
+        }
     };
     
     /**

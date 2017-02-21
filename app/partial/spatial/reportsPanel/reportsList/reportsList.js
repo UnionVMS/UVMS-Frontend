@@ -254,9 +254,8 @@ angular.module('unionvmsWeb').controller('ReportslistCtrl',function($scope, $fil
     var deleteReportError = function(error){
         $scope.isLoadingReportsList = false;
         $anchorScroll();
-        var searchString = 'spatial.' + error.msg;
         $scope.tableAlert.type = 'error';
-        $scope.tableAlert.msg = searchString;
+        $scope.tableAlert.msg = 'spatial.error_delete_failed';
         $scope.tableAlert.timeout = 8000;
         $scope.tableAlert.visible = true;
     };

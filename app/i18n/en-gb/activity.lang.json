@@ -147,7 +147,6 @@
 	"fa_report_document_type_declaration": "Declaration",
 	"fa_report_document_type_notification": "Notification",
 	"fa_report_document_type_correction": "Correction",
-	"report_reason_fishing": "Fishing",
     "trip_summary_quit_trip_detail": "Quit trip detail",
     "trip_summary_export_trip": "Export trip",
     "catch_panel_see_trip_evolution": "See trip evolution",
@@ -210,5 +209,7 @@
     "tab_trip_table_header_duration": "Duration",
     "tab_trip_table_header_nCorrections": "Corrections",
     "tab_trip_table_header_nPositions": "Positions",
-    "tab_trip_table_header_alarm": "Alarm"
+    "tab_trip_table_header_alarm": "Alarm",
+    "fa_navigator_previous": "Previous activity type",
+    "fa_navigator_next": "Next activity type"
 }
