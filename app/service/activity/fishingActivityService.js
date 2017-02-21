@@ -34,12 +34,19 @@ angular.module('unionvmsWeb').factory('fishingActivityService',function(Departur
 	 * @public
 	 * @alias getData
 	 * @param {String} type - The activity type (e.g. departure)
+	 * @param {Function} callback - An optional callback function
 	 */
-	faServ.getData = function(type){
+	faServ.getData = function(type, callback){
 	    var uType = type.toUpperCase(); 
 	    switch (uType) {
             case 'DEPARTURE':
                 getDeparture();
+                break;
+            case 'NOTIFICATION_ARRIVAL':
+                getNotificationArrival(callback);
+                break;
+            case 'ARRIVAL':
+                getArrival(callback);
                 break;
             //TODO other types of fa operations
         }
@@ -87,6 +94,46 @@ angular.module('unionvmsWeb').factory('fishingActivityService',function(Departur
 	        loadingStatus.isLoading('FishingActivity', false);
 	    });
 	}
+	
+	/**
+     * Get data specifically for Notification of arrival operations
+     * 
+     * @memberof fishingActivityService
+     * @private
+     */
+    function getNotificationArrival(callback) {
+        //TODO use fa id in the REST request
+        loadingStatus.isLoading('FishingActivity', true);
+        activityRestService.getFishingActivityDetails('arrival_notification').then(function (response) {
+            faServ.activityData = new ArrivalNotification();
+            faServ.activityData.fromJson(response);
+            callback();
+            loadingStatus.isLoading('FishingActivity', false);
+        }, function (error) {
+            //TODO deal with error from rest service
+            loadingStatus.isLoading('FishingActivity', false);
+        });
+    }
+    
+    /**
+     * Get data specifically for Arrival operations
+     * 
+     * @memberof fishingActivityService
+     * @private
+     */
+    function getArrival(callback) {
+        //TODO use fa id in the REST request
+        loadingStatus.isLoading('FishingActivity', true);
+        activityRestService.getFishingActivityDetails('arrival').then(function (response) {
+            faServ.activityData = new Arrival();
+            faServ.activityData.fromJson(response);
+            callback();
+            loadingStatus.isLoading('FishingActivity', false);
+        }, function (error) {
+            //TODO deal with error from rest service
+            loadingStatus.isLoading('FishingActivity', false);
+        });
+    }
 
 	return faServ;
 });

@@ -12,9 +12,6 @@ copy of the GNU General Public License along with the IFDM Suite. If not, see <h
 <div class="col-md-12 trips-panel" ng-controller="TripspanelCtrl">
     <!--TRIP SUMMARY LOADING-->
     <loading-panel type="TripSummary"></loading-panel>
-    <div class="col-md-12">
-    
-    </div>
     <!--TRIP SUMMARY ALERT-->
     <div class="container containerWithTopBottomPadding spatial-error" ng-show="alert.hasAlert">
         <div class="alert alert-container" role="alert" ng-class="{'alert-danger': alert.hasError, 'alert-success': alert.hasSuccess, 'alert-warning': alert.hasWarning}">
@@ -49,4 +46,5 @@ copy of the GNU General Public License along with the IFDM Suite. If not, see <h
     <div ng-if="repNav.isViewVisible('catchDetails')" ng-include="'partial/spatial/tripsPanel/catchDetails/catchDetails.html'"></div>
     <div ng-if="repNav.isViewVisible('catchEvolution')" ng-include="'partial/spatial/tripsPanel/catchEvolution/catchEvolution.html'"></div>
     <fishing-activity-navigator ng-if="repNav.isViewVisible('tripDeparturePanel')" partial="partial/spatial/tripsPanel/tripDeparturePanel/tripDeparturePanel.html"></fishing-activity-navigator>
+    <div ng-if="repNav.isViewVisible('tripArrivalPanel')" ng-include="'partial/spatial/tripsPanel/tripArrivalPanel/tripArrivalPanel.html'"></div>
 </div>
