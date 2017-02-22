@@ -19,8 +19,8 @@ copy of the GNU General Public License along with the IFDM Suite. If not, see <h
  * @description
  *  A service to deal with any kind of fishing activity operation (e.g. Departure, Arrival, ...)
  */
-angular.module('unionvmsWeb').factory('fishingActivityService',function(Departure, activityRestService, loadingStatus) {
-	
+angular.module('unionvmsWeb').factory('fishingActivityService', function (Departure, ArrivalNotification, Arrival, Landing, activityRestService, loadingStatus) {
+
     var faServ = {
         activityData: {},
         id: undefined,
@@ -47,6 +47,9 @@ angular.module('unionvmsWeb').factory('fishingActivityService',function(Departur
                 break;
             case 'ARRIVAL':
                 getArrival(callback);
+                break;
+            case 'LANDING':
+                getLanding();
                 break;
             //TODO other types of fa operations
         }
@@ -114,13 +117,13 @@ angular.module('unionvmsWeb').factory('fishingActivityService',function(Departur
             loadingStatus.isLoading('FishingActivity', false);
         });
     }
-    
-    /**
-     * Get data specifically for Arrival operations
-     * 
-     * @memberof fishingActivityService
-     * @private
-     */
+
+	/**
+	 * Get data specifically for Arrival operations
+	 * 
+	 * @memberof fishingActivityService
+	 * @private
+	 */
     function getArrival(callback) {
         //TODO use fa id in the REST request
         loadingStatus.isLoading('FishingActivity', true);
@@ -135,5 +138,24 @@ angular.module('unionvmsWeb').factory('fishingActivityService',function(Departur
         });
     }
 
-	return faServ;
+    /**
+	 * Get data specifically for Landing operations
+	 * 
+	 * @memberof fishingActivityService
+	 * @private
+	 */
+    function getLanding() {
+        //TODO use fa id in the REST request
+        loadingStatus.isLoading('FishingActivity', true);
+        activityRestService.getFishingActivityDetails('landing').then(function (response) {
+            faServ.activityData = new Landing();
+            faServ.activityData.fromJson(response);
+            loadingStatus.isLoading('FishingActivity', false);
+        }, function (error) {
+            //TODO deal with error from rest service
+            loadingStatus.isLoading('FishingActivity', false);
+        });
+    }
+
+    return faServ;
 });

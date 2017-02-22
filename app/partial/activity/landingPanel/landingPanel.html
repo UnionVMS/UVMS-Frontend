@@ -1,0 +1,33 @@
+<!--
+Developed with the contribution of the European Commission - Directorate General for Maritime Affairs and Fisheries
+© European Union, 2015-2016.
+
+This file is part of the Integrated Fisheries Data Management (IFDM) Suite. The IFDM Suite is free software: you can
+redistribute it and/or modify it under the terms of the GNU General Public License as published by the
+Free Software Foundation, either version 3 of the License, or any later version. The IFDM Suite is distributed in
+the hope that it will be useful, but WITHOUT ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or
+FITNESS FOR A PARTICULAR PURPOSE.  See the GNU General Public License for more details. You should have received a
+copy of the GNU General Public License along with the IFDM Suite. If not, see <http://www.gnu.org/licenses/>.
+-->
+<div class="col-md-12 landing-panel" ng-controller="LandingpanelCtrl">
+    <div class="row summary-row">
+        <trip-overview-panel class="col-md-12 summary-section" trip="fishingTripDetails"></trip-overview-panel>
+    </div>
+    <div class="col-md-12 main-content">
+        <a class="btn-trip-quit" title="{{'activity.trip_summary_quit_trip_detail' | i18n }}" ng-click="quitTripSummary()"><i class="fa fa-share-square-o"></i></a>
+        <div class="row title">
+            <span>{{'activity.trip_landing' | i18n}}</span>
+        </div>
+        <div class="row activity-summary-row">
+            <!--<fa-overview-panel class="col-md-3 summary-section" ng-model="faServ.activityData.landingSummary"></fa-overview-panel>-->
+            <location-tile class="col-md-2 summary-section" is-clickable="isLocationClickable()" field-title="{{'activity.activity_location_port_landing' | i18n}}"
+                location-details="faServ.activityData.port" click-callback="locationClickCallback()"></location-tile>
+            <div class="col-md-4"></div>
+            <fa-report-doc-tile class="col-md-4 summary-section" fa-report="faServ.activityData.reportDoc"></fa-report-doc-tile>
+        </div>
+        <div class="row activity-summary-row" ng-if="faServ.activityData.landingCatchData.length > 0">
+            <catch-class-landing-details class="col-md-12 summary-section" ng-model="faServ.activityData.landingCatchData" tile-title="{{'activity.activity_landing_catch' | i18n}}"
+                is-location-clickable="isLocationClickable()" buffer-distance="5000" click-callback="locationClickCallback()"></catch-class-landing-details>
+        </div>
+    </div>
+</div>
