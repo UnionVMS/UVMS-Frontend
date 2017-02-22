@@ -435,7 +435,7 @@ angular.module('unionvmsWeb').controller('ReportformCtrl',function($scope, $moda
 
     var reportError = function(error, defaultMsg) {
         $scope.formAlert.visible = true;
-        var errorMsg = defaultMsg;
+        var errorMsg;
 
         if (angular.isDefined(error.data.msg)) {
             var msg = error.data.msg;
@@ -443,7 +443,9 @@ angular.module('unionvmsWeb').controller('ReportformCtrl',function($scope, $moda
                 msg = 'spatial.' + msg;
             }
             errorMsg = locale.getString(msg);
-        } else {
+        }
+        
+        if (!angular.isDefined(errorMsg) || errorMsg.indexOf('KEY_NOT_FOUND') !== -1){
             errorMsg = locale.getString(defaultMsg);
         }
         

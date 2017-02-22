@@ -268,7 +268,7 @@
     "tab_vms_alert_table_pan_btn_title": "Pan to alert",
     "tab_vms_trip_table_zoom_btn_title": "Zoom to trip",
 	"error_get_reports_list": "No result could be retrieved at this time. Please try again.",
-	"error_delete_failed": "It was not possible to delete the report at this time. Please try again later.",
+	"error_delete_failed": "It was not possible to delete the report at this time. Please try again.",
 	"success_delete_report": "Report was deleted successfully.",
 	"success_create_report": "Your report was created successfully.",
 	"success_update_report": "Your report was updated successfully",
