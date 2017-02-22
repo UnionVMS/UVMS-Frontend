@@ -1,6 +1,5 @@
 <div class="table-chart">
-    <a class="switch-btn" ng-click="switchMode()"><i class="fa" ng-class="{'fa-bar-chart': mode === 'table', 'fa-th': mode === 'chart'}"></i></a>
-
+    <!--<a class="switch-btn" ng-click="switchMode()"><i class="fa" ng-class="{'fa-bar-chart': mode === 'table', 'fa-th': mode === 'chart'}"></i></a>-->
     <div class="col-md-12 table-responsive-force" ng-show="mode === 'table'">
         <div class="row table-container">
             <div class="col-md-12 table tableSmart table-striped table-condensed table-bordered">
@@ -19,28 +18,4 @@
             </div>
         </div>
     </div>
-
-
-    <!--<div class="table-responsive-force" ng-show="mode === 'table'">
-        <table class="table table-striped table-condensed table-bordered">
-            <thead>
-                <tr ng-repeat="headerRow in table.headers" ng-class="{'upperHeader': !$last}">
-                    <th ng-if="$first && table.nrGlobalHeaders" rowspan="{{table.headers.length-1}}" colspan="{{table.nrGlobalHeaders}}" class="invisible-header table-title">
-                        <span ng-if="table.title">{{'activity.catch_details_table_name_' + table.title | i18n }}</span>
-                    </th>
-                    <th ng-repeat="header in headerRow track by $index" colspan="{{header.width}}" ng-class="{'species-code': $index >= table.nrGlobalHeaders,'invisible-header': !header.title }">{{header.title}}</th>
-                </tr>
-            </thead>
-            <tbody>
-                <tr ng-repeat="row in table.rows">
-                    <td ng-repeat="item in row track by $index" ng-class="{'global-table-attr': $index < table.nrGlobalHeaders}">{{item}}</td>
-                </tr>
-                <tr ng-if="table.totals">
-                    <td ng-if="table.nrGlobalHeaders" colspan="{{table.nrGlobalHeaders}}" class="total-col">{{'activity.catch_details_table_total' | i18n}}</td>
-                    <td ng-repeat="total in table.totals track by $index">{{total}}</td>
-                </tr>
-            </tbody>
-        </table>
-    </div>-->
-
 </div>
