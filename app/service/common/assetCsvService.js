@@ -56,7 +56,7 @@ copy of the GNU General Public License along with the IFDM Suite. If not, see <h
                 $filter('length')(asset.lengthValue),
                 asset.grossTonnage,
                 asset.powerMain,
-                asset.producer.name.split('"'),
+                asset.producer.name,
                 asset.producer.id,
                 getContactsDetails(asset)
             ]];

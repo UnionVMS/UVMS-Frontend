@@ -433,10 +433,6 @@ angular.module('unionvmsWeb').controller('VesselFormCtrl',function($scope, $log,
         MobileTerminalHistoryModal.show(mobileTerminal);
     };
 
-    $scope.exportAssetToCsv = function() {
-        assetCsvService.download($scope.vesselObj);
-    };
-
     // Add new row with contact item
     $scope.addContactItem = function(vesselContact) {
         if (vesselContact.length === 0) {
@@ -536,7 +532,9 @@ angular.module('unionvmsWeb').controller('VesselFormCtrl',function($scope, $log,
         showCancel: function() {
             return true;
         },
-        exportToCsvCallback: $scope.exportAssetToCsv,
+        exportToCsvCallback: function(vessel) {
+            assetCsvService.download($scope.vesselObj);
+        },
         showExport: function(vessel) {
             if (vessel) {
                 return angular.isDefined(vessel.vesselId) && vessel.vesselId != null;

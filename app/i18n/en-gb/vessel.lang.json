@@ -136,7 +136,6 @@
     "vessel_details_cfr_pattern_validation_message": "Must be 3 characters followed by 9 numbers and/or characters",
     "vessel_details_mmsi_pattern_validation_message": "Must be 9 numbers",
     "vessel_details_imo_pattern_validation_message": "Must be 7 numbers",
-    "vessel_details_producer_code_pattern_validation_message": "Must be 3 characters",
     "vessel_details_max_decimals_pattern_validation_message": "There can be max {1} decimals",
     "vessel_details_get_length_over_all_pattern_validation_message": "There can be max 4 numbers followed by max 2 decimals",
     "vessel_details_email": "Email",
