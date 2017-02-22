@@ -532,15 +532,6 @@ angular.module('unionvmsWeb').controller('VesselFormCtrl',function($scope, $log,
             }
             return false;
         },
-        addMobileTerminal: function() {
-            $scope.toggleAddNewMobileTerminalForm();
-        },
-        showMobileTerminal: function(vessel) {
-            if (vessel) {
-                return angular.isDefined(vessel.vesselId) && vessel.vesselId != null && vessel.active;
-            }
-            return false;
-        },
         disableAddMobileTerminal: function(vessel) {
             if (angular.isDefined($scope.vesselForm.cfr && $scope.vesselForm.ircs && vessel)) {
                 return $scope.vesselForm.cfr.$invalid || $scope.vesselForm.ircs.$invalid || !vessel.ircs || !vessel.cfr;

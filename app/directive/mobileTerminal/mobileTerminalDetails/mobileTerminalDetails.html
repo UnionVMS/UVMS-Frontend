@@ -77,7 +77,7 @@
                                 <span>{{'mobileTerminal.form_inmarsatc_communication_channels_notice' | i18n}}</span>
                             </div>
                             <div ng-repeat="communicationChannel in mobileTerminal.channels">
-                                <div ng-form="channelForm" class="channel-form">
+                                <div ng-form="channelForm" class="channel-form" ng-class="{'single-channel': !isMultipleChannelsAllowed()}">
                                     <div class="delete-channel" ng-show="!disableForm() && $index > 0">
                                         <div class="btn btn-default" ng-click="removeChannel($index)">
                                             <i class="fa fa-trash" title="{{'common.remove' | i18n}}"></i>

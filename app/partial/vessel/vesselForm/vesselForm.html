@@ -34,7 +34,7 @@ copy of the GNU General Public License along with the IFDM Suite. If not, see <h
                                     <span ng-if="isCreateNewMode()">{{'vessel.mobileTerminal_add_message_unsaved' | i18n}}</span>
                                     <span ng-if="mobileTerminals.length <= 0 && !isCreateNewMode()">{{'vessel.mobileTerminal_add_message_none_connected' | i18n}}</span>
                                     <span ng-if="menuBarFunctions.disableAddMobileTerminal(vesselObj) && !isCreateNewMode()">{{'vessel.mobileTerminal_add_message_missing_ircs_cfr' | i18n}}</span>
-                                    <button class="btn btn-primary btn-add with-icon add-terminal" ng-click="toggleAddNewMobileTerminalForm()" ng-show="menuBarFunctions.showMobileTerminal(vesselObj)" ng-disabled="menuBarFunctions.disableAddMobileTerminal(vesselObj)" id="menu-bar-vessel-add-terminal">
+                                    <button class="btn btn-primary btn-add with-icon add-terminal" ng-click="toggleAddNewMobileTerminalForm()" ng-disabled="menuBarFunctions.disableAddMobileTerminal(vesselObj)" id="menu-bar-vessel-add-terminal">
                                         <i class="fa fa-plus"></i>
                                         {{'vessel.add_new_mobile_terminal' | i18n}}
                                     </button>

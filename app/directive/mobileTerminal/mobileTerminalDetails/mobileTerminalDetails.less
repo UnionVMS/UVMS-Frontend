@@ -16,6 +16,9 @@ copy of the GNU General Public License along with the IFDM Suite. If not, see <h
     @row-margin:             15px;
     @field-margin-vertical:  20px;
     @field-height:           30px;
+
+    padding-top: @field-margin-vertical;
+    padding-bottom: 5px;
     
     .channel-form {
         max-width: @max-width;
@@ -31,6 +34,12 @@ copy of the GNU General Public License along with the IFDM Suite. If not, see <h
 
             &:last-of-type { margin-bottom: 0; }
             .form-group { margin-bottom: 0; }
+        }
+
+        &.single-channel {
+            &:last-of-type {
+                margin-bottom: 0;
+            }
         }
     }
 
