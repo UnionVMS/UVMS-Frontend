@@ -21,8 +21,8 @@ angular.module('unionvmsWeb')
             modeltype : '=',
             createNew : '=',
             vesselId : '=',
-            callback : '=',
-            ngDisabled : '='
+            ngDisabled : '=',
+            functions : '='
         },
 		templateUrl: 'directive/mobileTerminal/mobileTerminalDetails/mobileTerminalDetails.html',
 		link: function(scope, element, attrs, fn) {
@@ -217,7 +217,7 @@ angular.module('unionvmsWeb')
 
         //Create new Mobile Terminal With Vessel - Success
         var createNewMobileTerminalWithVesselSuccess = function(){
-            $scope.callback.updateMobileTerminals();
+            $scope.functions.updateMobileTerminals();
             alertService.showSuccessMessage(locale.getString('mobileTerminal.add_new_alert_message_on_success'));
         };
 
@@ -276,11 +276,11 @@ angular.module('unionvmsWeb')
             $scope.mobileTerminal.archived = true;
             alertService.showSuccessMessageWithTimeout(locale.getString('mobileTerminal.archive_message_on_success'));
             if($scope.modeltype === 'VESSEL') {
-                $scope.callback.updateMobileTerminals();
+                $scope.functions.updateMobileTerminals();
             }
 
             if($scope.modeltype === 'MOBILE_TERMINAL') {
-                $scope.callback.displayMobileTerminalList();
+                $scope.functions.displayMobileTerminalList();
             }
         };
 
@@ -313,7 +313,7 @@ angular.module('unionvmsWeb')
             alertService.showSuccessMessageWithTimeout(locale.getString('mobileTerminal.unassign_vessel_message_on_success'));
 
             if($scope.modeltype === 'VESSEL') {
-                $scope.callback.updateMobileTerminals();
+                $scope.functions.updateMobileTerminals();
             }
         };
 
@@ -352,7 +352,7 @@ angular.module('unionvmsWeb')
         //Close Mobile Terminal form
         $scope.closeMobileTerminalForm = function(){
             if ($scope.modeltype === 'MOBILE_TERMINAL') {
-                $scope.callback.displayMobileTerminalList();
+                $scope.functions.displayMobileTerminalList();
             }
         };
 
@@ -443,6 +443,17 @@ angular.module('unionvmsWeb')
                     return false;
                 }
                 return true;
+            },
+            removeCallback: function(mobileTerminal) {
+                if (mobileTerminal) {
+                    $scope.functions.removeMobileTerminal(mobileTerminal);
+                }
+            },
+            showRemove: function(mobileTerminal) {
+                if ($scope.modeltype === 'VESSEL' && $scope.isCreateNewMode()) {
+                    return true;
+                }
+                return false;
             }
         };
 

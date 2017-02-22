@@ -490,12 +490,6 @@ angular.module('unionvmsWeb').controller('VesselFormCtrl',function($scope, $log,
         $scope.mobileTerminals.push(newMobileTerminal);
     };
 
-    $scope.mobileTerminalForm = {
-        updateMobileTerminals: function() {
-            getMobileTerminals();
-        }
-    };
-
     // Set menu bar header
     $scope.getMenuBarHeader = function(vessel) {
         if ($scope.isCreateNewMode()) {
@@ -558,6 +552,15 @@ angular.module('unionvmsWeb').controller('VesselFormCtrl',function($scope, $log,
     $scope.vesselContactsFunctions = {
         addContactItemCallback: $scope.addContactItem,
         removeContactItemCallback: $scope.removeContactItem
+    };
+
+    $scope.mobileTerminalFunctions = {
+        updateMobileTerminals: function() {
+            getMobileTerminals();
+        },
+        removeMobileTerminal: function(mobileTerminal) {
+            $scope.mobileTerminals.splice($scope.mobileTerminals.indexOf(mobileTerminal), 1);
+        }
     };
 
     $scope.contentTabsFunctions = {

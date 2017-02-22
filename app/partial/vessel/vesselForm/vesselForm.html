@@ -39,8 +39,8 @@ copy of the GNU General Public License along with the IFDM Suite. If not, see <h
                                         {{'vessel.add_new_mobile_terminal' | i18n}}
                                     </button>
                                 </div>
-                                <div ng-repeat="mobileTerminal in mobileTerminals">
-                                    <mobile-terminal-details mobile-terminal="mobileTerminal" vessel-id="vesselObj.vesselId.guid" modeltype="'VESSEL'" functions="mobileTerminalFunctions" submit-attempted="submitAttempted" list-index="$index"></mobile-terminal-details>
+                                <div ng-repeat="mobileTerminal in mobileTerminals | orderBy:'isCreateNewMode'">
+                                    <mobile-terminal-details mobile-terminal="mobileTerminal" vessel-id="vesselObj.vesselId.guid" modeltype="'VESSEL'" functions="mobileTerminalFunctions" submit-attempted="submitAttempted"></mobile-terminal-details>
                                 </div>
                             </div>
 
