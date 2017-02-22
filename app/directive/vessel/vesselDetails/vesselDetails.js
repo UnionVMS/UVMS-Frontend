@@ -65,7 +65,7 @@ angular.module('unionvmsWeb')
         };
         $scope.producerCodePattern = vesselValidationService.getProducerCodePattern();
         $scope.producerCodeValidationMessages = {
-            'pattern' : locale.getString('vessel.vessel_details_producer_code_pattern_validation_message')
+            'pattern' : locale.getString('common.validation_invalid_numeric')
         };
 
         $scope.lengthUnit = globalSettingsService.getLengthUnit();
