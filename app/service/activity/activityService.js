@@ -138,6 +138,10 @@ angular.module('unionvmsWeb').factory('activityService',function(locale, activit
      * @alias resetReportsListTableState
      */
     actServ.resetReportsListTableState = function(){
+        if (angular.isDefined(actServ.reportsList.tableState)){
+            actServ.reportsList.tableState.pagination.start = 0;
+        }
+         
         actServ.reportsList.pagination = {
             offset: 1,
             pageSize: pageSize,
@@ -214,7 +218,7 @@ angular.module('unionvmsWeb').factory('activityService',function(locale, activit
     function getPaginationForServer(tableState){
 
         var pag = {
-            offset: tableState ? tableState.pagination.start : 0,
+            offset: tableState ? tableState.pagination.start : 0, //TODO important: check this logic 
             pageSize: pageSize
         };
         

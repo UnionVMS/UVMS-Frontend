@@ -36,21 +36,23 @@ angular.module('unionvmsWeb').controller('ActivityreportslistCtrl',function($sco
      * @alias callServer
      */
     $scope.callServer = function(tableState){
-        $scope.actServ.reportsList.tableState = tableState;
-        $scope.actServ.reportsList.isLoading = true;
-        
-        var searchField, sortOrder; 
-        if (angular.isDefined(tableState.sort.predicate)){
-            searchField = getTruePredicate(tableState.sort.predicate);
-            sortOrder = tableState.sort.reverse;
+        if (!$scope.actServ.reportsList.isLoading && angular.isDefined($scope.actServ.reportsList.searchObject.multipleCriteria)){
+            $scope.actServ.reportsList.tableState = tableState;
+            $scope.actServ.reportsList.isLoading = true;
+            
+            var searchField, sortOrder; 
+            if (angular.isDefined(tableState.sort.predicate)){
+                searchField = getTruePredicate(tableState.sort.predicate);
+                sortOrder = tableState.sort.reverse;
+            }
+            
+            $scope.actServ.reportsList.sorting = {
+                sortBy: searchField,
+                reversed: sortOrder
+            };
+            
+            $scope.actServ.getActivityList(callServerCallback, tableState);
         }
-        
-        $scope.actServ.reportsList.sorting = {
-            sortBy: searchField,
-            reversed: sortOrder
-        };
-        
-        $scope.actServ.getActivityList(callServerCallback, tableState);
     };
     
     /**
