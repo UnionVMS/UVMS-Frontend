@@ -13,30 +13,6 @@ describe('Departure', function() {
   var data;
   beforeEach(module('unionvmsWeb'));
   
-  function getGears(){
-      return [{
-          "code": "SSC",
-          "description": "Scottish seines"
-      },{
-          "code": "LHM",
-          "description": "Handlines and pole-lines (mechanized)"
-      }];
-  }
-  
-  function getCatchType(){
-      return [{
-          "code": "KEPT_IN_NET",
-          "description": "Catch kept in the net"
-      }];
-  }
-  
-  function getWeightMeans(){
-      return [{
-          "code": "ESTIMATED",
-          "description": "Estimated weight mean"
-      }];
-  }
-
   function getDepartureData(){
       return {
           "summary": {
@@ -104,6 +80,8 @@ describe('Departure', function() {
   }));
 
   it('should properly build a departure from json data', inject(function(Departure) {
+      data = getDepartureData();
+
       var dep = new Departure();
       dep.fromJson(data);
       
@@ -111,16 +89,8 @@ describe('Departure', function() {
       expect(dep.port).toEqual(data.port);
       expect(dep.reportDoc).toEqual(data.reportDoc);
       
-      var srcData = getDepartureData();
-      var gears = getGears();
-      var catchType = getCatchType();
-      var weightMeans = getWeightMeans();
-      
       expect(dep.gears.length).toEqual(2);
-      expect(dep.gears[0].type).toEqual(srcData.gears[0].type + ' - ' + gears[0].description);
       expect(dep.fishingData.length).toBe(1);
-      expect(dep.fishingData[0].details.typeDesc).toEqual(catchType[0].description);
-      expect(dep.fishingData[0].details.weightMeansDesc).toEqual(weightMeans[0].description);
   }));
 
 });

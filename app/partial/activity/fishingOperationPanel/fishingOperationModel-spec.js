@@ -299,31 +299,6 @@ describe('FishingOperation', function() {
     };
   }
 
-  function getGears(){
-      return [{
-          "code": "SSC",
-          "description": "Scottish seines"
-      },{
-          "code": "LHM",
-          "description": "Handlines and pole-lines (mechanized)"
-      }];
-  }
-  
-  function getCatchType(){
-      return [{
-          "code": "KEPT_IN_NET",
-          "description": "Catch kept in the net"
-      }];
-  }
-  
-  function getWeightMeans(){
-      return [{
-          "code": "ESTIMATED",
-          "description": "Estimated weight mean"
-      }];
-  }
-
-
   it('should instantiate a new empty fishing operation object', inject(function(FishingOperation){
       var fishOp = new FishingOperation();
       
@@ -337,19 +312,15 @@ describe('FishingOperation', function() {
   }));
 
   it('should properly build a fishing operation from json data', inject(function(FishingOperation) {
+      data = getFishingOperationData();
+
       var fishOp = new FishingOperation();
       fishOp.fromJson(data);
       expect(fishOp.summary).toEqual(getTransformedSummary());
       expect(fishOp.port).toEqual(data.port);
       expect(fishOp.reportDoc).toEqual(data.reportDoc);
       
-      var srcData = getFishingOperationData();
-      var gears = getGears();
-      var catchType = getCatchType();
-      var weightMeans = getWeightMeans();
-      
       expect(fishOp.gears.length).toEqual(4);
-      expect(fishOp.gears[0].type).toEqual(srcData.gears[0].type + ' - ' + gears[0].description);
       expect(fishOp.fishingData.length).toBe(3);
   }));
 
