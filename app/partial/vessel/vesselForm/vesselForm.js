@@ -53,12 +53,10 @@ angular.module('unionvmsWeb').controller('VesselFormCtrl',function($scope, $log,
         }       
     }, true);
 
-    //Add notes to Vessel object when created 
-    $scope.$watch('vesselNotesObj', function(newValue, oldValue){
-        if ($scope.vesselNotesObj.date && $scope.vesselNotesObj.activity) {
-            $scope.noFormChange = false;
-        }
-    }, true);
+    //Check if form has been modified 
+    $scope.dirtyCheck = function(status) {
+        $scope.noFormChange = !status;
+    };
 
     //Has form submit been atempted?
     $scope.submitAttempted = false;
@@ -316,11 +314,6 @@ angular.module('unionvmsWeb').controller('VesselFormCtrl',function($scope, $log,
         }else{
             alertService.showErrorMessage(locale.getString('vessel.add_new_alert_message_on_form_validation_error'));
         }
-    };
-
-    //Is the name of the vessel set?
-    $scope.isVesselNameSet = function(){
-        return angular.isDefined($scope.vesselObj) && angular.isDefined($scope.vesselObj.name) && $scope.vesselObj.name.trim().length > 0;
     };
 
     //Vessel was successfully updated

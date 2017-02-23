@@ -252,17 +252,6 @@ describe('VesselFormCtrl', function() {
         expect(mobileTerminalRestService.unassignMobileTerminal).toHaveBeenCalledWith(mt2, 'some modal comment');
     }));
 
-    it('isVesselNameSet should return correctly', inject(function(Vessel) {
-        scope.vesselObj =  new Vessel();
-        expect(scope.isVesselNameSet()).toBeFalsy();
-
-        scope.vesselObj.name ="TEST";
-        expect(scope.isVesselNameSet()).toBeTruthy();
-
-        scope.vesselObj.name ="";
-        expect(scope.isVesselNameSet()).toBeFalsy();
-    }));
-
     it('should detect if more than one active terminals are of the same type', inject(function(MobileTerminal) {
         var mt1 = new MobileTerminal();
         var mt2 = new MobileTerminal();
