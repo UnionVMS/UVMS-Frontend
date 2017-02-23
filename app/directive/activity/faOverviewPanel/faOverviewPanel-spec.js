@@ -9,15 +9,53 @@ describe('faOverviewPanel', function() {
     compile = $compile;
   }));
 
-  it('should ...', function() {
+  beforeEach(inject(function($httpBackend) {
+		//Mock
+		$httpBackend.whenGET(/usm/).respond();
+		$httpBackend.whenGET(/i18n/).respond();
+		$httpBackend.whenGET(/globals/).respond({data : []});
+	}));
 
-    /* 
-    To test your directive, you need to create some html that would use your directive,
-    send that through compile() then compare the results.
+  function buildMocks(){
+    scope.summary = {
+      title: "title",
+      subTitle: "subTitle",
+      items: {
+        fishery_type: "Demersal",
+        no_operations: 163,
+        occurence: "2017-07-30T05:40:25",
+        targetted_species: ["GADUS"],
+        vessel_activity: "FSH - Fishing"
+      },
+      subItems: {
+        duration: "10d 8h"
+      }
+    };
+  }
 
-    var element = compile('<div mydirective name="name">hi</div>')(scope);
-    expect(element.text()).toBe('hello, world');
-    */
+  it('should compile and present the model content', function() {
+    buildMocks();
 
+    var faOverviewPanel = compile('<fa-overview-panel class="col-md-12 summary-section" ng-model="summary"></fa-overview-panel>')(scope);
+    scope.$digest();
+
+    var nrItems = 0;
+    var nrSubItems = 0;
+
+    angular.forEach(scope.summary.items, function(item){
+      nrItems++;
+    });
+
+    angular.forEach(scope.summary.subItems, function(item){
+      nrSubItems++;
+    });
+
+    expect(angular.element(faOverviewPanel).find('> .fa-overview-fieldset > .item-container').length).toEqual(nrItems);
+    expect(angular.element(faOverviewPanel).find('.fa-overview-fieldset > .fa-overview-fieldset > .item-container').length).toEqual(nrSubItems);
+
+    expect(angular.element(faOverviewPanel).find('> .fa-overview-fieldset > legend > a').text()).toEqual(scope.summary.title);
+    expect(angular.element(faOverviewPanel).find('.fa-overview-fieldset > .fa-overview-fieldset > legend > a').text()).toEqual(scope.summary.subTitle);
+
+    faOverviewPanel.isolateScope().$destroy();
   });
 });

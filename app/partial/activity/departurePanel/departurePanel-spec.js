@@ -39,7 +39,7 @@ describe('DeparturepanelCtrl', function() {
 	});
 
     beforeEach(inject(function($rootScope, $controller, _$state_, $injector) {
-        $httpBackend = $injector.get('$httpBackend');;
+        $httpBackend = $injector.get('$httpBackend');
         $httpBackend.whenGET(/usm/).respond();
         $httpBackend.whenGET(/i18n/).respond();
         $httpBackend.whenGET(/globals/).respond({data : []});

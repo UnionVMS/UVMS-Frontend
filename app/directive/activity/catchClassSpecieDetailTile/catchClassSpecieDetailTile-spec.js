@@ -27,8 +27,7 @@ describe('catchClassSpecieDetailTile', function() {
 		$httpBackend.whenGET(/globals/).respond({data : []});
 	}));
 
-  it('should ...', function() {
-
+  function buildMocks(){
     scope.fishingData = [
          {
             "locations":[
@@ -323,6 +322,10 @@ describe('catchClassSpecieDetailTile', function() {
       scope.clickCallback = function(){
         return true;
       };
+  }
+
+  it('should compile and receive the data', function() {
+      buildMocks();
 
       var catchDetail = compile('<catch-class-specie-detail-tile class="col-md-12 summary-section" ng-model="fishingData" tile-title="Catch" is-location-clickable="isLocationClickable()" buffer-distance="5000" click-callback="locationClickCallback()"></catch-class-specie-detail-tile>')(scope);
       scope.$digest();
@@ -334,6 +337,5 @@ describe('catchClassSpecieDetailTile', function() {
       expect(isolatedScope.bufferDistance).toEqual('5000');
 
       catchDetail.isolateScope().$destroy();
-
   });
 });

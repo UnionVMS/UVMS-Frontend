@@ -178,6 +178,7 @@
     "fa_type_departure": "Departure",
     "fa_type_fishing_operation": "Fishing operation",
     "fa_type_arrival": "Arrival",
+    "fishing_time": "Fishing time",
     "departure_optype_correction": "Correction",
     "title_fishing_activity": "Fishing Activity",
     "activity_summary_occurrence": "Occurrence",

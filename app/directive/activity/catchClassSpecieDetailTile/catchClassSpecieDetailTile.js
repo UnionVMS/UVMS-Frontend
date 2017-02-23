@@ -88,6 +88,50 @@ angular.module('unionvmsWeb').directive('catchClassSpecieDetailTile', function(l
 			scope.selectClass = function(className){
 				scope.selectedClass = className;
 			};
+
+
+			/**
+			 * Create and show a tootlip with a description for the catch details type
+			 *  
+			 *  @memberof catchClassSpecieDetailTile
+			 *  @public
+			 *  @param {String} text - The text to be displayed in the tooltip
+			 *  @param {String} cssSel - The css selector class of the item against which the tip will be displayed
+			 */
+			scope.displayDetailsTip = function(text, cssSel){
+				var target = angular.element('.catch-class-specie-detail-tile .' + cssSel);
+				var tip;
+				if (angular.isDefined($(target).attr('data-hasqtip'))){
+					tip = $(target);
+				} else {
+					tip = target.qtip({
+						content: {
+							text: text
+						},
+						position: {
+							my: 'left center',
+							at: 'right center',
+							target: target,
+							effect: false
+						},
+						show: {
+							solo: true,
+							when: false,
+							effect: false
+						},
+						style: {
+							classes: 'qtip-bootstrap'
+						},
+						events: {
+							hide: function(evt, api){
+								api.destroy(true);
+							}
+						}
+					});
+				} 
+				var api = tip.qtip('api');
+				api.show();
+			};
 		}
 	};
 });

@@ -25,7 +25,7 @@ copy of the GNU General Public License along with the IFDM Suite. If not, see <h
     </div>
     <!--TRIPS LIST (WHEN RUNNING REPORT WITHOUT MAP)-->
     <div ng-include="'partial/spatial/tripsPanel/tripsList/tripsList.html'" ng-if="false"></div>
-    <!--TRIP SUMMARY--><!--FIXME: remove ng-if="false"-->
+    <!--TRIP SUMMARY-->
     <uib-tabset ng-show="repNav.isViewVisible('tripSummary')" class="trip-panel-content">
         <!-- active="tripSummServ.activeTab.index"-->
         <uib-tab index="$index" ng-repeat="tab in tripSummServ.tabs" active="tab.active" select="tripSummServ.initializeTrip($index)">

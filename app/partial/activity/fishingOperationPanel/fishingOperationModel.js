@@ -23,7 +23,7 @@ copy of the GNU General Public License along with the IFDM Suite. If not, see <h
  * @description
  *  A model to store all the data related to a departure in a standardized way
  */
-angular.module('unionvmsWeb').factory('FishingOperation',function(fishingActivityService) {
+angular.module('unionvmsWeb').factory('FishingOperation',function(fishingActivityService,locale) {
     
     function FishingOperation(){
         this.faType = 'fa_type_fishing_operation';
@@ -63,9 +63,9 @@ angular.module('unionvmsWeb').factory('FishingOperation',function(fishingActivit
         this.gears = data.gears;
         this.reportDoc = data.reportDoc;
         this.fishingData = data.fishingData;
-        /*fishingActivityService.addGearDescription(this);
+        fishingActivityService.addGearDescription(this);
         fishingActivityService.addCatchTypeDescription(this);
-        fishingActivityService.addWeightMeansDescription(this);*/
+        fishingActivityService.addWeightMeansDescription(this);
     };
 
     var loadSummaryData = function(data){
@@ -75,8 +75,8 @@ angular.module('unionvmsWeb').factory('FishingOperation',function(fishingActivit
 
 
         var finalSummary = {
-            title: "Fishing activity: Fishing operation",
-            subTitle: "Fishing time"
+            title: locale.getString('activity.title_fishing_activity') + ': '+ locale.getString('activity.fa_type_fishing_operation'),
+            subTitle: locale.getString('activity.fishing_time')
         };
 
         if(_.keys(data).length){
