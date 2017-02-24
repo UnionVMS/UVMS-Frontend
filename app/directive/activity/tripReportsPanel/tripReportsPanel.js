@@ -181,7 +181,7 @@ angular.module('unionvmsWeb').directive('tripReportsPanel', function(loadingStat
                 type = undefined;
             }
             this.previousItem.idx = idx;
-            this.previousItem.type = type
+            this.previousItem.type = type;
         } else {
             idx = this.currentItemIdx + 1;
             if (idx < this.reports.length){
@@ -193,7 +193,7 @@ angular.module('unionvmsWeb').directive('tripReportsPanel', function(loadingStat
             this.nextItem.idx = idx;
             this.nextItem.type = type;
         }
-    }
+    };
     
     return tripReports;
 });

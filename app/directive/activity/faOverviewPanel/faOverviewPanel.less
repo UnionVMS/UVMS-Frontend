@@ -9,13 +9,28 @@ the hope that it will be useful, but WITHOUT ANY WARRANTY; without even the impl
 FITNESS FOR A PARTICULAR PURPOSE.  See the GNU General Public License for more details. You should have received a
 copy of the GNU General Public License along with the IFDM Suite. If not, see <http://www.gnu.org/licenses/>.
 */
-.departure-panel {
-    height: 100%;
-    .btn-trip-quit {
-        top: 10px;
-        right: 15px;
+fa-overview-panel {
+    .fa-overview-fieldset {
+        legend.fieldsetLegendStyle {
+            margin-bottom: 5px;
+        }
+        .fa-overview-fieldset {
+            margin-top: 5px;
+            margin-bottom: 0;
+            padding-bottom: 15px;
+        }
+        .item-container {
+            display: flex;
+            .labels {
+                font-weight: bold;
+                white-space: nowrap;
+                &::after {
+                    content: ':'
+                }
+            }
+        }
     }
-    .summary-row {
+    > .fa-overview-fieldset {
         padding-bottom: 15px;
     }
 }

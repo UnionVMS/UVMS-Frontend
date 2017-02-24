@@ -9,30 +9,15 @@ the hope that it will be useful, but WITHOUT ANY WARRANTY; without even the impl
 FITNESS FOR A PARTICULAR PURPOSE.  See the GNU General Public License for more details. You should have received a
 copy of the GNU General Public License along with the IFDM Suite. If not, see <http://www.gnu.org/licenses/>.
 */
-/**
- * @memberof unionvmsWeb
- * @ngdoc controller
- * @name DeparturepanelCtrl
- * @param $scope {Service} controller scope
- * @param $state {Service} state provider service
- * @param fishingActivityService {Service} fishing activity service <p>{@link unionvmsWeb.fishingActivityService}</p>
- * @param reportFormService {Service} report form service <p>{@link unionvmsWeb.reportFormService}</p>
- * @param activityRestService {Service} activity REST service <p>{@link unionvmsWeb.activityRestService}</p>
- * @description
- *  The controller for the departure panel partial
- */
-angular.module('unionvmsWeb').controller('DeparturepanelCtrl',function($scope, $state, fishingActivityService, tripSummaryService, activityRestService, loadingStatus, Departure, reportingNavigatorService){
+angular.module('unionvmsWeb').controller('FishingoperationpanelCtrl',function($scope,fishingActivityService,loadingStatus,$state,tripSummaryService,activityRestService,FishingOperation){
+
     $scope.faServ = fishingActivityService;
     
-    /**
-     * Initialization function for the departure panel
-     * 
-     * @memberof DeparturepanelCtrl
-     * @private
-     */
     var init = function(){
-        $scope.faServ.getFishingActivity(new Departure());
+        $scope.faServ.getFishingActivity(new FishingOperation());
         loadingStatus.isLoading('FishingActivity', true);
+        //activityRestService.getTripCatchDetail($scope.faServ.id).then(function(response){
+        //FIXME id is hardcoded
         activityRestService.getTripCatchDetail($scope.faServ.id).then(function(response){
             $scope.fishingTripDetails = response;  
             loadingStatus.isLoading('FishingActivity', false);
@@ -41,18 +26,11 @@ angular.module('unionvmsWeb').controller('DeparturepanelCtrl',function($scope, $
             loadingStatus.isLoading('FishingActivity', false);
         });
     };
-    
-    //The watch is needed for the navigation in the trip summary
-    $scope.$watch('faServ.id', function(newVal, oldVal){
-        if (angular.isDefined(newVal) && newVal !== oldVal){
-            init();
-        }
-    });
-    
+
     /**
      * Check if a location tile should be clickable taking into consideration the route and the report configuration
      * 
-     * @memberof DeparturepanelCtrl
+     * @memberof FishingoperationpanelCtrl
      * @public
      * @alias isLocationClickable
      * @returns {Boolean} Whether the location tile should be clickable or not
@@ -65,26 +43,11 @@ angular.module('unionvmsWeb').controller('DeparturepanelCtrl',function($scope, $
         
         return clickable;
     };
-    
-    /**
-     * Quit departure panel function
-     * 
-     * @memberof DeparturepanelCtrl
-     * @public
-     * @alias quitDeparturePanel
-     */
-    $scope.quitDeparturePanel = function(){
-        if (($state.current.name === 'app.reporting-id' || $state.current.name === 'app.reporting')){
-            reportingNavigatorService.goToPreviousView();
-        } else {
-            //TODO quit logic for the activity tab
-        }
-    };
-    
+
     /**
      * The click location callback function
      * 
-     * @memberof DeparturepanelCtrl
+     * @memberof FishingoperationpanelCtrl
      * @public
      * @alias locationClickCallback
      */
@@ -92,6 +55,6 @@ angular.module('unionvmsWeb').controller('DeparturepanelCtrl',function($scope, $
         //TODO when we have it running with reports - mainly for hiding/showing stuff
         console.log('This is the click callback');
     };
-    
+
     init();
 });

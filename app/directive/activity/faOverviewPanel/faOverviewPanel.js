@@ -9,13 +9,26 @@ the hope that it will be useful, but WITHOUT ANY WARRANTY; without even the impl
 FITNESS FOR A PARTICULAR PURPOSE.  See the GNU General Public License for more details. You should have received a
 copy of the GNU General Public License along with the IFDM Suite. If not, see <http://www.gnu.org/licenses/>.
 */
-.departure-panel {
-    height: 100%;
-    .btn-trip-quit {
-        top: 10px;
-        right: 15px;
-    }
-    .summary-row {
-        padding-bottom: 15px;
-    }
-}
+/**
+ * @memberof unionvmsWeb
+ * @ngdoc directive
+ * @name faOverviewPanel
+ * @attr {Array} ngModel - the content data of fa overview
+ * @description
+ *  A reusable tile that will display the fishing activity overview data in every fishing activity report panel
+ */
+angular.module('unionvmsWeb').directive('faOverviewPanel', function($filter) {
+	return {
+		restrict: 'E',
+		replace: false,
+		scope: {
+			ngModel: '='
+		},
+		templateUrl: 'directive/activity/faOverviewPanel/faOverviewPanel.html',
+		link: function(scope, element, attrs, fn) {
+			scope.isArray = function(val){
+				 return _.isArray(val);
+			};
+		}
+	};
+});

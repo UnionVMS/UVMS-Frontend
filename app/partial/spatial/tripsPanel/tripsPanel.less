@@ -21,7 +21,7 @@ copy of the GNU General Public License along with the IFDM Suite. If not, see <h
         }
         fieldset {
             padding-bottom: 10px;
-            margin-bottom: 5px;
+            margin-bottom: 0;
             align-items: stretch;
             legend {
                 margin: 0 5px 0 -5px;
@@ -125,6 +125,28 @@ copy of the GNU General Public License along with the IFDM Suite. If not, see <h
                 font-size: 22px;
                 color: #ddd;
             }
+        }
+    }
+    .main-content {
+        border: 1px solid #ddd;
+        height: 100%;
+        .title {
+            text-align: center;
+            font-size: 20px;
+            font-weight: bold;
+            margin-top: 5px;
+            margin-bottom: 15px;
+            .useColon::after {
+                content: ':'
+            }
+            .operationType {
+                text-transform: uppercase;
+                color: @primaryColor;
+            }
+        }
+        .summary-section {
+            //padding-bottom: 15px;
+            margin-bottom: 0;
         }
     }
 }

@@ -1,0 +1,21 @@
+<div class="table-chart">
+    <!--<a class="switch-btn" ng-click="switchMode()"><i class="fa" ng-class="{'fa-bar-chart': mode === 'table', 'fa-th': mode === 'chart'}"></i></a>-->
+    <div class="col-md-12 table-responsive-force" ng-show="mode === 'table'">
+        <div class="row table-container">
+            <div class="col-md-12 table tableSmart table-striped table-condensed table-bordered">
+                <div class="col-md-12 thead">
+                    <div class="row tr">
+                        <div class="th col-md-2" ng-repeat="column in columns">
+                            {{column.text}}
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-12 tbody">
+                    <div class="row tr" ng-repeat="row in ngModel" ng-click="selectRow($index)" ng-class="row.selected ? 'selected-row' : ''">
+                        <div class="td col-md-2" ng-repeat="column in columns">{{column.value ? row[column.id][column.value] || row[column.id][0][column.value] : row[column.id]}}</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

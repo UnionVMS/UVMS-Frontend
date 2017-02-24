@@ -10,7 +10,7 @@ FITNESS FOR A PARTICULAR PURPOSE.  See the GNU General Public License for more d
 copy of the GNU General Public License along with the IFDM Suite. If not, see <http://www.gnu.org/licenses/>.
 */
 
-angular.module('unionvmsWeb').controller('ArrivalpanelCtrl', function($scope, $state, fishingActivityService, tripSummaryService, activityRestService, locale, loadingStatus) {
+angular.module('unionvmsWeb').controller('ArrivalpanelCtrl', function($scope, $state, fishingActivityService, tripSummaryService, activityRestService, locale, loadingStatus, Arrival, ArrivalNotification) {
     $scope.faServ = fishingActivityService;
     
     var arrivalNotification = true;
@@ -23,9 +23,9 @@ angular.module('unionvmsWeb').controller('ArrivalpanelCtrl', function($scope, $s
        */
     var init = function() {
         if(arrivalNotification){
-            $scope.faServ.getData('notification_arrival', arrivalData);
+            $scope.faServ.getFishingActivity(new ArrivalNotification(), arrivalData);
         }else{
-            $scope.faServ.getData('arrival',arrivalData);
+            $scope.faServ.getFishingActivity(new Arrival(),arrivalData);
         }
         
         loadingStatus.isLoading('FishingActivity', true);

@@ -19,40 +19,12 @@ copy of the GNU General Public License along with the IFDM Suite. If not, see <h
  * @description
  *  A service to deal with any kind of fishing activity operation (e.g. Departure, Arrival, ...)
  */
-angular.module('unionvmsWeb').factory('fishingActivityService', function (Departure, ArrivalNotification, Arrival, Landing, activityRestService, loadingStatus) {
+angular.module('unionvmsWeb').factory('fishingActivityService', function (activityRestService, loadingStatus, mdrCacheService) {
 
     var faServ = {
         activityData: {},
         id: undefined,
         isCorrection: false
-	};
-	
-	/**
-	 * Get fishing activity operation data from server
-	 * 
-	 * @memberof fishingActivityService
-	 * @public
-	 * @alias getData
-	 * @param {String} type - The activity type (e.g. departure)
-	 * @param {Function} callback - An optional callback function
-	 */
-	faServ.getData = function(type, callback){
-	    var uType = type.toUpperCase(); 
-	    switch (uType) {
-            case 'DEPARTURE':
-                getDeparture();
-                break;
-            case 'NOTIFICATION_ARRIVAL':
-                getNotificationArrival(callback);
-                break;
-            case 'ARRIVAL':
-                getArrival(callback);
-                break;
-            case 'LANDING':
-                getLanding();
-                break;
-            //TODO other types of fa operations
-        }
 	};
 	
 	/**
@@ -80,82 +52,85 @@ angular.module('unionvmsWeb').factory('fishingActivityService', function (Depart
     };
 	
 	/**
-	 * Get data specifically for departure operations
+	 * Get data for a specific fishing activity
 	 * 
 	 * @memberof fishingActivityService
-	 * @private
+	 * @public
+     * @alias getFishingActivity
 	 */
-	function getDeparture(){
-	    //TODO use fa id in the REST request
-	    loadingStatus.isLoading('FishingActivity', true);
-	    activityRestService.getFishingActivityDetails('departure').then(function(response){
-	        faServ.activityData = new Departure();
-	        faServ.activityData.fromJson(response);
-	        loadingStatus.isLoading('FishingActivity', false);
-	    }, function(error){
-	        //TODO deal with error from rest service
-	        loadingStatus.isLoading('FishingActivity', false);
-	    });
-	}
-	
-	/**
-     * Get data specifically for Notification of arrival operations
-     * 
-     * @memberof fishingActivityService
-     * @private
-     */
-    function getNotificationArrival(callback) {
+    faServ.getFishingActivity = function(obj, callback) {
         //TODO use fa id in the REST request
         loadingStatus.isLoading('FishingActivity', true);
-        activityRestService.getFishingActivityDetails('arrival_notification').then(function (response) {
-            faServ.activityData = new ArrivalNotification();
+        activityRestService.getFishingActivityDetails(obj.constructor.name.toLowerCase()).then(function (response) {
+            faServ.activityData = obj;
             faServ.activityData.fromJson(response);
-            callback();
+            if(angular.isDefined(callback)){
+                callback();
+            }
             loadingStatus.isLoading('FishingActivity', false);
         }, function (error) {
             //TODO deal with error from rest service
             loadingStatus.isLoading('FishingActivity', false);
         });
-    }
-
-	/**
-	 * Get data specifically for Arrival operations
-	 * 
-	 * @memberof fishingActivityService
-	 * @private
-	 */
-    function getArrival(callback) {
-        //TODO use fa id in the REST request
-        loadingStatus.isLoading('FishingActivity', true);
-        activityRestService.getFishingActivityDetails('arrival').then(function (response) {
-            faServ.activityData = new Arrival();
-            faServ.activityData.fromJson(response);
-            callback();
-            loadingStatus.isLoading('FishingActivity', false);
-        }, function (error) {
-            //TODO deal with error from rest service
-            loadingStatus.isLoading('FishingActivity', false);
-        });
-    }
+    };
 
     /**
-	 * Get data specifically for Landing operations
-	 * 
-	 * @memberof fishingActivityService
-	 * @private
-	 */
-    function getLanding() {
-        //TODO use fa id in the REST request
-        loadingStatus.isLoading('FishingActivity', true);
-        activityRestService.getFishingActivityDetails('landing').then(function (response) {
-            faServ.activityData = new Landing();
-            faServ.activityData.fromJson(response);
-            loadingStatus.isLoading('FishingActivity', false);
-        }, function (error) {
-            //TODO deal with error from rest service
-            loadingStatus.isLoading('FishingActivity', false);
+     * Adds gear description from MDR code lists into the gears type attribute.
+     * 
+     * @memberof fishingActivityService
+     * @public
+     * @param {Object} faObj - A reference to the Fishing activity object
+     * @param {Array} data - An array containing the available gears
+     * @alias addGearDescription
+     */
+    faServ.addGearDescription = function(faObj){
+        mdrCacheService.getCodeList('gear_type').then(function(response){
+            angular.forEach(faObj.gears, function(item) {
+                var mdrRec = _.findWhere(response, {code: item.type});
+                if (angular.isDefined(mdrRec)){
+                    item.type = item.type + ' - ' + mdrRec.description;
+                }
+            });
         });
-    }
-
-    return faServ;
+    };
+    
+    /**
+     * Adds catch type description from MDR code lists into the details object.
+     * 
+     * @memberof fishingActivityService
+     * @public
+     * @param {Object} faObj - A reference to the Fishing activity object
+     * @alias addCatchTypeDescription
+     */
+    faServ.addCatchTypeDescription = function(faObj){
+        mdrCacheService.getCodeList('fa_catch_type').then(function(response){
+            angular.forEach(faObj.fishingData, function(item) {
+                var mdrRec = _.findWhere(response, {code: item.details.catchType});
+                if (angular.isDefined(mdrRec)){
+                    item.details.typeDesc = mdrRec.description;
+                }
+            });
+        });
+    };
+	
+	/**
+     * Adds weight means description from MDR code lists into the details object.
+     * 
+     * @memberof fishingActivityService
+     * @public
+     * @param {Object} faObj - A reference to the Fishing activity object
+     * @alias addWeightMeansDescription
+     */
+    faServ.addWeightMeansDescription = function(faObj){
+        mdrCacheService.getCodeList('weight_means').then(function(response){
+            angular.forEach(faObj.fishingData, function(item) {
+                var mdrRec = _.findWhere(response, {code: item.details.weightMeans});
+                if (angular.isDefined(mdrRec)){
+                    item.details.weightMeansDesc = mdrRec.description;
+                }
+            });
+        });
+    };
+    
+	return faServ;
 });

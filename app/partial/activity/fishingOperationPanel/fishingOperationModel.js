@@ -23,10 +23,10 @@ copy of the GNU General Public License along with the IFDM Suite. If not, see <h
  * @description
  *  A model to store all the data related to a departure in a standardized way
  */
-angular.module('unionvmsWeb').factory('Departure',function(mdrCacheService, fishingActivityService) {
+angular.module('unionvmsWeb').factory('FishingOperation',function(fishingActivityService,locale) {
     
-    function Departure(){
-        this.faType = 'fa_type_departure';
+    function FishingOperation(){
+        this.faType = 'fa_type_fishing_operation';
         this.operationType = undefined;
         this.summary = {
             occurence: undefined,
@@ -57,16 +57,47 @@ angular.module('unionvmsWeb').factory('Departure',function(mdrCacheService, fish
      * @public
      * @param {Object} data - The source data to fill in the model
      */
-    Departure.prototype.fromJson = function(data){
-        this.summary = data.summary;
+    FishingOperation.prototype.fromJson = function(data){
+        this.summary = loadSummaryData(data.summary);
         this.port = data.port;
-        this.reportDoc = data.reportDoc;
         this.gears = data.gears;
+        this.reportDoc = data.reportDoc;
         this.fishingData = data.fishingData;
         fishingActivityService.addGearDescription(this);
         fishingActivityService.addCatchTypeDescription(this);
         fishingActivityService.addWeightMeansDescription(this);
     };
+
+    var loadSummaryData = function(data){
+
+        var attrOrder = ['occurence','vessel_activity','no_operations','fishery_type','targetted_species','fishing_time'];
+        var subAttrOrder = ['duration'];
+
+
+        var finalSummary = {
+            title: locale.getString('activity.title_fishing_activity') + ': '+ locale.getString('activity.fa_type_fishing_operation'),
+            subTitle: locale.getString('activity.fishing_time')
+        };
+
+        if(_.keys(data).length){
+            finalSummary.items = {};
+        }
+
+        angular.forEach(attrOrder,function(attrName){
+            if(angular.isObject(data[attrName]) && !angular.isArray(data[attrName])){
+                if(!_.isEmpty(data[attrName])){
+                    finalSummary.subItems = {};
+                    angular.forEach(subAttrOrder,function(subAttrName){
+                        finalSummary.subItems[subAttrName] = data[attrName][subAttrName];
+                    });
+                }
+            }else{
+                finalSummary.items[attrName] = data[attrName];
+            }
+        });
+
+        return finalSummary;
+    };
     
-    return Departure;
+    return FishingOperation;
 });

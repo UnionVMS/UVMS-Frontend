@@ -1,0 +1,94 @@
+/*
+Developed with the contribution of the European Commission - Directorate General for Maritime Affairs and Fisheries
+© European Union, 2015-2016.
+
+This file is part of the Integrated Fisheries Data Management (IFDM) Suite. The IFDM Suite is free software: you can
+redistribute it and/or modify it under the terms of the GNU General Public License as published by the
+Free Software Foundation, either version 3 of the License, or any later version. The IFDM Suite is distributed in
+the hope that it will be useful, but WITHOUT ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or
+FITNESS FOR A PARTICULAR PURPOSE.  See the GNU General Public License for more details. You should have received a
+copy of the GNU General Public License along with the IFDM Suite. If not, see <http://www.gnu.org/licenses/>.
+*/
+.catch-class-specie-detail-tile {
+    padding-bottom: 15px;
+    .fieldsetLegendStyle {
+        margin-bottom: 5px;
+    }
+    .catch-details-btn {
+        position: absolute;
+        top: 0;
+        right: 16px;
+        font-size: 16px;
+    }
+    .table {
+        td,
+        .td {
+            cursor: default;
+        }
+        .selected-row td {
+            background-color: rgba(8, 159, 215, 0.46) !important;
+        }
+    }
+    .global-container {
+        display: flex;
+        > *:last-child {
+            padding-right: 0;
+        }
+    }
+    .table-chart-container {
+        min-width: 415px;
+    }
+    .details-content {
+        -webkit-box-flex: 1;
+        -ms-flex: 1;
+        flex: 1;
+        min-width: 705px;
+    }
+    .item-container {
+        display: flex;
+        .labels {
+            font-weight: bold;
+            white-space: nowrap;
+            &::after {
+                content: ':'
+            }
+        }
+    }
+    .section {
+        border: 1px solid #ddd;
+        padding-top: 15px;
+        padding-bottom: 15px;
+        overflow-x: auto;
+        margin-bottom: 10px;
+    }
+    .details {
+        color: @primaryColor;
+        &:hover {
+            cursor: pointer
+        }
+    }
+    .rg-rigth {
+        content: ":";
+        position: absolute;
+        top: 2px;
+        left: 1px;
+        color: #ccc;
+    }
+    .location-gear-container {
+        height: 100%;
+        .species-title {
+            text-align: center;
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            font-weight: bold;
+            font-size: 16px;
+        }
+        .location-gear-content {
+            display: flex;
+            padding-top: 22px;
+            height: 100%;
+        }
+    }
+}
