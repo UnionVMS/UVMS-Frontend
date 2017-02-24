@@ -73,6 +73,64 @@ angular.module('unionvmsWeb').factory('fishingActivityService', function (activi
             loadingStatus.isLoading('FishingActivity', false);
         });
     };
+
+    /**
+     * Adds gear description from MDR code lists into the gears type attribute.
+     * 
+     * @memberof fishingActivityService
+     * @public
+     * @param {Object} faObj - A reference to the Fishing activity object
+     * @param {Array} data - An array containing the available gears
+     * @alias addGearDescription
+     */
+    faServ.addGearDescription = function(faObj){
+        mdrCacheService.getCodeList('gear_type').then(function(response){
+            angular.forEach(faObj.gears, function(item) {
+                var mdrRec = _.findWhere(response, {code: item.type});
+                if (angular.isDefined(mdrRec)){
+                    item.type = item.type + ' - ' + mdrRec.description;
+                }
+            });
+        });
+    };
+    
+    /**
+     * Adds catch type description from MDR code lists into the details object.
+     * 
+     * @memberof fishingActivityService
+     * @public
+     * @param {Object} faObj - A reference to the Fishing activity object
+     * @alias addCatchTypeDescription
+     */
+    faServ.addCatchTypeDescription = function(faObj){
+        mdrCacheService.getCodeList('fa_catch_type').then(function(response){
+            angular.forEach(faObj.fishingData, function(item) {
+                var mdrRec = _.findWhere(response, {code: item.details.catchType});
+                if (angular.isDefined(mdrRec)){
+                    item.details.typeDesc = mdrRec.description;
+                }
+            });
+        });
+    };
+	
+	/**
+     * Adds weight means description from MDR code lists into the details object.
+     * 
+     * @memberof fishingActivityService
+     * @public
+     * @param {Object} faObj - A reference to the Fishing activity object
+     * @alias addWeightMeansDescription
+     */
+    faServ.addWeightMeansDescription = function(faObj){
+        mdrCacheService.getCodeList('weight_means').then(function(response){
+            angular.forEach(faObj.fishingData, function(item) {
+                var mdrRec = _.findWhere(response, {code: item.details.weightMeans});
+                if (angular.isDefined(mdrRec)){
+                    item.details.weightMeansDesc = mdrRec.description;
+                }
+            });
+        });
+    };
     
 	return faServ;
 });
