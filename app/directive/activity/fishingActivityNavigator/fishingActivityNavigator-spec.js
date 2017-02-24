@@ -29,7 +29,7 @@ describe('fishingActivityNavigator', function() {
             }
         };
         
-        mockFishServ = jasmine.createSpyObj('fishingActivityService', ['resetActivity', 'getData']);
+        mockFishServ = jasmine.createSpyObj('fishingActivityService', ['resetActivity', 'getFishingActivity']);
         
         module(function($provide){
             $provide.value('tripReportsTimeline', mockTimeline);
@@ -37,13 +37,12 @@ describe('fishingActivityNavigator', function() {
         });
     });
     
-    beforeEach(inject(function($rootScope,$compile,$injector) {
+    beforeEach(inject(function($rootScope,$compile,$injector,$httpBackend) {
         if(!angular.element('#parent-container').length){
             var parentElement = angular.element('<div id="parent-container"></div>');
             parentElement.appendTo('body');
         }
         
-        $httpBackend = $injector.get('$httpBackend');;
         $httpBackend.whenGET(/usm/).respond();
         $httpBackend.whenGET(/i18n/).respond();
         $httpBackend.whenGET(/globals/).respond({data : []});
@@ -63,7 +62,7 @@ describe('fishingActivityNavigator', function() {
             return true;
         });
         
-        mockFishServ.getData.andCallFake(function(){
+        mockFishServ.getFishingActivity.andCallFake(function(){
             return true;
         });
     }
