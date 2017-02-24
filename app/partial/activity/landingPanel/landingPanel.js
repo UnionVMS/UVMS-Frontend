@@ -12,7 +12,7 @@ copy of the GNU General Public License along with the IFDM Suite. If not, see <h
 /**
  * @memberof unionvmsWeb
  * @ngdoc controller
- * @name DeparturepanelCtrl
+ * @name LandingpanelCtrl
  * @param $scope {Service} controller scope
  * @param $state {Service} state provider service
  * @param fishingActivityService {Service} fishing activity service <p>{@link unionvmsWeb.fishingActivityService}</p>
@@ -21,77 +21,54 @@ copy of the GNU General Public License along with the IFDM Suite. If not, see <h
  * @description
  *  The controller for the departure panel partial
  */
-angular.module('unionvmsWeb').controller('DeparturepanelCtrl',function($scope, $state, fishingActivityService, tripSummaryService, activityRestService, loadingStatus, Departure, reportingNavigatorService){
+angular.module('unionvmsWeb').controller('LandingpanelCtrl', function ($scope, $state, fishingActivityService, tripSummaryService, activityRestService, loadingStatus) {
     $scope.faServ = fishingActivityService;
-    
     /**
-     * Initialization function for the departure panel
+     * Initialization function
      * 
-     * @memberof DeparturepanelCtrl
+     * @memberof LandingpanelCtrl
      * @private
      */
-    var init = function(){
-        $scope.faServ.getFishingActivity(new Departure());
+    var init = function () {
+        $scope.faServ.getData('landing');
         loadingStatus.isLoading('FishingActivity', true);
-        activityRestService.getTripCatchDetail($scope.faServ.id).then(function(response){
-            $scope.fishingTripDetails = response;  
+        activityRestService.getTripCatchDetail('1').then(function (response) {
+            $scope.fishingTripDetails = response;
             loadingStatus.isLoading('FishingActivity', false);
-        }, function(error){
+        }, function (error) {
             //TODO deal with error from service
             loadingStatus.isLoading('FishingActivity', false);
         });
     };
-    
-    //The watch is needed for the navigation in the trip summary
-    $scope.$watch('faServ.id', function(newVal, oldVal){
-        if (angular.isDefined(newVal) && newVal !== oldVal){
-            init();
-        }
-    });
-    
+
     /**
-     * Check if a location tile should be clickable taking into consideration the route and the report configuration
-     * 
-     * @memberof DeparturepanelCtrl
-     * @public
-     * @alias isLocationClickable
-     * @returns {Boolean} Whether the location tile should be clickable or not
-     */
-    $scope.isLocationClickable = function(){
+      * Check if a location tile should be clickable taking into consideration the route and the report configuration
+      * 
+      * @memberof LandingpanelCtrl
+      * @public
+      * @alias isLocationClickable
+      * @returns {Boolean} Whether the location tile should be clickable or not
+      */
+    $scope.isLocationClickable = function () {
         var clickable = false;
-        if (($state.current.name === 'app.reporting-id' || $state.current.name === 'app.reporting') && tripSummaryService.withMap){
+        if (($state.current.name === 'app.reporting-id' || $state.current.name === 'app.reporting') && tripSummaryService.withMap) {
             clickable = true;
         }
-        
+
         return clickable;
     };
-    
-    /**
-     * Quit departure panel function
-     * 
-     * @memberof DeparturepanelCtrl
-     * @public
-     * @alias quitDeparturePanel
-     */
-    $scope.quitDeparturePanel = function(){
-        if (($state.current.name === 'app.reporting-id' || $state.current.name === 'app.reporting')){
-            reportingNavigatorService.goToPreviousView();
-        } else {
-            //TODO quit logic for the activity tab
-        }
-    };
-    
+
     /**
      * The click location callback function
      * 
-     * @memberof DeparturepanelCtrl
+     * @memberof LandingpanelCtrl
      * @public
      * @alias locationClickCallback
      */
-    $scope.locationClickCallback = function(){
+    $scope.locationClickCallback = function () {
         //TODO when we have it running with reports - mainly for hiding/showing stuff
         console.log('This is the click callback');
     };
-    
+
     init();
 });

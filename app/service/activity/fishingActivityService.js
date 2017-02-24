@@ -13,7 +13,7 @@ copy of the GNU General Public License along with the IFDM Suite. If not, see <h
  * @memberof unionvmsWeb
  * @ngdoc service
  * @name fishingActivityService
- * @param Departure {Model} The model for Departure fissing activities <p>{@link unionvmsWeb.Departure}</p>
+ * @param Departure {Model} The model for Departure fishing activities <p>{@link unionvmsWeb.Departure}</p>
  * @param activityRestService {Service} The activity REST service <p>{@link unionvmsWeb.activityRestService}</p>
  * @attr {Object} activityData - An object containing the activity data that will be used in the different views
  * @description
@@ -25,8 +25,8 @@ angular.module('unionvmsWeb').factory('fishingActivityService', function (activi
         activityData: {},
         id: undefined,
         isCorrection: false
-    };
-
+	};
+	
 	/**
 	 * Reset fishing activity service
 	 * 
@@ -34,12 +34,12 @@ angular.module('unionvmsWeb').factory('fishingActivityService', function (activi
 	 * @public
 	 * @alias resetActivity
 	 */
-    faServ.resetActivity = function () {
-        faServ.activityData = {};
-        faServ.id = undefined;
-        faServ.isCorrection = false;
-    };
-
+	faServ.resetActivity = function(){
+	    faServ.activityData = {};
+	    faServ.id = undefined;
+	    faServ.isCorrection = false;
+	};
+	
 	/**
      * Reset activity data within the service
      * 
@@ -47,11 +47,10 @@ angular.module('unionvmsWeb').factory('fishingActivityService', function (activi
      * @public
      * @alias resetActivityData
      */
-    faServ.resetActivityData = function () {
+    faServ.resetActivityData = function(){
         faServ.activityData = {};
-
     };
-
+	
 	/**
 	 * Get data for a specific fishing activity
 	 * 
@@ -113,7 +112,7 @@ angular.module('unionvmsWeb').factory('fishingActivityService', function (activi
             });
         });
     };
-    
+
     /**
      * Adds weight means description from MDR code lists into the details object.
      * 

@@ -31,7 +31,11 @@ angular.module('unionvmsWeb').directive('catchClassDetailTile', function() {
 		},
 		templateUrl: 'directive/activity/catchClassDetailTile/catchClassDetailTile.html',
 		link: function(scope, element, attrs, fn) {
-		    scope.init();
+		    scope.$watch('ngModel', function(newVal){
+		        if (angular.isDefined(newVal)){
+		            scope.init();
+		        }
+		    });
 		}
 	};
 }).

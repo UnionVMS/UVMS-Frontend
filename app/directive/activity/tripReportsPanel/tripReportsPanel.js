@@ -18,7 +18,7 @@ copy of the GNU General Public License along with the IFDM Suite. If not, see <h
  * @description
  *  A reusable tile that will display the report messages and the message types count related to the selected trip
  */
-angular.module('unionvmsWeb').directive('tripReportsPanel', function(loadingStatus,activityRestService,$anchorScroll,locale,reportingNavigatorService,fishingActivityService) {
+angular.module('unionvmsWeb').directive('tripReportsPanel', function(loadingStatus,activityRestService,$anchorScroll,locale,reportingNavigatorService,fishingActivityService, tripReportsTimeline) {
 	return {
 		restrict: 'E',
 		replace: true,
@@ -49,7 +49,7 @@ angular.module('unionvmsWeb').directive('tripReportsPanel', function(loadingStat
                 {
                     id: "reason",
                     label: "activity.reports_panel_column_reason",
-                    width: 1
+                    width: 2
                 },
                 {
                     id: "remarks",
@@ -68,10 +68,11 @@ angular.module('unionvmsWeb').directive('tripReportsPanel', function(loadingStat
                 }
             ];
 
-            //when tthe trip is initialized
-            scope.$watch('trip',function(){
-				init();
+            //when the trip is initialized
+            scope.$watch('trip',function(newVal){
+                init();
 			});
+            
 
             /**
 			 * Initializes the trip reports panel directive
@@ -112,13 +113,88 @@ angular.module('unionvmsWeb').directive('tripReportsPanel', function(loadingStat
                     //TODO check the type of fa operation so that we can open the proper partial
                     //FIXME set proper id and correction in the faservice
                     fishingActivityService.resetActivity();
-                    fishingActivityService.id = '1234';
+                    fishingActivityService.id = node.id;
                     fishingActivityService.isCorrection = node.corrections;
-                    reportingNavigatorService.goToView('tripsPanel','tripFishingOperationPanel'); 
-		           // reportingNavigatorService.goToView('tripsPanel','tripArrivalPanel');
+                    tripReportsTimeline.setCurrentPreviousAndNextItem(node);
+                    reportingNavigatorService.goToView('tripsPanel','tripDeparturePanel');
                 }
             };
 		}
 	};
+})
+/**
+ * @memberof unionvmsWeb
+ * @ngdoc service
+ * @name tripReportsTimeline
+ * @description
+ *  A service for managing the ordered access to fishing activities within a trip
+ */
+.factory('tripReportsTimeline', function(){
+    var tripReports = {
+        reports: [],
+        currentItemIdx: undefined,
+        previousItem: {
+            idx: undefined,
+            type: undefined
+        },
+        nextItem: {
+            idx: undefined,
+            type: undefined
+        }
+    };
+    
+    /**
+     * Set the current, previous and next fishing activities items for navigation purposes
+     * 
+     * @memberof tripReportsTimeline
+     * @public
+     * @alias setCurrentPreviousAndNextItem
+     */
+    tripReports.setCurrentPreviousAndNextItem = function(selectedRecord){
+        var idx = _.findIndex(this.reports, function(report){
+            return report.id === selectedRecord.id;
+        });
+        
+        if (idx !== -1){
+            tripReports.currentItemIdx = idx;
+            tripReports.setItem('previous');
+            tripReports.setItem('next');
+        }
+    };
+    
+    /**
+     * Set an activity item within the factory (it might be a next or previous item)
+     * 
+     * @memberof tripReportsTimeline
+     * @public
+     * @alias setItem
+     * @param {String} direction - The direction of the item. Supported values are: next or previous.
+     */
+    tripReports.setItem = function(direction){
+        var idx, type;
+        if (direction === 'previous'){
+            idx = this.currentItemIdx - 1;
+            if (idx >= 0){
+                type = this.reports[idx].srcType;
+            } else {
+                idx = undefined;
+                type = undefined;
+            }
+            this.previousItem.idx = idx;
+            this.previousItem.type = type;
+        } else {
+            idx = this.currentItemIdx + 1;
+            if (idx < this.reports.length){
+                type = this.reports[idx].srcType;
+            } else {
+                idx = undefined;
+                type = undefined;
+            }
+            this.nextItem.idx = idx;
+            this.nextItem.type = type;
+        }
+    }
+    
+    return tripReports;
 });
 

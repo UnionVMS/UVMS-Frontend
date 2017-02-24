@@ -193,6 +193,7 @@ angular.module('unionvmsWeb').factory('activityService',function(locale, activit
                     break;
                 case 'activitiesHistory':
                     this.displayedActivitiesHistory = [];
+                    this.selReportDoc = {};
                     break;
                 default:
                     break;
