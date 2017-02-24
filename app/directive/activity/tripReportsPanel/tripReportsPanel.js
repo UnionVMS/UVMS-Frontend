@@ -193,7 +193,7 @@ angular.module('unionvmsWeb').directive('tripReportsPanel', function(loadingStat
             this.nextItem.idx = idx;
             this.nextItem.type = type;
         }
-    }
+    };
     
     return tripReports;
 });
