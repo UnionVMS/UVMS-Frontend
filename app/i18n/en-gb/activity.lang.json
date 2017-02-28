@@ -74,6 +74,7 @@
 	"trip_departure": "Departure",
 	"trip_arrival": "Arrival",
 	"trip_landing": "Landing",
+    "trip_discard": "Discard at Sea",
     "trip_landing_time": "Landing time",
 	"trip_summary_vessel": "Vessel",
 	"trip_summary_vessel_name": "Name",
