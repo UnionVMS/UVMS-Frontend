@@ -82,7 +82,7 @@ angular.module('unionvmsWeb').directive('tripReportsPanel', function(loadingStat
 			 */
             var init = function(){
                 //get trip message count
-                loadingStatus.isLoading('TripSummary', true);
+                loadingStatus.isLoading('TripSummary', true, 0);
                 activityRestService.getTripMessageCount(scope.trip.id).then(function(response){
                     scope.trip.fromJson('messageCount',response.data);
                     scope.messageCount = scope.trip.messageCount;
