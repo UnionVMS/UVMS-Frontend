@@ -53,6 +53,10 @@ describe('VesselFormCtrl', function() {
             //Nothing
         };
 
+        scope.setVesselDetailsDirty = function(bool){
+            scope.isVesselDetailsDirty = bool;
+        };
+
         scope.vesselNoteValues = {
             date : "1", 
             activity : "1", 
@@ -129,6 +133,7 @@ describe('VesselFormCtrl', function() {
         };
 
         scope.setCreateMode(false);
+        scope.setVesselDetailsDirty(true);
 
         // A form to be valid
         var element = angular.element('<form name="vesselForm"></form>');

@@ -22,7 +22,7 @@ angular.module('unionvmsWeb')
             disableForm : '=',
             spin: '=',
             status: '=', 
-            dirtyCheck: '='
+            dirtyStatus: '='
         },
 		templateUrl: 'directive/vessel/vesselNotes/vesselNotes.html',
 		link: function(scope, element, attrs, fn) {
@@ -60,7 +60,7 @@ angular.module('unionvmsWeb')
         // Check if notes has been modified and set form dirty 
         $scope.$watch('vesselNotes', function(newValue, oldValue){
             if ($scope.vesselNotes.date && $scope.vesselNotes.activity) {
-                $scope.dirtyCheck(true); 
+                $scope.dirtyStatus(true);
             }
         }, true);
 
