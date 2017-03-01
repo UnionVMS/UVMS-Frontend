@@ -367,7 +367,8 @@ module.exports = function (grunt) {
           mangle: false,
           beautify: true,
           banner: '/*Version: <%= grunt.template.today("yyyy-mm-dd HH:MM") %> */',
-          sourceMap: true
+          sourceMap: true,
+          compress: { unused: false}
         },
         src: 'dist/app.full.js',
         dest:'dist/app.full.min.js'
