@@ -11,36 +11,39 @@ copy of the GNU General Public License along with the IFDM Suite. If not, see <h
  */
 angular.module('unionvmsWeb').factory('alertService',function($timeout) {
 
-    var currentAlert = {
-        message : "",
-        type : ""
-    };
+    var currentAlerts = [];
     var alertTimeout;
 
     //Show an alert message
-    var showMessage = function(message, type){
-        //Cancel alert timeout
-        if(angular.isDefined(alertTimeout)){
-            $timeout.cancel(alertTimeout);
-            alertTimeout = undefined;
+    var showMessage = function(message, type, hideOnTimeout){
+
+        //Add flag for timeout messages
+        var timeout = false;
+        if(angular.isDefined(hideOnTimeout)){
+            timeout = hideOnTimeout;
         }
-        currentAlert.message = message;
-        currentAlert.type = type;
+        
+        //Push alert messages to array
+        currentAlerts.push({
+            message: message,
+            type: type, 
+            hideOnTimeout: timeout
+        });
     };
 
     //Show an alert message and hide it after 3 seconds
     var showMessageWithTimeout = function(message, type){
         //Show message
-            showMessage(message, type);
+        showMessage(message, type, true);
 
-        //Remove alert after the timout time
+        //Remove alert after timout time
         var timeoutTime = 3000;
         alertTimeout = $timeout(function(){
-            currentAlert.message = "";
+            alertService.hideTimeoutMessages();
         }, timeoutTime);
     };
 
-	var alertService = {
+    var alertService = {
         showErrorMessage : function(message){
             showMessage(message, 'ERROR');
         },
@@ -68,15 +71,27 @@ angular.module('unionvmsWeb').factory('alertService',function($timeout) {
         showActionBarMessage : function(message){
             showMessage(message, 'ACTIONBAR');
         },
-        hideMessage : function(){
-            currentAlert.message = "";
+        hideMessage : function(index){
+            if (angular.isDefined(index)) {
+                currentAlerts.splice(index, 1);
+            } else {
+                var i = currentAlerts.length;
+                while (i--) {
+                    currentAlerts.splice(i, 1);
+                }
+            }
+        },
+        hideTimeoutMessages : function(){
+            for (var i = 0; i < currentAlerts.length; i++) {
+                if(currentAlerts[i].hideOnTimeout) {
+                   currentAlerts.splice(i, 1);
+                }
+            }
         },
         getCurrentAlert : function(){
-            return currentAlert;
-        },
-
-
+            return currentAlerts;
+        }
     };
 
-	return alertService;
+    return alertService;
 });

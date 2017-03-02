@@ -22,8 +22,7 @@ angular.module('unionvmsWeb')
             vesselForm : '=',
             submitAttempted : '=',
             spin: '=',
-            existingValues: '=',
-            functions : '='
+            existingValues: '='
         },
 		templateUrl: 'directive/vessel/vesselDetails/vesselDetails.html',
 		link: function(scope, element, attrs, fn) {
@@ -74,16 +73,6 @@ angular.module('unionvmsWeb')
             return {
                 maxlength: locale.getString('vessel.warn_max_length', length)
             };
-        };
-
-        $scope.orderByOwner = function (contact) {
-            switch (contact.owner) {
-                case true:
-                    return 1;
-
-                case false:
-                    return 2;
-            }
         };
     }
 );

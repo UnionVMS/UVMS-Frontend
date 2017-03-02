@@ -46,25 +46,29 @@ angular.module('unionvmsWeb').controller('VesselFormCtrl',function($scope, $log,
     $scope.$watch('vesselObj', function(newValue, oldValue) {
         if (angular.isDefined($scope.vesselObjOriginal)) {
             if (angular.equals(angular.copy(newValue).toJson(), $scope.vesselObjOriginal.toJson())) {
-                $scope.noFormChange = true;
+                $scope.setFormDirtyStatus(false);
+                $scope.isVesselDetailsDirty = false;
             } else {
-                $scope.noFormChange = false;
+                $scope.setFormDirtyStatus(true);
+                $scope.isVesselDetailsDirty = true;
             }
         }       
     }, true);
 
-    //Add notes to Vessel object when created 
-    $scope.$watch('vesselNotesObj', function(newValue, oldValue){
-        if ($scope.vesselNotesObj.date && $scope.vesselNotesObj.activity) {
-            $scope.noFormChange = false;
+    //Check if form has been modified 
+    $scope.setFormDirtyStatus = function(status) {
+        if (angular.isDefined(status)) {
+            $scope.isFormDirty = status;
         }
-    }, true);
+    };
 
     //Has form submit been atempted?
     $scope.submitAttempted = false;
     $scope.waitingForCreateResponse = false;
     $scope.waitingForHistoryResponse = false;
     $scope.waitingForMobileTerminalsResponse = false;
+    $scope.isFormDirty = false;
+    $scope.isVesselDetailsDirty = false;
 
     //Set default country code
     $scope.setDefaultCountryCode = function(){
@@ -110,6 +114,7 @@ angular.module('unionvmsWeb').controller('VesselFormCtrl',function($scope, $log,
 
             $scope.nonUniqueActiveTerminalTypes = $scope.getNonUniqueActiveTerminalTypes($scope.mobileTerminals);
             if ($scope.hasNonUniqueActiveTerminalTypes()) {
+                alertService.hideMessage();
                 alertService.showWarningMessage(locale.getString("vessel.warning_multiple_terminals"));
             }
             $scope.waitingForMobileTerminalsResponse = false;
@@ -301,7 +306,7 @@ angular.module('unionvmsWeb').controller('VesselFormCtrl',function($scope, $log,
     $scope.updateVessel = function(){
         $scope.submitAttempted = true;
 
-        if($scope.vesselForm.$valid) {
+        if($scope.vesselForm.$valid && $scope.isVesselDetailsDirty) {
             //MobileTerminals remove them cuz they do not exist in backend yet.
             delete $scope.vesselObj.mobileTerminals;
             $scope.updateContactItems();
@@ -313,14 +318,7 @@ angular.module('unionvmsWeb').controller('VesselFormCtrl',function($scope, $log,
 
             var updateResponse = vesselRestService.updateVessel($scope.vesselObj)
                 .then(updateVesselSuccess, updateVesselError);
-        }else{
-            alertService.showErrorMessage(locale.getString('vessel.add_new_alert_message_on_form_validation_error'));
         }
-    };
-
-    //Is the name of the vessel set?
-    $scope.isVesselNameSet = function(){
-        return angular.isDefined($scope.vesselObj) && angular.isDefined($scope.vesselObj.name) && $scope.vesselObj.name.trim().length > 0;
     };
 
     //Vessel was successfully updated
@@ -486,12 +484,6 @@ angular.module('unionvmsWeb').controller('VesselFormCtrl',function($scope, $log,
         $scope.mobileTerminals.push(newMobileTerminal);
     };
 
-    $scope.mobileTerminalForm = {
-        updateMobileTerminals: function() {
-            getMobileTerminals();
-        }
-    };
-
     // Set menu bar header
     $scope.getMenuBarHeader = function(vessel) {
         if ($scope.isCreateNewMode()) {
@@ -502,29 +494,17 @@ angular.module('unionvmsWeb').controller('VesselFormCtrl',function($scope, $log,
     };
 
     $scope.menuBarFunctions = {
-        addMobileTerminal: function() {
-            $scope.toggleAddNewMobileTerminalForm();
-        },
-        showMobileTerminal: function(vessel) {
-            if (vessel) {
-                return angular.isDefined(vessel.vesselId) && vessel.vesselId != null && vessel.active;
-            }
-            return false;
-        },
-        disableAddMobileTerminal: function(vessel) {
-            if (vessel) {
-                return $scope.vesselForm.cfr.$invalid || $scope.vesselForm.ircs.$invalid || !vessel.ircs || !vessel.cfr;
-            }
-            return false;
-        },
         saveCallback: $scope.createNewVessel,
+        updateCallback: $scope.updateVessel,
+        showSave: function(vessel) {
+            return true; 
+        },
         disableSave: function(vessel) {
             if (vessel) {
-                return $scope.noFormChange || $scope.vesselForm.$invalid;
+                return !$scope.isFormDirty || $scope.vesselForm.$invalid;
             }
             return false;
         },
-        updateCallback: $scope.updateVessel,
         cancelCallback: function() {
             $scope.clearForm();
             $scope.cancelFormView();
@@ -547,11 +527,54 @@ angular.module('unionvmsWeb').controller('VesselFormCtrl',function($scope, $log,
                 return angular.isDefined(vessel.vesselId) && vessel.vesselId != null && vessel.active;
             }
             return false;
+        },
+        disableAddMobileTerminal: function(vessel) {
+            if (angular.isDefined($scope.vesselForm.cfr && $scope.vesselForm.ircs && vessel)) {
+                return $scope.vesselForm.cfr.$invalid || $scope.vesselForm.ircs.$invalid || !vessel.ircs || !vessel.cfr;
+            }
+            return false;
+        },
+    };
+
+    $scope.vesselContactsFunctions = {
+        addContactItemCallback: $scope.addContactItem,
+        removeContactItemCallback: $scope.removeContactItem
+    };
+
+    $scope.mobileTerminalFunctions = {
+        setSubmitStatus: function(status) {
+            if (angular.isDefined(status)) {
+                $scope.submitAttempted = status;
+            }
+        },
+        updateMobileTerminals: function() {
+            getMobileTerminals();
+        },
+        removeMobileTerminal: function(mobileTerminal) {
+            $scope.mobileTerminals.splice($scope.mobileTerminals.indexOf(mobileTerminal), 1);
         }
     };
 
-    $scope.vesselDetailsFunctions = {
-        addContactItemCallback: $scope.addContactItem,
-        removeContactItemCallback: $scope.removeContactItem
+    $scope.contentTabsFunctions = {
+        setTabs: function() {
+            return [
+                {
+                    'tab': 'MOBILE_TERMINALS',
+                    'title': $filter('i18n')('header.menu_communication')
+                },
+                {
+                    'tab': 'CONTACTS',
+                    'title': $filter('i18n')('vessel.vessel_details_contacts')
+                },
+                {
+                    'tab': 'NOTES',
+                    'title': $filter('i18n')('vessel.notes')
+                },
+                {
+                    'tab': 'HISTORY',
+                    'title': $filter('i18n')('vessel.event_history')
+                },
+            ];
+        }
     };
 });

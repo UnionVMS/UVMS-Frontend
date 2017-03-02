@@ -21,7 +21,8 @@ angular.module('unionvmsWeb')
             submitAttempted : '=',
             disableForm : '=',
             spin: '=',
-            status: '=' 
+            status: '=', 
+            dirtyStatus: '='
         },
 		templateUrl: 'directive/vessel/vesselNotes/vesselNotes.html',
 		link: function(scope, element, attrs, fn) {
@@ -54,8 +55,16 @@ angular.module('unionvmsWeb')
 });
 
 angular.module('unionvmsWeb')
-    .controller('vesselNotesCtrl', function($scope, locale, configurationService, vesselValidationService, globalSettingsService, vesselRestService){
+    .controller('vesselNotesCtrl', function($scope, locale, configurationService, vesselRestService){
 
+        // Check if notes has been modified and set form dirty 
+        $scope.$watch('vesselNotes', function(newValue, oldValue){
+            if ($scope.vesselNotes.date && $scope.vesselNotes.activity) {
+                $scope.dirtyStatus(true);
+            }
+        }, true);
+
+        // Get list of activity numbers 
         vesselRestService.getNoteActivityList().then(function(data) {
             $scope.noteActivityList = data;
             $scope.vesselNotesActivity = configurationService.setTextAndCodeForDropDown(data.code, true);
