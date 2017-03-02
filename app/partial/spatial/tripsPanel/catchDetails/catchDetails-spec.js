@@ -301,14 +301,14 @@ describe('CatchdetailsCtrl', function () {
                 then: function(callback){
                     return callback(getTripCatchDetail());
                 }
-            }
+            };
         });
         activityRestServiceSpy.getTripCatchesLandingDetails.andCallFake(function (test) {
             return {
                 then: function(callback){
                     return callback(getTripCatchesLandingDetails());
                 }
-            }
+            };
         });
     }
 

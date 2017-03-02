@@ -89,7 +89,9 @@ angular.module('unionvmsWeb').factory('reportService',function($rootScope, $time
 	rep.runReport = function(report){
         loadingStatus.isLoading('LiveviewMap',true, 0);
         
-        rep.reportType = report.reportType;
+        if(angular.isDefined(report)){
+            rep.reportType = report.reportType;
+        }
         rep.hasAlert = false;
         $modalStack.dismissAll();
         if (angular.isDefined(rep.autoRefreshInterval)){
