@@ -33,6 +33,7 @@ describe('CatchdetailsCtrl', function () {
     beforeEach(inject(function ($rootScope, $controller) {
         buildMocks();
         scope = $rootScope.$new();
+        scope.tripId = getTripCatchDetail().tripID;
         ctrl = $controller('CatchdetailsCtrl', { $scope: scope });
         scope.$digest();
     }));
@@ -301,14 +302,14 @@ describe('CatchdetailsCtrl', function () {
                 then: function(callback){
                     return callback(getTripCatchDetail());
                 }
-            }
+            };
         });
         activityRestServiceSpy.getTripCatchesLandingDetails.andCallFake(function (test) {
             return {
                 then: function(callback){
                     return callback(getTripCatchesLandingDetails());
                 }
-            }
+            };
         });
     }
 

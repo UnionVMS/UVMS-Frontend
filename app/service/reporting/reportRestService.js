@@ -121,21 +121,6 @@ angular.module('unionvmsWeb').factory('reportRestFactory', function($resource) {
         getReport: function(reportId){
             var deferred = $q.defer();
             reportRestFactory.getReport().get({id: reportId}, function(response){
-                //TODO remove this after the service is finished
-                response.data.reportType = "standard";
-
-                response.data.filterExpression.fa = {
-                    reportType: ['NOTIFICATION'],
-                    activityType: ['DEPARTURE','LANDING'],
-                    master: 'rep_power',
-                    port: 'PORT1',
-                    gear: 'GNS',
-                    weight: {
-                        min: 2,
-                        unit: 'kg'
-                    }
-                };
-
                 deferred.resolve(response.data);
             }, function(error){
                 deferred.reject(error);

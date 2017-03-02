@@ -59,47 +59,78 @@ angular.module('unionvmsWeb').controller('ReportformCtrl',function($scope, $moda
 
     $scope.aggregationTypes = [
         {
-            code: "fs",
-            text: locale.getString('spatial.reports_form_aggregation_type_fs')
+            code: "FLAG_STATE",
+            text: locale.getString('spatial.criteria_flag_state')
         },
         {
-            code: "vessel",
-            text: locale.getString('spatial.reports_form_aggregation_type_vessel')
+            code: "VESSEL",
+            text: locale.getString('spatial.criteria_vessel')
         },
         {
-            code: "period",
-            text: locale.getString('spatial.reports_form_aggregation_type_period'),
+            code: "DATE",
+            text: locale.getString('spatial.criteria_date'),
             items: [
                 {
-                    code: "day",
-                    text: locale.getString('spatial.reports_form_aggregation_type_period_day')
+                    code: "DATE_DAY",
+                    text: locale.getString('spatial.criteria_date_day')
                 },
                 {
-                    code: "month",
-                    text: locale.getString('spatial.reports_form_aggregation_type_period_month')
+                    code: "DATE_MONTH",
+                    text: locale.getString('spatial.criteria_date_month')
                 },
                 {
-                    code: "year",
-                    text: locale.getString('spatial.reports_form_aggregation_type_period_year')
+                    code: "DATE_YEAR",
+                    text: locale.getString('spatial.criteria_date_year')
                 }
-
-            ]
+            ],
+            selection: "single"
         },
         {
-            code: "area",
-            text: locale.getString('spatial.reports_form_aggregation_type_area')
+            code: "AREA",
+            text: locale.getString('spatial.criteria_area'),
+            items: [
+                {
+                    code: "TERRITORY",
+                    text: locale.getString('spatial.criteria_territory')
+                },
+                {
+                    code: "FAO_AREA",
+                    text: locale.getString('spatial.criteria_fao_area')
+                },
+                {
+                    code: "ICES_STAT_RECTANGLE",
+                    text: locale.getString('spatial.criteria_ices_stat_rectangle')
+                },
+                {
+                    code: "EFFORT_ZONE",
+                    text: locale.getString('spatial.criteria_effort_zone')
+                },
+                {
+                    code: "RFMO",
+                    text: locale.getString('spatial.criteria_rfmo')
+                },
+                {
+                    code: "GFCM_GSA",
+                    text: locale.getString('spatial.criteria_gfcm_gsa')
+                },
+                {
+                    code: "GFCM_STAT_RECTANGLE",
+                    text: locale.getString('spatial.criteria_gfcm_stat_rectangle')
+                }
+            ],
+            selection: "multiple"
         },
         {
-            code: "geartype",
-            text: locale.getString('spatial.reports_form_aggregation_type_geartype')
+            code: "GEAR_TYPE",
+            text: locale.getString('spatial.criteria_gear_type')
         },
         {
-            code: "species",
-            text: locale.getString('spatial.reports_form_aggregation_type_species')
+            code: "SPECIES",
+            text: locale.getString('spatial.criteria_species')
         },
         {
-            code: "presentation",
-            text: locale.getString('spatial.reports_form_aggregation_type_presentation')
+            code: "PRESENTATION",
+            text: locale.getString('spatial.criteria_presentation')
         }
     ];
 

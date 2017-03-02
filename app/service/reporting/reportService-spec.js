@@ -46,7 +46,7 @@ describe('reportService', function () {
         });
     });
     
-    beforeEach(inject(function($injector, _$interval_){
+    beforeEach(inject(function($injector, _$interval_, $httpBackend, Report){
         $interval = _$interval_;
         repServ = $injector.get('reportService');
         //We need to mock the following function because it is only defined in mapPanel.js
@@ -55,10 +55,7 @@ describe('reportService', function () {
         };
         
         //Define a standard report to be run
-        var repModel = $injector.get('Report');
-        rep = new repModel();
-        
-        $httpBackend = $injector.get('$httpBackend');
+        rep = new Report();
         
         $httpBackend.whenGET(/usm/).respond();
         $httpBackend.whenGET(/i18n/).respond();

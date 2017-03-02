@@ -16,7 +16,7 @@ copy of the GNU General Public License along with the IFDM Suite. If not, see <h
 			<div class="row form-group">
 				<div class="col-md-4">
 					<combobox ng-model="repServ.selectedHistory" initialtext="{{repServ.name}}" items="repServ.reportsHistory" combo-section="true" callback="selectHistory" init-callback="initComboHistory"
-					is-loading="repServ.loadingReportHistory" class="combo-report-history" no-placeholder-on-list="true"></combobox>
+					is-loading="repServ.loadingReportHistory" class="combo-report-history" no-placeholder-on-list="true" list-class="combo-report-history-list"></combobox>
 				</div>
 				<div class="col-md-8 textAlignRight buttonContainer">
 					<button type="button" class="btn btn-primary btn-sm" ng-show="repServ.id !== undefined" ng-click="editReport()">
