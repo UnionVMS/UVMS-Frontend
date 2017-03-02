@@ -538,7 +538,7 @@ module.exports = function (grunt) {
       'sub-build-ci': {
         tasks: [['htmlhint','jshint'],['less','dom_munger','ngtemplates','cssmin','concat','ngAnnotate','uglify','copy:dist','htmlmin','compress:dist','clean:after']],
         options: {
-          limit: 2,
+          limit: 1,
           logConcurrentOutput: true
         }
       }
