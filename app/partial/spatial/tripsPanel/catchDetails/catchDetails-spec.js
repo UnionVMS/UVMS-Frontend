@@ -33,6 +33,7 @@ describe('CatchdetailsCtrl', function () {
     beforeEach(inject(function ($rootScope, $controller) {
         buildMocks();
         scope = $rootScope.$new();
+        scope.tripId = getTripCatchDetail().tripID;
         ctrl = $controller('CatchdetailsCtrl', { $scope: scope });
         scope.$digest();
     }));
