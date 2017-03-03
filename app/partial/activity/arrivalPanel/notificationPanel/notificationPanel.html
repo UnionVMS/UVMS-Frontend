@@ -22,7 +22,8 @@ copy of the GNU General Public License along with the IFDM Suite. If not, see <h
 		<div class="row activity-summary-row">
 			<clock-panel class="col-md-2" clock-panal-data="data" fa-type="fa_type_arrival"></clock-panel>
 			<location-tile class="col-md-4 summary-section" is-clickable="isLocationClickable()" field-title="{{'activity.activity_location_port_departure' | i18n}}" location-details="faServ.activityData.port" click-callback="locationClickCallback()"></location-tile>
-			<fa-report-doc-tile class="col-md-6 summary-section" fa-report="faServ.activityData.reportDoc"></fa-report-doc-tile>
+			<!--<fa-report-doc-tile class="col-md-6 summary-section" fa-report="faServ.activityData.reportDoc"></fa-report-doc-tile>-->
+			<fa-details-panel class="col-md-6 summary-section" ng-model="faServ.activityData.reportDoc"></fa-details-panel>
 		</div>
 		<div class="row activity-summary-row" ng-if="faServ.activityData.fishingData.length > 0">
 			<catch-class-detail-tile class="col-md-12 summary-section" ng-model="faServ.activityData.fishingData" tile-title="{{'activity.departure_catch_detail' | i18n}}" is-location-clickable="isLocationClickable()" buffer-distance="5000" click-callback="locationClickCallback()"></catch-class-detail-tile>

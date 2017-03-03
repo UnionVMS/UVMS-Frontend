@@ -61,7 +61,7 @@ angular.module('unionvmsWeb').factory('FishingOperation',function(fishingActivit
         this.summary = loadSummaryData(data.summary);
         this.port = data.port;
         this.gears = data.gears;
-        this.reportDoc = data.reportDoc;
+        this.reportDoc = fishingActivityService.loadFaDocData(data.reportDoc);
         this.fishingData = data.fishingData;
         fishingActivityService.addGearDescription(this);
         fishingActivityService.addCatchTypeDescription(this);
@@ -69,35 +69,16 @@ angular.module('unionvmsWeb').factory('FishingOperation',function(fishingActivit
     };
 
     var loadSummaryData = function(data){
-
         var attrOrder = ['occurence','vessel_activity','no_operations','fishery_type','targetted_species','fishing_time'];
         var subAttrOrder = ['duration'];
 
+        var finalSummary = fishingActivityService.loadFishingActivityDetails(data, attrOrder, subAttrOrder);
 
-        var finalSummary = {
-            title: locale.getString('activity.title_fishing_activity') + ': '+ locale.getString('activity.fa_type_fishing_operation'),
-            subTitle: locale.getString('activity.fishing_time')
-        };
-
-        if(_.keys(data).length){
-            finalSummary.items = {};
-        }
-
-        angular.forEach(attrOrder,function(attrName){
-            if(angular.isObject(data[attrName]) && !angular.isArray(data[attrName])){
-                if(!_.isEmpty(data[attrName])){
-                    finalSummary.subItems = {};
-                    angular.forEach(subAttrOrder,function(subAttrName){
-                        finalSummary.subItems[subAttrName] = data[attrName][subAttrName];
-                    });
-                }
-            }else{
-                finalSummary.items[attrName] = data[attrName];
-            }
-        });
+        finalSummary.title = locale.getString('activity.title_fishing_activity') + ': '+ locale.getString('activity.fa_type_fishing_operation');
+        finalSummary.subTitle = locale.getString('activity.fishing_time');
 
         return finalSummary;
     };
-    
+
     return FishingOperation;
 });

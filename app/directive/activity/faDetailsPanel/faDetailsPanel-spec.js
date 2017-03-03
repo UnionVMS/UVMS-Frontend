@@ -9,7 +9,7 @@ the hope that it will be useful, but WITHOUT ANY WARRANTY; without even the impl
 FITNESS FOR A PARTICULAR PURPOSE.  See the GNU General Public License for more details. You should have received a
 copy of the GNU General Public License along with the IFDM Suite. If not, see <http://www.gnu.org/licenses/>.
 */
-describe('faOverviewPanel', function() {
+describe('faDetailsPanel', function() {
 
   beforeEach(module('unionvmsWeb'));
 
@@ -47,7 +47,7 @@ describe('faOverviewPanel', function() {
   it('should compile and present the model content', function() {
     buildMocks();
 
-    var faOverviewPanel = compile('<fa-overview-panel class="col-md-12 summary-section" ng-model="summary"></fa-overview-panel>')(scope);
+    var faDetailsPanel = compile('<fa-details-panel class="col-md-12 summary-section" ng-model="summary"></fa-details-panel>')(scope);
     scope.$digest();
 
     var nrItems = 0;
@@ -61,12 +61,12 @@ describe('faOverviewPanel', function() {
       nrSubItems++;
     });
 
-    expect(angular.element(faOverviewPanel).find('> .fa-overview-fieldset > .item-container').length).toEqual(nrItems);
-    expect(angular.element(faOverviewPanel).find('.fa-overview-fieldset > .fa-overview-fieldset > .item-container').length).toEqual(nrSubItems);
+    expect(angular.element(faDetailsPanel).find('> .fa-details-fieldset > .item-container').length).toEqual(nrItems);
+    expect(angular.element(faDetailsPanel).find('.fa-details-fieldset > .fa-details-fieldset > .item-container').length).toEqual(nrSubItems);
 
-    expect(angular.element(faOverviewPanel).find('> .fa-overview-fieldset > legend > a').text()).toEqual(scope.summary.title);
-    expect(angular.element(faOverviewPanel).find('.fa-overview-fieldset > .fa-overview-fieldset > legend > a').text()).toEqual(scope.summary.subTitle);
+    expect(angular.element(faDetailsPanel).find('> .fa-details-fieldset > legend > a').text()).toEqual(scope.summary.title);
+    expect(angular.element(faDetailsPanel).find('.fa-details-fieldset > .fa-details-fieldset > legend > a').text()).toEqual(scope.summary.subTitle);
 
-    faOverviewPanel.isolateScope().$destroy();
+    faDetailsPanel.isolateScope().$destroy();
   });
 });

@@ -19,7 +19,7 @@ copy of the GNU General Public License along with the IFDM Suite. If not, see <h
  * @description
  *  A service to deal with any kind of fishing activity operation (e.g. Departure, Arrival, ...)
  */
-angular.module('unionvmsWeb').factory('fishingActivityService', function (activityRestService, loadingStatus, mdrCacheService) {
+angular.module('unionvmsWeb').factory('fishingActivityService', function (activityRestService, loadingStatus, mdrCacheService, locale) {
 
     var faServ = {
         activityData: {},
@@ -130,6 +130,49 @@ angular.module('unionvmsWeb').factory('fishingActivityService', function (activi
                 }
             });
         });
+    };
+
+    /**
+     * Adds weight means description from MDR code lists into the details object.
+     * 
+     * @memberof fishingActivityService
+     * @public
+     * @param {Object} faObj - A reference to the Fishing activity object
+     * @alias loadFishActivityOverview
+     */
+    faServ.loadFishingActivityDetails = function(data, attrOrder, subAttrOrder){
+        var finalSummary = {};
+
+        if(_.keys(data).length){
+            finalSummary.items = {};
+        }
+
+        angular.forEach(attrOrder,function(attrName){
+            if(angular.isObject(data[attrName]) && !angular.isArray(data[attrName])){
+                if(!_.isEmpty(data[attrName])){
+                    finalSummary.subItems = {};
+                    angular.forEach(subAttrOrder,function(subAttrName){
+                        finalSummary.subItems[subAttrName] = data[attrName][subAttrName];
+                    });
+                }
+            }else{
+                finalSummary.items[attrName] = data[attrName];
+            }
+        });
+
+        return finalSummary;
+    };
+
+    faServ.loadFaDocData = function(data){
+        var attrOrder = ['type','dateAccepted'];
+        var subAttrOrder = ['id','refId','creationDate','purposeCode',/*'owner',*/'purpose','FMC_marker'];
+
+        var finalSummary = this.loadFishingActivityDetails(data, attrOrder, subAttrOrder);
+
+        finalSummary.title = locale.getString('activity.activity_report_doc_title');
+        finalSummary.subTitle = locale.getString('activity.activity_related_flux_doc_title');
+
+        return finalSummary;
     };
     
 	return faServ;

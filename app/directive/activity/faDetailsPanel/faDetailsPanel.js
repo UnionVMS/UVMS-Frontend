@@ -9,28 +9,26 @@ the hope that it will be useful, but WITHOUT ANY WARRANTY; without even the impl
 FITNESS FOR A PARTICULAR PURPOSE.  See the GNU General Public License for more details. You should have received a
 copy of the GNU General Public License along with the IFDM Suite. If not, see <http://www.gnu.org/licenses/>.
 */
-fa-overview-panel {
-    .fa-overview-fieldset {
-        legend.fieldsetLegendStyle {
-            margin-bottom: 5px;
-        }
-        .fa-overview-fieldset {
-            margin-top: 5px;
-            margin-bottom: 0;
-            padding-bottom: 15px;
-        }
-        .item-container {
-            display: flex;
-            .labels {
-                font-weight: bold;
-                white-space: nowrap;
-                &::after {
-                    content: ':'
-                }
-            }
-        }
-    }
-    > .fa-overview-fieldset {
-        padding-bottom: 15px;
-    }
-}
+/**
+ * @memberof unionvmsWeb
+ * @ngdoc directive
+ * @name faDetailsPanel
+ * @attr {Array} ngModel - the content data of fa overview
+ * @description
+ *  A reusable tile that will display the fishing activity overview data in every fishing activity report panel
+ */
+angular.module('unionvmsWeb').directive('faDetailsPanel', function($filter) {
+	return {
+		restrict: 'E',
+		replace: false,
+		scope: {
+			ngModel: '='
+		},
+		templateUrl: 'directive/activity/faDetailsPanel/faDetailsPanel.html',
+		link: function(scope, element, attrs, fn) {
+			scope.isArray = function(val){
+				 return _.isArray(val);
+			};
+		}
+	};
+});
