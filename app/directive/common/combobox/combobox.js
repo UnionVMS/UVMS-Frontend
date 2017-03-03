@@ -143,7 +143,7 @@ angular.module('unionvmsWeb').directive('combobox', function(comboboxService,loc
             //set the label in the multiple combobox
             scope.setLabelMultiple = function() {
                 if(scope.hideSelectedItems && scope.selectedItems.length > 1){
-                    scope.currentItemLabel = (scope.selectedItems.length === scope.loadedItems.length ? locale.getString('common.all') : scope.selectedItems.length) + " " + locale.getString('common.items_selected');
+                    scope.currentItemLabel = locale.getString('common.all');
                 }else if(scope.selectedItems.length === 0 && scope.initialtext){
                     scope.currentItemLabel = scope.initialtext;
                 }else{

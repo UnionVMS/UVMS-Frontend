@@ -24,10 +24,6 @@ angular.module('unionvmsWeb').controller('ActivityreportslistCtrl',function($sco
     $scope.actServ = activityService;
     $scope.attrVisibility = visibilityService;
     
-    $scope.$watch(function(){return $scope.actServ.reportsList.hasError;}, function(newVal){
-        console.log('hasError: ' + newVal);
-    });
-    
     /**
      * Pipe function used in the smartTable in order to support server side pagination and sorting
      * 
@@ -115,5 +111,6 @@ angular.module('unionvmsWeb').controller('ActivityreportslistCtrl',function($sco
         //TODO fetch the data and load the partial
         $scope.actServ.overview = $scope.actServ.displayedActivities[idx];
         $scope.goToView(3);
+        //reportingNavigatorService.goToView('tripsPanel','tripDeparturePanel');
     };
 });
