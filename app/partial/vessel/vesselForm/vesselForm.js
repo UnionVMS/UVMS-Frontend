@@ -162,6 +162,23 @@ angular.module('unionvmsWeb').controller('VesselFormCtrl',function($scope, $log,
         return nonUniqueActiveTerminalTypes;
     };
 
+    // Add new Mobile Terminal to Vessel
+    $scope.toggleAddNewMobileTerminalForm = function(){
+        toggleMobileTerminalForm(new MobileTerminal());
+    };
+
+    var toggleMobileTerminalForm = function(newMobileTerminal){
+        newMobileTerminal.isCreateNewMode = true;
+        $scope.mobileTerminals.push(newMobileTerminal);
+    };
+
+    // Check if asset has any connected terminals
+    $scope.hasLinkedMobileTerminals = function(){
+        if (angular.isDefined($scope.mobileTerminals) && $scope.mobileTerminals.length > 0) {
+            return true;
+        }
+    };
+
     function performArchiveVessel(comment) {
         // When you have just created a vessel the getOriginalVessel will return undefined.
         $scope.vesselObj = $scope.getOriginalVessel() || $scope.getVesselObj();
@@ -472,16 +489,6 @@ angular.module('unionvmsWeb').controller('VesselFormCtrl',function($scope, $log,
                 });
             }
         });
-    };
-
-    // Add new Mobile Terminal to Vessel
-    $scope.toggleAddNewMobileTerminalForm = function(){
-        toggleMobileTerminalForm(new MobileTerminal());
-    };
-
-    var toggleMobileTerminalForm = function(newMobileTerminal){
-        newMobileTerminal.isCreateNewMode = true;
-        $scope.mobileTerminals.push(newMobileTerminal);
     };
 
     // Set menu bar header

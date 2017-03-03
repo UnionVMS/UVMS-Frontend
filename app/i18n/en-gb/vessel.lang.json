@@ -141,6 +141,7 @@
     "vessel_details_imo_pattern_validation_message": "Must be 7 numbers",
     "vessel_details_max_decimals_pattern_validation_message": "There can be max {1} decimals",
     "vessel_details_get_length_over_all_pattern_validation_message": "There can be max 4 numbers followed by max 2 decimals",
+    "vessel_details_terminal_linked_required_validation_message": "Reqiured when terminal is linked",
     "vessel_details_email": "Email",
     "vessel_details_contacts": "Contacts",
     "vessel_details_contact_name": "Contact name",
