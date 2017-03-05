@@ -495,8 +495,8 @@ angular.module('unionvmsWeb').controller('VesselFormCtrl',function($scope, $log,
     $scope.getMenuBarHeader = function(vessel) {
         if ($scope.isCreateNewMode()) {
             return $filter('i18n')('vessel.create_new_vessel');
-        } else if (angular.isDefined(vessel)) {
-            return vessel.name;
+        } else if (angular.isDefined($scope.vesselObjOriginal)) {
+            return $scope.vesselObjOriginal.name;
         }
     };
 
