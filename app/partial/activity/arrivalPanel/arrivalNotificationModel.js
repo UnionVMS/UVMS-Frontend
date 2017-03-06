@@ -20,7 +20,7 @@ copy of the GNU General Public License along with the IFDM Suite. If not, see <h
  * @description
  *  A model to store all the data related to a Notification of arrival in a standardized way
  */
-angular.module('unionvmsWeb').factory('ArrivalNotification', function() {
+angular.module('unionvmsWeb').factory('ArrivalNotification', function(fishingActivityService) {
 
     function ArrivalNotification() {
        
@@ -53,7 +53,7 @@ angular.module('unionvmsWeb').factory('ArrivalNotification', function() {
     ArrivalNotification.prototype.fromJson = function(data) {
         this.arrival = data.arrival;
         this.port = data.port;
-        this.reportDoc = data.reportDoc;
+        this.reportDoc = fishingActivityService.loadFaDocData(data.reportDoc);
         this.fishingData = data.arrivalCatchData;
     };
 

@@ -20,7 +20,7 @@ copy of the GNU General Public License along with the IFDM Suite. If not, see <h
  * @description
  *  A model to store all the data related to a Landing in a standardized way
  */
-angular.module('unionvmsWeb').factory('Landing', function(locale) {
+angular.module('unionvmsWeb').factory('Landing', function(locale, fishingActivityService) {
 
     function Landing() {
         this.landingSummary = {
@@ -53,40 +53,28 @@ angular.module('unionvmsWeb').factory('Landing', function(locale) {
     Landing.prototype.fromJson = function(data) {
         this.landingSummary = loadSummaryData(data.landingSummary);
         this.port = data.port;
-        this.reportDoc = data.reportDoc;
+        this.reportDoc = fishingActivityService.loadFaDocData(data.reportDoc);
         this.landingCatchData = data.landingCatchData;
     };
 
-    var loadSummaryData = function(data) {
+    var loadSummaryData = function(data){
 
-        var attrOrder = ['occurence', 'landingTime'];
-        var subAttrOrder = ['startOfLanding', 'endOfLanding'];
-
-
-        var finalSummary = {
-            title: locale.getString('activity.title_fishing_activity') + ':' + locale.getString('activity.trip_landing'),
-            subTitle: locale.getString('activity.trip_landing_time')
+        var attrOrder = {
+            occurence: {
+                type: 'date'
+            },
+            startOfLanding: {
+                type: 'date'
+            },
+            endOfLanding: {
+                type: 'date'
+            }
         };
 
-        if (_.keys(data).length) {
-            finalSummary.items = {};
-        }
+        var finalSummary = fishingActivityService.loadFishingActivityDetails(data, attrOrder);
 
-        angular.forEach(attrOrder, function(attrName) {
-
-            if (angular.isObject(data[attrName]) && !angular.isArray(data[attrName])) {
-                if (!_.isEmpty(data[attrName])) {
-                    finalSummary.subItems = {};
-                    angular.forEach(subAttrOrder, function(subAttrName) {
-                        finalSummary.subItems[subAttrName] = data[attrName][subAttrName];
-                    });
-                }
-            } else {
-                finalSummary.items[attrName] = data[attrName];
-            }
-        });
-
-
+        finalSummary.title = locale.getString('activity.title_fishing_activity') + ': '+ locale.getString('activity.trip_landing');
+        finalSummary.subTitle = locale.getString('activity.trip_landing_time');
 
         return finalSummary;
     };

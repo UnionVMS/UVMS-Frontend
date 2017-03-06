@@ -21,7 +21,7 @@ copy of the GNU General Public License along with the IFDM Suite. If not, see <h
  * @description
  *  A model to store all the data related to a Arrival in a standardized way
  */
-angular.module('unionvmsWeb').factory('Arrival', function () {
+angular.module('unionvmsWeb').factory('Arrival', function (fishingActivityService) {
 
     function Arrival() {
         
@@ -56,7 +56,7 @@ angular.module('unionvmsWeb').factory('Arrival', function () {
         this.arrival = data.arrival;
         this.port = data.port;
         this.gears = data.gears;
-        this.reportDoc = data.reportDoc;
+        this.reportDoc = fishingActivityService.loadFaDocData(data.reportDoc);
     };
 
     return Arrival;

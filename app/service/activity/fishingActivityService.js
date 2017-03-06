@@ -19,7 +19,7 @@ copy of the GNU General Public License along with the IFDM Suite. If not, see <h
  * @description
  *  A service to deal with any kind of fishing activity operation (e.g. Departure, Arrival, ...)
  */
-angular.module('unionvmsWeb').factory('fishingActivityService', function (activityRestService, loadingStatus, mdrCacheService, locale) {
+angular.module('unionvmsWeb').factory('fishingActivityService', function (activityRestService, loadingStatus, mdrCacheService, locale, $filter) {
 
     var faServ = {
         activityData: {},
@@ -140,34 +140,82 @@ angular.module('unionvmsWeb').factory('fishingActivityService', function (activi
      * @param {Object} faObj - A reference to the Fishing activity object
      * @alias loadFishActivityOverview
      */
-    faServ.loadFishingActivityDetails = function(data, attrOrder, subAttrOrder){
+    faServ.loadFishingActivityDetails = function(data, attrOrder){
+        var attrKeys = _.keys(attrOrder);
         var finalSummary = {};
 
         if(_.keys(data).length){
             finalSummary.items = {};
         }
 
-        angular.forEach(attrOrder,function(attrName){
-            if(angular.isObject(data[attrName]) && !angular.isArray(data[attrName])){
-                if(!_.isEmpty(data[attrName])){
+        angular.forEach(data,function(value,key){
+            if(angular.isObject(value) && !angular.isArray(value)){
+                if(!_.isEmpty(value)){
                     finalSummary.subItems = {};
-                    angular.forEach(subAttrOrder,function(subAttrName){
-                        finalSummary.subItems[subAttrName] = data[attrName][subAttrName];
+                    angular.forEach(value,function(subItem,subKey){
+                        finalSummary.subItems[subKey] = transformFaItem(subItem, subKey, attrOrder, attrKeys);
                     });
                 }
             }else{
-                finalSummary.items[attrName] = data[attrName];
+                finalSummary.items[key] = transformFaItem(value, key, attrOrder, attrKeys);
             }
         });
 
         return finalSummary;
     };
 
-    faServ.loadFaDocData = function(data){
-        var attrOrder = ['type','dateAccepted'];
-        var subAttrOrder = ['id','refId','creationDate','purposeCode',/*'owner',*/'purpose','FMC_marker'];
+    var transformFaItem = function(value, key, attrOrder, attrKeys){
+        var newVal = value;
+        
+        if(attrOrder[key] === 'date'){
+            newVal = $filter('stDateUtc')(newVal);
+        }else if(angular.isArray(value)){
+            newVal = '';
+            angular.forEach(value,function(arrItem,arrIdx){
+                newVal += arrItem + ', ';
+                if(value.length-1 === arrIdx){
+                    newVal = newVal.slice(0, newVal.length-3);
+                }
+            });
+        }
 
-        var finalSummary = this.loadFishingActivityDetails(data, attrOrder, subAttrOrder);
+        return {
+            idx: attrKeys.indexOf(key),
+            value: newVal,
+            clickable: attrOrder[key].clickable
+        };
+    };
+
+    faServ.loadFaDocData = function(data){
+        var attrOrder = {
+            type: {
+                type: 'string'
+            },
+            dateAccepted: {
+                type: 'date'
+            },
+            id: {
+                type: 'string'
+            },
+            refId: {
+                type: 'string',
+                clickable: true
+            },
+            creationDate: {
+                type: 'date'
+            },
+            purposeCode: {
+                type: 'string'
+            },
+            purpose: {
+                type: 'string'
+            },
+            FMC_marker: {
+                type: 'string'
+            }
+        };
+
+        var finalSummary = this.loadFishingActivityDetails(data, attrOrder);
 
         finalSummary.title = locale.getString('activity.activity_report_doc_title');
         finalSummary.subTitle = locale.getString('activity.activity_related_flux_doc_title');

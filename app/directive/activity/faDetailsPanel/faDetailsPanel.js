@@ -22,12 +22,23 @@ angular.module('unionvmsWeb').directive('faDetailsPanel', function($filter) {
 		restrict: 'E',
 		replace: false,
 		scope: {
-			ngModel: '='
+			ngModel: '=',
+			isLocClickable: '&',
+		    locClickCallback: '&',
+		    locDetails: '='
 		},
 		templateUrl: 'directive/activity/faDetailsPanel/faDetailsPanel.html',
 		link: function(scope, element, attrs, fn) {
 			scope.isArray = function(val){
 				 return _.isArray(val);
+			};
+
+			scope.hasLocData = function(){
+				var status = false;
+				if (angular.isDefined(scope.locDetails) && ((_.isArray(scope.locDetails) && scope.locDetails.length > 0) || (!_.isArray(scope.locDetails) && !_.isEqual(scope.locDetails, {})))){
+					status = true;
+				}
+				return status;
 			};
 		}
 	};

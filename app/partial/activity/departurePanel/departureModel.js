@@ -23,7 +23,7 @@ copy of the GNU General Public License along with the IFDM Suite. If not, see <h
  * @description
  *  A model to store all the data related to a departure in a standardized way
  */
-angular.module('unionvmsWeb').factory('Departure',function(mdrCacheService, fishingActivityService) {
+angular.module('unionvmsWeb').factory('Departure',function(mdrCacheService, fishingActivityService, locale) {
     
     function Departure(){
         this.faType = 'fa_type_departure';
@@ -58,9 +58,9 @@ angular.module('unionvmsWeb').factory('Departure',function(mdrCacheService, fish
      * @param {Object} data - The source data to fill in the model
      */
     Departure.prototype.fromJson = function(data){
-        this.summary = data.summary;
+        this.summary = loadSummaryData(data.summary);
         this.port = data.port;
-        this.reportDoc = data.reportDoc;
+        this.reportDoc = fishingActivityService.loadFaDocData(data.reportDoc);
         this.gears = data.gears;
         this.fishingData = data.fishingData;
         fishingActivityService.addGearDescription(this);
@@ -68,5 +68,32 @@ angular.module('unionvmsWeb').factory('Departure',function(mdrCacheService, fish
         fishingActivityService.addWeightMeansDescription(this);
     };
     
+
+    var loadSummaryData = function(data){
+
+        var attrOrder = {
+            occurence: {
+                type: 'date'
+            },
+            reason: {
+                type: 'string'
+            },
+            fishery_type: {
+                type: 'string'
+            },
+            targetted_species: {
+                type: 'array'
+            }
+        };
+
+        var finalSummary = fishingActivityService.loadFishingActivityDetails(data, attrOrder);
+
+        finalSummary.title = locale.getString('activity.title_fishing_activity') + ': '+ locale.getString('activity.fa_type_departure');
+        finalSummary.subTitle = locale.getString('activity.activity_location_port_departure');
+
+        return finalSummary;
+    };
+
+
     return Departure;
 });

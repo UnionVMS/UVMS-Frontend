@@ -69,10 +69,29 @@ angular.module('unionvmsWeb').factory('FishingOperation',function(fishingActivit
     };
 
     var loadSummaryData = function(data){
-        var attrOrder = ['occurence','vessel_activity','no_operations','fishery_type','targetted_species','fishing_time'];
-        var subAttrOrder = ['duration'];
 
-        var finalSummary = fishingActivityService.loadFishingActivityDetails(data, attrOrder, subAttrOrder);
+        var attrOrder = {
+            occurence: {
+                type: 'date'
+            },
+            vessel_activity: {
+                type: 'string'
+            },
+            no_operations: {
+                type: 'string'
+            },
+            fishery_type: {
+                type: 'string'
+            },
+            targetted_species: {
+                type: 'array'
+            },
+            duration: {
+                type: 'string'
+            }
+        };
+
+        var finalSummary = fishingActivityService.loadFishingActivityDetails(data, attrOrder);
 
         finalSummary.title = locale.getString('activity.title_fishing_activity') + ': '+ locale.getString('activity.fa_type_fishing_operation');
         finalSummary.subTitle = locale.getString('activity.fishing_time');
