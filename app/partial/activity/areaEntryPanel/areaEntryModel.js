@@ -18,7 +18,7 @@ copy of the GNU General Public License along with the IFDM Suite. If not, see <h
  * @description
  *  A model to store all the data related to a Area Entry in a standardized way
  */
-angular.module('unionvmsWeb').factory('AreaEntry', function (locale) {
+angular.module('unionvmsWeb').factory('AreaEntry', function (locale, fishingActivityService) {
 
     function AreaEntry() {
         this.landingSummary = {
@@ -46,6 +46,9 @@ angular.module('unionvmsWeb').factory('AreaEntry', function (locale) {
     AreaEntry.prototype.fromJson = function (data) {
         this.landingSummary = loadSummaryData(data.landingSummary);
         this.reportDoc = data.reportDoc;
+        fishingActivityService.addGearDescription(this);
+        fishingActivityService.addCatchTypeDescription(this);
+        fishingActivityService.addWeightMeansDescription(this);
     };
 
     var loadSummaryData = function (data) {

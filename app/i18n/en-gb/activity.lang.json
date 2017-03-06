@@ -74,6 +74,8 @@
 	"trip_departure": "Departure",
 	"trip_arrival": "Arrival",
 	"trip_landing": "Landing",
+    "trip_jointFishingOperation": "Joint Fishing Operation",
+    "trip_relocation": "Relocation",
     "trip_discard": "Discard at Sea",
     "trip_area_entry": "Entry into Area",
     "trip_area_exit": "Area Exit",

@@ -12,24 +12,24 @@ copy of the GNU General Public License along with the IFDM Suite. If not, see <h
 /**
  * @memberof unionvmsWeb
  * @ngdoc model
- * @name Transhipment
- * @attr {Object} landingSummary - An object containing the fishing activity landingSummary data (like occurence, landingTime)
+ * @name JointFishingOperation
+ * @attr {Object} Summary - An object containing the fishing activity landingSummary data (like occurence, landingTime)
  * @attr {Object} location - An object containing all the data of the location
+ * @attr {Array} gears - An array conatining objects that describe the available gears
  * @attr {Object} reportDoc - An object containing all the data related with the fishing activity report document
  * @description
- *  A model to store all the data related to a Transhipment in a standardized way
+ *  A model to store all the data related to a Joint Fishing Operations in a standardized way
  */
-angular.module('unionvmsWeb').factory('Transhipment', function(locale,fishingActivityService) {
+angular.module('unionvmsWeb').factory('JointFishingOperation', function(locale,fishingActivityService) {
 
-    function Transhipment() {
-        this.landingSummary = {
+    function JointFishingOperation() {
+        this.operationType = undefined;
+        this.summary = {
             occurence: undefined,
             landingTime: undefined
         };
-        this.port = {
-            name: undefined,
-            coordinates: []
-        };
+        this.locations = [];
+        this.gears = [];
         this.reportDoc = {
             type: undefined,
             dateAccepted: undefined,
@@ -39,20 +39,24 @@ angular.module('unionvmsWeb').factory('Transhipment', function(locale,fishingAct
             purposeCode: undefined,
             purpose: undefined
         };
-        this.landingCatchData = [];
+
     }
 
     /**
      * Load the model with data
      * 
-     * @memberof Transhipment
+     * @memberof JointFishingOperation
      * @public
      * @param {Object} data - The source data to fill in the model
      */
-    Transhipment.prototype.fromJson = function(data) {
-        this.landingSummary = loadSummaryData(data.landingSummary);
-        this.port = data.port;
+    JointFishingOperation.prototype.fromJson = function(data) {
+        this.summary = loadSummaryData(data.summary);
+        this.locations = data.locations;
+        this.gears = data.gears;
         this.reportDoc = data.reportDoc;
+        fishingActivityService.addGearDescription(this);
+        fishingActivityService.addCatchTypeDescription(this);
+        fishingActivityService.addWeightMeansDescription(this);
     };
 
     var loadSummaryData = function(data) {
@@ -84,10 +88,8 @@ angular.module('unionvmsWeb').factory('Transhipment', function(locale,fishingAct
             }
         });
 
-
-
         return finalSummary;
     };
 
-    return Transhipment;
+    return JointFishingOperation;
 });

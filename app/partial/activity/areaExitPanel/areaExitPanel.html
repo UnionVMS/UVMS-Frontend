@@ -10,13 +10,14 @@ FITNESS FOR A PARTICULAR PURPOSE.  See the GNU General Public License for more d
 copy of the GNU General Public License along with the IFDM Suite. If not, see <http://www.gnu.org/licenses/>.
 -->
 <div class="col-md-12 area-exit-panel" ng-controller="AreaexitpanelCtrl">
-    <div class="row summary-row">
+    <div class="row activity-summary-row">
         <trip-overview-panel class="col-md-12 summary-section" trip="fishingTripDetails"></trip-overview-panel>
     </div>
     <div class="col-md-12 main-content">
         <a class="btn-trip-quit" title="{{'activity.trip_summary_quit_trip_detail' | i18n }}" ng-click="quitTripSummary()"><i class="fa fa-share-square-o"></i></a>
         <div class="row title">
-            <span>{{'activity.trip_area_exit' | i18n}}</span>
+            <span ng-class="{useColon: faServ.isCorrection}">{{'activity.trip_area_exit' | i18n}}</span>
+            <span class="operationType" ng-if="faServ.isCorrection">{{'activity.departure_optype_correction' | i18n}}</span>
         </div>
         <div class="row activity-summary-row">
             <fa-overview-panel class="col-md-3 summary-section" ng-model="faServ.activityData.landingSummary"></fa-overview-panel>

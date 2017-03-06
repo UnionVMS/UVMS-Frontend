@@ -12,25 +12,24 @@ copy of the GNU General Public License along with the IFDM Suite. If not, see <h
 /**
  * @memberof unionvmsWeb
  * @ngdoc controller
- * @name DiscardpanelCtrl
+ * @name RelocationpanelCtrl
  * @param $scope {Service} controller scope
  * @param $state {Service} state provider service
  * @param fishingActivityService {Service} fishing activity service <p>{@link unionvmsWeb.fishingActivityService}</p>
  * @param reportFormService {Service} report form service <p>{@link unionvmsWeb.reportFormService}</p>
- * @param activityRestService {Service} activity REST service <p>{@link unionvmsWeb.activityRestService}</p>
  * @description
- *  The controller for the departure panel partial
+ *  The controller for the relocation panel partial
  */
-angular.module('unionvmsWeb').controller('DiscardpanelCtrl', function ($scope, $state, fishingActivityService, tripSummaryService, activityRestService, loadingStatus, Discard) {
+angular.module('unionvmsWeb').controller('RelocationpanelCtrl', function ($scope, $state, fishingActivityService, tripSummaryService, activityRestService, loadingStatus, Relocation) {
     $scope.faServ = fishingActivityService;
     /**
      * Initialization function
      * 
-     * @memberof DiscardpanelCtrl
+     * @memberof RelocationpanelCtrl
      * @private
      */
     var init = function () {
-        $scope.faServ.getFishingActivity(new Discard());
+        $scope.faServ.getFishingActivity(new Relocation());
         loadingStatus.isLoading('FishingActivity', true);
         activityRestService.getTripCatchDetail($scope.faServ.id).then(function (response) {
             $scope.fishingTripDetails = response;
@@ -44,7 +43,7 @@ angular.module('unionvmsWeb').controller('DiscardpanelCtrl', function ($scope, $
     /**
       * Check if a location tile should be clickable taking into consideration the route and the report configuration
       * 
-      * @memberof DiscardpanelCtrl
+      * @memberof RelocationpanelCtrl
       * @public
       * @alias isLocationClickable
       * @returns {Boolean} Whether the location tile should be clickable or not
@@ -61,7 +60,7 @@ angular.module('unionvmsWeb').controller('DiscardpanelCtrl', function ($scope, $
     /**
      * The click location callback function
      * 
-     * @memberof DiscardpanelCtrl
+     * @memberof RelocationpanelCtrl
      * @public
      * @alias locationClickCallback
      */

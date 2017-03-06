@@ -19,7 +19,7 @@ copy of the GNU General Public License along with the IFDM Suite. If not, see <h
  * @description
  *  A model to store all the data related to a Landing in a standardized way
  */
-angular.module('unionvmsWeb').factory('Discard', function (locale) {
+angular.module('unionvmsWeb').factory('Discard', function (locale,fishingActivityService) {
 
     function Discard() {
         this.landingSummary = {
@@ -52,6 +52,9 @@ angular.module('unionvmsWeb').factory('Discard', function (locale) {
         this.landingSummary = loadSummaryData(data.landingSummary);
         this.port = data.port;
         this.reportDoc = data.reportDoc;
+        fishingActivityService.addGearDescription(this);
+        fishingActivityService.addCatchTypeDescription(this);
+        fishingActivityService.addWeightMeansDescription(this);
     };
 
     var loadSummaryData = function (data) {
