@@ -49,6 +49,11 @@ copy of the GNU General Public License along with the IFDM Suite. If not, see <h
                             margin-bottom: 20px;
                         }
                     }
+
+                    &.no-padding {
+                        padding-right: 0;
+                        padding-left: 0;
+                    }
                 }
             }
         }
@@ -74,7 +79,8 @@ copy of the GNU General Public License along with the IFDM Suite. If not, see <h
 
         .wrapper {
             .flexbox();
-            margin: 0 -@asset-form_primary-padding;
+            width: 100%;
+            margin-right: -@asset-form_primary-padding;
         }
 
         .notesListContainer {
@@ -86,7 +92,7 @@ copy of the GNU General Public License along with the IFDM Suite. If not, see <h
             padding-top: @asset-form_primary-padding * 2;
             margin-top: -@asset-form_primary-padding * 2;
             background: @searchResultsTableOddRowColor;
-            border-left: 1px solid @sectionBorderColor; 
+            border-left: 1px solid @sectionBorderColor;
 
             .form-header {
                 .form-header-bold();
