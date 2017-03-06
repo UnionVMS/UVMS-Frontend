@@ -47,10 +47,10 @@ angular.module('unionvmsWeb').controller('VesselFormCtrl',function($scope, $log,
         if (angular.isDefined($scope.vesselObjOriginal)) {
             if (angular.equals(angular.copy(newValue).toJson(), $scope.vesselObjOriginal.toJson())) {
                 $scope.setFormDirtyStatus(false);
-                $scope.isVesselDetailsDirty = false;
+                $scope.setVesselDetailsDirtyStatus(false);
             } else {
                 $scope.setFormDirtyStatus(true);
-                $scope.isVesselDetailsDirty = true;
+                $scope.setVesselDetailsDirtyStatus(true);
             }
         }       
     }, true);
@@ -61,6 +61,14 @@ angular.module('unionvmsWeb').controller('VesselFormCtrl',function($scope, $log,
             $scope.isFormDirty = status;
         }
     };
+
+    //Check if vessel obj has been modified
+    $scope.setVesselDetailsDirtyStatus = function(status) {
+        if (angular.isDefined(status)) {
+            $scope.isVesselDetailsDirty = status;
+            $scope.setFormDirtyStatus(status);
+        }
+    }
 
     //Has form submit been atempted?
     $scope.submitAttempted = false;
