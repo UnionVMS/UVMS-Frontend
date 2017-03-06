@@ -24,7 +24,7 @@ angular.module('unionvmsWeb').directive('tableFilterHeaders', function() {
 		    
 		    scope.setColumnVisibility = function(){
 		        var allKeys = _.map(scope.records, function(item){
-		            return _.keys(item[scope.uniqueColumnsSrcData])
+		            return _.keys(item[scope.uniqueColumnsSrcData]);
 		        });
 		        var uniqueKeys = _.uniq(_.flatten(allKeys));
 		        angular.forEach(scope.columns, function(column) {
@@ -44,7 +44,7 @@ angular.module('unionvmsWeb').directive('tableFilterHeaders', function() {
 		}
 	};
 })
-.directive('stSelectMultiple', function(locale){
+.directive('stSelectMultiple', function(locale, $timeout){
     return {
         restrict: 'E',
         require: '^stTable',
@@ -56,8 +56,36 @@ angular.module('unionvmsWeb').directive('tableFilterHeaders', function() {
         },
         templateUrl: 'directive/common/tableFilterHeaders/stSelectMultiple.html',
         link: function(scope, element, attr, table) {
-            scope.selModel = [];
-            scope.comboItems = [];
+            scope.combo = {
+                model: [],
+                items: []
+            };
+            
+            scope.doFilter = function(){
+                $timeout(function(){
+                    var query = {
+                        matchAny: {}
+                    };
+
+                    query.matchAny.items = angular.copy(scope.combo.model);
+                    var numberOfItems = query.matchAny.items.length;
+                    if (numberOfItems === 0 || numberOfItems === scope.combo.items.length) {
+                        query.matchAny.all = true;
+                    } else {
+                        query.matchAny.all = false;
+                    }
+
+                    table.search(query, scope.predicate);
+                });
+            };
+            
+//            function getPredicate() {
+//                var predicate = scope.predicate;
+//                if (!predicate && scope.predicateExpression) {
+//                  predicate = scope.predicateExpression;
+//                }
+//                return predicate;
+//              }
             
             function init(){
                 if (angular.isDefined(scope.collection)){
@@ -79,7 +107,7 @@ angular.module('unionvmsWeb').directive('tableFilterHeaders', function() {
                 if (props.length === 1){
                     uniqueValues = _.uniq(_.pluck(scope.collection, props[0]));
                 } else {
-                    testValues = _.uniq(_.map(scope.collection, function(item){
+                    var testValues = _.uniq(_.map(scope.collection, function(item){
                         return item[props[0]][props[1]];
                     }));
                     
@@ -89,10 +117,10 @@ angular.module('unionvmsWeb').directive('tableFilterHeaders', function() {
                     }
                 }
                 
-                scope.selModel = _.sortBy(uniqueValues, function(item){return item;});
+                scope.combo.model = _.sortBy(uniqueValues, function(item){return item;});
                 
                 var items = [];
-                angular.forEach(scope.selModel, function(val){
+                angular.forEach(scope.combo.model, function(val){
                     items.push({
                         code: val,
                         text: val
@@ -100,16 +128,44 @@ angular.module('unionvmsWeb').directive('tableFilterHeaders', function() {
                 });
                 
                 if (hasEmptyValues){
-                    scope.selModel.push('null_values'); //TODO check if it is possible to use undefined
+                    scope.combo.model.push('null_values');
                     items.push({
-                        code: 'null_values', //TODO check if it is possible to use undefined
+                        code: 'null_values',
                         text: locale.getString('common.empty_value')
                     });
                 }
-                scope.comboItems = items;
+                scope.combo.items = items;
             }
             
             init();
         }
-    }
+    };
+})
+.filter('comboHeaderFilter', function($filter){
+    return function(array, predictedObject){
+        var keys = _.keys(predictedObject);
+        var records = _.filter(array, function(item){
+            var status = true;
+            angular.forEach(keys, function(key){
+                var splitKey = key.split('.');
+                var testValue = item[splitKey[0]];
+                if (splitKey.length > 1){
+                    testValue = testValue[splitKey[1]];
+                }
+                
+                var nullIdx = _.indexOf(predictedObject[key].matchAny.items, 'null_values');
+                if (nullIdx !== -1){
+                    predictedObject[key].matchAny.items[nullIdx] = undefined;
+                }
+                
+                if (status && !predictedObject[key].matchAny.all && _.indexOf(predictedObject[key].matchAny.items, testValue) === -1) {
+                    status = false;
+                } 
+            });
+            
+            return status
+        });
+        
+        return records;
+    };
 });

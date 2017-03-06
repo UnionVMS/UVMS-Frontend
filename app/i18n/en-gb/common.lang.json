@@ -144,6 +144,6 @@
     "mandatory_field":"*",
     "error_user_without_scope": "Module not accessible to accounts without a scope.",
     "no_data_available": "No data available",
-    "items_selected": "items selected",
+    "items_selected": "items",
     "empty_value": "No value"
 }

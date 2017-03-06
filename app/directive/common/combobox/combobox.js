@@ -143,7 +143,7 @@ angular.module('unionvmsWeb').directive('combobox', function(comboboxService,loc
             //set the label in the multiple combobox
             scope.setLabelMultiple = function() {
                 if(scope.hideSelectedItems && scope.selectedItems.length > 1){
-                    scope.currentItemLabel = locale.getString('common.all');
+                    scope.currentItemLabel = (scope.selectedItems.length === scope.loadedItems.length ? locale.getString('common.all') : scope.selectedItems.length) + " " + locale.getString('common.items_selected');
                 }else if(scope.selectedItems.length === 0 && scope.initialtext){
                     scope.currentItemLabel = scope.initialtext;
                 }else{
@@ -282,13 +282,7 @@ angular.module('unionvmsWeb').directive('combobox', function(comboboxService,loc
             	}
                 
                 /*scope.toggleCombo();*/
-                if(angular.isDefined(scope.callback)){
-                    var extraParams;
-                    if(angular.isDefined(scope.callbackParams)){
-                        extraParams = scope.callbackParams;
-                    }
-                    scope.callback(item, extraParams);
-                }
+                testAndRunCallback(item);
             };
 
             //Add a default value as first item in the dropdown
@@ -352,6 +346,7 @@ angular.module('unionvmsWeb').directive('combobox', function(comboboxService,loc
                     angular.copy(scope.ngModel,arr);
                     scope.ngModel = arr; 
                 }
+                testAndRunCallback();
             };
             
             scope.removeAllSelected = function(){
@@ -363,6 +358,7 @@ angular.module('unionvmsWeb').directive('combobox', function(comboboxService,loc
                 }
                 angular.copy(scope.ngModel,arr);
                 scope.ngModel = arr; 
+                testAndRunCallback();
             };
             
             scope.onComboChange = function(){
@@ -380,17 +376,20 @@ angular.module('unionvmsWeb').directive('combobox', function(comboboxService,loc
                     scope.selectVal(item);
                 }else{
                     scope.removeSelectedItem(item.code);
-                    
-                    if(angular.isDefined(scope.callback)){
-                        var extraParams;
-                        if(angular.isDefined(scope.callbackParams)){
-                            extraParams = scope.callbackParams;
-                        }
-                        scope.callback(item, extraParams);
-                    }
+                    testAndRunCallback(item);
                 }
                 comboboxService.setActiveCombo(scope);
             };
+            
+            function testAndRunCallback(item){
+                if(angular.isDefined(scope.callback)){
+                    var extraParams;
+                    if(angular.isDefined(scope.callbackParams)){
+                        extraParams = scope.callbackParams;
+                    }
+                    scope.callback(item, extraParams);
+                }
+            }
             
             var init = function(){
                 scope.selectFieldId = generateGUID();
