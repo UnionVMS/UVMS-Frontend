@@ -50,7 +50,8 @@ copy of the GNU General Public License along with the IFDM Suite. If not, see <h
 					<div class="row">
 						<div class="form-group col-md-3 inline-group">
 							<label>{{'spatial.reports_form_report_type_label' | i18n}}</label>
-							<combobox ng-model="report.reportType" items="reportTypes" callback="resetForm"></combobox>
+							<span ng-if="!isAllowed('Activity', 'ACTIVITY_ALLOWED')" class="">{{ 'spatial.reports_table_' + report.reportType | i18n }}</span>
+							<combobox ng-model="report.reportType" items="reportTypes" callback="resetForm" ng-if="isAllowed('Activity', 'ACTIVITY_ALLOWED')"></combobox>
 						</div>
 					</div>
 				</div>
@@ -161,7 +162,7 @@ copy of the GNU General Public License along with the IFDM Suite. If not, see <h
 					<!-- Aggregation Criteria -->
 					<div class="form-group aggregation-container" ng-if="report.reportType === 'summary'">
 						<h3 class="row">{{'spatial.output_criteria' | i18n }}</h3>
-						<aggregation-panel class="col-md-12" ng-model="report.sortFilters" aggregation-types="aggregationTypes" min-selections="1" title="{{'spatial.group_by' | i18n}}"></aggregation-panel>
+						<aggregation-panel class="col-md-12" ng-model="report.sortFilters" aggregation-types="aggregationTypes" min-selections="1" title="{{'spatial.group_by' | i18n}}" name="outputCriteria"></aggregation-panel>
 					</div>
 				</div>
 			</ng-form>

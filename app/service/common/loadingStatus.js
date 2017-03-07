@@ -70,7 +70,7 @@ angular.module('unionvmsWeb').factory('loadingStatus',function() {
             counter: 0
 		},
 		TripSummary: {
-		    message: 'activity.trip_summary_loading',
+		    message: ['activity.trip_summary_loading', 'activity.catch_details_loading'],
             value: false,
             counter: 0
 		},

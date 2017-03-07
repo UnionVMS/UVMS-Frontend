@@ -256,6 +256,7 @@ angular.module('unionvmsWeb').directive('combobox', function(comboboxService,loc
                     return;
                 }
 
+                ctrl.$setDirty();
                 if(scope.multiple){
                     if(!angular.isDefined(scope.ngModel)){
                         scope.ngModel = [];
@@ -379,6 +380,7 @@ angular.module('unionvmsWeb').directive('combobox', function(comboboxService,loc
                 if(!scope.multiple || (scope.multiple && scope.selectedItems.indexOf(item) === -1)){
                     scope.selectVal(item);
                 }else{
+                    ctrl.$setDirty();
                     scope.removeSelectedItem(item.code);
                     
                     if(angular.isDefined(scope.callback)){
