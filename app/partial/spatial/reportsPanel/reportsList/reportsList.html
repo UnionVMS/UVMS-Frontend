@@ -31,6 +31,7 @@ copy of the GNU General Public License along with the IFDM Suite. If not, see <h
 				<tr>
 					<th st-sort="name" st-skip-natural="true" st-class-ascent="sorting_asc" st-class-descent="sorting_desc" >{{'spatial.reports_table_header_name' | i18n }}</th>
 					<th st-sort="desc" st-skip-natural="true" st-class-ascent="sorting_asc" st-class-descent="sorting_desc" >{{'spatial.reports_table_header_description' | i18n }}</th>
+					<th st-sort="reportType" st-skip-natural="true" st-class-ascent="sorting_asc" st-class-descent="sorting_desc" >{{'spatial.reports_table_header_report_type' | i18n }}</th>
 					<th st-sort="createdOn" st-skip-natural="true" st-sort-default="reverse"  st-class-ascent="sorting_asc" st-class-descent="sorting_desc" >{{'spatial.reports_table_header_created_on' | i18n }}</th>
 					<th st-sort="createdBy" st-skip-natural="true" st-class-ascent="sorting_asc" st-class-descent="sorting_desc" >{{'spatial.reports_table_header_owner' | i18n }}</th>
 					<th st-sort="executedOn" st-skip-natural="true" st-class-ascent="sorting_asc" st-class-descent="sorting_desc" >{{'spatial.reports_table_header_last_executed' | i18n }}</th>
@@ -51,6 +52,7 @@ copy of the GNU General Public License along with the IFDM Suite. If not, see <h
 				<tr ng-repeat="report in displayedRecords" ng-if="displayedRecords.length && !isLoadingReportsList">
 					<td class="break-word-column">{{ report.name }}</td>
 					<td class="break-word-column">{{ report.desc }}</td>
+					<td class="no-wrap-white-space">{{ 'spatial.reports_table_' + report.reportType | i18n }}</td>
 					<td class="no-wrap-white-space">{{ report.createdOn | stDateUtc }}</td>
 					<td class="no-wrap-white-space">{{ report.createdBy }}</td>
 					<td class="no-wrap-white-space">{{ report.executedOn | stDateUtc }}</td>
@@ -74,7 +76,7 @@ copy of the GNU General Public License along with the IFDM Suite. If not, see <h
 						<button type="button" ng-show="report.editable" class="btn btn-default btn-xs" title="{{'spatial.reports_table_config_label' | i18n }}" ng-click="showFilters($index)"><span class="fa fa-pencil"></span></button>
 						<div class="btn-group" ng-show="{{report.shareable && report.shareable.length > 0}}">
 						<!--<button type="button" class="btn btn-secondary dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" >-->
-						<button type="button" class="btn btn-default btn-xs" title="{{'spatial.reports_table_share_label' | i18n }}" data-toggle="dropdown" aria-haspopup="true" ><span class="fa fa-share-alt"></span></button>
+						<button type="button" ng-if="report.reportType === 'standard'" class="btn btn-default btn-xs" title="{{'spatial.reports_table_share_label' | i18n }}" data-toggle="dropdown" aria-haspopup="true" ><span class="fa fa-share-alt"></span></button>
 						<div class="dropdown-menu">
 							<div class="dropdown-body">
 								<a class="dropdown-item" ng-repeat="visibilityLevel in getVisibilityLevels(report)" ng-click="shareReport($parent.$index, visibilityLevel)">

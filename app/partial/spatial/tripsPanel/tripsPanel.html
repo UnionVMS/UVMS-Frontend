@@ -39,13 +39,19 @@ copy of the GNU General Public License along with the IFDM Suite. If not, see <h
             <!--TAB CONTENT-->
             <div class="trip-summary-tab" ng-if="tab.title === trip.id">
                 <div ng-include="'partial/spatial/tripsPanel/tripSummary/tripSummary.html'"></div>
-
             </div>
         </uib-tab>
     </uib-tabset>
     <div ng-if="repNav.isViewVisible('catchDetails')" ng-include="'partial/spatial/tripsPanel/catchDetails/catchDetails.html'"></div>
     <div ng-if="repNav.isViewVisible('catchEvolution')" ng-include="'partial/spatial/tripsPanel/catchEvolution/catchEvolution.html'"></div>
+    <div ng-if="repNav.isViewVisible('tripFishingOperationPanel')" ng-include="'partial/spatial/tripsPanel/tripFishingOperationPanel/tripFishingOperationPanel.html'"></div>
     <fishing-activity-navigator ng-if="repNav.isViewVisible('tripDeparturePanel')" partial="partial/spatial/tripsPanel/tripDeparturePanel/tripDeparturePanel.html"></fishing-activity-navigator>
     <div ng-if="repNav.isViewVisible('tripArrivalPanel')" ng-include="'partial/spatial/tripsPanel/tripArrivalPanel/tripArrivalPanel.html'"></div>
     <div ng-if="repNav.isViewVisible('tripLandingPanel')" ng-include="'partial/spatial/tripsPanel/tripLandingPanel/tripLandingPanel.html'"></div>
+    <div ng-if="repNav.isViewVisible('tripDiscardPanel')" ng-include="'partial/spatial/tripsPanel/tripDiscardPanel/tripDiscardPanel.html'"></div>
+    <div ng-if="repNav.isViewVisible('tripAreaEntryPanel')" ng-include="'partial/spatial/tripsPanel/tripAreaEntryPanel/tripAreaEntryPanel.html'"></div>
+    <div ng-if="repNav.isViewVisible('tripAreaExitPanel')" ng-include="'partial/spatial/tripsPanel/tripAreaExitPanel/tripAreaExitPanel.html'"></div>
+    <div ng-if="repNav.isViewVisible('tripTranshipmentPanel')" ng-include="'partial/spatial/tripsPanel/tripTranshipmentPanel/tripTranshipmentPanel.html'"></div>
+    <div ng-if="repNav.isViewVisible('tripRelocationPanel')" ng-include="'partial/spatial/tripsPanel/tripRelocationPanel/tripRelocationPanel.html'"></div>
+    <div ng-if="repNav.isViewVisible('tripJointFishingOperationPanel')" ng-include="'partial/spatial/tripsPanel/tripJointFishingOperationPanel/tripJointFishingOperationPanel.html'"></div>
 </div>

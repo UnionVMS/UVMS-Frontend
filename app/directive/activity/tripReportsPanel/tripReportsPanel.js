@@ -82,7 +82,7 @@ angular.module('unionvmsWeb').directive('tripReportsPanel', function(loadingStat
 			 */
             var init = function(){
                 //get trip message count
-                loadingStatus.isLoading('TripSummary', true);
+                loadingStatus.isLoading('TripSummary', true, 0);
                 activityRestService.getTripMessageCount(scope.trip.id).then(function(response){
                     scope.trip.fromJson('messageCount',response.data);
                     scope.messageCount = scope.trip.messageCount;
@@ -181,7 +181,7 @@ angular.module('unionvmsWeb').directive('tripReportsPanel', function(loadingStat
                 type = undefined;
             }
             this.previousItem.idx = idx;
-            this.previousItem.type = type
+            this.previousItem.type = type;
         } else {
             idx = this.currentItemIdx + 1;
             if (idx < this.reports.length){
@@ -193,7 +193,7 @@ angular.module('unionvmsWeb').directive('tripReportsPanel', function(loadingStat
             this.nextItem.idx = idx;
             this.nextItem.type = type;
         }
-    }
+    };
     
     return tripReports;
 });

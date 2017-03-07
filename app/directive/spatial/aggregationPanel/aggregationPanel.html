@@ -2,14 +2,15 @@
     <!--TITLE-->
     <h5 class="aggr-title">{{title}}</h5>
     <!--TREE-->
-    <div ui-tree style="overflow:auto;" class="wrapper">
-        <ul ui-tree-nodes ng-model="ngModel" class="aggr-panel-list">
+    <div ui-tree="treeOptions" style="overflow:auto;" class="wrapper" name="aggrPanelParent">
+        <ul ui-tree-nodes ng-model="ngModel" class="aggr-panel-list" name="aggrPanel">
             <li ui-tree-node ng-repeat="item in ngModel" data-scroll-container=".wrapper">
                 <div ng-if="!$first" class="identation" ng-style="{'margin-left': calcIdentation($index) }"></div>
                 <div ui-tree-handle>
                     ::: {{item.text}}
                 </div>
-                <combobox class="sub-aggr-combo" ng-if="item.items" items="item.items" ng-model="item.value" no-placeholder-on-list="true" default-value="item.items[0].code"></combobox>
+                <combobox ng-if="item.selection === 'single'" class="sub-aggr-combo" items="item.items" ng-model="item.values" no-placeholder-on-list="true" default-value="item.items[0].code"></combobox>
+                <combobox ng-if="item.selection === 'multiple'" multiple="true" class="sub-aggr-combo" items="item.items" ng-model="item.values" no-placeholder-on-list="true" min-selections="1" hide-selected-items="true"></combobox>
             </li>
         </ul>
     </div>

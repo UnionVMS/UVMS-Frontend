@@ -22,6 +22,7 @@ copy of the GNU General Public License along with the IFDM Suite. If not, see <h
 angular.module('unionvmsWeb').directive('aggregationPanel', function() {
 	return {
 		restrict: 'E',
+		require: "^ngModel",
 		scope: {
 			ngModel: '=',
 			aggregationTypes: '=',
@@ -99,6 +100,16 @@ angular.module('unionvmsWeb').directive('aggregationPanel', function() {
 
 			//checks if the model changed
 			scope.$watch('ngModel', function(newVal){
+				angular.forEach(newVal, function(item){
+					var aggrType = _.where(scope.aggregationTypes,{code: item.code})[0];
+					item.selection = aggrType.selection;
+					if(angular.isDefined(item.selection)){
+						item.items = aggrType.items;
+						if(item.selection === 'single' && _.isArray(item.values)){
+							item.values = _.where(aggrType.items,{code: item.values[0]})[0].code;
+						}
+					}
+				});
 				synchSelectedTypes(newVal);
 			}, true);
 
@@ -147,6 +158,12 @@ angular.module('unionvmsWeb').directive('aggregationPanel', function() {
 			if(angular.isDefined(scope.ngModel)){
 				synchSelectedTypes(scope.ngModel);
 			}
+
+			scope.treeOptions = {
+				dropped: function(evt) {
+					fn.$setDirty();
+				},
+			};
 
 			checkMinSelections();
 		}

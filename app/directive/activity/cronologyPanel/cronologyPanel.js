@@ -53,7 +53,7 @@ angular.module('unionvmsWeb').directive('cronologyPanel', function(loadingStatus
 			 */
             var init = function(){
                 //get trip cronology
-                loadingStatus.isLoading('TripSummary', true);
+                loadingStatus.isLoading('TripSummary', true, 0);
                 activityRestService.getTripCronology(scope.trip.id,5).then(function(response){
                     scope.trip.fromJson('cronology',response.data);
                     scope.cronology = scope.trip.cronology;

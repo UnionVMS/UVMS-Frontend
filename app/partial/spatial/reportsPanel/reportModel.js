@@ -9,7 +9,7 @@ the hope that it will be useful, but WITHOUT ANY WARRANTY; without even the impl
 FITNESS FOR A PARTICULAR PURPOSE.  See the GNU General Public License for more details. You should have received a
 copy of the GNU General Public License along with the IFDM Suite. If not, see <http://www.gnu.org/licenses/>.
 */
-angular.module('unionvmsWeb').factory('Report',function(unitConversionService, userService) { //globalSettingsService,
+angular.module('unionvmsWeb').factory('Report',function(unitConversionService, userService, locale) { //globalSettingsService,
 	function Report(){
 	    this.id = undefined;
 	    this.name = undefined;
@@ -181,6 +181,13 @@ angular.module('unionvmsWeb').factory('Report',function(unitConversionService, u
 			report.sortFilters = filter.sort;
 
 	        report.areas = filter.areas;
+
+			if(angular.isDefined(filter.criteria) && filter.criteria.length){
+				angular.forEach(filter.criteria, function(item){
+					item.text = locale.getString('spatial.criteria_' + item.code.toLowerCase());
+				});
+			}
+			report.sortFilters = filter.criteria;
 	        
 	        if (angular.isDefined(data.mapConfiguration)){
 	        	if(angular.isDefined(data.mapConfiguration.layerSettings) && angular.isDefined(data.mapConfiguration.layerSettings.areaLayers) && !_.isEmpty(data.mapConfiguration.layerSettings.areaLayers)){
@@ -267,6 +274,24 @@ angular.module('unionvmsWeb').factory('Report',function(unitConversionService, u
 			}
 		}
 
+		var criteria;
+		if(angular.isDefined(this.sortFilters) && this.sortFilters.length){
+			criteria = [];
+			angular.forEach(this.sortFilters, function(item){
+				var values;
+
+				if(!angular.isDefined(item.values)){
+					values = [item.code];
+				}else if(!_.isArray(item.values)){
+					values = [item.values];
+				}else{
+					values = item.values;
+				}
+
+				criteria.push({'code': item.code, 'values': values});
+			});
+		}
+
 	    var filter = {
 	        common: {
 				id: this.commonFilterId,
@@ -279,9 +304,8 @@ angular.module('unionvmsWeb').factory('Report',function(unitConversionService, u
             assets: [],
             vms: vmsFilters,
 			fa: faFilters,
-            areas: this.areas
-			//TODO uncomment when the service is updated
-			//sort: this.sortFilters
+            areas: this.areas,
+			criteria: criteria
 	    };
 
 	    if (angular.isDefined(this.vesselsSelection) && this.vesselsSelection.length){
@@ -292,7 +316,7 @@ angular.module('unionvmsWeb').factory('Report',function(unitConversionService, u
 	        id: this.id,
 	        name: this.name,
 	        desc: this.desc !== '' ? this.desc : undefined,
-			//reportType: this.reportType, FIXME uncomment
+			reportType: this.reportType,
 	        visibility: angular.isDefined(this.visibility) ? this.visibility : 'private',
 	        withMap: this.withMap,
 	        filterExpression: filter
@@ -428,8 +452,25 @@ angular.module('unionvmsWeb').factory('Report',function(unitConversionService, u
 				report.filterExpression.fa = undefined;
 			}
 		}
-		//TODO uncomment when the service is updated
-		//report.filterExpression.sort = this.sortFilters;
+
+		var criteria;
+		if(angular.isDefined(this.sortFilters) && this.sortFilters.length){
+			criteria = [];
+			angular.forEach(this.sortFilters, function(item){
+				var values;
+
+				if(!angular.isDefined(item.values)){
+					values = [item.code];
+				}else if(!_.isArray(item.values)){
+					values = [item.values];
+				}else{
+					values = item.values;
+				}
+
+				criteria.push({'code': item.code, 'values': values});
+			});
+		}
+		report.filterExpression.criteria = criteria;
 
         if(this.withMap === true){
         	report.mapConfiguration = {

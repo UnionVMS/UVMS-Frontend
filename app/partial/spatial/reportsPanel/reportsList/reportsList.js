@@ -67,7 +67,9 @@ angular.module('unionvmsWeb').controller('ReportslistCtrl',function($scope, $fil
         var record = $scope.displayedRecords[index];
         $scope.repServ.id = $scope.displayedRecords[index].id;
         $scope.repServ.runReport(record);
-        $scope.close();
+
+        var keepState = record.reportType === 'summary' ? true : undefined;
+        $scope.close(keepState);
     };
     
     //Report filter definitions

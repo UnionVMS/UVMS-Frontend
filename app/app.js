@@ -42,7 +42,8 @@ var unionvmsWebApp = angular.module('unionvmsWeb', [
     'debugConfig',
     'angular-cron-jobs',
     'nvd3',
-    'ui.tree'
+    'ui.tree',
+    'angularResizable'
 ]);
 
 var currentUserContextPromise = function(userService) {
