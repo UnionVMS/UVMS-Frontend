@@ -12,38 +12,38 @@ copy of the GNU General Public License along with the IFDM Suite. If not, see <h
 /**
  * @memberof unionvmsWeb
  * @ngdoc model
- * @name Landing
+ * @name Relocation
  * @attr {Object} summary - An object containing the fishing activity landingSummary data (like occurence, landingTime)
- * @attr {Object} port - An object containing all the data of the port of Landing
+ * @attr {Object} location - An object containing all the data of the location
  * @attr {Object} reportDoc - An object containing all the data related with the fishing activity report document
- * @attr {Object} landingCatchData - An object containing all the data related with fishing data (like fish species, weights, gear used, locations etc... )
  * @description
- *  A model to store all the data related to a Landing in a standardized way
+ *  A model to store all the data related to a Relocation in a standardized way
  */
-angular.module('unionvmsWeb').factory('Landing', function(locale) {
+angular.module('unionvmsWeb').factory('Relocation', function (locale, fishingActivityService) {
 
-    function Landing() {
+    function Relocation() {
         this.summary = undefined;
-        this.port = undefined;
+        this.locations = undefined;
         this.reportDoc = undefined;
-        this.landingCatchData = [];
     }
 
     /**
      * Load the model with data
      * 
-     * @memberof Landing
+     * @memberof Relocation
      * @public
      * @param {Object} data - The source data to fill in the model
      */
-    Landing.prototype.fromJson = function(data) {
+    Relocation.prototype.fromJson = function (data) {
         this.summary = loadSummaryData(data.summary);
-        this.port = data.port;
+        this.locations = data.locations;
         this.reportDoc = data.reportDoc;
-        this.landingCatchData = data.landingCatchData;
+        fishingActivityService.addGearDescription(this);
+        fishingActivityService.addCatchTypeDescription(this);
+        fishingActivityService.addWeightMeansDescription(this);
     };
 
-    var loadSummaryData = function(data) {
+    var loadSummaryData = function (data) {
 
         var attrOrder = ['occurence', 'landingTime'];
         var subAttrOrder = ['startOfLanding', 'endOfLanding'];
@@ -58,12 +58,12 @@ angular.module('unionvmsWeb').factory('Landing', function(locale) {
             finalSummary.items = {};
         }
 
-        angular.forEach(attrOrder, function(attrName) {
+        angular.forEach(attrOrder, function (attrName) {
 
             if (angular.isObject(data[attrName]) && !angular.isArray(data[attrName])) {
                 if (!_.isEmpty(data[attrName])) {
                     finalSummary.subItems = {};
-                    angular.forEach(subAttrOrder, function(subAttrName) {
+                    angular.forEach(subAttrOrder, function (subAttrName) {
                         finalSummary.subItems[subAttrName] = data[attrName][subAttrName];
                     });
                 }
@@ -77,5 +77,5 @@ angular.module('unionvmsWeb').factory('Landing', function(locale) {
         return finalSummary;
     };
 
-    return Landing;
+    return Relocation;
 });

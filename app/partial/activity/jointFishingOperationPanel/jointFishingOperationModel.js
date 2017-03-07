@@ -12,35 +12,40 @@ copy of the GNU General Public License along with the IFDM Suite. If not, see <h
 /**
  * @memberof unionvmsWeb
  * @ngdoc model
- * @name Landing
- * @attr {Object} summary - An object containing the fishing activity landingSummary data (like occurence, landingTime)
- * @attr {Object} port - An object containing all the data of the port of Landing
+ * @name JointFishingOperation
+ * @attr {Object} Summary - An object containing the fishing activity landingSummary data (like occurence, landingTime)
+ * @attr {Object} location - An object containing all the data of the location
+ * @attr {Array} gears - An array conatining objects that describe the available gears
  * @attr {Object} reportDoc - An object containing all the data related with the fishing activity report document
- * @attr {Object} landingCatchData - An object containing all the data related with fishing data (like fish species, weights, gear used, locations etc... )
  * @description
- *  A model to store all the data related to a Landing in a standardized way
+ *  A model to store all the data related to a Joint Fishing Operations in a standardized way
  */
-angular.module('unionvmsWeb').factory('Landing', function(locale) {
+angular.module('unionvmsWeb').factory('JointFishingOperation', function(locale,fishingActivityService) {
 
-    function Landing() {
-        this.summary = undefined;
-        this.port = undefined;
+    function JointFishingOperation() {
+        this.operationType = undefined;
+        this.summary =undefined;
+        this.locations = [];
+        this.gears = [];
         this.reportDoc = undefined;
-        this.landingCatchData = [];
+
     }
 
     /**
      * Load the model with data
      * 
-     * @memberof Landing
+     * @memberof JointFishingOperation
      * @public
      * @param {Object} data - The source data to fill in the model
      */
-    Landing.prototype.fromJson = function(data) {
+    JointFishingOperation.prototype.fromJson = function(data) {
         this.summary = loadSummaryData(data.summary);
-        this.port = data.port;
+        this.locations = data.locations;
+        this.gears = data.gears;
         this.reportDoc = data.reportDoc;
-        this.landingCatchData = data.landingCatchData;
+        fishingActivityService.addGearDescription(this);
+        fishingActivityService.addCatchTypeDescription(this);
+        fishingActivityService.addWeightMeansDescription(this);
     };
 
     var loadSummaryData = function(data) {
@@ -72,10 +77,8 @@ angular.module('unionvmsWeb').factory('Landing', function(locale) {
             }
         });
 
-
-
         return finalSummary;
     };
 
-    return Landing;
+    return JointFishingOperation;
 });
