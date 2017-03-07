@@ -1,6 +1,6 @@
 <div class="table-filter-headers">
 	<div class="table-responsive-force">
-		<table class="table table-striped table-condensed" st-table="displayedRecords" st-safe-src="records" st-set-filter="comboHeaderFilter">
+		<table class="table table-striped table-condensed" st-table="displayedRecords" st-safe-src="records" st-set-filter="comboHeaderFilter" st-auto-select-row="false">
 			<thead>
 				<tr>
 					<th ng-repeat="column in columns" st-sort="{{column.srcObj ? column.srcObj + '.' +  column.srcProp : column.srcProp}}" st-skip-natural="true" st-class-ascent="sorting_asc" st-class-descent="sorting_desc" ng-if="column.isVisible">{{column.title}}</th>
@@ -12,20 +12,17 @@
 				</tr>
 			</thead>
 			<tbody>
-				<tr ng-repeat="item in displayedRecords">
+				<tr ng-repeat="item in displayedRecords" ng-class="{'selected-row': item.selected, 'is-selectable': selectedItem}" ng-click="selectRow($index)">
 					<td ng-repeat="column in columns" ng-if="column.isVisible">{{column.srcObj ? item[column.srcObj][column.srcProp] : item[column.srcProp]}}</td>
 				</tr>
 			</tbody>
+			<tfoot ng-if="hasTotals">
+				<tr>
+					<td ng-repeat="column in columns" ng-if="column.isVisible">
+						<st-calculate-totals ng-if="column.calculateTotal" property="{{column.srcProp}}"></st-calculate-totals>
+					</td>
+				</tr>
+			</tfoot>
 		</table>
 	</div>
-	
-	
-	<!-- <tfoot class="stFooterPagination" ng-show="displayedRecords.length && !isLoadingReportsList">
-		<tr>
-			<td colspan="7" class="text-right">
-				<div st-pagination st-items-by-page="itemsByPage" st-displayed-pages="7" st-template="partial/common/reportsPagination/reportsPagination.html"></div>
-			</td>
-		</tr>
-	</tfoot> -->
-	
 </div>

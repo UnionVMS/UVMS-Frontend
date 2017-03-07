@@ -9,6 +9,15 @@ the hope that it will be useful, but WITHOUT ANY WARRANTY; without even the impl
 FITNESS FOR A PARTICULAR PURPOSE.  See the GNU General Public License for more details. You should have received a
 copy of the GNU General Public License along with the IFDM Suite. If not, see <http://www.gnu.org/licenses/>.
 */
+/**
+ * @memberof unionvmsWeb
+ * @ngdoc directive
+ * @param {Service} locale - The angular locale service
+ * @attr {String} tileTitle - The title of the tile
+ * @attr {Array} srcData - An array containing the data to be displayed on the table within the tile
+ * @desc
+ *  A reusable tile to display processing and products information for a given fishing activity
+ */
 angular.module('unionvmsWeb').directive('productProcessingTile', function(locale) {
 	return {
 		restrict: 'E',
@@ -19,6 +28,9 @@ angular.module('unionvmsWeb').directive('productProcessingTile', function(locale
 		},
 		templateUrl: 'directive/activity/productProcessingTile/productProcessingTile.html',
 		link: function(scope, element, attrs, fn) {
+		    scope.$watch('currentItem', function(newVal){
+		        console.log(newVal);
+		    });
 		    scope.tableAttrs = [{
 		        title: locale.getString('activity.type'),
 		        srcProp: 'type',
@@ -105,7 +117,8 @@ angular.module('unionvmsWeb').directive('productProcessingTile', function(locale
 		    }, {
                 title: locale.getString('activity.product_weight'),
                 srcProp: 'weight',
-                isVisible: true
+                isVisible: true,
+                calculateTotal: true
 		    }, {
                 title: locale.getString('activity.packaging_type'),
                 srcProp: 'packagingType',
@@ -114,11 +127,13 @@ angular.module('unionvmsWeb').directive('productProcessingTile', function(locale
 		    }, {
                 title: locale.getString('activity.package_weight'),
                 srcProp: 'packageWeight',
-                isVisible: true
+                isVisible: true,
+                calculateTotal: true
 		    }, {
                 title: locale.getString('activity.package_quantity'),
                 srcProp: 'packageQuantity',
-                isVisible: true
+                isVisible: true,
+                calculateTotal: true
 		    }];
 		}
 	};

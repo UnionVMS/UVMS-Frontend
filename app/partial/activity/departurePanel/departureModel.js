@@ -47,7 +47,7 @@ angular.module('unionvmsWeb').factory('Departure',function(mdrCacheService) {
             purposeCode: undefined,
             purpose: undefined
         };
-        this.procProducts = {};
+        this.processingProducts = {};
         this.fishingData = [];
     }
     
@@ -64,7 +64,7 @@ angular.module('unionvmsWeb').factory('Departure',function(mdrCacheService) {
         this.reportDoc = data.reportDoc;
         this.gears = data.gears;
         this.fishingData = data.fishingData;
-        this.procProducts = data.procProducts;
+        this.processingProducts = data.processingProducts;
         addGearDescription(this);
         addCatchTypeDescription(this);
         addWeightMeansDescription(this);
