@@ -13,7 +13,7 @@ copy of the GNU General Public License along with the IFDM Suite. If not, see <h
  * @memberof unionvmsWeb
  * @ngdoc model
  * @name AreaExit
- * @attr {Object} landingSummary - An object containing the fishing activity landingSummary data (like occurence, landingTime)
+ * @attr {Object} summary - An object containing the fishing activity landingSummary data (like occurence, landingTime)
  * @attr {Object} reportDoc - An object containing all the data related with the fishing activity report document
  * @description
  *  A model to store all the data related to a Area Exit in a standardized way
@@ -21,19 +21,8 @@ copy of the GNU General Public License along with the IFDM Suite. If not, see <h
 angular.module('unionvmsWeb').factory('AreaExit', function (locale) {
 
     function AreaExit() {
-        this.landingSummary = {
-            occurence: undefined,
-            landingTime: undefined
-        };
-        this.reportDoc = {
-            type: undefined,
-            dateAccepted: undefined,
-            id: undefined,
-            refId: undefined,
-            creationDate: undefined,
-            purposeCode: undefined,
-            purpose: undefined
-        };
+        this.summary = undefined;
+        this.reportDoc = undefined;
     }
 
     /**
@@ -44,7 +33,7 @@ angular.module('unionvmsWeb').factory('AreaExit', function (locale) {
      * @param {Object} data - The source data to fill in the model
      */
     AreaExit.prototype.fromJson = function (data) {
-        this.landingSummary = loadSummaryData(data.landingSummary);
+        this.summary = loadSummaryData(data.summary);
         this.reportDoc = data.reportDoc;
     };
 

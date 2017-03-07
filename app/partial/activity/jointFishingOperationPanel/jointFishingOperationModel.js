@@ -24,21 +24,10 @@ angular.module('unionvmsWeb').factory('JointFishingOperation', function(locale,f
 
     function JointFishingOperation() {
         this.operationType = undefined;
-        this.summary = {
-            occurence: undefined,
-            landingTime: undefined
-        };
+        this.summary =undefined;
         this.locations = [];
         this.gears = [];
-        this.reportDoc = {
-            type: undefined,
-            dateAccepted: undefined,
-            id: undefined,
-            refId: undefined,
-            creationDate: undefined,
-            purposeCode: undefined,
-            purpose: undefined
-        };
+        this.reportDoc = undefined;
 
     }
 

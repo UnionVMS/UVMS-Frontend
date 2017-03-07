@@ -13,8 +13,8 @@ copy of the GNU General Public License along with the IFDM Suite. If not, see <h
  * @memberof unionvmsWeb
  * @ngdoc model
  * @name Discard
- * @attr {Object} landingSummary - An object containing the fishing activity landingSummary data (like occurence, landingTime)
- * @attr {Object} port - An object containing all the data of the port of Landing
+ * @attr {Object} summary - An object containing the fishing activity landingSummary data (like occurence, landingTime)
+ * @attr {Object} location - An object containing all the data of location
  * @attr {Object} reportDoc - An object containing all the data related with the fishing activity report document
  * @description
  *  A model to store all the data related to a Landing in a standardized way
@@ -22,23 +22,9 @@ copy of the GNU General Public License along with the IFDM Suite. If not, see <h
 angular.module('unionvmsWeb').factory('Discard', function (locale,fishingActivityService) {
 
     function Discard() {
-        this.landingSummary = {
-            occurence: undefined,
-            landingTime: undefined
-        };
-        this.port = {
-            name: undefined,
-            coordinates: []
-        };
-        this.reportDoc = {
-            type: undefined,
-            dateAccepted: undefined,
-            id: undefined,
-            refId: undefined,
-            creationDate: undefined,
-            purposeCode: undefined,
-            purpose: undefined
-        };
+        this.summary = undefined;
+        this.locations =undefined;
+        this.reportDoc = undefined;
     }
 
     /**
@@ -49,8 +35,8 @@ angular.module('unionvmsWeb').factory('Discard', function (locale,fishingActivit
      * @param {Object} data - The source data to fill in the model
      */
     Discard.prototype.fromJson = function (data) {
-        this.landingSummary = loadSummaryData(data.landingSummary);
-        this.port = data.port;
+        this.summary = loadSummaryData(data.summary);
+        this.locations = data.locations;
         this.reportDoc = data.reportDoc;
         fishingActivityService.addGearDescription(this);
         fishingActivityService.addCatchTypeDescription(this);

@@ -13,33 +13,18 @@ copy of the GNU General Public License along with the IFDM Suite. If not, see <h
  * @memberof unionvmsWeb
  * @ngdoc model
  * @name Relocation
- * @attr {Object} landingSummary - An object containing the fishing activity landingSummary data (like occurence, landingTime)
+ * @attr {Object} summary - An object containing the fishing activity landingSummary data (like occurence, landingTime)
  * @attr {Object} location - An object containing all the data of the location
  * @attr {Object} reportDoc - An object containing all the data related with the fishing activity report document
  * @description
  *  A model to store all the data related to a Relocation in a standardized way
  */
-angular.module('unionvmsWeb').factory('Relocation', function (locale,fishingActivityService) {
+angular.module('unionvmsWeb').factory('Relocation', function (locale, fishingActivityService) {
 
     function Relocation() {
-        this.landingSummary = {
-            occurence: undefined,
-            landingTime: undefined
-        };
-        this.port = {
-            name: undefined,
-            coordinates: []
-        };
-        this.reportDoc = {
-            type: undefined,
-            dateAccepted: undefined,
-            id: undefined,
-            refId: undefined,
-            creationDate: undefined,
-            purposeCode: undefined,
-            purpose: undefined
-        };
-
+        this.summary = undefined;
+        this.locations = undefined;
+        this.reportDoc = undefined;
     }
 
     /**
@@ -50,8 +35,8 @@ angular.module('unionvmsWeb').factory('Relocation', function (locale,fishingActi
      * @param {Object} data - The source data to fill in the model
      */
     Relocation.prototype.fromJson = function (data) {
-        this.landingSummary = loadSummaryData(data.landingSummary);
-        this.port = data.port;
+        this.summary = loadSummaryData(data.summary);
+        this.locations = data.locations;
         this.reportDoc = data.reportDoc;
         fishingActivityService.addGearDescription(this);
         fishingActivityService.addCatchTypeDescription(this);
