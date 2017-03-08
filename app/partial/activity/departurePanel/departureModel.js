@@ -78,10 +78,10 @@ angular.module('unionvmsWeb').factory('Departure',function(mdrCacheService, fish
             reason: {
                 type: 'string'
             },
-            fishery_type: {
+            fisheryType: {
                 type: 'string'
             },
-            targetted_species: {
+            targetedSpecies: {
                 type: 'array'
             }
         };
@@ -89,7 +89,7 @@ angular.module('unionvmsWeb').factory('Departure',function(mdrCacheService, fish
         var finalSummary = fishingActivityService.loadFishingActivityDetails(data, attrOrder);
 
         finalSummary.title = locale.getString('activity.title_fishing_activity') + ': '+ locale.getString('activity.fa_type_departure');
-        finalSummary.subTitle = locale.getString('activity.activity_location_port_departure');
+        //finalSummary.subTitle = locale.getString('activity.activity_location_port_departure');
 
         return finalSummary;
     };

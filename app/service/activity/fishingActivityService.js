@@ -167,7 +167,7 @@ angular.module('unionvmsWeb').factory('fishingActivityService', function (activi
     var transformFaItem = function(value, key, attrOrder, attrKeys){
         var newVal = value;
         
-        if(attrOrder[key] === 'date'){
+        if(attrOrder[key].type === 'date'){
             newVal = $filter('stDateUtc')(newVal);
         }else if(angular.isArray(value)){
             newVal = '';
@@ -221,6 +221,29 @@ angular.module('unionvmsWeb').factory('fishingActivityService', function (activi
         finalSummary.subTitle = locale.getString('activity.activity_related_flux_doc_title');
 
         return finalSummary;
+    };
+
+    faServ.loadGears = function(data){
+    
+        var attrOrder = {
+            meshSize: {
+                type: 'string'
+            },
+            beamLength: {
+                type: 'string'
+            },
+            numBeams: {
+                type: 'string'
+            }
+        };
+        
+        for(var i=0;i<data.length;i++){
+            data[i].characteristics = this.loadFishingActivityDetails(data[i].characteristics, attrOrder);
+            data[i].characteristics.title = locale.getString('activity.characteristics');
+        }
+        var gears = data;
+
+        return gears;
     };
     
 	return faServ;

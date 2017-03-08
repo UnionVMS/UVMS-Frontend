@@ -60,9 +60,9 @@ angular.module('unionvmsWeb').factory('FishingOperation',function(fishingActivit
     FishingOperation.prototype.fromJson = function(data){
         this.summary = loadSummaryData(data.summary);
         this.port = data.port;
-        this.gears = data.gears;
+        this.gears = fishingActivityService.loadGears(data.gears);
         this.reportDoc = fishingActivityService.loadFaDocData(data.reportDoc);
-        this.fishingData = data.fishingData;
+        this.fishingData = loadFishingData(data.fishingData);
         fishingActivityService.addGearDescription(this);
         fishingActivityService.addCatchTypeDescription(this);
         fishingActivityService.addWeightMeansDescription(this);
@@ -80,10 +80,10 @@ angular.module('unionvmsWeb').factory('FishingOperation',function(fishingActivit
             no_operations: {
                 type: 'string'
             },
-            fishery_type: {
+            fisheryType: {
                 type: 'string'
             },
-            targetted_species: {
+            targetedSpecies: {
                 type: 'array'
             },
             duration: {
@@ -97,6 +97,13 @@ angular.module('unionvmsWeb').factory('FishingOperation',function(fishingActivit
         finalSummary.subTitle = locale.getString('activity.fishing_time');
 
         return finalSummary;
+    };
+
+    var loadFishingData = function(data){
+        angular.forEach(data, function(item){
+            item.gears = fishingActivityService.loadGears(item.gears);
+        });
+        return data;
     };
 
     return FishingOperation;
