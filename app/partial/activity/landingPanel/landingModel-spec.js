@@ -21,7 +21,7 @@ describe('Landing', function () {
 
     function getLandingData() {
         return {
-            "landingSummary": {
+            "summary": {
                 "occurence": "2018-02-26T00:28:28",
                 "landingTime": {
                     "startOfLanding": "2016-04-22T17:47:19",
@@ -327,17 +327,17 @@ describe('Landing', function () {
         var land = new Landing();
 
         expect(land).toEqual(jasmine.any(Object));
-        expect(land.landingSummary).toEqual(jasmine.any(Object));
-        expect(land.port).toEqual(jasmine.any(Object));
+        expect(land.summary).not.toBeDefined();
+        expect(land.port).not.toBeDefined();
         expect(land.landingCatchData).toEqual([]);
-        expect(land.reportDoc).toEqual(jasmine.any(Object));
+        expect(land.reportDoc).not.toBeDefined();
 
     }));
 
     it('should properly build landing from json data', inject(function (Landing) {
         var land = new Landing();
         land.fromJson(data);
-        expect(land.landingSummary).toEqual(summary);
+        expect(land.summary).toEqual(summary);
         expect(land.port).toEqual(data.port);
         expect(land.reportDoc).toEqual(data.reportDoc);
         expect(land.landingCatchData.length).toEqual(2);
