@@ -24,7 +24,8 @@ angular.module('unionvmsWeb')
             ngDisabled : '=',
             functions : '=',
             dirtyStatus : '=',
-            submitAttemptedWatcher : '='
+            submitAttemptedWatcher : '=',
+            listIndex : '='
         },
 		templateUrl: 'directive/mobileTerminal/mobileTerminalDetails/mobileTerminalDetails.html',
 		link: function(scope, element, attrs, fn) {
@@ -390,6 +391,32 @@ angular.module('unionvmsWeb')
         $scope.closeMobileTerminalForm = function(){
             if ($scope.modeltype === 'MOBILE_TERMINAL') {
                 $scope.functions.displayMobileTerminalList();
+            }
+        };
+
+        $scope.getRadioButtonTitle = function(index) {
+
+        }; 
+
+        var disabledMessage = locale.getString('mobileTerminal.form_inmarsatc_communication_disabledchannel_message');
+        $scope.getRadioButtonHelpText = {
+            pollable: function(index) {
+                if ($scope.disableChannels.pollable(index)) {
+                    return disabledMessage;
+                }
+                return locale.getString('mobileTerminal.form_inmarsatc_communication_selectedchannel_poll_label');
+            },
+            configurable: function(index) {
+                if ($scope.disableChannels.configurable(index)) {
+                    return disabledMessage;
+                }
+                return locale.getString('mobileTerminal.form_inmarsatc_communication_selectedchannel_con_label');
+            },
+            defaultReporting: function(index) {
+                if ($scope.disableChannels.defaultReporting(index)) {
+                    return disabledMessage;
+                }
+                return locale.getString('mobileTerminal.form_inmarsatc_communication_selectedchannel_def_label');
             }
         };
 

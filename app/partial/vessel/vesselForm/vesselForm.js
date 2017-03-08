@@ -68,7 +68,7 @@ angular.module('unionvmsWeb').controller('VesselFormCtrl',function($scope, $log,
             $scope.isVesselDetailsDirty = status;
             $scope.setFormDirtyStatus(status);
         }
-    }
+    };
 
     //Has form submit been atempted?
     $scope.submitAttempted = false;

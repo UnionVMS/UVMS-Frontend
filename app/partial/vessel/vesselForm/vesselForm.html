@@ -40,7 +40,7 @@ copy of the GNU General Public License along with the IFDM Suite. If not, see <h
                                     </button>
                                 </div>
                                 <div ng-repeat="mobileTerminal in mobileTerminals | orderBy:'isCreateNewMode'">
-                                    <mobile-terminal-details mobile-terminal="mobileTerminal" vessel-id="vesselObj.vesselId.guid" modeltype="'VESSEL'" functions="mobileTerminalFunctions" submit-attempted-watcher="submitAttempted" dirty-status="setFormDirtyStatus"></mobile-terminal-details>
+                                    <mobile-terminal-details mobile-terminal="mobileTerminal" vessel-id="vesselObj.vesselId.guid" modeltype="'VESSEL'" functions="mobileTerminalFunctions" submit-attempted-watcher="submitAttempted" dirty-status="setFormDirtyStatus" list-index="$index"></mobile-terminal-details>
                                 </div>
                             </div>
 

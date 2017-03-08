@@ -70,6 +70,7 @@
     "form_inmarsatc_communication_channel_sort_up_title" : "Move up",
     "form_inmarsatc_communication_channel_sort_down_title" : "Move down",
     "form_inmarsatc_communication_channels_used_for_polling" : "Used for polling!",
+    "form_inmarsatc_communication_disabledchannel_message" : "Only one channel can have this value selected",
     "form_inmarsatc_communication_selectedchannel_channel_label" : "Channel",
     "form_inmarsatc_communication_selectedchannel_poll_label" : "Poll",
     "form_inmarsatc_communication_selectedchannel_con_label" : "Config.",
