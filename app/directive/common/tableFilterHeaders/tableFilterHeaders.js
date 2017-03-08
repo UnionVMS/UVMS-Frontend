@@ -255,13 +255,16 @@ angular.module('unionvmsWeb').directive('tableFilterHeaders', function($compile)
             property: '@'
         },
         link: function (scope, element, attr, table){
+            scope.total = 0;
             scope.isCalculating = false;
             scope.$watch(table.getFilteredCollection, function(data){
                 if (angular.isDefined(data) && scope.isCalculating === false){
                     scope.total = 0;
                     scope.isCalculating = true;
                     for (var i = 0; i < data.length; i++){
-                        scope.total += data[i][scope.property];
+                        if (!isNaN(data[i][scope.property])){
+                            scope.total += data[i][scope.property];
+                        }
                         if (i === data.length - 1){
                             scope.isCalculating = false;
                         }

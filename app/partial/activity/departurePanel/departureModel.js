@@ -47,7 +47,7 @@ angular.module('unionvmsWeb').factory('Departure',function(mdrCacheService, fish
             purposeCode: undefined,
             purpose: undefined
         };
-        this.processingProducts = {};
+        this.processingProducts = [];
         this.fishingData = [];
     }
     

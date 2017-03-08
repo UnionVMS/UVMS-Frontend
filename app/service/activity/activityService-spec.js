@@ -10,7 +10,7 @@ FITNESS FOR A PARTICULAR PURPOSE.  See the GNU General Public License for more d
 copy of the GNU General Public License along with the IFDM Suite. If not, see <http://www.gnu.org/licenses/>.
 */
 describe('activityService', function() {
-    var actServ, mockActRestServ, mockVisServ;
+    var actServ, mockActRestServ, mockVisServ, mockFishingActServ;
     var pageSize = 25;
     
     beforeEach(module('unionvmsWeb'));
@@ -18,10 +18,12 @@ describe('activityService', function() {
     beforeEach(function(){
         mockActRestServ = jasmine.createSpyObj('activityRestService', ['getUserPreferences', 'getActivityList', 'getReportHistory']);
         mockVisServ = jasmine.createSpyObj('visibilityService', ['setVisibility']);
+        mockFishingActServ = jasmine.createSpyObj('fishingActivityService', ['resetActivity']);
         
         module(function($provide){
             $provide.value('activityRestService', mockActRestServ);
             $provide.value('visibilityService', mockVisServ);
+            $provide.value('fishingActivityService', mockFishingActServ);
         });
     });
     
@@ -143,9 +145,11 @@ describe('activityService', function() {
         expect(actServ.breadcrumbPages).toEqual(jasmine.any(Array));
         expect(actServ.breadcrumbPages.length).toBe(4);
         expect(actServ.activities).toEqual(jasmine.any(Array));
+        expect(actServ.activitiesHistory).toEqual(jasmine.any(Array));
+        expect(actServ.history).toEqual(jasmine.any(Array));
         expect(actServ.overview).toEqual(jasmine.any(Object));
-        expect(actServ.details).toEqual(jasmine.any(Object));
         expect(actServ.reportsList).toEqual(jasmine.any(Object));
+        expect(actServ.selReportDoc).toEqual(jasmine.any(Object));
     });
     
     it('should get activity list', function(){
@@ -240,8 +244,6 @@ describe('activityService', function() {
         expect(actServ.displayedActivities.length).toEqual(0);
         expect(actServ.overview).toEqual(jasmine.any(Object));
         expect(actServ.overview).toEqual({});
-        expect(actServ.details).toEqual(jasmine.any(Object));
-        expect(actServ.details).toEqual({});
         expect(actServ.reportsList).toEqual(jasmine.any(Object));
         expect(actServ.reportsList).toEqual(getInitialReportsListDef());
         expect(actServ.history).toEqual(jasmine.any(Array));
@@ -254,6 +256,7 @@ describe('activityService', function() {
         expect(actServ.displayedActivitiesHistory.length).toEqual(0);
         expect(actServ.historyList).toEqual(getHistoryListObject());
         expect(actServ.activitiesHistoryList).toEqual(getActivitiesHistoryListObject());
+        expect(actServ.selReportDoc).toEqual(jasmine.any(Object));
         expect(actServ.allPurposeCodes).toEqual(jasmine.any(Array));
         expect(actServ.allPurposeCodes.length).toEqual(0);
     });
@@ -292,12 +295,33 @@ describe('activityService', function() {
         expect(actServ.overview).toEqual({});
     });
     
-    it('should clear details by specifying the type', function(){
+    it('should clear activities by specifying the type', function(){
+        mockServiceProperties();
+        actServ.clearAttributeByType('activities');
+        
+        expect(actServ.activities).toEqual(jasmine.any(Array));
+        expect(actServ.activities.length).toEqual(0);
+        expect(actServ.displayedActivities).toEqual(jasmine.any(Array));
+        expect(actServ.displayedActivities.length).toEqual(0);
+    });
+    
+    it('should clear activities history by specifying the type', function(){
+        mockServiceProperties();
+        actServ.clearAttributeByType('activitiesHistory');
+        
+        expect(actServ.activitiesHistory).toEqual(jasmine.any(Array));
+        expect(actServ.activitiesHistory.length).toEqual(0);
+        expect(actServ.displayedActivitiesHistory).toEqual(jasmine.any(Array));
+        expect(actServ.displayedActivitiesHistory.length).toEqual(0);
+        expect(actServ.selReportDoc).toEqual(jasmine.any(Object));
+        expect(actServ.selReportDoc).toEqual({});
+    });
+    
+    it('should clear all details by specifying the type', function(){
         mockServiceProperties();
         actServ.clearAttributeByType('details');
         
-        expect(actServ.details).toEqual(jasmine.any(Object));
-        expect(actServ.details).toEqual({});
+        expect(mockFishingActServ.resetActivity).toHaveBeenCalled();
     });
     
     it('should reset the reports list tableState', function(){
