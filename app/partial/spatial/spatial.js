@@ -9,7 +9,7 @@ the hope that it will be useful, but WITHOUT ANY WARRANTY; without even the impl
 FITNESS FOR A PARTICULAR PURPOSE.  See the GNU General Public License for more details. You should have received a
 copy of the GNU General Public License along with the IFDM Suite. If not, see <http://www.gnu.org/licenses/>.
 */
-angular.module('unionvmsWeb').controller('SpatialCtrl',function($scope, $timeout, locale, mapService, spatialHelperService, Report, reportRestService, reportFormService, reportService, $anchorScroll, userService, loadingStatus, $state, $localStorage, comboboxService, reportingNavigatorService, $compile, $modal, confirmationModal, tripSummaryService){
+angular.module('unionvmsWeb').controller('SpatialCtrl',function($scope, $timeout, locale, mapService, spatialHelperService, Report, reportRestService, reportFormService, reportService, $anchorScroll, userService, loadingStatus, $state, $localStorage, comboboxService, reportingNavigatorService, $compile, $modal, confirmationModal){
     $scope.reports = [];
     $scope.executedReport = {};
     $scope.repServ = reportService;
@@ -26,9 +26,6 @@ angular.module('unionvmsWeb').controller('SpatialCtrl',function($scope, $timeout
     
    locale.ready('spatial').then(function(){
     reportingNavigatorService.goToView('tripsPanel','tripSummary');
-        tripSummaryService.openNewTrip('NLD-TRP-20160408000034');
-        return;
-
        loadingStatus.isLoading('InitialReporting', true);
        
        //reset the map and remove references to it
