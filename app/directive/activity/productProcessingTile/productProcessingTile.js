@@ -28,9 +28,6 @@ angular.module('unionvmsWeb').directive('productProcessingTile', function(locale
 		},
 		templateUrl: 'directive/activity/productProcessingTile/productProcessingTile.html',
 		link: function(scope, element, attrs, fn) {
-		    scope.$watch('currentItem', function(newVal){
-		        console.log(newVal);
-		    });
 		    scope.tableAttrs = [{
 		        title: locale.getString('activity.type'),
 		        srcProp: 'type',
