@@ -40,7 +40,7 @@ copy of the GNU General Public License along with the IFDM Suite. If not, see <h
                                     </button>
                                 </div>
                                 <div ng-repeat="mobileTerminal in mobileTerminals | orderBy:'isCreateNewMode'">
-                                    <mobile-terminal-details mobile-terminal="mobileTerminal" vessel-id="vesselObj.vesselId.guid" modeltype="'VESSEL'" functions="mobileTerminalFunctions" submit-attempted-watcher="submitAttempted" dirty-status="setFormDirtyStatus" list-index="$index"></mobile-terminal-details>
+                                    <mobile-terminal-details mobile-terminal="mobileTerminal" vessel-id="vesselObj.vesselId.guid" modeltype="'VESSEL'" functions="mobileTerminalFunctions" submit-attempted-watcher="submitAttempted" dirty-status="setMobileTerminalDetailsDirtyStatus" list-index="$index"></mobile-terminal-details>
                                 </div>
                             </div>
 
@@ -53,7 +53,7 @@ copy of the GNU General Public License along with the IFDM Suite. If not, see <h
                             <div ng-show="selectedContentTab === 'NOTES'" class="tab no-padding notes-tab-container">
                                 <div class="wrapper">
                                     <div class="col-md-9 notesForm">
-                                        <vessel-notes vessel-notes="vesselNotesObj" vessel-form="vesselForm" disable-form="disableForm()" status="isVisible.vesselForm" submit-attempted="submitAttempted" dirty-status="setVesselDetailsDirtyStatus"></vessel-notes>
+                                        <vessel-notes vessel-notes="vesselNotesObj" vessel-form="vesselForm" disable-form="disableForm()" status="isVisible.vesselForm" submit-attempted="submitAttempted" dirty-status="setVesselNotesDirtyStatus"></vessel-notes>
                                     </div>
                                     <div class="col-md-3 notesListContainer">
                                         <div class="row">

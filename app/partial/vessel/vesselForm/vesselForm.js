@@ -46,27 +46,31 @@ angular.module('unionvmsWeb').controller('VesselFormCtrl',function($scope, $log,
     $scope.$watch('vesselObj', function(newValue, oldValue) {
         if (angular.isDefined($scope.vesselObjOriginal)) {
             if (angular.equals(angular.copy(newValue).toJson(), $scope.vesselObjOriginal.toJson())) {
-                $scope.setFormDirtyStatus(false);
                 $scope.setVesselDetailsDirtyStatus(false);
             } else {
-                $scope.setFormDirtyStatus(true);
                 $scope.setVesselDetailsDirtyStatus(true);
             }
         }
     }, true);
 
-    //Check if form has been modified
-    $scope.setFormDirtyStatus = function(status) {
-        if (angular.isDefined(status)) {
-            $scope.isFormDirty = status;
-        }
-    };
-
     //Check if vessel obj has been modified
     $scope.setVesselDetailsDirtyStatus = function(status) {
         if (angular.isDefined(status)) {
             $scope.isVesselDetailsDirty = status;
-            $scope.setFormDirtyStatus(status);
+        }
+    };
+
+    //Check if vessel notes obj has been modified
+    $scope.setVesselNotesDirtyStatus = function(status) {
+        if (angular.isDefined(status)) {
+            $scope.isVesselNotesDirtyStatus = status;
+        }
+    };
+
+    //Check if mobile terminal obj has been modified
+    $scope.setMobileTerminalDetailsDirtyStatus = function(status) {
+        if (angular.isDefined(status)) {
+            $scope.isMobileTerminalDetailsDirtyStatus = status;
         }
     };
 
@@ -75,8 +79,9 @@ angular.module('unionvmsWeb').controller('VesselFormCtrl',function($scope, $log,
     $scope.waitingForCreateResponse = false;
     $scope.waitingForHistoryResponse = false;
     $scope.waitingForMobileTerminalsResponse = false;
-    $scope.isFormDirty = false;
     $scope.isVesselDetailsDirty = false;
+    $scope.isMobileTerminalDetailsDirtyStatus = false;
+    $scope.isVesselNotesDirtyStatus = false;
 
     //Set default country code
     $scope.setDefaultCountryCode = function(){
@@ -511,12 +516,12 @@ angular.module('unionvmsWeb').controller('VesselFormCtrl',function($scope, $log,
     $scope.menuBarFunctions = {
         saveCallback: $scope.createNewVessel,
         updateCallback: $scope.updateVessel,
-        showSave: function(vessel) {
+        showSave: function() {
             return true;
         },
-        disableSave: function(vessel) {
-            if (vessel) {
-                return !$scope.isFormDirty || $scope.vesselForm.$invalid;
+        disableSave: function() {
+            if ((!$scope.isVesselDetailsDirty && !$scope.isMobileTerminalDetailsDirtyStatus && !$scope.isVesselNotesDirtyStatus) || $scope.vesselForm.$invalid) {
+                return true;
             }
             return false;
         },
