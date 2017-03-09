@@ -29,7 +29,7 @@ copy of the GNU General Public License along with the IFDM Suite. If not, see <h
 									<label>{{'spatial.reports_form_activity_report_type' | i18n }}</label>
 								</div>
 								<div class="col-md-8">
-									<combobox ng-model="report.faFilters.reportType" name="reportType" items="reportTypes" initialtext="{{'common.all' | i18n }}"></combobox>
+									<combobox ng-model="report.faFilters.reportTypes" name="reportType" items="reportTypes" initialtext="{{'common.all' | i18n }}"></combobox>
 								</div>
 							</div>
 							<div class="form-group row">
@@ -37,7 +37,7 @@ copy of the GNU General Public License along with the IFDM Suite. If not, see <h
 									<label>{{'spatial.reports_form_activity_activity_type' | i18n }}</label>
 								</div>
 								<div class="col-md-8">
-									<combobox ng-model="report.faFilters.activityType" name="activityType" items="activityTypes" initialtext="{{'common.all' | i18n }}"></combobox>
+									<combobox ng-model="report.faFilters.activityTypes" name="activityType" items="activityTypes" initialtext="{{'common.all' | i18n }}"></combobox>
 								</div>
 							</div>
 							<div class="form-group row">
@@ -45,7 +45,7 @@ copy of the GNU General Public License along with the IFDM Suite. If not, see <h
 									<label>{{'spatial.reports_form_activity_master' | i18n}}</label>
 								</div>
 								<div class="col-md-8">
-									<input type="text" class="form-control" name="master" ng-model="report.faFilters.master"/>
+									<input type="text" class="form-control" name="master" ng-model="report.faFilters.masters"/>
 								</div>
 							</div>
 						</div>
@@ -57,7 +57,7 @@ copy of the GNU General Public License along with the IFDM Suite. If not, see <h
 								</div>
 								<div class="form-group col-md-10">
 									<!--<combobox ng-model="report.faFilters.port" name="port" initialtext="{{'common.all' | i18n }}" items="ports"></combobox>-->
-									<input type="text" class="form-control" ng-model="report.faFilters.port" name="port">
+									<input type="text" class="form-control" ng-model="report.faFilters.ports" name="port">
 								</div>
 							</div>
 							<div class="row form-group">
@@ -65,7 +65,7 @@ copy of the GNU General Public License along with the IFDM Suite. If not, see <h
 									<label>{{'spatial.reports_form_activity_gear' | i18n }}</label>
 								</div>
 								<div class="col-md-10">
-									<combobox ng-model="report.faFilters.gear" name="gear" initialtext="{{'common.all' | i18n }}" items="gearTypes"></combobox>
+									<combobox ng-model="report.faFilters.gears" name="gear" initialtext="{{'common.all' | i18n }}" items="gearTypes"></combobox>
 								</div>
 							</div>
 						</div>
