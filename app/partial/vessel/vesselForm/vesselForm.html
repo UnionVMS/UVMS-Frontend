@@ -86,11 +86,11 @@ copy of the GNU General Public License along with the IFDM Suite. If not, see <h
                                     </div>
                                 </div>
                             </div>
-                            
+
                             <!-- Tab: History -->
                             <div ng-show="selectedContentTab === 'HISTORY'" class="tab history-tab-container">
                                 <div class="historyListContainer">
-                                    <div class="textAlignRight" ng-if="isThisVisible.showCompleteVesselHistoryLink">
+                                    <div class="toggle-history" ng-if="isThisVisible.showCompleteVesselHistoryLink">
                                         <a ng-click="viewCompleteVesselHistory()" id="asset-btn-history-all">{{'common.view_all' | i18n}}</a>
                                     </div>
                                     <div loading-indicator="waitingForHistoryResponse" size="small" type="SPINNER">

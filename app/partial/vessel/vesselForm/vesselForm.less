@@ -102,7 +102,19 @@ copy of the GNU General Public License along with the IFDM Suite. If not, see <h
         }
     }
 
-    .notes-tab-container, 
+    .history-tab-container {
+        position: relative;
+
+        .historyListContainer {
+            .toggle-history {
+                position: absolute;
+                right: @asset-form_primary-padding;
+                top: @asset-form_primary-padding;
+            }
+        }
+    }
+
+    .notes-tab-container,
     .history-tab-container {
         .list-header {
             font-weight: 500;

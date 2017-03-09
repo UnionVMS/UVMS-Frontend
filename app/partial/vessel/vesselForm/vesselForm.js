@@ -52,10 +52,10 @@ angular.module('unionvmsWeb').controller('VesselFormCtrl',function($scope, $log,
                 $scope.setFormDirtyStatus(true);
                 $scope.setVesselDetailsDirtyStatus(true);
             }
-        }       
+        }
     }, true);
 
-    //Check if form has been modified 
+    //Check if form has been modified
     $scope.setFormDirtyStatus = function(status) {
         if (angular.isDefined(status)) {
             $scope.isFormDirty = status;
@@ -372,7 +372,7 @@ angular.module('unionvmsWeb').controller('VesselFormCtrl',function($scope, $log,
     };
 
     //Get first 5 history events for the vessel
-    var vesselHistorySize = 5;
+    var vesselHistorySize = 15;
     var getVesselHistory = function() {
         $scope.waitingForHistoryResponse = true;
         $scope.vesselHistoryError = undefined;
@@ -423,7 +423,7 @@ angular.module('unionvmsWeb').controller('VesselFormCtrl',function($scope, $log,
     };
 
     // Display list of vessel notes
-    $scope.vesselNotesSize = 7;
+    $scope.vesselNotesSize = 10;
     $scope.showVesselNotesList = function() {
         var vesselNotesSizeAll = $scope.vesselObj.notes.length;
         $scope.vesselNotesSize += vesselNotesSizeAll;
@@ -491,7 +491,7 @@ angular.module('unionvmsWeb').controller('VesselFormCtrl',function($scope, $log,
 
         // Remove form errors
         angular.forEach($scope.vesselForm, function(ctrl, name) {
-            if (name.indexOf('$') !== 0) {    
+            if (name.indexOf('$') !== 0) {
                 angular.forEach(ctrl.$error, function(value, name) {
                     ctrl.$setValidity(name, null);
                 });
@@ -512,7 +512,7 @@ angular.module('unionvmsWeb').controller('VesselFormCtrl',function($scope, $log,
         saveCallback: $scope.createNewVessel,
         updateCallback: $scope.updateVessel,
         showSave: function(vessel) {
-            return true; 
+            return true;
         },
         disableSave: function(vessel) {
             if (vessel) {
