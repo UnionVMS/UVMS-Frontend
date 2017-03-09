@@ -24,23 +24,13 @@ angular.module('unionvmsWeb').factory('ArrivalNotification', function(fishingAct
 
     function ArrivalNotification() {
        
-        this.arrival = {
+        this.summary = {
             estimatedArrival: "",
             reason: ""
         };
-        this.port = {
-            name: undefined,
-            coordinates: []
-        };
-        this.reportDoc = {
-            type: undefined,
-            id: undefined,
-            refId: undefined,
-            creationDate: undefined,
-            purposeCode: undefined,
-            purpose: undefined
-        };
-        this.fishingData = [];
+        this.port = undefined;
+        this.reportDoc = undefined;
+        this.fishingData = undefined;
     }
 
     /**
@@ -51,7 +41,7 @@ angular.module('unionvmsWeb').factory('ArrivalNotification', function(fishingAct
      * @param {Object} data - The source data to fill in the model
      */
     ArrivalNotification.prototype.fromJson = function(data) {
-        this.arrival = data.arrival;
+        this.summary = data.summary;
         this.port = data.port;
         this.reportDoc = fishingActivityService.loadFaDocData(data.reportDoc);
         this.fishingData = data.arrivalCatchData;

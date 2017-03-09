@@ -23,31 +23,16 @@ copy of the GNU General Public License along with the IFDM Suite. If not, see <h
  * @description
  *  A model to store all the data related to a departure in a standardized way
  */
-angular.module('unionvmsWeb').factory('Departure',function(mdrCacheService, fishingActivityService, locale) {
+angular.module('unionvmsWeb').factory('FishingActivity',function(mdrCacheService, fishingActivityService, locale) {
     
-    function Departure(){
-        this.faType = 'fa_type_departure';
+    function FishingActivity(faType){
+        this.faType = faType;
         this.operationType = undefined;
-        this.summary = {
-            occurence: undefined,
-            reason: undefined,
-            fisheryType: undefined,
-            targetedSpecies: []
-        };
-        this.port = {
-            name: undefined,
-            coordinates: []
-        };
-        this.gears = [];
-        this.reportDoc = {
-            type: undefined,
-            id: undefined,
-            refId: undefined,
-            creationDate: undefined,
-            purposeCode: undefined,
-            purpose: undefined
-        };
-        this.fishingData = [];
+        this.activityDetails = undefined;
+        this.ports = undefined;
+        this.gears = undefined;
+        this.reportDetails = undefined;
+        this.catches = undefined;
     }
     
     /**
@@ -57,15 +42,20 @@ angular.module('unionvmsWeb').factory('Departure',function(mdrCacheService, fish
      * @public
      * @param {Object} data - The source data to fill in the model
      */
-    Departure.prototype.fromJson = function(data){
-        this.summary = loadSummaryData(data.summary);
-        this.port = data.port;
-        this.reportDoc = fishingActivityService.loadFaDocData(data.reportDoc);
+    FishingActivity.prototype.fromJson = function(data){
+
+        fishingActivityService.faFromJson(this,data);
+console.log(this);
+        /*this.activityDetails = loadSummaryData(data.activityDetails);
+        this.ports = data.ports;
+        this.reportDetails = fishingActivityService.loadFaDocData(data.reportDetails);
         this.gears = fishingActivityService.loadGears(data.gears);
-        this.fishingData = data.fishingData;
+        this.catches = fishingActivityService.loadFishingData(data.catches);
         fishingActivityService.addGearDescription(this);
         fishingActivityService.addCatchTypeDescription(this);
-        fishingActivityService.addWeightMeansDescription(this);
+        fishingActivityService.addWeightMeansDescription(this);*/
+
+
     };
     
 
@@ -94,5 +84,5 @@ angular.module('unionvmsWeb').factory('Departure',function(mdrCacheService, fish
     };
 
 
-    return Departure;
+    return FishingActivity;
 });
