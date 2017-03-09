@@ -118,7 +118,7 @@ describe('VesselFormCtrl', function() {
         expect(scope.vesselObj.vesselId.value).toEqual(createResponseVessel.vesselId.value);
 
         //Check that get vessel history was called afterwards
-        expect(vesselRestService.getVesselHistoryListByVesselId).toHaveBeenCalledWith(scope.vesselObj.vesselId.value,5);
+        expect(vesselRestService.getVesselHistoryListByVesselId).toHaveBeenCalledWith(scope.vesselObj.vesselId.value,15);
 
     }));
 
@@ -163,7 +163,7 @@ describe('VesselFormCtrl', function() {
         expect(scope.vesselObj.vesselId.value).toEqual(createResponseVessel.vesselId.value);
 
         //Check that get vessel history was called afterwards
-        expect(vesselRestService.getVesselHistoryListByVesselId).toHaveBeenCalledWith(scope.vesselObj.vesselId.value,5);
+        expect(vesselRestService.getVesselHistoryListByVesselId).toHaveBeenCalledWith(scope.vesselObj.vesselId.value,15);
 
         //Check that mergeCurrentVesselIntoSearchResults was called afterwards to update the vessel list
         expect(scope.mergeCurrentVesselIntoSearchResults).toHaveBeenCalledWith(scope.vesselObj);
