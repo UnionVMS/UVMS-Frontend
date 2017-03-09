@@ -336,7 +336,7 @@ angular.module('unionvmsWeb').controller('VesselFormCtrl',function($scope, $log,
     $scope.updateVessel = function(){
         $scope.submitAttempted = true;
 
-        if($scope.vesselForm.$valid && $scope.isVesselDetailsDirty) {
+        if($scope.vesselForm.$valid && ($scope.isVesselDetailsDirty || $scope.isVesselNotesDirtyStatus)) {
             //MobileTerminals remove them cuz they do not exist in backend yet.
             delete $scope.vesselObj.mobileTerminals;
             $scope.updateContactItems();
