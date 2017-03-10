@@ -174,7 +174,7 @@ controller('CatchClassDetailTileCtrl', function($scope, locale){
         $scope.selected.total = parseFloat($scope.selected.lsc) + parseFloat($scope.selected.bms);
         
         var title = 'activity.location';
-        if ($scope.selected.ports.length > 1){
+        if ($scope.selected.locations.length > 1){
             title += 's';
         }
         $scope.locationTitle = locale.getString(title);
