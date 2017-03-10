@@ -18,6 +18,7 @@ copy of the GNU General Public License along with the IFDM Suite. If not, see <h
  * @param fishingActivityService {Service} fishing activity service <p>{@link unionvmsWeb.fishingActivityService}</p>
  * @param reportFormService {Service} report form service <p>{@link unionvmsWeb.reportFormService}</p>
  * @param activityRestService {Service} activity REST service <p>{@link unionvmsWeb.activityRestService}</p>
+ * @attr {String} srcTab - Identifies from where the partial is being initialized. It is defined through ng-init and supports the following values: reports, activity
  * @description
  *  The controller for the departure panel partial
  */
@@ -33,13 +34,17 @@ angular.module('unionvmsWeb').controller('DeparturepanelCtrl',function($scope, $
     var init = function(){
         $scope.faServ.getFishingActivity(new FishingActivity('departure'));
         loadingStatus.isLoading('FishingActivity', true);
-        activityRestService.getTripCatchDetail($scope.faServ.id).then(function(response){
-            $scope.fishingTripDetails = response;  
+        if ($scope.srcTab === 'reports'){
+            activityRestService.getTripCatchDetail($scope.faServ.id).then(function(response){
+                $scope.fishingTripDetails = response;  
+                loadingStatus.isLoading('FishingActivity', false);
+            }, function(error){
+                //TODO deal with error from service
+                loadingStatus.isLoading('FishingActivity', false);
+            });
+        } else {
             loadingStatus.isLoading('FishingActivity', false);
-        }, function(error){
-            //TODO deal with error from service
-            loadingStatus.isLoading('FishingActivity', false);
-        });
+        }
     };
     
     //The watch is needed for the navigation in the trip summary

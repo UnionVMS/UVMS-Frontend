@@ -17,13 +17,13 @@ copy of the GNU General Public License along with the IFDM Suite. If not, see <h
  * @param activityRestService {Service} the activity REST service <p>{@link unionvmsWeb.activityRestService}</p>
  * @param visibilityService {Service} the visibility service <p>{@link unionvmsWeb.visibilityService}</p>
  * @param breadcrumbService {Service} the navigator breadcrumb service <p>{@link unionvmsWeb.breadcrumbService}</p>
+ * @param fishingActivityService {Service} the fishing activity service <p>{@link unionvmsWeb.fishingActivityService}</p>
  * @attr {Array} breadcrumbPages - An ordered array containing all possible values for the breadcrumb
  * @attr {Array} activities - An array containing the list of fishing activities reports
  * @attr {Array} displayedActivities - An array that is a copy of the activities array and is used in the smart tables
  * @attr {Array} history - An array containing the history list of a fishing activity report
  * @attr {Array} displayedHistory - An array that is a copy of the history array and is used in the smart tables
  * @attr {Object} overview - An object containing the data to be displayed at the activity overview partial
- * @attr {Object} details - An object containing the data to be displayed at the activity details partial
  * @attr {Object} reportsList - An object containing the state of the FA reports table such as pagination, sorting, smart table tableState
  * @attr {Object} historyList - An object containing the state of the FA history table
  * @attr {Array} allPurposeCodes - An array containing all purpose codes available to the user
@@ -31,7 +31,7 @@ copy of the GNU General Public License along with the IFDM Suite. If not, see <h
  * @description
  *  A service to deal with all activity data
  */
-angular.module('unionvmsWeb').factory('activityService',function(locale, activityRestService, visibilityService, breadcrumbService) {
+angular.module('unionvmsWeb').factory('activityService',function(locale, activityRestService, visibilityService, breadcrumbService, fishingActivityService) {
     var actServ = {};
     var pageSize = 25;
     
@@ -63,7 +63,6 @@ angular.module('unionvmsWeb').factory('activityService',function(locale, activit
     actServ.overview = {};
     actServ.history = [];
     actServ.displayedHistory = [];
-    actServ.details = {};
     actServ.selReportDoc = {};
     actServ.activitiesHistory = [];
     actServ.displayedActivitiesHistory = [];
@@ -138,6 +137,10 @@ angular.module('unionvmsWeb').factory('activityService',function(locale, activit
      * @alias resetReportsListTableState
      */
     actServ.resetReportsListTableState = function(){
+        if (angular.isDefined(actServ.reportsList.tableState)){
+            actServ.reportsList.tableState.pagination.start = 0;
+        }
+         
         actServ.reportsList.pagination = {
             offset: 1,
             pageSize: pageSize,
@@ -146,7 +149,7 @@ angular.module('unionvmsWeb').factory('activityService',function(locale, activit
     };
     
     /**
-     * Reset attributes of the activity service (includes activities, overview, details and reportsList
+     * Reset attributes of the activity service (includes activities, overview and reportsList
      * 
      * @memberof activityService
      * @public
@@ -159,7 +162,6 @@ angular.module('unionvmsWeb').factory('activityService',function(locale, activit
         this.overview = {};
         this.history = [];
         this.displayedHistory = [];
-        this.details = {};
         this.activitiesHistory = [];
         this.displayedActivitiesHistory = [];
         this.reportsList = getReportsListObject();
@@ -174,7 +176,7 @@ angular.module('unionvmsWeb').factory('activityService',function(locale, activit
     };
     
     /**
-     * Clear attribute of the activity service by its type. Type can be: <b>activities</b>, <b>overview</b>, <b>details</b>, 
+     * Clear attribute of the activity service by its type. Type can be: <b>activities</b>, <b>overview</b>, 
      * <b>history</b>, <b>activitiesHistory</b>
      * 
      * @memberof activityService
@@ -199,7 +201,11 @@ angular.module('unionvmsWeb').factory('activityService',function(locale, activit
                     break;
             }
         } else {
-            this[type] = {};
+            if (type === 'details'){
+                fishingActivityService.resetActivity();
+            } else {
+                this[type] = {};
+            }
         }
     };
     
@@ -214,7 +220,7 @@ angular.module('unionvmsWeb').factory('activityService',function(locale, activit
     function getPaginationForServer(tableState){
 
         var pag = {
-            offset: tableState ? tableState.pagination.start : 0,
+            offset: tableState ? tableState.pagination.start : 0, //TODO important: check this logic 
             pageSize: pageSize
         };
         

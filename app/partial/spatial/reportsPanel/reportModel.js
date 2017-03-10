@@ -162,7 +162,14 @@ angular.module('unionvmsWeb').factory('Report',function(unitConversionService, u
 				filter.fa = {};
 			}
 
-			report.faFilters = filter.fa;
+			report.faFilters = {};
+			angular.forEach(filter.fa, function(value,key){
+				if(key === 'weight'){
+					report.faFilters[key] = value;
+				}else{
+					report.faFilters[key] = value[0];
+				}
+			});
 
 	        if (!angular.equals({}, filter.fa)){
 	            report.hasFaFilter = true;
@@ -262,14 +269,21 @@ angular.module('unionvmsWeb').factory('Report',function(unitConversionService, u
 		//Fishing activity filter
 		var faFilters;
 		if(this.hasFaFilter){
-			faFilters = this.faFilters;
+			if(_.keys(this.faFilters).length){
+				faFilters = {};
+				angular.forEach(this.faFilters, function(value,key){
+					if(key === 'weight'){
+						faFilters[key] = value;
+					}else{
+						faFilters[key] = [value];
+					}
+				});
 
-			if(angular.isDefined(faFilters.weight) && (!angular.isDefined(faFilters.weight.min) || _.isNull(faFilters.weight.min)) &&
-				(!angular.isDefined(faFilters.weight.max) || _.isNull(faFilters.weight.max))){
-				delete faFilters.weight;
-			}
-
-			if (_.isEmpty(faFilters)){
+				if(angular.isDefined(faFilters.weight) && (!angular.isDefined(faFilters.weight.min) || _.isNull(faFilters.weight.min)) &&
+					(!angular.isDefined(faFilters.weight.max) || _.isNull(faFilters.weight.max))){
+					delete faFilters.weight;
+				}
+			}else{
 				faFilters = undefined;
 			}
 		}
@@ -441,14 +455,21 @@ angular.module('unionvmsWeb').factory('Report',function(unitConversionService, u
 
 		//Fishing activity filter
 		if(this.hasFaFilter){
-			report.filterExpression.fa = this.faFilters;
+			if(_.keys(this.faFilters).length){
+				report.filterExpression.fa = {};
+				angular.forEach(this.faFilters, function(value,key){
+					if(key === 'weight'){
+						report.filterExpression.fa[key] = value;
+					}else{
+						report.filterExpression.fa[key] = [value];
+					}
+				});
 
-			if(angular.isDefined(report.filterExpression.fa.weight) && (!angular.isDefined(report.filterExpression.fa.weight.min) || _.isNull(report.filterExpression.fa.weight.min)) &&
-				(!angular.isDefined(report.filterExpression.fa.weight.max) || _.isNull(report.filterExpression.fa.weight.max))){
-				delete report.filterExpression.fa.weight;
-			}
-
-			if (_.isEmpty(report.filterExpression.fa)){
+				if(angular.isDefined(report.filterExpression.fa.weight) && (!angular.isDefined(report.filterExpression.fa.weight.min) || _.isNull(report.filterExpression.fa.weight.min)) &&
+					(!angular.isDefined(report.filterExpression.fa.weight.max) || _.isNull(report.filterExpression.fa.weight.max))){
+					delete report.filterExpression.fa.weight;
+				}
+			}else{
 				report.filterExpression.fa = undefined;
 			}
 		}

@@ -130,6 +130,7 @@ module.exports = function (grunt) {
                   //DIRECTIVES
                   'app/directive/common/breadcrumbNavigator',
                   'app/directive/activity/',
+                  'app/directive/common/tableFilterHeaders',
                   
                   //FILTERS
                   'app/filter/activity/'

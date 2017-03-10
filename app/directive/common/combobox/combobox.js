@@ -283,13 +283,7 @@ angular.module('unionvmsWeb').directive('combobox', function(comboboxService,loc
             	}
                 
                 /*scope.toggleCombo();*/
-                if(angular.isDefined(scope.callback)){
-                    var extraParams;
-                    if(angular.isDefined(scope.callbackParams)){
-                        extraParams = scope.callbackParams;
-                    }
-                    scope.callback(item, extraParams);
-                }
+                testAndRunCallback(item);
             };
 
             //Add a default value as first item in the dropdown
@@ -353,6 +347,7 @@ angular.module('unionvmsWeb').directive('combobox', function(comboboxService,loc
                     angular.copy(scope.ngModel,arr);
                     scope.ngModel = arr; 
                 }
+                testAndRunCallback();
             };
             
             scope.removeAllSelected = function(){
@@ -364,6 +359,7 @@ angular.module('unionvmsWeb').directive('combobox', function(comboboxService,loc
                 }
                 angular.copy(scope.ngModel,arr);
                 scope.ngModel = arr; 
+                testAndRunCallback();
             };
             
             scope.onComboChange = function(){
@@ -382,17 +378,20 @@ angular.module('unionvmsWeb').directive('combobox', function(comboboxService,loc
                 }else{
                     ctrl.$setDirty();
                     scope.removeSelectedItem(item.code);
-                    
-                    if(angular.isDefined(scope.callback)){
-                        var extraParams;
-                        if(angular.isDefined(scope.callbackParams)){
-                            extraParams = scope.callbackParams;
-                        }
-                        scope.callback(item, extraParams);
-                    }
+                    testAndRunCallback(item);
                 }
                 comboboxService.setActiveCombo(scope);
             };
+            
+            function testAndRunCallback(item){
+                if(angular.isDefined(scope.callback)){
+                    var extraParams;
+                    if(angular.isDefined(scope.callbackParams)){
+                        extraParams = scope.callbackParams;
+                    }
+                    scope.callback(item, extraParams);
+                }
+            }
             
             var init = function(){
                 scope.selectFieldId = generateGUID();

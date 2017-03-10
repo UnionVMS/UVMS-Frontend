@@ -9,30 +9,24 @@ the hope that it will be useful, but WITHOUT ANY WARRANTY; without even the impl
 FITNESS FOR A PARTICULAR PURPOSE.  See the GNU General Public License for more details. You should have received a
 copy of the GNU General Public License along with the IFDM Suite. If not, see <http://www.gnu.org/licenses/>.
 */
-.activity-details {
-    .activity-fa-loading {
-        left: 15px !important;
-        right: 15px !important;
-    }
-    .main-content {
-        border: 1px solid #ddd;
-        height: 100%;
-        .title {
-            text-align: center;
-            font-size: 20px;
-            font-weight: bold;
-            margin-top: 5px;
-            margin-bottom: 15px;
-            .useColon::after {
-                content: ':'
-            }
-            .operationType {
-                text-transform: uppercase;
-                color: @primaryColor;
+.table-filter-headers {
+    .table {
+        border: 0;
+        .filter {
+            cursor: default;
+        }
+        tfoot {
+            border-top: 2px solid #ddd;
+            border-bottom: 2px solid #ddd;
+            background-color: #ececec;
+        }
+        .selected-row {
+            td {
+                background-color: rgba(8, 159, 215, 0.46) !important;
             }
         }
-        .summary-section {
-            margin-bottom: 0;
+        .is-selectable {
+            cursor: pointer;
         }
     }
 }

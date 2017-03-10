@@ -12,14 +12,14 @@ copy of the GNU General Public License along with the IFDM Suite. If not, see <h
 /**
  * @memberof unionvmsWeb
  * @ngdoc model
- * @name Departure
+ * @name FishingActivity
  * @attr {String} faType - The fishing activity type (always departure)
  * @attr {String | Null} operationType - The fishing activity operation type (e.g. Correction)
- * @attr {Object} summary - An object containing the fishing activity summary data (like occurence, reason, ...)
- * @attr {Object} port - An object containing all the data of the port of departure
+ * @attr {Object} activityDetails - An object containing the fishing activity summary data (like occurence, reason, ...)
+ * @attr {Object} locations - An object containing all the data of the port of departure
  * @attr {Array} gears - An array conatining objects that describe the available gears
- * @attr {Object} reportDoc - An object containing all the data related with the fishing activity report document
- * @attr {Object} fishingData - An object containing all the data related with fishing data (like fish species and weights retained on board, locations 
+ * @attr {Object} reportDetails - An object containing all the data related with the fishing activity report document
+ * @attr {Object} catches - An object containing all the data related with fishing data (like fish species and weights retained on board, locations 
  * @description
  *  A model to store all the data related to a departure in a standardized way
  */
@@ -38,7 +38,7 @@ angular.module('unionvmsWeb').factory('FishingActivity',function(mdrCacheService
     /**
      * Load the model with data
      * 
-     * @memberof Departure
+     * @memberof FishingActivity
      * @public
      * @param {Object} data - The source data to fill in the model
      */
