@@ -33,39 +33,39 @@ angular.module('unionvmsWeb').factory('fishingActivityService', function (activi
             'reportDetails'
         ],
         departure: [
-            'ports',
+            'locations',
             'gears',
             'catches'
         ],
         landing: [
-            'ports',
+            'locations',
             'catches'
         ],
         arrival_notification: [
-            'ports',
+            'locations',
             'catches'
         ],
         arrival_declaration: [
-            'ports',
+            'locations',
             'gears'
         ],
         fishing_operation: [
-            'ports',
+            'locations',
             'gears',
             'catches'
         ],
         discard: [
-            'ports'
+            'locations'
         ],
         joint_fishing_operation: [
-            'ports',
+            'locations',
             'gears'
         ],
         relocation: [
-            'ports'
+            'locations'
         ],
         transhipment: [
-            'ports'
+            'locations'
         ]
     };
 
@@ -239,7 +239,7 @@ angular.module('unionvmsWeb').factory('fishingActivityService', function (activi
      */
     faServ.addCatchTypeDescription = function(faObj){
         mdrCacheService.getCodeList('fa_catch_type').then(function(response){
-            angular.forEach(faObj.fishingData, function(item) {
+            angular.forEach(faObj.catches, function(item) {
                 var mdrRec = _.findWhere(response, {code: item.details.catchType});
                 if (angular.isDefined(mdrRec)){
                     item.details.typeDesc = mdrRec.description;
@@ -258,7 +258,7 @@ angular.module('unionvmsWeb').factory('fishingActivityService', function (activi
      */
     faServ.addWeightMeansDescription = function(faObj){
         mdrCacheService.getCodeList('weight_means').then(function(response){
-            angular.forEach(faObj.fishingData, function(item) {
+            angular.forEach(faObj.catches, function(item) {
                 var mdrRec = _.findWhere(response, {code: item.details.weightMeans});
                 if (angular.isDefined(mdrRec)){
                     item.details.weightMeansDesc = mdrRec.description;
@@ -397,15 +397,14 @@ angular.module('unionvmsWeb').factory('fishingActivityService', function (activi
     };
 
     faServ.loadFishingData = function(obj,data){
-        this.addGearDescription(obj);
-        this.addCatchTypeDescription(obj);
-        this.addWeightMeansDescription(obj);
-
         if(angular.isDefined(data) && data.length && angular.isDefined(data[0].gears)){
             angular.forEach(data, function(item){
                 item.gears = faServ.loadGears(item.gears);
             });
         }
+        this.addGearDescription(obj);
+        this.addCatchTypeDescription(obj);
+        this.addWeightMeansDescription(obj);
 
         return data;
     };
@@ -421,8 +420,8 @@ angular.module('unionvmsWeb').factory('fishingActivityService', function (activi
                 case 'reportDetails':
                     obj.reportDetails = faServ.loadFaDocData(data.reportDetails);
                     break;
-                case 'ports':
-                    obj.ports = data.ports;
+                case 'locations':
+                    obj.locations = data.locations;
                     break;
                 case 'gears':
                     obj.gears = faServ.loadGears(data.gears);

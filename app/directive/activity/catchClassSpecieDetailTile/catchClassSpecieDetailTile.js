@@ -39,7 +39,7 @@ angular.module('unionvmsWeb').directive('catchClassSpecieDetailTile', function(l
 			//columns of the first table
 			scope.columnOrder = [
 				{
-					id: 'ports',
+					id: 'locations',
 					text: locale.getString('activity.catch_class_specie_column_location'),
 					value: 'name'
 				},

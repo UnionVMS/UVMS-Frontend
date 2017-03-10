@@ -29,7 +29,7 @@ describe('FishingActivity', function() {
                 "startDate": "2017-01-21T04:16:08"
             }
         },
-          "ports": {
+          "locations": {
               "name": "Duivgug",
               "geometry": "POINT(-51.90263 21.4388)"},
           "gears": [{
@@ -90,7 +90,7 @@ describe('FishingActivity', function() {
 
 
       expect(fa.activityDetails).not.toBeDefined();
-      expect(fa.ports).not.toBeDefined();
+      expect(fa.locations).not.toBeDefined();
       expect(fa.gears).not.toBeDefined();
       expect(fa.reportDetails).not.toBeDefined();
       expect(fa.catches).not.toBeDefined();
@@ -109,7 +109,7 @@ describe('FishingActivity', function() {
       expect(fa.activityDetails.title).toBeDefined();
       expect(fa.activityDetails.subTitle).toBeDefined();
 
-      expect(fa.ports).toEqual(data.ports);
+      expect(fa.locations).toEqual(data.locations);
 
       console.log(JSON.stringify(fa.reportDetails));
       expect(fa.reportDetails).toBeDefined();
