@@ -43,46 +43,8 @@ angular.module('unionvmsWeb').factory('FishingActivity',function(mdrCacheService
      * @param {Object} data - The source data to fill in the model
      */
     FishingActivity.prototype.fromJson = function(data){
-
         fishingActivityService.faFromJson(this,data);
-console.log(this);
-        /*this.activityDetails = loadSummaryData(data.activityDetails);
-        this.ports = data.ports;
-        this.reportDetails = fishingActivityService.loadFaDocData(data.reportDetails);
-        this.gears = fishingActivityService.loadGears(data.gears);
-        this.catches = fishingActivityService.loadFishingData(data.catches);
-        fishingActivityService.addGearDescription(this);
-        fishingActivityService.addCatchTypeDescription(this);
-        fishingActivityService.addWeightMeansDescription(this);*/
-
-
     };
     
-
-    var loadSummaryData = function(data){
-
-        var attrOrder = {
-            occurence: {
-                type: 'date'
-            },
-            reason: {
-                type: 'string'
-            },
-            fisheryType: {
-                type: 'string'
-            },
-            targetedSpecies: {
-                type: 'array'
-            }
-        };
-
-        var finalSummary = fishingActivityService.loadFishingActivityDetails(data, attrOrder);
-
-        finalSummary.title = locale.getString('activity.title_fishing_activity') + ': '+ locale.getString('activity.fa_type_departure');
-
-        return finalSummary;
-    };
-
-
     return FishingActivity;
 });

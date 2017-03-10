@@ -103,10 +103,28 @@ angular.module('unionvmsWeb').factory('fishingActivityService', function (activi
         meshSize: {
             type: 'string'
         },
-        beamLength: {
+        lengthWidth: {
             type: 'string'
         },
-        numBeams: {
+        numberOfGears: {
+            type: 'string'
+        },
+        height: {
+            type: 'string'
+        },
+        nrOfLines: {
+            type: 'string'
+        },
+        nrOfNets: {
+            type: 'string'
+        },
+        nominalLengthOfNet: {
+            type: 'string'
+        },
+        quantity: {
+            type: 'string'
+        },
+        description: {
             type: 'string'
         }
     };
@@ -114,16 +132,6 @@ angular.module('unionvmsWeb').factory('fishingActivityService', function (activi
     var faDocAttrOrder = {
         type: {
             type: 'string'
-        },
-        dateAccepted: {
-            type: 'date'
-        },
-        id: {
-            type: 'string'
-        },
-        refId: {
-            type: 'string',
-            clickable: true
         },
         creationDate: {
             type: 'date'
@@ -134,7 +142,20 @@ angular.module('unionvmsWeb').factory('fishingActivityService', function (activi
         purpose: {
             type: 'string'
         },
-        FMC_marker: {
+        owner: {
+            type: 'string'
+        },
+        id: {
+            type: 'string'
+        },
+        refId: {
+            type: 'string',
+            clickable: true
+        },
+        acceptedDate: {
+            type: 'date'
+        },
+        fmcMark: {
             type: 'string'
         }
     };
@@ -268,10 +289,12 @@ angular.module('unionvmsWeb').factory('fishingActivityService', function (activi
                     finalSummary.subTitle = locale.getString('activity.trip_' + key);
                     finalSummary.subItems = {};
                     angular.forEach(value,function(subItem,subKey){
-                        finalSummary.subItems[subKey] = transformFaItem(subItem, subKey, attrOrder, attrKeys);
+                        if(angular.isDefined(subItem) && !_.isNull(subItem) && subItem.length > 0){
+                            finalSummary.subItems[subKey] = transformFaItem(subItem, subKey, attrOrder, attrKeys);
+                        }
                     });
                 }
-            }else{
+            }else if(angular.isDefined(value) && !_.isNull(value) && value.length > 0){
                 finalSummary.items[key] = transformFaItem(value, key, attrOrder, attrKeys);
             }
         });
@@ -282,7 +305,7 @@ angular.module('unionvmsWeb').factory('fishingActivityService', function (activi
     var transformFaItem = function(value, key, attrOrder, attrKeys){
         var newVal = value;
         
-        if(attrOrder[key].type === 'date'){
+        if(angular.isDefined(attrOrder[key]) && attrOrder[key].type === 'date'){
             newVal = $filter('stDateUtc')(newVal);
         }else if(angular.isArray(value)){
             newVal = '';
@@ -294,27 +317,66 @@ angular.module('unionvmsWeb').factory('fishingActivityService', function (activi
             });
         }
 
+        var itemLabel = locale.getString('activity.fa_details_item_' + key);
+
         return {
             idx: attrKeys.indexOf(key),
+            label: itemLabel !== "%%KEY_NOT_FOUND%%" ? itemLabel : key,
             value: newVal,
-            clickable: attrOrder[key].clickable
+            clickable: attrOrder[key] ? attrOrder[key].clickable : undefined
         };
     };
 
     faServ.loadFaDocData = function(data){
-        var finalSummary = this.loadFishingActivityDetails(data, faDocAttrOrder);
+        var relatedReports;
+        var attrOrder = angular.copy(faDocAttrOrder);
+        var relRepIdx = _.keys(attrOrder).length;
+
+        if(angular.isDefined(data.relatedReports) && data.relatedReports.length > 0){
+            relatedReports = angular.copy(data.relatedReports);
+            data.relatedReports = {};
+            angular.forEach(relatedReports, function(report){
+                data.relatedReports[report.schemeId] = report.id;
+
+                attrOrder[report.schemeId] = {
+                    idx: relRepIdx,
+                    type: 'string'
+                };
+                relRepIdx++;
+            });
+        }
+
+        
+
+        var finalSummary = this.loadFishingActivityDetails(data, attrOrder);
 
         finalSummary.title = locale.getString('activity.activity_report_doc_title');
-        finalSummary.subTitle = locale.getString('activity.activity_related_flux_doc_title');
+
+        if(angular.isDefined(finalSummary.subItems)){
+            finalSummary.subTitle = locale.getString('activity.activity_related_flux_doc_title');
+        }
 
         return finalSummary;
     };
 
     faServ.loadGears = function(data){
-        for(var i=0;i<data.length;i++){
-            data[i].characteristics = this.loadFishingActivityDetails(data[i].characteristics, gearAttrOrder);
-            data[i].characteristics.title = locale.getString('activity.characteristics');
-        }
+        angular.forEach(data, function(gear){
+            var gearAttrs = _.keys(gear);
+            if(gearAttrs.length > 2){
+                gear.characteristics = {};
+                angular.forEach(gearAttrs,function(attrName){
+                    var nonCharacteristics = ['type','role'];
+
+                    if(nonCharacteristics.indexOf(attrName) === -1){
+                        gear.characteristics[attrName] = gear[attrName];
+                        delete gear[attrName];
+                    }
+                });
+                gear.characteristics = faServ.loadFishingActivityDetails(gear.characteristics, gearAttrOrder);
+                gear.characteristics.title = locale.getString('activity.characteristics');
+            }
+        });
+
         var gears = data;
 
         return gears;
@@ -334,7 +396,10 @@ angular.module('unionvmsWeb').factory('fishingActivityService', function (activi
         return finalSummary;
     };
 
-    faServ.loadFishingData = function(data){
+    faServ.loadFishingData = function(obj,data){
+        this.addGearDescription(obj);
+        this.addCatchTypeDescription(obj);
+        this.addWeightMeansDescription(obj);
 
         if(angular.isDefined(data) && data.length && angular.isDefined(data[0].gears)){
             angular.forEach(data, function(item){
@@ -363,14 +428,10 @@ angular.module('unionvmsWeb').factory('fishingActivityService', function (activi
                     obj.gears = faServ.loadGears(data.gears);
                     break;
                 case 'catches':
-                    obj.catches = faServ.loadFishingData(data.catches);
+                    obj.catches = faServ.loadFishingData(obj,data.catches);
                     break;
             }
         });
-
-        this.addGearDescription(obj);
-        this.addCatchTypeDescription(obj);
-        this.addWeightMeansDescription(obj);
 
         return obj;
     };
