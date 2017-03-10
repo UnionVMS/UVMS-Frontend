@@ -9,7 +9,7 @@ the hope that it will be useful, but WITHOUT ANY WARRANTY; without even the impl
 FITNESS FOR A PARTICULAR PURPOSE.  See the GNU General Public License for more details. You should have received a
 copy of the GNU General Public License along with the IFDM Suite. If not, see <http://www.gnu.org/licenses/>.
 */
-describe('Departure', function() {
+describe('FishingActivity', function() {
   var data;
   beforeEach(module('unionvmsWeb'));
   
@@ -24,7 +24,11 @@ describe('Departure', function() {
                   "BEAGLE",
                   "GADUS",
                   "SEAFOOD"
-              ]},
+              ],
+            "fishing_time": {
+                "startDate": "2017-01-21T04:16:08"
+            }
+        },
           "ports": {
               "name": "Duivgug",
               "geometry": "POINT(-51.90263 21.4388)"},
@@ -48,7 +52,18 @@ describe('Departure', function() {
               "refId": "38322286-c95b-57db-b35e-88702dadfc7e",
               "creationDate": "2017-02-08T11:15:47",
               "purposeCode": 3,
-              "purpose": "Nizcu sev fabu nathe gani bucava sa vagowwi buzi ekje zobhe ke gesepomi bueb ced."},
+              "purpose": "Nizcu sev fabu nathe gani bucava sa vagowwi buzi ekje zobhe ke gesepomi bueb ced.",
+              "relatedReports": [
+                {
+                    "schemaId": "askdlja",
+                    "id": "asdlasd-asdkasjd1-1231"
+                },
+                {
+                    "schemaId": "askdlja",
+                    "id": "asdlasd-asdkasjd1-1231"
+                }
+              ]
+        },
           "catches": [{
                   "lsc": 1816,
                   "bms": 423,
@@ -70,7 +85,7 @@ describe('Departure', function() {
       var fa = new FishingActivity('fishing_operation');
       
       expect(fa).toEqual(jasmine.any(Object));
-      expect(fa.faType).toEqual('fa_type_fishing_operation');
+      expect(fa.faType).toEqual('fishing_operation');
       expect(fa.operationType).not.toBeDefined();
 
 
@@ -88,6 +103,7 @@ describe('Departure', function() {
       fa.fromJson(data);
       
       expect(fa.activityDetails).toBeDefined();
+      console.log(JSON.stringify(fa.activityDetails));
       expect(fa.activityDetails.items).toBeDefined();
       expect(fa.activityDetails.subItems).toBeDefined();
       expect(fa.activityDetails.title).toBeDefined();
@@ -95,6 +111,7 @@ describe('Departure', function() {
 
       expect(fa.ports).toEqual(data.ports);
 
+      console.log(JSON.stringify(fa.reportDetails));
       expect(fa.reportDetails).toBeDefined();
       expect(fa.reportDetails.items).toBeDefined();
       expect(fa.reportDetails.subItems).toBeDefined();

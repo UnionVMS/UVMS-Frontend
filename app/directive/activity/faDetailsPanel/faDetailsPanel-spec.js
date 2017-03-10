@@ -32,14 +32,40 @@ describe('faDetailsPanel', function() {
       title: "title",
       subTitle: "subTitle",
       items: {
-        fishery_type: "Demersal",
-        no_operations: 163,
-        occurence: "2017-07-30T05:40:25",
-        targetted_species: ["GADUS"],
-        vessel_activity: "FSH - Fishing"
+        fishery_type: {
+            idx: 1,
+            label: "fishery_type",
+            value: "Demersal",
+            clickable: true
+        },
+        no_operations: {
+            idx: 0,
+            label: "no_operations",
+            value: 163,
+            clickable: undefined
+        },
+        occurence: {
+            idx: 2,
+            label: "occurence",
+            value: "2017-07-30T05:40:25"
+        },
+        targetted_species: {
+            idx: 3,
+            label: "targetted_species",
+            value: ["GADUS"]
+        },
+        vessel_activity: {
+            idx: 4,
+            label: "vessel_activity",
+            value: ["GADUS"]
+        }
       },
       subItems: {
-        duration: "10d 8h"
+        duration: {
+            idx: 5,
+            label: "duration",
+            value: "10d 8h"
+        }
       }
     };
   }

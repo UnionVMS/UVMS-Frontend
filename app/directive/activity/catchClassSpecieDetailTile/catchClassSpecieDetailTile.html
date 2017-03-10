@@ -64,7 +64,7 @@
 						<div class="row location-gear-container">
 							<div class="species-title">{{selectedSpecieLocation.species}} - {{selectedSpecieLocation.speciesName}}</div>
 							<div class="location-gear-content">
-								<location-tile class="col-md-6 stretch" field-title="{{'activity.location' | i18n}}" multiple="true" location-details="selectedSpecieLocation.ports" is-clickable="isLocationClickable" click-callback="clickCallback()" buffer-dist="5000"></location-tile>
+								<location-tile class="col-md-6 stretch" field-title="{{'activity.location' | i18n}}" multiple="true" location-details="selectedSpecieLocation.locations" is-clickable="isLocationClickable" click-callback="clickCallback()" buffer-dist="5000"></location-tile>
 								<carousel-tile class="col-md-6 summary-section" tile-title="{{'activity.header_fa_gear' | i18n}}" ng-model="selectedSpecieLocation.gears" template-url="directive/activity/carouselTile/templates/gearTile/gearTile.html"></carousel-tile>
 							</div>
 						</div>

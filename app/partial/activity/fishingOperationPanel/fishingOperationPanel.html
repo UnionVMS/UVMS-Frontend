@@ -21,7 +21,7 @@ copy of the GNU General Public License along with the IFDM Suite. If not, see <h
         <a class="btn-trip-quit" title="{{'activity.trip_summary_quit_trip_detail' | i18n }}" ng-click="quitTripSummary()"><i class="fa fa-share-square-o"></i></a>
         <div class="row activity-summary-row">
             <fa-details-panel class="col-md-3 summary-section" ng-model="faServ.activityData.activityDetails"></fa-details-panel>
-            <location-tile class="col-md-2 summary-section" is-clickable="isLocationClickable()" field-title="{{'activity.activity_location_port_departure' | i18n}}" location-details="faServ.activityData.ports" click-callback="locationClickCallback()"></location-tile>
+            <location-tile class="col-md-2 summary-section" is-clickable="isLocationClickable()" field-title="{{'activity.activity_location_port_departure' | i18n}}" location-details="faServ.activityData.locations" click-callback="locationClickCallback()"></location-tile>
 			<carousel-tile class="col-md-3 summary-section" tile-title="{{'activity.header_fa_gear' | i18n}}" ng-model="faServ.activityData.gears" template-url="directive/activity/carouselTile/templates/gearTile/gearTile.html"></carousel-tile>
             <fa-details-panel class="col-md-4 summary-section" ng-model="faServ.activityData.reportDetails"></fa-details-panel>
         </div>
