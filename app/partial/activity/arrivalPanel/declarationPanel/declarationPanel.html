@@ -20,14 +20,14 @@ copy of the GNU General Public License along with the IFDM Suite. If not, see <h
 		</div>
 		<div class="row col-md-12">
 			<div class="col-md-2 panel-padding">
-				<clock-panel  fa-type="fa_type_arrival" clock-panal-data="data"></clock-panel>
+				<clock-panel fa-type="fa_type_arrival" clock-panal-data="data"></clock-panel>
 			</div>
 			<div class="col-md-10 activity-summary-row panel-padding">
 				<location-tile class="col-md-3 summary-section" is-clickable="isLocationClickable()" field-title="{{'activity.activity_location_port_departure' | i18n}}"
-					location-details="faServ.activityData.port" click-callback="locationClickCallback()"></location-tile>
+					location-details="faServ.activityData.locations" click-callback="locationClickCallback()"></location-tile>
 				<carousel-tile class="col-md-4 summary-section" tile-title="{{'activity.header_fa_gear' | i18n}}" ng-model="faServ.activityData.gears"
 					template-url="directive/activity/carouselTile/templates/gearTile/gearTile.html"></carousel-tile>
-				<fa-report-doc-tile class="col-md-5 summary-section" fa-report="faServ.activityData.reportDoc"></fa-report-doc-tile>
+				<fa-details-panel class="col-md-5 summary-section" ng-model="faServ.activityData.reportDetails"></fa-details-panel>
 			</div>
 		</div>
 	</div>

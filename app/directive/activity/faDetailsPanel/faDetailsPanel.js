@@ -12,22 +12,33 @@ copy of the GNU General Public License along with the IFDM Suite. If not, see <h
 /**
  * @memberof unionvmsWeb
  * @ngdoc directive
- * @name faOverviewPanel
+ * @name faDetailsPanel
  * @attr {Array} ngModel - the content data of fa overview
  * @description
  *  A reusable tile that will display the fishing activity overview data in every fishing activity report panel
  */
-angular.module('unionvmsWeb').directive('faOverviewPanel', function($filter) {
+angular.module('unionvmsWeb').directive('faDetailsPanel', function($filter) {
 	return {
 		restrict: 'E',
 		replace: false,
 		scope: {
-			ngModel: '='
+			ngModel: '=',
+			isLocClickable: '&',
+		    locClickCallback: '&',
+		    locDetails: '='
 		},
-		templateUrl: 'directive/activity/faOverviewPanel/faOverviewPanel.html',
+		templateUrl: 'directive/activity/faDetailsPanel/faDetailsPanel.html',
 		link: function(scope, element, attrs, fn) {
 			scope.isArray = function(val){
 				 return _.isArray(val);
+			};
+
+			scope.hasLocData = function(){
+				var status = false;
+				if (angular.isDefined(scope.locDetails) && ((_.isArray(scope.locDetails) && scope.locDetails.length > 0) || (!_.isArray(scope.locDetails) && !_.isEqual(scope.locDetails, {})))){
+					status = true;
+				}
+				return status;
 			};
 		}
 	};

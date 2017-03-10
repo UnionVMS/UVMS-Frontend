@@ -19,15 +19,14 @@ copy of the GNU General Public License along with the IFDM Suite. If not, see <h
             <span>{{'activity.trip_landing' | i18n}}</span>
         </div>
         <div class="row activity-summary-row">
-            <fa-overview-panel class="col-md-3 summary-section" ng-model="faServ.activityData.summary"></fa-overview-panel>
+            <fa-details-panel class="col-md-3 summary-section" ng-model="faServ.activityData.activityDetails"></fa-details-panel>
             <location-tile class="col-md-2 summary-section" is-clickable="isLocationClickable()" field-title="{{'activity.activity_location_port_landing' | i18n}}"
-                location-details="faServ.activityData.port" click-callback="locationClickCallback()"></location-tile>
+                location-details="faServ.activityData.locations" click-callback="locationClickCallback()"></location-tile>
             <div class="col-md-4"></div>
-            <fa-report-doc-tile class="col-md-4 summary-section" fa-report="faServ.activityData.reportDoc"></fa-report-doc-tile>
+            <fa-details-panel class="col-md-4 summary-section" ng-model="faServ.activityData.reportDetails"></fa-details-panel>
         </div>
-        <div class="row activity-summary-row" ng-if="faServ.activityData.landingCatchData.length > 0">
-            <catch-class-landing-details class="col-md-12 summary-section" ng-model="faServ.activityData.landingCatchData" tile-title="{{'activity.activity_landing_catch' | i18n}}"
-                is-location-clickable="isLocationClickable()" buffer-distance="5000" click-callback="locationClickCallback()"></catch-class-landing-details>
+        <div class="activity-summary-row" ng-if="faServ.activityData.catches.length > 0">
+            <catch-class-specie-detail-tile class="col-md-12 summary-section" ng-model="faServ.activityData.catches" tile-title="{{'activity.activity_landing_catch' | i18n}}" is-location-clickable="isLocationClickable()" buffer-distance="5000" click-callback="locationClickCallback()"></catch-class-specie-detail-tile>
         </div>
     </div>
 </div>

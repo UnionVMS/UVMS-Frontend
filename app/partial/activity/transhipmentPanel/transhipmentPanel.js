@@ -21,7 +21,7 @@ copy of the GNU General Public License along with the IFDM Suite. If not, see <h
  * @description
  *  The controller for the Transhipment panel partial
  */
-angular.module('unionvmsWeb').controller('TranshipmentpanelCtrl', function($scope, $state, fishingActivityService, tripSummaryService, activityRestService, loadingStatus, Transhipment) {
+angular.module('unionvmsWeb').controller('TranshipmentpanelCtrl', function($scope, $state, fishingActivityService, tripSummaryService, activityRestService, loadingStatus, FishingActivity) {
     $scope.faServ = fishingActivityService;
     /**
      * Initialization function
@@ -30,7 +30,7 @@ angular.module('unionvmsWeb').controller('TranshipmentpanelCtrl', function($scop
      * @private
      */
     var init = function() {
-        $scope.faServ.getFishingActivity(new Transhipment());
+        $scope.faServ.getFishingActivity(new FishingActivity('transhipment'));
         loadingStatus.isLoading('FishingActivity', true);
         activityRestService.getTripCatchDetail($scope.faServ.id).then(function(response) {
             $scope.fishingTripDetails = response;

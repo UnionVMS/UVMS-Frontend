@@ -1,0 +1,25 @@
+<fieldset class="col-md-12 fieldsetStyle fa-details-fieldset">
+    <legend class="fieldsetLegendStyle">
+        <a>{{ngModel.title}}</a>
+    </legend>
+    <div class="item-container" ng-repeat="(key,item) in ngModel.items track by item.idx">
+        <span class="labels">{{ item.label }}</span>
+        &nbsp;
+        <span ng-class="item.clickable ? 'attr-clickable' : ''">{{item.value}}</span>
+    </div>
+
+    <fieldset class="col-md-12 fieldsetStyle fa-details-fieldset" ng-if="ngModel.subTitle || ngModel.subItems">
+        <legend class="fieldsetLegendStyle">
+            <a>{{ngModel.subTitle}}</a>
+        </legend>
+        <div class="item-container" ng-repeat="(key,item) in ngModel.subItems track by item.idx">
+            <span class="labels">{{ item.label }}</span>
+            &nbsp;
+            <span ng-class="item.clickable ? 'attr-clickable' : ''">{{item.value}}</span>
+        </div>
+    </fieldset>
+
+    <div class="row location-container" ng-if="hasLocData()">
+		<location-tile class="col-md-12" is-clickable="isLocClickable()" field-title="{{'activity.activity_location_port_departure' | i18n}}" location-details="locDetails" click-callback="locClickCallback()"></location-tile>
+	</div>
+</fieldset>

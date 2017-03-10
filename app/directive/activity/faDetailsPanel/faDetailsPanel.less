@@ -9,8 +9,34 @@ the hope that it will be useful, but WITHOUT ANY WARRANTY; without even the impl
 FITNESS FOR A PARTICULAR PURPOSE.  See the GNU General Public License for more details. You should have received a
 copy of the GNU General Public License along with the IFDM Suite. If not, see <http://www.gnu.org/licenses/>.
 */
-describe('Relocation', function () {
-   
-    beforeEach(module('unionvmsWeb'));
-
-});
+fa-details-panel {
+    .fa-details-fieldset {
+        legend.fieldsetLegendStyle {
+            margin-bottom: 5px;
+        }
+        .fa-details-fieldset {
+            margin-top: 5px;
+            margin-bottom: 0;
+            padding-bottom: 15px;
+        }
+        .item-container {
+            display: flex;
+            .labels {
+                font-weight: bold;
+                white-space: nowrap;
+                &::after {
+                    content: ':'
+                }
+            }
+            .attr-clickable {
+                color: @primaryColor;
+                text-decoration: underline;
+                font-weight: bold;
+                cursor: pointer;
+            }
+        }
+    }
+    > .fa-details-fieldset {
+        padding-bottom: 15px;
+    }
+}

@@ -9,13 +9,13 @@ the hope that it will be useful, but WITHOUT ANY WARRANTY; without even the impl
 FITNESS FOR A PARTICULAR PURPOSE.  See the GNU General Public License for more details. You should have received a
 copy of the GNU General Public License along with the IFDM Suite. If not, see <http://www.gnu.org/licenses/>.
 */
-describe('Departure', function() {
+describe('FishingActivity', function() {
   var data;
   beforeEach(module('unionvmsWeb'));
   
-  function getDepartureData(){
+  function getFishingOperationData(){
       return {
-          "summary": {
+          "activityDetails": {
               "occurence": "2017-01-21T04:16:08",
               "reason": "Fishing",
               "fisheryType": "Demersal",
@@ -24,8 +24,12 @@ describe('Departure', function() {
                   "BEAGLE",
                   "GADUS",
                   "SEAFOOD"
-              ]},
-          "port": {
+              ],
+            "fishing_time": {
+                "startDate": "2017-01-21T04:16:08"
+            }
+        },
+          "locations": {
               "name": "Duivgug",
               "geometry": "POINT(-51.90263 21.4388)"},
           "gears": [{
@@ -41,15 +45,26 @@ describe('Departure', function() {
                   "beamLength": "39m",
                   "numBeams": 4
               }],
-          "reportDoc": {
+          "reportDetails": {
               "type": "NOTIFICATION",
               "dateAccepted": "2016-08-25T10:29:58",
               "id": "d1a71a7c-9b86-592b-bdc6-6f9b2958ac78",
               "refId": "38322286-c95b-57db-b35e-88702dadfc7e",
               "creationDate": "2017-02-08T11:15:47",
               "purposeCode": 3,
-              "purpose": "Nizcu sev fabu nathe gani bucava sa vagowwi buzi ekje zobhe ke gesepomi bueb ced."},
-          "fishingData": [{
+              "purpose": "Nizcu sev fabu nathe gani bucava sa vagowwi buzi ekje zobhe ke gesepomi bueb ced.",
+              "relatedReports": [
+                {
+                    "schemaId": "askdlja",
+                    "id": "asdlasd-asdkasjd1-1231"
+                },
+                {
+                    "schemaId": "askdlja",
+                    "id": "asdlasd-asdkasjd1-1231"
+                }
+              ]
+        },
+          "catches": [{
                   "lsc": 1816,
                   "bms": 423,
                   "locations": [{
@@ -66,31 +81,45 @@ describe('Departure', function() {
       };
   }
   
-  it('should instantiate a new empty departure object', inject(function(Departure){
-      var dep = new Departure();
+  it('should instantiate a new empty departure object', inject(function(FishingActivity){
+      var fa = new FishingActivity('fishing_operation');
       
-      expect(dep).toEqual(jasmine.any(Object));
-      expect(dep.faType).toEqual('fa_type_departure');
-      expect(dep.operationType).not.toBeDefined();
-      expect(dep.summary).toEqual(jasmine.any(Object));
-      expect(dep.port).toEqual(jasmine.any(Object));
-      expect(dep.gears).toEqual([]);
-      expect(dep.reportDoc).toEqual(jasmine.any(Object));
-      expect(dep.fishingData).toEqual([]);
+      expect(fa).toEqual(jasmine.any(Object));
+      expect(fa.faType).toEqual('fishing_operation');
+      expect(fa.operationType).not.toBeDefined();
+
+
+      expect(fa.activityDetails).not.toBeDefined();
+      expect(fa.locations).not.toBeDefined();
+      expect(fa.gears).not.toBeDefined();
+      expect(fa.reportDetails).not.toBeDefined();
+      expect(fa.catches).not.toBeDefined();
   }));
 
-  it('should properly build a departure from json data', inject(function(Departure) {
-      data = getDepartureData();
+  it('should properly build a fishing operation from json data', inject(function(FishingActivity) {
+      data = getFishingOperationData();
 
-      var dep = new Departure();
-      dep.fromJson(data);
+      var fa = new FishingActivity('fishing_operation');
+      fa.fromJson(data);
       
-      expect(dep.summary).toEqual(data.summary);
-      expect(dep.port).toEqual(data.port);
-      expect(dep.reportDoc).toEqual(data.reportDoc);
+      expect(fa.activityDetails).toBeDefined();
+      console.log(JSON.stringify(fa.activityDetails));
+      expect(fa.activityDetails.items).toBeDefined();
+      expect(fa.activityDetails.subItems).toBeDefined();
+      expect(fa.activityDetails.title).toBeDefined();
+      expect(fa.activityDetails.subTitle).toBeDefined();
+
+      expect(fa.locations).toEqual(data.locations);
+
+      console.log(JSON.stringify(fa.reportDetails));
+      expect(fa.reportDetails).toBeDefined();
+      expect(fa.reportDetails.items).toBeDefined();
+      expect(fa.reportDetails.subItems).toBeDefined();
+      expect(fa.reportDetails.title).toBeDefined();
+      expect(fa.reportDetails.subTitle).toBeDefined();
       
-      expect(dep.gears.length).toEqual(2);
-      expect(dep.fishingData.length).toBe(1);
+      expect(fa.gears.length).toEqual(2);
+      expect(fa.catches.length).toBe(1);
   }));
 
 });

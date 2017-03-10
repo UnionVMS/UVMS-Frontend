@@ -23,7 +23,7 @@ describe('catchClassDetailTile', function() {
             parentElement.appendTo('body');
         }
         
-        $httpBackend = $injector.get('$httpBackend');;
+        $httpBackend = $injector.get('$httpBackend');
         $httpBackend.whenGET(/usm/).respond();
         $httpBackend.whenGET(/i18n/).respond();
         $httpBackend.whenGET(/globals/).respond({data : []});
@@ -65,7 +65,7 @@ describe('catchClassDetailTile', function() {
         }];
     }
     
-    describe('testing the controller: CatchClassDetailTileCtrl', function(){
+    /*describe('testing the controller: CatchClassDetailTileCtrl', function(){
         beforeEach(inject(function($controller) {
             controller = $controller('CatchClassDetailTileCtrl', {
                 $scope: scope
@@ -188,5 +188,5 @@ describe('catchClassDetailTile', function() {
             expect(angular.element('.qtip-bootstrap')).toBeDefined();
             expect(angular.element('.qtip-bootstrap').text()).toEqual(testScope.ngModel[0].details.typeDesc);
         });
-    });
+    });*/
 });

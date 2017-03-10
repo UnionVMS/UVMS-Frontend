@@ -10,10 +10,10 @@ FITNESS FOR A PARTICULAR PURPOSE.  See the GNU General Public License for more d
 copy of the GNU General Public License along with the IFDM Suite. If not, see <http://www.gnu.org/licenses/>.
 */
 
-angular.module('unionvmsWeb').controller('ArrivalpanelCtrl', function($scope, $state, fishingActivityService, tripSummaryService, activityRestService, locale, loadingStatus, Arrival, ArrivalNotification) {
+angular.module('unionvmsWeb').controller('ArrivalpanelCtrl', function($scope, $state, fishingActivityService, tripSummaryService, activityRestService, locale, loadingStatus, FishingActivity) {
     $scope.faServ = fishingActivityService;
     
-    var arrivalNotification = true;
+    var arrivalNotification = false;
 
       /**
        * Initialization function
@@ -22,11 +22,7 @@ angular.module('unionvmsWeb').controller('ArrivalpanelCtrl', function($scope, $s
        * @private
        */
     var init = function() {
-        if(arrivalNotification){
-            $scope.faServ.getFishingActivity(new ArrivalNotification(), arrivalData);
-        }else{
-            $scope.faServ.getFishingActivity(new Arrival(),arrivalData);
-        }
+        $scope.faServ.getFishingActivity(new FishingActivity(arrivalNotification ? 'arrival_notification' : 'arrival_declaration'), arrivalData);
         
         loadingStatus.isLoading('FishingActivity', true);
         activityRestService.getTripCatchDetail($scope.faServ.id).then(function(response) {
@@ -49,13 +45,13 @@ angular.module('unionvmsWeb').controller('ArrivalpanelCtrl', function($scope, $s
     var arrivalData = function() {
         $scope.data = [{
             "caption": (arrivalNotification === true) ? locale.getString('activity.clock_panel_estimated_time') : locale.getString('activity.clock_panel_arrival_time'),
-            "reason": $scope.faServ.activityData.arrival.reason,
-            "arrivalTime": (arrivalNotification === true) ? $scope.faServ.activityData.arrival.estimatedArrival : $scope.faServ.activityData.arrival.arrivalTime,
+            "reason": $scope.faServ.activityData.activityDetails.reason,
+            "arrivalTime": (arrivalNotification === true) ? $scope.faServ.activityData.activityDetails.estimatedArrival : $scope.faServ.activityData.activityDetails.arrivalTime,
             "showClock": "true"
         },
         {
             "caption": (arrivalNotification === true) ? "" : locale.getString('activity.clock_panel_intended_start_time'),
-            "arrivalTime": (arrivalNotification === true) ? "" : $scope.faServ.activityData.arrival.intendedLandingTime,
+            "arrivalTime": (arrivalNotification === true) ? "" : $scope.faServ.activityData.activityDetails.intendedLandingTime,
             "showClock": (arrivalNotification === true) ? "false" : "true"
         }];
     };

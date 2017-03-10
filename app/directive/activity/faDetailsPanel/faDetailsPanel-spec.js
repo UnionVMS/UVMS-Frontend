@@ -9,7 +9,7 @@ the hope that it will be useful, but WITHOUT ANY WARRANTY; without even the impl
 FITNESS FOR A PARTICULAR PURPOSE.  See the GNU General Public License for more details. You should have received a
 copy of the GNU General Public License along with the IFDM Suite. If not, see <http://www.gnu.org/licenses/>.
 */
-describe('faOverviewPanel', function() {
+describe('faDetailsPanel', function() {
 
   beforeEach(module('unionvmsWeb'));
 
@@ -32,14 +32,40 @@ describe('faOverviewPanel', function() {
       title: "title",
       subTitle: "subTitle",
       items: {
-        fishery_type: "Demersal",
-        no_operations: 163,
-        occurence: "2017-07-30T05:40:25",
-        targetted_species: ["GADUS"],
-        vessel_activity: "FSH - Fishing"
+        fishery_type: {
+            idx: 1,
+            label: "fishery_type",
+            value: "Demersal",
+            clickable: true
+        },
+        no_operations: {
+            idx: 0,
+            label: "no_operations",
+            value: 163,
+            clickable: undefined
+        },
+        occurence: {
+            idx: 2,
+            label: "occurence",
+            value: "2017-07-30T05:40:25"
+        },
+        targetted_species: {
+            idx: 3,
+            label: "targetted_species",
+            value: ["GADUS"]
+        },
+        vessel_activity: {
+            idx: 4,
+            label: "vessel_activity",
+            value: ["GADUS"]
+        }
       },
       subItems: {
-        duration: "10d 8h"
+        duration: {
+            idx: 5,
+            label: "duration",
+            value: "10d 8h"
+        }
       }
     };
   }
@@ -47,7 +73,7 @@ describe('faOverviewPanel', function() {
   it('should compile and present the model content', function() {
     buildMocks();
 
-    var faOverviewPanel = compile('<fa-overview-panel class="col-md-12 summary-section" ng-model="summary"></fa-overview-panel>')(scope);
+    var faDetailsPanel = compile('<fa-details-panel class="col-md-12 summary-section" ng-model="summary"></fa-details-panel>')(scope);
     scope.$digest();
 
     var nrItems = 0;
@@ -61,12 +87,12 @@ describe('faOverviewPanel', function() {
       nrSubItems++;
     });
 
-    expect(angular.element(faOverviewPanel).find('> .fa-overview-fieldset > .item-container').length).toEqual(nrItems);
-    expect(angular.element(faOverviewPanel).find('.fa-overview-fieldset > .fa-overview-fieldset > .item-container').length).toEqual(nrSubItems);
+    expect(angular.element(faDetailsPanel).find('> .fa-details-fieldset > .item-container').length).toEqual(nrItems);
+    expect(angular.element(faDetailsPanel).find('.fa-details-fieldset > .fa-details-fieldset > .item-container').length).toEqual(nrSubItems);
 
-    expect(angular.element(faOverviewPanel).find('> .fa-overview-fieldset > legend > a').text()).toEqual(scope.summary.title);
-    expect(angular.element(faOverviewPanel).find('.fa-overview-fieldset > .fa-overview-fieldset > legend > a').text()).toEqual(scope.summary.subTitle);
+    expect(angular.element(faDetailsPanel).find('> .fa-details-fieldset > legend > a').text()).toEqual(scope.summary.title);
+    expect(angular.element(faDetailsPanel).find('.fa-details-fieldset > .fa-details-fieldset > legend > a').text()).toEqual(scope.summary.subTitle);
 
-    faOverviewPanel.isolateScope().$destroy();
+    faDetailsPanel.isolateScope().$destroy();
   });
 });

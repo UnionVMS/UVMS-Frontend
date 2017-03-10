@@ -20,13 +20,13 @@ copy of the GNU General Public License along with the IFDM Suite. If not, see <h
 		</div>
         <a class="btn-trip-quit" title="{{'activity.trip_summary_quit_trip_detail' | i18n }}" ng-click="quitTripSummary()"><i class="fa fa-share-square-o"></i></a>
         <div class="row activity-summary-row">
-            <fa-overview-panel class="col-md-3 summary-section" ng-model="faServ.activityData.summary"></fa-overview-panel>
-            <location-tile class="col-md-2 summary-section" is-clickable="isLocationClickable()" field-title="{{'activity.activity_location_port_departure' | i18n}}" location-details="faServ.activityData.port" click-callback="locationClickCallback()"></location-tile>
+            <fa-details-panel class="col-md-3 summary-section" ng-model="faServ.activityData.activityDetails"></fa-details-panel>
+            <location-tile class="col-md-2 summary-section" is-clickable="isLocationClickable()" field-title="{{'activity.activity_location_port_departure' | i18n}}" location-details="faServ.activityData.locations" click-callback="locationClickCallback()"></location-tile>
 			<carousel-tile class="col-md-3 summary-section" tile-title="{{'activity.header_fa_gear' | i18n}}" ng-model="faServ.activityData.gears" template-url="directive/activity/carouselTile/templates/gearTile/gearTile.html"></carousel-tile>
-			<fa-report-doc-tile class="col-md-4 summary-section" fa-report="faServ.activityData.reportDoc"></fa-report-doc-tile>
+            <fa-details-panel class="col-md-4 summary-section" ng-model="faServ.activityData.reportDetails"></fa-details-panel>
         </div>
-        <div class="activity-summary-row" ng-if="faServ.activityData.fishingData.length > 0">
-            <catch-class-specie-detail-tile class="col-md-12 summary-section" ng-model="faServ.activityData.fishingData" tile-title="{{'activity.trip_summary_catch' | i18n}}" is-location-clickable="isLocationClickable()" buffer-distance="5000" click-callback="locationClickCallback()"></catch-class-specie-detail-tile>
+        <div class="activity-summary-row" ng-if="faServ.activityData.catches.length > 0">
+            <catch-class-specie-detail-tile class="col-md-12 summary-section" ng-model="faServ.activityData.catches" tile-title="{{'activity.trip_summary_catch' | i18n}}" is-location-clickable="isLocationClickable()" buffer-distance="5000" click-callback="locationClickCallback()"></catch-class-specie-detail-tile>
         </div>
     </div>
 </div>

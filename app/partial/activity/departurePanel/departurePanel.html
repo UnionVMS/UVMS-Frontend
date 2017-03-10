@@ -20,12 +20,12 @@ copy of the GNU General Public License along with the IFDM Suite. If not, see <h
 			<span class="operationType" ng-if="faServ.isCorrection">{{'activity.departure_optype_correction' | i18n}}</span>
 		</div>
 		<div class="row activity-summary-row">
-			<activity-summary-tile class="col-md-3 summary-section" fa-type="{{faServ.activityData.faType}}" summary="faServ.activityData.summary" loc-details="faServ.activityData.port" is-loc-clickable="isLocationClickable()" loc-click-callback="locationClickCallback()"></activity-summary-tile>
+			<fa-details-panel class="col-md-3 summary-section" ng-model="faServ.activityData.activityDetails" loc-details="faServ.activityData.locations" is-loc-clickable="isLocationClickable()" loc-click-callback="locationClickCallback()"></fa-details-panel>
 			<carousel-tile class="col-md-3 summary-section" tile-title="{{'activity.header_fa_gear' | i18n}}" ng-model="faServ.activityData.gears" template-url="directive/activity/carouselTile/templates/gearTile/gearTile.html"></carousel-tile>
-			<fa-report-doc-tile class="col-md-6 summary-section" fa-report="faServ.activityData.reportDoc"></fa-report-doc-tile>
+			<fa-details-panel class="col-md-6 summary-section" ng-model="faServ.activityData.reportDetails"></fa-details-panel>
 		</div>
 		<div class="row activity-summary-row">
-			<catch-class-detail-tile class="col-md-12 summary-section" ng-model="faServ.activityData.fishingData" tile-title="{{'activity.departure_catch_detail' | i18n}}" is-location-clickable="isLocationClickable()" buffer-distance="5000" click-callback="locationClickCallback()"></catch-class-detail-tile>
+			<catch-class-detail-tile class="col-md-12 summary-section" ng-model="faServ.activityData.catches" tile-title="{{'activity.departure_catch_detail' | i18n}}" is-location-clickable="isLocationClickable()" buffer-distance="5000" click-callback="locationClickCallback()"></catch-class-detail-tile>
 		</div>
 		<div class="row activity-summary-row" ng-if="faServ.activityData.processingProducts && faServ.activityData.processingProducts.length > 0">
 			<product-processing-tile class="col-md-12 summary-section" src-data="faServ.activityData.processingProducts" tile-title="{{'activity.departure_processing_product' | i18n}}"></product-processing-tile>
