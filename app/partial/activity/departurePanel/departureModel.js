@@ -47,6 +47,7 @@ angular.module('unionvmsWeb').factory('Departure',function(mdrCacheService, fish
             purposeCode: undefined,
             purpose: undefined
         };
+        this.processingProducts = [];
         this.fishingData = [];
     }
     
@@ -63,6 +64,7 @@ angular.module('unionvmsWeb').factory('Departure',function(mdrCacheService, fish
         this.reportDoc = data.reportDoc;
         this.gears = data.gears;
         this.fishingData = data.fishingData;
+        this.processingProducts = data.processingProducts;
         fishingActivityService.addGearDescription(this);
         fishingActivityService.addCatchTypeDescription(this);
         fishingActivityService.addWeightMeansDescription(this);

@@ -24,10 +24,6 @@ angular.module('unionvmsWeb').controller('ActivityreportslistCtrl',function($sco
     $scope.actServ = activityService;
     $scope.attrVisibility = visibilityService;
     
-    $scope.$watch(function(){return $scope.actServ.reportsList.hasError;}, function(newVal){
-        console.log('hasError: ' + newVal);
-    });
-    
     /**
      * Pipe function used in the smartTable in order to support server side pagination and sorting
      * 
@@ -36,21 +32,23 @@ angular.module('unionvmsWeb').controller('ActivityreportslistCtrl',function($sco
      * @alias callServer
      */
     $scope.callServer = function(tableState){
-        $scope.actServ.reportsList.tableState = tableState;
-        $scope.actServ.reportsList.isLoading = true;
-        
-        var searchField, sortOrder; 
-        if (angular.isDefined(tableState.sort.predicate)){
-            searchField = getTruePredicate(tableState.sort.predicate);
-            sortOrder = tableState.sort.reverse;
+        if (!$scope.actServ.reportsList.isLoading && angular.isDefined($scope.actServ.reportsList.searchObject.multipleCriteria)){
+            $scope.actServ.reportsList.tableState = tableState;
+            $scope.actServ.reportsList.isLoading = true;
+            
+            var searchField, sortOrder; 
+            if (angular.isDefined(tableState.sort.predicate)){
+                searchField = getTruePredicate(tableState.sort.predicate);
+                sortOrder = tableState.sort.reverse;
+            }
+            
+            $scope.actServ.reportsList.sorting = {
+                sortBy: searchField,
+                reversed: sortOrder
+            };
+            
+            $scope.actServ.getActivityList(callServerCallback, tableState);
         }
-        
-        $scope.actServ.reportsList.sorting = {
-            sortBy: searchField,
-            reversed: sortOrder
-        };
-        
-        $scope.actServ.getActivityList(callServerCallback, tableState);
     };
     
     /**
@@ -113,5 +111,6 @@ angular.module('unionvmsWeb').controller('ActivityreportslistCtrl',function($sco
         //TODO fetch the data and load the partial
         $scope.actServ.overview = $scope.actServ.displayedActivities[idx];
         $scope.goToView(3);
+        //reportingNavigatorService.goToView('tripsPanel','tripDeparturePanel');
     };
 });

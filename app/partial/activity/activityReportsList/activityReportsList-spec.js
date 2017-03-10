@@ -28,6 +28,11 @@ describe('ActivityreportslistCtrl', function() {
 	            sorting: {
 	                sortBy: undefined,
 	                reversed: undefined
+	            },
+	            searchObject: {
+	                multipleCriteria: {
+	                    PURPOSE: ['1']
+	                }
 	            }
 	        },
 	        overview: {},
