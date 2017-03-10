@@ -13,6 +13,8 @@ describe('Table with combobox filters and calculated totals', function() {
             parentElement.appendTo('body');
         }
         
+        checkAndRemoveExistingTables();
+        
         $timeout = _$timeout_;
         $filter = _$filter_;
         
@@ -26,6 +28,14 @@ describe('Table with combobox filters and calculated totals', function() {
         angular.element('table-filter-headers').remove();
     });
     
+    function checkAndRemoveExistingTables(){
+        var tables = angular.element('table');
+        if (tables.length > 0){
+            angular.forEach(tables, function(table){
+                table.remove();
+            });
+        }
+    }
     
     function buildMockRecords(){
         return [{
