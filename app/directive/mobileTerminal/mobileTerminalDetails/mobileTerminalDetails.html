@@ -40,8 +40,8 @@
                                         <label ng-if="mobileTerminal.active">{{'common.active' | i18n}}</label>
                                         <label ng-if="!mobileTerminal.active">{{'common.inactive' | i18n}}</label>
                                         <label class="switch">
-                                            <input type="checkbox" ng-model="mobileTerminal.active" id="mt-{{listIndex}}-activation">
-                                            <div class="slider">
+                                            <input type="checkbox" ng-model="mobileTerminal.active">
+                                            <div class="slider" id="mt-{{listIndex}}-activation">
                                                 <i class="fa fa-check"></i>
                                                 <i class="fa fa-times"></i>
                                             </div>

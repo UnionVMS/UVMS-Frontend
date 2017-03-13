@@ -29,7 +29,7 @@ copy of the GNU General Public License along with the IFDM Suite. If not, see <h
                                         </button>
                                     </th>
                                 </tr>
-                                <tr class="searchInputRow dateSearch"  ng-if="!showPollByID">
+                                <tr class="searchInputRow dateSearch" ng-if="!showPollByID">
                                     <th>&nbsp;</th>
                                     <th colspan="2">
                                         <dropdown ng-model="advancedSearchObject.TIME_SPAN" items="timeSpanOptions" no-placeholder-item></dropdown>
@@ -40,7 +40,7 @@ copy of the GNU General Public License along with the IFDM Suite. If not, see <h
                                     </th>
 
                                     <th colspan="2">
-                                        <datepicker-input model="advancedSearchObject.TO_DATE" min-date="advancedSearchObject.FROM_DATE"  placeholder="{{'polling.polling_logs_search_date_to_placeholder' | i18n}}" time="true" input-field-id="polling-logs-search-to-date-picker"></datepicker-input>
+                                        <datepicker-input model="advancedSearchObject.TO_DATE" min-date="advancedSearchObject.FROM_DATE" placeholder="{{'polling.polling_logs_search_date_to_placeholder' | i18n}}" time="true" input-field-id="polling-logs-search-to-date-picker"></datepicker-input>
                                     </th>
 
                                     <th class="textAlignCenter">
@@ -62,15 +62,15 @@ copy of the GNU General Public License along with the IFDM Suite. If not, see <h
                                 <tr class="searchInputRow" ng-if="!showPollByID">
                                     <th>&nbsp;</th>
                                     <th>
-                                        <input type="text"/ placeholder="{{'common.all' | i18n}}" ng-model="advancedSearchObject.NAME">
+                                        <input type="text" placeholder="{{'common.all' | i18n}}" ng-model="advancedSearchObject.NAME">
                                     </th>
 
                                     <th>
-                                        <input type="text"/ placeholder="{{'common.all' | i18n}}" ng-model="advancedSearchObject.EXTERNAL_MARKING">
+                                        <input type="text" placeholder="{{'common.all' | i18n}}" ng-model="advancedSearchObject.EXTERNAL_MARKING">
                                     </th>
 
                                     <th>
-                                        <dropdown ng-model="advancedSearchObject.POLL_TYPE" items="pollTypes"  initialtext="{{ 'common.all' | i18n }}" initialtext-selectable></dropdown >
+                                        <dropdown ng-model="advancedSearchObject.POLL_TYPE" items="pollTypes" initialtext="{{ 'common.all' | i18n }}" initialtext-selectable></dropdown>
                                     </th>
 
                                     <th>
@@ -86,7 +86,7 @@ copy of the GNU General Public License along with the IFDM Suite. If not, see <h
                                     </th>
 
                                     <th>
-                                        <dropdown ng-model="advancedSearchObject.STATUS" items="statusTypes"  initialtext="{{ 'common.all' | i18n }}" initialtext-selectable></dropdown>
+                                        <dropdown ng-model="advancedSearchObject.STATUS" items="statusTypes" initialtext="{{ 'common.all' | i18n }}" initialtext-selectable></dropdown>
                                     </th>
 
                                     <th>
