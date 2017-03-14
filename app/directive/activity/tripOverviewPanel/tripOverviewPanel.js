@@ -21,7 +21,7 @@ copy of the GNU General Public License along with the IFDM Suite. If not, see <h
 angular.module('unionvmsWeb').directive('tripOverviewPanel', function () {
     return {
         restrict: 'E',
-        replace: true,
+        replace: false,
         scope: {
             trip: '=',
             clickCallback: '&'
