@@ -23,10 +23,10 @@ angular.module('unionvmsWeb').directive('tripOverviewPanel', function () {
         restrict: 'E',
         replace: true,
         scope: {
-            trip: '='
+            trip: '=',
+            clickCallback: '&'
         },
-        templateUrl: 'directive/activity/tripOverviewPanel/tripOverviewPanel.html',
-
+        templateUrl: 'directive/activity/tripOverviewPanel/tripOverviewPanel.html'
     };
 });
 

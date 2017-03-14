@@ -24,42 +24,36 @@ copy of the GNU General Public License along with the IFDM Suite. If not, see <h
     .trip-overview-container {
         margin: 0;
         padding: 0;
-        .field-format,
-        .date-field,
-        .field-width {
-            padding: 0 10px;
-            float:left;
-        }
-        .field-format,
-        .field-width,
-        .date-container {
-            word-break: break-word;
-            display: flex;
-        }
-        .field-format,
-        .date-field {
-            width: 21%;
-        }
-        .field-width {
-            width: 16%;
-            &.icon {
-                display: table;
-                .field-text-icon {
-                    display: table-cell;
-                    vertical-align: middle;
-                }
+        display: flex;
+        .field-icon {
+            display: table;
+            height: 100%;
+            &:hover {
+                cursor: pointer;
+            }
+            .field-label {
+                display: table-cell;
+                vertical-align: middle;
+                font-size: 22px;
+                padding-right: 10px;
+            }
+            .field-text {
+                display: table-cell;
+                white-space: nowrap;
+                vertical-align: middle;
             }
         }
-        .field-label,
-        .field-label-icon {
-            white-space: nowrap;
-            margin-right: 5px;
-        }
-        .field-label {
-            font-weight: bold;
-        }
-        .field-label-icon {
-            font-size: 22px;
+        .trip-row {
+            width: 100%;
+            display: flex;
+            .field-format {
+                display: inline-flex;
+                .field-label {
+                    font-weight: bold;
+                    white-space: nowrap;
+                    margin-right: 5px;
+                }
+            }
         }
     }
     

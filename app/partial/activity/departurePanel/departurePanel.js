@@ -33,18 +33,18 @@ angular.module('unionvmsWeb').controller('DeparturepanelCtrl',function($scope, $
      */
     var init = function(){
         $scope.faServ.getFishingActivity(new FishingActivity('departure'));
-        loadingStatus.isLoading('FishingActivity', true);
-        if ($scope.srcTab === 'reports'){
-            activityRestService.getTripCatchDetail($scope.faServ.id).then(function(response){
-                $scope.fishingTripDetails = response;  
-                loadingStatus.isLoading('FishingActivity', false);
-            }, function(error){
-                //TODO deal with error from service
-                loadingStatus.isLoading('FishingActivity', false);
-            });
-        } else {
-            loadingStatus.isLoading('FishingActivity', false);
-        }
+//        loadingStatus.isLoading('FishingActivity', true);
+////        if ($scope.srcTab === 'reports'){
+//            activityRestService.getTripCatchDetail($scope.faServ.id).then(function(response){
+//                $scope.fishingTripDetails = response;  
+//                loadingStatus.isLoading('FishingActivity', false);
+//            }, function(error){
+//                //TODO deal with error from service
+//                loadingStatus.isLoading('FishingActivity', false);
+//            });
+////        } else {
+////            loadingStatus.isLoading('FishingActivity', false);
+////        }
     };
     
     //The watch is needed for the navigation in the trip summary
@@ -97,6 +97,11 @@ angular.module('unionvmsWeb').controller('DeparturepanelCtrl',function($scope, $
         //TODO when we have it running with reports - mainly for hiding/showing stuff
         console.log('This is the click callback');
     };
+    
+    $scope.showVesselTile = function(){
+        $scope.faServ.isVesselTileVisible = !$scope.faServ.isVesselTileVisible
+        console.log($scope.faServ.isVesselTileVisible);
+    }
     
     init();
 });
