@@ -550,7 +550,7 @@ angular.module('unionvmsWeb').controller('VesselFormCtrl',function($scope, $log,
         },
         disableAddMobileTerminal: function(vessel) {
             if (angular.isDefined($scope.vesselForm.cfr && $scope.vesselForm.ircs && vessel)) {
-                return $scope.vesselForm.cfr.$invalid || $scope.vesselForm.ircs.$invalid || !vessel.ircs || !vessel.cfr;
+                return $scope.vesselForm.cfr.$invalid || $scope.vesselForm.ircs.$invalid || !vessel.ircs || !vessel.cfr || $scope.isCreateNewMode();
             }
             return false;
         },
