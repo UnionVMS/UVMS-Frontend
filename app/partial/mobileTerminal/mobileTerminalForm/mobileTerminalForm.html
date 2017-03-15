@@ -34,7 +34,7 @@ copy of the GNU General Public License along with the IFDM Suite. If not, see <h
                 <div class="col-md-6 textAlignRight">
                     <div class="actions">
                         <div>
-                            <a ng-click="toggleAssignVessel()" id="mob-term-form-assign-vessel-1">{{'common.cancel' | i18n}}</a>
+                            <a ng-click="toggleAssignVessel()" id="mt-btn-cancel">{{'common.cancel' | i18n}}</a>
                         </div>
                         <div class="clearfix"></div>
                     </div>
@@ -45,10 +45,10 @@ copy of the GNU General Public License along with the IFDM Suite. If not, see <h
 
         <div class="row" ng-hide="isVisible.assignVessel || vesselFormDisplayed()" show-if-allowed="manageMobileTerminals">
             <div class="col-md-12" ng-hide="currentMobileTerminal.connectId">
-                <span class="assignVesselLink" ng-click="toggleAssignVessel()" ng-show="currentMobileTerminal.guid" id="mob-term-form-assign-vessel-2">{{'mobileTerminal.assign_vessel' | i18n}}</span>
+                <span class="assignVesselLink" ng-click="toggleAssignVessel()" ng-show="currentMobileTerminal.guid" id="mt-btn-assign-asset">{{'mobileTerminal.assign_vessel' | i18n}}</span>
             </div>
-        </div>   
-        <mobile-terminal-details mobile-terminal="currentMobileTerminal" modeltype="'MOBILE_TERMINAL'" functions="mobileTerminalFormFunctions" ng-disabled="disableMobileTerminalForm()" list-index="0"></mobile-terminal-details>        
+        </div>
+        <mobile-terminal-details mobile-terminal="currentMobileTerminal" modeltype="'MOBILE_TERMINAL'" functions="mobileTerminalFormFunctions" ng-disabled="disableMobileTerminalForm()" list-index="0"></mobile-terminal-details>
     </div>
 
 </div>

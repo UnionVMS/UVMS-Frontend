@@ -37,7 +37,7 @@ copy of the GNU General Public License along with the IFDM Suite. If not, see <h
             </thead>
             <tbody>
             <tr ng-repeat="item in currentSearchResults.items | orderBy:currentSearchResults.sortBy:currentSearchResults.sortReverse | filter:currentSearchResults.filter" ng-class="{archived: !item.active}">
-                <td class="checkboxContainer"><input type="checkbox" ng-checked="isChecked(item)" ng-click="checkItem(item)"/></td>
+                <td class="checkboxContainer"><input type="checkbox" ng-checked="isChecked(item)" ng-click="checkItem(item)" id="asset-checkbox-listitem"/></td>
                 <td ng-attr-title="{{item.countryCode}}">{{item.countryCode}}</td>
                 <td ng-attr-title="{{item.externalMarking}}">{{item.externalMarking}}</td>
                 <td ng-attr-title="{{item.name}}">{{item.name}}</td>
