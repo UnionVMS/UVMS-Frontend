@@ -33,18 +33,6 @@ angular.module('unionvmsWeb').controller('DeparturepanelCtrl',function($scope, $
      */
     var init = function(){
         $scope.faServ.getFishingActivity(new FishingActivity('departure'));
-//        loadingStatus.isLoading('FishingActivity', true);
-////        if ($scope.srcTab === 'reports'){
-//            activityRestService.getTripCatchDetail($scope.faServ.id).then(function(response){
-//                $scope.fishingTripDetails = response;  
-//                loadingStatus.isLoading('FishingActivity', false);
-//            }, function(error){
-//                //TODO deal with error from service
-//                loadingStatus.isLoading('FishingActivity', false);
-//            });
-////        } else {
-////            loadingStatus.isLoading('FishingActivity', false);
-////        }
     };
     
     //The watch is needed for the navigation in the trip summary
