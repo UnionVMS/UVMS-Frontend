@@ -24,13 +24,15 @@ angular.module('unionvmsWeb').factory('fishingActivityService', function (activi
     var faServ = {
         activityData: {},
         id: undefined,
-        isCorrection: false
+        isCorrection: false,
+        isVesselTileVisible: false
 	};
 
     var faModels = {
         common: [
             'activityDetails',
-            'reportDetails'
+            'reportDetails',
+            'tripDetails'
         ],
         departure: [
             'locations',
@@ -173,6 +175,7 @@ angular.module('unionvmsWeb').factory('fishingActivityService', function (activi
 	    faServ.activityData = {};
 	    faServ.id = undefined;
 	    faServ.isCorrection = false;
+	    faServ.isVesselTileVisible = false;
 	};
 	
 	/**
@@ -196,6 +199,7 @@ angular.module('unionvmsWeb').factory('fishingActivityService', function (activi
     faServ.getFishingActivity = function(obj, callback) {
         //TODO use fa id in the REST request
         loadingStatus.isLoading('FishingActivity', true);
+        faServ.isVesselTileVisible = false;
         activityRestService.getFishingActivityDetails(obj.faType).then(function (response) {
             faServ.activityData = obj;
             faServ.activityData.fromJson(response);
@@ -428,6 +432,9 @@ angular.module('unionvmsWeb').factory('fishingActivityService', function (activi
                     break;
                 case 'catches':
                     obj.catches = faServ.loadFishingData(obj,data.catches);
+                    break;
+                case 'tripDetails':
+                    obj.tripDetails = data.tripDetails;
                     break;
             }
         });

@@ -33,18 +33,6 @@ angular.module('unionvmsWeb').controller('DeparturepanelCtrl',function($scope, $
      */
     var init = function(){
         $scope.faServ.getFishingActivity(new FishingActivity('departure'));
-        loadingStatus.isLoading('FishingActivity', true);
-        if ($scope.srcTab === 'reports'){
-            activityRestService.getTripCatchDetail($scope.faServ.id).then(function(response){
-                $scope.fishingTripDetails = response;  
-                loadingStatus.isLoading('FishingActivity', false);
-            }, function(error){
-                //TODO deal with error from service
-                loadingStatus.isLoading('FishingActivity', false);
-            });
-        } else {
-            loadingStatus.isLoading('FishingActivity', false);
-        }
     };
     
     //The watch is needed for the navigation in the trip summary
@@ -96,6 +84,18 @@ angular.module('unionvmsWeb').controller('DeparturepanelCtrl',function($scope, $
     $scope.locationClickCallback = function(){
         //TODO when we have it running with reports - mainly for hiding/showing stuff
         console.log('This is the click callback');
+    };
+    
+    /**
+     * Toggle the vessel tile for the reporting vessel
+     * 
+     * @memberof DeparturepanelCtrl
+     * @public
+     * @alias toggleVesselTile
+     */
+    $scope.toggleVesselTile = function(){
+        $scope.faServ.isVesselTileVisible = !$scope.faServ.isVesselTileVisible;
+        //TODO when vessel tile is ready
     };
     
     init();
