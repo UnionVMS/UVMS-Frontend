@@ -1,6 +1,6 @@
 <div class="table-chart">
     <!--<a class="switch-btn" ng-click="switchMode()"><i class="fa" ng-class="{'fa-bar-chart': mode === 'table', 'fa-th': mode === 'chart'}"></i></a>-->
-    <div class="col-md-12 table-responsive-force" ng-show="mode === 'table'">
+    <!--<div class="col-md-12 table-responsive-force" ng-show="mode === 'table'">
         <div class="row table-container">
             <div class="col-md-12 table tableSmart table-striped table-condensed table-bordered">
                 <div class="col-md-12 thead">
@@ -17,5 +17,7 @@
                 </div>
             </div>
         </div>
-    </div>
+    </div>-->
+
+    <table-filter-headers columns="columns" records="ngModel" unique-columns-src-data="locations" unique-columns="isArea" selected-item="selectedItem"></table-filter-headers>
 </div>

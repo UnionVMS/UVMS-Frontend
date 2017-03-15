@@ -9,40 +9,12 @@
 		</div> -->
 		<div class="col-md-5 table-chart-container" resizable r-directions="['right']" r-flex="true">
 			<!--<nvd3 options="options" data="chartData"></nvd3>-->
-			<table-chart ng-model="ngModel" columns="columnOrder" selected-item="selectedSpecieLocation"></table-chart>
+			<table-chart ng-model="ngModel" columns="tableAttrs" selected-item="selectedSpecieLocation"></table-chart>
 		</div>
 		<div class="col-md-7 details-content">
 			<div class="col-md-12">
 				<div class="global-container">
 					<div class="col-md-4">
-						<div class="row">
-							<div class="col-md-12 section">
-								<div class="row">
-									<div class="col-md-12 item-container">
-										<span class="labels">{{'activity.type' | i18n}}</span>&nbsp;
-										<span>{{selectedSpecieLocation[selectedClass].type}} <i class="fa fa-info-circle details type-desc" ng-if="selectedSpecieLocation.details.typeDesc" ng-mouseover="displayDetailsTip(selectedSpecieLocation.details.typeDesc, 'type-desc')"></i></span>
-									</div>
-								</div>
-								<div class="row">
-									<div class="col-md-12 item-container">
-										<span class="labels">{{'activity.units' | i18n}}</span>&nbsp;
-										<span>{{selectedSpecieLocation[selectedClass].unit}}</span>
-									</div>
-								</div>
-								<div class="row">
-									<div class="col-md-12 item-container">
-										<span class="labels">{{'activity.header_fa_weight' | i18n}}</span>&nbsp;
-										<span>{{selectedSpecieLocation[selectedClass].weight}} kg</span>
-									</div>
-								</div>
-								<div class="row">
-									<div class="col-md-12 item-container">
-										<span class="labels">{{'activity.weight_means' | i18n}}</span>&nbsp;
-										<span>{{selectedSpecieLocation[selectedClass].weight_mean}}  <i class="fa fa-info-circle details weight-means-desc" ng-if="selectedSpecieLocation.details.weightMeansDesc" ng-mouseover="displayDetailsTip(selectedSpecieLocation.details.weightMeansDesc, 'weight-means-desc')"></i></span>
-									</div>
-								</div>
-							</div>
-						</div>
 						<div class="row">
 							<table class="table table-condensed table-striped">
 								<thead>
@@ -59,13 +31,23 @@
 								</tbody>
 							</table>
 						</div>
+						<div class="row">
+							<div class="col-md-12 section">
+								<div class="row" ng-repeat="(attrName,attr) in selectedSpecieLocation[selectedClass].classProps">
+									<div class="col-md-12 item-container">
+										<span class="labels">{{'activity.' + attrName | i18n}}</span>&nbsp;
+										<span>{{attr}} <i class="fa fa-info-circle details {{ attrName + 'Desc' }}" ng-if="selectedSpecieLocation[selectedClass].classDescs[attrName + 'Desc']" ng-mouseover="displayDetailsTip(selectedSpecieLocation[selectedClass].classDescs[attrName + 'Desc'], attrName + 'Desc')"></i></span>
+									</div>
+								</div>
+							</div>
+						</div>
 					</div>
 					<div class="col-md-12">
 						<div class="row location-gear-container">
-							<div class="species-title">{{selectedSpecieLocation.species}} - {{selectedSpecieLocation.speciesName}}</div>
+							<div class="species-title">{{selectedSpecieLocation.species}}<!-- - {{selectedSpecieLocation.speciesName}}--></div>
 							<div class="location-gear-content">
-								<location-tile class="col-md-6 stretch" field-title="{{'activity.location' | i18n}}" multiple="true" location-details="selectedSpecieLocation.locations" is-clickable="isLocationClickable" click-callback="clickCallback()" buffer-dist="5000"></location-tile>
-								<carousel-tile class="col-md-6 summary-section" tile-title="{{'activity.header_fa_gear' | i18n}}" ng-model="selectedSpecieLocation.gears" template-url="directive/activity/carouselTile/templates/gearTile/gearTile.html"></carousel-tile>
+								<location-tile class="col-md-6 stretch" field-title="{{'activity.location' | i18n}}" multiple="true" location-details="selectedSpecieLocation[selectedClass].specifiedFluxLocations" ng-if="selectedSpecieLocation[selectedClass].specifiedFluxLocations" is-clickable="isLocationClickable" click-callback="clickCallback()" buffer-dist="5000"></location-tile>
+								<carousel-tile class="col-md-6 summary-section" tile-title="{{'activity.header_fa_gear' | i18n}}" ng-model="selectedSpecieLocation[selectedClass].gears" template-url="directive/activity/carouselTile/templates/gearTile/gearTile.html"></carousel-tile>
 							</div>
 						</div>
 					</div>

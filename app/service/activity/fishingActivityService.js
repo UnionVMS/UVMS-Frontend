@@ -69,96 +69,123 @@ angular.module('unionvmsWeb').factory('fishingActivityService', function (activi
         ]
     };
 
-    var faSummaryAttrsOrder = {
-        occurence: {
+    var faSummaryAttrsOrder = [
+        {
+            id: 'occurence',
             type: 'date'
         },
-        reason: {
+        {
+            id: 'reason',
             type: 'string'
         },
-        vessel_activity: {
+        {
+            id: 'vessel_activity',
             type: 'string'
         },
-        no_operations: {
+        {
+            id: 'no_operations',
             type: 'string'
         },
-        fisheryType: {
+        {
+            id: 'fisheryType',
             type: 'string'
         },
-        targetedSpecies: {
+        {
+            id: 'targetedSpecies',
             type: 'array'
         },
-        duration: {
+        {
+            id: 'duration',
             type: 'string'
         },
-        startOfLanding: {
+        {
+            id: 'startOfLanding',
             type: 'date'
         },
-        endOfLanding: {
+        {
+            id: 'endOfLanding',
             type: 'date'
         }
-    };
+    ];
 
-    var gearAttrOrder = {
-        meshSize: {
+    var gearAttrOrder = [
+        {
+            id: 'meshSize',
             type: 'string'
         },
-        lengthWidth: {
+        {
+            id: 'lengthWidth',
             type: 'string'
         },
-        numberOfGears: {
+        {
+            id: 'numberOfGears',
             type: 'string'
         },
-        height: {
+        {
+            id: 'height',
             type: 'string'
         },
-        nrOfLines: {
+        {
+            id: 'nrOfLines',
             type: 'string'
         },
-        nrOfNets: {
+        {
+            id: 'nrOfNets',
             type: 'string'
         },
-        nominalLengthOfNet: {
+        {
+            id: 'nominalLengthOfNet',
             type: 'string'
         },
-        quantity: {
+        {
+            id: 'quantity',
             type: 'string'
         },
-        description: {
+        {
+            id: 'description',
             type: 'string'
         }
-    };
+    ];
 
-    var faDocAttrOrder = {
-        type: {
+    var faDocAttrOrder = [
+        {
+            id: 'type',
             type: 'string'
         },
-        creationDate: {
+        {
+            id: 'creationDate',
             type: 'date'
         },
-        purposeCode: {
+        {
+            id: 'purposeCode',
             type: 'string'
         },
-        purpose: {
+        {
+            id: 'purpose',
             type: 'string'
         },
-        owner: {
+        {
+            id: 'owner',
             type: 'string'
         },
-        id: {
+        {
+            id: 'id',
             type: 'string'
         },
-        refId: {
+        {
+            id: 'refId',
             type: 'string',
             clickable: true
         },
-        acceptedDate: {
+        {
+            id: 'acceptedDate',
             type: 'date'
         },
-        fmcMark: {
+        {
+            id: 'fmcMark',
             type: 'string'
         }
-    };
+    ];
 
 
 	
@@ -258,11 +285,17 @@ angular.module('unionvmsWeb').factory('fishingActivityService', function (activi
      */
     faServ.addWeightMeansDescription = function(faObj){
         mdrCacheService.getCodeList('weight_means').then(function(response){
+            var classes = ['lsc','bms'];
             angular.forEach(faObj.catches, function(item) {
-                var mdrRec = _.findWhere(response, {code: item.details.weightMeans});
-                if (angular.isDefined(mdrRec)){
-                    item.details.weightMeansDesc = mdrRec.description;
-                }
+                angular.forEach(classes, function(className) {
+                    var mdrRec = _.findWhere(response, {code: item[className].classProps.weightingMeans});
+                    if (angular.isDefined(mdrRec)){
+                        if(!angular.isDefined(item[className].classDescs)){
+                            item[className].classDescs = {};
+                        }
+                        item[className].classDescs.weightingMeansDesc = mdrRec.description;
+                    }
+                });
             });
         });
     };
@@ -276,7 +309,7 @@ angular.module('unionvmsWeb').factory('fishingActivityService', function (activi
      * @alias loadFishActivityOverview
      */
     faServ.loadFishingActivityDetails = function(data, attrOrder){
-        var attrKeys = _.keys(attrOrder);
+        var attrKeys = _.pluck(attrOrder, 'id');
         var finalSummary = {};
 
         if(_.keys(data).length){
@@ -304,8 +337,9 @@ angular.module('unionvmsWeb').factory('fishingActivityService', function (activi
 
     var transformFaItem = function(value, key, attrOrder, attrKeys){
         var newVal = value;
+        var attrData = _.where(attrOrder, {id: key});
         
-        if(angular.isDefined(attrOrder[key]) && attrOrder[key].type === 'date'){
+        if(angular.isDefined(attrData.length) && attrData.type === 'date'){
             newVal = $filter('stDateUtc')(newVal);
         }else if(angular.isArray(value)){
             newVal = '';
@@ -323,14 +357,14 @@ angular.module('unionvmsWeb').factory('fishingActivityService', function (activi
             idx: attrKeys.indexOf(key),
             label: itemLabel !== "%%KEY_NOT_FOUND%%" ? itemLabel : key,
             value: newVal,
-            clickable: attrOrder[key] ? attrOrder[key].clickable : undefined
+            clickable: attrData.length ? attrData.clickable : undefined
         };
     };
 
     faServ.loadFaDocData = function(data){
         var relatedReports;
         var attrOrder = angular.copy(faDocAttrOrder);
-        var relRepIdx = _.keys(attrOrder).length;
+        var relRepIdx = attrOrder.length;
 
         if(angular.isDefined(data.relatedReports) && data.relatedReports.length > 0){
             relatedReports = angular.copy(data.relatedReports);
@@ -338,10 +372,11 @@ angular.module('unionvmsWeb').factory('fishingActivityService', function (activi
             angular.forEach(relatedReports, function(report){
                 data.relatedReports[report.schemeId] = report.id;
 
-                attrOrder[report.schemeId] = {
+                attrOrder.push({
                     idx: relRepIdx,
+                    id: report.schemeId,
                     type: 'string'
-                };
+                });
                 relRepIdx++;
             });
         }
@@ -364,11 +399,17 @@ angular.module('unionvmsWeb').factory('fishingActivityService', function (activi
             var gearAttrs = _.keys(gear);
             if(gearAttrs.length > 2){
                 gear.characteristics = {};
+                gear.characteristicsDetails = {};
                 angular.forEach(gearAttrs,function(attrName){
                     var nonCharacteristics = ['type','role'];
+                    var mainCharacteristics = ['meshSize','lengthWidth','numberOfGears'];
 
                     if(nonCharacteristics.indexOf(attrName) === -1){
-                        gear.characteristics[attrName] = gear[attrName];
+                        if(mainCharacteristics.indexOf(attrName) === -1){
+                            gear.characteristicsDetails[attrName] = gear[attrName];
+                        }else{
+                            gear.characteristics[attrName] = gear[attrName];
+                        }
                         delete gear[attrName];
                     }
                 });
@@ -397,13 +438,32 @@ angular.module('unionvmsWeb').factory('fishingActivityService', function (activi
     };
 
     faServ.loadFishingData = function(obj,data){
-        if(angular.isDefined(data) && data.length && angular.isDefined(data[0].gears)){
+        if(angular.isDefined(data) && data.length){
+            var classes = ['lsc','bms'];
             angular.forEach(data, function(item){
-                item.gears = faServ.loadGears(item.gears);
+                angular.forEach(classes, function(className){
+                    if(angular.isDefined(item[className].gears)){
+                        item[className].gears = faServ.loadGears(item[className].gears);
+                    }
+
+                    item[className].classProps = {};
+                    
+                    if(angular.isDefined(item[className].destinationLocation) && angular.isDefined(item[className].destinationLocation[0])){
+                        item[className].destinationLocation = item[className].destinationLocation[0].id + ' - ' + item[className].destinationLocation[0].name + ', ' +
+                                                    item[className].destinationLocation[0].countryId;
+                    }
+
+                    angular.forEach(item[className], function(attr,attrName){
+                        if(!_.isObject(attr) && !_.isArray(attr)){
+                            item[className].classProps[attrName] = attr;
+                            delete item[className][attrName];
+                        }
+                    });
+                });
             });
         }
         this.addGearDescription(obj);
-        this.addCatchTypeDescription(obj);
+        /*this.addCatchTypeDescription(obj);*/
         this.addWeightMeansDescription(obj);
 
         return data;
