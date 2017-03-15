@@ -15,7 +15,21 @@ copy of the GNU General Public License along with the IFDM Suite. If not, see <h
     .fieldsetLegendStyle {
         margin-bottom: 10px !important;
     }
-    .container {
+    .item-container {
+        display: flex;
+        .item-label {
+            font-weight: bold;
+            margin-right: 5px;
+            white-space: nowrap;
+            &:after {
+                content: ':'
+            }
+        }
+        .item-text:not(:last-child){
+            margin-right: 10px;
+        }
+    }
+    /*.container {
         height: calc(~'100% - 20px');
         .col-md-12 {
             //top: 50%;
@@ -49,7 +63,7 @@ copy of the GNU General Public License along with the IFDM Suite. If not, see <h
                 }
             }
         }
-    }
+    }*/
     .no-data {
         text-align: center;
         top: 0;

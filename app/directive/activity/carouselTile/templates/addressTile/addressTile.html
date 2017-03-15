@@ -1,0 +1,32 @@
+<div class="col-md-12 address-tile">
+	<div class="row" ng-if="item.streetName">
+		<div class="item-container">
+			<span class="item-label">{{'activity.fa_locations_street' | i18n}}</span>
+			<span>{{item.streetName}}</span>
+		</div>
+	</div>
+	<div class="row" ng-if="item.plotId">
+		<div class="item-container">
+			<span class="item-label">{{'activity.fa_locations_plotId' | i18n}}</span>
+			<span>{{item.plotId}}</span>
+		</div>
+	</div>
+	<div class="row" ng-if="item.postCode">
+		<div class="item-container">
+			<span class="item-label">{{'activity.fa_locations_postal_code' | i18n}}</span>
+			<span>{{item.postCode}}</span>
+		</div>
+	</div>
+	<div class="row" ng-if="item.cityName">
+		<div class="item-container">
+			<span class="item-label">{{'activity.fa_locations_city' | i18n}}</span>
+			<span>{{item.cityName}}</span>
+		</div>
+	</div>
+	<div class="row" ng-if="item.countryCode || item.countryName">
+		<div class="item-container">
+			<span class="item-label">{{'activity.fa_locations_country' | i18n}}</span>
+			<span>{{item.countryCode && item.countryName ? item.countryCode + ' - ' + item.countryName : item.countryCode || item.countryName}}</span>
+		</div>
+	</div>
+</div>

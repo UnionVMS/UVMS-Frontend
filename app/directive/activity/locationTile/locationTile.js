@@ -37,9 +37,14 @@ angular.module('unionvmsWeb').directive('locationTile', function() {
 		},
 		templateUrl: 'directive/activity/locationTile/locationTile.html',
 		link: function(scope, element, attrs, fn) {
-            if (!angular.isDefined(scope.multiple) && !angular.isDefined(attrs.multiple)){
-                scope.multiple = false;
-            }
+		    scope.$watch('locationDetails', function(newVal, oldVal){
+		        if (angular.isDefined(newVal) && !_.isEqual(newVal, oldVal)){
+		            scope.init();
+		        }
+		    })
+//            if (!angular.isDefined(scope.multiple) && !angular.isDefined(attrs.multiple)){
+//                scope.multiple = false;
+//            }
         }
 	};
 })
@@ -53,6 +58,66 @@ angular.module('unionvmsWeb').directive('locationTile', function() {
  *  The controller for the locationTile directive ({@link unionvmsWeb.locationTile})
  */
 .controller('LocationTileCtrl', function($scope, mapService){
+    /**
+     * Intialization function
+     * 
+     * @memberof LocationTileCtrl
+     * @public
+     * @alias init
+     */
+    $scope.init = function(){
+        $scope.countries = [];
+        $scope.rfmo = [];
+        $scope.identifiers = [];
+        $scope.positions = [];
+        $scope.addresses = [];
+        processData();
+    };
+    
+    
+    /**
+     * Pre-process location details to fit the directive's structure
+     * 
+     * @memberof LocationTileCtrl
+     * @private
+     */
+    function processData(){
+        angular.forEach($scope.locationDetails, function(record){
+            if (_.indexOf($scope.countries, record.country) === -1){
+                $scope.countries.push(record.country);
+            }
+            
+            if (_.indexOf($scope.rfmo, record.rfmoCode) === -1){
+                $scope.rfmo.push(record.rfmoCode);
+            }
+            
+            if (angular.isDefined(record.identifier)){
+                $scope.identifiers.push({
+                    id: record.identifier.id,
+                    schemeId: record.identifier.schemeId,
+                    geometry: record.geometry
+                });
+            } else {
+                //We we get positions only
+                var wkt = new ol.format.WKT();
+                var coords = wkt.readGeometry(record.geometry).getCoordinates();
+                $scope.positions.push({
+                    geometry: record.geometry,
+                    lon: coords[0],
+                    lat: coords[1]
+                });
+            }
+            
+            if (angular.isDefined(record.structuredAddress) && record.structuredAddress.length > 0){
+                $scope.addresses.push(record.structuredAddress);
+            }
+        });
+        
+        if ($scope.addresses.length > 0){
+            $scope.addresses = _.flatten($scope.addresses);
+        }
+    }
+    
     /**
      * Zoom to the location in the liveview map and execute callback if defined
      * 
@@ -137,13 +202,13 @@ angular.module('unionvmsWeb').directive('locationTile', function() {
      * @alias checkIsMultiple
      * @returns {Boolean} Whether the directive is using a multiple data source or not
      */
-    $scope.checkIsMultiple = function(){
-        var status = false;
-        if ($scope.multiple && $scope.locationDetails.length > 1){
-            status = true;
-        }
-        
-        return status;
-    };
+//    $scope.checkIsMultiple = function(){
+//        var status = false;
+//        if ($scope.multiple && $scope.locationDetails.length > 1){
+//            status = true;
+//        }
+//        
+//        return status;
+//    };
 });
 

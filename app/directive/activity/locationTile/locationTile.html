@@ -2,7 +2,46 @@
 	<legend class="fieldsetLegendStyle">
 		<a>{{fieldTitle}}</a>
 	</legend>
-	<div ng-switch="checkIsMultiple()" ng-class="{container: !checkIsMultiple(), 'container-multiple': checkIsMultiple()}" ng-if="hasData()">
+	<div class="row">
+		<div class="col-md-12 item-container">
+			<span class="item-label">{{'activity.fa_locations_country' | i18n}}</span>
+			<span>{{ countries | stArrayToString: ', '}}</span>
+		</div>
+	</div>
+	<div class="row">
+		<div class="col-md-12 item-container">
+			<span class="item-label">{{'activity.rfmo_area' | i18n}}</span>
+			<span>{{ rfmo | stArrayToString: ', '}}</span>
+		</div>
+	</div>
+	<div class="row">
+		<div class="col-md-12">
+			<ul>
+				<li ng-repeat="item in identifiers" class="item-container">
+					<span class="item-label">{{item.schemeId}}</span> 
+					<span>{{item.id}}</span>
+				</li>
+			</ul>
+		</div>
+	</div>
+	<div class="row">
+		<div class="col-md-12">
+			<ul>
+				<li ng-repeat="item in positions" class="item-container">
+					<span class="item-label">{{'activity.fa_locations_lon' | i18n}}</span> 
+					<span class="item-text">{{item.lon}}</span>
+					<span class="item-label">{{'activity.fa_locations_lat' | i18n}}</span> 
+					<span class="item-text">{{item.lat}}</span>
+				</li>
+			</ul>
+		</div>
+	</div>
+	<div class="row">
+		<div class="col-md-12">
+			<carousel-tile tile-title="{{'activity.fa_locations_addresses' | i18n}}" ng-model="addresses" use-top-nav="false" template-url="directive/activity/carouselTile/templates/addressTile/addressTile.html"></carousel-tile>
+		</div>
+	</div>
+	<!-- <div ng-switch="checkIsMultiple()" ng-class="{container: !checkIsMultiple(), 'container-multiple': checkIsMultiple()}" ng-if="hasData()">
 		<div class="col-md-12" ng-class="{clickable: isItemClickable()}" ng-click="zoomToLocation()" ng-switch-default>
 			<div class="name">{{locationDetails.name || locationDetails[0].name}}</div>
 		</div>
@@ -11,7 +50,7 @@
 				<li ng-repeat="location in locationDetails" ng-class="{'item-clickable': isItemClickable(location)}" ng-click="zoomToLocation(location)">{{location.name}}</li>
 			</ul>
 		</div>
-	</div>
+	</div> -->
 	<div class="row no-data" ng-if="!hasData()">
 		<div class="col-md-12">
 			<span>{{'activity.no_data' | i18n}}</span>
