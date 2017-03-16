@@ -14,8 +14,12 @@ copy of the GNU General Public License along with the IFDM Suite. If not, see <h
     position: relative;
     .fieldsetLegendStyle {
         margin-bottom: 10px !important;
+        a:hover {
+            cursor: pointer;
+        }
     }
     .item-container {
+        cursor: default;
         display: flex;
         .item-label {
             font-weight: bold;
@@ -27,6 +31,15 @@ copy of the GNU General Public License along with the IFDM Suite. If not, see <h
         }
         .item-text:not(:last-child){
             margin-right: 10px;
+        }
+    }
+    .row-section {
+        margin-top: 10px;
+        .item-clickable {
+            cursor: pointer;
+            &:hover {
+                text-decoration: underline;
+            }
         }
     }
     /*.container {

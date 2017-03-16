@@ -297,5 +297,6 @@
     "fa_locations_street": "Street",
     "fa_locations_city": "City",
     "fa_locations_postal_code": "Postal code",
-    "fa_locations_plotId": "Plot ID"
+    "fa_locations_plotId": "Plot ID",
+    "fa_locations_zoom_to_activity": "Zoom to activity in the map"
 }
