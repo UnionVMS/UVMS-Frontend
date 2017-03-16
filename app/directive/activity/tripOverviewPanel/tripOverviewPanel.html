@@ -4,44 +4,32 @@
 			<a>{{'activity.fishing_trip' | i18n }}</a>
 		</legend>
 		<div class="row trip-overview-container">
-			<div class="field-format">
-				<span class="field-label">{{'activity.trip_id' | i18n }}:</span>
-				<span>{{trip.tripId}} [{{trip.schemeId}}]</span>
-            </div>
-			<div class="field-width icon">
-				<div class="field-label-icon"><i class="fa fa-ship"></i></div>
-				<div class="field-text-icon">{{trip.vesselName}}</div>
+			<div class="col-md-3">
+				<div class="field-icon" ng-click="clickCallback()">
+					<div class="field-label"><i class="fa fa-ship"></i></div>
+					<div class="field-text">{{trip.vesselDetails.country}} - {{trip.vesselDetails.name}}</div>
+				</div>
 			</div>
-			<div class="date-field">
-				<div class="date-container">
-					<span class="field-label">{{'activity.trip_departure' | i18n }}:</span>
-					<span>{{ trip.departure | stDateUtc }}</span>
+			<div class="col-md-9">
+				<div ng-repeat="trip in trip.trips" class="trip-row">
+					<div class="field-format">
+						<span class="field-label">{{'activity.trip_id' | i18n }}:</span>
+						<span class="field-text">{{trip.tripId.schemeId}}:{{trip.tripId.id}}</span>
+					</div>
+					<div class="field-format">
+						<span class="field-label">{{'activity.trip_departure' | i18n }}:</span>
+						<span class="field-text">{{trip.departureTime | stDateUtc}}</span>
+					</div>
+					<div class="field-format">
+						<span class="field-label">{{'activity.trip_arrival' | i18n }}:</span>
+						<span class="field-text">{{trip.arrivalTime | stDateUtc}}</span>
+					</div>
+					<div class="field-format">
+						<span class="field-label">{{'activity.trip_landing' | i18n }}:</span>
+						<span class="field-text">{{trip.landingTime | stDateUtc}}</span>
+					</div>
 				</div>
-				<div class="date-container">
-                	<span class="field-label">{{'activity.catch_details_trip_overview_at' | i18n }}:</span>
-					<span>{{trip.departureAt | stArrayToString: ', '}} </span>
-                </div>
-            </div>
-            <div class="date-field">
-            	<div class="date-container">
-					<span class="field-label">{{'activity.trip_arrival' | i18n }}:</span>
-					<span>{{ trip.arrival | stDateUtc }}</span>
-				</div>
-                <div class="date-container">
-                	<span class="field-label">{{'activity.catch_details_trip_overview_at' | i18n }}:</span>
-					<span>{{trip.arrivalAt | stArrayToString: ', '}} </span>
-                </div>
-            </div>
-            <div class="date-field">
-            	<div class="date-container">
-					<span class="field-label">{{'activity.trip_landing' | i18n }}:</span>
-					<span>{{ trip.landing | stDateUtc }}</span>
-				</div>
-                <div class="date-container">
-                	<span class="field-label">{{'activity.catch_details_trip_overview_at' | i18n }}:</span>
-					<span>{{trip.landingAt | stArrayToString: ', '}} </span>
-                </div>
-            </div>
+			</div>
 		</div>
 	</fieldset>
 </div>

@@ -296,5 +296,14 @@
     "product_weight": "Prod. weight",
     "packaging_type": "Packaging type",
     "package_weight": "Package weight",
-    "package_quantity": "Package quantity"
+    "package_quantity": "Package quantity",
+
+    "weight": "Weight",
+    "unit": "Unit",
+    "stockId": "Stock id",
+    "size": "Size",
+    "weightingMeans": "Weighting Means",
+    "tripId": "Trip id",
+    "usage": "Usage",
+    "destinationLocation": "Location"
 }

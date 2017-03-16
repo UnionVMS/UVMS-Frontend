@@ -26,7 +26,7 @@ copy of the GNU General Public License along with the IFDM Suite. If not, see <h
             <fa-details-panel class="col-md-4 summary-section" ng-model="faServ.activityData.reportDetails"></fa-details-panel>
         </div>
         <div class="activity-summary-row" ng-if="faServ.activityData.catches.length > 0">
-            <catch-class-specie-detail-tile class="col-md-12 summary-section" ng-model="faServ.activityData.catches" tile-title="{{'activity.trip_summary_catch' | i18n}}" is-location-clickable="isLocationClickable()" buffer-distance="5000" click-callback="locationClickCallback()"></catch-class-specie-detail-tile>
+            <catch-tile class="col-md-12 summary-section" ng-model="faServ.activityData.catches" tile-title="{{'activity.trip_summary_catch' | i18n}}" is-location-clickable="isLocationClickable()" buffer-distance="5000" click-callback="locationClickCallback()"></catch-tile>
         </div>
     </div>
 </div>

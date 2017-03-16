@@ -364,12 +364,6 @@ describe('tableChart', function() {
     expect(isolatedScope.columns).toEqual(scope.columnOrder);
     expect(isolatedScope.selectedItem).toEqual(scope.selectedSpecieLocation);
 
-    expect(angular.element(tableChart).find('.tbody > .tr').length).toEqual(scope.fishingData.length);
-
-    angular.element(tableChart).find('.tbody > .tr')[2].click();
-    expect(isolatedScope.ngModel[2].selected).toBe(true);
-    expect(isolatedScope.ngModel[2]).toEqual(scope.selectedSpecieLocation);
-
     /*angular.element(tableChart).find('.switch-btn').click();
     expect(isolatedScope.mode).toEqual('chart');*/
 

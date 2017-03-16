@@ -21,7 +21,7 @@ copy of the GNU General Public License along with the IFDM Suite. If not, see <h
  * @description
  *  A widget to display data about the catch details with the species per class
  */
-angular.module('unionvmsWeb').directive('catchClassSpecieDetailTile', function(locale,reportingNavigatorService) {
+angular.module('unionvmsWeb').directive('catchTile', function(locale,reportingNavigatorService) {
 	return {
 		restrict: 'E',
 		replace: true,
@@ -32,45 +32,80 @@ angular.module('unionvmsWeb').directive('catchClassSpecieDetailTile', function(l
 		    bufferDistance: '@',
 		    clickCallback: '&'
 		},
-		templateUrl: 'directive/activity/catchClassSpecieDetailTile/catchClassSpecieDetailTile.html',
+		templateUrl: 'directive/activity/catchTile/catchTile.html',
 		link: function(scope, element, attrs, fn) {
 			scope.repNav = reportingNavigatorService;
 
 			//columns of the first table
-			scope.columnOrder = [
-				{
-					id: 'locations',
-					text: locale.getString('activity.catch_class_specie_column_location'),
-					value: 'name'
-				},
-				{
-					id: 'species',
-					text: locale.getString('activity.catch_class_specie_column_specie')
-				},
-				{
-					id: 'lsc',
-					text: locale.getString('activity.catch_class_specie_column_lsc'),
-					value: 'weight'
-				},
-				{
-					id: 'bms',
-					text: locale.getString('activity.catch_class_specie_column_bms'),
-					value: 'weight'
-				},
-				{
-					id: 'dis',
-					text: locale.getString('activity.catch_class_specie_column_dis'),
-					value: 'weight'
-				},
-				{
-					id: 'dim',
-					text: locale.getString('activity.catch_class_specie_column_dim'),
-					value: 'weight'
-				}
-			];
+			scope.tableAttrs = [{
+		        title: locale.getString('activity.type'),
+		        srcProp: 'type',
+		        isVisible: true,
+		        useComboFilter: true
+		    }, {
+		        title: locale.getString('activity.territory_area'),
+		        srcObj: 'locations',
+		        srcProp: 'territory',
+		        isArea: true,
+		        isVisible: true,
+		        useComboFilter: true
+		    }, {
+		        title: locale.getString('activity.fao_area'),
+		        srcObj: 'locations',
+                srcProp: 'fao_area',
+                isArea: true,
+                isVisible: true,
+                useComboFilter: true
+		    }, {
+                title: locale.getString('activity.ices_stat_rect'),
+                srcObj: 'locations',
+                srcProp: 'ices_stat_rectangle',
+                isArea: true,
+                isVisible: true,
+                useComboFilter: true
+		    }, {
+                title: locale.getString('activity.effort_zone'),
+                srcObj: 'locations',
+                srcProp: 'effort_zone',
+                isArea: true,
+                isVisible: true,
+                useComboFilter: true
+		    }, {
+                title: locale.getString('activity.rfmo_area'),
+                srcObj: 'locations',
+                srcProp: 'rfmo',
+                isArea: true,
+                isVisible: true,
+                useComboFilter: true
+		    }, {
+                title: locale.getString('activity.gfcm_area'),
+                srcObj: 'locations',
+                srcProp: 'gfcm_gsa',
+                isArea: true,
+                isVisible: true,
+                useComboFilter: true
+		    }, {
+                title: locale.getString('activity.gfcm_stat_rect'),
+                srcObj: 'locations',
+                srcProp: 'gfcm_stat_rectangle',
+                isArea: true,
+                isVisible: true,
+                useComboFilter: true
+		    }, {
+                title: locale.getString('activity.header_fa_species'),
+                srcProp: 'species',
+                isVisible: true,
+                useComboFilter: true
+		    }, {
+                title: locale.getString('activity.header_fa_weight'),
+                srcProp: 'calculatedWeight',
+                isVisible: true,
+                calculateTotal: true
+		    }];
+
 
 			//columns of the second table(classes)
-			scope.classColumnOrder = ['lsc', 'bms', 'dis', 'dim'];
+			scope.classColumnOrder = ['lsc', 'bms'];
 
 			//selects the first row on every table(by default)
 			scope.ngModel[0].selected = true;
@@ -99,7 +134,7 @@ angular.module('unionvmsWeb').directive('catchClassSpecieDetailTile', function(l
 			 *  @param {String} cssSel - The css selector class of the item against which the tip will be displayed
 			 */
 			scope.displayDetailsTip = function(text, cssSel){
-				var target = angular.element('.catch-class-specie-detail-tile .' + cssSel);
+				var target = angular.element('.catch-tile .' + cssSel);
 				var tip;
 				if (angular.isDefined($(target).attr('data-hasqtip'))){
 					tip = $(target);
