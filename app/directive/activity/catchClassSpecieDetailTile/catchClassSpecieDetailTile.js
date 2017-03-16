@@ -105,7 +105,7 @@ angular.module('unionvmsWeb').directive('catchClassSpecieDetailTile', function(l
 
 
 			//columns of the second table(classes)
-			scope.classColumnOrder = ['lsc', 'bms'/*, 'dis', 'dim'*/];
+			scope.classColumnOrder = ['lsc', 'bms'];
 
 			//selects the first row on every table(by default)
 			scope.ngModel[0].selected = true;
