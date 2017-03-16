@@ -531,7 +531,7 @@ describe('fishingActivityService', function() {
                     idx:0,
                     label:'',
 
-                    value:'2016-11-08T16:36:03',
+                    value:'2016-11-08T17:36:03+01:00',
                     clickable:undefined
                 },
                 vessel_activity:{
@@ -551,21 +551,19 @@ describe('fishingActivityService', function() {
                 targetedSpecies:{
                     idx:5,
                     label:'',
-
                     value:'GADU',
                     clickable:undefined
                 }
             },
-            subTitle:'',
             subItems:{
                 duration:{
                     idx:6,
                     label:'',
-
                     value:'10d 11h 20m',
                     clickable:undefined
                 }
             },
+            subTitle:'',
             title:': '
         },
         locations:{
@@ -575,7 +573,6 @@ describe('fishingActivityService', function() {
         gears:[
             {
                 type:'LHM - Handlines and pole-lines (mechanized)',
-
                 role:'On board',
                 characteristics:{
                     items:{
@@ -584,20 +581,15 @@ describe('fishingActivityService', function() {
                         label:'',
                         value:'139mm',
                         clickable:undefined
-
-
                     },
                     lengthWidth:{
                         idx:1,
                         label:'',
                         value:'11m',
                         clickable:undefined
-
-
                     }
                     },
                     title:''
-
                 },
                 characteristicsDetails:{
                     height:66,
@@ -606,13 +598,11 @@ describe('fishingActivityService', function() {
                     nominalLengthOfNet:950,
                     quantity:92,
                     description:'Otdoki winad jakifi li vebahu waazu fow ebezijo asmaca relena lulas vaj lure bitehu weper ukojuj vumdabew ot.'
-
                 }
             },
             {
                 type:'TBB',
                 role:'Deployed',
-
                 characteristics:{
                     items:{
                     meshSize:{
@@ -620,20 +610,15 @@ describe('fishingActivityService', function() {
                         label:'',
                         value:'211mm',
                         clickable:undefined
-
-
                     },
                     lengthWidth:{
                         idx:1,
                         label:'',
                         value:'99m',
                         clickable:undefined
-
-
                     }
                     },
                     title:''
-
                 },
                 characteristicsDetails:{
                     height:200,
@@ -642,7 +627,6 @@ describe('fishingActivityService', function() {
                     nominalLengthOfNet:109,
                     quantity:34,
                     description:'Sec lufi mazwubkoz hesgos nemto neku sale kowijfa ju opa icopaze lisizo.'
-
                 }
             }
         ],
@@ -651,47 +635,40 @@ describe('fishingActivityService', function() {
                 type:{
                     idx:0,
                     label:'',
-
                     value:'DECLARATION',
                     clickable:undefined
                 },
                 acceptedDate:{
                     idx:7,
                     label:'',
-
-                    value:'2018-07-07T06:48:08',
+                    value:'2018-07-07T07:48:08+01:00',
                     clickable:undefined
                 },
                 id:{
                     idx:5,
                     label:'',
-
                     value:'4bc9392b-3607-5d91-9032-194b83f89e28',
                     clickable:undefined
                 },
                 refId:{
                     idx:6,
                     label:'',
-
                     value:'c0bd3ec3-b178-5951-9853-7e13bb76b607',
-                    clickable:undefined
+                    clickable:true
                 },
                 creationDate:{
                     idx:1,
                     label:'',
-
-                    value:'2016-06-09T19:34:12',
+                    value:'2016-06-09T20:34:12+01:00',
                     clickable:undefined
                 },
                 purpose:{
                     idx:3,
                     label:'',
-
                     value:'Budrilico cuwmaglo gij munhofip pi zuwbibum bi feh ke za ajunutoc mupzaj gop ho legipejo epdeli.',
                     clickable:undefined
                 }
             },
-            subTitle:'',
             subItems:{
                 dcafedc4:{
                     idx:9,
@@ -701,6 +678,7 @@ describe('fishingActivityService', function() {
                     clickable:undefined
                 }
             },
+            subTitle:'',
             title:''
         },
         catches:[
@@ -1234,6 +1212,7 @@ describe('fishingActivityService', function() {
         faObj.fromJson(getFaResponse());
 
         expect(angular.equals(faObj,getFaModel())).toBe(true);
+        /*expect(faObj).toEqual(getFaModel());*/
     }));
 
 });

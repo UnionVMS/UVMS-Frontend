@@ -328,17 +328,24 @@ angular.module('unionvmsWeb').factory('fishingActivityService', function (activi
 
         angular.forEach(data,function(value,key){
             if(angular.isObject(value) && !angular.isArray(value)){
-                if(!_.isEmpty(value)){
-                    finalSummary.subTitle = locale.getString('activity.trip_' + key);
+                if(!_.isEmpty(value) && key !== 'characteristics'){
                     finalSummary.subItems = {};
                     angular.forEach(value,function(subItem,subKey){
-                        if(angular.isDefined(subItem) && !_.isNull(subItem) && subItem.length > 0){
-                            finalSummary.subItems[subKey] = transformFaItem(subItem, subKey, attrOrder, attrKeys);
+                        var attrData = _.where(attrOrder, {id: subKey});
+                        if(angular.isDefined(subItem) && !_.isNull(subItem) && subItem.length > 0 && attrData.length){
+                            finalSummary.subItems[subKey] = transformFaItem(subItem, subKey, attrOrder, attrKeys, attrData[0]);
                         }
                     });
+
+                    if(!_.isEmpty(value)){
+                        finalSummary.subTitle = locale.getString('activity.trip_' + key);
+                    }
                 }
             }else if(angular.isDefined(value) && !_.isNull(value) && value.length > 0){
-                finalSummary.items[key] = transformFaItem(value, key, attrOrder, attrKeys);
+                var attrData = _.where(attrOrder, {id: key});
+                if(attrData.length){
+                    finalSummary.items[key] = transformFaItem(value, key, attrOrder, attrKeys, attrData[0]);
+                }
             }
         });
 
@@ -357,11 +364,10 @@ angular.module('unionvmsWeb').factory('fishingActivityService', function (activi
      * @alias transformFaItem
      * @returns {Object} item to be displayed in the fishing activity details
      */
-    var transformFaItem = function(value, key, attrOrder, attrKeys){
+    var transformFaItem = function(value, key, attrOrder, attrKeys, attrData){
         var newVal = value;
-        var attrData = _.where(attrOrder, {id: key});
         
-        if(angular.isDefined(attrData.length) && attrData.type === 'date'){
+        if(attrData.type === 'date'){
             newVal = $filter('stDateUtc')(newVal);
         }else if(angular.isArray(value)){
             newVal = '';
@@ -379,7 +385,7 @@ angular.module('unionvmsWeb').factory('fishingActivityService', function (activi
             idx: attrKeys.indexOf(key),
             label: itemLabel !== "%%KEY_NOT_FOUND%%" ? itemLabel : key,
             value: newVal,
-            clickable: attrData.length ? attrData.clickable : undefined
+            clickable: attrData.clickable || undefined
         };
     };
 
