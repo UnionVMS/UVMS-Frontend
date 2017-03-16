@@ -36,16 +36,16 @@ copy of the GNU General Public License along with the IFDM Suite. If not, see <h
 					<th st-sort="createdBy" st-skip-natural="true" st-class-ascent="sorting_asc" st-class-descent="sorting_desc" >{{'spatial.reports_table_header_owner' | i18n }}</th>
 					<th st-sort="executedOn" st-skip-natural="true" st-class-ascent="sorting_asc" st-class-descent="sorting_desc" >{{'spatial.reports_table_header_last_executed' | i18n }}</th>
 					<th st-sort="visibility" st-skip-natural="true"  st-class-ascent="sorting_asc" st-class-descent="sorting_desc" class="dt-center" >{{'spatial.reports_table_header_visibility' | i18n }}</th>
-					<th style="min-width: 135px;">{{'spatial.table_header_actions' | i18n }}</th>
+					<th style="min-width: 180px;">{{'spatial.table_header_actions' | i18n }}</th>
 				</tr>
 				<tr>
-					<th colspan="7" ng-if="!isLoadingReportsList && (tableAlert.visible || !displayedRecords.length)">
+					<th colspan="8" ng-if="!isLoadingReportsList && (tableAlert.visible || !displayedRecords.length)">
 						<table-alert type="tableAlert.type" msg="tableAlert.msg" visible="tableAlert.visible" timeout="tableAlert.timeout"></table-alert>
 						<table-alert type="'info'" msg="'spatial.table_no_data'" visible="!tableAlert.visible && !isLoadingReportsList && !displayedRecords.length"></table-alert>
 					</th>
 				</tr>
 				<tr ng-if="isLoadingReportsList">
-					<th colspan="7" class="loading-spinner-cl"><i class="fa fa-spinner fa-spin loading-spinner"></i></th>
+					<th colspan="8" class="loading-spinner-cl"><i class="fa fa-spinner fa-spin loading-spinner"></i></th>
 				</tr>
 			</thead>
 			<tbody>
@@ -91,7 +91,7 @@ copy of the GNU General Public License along with the IFDM Suite. If not, see <h
 			</tbody>
 			<tfoot class="stFooterPagination" ng-show="displayedRecords.length && !isLoadingReportsList">
 				<tr>
-					<td colspan="7" class="text-right">
+					<td colspan="8" class="text-right">
 						<div st-pagination st-items-by-page="itemsByPage" st-displayed-pages="7" st-template="partial/common/reportsPagination/reportsPagination.html"></div>
 					</td>
 				</tr>
