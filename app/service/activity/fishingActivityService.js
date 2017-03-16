@@ -19,13 +19,13 @@ copy of the GNU General Public License along with the IFDM Suite. If not, see <h
  * @description
  *  A service to deal with any kind of fishing activity operation (e.g. Departure, Arrival, ...)
  */
-angular.module('unionvmsWeb').factory('fishingActivityService', function (activityRestService, loadingStatus, mdrCacheService, locale, $filter) {
+angular.module('unionvmsWeb').factory('fishingActivityService', function(activityRestService, loadingStatus, mdrCacheService, locale, $filter) {
 
     var faServ = {
         activityData: {},
         id: undefined,
         isCorrection: false
-	};
+    };
 
     var faModels = {
         common: [
@@ -66,6 +66,12 @@ angular.module('unionvmsWeb').factory('fishingActivityService', function (activi
         ],
         transhipment: [
             'locations'
+        ],
+        area_entry: [
+            'areas'
+        ],
+        area_exit: [
+            'areas'
         ]
     };
 
@@ -160,8 +166,22 @@ angular.module('unionvmsWeb').factory('fishingActivityService', function (activi
         }
     };
 
+    var faAreaAttrOrder = {
+        transmission: {
+            type: 'string'
+        },
+        crossing: {
+            type: 'string'
+        },
+        startActivity: {
+            type: 'string'
+        },
+        startFishing: {
+            type: 'string'
+        }
+    }
 
-	
+
 	/**
 	 * Reset fishing activity service
 	 * 
@@ -169,12 +189,12 @@ angular.module('unionvmsWeb').factory('fishingActivityService', function (activi
 	 * @public
 	 * @alias resetActivity
 	 */
-	faServ.resetActivity = function(){
-	    faServ.activityData = {};
-	    faServ.id = undefined;
-	    faServ.isCorrection = false;
-	};
-	
+    faServ.resetActivity = function() {
+        faServ.activityData = {};
+        faServ.id = undefined;
+        faServ.isCorrection = false;
+    };
+
 	/**
      * Reset activity data within the service
      * 
@@ -182,10 +202,10 @@ angular.module('unionvmsWeb').factory('fishingActivityService', function (activi
      * @public
      * @alias resetActivityData
      */
-    faServ.resetActivityData = function(){
+    faServ.resetActivityData = function() {
         faServ.activityData = {};
     };
-	
+
 	/**
 	 * Get data for a specific fishing activity
 	 * 
@@ -196,14 +216,14 @@ angular.module('unionvmsWeb').factory('fishingActivityService', function (activi
     faServ.getFishingActivity = function(obj, callback) {
         //TODO use fa id in the REST request
         loadingStatus.isLoading('FishingActivity', true);
-        activityRestService.getFishingActivityDetails(obj.faType).then(function (response) {
+        activityRestService.getFishingActivityDetails(obj.faType).then(function(response) {
             faServ.activityData = obj;
             faServ.activityData.fromJson(response);
-            if(angular.isDefined(callback)){
+            if (angular.isDefined(callback)) {
                 callback();
             }
             loadingStatus.isLoading('FishingActivity', false);
-        }, function (error) {
+        }, function(error) {
             //TODO deal with error from rest service
             loadingStatus.isLoading('FishingActivity', false);
         });
@@ -218,17 +238,17 @@ angular.module('unionvmsWeb').factory('fishingActivityService', function (activi
      * @param {Array} data - An array containing the available gears
      * @alias addGearDescription
      */
-    faServ.addGearDescription = function(faObj){
-        mdrCacheService.getCodeList('gear_type').then(function(response){
+    faServ.addGearDescription = function(faObj) {
+        mdrCacheService.getCodeList('gear_type').then(function(response) {
             angular.forEach(faObj.gears, function(item) {
-                var mdrRec = _.findWhere(response, {code: item.type});
-                if (angular.isDefined(mdrRec)){
+                var mdrRec = _.findWhere(response, { code: item.type });
+                if (angular.isDefined(mdrRec)) {
                     item.type = item.type + ' - ' + mdrRec.description;
                 }
             });
         });
     };
-    
+
     /**
      * Adds catch type description from MDR code lists into the details object.
      * 
@@ -237,17 +257,17 @@ angular.module('unionvmsWeb').factory('fishingActivityService', function (activi
      * @param {Object} faObj - A reference to the Fishing activity object
      * @alias addCatchTypeDescription
      */
-    faServ.addCatchTypeDescription = function(faObj){
-        mdrCacheService.getCodeList('fa_catch_type').then(function(response){
+    faServ.addCatchTypeDescription = function(faObj) {
+        mdrCacheService.getCodeList('fa_catch_type').then(function(response) {
             angular.forEach(faObj.catches, function(item) {
-                var mdrRec = _.findWhere(response, {code: item.details.catchType});
-                if (angular.isDefined(mdrRec)){
+                var mdrRec = _.findWhere(response, { code: item.details.catchType });
+                if (angular.isDefined(mdrRec)) {
                     item.details.typeDesc = mdrRec.description;
                 }
             });
         });
     };
-	
+
 	/**
      * Adds weight means description from MDR code lists into the details object.
      * 
@@ -256,11 +276,11 @@ angular.module('unionvmsWeb').factory('fishingActivityService', function (activi
      * @param {Object} faObj - A reference to the Fishing activity object
      * @alias addWeightMeansDescription
      */
-    faServ.addWeightMeansDescription = function(faObj){
-        mdrCacheService.getCodeList('weight_means').then(function(response){
+    faServ.addWeightMeansDescription = function(faObj) {
+        mdrCacheService.getCodeList('weight_means').then(function(response) {
             angular.forEach(faObj.catches, function(item) {
-                var mdrRec = _.findWhere(response, {code: item.details.weightMeans});
-                if (angular.isDefined(mdrRec)){
+                var mdrRec = _.findWhere(response, { code: item.details.weightMeans });
+                if (angular.isDefined(mdrRec)) {
                     item.details.weightMeansDesc = mdrRec.description;
                 }
             });
@@ -275,26 +295,26 @@ angular.module('unionvmsWeb').factory('fishingActivityService', function (activi
      * @param {Object} faObj - A reference to the Fishing activity object
      * @alias loadFishActivityOverview
      */
-    faServ.loadFishingActivityDetails = function(data, attrOrder){
+    faServ.loadFishingActivityDetails = function(data, attrOrder) {
         var attrKeys = _.keys(attrOrder);
         var finalSummary = {};
 
-        if(_.keys(data).length){
+        if (_.keys(data).length) {
             finalSummary.items = {};
         }
 
-        angular.forEach(data,function(value,key){
-            if(angular.isObject(value) && !angular.isArray(value)){
-                if(!_.isEmpty(value)){
+        angular.forEach(data, function(value, key) {
+            if (angular.isObject(value) && !angular.isArray(value)) {
+                if (!_.isEmpty(value)) {
                     finalSummary.subTitle = locale.getString('activity.trip_' + key);
                     finalSummary.subItems = {};
-                    angular.forEach(value,function(subItem,subKey){
-                        if(angular.isDefined(subItem) && !_.isNull(subItem) && subItem.length > 0){
+                    angular.forEach(value, function(subItem, subKey) {
+                        if (angular.isDefined(subItem) && !_.isNull(subItem) && subItem.length > 0) {
                             finalSummary.subItems[subKey] = transformFaItem(subItem, subKey, attrOrder, attrKeys);
                         }
                     });
                 }
-            }else if(angular.isDefined(value) && !_.isNull(value) && value.length > 0){
+            } else if (angular.isDefined(value) && !_.isNull(value) && value.length > 0) {
                 finalSummary.items[key] = transformFaItem(value, key, attrOrder, attrKeys);
             }
         });
@@ -302,17 +322,17 @@ angular.module('unionvmsWeb').factory('fishingActivityService', function (activi
         return finalSummary;
     };
 
-    var transformFaItem = function(value, key, attrOrder, attrKeys){
+    var transformFaItem = function(value, key, attrOrder, attrKeys) {
         var newVal = value;
-        
-        if(angular.isDefined(attrOrder[key]) && attrOrder[key].type === 'date'){
+
+        if (angular.isDefined(attrOrder[key]) && attrOrder[key].type === 'date') {
             newVal = $filter('stDateUtc')(newVal);
-        }else if(angular.isArray(value)){
+        } else if (angular.isArray(value)) {
             newVal = '';
-            angular.forEach(value,function(arrItem,arrIdx){
+            angular.forEach(value, function(arrItem, arrIdx) {
                 newVal += arrItem + ', ';
-                if(value.length-1 === arrIdx){
-                    newVal = newVal.slice(0, newVal.length-3);
+                if (value.length - 1 === arrIdx) {
+                    newVal = newVal.slice(0, newVal.length - 3);
                 }
             });
         }
@@ -327,15 +347,15 @@ angular.module('unionvmsWeb').factory('fishingActivityService', function (activi
         };
     };
 
-    faServ.loadFaDocData = function(data){
+    faServ.loadFaDocData = function(data) {
         var relatedReports;
         var attrOrder = angular.copy(faDocAttrOrder);
         var relRepIdx = _.keys(attrOrder).length;
 
-        if(angular.isDefined(data.relatedReports) && data.relatedReports.length > 0){
+        if (angular.isDefined(data.relatedReports) && data.relatedReports.length > 0) {
             relatedReports = angular.copy(data.relatedReports);
             data.relatedReports = {};
-            angular.forEach(relatedReports, function(report){
+            angular.forEach(relatedReports, function(report) {
                 data.relatedReports[report.schemeId] = report.id;
 
                 attrOrder[report.schemeId] = {
@@ -346,28 +366,28 @@ angular.module('unionvmsWeb').factory('fishingActivityService', function (activi
             });
         }
 
-        
+
 
         var finalSummary = this.loadFishingActivityDetails(data, attrOrder);
 
         finalSummary.title = locale.getString('activity.activity_report_doc_title');
 
-        if(angular.isDefined(finalSummary.subItems)){
+        if (angular.isDefined(finalSummary.subItems)) {
             finalSummary.subTitle = locale.getString('activity.activity_related_flux_doc_title');
         }
 
         return finalSummary;
     };
 
-    faServ.loadGears = function(data){
-        angular.forEach(data, function(gear){
+    faServ.loadGears = function(data) {
+        angular.forEach(data, function(gear) {
             var gearAttrs = _.keys(gear);
-            if(gearAttrs.length > 2){
+            if (gearAttrs.length > 2) {
                 gear.characteristics = {};
-                angular.forEach(gearAttrs,function(attrName){
-                    var nonCharacteristics = ['type','role'];
+                angular.forEach(gearAttrs, function(attrName) {
+                    var nonCharacteristics = ['type', 'role'];
 
-                    if(nonCharacteristics.indexOf(attrName) === -1){
+                    if (nonCharacteristics.indexOf(attrName) === -1) {
                         gear.characteristics[attrName] = gear[attrName];
                         delete gear[attrName];
                     }
@@ -382,23 +402,41 @@ angular.module('unionvmsWeb').factory('fishingActivityService', function (activi
         return gears;
     };
 
-    faServ.loadSummaryData = function(faType,data){
+    faServ.loadSummaryData = function(faType, data) {
         var exceptions = ['arrival_notification', 'arrival_declaration'];
         var finalSummary;
 
-        if(exceptions.indexOf(faType) === -1){
+        if (exceptions.indexOf(faType) === -1) {
             finalSummary = this.loadFishingActivityDetails(data, faSummaryAttrsOrder);
-            finalSummary.title = locale.getString('activity.title_fishing_activity') + ': '+ locale.getString('activity.fa_type_' + faType);
-        }else{
+            finalSummary.title = locale.getString('activity.title_fishing_activity') + ': ' + locale.getString('activity.fa_type_' + faType);
+        } else {
             finalSummary = data;
         }
 
         return finalSummary;
     };
 
-    faServ.loadFishingData = function(obj,data){
-        if(angular.isDefined(data) && data.length && angular.isDefined(data[0].gears)){
-            angular.forEach(data, function(item){
+    faServ.loadAreaData = function(faType, data) {
+        var areaSummary = {
+            areaData: {}
+        };
+        var wkt = new ol.format.WKT();
+        areaSummary.title = locale.getString('activity.area_tile_' + faType);
+        areaSummary.number = 12 / (Object.keys(data).length);
+
+        angular.forEach(data, function(value, key) {
+            areaSummary.areaData[key] = {};
+            var geom = wkt.readGeometry(value.geometry).getCoordinates();
+            areaSummary.areaData[key].occurence = value.occurence;
+            areaSummary.areaData[key].long = geom[0];
+            areaSummary.areaData[key].lat = geom[1];
+        });
+        return areaSummary;
+    };
+
+    faServ.loadFishingData = function(obj, data) {
+        if (angular.isDefined(data) && data.length && angular.isDefined(data[0].gears)) {
+            angular.forEach(data, function(item) {
                 item.gears = faServ.loadGears(item.gears);
             });
         }
@@ -409,13 +447,16 @@ angular.module('unionvmsWeb').factory('fishingActivityService', function (activi
         return data;
     };
 
-    faServ.faFromJson = function(obj,data){
+    faServ.faFromJson = function(obj, data) {
         var model = faModels.common.concat(angular.isDefined(faModels[obj.faType]) ? faModels[obj.faType] : []);
 
-        angular.forEach(model, function(dataType){
-            switch(dataType){
+        angular.forEach(model, function(dataType) {
+            switch (dataType) {
                 case 'activityDetails':
-                    obj.activityDetails = faServ.loadSummaryData(obj.faType,data.activityDetails);
+                    obj.activityDetails = faServ.loadSummaryData(obj.faType, data.activityDetails);
+                    break;
+                case 'areas':
+                    obj.areas = faServ.loadAreaData(obj.faType, data.areas);
                     break;
                 case 'reportDetails':
                     obj.reportDetails = faServ.loadFaDocData(data.reportDetails);
@@ -427,13 +468,13 @@ angular.module('unionvmsWeb').factory('fishingActivityService', function (activi
                     obj.gears = faServ.loadGears(data.gears);
                     break;
                 case 'catches':
-                    obj.catches = faServ.loadFishingData(obj,data.catches);
+                    obj.catches = faServ.loadFishingData(obj, data.catches);
                     break;
             }
         });
-
+        
         return obj;
     };
-    
-	return faServ;
+
+    return faServ;
 });
