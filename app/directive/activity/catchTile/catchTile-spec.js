@@ -9,7 +9,7 @@ the hope that it will be useful, but WITHOUT ANY WARRANTY; without even the impl
 FITNESS FOR A PARTICULAR PURPOSE.  See the GNU General Public License for more details. You should have received a
 copy of the GNU General Public License along with the IFDM Suite. If not, see <http://www.gnu.org/licenses/>.
 */
-describe('catchClassSpecieDetailTile', function() {
+describe('catchTile', function() {
 
   beforeEach(module('unionvmsWeb'));
 
@@ -804,7 +804,7 @@ describe('catchClassSpecieDetailTile', function() {
   it('should compile and receive the data', function() {
       buildMocks();
 
-      var catchDetail = compile('<catch-class-specie-detail-tile class="col-md-12 summary-section" ng-model="fishingData" tile-title="Catch" is-location-clickable="isLocationClickable()" buffer-distance="5000" click-callback="locationClickCallback()"></catch-class-specie-detail-tile>')(scope);
+      var catchDetail = compile('<catch-tile class="col-md-12 summary-section" ng-model="fishingData" tile-title="Catch" is-location-clickable="isLocationClickable()" buffer-distance="5000" click-callback="locationClickCallback()"></catch-tile>')(scope);
       scope.$digest();
 
       var isolatedScope = catchDetail.isolateScope();

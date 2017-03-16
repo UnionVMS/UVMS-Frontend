@@ -33,25 +33,6 @@ angular.module('unionvmsWeb').directive('tableChart', function() {
 			scope.mode = 'table';
 
 			/**
-			 * Selects a row by index
-			 * 
-			 * @memberof tableChart
-			 * @public
-			 * @alias selectRow
-			 * @param {Number} [idx] - Index of the row to be selected
-			 */
-			scope.selectRow = function(idx){
-				angular.forEach(scope.ngModel, function(item){
-					delete item.selected;
-				});
-				scope.ngModel[idx].selected = true;
-
-				if(angular.isDefined(scope.selectedItem)){
-					scope.selectedItem = scope.ngModel[idx];
-				}
-			};
-
-			/**
 			 * Switch mode between table and chart
 			 * 
 			 * @memberof tableChart

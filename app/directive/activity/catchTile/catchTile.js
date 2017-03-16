@@ -21,7 +21,7 @@ copy of the GNU General Public License along with the IFDM Suite. If not, see <h
  * @description
  *  A widget to display data about the catch details with the species per class
  */
-angular.module('unionvmsWeb').directive('catchClassSpecieDetailTile', function(locale,reportingNavigatorService) {
+angular.module('unionvmsWeb').directive('catchTile', function(locale,reportingNavigatorService) {
 	return {
 		restrict: 'E',
 		replace: true,
@@ -32,7 +32,7 @@ angular.module('unionvmsWeb').directive('catchClassSpecieDetailTile', function(l
 		    bufferDistance: '@',
 		    clickCallback: '&'
 		},
-		templateUrl: 'directive/activity/catchClassSpecieDetailTile/catchClassSpecieDetailTile.html',
+		templateUrl: 'directive/activity/catchTile/catchTile.html',
 		link: function(scope, element, attrs, fn) {
 			scope.repNav = reportingNavigatorService;
 
@@ -134,7 +134,7 @@ angular.module('unionvmsWeb').directive('catchClassSpecieDetailTile', function(l
 			 *  @param {String} cssSel - The css selector class of the item against which the tip will be displayed
 			 */
 			scope.displayDetailsTip = function(text, cssSel){
-				var target = angular.element('.catch-class-specie-detail-tile .' + cssSel);
+				var target = angular.element('.catch-tile .' + cssSel);
 				var tip;
 				if (angular.isDefined($(target).attr('data-hasqtip'))){
 					tip = $(target);
