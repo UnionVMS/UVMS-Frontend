@@ -59,6 +59,9 @@
                 <npm.args>update --proxy=${bowerproxy}
                     --https-proxy=${bowerproxy}
                 </npm.args>
+                <yarn.args>update --proxy=${bowerproxy}
+                    --https-proxy=${bowerproxy}
+                </yarn.args>
             </properties>
         </profile>
         <profile>
@@ -182,14 +185,17 @@
                 <plugin>
                     <groupId>com.github.eirslett</groupId>
                     <artifactId>frontend-maven-plugin</artifactId>
-                    <version>1.0</version>
+                    <version>1.3</version>
                     <configuration>
                         <workingDirectory>${basedir}</workingDirectory>
                         <outputdir>${basedir}/dist</outputdir>
                         <nodeVersion>v5.3.0</nodeVersion>
                         <npmVersion>3.3.12</npmVersion>
+                        <yarnVersion>v0.21.3</yarnVersion>
+
                         <nodeDownloadRoot>https://nodejs.org/dist/</nodeDownloadRoot>
                         <npmDownloadRoot>https://registry.npmjs.org/npm/-/</npmDownloadRoot>
+                         <!--yarnDownloadRoot>https://github.com/yarnpkg/yarn/releases/download</yarnDownloadRoot-->
                     </configuration>
                 </plugin>
                 <plugin>
@@ -205,7 +211,7 @@
                                         <artifactId>frontend-maven-plugin</artifactId>
                                         <versionRange>[0.0.1,)</versionRange>
                                         <goals>
-                                            <goal>npm</goal>
+                                            <goal>yarn</goal>
                                             <goal>bower</goal>
                                             <goal>grunt</goal>
                                         </goals>
@@ -231,18 +237,18 @@
                 <artifactId>frontend-maven-plugin</artifactId>
                 <executions>
                     <execution>
-                        <id>install node and npm</id>
+                        <id>install node and yarn</id>
                         <goals>
-                            <goal>install-node-and-npm</goal>
+                            <goal>install-node-and-yarn</goal>
                         </goals>
                     </execution>
                     <execution>
-                        <id>npm install</id>
+                        <id>yarn install</id>
                         <goals>
-                            <goal>npm</goal>
+                            <goal>yarn</goal>
                         </goals>
                         <configuration>
-                            <arguments>${npm.args}</arguments>
+                            <arguments>${yarn.args}</arguments>
                         </configuration>
                     </execution>
                     <execution>
@@ -257,7 +263,6 @@
                     <execution>
                         <id>prune</id>
                         <goals>
-                            <goal>npm</goal>
                             <goal>bower</goal>
                         </goals>
                         <configuration>
@@ -273,16 +278,6 @@
                         <configuration>
                             <arguments>${grunt.build} build-docs</arguments>
                             <outputdir>${basedir}/dist</outputdir>
-                        </configuration>
-                    </execution>
-                    <execution>
-                        <id>karma</id>
-                        <goals>
-                            <goal>grunt</goal>
-                        </goals>
-                        <phase>${karma.phase}</phase>
-                        <configuration>
-                            <arguments>test</arguments>
                         </configuration>
                     </execution>
                 </executions>
