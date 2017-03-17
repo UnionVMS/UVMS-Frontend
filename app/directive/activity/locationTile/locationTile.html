@@ -1,20 +1,20 @@
 <fieldset class="col-md-12 fieldsetStyle location-tile">
 	<legend class="fieldsetLegendStyle">
 		<a>{{fieldTitle}}</a>
-		<span ng-if="isClickable && srcActivityGeom">
+		<span ng-if="isClickable && activityGeom">
 			<a href title="{{'activity.fa_locations_zoom_to_activity' | i18n}}" ng-click="zoomToLocation(activityGeom)">
 				<i class="fa fa-search-plus" aria-hidden="true"></i>
 			</a>
 		</span>
 	</legend>
 	<div ng-if="hasData()">
-		<div class="row">
+		<div class="row" ng-if="countries.length > 0">
 			<div class="col-md-12 item-container">
 				<span class="item-label">{{'activity.fa_locations_country' | i18n}}</span>
 				<span>{{ countries | stArrayToString: ', '}}</span>
 			</div>
 		</div>
-		<div class="row">
+		<div class="row" ng-if="rfmo.length > 0">
 			<div class="col-md-12 item-container">
 				<span class="item-label">{{'activity.rfmo_area' | i18n}}</span>
 				<span>{{ rfmo | stArrayToString: ', '}}</span>
@@ -36,7 +36,7 @@
 				</ul>
 			</div>
 		</div>
-		<div class="row">
+		<div class="row" ng-if="addresses.length > 0">
 			<div class="col-md-12">
 				<carousel-tile tile-title="{{'activity.fa_locations_addresses' | i18n}}" ng-model="addresses" use-top-nav="false" template-url="directive/activity/carouselTile/templates/addressTile/addressTile.html"></carousel-tile>
 			</div>

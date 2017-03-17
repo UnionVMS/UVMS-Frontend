@@ -69,7 +69,6 @@ angular.module('unionvmsWeb').directive('locationTile', function() {
         $scope.identifiers = [];
         $scope.positions = [];
         $scope.addresses = [];
-        $scope.activityGeom = {};
         processData();
     };
     
@@ -116,8 +115,10 @@ angular.module('unionvmsWeb').directive('locationTile', function() {
             $scope.addresses = _.flatten($scope.addresses);
         }
         
-        $scope.activityGeom = {
-            geometry: $scope.srcActivityGeom
+        if (angular.isDefined($scope.srcActivityGeom)){
+            $scope.activityGeom = {
+                geometry: $scope.srcActivityGeom
+            };
         }
     }
     
@@ -141,7 +142,7 @@ angular.module('unionvmsWeb').directive('locationTile', function() {
                 finalGeom = ol.geom.Polygon.fromExtent(extent);
             }
             
-            //mapService.zoomTo(finalGeom);
+            mapService.zoomTo(finalGeom);
             if (angular.isDefined($scope.clickCallback)){
                 $scope.clickCallback();
             }
