@@ -27,10 +27,16 @@ angular.module('unionvmsWeb').directive('carouselTile', function() {
 		scope: {
 		    tileTitle: '@',
 		    ngModel: '=',
-		    templateUrl: '@'
+		    templateUrl: '@',
+		    useTopNav: '='
 		},
 		templateUrl: 'directive/activity/carouselTile/carouselTile.html',
 		link: function(scope, element, attrs, fn) {
+		    scope.displayTopNav = true;
+		    if (angular.isDefined(scope.useTopNav) && !scope.useTopNav){
+		        scope.displayTopNav = false;
+		    }
+		    
             scope.$watch('ngModel',function(newVal){
                 if(newVal){
                     scope.init();
