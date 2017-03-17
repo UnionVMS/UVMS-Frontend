@@ -52,10 +52,11 @@ angular.module('unionvmsWeb').directive('locationTile', function() {
  * @name LocationTileCtrl
  * @param $scope {Service} The controller scope
  * @param mapService {Service} The map service for the liveview map <p>{@link unionvmsWeb.mapService}</p>
+ * @param locale {Service} The angular locale service
  * @description
  *  The controller for the locationTile directive ({@link unionvmsWeb.locationTile})
  */
-.controller('LocationTileCtrl', function($scope, mapService){
+.controller('LocationTileCtrl', function($scope, mapService, locale){
     /**
      * Intialization function
      * 
@@ -90,9 +91,10 @@ angular.module('unionvmsWeb').directive('locationTile', function() {
             }
             
             if (angular.isDefined(record.identifier)){
+                var schemeId = locale.getString('activity.fa_details_item_' + record.identifier.schemeId.toLowerCase());
                 $scope.identifiers.push({
                     id: record.identifier.id,
-                    schemeId: record.identifier.schemeId,
+                    schemeId: schemeId !== "%%KEY_NOT_FOUND%%" ? schemeId : record.identifier.schemeId,
                     geometry: record.geometry
                 });
             } else {

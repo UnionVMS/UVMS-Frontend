@@ -156,7 +156,7 @@ describe('locationTile', function() {
     function getIdentifier(record){
         return {
             id: record.identifier.id,
-            schemeId: record.identifier.schemeId,
+            schemeId: '',
             geometry: record.geometry
         }
     }

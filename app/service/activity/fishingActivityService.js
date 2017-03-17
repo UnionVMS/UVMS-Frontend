@@ -37,7 +37,8 @@ angular.module('unionvmsWeb').factory('fishingActivityService', function (activi
         departure: [
             'locations',
             'gears',
-            'catches'
+            'catches',
+            'processingProducts'
         ],
         landing: [
             'locations',
@@ -435,6 +436,9 @@ angular.module('unionvmsWeb').factory('fishingActivityService', function (activi
                     break;
                 case 'tripDetails':
                     obj.tripDetails = data.tripDetails;
+                    break;
+                case 'processingProducts':
+                    obj.processingProducts = data.processingProducts;
                     break;
             }
         });

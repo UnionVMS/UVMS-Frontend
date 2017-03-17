@@ -273,13 +273,6 @@
     "catch_class_specie_column_dis": "DIS",
     "fa_navigator_previous": "Previous activity type",
     "fa_navigator_next": "Next activity type",
-    "territory_area": "Territory",
-    "fao_area": "FAO",
-    "ices_stat_rect": "ICES Stat. Rect.",
-    "effort_zone": "Effort zone",
-    "rfmo_area": "RFMO",
-    "gfcm_area": "GFCM",
-    "gfcm_stat_rect": "GFCM Stat. Rect.",
     "presentation": "Presentation",
     "preservation": "Preservation",
     "freshness": "Freshness",
@@ -298,5 +291,13 @@
     "fa_locations_city": "City",
     "fa_locations_postal_code": "Postal code",
     "fa_locations_plotId": "Plot ID",
-    "fa_locations_zoom_to_activity": "Zoom to activity in the map"
+    "fa_locations_zoom_to_activity": "Zoom to activity in the map",
+     
+    "fa_fao_area": "FAO",
+    "fa_territory": "Territory",
+    "fa_ices_stat_rectangle": "ICES Stat. Rect.",
+    "fa_effort_zone": "Effort zone",
+    "fa_gfcm_gsa": "GFCM",
+    "fa_gfcm_stat_rectangle": "GFCM Stat. Rect.",
+    "fa_rfmo": "RFMO"
 }
