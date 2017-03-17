@@ -22,7 +22,7 @@ angular.module('unionvmsWeb').directive('vesselTile', function() {
 		restrict: 'E',
 		replace: true,
 		scope: {
-			trip: '='
+			ngModel: '='
 		},
 		templateUrl: 'directive/activity/vesselTile/vesselTile.html'
 	};

@@ -316,5 +316,10 @@
     "weightingMeans": "Weighting Means",
     "tripId": "Trip id",
     "usage": "Usage",
-    "destinationLocation": "Location"
+    "destinationLocation": "Location",
+    "vessel_details": "Vessel details",
+
+    "fa_details_item_role": "Role",
+    "fa_details_item_name": "Name",
+    "fa_details_item_country": "Country"
 }

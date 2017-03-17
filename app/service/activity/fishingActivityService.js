@@ -220,6 +220,21 @@ angular.module('unionvmsWeb').factory('fishingActivityService', function(activit
         }
     };
 
+    //Configs of vessel details attributes
+    var vesselAttrOrder = [
+        {
+            id: 'role',
+            type: 'string'
+        },
+        {
+            id: 'name',
+            type: 'string'
+        },
+        {
+            id: 'country',
+            type: 'string'
+        }
+    ];
 
 	/**
 	 * Reset fishing activity service
@@ -425,23 +440,11 @@ angular.module('unionvmsWeb').factory('fishingActivityService', function(activit
      * @returns {Object} data to be displayed
      */
     var loadFaDocData = function(data){
-        var relatedReports;
         var attrOrder = angular.copy(faDocAttrOrder);
         var relRepIdx = attrOrder.length;
 
-        if (angular.isDefined(data.relatedReports) && data.relatedReports.length > 0) {
-            relatedReports = angular.copy(data.relatedReports);
-            data.relatedReports = {};
-            angular.forEach(relatedReports, function(report) {
-                data.relatedReports[report.schemeId] = report.id;
-
-                attrOrder.push({
-                    idx: relRepIdx,
-                    id: report.schemeId,
-                    type: 'string'
-                });
-                relRepIdx++;
-            });
+        if(angular.isDefined(data.relatedReports) && data.relatedReports.length > 0){
+            data.relatedReports = addExtraDetails(data.relatedReports,attrOrder,relRepIdx);
         }
 
         var finalSummary = loadFishingActivityDetails(data, attrOrder);
@@ -587,6 +590,61 @@ angular.module('unionvmsWeb').factory('fishingActivityService', function(activit
         return data;
     };
 
+
+    /**
+     * Loads the data to be presented in the catch tile
+     * 
+     * @memberof fishingActivityService
+     * @private
+     * @param {String} obj - Fishing activity model
+     * @param {Object} data - A reference to the data to be loaded in the catch tile
+     * @alias loadTripDetails
+     * @returns {Object} data to be displayed in the catch tile
+     */
+    var loadTripDetails = function(data){
+        if(angular.isDefined(data)){
+            data.vesselDetails.vesselOverview = {};
+
+            var attrOrder = angular.copy(vesselAttrOrder);
+            var vesselIdx = attrOrder.length;
+
+            angular.forEach(data.vesselDetails,function(prop,propName){
+                if(!_.isObject(prop)){
+                    data.vesselDetails.vesselOverview[propName] = prop;
+                    delete data.vesselDetails[propName];
+                }
+            });
+
+            if(angular.isDefined(data.vesselDetails.vesselIds) && data.vesselDetails.vesselIds.length){
+                _.extend(data.vesselDetails.vesselOverview,addExtraDetails(data.vesselDetails.vesselIds,attrOrder,vesselIdx));
+                delete data.vesselDetails.vesselIds;
+            }
+
+            if(_.keys(data.vesselDetails.vesselOverview).length){
+                data.vesselDetails.vesselOverview = loadFishingActivityDetails(data.vesselDetails.vesselOverview, attrOrder);
+            }
+        }
+
+        return data;
+    };
+
+    var addExtraDetails = function(data,attrOrder,attrIdx){
+        var finalData = {};
+        angular.forEach(data, function(value){
+            finalData[value.schemeId] = value.id;
+
+            attrOrder.push({
+                idx: attrIdx,
+                id: value.schemeId,
+                type: 'string'
+            });
+            attrIdx++;
+        });
+
+        return finalData;
+    };
+    
+
     /**
      * Loads all the fishing activity data in the model
      * 
@@ -621,7 +679,7 @@ angular.module('unionvmsWeb').factory('fishingActivityService', function(activit
                     obj.catches = loadFishingData(obj,data.catches);
                     break;
                 case 'tripDetails':
-                    obj.tripDetails = data.tripDetails;
+                    obj.tripDetails = loadTripDetails(data.tripDetails);
                     break;
                 case 'processingProducts':
                     obj.processingProducts = data.processingProducts;
