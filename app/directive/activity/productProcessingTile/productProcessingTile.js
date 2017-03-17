@@ -34,49 +34,49 @@ angular.module('unionvmsWeb').directive('productProcessingTile', function(locale
 		        isVisible: true,
 		        useComboFilter: true
 		    }, {
-		        title: locale.getString('activity.territory_area'),
+		        title: locale.getString('activity.fa_territory'),
 		        srcObj: 'locations',
 		        srcProp: 'territory',
 		        isArea: true,
 		        isVisible: true,
 		        useComboFilter: true
 		    }, {
-		        title: locale.getString('activity.fao_area'),
+		        title: locale.getString('activity.fa_fao_area'),
 		        srcObj: 'locations',
                 srcProp: 'fao_area',
                 isArea: true,
                 isVisible: true,
                 useComboFilter: true
 		    }, {
-                title: locale.getString('activity.ices_stat_rect'),
+                title: locale.getString('activity.fa_ices_stat_rectangle'),
                 srcObj: 'locations',
                 srcProp: 'ices_stat_rectangle',
                 isArea: true,
                 isVisible: true,
                 useComboFilter: true
 		    }, {
-                title: locale.getString('activity.effort_zone'),
+                title: locale.getString('activity.fa_effort_zone'),
                 srcObj: 'locations',
                 srcProp: 'effort_zone',
                 isArea: true,
                 isVisible: true,
                 useComboFilter: true
 		    }, {
-                title: locale.getString('activity.rfmo_area'),
+                title: locale.getString('activity.fa_rfmo'),
                 srcObj: 'locations',
                 srcProp: 'rfmo',
                 isArea: true,
                 isVisible: true,
                 useComboFilter: true
 		    }, {
-                title: locale.getString('activity.gfcm_area'),
+                title: locale.getString('activity.fa_gfcm_gsa'),
                 srcObj: 'locations',
                 srcProp: 'gfcm_gsa',
                 isArea: true,
                 isVisible: true,
                 useComboFilter: true
 		    }, {
-                title: locale.getString('activity.gfcm_stat_rect'),
+                title: locale.getString('activity.fa_gfcm_stat_rectangle'),
                 srcObj: 'locations',
                 srcProp: 'gfcm_stat_rectangle',
                 isArea: true,

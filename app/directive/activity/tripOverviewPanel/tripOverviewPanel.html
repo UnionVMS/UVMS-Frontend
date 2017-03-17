@@ -7,7 +7,7 @@
 			<div class="col-md-3">
 				<div class="field-icon" ng-click="clickCallback()">
 					<div class="field-label"><i class="fa fa-ship"></i></div>
-					<div class="field-text">{{trip.vesselDetails.country}} - {{trip.vesselDetails.name}}</div>
+					<div class="field-text">{{trip.vesselDetails.country && trip.vesselDetails.name ? trip.vesselDetails.country + ' - ' + trip.vesselDetails.name : trip.vesselDetails.country || trip.vesselDetails.name}}</div>
 				</div>
 			</div>
 			<div class="col-md-9">

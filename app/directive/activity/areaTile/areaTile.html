@@ -1,0 +1,21 @@
+<fieldset class="col-md-12 fieldsetStyle catch-section area-tile">
+    <legend class="fieldsetLegendStyle">
+        <a>{{ngModel.title}}</a>
+    </legend>
+    <div class="row area-tile-body">
+        <div class="row chart-title">
+            <span class="panel-subtitle">{{ngModel.title}}</span>
+        </div>
+        <div class="row">
+            <div class="col-md-{{ngModel.number}} area-subsection" ng-repeat="(key,value) in ngModel.areaData">
+                <analog-clock class="analog-clock" clock-data="value.occurence"></analog-clock>
+                <div><span>{{value.occurence | dateUtc:'h:mm:ss a'}}</span></div>
+                <div class=" lat-long"><span>{{ 'activity.area_'+key | i18n }}</span></div>
+                <div ng-click="geometryClick(value)">
+                    <div><span class="lat-long">{{ 'activity.area_long' | i18n }} : </span><span>{{value.long}}</span></div>
+                    <div class=""><span class="lat-long">{{ 'activity.area_lat' | i18n }} : </span><span>{{value.lat}}</span></div>
+                </div>
+            </div>
+        </div>
+    </div>
+</fieldset>
