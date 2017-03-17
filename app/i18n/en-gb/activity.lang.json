@@ -217,6 +217,14 @@
     "ref_id": "Ref. ID",
     "purpose": "Purpose",
     "role": "Role",
+    "area_tile_area_entry":"Entry into Area",
+    "area_tile_area_exit":"Exiting Area",
+    "area_long":"LON",
+    "area_lat":"LAT",
+    "area_transmission":"Transmission",
+    "area_crossing":"Crossing",
+    "area_startActivity":"Start Activity",
+    "area_startFishing":"Start Fishing",
     "characteristics": "Characteristics",
     "fa_details_item_meshSize": "Mesh size",
     "fa_details_item_lengthWidth": "Width length",
@@ -299,5 +307,14 @@
     "fa_effort_zone": "Effort zone",
     "fa_gfcm_gsa": "GFCM",
     "fa_gfcm_stat_rectangle": "GFCM Stat. Rect.",
-    "fa_rfmo": "RFMO"
+    "fa_rfmo": "RFMO",
+
+    "weight": "Weight",
+    "unit": "Unit",
+    "stockId": "Stock id",
+    "size": "Size",
+    "weightingMeans": "Weighting Means",
+    "tripId": "Trip id",
+    "usage": "Usage",
+    "destinationLocation": "Location"
 }
