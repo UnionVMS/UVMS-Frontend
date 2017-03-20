@@ -144,6 +144,7 @@ angular.module('unionvmsWeb').directive('locationTile', function() {
                 finalGeom = ol.geom.Polygon.fromExtent(extent);
             }
             
+            finalGeom.transform('EPSG:4326', mapService.getMapProjectionCode());
             mapService.zoomTo(finalGeom);
             if (angular.isDefined($scope.clickCallback)){
                 $scope.clickCallback();

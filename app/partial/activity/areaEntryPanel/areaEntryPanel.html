@@ -21,7 +21,7 @@ copy of the GNU General Public License along with the IFDM Suite. If not, see <h
         </div>
         <div class="row activity-summary-row">
             <fa-details-panel class="col-md-3 summary-section" ng-model="faServ.activityData.activityDetails"></fa-details-panel>
-            <area-tile class="col-md-5 summary-section" ng-model="faServ.activityData.areas"></area-tile>
+            <area-tile class="col-md-5 summary-section" ng-model="faServ.activityData.areas" click-callback="areaClickCallback()" buffer-dist="5000" is-clickable="isAreaClickable()"></area-tile>
             <fa-details-panel class="col-md-4 summary-section" ng-model="faServ.activityData.reportDetails"></fa-details-panel>
         </div>
     </div>
