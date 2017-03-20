@@ -537,10 +537,12 @@ angular.module('unionvmsWeb').factory('fishingActivityService', function(activit
 
         angular.forEach(data, function(value, key) {
             areaSummary.areaData[key] = {};
-            var geom = wkt.readGeometry(value.geometry).getCoordinates();
+            var geom = wkt.readGeometry(value.geometry);
+            var coords = geom.getCoordinates();
             areaSummary.areaData[key].occurence = value.occurence;
-            areaSummary.areaData[key].long = geom[0];
-            areaSummary.areaData[key].lat = geom[1];
+            areaSummary.areaData[key].long = coords[0];
+            areaSummary.areaData[key].lat = coords[1];
+            areaSummary.areaData[key].geometry = geom;
         });
         return areaSummary;
     };

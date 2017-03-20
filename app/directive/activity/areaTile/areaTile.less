@@ -12,26 +12,34 @@ copy of the GNU General Public License along with the IFDM Suite. If not, see <h
 .area-tile {
     .area-tile-body {
         padding:0 25px;
-      }
-    .chart-title {
+    }
+    .sub-title {
+        font-weight: bold;
+        margin-top: 15px;
+    }
+    /*.chart-title {
         text-align: center;
         padding:10px;
-            .panel-subtitle {
-                 font-size: 15px;
-                 font-family: Roboto, Arial;
-                 font-weight: bold;
-                    }
-      }
+        .panel-subtitle {
+            font-size: 15px;
+            font-family: Roboto, Arial;
+            font-weight: bold;
+        }
+    }*/
     .area-subsection {
-          padding-bottom: 20px;
-          text-align: center;
-      }
+        padding-bottom: 20px;
+        text-align: center;
+    }
     .analog-clock {
-          padding-bottom:10px;
-          height:150px;
+        padding-bottom:10px;
+        height:150px;
          
-      }
+    }
     .lat-long {
-          font-weight: bold;
-      }
+        margin-top: 5px;
+        &.is-clickable:hover {
+            cursor: pointer;
+            text-decoration: underline;
+        }
+    }
 }
