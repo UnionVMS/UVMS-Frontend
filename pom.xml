@@ -20,6 +20,7 @@
         <uvms.rest.base.url>http://localhost</uvms.rest.base.url>
         <uvms.rest.base.port>9001</uvms.rest.base.port>
         <web.app.context.path>unionvms</web.app.context.path>
+        <NODE_ENV>--max_old_space_size=256</NODE_ENV>
 
         <scm.connection>scm:git:https://github.com/UnionVMS/UVMS-Frontend.git</scm.connection>
     </properties>
@@ -182,14 +183,17 @@
                 <plugin>
                     <groupId>com.github.eirslett</groupId>
                     <artifactId>frontend-maven-plugin</artifactId>
-                    <version>1.0</version>
+                    <version>1.3</version>
                     <configuration>
                         <workingDirectory>${basedir}</workingDirectory>
                         <outputdir>${basedir}/dist</outputdir>
-                        <nodeVersion>v5.3.0</nodeVersion>
-                        <npmVersion>3.3.12</npmVersion>
+                        <nodeVersion>v5.7.1</nodeVersion>
+                        <npmVersion>3.6.0</npmVersion>
                         <nodeDownloadRoot>https://nodejs.org/dist/</nodeDownloadRoot>
                         <npmDownloadRoot>https://registry.npmjs.org/npm/-/</npmDownloadRoot>
+                        <environmentVariables>
+                          <NODE_ENV>${NODE_ENV}</NODE_ENV>
+                        </environmentVariables>
                     </configuration>
                 </plugin>
                 <plugin>
@@ -347,12 +351,12 @@
         <repository>
             <id>focus-releases</id>
             <name>UnionVms Repository</name>
-            <url>http://nexus.focus.fish/nexus/content/repositories/releases/</url>
+            <url>http://localhost:8081/nexus/repository/releases/</url>
         </repository>
         <snapshotRepository>
             <id>focus-snapshots</id>
             <name>UnionVms Snapshot Repository</name>
-            <url>http://nexus.focus.fish/nexus/content/repositories/snapshots/</url>
+            <url>http://localhost:8081/nexus/repository/snapshots/</url>
         </snapshotRepository>
     </distributionManagement>
 </project>
