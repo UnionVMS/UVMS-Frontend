@@ -13,6 +13,21 @@ copy of the GNU General Public License along with the IFDM Suite. If not, see <h
     text-align: left;
     padding-left: 40px;
     padding-right: 40px;
+    .item-container {
+        cursor: default;
+        display: flex;
+        .item-label {
+            font-weight: bold;
+            margin-right: 5px;
+            white-space: nowrap;
+            &:after {
+                content: ':'
+            }
+        }
+        .item-text:not(:last-child){
+            margin-right: 10px;
+        }
+    }
 }
 
 .without-arrows {

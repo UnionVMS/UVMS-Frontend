@@ -10,6 +10,7 @@ FITNESS FOR A PARTICULAR PURPOSE.  See the GNU General Public License for more d
 copy of the GNU General Public License along with the IFDM Suite. If not, see <http://www.gnu.org/licenses/>.
 */
 .vessel-tile {
+    padding-bottom: 15px;
     .vessel-name {
         text-decoration: underline;
         font-size: 17px;
@@ -22,5 +23,16 @@ copy of the GNU General Public License along with the IFDM Suite. If not, see <h
     }
     .no-border > fieldset {
         border: 0 !important;
+    }
+    .contact-parties > .carousel-tile > .carousel {
+        &,
+        & > .carousel-inner {
+            & > .carousel-control {
+                display: none;
+            }
+        }
+    }
+    .without-arrows .address-tile {
+        padding: 0 30px;
     }
 }

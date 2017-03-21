@@ -623,6 +623,38 @@ angular.module('unionvmsWeb').factory('fishingActivityService', function(activit
             if(_.keys(data.vesselDetails.vesselOverview).length){
                 data.vesselDetails.vesselOverview = loadFishingActivityDetails(data.vesselDetails.vesselOverview, attrOrder);
             }
+
+            if(angular.isDefined(data.vesselDetails.authorizations) && data.vesselDetails.authorizations.length){
+                var authAttrOrder = [];
+                data.vesselDetails.authorizations = addExtraDetails(data.vesselDetails.authorizations,authAttrOrder,0);
+                data.vesselDetails.authorizations = loadFishingActivityDetails(data.vesselDetails.authorizations, authAttrOrder);
+                data.vesselDetails.authorizations.title = locale.getString('activity.authorizations');
+            }
+
+            if(angular.isDefined(data.vesselDetails.contactParties) && data.vesselDetails.contactParties.length){
+                angular.forEach(data.vesselDetails.contactParties, function(item) {
+                    item.type = item.role + ' - ' + item.contactPerson.alias;
+                });
+            }
+
+            if(angular.isDefined(data.vesselDetails.storage)){
+                var storAttrOrder = [
+                    {
+                        idx: 0,
+                        id: 'type',
+                        type: 'string'
+                    }
+                ];
+
+                if(angular.isDefined(data.vesselDetails.storage.identifiers) && data.vesselDetails.storage.identifiers.length){
+                    var type = data.vesselDetails.storage.type;
+                    data.vesselDetails.storage = addExtraDetails(data.vesselDetails.storage.identifiers,storAttrOrder,1);
+                    data.vesselDetails.storage.type = type;
+                }
+
+                data.vesselDetails.storage = loadFishingActivityDetails(data.vesselDetails.storage, storAttrOrder);
+                data.vesselDetails.storage.title = locale.getString('activity.vessel_storage');
+            }
         }
 
         return data;

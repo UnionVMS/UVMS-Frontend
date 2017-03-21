@@ -321,5 +321,12 @@
 
     "fa_details_item_role": "Role",
     "fa_details_item_name": "Name",
-    "fa_details_item_country": "Country"
+    "fa_details_item_country": "Country",
+
+    "contact_parties": "Contact parties",
+    "name": "Name",
+    "alias": "Alias",
+
+    "authorizations": "Authorizations",
+    "vessel_storage": "Vessel storage"
 }

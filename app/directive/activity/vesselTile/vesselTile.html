@@ -39,8 +39,12 @@
     <legend class="fieldsetLegendStyle">
         <a>{{'activity.vessel_details' | i18n }}</a>
     </legend>
-    <fa-details-panel class="col-md-3 summary-section no-border" ng-model="ngModel.vesselOverview" ng-if="ngModel.vesselOverview"></fa-details-panel>
-
+    <div class="row">
+        <fa-details-panel class="col-md-3 no-border" ng-model="ngModel.vesselOverview" ng-if="ngModel.vesselOverview"></fa-details-panel>
+        <fa-details-panel class="col-md-3" ng-model="ngModel.authorizations" ng-if="ngModel.authorizations"></fa-details-panel>
+        <carousel-tile class="col-md-3 contact-parties" tile-title="{{'activity.contact_parties' | i18n}}" ng-model="ngModel.contactParties" template-url="directive/activity/carouselTile/templates/contactPartiesTile/contactPartiesTile.html"></carousel-tile>
+        <fa-details-panel class="col-md-3" ng-model="ngModel.storage" ng-if="ngModel.storage"></fa-details-panel>
+    </div>
     <div class="row no-data" ng-if="!ngModel">
         <div class="col-md-12">
             <span>{{'activity.no_data' | i18n}}</span>
