@@ -15,7 +15,7 @@ describe('locationTile', function() {
     beforeEach(module('unionvmsWeb'));
     
     beforeEach(function(){
-        mockMapServ = jasmine.createSpyObj('mapService', ['zoomTo']);
+        mockMapServ = jasmine.createSpyObj('mapService', ['zoomTo', 'getMapProjectionCode']);
         
         module(function($provide){
             $provide.value('mapService', mockMapServ);
@@ -37,6 +37,12 @@ describe('locationTile', function() {
         $httpBackend.whenGET(/i18n/).respond();
         $httpBackend.whenGET(/globals/).respond({data : []});
     }));
+    
+    function mockService(){
+        mockMapServ.getMapProjectionCode.andCallFake(function(){
+            return 'EPSG:4326'
+        });
+    }
     
     function buildMock(){
         return [{
@@ -202,6 +208,8 @@ describe('locationTile', function() {
             expect(isolatedScope.positions.length).toEqual(stats.posCounter);
             expect(isolatedScope.addresses.length).toEqual(stats.addCounter);
             expect(isolatedScope.activityGeom).not.toBeDefined();
+            
+            isolatedScope.$destroy();
         });
         
         it('should render the tile with clickable locations', function(){
@@ -221,6 +229,8 @@ describe('locationTile', function() {
             expect(angular.element('location-tile').length).toBe(1);
             expect(angular.element('legend').find('.fa-search-plus').length).toBe(0);
             expect(angular.element('.item-clickable').length).toEqual(stats.clickableCounter);
+            
+            isolatedScope.$destroy();
         });
         
         it('should render the tile with the button to zoom to the fishing activity', function(){
@@ -337,6 +347,7 @@ describe('locationTile', function() {
         
         it('should zoom to a location when it is clickable', function(){
             scope.locationDetails = buildMock();
+            mockService();
             scope.isClickable = true;
             scope.init();
             
@@ -347,6 +358,7 @@ describe('locationTile', function() {
         
         it('should not zoom to a location if it is not clickable', function(){
             scope.locationDetails = buildMock();
+            mockService();
             scope.isClickable = true;
             scope.init();
             scope.positions[0].geometry = null
@@ -357,6 +369,7 @@ describe('locationTile', function() {
 
         it('should zoom to a specified point location and apply a buffer to calculate the extent of the zoom', function(){
             scope.locationDetails = buildMock();
+            mockService();
             scope.isClickable = true;
             scope.bufferDist = 5000;
             scope.init();
@@ -368,6 +381,7 @@ describe('locationTile', function() {
         
         it('should call the click callback function when zoooming to the location', function(){
             scope.locationDetails = buildMock();
+            mockService();
             scope.isClickable = true;
             scope.clickCallback = jasmine.createSpy('clickCallback');
             scope.init();
