@@ -127,7 +127,8 @@ angular.module('unionvmsWeb').directive('tableFilterHeaders', function($compile)
  * @param {Service} $timeout - The angular timeout service
  * @attr {Array} collection - An array of objects containing the data that is displayed in the table
  * @attr {String} predicate - A string identifying the source property to be filtered   
- * @attr {Booelan} isArea - A boolean which specifies if the column is related with an area nested object so that undefined values are supported within the filtering
+ * @attr {Boolean} isArea - A boolean which specifies if the column is related with an area nested object so that undefined values are supported within the filtering
+ * @attr {String} translateColumn - A string with src locale file and initial text to translate (e.g.: abbreviation.gear_type_)
  * @description
  *  A directive to add comboboxes with multiple selection for a column to support multiple filtering criteria. It should be used with {@link unionvmsWeb.tableFilterHeaders} directive.
  */
@@ -138,7 +139,8 @@ angular.module('unionvmsWeb').directive('tableFilterHeaders', function($compile)
         scope: {
           collection: '=',
           predicate: '@',
-          isArea: '@'
+          isArea: '@',
+          translateColumn: '='
         },
         templateUrl: 'directive/common/tableFilterHeaders/stSelectMultiple.html',
         link: function(scope, element, attr, table) {
@@ -198,29 +200,35 @@ angular.module('unionvmsWeb').directive('tableFilterHeaders', function($compile)
              * @private
              */
             function buildCombolistItems(){
-                var uniqueValues;
+                var testValues;
                 var hasEmptyValues = false;
                 var props = scope.predicate.split('.');
                 if (props.length === 1){
-                    uniqueValues = _.uniq(_.pluck(scope.collection, props[0]));
+                    testValues = _.uniq(_.map(scope.collection, function(item){
+                        return item[props[0]];
+                    }));
                 } else {
-                    var testValues = _.uniq(_.map(scope.collection, function(item){
+                    testValues = _.uniq(_.map(scope.collection, function(item){
                         return item[props[0]][props[1]];
                     }));
-                    
-                    uniqueValues = _.compact(testValues);
-                    if (scope.isArea && !_.isEqual(uniqueValues, testValues)){
-                        hasEmptyValues = true;
-                    }
+                }
+                
+                var uniqueValues = _.compact(testValues);
+                if (!_.isEqual(uniqueValues, testValues)){
+                    hasEmptyValues = true;
                 }
                 
                 scope.combo.model = _.sortBy(uniqueValues, function(item){return item;});
                 
                 var items = [];
                 angular.forEach(scope.combo.model, function(val){
+                    var text = val;
+                    if (angular.isDefined(scope.translateColumn)){
+                        text = locale.getString(scope.translateColumn + val);
+                    }
                     items.push({
                         code: val,
-                        text: val
+                        text: text
                     });
                 });
                 

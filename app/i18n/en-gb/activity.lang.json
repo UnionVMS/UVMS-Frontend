@@ -316,5 +316,7 @@
     "weightingMeans": "Weighting Means",
     "tripId": "Trip id",
     "usage": "Usage",
-    "destinationLocation": "Location"
+    "destinationLocation": "Location",
+    "occurrence": "Occurrence",
+    "gear_shot_and_retrieval": "Gear shot and retrieval"
 }
