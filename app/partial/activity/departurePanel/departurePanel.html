@@ -21,7 +21,7 @@ copy of the GNU General Public License along with the IFDM Suite. If not, see <h
 			<span class="operationType" ng-if="faServ.isCorrection">{{'activity.departure_optype_correction' | i18n}}</span>
 		</div>
 		<div class="row activity-summary-row">
-			<fa-details-panel class="col-md-3 summary-section" ng-model="faServ.activityData.activityDetails" loc-details="faServ.activityData.locations" is-loc-clickable="isLocationClickable()" loc-click-callback="locationClickCallback()"></fa-details-panel>
+			<fa-details-panel class="col-md-3 summary-section" ng-model="faServ.activityData.activityDetails"></fa-details-panel>
 			<location-tile class="col-md-3 summary-section" location-details="faServ.activityData.locations" src-activity-geom="faServ.activityData.activityDetails.items.geometry.value" is-clickable="isLocationClickable()" click-callback="locationClickCallback()" buffer-dist="5000" field-title="{{'activity.activity_location_port_departure' | i18n}}"></location-tile>
 			<carousel-tile class="col-md-3 summary-section" tile-title="{{'activity.header_fa_gear' | i18n}}" ng-model="faServ.activityData.gears" template-url="directive/activity/carouselTile/templates/gearTile/gearTile.html"></carousel-tile>
 			<fa-details-panel class="col-md-3 summary-section" ng-model="faServ.activityData.reportDetails"></fa-details-panel>
