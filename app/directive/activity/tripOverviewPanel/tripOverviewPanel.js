@@ -26,7 +26,13 @@ angular.module('unionvmsWeb').directive('tripOverviewPanel', function () {
             trip: '=',
             clickCallback: '&'
         },
-        templateUrl: 'directive/activity/tripOverviewPanel/tripOverviewPanel.html'
+        templateUrl: 'directive/activity/tripOverviewPanel/tripOverviewPanel.html',
+        link: function(scope, element, attrs, fn) {
+            scope.isVesselTileVisible = false;
+            scope.toggleVesselTile = function(){
+                scope.isVesselTileVisible = !scope.isVesselTileVisible;
+            };
+        }
     };
 });
 
