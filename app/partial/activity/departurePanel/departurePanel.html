@@ -12,7 +12,7 @@ copy of the GNU General Public License along with the IFDM Suite. If not, see <h
 <div class="col-md-12 departure-panel" ng-controller="DeparturepanelCtrl">
 	<!-- <div class="row summary-row" ng-if="srcTab === 'reports'"> -->
 	<div class="row summary-row">
-		<trip-overview-panel class="col-md-12 summary-section" trip="faServ.activityData.tripDetails" click-callback="toggleVesselTile()"></trip-overview-panel>
+		<trip-overview-panel class="col-md-12 summary-section" trip="faServ.activityData.tripDetails"></trip-overview-panel>
 	</div>
 	<div class="col-md-12 main-content">
 		<a class="btn-trip-quit" title="{{'activity.trip_summary_quit_trip_detail' | i18n }}" ng-click="quitDeparturePanel()" ng-if="srcTab === 'reports'"><i class="fa fa-share-square-o"></i></a>

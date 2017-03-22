@@ -9,30 +9,27 @@ the hope that it will be useful, but WITHOUT ANY WARRANTY; without even the impl
 FITNESS FOR A PARTICULAR PURPOSE.  See the GNU General Public License for more details. You should have received a
 copy of the GNU General Public License along with the IFDM Suite. If not, see <http://www.gnu.org/licenses/>.
 */
-.address-tile {
-    text-align: left;
-    padding-left: 40px;
-    padding-right: 40px;
-    .item-container {
-        cursor: default;
-        display: flex;
-        .item-label {
-            font-weight: bold;
-            margin-right: 5px;
-            white-space: nowrap;
-            &:after {
-                content: ':'
+.vessel-tile {
+    padding-bottom: 15px;
+    .vessel-name {
+        text-decoration: underline;
+        font-size: 17px;
+        font-weight: bold;
+        margin-bottom: 5px;
+        color: @primaryColor;
+    }
+    .trip-row-label {
+        font-weight: bold;
+    }
+    .no-border > fieldset {
+        border: 0 !important;
+    }
+    .contact-parties > .carousel-tile > .carousel {
+        &,
+        & > .carousel-inner {
+            & > .carousel-control {
+                display: none;
             }
         }
-        .item-text:not(:last-child){
-            margin-right: 10px;
-        }
-    }
-}
-
-.without-arrows {
-    .address-tile {
-        padding-left: 0px;
-        padding-right: 0px;
     }
 }
