@@ -471,14 +471,14 @@ angular.module('unionvmsWeb').factory('fishingActivityService', function(activit
             var gearAttrs = _.keys(gear);
             if (gearAttrs.length > 2) {
                 gear.characteristics = {};
-                gear.characteristicsDetails = {};
+                var characteristicsDetails = {};
                 angular.forEach(gearAttrs,function(attrName){
                     var nonCharacteristics = ['type','role'];
                     var mainCharacteristics = ['meshSize','lengthWidth','numberOfGears'];
 
                     if(nonCharacteristics.indexOf(attrName) === -1){
                         if(mainCharacteristics.indexOf(attrName) === -1){
-                            gear.characteristicsDetails[attrName] = gear[attrName];
+                            characteristicsDetails[attrName] = gear[attrName];
                         }else{
                             gear.characteristics[attrName] = gear[attrName];
                         }
@@ -486,13 +486,13 @@ angular.module('unionvmsWeb').factory('fishingActivityService', function(activit
                     }
                 });
                 gear.characteristics = loadFishingActivityDetails(gear.characteristics, gearAttrOrder);
-                gear.characteristics.characteristicsDetails = gear.characteristicsDetails;
+                gear.characteristics.characteristicsDetails = characteristicsDetails;
                 gear.characteristics.title = locale.getString('activity.characteristics');
             }
         });
 
         var gears = data;
-
+       
         return gears;
     };
 
