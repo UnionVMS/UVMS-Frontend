@@ -25,9 +25,6 @@ angular.module('unionvmsWeb').controller('SpatialCtrl',function(tripSummaryServi
     $scope.repServ.clearVmsData();
     
    locale.ready('spatial').then(function(){
-    reportingNavigatorService.goToView('tripsPanel','tripSummary');
-    tripSummaryService.openNewTrip('NLD-TRP-20160408000034');
-    return;
        loadingStatus.isLoading('InitialReporting', true);
        
        //reset the map and remove references to it
