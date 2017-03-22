@@ -15,42 +15,9 @@
         <span>{{item.contactPerson.alias}}</span>
     </div>
 
-
 	<div class="row" ng-if="item.structuredAddress.length > 0">
 		<div class="col-md-12">
 			<carousel-tile tile-title="{{'activity.fa_locations_addresses' | i18n}}" ng-model="item.structuredAddress" use-top-nav="false" template-url="directive/activity/carouselTile/templates/addressTile/addressTile.html"></carousel-tile>
 		</div>
 	</div>
-
-
-  <!--  <div class="row" ng-if="item.structuredAddress.streetName">
-		<div class="item-container">
-			<span class="item-label">{{'activity.fa_locations_street' | i18n}}</span>
-			<span>{{item.structuredAddress.streetName}}</span>
-		</div>
-	</div>
-	<div class="row" ng-if="item.structuredAddress.plotId">
-		<div class="item-container">
-			<span class="item-label">{{'activity.fa_locations_plotId' | i18n}}</span>
-			<span>{{item.structuredAddress.plotId}}</span>
-		</div>
-	</div>
-	<div class="row" ng-if="item.structuredAddress.postCode">
-		<div class="item-container">
-			<span class="item-label">{{'activity.fa_locations_postal_code' | i18n}}</span>
-			<span>{{item.structuredAddress.postCode}}</span>
-		</div>
-	</div>
-	<div class="row" ng-if="item.structuredAddress.cityName">
-		<div class="item-container">
-			<span class="item-label">{{'activity.fa_locations_city' | i18n}}</span>
-			<span>{{item.structuredAddress.cityName}}</span>
-		</div>
-	</div>
-	<div class="row" ng-if="item.structuredAddress.countryCode || item.structuredAddress.countryName">
-		<div class="item-container">
-			<span class="item-label">{{'activity.fa_locations_country' | i18n}}</span>
-			<span>{{item.structuredAddress.countryCode && item.structuredAddress.countryName ? item.structuredAddress.countryCode + ' - ' + item.structuredAddress.countryName : item.structuredAddress.countryCode || item.structuredAddress.countryName}}</span>
-		</div>
-	</div>-->
 </div>

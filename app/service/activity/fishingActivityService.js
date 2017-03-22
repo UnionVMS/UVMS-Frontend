@@ -648,6 +648,17 @@ angular.module('unionvmsWeb').factory('fishingActivityService', function(activit
         return data;
     };
 
+    /**
+     * Adds extra attributes to attrOrder
+     * 
+     * @memberof fishingActivityService
+     * @private
+     * @param {Object} data - A reference to the data to be loaded in the attrOrder
+     * @param {Array} attrOrder - Array with the attribute order
+     * @param {Number} attrIdx - Current index in the attrOrder
+     * @alias addExtraDetails
+     * @returns {Object} data to be displayed in the fa details panel
+     */
     var addExtraDetails = function(data,attrOrder,attrIdx){
         var finalData = {};
         angular.forEach(data, function(value){

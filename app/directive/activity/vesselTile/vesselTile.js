@@ -13,9 +13,9 @@ copy of the GNU General Public License along with the IFDM Suite. If not, see <h
  * @memberof unionvmsWeb
  * @ngdoc directive
  * @name vesselTile
- * @attr {unionvmsWeb.Trip} trip - current trip in trip summary
+ * @attr {Object} ngModel - vessel details
  * @description
- *  A reusable tile that will display the vessel details related to the selected trip
+ *  A reusable tile that will display the vessel details
  */
 angular.module('unionvmsWeb').directive('vesselTile', function() {
 	return {
@@ -28,6 +28,14 @@ angular.module('unionvmsWeb').directive('vesselTile', function() {
 		link: function(scope, element, attrs, fn) {
 			var watchRef;
 
+			/**
+             * Calcs the width of the inner fieldsets
+             * 
+             * @memberof vesselTile
+             * @private
+			 * @param {Object} newVal - the model of vessel tile
+             * @alias calcWidth
+             */
 			var calcWidth = function(newVal){
 				var nrPanels = 0;
 				angular.forEach(newVal,function(prop){
@@ -38,6 +46,7 @@ angular.module('unionvmsWeb').directive('vesselTile', function() {
 				scope.colWidth = 12 / (nrPanels || 1);
 			};
 
+			//if ngModel is not defined add a watch to wait for the model
 			if(angular.isDefined(scope.ngModel)){
 				calcWidth(scope.ngModel);
 			}else{

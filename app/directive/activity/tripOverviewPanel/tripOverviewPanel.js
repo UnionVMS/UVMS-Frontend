@@ -28,7 +28,14 @@ angular.module('unionvmsWeb').directive('tripOverviewPanel', function () {
         templateUrl: 'directive/activity/tripOverviewPanel/tripOverviewPanel.html',
         link: function(scope, element, attrs, fn) {
             scope.isVesselTileVisible = false;
-            
+
+            /**
+             * Show/hide vessel details
+             * 
+             * @memberof tripOverviewPanel
+             * @private
+             * @alias toggleVesselTile
+             */
             scope.toggleVesselTile = function(){
                 scope.isVesselTileVisible = !scope.isVesselTileVisible;
             };
