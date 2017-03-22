@@ -29,8 +29,7 @@ angular.module('unionvmsWeb').factory('fishingActivityService', function(activit
     var faServ = {
         activityData: {},
         id: undefined,
-        isCorrection: false,
-        isVesselTileVisible: false
+        isCorrection: false
 	};
 
     //tiles per fishing activity view
@@ -205,20 +204,6 @@ angular.module('unionvmsWeb').factory('fishingActivityService', function(activit
         }
     ];
 
-    var faAreaAttrOrder = {
-        transmission: {
-            type: 'string'
-        },
-        crossing: {
-            type: 'string'
-        },
-        startActivity: {
-            type: 'string'
-        },
-        startFishing: {
-            type: 'string'
-        }
-    };
 
     //Configs of vessel details attributes
     var vesselAttrOrder = [
@@ -247,7 +232,6 @@ angular.module('unionvmsWeb').factory('fishingActivityService', function(activit
 	    faServ.activityData = {};
 	    faServ.id = undefined;
 	    faServ.isCorrection = false;
-	    faServ.isVesselTileVisible = false;
 	};
 	
 	/**
@@ -271,7 +255,6 @@ angular.module('unionvmsWeb').factory('fishingActivityService', function(activit
     faServ.getFishingActivity = function(obj, callback) {
         //TODO use fa id in the REST request
         loadingStatus.isLoading('FishingActivity', true);
-        faServ.isVesselTileVisible = false;
         activityRestService.getFishingActivityDetails(obj.faType).then(function (response) {
             faServ.activityData = obj;
             faServ.activityData.fromJson(response);
@@ -391,6 +374,10 @@ angular.module('unionvmsWeb').factory('fishingActivityService', function(activit
         });
 
         return finalSummary;
+    };
+
+    faServ.loadFaDetails = function(data, attrOrder){
+        return loadFishingActivityDetails(data, attrOrder);
     };
 
     /**
@@ -530,7 +517,7 @@ angular.module('unionvmsWeb').factory('fishingActivityService', function(activit
      * @alias loadAreaData
      * @returns {Object} data to be displayed
      */
-    faServ.loadAreaData = function(faType, data) {
+     var loadAreaData = function(faType, data) {
         var areaSummary = {
             areaData: {}
         };
@@ -697,7 +684,7 @@ angular.module('unionvmsWeb').factory('fishingActivityService', function(activit
                     obj.activityDetails = loadSummaryData(obj.faType, data.activityDetails);
                     break;
                 case 'areas':
-                    obj.areas = faServ.loadAreaData(obj.faType, data.areas);
+                    obj.areas = loadAreaData(obj.faType, data.areas);
                     break;
                 case 'reportDetails':
                     obj.reportDetails = loadFaDocData(data.reportDetails);

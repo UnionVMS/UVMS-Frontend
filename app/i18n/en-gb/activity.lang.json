@@ -328,5 +328,13 @@
     "alias": "Alias",
 
     "authorizations": "Authorizations",
-    "vessel_storage": "Vessel storage"
+    "vessel_storage": "Vessel storage",
+
+    "fa_details_item_exMark": "Ext. marking",
+    "fa_details_item_flagState": "Flag State",
+    "fa_details_item_ircs": "IRCS",
+    "fa_details_item_cfr": "CFR",
+    "fa_details_item_gfcm": "GFCM",
+    "fa_details_item_iccat": "ICCAT",
+    "fa_details_item_uvi": "UVI"
 }

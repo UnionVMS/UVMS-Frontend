@@ -526,43 +526,40 @@ describe('fishingActivityService', function() {
         faType:'fishing_operation',
         operationType:undefined,
         activityDetails:{
-            items:{
-                occurence:{
+            items:[
+                {
                     idx:0,
                     label:'',
-
                     value:'2016-11-08T17:36:03+01:00',
                     clickable:undefined
                 },
-                vessel_activity:{
+                {
                     idx:2,
                     label:'',
-
                     value:'FSH - Fishing',
                     clickable:undefined
                 },
-                fisheryType:{
+                {
                     idx:4,
                     label:'',
-
                     value:'Demersal',
                     clickable:undefined
                 },
-                targetedSpecies:{
+                {
                     idx:5,
                     label:'',
                     value:'GADU',
                     clickable:undefined
                 }
-            },
-            subItems:{
-                duration:{
+            ],
+            subItems:[
+                {
                     idx:6,
                     label:'',
                     value:'10d 11h 20m',
                     clickable:undefined
                 }
-            },
+            ],
             subTitle:'',
             title:': '
         },
@@ -575,20 +572,20 @@ describe('fishingActivityService', function() {
                 type:'LHM - Handlines and pole-lines (mechanized)',
                 role:'On board',
                 characteristics:{
-                    items:{
-                    meshSize:{
-                        idx:0,
-                        label:'',
-                        value:'139mm',
-                        clickable:undefined
-                    },
-                    lengthWidth:{
-                        idx:1,
-                        label:'',
-                        value:'11m',
-                        clickable:undefined
-                    }
-                    },
+                    items:[
+                        {
+                            idx:0,
+                            label:'',
+                            value:'139mm',
+                            clickable:undefined
+                        },
+                        {
+                            idx:1,
+                            label:'',
+                            value:'11m',
+                            clickable:undefined
+                        }
+                    ],
                     title:''
                 },
                 characteristicsDetails:{
@@ -604,20 +601,20 @@ describe('fishingActivityService', function() {
                 type:'TBB',
                 role:'Deployed',
                 characteristics:{
-                    items:{
-                    meshSize:{
-                        idx:0,
-                        label:'',
-                        value:'211mm',
-                        clickable:undefined
-                    },
-                    lengthWidth:{
-                        idx:1,
-                        label:'',
-                        value:'99m',
-                        clickable:undefined
-                    }
-                    },
+                    items:[
+                        {
+                            idx:0,
+                            label:'',
+                            value:'211mm',
+                            clickable:undefined
+                        },
+                        {
+                            idx:1,
+                            label:'',
+                            value:'99m',
+                            clickable:undefined
+                        }
+                    ],
                     title:''
                 },
                 characteristicsDetails:{
@@ -631,53 +628,52 @@ describe('fishingActivityService', function() {
             }
         ],
         reportDetails:{
-            items:{
-                type:{
+            items:[
+                {
                     idx:0,
                     label:'',
                     value:'DECLARATION',
                     clickable:undefined
                 },
-                acceptedDate:{
+                {
                     idx:7,
                     label:'',
                     value:'2018-07-07T07:48:08+01:00',
                     clickable:undefined
                 },
-                id:{
+                {
                     idx:5,
                     label:'',
                     value:'4bc9392b-3607-5d91-9032-194b83f89e28',
                     clickable:undefined
                 },
-                refId:{
+                {
                     idx:6,
                     label:'',
                     value:'c0bd3ec3-b178-5951-9853-7e13bb76b607',
                     clickable:true
                 },
-                creationDate:{
+                {
                     idx:1,
                     label:'',
                     value:'2016-06-09T20:34:12+01:00',
                     clickable:undefined
                 },
-                purpose:{
+                {
                     idx:3,
                     label:'',
                     value:'Budrilico cuwmaglo gij munhofip pi zuwbibum bi feh ke za ajunutoc mupzaj gop ho legipejo epdeli.',
                     clickable:undefined
                 }
-            },
-            subItems:{
-                dcafedc4:{
+            ],
+            subItems:[
+                {
                     idx:9,
                     label:'',
-
                     value:'726b43ee-f70c-54ee-b4ad-a7976585ef42',
                     clickable:undefined
                 }
-            },
+            ],
             subTitle:'',
             title:''
         },
@@ -732,62 +728,51 @@ describe('fishingActivityService', function() {
                     gears:[
                     {
                         type:'LHM',
-
                         role:'On board',
                         characteristics:{
-                            items:{
-                                meshSize:{
-                                idx:0,
-                                label:'',
-                                value:'139mm',
-                                clickable:undefined
-
-
+                            items:[
+                                {
+                                    idx:0,
+                                    label:'',
+                                    value:'139mm',
+                                    clickable:undefined
                                 },
-                                lengthWidth:{
-                                idx:1,
-                                label:'',
-                                value:'11m',
-                                clickable:undefined
-
-
+                                {
+                                    idx:1,
+                                    label:'',
+                                    value:'11m',
+                                    clickable:undefined
                                 }
-                            },
+                            ],
                             title:''
-
                         },
                         characteristicsDetails:{
                             height:66,
                             nrOfLines:135,
                             nrOfNets:4,
-
-
-
                             nominalLengthOfNet:950,
                             quantity:92,
                             description:'Otdoki winad jakifi li vebahu waazu fow ebezijo asmaca relena lulas vaj lure bitehu weper ukojuj vumdabew ot.'
-
-
                         }
                     },
                     {
                         type:'TBB',
                         role:'Deployed',
                         characteristics:{
-                            items:{
-                                meshSize:{
+                            items:[
+                                {
                                     idx:0,
                                     label:'',
                                     value:'211mm',
                                     clickable:undefined
                                 },
-                                lengthWidth:{
+                                {
                                     idx:1,
                                     label:'',
                                     value:'99m',
                                     clickable:undefined
                                 }
-                            },
+                            ],
                             title:''
                         },
                         characteristicsDetails:{
@@ -801,14 +786,14 @@ describe('fishingActivityService', function() {
                     }
                     ],
                     classProps:{
-                    unit:911,
-                    weight:1814,
-                    weightingMeans:'WEIGHED',
-                    stockId:'7da34062',
-                    size:'orbecebo',
-                    tripId:'8c3ea655-3cb6-5e67-8f75-40282589bc7a',
-                    usage:'omregaj',
-                    destinationLocation:'(508) - Bojuguj, NU'
+                        unit:911,
+                        weight:1814,
+                        weightingMeans:'WEIGHED',
+                        stockId:'7da34062',
+                        size:'orbecebo',
+                        tripId:'8c3ea655-3cb6-5e67-8f75-40282589bc7a',
+                        usage:'omregaj',
+                        destinationLocation:'(508) - Bojuguj, NU'
                     }
                 },
                 bms:{
@@ -882,20 +867,20 @@ describe('fishingActivityService', function() {
                         type:'LHM',
                         role:'On board',
                         characteristics:{
-                            items:{
-                                meshSize:{
+                            items:[
+                                {
                                     idx:0,
                                     label:'',
                                     value:'139mm',
                                     clickable:undefined
                                 },
-                                lengthWidth:{
+                                {
                                     idx:1,
                                     label:'',
                                     value:'11m',
                                     clickable:undefined
                                 }
-                            },
+                            ],
                             title:''
                         },
                         characteristicsDetails:{
@@ -911,20 +896,20 @@ describe('fishingActivityService', function() {
                         type:'TBB',
                         role:'Deployed',
                         characteristics:{
-                            items:{
-                                meshSize:{
+                            items:[
+                                {
                                     idx:0,
                                     label:'',
                                     value:'211mm',
                                     clickable:undefined
                                 },
-                                lengthWidth:{
+                                {
                                     idx:1,
                                     label:'',
                                     value:'99m',
                                     clickable:undefined
                                 }
-                            },
+                            ],
                             title:''
                         },
                         characteristicsDetails:{
@@ -982,20 +967,20 @@ describe('fishingActivityService', function() {
                         type:'LHM',
                         role:'On board',
                         characteristics:{
-                            items:{
-                                meshSize:{
+                            items:[
+                                {
                                     idx:0,
                                     label:'',
                                     value:'139mm',
                                     clickable:undefined
                                 },
-                                lengthWidth:{
+                                {
                                     idx:1,
                                     label:'',
                                     value:'11m',
                                     clickable:undefined
                                 }
-                            },
+                            ],
                             title:''
                         },
                         characteristicsDetails:{
@@ -1011,20 +996,20 @@ describe('fishingActivityService', function() {
                         type:'TBB',
                         role:'Deployed',
                         characteristics:{
-                            items:{
-                                meshSize:{
+                            items:[
+                                {
                                     idx:0,
                                     label:'',
                                     value:'211mm',
                                     clickable:undefined
                                 },
-                                lengthWidth:{
+                                {
                                     idx:1,
                                     label:'',
                                     value:'99m',
                                     clickable:undefined
                                 }
-                            },
+                            ],
                             title:''
                         },
                         characteristicsDetails:{
@@ -1081,20 +1066,20 @@ describe('fishingActivityService', function() {
                         type:'LHM',
                         role:'On board',
                         characteristics:{
-                            items:{
-                                meshSize:{
+                            items:[
+                                {
                                     idx:0,
                                     label:'',
                                     value:'139mm',
                                     clickable:undefined
                                 },
-                                lengthWidth:{
+                                {
                                     idx:1,
                                     label:'',
                                     value:'11m',
                                     clickable:undefined
                                 }
-                            },
+                            ],
                             title:''
                         },
                         characteristicsDetails:{
@@ -1110,20 +1095,20 @@ describe('fishingActivityService', function() {
                         type:'TBB',
                         role:'Deployed',
                         characteristics:{
-                            items:{
-                                meshSize:{
+                            items:[
+                                {
                                     idx:0,
                                     label:'',
                                     value:'211mm',
                                     clickable:undefined
                                 },
-                                lengthWidth:{
+                                {
                                     idx:1,
                                     label:'',
                                     value:'99m',
                                     clickable:undefined
                                 }
-                            },
+                            ],
                             title:''
                         },
                         characteristicsDetails:{

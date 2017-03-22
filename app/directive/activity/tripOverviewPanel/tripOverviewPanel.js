@@ -23,12 +23,12 @@ angular.module('unionvmsWeb').directive('tripOverviewPanel', function () {
         restrict: 'E',
         replace: false,
         scope: {
-            trip: '=',
-            clickCallback: '&'
+            trip: '='
         },
         templateUrl: 'directive/activity/tripOverviewPanel/tripOverviewPanel.html',
         link: function(scope, element, attrs, fn) {
             scope.isVesselTileVisible = false;
+            
             scope.toggleVesselTile = function(){
                 scope.isVesselTileVisible = !scope.isVesselTileVisible;
             };

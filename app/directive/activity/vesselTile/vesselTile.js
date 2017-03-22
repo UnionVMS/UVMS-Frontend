@@ -20,10 +20,34 @@ copy of the GNU General Public License along with the IFDM Suite. If not, see <h
 angular.module('unionvmsWeb').directive('vesselTile', function() {
 	return {
 		restrict: 'E',
-		replace: true,
+		replace: false,
 		scope: {
 			ngModel: '='
 		},
-		templateUrl: 'directive/activity/vesselTile/vesselTile.html'
+		templateUrl: 'directive/activity/vesselTile/vesselTile.html',
+		link: function(scope, element, attrs, fn) {
+			var watchRef;
+
+			var calcWidth = function(newVal){
+				var nrPanels = 0;
+				angular.forEach(newVal,function(prop){
+					if(_.isObject(prop)){
+						nrPanels++;
+					}
+				});
+				scope.colWidth = 12 / (nrPanels || 1);
+			};
+
+			if(angular.isDefined(scope.ngModel)){
+				calcWidth(scope.ngModel);
+			}else{
+				watchRef = scope.$watch('ngModel',function(newVal){
+					if(angular.isDefined(newVal)){
+						calcWidth(newVal);
+						watchRef();
+					}
+				});	
+			}
+		}
 	};
 });
