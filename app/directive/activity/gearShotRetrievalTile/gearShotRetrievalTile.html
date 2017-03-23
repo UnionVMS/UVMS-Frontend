@@ -2,9 +2,32 @@
 	<legend class="fieldsetLegendStyle">
 		<a>{{tileTitle}}</a>
 	</legend>
-	<!-- <table-filter-headers columns="tableAttrs" records="srcData" unique-columns-src-data="locations" unique-columns="isArea"></table-filter-headers> -->
 	<div class="col-md-5">
-		<table-filter-headers columns="tableAttrs" records="srcData"></table-filter-headers>
+		<table-filter-headers columns="tableAttrs" records="srcData" selected-item="selected"></table-filter-headers>
 	</div>
-	<div class="col-md-7"></div>
+	<div class="col-md-7 no-padding-right">
+		<fieldset class="col-md-12 fieldsetStyle">
+			<legend class="fieldsetLegendStyle">
+				<a>{{'activity.gear_shot_retrieval_details' | i18n}} {{'abbreviations.gear_type_' + selected.type | i18n}}</a>
+			</legend>
+			<div class="row">
+				<div class="col-md-12 item-container">
+					<span class="item-label">{{selected.id.schemeId}}</span>
+					<span>{{selected.id.id}}</span>
+				</div>
+			</div>
+			<div class="row with-margin-top row-flex">
+				<div class="col-md-6">
+					<location-tile class="row summary-section no-padding-right" location-details="selected.location" buffer-dist="5000" field-title="{{'activity.location' | i18n}}"></location-tile>
+					<!-- is-clickable="isLocationClickable()" click-callback="locationClickCallback()" -->
+				</div>
+				<div class="col-md-6">
+					<carousel-tile class="row summary-section" tile-title="{{'activity.header_fa_gear' | i18n}}" ng-model="selected.gears" template-url="directive/activity/carouselTile/templates/gearTile/gearTile.html"></carousel-tile>
+				</div>
+			</div>
+			<div class="row with-margin-top">
+				<carousel-tile class="col-md-12 gear-problem" tile-title="{{'activity.header_fa_gear_problem' | i18n}}" ng-model="selected.gearProblems" template-url="directive/activity/carouselTile/templates/gearProblemTile/gearProblemTile.html"></carousel-tile>
+			</div>
+		</fieldset>
+	</div>
 </fieldset>

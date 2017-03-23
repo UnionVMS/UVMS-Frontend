@@ -27,6 +27,9 @@ angular.module('unionvmsWeb').directive('gearShotRetrievalTile', function(locale
 		},
 		templateUrl: 'directive/activity/gearShotRetrievalTile/gearShotRetrievalTile.html',
 		link: function(scope, element, attrs, fn) {
+		    scope.selected = {};
+		    //TODO watch on selected to debug
+		    
 		    scope.tableAttrs = [{
                 title: locale.getString('activity.type'),
                 srcProp: 'type',

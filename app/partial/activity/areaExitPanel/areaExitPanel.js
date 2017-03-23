@@ -18,10 +18,11 @@ copy of the GNU General Public License along with the IFDM Suite. If not, see <h
  * @param fishingActivityService {Service} fishing activity service <p>{@link unionvmsWeb.fishingActivityService}</p>
  * @param reportFormService {Service} report form service <p>{@link unionvmsWeb.reportFormService}</p>
  * @param activityRestService {Service} activity REST service <p>{@link unionvmsWeb.activityRestService}</p>
+ * @param tripSummaryService {Service} trip summary service <p>{@link unionvmsWeb.tripSummaryService}</p>
  * @description
  *  The controller for the Area Exit panel partial
  */
-angular.module('unionvmsWeb').controller('AreaexitpanelCtrl', function ($scope, $state, fishingActivityService, activityRestService, loadingStatus, FishingActivity) {
+angular.module('unionvmsWeb').controller('AreaexitpanelCtrl', function ($scope, $state, fishingActivityService, activityRestService, loadingStatus, FishingActivity, tripSummaryService) {
     $scope.faServ = fishingActivityService;
     /**
      * Initialization function
