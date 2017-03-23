@@ -31,42 +31,42 @@ describe('faDetailsPanel', function() {
     scope.summary = {
       title: "title",
       subTitle: "subTitle",
-      items: {
-        fishery_type: {
+      items: [
+        {
             idx: 1,
             label: "fishery_type",
             value: "Demersal",
             clickable: true
         },
-        no_operations: {
+        {
             idx: 0,
             label: "no_operations",
             value: 163,
             clickable: undefined
         },
-        occurence: {
+        {
             idx: 2,
             label: "occurence",
             value: "2017-07-30T05:40:25"
         },
-        targetted_species: {
+        {
             idx: 3,
             label: "targetted_species",
             value: ["GADUS"]
         },
-        vessel_activity: {
+        {
             idx: 4,
             label: "vessel_activity",
             value: ["GADUS"]
         }
-      },
-      subItems: {
-        duration: {
+      ],
+      subItems: [
+        {
             idx: 5,
             label: "duration",
             value: "10d 8h"
         }
-      }
+      ]
     };
   }
 

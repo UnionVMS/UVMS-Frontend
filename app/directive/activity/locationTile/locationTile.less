@@ -14,39 +14,31 @@ copy of the GNU General Public License along with the IFDM Suite. If not, see <h
     position: relative;
     .fieldsetLegendStyle {
         margin-bottom: 10px !important;
-    }
-    .container {
-        height: calc(~'100% - 20px');
-        .col-md-12 {
-            //top: 50%;
-            //transform: translateY(-50%);
-            &.clickable {
-                cursor: pointer;
-                &:hover {
-                    text-decoration: underline;
-                }
-            }
+        a:hover {
+            cursor: pointer;
         }
     }
-    .container-multiple {
-        position: absolute;
-        top: 30px;
-        bottom: 0;
-        left: 0;
-        right: 15px;
-        overflow-y: auto;
+    .item-container {
+        cursor: default;
+        display: flex;
+        .item-label {
+            font-weight: bold;
+            margin-right: 5px;
+            white-space: nowrap;
+            &:after {
+                content: ':'
+            }
+        }
+        .item-text:not(:last-child){
+            margin-right: 10px;
+        }
     }
-    .name {
-        text-align: center;
-    }
-    .location-list {
-        li {
-            cursor: default;
-            &.item-clickable {
-                cursor: pointer;
-                &:hover {
-                    text-decoration: underline;
-                }
+    .row-section {
+        margin-top: 10px;
+        .item-clickable {
+            cursor: pointer;
+            &:hover {
+                text-decoration: underline;
             }
         }
     }

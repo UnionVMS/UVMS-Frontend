@@ -9,37 +9,27 @@ the hope that it will be useful, but WITHOUT ANY WARRANTY; without even the impl
 FITNESS FOR A PARTICULAR PURPOSE.  See the GNU General Public License for more details. You should have received a
 copy of the GNU General Public License along with the IFDM Suite. If not, see <http://www.gnu.org/licenses/>.
 */
-.area-tile {
-    .area-tile-body {
-        padding:0 25px;
-    }
-    .sub-title {
+.vessel-tile {
+    padding-bottom: 15px;
+    .vessel-name {
+        text-decoration: underline;
+        font-size: 17px;
         font-weight: bold;
-        margin-top: 15px;
+        margin-bottom: 5px;
+        color: @primaryColor;
     }
-    /*.chart-title {
-        text-align: center;
-        padding:10px;
-        .panel-subtitle {
-            font-size: 15px;
-            font-family: Roboto, Arial;
-            font-weight: bold;
-        }
-    }*/
-    .area-subsection {
-        padding-bottom: 20px;
-        text-align: center;
+    .trip-row-label {
+        font-weight: bold;
     }
-    .analog-clock {
-        padding-bottom:10px;
-        height:150px;
-         
+    .no-border > fieldset {
+        border: 0 !important;
     }
-    .lat-long {
-        margin-top: 5px;
-        &.is-clickable:hover {
-            cursor: pointer;
-            text-decoration: underline;
+    .contact-parties > .carousel-tile > .carousel {
+        &,
+        & > .carousel-inner {
+            & > .carousel-control {
+                display: none;
+            }
         }
     }
 }

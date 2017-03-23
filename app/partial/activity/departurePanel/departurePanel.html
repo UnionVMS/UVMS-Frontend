@@ -12,7 +12,7 @@ copy of the GNU General Public License along with the IFDM Suite. If not, see <h
 <div class="col-md-12 departure-panel" ng-controller="DeparturepanelCtrl">
 	<!-- <div class="row summary-row" ng-if="srcTab === 'reports'"> -->
 	<div class="row summary-row">
-		<trip-overview-panel class="col-md-12 summary-section" trip="faServ.activityData.tripDetails" click-callback="toggleVesselTile()"></trip-overview-panel>
+		<trip-overview-panel class="col-md-12 summary-section" trip="faServ.activityData.tripDetails"></trip-overview-panel>
 	</div>
 	<div class="col-md-12 main-content">
 		<a class="btn-trip-quit" title="{{'activity.trip_summary_quit_trip_detail' | i18n }}" ng-click="quitDeparturePanel()" ng-if="srcTab === 'reports'"><i class="fa fa-share-square-o"></i></a>
@@ -21,9 +21,10 @@ copy of the GNU General Public License along with the IFDM Suite. If not, see <h
 			<span class="operationType" ng-if="faServ.isCorrection">{{'activity.departure_optype_correction' | i18n}}</span>
 		</div>
 		<div class="row activity-summary-row">
-			<fa-details-panel class="col-md-3 summary-section" ng-model="faServ.activityData.activityDetails" loc-details="faServ.activityData.locations" is-loc-clickable="isLocationClickable()" loc-click-callback="locationClickCallback()"></fa-details-panel>
+			<fa-details-panel class="col-md-3 summary-section" ng-model="faServ.activityData.activityDetails"></fa-details-panel>
+			<location-tile class="col-md-3 summary-section" location-details="faServ.activityData.locations" src-activity-geom="faServ.activityData.activityDetails.items.geometry.value" is-clickable="isLocationClickable()" click-callback="locationClickCallback()" buffer-dist="5000" field-title="{{'activity.activity_location_port_departure' | i18n}}"></location-tile>
 			<carousel-tile class="col-md-3 summary-section" tile-title="{{'activity.header_fa_gear' | i18n}}" ng-model="faServ.activityData.gears" template-url="directive/activity/carouselTile/templates/gearTile/gearTile.html"></carousel-tile>
-			<fa-details-panel class="col-md-6 summary-section" ng-model="faServ.activityData.reportDetails"></fa-details-panel>
+			<fa-details-panel class="col-md-3 summary-section" ng-model="faServ.activityData.reportDetails"></fa-details-panel>
 		</div>
 		<div class="row activity-summary-row">
 			<catch-class-detail-tile class="col-md-12 summary-section" ng-model="faServ.activityData.catches" tile-title="{{'activity.departure_catch_detail' | i18n}}" is-location-clickable="isLocationClickable()" buffer-distance="5000" click-callback="locationClickCallback()"></catch-class-detail-tile>

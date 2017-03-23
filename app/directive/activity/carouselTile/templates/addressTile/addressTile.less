@@ -9,37 +9,30 @@ the hope that it will be useful, but WITHOUT ANY WARRANTY; without even the impl
 FITNESS FOR A PARTICULAR PURPOSE.  See the GNU General Public License for more details. You should have received a
 copy of the GNU General Public License along with the IFDM Suite. If not, see <http://www.gnu.org/licenses/>.
 */
-.area-tile {
-    .area-tile-body {
-        padding:0 25px;
-    }
-    .sub-title {
-        font-weight: bold;
-        margin-top: 15px;
-    }
-    /*.chart-title {
-        text-align: center;
-        padding:10px;
-        .panel-subtitle {
-            font-size: 15px;
-            font-family: Roboto, Arial;
+.address-tile {
+    text-align: left;
+    padding-left: 40px;
+    padding-right: 40px;
+    .item-container {
+        cursor: default;
+        display: flex;
+        .item-label {
             font-weight: bold;
+            margin-right: 5px;
+            white-space: nowrap;
+            &:after {
+                content: ':'
+            }
         }
-    }*/
-    .area-subsection {
-        padding-bottom: 20px;
-        text-align: center;
-    }
-    .analog-clock {
-        padding-bottom:10px;
-        height:150px;
-         
-    }
-    .lat-long {
-        margin-top: 5px;
-        &.is-clickable:hover {
-            cursor: pointer;
-            text-decoration: underline;
+        .item-text:not(:last-child){
+            margin-right: 10px;
         }
+    }
+}
+
+.without-arrows {
+    .address-tile {
+        padding-left: 0px;
+        padding-right: 0px;
     }
 }

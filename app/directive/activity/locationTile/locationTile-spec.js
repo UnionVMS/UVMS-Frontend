@@ -10,19 +10,19 @@ FITNESS FOR A PARTICULAR PURPOSE.  See the GNU General Public License for more d
 copy of the GNU General Public License along with the IFDM Suite. If not, see <http://www.gnu.org/licenses/>.
 */
 describe('locationTile', function() {
-    var scope,compile,tile,$httpBackend,mockMapServ;
+    var scope,compile,tile,$httpBackend,mockMapServ,$filter;
     
     beforeEach(module('unionvmsWeb'));
     
     beforeEach(function(){
-        mockMapServ = jasmine.createSpyObj('mapService', ['zoomTo']);
+        mockMapServ = jasmine.createSpyObj('mapService', ['zoomTo', 'getMapProjectionCode']);
         
         module(function($provide){
             $provide.value('mapService', mockMapServ);
         });
     });
     
-    beforeEach(inject(function($rootScope, $compile, $injector) {
+    beforeEach(inject(function($rootScope, $compile, $injector, _$filter_) {
         scope = $rootScope.$new();
         compile = $compile;
         
@@ -31,27 +31,151 @@ describe('locationTile', function() {
             parentElement.appendTo('body');
         }
         
+        $filter = _$filter_;
         $httpBackend = $injector.get('$httpBackend');;
         $httpBackend.whenGET(/usm/).respond();
         $httpBackend.whenGET(/i18n/).respond();
         $httpBackend.whenGET(/globals/).respond({data : []});
     }));
     
-    function buildSingleMock(){
+    function mockService(){
+        mockMapServ.getMapProjectionCode.andCallFake(function(){
+            return 'EPSG:4326'
+        });
+    }
+    
+    function buildMock(){
+        return [{
+            "country": "SC",
+            "rfmoCode": "Borders",
+            "geometry": "POINT(82.84711 -83.7533)",
+            "structuredAddress": [{
+                "streetName": "Gamo Junction",
+                "plotId": "5547ad46",
+                "postCode": "L4J 6N4",
+                "cityName": "Ilebuoci",
+                "countryCode": "VG",
+                "countryName": "Andorra",
+                "characteristics": {
+                  "key1": "value1",
+                  "key2": "value2"
+                }
+            },{
+                "streetName": "Fahge Extension",
+                "plotId": "bc9205e7",
+                "postCode": "B7M 6N4",
+                "cityName": "Ojsaro",
+                "countryCode": "GU",
+                "countryName": "U.S. Virgin Islands",
+                "characteristics": {
+                  "key1": "value1",
+                  "key2": "value2"
+                }
+            }],
+            "identifier": {
+              "id": "3a369c59-239e-5039-b074-81fad8d526ab",
+              "schemeId": "d149003f"
+            }
+        },{
+            "country": "CI",
+            "rfmoCode": "Bedfordshire",
+            "geometry": "POINT(125.19486 0.15269)",
+            "structuredAddress": [{
+                "streetName": "Pooki Manor",
+                "plotId": "8146ff53",
+                "postCode": "L9G 8I0",
+                "cityName": "Atanedad",
+                "countryCode": "MX",
+                "countryName": "Bolivia",
+                "characteristics": {
+                  "key1": "value1",
+                  "key2": "value2"
+                }
+            }]
+        }];
+    }
+    
+    function getAdditionalData(){
         return {
-            name: 'BEZEE -  Zeebrugge',
-            geometry: 'POINT(5.5 60.5)'
+            "country": "CI",
+            "rfmoCode": "Bedfordshire",
+            "geometry": "POINT(125.19486 0.15269)",
+            "structuredAddress": []
         };
     }
     
-    function buildMultipleMock(){
-        return [{
-            name: '39F6-27.4.b.XEU',
-            geometry: 'POINT(5.5 60.5)'
-        }, {
-            name: '39F6-27.4.a.XEU',
-            geometry: 'POLYGON ((30 10, 10 20, 20 40, 40 40, 30 10))'
-        }];
+    function getDataStats(srcData){
+        var stats = {
+            countries: [],
+            rfmo: [],
+            liCounter: 0,
+            idCounter: 0,
+            posCounter: 0,
+            addCounter: 0,
+            clickableCounter: 0
+        }
+        angular.forEach(srcData, function(record){
+            stats.clickableCounter += 1;
+            stats.liCounter += 1 + record.structuredAddress.length;
+            stats.addCounter += record.structuredAddress.length;
+            if (angular.isDefined(record.identifier)){
+                stats.idCounter += 1;
+            } else {
+                stats.posCounter += 1;
+            }
+            
+            if (_.indexOf(stats.countries, record.country) === -1){
+                stats.countries.push(record.country)
+            }
+            
+            if (_.indexOf(stats.rfmo, record.rfmoCode) === -1){
+                stats.rfmo.push(record.rfmoCode)
+            }
+        });
+        
+        return stats;
+    }
+    
+    function getProcessedData(srcData){
+        var finalData = {
+            countries: [],
+            rfmo: []
+        }
+        
+        angular.forEach(srcData, function(record){
+            if (_.indexOf(finalData.countries, record.country) === -1){
+                finalData.countries.push(record.country)
+            }
+            
+            if (_.indexOf(finalData.rfmo, record.rfmoCode) === -1){
+                finalData.rfmo.push(record.rfmoCode)
+            }
+        });
+        
+        return finalData;
+    }
+    
+    function getActivityGeom(){
+        return 'MULTIPOINT((145.63094 51.83387), (-78.39494 23.84))';
+    }
+    
+    function getIdentifier(record){
+        return {
+            id: record.identifier.id,
+            schemeId: '',
+            geometry: record.geometry
+        }
+    }
+    
+    function getPosition(record){
+        var wkt = new ol.format.WKT();
+        var coords = wkt.readGeometry(record.geometry).getCoordinates();
+        
+        return {
+            geometry: record.geometry,
+            lon: coords[0],
+            lat: coords[1]
+        }
     }
     
     describe('testing the directive: locationTile', function(){
@@ -59,94 +183,100 @@ describe('locationTile', function() {
             angular.element('location-tile').remove();
         });
         
-        it('should render the location tile with a single location', function(){
-            scope.locationDetails = buildSingleMock();
-            
-            tile = compile('<location-tile field-title="single" location-details="locationDetails"></location-tile>')(scope);
-            tile.appendTo('#parent-container');
-            scope.$digest(); 
-            
-            expect(angular.element('location-tile').length).toBe(1);
-            expect(angular.element('legend').children().text()).toEqual('single');
-            expect(angular.element('.name').text()).toEqual(scope.locationDetails.name);
-        });
-        
-        it('should render the location tile with multiple locations', function(){
-            scope.locationDetails = buildMultipleMock();
-            
-            tile = compile('<location-tile field-title="multiple" multiple="true" location-details="locationDetails"></location-tile>')(scope);
-            tile.appendTo('#parent-container');
-            scope.$digest();
-            
-            expect(angular.element('location-tile').length).toBe(1);
-            expect(angular.element('legend').children().text()).toEqual('multiple');
-            expect(angular.element('li').length).toBe(2);
-            expect(angular.element('li').eq(0).text()).toEqual(scope.locationDetails[0].name);
-            expect(angular.element('li').eq(1).text()).toEqual(scope.locationDetails[1].name);
-        });
-        
-        it('should render the location tile with a single location when the locationDetails is an array composed by a single item', function(){
-            scope.locationDetails = buildMultipleMock();
-            scope.locationDetails.shift();
-            
-            tile = compile('<location-tile field-title="single" multiple="true" location-details="locationDetails"></location-tile>')(scope);
-            tile.appendTo('#parent-container');
-            scope.$digest();
-            
-            expect(angular.element('location-tile').length).toBe(1);
-            expect(angular.element('legend').children().text()).toEqual('single');
-            expect(angular.element('.name').text()).toEqual(scope.locationDetails[0].name);
-        });
-        
-        it('should render the location tile with a single clickable location', function(){
-            scope.locationDetails = buildSingleMock();
-            
-            tile = compile('<location-tile field-title="single" is-clickable="true" location-details="locationDetails"></location-tile>')(scope);
-            tile.appendTo('#parent-container');
-            scope.$digest(); 
-            
-            expect(angular.element('.clickable').length).toBe(1);
-        });
-        
-        it('should render the location tile with multiple clickable locations', function(){
-            scope.locationDetails = buildMultipleMock();
-            
-            tile = compile('<location-tile field-title="multiple" is-clickable="true" multiple="true" location-details="locationDetails"></location-tile>')(scope);
-            tile.appendTo('#parent-container');
-            scope.$digest(); 
-            
-            expect(angular.element('.item-clickable').length).toBe(2);
-        });
-        
-        it('should render the location tile with multiple locations, but only some of them should be clickable', function(){
-            scope.locationDetails = buildMultipleMock();
-            scope.locationDetails[0].geometry = undefined;
-            
-            tile = compile('<location-tile field-title="multiple" is-clickable="true" multiple="true" location-details="locationDetails"></location-tile>')(scope);
-            tile.appendTo('#parent-container');
-            scope.$digest(); 
-            
-            expect(angular.element('.item-clickable').length).toBe(1);
-        });
-        
-        it('should render the location tile with no data message when locationDetails is an object', function(){
-            scope.locationDetails = {};
-            
-            tile = compile('<location-tile class="locTile" field-title="nodata" multiple="false" location-details="locationDetails"></location-tile>')(scope);
-            tile.appendTo('#parent-container');
-            scope.$digest(); 
-            
-            expect(angular.element('.locTile .no-data').length).toBe(1);
-        });
-        
-        it('should render the location tile with no data message when locationDetails is an array', function(){
+        it('should properly render the location tile', function(){
             scope.locationDetails = [];
             
-            tile = compile('<location-tile class="locTile" field-title="nodata" multiple="true" location-details="locationDetails"></location-tile>')(scope);
+            tile = compile('<location-tile field-title="title" location-details="locationDetails"></location-tile>')(scope);
             tile.appendTo('#parent-container');
             scope.$digest(); 
             
-            expect(angular.element('.locTile .no-data').length).toBe(1);
+            scope.locationDetails = buildMock();
+            scope.$digest(); 
+            
+            var isolatedScope = tile.isolateScope();
+            var filter = $filter('stArrayToString');
+            var stats = getDataStats(scope.locationDetails);
+            
+            expect(angular.element('location-tile').length).toBe(1);
+            expect(angular.element('legend').find('.fa-search-plus').length).toBe(0);
+            expect(angular.element('.item-container').eq(0).find('span').eq(1).text()).toEqual(filter(stats.countries, ', '));
+            expect(angular.element('.item-container').eq(1).find('span').eq(1).text()).toEqual(filter(stats.rfmo, ', '));
+            expect(angular.element('li').length).toEqual(stats.liCounter);
+            expect(angular.element('carousel-tile').length).toEqual(1);
+            
+            expect(isolatedScope.identifiers.length).toEqual(stats.idCounter);
+            expect(isolatedScope.positions.length).toEqual(stats.posCounter);
+            expect(isolatedScope.addresses.length).toEqual(stats.addCounter);
+            expect(isolatedScope.activityGeom).not.toBeDefined();
+            
+            isolatedScope.$destroy();
+        });
+        
+        it('should render the tile with clickable locations', function(){
+            scope.locationDetails = [];
+            
+            tile = compile('<location-tile field-title="title" is-clickable="true" location-details="locationDetails"></location-tile>')(scope);
+            tile.appendTo('#parent-container');
+            scope.$digest(); 
+            
+            scope.locationDetails = buildMock();
+            scope.$digest(); 
+            
+            var isolatedScope = tile.isolateScope();
+            var filter = $filter('stArrayToString');
+            var stats = getDataStats(scope.locationDetails);
+            
+            expect(angular.element('location-tile').length).toBe(1);
+            expect(angular.element('legend').find('.fa-search-plus').length).toBe(0);
+            expect(angular.element('.item-clickable').length).toEqual(stats.clickableCounter);
+            
+            isolatedScope.$destroy();
+        });
+        
+        it('should render the tile with the button to zoom to the fishing activity', function(){
+            scope.locationDetails = [];
+            scope.activityGeometry = getActivityGeom();
+            
+            tile = compile('<location-tile field-title="title" is-clickable="true" src-activity-geom="activityGeometry" location-details="locationDetails"></location-tile>')(scope);
+            tile.appendTo('#parent-container');
+            scope.$digest(); 
+            
+            scope.locationDetails = buildMock();
+            scope.$digest(); 
+            
+            var stats = getDataStats(scope.locationDetails);
+            
+            expect(angular.element('location-tile').length).toBe(1);
+            expect(angular.element('legend').find('.fa-search-plus').length).toBe(1);
+            expect(angular.element('.item-clickable').length).toEqual(stats.clickableCounter);
+        });
+        
+        it('should render the tile without the button to zoom to the fishing activity if directive is configured not to be clickable', function(){
+            scope.locationDetails = [];
+            scope.activityGeometry = getActivityGeom();
+            
+            tile = compile('<location-tile field-title="title" is-clickable="false" src-activity-geom="activityGeometry" location-details="locationDetails"></location-tile>')(scope);
+            tile.appendTo('#parent-container');
+            scope.$digest(); 
+            
+            scope.locationDetails = buildMock();
+            scope.$digest(); 
+            
+            var stats = getDataStats(scope.locationDetails);
+            
+            expect(angular.element('location-tile').length).toBe(1);
+            expect(angular.element('legend').find('.fa-search-plus').length).toBe(0);
+            expect(angular.element('.item-clickable').length).toEqual(0);
+        });
+        
+        it('should render the location tile with no data message when locationDetails is empty', function(){
+            scope.locationDetails = [];
+            
+            tile = compile('<location-tile field-title="title" is-clickable="true" location-details="locationDetails"></location-tile>')(scope);
+            tile.appendTo('#parent-container');
+            scope.$digest(); 
+            
+            expect(angular.element('.no-data').length).toBe(1);
         });
     });
     
@@ -158,118 +288,105 @@ describe('locationTile', function() {
         }));
         
         it('should properly detect if the locationDetails contains data', function(){
-            scope.multiple = false;
-            scope.locationDetails = buildSingleMock();
-            var test = scope.hasData();
-            expect(test).toBeTruthy();
-            
-            scope.locationDetails = {};
-            test = scope.hasData();
-            expect(test).toBeFalsy();
-            
-            scope.multiple = true;
-            scope.locationDetails = buildMultipleMock();
-            test = scope.hasData()
-            expect(test).toBeTruthy();
-            
             scope.locationDetails = [];
-            test = scope.hasData()
-            expect(test).toBeFalsy();
+            expect(scope.hasData()).toBeFalsy();
+            
+            scope.locationDetails = buildMock();
+            expect(scope.hasData()).toBeTruthy();
         });
         
-        it('should properly check if the directive is multiple or not', function(){
-            scope.multiple = false;
-            var test = scope.checkIsMultiple();
-            expect(test).toBeFalsy();
+        it('should properly process input locationDetails data', function(){
+            scope.locationDetails = buildMock();
+            scope.init();
             
-            scope.locationDetails = buildMultipleMock();
-            scope.multiple = true;
-            test = scope.checkIsMultiple();
-            expect(test).toBeTruthy();
+            var stats = getDataStats(scope.locationDetails);
+            expect(scope.countries).toEqual(stats.countries);
+            expect(scope.rfmo).toEqual(stats.rfmo);
+            expect(scope.activityGeom).not.toBeDefined();
+            expect(scope.identifiers.length).toEqual(stats.idCounter);
+            expect(scope.positions.length).toEqual(stats.posCounter);
+            expect(scope.addresses.length).toEqual(stats.addCounter);
+            expect(scope.identifiers[0]).toEqual(getIdentifier(scope.locationDetails[0]));
+            expect(scope.positions[0]).toEqual(getPosition(scope.locationDetails[1]));
+        });
+        
+        it('should properly process input activity geometry', function(){
+            scope.srcActivityGeom = getActivityGeom();
+            scope.init();
             
-            scope.locationDetails.shift();
-            test = scope.checkIsMultiple();
-            expect(test).toBeFalsy();
+            expect(scope.activityGeom ).toEqual({geometry: getActivityGeom()});
+        });
+        
+        it('should not include duplicated country and rfmo values', function(){
+            scope.locationDetails = buildMock();
+            scope.locationDetails.push(getAdditionalData());
+            scope.init();
+            
+            var stats = getDataStats(scope.locationDetails);
+            expect(scope.countries).toEqual(stats.countries);
+            expect(scope.rfmo).toEqual(stats.rfmo);
+            expect(scope.addresses.length).toEqual(stats.addCounter);
         });
         
         it('should not be clickable', function(){
             scope.isClickable = false;
-            var test = scope.isItemClickable();
-            expect(test).toBeFalsy();
+            expect(scope.isItemClickable()).toBeFalsy();
         });
         
-        it('should properly check if a single position is clickable', function(){
+        it('should properly check if an item is clickable', function(){
             scope.isClickable = true;
-            scope.multiple = false;
-            scope.locationDetails = buildSingleMock();
+            scope.locationDetails = buildMock();
+            scope.init();
             
-            var test = scope.isItemClickable();
-            expect(test).toBeTruthy();
+            expect(scope.isItemClickable(scope.positions[0])).toBeTruthy();
+            expect(scope.isItemClickable(scope.identifiers[0])).toBeTruthy();
             
-            scope.locationDetails.geometry = undefined;
-            var test = scope.isItemClickable();
-            expect(test).toBeFalsy();
+            scope.identifiers[0].geometry = null;
+            expect(scope.isItemClickable(scope.identifiers[0])).toBeFalsy();
         });
         
-        it('should properly check if multiple positions are clickable', function(){
+        it('should zoom to a location when it is clickable', function(){
+            scope.locationDetails = buildMock();
+            mockService();
             scope.isClickable = true;
-            scope.multiple = true;
-            scope.locationDetails = buildMultipleMock();
-            scope.locationDetails[1].geometry = undefined;
+            scope.init();
             
-            var test = scope.isItemClickable(scope.locationDetails[0]);
-            expect(test).toBeTruthy();
-            
-            var test = scope.isItemClickable(scope.locationDetails[1]);
-            expect(test).toBeFalsy();
-        });
-        
-        it('should zoom to a single location when it is clickable', function(){
-            scope.locationDetails = buildSingleMock();
-            scope.isClickable = true;
-            scope.mulitple = false;
-            
-            scope.zoomToLocation();
-            expect(mockMapServ.zoomTo).toHaveBeenCalled();
-        });
-        
-        it('should zoom to the first location when it is clickable and no item is specified', function(){
-            scope.locationDetails = buildMultipleMock();
-            scope.isClickable = true;
-            scope.multiple = true;
-            
-            scope.zoomToLocation();
+            scope.zoomToLocation(scope.positions[0]);
             expect(mockMapServ.zoomTo).toHaveBeenCalled();
             expect(mockMapServ.zoomTo.mostRecentCall.args[0] instanceof ol.geom.Point).toBeTruthy();
         });
         
-        it('should zoom to a specified point location and apply a buffer to calculate the extent of the zoom', function(){
-            scope.locationDetails = buildMultipleMock();
+        it('should not zoom to a location if it is not clickable', function(){
+            scope.locationDetails = buildMock();
+            mockService();
             scope.isClickable = true;
-            scope.multiple = true;
-            scope.bufferDist = 5000;
+            scope.init();
+            scope.positions[0].geometry = null
             
-            scope.zoomToLocation(scope.locationDetails[0]);
+            scope.zoomToLocation(scope.positions[0]);
+            expect(mockMapServ.zoomTo).not.toHaveBeenCalled();
+        });
+
+        it('should zoom to a specified point location and apply a buffer to calculate the extent of the zoom', function(){
+            scope.locationDetails = buildMock();
+            mockService();
+            scope.isClickable = true;
+            scope.bufferDist = 5000;
+            scope.init();
+            
+            scope.zoomToLocation(scope.positions[0]);
             expect(mockMapServ.zoomTo).toHaveBeenCalled();
             expect(mockMapServ.zoomTo.mostRecentCall.args[0] instanceof ol.geom.Polygon).toBeTruthy();        
         });
         
-        it('should not zoom to a location if it is not clickable', function(){
-            scope.locationDetails = buildSingleMock();
-            scope.isClickable = false;
-            scope.multiple = false;
-            
-            scope.zoomToLocation();
-            expect(mockMapServ.zoomTo).not.toHaveBeenCalled();
-        });
-        
         it('should call the click callback function when zoooming to the location', function(){
-            scope.locationDetails = buildSingleMock();
+            scope.locationDetails = buildMock();
+            mockService();
             scope.isClickable = true;
-            scope.multiple = false;
             scope.clickCallback = jasmine.createSpy('clickCallback');
+            scope.init();
             
-            scope.zoomToLocation();
+            scope.zoomToLocation(scope.positions[0]);
             expect(mockMapServ.zoomTo).toHaveBeenCalled();
             expect(scope.clickCallback).toHaveBeenCalled();
         });
