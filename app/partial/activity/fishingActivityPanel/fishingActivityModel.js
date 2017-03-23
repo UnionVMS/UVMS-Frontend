@@ -29,7 +29,7 @@ angular.module('unionvmsWeb').factory('FishingActivity',function(mdrCacheService
     function FishingActivity(faType){
         this.faType = faType;
         this.operationType = undefined;
-        this.areas=undefined;
+        this.areas = undefined;
         this.activityDetails = undefined;
         this.locations = undefined;
         this.gears = undefined;

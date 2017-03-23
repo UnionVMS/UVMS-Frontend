@@ -394,7 +394,7 @@ angular.module('unionvmsWeb').factory('fishingActivityService', function(activit
      */
     var transformFaItem = function(value, key, attrOrder, attrKeys, attrData){
         var newVal = value;
-        
+
         if(attrData.type === 'date'){
             newVal = $filter('stDateUtc')(newVal);
         } else if (angular.isArray(value)) {
@@ -438,6 +438,9 @@ angular.module('unionvmsWeb').factory('fishingActivityService', function(activit
 
         finalSummary.title = locale.getString('activity.activity_report_doc_title');
 
+        if (angular.isDefined(data.characteristics)) {
+            finalSummary.characteristicsDetails = data.characteristics;
+        }
         if (angular.isDefined(finalSummary.subItems)) {
             finalSummary.subTitle = locale.getString('activity.activity_related_flux_doc_title');
         }
@@ -459,14 +462,14 @@ angular.module('unionvmsWeb').factory('fishingActivityService', function(activit
             var gearAttrs = _.keys(gear);
             if (gearAttrs.length > 2) {
                 gear.characteristics = {};
-                gear.characteristicsDetails = {};
+                var characteristicsDetails = {};
                 angular.forEach(gearAttrs,function(attrName){
                     var nonCharacteristics = ['type','role'];
                     var mainCharacteristics = ['meshSize','lengthWidth','numberOfGears'];
 
                     if(nonCharacteristics.indexOf(attrName) === -1){
                         if(mainCharacteristics.indexOf(attrName) === -1){
-                            gear.characteristicsDetails[attrName] = gear[attrName];
+                            characteristicsDetails[attrName] = gear[attrName];
                         }else{
                             gear.characteristics[attrName] = gear[attrName];
                         }
@@ -474,12 +477,13 @@ angular.module('unionvmsWeb').factory('fishingActivityService', function(activit
                     }
                 });
                 gear.characteristics = loadFishingActivityDetails(gear.characteristics, gearAttrOrder);
+                gear.characteristics.characteristicsDetails = characteristicsDetails;
                 gear.characteristics.title = locale.getString('activity.characteristics');
             }
         });
 
         var gears = data;
-
+       
         return gears;
     };
 
@@ -496,10 +500,13 @@ angular.module('unionvmsWeb').factory('fishingActivityService', function(activit
     var loadSummaryData = function(faType,data){
         var exceptions = ['arrival_notification', 'arrival_declaration'];
         var finalSummary;
-
+        
         if(exceptions.indexOf(faType) === -1){
             finalSummary = loadFishingActivityDetails(data, faSummaryAttrsOrder);
-            finalSummary.title = locale.getString('activity.title_fishing_activity') + ': '+ locale.getString('activity.fa_type_' + faType);
+            if (angular.isDefined(data.characteristics)) {
+                finalSummary.characteristicsDetails = data.characteristics;
+            }
+            finalSummary.title = locale.getString('activity.title_fishing_activity') + ': ' + locale.getString('activity.fa_type_' + faType);
         }else{
             finalSummary = data;
         }
@@ -557,10 +564,10 @@ angular.module('unionvmsWeb').factory('fishingActivityService', function(activit
                     }
 
                     item[className].classProps = {};
-                    
+
                     if(angular.isDefined(item[className].destinationLocation) && angular.isDefined(item[className].destinationLocation[0])){
                         item[className].destinationLocation = item[className].destinationLocation[0].id + ' - ' + item[className].destinationLocation[0].name + ', ' +
-                                                    item[className].destinationLocation[0].countryId;
+                            item[className].destinationLocation[0].countryId;
                     }
 
                     angular.forEach(item[className], function(attr,attrName){
@@ -717,7 +724,7 @@ angular.module('unionvmsWeb').factory('fishingActivityService', function(activit
                     break;
             }
         });
-        
+
         return obj;
     };
 
