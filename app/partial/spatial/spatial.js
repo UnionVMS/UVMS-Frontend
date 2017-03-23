@@ -25,7 +25,6 @@ angular.module('unionvmsWeb').controller('SpatialCtrl',function($scope, $timeout
     $scope.repServ.clearVmsData();
     
    locale.ready('spatial').then(function(){
-    reportingNavigatorService.goToView('tripsPanel','tripSummary');
        loadingStatus.isLoading('InitialReporting', true);
        
        //reset the map and remove references to it

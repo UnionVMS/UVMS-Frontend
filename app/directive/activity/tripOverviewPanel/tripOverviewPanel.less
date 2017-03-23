@@ -10,8 +10,8 @@ FITNESS FOR A PARTICULAR PURPOSE.  See the GNU General Public License for more d
 copy of the GNU General Public License along with the IFDM Suite. If not, see <http://www.gnu.org/licenses/>.
 */
 .trip-overview-panel {
-    width: 100%;
-    .fieldsetStyle{
+    > .fieldsetStyle{
+        width: 100%;
         padding: 0;
         padding-bottom: 10px;
         margin: 0; 
@@ -19,6 +19,19 @@ copy of the GNU General Public License along with the IFDM Suite. If not, see <h
             margin: 0 0 10px 10px;
             a:hover {
                 cursor: default;
+            }
+        }
+        > .activity-summary-row {
+            max-height: 0;
+            transition: max-height 0.60s ease-out;
+            overflow: hidden;
+            &.visible {
+                max-height: 1000px;
+                transition: max-height 0.60s ease-in;
+            }
+            &,
+            .vessel-tile {
+                margin-bottom: 0;
             }
         }
     }
@@ -31,11 +44,14 @@ copy of the GNU General Public License along with the IFDM Suite. If not, see <h
             height: 100%;
             &:hover {
                 cursor: pointer;
-                .field-label {
-                    color: @primaryColor;
-                }
                 .field-text {
                     text-decoration: underline
+                }
+            }
+            &.enabled,
+            &:hover {
+                .field-label {
+                    color: @primaryColor;
                 }
             }
             .field-label {
@@ -68,5 +84,4 @@ copy of the GNU General Public License along with the IFDM Suite. If not, see <h
             }
         }
     }
-    
 }

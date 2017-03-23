@@ -26,7 +26,7 @@ copy of the GNU General Public License along with the IFDM Suite. If not, see <h
  * @description
  *  A model to store all the data related to a trip
  */
-angular.module('unionvmsWeb').factory('Trip',function(locale,unitConversionService,tripReportsTimeline) {
+angular.module('unionvmsWeb').factory('Trip',function(locale,unitConversionService,tripReportsTimeline,fishingActivityService) {
 
     /**
      * Trip constructor
@@ -281,8 +281,55 @@ angular.module('unionvmsWeb').factory('Trip',function(locale,unitConversionServi
      * @param {Object} data - vessel and roles data
      */
 	var loadVesselRoles = function(self,data){
-		self.tripVessel = angular.copy(data);
-		delete self.tripVessel.contactPersons;
+		
+        var vesselAttrOrder = [
+            {
+                id: 'name',
+                type: 'string'
+            },
+            {
+                id: 'exMark',
+                type: 'string'
+            },
+            {
+                id: 'flagState',
+                type: 'string'
+            },
+            {
+                id: 'ircs',
+                type: 'string'
+            },
+            {
+                id: 'cfr',
+                type: 'string'
+            },
+            {
+                id: 'gfcm',
+                type: 'string'
+            },
+            {
+                id: 'iccat',
+                type: 'string'
+            },
+            {
+                id: 'uvi',
+                type: 'string'
+            }
+        ];
+        
+        var vessel = angular.copy(data);
+		delete vessel.contactPersons;
+
+        self.tripVessel = {};
+        self.tripVessel.vesselOverview = {};
+        angular.forEach(vessel,function(prop,propName){
+            if(!_.isNull(prop) && propName.indexOf('Enriched') === -1){
+                self.tripVessel.vesselOverview[propName] = prop;
+            }
+        });
+
+        self.tripVessel.vesselOverview = fishingActivityService.loadFaDetails(self.tripVessel.vesselOverview, vesselAttrOrder);
+        
 
 		angular.forEach(data.contactPersons,function(value, key) {
 			value.type = value.title + ' ' + value.givenName + ' ' + value.middleName + ' ' + value.familyName;

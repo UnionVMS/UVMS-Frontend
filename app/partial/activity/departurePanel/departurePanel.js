@@ -86,17 +86,5 @@ angular.module('unionvmsWeb').controller('DeparturepanelCtrl',function($scope, $
         console.log('This is the click callback');
     };
     
-    /**
-     * Toggle the vessel tile for the reporting vessel
-     * 
-     * @memberof DeparturepanelCtrl
-     * @public
-     * @alias toggleVesselTile
-     */
-    $scope.toggleVesselTile = function(){
-        $scope.faServ.isVesselTileVisible = !$scope.faServ.isVesselTileVisible;
-        //TODO when vessel tile is ready
-    };
-    
     init();
 });

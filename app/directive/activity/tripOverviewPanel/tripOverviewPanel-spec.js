@@ -77,27 +77,23 @@ describe('tripOverviewPanel', function() {
 
     });
     
-    
-    it('should properly call the click callback', function(){
-        scope.clickCallback = function(){
-            return true;
-        };
+    it('should properly show/hide the vessel details', function(){
         
         var oneTrip = angular.copy(scope.fishTripDetails.trips[0]);
         scope.fishTripDetails.trips = [oneTrip];
         
-        var tripOverviewPanel = compile('<trip-overview-panel trip="fishTripDetails" click-callback="clickCallback"></trip-overview-panel>')(scope);
+        var tripOverviewPanel = compile('<trip-overview-panel trip="fishTripDetails"></trip-overview-panel>')(scope);
         scope.$digest();
 
         tripOverviewPanel.appendTo('#parent-container');
 
         var isolatedScope = tripOverviewPanel.isolateScope();
-        spyOn(isolatedScope, 'clickCallback');
 
-        expect(scope.fishTripDetails).toBe(isolatedScope.trip);
-        expect(angular.element('.trip-row').length).toBe(1);
-        
-        angular.element('.field-icon').click();
-        expect(isolatedScope.clickCallback).toHaveBeenCalled();
+        expect(isolatedScope.isVesselTileVisible).toEqual(false);
+
+        tripOverviewPanel.find('.field-icon').click();
+        scope.$digest();
+
+        expect(isolatedScope.isVesselTileVisible).toEqual(true);
     });
 });

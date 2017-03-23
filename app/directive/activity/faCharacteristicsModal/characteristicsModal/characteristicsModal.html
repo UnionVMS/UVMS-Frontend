@@ -1,4 +1,4 @@
-/*
+<!--
 Developed with the contribution of the European Commission - Directorate General for Maritime Affairs and Fisheries
 © European Union, 2015-2016.
 
@@ -8,30 +8,28 @@ Free Software Foundation, either version 3 of the License, or any later version.
 the hope that it will be useful, but WITHOUT ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or
 FITNESS FOR A PARTICULAR PURPOSE.  See the GNU General Public License for more details. You should have received a
 copy of the GNU General Public License along with the IFDM Suite. If not, see <http://www.gnu.org/licenses/>.
-*/
-.address-tile {
-    text-align: left;
-    padding-left: 40px;
-    padding-right: 40px;
-    .item-container {
-        cursor: default;
-        display: flex;
-        .item-label {
-            font-weight: bold;
-            margin-right: 5px;
-            white-space: nowrap;
-            &:after {
-                content: ':'
-            }
-        }
-        .item-text:not(:last-child){
-            margin-right: 10px;
-        }
-    }
-}
-
-.without-arrows {
-    .address-tile {
-        padding: 0 30px;
-    }
-}
+-->
+<div class="characteristics-modal">
+    <!--  HEADER -->
+    <div class="modal-header">
+        <div class="pointer pull-right" ng-click="close()">
+            <i class="fa fa-times closeicon"></i>
+        </div>
+        <h4 class="modal-title">{{'activity.characteristics' | i18n}}</h4>
+    </div>
+    <!-- BODY -->
+    <div class="modal-body">
+        <div ng-repeat="item in characteristics">
+            <span class="fields">{{item.key}}</span>
+            <span>{{item.value}}</span>
+        </div>
+    </div>
+    <!-- FOOTER -->
+    <div class="modal-footer">
+        <div class="row">
+            <div class="col-md-12">
+                <button class="btn btn-default btn-action" type="button" ng-click="close()">{{'common.close' | i18n}}</button>
+            </div>
+        </div>
+    </div>
+</div>

@@ -1,0 +1,53 @@
+<!--<div>
+    <fieldset class="col-md-12 fieldsetStyle vessel-tile">
+        <legend class="fieldsetLegendStyle">
+            <a>{{'activity.trip_summary_vessel' | i18n }}</a>
+        </legend>
+        <div class="col-md-12" ng-if="trip.tripVessel">
+            <div class="row">
+                <!--VESSEL NAME-->
+                <!--<div class="row form-row">
+                    <span class="col-md-12 vessel-name">{{'activity.trip_summary_vessel_name' | i18n }}: {{trip.tripVessel.name}}</span>
+                </div>-->
+                <!--VESSEL EXT MARK-->
+                <!--<div class="row">
+                    <span class="col-md-12"><span class="trip-row-label">{{'activity.trip_summary_vessel_exMark' | i18n }}:</span> {{trip.tripVessel.exMark}}</span>
+                </div>-->
+                <!--VESSEL FLAG STATE-->
+                <!--<div class="row">
+                    <span class="col-md-12"><span class="trip-row-label">{{'activity.trip_summary_vessel_flagState' | i18n }}:</span> {{trip.tripVessel.flagState}}</span>
+                </div>-->
+                <!--VESSEL IRCS-->
+                <!--<div class="row">
+                    <span class="col-md-12"><span class="trip-row-label">{{'activity.trip_summary_vessel_ircs' | i18n }}:</span> {{trip.tripVessel.ircs}}</span>
+                </div>-->
+                <!--VESSEL CFR-->
+                <!--<div class="row">
+                    <span class="col-md-12"><span class="trip-row-label">{{'activity.trip_summary_vessel_cfr' | i18n }}:</span> {{trip.tripVessel.cfr}}</span>
+                </div>
+            </div>
+        </div>
+        <div class="row no-data" ng-if="!trip.tripVessel">
+            <div class="col-md-12">
+                <span>{{'activity.no_data' | i18n}}</span>
+            </div>
+        </div>
+    </fieldset>
+</div>-->
+
+<fieldset class="col-md-12 fieldsetStyle vessel-tile">
+    <legend class="fieldsetLegendStyle">
+        <a>{{'activity.vessel_details' | i18n }}</a>
+    </legend>
+    <div class="row" ng-if="colWidth">
+        <fa-details-panel class="summary-section no-border col-md-{{colWidth}}" ng-model="ngModel.vesselOverview" ng-if="ngModel.vesselOverview"></fa-details-panel>
+        <fa-details-panel class="summary-section col-md-{{colWidth}}" ng-model="ngModel.authorizations" ng-if="ngModel.authorizations"></fa-details-panel>
+        <carousel-tile class="summary-section contact-parties col-md-{{colWidth}}" ng-if="ngModel.contactParties" tile-title="{{'activity.contact_parties' | i18n}}" ng-model="ngModel.contactParties" template-url="directive/activity/carouselTile/templates/contactPartiesTile/contactPartiesTile.html"></carousel-tile>
+        <fa-details-panel class="summary-section col-md-{{colWidth}}" ng-model="ngModel.storage" ng-if="ngModel.storage"></fa-details-panel>
+    </div>
+    <div class="row no-data" ng-if="!ngModel">
+        <div class="col-md-12">
+            <span>{{'activity.no_data' | i18n}}</span>
+        </div>
+    </div>
+</fieldset>

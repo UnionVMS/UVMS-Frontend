@@ -66,18 +66,18 @@ describe('catchTile', function() {
                     "type":"TBB",
                     "role":"Deployed",
                     "characteristics":{
-                        "items":{
-                          "meshSize":{
+                        "items":[
+                          {
                               "idx":0,
                               "label":"Mesh size",
                               "value":"239mm"
                           },
-                          "lengthWidth":{
+                          {
                               "idx":1,
                               "label":"Width length",
                               "value":"31m"
                           }
-                        },
+                        ],
                         "title":"Characteristics"
                     },
                     "characteristicsDetails":{
@@ -93,18 +93,18 @@ describe('catchTile', function() {
                     "type":"GND",
                     "role":"Deployed",
                     "characteristics":{
-                        "items":{
-                          "meshSize":{
+                        "items":[
+                          {
                               "idx":0,
                               "label":"Mesh size",
                               "value":"209mm"
                           },
-                          "lengthWidth":{
+                          {
                               "idx":1,
                               "label":"Width length",
                               "value":"21m"
                           }
-                        },
+                        ],
                         "title":"Characteristics"
                     },
                     "characteristicsDetails":{
@@ -120,18 +120,18 @@ describe('catchTile', function() {
                     "type":"SSC",
                     "role":"Deployed",
                     "characteristics":{
-                        "items":{
-                          "meshSize":{
+                        "items":[
+                          {
                               "idx":0,
                               "label":"Mesh size",
                               "value":"134mm"
                           },
-                          "lengthWidth":{
+                          {
                               "idx":1,
                               "label":"Width length",
                               "value":"72m"
                           }
-                        },
+                        ],
                         "title":"Characteristics"
                     },
                     "characteristicsDetails":{
@@ -147,18 +147,18 @@ describe('catchTile', function() {
                     "type":"LHM",
                     "role":"Deployed",
                     "characteristics":{
-                        "items":{
-                          "meshSize":{
+                        "items":[
+                          {
                               "idx":0,
                               "label":"Mesh size",
                               "value":"85mm"
                           },
-                          "lengthWidth":{
+                          {
                               "idx":1,
                               "label":"Width length",
                               "value":"31m"
                           }
-                        },
+                        ],
                         "title":"Characteristics"
                     },
                     "characteristicsDetails":{
@@ -249,18 +249,18 @@ describe('catchTile', function() {
                     "type":"SSC",
                     "role":"On board",
                     "characteristics":{
-                        "items":{
-                          "meshSize":{
+                        "items":[
+                          {
                               "idx":0,
                               "label":"Mesh size",
                               "value":"140mm"
                           },
-                          "lengthWidth":{
+                          {
                               "idx":1,
                               "label":"Width length",
                               "value":"29m"
                           }
-                        },
+                        ],
                         "title":"Characteristics"
                     },
                     "characteristicsDetails":{
@@ -276,18 +276,18 @@ describe('catchTile', function() {
                     "type":"TBB",
                     "role":"Deployed",
                     "characteristics":{
-                        "items":{
-                          "meshSize":{
+                        "items":[
+                          {
                               "idx":0,
                               "label":"Mesh size",
                               "value":"166mm"
                           },
-                          "lengthWidth":{
+                          {
                               "idx":1,
                               "label":"Width length",
                               "value":"93m"
                           }
-                        },
+                        ],
                         "title":"Characteristics"
                     },
                     "characteristicsDetails":{
@@ -303,18 +303,18 @@ describe('catchTile', function() {
                     "type":"LHM",
                     "role":"On board",
                     "characteristics":{
-                        "items":{
-                          "meshSize":{
+                        "items":[
+                          {
                               "idx":0,
                               "label":"Mesh size",
                               "value":"80mm"
                           },
-                          "lengthWidth":{
+                          {
                               "idx":1,
                               "label":"Width length",
                               "value":"17m"
                           }
-                        },
+                        ],
                         "title":"Characteristics"
                     },
                     "characteristicsDetails":{
@@ -330,18 +330,18 @@ describe('catchTile', function() {
                     "type":"GND",
                     "role":"Deployed",
                     "characteristics":{
-                        "items":{
-                          "meshSize":{
+                        "items":[
+                          {
                               "idx":0,
                               "label":"Mesh size",
                               "value":"82mm"
                           },
-                          "lengthWidth":{
+                          {
                               "idx":1,
                               "label":"Width length",
                               "value":"99m"
                           }
-                        },
+                        ],
                         "title":"Characteristics"
                     },
                     "characteristicsDetails":{
@@ -393,18 +393,18 @@ describe('catchTile', function() {
                     "type":"SSC",
                     "role":"On board",
                     "characteristics":{
-                        "items":{
-                          "meshSize":{
+                        "items":[
+                          {
                               "idx":0,
                               "label":"Mesh size",
                               "value":"68mm"
                           },
-                          "lengthWidth":{
+                          {
                               "idx":1,
                               "label":"Width length",
                               "value":"41m"
                           }
-                        },
+                        ],
                         "title":"Characteristics"
                     },
                     "characteristicsDetails":{
@@ -420,18 +420,18 @@ describe('catchTile', function() {
                     "type":"GTR",
                     "role":"Deployed",
                     "characteristics":{
-                        "items":{
-                          "meshSize":{
+                        "items":[
+                          {
                               "idx":0,
                               "label":"Mesh size",
                               "value":"137mm"
                           },
-                          "lengthWidth":{
+                          {
                               "idx":1,
                               "label":"Width length",
                               "value":"12m"
                           }
-                        },
+                        ],
                         "title":"Characteristics"
                     },
                     "characteristicsDetails":{
@@ -447,18 +447,18 @@ describe('catchTile', function() {
                     "type":"GND",
                     "role":"Deployed",
                     "characteristics":{
-                        "items":{
-                          "meshSize":{
+                        "items":[
+                          {
                               "idx":0,
                               "label":"Mesh size",
                               "value":"194mm"
                           },
-                          "lengthWidth":{
+                          {
                               "idx":1,
                               "label":"Width length",
                               "value":"13m"
                           }
-                        },
+                        ],
                         "title":"Characteristics"
                     },
                     "characteristicsDetails":{
@@ -474,18 +474,18 @@ describe('catchTile', function() {
                     "type":"LHM",
                     "role":"Deployed",
                     "characteristics":{
-                        "items":{
-                          "meshSize":{
+                        "items":[
+                          {
                               "idx":0,
                               "label":"Mesh size",
                               "value":"194mm"
                           },
-                          "lengthWidth":{
+                          {
                               "idx":1,
                               "label":"Width length",
                               "value":"26m"
                           }
-                        },
+                        ],
                         "title":"Characteristics"
                     },
                     "characteristicsDetails":{
@@ -521,18 +521,18 @@ describe('catchTile', function() {
                     "type":"TBB",
                     "role":"Deployed",
                     "characteristics":{
-                        "items":{
-                          "meshSize":{
+                        "items":[
+                          {
                               "idx":0,
                               "label":"Mesh size",
                               "value":"234mm"
                           },
-                          "lengthWidth":{
+                          {
                               "idx":1,
                               "label":"Width length",
                               "value":"64m"
                           }
-                        },
+                        ],
                         "title":"Characteristics"
                     },
                     "characteristicsDetails":{
@@ -548,18 +548,18 @@ describe('catchTile', function() {
                     "type":"SSC",
                     "role":"On board",
                     "characteristics":{
-                        "items":{
-                          "meshSize":{
+                        "items":[
+                          {
                               "idx":0,
                               "label":"Mesh size",
                               "value":"207mm"
                           },
-                          "lengthWidth":{
+                          {
                               "idx":1,
                               "label":"Width length",
                               "value":"79m"
                           }
-                        },
+                        ],
                         "title":"Characteristics"
                     },
                     "characteristicsDetails":{
@@ -614,18 +614,18 @@ describe('catchTile', function() {
                     "type":"TBB",
                     "role":"On board",
                     "characteristics":{
-                        "items":{
-                          "meshSize":{
+                        "items":[
+                          {
                               "idx":0,
                               "label":"Mesh size",
                               "value":"242mm"
                           },
-                          "lengthWidth":{
+                          {
                               "idx":1,
                               "label":"Width length",
                               "value":"42m"
                           }
-                        },
+                        ],
                         "title":"Characteristics"
                     },
                     "characteristicsDetails":{
@@ -697,18 +697,18 @@ describe('catchTile', function() {
                     "type":"TBB",
                     "role":"Deployed",
                     "characteristics":{
-                        "items":{
-                          "meshSize":{
+                        "items":[
+                          {
                               "idx":0,
                               "label":"Mesh size",
                               "value":"52mm"
                           },
-                          "lengthWidth":{
+                          {
                               "idx":1,
                               "label":"Width length",
                               "value":"69m"
                           }
-                        },
+                        ],
                         "title":"Characteristics"
                     },
                     "characteristicsDetails":{
@@ -724,18 +724,18 @@ describe('catchTile', function() {
                     "type":"GTR",
                     "role":"Deployed",
                     "characteristics":{
-                        "items":{
-                          "meshSize":{
+                        "items":[
+                          {
                               "idx":0,
                               "label":"Mesh size",
                               "value":"173mm"
                           },
-                          "lengthWidth":{
+                          {
                               "idx":1,
                               "label":"Width length",
                               "value":"31m"
                           }
-                        },
+                        ],
                         "title":"Characteristics"
                     },
                     "characteristicsDetails":{
@@ -751,18 +751,18 @@ describe('catchTile', function() {
                     "type":"SSC",
                     "role":"On board",
                     "characteristics":{
-                        "items":{
-                          "meshSize":{
+                        "items":[
+                          {
                               "idx":0,
                               "label":"Mesh size",
                               "value":"104mm"
                           },
-                          "lengthWidth":{
+                          {
                               "idx":1,
                               "label":"Width length",
                               "value":"55m"
                           }
-                        },
+                        ],
                         "title":"Characteristics"
                     },
                     "characteristicsDetails":{

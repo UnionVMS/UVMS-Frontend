@@ -1,0 +1,23 @@
+<div class="col-md-12">
+    <div class="item-container">
+        <span class="labels">{{'activity.role' | i18n }}</span>
+        &nbsp;
+        <span>{{item.role}}</span>
+    </div>
+    <div class="item-container">
+        <span class="labels">{{'activity.name' | i18n }}</span>
+        &nbsp;
+        <span>{{item.contactPerson.firstName}} {{item.contactPerson.lastName}}</span>
+    </div>
+    <div class="item-container">
+        <span class="labels">{{'activity.alias' | i18n }}</span>
+        &nbsp;
+        <span>{{item.contactPerson.alias}}</span>
+    </div>
+
+	<div class="row" ng-if="item.structuredAddress.length > 0">
+		<div class="col-md-12">
+			<carousel-tile tile-title="{{'activity.fa_locations_addresses' | i18n}}" ng-model="item.structuredAddress" use-top-nav="false" template-url="directive/activity/carouselTile/templates/addressTile/addressTile.html"></carousel-tile>
+		</div>
+	</div>
+</div>
