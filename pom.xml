@@ -333,14 +333,6 @@
         </plugins>
     </build>
 
-    <repositories>
-        <repository>
-            <id>focus-repo</id>
-            <name>Focus nexus repository</name>
-            <url>http://nexus.focus.fish/</url>
-        </repository>
-    </repositories>
-
     <scm>
         <connection>${scm.connection}</connection>
         <tag>HEAD</tag>
