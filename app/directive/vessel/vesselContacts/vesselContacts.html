@@ -2,7 +2,7 @@
     <fieldset ng-disabled="disableForm">
         <div class="contact-list">
             <div class="contact-item" ng-if="vessel.contact.length == 0">
-                <div class="col-md-3 form-group smallerpaddingright">
+                <div class="col-md-2 form-group smallerpaddingright">
                     <label>{{ 'vessel.vessel_details_contact_name' | i18n }}</label>
                     <input type="text" name="contactName" id="asset-input-contact-name-0" class="form-control" ng-model="vessel.contact[0].name"/>
                 </div>
@@ -17,7 +17,7 @@
             </div>
 
             <div class="contact-item" ng-repeat="contact in vessel.contact | orderBy:orderByOwner">
-                <div class="col-md-3 form-group smallerpaddingright">
+                <div class="col-md-2 form-group smallerpaddingright">
                     <label>{{ 'vessel.vessel_details_contact_name' | i18n }}</label>
                     <input type="text" name="contactName" id="asset-input-contact-name-{{$index}}" class="form-control" ng-model="contact.name"/>
                 </div>
