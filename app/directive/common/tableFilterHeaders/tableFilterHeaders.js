@@ -39,6 +39,18 @@ angular.module('unionvmsWeb').directive('tableFilterHeaders', function($compile)
 		        if (angular.isDefined(scope.selectedItem)){
                     element.attr('st-auto-select-row', true);
                 }
+
+                var initFilters = function(){
+                    angular.forEach(scope.columns,function(column){
+                        if(angular.isDefined(column.filterBy)){
+                            column.filterBy = column.srcObj ? column.srcObj + '.' + column.filterBy : column.filterBy;
+                        }else{
+                            column.filterBy = column.srcObj ? column.srcObj + '.' + column.srcProp : column.srcProp;
+                        }
+                    });
+                };
+
+                initFilters();
 		    },
 		    post: function(scope, element, attrs, fn){
                 scope.hasTotals = false;
@@ -258,7 +270,7 @@ angular.module('unionvmsWeb').directive('tableFilterHeaders', function($compile)
             scope.total = 0;
             scope.isCalculating = false;
             scope.$watch(table.getFilteredCollection, function(data){
-                if (angular.isDefined(data) && scope.isCalculating === false){
+                if (angular.isDefined(data) && data.length && scope.isCalculating === false){
                     scope.total = 0;
                     scope.isCalculating = true;
                     for (var i = 0; i < data.length; i++){

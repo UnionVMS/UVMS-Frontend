@@ -7,7 +7,7 @@
 				</tr>
 				<tr ng-if="records.length > 1">
 					<th ng-repeat="column in columns" ng-if="column.isVisible" class="filter">
-						<st-select-multiple ng-if="column.useComboFilter" is-area="column.isArea" collection="records" predicate="{{column.srcObj ? column.srcObj + '.' +  column.srcProp : column.srcProp}}"></st-select-multiple>
+						<st-select-multiple ng-if="column.useComboFilter" is-area="column.isArea" collection="records" predicate="{{column.filterBy}}"></st-select-multiple>
 					</th>
 				</tr>
 			</thead>
