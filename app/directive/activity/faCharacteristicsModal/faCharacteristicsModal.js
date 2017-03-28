@@ -46,8 +46,7 @@ angular.module('unionvmsWeb').directive('faCharacteristicsModal', function($moda
                         }
                     }
                 });
-
-            }
+            };
         }
     };
 });

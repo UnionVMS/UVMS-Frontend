@@ -15,10 +15,11 @@ copy of the GNU General Public License along with the IFDM Suite. If not, see <h
  * @name GearproblemtileCtrl
  * @param $scope {Service} controller scope
  * @param $state {Service} state provider service
+ * @param tripSummaryService {Service} the trip summary service <p>{@link unionvmsWeb.tripSummaryService}</p>
  * @description
  *  The controller for the gear problem tile template
  */
-angular.module('unionvmsWeb').controller('GearproblemtileCtrl',function($scope, $state){
+angular.module('unionvmsWeb').controller('GearproblemtileCtrl',function($scope, $state, tripSummaryService){
     /**
      * Create and show a tootlip with a description for the gear problem type and gear recovery measure
      *  

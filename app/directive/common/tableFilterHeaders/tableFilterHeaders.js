@@ -258,7 +258,7 @@ angular.module('unionvmsWeb').directive('tableFilterHeaders', function($compile)
     return {
         restrict: 'E',
         require: '^stTable',
-        template: '<div><b>&Sigma;</b> {{total}}</div>',
+        template: '<div class="single-line"><b>&Sigma;</b> {{total}}</div>',
         scope: {
             property: '@'
         },
