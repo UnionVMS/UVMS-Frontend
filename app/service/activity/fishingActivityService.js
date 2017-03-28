@@ -338,7 +338,7 @@ angular.module('unionvmsWeb').factory('fishingActivityService', function(activit
             angular.forEach(faObj.relocation, function(item) {
                 var mdrRec = _.findWhere(response, { code: item.role });
                 if (angular.isDefined(mdrRec)) {
-                    item.role = mdrRec.description;
+                    item.roleDesc = mdrRec.description;
                 }
             });
         });

@@ -30,9 +30,11 @@ angular.module('unionvmsWeb').directive('relocationTile', function(locale) {
 		link: function(scope, element, attrs, fn) {
 		    scope.tableAttrs = [{
 		        title: locale.getString('activity.role'),
-		        srcProp: 'role',
+				srcProp: 'roleDesc',
 		        isVisible: true,
-		        useComboFilter: true
+		        useComboFilter: true,
+				filterBy: 'role',
+				translate: 'abbreviations.activity_'
 		    }, {
 		        title: locale.getString('activity.fs'),
                 srcProp: 'country',
