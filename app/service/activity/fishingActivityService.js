@@ -608,11 +608,20 @@ angular.module('unionvmsWeb').factory('fishingActivityService', function(activit
         return data;
     };
     
+    /**
+     * Loads the data to be presented in the catch tile
+     * 
+     * @memberof fishingActivityService
+     * @private
+     * @alias loadGearShotRetrieval
+     * @param {Object} data - A reference to the data to be loaded in the gear shot retrieval tile
+     * @returns {Object} data to be displayed in the gear shot retrieval tile
+     */
     var loadGearShotRetrieval = function(data){
         angular.forEach(data, function(record){
             record.location = [record.location];
             record.gears = loadGears([record.gear]);
-            delete record.gears;
+            delete record.gear;
         });
         
         return data;
