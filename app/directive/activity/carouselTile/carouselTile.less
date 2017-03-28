@@ -20,6 +20,9 @@ copy of the GNU General Public License along with the IFDM Suite. If not, see <h
     }
     .fieldsetLegendStyle {
         margin-bottom: 10px !important;
+        A:first-child {
+            cursor: default;
+        }
         .fa {
             color: @primaryColor;
             cursor: pointer;
@@ -57,6 +60,24 @@ copy of the GNU General Public License along with the IFDM Suite. If not, see <h
             }
             &.right span {
                 right: -5px;
+            }
+        }
+    }
+    .no-data {
+        text-align: center;
+        top: 0;
+        bottom: 0;
+        left: 15px;
+        right: 15px;
+        position: absolute;
+        div {
+            display: table;
+            height: 100%;
+            span {
+                display: table-cell;
+                vertical-align: middle;
+                font-size: 22px;
+                color: #ddd;
             }
         }
     }

@@ -31,5 +31,7 @@
     "activity_LOADED": "Loaded",
     "activity_BY_CATCH": "By catch",
     "activity_ALLOCATED_TO_QUOTA": "Allocated to quota",
-    "activity_SAMPLE": "Sample"
+    "activity_SAMPLE": "Sample",
+    "gear_type_GEAR_SHOT": "Gear shot",
+    "gear_type_GEAR_RETRIEVAL": "Gear retrieval"
 }

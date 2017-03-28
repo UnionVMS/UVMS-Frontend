@@ -1,4 +1,4 @@
-<!--
+/*
 Developed with the contribution of the European Commission - Directorate General for Maritime Affairs and Fisheries
 © European Union, 2015-2016.
 
@@ -8,14 +8,28 @@ Free Software Foundation, either version 3 of the License, or any later version.
 the hope that it will be useful, but WITHOUT ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or
 FITNESS FOR A PARTICULAR PURPOSE.  See the GNU General Public License for more details. You should have received a
 copy of the GNU General Public License along with the IFDM Suite. If not, see <http://www.gnu.org/licenses/>.
--->
-<div class="col-md-12 activity-details" ng-controller="ActivitydetailsCtrl">
-	<!-- <div>{{actServ.details.name}}</div> -->
-	<loading-panel class="activity-fa-loading" type="FishingActivity"></loading-panel>
-	<div class="row">
-		<div ng-include="'partial/activity/departurePanel/departurePanel.html'" ng-init="srcTab = 'activity'"></div>
-		<!-- <div ng-include="'partial/activity/areaExitPanel/areaExitPanel.html'" ng-init="srcTab = 'activity'"></div> -->
-		<!-- <div ng-include="'partial/activity/areaEntryPanel/areaEntryPanel.html'" ng-init="srcTab = 'activity'"></div> -->
-	</div>
-</div>
-
+*/
+/**
+ * @memberof unionvmsWeb
+ * @ngdoc directive
+ * @name ngModelFile
+ * @attr {Object} ngModelFile - custom ngModel for input type="file" 
+ * @description
+ *  Custom ngModel for input type="file"
+ */
+angular.module('unionvmsWeb').directive('ngModelFile', function () {
+    return {
+        restrict: 'A',
+        replace: false,
+        scope: {
+            ngModelFile: "="
+        },
+        link: function (scope, element, attrs, fn) {
+            element.bind("change", function (changeEvent) {
+                    scope.$apply(function () {
+                        scope.ngModelFile = changeEvent.target.files;
+                    });
+            });
+        }
+    };
+});

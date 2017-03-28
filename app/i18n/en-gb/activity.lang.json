@@ -49,6 +49,7 @@
 	"header_fa_areas": "Areas",
 	"header_fa_port": "Port",
 	"header_fa_gear": "Gears",
+	"header_fa_gear_problem": "Gear problems",
     "header_fa_gear_used": "Gears used",
 	"header_fa_species": "Species",
 	"header_fa_weight": "Weight (kg)",
@@ -108,7 +109,7 @@
 	"catch_details_difference":"Difference(%)",
 	"catch_details_table_total": "Total",
 	"catch_details_column_area": "Area",
-	"reports_panel_column_type": "Type(Notification/Declaration)",
+	"reports_panel_column_type": "Type (Notification/Declaration)",
     "reports_panel_column_date": "Date",
     "reports_panel_column_location": "Location",
     "reports_panel_column_reason": "Reason",
@@ -342,5 +343,10 @@
     "vessel_id": "Vessel id",
     "ircs": "IRCS",
     "specie": "Specie",
-    "alloc_type": "Allocation type"
+    "alloc_type": "Allocation type",
+    
+    "occurrence": "Occurrence",
+    "gear_shot_and_retrieval": "Gear shot and retrieval",
+    "gear_shot_retrieval_details": "Details:",
+    "gear_shot_retrieval_recovery": "Recovery measure"
 }

@@ -7,13 +7,19 @@
 				</tr>
 				<tr ng-if="records.length > 1">
 					<th ng-repeat="column in columns" ng-if="column.isVisible" class="filter">
-						<st-select-multiple ng-if="column.useComboFilter" is-area="column.isArea" collection="records" predicate="{{column.filterBy}}"></st-select-multiple>
+						<st-select-multiple ng-if="column.useComboFilter" is-area="column.isArea" collection="records" translate-column="column.translation" predicate="{{column.filterBy}}"></st-select-multiple>
 					</th>
 				</tr>
 			</thead>
 			<tbody>
 				<tr ng-repeat="item in displayedRecords" ng-class="{'selected-row': item.selected, 'is-selectable': selectedItem}" ng-click="selectRow($index)">
-					<td ng-repeat="column in columns" ng-if="column.isVisible">{{column.srcObj ? item[column.srcObj][column.srcProp] : item[column.srcProp]}}</td>
+					<td ng-repeat="column in columns" ng-if="column.isVisible">
+						<span ng-if="column.srcObj">{{item[column.srcObj][column.srcProp]}}</span>
+						<span ng-if="column.isDate">{{item[column.srcProp] | stDateUtc}}</span>
+						<span ng-if="column.isDuration">{{item[column.srcProp] | stHumanizeTime}}</span>
+						<span ng-if="column.translation">{{column.translation + item[column.srcProp] | i18n}}</span>
+						<span ng-if="!column.srcObj && !column.isDate && !column.isDuration && !column.translation">{{item[column.srcProp]}}</span>
+					</td>
 				</tr>
 			</tbody>
 			<tfoot ng-if="hasTotals">

@@ -42,8 +42,9 @@ angular.module('unionvmsWeb').factory('fishingActivityService', function(activit
         departure: [
             'locations',
             'gears',
-            'catches',
-            'processingProducts'
+            //'catches',
+            'processingProducts',
+            'gearShotRetrieval'
         ],
         landing: [
             'locations',
@@ -307,6 +308,32 @@ angular.module('unionvmsWeb').factory('fishingActivityService', function(activit
             });
         });
     };
+    
+    var addGearProblemDesc = function(obj){
+        mdrCacheService.getCodeList('fa_gear_problem').then(function(response){
+            angular.forEach(obj.gearShotRetrieval, function(item) {
+                angular.forEach(item.gearProblems, function(prob){
+                    var mdrRec = _.findWhere(response, { code: prob.type });
+                    if (angular.isDefined(mdrRec)) {
+                        prob.typeDesc = mdrRec.description;
+                    }
+                });
+            });
+        });
+    };
+    
+    var addRecoveryDesc = function(obj){
+        mdrCacheService.getCodeList('fa_gear_recovery').then(function(response){
+            angular.forEach(obj.gearShotRetrieval, function(item) {
+                angular.forEach(item.gearProblems, function(rec){
+                    var mdrRec = _.findWhere(response, { code: rec.recoveryMeasure });
+                    if (angular.isDefined(mdrRec)) {
+                        rec.recoveryDesc = mdrRec.description;
+                    }
+                });
+            });
+        });
+    };
 
 	/**
      * Adds weight means description from MDR code lists into the details object.
@@ -561,12 +588,11 @@ angular.module('unionvmsWeb').factory('fishingActivityService', function(activit
      * 
      * @memberof fishingActivityService
      * @private
-     * @param {String} obj - Fishing activity model
      * @param {Object} data - A reference to the data to be loaded in the catch tile
      * @alias loadFishingData
      * @returns {Object} data to be displayed in the catch tile
      */
-    var loadFishingData = function(obj,data){
+    var loadFishingData = function(data){
         if(angular.isDefined(data) && data.length){
             var classes = ['lsc','bms'];
             angular.forEach(data, function(item){
@@ -591,10 +617,25 @@ angular.module('unionvmsWeb').factory('fishingActivityService', function(activit
                 });
             });
         }
-        addGearDescription(obj);
-        /*this.addCatchTypeDescription(obj);*/
-        addWeightMeansDescription(obj);
-
+        return data;
+    };
+    
+    /**
+     * Loads the data to be presented in the catch tile
+     * 
+     * @memberof fishingActivityService
+     * @private
+     * @alias loadGearShotRetrieval
+     * @param {Object} data - A reference to the data to be loaded in the gear shot retrieval tile
+     * @returns {Object} data to be displayed in the gear shot retrieval tile
+     */
+    var loadGearShotRetrieval = function(data){
+        angular.forEach(data, function(record){
+            record.location = [record.location];
+            record.gears = loadGears([record.gear]);
+            delete record.gear;
+        });
+        
         return data;
     };
 
@@ -695,7 +736,7 @@ angular.module('unionvmsWeb').factory('fishingActivityService', function(activit
     };
 
 
-    var loadRelocation = function(obj,data){
+    var loadRelocation = function(data){
         angular.forEach(data, function(row){
             angular.forEach(row.vesselIdentifiers, function(item){
                 if(item.schemeId === 'IRCS'){
@@ -705,8 +746,6 @@ angular.module('unionvmsWeb').factory('fishingActivityService', function(activit
                 }
             });
         });
-
-        addVesselRoleDescription(obj);
 
         return data;
     };
@@ -741,9 +780,13 @@ angular.module('unionvmsWeb').factory('fishingActivityService', function(activit
                     break;
                 case 'gears':
                     obj.gears = loadGears(data.gears);
+                    addGearDescription(obj);
                     break;
                 case 'catches':
-                    obj.catches = loadFishingData(obj,data.catches);
+                    obj.catches = loadFishingData(data.catches);
+                    addGearDescription(obj);
+                    /*this.addCatchTypeDescription(obj);*/
+                    addWeightMeansDescription(obj);
                     break;
                 case 'tripDetails':
                     obj.tripDetails = loadTripDetails(data.tripDetails);
@@ -752,7 +795,14 @@ angular.module('unionvmsWeb').factory('fishingActivityService', function(activit
                     obj.processingProducts = data.processingProducts;
                     break;
                 case 'relocation':
-                    obj.relocation = loadRelocation(obj, data.relocation);
+                    obj.relocation = loadRelocation(data.relocation);
+                    addVesselRoleDescription(obj);
+                    break;
+                case 'gearShotRetrieval':
+                    obj.gearShotRetrieval = loadGearShotRetrieval(data.gearShotRetrieval);
+                    addGearProblemDesc(obj);
+                    addRecoveryDesc(obj);
+                    addGearDescription(obj);
                     break;
             }
         });
