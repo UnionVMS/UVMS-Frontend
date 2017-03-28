@@ -12,12 +12,15 @@ copy of the GNU General Public License along with the IFDM Suite. If not, see <h
 /**
  * @memberof unionvmsWeb
  * @ngdoc directive
+ * @name gearShotRetrievalTile
+ * @param locale {Service} - The angular locale service
+ * @param $styate {Service} - The state provider service
  * @attr {String} tileTitle - The title of the tile
  * @attr {Array} srcData - An array containing the data to be displayed on the tile
  * @desc
  *  A reusable tile to display gear shot and retrieval sub-activities
  */
-angular.module('unionvmsWeb').directive('gearShotRetrievalTile', function(locale) {
+angular.module('unionvmsWeb').directive('gearShotRetrievalTile', function(locale, $state) {
 	return {
 		restrict: 'E',
 		replace: false,
@@ -28,7 +31,6 @@ angular.module('unionvmsWeb').directive('gearShotRetrievalTile', function(locale
 		templateUrl: 'directive/activity/gearShotRetrievalTile/gearShotRetrievalTile.html',
 		link: function(scope, element, attrs, fn) {
 		    scope.selected = {};
-		    //TODO watch on selected to debug
 		    
 		    scope.tableAttrs = [{
                 title: locale.getString('activity.type'),
@@ -49,7 +51,25 @@ angular.module('unionvmsWeb').directive('gearShotRetrievalTile', function(locale
                 useComboFilter: false,
                 isDuration: true
             }];
-
+		    
+		    /**
+		     * Check if a location tile should be clickable taking into consideration the route and the report configuration
+		     * 
+		     * @memberof gearShotRetrievalTile
+		     * @public
+		     * @alias isLocationClickable
+		     * @returns {Boolean} Whether the location tile should be clickable or not
+		     */
+		    scope.isLocationClickable = function(){
+		        var clickable = false;
+		        if (($state.current.name === 'app.reporting-id' || $state.current.name === 'app.reporting') && tripSummaryService.withMap){
+		            clickable = true;
+		        }
+		        
+		        return clickable;
+		    };
+		    
+		    //TODO - check if we need a click callback on the locations tile
 		}
 	};
 });

@@ -15,14 +15,18 @@ copy of the GNU General Public License along with the IFDM Suite. If not, see <h
  * @name GearproblemtileCtrl
  * @param $scope {Service} controller scope
  * @param $state {Service} state provider service
- * @param fishingActivityService {Service} fishing activity service <p>{@link unionvmsWeb.fishingActivityService}</p>
- * @param reportFormService {Service} report form service <p>{@link unionvmsWeb.reportFormService}</p>
- * @param activityRestService {Service} activity REST service <p>{@link unionvmsWeb.activityRestService}</p>
- * @attr {String} srcTab - Identifies from where the partial is being initialized. It is defined through ng-init and supports the following values: reports, activity
  * @description
- *  The controller for the departure panel partial
+ *  The controller for the gear problem tile template
  */
-angular.module('unionvmsWeb').controller('GearproblemtileCtrl',function($scope){
+angular.module('unionvmsWeb').controller('GearproblemtileCtrl',function($scope, $state){
+    /**
+     * Create and show a tootlip with a description for the gear problem type and gear recovery measure
+     *  
+     *  @memberof GearproblemtileCtrl
+     *  @public
+     *  @param {Object} item - The item object containing the type and text to be displayed
+     *  @param {String} cssSel - The css selector class of the item against which the tip will be displayed
+     */
     $scope.displayDetailsTip = function(item, cssSel){
         var target = angular.element('.gear-problem-tile .' + cssSel + '-' + item.type);
         var tip;
@@ -60,11 +64,21 @@ angular.module('unionvmsWeb').controller('GearproblemtileCtrl',function($scope){
     };
     
     /**
-     * Create and show a tootlip with a description for the catch details type
-     *  
-     *  @memberof catchClassSpecieDetailTile
-     *  @public
-     *  @param {String} text - The text to be displayed in the tooltip
-     *  @param {String} cssSel - The css selector class of the item against which the tip will be displayed
+     * Check if a location tile should be clickable taking into consideration the route and the report configuration
+     * 
+     * @memberof GearproblemtileCtrl
+     * @public
+     * @alias isLocationClickable
+     * @returns {Boolean} Whether the location tile should be clickable or not
      */
+    $scope.isLocationClickable = function(){
+        var clickable = false;
+        if (($state.current.name === 'app.reporting-id' || $state.current.name === 'app.reporting') && tripSummaryService.withMap){
+            clickable = true;
+        }
+        
+        return clickable;
+    };
+    
+    //TODO - check if we need a click callback on the locations tile
 });
