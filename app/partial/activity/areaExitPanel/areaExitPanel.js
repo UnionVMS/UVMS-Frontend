@@ -21,7 +21,7 @@ copy of the GNU General Public License along with the IFDM Suite. If not, see <h
  * @description
  *  The controller for the Area Exit panel partial
  */
-angular.module('unionvmsWeb').controller('AreaexitpanelCtrl', function ($scope, $state, fishingActivityService, activityRestService, loadingStatus, FishingActivity) {
+angular.module('unionvmsWeb').controller('AreaexitpanelCtrl', function ($scope, $state, fishingActivityService, activityRestService, loadingStatus, FishingActivity, tripSummaryService) {
     $scope.faServ = fishingActivityService;
     /**
      * Initialization function

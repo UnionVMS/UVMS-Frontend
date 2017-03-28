@@ -21,7 +21,7 @@ copy of the GNU General Public License along with the IFDM Suite. If not, see <h
  * @description
  *  The controller for the Area Entry panel partial
  */
-angular.module('unionvmsWeb').controller('AreaentrypanelCtrl', function ($scope, $state, fishingActivityService, activityRestService, loadingStatus, FishingActivity) {
+angular.module('unionvmsWeb').controller('AreaentrypanelCtrl', function ($scope, $state, fishingActivityService, activityRestService, loadingStatus, FishingActivity, tripSummaryService) {
     $scope.faServ = fishingActivityService;
     /**
      * Initialization function

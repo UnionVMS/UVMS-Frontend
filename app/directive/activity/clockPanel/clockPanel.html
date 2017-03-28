@@ -4,8 +4,9 @@
             <a>{{'activity.title_fishing_activity' | i18n}}: {{translatedFaType| i18n}}</a>
         </legend>
         <div class="row clock-body">
-            <div class="col-md-12 clock-subsection" ng-show="{{item.showClock}}" ng-repeat="item in clockPanalData">
-                <analog-clock clock-data="item.arrivalTime"></analog-clock>
+            <div class="col-md-12 clock-subsection" ng-if="item.arrivalTime" ng-show="{{item.showClock}}" ng-repeat="item in clockPanalData">
+                <analog-clock  clock-data="item.arrivalTime"></analog-clock>
+                <div><span>{{item.arrivalTime | stDateUtc}}</span></div>
                 <div><span ng-if="item.caption">{{ item.caption}}</span></div>
                 <div><span ng-if="$first">{{'activity.fa_details_item_reason' | i18n}}: {{item.reason}}</span></div>
             </div>
