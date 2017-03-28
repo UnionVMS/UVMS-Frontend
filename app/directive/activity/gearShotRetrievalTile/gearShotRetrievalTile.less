@@ -9,10 +9,17 @@ the hope that it will be useful, but WITHOUT ANY WARRANTY; without even the impl
 FITNESS FOR A PARTICULAR PURPOSE.  See the GNU General Public License for more details. You should have received a
 copy of the GNU General Public License along with the IFDM Suite. If not, see <http://www.gnu.org/licenses/>.
 */
-.address-tile {
-    text-align: left;
-    padding-left: 40px;
-    padding-right: 40px;
+.gear-shot-retrieval-tile {
+    .with-margin-top {
+        margin-top: 10px;
+    }
+    .row-flex {
+        display: flex;
+        carousel-tile,
+        location-tile {
+            height: 100%;
+        }
+    }
     .item-container {
         cursor: default;
         display: flex;
@@ -24,14 +31,20 @@ copy of the GNU General Public License along with the IFDM Suite. If not, see <h
                 content: ':'
             }
         }
-        .item-text:not(:last-child){
-            margin-right: 10px;
-        }
     }
-}
-
-.without-arrows {
-    .address-tile {
-        padding: 0 30px;
+    .no-padding-right {
+        padding-right: 0px;
+    }
+    .gear-problem > .carousel-tile {
+        padding-left: 0;
+        padding-right: 0;
+        > .carousel {
+            &,
+            & > .carousel-inner {
+                & > .carousel-control {
+                    display: none;
+                }
+            }
+        }
     }
 }

@@ -13,5 +13,7 @@
     "activity_GEAR_SHOT": "GES",
     "activity_GEAR_RETRIEVAL": "GER",
     "activity_START_FISHING": "STFSH",
-    "activity_JOINED_FISHING_OPERATION": "JFO"
+    "activity_JOINED_FISHING_OPERATION": "JFO",
+    "gear_type_GEAR_SHOT": "Gear shot",
+    "gear_type_GEAR_RETRIEVAL": "Gear retrieval"
 }
