@@ -68,7 +68,8 @@ angular.module('unionvmsWeb').factory('fishingActivityService', function(activit
         ],
         joint_fishing_operation: [
             'locations',
-            'gears'
+            'gears',
+            'relocation'
         ],
         relocation: [
             'locations'
@@ -355,6 +356,17 @@ angular.module('unionvmsWeb').factory('fishingActivityService', function(activit
                         item[className].classDescs.weightingMeansDesc = mdrRec.description;
                     }
                 });
+            });
+        });
+    };
+
+    var addVesselRoleDescription = function(faObj){
+        mdrCacheService.getCodeList('vessel_role').then(function(response){
+            angular.forEach(faObj.relocation, function(item) {
+                var mdrRec = _.findWhere(response, { code: item.role });
+                if (angular.isDefined(mdrRec)) {
+                    item.roleDesc = mdrRec.description;
+                }
             });
         });
     };
@@ -722,6 +734,21 @@ angular.module('unionvmsWeb').factory('fishingActivityService', function(activit
 
         return finalData;
     };
+
+
+    var loadRelocation = function(data){
+        angular.forEach(data, function(row){
+            angular.forEach(row.vesselIdentifiers, function(item){
+                if(item.schemeId === 'IRCS'){
+                    row.ircs = item.id;
+                }else{
+                    row.vesselId = item;
+                }
+            });
+        });
+
+        return data;
+    };
     
 
     /**
@@ -766,6 +793,10 @@ angular.module('unionvmsWeb').factory('fishingActivityService', function(activit
                     break;
                 case 'processingProducts':
                     obj.processingProducts = data.processingProducts;
+                    break;
+                case 'relocation':
+                    obj.relocation = loadRelocation(data.relocation);
+                    addVesselRoleDescription(obj);
                     break;
                 case 'gearShotRetrieval':
                     obj.gearShotRetrieval = loadGearShotRetrieval(data.gearShotRetrieval);

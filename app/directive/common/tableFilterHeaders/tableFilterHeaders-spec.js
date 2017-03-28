@@ -4,7 +4,7 @@ describe('Table with combobox filters and calculated totals', function() {
 
     var scope,compile,tile,$timeout,$filter;
     
-    beforeEach(inject(function($rootScope,$compile,$injector,_$timeout_,_$filter_) {
+    beforeEach(inject(function($rootScope,$compile,$injector,_$timeout_,_$filter_,$httpBackend) {
         scope = $rootScope.$new();
         compile = $compile;
         
@@ -18,7 +18,6 @@ describe('Table with combobox filters and calculated totals', function() {
         $timeout = _$timeout_;
         $filter = _$filter_;
         
-        $httpBackend = $injector.get('$httpBackend');
         $httpBackend.whenGET(/usm/).respond();
         $httpBackend.whenGET(/i18n/).respond();
         $httpBackend.whenGET(/globals/).respond({data : []});
@@ -40,6 +39,8 @@ describe('Table with combobox filters and calculated totals', function() {
     function buildMockRecords(){
         return [{
             "type": "ONBOARD",
+            "role": "CATCHING_VESSEL",
+            "roleDesc": "The catching vessel",
             "weight": 1444,
             "locations": {
                 "rfmo": "Pepodo",
@@ -47,6 +48,8 @@ describe('Table with combobox filters and calculated totals', function() {
             }
         },{
             "type": "UNLOADED",
+            "role": "PARTICIPATING_VESSEL",
+            "roleDesc": "The participating vessel",
             "weight": 1234,
             "locations": {
                 "rfmo": "Uncifi",
@@ -62,7 +65,7 @@ describe('Table with combobox filters and calculated totals', function() {
             srcProp: 'type',
             isVisible: true,
             useComboFilter: true
-        }, {
+        },{
             title: 'rfmo',
             srcObj: 'locations',
             srcProp: 'rfmo',
@@ -95,7 +98,13 @@ describe('Table with combobox filters and calculated totals', function() {
             srcProp: 'weight',
             isVisible: true,
             calculateTotal: true
-        }]
+        },{
+            title: 'role',
+            srcProp: 'roleDesc',
+            filterBy: 'role',
+            isVisible: true,
+            useComboFilter: true
+        }];
     }
     
     function getColumnCount(cols, prop){
@@ -185,7 +194,7 @@ describe('Table with combobox filters and calculated totals', function() {
         }
         
         if (isArea){
-            model.push('null_values')
+            model.push('null_values');
         }
         
         return model;
@@ -277,6 +286,33 @@ describe('Table with combobox filters and calculated totals', function() {
             $timeout.flush();
             
             expect(isolatedScope.doFilter).toHaveBeenCalled();
+        });
+
+        it('should apply the filter when using filterBy property', function(){
+            scope.records = buildMockRecords();
+            scope.columns = buildMockColumns();
+            scope.selectedItem = {};
+            
+            tile = compile('<table-filter-headers columns="columns" records="records" unique-columns-src-data="locations" unique-columns="isArea"></table-filter-headers>')(scope);
+            tile.appendTo('#parent-container');
+            scope.$digest();
+            
+            var nrRows = angular.element(tile).find('.table-filter-headers tbody tr').length;
+            expect(nrRows).toEqual(2);
+
+            var multiple = angular.element('st-select-multiple').eq(3);
+            var isolatedScope = multiple.isolateScope();
+            
+            var combo = multiple.find('.combobox');
+            var listItem = angular.element('#' + combo.attr('combolist-id')).find('li').eq(1);
+            
+            listItem.click();
+            isolatedScope.$digest();
+            $timeout.flush();
+            
+
+            nrRows = angular.element(tile).find('.table-filter-headers tbody tr').length;
+            expect(nrRows).toEqual(1);
         });
     });
     

@@ -338,6 +338,12 @@
     "fa_details_item_gfcm": "GFCM",
     "fa_details_item_iccat": "ICCAT",
     "fa_details_item_uvi": "UVI",
+
+    "fs": "Flag state",
+    "vessel_id": "Vessel id",
+    "ircs": "IRCS",
+    "specie": "Specie",
+    "alloc_type": "Allocation type",
     
     "occurrence": "Occurrence",
     "gear_shot_and_retrieval": "Gear shot and retrieval",
