@@ -15,12 +15,13 @@ copy of the GNU General Public License along with the IFDM Suite. If not, see <h
  * @name gearShotRetrievalTile
  * @param locale {Service} - The angular locale service
  * @param $styate {Service} - The state provider service
+ * @param tripSummaryService {Service} the trip summary service <p>{@link unionvmsWeb.tripSummaryService}</p>
  * @attr {String} tileTitle - The title of the tile
  * @attr {Array} srcData - An array containing the data to be displayed on the tile
  * @desc
  *  A reusable tile to display gear shot and retrieval sub-activities
  */
-angular.module('unionvmsWeb').directive('gearShotRetrievalTile', function(locale, $state) {
+angular.module('unionvmsWeb').directive('gearShotRetrievalTile', function(locale, $state, tripSummaryService) {
 	return {
 		restrict: 'E',
 		replace: false,
