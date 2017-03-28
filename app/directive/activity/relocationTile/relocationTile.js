@@ -28,13 +28,15 @@ angular.module('unionvmsWeb').directive('relocationTile', function(locale) {
 		},
 		templateUrl: 'directive/activity/relocationTile/relocationTile.html',
 		link: function(scope, element, attrs, fn) {
+
+			//table columns
 		    scope.tableAttrs = [{
 		        title: locale.getString('activity.role'),
 				srcProp: 'roleDesc',
 		        isVisible: true,
 		        useComboFilter: true,
 				filterBy: 'role',
-				translate: 'abbreviations.activity_'
+				translation: 'abbreviations.activity_'
 		    }, {
 		        title: locale.getString('activity.fs'),
                 srcProp: 'country',
@@ -66,7 +68,8 @@ angular.module('unionvmsWeb').directive('relocationTile', function(locale) {
                 title: locale.getString('activity.alloc_type'),
                 srcProp: 'type',
                 isVisible: true,
-                useComboFilter: true
+                useComboFilter: true,
+				translation: 'abbreviations.activity_'
 		    }, {
                 title: locale.getString('activity.weight'),
                 srcProp: 'weight',

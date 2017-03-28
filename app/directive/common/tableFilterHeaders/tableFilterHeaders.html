@@ -17,7 +17,7 @@
 						<span ng-if="column.srcObj">{{item[column.srcObj][column.srcProp]}}</span>
 						<span ng-if="column.isDate">{{item[column.srcProp] | stDateUtc}}</span>
 						<span ng-if="column.isDuration">{{item[column.srcProp] | stHumanizeTime}}</span>
-						<span ng-if="column.translation">{{column.translation + item[column.srcProp] | i18n}}</span>
+						<span ng-if="column.translation">{{column.translation + item[column.filterBy ? column.filterBy : column.srcProp] | i18n}}</span>
 						<span ng-if="!column.srcObj && !column.isDate && !column.isDuration && !column.translation">{{item[column.srcProp]}}</span>
 					</td>
 				</tr>
