@@ -135,7 +135,16 @@ angular.module('unionvmsWeb').factory('activityRestFactory', function ($resource
             });
         },
         getFishingActivityDetails: function(){
-            return $resource('/mock/activity/fadetails/:fatype', {}, {
+            /*return $resource('/mock/activity/fadetails/:fatype', {}, {
+                'get': {
+                    method: 'GET',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    }
+                }
+            });*/
+
+            return $resource('/activity/rest/fa/views/:fatype/:faId', {}, {
                 'get': {
                     method: 'GET',
                     headers: {
@@ -374,9 +383,9 @@ angular.module('unionvmsWeb').factory('activityRestFactory', function ($resource
          * @param {String} type - The fisihing activity type (e.g. departure, landing, arrival)
          * @returns {Promise}  A promise with either the fishing activity details or reject error
          */
-        getFishingActivityDetails: function(type){
+        getFishingActivityDetails: function(type, faId){
             var deferred = $q.defer();
-            activityRestFactory.getFishingActivityDetails().get({ fatype: type.toLowerCase() }, function (response) {
+            activityRestFactory.getFishingActivityDetails().get({ fatype: type.toLowerCase(), faId: faId }, function (response) {
                 deferred.resolve(response.data);
             }, function (error) {
                 deferred.reject(error);
