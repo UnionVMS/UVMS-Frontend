@@ -136,14 +136,14 @@ angular.module('unionvmsWeb').factory('Trip',function(locale,unitConversionServi
      * @param {Object} self - current trip object
      * @param {Object} activityReports - activity reports data
      */
-	var loadReportMessages = function(self,activityReports){
+	var loadReportMessages = function(self,activityReports){       
         self.reports = [];
 
         //one sub node per period
         var counter = 0; //FIXME remove when backend service ready
         
         //one main node per activity report
-        angular.forEach(activityReports,function(report){
+        angular.forEach(activityReports,function(report){          
             var reportItem = {};
             reportItem.type = locale.getString('activity.activity_type_' + report.activityType.toLowerCase());
             reportItem.nodes = [];
@@ -159,6 +159,8 @@ angular.module('unionvmsWeb').factory('Trip',function(locale,unitConversionServi
                 subreportItem.type = (report.correction ? locale.getString('activity.fa_report_document_type_correction') + ': ' : '') + locale.getString('activity.activity_type_' + report.activityType.toLowerCase()) + ' (' + locale.getString('activity.fa_report_document_type_' + report.faReportDocumentType.toLowerCase()) + ')';
 
                 subreportItem.date = getReportDate(report.faReportAcceptedDateTime,subreport.startDate,subreport.endDate);
+                
+                subreportItem.documentType=report.faReportDocumentType.toLowerCase();
 
                 if(angular.isDefined(report.locations) && report.locations.length > 0){
                     subreportItem.location = '';

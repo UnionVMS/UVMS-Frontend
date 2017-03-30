@@ -39,7 +39,7 @@ angular.module('unionvmsWeb').directive('locationTile', function() {
 		templateUrl: 'directive/activity/locationTile/locationTile.html',
 		link: function(scope, element, attrs, fn) {
 		    scope.$watch('locationDetails', function(newVal, oldVal){
-		        if (angular.isDefined(newVal) && !_.isEqual(newVal, oldVal)){
+		        if (angular.isDefined(newVal)){
 		            scope.init();
 		        }
 		    });

@@ -29,7 +29,8 @@ angular.module('unionvmsWeb').factory('fishingActivityService', function(activit
     var faServ = {
         activityData: {},
         id: undefined,
-        isCorrection: false
+        isCorrection: false,
+        documentType: undefined
 	};
 
     //tiles per fishing activity view
@@ -256,6 +257,7 @@ angular.module('unionvmsWeb').factory('fishingActivityService', function(activit
         //TODO use fa id in the REST request
         loadingStatus.isLoading('FishingActivity', true);
         activityRestService.getFishingActivityDetails(obj.faType).then(function (response) {
+            console.log("response"+JSON.stringify(response));
             faServ.activityData = obj;
             faServ.activityData.fromJson(response);
             if (angular.isDefined(callback)) {

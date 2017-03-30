@@ -80,7 +80,7 @@ angular.module('unionvmsWeb').directive('tripReportsPanel', function(loadingStat
 			 * @memberof tripReportsPanel
 			 * @private
 			 */
-            var init = function(){
+            var init = function(){             
                 //get trip message count
                 loadingStatus.isLoading('TripSummary', true, 0);
                 activityRestService.getTripMessageCount(scope.trip.id).then(function(response){
@@ -115,6 +115,7 @@ angular.module('unionvmsWeb').directive('tripReportsPanel', function(loadingStat
                     fishingActivityService.resetActivity();
                     fishingActivityService.id = node.id;
                     fishingActivityService.isCorrection = node.corrections;
+                    fishingActivityService.documentType = node.documentType;
                     tripReportsTimeline.setCurrentPreviousAndNextItem(node);
                     reportingNavigatorService.goToView('tripsPanel','tripDeparturePanel');
                 }

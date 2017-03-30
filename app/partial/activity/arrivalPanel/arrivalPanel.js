@@ -9,11 +9,22 @@ the hope that it will be useful, but WITHOUT ANY WARRANTY; without even the impl
 FITNESS FOR A PARTICULAR PURPOSE.  See the GNU General Public License for more details. You should have received a
 copy of the GNU General Public License along with the IFDM Suite. If not, see <http://www.gnu.org/licenses/>.
 */
-
+/**
+ * @memberof unionvmsWeb
+ * @ngdoc controller
+ * @name ArrivalpanelCtrl
+ * @param $scope {Service} controller scope
+ * @param $state {Service} state provider service
+ * @param fishingActivityService {Service} fishing activity service <p>{@link unionvmsWeb.fishingActivityService}</p>
+ * @param activityRestService {Service} activity REST service <p>{@link unionvmsWeb.activityRestService}</p>
+ * @attr {String} srcTab - Identifies from where the partial is being initialized. It is defined through ng-init and supports the following values: reports, activity
+ * @description
+ *  The controller for the Arrival panel partial
+ */
 angular.module('unionvmsWeb').controller('ArrivalpanelCtrl', function($scope, $state, fishingActivityService, tripSummaryService, activityRestService, locale, loadingStatus, FishingActivity) {
     $scope.faServ = fishingActivityService;
     
-    var arrivalNotification = false;
+    var arrivalNotification =  ($scope.faServ.documentType == 'notification')? true : false;
 
       /**
        * Initialization function
