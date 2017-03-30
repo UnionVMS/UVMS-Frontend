@@ -282,10 +282,9 @@ angular.module('unionvmsWeb').factory('fishingActivityService', function(activit
             activityId: faServ.id
         };
         
-        //FIXME this should be checked for the integration of activity details on the reporting tab where we should also include the trip id in the payload
-//        if (($state.current.name === 'app.reporting-id' || $state.current.name === 'app.reporting') && tripSummaryService.withMap){
-//            payload.tripId = tripSummaryService.trip.id;
-//        }
+        if ($state.current.name === 'app.reporting-id' || $state.current.name === 'app.reporting'){
+            payload.tripId = tripSummaryService.trip.id;
+        }
         
         activityRestService.getFishingActivityDetails(getViewNameByFaType(obj.faType), payload).then(function (response) {
             faServ.activityData = obj;
