@@ -109,7 +109,10 @@ angular.module('unionvmsWeb').controller('ActivityreportslistCtrl',function($sco
      */
     $scope.openDetails = function(idx){
         //TODO fetch the data and load the partial
-        $scope.actServ.overview = $scope.actServ.displayedActivities[idx];
+        $scope.actServ.overview = $scope.actServ.displayedActivities[idx]; //TODO check if we need this
+        $scope.actServ.id = $scope.actServ.displayedActivities[idx].fishingActivityId;
+        $scope.actServ.activityType = $scope.actServ.displayedActivities[idx].activityType.toLowerCase();
+        
         $scope.goToView(3);
         //reportingNavigatorService.goToView('tripsPanel','tripDeparturePanel');
     };

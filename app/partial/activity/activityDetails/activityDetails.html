@@ -13,8 +13,8 @@ copy of the GNU General Public License along with the IFDM Suite. If not, see <h
 	<!-- <div>{{actServ.details.name}}</div> -->
 	<loading-panel class="activity-fa-loading" type="FishingActivity"></loading-panel>
 	<div class="row">
-		<div ng-include="'partial/activity/departurePanel/departurePanel.html'" ng-init="srcTab = 'activity'"></div>
-		<!-- <div ng-include="'partial/activity/areaExitPanel/areaExitPanel.html'" ng-init="srcTab = 'activity'"></div> -->
+		<!-- <div ng-include="'partial/activity/departurePanel/departurePanel.html'" ng-init="srcTab = 'activity'"></div> -->
+		<div ng-include="'partial/activity/areaExitPanel/areaExitPanel.html'" ng-init="srcTab = 'activity'" ng-if="faServ.activityType === 'area_exit'"></div>
 		<!-- <div ng-include="'partial/activity/areaEntryPanel/areaEntryPanel.html'" ng-init="srcTab = 'activity'"></div> -->
 	</div>
 </div>
