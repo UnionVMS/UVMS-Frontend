@@ -32,14 +32,6 @@ angular.module('unionvmsWeb').controller('AreaexitpanelCtrl', function ($scope, 
      */
     var init = function () {
         $scope.faServ.getFishingActivity(new FishingActivity('area_exit'));
-        loadingStatus.isLoading('FishingActivity', true);
-        activityRestService.getTripCatchDetail($scope.faServ.id).then(function (response) {
-            $scope.fishingTripDetails = response;
-            loadingStatus.isLoading('FishingActivity', false);
-        }, function (error) {
-            //TODO deal with error from service
-            loadingStatus.isLoading('FishingActivity', false);
-        });
     };
     
     /**

@@ -14,10 +14,10 @@ copy of the GNU General Public License along with the IFDM Suite. If not, see <h
  * @ngdoc controller
  * @name ActivitydetailsCtrl
  * @param $scope {Service} controller scope
- * @param activityService {Service} The activity service
+ * @param fishingActivityService {Service} The fishing activity service <p>{@link unionvmsWeb.fishingActivityService}</p>
  * @description
  *  The controller for the activity details page
  */
-angular.module('unionvmsWeb').controller('ActivitydetailsCtrl',function($scope, activityService){
-    $scope.actServ = activityService;
+angular.module('unionvmsWeb').controller('ActivitydetailsCtrl',function($scope, fishingActivityService){
+    $scope.faServ = fishingActivityService;
 });
