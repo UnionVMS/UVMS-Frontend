@@ -143,14 +143,6 @@ angular.module('unionvmsWeb').factory('activityRestFactory', function ($resource
                    }
                }
             });
-//            return $resource('/mock/activity/fadetails/:fatype', {}, {
-//                'get': {
-//                    method: 'GET',
-//                    headers: {
-//                        'Content-Type': 'application/json'
-//                    }
-//                }
-//            });
         }
     };
 
