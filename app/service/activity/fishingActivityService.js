@@ -18,13 +18,15 @@ copy of the GNU General Public License along with the IFDM Suite. If not, see <h
  * @param mdrCacheService {Service} The mdr code lists cache service <p>{@link unionvmsWeb.mdrCacheService}</p>
  * @param locale {service} angular locale service
  * @param $filter {Service} angular filter service
+ * @param $state {Service} The angular $state service
+ * @param tripSummaryService {Service} The trip summary service <p>{@link unionvmsWeb.tripSummaryService}</p>
  * @attr {Object} activityData - An object containing the activity data that will be used in the different views
  * @attr {String} id - Id of the current fishing activity
  * @attr {Boolean} isCorrection - Tells if the current fishing activity is a correction
  * @description
  *  A service to deal with any kind of fishing activity operation (e.g. Departure, Arrival, ...)
  */
-angular.module('unionvmsWeb').factory('fishingActivityService', function(activityRestService, loadingStatus, mdrCacheService, locale, $filter) {
+angular.module('unionvmsWeb').factory('fishingActivityService', function(activityRestService, loadingStatus, mdrCacheService, locale, $filter, $state, tripSummaryService) {
 
     var faServ = {
         activityData: {},
@@ -248,6 +250,24 @@ angular.module('unionvmsWeb').factory('fishingActivityService', function(activit
     faServ.resetActivityData = function() {
         faServ.activityData = {};
     };
+    
+    /**
+     * Get the view name for requesting data on each activity type
+     * 
+     * @memberof fishingActivityService
+     * @private
+     * @param {String} type - The fishing activity type (e.g. area_exit)
+     * @returns {String} The view name
+     */
+    function getViewNameByFaType(type){
+        var views = {
+            area_exit: 'areaExit'
+        };
+        
+        //TODO add all activity types
+        
+        return views[type.toLowerCase()];
+    }
 
 	/**
 	 * Get data for a specific fishing activity
@@ -257,9 +277,17 @@ angular.module('unionvmsWeb').factory('fishingActivityService', function(activit
      * @alias getFishingActivity
 	 */
     faServ.getFishingActivity = function(obj, callback) {
-        //TODO use fa id in the REST request
         loadingStatus.isLoading('FishingActivity', true);
-        activityRestService.getFishingActivityDetails(obj.faType, faServ.id).then(function (response) {
+        var payload = {
+            activityId: faServ.id
+        };
+        
+        //FIXME this should be checked for the integration of activity details on the reporting tab where we should also include the trip id in the payload
+//        if (($state.current.name === 'app.reporting-id' || $state.current.name === 'app.reporting') && tripSummaryService.withMap){
+//            payload.tripId = tripSummaryService.trip.id;
+//        }
+        
+        activityRestService.getFishingActivityDetails(getViewNameByFaType(obj.faType), payload).then(function (response) {
             faServ.activityData = obj;
             faServ.activityData.fromJson(response);
             if (angular.isDefined(callback)) {
@@ -447,8 +475,13 @@ angular.module('unionvmsWeb').factory('fishingActivityService', function(activit
                 }
             });
         }
-
-        var itemLabel = locale.getString('activity.fa_details_item_' + key);
+        
+        var itemLabel;
+        if(key.indexOf(".") !== -1){
+            itemLabel = key;
+        }else{
+            itemLabel = locale.getString('activity.fa_details_item_' + key);
+        }
 
         return {
             idx: attrKeys.indexOf(key),
@@ -575,12 +608,14 @@ angular.module('unionvmsWeb').factory('fishingActivityService', function(activit
 
         angular.forEach(data, function(value, key) {
             areaSummary.areaData[key] = {};
-            var geom = wkt.readGeometry(value.geometry);
-            var coords = geom.getCoordinates();
             areaSummary.areaData[key].occurence = value.occurence;
-            areaSummary.areaData[key].long = coords[0];
-            areaSummary.areaData[key].lat = coords[1];
-            areaSummary.areaData[key].geometry = geom;
+            if (angular.isDefined(value.geometry)){
+                var geom = wkt.readGeometry(value.geometry);
+                var coords = geom.getCoordinates();
+                areaSummary.areaData[key].long = coords[0];
+                areaSummary.areaData[key].lat = coords[1];
+                areaSummary.areaData[key].geometry = geom;
+            }
         });
         return areaSummary;
     };

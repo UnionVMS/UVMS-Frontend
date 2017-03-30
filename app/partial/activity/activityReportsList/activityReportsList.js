@@ -20,8 +20,9 @@ copy of the GNU General Public License along with the IFDM Suite. If not, see <h
  * @description
  *  The controller for the fisihing activity reports table list
  */
-angular.module('unionvmsWeb').controller('ActivityreportslistCtrl',function($scope, activityService, visibilityService){
+angular.module('unionvmsWeb').controller('ActivityreportslistCtrl',function($scope, activityService, visibilityService, fishingActivityService){
     $scope.actServ = activityService;
+    $scope.faServ = fishingActivityService;
     $scope.attrVisibility = visibilityService;
     
     /**
@@ -108,12 +109,10 @@ angular.module('unionvmsWeb').controller('ActivityreportslistCtrl',function($sco
      * @param {Number} idx - The index of the activity record to use to fetch the detail data
      */
     $scope.openDetails = function(idx){
-        //TODO fetch the data and load the partial
         $scope.actServ.overview = $scope.actServ.displayedActivities[idx]; //TODO check if we need this
-        $scope.actServ.id = $scope.actServ.displayedActivities[idx].fishingActivityId;
-        $scope.actServ.activityType = $scope.actServ.displayedActivities[idx].activityType.toLowerCase();
+        $scope.faServ.id = $scope.actServ.displayedActivities[idx].fishingActivityId;
+        $scope.faServ.activityType = $scope.actServ.displayedActivities[idx].activityType.toLowerCase();
         
         $scope.goToView(3);
-        //reportingNavigatorService.goToView('tripsPanel','tripDeparturePanel');
     };
 });
