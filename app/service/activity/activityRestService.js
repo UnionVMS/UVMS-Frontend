@@ -135,22 +135,13 @@ angular.module('unionvmsWeb').factory('activityRestFactory', function ($resource
             });
         },
         getFishingActivityDetails: function(){
-            /*return $resource('/mock/activity/fadetails/:fatype', {}, {
-                'get': {
-                    method: 'GET',
-                    headers: {
-                        'Content-Type': 'application/json'
-                    }
-                }
-            });*/
-
-            return $resource('/activity/rest/fa/views/:fatype/:faId', {}, {
-                'get': {
-                    method: 'GET',
-                    headers: {
-                        'Content-Type': 'application/json'
-                    }
-                }
+            return $resource('/activity/rest/fa/views/:fatype', {}, {
+               'get': {
+                   method: 'POST',
+                   headers: {
+                       'Content-Type': 'application/json'
+                   }
+               }
             });
         }
     };
@@ -381,11 +372,12 @@ angular.module('unionvmsWeb').factory('activityRestFactory', function ($resource
          * @memberof activityRestService
          * @public
          * @param {String} type - The fisihing activity type (e.g. departure, landing, arrival)
+         * @param {Object} payload - The post payload containing the activity id (mandatory) and the trip id (not mandatory and to be used only in the report tab) 
          * @returns {Promise}  A promise with either the fishing activity details or reject error
          */
-        getFishingActivityDetails: function(type, faId){
+        getFishingActivityDetails: function(type, payload){
             var deferred = $q.defer();
-            activityRestFactory.getFishingActivityDetails().get({ fatype: type.toLowerCase(), faId: faId }, function (response) {
+            activityRestFactory.getFishingActivityDetails().get({fatype: type}, payload, function (response) {
                 deferred.resolve(response.data);
             }, function (error) {
                 deferred.reject(error);
