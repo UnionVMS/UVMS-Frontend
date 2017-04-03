@@ -257,7 +257,7 @@ angular.module('unionvmsWeb').factory('fishingActivityService', function(activit
         //TODO use fa id in the REST request
         loadingStatus.isLoading('FishingActivity', true);
         activityRestService.getFishingActivityDetails(obj.faType).then(function (response) {
-            console.log("response"+JSON.stringify(response));
+          
             faServ.activityData = obj;
             faServ.activityData.fromJson(response);
             if (angular.isDefined(callback)) {
