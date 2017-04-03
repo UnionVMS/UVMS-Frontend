@@ -31,7 +31,7 @@
 								</tbody>
 							</table>
 						</div>
-						<div class="row">
+						<div class="row" ng-if="selectedSpecieLocation.groupingDetails[selectedClass].classProps">
 							<div class="col-md-12 section">
 								<div class="row" ng-repeat="(attrName,attr) in selectedSpecieLocation.groupingDetails[selectedClass].classProps">
 									<div class="col-md-12 item-container">

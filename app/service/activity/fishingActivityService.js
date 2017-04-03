@@ -348,12 +348,14 @@ angular.module('unionvmsWeb').factory('fishingActivityService', function(activit
             var classes = ['LSC','BMS'];
             angular.forEach(faObj.catches, function(item) {
                 angular.forEach(classes, function(className) {
-                    var mdrRec = _.findWhere(response, {code: item.groupingDetails[className].classProps.weightingMeans});
-                    if (angular.isDefined(mdrRec)){
-                        if(!angular.isDefined(item.groupingDetails[className].classDescs)){
-                            item.groupingDetails[className].classDescs = {};
+                    if(angular.isDefined(item.groupingDetails[className].classProps)){
+                        var mdrRec = _.findWhere(response, {code: item.groupingDetails[className].classProps.weightingMeans});
+                        if (angular.isDefined(mdrRec)){
+                            if(!angular.isDefined(item.groupingDetails[className].classDescs)){
+                                item.groupingDetails[className].classDescs = {};
+                            }
+                            item.groupingDetails[className].classDescs.weightingMeansDesc = mdrRec.description;
                         }
-                        item.groupingDetails[className].classDescs.weightingMeansDesc = mdrRec.description;
                     }
                 });
             });
@@ -604,23 +606,33 @@ angular.module('unionvmsWeb').factory('fishingActivityService', function(activit
             var classes = ['LSC','BMS'];
             angular.forEach(data, function(item){
                 angular.forEach(classes, function(className){
-                    if(angular.isDefined(item.groupingDetails[className].gears)){
-                        item.groupingDetails[className].gears = loadGears(item.groupingDetails[className].gears);
+                    var classDetails = item.groupingDetails;
+
+                    if(angular.isDefined(classDetails[className].gears)){
+                        classDetails[className].gears = loadGears(classDetails[className].gears);
                     }
 
-                    item.groupingDetails[className].classProps = {};
+                    classDetails[className].classProps = {};
 
-                    if(angular.isDefined(item.groupingDetails[className].destinationLocation) && angular.isDefined(item.groupingDetails[className].destinationLocation[0])){
-                        item.groupingDetails[className].destinationLocation = item.groupingDetails[className].destinationLocation[0].id + ' - ' + item.groupingDetails[className].destinationLocation[0].name + ', ' +
-                            item.groupingDetails[className].destinationLocation[0].countryId;
+                    if(angular.isDefined(classDetails[className].destinationLocation) && angular.isDefined(classDetails[className].destinationLocation[0])){
+                        classDetails[className].destinationLocation = classDetails[className].destinationLocation[0].id + ' - ' + classDetails[className].destinationLocation[0].name + ', ' +
+                            classDetails[className].destinationLocation[0].countryId;
                     }
 
-                    angular.forEach(item.groupingDetails[className], function(attr,attrName){
-                        if(!_.isObject(attr) && !_.isArray(attr)){
-                            item.groupingDetails[className].classProps[attrName] = attr;
-                            delete item.groupingDetails[className][attrName];
+                    angular.forEach(classDetails[className], function(attr,attrName){
+                        if(!_.isObject(attr) && !_.isArray(attr) && attrName !== 'weight'){
+                            classDetails[className].classProps[attrName] = attr;
+                            delete classDetails[className][attrName];
                         }
                     });
+
+                    if(_.isEmpty(classDetails[className].classProps)){
+                        delete classDetails[className].classProps;
+                    }
+
+                    if(!angular.isDefined(classDetails[className].weight)){
+                        classDetails[className].weight = 0;
+                    }
                 });
             });
         }
