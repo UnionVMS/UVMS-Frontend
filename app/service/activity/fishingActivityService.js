@@ -261,12 +261,14 @@ angular.module('unionvmsWeb').factory('fishingActivityService', function(activit
      */
     function getViewNameByFaType(type){
         var views = {
-            area_exit: 'areaExit'
+            area_exit: 'areaExit',
+            fishing_operation: 'fishingOperation',
+            area_entry: 'areaEntry'
         };
         
         //TODO add all activity types
         
-        return views[type.toLowerCase()];
+        return views[type.toLowerCase()] || type;
     }
 
 	/**
@@ -338,6 +340,14 @@ angular.module('unionvmsWeb').factory('fishingActivityService', function(activit
         });
     };
     
+    /**
+     * Adds gear problem description from MDR code lists into the details object.
+     * 
+     * @memberof fishingActivityService
+     * @private
+     * @param {Object} obj - A reference to the Fishing activity object
+     * @alias addGearProblemDesc
+     */
     var addGearProblemDesc = function(obj){
         mdrCacheService.getCodeList('fa_gear_problem').then(function(response){
             angular.forEach(obj.gearShotRetrieval, function(item) {
@@ -351,6 +361,14 @@ angular.module('unionvmsWeb').factory('fishingActivityService', function(activit
         });
     };
     
+    /**
+     * Adds gear recovery description from MDR code lists into the details object.
+     * 
+     * @memberof fishingActivityService
+     * @private
+     * @param {Object} obj - A reference to the Fishing activity object
+     * @alias addRecoveryDesc
+     */
     var addRecoveryDesc = function(obj){
         mdrCacheService.getCodeList('fa_gear_recovery').then(function(response){
             angular.forEach(obj.gearShotRetrieval, function(item) {
@@ -391,6 +409,14 @@ angular.module('unionvmsWeb').factory('fishingActivityService', function(activit
         });
     };
 
+    /**
+     * Adds gear recovery description from MDR code lists into the details object.
+     * 
+     * @memberof fishingActivityService
+     * @private
+     * @param {Object} faObj - A reference to the Fishing activity object
+     * @alias addVesselRoleDescription
+     */
     var addVesselRoleDescription = function(faObj){
         mdrCacheService.getCodeList('vessel_role').then(function(response){
             angular.forEach(faObj.relocation, function(item) {
@@ -785,7 +811,15 @@ angular.module('unionvmsWeb').factory('fishingActivityService', function(activit
         return finalData;
     };
 
-
+    /**
+     * Loads the data to be presented in the relocation tile
+     * 
+     * @memberof fishingActivityService
+     * @private
+     * @param {Object} data - A reference to the data to be loaded in the relocation tile
+     * @alias loadRelocation
+     * @returns {Object} data to be displayed in the relocation tile
+     */
     var loadRelocation = function(data){
         angular.forEach(data, function(row){
             angular.forEach(row.vesselIdentifiers, function(item){

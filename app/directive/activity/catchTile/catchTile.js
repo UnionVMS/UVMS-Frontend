@@ -170,13 +170,25 @@ angular.module('unionvmsWeb').directive('catchTile', function(locale,reportingNa
 				api.show();
 			};
 
+			/**
+			 * Create and show a tootlip with a description for the catch details type
+			 *  
+			 *  @memberof catchClassSpecieDetailTile
+			 *  @public
+			 *  @param {Array} model - The catch data to be displayed in the tile
+			 *  @returns {Boolean} a boolean which indicates if there's data to display or not
+			 */
+			scope.hasData = function(model){
+				return angular.isDefined(model) && !_.isEmpty(model);
+			};
+
 			//if ngModel is not defined add a watch to wait for the model
 			var watchRef;
-			if(angular.isDefined(scope.ngModel) && !_.isEmpty(newVal)){
+			if(scope.hasData(scope.ngModel)){
 				init();
 			}else{
 				watchRef = scope.$watch('ngModel',function(newVal){
-					if(angular.isDefined(newVal) && !_.isEmpty(newVal)){
+					if(scope.hasData(newVal)){
 						init();
 						watchRef();
 					}

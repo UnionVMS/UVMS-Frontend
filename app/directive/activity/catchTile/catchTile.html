@@ -1,8 +1,8 @@
-<fieldset class="col-md-12 fieldsetStyle catch-tile">
+<fieldset class="col-md-12 fieldsetStyle catch-tile" ng-switch="hasData(ngModel)">
 	<legend class="fieldsetLegendStyle">
 		<a>{{tileTitle}}</a>
 	</legend>
-	<div class="row global-container">
+	<div class="row global-container" ng-switch-when="true">
 		<!-- FIXME in tripsummary panel -->
 		<!-- <div class="navigator">
 			<i class="fa fa-th-large"></i>
@@ -56,7 +56,7 @@
 			</div>
 		</div>
 	</div>
-	<div class="row no-data" ng-if="!ngModel">
+	<div class="row no-data" ng-switch-when="false">
 		<div class="col-md-12">
 			<span>{{'activity.no_data' | i18n}}</span>
 		</div>
