@@ -18,7 +18,7 @@
             <span ng-class="item.clickable ? 'attr-clickable' : ''">{{item.value}}</span>
         </div>
     </fieldset>
-    <fa-characteristics-modal ng-if="ngModel.characteristicsDetails" class="characteristics" data="ngModel.characteristicsDetails"></fa-characteristics-modal>
+    <fa-characteristics-modal ng-if="ngModel.characteristics" class="characteristics" data="ngModel.characteristics"></fa-characteristics-modal>
     <div class="row location-container" ng-if="hasLocData()">
         <location-tile class="col-md-12" is-clickable="isLocClickable()" field-title="{{'activity.activity_location_port_departure' | i18n}}" location-details="locDetails" click-callback="locClickCallback()"></location-tile>
     </div>

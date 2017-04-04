@@ -139,8 +139,6 @@ angular.module('unionvmsWeb').factory('Trip',function(locale,unitConversionServi
 	var loadReportMessages = function(self,activityReports){
         self.reports = [];
 
-        //one sub node per period
-        var counter = 0; //FIXME remove when backend service ready
         
         //one main node per activity report
         angular.forEach(activityReports,function(report){
@@ -172,9 +170,7 @@ angular.module('unionvmsWeb').factory('Trip',function(locale,unitConversionServi
                 subreportItem.corrections = report.correction;
                 subreportItem.detail = true;
                 
-                //FIXME remove id when backend service ready
-                subreportItem.id = counter;
-                counter += 1;
+                subreportItem.id = report.fishingActivityId;
                 
                 reportItem.nodes.push(subreportItem);
                 tripReportsTimeline.reports.push(subreportItem); 

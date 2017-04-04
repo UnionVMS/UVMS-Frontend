@@ -45,7 +45,7 @@ angular.module('unionvmsWeb').factory('fishingActivityService', function(activit
         departure: [
             'locations',
             'gears',
-            //'catches',
+            'catches',
             'processingProducts',
             'gearShotRetrieval'
         ],
@@ -91,7 +91,7 @@ angular.module('unionvmsWeb').factory('fishingActivityService', function(activit
     //Configs of activity details attributes
     var faSummaryAttrsOrder = [
         {
-            id: 'occurence',
+            id: 'occurrence',
             type: 'date'
         },
         {
@@ -261,12 +261,14 @@ angular.module('unionvmsWeb').factory('fishingActivityService', function(activit
      */
     function getViewNameByFaType(type){
         var views = {
-            area_exit: 'areaExit'
+            area_exit: 'areaExit',
+            fishing_operation: 'fishingOperation',
+            area_entry: 'areaEntry'
         };
         
         //TODO add all activity types
         
-        return views[type.toLowerCase()];
+        return views[type.toLowerCase()] || type;
     }
 
 	/**
@@ -338,6 +340,14 @@ angular.module('unionvmsWeb').factory('fishingActivityService', function(activit
         });
     };
     
+    /**
+     * Adds gear problem description from MDR code lists into the details object.
+     * 
+     * @memberof fishingActivityService
+     * @private
+     * @param {Object} obj - A reference to the Fishing activity object
+     * @alias addGearProblemDesc
+     */
     var addGearProblemDesc = function(obj){
         mdrCacheService.getCodeList('fa_gear_problem').then(function(response){
             angular.forEach(obj.gearShotRetrieval, function(item) {
@@ -351,6 +361,14 @@ angular.module('unionvmsWeb').factory('fishingActivityService', function(activit
         });
     };
     
+    /**
+     * Adds gear recovery description from MDR code lists into the details object.
+     * 
+     * @memberof fishingActivityService
+     * @private
+     * @param {Object} obj - A reference to the Fishing activity object
+     * @alias addRecoveryDesc
+     */
     var addRecoveryDesc = function(obj){
         mdrCacheService.getCodeList('fa_gear_recovery').then(function(response){
             angular.forEach(obj.gearShotRetrieval, function(item) {
@@ -374,21 +392,31 @@ angular.module('unionvmsWeb').factory('fishingActivityService', function(activit
      */
     var addWeightMeansDescription = function(faObj){
         mdrCacheService.getCodeList('weight_means').then(function(response){
-            var classes = ['lsc','bms'];
+            var classes = ['LSC','BMS'];
             angular.forEach(faObj.catches, function(item) {
                 angular.forEach(classes, function(className) {
-                    var mdrRec = _.findWhere(response, {code: item[className].classProps.weightingMeans});
-                    if (angular.isDefined(mdrRec)){
-                        if(!angular.isDefined(item[className].classDescs)){
-                            item[className].classDescs = {};
+                    if(angular.isDefined(item.groupingDetails[className].classProps)){
+                        var mdrRec = _.findWhere(response, {code: item.groupingDetails[className].classProps.weightingMeans});
+                        if (angular.isDefined(mdrRec)){
+                            if(!angular.isDefined(item.groupingDetails[className].classDescs)){
+                                item.groupingDetails[className].classDescs = {};
+                            }
+                            item.groupingDetails[className].classDescs.weightingMeansDesc = mdrRec.description;
                         }
-                        item[className].classDescs.weightingMeansDesc = mdrRec.description;
                     }
                 });
             });
         });
     };
 
+    /**
+     * Adds gear recovery description from MDR code lists into the details object.
+     * 
+     * @memberof fishingActivityService
+     * @private
+     * @param {Object} faObj - A reference to the Fishing activity object
+     * @alias addVesselRoleDescription
+     */
     var addVesselRoleDescription = function(faObj){
         mdrCacheService.getCodeList('vessel_role').then(function(response){
             angular.forEach(faObj.relocation, function(item) {
@@ -511,8 +539,8 @@ angular.module('unionvmsWeb').factory('fishingActivityService', function(activit
 
         finalSummary.title = locale.getString('activity.activity_report_doc_title');
 
-        if (angular.isDefined(data.characteristics)) {
-            finalSummary.characteristicsDetails = data.characteristics;
+        if (angular.isDefined(data.characteristics) && !_.isEmpty(data.characteristics)) {
+            finalSummary.characteristics = data.characteristics;
         }
         if (angular.isDefined(finalSummary.subItems)) {
             finalSummary.subTitle = locale.getString('activity.activity_related_flux_doc_title');
@@ -534,24 +562,26 @@ angular.module('unionvmsWeb').factory('fishingActivityService', function(activit
         angular.forEach(data, function(gear){
             var gearAttrs = _.keys(gear);
             if (gearAttrs.length > 2) {
-                gear.characteristics = {};
-                var characteristicsDetails = {};
+                gear.mainCharacteristics = {};
+                var popupCharacteristics = {};
                 angular.forEach(gearAttrs,function(attrName){
                     var nonCharacteristics = ['type','role'];
                     var mainCharacteristics = ['meshSize','lengthWidth','numberOfGears'];
 
                     if(nonCharacteristics.indexOf(attrName) === -1){
                         if(mainCharacteristics.indexOf(attrName) === -1){
-                            characteristicsDetails[attrName] = gear[attrName];
+                            popupCharacteristics[attrName] = gear[attrName];
                         }else{
-                            gear.characteristics[attrName] = gear[attrName];
+                            gear.mainCharacteristics[attrName] = gear[attrName];
                         }
                         delete gear[attrName];
                     }
                 });
-                gear.characteristics = loadFishingActivityDetails(gear.characteristics, gearAttrOrder);
-                gear.characteristics.characteristicsDetails = characteristicsDetails;
-                gear.characteristics.title = locale.getString('activity.characteristics');
+                gear.mainCharacteristics = loadFishingActivityDetails(gear.mainCharacteristics, gearAttrOrder);
+                if(!_.isEmpty(popupCharacteristics)){
+                    gear.mainCharacteristics.characteristics = popupCharacteristics;
+                }
+                gear.mainCharacteristics.title = locale.getString('activity.characteristics');
             }
         });
 
@@ -576,8 +606,8 @@ angular.module('unionvmsWeb').factory('fishingActivityService', function(activit
         
         if(exceptions.indexOf(faType) === -1){
             finalSummary = loadFishingActivityDetails(data, faSummaryAttrsOrder);
-            if (angular.isDefined(data.characteristics)) {
-                finalSummary.characteristicsDetails = data.characteristics;
+            if (angular.isDefined(data.characteristics) && !_.isEmpty(data.characteristics)) {
+                finalSummary.characteristics = data.characteristics;
             }
             finalSummary.title = locale.getString('activity.title_fishing_activity') + ': ' + locale.getString('activity.fa_type_' + faType);
         }else{
@@ -630,26 +660,39 @@ angular.module('unionvmsWeb').factory('fishingActivityService', function(activit
      */
     var loadFishingData = function(data){
         if(angular.isDefined(data) && data.length){
-            var classes = ['lsc','bms'];
+            var classes = ['LSC','BMS'];
             angular.forEach(data, function(item){
                 angular.forEach(classes, function(className){
-                    if(angular.isDefined(item[className].gears)){
-                        item[className].gears = loadGears(item[className].gears);
+                    var classDetails = item.groupingDetails;
+
+                    if(angular.isDefined(classDetails[className].gears)){
+                        classDetails[className].gears = loadGears(classDetails[className].gears);
                     }
 
-                    item[className].classProps = {};
+                    classDetails[className].classProps = {};
 
-                    if(angular.isDefined(item[className].destinationLocation) && angular.isDefined(item[className].destinationLocation[0])){
-                        item[className].destinationLocation = item[className].destinationLocation[0].id + ' - ' + item[className].destinationLocation[0].name + ', ' +
-                            item[className].destinationLocation[0].countryId;
+                    if(angular.isDefined(classDetails[className].destinationLocation) && angular.isDefined(classDetails[className].destinationLocation[0])){
+                        classDetails[className].destinationLocation = classDetails[className].destinationLocation[0].id + ' - ' + classDetails[className].destinationLocation[0].name + ', ' +
+                            classDetails[className].destinationLocation[0].countryId;
                     }
 
-                    angular.forEach(item[className], function(attr,attrName){
-                        if(!_.isObject(attr) && !_.isArray(attr)){
-                            item[className].classProps[attrName] = attr;
-                            delete item[className][attrName];
+                    angular.forEach(classDetails[className], function(attr,attrName){
+                        if(!_.isObject(attr) && !_.isArray(attr) && ['weight','unit'].indexOf(attrName) === -1){
+                            classDetails[className].classProps[attrName] = attr;
+                            delete classDetails[className][attrName];
                         }
                     });
+
+                    if(_.isEmpty(classDetails[className].classProps)){
+                        delete classDetails[className].classProps;
+                    }
+
+                    if(!angular.isDefined(classDetails[className].weight)){
+                        classDetails[className].weight = 0;
+                    }
+                    if(!angular.isDefined(classDetails[className].unit)){
+                        classDetails[className].unit = 0;
+                    }
                 });
             });
         }
@@ -771,7 +814,15 @@ angular.module('unionvmsWeb').factory('fishingActivityService', function(activit
         return finalData;
     };
 
-
+    /**
+     * Loads the data to be presented in the relocation tile
+     * 
+     * @memberof fishingActivityService
+     * @private
+     * @param {Object} data - A reference to the data to be loaded in the relocation tile
+     * @alias loadRelocation
+     * @returns {Object} data to be displayed in the relocation tile
+     */
     var loadRelocation = function(data){
         angular.forEach(data, function(row){
             angular.forEach(row.vesselIdentifiers, function(item){

@@ -24,7 +24,7 @@ copy of the GNU General Public License along with the IFDM Suite. If not, see <h
 angular.module('unionvmsWeb').directive('catchTile', function(locale,reportingNavigatorService) {
 	return {
 		restrict: 'E',
-		replace: true,
+		replace: false,
 		scope: {
 			tileTitle: '@',
 		    ngModel: '=',
@@ -43,51 +43,51 @@ angular.module('unionvmsWeb').directive('catchTile', function(locale,reportingNa
 		        isVisible: true,
 		        useComboFilter: true
 		    }, {
-		        title: locale.getString('activity.territory_area'),
+		        title: locale.getString('activity.fa_territory'),
 		        srcObj: 'locations',
 		        srcProp: 'territory',
 		        isArea: true,
 		        isVisible: true,
 		        useComboFilter: true
 		    }, {
-		        title: locale.getString('activity.fao_area'),
+		        title: locale.getString('activity.fa_fao_area'),
 		        srcObj: 'locations',
-                srcProp: 'fao_area',
+                srcProp: 'faoArea',
                 isArea: true,
                 isVisible: true,
                 useComboFilter: true
 		    }, {
-                title: locale.getString('activity.ices_stat_rect'),
+                title: locale.getString('activity.fa_ices_stat_rectangle'),
                 srcObj: 'locations',
-                srcProp: 'ices_stat_rectangle',
+                srcProp: 'icesStatRectangle',
                 isArea: true,
                 isVisible: true,
                 useComboFilter: true
 		    }, {
-                title: locale.getString('activity.effort_zone'),
+                title: locale.getString('activity.fa_effort_zone'),
                 srcObj: 'locations',
-                srcProp: 'effort_zone',
+                srcProp: 'effortZone',
                 isArea: true,
                 isVisible: true,
                 useComboFilter: true
 		    }, {
-                title: locale.getString('activity.rfmo_area'),
+                title: locale.getString('activity.fa_rfmo'),
                 srcObj: 'locations',
                 srcProp: 'rfmo',
                 isArea: true,
                 isVisible: true,
                 useComboFilter: true
 		    }, {
-                title: locale.getString('activity.gfcm_area'),
+                title: locale.getString('activity.fa_gfcm_gsa'),
                 srcObj: 'locations',
-                srcProp: 'gfcm_gsa',
+                srcProp: 'gfcmGsa',
                 isArea: true,
                 isVisible: true,
                 useComboFilter: true
 		    }, {
-                title: locale.getString('activity.gfcm_stat_rect'),
+                title: locale.getString('activity.fa_gfcm_stat_rectangle'),
                 srcObj: 'locations',
-                srcProp: 'gfcm_stat_rectangle',
+                srcProp: 'gfcmStatRectangle',
                 isArea: true,
                 isVisible: true,
                 useComboFilter: true
@@ -104,13 +104,15 @@ angular.module('unionvmsWeb').directive('catchTile', function(locale,reportingNa
 		    }];
 
 
-			//columns of the second table(classes)
-			scope.classColumnOrder = ['lsc', 'bms'];
+			var init = function(){
+				//columns of the second table(classes)
+				scope.classColumnOrder = ['LSC', 'BMS'];
 
-			//selects the first row on every table(by default)
-			scope.ngModel[0].selected = true;
-			scope.selectedSpecieLocation = scope.ngModel[0];
-			scope.selectedClass = 'lsc';
+				//selects the first row on every table(by default)
+				scope.ngModel[0].selected = true;
+				scope.selectedSpecieLocation = scope.ngModel[0];
+				scope.selectedClass = 'LSC';
+			};
 
 			/**
 			 * Selects a row by index
@@ -167,6 +169,31 @@ angular.module('unionvmsWeb').directive('catchTile', function(locale,reportingNa
 				var api = tip.qtip('api');
 				api.show();
 			};
+
+			/**
+			 * Create and show a tootlip with a description for the catch details type
+			 *  
+			 *  @memberof catchClassSpecieDetailTile
+			 *  @public
+			 *  @param {Array} model - The catch data to be displayed in the tile
+			 *  @returns {Boolean} a boolean which indicates if there's data to display or not
+			 */
+			scope.hasData = function(model){
+				return angular.isDefined(model) && !_.isEmpty(model);
+			};
+
+			//if ngModel is not defined add a watch to wait for the model
+			var watchRef;
+			if(scope.hasData(scope.ngModel)){
+				init();
+			}else{
+				watchRef = scope.$watch('ngModel',function(newVal){
+					if(scope.hasData(newVal)){
+						init();
+						watchRef();
+					}
+				});	
+			}
 		}
 	};
 });
