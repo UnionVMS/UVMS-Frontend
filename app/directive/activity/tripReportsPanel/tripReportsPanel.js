@@ -18,16 +18,16 @@ copy of the GNU General Public License along with the IFDM Suite. If not, see <h
  * @description
  *  A reusable tile that will display the report messages and the message types count related to the selected trip
  */
-angular.module('unionvmsWeb').directive('tripReportsPanel', function(loadingStatus,activityRestService,$anchorScroll,locale,reportingNavigatorService,fishingActivityService, tripReportsTimeline) {
-	return {
-		restrict: 'E',
-		replace: true,
-		scope: {
+angular.module('unionvmsWeb').directive('tripReportsPanel', function(loadingStatus,$filter,activityRestService,$anchorScroll,locale,reportingNavigatorService,fishingActivityService, tripReportsTimeline) {
+    return {
+        restrict: 'E',
+        replace: true,
+        scope: {
             trip: '=',
             tripAlert: '='
-		},
-		templateUrl: 'directive/activity/tripReportsPanel/tripReportsPanel.html',
-		link: function(scope, element, attrs, fn) {
+        },
+        templateUrl: 'directive/activity/tripReportsPanel/tripReportsPanel.html',
+        link: function(scope, element, attrs, fn) {
 
             //Report table headers
             scope.reportHeaders = [
@@ -71,8 +71,8 @@ angular.module('unionvmsWeb').directive('tripReportsPanel', function(loadingStat
             //when the trip is initialized
             scope.$watch('trip',function(newVal){
                 init();
-			});
-            
+            });
+
 
             /**
 			 * Initializes the trip reports panel directive
@@ -80,7 +80,7 @@ angular.module('unionvmsWeb').directive('tripReportsPanel', function(loadingStat
 			 * @memberof tripReportsPanel
 			 * @private
 			 */
-            var init = function(){             
+            var init = function(){
                 //get trip message count
                 loadingStatus.isLoading('TripSummary', true, 0);
                 activityRestService.getTripMessageCount(scope.trip.id).then(function(response){
@@ -96,7 +96,25 @@ angular.module('unionvmsWeb').directive('tripReportsPanel', function(loadingStat
                     loadingStatus.isLoading('TripSummary', false);
                 });
             };
-            
+
+            /**
+             * Gets the name of the panel to be opened.
+             * 
+             * @memberof tripReportsPanel
+             * @public
+             * @alias getFaView
+             * @param {String} type - the node type
+             */
+            function getFaView(type) {
+                var view = "";
+                angular.forEach(type.split("_"), function(value) {
+                    value = $filter('capitalize')(value);
+                    view += value;
+                });
+                view = 'trip' + view + 'Panel';
+                return view;
+            }
+
             /**
              * Navigate to the proper partial when details button is clicked
              * 
@@ -117,85 +135,85 @@ angular.module('unionvmsWeb').directive('tripReportsPanel', function(loadingStat
                     fishingActivityService.isCorrection = node.corrections;
                     fishingActivityService.documentType = node.documentType;
                     tripReportsTimeline.setCurrentPreviousAndNextItem(node);
-                    reportingNavigatorService.goToView('tripsPanel','tripDeparturePanel');
+                   reportingNavigatorService.goToView('tripsPanel', getFaView(node.srcType));
                 }
             };
-		}
-	};
+        }
+    };
 })
-/**
- * @memberof unionvmsWeb
- * @ngdoc service
- * @name tripReportsTimeline
- * @description
- *  A service for managing the ordered access to fishing activities within a trip
- */
-.factory('tripReportsTimeline', function(){
-    var tripReports = {
-        reports: [],
-        currentItemIdx: undefined,
-        previousItem: {
-            idx: undefined,
-            type: undefined
-        },
-        nextItem: {
-            idx: undefined,
-            type: undefined
-        }
-    };
-    
     /**
-     * Set the current, previous and next fishing activities items for navigation purposes
-     * 
-     * @memberof tripReportsTimeline
-     * @public
-     * @alias setCurrentPreviousAndNextItem
+     * @memberof unionvmsWeb
+     * @ngdoc service
+     * @name tripReportsTimeline
+     * @description
+     *  A service for managing the ordered access to fishing activities within a trip
      */
-    tripReports.setCurrentPreviousAndNextItem = function(selectedRecord){
-        var idx = _.findIndex(this.reports, function(report){
-            return report.id === selectedRecord.id;
-        });
-        
-        if (idx !== -1){
-            tripReports.currentItemIdx = idx;
-            tripReports.setItem('previous');
-            tripReports.setItem('next');
-        }
-    };
-    
-    /**
-     * Set an activity item within the factory (it might be a next or previous item)
-     * 
-     * @memberof tripReportsTimeline
-     * @public
-     * @alias setItem
-     * @param {String} direction - The direction of the item. Supported values are: next or previous.
-     */
-    tripReports.setItem = function(direction){
-        var idx, type;
-        if (direction === 'previous'){
-            idx = this.currentItemIdx - 1;
-            if (idx >= 0){
-                type = this.reports[idx].srcType;
-            } else {
-                idx = undefined;
-                type = undefined;
+    .factory('tripReportsTimeline', function(){
+        var tripReports = {
+            reports: [],
+            currentItemIdx: undefined,
+            previousItem: {
+                idx: undefined,
+                type: undefined
+            },
+            nextItem: {
+                idx: undefined,
+                type: undefined
             }
-            this.previousItem.idx = idx;
-            this.previousItem.type = type;
-        } else {
-            idx = this.currentItemIdx + 1;
-            if (idx < this.reports.length){
-                type = this.reports[idx].srcType;
-            } else {
-                idx = undefined;
-                type = undefined;
+        };
+
+        /**
+         * Set the current, previous and next fishing activities items for navigation purposes
+         * 
+         * @memberof tripReportsTimeline
+         * @public
+         * @alias setCurrentPreviousAndNextItem
+         */
+        tripReports.setCurrentPreviousAndNextItem = function(selectedRecord){
+            var idx = _.findIndex(this.reports, function(report){
+                return report.id === selectedRecord.id;
+            });
+
+            if (idx !== -1){
+                tripReports.currentItemIdx = idx;
+                tripReports.setItem('previous');
+                tripReports.setItem('next');
             }
-            this.nextItem.idx = idx;
-            this.nextItem.type = type;
-        }
-    };
-    
-    return tripReports;
-});
+        };
+
+        /**
+         * Set an activity item within the factory (it might be a next or previous item)
+         * 
+         * @memberof tripReportsTimeline
+         * @public
+         * @alias setItem
+         * @param {String} direction - The direction of the item. Supported values are: next or previous.
+         */
+        tripReports.setItem = function(direction){
+            var idx, type;
+            if (direction === 'previous'){
+                idx = this.currentItemIdx - 1;
+                if (idx >= 0){
+                    type = this.reports[idx].srcType;
+                } else {
+                    idx = undefined;
+                    type = undefined;
+                }
+                this.previousItem.idx = idx;
+                this.previousItem.type = type;
+            } else {
+                idx = this.currentItemIdx + 1;
+                if (idx < this.reports.length){
+                    type = this.reports[idx].srcType;
+                } else {
+                    idx = undefined;
+                    type = undefined;
+                }
+                this.nextItem.idx = idx;
+                this.nextItem.type = type;
+            }
+        };
+
+        return tripReports;
+    });
 
