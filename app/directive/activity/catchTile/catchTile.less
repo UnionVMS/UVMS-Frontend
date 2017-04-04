@@ -36,14 +36,16 @@ copy of the GNU General Public License along with the IFDM Suite. If not, see <h
             padding-right: 0;
         }
     }
-    .table-chart-container {
-        min-width: 415px;
-    }
     .details-content {
         -webkit-box-flex: 1;
         -ms-flex: 1;
         flex: 1;
-        //min-width: 705px;
+        .details-content-body {
+            &,
+            .global-container {
+                height: 100%;
+            }
+        }
     }
     .item-container {
         display: flex;
