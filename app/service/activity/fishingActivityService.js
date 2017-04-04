@@ -677,7 +677,7 @@ angular.module('unionvmsWeb').factory('fishingActivityService', function(activit
                     }
 
                     angular.forEach(classDetails[className], function(attr,attrName){
-                        if(!_.isObject(attr) && !_.isArray(attr) && attrName !== 'weight'){
+                        if(!_.isObject(attr) && !_.isArray(attr) && ['weight','unit'].indexOf(attrName) === -1){
                             classDetails[className].classProps[attrName] = attr;
                             delete classDetails[className][attrName];
                         }
@@ -689,6 +689,9 @@ angular.module('unionvmsWeb').factory('fishingActivityService', function(activit
 
                     if(!angular.isDefined(classDetails[className].weight)){
                         classDetails[className].weight = 0;
+                    }
+                    if(!angular.isDefined(classDetails[className].unit)){
+                        classDetails[className].unit = 0;
                     }
                 });
             });

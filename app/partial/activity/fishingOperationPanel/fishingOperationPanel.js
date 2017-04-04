@@ -16,8 +16,6 @@ angular.module('unionvmsWeb').controller('FishingoperationpanelCtrl',function($s
     var init = function(){
         $scope.faServ.getFishingActivity(new FishingActivity('fishing_operation'));
         loadingStatus.isLoading('FishingActivity', true);
-        //activityRestService.getTripCatchDetail($scope.faServ.id).then(function(response){
-        //FIXME id is hardcoded
         activityRestService.getTripCatchDetail($scope.faServ.id).then(function(response){
             $scope.fishingTripDetails = response;  
             loadingStatus.isLoading('FishingActivity', false);

@@ -21,12 +21,14 @@
 									<tr>
 										<th>{{'activity.class' | i18n}}</th>
 										<th>{{'activity.header_fa_weight' | i18n}}</th>
+										<th>#</th>
 									</tr>
 								</thead>
 								<tbody>
 									<tr ng-repeat="class in classColumnOrder" ng-class="{'selected-row': selectedClass === class}" ng-click="selectClass(class)">
 										<td>{{'activity.' + class | lowercase | i18n}}</td>
 										<td>{{selectedSpecieLocation.groupingDetails[class].weight}}</td>
+										<td>{{selectedSpecieLocation.groupingDetails[class].unit}}</td>
 									</tr>
 								</tbody>
 							</table>

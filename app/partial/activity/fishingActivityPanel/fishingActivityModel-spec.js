@@ -65,25 +65,250 @@ describe('FishingActivity', function() {
               ]
         },
           "catches": [{
-                  "lsc": 1816,
-                  "bms": 423,
-                  "locations": [{
-                          "name": "Ugiudtik",
-                          "geometry": "POINT(-3.30141 -72.37756)"
-                      }],
-                  "details": {
-                      "catchType": "KEPT_IN_NET",
-                      "unit": "kg",
-                      "weightMeans": "ESTIMATED"},
-                  "species": "COD",
-                  "speciesName": "HADDOCK"
-              }]
+                    type: 'DISCARDED',
+                    species: 'TUR',
+                    calculatedWeight: 1372,
+                    groupingDetails: {
+                        LSC: {
+                            unit: 911,
+                            weight: 1814,
+                            specifiedFluxLocations: [{
+                                    name: 'Lepeme',
+                                    geometry: 'POINT(17.93296 -15.83782)'
+                                }, {
+                                    name: 'Colufcu',
+                                    geometry: 'POINT(-84.30513 -47.4552)'
+                                }
+                            ],
+                            characteristics: [{
+                                    typeCode: 'ij',
+                                    typeCodeListId: 'f14129be-3ff6-50e8-9351-3ccb1e1ce45b',
+                                    valueMeasure: 503,
+                                    valueMeasureUnitCode: 'jurpule',
+                                    calculatedValueMeasure: 335,
+                                    valueDateTime: '1366808461',
+                                    valueIndicator: 'law',
+                                    valueCode: 'puheve',
+                                    valueText: 'Ravgodec eg awi dimon zib cu cejsuh hu bi jafe cemove awfiz lodedza agoti vu uzeupaon.',
+                                    valueQuantity: 195,
+                                    valueQuantityCode: 'na',
+                                    calculatedValueQuantity: 443,
+                                    description: 'Lac ul pojolla gegikun ojihag sof vor peswiddaz dafver una lag zirot mugbumha sa atufid havbo ju hi.'
+                                }, {
+                                    typeCode: 'mop',
+                                    typeCodeListId: '7917df18-e9f4-5351-bc8d-f79c516598e5',
+                                    valueMeasure: 688,
+                                    valueMeasureUnitCode: 'wac',
+                                    calculatedValueMeasure: 941,
+                                    valueDateTime: '734037196',
+                                    valueIndicator: 'ridafiha',
+                                    valueCode: 'caleoku',
+                                    valueText: 'Cozebuh bof te oro ojmo wehhi ca agu geuworav vargunu carterem tamuz ewi ge.',
+                                    valueQuantity: 706,
+                                    valueQuantityCode: 'paftif',
+                                    calculatedValueQuantity: 939,
+                                    description: 'Cecubo vovbalos et po rihbe korah pabnawke se agonep ka rihle fazhaweb golkidim nitwa wip ke.'
+                                }
+                            ],
+                            gears: [{
+                                    type: 'LHM',
+                                    role: 'On board',
+                                    mainCharacteristics: {
+                                        items: [{
+                                                idx: 0,
+                                                label: '',
+                                                value: '139mm',
+                                                clickable: undefined
+                                            }, {
+                                                idx: 1,
+                                                label: '',
+                                                value: '11m',
+                                                clickable: undefined
+                                            }
+                                        ],
+                                        characteristics: {
+                                            height: 66,
+                                            nrOfLines: 135,
+                                            nrOfNets: 4,
+                                            nominalLengthOfNet: 950,
+                                            quantity: 92,
+                                            description: 'Otdoki winad jakifi li vebahu waazu fow ebezijo asmaca relena lulas vaj lure bitehu weper ukojuj vumdabew ot.'
+                                        },
+                                        title: ''
+                                    }
+                                }, {
+                                    type: 'TBB',
+                                    role: 'Deployed',
+                                    mainCharacteristics: {
+                                        items: [{
+                                                idx: 0,
+                                                label: '',
+                                                value: '211mm',
+                                                clickable: undefined
+                                            }, {
+                                                idx: 1,
+                                                label: '',
+                                                value: '99m',
+                                                clickable: undefined
+                                            }
+                                        ],
+                                        characteristics: {
+                                            height: 200,
+                                            nrOfLines: 127,
+                                            nrOfNets: 9,
+                                            nominalLengthOfNet: 109,
+                                            quantity: 34,
+                                            description: 'Sec lufi mazwubkoz hesgos nemto neku sale kowijfa ju opa icopaze lisizo.'
+                                        },
+                                        title: ''
+                                    }
+                                }
+                            ],
+                            classProps: {
+                                weightingMeans: 'WEIGHED',
+                                stockId: '7da34062',
+                                size: 'orbecebo',
+                                tripId: '8c3ea655-3cb6-5e67-8f75-40282589bc7a',
+                                usage: 'omregaj',
+                                destinationLocation: '(508) - Bojuguj, NU'
+                            }
+                        },
+                        BMS: {
+                            unit: 1432,
+                            weight: 1788,
+                            specifiedFluxLocations: [{
+                                    name: 'Macwosha',
+                                    geometry: 'POINT(-85.44089 -88.44016)'
+                                }, {
+                                    name: 'Jomfiba',
+                                    geometry: 'POINT(-33.987 -83.40046)'
+                                }, {
+                                    name: 'Minike',
+                                    geometry: 'POINT(81.47809 -43.04273)'
+                                }, {
+                                    name: 'Jowsotobe',
+                                    geometry: 'POINT(20.24789 -69.17315)'
+                                }
+                            ],
+                            characteristics: [{
+                                    typeCode: 'ba',
+                                    typeCodeListId: '901c9f8f-f06d-5549-804d-f5d4c94a4654',
+                                    valueMeasure: 117,
+                                    valueMeasureUnitCode: 'ag',
+                                    calculatedValueMeasure: 247,
+                                    valueDateTime: '341723797',
+                                    valueIndicator: 'opuah',
+                                    valueCode: 'lemamez',
+                                    valueText: 'Diper ef guukibi jimaskuk lizwofe evasab pajfak kepbovso jigafa mak ke abbaje esurokso gambozabu em pahhu bug kisfaopi.',
+                                    valueQuantity: 942,
+                                    valueQuantityCode: 'pelitsu',
+                                    calculatedValueQuantity: 887,
+                                    description: 'Ari wujamon vuj uglamus sejpu bimcibgaj upemadru tevubuj zepibbed ek temu pip jauz pef.'
+                                }, {
+                                    typeCode: 'evuhka',
+                                    typeCodeListId: 'b87980ab-dded-5bc1-a072-6835daa139a5',
+                                    valueMeasure: 565,
+                                    valueMeasureUnitCode: 'as',
+                                    calculatedValueMeasure: 308,
+                                    valueDateTime: '1373985210',
+                                    valueIndicator: 'bahsophis',
+                                    valueCode: 'ruf',
+                                    valueText: 'Iciovsa epo keb husiffo pahjom keslatlab remonido mumhul ko fehvumi wumto widud ranuna riga nun wiviki naosit.',
+                                    valueQuantity: 804,
+                                    valueQuantityCode: 'na',
+                                    calculatedValueQuantity: 246,
+                                    description: 'Uv pugospuj ocipuk bazhal difeziman riuni appa jocefolab mu zeen befta toczaaki azeelza.'
+                                }, {
+                                    typeCode: 'af',
+                                    typeCodeListId: '59c44e86-b19c-5949-b2fd-cd7ea68890a6',
+                                    valueMeasure: 560,
+                                    valueMeasureUnitCode: 'jufegerek',
+                                    calculatedValueMeasure: 276,
+                                    valueDateTime: '521319180',
+                                    valueIndicator: 'etozobje',
+                                    valueCode: 'lubasmuf',
+                                    valueText: 'Ni daaseda zetadde fig saj jilizun topbif fi sojuzi ev moto novinal vano wu jolbisuc cihzinmej dajudbih wawcecad.',
+                                    valueQuantity: 298,
+                                    valueQuantityCode: 'iveeco',
+                                    calculatedValueQuantity: 760,
+                                    description: 'Buvejdo zig wet munuruh karnezor ivjompit hajaf ejunefo behulem him nenat pizviteko udrom niw.'
+                                }
+                            ],
+                            gears: [{
+                                    type: 'LHM',
+                                    role: 'On board',
+                                    mainCharacteristics: {
+                                        items: [{
+                                                idx: 0,
+                                                label: '',
+                                                value: '139mm',
+                                                clickable: undefined
+                                            }, {
+                                                idx: 1,
+                                                label: '',
+                                                value: '11m',
+                                                clickable: undefined
+                                            }
+                                        ],
+                                        characteristics: {
+                                            height: 66,
+                                            nrOfLines: 135,
+                                            nrOfNets: 4,
+                                            nominalLengthOfNet: 950,
+                                            quantity: 92,
+                                            description: 'Otdoki winad jakifi li vebahu waazu fow ebezijo asmaca relena lulas vaj lure bitehu weper ukojuj vumdabew ot.'
+                                        },
+                                        title: ''
+                                    }
+                                }, {
+                                    type: 'TBB',
+                                    role: 'Deployed',
+                                    mainCharacteristics: {
+                                        items: [{
+                                                idx: 0,
+                                                label: '',
+                                                value: '211mm',
+                                                clickable: undefined
+                                            }, {
+                                                idx: 1,
+                                                label: '',
+                                                value: '99m',
+                                                clickable: undefined
+                                            }
+                                        ],
+                                        characteristics: {
+                                            height: 200,
+                                            nrOfLines: 127,
+                                            nrOfNets: 9,
+                                            nominalLengthOfNet: 109,
+                                            quantity: 34,
+                                            description: 'Sec lufi mazwubkoz hesgos nemto neku sale kowijfa ju opa icopaze lisizo.'
+                                        },
+                                        title: ''
+                                    }
+                                }
+                            ],
+                            classProps: {
+                                weightingMeans: 'WEIGHED',
+                                stockId: '83369cf5',
+                                size: 'oc',
+                                tripId: '6f8c22ac-b410-54db-a2f3-c040c47adc88',
+                                usage: 'zezu',
+                                destinationLocation: '(545) - Zelihco, SC'
+                            }
+                        }
+                    },
+                    locations: {
+                        gfcm_stat_rectangle: 'Dezobin',
+                        gfcm_gsa: 'Damoze',
+                        fao_area: 'Moapiho'
+                    }
+                }]
       };
   }
   
   it('should instantiate a new empty departure object', inject(function(FishingActivity){
-      //FIXME fix unit tests
-      /*var fa = new FishingActivity('fishing_operation');
+      var fa = new FishingActivity('fishing_operation');
       
       expect(fa).toEqual(jasmine.any(Object));
       expect(fa.faType).toEqual('fishing_operation');
@@ -94,17 +319,16 @@ describe('FishingActivity', function() {
       expect(fa.locations).not.toBeDefined();
       expect(fa.gears).not.toBeDefined();
       expect(fa.reportDetails).not.toBeDefined();
-      expect(fa.catches).not.toBeDefined();*/
+      expect(fa.catches).not.toBeDefined();
   }));
 
   it('should properly build a fishing operation from json data', inject(function(FishingActivity) {
-      /*data = getFishingOperationData();
+      data = getFishingOperationData();
 
       var fa = new FishingActivity('fishing_operation');
       fa.fromJson(data);
       
       expect(fa.activityDetails).toBeDefined();
-      console.log(JSON.stringify(fa.activityDetails));
       expect(fa.activityDetails.items).toBeDefined();
       expect(fa.activityDetails.subItems).toBeDefined();
       expect(fa.activityDetails.title).toBeDefined();
@@ -112,7 +336,6 @@ describe('FishingActivity', function() {
 
       expect(fa.locations).toEqual(data.locations);
 
-      console.log(JSON.stringify(fa.reportDetails));
       expect(fa.reportDetails).toBeDefined();
       expect(fa.reportDetails.items).toBeDefined();
       expect(fa.reportDetails.subItems).toBeDefined();
@@ -120,7 +343,7 @@ describe('FishingActivity', function() {
       expect(fa.reportDetails.subTitle).toBeDefined();
       
       expect(fa.gears.length).toEqual(2);
-      expect(fa.catches.length).toBe(1);*/
+      expect(fa.catches.length).toBe(1);
   }));
 
 });

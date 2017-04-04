@@ -92,7 +92,7 @@ describe('activityService', function() {
                 }
             },
             pagination: {
-                offset: 1,
+                offset: 0,
                 pageSize: pageSize,
                 totalPages: 1
             },
@@ -110,7 +110,7 @@ describe('activityService', function() {
             searchObject: {},
             tableState: undefined,
             pagination: {
-                offset: 1,
+                offset: 0,
                 pageSize: pageSize,
                 totalPages: undefined
             },
@@ -137,7 +137,7 @@ describe('activityService', function() {
         return {
             isLoading: false,
             hasError: false
-        }
+        };
     }
 
     it('should be properly initialized', function() {
@@ -152,119 +152,115 @@ describe('activityService', function() {
         expect(actServ.selReportDoc).toEqual(jasmine.any(Object));
     });
     
-    //FIXME
-//    it('should get activity list', function(){
-//        buildMocks();
-//        spyOn(actServ, 'clearAttributeByType');
-//        actServ.getActivityList();
-//        
-//        expect(actServ.clearAttributeByType).toHaveBeenCalled();
-//        expect(actServ.activities.length).toBe(2);
-//        
-//        var pag = {
-//            offset: 1,
-//            pageSize: 25,
-//            totalPages: 1
-//        };
-//        expect(actServ.reportsList.pagination).toEqual(pag);
-//    });
+    it('should get activity list', function(){
+        buildMocks();
+        spyOn(actServ, 'clearAttributeByType');
+        actServ.getActivityList();
+        
+        expect(actServ.clearAttributeByType).toHaveBeenCalled();
+        expect(actServ.activities.length).toBe(2);
+        
+        var pag = {
+            offset: 0,
+            pageSize: 25,
+            totalPages: 1
+        };
+        expect(actServ.reportsList.pagination).toEqual(pag);
+    });
     
     
-    //FIXME
-//    it('should get activity list and update number of pages', function(){
-//        buildMocks();
-//        spyOn(actServ, 'clearAttributeByType');
-//        
-//        actServ.reportsList.tableState = {
-//            pagination: {
-//                number: pageSize,
-//                start: 0
-//            },
-//            search: {},
-//            sort: {
-//                predicate: 'activityType',
-//                reverse: true
-//            }
-//        };
-//        
-//        
-//        actServ.getActivityList();
-//        
-//        expect(actServ.clearAttributeByType).toHaveBeenCalled();
-//        expect(actServ.activities.length).toBe(2);
-//        
-//        var pag = {
-//            offset: 1,
-//            pageSize: 25,
-//            totalPages: 1
-//        };
-//        expect(actServ.reportsList.pagination).toEqual(pag);
-//        expect(actServ.reportsList.tableState.pagination.numberOfPages).toEqual(actServ.reportsList.pagination.totalPages);
-//    });
+    it('should get activity list and update number of pages', function(){
+        buildMocks();
+        spyOn(actServ, 'clearAttributeByType');
+        
+        actServ.reportsList.tableState = {
+            pagination: {
+                number: pageSize,
+                start: 0
+            },
+            search: {},
+            sort: {
+                predicate: 'activityType',
+                reverse: true
+            }
+        };
+        
+        
+        actServ.getActivityList();
+        
+        expect(actServ.clearAttributeByType).toHaveBeenCalled();
+        expect(actServ.activities.length).toBe(2);
+        
+        var pag = {
+            offset: 0,
+            pageSize: 25,
+            totalPages: 1
+        };
+        expect(actServ.reportsList.pagination).toEqual(pag);
+        expect(actServ.reportsList.tableState.pagination.numberOfPages).toEqual(actServ.reportsList.pagination.totalPages);
+    });
     
-    //FIXME
-//    it('should get activity list and execute callback function', function(){
-//        buildMocks();
-//        spyOn(actServ, 'clearAttributeByType');
-//        
-//        var callBackSpy = jasmine.createSpy('callbackFn')
-//        var callBackObj = {
-//            fn: callBackSpy
-//        }
-//        
-//        var tblState = {
-//            pagination: {
-//                number: pageSize,
-//                start: 0
-//            },
-//            search: {},
-//            sort: {
-//                predicate: 'activityType',
-//                reverse: true
-//            }
-//        };
-//        
-//        actServ.getActivityList(callBackObj.fn, tblState);
-//        
-//        expect(actServ.clearAttributeByType).toHaveBeenCalled();
-//        expect(actServ.activities.length).toBe(2);
-//        
-//        var pag = {
-//            offset: 1,
-//            pageSize: 25,
-//            totalPages: 1
-//        };
-//        expect(actServ.reportsList.pagination).toEqual(pag);
-//        expect(callBackSpy).toHaveBeenCalledWith(tblState);
-//    });
+    it('should get activity list and execute callback function', function(){
+        buildMocks();
+        spyOn(actServ, 'clearAttributeByType');
+        
+        var callBackSpy = jasmine.createSpy('callbackFn');
+        var callBackObj = {
+            fn: callBackSpy
+        }
+        
+        var tblState = {
+            pagination: {
+                number: pageSize,
+                start: 0
+            },
+            search: {},
+            sort: {
+                predicate: 'activityType',
+                reverse: true
+            }
+        };
+        
+        actServ.getActivityList(callBackObj.fn, tblState);
+        
+        expect(actServ.clearAttributeByType).toHaveBeenCalled();
+        expect(actServ.activities.length).toBe(2);
+        
+        var pag = {
+            offset: 0,
+            pageSize: 25,
+            totalPages: 1
+        };
+        expect(actServ.reportsList.pagination).toEqual(pag);
+        expect(callBackSpy).toHaveBeenCalledWith(tblState);
+    });
     
-    //FIXME
-//    it('should reset the state of the service properties', function(){
-//        mockServiceProperties();
-//        actServ.reset();
-//        
-//        expect(actServ.activities).toEqual(jasmine.any(Array));
-//        expect(actServ.activities.length).toEqual(0);
-//        expect(actServ.displayedActivities).toEqual(jasmine.any(Array));
-//        expect(actServ.displayedActivities.length).toEqual(0);
-//        expect(actServ.overview).toEqual(jasmine.any(Object));
-//        expect(actServ.overview).toEqual({});
-//        expect(actServ.reportsList).toEqual(jasmine.any(Object));
-//        expect(actServ.reportsList).toEqual(getInitialReportsListDef());
-//        expect(actServ.history).toEqual(jasmine.any(Array));
-//        expect(actServ.history.length).toEqual(0);
-//        expect(actServ.displayedHistory).toEqual(jasmine.any(Array));
-//        expect(actServ.displayedHistory.length).toEqual(0);
-//        expect(actServ.activitiesHistory).toEqual(jasmine.any(Array));
-//        expect(actServ.activitiesHistory.length).toEqual(0);
-//        expect(actServ.displayedActivitiesHistory).toEqual(jasmine.any(Array));
-//        expect(actServ.displayedActivitiesHistory.length).toEqual(0);
-//        expect(actServ.historyList).toEqual(getHistoryListObject());
-//        expect(actServ.activitiesHistoryList).toEqual(getActivitiesHistoryListObject());
-//        expect(actServ.selReportDoc).toEqual(jasmine.any(Object));
-//        expect(actServ.allPurposeCodes).toEqual(jasmine.any(Array));
-//        expect(actServ.allPurposeCodes.length).toEqual(0);
-//    });
+    it('should reset the state of the service properties', function(){
+        mockServiceProperties();
+        actServ.reset();
+        
+        expect(actServ.activities).toEqual(jasmine.any(Array));
+        expect(actServ.activities.length).toEqual(0);
+        expect(actServ.displayedActivities).toEqual(jasmine.any(Array));
+        expect(actServ.displayedActivities.length).toEqual(0);
+        expect(actServ.overview).toEqual(jasmine.any(Object));
+        expect(actServ.overview).toEqual({});
+        expect(actServ.reportsList).toEqual(jasmine.any(Object));
+        expect(actServ.reportsList).toEqual(getInitialReportsListDef());
+        expect(actServ.history).toEqual(jasmine.any(Array));
+        expect(actServ.history.length).toEqual(0);
+        expect(actServ.displayedHistory).toEqual(jasmine.any(Array));
+        expect(actServ.displayedHistory.length).toEqual(0);
+        expect(actServ.activitiesHistory).toEqual(jasmine.any(Array));
+        expect(actServ.activitiesHistory.length).toEqual(0);
+        expect(actServ.displayedActivitiesHistory).toEqual(jasmine.any(Array));
+        expect(actServ.displayedActivitiesHistory.length).toEqual(0);
+        expect(actServ.historyList).toEqual(getHistoryListObject());
+        expect(actServ.activitiesHistoryList).toEqual(getActivitiesHistoryListObject());
+        expect(actServ.selReportDoc).toEqual(jasmine.any(Object));
+        expect(actServ.allPurposeCodes).toEqual(jasmine.any(Array));
+        expect(actServ.allPurposeCodes.length).toEqual(0);
+    });
     
     it('should clear data by specifying the attribute type', function(){
         mockServiceProperties();
@@ -329,38 +325,36 @@ describe('activityService', function() {
         expect(mockFishingActServ.resetActivity).toHaveBeenCalled();
     });
     
-    //FIXME
-//    it('should reset the reports list tableState', function(){
-//        mockServiceProperties();
-//        actServ.resetReportsListTableState();
-//        
-//        var initialState = getInitialReportsListDef();
-//        expect(actServ.reportsList.pagination).toEqual(initialState.pagination);
-//        
-//        var expectedTableState = {
-//            start: 0,
-//            number: pageSize,
-//            numberOfPages: 1
-//        };
-//        expect(actServ.reportsList.tableState.pagination).toEqual(expectedTableState);
-//    });
+    it('should reset the reports list tableState', function(){
+        mockServiceProperties();
+        actServ.resetReportsListTableState();
+        
+        var initialState = getInitialReportsListDef();
+        expect(actServ.reportsList.pagination).toEqual(initialState.pagination);
+        
+        var expectedTableState = {
+            start: 0,
+            number: pageSize,
+            numberOfPages: 1
+        };
+        expect(actServ.reportsList.tableState.pagination).toEqual(expectedTableState);
+    });
     
-    //FIXME
-//    it('should reset the reports list tableState but not the smartTable state', function(){
-//        mockServiceProperties();
-//        actServ.reportsList.tableState = undefined;
-//        actServ.resetReportsListTableState();
-//        
-//        var initialState = getInitialReportsListDef();
-//        expect(actServ.reportsList.pagination).toEqual(initialState.pagination);
-//        
-//        var expectedTableState = {
-//            start: 0,
-//            number: pageSize,
-//            numberOfPages: 1
-//        };
-//        expect(actServ.reportsList.tableState).not.toBeDefined();
-//    });
+    it('should reset the reports list tableState but not the smartTable state', function(){
+        mockServiceProperties();
+        actServ.reportsList.tableState = undefined;
+        actServ.resetReportsListTableState();
+        
+        var initialState = getInitialReportsListDef();
+        expect(actServ.reportsList.pagination).toEqual(initialState.pagination);
+        
+        var expectedTableState = {
+            start: 0,
+            number: pageSize,
+            numberOfPages: 1
+        };
+        expect(actServ.reportsList.tableState).not.toBeDefined();
+    });
     
     it('should get activity user preferences and set visibility settings', function(){
         buildMocks();
