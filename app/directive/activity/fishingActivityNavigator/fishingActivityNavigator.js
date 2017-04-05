@@ -20,7 +20,7 @@ copy of the GNU General Public License along with the IFDM Suite. If not, see <h
  * @description
  *  A directive to add support for ordered navigation between activities of a trip
  */
-angular.module('unionvmsWeb').directive('fishingActivityNavigator', function(tripReportsTimeline, fishingActivityService, reportingNavigatorService) {
+angular.module('unionvmsWeb').directive('fishingActivityNavigator', function(tripReportsTimeline, fishingActivityService, reportingNavigatorService, $compile) {
 	return {
 		restrict: 'E',
 		replace: false,
@@ -30,7 +30,7 @@ angular.module('unionvmsWeb').directive('fishingActivityNavigator', function(tri
 		templateUrl: 'directive/activity/fishingActivityNavigator/fishingActivityNavigator.html',
 		link: function(scope, element, attrs, fn) {
 		    scope.timeline = tripReportsTimeline;
-		    
+		
 		    /**
 		     * Navigate to the next fishing activity
 		     * 
@@ -72,15 +72,11 @@ angular.module('unionvmsWeb').directive('fishingActivityNavigator', function(tri
                 fishingActivityService.isCorrection = rec.corrections;
                 scope.timeline.setCurrentPreviousAndNextItem(rec);
                 
-                var panel;
-                switch (rec.srcType.toLowerCase()) {
-                case 'fishing_operation': //FIXME
-                    panel = 'tripDeparturePanel';
-                    break;
-                //TODO include other activity types Arrival, Landing, ...
-                }
-                
-                reportingNavigatorService.goToView('tripsPanel', panel);
+				reportingNavigatorService.goToView('tripsPanel', fishingActivityService.getFaView(rec.srcType),function(){
+                   var content=angular.element('fishing-activity-navigator .fa-partial');
+                   var scope = content.scope();
+                   $compile(content.contents())(scope);
+                });
             }
 		}
 	};
