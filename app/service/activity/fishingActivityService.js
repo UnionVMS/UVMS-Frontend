@@ -343,14 +343,14 @@ angular.module('unionvmsWeb').factory('fishingActivityService', function(activit
      * @param {String} type - fa activity type
      */
     faServ.getFaView = function(type) {
-                var view = "";
-                angular.forEach(type.split("_"), function(value) {
-                    value = $filter('capitalize')(value);
-                    view += value;
-                });
-                view = 'trip' + view + 'Panel';
-                return view;
-            }
+        var view = "";
+        angular.forEach(type.split("_"), function(value) {
+            value = $filter('capitalize')(value);
+            view += value;
+        });
+        view = 'trip' + view + 'Panel';
+        return view;
+    }
     /**
      * Loads the data to be presented in the fishing activity details panel
      * 
