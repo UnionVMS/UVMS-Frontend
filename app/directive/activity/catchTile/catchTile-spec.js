@@ -810,14 +810,14 @@ describe('catchTile', function() {
       var isolatedScope = catchDetail.isolateScope();
 
       expect(isolatedScope.ngModel).toEqual(scope.fishingData);
-      expect(catchDetail.find('> .fieldsetLegendStyle > a').text()).toEqual('Catch');
+      expect(catchDetail.find('> .fieldsetLegendStyle > a').text()).toEqual('');
       expect(isolatedScope.bufferDistance).toEqual('5000');
 
-      expect(isolatedScope.selectedClass).toEqual('lsc');
+      expect(isolatedScope.selectedClass).toEqual('LSC');
       expect(isolatedScope.selectedSpecieLocation[isolatedScope.selectedClass]).toEqual(scope.fishingData[0][isolatedScope.selectedClass]);
       catchDetail.find('.details-content .global-container table tbody tr')[1].click();
       scope.$digest();
-      expect(isolatedScope.selectedClass).toEqual('bms');
+      expect(isolatedScope.selectedClass).toEqual('BMS');
       expect(isolatedScope.selectedSpecieLocation[isolatedScope.selectedClass]).toEqual(scope.fishingData[0][isolatedScope.selectedClass]);
 
       catchDetail.isolateScope().$destroy();

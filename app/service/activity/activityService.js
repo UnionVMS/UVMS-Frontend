@@ -87,7 +87,7 @@ angular.module('unionvmsWeb').factory('activityService',function(locale, activit
             searchObject: {},
             tableState: undefined,
             pagination: {
-                offset: 1,
+                offset: 0,
                 pageSize: pageSize,
                 totalPages: undefined
             },
@@ -142,7 +142,7 @@ angular.module('unionvmsWeb').factory('activityService',function(locale, activit
         }
          
         actServ.reportsList.pagination = {
-            offset: 1,
+            offset: 0,
             pageSize: pageSize,
             totalPages: undefined
         };
@@ -218,19 +218,15 @@ angular.module('unionvmsWeb').factory('activityService',function(locale, activit
      * @returns {Object} A pagination object with offset and pageSize
      */
     function getPaginationForServer(tableState){
-
         var pag = {
-            offset: tableState ? tableState.pagination.start : 0, //TODO important: check this logic 
+            offset: 0, 
             pageSize: pageSize
         };
         
-        //FIXME remove the following ifelse block when server side pagination is fixed
-        if(angular.isDefined(tableState)){
-            pag.offset = tableState.pagination.start / tableState.pagination.number + 1;
-        } else {
-            pag.offset = 1;
+        if (angular.isDefined(tableState) && tableState.pagination.start > 0){
+            pag.offset = tableState.pagination.start;
         }
-         
+        
         return pag;
     }
     

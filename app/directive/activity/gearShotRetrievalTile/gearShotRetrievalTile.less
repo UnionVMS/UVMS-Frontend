@@ -9,27 +9,42 @@ the hope that it will be useful, but WITHOUT ANY WARRANTY; without even the impl
 FITNESS FOR A PARTICULAR PURPOSE.  See the GNU General Public License for more details. You should have received a
 copy of the GNU General Public License along with the IFDM Suite. If not, see <http://www.gnu.org/licenses/>.
 */
-.table-filter-headers {
-    .table {
-        border: 0;
-        .filter {
-            cursor: default;
+.gear-shot-retrieval-tile {
+    .with-margin-top {
+        margin-top: 10px;
+    }
+    .row-flex {
+        display: flex;
+        carousel-tile,
+        location-tile {
+            height: 100%;
         }
-        tfoot {
-            border-top: 2px solid #ddd;
-            border-bottom: 2px solid #ddd;
-            background-color: #ececec;
-        }
-        .selected-row {
-            td {
-                background-color: rgba(8, 159, 215, 0.46) !important;
+    }
+    .item-container {
+        cursor: default;
+        display: flex;
+        .item-label {
+            font-weight: bold;
+            margin-right: 5px;
+            white-space: nowrap;
+            &:after {
+                content: ':'
             }
         }
-        .is-selectable {
-            cursor: pointer;
-        }
-        .single-line {
-            white-space: nowrap;
+    }
+    .no-padding-right {
+        padding-right: 0px;
+    }
+    .gear-problem > .carousel-tile {
+        padding-left: 0;
+        padding-right: 0;
+        > .carousel {
+            &,
+            & > .carousel-inner {
+                & > .carousel-control {
+                    display: none;
+                }
+            }
         }
     }
 }

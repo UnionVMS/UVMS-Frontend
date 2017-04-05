@@ -92,7 +92,7 @@ describe('activityService', function() {
                 }
             },
             pagination: {
-                offset: 1,
+                offset: 0,
                 pageSize: pageSize,
                 totalPages: 1
             },
@@ -110,7 +110,7 @@ describe('activityService', function() {
             searchObject: {},
             tableState: undefined,
             pagination: {
-                offset: 1,
+                offset: 0,
                 pageSize: pageSize,
                 totalPages: undefined
             },
@@ -137,7 +137,7 @@ describe('activityService', function() {
         return {
             isLoading: false,
             hasError: false
-        }
+        };
     }
 
     it('should be properly initialized', function() {
@@ -161,12 +161,13 @@ describe('activityService', function() {
         expect(actServ.activities.length).toBe(2);
         
         var pag = {
-            offset: 1,
+            offset: 0,
             pageSize: 25,
             totalPages: 1
         };
         expect(actServ.reportsList.pagination).toEqual(pag);
     });
+    
     
     it('should get activity list and update number of pages', function(){
         buildMocks();
@@ -191,7 +192,7 @@ describe('activityService', function() {
         expect(actServ.activities.length).toBe(2);
         
         var pag = {
-            offset: 1,
+            offset: 0,
             pageSize: 25,
             totalPages: 1
         };
@@ -203,7 +204,7 @@ describe('activityService', function() {
         buildMocks();
         spyOn(actServ, 'clearAttributeByType');
         
-        var callBackSpy = jasmine.createSpy('callbackFn')
+        var callBackSpy = jasmine.createSpy('callbackFn');
         var callBackObj = {
             fn: callBackSpy
         }
@@ -226,7 +227,7 @@ describe('activityService', function() {
         expect(actServ.activities.length).toBe(2);
         
         var pag = {
-            offset: 1,
+            offset: 0,
             pageSize: 25,
             totalPages: 1
         };

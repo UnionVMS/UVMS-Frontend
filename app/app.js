@@ -888,7 +888,10 @@ unionvmsWebApp.factory('initService',function($log, configurationService, locale
                 'spatial',
                 'exchange',
                 'alarms',
-                'areas'
+                'areas',
+                'activity',
+                'abbreviations',
+                'login'
             ]);
         },
     };

@@ -9,27 +9,23 @@ the hope that it will be useful, but WITHOUT ANY WARRANTY; without even the impl
 FITNESS FOR A PARTICULAR PURPOSE.  See the GNU General Public License for more details. You should have received a
 copy of the GNU General Public License along with the IFDM Suite. If not, see <http://www.gnu.org/licenses/>.
 */
-.table-filter-headers {
-    .table {
-        border: 0;
-        .filter {
-            cursor: default;
-        }
-        tfoot {
-            border-top: 2px solid #ddd;
-            border-bottom: 2px solid #ddd;
-            background-color: #ececec;
-        }
-        .selected-row {
-            td {
-                background-color: rgba(8, 159, 215, 0.46) !important;
+.gear-problem-tile {
+    text-align: left;
+    .item-container {
+        display: flex;
+        .labels {
+            font-weight: bold;
+            white-space: nowrap;
+            margin-right: 5px;
+            &::after {
+                content: ':'
             }
         }
-        .is-selectable {
-            cursor: pointer;
-        }
-        .single-line {
-            white-space: nowrap;
+    }
+    .fa {
+        color: @primaryColor;
+        &:hover {
+            cursor: pointer
         }
     }
 }

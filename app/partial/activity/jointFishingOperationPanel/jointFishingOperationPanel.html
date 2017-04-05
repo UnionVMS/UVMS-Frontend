@@ -28,5 +28,8 @@ copy of the GNU General Public License along with the IFDM Suite. If not, see <h
                 template-url="directive/activity/carouselTile/templates/gearTile/gearTile.html"></carousel-tile>
             <fa-details-panel class="col-md-4 summary-section" ng-model="faServ.activityData.reportDetails"></fa-details-panel>
         </div>
+        <div class="row activity-summary-row">
+            <relocation-tile class="col-md-12 summary-section" tile-title="{{'activity.activity_type_relocation' | i18n}}" src-data="faServ.activityData.relocation"></relocation-tile>
+        </div>
     </div>
 </div>
