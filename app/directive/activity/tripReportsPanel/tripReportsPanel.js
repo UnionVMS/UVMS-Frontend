@@ -96,25 +96,7 @@ angular.module('unionvmsWeb').directive('tripReportsPanel', function(loadingStat
                     loadingStatus.isLoading('TripSummary', false);
                 });
             };
-
-            /**
-             * Gets the name of the panel to be opened.
-             * 
-             * @memberof tripReportsPanel
-             * @public
-             * @alias getFaView
-             * @param {String} type - the node type
-             */
-            function getFaView(type) {
-                var view = "";
-                angular.forEach(type.split("_"), function(value) {
-                    value = $filter('capitalize')(value);
-                    view += value;
-                });
-                view = 'trip' + view + 'Panel';
-                return view;
-            }
-
+            
             /**
              * Navigate to the proper partial when details button is clicked
              * 
@@ -135,7 +117,7 @@ angular.module('unionvmsWeb').directive('tripReportsPanel', function(loadingStat
                     fishingActivityService.isCorrection = node.corrections;
                     fishingActivityService.documentType = node.documentType;
                     tripReportsTimeline.setCurrentPreviousAndNextItem(node);
-                   reportingNavigatorService.goToView('tripsPanel', getFaView(node.srcType));
+                   reportingNavigatorService.goToView('tripsPanel', fishingActivityService.getFaView(node.srcType));
                 }
             };
         }

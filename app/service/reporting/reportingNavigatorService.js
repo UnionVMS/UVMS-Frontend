@@ -56,7 +56,18 @@ angular.module('unionvmsWeb').factory('reportingNavigatorService',function() {
 	                    callback();
 	                }
 	            }
-		    } 
+		    }else{
+					if(angular.isDefined(callback)){
+	                currentState.callback = callback;
+	                if(angular.isDefined(params)){
+	                    currentState.params = params;
+	                    callback.apply(this, params);
+	                }else{
+	                    callback();
+	                }
+	            }
+				
+			}
 		},
 		goToPreviousView: function() {
 			var auxState = angular.copy(currentState);
