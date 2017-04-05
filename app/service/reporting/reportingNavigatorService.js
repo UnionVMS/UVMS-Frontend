@@ -39,7 +39,7 @@ angular.module('unionvmsWeb').factory('reportingNavigatorService',function() {
 		panel: ''
 	};
 
-    function callCallback(callback){
+    function callCallback(callback, params){
 		if(angular.isDefined(callback)){
 			currentState.callback = callback;
 			if(angular.isDefined(params)){
@@ -58,9 +58,9 @@ angular.module('unionvmsWeb').factory('reportingNavigatorService',function() {
 	                section: sectionTo,
 	                panel: panelTo
 	            };
-				callCallback(callback);  
+				callCallback(callback, params);  
 		    }else{
-				callCallback(callback);	
+				callCallback(callback, params);	
 			}
 		},
 		goToPreviousView: function() {

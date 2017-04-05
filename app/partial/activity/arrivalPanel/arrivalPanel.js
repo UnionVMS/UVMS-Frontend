@@ -24,7 +24,7 @@ copy of the GNU General Public License along with the IFDM Suite. If not, see <h
 angular.module('unionvmsWeb').controller('ArrivalpanelCtrl', function($scope, $state, fishingActivityService, tripSummaryService, activityRestService, locale, loadingStatus, FishingActivity) {
     $scope.faServ = fishingActivityService;
     
-    var arrivalNotification =  ($scope.faServ.documentType == 'notification')? true : false;
+    var arrivalNotification =  ($scope.faServ.documentType === 'notification')? true : false;
 
       /**
        * Initialization function
@@ -57,7 +57,7 @@ angular.module('unionvmsWeb').controller('ArrivalpanelCtrl', function($scope, $s
         $scope.data = [{
             "caption": (arrivalNotification === true) ? locale.getString('activity.clock_panel_estimated_time') : locale.getString('activity.clock_panel_arrival_time'),
             "reason": $scope.faServ.activityData.activityDetails.reason,
-            "arrivalTime": (arrivalNotification === true) ? $scope.faServ.activityData.activityDetails.estimatedArrival : $scope.faServ.activityData.activityDetails.arrivalTime,
+            "arrivalTime": $scope.faServ.activityData.activityDetails.arrivalTime,
             "showClock": "true"
         },
         {

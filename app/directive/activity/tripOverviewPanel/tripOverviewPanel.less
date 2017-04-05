@@ -9,76 +9,79 @@ the hope that it will be useful, but WITHOUT ANY WARRANTY; without even the impl
 FITNESS FOR A PARTICULAR PURPOSE.  See the GNU General Public License for more details. You should have received a
 copy of the GNU General Public License along with the IFDM Suite. If not, see <http://www.gnu.org/licenses/>.
 */
-.trip-overview-panel {
-    > .fieldsetStyle{
-        width: 100%;
-        padding: 0;
-        padding-bottom: 10px;
-        margin: 0; 
-        .fieldsetLegendStyle {
-            margin: 0 0 10px 10px;
-            a:hover {
-                cursor: default;
-            }
-        }
-        > .activity-summary-row {
-            max-height: 0;
-            transition: max-height 0.60s ease-out;
-            overflow: hidden;
-            &.visible {
-                max-height: 1000px;
-                transition: max-height 0.60s ease-in;
-            }
-            &,
-            .vessel-tile {
-                margin-bottom: 0;
-            }
-        }
-    }
-    .trip-overview-container {
-        margin: 0;
-        padding: 0;
-        display: flex;
-        .field-icon {
-            display: table;
-            height: 100%;
-            &:hover {
-                cursor: pointer;
-                .field-text {
-                    text-decoration: underline
-                }
-            }
-            &.enabled,
-            &:hover {
-                .field-label {
-                    color: @primaryColor;
-                }
-            }
-            .field-label {
-                display: table-cell;
-                vertical-align: middle;
-                font-size: 22px;
-                padding-right: 10px;
-            }
-            .field-text {
-                display: table-cell;
-                white-space: nowrap;
-                vertical-align: middle;
-            }
-        }
-        .trip-row {
+trip-overview-panel {
+    display: block !important;
+    .trip-overview-panel {
+        > .fieldsetStyle{
             width: 100%;
-            display: flex;
-            .field-format {
-                display: inline-flex;
-                .field-label {
-                    font-weight: bold;
-                    white-space: nowrap;
-                    margin-right: 5px;
+            padding: 0;
+            padding-bottom: 10px;
+            margin: 0; 
+            .fieldsetLegendStyle {
+                margin: 0 0 10px 10px;
+                a:hover {
+                    cursor: default;
                 }
-                &:not(:last-child){
+            }
+            > .activity-summary-row {
+                max-height: 0;
+                transition: max-height 0.60s ease-out;
+                overflow: hidden;
+                &.visible {
+                    max-height: 1000px;
+                    transition: max-height 0.60s ease-in;
+                }
+                &,
+                .vessel-tile {
+                    margin-bottom: 0;
+                }
+            }
+        }
+        .trip-overview-container {
+            margin: 0;
+            padding: 0;
+            display: flex;
+            .field-icon {
+                display: table;
+                height: 100%;
+                &:hover {
+                    cursor: pointer;
                     .field-text {
-                        margin-right: 10px;
+                        text-decoration: underline
+                    }
+                }
+                &.enabled,
+                &:hover {
+                    .field-label {
+                        color: @primaryColor;
+                    }
+                }
+                .field-label {
+                    display: table-cell;
+                    vertical-align: middle;
+                    font-size: 22px;
+                    padding-right: 10px;
+                }
+                .field-text {
+                    display: table-cell;
+                    white-space: nowrap;
+                    vertical-align: middle;
+                }
+            }
+            .trip-row {
+                width: 100%;
+                display: flex;
+                .field-format {
+                    display: inline-flex;
+                    .field-label {
+                        font-weight: bold;
+                        white-space: nowrap;
+                        margin-right: 5px;
+                    }
+                    &:not(:last-child){
+                        .field-text {
+                            margin-right: 10px;
+                        }
                     }
                 }
             }

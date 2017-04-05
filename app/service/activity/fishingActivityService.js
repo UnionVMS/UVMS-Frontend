@@ -263,8 +263,10 @@ angular.module('unionvmsWeb').factory('fishingActivityService', function(activit
     function getViewNameByFaType(type){
         var views = {
             area_exit: 'areaExit',
-            fishing_operation: 'fishingOperation',
-            area_entry: 'areaEntry'
+            fishing_operation: 'fishingoperation',
+            area_entry: 'areaEntry',
+            arrival_declaration: 'arrival',
+            arrival_notification: 'arrival'
         };
         
         //TODO add all activity types
@@ -546,22 +548,26 @@ angular.module('unionvmsWeb').factory('fishingActivityService', function(activit
      * @returns {Object} data to be displayed
      */
     var loadFaDocData = function(data){
-        var attrOrder = angular.copy(faDocAttrOrder);
-        var relRepIdx = attrOrder.length;
+        var finalSummary;
 
-        if(angular.isDefined(data.relatedReports) && data.relatedReports.length > 0){
-            data.relatedReports = addExtraDetails(data.relatedReports,attrOrder,relRepIdx);
-        }
+        if(angular.isDefined(data)){
+            var attrOrder = angular.copy(faDocAttrOrder);
+            var relRepIdx = attrOrder.length;
 
-        var finalSummary = loadFishingActivityDetails(data, attrOrder);
+            if(angular.isDefined(data.relatedReports) && data.relatedReports.length > 0){
+                data.relatedReports = addExtraDetails(data.relatedReports,attrOrder,relRepIdx);
+            }
 
-        finalSummary.title = locale.getString('activity.activity_report_doc_title');
+            finalSummary = loadFishingActivityDetails(data, attrOrder);
 
-        if (angular.isDefined(data.characteristics) && !_.isEmpty(data.characteristics)) {
-            finalSummary.characteristics = data.characteristics;
-        }
-        if (angular.isDefined(finalSummary.subItems)) {
-            finalSummary.subTitle = locale.getString('activity.activity_related_flux_doc_title');
+            finalSummary.title = locale.getString('activity.activity_report_doc_title');
+
+            if (angular.isDefined(data.characteristics) && !_.isEmpty(data.characteristics)) {
+                finalSummary.characteristics = data.characteristics;
+            }
+            if (angular.isDefined(finalSummary.subItems)) {
+                finalSummary.subTitle = locale.getString('activity.activity_related_flux_doc_title');
+            }
         }
 
         return finalSummary;

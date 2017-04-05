@@ -29,7 +29,7 @@ describe('fishingActivityNavigator', function() {
             }
         };
         
-        mockFishServ = jasmine.createSpyObj('fishingActivityService', ['resetActivity', 'getFishingActivity']);
+        mockFishServ = jasmine.createSpyObj('fishingActivityService', ['resetActivity', 'getFishingActivity', 'getFaView']);
         
         module(function($provide){
             $provide.value('tripReportsTimeline', mockTimeline);
@@ -64,6 +64,10 @@ describe('fishingActivityNavigator', function() {
         
         mockFishServ.getFishingActivity.andCallFake(function(){
             return true;
+        });
+
+        mockFishServ.getFaView.andCallFake(function(){
+            return 'tripDeparturePanel';
         });
     }
     
