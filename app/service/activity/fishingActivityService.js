@@ -32,6 +32,7 @@ angular.module('unionvmsWeb').factory('fishingActivityService', function(activit
         activityData: {},
         id: undefined,
         isCorrection: false,
+        documentType: undefined,
         activityType: undefined
 	};
 
@@ -408,7 +409,24 @@ angular.module('unionvmsWeb').factory('fishingActivityService', function(activit
             });
         });
     };
-
+   
+    /**
+     * Gets the name of the fishing activity panel.
+     * 
+     * @memberof fishingActivityService
+     * @public
+     * @alias getFaView
+     * @param {String} type - fa activity type
+     */
+    faServ.getFaView = function(type) {
+        var view = "";
+        angular.forEach(type.split("_"), function(value) {
+            value = $filter('capitalize')(value);
+            view += value;
+        });
+        view = 'trip' + view + 'Panel';
+        return view;
+    }
     /**
      * Adds gear recovery description from MDR code lists into the details object.
      * 

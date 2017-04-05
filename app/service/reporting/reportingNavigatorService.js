@@ -39,6 +39,17 @@ angular.module('unionvmsWeb').factory('reportingNavigatorService',function() {
 		panel: ''
 	};
 
+    function callCallback(callback){
+		if(angular.isDefined(callback)){
+			currentState.callback = callback;
+			if(angular.isDefined(params)){
+				currentState.params = params;
+				callback.apply(this, params);
+			}else{
+				callback();
+			}
+		}
+	}
 	var reportingNavigatorService = {
 		goToView: function(sectionTo,panelTo,callback,params) {
 		    if (currentState.section !== sectionTo || currentState.panel !== panelTo){
@@ -47,16 +58,10 @@ angular.module('unionvmsWeb').factory('reportingNavigatorService',function() {
 	                section: sectionTo,
 	                panel: panelTo
 	            };
-	            if(angular.isDefined(callback)){
-	                currentState.callback = callback;
-	                if(angular.isDefined(params)){
-	                    currentState.params = params;
-	                    callback.apply(this, params);
-	                }else{
-	                    callback();
-	                }
-	            }
-		    } 
+				callCallback(callback);  
+		    }else{
+				callCallback(callback);	
+			}
 		},
 		goToPreviousView: function() {
 			var auxState = angular.copy(currentState);
