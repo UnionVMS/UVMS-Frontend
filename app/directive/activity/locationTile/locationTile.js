@@ -82,11 +82,11 @@ angular.module('unionvmsWeb').directive('locationTile', function() {
      */
     function processData(){
         angular.forEach($scope.locationDetails, function(record){
-            if (_.indexOf($scope.countries, record.country) === -1){
+            if (angular.isDefined(record.country) && _.indexOf($scope.countries, record.country) === -1){
                 $scope.countries.push(record.country);
             }
             
-            if (_.indexOf($scope.rfmo, record.rfmoCode) === -1){
+            if (angular.isDefined(record.rfmoCode) && _.indexOf($scope.rfmo, record.rfmoCode) === -1){
                 $scope.rfmo.push(record.rfmoCode);
             }
             

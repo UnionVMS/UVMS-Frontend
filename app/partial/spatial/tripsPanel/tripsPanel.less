@@ -12,6 +12,10 @@ copy of the GNU General Public License along with the IFDM Suite. If not, see <h
 .activity-summary-row {
     display: flex;
     margin-bottom: 10px;
+    min-height: 200px;
+    &:last-child {
+        margin-bottom: 0;
+    }
     .summary-section {
         padding-left: 0;
         padding-right: 15px;
@@ -41,6 +45,7 @@ copy of the GNU General Public License along with the IFDM Suite. If not, see <h
     padding: 15px;
     overflow-y: auto;
     height: calc(~"100vh - 100px");
+    min-width: 992px;
     .trip-panel-content {
         position: relative;
     }

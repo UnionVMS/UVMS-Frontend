@@ -12,6 +12,7 @@ copy of the GNU General Public License along with the IFDM Suite. If not, see <h
 <div class="col-md-12 trips-panel" ng-controller="TripspanelCtrl">
     <!--TRIP SUMMARY LOADING-->
     <loading-panel type="TripSummary"></loading-panel>
+    <loading-panel type="FishingActivity"></loading-panel>
     <!--TRIP SUMMARY ALERT-->
     <div class="container containerWithTopBottomPadding spatial-error" ng-show="alert.hasAlert">
         <div class="alert alert-container" role="alert" ng-class="{'alert-danger': alert.hasError, 'alert-success': alert.hasSuccess, 'alert-warning': alert.hasWarning}">
@@ -23,6 +24,7 @@ copy of the GNU General Public License along with the IFDM Suite. If not, see <h
             </span>
         </div>
     </div>
+    
     <!--TRIPS LIST (WHEN RUNNING REPORT WITHOUT MAP)-->
     <div ng-include="'partial/spatial/tripsPanel/tripsList/tripsList.html'" ng-if="false"></div>
     <!--TRIP SUMMARY-->
