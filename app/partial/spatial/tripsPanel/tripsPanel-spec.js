@@ -111,7 +111,7 @@ describe('TripspanelCtrl', function() {
 		scope.closeTab(1);
 		expect(scope.tripSummServ.tabs.length).toEqual(1);
 
-		scope.quitTripSummary();
+		scope.navigateBack();
 		expect(scope.tripSummServ.tabs.length).toEqual(0);
 		
 	}));

@@ -533,19 +533,9 @@ describe('fishingActivityService', function() {
             areas: undefined,
             activityDetails: {
                 items: [{
-                        idx: 2,
-                        label: '',
-                        value: 'FSH - Fishing',
-                        clickable: undefined
-                    }, {
                         idx: 4,
                         label: '',
                         value: 'Demersal',
-                        clickable: undefined
-                    }, {
-                        idx: 5,
-                        label: '',
-                        value: 'GADU',
                         clickable: undefined
                     }
                 ],
@@ -1083,7 +1073,9 @@ describe('fishingActivityService', function() {
                     }
                 }
             ],
-            tripDetails: undefined
+            tripDetails: undefined,
+            processingProducts: undefined,
+            gearShotRetrieval: undefined
         };
     }
 
@@ -1140,6 +1132,8 @@ describe('fishingActivityService', function() {
         var faObj = new FishingActivity('fishing_operation');
 
         faObj.fromJson(getFaResponse());
+
+        /*expect(faObj).toBe(getFaModel());*/
 
         expect(angular.equals(faObj, getFaModel())).toBe(true);
     }));

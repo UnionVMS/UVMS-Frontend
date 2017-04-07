@@ -51,7 +51,7 @@ angular.module('unionvmsWeb').controller('TripspanelCtrl', function ($scope, gen
     $scope.closeTab = function (index) {
         $scope.tripSummServ.tabs.splice(index, 1);
         if ($scope.tripSummServ.tabs.length < 1) {
-            $scope.quitTripSummary();
+            $scope.navigateBack();
         }
     };
 
