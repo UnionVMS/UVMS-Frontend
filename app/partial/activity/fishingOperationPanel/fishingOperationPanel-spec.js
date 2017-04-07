@@ -13,16 +13,14 @@ describe('FishingoperationpanelCtrl', function() {
 
 	beforeEach(module('unionvmsWeb'));
 
-	var scope,ctrl,fishActRestServSpy,actRestSpy,fishOperSpy;
+	var scope,ctrl,fishActRestServSpy,fishOperSpy;
 	
 	beforeEach(function(){
 		fishActRestServSpy = jasmine.createSpyObj('fishingActivityService', ['getFishingActivity']);
-		actRestSpy = jasmine.createSpyObj('activityRestService', ['getTripCatchDetail']);
 		fishOperSpy = jasmine.createSpy('FishingOperation');
 		
 		module(function($provide){
 			$provide.value('fishingActivityService', fishActRestServSpy);
-			$provide.value('activityRestService', actRestSpy);
 			$provide.value('FishingOperation', fishOperSpy);
 		});
 	});
@@ -54,20 +52,11 @@ describe('FishingoperationpanelCtrl', function() {
 				}
 			};
 		});
-
-		actRestSpy.getTripCatchDetail.andCallFake(function(){
-			return {
-				then: function(callback){
-						return callback(getFishingActivity());
-				}
-			};
-		});
 	}
 
 
 	it('should initialize the fishing activity', inject(function() {
 		expect(fishActRestServSpy.getFishingActivity).toHaveBeenCalled();
-		expect(actRestSpy.getTripCatchDetail).toHaveBeenCalled();
 	}));
 
 });

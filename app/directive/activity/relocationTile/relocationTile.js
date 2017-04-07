@@ -32,10 +32,9 @@ angular.module('unionvmsWeb').directive('relocationTile', function(locale) {
 			//table columns
 		    scope.tableAttrs = [{
 		        title: locale.getString('activity.role'),
-				srcProp: 'roleDesc',
+				srcProp: 'roleName',
 		        isVisible: true,
 		        useComboFilter: true,
-				filterBy: 'role',
 				translation: 'abbreviations.activity_'
 		    }, {
 		        title: locale.getString('activity.fs'),
@@ -81,6 +80,18 @@ angular.module('unionvmsWeb').directive('relocationTile', function(locale) {
                 isVisible: true,
                 calculateTotal: true
 		    }];
+
+			/**
+			 * Create and show a tootlip with a description for the catch details type
+			 *  
+			 *  @memberof catchClassSpecieDetailTile
+			 *  @public
+			 *  @param {Array} model - The catch data to be displayed in the tile
+			 *  @returns {Boolean} a boolean which indicates if there's data to display or not
+			 */
+			scope.hasData = function(model){
+				return angular.isDefined(model) && !_.isEmpty(model);
+			};
 		}
 	};
 });

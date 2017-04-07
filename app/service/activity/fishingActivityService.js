@@ -47,16 +47,17 @@ angular.module('unionvmsWeb').factory('fishingActivityService', function(activit
             'locations',
             'gears',
             'catches',
-            'processingProducts',
-            'gearShotRetrieval'
+            'processingProducts'
         ],
         landing: [
             'locations',
-            'catches'
+            'catches',
+            'processingProducts'
         ],
         arrival_notification: [
             'locations',
-            'catches'
+            'catches',
+            'processingProducts'
         ],
         arrival_declaration: [
             'locations',
@@ -65,21 +66,31 @@ angular.module('unionvmsWeb').factory('fishingActivityService', function(activit
         fishing_operation: [
             'locations',
             'gears',
-            'catches'
+            'catches',
+            'processingProducts',
+            'gearShotRetrieval'
         ],
         discard: [
-            'locations'
+            'locations',
+            'catches',
+            'processingProducts'
         ],
         joint_fishing_operation: [
             'locations',
             'gears',
+            'catches',
+            'processingProducts',
             'relocation'
         ],
         relocation: [
-            'locations'
+            'locations',
+            'catches',
+            'processingProducts',
         ],
         transhipment: [
-            'locations'
+            'locations',
+            'catches',
+            'processingProducts',
         ],
         area_entry: [
             'areas'
@@ -102,7 +113,7 @@ angular.module('unionvmsWeb').factory('fishingActivityService', function(activit
             type: 'string'
         },
         {
-            id: 'vessel_activity',
+            id: 'vesselActivity',
             type: 'string'
         },
         {
@@ -114,7 +125,7 @@ angular.module('unionvmsWeb').factory('fishingActivityService', function(activit
             type: 'string'
         },
         {
-            id: 'targetedSpecies',
+            id: 'speciesTarget',
             type: 'array'
         },
         {
@@ -127,6 +138,14 @@ angular.module('unionvmsWeb').factory('fishingActivityService', function(activit
         },
         {
             id: 'endOfLanding',
+            type: 'date'
+        },
+        {
+            id: 'startDate',
+            type: 'date'
+        },
+        {
+            id: 'endDate',
             type: 'date'
         }
     ];
@@ -264,16 +283,11 @@ angular.module('unionvmsWeb').factory('fishingActivityService', function(activit
      */
     function getViewNameByFaType(type){
         var views = {
-            landing: 'landing',
-            discard: 'discard',
-            departure: 'departure',
             area_entry: 'areaEntry',
             area_exit: 'areaExit',
             arrival_declaration: 'arrival',
             arrival_notification: 'arrival',
-            transhipment: 'transhipment',
             fishing_operation: 'fishingoperation',
-            relocation: 'relocation',
             joint_fishing_operation: 'jointfishingoperation'
         };
         
@@ -433,6 +447,7 @@ angular.module('unionvmsWeb').factory('fishingActivityService', function(activit
             view += value;
         });
         view = 'trip' + view + 'Panel';
+        
         return view;
     }
     /**
@@ -912,7 +927,7 @@ angular.module('unionvmsWeb').factory('fishingActivityService', function(activit
                     obj.processingProducts = data.processingProducts;
                     break;
                 case 'relocation':
-                    obj.relocation = loadRelocation(data.relocation);
+                    obj.relocation = loadRelocation(data.relocations);
                     addVesselRoleDescription(obj);
                     break;
                 case 'gearShotRetrieval':
