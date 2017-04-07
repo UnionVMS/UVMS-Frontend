@@ -28,10 +28,14 @@
 						<span>{{item.id}}</span>
 					</li>
 					<li ng-repeat="item in positions" class="item-container" ng-if="positions.length > 0" ng-class="{'item-clickable': isItemClickable(item)}" ng-click="zoomToLocation(item)">
-						<span class="item-label">{{'activity.fa_locations_lon' | i18n}}</span> 
-						<span class="item-text">{{item.lon}}</span>
-						<span class="item-label">{{'activity.fa_locations_lat' | i18n}}</span> 
-						<span class="item-text">{{item.lat}}</span>
+						<div class="item-field">
+							<span class="item-label">{{'activity.fa_locations_lon' | i18n}}</span> 
+							<span class="item-text">{{item.lon}}</span>
+						</div>
+						<div class="item-field">
+							<span class="item-label">{{'activity.fa_locations_lat' | i18n}}</span> 
+							<span class="item-text">{{item.lat}}</span>
+						</div>
 					</li>
 				</ul>
 			</div>

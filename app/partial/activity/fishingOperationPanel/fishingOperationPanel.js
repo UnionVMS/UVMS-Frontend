@@ -9,20 +9,12 @@ the hope that it will be useful, but WITHOUT ANY WARRANTY; without even the impl
 FITNESS FOR A PARTICULAR PURPOSE.  See the GNU General Public License for more details. You should have received a
 copy of the GNU General Public License along with the IFDM Suite. If not, see <http://www.gnu.org/licenses/>.
 */
-angular.module('unionvmsWeb').controller('FishingoperationpanelCtrl',function($scope,fishingActivityService,loadingStatus,$state,tripSummaryService,activityRestService,FishingActivity){
+angular.module('unionvmsWeb').controller('FishingoperationpanelCtrl',function($scope,fishingActivityService,loadingStatus,$state,tripSummaryService,FishingActivity){
 
     $scope.faServ = fishingActivityService;
     
     var init = function(){
         $scope.faServ.getFishingActivity(new FishingActivity('fishing_operation'));
-        loadingStatus.isLoading('FishingActivity', true);
-        activityRestService.getTripCatchDetail($scope.faServ.id).then(function(response){
-            $scope.fishingTripDetails = response;  
-            loadingStatus.isLoading('FishingActivity', false);
-        }, function(error){
-            //TODO deal with error from service
-            loadingStatus.isLoading('FishingActivity', false);
-        });
     };
 
     /**

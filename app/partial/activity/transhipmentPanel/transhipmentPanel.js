@@ -17,11 +17,10 @@ copy of the GNU General Public License along with the IFDM Suite. If not, see <h
  * @param $state {Service} state provider service
  * @param fishingActivityService {Service} fishing activity service <p>{@link unionvmsWeb.fishingActivityService}</p>
  * @param reportFormService {Service} report form service <p>{@link unionvmsWeb.reportFormService}</p>
- * @param activityRestService {Service} activity REST service <p>{@link unionvmsWeb.activityRestService}</p>
  * @description
  *  The controller for the Transhipment panel partial
  */
-angular.module('unionvmsWeb').controller('TranshipmentpanelCtrl', function($scope, $state, fishingActivityService, tripSummaryService, activityRestService, loadingStatus, FishingActivity) {
+angular.module('unionvmsWeb').controller('TranshipmentpanelCtrl', function($scope, $state, fishingActivityService, tripSummaryService, loadingStatus, FishingActivity) {
     $scope.faServ = fishingActivityService;
     /**
      * Initialization function
@@ -31,14 +30,6 @@ angular.module('unionvmsWeb').controller('TranshipmentpanelCtrl', function($scop
      */
     var init = function() {
         $scope.faServ.getFishingActivity(new FishingActivity('transhipment'));
-        loadingStatus.isLoading('FishingActivity', true);
-        activityRestService.getTripCatchDetail($scope.faServ.id).then(function(response) {
-            $scope.fishingTripDetails = response;
-            loadingStatus.isLoading('FishingActivity', false);
-        }, function(error) {
-            //TODO deal with error from service
-            loadingStatus.isLoading('FishingActivity', false);
-        });
     };
 
     /**

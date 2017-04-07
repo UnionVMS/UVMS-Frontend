@@ -75,9 +75,9 @@ angular.module('unionvmsWeb').controller('TripspanelCtrl', function ($scope, gen
      * 
      * @memberof TripspanelCtrl
      * @public
-     * @alias quitTripSummary
+     * @alias navigateBack
      */
-    $scope.quitTripSummary = function () {
+    $scope.navigateBack = function () {
         var currentView = $scope.repNav.getCurrentView();
         if(currentView === 'tripSummary'){
             $scope.tripSummServ.tabs.splice(0, $scope.tripSummServ.tabs.length);

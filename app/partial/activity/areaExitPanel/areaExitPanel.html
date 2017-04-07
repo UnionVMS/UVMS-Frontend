@@ -14,9 +14,9 @@ copy of the GNU General Public License along with the IFDM Suite. If not, see <h
         <trip-overview-panel class="col-md-12 summary-section" trip="fishingTripDetails"></trip-overview-panel>
     </div>
     <div class="col-md-12 main-content">
-        <a class="btn-trip-quit" title="{{'activity.trip_summary_quit_trip_detail' | i18n }}" ng-click="quitTripSummary()"><i class="fa fa-share-square-o"></i></a>
+        <a class="btn-trip-quit" title="{{'activity.trip_summary_quit_trip_detail' | i18n }}" ng-click="repNav.goToView('tripsPanel', 'tripSummary')"><i class="fa fa-share-square-o"></i></a>
         <div class="row title">
-            <span ng-if="faServ.documentType=='notification'">{{'activity.fa_report_document_type_notification_of' | i18n}}</span>
+            <span ng-if="faServ.documentType === 'notification'">{{'activity.fa_report_document_type_notification_of' | i18n}}</span>
             <span ng-class="{useColon: faServ.isCorrection}">{{'activity.trip_area_exit' | i18n}}</span>
             <span class="operationType" ng-if="faServ.isCorrection">{{'activity.optype_correction' | i18n}}</span>
         </div>

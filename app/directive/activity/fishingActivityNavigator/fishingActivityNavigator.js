@@ -30,6 +30,7 @@ angular.module('unionvmsWeb').directive('fishingActivityNavigator', function(tri
 		templateUrl: 'directive/activity/fishingActivityNavigator/fishingActivityNavigator.html',
 		link: function(scope, element, attrs, fn) {
 		    scope.timeline = tripReportsTimeline;
+			scope.repNav = reportingNavigatorService;
 		
 		    /**
 		     * Navigate to the next fishing activity
@@ -78,6 +79,7 @@ angular.module('unionvmsWeb').directive('fishingActivityNavigator', function(tri
                    $compile(content.contents())(scope);
                 });
             }
+
 		}
 	};
 });
