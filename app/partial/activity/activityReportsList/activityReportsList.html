@@ -60,7 +60,7 @@ copy of the GNU General Public License along with the IFDM Suite. If not, see <h
 								<i class="fa {{ activity.purposeCode | stPurposeCode: true }}" title="{{ activity.purposeCode | stPurposeCode}}"></i>
 							</div>
 							<div ng-show="attrVisibility.fishingActivities.dataSource" ng-if="column === 'dataSource'">{{ activity.dataSource }}</div>
-							<div ng-show="attrVisibility.fishingActivities.fromName" ng-if="column === 'fromName'">{{ activity.fromName }}</div>
+							<div ng-show="attrVisibility.fishingActivities.fromName" ng-if="column === 'fromName'">{{ activity.fromId | stArrayToString: ', ' }}</div>
 							<div ng-show="attrVisibility.fishingActivities.startDate" ng-if="column === 'startDate'">{{ activity.startDate | stDateUtc }}</div>
 							<div ng-show="attrVisibility.fishingActivities.endDate" ng-if="column === 'endDate'">{{ activity.endDate | stDateUtc }}</div>
 							<div ng-show="attrVisibility.fishingActivities.cfr" ng-if="column === 'cfr'">{{ activity.vesselIdTypes | stVessekIdsToColumns: 'cfr' }}</div>
@@ -73,7 +73,7 @@ copy of the GNU General Public License along with the IFDM Suite. If not, see <h
 							<div ng-show="attrVisibility.fishingActivities.port" ng-if="column === 'port'">{{ activity.port | stArrayToString: ' - ' }}</div>
 							<div ng-show="attrVisibility.fishingActivities.fishingGear" ng-if="column === 'fishingGear'">{{ activity.fishingGear | stArrayToString: ' - ' }}</div>
 							<div ng-show="attrVisibility.fishingActivities.speciesCode" ng-if="column === 'speciesCode'">{{ activity.speciesCode | stArrayToString: ', ' }}</div>
-							<div ng-show="attrVisibility.fishingActivities.quantity" ng-if="column === ''">{{ activity.quantity | stArrayToString: ', ' }}</div>
+							<div ng-show="attrVisibility.fishingActivities.quantity" ng-if="column === 'quantity'">{{ activity.quantity }}</div>
 						</td>
 						<td class="no-wrap-white-space">
 							<button type="button" class="btn btn-xs btn-default" title="{{'activity.activity_details' | i18n }}" ng-click="openDetails($index)">

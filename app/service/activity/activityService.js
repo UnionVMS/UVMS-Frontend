@@ -31,7 +31,7 @@ copy of the GNU General Public License along with the IFDM Suite. If not, see <h
  * @description
  *  A service to deal with all activity data
  */
-angular.module('unionvmsWeb').factory('activityService',function(locale, activityRestService, visibilityService, breadcrumbService, fishingActivityService) {
+angular.module('unionvmsWeb').factory('activityService',function(locale, activityRestService, visibilityService, breadcrumbService, fishingActivityService, $q) {
     var actServ = {};
     var pageSize = 25;
     
@@ -170,6 +170,8 @@ angular.module('unionvmsWeb').factory('activityService',function(locale, activit
         this.activitiesHistoryList = getActivitiesHistoryListObject();
         this.allPurposeCodes = [];
         
+        this.isTableLoaded = false;
+        
         if (angular.isDefined(goToInitialPage) && goToInitialPage){
             breadcrumbService.goToItem(0);
         }
@@ -247,13 +249,18 @@ angular.module('unionvmsWeb').factory('activityService',function(locale, activit
     };
 	
     /**
+     * A property to avoid automatic reloading of the table through the st-pipe, mainly used to avoid reloading data
+     * when coming back from activity details or activity history
+     */
+    actServ.isTableLoaded = false;
+    /**
      * Get the list of activities according to the table pagination and search criteria
      * 
      * @memberof activityService
      * @public
      * @alias getActivityList
      * @param {Object} searcObj - The object containing the search criteria to filter FA reports
-     */
+     */    
     actServ.getActivityList = function(callback, tableState){
         actServ.clearAttributeByType('activities');
         
@@ -286,9 +293,11 @@ angular.module('unionvmsWeb').factory('activityService',function(locale, activit
             
             actServ.reportsList.isLoading = false;
             actServ.reportsList.hasError = false;
+            actServ.isTableLoaded = true;
         }, function(error){
             actServ.reportsList.isLoading = false;
             actServ.reportsList.hasError = true;
+            actServ.isTableLoaded = false;
         });
     };
     

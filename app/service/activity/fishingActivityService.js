@@ -85,7 +85,9 @@ angular.module('unionvmsWeb').factory('fishingActivityService', function(activit
             'areas'
         ],
         area_exit: [
-            'areas'
+            'areas',
+            'catches',
+            'processingProducts'
         ]
     };
 
@@ -262,14 +264,18 @@ angular.module('unionvmsWeb').factory('fishingActivityService', function(activit
      */
     function getViewNameByFaType(type){
         var views = {
-            area_exit: 'areaExit',
-            fishing_operation: 'fishingoperation',
+            landing: 'landing',
+            discard: 'discard',
+            departure: 'departure',
             area_entry: 'areaEntry',
+            area_exit: 'areaExit',
             arrival_declaration: 'arrival',
-            arrival_notification: 'arrival'
+            arrival_notification: 'arrival',
+            transhipment: 'transhipment',
+            fishing_operation: 'fishingoperation',
+            relocation: 'relocation',
+            joint_fishing_operation: 'jointfishingoperation'
         };
-        
-        //TODO add all activity types
         
         return views[type.toLowerCase()] || type;
     }

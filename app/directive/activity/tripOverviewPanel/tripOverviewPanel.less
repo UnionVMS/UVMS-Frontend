@@ -24,6 +24,7 @@ trip-overview-panel {
                 }
             }
             > .activity-summary-row {
+                min-height: 0 !important;
                 max-height: 0;
                 transition: max-height 0.60s ease-out;
                 overflow: hidden;
@@ -70,6 +71,7 @@ trip-overview-panel {
             }
             .trip-row {
                 width: 100%;
+                height: 100%;
                 display: flex;
                 .field-format {
                     display: inline-flex;
@@ -77,6 +79,10 @@ trip-overview-panel {
                         font-weight: bold;
                         white-space: nowrap;
                         margin-right: 5px;
+                        line-height: 30px;
+                    }
+                    .field-text {
+                        line-height: 30px;
                     }
                     &:not(:last-child){
                         .field-text {

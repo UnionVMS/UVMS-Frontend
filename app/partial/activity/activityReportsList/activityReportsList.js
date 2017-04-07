@@ -33,7 +33,7 @@ angular.module('unionvmsWeb').controller('ActivityreportslistCtrl',function($sco
      * @alias callServer
      */
     $scope.callServer = function(tableState){
-        if (!$scope.actServ.reportsList.isLoading && angular.isDefined($scope.actServ.reportsList.searchObject.multipleCriteria)){
+        if (!$scope.actServ.reportsList.isLoading && angular.isDefined($scope.actServ.reportsList.searchObject.multipleCriteria) && !$scope.actServ.isTableLoaded){
             $scope.actServ.reportsList.tableState = tableState;
             $scope.actServ.reportsList.isLoading = true;
             
