@@ -12,7 +12,7 @@ copy of the GNU General Public License along with the IFDM Suite. If not, see <h
 /**
  * @memberof unionvmsWeb
  * @ngdoc directive
- * @name catchClassSpecieDetailTile
+ * @name catchTile
  * @attr {Object} tileTitle - Title of fieldset
  * @attr {Object} ngModel - Data to be displayed
  * @attr {Boolean} isLocationClickable - tells if the click is enable on location tile
@@ -117,7 +117,7 @@ angular.module('unionvmsWeb').directive('catchTile', function(locale,reportingNa
 			/**
 			 * Selects a row by index
 			 * 
-			 * @memberof catchClassSpecieDetailTile
+			 * @memberof catchTile
 			 * @public
 			 * @alias selectClass
 			 * @param {String} [className] - Index of the class to be selected
@@ -130,7 +130,7 @@ angular.module('unionvmsWeb').directive('catchTile', function(locale,reportingNa
 			/**
 			 * Create and show a tootlip with a description for the catch details type
 			 *  
-			 *  @memberof catchClassSpecieDetailTile
+			 *  @memberof catchTile
 			 *  @public
 			 *  @param {String} text - The text to be displayed in the tooltip
 			 *  @param {String} cssSel - The css selector class of the item against which the tip will be displayed
@@ -173,7 +173,7 @@ angular.module('unionvmsWeb').directive('catchTile', function(locale,reportingNa
 			/**
 			 * Create and show a tootlip with a description for the catch details type
 			 *  
-			 *  @memberof catchClassSpecieDetailTile
+			 *  @memberof catchTile
 			 *  @public
 			 *  @param {Array} model - The catch data to be displayed in the tile
 			 *  @returns {Boolean} a boolean which indicates if there's data to display or not

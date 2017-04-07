@@ -51,7 +51,7 @@ angular.module('unionvmsWeb').controller('TripspanelCtrl', function ($scope, gen
     $scope.closeTab = function (index) {
         $scope.tripSummServ.tabs.splice(index, 1);
         if ($scope.tripSummServ.tabs.length < 1) {
-            $scope.quitTripSummary();
+            $scope.navigateBack();
         }
     };
 
@@ -75,9 +75,9 @@ angular.module('unionvmsWeb').controller('TripspanelCtrl', function ($scope, gen
      * 
      * @memberof TripspanelCtrl
      * @public
-     * @alias quitTripSummary
+     * @alias navigateBack
      */
-    $scope.quitTripSummary = function () {
+    $scope.navigateBack = function () {
         var currentView = $scope.repNav.getCurrentView();
         if(currentView === 'tripSummary'){
             $scope.tripSummServ.tabs.splice(0, $scope.tripSummServ.tabs.length);

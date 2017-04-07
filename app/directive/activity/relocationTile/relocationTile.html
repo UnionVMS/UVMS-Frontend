@@ -1,6 +1,11 @@
-<fieldset class="col-md-12 fieldsetStyle relocation-tile">
+<fieldset class="col-md-12 fieldsetStyle relocation-tile" ng-switch="hasData(srcData)">
 	<legend class="fieldsetLegendStyle">
 		<a>{{tileTitle}}</a>
 	</legend>
-	<table-filter-headers columns="tableAttrs" records="srcData"></table-filter-headers>
+	<table-filter-headers columns="tableAttrs" records="srcData" ng-switch-when="true"></table-filter-headers>
+	<div class="row no-data" ng-switch-when="false">
+		<div class="col-md-12">
+			<span>{{'activity.no_data' | i18n}}</span>
+		</div>
+	</div>
 </fieldset>

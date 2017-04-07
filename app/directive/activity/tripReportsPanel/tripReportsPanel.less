@@ -23,25 +23,20 @@ copy of the GNU General Public License along with the IFDM Suite. If not, see <h
             left: 30px;
             right: 0;
             .table.angular-ui-tree {
-                position: relative;
+                display: flex;
+                flex-flow: column;
                 height: 100%;
                 > .thead {
-                    position: absolute;
-                    z-index: 1;
-                    top: 0;
-                    left: 0;
+                    flex: 0 1 auto;
                     background: #fff;
                     > .tr > .th {
                         text-align: center;
                     }
                 }
                 .angular-ui-tree-nodes.tbody {
-                    margin-bottom: -20px;
-                    max-height: 236px;
-                    height: 100%;
+                    flex: 1 40 auto;
                     background: #ddd;
                     overflow-y: auto;
-                    margin-top: 32px;
                     > .tr {
                         background: #f7f7f7;
                         border-top: 1px solid #ddd;

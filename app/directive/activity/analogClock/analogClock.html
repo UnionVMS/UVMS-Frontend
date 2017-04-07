@@ -3,7 +3,7 @@
         <circle class="surface" cx='50' cy='50' r='45' />
         <!-- clock Markers : hour and minute Markers -->
         <g>
-            <rect ng-class="((item%5)==0)?'markers-hour':'markers-minute'" ng-repeat="item in clockMarker" ng-attr-transform="rotate({{item}} 50 50)"
+            <rect ng-class="((item%5) === 0)?'markers-hour':'markers-minute'" ng-repeat="item in clockMarker" ng-attr-transform="rotate({{item}} 50 50)"
             />
         </g>
         <!-- clock Hands and clock center -->

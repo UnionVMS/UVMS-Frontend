@@ -20,7 +20,7 @@ copy of the GNU General Public License along with the IFDM Suite. If not, see <h
  * @description
  *  The controller for the relocation panel partial
  */
-angular.module('unionvmsWeb').controller('RelocationpanelCtrl', function ($scope, $state, fishingActivityService, tripSummaryService, activityRestService, loadingStatus, FishingActivity) {
+angular.module('unionvmsWeb').controller('RelocationpanelCtrl', function ($scope, $state, fishingActivityService, tripSummaryService, loadingStatus, FishingActivity) {
     $scope.faServ = fishingActivityService;
     
     /**
@@ -31,14 +31,6 @@ angular.module('unionvmsWeb').controller('RelocationpanelCtrl', function ($scope
      */
     var init = function () {
         $scope.faServ.getFishingActivity(new FishingActivity('relocation'));
-        loadingStatus.isLoading('FishingActivity', true);
-        activityRestService.getTripCatchDetail($scope.faServ.id).then(function (response) {
-            $scope.fishingTripDetails = response;
-            loadingStatus.isLoading('FishingActivity', false);
-        }, function (error) {
-            //TODO deal with error from service
-            loadingStatus.isLoading('FishingActivity', false);
-        });
     };
 
     /**

@@ -14,7 +14,7 @@ copy of the GNU General Public License along with the IFDM Suite. If not, see <h
 		<trip-overview-panel class="col-md-12 summary-section" trip="fishingTripDetails"></trip-overview-panel>
 	</div>
 	<div class="col-md-12 main-content">
-		<a class="btn-trip-quit" title="{{'activity.trip_summary_quit_trip_detail' | i18n }}" ng-click="quitTripSummary()"><i class="fa fa-share-square-o"></i></a>
+		<a class="btn-trip-quit" title="{{'activity.trip_summary_quit_trip_detail' | i18n }}" ng-click="repNav.goToView('tripsPanel', 'tripSummary')"><i class="fa fa-share-square-o"></i></a>
 		<div class="row title">
 			<span>{{'activity.fa_report_document_type_notification_of' | i18n}}</span>
             <span ng-class="{useColon: faServ.isCorrection}">{{'activity.notification_arrival_title' | i18n}}</span>
@@ -25,8 +25,11 @@ copy of the GNU General Public License along with the IFDM Suite. If not, see <h
 			<location-tile class="col-md-4 summary-section" is-clickable="isLocationClickable()" field-title="{{'activity.activity_location_port_departure' | i18n}}" location-details="faServ.activityData.locations" click-callback="locationClickCallback()"></location-tile>
 			<fa-details-panel class="col-md-6 summary-section" ng-model="faServ.activityData.reportDetails"></fa-details-panel>
 		</div>
-		<div class="row activity-summary-row" ng-if="faServ.activityData.catches.length > 0">
-			<catch-class-detail-tile class="col-md-12 summary-section" ng-model="faServ.activityData.catches" tile-title="{{'activity.departure_catch_detail' | i18n}}" is-location-clickable="isLocationClickable()" buffer-distance="5000" click-callback="locationClickCallback()"></catch-class-detail-tile>
+		<div class="row activity-summary-row">
+			<catch-tile class="col-md-12 summary-section" ng-model="faServ.activityData.catches" tile-title="{{'activity.catch_details_catches_table' | i18n}}" is-location-clickable="isLocationClickable()" buffer-distance="5000" click-callback="locationClickCallback()"></catch-tile>
 		</div>
+		<div class="row activity-summary-row" ng-if="faServ.activityData.processingProducts && faServ.activityData.processingProducts.length > 0">
+			<product-processing-tile class="col-md-12 summary-section" src-data="faServ.activityData.processingProducts" tile-title="{{'activity.departure_processing_product' | i18n}}"></product-processing-tile>
+		</div> 
 	</div>
 </div>

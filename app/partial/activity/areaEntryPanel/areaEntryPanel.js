@@ -17,12 +17,11 @@ copy of the GNU General Public License along with the IFDM Suite. If not, see <h
  * @param $state {Service} state provider service
  * @param fishingActivityService {Service} fishing activity service <p>{@link unionvmsWeb.fishingActivityService}</p>
  * @param reportFormService {Service} report form service <p>{@link unionvmsWeb.reportFormService}</p>
- * @param activityRestService {Service} activity REST service <p>{@link unionvmsWeb.activityRestService}</p>
  * @param tripSummaryService {Service} trip summary service <p>{@link unionvmsWeb.tripSummaryService}</p>
  * @description
  *  The controller for the Area Entry panel partial
  */
-angular.module('unionvmsWeb').controller('AreaentrypanelCtrl', function ($scope, $state, fishingActivityService, activityRestService, loadingStatus, FishingActivity, tripSummaryService) {
+angular.module('unionvmsWeb').controller('AreaentrypanelCtrl', function ($scope, $state, fishingActivityService, loadingStatus, FishingActivity, tripSummaryService) {
     $scope.faServ = fishingActivityService;
     /**
      * Initialization function
@@ -32,14 +31,6 @@ angular.module('unionvmsWeb').controller('AreaentrypanelCtrl', function ($scope,
      */
     var init = function () {
         $scope.faServ.getFishingActivity(new FishingActivity('area_entry'));
-        loadingStatus.isLoading('FishingActivity', true);
-        activityRestService.getTripCatchDetail($scope.faServ.id).then(function (response) {
-            $scope.fishingTripDetails = response;
-            loadingStatus.isLoading('FishingActivity', false);
-        }, function (error) {
-            //TODO deal with error from service
-            loadingStatus.isLoading('FishingActivity', false);
-        });
     };
     
     /**

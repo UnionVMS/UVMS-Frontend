@@ -21,7 +21,7 @@ copy of the GNU General Public License along with the IFDM Suite. If not, see <h
  * @description
  *  A reusable smart table directive that supports multiple and simultaneous combobox filters, and calculates totals according to an object that defines the table structure
  */
-angular.module('unionvmsWeb').directive('tableFilterHeaders', function($compile) {
+angular.module('unionvmsWeb').directive('tableFilterHeaders', function($compile, locale) {
 	return {
 		restrict: 'E',
 		replace: false,
@@ -40,17 +40,32 @@ angular.module('unionvmsWeb').directive('tableFilterHeaders', function($compile)
                     element.attr('st-auto-select-row', true);
                 }
 
-                var initFilters = function(){
+                var initColumns = function(){
                     angular.forEach(scope.columns,function(column){
                         if(angular.isDefined(column.filterBy)){
                             column.filterBy = column.srcObj ? column.srcObj + '.' + column.filterBy : column.filterBy;
                         }else{
                             column.filterBy = column.srcObj ? column.srcObj + '.' + column.srcProp : column.srcProp;
                         }
+
+                        if(angular.isDefined(column.translation)){
+                            angular.forEach(scope.records,function(item){
+                                item['translated' + column.srcProp] = getTranslation(item,column);
+                            });
+                        }
                     });
                 };
 
-                initFilters();
+                var getTranslation = function(item,column){
+                    var val = item[column.filterBy ? column.filterBy : column.srcProp];
+                    var translation = locale.getString(column.translation + val);
+
+                    translation = translation !== "%%KEY_NOT_FOUND%%" ? translation : val;
+
+                    return translation;
+                };
+
+                initColumns();
 		    },
 		    post: function(scope, element, attrs, fn){
                 scope.hasTotals = false;
@@ -122,7 +137,7 @@ angular.module('unionvmsWeb').directive('tableFilterHeaders', function($compile)
                         scope.selectedItem = scope.displayedRecords[idx];
                     }
                 };
-                
+
                 if (angular.isDefined(scope.uniqueColumnsSrcData)){
                     setColumnVisibility();
                 }
@@ -236,7 +251,8 @@ angular.module('unionvmsWeb').directive('tableFilterHeaders', function($compile)
                 angular.forEach(scope.combo.model, function(val){
                     var text = val;
                     if (angular.isDefined(scope.translateColumn)){
-                        text = locale.getString(scope.translateColumn + val);
+                        var item = locale.getString(scope.translateColumn + val);
+                        text = item !== "%%KEY_NOT_FOUND%%" ? item : val;
                     }
                     items.push({
                         code: val,

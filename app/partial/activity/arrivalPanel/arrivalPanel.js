@@ -16,12 +16,11 @@ copy of the GNU General Public License along with the IFDM Suite. If not, see <h
  * @param $scope {Service} controller scope
  * @param $state {Service} state provider service
  * @param fishingActivityService {Service} fishing activity service <p>{@link unionvmsWeb.fishingActivityService}</p>
- * @param activityRestService {Service} activity REST service <p>{@link unionvmsWeb.activityRestService}</p>
  * @attr {String} srcTab - Identifies from where the partial is being initialized. It is defined through ng-init and supports the following values: reports, activity
  * @description
  *  The controller for the Arrival panel partial
  */
-angular.module('unionvmsWeb').controller('ArrivalpanelCtrl', function($scope, $state, fishingActivityService, tripSummaryService, activityRestService, locale, loadingStatus, FishingActivity) {
+angular.module('unionvmsWeb').controller('ArrivalpanelCtrl', function($scope, $state, fishingActivityService, tripSummaryService, locale, loadingStatus, FishingActivity) {
     $scope.faServ = fishingActivityService;
     
     var arrivalNotification =  ($scope.faServ.documentType === 'notification')? true : false;
@@ -34,15 +33,6 @@ angular.module('unionvmsWeb').controller('ArrivalpanelCtrl', function($scope, $s
        */
     var init = function() {
         $scope.faServ.getFishingActivity(new FishingActivity(arrivalNotification ? 'arrival_notification' : 'arrival_declaration'), arrivalData);
-        
-        loadingStatus.isLoading('FishingActivity', true);
-        activityRestService.getTripCatchDetail($scope.faServ.id).then(function(response) {
-            $scope.fishingTripDetails = response;
-            loadingStatus.isLoading('FishingActivity', false);
-        }, function(error) {
-            //TODO deal with error from service
-            loadingStatus.isLoading('FishingActivity', false);
-        });
     };
 
        /**
