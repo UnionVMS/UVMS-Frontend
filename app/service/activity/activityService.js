@@ -86,6 +86,8 @@ angular.module('unionvmsWeb').factory('activityService',function(locale, activit
             hasError: false,
             searchObject: {},
             tableState: undefined,
+            stCtrl: undefined,
+            fromForm: false,
             pagination: {
                 offset: 0,
                 pageSize: pageSize,
@@ -283,8 +285,13 @@ angular.module('unionvmsWeb').factory('activityService',function(locale, activit
             
             actServ.activities = response.resultList;
             actServ.displayedActivities = [].concat(actServ.activities);
-            if (angular.isDefined(callback) && angular.isDefined(tableState)){
-                callback(tableState);
+            if (angular.isDefined(callback)){
+                if (angular.isDefined(tableState)){
+                    callback(tableState);
+                } else {
+                    callback();
+                }
+                
             }
             
             if (!angular.isDefined(callback) && angular.isDefined(actServ.reportsList.tableState)){

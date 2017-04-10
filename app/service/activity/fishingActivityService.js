@@ -260,6 +260,7 @@ angular.module('unionvmsWeb').factory('fishingActivityService', function(activit
 	    faServ.id = undefined;
 	    faServ.isCorrection = false;
 	    faServ.activityType = undefined;
+	    faServ.documentType = undefined;
 	};
 	
 	/**

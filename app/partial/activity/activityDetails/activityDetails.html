@@ -10,19 +10,18 @@ FITNESS FOR A PARTICULAR PURPOSE.  See the GNU General Public License for more d
 copy of the GNU General Public License along with the IFDM Suite. If not, see <http://www.gnu.org/licenses/>.
 -->
 <div class="col-md-12 activity-details" ng-controller="ActivitydetailsCtrl">
-	<!-- <div>{{actServ.details.name}}</div> -->
 	<loading-panel class="activity-fa-loading" type="FishingActivity"></loading-panel>
 	<div class="row">
-		<div ng-include="partial/activity/landingPanel/landingPanel.html" ng-init="srcTab = 'activity'" ng-if="faServ.activityType === 'landing'"></div>
-		<div ng-include="partial/activity/discardPanel/discardPanel.html" ng-init="srcTab = 'activity'" ng-if="faServ.activityType === 'discard'"></div>
+		<div ng-include="'partial/activity/landingPanel/landingPanel.html'" ng-init="srcTab = 'activity'" ng-if="faServ.activityType === 'landing'"></div>
+		<div ng-include="'partial/activity/discardPanel/discardPanel.html'" ng-init="srcTab = 'activity'" ng-if="faServ.activityType === 'discard'"></div>
 		<div ng-include="'partial/activity/departurePanel/departurePanel.html'" ng-init="srcTab = 'activity'" ng-if="faServ.activityType === 'departure'"></div>
 		<div ng-include="'partial/activity/areaEntryPanel/areaEntryPanel.html'" ng-init="srcTab = 'activity'" ng-if="faServ.activityType === 'area_entry'"></div>
 		<div ng-include="'partial/activity/areaExitPanel/areaExitPanel.html'" ng-init="srcTab = 'activity'" ng-if="faServ.activityType === 'area_exit'"></div>
-		<div ng-include="partial/activity/arrivalPanel/arrivalPanel.html" ng-init="srcTab = 'activity'" ng-if="faServ.activityType === 'arrival'"></div>
-		<div ng-include="partial/activity/transhipmentPanel/transhipmentPanel.html" ng-init="srcTab = 'activity'" ng-if="faServ.activityType === 'transhipment'"></div>
-		<div ng-include="partial/activity/fishingOperationPanel/fishingOperationPanel.html" ng-init="srcTab = 'activity'" ng-if="faServ.activityType === 'fishing_operation'"></div>
-		<div ng-include="partial/activity/relocationPanel/relocationPanel.html" ng-init="srcTab = 'activity'" ng-if="faServ.activityType === 'relocation'"></div>
-		<div ng-include="partial/activity/jointFishingOperation/jointFishingOperation.html" ng-init="srcTab = 'activity'" ng-if="faServ.activityType === 'joint_fishing_operation'"></div>
+		<div ng-include="'partial/activity/arrivalPanel/arrivalPanel.html'" ng-init="srcTab = 'activity'" ng-if="faServ.activityType === 'arrival'"></div>
+		<div ng-include="'partial/activity/transhipmentPanel/transhipmentPanel.html'" ng-init="srcTab = 'activity'" ng-if="faServ.activityType === 'transhipment'"></div>
+		<div ng-include="'partial/activity/fishingOperationPanel/fishingOperationPanel.html'" ng-init="srcTab = 'activity'" ng-if="faServ.activityType === 'fishing_operation'"></div>
+		<div ng-include="'partial/activity/relocationPanel/relocationPanel.html'" ng-init="srcTab = 'activity'" ng-if="faServ.activityType === 'relocation'"></div>
+		<div ng-include="'partial/activity/jointFishingOperation/jointFishingOperation.html'" ng-init="srcTab = 'activity'" ng-if="faServ.activityType === 'joint_fishing_operation'"></div>
 	</div>
 </div>
 

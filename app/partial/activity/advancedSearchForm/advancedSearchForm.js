@@ -199,7 +199,10 @@ angular.module('unionvmsWeb').controller('AdvancedsearchformCtrl',function($scop
         $scope.actServ.resetReportsListTableState();
         $scope.actServ.resetReportsListSearchObject();
         $scope.actServ.reportsList.isLoading = true;
-        $scope.actServ.getActivityList();
+        $scope.actServ.getActivityList(function(){
+            $scope.actServ.reportsList.fromForm = true;
+            $scope.actServ.reportsList.stCtrl.pipe();
+        });
     };
     
     /**
@@ -215,7 +218,7 @@ angular.module('unionvmsWeb').controller('AdvancedsearchformCtrl',function($scop
             $scope.isFormValid = true;
             $scope.actServ.reportsList.isLoading = true;
             $scope.actServ.resetReportsListTableState();
-            $scope.actServ.isTableLoaded = true;
+            $scope.actServ.isTableLoaded = false;
             
             var keyMapper = {
                 reportType: 'REPORT_TYPE',
@@ -269,7 +272,10 @@ angular.module('unionvmsWeb').controller('AdvancedsearchformCtrl',function($scop
                 multipleCriteria: multipleFormatedSearch
             };
             
-            $scope.actServ.getActivityList();
+            $scope.actServ.getActivityList(function(){
+                $scope.actServ.reportsList.fromForm = true;
+                $scope.actServ.reportsList.stCtrl.pipe();
+            });
         }
     };
     
