@@ -31,7 +31,7 @@ copy of the GNU General Public License along with the IFDM Suite. If not, see <h
  * @description
  *  A service to deal with all activity data
  */
-angular.module('unionvmsWeb').factory('activityService',function(locale, activityRestService, visibilityService, breadcrumbService, fishingActivityService, $q) {
+angular.module('unionvmsWeb').factory('activityService',function(locale, activityRestService, visibilityService, breadcrumbService, fishingActivityService) {
     var actServ = {};
     var pageSize = 25;
     
