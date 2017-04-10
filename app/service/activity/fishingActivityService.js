@@ -96,10 +96,14 @@ angular.module('unionvmsWeb').factory('fishingActivityService', function(activit
             'vesselDetails'
         ],
         area_entry: [
-            'areas'
+            'areas',
+            'catches',
+            'processingProducts'
         ],
         area_exit: [
-            'areas'
+            'areas',
+            'catches',
+            'processingProducts'
         ]
     };
 
@@ -261,6 +265,7 @@ angular.module('unionvmsWeb').factory('fishingActivityService', function(activit
 	    faServ.id = undefined;
 	    faServ.isCorrection = false;
 	    faServ.activityType = undefined;
+	    faServ.documentType = undefined;
 	};
 	
 	/**
@@ -284,15 +289,13 @@ angular.module('unionvmsWeb').factory('fishingActivityService', function(activit
      */
     function getViewNameByFaType(type){
         var views = {
-            area_exit: 'areaExit',
-            fishing_operation: 'fishingoperation',
-            joint_fishing_operation: 'jointfishingoperation',
             area_entry: 'areaEntry',
+            area_exit: 'areaExit',
             arrival_declaration: 'arrival',
-            arrival_notification: 'arrival'
+            arrival_notification: 'arrival',
+            fishing_operation: 'fishingoperation',
+            joint_fishing_operation: 'jointfishingoperation'
         };
-        
-        //TODO add all activity types
         
         return views[type.toLowerCase()] || type;
     }

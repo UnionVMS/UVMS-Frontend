@@ -86,6 +86,8 @@ angular.module('unionvmsWeb').factory('activityService',function(locale, activit
             hasError: false,
             searchObject: {},
             tableState: undefined,
+            stCtrl: undefined,
+            fromForm: false,
             pagination: {
                 offset: 0,
                 pageSize: pageSize,
@@ -170,6 +172,8 @@ angular.module('unionvmsWeb').factory('activityService',function(locale, activit
         this.activitiesHistoryList = getActivitiesHistoryListObject();
         this.allPurposeCodes = [];
         
+        this.isTableLoaded = false;
+        
         if (angular.isDefined(goToInitialPage) && goToInitialPage){
             breadcrumbService.goToItem(0);
         }
@@ -247,13 +251,18 @@ angular.module('unionvmsWeb').factory('activityService',function(locale, activit
     };
 	
     /**
+     * A property to avoid automatic reloading of the table through the st-pipe, mainly used to avoid reloading data
+     * when coming back from activity details or activity history
+     */
+    actServ.isTableLoaded = false;
+    /**
      * Get the list of activities according to the table pagination and search criteria
      * 
      * @memberof activityService
      * @public
      * @alias getActivityList
      * @param {Object} searcObj - The object containing the search criteria to filter FA reports
-     */
+     */    
     actServ.getActivityList = function(callback, tableState){
         actServ.clearAttributeByType('activities');
         
@@ -276,8 +285,13 @@ angular.module('unionvmsWeb').factory('activityService',function(locale, activit
             
             actServ.activities = response.resultList;
             actServ.displayedActivities = [].concat(actServ.activities);
-            if (angular.isDefined(callback) && angular.isDefined(tableState)){
-                callback(tableState);
+            if (angular.isDefined(callback)){
+                if (angular.isDefined(tableState)){
+                    callback(tableState);
+                } else {
+                    callback();
+                }
+                
             }
             
             if (!angular.isDefined(callback) && angular.isDefined(actServ.reportsList.tableState)){
@@ -286,9 +300,11 @@ angular.module('unionvmsWeb').factory('activityService',function(locale, activit
             
             actServ.reportsList.isLoading = false;
             actServ.reportsList.hasError = false;
+            actServ.isTableLoaded = true;
         }, function(error){
             actServ.reportsList.isLoading = false;
             actServ.reportsList.hasError = true;
+            actServ.isTableLoaded = false;
         });
     };
     
