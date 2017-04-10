@@ -32,9 +32,11 @@ angular.module('unionvmsWeb').controller('ActivityreportslistCtrl',function($sco
      * @public
      * @alias callServer
      */
-    $scope.callServer = function(tableState){
-        if (!$scope.actServ.reportsList.isLoading && angular.isDefined($scope.actServ.reportsList.searchObject.multipleCriteria)){
-            $scope.actServ.reportsList.tableState = tableState;
+    $scope.callServer = function(tableState, ctrl){
+        $scope.actServ.reportsList.stCtrl = ctrl;
+        $scope.actServ.reportsList.tableState = tableState;
+        
+        if (!$scope.actServ.reportsList.isLoading && angular.isDefined($scope.actServ.reportsList.searchObject.multipleCriteria) && !$scope.actServ.isTableLoaded){
             $scope.actServ.reportsList.isLoading = true;
             
             var searchField, sortOrder; 
@@ -49,6 +51,14 @@ angular.module('unionvmsWeb').controller('ActivityreportslistCtrl',function($sco
             };
             
             $scope.actServ.getActivityList(callServerCallback, tableState);
+        } else {
+            if (!angular.isDefined(tableState.pagination.numberOfPages) || $scope.actServ.reportsList.fromForm){
+                callServerCallback(tableState);
+                $scope.actServ.reportsList.fromForm = false;
+            } else {
+                $scope.actServ.isTableLoaded = false;
+                ctrl.pipe();
+            }
         }
     };
     
@@ -112,6 +122,7 @@ angular.module('unionvmsWeb').controller('ActivityreportslistCtrl',function($sco
         $scope.actServ.overview = $scope.actServ.displayedActivities[idx]; //TODO check if we need this
         $scope.faServ.id = $scope.actServ.displayedActivities[idx].fishingActivityId;
         $scope.faServ.activityType = $scope.actServ.displayedActivities[idx].activityType.toLowerCase();
+        $scope.faServ.documentType = $scope.actServ.displayedActivities[idx].FAReportType.toLowerCase();
         
         $scope.goToView(3);
     };
