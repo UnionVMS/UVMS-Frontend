@@ -53,19 +53,6 @@ angular.module('unionvmsWeb').controller('DeparturepanelCtrl',function($scope, $
     };
     
     /**
-     * Quit departure panel function
-     * 
-     * @memberof DeparturepanelCtrl
-     * @public
-     * @alias quitDeparturePanel
-     */
-    $scope.quitDeparturePanel = function(){
-        if (($state.current.name === 'app.reporting-id' || $state.current.name === 'app.reporting')){
-            reportingNavigatorService.goToPreviousView();
-        }
-    };
-    
-    /**
      * The click location callback function
      * 
      * @memberof DeparturepanelCtrl

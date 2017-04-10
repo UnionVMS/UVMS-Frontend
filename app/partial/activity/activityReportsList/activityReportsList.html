@@ -70,7 +70,7 @@ copy of the GNU General Public License along with the IFDM Suite. If not, see <h
 							<div ng-show="attrVisibility.fishingActivities.iccat" ng-if="column === 'iccat'">{{ activity.vesselIdTypes | stVessekIdsToColumns: 'iccat' }}</div>
 							<div ng-show="attrVisibility.fishingActivities.gfcm" ng-if="column === 'gfcm'">{{ activity.vesselIdTypes | stVessekIdsToColumns: 'gfcm' }}</div>
 							<div ng-show="attrVisibility.fishingActivities.areas" ng-if="column === 'areas'">{{ activity.areas | stArrayToString: ' - ' }}</div>
-							<div ng-show="attrVisibility.fishingActivities.port" ng-if="column === 'port'">{{ activity.port | stArrayToString: ' - ' }}</div>
+							<div ng-show="attrVisibility.fishingActivities.port" ng-if="column === 'port'">{{ activity.port | stArrayToString: ', ' }}</div>
 							<div ng-show="attrVisibility.fishingActivities.fishingGear" ng-if="column === 'fishingGear'">{{ activity.fishingGear | stArrayToString: ' - ' }}</div>
 							<div ng-show="attrVisibility.fishingActivities.speciesCode" ng-if="column === 'speciesCode'">{{ activity.speciesCode | stArrayToString: ', ' }}</div>
 							<div ng-show="attrVisibility.fishingActivities.quantity" ng-if="column === 'quantity'">{{ activity.quantity }}</div>

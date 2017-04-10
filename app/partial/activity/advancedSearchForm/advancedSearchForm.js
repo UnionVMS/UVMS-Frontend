@@ -152,7 +152,8 @@ angular.module('unionvmsWeb').controller('AdvancedsearchformCtrl',function($scop
     $scope.getActivityTypes = function(){
         $scope.codeLists.activityTypes = [];
         mdrCacheService.getCodeList('flux_fa_type').then(function(response){
-            $scope.codeLists.activityTypes = convertCodelistToCombolist(response, true, true);
+            var suportedCodes = ['DEPARTURE', 'ARRIVAL', 'AREA_ENTRY', 'AREA_EXIT', 'FISHING_OPERATION', 'LANDING', 'DISCARD', 'TRANSHIPMENT', 'RELOCATION', 'JOINED_FISHING_OPERATION'];
+            $scope.codeLists.activityTypes = convertCodelistToCombolist(response, true, true, suportedCodes);
         }, function(error){
             $scope.actServ.setAlert(true, 'activity.activity_error_getting_code_lists');
         });
@@ -300,10 +301,11 @@ angular.module('unionvmsWeb').controller('AdvancedsearchformCtrl',function($scop
      * @private
      * @param {Array} data - The input data array
      * @param {Boolean} withTooltip - True if the item text and tooltip description should be different
+     * @param {Array} [suportedCodes] - An array containing the supported codes. This param is optional
      * @parm {Boolean} useAbbreviations - Whether the item text should be fetched from the abbreviations lang file or not
      * @returns {Array} An array suitable for combobox use
      */
-    function convertCodelistToCombolist (data, withTooltip, useAbbreviations){
+    function convertCodelistToCombolist (data, withTooltip, useAbbreviations, suportedCodes){
         var comboList = [];
         angular.forEach(data, function(item) {
             var rec = {
@@ -319,7 +321,14 @@ angular.module('unionvmsWeb').controller('AdvancedsearchformCtrl',function($scop
                 
                 rec.desc = item.description;
             }
-            comboList.push(rec);
+            
+            if (angular.isDefined(suportedCodes)){
+                if (_.indexOf(suportedCodes, item.code) !== -1){
+                    comboList.push(rec);
+                }
+            } else {
+                comboList.push(rec);
+            }
         });
         
         return comboList;

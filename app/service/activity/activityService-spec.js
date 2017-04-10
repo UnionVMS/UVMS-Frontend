@@ -109,6 +109,8 @@ describe('activityService', function() {
             hasError: false,
             searchObject: {},
             tableState: undefined,
+            stCtrl: undefined,
+            fromForm: false,
             pagination: {
                 offset: 0,
                 pageSize: pageSize,
