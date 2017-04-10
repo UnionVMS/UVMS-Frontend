@@ -397,15 +397,11 @@ angular.module('unionvmsWeb').factory('Trip',function(locale,unitConversionServi
                 type.caption = locale.getString('activity.catch_panel_caption_' + typeName) + ' ' + type.total + ' kg';
 
                 if (angular.isDefined(type.speciesList) && type.speciesList.length > 0){
+
                     angular.forEach(type.speciesList, function(value, key) {
-                        var specieCode = value.speciesCode;
-                        var specieKey = key;
-                        angular.forEach(Trip.specieColor, function(value,key){
-                            if (value.code === specieCode) {
-                                type.speciesList[specieKey].color = '#' + value.color;
-                                type.speciesList[specieKey].tableColor = {'background-color': tinycolor('#' + value.color).setAlpha(0.7).toRgbString()};
-                            }
-                        });
+                        var specieColor = _.where(Trip.specieColor, {code: value.speciesCode})[0].color;
+                        type.speciesList[key].color = '#' + specieColor;
+                        type.speciesList[key].tableColor = {'background-color': tinycolor('#' + specieColor).setAlpha(0.7).toRgbString()};
                     });
                 }
             });
