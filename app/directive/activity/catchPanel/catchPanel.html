@@ -3,43 +3,45 @@
         <legend class="fieldsetLegendStyle">
             <a>{{title}}</a>
         </legend>
-        <div class="row catch-details-body" ng-if="ngModel">
-            <div class="col-md-6 catch-subsection" ng-repeat="(title, data) in ngModel" ng-class="{'has-caption': data.caption}">
-                <div class="row">
-                    <!--TITLE-->
-                    <div class="chart-title">
-                        <span class="panel-subtitle">{{data.title}}</span>
-                    </div>
-                    <!--SPECIE COUNT CHART-->
-                    <div ng-class="{'col-md-6': withTable, 'col-md-12': !withTable}">
-                        <div class="nvd3-chart">
-                            <nvd3 options="options[title]" data="data.speciesList" on-ready="api.refresh()" ng-if="!isLoading"></nvd3>
+        <div class="catch-details-body" ng-if="ngModel">
+            <div class="row">
+                <div class="col-md-6 catch-subsection" ng-repeat="(title, data) in ngModel" ng-class="{'has-caption': data.caption}">
+                    <div class="row">
+                        <!--TITLE-->
+                        <div class="chart-title">
+                            <span class="panel-subtitle">{{data.title}}</span>
                         </div>
-                    </div>
-                    <!--SPECIE COUNT TABLE-->
-                    <div class="col-md-6" ng-if="withTable">
-                        <div class="table-responsive-force col-md-12" st-table="displayedCatch" st-safe-src="data.speciesList">
-                            <div class="table tableSmart table-striped table-condensed row">
-                                <div class="thead col-md-12">
-                                    <div class="tr row">
-                                        <div class="th color-column"></div>
-                                        <div class="th col-md-7" st-sort="speciesCode" title="{{'activity.catch_panel_column_species' | i18n }}" st-class-ascent="sorting_sm_asc" st-class-descent="sorting_sm_desc">{{'activity.catch_panel_column_species' | i18n }}</div>
-                                        <div class="th col-md-5" st-sort="weight" st-sort-default="reverse" title="{{'activity.catch_panel_column_weight' | i18n }}" st-class-ascent="sorting_sm_asc" st-class-descent="sorting_sm_desc">{{'activity.catch_panel_column_weight' | i18n }}</div>
+                        <!--SPECIE COUNT CHART-->
+                        <div ng-class="{'col-md-6': withTable, 'col-md-12': !withTable}">
+                            <div class="nvd3-chart">
+                                <nvd3 options="options[title]" data="data.speciesList" on-ready="api.refresh()" ng-if="!isLoading"></nvd3>
+                            </div>
+                        </div>
+                        <!--SPECIE COUNT TABLE-->
+                        <div class="col-md-6" ng-if="withTable">
+                            <div class="table-responsive-force col-md-12" st-table="displayedCatch" st-safe-src="data.speciesList">
+                                <div class="table tableSmart table-striped table-condensed row">
+                                    <div class="thead col-md-12">
+                                        <div class="tr row">
+                                            <div class="th color-column"></div>
+                                            <div class="th col-md-5" st-sort="speciesCode" title="{{'activity.catch_panel_column_species' | i18n }}" st-class-ascent="sorting_sm_asc" st-class-descent="sorting_sm_desc">{{'activity.catch_panel_column_species' | i18n }}</div>
+                                            <div class="th col-md-7" st-sort="weight" st-sort-default="reverse" title="{{'activity.catch_panel_column_weight' | i18n }}" st-class-ascent="sorting_sm_asc" st-class-descent="sorting_sm_desc">{{'activity.catch_panel_column_weight' | i18n }}</div>
+                                        </div>
                                     </div>
-                                </div>
-                                <div class="tbody col-md-12">
-                                    <div class="tr row" ng-repeat="item in displayedCatch">
-                                        <div ng-style="item.tableColor" class="td color-column"></div>
-                                        <div class="td col-md-7" title="{{item.speciesCode}}">{{item.speciesCode}}</div>
-                                        <div class="td col-md-5" title="{{item.weight}}">{{item.weight}}</div>
+                                    <div class="tbody col-md-12">
+                                        <div class="tr row" ng-repeat="item in displayedCatch">
+                                            <div ng-style="item.tableColor" class="td color-column"></div>
+                                            <div class="td col-md-5" title="{{item.speciesCode}}">{{item.speciesCode}}</div>
+                                            <div class="td col-md-7" title="{{item.weight}}">{{item.weight}}</div>
+                                        </div>
                                     </div>
                                 </div>
                             </div>
                         </div>
                     </div>
+                    <!--CHART CAPTION-->
+                    <span class="col-md-12 chart-caption" ng-if="data.caption">{{data.caption}}</span>
                 </div>
-                <!--CHART CAPTION-->
-                <span class="col-md-12 chart-caption" ng-if="data.caption">{{data.caption}}</span>
             </div>
         </div>
         <div class="row no-data" ng-if="!ngModel">

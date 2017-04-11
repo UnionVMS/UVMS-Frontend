@@ -356,5 +356,6 @@
     "gear_shot_retrieval_recovery": "Recovery measure",
 
     "trip_transhipmentTime": "Transhipment time",
-    "receiver_vessel": "Receiver vessel"
+    "receiver_vessel": "Receiver vessel",
+    "species": "Species"
 }
