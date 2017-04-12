@@ -32,7 +32,6 @@ copy of the GNU General Public License along with the IFDM Suite. If not, see <h
     }
     .global-container {
         display: flex;
-        padding-top: 22px;
         > *:last-child {
             padding-right: 0;
         }
@@ -45,8 +44,9 @@ copy of the GNU General Public License along with the IFDM Suite. If not, see <h
         -ms-flex: 1;
         flex: 1;
         .details-content-body {
+            padding-top: 20px;
             &,
-            .global-container {
+            > .global-container {
                 height: 100%;
             }
         }
@@ -57,7 +57,7 @@ copy of the GNU General Public License along with the IFDM Suite. If not, see <h
             left: 0;
             width: 100%;
             font-weight: bold;
-            font-size: 16px;
+            font-size: 18px;
         }
     }
     .item-container {
