@@ -270,9 +270,11 @@ copy of the GNU General Public License along with the IFDM Suite. If not, see <h
         <div id="popup" class="ol-popup">
             <a href ng-click="closePopup()" id="popup-closer" class="ol-popup-closer"><span class="fa fa-times"></span></a>
             <div class="col-md-12 ol-popup-header">
-				<span class="header" ng-show="popupRecContainer.currentType === 'vmspos' || popupRecContainer.currentType === 'alarms'">{{'spatial.popup_positions_title' | i18n}}</span>
-				<span class="header" ng-show="popupRecContainer.currentType === 'vmsseg'">{{'spatial.popup_segments_title' | i18n}}</span>            	
-				<div class="btn-container" ng-show="popupRecContainer.currentType === 'vmspos' && isAllowed('Vessel', 'getVesselById')">
+				<span class="header" ng-if="popupRecContainer.currentType === 'vmspos' || popupRecContainer.currentType === 'alarms'">{{'spatial.popup_positions_title' | i18n}}</span>
+				<span class="header" ng-if="popupRecContainer.currentType === 'vmsseg'">{{'spatial.popup_segments_title' | i18n}}</span>            	
+				<span class="header" ng-if="popupRecContainer.currentType === 'ers'">{{'spatial.popup_activities_title' | i18n}}</span>
+				<span class="header" ng-if="popupRecContainer.currentType === 'alarms'">{{'spatial.popup_alarms_title' | i18n}}</span>
+				<div class="btn-container" ng-show="(popupRecContainer.currentType === 'vmspos' || popupRecContainer.currentType === 'ers') && isAllowed('Vessel', 'getVesselById')">
 					<button type="button" class="btn btn-default btn-xs" title="{{'spatial.popup_vessel_details_btn_title' | i18n}}" ng-click="getVesselDetails()"><i class="fa fa-ship"></i></button>
 				</div>
 			</div>

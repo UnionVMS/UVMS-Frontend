@@ -11,6 +11,8 @@
 	"tab_trips": "Trips",
 	"popup_positions_title": "Position details",
 	"popup_segments_title": "Segment details",
+	"popup_activities_title": "Activity details",
+	"popup_alarms_title": "Alarm details",
 	"popup_vessel_details_btn_title": "Vessel details",
 	"popup_item": "Item",
 	"popup_out_of": "out of",
@@ -549,5 +551,9 @@
 	"criteria_effort_zone": "Effort zone",
 	"criteria_rfmo": "RFMO",
 	"criteria_gfcm_gsa": "GFCM GSA",
-	"criteria_gfcm_stat_rectangle": "GFCM STAT RECTANGLE"
+	"criteria_gfcm_stat_rectangle": "GFCM STAT RECTANGLE",
+	    
+	"popup_activity_occurence": "Occurence",
+	"popup_activity_purpose": "Purpose",
+	"popup_activity_gears": "Gears"
 }

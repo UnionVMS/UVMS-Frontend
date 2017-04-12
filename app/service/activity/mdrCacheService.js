@@ -45,6 +45,26 @@ angular.module('unionvmsWeb').factory('mdrCacheService',function($q, mdrRestServ
 	    return deferred.promise;
 	};
 	
+	
+	/**
+	 * Get a description by code of a specified MDR list. It assumes that the list is already loaded in the cache.
+	 * 
+	 * @memberof mdrCacheService
+	 * @public
+	 * @alias getDescriptionByCode
+	 * @param {String} listName - The mdr code list name (should be the same name as the path parameter for the REST service)
+	 * @param {String} code - The code to which the description will be fetched
+	 * @returns {String|Undefined} The description corresponding to the specified code and list or undefined
+	 */
+	mdrServ.getDescriptionByCode = function(listName, code){
+	    if(_.has(this.codeLists, listName)){
+	        var item = _.findWhere(this.codeLists[listName], {code: code});
+	        if (angular.isDefined(item)){
+	            return item.description;
+	        }
+	    }
+	};
+	
 	/**
 	 * Get the code list from server
 	 * 
