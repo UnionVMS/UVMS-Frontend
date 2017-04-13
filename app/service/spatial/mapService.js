@@ -192,9 +192,9 @@ angular.module('unionvmsWeb').factory('mapService', function(locale, $rootScope,
 	                        }, {
 	                            schemeId: 'IRCS',
 	                            id: 'SGZE'
-//	                        }, {
-//	                            schemeId: 'CFR',
-//	                            id: 'SWE000010126'
+	                        }, {
+	                            schemeId: 'CFR',
+	                            id: 'SWE000010126'
 	                        }, {
 	                            schemeId: 'UVI',
 	                            id: '0123456'
@@ -205,8 +205,9 @@ angular.module('unionvmsWeb').factory('mapService', function(locale, $rootScope,
 	                            schemeId: 'GFCM',
 	                            id: '02468'
 	                        }],
-//	                        activityId: 54,
-//	                        tripId: 'MLT-TRP-20160630000001',
+	                        activityId: 54,
+	                        tripId: 'MLT-TRP-20160630000001',
+	                        isCorrection: false,
 	                        dataSource: "FLUX",
 	                        activityType: "DEPARTURE",
 	                        reportType: "NOTIFICATION",
@@ -3103,6 +3104,11 @@ angular.module('unionvmsWeb').factory('mapService', function(locale, $rootScope,
      */
     ms.requestPopupTemplate = function(data, type, coords, fromCluster){
         ms.popupRecContainer.currentType = type;
+        
+        if (type === 'ers'){
+            ms.popupRecContainer.activityType = data.activityType;
+        }
+        
         var templateURL = 'partial/spatial/templates/' + type + '.html';
         $templateRequest(templateURL).then(function(template){
             var rendered = Mustache.render(template, data);
@@ -3114,6 +3120,13 @@ angular.module('unionvmsWeb').factory('mapService', function(locale, $rootScope,
                 ms.overlay.set('featureId', data.id, true);
                 ms.overlay.set('vesselId', data.vesselId, true);
                 ms.overlay.set('vesselName', data.vesselName, true);
+                if (type === 'ers'){
+                    ms.overlay.set('activityId', data.activityId);
+                    ms.overlay.set('tripId', data.tripId);
+                    ms.overlay.set('isCorrection', data.isCorrection);
+                    ms.overlay.set('documentType', data.reportType);
+                    ms.overlay.set('activityType', data.activityType);
+                }
             } else {
                 ms.overlay.set('featureId', undefined, true);
             }
@@ -3562,6 +3575,11 @@ angular.module('unionvmsWeb').factory('mapService', function(locale, $rootScope,
             activity: data,
             vesselName: feature.vesselName,
             vesselId: feature.vesselGuid,
+            activityId: feature.activityId,
+            tripId: feature.tripId,
+            isCorrection: feature.isCorrection,
+            reportType: feature.reportType,
+            activityType: feature.activityType.toLowerCase(),
             getTitle: function(){
                 return this.title;
             },

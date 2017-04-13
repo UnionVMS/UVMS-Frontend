@@ -645,9 +645,9 @@ angular.module('unionvmsWeb').controller('VmspanelCtrl',function($scope, locale,
        ), 'header': header};
    };
 
-   $scope.openTripSummary = function(tripName){
+   $scope.openTripSummary = function(tripId){
        $scope.tripSummServ.withMap = $scope.repNav.isViewVisible('mapPanel');
-       $scope.tripSummServ.openNewTrip(tripName);
+       $scope.tripSummServ.openNewTrip(tripId);
        $scope.repNav.goToView('tripsPanel','tripSummary');
    };
 

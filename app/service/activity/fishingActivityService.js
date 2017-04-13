@@ -26,7 +26,7 @@ copy of the GNU General Public License along with the IFDM Suite. If not, see <h
  * @description
  *  A service to deal with any kind of fishing activity operation (e.g. Departure, Arrival, ...)
  */
-angular.module('unionvmsWeb').factory('fishingActivityService', function(activityRestService, loadingStatus, mdrCacheService, locale, $filter, $state, tripSummaryService) {
+angular.module('unionvmsWeb').factory('fishingActivityService', function(activityRestService, loadingStatus, mdrCacheService, locale, $filter, $state, tripSummaryService, reportingNavigatorService) {
 
     var faServ = {
         activityData: {},
@@ -455,7 +455,25 @@ angular.module('unionvmsWeb').factory('fishingActivityService', function(activit
         view = 'trip' + view + 'Panel';
 
         return view;
-    }
+    };
+    
+    /**
+     * Quit the fishing activiy panel and navigate to the previous view
+     * 
+     * @memberof fishingActivityService
+     * @public
+     * @alias quitFaView
+     */
+    faServ.quitFaView = function(){
+        //TODO recheck this logic when we implement navigation from panel to subpanel (e.g. fishing op to catch details)
+        var previousView = reportingNavigatorService.getPreviousView();
+        if (previousView === 'mapPanel'){
+            reportingNavigatorService.goToView('liveViewPanel', 'mapPanel');
+        } else {
+            reportingNavigatorService.goToView('tripsPanel', 'tripSummary');
+        }
+    };
+    
     /**
      * Adds gear recovery description from MDR code lists into the details object.
      * 

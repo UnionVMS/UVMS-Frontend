@@ -9,7 +9,7 @@ the hope that it will be useful, but WITHOUT ANY WARRANTY; without even the impl
 FITNESS FOR A PARTICULAR PURPOSE.  See the GNU General Public License for more details. You should have received a
 copy of the GNU General Public License along with the IFDM Suite. If not, see <http://www.gnu.org/licenses/>.
 */
-angular.module('unionvmsWeb').factory('reportService',function($rootScope, $timeout, $interval, $anchorScroll, locale, TreeModel, reportRestService, reportFormService, spatialRestService, spatialHelperService, defaultMapConfigs, mapService, unitConversionService, visibilityService, mapAlarmsService, loadingStatus, spatialConfigRestService, SpatialConfig, Report, globalSettingsService, userService, reportingNavigatorService, $modalStack, layerPanelService) {
+angular.module('unionvmsWeb').factory('reportService',function($rootScope, $timeout, $interval, $anchorScroll, locale, TreeModel, reportRestService, reportFormService, spatialRestService, spatialHelperService, defaultMapConfigs, mapService, unitConversionService, visibilityService, mapAlarmsService, loadingStatus, spatialConfigRestService, SpatialConfig, Report, globalSettingsService, userService, reportingNavigatorService, $modalStack, layerPanelService,tripReportsTimeline) {
 
     var rep = {
        id: undefined,
@@ -88,6 +88,7 @@ angular.module('unionvmsWeb').factory('reportService',function($rootScope, $time
 
 	rep.runReport = function(report){
         loadingStatus.isLoading('LiveviewMap',true, 0);
+        tripReportsTimeline.reset();
         
         if(angular.isDefined(report)){
             rep.reportType = report.reportType;
@@ -153,6 +154,7 @@ angular.module('unionvmsWeb').factory('reportService',function($rootScope, $time
 	
 	rep.runReportWithoutSaving = function(report){
 	    loadingStatus.isLoading('LiveviewMap',true, 0);
+	    tripReportsTimeline.reset();
 	    rep.hasAlert = false;
         $modalStack.dismissAll();
 	    if (angular.isDefined(rep.autoRefreshInterval)){

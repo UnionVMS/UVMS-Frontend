@@ -34,36 +34,40 @@ angular.module('unionvmsWeb').factory('tripSummaryService',function($timeout) {
      * @memberof tripSummaryService
      * @public
      * @param {String} tripId - trip id
+     * @param {Boolean} [fromPopup] - whether the new trip is being called from the acitvity popup or not
 	 * @alias openNewTrip
      */
-    tripSummaryService.openNewTrip = function(tripId){
-        this.isLoadingTrip = true;
-        var self = this;
+    tripSummaryService.openNewTrip = function(tripId, fromPopup){
+        if (angular.isDefined(fromPopup) && fromPopup){
+            this.initializeTrip(tripId);
+        } else {
+            this.isLoadingTrip = true;
+            var self = this;
 
-        if(!angular.isDefined(this.tabs)){
-            this.tabs = [];
-        }
-        
-        angular.forEach(this.tabs, function(item) {
-            item.active = false;
-        });
+            if(!angular.isDefined(this.tabs)){
+                this.tabs = [];
+            }
+            
+            angular.forEach(this.tabs, function(item) {
+                item.active = false;
+            });
 
-        if(_.where(this.tabs, {title: tripId}).length === 0){
-            this.tabs.push({title: tripId, active: true});
-            this.initializeTrip(this.tabs.length-1);
-        }else{
-            angular.forEach(this.tabs, function(value,key){
-                if(value.title === tripId){
-                    value.active = true;
-                    self.initializeTrip(key);
-                }
+            if(_.where(this.tabs, {title: tripId}).length === 0){
+                this.tabs.push({title: tripId, active: true});
+                this.initializeTrip(this.tabs[this.tabs.length-1].title);
+            }else{
+                angular.forEach(this.tabs, function(value,key){
+                    if(value.title === tripId){
+                        value.active = true;
+                        self.initializeTrip(value.title);
+                    }
+                });
+            }
+
+            $timeout(function(){
+                self.isLoadingTrip = false;
             });
         }
-
-        $timeout(function(){
-            self.isLoadingTrip = false;
-        });
-        
     };
 
     /**
