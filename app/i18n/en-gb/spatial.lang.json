@@ -556,5 +556,7 @@
 	    
 	"popup_activity_occurence": "Occurence",
 	"popup_activity_purpose": "Purpose",
-	"popup_activity_gears": "Gears"
+	"popup_activity_gears": "Gears",
+	
+	"alarm_raised": "Alert raised"
 }

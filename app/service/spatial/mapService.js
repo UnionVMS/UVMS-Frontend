@@ -3596,14 +3596,14 @@ angular.module('unionvmsWeb').factory('mapService', function(locale, $rootScope,
         };
     };
     
-  //Popup attribute names for segments
+    //Popup attribute names for fishing activities
     /**
-     * Get attributes names for segment data
+     * Get attributes names for activity data
      * 
      * @memberof mapService
      * @public
-     * @alias getSegmentTitles
-     * @returns {Object} An object containing the regionalized attributes for segment data
+     * @alias getActivityTitles
+     * @returns {Object} An object containing the regionalized attributes for activity data
      */
     ms.getActivityTitles = function(){
         return {
@@ -3627,15 +3627,15 @@ angular.module('unionvmsWeb').factory('mapService', function(locale, $rootScope,
         };
     };
     
-    //Popup data values for segments
+    //Popup data values for activities
     /**
      * Format segment data to be displayed in the popup taking into consideration user preferences
      * 
      * @memberof mapService
      * @public
-     * @alias formatPositionDataForPopup
+     * @alias formatActivityDataForPopup
      * @param {Object} data - The object containing initial data
-     * @returns {Object} An object containing properly formated segment data
+     * @returns {Object} An object containing properly formated activity data
      */
     ms.formatActivityDataForPopup = function(data){
         var filter = $filter('stArrayToString');
@@ -3652,15 +3652,13 @@ angular.module('unionvmsWeb').factory('mapService', function(locale, $rootScope,
             gfcm: vesselIds.gfcm,
             iccat: vesselIds.iccat,
             uvi: vesselIds.uvi,
-//            activityId: data.activityId,
-//            tripId: data.tripId,
             source: data.dataSource,
             activityType: data.activityType,
             reportType: data.reportType,
             purposeCode: angular.isDefined(pCodeDesc) ? data.purposeCode + ' - ' + pCodeDesc : data.purposeCode,
             occurrence: unitConversionService.date.convertToUserFormat(data.acceptedDateTime),
             areas: filter(data.areas, '- '),
-            //ports: data.ports, //TODO use filter
+            //ports: data.ports,
             gears: filter(data.gears, ' - '), 
             species: filter(data.species, ', ')    
         };
