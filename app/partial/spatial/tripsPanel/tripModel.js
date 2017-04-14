@@ -389,7 +389,7 @@ angular.module('unionvmsWeb').factory('Trip',function(locale,unitConversionServi
      */
     var loadCatch = function(self,data){
         
-       self.specieColor= generateSpecieColors(data);
+       self.specieColor = generateSpecieColors(data);
         //if has speciesList in the child properties
         if(_.without(_.pluck(data, 'speciesList'),undefined).length > 0){
             angular.forEach(data, function(type,typeName){
