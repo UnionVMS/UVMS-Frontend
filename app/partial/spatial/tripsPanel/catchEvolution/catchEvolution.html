@@ -10,7 +10,7 @@ FITNESS FOR A PARTICULAR PURPOSE.  See the GNU General Public License for more d
 copy of the GNU General Public License along with the IFDM Suite. If not, see <http://www.gnu.org/licenses/>.
 -->
 <div ng-controller="CatchevolutionCtrl" class="catch-evolution">
-	<a class="btn-trip-quit" title="{{'activity.trip_summary_quit_trip_detail' | i18n }}" ng-click="navigateBack()"><i class="fa fa-share-square-o"></i></a>
+    <a class="btn-trip-quit" title="{{'activity.trip_summary_quit_trip_detail' | i18n }}" ng-click="navigateBack()"><i class="fa fa-share-square-o"></i></a>
     <fieldset class="col-md-12 fieldsetStyle">
         <legend class="fieldsetLegendStyle">
             <a>{{'activity.catch_evolution_title' | i18n }}</a>
@@ -19,6 +19,19 @@ copy of the GNU General Public License along with the IFDM Suite. If not, see <h
         <div class="row catch-evolution-container">
             <!-- TRIP OVERVIEW PANEL -->
             <trip-overview-panel class="col-md-12 summary-section" trip="fishingTripDetails"></trip-overview-panel>
+            <div class="col-md-12 summary-section evolution-color-panel">
+                <fieldset class="col-md-12 fieldsetStyle">
+                    <legend class="fieldsetLegendStyle">
+                        <a>{{'activity.catch_evolution_color_panel' | i18n }}</a>
+                    </legend>
+                    <div class="color-legend">
+                        <div class="color-panel" ng-repeat=" item in speciesColors">
+                            <div class="square" style="background-color: #{{item.color}};"></div>
+                            <div class="specie-code">{{item.code}}</div>
+                        </div>
+                    </div>
+                </fieldset>
+            </div>
             <!-- CHARTS PANEL -->
             <div class="col-md-12">
                 <div class="col-md-12 chart-panel">
