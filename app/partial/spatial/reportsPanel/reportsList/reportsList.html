@@ -40,7 +40,7 @@ copy of the GNU General Public License along with the IFDM Suite. If not, see <h
 				</tr>
 				<tr>
 					<th colspan="8" ng-if="!isLoadingReportsList && (tableAlert.visible || !displayedRecords.length)">
-						<table-alert type="tableAlert.type" msg="tableAlert.msg" visible="tableAlert.visible" timeout="tableAlert.timeout"></table-alert>
+						<table-alert type="tableAlert.type" msg="tableAlert.msg" visible="tableAlert.visible" no-hide="false"></table-alert>
 						<table-alert type="'info'" msg="'spatial.table_no_data'" visible="!tableAlert.visible && !isLoadingReportsList && !displayedRecords.length"></table-alert>
 					</th>
 				</tr>
