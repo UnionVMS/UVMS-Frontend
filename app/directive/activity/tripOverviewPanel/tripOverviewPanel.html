@@ -12,21 +12,23 @@
 			</div>
 			<div class="col-md-9">
 				<div ng-repeat="trip in trip.trips" class="trip-row">
-					<div class="field-format">
-						<span class="field-label">{{'activity.trip_id' | i18n }}:</span>
-						<span class="field-text">{{trip.tripId.schemeId}}:{{trip.tripId.id}}</span>
-					</div>
-					<div class="field-format">
-						<span class="field-label">{{'activity.trip_departure' | i18n }}:</span>
-						<span class="field-text">{{trip.departureTime | stDateUtc}}</span>
-					</div>
-					<div class="field-format">
-						<span class="field-label">{{'activity.trip_arrival' | i18n }}:</span>
-						<span class="field-text">{{trip.arrivalTime | stDateUtc}}</span>
-					</div>
-					<div class="field-format">
-						<span class="field-label">{{'activity.trip_landing' | i18n }}:</span>
-						<span class="field-text">{{trip.landingTime | stDateUtc}}</span>
+					<div ng-repeat="id in trip.tripId">
+						<div class="field-format">
+							<span class="field-label">{{'activity.trip_id' | i18n }}:</span>
+							<span class="field-text">{{id.schemeId}}:{{id.id}}</span>
+						</div>
+						<div class="field-format" ng-if="trip.departueTime">
+							<span class="field-label">{{'activity.trip_departure' | i18n }}:</span>
+							<span class="field-text">{{trip.departureTime | stDateUtc}}</span>
+						</div>
+						<div class="field-format" ng-if="trip.arrivalTime">
+							<span class="field-label">{{'activity.trip_arrival' | i18n }}:</span>
+							<span class="field-text">{{trip.arrivalTime | stDateUtc}}</span>
+						</div>
+						<div class="field-format" ng-if="trip.landingTime">
+							<span class="field-label">{{'activity.trip_landing' | i18n }}:</span>
+							<span class="field-text">{{trip.landingTime | stDateUtc}}</span>
+						</div>
 					</div>
 				</div>
 			</div>
