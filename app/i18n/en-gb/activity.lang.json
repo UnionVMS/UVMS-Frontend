@@ -256,7 +256,6 @@
     "tab_trip_table_header_first_event_time": "First event date",
     "tab_trip_table_header_last_event": "Last event",
     "tab_trip_table_header_last_event_time": "Last event date",
-    "tab_trip_table_header_vesselId": "Vessel id",
     "tab_trip_table_header_duration": "Duration",
     "tab_trip_table_header_nCorrections": "Corrections",
     "tab_trip_table_header_nPositions": "Positions",

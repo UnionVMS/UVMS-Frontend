@@ -344,25 +344,6 @@ angular.module('unionvmsWeb').factory('reportService',function($rootScope, $time
         rep.positions = data.movements.features;
         rep.segments = data.segments.features;
         rep.tracks = data.tracks;
-        
-        //FIXME remove this mock
-        var newTrip = {
-            tripId: "ALT-TRP-20160630000001",
-            schemeId: "AU_TRIP_ID",
-            firstFishingActivity: "DEPARTURE",
-            firstFishingActivityDateTime: "2016-01-09T03:06:00",
-            lastFishingActivity: "ARRIVAL",
-            lastFishingActivityDateTime: "2016-01-09T03:06:00",
-            noOfCorrections: 10,
-            tripDuration: 2500,
-            flagState: "SWE",
-            multipointWkt: "MULTIPOINT ((65.75 -20.4167))",
-            vesselIds: {
-                CFR: "ABR000A13932"
-            }
-        }
-        data.trips.push(newTrip);
-        
         rep.trips = data.trips;
         rep.activities = data.activities.features;
         rep.criteria = data.criteria;
