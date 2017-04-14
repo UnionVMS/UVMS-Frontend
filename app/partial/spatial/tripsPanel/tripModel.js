@@ -77,7 +77,7 @@ angular.module('unionvmsWeb').factory('Trip',function(locale,unitConversionServi
                 break;
             case 'mapData':
                 loadMapData(this, data);
-                break;
+                break;           
         }
     };
 
@@ -373,7 +373,7 @@ angular.module('unionvmsWeb').factory('Trip',function(locale,unitConversionServi
                     code: value,
                     color: colors[key]
                 });
-            });
+            });           
             return specieColors;
         }
     }
@@ -389,7 +389,7 @@ angular.module('unionvmsWeb').factory('Trip',function(locale,unitConversionServi
      */
     var loadCatch = function(self,data){
         
-        Trip.specieColor = generateSpecieColors(data);
+       self.specieColor = generateSpecieColors(data);
         //if has speciesList in the child properties
         if(_.without(_.pluck(data, 'speciesList'),undefined).length > 0){
             angular.forEach(data, function(type,typeName){
@@ -399,7 +399,7 @@ angular.module('unionvmsWeb').factory('Trip',function(locale,unitConversionServi
                 if (angular.isDefined(type.speciesList) && type.speciesList.length > 0){
 
                     angular.forEach(type.speciesList, function(value, key) {
-                        var specieColor = _.where(Trip.specieColor, {code: value.speciesCode})[0].color;
+                        var specieColor = _.where(self.specieColor, {code: value.speciesCode})[0].color;
                         type.speciesList[key].color = '#' + specieColor;
                         type.speciesList[key].tableColor = {'background-color': tinycolor('#' + specieColor).setAlpha(0.7).toRgbString()};
                     });
