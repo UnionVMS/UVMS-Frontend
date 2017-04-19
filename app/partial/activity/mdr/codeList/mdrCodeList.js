@@ -23,12 +23,17 @@ copy of the GNU General Public License along with the IFDM Suite. If not, see <h
  */
 angular.module('unionvmsWeb').controller('MdrcodelistCtrl',function($scope, $modalInstance, acronym, mdrRestService, $timeout){
 
+    $scope.itemsByPage = 25;
     $scope.displayedMdrCodeList = [];
-    $scope.allColumns = [];
+    $scope.columns = [
+        'code',
+        'description',
+        'version'
+    ];
+
     $scope.acronym = acronym;
-    $scope.tableLoading = true;
-    $scope.searchFilter = '';
-    $scope.tableState = null;
+    var currentTableState;
+    var lastTableState;
 
     /**
      * Closes the mdr code list modal
@@ -50,33 +55,42 @@ angular.module('unionvmsWeb').controller('MdrcodelistCtrl',function($scope, $mod
      * @param {Object} tableState - current state of filters and sorting of table
      */
     $scope.callServer = function(tableState) {
-        $scope.tableState = tableState;
-        $scope.tableLoading = true;
-
-        mdrRestService.getMDRCodeListByAcronym(acronym, tableState).then(function (result) {
-            if (angular.isDefined(result) && result.length > 0 ) {
-                $scope.allColumns = _.allKeys(result[0]);
-                $scope.displayedMdrCodeList = result;
-             }
-
+        mdrRestService.getMDRCodeList(acronym, tableState, $scope.columns).then(function (result) {
+            if (angular.isDefined(result)) {
+                if(!angular.equals($scope.displayedMdrCodeList, result)){
+                    $scope.displayedMdrCodeList = result;
+                }
+            }else{
+                $scope.displayedMdrCodeList = [];
+            }
             $scope.tableLoading = false;
-          });
+        });
     };
 
-    $scope.$watch('searchFilter', function(newVal, oldVal){
-        if (angular.isDefined(newVal) && newVal !== ''){
+    $scope.filterChanged = function(tableState){
+        currentTableState = tableState;
+
+        if(!angular.isDefined(currentTableState.pagination.number)){
+            currentTableState.pagination.number = $scope.itemsByPage;
+        }
+
+        var state = angular.copy(tableState);
+        delete state.pagination.numberOfPages;
+        
+        if(!_.isEqual(lastTableState,state)){
             $scope.tableLoading = true;
             if ($scope.requestTimer){
                 $timeout.cancel($scope.requestTimer);
             }
 
             $scope.requestTimer = $timeout(function(){
-                $scope.tableState.search.predicateObject = newVal;
-                $scope.callServer($scope.tableState);
+                $scope.callServer(currentTableState);
+                lastTableState = angular.copy(state);
             }, 1500, true, $scope);
-        } else {
-            $scope.searchFilter = '';
+        }else{
+            $scope.tableLoading = false;
         }
-    });
+    };
+
 });
 
