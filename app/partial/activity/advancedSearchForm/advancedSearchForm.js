@@ -83,7 +83,7 @@ angular.module('unionvmsWeb').controller('AdvancedsearchformCtrl',function($scop
      */
     $scope.getPurposeCodes = function(){
         $scope.codeLists.purposeCodes = [];
-        mdrCacheService.getCodeList('flux_gp_purposecode').then(function(response){
+        mdrCacheService.getCodeList('FLUX_GP_PURPOSE').then(function(response){
              var list = convertCodelistToCombolist(response, false, false);
              if (!userService.isAllowed('SHOW_DELETED_FA_REPORTS', 'Activity', true)){
                  list = _.reject(list, function(item){
@@ -117,7 +117,7 @@ angular.module('unionvmsWeb').controller('AdvancedsearchformCtrl',function($scop
      */
     $scope.getReportTypes = function(){
         $scope.codeLists.reportTypes = [];
-        mdrCacheService.getCodeList('flux_fa_report_type').then(function(response){
+        mdrCacheService.getCodeList('FLUX_FA_REPORT_TYPE').then(function(response){
             $scope.codeLists.reportTypes = convertCodelistToCombolist(response, false, false);
         }, function(error){
             $scope.actServ.setAlert(true, 'activity.activity_error_getting_code_lists');
@@ -134,7 +134,7 @@ angular.module('unionvmsWeb').controller('AdvancedsearchformCtrl',function($scop
      */
     $scope.getGearTypes = function(){
         $scope.codeLists.gearTypes = [];
-        mdrCacheService.getCodeList('gear_type').then(function(response){
+        mdrCacheService.getCodeList('GEAR_TYPE').then(function(response){
             $scope.codeLists.gearTypes = convertCodelistToCombolist(response, true, false);
         }, function(error){
             $scope.actServ.setAlert(true, 'activity.activity_error_getting_code_lists');
@@ -151,7 +151,7 @@ angular.module('unionvmsWeb').controller('AdvancedsearchformCtrl',function($scop
      */
     $scope.getActivityTypes = function(){
         $scope.codeLists.activityTypes = [];
-        mdrCacheService.getCodeList('flux_fa_type').then(function(response){
+        mdrCacheService.getCodeList('FLUX_FA_TYPE').then(function(response){
             var suportedCodes = ['DEPARTURE', 'ARRIVAL', 'AREA_ENTRY', 'AREA_EXIT', 'FISHING_OPERATION', 'LANDING', 'DISCARD', 'TRANSHIPMENT', 'RELOCATION', 'JOINED_FISHING_OPERATION'];
             $scope.codeLists.activityTypes = convertCodelistToCombolist(response, true, true, suportedCodes);
         }, function(error){

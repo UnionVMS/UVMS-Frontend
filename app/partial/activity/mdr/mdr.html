@@ -39,7 +39,7 @@ copy of the GNU General Public License along with the IFDM Suite. If not, see <h
 
 
     <!--SMART TABLE containing all the MDR code lists-->
-    <fieldset class="fieldsetStyle col-md-12" ng-show="isAllowed('LIST_MDR_CODE_LISTS')">
+    <fieldset class="fieldsetStyle col-md-12 code-list-status-container" ng-show="isAllowed('LIST_MDR_CODE_LISTS')">
         <legend class="fieldsetLegendStyle">
             <a data-toggle="collapse" >{{'activity.code_lists_fieldset_label' | i18n }}</a>
         </legend>
@@ -47,7 +47,12 @@ copy of the GNU General Public License along with the IFDM Suite. If not, see <h
         <div st-table="displayedMDRLists" st-safe-src="mdrCodeLists" st-set-filter="stMDRCodeLists">
             <div class="form-group row" ng-show="isAllowed('UPDATE_MDR_CODE_LISTS')">
                 <div class="col-md-4">
-                    <input st-search="" class="form-control" placeholder="{{'common.search' | i18n}}" type="text"/>
+                    <button type="button" class="btn btn-primary btn-sm refresh-btn" ng-click="getAcronymsDetails()">
+                        <span class="fa fa-refresh" aria-hidden="true"></span>
+                    </button>
+                    <div class="col-md-12 search-container">
+                        <input st-search="" class="form-control" placeholder="{{'common.search' | i18n}}" type="text"/>
+                    </div>
                 </div>
                 <div class="col-md-8 btn-container">
                     <button type="button" class="btn btn-default btn-sm" ng-click="updateNow()" ng-disabled="isUpdateNowDisabled">

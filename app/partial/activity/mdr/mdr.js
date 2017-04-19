@@ -78,7 +78,7 @@ angular.module('unionvmsWeb').controller('MdrCtrl',function($scope, mdrRestServi
         }
 
 	    if ($scope.isAllowed('LIST_MDR_CODE_LISTS')) {
-	        $scope.getMDRCodeLists();
+	        $scope.getAcronymsDetails();
         }
 	};
 
@@ -105,6 +105,7 @@ angular.module('unionvmsWeb').controller('MdrCtrl',function($scope, mdrRestServi
      * @public
      */
     $scope.updateNow = function() {
+        loadingStatus.isLoading('MdrSettings',true);
         var acronymArray = [];
         angular.forEach($scope.displayedMDRLists, function (value, key) {
              if (value.isSelected) {
@@ -113,9 +114,16 @@ angular.module('unionvmsWeb').controller('MdrCtrl',function($scope, mdrRestServi
         });
 
         mdrRestService.syncNow(acronymArray).then(function(response) {
-             $scope.getMDRCodeLists();
+            if(angular.isDefined(response.includedObject)){
+                loadingStatus.isLoading('MdrSettings',true);
+                $scope.tableLoading = true;
+                getAcronymsDetailsSuccess(response.includedObject);
+            }
+            //$scope.getAcronymsDetails();
+            loadingStatus.isLoading('MdrSettings',false);
         }, function(error) {
             alertService.showErrorMessageWithTimeout(locale.getString('activity.error_sync_now'));
+            loadingStatus.isLoading('MdrSettings',false);
         });
     };
 
@@ -128,10 +136,18 @@ angular.module('unionvmsWeb').controller('MdrCtrl',function($scope, mdrRestServi
      * @public
      */
      $scope.updateAllNow = function() {
+        loadingStatus.isLoading('MdrSettings',true);
         mdrRestService.syncAllNow().then(function(response) {
-             $scope.getMDRCodeLists();
+            if(response.includedObject){
+                loadingStatus.isLoading('MdrSettings',true);
+                $scope.tableLoading = true;
+                getAcronymsDetailsSuccess(response.includedObject);
+            }
+            //$scope.getAcronymsDetails();
+            loadingStatus.isLoading('MdrSettings',false);
         }, function(error) {
             alertService.showErrorMessageWithTimeout(locale.getString('activity.error_sync_all_now'));
+            loadingStatus.isLoading('MdrSettings',false);
         });
     };
 
@@ -202,20 +218,27 @@ angular.module('unionvmsWeb').controller('MdrCtrl',function($scope, mdrRestServi
      * method that fetches all the MDR Code lists
      *
      * @memberof MdrCtrl
-     * @function getMDRCodeLists
+     * @function getAcronymsDetails
      * @public
      */
-    $scope.getMDRCodeLists = function(){
+    $scope.getAcronymsDetails = function(){
+        loadingStatus.isLoading('MdrSettings',true);
         $scope.tableLoading = true;
-        mdrRestService.getMDRCodeLists().then(function(response){
-            $scope.mdrCodeLists = response;
-            $scope.displayedMDRLists = [].concat($scope.mdrCodeLists);
-            $scope.tableLoading = false;
-            checkSelectedAll();
-        }, function(error){
-            $scope.tableLoading = false;
-            alertService.showErrorMessageWithTimeout(locale.getString('activity.error_getting_mdr_code_lists'));
-        });
+        mdrRestService.getAcronymsDetails().then(getAcronymsDetailsSuccess, getAcronymsDetailsError);
+    };
+
+    var getAcronymsDetailsSuccess = function(response) {
+        $scope.mdrCodeLists = response;
+        $scope.displayedMDRLists = [].concat($scope.mdrCodeLists);
+        checkSelectedAll();
+        loadingStatus.isLoading('MdrSettings',false);
+        $scope.tableLoading = false;
+    };
+
+    var getAcronymsDetailsError = function(error) {
+        alertService.showErrorMessageWithTimeout(locale.getString('activity.error_getting_mdr_code_lists'));
+        loadingStatus.isLoading('MdrSettings',false);
+        $scope.tableLoading = false;
     };
 
     var getCronJobExpressionSuccess = function(response) {
