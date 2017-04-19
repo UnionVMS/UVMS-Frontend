@@ -23,7 +23,7 @@ copy of the GNU General Public License along with the IFDM Suite. If not, see <h
  * @description
  *  A reusable tile that will display two pie charts side-by-side, and optionally a table and caption for the input data 
  */
-angular.module('unionvmsWeb').directive('catchPanel', function(locale) {
+angular.module('unionvmsWeb').directive('catchPanel', function(locale, $compile) {
     return {
         restrict: 'E',
         replace: true,
@@ -37,8 +37,10 @@ angular.module('unionvmsWeb').directive('catchPanel', function(locale) {
         },
         templateUrl: 'directive/activity/catchPanel/catchPanel.html',
         link: function(scope, element, attrs, fn) {
-
-			/**
+            
+            scope.element = element;
+			
+            /**
 			 * Initialize the charts with nvd3 properties
 			 * 
 			 * @memberof catchPanel
@@ -89,6 +91,14 @@ angular.module('unionvmsWeb').directive('catchPanel', function(locale) {
                 init();
             });
 
+            scope.$watch(function() { return angular.element(scope.element).is(':visible') }, function() {
+               angular.forEach( angular.element('.nvd3-chart', scope.element),function(item){
+                        var elem = angular.element(item);
+                        var scope = elem.scope();
+                        $compile(elem.contents())(scope);
+                  });
+            });
+           
 			/**
 			 * Initializes the catch panel directive
 			 * 

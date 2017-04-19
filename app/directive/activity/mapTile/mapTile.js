@@ -19,7 +19,7 @@ copy of the GNU General Public License along with the IFDM Suite. If not, see <h
  * @description
  *  A reusable tile that will display a map with vectorial spatial data. The base layers are fetched from the user/admin preferences and the vector data should be passed through the model
  */
-angular.module('unionvmsWeb').directive('mapTile', function($timeout) {
+angular.module('unionvmsWeb').directive('mapTile', function($timeout, genericMapService) {
 	return {
 		restrict: 'E',
 		replace: false,
@@ -31,8 +31,13 @@ angular.module('unionvmsWeb').directive('mapTile', function($timeout) {
 		},
 		templateUrl: 'directive/activity/mapTile/mapTile.html',
 		link: function(scope, element, attrs, fn) {
+            
+            scope.$watch(function() { return angular.element(element).is(':visible') }, function() {
+                genericMapService.updateMapSize(scope.map);
+            });
+
 		    scope.generateMapId();
-		    
+         
 		    scope.$watch('mapData',function(newVal){
                 if(newVal){
                     $timeout(function(){
