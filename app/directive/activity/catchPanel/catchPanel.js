@@ -90,7 +90,8 @@ angular.module('unionvmsWeb').directive('catchPanel', function(locale, $compile)
                 //TODO init must be called if the data is already loaded before the directive compilation
                 init();
             });
-
+            
+            //To refresh the charts manually
             scope.$watch(function() { return angular.element(scope.element).is(':visible') }, function() {
                angular.forEach( angular.element('.nvd3-chart', scope.element),function(item){
                         var elem = angular.element(item);
