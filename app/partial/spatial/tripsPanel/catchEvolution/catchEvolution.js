@@ -22,6 +22,7 @@ copy of the GNU General Public License along with the IFDM Suite. If not, see <h
 angular.module('unionvmsWeb').controller('CatchevolutionCtrl', function($scope, activityRestService, locale, tripSummaryService) {
     
     $scope.speciesColors = tripSummaryService.trip.specieColor;   
+  
     /**
        * Initialization function
        * 
@@ -55,8 +56,13 @@ angular.module('unionvmsWeb').controller('CatchevolutionCtrl', function($scope, 
 
                 if(angular.isDefined(chart.speciesList) && chart.speciesList.length > 0){
                     angular.forEach(chart.speciesList, function(value,key){
-                        var specieColor = _.where($scope.speciesColors, {code: value.speciesCode})[0].color;
-                        chart.speciesList[key].color = '#' + specieColor;
+                        var specieCode = value.speciesCode;
+                        angular.forEach($scope.speciesColors, function(item){
+                          if(specieCode == item.code){
+
+                              chart.speciesList[key].color = '#' + item.color;
+                          }
+                        });
                     });
                 }
             });
@@ -71,9 +77,13 @@ angular.module('unionvmsWeb').controller('CatchevolutionCtrl', function($scope, 
 
             if(angular.isDefined(chart.speciesList) && chart.speciesList.length > 0){
                 angular.forEach(chart.speciesList, function(value,key){
-                    var specieColor = _.where($scope.speciesColors, {code: value.speciesCode})[0].color;
-                    chart.speciesList[key].color = '#' + specieColor;
-                    chart.speciesList[key].tableColor = {'background-color': tinycolor('#' + specieColor).setAlpha(0.7).toRgbString()};
+                    var specieCode = value.speciesCode;
+                        angular.forEach($scope.speciesColors, function(item){
+                          if(specieCode == item.code){
+                             chart.speciesList[key].color = '#' + item.color;
+                             chart.speciesList[key].tableColor = {'background-color': tinycolor('#' + item.color).setAlpha(0.7).toRgbString()};
+                          }
+                        });
                 });
             }
         });
