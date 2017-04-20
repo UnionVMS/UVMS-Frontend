@@ -344,52 +344,6 @@ angular.module('unionvmsWeb').factory('reportService',function($rootScope, $time
         rep.positions = data.movements.features;
         rep.segments = data.segments.features;
         rep.tracks = data.tracks;
-        
-        
-        //FIXME remove this mock -reportservice line 347
-        var newTrip = {
-            tripId: "ALT-TRP-20160630000001",
-            schemeId: "AU_TRIP_ID",
-            firstFishingActivity: "DEPARTURE",
-            firstFishingActivityDateTime: "2016-01-09T03:06:00",
-            lastFishingActivity: "ARRIVAL",
-            lastFishingActivityDateTime: "2016-01-09T03:06:00",
-            noOfCorrections: 10,
-            tripDuration: 2500,
-            flagState: "SWE",
-            multipointWkt: "MULTIPOINT ((65.75 -20.4167))",
-            CFR: "ABR000A13932",
-            EXT_MARK: '123456',
-            IRCS: '987654321',
-            ICCAT: 'iccat123',
-            UVI: 'uvi123',
-            GFCM: 'gfcm123',
-            vmsPositionsCount: 10
-        };
-        data.trips.push(newTrip);
-        
-        var newTrip2 = {
-            tripId: "ALT-TRP-20160630000001",
-            schemeId: "EU_TRIP_ID",
-            firstFishingActivity: "DEPARTURE",
-            firstFishingActivityDateTime: "2016-01-09T03:06:00",
-            lastFishingActivity: "ARRIVAL",
-            lastFishingActivityDateTime: "2016-01-09T03:06:00",
-            noOfCorrections: 10,
-            tripDuration: 2500,
-            flagState: "SWE",
-            multipointWkt: "MULTIPOINT ((65.75 -20.4167))",
-            CFR: "ABR000A13932",
-            EXT_MARK: '123456',
-            IRCS: '987654321',
-            ICCAT: 'iccat123',
-            UVI: 'uvi123',
-            GFCM: 'gfcm123',
-            vmsPositionsCount: 10
-        };
-        data.trips.push(newTrip2);
-        
-        
         rep.trips = data.trips;
         rep.activities = data.activities.features;
         rep.criteria = data.criteria;

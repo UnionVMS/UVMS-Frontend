@@ -549,13 +549,13 @@ copy of the GNU General Public License along with the IFDM Suite. If not, see <h
 				<table class="table table-striped table-condensed">
 					<thead>
 						<tr class="with-bottom-border row">
-							<th colspan="16" class="table-tools">
+							<th colspan="15" class="table-tools">
 								<i ng-click="toggleFiltersRow('trips')">{{isTripFilterVisible === false ? 'spatial.table_filters_activate' : 'spatial.table_filters_deactivate' | i18n}}</i>
 							</th>
 							<th>
-								<!-- <div class="btnTools btn btn-default btn-xs" ng-show="isAllowed('Reporting', 'EXPORT_VMS_REPORT_DATA')" st-export-data export-fn="exportAsCSV(vmsType, data)" vms-type="trips">
+								<div class="btnTools btn btn-default btn-xs" ng-show="isAllowed('Activity', 'EXPORT_ACTIVITY_DATA')" st-export-data export-fn="exportAsCSV(vmsType, data)" vms-type="trips">
 									<i class="fa fa-download" title="{{'spatial.tab_vms_export_csv' | i18n}}"></i>
-								</div> -->
+								</div>
 							</th>
 						</tr>
 						<tr ng-show="isTripFilterVisible" class="no-border-row">
@@ -606,14 +606,11 @@ copy of the GNU General Public License along with the IFDM Suite. If not, see <h
 								        <combobox name="firstFishingActivity" ng-model="firstFishingActivityType" items="activityTypes" list-class="filter-combo" initialtext="{{'activity.tab_trip_table_header_first_event' | i18n}}" ></combobox>
 								        <a href="" qtip at="top left" my="bottom right" content="{{'activity.tab_trip_table_header_first_event' | i18n }}" class="info-qtip qtip-blue"><i class="fa fa-question-circle"></i></a>
 								    </div>
-									<!-- LAST EVENT -->
+									<!-- LAST EVENT TYPE -->
 									<div class="col-md-2 st-table-filters" ng-show="attrVisibility.trips.lastEventType">
 								        <combobox name="lastFishingActivity" ng-model="lastFishingActivityType" items="activityTypes" list-class="filter-combo" initialtext="{{'activity.tab_trip_table_header_last_event' | i18n}}" ></combobox>
 								        <a href="" qtip at="top left" my="bottom right" content="{{'activity.tab_trip_table_header_last_event' | i18n }}" class="info-qtip qtip-blue"><i class="fa fa-question-circle"></i></a>
 								    </div>
-									
-									
-									
 									<!-- FIRST EVENT DATE-->
 									<div class="col-md-2 st-table-filters" ng-show="attrVisibility.trips.firstEventTime">
 										<datepicker-input time="true" model="firstEventDate" max-date="lastEventDate" placeholder="{{'spatial.table_filter_start_at' | i18n }}" ng-change-callback="resetDateTimePicker" input-field-id="trip-panel-filter-start-date-picker{{isModal ? '-modal' : ''}}"></datepicker-input>

@@ -454,6 +454,8 @@ angular.module('unionvmsWeb').controller('VmspanelCtrl',function($scope, locale,
 			    	   			    itemProperty = rec.countryCode; 
 			    	   			} else if (type === 'alarms'){
 			    	   			    itemProperty = rec.properties.fs;
+			    	   			} else if (type === 'trips'){
+			    	   			    itemProperty = rec.flagState;
 			    	   			} else {
 			    	   			    itemProperty = rec.properties.countryCode;
 			    	   			}
@@ -467,6 +469,8 @@ angular.module('unionvmsWeb').controller('VmspanelCtrl',function($scope, locale,
                                     itemProperty = rec.externalMarking; 
                                 } else if (type === 'alarms'){
                                     itemProperty = rec.properties.extMark;
+                                } else if (type === 'trips'){
+                                    itemProperty = rec.EXT_MARK;
                                 } else {
                                     itemProperty = rec.properties.externalMarking;
                                 }
@@ -476,16 +480,46 @@ angular.module('unionvmsWeb').controller('VmspanelCtrl',function($scope, locale,
 			    	   			if(!gotHeaders){
 			    	   				header.push(locale.getString('spatial.tab_vms_pos_table_header_ircs'));
 			    	   			}
-			    	   			itemProperty = type === 'tracks'? rec.ircs : rec.properties.ircs;
+			    	   			if (type === 'tracks'){
+			    	   			    itemProperty = rec.ircs;
+			    	   			} else if (type === 'trips'){
+			    	   			    itemProperty = rec.IRCS;
+			    	   			} else {
+			    	   			    itemProperty = rec.properties.ircs;
+			    	   			}
 			    	   			row.push(itemProperty);
 			    	   			break;
 			    	   		case 'cfr':
 			    	   			if(!gotHeaders){
 			    	   				header.push(locale.getString('spatial.tab_vms_pos_table_header_cfr'));
 			    	   			}
-			    	   			itemProperty = type === 'tracks'? rec.cfr : rec.properties.cfr;
+			    	   			if (type === 'tracks'){
+                                    itemProperty = rec.cfr;
+                                } else if (type === 'trips'){
+                                    itemProperty = rec.CFR;
+                                } else {
+                                    itemProperty = rec.properties.cfr;
+                                }
 			    	   			row.push(itemProperty);
 			    	   			break;
+			    	   		case 'uvi':
+			    	   		    if (!gotHeaders){
+			    	   		        header.push(locale.getString('activity.fa_details_item_uvi'));
+			    	   		    }
+		    	   		        row.push(rec.UVI);
+			    	   		    break;
+			    	   		case 'iccat':
+                                if (!gotHeaders){
+                                    header.push(locale.getString('activity.fa_details_item_iccat'));
+                                }
+                                row.push(rec.ICCAT);
+                                break;
+			    	   		case 'gfcm':
+                                if (!gotHeaders){
+                                    header.push(locale.getString('activity.fa_details_item_gfcm'));
+                                }
+                                row.push(rec.GFCM);
+                                break;
 			    	   		case 'name':
 			    	   			if(!gotHeaders){
 			    	   				header.push(locale.getString('spatial.tab_vms_pos_table_header_name'));
@@ -582,16 +616,16 @@ angular.module('unionvmsWeb').controller('VmspanelCtrl',function($scope, locale,
 			    	   			break;
 			    	   		case 'dur':
 			    	   			if(!gotHeaders){
-			    	   				header.push(locale.getString('spatial.tab_vms_seg_table_header_duration'));
+			    	   				header.push(locale.getString('spatial.tab_vms_seg_table_header_duration') + '(' + locale.getString('spatial.miliseconds') + ')');
 			    	   			}
 			    	   			itemProperty = type === 'tracks'? rec.duration : rec.properties.duration;
 			    	   			row.push(itemProperty);
 			    	   			break;
 			    	   		case 'timeSea':
 			    	   			if(!gotHeaders){
-			    	   				header.push(locale.getString('spatial.tab_vms_tracks_table_header_time_at_sea'));
+			    	   				header.push(locale.getString('spatial.tab_vms_tracks_table_header_time_at_sea') + '(' + locale.getString('spatial.miliseconds') + ')');
 			    	   			}
-			    	   			row.push(unitConversionService.duration.timeToHuman(rec.totalTimeAtSea));
+			    	   			row.push(rec.totalTimeAtSea);
 			    	   			break;
 			    	   		case 'ruleName':
     			    	   		 if(!gotHeaders){
@@ -635,6 +669,55 @@ angular.module('unionvmsWeb').controller('VmspanelCtrl',function($scope, locale,
                                  }
                                  row.push(rec.properties.ruleDefinitions);
                                  break;
+			    	   		case 'tripId':
+                                if(!gotHeaders){
+                                    header.push(locale.getString('activity.tab_trip_table_header_id'));
+                                }
+                                row.push(rec.schemeId + ':' + rec.tripId);
+                                break;
+			    	   		case 'firstEventType':
+                                if(!gotHeaders){
+                                    header.push(locale.getString('activity.tab_trip_table_header_first_event'));
+                                }
+                                row.push(rec.firstFishingActivity);
+                                break;
+			    	   		case 'firstEventTime':
+                                if(!gotHeaders){
+                                    header.push(locale.getString('activity.tab_trip_table_header_first_event_time'));
+                                }
+                                row.push(rec.firstFishingActivityDateTime);
+                                break;
+			    	   		case 'lastEventType':
+                                if(!gotHeaders){
+                                    header.push(locale.getString('activity.tab_trip_table_header_last_event'));
+                                }
+                                row.push(rec.lastFishingActivity);
+                                break;
+                            case 'lastEventTime':
+                                if(!gotHeaders){
+                                    header.push(locale.getString('activity.tab_trip_table_header_last_event_time'));
+                                }
+                                row.push(rec.lastFishingActivityDateTime);
+                                break;
+                            case 'duration':
+                                if(!gotHeaders){
+                                    header.push(locale.getString('activity.tab_trip_table_header_duration') + '(' + locale.getString('spatial.miliseconds') + ')');
+                                }
+                                row.push(rec.tripDuration);
+                                break;
+                            case 'nCorrections':
+                                if(!gotHeaders){
+                                    header.push(locale.getString('activity.tab_trip_table_header_nCorrections'));
+                                }
+                                row.push(rec.noOfCorrections);
+                                break;
+                            case 'nPositions':
+                                if(!gotHeaders){
+                                    header.push(locale.getString('activity.tab_trip_table_header_nPositions'));
+                                }
+                                row.push(rec.vmsPositionsCount);
+                                break;
+                            //TODO trip alarms
 			    	   }
 		    	   }
 		       });
