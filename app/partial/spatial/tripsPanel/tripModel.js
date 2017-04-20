@@ -376,7 +376,7 @@ angular.module('unionvmsWeb').factory('Trip',function(locale,unitConversionServi
             });           
             return specieColors;
         }
-    }
+    };
 
 
     /**

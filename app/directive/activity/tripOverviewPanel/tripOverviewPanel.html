@@ -32,7 +32,7 @@
 			</div>
 		</div>
 		<div class="activity-summary-row" ng-class="{'visible': isVesselTileVisible}" ng-if="trip.vesselDetails">
-            <vessel-tile class="col-md-12" ng-model="trip.vesselDetails"></vessel-tile>
+            <vessel-tile class="col-md-12" ng-model="trip.vesselDetails" tile-title="{{'activity.vessel_details' | i18n }}"></vessel-tile>
         </div>
 	</fieldset>
 </div>

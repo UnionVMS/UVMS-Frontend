@@ -17,7 +17,7 @@ describe('MdrCtrl', function() {
 
     beforeEach(function(){
         userServSpy = jasmine.createSpyObj('userService', ['isAllowed','getRoleName','getScopeName']);
-        mdrRestServSpy = jasmine.createSpyObj('mdrRestService', ['getCronJobExpression','getMDRCodeLists','updateCronJobExpression','syncNow','syncAllNow','enableDisableScheduledUpdate']);
+        mdrRestServSpy = jasmine.createSpyObj('mdrRestService', ['getCronJobExpression','getAcronymsDetails','updateCronJobExpression','syncNow','syncAllNow','enableDisableScheduledUpdate']);
         
         module(function($provide){
             $provide.value('userService', userServSpy);
@@ -37,7 +37,7 @@ describe('MdrCtrl', function() {
         return "40 4 25 4 *";
     }
 
-    function getMDRCodeLists(){
+    function getAcronymsDetails(){
         return [
                 {
                     "code": "AAA",
@@ -190,10 +190,10 @@ describe('MdrCtrl', function() {
           };
         });
 
-        mdrRestServSpy.getMDRCodeLists.andCallFake(function(){
+        mdrRestServSpy.getAcronymsDetails.andCallFake(function(){
           return {
               then: function(callback){
-                  return callback(getMDRCodeLists());
+                  return callback(getAcronymsDetails());
               }
           };
         });
@@ -246,7 +246,7 @@ describe('MdrCtrl', function() {
         scope.$digest();
 
         expect(mdrRestServSpy.getCronJobExpression).not.toHaveBeenCalled();
-        expect(mdrRestServSpy.getMDRCodeLists).not.toHaveBeenCalled();
+        expect(mdrRestServSpy.getAcronymsDetails).not.toHaveBeenCalled();
 
         scope.selectedAll = true;
         scope.selectDeselectAll();

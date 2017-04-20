@@ -22,7 +22,8 @@ angular.module('unionvmsWeb').directive('vesselTile', function() {
 		restrict: 'E',
 		replace: false,
 		scope: {
-			ngModel: '='
+			ngModel: '=',
+			tileTitle: '@'
 		},
 		templateUrl: 'directive/activity/vesselTile/vesselTile.html',
 		link: function(scope, element, attrs, fn) {
