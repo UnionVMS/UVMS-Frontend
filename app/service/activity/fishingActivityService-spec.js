@@ -1106,13 +1106,13 @@ describe('fishingActivityService', function() {
 
     function builMocks() {
         mockMdrServ.getCodeList.andCallFake(function(param) {
-            if (param === 'gear_type') {
+            if (param === 'GEAR_TYPE') {
                 return {
                     then: function(callback) {
                         return callback(getGears());
                     }
                 };
-            } else if (param === 'fa_catch_type') {
+            } else if (param === 'FA_CATCH_TYPE') {
                 return {
                     then: function(callback) {
                         return callback(getCatchType());

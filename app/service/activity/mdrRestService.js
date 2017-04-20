@@ -20,14 +20,14 @@ copy of the GNU General Public License along with the IFDM Suite. If not, see <h
 angular.module('unionvmsWeb').factory('mdrRestFactory',function($resource) {
   return {
           getCronJobExpression: function(){
-              return $resource('/activity/rest/mdr/scheduler/config', {}, {
+              return $resource('/mdr/rest/service/scheduler/config', {}, {
                   'get': {
                       method: 'GET'
                   }
               });
           },
           updateCronJobExpression: function(){
-              return $resource('/activity/rest/mdr/scheduler/config/update', {}, {
+              return $resource('/mdr/rest/service/scheduler/config/update', {}, {
                   'save': {
                       method: 'PUT',
                       headers: {
@@ -36,15 +36,27 @@ angular.module('unionvmsWeb').factory('mdrRestFactory',function($resource) {
                   }
               });
           },
-          getMDRCodeLists: function() {
-            return $resource('/activity/rest/mdr/acronyms/details');
+          getAcronymsDetails: function() {
+            return $resource('/mdr/rest/service/acronyms/details', {}, {
+                  'get': {
+                      method: 'GET'
+                  }
+              });
           },
-           getMDRCodeListByAcronym: function(acronym, offset, size, filter, sortBy, sortReversed) {
+          getMDRCodeList: function() {
             //the URL should be /activity/rest/acronyms/details
-              return $resource('service/activity/codeList.json');
+            //return $resource('service/activity/codeList.json');
+            return $resource('/mdr/rest/cl/search' , {}, {
+                'get': {
+                    method: 'POST'
+                },
+                headers: {
+                    'Content-Type': 'application/json'
+                }
+            });
           },
           syncNow: function(){
-            return $resource('/activity/rest/mdr/sync/list', {}, {
+            return $resource('/mdr/rest/service/sync/list', {}, {
                 'update': {
                     method: 'POST',
                     headers: {
@@ -54,18 +66,22 @@ angular.module('unionvmsWeb').factory('mdrRestFactory',function($resource) {
             });
            },
           syncAllNow: function(){
-               return $resource('/activity/rest/mdr/sync/all');
+            return $resource('/mdr/rest/service/sync/all', {}, {
+                'get': {
+                    method: 'GET'
+                }
+            });
           },
           enableDisableScheduledUpdate: function() {
-               return $resource('/activity/rest/mdr/status/schedulable/update/:acronymID/:schedulableFlag', {
-                     acronymID: '@acronymID',
-                     schedulableFlag: '@schedulableFlag'
+               return $resource('/mdr/rest/service/status/schedulable/update/:acronym/:schedulable', {
+                     acronym: '@acronymID',
+                     schedulable: '@schedulableFlag'
                 }, {
                     'update': {
                         method:'PUT'
                     }
                });
-          },
+          }/*,
           getCodeList: function(){
               return $resource('/mock/mdr/cl/:acronym', {
                   acronym: '@acronym'
@@ -77,7 +93,7 @@ angular.module('unionvmsWeb').factory('mdrRestFactory',function($resource) {
                       }
                   }
               });
-          }
+          }*/
       };
   })
   /**
@@ -133,9 +149,9 @@ angular.module('unionvmsWeb').factory('mdrRestFactory',function($resource) {
          * @public
          * @returns {Promise} A promise with either the MDR code list or reject error
          */
-  	    getMDRCodeLists: function() {
+  	    getAcronymsDetails: function() {
   	        var deferred = $q.defer();
-  	        mdrRestFactory.getMDRCodeLists().get(function(response) {
+  	        mdrRestFactory.getAcronymsDetails().get(function(response) {
   	            deferred.resolve(response.data);
   	        }, function(error) {
   	            console.error('Error listing the acronyms table');
@@ -152,18 +168,41 @@ angular.module('unionvmsWeb').factory('mdrRestFactory',function($resource) {
          * @param {String} tableState - is an object representing the smart table state
          * @returns {Promise} A promise with either the MDR code list or reject error
          */
-  	    getMDRCodeListByAcronym: function(acronym, tableState) {
-      	    var pagination = tableState.pagination;
-            var offset = pagination.start || 0;     // This is NOT the page number, but the index of item in the list that you want to use to display the table.
-            var size = pagination.number || 10;  // Number of entries showed per page.
-            var filter = tableState.search.predicateObject;
-            var sortBy = tableState.sort.predicate;
-            var sortReversed = tableState.sort.reverse;
+  	    getMDRCodeList: function(acronym, tableState, searchAttribute) {
+            var payload;
+
+            if(angular.isDefined(tableState)){
+                payload = {
+                    pagination: {
+                        offset: tableState.pagination.start || 0, // This is NOT the page number, but the index of item in the list that you want to use to display the table.
+                        pageSize: tableState.pagination.number || 10 // Number of entries showed per page.
+                    },
+                    sorting: {
+                        sortBy: tableState.sort.predicate,
+                        isReversed: tableState.sort.reverse
+                    },
+                    criteria: {
+                        acronym: acronym,
+                        filter: tableState.search.predicateObject && tableState.search.predicateObject.$ ? '*' + tableState.search.predicateObject.$ + '*' : '*',
+                        searchAttribute: searchAttribute
+                    }
+                };
+            }else{
+                payload = {
+                    criteria: {
+                        acronym: acronym,
+                        filter: '*',
+                    }
+                };
+            }
 
             var deferred = $q.defer();
-            mdrRestFactory.getMDRCodeListByAcronym(acronym, offset, size, filter, sortBy, sortReversed).get(function(response) {
-                tableState.pagination.numberOfPages = response.numberOfPages||0;//set the number of pages so the pagination can update
-                deferred.resolve(response.data);
+            mdrRestFactory.getMDRCodeList().get(payload, function(response) {
+                if(angular.isDefined(tableState) && angular.isDefined(tableState.pagination)){
+                    var pageSize = tableState.pagination.number || 10;
+                    tableState.pagination.numberOfPages = Math.ceil(response.totalItemsCount / pageSize) || 1;//set the number of pages so the pagination can update
+                }
+                deferred.resolve(response.resultList);
             }, function(error) {
                 console.error('Error listing code list details');
                 deferred.reject(error);
@@ -228,7 +267,7 @@ angular.module('unionvmsWeb').factory('mdrRestFactory',function($resource) {
                      deferred.reject(error);
                 });
           return deferred.promise;
-        },
+        }/*,
         getCodeList: function(acronym){
             var deferred = $q.defer();
             //TODO the payload for pagination
@@ -239,7 +278,7 @@ angular.module('unionvmsWeb').factory('mdrRestFactory',function($resource) {
                 deferred.reject(error);
             });
             return deferred.promise;
-        }
+        }*/
   	};
 
   	return mdrRestService;

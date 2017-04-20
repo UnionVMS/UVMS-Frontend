@@ -19,8 +19,9 @@ copy of the GNU General Public License along with the IFDM Suite. If not, see <h
  * @description
  *  The controller for the Catch Evolution panel  
  */
-angular.module('unionvmsWeb').controller('CatchevolutionCtrl', function($scope, activityRestService, locale) {
+angular.module('unionvmsWeb').controller('CatchevolutionCtrl', function($scope, activityRestService, locale, tripSummaryService) {
     
+    $scope.speciesColors = tripSummaryService.trip.specieColor;   
     /**
        * Initialization function
        * 
@@ -53,14 +54,14 @@ angular.module('unionvmsWeb').controller('CatchevolutionCtrl', function($scope, 
                 }
 
                 if(angular.isDefined(chart.speciesList) && chart.speciesList.length > 0){
-                    var colors = palette('tol-rainbow', chart.speciesList.length);
                     angular.forEach(chart.speciesList, function(value,key){
-                        chart.speciesList[key].color = '#' + colors[key];
+                        var specieColor = _.where($scope.speciesColors, {code: value.speciesCode})[0].color;
+                        chart.speciesList[key].color = '#' + specieColor;
                     });
                 }
             });
         });
-
+        
         angular.forEach($scope.catchEvolutionData.finalCatch, function(chart,chartName){
             if(chartName === 'cumulated'){
                 chart.title = locale.getString('activity.catch_evolution_title_cumulated_catch');
@@ -69,10 +70,10 @@ angular.module('unionvmsWeb').controller('CatchevolutionCtrl', function($scope, 
             }
 
             if(angular.isDefined(chart.speciesList) && chart.speciesList.length > 0){
-                var colors = palette('tol-rainbow', chart.speciesList.length);
                 angular.forEach(chart.speciesList, function(value,key){
-                    chart.speciesList[key].color = '#' + colors[key];
-                    chart.speciesList[key].tableColor = {'background-color': tinycolor('#' + colors[key]).setAlpha(0.7).toRgbString()};
+                    var specieColor = _.where($scope.speciesColors, {code: value.speciesCode})[0].color;
+                    chart.speciesList[key].color = '#' + specieColor;
+                    chart.speciesList[key].tableColor = {'background-color': tinycolor('#' + specieColor).setAlpha(0.7).toRgbString()};
                 });
             }
         });

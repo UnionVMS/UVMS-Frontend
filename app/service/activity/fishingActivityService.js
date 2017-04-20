@@ -340,7 +340,7 @@ angular.module('unionvmsWeb').factory('fishingActivityService', function(activit
      * @alias addGearDescription
      */
     var addGearDescription = function(faObj){
-        mdrCacheService.getCodeList('gear_type').then(function(response){
+        mdrCacheService.getCodeList('GEAR_TYPE').then(function(response){
             angular.forEach(faObj.gears, function(item) {
                 var mdrRec = _.findWhere(response, { code: item.type });
                 if (angular.isDefined(mdrRec)) {
@@ -359,7 +359,7 @@ angular.module('unionvmsWeb').factory('fishingActivityService', function(activit
      * @alias addCatchTypeDescription
      */
     var addCatchTypeDescription = function(faObj){
-        mdrCacheService.getCodeList('fa_catch_type').then(function(response){
+        mdrCacheService.getCodeList('FA_CATCH_TYPE').then(function(response){
             angular.forEach(faObj.catches, function(item) {
                 var mdrRec = _.findWhere(response, { code: item.details.catchType });
                 if (angular.isDefined(mdrRec)) {
@@ -378,7 +378,7 @@ angular.module('unionvmsWeb').factory('fishingActivityService', function(activit
      * @alias addGearProblemDesc
      */
     var addGearProblemDesc = function(obj){
-        mdrCacheService.getCodeList('fa_gear_problem').then(function(response){
+        mdrCacheService.getCodeList('FA_GEAR_PROBLEM').then(function(response){
             angular.forEach(obj.gearShotRetrieval, function(item) {
                 angular.forEach(item.gearProblems, function(prob){
                     var mdrRec = _.findWhere(response, { code: prob.type });
@@ -399,7 +399,7 @@ angular.module('unionvmsWeb').factory('fishingActivityService', function(activit
      * @alias addRecoveryDesc
      */
     var addRecoveryDesc = function(obj){
-        mdrCacheService.getCodeList('fa_gear_recovery').then(function(response){
+        mdrCacheService.getCodeList('FA_GEAR_RECOVERY').then(function(response){
             angular.forEach(obj.gearShotRetrieval, function(item) {
                 angular.forEach(item.gearProblems, function(rec){
                     var mdrRec = _.findWhere(response, { code: rec.recoveryMeasure });
@@ -420,7 +420,7 @@ angular.module('unionvmsWeb').factory('fishingActivityService', function(activit
      * @alias addWeightMeansDescription
      */
     var addWeightMeansDescription = function(faObj){
-        mdrCacheService.getCodeList('weight_means').then(function(response){
+        mdrCacheService.getCodeList('WEIGHT_MEANS').then(function(response){
             var classes = ['LSC','BMS'];
             angular.forEach(faObj.catches, function(item) {
                 angular.forEach(classes, function(className) {
@@ -483,7 +483,7 @@ angular.module('unionvmsWeb').factory('fishingActivityService', function(activit
      * @alias addVesselRoleDescription
      */
     var addVesselRoleDescription = function(faObj){
-        mdrCacheService.getCodeList('vessel_role').then(function(response){
+        mdrCacheService.getCodeList('FA_VESSEL_ROLE').then(function(response){
             angular.forEach(faObj.relocation, function(item) {
                 var mdrRec = _.findWhere(response, { code: item.role });
                 if (angular.isDefined(mdrRec)) {

@@ -39,7 +39,7 @@ angular.module('unionvmsWeb').filter('stPurposeCode', function(mdrCacheService) 
     function convertCode(mdrCode, isImage){
         if (!isFinished && !isInvoked){
             isInvoked = true;
-            mdrCacheService.getCodeList('flux_gp_purposecode').then(function(response){
+            mdrCacheService.getCodeList('FLUX_GP_PURPOSE').then(function(response){
                 angular.forEach(response, function(item){
                     cachedCodes.push({
                         code: item.code,

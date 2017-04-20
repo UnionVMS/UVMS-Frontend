@@ -74,7 +74,7 @@ angular.module('unionvmsWeb').factory('mdrCacheService',function($q, mdrRestServ
 	 * @param {Object} deferred - The deferred object
 	 */
 	function getCodeListFromServer (listName, deferred){
-	    mdrRestService.getCodeList(listName).then(function(response){
+	    mdrRestService.getMDRCodeList(listName).then(function(response){
 	        mdrServ.codeLists[listName] = response;
 	        deferred.resolve(mdrServ.codeLists[listName]);
 	    }, function(error){

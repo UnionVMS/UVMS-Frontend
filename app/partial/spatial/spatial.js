@@ -87,9 +87,7 @@ angular.module('unionvmsWeb').controller('SpatialCtrl',function($scope, $timeout
            }
            loadingStatus.isLoading('InitialReporting', false);
        }, function(error){
-           $scope.repServ.hasAlert = true;
-           $scope.repServ.alertType = 'danger';
-           $scope.repServ.message = locale.getString('spatial.map_error_loading_reports_list');
+           $scope.repNav.goToView('liveViewPanel','mapPanel',$scope.openReportList,[undefined,true]);
            loadingStatus.isLoading('InitialReporting', false);
        });
    };
