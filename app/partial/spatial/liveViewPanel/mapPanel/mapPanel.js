@@ -9,7 +9,7 @@ the hope that it will be useful, but WITHOUT ANY WARRANTY; without even the impl
 FITNESS FOR A PARTICULAR PURPOSE.  See the GNU General Public License for more details. You should have received a
 copy of the GNU General Public License along with the IFDM Suite. If not, see <http://www.gnu.org/licenses/>.
 */
-angular.module('unionvmsWeb').controller('MapCtrl',function($log, $scope, locale, $timeout, $document, $templateRequest, $modal, mapService, loadingStatus, spatialHelperService, reportService, mapFishPrintRestService, MapFish, MapFishPayload, spatialRestService, $window, projectionService, $state, $localStorage, reportFormService,comboboxService,userService){
+angular.module('unionvmsWeb').controller('MapCtrl',function($log, $scope, locale, $timeout, $document, $templateRequest, $modal, mapService, loadingStatus, spatialHelperService, reportService, mapFishPrintRestService, MapFish, MapFishPayload, spatialRestService, $window, projectionService, $state, $localStorage, reportFormService,comboboxService,userService,fishingActivityService,reportingNavigatorService,tripSummaryService,tripReportsTimeline){
     $scope.activeControl = '';
     $scope.showMeasureConfigWin = false;
     $scope.showMapFishConfigWin = false;
@@ -106,6 +106,16 @@ angular.module('unionvmsWeb').controller('MapCtrl',function($log, $scope, locale
             });
             $scope.spatialHelper.configureFullscreenModal(modalInstance);
         }
+    };
+    
+    $scope.goToFaView = function(){
+        fishingActivityService.resetActivity();
+        fishingActivityService.id = mapService.overlay.get('activityId');
+        fishingActivityService.isCorrection = mapService.overlay.get('isCorrection');
+        fishingActivityService.documentType = mapService.overlay.get('documentType');
+        tripSummaryService.openNewTrip(mapService.overlay.get('tripId'), true);
+        tripReportsTimeline.reset();
+        reportingNavigatorService.goToView('tripsPanel', fishingActivityService.getFaView(mapService.overlay.get('activityType')));
     };
 
     //Check for permissions
@@ -645,6 +655,16 @@ angular.module('unionvmsWeb').controller('MapCtrl',function($log, $scope, locale
     			$scope.bookmarksEnable();
     		}
     	}, 100);
+	};
+	
+	$scope.isActivityDetailsAllowed = function(){
+	    var isAllowed = false;
+	    var suportedCodes = ['DEPARTURE', 'ARRIVAL', 'AREA_ENTRY', 'AREA_EXIT', 'FISHING_OPERATION', 'LANDING', 'DISCARD', 'TRANSHIPMENT', 'RELOCATION', 'JOINED_FISHING_OPERATION'];
+	    if ($scope.popupRecContainer.currentType === 'ers' && _.indexOf(suportedCodes, $scope.popupRecContainer.activityType.toUpperCase()) !== -1){
+	        isAllowed = true;
+	    }
+	    
+	    return isAllowed;
 	};
     
     $scope.$watch(function(){return $scope.repNav.isViewVisible('mapPanel');}, function(newVal,oldVal){

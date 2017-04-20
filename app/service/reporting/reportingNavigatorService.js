@@ -109,6 +109,12 @@ angular.module('unionvmsWeb').factory('reportingNavigatorService',function() {
 		getCurrentSection:function(){
 			return currentState.section;
 		},
+		getPreviousView:function(){
+            return previousState.panel;
+        },
+        getPreviousSection:function(){
+            return previousState.section;
+        },
 		addStateCallback: function(callback) {
 			currentState.callback = callback;
 		},
