@@ -179,6 +179,46 @@ angular.module('unionvmsWeb').factory('mapService', function(locale, $rootScope,
 	            
 	            if (records.length > 0){
 	                ms.popupRecContainer.reset();
+	                //FIXME 
+	                if (records[0].type === 'ers'){
+	                    records[0].data = {
+	                        vesselName: 'VASTFJORD II',
+	                        vesselGuid: 'bc71848f-1c7d-41f5-8b32-b7e30c2bf592',
+	                        flagState: 'SWE',
+	                        vesselIdentifiers: [{
+	                            schemeId: 'EXT_MARK',
+	                            id: 'GG-218'
+	                        }, {
+	                            schemeId: 'IRCS',
+	                            id: 'SGZE'
+	                        }, {
+	                            schemeId: 'CFR',
+	                            id: 'SWE000010126'
+	                        }, {
+	                            schemeId: 'UVI',
+	                            id: '0123456'
+	                        }, {
+	                            schemeId: 'ICCAT',
+	                            id: '6543210'
+	                        }, {
+	                            schemeId: 'GFCM',
+	                            id: '02468'
+	                        }],
+	                        activityId: 54,
+	                        tripId: 'MLT-TRP-20160630000001',
+	                        isCorrection: false,
+	                        dataSource: "FLUX",
+	                        activityType: "DEPARTURE",
+	                        reportType: "NOTIFICATION",
+	                        purposeCode: "9",
+	                        acceptedDateTime: "2017-01-09T11:12:00.000Z",
+	                        areas: ['51.5', '51.6'],
+	                        ports: [66.75, -20.4167],
+	                        gears: ['PS', 'OTB', 'OTT'],
+	                        species: ['YFT', 'BET', 'SKJ']
+	                    };
+	                }
+	                
                     var data = ms.setObjPopup(records[0]);
                     ms.popupRecContainer.records = records;
                     ms.popupRecContainer.currentIdx = 0;

@@ -214,7 +214,7 @@ angular.module('unionvmsWeb').directive('tripReportsPanel', function(loadingStat
             idx: undefined,
             type: undefined
         };
-    }
+    };
 
     return tripReports;
 });

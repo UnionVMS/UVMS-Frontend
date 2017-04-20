@@ -237,6 +237,8 @@
 	"table_filters_reset": "Clear filters",
 	"table_filter_start_date": "Start date",
 	"table_filter_end_date": "End date",
+	"table_filter_start_at": "Starting at",
+	"table_filter_finish_at": "Finishing at",
 	"tab_vms_pos_table_header_fs": "F.S",
 	"tab_vms_pos_table_header_country_name": "Country name",
 	"tab_vms_pos_table_header_ext_mark": "Ext. marking",

@@ -9,12 +9,13 @@ the hope that it will be useful, but WITHOUT ANY WARRANTY; without even the impl
 FITNESS FOR A PARTICULAR PURPOSE.  See the GNU General Public License for more details. You should have received a
 copy of the GNU General Public License along with the IFDM Suite. If not, see <http://www.gnu.org/licenses/>.
 */
-angular.module('unionvmsWeb').controller('VmspanelCtrl',function($scope, locale, globalSettingsService, reportService, mapService, csvWKTService, unitConversionService, visibilityService, userService, tripSummaryService, layerPanelService){
+angular.module('unionvmsWeb').controller('VmspanelCtrl',function($scope, locale, globalSettingsService, reportService, mapService, csvWKTService, unitConversionService, visibilityService, userService, tripSummaryService, layerPanelService, mdrCacheService){
     $scope.selectedVmsTab = 'MOVEMENTS';
     $scope.isPosFilterVisible = false;
     $scope.isSegFilterVisible = false;
     $scope.isTrackFilterVisible = false;
     $scope.isAlarmFilterVisible = false;
+    $scope.isTripFilterVisible = false;
     $scope.itemsByPage = 25;
     $scope.itemsByPageModal = 15;
     $scope.modalCollapsed = false;
@@ -26,6 +27,7 @@ angular.module('unionvmsWeb').controller('VmspanelCtrl',function($scope, locale,
     $scope.decimalDegrees = true;
     $scope.attrVisibility = visibilityService;
     $scope.tripSummServ = tripSummaryService;
+    $scope.activityTypes = [];
     
     //Define VMS tabs
     var setVmsTabs = function(){
@@ -57,6 +59,7 @@ angular.module('unionvmsWeb').controller('VmspanelCtrl',function($scope, locale,
         
    locale.ready('spatial').then(function(){
        $scope.vmsTabMenu = setVmsTabs();
+       $scope.getActivityTypes();
    });
    
    $scope.isTabVisible = function(tab){
@@ -109,6 +112,9 @@ angular.module('unionvmsWeb').controller('VmspanelCtrl',function($scope, locale,
            case 'alarms':
                $scope.isAlarmFilterVisible = !$scope.isAlarmFilterVisible;
                break;
+           case 'trips':
+               $scope.isTripFilterVisible = !$scope.isTripFilterVisible;
+               break;
        }
    };
    
@@ -119,7 +125,15 @@ angular.module('unionvmsWeb').controller('VmspanelCtrl',function($scope, locale,
        } else if ($scope.selectedVmsTab === 'ALARMS'){
            $scope.alarmStartDate = undefined;
            $scope.alarmEndDate = undefined;
+       } else if ($scope.selectedVmsTab === 'TRIPS'){
+           $scope.firstEventDate = undefined;
+           $scope.lastEventDate = undefined;
        }
+   };
+   
+   $scope.clearComboFilters = function(){
+       $scope.firstFishingActivityType = undefined;
+       $scope.lastFishingActivityType = undefined;
    };
    
    //Positions table config
@@ -273,6 +287,8 @@ angular.module('unionvmsWeb').controller('VmspanelCtrl',function($scope, locale,
            case 'alarms':
                formId = 'alarmFiltersForm';
                break;
+           case 'trip':
+               formId = 'tripFiltersForm';
        }
        
        if ($scope.isModal){
@@ -293,10 +309,16 @@ angular.module('unionvmsWeb').controller('VmspanelCtrl',function($scope, locale,
    
    $scope.getFilterData = function(selector){
        var obj = {};
+       var comboInputs = ['firstFishingActivity', 'lastFishingActivity'];
        $('#' + selector + ' [name]').each(
            function(index){  
                var input = $(this);
                var value = input.val();
+               
+               if (_.indexOf(comboInputs, input.attr('name')) !== -1){
+                   value = $scope[input.attr('name') + 'Type'];
+               }
+               
                obj[input.attr('name')] = value;
            }
        );
@@ -322,6 +344,18 @@ angular.module('unionvmsWeb').controller('VmspanelCtrl',function($scope, locale,
                obj.endDate = $scope.alarmEndDate;
            }
        }
+       
+       if (selector.indexOf('tripFilters') !== -1){
+           if (angular.isDefined($scope.firstEventDate)){
+               obj.startDate = $scope.firstEventDate;
+           }
+           
+           if (angular.isDefined($scope.lastEventDate)){
+               obj.endDate = $scope.lastEventDate;
+           }
+       }
+       
+       
        
        obj = _.pick(obj, function(value, key, obj){
            return value !== '';
@@ -643,6 +677,24 @@ angular.module('unionvmsWeb').controller('VmspanelCtrl',function($scope, locale,
 	       return csvObj;
            }, []
        ), 'header': header};
+   };
+   
+   $scope.getActivityTypes = function(){
+       mdrCacheService.getCodeList('flux_fa_type').then(function(response){
+           var suportedCodes = ['DEPARTURE', 'ARRIVAL', 'AREA_ENTRY', 'AREA_EXIT', 'FISHING_OPERATION', 'LANDING', 'DISCARD', 'TRANSHIPMENT', 'RELOCATION', 'JOINED_FISHING_OPERATION'];
+           angular.forEach(response, function(rec){
+               if (_.indexOf(suportedCodes, rec.code) !== -1){
+                   $scope.activityTypes.push({
+                       code: rec.code,
+                       text: locale.getString('abbreviations.activity_' + rec.code),
+                       desc: rec.description
+                   });
+               }
+           });
+       }, function(error){
+           //TODO
+           //$scope.actServ.setAlert(true, 'activity.activity_error_getting_code_lists');
+       });
    };
 
    $scope.openTripSummary = function(tripId){
