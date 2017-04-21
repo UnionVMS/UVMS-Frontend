@@ -289,7 +289,7 @@ angular.module('unionvmsWeb').factory('fishingActivityService', function(activit
             area_entry: 'areaEntry',
             area_exit: 'areaExit',
             arrival_declaration: 'arrival',
-            arrival_notification: 'arrival',
+            arrival_notification: 'notification',
             fishing_operation: 'fishingoperation',
             joint_fishing_operation: 'jointfishingoperation'
         };
