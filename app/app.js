@@ -437,10 +437,14 @@ unionvmsWebApp.config(function($stateProvider, $compileProvider, tmhDynamicLocal
             data: {
                 pageTitle: 'header.page_title_reports'
             },
-            onEnter: function($state,locale,userService,errorService){
+            onEnter: function($state,locale,userService,errorService,mdrCacheService){
                 if(_.isNull(userService.getCurrentContext().scope)){
                     errorService.setErrorMessage(locale.getString('common.error_user_without_scope'));
                     $state.go('error');
+                } else {
+                    if (userService.isAllowed('ACTIVITY_ALLOWED', 'Activity', true)){
+                        mdrCacheService.getCodeList('flux_gp_purposecode');
+                    }
                 }
             },
             onExit: function(loadingStatus,$modalStack){
@@ -913,6 +917,7 @@ var restApiURLS = [
     '/rules/activity/',
     '/reporting/rest/',
     '/spatial/rest/',
+    '/activity/rest/',
     '/mapfish-print',
     '/usm-authentication/rest', '/usm-authorisation/rest', '/usm-administration/rest'
 ];

@@ -15,7 +15,8 @@ angular.module('unionvmsWeb').directive('stResetSearch', function() {
         require: '^stTable',
         scope: {
             formId: '@',
-            clearDates: '&'
+            clearDates: '&',
+            clearCombos: '&'
         },
         templateUrl: 'directive/spatial/stResetSearch/stResetSearch.html',
         link: function(scope, element, attrs, ctrl) {
@@ -45,6 +46,10 @@ angular.module('unionvmsWeb').directive('stResetSearch', function() {
                 
                 if (angular.isDefined(attrs.clearDates)){
                     scope.clearDates();
+                }
+                
+                if (angular.isDefined(attrs.clearCombos)){
+                    scope.clearCombos();
                 }
             };
             

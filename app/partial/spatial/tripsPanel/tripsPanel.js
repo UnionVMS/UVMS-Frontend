@@ -61,11 +61,11 @@ angular.module('unionvmsWeb').controller('TripspanelCtrl', function ($scope, gen
      * @memberof tripSummaryService
      * @public
      * @alias initializeTrip
-     * @param {Number} index - The index of the tab to be initialized
+     * @param {String} tripId - The trip id
      */
-    $scope.tripSummServ.initializeTrip = function (index) {
-        if (angular.isDefined($scope.tripSummServ.tabs[index])) {
-            $scope.tripSummServ.trip = new Trip($scope.tripSummServ.tabs[index].title);
+    $scope.tripSummServ.initializeTrip = function (tripId) {
+        if (angular.isDefined(tripId)) {
+            $scope.tripSummServ.trip = new Trip(tripId);
             $scope.trip = $scope.tripSummServ.trip;
         }
     };
@@ -86,5 +86,4 @@ angular.module('unionvmsWeb').controller('TripspanelCtrl', function ($scope, gen
             $scope.repNav.goToPreviousView();
         }
     };
-
 });

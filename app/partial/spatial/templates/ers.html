@@ -1,4 +1,4 @@
-/*
+<!--
 Developed with the contribution of the European Commission - Directorate General for Maritime Affairs and Fisheries
 © European Union, 2015-2016.
 
@@ -8,39 +8,21 @@ Free Software Foundation, either version 3 of the License, or any later version.
 the hope that it will be useful, but WITHOUT ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or
 FITNESS FOR A PARTICULAR PURPOSE.  See the GNU General Public License for more details. You should have received a
 copy of the GNU General Public License along with the IFDM Suite. If not, see <http://www.gnu.org/licenses/>.
-*/
-.vessel-tile {
-    padding-bottom: 15px;
-    .vessel-name {
-        text-decoration: underline;
-        font-size: 17px;
-        font-weight: bold;
-        margin-bottom: 5px;
-        color: @primaryColor;
-    }
-    .trip-row-label {
-        font-weight: bold;
-    }
-    .no-border > fieldset {
-        border: 0 !important;
-    }
-    .summary-section {
-        &:first-child {
-            padding-left: 0;
-        }
-        &:last-child {
-            padding-right: 0;
-        }
-    }
-    .contact-parties > .carousel-tile > .carousel {
-        &,
-        & > .carousel-inner {
-            & > .carousel-control {
-                display: none;
-            }
-        }
-    }
-    fa-details-panel.summary-section:first-child {
-        padding-left: 0;
-    }
-}
+-->
+<div class="col-md-12 info-content">
+	<table class="table table-striped table-condensed table-bordered">
+		{{#activity}}
+		<tr>
+			{{#showTitles}}
+			<td class="col-md-6"><b>{{getTitle}}</b></td>
+			<td class="col-md-6">{{getValue}}</td>
+			{{/showTitles}}
+			{{^showTitles}}
+				{{#doDisplay}}
+				<td class="col-md-6">{{getValue}}</td>
+				{{/doDisplay}}
+			{{/showTitles}}
+		</tr>
+		{{/activity}}
+	</table>
+</div>

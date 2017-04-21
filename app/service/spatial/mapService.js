@@ -28,6 +28,7 @@ copy of the GNU General Public License along with the IFDM Suite. If not, see <h
  * @param MapFish {service} Mapfish service
  * @param genericMapService {service} generic map service <p>{@link unionvmsWeb.genericMapService}</p>
  * @param layerPanelService {service} layer panel service
+ * @param mdrCacheService {service} MDR cache service <p>{@link unionvmsWeb.mdrCacheService}</p>
  * @attr {ol.Graticule} mapGraticule - The OL map graticule
  * @attr {Number} mapPrintResolution - The current map resolution to use while printing
  * @attr {Object} styles - An object containing the styles definitions for vms positions, segments and alarms
@@ -49,7 +50,7 @@ copy of the GNU General Public License along with the IFDM Suite. If not, see <h
  * @description
  *  Service to control the map on the liveview of the reporting tab
  */
-angular.module('unionvmsWeb').factory('mapService', function(locale, $rootScope, $window, $localStorage, $timeout, $interval, $templateRequest, $filter, spatialHelperService, globalSettingsService, unitConversionService, coordinateFormatService, MapFish, genericMapService, layerPanelService) {
+angular.module('unionvmsWeb').factory('mapService', function(locale, $rootScope, $window, $localStorage, $timeout, $interval, $templateRequest, $filter, spatialHelperService, globalSettingsService, unitConversionService, coordinateFormatService, MapFish, genericMapService, layerPanelService, mdrCacheService) {
 	var ms = {};
 	ms.sp = spatialHelperService;
 
@@ -139,11 +140,12 @@ angular.module('unionvmsWeb').factory('mapService', function(locale, $rootScope,
                                     fromCluster: false
                                 });
 	                        }
-	                    } else if (type === 'vmsseg' || type === 'alarms'){
+	                    } else if (type === 'vmsseg' || type === 'alarms' || type === 'ers'){
 	                        records.push({
 	                            type: type,
 	                            data: feature.getProperties(),
-	                            coord: type === 'vmsseg' ? feature.getGeometry().getClosestPoint(coordinate) : feature.getGeometry().getCoordinates(),
+	                            coord: type === 'vmsseg' || type === 'ers' ? feature.getGeometry().getClosestPoint(coordinate) : feature.getGeometry().getCoordinates(),
+	                            id: feature.getId(),
 	                            fromCluster: false
 	                        });
 	                    }
@@ -3061,6 +3063,11 @@ angular.module('unionvmsWeb').factory('mapService', function(locale, $rootScope,
      */
     ms.requestPopupTemplate = function(data, type, coords, fromCluster){
         ms.popupRecContainer.currentType = type;
+        
+        if (type === 'ers'){
+            ms.popupRecContainer.activityType = data.activityType;
+        }
+        
         var templateURL = 'partial/spatial/templates/' + type + '.html';
         $templateRequest(templateURL).then(function(template){
             var rendered = Mustache.render(template, data);
@@ -3068,10 +3075,17 @@ angular.module('unionvmsWeb').factory('mapService', function(locale, $rootScope,
             content.innerHTML = rendered;
             ms.overlay.setPosition(coords);
             ms.overlay.set('fromCluster', fromCluster, true);
-            if (type === 'vmspos'){
+            if (type === 'vmspos' || type === 'ers'){
                 ms.overlay.set('featureId', data.id, true);
                 ms.overlay.set('vesselId', data.vesselId, true);
                 ms.overlay.set('vesselName', data.vesselName, true);
+                if (type === 'ers'){
+                    ms.overlay.set('activityId', data.activityId);
+                    ms.overlay.set('tripId', data.tripId);
+                    ms.overlay.set('isCorrection', data.isCorrection);
+                    ms.overlay.set('documentType', data.reportType);
+                    ms.overlay.set('activityType', data.activityType);
+                }
             } else {
                 ms.overlay.set('featureId', undefined, true);
             }
@@ -3118,7 +3132,9 @@ angular.module('unionvmsWeb').factory('mapService', function(locale, $rootScope,
 	    positions: ['fs', 'extMark', 'ircs', 'cfr', 'name', 'posTime', 'lat', 'lon', 'stat', 'm_spd', 'c_spd', 'crs', 'msg_tp', 'act_tp', 'source'],
 	    positionsTitles: true,
 	    segments: ['fs', 'extMark', 'ircs', 'cfr', 'name', 'dist', 'dur', 'spd', 'crs', 'cat'],
-	    segmentsTitles: true
+	    segmentsTitles: true,
+	    ers: ['fs', 'ext_mark', 'ircs', 'cfr', 'gfcm', 'iccat', 'uvi', 'name', 'source', 'activityType', 'reportType', 'purposeCode', 'occurrence', 'areas', 'gears', 'species'],
+	    ersTitles: true
 	};
 	
 	ms.setPopupVisibility = function(type, config){
@@ -3142,13 +3158,22 @@ angular.module('unionvmsWeb').factory('mapService', function(locale, $rootScope,
 	ms.setObjPopup = function(record){
 	    var type = record.type;
 	    var data;
-	    if (type === 'vmspos'){
-	        data = ms.setPositionsObjPopup(record.data, record.id);
-	    } else if (type === 'vmsseg'){
-	        data = ms.setSegmentsObjPopup(record.data);
-	    } else { //alarms
-	        data = ms.setAlarmsObjPopup(record.data);
-	    }
+	    switch (type) {
+            case 'vmspos':
+                data = ms.setPositionsObjPopup(record.data, record.id);
+                break;
+            case 'vmsseg':
+                data = ms.setSegmentsObjPopup(record.data);
+                break;
+            case 'ers':
+                data = ms.setActivitiesObjPopup(record.data);
+                break;
+            case 'alarms':
+                data = ms.setAlarmsObjPopup(record.data);
+                break;
+            default:
+                break;
+        }
 	    
 	    return data;
 	};
@@ -3315,8 +3340,6 @@ angular.module('unionvmsWeb').factory('mapService', function(locale, $rootScope,
         }
     };
 
-    //POPUP - vms segments
-    //Define the object that will be used in the popup for vms segments
     /**
      * Create object containing all the necessary segment information to be displayed in the popup
      * 
@@ -3484,6 +3507,139 @@ angular.module('unionvmsWeb').factory('mapService', function(locale, $rootScope,
             color: ms.getColorByStatus(ms.styles.alarms, data.ticketStatus)
         };
     };
+    
+    /**
+     * Create object containing all the necessary fishing activity information to be displayed in the popup
+     * 
+     * @memberof mapService
+     * @public
+     * @alias setActivitiesObjPopup
+     * @param {ol.Feature} feature - The OL feature used to display the popup 
+     * @returns {Object} An object containing the necessary position information to be displayed in the popup
+     */
+    ms.setActivitiesObjPopup = function(feature){
+        var titles = ms.getActivityTitles();
+        var srcData = ms.formatActivityDataForPopup(feature);
+        
+        var data = [];
+        for (var i = 0; i < ms.popupVisibility.ers.length; i++){
+            data.push({
+                title: titles[ms.popupVisibility.ers[i]],
+                value: srcData[ms.popupVisibility.ers[i]]
+            });
+        }
+        
+        return {
+            showTitles: ms.popupVisibility.ersTitles,
+            activity: data,
+            vesselName: feature.vesselName,
+            vesselId: feature.vesselGuid,
+            activityId: feature.activityId,
+            tripId: feature.tripId,
+            isCorrection: feature.isCorrection,
+            reportType: feature.reportType,
+            activityType: feature.activityType.toLowerCase(),
+            getTitle: function(){
+                return this.title;
+            },
+            getValue: function(){
+                return this.value;
+            },
+            doDisplay: function(){
+                if (!angular.isDefined(this.value) || this.value === ''){
+                    return false;
+                } else {
+                    return true;
+                }
+            }
+        };
+    };
+    
+    //Popup attribute names for fishing activities
+    /**
+     * Get attributes names for activity data
+     * 
+     * @memberof mapService
+     * @public
+     * @alias getActivityTitles
+     * @returns {Object} An object containing the regionalized attributes for activity data
+     */
+    ms.getActivityTitles = function(){
+        return {
+            name: locale.getString('spatial.reports_form_details_modal_vessel_name_header'),
+            fs: locale.getString('activity.fa_details_item_flagState'),
+            ext_mark: locale.getString('activity.fa_details_item_exMark'),
+            ircs: locale.getString('activity.fa_details_item_ircs'),
+            cfr: locale.getString('activity.fa_details_item_cfr'),
+            gfcm: locale.getString('activity.fa_details_item_gfcm'),
+            iccat: locale.getString('activity.fa_details_item_iccat'),
+            uvi: locale.getString('activity.fa_details_item_uvi'),
+            source: locale.getString('spatial.tab_vms_pos_table_header_source'),
+            activityType: locale.getString('spatial.reports_form_vms_activity_type'),
+            reportType: locale.getString('spatial.reports_form_activity_report_type'),
+            purposeCode: locale.getString('spatial.popup_activity_purpose'),
+            occurrence: locale.getString('spatial.popup_activity_occurence'),
+            areas: locale.getString('spatial.criteria_area'),
+            //ports: locale.getString('spatial.layer_tree_ports'),
+            gears: locale.getString('spatial.popup_activity_gears'),
+            species: locale.getString('spatial.criteria_species')
+        };
+    };
+    
+    //Popup data values for activities
+    /**
+     * Format segment data to be displayed in the popup taking into consideration user preferences
+     * 
+     * @memberof mapService
+     * @public
+     * @alias formatActivityDataForPopup
+     * @param {Object} data - The object containing initial data
+     * @returns {Object} An object containing properly formated activity data
+     */
+    ms.formatActivityDataForPopup = function(data){
+        var filter = $filter('stArrayToString');
+        var pCodeDesc = mdrCacheService.getDescriptionByCode('flux_gp_purposecode', data.purposeCode);
+        
+        var vesselIds = getVesselIdsObject(data.vesselIdentifiers);
+        
+        return {
+            fs: data.flagState,
+            name: data.vesselName,
+            ext_mark: vesselIds.ext_mark,
+            ircs: vesselIds.ircs,
+            cfr: vesselIds.cfr,
+            gfcm: vesselIds.gfcm,
+            iccat: vesselIds.iccat,
+            uvi: vesselIds.uvi,
+            source: data.dataSource,
+            activityType: data.activityType,
+            reportType: data.reportType,
+            purposeCode: angular.isDefined(pCodeDesc) ? data.purposeCode + ' - ' + pCodeDesc : data.purposeCode,
+            occurrence: unitConversionService.date.convertToUserFormat(data.acceptedDateTime),
+            areas: filter(data.areas, '- '),
+            //ports: data.ports,
+            gears: filter(data.gears, ' - '), 
+            species: filter(data.species, ', ')    
+        };
+    };
+    
+    /**
+     * Create an object conatining all the vessel identifier types. To be used for the activities popup
+     * 
+     * @memberof mapService
+     * @private
+     * @param {Array} data - An array of objects containing the schemeId and id of a vessel 
+     * @returns {Object} The object conatining all vessel identifiers
+     */
+    function getVesselIdsObject (data){
+        var ids = {};
+        for (var i = 0; i < data.length; i++){
+            ids[data[i].schemeId.toLowerCase()] = data[i].id; 
+        }
+        
+        return ids;
+    }
+    
 
 	return ms;
 });

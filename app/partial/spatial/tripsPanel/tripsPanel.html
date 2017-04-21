@@ -30,7 +30,7 @@ copy of the GNU General Public License along with the IFDM Suite. If not, see <h
     <!--TRIP SUMMARY-->
     <uib-tabset ng-show="repNav.isViewVisible('tripSummary')" class="trip-panel-content">
         <!-- active="tripSummServ.activeTab.index"-->
-        <uib-tab index="$index" ng-repeat="tab in tripSummServ.tabs" active="tab.active" select="tripSummServ.initializeTrip($index)">
+        <uib-tab index="$index" ng-repeat="tab in tripSummServ.tabs" active="tab.active" select="tripSummServ.initializeTrip(tab.title)">
             <!--TAB HEADER-->
             <uib-tab-heading>
                 {{tab.title}}

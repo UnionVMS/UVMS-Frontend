@@ -75,12 +75,21 @@ angular.module('unionvmsWeb').factory('visibilityService',function() {
         },
         trips: {
             tripId: true,
-            event: true,
-            vesselId: true,
+            fs: true,
+            extMark: true,
+            ircs: true,
+            cfr: true,
+            uvi: true,
+            iccat: true,
+            gfcm: true,
+            firstEventType: true,
+            firstEventTime: true,
+            lastEventType: true,
+            lastEventTime: true,
             duration: true,
             nCorrections: true,
             nPositions: true,
-            alarm: true
+            alarm: false //FIXME by default should be true when we have rules working
         },
         fishingActivities : {
             FAReportType: true,
@@ -107,7 +116,7 @@ angular.module('unionvmsWeb').factory('visibilityService',function() {
         segmentsColumns: ['fs','extMark','ircs','cfr','name','dist','dur','spd','crs','cat'],
         tracksColumns: ['fs','extMark','ircs','cfr','name','dist','dur','timeSea'],
         alarmsColumns: ['fs', 'extMark', 'ircs', 'cfr', 'name', 'ruleName', 'ruleDesc', 'ticketOpenDate', 'ticketStatus', 'ticketUpdateDate', 'ticketUpdatedBy', 'ruleDefinitions'],
-        tripsColumns: ['tripId','event','vesselId','duration','nCorrections','nPositions','alarm'],
+        tripsColumns: ['tripId', 'fs', 'extMark', 'ircs', 'cfr', 'uvi', 'iccat', 'gfcm', 'firstEventType', 'firstEventTime', 'lastEventType', 'lastEventTime', 'duration','nCorrections','nPositions','alarm'],
         fishingActivitiesColumns: ['FAReportType','activityType','occurrence','purposeCode','dataSource','fromName','startDate','endDate','cfr','ircs','extMark','uvi','iccat','gfcm','areas','port','fishingGear','speciesCode','quantity'],
         /**
          * Set the visibility and order of all table fields

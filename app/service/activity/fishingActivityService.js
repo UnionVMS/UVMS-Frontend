@@ -26,7 +26,7 @@ copy of the GNU General Public License along with the IFDM Suite. If not, see <h
  * @description
  *  A service to deal with any kind of fishing activity operation (e.g. Departure, Arrival, ...)
  */
-angular.module('unionvmsWeb').factory('fishingActivityService', function(activityRestService, loadingStatus, mdrCacheService, locale, $filter, $state, tripSummaryService) {
+angular.module('unionvmsWeb').factory('fishingActivityService', function(activityRestService, loadingStatus, mdrCacheService, locale, $filter, $state, tripSummaryService, reportingNavigatorService) {
 
     var faServ = {
         activityData: {},
@@ -80,17 +80,20 @@ angular.module('unionvmsWeb').factory('fishingActivityService', function(activit
             'gears',
             'catches',
             'processingProducts',
-            'relocation'
+            'relocation',
+            'vesselDetails'
         ],
         relocation: [
             'locations',
             'catches',
             'processingProducts',
+            'vesselDetails'
         ],
         transhipment: [
             'locations',
             'catches',
             'processingProducts',
+            'vesselDetails'
         ],
         area_entry: [
             'areas',
@@ -450,8 +453,25 @@ angular.module('unionvmsWeb').factory('fishingActivityService', function(activit
             view += value;
         });
         view = 'trip' + view + 'Panel';
-        
+
         return view;
+    };
+    
+    /**
+     * Quit the fishing activiy panel and navigate to the previous view
+     * 
+     * @memberof fishingActivityService
+     * @public
+     * @alias quitFaView
+     */
+    faServ.quitFaView = function(){
+        //TODO recheck this logic when we implement navigation from panel to subpanel (e.g. fishing op to catch details)
+        var previousView = reportingNavigatorService.getPreviousView();
+        if (previousView === 'mapPanel'){
+            reportingNavigatorService.goToView('liveViewPanel', 'mapPanel');
+        } else {
+            reportingNavigatorService.goToView('tripsPanel', 'tripSummary');
+        }
     };
     
     /**
@@ -780,57 +800,7 @@ angular.module('unionvmsWeb').factory('fishingActivityService', function(activit
      */
     var loadTripDetails = function(data){
         if(angular.isDefined(data)){
-            data.vesselDetails.vesselOverview = {};
-
-            var attrOrder = angular.copy(vesselAttrOrder);
-            var vesselIdx = attrOrder.length;
-
-            angular.forEach(data.vesselDetails,function(prop,propName){
-                if(!_.isObject(prop)){
-                    data.vesselDetails.vesselOverview[propName] = prop;
-                }
-            });
-
-            if(angular.isDefined(data.vesselDetails.vesselIds) && data.vesselDetails.vesselIds.length){
-                _.extend(data.vesselDetails.vesselOverview,addExtraDetails(data.vesselDetails.vesselIds,attrOrder,vesselIdx));
-                delete data.vesselDetails.vesselIds;
-            }
-
-            if(_.keys(data.vesselDetails.vesselOverview).length){
-                data.vesselDetails.vesselOverview = loadFishingActivityDetails(data.vesselDetails.vesselOverview, attrOrder);
-            }
-
-            if(angular.isDefined(data.vesselDetails.authorizations) && data.vesselDetails.authorizations.length){
-                var authAttrOrder = [];
-                data.vesselDetails.authorizations = addExtraDetails(data.vesselDetails.authorizations,authAttrOrder,0);
-                data.vesselDetails.authorizations = loadFishingActivityDetails(data.vesselDetails.authorizations, authAttrOrder);
-                data.vesselDetails.authorizations.title = locale.getString('activity.authorizations');
-            }
-
-            if(angular.isDefined(data.vesselDetails.contactParties) && data.vesselDetails.contactParties.length){
-                angular.forEach(data.vesselDetails.contactParties, function(item) {
-                    item.type = item.role + ' - ' + item.contactPerson.alias;
-                });
-            }
-
-            if(angular.isDefined(data.vesselDetails.storage)){
-                var storAttrOrder = [
-                    {
-                        idx: 0,
-                        id: 'type',
-                        type: 'string'
-                    }
-                ];
-
-                if(angular.isDefined(data.vesselDetails.storage.identifiers) && data.vesselDetails.storage.identifiers.length){
-                    var type = data.vesselDetails.storage.type;
-                    data.vesselDetails.storage = addExtraDetails(data.vesselDetails.storage.identifiers,storAttrOrder,1);
-                    data.vesselDetails.storage.type = type;
-                }
-
-                data.vesselDetails.storage = loadFishingActivityDetails(data.vesselDetails.storage, storAttrOrder);
-                data.vesselDetails.storage.title = locale.getString('activity.vessel_storage');
-            }
+            loadVesselDetails(data.vesselDetails);
         }
 
         return data;
@@ -884,6 +854,67 @@ angular.module('unionvmsWeb').factory('fishingActivityService', function(activit
         });
 
         return data;
+    };
+
+
+    var loadVesselDetails = function(vesselDetails){
+        if(angular.isDefined(vesselDetails) && !_.isEmpty(vesselDetails)){
+            vesselDetails.vesselOverview = {};
+
+            var attrOrder = angular.copy(vesselAttrOrder);
+            var vesselIdx = attrOrder.length;
+
+            angular.forEach(vesselDetails,function(prop,propName){
+                if(!_.isObject(prop)){
+                    vesselDetails.vesselOverview[propName] = prop;
+                }
+            });
+
+            if(angular.isDefined(vesselDetails.vesselIds) && vesselDetails.vesselIds.length){
+                _.extend(vesselDetails.vesselOverview,addExtraDetails(vesselDetails.vesselIds,attrOrder,vesselIdx));
+                delete vesselDetails.vesselIds;
+            }
+
+            if(_.keys(vesselDetails.vesselOverview).length){
+                vesselDetails.vesselOverview = loadFishingActivityDetails(vesselDetails.vesselOverview, attrOrder);
+            }
+
+            if(angular.isDefined(vesselDetails.authorizations) && vesselDetails.authorizations.length){
+                var authAttrOrder = [];
+                vesselDetails.authorizations = addExtraDetails(vesselDetails.authorizations,authAttrOrder,0);
+                vesselDetails.authorizations = loadFishingActivityDetails(vesselDetails.authorizations, authAttrOrder);
+                vesselDetails.authorizations.title = locale.getString('activity.authorizations');
+            }
+
+            if(angular.isDefined(vesselDetails.contactParties) && vesselDetails.contactParties.length){
+                angular.forEach(vesselDetails.contactParties, function(item) {
+                    item.type = item.role + ' - ' + item.contactPerson.alias;
+                });
+            }
+
+            if(angular.isDefined(vesselDetails.storage)){
+                var storAttrOrder = [
+                    {
+                        idx: 0,
+                        id: 'type',
+                        type: 'string'
+                    }
+                ];
+
+                if(angular.isDefined(vesselDetails.storage.identifiers) && vesselDetails.storage.identifiers.length){
+                    var type = vesselDetails.storage.type;
+                    vesselDetails.storage = addExtraDetails(vesselDetails.storage.identifiers,storAttrOrder,1);
+                    vesselDetails.storage.type = type;
+                }
+
+                vesselDetails.storage = loadFishingActivityDetails(vesselDetails.storage, storAttrOrder);
+                vesselDetails.storage.title = locale.getString('activity.vessel_storage');
+            }
+
+            return vesselDetails;
+        }else{
+            return undefined;
+        }
     };
     
 
@@ -939,6 +970,9 @@ angular.module('unionvmsWeb').factory('fishingActivityService', function(activit
                     addGearProblemDesc(obj);
                     addRecoveryDesc(obj);
                     addGearDescription(obj);
+                    break;
+                case 'vesselDetails':
+                    obj.vesselDetails = loadVesselDetails(data.vesselDetails);
                     break;
             }
         });

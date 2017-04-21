@@ -117,85 +117,105 @@ angular.module('unionvmsWeb').directive('tripReportsPanel', function(loadingStat
                     fishingActivityService.isCorrection = node.corrections;
                     fishingActivityService.documentType = node.documentType;
                     tripReportsTimeline.setCurrentPreviousAndNextItem(node);
-                   reportingNavigatorService.goToView('tripsPanel', fishingActivityService.getFaView(node.srcType));
+                    reportingNavigatorService.goToView('tripsPanel', fishingActivityService.getFaView(node.srcType));
                 }
             };
         }
     };
 })
+/**
+ * @memberof unionvmsWeb
+ * @ngdoc service
+ * @name tripReportsTimeline
+ * @description
+ *  A service for managing the ordered access to fishing activities within a trip
+ */
+.factory('tripReportsTimeline', function(){
+    var tripReports = {
+        reports: [],
+        currentItemIdx: undefined,
+        previousItem: {
+            idx: undefined,
+            type: undefined
+        },
+        nextItem: {
+            idx: undefined,
+            type: undefined
+        }
+    };
+
     /**
-     * @memberof unionvmsWeb
-     * @ngdoc service
-     * @name tripReportsTimeline
-     * @description
-     *  A service for managing the ordered access to fishing activities within a trip
+     * Set the current, previous and next fishing activities items for navigation purposes
+     * 
+     * @memberof tripReportsTimeline
+     * @public
+     * @alias setCurrentPreviousAndNextItem
      */
-    .factory('tripReportsTimeline', function(){
-        var tripReports = {
-            reports: [],
-            currentItemIdx: undefined,
-            previousItem: {
-                idx: undefined,
-                type: undefined
-            },
-            nextItem: {
-                idx: undefined,
-                type: undefined
-            }
-        };
+    tripReports.setCurrentPreviousAndNextItem = function(selectedRecord){
+        var idx = _.findIndex(this.reports, function(report){
+            return report.id === selectedRecord.id;
+        });
 
-        /**
-         * Set the current, previous and next fishing activities items for navigation purposes
-         * 
-         * @memberof tripReportsTimeline
-         * @public
-         * @alias setCurrentPreviousAndNextItem
-         */
-        tripReports.setCurrentPreviousAndNextItem = function(selectedRecord){
-            var idx = _.findIndex(this.reports, function(report){
-                return report.id === selectedRecord.id;
-            });
+        if (idx !== -1){
+            tripReports.currentItemIdx = idx;
+            tripReports.setItem('previous');
+            tripReports.setItem('next');
+        }
+    };
 
-            if (idx !== -1){
-                tripReports.currentItemIdx = idx;
-                tripReports.setItem('previous');
-                tripReports.setItem('next');
-            }
-        };
-
-        /**
-         * Set an activity item within the factory (it might be a next or previous item)
-         * 
-         * @memberof tripReportsTimeline
-         * @public
-         * @alias setItem
-         * @param {String} direction - The direction of the item. Supported values are: next or previous.
-         */
-        tripReports.setItem = function(direction){
-            var idx, type;
-            if (direction === 'previous'){
-                idx = this.currentItemIdx - 1;
-                if (idx >= 0){
-                    type = this.reports[idx].srcType;
-                } else {
-                    idx = undefined;
-                    type = undefined;
-                }
-                this.previousItem.idx = idx;
-                this.previousItem.type = type;
+    /**
+     * Set an activity item within the factory (it might be a next or previous item)
+     * 
+     * @memberof tripReportsTimeline
+     * @public
+     * @alias setItem
+     * @param {String} direction - The direction of the item. Supported values are: next or previous.
+     */
+    tripReports.setItem = function(direction){
+        var idx, type;
+        if (direction === 'previous'){
+            idx = this.currentItemIdx - 1;
+            if (idx >= 0){
+                type = this.reports[idx].srcType;
             } else {
-                idx = this.currentItemIdx + 1;
-                if (idx < this.reports.length){
-                    type = this.reports[idx].srcType;
-                } else {
-                    idx = undefined;
-                    type = undefined;
-                }
-                this.nextItem.idx = idx;
-                this.nextItem.type = type;
+                idx = undefined;
+                type = undefined;
             }
+            this.previousItem.idx = idx;
+            this.previousItem.type = type;
+        } else {
+            idx = this.currentItemIdx + 1;
+            if (idx < this.reports.length){
+                type = this.reports[idx].srcType;
+            } else {
+                idx = undefined;
+                type = undefined;
+            }
+            this.nextItem.idx = idx;
+            this.nextItem.type = type;
+        }
+    };
+    
+    /**
+     * Reset the trip reports timeline service
+     * 
+     * @memberof tripReportsTimeline
+     * @public
+     * @alias reset
+     */
+    tripReports.reset = function(){
+        this.reports = [];
+        this.currentItemIdx = undefined;
+        this.previousItem = {
+            idx: undefined,
+            type: undefined
         };
+        this.nextItem = {
+            idx: undefined,
+            type: undefined
+        };
+    };
 
-        return tripReports;
-    });
+    return tripReports;
+});
 
