@@ -14,30 +14,30 @@ copy of the GNU General Public License along with the IFDM Suite. If not, see <h
         <table class="searchResults colorOdd truncate-text">
             <thead>
             <tr>
-                <th class="checkboxContainer"><input type="checkbox" ng-checked="isAllChecked()" ng-click="checkAll()" ng-disabled="!currentSearchResults.items.length"/></th>
+                <th class="checkboxContainer"><input type="checkbox" ng-checked="isAllChecked()" ng-click="checkAll()" ng-disabled="!currentSearchResults.items.length" input-field-id="asset-checkbox-select-all"/></th>
 
-                <th sortable-table-header by="currentSearchResults.sortBy" reverse="currentSearchResults.sortReverse" order="'countryCode'">{{'vessel.table_header_flag_state' | i18n}}</th>
+                <th sortable-table-header by="currentSearchResults.sortBy" reverse="currentSearchResults.sortReverse" order="'countryCode'" input-field-id="asset-sort-countryCode">{{'vessel.table_header_flag_state' | i18n}}</th>
 
-                <th sortable-table-header by="currentSearchResults.sortBy" reverse="currentSearchResults.sortReverse" order="'externalMarking'">{{'vessel.table_header_external_marking' | i18n}}</th>
+                <th sortable-table-header by="currentSearchResults.sortBy" reverse="currentSearchResults.sortReverse" order="'externalMarking'" input-field-id="asset-sort-externalMarking">{{'vessel.table_header_external_marking' | i18n}}</th>
 
-                <th sortable-table-header by="currentSearchResults.sortBy" reverse="currentSearchResults.sortReverse" order="'name'">{{'vessel.table_header_name' | i18n}}</th>
+                <th sortable-table-header by="currentSearchResults.sortBy" reverse="currentSearchResults.sortReverse" order="'name'" input-field-id="asset-sort-name">{{'vessel.table_header_name' | i18n}}</th>
 
-                <th sortable-table-header by="currentSearchResults.sortBy" reverse="currentSearchResults.sortReverse" order="'ircs'">{{'vessel.table_header_signal' | i18n}}</th>
+                <th sortable-table-header by="currentSearchResults.sortBy" reverse="currentSearchResults.sortReverse" order="'ircs'" input-field-id="asset-sort-ircs">{{'vessel.table_header_signal' | i18n}}</th>
 
-                <th sortable-table-header by="currentSearchResults.sortBy" reverse="currentSearchResults.sortReverse" order="'cfr'">{{'vessel.table_header_cfr' | i18n}}</th>
+                <th sortable-table-header by="currentSearchResults.sortBy" reverse="currentSearchResults.sortReverse" order="'cfr'" input-field-id="asset-sort-cfr">{{'vessel.table_header_cfr' | i18n}}</th>
 
-                <th sortable-table-header by="currentSearchResults.sortBy" reverse="currentSearchResults.sortReverse" order="'gearType'">{{'vessel.table_header_gear_type' | i18n}}</th>
+                <th sortable-table-header by="currentSearchResults.sortBy" reverse="currentSearchResults.sortReverse" order="'gearType'" input-field-id="asset-sort-gearType">{{'vessel.table_header_gear_type' | i18n}}</th>
 
-                <th sortable-table-header by="currentSearchResults.sortBy" reverse="currentSearchResults.sortReverse" order="'licenseType'">{{'vessel.table_header_license_type' | i18n}}</th>
+                <th sortable-table-header by="currentSearchResults.sortBy" reverse="currentSearchResults.sortReverse" order="'licenseType'" input-field-id="asset-sort-licenseType">{{'vessel.table_header_license_type' | i18n}}</th>
 
-                <th sortable-table-header by="currentSearchResults.sortBy" reverse="currentSearchResults.sortReverse" order="'-lastMovement.time'">{{'vessel.table_header_last_report' | i18n}}</th>
+                <th sortable-table-header by="currentSearchResults.sortBy" reverse="currentSearchResults.sortReverse" order="'-lastMovement.time'" input-field-id="asset-sort-lastMovement">{{'vessel.table_header_last_report' | i18n}}</th>
 
                 <th>{{'vessel.table_header_details' | i18n}}</th>
             </tr>
             </thead>
             <tbody>
             <tr ng-repeat="item in currentSearchResults.items | orderBy:currentSearchResults.sortBy:currentSearchResults.sortReverse | filter:currentSearchResults.filter" ng-class="{archived: !item.active}">
-                <td class="checkboxContainer"><input type="checkbox" ng-checked="isChecked(item)" ng-click="checkItem(item)"/></td>
+                <td class="checkboxContainer"><input type="checkbox" ng-checked="isChecked(item)" ng-click="checkItem(item)" id="asset-checkbox-listitem"/></td>
                 <td ng-attr-title="{{item.countryCode}}">{{item.countryCode}}</td>
                 <td ng-attr-title="{{item.externalMarking}}">{{item.externalMarking}}</td>
                 <td ng-attr-title="{{item.name}}">{{item.name}}</td>
@@ -46,10 +46,10 @@ copy of the GNU General Public License along with the IFDM Suite. If not, see <h
                 <td ng-attr-title="{{item.gearType | vesselGearTypeTranslation}}">{{item.gearType | vesselGearTypeTranslation}}</td>
                 <td ng-attr-title="{{item.licenseType | vesselLicenseTypeTranslation}}">{{item.licenseType | vesselLicenseTypeTranslation}}</td>
                 <td>
-                    <span ng-show="item.lastMovement" class="link" ng-click="showReport(item.lastMovement.guid)" ng-attr-title="{{item.lastMovement.time | timeAgo}}">{{item.lastMovement.time | timeAgo}}</span>
+                    <span ng-show="item.lastMovement" class="link" ng-click="showReport(item.lastMovement.guid)" ng-attr-title="{{item.lastMovement.time | timeAgo}}" id="asset-toggle-lastmovement">{{item.lastMovement.time | timeAgo}}</span>
                 </td>
                 <td>
-                    <button class="btn btn-default btn-sm" ng-click="toggleViewVessel(item)">
+                    <button class="btn btn-default btn-sm" ng-click="toggleViewVessel(item)" id="asset-toggle-form">
                         <i class="fa" ng-class="allowedToEditVessel(item) ? 'fa-pencil': 'fa-eye'"></i>
                     </button>
                 </td>

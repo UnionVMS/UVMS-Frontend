@@ -9,16 +9,17 @@
     </div>
     <div class="textAlignRight">
         <div class="actions wrapper">
-            <div ng-if="includeArchive" ng-include="'directive/common/menuBar/menuBarArchive.html'" class="item"></div>
-            <div ng-if="includeUnlink" ng-include="'directive/common/menuBar/menuBarUnlink.html'" class="item"></div>
-            <div ng-if="includeHistory" ng-include="'directive/common/menuBar/menuHistory.html'" class="item"></div>
-            <div ng-if="includeCSVDownload" ng-include="'directive/common/menuBar/menuBarCSV.html'" class="item"></div>
-            <div ng-if="functions.showCancel()" class="item">
+            <div ng-if="includeRemove()" ng-include="'directive/common/menuBar/menuBarRemove.html'" class="item"></div>
+            <div ng-if="includeArchive()" ng-include="'directive/common/menuBar/menuBarArchive.html'" class="item"></div>
+            <div ng-if="includeUnlink()" ng-include="'directive/common/menuBar/menuBarUnlink.html'" class="item"></div>
+            <div ng-if="includeHistory()" ng-include="'directive/common/menuBar/menuHistory.html'" class="item"></div>
+            <div ng-if="includeCSVDownload()" ng-include="'directive/common/menuBar/menuBarCSV.html'" class="item"></div>
+            <div ng-if="includeCancel()" class="item">
                 <div class="menuTextItem">
                     <a ng-click="functions.cancelCallback()" class="btn-cancel" id="menu-bar-cancel">Cancel</a>
                 </div>
             </div>
-            <div ng-if="includeSaveUpdate && !functions.isNotAllowed(ngModel)" ng-include="'directive/common/menuBar/menuBarSave.html'" class="item"></div>
+            <div ng-if="includeSaveUpdate() && !functions.isNotAllowed(ngModel)" ng-include="'directive/common/menuBar/menuBarSave.html'" class="item"></div>
         </div>
     </div>
 </div>

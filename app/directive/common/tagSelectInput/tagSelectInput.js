@@ -23,7 +23,8 @@ angular.module('unionvmsWeb').directive('tagSelectInput', function() {
             maxLimit : '@',
             titleField : '@',
             valueField : '@',
-            multipleSelectionDropdown : '@'
+            multipleSelectionDropdown : '@',
+            inputFieldId : '@'
         },
         templateUrl: 'directive/common/tagSelectInput/tagSelectInput.html',
         link: function(scope, element, attrs, fn) {

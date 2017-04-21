@@ -9,92 +9,124 @@ the hope that it will be useful, but WITHOUT ANY WARRANTY; without even the impl
 FITNESS FOR A PARTICULAR PURPOSE.  See the GNU General Public License for more details. You should have received a
 copy of the GNU General Public License along with the IFDM Suite. If not, see <http://www.gnu.org/licenses/>.
  */
+
+ // Config
+@asset-form_primary-padding: 15px;
+
 .vesselForm {
-    margin-bottom: 20px;
+    margin-bottom: @asset-form_primary-padding;
 
-    .vesselContainer {
-        .detailsContainer{
-            padding-top: 20px;
-            padding-bottom: 20px;
-            .clear();
+    .tabs-container {
+        .content-tabs_row {
+            margin-top: @asset-form_primary-padding * 2;
+            padding-left: @asset-form_primary-padding;
         }
 
-        .notesContainer {
-            .grayBorderTop();
-            .clear();
+        .tabs-content {
             .flexbox();
+            min-height: 300px;
 
-            .notesListContainer {
-                .grayBorderRight();
-                padding: 15px 15px 20px 15px;
+            .tabs-wrapper {
+                .flexbox();
+                .flex(1 0 100%);
+                width: 100%;
 
-                th {
-                    font-weight: 500;
-                }
+                .tab {
+                    width: 100%;
+                    padding-top: @asset-form_primary-padding * 2;
+                    padding-right: @asset-form_primary-padding;
+                    padding-left: @asset-form_primary-padding;
+                    padding-bottom: 0;
 
-                .list td {
-                    &:first-child {
-                        width: 30%;
+                    .tab-header {
+                        span {
+                            display: inline-block;
+                            margin-bottom: 20px;
+                        }
+
+                        button {
+                            display: block;
+                            margin-bottom: 20px;
+                        }
                     }
-                    &:nth-child(2) {
-                        width: 70%;
-                    }
-                }
-            }
 
-            .notesForm {
-                padding: 15px 15px 20px 15px; 
-            }
-        }
-
-        .historyAndTerminalInformation{
-            .grayBorderTop();
-            .flexbox();
-
-            margin-bottom: -15px;
-
-            >.row{
-                padding-top: 10px;
-            }
-
-            .historyContainer{
-                padding: 15px 15px 20px 15px; 
-
-                th {
-                    font-weight: 500;
-                }
-                
-                .list td{
-                    &:first-child{
-                        width: 30%;
-                    }
-                    &:nth-child(2){
-                        width: 70%;
+                    &.no-padding {
+                        padding-right: 0;
+                        padding-left: 0;
                     }
                 }
             }
-        }
-
-        .form-header {
-            margin-top: 0px;
-            margin-bottom: 20px;
-            .form-header-bold();
         }
     }
 
-    .mobileTerminalsContainer {
-        margin-top: 40px;
+    .mobileTerminals-tab-container {
+        .mobileterminal-container {
+            .clear();
+            margin-bottom: 20px;
 
-        h3 {
-            margin: 0;
+            &:last-of-type {
+                margin-bottom: 0;
+            }
         }
 
-        .loadingIndicator {
-            position: relative;
-            .clear();
+        .mobileInformationContainer.card {
+            border-width: 1px;
+        }
+    }
 
-            .spinnerOverlay {
-                display: none;
+    .notes-tab-container {
+        .flexbox();
+
+        .wrapper {
+            .flexbox();
+            width: 100%;
+            margin-right: -@asset-form_primary-padding;
+        }
+
+        .notesListContainer {
+            .flex(1);
+            height: 100%;
+            align-items: stretch;
+            box-sizing: content-box;
+            padding: @asset-form_primary-padding;
+            padding-top: @asset-form_primary-padding * 2;
+            margin-top: -@asset-form_primary-padding * 2;
+            background: @searchResultsTableOddRowColor;
+            border-left: 1px solid @sectionBorderColor;
+
+            .form-header {
+                .form-header-bold();
+                margin-top: 0px;
+                margin-bottom: 11px;
+            }
+        }
+    }
+
+    .history-tab-container {
+        position: relative;
+
+        .historyListContainer {
+            .toggle-history {
+                position: absolute;
+                right: @asset-form_primary-padding;
+                top: @asset-form_primary-padding;
+            }
+        }
+    }
+
+    .notes-tab-container,
+    .history-tab-container {
+        .list-header {
+            font-weight: 500;
+        }
+
+        .list-item {
+            color: @primaryColor;
+            cursor: pointer;
+            line-height: 1.5em;
+
+            &:hover {
+                text-decoration: underline;
             }
         }
     }

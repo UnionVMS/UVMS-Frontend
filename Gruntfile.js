@@ -367,7 +367,8 @@ module.exports = function (grunt) {
           mangle: false,
           beautify: true,
           banner: '/*Version: <%= grunt.template.today("yyyy-mm-dd HH:MM") %> */',
-          sourceMap: true
+          sourceMap: true,
+          compress: { unused: false}
         },
         src: 'dist/app.full.js',
         dest:'dist/app.full.min.js'
@@ -533,6 +534,15 @@ module.exports = function (grunt) {
         }]
       }
     },
+    concurrent: {
+      'sub-build-ci': {
+        tasks: [['htmlhint','jshint'],['less','dom_munger','ngtemplates','cssmin','concat','ngAnnotate','uglify','copy:dist','htmlmin','compress:dist','clean:after']],
+        options: {
+          limit: 1,
+          logConcurrentOutput: true
+        }
+      }
+    },
     ngconstant: {
       options: {
         name: 'debugConfig',
@@ -558,8 +568,10 @@ module.exports = function (grunt) {
   });
   
   grunt.registerTask('sub-build',['parallel:sub-build']);//,'clean:after'
+  grunt.registerTask('sub-build-ci',['concurrent:sub-build-ci']);//,'clean:after'
 
   grunt.registerTask('build', ['test', 'ngconstant:production', 'clean:before', 'copy:config', 'sub-build']);
+  grunt.registerTask('build-ci', ['test', 'ngconstant:production', 'clean:before', 'copy:config', 'sub-build-ci']);
   grunt.registerTask('build-local', ['ngconstant:development', 'test', 'clean:before', 'copy:configLocal', 'test', 'sub-build']);
   grunt.registerTask('build-cygnus', ['ngconstant:development', 'test', 'clean:before', 'copy:configCygnus', 'sub-build']);
   grunt.registerTask('build-maven', ['ngconstant:development', 'test', 'clean:before', 'copy:configMaven', 'sub-build']);

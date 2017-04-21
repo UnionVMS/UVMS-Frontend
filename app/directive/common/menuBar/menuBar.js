@@ -44,9 +44,40 @@ angular.module('unionvmsWeb')
             console.error("ModelType is missing for menu bar. " + $scope.modeltype);
     }
 
-    $scope.includeSaveUpdate = angular.isDefined($scope.functions.saveCallback) && angular.isDefined($scope.functions.updateCallback);
-    $scope.includeCSVDownload = angular.isDefined($scope.functions.exportToCsvCallback);
-    $scope.includeArchive = angular.isDefined($scope.functions.archiveCallback);
-    $scope.includeHistory = angular.isDefined($scope.functions.historyCallback);
-    $scope.includeUnlink = angular.isDefined($scope.functions.unlinkCallback);
+    $scope.includeSaveUpdate = function() {
+        if (angular.isDefined($scope.functions.saveCallback && $scope.functions.updateCallback && $scope.functions.showSave)) {
+            return $scope.functions.showSave($scope.ngModel);
+        }
+    };
+    $scope.includeCSVDownload = function() {
+        if (angular.isDefined($scope.functions.exportToCsvCallback && $scope.functions.showExport)) {
+            return $scope.functions.showExport($scope.ngModel);
+        }
+    };
+    $scope.includeArchive = function() {
+        if (angular.isDefined($scope.functions.archiveCallback && $scope.functions.showArchive)) {
+            return $scope.functions.showArchive($scope.ngModel);
+        }
+    };
+    $scope.includeHistory = function() {
+        if (angular.isDefined($scope.functions.historyCallback && $scope.functions.showHistory)) {
+            return $scope.functions.showHistory($scope.ngModel);
+        }
+    };
+    $scope.includeUnlink = function() {
+        if (angular.isDefined($scope.functions.unlinkCallback && $scope.functions.showUnlink)) {
+            return $scope.functions.showUnlink($scope.ngModel);
+        }
+    };
+    $scope.includeRemove = function() {
+        if (angular.isDefined($scope.functions.removeCallback && $scope.functions.showRemove)) {
+            return $scope.functions.showRemove($scope.ngModel);
+        }
+    };
+    $scope.includeCancel = function() {
+        if (angular.isDefined($scope.functions.cancelCallback && $scope.functions.showCancel)) {
+            return $scope.functions.showCancel($scope.ngModel);
+        }
+    };
+
 });

@@ -13,17 +13,17 @@ angular.module('unionvmsWeb')
 .factory('VesselNotes', function() {
 
         function VesselNotes() {
-            id = undefined;
-            date = undefined;
-            activity = undefined;
-            user = undefined;
-            readyDate = undefined;
-            licenseHolder = undefined;
-            contact = undefined;
-            sheetNumber = undefined;
-            notes = undefined;
-            document = undefined;
-            source = undefined;
+            this.id = undefined;
+            this.date = undefined;
+            this.activity = undefined;
+            this.user = undefined;
+            this.readyDate = undefined;
+            this.licenseHolder = undefined;
+            this.contact = undefined;
+            this.sheetNumber = undefined;
+            this.notes = undefined;
+            this.document = undefined;
+            this.source = undefined;
         }
 
         VesselNotes.fromDTO = function(data){

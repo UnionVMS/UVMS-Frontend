@@ -1,4 +1,4 @@
-<!--
+/*
 ﻿Developed with the contribution of the European Commission - Directorate General for Maritime Affairs and Fisheries
 © European Union, 2015-2016.
 
@@ -8,23 +8,32 @@ Free Software Foundation, either version 3 of the License, or any later version.
 the hope that it will be useful, but WITHOUT ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or
 FITNESS FOR A PARTICULAR PURPOSE.  See the GNU General Public License for more details. You should have received a
 copy of the GNU General Public License along with the IFDM Suite. If not, see <http://www.gnu.org/licenses/>.
--->
-<div>
-	<div static-include="partial/admin/adminPageHeader/adminPageHeader.html"></div>
+ */
+ .vesselContacts {
+    .contact-item {
+        margin: 0 -15px;
+        display: block;
+        .clearfix();
+    }
 
-	<div class="auditConfigurationContainer">
-	    <div class="containerWrapper pollingTabs">
-	        <div class="container">
-	            <content-tabs 
-	                selected-tab="activeTab" 
-	                functions="contentTabsFunctions">
-	            </content-tabs>
-	        </div>
-	    </div>
-		<div class="container containerWithTopBottomPadding nopaddingtop">
-			<div class="card nomargintop">
-				<ng-include src="configurationPageUrl()"/>
-			</div>
-		</div>
-	</div>
-</div>
+    .btn-removeContact {
+        margin-left: 7px;
+        margin-top: 20px;
+        height: 30px;
+        width: 30px;
+        padding: 0;
+        line-height: 29px;
+        font-size: 100%;
+        color: @primaryColor;
+
+        &:hover {
+            color: @errorColor;
+        }
+    }
+
+    .btn-addContact {
+        i {
+            margin-right: 3px;
+        }
+    }
+ }

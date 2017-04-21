@@ -11,7 +11,7 @@ copy of the GNU General Public License along with the IFDM Suite. If not, see <h
  */
 angular.module('unionvmsWeb').controller('AlertsCtrl',function($scope, alertService){
 
-    $scope.alert = alertService.getCurrentAlert();
+    $scope.alerts = alertService.getCurrentAlert();
 
     //Close alert
     $scope.closeAlert = function(){

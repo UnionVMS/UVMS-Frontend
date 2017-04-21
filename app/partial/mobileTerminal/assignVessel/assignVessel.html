@@ -16,10 +16,10 @@ copy of the GNU General Public License along with the IFDM Suite. If not, see <h
             <vessel-details vessel="selectedVessel" disable-form="true" ></vessel-details>
             <div class="row detailsFooter">
                 <div class="col-md-6 backLinkContainer">
-                    <span ng-click="goBackToAssignVesselSearchResultsClick()">{{"vessel.assign_back_to_search_result" | i18n | uppercase}}</span>
+                    <span ng-click="goBackToAssignVesselSearchResultsClick()" id="assign-asset-btn-searchresult">{{"vessel.assign_back_to_search_result" | i18n | uppercase}}</span>
                 </div>
                 <div class="col-md-6 textAlignRight">
-                    <button type="button" class="btn btn-primary" ng-click="assignToSelectedVessel()"> <i class="fa fa-link"></i> {{"vessel.assign" | i18n | uppercase}}</button>
+                    <button type="button" class="btn btn-primary" ng-click="assignToSelectedVessel()" id="assign-asset-btn-assign"> <i class="fa fa-link"></i> {{"vessel.assign" | i18n | uppercase}}</button>
                 </div>
             </div>
         </div>
@@ -30,17 +30,17 @@ copy of the GNU General Public License along with the IFDM Suite. If not, see <h
                         <!-- Search input -->
                         <div class="col-md-2">
                             <input type="text" class="form-control searchText"
-                                   placeholder="{{'vessel.search_vessel_placeholder' | i18n}}" ng-model="assignVesselFreeText">
+                                   placeholder="{{'vessel.search_vessel_placeholder' | i18n}}" ng-model="assignVesselFreeText" id="assign-asset-input-search">
                         </div>
 
                         <!-- Type Dropdown -->
                         <div class="col-md-2">
-                            <dropdown ng-model="assignVesselSearchType" initialtext="" items="assignVesselSearchTypes"></dropdown>
+                            <dropdown ng-model="assignVesselSearchType" initialtext="" items="assignVesselSearchTypes"  input-field-id="assign-asset-dropdown-search"></dropdown>
                         </div>
 
                         <!-- Search button -->
                         <div class="col-md-2 mtsearchbuttoncontainer">
-                            <button type="submit" class="btn btn-primary btn-sm vmsbtn"  ng-click="assignVesselSearch()" ng-disabled="!assignVesselFreeText">
+                            <button type="submit" class="btn btn-primary btn-sm vmsbtn" ng-click="assignVesselSearch()" ng-disabled="!assignVesselFreeText" id="assign-asset-btn-search">
                                 {{'common.search' | i18n}}
                             </button>
                         </div>
@@ -51,10 +51,10 @@ copy of the GNU General Public License along with the IFDM Suite. If not, see <h
                         <table class="searchResults colorOdd truncate-text">
                             <thead>
                                 <tr>
-                                    <th sortable-table-header by="currentSearchResults.sortBy" reverse="currentSearchResults.sortReverse" order="'ircs'">{{"vessel.ircs" | i18n}}</th>
-                                    <th sortable-table-header by="currentSearchResults.sortBy" reverse="currentSearchResults.sortReverse" order="'name'">{{"vessel.name" | i18n}}</th>
-                                    <th sortable-table-header by="currentSearchResults.sortBy" reverse="currentSearchResults.sortReverse" order="'cfr'">{{"vessel.cfr" | i18n}}</th>
-                                    <th sortable-table-header by="currentSearchResults.sortBy" reverse="currentSearchResults.sortReverse" order="'externalMarking'">{{"vessel.external_marking" | i18n}}</th>
+                                    <th sortable-table-header by="currentSearchResults.sortBy" reverse="currentSearchResults.sortReverse" order="'ircs'" input-field-id="assign-asset-sort-ircs">{{"vessel.ircs" | i18n}}</th>
+                                    <th sortable-table-header by="currentSearchResults.sortBy" reverse="currentSearchResults.sortReverse" order="'name'" input-field-id="assign-asset-sort-name">{{"vessel.name" | i18n}}</th>
+                                    <th sortable-table-header by="currentSearchResults.sortBy" reverse="currentSearchResults.sortReverse" order="'cfr'" input-field-id="assign-asset-sort-cfr">{{"vessel.cfr" | i18n}}</th>
+                                    <th sortable-table-header by="currentSearchResults.sortBy" reverse="currentSearchResults.sortReverse" order="'externalMarking'" input-field-id="assign-asset-sort-externalMarking">{{"vessel.external_marking" | i18n}}</th>
                                     <th>&nbsp;</th>
                                 </tr>
                             </thead>
@@ -64,7 +64,7 @@ copy of the GNU General Public License along with the IFDM Suite. If not, see <h
                                 <td ng-attr-title="{{vessel.cfr}}">{{vessel.cfr}}</td>
                                 <td ng-attr-title="{{vessel.externalMarking}}">{{vessel.externalMarking}}</td>
                                 <td class="textAlignRight">
-                                    <button type="button" class="btn btn-primary" ng-click="selectVessel(vessel)" ng-disabled="!vessel.ircs" title="{{ vessel.ircs ? '' : 'mobileTerminal.assign_vessel_ircs_required' | i18n }}" style="pointer-events: auto;"><i class="fa fa-check"></i></button>
+                                    <button type="button" class="btn btn-primary" ng-click="selectVessel(vessel)" ng-disabled="!vessel.ircs" title="{{ vessel.ircs ? '' : 'mobileTerminal.assign_vessel_ircs_required' | i18n }}" id="assign-asset-btn-select" style="pointer-events: auto;"><i class="fa fa-check"></i></button>
                                 </td>
                             </tr>
                         </table>

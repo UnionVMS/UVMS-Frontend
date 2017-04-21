@@ -9,7 +9,7 @@ the hope that it will be useful, but WITHOUT ANY WARRANTY; without even the impl
 FITNESS FOR A PARTICULAR PURPOSE.  See the GNU General Public License for more details. You should have received a
 copy of the GNU General Public License along with the IFDM Suite. If not, see <http://www.gnu.org/licenses/>.
  */
-angular.module('unionvmsWeb').controller('VesselCtrl', function($scope, $log, locale, savedSearchService, Vessel, VesselContact, searchService, vesselRestService, alertService, $stateParams, csvService, SearchResults, userService, PositionReportModal, $filter, $timeout) {
+angular.module('unionvmsWeb').controller('VesselCtrl', function($scope, $log, $state, $filter, $timeout, locale, savedSearchService, Vessel, VesselContact, searchService, vesselRestService, alertService, csvService, SearchResults, userService, PositionReportModal) {
 
     var checkAccessToFeature = function(feature) {
         return userService.isAllowed(feature, 'Union-VMS', true);
@@ -43,7 +43,7 @@ angular.module('unionvmsWeb').controller('VesselCtrl', function($scope, $log, lo
         $scope.searchLatestMovements();
 
         //Load vessel details
-        var vesselGUID = $stateParams.id;
+        var vesselGUID = $state.params.id;
         if(angular.isDefined(vesselGUID)){
             vesselRestService.getVessel(vesselGUID).then(
                 function(vessel) {
@@ -51,11 +51,17 @@ angular.module('unionvmsWeb').controller('VesselCtrl', function($scope, $log, lo
                     $scope.waitingForVesselDataResponse = false;
                 },
                 function(error){
-                    $log.error("Error loading details for vessel with with GUID: " +vesselGUID);
+                    $log.error("Error loading state params: /" +vesselGUID);
                     //Show alert and vessel list
                     $scope.waitingForVesselDataResponse = false;
                     toggleFormDetails();
-                    alertService.showErrorMessage(locale.getString('vessel.view_vessel_on_failed_to_load_error'));
+                    alertService.showErrorMessage(locale.getString('vessel.vessel_stateparams_failed_to_load_error'));
+
+                    //Hide alert and change state after 5 sec
+                    $timeout(function() {
+                        $state.go('app.assets', {}, {notify: false});
+                        alertService.hideMessage();
+                    }, 5000);
                 }
             );
 
@@ -264,6 +270,15 @@ angular.module('unionvmsWeb').controller('VesselCtrl', function($scope, $log, lo
         });
     }
 
+    //When click cancel redirect to correct state and toggle list view
+    $scope.cancelFormView = function(){
+        if(angular.isDefined($state.params.id)){
+            $state.go('app.assets', {}, {notify: false});
+        }
+
+        $scope.toggleViewVessel();
+    };
+
     //Callback function for the "edit selection" dropdown
     $scope.editSelectionCallback = function(selectedItem){
         var selectedItems = $scope.getSelectedItemsInFilter();
@@ -361,7 +376,6 @@ angular.module('unionvmsWeb').controller('VesselCtrl', function($scope, $log, lo
     $scope.showReport = function(reportGuid){
         PositionReportModal.showReportWithGuid(reportGuid);
     };
-
 
     $scope.$on("$destroy", function() {
         alertService.hideMessage();
