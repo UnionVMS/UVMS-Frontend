@@ -593,7 +593,7 @@ angular.module('unionvmsWeb').factory('fishingActivityService', function(activit
      * @returns {Object} data to be displayed
      */
     var loadFaDocData = function(data){
-        var finalSummary;
+        var finalSummary = {};
 
         if(angular.isDefined(data)){
             var attrOrder = angular.copy(faDocAttrOrder);
@@ -605,8 +605,6 @@ angular.module('unionvmsWeb').factory('fishingActivityService', function(activit
 
             finalSummary = loadFishingActivityDetails(data, attrOrder);
 
-            finalSummary.title = locale.getString('activity.activity_report_doc_title');
-
             if (angular.isDefined(data.characteristics) && !_.isEmpty(data.characteristics)) {
                 finalSummary.characteristics = data.characteristics;
             }
@@ -614,6 +612,8 @@ angular.module('unionvmsWeb').factory('fishingActivityService', function(activit
                 finalSummary.subTitle = locale.getString('activity.activity_related_flux_doc_title');
             }
         }
+
+        finalSummary.title = locale.getString('activity.activity_report_doc_title');
 
         return finalSummary;
     };
@@ -799,7 +799,8 @@ angular.module('unionvmsWeb').factory('fishingActivityService', function(activit
      * @returns {Object} data to be displayed in the catch tile
      */
     var loadTripDetails = function(data){
-        if(angular.isDefined(data)){
+        if(angular.isDefined(data) && angular.isDefined(data.vesselDetails)){
+            data.vesselDetails.authorizations = data.authorizations;
             loadVesselDetails(data.vesselDetails);
         }
 

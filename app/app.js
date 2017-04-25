@@ -443,7 +443,7 @@ unionvmsWebApp.config(function($stateProvider, $compileProvider, tmhDynamicLocal
                     $state.go('error');
                 } else {
                     if (userService.isAllowed('ACTIVITY_ALLOWED', 'Activity', true)){
-                        mdrCacheService.getCodeList('flux_gp_purposecode');
+                        mdrCacheService.getCodeList('FLUX_GP_PURPOSE');
                     }
                 }
             },

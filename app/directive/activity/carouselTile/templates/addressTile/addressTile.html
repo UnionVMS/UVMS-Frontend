@@ -23,10 +23,11 @@
 			<span>{{item.cityName}}</span>
 		</div>
 	</div>
-	<div class="row" ng-if="item.countryCode || item.countryName">
+	<div class="row" ng-if="item.countryName">
 		<div class="item-container">
 			<span class="item-label">{{'activity.fa_locations_country' | i18n}}</span>
-			<span>{{item.countryCode && item.countryName ? item.countryCode + ' - ' + item.countryName : item.countryCode || item.countryName}}</span>
+			<span>{{item.countryName}}</span>
 		</div>
 	</div>
+	<fa-characteristics-modal ng-if="item.characteristics" class="characteristics" data="item.characteristics"></fa-characteristics-modal>
 </div>

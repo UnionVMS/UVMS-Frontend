@@ -71,6 +71,7 @@ angular.module('unionvmsWeb').directive('fishingActivityNavigator', function(tri
                 fishingActivityService.resetActivity();
                 fishingActivityService.id = rec.id;
                 fishingActivityService.isCorrection = rec.corrections;
+				fishingActivityService.documentType = rec.documentType;
                 scope.timeline.setCurrentPreviousAndNextItem(rec);
                 
 				reportingNavigatorService.goToView('tripsPanel', fishingActivityService.getFaView(rec.srcType),function(){

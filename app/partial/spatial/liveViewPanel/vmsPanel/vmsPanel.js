@@ -763,7 +763,7 @@ angular.module('unionvmsWeb').controller('VmspanelCtrl',function($scope, locale,
    };
    
    $scope.getActivityTypes = function(){
-       mdrCacheService.getCodeList('flux_fa_type').then(function(response){
+       mdrCacheService.getCodeList('FLUX_FA_TYPE').then(function(response){
            var suportedCodes = ['DEPARTURE', 'ARRIVAL', 'AREA_ENTRY', 'AREA_EXIT', 'FISHING_OPERATION', 'LANDING', 'DISCARD', 'TRANSHIPMENT', 'RELOCATION', 'JOINED_FISHING_OPERATION'];
            angular.forEach(response, function(rec){
                if (_.indexOf(suportedCodes, rec.code) !== -1){

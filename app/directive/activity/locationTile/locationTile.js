@@ -97,7 +97,7 @@ angular.module('unionvmsWeb').directive('locationTile', function() {
                     schemeId: schemeId !== "%%KEY_NOT_FOUND%%" ? schemeId : record.identifier.schemeId,
                     geometry: record.geometry
                 });
-            } else {
+            } else if (angular.isDefined(record.geometry)) {
                 //Here we get type = positions only from FLUX
                 var wkt = new ol.format.WKT();
                 var coords = wkt.readGeometry(record.geometry).getCoordinates();
@@ -108,8 +108,8 @@ angular.module('unionvmsWeb').directive('locationTile', function() {
                 });
             }
             
-            if (angular.isDefined(record.structuredAddress) && record.structuredAddress.length > 0){
-                $scope.addresses.push(record.structuredAddress);
+            if (angular.isDefined(record.structuredAddresses) && record.structuredAddresses.length > 0){
+                $scope.addresses.push(record.structuredAddresses);
             }
         });
         
