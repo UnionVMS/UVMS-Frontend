@@ -140,7 +140,6 @@ angular.module('unionvmsWeb').factory('Trip',function(locale,unitConversionServi
     var loadReportMessages = function(self,activityReports){
         self.reports = [];
 
-
         //one main node per activity report
         angular.forEach(activityReports,function(report){
             var reportItem = {};
@@ -181,6 +180,7 @@ angular.module('unionvmsWeb').factory('Trip',function(locale,unitConversionServi
 
             self.reports.push(reportItem);
         });
+        /*console.log(self.reports);*/
     };
 
     /**
@@ -272,6 +272,33 @@ angular.module('unionvmsWeb').factory('Trip',function(locale,unitConversionServi
     };
 
     /**
+     * Adds extra attributes to attrOrder
+     * 
+     * @memberof Trip
+     * @private
+     * @param {Object} data - A reference to the data to be loaded in the attrOrder
+     * @param {Array} attrOrder - Array with the attribute order
+     * @param {Number} attrIdx - Current index in the attrOrder
+     * @alias addExtraDetails
+     * @returns {Object} data to be displayed in the fa details panel
+     */
+    var addExtraDetails = function(data,attrOrder,attrIdx){
+        var finalData = {};
+        angular.forEach(data, function(value){
+            finalData[value.schemeId] = value.id;
+
+            attrOrder.push({
+                idx: attrIdx,
+                id: value.schemeId,
+                type: 'string'
+            });
+            attrIdx++;
+        });
+
+        return finalData;
+    };
+
+    /**
      * Load the vessel details and the trip roles into the model
      * 
      * @memberof Trip
@@ -291,43 +318,34 @@ angular.module('unionvmsWeb').factory('Trip',function(locale,unitConversionServi
                 type: 'string'
             },
             {
-                id: 'flagState',
-                type: 'string'
-            },
-            {
-                id: 'ircs',
-                type: 'string'
-            },
-            {
-                id: 'cfr',
-                type: 'string'
-            },
-            {
-                id: 'gfcm',
-                type: 'string'
-            },
-            {
-                id: 'iccat',
-                type: 'string'
-            },
-            {
-                id: 'uvi',
+                id: 'country',
                 type: 'string'
             }
         ];
 
         var vessel = angular.copy(data);
         delete vessel.contactPersons;
+        
+        vessel.vesselOverview = {};
 
-        self.tripVessel = {};
-        self.tripVessel.vesselOverview = {};
+        var attrOrder = angular.copy(vesselAttrOrder);
+        var vesselIdx = attrOrder.length;
+
         angular.forEach(vessel,function(prop,propName){
-            if(!_.isNull(prop) && propName.indexOf('Enriched') === -1){
-                self.tripVessel.vesselOverview[propName] = prop;
+            if(!_.isObject(prop)){
+                vessel.vesselOverview[propName] = prop;
+                delete vessel[propName];
             }
         });
 
-        self.tripVessel.vesselOverview = fishingActivityService.loadFaDetails(self.tripVessel.vesselOverview, vesselAttrOrder);
+        if(angular.isDefined(vessel.vesselIds) && vessel.vesselIds.length){
+            _.extend(vessel.vesselOverview,addExtraDetails(vessel.vesselIds,attrOrder,vesselIdx));
+        }
+
+        self.tripVessel = {};
+        self.tripVessel.vesselOverview = vessel.vesselOverview;
+
+        self.tripVessel.vesselOverview = fishingActivityService.loadFaDetails(self.tripVessel.vesselOverview, attrOrder);
 
 
         angular.forEach(data.contactPersons,function(value, key) {

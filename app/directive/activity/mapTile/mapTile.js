@@ -32,7 +32,7 @@ angular.module('unionvmsWeb').directive('mapTile', function($timeout, genericMap
 		templateUrl: 'directive/activity/mapTile/mapTile.html',
 		link: function(scope, element, attrs, fn) {
             
-            scope.$watch(function() { return angular.element(element).is(':visible') }, function() {
+            scope.$watch(function() { return angular.element(element).is(':visible'); }, function() {
                 genericMapService.updateMapSize(scope.map);
             });
 

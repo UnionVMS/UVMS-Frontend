@@ -58,7 +58,7 @@ angular.module('unionvmsWeb').controller('CatchevolutionCtrl', function($scope, 
                     angular.forEach(chart.speciesList, function(value,key){
                         var specieCode = value.speciesCode;
                         angular.forEach($scope.speciesColors, function(item){
-                          if(specieCode == item.code){
+                          if(specieCode === item.code){
 
                               chart.speciesList[key].color = '#' + item.color;
                           }
@@ -79,7 +79,7 @@ angular.module('unionvmsWeb').controller('CatchevolutionCtrl', function($scope, 
                 angular.forEach(chart.speciesList, function(value,key){
                     var specieCode = value.speciesCode;
                         angular.forEach($scope.speciesColors, function(item){
-                          if(specieCode == item.code){
+                          if(specieCode === item.code){
                              chart.speciesList[key].color = '#' + item.color;
                              chart.speciesList[key].tableColor = {'background-color': tinycolor('#' + item.color).setAlpha(0.7).toRgbString()};
                           }

@@ -11,6 +11,9 @@ copy of the GNU General Public License along with the IFDM Suite. If not, see <h
 */
 .vessel-tile {
     padding-bottom: 15px;
+    > .row {
+        display: flex;
+    }
     .vessel-name {
         text-decoration: underline;
         font-size: 17px;
@@ -28,9 +31,6 @@ copy of the GNU General Public License along with the IFDM Suite. If not, see <h
         &:first-child {
             padding-left: 0;
         }
-        &:last-child {
-            padding-right: 0;
-        }
     }
     .contact-parties > .carousel-tile > .carousel {
         &,
@@ -39,5 +39,8 @@ copy of the GNU General Public License along with the IFDM Suite. If not, see <h
                 display: none;
             }
         }
+    }
+    fa-details-panel.summary-section:first-child {
+        padding-left: 0;
     }
 }

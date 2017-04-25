@@ -27,7 +27,7 @@ angular.module('unionvmsWeb').controller('CharacteristicsModalCtrl', function($s
         var itemLabel = locale.getString('activity.fa_details_item_' + key);
         $scope.characteristics.push({
             key: itemLabel !== "%%KEY_NOT_FOUND%%" ? itemLabel : key,
-            value: value
+            value: (angular.isArray(value) === true ? value.join(", ") : value)
         });
     });
     
