@@ -11,14 +11,15 @@ copy of the GNU General Public License along with the IFDM Suite. If not, see <h
 */
 .fishingActivityNavigator {
     .activity-slider {
-        position: absolute;
+        position: fixed;
         width: 30px;
-        top: calc(~'50vh');
+        top: calc(~'50vh + 75px');
+        z-index: 1;
         &.slider-left {
-            left: 0;
+            left: 6px;
         }
         &.slider-right {
-            right: 0;
+            right: 6px;
         }
         .slider-title {
             text-align: center;
