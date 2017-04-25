@@ -269,6 +269,10 @@ angular.module('unionvmsWeb').controller('VmspanelCtrl',function($scope, locale,
        mapService.panTo(coords);
    };
    
+   $scope.tripIdSort = function(value){
+       return value.schemeId + ':' + value.tripId;
+   };
+   
    $scope.getFilters = function(type){
        var elId = '#' + type + 'Filters';
        
@@ -715,7 +719,7 @@ angular.module('unionvmsWeb').controller('VmspanelCtrl',function($scope, locale,
                                 if(!gotHeaders){
                                     header.push(locale.getString('activity.tab_trip_table_header_nPositions'));
                                 }
-                                row.push(rec.vmsPositionsCount);
+                                row.push(rec.vmsPositionCount);
                                 break;
                             //TODO trip alarms
 			    	   }
@@ -775,8 +779,8 @@ angular.module('unionvmsWeb').controller('VmspanelCtrl',function($scope, locale,
                }
            });
        }, function(error){
-           //TODO
-           //$scope.actServ.setAlert(true, 'activity.activity_error_getting_code_lists');
+           $scope.attrVisibility.firstEventType = false;
+           $scope.attrVisibility.lastEventType = false;
        });
    };
 
