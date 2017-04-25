@@ -3598,19 +3598,17 @@ angular.module('unionvmsWeb').factory('mapService', function(locale, $rootScope,
      */
     ms.formatActivityDataForPopup = function(data){
         var filter = $filter('stArrayToString');
-        var pCodeDesc = mdrCacheService.getDescriptionByCode('flux_gp_purposecode', data.purposeCode);
-        
-        var vesselIds = getVesselIdsObject(data.vesselIdentifiers);
+        var pCodeDesc = mdrCacheService.getDescriptionByCode('FLUX_GP_PURPOSE', data.purposeCode);
         
         return {
             fs: data.flagState,
             name: data.vesselName,
-            ext_mark: vesselIds.ext_mark,
-            ircs: vesselIds.ircs,
-            cfr: vesselIds.cfr,
-            gfcm: vesselIds.gfcm,
-            iccat: vesselIds.iccat,
-            uvi: vesselIds.uvi,
+            ext_mark: data.EXT_MARK,
+            ircs: data.IRCS,
+            cfr: data.CFR,
+            gfcm: data.GFCM,
+            iccat: data.ICCAT,
+            uvi: data.UVI,
             source: data.dataSource,
             activityType: data.activityType,
             reportType: data.reportType,
@@ -3623,24 +3621,6 @@ angular.module('unionvmsWeb').factory('mapService', function(locale, $rootScope,
         };
     };
     
-    /**
-     * Create an object conatining all the vessel identifier types. To be used for the activities popup
-     * 
-     * @memberof mapService
-     * @private
-     * @param {Array} data - An array of objects containing the schemeId and id of a vessel 
-     * @returns {Object} The object conatining all vessel identifiers
-     */
-    function getVesselIdsObject (data){
-        var ids = {};
-        for (var i = 0; i < data.length; i++){
-            ids[data[i].schemeId.toLowerCase()] = data[i].id; 
-        }
-        
-        return ids;
-    }
-    
-
 	return ms;
 });
 

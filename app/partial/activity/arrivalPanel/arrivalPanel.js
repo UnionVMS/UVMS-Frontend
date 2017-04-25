@@ -23,7 +23,7 @@ copy of the GNU General Public License along with the IFDM Suite. If not, see <h
 angular.module('unionvmsWeb').controller('ArrivalpanelCtrl', function($scope, $state, fishingActivityService, tripSummaryService, locale, loadingStatus, FishingActivity) {
     $scope.faServ = fishingActivityService;
     
-    var arrivalNotification =  ($scope.faServ.documentType === 'notification')? true : false;
+    var arrivalNotification =  ($scope.faServ.documentType.toLowerCase() === 'notification')? true : false;
 
       /**
        * Initialization function

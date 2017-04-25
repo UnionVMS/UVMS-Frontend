@@ -269,6 +269,10 @@ angular.module('unionvmsWeb').controller('VmspanelCtrl',function($scope, locale,
        mapService.panTo(coords);
    };
    
+   $scope.tripIdSort = function(value){
+       return value.schemeId + ':' + value.tripId;
+   };
+   
    $scope.getFilters = function(type){
        var elId = '#' + type + 'Filters';
        
@@ -715,7 +719,7 @@ angular.module('unionvmsWeb').controller('VmspanelCtrl',function($scope, locale,
                                 if(!gotHeaders){
                                     header.push(locale.getString('activity.tab_trip_table_header_nPositions'));
                                 }
-                                row.push(rec.vmsPositionsCount);
+                                row.push(rec.vmsPositionCount);
                                 break;
                             //TODO trip alarms
 			    	   }
@@ -763,7 +767,7 @@ angular.module('unionvmsWeb').controller('VmspanelCtrl',function($scope, locale,
    };
    
    $scope.getActivityTypes = function(){
-       mdrCacheService.getCodeList('flux_fa_type').then(function(response){
+       mdrCacheService.getCodeList('FLUX_FA_TYPE').then(function(response){
            var suportedCodes = ['DEPARTURE', 'ARRIVAL', 'AREA_ENTRY', 'AREA_EXIT', 'FISHING_OPERATION', 'LANDING', 'DISCARD', 'TRANSHIPMENT', 'RELOCATION', 'JOINED_FISHING_OPERATION'];
            angular.forEach(response, function(rec){
                if (_.indexOf(suportedCodes, rec.code) !== -1){
@@ -775,8 +779,8 @@ angular.module('unionvmsWeb').controller('VmspanelCtrl',function($scope, locale,
                }
            });
        }, function(error){
-           //TODO
-           //$scope.actServ.setAlert(true, 'activity.activity_error_getting_code_lists');
+           $scope.attrVisibility.firstEventType = false;
+           $scope.attrVisibility.lastEventType = false;
        });
    };
 
