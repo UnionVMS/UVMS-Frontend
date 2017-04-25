@@ -130,7 +130,7 @@ module.exports = function (grunt) {
                   //DIRECTIVES
                   'app/directive/common/breadcrumbNavigator',
                   'app/directive/activity/',
-                  
+
                   //FILTERS
                   'app/filter/activity/'
             ],
@@ -145,7 +145,7 @@ module.exports = function (grunt) {
     },
     watch: {
       options: {
-          livereload: true,
+          livereload: false,
           livereloadOnError: false,
           spawn: false
       },
@@ -566,7 +566,7 @@ module.exports = function (grunt) {
       }
     }
   });
-  
+
   grunt.registerTask('sub-build',['parallel:sub-build']);//,'clean:after'
   grunt.registerTask('sub-build-ci',['concurrent:sub-build-ci']);//,'clean:after'
 
@@ -580,29 +580,29 @@ module.exports = function (grunt) {
   grunt.registerTask('test',['ngconstant:development', 'dom_munger:read', 'ngtemplates', 'karma:services', 'karma:controllers', 'karma:directives', 'karma:filters', 'clean:after']);
 
   grunt.registerTask('default',['build-dev']);
-  
+
   grunt.registerTask('serve-no-watch', ['less', 'dom_munger:read', 'configureProxies', 'configureRewriteRules', 'connect:development']);
   grunt.registerTask('serve', ['parallel:serve']);
   grunt.registerTask('serve-debug', ['ngconstant:development','serve']);
   grunt.registerTask('serve-prod', ['ngconstant:production','serve']);
   grunt.registerTask('serve-copy', ['copy:serve', 'serve']);
-  
+
   grunt.registerTask('build-docs', ['jsdoc']);
   grunt.registerTask('constants', ['ngconstant:development']);
-  
+
     grunt.event.on('watch', function(action, filepath) {
         if (filepath.lastIndexOf('.js') !== -1 && filepath.lastIndexOf('.js') === filepath.length - 3) {
-    
+
             //lint the changed js file
             grunt.config('jshint.main.src', filepath);
             grunt.task.run('jshint');
-    
+
             //find the appropriate unit test for the changed file
             var spec = filepath;
             if (filepath.lastIndexOf('-spec.js') === -1 || filepath.lastIndexOf('-spec.js') !== filepath.length - 8) {
                 spec = filepath.substring(0, filepath.length - 3) + '-spec.js';
             }
-    
+
             //if the spec exists then lets run it
             if (grunt.file.exists(spec)) {
                 //grunt.config('jasmine.unit.options.specs', spec);
@@ -615,23 +615,22 @@ module.exports = function (grunt) {
                     'test/envConfigForTest.js',
                     spec
                 ];
-    
+
                 grunt.config('karma.options.files', files);
                 grunt.task.run('karma:during_watch');
             }
         }
-    
+
         if (filepath.lastIndexOf('.htm') !== -1 && filepath.lastIndexOf('.htm') >= (filepath.length - 6)) {
             //lint the changed html file
             grunt.config('htmlhint.html.src', filepath);
             grunt.task.run('htmlhint');
         }
-    
+
         //if index.html changed, we need to reread the <script> tags so our next run of jasmine
         //will have the correct environment
         if (filepath === 'app\\index.html') {
             grunt.task.run('dom_munger:read');
         }
-    
     });
 };
