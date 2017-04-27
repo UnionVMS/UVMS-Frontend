@@ -38,6 +38,8 @@ module.exports = function (grunt) {
   var proxy = require('grunt-connect-proxy/lib/utils').proxyRequest;
 
   var rewriteRulesSnippet = require('grunt-connect-rewrite/lib/utils').rewriteRequest;
+  var serveStatic = require('serve-static');
+  var serveIndex = require('serve-index');
 
   //KARMA TEST FILES
   var karmaFiles = [
@@ -102,11 +104,11 @@ module.exports = function (grunt) {
                   var directory = options.directory || options.base[options.base.length - 1];
                   options.base.forEach(function (base) {
                       // Serve static files.
-                      middlewares.push(connect.static(base));
+                      middlewares.push(serveStatic(base));
                   });
 
                   // Make directory browse-able.
-                  middlewares.push(connect.directory(directory));
+                  middlewares.push(serveIndex(directory));
 
                   return middlewares;
               }
