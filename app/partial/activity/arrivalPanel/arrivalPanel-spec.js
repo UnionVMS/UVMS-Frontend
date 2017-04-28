@@ -38,12 +38,13 @@ describe('ArrivalpanelCtrl', function() {
         });
 	});
 
-    beforeEach(inject(function($rootScope, $controller, _$state_, $injector) {
-        $httpBackend = $injector.get('$httpBackend');;
+    beforeEach(inject(function($rootScope, $controller, _$state_, $httpBackend, fishingActivityService) {
         $httpBackend.whenGET(/usm/).respond();
         $httpBackend.whenGET(/i18n/).respond();
         $httpBackend.whenGET(/globals/).respond({data : []});
         $httpBackend.whenGET(/movement/).respond();
+
+        fishingActivityService.documentType = 'NOTIFICATION';
         
         $state = _$state_;
         scope = $rootScope.$new();

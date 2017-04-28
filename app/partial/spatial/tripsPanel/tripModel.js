@@ -138,6 +138,7 @@ angular.module('unionvmsWeb').factory('Trip',function(locale,unitConversionServi
      * @param {Object} activityReports - activity reports data
      */
     var loadReportMessages = function(self,activityReports){
+        var reports = [];
         self.reports = [];
 
         //one main node per activity report
@@ -178,9 +179,40 @@ angular.module('unionvmsWeb').factory('Trip',function(locale,unitConversionServi
                 tripReportsTimeline.reports.push(subreportItem);
             });
 
-            self.reports.push(reportItem);
+            reports.push(reportItem);
         });
-        /*console.log(self.reports);*/
+
+        /*var transformedTypes = [];
+        var finalNodes = [];
+        angular.forEach(reports, function(node){
+
+            if(transformedTypes.indexOf(node.type) === -1){
+                transformedTypes.push(node.type);
+                var typNodes = _.where(reports, { type: node.type });
+
+                var subNode;
+                if(typNodes.length >= 2){
+                    subNode = {
+                        type: node.type,
+                        nodes: []
+                    };
+
+                    angular.forEach(typNodes,function(type){
+                        subNode.nodes = subNode.nodes.concat(type.nodes);
+                    });
+
+                    subNode.nodes = _.sortBy(subNode.nodes, function(rep){
+                        return moment(rep.date).unix();
+                    });
+                }else{
+                    subNode = node;
+                }
+                finalNodes.push(subNode);
+            }
+        });
+        reports = finalNodes;*/
+
+        self.reports = reports;
     };
 
     /**

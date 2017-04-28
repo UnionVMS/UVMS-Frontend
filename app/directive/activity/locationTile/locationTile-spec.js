@@ -32,7 +32,7 @@ describe('locationTile', function() {
         }
         
         $filter = _$filter_;
-        $httpBackend = $injector.get('$httpBackend');;
+        $httpBackend = $injector.get('$httpBackend');
         $httpBackend.whenGET(/usm/).respond();
         $httpBackend.whenGET(/i18n/).respond();
         $httpBackend.whenGET(/globals/).respond({data : []});
@@ -40,7 +40,7 @@ describe('locationTile', function() {
     
     function mockService(){
         mockMapServ.getMapProjectionCode.andCallFake(function(){
-            return 'EPSG:4326'
+            return 'EPSG:4326';
         });
     }
     
@@ -49,7 +49,7 @@ describe('locationTile', function() {
             "country": "SC",
             "rfmoCode": "Borders",
             "geometry": "POINT(82.84711 -83.7533)",
-            "structuredAddress": [{
+            "structuredAddresses": [{
                 "streetName": "Gamo Junction",
                 "plotId": "5547ad46",
                 "postCode": "L4J 6N4",
@@ -80,7 +80,7 @@ describe('locationTile', function() {
             "country": "CI",
             "rfmoCode": "Bedfordshire",
             "geometry": "POINT(125.19486 0.15269)",
-            "structuredAddress": [{
+            "structuredAddresses": [{
                 "streetName": "Pooki Manor",
                 "plotId": "8146ff53",
                 "postCode": "L9G 8I0",
@@ -100,7 +100,7 @@ describe('locationTile', function() {
             "country": "CI",
             "rfmoCode": "Bedfordshire",
             "geometry": "POINT(125.19486 0.15269)",
-            "structuredAddress": []
+            "structuredAddresses": []
         };
     }
     
@@ -116,8 +116,8 @@ describe('locationTile', function() {
         }
         angular.forEach(srcData, function(record){
             stats.clickableCounter += 1;
-            stats.liCounter += 1 + record.structuredAddress.length;
-            stats.addCounter += record.structuredAddress.length;
+            stats.liCounter += 1 + record.structuredAddresses.length;
+            stats.addCounter += record.structuredAddresses.length;
             if (angular.isDefined(record.identifier)){
                 stats.idCounter += 1;
             } else {
@@ -125,11 +125,11 @@ describe('locationTile', function() {
             }
             
             if (_.indexOf(stats.countries, record.country) === -1){
-                stats.countries.push(record.country)
+                stats.countries.push(record.country);
             }
             
             if (_.indexOf(stats.rfmo, record.rfmoCode) === -1){
-                stats.rfmo.push(record.rfmoCode)
+                stats.rfmo.push(record.rfmoCode);
             }
         });
         
@@ -144,11 +144,11 @@ describe('locationTile', function() {
         
         angular.forEach(srcData, function(record){
             if (_.indexOf(finalData.countries, record.country) === -1){
-                finalData.countries.push(record.country)
+                finalData.countries.push(record.country);
             }
             
             if (_.indexOf(finalData.rfmo, record.rfmoCode) === -1){
-                finalData.rfmo.push(record.rfmoCode)
+                finalData.rfmo.push(record.rfmoCode);
             }
         });
         
@@ -282,7 +282,7 @@ describe('locationTile', function() {
     
     describe('testing the controller: LocationTileCtrl', function(){
         beforeEach(inject(function($controller) {
-            controller = $controller('LocationTileCtrl', {
+            var controller = $controller('LocationTileCtrl', {
                 $scope: scope
             });
         }));
@@ -361,7 +361,7 @@ describe('locationTile', function() {
             mockService();
             scope.isClickable = true;
             scope.init();
-            scope.positions[0].geometry = null
+            scope.positions[0].geometry = null;
             
             scope.zoomToLocation(scope.positions[0]);
             expect(mockMapServ.zoomTo).not.toHaveBeenCalled();
