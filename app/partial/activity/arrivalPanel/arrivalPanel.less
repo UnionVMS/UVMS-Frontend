@@ -12,4 +12,14 @@ copy of the GNU General Public License along with the IFDM Suite. If not, see <h
 
 .arrival-panel{
     min-height: calc(~'100% - 180px');
+    .arrival-row-last-div {
+        &:first-child,
+        .summary-section:first-child
+         {
+            padding-left: 0;
+        }
+    }
+    .clock-container {
+        margin-bottom: 0;
+    }
 }

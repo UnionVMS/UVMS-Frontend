@@ -19,16 +19,20 @@ copy of the GNU General Public License along with the IFDM Suite. If not, see <h
 		    <span ng-class="{useColon: faServ.isCorrection}">{{'activity.fa_type_arrival' | i18n}}</span>
             <span class="operationType" ng-if="faServ.isCorrection">{{'activity.optype_correction' | i18n}}</span>
 		</div>
-		<div class="row col-md-12">
-			<div class="col-md-2 panel-padding">
-				<clock-panel fa-type="fa_type_arrival" clock-panal-data="data"></clock-panel>
+		<div class="row">
+			<div class="col-md-2 activity-summary-row clock-container">
+				<div class="row">
+					<clock-panel class="summary-section" fa-type="fa_type_arrival" clock-panal-data="data"></clock-panel>
+				</div>
 			</div>
-			<div class="col-md-10 activity-summary-row panel-padding">
-				<location-tile class="col-md-3 summary-section" is-clickable="isLocationClickable()" field-title="{{'activity.activity_location_port_departure' | i18n}}"
-					location-details="faServ.activityData.locations" click-callback="locationClickCallback()"></location-tile>
-				<carousel-tile class="col-md-4 summary-section" tile-title="{{'activity.header_fa_gear' | i18n}}" ng-model="faServ.activityData.gears"
-					template-url="directive/activity/carouselTile/templates/gearTile/gearTile.html"></carousel-tile>
-				<fa-details-panel class="col-md-5 summary-section" ng-model="faServ.activityData.reportDetails"></fa-details-panel>
+			<div class="col-md-10">
+				<div class="row activity-summary-row arrival-row-last-div">
+					<location-tile class="col-md-3 summary-section" is-clickable="isLocationClickable()" field-title="{{'activity.activity_location_port_departure' | i18n}}"
+						location-details="faServ.activityData.locations" click-callback="locationClickCallback()"></location-tile>
+					<carousel-tile class="col-md-4 summary-section" tile-title="{{'activity.header_fa_gear' | i18n}}" ng-model="faServ.activityData.gears"
+						template-url="directive/activity/carouselTile/templates/gearTile/gearTile.html"></carousel-tile>
+					<fa-details-panel class="col-md-5 summary-section" ng-model="faServ.activityData.reportDetails"></fa-details-panel>
+				</div>
 			</div>
 		</div>
 	</div>
