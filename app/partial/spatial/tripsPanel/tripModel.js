@@ -137,7 +137,7 @@ angular.module('unionvmsWeb').factory('Trip',function(locale,unitConversionServi
      * @param {Object} self - current trip object
      * @param {Object} activityReports - activity reports data
      */
-    var loadReportMessages = function(self,activityReports){
+    var loadReportMessages1 = function(self,activityReports){
         var reports = [];
         self.reports = [];
 
@@ -211,6 +211,73 @@ angular.module('unionvmsWeb').factory('Trip',function(locale,unitConversionServi
             }
         });
         reports = finalNodes;*/
+
+        self.reports = reports;
+    };
+
+    var loadActivityReportItem = function(node){
+        var reportItem = {};
+        reportItem.srcType = node.activityType;
+
+        reportItem.type = (node.correction ? locale.getString('activity.fa_report_document_type_correction') + ': ' : '') + locale.getString('activity.activity_type_' + node.activityType.toLowerCase()) + ' (' + locale.getString('activity.fa_report_document_type_' + node.faReportDocumentType.toLowerCase()) + ')';
+
+        if(!angular.isDefined(node.delimitedPeriod) || node.delimitedPeriod.length === 0){
+            node.delimitedPeriod = [{}];
+        }
+
+        reportItem.date = getReportDate(node.faReportAcceptedDateTime,node.delimitedPeriod[0].startDate,node.delimitedPeriod[0].endDate);
+
+        reportItem.documentType = node.faReportDocumentType.toLowerCase();
+
+        if(angular.isDefined(node.locations) && node.locations.length > 0){
+            reportItem.location = '';
+            angular.forEach(node.locations,function(location){
+                reportItem.location += location;
+            });
+        }
+
+        reportItem.reason = node.reason;
+        reportItem.remarks = getRemarks(node);
+
+        reportItem.corrections = node.correction;
+        reportItem.detail = true;
+
+        reportItem.id = node.fishingActivityId;
+
+        if(angular.isDefined(node.refID)){
+            var mainNode = _.find(this, function(rep){
+                return rep.id === node.refID;
+            });
+            
+            mainNode.nodes = mainNode.nodes || [];
+            mainNode.nodes.push(reportItem);
+        }else{
+            this.push(reportItem);
+        }
+    };
+
+    var loadReportMessages = function(self,activityReports){
+        var reports = [];
+        self.reports = [];
+
+        var mainNodes = _.filter(activityReports, function(rep){ return rep.refID === undefined; });
+        var subNodes = _.filter(activityReports, function(rep){ return rep.refID !== undefined; });
+
+        angular.forEach(mainNodes,loadActivityReportItem,reports);
+        _.sortBy(reports, function(node){ return moment(node.date).unix(); });
+
+        angular.forEach(subNodes,loadActivityReportItem,reports);
+
+        angular.forEach(reports,function(rep){
+            if(angular.isDefined(rep.nodes)){
+                rep.correction = _.where(rep.nodes, {corrections: true}).length ? true : false;
+                _.sortBy(rep.nodes, function(node){ return moment(node.date).unix(); });
+                rep.nodes = rep.nodes.reverse();
+            }
+
+            //FIXME need to change tripReportsTimeline to navigate in 2 levels of reports
+            tripReportsTimeline.reports.push(rep);
+        });
 
         self.reports = reports;
     };

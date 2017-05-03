@@ -967,7 +967,7 @@ angular.module('unionvmsWeb').factory('fishingActivityService', function(activit
                     addVesselRoleDescription(obj);
                     break;
                 case 'gearShotRetrieval':
-                    obj.gearShotRetrieval = loadGearShotRetrieval(data.gearShotRetrieval);
+                    obj.gearShotRetrieval = loadGearShotRetrieval(data.gearShotRetrievalList);
                     addGearProblemDesc(obj);
                     addRecoveryDesc(obj);
                     addGearDescription(obj);
