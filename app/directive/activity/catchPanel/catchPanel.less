@@ -16,8 +16,8 @@ copy of the GNU General Public License along with the IFDM Suite. If not, see <h
     }
     .catch-section {
         .catch-details-body {
-            display: flex;
             .catch-subsection {
+                border-left: 1px solid #ddd;
                 &.has-caption {
                     padding-bottom: 30px;
                 }
@@ -34,9 +34,8 @@ copy of the GNU General Public License along with the IFDM Suite. If not, see <h
                         font-family: Roboto, Arial;
                     }
                 }
-                
-                &:last-child {
-                    border-left: 1px solid #ddd;
+                &:first-child {
+                    border-left: 0;
                 }
                 .chart-caption {
                     position: absolute;
@@ -57,9 +56,6 @@ copy of the GNU General Public License along with the IFDM Suite. If not, see <h
                     .tr {
                         position: relative;
                         padding-left: 10px;
-                        .td:last-child {
-                            text-align: center;
-                        }
                     }
                     .color-column {
                         position: absolute;
