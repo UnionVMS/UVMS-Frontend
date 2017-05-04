@@ -19,17 +19,18 @@ copy of the GNU General Public License along with the IFDM Suite. If not, see <h
  * @description
  *  The controller for the Catch Details.  
  */
-angular.module('unionvmsWeb').controller('CatchdetailsCtrl', function($scope, activityRestService, locale, tableService, reportService, loadingStatus) {
+angular.module('unionvmsWeb').controller('CatchdetailsCtrl', function($scope, activityRestService, locale, tableService, reportService, loadingStatus, tripSummaryService) {
     
     /**
     * Initialization function
     * 
     * @memberof CatchdetailsCtrl
     * @private
-    */
+    */    
     var init = function() {
-
-        if(angular.isDefined($scope.tripId)){
+     
+        $scope.tripId=tripSummaryService.trip.id;
+        if(angular.isDefined($scope.tripId)){           
             loadingStatus.isLoading('TripSummary', true, 1);
             //FIXME change with proper trip id
             activityRestService.getTripCatchDetail($scope.tripId).then(function(response){

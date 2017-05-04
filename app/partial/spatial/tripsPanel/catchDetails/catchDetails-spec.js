@@ -13,13 +13,17 @@ describe('CatchdetailsCtrl', function () {
 
     beforeEach(module('unionvmsWeb'));
 
-    var scope, ctrl, activityRestServiceSpy;
+    var scope, ctrl, activityRestServiceSpy, tripSummaryServiceSpy;
 
     beforeEach(function () {
         activityRestServiceSpy = jasmine.createSpyObj('activityRestService', ['getTripCatchDetail', 'getTripCatchesLandingDetails']);
-
+        tripSummaryServiceSpy = jasmine.createSpyObj('tripSummaryService', ['trip']);
+        
         module(function ($provide) {
             $provide.value('activityRestService', activityRestServiceSpy);
+        });
+        module(function($provide) {
+            $provide.value('tripSummaryService', tripSummaryServiceSpy);
         });
     });
 
@@ -297,6 +301,7 @@ describe('CatchdetailsCtrl', function () {
 
 
     function buildMocks() {
+        tripSummaryServiceSpy.trip.id = "";
         activityRestServiceSpy.getTripCatchDetail.andCallFake(function () {
             return {
                 then: function(callback){
