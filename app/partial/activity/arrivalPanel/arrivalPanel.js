@@ -72,6 +72,8 @@ angular.module('unionvmsWeb').controller('ArrivalpanelCtrl', function($scope, $s
             var reasonDesc = _.where(response, { code: obj.reason });
             if(angular.isDefined(reasonDesc) && reasonDesc.length > 0){
                $scope.data[0].reason = obj.reason + ' - ' + reasonDesc[0].description;
+            }else{
+               $scope.data[0].reason = obj.reason;
             }
             loadingStatus.isLoading('FishingActivity', false);
         },function(error) {
