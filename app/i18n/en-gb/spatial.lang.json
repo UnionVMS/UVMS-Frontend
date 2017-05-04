@@ -234,6 +234,7 @@
 	"tab_vms_export_csv_alarms_filename": "alerts.csv",
 	"tab_vms_export_csv_trips_filename": "trips.csv",
 	"table_no_data": "No data available",
+	"table_no_asset_matching_data": "There are no assets matching your search criteria.",
 	"table_filters_activate": "Show filters",
 	"table_filters_deactivate": "Hide filters",
 	"table_filters_reset": "Clear filters",

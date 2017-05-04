@@ -208,6 +208,7 @@
     "title_fishing_activity": "Fishing Activity",
     "activity_landing_catch":"Catch",
     "activity_location_port_departure": "Port of departure",
+    "activity_location_port_arrival": "Port of arrival",
     "activity_location_port_landing": "Port of landing",
     "activity_report_doc_title": "Report details",
     "activity_related_flux_doc_title": "Related reports",

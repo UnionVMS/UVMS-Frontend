@@ -20,33 +20,32 @@ copy of the GNU General Public License along with the IFDM Suite. If not, see <h
  * @description
  *  The controller for the Arrival panel partial
  */
-angular.module('unionvmsWeb').controller('ArrivalpanelCtrl', function($scope, $state, fishingActivityService, tripSummaryService, locale, loadingStatus, FishingActivity) {
+angular.module('unionvmsWeb').controller('ArrivalpanelCtrl', function($scope, $state, fishingActivityService, mdrCacheService, tripSummaryService, locale, loadingStatus, FishingActivity) {
     $scope.faServ = fishingActivityService;
-    
-    var arrivalNotification =  ($scope.faServ.documentType.toLowerCase() === 'notification')? true : false;
 
-      /**
-       * Initialization function
-       * 
-       * @memberof ArrivalpanelCtrl
-       * @private
-       */
+    var arrivalNotification = ($scope.faServ.documentType.toLowerCase() === 'notification') ? true : false;
+
+    /**
+     * Initialization function
+     * 
+     * @memberof ArrivalpanelCtrl
+     * @private
+     */
     var init = function() {
         $scope.faServ.getFishingActivity(new FishingActivity(arrivalNotification ? 'arrival_notification' : 'arrival_declaration'), arrivalData);
     };
 
-       /**
-         * A callback function to get the data for clock panel
-         * 
-         * @memberof ArrivalpanelCtrl
-         * @public
-         * @alias arrivalData
-         * @returns data for clock panel
-         */
+    /**
+      * A callback function to get the data for clock panel
+      * 
+      * @memberof ArrivalpanelCtrl
+      * @public
+      * @alias arrivalData
+      * @returns data for clock panel
+      */
     var arrivalData = function() {
         $scope.data = [{
             "caption": (arrivalNotification === true) ? locale.getString('activity.clock_panel_estimated_time') : locale.getString('activity.clock_panel_arrival_time'),
-            "reason": $scope.faServ.activityData.activityDetails.reason,
             "arrivalTime": $scope.faServ.activityData.activityDetails.arrivalTime,
             "showClock": "true"
         },
@@ -55,17 +54,42 @@ angular.module('unionvmsWeb').controller('ArrivalpanelCtrl', function($scope, $s
             "arrivalTime": (arrivalNotification === true) ? "" : $scope.faServ.activityData.activityDetails.intendedLandingTime,
             "showClock": (arrivalNotification === true) ? "false" : "true"
         }];
+        getReasonCodes($scope.faServ.activityData.activityDetails);
     };
 
+     /**
+     * Get human readable text from MDR for Reason in activity Details.
+     * 
+     * @memberof ArrivalpanelCtrl
+     * @public
+     * @alias getReasonCode
+     * @returns Reason code
+     */
+    var getReasonCodes = function (obj) {
+        loadingStatus.isLoading('FishingActivity', true);
+        
+        mdrCacheService.getCodeList('FA_REASON_ARRIVAL').then(function (response) {  
+            var reasonDesc = _.where(response, { code: obj.reason });
+            if(angular.isDefined(reasonDesc) && reasonDesc.length > 0){
+               $scope.data[0].reason = obj.reason + ' - ' + reasonDesc[0].description;
+            }else{
+               $scope.data[0].reason = obj.reason;
+            }
+            loadingStatus.isLoading('FishingActivity', false);
+        },function(error) {
+            //TODO deal with error from rest service
+            loadingStatus.isLoading('FishingActivity', false);
+        });
+    };
 
-       /**
-         * Check if a location tile should be clickable taking into consideration the route and the report configuration
-         * 
-         * @memberof ArrivalpanelCtrl
-         * @public
-         * @alias isLocationClickable
-         * @returns {Boolean} Whether the location tile should be clickable or not
-         */
+    /**
+      * Check if a location tile should be clickable taking into consideration the route and the report configuration
+      * 
+      * @memberof ArrivalpanelCtrl
+      * @public
+      * @alias isLocationClickable
+      * @returns {Boolean} Whether the location tile should be clickable or not
+      */
     $scope.isLocationClickable = function() {
         var clickable = false;
         if (($state.current.name === 'app.reporting-id' || $state.current.name === 'app.reporting') && tripSummaryService.withMap) {
