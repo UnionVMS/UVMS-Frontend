@@ -10,7 +10,7 @@ FITNESS FOR A PARTICULAR PURPOSE.  See the GNU General Public License for more d
 copy of the GNU General Public License along with the IFDM Suite. If not, see <http://www.gnu.org/licenses/>.
 -->
 <div class="row advancedActiviySearchForm" ng-controller="AdvancedsearchformCtrl">
-	<div ng-class="{'is-disabled': actServ.reportsList.isLoading}">
+	<div ng-class="{'is-disabled': actServ.reportsList.isLoading || actServ.isGettingMdrCodes}" ng-show="isFormVisible">
 		<form name="activityAdvancedSearchForm" novalidate>
 		    <div class="col-md-2">
 		        <!--communication channel criterion-->
@@ -44,11 +44,11 @@ copy of the GNU General Public License along with the IFDM Suite. If not, see <h
 		        <!-- PURPOSE_CODE criterion -->
 		        <combobox ng-model="advancedSearchObject.purposeCode" items="codeLists.purposeCodes" multiple="true" min-selections="1" hide-selected-items="true" initialtext="{{'activity.advanced_search_placeholder_purpose_code' | i18n}}"></combobox>
 		    </div>
-		    <div class="col-md-2">
+		    <div class="col-md-2" ng-show="visibleCombos.reportType">
 		        <!-- REPORT_TYPE criterion -->
 		        <combobox ng-model="advancedSearchObject.reportType" items="codeLists.reportTypes" initialtext="{{'activity.advanced_search_placeholder_report_type' | i18n}}" ></combobox>
 		    </div>
-		    <div class="col-md-2">
+		    <div class="col-md-2" ng-show="visibleCombos.activityType">
 		        <!-- ACTIVITY_TYPE criterion -->
 		        <combobox ng-model="advancedSearchObject.activityType" items="codeLists.activityTypes" initialtext="{{'activity.advanced_search_placeholder_activity_type' | i18n}}" ></combobox>
 		    </div>
@@ -60,7 +60,7 @@ copy of the GNU General Public License along with the IFDM Suite. If not, see <h
 		        <!-- PORT criterion -->
 		        <input id="portFACriterion" type="text" class="form-control" name="portFACriterion" ng-model="advancedSearchObject.port" placeholder="{{'activity.advanced_search_placeholder_port' | i18n}}"  maxlength="255"/>
 		    </div>
-		    <div class="col-md-2">
+		    <div class="col-md-2" ng-show="visibleCombos.gearType">
 		        <!-- GEAR_TYPE criterion -->
 		        <combobox ng-model="advancedSearchObject.gearType" items="codeLists.gearTypes" initialtext="{{'activity.advanced_search_placeholder_gear_type' | i18n}}" ></combobox>
 		    </div>
