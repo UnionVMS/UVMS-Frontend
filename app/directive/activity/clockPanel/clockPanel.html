@@ -4,10 +4,10 @@
             <a>{{'activity.title_fishing_activity' | i18n}}: {{translatedFaType| i18n}}</a>
         </legend>
         <div class="row clock-body">
-            <div class="col-md-12 clock-subsection" ng-show="{{item.showClock}}" ng-repeat="item in clockPanalData">
-                <analog-clock ng-if="item.arrivalTime" clock-data="item.arrivalTime"></analog-clock>
-                <div ng-if="item.arrivalTime"><span>{{item.arrivalTime | stDateUtc}}</span></div>
-                <div ng-if="item.arrivalTime"><span ng-if="item.caption" class="fields">{{ item.caption}}</span></div>
+            <div class="col-md-12 clock-subsection" ng-show="{{item.showClock}}" ng-repeat="item in clockPanalData" ng-switch="item.arrivalTime !== undefined">
+                <analog-clock ng-switch-when="true" clock-data="item.arrivalTime"></analog-clock>
+                <div ng-switch-when="true"><span>{{item.arrivalTime | stDateUtc}}</span></div>
+                <div ng-switch-when="true"><span ng-if="item.caption" class="fields">{{ item.caption}}</span></div>
                 <div ng-if="item.reason" ng-if="$first"><span class="fields useColon">{{'activity.fa_details_item_reason' | i18n}}</span><span> {{item.reason}}</span>
                 </div>
             </div>

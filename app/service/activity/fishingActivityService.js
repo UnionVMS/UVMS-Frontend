@@ -957,8 +957,8 @@ angular.module('unionvmsWeb').factory('fishingActivityService', function(activit
 
             loadingStatus.isLoading('FishingActivity', false);  
         },function(error) {
-           //TODO deal with error from rest service
-           loadingStatus.isLoading('FishingActivity', false);
+               //TODO deal with error from rest service
+               loadingStatus.isLoading('FishingActivity', false);
         });
      };
 
@@ -989,8 +989,8 @@ angular.module('unionvmsWeb').factory('fishingActivityService', function(activit
 
                    loadingStatus.isLoading('FishingActivity', false);
               },function(error){
-              //TODO deal with error from rest service
-              loadingStatus.isLoading('FishingActivity', false);
+                    //TODO deal with error from rest service
+                    loadingStatus.isLoading('FishingActivity', false);
              });
            }
      };
