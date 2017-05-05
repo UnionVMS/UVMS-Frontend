@@ -1,0 +1,4 @@
+{
+    "env_name": "${uvms.env.name}",
+    "rest_api_base" : "${uvms.rest.base.url}:${uvms.rest.base.port}"
+}
