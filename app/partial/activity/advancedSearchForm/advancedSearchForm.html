@@ -108,8 +108,135 @@ copy of the GNU General Public License along with the IFDM Suite. If not, see <h
 		    </div>
 		</form>
 	    <div class="col-md-12 buttonSection">
-	    	<button class="btn btn-primary button" type="button" ng-click="searchFAReports()" >{{"common.search" | i18n }}</button>
-	    	<button type="button" class="btn btn-default button" ng-click="resetSearch()">{{'common.reset' | i18n}}</button>
+	    	<!-- COLUMNS BUTTON -->
+			<div class="btn-group btn-left">
+				<button type="button" class="btn btn-primary dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+			  		{{'activity.columns' | i18n}}
+			  		<span class="caret"></span>
+			  	</button>
+			  	<div class="dropdown-menu" ng-click="$event.stopPropagation()">
+		  			<div class="row">
+		  				<div class="checkbox col-md-6">
+			  				<label>
+						      <input type="checkbox" ng-model="visServ.fishingActivities.FAReportType" ng-change="updateVisibilityCache('FAReportType')">{{'activity.header_fa_report_type' | i18n }}
+						    </label>
+			  			</div>
+			  			<div class="checkbox col-md-6">
+			  				<label>
+						      <input type="checkbox" ng-model="visServ.fishingActivities.activityType" ng-change="updateVisibilityCache('activityType')">{{'activity.header_fa_activity_type' | i18n }}
+						    </label>
+			  			</div>
+		  			</div>
+		  			<div class="row">
+		  				<div class="checkbox col-md-6">
+			  				<label>
+						      <input type="checkbox" ng-model="visServ.fishingActivities.occurrence" ng-change="updateVisibilityCache('occurrence')">{{'activity.header_fa_occurrence' | i18n }}
+						    </label>
+			  			</div>
+			  			<div class="checkbox col-md-6">
+			  				<label>
+						      <input type="checkbox" ng-model="visServ.fishingActivities.purposeCode" ng-change="updateVisibilityCache('purposeCode')">{{'activity.header_fa_purpose_code' | i18n }} 
+						    </label>
+			  			</div>
+		  			</div>
+		  			<div class="row">
+		  				<div class="checkbox col-md-6">
+			  				<label>
+						      <input type="checkbox" ng-model="visServ.fishingActivities.dataSource" ng-change="updateVisibilityCache('dataSource')">{{'activity.header_fa_data_source' | i18n }}
+						    </label>
+			  			</div>
+			  			<div class="checkbox col-md-6">
+			  				<label>
+						      <input type="checkbox" ng-model="visServ.fishingActivities.fromName" ng-change="updateVisibilityCache('fromName')">{{'activity.header_fa_from_name' | i18n }} 
+						    </label>
+			  			</div>
+		  			</div>
+		  			<div class="row">
+		  				<div class="checkbox col-md-6">
+			  				<label>
+						      <input type="checkbox" ng-model="visServ.fishingActivities.startDate" ng-change="updateVisibilityCache('startDate')">{{'activity.header_fa_start_date' | i18n }}
+						    </label>
+			  			</div>
+			  			<div class="checkbox col-md-6">
+			  				<label>
+						      <input type="checkbox" ng-model="visServ.fishingActivities.endDate" ng-change="updateVisibilityCache('endDate')">{{'activity.header_fa_end_date' | i18n }} 
+						    </label>
+			  			</div>
+		  			</div>
+		  			<div class="row">
+		  				<div class="checkbox col-md-6">
+			  				<label>
+						      <input type="checkbox" ng-model="visServ.fishingActivities.cfr" ng-change="updateVisibilityCache('cfr')">{{'spatial.reports_form_vessel_search_table_header_cfr' | i18n }}
+						    </label>
+			  			</div>
+			  			<div class="checkbox col-md-6">
+			  				<label>
+						      <input type="checkbox" ng-model="visServ.fishingActivities.ircs" ng-change="updateVisibilityCache('ircs')">{{'spatial.reports_form_vessel_search_table_header_ircs' | i18n }} 
+						    </label>
+			  			</div>
+		  			</div>
+		  			<div class="row">
+		  				<div class="checkbox col-md-6">
+			  				<label>
+						      <input type="checkbox" ng-model="visServ.fishingActivities.extMark" ng-change="updateVisibilityCache('extMark')">{{'spatial.reports_form_vessel_search_table_header_external_marking' | i18n }}
+						    </label>
+			  			</div>
+			  			<div class="checkbox col-md-6">
+			  				<label>
+						      <input type="checkbox" ng-model="visServ.fishingActivities.uvi" ng-change="updateVisibilityCache('uvi')">{{'activity.header_fa_uvi' | i18n }} 
+						    </label>
+			  			</div>
+		  			</div>
+		  			<div class="row">
+		  				<div class="checkbox col-md-6">
+			  				<label>
+						      <input type="checkbox" ng-model="visServ.fishingActivities.iccat" ng-change="updateVisibilityCache('iccat')">{{'activity.header_fa_iccat' | i18n }}
+						    </label>
+			  			</div>
+			  			<div class="checkbox col-md-6">
+			  				<label>
+						      <input type="checkbox" ng-model="visServ.fishingActivities.gfcm" ng-change="updateVisibilityCache('gfcm')">{{'activity.header_fa_gfcm' | i18n }} 
+						    </label>
+			  			</div>
+		  			</div>
+		  			<div class="row">
+		  				<div class="checkbox col-md-6">
+			  				<label>
+						      <input type="checkbox" ng-model="visServ.fishingActivities.areas" ng-change="updateVisibilityCache('areas')">{{'activity.header_fa_areas' | i18n }}
+						    </label>
+			  			</div>
+			  			<div class="checkbox col-md-6">
+			  				<label>
+						      <input type="checkbox" ng-model="visServ.fishingActivities.port" ng-change="updateVisibilityCache('port')">{{'activity.header_fa_port' | i18n }} 
+						    </label>
+			  			</div>
+		  			</div>
+		  			<div class="row">
+		  				<div class="checkbox col-md-6">
+			  				<label>
+						      <input type="checkbox" ng-model="visServ.fishingActivities.fishingGear" ng-change="updateVisibilityCache('fishingGear')">{{'activity.header_fa_gear' | i18n }}
+						    </label>
+			  			</div>
+			  			<div class="checkbox col-md-6">
+			  				<label>
+						      <input type="checkbox" ng-model="visServ.fishingActivities.speciesCode" ng-change="updateVisibilityCache('speciesCode')">{{'activity.header_fa_species' | i18n }} 
+						    </label>
+			  			</div>
+		  			</div>
+		  			<div class="row">
+		  				<div class="checkbox col-md-6">
+			  				<label>
+						      <input type="checkbox" ng-model="visServ.fishingActivities.quantity" ng-change="updateVisibilityCache('quantity')">{{'activity.header_fa_weight' | i18n }}
+						    </label>
+			  			</div>
+		  			</div>
+			  	</div>
+			</div>
+			<!-- FORM BUTTONS -->
+	    	<div class="btn-right">
+	    		<button class="btn btn-primary button" type="button" ng-click="searchFAReports()" >{{"common.search" | i18n }}</button>
+	    		<button type="button" class="btn btn-default button" ng-click="resetSearch()">{{'common.reset' | i18n}}</button>
+	    	</div>
 	    </div>
 	</div>
 </div>

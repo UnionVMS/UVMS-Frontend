@@ -20,14 +20,16 @@ copy of the GNU General Public License along with the IFDM Suite. If not, see <h
  * @param vesselRestService {Service} The vessel REST service
  * @param userService {Service} The user service
  * @param locale {Service} The angular locale service
+ * @param visibilityService {Service} The visibility service <p>{@link unionvmsWeb.visibilityService}</p>
  * @attr {Boolean} isFormValid - A flag for validating the search form
  * @attr {Object} codeLists - An object containing all code lists items
  * @attr {Object} advancedSearchObject - An object containing all search criterias specified within the form
  * @description
  *  The controller for the advanced search form of the activity tab table  
  */
-angular.module('unionvmsWeb').controller('AdvancedsearchformCtrl',function($scope, activityService, unitConversionService, mdrCacheService, vesselRestService, userService, locale){
+angular.module('unionvmsWeb').controller('AdvancedsearchformCtrl',function($scope, activityService, unitConversionService, mdrCacheService, vesselRestService, userService, locale, visibilityService){
     $scope.actServ = activityService;
+    $scope.visServ = visibilityService;
     $scope.isFormVisible = true;
     $scope.isFormValid = true;
     
@@ -292,6 +294,18 @@ angular.module('unionvmsWeb').controller('AdvancedsearchformCtrl',function($scop
                 $scope.actServ.reportsList.stCtrl.pipe();
             });
         }
+    };
+    
+    /**
+     * Update the fishing activities column visibility settings
+     *  
+     * @memberof AdvancedsearchformCtrl
+     * @public
+     * @alias updateVisibilityCache
+     * @param {String} column - the column name property to be updated
+     */
+    $scope.updateVisibilityCache = function(column){
+        $scope.visServ.updateStorage(column)
     };
     
     /**

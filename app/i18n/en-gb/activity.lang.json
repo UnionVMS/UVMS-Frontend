@@ -362,5 +362,6 @@
 
     "trip_transhipmentTime": "Transhipment time",
     "receiver_vessel": "Receiver vessel",
-    "species": "Species"
+    "species": "Species",
+    "columns": "Columns"
 }
