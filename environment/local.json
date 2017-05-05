@@ -1,4 +1,0 @@
-{
-    "env_name": "Local",
-    "rest_api_base" : "http://localhost:9001"
-}
