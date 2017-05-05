@@ -20,15 +20,24 @@ copy of the GNU General Public License along with the IFDM Suite. If not, see <h
  * @param vesselRestService {Service} The vessel REST service
  * @param userService {Service} The user service
  * @param locale {Service} The angular locale service
+ * @param visibilityService {Service} The visibility service <p>{@link unionvmsWeb.visibilityService}</p>
  * @attr {Boolean} isFormValid - A flag for validating the search form
  * @attr {Object} codeLists - An object containing all code lists items
  * @attr {Object} advancedSearchObject - An object containing all search criterias specified within the form
  * @description
  *  The controller for the advanced search form of the activity tab table  
  */
-angular.module('unionvmsWeb').controller('AdvancedsearchformCtrl',function($scope, activityService, unitConversionService, mdrCacheService, vesselRestService, userService, locale){
+angular.module('unionvmsWeb').controller('AdvancedsearchformCtrl',function($scope, activityService, unitConversionService, mdrCacheService, vesselRestService, userService, locale, visibilityService){
     $scope.actServ = activityService;
+    $scope.visServ = visibilityService;
+    $scope.isFormVisible = true;
     $scope.isFormValid = true;
+    
+    $scope.visibleCombos = {
+        reportType: true,
+        activityType: true,
+        gearType: true
+    };
     
     $scope.codeLists = {
         comChannels: null,
@@ -102,8 +111,12 @@ angular.module('unionvmsWeb').controller('AdvancedsearchformCtrl',function($scop
              };
              
              $scope.codeLists.purposeCodes = list;
+             $scope.actServ.isGettingMdrCodes = false;
         }, function(error){
-            $scope.actServ.setAlert(true, 'activity.activity_error_getting_code_lists');
+            //FIXME show other message
+            $scope.actServ.setAlert(true, 'activity.activity_error_not_possible_to_query_activity_data');
+            $scope.actServ.isGettingMdrCodes = false;
+            $scope.isFormVisible = false; //When we don't have MDR purpose codes we will not be able to do activity queries, so we hide the search form
         });
     };
     
@@ -121,6 +134,7 @@ angular.module('unionvmsWeb').controller('AdvancedsearchformCtrl',function($scop
             $scope.codeLists.reportTypes = convertCodelistToCombolist(response, false, false);
         }, function(error){
             $scope.actServ.setAlert(true, 'activity.activity_error_getting_code_lists');
+            $scope.visibleCombos.reportType = false;
         });
     };
     
@@ -138,6 +152,7 @@ angular.module('unionvmsWeb').controller('AdvancedsearchformCtrl',function($scop
             $scope.codeLists.gearTypes = convertCodelistToCombolist(response, true, false);
         }, function(error){
             $scope.actServ.setAlert(true, 'activity.activity_error_getting_code_lists');
+            $scope.visibleCombos.gearType = false;
         });
     };
     
@@ -156,6 +171,7 @@ angular.module('unionvmsWeb').controller('AdvancedsearchformCtrl',function($scop
             $scope.codeLists.activityTypes = convertCodelistToCombolist(response, true, true, suportedCodes);
         }, function(error){
             $scope.actServ.setAlert(true, 'activity.activity_error_getting_code_lists');
+            $scope.visibleCombos.activityType = false;
         });
     };
     
@@ -278,6 +294,18 @@ angular.module('unionvmsWeb').controller('AdvancedsearchformCtrl',function($scop
                 $scope.actServ.reportsList.stCtrl.pipe();
             });
         }
+    };
+    
+    /**
+     * Update the fishing activities column visibility settings
+     *  
+     * @memberof AdvancedsearchformCtrl
+     * @public
+     * @alias updateVisibilityCache
+     * @param {String} column - the column name property to be updated
+     */
+    $scope.updateVisibilityCache = function(column){
+        $scope.visServ.updateStorage(column)
     };
     
     /**

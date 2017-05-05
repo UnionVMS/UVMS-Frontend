@@ -72,6 +72,7 @@ angular.module('unionvmsWeb').factory('activityService',function(locale, activit
     actServ.activitiesHistoryList = getActivitiesHistoryListObject();
     
     actServ.allPurposeCodes = [];
+    actServ.isGettingMdrCodes = false;
     
     /**
      * Create an empty reportsList Object with all the necessary properties
@@ -173,6 +174,7 @@ angular.module('unionvmsWeb').factory('activityService',function(locale, activit
         this.allPurposeCodes = [];
         
         this.isTableLoaded = false;
+        this.isGettingMdrCodes = false;
         
         if (angular.isDefined(goToInitialPage) && goToInitialPage){
             breadcrumbService.goToItem(0);

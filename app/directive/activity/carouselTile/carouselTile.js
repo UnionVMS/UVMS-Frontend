@@ -67,6 +67,7 @@ angular.module('unionvmsWeb').directive('carouselTile', function() {
             $scope.ngModel[i].active = false;
             if (i === 0){
                 $scope.ngModel[i].active = true;
+                //$scope.currentItem = i + 1;
             }
         }
     };
@@ -94,5 +95,40 @@ angular.module('unionvmsWeb').directive('carouselTile', function() {
     $scope.setActiveItem = function(idx){
         $scope.ngModel[idx].active = true;
    };
+   
+   /**
+    * On slide change callback function to update the current selected item for the paginator
+    * 
+    * @memberof CarouselTileCtrl
+    * @public
+    * @param {Number} newSlide - The index of the new selected slide
+    */
+   $scope.onSlideChanged = function (newSlide) {
+       $scope.currentItem = newSlide + 1;
+   };
+})
+/**
+ * @memberof unionvmsWeb
+ * @ngdoc directive
+ * @name onCarouselChange
+ * @param {Service} $parse - The angular parse service
+ * @param {Service} $animate - The angular animate service
+ * @description
+ *  A directive to intersect the change method of the uib-carousel directive and return the index of the new selected slide
+ */
+.directive('onCarouselChange', function($parse, $animate){
+    return {
+        require: '^uibCarousel',
+        link: function(scope, element, attrs, carouselCtrl){
+            var fn = $parse(attrs.onCarouselChange);
+            var origSelect = carouselCtrl.select;
+            carouselCtrl.select = function(nextSlide, direction, nextIndex) {
+                if (nextSlide !== this.currentSlide) {
+                    fn(scope, {newSlide: nextSlide.index});
+                    return origSelect.apply(this, arguments);
+                }
+            }
+        }
+    };
 });
 
