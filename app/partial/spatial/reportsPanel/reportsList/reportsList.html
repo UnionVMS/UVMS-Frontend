@@ -39,9 +39,8 @@ copy of the GNU General Public License along with the IFDM Suite. If not, see <h
 					<th style="min-width: 180px;">{{'spatial.table_header_actions' | i18n }}</th>
 				</tr>
 				<tr>
-					<th colspan="8" ng-if="!isLoadingReportsList && (tableAlert.visible || !displayedRecords.length)">
+					<th colspan="8" ng-if="!isLoadingReportsList && tableAlert.visible">
 						<table-alert type="tableAlert.type" msg="tableAlert.msg" visible="tableAlert.visible" no-hide="false"></table-alert>
-						<table-alert type="'info'" msg="'spatial.table_no_data'" visible="!tableAlert.visible && !isLoadingReportsList && !displayedRecords.length"></table-alert>
 					</th>
 				</tr>
 				<tr ng-if="isLoadingReportsList">
