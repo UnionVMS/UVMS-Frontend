@@ -347,12 +347,12 @@
         <repository>
             <id>focus-releases</id>
             <name>UnionVms Repository</name>
-            <url>http://localhost:8081/nexus/repository/releases/</url>
+            <url>http://nexus.focus.fish/nexus/repository/releases/</url>
         </repository>
         <snapshotRepository>
             <id>focus-snapshots</id>
             <name>UnionVms Snapshot Repository</name>
-            <url>http://localhost:8081/nexus/repository/snapshots/</url>
+            <url>http://nexus.focus.fish/nexus/repository/snapshots/</url>
         </snapshotRepository>
     </distributionManagement>
 </project>
