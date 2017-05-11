@@ -243,10 +243,11 @@ angular.module('unionvmsWeb').factory('Trip',function(locale,unitConversionServi
         reportItem.detail = true;
 
         reportItem.id = node.fishingActivityId;
+        reportItem.faUniqueReportID = node.faUniqueReportID;
 
-        if(angular.isDefined(node.refID)){
+        if(angular.isDefined(node.faReferenceID)){
             var mainNode = _.find(this, function(rep){
-                return rep.id === node.refID;
+                return rep.faUniqueReportID === node.faReferenceID;
             });
             
             mainNode.nodes = mainNode.nodes || [];
@@ -260,8 +261,8 @@ angular.module('unionvmsWeb').factory('Trip',function(locale,unitConversionServi
         var reports = [];
         self.reports = [];
 
-        var mainNodes = _.filter(activityReports, function(rep){ return rep.refID === undefined; });
-        var subNodes = _.filter(activityReports, function(rep){ return rep.refID !== undefined; });
+        var mainNodes = _.filter(activityReports, function(rep){ return rep.faReferenceID === undefined; });
+        var subNodes = _.filter(activityReports, function(rep){ return rep.faReferenceID !== undefined; });
 
         angular.forEach(mainNodes,loadActivityReportItem,reports);
         _.sortBy(reports, function(node){ return moment(node.date).unix(); });

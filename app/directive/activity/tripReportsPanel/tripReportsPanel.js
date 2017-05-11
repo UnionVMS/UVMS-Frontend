@@ -107,18 +107,13 @@ angular.module('unionvmsWeb').directive('tripReportsPanel', function(loadingStat
              * @param {Object} node - the node object used as the table subrow
              * @param {String} type - the node type
              */
-            scope.navigate = function(item, node, type){
-                //FIXME this needs to be changed when the proper data is displayed in the table
-                if (type !== 'corrections'){
-                    //TODO check the type of fa operation so that we can open the proper partial
-                    //FIXME set proper id and correction in the faservice
-                    fishingActivityService.resetActivity();
-                    fishingActivityService.id = node.id;
-                    fishingActivityService.isCorrection = node.corrections;
-                    fishingActivityService.documentType = node.documentType;
-                    tripReportsTimeline.setCurrentPreviousAndNextItem(node);
-                    reportingNavigatorService.goToView('tripsPanel', fishingActivityService.getFaView(node.srcType));
-                }
+            scope.navigate = function(node, parentId){
+                fishingActivityService.resetActivity();
+                fishingActivityService.id = node.id;
+                fishingActivityService.isCorrection = node.corrections;
+                fishingActivityService.documentType = node.documentType;
+                tripReportsTimeline.setCurrentPreviousAndNextItem(node.id, parentId);
+                reportingNavigatorService.goToView('tripsPanel', fishingActivityService.getFaView(node.srcType));
             };
         }
     };
@@ -134,11 +129,20 @@ angular.module('unionvmsWeb').directive('tripReportsPanel', function(loadingStat
     var tripReports = {
         reports: [],
         currentItemIdx: undefined,
+        currentItemSubIdx: undefined,
         previousItem: {
             idx: undefined,
             type: undefined
         },
         nextItem: {
+            idx: undefined,
+            type: undefined
+        },
+        previousSubItem: {
+            idx: undefined,
+            type: undefined
+        },
+        nextSubItem: {
             idx: undefined,
             type: undefined
         }
@@ -151,49 +155,115 @@ angular.module('unionvmsWeb').directive('tripReportsPanel', function(loadingStat
      * @public
      * @alias setCurrentPreviousAndNextItem
      */
-    tripReports.setCurrentPreviousAndNextItem = function(selectedRecord){
+    tripReports.setCurrentPreviousAndNextItem = function(id, parentId){
+
+        var nodeId;
+        var subNodeId;
+        if(angular.isDefined(parentId)){
+            nodeId = parentId;
+            subNodeId = id;
+        }else{
+            nodeId = id;
+        }
+
         var idx = _.findIndex(this.reports, function(report){
-            return report.id === selectedRecord.id;
+            return report.id === nodeId;
         });
 
         if (idx !== -1){
+            var subIdx;
+            if(angular.isDefined(subNodeId)){
+                subIdx = _.findIndex(this.reports[idx], function(subReport){
+                    return subReport.id === subNodeId;
+                });
+            }
+
             tripReports.currentItemIdx = idx;
-            tripReports.setItem('previous');
-            tripReports.setItem('next');
+            tripReports.currentItemSubIdx = subIdx;
+            tripReports.setPreviousItem();
+            tripReports.setNextItem();
+            tripReports.setPreviousSubItem();
+            tripReports.setNextSubItem();
         }
     };
 
     /**
-     * Set an activity item within the factory (it might be a next or previous item)
+     * Set the previous activity node item within the factory
      * 
      * @memberof tripReportsTimeline
      * @public
-     * @alias setItem
-     * @param {String} direction - The direction of the item. Supported values are: next or previous.
+     * @alias setPreviousItem
      */
-    tripReports.setItem = function(direction){
+    tripReports.setPreviousItem = function(){
         var idx, type;
-        if (direction === 'previous'){
+        if(this.currentItemIdx - 1 > 0){
             idx = this.currentItemIdx - 1;
-            if (idx >= 0){
-                type = this.reports[idx].srcType;
-            } else {
-                idx = undefined;
-                type = undefined;
-            }
-            this.previousItem.idx = idx;
-            this.previousItem.type = type;
-        } else {
-            idx = this.currentItemIdx + 1;
-            if (idx < this.reports.length){
-                type = this.reports[idx].srcType;
-            } else {
-                idx = undefined;
-                type = undefined;
-            }
-            this.nextItem.idx = idx;
-            this.nextItem.type = type;
+            type = this.reports[idx].srcType;
         }
+
+        this.previousItem.idx = idx;
+        this.previousItem.type = type;
+    };
+
+    /**
+     * Set the next activity node item within the factory
+     * 
+     * @memberof tripReportsTimeline
+     * @public
+     * @alias setNextItem
+     */
+    tripReports.setNextItem = function(){
+        var idx, type;
+        if(this.currentItemIdx + 1 < this.reports.length - 1){
+            idx = this.currentItemIdx + 1;
+            type = this.reports[idx].srcType;
+        }
+
+        this.nextItem.idx = idx;
+        this.nextItem.type = type;
+    };
+
+    /**
+     * Set the previous activity subnode item within the factory
+     * 
+     * @memberof tripReportsTimeline
+     * @public
+     * @alias setPreviousItem
+     */
+    tripReports.setPreviousSubItem = function(){
+        var idx, type;
+        if(angular.isDefined(this.currentItemSubIdx)){
+            if(this.currentItemSubIdx > 0){
+                idx = this.currentItemSubIdx - 1;
+                type = this.reports[this.currentItemIdx].nodes[idx].srcType;
+            }else if(this.currentItemSubIdx === 0){
+                type = this.reports[this.currentItemIdx].srcType;
+            }
+        }
+
+        this.previousSubItem.idx = idx;
+        this.previousSubItem.type = type;
+    };
+
+    /**
+     * Set the next activity subnode item within the factory
+     * 
+     * @memberof tripReportsTimeline
+     * @public
+     * @alias setNextSubItem
+     */
+    tripReports.setNextSubItem = function(){
+        var idx, type;
+        if(angular.isDefined(this.currentItemSubIdx) && this.currentItemSubIdx + 1 < this.reports[this.currentItemIdx].nodes.length){
+            idx = this.currentItemSubIdx + 1;
+            type = this.reports[this.currentItemIdx].nodes[idx].srcType;
+        }else if(angular.isDefined(this.reports[this.currentItemIdx].nodes) && this.reports[this.currentItemIdx].nodes.length){
+            idx = 0;
+            type = this.reports[this.currentItemIdx].nodes[idx].srcType;
+        }
+
+        this.nextSubItem.idx = idx;
+        this.nextSubItem.type = type;
     };
     
     /**
@@ -206,11 +276,20 @@ angular.module('unionvmsWeb').directive('tripReportsPanel', function(loadingStat
     tripReports.reset = function(){
         this.reports = [];
         this.currentItemIdx = undefined;
+        this.currentItemSubIdx = undefined;
         this.previousItem = {
             idx: undefined,
             type: undefined
         };
         this.nextItem = {
+            idx: undefined,
+            type: undefined
+        };
+        this.previousSubItem = {
+            idx: undefined,
+            type: undefined
+        };
+        this.nextSubItem = {
             idx: undefined,
             type: undefined
         };

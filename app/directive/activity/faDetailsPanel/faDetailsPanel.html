@@ -2,20 +2,22 @@
     <legend class="fieldsetLegendStyle">
         <a>{{ngModel.title}}</a>
     </legend>
-    <div class="item-container" ng-repeat="item in ngModel.items | orderBy: 'idx' as filtered_result track by item.idx">
+    <div class="item-container" ng-repeat="item in ngModel.items | orderBy: 'idx' as filtered_result track by item.idx" ng-switch="item.clickable">
         <span class="labels">{{ item.label }}</span>
         &nbsp;
-        <span ng-class="item.clickable ? 'attr-clickable' : ''">{{item.value}}</span>
+        <a ng-switch-when="true" class="attr-clickable" ng-click="item.onClick(item.value)">{{item.value}}</a>
+        <span ng-switch-default>{{item.value}}</span>
     </div>
 
     <fieldset class="col-md-12 fieldsetStyle fa-details-fieldset" ng-if="ngModel.subTitle || ngModel.subItems">
         <legend class="fieldsetLegendStyle">
             <a>{{ngModel.subTitle}}</a>
         </legend>
-        <div class="item-container" ng-repeat="item in ngModel.subItems | orderBy: 'idx' as filtered_result track by item.idx">
+        <div class="item-container" ng-repeat="item in ngModel.subItems | orderBy: 'idx' as filtered_result track by item.idx" ng-switch="item.clickable">
             <span class="labels">{{ item.label }}</span>
             &nbsp;
-            <span ng-class="item.clickable ? 'attr-clickable' : ''">{{item.value}}</span>
+            <a ng-switch-when="true" class="attr-clickable" ng-click="item.onClick(item.value)">{{item.value}}</a>
+            <span ng-switch-default>{{item.value}}</span>
         </div>
     </fieldset>
     <fa-characteristics-modal ng-if="ngModel.characteristics" class="characteristics" data="ngModel.characteristics"></fa-characteristics-modal>

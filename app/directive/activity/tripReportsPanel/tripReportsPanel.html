@@ -22,7 +22,7 @@
                                     'fa-minus-square-o': !collapsed
                                     }"></span></a>
                                     <span ng-switch-when="true">{{item[header.id]}}</span>
-                                    <a ng-switch-when="false" class="details-btn" ng-click="navigate(item, item, header.id)">
+                                    <a ng-switch-when="false" class="details-btn" ng-click="navigate(item)">
                                         <i class="fa" ng-class="{'fa-eye': header.id === 'detail' && item[header.id], 'fa-check': header.id === 'corrections' && item[header.id]}"></i>
                                     </a>
                                 </div>
@@ -31,7 +31,7 @@
                                     <div class="row">
                                         <div class="sub-col td col-md-{{header.width}}" ng-repeat="header in reportHeaders" ng-class="{'col-btn': ['corrections','detail'].indexOf(header.id) !== -1}" ng-switch="['corrections','detail'].indexOf(header.id) === -1">
                                             <span ng-switch-when="true">{{node[header.id]}}</span>
-                                            <a ng-switch-when="false" class="details-btn" ng-click="navigate(item, node, header.id)">
+                                            <a ng-switch-when="false" class="details-btn" ng-click="navigate(node, item.id)">
                                                 <i class="fa" ng-class="{'fa-eye': header.id === 'detail' && node[header.id], 'fa-check': header.id === 'corrections' && node[header.id]}"></i>
                                             </a>
                                         </div>

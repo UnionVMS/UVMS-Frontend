@@ -26,7 +26,7 @@ copy of the GNU General Public License along with the IFDM Suite. If not, see <h
  * @description
  *  A service to deal with any kind of fishing activity operation (e.g. Departure, Arrival, ...)
  */
-angular.module('unionvmsWeb').factory('fishingActivityService', function(activityRestService, loadingStatus, mdrCacheService, locale, $filter, $state, tripSummaryService, reportingNavigatorService) {
+angular.module('unionvmsWeb').factory('fishingActivityService', function(activityRestService, loadingStatus, mdrCacheService, locale, $filter, $state, tripSummaryService, reportingNavigatorService, tripReportsTimeline, $compile) {
 
     var faServ = {
         activityData: {},
@@ -224,7 +224,22 @@ angular.module('unionvmsWeb').factory('fishingActivityService', function(activit
         {
             id: 'refId',
             type: 'string',
-            clickable: true
+            clickable: true,
+            onClick: function(refId){
+                var report = _.find(tripSummaryService.trip.reports, function(rep){
+                    return refId === rep.faUniqueReportID;
+                });
+
+                faServ.resetActivity();
+                faServ.id = report.id;
+                faServ.isCorrection = report.corrections;
+                faServ.documentType = report.documentType;
+                tripReportsTimeline.setCurrentPreviousAndNextItem(report.id);
+                var content = angular.element('fishing-activity-navigator');
+                
+                var scope = content.scope();
+                $compile(content)(scope);
+            }
         },
         {
             id: 'acceptedDate',
@@ -579,7 +594,8 @@ angular.module('unionvmsWeb').factory('fishingActivityService', function(activit
             idx: attrKeys.indexOf(key),
             label: itemLabel !== "%%KEY_NOT_FOUND%%" ? itemLabel : key,
             value: newVal,
-            clickable: attrData.clickable || undefined
+            clickable: attrData.clickable || undefined,
+            onClick: attrData.onClick || undefined
         };
     };
 
@@ -780,8 +796,18 @@ angular.module('unionvmsWeb').factory('fishingActivityService', function(activit
     var loadGearShotRetrieval = function(data){
         angular.forEach(data, function(record){
             record.location = [record.location];
-            record.gears = loadGears([record.gear]);
-            delete record.gear;
+            if(angular.isDefined(record.gear)){
+                record.gears = loadGears([record.gear]);
+                delete record.gear;
+            }
+            record.characteristics = loadCharacteristics(record.characteristics);
+            if(angular.isDefined(record.gearProblems)){
+                angular.forEach(record.gearProblems, function(gearProb){
+                    if(gearProb.location){
+                        gearProb.location = [gearProb.location];
+                    }
+                });
+            }
         });
         
         return data;
@@ -917,7 +943,19 @@ angular.module('unionvmsWeb').factory('fishingActivityService', function(activit
             return undefined;
         }
     };
-    
+
+    var loadCharacteristics = function(characteristics){
+        if(angular.isDefined(characteristics)){
+            angular.forEach(characteristics, function(property, propName){
+                var patt = /\d{4}-\d{2}-\d{2}T\d{2}:\d{2}:\d{2}/g;
+                if(patt.test(property)){
+                    characteristics[propName] = $filter('stDateUtc')(property);
+                }
+            },characteristics);
+        }
+
+        return characteristics;
+    };
 
     /**
      * Loads all the fishing activity data in the model

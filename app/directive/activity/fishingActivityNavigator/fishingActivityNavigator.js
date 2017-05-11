@@ -32,34 +32,6 @@ angular.module('unionvmsWeb').directive('fishingActivityNavigator', function(tri
 		    scope.timeline = tripReportsTimeline;
 			scope.repNav = reportingNavigatorService;
 		
-		    /**
-		     * Navigate to the next fishing activity
-		     * 
-		     * @memberof fishingActivityNavigator
-		     * @public
-		     * @alias goToNext
-		     */
-		    scope.goToNext = function(){
-		        var rec = scope.timeline.reports[scope.timeline.currentItemIdx + 1];
-		        if (angular.isDefined(rec)){
-		            goToItem(rec);
-		        }
-		    };
-		    
-		    /**
-             * Navigate to the previous fishing activity
-             * 
-             * @memberof fishingActivityNavigator
-             * @public
-             * @alias goToPrevious
-             */
-		    scope.goToPrevious = function(){
-		        var rec = scope.timeline.reports[scope.timeline.currentItemIdx - 1];
-		        if (angular.isDefined(rec)){
-		            goToItem(rec);
-                }
-            };
-            
             /**
              * Navigate to the specied activity
              * 
@@ -67,18 +39,30 @@ angular.module('unionvmsWeb').directive('fishingActivityNavigator', function(tri
              * @private
              * @param {Object} rec - The object containing the activity to navigate to
              */
-            function goToItem(rec){
-                fishingActivityService.resetActivity();
-                fishingActivityService.id = rec.id;
-                fishingActivityService.isCorrection = rec.corrections;
-				fishingActivityService.documentType = rec.documentType;
-                scope.timeline.setCurrentPreviousAndNextItem(rec);
-                
-				reportingNavigatorService.goToView('tripsPanel', fishingActivityService.getFaView(rec.srcType),function(){
-                   var content=angular.element('fishing-activity-navigator .fa-partial');
-                   var scope = content.scope();
-                   $compile(content.contents())(scope);
-                });
+            function goToItem(direction){
+				var rec, parentId;
+				if(angular.isDefined(scope.timeline[direction + 'Item'].idx)){
+					if(angular.isDefined(scope.timeline[direction + 'SubItem'].idx)){
+						rec = scope.timeline.reports[scope.timeline[direction + 'Item'].idx].nodes[scope.timeline[direction + 'SubItem'].idx];
+						parentId = scope.timeline[direction + 'Item'].idx;
+					}else{
+						rec = scope.timeline.reports[scope.timeline[direction + 'Item'].idx];
+					}
+				}
+
+				if (angular.isDefined(rec)){
+					fishingActivityService.resetActivity();
+					fishingActivityService.id = rec.id;
+					fishingActivityService.isCorrection = rec.corrections;
+					fishingActivityService.documentType = rec.documentType;
+					scope.timeline.setCurrentPreviousAndNextItem(rec.id, parentId);
+					
+					reportingNavigatorService.goToView('tripsPanel', fishingActivityService.getFaView(rec.srcType),function(){
+						var content = angular.element('fishing-activity-navigator');
+						var scope = content.scope();
+						$compile(content)(scope);
+					});
+				}
             }
 
 		}
