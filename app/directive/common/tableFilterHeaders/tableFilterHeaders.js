@@ -37,7 +37,8 @@ angular.module('unionvmsWeb').directive('tableFilterHeaders', function($compile,
 		link: {
 		    pre: function(scope, element, attrs, fn){
 		        if (angular.isDefined(scope.selectedItem)){
-                    element.attr('st-auto-select-row', true);
+                    //element.attr('st-auto-select-row', true);
+                    element.find('table').attr('st-auto-select-row', true);
                 }
 
                 var initColumns = function(){

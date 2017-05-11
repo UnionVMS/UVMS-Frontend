@@ -476,7 +476,7 @@ angular.module('unionvmsWeb').controller('ReportformCtrl',function($scope, $moda
             errorMsg = locale.getString(msg);
         }
         
-        if (!angular.isDefined(errorMsg) || errorMsg.indexOf('KEY_NOT_FOUND') !== -1){
+        if (!angular.isDefined(errorMsg) || errorMsg.indexOf('KEY_NOT_FOUND') !== -1 || errorMsg === ''){
             errorMsg = locale.getString(defaultMsg);
         }
         

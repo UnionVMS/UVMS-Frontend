@@ -718,6 +718,10 @@ angular.module('unionvmsWeb').factory('fishingActivityService', function(activit
         };
         var wkt = new ol.format.WKT();
         areaSummary.title = locale.getString('activity.area_tile_' + faType);
+        if (angular.isDefined(data.schemeId) && angular.isDefined(data.id)){
+            areaSummary.title += ' - ' + data.schemeId + ':' + data.id; 
+        }
+        
         areaSummary.number = 12 / (Object.keys(data).length);
 
         angular.forEach(data, function(value, key) {

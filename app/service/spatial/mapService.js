@@ -3614,7 +3614,7 @@ angular.module('unionvmsWeb').factory('mapService', function(locale, $rootScope,
             reportType: data.reportType,
             purposeCode: angular.isDefined(pCodeDesc) ? data.purposeCode + ' - ' + pCodeDesc : data.purposeCode,
             occurrence: unitConversionService.date.convertToUserFormat(data.acceptedDateTime),
-            areas: filter(data.areas, '- '),
+            areas: filter(data.areas, ' - '),
             //ports: data.ports,
             gears: filter(data.gears, ' - '), 
             species: filter(data.species, ', ')    
