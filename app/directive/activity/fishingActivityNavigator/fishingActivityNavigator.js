@@ -39,7 +39,7 @@ angular.module('unionvmsWeb').directive('fishingActivityNavigator', function(tri
              * @private
              * @param {Object} rec - The object containing the activity to navigate to
              */
-            function goToItem(direction){
+            scope.goToItem = function(direction){
 				var rec, parentId;
 				if(angular.isDefined(scope.timeline[direction + 'Item'].idx)){
 					if(angular.isDefined(scope.timeline[direction + 'SubItem'].idx)){

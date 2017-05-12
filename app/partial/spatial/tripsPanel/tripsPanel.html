@@ -46,14 +46,34 @@ copy of the GNU General Public License along with the IFDM Suite. If not, see <h
     </uib-tabset>
     <div ng-if="repNav.isViewVisible('catchDetails')" ng-include="'partial/spatial/tripsPanel/catchDetails/catchDetails.html'"></div>
     <div ng-if="repNav.isViewVisible('catchEvolution')" ng-include="'partial/spatial/tripsPanel/catchEvolution/catchEvolution.html'"></div>
-    <fishing-activity-navigator ng-if="repNav.isViewVisible('tripFishingOperationPanel')" partial="partial/spatial/tripsPanel/tripFishingOperationPanel/tripFishingOperationPanel.html"></fishing-activity-navigator>
-    <fishing-activity-navigator ng-if="repNav.isViewVisible('tripDeparturePanel')" partial="partial/spatial/tripsPanel/tripDeparturePanel/tripDeparturePanel.html"></fishing-activity-navigator>
-    <fishing-activity-navigator ng-if="repNav.isViewVisible('tripArrivalPanel')" partial="partial/spatial/tripsPanel/tripArrivalPanel/tripArrivalPanel.html"></fishing-activity-navigator>
-    <fishing-activity-navigator ng-if="repNav.isViewVisible('tripLandingPanel')" partial="partial/spatial/tripsPanel/tripLandingPanel/tripLandingPanel.html"></fishing-activity-navigator>
-    <fishing-activity-navigator ng-if="repNav.isViewVisible('tripDiscardPanel')" partial="partial/spatial/tripsPanel/tripDiscardPanel/tripDiscardPanel.html"></fishing-activity-navigator>
-    <fishing-activity-navigator ng-if="repNav.isViewVisible('tripAreaEntryPanel')" partial="partial/spatial/tripsPanel/tripAreaEntryPanel/tripAreaEntryPanel.html"></fishing-activity-navigator>
-    <fishing-activity-navigator ng-if="repNav.isViewVisible('tripAreaExitPanel')" partial="partial/spatial/tripsPanel/tripAreaExitPanel/tripAreaExitPanel.html"></fishing-activity-navigator>
-    <fishing-activity-navigator ng-if="repNav.isViewVisible('tripTranshipmentPanel')" partial="partial/spatial/tripsPanel/tripTranshipmentPanel/tripTranshipmentPanel.html"></fishing-activity-navigator>
-    <fishing-activity-navigator ng-if="repNav.isViewVisible('tripRelocationPanel')" partial="partial/spatial/tripsPanel/tripRelocationPanel/tripRelocationPanel.html"></fishing-activity-navigator>
-    <fishing-activity-navigator ng-if="repNav.isViewVisible('tripJointFishingOperationPanel')" partial="partial/spatial/tripsPanel/tripJointFishingOperationPanel/tripJointFishingOperationPanel.html"></fishing-activity-navigator>
+    <div ng-if="repNav.isViewVisible('tripFishingOperationPanel')">
+        <fishing-activity-navigator partial="partial/spatial/tripsPanel/tripFishingOperationPanel/tripFishingOperationPanel.html"></fishing-activity-navigator>
+    </div>
+    <div ng-if="repNav.isViewVisible('tripDeparturePanel') ">
+        <fishing-activity-navigator partial="partial/spatial/tripsPanel/tripDeparturePanel/tripDeparturePanel.html"></fishing-activity-navigator>
+    </div>
+    <div ng-if="repNav.isViewVisible('tripArrivalPanel')">
+        <fishing-activity-navigator partial="partial/spatial/tripsPanel/tripArrivalPanel/tripArrivalPanel.html"></fishing-activity-navigator>
+    </div>
+    <div ng-if="repNav.isViewVisible('tripLandingPanel')">
+        <fishing-activity-navigator partial="partial/spatial/tripsPanel/tripLandingPanel/tripLandingPanel.html"></fishing-activity-navigator>
+    </div>
+    <div ng-if="repNav.isViewVisible('tripDiscardPanel')">
+        <fishing-activity-navigator partial="partial/spatial/tripsPanel/tripDiscardPanel/tripDiscardPanel.html"></fishing-activity-navigator>
+    </div>
+    <div ng-if="repNav.isViewVisible('tripAreaEntryPanel')">
+        <fishing-activity-navigator partial="partial/spatial/tripsPanel/tripAreaEntryPanel/tripAreaEntryPanel.html"></fishing-activity-navigator>
+    </div>
+    <div ng-if="repNav.isViewVisible('tripAreaExitPanel')">
+        <fishing-activity-navigator partial="partial/spatial/tripsPanel/tripAreaExitPanel/tripAreaExitPanel.html"></fishing-activity-navigator>
+    </div>
+    <div ng-if="repNav.isViewVisible('tripTranshipmentPanel')">
+        <fishing-activity-navigator partial="partial/spatial/tripsPanel/tripTranshipmentPanel/tripTranshipmentPanel.html"></fishing-activity-navigator>
+    </div>
+    <div ng-if="repNav.isViewVisible('tripRelocationPanel')">
+        <fishing-activity-navigator partial="partial/spatial/tripsPanel/tripRelocationPanel/tripRelocationPanel.html"></fishing-activity-navigator>
+    </div>
+    <div ng-if="repNav.isViewVisible('tripJointFishingOperationPanel')">
+        <fishing-activity-navigator partial="partial/spatial/tripsPanel/tripJointFishingOperationPanel/tripJointFishingOperationPanel.html"></fishing-activity-navigator>
+    </div>
 </div>

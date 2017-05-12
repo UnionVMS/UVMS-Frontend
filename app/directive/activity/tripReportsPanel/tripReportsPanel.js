@@ -196,7 +196,7 @@ angular.module('unionvmsWeb').directive('tripReportsPanel', function(loadingStat
      */
     tripReports.setPreviousItem = function(){
         var idx, type;
-        if(this.currentItemIdx - 1 > 0){
+        if(this.currentItemIdx - 1 >= 0){
             idx = this.currentItemIdx - 1;
             type = this.reports[idx].srcType;
         }
@@ -214,7 +214,7 @@ angular.module('unionvmsWeb').directive('tripReportsPanel', function(loadingStat
      */
     tripReports.setNextItem = function(){
         var idx, type;
-        if(this.currentItemIdx + 1 < this.reports.length - 1){
+        if(this.currentItemIdx + 1 < this.reports.length){
             idx = this.currentItemIdx + 1;
             type = this.reports[idx].srcType;
         }
