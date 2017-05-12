@@ -10,30 +10,30 @@
                     <div ui-tree="" class="row table tableSmart table-condensed table-responsive angular-ui-tree">
                         <div class="thead col-md-12">
                             <div class="tr row">
-                                <div class="th col-md-{{header.width}}" ng-repeat="header in reportHeaders" title="{{ header.label | i18n }}">{{ header.label | i18n }}</div>
+                                <div class="th col-md-{{header.width}} {{header.alignCenter ? 'col-btn' : '' }}" ng-repeat="header in reportHeaders" title="{{ header.label | i18n }}">{{ header.label | i18n }}</div>
                             </div>
                         </div>
                         <!--NODES-->
                         <div ui-tree-nodes="" ng-model="trip.reports" class="tbody col-md-12 angular-ui-tree-nodes">
                             <div ng-repeat="item in trip.reports" ui-tree-node="" collapsed="true" class="tr row angular-ui-tree-node" data-nodrag>
-                                <div class="td col-md-{{header.width}}" ng-repeat="header in reportHeaders" ng-class="{'col-btn': ['corrections','detail'].indexOf(header.id) !== -1}" ng-switch="['corrections','detail'].indexOf(header.id) === -1">
+                                <div class="td col-md-{{header.width}} {{header.alignCenter ? 'col-btn' : '' }}" ng-repeat="header in reportHeaders" ng-switch="header.alignCenter">
                                 	<a ng-if="item.nodes && item.nodes.length > 0 && header.id === 'type'" ng-click="toggle(this)"><span class="fa" ng-class="{
                                     'fa-plus-square-o': collapsed,
                                     'fa-minus-square-o': !collapsed
                                     }"></span></a>
-                                    <span ng-switch-when="true">{{item[header.id]}}</span>
-                                    <a ng-switch-when="false" class="details-btn" ng-click="navigate(item)">
+                                    <a ng-switch-when="true" class="details-btn" ng-click="navigate(item)">
                                         <i class="fa" ng-class="{'fa-eye': header.id === 'detail' && item[header.id], 'fa-check': header.id === 'corrections' && item[header.id]}"></i>
                                     </a>
+                                    <span ng-switch-default>{{item[header.id]}}</span>
                                 </div>
                                 <!--SUBNODES-->
                                 <div ng-repeat="node in item.nodes" class="tr col-md-12 angular-ui-tree-node" ng-class="{hidden: collapsed}" data-nodrag>
                                     <div class="row">
-                                        <div class="sub-col td col-md-{{header.width}}" ng-repeat="header in reportHeaders" ng-class="{'col-btn': ['corrections','detail'].indexOf(header.id) !== -1}" ng-switch="['corrections','detail'].indexOf(header.id) === -1">
-                                            <span ng-switch-when="true">{{node[header.id]}}</span>
-                                            <a ng-switch-when="false" class="details-btn" ng-click="navigate(node, item.id)">
+                                        <div class="sub-col td col-md-{{header.width}} {{header.alignCenter ? 'col-btn' : '' }}" ng-repeat="header in reportHeaders" ng-switch="header.alignCenter">
+                                            <a ng-switch-when="true" class="details-btn" ng-click="navigate(node, item.id)">
                                                 <i class="fa" ng-class="{'fa-eye': header.id === 'detail' && node[header.id], 'fa-check': header.id === 'corrections' && node[header.id]}"></i>
                                             </a>
+                                            <span ng-switch-default>{{node[header.id]}}</span>
                                         </div>
                                     </div>
                                 </div>

@@ -59,12 +59,14 @@ angular.module('unionvmsWeb').directive('tripReportsPanel', function(loadingStat
                 {
                     id: "corrections",
                     label: "activity.reports_panel_column_corrections",
-                    width: 1
+                    width: 1,
+                    alignCenter: true
                 },
                 {
                     id: "detail",
                     label: "activity.reports_panel_column_detail",
-                    width: 1
+                    width: 1,
+                    alignCenter: true
                 }
             ];
 
