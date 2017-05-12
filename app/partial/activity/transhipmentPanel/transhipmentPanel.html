@@ -24,10 +24,10 @@ copy of the GNU General Public License along with the IFDM Suite. If not, see <h
             <fa-details-panel class="col-md-3 summary-section" ng-model="faServ.activityData.activityDetails"></fa-details-panel>
             <location-tile class="col-md-3 summary-section" is-clickable="isLocationClickable()" field-title="{{'activity.location' | i18n}}"
                 location-details="faServ.activityData.locations" click-callback="locationClickCallback()"></location-tile>
-            <div class="col-md-3"></div>
+            <fa-details-panel class="col-md-3 summary-section" ng-model="faServ.activityData.activityAuthorizations"></fa-details-panel>
             <fa-details-panel class="col-md-4 summary-section" ng-model="faServ.activityData.reportDetails"></fa-details-panel>
         </div>
-        <div class="row activity-summary-row">
+        <div class="row activity-summary-row trans-vessel-tile">
             <vessel-tile class="col-md-12 summary-section" ng-model="faServ.activityData.vesselDetails" tile-title="{{'activity.receiver_vessel' | i18n}}"></vessel-tile>
         </div>
         <div class="row activity-summary-row">

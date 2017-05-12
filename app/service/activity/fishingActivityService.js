@@ -528,7 +528,7 @@ angular.module('unionvmsWeb').factory('fishingActivityService', function(activit
 
         angular.forEach(data,function(value,key){           
             if(angular.isObject(value) && !angular.isArray(value)){
-                if(!_.isEmpty(value) && key !== 'characteristics'){
+                if(!_.isEmpty(value) && key !== 'characteristics' && key !== 'authorizations'){
                     finalSummary.subItems = [];
                     angular.forEach(value,function(subItem,subKey){
                         var attrData = _.where(attrOrder, {id: subKey});
@@ -1012,6 +1012,20 @@ angular.module('unionvmsWeb').factory('fishingActivityService', function(activit
      */
     faServ.faFromJson = function(obj,data){
         var model = faModels.common.concat(angular.isDefined(faModels[obj.faType]) ? faModels[obj.faType] : []);
+        
+        if (obj.faType === 'transhipment' && angular.isDefined(data.activityDetails.authorizations)){
+            if (data.activityDetails.authorizations.length > 0){
+                var authAttrOrder = [];
+                obj.activityAuthorizations = addExtraDetails([data.activityDetails.authorizations],authAttrOrder,0);
+                obj.activityAuthorizations = loadFishingActivityDetails(obj.activityAuthorizations, authAttrOrder);
+                obj.activityAuthorizations.title = locale.getString('activity.authorizations');
+            } else {
+                obj.activityAuthorizations = {
+                    title: locale.getString('activity.authorizations')
+                };
+            }
+            delete data.activityDetails.authorizations;
+        }
 
         angular.forEach(model, function(dataType) {
             switch (dataType) {
