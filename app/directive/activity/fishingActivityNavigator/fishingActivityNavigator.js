@@ -37,7 +37,7 @@ angular.module('unionvmsWeb').directive('fishingActivityNavigator', function(tri
              * 
              * @memberof fishingActivityNavigator
              * @private
-             * @param {Object} rec - The object containing the activity to navigate to
+             * @param {String} direction - direction might be previous/next fishing activity
              */
             scope.goToItem = function(direction){
 				var rec, parentId;
