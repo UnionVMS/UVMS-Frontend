@@ -22,4 +22,9 @@
     <div class="row location-container" ng-if="hasLocData()">
         <location-tile class="col-md-12" is-clickable="isLocClickable()" field-title="{{'activity.activity_location_port_departure' | i18n}}" location-details="locDetails" click-callback="locClickCallback()"></location-tile>
     </div>
+    <div class="row no-data" ng-if="(!ngModel.items || (ngModel.items && ngModel.items.length === 0)) && (!ngModel.subTitle || !ngModel.subItems) && !hasLocaData()">
+		<div class="col-md-12">
+			<span>{{'activity.no_data' | i18n}}</span>
+		</div>
+	</div>
 </fieldset>

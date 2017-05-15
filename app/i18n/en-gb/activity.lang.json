@@ -206,6 +206,7 @@
     "fa_details_item_occurrence":"Occurrence",
     "fa_details_item_startOfLanding":"Start of landing",
     "fa_details_item_endOfLanding":"End of landing",
+    "fa_details_item_owner":"Owner",
     "optype_correction": "Correction",
     "title_fishing_activity": "Fishing Activity",
     "activity_landing_catch":"Catch",
