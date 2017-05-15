@@ -25,7 +25,7 @@
         <uvms.rest.base.port>9001</uvms.rest.base.port>
         <web.app.context.path>unionvms</web.app.context.path>
         <NODE_ENV>--max_old_space_size=256</NODE_ENV>
-        <sonar.organization>vms-github</sonar.organization>
+        <sonar.organization>uvms-github</sonar.organization>
 		<sonar.sources>app</sonar.sources>
 		<sonar.tests>test</sonar.tests>
 		<sonar.exclusions>dist/**,app/assets/spatial/**</sonar.exclusions>
