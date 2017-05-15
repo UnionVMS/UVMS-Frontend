@@ -25,9 +25,10 @@
         <uvms.rest.base.port>9001</uvms.rest.base.port>
         <web.app.context.path>unionvms</web.app.context.path>
         <NODE_ENV>--max_old_space_size=256</NODE_ENV>
+        <sonar.organization>vms-github</sonar.organization>
 		<sonar.sources>app</sonar.sources>
 		<sonar.tests>test</sonar.tests>
-		<sonar.exclusions>dist/**</sonar.exclusions>
+		<sonar.exclusions>dist/**,app/assets/spatial/**</sonar.exclusions>
 		<sonar.surefire.reportsPath>testResults</sonar.surefire.reportsPath>
 		<sonar.javascript.karmajstestdriver.reportsPath>testResults</sonar.javascript.karmajstestdriver.reportsPath>
 		<sonar.javascript.lcov.reportPath>testResults</sonar.javascript.lcov.reportPath>
