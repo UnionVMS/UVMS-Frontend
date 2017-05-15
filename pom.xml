@@ -29,9 +29,9 @@
 		<sonar.sources>app</sonar.sources>
 		<sonar.tests>test</sonar.tests>
 		<sonar.exclusions>dist/**,app/assets/spatial/**</sonar.exclusions>
-		<sonar.surefire.reportsPath>testResults</sonar.surefire.reportsPath>
-		<sonar.javascript.karmajstestdriver.reportsPath>testResults</sonar.javascript.karmajstestdriver.reportsPath>
-		<sonar.javascript.lcov.reportPath>testResults</sonar.javascript.lcov.reportPath>
+		<sonar.surefire.reportsPath>testResults/**</sonar.surefire.reportsPath>
+		<sonar.javascript.karmajstestdriver.reportsPath>testResults/**</sonar.javascript.karmajstestdriver.reportsPath>
+		<sonar.javascript.lcov.reportPaths>testResults/**/lcov.info</sonar.javascript.lcov.reportPaths>
         <scm.connection>scm:git:https://github.com/UnionVMS/UVMS-Frontend.git</scm.connection>
     </properties>
 
