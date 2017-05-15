@@ -385,7 +385,7 @@ module.exports = function (grunt) {
         },
         coverageReporter: {
             dir: 'testResults/coverage',
-            type: 'html'
+            type: 'lcov'
         },
         autoWatch: false, //watching is handled by grunt-contrib-watch
         singleRun: true
@@ -403,7 +403,7 @@ module.exports = function (grunt) {
             },
             coverageReporter: {
                 dir: 'testResults/controllers/coverage',
-                type: 'html'
+                type: 'lcov'
             }
         }
       },
@@ -419,7 +419,7 @@ module.exports = function (grunt) {
             },
             coverageReporter: {
                 dir: 'testResults/directives/coverage',
-                type: 'html'
+                type: 'lcov'
             }
         }
       },
@@ -435,7 +435,7 @@ module.exports = function (grunt) {
             },
             coverageReporter: {
                 dir: 'testResults/services/coverage',
-                type: 'html'
+                type: 'lcov'
             }
         }
       },
@@ -451,7 +451,7 @@ module.exports = function (grunt) {
             },
             coverageReporter: {
                 dir: 'testResults/filters/coverage',
-                type: 'html'
+                type: 'lcov'
             }
         }
       },
