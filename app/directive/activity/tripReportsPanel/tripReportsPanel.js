@@ -156,6 +156,8 @@ angular.module('unionvmsWeb').directive('tripReportsPanel', function(loadingStat
      * @memberof tripReportsTimeline
      * @public
      * @alias setCurrentPreviousAndNextItem
+     * @param {Number} id - id of the current node
+     * @param {Number} parentId - id of the parent node
      */
     tripReports.setCurrentPreviousAndNextItem = function(id, parentId){
 

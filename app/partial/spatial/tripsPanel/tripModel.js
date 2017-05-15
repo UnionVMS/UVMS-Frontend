@@ -134,87 +134,8 @@ angular.module('unionvmsWeb').factory('Trip',function(locale,unitConversionServi
      * 
      * @memberof Trip
      * @private
-     * @param {Object} self - current trip object
-     * @param {Object} activityReports - activity reports data
+     * @param {Object} node - current node
      */
-    var loadReportMessages1 = function(self,activityReports){
-        var reports = [];
-        self.reports = [];
-
-        //one main node per activity report
-        angular.forEach(activityReports,function(report){
-            var reportItem = {};
-            reportItem.type = locale.getString('activity.activity_type_' + report.activityType.toLowerCase());
-            reportItem.nodes = [];
-
-            if(!angular.isDefined(report.delimitedPeriod) || report.delimitedPeriod.length === 0){
-                report.delimitedPeriod = [{}];
-            }
-
-            angular.forEach(report.delimitedPeriod,function(subreport){
-                var subreportItem = {};
-                subreportItem.srcType = report.activityType;
-
-                subreportItem.type = (report.correction ? locale.getString('activity.fa_report_document_type_correction') + ': ' : '') + locale.getString('activity.activity_type_' + report.activityType.toLowerCase()) + ' (' + locale.getString('activity.fa_report_document_type_' + report.faReportDocumentType.toLowerCase()) + ')';
-
-                subreportItem.date = getReportDate(report.faReportAcceptedDateTime,subreport.startDate,subreport.endDate);
-
-                subreportItem.documentType=report.faReportDocumentType.toLowerCase();
-
-                if(angular.isDefined(report.locations) && report.locations.length > 0){
-                    subreportItem.location = '';
-                    angular.forEach(report.locations,function(location){
-                        subreportItem.location += location;
-                    });
-                }
-                subreportItem.reason = report.reason;
-                subreportItem.remarks = getRemarks(report);
-
-                subreportItem.corrections = report.correction;
-                subreportItem.detail = true;
-
-                subreportItem.id = report.fishingActivityId;
-
-                reportItem.nodes.push(subreportItem);
-                tripReportsTimeline.reports.push(subreportItem);
-            });
-
-            reports.push(reportItem);
-        });
-
-        /*var transformedTypes = [];
-        var finalNodes = [];
-        angular.forEach(reports, function(node){
-
-            if(transformedTypes.indexOf(node.type) === -1){
-                transformedTypes.push(node.type);
-                var typNodes = _.where(reports, { type: node.type });
-
-                var subNode;
-                if(typNodes.length >= 2){
-                    subNode = {
-                        type: node.type,
-                        nodes: []
-                    };
-
-                    angular.forEach(typNodes,function(type){
-                        subNode.nodes = subNode.nodes.concat(type.nodes);
-                    });
-
-                    subNode.nodes = _.sortBy(subNode.nodes, function(rep){
-                        return moment(rep.date).unix();
-                    });
-                }else{
-                    subNode = node;
-                }
-                finalNodes.push(subNode);
-            }
-        });
-        reports = finalNodes;*/
-
-        self.reports = reports;
-    };
-
     var loadActivityReportItem = function(node){
         var reportItem = {};
         reportItem.srcType = node.activityType;
@@ -257,6 +178,14 @@ angular.module('unionvmsWeb').factory('Trip',function(locale,unitConversionServi
         }
     };
 
+    /**
+     * Load the report messages into the model
+     * 
+     * @memberof Trip
+     * @private
+     * @param {Object} self - current trip object
+     * @param {Object} activityReports - activity reports data
+     */
     var loadReportMessages = function(self,activityReports){
         var reports = [];
         self.reports = [];

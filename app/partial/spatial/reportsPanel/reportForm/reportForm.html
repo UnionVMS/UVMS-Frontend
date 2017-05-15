@@ -50,7 +50,7 @@ copy of the GNU General Public License along with the IFDM Suite. If not, see <h
 					<div class="row">
 						<div class="form-group col-md-3 inline-group">
 							<label>{{'spatial.reports_form_report_type_label' | i18n}}</label>
-							<span ng-if="!isAllowed('Activity', 'ACTIVITY_ALLOWED') && report.reportType !== undefined" class="">{{ 'spatial.reports_table_' + report.reportType | i18n }}</span>
+							<span ng-if="!isAllowed('Activity', 'ACTIVITY_ALLOWED') && report.reportType !== undefined">{{ 'spatial.reports_table_' + report.reportType | i18n }}</span>
 							<combobox ng-model="report.reportType" items="reportTypes" callback="resetForm" ng-if="isAllowed('Activity', 'ACTIVITY_ALLOWED')"></combobox>
 						</div>
 					</div>
