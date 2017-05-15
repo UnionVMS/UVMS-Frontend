@@ -10,6 +10,13 @@ FITNESS FOR A PARTICULAR PURPOSE.  See the GNU General Public License for more d
 copy of the GNU General Public License along with the IFDM Suite. If not, see <http://www.gnu.org/licenses/>.
 */
 .gear-shot-retrieval-tile {
+    .summary-section,
+    .gear-problem {
+        &,
+        .location-tile {
+            min-height: 150px;
+        }
+    }
     .with-margin-top {
         margin-top: 10px;
     }
@@ -46,5 +53,10 @@ copy of the GNU General Public License along with the IFDM Suite. If not, see <h
                 }
             }
         }
+    }
+    fa-characteristics-modal {
+        position: absolute;
+        top: 20px;
+        right: 15px;
     }
 }

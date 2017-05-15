@@ -11,7 +11,7 @@ copy of the GNU General Public License along with the IFDM Suite. If not, see <h
 -->
 <div class="fishingActivityNavigator">
 	<div class="activity-slider slider-left" ng-if="timeline.previousItem.idx || timeline.previousItem.idx >= 0">
-		<div class="slider-container container-left" ng-click="goToPrevious()">
+		<div class="slider-container container-left" ng-click="goToItem('previous')">
 			<a>
 				<i class="fa fa-chevron-up"></i>
 				<div class="slider-title">
@@ -22,7 +22,7 @@ copy of the GNU General Public License along with the IFDM Suite. If not, see <h
 	</div>
 	<div class="fa-partial" ng-include="partial" ng-init="srcTab = 'reports'"></div>
 	<div class="activity-slider slider-right" ng-if="timeline.nextItem.idx">
-		<div class="slider-container container-right" ng-click="goToNext()">
+		<div class="slider-container container-right" ng-click="goToItem('next')">
 			<a>
 				<i class="fa fa-chevron-up"></i>
 				<div class="slider-title">

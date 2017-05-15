@@ -111,7 +111,12 @@ angular.module('unionvmsWeb').directive('catchTile', function(locale,reportingNa
 				//selects the first row on every table(by default)
 				scope.ngModel[0].selected = true;
 				scope.selectedSpecieLocation = scope.ngModel[0];
-				scope.selectedClass = 'LSC';
+
+				if(scope.ngModel[0].groupingDetails.LSC.weight){
+					scope.selectedClass = 'LSC';
+				}else{
+					scope.selectedClass = 'BMS';
+				}
 			};
 
 			/**

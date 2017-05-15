@@ -16,11 +16,20 @@ describe('fishingActivityNavigator', function() {
                 srcType: 'FISHING_OPERATION'
             }],
             currentItemIdx: undefined,
+            currentItemSubIdx: undefined,
             previousItem: {
                 idx: undefined,
                 type: undefined
             },
             nextItem: {
+                idx: undefined,
+                type: undefined
+            },
+            previousSubItem: {
+                idx: undefined,
+                type: undefined
+            },
+            nextSubItem: {
                 idx: undefined,
                 type: undefined
             },
@@ -136,7 +145,7 @@ describe('fishingActivityNavigator', function() {
         angular.element('.container-left').trigger('click');
         
         expect(mockFishServ.resetActivity).toHaveBeenCalled();
-        expect(mockTimeline.setCurrentPreviousAndNextItem).toHaveBeenCalledWith(mockTimeline.reports[1]);
+        expect(mockTimeline.setCurrentPreviousAndNextItem).toHaveBeenCalledWith(mockTimeline.reports[1].id, undefined);
     });
     
     it('should navigate to the next item', function(){
@@ -155,7 +164,7 @@ describe('fishingActivityNavigator', function() {
         angular.element('.container-right').trigger('click');
         
         expect(mockFishServ.resetActivity).toHaveBeenCalled();
-        expect(mockTimeline.setCurrentPreviousAndNextItem).toHaveBeenCalledWith(mockTimeline.reports[1]);
+        expect(mockTimeline.setCurrentPreviousAndNextItem).toHaveBeenCalledWith(mockTimeline.reports[1].id, undefined);
     });
     
     it('should not navigate to any item if the specified index is out of bounds', function(){
@@ -165,11 +174,11 @@ describe('fishingActivityNavigator', function() {
         scope.$digest();
         var isolatedScope = nav.isolateScope();
         
-        isolatedScope.goToNext();
+        isolatedScope.goToItem('next');
         expect(mockFishServ.resetActivity).not.toHaveBeenCalled();
         
         mockTimeline.currentItemIdx = 0;
-        isolatedScope.goToPrevious();
+        isolatedScope.goToItem('previous');
         expect(mockFishServ.resetActivity).not.toHaveBeenCalled();
         
         isolatedScope.$destroy();

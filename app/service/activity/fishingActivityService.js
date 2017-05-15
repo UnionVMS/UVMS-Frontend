@@ -26,7 +26,7 @@ copy of the GNU General Public License along with the IFDM Suite. If not, see <h
  * @description
  *  A service to deal with any kind of fishing activity operation (e.g. Departure, Arrival, ...)
  */
-angular.module('unionvmsWeb').factory('fishingActivityService', function(activityRestService, loadingStatus, mdrCacheService, locale, $filter, $state, tripSummaryService, reportingNavigatorService) {
+angular.module('unionvmsWeb').factory('fishingActivityService', function(activityRestService, loadingStatus, mdrCacheService, locale, $filter, $state, tripSummaryService, reportingNavigatorService, tripReportsTimeline, $compile) {
 
     var faServ = {
         activityData: {},
@@ -224,7 +224,22 @@ angular.module('unionvmsWeb').factory('fishingActivityService', function(activit
         {
             id: 'refId',
             type: 'string',
-            clickable: true
+            clickable: true,
+            onClick: function(refId){
+                var report = _.find(tripSummaryService.trip.reports, function(rep){
+                    return refId === rep.faUniqueReportID;
+                });
+
+                faServ.resetActivity();
+                faServ.id = report.id;
+                faServ.isCorrection = report.corrections;
+                faServ.documentType = report.documentType;
+                tripReportsTimeline.setCurrentPreviousAndNextItem(report.id);
+                var content = angular.element('fishing-activity-navigator');
+                
+                var scope = content.scope();
+                $compile(content)(scope);
+            }
         },
         {
             id: 'acceptedDate',
@@ -594,8 +609,9 @@ angular.module('unionvmsWeb').factory('fishingActivityService', function(activit
             idx: attrKeys.indexOf(key),
             label: itemLabel !== "%%KEY_NOT_FOUND%%" ? itemLabel : key,
             value: newVal,
-            id: key,
-            clickable: attrData.clickable || undefined
+            clickable: attrData.clickable || undefined,
+            onClick: attrData.onClick || undefined,
+            id: key
         };
     };
 
@@ -800,8 +816,18 @@ angular.module('unionvmsWeb').factory('fishingActivityService', function(activit
     var loadGearShotRetrieval = function(data){
         angular.forEach(data, function(record){
             record.location = [record.location];
-            record.gears = loadGears([record.gear]);
-            delete record.gear;
+            if(angular.isDefined(record.gear)){
+                record.gears = loadGears([record.gear]);
+                delete record.gear;
+            }
+            record.characteristics = loadCharacteristics(record.characteristics);
+            if(angular.isDefined(record.gearProblems)){
+                angular.forEach(record.gearProblems, function(gearProb){
+                    if(gearProb.location){
+                        gearProb.location = [gearProb.location];
+                    }
+                });
+            }
         });
         
         return data;
@@ -877,7 +903,15 @@ angular.module('unionvmsWeb').factory('fishingActivityService', function(activit
         return data;
     };
 
-
+    /**
+     * Loads the data to be presented in the vessel tile
+     * 
+     * @memberof fishingActivityService
+     * @private
+     * @param {Object} vesselDetails - A reference to the data to be loaded in the vessel tile
+     * @alias loadVesselDetails
+     * @returns {Object} data to be displayed in the vessel tile
+     */
     var loadVesselDetails = function(vesselDetails){
         if(angular.isDefined(vesselDetails) && !_.isEmpty(vesselDetails)){
             vesselDetails.vesselOverview = {};
@@ -938,11 +972,33 @@ angular.module('unionvmsWeb').factory('fishingActivityService', function(activit
         }
     };
 
+    /**
+     * Loads the characteristics data to be presented
+     * 
+     * @memberof fishingActivityService
+     * @private
+     * @param {Object} characteristics - A reference to the characteristics to be loaded
+     * @alias loadCharacteristics
+     * @returns {Object} characteristics data to be displayed
+     */
+    var loadCharacteristics = function(characteristics){
+        if(angular.isDefined(characteristics)){
+            angular.forEach(characteristics, function(property, propName){
+                var patt = /\d{4}-\d{2}-\d{2}T\d{2}:\d{2}:\d{2}/g;
+                if(patt.test(property)){
+                    characteristics[propName] = $filter('stDateUtc')(property);
+                }
+            },characteristics);
+        }
+
+        return characteristics;
+    };
+
      /**
      * Get the human readable text from MDR for Purpose code in report Details
      * 
      * @memberof fishingActivityService
-     * @public
+     * @private
      * @alias getPurposeCodes
      * @returns the purpose code
      */
@@ -970,7 +1026,7 @@ angular.module('unionvmsWeb').factory('fishingActivityService', function(activit
      * Get the human readable text from MDR for reason in activity details
      * 
      * @memberof fishingActivityService
-     * @public
+     * @private
      * @alias getReasonCodes
      * @returns the purpose code
      */
@@ -1064,7 +1120,7 @@ angular.module('unionvmsWeb').factory('fishingActivityService', function(activit
                     addVesselRoleDescription(obj);
                     break;
                 case 'gearShotRetrieval':
-                    obj.gearShotRetrieval = loadGearShotRetrieval(data.gearShotRetrieval);
+                    obj.gearShotRetrieval = loadGearShotRetrieval(data.gearShotRetrievalList);
                     addGearProblemDesc(obj);
                     addRecoveryDesc(obj);
                     addGearDescription(obj);

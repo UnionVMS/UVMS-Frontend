@@ -31,7 +31,7 @@ angular.module('unionvmsWeb').directive('gearShotRetrievalTile', function(locale
 		},
 		templateUrl: 'directive/activity/gearShotRetrievalTile/gearShotRetrievalTile.html',
 		link: function(scope, element, attrs, fn) {
-		    scope.selected = {};
+		    scope.selected = scope.srcData[0];
 		    
 		    scope.tableAttrs = [{
                 title: locale.getString('activity.type'),
@@ -70,6 +70,10 @@ angular.module('unionvmsWeb').directive('gearShotRetrievalTile', function(locale
 		        return clickable;
 		    };
 		    
+			scope.hasCharacteristics = function(characteristics){
+		        return characteristics && _.keys(characteristics).length;
+		    };
+
 		    //TODO - check if we need a click callback on the locations tile
 		}
 	};

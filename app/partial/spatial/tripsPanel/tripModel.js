@@ -134,6 +134,55 @@ angular.module('unionvmsWeb').factory('Trip',function(locale,unitConversionServi
      * 
      * @memberof Trip
      * @private
+     * @param {Object} node - current node
+     */
+    var loadActivityReportItem = function(node){
+        var reportItem = {};
+        reportItem.srcType = node.activityType;
+
+        reportItem.type = (node.correction ? locale.getString('activity.fa_report_document_type_correction') + ': ' : '') + locale.getString('activity.activity_type_' + node.activityType.toLowerCase()) + ' (' + locale.getString('activity.fa_report_document_type_' + node.faReportDocumentType.toLowerCase()) + ')';
+
+        if(!angular.isDefined(node.delimitedPeriod) || node.delimitedPeriod.length === 0){
+            node.delimitedPeriod = [{}];
+        }
+
+        reportItem.date = getReportDate(node.faReportAcceptedDateTime,node.delimitedPeriod[0].startDate,node.delimitedPeriod[0].endDate);
+
+        reportItem.documentType = node.faReportDocumentType.toLowerCase();
+
+        if(angular.isDefined(node.locations) && node.locations.length > 0){
+            reportItem.location = '';
+            angular.forEach(node.locations,function(location){
+                reportItem.location += location;
+            });
+        }
+
+        reportItem.reason = node.reason;
+        reportItem.remarks = getRemarks(node);
+
+        reportItem.corrections = node.correction;
+        reportItem.detail = true;
+
+        reportItem.id = node.fishingActivityId;
+        reportItem.faUniqueReportID = node.faUniqueReportID;
+
+        if(angular.isDefined(node.faReferenceID)){
+            var mainNode = _.find(this, function(rep){
+                return rep.faUniqueReportID === node.faReferenceID;
+            });
+            
+            mainNode.nodes = mainNode.nodes || [];
+            mainNode.nodes.push(reportItem);
+        }else{
+            this.push(reportItem);
+        }
+    };
+
+    /**
+     * Load the report messages into the model
+     * 
+     * @memberof Trip
+     * @private
      * @param {Object} self - current trip object
      * @param {Object} activityReports - activity reports data
      */
@@ -141,76 +190,24 @@ angular.module('unionvmsWeb').factory('Trip',function(locale,unitConversionServi
         var reports = [];
         self.reports = [];
 
-        //one main node per activity report
-        angular.forEach(activityReports,function(report){
-            var reportItem = {};
-            reportItem.type = locale.getString('activity.activity_type_' + report.activityType.toLowerCase());
-            reportItem.nodes = [];
+        var mainNodes = _.filter(activityReports, function(rep){ return rep.faReferenceID === undefined; });
+        var subNodes = _.filter(activityReports, function(rep){ return rep.faReferenceID !== undefined; });
 
-            if(!angular.isDefined(report.delimitedPeriod) || report.delimitedPeriod.length === 0){
-                report.delimitedPeriod = [{}];
+        angular.forEach(mainNodes,loadActivityReportItem,reports);
+        _.sortBy(reports, function(node){ return moment(node.date).unix(); });
+
+        angular.forEach(subNodes,loadActivityReportItem,reports);
+
+        angular.forEach(reports,function(rep){
+            if(angular.isDefined(rep.nodes)){
+                rep.correction = _.where(rep.nodes, {corrections: true}).length ? true : false;
+                _.sortBy(rep.nodes, function(node){ return moment(node.date).unix(); });
+                rep.nodes = rep.nodes.reverse();
             }
 
-            angular.forEach(report.delimitedPeriod,function(subreport){
-                var subreportItem = {};
-                subreportItem.srcType = report.activityType;
-
-                subreportItem.type = (report.correction ? locale.getString('activity.fa_report_document_type_correction') + ': ' : '') + locale.getString('activity.activity_type_' + report.activityType.toLowerCase()) + ' (' + locale.getString('activity.fa_report_document_type_' + report.faReportDocumentType.toLowerCase()) + ')';
-
-                subreportItem.date = getReportDate(report.faReportAcceptedDateTime,subreport.startDate,subreport.endDate);
-
-                subreportItem.documentType=report.faReportDocumentType.toLowerCase();
-
-                if(angular.isDefined(report.locations) && report.locations.length > 0){
-                    subreportItem.location = '';
-                    angular.forEach(report.locations,function(location){
-                        subreportItem.location += location;
-                    });
-                }
-                subreportItem.reason = report.reason;
-                subreportItem.remarks = getRemarks(report);
-
-                subreportItem.corrections = report.correction;
-                subreportItem.detail = true;
-
-                subreportItem.id = report.fishingActivityId;
-
-                reportItem.nodes.push(subreportItem);
-                tripReportsTimeline.reports.push(subreportItem);
-            });
-
-            reports.push(reportItem);
+            //FIXME need to change tripReportsTimeline to navigate in 2 levels of reports
+            tripReportsTimeline.reports.push(rep);
         });
-
-        /*var transformedTypes = [];
-        var finalNodes = [];
-        angular.forEach(reports, function(node){
-
-            if(transformedTypes.indexOf(node.type) === -1){
-                transformedTypes.push(node.type);
-                var typNodes = _.where(reports, { type: node.type });
-
-                var subNode;
-                if(typNodes.length >= 2){
-                    subNode = {
-                        type: node.type,
-                        nodes: []
-                    };
-
-                    angular.forEach(typNodes,function(type){
-                        subNode.nodes = subNode.nodes.concat(type.nodes);
-                    });
-
-                    subNode.nodes = _.sortBy(subNode.nodes, function(rep){
-                        return moment(rep.date).unix();
-                    });
-                }else{
-                    subNode = node;
-                }
-                finalNodes.push(subNode);
-            }
-        });
-        reports = finalNodes;*/
 
         self.reports = reports;
     };
