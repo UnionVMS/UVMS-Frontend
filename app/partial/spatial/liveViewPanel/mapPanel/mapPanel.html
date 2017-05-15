@@ -229,7 +229,7 @@ copy of the GNU General Public License along with the IFDM Suite. If not, see <h
 			                            	<ng-form name="mapfishDetailForm{{$index}}">
 			                            		<div class="print-content-control" ng-class="{'has-error': (printForm.mapfishDetailForm{{$index}}.$dirty || submittedMapFishPrint === true) && printForm.mapfishDetailForm{{$index}}.$invalid}">
 					                                <label>{{attribute.name | capitalize}}</label>
-					                                <input type="text" class="form-control" name="attribute.name" ng-model="mapFishLocalConfig[attribute.name]" ng-init="mapFishLocalConfig[attribute.name] = attribute.default" ng-required="true"/>
+					                                <input type="text" class="form-control" maxlength="25" name="attribute.name" ng-model="mapFishLocalConfig[attribute.name]" ng-init="mapFishLocalConfig[attribute.name] = attribute.default" ng-required="true"/>
 					                                <div class="innerErrorMessagesInputWithUpLabel" ng-messages="printForm.mapfishDetailForm{{$index}}.$error" ng-show="(printForm.mapfishDetailForm{{$index}}.$dirty || submittedMapFishPrint === true) && printForm.mapfishDetailForm{{$index}}.$invalid">
 														<div ng-message="required">{{'spatial.required_field_error_message' | i18n }}</div>
 													</div>

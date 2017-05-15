@@ -268,6 +268,21 @@ angular.module('unionvmsWeb').factory('fishingActivityService', function(activit
         }
     ];
 
+    var faMdrReason=[
+	    {
+		    activityName: 'area_entry',
+		    achronym: 'FA_REASON_ENTRY'
+	    },
+	    {
+		    activityName: 'departure',
+		    achronym: 'FA_REASON_DEPARTURE'
+	    },
+	    {
+		    activityName: 'discard',
+		    achronym: 'FA_REASON_DISCARD'
+	    }
+     ];
+
 	/**
 	 * Reset fishing activity service
 	 * 
@@ -526,7 +541,7 @@ angular.module('unionvmsWeb').factory('fishingActivityService', function(activit
             finalSummary.items = [];
         }
 
-        angular.forEach(data,function(value,key){
+        angular.forEach(data,function(value,key){           
             if(angular.isObject(value) && !angular.isArray(value)){
                 if(!_.isEmpty(value) && key !== 'characteristics'){
                     finalSummary.subItems = [];
@@ -595,7 +610,8 @@ angular.module('unionvmsWeb').factory('fishingActivityService', function(activit
             label: itemLabel !== "%%KEY_NOT_FOUND%%" ? itemLabel : key,
             value: newVal,
             clickable: attrData.clickable || undefined,
-            onClick: attrData.onClick || undefined
+            onClick: attrData.onClick || undefined,
+            id: key
         };
     };
 
@@ -608,7 +624,7 @@ angular.module('unionvmsWeb').factory('fishingActivityService', function(activit
      * @alias loadFaDocData
      * @returns {Object} data to be displayed
      */
-    var loadFaDocData = function(data){
+    var loadFaDocData = function(data){   
         var finalSummary = {};
 
         if(angular.isDefined(data)){
@@ -813,7 +829,7 @@ angular.module('unionvmsWeb').factory('fishingActivityService', function(activit
         return data;
     };
 
-
+ 
     /**
      * Loads the data to be presented in the catch tile
      * 
@@ -829,7 +845,7 @@ angular.module('unionvmsWeb').factory('fishingActivityService', function(activit
             data.vesselDetails.authorizations = data.authorizations;
             loadVesselDetails(data.vesselDetails);
         }
-
+      
         return data;
     };
 
@@ -883,7 +899,15 @@ angular.module('unionvmsWeb').factory('fishingActivityService', function(activit
         return data;
     };
 
-
+    /**
+     * Loads the data to be presented in the vessel tile
+     * 
+     * @memberof fishingActivityService
+     * @private
+     * @param {Object} vesselDetails - A reference to the data to be loaded in the vessel tile
+     * @alias loadVesselDetails
+     * @returns {Object} data to be displayed in the vessel tile
+     */
     var loadVesselDetails = function(vesselDetails){
         if(angular.isDefined(vesselDetails) && !_.isEmpty(vesselDetails)){
             vesselDetails.vesselOverview = {};
@@ -944,6 +968,15 @@ angular.module('unionvmsWeb').factory('fishingActivityService', function(activit
         }
     };
 
+    /**
+     * Loads the characteristics data to be presented
+     * 
+     * @memberof fishingActivityService
+     * @private
+     * @param {Object} characteristics - A reference to the characteristics to be loaded
+     * @alias loadCharacteristics
+     * @returns {Object} characteristics data to be displayed
+     */
     var loadCharacteristics = function(characteristics){
         if(angular.isDefined(characteristics)){
             angular.forEach(characteristics, function(property, propName){
@@ -956,6 +989,68 @@ angular.module('unionvmsWeb').factory('fishingActivityService', function(activit
 
         return characteristics;
     };
+
+     /**
+     * Get the human readable text from MDR for Purpose code in report Details
+     * 
+     * @memberof fishingActivityService
+     * @private
+     * @alias getPurposeCodes
+     * @returns the purpose code
+     */
+     var getPurposeCodes = function(acronym, obj){
+        loadingStatus.isLoading('FishingActivity', true);
+        
+        mdrCacheService.getCodeList(acronym).then(function(response){
+            angular.forEach(obj.reportDetails.items,function(item){
+                if(item.id === "purposeCode"){
+                    var purposeCode = _.where(response, {code: item.value});
+                    if(angular.isDefined(purposeCode) && purposeCode.length > 0){
+                        item.value = item.value +' - '+ purposeCode[0].description; 
+                    }
+                }
+            });
+
+            loadingStatus.isLoading('FishingActivity', false);  
+        },function(error) {
+               //TODO deal with error from rest service
+               loadingStatus.isLoading('FishingActivity', false);
+        });
+     };
+
+     /**
+     * Get the human readable text from MDR for reason in activity details
+     * 
+     * @memberof fishingActivityService
+     * @private
+     * @alias getReasonCodes
+     * @returns the purpose code
+     */
+     var getReasonCodes = function(obj){
+           var activityType = _.where(faMdrReason, {activityName: obj.faType});
+          
+           if(angular.isDefined(activityType) && activityType.length > 0){
+               var acronym =activityType[0].achronym;
+               loadingStatus.isLoading('FishingActivity', true);
+               
+               mdrCacheService.getCodeList(acronym).then(function(response){
+                   angular.forEach(obj.activityDetails.items,function(item){
+                      var reasonDesc = _.where(response, {code: item.value});
+                      if(item.id === "reason"){
+                          if(angular.isDefined(reasonDesc) && reasonDesc.length > 0){  
+                              item.value = item.value +' - '+reasonDesc[0].description; 
+                          }
+                      }
+                   });
+
+                   loadingStatus.isLoading('FishingActivity', false);
+              },function(error){
+                    //TODO deal with error from rest service
+                    loadingStatus.isLoading('FishingActivity', false);
+             });
+           }
+     };
+    
 
     /**
      * Loads all the fishing activity data in the model
@@ -974,12 +1069,14 @@ angular.module('unionvmsWeb').factory('fishingActivityService', function(activit
             switch (dataType) {
                 case 'activityDetails':
                     obj.activityDetails = loadSummaryData(obj.faType, data.activityDetails);
+                    getReasonCodes(obj);
                     break;
                 case 'areas':
                     obj.areas = loadAreaData(obj.faType, data.areas);
                     break;
                 case 'reportDetails':
                     obj.reportDetails = loadFaDocData(data.reportDetails);
+                    getPurposeCodes('FLUX_GP_PURPOSE',obj);                  
                     break;
                 case 'locations':
                     obj.locations = data.locations;

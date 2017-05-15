@@ -511,8 +511,9 @@ unionvmsWebApp.config(function($stateProvider, $compileProvider, tmhDynamicLocal
             data: {
                 pageTitle: 'header.page_title_activity'
             },
-            onEnter: function($state, locale, activityService){
-                activityService.getUserPreferences();
+            onEnter: function($state, locale, activityService,visibilityService){
+                //activityService.getUserPreferences(); //FIXME - skipped for the moment until we have all user preferences interfaces
+                visibilityService.initFromStorage();
             },
             onExit: function(loadingStatus, activityService){
                 loadingStatus.resetState();

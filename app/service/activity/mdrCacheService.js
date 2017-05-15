@@ -66,6 +66,24 @@ angular.module('unionvmsWeb').factory('mdrCacheService',function($q, mdrRestServ
 	};
 	
 	/**
+	 * Check if an MDR list is already available in the local cache of the service
+	 * 
+	 * @memberof mdrCacheService
+	 * @public
+	 * @alias isListAvailableLocally
+	 * @param {String} listName - The mdr code list name (should be the same name as the path parameter for the REST service)
+	 * @returns {Boolean} Whether the list is available locally or not
+	 */
+	mdrServ.isListAvailableLocally = function(listName){
+	    var availability = false;
+	    if (_.has(this.codeLists, listName)){
+	        availability = true;
+	    }
+	    
+	    return availability;
+	};
+	
+	/**
 	 * Get the code list from server
 	 * 
 	 * @memberof mdrCacheService
