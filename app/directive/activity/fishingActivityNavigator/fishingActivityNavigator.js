@@ -42,12 +42,7 @@ angular.module('unionvmsWeb').directive('fishingActivityNavigator', function(tri
             scope.goToItem = function(direction){
 				var rec, parentId;
 				if(angular.isDefined(scope.timeline[direction + 'Item'].idx)){
-					if(angular.isDefined(scope.timeline[direction + 'SubItem'].idx)){
-						rec = scope.timeline.reports[scope.timeline[direction + 'Item'].idx].nodes[scope.timeline[direction + 'SubItem'].idx];
-						parentId = scope.timeline[direction + 'Item'].idx;
-					}else{
-						rec = scope.timeline.reports[scope.timeline[direction + 'Item'].idx];
-					}
+					rec = scope.timeline.reports[scope.timeline[direction + 'Item'].idx];
 				}
 
 				if (angular.isDefined(rec)){
@@ -63,7 +58,7 @@ angular.module('unionvmsWeb').directive('fishingActivityNavigator', function(tri
 						$compile(content)(scope);
 					});
 				}
-            }
+            };
 
 		}
 	};
