@@ -3567,8 +3567,8 @@ angular.module('unionvmsWeb').factory('mapService', function(locale, $rootScope,
     ms.getActivityTitles = function(){
         return {
             name: locale.getString('spatial.reports_form_details_modal_vessel_name_header'),
-            fs: locale.getString('activity.fa_details_item_flagState'),
-            ext_mark: locale.getString('activity.fa_details_item_exMark'),
+            fs: locale.getString('activity.fa_details_item_flag_state'),
+            ext_mark: locale.getString('activity.fa_details_item_ext_mark'),
             ircs: locale.getString('activity.fa_details_item_ircs'),
             cfr: locale.getString('activity.fa_details_item_cfr'),
             gfcm: locale.getString('activity.fa_details_item_gfcm'),
