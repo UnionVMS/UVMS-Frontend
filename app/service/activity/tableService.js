@@ -119,8 +119,9 @@ angular.module('unionvmsWeb').factory('tableService',function(locale) {
       * @param {Array} row - row to be ordered
       * @param {Array} header - format to order the row
       * @returns {Array} ordered row
+      * @alias sortRow
       */
-    var formRow = function(row, header) {
+    var sortRow = function(row, header) {
         var currentRow = [];
         angular.forEach(header, function(item) {
             angular.forEach(row, function(rowItem) {
@@ -128,12 +129,12 @@ angular.module('unionvmsWeb').factory('tableService',function(locale) {
                     currentRow.push({
                         key: item,
                         value: rowItem.value
-                    })
+                    });
                 }
             });
         });
         return currentRow;
-    }
+    };
 
     /**
      * Get the ordered table rows from the service data
@@ -143,16 +144,17 @@ angular.module('unionvmsWeb').factory('tableService',function(locale) {
      * @param {Array} rowData - data to be ordered
      * @param {Array} header - format to order the row
 	 * @returns {Array}  ordered rows to be displayed
+     * @alias sortTableRows
      */
-    var formTableRows = function(rowData, header) {
+    var sortTableRows = function(rowData, header) {
         var orderedRows = [];
         angular.forEach(rowData, function(row) {
-            var row = formRow(row, header);
-            orderedRows.push(row);
+            var rowData = sortRow(row, header);
+            orderedRows.push(rowData);
 
         });
         return orderedRows;
-    }
+    };
 
     var tableService = {};
 
@@ -171,13 +173,14 @@ angular.module('unionvmsWeb').factory('tableService',function(locale) {
         if(data.items.length > 0) {
 
             if (tableName === "catches") {
+                
                 // catches
                 table = getTableHeaders(data.items[0], localePrefix);
-                optiRows = getTableRows(data.items);
+                var optiRows = getTableRows(data.items);
                 var headerData = _.pluck(optiRows[0], 'key');
                 // ordered rows
-                table.rows = formTableRows(optiRows, headerData);
-                table.totals = data.total ? formRow(getTableRow(data.total), headerData) : undefined;
+                table.rows = sortTableRows(optiRows, headerData);
+                table.totals = data.total ? sortRow(getTableRow(data.total), headerData) : undefined;
 
             } else {
                 //landing
