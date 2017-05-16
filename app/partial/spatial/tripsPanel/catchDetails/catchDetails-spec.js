@@ -16,7 +16,7 @@ describe('CatchdetailsCtrl', function () {
 	var scope, ctrl, activityRestServiceSpy, tripSummaryServiceSpy;
 
 	beforeEach(function () {
-		activityRestServiceSpy = jasmine.createSpyObj('activityRestService', ['getTripCatchDetail', 'getTripCatchesLandingDetails']);
+		activityRestServiceSpy = jasmine.createSpyObj('activityRestService', [/*'getTripCatchDetail',*/ 'getTripCatchesLandingDetails']);
 		tripSummaryServiceSpy = jasmine.createSpyObj('tripSummaryService', ['trip']);
 
 		module(function ($provide) {
@@ -37,12 +37,12 @@ describe('CatchdetailsCtrl', function () {
 	beforeEach(inject(function ($rootScope, $controller) {
 		buildMocks();
 		scope = $rootScope.$new();
-		scope.tripId = getTripCatchDetail().tripID;
+		//scope.tripId = getTripCatchDetail().tripID;
 		ctrl = $controller('CatchdetailsCtrl', { $scope: scope });
 		scope.$digest();
 	}));
 
-	function getTripCatchDetail() {
+	/*function getTripCatchDetail() {
 		return {
 			"tripID": "BEL-TRP-O16-2016_0021",
 			"vesselName": "Beagle(BEL123456789)",
@@ -53,7 +53,7 @@ describe('CatchdetailsCtrl', function () {
 			"landing": "2016-10-21T08:28:21",
 			"landingAt": ["BEOST"]
 		};
-	}
+	}*/
 
 
 
@@ -368,13 +368,13 @@ describe('CatchdetailsCtrl', function () {
 
 	function buildMocks() {
 		tripSummaryServiceSpy.trip.id = "";
-		activityRestServiceSpy.getTripCatchDetail.andCallFake(function () {
+		/*activityRestServiceSpy.getTripCatchDetail.andCallFake(function () {
 			return {
 				then: function (callback) {
 					return callback(getTripCatchDetail());
 				}
 			};
-		});
+		});*/
 		activityRestServiceSpy.getTripCatchesLandingDetails.andCallFake(function (test) {
 			return {
 				then: function (callback) {
@@ -387,7 +387,7 @@ describe('CatchdetailsCtrl', function () {
 
 
 	it('should call the web services only once', inject(function () {
-		expect(activityRestServiceSpy.getTripCatchDetail.callCount).toBe(1);
+		//expect(activityRestServiceSpy.getTripCatchDetail.callCount).toBe(1);
 		expect(activityRestServiceSpy.getTripCatchesLandingDetails.callCount).toBe(1);
 	}));
 

@@ -31,14 +31,14 @@ angular.module('unionvmsWeb').controller('CatchdetailsCtrl', function ($scope, a
 
         $scope.tripId = tripSummaryService.trip.id;
         if (angular.isDefined($scope.tripId)) {
-            loadingStatus.isLoading('TripSummary', true, 1);
+            /*loadingStatus.isLoading('TripSummary', true, 1);
             //FIXME change with proper trip id
             activityRestService.getTripCatchDetail($scope.tripId).then(function (response) {
                 $scope.fishingTripDetails = response;
                 loadingStatus.isLoading('TripSummary', false);
             }, function (error) {
                 //TODO deal with error from service
-            });
+            });*/
 
             loadingStatus.isLoading('TripSummary', true, 1);
             //FIXME change with proper trip id
