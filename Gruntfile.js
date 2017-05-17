@@ -380,8 +380,9 @@ module.exports = function (grunt) {
         logLevel:'INFO',
         reporters:['mocha', 'junit', 'coverage'],
         junitReporter: {
-            outputDir: 'testResults',
-            outputFile: 'test-results.xml'
+        	useBrowserName: false,
+        	outputDir: 'testResults',
+            outputFile: 'TESTS-results.xml'
         },
         coverageReporter: {
             dir: 'testResults/coverage',
@@ -395,8 +396,9 @@ module.exports = function (grunt) {
         options: {
             files: karmaFiles.concat(['app/partial/**/*-spec.js']),
             junitReporter: {
-                outputDir: 'testResults/controllers',
-                outputFile: 'controllers.xml',
+            	useBrowserName: false,
+            	outputDir: 'testResults/controllers',
+                outputFile: 'TESTS-results.xml',
             },
             preprocessors: {
                 'app/partial/**/!(*-spec).js': ['coverage']
@@ -411,8 +413,9 @@ module.exports = function (grunt) {
         options: {
             files: karmaFiles.concat(['app/directive/**/*-spec.js', 'temp/templates.js']),
             junitReporter: {
-                outputDir: 'testResults/directives',
-                outputFile: 'directives.xml'
+            	useBrowserName: false,
+            	outputDir: 'testResults/directives',
+                outputFile: 'TESTS-results.xml'
             },
             preprocessors: {
                 'app/directive/**/!(*-spec).js': ['coverage']
@@ -427,8 +430,9 @@ module.exports = function (grunt) {
         options: {
             files: karmaFiles.concat(['app/service/**/*-spec.js']),
             junitReporter: {
-                outputDir: 'testResults/services',
-                outputFile: 'services.xml'
+            	useBrowserName: false,
+            	outputDir: 'testResults/services',
+                outputFile: 'TESTS-results.xml'
             },
             preprocessors: {
                 'app/service/**/!(*-spec).js': ['coverage']
@@ -443,8 +447,9 @@ module.exports = function (grunt) {
         options: {
             files: karmaFiles.concat(['app/filter/**/*-spec.js']),
             junitReporter: {
-                outputDir: 'testResults/filters',
-                outputFile: 'filters.xml'
+            	useBrowserName: false,
+            	outputDir: 'testResults/filters',
+                outputFile: 'TESTS-results.xml'
             },
             preprocessors: {
                 'app/filter/**/!(*-spec).js': ['coverage']
