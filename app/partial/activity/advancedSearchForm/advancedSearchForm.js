@@ -329,13 +329,16 @@ angular.module('unionvmsWeb').controller('AdvancedsearchformCtrl',function($scop
      * @private
      * @param {Array} data - The input data array
      * @param {Boolean} withTooltip - True if the item text and tooltip description should be different
-     * @param {Array} [suportedCodes] - An array containing the supported codes. This param is optional
      * @parm {Boolean} useAbbreviations - Whether the item text should be fetched from the abbreviations lang file or not
+     * @param {Array} [suportedCodes] - An array containing the supported codes. This param is optional
      * @returns {Array} An array suitable for combobox use
      */
     function convertCodelistToCombolist (data, withTooltip, useAbbreviations, suportedCodes){
         var comboList = [];
         angular.forEach(data, function(item) {
+            if (item.code === 'JOINED_FISHING_OPERATION'){
+                item.code = 'JOINT_FISHING_OPERATION';
+            }
             var rec = {
                 code: item.code,
                 text: item.description
@@ -351,7 +354,7 @@ angular.module('unionvmsWeb').controller('AdvancedsearchformCtrl',function($scop
             }
             
             if (angular.isDefined(suportedCodes)){
-                if (_.indexOf(suportedCodes, item.code) !== -1){
+                if (_.indexOf(suportedCodes, item.code) !== -1 || (item.code === 'JOINT_FISHING_OPERATION' && _.indexOf(suportedCodes, 'JOINED_FISHING_OPERATION') !== -1)){
                     comboList.push(rec);
                 }
             } else {

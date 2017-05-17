@@ -365,21 +365,69 @@ angular.module('unionvmsWeb').factory('fishingActivityService', function(activit
      * 
      * @memberof fishingActivityService
      * @private
-     * @param {Object} faObj - A reference to the Fishing activity object
-     * @param {Array} data - An array containing the available gears
+     * @param {Object} gearObj - A reference to the activity gear object
      * @alias addGearDescription
      */
-    var addGearDescription = function(faObj){
+    var addGearDescription = function(gearObj){
         mdrCacheService.getCodeList('GEAR_TYPE').then(function(response){
-            angular.forEach(faObj.gears, function(item) {
+            angular.forEach(gearObj, function(item) {
                 var mdrRec = _.findWhere(response, { code: item.type });
                 if (angular.isDefined(mdrRec)) {
-                    item.type = item.type + ' - ' + mdrRec.description;
+                    item.type = item.type + ' - ' + mdrRec.description.replace('- ', '');
                 }
             });
         });
     };
-
+    
+    /**
+     * Adds gear description from MDR code lists into the gears type attribute inside catches
+     * 
+     * @memberof fishingActivityService
+     * @private
+     * @param {Object} faCatches - A reference to the activity catches object
+     * @alias addGearDescription
+     */
+    var addGearDescFromCatches = function(faCatches){
+        mdrCacheService.getCodeList('GEAR_TYPE').then(function(response){
+            angular.forEach(faCatches, function(faCatch){
+                var keys = ['BMS', 'LSC'];
+                for (var j = 0; j < keys.length; j++){
+                    if (angular.isDefined(faCatch.groupingDetails[keys[j]].gears) && faCatch.groupingDetails[keys[j]].gears.length > 0){
+                        for (var i = 0; i < faCatch.groupingDetails[keys[j]].gears.length; i++){
+                            var mdrRec = _.findWhere(response, { code:  faCatch.groupingDetails[keys[j]].gears[i].type});
+                            if (angular.isDefined(mdrRec)) {
+                                faCatch.groupingDetails[keys[j]].gears[i].type = faCatch.groupingDetails[keys[j]].gears[i].type + ' - ' + mdrRec.description.replace('- ', '');
+                            }
+                        }
+                    }
+                }
+            });
+        });
+    };
+    
+    /**
+     * Adds gear description from MDR code lists into the gears type attribute inside gear shot retrieval
+     * 
+     * @memberof fishingActivityService
+     * @private
+     * @param {Object} gearShotObj - A reference to the activity gearShotRetrieval object
+     * @alias addGearDescription
+     */
+    var addGearDescFromGearShotRetrieval = function(gearShotObj){
+        mdrCacheService.getCodeList('GEAR_TYPE').then(function(response){
+            angular.forEach(gearShotObj, function(gearShot){
+                if (angular.isDefined(gearShot.gears) && gearShot.gears.length > 0){
+                    for (var i = 0; i < gearShot.gears.length; i++){
+                        var mdrRec = _.findWhere(response, { code: gearShot.gears[i].type });
+                        if (angular.isDefined(mdrRec)) {
+                            gearShot.gears[i].type = gearShot.gears[i].type + ' - ' + mdrRec.description.replace('- ', '');
+                        }
+                    }
+                }
+            });
+        });
+    };
+    
     /**
      * Adds catch type description from MDR code lists into the details object.
      * 
@@ -602,7 +650,7 @@ angular.module('unionvmsWeb').factory('fishingActivityService', function(activit
         if(key.indexOf(".") !== -1){
             itemLabel = key;
         }else{
-            itemLabel = locale.getString('activity.fa_details_item_' + key);
+            itemLabel = locale.getString('activity.fa_details_item_' + key.toLowerCase());
         }
 
         return {
@@ -1101,11 +1149,11 @@ angular.module('unionvmsWeb').factory('fishingActivityService', function(activit
                     break;
                 case 'gears':
                     obj.gears = loadGears(data.gears);
-                    addGearDescription(obj);
+                    addGearDescription(obj.gears);
                     break;
                 case 'catches':
                     obj.catches = loadFishingData(data.catches);
-                    addGearDescription(obj);
+                    addGearDescFromCatches(obj.catches);
                     /*this.addCatchTypeDescription(obj);*/
                     addWeightMeansDescription(obj);
                     break;
@@ -1122,8 +1170,7 @@ angular.module('unionvmsWeb').factory('fishingActivityService', function(activit
                 case 'gearShotRetrieval':
                     obj.gearShotRetrieval = loadGearShotRetrieval(data.gearShotRetrievalList);
                     addGearProblemDesc(obj);
-                    addRecoveryDesc(obj);
-                    addGearDescription(obj);
+                    addGearDescFromGearShotRetrieval(obj.gearShotRetrieval);
                     break;
                 case 'vesselDetails':
                     obj.vesselDetails = loadVesselDetails(data.vesselDetails);
