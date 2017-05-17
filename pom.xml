@@ -30,10 +30,10 @@
 		<sonar.tests>app</sonar.tests>
 		<sonar.test.inclusions>**/*-spec.js</sonar.test.inclusions>
 		<sonar.exclusions>dist/**,app/assets/spatial/**,**/*-spec.js</sonar.exclusions>
-		<sonar.surefire.reportsPath>testResults/controllers/,testResults/directives/,testResults/filters/,testResults/services/</sonar.surefire.reportsPath>
-		<sonar.javascript.jstestdriver.reportsPath>testResults/controllers/,testResults/directives/,testResults/filters/,testResults/services/</sonar.javascript.jstestdriver.reportsPath>
-		<sonar.javascript.karmajstestdriver.reportsPath>testResults/controllers/,testResults/directives/,testResults/filters/,testResults/services/</sonar.javascript.karmajstestdriver.reportsPath>
-		<sonar.javascript.jstest.reportsPath>testResults/controllers/,testResults/directives/,testResults/filters/,testResults/services/</sonar.javascript.jstest.reportsPath>
+		<sonar.surefire.reportsPath>testResults/controllers/TESTS-results.xml,testResults/directives/TESTS-results.xml,testResults/filters/TESTS-results.xml,testResults/services/TESTS-results.xml</sonar.surefire.reportsPath>
+		<sonar.javascript.jstestdriver.reportsPath>testResults/controllers/TESTS-results.xml,testResults/directives/TESTS-results.xml,testResults/filters/TESTS-results.xml,testResults/services/TESTS-results.xml</sonar.javascript.jstestdriver.reportsPath>
+		<sonar.javascript.karmajstestdriver.reportsPath>testResults/controllers/TESTS-results.xml,testResults/directives/TESTS-results.xml,testResults/filters/TESTS-results.xml,testResults/services/TESTS-results.xml</sonar.javascript.karmajstestdriver.reportsPath>
+		<sonar.javascript.jstest.reportsPath>testResults/controllers/TESTS-results.xml,testResults/directives/TESTS-results.xml,testResults/filters/TESTS-results.xml,testResults/services/TESTS-results.xml</sonar.javascript.jstest.reportsPath>
 		<sonar.javascript.lcov.reportPaths>testResults/controllers/coverage/PhantomJS 2.1.1 (Linux 0.0.0)/lcov.info,testResults/directives/coverage/PhantomJS 2.1.1 (Linux 0.0.0)/lcov.info,testResults/filters/coverage/PhantomJS 2.1.1 (Linux 0.0.0)/lcov.info,testResults/services/coverage/PhantomJS 2.1.1 (Linux 0.0.0)/lcov.info</sonar.javascript.lcov.reportPaths>
         <scm.connection>scm:git:https://github.com/UnionVMS/UVMS-Frontend.git</scm.connection>
     </properties>
