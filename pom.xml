@@ -29,9 +29,10 @@
 		<sonar.sources>app</sonar.sources>
 		<sonar.tests>test</sonar.tests>
 		<sonar.exclusions>dist/**,app/assets/spatial/**</sonar.exclusions>
-		<sonar.surefire.reportsPath>testResults/**</sonar.surefire.reportsPath>
-		<sonar.javascript.karmajstestdriver.reportsPath>testResults/**</sonar.javascript.karmajstestdriver.reportsPath>
-		<sonar.javascript.lcov.reportPaths>testResults/**/lcov.info</sonar.javascript.lcov.reportPaths>
+		<sonar.surefire.reportsPath>testResults/controllers/PhantomJS_2.1.1_(Windows_8_0.0.0)/controllers.xml,testResults/directives/PhantomJS_2.1.1_(Windows_8_0.0.0)/controllers.xml,testResults/filters/PhantomJS_2.1.1_(Windows_8_0.0.0)/controllers.xml,testResults/services/PhantomJS_2.1.1_(Windows_8_0.0.0)/controllers.xml</sonar.surefire.reportsPath>
+		<sonar.javascript.jstestdriver.reportsPath>testResults/controllers/PhantomJS_2.1.1_(Windows_8_0.0.0)/controllers.xml,testResults/directives/PhantomJS_2.1.1_(Windows_8_0.0.0)/controllers.xml,testResults/filters/PhantomJS_2.1.1_(Windows_8_0.0.0)/controllers.xml,testResults/services/PhantomJS_2.1.1_(Windows_8_0.0.0)/controllers.xml</sonar.javascript.jstestdriver.reportsPath>
+		<sonar.javascript.karmajstestdriver.reportsPath>testResults/controllers/PhantomJS_2.1.1_(Windows_8_0.0.0)/controllers.xml,testResults/directives/PhantomJS_2.1.1_(Windows_8_0.0.0)/controllers.xml,testResults/filters/PhantomJS_2.1.1_(Windows_8_0.0.0)/controllers.xml,testResults/services/PhantomJS_2.1.1_(Windows_8_0.0.0)/controllers.xml</sonar.javascript.karmajstestdriver.reportsPath>
+		<sonar.javascript.lcov.reportPaths>testResults/controllers/coverage/PhantomJS 2.1.1 (Windows 8 0.0.0)/lcov.info,testResults/directives/coverage/PhantomJS 2.1.1 (Windows 8 0.0.0)/lcov.info,testResults/filters/coverage/PhantomJS 2.1.1 (Windows 8 0.0.0)/lcov.info,testResults/services/coverage/PhantomJS 2.1.1 (Windows 8 0.0.0)/lcov.info</sonar.javascript.lcov.reportPaths>
         <scm.connection>scm:git:https://github.com/UnionVMS/UVMS-Frontend.git</scm.connection>
     </properties>
 
