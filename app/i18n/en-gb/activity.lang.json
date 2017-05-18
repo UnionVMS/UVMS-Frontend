@@ -351,8 +351,8 @@
     "fa_details_item_gfcm": "GFCM",
     "fa_details_item_iccat": "ICCAT",
     "fa_details_item_uvi": "UVI",
-    "fa_details_item_startDate": "Start date",
-    "fa_details_item_endDate": "End date",
+    "fa_details_item_startdate": "Start date",
+    "fa_details_item_enddate": "End date",
     "fa_details_item_territory": "Territory",
     "fa_details_item_fao_area": "FAO area",
 
@@ -370,5 +370,6 @@
     "trip_transhipmentTime": "Transhipment time",
     "receiver_vessel": "Receiver vessel",
     "species": "Species",
-    "columns": "Columns"
+    "columns": "Columns",
+    "joint_fishing_vessel": "Joint fishing vessel"
 }

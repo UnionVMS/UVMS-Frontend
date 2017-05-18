@@ -961,58 +961,77 @@ angular.module('unionvmsWeb').factory('fishingActivityService', function(activit
      * @returns {Object} data to be displayed in the vessel tile
      */
     var loadVesselDetails = function(vesselDetails){
-        if(angular.isDefined(vesselDetails) && !_.isEmpty(vesselDetails)){
-            vesselDetails.vesselOverview = {};
-
-            var attrOrder = angular.copy(vesselAttrOrder);
-            var vesselIdx = attrOrder.length;
-
-            angular.forEach(vesselDetails,function(prop,propName){
-                if(!_.isObject(prop)){
-                    vesselDetails.vesselOverview[propName] = prop;
-                }
-            });
-
-            if(angular.isDefined(vesselDetails.vesselIds) && vesselDetails.vesselIds.length){
-                _.extend(vesselDetails.vesselOverview,addExtraDetails(vesselDetails.vesselIds,attrOrder,vesselIdx));
-                delete vesselDetails.vesselIds;
+        if(vesselDetails){
+            if(_.isObject(vesselDetails) && !_.isArray(vesselDetails)){
+                vesselDetails = [vesselDetails];
             }
 
-            if(_.keys(vesselDetails.vesselOverview).length){
-                vesselDetails.vesselOverview = loadFishingActivityDetails(vesselDetails.vesselOverview, attrOrder);
-            }
+            angular.forEach(vesselDetails, function(vessel){
+                vessel.vesselOverview = {};
 
-            if(angular.isDefined(vesselDetails.authorizations) && vesselDetails.authorizations.length){
-                var authAttrOrder = [];
-                vesselDetails.authorizations = addExtraDetails(vesselDetails.authorizations,authAttrOrder,0);
-                vesselDetails.authorizations = loadFishingActivityDetails(vesselDetails.authorizations, authAttrOrder);
-                vesselDetails.authorizations.title = locale.getString('activity.authorizations');
-            }
+                var attrOrder = angular.copy(vesselAttrOrder);
+                var vesselIdx = attrOrder.length;
 
-            if(angular.isDefined(vesselDetails.contactParties) && vesselDetails.contactParties.length){
-                angular.forEach(vesselDetails.contactParties, function(item) {
-                    item.type = item.role + ' - ' + item.contactPerson.alias;
-                });
-            }
-
-            if(angular.isDefined(vesselDetails.storage)){
-                var storAttrOrder = [
-                    {
-                        idx: 0,
-                        id: 'type',
-                        type: 'string'
+                angular.forEach(vessel,function(prop,propName){
+                    if(!_.isObject(prop)){
+                        vessel.vesselOverview[propName] = prop;
                     }
-                ];
+                });
 
-                if(angular.isDefined(vesselDetails.storage.identifiers) && vesselDetails.storage.identifiers.length){
-                    var type = vesselDetails.storage.type;
-                    vesselDetails.storage = addExtraDetails(vesselDetails.storage.identifiers,storAttrOrder,1);
-                    vesselDetails.storage.type = type;
+                if(angular.isDefined(vessel.vesselIds) && vessel.vesselIds.length){
+                    _.extend(vessel.vesselOverview,addExtraDetails(vessel.vesselIds,attrOrder,vesselIdx));
+                    delete vessel.vesselIds;
                 }
 
-                vesselDetails.storage = loadFishingActivityDetails(vesselDetails.storage, storAttrOrder);
-                vesselDetails.storage.title = locale.getString('activity.vessel_storage');
-            }
+                if(_.keys(vessel.vesselOverview).length){
+                    vessel.vesselOverview = loadFishingActivityDetails(vessel.vesselOverview, attrOrder);
+                }
+
+                if(angular.isDefined(vessel.authorizations) && vessel.authorizations.length){
+                    var authAttrOrder = [];
+                    vessel.authorizations = addExtraDetails(vessel.authorizations,authAttrOrder,0);
+                    vessel.authorizations = loadFishingActivityDetails(vessel.authorizations, authAttrOrder);
+                    vessel.authorizations.title = locale.getString('activity.authorizations');
+                }else{
+                    delete vessel.authorizations;
+                }
+
+                if(angular.isDefined(vessel.contactParties) && vessel.contactParties.length){
+                    angular.forEach(vessel.contactParties, function(item) {
+                        item.type = item.role + ' - ' + item.contactPerson.alias;
+                    });
+                }else{
+                    delete vessel.contactParties;
+                }
+
+                if(angular.isDefined(vessel.storage)){
+                    var storAttrOrder = [
+                        {
+                            idx: 0,
+                            id: 'type',
+                            type: 'string'
+                        }
+                    ];
+
+                    if(angular.isDefined(vessel.storage.identifiers) && vessel.storage.identifiers.length){
+                        var type = vessel.storage.type;
+                        vessel.storage = addExtraDetails(vessel.storage.identifiers,storAttrOrder,1);
+                        vessel.storage.type = type;
+                    }
+
+                    vessel.storage = loadFishingActivityDetails(vessel.storage, storAttrOrder);
+                    vessel.storage.title = locale.getString('activity.vessel_storage');
+                }
+
+                if(angular.isDefined(vessel.country) || angular.isDefined(vessel.name)){
+                    if(angular.isDefined(vessel.country) && angular.isDefined(vessel.name)){
+                        vessel.type = vessel.country + ' - ' + vessel.name;
+                    }else{
+                        vessel.type = angular.isDefined(vessel.country) ? vessel.country : vessel.name;
+                    }
+                }
+                
+            });
 
             return vesselDetails;
         }else{
@@ -1173,6 +1192,49 @@ angular.module('unionvmsWeb').factory('fishingActivityService', function(activit
                     addGearDescFromGearShotRetrieval(obj.gearShotRetrieval);
                     break;
                 case 'vesselDetails':
+                    var vesselObj = {
+                        "name":"Marie-Pierre André",
+                        "country":"FRA",
+                        "contactParties":[
+                        {
+                            "role":"MASTER",
+                            "contactPerson":{
+                                "alias":"AMA capitaine BFT"
+                            },
+                            "structuredAddress":[
+                                {
+                                    "streetName":"la ciotat",
+                                    "countryCode":"FRA"
+                                }
+                            ]
+                        }
+                        ],
+                        "vesselIds":[
+                        {
+                            "id":"ATEU0MAR00000",
+                            "schemeId":"ICCAT"
+                        },
+                        {
+                            "id":"FRA201504172",
+                            "schemeId":"CFR"
+                        },
+                        {
+                            "id":"MA201504",
+                            "schemeId":"EXT_MARK"
+                        },
+                        {
+                            "id":"FW20150",
+                            "schemeId":"IRCS"
+                        }
+                        ],
+                        "authorizations":[
+
+                        ]
+                    };
+                    data.vesselDetails = [];
+                    data.vesselDetails.push(angular.copy(vesselObj));
+                    data.vesselDetails.push(angular.copy(vesselObj));
+
                     obj.vesselDetails = loadVesselDetails(data.vesselDetails);
                     break;
             }
