@@ -37,7 +37,7 @@ angular.module('unionvmsWeb').directive('tableFilterHeaders', function($compile,
 		link: {
 		    pre: function(scope, element, attrs, fn){
 		        if (angular.isDefined(scope.selectedItem)){
-                    element.attr('st-auto-select-row', true);
+                    element.find('table').attr('st-auto-select-row', true);
                 }
 
                 var initColumns = function(){
@@ -89,10 +89,12 @@ angular.module('unionvmsWeb').directive('tableFilterHeaders', function($compile,
                  * @private
                  */
                 function checkRenderTotals(){
-                    for (var i = 0; i < scope.columns.length; i++){
-                        if (angular.isDefined(scope.columns[i].calculateTotal) && scope.columns[i].calculateTotal){
-                            scope.hasTotals = true;
-                            break;
+                    if(angular.isDefined(scope.columns)){
+                        for (var i = 0; i < scope.columns.length; i++){
+                            if (angular.isDefined(scope.columns[i].calculateTotal) && scope.columns[i].calculateTotal){
+                                scope.hasTotals = true;
+                                break;
+                            }
                         }
                     }
                 }

@@ -17,11 +17,16 @@ copy of the GNU General Public License along with the IFDM Suite. If not, see <h
  * @param locale {Service} angular locale service
  * @param activityService {Service} the activity service <p>{@link unionvmsWeb.activityService}</p>
  * @param breadcrumbService {Service} the breadcrumb service <p>{@link unionvmsWeb.breadcrumbService}</p>
+ * @param mdrCacheService {Service} The MDR cache service <p>{@link unionvmsWeb.mdrCacheService}</p>
  * @description
  *  The controller for the activity tab  
  */
-angular.module('unionvmsWeb').controller('ActivityCtrl',function($scope, locale, activityService, breadcrumbService){
+angular.module('unionvmsWeb').controller('ActivityCtrl',function($scope, locale, activityService, breadcrumbService, mdrCacheService){
     $scope.actServ = activityService;
+    
+    if (mdrCacheService.isListAvailableLocally('FLUX_GP_PURPOSE') === false){
+        $scope.actServ.isGettingMdrCodes = true;
+    }
     
     /**
      * Check if partial should be visible according to the breadcrumbPages item status

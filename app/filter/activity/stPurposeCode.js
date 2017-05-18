@@ -15,7 +15,7 @@ angular.module('unionvmsWeb').filter('stPurposeCode', function(mdrCacheService) 
         '1': 'fa-ban',
         '3': 'fa-trash-o',
         '5': 'fa-retweet',
-        '9': 'fa-certificate'
+        '9': 'fa-plus-circle'
     };
     var isFinished = false;
     var isInvoked = false;

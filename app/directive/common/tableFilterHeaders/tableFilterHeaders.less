@@ -25,11 +25,16 @@ copy of the GNU General Public License along with the IFDM Suite. If not, see <h
                 background-color: rgba(8, 159, 215, 0.46) !important;
             }
         }
-        .is-selectable {
-            cursor: pointer;
+        tbody tr td{
+            cursor: default;
         }
         .single-line {
             white-space: nowrap;
+        }
+    }
+    table[st-auto-select-row=true]{
+        tbody tr td {
+            cursor: pointer !important;
         }
     }
 }

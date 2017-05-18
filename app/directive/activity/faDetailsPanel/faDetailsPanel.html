@@ -2,24 +2,31 @@
     <legend class="fieldsetLegendStyle">
         <a>{{ngModel.title}}</a>
     </legend>
-    <div class="item-container" ng-repeat="item in ngModel.items | orderBy: 'idx' as filtered_result track by item.idx">
+    <div class="item-container" ng-repeat="item in ngModel.items | orderBy: 'idx' as filtered_result track by item.idx" ng-switch="item.clickable">
         <span class="labels">{{ item.label }}</span>
         &nbsp;
-        <span ng-class="item.clickable ? 'attr-clickable' : ''">{{item.value}}</span>
+        <a ng-switch-when="true" class="attr-clickable" ng-click="item.onClick(item.value)">{{item.value}}</a>
+        <span ng-switch-default>{{item.value}}</span>
     </div>
 
     <fieldset class="col-md-12 fieldsetStyle fa-details-fieldset" ng-if="ngModel.subTitle || ngModel.subItems">
         <legend class="fieldsetLegendStyle">
             <a>{{ngModel.subTitle}}</a>
         </legend>
-        <div class="item-container" ng-repeat="item in ngModel.subItems | orderBy: 'idx' as filtered_result track by item.idx">
+        <div class="item-container" ng-repeat="item in ngModel.subItems | orderBy: 'idx' as filtered_result track by item.idx" ng-switch="item.clickable">
             <span class="labels">{{ item.label }}</span>
             &nbsp;
-            <span ng-class="item.clickable ? 'attr-clickable' : ''">{{item.value}}</span>
+            <a ng-switch-when="true" class="attr-clickable" ng-click="item.onClick(item.value)">{{item.value}}</a>
+            <span ng-switch-default>{{item.value}}</span>
         </div>
     </fieldset>
     <fa-characteristics-modal ng-if="ngModel.characteristics" class="characteristics" data="ngModel.characteristics"></fa-characteristics-modal>
     <div class="row location-container" ng-if="hasLocData()">
         <location-tile class="col-md-12" is-clickable="isLocClickable()" field-title="{{'activity.activity_location_port_departure' | i18n}}" location-details="locDetails" click-callback="locClickCallback()"></location-tile>
     </div>
+    <div class="row no-data" ng-if="(!ngModel.items || (ngModel.items && ngModel.items.length === 0)) && (!ngModel.subTitle || !ngModel.subItems) && !hasLocaData()">
+		<div class="col-md-12">
+			<span>{{'activity.no_data' | i18n}}</span>
+		</div>
+	</div>
 </fieldset>

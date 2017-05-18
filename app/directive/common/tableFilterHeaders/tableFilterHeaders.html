@@ -12,7 +12,7 @@
 				</tr>
 			</thead>
 			<tbody>
-				<tr ng-repeat="item in displayedRecords" ng-class="{'selected-row': item.selected, 'is-selectable': selectedItem}" ng-click="selectRow($index)">
+				<tr ng-repeat="item in displayedRecords" ng-class="{'selected-row': item.selected}" ng-click="selectRow($index)">
 					<td ng-repeat="column in columns" ng-if="column.isVisible">
 						<span ng-if="column.srcObj">{{item[column.srcObj][column.srcProp]}}</span>
 						<span ng-if="column.isDate">{{item[column.srcProp] | stDateUtc}}</span>

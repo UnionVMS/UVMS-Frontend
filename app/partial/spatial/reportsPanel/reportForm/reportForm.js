@@ -428,7 +428,7 @@ angular.module('unionvmsWeb').controller('ReportformCtrl',function($scope, $moda
             $scope.repNav.goToView('liveViewPanel','mapPanel',$scope.openReportList);
         }
         reportFormService.report = undefined;
-        reportMsgService.show(locale.getString('spatial.success_create_report'), 'success');
+        reportMsgService.show('spatial.success_create_report', 'success', true, 8000);
         loadingStatus.isLoading('SaveReport',false);
     };
 
@@ -444,7 +444,7 @@ angular.module('unionvmsWeb').controller('ReportformCtrl',function($scope, $moda
         }else{
             $scope.repNav.goToView('liveViewPanel','mapPanel',$scope.openReportList);
         }
-        reportMsgService.show(locale.getString('spatial.success_update_report'), 'success');
+        reportMsgService.show('spatial.success_update_report', 'success', true, 8000);
         if ($scope.formMode === 'EDIT'){
             reportFormService.report = undefined;
         } else if ($scope.formMode === 'EDIT-FROM-LIVEVIEW'){
@@ -476,7 +476,7 @@ angular.module('unionvmsWeb').controller('ReportformCtrl',function($scope, $moda
             errorMsg = locale.getString(msg);
         }
         
-        if (!angular.isDefined(errorMsg) || errorMsg.indexOf('KEY_NOT_FOUND') !== -1){
+        if (!angular.isDefined(errorMsg) || errorMsg.indexOf('KEY_NOT_FOUND') !== -1 || errorMsg === ''){
             errorMsg = locale.getString(defaultMsg);
         }
         
