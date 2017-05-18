@@ -1,0 +1,25 @@
+﻿<h5>Products</h5>
+<div class="alert alert-info" ng-if="!vm.products || vm.products.length === 0">
+    <span class="fa fa-info-circle"> &nbsp; {{'sales.products_empty' | i18n }}</span>
+</div>
+<div ng-if="vm.products && vm.products.length > 0">
+    <div class="row">
+        <div class="col-md-3">
+            <div class="row">
+                <div class="col-md-4">
+                    <dropdown class="menu-style"
+                              ng-model="vm.editSelection"
+                              initialtext="{{'common.actions' | i18n}}"
+                              items="vm.editSelectionDropdownItems"
+                              callback="vm.editSelectionCallBack">
+                    </dropdown>
+                </div>
+            </div>
+            <sales-products-chart products="vm.products" filter-products="vm.filterProducts"></sales-products-chart>
+        </div>
+        <div class="col-md-9">
+            <h3>{{vm.selectedSpecies | codeList:'species'}}</h3>
+            <sales-products-table products="vm.filteredProducts" currency="vm.currency" show-area="vm.showArea"></sales-products-table>
+        </div>
+    </div>
+</div>

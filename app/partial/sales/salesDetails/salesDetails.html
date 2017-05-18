@@ -1,0 +1,13 @@
+﻿<div>
+    <div class="container containerWithTopBottomPadding">
+        <!--Fishing trip-->
+        <div class="sales-top-card" ng-if="vm.salesDetails.salesNote.type !== 'VS'">
+            <sales-fishing-trip trip="vm.salesDetails.fishingTrip"></sales-fishing-trip>
+        </div>
+
+        <!--Sales Note-->
+        <div class="card">
+            <sales-note sales-note="vm.salesDetails.salesNote"></sales-note>
+        </div>
+    </div>
+</div>

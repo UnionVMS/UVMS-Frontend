@@ -109,6 +109,7 @@ copy of the GNU General Public License along with the IFDM Suite. If not, see <h
     <script src="directive/common/search/advancedSearch/mobileTerminal/advancedSearchMobileTerminalForm.js"></script>
     <script src="directive/common/search/advancedSearch/pollingMobileTerminal/searchPollingMobileTerminalForm.js"></script>
     <script src="directive/common/search/advancedSearch/vessel/advancedSearchVesselForm.js"></script>
+    <script src="directive/common/search/advancedSearch/sales/advancedSearchSalesForm.js"></script>
     <script src="directive/common/searchResultErrorAlert/searchResultErrorAlert.js"></script>
     <script src="directive/common/sortableTableHeader/sortableTableHeader.js"></script>
     <script src="directive/common/staticInclude/staticInclude.js"></script>
@@ -247,6 +248,36 @@ copy of the GNU General Public License along with the IFDM Suite. If not, see <h
     <script src="directive/common/search/advancedSearch/alarm/holdingTableSearchForm.js"></script>
     <script src="directive/common/search/advancedSearch/alarm/ticketSearchForm.js"></script>
     <script src="service/common/csvService.js"></script>
+
+    <!--Sales-->
+    <script src="partial/sales/sales.config.js"></script>
+    <script src="partial/sales/sales.js"></script>
+    <script src="partial/sales/salesNoteList/salesNoteList.js"></script>
+    <script src="partial/sales/salesDetails/salesDetails.js"></script>
+    <script src="partial/sales/salesDetails/fishingTrip/fishingTrip.js"></script>
+    <script src="partial/sales/salesDetails/salesNote/salesNote.js"></script>
+    <script src="partial/sales/salesDetails/salesNote/document/document.js"></script>
+    <script src="partial/sales/salesDetails/salesNote/fluxReport/fluxReport.js"></script>
+    <script src="partial/sales/salesDetails/salesNote/location/location.js"></script>
+    <script src="partial/sales/salesDetails/salesNote/parties/parties.js"></script>
+    <script src="partial/sales/salesDetails/salesNote/products/products.js"></script>
+    <script src="partial/sales/salesDetails/salesNote/products/productsTable.js"></script>
+    <script src="partial/sales/salesDetails/salesNote/products/productsChart.js"></script>
+    <script src="partial/sales/salesDetails/salesNote/totals/totals.js"></script>
+
+    <script src="service/sales/salesRestApi.js"></script>
+    <script src="service/sales/salesRestService.js"></script>
+    <script src="service/sales/salesSearchService.js"></script>
+    <script src="service/sales/codeListService.js"></script>
+    <script src="service/sales/salesSelectionService.js"></script>
+    <script src="service/sales/salesCsvService.js"></script>
+    <script src="service/sales/model/salesNoteListPageModel.js"></script>
+    <script src="service/sales/model/codeListModel.js"></script>
+
+    <script src="filter/sales/codeListFilter.js"></script>
+
+    <script src="directive/common/groupLineInput/groupLineInput.js"></script>
+    <script src="directive/common/simpleExport/simpleExport.js"></script>
 
     <!-- Assets in zone widget -->
     <script src="widgets/assetsInZone/assetsInZone.js"></script>
@@ -505,7 +536,7 @@ copy of the GNU General Public License along with the IFDM Suite. If not, see <h
     <script src="directive/activity/catchClassDetailTile/catchClassDetailTile.js"></script>
     <script src="partial/spatial/tripsPanel/catchEvolution/catchEvolution.js"></script>
     <script src="partial/spatial/tripsPanel/tripDeparturePanel/tripDeparturePanel.js"></script>
-    
+
     <script src="debugConfig.js"></script>
     <script src="service/activity/mdrCacheService.js"></script>
     <script src="partial/activity/activityHistoryList/activityHistoryList.js"></script>

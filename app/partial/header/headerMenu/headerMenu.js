@@ -78,7 +78,7 @@ angular.module('unionvmsWeb').controller('HeaderMenuCtrl',function($scope, $root
         if(checkAccess('Reporting', 'LIST_REPORTS')){
             addMenuItem(locale.getString('header.menu_reporting'), '/reporting', 'reporting');
         }
-        
+
         //AREAS
         if(checkAccess('Spatial', 'VIEW_AREA_MANAGEMENT_UI') && (checkAccess('Spatial', 'MANAGE_USER_DEFINED_AREAS') || checkAccess('Spatial', 'MANAGE_REFERENCE_DATA') || checkAccess('Spatial', 'MANAGE_ANY_USER_AREA'))){
             addMenuItem(locale.getString('header.menu_areas'), '/areas', 'areas');
@@ -87,7 +87,7 @@ angular.module('unionvmsWeb').controller('HeaderMenuCtrl',function($scope, $root
         if(checkAccess('Activity', 'ACTIVITY_ALLOWED')){
             addMenuItem(locale.getString('header.menu_activity'), '/activity', 'activity');
         }
-        
+
         //MOVEMENT
         var movementLink = false;
         var movementElemId;
@@ -100,6 +100,11 @@ angular.module('unionvmsWeb').controller('HeaderMenuCtrl',function($scope, $root
         }
         if(movementLink){
             addMenuItem(locale.getString('header.menu_movement'), movementLink, movementElemId);
+        }
+
+        //SALES
+        if (checkAccess('Sales', 'getSalesNotes')) {
+            addMenuItem(locale.getString('header.menu_sales'), '/sales', 'sales');
         }
 
         //EXCHANGE
@@ -195,7 +200,7 @@ angular.module('unionvmsWeb').controller('HeaderMenuCtrl',function($scope, $root
         }else{
         	$state.go(homeState, {});
         }
-        
+
     });
 
     init();

@@ -1,0 +1,27 @@
+context: [
+    '/rest/asset/rest',
+    '/rest/vessel/rest',
+    '/rest/mobileterminal/rest/',
+    '/rest/exchange/rest/',
+    '/rest/exchange/activity/',
+    '/rest/movement/rest/',
+    '/rest/movement/activity/',
+    '/rest/audit/rest/',
+    '/rest/rules/rest/',
+    '/rest/rules/activity/',
+    '/rest/reporting/rest/',
+    '/rest/spatial/rest/',
+    '/rest/spatial/image/',
+    '/rest/config/rest',
+    '/rest/mapfish',
+    '/rest/usm-authentication/rest',
+    '/rest/usm-authorisation/rest',
+    '/rest/usm-administration/rest'
+    ]
+host: 'apunid01'
+port: 443
+
+https: false
+secure: false
+
+protocol: 'https:'

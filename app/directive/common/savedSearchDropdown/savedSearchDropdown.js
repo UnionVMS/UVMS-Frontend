@@ -136,6 +136,24 @@ angular.module('unionvmsWeb')
                         }
                     });
                     break;
+                case "SALES":
+                    $scope.items = salesSearchService.getSavedSearches();
+                    $scope.emptyPlaceholder = locale.getString('sales.select_a_saved_search_empty_placeholder');
+
+                    //Delete a saved search
+                    $scope.removeSavedSearch = function (item) {
+                        salesSearchService.deleteSavedSearch(item).then(onDeleteSuccess, onDeleteError);
+                    };
+                    deleteSuccessText = locale.getString('common.saved_search_delete_success');
+                    deleteErrorText = locale.getString('common.saved_search_delete_error');
+
+                    //Watch for changes to the ngModel and update the dropdown label
+                    $scope.$watch(function () { return salesSearchService.getSavedSearches(); }, function (newVal, oldVal) {
+                        if (newVal !== oldVal) {
+                            $scope.items = newVal;
+                        }
+                    });
+                    break;
                 default:
                     console.error("Type is missing for saved search dropdown.");
             }

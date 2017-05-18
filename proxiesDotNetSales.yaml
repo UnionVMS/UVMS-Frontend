@@ -1,0 +1,20 @@
+context: [
+    '/rest/sales/rest'
+    ]
+host: 'localhost'
+port: 20155
+
+https: false
+secure: false
+
+#protocol: 'https:'
+
+# Change origin and headers.host required when trying to reach the server from outside
+#changeOrigin: true
+#headers: {
+#    'origin': 'apunid01',
+#    host: 'apunid01'
+#    #'origin': 'w130423.brussels.intrasoft-intl.private:7001'
+#    #host: 'mare-usm-dev.intrasoft-intl.com'
+#    #host: 'intrarolli.ngrok.io'
+#    }

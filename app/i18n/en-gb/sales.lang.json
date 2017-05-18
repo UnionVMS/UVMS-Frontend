@@ -1,0 +1,93 @@
+﻿{
+    "table_details_button": "Details",
+    "table_header_flag_state": "F. S.",
+    "table_header_external_marketing": "Ext. marking",
+    "table_header_ircs": "IRCS",
+    "table_header_name": "Name",
+    "table_header_sales_date": "Sales date",
+    "table_header_sales_location": "Sales location",
+    "table_header_landing_date": "Landing date",
+    "table_header_landing_port": "Landing port",
+    "table_header_sales_type": "Type",
+    "table_header_seller": "Seller",
+    "table_header_buyer": "Buyer",
+    "table_header_details": "Details",
+    "search_zero_results_error": "No sales note matching your search criteria was found.",
+    "documents_export_failed": "Failed to export documents",
+
+    "advanced_search_placeholder_flag_state": "Flag State",
+    "advanced_search_placeholder_sales_type": "Type of Sale",
+    "advanced_search_placeholder_sales_location": "Sales Location",
+    "advanced_search_placeholder_landing_port": "Landing Port",
+    "advanced_search_placeholder_species": "Species",
+    "advanced_search_species_function_and": "AND",
+    "advanced_search_species_function_or": "OR",
+
+    "search_placeholder_sales_start_date": "Sales Start Date",
+    "search_placeholder_sales_end_date": "Sales End Date",
+    "search_placeholder_vessel_name": "Name / CFR / IRCS",
+
+    "fishing_trip_header": "Fishing Trip",
+    "fishing_trip_id": "Trip ID",
+    "fishing_trip_location_at": "at",
+    "fishing_trip_departure": "Depature",
+    "fishing_trip_arrival": "Arrival",
+    "fishing_trip_landing": "Landing",
+
+    "sales_note_header": "Sales Note",
+
+    "document_header": "Sales document",
+    "document_id": "Id:",
+    "document_currency": "Currency:",
+    "document_occurence": "Occurence:",
+
+    "parties_header": "Parties",
+    "party_id": "Id:",
+    "party_name": "Name:",
+    "party_role": "Role:",
+    "party_role_buyer": "Buyer",
+    "party_role_seller": "Seller",
+
+    "totals_header": "Totals",
+    "totals_weight": "Weight:",
+    "totals_price": "Price:",
+
+    "report_header": "FLUX Report Document",
+    "report_id": "Id:",
+    "report_creation": "Creation:",
+    "report_purpose": "Purpose:",
+    "report_party": "FLUX Party:",
+    "report_export_all": "Export all",
+    "report_exporting_all": "Exporting...",
+
+
+    "location_header": "Sales location",
+    "products_table_header_specie": "Specie",
+    "products_table_header_area": "Area",
+    "products_table_header_freshness": "Freshness",
+    "products_table_header_presentation": "Presentation",
+    "products_table_header_preservation": "Preservation",
+    "products_table_header_factor": "Factor",
+    "products_table_header_category": "Cat.",
+    "products_table_header_class": "Class",
+    "products_table_header_usage": "Usage",
+    "products_table_header_weight": "Weight",
+    "products_table_header_unit": "Unit",
+    "products_table_header_price": "Price",
+    "products_empty": "This sales note contains no products",
+    "products_export_all": "Export all",
+    "products_export_specie": "Export current specie",
+    "products_export_failed": "Failed to export products",
+
+
+    "select_a_saved_search_empty_placeholder": "No saved search was found",
+    "save_search": "Save search",
+    "save_search_modal_header": "Save search",
+    "save_search_modal_input_placeholder": "Choose a title for your search",
+    "save_search_modal_dropdown_header": "or save as the following search",
+    "save_search_modal_dropdown_label": "Select a search",
+    "save_search_modal_error": "The search couldn't be saved.",
+
+    "sales_note_not_exist_error":  "The sales note does not exist"
+
+}

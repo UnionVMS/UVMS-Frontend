@@ -887,7 +887,8 @@ unionvmsWebApp.factory('initService',function($log, configurationService, locale
                 'spatial',
                 'exchange',
                 'alarms',
-                'areas'
+                'areas',
+                'sales'
             ]);
         },
     };
@@ -910,7 +911,8 @@ var restApiURLS = [
     '/reporting/rest/',
     '/spatial/rest/',
     '/mapfish-print',
-    '/usm-authentication/rest', '/usm-authorisation/rest', '/usm-administration/rest'
+    '/usm-authentication/rest', '/usm-authorisation/rest', '/usm-administration/rest',
+    'sales/rest/'
 ];
 
 //Request interceptor that routes REST api request to the REST api server
