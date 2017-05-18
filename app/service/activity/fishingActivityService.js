@@ -81,7 +81,8 @@ angular.module('unionvmsWeb').factory('fishingActivityService', function(activit
             'catches',
             'processingProducts',
             'relocation',
-            'vesselDetails'
+            'vesselDetails',
+            'gearProblems'
         ],
         relocation: [
             'locations',
@@ -881,6 +882,26 @@ angular.module('unionvmsWeb').factory('fishingActivityService', function(activit
         return data;
     };
 
+    /**
+     * Loads the data to be presented in the gear problems tile
+     * 
+     * @memberof fishingActivityService
+     * @private
+     * @alias loadGearProblem
+     * @param {Object} data - A reference to the data to be loaded in the gear problems
+     * @returns {Object} data to be displayed in the gear problems tile
+     */
+    var loadGearProblem = function(data){          
+            if(angular.isDefined(data.gearProblems)){
+                angular.forEach(data.gearProblems, function(gearProb){
+                    if(gearProb.location){
+                        gearProb.location = [gearProb.location];
+                    }
+                });
+            }
+        return data;
+    };
+
  
     /**
      * Loads the data to be presented in the catch tile
@@ -1171,6 +1192,10 @@ angular.module('unionvmsWeb').factory('fishingActivityService', function(activit
                     obj.gearShotRetrieval = loadGearShotRetrieval(data.gearShotRetrievalList);
                     addGearProblemDesc(obj);
                     addGearDescFromGearShotRetrieval(obj.gearShotRetrieval);
+                    break;
+                case 'gearProblems':
+                    obj.gearProblems = loadGearProblem(data.gearProblems);
+                    addGearProblemDesc(obj);
                     break;
                 case 'vesselDetails':
                     obj.vesselDetails = loadVesselDetails(data.vesselDetails);
