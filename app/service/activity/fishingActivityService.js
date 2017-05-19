@@ -870,15 +870,8 @@ angular.module('unionvmsWeb').factory('fishingActivityService', function(activit
                 delete record.gear;
             }
             record.characteristics = loadCharacteristics(record.characteristics);
-            if(angular.isDefined(record.gearProblems)){
-                angular.forEach(record.gearProblems, function(gearProb){
-                    if(gearProb.location){
-                        gearProb.location = [gearProb.location];
-                    }
-                });
-            }
+            record.gearProblems = loadGearProblem(record.gearProblems);
         });
-        
         return data;
     };
 
@@ -891,9 +884,9 @@ angular.module('unionvmsWeb').factory('fishingActivityService', function(activit
      * @param {Object} data - A reference to the data to be loaded in the gear problems
      * @returns {Object} data to be displayed in the gear problems tile
      */
-    var loadGearProblem = function(data){          
-            if(angular.isDefined(data.gearProblems)){
-                angular.forEach(data.gearProblems, function(gearProb){
+    var loadGearProblem = function(data){
+            if(angular.isDefined(data)){
+                angular.forEach(data, function(gearProb){
                     if(gearProb.location){
                         gearProb.location = [gearProb.location];
                     }
