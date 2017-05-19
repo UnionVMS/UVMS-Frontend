@@ -127,7 +127,7 @@ angular.module('unionvmsWeb').directive('carouselTile', function() {
                     fn(scope, {newSlide: nextSlide.index});
                     return origSelect.apply(this, arguments);
                 }
-            }
+            };
         }
     };
 });

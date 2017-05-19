@@ -13,8 +13,8 @@
     "activity_GEAR_SHOT": "GES",
     "activity_GEAR_RETRIEVAL": "GER",
     "activity_START_FISHING": "STFSH",
+    "activity_JOINT_FISHING_OPERATION": "JFO",
     "activity_JOINED_FISHING_OPERATION": "JFO",
-
     "activity_CATCHING_VESSEL": "Catching vessel",
     "activity_PARTICIPATING_VESSEL": "Participating vessel",
     "activity_PAIR_FISHING_PARTNER": "Pair fishing partner",

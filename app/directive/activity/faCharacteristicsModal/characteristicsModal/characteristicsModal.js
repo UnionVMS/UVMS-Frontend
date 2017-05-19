@@ -24,7 +24,7 @@ angular.module('unionvmsWeb').controller('CharacteristicsModalCtrl', function($s
     $scope.characteristics = [];
 
     angular.forEach(modalData, function(value, key) {
-        var itemLabel = locale.getString('activity.fa_details_item_' + key);
+        var itemLabel = locale.getString('activity.fa_details_item_' + key.toLowerCase());
         $scope.characteristics.push({
             key: itemLabel !== "%%KEY_NOT_FOUND%%" ? itemLabel : key,
             value: (angular.isArray(value) === true ? value.join(", ") : value)
