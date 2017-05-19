@@ -46,14 +46,15 @@ angular.module('unionvmsWeb').controller('ArrivalpanelCtrl', function($scope, $s
     var arrivalData = function() {
         $scope.data = [{
             "caption": (arrivalNotification === true) ? locale.getString('activity.clock_panel_estimated_time') : locale.getString('activity.clock_panel_arrival_time'),
-            "arrivalTime": $scope.faServ.activityData.activityDetails.arrivalTime,
-            "showClock": "true"
-        },
-        {
-            "caption": (arrivalNotification === true) ? "" : locale.getString('activity.clock_panel_intended_start_time'),
-            "arrivalTime": (arrivalNotification === true) ? "" : $scope.faServ.activityData.activityDetails.intendedLandingTime,
-            "showClock": (arrivalNotification === true) ? "false" : "true"
+            "arrivalTime": $scope.faServ.activityData.activityDetails.arrivalTime
         }];
+        
+        if ($scope.faServ.activityData.activityDetails.intendedLandingTime){
+            $scope.data.push({
+                "caption": locale.getString('activity.clock_panel_intended_start_time'),
+                "arrivalTime": $scope.faServ.activityData.activityDetails.intendedLandingTime
+            });
+        }
         getReasonCodes($scope.faServ.activityData.activityDetails);
     };
 
@@ -108,7 +109,9 @@ angular.module('unionvmsWeb').controller('ArrivalpanelCtrl', function($scope, $s
      * @alias locationClickCallback
      */
     $scope.locationClickCallback = function() {
-        reportingNavigatorService.goToView('liveViewPanel', 'mapPanel');
+        //TODO when we have it running with reports - mainly for hiding/showing stuff
+        console.log('This is the click callback');
+        //reportingNavigatorService.goToView('liveViewPanel', 'mapPanel');
     };
 
 

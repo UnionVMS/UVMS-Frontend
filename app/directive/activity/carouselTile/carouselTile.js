@@ -37,11 +37,11 @@ angular.module('unionvmsWeb').directive('carouselTile', function() {
 		        scope.displayTopNav = false;
 		    }
 		    
-            /*scope.$watch('ngModel',function(newVal){
+            scope.$watch('ngModel',function(newVal){
                 if(newVal){
                     scope.init();
                 }
-            });*/
+            });
 		}
 	};
 })
