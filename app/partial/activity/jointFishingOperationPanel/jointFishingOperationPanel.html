@@ -28,9 +28,8 @@ copy of the GNU General Public License along with the IFDM Suite. If not, see <h
                 template-url="directive/activity/carouselTile/templates/gearTile/gearTile.html"></carousel-tile>
             <fa-details-panel class="col-md-4 summary-section" ng-model="faServ.activityData.reportDetails"></fa-details-panel>
         </div>
-        <div class="row activity-summary-row">
-            <vessel-tile class="col-md-9 summary-section" ng-model="faServ.activityData.vesselDetails" tile-title="{{'activity.receiver_vessel' | i18n}}"></vessel-tile>
-            <carousel-tile class="col-md-3 summary-section gear-problem" tile-title="{{'activity.header_fa_gear_problem' | i18n}}" ng-model="faServ.activityData.gearProblems" template-url="directive/activity/carouselTile/templates/gearProblemTile/gearProblemTile.html"></carousel-tile>
+        <div class="row activity-summary-row" ng-if="faServ.activityData.vesselDetails">
+            <carousel-tile class="col-md-12" tile-title="{{'activity.joint_fishing_vessel' | i18n}}" ng-model="faServ.activityData.vesselDetails" template-url="directive/activity/carouselTile/templates/vesselTileTemplate/vesselTileTemplate.html"></carousel-tile>
         </div>
         <div class="row activity-summary-row">
             <catch-tile class="col-md-12 summary-section" ng-model="faServ.activityData.catches" tile-title="{{'activity.catch_details_catches_table' | i18n}}" is-location-clickable="isLocationClickable()" buffer-distance="5000" click-callback="locationClickCallback()"></catch-tile>
