@@ -115,7 +115,7 @@ angular.module('unionvmsWeb').factory('activityRestFactory', function ($resource
             });
         },
         getTripCatchesLandingDetails: function () {
-            return $resource('/mock/activity/triplandingdetails/:id', {}, {
+            return $resource('/activity/rest/catch/details/:id', {}, {
                 'get': {
                     method: 'GET',
                     headers: {

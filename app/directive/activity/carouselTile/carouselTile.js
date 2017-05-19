@@ -37,11 +37,11 @@ angular.module('unionvmsWeb').directive('carouselTile', function() {
 		        scope.displayTopNav = false;
 		    }
 		    
-            scope.$watch('ngModel',function(newVal){
+            /*scope.$watch('ngModel',function(newVal){
                 if(newVal){
                     scope.init();
                 }
-            });
+            });*/
 		}
 	};
 })
@@ -127,7 +127,7 @@ angular.module('unionvmsWeb').directive('carouselTile', function() {
                     fn(scope, {newSlide: nextSlide.index});
                     return origSelect.apply(this, arguments);
                 }
-            }
+            };
         }
     };
 });

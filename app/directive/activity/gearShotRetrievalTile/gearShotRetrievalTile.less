@@ -10,8 +10,7 @@ FITNESS FOR A PARTICULAR PURPOSE.  See the GNU General Public License for more d
 copy of the GNU General Public License along with the IFDM Suite. If not, see <http://www.gnu.org/licenses/>.
 */
 .gear-shot-retrieval-tile {
-    .summary-section,
-    .gear-problem {
+    .summary-section {
         &,
         .location-tile {
             min-height: 150px;
@@ -42,7 +41,13 @@ copy of the GNU General Public License along with the IFDM Suite. If not, see <h
     .no-padding-right {
         padding-right: 0px;
     }
-    .gear-problem > .carousel-tile {
+    fa-characteristics-modal {
+        position: absolute;
+        top: 20px;
+        right: 15px;
+    }
+}
+.gear-problem > .carousel-tile {
         padding-left: 0;
         padding-right: 0;
         > .carousel {
@@ -54,9 +59,9 @@ copy of the GNU General Public License along with the IFDM Suite. If not, see <h
             }
         }
     }
-    fa-characteristics-modal {
-        position: absolute;
-        top: 20px;
-        right: 15px;
+    .gear-problem {
+        &,
+        .location-tile {
+            min-height: 150px;
+        }
     }
-}
