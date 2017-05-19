@@ -50,6 +50,7 @@ angular.module('unionvmsWeb').directive('fishingActivityNavigator', function(tri
 					fishingActivityService.id = rec.id;
 					fishingActivityService.isCorrection = rec.corrections;
 					fishingActivityService.documentType = rec.documentType;
+					fishingActivityService.activityType = rec.srcType;
 					scope.timeline.setCurrentPreviousAndNextItem(rec.id, parentId);
 					
 					reportingNavigatorService.goToView('tripsPanel', fishingActivityService.getFaView(rec.srcType),function(){

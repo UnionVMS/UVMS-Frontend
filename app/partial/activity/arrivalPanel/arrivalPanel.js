@@ -20,7 +20,7 @@ copy of the GNU General Public License along with the IFDM Suite. If not, see <h
  * @description
  *  The controller for the Arrival panel partial
  */
-angular.module('unionvmsWeb').controller('ArrivalpanelCtrl', function($scope, $state, fishingActivityService, mdrCacheService, tripSummaryService, locale, loadingStatus, FishingActivity) {
+angular.module('unionvmsWeb').controller('ArrivalpanelCtrl', function($scope, $state, fishingActivityService, mdrCacheService, tripSummaryService, locale, loadingStatus, FishingActivity, reportingNavigatorService) {
     $scope.faServ = fishingActivityService;
 
     var arrivalNotification = ($scope.faServ.documentType.toLowerCase() === 'notification') ? true : false;
@@ -108,8 +108,7 @@ angular.module('unionvmsWeb').controller('ArrivalpanelCtrl', function($scope, $s
      * @alias locationClickCallback
      */
     $scope.locationClickCallback = function() {
-        //TODO when we have it running with reports - mainly for hiding/showing stuff
-        console.log('This is the click callback');
+        reportingNavigatorService.goToView('liveViewPanel', 'mapPanel');
     };
 
 
