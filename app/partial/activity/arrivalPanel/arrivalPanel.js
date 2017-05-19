@@ -20,7 +20,7 @@ copy of the GNU General Public License along with the IFDM Suite. If not, see <h
  * @description
  *  The controller for the Arrival panel partial
  */
-angular.module('unionvmsWeb').controller('ArrivalpanelCtrl', function($scope, $state, fishingActivityService, mdrCacheService, tripSummaryService, locale, loadingStatus, FishingActivity) {
+angular.module('unionvmsWeb').controller('ArrivalpanelCtrl', function($scope, $state, fishingActivityService, mdrCacheService, tripSummaryService, locale, loadingStatus, FishingActivity, reportingNavigatorService) {
     $scope.faServ = fishingActivityService;
 
     var arrivalNotification = ($scope.faServ.documentType.toLowerCase() === 'notification') ? true : false;
@@ -46,14 +46,15 @@ angular.module('unionvmsWeb').controller('ArrivalpanelCtrl', function($scope, $s
     var arrivalData = function() {
         $scope.data = [{
             "caption": (arrivalNotification === true) ? locale.getString('activity.clock_panel_estimated_time') : locale.getString('activity.clock_panel_arrival_time'),
-            "arrivalTime": $scope.faServ.activityData.activityDetails.arrivalTime,
-            "showClock": "true"
-        },
-        {
-            "caption": (arrivalNotification === true) ? "" : locale.getString('activity.clock_panel_intended_start_time'),
-            "arrivalTime": (arrivalNotification === true) ? "" : $scope.faServ.activityData.activityDetails.intendedLandingTime,
-            "showClock": (arrivalNotification === true) ? "false" : "true"
+            "arrivalTime": $scope.faServ.activityData.activityDetails.arrivalTime
         }];
+        
+        if ($scope.faServ.activityData.activityDetails.intendedLandingTime){
+            $scope.data.push({
+                "caption": locale.getString('activity.clock_panel_intended_start_time'),
+                "arrivalTime": $scope.faServ.activityData.activityDetails.intendedLandingTime
+            });
+        }
         getReasonCodes($scope.faServ.activityData.activityDetails);
     };
 
@@ -110,6 +111,7 @@ angular.module('unionvmsWeb').controller('ArrivalpanelCtrl', function($scope, $s
     $scope.locationClickCallback = function() {
         //TODO when we have it running with reports - mainly for hiding/showing stuff
         console.log('This is the click callback');
+        //reportingNavigatorService.goToView('liveViewPanel', 'mapPanel');
     };
 
 

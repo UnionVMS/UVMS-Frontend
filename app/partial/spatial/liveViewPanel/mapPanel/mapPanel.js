@@ -666,6 +666,10 @@ angular.module('unionvmsWeb').controller('MapCtrl',function($log, $scope, locale
 	    
 	    return isAllowed;
 	};
+	
+	$scope.backToFAView = function(){
+	    reportingNavigatorService.goToView('tripsPanel', fishingActivityService.getFaView(fishingActivityService.activityType));
+	};
     
     $scope.$watch(function(){return $scope.repNav.isViewVisible('mapPanel');}, function(newVal,oldVal){
         if(newVal === true && !angular.isDefined($scope.repServ.autoRefreshInterval) && $scope.repServ.refresh.status){

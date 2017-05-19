@@ -13,13 +13,19 @@ copy of the GNU General Public License along with the IFDM Suite. If not, see <h
  * @memberof unionvmsWeb
  * @ngdoc service
  * @name tripSummaryService
+ * @parama $timeout {Service} the angular timeout service
+ * @param loadingStatus {Service} the loading status service <p>{@link unionvmsWeb.loadingStatus}</p>
+ * @param activityRestService {Service} the activity REST service <p>{@link unionvmsWeb.activityRestService}</p>
+ * @param spatialConfigAlertService {Service} the spatial config alert service <p>{@link unionvmsWeb.spatialConfigAlertService}</p>
+ * @param $anchorScroll {Service} angular $anchorScroll service
+ * @param locale {Service} angular locale service
  * @attr {unionvmsWeb.Trip} trip - The current trip in trip summary
  * @attr {Object} mapConfigs - A property object that will contain the cronology of trips related to the current trip
  * @attr {Array} tabs - A property object that will be the catch details
  * @description
  *  Service to manage the trip summary view in the application
  */
-angular.module('unionvmsWeb').factory('tripSummaryService',function($timeout) {
+angular.module('unionvmsWeb').factory('tripSummaryService',function($timeout, loadingStatus, activityRestService, spatialConfigAlertService, $anchorScroll, locale) {
 	var tripSummaryService = {
 	    withMap: undefined,
 	    trip: undefined,
@@ -41,7 +47,6 @@ angular.module('unionvmsWeb').factory('tripSummaryService',function($timeout) {
         if (angular.isDefined(fromPopup) && fromPopup){
             this.initializeTrip(tripId);
         } else {
-            this.isLoadingTrip = true;
             var self = this;
 
             if(!angular.isDefined(this.tabs)){
@@ -63,10 +68,8 @@ angular.module('unionvmsWeb').factory('tripSummaryService',function($timeout) {
                     }
                 });
             }
-
-            $timeout(function(){
-                self.isLoadingTrip = false;
-            });
+            
+            this.initTripSummary();
         }
     };
 
@@ -79,6 +82,72 @@ angular.module('unionvmsWeb').factory('tripSummaryService',function($timeout) {
      */
 	tripSummaryService.resetMapConfigs = function(){
 	    this.mapConfigs = undefined;
+	};
+	
+	/**
+	 * Initialize trip summary requests
+	 * 
+	 * @memberof tripSummaryService
+	 * @public
+	 * @alias initTripSummary
+	 */
+	tripSummaryService.initTripSummary = function(){
+	    var self = this;
+	    loadingStatus.isLoading('TripSummary', true);
+        //get vessel and role data for the specified trip
+        activityRestService.getTripVessel(self.trip.id).then(function (response) {
+            self.trip.fromJson('vessel', response.data);
+            loadingStatus.isLoading('TripSummary', false);
+        }, function (error) {
+            $anchorScroll();
+            spatialConfigAlertService.hasAlert = true;
+            spatialConfigAlertService.hasError = true;
+            spatialConfigAlertService.alertMessage = locale.getString('activity.error_loading_trip_summary_vessel_data');
+            spatialConfigAlertService.hideAlert();
+            loadingStatus.isLoading('TripSummary', false);
+        });
+
+        loadingStatus.isLoading('TripSummary', true);
+        //get activity reports data for the specified trip
+        activityRestService.getTripReports(self.trip.id).then(function (response) {
+            self.trip.fromJson('reports', response.data);
+            loadingStatus.isLoading('TripSummary', false);
+        }, function (error) {
+            $anchorScroll();
+            spatialConfigAlertService.hasAlert = true;
+            spatialConfigAlertService.hasError = true;
+            spatialConfigAlertService.alertMessage = locale.getString('activity.error_loading_trip_summary_reports');
+            spatialConfigAlertService.hideAlert();
+            loadingStatus.isLoading('TripSummary', false);
+        });
+
+        loadingStatus.isLoading('TripSummary', true);
+        // get trip catches data for the specific trip
+        activityRestService.getTripCatches(self.trip.id).then(function (response) {
+            self.trip.fromJson('catch', response.data);
+            loadingStatus.isLoading('TripSummary', false);
+        }, function (error) {
+            $anchorScroll();
+            spatialConfigAlertService.hasAlert = true;
+            spatialConfigAlertService.hasError = true;
+            spatialConfigAlertService.alertMessage = locale.getString('activity.error_loading_trip_summary_catch_details');
+            spatialConfigAlertService.hideAlert();
+            loadingStatus.isLoading('TripSummary', false);
+        });
+        
+        loadingStatus.isLoading('TripSummary', true);
+        // get trip map data for the specific trip
+        activityRestService.getTripMapData(self.trip.id).then(function (response) {
+            self.trip.fromJson('mapData', response);
+            loadingStatus.isLoading('TripSummary', false);
+        }, function (error) {
+            $anchorScroll();
+            spatialConfigAlertService.hasAlert = true;
+            spatialConfigAlertService.hasError = true;
+            spatialConfigAlertService.alertMessage = locale.getString('activity.error_loading_trip_summary_map_data');
+            spatialConfigAlertService.hideAlert();
+            loadingStatus.isLoading('TripSummary', false);
+        });
 	};
 	
 	return tripSummaryService;
