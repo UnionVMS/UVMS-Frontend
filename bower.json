@@ -58,7 +58,8 @@
     "tinycolor": "^1.4.1",
     "turf": "https://github.com/Turfjs/turf.git#~2.0.2",
     "underscore": "~1.8",
-    "angular-resizable": "^1.2.0"
+    "angular-resizable": "^1.2.0",
+    "angular-slick-carousel": "^3.1.7"
   },
   "devDependencies": {
     "jasmine-collection-matchers": "~0.1.2"
