@@ -1210,49 +1210,6 @@ angular.module('unionvmsWeb').factory('fishingActivityService', function(activit
                     addGearProblemDesc(obj);
                     break;
                 case 'vesselDetails':
-                    var vesselObj = {
-                        "name":"Marie-Pierre André",
-                        "country":"FRA",
-                        "contactParties":[
-                        {
-                            "role":"MASTER",
-                            "contactPerson":{
-                                "alias":"AMA capitaine BFT"
-                            },
-                            "structuredAddress":[
-                                {
-                                    "streetName":"la ciotat",
-                                    "countryCode":"FRA"
-                                }
-                            ]
-                        }
-                        ],
-                        "vesselIds":[
-                        {
-                            "id":"ATEU0MAR00000",
-                            "schemeId":"ICCAT"
-                        },
-                        {
-                            "id":"FRA201504172",
-                            "schemeId":"CFR"
-                        },
-                        {
-                            "id":"MA201504",
-                            "schemeId":"EXT_MARK"
-                        },
-                        {
-                            "id":"FW20150",
-                            "schemeId":"IRCS"
-                        }
-                        ],
-                        "authorizations":[
-
-                        ]
-                    };
-                    data.vesselDetails = [];
-                    data.vesselDetails.push(angular.copy(vesselObj));
-                    data.vesselDetails.push(angular.copy(vesselObj));
-
                     obj.vesselDetails = loadVesselDetails(data.vesselDetails);
                     break;
             }
