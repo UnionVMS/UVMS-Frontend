@@ -76,7 +76,8 @@ module.exports = function (grunt) {
                   '/config/rest',
                   '/mapfish-print',
                   '/usm-authentication/rest', '/usm-authorisation/rest', '/usm-administration/rest',
-                  '/activity/rest', '/sales/rest'],
+                  '/activity/rest',
+                  '/sales/rest'],
               host: 'localhost',
               port: 8080
         },{

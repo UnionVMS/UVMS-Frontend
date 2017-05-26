@@ -95,7 +95,7 @@ angular.module('unionvmsWeb').directive('savedSearchDropdown', function() {
 });
 
 angular.module('unionvmsWeb')
-    .controller('savedSearchDropdownCtrl', function($scope, locale, savedSearchService, alertService, confirmationModal){
+    .controller('savedSearchDropdownCtrl', function($scope, locale, savedSearchService, alertService, confirmationModal, salesSearchService){
 
             //Get/set items and functions depending on type
             var deleteSuccessText, deleteErrorText;

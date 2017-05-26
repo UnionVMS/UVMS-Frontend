@@ -83,7 +83,7 @@ angular.module('unionvmsWeb')
         //Reset all search fields
         function $$resetSearchFields() {
             $scope.resetAdvancedSearchForm(false);
-        };
+        }
 
         //Reset the saved search dropdown
         function $$resetSelectedSearchGroup() {
