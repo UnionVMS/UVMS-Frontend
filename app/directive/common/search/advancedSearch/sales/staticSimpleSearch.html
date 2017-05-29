@@ -5,21 +5,25 @@
             <input type="text" class="form-control searchText" ng-disabled="advancedSearchVisible" placeholder="{{'sales.search_placeholder_vessel_name' | i18n}}" ng-model="advancedSearchObject.vesselName">
         </div>
         <div class="col-md-2 nopaddingleft searchcriteria">
-            <datepicker-input model="advancedSearchObject.salesStartDate"
-                              placeholder="{{'sales.search_placeholder_sales_start_date' | i18n}}"
-                              ng-disabled="advancedSearchVisible"
-                              ng-change-callback="updateSalesStartDate"
-                              max-date="advancedSearchObject.salesEndDate">
+            <datepicker-input   input-field-id="salesStartDate"
+                                name="salesStartDate"
+                                model="advancedSearchObject.salesStartDate"
+                                placeholder="{{'sales.search_placeholder_sales_start_date' | i18n}}"
+                                ng-disabled="advancedSearchVisible"
+                                ng-change-callback="updateSalesStartDate"
+                                max-date="advancedSearchObject.salesEndDate">
             </datepicker-input>
         </div>
         <div class="col-md-2 nopaddingleft searchcriteria">
-            <datepicker-input model="advancedSearchObject.salesEndDate"
-                              placeholder="{{'sales.search_placeholder_sales_end_date' | i18n}}"
-                              ng-disabled="advancedSearchVisible"
-                              ng-change-callback="updateSalesEndDate"
-                              min-date="advancedSearchObject.salesStartDate">
+            <datepicker-input   input-field-id="salesEndDate"
+                                name="salesEndDate"
+                                model="advancedSearchObject.salesEndDate"
+                                placeholder="{{'sales.search_placeholder_sales_end_date' | i18n}}"
+                                ng-disabled="advancedSearchVisible"
+                                ng-change-callback="updateSalesEndDate"
+                                min-date="advancedSearchObject.salesStartDate">
             </datepicker-input>
-        </div>  
+        </div>
         <div class="col-md-2 smallerpadding col-md-offset-2">
             <div class="row nomargin">
                 <div class="col-md-12 colNoPadding searchcriteria">

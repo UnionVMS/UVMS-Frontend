@@ -6,18 +6,11 @@ angular.module('unionvmsWeb')
 
         var codelists = ['flagStates', 'salesCategories', 'salesLocations', 'landingPorts', 'species'];
 
-        //TODO: Validation
-        //$scope.mmsiRegExp = salesValidationService.getMMSIPattern();
-        //$scope.mmsiValidationMessages = {
-        //    'pattern' : locale.getString('sales.sales_details_mmsi_pattern_validation_message')
-        //};
-
         var init = function () {
             codeListService.getCodeListsAssured(codelists).then(function (lists) {
                 $scope.config = lists;
             });
         };
-
 
         //On click on the reset link
         $scope.resetSearch = function () {
@@ -39,12 +32,12 @@ angular.module('unionvmsWeb')
         $scope.updateSalesStartDate = function (newValue) {
             if (!angular.isDefined(newValue)) { return; }
             var searchObj = searchService.getAdvancedSearchObject();
-            searchObj.salesStartDate = dateTimeService.isFormattedAsUnixSecondsTimstamp(newValue);
+            searchObj.salesStartDate = newValue;
         };
         $scope.updateSalesEndDate = function (newValue) {
             if (!angular.isDefined(newValue)) { return; }
             var searchObj = searchService.getAdvancedSearchObject();
-            searchObj.salesEndDate = dateTimeService.isFormattedAsUnixSecondsTimstamp(newValue);
+            searchObj.salesEndDate = newValue;
         };
 
         $scope.setCorrectSpecies = function (species, func) {
