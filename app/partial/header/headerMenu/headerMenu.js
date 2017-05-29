@@ -9,13 +9,13 @@ the hope that it will be useful, but WITHOUT ANY WARRANTY; without even the impl
 FITNESS FOR A PARTICULAR PURPOSE.  See the GNU General Public License for more details. You should have received a
 copy of the GNU General Public License along with the IFDM Suite. If not, see <http://www.gnu.org/licenses/>.
  */
-angular.module('unionvmsWeb').controller('HeaderMenuCtrl',function($scope, $rootScope, $location, $state, $timeout, userService, userFeatureAccess, startPageService, locale){
+angular.module('unionvmsWeb').controller('HeaderMenuCtrl',function($scope, $rootScope, $location, $state, $timeout, $log, userService, userFeatureAccess, startPageService, locale){
 
     var checkAccess = function(module, feature) {
         return userService.isAllowed(feature, module, true);
     };
 
-    var addMenuItem = function(text, url, elemId) {
+    $scope.addMenuItem = function(text, url, elemId) {
         $scope.menu.push(
             {
                 'title': text,
@@ -25,26 +25,26 @@ angular.module('unionvmsWeb').controller('HeaderMenuCtrl',function($scope, $root
         );
     };
 
-    var setMenu = function() {
+    $scope.setMenu = function() {
 
         $scope.menu = [];
 
         // Today
-        addMenuItem(locale.getString('header.menu_today'), '/today', 'today');
+        $scope.addMenuItem(locale.getString('header.menu_today'), '/today', 'today');
 
         // Reports
         if (checkAccess('Reporting', 'LIST_REPORTS')) {
-            addMenuItem(locale.getString('header.menu_reporting'), '/reporting', 'reporting');
+            $scope.addMenuItem(locale.getString('header.menu_reporting'), '/reporting', 'reporting');
         }
 
         // Area management
         if (checkAccess('Spatial', 'VIEW_AREA_MANAGEMENT_UI') && (checkAccess('Spatial', 'MANAGE_USER_DEFINED_AREAS') || checkAccess('Spatial', 'MANAGE_REFERENCE_DATA') || checkAccess('Spatial', 'MANAGE_ANY_USER_AREA'))) {
-            addMenuItem(locale.getString('header.menu_areas'), '/areas', 'areas');
+            $scope.addMenuItem(locale.getString('header.menu_areas'), '/areas', 'areas');
         }
 
         // Activity
         if (checkAccess('Activity', 'ACTIVITY_ALLOWED')) {
-            addMenuItem(locale.getString('header.menu_activity'), '/activity', 'activity');
+            $scope.addMenuItem(locale.getString('header.menu_activity'), '/activity', 'activity');
         }
 
         // Positions
@@ -57,30 +57,32 @@ angular.module('unionvmsWeb').controller('HeaderMenuCtrl',function($scope, $root
         } else if (checkAccess('Movement', 'viewManualMovements')) {
             movementLink = '/movement/manual';
             movementElemId = 'manual-movement';
+        } else {
+            movementLink = undefined;
         }
 
         if (movementLink) {
-            addMenuItem(locale.getString('header.menu_movement'), movementLink, movementElemId);
+            $scope.addMenuItem(locale.getString('header.menu_movement'), movementLink, movementElemId);
         }
 
         // Exchange
         if (checkAccess('Exchange', 'viewExchange')) {
-            addMenuItem(locale.getString('header.menu_exchange'), '/exchange', 'exchange');
+            $scope.addMenuItem(locale.getString('header.menu_exchange'), '/exchange', 'exchange');
         }
 
         // Polling
         if (checkAccess('Union-VMS', 'viewMobileTerminalPolls')) {
-            addMenuItem(locale.getString('header.menu_polling'), '/polling/logs', 'polling-logs');
+            $scope.addMenuItem(locale.getString('header.menu_polling'), '/polling/logs', 'polling-logs');
         }
 
         // Assets
         if (checkAccess('Union-VMS', 'viewVesselsAndMobileTerminals')) {
-            addMenuItem(locale.getString('header.menu_assets'), '/assets', 'assets');
+            $scope.addMenuItem(locale.getString('header.menu_assets'), '/assets', 'assets');
         }
 
         // Mobile Terminals
         if (checkAccess('Union-VMS', 'viewVesselsAndMobileTerminals')) {
-            addMenuItem(locale.getString('header.menu_communication'), '/communication', 'communication');
+            $scope.addMenuItem(locale.getString('header.menu_communication'), '/communication', 'communication');
         }
 
         // Alerts
@@ -99,12 +101,12 @@ angular.module('unionvmsWeb').controller('HeaderMenuCtrl',function($scope, $root
         }
 
         if (alarmsLink) {
-            addMenuItem(locale.getString('header.menu_alarmconditions'), alarmsLink, alarmsElemId);
+            $scope.addMenuItem(locale.getString('header.menu_alarmconditions'), alarmsLink, alarmsElemId);
         }
 
         // User
         if (userFeatureAccess.accessToAnyFeatureInList('USM')) {
-            addMenuItem(locale.getString('header.menu_user'), '/usm/users', 'users');
+            $scope.addMenuItem(locale.getString('header.menu_user'), '/usm/users', 'users');
         }
 
         // Admin
@@ -120,7 +122,7 @@ angular.module('unionvmsWeb').controller('HeaderMenuCtrl',function($scope, $root
         }
 
         if (adminLink) {
-            addMenuItem(locale.getString('header.menu_admin'), adminLink, adminElemId);
+            $scope.addMenuItem(locale.getString('header.menu_admin'), adminLink, adminElemId);
         }
     };
 
@@ -139,19 +141,16 @@ angular.module('unionvmsWeb').controller('HeaderMenuCtrl',function($scope, $root
     };
 
     $rootScope.$on('AuthenticationSuccess', function () {
-        setMenu();
+        $scope.setMenu();
     });
 
     $rootScope.$on('needsAuthentication', function () {
-        setMenu();
+        $scope.setMenu();
     });
 
     $rootScope.$on('ContextSwitch', function () {
-        setMenu();
+        $scope.setMenu();
         var homeState = startPageService.getStartPageStateName();
-
-        console.log($state.current.name);
-        console.log(homeState);
 
         if ($state.current.name === homeState) {
         	//This timeout is required when the homeState is the same as the current tab
@@ -164,6 +163,6 @@ angular.module('unionvmsWeb').controller('HeaderMenuCtrl',function($scope, $root
 
     });
 
-    setMenu();
+    $scope.setMenu();
 
 });

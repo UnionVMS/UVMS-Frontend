@@ -11,26 +11,84 @@ copy of the GNU General Public License along with the IFDM Suite. If not, see <h
  */
 describe('HeaderMenuCtrl', function() {
 
-	beforeEach(module('unionvmsWeb'));
+    beforeEach(module('unionvmsWeb'));
 
-	it('should be active', inject(function($rootScope, $controller) {
-		var scope = $rootScope.$new();
-		var ctrl = $controller('HeaderMenuCtrl', {
-			$scope: scope,
-			$location: {
-				path: function() {
-					return "/uvms";
-				}
-			}
-		});
+    beforeEach(inject(function($rootScope, $controller, $state, $httpBackend) {
+        scope = $rootScope.$new();
+        ctrl = $controller('HeaderMenuCtrl', {$scope:scope});
+        state = $state;
+        rootScope = $rootScope;
 
-		expect(scope.isActive("/uvms")).toBeTruthy();
-		expect(scope.isActive("/uvms/apa")).toBeTruthy();
+        //Mock
+        $httpBackend.whenGET(/usm/).respond();
+        $httpBackend.whenGET(/i18n/).respond();
+        $httpBackend.whenGET(/globals/).respond({data : []});
+    }));
 
-		expect(scope.isActive("uvms/apa")).toBeFalsy();
-		expect(scope.isActive("")).toBeFalsy();
-		expect(scope.isActive("/")).toBeFalsy();
-		expect(scope.isActive("/uvms2")).toBeFalsy();
-	}));
+    it('should set naviugation tab to active', inject(function($controller) {
+        var ctrl = $controller('HeaderMenuCtrl', {
+            $scope: scope,
+            $location: {
+                path: function() {
+                    return "/uvms";
+                }
+            }
+        });
 
+        expect(scope.isActive("/uvms")).toBeTruthy();
+        expect(scope.isActive("/uvms/apa")).toBeTruthy();
+
+        expect(scope.isActive("uvms/apa")).toBeFalsy();
+        expect(scope.isActive("")).toBeFalsy();
+        expect(scope.isActive("/")).toBeFalsy();
+        expect(scope.isActive("/uvms2")).toBeFalsy();
+    }));
+
+    it('should always display the "today" navigation tab, regardless of other access', inject(function(userService) {
+        var userAllowedSpy = spyOn(userService, "isAllowed").andReturn(false);
+        scope.setMenu();
+
+        expect(userAllowedSpy).toHaveBeenCalled();
+        expect(scope.menu.length).toBe(1);
+        expect(scope.menu[0].url).toBe('/today');
+        expect(scope.menu[0].elemId).toBe('today');
+    }));
+
+    it('should display more navigation tabs than "today" if the user has access', inject(function(userService) {
+        var userAllowedSpy = spyOn(userService, "isAllowed").andReturn(true);
+        scope.setMenu();
+        expect(userAllowedSpy).toHaveBeenCalled();
+        expect(scope.menu.length).toBeGreaterThan(1);
+    }));
+
+    it('444', inject(function(userService) {
+        var userAllowedSpy = spyOn(userService, "isAllowed").andReturn(true);
+        scope.addMenuItem('Activity', '/activity', 'activity');
+
+        expect(scope.menu.length).toBe(2);
+        expect(scope.menu[1].url).toBe('/activity');
+        expect(scope.menu[1].elemId).toBe('activity');
+    }));
+
+    it('should set menu if authentication success', function() {
+        var setMenuSpy = spyOn(scope, 'setMenu');
+        expect(setMenuSpy).not.toHaveBeenCalled();
+
+        //Broadcast event
+        rootScope.$broadcast("AuthenticationSuccess");
+        rootScope.$digest();
+
+        expect(setMenuSpy).toHaveBeenCalled();
+    });
+
+    it('should set menu if authentication needed', function() {
+        var setMenuSpy = spyOn(scope, 'setMenu');
+        expect(setMenuSpy).not.toHaveBeenCalled();
+
+        //Broadcast event
+        rootScope.$broadcast("needsAuthentication");
+        rootScope.$digest();
+
+        expect(setMenuSpy).toHaveBeenCalled();
+    });
 });
