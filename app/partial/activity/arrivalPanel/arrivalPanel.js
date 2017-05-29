@@ -111,7 +111,7 @@ angular.module('unionvmsWeb').controller('ArrivalpanelCtrl', function($scope, $s
     $scope.locationClickCallback = function() {
         //TODO when we have it running with reports - mainly for hiding/showing stuff
         console.log('This is the click callback');
-        reportingNavigatorService.goToView('liveViewPanel', 'mapPanel');
+        //reportingNavigatorService.goToView('liveViewPanel', 'mapPanel');
     };
 
 
