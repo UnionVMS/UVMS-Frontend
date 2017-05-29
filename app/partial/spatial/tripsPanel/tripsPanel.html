@@ -44,7 +44,7 @@ copy of the GNU General Public License along with the IFDM Suite. If not, see <h
             </div>
         </uib-tab>
     </uib-tabset>
-    <div ng-if="repNav.isViewVisible('catchDetails')" ng-include="'partial/spatial/tripsPanel/catchDetails/catchDetails.html'"></div>
+    <div ng-if="repNav.isSectionVisible('tripsPanel') && repNav.isViewVisible('catchDetails')" ng-include="'partial/spatial/tripsPanel/catchDetails/catchDetails.html'"></div>
     <div ng-if="repNav.isViewVisible('catchEvolution')" ng-include="'partial/spatial/tripsPanel/catchEvolution/catchEvolution.html'"></div>
     <div ng-if="repNav.isViewVisible('tripFishingOperationPanel')">
         <fishing-activity-navigator partial="partial/spatial/tripsPanel/tripFishingOperationPanel/tripFishingOperationPanel.html"></fishing-activity-navigator>

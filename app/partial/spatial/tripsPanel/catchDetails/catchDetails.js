@@ -29,7 +29,10 @@ angular.module('unionvmsWeb').controller('CatchdetailsCtrl', function ($scope, a
     */
     var init = function () {
 
-        $scope.tripId = tripSummaryService.trip.id;
+        if(angular.isDefined(tripSummaryService.trip)){
+            $scope.tripId = tripSummaryService.trip.id;
+        }
+    
         if (angular.isDefined($scope.tripId)) {
             /*loadingStatus.isLoading('TripSummary', true, 1);
             //FIXME change with proper trip id
