@@ -9,7 +9,7 @@ the hope that it will be useful, but WITHOUT ANY WARRANTY; without even the impl
 FITNESS FOR A PARTICULAR PURPOSE.  See the GNU General Public License for more details. You should have received a
 copy of the GNU General Public License along with the IFDM Suite. If not, see <http://www.gnu.org/licenses/>.
  */
-angular.module('unionvmsWeb').controller('HeaderMenuCtrl',function($scope, $rootScope, $location, $state, $timeout, userService, startPageService, locale){
+angular.module('unionvmsWeb').controller('HeaderMenuCtrl',function($scope, $rootScope, $location, $state, $timeout, userService, startPageService, locale, userFeatureAccess){
 
     var checkAccess = function(module, feature) {
         return userService.isAllowed(feature,module,true);
@@ -25,47 +25,6 @@ angular.module('unionvmsWeb').controller('HeaderMenuCtrl',function($scope, $root
         });
     };
 
-    //Features for showing user in menu
-    var userFeatures = [
-        'activateRoles',
-        'activateScopes',
-        'activateUsers',
-        'assignRoles',
-        'assignScopes',
-        'configurePolicies',
-        'copyUserProfile',
-        'manageApplications',
-        'manageEndpoints',
-        'manageOrganisations',
-        'managePersons',
-        'manageRoles',
-        'manageScopes',
-        'manageUserContexts',
-        'manageUserPreferences',
-        'manageUsers',
-        'viewApplications',
-        'viewEndpointsDetails',
-        'viewOrganisationDetails',
-        'viewOrganisations',
-        'viewPersonDetails',
-        'viewRoles',
-        'viewScopes',
-        'viewUserContexts',
-        'viewUserPreferences',
-        'viewUsers',
-    ];
-
-    var accessToAnyFeatureInList = function(application, featureList){
-        var access = false;
-        $.each(featureList, function(index, feature){
-            if(checkAccess(application, feature)){
-                access = true;
-                return false;
-            }
-        });
-        return access;
-    };
-
     var setMenu = function(){
         $scope.menu = [];
 
@@ -78,7 +37,7 @@ angular.module('unionvmsWeb').controller('HeaderMenuCtrl',function($scope, $root
         if(checkAccess('Reporting', 'LIST_REPORTS')){
             addMenuItem(locale.getString('header.menu_reporting'), '/reporting', 'reporting');
         }
-        
+
         //AREAS
         if(checkAccess('Spatial', 'VIEW_AREA_MANAGEMENT_UI') && (checkAccess('Spatial', 'MANAGE_USER_DEFINED_AREAS') || checkAccess('Spatial', 'MANAGE_REFERENCE_DATA') || checkAccess('Spatial', 'MANAGE_ANY_USER_AREA'))){
             addMenuItem(locale.getString('header.menu_areas'), '/areas', 'areas');
@@ -87,7 +46,7 @@ angular.module('unionvmsWeb').controller('HeaderMenuCtrl',function($scope, $root
         if(checkAccess('Activity', 'ACTIVITY_ALLOWED')){
             addMenuItem(locale.getString('header.menu_activity'), '/activity', 'activity');
         }
-        
+
         //MOVEMENT
         var movementLink = false;
         var movementElemId;
@@ -135,7 +94,7 @@ angular.module('unionvmsWeb').controller('HeaderMenuCtrl',function($scope, $root
         }
 
         //USERS
-        if(accessToAnyFeatureInList('USM', userFeatures)){
+        if (userFeatureAccess.accessToAnyFeatureInList('USM')) {
             addMenuItem(locale.getString('header.menu_user'), '/usm/users', 'users');
         }
 
@@ -195,7 +154,7 @@ angular.module('unionvmsWeb').controller('HeaderMenuCtrl',function($scope, $root
         }else{
         	$state.go(homeState, {});
         }
-        
+
     });
 
     init();
