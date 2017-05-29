@@ -261,7 +261,7 @@ angular.module('unionvmsWeb').directive('combobox', function(comboboxService,loc
                     if(!angular.isDefined(scope.ngModel)){
                         scope.ngModel = [];
                     }
-                	if(scope.ngModel.indexOf(item.code) === -1){
+                	if(angular.isDefined(item.code) && scope.ngModel.indexOf(item.code) === -1){
                 		var arr = [].concat(scope.ngModel);
                 		arr.push(getItemCode(item));
                 		scope.ngModel = arr;

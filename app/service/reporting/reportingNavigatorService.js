@@ -20,7 +20,8 @@ angular.module('unionvmsWeb').factory('reportingNavigatorService',function() {
 //        userPreferences: undefined,
 //        liveViewPanel: {
 //            mapPanel : undefined,
-//            vmsPanel: undefined
+//            vmsPanel: undefined,
+//			  catchDetails: undefined
 //        },
 //		  tripsPanel: {
 //            tripSummary : undefined,
