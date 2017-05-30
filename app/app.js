@@ -450,6 +450,7 @@ unionvmsWebApp.config(function($stateProvider, $compileProvider, tmhDynamicLocal
             onExit: function(loadingStatus,$modalStack){
                 loadingStatus.resetState();
                 $modalStack.dismissAll();
+                angular.element('body').removeClass('modal-open');
             }
         })
         .state('app.reporting-id', {
