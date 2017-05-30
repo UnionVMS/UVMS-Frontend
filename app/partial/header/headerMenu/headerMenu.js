@@ -57,8 +57,6 @@ angular.module('unionvmsWeb').controller('HeaderMenuCtrl',function($scope, $root
         } else if (checkAccess('Movement', 'viewManualMovements')) {
             movementLink = '/movement/manual';
             movementElemId = 'manual-movement';
-        } else {
-            movementLink = undefined;
         }
 
         if (movementLink) {
@@ -75,14 +73,14 @@ angular.module('unionvmsWeb').controller('HeaderMenuCtrl',function($scope, $root
             $scope.addMenuItem(locale.getString('header.menu_polling'), '/polling/logs', 'polling-logs');
         }
 
-        // Assets
-        if (checkAccess('Union-VMS', 'viewVesselsAndMobileTerminals')) {
-            $scope.addMenuItem(locale.getString('header.menu_assets'), '/assets', 'assets');
-        }
-
         // Mobile Terminals
         if (checkAccess('Union-VMS', 'viewVesselsAndMobileTerminals')) {
             $scope.addMenuItem(locale.getString('header.menu_communication'), '/communication', 'communication');
+        }
+
+        // Assets
+        if (checkAccess('Union-VMS', 'viewVesselsAndMobileTerminals')) {
+            $scope.addMenuItem(locale.getString('header.menu_assets'), '/assets', 'assets');
         }
 
         // Alerts
@@ -164,5 +162,4 @@ angular.module('unionvmsWeb').controller('HeaderMenuCtrl',function($scope, $root
     });
 
     $scope.setMenu();
-
 });
