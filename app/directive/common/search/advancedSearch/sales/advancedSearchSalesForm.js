@@ -1,5 +1,5 @@
 angular.module('unionvmsWeb')
-    .controller('AdvancedSearchSalesFormCtrl', function ($scope, $modal, locale, unitTransformer, codeListService, dateTimeService, searchService, savedSearchService, salesSearchService) { //TODO: salesValidationService,
+    .controller('AdvancedSearchSalesFormCtrl', function ($scope, $modal, locale, unitTransformer, codeListService, dateTimeService, searchService, savedSearchService, salesSearchService, userService) { //TODO: salesValidationService,
 
         $scope.advancedSearch = salesSearchService.getAdvancedSearchStatus;
         $scope.savedSearches = salesSearchService.savedSearches;
@@ -49,6 +49,13 @@ angular.module('unionvmsWeb')
                 searchObj.allSpecies = undefined;
                 searchObj.anySpecies = species;
             }
+        };
+
+        $scope.checkAccess = function (feature) {
+            if (userService.isAllowed(feature, "Sales", true)) {
+                return true;
+            }
+            return false;
         };
 
         $scope.openSaveGroupModal = function () {
