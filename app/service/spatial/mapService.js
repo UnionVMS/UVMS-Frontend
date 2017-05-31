@@ -1796,8 +1796,8 @@ angular.module('unionvmsWeb').factory('mapService', function(locale, $rootScope,
 	            newHeight = minHeight;
 	        }
 	        
-	        $('.map-container').css('height', newHeight);
-	        $('#map').css('height', newHeight + 'px');
+	        $('.map-container').css('height','100%');
+	        $('#map').css('height', '100%');
 	        
 	        ms.updateMapSize();
         }, 100);
