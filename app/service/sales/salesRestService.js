@@ -22,11 +22,22 @@
 
         ///////////////////////////
 
-        function getSalesNotesPage(pageNr, filters) {
+        function getSalesNotesPage(pageNr, filters, sorting) {
 
             var deferred = $q.defer();
             var pageSize = 10;
-            salesRestApi.sales.search({}, { pageIndex: pageNr, pageSize: pageSize, filters: filters }, function (response) {
+            var payload = {
+                pageIndex: pageNr,
+                pageSize: pageSize,
+                filters: filters
+            };
+
+            if (sorting && sorting.sortField && sorting.sortDirection) {
+                payload.sortField = sorting.sortField;
+                payload.sortDirection = sorting.sortDirection;
+            }
+
+            salesRestApi.sales.search({}, payload, function (response) {
                 if ($$valid(response, deferred)) {
                     var salesNoteListPage = new SalesNoteListPage();
                     angular.extend(salesNoteListPage, response.data);

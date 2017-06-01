@@ -8,10 +8,8 @@
                 </div>
                <simple-export exportfunc="vm.exportSalesNotes"></simple-export>
             </div>
-            <!--<i class="fa fa-lg fa-download" title="{{'spatial.tab_vms_export_csv' | i18n}}" st-export-data export-fn="exportAsCSV(vmsType, data)" vms-type="positions" ng-show="isAllowed('Reporting', 'EXPORT_VMS_REPORT_DATA')"></i> -->
-            <sales-note-list sales-notes="vm.currentSearchResults">                             >
+            <sales-note-list>
             </sales-note-list>
-            <search-results-pagination page='vm.currentSearchResults.page' total='vm.currentSearchResults.totalNumberOfPages' callback='vm.gotoPage'></search-results-pagination>
             </div>
     </div>
 </div>

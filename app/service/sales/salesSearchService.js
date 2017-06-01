@@ -55,14 +55,16 @@
             return searchResults;
         }
 
-        function searchSalesNotes() {
+        function searchSalesNotes(sorting) {
             lastSearchObject = angular.copy(advancedSearchObject);
+
             searchResults.clearErrorMessage();
             searchResults.setLoading(true);
-
             var deferred = $q.defer();
+
             var filters = advancedSearchObject || {};
-            salesRestService.getSalesNotesPage(currentPageNr, filters).then(function (page) {
+
+            salesRestService.getSalesNotesPage(currentPageNr, filters, sorting).then(function (page) {
                 searchResults.updateWithNewResults(page);
                 deferred.resolve(page);
             }, function (error) {

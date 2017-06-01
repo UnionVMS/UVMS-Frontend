@@ -1,6 +1,6 @@
 ﻿(function () {
     'use strict';
-    
+
     angular
         .module('unionvmsWeb')
         .controller('SalesCtrl', salesCtrl);
@@ -19,6 +19,7 @@
         vm.exportSalesNotes = salesRestService.exportDocuments;
 
         vm.editSelectionCallBack = editSelectionCallBack;
+
 
         init();
 

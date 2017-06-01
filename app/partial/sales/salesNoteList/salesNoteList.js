@@ -8,13 +8,16 @@
             controller: salesNoteListCtrl,
             controllerAs: 'vm',
             bindings: {
-                salesNotes: '<'
+                // salesNotes: '<'
             }
         });
 
-    function salesNoteListCtrl($state, salesSelectionService) {
+    function salesNoteListCtrl($state, salesSelectionService, $scope, salesSearchService) {
         /* jshint validthis:true */
         var vm = this;
+
+        vm.displayedCollection = [];
+        vm.salesNotes = [];
 
         vm.selectAllCheckbox = false;
 
@@ -26,12 +29,52 @@
 
         vm.openSalesNote = openSalesNote;
 
+        vm.searchSalesNotes = searchSalesNotes;
+
+        vm.goToPage = goToPage;
+
+        vm.callServer = callServer;
+
+        vm.sorting = {};
+
+        vm.add = function () {
+            console.log("doing stuff2222");
+            console.log(vm.salesNotes.items);
+        };
+
         init();
 
         ///////////////////////
 
-        function init() {
+        function callServer(tableState) {
+            vm.sorting.sortField = tableState.sort.predicate;
 
+            if (tableState.sort.reverse === true) {
+                vm.sorting.sortDirection = "DESCENDING";
+            } else if (tableState.sort.reverse === false) {
+                vm.sorting.sortDirection = "ASCENDING";
+            }
+
+            salesSearchService.searchSalesNotes(vm.sorting).then(function () {
+                vm.salesNotes = salesSearchService.getSearchResults();
+                tableState.pagination.numberOfPages = vm.salesNotes.totalNumberOfPages;
+            });
+        }
+
+        function init() {
+        }
+
+        function goToPage(page) {
+            if (angular.isDefined(page)) {
+                salesSearchService.setPage(page);
+                searchSalesNotes(vm.sorting);
+            }
+        }
+
+        function searchSalesNotes(sorting) {
+            salesSearchService.searchSalesNotes(sorting).then(function () {
+                salesSelectionService.reset();
+            });
         }
 
         function openSalesNote(item) {
@@ -58,8 +101,8 @@
 
         function refreshCheckboxes() {
             vm.selectAllCheckbox = isAllChecked();
-            for (var index = 0; index < vm.salesNotes.items.length; index++) {
-                var note = vm.salesNotes.items[index];
+            for (var index = 0; index < vm.salesNotes.length; index++) {
+                var note = vm.salesNotes[index];
                 note.selected = isNoteChecked(note);
             }
         }
