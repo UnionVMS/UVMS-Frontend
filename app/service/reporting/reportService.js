@@ -383,11 +383,12 @@ angular.module('unionvmsWeb').factory('reportService',function($rootScope, $time
                 rep.setAutoRefresh();
             }
         }else{
-            reportingNavigatorService.goToView('liveViewPanel','catchDetails');
             if(!angular.isDefined(rep.criteria.recordDTOs) || rep.criteria.recordDTOs.length === 0){
                 rep.hasAlert = true;
                 rep.alertType = 'warning';
                 rep.message = locale.getString('spatial.report_no_ers_data');
+            }else{
+                reportingNavigatorService.goToView('liveViewPanel','catchDetails');
             }
         }
         
