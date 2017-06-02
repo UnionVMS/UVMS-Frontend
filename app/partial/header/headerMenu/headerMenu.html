@@ -9,14 +9,12 @@ the hope that it will be useful, but WITHOUT ANY WARRANTY; without even the impl
 FITNESS FOR A PARTICULAR PURPOSE.  See the GNU General Public License for more details. You should have received a
 copy of the GNU General Public License along with the IFDM Suite. If not, see <http://www.gnu.org/licenses/>.
 -->
-<div class="headermenu" ng-controller="HeaderMenuCtrl" id="uvms-header-menu">
-    <nav class="headercontainer">
-        <ul>
-             <li class="cell" ng-repeat="page in menu" ng-class="{active: isActive(page.url)}">
-                <a ng-href="#{{page.url}}" ng-attr-id="{{'uvms-header-menu-item-' + page.elemId}}">
-                    {{page.title}}
-                </a>
-            </li>
-        </ul>
-    </nav>
-</div>
+<nav class="header-menu" ng-controller="HeaderMenuCtrl" id="uvms-header-menu">
+    <ul>
+         <li class="cell" ng-repeat="page in menu" ng-class="{active: isActive(page.url)}">
+            <a ng-href="#{{page.url}}" ng-attr-id="{{'uvms-header-menu-item-' + page.elemId}}">
+                {{page.title}}
+            </a>
+        </li>
+    </ul>
+</nav>
