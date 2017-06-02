@@ -43,6 +43,7 @@ angular.module('unionvmsWeb').directive('combobox', function(comboboxService,loc
 			scope.comboboxServ = comboboxService;
 			scope.element = element;
 			scope.initialitem = true;
+            
             if(!angular.isDefined(scope.listClass)){
                 scope.listClass = '';
             }
@@ -209,39 +210,41 @@ angular.module('unionvmsWeb').directive('combobox', function(comboboxService,loc
                 }
             });
             
-            scope.$watchCollection('items', function(newVal, oldVal){
-            	scope.isFilterActive = false;
-                if (newVal && newVal.length > 0){
-                	scope.loadedItems = newVal;
-                	
-                	if(scope.uppercase){
-                		for(var i=0;i<scope.loadedItems.length;i++){
-                			scope.loadedItems[i].text = scope.loadedItems[i].text.toUpperCase();
-                		}
-    				}
-                	
-                	if(scope.multiple){
-                		scope.selectedItems = [];
-                		if(angular.isDefined(scope.ngModel)){
-	                		angular.forEach(scope.ngModel, function(item) {
-	                			for(var i=0;i<scope.loadedItems.length;i++){
-		                			if(scope.loadedItems[i].code === item){
-		                				scope.selectedItems.push(scope.loadedItems[i]);
-		                			}
-	                			}
-	                		});
-                            scope.setLabelMultiple();
-                		}
-                	}else if(angular.isDefined(scope.ngModel)){                   
-                        var item = getItemObjectByCode(scope.ngModel);
-                        if (angular.isDefined(item)){
-                            scope.currentItemLabel = scope.getItemLabel(item);
+            if(!scope.lineStyle){
+                scope.$watchCollection('items', function(newVal, oldVal){
+                    scope.isFilterActive = false;
+                    if (newVal && newVal.length > 0){
+                        scope.loadedItems = newVal;
+                        
+                        if(scope.uppercase){
+                            for(var i=0;i<scope.loadedItems.length;i++){
+                                scope.loadedItems[i].text = scope.loadedItems[i].text.toUpperCase();
+                            }
                         }
-                	}
-                }else{
-                    scope.loadedItems = [];
-                }
-            },true);
+                        
+                        if(scope.multiple){
+                            scope.selectedItems = [];
+                            if(angular.isDefined(scope.ngModel)){
+                                angular.forEach(scope.ngModel, function(item) {
+                                    for(var i=0;i<scope.loadedItems.length;i++){
+                                        if(scope.loadedItems[i].code === item){
+                                            scope.selectedItems.push(scope.loadedItems[i]);
+                                        }
+                                    }
+                                });
+                                scope.setLabelMultiple();
+                            }
+                        }else if(angular.isDefined(scope.ngModel)){                   
+                            var item = getItemObjectByCode(scope.ngModel);
+                            if (angular.isDefined(item)){
+                                scope.currentItemLabel = scope.getItemLabel(item);
+                            }
+                        }
+                    }else{
+                        scope.loadedItems = [];
+                    }
+                },true);
+            }
 
             scope.$watch('initialtext',function(newVal,oldVal){
                 if(!angular.isDefined(scope.ngModel)){
@@ -404,7 +407,6 @@ angular.module('unionvmsWeb').directive('combobox', function(comboboxService,loc
                 }
                 $('#' + scope.comboboxId).appendTo(dest);
                 ctrl.$setPristine();
-                
                 if(scope.lineStyle !== undefined && scope.lineStyle === true){
                 	loadLineStyleItems();
                 }else{
