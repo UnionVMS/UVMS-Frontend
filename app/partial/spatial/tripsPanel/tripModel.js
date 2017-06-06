@@ -142,13 +142,9 @@ angular.module('unionvmsWeb').factory('Trip',function(locale,unitConversionServi
 
         reportItem.type = (node.correction ? locale.getString('activity.fa_report_document_type_correction') + ': ' : '') + locale.getString('activity.activity_type_' + node.activityType.toLowerCase()) + ' (' + locale.getString('activity.fa_report_document_type_' + node.faReportDocumentType.toLowerCase()) + ')';
 
-        if(!angular.isDefined(node.delimitedPeriod) || node.delimitedPeriod.length === 0){
-            node.delimitedPeriod = [{}];
-        }
-
-        reportItem.date = getReportDate(node.faReportAcceptedDateTime,node.delimitedPeriod[0].startDate,node.delimitedPeriod[0].endDate);
-
         reportItem.documentType = node.faReportDocumentType.toLowerCase();
+
+        reportItem.date = getReportDate(node);
 
         if(angular.isDefined(node.locations) && node.locations.length > 0){
             reportItem.location = '';
@@ -194,14 +190,14 @@ angular.module('unionvmsWeb').factory('Trip',function(locale,unitConversionServi
         var subNodes = _.filter(activityReports, function(rep){ return rep.faReferenceID !== undefined; });
 
         angular.forEach(mainNodes,loadActivityReportItem,reports);
-        _.sortBy(reports, function(node){ return moment(node.date).unix(); });
+        reports = _.sortBy(reports, function(node){ return moment(node.date).unix(); });
 
         angular.forEach(subNodes,loadActivityReportItem,reports);
 
         angular.forEach(reports,function(rep){
             if(angular.isDefined(rep.nodes)){
                 rep.correction = _.where(rep.nodes, {corrections: true}).length ? true : false;
-                _.sortBy(rep.nodes, function(node){ return moment(node.date).unix(); });
+                rep.nodes = _.sortBy(rep.nodes, function(node){ return moment(node.date).unix(); });
                 rep.nodes = rep.nodes.reverse();
             }
 
@@ -239,11 +235,7 @@ angular.module('unionvmsWeb').factory('Trip',function(locale,unitConversionServi
                 remarks += ' (gear used)';
                 break;
             case 'ARRIVAL':
-                if(report.faReportDocumentType === 'DECLARATION'){
-                    remarks += ' (est. time landing)';
-                }else if(report.faReportDocumentType === 'NOTIFICATION'){
-                    remarks += ' (gear used)';
-                }
+                remarks += ' (est. time of arrival)';
                 break;
             case 'LANDING':
                 remarks += ' (end time landing)';
@@ -274,9 +266,28 @@ angular.module('unionvmsWeb').factory('Trip',function(locale,unitConversionServi
      * @param {String} startDate - report message start date time
      * @param {String} endDate - report message end date time
      */
-    var getReportDate = function(acceptedDateTime,startDate,endDate){
+    var getReportDate = function(node){
         var date;
-        if(angular.isDefined(startDate) && angular.isDefined(endDate)){
+
+        if(node.faReportDocumentType.toLowerCase() === 'declaration'){
+            if(node.occurence){
+                date = unitConversionService.date.convertToUserFormat(node.occurence);
+            }else if(node.delimitedPeriod && node.delimitedPeriod.length){
+                if(node.delimitedPeriod[0].startDate){
+                    date = unitConversionService.date.convertToUserFormat(node.delimitedPeriod[0].startDate);
+                }else if(node.delimitedPeriod[0].endDate){
+                    date = unitConversionService.date.convertToUserFormat(node.delimitedPeriod[0].endDate);
+                }else{
+                    date = unitConversionService.date.convertToUserFormat(node.faReportAcceptedDateTime);
+                }
+            }else{
+                date = unitConversionService.date.convertToUserFormat(node.faReportAcceptedDateTime);
+            }
+        }else{
+            date = unitConversionService.date.convertToUserFormat(node.faReportAcceptedDateTime);
+        }
+
+        /*if(angular.isDefined(startDate) && angular.isDefined(endDate)){
             startDate = unitConversionService.date.convertToUserFormat(startDate);
             endDate = unitConversionService.date.convertToUserFormat(endDate);
 
@@ -295,7 +306,7 @@ angular.module('unionvmsWeb').factory('Trip',function(locale,unitConversionServi
         }else{
             acceptedDateTime = unitConversionService.date.convertToUserFormat(acceptedDateTime);
             date = acceptedDateTime;
-        }
+        }*/
 
         return date;
     };
