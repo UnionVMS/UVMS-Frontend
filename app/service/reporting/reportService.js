@@ -51,6 +51,7 @@ angular.module('unionvmsWeb').factory('reportService',function($rootScope, $time
         rep.refresh.rate = undefined;
         rep.getConfigsTime = undefined;
         rep.getReportTime = undefined;
+        rep.hasAlert = false;
         
         //Clear data used in tables
         rep.clearVmsData();
@@ -88,6 +89,7 @@ angular.module('unionvmsWeb').factory('reportService',function($rootScope, $time
 
 	rep.runReport = function(report){
         loadingStatus.isLoading('LiveviewMap',true, 0);
+
         tripReportsTimeline.reset();
         
         if(angular.isDefined(report)){
