@@ -304,6 +304,10 @@ angular.module('unionvmsWeb').factory('reportService',function($rootScope, $time
         rep.hasAlert = true;
         rep.alertType = 'danger';
         rep.message = locale.getString('spatial.map_error_loading_report');
+
+        if(!reportingNavigatorService.isViewVisible('mapPanel')){
+            reportingNavigatorService.goToView('liveViewPanel','mapPanel');
+        }
     };
     
     //Get Alarms data Success callback
@@ -412,6 +416,9 @@ angular.module('unionvmsWeb').factory('reportService',function($rootScope, $time
         rep.message = locale.getString('spatial.map_error_loading_report');
         rep.refresh.status = false;
         loadingStatus.isLoading('LiveviewMap', false);
+        if(!reportingNavigatorService.isViewVisible('mapPanel')){
+            reportingNavigatorService.goToView('liveViewPanel','mapPanel');
+        }
     };
     
     //Refresh report success callback

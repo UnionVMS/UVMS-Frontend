@@ -272,7 +272,7 @@ angular.module('unionvmsWeb').controller('SpatialCtrl',function(/*tripSummarySer
             delete $scope.tempReport;
             if(action === 'list'){
                 openReportsModal();
-            }else{
+            }else if(action === 'form'){
                 $scope.repNav.goToView('reportsPanel','reportForm');
             }
             loadingStatus.isLoading('LiveviewMap',false);

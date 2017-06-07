@@ -11,7 +11,7 @@ copy of the GNU General Public License along with the IFDM Suite. If not, see <h
 -->
 <div class="containerWrapper" ng-controller="LiveviewpanelCtrl">
 	<div id="liveview-panel" ng-include="'partial/spatial/liveViewPanel/mapPanel/mapPanel.html'" ng-show="repNav.isViewVisible('mapPanel')"></div>
-	<div class="container containerWithTopBottomPadding" ng-show="repNav.isViewVisible('vmsPanel')">
+	<div class="container containerWithTopBottomPadding" ng-if="repNav.isSectionVisible('liveViewPanel') && (repNav.isViewVisible('vmsPanel') || repNav.isViewVisible('catchDetails'))">
 		<div class="card">
 			<div class="row form-group">
 				<div class="col-md-4">
@@ -31,11 +31,11 @@ copy of the GNU General Public License along with the IFDM Suite. If not, see <h
 			</div>
 			<div class="row">
 				<div class="col-md-12">
-					<div ng-include="'partial/spatial/liveViewPanel/vmsPanel/vmsPanel.html'"></div>
+					<div ng-include="'partial/spatial/liveViewPanel/vmsPanel/vmsPanel.html'" ng-if="repNav.isViewVisible('vmsPanel')"></div>
+					<div class="trips-panel" ng-include="'partial/spatial/tripsPanel/catchDetails/catchDetails.html'" ng-if="repNav.isViewVisible('catchDetails')"></div>
 				</div>
 			</div>
 		</div>
 	</div>
-	<div class="trips-panel" ng-if="repNav.isSectionVisible('liveViewPanel') && repNav.isViewVisible('catchDetails')" ng-include="'partial/spatial/tripsPanel/catchDetails/catchDetails.html'"></div>
 </div>
 
