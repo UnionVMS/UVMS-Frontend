@@ -16,7 +16,7 @@
 				<!--SVG SELECTION-->
 				<svg height="20px" width="100%" ng-if="lineStyle === true">
 					<g fill="none" stroke="#262626" stroke-width="4">
-						<path stroke-dasharray="{{currentItemLabel}}" d="M0 10 l999 0" />
+						<path stroke-dasharray="{{currentItemLabel}}" d="M0 10 l999 0"></path>
 					</g>
 				</svg>
 				<!--CARET-->
@@ -61,10 +61,10 @@
 				<a ng-bind="getItemLabel(item)"></a>
 			</li>
 			<!--SVG COMBO-->
-			<li ng-class="disabledItem(item) ? 'disabled' : ''" ng-repeat="item in loadedItems" ng-click="selectVal(item)" ng-if="lineStyle === true" ng-show="!isLoading">
+			<li ng-class="disabledItem(item) ? 'disabled' : ''" ng-repeat="item in loadedItems" ng-click="selectVal(item)" ng-if="lineStyle" ng-show="!isLoading">
 				<svg height="21px" width="100%">
 					<g fill="none" stroke="#262626" stroke-width="4">
-						<path stroke-dasharray="{{getItemLabel(item)}}" d="M0 13 l999 0" />
+						<path stroke-dasharray="{{getItemLabel(item)}}" d="M0 13 l999 0"></path>
 					</g>
 				</svg>
 			</li>

@@ -786,6 +786,8 @@ angular.module('unionvmsWeb').factory('fishingActivityService', function(activit
         if (angular.isDefined(data.schemeId) && angular.isDefined(data.id)){
             areaSummary.title += ' - ' + data.schemeId + ':' + data.id; 
         }
+        delete data.schemeId;
+        delete data.id;
         
         areaSummary.number = 12 / (Object.keys(data).length);
 
