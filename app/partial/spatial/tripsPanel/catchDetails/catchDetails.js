@@ -32,9 +32,6 @@ angular.module('unionvmsWeb').controller('CatchdetailsCtrl', function ($scope, a
                 }
             };
             processTables();
-
-            $scope.unRef();
-            delete $scope.unRef;
         }
     };
 
@@ -71,7 +68,7 @@ angular.module('unionvmsWeb').controller('CatchdetailsCtrl', function ($scope, a
 
         } else {
             if(!$scope.repServ.criteria){
-                $scope.unRef = $scope.$watch('repServ.criteria', prepareSummaryReport);
+                $scope.$watchCollection('repServ.criteria', prepareSummaryReport, true);
             }
         }
     };
