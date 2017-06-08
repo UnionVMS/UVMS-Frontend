@@ -12,6 +12,12 @@ copy of the GNU General Public License along with the IFDM Suite. If not, see <h
 <div class="containerWrapper" ng-controller="LiveviewpanelCtrl">
 	<div id="liveview-panel" ng-include="'partial/spatial/liveViewPanel/mapPanel/mapPanel.html'" ng-show="repNav.isViewVisible('mapPanel')"></div>
 	<div class="container containerWithTopBottomPadding" ng-if="repNav.isSectionVisible('liveViewPanel') && (repNav.isViewVisible('vmsPanel') || repNav.isViewVisible('catchDetails'))">
+		<div ng-if="repServ.hasAlert" class="alert alert-container" ng-class="{'alert-warning': repServ.alertType === 'warning', 'alert-danger': repServ.alertType === 'danger'}" role="alert">
+			<span class="fa fa-exclamation-circle" aria-hidden="true"></span>
+			<span class="alert-message">
+				<span>{{repServ.message}}</span>            
+			</span>
+		</div>
 		<div class="card">
 			<div class="row form-group">
 				<div class="col-md-4">

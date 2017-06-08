@@ -51,7 +51,6 @@ angular.module('unionvmsWeb').factory('reportService',function($rootScope, $time
         rep.refresh.rate = undefined;
         rep.getConfigsTime = undefined;
         rep.getReportTime = undefined;
-        rep.hasAlert = false;
         
         //Clear data used in tables
         rep.clearVmsData();
@@ -143,7 +142,9 @@ angular.module('unionvmsWeb').factory('reportService',function($rootScope, $time
                     loadingStatus.isLoading('InitialReporting', false);
                 } else {
                     spatialRestService.getConfigsForReportWithoutMap(rep.getConfigsTime).then(getConfigWithoutMapSuccess, getConfigWithoutMapError);
-                    if(rep.reportType !== 'summary'){
+                    if(rep.reportType === 'summary'){
+                        reportingNavigatorService.goToView('liveViewPanel','catchDetails');
+                    }else{
                         reportingNavigatorService.goToView('liveViewPanel','vmsPanel');
                     }
                     loadingStatus.isLoading('InitialReporting', false);
@@ -169,7 +170,11 @@ angular.module('unionvmsWeb').factory('reportService',function($rootScope, $time
             reportingNavigatorService.goToView('liveViewPanel','mapPanel');
             loadingStatus.isLoading('InitialReporting', false);
         }else{
-            reportingNavigatorService.goToView('liveViewPanel','vmsPanel');
+            if(rep.reportType === 'summary'){
+                reportingNavigatorService.goToView('liveViewPanel','catchDetails');
+            }else{
+                reportingNavigatorService.goToView('liveViewPanel','vmsPanel');
+            }
             loadingStatus.isLoading('InitialReporting', false);
         }
 	};
@@ -194,7 +199,7 @@ angular.module('unionvmsWeb').factory('reportService',function($rootScope, $time
 	};
 	
 	rep.refreshReport = function(){
-	    if (angular.isDefined(rep.id) && reportingNavigatorService.isViewVisible('mapPanel')){
+	    if (angular.isDefined(rep.id)){
 	        rep.clearMapOverlaysOnRefresh();
 	        rep.isReportRefreshing = true;
 	        if(reportFormService.liveView.outOfDate){
@@ -216,7 +221,7 @@ angular.module('unionvmsWeb').factory('reportService',function($rootScope, $time
         }
         
         rep.autoRefreshInterval = $interval(function() {
-            if (rep.isReportExecuting === false && rep.refresh.status === true) {
+            if (rep.isReportExecuting === false && rep.refresh.status === true && reportingNavigatorService.isViewVisible('mapPanel')) {
                 rep.refreshReport();
             }
         }, rep.refresh.rate*60*1000); //timeout in minutes
@@ -304,10 +309,6 @@ angular.module('unionvmsWeb').factory('reportService',function($rootScope, $time
         rep.hasAlert = true;
         rep.alertType = 'danger';
         rep.message = locale.getString('spatial.map_error_loading_report');
-
-        if(!reportingNavigatorService.isViewVisible('mapPanel')){
-            reportingNavigatorService.goToView('liveViewPanel','mapPanel');
-        }
     };
     
     //Get Alarms data Success callback
@@ -416,9 +417,6 @@ angular.module('unionvmsWeb').factory('reportService',function($rootScope, $time
         rep.message = locale.getString('spatial.map_error_loading_report');
         rep.refresh.status = false;
         loadingStatus.isLoading('LiveviewMap', false);
-        if(!reportingNavigatorService.isViewVisible('mapPanel')){
-            reportingNavigatorService.goToView('liveViewPanel','mapPanel');
-        }
     };
     
     //Refresh report success callback
