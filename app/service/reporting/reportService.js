@@ -165,14 +165,21 @@ angular.module('unionvmsWeb').factory('reportService',function($rootScope, $time
         }
 		rep.isReportExecuting = true;
 		rep.mergedReport = angular.copy(report); 
-    	spatialConfigRestService.getUserConfigs().then(getUserConfigsSuccess, getUserConfigsFailure);
-        if(rep.mergedReport.withMap){
+        if(rep.mergedReport.withMap && rep.mergedReport.reportType === 'standard'){
+            spatialConfigRestService.getUserConfigs().then(getUserConfigsSuccess, getUserConfigsFailure);
             reportingNavigatorService.goToView('liveViewPanel','mapPanel');
             loadingStatus.isLoading('InitialReporting', false);
         }else{
             if(rep.reportType === 'summary'){
+                prepareReportToRun(rep.mergedReport);
+                
+                rep.getReportTime = moment.utc().format('YYYY-MM-DDTHH:mm:ss');
+                rep.mergedReport.additionalProperties = getUnitSettings();
+                
+                reportRestService.executeWithoutSaving(rep.mergedReport).then(getVmsDataSuccess, getVmsDataError);
                 reportingNavigatorService.goToView('liveViewPanel','catchDetails');
             }else{
+                spatialConfigRestService.getUserConfigs().then(getUserConfigsSuccess, getUserConfigsFailure);
                 reportingNavigatorService.goToView('liveViewPanel','vmsPanel');
             }
             loadingStatus.isLoading('InitialReporting', false);
@@ -462,7 +469,7 @@ angular.module('unionvmsWeb').factory('reportService',function($rootScope, $time
         mapService.resetLabelContainers();
         
         //This gets executed on initial loading when we have a default report
-        if (!angular.isDefined(mapService.map) && report.withMap){
+        if (!angular.isDefined(mapService.map) && report.withMap && report.reportType === 'standard'){
             mapService.setMap(defaultMapConfigs);
         } else if (angular.isDefined(mapService.map)) {
             mapService.clearVectorLayers();
@@ -541,10 +548,11 @@ angular.module('unionvmsWeb').factory('reportService',function($rootScope, $time
 	var getUserConfigsSuccess = function(response){
 	    rep.lastMapConfigs = response;
 	    
-	    var model = new SpatialConfig();	    
+	    var model = new SpatialConfig();
 	    var userConfig = model.forUserPrefFromJson(response);
 	    
 	    mergeSettings(userConfig);
+
         spatialConfigRestService.getMapConfigsFromReport(getMapConfigs(userConfig)).then(getMapConfigsFromReportSuccess, getMapConfigsFromReportFailure);
 	};
 	

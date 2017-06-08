@@ -1751,7 +1751,7 @@ angular.module('unionvmsWeb').factory('mapService', function(locale, $rootScope,
      * @returns {String} Map base projection code  (e.g. 'EPSG:4326')
      */
     ms.getMapProjectionCode = function(){
-        return genericMapService.getMapProjectionCode(ms.map);
+        return angular.isDefined(ms.map) ? genericMapService.getMapProjectionCode(ms.map) : undefined;
     };
 
     /**
