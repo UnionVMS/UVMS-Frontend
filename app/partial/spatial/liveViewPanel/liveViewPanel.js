@@ -11,10 +11,6 @@ copy of the GNU General Public License along with the IFDM Suite. If not, see <h
 */
 angular.module('unionvmsWeb').controller('LiveviewpanelCtrl',function($scope, $timeout, $window, locale, mapService, reportService, genericMapService){
    
-   $scope.navigateBack = function(){
-        $scope.repNav.goToPreviousView();
-   };
-   
    $scope.$watch('repNav.isViewVisible("mapPanel")', function(newVal, oldVal){
       if (newVal){
           $timeout(mapService.updateMapContainerSize(), 100);

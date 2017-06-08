@@ -30,5 +30,6 @@ copy of the GNU General Public License along with the IFDM Suite. If not, see <h
 </form>
 <div class="modal-footer">
     <button type="button" class="btn btn-default" ng-click="modal.cancel()">{{ modal.labels.cancel }}</button>
+    <button type="button" class="btn btn-danger" ng-click="modal.discard('discard')" ng-if="::modal.discard">{{ modal.labels.discard }}</button>
     <button type="button" class="btn btn-primary" ng-click="modal.confirm()">{{ modal.labels.confirm }}</button>
 </div>

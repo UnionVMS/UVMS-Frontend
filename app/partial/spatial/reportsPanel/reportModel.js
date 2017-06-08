@@ -332,24 +332,26 @@ angular.module('unionvmsWeb').factory('Report',function(unitConversionService, u
 	        desc: this.desc !== '' ? this.desc : undefined,
 			reportType: this.reportType,
 	        visibility: angular.isDefined(this.visibility) ? this.visibility : 'private',
-	        withMap: this.withMap,
+	        withMap: this.reportType === 'standard' ? this.withMap : false,
 	        filterExpression: filter
 	    };
 	    
-	    if(this.withMap === true){
-	        dto.mapConfiguration = this.mapConfiguration;
-	    }else{
-	    	if(angular.isDefined(this.mapConfiguration.spatialConnectId)){
-	    		dto.mapConfiguration = {'spatialConnectId': this.mapConfiguration.spatialConnectId};
-	    	}
-			if(angular.isDefined(this.mapConfiguration.visibilitySettings)){
-				if(angular.isDefined(dto.mapConfiguration)){
-					dto.mapConfiguration.visibilitySettings = this.mapConfiguration.visibilitySettings;
-				}else{
-	    			dto.mapConfiguration = {'visibilitySettings': this.mapConfiguration.visibilitySettings};
+		if(this.reportType === 'standard'){
+			if(this.withMap === true){
+				dto.mapConfiguration = this.mapConfiguration;
+			}else{
+				if(angular.isDefined(this.mapConfiguration.spatialConnectId)){
+					dto.mapConfiguration = {'spatialConnectId': this.mapConfiguration.spatialConnectId};
 				}
-	    	}
-	    }
+				if(angular.isDefined(this.mapConfiguration.visibilitySettings)){
+					if(angular.isDefined(dto.mapConfiguration)){
+						dto.mapConfiguration.visibilitySettings = this.mapConfiguration.visibilitySettings;
+					}else{
+						dto.mapConfiguration = {'visibilitySettings': this.mapConfiguration.visibilitySettings};
+					}
+				}
+			}
+		}
 	    
 	    if(angular.isDefined(this.additionalProperties)){
         	dto.additionalProperties = this.additionalProperties;
@@ -493,28 +495,30 @@ angular.module('unionvmsWeb').factory('Report',function(unitConversionService, u
 		}
 		report.filterExpression.criteria = criteria;
 
-        if(this.withMap === true){
-        	report.mapConfiguration = {
-        		coordinatesFormat: this.mapConfiguration.coordinatesFormat,
-            	displayProjectionId: this.mapConfiguration.displayProjectionId,
-            	mapProjectionId: this.mapConfiguration.mapProjectionId,
-            	scaleBarUnits: this.mapConfiguration.scaleBarUnits,
-            	stylesSettings: this.mapConfiguration.stylesSettings,
-            	visibilitySettings: this.mapConfiguration.visibilitySettings,
-            	layerSettings: this.mapConfiguration.layerSettings
-            };
-        }else{
-        	if(angular.isDefined(this.mapConfiguration.spatialConnectId)){
-        		report.mapConfiguration = {'spatialConnectId': this.mapConfiguration.spatialConnectId};
-        	}
-			if(angular.isDefined(this.mapConfiguration.visibilitySettings)){
-				if(angular.isDefined(report.mapConfiguration)){
-					report.mapConfiguration.visibilitySettings = this.mapConfiguration.visibilitySettings;
-				}else{
-	    			report.mapConfiguration = {'visibilitySettings': this.mapConfiguration.visibilitySettings};
+		if(this.reportType === 'standard'){
+			if(this.withMap === true){
+				report.mapConfiguration = {
+					coordinatesFormat: this.mapConfiguration.coordinatesFormat,
+					displayProjectionId: this.mapConfiguration.displayProjectionId,
+					mapProjectionId: this.mapConfiguration.mapProjectionId,
+					scaleBarUnits: this.mapConfiguration.scaleBarUnits,
+					stylesSettings: this.mapConfiguration.stylesSettings,
+					visibilitySettings: this.mapConfiguration.visibilitySettings,
+					layerSettings: this.mapConfiguration.layerSettings
+				};
+			}else{
+				if(angular.isDefined(this.mapConfiguration.spatialConnectId)){
+					report.mapConfiguration = {'spatialConnectId': this.mapConfiguration.spatialConnectId};
 				}
-	    	}
-	    }
+				if(angular.isDefined(this.mapConfiguration.visibilitySettings)){
+					if(angular.isDefined(report.mapConfiguration)){
+						report.mapConfiguration.visibilitySettings = this.mapConfiguration.visibilitySettings;
+					}else{
+						report.mapConfiguration = {'visibilitySettings': this.mapConfiguration.visibilitySettings};
+					}
+				}
+			}
+		}
         
         if(angular.isDefined(this.additionalProperties)){
         	report.additionalProperties = this.additionalProperties;

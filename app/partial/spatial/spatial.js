@@ -9,7 +9,7 @@ the hope that it will be useful, but WITHOUT ANY WARRANTY; without even the impl
 FITNESS FOR A PARTICULAR PURPOSE.  See the GNU General Public License for more details. You should have received a
 copy of the GNU General Public License along with the IFDM Suite. If not, see <http://www.gnu.org/licenses/>.
 */
-angular.module('unionvmsWeb').controller('SpatialCtrl',function(/*tripSummaryService, */$scope, $timeout, locale, mapService, spatialHelperService, Report, reportRestService, reportFormService, reportService, $anchorScroll, userService, loadingStatus, $state, $localStorage, comboboxService, reportingNavigatorService, $compile, $modal, confirmationModal){
+angular.module('unionvmsWeb').controller('SpatialCtrl',function(/*tripSummaryService, */$scope, $timeout, locale, mapService, spatialHelperService, Report, reportRestService, reportFormService, reportService, $anchorScroll, userService, loadingStatus, $state, $localStorage, comboboxService, reportingNavigatorService, $compile, $modal, confirmationModal, $modalStack){
     $scope.reports = [];
     $scope.executedReport = {};
     $scope.repServ = reportService;
@@ -123,11 +123,16 @@ angular.module('unionvmsWeb').controller('SpatialCtrl',function(/*tripSummarySer
        if (reportFormService.liveView.outOfDate){
             var options = {
                 textLabel : locale.getString("spatial.reports_discard_changes"),
-                yesNo : true
+                yesNo : true,
+                discard: true
             };
             confirmationModal.open(function(reason){
                 if(reason !== 'deny'){
-                    $scope.saveReport('form');
+                    if(reason === 'discard'){
+                        $scope.discardReport('form');
+                    }else{
+                        $scope.saveReport('form');
+                    }
                 }
             },
             options);
@@ -186,12 +191,17 @@ angular.module('unionvmsWeb').controller('SpatialCtrl',function(/*tripSummarySer
         $scope.comboServ.closeCurrentCombo(evt);
         if (evt && reportFormService.liveView.outOfDate){
             var options = {
-                textLabel : locale.getString("spatial.reports_discard_changes"),
-                yesNo : true
+                textLabel: locale.getString("spatial.reports_discard_changes"),
+                yesNo: true,
+                discard: true
             };
             confirmationModal.open(function(reason){
                 if(reason !== 'deny'){
-                    $scope.saveReport('list');
+                    if(reason === 'discard'){
+                        $scope.discardReport('list');
+                    }else{
+                        $scope.saveReport('list');
+                    }
                 }
             },
             options);
@@ -262,7 +272,7 @@ angular.module('unionvmsWeb').controller('SpatialCtrl',function(/*tripSummarySer
             delete $scope.tempReport;
             if(action === 'list'){
                 openReportsModal();
-            }else{
+            }else if(action === 'form'){
                 $scope.repNav.goToView('reportsPanel','reportForm');
             }
             loadingStatus.isLoading('LiveviewMap',false);
@@ -274,6 +284,19 @@ angular.module('unionvmsWeb').controller('SpatialCtrl',function(/*tripSummarySer
             delete $scope.tempReport;
             loadingStatus.isLoading('LiveviewMap',false);
         });
+    };
+
+    $scope.discardReport = function(action){
+        /*$modalStack.dismissAll();
+        angular.element('body').removeClass('alert-open');*/
+        $scope.repServ.resetReport();
+        reportFormService.resetLiveView();
+
+        if(action === 'list'){
+            openReportsModal();
+        }else{
+            $scope.repNav.goToView('reportsPanel','reportForm');
+        }
     };
 
     /*$(document).on('webkitfullscreenchange mozfullscreenchange fullscreenchange MSFullscreenChange', function() {
