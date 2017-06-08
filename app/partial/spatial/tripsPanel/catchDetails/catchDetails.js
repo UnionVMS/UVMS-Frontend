@@ -21,6 +21,23 @@ copy of the GNU General Public License along with the IFDM Suite. If not, see <h
  */
 angular.module('unionvmsWeb').controller('CatchdetailsCtrl', function ($scope, activityRestService, locale, tableService, reportService, loadingStatus, tripSummaryService) {
 
+    var prepareSummaryReport = function(){
+
+        if($scope.repServ.criteria){
+            var summaryReport = prepareCatchData($scope.repServ.criteria);
+            $scope.tables = {
+                catches: {
+                    items: summaryReport.items,
+                    total: summaryReport.total
+                }
+            };
+            processTables();
+
+            $scope.unRef();
+            delete $scope.unRef;
+        }
+    };
+
     /**
     * Initialization function
     * 
@@ -29,7 +46,10 @@ angular.module('unionvmsWeb').controller('CatchdetailsCtrl', function ($scope, a
     */
     var init = function () {
 
-        $scope.tripId = tripSummaryService.trip.id;
+        if(angular.isDefined(tripSummaryService.trip)){
+            $scope.tripId = tripSummaryService.trip.id;
+        }
+    
         if (angular.isDefined($scope.tripId)) {
             /*loadingStatus.isLoading('TripSummary', true, 1);
             //FIXME change with proper trip id
@@ -50,15 +70,9 @@ angular.module('unionvmsWeb').controller('CatchdetailsCtrl', function ($scope, a
             });
 
         } else {
-
-            var summaryReport = prepareCatchData(reportService.criteria);
-            $scope.tables = {
-                catches: {
-                    items: summaryReport.items,
-                    total: summaryReport.total
-                }
-            };
-            processTables();
+            if(!$scope.repServ.criteria){
+                $scope.unRef = $scope.$watch('repServ.criteria', prepareSummaryReport);
+            }
         }
     };
 

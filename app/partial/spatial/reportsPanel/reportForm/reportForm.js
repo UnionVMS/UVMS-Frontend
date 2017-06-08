@@ -281,8 +281,9 @@ angular.module('unionvmsWeb').controller('ReportformCtrl',function($scope, $moda
                         reportRestService.updateReport($scope.report).then(updateReportSuccess, updateReportError);
                     } else {
                         loadingStatus.isLoading('SaveReport',false);
-                        $scope.repNav.goToPreviousView();
+                        $scope.repNav.goToView('liveViewPanel','mapPanel');
                     }
+                   
                     break;
             }
         } else {
@@ -439,15 +440,17 @@ angular.module('unionvmsWeb').controller('ReportformCtrl',function($scope, $moda
 
     var updateReportSuccess = function(response){
         reportService.loadReportHistory();
-        if($scope.repNav.hasPreviousState()){
-            $scope.repNav.goToPreviousView();
-        }else{
-            $scope.repNav.goToView('liveViewPanel','mapPanel',$scope.openReportList);
-        }
+        
         reportMsgService.show('spatial.success_update_report', 'success', true, 8000);
         if ($scope.formMode === 'EDIT'){
+            if($scope.repNav.hasPreviousState()){
+                $scope.repNav.goToPreviousView();
+            }else{
+                $scope.repNav.goToView('liveViewPanel','mapPanel',$scope.openReportList);
+            }
             reportFormService.report = undefined;
         } else if ($scope.formMode === 'EDIT-FROM-LIVEVIEW'){
+            $scope.repNav.goToView('liveViewPanel','mapPanel');
             angular.copy($scope.currentRepCopy,reportFormService.liveView.currentReport);
             delete $scope.currentRepCopy;
             angular.copy(reportFormService.liveView.currentReport, reportFormService.liveView.originalReport);

@@ -62,6 +62,7 @@
     "reset" : "Reset",
     "save" : "Save",
     "confirm" : "Confirm",
+    "discard": "Discard",
     "unlink" : "Unlink",
     "show_history" : "Show history",
     "save_as_group": "Save as Group",

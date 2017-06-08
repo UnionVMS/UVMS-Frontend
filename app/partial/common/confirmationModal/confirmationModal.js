@@ -24,19 +24,21 @@ copy of the GNU General Public License along with the IFDM Suite. If not, see <h
     function ConfirmationModalController($modalInstance, options, locale) {
         var vm = this;
         vm.confirm = confirm;
+        vm.discard = options.discard ? confirm : undefined;
         vm.cancel = cancel;
         vm.commentsEnabled = options.commentsEnabled;
         vm.labels = {
             title: options.titleLabel || locale.getString("common.are_you_sure"),
             text: options.textLabel || locale.getString("common.are_you_sure"),
             confirm: options.confirmLabel || locale.getString("common.yes"),
+            discard: options.discardLabel || locale.getString("common.discard"),
             cancel: options.cancelLabel || locale.getString("common.cancel"),
         };
 
-        function confirm() {
+        function confirm(discard) {
             vm.submitAttempted = true;
             if (!options.commentsEnabled || vm.commentForm.$valid) {
-                $modalInstance.close(vm.comment);
+                $modalInstance.close(vm.comment || discard);
             }
         }
 
