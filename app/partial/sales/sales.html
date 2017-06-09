@@ -1,16 +1,16 @@
 ﻿<div>
     <div class="container containerWithTopBottomPadding">
         <div class="card">
-            <advanced-search searchfunc="vm.searchSalesNotes" modeltype="'SALES'"></advanced-search>
+            <advanced-search searchfunc="vm.searchSalesReports" modeltype="'SALES'"></advanced-search>
             <div class="row">
                 <div class="col-md-1">
                     <dropdown class="" ng-model="vm.editSelection" initialtext="{{'common.actions' | i18n}}" items="vm.editSelectionDropdownItems" menu-style callback="vm.editSelectionCallBack"></dropdown>
                 </div>
-               <simple-export exportfunc="vm.exportSalesNotes"></simple-export>
+               <simple-export exportfunc="vm.exportSalesReports"></simple-export>
             </div>
             <!--<i class="fa fa-lg fa-download" title="{{'spatial.tab_vms_export_csv' | i18n}}" st-export-data export-fn="exportAsCSV(vmsType, data)" vms-type="positions" ng-show="isAllowed('Reporting', 'EXPORT_VMS_REPORT_DATA')"></i> -->
-            <sales-note-list sales-notes="vm.currentSearchResults">                             >
-            </sales-note-list>
+            <sales-report-list sales-reports="vm.currentSearchResults">                             >
+            </sales-report-list>
             <search-results-pagination page='vm.currentSearchResults.page' total='vm.currentSearchResults.totalNumberOfPages' callback='vm.gotoPage'></search-results-pagination>
             </div>
     </div>

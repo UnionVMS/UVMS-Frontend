@@ -5,10 +5,10 @@
         .module('unionvmsWeb')
         .factory('salesRestService', salesRestService);
 
-    function salesRestService($q, $log, salesRestApi, SalesNoteListPage, userService, SavedSearchGroup, SearchField) {
+    function salesRestService($q, $log, salesRestApi, SalesReportListPage, userService, SavedSearchGroup, SearchField) {
 
         var service = {
-            getSalesNotesPage: getSalesNotesPage,
+            getSalesReportsPage: getSalesReportsPage,
             getCodeLists: getCodeLists,
             getSalesDetails: getSalesDetails,
             getSavedSearches: getSavedSearches,
@@ -22,20 +22,20 @@
 
         ///////////////////////////
 
-        function getSalesNotesPage(pageNr, filters) {
+        function getSalesReportsPage(pageNr, filters) {
 
             var deferred = $q.defer();
             var pageSize = 10;
             salesRestApi.sales.search({}, { pageIndex: pageNr, pageSize: pageSize, filters: filters }, function (response) {
                 if ($$valid(response, deferred)) {
-                    var salesNoteListPage = new SalesNoteListPage();
-                    angular.extend(salesNoteListPage, response.data);
-                    deferred.resolve(salesNoteListPage);
+                    var salesReportListPage = new SalesReportListPage();
+                    angular.extend(salesReportListPage, response.data);
+                    deferred.resolve(salesReportListPage);
                 }
             },
             function (err) {
-                $log.error("Error: salesRestService.getSalesNoteList()", err);
-                deferred.reject("Could not load salesNoteList");
+                $log.error("Error: salesRestService.getSalesReportsPage()", err);
+                deferred.reject("Could not load sales reports list");
             });
 
             return deferred.promise;

@@ -22,7 +22,7 @@
         var service = {
             init: init,
             getSearchResults: getSearchResults,
-            searchSalesNotes: searchSalesNotes,
+            searchSalesReports: searchSalesReports,
             setPage: setPage,
             resetPage: resetPage,
             getAdvancedSearchStatus: getAdvancedSearchStatus,
@@ -50,23 +50,23 @@
 
         function getSearchResults() {
             if (!searchResults.loading && searchResults.items.length === 0) {
-                searchSalesNotes();
+                searchSalesReports();
             }
             return searchResults;
         }
 
-        function searchSalesNotes() {
+        function searchSalesReports() {
             lastSearchObject = angular.copy(advancedSearchObject);
             searchResults.clearErrorMessage();
             searchResults.setLoading(true);
 
             var deferred = $q.defer();
             var filters = advancedSearchObject || {};
-            salesRestService.getSalesNotesPage(currentPageNr, filters).then(function (page) {
+            salesRestService.getSalesReportsPage(currentPageNr, filters).then(function (page) {
                 searchResults.updateWithNewResults(page);
                 deferred.resolve(page);
             }, function (error) {
-                $log.error("Error: salesSearchService.searchSalesNotes().", error);
+                $log.error("Error: salesSearchService.searchSalesReports().", error);
                 searchResults.setErrorMessage(locale.getString('common.search_failed_error'));
                 searchResults.removeAllItems();
                 searchResults.setLoading(false);

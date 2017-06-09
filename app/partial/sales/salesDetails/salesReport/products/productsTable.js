@@ -4,7 +4,7 @@
     angular
         .module('unionvmsWeb')
         .component('salesProductsTable', {
-            templateUrl: 'partial/sales/salesDetails/salesNote/products/productsTable.html',
+            templateUrl: 'partial/sales/salesDetails/salesReport/products/productsTable.html',
             controller: productsTableCtrl,
             controllerAs: 'vm',
             bindings: {

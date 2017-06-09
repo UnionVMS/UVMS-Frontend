@@ -103,7 +103,7 @@ angular.module('unionvmsWeb').controller('HeaderMenuCtrl',function($scope, $root
         }
 
         //SALES
-        if (checkAccess('Sales', 'viewSalesNotes')) {
+        if (checkAccess('Sales', 'viewSalesReports')) {
             addMenuItem(locale.getString('header.menu_sales'), '/sales', 'sales');
         }
 

@@ -4,7 +4,7 @@
     angular
         .module('unionvmsWeb')
         .component('salesLocation', {
-            templateUrl: 'partial/sales/salesDetails/salesNote/location/location.html',
+            templateUrl: 'partial/sales/salesDetails/salesReport/location/location.html',
             controller: locationCtrl,
             controllerAs: 'vm',
             bindings: {

@@ -3,16 +3,16 @@
 
     angular
         .module('unionvmsWeb')
-        .component('salesNoteList', {
-            templateUrl: 'partial/sales/salesNoteList/salesNoteList.html',
-            controller: salesNoteListCtrl,
+        .component('salesReportList', {
+            templateUrl: 'partial/sales/salesReportList/salesReportList.html',
+            controller: salesReportListCtrl,
             controllerAs: 'vm',
             bindings: {
-                salesNotes: '<'
+            salesReports: '<'
             }
         });
 
-    function salesNoteListCtrl($state, salesSelectionService) {
+    function salesReportListCtrl($state, salesSelectionService) {
         /* jshint validthis:true */
         var vm = this;
 
@@ -24,7 +24,7 @@
         vm.isNoteChecked = isNoteChecked;
         vm.isAllChecked = isAllChecked;
 
-        vm.openSalesNote = openSalesNote;
+        vm.openSalesReport = openSalesReport;
 
         init();
 
@@ -34,7 +34,7 @@
 
         }
 
-        function openSalesNote(item) {
+        function openSalesReport(item) {
             $state.go('app.sales.details', {id: item.extId});
         }
 
@@ -58,8 +58,8 @@
 
         function refreshCheckboxes() {
             vm.selectAllCheckbox = isAllChecked();
-            for (var index = 0; index < vm.salesNotes.items.length; index++) {
-                var note = vm.salesNotes.items[index];
+            for (var index = 0; index < vm.salesReports.items.length; index++) {
+                var note = vm.salesReports.items[index];
                 note.selected = isNoteChecked(note);
             }
         }

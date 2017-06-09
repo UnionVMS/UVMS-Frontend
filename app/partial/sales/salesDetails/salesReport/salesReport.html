@@ -1,4 +1,4 @@
-﻿<div class="salesNote">
+﻿<div class="salesReport">
     <div class="row card-header">
         <div class="col-md-6">
             <div><h3>{{'sales.sales_note_header' | i18n}} - {{vm.salesCategory}}</h3></div>
@@ -14,24 +14,24 @@
 
     <div class="row row-eq-height grayBorderBottom">
         <div class="col-md-5ths col-xs-6 component grayBorderRight">
-            <sales-document document="vm.salesNote.document"></sales-document>
+            <sales-document document="vm.salesReport.document"></sales-document>
         </div>
         <div class="col-md-5ths col-xs-6 component grayBorderRight">
-            <sales-location location="vm.salesNote.location"></sales-location>
+            <sales-location location="vm.salesReport.location"></sales-location>
         </div>
         <div class="col-md-5ths col-xs-6 component grayBorderRight">
-            <sales-parties parties="vm.salesNote.parties"></sales-parties>
+            <sales-parties parties="vm.salesReport.parties"></sales-parties>
         </div>
         <div class="col-md-5ths col-xs-6 component grayBorderRight">
-            <sales-totals totals="vm.salesNote.totals" currency="vm.currency"></sales-totals>
+            <sales-totals totals="vm.salesReport.totals" currency="vm.currency"></sales-totals>
         </div>
         <div class="col-md-5ths col-xs-6 component">
-            <sales-flux-report report="vm.salesNote.fluxReport"></sales-flux-report>
+            <sales-flux-report report="vm.salesReport.fluxReport"></sales-flux-report>
         </div>
     </div>
     <div class="row">
         <div class="col-md-12 component">
-            <sales-products products="vm.salesNote.products" currency="vm.currency" show-area="vm.salesNote.category !== 'VARIOUS_SUPPLY'"></sales-products>
+            <sales-products products="vm.salesReport.products" currency="vm.currency" show-area="vm.salesReport.category !== 'VARIOUS_SUPPLY'"></sales-products>
         </div>
     </div>
 </div>

@@ -4,7 +4,7 @@
     angular
     .module('unionvmsWeb')
     .component('salesProductsChart', {
-        templateUrl: 'partial/sales/salesDetails/salesNote/products/productsChart.html',
+        templateUrl: 'partial/sales/salesDetails/salesReport/products/productsChart.html',
         controller: productsChartCtrl,
         controllerAs: 'vm',
         bindings: {
@@ -170,7 +170,7 @@
             //Filter on first species
             vm.filterProducts(vm.labels[0]);
         }
-        
+
         function calculateAvg(total, count) {
             return Math.round((total / count) * 100) / 100;
         }

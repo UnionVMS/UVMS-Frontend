@@ -8,7 +8,7 @@
     function salesCsvService(locale) {
         var service = {
             headers: {
-                salesNote: [
+                salesReport: [
                     locale.getString('sales.table_header_flag_state'),
                     locale.getString('sales.table_header_external_marketing'),
                     locale.getString('sales.table_header_ircs'),

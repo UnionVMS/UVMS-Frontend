@@ -1,6 +1,6 @@
 ﻿(function () {
     'use strict';
-    
+
     angular
         .module('unionvmsWeb')
         .controller('SalesCtrl', salesCtrl);
@@ -14,9 +14,9 @@
         ];
 
         vm.gotoPage = gotoPage;
-        vm.searchSalesNotes = searchSalesNotes;
+        vm.searchSalesReports = searchSalesReports;
         vm.currentSearchResults = salesSearchService.getSearchResults();
-        vm.exportSalesNotes = salesRestService.exportDocuments;
+        vm.exportSalesReports = salesRestService.exportDocuments;
 
         vm.editSelectionCallBack = editSelectionCallBack;
 
@@ -29,8 +29,8 @@
         }
 
         //Search sales notes
-        function searchSalesNotes() {
-            salesSearchService.searchSalesNotes().then(function () {
+        function searchSalesReports() {
+            salesSearchService.searchSalesReports().then(function () {
                 salesSelectionService.reset();
             });
         }
@@ -39,7 +39,7 @@
         function gotoPage(page) {
             if (angular.isDefined(page)) {
                 salesSearchService.setPage(page);
-                searchSalesNotes();
+                searchSalesReports();
             }
         }
 
@@ -57,7 +57,7 @@
         }
         function exportSelectionSuccess(data) {
             vm.currentSearchResults.setLoading(false);
-            var header = salesCsvService.headers.salesNote;
+            var header = salesCsvService.headers.salesReport;
             csvService.downloadCSVFile(data, header, "sales_documents_export.csv");
         }
         function exportSelectionFailed() {

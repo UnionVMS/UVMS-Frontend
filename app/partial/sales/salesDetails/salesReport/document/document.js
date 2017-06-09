@@ -3,16 +3,16 @@
 
     angular
         .module('unionvmsWeb')
-        .component('salesFluxReport', {
-            templateUrl: 'partial/sales/salesDetails/salesNote/fluxReport/fluxReport.html',
-            controller: reportCtrl,
+        .component('salesDocument', {
+            templateUrl: 'partial/sales/salesDetails/salesReport/document/document.html',
+            controller: documentCtrl,
             controllerAs: 'vm',
             bindings: {
-                report: '<'
+                document: '<'
             }
         });
 
-    function reportCtrl() {
+    function documentCtrl() {
         /* jshint validthis:true */
         var vm = this;
 
