@@ -20,6 +20,7 @@
 
         vm.editSelectionCallBack = editSelectionCallBack;
 
+
         init();
 
         //////////// Loading sales notes ////////////

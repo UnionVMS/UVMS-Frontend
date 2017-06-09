@@ -6,15 +6,15 @@
         .component('salesReportList', {
             templateUrl: 'partial/sales/salesReportList/salesReportList.html',
             controller: salesReportListCtrl,
-            controllerAs: 'vm',
-            bindings: {
-            salesReports: '<'
-            }
+            controllerAs: 'vm'
         });
 
-    function salesReportListCtrl($state, salesSelectionService) {
+    function salesReportListCtrl($state, salesSelectionService, $scope, salesSearchService) {
         /* jshint validthis:true */
         var vm = this;
+
+        vm.displayedCollection = [];
+        vm.salesReports = [];
 
         vm.selectAllCheckbox = false;
 
@@ -26,13 +26,51 @@
 
         vm.openSalesReport = openSalesReport;
 
+        vm.searchSalesReports = searchSalesReports;
+
+        vm.goToPage = goToPage;
+
+        vm.callServer = callServer;
+
+        vm.sorting = {};
+
+        vm.add = function () {
+            console.log("doing stuff2222");
+            console.log(vm.salesReports.items);
+        };
+
         init();
 
         ///////////////////////
 
-        function init() {
+        function callServer(tableState) {
+            vm.sorting.sortField = tableState.sort.predicate;
 
+            if (tableState.sort.reverse === true) {
+                vm.sorting.sortDirection = "DESCENDING";
+            } else if (tableState.sort.reverse === false) {
+                vm.sorting.sortDirection = "ASCENDING";
+            }
+
+            salesSearchService.searchSalesReports(vm.sorting).then(function () {
+                vm.salesReports = salesSearchService.getSearchResults();
+                tableState.pagination.numberOfPages = vm.salesReports.totalNumberOfPages;
+            });
         }
+
+        function init() {
+        }
+        function goToPage(page) {
+            if (angular.isDefined(page)) {
+                salesSearchService.setPage(page);
+                searchSalesReports(vm.sorting);
+            }
+        }
+
+        function searchSalesReports(sorting) {
+            salesSearchService.searchSalesReports(sorting).then(function () {
+                salesSelectionService.reset();
+            });
 
         function openSalesReport(item) {
             $state.go('app.sales.details', {id: item.extId});
@@ -58,8 +96,8 @@
 
         function refreshCheckboxes() {
             vm.selectAllCheckbox = isAllChecked();
-            for (var index = 0; index < vm.salesReports.items.length; index++) {
-                var note = vm.salesReports.items[index];
+            for (var index = 0; index < vm.salesReports.length; index++) {
+                var note = vm.salesReports[index];
                 note.selected = isNoteChecked(note);
             }
         }

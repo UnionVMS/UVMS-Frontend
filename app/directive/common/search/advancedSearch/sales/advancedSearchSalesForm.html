@@ -12,7 +12,7 @@
                 <span ng-hide="advancedSearch()">{{'common.advanced_search' | i18n}}</span>
                 <span ng-show="advancedSearch()">{{'common.simple_search' | i18n}}</span>
             </a>
-            <a ng-show="advancedSearch" ng-click="openSaveGroupModal()">
+            <a ng-show="advancedSearch && checkAccess('manageSalesNotes')" ng-click="openSaveGroupModal()">
                 <span>{{'common.search_group_save' | i18n}}</span>
             </a>
 		</div>

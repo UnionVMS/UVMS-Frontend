@@ -55,14 +55,16 @@
             return searchResults;
         }
 
-        function searchSalesReports() {
+        function searchSalesReports(sorting) {
             lastSearchObject = angular.copy(advancedSearchObject);
+
             searchResults.clearErrorMessage();
             searchResults.setLoading(true);
-
             var deferred = $q.defer();
+
             var filters = advancedSearchObject || {};
-            salesRestService.getSalesReportsPage(currentPageNr, filters).then(function (page) {
+
+            salesRestService.getSalesReportsPage(currentPageNr, filters, sorting).then(function (page) {
                 searchResults.updateWithNewResults(page);
                 deferred.resolve(page);
             }, function (error) {
