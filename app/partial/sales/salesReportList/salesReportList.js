@@ -71,6 +71,7 @@
             salesSearchService.searchSalesReports(sorting).then(function () {
                 salesSelectionService.reset();
             });
+        }
 
         function openSalesReport(item) {
             $state.go('app.sales.details', {id: item.extId});
@@ -102,4 +103,5 @@
             }
         }
     }
+
 })();

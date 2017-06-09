@@ -1,44 +1,46 @@
 ﻿<div class="row">
-    <div search-results-table search="vm.salesReports" class="col-md-12">
+    <div st-table="vm.salesReports.items" st-pipe="vm.callServer" class="col-md-12">
+        <button ng-click="vm.add()">add</button>
         <table class="searchResults colorOdd truncate-text">
             <thead>
-                <tr>
-                    <th class="checkboxContainer"><input type="checkbox" ng-checked="vm.isAllChecked()" ng-click="vm.checkAllCallBack()" ng-disabled="!vm.salesReports.items.length" /></th>
-                    <th sortable-table-header by="vm.salesReports.sortBy" reverse="vm.salesReports.sortReverse" order="'flagState'">{{'sales.table_header_flag_state' | i18n}}</th>
-                    <th sortable-table-header by="vm.salesReports.sortBy" reverse="vm.salesReports.sortReverse" order="'externalMarking'">{{'sales.table_header_external_marketing' | i18n}}</th>
-                    <th sortable-table-header by="vm.salesReports.sortBy" reverse="vm.salesReports.sortReverse" order="'ircs'">{{'sales.table_header_ircs' | i18n}}</th>
-                    <th sortable-table-header by="vm.salesReports.sortBy" reverse="vm.salesReports.sortReverse" order="'name'">{{'sales.table_header_name' | i18n}}</th>
-                    <th sortable-table-header by="vm.salesReports.sortBy" reverse="vm.salesReports.sortReverse" order="'salesDate'">{{'sales.table_header_sales_date' | i18n}}</th>
-                    <th sortable-table-header by="vm.salesReports.sortBy" reverse="vm.salesReports.sortReverse" order="'salesLocation'">{{'sales.table_header_sales_location' | i18n}}</th>
-                    <th sortable-table-header by="vm.salesReports.sortBy" reverse="vm.salesReports.sortReverse" order="'landingDate'">{{'sales.table_header_landing_date' | i18n}}</th>
-                    <th sortable-table-header by="vm.salesReports.sortBy" reverse="vm.salesReports.sortReverse" order="'landingPort'">{{'sales.table_header_landing_port' | i18n}}</th>
-                    <th sortable-table-header by="vm.salesReports.sortBy" reverse="vm.salesReports.sortReverse" order="'category'">{{'sales.table_header_sales_type' | i18n}}</th>
-                    <th sortable-table-header by="vm.salesReports.sortBy" reverse="vm.salesReports.sortReverse" order="'seller'">{{'sales.table_header_seller' | i18n}}</th>
-                    <th sortable-table-header by="vm.salesReports.sortBy" reverse="vm.salesReports.sortReverse" order="'buyer'">{{'sales.table_header_buyer' | i18n}}</th>
-                    <th>{{'sales.table_header_details' | i18n}}</th>
-                </tr>
+            <tr>
+                <th class="checkboxContainer"><input type="checkbox" ng-checked="vm.isAllChecked()" ng-click="vm.checkAllCallBack()" ng-disabled="!vm.salesReports.items.length" /></th>
+                <th st-sort="FLAG_STATE">{{'sales.table_header_flag_state' | i18n}}</th>
+                <th>{{'sales.table_header_external_marketing' | i18n}}</th>
+                <th>{{'sales.table_header_ircs' | i18n}}</th>
+                <th st-sort="VESSEL_NAME">{{'sales.table_header_name' | i18n}}</th>
+                <th st-sort="SALES_DATE">{{'sales.table_header_sales_date' | i18n}}</th>
+                <th st-sort="SALES_LOCATION">{{'sales.table_header_sales_location' | i18n}}</th>
+                <th st-sort="LANDING_DATE">{{'sales.table_header_landing_date' | i18n}}</th>
+                <th st-sort="LANDING_PORT">{{'sales.table_header_landing_port' | i18n}}</th>
+                <th st-sort="CATEGORY">{{'sales.table_header_sales_type' | i18n}}</th>
+                <th st-sort="SELLER">{{'sales.table_header_seller' | i18n}}</th>
+                <th st-sort="BUYER">{{'sales.table_header_buyer' | i18n}}</th>
+                <th>{{'sales.table_header_details' | i18n}}</th>
+            </tr>
             </thead>
             <tbody>
-                <tr ng-repeat="item in vm.salesReports.items | orderBy:vm.salesReports.sortBy:vm.salesReports.sortReverse | filter:vm.salesReports.filter track by $index ">
-                    <td class="checkboxContainer"><input type="checkbox" ng-checked="vm.isNoteChecked(item)" ng-click="vm.checkItemCallBack(item)" /></td>
-                    <td ng-attr-title="{{item.flagState}}">{{item.flagState}}</td>
-                    <td ng-attr-title="{{item.externalMarking}}">{{item.externalMarking}}</td>
-                    <td ng-attr-title="{{item.ircs}}">{{item.ircs}}</td>
-                    <td ng-attr-title="{{item.vesselName}}">{{item.vesselName}}</td>
-                    <td ng-attr-title="{{item.occurrence}}">{{item.occurrence | date:"yyyy-MM-dd HH:mm"}}</td>
-                    <td ng-attr-title="{{item.location}}">{{item.location}}</td>
-                    <td ng-attr-title="{{item.landingDate}}">{{item.landingDate | date:"yyyy-MM-dd HH:mm"}}</td>
-                    <td ng-attr-title="{{item.landingPort}}">{{item.landingPort}}</td>
-                    <td ng-attr-title="{{item.category}}">{{item.category}}</td>
-                    <td ng-attr-title="{{item.buyer}}">{{item.buyer}}</td>
-                    <td ng-attr-title="{{item.seller}}">{{item.seller}}</td>
-                    <td>
-                        <button class="btn btn-default btn-sm" ng-click="vm.openSalesReport(item)">
-                            <i class="fa fa-eye"></i>
-                        </button>
-                    </td>
-                </tr>
+            <tr ng-repeat="item in vm.salesReports.items track by $index">
+                <td class="checkboxContainer"><input type="checkbox" ng-checked="vm.isNoteChecked(item)" ng-click="vm.checkItemCallBack(item)" /></td>
+                <td ng-attr-title="{{item.flagState}}">{{item.flagState}}</td>
+                <td ng-attr-title="{{item.externalMarking}}">{{item.externalMarking}}</td>
+                <td ng-attr-title="{{item.ircs}}">{{item.ircs}}</td>
+                <td ng-attr-title="{{item.vesselName}}">{{item.vesselName}}</td>
+                <td ng-attr-title="{{item.occurrence}}">{{item.occurrence | date:"yyyy-MM-dd HH:mm"}}</td>
+                <td ng-attr-title="{{item.location}}">{{item.location}}</td>
+                <td ng-attr-title="{{item.landingDate}}">{{item.landingDate | date:"yyyy-MM-dd HH:mm"}}</td>
+                <td ng-attr-title="{{item.landingPort}}">{{item.landingPort}}</td>
+                <td ng-attr-title="{{item.category}}">{{item.category}}</td>
+                <td ng-attr-title="{{item.buyer}}">{{item.buyer}}</td>
+                <td ng-attr-title="{{item.seller}}">{{item.seller}}</td>
+                <td>
+                    <button class="btn btn-default btn-sm" ng-click="vm.openSalesReport(item)">
+                        <i class="fa fa-eye"></i>
+                    </button>
+                </td>
+            </tr>
             </tbody>
         </table>
+        <search-results-pagination page='vm.salesReports.page' total='vm.salesReports.totalNumberOfPages' callback='vm.goToPage'></search-results-pagination>
     </div>
 </div>
