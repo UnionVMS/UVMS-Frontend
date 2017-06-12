@@ -1,5 +1,5 @@
-<!--
-﻿Developed with the contribution of the European Commission - Directorate General for Maritime Affairs and Fisheries
+/*
+Developed with the contribution of the European Commission - Directorate General for Maritime Affairs and Fisheries
 © European Union, 2015-2016.
 
 This file is part of the Integrated Fisheries Data Management (IFDM) Suite. The IFDM Suite is free software: you can
@@ -8,13 +8,20 @@ Free Software Foundation, either version 3 of the License, or any later version.
 the hope that it will be useful, but WITHOUT ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or
 FITNESS FOR A PARTICULAR PURPOSE.  See the GNU General Public License for more details. You should have received a
 copy of the GNU General Public License along with the IFDM Suite. If not, see <http://www.gnu.org/licenses/>.
--->
-<nav class="header-menu" ng-controller="HeaderMenuCtrl" id="uvms-header-menu">
-    <ul>
-         <li class="cell" ng-repeat="page in menu" ng-class="{active: isActive(page.url)}">
-            <a ng-href="#{{page.url}}" ng-attr-id="{{'uvms-header-menu-item-' + page.elemId}}">
-                {{page.title}}
-            </a>
-        </li>
-    </ul>
-</nav>
+ */
+.current-time {
+    letter-spacing: 0.8px;
+
+    .date {
+        font-weight: 300;
+    }
+
+    .time {
+        font-weight: 500;
+    }
+
+    .format {
+        font-size: 70%;
+        vertical-align: text-top;
+    }
+}
