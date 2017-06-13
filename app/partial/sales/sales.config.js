@@ -22,7 +22,7 @@
                 controller: 'SalesCtrl',
                 controllerAs: 'vm',
                 data: {
-                    access: 'viewSalesNotes',
+                    access: 'viewSalesReports',
                     pageTitle: 'sales'
                 }
             })
@@ -37,7 +37,7 @@
                     }
                 },
                 data: {
-                    access: 'viewSalesNotes',
+                    access: 'viewSalesReports',
                     pageTitle: 'sales'
                 }
             });

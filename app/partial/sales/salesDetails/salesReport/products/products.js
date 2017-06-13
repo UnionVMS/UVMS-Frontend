@@ -4,7 +4,7 @@
     angular
         .module('unionvmsWeb')
         .component('salesProducts', {
-            templateUrl: 'partial/sales/salesDetails/salesNote/products/products.html',
+            templateUrl: 'partial/sales/salesDetails/salesReport/products/products.html',
             controller: productsCtrl,
             controllerAs: 'vm',
             bindings: {
@@ -43,7 +43,7 @@
                 data = _.where(data, { 'species': vm.selectedSpecies });
             }
             var header = salesCsvService.headers.product;
-            csvService.downloadCSVFile(data, header, "sales_products_export.csv");            
+            csvService.downloadCSVFile(data, header, "sales_products_export.csv");
         }
     }
 })();

@@ -28,7 +28,7 @@ angular.module('unionvmsWeb')
     function exportFinished(data) {
         $scope.loading = false;
         //Create and download the file
-        var header = salesCsvService.headers.salesNote;
+        var header = salesCsvService.headers.salesReport;
         csvService.downloadCSVFile(data, header, "sales_documents_export.csv");
 
         $scope.errors = [];

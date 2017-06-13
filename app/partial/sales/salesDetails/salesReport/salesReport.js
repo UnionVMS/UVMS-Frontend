@@ -3,41 +3,41 @@
 
     angular
         .module('unionvmsWeb')
-        .component('salesNote', {
-            templateUrl: 'partial/sales/salesDetails/salesNote/salesNote.html',
-            controller: salesNoteCtrl,
+        .component('salesReport', {
+            templateUrl: 'partial/sales/salesDetails/salesReport/salesReport.html',
+            controller: salesReportCtrl,
             controllerAs: 'vm',
             bindings: {
-                salesNote: '<'
+            salesReport: '<'
             }
         });
 
-    function salesNoteCtrl($state, codeListService) {
+    function salesReportCtrl($state, codeListService) {
         /* jshint validthis:true */
         var vm = this;
 
         getCurrency();
         getType();
 
-        vm.close = closeSalesNote;
+        vm.close = closeSalesReport;
 
         /////////////////////////
 
-        function closeSalesNote() {
+        function closeSalesReport() {
             $state.go('app.sales.list');
         }
 
         function getCurrency() {
             codeListService.getCodeListAssured('currencies').then(
                 function (list) {
-                    vm.currency = list.getValue(vm.salesNote.document.currency);
+                    vm.currency = list.getValue(vm.salesReport.document.currency);
                 });
         }
 
         function getType() {
             codeListService.getCodeListAssured('salesCategories').then(
                 function (list) {
-                    vm.salesCategory = list.getValue(vm.salesNote.category);
+                    vm.salesCategory = list.getValue(vm.salesReport.category);
                 });
         }
     }

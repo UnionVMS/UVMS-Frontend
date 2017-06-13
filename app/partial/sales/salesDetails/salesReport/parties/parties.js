@@ -4,7 +4,7 @@
     angular
         .module('unionvmsWeb')
         .component('salesParties', {
-            templateUrl: 'partial/sales/salesDetails/salesNote/parties/parties.html',
+            templateUrl: 'partial/sales/salesDetails/salesReport/parties/parties.html',
             controller: partiesCtrl,
             controllerAs: 'vm',
             bindings: {

@@ -3,21 +3,18 @@
 
     angular
         .module('unionvmsWeb')
-        .component('salesNoteList', {
-            templateUrl: 'partial/sales/salesNoteList/salesNoteList.html',
-            controller: salesNoteListCtrl,
-            controllerAs: 'vm',
-            bindings: {
-                // salesNotes: '<'
-            }
+        .component('salesReportList', {
+            templateUrl: 'partial/sales/salesReportList/salesReportList.html',
+            controller: salesReportListCtrl,
+            controllerAs: 'vm'
         });
 
-    function salesNoteListCtrl($state, salesSelectionService, $scope, salesSearchService) {
+    function salesReportListCtrl($state, salesSelectionService, $scope, salesSearchService) {
         /* jshint validthis:true */
         var vm = this;
 
         vm.displayedCollection = [];
-        vm.salesNotes = [];
+        vm.salesReports = [];
 
         vm.selectAllCheckbox = false;
 
@@ -27,9 +24,9 @@
         vm.isNoteChecked = isNoteChecked;
         vm.isAllChecked = isAllChecked;
 
-        vm.openSalesNote = openSalesNote;
+        vm.openSalesReport = openSalesReport;
 
-        vm.searchSalesNotes = searchSalesNotes;
+        vm.searchSalesReports = searchSalesReports;
 
         vm.goToPage = goToPage;
 
@@ -39,7 +36,7 @@
 
         vm.add = function () {
             console.log("doing stuff2222");
-            console.log(vm.salesNotes.items);
+            console.log(vm.salesReports.items);
         };
 
         init();
@@ -55,29 +52,28 @@
                 vm.sorting.sortDirection = "ASCENDING";
             }
 
-            salesSearchService.searchSalesNotes(vm.sorting).then(function () {
-                vm.salesNotes = salesSearchService.getSearchResults();
-                tableState.pagination.numberOfPages = vm.salesNotes.totalNumberOfPages;
+            salesSearchService.searchSalesReports(vm.sorting).then(function () {
+                vm.salesReports = salesSearchService.getSearchResults();
+                tableState.pagination.numberOfPages = vm.salesReports.totalNumberOfPages;
             });
         }
 
         function init() {
         }
-
         function goToPage(page) {
             if (angular.isDefined(page)) {
                 salesSearchService.setPage(page);
-                searchSalesNotes(vm.sorting);
+                searchSalesReports(vm.sorting);
             }
         }
 
-        function searchSalesNotes(sorting) {
-            salesSearchService.searchSalesNotes(sorting).then(function () {
+        function searchSalesReports(sorting) {
+            salesSearchService.searchSalesReports(sorting).then(function () {
                 salesSelectionService.reset();
             });
         }
 
-        function openSalesNote(item) {
+        function openSalesReport(item) {
             $state.go('app.sales.details', {id: item.extId});
         }
 
@@ -101,10 +97,11 @@
 
         function refreshCheckboxes() {
             vm.selectAllCheckbox = isAllChecked();
-            for (var index = 0; index < vm.salesNotes.length; index++) {
-                var note = vm.salesNotes[index];
+            for (var index = 0; index < vm.salesReports.length; index++) {
+                var note = vm.salesReports[index];
                 note.selected = isNoteChecked(note);
             }
         }
     }
+
 })();

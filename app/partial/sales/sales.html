@@ -1,15 +1,15 @@
 ﻿<div>
     <div class="container containerWithTopBottomPadding">
         <div class="card">
-            <advanced-search searchfunc="vm.searchSalesNotes" modeltype="'SALES'"></advanced-search>
+            <advanced-search searchfunc="vm.searchSalesReports" modeltype="'SALES'"></advanced-search>
             <div class="row">
                 <div class="col-md-1">
                     <dropdown class="" ng-model="vm.editSelection" initialtext="{{'common.actions' | i18n}}" items="vm.editSelectionDropdownItems" menu-style callback="vm.editSelectionCallBack"></dropdown>
                 </div>
-               <simple-export exportfunc="vm.exportSalesNotes"></simple-export>
+               <simple-export exportfunc="vm.exportSalesReports"></simple-export>
             </div>
-            <sales-note-list>
-            </sales-note-list>
+            <sales-report-list>
+            </sales-report-list>
             </div>
     </div>
 </div>

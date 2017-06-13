@@ -3,22 +3,21 @@
 
     angular
         .module('unionvmsWeb')
-        .component('salesDocument', {
-            templateUrl: 'partial/sales/salesDetails/salesNote/document/document.html',
-            controller: documentCtrl,
+        .component('salesTotals', {
+            templateUrl: 'partial/sales/salesDetails/salesReport/totals/totals.html',
+            controller: totalsCtrl,
             controllerAs: 'vm',
             bindings: {
-                document: '<'
+                totals: '<',
+                currency: '<'
             }
         });
 
-    function documentCtrl() {
+    function totalsCtrl() {
         /* jshint validthis:true */
         var vm = this;
 
-
         /////////////////////////
-
 
     }
 })();

@@ -39,7 +39,7 @@
     "document_header": "Sales document",
     "document_id": "Id:",
     "document_currency": "Currency:",
-    "document_occurence": "Occurence:",
+    "document_occurrence": "Occurrence:",
 
     "parties_header": "Parties",
     "party_id": "Id:",
