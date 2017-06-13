@@ -39,8 +39,8 @@
     "report_header_VARIOUS_SUPPLY": "Various Supply",
     "report_header_NEGOTIATED_SALE": "Negotiated Sale",
 
-    "report_status_CORRECTION": "Corrected",
-    "report_status_DELETE": "Deleted",
+    "report_status_CORRECTED": "Corrected",
+    "report_status_DELETED": "Deleted",
 
     "document_header": "Document",
     "document_id": "Id:",

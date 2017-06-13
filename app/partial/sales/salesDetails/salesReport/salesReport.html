@@ -1,7 +1,8 @@
 ﻿<div class="salesReport">
     <div class="row card-header">
         <div class="col-md-1">
-            <h3 class="label label-danger sales-report-status" ng-if="vm.salesReport.fluxReport.purposeCode != 'ORIGINAL'">{{'sales.report_status_' + vm.salesReport.fluxReport.purposeCode | i18n}}</h3>
+            <h3 class="label label-danger sales-report-status" ng-if="vm.salesReport.fluxReport.purposeCode == 'DELETE'">{{'sales.report_status_DELETED' | i18n}}</h3>
+            <h3 class="label label-danger sales-report-status" ng-if="!vm.salesReport.latestVersion">{{'sales.report_status_CORRECTED' | i18n}}</h3>
         </div>
         <div class="col-md-3"></div>
         <div class="col-md-3">
