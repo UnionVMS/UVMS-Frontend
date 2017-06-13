@@ -4,39 +4,39 @@
     "table_header_external_marketing": "Ext. marking",
     "table_header_ircs": "IRCS",
     "table_header_name": "Name",
-    "table_header_sales_date": "Sales date",
-    "table_header_sales_location": "Sales location",
+    "table_header_sales_date": "Date",
+    "table_header_sales_location": "Location",
     "table_header_landing_date": "Landing date",
     "table_header_landing_port": "Landing port",
     "table_header_sales_type": "Type",
     "table_header_seller": "Seller",
     "table_header_buyer": "Buyer",
     "table_header_details": "Details",
-    "search_zero_results_error": "No sales note matching your search criteria was found.",
+    "search_zero_results_error": "No reports matching your search criteria was found.",
     "documents_export_failed": "Failed to export documents",
 
     "advanced_search_placeholder_flag_state": "Flag State",
-    "advanced_search_placeholder_sales_type": "Type of Sale",
-    "advanced_search_placeholder_sales_location": "Sales Location",
+    "advanced_search_placeholder_sales_type": "Type",
+    "advanced_search_placeholder_sales_location": "Location",
     "advanced_search_placeholder_landing_port": "Landing Port",
     "advanced_search_placeholder_species": "Species",
     "advanced_search_species_function_and": "AND",
     "advanced_search_species_function_or": "OR",
 
-    "search_placeholder_sales_start_date": "Sales Start Date",
-    "search_placeholder_sales_end_date": "Sales End Date",
+    "search_placeholder_sales_start_date": "Start Date",
+    "search_placeholder_sales_end_date": "End Date",
     "search_placeholder_vessel_name": "Name / CFR / IRCS",
 
     "fishing_trip_header": "Fishing Trip",
     "fishing_trip_id": "Trip ID",
     "fishing_trip_location_at": "at",
-    "fishing_trip_departure": "Depature",
+    "fishing_trip_departure": "Departure",
     "fishing_trip_arrival": "Arrival",
     "fishing_trip_landing": "Landing",
 
     "sales_note_header": "Sales Note",
 
-    "document_header": "Sales document",
+    "document_header": "Document",
     "document_id": "Id:",
     "document_currency": "Currency:",
     "document_occurrence": "Occurrence:",
@@ -59,9 +59,16 @@
     "report_party": "FLUX Party:",
     "report_export_all": "Export all",
     "report_exporting_all": "Exporting...",
+    "report_go_to_newest_version": "Go to newest version",
+    "report_older_versions": "Older versions",
+    "report_related_reports": "Related reports",
+    "report_older_versions_label": "Older versions: ",
+    "report_related_reports_label": "Related reports: ",
 
+    "report_item_type_TAKE_OVER_DOCUMENT": "Take Over Document",
+    "report_item_type_SALES_NOTE": "Sales Note",
 
-    "location_header": "Sales location",
+    "location_header": "Location",
     "products_table_header_specie": "Specie",
     "products_table_header_area": "Area",
     "products_table_header_freshness": "Freshness",
@@ -74,7 +81,7 @@
     "products_table_header_weight": "Weight",
     "products_table_header_unit": "Unit",
     "products_table_header_price": "Price",
-    "products_empty": "This sales note contains no products",
+    "products_empty": "This report contains no products",
     "products_export_all": "Export all",
     "products_export_specie": "Export current specie",
     "products_export_failed": "Failed to export products",
@@ -88,6 +95,6 @@
     "save_search_modal_dropdown_label": "Select a search",
     "save_search_modal_error": "The search couldn't be saved.",
 
-    "sales_note_not_exist_error":  "The sales note does not exist"
+    "sales_note_not_exist_error":  "The report does not exist"
 
 }

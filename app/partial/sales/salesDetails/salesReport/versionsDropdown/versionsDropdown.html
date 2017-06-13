@@ -1,0 +1,15 @@
+﻿<label>{{ 'sales.report_older_versions_label' | i18n }}</label>
+<dropdown
+          ng-if="vm.currentReportIsNewestVersion"
+          ng-disabled="vm.reportVersions == null || vm.reportVersions.length == 0"
+          class="menu-style"
+          ng-model="vm.selection"
+          initialtext="{{ 'sales.report_older_versions' | i18n }}"
+          items="vm.dropdownItems"
+          callback="vm.chooseOlderVersion">
+</dropdown>
+<button type="button" class="btn btn-default"
+        ng-if="!vm.currentReportIsNewestVersion"
+        ng-click="vm.goToNewestVersion()">
+    {{ 'sales.report_go_to_newest_version' | i18n }}
+</button>

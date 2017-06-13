@@ -1,9 +1,23 @@
 ﻿<div class="salesReport">
     <div class="row card-header">
-        <div class="col-md-6">
+        <div class="col-md-7">
             <div><h3>{{'sales.sales_note_header' | i18n}} - {{vm.salesCategory}}</h3></div>
         </div>
-        <div class="col-md-6">
+        <div class="col-md-2">
+            <div class="actions">
+                    <sales-versions-dropdown report-versions="vm.salesReport.otherVersions"
+                                             current-report-is-newest-version="vm.salesReport.latestVersion">
+                    </sales-versions-dropdown>
+            </div>
+        </div>
+        <div class="col-md-2">
+            <div class="actions">
+                <sales-relevant-reports-dropdown
+                        reports="vm.salesReport.relatedReports">
+                </sales-relevant-reports-dropdown>
+            </div>
+        </div>
+        <div class="col-md-1">
             <div class="actions">
                 <div class="closeIcon textAlignRight" ng-click="vm.close()">
                     <i class="fa fa-sign-out signouticon" title="{{'common.close' | i18n}}"></i>
