@@ -34,11 +34,6 @@
 
         vm.sorting = {};
 
-        vm.add = function () {
-            console.log("doing stuff2222");
-            console.log(vm.salesReports.items);
-        };
-
         init();
 
         ///////////////////////
@@ -59,14 +54,6 @@
         }
 
         function init() {
-            callServer({
-                sort: {
-                    reverse: true
-                },
-                pagination: {
-                    numberOfPages: 2
-                }
-            })
         }
 
         function goToPage(page) {
