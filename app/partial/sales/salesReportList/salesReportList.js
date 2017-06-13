@@ -59,7 +59,16 @@
         }
 
         function init() {
+            callServer({
+                sort: {
+                    reverse: true
+                },
+                pagination: {
+                    numberOfPages: 2
+                }
+            })
         }
+
         function goToPage(page) {
             if (angular.isDefined(page)) {
                 salesSearchService.setPage(page);

@@ -164,3 +164,45 @@
     float: left;
     padding-right: 5px;
 }
+
+sales-report-list {
+    tr {
+        background: none !important;
+    }
+
+    tbody {
+        border-bottom: solid 1px @searchResultsTableRowBorderColor !important;
+    }
+    tbody:nth-child(odd) {
+        background: @searchResultsTableOddRowColor !important;
+    }
+
+    .glyphicon-time {
+        margin: 7px 0 0;
+        opacity:0;
+    }
+
+    td .glyphicon-chevron-right {
+        cursor:pointer;
+    }
+
+
+    td .glyphicon-share-alt {
+        transform: matrix(1, 0, 0, -1, 0, 0);
+    }
+
+    .glyphicon-chevron-right {
+        margin: 4px 0 0;
+    }
+}
+
+.report-older-version {
+    *:not(i):not(span){
+        text-decoration: line-through;
+    }
+}
+.strike-through {
+    *:not(i):not(span){
+        text-decoration: line-through;
+    }
+}
