@@ -34,7 +34,13 @@
     "fishing_trip_arrival": "Arrival",
     "fishing_trip_landing": "Landing",
 
-    "sales_note_header": "Sales Note",
+    "report_header_SALES_NOTE": "Sales Note",
+    "report_header_TAKE_OVER_DOCUMENT": "Take Over Document",
+    "report_header_VARIOUS_SUPPLY": "Various Supply",
+    "report_header_NEGOTIATED_SALE": "Negotiated Sale",
+
+    "report_status_CORRECTION": "Corrected",
+    "report_status_DELETE": "Deleted",
 
     "document_header": "Document",
     "document_id": "Id:",

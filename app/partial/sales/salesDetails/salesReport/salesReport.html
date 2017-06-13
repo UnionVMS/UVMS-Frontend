@@ -1,7 +1,16 @@
 ﻿<div class="salesReport">
     <div class="row card-header">
-        <div class="col-md-7">
-            <div><h3>{{'sales.sales_note_header' | i18n}} - {{vm.salesCategory}}</h3></div>
+        <div class="col-md-1">
+            <h3 class="label label-danger sales-report-status" ng-if="vm.salesReport.fluxReport.purposeCode != 'ORIGINAL'">{{'sales.report_status_' + vm.salesReport.fluxReport.purposeCode | i18n}}</h3>
+        </div>
+        <div class="col-md-3"></div>
+        <div class="col-md-3">
+            <div>
+                <h3 class="textAlignCenter">
+                    <span>{{'sales.report_header_' + vm.salesReport.itemType | i18n}}</span>
+                    <span ng-if="vm.salesReport.category && vm.salesReport.category != 'FIRST_SALE'">- {{'sales.report_header_' + vm.salesReport.category | i18n}}</span>
+                </h3>
+            </div>
         </div>
         <div class="col-md-2">
             <div class="actions">
