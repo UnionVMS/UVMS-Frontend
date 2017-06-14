@@ -34,7 +34,8 @@ angular.module('unionvmsWeb').factory('spatialHelperService',function(userServic
 	        units: 'm',
 	        radius: undefined,
 	        features: []
-	    }
+	    },
+        fromFAView: false
 	};
 	
 	//Default reports

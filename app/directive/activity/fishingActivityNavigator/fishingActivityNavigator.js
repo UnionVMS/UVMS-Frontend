@@ -53,7 +53,7 @@ angular.module('unionvmsWeb').directive('fishingActivityNavigator', function(tri
 					fishingActivityService.activityType = rec.srcType;
 					scope.timeline.setCurrentPreviousAndNextItem(rec.id, parentId);
 					
-					reportingNavigatorService.goToView('tripsPanel', fishingActivityService.getFaView(rec.srcType),function(){
+					reportingNavigatorService.goToView('tripsPanel',  'FishingActivityPanel' /*fishingActivityService.getFaView(rec.srcType)*/,function(){
 						var content = angular.element('fishing-activity-navigator');
 						var scope = content.scope();
 						$compile(content)(scope);

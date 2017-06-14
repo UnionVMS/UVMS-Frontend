@@ -26,7 +26,7 @@ copy of the GNU General Public License along with the IFDM Suite. If not, see <h
  * @description
  *  A service to deal with any kind of fishing activity operation (e.g. Departure, Arrival, ...)
  */
-angular.module('unionvmsWeb').factory('fishingActivityService', function(activityRestService, loadingStatus, mdrCacheService, locale, $filter, $state, tripSummaryService, reportingNavigatorService, tripReportsTimeline, $compile) {
+angular.module('unionvmsWeb').factory('fishingActivityService', function(activityRestService, loadingStatus, mdrCacheService, locale, $filter, $state, tripSummaryService, reportingNavigatorService, tripReportsTimeline, $compile, spatialHelperService) {
 
     var faServ = {
         activityData: {},
@@ -544,13 +544,15 @@ angular.module('unionvmsWeb').factory('fishingActivityService', function(activit
      * @alias quitFaView
      */
     faServ.quitFaView = function(){
+        spatialHelperService.fromFAView = false;
         //TODO recheck this logic when we implement navigation from panel to subpanel (e.g. fishing op to catch details)
-        var previousView = reportingNavigatorService.getPreviousView();
-        if (previousView === 'mapPanel'){
+        if (faServ.openFromMap){
             reportingNavigatorService.goToView('liveViewPanel', 'mapPanel');
         } else {
             reportingNavigatorService.goToView('tripsPanel', 'tripSummary');
         }
+
+        faServ.openFromMap = false;
     };
     
     /**

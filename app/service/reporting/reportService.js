@@ -88,6 +88,7 @@ angular.module('unionvmsWeb').factory('reportService',function($rootScope, $time
 
 	rep.runReport = function(report){
         loadingStatus.isLoading('LiveviewMap',true, 0);
+        spatialHelperService.fromFAView = false;
 
         tripReportsTimeline.reset();
         
@@ -157,6 +158,7 @@ angular.module('unionvmsWeb').factory('reportService',function($rootScope, $time
 	
 	rep.runReportWithoutSaving = function(report){
 	    loadingStatus.isLoading('LiveviewMap',true, 0);
+        spatialHelperService.fromFAView = false;
 	    tripReportsTimeline.reset();
 	    rep.hasAlert = false;
         $modalStack.dismissAll();
