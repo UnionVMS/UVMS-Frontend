@@ -786,7 +786,7 @@ angular.module('unionvmsWeb').controller('VmspanelCtrl',function($scope, locale,
 
    $scope.openTripSummary = function(tripId){
        $scope.tripSummServ.withMap = $scope.repNav.isViewVisible('mapPanel');
-       $scope.tripSummServ.openNewTrip(/*'FRA-TRP-2016122102030'*/tripId);
+       $scope.tripSummServ.openNewTrip(tripId);
        $scope.repNav.goToView('tripsPanel','tripSummary');
    };
 
