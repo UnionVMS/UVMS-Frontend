@@ -43,7 +43,8 @@ var unionvmsWebApp = angular.module('unionvmsWeb', [
     'angular-cron-jobs',
     'nvd3',
     'ui.tree',
-    'angularResizable'
+    'angularResizable',
+    'slickCarousel'
 ]);
 
 var currentUserContextPromise = function(userService) {

@@ -272,7 +272,7 @@ angular.module('unionvmsWeb').factory('Report',function(unitConversionService, u
 			if(_.keys(this.faFilters).length){
 				faFilters = {};
 				angular.forEach(this.faFilters, function(value,key){
-					if(key === 'weight'){
+					if(key === 'weight' || key === 'id'){
 						faFilters[key] = value;
 					}else{
 						faFilters[key] = [value];
@@ -460,7 +460,7 @@ angular.module('unionvmsWeb').factory('Report',function(unitConversionService, u
 			if(_.keys(this.faFilters).length){
 				report.filterExpression.fa = {};
 				angular.forEach(this.faFilters, function(value,key){
-					if(key === 'weight'){
+					if(key === 'weight' || key === 'id'){
 						report.filterExpression.fa[key] = value;
 					}else{
 						report.filterExpression.fa[key] = [value];

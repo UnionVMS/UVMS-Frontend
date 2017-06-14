@@ -305,7 +305,7 @@ angular.module('unionvmsWeb').controller('AdvancedsearchformCtrl',function($scop
      * @param {String} column - the column name property to be updated
      */
     $scope.updateVisibilityCache = function(column){
-        $scope.visServ.updateStorage(column)
+        $scope.visServ.updateStorage(column);
     };
     
     /**

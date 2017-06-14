@@ -36,12 +36,6 @@ angular.module('unionvmsWeb').directive('carouselTile', function() {
 		    if (angular.isDefined(scope.useTopNav) && !scope.useTopNav){
 		        scope.displayTopNav = false;
 		    }
-		    
-            scope.$watch('ngModel',function(newVal){
-                if(newVal){
-                    scope.init();
-                }
-            });
 		}
 	};
 })
@@ -51,26 +45,38 @@ angular.module('unionvmsWeb').directive('carouselTile', function() {
  * @name CarouselTileCtrl
  * @param $scope {Service} The controller scope
  * @param locale {Service} The angular locale service
+ * @param $timeout {Service} the angular timeout service
  * @description
  *  The controller for the carouselTile directive ({@link unionvmsWeb.carouselTile})
  */
-.controller('CarouselTileCtrl', function($scope, locale){
-    /**
-     * The initialization function for the directive
-     * 
-     * @memberof CarouselTileCtrl
-     * @public
-     * @alias init
-     */
-    $scope.init = function(){
-        for (var i = 0; i < $scope.ngModel.length; i++){
-            $scope.ngModel[i].active = false;
-            if (i === 0){
-                $scope.ngModel[i].active = true;
-                //$scope.currentItem = i + 1;
+.controller('CarouselTileCtrl', function($scope, locale, $timeout){
+    $scope.isLoaded = true;
+    $scope.initialized = false;
+    $scope.slickConfig = {
+        enabled: true,
+        autoplay: false,
+        draggable: false,
+        method: {},
+        event: {
+            init: function (event, slick) {
+                $scope.currentItem = 1;
+                $scope.initialized = true;
+            },
+            afterChange: function(event, slick, currentSlide, nextSlide){
+                $scope.currentItem = currentSlide + 1;
             }
         }
     };
+    
+    $scope.$watch('ngModel', function(newVal){
+        if (newVal && $scope.initialized && $scope.isLoaded){
+            $scope.isLoaded = false;
+            $scope.currentItem = 1;
+            $timeout(function () {
+                $scope.isLoaded = true;
+            }, 5);
+        }
+    });
     
     /**
      * Check if an item is the current active item (the one being displayed in the carousel)
@@ -81,7 +87,7 @@ angular.module('unionvmsWeb').directive('carouselTile', function() {
      * @returns {Boolean} Whether the item is active or not 
      */
     $scope.isItemActive = function(idx){
-        return $scope.ngModel[idx].active;
+        return idx === $scope.currentItem - 1;
     };
     
     /**
@@ -93,42 +99,7 @@ angular.module('unionvmsWeb').directive('carouselTile', function() {
      * @param {Number} idx - The index of the item that should be set to active
      */
     $scope.setActiveItem = function(idx){
-        $scope.ngModel[idx].active = true;
-   };
-   
-   /**
-    * On slide change callback function to update the current selected item for the paginator
-    * 
-    * @memberof CarouselTileCtrl
-    * @public
-    * @param {Number} newSlide - The index of the new selected slide
-    */
-   $scope.onSlideChanged = function (newSlide) {
-       $scope.currentItem = newSlide + 1;
-   };
-})
-/**
- * @memberof unionvmsWeb
- * @ngdoc directive
- * @name onCarouselChange
- * @param {Service} $parse - The angular parse service
- * @param {Service} $animate - The angular animate service
- * @description
- *  A directive to intersect the change method of the uib-carousel directive and return the index of the new selected slide
- */
-.directive('onCarouselChange', function($parse, $animate){
-    return {
-        require: '^uibCarousel',
-        link: function(scope, element, attrs, carouselCtrl){
-            var fn = $parse(attrs.onCarouselChange);
-            var origSelect = carouselCtrl.select;
-            carouselCtrl.select = function(nextSlide, direction, nextIndex) {
-                if (nextSlide !== this.currentSlide) {
-                    fn(scope, {newSlide: nextSlide.index});
-                    return origSelect.apply(this, arguments);
-                }
-            };
-        }
+        $scope.slickConfig.method.slickGoTo(idx);
     };
 });
 

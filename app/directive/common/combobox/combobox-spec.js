@@ -100,9 +100,9 @@ describe('combobox', function() {
     groupCombo: {
       'group': {attr: 'group', type: '@'}
     },
-    lineStyleCombo: {
+    /*lineStyleCombo: {
       'lineStyle': {attr: 'lineStyle', type: '='}
-    },
+    },*/
     editableCombo: {
       'editable': {attr: 'editable', type: '='}
     },

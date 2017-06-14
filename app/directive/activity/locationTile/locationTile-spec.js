@@ -108,7 +108,6 @@ describe('locationTile', function() {
         var stats = {
             countries: [],
             rfmo: [],
-            liCounter: 0,
             idCounter: 0,
             posCounter: 0,
             addCounter: 0,
@@ -116,7 +115,6 @@ describe('locationTile', function() {
         }
         angular.forEach(srcData, function(record){
             stats.clickableCounter += 1;
-            stats.liCounter += 1 + record.structuredAddresses.length;
             stats.addCounter += record.structuredAddresses.length;
             if (angular.isDefined(record.identifier)){
                 stats.idCounter += 1;
@@ -201,7 +199,6 @@ describe('locationTile', function() {
             expect(angular.element('legend').find('.fa-search-plus').length).toBe(0);
             expect(angular.element('.item-container').eq(0).find('span').eq(1).text()).toEqual(filter(stats.countries, ', '));
             expect(angular.element('.item-container').eq(1).find('span').eq(1).text()).toEqual(filter(stats.rfmo, ', '));
-            expect(angular.element('li').length).toEqual(stats.liCounter);
             expect(angular.element('carousel-tile').length).toEqual(1);
             
             expect(isolatedScope.identifiers.length).toEqual(stats.idCounter);
