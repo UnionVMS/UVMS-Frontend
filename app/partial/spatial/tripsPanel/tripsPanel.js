@@ -21,10 +21,11 @@ copy of the GNU General Public License along with the IFDM Suite. If not, see <h
  * @description
  *  The controller for the trip summary tab  
  */
-angular.module('unionvmsWeb').controller('TripspanelCtrl', function ($scope, genericMapService, tripSummaryService, spatialConfigAlertService, Trip) {
+angular.module('unionvmsWeb').controller('TripspanelCtrl', function ($scope, genericMapService, tripSummaryService, spatialConfigAlertService, Trip, fishingActivityService) {
 
     $scope.alert = spatialConfigAlertService;
     $scope.tripSummServ = tripSummaryService;
+    $scope.faServ = fishingActivityService;
 
     $scope.tripSummServ.resetMapConfigs();
 

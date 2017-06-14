@@ -32,6 +32,7 @@ angular.module('unionvmsWeb').controller('MapCtrl',function($log, $scope, locale
     $scope.graticuleActivated = false;
     $scope.graticuleTip = [locale.getString('spatial.map_tip_enable'), locale.getString('spatial.map_tip_graticule')].join(' ');
     $scope.comboServ = comboboxService;
+    $scope.spatialHelpServ = spatialHelperService;
 
     //Comboboxes
     $scope.measuringUnits = [
@@ -110,12 +111,14 @@ angular.module('unionvmsWeb').controller('MapCtrl',function($log, $scope, locale
     
     $scope.goToFaView = function(){
         fishingActivityService.resetActivity();
+        fishingActivityService.openFromMap = true;
         fishingActivityService.id = mapService.overlay.get('activityId');
         fishingActivityService.isCorrection = mapService.overlay.get('isCorrection');
         fishingActivityService.documentType = mapService.overlay.get('documentType').toLowerCase();
         tripSummaryService.openNewTrip(mapService.overlay.get('tripId'), true);
         tripReportsTimeline.reset();
-        reportingNavigatorService.goToView('tripsPanel', fishingActivityService.getFaView(mapService.overlay.get('activityType')));
+        fishingActivityService.activityType = mapService.overlay.get('activityType').toUpperCase();
+        reportingNavigatorService.goToView('tripsPanel', 'FishingActivityPanel');
     };
 
     //Check for permissions
@@ -668,7 +671,7 @@ angular.module('unionvmsWeb').controller('MapCtrl',function($log, $scope, locale
 	};
 	
 	$scope.backToFAView = function(){
-	    reportingNavigatorService.goToView('tripsPanel', fishingActivityService.getFaView(fishingActivityService.activityType));
+	    reportingNavigatorService.goToView('tripsPanel', 'FishingActivityPanel');
 	};
     
     $scope.$watch(function(){return $scope.repNav.isViewVisible('mapPanel');}, function(newVal,oldVal){

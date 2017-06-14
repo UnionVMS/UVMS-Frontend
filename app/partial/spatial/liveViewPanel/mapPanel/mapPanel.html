@@ -43,12 +43,12 @@ copy of the GNU General Public License along with the IFDM Suite. If not, see <h
                 </div>
             </div>
         </div>
-        <!-- <div class="map-over-btn">
-        	<button type="button" class="btn btn-default" ng-click="backToFAView()">
+        <div class="map-over-btn">
+        	<button type="button" class="btn btn-default" ng-if="spatialHelpServ.fromFAView" ng-click="backToFAView()">
         		<span class="fa fa-share-square-o"></span>&nbsp;
         		<span>Back to activity details</span>
        		</button>
-        </div> -->
+        </div>
         <ng-form name="mapForm">
 	        <div id="map" class="map">
 	        	<div ng-include="'partial/spatial/liveViewPanel/mapPanel/layerPanel/layerPanel.html'"></div>
@@ -280,8 +280,8 @@ copy of the GNU General Public License along with the IFDM Suite. If not, see <h
 				<span class="header" ng-if="popupRecContainer.currentType === 'vmsseg'">{{'spatial.popup_segments_title' | i18n}}</span>            	
 				<span class="header" ng-if="popupRecContainer.currentType === 'ers'">{{'spatial.popup_activities_title' | i18n}}</span>
 				<span class="header" ng-if="popupRecContainer.currentType === 'alarms'">{{'spatial.popup_alarms_title' | i18n}}</span>
-				<div class="btn-container" ng-show="(popupRecContainer.currentType === 'vmspos' || popupRecContainer.currentType === 'ers') && isAllowed('Vessel', 'getVesselById')">
-					<button type="button" class="btn btn-default btn-xs" title="{{'spatial.popup_vessel_details_btn_title' | i18n}}" ng-click="getVesselDetails()"><i class="fa fa-ship"></i></button>
+				<div class="btn-container" ng-show="(popupRecContainer.currentType === 'vmspos' || popupRecContainer.currentType === 'ers')">
+					<button type="button" class="btn btn-default btn-xs" title="{{'spatial.popup_vessel_details_btn_title' | i18n}}" ng-click="getVesselDetails()" ng-if="isAllowed('Vessel', 'getVesselById')"><i class="fa fa-ship"></i></button>
 					<button type="button" class="btn btn-default btn-xs" title="{{'spatial.popup_activity_details_btn_title' | i18n}}" ng-click="goToFaView()" ng-if="isActivityDetailsAllowed()"><i class="fa fa-eye"></i></button>
 				</div>
 			</div>

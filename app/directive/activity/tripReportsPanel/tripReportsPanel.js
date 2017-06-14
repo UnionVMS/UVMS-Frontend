@@ -116,7 +116,7 @@ angular.module('unionvmsWeb').directive('tripReportsPanel', function(loadingStat
                 fishingActivityService.documentType = node.documentType;
                 fishingActivityService.activityType = node.srcType;
                 tripReportsTimeline.setCurrentPreviousAndNextItem(node.id, parentId);
-                reportingNavigatorService.goToView('tripsPanel', fishingActivityService.getFaView(node.srcType));
+                reportingNavigatorService.goToView('tripsPanel',  'FishingActivityPanel');
             };
         }
     };
