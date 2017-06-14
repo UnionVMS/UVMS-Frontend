@@ -12,6 +12,6 @@
 			<span class="labels">{{'activity.gear_shot_retrieval_recovery' | i18n}}</span>
 			<span>{{item.recoveryMeasure}} <i class="fa fa-info-circle recoveryDesc-{{item.type}}" ng-if="item.recoveryDesc" ng-mouseover="displayDetailsTip(item, 'recoveryDesc')"></i></span>
 		</div>
-		<location-tile ng-if="item.location" class="col-md-12 with-margin-top" location-details="item.location" field-title="{{'activity.locations' | i18n}}" is-clickable="isLocationClickable()"></location-tile>
+		<location-tile ng-if="item.location" class="col-md-12 with-margin-top" location-details="item.location" field-title="{{'activity.locations' | i18n}}" is-clickable="faServ.isLocationClickable()"></location-tile>
 	</div>
 </div>

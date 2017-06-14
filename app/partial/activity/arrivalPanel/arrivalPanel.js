@@ -20,7 +20,7 @@ copy of the GNU General Public License along with the IFDM Suite. If not, see <h
  * @description
  *  The controller for the Arrival panel partial
  */
-angular.module('unionvmsWeb').controller('ArrivalpanelCtrl', function($scope, $state, fishingActivityService, mdrCacheService, tripSummaryService, locale, loadingStatus, FishingActivity, reportingNavigatorService, spatialHelperService, $modalStack) {
+angular.module('unionvmsWeb').controller('ArrivalpanelCtrl', function($scope, $state, fishingActivityService, mdrCacheService, tripSummaryService, locale, loadingStatus, FishingActivity) {
     $scope.faServ = fishingActivityService;
 
     var arrivalNotification = ($scope.faServ.documentType.toLowerCase() === 'notification') ? true : false;
@@ -82,42 +82,6 @@ angular.module('unionvmsWeb').controller('ArrivalpanelCtrl', function($scope, $s
             loadingStatus.isLoading('FishingActivity', false);
         });
     };
-
-    /**
-      * Check if a location tile should be clickable taking into consideration the route and the report configuration
-      * 
-      * @memberof ArrivalpanelCtrl
-      * @public
-      * @alias isLocationClickable
-      * @returns {Boolean} Whether the location tile should be clickable or not
-      */
-    $scope.isLocationClickable = function() {
-        var clickable = false;
-        if (($state.current.name === 'app.reporting-id' || $state.current.name === 'app.reporting') && tripSummaryService.withMap) {
-            clickable = true;
-        }
-
-        return clickable;
-    };
-
-
-    /**
-     * The click location callback function
-     * 
-     * @memberof ArrivalpanelCtrl
-     * @public
-     * @alias locationClickCallback
-     */
-    $scope.locationClickCallback = function() {
-        //TODO when we have it running with reports - mainly for hiding/showing stuff
-        console.log('This is the click callback');
-        spatialHelperService.fromFAView = true;
-        $modalStack.dismissAll();
-        angular.element('body').removeClass('modal-open');
-
-        reportingNavigatorService.goToView('liveViewPanel', 'mapPanel');
-    };
-
 
     init();
 
