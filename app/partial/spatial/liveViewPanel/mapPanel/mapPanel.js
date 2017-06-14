@@ -117,8 +117,8 @@ angular.module('unionvmsWeb').controller('MapCtrl',function($log, $scope, locale
         fishingActivityService.documentType = mapService.overlay.get('documentType').toLowerCase();
         tripSummaryService.openNewTrip(mapService.overlay.get('tripId'), true);
         tripReportsTimeline.reset();
-        fishingActivityService.activityType = mapService.overlay.get('activityType');
-        reportingNavigatorService.goToView('tripsPanel',  'FishingActivityPanel');//fishingActivityService.getFaView(mapService.overlay.get('activityType')));
+        fishingActivityService.activityType = mapService.overlay.get('activityType').toUpperCase();
+        reportingNavigatorService.goToView('tripsPanel', 'FishingActivityPanel');
     };
 
     //Check for permissions
@@ -671,7 +671,7 @@ angular.module('unionvmsWeb').controller('MapCtrl',function($log, $scope, locale
 	};
 	
 	$scope.backToFAView = function(){
-	    reportingNavigatorService.goToView('tripsPanel', 'FishingActivityPanel');//fishingActivityService.getFaView(fishingActivityService.activityType));
+	    reportingNavigatorService.goToView('tripsPanel', 'FishingActivityPanel');
 	};
     
     $scope.$watch(function(){return $scope.repNav.isViewVisible('mapPanel');}, function(newVal,oldVal){
