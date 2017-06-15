@@ -1,143 +1,101 @@
-+
+# UVMS-Frontend
 
-#### Fresh install ####
+This AngularJS application is the frontend module for the Union VMS system.
 
-In order to setup a working development environment you can follow these steps.
+## Getting Started
 
-1. First off you would need a better commandprompt then shipped with win.
-Cmder is a lightweight console emulator that fills our need but you can use one of your choosing.
-Go to http://bliker.github.io/cmder/
-Download and install
+Below instructions will get you a copy of the frontend module up and running on your local machine for development and testing purposes.
 
-2. go to yeoman.io and follow the installation instructions there. In short you need to install Nodejs, npm (which comes bundled with nodejs) and git to install yeoman.
+### Prerequisites
 
-3. Nodejs,	a:	Go to http://nodejs.org
-		b:	Download and install nodejs.
-		c:	Verify installation in cmder by typing node --version && npm --version, a version number for should appear for node and npm in the console.
-
-4. Git		a:	Go to http://git-scm.com/
-		b:	download and install git
-		c: 	Verify installation by typing git --version
+The application is run on node.js please download and install [Node.js v 5.7.1](https://nodejs.org/download/release/v5.7.1/) if a newer version of node already is installed we recommend you to use [nvm](https://github.com/creationix/nvm) to be able to run this version. Verify the version and installation by running `node --version && npm --version`
 
 
-5.Once you�ve got Node installed, install the Yeoman toolset with the command:
-npm install --global yo bower grunt-cli
+### Installing
 
-6. Verify installation by typing:
-yo --version && bower --version && grunt --version
+Follow below step by step to get a development environment running.
 
-7. Running the above should output three separate version numbers:
-Yeoman, Bower, Grunt CLI (the command-line interface for Grunt)
+Run below command to install Yeoman, Bower and Grunt to be able to develop, serve and build the application
 
+```
+$ npm install --global yo bower grunt-cli
+```
 
-GENERATOR
-https://github.com/cgross/generator-cg-angular
+Install the [Angular generator](https://github.com/cgross/generator-cg-angular), this is needed to generate new frontend components
 
-generator-cg-angular - This generator follows the Angular Best Practice Guidelines for Project Structure.
+```
+$ npm install -g generator-cg-angular
+```
 
-npm install -g generator-cg-angular
+## Grunt tasks
 
+The project is using Grunt as a task runner. The config file with all tasks can be found in `Gruntfile.js`
 
-You can now either create a new project or in this case use svn to download our checked in project. (see steps below).
+### Serve the application
 
+A backend environment needs to be present to be able to run the frontend code locally. Please follow the documentation on Focus fish on [how to setup a Docker environment](https://focusfish.atlassian.net/wiki/display/UVMS/Docker+Installation)
 
+Run below command to serve the application on a web server `http://localhost:9001`
 
-#### Developed earlier, eg use this steps when yeoman, bower, grunt ets is installed ####
-Prerequisities see below.
+```
+$ grunt serve
+```
 
-(Yeoman, optional) Node.js and git.
-yo --version && bower --version && grunt --version
-Running the above should output three separate version numbers: Yeoman, Bower, Grunt CLI (the command-line interface for Grunt)
+### Running the tests
 
-Steps:
-1 Create projekt folder
-2 Download project from SVN to this newly created folder
-3 Navigate to this folder
-4 run npm install
-5 run bower install
-6 run grunt
-7 run grunt serve
+Running below command will start Mocha tests via Karma-runner. This will also create a coverage report found in `/testResults`.
 
+```
+$ grunt test
+```
 
+### Build the application
 
-Prerequisities
-Already installed:
-* (Yeoman, optional) Node.js and git.
-* generator-cg-angular https://github.com/cgross/generator-cg-angular
+Below command will minify, compress and concatenates the project to only a few highly compressed files found in `/dist`. Kindly note that unit tests will be run before the built files can created.
 
-Verify installation by typing: yo --version && bower --version && grunt --version
-Running the above should output three separate version numbers: Yeoman, Bower, Grunt CLI (the command-line interface for Grunt)
+The build process uses grunt-dom-munger to pull script references from the index.html:
 
+* To prevent a script or stylesheet from being included in concatenation, put a `data-concat="false"` attribute on the link or script tag.  This is currently applied for the `livereload.js` and `less.js` script tags.
 
+* To prevent a script or link tag from being removed from the finalized `index.html`, use a `data-remove="false"` attribute.
 
-To create a new project:
-1. mkdir MyNewAwesomeApp
-2. cd MyNewAwesomeApp
-3. yo cg-angular
+```
+$ grunt build-ci
+```
 
-
-
-
-
-FIX:
-======================================
-
-If error when running npm install:
-...
-npm ERR! phantomjs@1.9.15 install: `node install.js`
-npm ERR! Exit status 1
-...
+To build the application with Maven use below command:
+```
+clean deploy -DskipTests -Dgrunt.build=$build-ci -U
+```
 
 
-Go to
-C:\Users\[user]\AppData\Local\Temp
-and rename or remove phantomjs folder.
+### Documentation
 
+Running below command will render Javascript documentation to `/dist/docs/`. Javascript documentation through [JSDoc](http://usejsdoc.org/) should be added for all components created.
+```
+$ grunt build-docs
+```
 
-more info
-https://github.com/Medium/phantomjs/issues/284
+## Development and style guide
 
+To generate a new component to the project use Angular Generator with below command depending on the component
+```
+$ yo cg-angular:directive my-directive
+$ yo cg-angular:partial my-partial
+$ yo cg-angular:service my-service
+$ yo cg-angular:filter my-filter
+```
 
+## Contributing
 
+Please read [Focus Fish - Union VMS Documentation](https://focusfish.atlassian.net/wiki/display/FOC/DRAFT+-+JIRA+and+GitHub+workflow+in+practice) for details on our code of conduct, and the process for submitting pull requests.
 
+## License
 
-Commands
-======================================
-grunt serve
-grunt test
-grunt build
+Developed with the contribution of the European Commission - Directorate General for Maritime Affairs and Fisheries © European Union, 2015-2017.
 
-Subgenerators
-(In app folder you can run this commands)
-yo cg-angular:directive my-awesome-directive
-yo cg-angular:partial my-partial
-yo cg-angular:service my-service
-yo cg-angular:filter my-filter
-yo cg-angular:module my-module
-yo cg-angular:modal my-modal
+This file is part of the Integrated Fisheries Data Management (IFDM) Suite. The IFDM Suite is free software: you can redistribute it and/or modify it under the terms of the GNU General Public License as published by the Free Software Foundation, either version 3 of the License, or any later version. The IFDM Suite is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU General Public License for more details. You should have received a copy of the GNU General Public License along with the IFDM Suite. If not, see http://www.gnu.org/licenses
 
+## Guides
 
-App client configuration
-=====================================
-The config.json file is loaded when the application loads, and contains the base
-URL for all REST requests ('rest_api_base'). It should be set to the full URL
-of the server running the backend components.
-
-Templates for different environments can be found in the environment directory.
-
-The 'env_name' property does not do anything, but only displays the name of the
-environment in the application footer.
-
-
-Contents of this application
-=====================================
-app.full.js - unminified JS
-app.full.min.css - minified CSS styles
-app.full.min.js - minified JS (~ 6 MB)
-app.full.min.js.map - names used for debugging
-assets - fonts, pictures, locales, ...
-config.json = environmetn/*.json
-fonts
-i18n - translations
-index.html - minified HTML
-usm - some USM assets
+* [User Manual to the application](https://focusfish.atlassian.net/wiki/display/UVMS/Union+VMS+-+User+Manual)
