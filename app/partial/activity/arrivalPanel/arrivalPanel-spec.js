@@ -24,7 +24,7 @@ describe('ArrivalpanelCtrl', function() {
 	beforeEach(module('unionvmsWeb'));
 	beforeEach(module('stateMock'));
 
-	var scope,ctrl,mockState, $httpBackend, $state, mockTripSumServ, appStates;
+	var scope,ctrl,mockState, $state, mockTripSumServ, appStates;
 	
 	beforeEach(function(){
 	    appStates = ['','app.reporting', 'app.reporting-id'];
@@ -61,7 +61,7 @@ describe('ArrivalpanelCtrl', function() {
 	    var test;
 	    angular.forEach(appStates, function(state) {
 	        $state.go(state);
-	        test = scope.isLocationClickable();
+	        test = scope.faServ.isLocationClickable();
 	        expect(test).toBeTruthy();
 	    });
 	}));
@@ -70,7 +70,7 @@ describe('ArrivalpanelCtrl', function() {
 	   var test;
        angular.forEach(appStates, function(state) {
            $state.go(state);
-           test = scope.isLocationClickable();
+           test = scope.faServ.isLocationClickable();
            expect(test).toBeFalsy();
        });
 	});
@@ -78,7 +78,7 @@ describe('ArrivalpanelCtrl', function() {
 	it('should not allow a location to be clickable if the application is not on the reporting router', function(){
 	    setWithMap(true);
 	    $state.go(appStates[0]);
-	    var test = scope.isLocationClickable();
+	    var test = scope.faServ.isLocationClickable();
 	    expect(test).toBeFalsy();
 	});
 
