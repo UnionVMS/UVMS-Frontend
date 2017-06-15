@@ -57,7 +57,7 @@ Below command will minify, compress and concatenates the project to only a few h
 
 The build process uses grunt-dom-munger to pull script references from the index.html:
 
-* To prevent a script or stylesheet from being included in concatenation, put a `data-concat="false"` attribute on the link or script tag.  This is currently applied for the `livereload.js` and `less.js` script tags.
+* To prevent a script or stylesheet from being included in concatenation, put a `data-concat="false"` attribute on the link or script tag.
 
 * To prevent a script or link tag from being removed from the finalized `index.html`, use a `data-remove="false"` attribute.
 
