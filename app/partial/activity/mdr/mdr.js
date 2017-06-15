@@ -294,7 +294,7 @@ angular.module('unionvmsWeb').controller('MdrCtrl',function($scope, mdrRestServi
      * @return {Boolean} true if the user has the specified feature in his profile
      */
      $scope.isAllowed = function(feature){
-       return userService.isAllowed(feature, 'Activity', true);
+       return userService.isAllowed(feature, 'MDR Cache', true);
     };
 
     /**
