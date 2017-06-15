@@ -1,10 +1,12 @@
 # UVMS-Frontend
 
-This AngularJS application is the frontend module for the Union VMS system.
+This AngularJS application is the frontend module for Union VMS.
+
 
 ## Getting Started
 
 Below instructions will get you a copy of the frontend module up and running on your local machine for development and testing purposes.
+
 
 ### Prerequisites
 
