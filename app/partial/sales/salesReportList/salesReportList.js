@@ -17,6 +17,7 @@
         vm.salesReports = [];
 
         vm.selectAllCheckbox = false;
+        vm.isLoading = false;
 
         vm.checkAllCallBack = checkAllCallBack;
         vm.checkItemCallBack = checkItemCallBack;
@@ -34,6 +35,8 @@
 
         vm.sorting = {};
 
+
+
         init();
 
         ///////////////////////
@@ -47,10 +50,7 @@
                 vm.sorting.sortDirection = "ASCENDING";
             }
 
-            salesSearchService.searchSalesReports(vm.sorting).then(function () {
-                vm.salesReports = salesSearchService.getSearchResults();
-                tableState.pagination.numberOfPages = vm.salesReports.totalNumberOfPages;
-            });
+            searchSalesReports(vm.sorting, tableState);
         }
 
         function init() {
@@ -63,9 +63,17 @@
             }
         }
 
-        function searchSalesReports(sorting) {
+        function searchSalesReports(sorting, tableState) {
+            vm.isLoading = true;
             salesSearchService.searchSalesReports(sorting).then(function () {
                 salesSelectionService.reset();
+                vm.salesReports = salesSearchService.getSearchResults();
+
+                if (tableState) {
+                    tableState.pagination.numberOfPages = vm.salesReports.totalNumberOfPages;
+                }
+
+                vm.isLoading = false;
             });
         }
 

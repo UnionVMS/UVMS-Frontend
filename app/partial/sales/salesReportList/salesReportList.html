@@ -1,4 +1,4 @@
-﻿<div class="row">
+﻿<div class="row" loading-indicator="vm.isLoading" size="small" type="SPINNER">
     <div st-table="vm.salesReports.items" st-pipe="vm.callServer" class="col-md-12">
         <table class="searchResults colorOdd truncate-text">
             <thead>
@@ -21,6 +21,7 @@
                     <th>{{'sales.table_header_details' | i18n}}</th>
                 </tr>
             </thead>
+
             <tbody ng-repeat="item in vm.salesReports.items track by $index" class="striped" ng-class="{'strike-through': item.purpose == 3}">
                     <tr>
                         <td><span class="glyphicon glyphicon-chevron-right" ng-show="item.olderVersions.length" ng-click="item.openDropdown = !item.openDropdown"></span></td>
