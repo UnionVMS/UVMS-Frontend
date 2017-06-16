@@ -138,7 +138,7 @@ module.exports = function (grunt) {
                 destination: 'dist/docs',
                 configure: 'jsdoc_conf.json',
                 template: 'node_modules/angular-jsdoc/angular-template',
-                readme: './README_docs.md',
+                readme: './README.md',
                 recurse: true
             }
         }
