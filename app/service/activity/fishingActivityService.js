@@ -33,7 +33,8 @@ angular.module('unionvmsWeb').factory('fishingActivityService', function(activit
         id: undefined,
         isCorrection: false,
         documentType: undefined,
-        activityType: undefined
+        activityType: undefined,
+        openFromMap: undefined
 	};
 
     //tiles per fishing activity view
