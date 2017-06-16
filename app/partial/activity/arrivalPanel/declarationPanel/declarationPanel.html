@@ -27,8 +27,8 @@ copy of the GNU General Public License along with the IFDM Suite. If not, see <h
 			</div>
 			<div class="col-md-10">
 				<div class="row activity-summary-row arrival-row-last-div">
-					<location-tile class="col-md-3 summary-section" is-clickable="isLocationClickable()" field-title="{{'activity.activity_location_port_arrival' | i18n}}"
-						location-details="faServ.activityData.locations" click-callback="locationClickCallback()"></location-tile>
+					<location-tile class="col-md-3 summary-section" is-clickable="faServ.isLocationClickable()" field-title="{{'activity.activity_location_port_arrival' | i18n}}"
+						location-details="faServ.activityData.locations" click-callback="faServ.locationClickCallback()"></location-tile>
 					<carousel-tile class="col-md-4 summary-section" tile-title="{{'activity.header_fa_gear' | i18n}}" ng-model="faServ.activityData.gears"
 						template-url="directive/activity/carouselTile/templates/gearTile/gearTile.html"></carousel-tile>
 					<fa-details-panel class="col-md-5 summary-section" ng-model="faServ.activityData.reportDetails"></fa-details-panel>

@@ -22,13 +22,13 @@ copy of the GNU General Public License along with the IFDM Suite. If not, see <h
         </div>
         <div class="row activity-summary-row">
             <fa-details-panel class="col-md-3 summary-section" ng-model="faServ.activityData.activityDetails"></fa-details-panel>
-            <location-tile class="col-md-3 summary-section" is-clickable="isLocationClickable()" field-title="{{'activity.location' | i18n}}"
-                location-details="faServ.activityData.locations" click-callback="locationClickCallback()"></location-tile>
+            <location-tile class="col-md-3 summary-section" is-clickable="faServ.isLocationClickable()" field-title="{{'activity.location' | i18n}}"
+                location-details="faServ.activityData.locations" click-callback="faServ.locationClickCallback()"></location-tile>
             <div class="col-md-3"></div>
             <fa-details-panel class="col-md-4 summary-section" ng-model="faServ.activityData.reportDetails"></fa-details-panel>
         </div>
         <div class="row activity-summary-row">
-			<catch-tile class="col-md-12 summary-section" ng-model="faServ.activityData.catches" tile-title="{{'activity.catch_details_catches_table' | i18n}}" is-location-clickable="isLocationClickable()" buffer-distance="5000" click-callback="locationClickCallback()"></catch-tile>
+			<catch-tile class="col-md-12 summary-section" ng-model="faServ.activityData.catches" tile-title="{{'activity.catch_details_catches_table' | i18n}}" is-location-clickable="faServ.isLocationClickable()" buffer-distance="5000" click-callback="faServ.locationClickCallback()"></catch-tile>
 		</div>
 		<div class="row activity-summary-row" ng-if="faServ.activityData.processingProducts && faServ.activityData.processingProducts.length > 0">
 			<product-processing-tile class="col-md-12 summary-section" src-data="faServ.activityData.processingProducts" tile-title="{{'activity.departure_processing_product' | i18n}}"></product-processing-tile>

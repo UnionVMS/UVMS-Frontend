@@ -17,34 +17,5 @@ angular.module('unionvmsWeb').controller('FishingoperationpanelCtrl',function($s
         $scope.faServ.getFishingActivity(new FishingActivity('fishing_operation'));
     };
 
-    /**
-     * Check if a location tile should be clickable taking into consideration the route and the report configuration
-     * 
-     * @memberof FishingoperationpanelCtrl
-     * @public
-     * @alias isLocationClickable
-     * @returns {Boolean} Whether the location tile should be clickable or not
-     */
-    $scope.isLocationClickable = function(){
-        var clickable = false;
-        if (($state.current.name === 'app.reporting-id' || $state.current.name === 'app.reporting') && tripSummaryService.withMap){
-            clickable = true;
-        }
-        
-        return clickable;
-    };
-
-    /**
-     * The click location callback function
-     * 
-     * @memberof FishingoperationpanelCtrl
-     * @public
-     * @alias locationClickCallback
-     */
-    $scope.locationClickCallback = function(){
-        //TODO when we have it running with reports - mainly for hiding/showing stuff
-        console.log('This is the click callback');
-    };
-
     init();
 });

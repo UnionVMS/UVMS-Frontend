@@ -21,7 +21,7 @@ copy of the GNU General Public License along with the IFDM Suite. If not, see <h
  * @desc
  *  A reusable tile to display gear shot and retrieval sub-activities
  */
-angular.module('unionvmsWeb').directive('gearShotRetrievalTile', function(locale, $state, tripSummaryService) {
+angular.module('unionvmsWeb').directive('gearShotRetrievalTile', function(locale, $state, tripSummaryService, fishingActivityService) {
 	return {
 		restrict: 'E',
 		replace: false,
@@ -31,6 +31,7 @@ angular.module('unionvmsWeb').directive('gearShotRetrievalTile', function(locale
 		},
 		templateUrl: 'directive/activity/gearShotRetrievalTile/gearShotRetrievalTile.html',
 		link: function(scope, element, attrs, fn) {
+			scope.faServ = fishingActivityService;
 		    scope.selected = scope.srcData[0];
 		    
 		    scope.tableAttrs = [{
@@ -52,23 +53,6 @@ angular.module('unionvmsWeb').directive('gearShotRetrievalTile', function(locale
                 useComboFilter: false,
                 isDuration: true
             }];
-		    
-		    /**
-		     * Check if a location tile should be clickable taking into consideration the route and the report configuration
-		     * 
-		     * @memberof gearShotRetrievalTile
-		     * @public
-		     * @alias isLocationClickable
-		     * @returns {Boolean} Whether the location tile should be clickable or not
-		     */
-		    scope.isLocationClickable = function(){
-		        var clickable = false;
-		        if (($state.current.name === 'app.reporting-id' || $state.current.name === 'app.reporting') && tripSummaryService.withMap){
-		            clickable = true;
-		        }
-		        
-		        return clickable;
-		    };
 		    
 			scope.hasCharacteristics = function(characteristics){
 		        return characteristics && _.keys(characteristics).length;

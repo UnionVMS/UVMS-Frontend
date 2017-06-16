@@ -22,7 +22,7 @@ copy of the GNU General Public License along with the IFDM Suite. If not, see <h
  * @description
  *  The controller for the departure panel partial
  */
-angular.module('unionvmsWeb').controller('DeparturepanelCtrl',function($scope, $state, fishingActivityService, tripSummaryService, activityRestService, loadingStatus, FishingActivity, reportingNavigatorService){
+angular.module('unionvmsWeb').controller('DeparturepanelCtrl',function($scope, $state, fishingActivityService, tripSummaryService, activityRestService, loadingStatus, FishingActivity){
     $scope.faServ = fishingActivityService;
     
     /**
@@ -33,35 +33,6 @@ angular.module('unionvmsWeb').controller('DeparturepanelCtrl',function($scope, $
      */
     var init = function(){
         $scope.faServ.getFishingActivity(new FishingActivity('departure'));
-    };
-    
-    /**
-     * Check if a location tile should be clickable taking into consideration the route and the report configuration
-     * 
-     * @memberof DeparturepanelCtrl
-     * @public
-     * @alias isLocationClickable
-     * @returns {Boolean} Whether the location tile should be clickable or not
-     */
-    $scope.isLocationClickable = function(){
-        var clickable = false;
-        if (($state.current.name === 'app.reporting-id' || $state.current.name === 'app.reporting') && tripSummaryService.withMap){
-            clickable = true;
-        }
-        
-        return clickable;
-    };
-    
-    /**
-     * The click location callback function
-     * 
-     * @memberof DeparturepanelCtrl
-     * @public
-     * @alias locationClickCallback
-     */
-    $scope.locationClickCallback = function(){
-        //TODO when we have it running with reports - mainly for hiding/showing stuff
-        console.log('This is the click callback');
     };
     
     init();

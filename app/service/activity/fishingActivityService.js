@@ -26,14 +26,15 @@ copy of the GNU General Public License along with the IFDM Suite. If not, see <h
  * @description
  *  A service to deal with any kind of fishing activity operation (e.g. Departure, Arrival, ...)
  */
-angular.module('unionvmsWeb').factory('fishingActivityService', function(activityRestService, loadingStatus, mdrCacheService, locale, $filter, $state, tripSummaryService, reportingNavigatorService, tripReportsTimeline, $compile, spatialHelperService) {
+angular.module('unionvmsWeb').factory('fishingActivityService', function(activityRestService, loadingStatus, mdrCacheService, locale, $filter, $state, tripSummaryService, reportingNavigatorService, tripReportsTimeline, $compile, spatialHelperService, $modalStack) {
 
     var faServ = {
         activityData: {},
         id: undefined,
         isCorrection: false,
         documentType: undefined,
-        activityType: undefined
+        activityType: undefined,
+        openFromMap: undefined
 	};
 
     //tiles per fishing activity view
@@ -1116,31 +1117,63 @@ angular.module('unionvmsWeb').factory('fishingActivityService', function(activit
      * @returns the purpose code
      */
      var getReasonCodes = function(obj){
-           var activityType = _.where(faMdrReason, {activityName: obj.faType});
-          
-           if(angular.isDefined(activityType) && activityType.length > 0){
-               var acronym =activityType[0].achronym;
-               loadingStatus.isLoading('FishingActivity', true);
-               
-               mdrCacheService.getCodeList(acronym).then(function(response){
-                   angular.forEach(obj.activityDetails.items,function(item){
-                      var reasonDesc = _.where(response, {code: item.value});
-                      if(item.id === "reason"){
-                          if(angular.isDefined(reasonDesc) && reasonDesc.length > 0){  
-                              item.value = item.value +' - '+reasonDesc[0].description; 
-                          }
-                      }
-                   });
+        var activityType = _.where(faMdrReason, {activityName: obj.faType});
+        
+        if(angular.isDefined(activityType) && activityType.length > 0){
+            var acronym =activityType[0].achronym;
+            loadingStatus.isLoading('FishingActivity', true);
+            
+            mdrCacheService.getCodeList(acronym).then(function(response){
+                angular.forEach(obj.activityDetails.items,function(item){
+                    var reasonDesc = _.where(response, {code: item.value});
+                    if(item.id === "reason"){
+                        if(angular.isDefined(reasonDesc) && reasonDesc.length > 0){  
+                            item.value = item.value +' - '+reasonDesc[0].description; 
+                        }
+                    }
+                });
 
-                   loadingStatus.isLoading('FishingActivity', false);
-              },function(error){
-                    //TODO deal with error from rest service
-                    loadingStatus.isLoading('FishingActivity', false);
-             });
-           }
-     };
+                loadingStatus.isLoading('FishingActivity', false);
+            },function(error){
+                //TODO deal with error from rest service
+                loadingStatus.isLoading('FishingActivity', false);
+            });
+        }
+    };
+
+    /**
+     * The click location callback function
+     * 
+     * @memberof fishingActivityService
+     * @public
+     * @alias locationClickCallback
+     */
+    faServ.locationClickCallback = function() {
+        //TODO when we have it running with reports - mainly for hiding/showing stuff
+        spatialHelperService.fromFAView = true;
+        $modalStack.dismissAll();
+        angular.element('body').removeClass('modal-open');
+
+        reportingNavigatorService.goToView('liveViewPanel', 'mapPanel');
+    };
+
+    /**
+      * Check if a location tile should be clickable taking into consideration the route and the report configuration
+      * 
+      * @memberof fishingActivityService
+      * @public
+      * @alias isLocationClickable
+      * @returns {Boolean} Whether the location tile should be clickable or not
+      */
+    faServ.isLocationClickable = function() {
+        var clickable = false;
+        if (($state.current.name === 'app.reporting-id' || $state.current.name === 'app.reporting') && tripSummaryService.withMap) {
+            clickable = true;
+        }
+
+        return clickable;
+    };
     
-
     /**
      * Loads all the fishing activity data in the model
      * 
