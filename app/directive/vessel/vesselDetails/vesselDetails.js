@@ -23,7 +23,7 @@ angular.module('unionvmsWeb')
             submitAttempted : '=',
             spin: '=',
             existingValues: '=',
-            functions : '='
+            hasLinkedTerminal: '='
         },
 		templateUrl: 'directive/vessel/vesselDetails/vesselDetails.html',
 		link: function(scope, element, attrs, fn) {
@@ -43,47 +43,46 @@ angular.module('unionvmsWeb')
         $scope.vesselGrossTonnageUnits = configurationService.setTextAndCodeForDropDown(configurationService.getValue('VESSEL','UNIT_TONNAGE'), 'TONNAGE','VESSEL', true);
 
         //Validation
-        $scope.imoRegExp = vesselValidationService.getIMOPattern();
+        $scope.ircsValidationMessages = {
+            'required' : locale.getString('vessel.vessel_details_terminal_linked_required_validation_message')
+        };
+
         $scope.cfrRegExp = vesselValidationService.getCFRPattern();
         $scope.cfrValidationMessages = {
-            'pattern' : locale.getString('vessel.vessel_details_cfr_pattern_validation_message')
+            'pattern' : locale.getString('vessel.vessel_details_cfr_pattern_validation_message'),
+            'required' : locale.getString('vessel.vessel_details_terminal_linked_required_validation_message')
         };
+
         $scope.mmsiRegExp = vesselValidationService.getMMSIPattern();
         $scope.mmsiValidationMessages = {
             'pattern' : locale.getString('vessel.vessel_details_mmsi_pattern_validation_message')
         };
+
+        $scope.imoRegExp = vesselValidationService.getIMOPattern();
         $scope.imoValidationMessages = {
             'pattern' : locale.getString('vessel.vessel_details_imo_pattern_validation_message')
         };
+
         $scope.maxTwoDecimalsRegExp = vesselValidationService.getMaxTwoDecimalsPattern();
         $scope.maxTwoDecimalsValidationMessages = {
             'pattern' : locale.getString('vessel.vessel_details_max_decimals_pattern_validation_message', "2")
         };
+
         $scope.getlengthOverAllRegExp = vesselValidationService.getlengthOverAllPattern();
         $scope.lengthOverAllValidationMessages = {
             'pattern' : locale.getString('vessel.vessel_details_get_length_over_all_pattern_validation_message')
         };
+
         $scope.producerCodePattern = vesselValidationService.getProducerCodePattern();
         $scope.producerCodeValidationMessages = {
-            'pattern' : locale.getString('vessel.vessel_details_producer_code_pattern_validation_message')
+            'pattern' : locale.getString('common.validation_invalid_numeric')
         };
 
         $scope.lengthUnit = globalSettingsService.getLengthUnit();
-
         $scope.getMaxLengthMessage = function(length) {
             return {
                 maxlength: locale.getString('vessel.warn_max_length', length)
             };
-        };
-
-        $scope.orderByOwner = function (contact) {
-            switch (contact.owner) {
-                case true:
-                    return 1;
-
-                case false:
-                    return 2;
-            }
         };
     }
 );

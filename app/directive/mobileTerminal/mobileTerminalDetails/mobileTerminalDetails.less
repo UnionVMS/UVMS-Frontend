@@ -16,6 +16,9 @@ copy of the GNU General Public License along with the IFDM Suite. If not, see <h
     @row-margin:             15px;
     @field-margin-vertical:  20px;
     @field-height:           30px;
+
+    padding-top: @field-margin-vertical;
+    padding-bottom: 5px;
     
     .channel-form {
         max-width: @max-width;
@@ -31,6 +34,12 @@ copy of the GNU General Public License along with the IFDM Suite. If not, see <h
 
             &:last-of-type { margin-bottom: 0; }
             .form-group { margin-bottom: 0; }
+        }
+
+        &.single-channel {
+            &:last-of-type {
+                margin-bottom: 0;
+            }
         }
     }
 
@@ -59,6 +68,10 @@ copy of the GNU General Public License along with the IFDM Suite. If not, see <h
         .form-group {
             margin-right: @field-margin-vertical;
             align-self: flex-end;
+
+            &.half-margin-right {
+                margin-right: @field-margin-vertical / 2;
+            }
 
             &.long-field {
                 flex-basis: 230px;
@@ -139,58 +152,84 @@ copy of the GNU General Public License along with the IFDM Suite. If not, see <h
             }
         }
     }
-
+    
     // Radio buttons
-    .radio-buttons, 
-    .checkboxes-buttons {
-        .flexbox();
+    @radio-button-width: 24px;
+    @radio-button-container-width: 55px;
 
-        .radio-button, 
-        .checkbox-button {
-            position: relative;
-            margin-right: @field-margin-vertical;
+    .radio-button {
+        min-width: @radio-button-container-width;
 
-            &:last-of-type {
-                margin-right: 0;
-            }
+        &.form-group {
+            margin-right: 0px;
+        }
 
-            label.radio-btn, 
-            input[type="checkbox"] {
-                display: block;
+        &.margin-right {
+            margin-right: 20px;
+        }
+
+        input[type="checkbox"] {
+            opacity: 0;
+            width: 0px;
+            height: 0px;
+            position: absolute;
+
+            + label {
                 position: relative;
-                height: @field-height;
-                margin: 0px auto;
+                outline: none;
+                display: block;
+                cursor: pointer;
+                padding: 0;
+                margin-top: (@form-input-height - @radio-button-width) / 2;
+                margin-bottom: (@form-input-height - @radio-button-width) / 2;
+
+                span {
+                    .postion-absolut-horizontal();
+                    top: -(@radio-button-width - @form-input-border-size);
+                    font-size: @font-size-base;
+                    line-height: @line-height-base;
+                    color: @text-color;
+                    font-weight: 500;
+                    text-align: center;
+                    
+                    width: @radio-button-container-width;
+                    white-space: nowrap;
+                    overflow: hidden;
+                    text-overflow: ellipsis;
+                    .disable-highlight-selection();
+                }
             }
 
-            input[type="radio"] {
-                opacity: 0;
-                width: 0px;
-                height: 0px;
-                position: absolute;
-            }
-
-            input[type="radio"] + label:before, 
-            input[type="radio"]:checked + label:after {
+            + label:before, 
+            &:checked + label:after {
+                content: "";
                 display: block;
                 border-radius: 50%;
                 cursor: pointer;
-                content: "";
                 z-index: 1;
                 .transition-all-ease(500ms);
+            }
+
+            + label:before {
+                position: relative;
+                border: @form-input-border;
+                background: #fff;
+                width: @radio-button-width;
+                height: @radio-button-width;
+                left: 50%; 
+                margin-left: -@radio-button-width/2;
+            }
+            
+            &:checked + label:after {
+                background: @profileColor_blue;
+                width: @radio-button-width - 10px;
+                height: @radio-button-width - 10px;
                 .postion-absolut-vertical-horizontal();
             }
 
-            input[type="radio"] + label:before {
-                border: 1px solid #c2c9cc;
-                background: #fff;
-                width: 24px;
-                height: 24px;
-            }
-
-            input[type="radio"]:checked + label:after {
-                background: @profileColor_blue;
-                width: 14px;
-                height: 14px;
+            &:disabled + label:before {
+                background: lighten(@inputBorderColor, 15%);
+                cursor: not-allowed;
             }
         }
     }

@@ -9,26 +9,28 @@ the hope that it will be useful, but WITHOUT ANY WARRANTY; without even the impl
 FITNESS FOR A PARTICULAR PURPOSE.  See the GNU General Public License for more details. You should have received a
 copy of the GNU General Public License along with the IFDM Suite. If not, see <http://www.gnu.org/licenses/>.
 -->
-<div class="container containerWithTopBottomPadding nopaddingbottom" ng-hide="!alert.message">
-    <div class="row">
-        <div class="col-md-12">
-            <div class="alert nomarginbottom" ng-class="{'alert-info' : alert.type==='INFO', 'alert-success' : alert.type==='SUCCESS', 'alert-warning': alert.type === 'WARNING', 'alert-danger' : alert.type==='ERROR', 'alert-actionbar' : alert.type==='ACTIONBAR'}" role="alert">
-                <div class="icon"> 
-                    <i ng-if="alert.type === 'SUCCESS'" class="fa fa fa-check" style=" vertical-align: middle;"></i>
-                    <i ng-if="alert.type === 'ERROR'" class="fa fa fa-warning" style=" vertical-align: middle;"></i>
-                    <i ng-if="alert.type === 'WARNING'"  class="fa fa fa-warning" style=" vertical-align: middle;"></i>
-                    <i ng-if="alert.type === 'INFO'"  class="fa fa fa-info" style=" vertical-align: middle;"></i>
-                </div>
-                <div class="message"> 
-                    {{alert.message}}
-                </div>
-                <div class="close" ng-hide="alert.type === 'ACTIONBAR'">
-                    <i class="fa fa-times" ng-click="closeAlert()" title="{{'common.close' | i18n}}"></i>
-                </div>
-                <div class="action-buttons" ng-hide="!(alert.type === 'ACTIONBAR')">
-                    <button type="button" class="btn btn-default btn-sm cancel" ng-click="cancelSearch()">
-                        <i class="fa fa-times"></i> {{'common.cancel' | i18n}}
-                    </button>
+<div ng-repeat="alert in alerts">
+    <div class="container containerWithTopBottomPadding nopaddingbottom" ng-hide="!alert.message">
+        <div class="row">
+            <div class="col-md-12">
+                <div class="alert nomarginbottom" ng-class="{'alert-info' : alert.type==='INFO', 'alert-success' : alert.type==='SUCCESS', 'alert-warning': alert.type === 'WARNING', 'alert-danger' : alert.type==='ERROR', 'alert-actionbar' : alert.type==='ACTIONBAR'}" role="alert">
+                    <div class="icon"> 
+                        <i ng-if="alert.type === 'SUCCESS'" class="fa fa fa-check" style=" vertical-align: middle;"></i>
+                        <i ng-if="alert.type === 'ERROR'" class="fa fa fa-warning" style=" vertical-align: middle;"></i>
+                        <i ng-if="alert.type === 'WARNING'"  class="fa fa fa-warning" style=" vertical-align: middle;"></i>
+                        <i ng-if="alert.type === 'INFO'"  class="fa fa fa-info" style=" vertical-align: middle;"></i>
+                    </div>
+                    <div class="message"> 
+                        {{alert.message}}
+                    </div>
+                    <div class="close" ng-hide="alert.type === 'ACTIONBAR'">
+                        <i class="fa fa-times" ng-click="closeAlert($index)" title="{{'common.close' | i18n}}"></i>
+                    </div>
+                    <div class="action-buttons" ng-hide="!(alert.type === 'ACTIONBAR')">
+                        <button type="button" class="btn btn-default btn-sm cancel" ng-click="cancelSearch()">
+                            <i class="fa fa-times"></i> {{'common.cancel' | i18n}}
+                        </button>
+                    </div>
                 </div>
             </div>
         </div>

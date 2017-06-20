@@ -21,7 +21,7 @@ describe('VesselCtrl', function() {
             if(angular.isUndefined(stateparams)){
                 stateparams = {};
             }
-            return $controller('VesselCtrl', {$scope: scope, $stateParams:stateparams});
+            return $controller('VesselCtrl', {$scope: scope, $state: {params : stateparams}});
         }
     }));
 

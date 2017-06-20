@@ -1,159 +1,108 @@
-<div class="col-md-12 vesselDetailsContainer" loading-indicator="spin">
+<div class="col-md-12 vesselDetailsContainer">
     <fieldset ng-disabled="disableForm">
         <div class="row">
-
             <div class="col-md-1 form-group smallerpaddingright" ng-class="{'has-error': (submitAttempted || vesselForm.countryCode.$dirty) && vesselForm.countryCode.$invalid}">
                 <label>{{ 'vessel.vessel_details_flagstate' | i18n }}<span ng-if="createNewMode" class="mandatory">{{ 'common.mandatory_field' | i18n }}</span></label>
-                <dropdown name="countryCode" ng-model="vessel.countryCode" initialtext="{{ 'vessel.vessel_details_flagstate' | i18n }}" items="vesselFlagState" required ng-if="!countryCode" ng-disabled="disableForm"></dropdown>
-                <dropdown name="countryCode" ng-model="vessel.countryCode" initialtext="{{countryCode}}" items="vesselFlagState" required ng-if="countryCode" ng-disabled="disableForm"></dropdown>
+                <dropdown name="countryCode" input-field-id="asset-input-countryCode" ng-model="vessel.countryCode" initialtext="{{ 'vessel.vessel_details_flagstate' | i18n }}" items="vesselFlagState" required ng-if="!countryCode" ng-disabled="disableForm"></dropdown>
+                <dropdown name="countryCode" input-field-id="asset-input-countryCode" ng-model="vessel.countryCode" initialtext="{{countryCode}}" items="vesselFlagState" required ng-if="countryCode" ng-disabled="disableForm" id="flagstate"></dropdown>
                 <input-validation-message types="required" input="vesselForm.countryCode"></input-validation-message>
             </div>
             <div class="col-md-2 form-group smallerpadding" ng-class="{'has-error': (submitAttempted || vesselForm.ircs.$dirty) && vesselForm.ircs.$invalid}">
-                <label>{{ 'vessel.vessel_details_IRCS_code' | i18n }}</label>
-                <input type="text" name="ircs" class="form-control" ng-model="vessel.ircs" ng-maxlength="8">
+                <label>{{ 'vessel.vessel_details_IRCS_code' | i18n }}<span ng-if="hasLinkedTerminal && !vessel.ircs.length" class="mandatory">{{ 'common.mandatory_field' | i18n }}</span></label>
+                <input type="text" name="ircs" id="asset-input-ircs" class="form-control" ng-model="vessel.ircs" ng-maxlength="8" ng-required="hasLinkedTerminal">
                 <input-validation-message types="maxlength" input="vesselForm.ircs" custom-messages="{{getMaxLengthMessage(8)}}"></input-validation-message>
+                <input-validation-message types="required" input="vesselForm.ircs" custom-messages="{{ircsValidationMessages}}"></input-validation-message>
             </div>
-
             <div class="col-md-3 form-group smallerpadding" ng-class="{'has-error': (submitAttempted || vesselForm.name.$dirty) && vesselForm.name.$invalid}">
                 <label>{{ 'vessel.vessel_details_name' | i18n }}<span ng-if="createNewMode" class="mandatory">{{ 'common.mandatory_field' | i18n }}</span></label>
-                <input type="text" name="name" class="form-control" ng-model="vessel.name" ng-maxlength="40" required>
+                <input type="text" name="name" id="asset-input-name" class="form-control" ng-model="vessel.name" ng-maxlength="40" required>
                 <input-validation-message types="required,maxlength" input="vesselForm.name" custom-messages="{{getMaxLengthMessage(40)}}"></input-validation-message>
             </div>
-
             <div class="col-md-2 form-group smallerpadding" ng-class="{'has-error': (submitAttempted || vesselForm.externalMarking.$dirty) && vesselForm.externalMarking.$invalid}">
                 <label>{{ 'vessel.vessel_details_ext_marking' | i18n }}<span ng-if="createNewMode" class="mandatory">{{ 'common.mandatory_field' | i18n }}</span></label>
-                <input type="text" name="externalMarking" class="form-control" ng-model="vessel.externalMarking" ng-maxlength="14" required>
+                <input type="text" name="externalMarking" id="asset-input-externalMarking" class="form-control" ng-model="vessel.externalMarking" ng-maxlength="14" required>
                 <input-validation-message types="required,maxlength" input="vesselForm.externalMarking" custom-messages="{{getMaxLengthMessage(14)}}"></input-validation-message>
             </div>
-
             <div class="col-md-2 form-group smallerpadding" ng-class="{'has-error': (submitAttempted || vesselForm.cfr.$dirty) && vesselForm.cfr.$invalid}">
-                <label>{{ 'vessel.vessel_details_CFR' | i18n }}</label>
-                <input type="text" name="cfr" class="form-control" ng-model="vessel.cfr" ng-required ng-pattern="cfrRegExp" existing="existingValues.cfr">
+                <label>{{ 'vessel.vessel_details_CFR' | i18n }}<span ng-if="hasLinkedTerminal && !vessel.cfr.length" class="mandatory">{{ 'common.mandatory_field' | i18n }}</span></label>
+                <input type="text" name="cfr" id="asset-input-cfr" class="form-control" ng-model="vessel.cfr" ng-pattern="cfrRegExp" existing="existingValues.cfr" ng-required="hasLinkedTerminal">
                 <input-validation-message types="pattern,required,unique" input="vesselForm.cfr" custom-messages="{{cfrValidationMessages}}"></input-validation-message>
             </div>
             <div class="col-md-2 form-group smallerpaddingleft" ng-class="{'has-error': (submitAttempted || vesselForm.imo.$dirty) && vesselForm.imo.$invalid}">
                 <label>{{ 'vessel.vessel_details_IMO' | i18n }}</label>
-                <input type="text" name="imo" class="form-control" ng-model="vessel.imo" ng-pattern="imoRegExp" existing="existingValues.imo">
+                <input type="text" name="imo" id="asset-input-imo" class="form-control" ng-model="vessel.imo" ng-pattern="imoRegExp" existing="existingValues.imo">
                 <input-validation-message types="pattern, unique" input="vesselForm.imo" custom-messages="{{imoValidationMessages}}"></input-validation-message>
             </div>
-
         </div>
-        <div class="row">
 
+        <div class="row">
             <div class="col-md-3 form-group smallerpaddingright" ng-class="{'has-error': (submitAttempted || vesselForm.homeport.$dirty) && vesselForm.homeport.$invalid}">
                 <label>{{ 'vessel.vessel_details_home_port' | i18n }}</label>
-                <input type="text" name="homeport" class="form-control" ng-model="vessel.homePort" ng-maxlength="30"/>
+                <input type="text" name="homeport" id="asset-input-homeport" class="form-control" ng-model="vessel.homePort" ng-maxlength="30"/>
                 <input-validation-message types="maxlength" input="vesselForm.homeport" custom-messages="{{getMaxLengthMessage(30)}}"></input-validation-message>
             </div>
-
             <div class="col-md-3 form-group smallerpadding" ng-class="{'has-error': (submitAttempted || vesselForm.gearType.$dirty) && vesselForm.gearType.$invalid}">
                 <label>{{ 'vessel.vessel_details_gear_type' | i18n }}</label>
-                <dropdown name="gearType" ng-model="vessel.gearType" initialtext="{{ 'vessel.vessel_details_gear_type' | i18n }}" items="vesselGearTypes" ng-disabled="disableForm"></dropdown>
+                <dropdown name="gearType" input-field-id="asset-input-gearType" ng-model="vessel.gearType" initialtext="{{ 'vessel.vessel_details_gear_type' | i18n }}" items="vesselGearTypes" ng-disabled="disableForm"></dropdown>
             </div>
 
             <div class="col-md-2 form-group smallerpadding" ng-class="{'has-error': (submitAttempted || vesselForm.mmsi.$dirty) && vesselForm.mmsi.$invalid}">
                 <label>{{ 'vessel.vessel_details_MMSI_no' | i18n }}</label>
-                <input type="text" name="mmsi" class="form-control" ng-model="vessel.mmsiNo" ng-pattern="mmsiRegExp" existing="existingValues.mmsi">
+                <input type="text" name="mmsi" id="asset-input-mmsi" class="form-control" ng-model="vessel.mmsiNo" ng-pattern="mmsiRegExp" existing="existingValues.mmsi">
                 <input-validation-message types="pattern, unique" input="vesselForm.mmsi" custom-messages="{{mmsiValidationMessages}}"></input-validation-message >
             </div>
             <div class="col-md-4 smallerpaddingleft form-group" ng-class="{'has-error': (submitAttempted || vesselForm.licenseType.$dirty) && vesselForm.licenseType.$invalid}">
                 <label>{{ 'vessel.vessel_details_license_type' | i18n }}</label>
-                <dropdown name="licenseType" ng-model="vessel.licenseType" initialtext="{{ 'vessel.vessel_details_license_type' | i18n }}" items="vesselLicensTypes" ng-disabled="disableForm"></dropdown>
+                <dropdown name="licenseType" input-field-id="asset-input-licenseType" ng-model="vessel.licenseType" initialtext="{{ 'vessel.vessel_details_license_type' | i18n }}" items="vesselLicensTypes" ng-disabled="disableForm"></dropdown>
             </div>
         </div>
-        <div class="row">
 
+        <div class="row">
             <div class="col-md-3 smallerpaddingright">
                 <div class="col-md-8 nopaddingleft nopaddingright form-group lengthValue" ng-class="{'has-error': (submitAttempted || vesselForm.lengthValue.$dirty) && vesselForm.lengthValue.$invalid}">
                     <label>{{ 'vessel.vessel_details_length' | i18n }}</label>
                     <div class="unit-input">
-                        <input type="text" name="lengthValue" class="form-control" ng-model="vessel.lengthValue" ng-pattern="getlengthOverAllRegExp" transform-length>
+                        <input type="text" name="lengthValue" id="asset-input-lengthValue" class="form-control" ng-model="vessel.lengthValue" ng-pattern="getlengthOverAllRegExp" transform-length>
                         <div class="unit-box">{{"common.short_length_unit_" + lengthUnit | i18n}}</div>
                     </div>
                     <input-validation-message types="pattern" input="vesselForm.lengthValue" custom-messages="{{lengthOverAllValidationMessages}}"></input-validation-message>
                 </div>
                 <div class="col-md-4 nopaddingleft nopaddingright border-radius-right">
                     <label></label>
-                    <dropdown class="lengthTypeUnit" ng-model="vessel.lengthType" no-placeholder-item items="vesselLengthTypes" ng-disabled="disableForm"></dropdown>
+                    <dropdown name="lengthTypeUnit" input-field-id="asset-input-lengthTypeUnit" class="lengthTypeUnit" ng-model="vessel.lengthType" no-placeholder-item items="vesselLengthTypes" ng-disabled="disableForm"></dropdown>
                 </div>
             </div>
-
-
             <div class="col-md-3 smallerpadding">
                 <div class="col-md-8 nopaddingleft nopaddingright form-group grossTonage" ng-class="{'has-error': (submitAttempted || vesselForm.grossTonnage.$dirty) && vesselForm.grossTonnage.$invalid}">
                     <label>{{ 'vessel.vessel_details_tonnage' | i18n }}</label>
                     <div class="unit-input">
-                        <input name="grossTonnage" class="form-control" ng-model="vessel.grossTonnage" numeric ng-maxlength="7" ng-pattern="maxTwoDecimalsRegExp">
+                        <input name="grossTonnage" id="asset-input-grossTonnage" class="form-control" ng-model="vessel.grossTonnage" numeric ng-maxlength="7" ng-pattern="maxTwoDecimalsRegExp">
                         <div class="unit-box">{{"common.tons" | i18n}}</div>
                     </div>
                     <input-validation-message types="maxlength, numeric, pattern" input="vesselForm.grossTonnage" custom-messages="{{maxTwoDecimalsValidationMessages}}"></input-validation-message >
                 </div>
                 <div class="col-md-4 nopaddingleft nopaddingright border-radius-right">
                     <label></label>
-                    <dropdown class="grossTonnageUnit" ng-model="vessel.grossTonnageUnit" no-placeholder-item  items="vesselGrossTonnageUnits" ng-disabled="disableForm"></dropdown>
+                    <dropdown class="grossTonnageUnit" input-field-id="asset-input-grossTonnageUnit" ng-model="vessel.grossTonnageUnit" no-placeholder-item  items="vesselGrossTonnageUnits" ng-disabled="disableForm"></dropdown>
                 </div>
             </div>
-
             <div class="col-md-2 form-group smallerpadding" ng-class="{'has-error': (submitAttempted || vesselForm.power.$dirty) && vesselForm.power.$invalid}">
                 <label>{{ 'vessel.vessel_details_main_power' | i18n }}</label>
                 <div class="unit-input">
-                    <input type="text" name="power" class="form-control" ng-model="vessel.powerMain" numeric ng-maxlength="8"  ng-pattern="maxTwoDecimalsRegExp">
+                    <input type="text" name="power" id="asset-input-power" class="form-control" ng-model="vessel.powerMain" numeric ng-maxlength="8"  ng-pattern="maxTwoDecimalsRegExp">
                     <div class="unit-box">{{"common.kw" | i18n}}</div>
                 </div>
                 <input-validation-message types="maxlength, numeric, pattern" input="vesselForm.power" custom-messages="{{maxTwoDecimalsValidationMessages}}"></input-validation-message >
             </div>
-
             <div class="col-md-2 form-group smallerpadding">
                 <label>{{ 'vessel.po_name' | i18n }}</label>
-                <input type="text" name="producername" class="form-control " ng-model="vessel.producer.name">
+                <input type="text" name="producername" id="asset-input-producername" class="form-control " ng-model="vessel.producer.name">
             </div>
-
             <div class="col-md-2 form-group smallerpaddingleft" ng-class="{'has-error': (submitAttempted || vesselForm.producercode.$dirty) && vesselForm.producercode.$invalid}">
                 <label>{{ 'vessel.po_code' | i18n }}</label>
-                <input type="text" name="producercode" class="form-control" ng-model="vessel.producer.code" ng-pattern="producerCodePattern">
+                <input type="text" name="producercode" id="asset-input-producercode" class="form-control" ng-model="vessel.producer.code" ng-pattern="producerCodePattern">
                 <input-validation-message types="pattern" input="vesselForm.producercode" custom-messages="{{producerCodeValidationMessages}}"></input-validation-message>
             </div>
         </div>
-
-        <div class="col-12 contact-wrapper">
-            <div class="contact-list">
-                <div class="contact-item" ng-if="vessel.contact.length === 0">
-                    <div class="col-md-3 form-group smallerpaddingright">
-                        <label>{{ 'vessel.vessel_details_contact_name' | i18n }}</label>
-                        <input type="text" name="contactName" id="contact-name" class="form-control" ng-model="vessel.contact[0].name"/>
-                    </div>
-                    <div class="col-md-3 form-group smallerpadding">
-                        <label>{{ 'vessel.vessel_details_contact_email' | i18n }}</label>
-                        <input type="text" name="contactEmail" id="contact-email" class="form-control" ng-model="vessel.contact[0].email"/>
-                    </div>
-                    <div class="col-md-2 form-group smallerpadding">
-                        <label>{{ 'vessel.vessel_details_contact_number' | i18n }}</label>
-                        <input type="text" name="contactNumber" id="contact-number" class="form-control" ng-model="vessel.contact[0].number"/>
-                    </div>
-                </div>
-
-                <div class="contact-item" ng-repeat="contact in vessel.contact | orderBy:orderByOwner">
-                    <div class="col-md-3 form-group smallerpaddingright">
-                        <label>{{ 'vessel.vessel_details_contact_name' | i18n }}</label>
-                        <input type="text" name="contactName" id="contact-name" class="form-control" ng-model="contact.name"/>
-                    </div>
-                    <div class="col-md-3 form-group smallerpadding">
-                        <label>{{ 'vessel.vessel_details_contact_email' | i18n }}</label>
-                        <input type="text" name="contactEmail" id="contact-email" class="form-control" ng-model="contact.email"/>
-                    </div>
-                    <div class="col-md-2 form-group smallerpadding">
-                        <label>{{ 'vessel.vessel_details_contact_number' | i18n }}</label>
-                        <input type="text" name="contactNumber" id="contact-number" class="form-control" ng-model="contact.number"/>
-                    </div>
-                    <div id="btn-remove-contact" class="btn btn-sm btn-default btn-removeContact" ng-if="vessel.contact.length > 1" ng-click="functions.removeContactItemCallback(vessel.contact, $index)" ng-hide="disableForm">
-                        <i class="fa fa-trash" title="{{ 'vessel.vessel_details_contact_remove' | i18n }}"></i>
-                    </div>
-                </div>
-            </div>
-            <a id="btn-add-contact" class="btn-addContact" ng-click="functions.addContactItemCallback(vessel.contact)" ng-hide="disableForm">
-                <i class="fa fa-plus"></i> {{ 'vessel.vessel_details_contact_add' | i18n }}
-            </a>
-        </div>
-
     </fieldset>
 </div>

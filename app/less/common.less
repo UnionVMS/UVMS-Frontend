@@ -320,7 +320,7 @@ a{
 }
 a:hover{
     text-decoration: none;
-    color: #428bca;
+    color: @primaryColorHover;
 }
 
 
@@ -534,7 +534,7 @@ a:hover{
         color: inherit;
         &:hover {
             text-decoration: underline;
-        }   
+        }
     }
 }
 
@@ -548,6 +548,11 @@ a:hover{
     display: flex;
 }
 
+.flexbox-inline() {
+    display: -webkit-inline-flex;
+    display: inline-flex;
+}
+
 .flex(@values) {
     -webkit-box-flex: @values;
     -moz-box-flex: @values;
@@ -557,13 +562,12 @@ a:hover{
 }
 
 .flexorder(@val) {
-    -webkit-box-ordinal-group: @val;  
-    -moz-box-ordinal-group: @val;     
-    -ms-flex-order: @val;     
-    -webkit-order: @val;  
+    -webkit-box-ordinal-group: @val;
+    -moz-box-ordinal-group: @val;
+    -ms-flex-order: @val;
+    -webkit-order: @val;
     order: @val;
 }
-
 
 // Clearfix
 .clear {
@@ -574,7 +578,7 @@ a:hover{
     }
 }
 
-// Alignments 
+// Alignments
 .postion-absolut-vertical-horizontal() {
     position: absolute;
     left: 50%;
@@ -596,7 +600,17 @@ a:hover{
     transform: translate(0,-50%);
 }
 
-// Transitions
+.postion-absolut-horizontal() {
+    position: absolute;
+    left: 50%;
+    -webkit-transform: translate(-50%, 0);
+    -moz-transform: translate(-50%, 0);
+    -ms-transform: translate(-50%, 0);
+    -o-transform: translate(-50%, 0);
+    transform: translate(-50%, 0);
+}
+
+// Transitions all
 .transition-all-ease(@val) {
     -webkit-transition: all @val ease;
     -moz-transition: all @val ease;
@@ -604,7 +618,15 @@ a:hover{
     transition: all @val ease;
 }
 
-// Icon font 
+// Transitions specified object
+.transition-specified-ease(@obj, @time) {
+    -webkit-transition: @obj @time ease;
+    -moz-transition: @obj @time ease;
+    -o-transition: @obj @time ease;
+    transition: @obj @time ease;
+}
+
+// Icon font
 .icon-font-bootstrap(@fontSize) {
     display: inline-block;
     font: normal normal normal @fontSize/0px FontAwesome;
@@ -618,4 +640,14 @@ a:hover{
     -webkit-font-smoothing: antialiased;
     -moz-osx-font-smoothing: grayscale;
     font-smooth: always;
+}
+
+//Disable higlight selection
+.disable-highlight-selection() {
+    -webkit-touch-callout: none;
+    -webkit-user-select: none;
+    -khtml-user-select: none;
+    -moz-user-select: none;
+    -ms-user-select: none;
+    user-select: none;
 }

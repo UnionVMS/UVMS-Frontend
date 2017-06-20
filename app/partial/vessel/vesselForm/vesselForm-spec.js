@@ -53,6 +53,10 @@ describe('VesselFormCtrl', function() {
             //Nothing
         };
 
+        scope.setVesselDetailsDirty = function(bool){
+            scope.isVesselDetailsDirty = bool;
+        };
+
         scope.vesselNoteValues = {
             date : "1", 
             activity : "1", 
@@ -114,7 +118,7 @@ describe('VesselFormCtrl', function() {
         expect(scope.vesselObj.vesselId.value).toEqual(createResponseVessel.vesselId.value);
 
         //Check that get vessel history was called afterwards
-        expect(vesselRestService.getVesselHistoryListByVesselId).toHaveBeenCalledWith(scope.vesselObj.vesselId.value,5);
+        expect(vesselRestService.getVesselHistoryListByVesselId).toHaveBeenCalledWith(scope.vesselObj.vesselId.value,15);
 
     }));
 
@@ -129,6 +133,7 @@ describe('VesselFormCtrl', function() {
         };
 
         scope.setCreateMode(false);
+        scope.setVesselDetailsDirty(true);
 
         // A form to be valid
         var element = angular.element('<form name="vesselForm"></form>');
@@ -158,7 +163,7 @@ describe('VesselFormCtrl', function() {
         expect(scope.vesselObj.vesselId.value).toEqual(createResponseVessel.vesselId.value);
 
         //Check that get vessel history was called afterwards
-        expect(vesselRestService.getVesselHistoryListByVesselId).toHaveBeenCalledWith(scope.vesselObj.vesselId.value,5);
+        expect(vesselRestService.getVesselHistoryListByVesselId).toHaveBeenCalledWith(scope.vesselObj.vesselId.value,15);
 
         //Check that mergeCurrentVesselIntoSearchResults was called afterwards to update the vessel list
         expect(scope.mergeCurrentVesselIntoSearchResults).toHaveBeenCalledWith(scope.vesselObj);
@@ -250,17 +255,6 @@ describe('VesselFormCtrl', function() {
         expect(mobileTerminalRestService.inactivateMobileTerminal).toHaveBeenCalledWith(mt2, 'some modal comment');
         expect(mobileTerminalRestService.unassignMobileTerminal).toHaveBeenCalledWith(mt1, 'some modal comment');
         expect(mobileTerminalRestService.unassignMobileTerminal).toHaveBeenCalledWith(mt2, 'some modal comment');
-    }));
-
-    it('isVesselNameSet should return correctly', inject(function(Vessel) {
-        scope.vesselObj =  new Vessel();
-        expect(scope.isVesselNameSet()).toBeFalsy();
-
-        scope.vesselObj.name ="TEST";
-        expect(scope.isVesselNameSet()).toBeTruthy();
-
-        scope.vesselObj.name ="";
-        expect(scope.isVesselNameSet()).toBeFalsy();
     }));
 
     it('should detect if more than one active terminals are of the same type', inject(function(MobileTerminal) {

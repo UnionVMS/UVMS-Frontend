@@ -11,7 +11,7 @@ copy of the GNU General Public License along with the IFDM Suite. If not, see <h
 -->
 <div class="vesselHistoryContainer">
     <div class="modal-header">
-        <div class="pointer pull-right" ng-click="cancel()">
+        <div class="pointer pull-right" ng-click="cancel()" id="asset-btn-close-history">
             <i class="fa fa-times closeicon"></i>
         </div>
         <h4 class="modal-title">{{vesselHistory.name}}</h4>
@@ -21,7 +21,7 @@ copy of the GNU General Public License along with the IFDM Suite. If not, see <h
         </div>
     </div>
 
-	<div class="modal-body">
+    <div class="modal-body">
         <div class="historyValues">
             <div class="col-md-12 sectionHeader">
                 {{'vessel.event_history_administrative_information' | i18n}}
@@ -123,8 +123,8 @@ copy of the GNU General Public License along with the IFDM Suite. If not, see <h
                 <span ng-if="vesselHistory.lengthValue">{{"common.meters_short" | i18n}} {{vesselHistory.lengthType | vesselHistoryReplaceEmptyValueWithDash}}</span></b>
             </div>
         </div>
-	</div>
-	<div class="modal-footer">
-    	<button type="button" class="btn btn-primary" ng-click="cancel()">{{'vessel.close' | i18n | uppercase}}</button>
-	</div>
+    </div>
+    <div class="modal-footer">
+        <button type="button" class="btn btn-primary" ng-click="cancel()" id="asset-btn-close-history">{{'vessel.close' | i18n | uppercase}}</button>
+    </div>
 </div>

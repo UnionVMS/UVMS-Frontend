@@ -123,8 +123,7 @@ angular.module('unionvmsWeb').factory('rulesSuggestionsService',function($log, $
         return getSearchResultPageAndExtractSuggestions(pagePromise, criteria, subCriteria);
     };
 
-    var countryCache = undefined;
-
+    var countryCache;
     function getCodesWithPrefix(codes, searchValue) {
         var prefix = new RegExp('^' + searchValue, 'gi');
         return codes.filter(function(code) {
@@ -145,8 +144,7 @@ angular.module('unionvmsWeb').factory('rulesSuggestionsService',function($log, $
         });
     }
 
-    var userAreaCache = undefined;
-
+    var userAreaCache;
     function getUserAreas(searchValue) {
         return $q.when(userAreaCache || $q(function(resolve) {
             return spatialRestService.getUserDefinedAreas().then(function(areas) {

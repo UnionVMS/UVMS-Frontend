@@ -8,17 +8,13 @@
         </div>
 
         <div class="col-md-10 searchFooter">
-            <a ng-click="toggleAdvancedSearch()">
+            <a ng-click="toggleAdvancedSearch()" id="asset-toggle-search-view">
                 <span ng-hide="advancedSearch">{{'common.advanced_search' | i18n}}</span>
                 <span ng-show="advancedSearch">{{'common.simple_search' | i18n}}</span>
             </a>
-            <a ng-show="advancedSearch" ng-click="openSaveGroupModal()">
+            <a ng-show="advancedSearch" ng-click="openSaveGroupModal()" id="asset-btn-save-search">
                 <span>{{'common.search_group_save' | i18n}}</span>
             </a>
-		</div>
-<!--         <div class="col-md-2 searchFooter smallerpadding">
-            <label style="color: #428bca; font-weight: normal;"><input type="checkbox"/>
-            Include archived</label>
-        </div> -->
+        </div>
     </div>
 </div>
