@@ -448,10 +448,11 @@ unionvmsWebApp.config(function($stateProvider, $compileProvider, tmhDynamicLocal
                     }
                 }
             },
-            onExit: function(loadingStatus,$modalStack){
+            onExit: function(loadingStatus,$modalStack,spatialHelperService){
                 loadingStatus.resetState();
                 $modalStack.dismissAll();
                 angular.element('body').removeClass('modal-open');
+                spatialHelperService.fromFAView = false;
             }
         })
         .state('app.reporting-id', {
