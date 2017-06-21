@@ -34,10 +34,10 @@ module.exports = function (grunt) {
   // load all grunt tasks
   require('time-grunt')(grunt);
   require('load-grunt-tasks')(grunt);
-
   var proxy = require('grunt-connect-proxy/lib/utils').proxyRequest;
-
   var rewriteRulesSnippet = require('grunt-connect-rewrite/lib/utils').rewriteRequest;
+  var serveStatic = require('serve-static');
+  var serveIndex = require('serve-index');
 
   //KARMA TEST FILES
   var karmaFiles = [
@@ -76,7 +76,8 @@ module.exports = function (grunt) {
                   '/config/rest',
                   '/mapfish-print',
                   '/usm-authentication/rest', '/usm-authorisation/rest', '/usm-administration/rest',
-                  '/activity/rest'],
+                  '/activity/rest',
+                  '/mdr/rest'],
               host: 'localhost',
               port: 8080
         },{
@@ -102,11 +103,11 @@ module.exports = function (grunt) {
                   var directory = options.directory || options.base[options.base.length - 1];
                   options.base.forEach(function (base) {
                       // Serve static files.
-                      middlewares.push(connect.static(base));
+                      middlewares.push(serveStatic(base));
                   });
 
                   // Make directory browse-able.
-                  middlewares.push(connect.directory(directory));
+                  middlewares.push(serveIndex(directory));
 
                   return middlewares;
               }
@@ -130,7 +131,8 @@ module.exports = function (grunt) {
                   //DIRECTIVES
                   'app/directive/common/breadcrumbNavigator',
                   'app/directive/activity/',
-                  
+                  'app/directive/common/tableFilterHeaders',
+
                   //FILTERS
                   'app/filter/activity/'
             ],
@@ -138,14 +140,14 @@ module.exports = function (grunt) {
                 destination: 'dist/docs',
                 configure: 'jsdoc_conf.json',
                 template: 'node_modules/angular-jsdoc/angular-template',
-                readme: './README_docs.md',
+                readme: './README.md',
                 recurse: true
             }
         }
     },
     watch: {
       options: {
-          livereload: true,
+          livereload: false,
           livereloadOnError: false,
           spawn: false
       },
@@ -262,46 +264,6 @@ module.exports = function (grunt) {
             dest: 'temp/config.json'
         }]
       },
-      configLocal:{
-        files: [
-            {
-                src: 'environment/local.json',
-                dest: 'temp/config.json'
-            }
-        ]
-      },
-      configDev:{
-        files: [
-            {
-                src: 'environment/dev.json',
-                dest: 'temp/config.json'
-            }
-        ]
-      },
-      configTest:{
-        files: [
-            {
-                src: 'environment/test.json',
-                dest: 'temp/config.json'
-            }
-        ]
-      },
-      configCygnus : {
-        files: [
-            {
-                src: 'environment/cygnus.json',
-                dest: 'temp/config.json'
-            }
-        ]
-      },
-      configMaven : {
-        files: [
-            {
-                src: 'environment/maven.json',
-                dest: 'temp/config.json'
-            }
-        ]
-      },
       serve: {
         files: [
             {
@@ -335,8 +297,8 @@ module.exports = function (grunt) {
         options: {
           remove: ['script[data-remove!="false"]','link[data-remove!="false"]'],
           append: [
-            {selector:'body',html:'<script src="app.full.min.js"></script>'},
-            {selector:'head',html:'<link rel="stylesheet" href="app.full.min.css">'}
+            {selector:'body',html:'<script src="app.full.min.js?v=' + pkg.version + '"></script>'},
+            {selector:'head',html:'<link rel="stylesheet" href="app.full.min.css?v=' + pkg.version +'">'}
           ]
         },
         src:'app/index.html',
@@ -420,12 +382,13 @@ module.exports = function (grunt) {
         logLevel:'INFO',
         reporters:['mocha', 'junit', 'coverage'],
         junitReporter: {
-            outputDir: 'testResults',
-            outputFile: 'test-results.xml'
+        	useBrowserName: false,
+        	outputDir: 'testResults',
+            outputFile: 'TESTS-results.xml'
         },
         coverageReporter: {
             dir: 'testResults/coverage',
-            type: 'html'
+            type: 'lcov'
         },
         autoWatch: false, //watching is handled by grunt-contrib-watch
         singleRun: true
@@ -435,15 +398,16 @@ module.exports = function (grunt) {
         options: {
             files: karmaFiles.concat(['app/partial/**/*-spec.js']),
             junitReporter: {
-                outputDir: 'testResults/controllers',
-                outputFile: 'controllers.xml',
+            	useBrowserName: false,
+            	outputDir: 'testResults/controllers',
+                outputFile: 'TESTS-results.xml',
             },
             preprocessors: {
                 'app/partial/**/!(*-spec).js': ['coverage']
             },
             coverageReporter: {
                 dir: 'testResults/controllers/coverage',
-                type: 'html'
+                type: 'lcov'
             }
         }
       },
@@ -451,15 +415,16 @@ module.exports = function (grunt) {
         options: {
             files: karmaFiles.concat(['app/directive/**/*-spec.js', 'temp/templates.js']),
             junitReporter: {
-                outputDir: 'testResults/directives',
-                outputFile: 'directives.xml'
+            	useBrowserName: false,
+            	outputDir: 'testResults/directives',
+                outputFile: 'TESTS-results.xml'
             },
             preprocessors: {
                 'app/directive/**/!(*-spec).js': ['coverage']
             },
             coverageReporter: {
                 dir: 'testResults/directives/coverage',
-                type: 'html'
+                type: 'lcov'
             }
         }
       },
@@ -467,15 +432,16 @@ module.exports = function (grunt) {
         options: {
             files: karmaFiles.concat(['app/service/**/*-spec.js']),
             junitReporter: {
-                outputDir: 'testResults/services',
-                outputFile: 'services.xml'
+            	useBrowserName: false,
+            	outputDir: 'testResults/services',
+                outputFile: 'TESTS-results.xml'
             },
             preprocessors: {
                 'app/service/**/!(*-spec).js': ['coverage']
             },
             coverageReporter: {
                 dir: 'testResults/services/coverage',
-                type: 'html'
+                type: 'lcov'
             }
         }
       },
@@ -483,15 +449,16 @@ module.exports = function (grunt) {
         options: {
             files: karmaFiles.concat(['app/filter/**/*-spec.js']),
             junitReporter: {
-                outputDir: 'testResults/filters',
-                outputFile: 'filters.xml'
+            	useBrowserName: false,
+            	outputDir: 'testResults/filters',
+                outputFile: 'TESTS-results.xml'
             },
             preprocessors: {
                 'app/filter/**/!(*-spec).js': ['coverage']
             },
             coverageReporter: {
                 dir: 'testResults/filters/coverage',
-                type: 'html'
+                type: 'lcov'
             }
         }
       },
@@ -566,43 +533,20 @@ module.exports = function (grunt) {
       }
     }
   });
-  
-  grunt.registerTask('sub-build',['parallel:sub-build']);//,'clean:after'
-  grunt.registerTask('sub-build-ci',['concurrent:sub-build-ci']);//,'clean:after'
 
-  grunt.registerTask('build', ['test', 'ngconstant:production', 'clean:before', 'copy:config', 'sub-build']);
-  grunt.registerTask('build-ci', ['test', 'ngconstant:production', 'clean:before', 'copy:config', 'sub-build-ci']);
-  grunt.registerTask('build-local', ['ngconstant:development', 'test', 'clean:before', 'copy:configLocal', 'test', 'sub-build']);
-  grunt.registerTask('build-cygnus', ['ngconstant:development', 'test', 'clean:before', 'copy:configCygnus', 'sub-build']);
-  grunt.registerTask('build-maven', ['ngconstant:development', 'test', 'clean:before', 'copy:configMaven', 'sub-build']);
-  grunt.registerTask('build-dev', ['ngconstant:development', 'test', 'clean:before', 'copy:configDev','sub-build']);
-  grunt.registerTask('build-test', ['ngconstant:development', 'test', 'clean:before', 'copy:configTest','sub-build']);
-  grunt.registerTask('test',['ngconstant:development', 'dom_munger:read', 'ngtemplates', 'karma:services', 'karma:controllers', 'karma:directives', 'karma:filters', 'clean:after']);
-
-  grunt.registerTask('default',['build-dev']);
-  
-  grunt.registerTask('serve-no-watch', ['less', 'dom_munger:read', 'configureProxies', 'configureRewriteRules', 'connect:development']);
-  grunt.registerTask('serve', ['parallel:serve']);
-  grunt.registerTask('serve-debug', ['ngconstant:development','serve']);
-  grunt.registerTask('serve-prod', ['ngconstant:production','serve']);
-  grunt.registerTask('serve-copy', ['copy:serve', 'serve']);
-  
-  grunt.registerTask('build-docs', ['jsdoc']);
-  grunt.registerTask('constants', ['ngconstant:development']);
-  
     grunt.event.on('watch', function(action, filepath) {
         if (filepath.lastIndexOf('.js') !== -1 && filepath.lastIndexOf('.js') === filepath.length - 3) {
-    
+
             //lint the changed js file
             grunt.config('jshint.main.src', filepath);
             grunt.task.run('jshint');
-    
+
             //find the appropriate unit test for the changed file
             var spec = filepath;
             if (filepath.lastIndexOf('-spec.js') === -1 || filepath.lastIndexOf('-spec.js') !== filepath.length - 8) {
                 spec = filepath.substring(0, filepath.length - 3) + '-spec.js';
             }
-    
+
             //if the spec exists then lets run it
             if (grunt.file.exists(spec)) {
                 //grunt.config('jasmine.unit.options.specs', spec);
@@ -615,23 +559,41 @@ module.exports = function (grunt) {
                     'test/envConfigForTest.js',
                     spec
                 ];
-    
+
                 grunt.config('karma.options.files', files);
                 grunt.task.run('karma:during_watch');
             }
         }
-    
+
         if (filepath.lastIndexOf('.htm') !== -1 && filepath.lastIndexOf('.htm') >= (filepath.length - 6)) {
             //lint the changed html file
             grunt.config('htmlhint.html.src', filepath);
             grunt.task.run('htmlhint');
         }
-    
+
         //if index.html changed, we need to reread the <script> tags so our next run of jasmine
         //will have the correct environment
         if (filepath === 'app\\index.html') {
             grunt.task.run('dom_munger:read');
         }
-    
     });
+
+    // Build application
+    grunt.registerTask('build', ['test', 'ngconstant:production', 'clean:before', 'copy:config', 'parallel:sub-build']);
+
+    // Build application with less CPU use (recommended to use for Jenkins build)
+    grunt.registerTask('build-ci', ['test', 'ngconstant:production', 'clean:before', 'copy:config', 'concurrent:sub-build-ci']);
+
+    // Build JS documentation files
+    grunt.registerTask('build-docs', ['jsdoc']);
+
+    // Run Karma test
+    grunt.registerTask('test',['ngconstant:development', 'dom_munger:read', 'ngtemplates', 'karma:services', 'karma:controllers', 'karma:directives', 'karma:filters', 'clean:after']);
+
+    // Run application locally, connect web server on http://localhost:9001
+    grunt.registerTask('serve', ['parallel:serve']);
+
+    grunt.registerTask('serve-no-watch', ['less', 'dom_munger:read', 'configureProxies', 'configureRewriteRules', 'connect:development']);
+
+    grunt.registerTask('serve-copy', ['copy:serve', 'serve']);
 };

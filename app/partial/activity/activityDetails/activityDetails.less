@@ -9,4 +9,53 @@ the hope that it will be useful, but WITHOUT ANY WARRANTY; without even the impl
 FITNESS FOR A PARTICULAR PURPOSE.  See the GNU General Public License for more details. You should have received a
 copy of the GNU General Public License along with the IFDM Suite. If not, see <http://www.gnu.org/licenses/>.
 */
-
+.activity-details {
+    .activity-fa-loading {
+        left: 15px !important;
+        right: 15px !important;
+        margin: -15px;
+        bottom: -3px;
+    }
+    .main-content {
+        border: 1px solid #ddd;
+        height: 100%;
+        padding-bottom: 15px;
+        .title {
+            text-align: center;
+            font-size: 20px;
+            font-weight: bold;
+            margin-top: 5px;
+            margin-bottom: 15px;
+            .useColon::after {
+                content: ':'
+            }
+            .operationType {
+                text-transform: uppercase;
+                color: @primaryColor;
+            }
+        }
+        .summary-section {
+            margin-bottom: 0;
+        }
+    }
+    .no-data {
+        text-align: center;
+        top: 20px;
+        bottom: 0;
+        left: 15px;
+        right: 15px;
+        position: absolute;
+        background-color: #fff;
+        z-index: 2;
+        div {
+            display: table;
+            height: 100%;
+            span {
+                display: table-cell;
+                vertical-align: middle;
+                font-size: 22px;
+                color: #ddd;
+            }
+        }
+    }
+}

@@ -14,7 +14,7 @@ copy of the GNU General Public License along with the IFDM Suite. If not, see <h
     <div class="map-container">
         <div id="map-toolbar">
             <div class="btn-group-left">
-				<combobox ng-model="repServ.selectedHistory" initialtext="{{repServ.name || ('spatial.header_reports' | i18n)}}" items="repServ.reportsHistory" combo-section="true" callback="selectHistory" init-callback="initComboHistory" is-loading="repServ.loadingReportHistory" class="combo-report-history" no-placeholder-on-list="true" dest-combo-list="#mapPanelContainer"></combobox>
+				<combobox ng-model="repServ.selectedHistory" initialtext="{{repServ.name || ('spatial.header_reports' | i18n)}}" items="repServ.reportsHistory" combo-section="true" callback="selectHistory" init-callback="initComboHistory" is-loading="repServ.loadingReportHistory" class="combo-report-history" list-class="combo-report-history-list" no-placeholder-on-list="true" dest-combo-list="#mapPanelContainer"></combobox>
                 <div class="btn-group btn-group-xs" role="group" aria-label="Map controls">
                 	<div class="btn btn-default refresh-container" ng-class="{disabled: !checkSpatialConfigPermission()}">
 						<span>{{'spatial.map_label_auto_refresh_status' | i18n }}</span>
@@ -42,6 +42,12 @@ copy of the GNU General Public License along with the IFDM Suite. If not, see <h
                     <button type="button" class="btn btn-default btn-toolbar" title="{{'spatial.user_preferences' | i18n }}" ng-click="openUserPrefs()" ng-if="isAllowed('Spatial', 'ALLOW_USER_SPATIAL_CONFIGURATIONS')"><span class="fa fa-cogs"></span></button>
                 </div>
             </div>
+        </div>
+        <div class="map-over-btn">
+        	<button type="button" class="btn btn-default" ng-if="spatialHelpServ.fromFAView" ng-click="backToFAView()">
+        		<span class="fa fa-share-square-o"></span>&nbsp;
+        		<span>Back to activity details</span>
+       		</button>
         </div>
         <ng-form name="mapForm">
 	        <div id="map" class="map">
@@ -134,7 +140,7 @@ copy of the GNU General Public License along with the IFDM Suite. If not, see <h
 	                    </div>
 	                    <div class="form-group col-md-12 measure-content">
 	                        <label>{{'spatial.map_start_date_label' | i18n }}</label>
-	                        <datepicker-input time="true" model="measureConfigs.startDate" name="selectedDate" ng-disabled="measureConfigs.disabled" input-field-id="map-panel-measure-configs-start-date-picker" fullscreen-location="'.mapPanelContainer'"></datepicker-input>
+	                        <datepicker-input time="true" model="measureConfigs.startDate" name="selectedDate" ng-disabled="measureConfigs.disabled" input-field-id="map-panel-measure-configs-start-date-picker" fullscreen-location="#mapPanelContainer'"></datepicker-input>
 	                    </div>
 	                </div>
 	            </div>
@@ -229,7 +235,7 @@ copy of the GNU General Public License along with the IFDM Suite. If not, see <h
 			                            	<ng-form name="mapfishDetailForm{{$index}}">
 			                            		<div class="print-content-control" ng-class="{'has-error': (printForm.mapfishDetailForm{{$index}}.$dirty || submittedMapFishPrint === true) && printForm.mapfishDetailForm{{$index}}.$invalid}">
 					                                <label>{{attribute.name | capitalize}}</label>
-					                                <input type="text" class="form-control" name="attribute.name" ng-model="mapFishLocalConfig[attribute.name]" ng-init="mapFishLocalConfig[attribute.name] = attribute.default" ng-required="true"/>
+					                                <input type="text" class="form-control" maxlength="25" name="attribute.name" ng-model="mapFishLocalConfig[attribute.name]" ng-init="mapFishLocalConfig[attribute.name] = attribute.default" ng-required="true"/>
 					                                <div class="innerErrorMessagesInputWithUpLabel" ng-messages="printForm.mapfishDetailForm{{$index}}.$error" ng-show="(printForm.mapfishDetailForm{{$index}}.$dirty || submittedMapFishPrint === true) && printForm.mapfishDetailForm{{$index}}.$invalid">
 														<div ng-message="required">{{'spatial.required_field_error_message' | i18n }}</div>
 													</div>
@@ -270,10 +276,13 @@ copy of the GNU General Public License along with the IFDM Suite. If not, see <h
         <div id="popup" class="ol-popup">
             <a href ng-click="closePopup()" id="popup-closer" class="ol-popup-closer"><span class="fa fa-times"></span></a>
             <div class="col-md-12 ol-popup-header">
-				<span class="header" ng-show="popupRecContainer.currentType === 'vmspos' || popupRecContainer.currentType === 'alarms'">{{'spatial.popup_positions_title' | i18n}}</span>
-				<span class="header" ng-show="popupRecContainer.currentType === 'vmsseg'">{{'spatial.popup_segments_title' | i18n}}</span>            	
-				<div class="btn-container" ng-show="popupRecContainer.currentType === 'vmspos' && isAllowed('Vessel', 'getVesselById')">
-					<button type="button" class="btn btn-default btn-xs" title="{{'spatial.popup_vessel_details_btn_title' | i18n}}" ng-click="getVesselDetails()"><i class="fa fa-ship"></i></button>
+				<span class="header" ng-if="popupRecContainer.currentType === 'vmspos' || popupRecContainer.currentType === 'alarms'">{{'spatial.popup_positions_title' | i18n}}</span>
+				<span class="header" ng-if="popupRecContainer.currentType === 'vmsseg'">{{'spatial.popup_segments_title' | i18n}}</span>            	
+				<span class="header" ng-if="popupRecContainer.currentType === 'ers'">{{'spatial.popup_activities_title' | i18n}}</span>
+				<span class="header" ng-if="popupRecContainer.currentType === 'alarms'">{{'spatial.popup_alarms_title' | i18n}}</span>
+				<div class="btn-container" ng-show="(popupRecContainer.currentType === 'vmspos' || popupRecContainer.currentType === 'ers')">
+					<button type="button" class="btn btn-default btn-xs" title="{{'spatial.popup_vessel_details_btn_title' | i18n}}" ng-click="getVesselDetails()" ng-if="isAllowed('Vessel', 'getVesselById')"><i class="fa fa-ship"></i></button>
+					<button type="button" class="btn btn-default btn-xs" title="{{'spatial.popup_activity_details_btn_title' | i18n}}" ng-click="goToFaView()" ng-if="isActivityDetailsAllowed()"><i class="fa fa-eye"></i></button>
 				</div>
 			</div>
             <div id="popup-content"></div>

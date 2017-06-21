@@ -10,10 +10,14 @@ FITNESS FOR A PARTICULAR PURPOSE.  See the GNU General Public License for more d
 copy of the GNU General Public License along with the IFDM Suite. If not, see <http://www.gnu.org/licenses/>.
 */
 .catch-details-container {
+    & > .row,
+    .catch-section {
+        height: 100%;
+    }
     .catch-section {
         .catch-details-body {
-            display: flex;
             .catch-subsection {
+                border-left: 1px solid #ddd;
                 &.has-caption {
                     padding-bottom: 30px;
                 }
@@ -30,12 +34,12 @@ copy of the GNU General Public License along with the IFDM Suite. If not, see <h
                         font-family: Roboto, Arial;
                     }
                 }
-                
-                &:last-child {
-                    border-left: 1px solid #ddd;
+                &:first-child {
+                    border-left: 0;
                 }
                 .chart-caption {
                     position: absolute;
+                    left: 0;
                     bottom: 0;
                     text-align: center;
                     width: 100%;
@@ -47,14 +51,11 @@ copy of the GNU General Public License along with the IFDM Suite. If not, see <h
                     .tbody {
                         max-height: 120px;
                         overflow-y: auto;
-                        padding-right: 16px;
+                        padding-right: 15px;
                     }
                     .tr {
                         position: relative;
                         padding-left: 10px;
-                        .td:last-child {
-                            text-align: center;
-                        }
                     }
                     .color-column {
                         position: absolute;

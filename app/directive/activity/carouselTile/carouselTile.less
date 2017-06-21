@@ -10,24 +10,44 @@ FITNESS FOR A PARTICULAR PURPOSE.  See the GNU General Public License for more d
 copy of the GNU General Public License along with the IFDM Suite. If not, see <http://www.gnu.org/licenses/>.
 */
 .carousel-tile {
-    .no-data {
-        text-align: center;
-        top: 0;
-        bottom: 0;
-        left: 15px;
-        right: 15px;
-        position: absolute;
-        div {
-            display: table;
-            height: 100%;
-            span {
-                display: table-cell;
-                vertical-align: middle;
-                font-size: 22px;
-                color: #ddd;
-            }
-        }
+    padding-left: 5px;
+    padding-right: 5px;
+    height: 100%;
+    *:focus {
+        outline: 0;
     }
+    .slick-next {
+        box-shadow: none;
+        right: 0;
+    }
+    .slick-prev {
+        box-shadow: none;
+        left: 0;
+    }
+    .slick-arrow {
+        z-index: 1;
+    }
+    .slick-prev:before {
+        font-family: FontAwesome;
+        content: '\f053';
+        color: @primaryColor;
+    }
+    [dir='rtl'] .slick-prev:before{
+        font-family: FontAwesome;
+        content: '\f054';
+        color: @primaryColor;
+    }
+    .slick-next:before{
+        font-family: FontAwesome;
+        content: '\f054';
+        color: @primaryColor;
+    }
+    [dir='rtl'] .slick-next:before{
+        font-family: FontAwesome;
+        content: '\f053';
+        color: @primaryColor;
+    }
+
     .dropdown-menu {
         max-height: 150px !important;
     }
@@ -36,6 +56,9 @@ copy of the GNU General Public License along with the IFDM Suite. If not, see <h
     }
     .fieldsetLegendStyle {
         margin-bottom: 10px !important;
+        a:first-child {
+            cursor: default;
+        }
         .fa {
             color: @primaryColor;
             cursor: pointer;
@@ -51,28 +74,26 @@ copy of the GNU General Public License along with the IFDM Suite. If not, see <h
             }
         }
     }
-    [uib-carousel] {
-        &.without-arrows {
-            .carousel-control {
-                display: none;
-            }
-        }
-        .carousel-indicators {
-            display: none;
-        }
-        .carousel-control {
-            top: 30px;
-            width: 17px;
-            background: #fff;
+    .carousel-paginator {
+        margin-right: 15px;
+        margin-top: 15px;
+        text-align: right;
+    }
+    .no-data {
+        text-align: center;
+        top: 20px;
+        bottom: 0;
+        left: 15px;
+        right: 15px;
+        position: absolute;
+        div {
+            display: table;
+            height: 100%;
             span {
-                margin-left: 0;
-                font-size: 20px;
-            }
-            &.left span {
-                left: 0;
-            }
-            &.right span {
-                right: 0;
+                display: table-cell;
+                vertical-align: middle;
+                font-size: 22px;
+                color: #ddd;
             }
         }
     }

@@ -26,6 +26,9 @@ copy of the GNU General Public License along with the IFDM Suite. If not, see <h
 @import "../app/assets/spatial/ol3-layerswitcher/src/ol3-layerswitcher.css";
 @import "../bower_components/nvd3/build/nv.d3.min.css";
 @import "../bower_components/angular-ui-tree/dist/angular-ui-tree.min.css";
+@import "../bower_components/angular-resizable/angular-resizable.min.css";
+@import "../bower_components/slick-carousel/slick/slick.css";
+@import "../bower_components/slick-carousel/slick/slick-theme.css";
 
 @fa-font-path: "assets/font-awesome/fonts";
 
@@ -81,6 +84,7 @@ copy of the GNU General Public License along with the IFDM Suite. If not, see <h
 @import "directive/polling/newPollWizardProgress/newPollWizardProgress.less";
 @import "partial/polling/pollingLogs/pollingLogs.less";
 @import "partial/polling/pollingPageHeader/pollingPageHeader.less";
+@import "directive/common/currentTime/currentTime.less";
 @import "directive/common/inputValidationMessage/inputValidationMessage.less";
 @import "directive/common/periodInput/periodInput.less";
 @import "directive/common/tagSelectInput/tagSelectInput.less";
@@ -212,20 +216,56 @@ copy of the GNU General Public License along with the IFDM Suite. If not, see <h
 @import "directive/activity/fishingTripPanel/fishingTripPanel.less";
 @import "directive/activity/rolesPanel/rolesPanel.less";
 @import "directive/activity/tripReportsPanel/tripReportsPanel.less";
-@import "directive/activity/vesselPanel/vesselPanel.less";
+@import "directive/activity/vesselTile/vesselTile.less";
 @import "directive/activity/tripOverviewPanel/tripOverviewPanel.less";
 @import "partial/spatial/tripsPanel/catchDetails/catchDetails.less";
 @import "partial/spatial/reportsPanel/reportForm/activityFiltersFieldset/activityFiltersFieldset.less";
 @import "partial/activity/departurePanel/departurePanel.less";
-@import "directive/activity/activitySummaryTile/activitySummaryTile.less";
 @import "directive/activity/locationTile/locationTile.less";
-@import "directive/activity/faReportDocTile/faReportDocTile.less";
 @import "directive/activity/carouselTile/carouselTile.less";
 @import "directive/activity/carouselTile/templates/gearTile/gearTile.less";
+@import "directive/activity/carouselTile/templates/gearProblemTile/gearProblemTile.less";
+@import "directive/activity/carouselTile/templates/addressTile/addressTile.less";
 @import "directive/activity/catchClassDetailTile/catchClassDetailTile.less";
 @import "partial/spatial/tripsPanel/catchEvolution/catchEvolution.less";
 @import "partial/spatial/tripsPanel/tripDeparturePanel/tripDeparturePanel.less";
+@import "directive/spatial/aggregationPanel/aggregationPanel.less";
 @import "partial/activity/activityHistoryList/activityHistoryList.less";
+
+@import "directive/activity/faDetailsPanel/faDetailsPanel.less";
+@import "partial/spatial/tripsPanel/tripFishingOperationPanel/tripFishingOperationPanel.less";
+@import "partial/activity/fishingOperationPanel/fishingOperationPanel.less";
+@import "directive/activity/catchTile/catchTile.less";
+@import "directive/activity/tableChart/tableChart.less";
+@import "directive/activity/fishingActivityNavigator/fishingActivityNavigator.less";
+@import "directive/activity/clockPanel/clockPanel.less";
+@import "directive/activity/analogClock/analogClock.less";
+@import "partial/spatial/tripsPanel/tripArrivalPanel/tripArrivalPanel.less";
+@import "partial/activity/arrivalPanel/arrivalPanel.less";
+@import "directive/activity/catchClassLandingDetails/catchClassLandingDetails.less";
+@import "partial/activity/landingPanel/landingPanel.less";
+@import "partial/spatial/tripsPanel/tripLandingPanel/tripLandingPanel.less";
+@import "directive/activity/productProcessingTile/productProcessingTile.less";
+@import "directive/common/tableFilterHeaders/tableFilterHeaders.less";
+@import "partial/activity/discardPanel/discardPanel.less";
+@import "partial/spatial/tripsPanel/tripDiscardPanel/tripDiscardPanel.less";
+@import "partial/spatial/tripsPanel/tripAreaEntryPanel/tripAreaEntryPanel.less";
+@import "partial/activity/areaEntryPanel/areaEntryPanel.less";
+@import "partial/activity/areaExitPanel/areaExitPanel.less";
+@import "partial/spatial/tripsPanel/tripAreaExitPanel/tripAreaExitPanel.less";
+@import "partial/activity/transhipmentPanel/transhipmentPanel.less";
+@import "partial/spatial/tripsPanel/tripTranshipmentPanel/tripTranshipmentPanel.less";
+@import "partial/spatial/tripsPanel/tripRelocationPanel/tripRelocationPanel.less";
+@import "partial/activity/relocationPanel/relocationPanel.less";
+@import "partial/spatial/tripsPanel/tripJointFishingOperationPanel/tripJointFishingOperationPanel.less";
+@import "partial/activity/jointFishingOperationPanel/jointFishingOperationPanel.less";
+@import "directive/activity/areaTile/areaTile.less";
+@import "directive/activity/gearShotRetrievalTile/gearShotRetrievalTile.less";
+@import "directive/activity/faCharacteristicsModal/faCharacteristicsModal.less";
+@import "directive/activity/faCharacteristicsModal/characteristicsModal/characteristicsModal.less";
+@import "directive/activity/carouselTile/templates/contactPartiesTile/contactPartiesTile.less";
+@import "directive/activity/relocationTile/relocationTile.less";
+@import "directive/activity/carouselTile/templates/vesselTileTemplate/vesselTileTemplate.less";
 /* Add Component LESS Above */
 /* Required for Angular UI Bootstrap */
 .nav, .pagination, .carousel, .panel-title a { cursor: pointer; }

@@ -24,7 +24,7 @@ angular.module('smart-table').filter('stFieldSearchGeoJson', function($filter, u
         var timeFields = ['duration', 'totalTimeAtSea'];
         var numberFields = ['reportedSpeed', 'calculatedSpeed', 'speedOverGround', 'distance'];
         
-        if (type !== 'tracks'){
+        if (type !== 'tracks' && type !== 'trips'){
             searchObj.properties = {};
         }
         
@@ -203,15 +203,25 @@ angular.module('smart-table').filter('stFieldSearchGeoJson', function($filter, u
                             additionalFilters[name] = 'positionTime';
                         } else if (type === 'alarms'){
                             additionalFilters[name] = 'ticketOpenDate';
+                        } else if (type === 'trips'){
+                            if (searchableKeys[i] === 'startDate'){
+                                additionalFilters[name] = 'firstFishingActivityDateTime';
+                            } else {
+                                additionalFilters[name] = 'lastFishingActivityDateTime';
+                            }
                         }
                         
+                        additionalFilters.doSearch = true;
+                    } else if (searchableKeys[i] === 'tripId'){
+                        keyIn = true;
+                        additionalFilters['tripId'] = srcObject[searchableKeys[i]];
                         additionalFilters.doSearch = true;
                     }
                 }
             } 
             
             if (!keyIn){
-                if (type === 'tracks'){
+                if (type === 'tracks' || type === 'trips'){
                     searchObj[searchableKeys[i]] = srcObject[searchableKeys[i]]; //this is the default
                 } else {
                     searchObj.properties[searchableKeys[i]] = srcObject[searchableKeys[i]]; //this is the default
@@ -280,8 +290,12 @@ angular.module('smart-table').filter('stFieldSearchGeoJson', function($filter, u
                     include = updateInclude(temp, include);
                 }
                 
+                var srcRec = rec;
                 if (angular.isDefined(this.startDate)){
-                    recDate = moment.utc(rec.properties[this.startDateField]);
+                    if (type !== 'trips'){
+                        srcRec = rec.properties;
+                    }
+                    recDate = moment.utc(srcRec[this.startDateField]);
                     filterDate = moment.utc(this.startDate);
                     
                     temp = recDate.isAfter(filterDate);
@@ -289,7 +303,11 @@ angular.module('smart-table').filter('stFieldSearchGeoJson', function($filter, u
                 }
                 
                 if (angular.isDefined(this.endDate)){
-                    recDate = moment.utc(rec.properties[this.endDateField]);
+                    if (type !== 'trips'){
+                        srcRec = rec.properties;
+                    }
+                    
+                    recDate = moment.utc(srcRec[this.endDateField]);
                     filterDate = moment.utc(this.endDate);
                     
                     temp = recDate.isBefore(filterDate);
@@ -328,30 +346,26 @@ angular.module('smart-table').filter('stFieldSearchGeoJson', function($filter, u
                 
                 if (angular.isDefined(this.duration)){
                     temp = false;
+                    var srcProp;
                     if (type === 'tracks'){
-                        if (this.upBoundary && rec.duration >= this.srcTime && rec.duration < this.upBoundary){
-                            temp = true;
-                        }
-                        
-                        if (rec.duration === this.srcTime){
-                            temp = true;
-                        }
-                        
-                        if (this.secondsToAdd === 0 && rec.duration > this.upBoundary - 1 && rec.duration <= this.upBoundary){
-                            temp = true;
-                        }
+                        srcProp = rec.duration;
+                    } else if (type === 'trips'){
+                        srcProp = rec.tripDuration;
                     } else {
-                        if (this.upBoundary && rec.properties.duration >= this.srcTime && rec.properties.duration < this.upBoundary){
-                            temp = true;
-                        }
-                        
-                        if (rec.properties.duration === this.srcTime){
-                            temp = true;
-                        }
-                        
-                        if (this.secondsToAdd === 0 && rec.properties.duration > this.upBoundary - 1 && rec.properties.duration <= this.upBoundary){
-                            temp = true;
-                        }
+                        srcProp = rec.properties.duration;
+                    }
+                    
+                    
+                    if (this.upBoundary && srcProp >= this.srcTime && srcProp < this.upBoundary){
+                        temp = true;
+                    }
+                    
+                    if (srcProp === this.srcTime){
+                        temp = true;
+                    }
+                    
+                    if (this.secondsToAdd === 0 && srcProp > this.upBoundary - 1 && srcProp <= this.upBoundary){
+                        temp = true;
                     }
                     
                     include = updateInclude(temp, include);
@@ -371,6 +385,15 @@ angular.module('smart-table').filter('stFieldSearchGeoJson', function($filter, u
                         temp = true;
                     }
                     
+                    include = updateInclude(temp, include);
+                }
+                
+                if (angular.isDefined(this.tripId)){
+                    temp = false;
+                    var tripName = rec.schemeId + ':' + rec.tripId;
+                    if (tripName.indexOf(this.tripId.toUpperCase()) !== -1){
+                        temp = true;
+                    }
                     include = updateInclude(temp, include);
                 }
                 

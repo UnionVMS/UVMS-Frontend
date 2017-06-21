@@ -15,37 +15,39 @@ angular.module('unionvmsWeb').filter('stPurposeCode', function(mdrCacheService) 
         '1': 'fa-ban',
         '3': 'fa-trash-o',
         '5': 'fa-retweet',
-        '9': 'fa-certificate'
+        '9': 'fa-plus-circle'
     };
     var isFinished = false;
     var isInvoked = false;
     
     function realFilter(code, isImage){
-        var rec = _.findWhere(cachedCodes, {code: code.toString()});
         var filtered;
-        if (isImage){
-            filtered = images[rec.code];
-        } else {
-            filtered = rec.text;
+        if (angular.isDefined(code)){
+            filtered = code;
+            var rec = _.findWhere(cachedCodes, {code: code.toString()});
+            if (angular.isDefined(rec)){
+                if (isImage){
+                    filtered = images[rec.code];
+                } else {
+                    filtered = rec.text;
+                }
+            }
         }
-        
         return filtered;
     }
     
     function convertCode(mdrCode, isImage){
-        if (!isFinished){
-            if (!isInvoked){
-                isInvoked = true;
-                mdrCacheService.getCodeList('flux_gp_purposecode').then(function(response){
-                    angular.forEach(response, function(item){
-                        cachedCodes.push({
-                            code: item.code,
-                            text: item.description
-                        });
+        if (!isFinished && !isInvoked){
+            isInvoked = true;
+            mdrCacheService.getCodeList('FLUX_GP_PURPOSE').then(function(response){
+                angular.forEach(response, function(item){
+                    cachedCodes.push({
+                        code: item.code,
+                        text: item.description
                     });
-                    isFinished = true;
-                }, cachedCodes);
-            }
+                });
+                isFinished = true;
+            }, cachedCodes);
             return;
         } else {
             return realFilter(mdrCode, isImage);

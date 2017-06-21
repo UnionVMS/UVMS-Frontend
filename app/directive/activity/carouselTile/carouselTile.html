@@ -1,7 +1,7 @@
 <fieldset class="col-md-12 fieldsetStyle carousel-tile">
 	<legend class="fieldsetLegendStyle">
 		<a>{{tileTitle}}</a>&nbsp;
-		<span uib-dropdown ng-if="ngModel.length > 1">
+		<span uib-dropdown ng-if="ngModel.length > 1 && displayTopNav">
 			<a href>
 				<i class="fa fa-caret-down" aria-hidden="true" uib-dropdown-toggle></i>
 			</a>
@@ -10,21 +10,15 @@
 					<a ng-click="setActiveItem($index)" ng-class="{'active-menu': isItemActive($index)}">{{item.type}}</a>
 				</li>
 			</ul>
-		</span>		
+		</span>
 	</legend>
-	<div uib-carousel ng-class="{'without-arrows': ngModel.length <= 1}" ng-if="ngModel.length > 0">
-		<div uib-slide ng-repeat="item in ngModel track by $index" active="item.active" index="$index">
+	<slick settings="slickConfig" ng-if="isLoaded">
+		<div ng-repeat="item in ngModel track by $index">
 			<div ng-include="templateUrl"></div>
 		</div>
-		<!--CAROUSEL NEXT/PREVIOUS BUTTONS-->
-        <a role="button" href class="left carousel-control">
-            <span aria-hidden="true" class="glyphicon glyphicon-chevron-left"></span>
-        </a>
-        <a role="button" href class="right carousel-control">
-            <span aria-hidden="true" class="glyphicon glyphicon-chevron-right"></span>
-        </a>
-	</div>
-	<div class="row no-data" ng-if="ngModel.length === 0">
+	</slick>
+	<div class="carousel-paginator" ng-if="ngModel.length > 1 && currentItem">{{ 'activity.carousel_paginator' | i18n:[currentItem, ngModel.length]}}</div>
+	<div class="row no-data" ng-if="!ngModel || ngModel.length === 0">
 		<div class="col-md-12">
 			<span>{{'activity.no_data' | i18n}}</span>
 		</div>

@@ -9,7 +9,7 @@ the hope that it will be useful, but WITHOUT ANY WARRANTY; without even the impl
 FITNESS FOR A PARTICULAR PURPOSE.  See the GNU General Public License for more details. You should have received a
 copy of the GNU General Public License along with the IFDM Suite. If not, see <http://www.gnu.org/licenses/>.
 */
-angular.module('unionvmsWeb').factory('Report',function(unitConversionService, userService) { //globalSettingsService,
+angular.module('unionvmsWeb').factory('Report',function(unitConversionService, userService, locale) { //globalSettingsService,
 	function Report(){
 	    this.id = undefined;
 	    this.name = undefined;
@@ -18,7 +18,7 @@ angular.module('unionvmsWeb').factory('Report',function(unitConversionService, u
 	    this.visibility = 'private';
 	    this.startDateTime = undefined;
 	    this.endDateTime = undefined;
-		//this.reportType = 'standard'; FIXME uncomment after release
+		this.reportType = 'standard';
 	    this.positionSelector = 'all';
 	    this.positionTypeSelector = 'positions';
 	    this.xValue = undefined;
@@ -39,8 +39,7 @@ angular.module('unionvmsWeb').factory('Report',function(unitConversionService, u
 	    };
 
 		this.hasFaFilter = false;
-		//FIXME uncomment after release
-		//this.faFilters = {};
+		this.faFilters = {};
 
 	    this.areas = [];
 	    
@@ -127,11 +126,10 @@ angular.module('unionvmsWeb').factory('Report',function(unitConversionService, u
 
 	        //Vessel filters
 	        report.vesselsSelection = filter.assets;
-
-	        //FIXME to uncomment after release
-//			if(angular.isDefined(data.reportType)){
-//				report.reportType = data.reportType;
-//			}
+	        
+			if(angular.isDefined(data.reportType)){
+				report.reportType = data.reportType;
+			}
 
 	        //VMS positions filters
 	        if (angular.isDefined(filter.vms) && angular.isDefined(filter.vms.vmsposition)){
@@ -160,24 +158,43 @@ angular.module('unionvmsWeb').factory('Report',function(unitConversionService, u
 	        }
 
 			//Fishing activity filters
-	        //FIXME uncomment after release
-//	        if(!angular.isDefined(filter.fa)){
-//				filter.fa = {};
-//			}
-//
-//			report.faFilters = filter.fa;
-//
-//	        if (!angular.equals({}, filter.fa)){
-//	            report.hasFaFilter = true;
-//	        }
-//
-//			if(!angular.isDefined(report.faFilters.weight)){
-//				report.faFilters.weight = {unit: 'kg'};
-//			}else if(!angular.isDefined(report.faFilters.weight.unit)){
-//				report.faFilters.weight.unit = 'kg';
-//			}
+	        if(!angular.isDefined(filter.fa)){
+				filter.fa = {};
+			}
+
+			report.faFilters = {};
+			angular.forEach(filter.fa, function(value,key){
+				if(key === 'weight'){
+					report.faFilters[key] = value;
+				}else{
+					report.faFilters[key] = value[0];
+				}
+			});
+
+	        if (!angular.equals({}, filter.fa)){
+	            report.hasFaFilter = true;
+	        }
+
+			if(!angular.isDefined(report.faFilters.weight)){
+				report.faFilters.weight = {unit: 'kg'};
+			}else if(!angular.isDefined(report.faFilters.weight.unit)){
+				report.faFilters.weight.unit = 'kg';
+			}
+
+			if(!angular.isDefined(filter.sort)){
+				filter.sort = {};
+			}
+
+			report.sortFilters = filter.sort;
 
 	        report.areas = filter.areas;
+
+			if(angular.isDefined(filter.criteria) && filter.criteria.length){
+				angular.forEach(filter.criteria, function(item){
+					item.text = locale.getString('spatial.criteria_' + item.code.toLowerCase());
+				});
+			}
+			report.sortFilters = filter.criteria;
 	        
 	        if (angular.isDefined(data.mapConfiguration)){
 	        	if(angular.isDefined(data.mapConfiguration.layerSettings) && angular.isDefined(data.mapConfiguration.layerSettings.areaLayers) && !_.isEmpty(data.mapConfiguration.layerSettings.areaLayers)){
@@ -250,20 +267,44 @@ angular.module('unionvmsWeb').factory('Report',function(unitConversionService, u
 		}
 
 		//Fishing activity filter
-		//FIXME uncomment after release
-//		var faFilters;
-//		if(this.hasFaFilter){
-//			faFilters = this.faFilters;
-//
-//			if(angular.isDefined(faFilters.weight) && (!angular.isDefined(faFilters.weight.min) || _.isNull(faFilters.weight.min)) &&
-//				(!angular.isDefined(faFilters.weight.max) || _.isNull(faFilters.weight.max))){
-//				delete faFilters.weight;
-//			}
-//
-//			if (_.isEmpty(faFilters)){
-//				faFilters = undefined;
-//			}
-//		}
+		var faFilters;
+		if(this.hasFaFilter){
+			if(_.keys(this.faFilters).length){
+				faFilters = {};
+				angular.forEach(this.faFilters, function(value,key){
+					if(key === 'weight' || key === 'id'){
+						faFilters[key] = value;
+					}else{
+						faFilters[key] = [value];
+					}
+				});
+
+				if(angular.isDefined(faFilters.weight) && (!angular.isDefined(faFilters.weight.min) || _.isNull(faFilters.weight.min)) &&
+					(!angular.isDefined(faFilters.weight.max) || _.isNull(faFilters.weight.max))){
+					delete faFilters.weight;
+				}
+			}else{
+				faFilters = undefined;
+			}
+		}
+
+		var criteria;
+		if(angular.isDefined(this.sortFilters) && this.sortFilters.length){
+			criteria = [];
+			angular.forEach(this.sortFilters, function(item){
+				var values;
+
+				if(!angular.isDefined(item.values)){
+					values = [item.code];
+				}else if(!_.isArray(item.values)){
+					values = [item.values];
+				}else{
+					values = item.values;
+				}
+
+				criteria.push({'code': item.code, 'values': values});
+			});
+		}
 
 	    var filter = {
 	        common: {
@@ -276,8 +317,9 @@ angular.module('unionvmsWeb').factory('Report',function(unitConversionService, u
 	        },
             assets: [],
             vms: vmsFilters,
-			//fa: faFilters, FIXME uncomment after release
-            areas: this.areas
+			fa: faFilters,
+            areas: this.areas,
+			criteria: criteria
 	    };
 
 	    if (angular.isDefined(this.vesselsSelection) && this.vesselsSelection.length){
@@ -288,26 +330,28 @@ angular.module('unionvmsWeb').factory('Report',function(unitConversionService, u
 	        id: this.id,
 	        name: this.name,
 	        desc: this.desc !== '' ? this.desc : undefined,
-			//reportType: this.reportType, FIXME uncomment after release
+			reportType: this.reportType,
 	        visibility: angular.isDefined(this.visibility) ? this.visibility : 'private',
-	        withMap: this.withMap,
+	        withMap: this.reportType === 'standard' ? this.withMap : false,
 	        filterExpression: filter
 	    };
 	    
-	    if(this.withMap === true){
-	        dto.mapConfiguration = this.mapConfiguration;
-	    }else{
-	    	if(angular.isDefined(this.mapConfiguration.spatialConnectId)){
-	    		dto.mapConfiguration = {'spatialConnectId': this.mapConfiguration.spatialConnectId};
-	    	}
-			if(angular.isDefined(this.mapConfiguration.visibilitySettings)){
-				if(angular.isDefined(dto.mapConfiguration)){
-					dto.mapConfiguration.visibilitySettings = this.mapConfiguration.visibilitySettings;
-				}else{
-	    			dto.mapConfiguration = {'visibilitySettings': this.mapConfiguration.visibilitySettings};
+		if(this.reportType === 'standard'){
+			if(this.withMap === true){
+				dto.mapConfiguration = this.mapConfiguration;
+			}else{
+				if(angular.isDefined(this.mapConfiguration.spatialConnectId)){
+					dto.mapConfiguration = {'spatialConnectId': this.mapConfiguration.spatialConnectId};
 				}
-	    	}
-	    }
+				if(angular.isDefined(this.mapConfiguration.visibilitySettings)){
+					if(angular.isDefined(dto.mapConfiguration)){
+						dto.mapConfiguration.visibilitySettings = this.mapConfiguration.visibilitySettings;
+					}else{
+						dto.mapConfiguration = {'visibilitySettings': this.mapConfiguration.visibilitySettings};
+					}
+				}
+			}
+		}
 	    
 	    if(angular.isDefined(this.additionalProperties)){
         	dto.additionalProperties = this.additionalProperties;
@@ -325,7 +369,7 @@ angular.module('unionvmsWeb').factory('Report',function(unitConversionService, u
 		
         report.name = this.name;
         report.desc = this.desc !== '' ? this.desc : undefined;
-		//report.reportType = this.reportType; FIXME uncomment after release
+		report.reportType = this.reportType;
         report.withMap = this.withMap;
         report.visibility = angular.isDefined(this.visibility) ? this.visibility : 'private';
         
@@ -412,42 +456,69 @@ angular.module('unionvmsWeb').factory('Report',function(unitConversionService, u
 		}
 
 		//Fishing activity filter
-		//FIXME uncomment after release
-//		if(this.hasFaFilter){
-//			report.filterExpression.fa = this.faFilters;
-//
-//			if(angular.isDefined(report.filterExpression.fa.weight) && (!angular.isDefined(report.filterExpression.fa.weight.min) || _.isNull(report.filterExpression.fa.weight.min)) &&
-//				(!angular.isDefined(report.filterExpression.fa.weight.max) || _.isNull(report.filterExpression.fa.weight.max))){
-//				delete report.filterExpression.fa.weight;
-//			}
-//
-//			if (_.isEmpty(report.filterExpression.fa)){
-//				report.filterExpression.fa = undefined;
-//			}
-//		}
+		if(this.hasFaFilter){
+			if(_.keys(this.faFilters).length){
+				report.filterExpression.fa = {};
+				angular.forEach(this.faFilters, function(value,key){
+					if(key === 'weight' || key === 'id'){
+						report.filterExpression.fa[key] = value;
+					}else{
+						report.filterExpression.fa[key] = [value];
+					}
+				});
 
-        if(this.withMap === true){
-        	report.mapConfiguration = {
-        		coordinatesFormat: this.mapConfiguration.coordinatesFormat,
-            	displayProjectionId: this.mapConfiguration.displayProjectionId,
-            	mapProjectionId: this.mapConfiguration.mapProjectionId,
-            	scaleBarUnits: this.mapConfiguration.scaleBarUnits,
-            	stylesSettings: this.mapConfiguration.stylesSettings,
-            	visibilitySettings: this.mapConfiguration.visibilitySettings,
-            	layerSettings: this.mapConfiguration.layerSettings
-            };
-        }else{
-        	if(angular.isDefined(this.mapConfiguration.spatialConnectId)){
-        		report.mapConfiguration = {'spatialConnectId': this.mapConfiguration.spatialConnectId};
-        	}
-			if(angular.isDefined(this.mapConfiguration.visibilitySettings)){
-				if(angular.isDefined(report.mapConfiguration)){
-					report.mapConfiguration.visibilitySettings = this.mapConfiguration.visibilitySettings;
-				}else{
-	    			report.mapConfiguration = {'visibilitySettings': this.mapConfiguration.visibilitySettings};
+				if(angular.isDefined(report.filterExpression.fa.weight) && (!angular.isDefined(report.filterExpression.fa.weight.min) || _.isNull(report.filterExpression.fa.weight.min)) &&
+					(!angular.isDefined(report.filterExpression.fa.weight.max) || _.isNull(report.filterExpression.fa.weight.max))){
+					delete report.filterExpression.fa.weight;
 				}
-	    	}
-	    }
+			}else{
+				report.filterExpression.fa = undefined;
+			}
+		}
+
+		var criteria;
+		if(angular.isDefined(this.sortFilters) && this.sortFilters.length){
+			criteria = [];
+			angular.forEach(this.sortFilters, function(item){
+				var values;
+
+				if(!angular.isDefined(item.values)){
+					values = [item.code];
+				}else if(!_.isArray(item.values)){
+					values = [item.values];
+				}else{
+					values = item.values;
+				}
+
+				criteria.push({'code': item.code, 'values': values});
+			});
+		}
+		report.filterExpression.criteria = criteria;
+
+		if(this.reportType === 'standard'){
+			if(this.withMap === true){
+				report.mapConfiguration = {
+					coordinatesFormat: this.mapConfiguration.coordinatesFormat,
+					displayProjectionId: this.mapConfiguration.displayProjectionId,
+					mapProjectionId: this.mapConfiguration.mapProjectionId,
+					scaleBarUnits: this.mapConfiguration.scaleBarUnits,
+					stylesSettings: this.mapConfiguration.stylesSettings,
+					visibilitySettings: this.mapConfiguration.visibilitySettings,
+					layerSettings: this.mapConfiguration.layerSettings
+				};
+			}else{
+				if(angular.isDefined(this.mapConfiguration.spatialConnectId)){
+					report.mapConfiguration = {'spatialConnectId': this.mapConfiguration.spatialConnectId};
+				}
+				if(angular.isDefined(this.mapConfiguration.visibilitySettings)){
+					if(angular.isDefined(report.mapConfiguration)){
+						report.mapConfiguration.visibilitySettings = this.mapConfiguration.visibilitySettings;
+					}else{
+						report.mapConfiguration = {'visibilitySettings': this.mapConfiguration.visibilitySettings};
+					}
+				}
+			}
+		}
         
         if(angular.isDefined(this.additionalProperties)){
         	report.additionalProperties = this.additionalProperties;

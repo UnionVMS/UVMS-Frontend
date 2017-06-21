@@ -20,13 +20,10 @@ copy of the GNU General Public License along with the IFDM Suite. If not, see <h
  * @description
  *  The controller for the fisihing activity reports table list
  */
-angular.module('unionvmsWeb').controller('ActivityreportslistCtrl',function($scope, activityService, visibilityService){
+angular.module('unionvmsWeb').controller('ActivityreportslistCtrl',function($scope, activityService, visibilityService, fishingActivityService){
     $scope.actServ = activityService;
+    $scope.faServ = fishingActivityService;
     $scope.attrVisibility = visibilityService;
-    
-    $scope.$watch(function(){return $scope.actServ.reportsList.hasError;}, function(newVal){
-        console.log('hasError: ' + newVal);
-    });
     
     /**
      * Pipe function used in the smartTable in order to support server side pagination and sorting
@@ -35,22 +32,34 @@ angular.module('unionvmsWeb').controller('ActivityreportslistCtrl',function($sco
      * @public
      * @alias callServer
      */
-    $scope.callServer = function(tableState){
+    $scope.callServer = function(tableState, ctrl){
+        $scope.actServ.reportsList.stCtrl = ctrl;
         $scope.actServ.reportsList.tableState = tableState;
-        $scope.actServ.reportsList.isLoading = true;
         
-        var searchField, sortOrder; 
-        if (angular.isDefined(tableState.sort.predicate)){
-            searchField = getTruePredicate(tableState.sort.predicate);
-            sortOrder = tableState.sort.reverse;
+        if (!$scope.actServ.reportsList.isLoading && angular.isDefined($scope.actServ.reportsList.searchObject.multipleCriteria) && !$scope.actServ.isTableLoaded){
+            $scope.actServ.reportsList.isLoading = true;
+            
+            var searchField, sortOrder; 
+            if (angular.isDefined(tableState.sort.predicate)){
+                searchField = getTruePredicate(tableState.sort.predicate);
+                sortOrder = tableState.sort.reverse;
+            }
+            
+            $scope.actServ.reportsList.sorting = {
+                sortBy: searchField,
+                reversed: sortOrder
+            };
+            
+            $scope.actServ.getActivityList(callServerCallback, tableState);
+        } else {
+            if (!angular.isDefined(tableState.pagination.numberOfPages) || $scope.actServ.reportsList.fromForm){
+                callServerCallback(tableState);
+                $scope.actServ.reportsList.fromForm = false;
+            } else {
+                $scope.actServ.isTableLoaded = false;
+                ctrl.pipe();
+            }
         }
-        
-        $scope.actServ.reportsList.sorting = {
-            sortBy: searchField,
-            reversed: sortOrder
-        };
-        
-        $scope.actServ.getActivityList(callServerCallback, tableState);
     };
     
     /**
@@ -110,8 +119,11 @@ angular.module('unionvmsWeb').controller('ActivityreportslistCtrl',function($sco
      * @param {Number} idx - The index of the activity record to use to fetch the detail data
      */
     $scope.openDetails = function(idx){
-        //TODO fetch the data and load the partial
-        $scope.actServ.overview = $scope.actServ.displayedActivities[idx];
+        $scope.actServ.overview = $scope.actServ.displayedActivities[idx]; //TODO check if we need this
+        $scope.faServ.id = $scope.actServ.displayedActivities[idx].fishingActivityId;
+        $scope.faServ.activityType = $scope.actServ.displayedActivities[idx].activityType.toLowerCase();
+        $scope.faServ.documentType = $scope.actServ.displayedActivities[idx].FAReportType.toLowerCase();
+        
         $scope.goToView(3);
     };
 });

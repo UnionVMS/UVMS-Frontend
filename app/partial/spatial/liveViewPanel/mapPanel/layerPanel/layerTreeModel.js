@@ -531,10 +531,9 @@ angular.module('unionvmsWeb').factory('TreeModel',function(locale, mapService, u
                 children: vectorNodes
             };
             finalNodes.push(node);
-            //FIXME uncomment after release
-//            if (data.activities.features.length > 0){
-//                finalNodes.push(buildVectorNodes('activities', data.activities));
-//            }
+            if (data.activities.features.length > 0){
+                finalNodes.push(buildVectorNodes('activities', data.activities));
+            }
             
             return finalNodes;
 	    }

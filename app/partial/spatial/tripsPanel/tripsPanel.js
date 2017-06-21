@@ -21,10 +21,11 @@ copy of the GNU General Public License along with the IFDM Suite. If not, see <h
  * @description
  *  The controller for the trip summary tab  
  */
-angular.module('unionvmsWeb').controller('TripspanelCtrl', function ($scope, genericMapService, tripSummaryService, spatialConfigAlertService, Trip) {
+angular.module('unionvmsWeb').controller('TripspanelCtrl', function ($scope, genericMapService, tripSummaryService, spatialConfigAlertService, Trip, fishingActivityService) {
 
     $scope.alert = spatialConfigAlertService;
     $scope.tripSummServ = tripSummaryService;
+    $scope.faServ = fishingActivityService;
 
     $scope.tripSummServ.resetMapConfigs();
 
@@ -51,7 +52,7 @@ angular.module('unionvmsWeb').controller('TripspanelCtrl', function ($scope, gen
     $scope.closeTab = function (index) {
         $scope.tripSummServ.tabs.splice(index, 1);
         if ($scope.tripSummServ.tabs.length < 1) {
-            $scope.quitTripSummary();
+            $scope.navigateBack();
         }
     };
 
@@ -61,11 +62,11 @@ angular.module('unionvmsWeb').controller('TripspanelCtrl', function ($scope, gen
      * @memberof tripSummaryService
      * @public
      * @alias initializeTrip
-     * @param {Number} index - The index of the tab to be initialized
+     * @param {String} tripId - The trip id
      */
-    $scope.tripSummServ.initializeTrip = function (index) {
-        if (angular.isDefined($scope.tripSummServ.tabs[index])) {
-            $scope.tripSummServ.trip = new Trip($scope.tripSummServ.tabs[index].title);
+    $scope.tripSummServ.initializeTrip = function (tripId) {
+        if (angular.isDefined(tripId)) {
+            $scope.tripSummServ.trip = new Trip(tripId);
             $scope.trip = $scope.tripSummServ.trip;
         }
     };
@@ -75,9 +76,9 @@ angular.module('unionvmsWeb').controller('TripspanelCtrl', function ($scope, gen
      * 
      * @memberof TripspanelCtrl
      * @public
-     * @alias quitTripSummary
+     * @alias navigateBack
      */
-    $scope.quitTripSummary = function () {
+    $scope.navigateBack = function () {
         var currentView = $scope.repNav.getCurrentView();
         if(currentView === 'tripSummary'){
             $scope.tripSummServ.tabs.splice(0, $scope.tripSummServ.tabs.length);
@@ -86,5 +87,4 @@ angular.module('unionvmsWeb').controller('TripspanelCtrl', function ($scope, gen
             $scope.repNav.goToPreviousView();
         }
     };
-
 });

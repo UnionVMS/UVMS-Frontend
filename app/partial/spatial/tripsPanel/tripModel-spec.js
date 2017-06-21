@@ -212,6 +212,29 @@ describe('tripModel', function() {
       noOfDeletions: 0,
       noOfCancellations: 0
     };
+    
+    var mapData = {
+        type: "FeatureCollection",
+        features: [
+            {
+                type: "Feature",
+                geometry: {
+                    type: "MultiPoint",
+                    coordinates: [
+                        [
+                            15.86,
+                            55.95
+                        ],
+                        [
+                            17.66,
+                            56.76
+                        ]
+                    ]
+                },
+                properties: {}
+            }
+        ]
+    };
 
 
     var unitConvServSpy;
@@ -266,12 +289,12 @@ describe('tripModel', function() {
       var trip = new Trip(tripId);
       expect(trip.id).toEqual(tripId);
       
-      trip.fromJson('vessel',vesselData);
+      /*trip.fromJson('vessel',vesselData);
       var tripVessel = angular.copy(vesselData);
 		  delete tripVessel.contactPersons;
       expect(trip.tripVessel).toEqual(tripVessel);
 
-      expect(trip.tripRoles.length).toEqual(vesselData.contactPersons.length);
+      expect(trip.tripRoles.length).toEqual(vesselData.contactPersons.length);*/
 
       trip.fromJson('cronology',cronologyData);
       expect(trip.cronology.previousTrips).toEqual(cronologyData.previousTrips.reverse());
@@ -295,6 +318,9 @@ describe('tripModel', function() {
       angular.forEach(trip.activityReports,function(report,repKey){
         expect(report.nodes.length).toEqual(reportsData.activityReports[repKey].length);
       });
+      
+      trip.fromJson('mapData', mapData);
+      expect(trip.mapData).toEqual(mapData);
 
     }));
 

@@ -1,0 +1,35 @@
+<!--
+Developed with the contribution of the European Commission - Directorate General for Maritime Affairs and Fisheries
+© European Union, 2015-2016.
+
+This file is part of the Integrated Fisheries Data Management (IFDM) Suite. The IFDM Suite is free software: you can
+redistribute it and/or modify it under the terms of the GNU General Public License as published by the
+Free Software Foundation, either version 3 of the License, or any later version. The IFDM Suite is distributed in
+the hope that it will be useful, but WITHOUT ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or
+FITNESS FOR A PARTICULAR PURPOSE.  See the GNU General Public License for more details. You should have received a
+copy of the GNU General Public License along with the IFDM Suite. If not, see <http://www.gnu.org/licenses/>.
+-->
+<div class="col-md-12 arrival-panel">
+   <div class="row activity-summary-row trip-overview-container">
+		<trip-overview-panel class="col-md-12 summary-section" trip="faServ.activityData.tripDetails"></trip-overview-panel>
+	</div>
+	<div class="col-md-12 main-content">
+		<a class="btn-trip-quit" title="{{'activity.trip_summary_quit_trip_detail' | i18n }}" ng-click="faServ.quitFaView()" ng-if="srcTab === 'reports'"><i class="fa fa-share-square-o"></i></a>
+		<div class="row title">
+			<span>{{'activity.fa_report_document_type_notification_of' | i18n}}</span>
+            <span ng-class="{useColon: faServ.isCorrection}">{{'activity.notification_arrival_title' | i18n}}</span>
+            <span class="operationType" ng-if="faServ.isCorrection">{{'activity.optype_correction' | i18n}}</span>
+		</div>
+		<div class="row activity-summary-row">
+			<clock-panel class="col-md-2" clock-panal-data="data" fa-type="fa_type_arrival"></clock-panel>
+			<location-tile class="col-md-4 summary-section" is-clickable="faServ.isLocationClickable()" field-title="{{'activity.activity_location_port_arrival' | i18n}}" location-details="faServ.activityData.locations" click-callback="faServ.locationClickCallback()"></location-tile>
+			<fa-details-panel class="col-md-6 summary-section" ng-model="faServ.activityData.reportDetails"></fa-details-panel>
+		</div>
+		<div class="row activity-summary-row">
+			<catch-tile class="col-md-12 summary-section" ng-model="faServ.activityData.catches" tile-title="{{'activity.catch_details_catches_table' | i18n}}" is-location-clickable="faServ.isLocationClickable()" buffer-distance="5000" click-callback="faServ.locationClickCallback()"></catch-tile>
+		</div>
+		<div class="row activity-summary-row" ng-if="faServ.activityData.processingProducts && faServ.activityData.processingProducts.length > 0">
+			<product-processing-tile class="col-md-12 summary-section" src-data="faServ.activityData.processingProducts" tile-title="{{'activity.departure_processing_product' | i18n}}"></product-processing-tile>
+		</div> 
+	</div>
+</div>

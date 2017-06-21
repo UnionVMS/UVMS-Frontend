@@ -26,7 +26,7 @@ copy of the GNU General Public License along with the IFDM Suite. If not, see <h
  * @description
  *  A model to store all the data related to a trip
  */
-angular.module('unionvmsWeb').factory('Trip',function(locale,unitConversionService) {
+angular.module('unionvmsWeb').factory('Trip',function(locale,unitConversionService,tripReportsTimeline,fishingActivityService) {
 
     /**
      * Trip constructor
@@ -36,16 +36,18 @@ angular.module('unionvmsWeb').factory('Trip',function(locale,unitConversionServi
 	 * @alias Trip
      * @param {Number} id - current trip id
      */
-	function Trip(id){
-		this.id = id;
-	    this.overview = undefined;
-		this.reports = undefined;
-		this.tripVessel = undefined;
-		this.tripRoles = undefined;
-		this.cronology = undefined;
-		this.catchDetails = undefined;
-		this.messageCount = undefined;
-	}
+    function Trip(id){
+        this.id = id;
+        this.overview = undefined;
+        this.reports = undefined;
+        this.tripVessel = undefined;
+        this.tripRoles = undefined;
+        this.cronology = undefined;
+        this.catchDetails = undefined;
+        this.messageCount = undefined;
+        this.mapData = undefined;
+        this.specieColor = undefined;
+    }
 
     /**
      * Load the model with the trip data
@@ -56,25 +58,40 @@ angular.module('unionvmsWeb').factory('Trip',function(locale,unitConversionServi
      * @param {String} type - current trip object
      * @param {Object} data - data related to the trip
      */
-	Trip.prototype.fromJson = function(type,data){
-		switch(type){
-			case 'reports':
-				loadReports(this,data);
-				break;
-			case 'vessel':
-				loadVesselRoles(this,data);
-				break;
-			case 'cronology':
-				loadCronology(this,data);
-				break;
-			case 'catch':
+    Trip.prototype.fromJson = function(type,data){
+        switch(type){
+            case 'reports':
+                loadReports(this,data);
+                break;
+            case 'vessel':
+                loadVesselRoles(this,data);
+                break;
+            case 'cronology':
+                loadCronology(this,data);
+                break;
+            case 'catch':
                 loadCatch(this,data);
-				break;
-			case 'messageCount':
-				this.messageCount = data;
-				break;
-		}
-	};
+                break;
+            case 'messageCount':
+                this.messageCount = data;
+                break;
+            case 'mapData':
+                loadMapData(this, data);
+                break;           
+        }
+    };
+
+	/**
+	 * Load the map data of a trip into the model
+	 * 
+	 * @memberof Trip
+	 * @private
+	 * @param {Object} self - current trip object
+     * @param {Object} data - reports and trip overview data
+	 */
+    var loadMapData = function(self, data){
+        self.mapData = data;
+    };
 
     /**
      * Load the trip overview and the report messages into the model
@@ -84,11 +101,10 @@ angular.module('unionvmsWeb').factory('Trip',function(locale,unitConversionServi
      * @param {Object} self - current trip object
      * @param {Object} data - reports and trip overview data
      */
-	var loadReports = function(self,data){
+    var loadReports = function(self,data){
         loadOverview(self,data.summary);
-		//TODO MAP geometries
-		loadReportMessages(self,data.activityReports); 
-	};
+        loadReportMessages(self,data.activityReports);
+    };
 
     /**
      * Load the trip overview into the model
@@ -118,47 +134,78 @@ angular.module('unionvmsWeb').factory('Trip',function(locale,unitConversionServi
      * 
      * @memberof Trip
      * @private
+     * @param {Object} node - current node
+     */
+    var loadActivityReportItem = function(node){
+        var reportItem = {};
+        reportItem.srcType = node.activityType;
+
+        reportItem.type = (node.correction ? locale.getString('activity.fa_report_document_type_correction') + ': ' : '') + locale.getString('activity.activity_type_' + node.activityType.toLowerCase()) + ' (' + locale.getString('activity.fa_report_document_type_' + node.faReportDocumentType.toLowerCase()) + ')';
+
+        reportItem.documentType = node.faReportDocumentType.toLowerCase();
+
+        reportItem.date = getReportDate(node);
+
+        if(angular.isDefined(node.locations) && node.locations.length > 0){
+            reportItem.location = '';
+            angular.forEach(node.locations,function(location){
+                reportItem.location += location;
+            });
+        }
+
+        reportItem.reason = node.reason;
+        reportItem.remarks = getRemarks(node);
+
+        reportItem.corrections = node.correction;
+        reportItem.detail = true;
+
+        reportItem.id = node.fishingActivityId;
+        reportItem.faUniqueReportID = node.faUniqueReportID;
+
+        if(angular.isDefined(node.faReferenceID)){
+            var mainNode = _.find(this, function(rep){
+                return rep.faUniqueReportID === node.faReferenceID;
+            });
+            
+            mainNode.nodes = mainNode.nodes || [];
+            mainNode.nodes.push(reportItem);
+        }else{
+            this.push(reportItem);
+        }
+    };
+
+    /**
+     * Load the report messages into the model
+     * 
+     * @memberof Trip
+     * @private
      * @param {Object} self - current trip object
      * @param {Object} activityReports - activity reports data
      */
-	var loadReportMessages = function(self,activityReports){
+    var loadReportMessages = function(self,activityReports){
+        var reports = [];
         self.reports = [];
 
-        //one main node per activity report
-        angular.forEach(activityReports,function(report){
-            var reportItem = {};
-            reportItem.type = locale.getString('activity.activity_type_' + report.activityType.toLowerCase());
-            reportItem.nodes = [];
+        var mainNodes = _.filter(activityReports, function(rep){ return rep.faReferenceID === undefined; });
+        var subNodes = _.filter(activityReports, function(rep){ return rep.faReferenceID !== undefined; });
 
-            if(!angular.isDefined(report.delimitedPeriod) || report.delimitedPeriod.length === 0){
-                report.delimitedPeriod = [{}];
+        angular.forEach(mainNodes,loadActivityReportItem,reports);
+        reports = _.sortBy(reports, function(node){ return moment(node.date).unix(); });
+
+        angular.forEach(subNodes,loadActivityReportItem,reports);
+
+        angular.forEach(reports,function(rep){
+            if(angular.isDefined(rep.nodes)){
+                rep.correction = _.where(rep.nodes, {corrections: true}).length ? true : false;
+                rep.nodes = _.sortBy(rep.nodes, function(node){ return moment(node.date).unix(); });
+                rep.nodes = rep.nodes.reverse();
             }
 
-            //one sub node per period
-            angular.forEach(report.delimitedPeriod,function(subreport){
-                var subreportItem = {};
-
-                subreportItem.type = (report.correction ? locale.getString('fa_report_document_type_correction') + ': ' : '') + locale.getString('activity.activity_type_' + report.activityType.toLowerCase()) + ' (' + locale.getString('activity.fa_report_document_type_' + report.faReportDocumentType.toLowerCase()) + ')';
-
-                subreportItem.date = getReportDate(report.faReportAcceptedDateTime,subreport.startDate,subreport.endDate);
-
-                if(angular.isDefined(report.locations) && report.locations.length > 0){
-                    subreportItem.location = '';
-                    angular.forEach(report.locations,function(location){
-                        subreportItem.location += location;
-                    });
-                }
-                subreportItem.reason = locale.getString('activity.report_reason_' + report.reason.toLowerCase());
-                subreportItem.remarks = getRemarks(report);
-
-                subreportItem.corrections = report.correction;
-                subreportItem.detail = true;
-                
-                reportItem.nodes.push(subreportItem);
-            });
-
-            self.reports.push(reportItem);
+            //FIXME need to change tripReportsTimeline to navigate in 2 levels of reports
+            tripReportsTimeline.reports.push(rep);
         });
+
+        self.reports = reports;
     };
 
     /**
@@ -168,7 +215,7 @@ angular.module('unionvmsWeb').factory('Trip',function(locale,unitConversionServi
      * @private
      * @param {Object} report - report message
      */
-	var getRemarks = function(report){
+    var getRemarks = function(report){
         var remarks = '';
 
         if(report.activityType === 'DEPARTURE' || report.activityType === 'FISHING_OPERATION'){
@@ -179,6 +226,7 @@ angular.module('unionvmsWeb').factory('Trip',function(locale,unitConversionServi
             remarks = unitConversionService.date.convertToUserFormat(report.faReportAcceptedDateTime);
         }
 
+        //FIXME This needs to be translatable, check with backend
         switch(report.activityType){
             case 'DEPARTURE':
                 remarks += ' (gear)';
@@ -187,11 +235,7 @@ angular.module('unionvmsWeb').factory('Trip',function(locale,unitConversionServi
                 remarks += ' (gear used)';
                 break;
             case 'ARRIVAL':
-                if(report.faReportDocumentType === 'DECLARATION'){
-                    remarks += ' (est. time landing)';
-                }else if(report.faReportDocumentType === 'NOTIFICATION'){
-                    remarks += ' (gear used)';
-                }
+                remarks += ' (est. time of arrival)';
                 break;
             case 'LANDING':
                 remarks += ' (end time landing)';
@@ -222,12 +266,31 @@ angular.module('unionvmsWeb').factory('Trip',function(locale,unitConversionServi
      * @param {String} startDate - report message start date time
      * @param {String} endDate - report message end date time
      */
-    var getReportDate = function(acceptedDateTime,startDate,endDate){
+    var getReportDate = function(node){
         var date;
-        if(angular.isDefined(startDate) && angular.isDefined(endDate)){
+
+        if(node.faReportDocumentType.toLowerCase() === 'declaration'){
+            if(node.occurence){
+                date = unitConversionService.date.convertToUserFormat(node.occurence);
+            }else if(node.delimitedPeriod && node.delimitedPeriod.length){
+                if(node.delimitedPeriod[0].startDate){
+                    date = unitConversionService.date.convertToUserFormat(node.delimitedPeriod[0].startDate);
+                }else if(node.delimitedPeriod[0].endDate){
+                    date = unitConversionService.date.convertToUserFormat(node.delimitedPeriod[0].endDate);
+                }else{
+                    date = unitConversionService.date.convertToUserFormat(node.faReportAcceptedDateTime);
+                }
+            }else{
+                date = unitConversionService.date.convertToUserFormat(node.faReportAcceptedDateTime);
+            }
+        }else{
+            date = unitConversionService.date.convertToUserFormat(node.faReportAcceptedDateTime);
+        }
+
+        /*if(angular.isDefined(startDate) && angular.isDefined(endDate)){
             startDate = unitConversionService.date.convertToUserFormat(startDate);
             endDate = unitConversionService.date.convertToUserFormat(endDate);
-            
+
             if(startDate === endDate){
                 date = startDate;
             }else{
@@ -243,9 +306,36 @@ angular.module('unionvmsWeb').factory('Trip',function(locale,unitConversionServi
         }else{
             acceptedDateTime = unitConversionService.date.convertToUserFormat(acceptedDateTime);
             date = acceptedDateTime;
-        }
+        }*/
 
         return date;
+    };
+
+    /**
+     * Adds extra attributes to attrOrder
+     * 
+     * @memberof Trip
+     * @private
+     * @param {Object} data - A reference to the data to be loaded in the attrOrder
+     * @param {Array} attrOrder - Array with the attribute order
+     * @param {Number} attrIdx - Current index in the attrOrder
+     * @alias addExtraDetails
+     * @returns {Object} data to be displayed in the fa details panel
+     */
+    var addExtraDetails = function(data,attrOrder,attrIdx){
+        var finalData = {};
+        angular.forEach(data, function(value){
+            finalData[value.schemeId] = value.id;
+
+            attrOrder.push({
+                idx: attrIdx,
+                id: value.schemeId,
+                type: 'string'
+            });
+            attrIdx++;
+        });
+
+        return finalData;
     };
 
     /**
@@ -256,15 +346,53 @@ angular.module('unionvmsWeb').factory('Trip',function(locale,unitConversionServi
      * @param {Object} self - current trip object
      * @param {Object} data - vessel and roles data
      */
-	var loadVesselRoles = function(self,data){
-		self.tripVessel = angular.copy(data);
-		delete self.tripVessel.contactPersons;
+    var loadVesselRoles = function(self,data){
 
-		angular.forEach(data.contactPersons,function(value, key) {
-			value.type = value.title + ' ' + value.givenName + ' ' + value.middleName + ' ' + value.familyName;
-		});
-		self.tripRoles = data.contactPersons;
-	};
+        var vesselAttrOrder = [
+            {
+                id: 'name',
+                type: 'string'
+            },
+            {
+                id: 'exMark',
+                type: 'string'
+            },
+            {
+                id: 'country',
+                type: 'string'
+            }
+        ];
+
+        var vessel = angular.copy(data);
+        delete vessel.contactPersons;
+        
+        vessel.vesselOverview = {};
+
+        var attrOrder = angular.copy(vesselAttrOrder);
+        var vesselIdx = attrOrder.length;
+
+        angular.forEach(vessel,function(prop,propName){
+            if(!_.isObject(prop)){
+                vessel.vesselOverview[propName] = prop;
+                delete vessel[propName];
+            }
+        });
+
+        if(angular.isDefined(vessel.vesselIds) && vessel.vesselIds.length){
+            _.extend(vessel.vesselOverview,addExtraDetails(vessel.vesselIds,attrOrder,vesselIdx));
+        }
+
+        self.tripVessel = {};
+        self.tripVessel.vesselOverview = vessel.vesselOverview;
+
+        self.tripVessel.vesselOverview = fishingActivityService.loadFaDetails(self.tripVessel.vesselOverview, attrOrder);
+
+
+        angular.forEach(data.contactPersons,function(value, key) {
+            value.type = value.title + ' ' + value.givenName + ' ' + value.middleName + ' ' + value.familyName;
+        });
+        self.tripRoles = data.contactPersons;
+    };
 
     /**
      * Load the trip cronology into the model
@@ -274,16 +402,40 @@ angular.module('unionvmsWeb').factory('Trip',function(locale,unitConversionServi
      * @param {Object} self - current trip object
      * @param {Object} data - cronology data
      */
-	var loadCronology = function(self,data){
-		if(angular.isDefined(data.previousTrips) && data.previousTrips.length > 0){
-			data.previousTrips = data.previousTrips.reverse();
-		}
-		if(angular.isDefined(data.nextTrips) && data.nextTrips.length > 0){
-			data.nextTrips = data.nextTrips.reverse();
-		}
+    var loadCronology = function(self,data){
+        if(angular.isDefined(data.previousTrips) && data.previousTrips.length > 0){
+            data.previousTrips = data.previousTrips.reverse();
+        }
+        if(angular.isDefined(data.nextTrips) && data.nextTrips.length > 0){
+            data.nextTrips = data.nextTrips.reverse();
+        }
 
-		self.cronology = data;
-	};
+        self.cronology = data;
+    };
+
+    /**
+     * generates colors for species
+     * 
+     * @memberof Trip
+     * @private
+     * @param {Object} catchData - catch details data
+     */
+    var generateSpecieColors = function(catchData) {
+        var specieColors = [];
+        var specieList = _.unique(_.pluck(_.flatten(_.pluck(catchData, 'speciesList')), 'speciesCode'));
+
+        if (angular.isDefined(specieList) && specieList.length > 0) {
+            var colors = palette('tol-rainbow', specieList.length);
+            angular.forEach(specieList, function(value, key) {
+                specieColors.push({
+                    code: value,
+                    color: colors[key]
+                });
+            });           
+            return specieColors;
+        }
+    };
+
 
     /**
      * Load the catch details into the model
@@ -294,22 +446,28 @@ angular.module('unionvmsWeb').factory('Trip',function(locale,unitConversionServi
      * @param {Object} data - catch details data
      */
     var loadCatch = function(self,data){
+        
+       self.specieColor = generateSpecieColors(data);
+        //if has speciesList in the child properties
+        if(_.without(_.pluck(data, 'speciesList'),undefined).length > 0){
+            angular.forEach(data, function(type,typeName){
+                type.title = locale.getString('activity.catch_panel_title_' + typeName);
+                type.caption = locale.getString('activity.catch_panel_caption_' + typeName) + ' ' + type.total + ' kg';
 
-        angular.forEach(data, function(type,typeName){
-            type.title = locale.getString('activity.catch_panel_title_' + typeName);
-            type.caption = locale.getString('activity.catch_panel_caption_' + typeName) + ' ' + type.total + ' kg';
+                if (angular.isDefined(type.speciesList) && type.speciesList.length > 0){
 
-            if(angular.isDefined(type.speciesList) && type.speciesList.length > 0){
-                var colors = palette('tol-rainbow', type.speciesList.length);
-                angular.forEach(type.speciesList, function(value,key){
-                    type.speciesList[key].color = '#' + colors[key];
-                    type.speciesList[key].tableColor = {'background-color': tinycolor('#' + colors[key]).setAlpha(0.7).toRgbString()};
-                });
-            }
-        });
+                    angular.forEach(type.speciesList, function(value, key) {
+                        var specieColor = _.where(self.specieColor, {code: value.speciesCode})[0].color;
+                        type.speciesList[key].color = '#' + specieColor;
+                        type.speciesList[key].tableColor = {'background-color': tinycolor('#' + specieColor).setAlpha(0.7).toRgbString()};
+                    });
+                }
+            });
+            self.catchDetails = data;
+        }else{
+            self.catchDetails = undefined;
+        }
+    };
 
-		self.catchDetails = data;
-	};
-
-	return Trip;
+    return Trip;
 });

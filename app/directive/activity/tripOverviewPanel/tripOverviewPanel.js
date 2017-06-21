@@ -21,12 +21,25 @@ copy of the GNU General Public License along with the IFDM Suite. If not, see <h
 angular.module('unionvmsWeb').directive('tripOverviewPanel', function () {
     return {
         restrict: 'E',
-        replace: true,
+        replace: false,
         scope: {
             trip: '='
         },
         templateUrl: 'directive/activity/tripOverviewPanel/tripOverviewPanel.html',
+        link: function(scope, element, attrs, fn) {
+            scope.isVesselTileVisible = false;
 
+            /**
+             * Show/hide vessel details
+             * 
+             * @memberof tripOverviewPanel
+             * @private
+             * @alias toggleVesselTile
+             */
+            scope.toggleVesselTile = function(){
+                scope.isVesselTileVisible = !scope.isVesselTileVisible;
+            };
+        }
     };
 });
 

@@ -7,7 +7,7 @@
     </parent>
     <groupId>eu.europa.ec.fisheries.uvms</groupId>
     <artifactId>unionvms-web</artifactId>
-    <version>3.0.4</version>
+    <version>3.0.5-SNAPSHOT</version>
     <name>unionvms-web</name>
     <packaging>war</packaging>
 
@@ -25,7 +25,13 @@
         <uvms.rest.base.port>9001</uvms.rest.base.port>
         <web.app.context.path>unionvms</web.app.context.path>
         <NODE_ENV>--max_old_space_size=256</NODE_ENV>
-
+        <sonar.organization>uvms-github</sonar.organization>
+		<sonar.sources>app</sonar.sources>
+		<sonar.tests>app</sonar.tests>
+		<sonar.test.inclusions>**/*-spec.js</sonar.test.inclusions>
+		<sonar.exclusions>dist/**,app/assets/spatial/**,**/*-spec.js</sonar.exclusions>
+		<sonar.javascript.jstest.reportsPath>testResults</sonar.javascript.jstest.reportsPath>
+		<sonar.javascript.lcov.reportPaths>testResults/controllers/coverage/PhantomJS 2.1.1 (Linux 0.0.0)/lcov.info,testResults/directives/coverage/PhantomJS 2.1.1 (Linux 0.0.0)/lcov.info,testResults/filters/coverage/PhantomJS 2.1.1 (Linux 0.0.0)/lcov.info,testResults/services/coverage/PhantomJS 2.1.1 (Linux 0.0.0)/lcov.info</sonar.javascript.lcov.reportPaths>
         <scm.connection>scm:git:https://github.com/UnionVMS/UVMS-Frontend.git</scm.connection>
     </properties>
 
@@ -339,7 +345,7 @@
 
     <scm>
         <connection>${scm.connection}</connection>
-        <tag>unionvms-web-3.0.4</tag>
+        <tag>HEAD</tag>
     </scm>
 
 
@@ -347,12 +353,12 @@
         <repository>
             <id>focus-releases</id>
             <name>UnionVms Repository</name>
-            <url>http://localhost:8081/nexus/repository/releases/</url>
+            <url>http://nexus.focus.fish/nexus/repository/releases/</url>
         </repository>
         <snapshotRepository>
             <id>focus-snapshots</id>
             <name>UnionVms Snapshot Repository</name>
-            <url>http://localhost:8081/nexus/repository/snapshots/</url>
+            <url>http://nexus.focus.fish/nexus/repository/snapshots/</url>
         </snapshotRepository>
     </distributionManagement>
 </project>

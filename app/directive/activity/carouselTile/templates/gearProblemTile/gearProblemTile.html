@@ -1,0 +1,17 @@
+<div class="col-md-12 gear-problem-tile" ng-controller="GearproblemtileCtrl">
+	<div class="row">
+		<div class="col-md-12 item-container" ng-if="item.type">
+			<span class="labels">{{'activity.type' | i18n}}</span>
+			<span>{{item.type}} <i class="fa fa-info-circle typeDesc-{{item.type}}" ng-if="item.typeDesc" ng-mouseover="displayDetailsTip(item, 'typeDesc')"></i></span>
+		</div>
+		<div class="col-md-12 item-container" ng-if="item.nrOfGears">
+			<span class="labels">{{'activity.fa_details_item_numberofgears' | i18n}}</span>
+			<span>{{item.nrOfGears}}</span>
+		</div>
+		<div class="col-md-12 item-container" ng-if="item.recoveryMeasure">
+			<span class="labels">{{'activity.gear_shot_retrieval_recovery' | i18n}}</span>
+			<span>{{item.recoveryMeasure}} <i class="fa fa-info-circle recoveryDesc-{{item.type}}" ng-if="item.recoveryDesc" ng-mouseover="displayDetailsTip(item, 'recoveryDesc')"></i></span>
+		</div>
+		<location-tile ng-if="item.location" class="col-md-12 with-margin-top" location-details="item.location" field-title="{{'activity.locations' | i18n}}" is-clickable="faServ.isLocationClickable()"></location-tile>
+	</div>
+</div>

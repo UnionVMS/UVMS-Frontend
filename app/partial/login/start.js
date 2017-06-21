@@ -16,7 +16,7 @@ angular.module('unionvmsWeb').controller('StartCtrl', function($scope, $log, $st
     $state.go(homeState, {}, {location: 'replace'});
 });
 
-angular.module('unionvmsWeb').factory('startPageService',function($log, globalSettingsService, userService) {
+angular.module('unionvmsWeb').factory('startPageService',function($log, globalSettingsService, userService, userFeatureAccess) {
 
     var unionVMSApplication = 'Union-VMS';
     var checkAccess = function(module, feature) {
@@ -37,46 +37,6 @@ angular.module('unionvmsWeb').factory('startPageService',function($log, globalSe
         reporting : ['app.reporting'],
     };
 
-    //Features for show usm page
-    var userFeatures = [
-        'activateRoles',
-        'activateScopes',
-        'activateUsers',
-        'assignRoles',
-        'assignScopes',
-        'configurePolicies',
-        'copyUserProfile',
-        'manageApplications',
-        'manageEndpoints',
-        'manageOrganisations',
-        'managePersons',
-        'manageRoles',
-        'manageScopes',
-        'manageUserContexts',
-        'manageUserPreferences',
-        'manageUsers',
-        'viewApplications',
-        'viewEndpointsDetails',
-        'viewOrganisationDetails',
-        'viewOrganisations',
-        'viewPersonDetails',
-        'viewRoles',
-        'viewScopes',
-        'viewUserContexts',
-        'viewUserPreferences',
-        'viewUsers',
-    ];
-
-    var accessToAnyFeatureInList = function(application, featureList){
-        var access = false;
-        $.each(featureList, function(index, feature){
-            if(checkAccess(application, feature)){
-                access = true;
-                return false;
-            }
-        });
-        return access;
-    };
     var userHasAccessToState = function(state){
         var accessToAssetsAndTerminals = checkAccess(unionVMSApplication, 'viewVesselsAndMobileTerminals');
 
@@ -98,7 +58,7 @@ angular.module('unionvmsWeb').factory('startPageService',function($log, globalSe
             case 'app.auditLog':
                 return checkAccess('Audit', 'viewAudit');
             case 'app.usm.users':
-                return accessToAnyFeatureInList('USM', userFeatures);
+                return userFeatureAccess.accessToAnyFeatureInList('USM');
             case 'app.reporting':
                 return checkAccess('Reporting', 'LIST_REPORTS');
             default:

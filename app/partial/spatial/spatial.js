@@ -9,7 +9,7 @@ the hope that it will be useful, but WITHOUT ANY WARRANTY; without even the impl
 FITNESS FOR A PARTICULAR PURPOSE.  See the GNU General Public License for more details. You should have received a
 copy of the GNU General Public License along with the IFDM Suite. If not, see <http://www.gnu.org/licenses/>.
 */
-angular.module('unionvmsWeb').controller('SpatialCtrl',function($scope, $timeout, locale, mapService, spatialHelperService, Report, reportRestService, reportFormService, reportService, $anchorScroll, userService, loadingStatus, $state, $localStorage, comboboxService, reportingNavigatorService, $compile, $modal, confirmationModal){
+angular.module('unionvmsWeb').controller('SpatialCtrl',function(/*tripSummaryService, */$scope, locale, mapService, spatialHelperService, Report, reportRestService, reportFormService, reportService, $anchorScroll, userService, loadingStatus, $state, $localStorage, comboboxService, reportingNavigatorService, $compile, $modal, confirmationModal){
     $scope.reports = [];
     $scope.executedReport = {};
     $scope.repServ = reportService;
@@ -25,6 +25,13 @@ angular.module('unionvmsWeb').controller('SpatialCtrl',function($scope, $timeout
     $scope.repServ.clearVmsData();
     
    locale.ready('spatial').then(function(){
+ /*   reportingNavigatorService.goToView('tripsPanel','tripSummary');
+      //tripSummaryService.openNewTrip('FRA-TRP-2016122102030');
+      //tripSummaryService.openNewTrip('ESP-TRP-20160630000003');
+      tripSummaryService.openNewTrip('MLT-TRP-20160630000001');
+      
+      return;
+*/
        loadingStatus.isLoading('InitialReporting', true);
        
        //reset the map and remove references to it
@@ -87,9 +94,7 @@ angular.module('unionvmsWeb').controller('SpatialCtrl',function($scope, $timeout
            }
            loadingStatus.isLoading('InitialReporting', false);
        }, function(error){
-           $scope.repServ.hasAlert = true;
-           $scope.repServ.alertType = 'danger';
-           $scope.repServ.message = locale.getString('spatial.map_error_loading_reports_list');
+           $scope.repNav.goToView('liveViewPanel','mapPanel',$scope.openReportList,[undefined,true]);
            loadingStatus.isLoading('InitialReporting', false);
        });
    };
@@ -118,11 +123,16 @@ angular.module('unionvmsWeb').controller('SpatialCtrl',function($scope, $timeout
        if (reportFormService.liveView.outOfDate){
             var options = {
                 textLabel : locale.getString("spatial.reports_discard_changes"),
-                yesNo : true
+                yesNo : true,
+                discard: true
             };
             confirmationModal.open(function(reason){
                 if(reason !== 'deny'){
-                    $scope.saveReport('form');
+                    if(reason === 'discard'){
+                        $scope.discardReport('form');
+                    }else{
+                        $scope.saveReport('form');
+                    }
                 }
             },
             options);
@@ -159,8 +169,20 @@ angular.module('unionvmsWeb').controller('SpatialCtrl',function($scope, $timeout
     };
 
     $scope.initComboHistory = function(comboId){
-        var comboFooter = angular.element('<li class="combo-history-footer col-md-12"><div class="row"><div class="footer-item col-md-5" ng-click="openReportList($event)"><label class="row">{{"spatial.report_history_list_btn" | i18n}}</label></div><div class="footer-item col-md-7" ng-click="createReportFromLiveview($event)"><label class="row">{{"spatial.report_history_create_new_btn" | i18n}}</label></div></div></li>');
-        angular.element('#' + comboId + '>.dropdown-menu').append(comboFooter);
+        var comboFooter = angular.element('<div class="combo-history-footer col-md-12">' + 
+                                            '<div class="row">' +
+                                                '<div class="footer-item" ng-click="openReportList($event)"' +
+                                                ' ng-class="{\'col-md-5\': isAllowed(\'Reporting\', \'CREATE_REPORT\'), \'col-md-12\': !isAllowed(\'Reporting\', \'CREATE_REPORT\')}">' +
+                                                    '<label class="row">{{"spatial.report_history_list_btn" | i18n}}</label>' +
+                                                '</div>' +
+                                                '<div ng-if="isAllowed(\'Reporting\', \'CREATE_REPORT\')" class="footer-item col-md-7"' +
+                                                ' ng-click="createReportFromLiveview($event)">' +
+                                                    '<label class="row">{{"spatial.report_history_create_new_btn" | i18n}}</label>' +
+                                                '</div>' +
+                                            '</div>' +
+                                        '</div>');
+
+        angular.element('#' + comboId).prepend(comboFooter);
         $compile(comboFooter)($scope);
     };
 
@@ -169,12 +191,17 @@ angular.module('unionvmsWeb').controller('SpatialCtrl',function($scope, $timeout
         $scope.comboServ.closeCurrentCombo(evt);
         if (evt && reportFormService.liveView.outOfDate){
             var options = {
-                textLabel : locale.getString("spatial.reports_discard_changes"),
-                yesNo : true
+                textLabel: locale.getString("spatial.reports_discard_changes"),
+                yesNo: true,
+                discard: true
             };
             confirmationModal.open(function(reason){
                 if(reason !== 'deny'){
-                    $scope.saveReport('list');
+                    if(reason === 'discard'){
+                        $scope.discardReport('list');
+                    }else{
+                        $scope.saveReport('list');
+                    }
                 }
             },
             options);
@@ -245,7 +272,7 @@ angular.module('unionvmsWeb').controller('SpatialCtrl',function($scope, $timeout
             delete $scope.tempReport;
             if(action === 'list'){
                 openReportsModal();
-            }else{
+            }else if(action === 'form'){
                 $scope.repNav.goToView('reportsPanel','reportForm');
             }
             loadingStatus.isLoading('LiveviewMap',false);
@@ -257,6 +284,19 @@ angular.module('unionvmsWeb').controller('SpatialCtrl',function($scope, $timeout
             delete $scope.tempReport;
             loadingStatus.isLoading('LiveviewMap',false);
         });
+    };
+
+    $scope.discardReport = function(action){
+        /*$modalStack.dismissAll();
+        angular.element('body').removeClass('alert-open');*/
+        $scope.repServ.resetReport();
+        reportFormService.resetLiveView();
+
+        if(action === 'list'){
+            openReportsModal();
+        }else{
+            $scope.repNav.goToView('reportsPanel','reportForm');
+        }
     };
 
     /*$(document).on('webkitfullscreenchange mozfullscreenchange fullscreenchange MSFullscreenChange', function() {

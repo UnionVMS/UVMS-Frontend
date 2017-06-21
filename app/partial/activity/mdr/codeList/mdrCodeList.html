@@ -17,7 +17,7 @@ copy of the GNU General Public License along with the IFDM Suite. If not, see <h
         <h4 class="modal-title">{{'activity.mdr_code_list_modal_title' | i18n}}{{acronym}}</h4>
     </div>
     <!-- BODY -->
-    <div class="modal-body" st-pipe="callServer" st-table="displayedMdrCodeList">
+    <div class="modal-body" st-pipe="filterChanged" st-table="displayedMdrCodeList">
         <div class="table-responsive-force">
             <div class="form-group col-md-4">
                 <div class="row">
@@ -27,28 +27,30 @@ copy of the GNU General Public License along with the IFDM Suite. If not, see <h
             <table id="codeListsTable" class="table table-striped areas-table table-condensed">
                 <thead>
                 	<tr>
-                		<th ng-repeat="column in allColumns">
-                			<div st-sort="{{column}}" st-sort-default="reverse" st-skip-natural="true" st-class-ascent="sorting_asc" st-class-descent="sorting_desc" ng-show="column === 'code'" ng-if="column === 'code'">{{'activity.mdr_code_list_field_' + column | i18n}}</div>
-                			<div st-sort="{{column}}" st-skip-natural="true" st-class-ascent="sorting_asc" st-class-descent="sorting_desc" ng-show="column !== 'code'" ng-if="column !== 'code'">{{'activity.mdr_code_list_field_' + column | i18n}}</div>
+                		<th ng-repeat="column in columns" ng-switch="column === 'code'">
+                			<div ng-switch-when="true" st-sort="{{column}}" st-sort-default="reverse" st-skip-natural="true" st-class-ascent="sorting_asc" st-class-descent="sorting_desc">{{'activity.' + column | i18n}}</div>
+                			<div ng-switch-when="false" st-sort="{{column}}" st-skip-natural="true" st-class-ascent="sorting_asc" st-class-descent="sorting_desc">{{'activity.' + column | i18n}}</div>
                 		</th>
                 	</tr>
-                    <tr ng-show="!tableLoading && !displayedMdrCodeList.length">
-                        <th colspan="{{allColumns.length}}"><table-alert type="'info'" msg="'activity.table_no_data'" visible="!displayedMdrCodeList.length && !tableLoading"></table-alert></th>
+                    <tr ng-if="!tableLoading && !displayedMdrCodeList.length">
+                        <th colspan="{{columns.length}}">
+                            <table-alert type="'info'" msg="'common.no_data_available'" visible="!tableLoading && !displayedMdrCodeList.length"></table-alert>
+                        </th>
                     </tr>
                     <tr ng-if="tableLoading && !alert.isLoading">
-                        <th class="loading-spinner-cl" colspan="{{allColumns.length}}"><i class="fa fa-spinner fa-spin loading-spinner"></i></th>
+                        <th class="loading-spinner-cl" colspan="{{columns.length}}"><i class="fa fa-spinner fa-spin loading-spinner"></i></th>
                     </tr>
                 </thead>
                 <tbody ng-show="!tableLoading && displayedMdrCodeList.length">
                     <tr ng-repeat="codeListEntry in displayedMdrCodeList">
-                        <td ng-repeat="column in allColumns">{{codeListEntry[column]}}</td>
+                        <td ng-repeat="column in columns">{{codeListEntry[column]}}</td>
                     </tr>
                 </tbody>
             </table>
         </div>
         <div class="tfoot stFooterPagination" ng-if="displayedMdrCodeList.length && !tableLoading">
             <div class="tr">
-                <div class="td text-right" colspan="{{allColumns.length}}">
+                <div class="td text-right" colspan="{{columns.length}}">
                     <div st-pagination st-items-by-page="itemsByPage" st-displayed-pages="7" st-template="partial/common/reportsPagination/reportsPagination.html"></div>
                 </div>
             </div>

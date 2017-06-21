@@ -62,7 +62,7 @@ copy of the GNU General Public License along with the IFDM Suite. If not, see <h
 								<div class="tr row" ng-if="hasError || !displayedRecords.length">
 									<div class="th col-md-12">
 										<table-alert type="'error'" msg="errorMessage" visible="hasError"></table-alert>
-										<table-alert type="'info'" msg="'spatial.table_no_data'" visible="!hasError && !displayedRecords.length && !vesselSearchLoading"></table-alert>
+										<table-alert type="'info'" msg="'spatial.table_no_asset_matching_data'" visible="!hasError && !displayedRecords.length && !vesselSearchLoading"></table-alert>
 									</div>
 								</div>
 								<div class="tr row" ng-if="vesselSearchLoading">

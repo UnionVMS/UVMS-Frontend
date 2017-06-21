@@ -45,6 +45,44 @@ angular.module('unionvmsWeb').factory('mdrCacheService',function($q, mdrRestServ
 	    return deferred.promise;
 	};
 	
+	
+	/**
+	 * Get a description by code of a specified MDR list. It assumes that the list is already loaded in the cache.
+	 * 
+	 * @memberof mdrCacheService
+	 * @public
+	 * @alias getDescriptionByCode
+	 * @param {String} listName - The mdr code list name (should be the same name as the path parameter for the REST service)
+	 * @param {String} code - The code to which the description will be fetched
+	 * @returns {String|Undefined} The description corresponding to the specified code and list or undefined
+	 */
+	mdrServ.getDescriptionByCode = function(listName, code){
+	    if(_.has(this.codeLists, listName)){
+	        var item = _.findWhere(this.codeLists[listName], {code: code});
+	        if (angular.isDefined(item)){
+	            return item.description;
+	        }
+	    }
+	};
+	
+	/**
+	 * Check if an MDR list is already available in the local cache of the service
+	 * 
+	 * @memberof mdrCacheService
+	 * @public
+	 * @alias isListAvailableLocally
+	 * @param {String} listName - The mdr code list name (should be the same name as the path parameter for the REST service)
+	 * @returns {Boolean} Whether the list is available locally or not
+	 */
+	mdrServ.isListAvailableLocally = function(listName){
+	    var availability = false;
+	    if (_.has(this.codeLists, listName)){
+	        availability = true;
+	    }
+	    
+	    return availability;
+	};
+	
 	/**
 	 * Get the code list from server
 	 * 
@@ -54,7 +92,7 @@ angular.module('unionvmsWeb').factory('mdrCacheService',function($q, mdrRestServ
 	 * @param {Object} deferred - The deferred object
 	 */
 	function getCodeListFromServer (listName, deferred){
-	    mdrRestService.getCodeList(listName).then(function(response){
+	    mdrRestService.getMDRCodeList(listName).then(function(response){
 	        mdrServ.codeLists[listName] = response;
 	        deferred.resolve(mdrServ.codeLists[listName]);
 	    }, function(error){

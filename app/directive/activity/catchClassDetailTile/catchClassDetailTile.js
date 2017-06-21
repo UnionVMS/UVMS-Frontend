@@ -31,7 +31,11 @@ angular.module('unionvmsWeb').directive('catchClassDetailTile', function() {
 		},
 		templateUrl: 'directive/activity/catchClassDetailTile/catchClassDetailTile.html',
 		link: function(scope, element, attrs, fn) {
-		    scope.init();
+		    scope.$watch('ngModel', function(newVal){
+		        if (angular.isDefined(newVal)){
+		            scope.init();
+		        }
+		    });
 		}
 	};
 }).
@@ -70,14 +74,15 @@ controller('CatchClassDetailTileCtrl', function($scope, locale){
             showControls: false,
             useInteractiveGuideline: true,
             reduceXTicks: false,
+            margin: {
+                bottom: 20
+            },
             yAxis: {
                 axisLabel: locale.getString('activity.header_fa_weight'),
                 showMaxMin: false,
                 ticks: 5
             },
             xAxis: {
-                rotateYLabel: true,
-                rotateLabels: -45,
                 tickFormat: function(xValue){
                     return $scope.ngModel[xValue].species;
                 }
@@ -113,6 +118,50 @@ controller('CatchClassDetailTileCtrl', function($scope, locale){
     };
     
     /**
+     * Create and show a tootlip with a description for the catch details type
+     *  
+     *  @memberof CatchClassDetailTileCtrl
+     *  @public
+     *  @param {String} text - The text to be displayed in the tooltip
+     *  @param {String} cssSel - The css selector class of the item against which the tip will be displayed
+     */
+    $scope.displayDetailsTip = function(text, cssSel){
+        var target = angular.element('.catch-class-detail-tile .' + cssSel);
+        var tip;
+        if (angular.isDefined($(target).attr('data-hasqtip'))){
+            tip = $(target);
+        } else {
+            tip = target.qtip({
+                content: {
+                    text: text
+                },
+                position: {
+                    my: 'left center',
+                    at: 'right center',
+                    target: target,
+                    effect: false
+                },
+                show: {
+                    solo: true,
+                    when: false,
+                    effect: false
+                },
+                style: {
+                    classes: 'qtip-bootstrap'
+                },
+                events: {
+                    hide: function(evt, api){
+                        api.destroy(true);
+                    }
+                }
+            });
+        } 
+        var api = tip.qtip('api');
+        api.show();
+    };
+    
+
+    /**
      * Select the record that should be used to display information on the location tile, table and summary sections. Set the location tile title according
      * to the number of locations available for a given record
      * 
@@ -141,13 +190,13 @@ controller('CatchClassDetailTileCtrl', function($scope, locale){
         var colors = palette('tol-rainbow', 2);
         var lscSeries = {
             key: locale.getString('activity.lsc').toUpperCase(),
-            color: colors[0],
+            color: '7fbc41',
             values: []
         };
         
         var bmsSeries = {
             key: locale.getString('activity.bms').toUpperCase(),
-            color: colors[1],
+            color: 'd92120',
             values: []
         };
         

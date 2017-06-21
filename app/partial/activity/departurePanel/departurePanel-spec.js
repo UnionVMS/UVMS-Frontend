@@ -38,8 +38,7 @@ describe('DeparturepanelCtrl', function() {
         });
 	});
 
-    beforeEach(inject(function($rootScope, $controller, _$state_, $injector) {
-        $httpBackend = $injector.get('$httpBackend');;
+    beforeEach(inject(function($rootScope, $controller, _$state_, $httpBackend) {
         $httpBackend.whenGET(/usm/).respond();
         $httpBackend.whenGET(/i18n/).respond();
         $httpBackend.whenGET(/globals/).respond({data : []});
@@ -60,7 +59,7 @@ describe('DeparturepanelCtrl', function() {
 	    var test;
 	    angular.forEach(appStates, function(state) {
 	        $state.go(state);
-	        test = scope.isLocationClickable();
+	        test = scope.faServ.isLocationClickable();
 	        expect(test).toBeTruthy();
 	    });
 	}));
@@ -69,7 +68,7 @@ describe('DeparturepanelCtrl', function() {
 	   var test;
        angular.forEach(appStates, function(state) {
            $state.go(state);
-           test = scope.isLocationClickable();
+           test = scope.faServ.isLocationClickable();
            expect(test).toBeFalsy();
        });
 	});
@@ -77,7 +76,7 @@ describe('DeparturepanelCtrl', function() {
 	it('should not allow a location to be clickable if the application is not on the reporting router', function(){
 	    setWithMap(true);
 	    $state.go(appStates[0]);
-	    var test = scope.isLocationClickable();
+	    var test = scope.faServ.isLocationClickable();
 	    expect(test).toBeFalsy();
 	});
 

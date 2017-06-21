@@ -11,12 +11,19 @@ copy of the GNU General Public License along with the IFDM Suite. If not, see <h
 -->
 <div class="containerWrapper" ng-controller="LiveviewpanelCtrl">
 	<div id="liveview-panel" ng-include="'partial/spatial/liveViewPanel/mapPanel/mapPanel.html'" ng-show="repNav.isViewVisible('mapPanel')"></div>
-	<div class="container containerWithTopBottomPadding" ng-show="repNav.isViewVisible('vmsPanel')">
-		<div class="card">
+	<div class="container containerWithTopBottomPadding" ng-if="repNav.isSectionVisible('liveViewPanel') && (repNav.isViewVisible('vmsPanel') || repNav.isViewVisible('catchDetails'))">
+		<div ng-if="repServ.hasAlert" class="alert alert-container" ng-class="{'alert-warning': repServ.alertType === 'warning', 'alert-danger': repServ.alertType === 'danger'}" role="alert">
+			<span class="fa fa-exclamation-circle" aria-hidden="true"></span>
+			<span class="alert-message">
+				<span>{{repServ.message}}</span>            
+			</span>
+		</div>
+		<div class="card rep-no-map-container">
+			<loading-panel type="LiveviewMap" ng-if="!isModal"></loading-panel>
 			<div class="row form-group">
 				<div class="col-md-4">
 					<combobox ng-model="repServ.selectedHistory" initialtext="{{repServ.name}}" items="repServ.reportsHistory" combo-section="true" callback="selectHistory" init-callback="initComboHistory"
-					is-loading="repServ.loadingReportHistory" class="combo-report-history" no-placeholder-on-list="true"></combobox>
+					is-loading="repServ.loadingReportHistory" class="combo-report-history" no-placeholder-on-list="true" list-class="combo-report-history-list"></combobox>
 				</div>
 				<div class="col-md-8 textAlignRight buttonContainer">
 					<button type="button" class="btn btn-primary btn-sm" ng-show="repServ.id !== undefined" ng-click="editReport()">
@@ -31,7 +38,8 @@ copy of the GNU General Public License along with the IFDM Suite. If not, see <h
 			</div>
 			<div class="row">
 				<div class="col-md-12">
-					<div ng-include="'partial/spatial/liveViewPanel/vmsPanel/vmsPanel.html'"></div>
+					<div ng-include="'partial/spatial/liveViewPanel/vmsPanel/vmsPanel.html'" ng-if="repNav.isViewVisible('vmsPanel')"></div>
+					<div class="trips-panel" ng-include="'partial/spatial/tripsPanel/catchDetails/catchDetails.html'" ng-if="repNav.isViewVisible('catchDetails')"></div>
 				</div>
 			</div>
 		</div>
