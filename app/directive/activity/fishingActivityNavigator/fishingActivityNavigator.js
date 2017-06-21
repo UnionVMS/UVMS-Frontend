@@ -20,7 +20,7 @@ copy of the GNU General Public License along with the IFDM Suite. If not, see <h
  * @description
  *  A directive to add support for ordered navigation between activities of a trip
  */
-angular.module('unionvmsWeb').directive('fishingActivityNavigator', function(tripReportsTimeline, fishingActivityService, reportingNavigatorService, $compile, $rootScope) {
+angular.module('unionvmsWeb').directive('fishingActivityNavigator', function(tripReportsTimeline, fishingActivityService, reportingNavigatorService, $compile) {
 	return {
 		restrict: 'E',
 		replace: false,

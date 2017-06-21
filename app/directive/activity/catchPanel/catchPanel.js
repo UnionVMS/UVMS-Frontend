@@ -23,7 +23,7 @@ copy of the GNU General Public License along with the IFDM Suite. If not, see <h
  * @description
  *  A reusable tile that will display two pie charts side-by-side, and optionally a table and caption for the input data 
  */
-angular.module('unionvmsWeb').directive('catchPanel', function(locale, $compile, $rootScope) {
+angular.module('unionvmsWeb').directive('catchPanel', function(locale, $compile) {
     return {
         restrict: 'E',
         replace: false,
@@ -93,10 +93,10 @@ angular.module('unionvmsWeb').directive('catchPanel', function(locale, $compile,
             
             //To refresh the charts manually
             scope.$watch(function() { return angular.element(scope.element).is(':visible'); }, function() {
-               angular.forEach( angular.element('.nvd3-chart > nvd3', scope.element),function(item){
-                        var elem = angular.element(item);
-                        $compile(elem)(scope);
-                  });
+                angular.forEach( angular.element('.nvd3-chart > nvd3', scope.element),function(item){
+                   var elem = angular.element(item);
+                   $compile(elem)(scope);
+                });
             });
            
 			/**
