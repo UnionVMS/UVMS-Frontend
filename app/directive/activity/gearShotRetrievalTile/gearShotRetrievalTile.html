@@ -1,0 +1,33 @@
+<fieldset class="col-md-12 fieldsetStyle gear-shot-retrieval-tile">
+	<legend class="fieldsetLegendStyle">
+		<a>{{tileTitle}}</a>
+	</legend>
+	<div class="col-md-5">
+		<table-filter-headers columns="tableAttrs" records="srcData" selected-item="selected"></table-filter-headers>
+	</div>
+	<div class="col-md-7 no-padding-right">
+		<fieldset class="col-md-12 fieldsetStyle">
+			<legend class="fieldsetLegendStyle">
+				<a>{{'activity.gear_shot_retrieval_details' | i18n}} {{'abbreviations.gear_type_' + selected.type | i18n}}</a>
+			</legend>
+			<div class="row" ng-if="selected.id">
+				<div class="col-md-12 item-container">
+					<span class="item-label">{{selected.id.schemeId}}</span>
+					<span>{{selected.id.id}}</span>
+				</div>
+			</div>
+			<div class="row with-margin-top row-flex">
+				<div class="col-md-6">
+					<location-tile class="row summary-section no-padding-right" location-details="selected.location" buffer-dist="5000" field-title="{{'activity.location' | i18n}}" is-clickable="faServ.isLocationClickable()"></location-tile>
+				</div>
+				<div class="col-md-6">
+					<carousel-tile class="row summary-section" tile-title="{{'activity.header_fa_gear' | i18n}}" ng-model="selected.gears" template-url="directive/activity/carouselTile/templates/gearTile/gearTile.html"></carousel-tile>
+				</div>
+			</div>
+			<div class="row with-margin-top" ng-if="selected.gearProblems && selected.gearProblems.length > 0">
+				<carousel-tile class="col-md-12 gear-problem" tile-title="{{'activity.header_fa_gear_problem' | i18n}}" ng-model="selected.gearProblems" template-url="directive/activity/carouselTile/templates/gearProblemTile/gearProblemTile.html"></carousel-tile>
+			</div>
+			<fa-characteristics-modal ng-if="hasCharacteristics(selected.characteristics)" class="characteristics" data="selected.characteristics"></fa-characteristics-modal>
+		</fieldset>
+	</div>
+</fieldset>

@@ -1,0 +1,65 @@
+/*
+Developed with the contribution of the European Commission - Directorate General for Maritime Affairs and Fisheries
+© European Union, 2015-2016.
+
+This file is part of the Integrated Fisheries Data Management (IFDM) Suite. The IFDM Suite is free software: you can
+redistribute it and/or modify it under the terms of the GNU General Public License as published by the
+Free Software Foundation, either version 3 of the License, or any later version. The IFDM Suite is distributed in
+the hope that it will be useful, but WITHOUT ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or
+FITNESS FOR A PARTICULAR PURPOSE.  See the GNU General Public License for more details. You should have received a
+copy of the GNU General Public License along with the IFDM Suite. If not, see <http://www.gnu.org/licenses/>.
+*/
+.fishingActivityNavigator {
+    .activity-slider {
+        position: fixed;
+        width: 30px;
+        top: calc(~'50vh + 75px');
+        z-index: 1;
+        &.slider-left {
+            left: 6px;
+        }
+        &.slider-right {
+            right: 6px;
+        }
+        .slider-title {
+            text-align: center;
+            font-weight: bold;
+        }
+        .slider-container {
+            border: 1px solid #ddd;
+            border-radius: 10px;
+            position: absolute;
+            top: 50%;
+            width: 350px;
+            a {
+                color: #333;
+            }
+            &:hover {
+                cursor: pointer;
+                a {
+                    color: @primaryColor;
+                }
+            }
+        }
+        .container-left {
+            transform: rotate(270deg) translate(50px, -160px);
+            transform-origin: center center;
+            i {
+                float: left;
+                margin-top: 2px;
+                margin-left: 10px;
+                color: @primaryColor;
+            }
+        }
+        .container-right {
+            transform: rotate(90deg) translate(-50px, 160px);
+            transform-origin: center center;
+            i {
+                float: right;
+                color: @primaryColor;
+                margin-top: 2px;
+                margin-right: 10px;
+            }
+        }
+    }
+}

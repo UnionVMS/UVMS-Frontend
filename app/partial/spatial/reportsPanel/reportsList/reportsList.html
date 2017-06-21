@@ -15,7 +15,7 @@ copy of the GNU General Public License along with the IFDM Suite. If not, see <h
 			<button type="button" class="btn btn-primary btn-sm" ng-click="loadReportList()">
 				<span class="fa fa-refresh" aria-hidden="true"></span>
 			</button>
-			<button type="button" class="btn btn-primary btn-sm" ng-click="openReportForm('CREATE')" ng-show="isAllowed('Reporting', 'CREATE_REPORT')">
+			<button type="button" class="btn btn-primary btn-sm" ng-click="openReportForm('CREATE')" ng-if="isAllowed('Reporting', 'CREATE_REPORT')">
 				<span class="fa fa-plus-square" aria-hidden="true"></span> &nbsp;
 				<span>{{'spatial.reports_add_new_report' | i18n }}</span>
 			</button>
@@ -31,26 +31,27 @@ copy of the GNU General Public License along with the IFDM Suite. If not, see <h
 				<tr>
 					<th st-sort="name" st-skip-natural="true" st-class-ascent="sorting_asc" st-class-descent="sorting_desc" >{{'spatial.reports_table_header_name' | i18n }}</th>
 					<th st-sort="desc" st-skip-natural="true" st-class-ascent="sorting_asc" st-class-descent="sorting_desc" >{{'spatial.reports_table_header_description' | i18n }}</th>
+					<th st-sort="reportType" st-skip-natural="true" st-class-ascent="sorting_asc" st-class-descent="sorting_desc" >{{'spatial.reports_table_header_report_type' | i18n }}</th>
 					<th st-sort="createdOn" st-skip-natural="true" st-sort-default="reverse"  st-class-ascent="sorting_asc" st-class-descent="sorting_desc" >{{'spatial.reports_table_header_created_on' | i18n }}</th>
 					<th st-sort="createdBy" st-skip-natural="true" st-class-ascent="sorting_asc" st-class-descent="sorting_desc" >{{'spatial.reports_table_header_owner' | i18n }}</th>
 					<th st-sort="executedOn" st-skip-natural="true" st-class-ascent="sorting_asc" st-class-descent="sorting_desc" >{{'spatial.reports_table_header_last_executed' | i18n }}</th>
 					<th st-sort="visibility" st-skip-natural="true"  st-class-ascent="sorting_asc" st-class-descent="sorting_desc" class="dt-center" >{{'spatial.reports_table_header_visibility' | i18n }}</th>
-					<th style="min-width: 135px;">{{'spatial.table_header_actions' | i18n }}</th>
+					<th style="min-width: 180px;">{{'spatial.table_header_actions' | i18n }}</th>
 				</tr>
 				<tr>
-					<th colspan="7" ng-if="!isLoadingReportsList && (tableAlert.visible || !displayedRecords.length)">
-						<table-alert type="tableAlert.type" msg="tableAlert.msg" visible="tableAlert.visible" timeout="tableAlert.timeout"></table-alert>
-						<table-alert type="'info'" msg="'spatial.table_no_data'" visible="!tableAlert.visible && !isLoadingReportsList && !displayedRecords.length"></table-alert>
+					<th colspan="8" ng-if="!isLoadingReportsList && tableAlert.visible">
+						<table-alert type="tableAlert.type" msg="tableAlert.msg" visible="tableAlert.visible" no-hide="false"></table-alert>
 					</th>
 				</tr>
 				<tr ng-if="isLoadingReportsList">
-					<th colspan="7" class="loading-spinner-cl"><i class="fa fa-spinner fa-spin loading-spinner"></i></th>
+					<th colspan="8" class="loading-spinner-cl"><i class="fa fa-spinner fa-spin loading-spinner"></i></th>
 				</tr>
 			</thead>
 			<tbody>
 				<tr ng-repeat="report in displayedRecords" ng-if="displayedRecords.length && !isLoadingReportsList">
 					<td class="break-word-column">{{ report.name }}</td>
 					<td class="break-word-column">{{ report.desc }}</td>
+					<td class="no-wrap-white-space">{{ 'spatial.reports_table_' + report.reportType | i18n }}</td>
 					<td class="no-wrap-white-space">{{ report.createdOn | stDateUtc }}</td>
 					<td class="no-wrap-white-space">{{ report.createdBy }}</td>
 					<td class="no-wrap-white-space">{{ report.executedOn | stDateUtc }}</td>
@@ -74,7 +75,7 @@ copy of the GNU General Public License along with the IFDM Suite. If not, see <h
 						<button type="button" ng-show="report.editable" class="btn btn-default btn-xs" title="{{'spatial.reports_table_config_label' | i18n }}" ng-click="showFilters($index)"><span class="fa fa-pencil"></span></button>
 						<div class="btn-group" ng-show="{{report.shareable && report.shareable.length > 0}}">
 						<!--<button type="button" class="btn btn-secondary dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" >-->
-						<button type="button" class="btn btn-default btn-xs" title="{{'spatial.reports_table_share_label' | i18n }}" data-toggle="dropdown" aria-haspopup="true" ><span class="fa fa-share-alt"></span></button>
+						<button type="button" ng-if="report.reportType === 'standard'" class="btn btn-default btn-xs" title="{{'spatial.reports_table_share_label' | i18n }}" data-toggle="dropdown" aria-haspopup="true" ><span class="fa fa-share-alt"></span></button>
 						<div class="dropdown-menu">
 							<div class="dropdown-body">
 								<a class="dropdown-item" ng-repeat="visibilityLevel in getVisibilityLevels(report)" ng-click="shareReport($parent.$index, visibilityLevel)">
@@ -89,7 +90,7 @@ copy of the GNU General Public License along with the IFDM Suite. If not, see <h
 			</tbody>
 			<tfoot class="stFooterPagination" ng-show="displayedRecords.length && !isLoadingReportsList">
 				<tr>
-					<td colspan="7" class="text-right">
+					<td colspan="8" class="text-right">
 						<div st-pagination st-items-by-page="itemsByPage" st-displayed-pages="7" st-template="partial/common/reportsPagination/reportsPagination.html"></div>
 					</td>
 				</tr>

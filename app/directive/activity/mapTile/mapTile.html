@@ -3,4 +3,9 @@
         <a>{{tileTitle}}</a>
     </legend>
     <div id="{{mapId}}" class="col-md-12 tile-map-container" style="height:{{mapHeight}}px;"></div>
+    <div class="row no-data" ng-if="!mapData">
+		<div class="col-md-12">
+			<span>{{'activity.no_data' | i18n}}</span>
+		</div>
+	</div>
 </fieldset>

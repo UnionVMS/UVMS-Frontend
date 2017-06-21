@@ -13,52 +13,44 @@ copy of the GNU General Public License along with the IFDM Suite. If not, see <h
     height: 100%;
     position: relative;
     .fieldsetLegendStyle {
-        margin-bottom: 10px !important;
+        a:hover {
+            cursor: pointer;
+        }
     }
-    .container {
-        height: calc(~'100% - 20px');
-        .col-md-12 {
-            top: 50%;
-            transform: translateY(-50%);
-            &.clickable {
-                cursor: pointer;
+    .item-container {
+        cursor: default;
+        display: inline-block;
+        margin-right: 15px;
+        .item-field {
+            display: inline-block;
+            &:first-child {
+                margin-right: 10px;
             }
         }
-    }
-    .container-multiple {
-        position: absolute;
-        top: 30px;
-        bottom: 0;
-        left: 0;
-        right: 15px;
-        overflow-y: auto;
-    }
-    .icon-container {
-        text-align: center;
-        margin-bottom: 10px;
-        i {
-            font-size: 10vw;
-            color: #505050;
+        .item-label {
+            font-weight: bold;
+            margin-right: 5px;
+            white-space: nowrap;
+            &:after {
+                content: ':'
+            }
+        }
+        .item-text:not(:last-child){
+            margin-right: 10px;
         }
     }
-    .name {
-        text-align: center;
-    }
-    .location-list {
-        text-align: center;
-        li {
-            cursor: default;
-            &.item-clickable {
-                cursor: pointer;
-                &:hover {
-                    text-decoration: underline;
-                }
+    .row-section {
+        margin-bottom: 10px;
+        .item-clickable {
+            cursor: pointer;
+            &:hover {
+                text-decoration: underline;
             }
         }
     }
     .no-data {
         text-align: center;
-        top: 0;
+        top: 20px;
         bottom: 0;
         left: 15px;
         right: 15px;

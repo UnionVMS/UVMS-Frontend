@@ -1,0 +1,109 @@
+/*
+Developed with the contribution of the European Commission - Directorate General for Maritime Affairs and Fisheries
+© European Union, 2015-2016.
+
+This file is part of the Integrated Fisheries Data Management (IFDM) Suite. The IFDM Suite is free software: you can
+redistribute it and/or modify it under the terms of the GNU General Public License as published by the
+Free Software Foundation, either version 3 of the License, or any later version. The IFDM Suite is distributed in
+the hope that it will be useful, but WITHOUT ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or
+FITNESS FOR A PARTICULAR PURPOSE.  See the GNU General Public License for more details. You should have received a
+copy of the GNU General Public License along with the IFDM Suite. If not, see <http://www.gnu.org/licenses/>.
+*/
+.catch-class-landing-details {
+    .selected-row td {
+      background-color: rgba(8, 159, 215, 0.46) !important;
+    }
+    .line {
+        border-right: 1px solid #ddd;
+        }
+   .btn-specie-detail,
+    .btn-catch-detail {
+            position: absolute;
+            font-size: 18px;
+            right: 11px;
+            top: 13px;
+        }
+   .btn-catch-detail {
+            top: -4px;
+        }
+    .btn-specie-detail {
+            top: 13px;
+         }
+        
+    .fieldsetLegendStyle {
+        margin-bottom: 10px !important;
+    }
+    .navigator {
+        z-index: 2;
+        position: absolute;
+        right: 15px;
+        color: @primaryColor;
+        &:hover {
+            cursor: pointer;
+        }
+    }
+    .species-title {
+        text-align: center;
+        font-weight: bold;
+        font-size: 16px;
+    }
+    .global-container {
+        display: flex;
+    }
+    .stretch {
+        align-items: stretch;
+        height:100%;
+        
+    }
+    .details {
+        color: @primaryColor;
+        &:hover {
+            cursor: pointer
+        }
+    }
+    .section {
+        border: 1px solid #ddd;
+        padding-top: 15px;
+        padding-bottom: 15px;
+        overflow-x: auto;
+        margin-bottom: 10px;
+        margin-top: 10px;
+        dl {
+            dt {
+                text-align: left;
+            }
+        }
+    }
+    .uppercase {
+        text-transform: uppercase;
+    }
+    .table {
+        margin-bottom: 0px;
+    }
+    .item-container {
+        display: flex;
+        .labels {
+            font-weight: bold;
+            white-space: nowrap;
+            &::after {
+                content: ':'
+            }
+        }
+    }
+    .nv-bar:hover {
+        cursor: pointer;
+    }
+    .nv-x .tick line { display: none; }
+}
+
+.catch-class-detail-chart {
+    thead > tr {
+        border-bottom: none !important;
+    }
+    td.value {
+        font-weight: normal !important;
+    }
+    td.key {
+        font-weight: bold !important;
+    }
+}

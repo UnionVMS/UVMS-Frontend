@@ -56,6 +56,84 @@ angular.module('unionvmsWeb').controller('ReportformCtrl',function($scope, $moda
     
     $scope.repFormServ = reportFormService;
 
+
+    $scope.aggregationTypes = [
+        {
+            code: "FLAG_STATE",
+            text: locale.getString('spatial.criteria_flag_state')
+        },
+        {
+            code: "VESSEL",
+            text: locale.getString('spatial.criteria_vessel')
+        },
+        {
+            code: "DATE",
+            text: locale.getString('spatial.criteria_date'),
+            items: [
+                {
+                    code: "DATE_DAY",
+                    text: locale.getString('spatial.criteria_date_day')
+                },
+                {
+                    code: "DATE_MONTH",
+                    text: locale.getString('spatial.criteria_date_month')
+                },
+                {
+                    code: "DATE_YEAR",
+                    text: locale.getString('spatial.criteria_date_year')
+                }
+            ],
+            selection: "single"
+        },
+        {
+            code: "AREA",
+            text: locale.getString('spatial.criteria_area'),
+            items: [
+                {
+                    code: "TERRITORY",
+                    text: locale.getString('spatial.criteria_territory')
+                },
+                {
+                    code: "FAO_AREA",
+                    text: locale.getString('spatial.criteria_fao_area')
+                },
+                {
+                    code: "ICES_STAT_RECTANGLE",
+                    text: locale.getString('spatial.criteria_ices_stat_rectangle')
+                },
+                {
+                    code: "EFFORT_ZONE",
+                    text: locale.getString('spatial.criteria_effort_zone')
+                },
+                {
+                    code: "RFMO",
+                    text: locale.getString('spatial.criteria_rfmo')
+                },
+                {
+                    code: "GFCM_GSA",
+                    text: locale.getString('spatial.criteria_gfcm_gsa')
+                },
+                {
+                    code: "GFCM_STAT_RECTANGLE",
+                    text: locale.getString('spatial.criteria_gfcm_stat_rectangle')
+                }
+            ],
+            selection: "multiple"
+        },
+        {
+            code: "GEAR_TYPE",
+            text: locale.getString('spatial.criteria_gear_type')
+        },
+        {
+            code: "SPECIES",
+            text: locale.getString('spatial.criteria_species')
+        },
+        {
+            code: "PRESENTATION",
+            text: locale.getString('spatial.criteria_presentation')
+        }
+    ];
+
     $scope.showSaveBtn = function(){
         var result = false;
         if ($scope.formMode === 'CREATE'){
@@ -203,8 +281,9 @@ angular.module('unionvmsWeb').controller('ReportformCtrl',function($scope, $moda
                         reportRestService.updateReport($scope.report).then(updateReportSuccess, updateReportError);
                     } else {
                         loadingStatus.isLoading('SaveReport',false);
-                        $scope.repNav.goToPreviousView();
+                        $scope.repNav.goToView('liveViewPanel','mapPanel');
                     }
+                   
                     break;
             }
         } else {
@@ -350,7 +429,7 @@ angular.module('unionvmsWeb').controller('ReportformCtrl',function($scope, $moda
             $scope.repNav.goToView('liveViewPanel','mapPanel',$scope.openReportList);
         }
         reportFormService.report = undefined;
-        reportMsgService.show(locale.getString('spatial.success_create_report'), 'success');
+        reportMsgService.show('spatial.success_create_report', 'success', true, 8000);
         loadingStatus.isLoading('SaveReport',false);
     };
 
@@ -361,15 +440,17 @@ angular.module('unionvmsWeb').controller('ReportformCtrl',function($scope, $moda
 
     var updateReportSuccess = function(response){
         reportService.loadReportHistory();
-        if($scope.repNav.hasPreviousState()){
-            $scope.repNav.goToPreviousView();
-        }else{
-            $scope.repNav.goToView('liveViewPanel','mapPanel',$scope.openReportList);
-        }
-        reportMsgService.show(locale.getString('spatial.success_update_report'), 'success');
+        
+        reportMsgService.show('spatial.success_update_report', 'success', true, 8000);
         if ($scope.formMode === 'EDIT'){
+            if($scope.repNav.hasPreviousState()){
+                $scope.repNav.goToPreviousView();
+            }else{
+                $scope.repNav.goToView('liveViewPanel','mapPanel',$scope.openReportList);
+            }
             reportFormService.report = undefined;
         } else if ($scope.formMode === 'EDIT-FROM-LIVEVIEW'){
+            $scope.repNav.goToView('liveViewPanel','mapPanel');
             angular.copy($scope.currentRepCopy,reportFormService.liveView.currentReport);
             delete $scope.currentRepCopy;
             angular.copy(reportFormService.liveView.currentReport, reportFormService.liveView.originalReport);
@@ -388,7 +469,7 @@ angular.module('unionvmsWeb').controller('ReportformCtrl',function($scope, $moda
 
     var reportError = function(error, defaultMsg) {
         $scope.formAlert.visible = true;
-        var errorMsg = defaultMsg;
+        var errorMsg;
 
         if (angular.isDefined(error.data.msg)) {
             var msg = error.data.msg;
@@ -396,7 +477,9 @@ angular.module('unionvmsWeb').controller('ReportformCtrl',function($scope, $moda
                 msg = 'spatial.' + msg;
             }
             errorMsg = locale.getString(msg);
-        } else {
+        }
+        
+        if (!angular.isDefined(errorMsg) || errorMsg.indexOf('KEY_NOT_FOUND') !== -1 || errorMsg === ''){
             errorMsg = locale.getString(defaultMsg);
         }
         

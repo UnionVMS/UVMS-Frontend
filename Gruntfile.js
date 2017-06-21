@@ -76,7 +76,8 @@ module.exports = function (grunt) {
                   '/config/rest',
                   '/mapfish-print',
                   '/usm-authentication/rest', '/usm-authorisation/rest', '/usm-administration/rest',
-                  '/activity/rest'],
+                  '/activity/rest',
+                  '/mdr/rest'],
               host: 'localhost',
               port: 8080
         },{
@@ -130,6 +131,7 @@ module.exports = function (grunt) {
                   //DIRECTIVES
                   'app/directive/common/breadcrumbNavigator',
                   'app/directive/activity/',
+                  'app/directive/common/tableFilterHeaders',
 
                   //FILTERS
                   'app/filter/activity/'
@@ -295,8 +297,8 @@ module.exports = function (grunt) {
         options: {
           remove: ['script[data-remove!="false"]','link[data-remove!="false"]'],
           append: [
-            {selector:'body',html:'<script src="app.full.min.js"></script>'},
-            {selector:'head',html:'<link rel="stylesheet" href="app.full.min.css">'}
+            {selector:'body',html:'<script src="app.full.min.js?v=' + pkg.version + '"></script>'},
+            {selector:'head',html:'<link rel="stylesheet" href="app.full.min.css?v=' + pkg.version +'">'}
           ]
         },
         src:'app/index.html',

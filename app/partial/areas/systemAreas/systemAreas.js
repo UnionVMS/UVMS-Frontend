@@ -26,24 +26,27 @@ angular.module('unionvmsWeb').controller('SystemareasCtrl',function($scope,gener
     $scope.shpAttrs = [];
     $scope.selectedAttrs = [];
     
-	$scope.fileNameChanged = function(elem){
-		$scope.SysareasForm.selectFileForm.areaFile.$setDirty();
-		if(elem.value){
-			$scope.filepath = elem.value;
-			var filename = $scope.filepath.replace(/^.*[\\\/]/, '');
-			$scope.$apply(function($scope) {
-				$scope.sysAreafile = filename;
-				$scope.validFile.isValid = true;
-				$scope.files = elem.files;         
-			 });
-		}else{
-			$scope.$apply(function($scope) {
-				$scope.sysAreafile = undefined;
-				$scope.validFile.isValid = false;
-			});
-		}
-	};
-	
+	$scope.$watch('fileData', function(newVal, oldVal) {
+        if (angular.isDefined(newVal) && newVal !== oldVal) {
+            var fileName = $scope.fileData;
+
+            $scope.fileNameChanged(fileName);
+
+        }
+    });
+    $scope.fileNameChanged = function(fileInfo) {
+        $scope.SysareasForm.selectFileForm.areaFile.$setDirty();
+        var selectedFileName = fileInfo[0].name;
+        if (selectedFileName) {
+            $scope.sysAreafile = selectedFileName;
+            $scope.validFile.isValid = true;
+            $scope.files = fileInfo;
+        } else {
+            $scope.sysAreafile = undefined;
+            $scope.validFile.isValid = false;
+        }
+    };
+    
 	//Uploading new file
     $scope.save = function(){
         $scope.isSaving = true;

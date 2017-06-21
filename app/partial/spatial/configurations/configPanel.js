@@ -9,7 +9,7 @@ the hope that it will be useful, but WITHOUT ANY WARRANTY; without even the impl
 FITNESS FOR A PARTICULAR PURPOSE.  See the GNU General Public License for more details. You should have received a
 copy of the GNU General Public License along with the IFDM Suite. If not, see <http://www.gnu.org/licenses/>.
 */
-angular.module('unionvmsWeb').controller('ConfigpanelCtrl',function($scope, $anchorScroll, locale, SpatialConfig, spatialConfigRestService, spatialConfigAlertService, loadingStatus, PreferencesService){
+angular.module('unionvmsWeb').controller('ConfigpanelCtrl',function($scope, $anchorScroll, locale, SpatialConfig, spatialConfigRestService, spatialConfigAlertService, loadingStatus, PreferencesService, mapService){
     $scope.settingsLevel = 'user';
 	$scope.alert = spatialConfigAlertService;
 	$scope.prefService = PreferencesService;
@@ -44,6 +44,11 @@ angular.module('unionvmsWeb').controller('ConfigpanelCtrl',function($scope, $anc
 		    $scope.alert.hideAlert();
 		    $scope.submitedWithErrors = true;
 		}
+	};
+	
+	$scope.cancel = function(){
+	    $scope.repNav.goToPreviousView();
+	    mapService.updateMapSize();
 	};
 	
     //Update config copy after saving new preferences

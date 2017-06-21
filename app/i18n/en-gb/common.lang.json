@@ -62,6 +62,7 @@
     "reset" : "Reset",
     "save" : "Save",
     "confirm" : "Confirm",
+    "discard": "Discard",
     "unlink" : "Unlink",
     "show_history" : "Show history",
     "save_as_group": "Save as Group",
@@ -144,5 +145,6 @@
     "mandatory_field":"*",
     "error_user_without_scope": "Module not accessible to accounts without a scope.",
     "no_data_available": "No data available",
-    "items_selected": "items selected"
+    "items_selected": "items",
+    "empty_value": "No value"
 }

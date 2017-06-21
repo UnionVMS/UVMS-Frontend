@@ -52,14 +52,22 @@ describe('mapTile', function() {
         });
         
         it('should create a map with fallback configurations', function(){
+            controller.registerZoomToExtentListener = jasmine.createSpy('registerZoomToExtentListener');
+            mockTripSumServ.mapConfigs = {success: false};
+            
             scope.mapId = 'mapTile';
-            scope.mapConfigs = {success: false};
+            scope.mapData = buildVectorData();
             scope.getMapConfigs();
             $interval.flush(1000);
             
             expect(scope.map).toBeDefined();
             expect(scope.map.getView().getProjection().getCode()).toEqual('EPSG:3857');
-            expect(scope.map.getLayers().getLength()).toEqual(1);
+            expect(scope.map.getLayers().getLength()).toEqual(2);
+            var layer = scope.map.getLayers().getArray()[1];
+            var features = layer.getSource().getFeatures();
+            expect(layer).toEqual(jasmine.any(ol.layer.Vector));
+            expect(features).toEqual(jasmine.any(Array));
+            expect(features.length).toEqual(2);
         });
         
         it('should get map configurations from trip service and create the map without vector data', function(){
@@ -70,7 +78,12 @@ describe('mapTile', function() {
             
             expect(scope.map).toBeDefined();
             expect(scope.map.getView().getProjection().getCode()).toEqual('EPSG:3857');
-            expect(scope.map.getLayers().getLength()).toEqual(3);
+            expect(scope.map.getLayers().getLength()).toEqual(4);
+            var layer = scope.map.getLayers().getArray()[3];
+            var features = layer.getSource().getFeatures();
+            expect(layer).toEqual(jasmine.any(ol.layer.Vector));
+            expect(features).toEqual(jasmine.any(Array));
+            expect(features.length).toEqual(0);
         });
         
         it('should create a map with vector data', function(){
@@ -80,16 +93,34 @@ describe('mapTile', function() {
             scope.mapData = buildVectorData();
             scope.getMapConfigs();
             $interval.flush(1000);
+            
             expect(scope.map).toBeDefined();
             expect(scope.map.getView().getProjection().getCode()).toEqual('EPSG:3857');
             expect(scope.map.getLayers().getLength()).toEqual(4);
-            
-            
             var layer = scope.map.getLayers().getArray()[3];
             var features = layer.getSource().getFeatures();
             expect(layer).toEqual(jasmine.any(ol.layer.Vector));
             expect(features).toEqual(jasmine.any(Array));
             expect(features.length).toEqual(2);
+        });
+        
+        it('should create a map with vector data and clear the vector data', function(){
+            controller.registerZoomToExtentListener = jasmine.createSpy('registerZoomToExtentListener');
+            mockTripSumServ.mapConfigs = buildMapConfigs();
+            scope.mapId = 'mapTile';
+            scope.mapData = buildVectorData();
+            scope.getMapConfigs();
+            $interval.flush(1000);
+            scope.clearVectorData();
+            
+            expect(scope.map).toBeDefined();
+            expect(scope.map.getView().getProjection().getCode()).toEqual('EPSG:3857');
+            expect(scope.map.getLayers().getLength()).toEqual(4);
+            var layer = scope.map.getLayers().getArray()[3];
+            var features = layer.getSource().getFeatures();
+            expect(layer).toEqual(jasmine.any(ol.layer.Vector));
+            expect(features).toEqual(jasmine.any(Array));
+            expect(features.length).toEqual(0);
         });
     });
     

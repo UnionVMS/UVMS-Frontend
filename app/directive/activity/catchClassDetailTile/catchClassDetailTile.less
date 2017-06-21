@@ -10,6 +10,7 @@ FITNESS FOR A PARTICULAR PURPOSE.  See the GNU General Public License for more d
 copy of the GNU General Public License along with the IFDM Suite. If not, see <http://www.gnu.org/licenses/>.
 */
 .catch-class-detail-tile {
+    min-height: 300px;
     .fieldsetLegendStyle {
         margin-bottom: 10px !important;
     }
@@ -31,6 +32,12 @@ copy of the GNU General Public License along with the IFDM Suite. If not, see <h
     }
     .stretch {
         align-items: stretch;
+    }
+    .details {
+        color: @primaryColor;
+        &:hover {
+            cursor: pointer
+        }
     }
     .section {
         border: 1px solid #ddd;
@@ -61,8 +68,8 @@ copy of the GNU General Public License along with the IFDM Suite. If not, see <h
             }
         }
     }
-    .nv-wrap {
-        padding-bottom: -20px;
+    .nv-bar:hover {
+        cursor: pointer;
     }
     .nv-x .tick line { display: none; }
 }

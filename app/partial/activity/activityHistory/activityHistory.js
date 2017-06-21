@@ -45,7 +45,7 @@ angular.module('unionvmsWeb').controller('ActivityhistoryCtrl',function($scope, 
      */
     $scope.openActivityHistory = function(idx){
         $scope.actServ.activitiesHistoryList.isLoading = true;
-        $scope.actServ.getActivitiesHistory($scope.actServ.displayedHistory[idx].id);
+        $scope.actServ.getActivitiesHistory($scope.actServ.displayedHistory[idx]);
         $scope.goToView(2);
     };
 });

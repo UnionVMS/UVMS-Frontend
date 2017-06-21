@@ -136,7 +136,7 @@ describe('catchPanel', function() {
         var catchPanel = compile('<catch-panel title="test" unit="kg" ng-model="data"></catch-panel>')(scope);
         catchPanel.appendTo('#parent-container');
         scope.$digest();
-        
+
         expect(angular.element('.catch-section').length).toEqual(1);
         expect(angular.element('legend').children().text()).toEqual('test');
         expect(angular.element('.table').length).toBe(0);

@@ -13,11 +13,12 @@ copy of the GNU General Public License along with the IFDM Suite. If not, see <h
  * @memberof unionvmsWeb
  * @ngdoc service
  * @name visibilityService
+ * @param {Service} $localStorage - The ngStorage service
  * @description
  *  A service containing all available fields for positions, segments, tracks, alarms, trips and fishing activities
  *  and their visibility and order (in the tables) as defined by the admin/user preferences
  */
-angular.module('unionvmsWeb').factory('visibilityService',function() {
+angular.module('unionvmsWeb').factory('visibilityService',function($localStorage, userService) {
 
 	var visibilityService = {
         positions: {
@@ -75,12 +76,21 @@ angular.module('unionvmsWeb').factory('visibilityService',function() {
         },
         trips: {
             tripId: true,
-            event: true,
-            vesselId: true,
+            fs: true,
+            extMark: true,
+            ircs: true,
+            cfr: true,
+            uvi: true,
+            iccat: true,
+            gfcm: true,
+            firstEventType: true,
+            firstEventTime: true,
+            lastEventType: true,
+            lastEventTime: true,
             duration: true,
             nCorrections: true,
             nPositions: true,
-            alarm: true
+            alarm: false //FIXME by default should be true when we have rules working
         },
         fishingActivities : {
             FAReportType: true,
@@ -107,7 +117,7 @@ angular.module('unionvmsWeb').factory('visibilityService',function() {
         segmentsColumns: ['fs','extMark','ircs','cfr','name','dist','dur','spd','crs','cat'],
         tracksColumns: ['fs','extMark','ircs','cfr','name','dist','dur','timeSea'],
         alarmsColumns: ['fs', 'extMark', 'ircs', 'cfr', 'name', 'ruleName', 'ruleDesc', 'ticketOpenDate', 'ticketStatus', 'ticketUpdateDate', 'ticketUpdatedBy', 'ruleDefinitions'],
-        tripsColumns: ['tripId','event','vesselId','duration','nCorrections','nPositions','alarm'],
+        tripsColumns: ['tripId', 'fs', 'extMark', 'ircs', 'cfr', 'uvi', 'iccat', 'gfcm', 'firstEventType', 'firstEventTime', 'lastEventType', 'lastEventTime', 'duration','nCorrections','nPositions','alarm'],
         fishingActivitiesColumns: ['FAReportType','activityType','occurrence','purposeCode','dataSource','fromName','startDate','endDate','cfr','ircs','extMark','uvi','iccat','gfcm','areas','port','fishingGear','speciesCode','quantity'],
         /**
          * Set the visibility and order of all table fields
@@ -121,6 +131,40 @@ angular.module('unionvmsWeb').factory('visibilityService',function() {
                  this[key] = setItems(this[key], data[key].table.values);
                  this[key + 'Columns'] = data[key].table.order;
              }
+        },
+        /**
+         * Initialize the visibility settings to and from the local storage
+         * 
+         * @memberof visibilityService
+         * @public
+         */
+        initFromStorage: function(){
+            //FIXME - This is to be used until we have the preferences working on the backend
+            var user = userService.getUserName();
+            if (!angular.isDefined($localStorage.visibilitySettings)){
+                $localStorage.visibilitySettings = {};
+            }
+            if (!angular.isDefined($localStorage.visibilitySettings[user])){
+                $localStorage.visibilitySettings[user] = {
+                    values: this.fishingActivities,
+                    order: this.fishingActivitiesColumns
+                };
+            } else {
+                var localConfig = angular.copy($localStorage.visibilitySettings[user]);
+                this.fishingActivities = localConfig.values;
+                this.fishingActivitiesColumns = localConfig.order;
+            }
+        },
+        /**
+         * Update the visibility setting in the local storage for a specific fishing activity column
+         * 
+         * @memberof visibilityService
+         * @public
+         * @param {String} prop - The property to be updated in the fishing activities visibility settings
+         */
+        updateStorage: function(prop){
+            var user = userService.getUserName();
+            $localStorage.visibilitySettings[user]['values'][prop] = this.fishingActivities[prop];
         }
 	};
 	

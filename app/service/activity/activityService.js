@@ -17,13 +17,13 @@ copy of the GNU General Public License along with the IFDM Suite. If not, see <h
  * @param activityRestService {Service} the activity REST service <p>{@link unionvmsWeb.activityRestService}</p>
  * @param visibilityService {Service} the visibility service <p>{@link unionvmsWeb.visibilityService}</p>
  * @param breadcrumbService {Service} the navigator breadcrumb service <p>{@link unionvmsWeb.breadcrumbService}</p>
+ * @param fishingActivityService {Service} the fishing activity service <p>{@link unionvmsWeb.fishingActivityService}</p>
  * @attr {Array} breadcrumbPages - An ordered array containing all possible values for the breadcrumb
  * @attr {Array} activities - An array containing the list of fishing activities reports
  * @attr {Array} displayedActivities - An array that is a copy of the activities array and is used in the smart tables
  * @attr {Array} history - An array containing the history list of a fishing activity report
  * @attr {Array} displayedHistory - An array that is a copy of the history array and is used in the smart tables
  * @attr {Object} overview - An object containing the data to be displayed at the activity overview partial
- * @attr {Object} details - An object containing the data to be displayed at the activity details partial
  * @attr {Object} reportsList - An object containing the state of the FA reports table such as pagination, sorting, smart table tableState
  * @attr {Object} historyList - An object containing the state of the FA history table
  * @attr {Array} allPurposeCodes - An array containing all purpose codes available to the user
@@ -31,7 +31,7 @@ copy of the GNU General Public License along with the IFDM Suite. If not, see <h
  * @description
  *  A service to deal with all activity data
  */
-angular.module('unionvmsWeb').factory('activityService',function(locale, activityRestService, visibilityService, breadcrumbService) {
+angular.module('unionvmsWeb').factory('activityService',function(locale, activityRestService, visibilityService, breadcrumbService, fishingActivityService) {
     var actServ = {};
     var pageSize = 25;
     
@@ -63,7 +63,7 @@ angular.module('unionvmsWeb').factory('activityService',function(locale, activit
     actServ.overview = {};
     actServ.history = [];
     actServ.displayedHistory = [];
-    actServ.details = {};
+    actServ.selReportDoc = {};
     actServ.activitiesHistory = [];
     actServ.displayedActivitiesHistory = [];
     
@@ -72,6 +72,7 @@ angular.module('unionvmsWeb').factory('activityService',function(locale, activit
     actServ.activitiesHistoryList = getActivitiesHistoryListObject();
     
     actServ.allPurposeCodes = [];
+    actServ.isGettingMdrCodes = false;
     
     /**
      * Create an empty reportsList Object with all the necessary properties
@@ -86,8 +87,10 @@ angular.module('unionvmsWeb').factory('activityService',function(locale, activit
             hasError: false,
             searchObject: {},
             tableState: undefined,
+            stCtrl: undefined,
+            fromForm: false,
             pagination: {
-                offset: 1,
+                offset: 0,
                 pageSize: pageSize,
                 totalPages: undefined
             },
@@ -137,15 +140,19 @@ angular.module('unionvmsWeb').factory('activityService',function(locale, activit
      * @alias resetReportsListTableState
      */
     actServ.resetReportsListTableState = function(){
+        if (angular.isDefined(actServ.reportsList.tableState)){
+            actServ.reportsList.tableState.pagination.start = 0;
+        }
+         
         actServ.reportsList.pagination = {
-            offset: 1,
+            offset: 0,
             pageSize: pageSize,
             totalPages: undefined
         };
     };
     
     /**
-     * Reset attributes of the activity service (includes activities, overview, details and reportsList
+     * Reset attributes of the activity service (includes activities, overview and reportsList
      * 
      * @memberof activityService
      * @public
@@ -158,13 +165,16 @@ angular.module('unionvmsWeb').factory('activityService',function(locale, activit
         this.overview = {};
         this.history = [];
         this.displayedHistory = [];
-        this.details = {};
         this.activitiesHistory = [];
         this.displayedActivitiesHistory = [];
         this.reportsList = getReportsListObject();
         this.historyList = getHistoryListObject();
+        this.selReportDoc = {};
         this.activitiesHistoryList = getActivitiesHistoryListObject();
         this.allPurposeCodes = [];
+        
+        this.isTableLoaded = false;
+        this.isGettingMdrCodes = false;
         
         if (angular.isDefined(goToInitialPage) && goToInitialPage){
             breadcrumbService.goToItem(0);
@@ -172,7 +182,7 @@ angular.module('unionvmsWeb').factory('activityService',function(locale, activit
     };
     
     /**
-     * Clear attribute of the activity service by its type. Type can be: <b>activities</b>, <b>overview</b>, <b>details</b>, 
+     * Clear attribute of the activity service by its type. Type can be: <b>activities</b>, <b>overview</b>, 
      * <b>history</b>, <b>activitiesHistory</b>
      * 
      * @memberof activityService
@@ -191,12 +201,17 @@ angular.module('unionvmsWeb').factory('activityService',function(locale, activit
                     break;
                 case 'activitiesHistory':
                     this.displayedActivitiesHistory = [];
+                    this.selReportDoc = {};
                     break;
                 default:
                     break;
             }
         } else {
-            this[type] = {};
+            if (type === 'details'){
+                fishingActivityService.resetActivity();
+            } else {
+                this[type] = {};
+            }
         }
     };
     
@@ -209,19 +224,15 @@ angular.module('unionvmsWeb').factory('activityService',function(locale, activit
      * @returns {Object} A pagination object with offset and pageSize
      */
     function getPaginationForServer(tableState){
-
         var pag = {
-            offset: tableState ? tableState.pagination.start : 0,
+            offset: 0, 
             pageSize: pageSize
         };
         
-        //FIXME remove the following ifelse block when server side pagination is fixed
-        if(angular.isDefined(tableState)){
-            pag.offset = tableState.pagination.start / tableState.pagination.number + 1;
-        } else {
-            pag.offset = 1;
+        if (angular.isDefined(tableState) && tableState.pagination.start > 0){
+            pag.offset = tableState.pagination.start;
         }
-         
+        
         return pag;
     }
     
@@ -242,20 +253,30 @@ angular.module('unionvmsWeb').factory('activityService',function(locale, activit
     };
 	
     /**
+     * A property to avoid automatic reloading of the table through the st-pipe, mainly used to avoid reloading data
+     * when coming back from activity details or activity history
+     */
+    actServ.isTableLoaded = false;
+    /**
      * Get the list of activities according to the table pagination and search criteria
      * 
      * @memberof activityService
      * @public
      * @alias getActivityList
      * @param {Object} searcObj - The object containing the search criteria to filter FA reports
-     */
+     */    
     actServ.getActivityList = function(callback, tableState){
         actServ.clearAttributeByType('activities');
+        
+        var simpleCriteria = {};
+        if (angular.isDefined(actServ.reportsList.searchObject.simpleCriteria)){
+            simpleCriteria = actServ.reportsList.searchObject.simpleCriteria;
+        }
         
         var payload = {
             pagination: getPaginationForServer(tableState),
             sorting: actServ.reportsList.sorting,
-            searchCriteriaMap: actServ.reportsList.searchObject.simpleCriteria,
+            searchCriteriaMap: simpleCriteria,
             searchCriteriaMapMultipleValues: actServ.reportsList.searchObject.multipleCriteria
         };
         
@@ -266,8 +287,13 @@ angular.module('unionvmsWeb').factory('activityService',function(locale, activit
             
             actServ.activities = response.resultList;
             actServ.displayedActivities = [].concat(actServ.activities);
-            if (angular.isDefined(callback) && angular.isDefined(tableState)){
-                callback(tableState);
+            if (angular.isDefined(callback)){
+                if (angular.isDefined(tableState)){
+                    callback(tableState);
+                } else {
+                    callback();
+                }
+                
             }
             
             if (!angular.isDefined(callback) && angular.isDefined(actServ.reportsList.tableState)){
@@ -276,9 +302,11 @@ angular.module('unionvmsWeb').factory('activityService',function(locale, activit
             
             actServ.reportsList.isLoading = false;
             actServ.reportsList.hasError = false;
+            actServ.isTableLoaded = true;
         }, function(error){
             actServ.reportsList.isLoading = false;
             actServ.reportsList.hasError = true;
+            actServ.isTableLoaded = false;
         });
     };
     
@@ -344,11 +372,12 @@ angular.module('unionvmsWeb').factory('activityService',function(locale, activit
      * @memberof activityService
      * @public
      * @alias getActivitiesHistory
-     * @param {Number} id - The id of the fishing activity report document
+     * @param {Object} reportDoc - The fa report document for which activities will be fetched
      * @returns {Promise} A promise that is either resolved with a list of activities or rejected with the corresponding error
      */
-    actServ.getActivitiesHistory = function(id){
+    actServ.getActivitiesHistory = function(reportDoc){
         actServ.clearAttributeByType('activitiesHistory');
+        actServ.selReportDoc = reportDoc;
         
         var payload = {
             pagination: {
@@ -360,7 +389,7 @@ angular.module('unionvmsWeb').factory('activityService',function(locale, activit
                 sortBy: 'ACTIVITY_TYPE'
             },
             searchCriteriaMap: {
-                'FA_REPORT_ID': id
+                'FA_REPORT_ID': reportDoc.id
             },
             searchCriteriaMapMultipleValues: {
                 'PURPOSE': actServ.getAllPurposeCodesArray()

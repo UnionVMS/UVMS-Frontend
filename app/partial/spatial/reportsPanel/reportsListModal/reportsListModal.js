@@ -18,9 +18,11 @@ angular.module('unionvmsWeb').controller('ReportslistmodalCtrl',function($scope,
         $modalInstance.dismiss('cancel');
     };
     
-    $scope.close = function(){
-        reportingNavigatorService.rmStateParams();
-        reportingNavigatorService.rmStateCallback();
+    $scope.close = function(keepState){
+        if(!keepState){
+            reportingNavigatorService.rmStateParams();
+            reportingNavigatorService.rmStateCallback();
+        }
         $modalInstance.close();
     };
     

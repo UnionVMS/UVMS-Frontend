@@ -9,25 +9,55 @@ the hope that it will be useful, but WITHOUT ANY WARRANTY; without even the impl
 FITNESS FOR A PARTICULAR PURPOSE.  See the GNU General Public License for more details. You should have received a
 copy of the GNU General Public License along with the IFDM Suite. If not, see <http://www.gnu.org/licenses/>.
 */
-.catch-evolution{
+.catch-evolution {
     .btn-trip-quit {
         z-index: 1;
         right: 28px;
         top: 31px;
     }   
-    .catch-evolution-container{
+    .catch-evolution-container {
+        .color-panel,
+        .specie-code,
+        .square {
+            display: inline-block;
+            line-height: 30px;
+        }
+        .color-legend {
+            margin-bottom: 10px;
+            margin-top: -10px;
+        }
+        .evolution-color-panel {
+            margin-top: 15px;
+        }
+        .color-panel {
+            margin: 0 25px 0 0;
+        }
+        .square {
+            width: 20px;
+            height: 20px;
+            margin: 0 5px 0 0;
+            vertical-align: middle;
+            border: 1px solid #808080;
+        }
         margin-top: -10px;
         padding-left: 0;
         padding-right: 30px;
-        overflow-y: auto;
-        height: calc(~"100vh - 160px");
-        .chart-panel{
+        //overflow-y: auto;
+        min-height: calc(~"100vh - 180px");
+        .chart-panel {
             padding-bottom: 10px;
             border-bottom: 1px solid #ddd;
             margin-top: 15px;
         }
-        .chart-panel-table{
+        .chart-panel-table {
            margin: 10px 0 0 0; 
+           padding-bottom: 15px;
         }
+        .catch-section {
+            min-height: 100px;
+        }
+    }
+    .fieldsetStyle {
+        margin: 0;
     }
 }
