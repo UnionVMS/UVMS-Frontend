@@ -93,11 +93,10 @@ angular.module('unionvmsWeb').directive('catchPanel', function(locale, $compile)
             
             //To refresh the charts manually
             scope.$watch(function() { return angular.element(scope.element).is(':visible'); }, function() {
-               angular.forEach( angular.element('.nvd3-chart > nvd3', scope.element),function(item){
-                        var elem = angular.element(item);
-                        var scope = elem.scope();
-                        $compile(elem)(scope);
-                  });
+                angular.forEach( angular.element('.nvd3-chart > nvd3', scope.element),function(item){
+                   var elem = angular.element(item);
+                   $compile(elem)(scope);
+                });
             });
            
 			/**

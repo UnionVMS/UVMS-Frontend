@@ -55,7 +55,6 @@ angular.module('unionvmsWeb').directive('fishingActivityNavigator', function(tri
 					
 					reportingNavigatorService.goToView('tripsPanel', 'FishingActivityPanel',function(){
 						var content = angular.element('fishing-activity-navigator');
-						var scope = content.scope();
 						$compile(content)(scope);
 					});
 				}
