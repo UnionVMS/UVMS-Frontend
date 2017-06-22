@@ -15,18 +15,30 @@ The application is run on node.js please download and install [Node.js v 5.7.1](
 
 ### Installing
 
-Follow below step by step to get a development environment running.
+Clone this [repository](https://github.com/UnionVMS/UVMS-Frontend.git) and follow below step by step to get a development environment running.
 
-Run below command to install Yeoman, Bower and Grunt to be able to develop, serve and build the application
+1. Run below command to install Yeoman, Bower and Grunt to be able to develop, serve and build the application
 
 ```
 $ npm install --global yo bower grunt-cli
 ```
 
-Install the [Angular generator](https://github.com/cgross/generator-cg-angular), this is needed to generate new frontend components
+2. Install the [Angular generator](https://github.com/cgross/generator-cg-angular), this is needed to generate new frontend components
 
 ```
 $ npm install -g generator-cg-angular
+```
+
+3. Install bower packages by running below command (specified in the manifest file `bower.json`)
+
+```
+$ bower i
+```
+
+4. Install npm packages by running below command (specified in the manifest file `package.json`)
+
+```
+$ npm i
 ```
 
 ## Grunt tasks
@@ -35,7 +47,7 @@ The project is using Grunt as a task runner. The config file with all tasks can 
 
 ### Serve the application
 
-A backend environment needs to be present to be able to run the frontend code locally. Please follow the documentation on Focus fish on [how to setup a Docker environment](https://focusfish.atlassian.net/wiki/display/UVMS/Docker+Installation)
+A backend environment needs to be present to be able to run the frontend code locally. Please follow the documentation on Focus fish on [how to setup a Docker environment](https://focusfish.atlassian.net/wiki/display/UVMS/Docker+Installation). Please specify the Wildfly port within the Gruntfile.js at connect:proxies, if you follow above guide the port should be set to '28080'.
 
 Run below command to serve the application on a web server `http://localhost:9001`
 
@@ -80,7 +92,7 @@ $ grunt build-docs
 
 ## Development and style guide
 
-To generate a new component to the project use Angular Generator with below command depending on the component
+To generate a new component to the project use Angular Generator with below command depending on the component.
 ```
 $ yo cg-angular:directive my-directive
 $ yo cg-angular:partial my-partial
