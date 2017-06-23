@@ -11,6 +11,8 @@
     "table_header_sales_type": "Type",
     "table_header_seller": "Seller",
     "table_header_buyer": "Buyer",
+    "table_header_recipient": "Recipient",
+    "table_header_buyer_recipient": "Buyer/Recipient",
     "table_header_details": "Details",
     "search_zero_results_error": "No reports matching your search criteria was found.",
     "documents_export_failed": "Failed to export documents",

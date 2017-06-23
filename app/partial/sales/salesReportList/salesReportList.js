@@ -33,6 +33,8 @@
 
         vm.callServer = callServer;
 
+        vm.getBuyerOrRecipientTitle = getBuyerOrRecipientTitle;
+
         vm.sorting = {};
 
 
@@ -75,6 +77,14 @@
 
                 vm.isLoading = false;
             });
+        }
+
+        function getBuyerOrRecipientTitle(item) {
+            if (item.buyer === "N/A" && item.recipient !== "N/A") {
+                return item.recipient;
+            }
+
+            return item.buyer;
         }
 
         function openSalesReport(item) {

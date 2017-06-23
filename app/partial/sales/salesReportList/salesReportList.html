@@ -17,7 +17,7 @@
                     <th st-sort="LANDING_PORT">{{'sales.table_header_landing_port' | i18n}}</th>
                     <th st-sort="CATEGORY">{{'sales.table_header_sales_type' | i18n}}</th>
                     <th>{{'sales.table_header_seller' | i18n}}</th>
-                    <th>{{'sales.table_header_buyer' | i18n}}</th>
+                    <th>{{'sales.table_header_buyer_recipient' | i18n}}</th>
                     <th>{{'sales.table_header_details' | i18n}}</th>
                 </tr>
             </thead>
@@ -37,8 +37,11 @@
                         <td ng-attr-title="{{item.landingDate}}">{{item.landingDate | date:"yyyy-MM-dd HH:mm"}}</td>
                         <td ng-attr-title="{{item.landingPort}}">{{item.landingPort}}</td>
                         <td ng-attr-title="{{item.category}}">{{item.category}}</td>
-                        <td ng-attr-title="{{item.buyer}}">{{item.buyer}}</td>
                         <td ng-attr-title="{{item.seller}}">{{item.seller}}</td>
+                        <td ng-attr-title="{{vm.getBuyerOrRecipientTitle(item)}}">
+                            <span ng-if="item.recipient == 'N/A'">{{item.buyer}}</span>
+                            <span ng-if="item.recipient != 'N/A'">{{item.recipient}}</span>
+                        </td>
                         <td>
                             <button class="btn btn-default btn-sm" ng-click="vm.openSalesReport(item)">
                                 <i class="fa fa-eye"></i>
@@ -57,8 +60,11 @@
                     <td ng-attr-title="{{correctedReport.landingDate}}">{{correctedReport.landingDate | date:"yyyy-MM-dd HH:mm"}}</td>
                     <td ng-attr-title="{{correctedReport.landingPort}}">{{correctedReport.landingPort}}</td>
                     <td ng-attr-title="{{correctedReport.category}}">{{correctedReport.category}}</td>
-                    <td ng-attr-title="{{correctedReport.buyer}}">{{correctedReport.buyer}}</td>
                     <td ng-attr-title="{{correctedReport.seller}}">{{correctedReport.seller}}</td>
+                    <td ng-attr-title="{{vm.getBuyerOrRecipientTitle(correctedReport)}}">
+                        <span ng-if="correctedReport.recipient == 'N/A'">{{correctedReport.buyer}}</span>
+                        <span ng-if="correctedReport.recipient != 'N/A'">{{correctedReport.recipient}}</span>
+                    </td>
                     <td>
                         <button class="btn btn-default btn-sm" ng-click="vm.openSalesReport(correctedReport)">
                             <i class="fa fa-eye"></i>

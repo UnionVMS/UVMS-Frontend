@@ -28,6 +28,9 @@
                 if (party.role === 'BUYER') {
                     vm.buyer = party;
                 }
+                if (party.role === 'RECIPIENT') {
+                    vm.recipient = party;
+                }
             });
         }
     }
