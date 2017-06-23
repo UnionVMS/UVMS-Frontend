@@ -46,7 +46,7 @@
 
         function goToNewestVersion() {
             if (vm.currentReportIsNewestVersion) {
-                throw new Exception("The button 'go to newest version' should not be activated!");
+                throw new Error("The button 'go to newest version' should not be activated!");
             }
             $state.go('app.sales.details', {id: vm.reportVersions[0].reportExtId});
         }

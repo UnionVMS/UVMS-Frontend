@@ -22,7 +22,7 @@
                 </tr>
             </thead>
 
-            <tbody ng-repeat="item in vm.salesReports.items track by $index" class="striped" ng-class="{'strike-through': item.purpose == 3}">
+            <tbody ng-repeat="item in vm.salesReports.items track by $index" class="striped" ng-class="{'strike-through': item.deletion}">
                     <tr>
                         <td><span class="glyphicon glyphicon-chevron-right" ng-show="item.olderVersions.length" ng-click="item.openDropdown = !item.openDropdown"></span></td>
                         <td class="checkboxContainer"><input type="checkbox" ng-checked="vm.isNoteChecked(item)"
