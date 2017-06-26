@@ -14,6 +14,6 @@ copy of the GNU General Public License along with the IFDM Suite. If not, see <h
 	<loading-panel type="InitialReporting" class="liveview-loading"></loading-panel>
 	<div ng-include="'partial/spatial/liveViewPanel/liveViewPanel.html'" ng-show="repNav.isSectionVisible('liveViewPanel')"></div>
 	<div ng-include="'partial/spatial/reportsPanel/reportsPanel.html'" ng-show="repNav.isSectionVisible('reportsPanel')"></div>
-	<div ng-include="'partial/spatial/configurations/configPanel.html'" ng-show="repNav.isSectionVisible('userPreferences')"></div>
+	<div ng-include="'partial/spatial/configurations/configPanel.html'" ng-if="repNav.isSectionVisible('userPreferences')"></div>
 	<div ng-include="'partial/spatial/tripsPanel/tripsPanel.html'" ng-show="repNav.isSectionVisible('tripsPanel')"></div>
 </div>

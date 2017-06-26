@@ -30,7 +30,7 @@ angular.module('unionvmsWeb').directive('combobox', function(comboboxService,loc
             isLoading : '=',
             group: '@',
             name: '@',
-            comboSection: '=',
+            comboSection: '@',
             initCallback: '=',
             noPlaceholderOnList: '@',
             defaultValue: '=',

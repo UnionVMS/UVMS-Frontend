@@ -1,70 +1,71 @@
-<div class="combobox" ng-class="{'combo-multiple': multiple, 'comboLineStyle': lineStyle === true, 'combo-editable': editable}" ng-model-options="{allowInvalid: true}" combolist-id="{{comboboxId}}">
+<div class="combobox" ng-class="::{'combo-multiple': multiple, 'comboLineStyle': lineStyle, 'combo-editable': editable}" ng-model-options="{allowInvalid: true}" combolist-id="{{::comboboxId}}">
 	<div class="dropdown fullWidthDropdown">
 		<div class="comboButtonContainer" ng-disabled="ngDisabled" ng-click="toggleCombo($event)">
-			<div class="btn btn-default dropdown-toggle" ng-if="!editable">
+			<div class="btn btn-default dropdown-toggle" ng-if="::!editable">
 				<!--selected label-->
-				<div ng-class="setplaceholdercolor ? 'placeholderColor':''" class="dropdowntext" ng-if="lineStyle !== true" title="{{initialValue && multiple ? initialValue.text + ': ' +  currentItemLabel : currentItemLabel}}">
+				<div ng-class="setplaceholdercolor ? 'placeholderColor':''" class="dropdowntext" ng-if="::!lineStyle" title="{{initialValue && multiple ? initialValue.text + ': ' +  currentItemLabel : currentItemLabel}}">
 					{{currentItemLabel}}
 					<!--MULTIPLE SELECTION-->
 					<ul class="selected-options" ng-if="multiple && (!hideSelectedItems || (hideSelectedItems && selectedItems.length === 1))">
-						<li ng-repeat="item in selectedItems" title="{{item.text}}">
+						<li ng-repeat="item in selectedItems" title="{{::item.text}}">
 							<span class="item-remover fa fa-times" ng-click="removeSelectedItem(item.code)"></span>
-							{{item.text}}
+							{{::item.text}}
 						</li>
 					</ul>
 				</div>
 				<!--SVG SELECTION-->
-				<svg height="20px" width="100%" ng-if="lineStyle === true">
+				<svg height="20px" width="100%" ng-if="::lineStyle">
 					<g fill="none" stroke="#262626" stroke-width="4">
 						<path stroke-dasharray="{{currentItemLabel}}" d="M0 10 l999 0"></path>
 					</g>
 				</svg>
 				<!--CARET-->
-				<span ng-class="{'caret': !multiple || selectedItems && selectedItems.length === 0,'clear-all item-remover fa fa-times': multiple && selectedItems.length > 0}" ng-click="removeAllSelected()"></span>
+				<span ng-if="::multiple" ng-class="{'caret': !selectedItems || !selectedItems.length,'clear-all item-remover fa fa-times': selectedItems && selectedItems.length > 0}" ng-click="removeAllSelected()"></span>
+				<span ng-if="::!multiple" class="caret"></span>
 			</div>
 			<!--INPUT FORM TO VALIDATE-->
 			<ng-form name="comboForm">
-				<input class="form-control combo-editable-input" name="comboEditableInput" ng-model="newItem.text" ng-change="onComboChange()" ng-focus="focus=true" ng-blur="focus=false" placeholder="{{placeholder}}" ng-if="editable">
-				<span ng-class="{'caret': !multiple || selectedItems && selectedItems.length === 0,'clear-all item-remover fa fa-times': multiple && selectedItems.length > 0}" ng-click="removeAllSelected()" ng-show="editable"></span>
+				<div ng-if="::editable">
+					<input class="form-control combo-editable-input" name="comboEditableInput" ng-model="newItem.text" ng-change="onComboChange()" ng-focus="focus=true" ng-blur="focus=false" placeholder="{{::placeholder}}">
+					<span class="caret"></span>
+				</div>
 			</ng-form>
 		</div>
 	</div>
-	<div class="comboList fullWidthDropdown {{listClass}}" ng-class="{'open': isOpen, 'comboLineStyle': lineStyle === true, 'combo-section': comboSection}">
+	<div class="comboList fullWidthDropdown {{::listClass}} {{ ::lineStyle ? 'comboLineStyle' : '' }} {{ ::comboSection ? 'combo-section' : '' }}" ng-class="{'open': isOpen}">
 		<ul class="dropdown-menu">
 			<!--PLACEHOLDER-->
-			<li class="combo-placeholder" ng-class="!initialtextSelectable ? 'disabled' : ''" ng-show="initialValue && !isLoading" ng-click="selectVal(initialValue)" ng-if="!noPlaceholderOnList" title="{{initialValue.text}}">
-				<a ng-bind="initialValue.text"></a>
+			<li class="combo-placeholder" ng-show="!isLoading" ng-click="selectVal(initialValue)" ng-if="::(!noPlaceholderOnList && initialValue)" title="{{::initialValue.text}}">
+				<a ng-bind="::initialValue.text"></a>
 			</li>
-			<li class="disabled" ng-if="comboSection && (!loadedItems || !loadedItems.length)" title="{{'common.no_data_available' | i18n}}">
-				<a ng-bind="('common.no_data_available' | i18n)"></a>
+			<li class="disabled" ng-if="comboSection && (!loadedItems || !loadedItems.length)" title="{{ ::comboboxServ.noDataAvailableLabel }}">
+				<a ng-bind="::comboboxServ.noDataAvailableLabel"></a>
 			</li>
 			<!--BASIC COMBO-->
-			<li ng-class="{'disabled': disabledItem(item),'selected-combo-item': multiple && selectedItems.indexOf(item) !== -1}"
-			ng-repeat="item in loadedItems" ng-click="changeCheckSelection(item)"
-			ng-if="(!group || (group && comboboxServ.isAvailableItem(group, ngModel, item.code))) && !lineStyle && !comboSection && !isFilterActive && !isLoading"
-			title="{{getItemDesc(item)}}">
-				<!--<i class="fa fa-check" style="position: absolute;left:3px;top:5px;" ng-if="multiple && ngModel.indexOf(item.code) !== -1"></i>-->
+			<li class="{{ ::disabledItem(item) ? 'disabled':'' }}" ng-class="{'selected-combo-item': multiple && selectedItems.indexOf(item) !== -1}"
+			ng-repeat="item in loadedItems" ng-click="changeCheckSelection(item)" ng-if="!lineStyle && !comboSection && !isFilterActive && !isLoading"
+			title="{{::getItemDesc(item)}}" ng-show="(!group || (group && comboboxServ.isAvailableItem(group, ngModel, item.code)))">
 				<i class="selected-combo-icon fa fa-check"></i>
-				<a ng-bind="getItemLabel(item)"></a>
+				<a ng-bind="::getItemLabel(item)"></a>
 			</li>
 			<!--COMBO WITH SECTIONS-->
 			<li class="disabled" ng-repeat="section in loadedItems" ng-if="comboSection && !isLoading">
-				<a ng-bind="getItemLabel(section) | uppercase" title="{{getItemDesc(section)}}"></a>
+				<a ng-bind="::(getItemLabel(section) | uppercase)" title="{{::(getItemDesc(section) | uppercase)}}"></a>
 				<ul class="dropdown-submenu">
-					<li ng-class="disabledItem(item) ? 'disabled' : ''" ng-repeat="item in section.items" ng-click="selectVal(item)" title="{{getItemDesc(item)}}">
-						<a ng-bind="getItemLabel(item)"></a>
+					<li class="{{::disabledItem(item) ? 'disabled' : ''}}" ng-repeat="item in ::section.items" ng-click="selectVal(item)" title="{{::getItemDesc(item)}}">
+						<a ng-bind="::getItemLabel(item)"></a>
 					</li>
 				</ul>
 			</li>
 			<!--COMBO WITH FILTER-->
-			<li ng-class="disabledItem(item) ? 'disabled' : ''" ng-repeat="item in loadedItems | filter:newItem" ng-click="selectVal(item)" ng-show="!scope.isLoading" ng-if="isFilterActive" title="{{getItemDesc(item)}}">
-				<a ng-bind="getItemLabel(item)"></a>
+			<li class="{{ ::disabledItem(item) ? 'disabled':'' }}" ng-repeat="item in loadedItems | filter:newItem" ng-click="selectVal(item)" ng-show="!scope.isLoading" ng-if="isFilterActive" title="{{::getItemDesc(item)}}">
+				<a ng-bind="::(getItemLabel(item))"></a>
 			</li>
 			<!--SVG COMBO-->
-			<li ng-class="disabledItem(item) ? 'disabled' : ''" ng-repeat="item in loadedItems" ng-click="selectVal(item)" ng-if="lineStyle" ng-show="!isLoading">
+			<li class="{{ ::disabledItem(item) ? 'disabled':'' }}" ng-repeat="item in loadedItems" ng-click="selectVal(item)" ng-if="::lineStyle" ng-show="!isLoading">
 				<svg height="21px" width="100%">
 					<g fill="none" stroke="#262626" stroke-width="4">
-						<path stroke-dasharray="{{getItemLabel(item)}}" d="M0 13 l999 0"></path>
+						<path stroke-dasharray="{{::getItemLabel(item)}}" d="M0 13 l999 0"></path>
 					</g>
 				</svg>
 			</li>
