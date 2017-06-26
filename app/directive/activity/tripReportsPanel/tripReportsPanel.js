@@ -18,7 +18,7 @@ copy of the GNU General Public License along with the IFDM Suite. If not, see <h
  * @description
  *  A reusable tile that will display the report messages and the message types count related to the selected trip
  */
-angular.module('unionvmsWeb').directive('tripReportsPanel', function(loadingStatus,activityRestService,$anchorScroll,locale,reportingNavigatorService,fishingActivityService,tripReportsTimeline) {
+angular.module('unionvmsWeb').directive('tripReportsPanel', function(loadingStatus,activityRestService,$anchorScroll,locale,reportingNavigatorService,fishingActivityService,tripReportsTimeline,$compile) {
     return {
         restrict: 'E',
         replace: true,
@@ -116,7 +116,12 @@ angular.module('unionvmsWeb').directive('tripReportsPanel', function(loadingStat
                 fishingActivityService.documentType = node.documentType;
                 fishingActivityService.activityType = node.srcType;
                 tripReportsTimeline.setCurrentPreviousAndNextItem(node.id, parentId);
-                reportingNavigatorService.goToView('tripsPanel',  'FishingActivityPanel');
+                reportingNavigatorService.goToView('tripsPanel',  'FishingActivityPanel',function(){
+                    var content = angular.element('fishing-activity-navigator');
+                    if(content.length){
+                        $compile(content)(scope);
+                    }
+                });
             };
         }
     };

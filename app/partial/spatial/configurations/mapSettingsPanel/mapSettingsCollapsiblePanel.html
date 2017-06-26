@@ -23,7 +23,7 @@ copy of the GNU General Public License along with the IFDM Suite. If not, see <h
 						<i class="pull-right glyphicon" ng-class="{'glyphicon-chevron-down': status.isOpen, 'glyphicon-chevron-right': !status.isOpen}"></i>
 					</div>
 				</accordion-heading>
-				<div ng-include="'partial/spatial/configurations/mapSettingsPanel/refreshSettingsForm/refreshSettingsForm.html'" ng-if="settingsLevel !== 'report'"></div>
+				<div ng-include="'partial/spatial/configurations/mapSettingsPanel/refreshSettingsForm/refreshSettingsForm.html'" ng-if="::(settingsLevel !== 'report')"></div>
 				<div ng-include="'partial/spatial/configurations/mapSettingsPanel/mapProjectionSettings/mapProjectionSettings.html'"></div>
 				<div class="col-md-12 col-btn-no-padding" ng-if="settingsLevel !== 'admin'">
 					<button type="button" class="btn btn-default pull-right" ng-click="prefService.reset('map',mapSettingsForm,configModel,configCopy,settingsLevel)">{{'spatial.settings_reset_btn' | i18n}}</button>
