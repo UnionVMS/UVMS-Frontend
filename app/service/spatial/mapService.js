@@ -536,24 +536,24 @@ angular.module('unionvmsWeb').factory('mapService', function(locale, $rootScope,
         
         cluster.on('change', function(e){
             //hide popup if position is clustered
-            if (angular.isDefined(ms.overlay)){
-                var id = ms.overlay.get('featureId');
-                var layerSrc = ms.getLayerByType('vmspos').getSource();
-                var features = layerSrc.getFeaturesInExtent(ms.map.getView().calculateExtent(ms.map.getSize()));
-                if (features.length > 0){
-                    var visible = false;
-                    angular.forEach(features, function(feature) {
-                        var inFeatures = feature.get('features');
-                        if (inFeatures.length === 1 && inFeatures[0].getId() === id){
-                            visible = true;
-                        }
-                    });
-                        
-                    if (!visible){
-                        ms.closePopup();
-                    }
-                }
-            }
+//            if (angular.isDefined(ms.overlay)){
+//                var id = ms.overlay.get('featureId');
+//                var layerSrc = ms.getLayerByType('vmspos').getSource();
+//                var features = layerSrc.getFeaturesInExtent(ms.map.getView().calculateExtent(ms.map.getSize()));
+//                if (features.length > 0){
+//                    var visible = false;
+//                    angular.forEach(features, function(feature) {
+//                        var inFeatures = feature.get('features');
+//                        if (inFeatures.length === 1 && inFeatures[0].getId() === id){
+//                            visible = true;
+//                        }
+//                    });
+//                        
+//                    if (!visible){
+//                        ms.closePopup();
+//                    }
+//                }
+//            }
         });
         
         var layer = new ol.layer.Vector({

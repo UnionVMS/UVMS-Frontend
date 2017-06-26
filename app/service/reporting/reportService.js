@@ -379,14 +379,15 @@ angular.module('unionvmsWeb').factory('reportService',function($rootScope, $time
                 
                 //Add nodes to the tree and layers to the map
                 //FIXME check for activities in the data
-                if (rep.positions.length > 0 || rep.segments.length > 0){
+                if (rep.positions.length > 0 || rep.segments.length > 0 || rep.activities.length > 0){
                     var vectorNodeSource = new TreeModel();
                     vectorNodeSource = vectorNodeSource.nodeFromData(data);
                     
                     layerPanelService.addLayerTreeNode(vectorNodeSource);
                     
                     if (reportingNavigatorService.isViewVisible('mapPanel')){
-                        mapService.zoomToPositionsLayer();
+                        //FIXME uncomment
+                        //mapService.zoomToPositionsLayer();
                     }
                 } else if (rep.positions.length === 0 && rep.segments.length === 0){
                     rep.hasAlert = true;
