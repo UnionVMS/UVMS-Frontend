@@ -11,7 +11,7 @@ copy of the GNU General Public License along with the IFDM Suite. If not, see <h
 -->
 <div class="row layer-selector-container" ng-controller="AreaslayersCtrl">
 	<div class="col-md-12 areas-selector">
-		<div ng-if="settingsLevel !== 'admin'">
+		<div ng-if="::(settingsLevel !== 'admin')">
 			<div class="col-md-4">
 				<span>{{'spatial.layer_settings_system_areas' | i18n}}</span>
 				<input type="radio" ng-model="selectedAreaType.name" value="sysarea">
@@ -25,12 +25,12 @@ copy of the GNU General Public License along with the IFDM Suite. If not, see <h
 				<input type="radio" ng-model="selectedAreaType.name" value="areagroup">
 			</div>
 		</div>
-		<div ng-repeat="container in areas.containers">
-			<div class="container-element" ng-repeat="list in container.lists" ng-show="selectedAreaType.name===list.type">
-		        <div class="column" ng-class="{'sysAreaList': list.type==='sysarea','userAreaList': list.type==='userarea','areaGroupList': list.type==='areagroup'}">
+		<div ng-repeat="container in ::areas.containers">
+			<div class="container-element" ng-repeat="list in ::container.lists" ng-show="selectedAreaType.name===list.type">
+		        <div class="column" ng-class="::{'sysAreaList': list.type==='sysarea','userAreaList': list.type==='userarea','areaGroupList': list.type==='areagroup'}">
 		        	<h5>{{list.name | i18n}}</h5>
 		        	<div ng-if="(!list.items || list.items.length === 0) && !isLoadingSysAreas && !isLoadingUserAreas && !isLoadingAreaGroups" class="noLayersMessage">
-						<span>There are no areas</span>
+						<span>{{'common.no_data_available' | i18n}}</span>
 					</div>
 					<div ng-if="isLoadingSysAreas || isLoadingUserAreas || isLoadingAreaGroups" class="loading-spinner-cl">
 			        	<i class="fa fa-spinner fa-spin loading-spinner"></i>
@@ -43,7 +43,7 @@ copy of the GNU General Public License along with the IFDM Suite. If not, see <h
 				            dnd-effect-allowed="copy"
 				            dnd-dragend="clearPlaceHolders()">
 				            <div class="handle">:::</div>
-							<div class="item">{{item.name}}</div>
+							<div class="item">{{::item.name}}</div>
 				        </li>
 				    </ul>
 		        </div>

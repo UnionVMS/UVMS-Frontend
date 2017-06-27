@@ -1,19 +1,19 @@
 <div class="aggr-panel" ng-init="selectedTypes = []">
     <!--TITLE-->
-    <h5 class="aggr-title">{{title}}</h5>
+    <h5 class="aggr-title">{{::title}}</h5>
     <!--TREE-->
     <div ui-tree="treeOptions" style="overflow:auto;" class="wrapper" name="aggrPanelParent">
         <ul ui-tree-nodes ng-model="ngModel" class="aggr-panel-list" name="aggrPanel">
             <li ui-tree-node ng-repeat="item in ngModel" data-scroll-container=".wrapper">
                 <div ng-if="!$first" class="identation" ng-style="{'margin-left': calcIdentation($index) }"></div>
                 <div ui-tree-handle>
-                    ::: {{item.text}}
+                    ::: {{::item.text}}
                 </div>
-                <combobox ng-if="item.selection === 'single'" class="sub-aggr-combo" items="item.items" ng-model="item.values" no-placeholder-on-list="true" default-value="item.items[0].code"></combobox>
-                <combobox ng-if="item.selection === 'multiple'" multiple="true" class="sub-aggr-combo" items="item.items" ng-model="item.values" no-placeholder-on-list="true" min-selections="1" hide-selected-items="true"></combobox>
+                <combobox ng-if="::item.selection === 'single'" class="sub-aggr-combo" items="::item.items" ng-model="item.values" no-placeholder-on-list="true" default-value="item.items[0].code"></combobox>
+                <combobox ng-if="::item.selection === 'multiple'" multiple="true" class="sub-aggr-combo" items="::item.items" ng-model="item.values" no-placeholder-on-list="true" min-selections="1" hide-selected-items="true"></combobox>
             </li>
         </ul>
     </div>
     <!--FILTERS LIST-->
-    <combobox class="aggr-types-combo" items="aggregationTypes" ng-model="selectedTypes" multiple="true" hide-selected-items="true" min-selections="minSelections" initialtext="{{'spatial.aggregation_types' | i18n}}"></combobox>
+    <combobox class="aggr-types-combo" items="::aggregationTypes" ng-model="selectedTypes" multiple="true" hide-selected-items="true" min-selections="minSelections" initialtext="{{'spatial.aggregation_types' | i18n}}"></combobox>
 </div>

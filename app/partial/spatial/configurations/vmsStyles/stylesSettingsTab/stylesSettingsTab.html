@@ -11,9 +11,9 @@ copy of the GNU General Public License along with the IFDM Suite. If not, see <h
 -->
 <div ng-controller="StylessettingstabCtrl" ng-init="init(styleTab.menu)">
     <ng-form name="{{styleTab.menu}}sForm" novalidate>
-		<div class="row" ng-if="styleTab.menu !== 'alarm'">
-			<div class="form-group col-md-4" ng-class="{'has-error': {{styleTab.menu}}sForm.{{styleTab.menu}}Property.$invalid}">
-				<combobox ng-model="configModel[styleTab.menu + 'Style'].attribute" initialtext="{{'spatial.' + styleTab.menu + '_property' | i18n }}" items="properties" ng-change="changeProperty()" name="{{styleTab.menu}}Property" ng-required="true"></combobox>
+		<div class="row" ng-if="::(styleTab.menu !== 'alarm')">
+			<div class="form-group col-md-4" ng-class="{'has-error': {{::styleTab.menu}}sForm.{{::styleTab.menu}}Property.$invalid}">
+				<combobox ng-model="configModel[styleTab.menu + 'Style'].attribute" initialtext="{{'spatial.' + styleTab.menu + '_property' | i18n }}" items="::properties" ng-change="changeProperty()" name="{{::styleTab.menu}}Property" ng-required="true"></combobox>
 			</div>
 			<div class="form-group col-md-4 btn-add" ng-show="configModel[styleTab.menu + 'Style'].attribute && ['reportedSpeed','calculatedSpeed','reportedCourse','courseOverGround','speedOverGround','distance'].indexOf(configModel[styleTab.menu + 'Style'].attribute) !== -1">
 				<button class="btn btn-default" ng-class="{ disabled: !isRulesFormValid()}" ng-click="addNewRule()" ng-disabled="!isRulesFormValid()" title="{{'spatial.property_add_rule' | i18n }}">
@@ -21,24 +21,24 @@ copy of the GNU General Public License along with the IFDM Suite. If not, see <h
 				</button>
 			</div>
 		</div>
-        <div class="row" ng-if="styleTab.menu === 'alarm'">
+        <div class="row" ng-if="::(styleTab.menu === 'alarm')">
 			<div class="col-md-12 alarm-styles-title">{{'spatial.preferences_alarm_status_category_title' | i18n | uppercase}}</div>
 		</div>
         <div class="row rulesList">
 			<ng-form name="ruleslistForm">
 				<div ng-if="styleTab.menu !== 'alarm' && configModel[styleTab.menu + 'Style'].attribute === 'countryCode'" ng-include="'partial/spatial/configurations/vmsStyles/generalStyles/countryStyles/countryStyles.html'" ng-init="lastComponentStyle = styleTab.menu" class="col-md-12"></div>
 				<div ng-repeat="item in configModel[styleTab.menu + 'Style'].style" ng-include="'partial/spatial/configurations/vmsStyles/generalStyles/ruleRow/ruleRow.html'" ng-if="styleTab.menu !== 'alarm' && configModel[styleTab.menu + 'Style'].attribute !== 'countryCode'" ng-init="lastComponentStyle = styleTab.menu"></div>
-				<ng-form name="alarmsListForm" ng-if="styleTab.menu === 'alarm'" novalidate>
+				<ng-form name="alarmsListForm" ng-if="::(styleTab.menu === 'alarm')" novalidate>
 					<div class="row col-md-12" ng-repeat="item in configModel.alarmStyle.style">
 						<div class="form-group col-md-2">
-							{{item.code}}
+							{{::item.code}}
 						</div>
 						<div class="form-group col-md-3" ng-class="{'has-error': !isAlarmColorValid(item)}">
 							<div class="colorPickerComponent">
 								<div ng-style="{'background-color': item.color && item.color.length > 3 && item.color.length <= 7 && item.color.indexOf('#') != -1 ? item.color : '#fff'}" class="form-control pickedcolor">
 									<i class="fa fa-ban" ng-hide="item.color && item.color.length > 3 && item.color.length <= 7 && item.color.indexOf('#') != -1"></i>
 								</div>
-								<input class="form-control" colorpicker ng-model="item.color" type="text" ng-change="validatePropertyColor(item,'alarmsListForm');" name="propertyColor{{item.id}}" autocomplete="off"/>
+								<input class="form-control" colorpicker ng-model="item.color" type="text" ng-change="validatePropertyColor(item,'alarmsListForm');" name="propertyColor{{::item.id}}" autocomplete="off"/>
 							</div>
 						</div>
 						<div ng-messages="alarmsListForm['propertyColor' + item.id].$error" ng-show="!isAlarmColorValid(item)">

@@ -67,10 +67,6 @@ angular.module('unionvmsWeb').controller('VmsstylescollapsiblepanelCtrl',functio
 	   $scope.selectedMenu = menu;
 	};
 	
-	$scope.isMenuSelected = function(menu){
-	   return $scope.selectedMenu === menu;
-	};
-    
     $scope.generateRandomColor = function(){
 		var color = "#";
 	    var possible = "0123456789";
