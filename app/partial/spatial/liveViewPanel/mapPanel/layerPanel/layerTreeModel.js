@@ -494,9 +494,9 @@ angular.module('unionvmsWeb').factory('TreeModel',function(locale, mapService, u
                     childNodes.push({
                         title: type, //FIXME use abbreviations
                         filterType: type,
-                        type: 'ers-source',
+                        type: 'ers-type',
                         selected: true
-                    })
+                    });
                 });
                 
                 node.children = childNodes;
@@ -522,7 +522,7 @@ angular.module('unionvmsWeb').factory('TreeModel',function(locale, mapService, u
 	                childNodes.push({
 	                    title: source,
 	                    filterType: source,
-	                    type: 'vmspos-source',
+	                    type: 'vmspos-type',
 	                    selected: true
 	                });
 	                //sourcesType.push(source);

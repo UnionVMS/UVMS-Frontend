@@ -2738,6 +2738,7 @@ angular.module('unionvmsWeb').factory('mapService', function(locale, $rootScope,
             var overlayId, feat;
             src.forEachFeatureInExtent(extent, function(feature){
                 if (type === 'vmspos'){
+                    var activeNodes = layerPanelService.getChildrenByStatus(true, 'vmspos');
                     var containedFeatures = feature.get('features');
                     if (containedFeatures.length === 1){
                         feat = containedFeatures[0];
@@ -2753,11 +2754,12 @@ angular.module('unionvmsWeb').factory('mapService', function(locale, $rootScope,
                             overlayId = ms.generateOverlayId(ms[containerName]);
                         }
                         ms[containerName].displayedIds.push(overlayId);
-                        if (!angular.isDefined(feat.get('overlayHidden')) || (feat.get('overlayHidden') === false && !angular.isDefined(feat.get('overlayId')))){
+                        if (_.indexOf(activeNodes, feat.get('source')) !== -1 && (!angular.isDefined(feat.get('overlayHidden')) || (feat.get('overlayHidden') === false && !angular.isDefined(feat.get('overlayId'))))){
                             ms.addLabelsOverlay(feat, type, overlayId);
                         }
                     }
                 } else {
+                    //Segments
                     var geom = feature.getGeometry();
                     if (geom.getLength() > 0){
                         var featSize = geom.getLength();
@@ -2829,38 +2831,6 @@ angular.module('unionvmsWeb').factory('mapService', function(locale, $rootScope,
         }, ms[containerName]);
         
         ms[containerName].active = false;
-    };
-    
-    /**
-     * Toggle labels for positions which were hidden by source in the layer tree
-     * 
-     * @memberof mapService
-     * @public
-     * @alias toggleVectorLabelsForSources 
-     * @param {Object} overlayStatus - An object conatining an array of overlay ids, array of features and the label visibility status
-     */
-    ms.toggleVectorLabelsForSources = function(overlayStatus){
-        var keys = _.keys(ms.vmsposLabels);
-        keys = _.without(keys, 'active', 'displayedIds');
-        
-        if (overlayStatus.visibility === false){
-            var intersection = _.intersection(keys, overlayStatus.overlayIds);
-            angular.forEach(intersection, function(key) {
-                ms.map.removeOverlay(this[key].overlay);
-                this[key].feature.set('overlayId', undefined);
-                delete this[key];
-                var idx = _.indexOf(this.displayedIds, key);
-                if (idx !== -1){
-                    this.displayedIds.splice(idx, 1);
-                }
-            }, ms.vmsposLabels);
-        } else {
-            angular.forEach(overlayStatus.features, function(feat) {
-                var overlayId = ms.generateOverlayId(ms.vmsposLabels);
-                ms.vmsposLabels.displayedIds.push(overlayId);
-                ms.addLabelsOverlay(feat, 'vmspos', overlayId);
-            });
-        }
     };
     
     /**
