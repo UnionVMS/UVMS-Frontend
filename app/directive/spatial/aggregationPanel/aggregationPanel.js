@@ -163,6 +163,12 @@ angular.module('unionvmsWeb').directive('aggregationPanel', function() {
 				dropped: function(evt) {
 					fn.$setDirty();
 				},
+				dragStart: function(evt) {
+					angular.element('body').addClass('is-dragging');
+				},
+				dragStop: function(evt) {
+					angular.element('body').removeClass('is-dragging');
+				}
 			};
 
 			checkMinSelections();

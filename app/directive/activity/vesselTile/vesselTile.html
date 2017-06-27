@@ -1,14 +1,14 @@
 <fieldset class="col-md-12 fieldsetStyle vessel-tile">
     <legend class="fieldsetLegendStyle">
-        <a>{{tileTitle}}</a>
+        <a>{{::tileTitle}}</a>
     </legend>
-    <div class="row" ng-if="ngModel">
-        <fa-details-panel class="summary-section no-border col-md-{{colWidth}}" ng-model="ngModel.vesselOverview" ng-if="ngModel.vesselOverview"></fa-details-panel>
-        <fa-details-panel class="summary-section col-md-{{colWidth}}" ng-model="ngModel.authorizations" ng-if="ngModel.authorizations"></fa-details-panel>
-        <carousel-tile class="summary-section contact-parties col-md-{{colWidth}}" ng-if="ngModel.contactParties" tile-title="{{'activity.contact_parties' | i18n}}" ng-model="ngModel.contactParties" template-url="directive/activity/carouselTile/templates/contactPartiesTile/contactPartiesTile.html"></carousel-tile>
-        <fa-details-panel class="summary-section col-md-{{colWidth}}" ng-model="ngModel.storage" ng-if="ngModel.storage"></fa-details-panel>
+    <div class="row" ng-if="::ngModel">
+        <fa-details-panel class="summary-section no-border col-md-{{::colWidth}}" ng-model="::ngModel.vesselOverview" ng-if="::ngModel.vesselOverview"></fa-details-panel>
+        <fa-details-panel class="summary-section col-md-{{::colWidth}}" ng-model="::ngModel.authorizations" ng-if="::ngModel.authorizations"></fa-details-panel>
+        <carousel-tile class="summary-section contact-parties col-md-{{::colWidth}}" ng-if="::ngModel.contactParties" tile-title="{{'activity.contact_parties' | i18n}}" ng-model="::ngModel.contactParties" template-url="directive/activity/carouselTile/templates/contactPartiesTile/contactPartiesTile.html"></carousel-tile>
+        <fa-details-panel class="summary-section col-md-{{::colWidth}}" ng-model="::ngModel.storage" ng-if="::ngModel.storage"></fa-details-panel>
     </div>
-    <div class="row no-data" ng-if="!ngModel">
+    <div class="row no-data" ng-if="::!ngModel">
         <div class="col-md-12">
             <span>{{'activity.no_data' | i18n}}</span>
         </div>

@@ -20,12 +20,14 @@ copy of the GNU General Public License along with the IFDM Suite. If not, see <h
  * @description
  *  Service to manage all existent combobox(directive) in the application
  */
-angular.module('unionvmsWeb').factory('comboboxService', function($window) {
+angular.module('unionvmsWeb').factory('comboboxService', function($window, $filter) {
 	var cb = {};
 	var activeCombo;
 	var selectedItemsGroup = {};
 	var comboList = {};
 	
+	cb.noDataAvailableLabel = $filter('i18n')('common.no_data_available');
+
 	/**
      * Check if the click event was triggered by clicking on any element whithin the active combobox
      * 

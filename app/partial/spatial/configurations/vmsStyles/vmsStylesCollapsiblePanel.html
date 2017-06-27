@@ -23,19 +23,19 @@ copy of the GNU General Public License along with the IFDM Suite. If not, see <h
 						<i class="pull-right glyphicon" ng-class="{'glyphicon-chevron-down': status.isOpen, 'glyphicon-chevron-right': !status.isOpen}"></i>
 					</div>
 				</accordion-heading>
-				<div class="containerWithBottomPadding" ng-hide="settingsLevel === 'report' && checkComponents()">
+				<div class="containerWithBottomPadding" ng-hide="::(settingsLevel === 'report' && checkComponents())">
 					<div class="row">
 						<div class="col-md-6 sectionMenu">
 							<ul class="horizontal pipeSeparator">
-								<li ng-repeat="menu in headerMenus" ng-click="selectMenu(menu.menu)" ng-class="{'active': selectedMenu === '{{menu.menu}}'}"><a>{{menu.title}}</a></li>
+								<li ng-repeat="menu in ::headerMenus" ng-click="selectMenu(menu.menu)" ng-class="{'active': selectedMenu === '{{::menu.menu}}'}"><a>{{::menu.title}}</a></li>
 							</ul>
 						</div>
 					</div>
 				</div>
 
-				<div ng-repeat="styleTab in headerMenus" ng-include="'partial/spatial/configurations/vmsStyles/stylesSettingsTab/stylesSettingsTab.html'" ng-show="isMenuSelected(styleTab.menu)"></div>
+				<div ng-repeat="styleTab in ::headerMenus" ng-include="'partial/spatial/configurations/vmsStyles/stylesSettingsTab/stylesSettingsTab.html'" ng-show="selectedMenu === styleTab.menu"></div>
 
-				<div class="col-md-12 col-btn-no-padding" ng-if="settingsLevel !== 'admin'">
+				<div class="col-md-12 col-btn-no-padding" ng-if="::(settingsLevel !== 'admin')">
 					<button type="button" class="btn btn-default pull-right" ng-click="prefService.reset('styles',stylesSettingsForm,configModel,configCopy,settingsLevel)">{{'spatial.settings_reset_btn' | i18n}}</button>
 				</div>
 			</accordion-group>

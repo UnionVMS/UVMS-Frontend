@@ -159,7 +159,7 @@ copy of the GNU General Public License along with the IFDM Suite. If not, see <h
 					</div>
 				</div>
 				<!-- RESET TO DEFAULTS -->
-				<div class="col-md-12 col-btn-no-padding reset-row" ng-if="settingsLevel !== 'admin'">
+				<div class="col-md-12 col-btn-no-padding reset-row" ng-if="::(settingsLevel !== 'admin')">
 					<button type="button" class="btn btn-default pull-right ng-binding" ng-click="initializeCurrentSelection();prefService.reset('referenceData',referenceDataSettingsForm,configModel,configCopy,settingsLevel,setInitialValues)">{{'spatial.settings_reset_btn' | i18n}}</button>
 				</div>
 			</accordion-group>

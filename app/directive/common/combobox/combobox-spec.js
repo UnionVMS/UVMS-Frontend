@@ -113,7 +113,7 @@ describe('combobox', function() {
       'minSelections': {attr: 'minSelections', type: '='}
     },
     sectionCombo: {
-      'comboSection': {attr: 'comboSection', type: '='},
+      'comboSection': {attr: 'comboSection', type: '@'},
       'items': {attr: 'itemsSection', type: '='}
     }
   };
