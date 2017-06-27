@@ -114,9 +114,13 @@ describe('dateTimeService', function($provide) {
     d = '2018-01-22 18:12:85 -0200';
     expect(dateTimeService.isFormattedWithTimeZone(d)).toBeTruthy();
 
+    //Contains timezone
+    d = '2017-06-22T12:21:54.148+02:00'
+    expect(dateTimeService.isFormattedWithTimeZone(d)).toBeTruthy();
+
     //Missing space
     d = '2015-11-18 13:49:00+01:00';
-    expect(dateTimeService.isFormattedWithTimeZone(d)).toBeFalsy();
+    expect(dateTimeService.isFormattedWithTimeZone(d)).toBeTruthy();
 
     //Incorrect date format, year should be 4 digits
     d = '15-11-18 13:49:00 +02:00';
