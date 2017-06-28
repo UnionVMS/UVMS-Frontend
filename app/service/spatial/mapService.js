@@ -2644,7 +2644,9 @@ angular.module('unionvmsWeb').factory('mapService', function(locale, $rootScope,
         positions: ['fs', 'extMark', 'ircs', 'cfr', 'name', 'posTime', 'lat', 'lon', 'stat', 'm_spd', 'c_spd', 'crs', 'msg_tp', 'act_tp', 'source'],
         positionsTitles: true,
         segments: ['fs', 'extMark', 'ircs', 'cfr', 'name', 'dist', 'dur', 'spd', 'crs', 'cat'],
-        segmentsTitles: true
+        segmentsTitles: true,
+        activities: ['fs', 'ext_mark', 'ircs', 'cfr', 'gfcm', 'iccat', 'uvi', 'name', 'source', 'activityType', 'reportType', 'purposeCode', 'occurrence', 'areas', 'gears', 'species'],
+        activitiesTitles: true
     };
     
     /**
@@ -2675,6 +2677,11 @@ angular.module('unionvmsWeb').factory('mapService', function(locale, $rootScope,
        displayedIds: []
     };
     
+    ms.ersLabels = {
+        active: false,
+        displayedIds: []
+    };
+    
     /**
      * Reset all label container objects
      * 
@@ -2689,6 +2696,11 @@ angular.module('unionvmsWeb').factory('mapService', function(locale, $rootScope,
         };
         
         ms.vmssegLabels = {
+            active: false,
+            displayedIds: []
+        };
+        
+        ms.ersLabels = {
             active: false,
             displayedIds: []
         };
@@ -2711,6 +2723,10 @@ angular.module('unionvmsWeb').factory('mapService', function(locale, $rootScope,
         if (ms.vmssegLabels.active === true){
             ms.activateVectorLabels('vmsseg');
         }
+        
+        if (ms.ersLabels.active === true){
+            ms.activateVectorLabels('ers');
+        }
     };
     
     //Activate Vector Label Overlays
@@ -2723,7 +2739,9 @@ angular.module('unionvmsWeb').factory('mapService', function(locale, $rootScope,
      * @param {String} type - The type of labels to be activated (either <b>positions</b> or <b>segments</b>)
      */
     ms.activateVectorLabels = function(type){
-        if ((type === 'vmspos' && ms.labelVisibility.positions.length > 0) || (type === 'vmsseg' && ms.labelVisibility.segments.length > 0)){
+        if ((type === 'vmspos' && ms.labelVisibility.positions.length > 0) || 
+                (type === 'vmsseg' && ms.labelVisibility.segments.length > 0) ||
+                (type === 'ers' && ms.labelVisibility.activities.length > 0)){
             var containerName = type + 'Labels'; 
             ms[containerName].active = true;
             ms[containerName].displayedIds = [];
@@ -2737,8 +2755,9 @@ angular.module('unionvmsWeb').factory('mapService', function(locale, $rootScope,
             var src = layer.getSource();
             var overlayId, feat;
             src.forEachFeatureInExtent(extent, function(feature){
+                var activeNodes;
                 if (type === 'vmspos'){
-                    var activeNodes = layerPanelService.getChildrenByStatus(true, 'vmspos');
+                    activeNodes = layerPanelService.getChildrenByStatus(true, 'vmspos');
                     var containedFeatures = feature.get('features');
                     if (containedFeatures.length === 1){
                         feat = containedFeatures[0];
@@ -2753,8 +2772,21 @@ angular.module('unionvmsWeb').factory('mapService', function(locale, $rootScope,
                         if (!angular.isDefined(overlayId)){
                             overlayId = ms.generateOverlayId(ms[containerName]);
                         }
-                        ms[containerName].displayedIds.push(overlayId);
                         if (_.indexOf(activeNodes, feat.get('source')) !== -1 && (!angular.isDefined(feat.get('overlayHidden')) || (feat.get('overlayHidden') === false && !angular.isDefined(feat.get('overlayId'))))){
+                            ms[containerName].displayedIds.push(overlayId);
+                            ms.addLabelsOverlay(feat, type, overlayId);
+                        }
+                    }
+                } else if (type === 'ers'){
+                    feat = feature;
+                    activeNodes = layerPanelService.getChildrenByStatus(true, 'ers');
+                    if (angular.isDefined(feat)){
+                        overlayId = feat.get('overlayId');
+                        if (!angular.isDefined(overlayId)){
+                            overlayId = ms.generateOverlayId(ms[containerName]);
+                        }
+                        if (_.indexOf(activeNodes, feat.get('activityType')) !== -1 && (!angular.isDefined(feat.get('overlayHidden')) || (feat.get('overlayHidden') === false && !angular.isDefined(feat.get('overlayId'))))){
+                            ms[containerName].displayedIds.push(overlayId);
                             ms.addLabelsOverlay(feat, type, overlayId);
                         }
                     }
@@ -2769,8 +2801,8 @@ angular.module('unionvmsWeb').factory('mapService', function(locale, $rootScope,
                             if (!angular.isDefined(overlayId)){
                                 overlayId = ms.generateOverlayId(ms[containerName]);
                             }
-                            ms[containerName].displayedIds.push(overlayId);
                             if (!angular.isDefined(feature.get('overlayHidden'))){
+                                ms[containerName].displayedIds.push(overlayId);
                                 ms.addLabelsOverlay(feature, type, overlayId);
                             }
                         }
@@ -2846,7 +2878,9 @@ angular.module('unionvmsWeb').factory('mapService', function(locale, $rootScope,
     ms.addLabelsOverlay = function(feature, type, overlayId){
         var coords;
         if (type === 'vmspos'){
-            coords = feature.getGeometry().getCoordinates();    
+            coords = feature.getGeometry().getCoordinates();
+        } else if (type === 'ers'){
+            coords = feature.getGeometry().getFirstCoordinate();
         } else {
             coords = ms.getMiddlePoint(feature.getGeometry());
         }
@@ -2913,6 +2947,17 @@ angular.module('unionvmsWeb').factory('mapService', function(locale, $rootScope,
                 data.push({
                     title: titles[ms.labelVisibility.positions[i]],
                     value: srcData[ms.labelVisibility.positions[i]]
+                });
+            }
+        } else if (type === 'ers'){
+            showTitles = ms.labelVisibility.activitiesTitles;
+            titles = ms.getActivityTitles();
+            srcData = ms.formatActivityDataForPopup(feature.getProperties());
+            
+            for (i = 0; i < ms.labelVisibility.activities.length; i++){
+                data.push({
+                    title: titles[ms.labelVisibility.activities[i]],
+                    value: srcData[ms.labelVisibility.activities[i]]
                 });
             }
         } else {

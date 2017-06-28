@@ -521,12 +521,12 @@ angular.module('unionvmsWeb').factory('reportService',function($rootScope, $time
 	    //Set popup visibility settings
 	    mapService.setPopupVisibility('positions', data.visibilitySettings.positions.popup);
 	    mapService.setPopupVisibility('segments', data.visibilitySettings.segments.popup);
-	    //TODO ers
+	    //mapService.setPopupVisibility('activities', data.visibilitySettings.activities.popup); FIXME
 	    
 	    //Set label visibility
 	    mapService.setLabelVisibility('positions', data.visibilitySettings.positions.labels);
 	    mapService.setLabelVisibility('segments', data.visibilitySettings.segments.labels);
-	    //TODO ers
+	    //mapService.setLabelVisibility('activities', data.visibilitySettings.activities.labels); FIXME
 	    
 	    //Build tree object and update layer panel
 	    var treeSource = new TreeModel();

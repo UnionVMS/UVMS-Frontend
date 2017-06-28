@@ -331,7 +331,9 @@ angular.module('unionvmsWeb').directive('layerTree', function($q, $modal, mapSer
 			    var cls = 'fa fa-tag fancytree-clickable';
 
 			    var empty = false;
-			    if ((data.node.data.type === 'vmspos' && mapService.labelVisibility.positions.length === 0) || (data.node.data.type === 'vmsseg' && mapService.labelVisibility.segments.length === 0)){
+			    if ((data.node.data.type === 'vmspos' && mapService.labelVisibility.positions.length === 0) || 
+			            (data.node.data.type === 'vmsseg' && mapService.labelVisibility.segments.length === 0) ||
+			            (data.node.data.type === 'ers' && mapService.labelVisibility.activities.length === 0)){
 			        tip = locale.getString('spatial.layer_tree_empty_popup_label_visibility_settings');
 			        empty = true;
 			        cls += ' label-disabled';

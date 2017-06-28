@@ -448,7 +448,6 @@ angular.module('unionvmsWeb').factory('TreeModel',function(locale, mapService, u
                 title = locale.getString('spatial.layer_tree_activities');
                 lyrType = 'ers';
                 longCopyright = locale.getString('spatial.activities_long_copyright');
-                //extraCls = 'layertree-alarms';
                 break;
             default:
                 break;
@@ -474,11 +473,9 @@ angular.module('unionvmsWeb').factory('TreeModel',function(locale, mapService, u
 	    
 	    var childNodes = [];
 	    
-	    //FIXME this should be removed when we implement conmtext menu options and labels for activities layer
+	    
 	    if (type === 'activities'){
-	        node.data.optionsEnabled = false;
-	        node.data.labelEnabled = false;
-	        node.data.isLayerGroup = true;
+	        node.data.optionsEnabled = false; //FIXME this should be removed when we implement conmtext menu options for activities layer
 	        node.data.filterProperty = 'activityType';
 	            
             var activityTypes = _.map(data.features, function(feat){
@@ -491,8 +488,9 @@ angular.module('unionvmsWeb').factory('TreeModel',function(locale, mapService, u
             
             if (activityTypes.length > 0){
                 angular.forEach(activityTypes, function(type){
+                    var abbr = locale.getString('abbreviations.activity_' + type);
                     childNodes.push({
-                        title: type, //FIXME use abbreviations
+                        title: abbr !== "%%KEY_NOT_FOUND%%" ? abbr : type,
                         filterType: type,
                         type: 'ers-type',
                         selected: true
@@ -500,8 +498,7 @@ angular.module('unionvmsWeb').factory('TreeModel',function(locale, mapService, u
                 });
                 
                 node.children = childNodes;
-                node.expanded = true;
-                //FIXME
+                node.expanded = true; //FIXME
             }
 	    }
 	    
@@ -515,9 +512,7 @@ angular.module('unionvmsWeb').factory('TreeModel',function(locale, mapService, u
 	            return src;
 	        });
 	        
-	        //mapService.vmsSources = {};
 	        if (sourceArray.length > 0){
-	            //var sourcesType = [];
 	            angular.forEach(sourceArray, function(source){
 	                childNodes.push({
 	                    title: source,
@@ -525,13 +520,9 @@ angular.module('unionvmsWeb').factory('TreeModel',function(locale, mapService, u
 	                    type: 'vmspos-type',
 	                    selected: true
 	                });
-	                //sourcesType.push(source);
-	                //mapService.vmsSources[source] = true;
 	            });
 	            
 	            node.children = childNodes;
-	            node.expanded = true;
-	            //node.data.sourcesType = sourcesType;
 	        }
 	    }
 	    
