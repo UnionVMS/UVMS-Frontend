@@ -22,7 +22,7 @@ describe('analogClock', function() {
             var parentElement = angular.element('<div id="parent-container"></div>');
             parentElement.appendTo('body');
         }
-        $httpBackend = $injector.get('$httpBackend');;
+        $httpBackend = $injector.get('$httpBackend');
         $httpBackend.whenGET(/usm/).respond();
         $httpBackend.whenGET(/i18n/).respond();
         $httpBackend.whenGET(/globals/).respond({ data: [] });
@@ -33,13 +33,13 @@ describe('analogClock', function() {
     });
 
     function buildMockData() {
-        return "2018-01-07T08:35:01"
+        return "2018-01-07T08:35:01";
     }
 
     it('should render analog clock', inject(function() {
         scope.clockData = buildMockData();
 
-        tile = compile('<analog-clock clockData="clockData"></analog-clock>')(scope);
+        var tile = compile('<analog-clock clockData="clockData"></analog-clock>')(scope);
         tile.appendTo('#parent-container');
         scope.$digest();
 
