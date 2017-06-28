@@ -46,10 +46,6 @@ angular.module('unionvmsWeb').controller('LayersettingsCtrl',function($scope, lo
 	   $scope.selectedMenu = menu;
 	};
 	
-	$scope.isMenuSelected = function(menu){
-	   return $scope.selectedMenu === menu;
-	};
-	
     $scope.checkIfExists = function(item,list,isBaseList) {
     	for(var i=0;i<list.length;i++){
     		if(angular.isDefined(item.areaType)){

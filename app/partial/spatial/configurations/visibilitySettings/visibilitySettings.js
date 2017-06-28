@@ -83,10 +83,6 @@ angular.module('unionvmsWeb').controller('VisibilitysettingsCtrl',function($scop
        $scope.selectedMenu = menu;
     };
     
-    $scope.isMenuSelected = function(menu){
-       return $scope.selectedMenu === menu;
-    };
-    
     $scope.dropItem = function(item, list){
  	   var itemIndex = list.indexOf(item);
  	   if(itemIndex !== 1){

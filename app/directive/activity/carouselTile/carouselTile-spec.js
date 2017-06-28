@@ -10,13 +10,14 @@ FITNESS FOR A PARTICULAR PURPOSE.  See the GNU General Public License for more d
 copy of the GNU General Public License along with the IFDM Suite. If not, see <http://www.gnu.org/licenses/>.
 */
 describe('carouselTile', function() {
-    var scope,compile,tile,$httpBackend,controller;
+    var scope,compile,tile,$httpBackend,controller,$timeout;
     
     beforeEach(module('unionvmsWeb'));
     
-    beforeEach(inject(function($rootScope, $compile, $injector) {
+    beforeEach(inject(function($rootScope, $compile, $injector, _$timeout_) {
         scope = $rootScope.$new();
         compile = $compile;
+        $timeout = _$timeout_;
         
         if(!angular.element('#parent-container').length){
             var parentElement = angular.element('<div id="parent-container"></div>');
@@ -29,32 +30,36 @@ describe('carouselTile', function() {
         $httpBackend.whenGET(/globals/).respond({data : []});
     }));
     
-    function buildMockData(withActiveStatus){
+    
+    beforeEach(inject(function($controller) {
+        controller = $controller('CarouselTileCtrl', {
+            $scope: scope
+        });
+    }));
+    
+    function buildMockData(){
         return [{
             type: 'TBB: Trowling Beam',
             role: 'On board',
             meshSize: '80mm',
             beamLength: '6m',
             numBeams: 4,
-            active: withActiveStatus ? true : undefined
         },{
             type: 'SSC: Scottish Seines',
             role: 'On board',
             meshSize: '80mm',
             beamLength: '6m',
             numBeams: 4,
-            active: withActiveStatus ? false : undefined
         },{
             type: 'GND: Driftnets',
             role: 'On board',
             meshSize: '80mm',
             beamLength: '6m',
             numBeams: 4,
-            active: withActiveStatus ? false : undefined
         }];
     }
     
-    describe('testing the directive: carouselTile', function(){
+    describe('testing the carouselTile', function(){
         afterEach(function(){
             angular.element('carousel-tile').remove();
         });
@@ -64,11 +69,13 @@ describe('carouselTile', function() {
             tile = compile('<carousel-tile tile-title="test" ng-model="ngModel" template-url="directive/activity/carouselTile/templates/gearTile/gearTile.html"></carousel-tile>')(scope);
             tile.appendTo('#parent-container');
             scope.$digest();
+            $timeout.flush();
             
             expect(angular.element('legend').find('a').first().text()).toEqual('test');
-            expect(angular.element('legend').find('li').length).toBe(3);
+            expect(angular.element('legend').find('li').length).toBe(scope.ngModel.length);
             expect(angular.element('legend').find('li').children().eq(0).attr('class').indexOf('active-menu')).not.toBe(-1);
-            expect(angular.element('.gear-tile').length).toBe(scope.ngModel.length);
+            expect(angular.element('slick').length).toBe(1);
+            expect(angular.element('slick').hasClass('slick-initialized')).toBeTruthy();
         });
         
         it('should render the no data message template', function(){
@@ -76,45 +83,13 @@ describe('carouselTile', function() {
             tile = compile('<carousel-tile tile-title="test" ng-model="ngModel" template-url="directive/activity/carouselTile/templates/gearTile/gearTile.html"></carousel-tile>')(scope);
             tile.appendTo('#parent-container');
             scope.$digest();
+            $timeout.flush();
             
             expect(angular.element('legend').find('a').first().text()).toEqual('test');
             expect(angular.element('legend').find('li').length).toBe(0);
             expect(angular.element('.no-data').length).toBe(1);
-        });
-    });
-    
-    describe('testing the controller: CarouselTileCtrl', function(){
-        beforeEach(inject(function($controller) {
-            controller = $controller('CarouselTileCtrl', {
-                $scope: scope
-            });
-        }));
-        
-        it('should properly initialize and process the input data', function(){
-            scope.ngModel = buildMockData();
-            var formatedData = buildMockData(true);
-            
-            scope.init()
-            expect(scope.ngModel).toEqual(formatedData);
-        });
-        
-        it('should check if the item is active or not', function(){
-            scope.ngModel = buildMockData();
-            scope.init();
-            
-            var test = scope.isItemActive(0);
-            expect(test).toBeTruthy();
-            
-            test = scope.isItemActive(1);
-            expect(test).toBeFalsy();
-        });
-        
-        it('should set the specified item as active', function(){
-            scope.ngModel = buildMockData();
-            scope.init();
-            
-            scope.setActiveItem(1);
-            expect(scope.ngModel[1].active).toBeTruthy();
+            expect(angular.element('slick').length).toBe(1);
+            expect(angular.element('slick').hasClass('slick-initialized')).toBeTruthy();
         });
         
     });

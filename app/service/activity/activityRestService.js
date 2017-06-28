@@ -94,6 +94,16 @@ angular.module('unionvmsWeb').factory('activityRestFactory', function ($resource
                 }
             });
         },
+        getTripMapData: function(){
+            return $resource('/activity/rest/trip/mapData/:id', {}, {
+                'get': {
+                    method: 'GET',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    }
+                }
+            });
+        },
         getTripCatchDetail: function () {
             return $resource('/mock/activity/catchdetails/:id', {}, {
                 'get': {
@@ -105,7 +115,7 @@ angular.module('unionvmsWeb').factory('activityRestFactory', function ($resource
             });
         },
         getTripCatchesLandingDetails: function () {
-            return $resource('/mock/activity/triplandingdetails/:id', {}, {
+            return $resource('/activity/rest/catch/details/:id', {}, {
                 'get': {
                     method: 'GET',
                     headers: {
@@ -125,13 +135,13 @@ angular.module('unionvmsWeb').factory('activityRestFactory', function ($resource
             });
         },
         getFishingActivityDetails: function(){
-            return $resource('/mock/activity/fadetails/:fatype', {}, {
-                'get': {
-                    method: 'GET',
-                    headers: {
-                        'Content-Type': 'application/json'
-                    }
-                }
+            return $resource('/activity/rest/fa/views/:fatype', {}, {
+               'get': {
+                   method: 'POST',
+                   headers: {
+                       'Content-Type': 'application/json'
+                   }
+               }
             });
         }
     };
@@ -288,6 +298,23 @@ angular.module('unionvmsWeb').factory('activityRestFactory', function ($resource
             return deferred.promise;
         },
         /**
+         * Get the trip map data
+         * 
+         * @memberof activityRestService
+         * @public
+         * @param {String} id - The trip id of the selected trip
+         * @returns {Promise} A promise with either the spatial trip data or reject error
+         */
+        getTripMapData: function(id){
+            var deferred = $q.defer();
+            activityRestFactory.getTripMapData().get({ id: id }, function (response) {
+                deferred.resolve(response.data);
+            }, function (error) {
+                deferred.reject(error);
+            });
+            return deferred.promise;
+        },
+        /**
          * Get the Catch Details of a specific trip
          * 
          * @memberof activityRestService
@@ -345,11 +372,12 @@ angular.module('unionvmsWeb').factory('activityRestFactory', function ($resource
          * @memberof activityRestService
          * @public
          * @param {String} type - The fisihing activity type (e.g. departure, landing, arrival)
+         * @param {Object} payload - The post payload containing the activity id (mandatory) and the trip id (not mandatory and to be used only in the report tab) 
          * @returns {Promise}  A promise with either the fishing activity details or reject error
          */
-        getFishingActivityDetails: function(type){
+        getFishingActivityDetails: function(type, payload){
             var deferred = $q.defer();
-            activityRestFactory.getFishingActivityDetails().get({ fatype: type.toLowerCase() }, function (response) {
+            activityRestFactory.getFishingActivityDetails().get({fatype: type}, payload, function (response) {
                 deferred.resolve(response.data);
             }, function (error) {
                 deferred.reject(error);

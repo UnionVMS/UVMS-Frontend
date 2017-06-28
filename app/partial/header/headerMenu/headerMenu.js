@@ -9,160 +9,124 @@ the hope that it will be useful, but WITHOUT ANY WARRANTY; without even the impl
 FITNESS FOR A PARTICULAR PURPOSE.  See the GNU General Public License for more details. You should have received a
 copy of the GNU General Public License along with the IFDM Suite. If not, see <http://www.gnu.org/licenses/>.
  */
-angular.module('unionvmsWeb').controller('HeaderMenuCtrl',function($scope, $rootScope, $location, $state, $timeout, userService, startPageService, locale){
+angular.module('unionvmsWeb').controller('HeaderMenuCtrl',function($scope, $rootScope, $location, $state, $timeout, $log, userService, userFeatureAccess, startPageService, locale){
 
     var checkAccess = function(module, feature) {
-        return userService.isAllowed(feature,module,true);
+        return userService.isAllowed(feature, module, true);
     };
 
-    $scope.menu = [];
-
-    var addMenuItem = function(text, url, elemId){
-        $scope.menu.push({
-            'title':text,
-            'url':url,
-            'elemId':elemId
-        });
-    };
-
-    //Features for showing user in menu
-    var userFeatures = [
-        'activateRoles',
-        'activateScopes',
-        'activateUsers',
-        'assignRoles',
-        'assignScopes',
-        'configurePolicies',
-        'copyUserProfile',
-        'manageApplications',
-        'manageEndpoints',
-        'manageOrganisations',
-        'managePersons',
-        'manageRoles',
-        'manageScopes',
-        'manageUserContexts',
-        'manageUserPreferences',
-        'manageUsers',
-        'viewApplications',
-        'viewEndpointsDetails',
-        'viewOrganisationDetails',
-        'viewOrganisations',
-        'viewPersonDetails',
-        'viewRoles',
-        'viewScopes',
-        'viewUserContexts',
-        'viewUserPreferences',
-        'viewUsers',
-    ];
-
-    var accessToAnyFeatureInList = function(application, featureList){
-        var access = false;
-        $.each(featureList, function(index, feature){
-            if(checkAccess(application, feature)){
-                access = true;
-                return false;
+    $scope.addMenuItem = function(text, url, elemId) {
+        $scope.menu.push(
+            {
+                'title': text,
+                'url': url,
+                'elemId': elemId
             }
-        });
-        return access;
+        );
     };
 
-    var setMenu = function(){
+    $scope.setMenu = function() {
+
         $scope.menu = [];
 
-        var unionVMSApplication = 'Union-VMS';
+        // Today
+        $scope.addMenuItem(locale.getString('header.menu_today'), '/today', 'today');
 
-        //TODAY
-        addMenuItem(locale.getString('header.menu_today'), '/today', 'today');
-
-        //REPORTING
-        if(checkAccess('Reporting', 'LIST_REPORTS')){
-            addMenuItem(locale.getString('header.menu_reporting'), '/reporting', 'reporting');
+        // Reports
+        if (checkAccess('Reporting', 'LIST_REPORTS')) {
+            $scope.addMenuItem(locale.getString('header.menu_reporting'), '/reporting', 'reporting');
         }
 
-        //AREAS
-        if(checkAccess('Spatial', 'VIEW_AREA_MANAGEMENT_UI') && (checkAccess('Spatial', 'MANAGE_USER_DEFINED_AREAS') || checkAccess('Spatial', 'MANAGE_REFERENCE_DATA') || checkAccess('Spatial', 'MANAGE_ANY_USER_AREA'))){
-            addMenuItem(locale.getString('header.menu_areas'), '/areas', 'areas');
-        }
-        //ACTIVITY
-        if(checkAccess('Activity', 'ACTIVITY_ALLOWED')){
-            addMenuItem(locale.getString('header.menu_activity'), '/activity', 'activity');
+        // Area management
+        if (checkAccess('Spatial', 'VIEW_AREA_MANAGEMENT_UI') && (checkAccess('Spatial', 'MANAGE_USER_DEFINED_AREAS') || checkAccess('Spatial', 'MANAGE_REFERENCE_DATA') || checkAccess('Spatial', 'MANAGE_ANY_USER_AREA'))) {
+            $scope.addMenuItem(locale.getString('header.menu_areas'), '/areas', 'areas');
         }
 
-        //MOVEMENT
+        // Activity
+        if (checkAccess('Activity', 'ACTIVITY_ALLOWED')) {
+            $scope.addMenuItem(locale.getString('header.menu_activity'), '/activity', 'activity');
+        }
+
+        // Positions
         var movementLink = false;
         var movementElemId;
-        if(checkAccess('Movement', 'viewMovements')){
+
+        if (checkAccess('Movement', 'viewMovements')) {
             movementLink = '/movement';
             movementElemId = 'movement';
-        }else if(checkAccess('Movement', 'viewManualMovements')){
+        } else if (checkAccess('Movement', 'viewManualMovements')) {
             movementLink = '/movement/manual';
             movementElemId = 'manual-movement';
         }
-        if(movementLink){
-            addMenuItem(locale.getString('header.menu_movement'), movementLink, movementElemId);
+
+        if (movementLink) {
+            $scope.addMenuItem(locale.getString('header.menu_movement'), movementLink, movementElemId);
         }
 
-        //SALES
+        //Sales
         if (checkAccess('Sales', 'viewSalesReports')) {
-            addMenuItem(locale.getString('header.menu_sales'), '/sales', 'sales');
+            $scope.addMenuItem(locale.getString('header.menu_sales'), '/sales', 'sales');
         }
 
-        //EXCHANGE
-        if(checkAccess('Exchange', 'viewExchange')){
-            addMenuItem(locale.getString('header.menu_exchange'), '/exchange', 'exchange');
+        // Exchange
+        if (checkAccess('Exchange', 'viewExchange')) {
+            $scope.addMenuItem(locale.getString('header.menu_exchange'), '/exchange', 'exchange');
         }
 
-        //POLLING
-        if(checkAccess(unionVMSApplication, 'viewMobileTerminalPolls')){
-            addMenuItem(locale.getString('header.menu_polling'), '/polling/logs', 'polling-logs');
-        }
-        //COMMUNICATION, ASSETS
-        if(checkAccess(unionVMSApplication, 'viewVesselsAndMobileTerminals')){
-            addMenuItem(locale.getString('header.menu_communication'), '/communication', 'communication');
-            addMenuItem(locale.getString('header.menu_assets'), '/assets', 'assets');
+        // Polling
+        if (checkAccess('Union-VMS', 'viewMobileTerminalPolls')) {
+            $scope.addMenuItem(locale.getString('header.menu_polling'), '/polling/logs', 'polling-logs');
         }
 
-        //ALARMS
+        // Mobile Terminals
+        if (checkAccess('Union-VMS', 'viewVesselsAndMobileTerminals')) {
+            $scope.addMenuItem(locale.getString('header.menu_communication'), '/communication', 'communication');
+        }
+
+        // Assets
+        if (checkAccess('Union-VMS', 'viewVesselsAndMobileTerminals')) {
+            $scope.addMenuItem(locale.getString('header.menu_assets'), '/assets', 'assets');
+        }
+
+        // Alerts
         var alarmsLink = false;
         var alarmsElemId;
-        if(checkAccess('Rules', 'viewAlarmsHoldingTable')){
+
+        if (checkAccess('Rules', 'viewAlarmsHoldingTable')) {
             alarmsLink = '/alerts/holdingtable';
             alarmsElemId = 'holding-table';
-        }else if(checkAccess('Rules', 'viewAlarmsOpenTickets')){
+        } else if (checkAccess('Rules', 'viewAlarmsOpenTickets')) {
             alarmsLink = '/alerts/notifications';
             alarmsElemId = 'alarms-notifications';
-        }else if(checkAccess('Rules', 'viewAlarmRules')){
+        } else if (checkAccess('Rules', 'viewAlarmRules')) {
             alarmsLink = '/alerts/rules';
             alarmsElemId = 'alarms-rules';
         }
-        if(alarmsLink){
-            addMenuItem(locale.getString('header.menu_alarmconditions'), alarmsLink, alarmsElemId);
+
+        if (alarmsLink) {
+            $scope.addMenuItem(locale.getString('header.menu_alarmconditions'), alarmsLink, alarmsElemId);
         }
 
-        //USERS
-        if(accessToAnyFeatureInList('USM', userFeatures)){
-            addMenuItem(locale.getString('header.menu_user'), '/usm/users', 'users');
+        // User
+        if (userFeatureAccess.accessToAnyFeatureInList('USM')) {
+            $scope.addMenuItem(locale.getString('header.menu_user'), '/usm/users', 'users');
         }
 
-        //ADMIN
+        // Admin
         var adminLink = false;
         var adminElemId;
-        if(checkAccess('Audit', 'viewAudit')){
+
+        if (checkAccess('Audit', 'viewAudit')) {
             adminLink = '/admin/auditlog';
             adminElemId = 'audit-log';
-        }else if(checkAccess('Configuration', 'viewConfiguration')){
+        } else if (checkAccess('Configuration', 'viewConfiguration')) {
             adminLink = '/admin/configuration';
             adminElemId = 'admin-configuration';
         }
-        if(adminLink){
-            addMenuItem(locale.getString('header.menu_admin'), adminLink, adminElemId);
-        }
-    };
 
-    var init = function(){
-    	if($state.current.name !== 'app.reporting-id'){
-    		setMenu();
-    	}
+        if (adminLink) {
+            $scope.addMenuItem(locale.getString('header.menu_admin'), adminLink, adminElemId);
+        }
     };
 
     var getFirstPathSegment = function(path) {
@@ -179,30 +143,28 @@ angular.module('unionvmsWeb').controller('HeaderMenuCtrl',function($scope, $root
         return getFirstPathSegment($location.path()) === (getFirstPathSegment(viewLocation));
     };
 
-    locale.ready('header').then(function () {
-        init();
+    $rootScope.$on('AuthenticationSuccess', function () {
+        $scope.setMenu();
     });
 
-    $rootScope.$on('AuthenticationSuccess', function () {
-        init();
-    });
     $rootScope.$on('needsAuthentication', function () {
-        init();
+        $scope.setMenu();
     });
+
     $rootScope.$on('ContextSwitch', function () {
-        init();
+        $scope.setMenu();
         var homeState = startPageService.getStartPageStateName();
-        if($state.current.name === homeState){
-        	//This timeout is required when the homeState is the sane as the current tab
+
+        if ($state.current.name === homeState) {
+        	//This timeout is required when the homeState is the same as the current tab
         	$timeout(function() {
         		$state.go(homeState, {});
-    		},1);
-        }else{
+    		}, 1);
+        } else {
         	$state.go(homeState, {});
         }
 
     });
 
-    init();
-
+    $scope.setMenu();
 });

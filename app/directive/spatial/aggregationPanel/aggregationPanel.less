@@ -1,0 +1,71 @@
+.aggr-panel {
+    position: relative;
+    padding: 15px;
+    padding-top: 0;
+    margin-bottom: 15px;
+    .aggr-types-combo {
+        position: absolute;
+        right: 10px;
+        top: 0;
+        width: 220px;
+    }
+    .angular-ui-tree-empty {
+        background-image: none;
+        border: 0;
+        background-color: #fff;
+    }
+    .angular-ui-tree {
+        min-height: 100px;
+        max-height: 250px;
+    }
+    .aggr-title {
+        margin: 0 0 20px 0;
+        color: #089fd7;
+    }
+    .sub-aggr-combo {
+        width: 150px;
+    }
+}
+
+.aggr-panel-list {
+    li[ui-tree-node] {
+        line-height: 30px;
+        margin-bottom: 5px;
+        cursor: default;
+        > * {
+            display: inline-block;
+            vertical-align: top;
+        }
+        [ui-tree-handle] {
+            line-height: 30px;
+            padding-right: 15px;
+            font-weight: 500;
+        }
+        .identation {
+            height: 50%;
+            border-left: 1px solid #c4c4c4;
+            border-bottom: 1px solid #c4c4c4;
+            padding-top: 15px;
+            width: 25px;
+        }
+        &:first-child {
+            .identation {
+                width: 0;
+            }
+        }
+    }
+    .angular-ui-tree-placeholder {
+        background-color: #eee;
+    }
+    &.angular-ui-tree-drag {
+        li[ui-tree-node] {
+            .identation {
+                border: 0;
+            }
+        }
+    }
+}
+
+body.is-dragging {
+    overflow-x: hidden;
+}

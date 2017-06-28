@@ -1,4 +1,4 @@
-﻿<!--
+<!--
 ﻿Developed with the contribution of the European Commission - Directorate General for Maritime Affairs and Fisheries
 © European Union, 2015-2016.
 
@@ -10,85 +10,98 @@ FITNESS FOR A PARTICULAR PURPOSE.  See the GNU General Public License for more d
 copy of the GNU General Public License along with the IFDM Suite. If not, see <http://www.gnu.org/licenses/>.
 -->
 <header>
+    <div ng-include="'assets/images/svgdefs.html'"></div>
     <div class="headercontainer">
 		<div class="header" ng-class="{'in-new-tab': appState === 'app.reporting-id'}">
 			<div class="pageinfo">
-				<div class="container">
-					<div class="row">
-                        <div class="col-md-2">
-				            <img class="uvmslogo" src="assets/images/logo.png" ng-click="appState === 'app.reporting-id' || gotoStartPage()">
+                <svg class="uvms-logotype" ng-click="appState === 'app.reporting-id' || gotoStartPage()">
+                    <use xlink:href="#uvms-logotype"></use>
+                </svg>
+                <div class="right">
+                    <current-time class="currentTime" tooltip-placement="bottom" tooltip="{{'header.current_time_title' | i18n}}"></current-time>
+                    <div class="notifications" ng-if="isAuthenticated && appState !== 'app.reporting-id'">
+                        <button class="btn btn-sm btn-default" ng-click="viewNotifications()"  ng-attr-title="{{'header.menu_alarmconditions' | i18n}}">
+                            <i class="fa fa-lg fa-bell"></i>
+                            <span class="badge" ng-bind="numberOfOpenAlarmsAndTickets.alarms + numberOfOpenAlarmsAndTickets.tickets" ng-show="numberOfOpenAlarmsAndTickets.alarms > 0 || numberOfOpenAlarmsAndTickets.tickets > 0"></span>
+                        </button>
+                    </div>
+                    <div class="language-select" ng-if="appState !== 'app.reporting-id'">
+                        <div class="dropdown">
+                            <button class="btn btn-default dropdown-toggle" id="language-select-menu" data-toggle="dropdown" aria-haspopup="true" aria-expanded="true">
+                                <div class="flag"><span class="flag-icon" ng-class="userFlagIconClass()"></span></div>
+                                <span class="caret"></span>
+                            </button>
+                            <ul class="dropdown-menu" aria-labelledby="language-select-menu">
+                                <li ng-repeat="language in languages" ng-show="languageIsAvailable(language)" ng-class="{'disabled': language === selectedLanguage}">
+                                    <a ng-click="language !== selectedLanguage && setLanguage(language)">
+                                        {{ languageNames[language] }}
+                                    </a>
+                                </li>
+                            </ul>
                         </div>
-                        <div class="col-md-10">
-                            <div class="sign-out">
-                                <button class="btn btn-default btn-sm" ng-click="signOut()" ng-attr-title="{{'header.sign_out' | i18n}}">
-                                    <i class="fa fa-lg fa-sign-out"></i>
-                                </button>
-                            </div>
-                            <div class="help" ng-if="appState !== 'app.reporting-id'">
-                                <a href="https://focusfish.atlassian.net/wiki/display/UVMS/Union+VMS+-+User+Manual" target="_blank" class="btn btn-default btn-sm" ng-attr-title="{{'common.help' | i18n}}">
-                                    <i class="fa fa-lg fa-question"></i>
-                                </a>
-                            </div>
-    					    <div class="signed-in" ng-if="isAuthenticated && appState !== 'app.reporting-id'">
-    							<div class="dropdown fullWidthDropdown login-drop-down">
-    								<button class="btn btn-default dropdown-toggle" type="button" id="user-menu" data-toggle="dropdown" aria-haspopup="true" aria-expanded="true">
-    									<div class="username"> <i class="fa fa-lg fa-user"></i>{{userName}}</div>
-    									<span class="caret"></span>
-    								</button>
-    								<ul class="dropdown-menu dropdown-menu-right" aria-labelledby="user-menu" >
-                                        <li ng-click="showFeatures()">
-                                            <a><i class="fa fa-user"></i>as {{currentContext.role.roleName}}</a>
-                                        </li>
-                                        <li ng-click="switchContext()">
-                                            <a><i class="fa fa-group"></i> <span ng-bind="'header.switch_context' | i18n"></span></a>
-                                        </li>
-                                        <li role="separator" class="divider"></li>
-                                        <li ng-controller="ModifyContactDetails">
-                                            <a ng-click="modifyMyContactDetails()"><i class="fa fa-user"></i><span ng-bind="'header.update_contact_details' | i18n"></span></a>
-                                        </li>
-                                        <li ng-controller="ModifyPassword">
-                                            <a ng-click="modifyMyPassword()"><i class="fa fa-key"></i> <span ng-bind="'header.change_password' | i18n"></span></a>
-                                        </li>
-                                        <li ng-controller="ModifySecurityAnswer">
-                                            <a ng-click="modifySecurityAnswer()"><i class="fa fa-key"></i> <span ng-bind="'header.change_security_answer' | i18n"></span></a>
-                                         </li>
-                                        <li role="separator" class="divider"></li>
-    									<li ng-click="signOut()">
-                                            <a><i class="fa fa-sign-out"></i> <span ng-bind="'header.sign_out' | i18n"></span></a>
-                                        </li>
-    								</ul>
-    							</div>
-    						</div>
-                            <div class="language-select" ng-if="appState !== 'app.reporting-id'">
-                                <div class="dropdown">
-                                    <button class="btn btn-default dropdown-toggle" id="language-select-menu" data-toggle="dropdown" aria-haspopup="true" aria-expanded="true">
-                                        <div class="flag"><span class="flag-icon" ng-class="userFlagIconClass()"></span></div>
-                                        <span class="caret"></span>
-                                    </button>
-                                    <ul class="dropdown-menu" aria-labelledby="language-select-menu">
-                                        <li ng-repeat="language in languages" ng-show="languageIsAvailable(language)" ng-class="{'disabled': language === selectedLanguage}">
-                                            <a ng-click="language !== selectedLanguage && setLanguage(language)">
-                                                {{ languageNames[language] }}
-                                            </a>
-                                        </li>
-                                    </ul>
+                    </div>
+    			    <div class="signed-in" ng-if="isAuthenticated && appState !== 'app.reporting-id'">
+    					<div class="dropdown fullWidthDropdown login-drop-down">
+    						<button class="btn btn-default dropdown-toggle" type="button" id="user-menu" data-toggle="dropdown" aria-haspopup="true" aria-expanded="true">
+    							<div class="username">
+                                    <i class="fa fa-lg fa-user"></i>{{userName}}
                                 </div>
-                            </div>
-                            <div class="sign-in" ng-if="!isAuthenticated">
-                                <a ng-click="signIn()"><i class="fa fa-lg fa-user"></i><span ng-bind="'header.sign_in' | i18n"></span></a>
-                            </div>
-                            <div class="notifications" ng-if="isAuthenticated && appState !== 'app.reporting-id'">
-                                <button class="btn btn-sm btn-default" ng-click="viewNotifications()">
-                                    <div class="fa fa-bell"><span class="badge" ng-bind="numberOfOpenAlarmsAndTickets.alarms + numberOfOpenAlarmsAndTickets.tickets" ng-show="numberOfOpenAlarmsAndTickets.alarms > 0 || numberOfOpenAlarmsAndTickets.tickets > 0"></span></div>
-                                </button>
-                            </div>
-                            <current-time class="currentTime" tooltip-placement="bottom" tooltip="{{'header.current_time_title' | i18n}}"></current-time>
-                        </div>
-				    </div>
-				</div>
+    							<span class="caret"></span>
+    						</button>
+    						<ul class="dropdown-menu dropdown-menu-right" aria-labelledby="user-menu" >
+                                <li ng-click="showFeatures()">
+                                    <a>
+                                        <i class="fa fa-user"></i><span>as {{currentContext.role.roleName}}</span>
+                                    </a>
+                                </li>
+                                <li ng-click="switchContext()">
+                                    <a>
+                                        <i class="fa fa-group"></i><span ng-bind="'header.switch_context' | i18n"></span>
+                                    </a>
+                                </li>
+                                <li role="separator" class="divider"></li>
+                                <li ng-controller="ModifyContactDetails">
+                                    <a ng-click="modifyMyContactDetails()">
+                                        <i class="fa fa-user"></i><span ng-bind="'header.update_contact_details' | i18n"></span>
+                                    </a>
+                                </li>
+                                <li ng-controller="ModifyPassword">
+                                    <a ng-click="modifyMyPassword()">
+                                        <i class="fa fa-key"></i><span ng-bind="'header.change_password' | i18n"></span></a>
+                                </li>
+                                <li ng-controller="ModifySecurityAnswer">
+                                    <a ng-click="modifySecurityAnswer()">
+                                        <i class="fa fa-key"></i><span ng-bind="'header.change_security_answer' | i18n"></span>
+                                    </a>
+                                 </li>
+                                <li role="separator" class="divider"></li>
+    							<li ng-click="signOut()">
+                                    <a>
+                                        <i class="fa fa-sign-out"></i><span ng-bind="'header.sign_out' | i18n"></span>
+                                    </a>
+                                </li>
+    						</ul>
+    					</div>
+    				</div>
+                    <div class="sign-in" ng-if="!isAuthenticated">
+                        <a ng-click="signIn()">
+                            <i class="fa fa-lg fa-user"></i><span ng-bind="'header.sign_in' | i18n" class="username"></span>
+                        </a>
+                    </div>
+                    <div class="help" ng-if="appState !== 'app.reporting-id'">
+                        <a href="https://focusfish.atlassian.net/wiki/display/UVMS/Union+VMS+-+User+Manual" target="_blank" class="btn btn-default btn-sm" ng-attr-title="{{'common.help' | i18n}}">
+                            <i class="fa fa-lg fa-question"></i>
+                        </a>
+                    </div>
+                    <div class="sign-out">
+                        <button class="btn btn-default btn-sm" ng-click="signOut()" ng-attr-title="{{'header.sign_out' | i18n}}">
+                            <i class="fa fa-lg fa-sign-out"></i>
+                        </button>
+                    </div>
+                </div>
 			</div>
-            <div class="headerMenuWrapper" ng-if="appState !== 'app.reporting-id'">
-			     <div ng-if="isAuthenticated" ng-include="'partial/header/headerMenu/headerMenu.html'"></div>
+            <div class="header-menu-wrapper" ng-if="appState !== 'app.reporting-id'">
+			    <div ng-if="isAuthenticated" ng-include="'partial/header/headerMenu/headerMenu.html'"></div>
             </div>
 		</div>
 	</div>

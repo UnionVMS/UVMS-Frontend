@@ -19,6 +19,7 @@ copy of the GNU General Public License along with the IFDM Suite. If not, see <h
  * @attr {Function} [clickCallback] - An optional click callback function
  * @attr {String | Number} [bufferDist] - An optional buffer distance that will be applied to the location geometry (only if it is a point geometry type) for the purpose of calculating the
  *       extent into which the map should be zoomed to
+ * @attr {String} [srcActivityGeom] - The WKT geometry string of the main fishing activity
  * @description
  *  A reusable tile that will display location details (as a single location or a list of locations) and, optionally, allow to zoom the main map (controlled by the mapService) to the specified location
  */
@@ -33,13 +34,15 @@ angular.module('unionvmsWeb').directive('locationTile', function() {
 		    isClickable: "=",
 		    clickCallback: "&",
 		    bufferDist: '@?',
-		    multiple: "=?"
+		    srcActivityGeom: '='
 		},
 		templateUrl: 'directive/activity/locationTile/locationTile.html',
 		link: function(scope, element, attrs, fn) {
-            if (!angular.isDefined(scope.multiple) && !angular.isDefined(attrs.multiple)){
-                scope.multiple = false;
-            }
+		    scope.$watch('locationDetails', function(newVal, oldVal){
+		        if (angular.isDefined(newVal)){
+		            scope.init();
+		        }
+		    });
         }
 	};
 })
@@ -49,10 +52,78 @@ angular.module('unionvmsWeb').directive('locationTile', function() {
  * @name LocationTileCtrl
  * @param $scope {Service} The controller scope
  * @param mapService {Service} The map service for the liveview map <p>{@link unionvmsWeb.mapService}</p>
+ * @param locale {Service} The angular locale service
  * @description
  *  The controller for the locationTile directive ({@link unionvmsWeb.locationTile})
  */
-.controller('LocationTileCtrl', function($scope, mapService){
+.controller('LocationTileCtrl', function($scope, mapService, locale){
+    /**
+     * Intialization function
+     * 
+     * @memberof LocationTileCtrl
+     * @public
+     * @alias init
+     */
+    $scope.init = function(){
+        $scope.countries = [];
+        $scope.rfmo = [];
+        $scope.identifiers = [];
+        $scope.positions = [];
+        $scope.addresses = [];
+        processData();
+    };
+    
+    
+    /**
+     * Pre-process location details to fit the directive's structure
+     * 
+     * @memberof LocationTileCtrl
+     * @private
+     */
+    function processData(){
+        angular.forEach($scope.locationDetails, function(record){
+            if (angular.isDefined(record.country) && _.indexOf($scope.countries, record.country) === -1){
+                $scope.countries.push(record.country);
+            }
+            
+            if (angular.isDefined(record.rfmoCode) && _.indexOf($scope.rfmo, record.rfmoCode) === -1){
+                $scope.rfmo.push(record.rfmoCode);
+            }
+            
+            if (angular.isDefined(record.identifier)){
+                var schemeId = locale.getString('activity.fa_details_item_' + record.identifier.schemeId.toLowerCase());
+                $scope.identifiers.push({
+                    id: record.identifier.id,
+                    schemeId: schemeId !== "%%KEY_NOT_FOUND%%" ? schemeId : record.identifier.schemeId,
+                    geometry: record.geometry
+                });
+            } else if (angular.isDefined(record.geometry)) {
+                //Here we get type = positions only from FLUX
+                var wkt = new ol.format.WKT();
+                var coords = wkt.readGeometry(record.geometry).getCoordinates();
+                $scope.positions.push({
+                    geometry: record.geometry,
+                    lon: coords[0],
+                    lat: coords[1]
+                });
+            }
+            
+            if (angular.isDefined(record.structuredAddresses) && record.structuredAddresses.length > 0){
+                $scope.addresses.push(record.structuredAddresses);
+            }
+        });
+        
+        if ($scope.addresses.length > 0){
+            $scope.addresses = _.flatten($scope.addresses);
+        }
+        
+        if (angular.isDefined($scope.srcActivityGeom)){
+            $scope.activityGeom = {
+                geometry: $scope.srcActivityGeom
+            };
+        }
+    }
+    
     /**
      * Zoom to the location in the liveview map and execute callback if defined
      * 
@@ -62,13 +133,6 @@ angular.module('unionvmsWeb').directive('locationTile', function() {
      * @param {Object} [item=$scope.locationDetails] - The object containing a geometry property to use for the zooming extent. If not defined, locationDetails object is the default.
      */
     $scope.zoomToLocation = function(item){
-        if (!angular.isDefined(item)){
-            if (_.isArray($scope.locationDetails)){
-                item = $scope.locationDetails[0];
-            } else {
-                item = $scope.locationDetails;
-            }
-        }
         //TODO test this function when we have it running with reports
         if ($scope.isItemClickable(item)){
             var wkt = new ol.format.WKT();
@@ -80,6 +144,7 @@ angular.module('unionvmsWeb').directive('locationTile', function() {
                 finalGeom = ol.geom.Polygon.fromExtent(extent);
             }
             
+            finalGeom.transform('EPSG:4326', mapService.getMapProjectionCode());
             mapService.zoomTo(finalGeom);
             if (angular.isDefined($scope.clickCallback)){
                 $scope.clickCallback();
@@ -99,9 +164,7 @@ angular.module('unionvmsWeb').directive('locationTile', function() {
     $scope.isItemClickable = function(item){
         var clickableStatus = false;
         if ($scope.isClickable){
-            if ($scope.multiple && angular.isDefined(item) && angular.isDefined(item.geometry) && item.geometry !== '' && item.geometry !== null){
-                clickableStatus = true;
-            } else if (!$scope.multiple && angular.isDefined($scope.locationDetails) && angular.isDefined($scope.locationDetails.geometry) && $scope.locationDetails.geometry !== '' && $scope.locationDetails.geometry !== null){
+            if (angular.isDefined(item.geometry) && item.geometry !== '' && item.geometry !== null){
                 clickableStatus = true;
             }
         }
@@ -118,28 +181,8 @@ angular.module('unionvmsWeb').directive('locationTile', function() {
      * @returns {Boolean} Whether there is data to be displayed to not
      */
     $scope.hasData = function(){
-        var status = true;
-        if (!$scope.multiple && _.isEqual($scope.locationDetails, {})){
-            status = false;
-        } else if ($scope.multiple && $scope.locationDetails.length === 0){
-            status = false;
-        }
-        
-        return status;
-    };
-    
-    /**
-     * Check if the directive should behave as multiple or not. This is needed to check if locationDeatils is an array of a single item, where
-     * in such case it should behave as not multiple
-     * 
-     * @memberof LocationTileCtrl
-     * @public
-     * @alias checkIsMultiple
-     * @returns {Boolean} Whether the directive is using a multiple data source or not
-     */
-    $scope.checkIsMultiple = function(){
         var status = false;
-        if ($scope.multiple && $scope.locationDetails.length > 1){
+        if (angular.isDefined($scope.locationDetails) && $scope.locationDetails.length > 0){
             status = true;
         }
         

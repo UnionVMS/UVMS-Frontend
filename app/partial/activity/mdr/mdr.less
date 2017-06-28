@@ -48,28 +48,37 @@ copy of the GNU General Public License along with the IFDM Suite. If not, see <h
         }
     }
 
-    #codeListsTable {
-        .tr:first-child {
-            .th {
-                padding: 0 15px;
-                text-align: center;
-                &.ckeckbox-column {
-                    text-align: left;
-                }
-            }
+    .code-list-status-container {
+        .refresh-btn {
+            position: absolute;
+            z-index: 1;
         }
-        .td {
-            padding: 5px 15px;
-            &.col-btn {
-                text-align: center;
-            }
-            &.col-auto-update {
-                button {
-                    width: auto;
-                    height: 30px;
-                    padding: 3px;
+        .search-container {
+            padding-left: 35px;
+        }
+        #codeListsTable {
+            .tr:first-child {
+                .th {
+                    padding: 0 15px;
+                    text-align: center;
+                    &.ckeckbox-column {
+                        text-align: left;
+                    }
                 }
-                
+            }
+            .td {
+                padding: 5px 15px;
+                &.col-btn {
+                    text-align: center;
+                }
+                &.col-auto-update {
+                    button {
+                        width: auto;
+                        height: 30px;
+                        padding: 3px;
+                    }
+                    
+                }
             }
         }
     }

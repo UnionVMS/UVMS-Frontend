@@ -170,18 +170,16 @@ describe('tripReportsPanel', function() {
     }
 
 	it('should show the reports data', function() {
-    buildMocks();
+        buildMocks();
 		var tripReportsPanel = compile('<trip-reports-panel trip="trip"></trip-reports-panel>')(scope);
 		scope.$digest();
 
-    tripReportsPanel.appendTo('#parent-container');
+        tripReportsPanel.appendTo('#parent-container');
 		expect(angular.element('.trip-reports-section').length).toEqual(1);
 
+        expect(angular.element('.angular-ui-tree-nodes > .angular-ui-tree-node').length).toEqual(scope.trip.reports.length);
 
-    expect(angular.element('.angular-ui-tree-nodes > .angular-ui-tree-node').length).toEqual(scope.trip.reports.length);
-
-
-    angular.element('trip-reports-panel').remove();
+        angular.element('trip-reports-panel').remove();
 		tripReportsPanel.isolateScope().$destroy();
 	});
 

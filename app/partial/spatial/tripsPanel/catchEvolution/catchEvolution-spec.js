@@ -13,13 +13,17 @@ describe('CatchevolutionCtrl', function() {
 
     beforeEach(module('unionvmsWeb'));
 
-    var scope, ctrl, activityRestServiceSpy, $httpBackend;
+    var scope, ctrl, activityRestServiceSpy, $httpBackend, tripSummaryServiceSpy;
 
     beforeEach(function() {
         activityRestServiceSpy = jasmine.createSpyObj('activityRestService', ['getTripCatchDetail', 'getTripCatchesEvolution']);
+        tripSummaryServiceSpy = jasmine.createSpyObj('tripSummaryService', ['trip']);
 
         module(function($provide) {
             $provide.value('activityRestService', activityRestServiceSpy);
+        });
+        module(function($provide) {
+            $provide.value('tripSummaryService', tripSummaryServiceSpy);
         });
     });
 
@@ -29,13 +33,44 @@ describe('CatchevolutionCtrl', function() {
         $httpBackend.whenGET(/usm/).respond();
         $httpBackend.whenGET(/i18n/).respond();
         $httpBackend.whenGET(/globals/).respond({ data: [] });
-        
+
         buildMocks();
         scope = $rootScope.$new();
         ctrl = $controller('CatchevolutionCtrl', { $scope: scope });
     }));
 
     function buildMocks() {
+
+        tripSummaryServiceSpy.trip.specieColor = [{
+            "code": "COD",
+            "color": "781c81"
+        }, 
+        {
+            "code": "DAB",
+            "color": "3f51a3"
+        },
+        {
+            "code": "HOM",
+            "color": "519cb8"
+        },
+        {
+            "code": "LEM",
+            "color": "83ba6d"
+        },
+        {
+            "code": "PLE",
+            "color": "c3ba45"
+        },
+        {
+            "code": "SOL",
+            "color": "e68a33"
+        },
+        {
+            "code": "WHG",
+            "color": "d92120"
+        }
+        ];
+
         activityRestServiceSpy.getTripCatchDetail.andCallFake(function() {
             return {
                 then: function(callback){
@@ -43,7 +78,7 @@ describe('CatchevolutionCtrl', function() {
                 }
             }
         });
-        
+
         activityRestServiceSpy.getTripCatchesEvolution.andCallFake(function() {
             return {
                 then: function(callback){
@@ -55,9 +90,11 @@ describe('CatchevolutionCtrl', function() {
     }
 
     it('should call the services only once', inject(function() {
+        
+        scope.speciesColors = tripSummaryServiceSpy.trip.specieColor;
         expect(activityRestServiceSpy.getTripCatchDetail.callCount).toBe(1);
         expect(activityRestServiceSpy.getTripCatchesEvolution.callCount).toBe(1);
-        
+
         angular.forEach(scope.catchEvolutionData.catchProgress, function(item){
             var keys = _.keys(item);
             angular.forEach(keys, function(key){
@@ -69,7 +106,7 @@ describe('CatchevolutionCtrl', function() {
                 })
             });
         });
-        
+
         angular.forEach(scope.catchEvolutionData.finalCatch, function(item){
             var keys = _.keys(item);
             expect(_.indexOf(keys, 'title')).not.toBe(-1);
@@ -79,8 +116,8 @@ describe('CatchevolutionCtrl', function() {
             });
         });
     }));
-    
-    
+
+
     function getTripCatch() {
         return {
             "tripID": "BEL-TRP-O16-2016_0021",
@@ -99,34 +136,42 @@ describe('CatchevolutionCtrl', function() {
             "catchProgress": [{
                 "onboard": {
                     "speciesList": [{
-                        "speciesCode": "BEAGLE",
+                        "speciesCode": "COD",
                         "weight": 111
                     },
                     {
-                        "speciesCode": "SEAFOOD",
+                        "speciesCode": "DAB",
                         "weight": 111
                     },
                     {
-                        "speciesCode": "SEAFOOD_2",
+                        "speciesCode": "HOM",
                         "weight": 111
                     },
                     {
-                        "speciesCode": "SEAFOOD_3",
+                        "speciesCode": "LEM",
                         "weight": 111
                     },
                     {
-                        "speciesCode": "BEAGLE",
+                        "speciesCode": "PLE",
                         "weight": 111
+                    },
+                    {
+                        "speciesCode": "SOL",
+                        "weight": 111
+                    },
+                    {
+                        "speciesCode": "WHG",
+                        "weight": "111"
                     }],
                     "total": 555
                 },
                 "cumulated": {
                     "speciesList": [{
-                        "speciesCode": "BEAGLE",
+                        "speciesCode": "COD",
                         "weight": 111
                     },
                     {
-                        "speciesCode": "SEAFOOD",
+                        "speciesCode": "DAB",
                         "weight": 111
                     }],
                     "total": 222
@@ -135,34 +180,42 @@ describe('CatchevolutionCtrl', function() {
             {
                 "onboard": {
                     "speciesList": [{
-                        "speciesCode": "BEAGLE",
+                        "speciesCode": "COD",
                         "weight": 111
                     },
                     {
-                        "speciesCode": "SEAFOOD",
+                        "speciesCode": "DAB",
                         "weight": 111
                     },
                     {
-                        "speciesCode": "SEAFOOD_2",
+                        "speciesCode": "HOM",
                         "weight": 111
                     },
                     {
-                        "speciesCode": "SEAFOOD_3",
+                        "speciesCode": "LEM",
                         "weight": 111
                     },
                     {
-                        "speciesCode": "BEAGLE",
+                        "speciesCode": "PLE",
                         "weight": 111
+                    },
+                    {
+                        "speciesCode": "SOL",
+                        "weight": 111
+                    },
+                    {
+                        "speciesCode": "WHG",
+                        "weight": "111"
                     }],
                     "total": 555
                 },
                 "cumulated": {
                     "speciesList": [{
-                        "speciesCode": "BEAGLE",
+                        "speciesCode": "COD",
                         "weight": 111
                     },
                     {
-                        "speciesCode": "SEAFOOD",
+                        "speciesCode": "DAB",
                         "weight": 111
                     }],
                     "total": 222
@@ -171,34 +224,42 @@ describe('CatchevolutionCtrl', function() {
             "finalCatch": {
                 "landed": {
                     "speciesList": [{
-                        "speciesCode": "BEAGLE",
+                        "speciesCode": "COD",
                         "weight": 111
                     },
                     {
-                        "speciesCode": "SEAFOOD",
+                        "speciesCode": "DAB",
                         "weight": 111
                     },
                     {
-                        "speciesCode": "SEAFOOD_2",
+                        "speciesCode": "HOM",
                         "weight": 111
                     },
                     {
-                        "speciesCode": "SEAFOOD_3",
+                        "speciesCode": "LEM",
                         "weight": 111
                     },
                     {
-                        "speciesCode": "BEAGLE",
+                        "speciesCode": "PLE",
+                        "weight": 111
+                    },
+                    {
+                        "speciesCode": "SOL",
+                        "weight": 111
+                    },
+                    {
+                        "speciesCode": "WHG",
                         "weight": 111
                     }],
                     "total": 555
                 },
                 "cumulated": {
                     "speciesList": [{
-                        "speciesCode": "BEAGLE",
+                        "speciesCode": "COD",
                         "weight": 111
                     },
                     {
-                        "speciesCode": "SEAFOOD",
+                        "speciesCode": "DAB",
                         "weight": 111
                     }],
                     "total": 222

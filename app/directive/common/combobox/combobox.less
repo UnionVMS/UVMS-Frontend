@@ -11,6 +11,7 @@ copy of the GNU General Public License along with the IFDM Suite. If not, see <h
 */
 .comboList {
 	position: absolute;
+	background-color: #fff;
 	.dropdown-menu {
 		z-index: 1071;
 		width: inherit;
@@ -58,6 +59,12 @@ copy of the GNU General Public License along with the IFDM Suite. If not, see <h
 					}
 				} 
 			}
+		}
+	}
+	li.combo-placeholder > a {
+		&,
+		:hover {
+			color: #999999;
 		}
 	}
 }

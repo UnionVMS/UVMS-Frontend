@@ -20,7 +20,8 @@ angular.module('unionvmsWeb').factory('reportingNavigatorService',function() {
 //        userPreferences: undefined,
 //        liveViewPanel: {
 //            mapPanel : undefined,
-//            vmsPanel: undefined
+//            vmsPanel: undefined,
+//			  catchDetails: undefined
 //        },
 //		  tripsPanel: {
 //            tripSummary : undefined,
@@ -39,6 +40,17 @@ angular.module('unionvmsWeb').factory('reportingNavigatorService',function() {
 		panel: ''
 	};
 
+    function callCallback(callback, params){
+		if(angular.isDefined(callback)){
+			currentState.callback = callback;
+			if(angular.isDefined(params)){
+				currentState.params = params;
+				callback.apply(this, params);
+			}else{
+				callback();
+			}
+		}
+	}
 	var reportingNavigatorService = {
 		goToView: function(sectionTo,panelTo,callback,params) {
 		    if (currentState.section !== sectionTo || currentState.panel !== panelTo){
@@ -47,16 +59,10 @@ angular.module('unionvmsWeb').factory('reportingNavigatorService',function() {
 	                section: sectionTo,
 	                panel: panelTo
 	            };
-	            if(angular.isDefined(callback)){
-	                currentState.callback = callback;
-	                if(angular.isDefined(params)){
-	                    currentState.params = params;
-	                    callback.apply(this, params);
-	                }else{
-	                    callback();
-	                }
-	            }
-		    } 
+				callCallback(callback, params);  
+		    }else{
+				callCallback(callback, params);	
+			}
 		},
 		goToPreviousView: function() {
 			var auxState = angular.copy(currentState);
@@ -104,6 +110,12 @@ angular.module('unionvmsWeb').factory('reportingNavigatorService',function() {
 		getCurrentSection:function(){
 			return currentState.section;
 		},
+		getPreviousView:function(){
+            return previousState.panel;
+        },
+        getPreviousSection:function(){
+            return previousState.section;
+        },
 		addStateCallback: function(callback) {
 			currentState.callback = callback;
 		},

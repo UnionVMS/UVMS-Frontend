@@ -1,0 +1,80 @@
+<fieldset class="col-md-12 fieldsetStyle catch-class-landing-details">
+	<legend class="fieldsetLegendStyle">
+		<a>{{tileTitle}}</a>
+	</legend>
+	<div class="row global-container">
+		<!-- FIXME in tripsummary panel -->
+		<!-- <div class="navigator">
+			<i class="fa fa-th-large"></i>
+		</div> -->
+		<div class="col-md-3 line">
+			<nvd3 options="options" data="chartData"></nvd3>
+			<a class="btn-catch-detail" title="{{'activity.catch_panel_see_catch_details' | i18n }}" ng-click="repNav.goToView('tripsPanel','catchDetails')">
+				<i class="fa fa-table"></i>
+			</a>
+		</div>
+		<div class="col-md-5">
+			<div class="row global-container">
+				<div class="col-md-12">
+					<div class="">
+						<div class="col-md-4 section">
+							<div class="row">
+								<div class="col-md-12 item-container">
+									<span class="labels">{{'activity.type' | i18n}}</span>&nbsp;
+									<span>{{selected.catchType}}</span>
+								</div>
+							</div>
+							<div class="row">
+								<div class="col-md-12 item-container">
+									<span class="labels">{{'activity.units' | i18n}}</span>&nbsp;
+									<span>{{selected.units}}</span>
+								</div>
+							</div>
+							<div class="row">
+								<div class="col-md-12 item-container">
+									<span class="labels">{{'activity.header_fa_total_weight' | i18n}}</span>&nbsp;
+									<span>{{selected.total}} kg</span>
+								</div>
+							</div>
+						</div>
+						<div class="col-md-7 ">
+							<div class="col-md-12 species-title text-center">{{selected.species}} - {{selected.speciesName}}</div>
+						</div>
+					</div>
+					<div class="table-responsive-force ">
+						<table class="table table-condensed table-striped text-center">
+							<thead>
+								<tr>
+									<th class="text-center">{{'activity.catch_landing_area' | i18n}}</th>
+									<th class="text-center">{{'activity.catch_landing_product_weight' | i18n}}</th>
+									<th class="text-center">{{'activity.catch_landing_size' | i18n}}</th>
+									<th class="text-center">{{'activity.catch_landing_presentatior' | i18n}}</th>
+									<th class="text-center">{{'activity.catch_landing_preservation' | i18n}}</th>
+									<th class="text-center">{{'activity.catch_landing_gear_used' | i18n}}</th>
+								</tr>
+							</thead>
+							<tbody>
+								<tr ng-repeat="row in selected.catchDetails" ng-click="itemClicked(row)" ng-class="{'selected-row': selectedRow===row}">
+									<td>{{row.area}}</td>
+									<td>{{row.productWeight}}</td>
+									<td>{{row.size}}</td>
+									<td>{{row.presentatior}}</td>
+									<td>{{row.preservation}}</td>
+									<td>{{row.gearUsed}}</td>
+								</tr>
+							</tbody>
+						</table>
+					</div>
+				</div>
+			</div>
+		</div>
+		<a class="btn-specie-detail" title="{{'activity.catch_panel_see_catch_details' | i18n }}">
+			<i class="fa fa-life-ring"></i>
+		</a>
+		<location-tile class="col-md-2 summary-section" field-title="{{locationTitle}}" location-details="selectedRow.locations"
+			multiple="true" is-clickable="isLocationClickable" click-callback="clickCallback()" buffer-dist="bufferDistance"></location-tile>
+		<carousel-tile class="col-md-2 summary-section" tile-title="{{'activity.header_fa_gear_used' | i18n}}" ng-model="selectedRow.gears"
+			template-url="directive/activity/carouselTile/templates/gearTile/gearTile.html"></carousel-tile>
+
+	</div>
+</fieldset>

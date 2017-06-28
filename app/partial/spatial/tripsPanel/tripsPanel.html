@@ -12,6 +12,7 @@ copy of the GNU General Public License along with the IFDM Suite. If not, see <h
 <div class="col-md-12 trips-panel" ng-controller="TripspanelCtrl">
     <!--TRIP SUMMARY LOADING-->
     <loading-panel type="TripSummary"></loading-panel>
+    <loading-panel type="FishingActivity"></loading-panel>
     <!--TRIP SUMMARY ALERT-->
     <div class="container containerWithTopBottomPadding spatial-error" ng-show="alert.hasAlert">
         <div class="alert alert-container" role="alert" ng-class="{'alert-danger': alert.hasError, 'alert-success': alert.hasSuccess, 'alert-warning': alert.hasWarning}">
@@ -23,12 +24,13 @@ copy of the GNU General Public License along with the IFDM Suite. If not, see <h
             </span>
         </div>
     </div>
+    
     <!--TRIPS LIST (WHEN RUNNING REPORT WITHOUT MAP)-->
     <div ng-include="'partial/spatial/tripsPanel/tripsList/tripsList.html'" ng-if="false"></div>
     <!--TRIP SUMMARY-->
-    <uib-tabset ng-show="repNav.isViewVisible('tripSummary')">
+    <uib-tabset ng-show="repNav.isViewVisible('tripSummary')" class="trip-panel-content">
         <!-- active="tripSummServ.activeTab.index"-->
-        <uib-tab index="$index" ng-repeat="tab in tripSummServ.tabs" active="tab.active" select="tripSummServ.initializeTrip($index)">
+        <uib-tab index="$index" ng-repeat="tab in tripSummServ.tabs" active="tab.active" select="tripSummServ.initializeTrip(tab.title)">
             <!--TAB HEADER-->
             <uib-tab-heading>
                 {{tab.title}}
@@ -39,11 +41,42 @@ copy of the GNU General Public License along with the IFDM Suite. If not, see <h
             <!--TAB CONTENT-->
             <div class="trip-summary-tab" ng-if="tab.title === trip.id">
                 <div ng-include="'partial/spatial/tripsPanel/tripSummary/tripSummary.html'"></div>
-
             </div>
         </uib-tab>
     </uib-tabset>
-    <div ng-if="repNav.isViewVisible('catchDetails')" ng-include="'partial/spatial/tripsPanel/catchDetails/catchDetails.html'"></div>
+    <div ng-if="repNav.isSectionVisible('tripsPanel') && repNav.isViewVisible('catchDetails')" ng-include="'partial/spatial/tripsPanel/catchDetails/catchDetails.html'"></div>
     <div ng-if="repNav.isViewVisible('catchEvolution')" ng-include="'partial/spatial/tripsPanel/catchEvolution/catchEvolution.html'"></div>
-	<div ng-if="repNav.isViewVisible('tripDeparturePanel')" ng-include="'partial/spatial/tripsPanel/tripDeparturePanel/tripDeparturePanel.html'"></div>
+    
+    <div ng-show="repNav.isViewVisible('FishingActivityPanel')" ng-switch="faServ.activityType">
+        <div ng-switch-when="FISHING_OPERATION">
+            <fishing-activity-navigator partial="partial/spatial/tripsPanel/tripFishingOperationPanel/tripFishingOperationPanel.html"></fishing-activity-navigator>
+        </div>
+        <div ng-switch-when="DEPARTURE">
+            <fishing-activity-navigator partial="partial/spatial/tripsPanel/tripDeparturePanel/tripDeparturePanel.html"></fishing-activity-navigator>
+        </div>
+        <div ng-switch-when="ARRIVAL">
+            <fishing-activity-navigator partial="partial/spatial/tripsPanel/tripArrivalPanel/tripArrivalPanel.html"></fishing-activity-navigator>
+        </div>
+        <div ng-switch-when="LANDING">
+            <fishing-activity-navigator partial="partial/spatial/tripsPanel/tripLandingPanel/tripLandingPanel.html"></fishing-activity-navigator>
+        </div>
+        <div ng-switch-when="DISCARD">
+            <fishing-activity-navigator partial="partial/spatial/tripsPanel/tripDiscardPanel/tripDiscardPanel.html"></fishing-activity-navigator>
+        </div>
+        <div ng-switch-when="AREA_ENTRY">
+            <fishing-activity-navigator partial="partial/spatial/tripsPanel/tripAreaEntryPanel/tripAreaEntryPanel.html"></fishing-activity-navigator>
+        </div>
+        <div ng-switch-when="AREA_EXIT">
+            <fishing-activity-navigator partial="partial/spatial/tripsPanel/tripAreaExitPanel/tripAreaExitPanel.html"></fishing-activity-navigator>
+        </div>
+        <div ng-switch-when="TRANSHIPMENT">
+            <fishing-activity-navigator partial="partial/spatial/tripsPanel/tripTranshipmentPanel/tripTranshipmentPanel.html"></fishing-activity-navigator>
+        </div>
+        <div ng-switch-when="RELOCATION">
+            <fishing-activity-navigator partial="partial/spatial/tripsPanel/tripRelocationPanel/tripRelocationPanel.html"></fishing-activity-navigator>
+        </div>
+        <div ng-switch-when="JOINT_FISHING_OPERATION">
+            <fishing-activity-navigator partial="partial/spatial/tripsPanel/tripJointFishingOperationPanel/tripJointFishingOperationPanel.html"></fishing-activity-navigator>
+        </div>
+    </div>
 </div>

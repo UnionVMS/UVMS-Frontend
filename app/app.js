@@ -42,7 +42,9 @@ var unionvmsWebApp = angular.module('unionvmsWeb', [
     'debugConfig',
     'angular-cron-jobs',
     'nvd3',
-    'ui.tree'
+    'ui.tree',
+    'angularResizable',
+    'slickCarousel'
 ]);
 
 var currentUserContextPromise = function(userService) {
@@ -436,15 +438,21 @@ unionvmsWebApp.config(function($stateProvider, $compileProvider, tmhDynamicLocal
             data: {
                 pageTitle: 'header.page_title_reports'
             },
-            onEnter: function($state,locale,userService,errorService){
+            onEnter: function($state,locale,userService,errorService,mdrCacheService){
                 if(_.isNull(userService.getCurrentContext().scope)){
                     errorService.setErrorMessage(locale.getString('common.error_user_without_scope'));
                     $state.go('error');
+                } else {
+                    if (userService.isAllowed('ACTIVITY_ALLOWED', 'Activity', true)){
+                        mdrCacheService.getCodeList('FLUX_GP_PURPOSE');
+                    }
                 }
             },
-            onExit: function(loadingStatus,$modalStack){
+            onExit: function(loadingStatus,$modalStack,spatialHelperService){
                 loadingStatus.resetState();
                 $modalStack.dismissAll();
+                angular.element('body').removeClass('modal-open');
+                spatialHelperService.fromFAView = false;
             }
         })
         .state('app.reporting-id', {
@@ -506,8 +514,9 @@ unionvmsWebApp.config(function($stateProvider, $compileProvider, tmhDynamicLocal
             data: {
                 pageTitle: 'header.page_title_activity'
             },
-            onEnter: function($state, locale, activityService){
-                activityService.getUserPreferences();
+            onEnter: function($state, locale, activityService,visibilityService){
+                //activityService.getUserPreferences(); //FIXME - skipped for the moment until we have all user preferences interfaces
+                visibilityService.initFromStorage();
             },
             onExit: function(loadingStatus, activityService){
                 loadingStatus.resetState();
@@ -888,7 +897,10 @@ unionvmsWebApp.factory('initService',function($log, configurationService, locale
                 'exchange',
                 'alarms',
                 'areas',
-                'sales'
+                'sales',
+                'activity',
+                'abbreviations',
+                'login'
             ]);
         },
     };
@@ -910,6 +922,8 @@ var restApiURLS = [
     '/rules/activity/',
     '/reporting/rest/',
     '/spatial/rest/',
+    '/activity/rest/',
+    '/mdr/rest/',
     '/mapfish-print',
     '/usm-authentication/rest', '/usm-authorisation/rest', '/usm-administration/rest',
     'sales/rest/'

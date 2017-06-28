@@ -47,7 +47,7 @@ copy of the GNU General Public License along with the IFDM Suite. If not, see <h
 							<div class="col-md-12 form-group input-group" ng-class="{'has-error': SysareasForm.areaFile.$dirty && SysareasForm.areaFile.$invalid}">
 								<span class="btn btn-primary btn-file input-group-addon">
 									{{'areas.area_upload_select_zip_file_btn' | i18n}}
-									<input type="file" accept="application/zip" onchange="angular.element(this).scope().fileNameChanged(this)"/>
+									<input type="file" accept="application/zip" ng-model-file="fileData"/>
 								</span>
 								<input type="text" class="form-control" ng-model="sysAreafile" name="areaFile" ng-required="true" readonly>
 								<span class="input-group-addon alert-success" ng-show="validFile.isValid === true">

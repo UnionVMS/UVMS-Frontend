@@ -732,12 +732,16 @@ angular.module('unionvmsWeb').controller('UserareasCtrl',function($scope, locale
         loadingStatus.isLoading('AreaManagement',false);
         $scope.alert.setError();
 
-        if(angular.isDefined(error) && angular.isDefined(error.data) && angular.isDefined(error.data.msg)){
-            $scope.alert.alertMessage = error.data.msg;    
-        }else{
-            $scope.alert.alertMessage = locale.getString('areas.' + defaultMsg);
+        var msg;
+        if(angular.isDefined(error) && angular.isDefined(error.data.msg)){
+            msg = locale.getString('areas.' + error.data.msg);    
         }
         
+        if (!angular.isDefined(msg) || msg.indexOf('KEY_NOT_FOUND') !== -1){
+            msg = locale.getString('areas.' + defaultMsg);
+        }
+        
+        $scope.alert.alertMessage = msg;
         $scope.userAreaSubmitted = false;
     };
     
