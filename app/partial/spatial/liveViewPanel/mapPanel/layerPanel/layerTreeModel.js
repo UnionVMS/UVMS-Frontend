@@ -448,7 +448,6 @@ angular.module('unionvmsWeb').factory('TreeModel',function(locale, mapService, u
                 title = locale.getString('spatial.layer_tree_activities');
                 lyrType = 'ers';
                 longCopyright = locale.getString('spatial.activities_long_copyright');
-                extraCls = 'layertree-alarms';
                 break;
             default:
                 break;
@@ -472,13 +471,39 @@ angular.module('unionvmsWeb').factory('TreeModel',function(locale, mapService, u
 	        }
 	    };
 	    
-	    //FIXME this should be removed when we implement conmtext menu options and labels for activities layer
+	    var childNodes = [];
+	    
+	    
 	    if (type === 'activities'){
-	        node.data.optionsEnabled = false;
-	        node.data.labelEnabled = false;
+	        node.data.optionsEnabled = false; //FIXME this should be removed when we implement conmtext menu options for activities layer
+	        node.data.filterProperty = 'activityType';
+	            
+            var activityTypes = _.map(data.features, function(feat){
+                return feat.properties.activityType;
+            });
+	            
+            activityTypes = _.sortBy(_.uniq(activityTypes), function(type){
+                return type;
+            });
+            
+            if (activityTypes.length > 0){
+                angular.forEach(activityTypes, function(type){
+                    var abbr = locale.getString('abbreviations.activity_' + type);
+                    childNodes.push({
+                        title: abbr !== "%%KEY_NOT_FOUND%%" ? abbr : type,
+                        filterType: type,
+                        type: 'ers-type',
+                        selected: true
+                    });
+                });
+                
+                node.children = childNodes;
+                node.expanded = true; //FIXME
+            }
 	    }
 	    
 	    if (type === 'positions'){
+	        node.data.filterProperty = 'source';
 	        var sourceArray = _.map(data.features, function(feat){
 	            return feat.properties.source;
 	        });
@@ -487,23 +512,17 @@ angular.module('unionvmsWeb').factory('TreeModel',function(locale, mapService, u
 	            return src;
 	        });
 	        
-	        mapService.vmsSources = {};
 	        if (sourceArray.length > 0){
-	            var childNodes = [];
-	            var sourcesType = [];
 	            angular.forEach(sourceArray, function(source){
 	                childNodes.push({
 	                    title: source,
-	                    type: 'vmspos-source',
+	                    filterType: source,
+	                    type: 'vmspos-type',
 	                    selected: true
 	                });
-	                sourcesType.push(source);
-	                mapService.vmsSources[source] = true;
 	            });
 	            
 	            node.children = childNodes;
-	            node.expanded = false;
-	            node.data.sourcesType = sourcesType;
 	        }
 	    }
 	    
@@ -514,7 +533,7 @@ angular.module('unionvmsWeb').factory('TreeModel',function(locale, mapService, u
 	TreeModel.prototype.nodeFromData = function(data){
 	    var finalNodes = [];
 	    var vectorNodes = [];
-
+	    //FIXME uncomment
 	    if (data.movements.features.length > 0){
 	        vectorNodes.push(buildVectorNodes('positions', data.movements));
 	    }
@@ -531,12 +550,16 @@ angular.module('unionvmsWeb').factory('TreeModel',function(locale, mapService, u
                 children: vectorNodes
             };
             finalNodes.push(node);
-            if (data.activities.features.length > 0){
-                finalNodes.push(buildVectorNodes('activities', data.activities));
-            }
-            
-            return finalNodes;
 	    }
+	    
+	    if (data.activities.features.length > 0){
+	        finalNodes.push(buildVectorNodes('activities', data.activities));
+        }
+	    
+	    if (finalNodes.length > 0){
+	        return finalNodes;
+	    }
+	    
 	};
 	
 	//Build node for alarms
