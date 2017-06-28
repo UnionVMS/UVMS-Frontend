@@ -157,15 +157,31 @@ angular.module('unionvmsWeb').directive('layerTree', function($q, $modal, mapSer
 			        }
                 }
 			    
+			    if (node.data.type === 'ers' && node.isSelected() === false && mapService.ersLabels.active === true){
+			        mapService.deactivateVectorLabels('ers');
+                    removeActiveLabelClass(node);
+			    }
+			    
 			    if (node.data.type === 'vmsseg' && mapService.vmssegLabels.active === true && node.isSelected() === false){
                     mapService.deactivateVectorLabels('vmsseg');
                     removeActiveLabelClass(node);
                 }
 			    
-			    if (node.data.type === 'vmspos-type'){
-			        if (mapService.vmsposLabels.active === true && getCheckedStatusForMainNode(node.getParent()) === true){
-			            mapService.deactivateVectorLabels('vmspos');
+			    if (node.data.type === 'vmspos-type' && mapService.vmsposLabels.active === true){
+			        mapService.deactivateVectorLabels('vmspos');
+			        if (getCheckedStatusForMainNode(node.getParent()) === true){
 			            mapService.activateVectorLabels('vmspos');
+			        } else {
+			            removeActiveLabelClass(node.getParent());
+			        }		            
+			    }
+			    
+			    if (node.data.type === 'ers-type' && mapService.ersLabels.active === true){
+			        mapService.deactivateVectorLabels('ers');
+			        if (getCheckedStatusForMainNode(node.getParent()) === true){
+			            mapService.activateVectorLabels('ers');
+			        } else {
+			            removeActiveLabelClass(node.getParent());
 			        }
 			    }
                 
@@ -176,9 +192,9 @@ angular.module('unionvmsWeb').directive('layerTree', function($q, $modal, mapSer
                         removeActiveLabelClass(child);
                     });
                 }
-
+                
                 //Deal with popups
-                var nodeTitles = ['vmsseg', 'vmspos', 'alarms', 'vmspos-type', 'ers', 'ers-type']; //FIXME check this logic
+                var nodeTitles = ['vmsseg', 'vmspos', 'alarms', 'vmspos-type', 'ers', 'ers-type'];
                 if (angular.isDefined(mapService.overlay) && node.isSelected() === false && _.indexOf(nodeTitles, node.data.type) !== -1){
                     mapService.closePopup();
                 }

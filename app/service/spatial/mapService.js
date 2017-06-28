@@ -2772,8 +2772,8 @@ angular.module('unionvmsWeb').factory('mapService', function(locale, $rootScope,
                         if (!angular.isDefined(overlayId)){
                             overlayId = ms.generateOverlayId(ms[containerName]);
                         }
+                        ms[containerName].displayedIds.push(overlayId);
                         if (_.indexOf(activeNodes, feat.get('source')) !== -1 && (!angular.isDefined(feat.get('overlayHidden')) || (feat.get('overlayHidden') === false && !angular.isDefined(feat.get('overlayId'))))){
-                            ms[containerName].displayedIds.push(overlayId);
                             ms.addLabelsOverlay(feat, type, overlayId);
                         }
                     }
@@ -2785,8 +2785,8 @@ angular.module('unionvmsWeb').factory('mapService', function(locale, $rootScope,
                         if (!angular.isDefined(overlayId)){
                             overlayId = ms.generateOverlayId(ms[containerName]);
                         }
+                        ms[containerName].displayedIds.push(overlayId);
                         if (_.indexOf(activeNodes, feat.get('activityType')) !== -1 && (!angular.isDefined(feat.get('overlayHidden')) || (feat.get('overlayHidden') === false && !angular.isDefined(feat.get('overlayId'))))){
-                            ms[containerName].displayedIds.push(overlayId);
                             ms.addLabelsOverlay(feat, type, overlayId);
                         }
                     }
@@ -2801,8 +2801,8 @@ angular.module('unionvmsWeb').factory('mapService', function(locale, $rootScope,
                             if (!angular.isDefined(overlayId)){
                                 overlayId = ms.generateOverlayId(ms[containerName]);
                             }
+                            ms[containerName].displayedIds.push(overlayId);
                             if (!angular.isDefined(feature.get('overlayHidden'))){
-                                ms[containerName].displayedIds.push(overlayId);
                                 ms.addLabelsOverlay(feature, type, overlayId);
                             }
                         }
