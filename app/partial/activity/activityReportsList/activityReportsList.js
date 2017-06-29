@@ -20,10 +20,23 @@ copy of the GNU General Public License along with the IFDM Suite. If not, see <h
  * @description
  *  The controller for the fisihing activity reports table list
  */
-angular.module('unionvmsWeb').controller('ActivityreportslistCtrl',function($scope, activityService, visibilityService, fishingActivityService){
+angular.module('unionvmsWeb').controller('ActivityreportslistCtrl',function($scope, activityService, visibilityService, fishingActivityService, $stateParams, $state){
     $scope.actServ = activityService;
     $scope.faServ = fishingActivityService;
     $scope.attrVisibility = visibilityService;
+    
+    //Automatically open a fishing activity details page when navigating from another tab
+    if (_.keys($stateParams).length > 0 && $stateParams.activityId !== null && $stateParams.tripId !== null && $stateParams.activityType !== null){
+        $scope.faServ.id = $stateParams.activityId;
+        $scope.faServ.activityType = $stateParams.activityType.toLowerCase();
+        $scope.faServ.documentType = $stateParams.faReportType.toLowerCase();
+        $scope.goToView(3);
+        
+        $stateParams.activityType = null;
+        $stateParams.activityId = null;
+        $stateParams.tripId = null;
+        $stateParams.faReportType = null;
+    }
     
     /**
      * Pipe function used in the smartTable in order to support server side pagination and sorting
