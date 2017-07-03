@@ -159,10 +159,6 @@ angular.module('unionvmsWeb').directive('mapTile', function($timeout, genericMap
             logo: false
         });
         
-        $scope.map.beforeRender(function(map){
-            map.updateSize();
-        });
-        
         $scope.map.setView(view);
         addBaseLayers();
         

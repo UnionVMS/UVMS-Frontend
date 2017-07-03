@@ -79,10 +79,6 @@ angular.module('unionvmsWeb').factory('mapService', function(locale, $rootScope,
 	        logo: false
 	    });
 
-	    map.beforeRender(function(map){
-	        map.updateSize();
-	    });
-
 	    map.on('moveend', function(e){
 	        var controls = e.map.getControls();
             controls.forEach(function(control){

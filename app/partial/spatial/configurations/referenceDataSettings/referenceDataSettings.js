@@ -515,10 +515,6 @@ angular.module('unionvmsWeb').controller('SystemareassettingsCtrl',function($sco
             logo: false
         });
         
-        map.beforeRender(function(map){
-            map.updateSize();
-        });
-        
         map.setView(view);
         mapReference.refData.map = map; 
         
