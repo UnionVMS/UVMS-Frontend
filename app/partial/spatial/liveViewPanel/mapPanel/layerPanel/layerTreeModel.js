@@ -498,7 +498,6 @@ angular.module('unionvmsWeb').factory('TreeModel',function(locale, mapService, u
                 });
                 
                 node.children = childNodes;
-                node.expanded = true; //FIXME
             }
 	    }
 	    

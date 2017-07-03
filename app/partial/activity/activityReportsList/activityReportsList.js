@@ -29,7 +29,9 @@ angular.module('unionvmsWeb').controller('ActivityreportslistCtrl',function($sco
     if (_.keys($stateParams).length > 0 && $stateParams.activityId !== null && $stateParams.tripId !== null && $stateParams.activityType !== null){
         $scope.faServ.id = $stateParams.activityId;
         $scope.faServ.activityType = $stateParams.activityType.toLowerCase();
-        $scope.faServ.documentType = $stateParams.faReportType.toLowerCase();
+        if ($stateParams.faReportType !== null){
+            $scope.faServ.documentType = $stateParams.faReportType.toLowerCase();
+        }
         $scope.goToView(3);
         
         $stateParams.activityType = null;

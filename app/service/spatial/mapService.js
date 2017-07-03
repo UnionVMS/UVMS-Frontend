@@ -638,20 +638,22 @@ angular.module('unionvmsWeb').factory('mapService', function(locale, $rootScope,
             html: locale.getString('spatial.vms_segments_copyright')
         });
         
-        var layer = new ol.layer.Vector({
+        var layer = new ol.layer.Image({
             title: config.title,
             type: config.type,
             longAttribution: config.longAttribution,
             isBaseLayer: config.isBaseLayer,
-            source: new ol.source.Vector({
+            source: new ol.source.ImageVector({
                 attributions: [attribution],
-                features: (new ol.format.GeoJSON()).readFeatures(config.geoJson, {
-                    dataProjection: 'EPSG:4326',
-                    featureProjection: ms.getMapProjectionCode()
-                })
-            }),
-            style: ms.setSegStyle
-        });
+                source: new ol.source.Vector({
+                    features: (new ol.format.GeoJSON()).readFeatures(config.geoJson, {
+                        dataProjection: 'EPSG:4326',
+                        featureProjection: ms.getMapProjectionCode()
+                    })
+                }),
+                style: ms.setSegStyle
+            })
+          });
         
         return( layer );
     };
@@ -2753,6 +2755,9 @@ angular.module('unionvmsWeb').factory('mapService', function(locale, $rootScope,
             //var resolution = ms.map.getView().getResolution();
             
             var src = layer.getSource();
+            if (type === 'vmsseg'){
+                src = src.getSource();
+            }
             var overlayId, feat;
             src.forEachFeatureInExtent(extent, function(feature){
                 var activeNodes;
