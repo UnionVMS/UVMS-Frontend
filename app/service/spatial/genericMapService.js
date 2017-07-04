@@ -606,7 +606,7 @@ angular.module('unionvmsWeb').factory('genericMapService',function($localStorage
      * Format mouse position coordinates according to the report/user preferences
      * 
      * @memberof genericMapService
-     * @public
+     * @private
      * @alias formatCoords
      * @param {Array<Number>} coord - The pair of coordinates to convert
      * @param {Object} ctrl - The object containing the definitions to appy in the mouse coordinates contrl
@@ -631,6 +631,17 @@ angular.module('unionvmsWeb').factory('genericMapService',function($localStorage
         }
     };
     
+    /**
+     * Format graticule coordinate label according to the report/user preferences
+     * 
+     * @memberof genericMapService
+     * @public
+     * @alias formatCoordsForGraticule
+     * @param {String} format - The coordinate format to be displayed (e.g. dd, ddm, dms)
+     * @param {Number} coord - The coordinate that should be formated
+     * @param {String} hemispheres
+     * @returns {String} The converted coordinate
+     */
     var formatCoordsForGraticule = function(format, coord, hemisphere){
         switch (format) {
             case 'm':
