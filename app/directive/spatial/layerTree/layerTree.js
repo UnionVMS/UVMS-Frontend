@@ -45,7 +45,7 @@ angular.module('unionvmsWeb').directive('layerTree', function($q, $modal, mapSer
 			    if (data.node.hasChildren() === true && !angular.isDefined(data.node.data.geoJson)){
 			        loopFolderNodes(data.node);
 			    } else {
-			        if (angular.isDefined(data.node.data.geoJson)){
+			        if (angular.isDefined(data.node.data.geoJson) && data.node.data.type !== 'vmsseg'){
 			            applyGeoJsonFilter(data, true);
 			            data.node.data.mapLayer.set('visible', data.node.isSelected());
 			        } else if (!angular.isDefined(data.node.data.geoJson) && !angular.isDefined(data.node.data.mapLayer)){
@@ -129,10 +129,10 @@ angular.module('unionvmsWeb').directive('layerTree', function($q, $modal, mapSer
                     if (node.hasChildren() && !angular.isDefined(node.data.geoJson)){
                         loopFolderNodes(node);
                     } else {
-                        if (angular.isDefined(node.data.geoJson)){
+                        if (angular.isDefined(node.data.geoJson) && node.data.type !== 'vmsseg'){
                             applyGeoJsonFilter({node: node}, true);
                             node.data.mapLayer.set('visible', node.isSelected());
-                        } else if (angular.isDefined(node.data.mapLayer) && !angular.isDefined(node.data.geoJson)){
+                        } else {
                             node.data.mapLayer.set('visible', node.isSelected());
                         }
                     }

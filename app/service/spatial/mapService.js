@@ -79,10 +79,6 @@ angular.module('unionvmsWeb').factory('mapService', function(locale, $rootScope,
 	        logo: false
 	    });
 
-	    map.beforeRender(function(map){
-	        map.updateSize();
-	    });
-
 	    map.on('moveend', function(e){
 	        var controls = e.map.getControls();
             controls.forEach(function(control){
@@ -413,7 +409,16 @@ angular.module('unionvmsWeb').factory('mapService', function(locale, $rootScope,
     };
     
     //Map graticule
-    ms.mapGraticule = new ol.Graticule({});
+    ms.graticuleFormat = 'dms';
+    ms.mapGraticule = new ol.Graticule({
+        showLabels: true,
+        lonLabelFormatter: function(lon){
+            return genericMapService.formatCoordsForGraticule(ms.graticuleFormat, lon, 'EW');
+        },
+        latLabelFormatter: function(lat){
+            return genericMapService.formatCoordsForGraticule(ms.graticuleFormat, lat, 'NS');
+        }
+    });
     /**
      * Set mapGraticule in the current map according to a specified visibility status
      * 
@@ -638,20 +643,22 @@ angular.module('unionvmsWeb').factory('mapService', function(locale, $rootScope,
             html: locale.getString('spatial.vms_segments_copyright')
         });
         
-        var layer = new ol.layer.Vector({
+        var layer = new ol.layer.Image({
             title: config.title,
             type: config.type,
             longAttribution: config.longAttribution,
             isBaseLayer: config.isBaseLayer,
-            source: new ol.source.Vector({
+            source: new ol.source.ImageVector({
                 attributions: [attribution],
-                features: (new ol.format.GeoJSON()).readFeatures(config.geoJson, {
-                    dataProjection: 'EPSG:4326',
-                    featureProjection: ms.getMapProjectionCode()
-                })
-            }),
-            style: ms.setSegStyle
-        });
+                source: new ol.source.Vector({
+                    features: (new ol.format.GeoJSON()).readFeatures(config.geoJson, {
+                        dataProjection: 'EPSG:4326',
+                        featureProjection: ms.getMapProjectionCode()
+                    })
+                }),
+                style: ms.setSegStyle
+            })
+          });
         
         return( layer );
     };
@@ -1917,6 +1924,7 @@ angular.module('unionvmsWeb').factory('mapService', function(locale, $rootScope,
 	        tempControls.push(ctrl.type);
 	        if (ctrl.type === 'mousecoords'){
 	            mousecoordsCtrl = ctrl;
+	            ms.graticuleFormat = mousecoordsCtrl.format;
 	        } else if (ctrl.type === 'scale'){
 	            scaleCtrl = ctrl;
 	        }
@@ -1940,6 +1948,7 @@ angular.module('unionvmsWeb').factory('mapService', function(locale, $rootScope,
 	            var config;
 	            if (ctrl === 'mousecoords'){
 	                config = mousecoordsCtrl;
+	                ms.graticuleFormat = mousecoordsCtrl.format;
 	            } else if (ctrl === 'scale'){
 	                config = scaleCtrl;
 	            }
@@ -1957,6 +1966,7 @@ angular.module('unionvmsWeb').factory('mapService', function(locale, $rootScope,
 	            var config;
                 if (ctrl === 'mousecoords'){
                     config = mousecoordsCtrl;
+                    ms.graticuleFormat = mousecoordsCtrl.format;
                 } else if (ctrl === 'scale'){
                     config = scaleCtrl;
                 }
@@ -2753,6 +2763,9 @@ angular.module('unionvmsWeb').factory('mapService', function(locale, $rootScope,
             //var resolution = ms.map.getView().getResolution();
             
             var src = layer.getSource();
+            if (type === 'vmsseg'){
+                src = src.getSource();
+            }
             var overlayId, feat;
             src.forEachFeatureInExtent(extent, function(feature){
                 var activeNodes;

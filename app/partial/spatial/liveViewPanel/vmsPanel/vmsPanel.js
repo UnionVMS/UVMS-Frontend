@@ -167,7 +167,7 @@ angular.module('unionvmsWeb').controller('VmspanelCtrl',function($scope, locale,
            var counter = 0;
            var layer = mapService.getLayerByType('highlight').getSource();
            layer.clear(true);
-           segLayer.getSource().forEachFeatureInExtent(extent, function(feature){
+           segLayer.getSource().getSource().forEachFeatureInExtent(extent, function(feature){
                if (feature.get('trackId') === id){
                    if (feature.getGeometry().getLength() !== 0){
                        coords.push(feature.getGeometry().getCoordinates());
