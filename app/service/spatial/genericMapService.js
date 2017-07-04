@@ -606,7 +606,7 @@ angular.module('unionvmsWeb').factory('genericMapService',function($localStorage
      * Format mouse position coordinates according to the report/user preferences
      * 
      * @memberof genericMapService
-     * @private
+     * @public
      * @alias formatCoords
      * @param {Array<Number>} coord - The pair of coordinates to convert
      * @param {Object} ctrl - The object containing the definitions to appy in the mouse coordinates contrl
@@ -628,6 +628,21 @@ angular.module('unionvmsWeb').factory('genericMapService',function($localStorage
             }
         } else {
             return ol.coordinate.format(coord, '<b>X:</b> {x} m \u0090 <b>Y:</b> {y} m' , 4);
+        }
+    };
+    
+    var formatCoordsForGraticule = function(format, coord, hemisphere){
+        switch (format) {
+            case 'm':
+            case 'dms':
+                return coordToDMS(coord, 'EW');
+                break;
+            case 'dd':
+                return coord.toFixed(2);
+                break;
+            case 'ddm':
+                return coordToDDM(coord, 'EW');
+                break;
         }
     };
     
@@ -829,7 +844,8 @@ angular.module('unionvmsWeb').factory('genericMapService',function($localStorage
 	    createPanInteractions: createPanInteractions,
 	    intersectGeomWithProj: intersectGeomWithProj,
 	    geomToGeoJson: geomToGeoJson,
-	    geoJsonToOlGeom: geoJsonToOlGeom
+	    geoJsonToOlGeom: geoJsonToOlGeom,
+	    formatCoordsForGraticule: formatCoordsForGraticule
 	};
 
 	return genericMapService;

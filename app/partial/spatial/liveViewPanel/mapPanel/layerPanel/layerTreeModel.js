@@ -493,7 +493,7 @@ angular.module('unionvmsWeb').factory('TreeModel',function(locale, mapService, u
                         title: abbr !== "%%KEY_NOT_FOUND%%" ? abbr : type,
                         filterType: type,
                         type: 'ers-type',
-                        selected: true
+                        selected: false
                     });
                 });
                 

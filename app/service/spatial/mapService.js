@@ -409,7 +409,16 @@ angular.module('unionvmsWeb').factory('mapService', function(locale, $rootScope,
     };
     
     //Map graticule
-    ms.mapGraticule = new ol.Graticule({});
+    ms.graticuleFormat = 'dms';
+    ms.mapGraticule = new ol.Graticule({
+        showLabels: true,
+        lonLabelFormatter: function(lon){
+            return genericMapService.formatCoordsForGraticule(ms.graticuleFormat, lon, 'EW');
+        },
+        latLabelFormatter: function(lat){
+            return genericMapService.formatCoordsForGraticule(ms.graticuleFormat, lat, 'NS');
+        }
+    });
     /**
      * Set mapGraticule in the current map according to a specified visibility status
      * 
@@ -1915,6 +1924,7 @@ angular.module('unionvmsWeb').factory('mapService', function(locale, $rootScope,
 	        tempControls.push(ctrl.type);
 	        if (ctrl.type === 'mousecoords'){
 	            mousecoordsCtrl = ctrl;
+	            ms.graticuleFormat = mousecoordsCtrl.format;
 	        } else if (ctrl.type === 'scale'){
 	            scaleCtrl = ctrl;
 	        }
@@ -1938,6 +1948,7 @@ angular.module('unionvmsWeb').factory('mapService', function(locale, $rootScope,
 	            var config;
 	            if (ctrl === 'mousecoords'){
 	                config = mousecoordsCtrl;
+	                ms.graticuleFormat = mousecoordsCtrl.format;
 	            } else if (ctrl === 'scale'){
 	                config = scaleCtrl;
 	            }
@@ -1955,6 +1966,7 @@ angular.module('unionvmsWeb').factory('mapService', function(locale, $rootScope,
 	            var config;
                 if (ctrl === 'mousecoords'){
                     config = mousecoordsCtrl;
+                    ms.graticuleFormat = mousecoordsCtrl.format;
                 } else if (ctrl === 'scale'){
                     config = scaleCtrl;
                 }

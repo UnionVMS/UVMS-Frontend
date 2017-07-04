@@ -1,7 +1,7 @@
 {
   "dependencies": {
     "Chart.js": "^1.0.2",
-    "OpenLayers": "~3.16",
+    "OpenLayers": "~4.2.0",
     "angular": "~1.5",
     "angular-animate": "~1.5",
     "angular-bootstrap": "~0.14",
