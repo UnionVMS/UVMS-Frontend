@@ -18,11 +18,11 @@ angular.module('unionvmsWeb').factory('searchUtilsService',function(SearchField,
         //Transform dates to UTC dates
         var dateCriterias = ["END_DATE","START_DATE", "REPORTING_START_DATE", "REPORTING_END_DATE", "TO_DATE", "FROM_DATE", "DATE_RECEIVED_FROM", "DATE_RECEIVED_TO" ];
         for (var i = 0; i < searchCriterias.length; i++) {
-            if ( dateCriterias.indexOf(searchCriterias[i].key) >= 0){
+            if (dateCriterias.indexOf(searchCriterias[i].key) >= 0){
                     //Values is already in UTC but we need to format it with timezone
                     searchCriterias[i].value = dateTimeService.formatUTCDateWithTimezone(searchCriterias[i].value);
             }
-            
+
             if (searchCriterias[i].key === 'TYPE' && searchCriterias[i].value === 'Reporting'){
                 searchCriterias[i].value = searchCriterias[i].value.toUpperCase();
             }
@@ -58,10 +58,6 @@ angular.module('unionvmsWeb').factory('searchUtilsService',function(SearchField,
                 switch(searchCriterias[i].value){
                     case 'TODAY':
                         searchCriterias.push(new SearchField(fromDateKey, dateTimeService.formatUTCDateWithTimezone(moment().startOf('day').format("YYYY-MM-DD HH:mm"))));
-                        searchCriterias.push(new SearchField(toDateKey, dateTimeService.formatUTCDateWithTimezone(moment.utc().format())));
-                        break;
-                    case 'THIS_WEEK':
-                        searchCriterias.push(new SearchField(fromDateKey, dateTimeService.formatUTCDateWithTimezone(moment().startOf('week').format("YYYY-MM-DD HH:mm"))));
                         searchCriterias.push(new SearchField(toDateKey, dateTimeService.formatUTCDateWithTimezone(moment.utc().format())));
                         break;
                     default:
@@ -171,7 +167,6 @@ angular.module('unionvmsWeb').factory('searchUtilsService',function(SearchField,
     var getTimeSpanOptions = function() {
         var options = [
             {text: locale.getString('common.time_span_today'), code:'TODAY'},
-            {text: locale.getString('common.time_span_this_week'), code:'THIS_WEEK'},
             {text: locale.getString('common.time_span_custom'), code:'CUSTOM'},
         ];
 
