@@ -371,5 +371,8 @@
     "receiver_vessel": "Receiver vessel",
     "species": "Species",
     "columns": "Columns",
-    "joint_fishing_vessel": "Joint fishing vessel"
+    "joint_fishing_vessel": "Joint fishing vessel",
+    "title": "Title",
+    "author": "Author",
+    "print": "Print"
 }

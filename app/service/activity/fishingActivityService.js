@@ -759,7 +759,7 @@ angular.module('unionvmsWeb').factory('fishingActivityService', function(activit
         
         if(exceptions.indexOf(faType) === -1){
             finalSummary = loadFishingActivityDetails(data, faSummaryAttrsOrder);
-            if (angular.isDefined(data.characteristics) && !_.isEmpty(data.characteristics)) {
+            if (angular.isDefined(data.characteristics) && _.keys(data.characteristics).length) {
                 finalSummary.characteristics = data.characteristics;
             }
             finalSummary.title = locale.getString('activity.title_fishing_activity') + ': ' + locale.getString('activity.fa_type_' + faType);
@@ -1172,6 +1172,44 @@ angular.module('unionvmsWeb').factory('fishingActivityService', function(activit
         }
 
         return clickable;
+    };
+
+    var centerText = function (doc, text) {
+        var textWidth = doc.getStringUnitWidth(text) * doc.internal.getFontSize() / doc.internal.scaleFactor;
+        var textOffset = (doc.internal.pageSize.width - textWidth) / 2;
+        doc.text(textOffset, 20, text);
+    };
+
+    /*var writeFooter = function (doc) {
+        var textWidth = doc.getStringUnitWidth(text) * doc.internal.getFontSize() / doc.internal.scaleFactor;
+        var textOffset = (doc.internal.pageSize.width - textWidth) / 2;
+        doc.setFontSize(10);
+        doc.setTextColor(120, 120, 120);
+        doc.text(0, 10, moment().utc().format('YYYY-MM-DD HH:mm Z') + ' UTC');
+        doc.text(0, 10, locale.getString('spatial.map_export_copyright') + ' unionVMS');
+    };*/
+
+    faServ.printView = function (view) {
+        var viewContainer;
+        if(view === 'fishingActivityPanel'){
+            viewContainer = angular.element('.fa-partial');
+        }
+        
+        var doc = new jsPDF('l', 'pt', 'a4');
+    
+        doc.setTextColor(41, 128, 185);
+        doc.setFontSize(18);
+
+        var options = {
+            pagesplit: true
+        };
+
+        doc.addHTML(viewContainer,0,30,options,function(){
+            centerText(doc, locale.getString('activity.title_fishing_activity'));
+            //Add footer
+            /*writeFooter(doc, 'landscape');*/
+            doc.save("test.pdf");
+        });
     };
     
     /**
