@@ -80,7 +80,7 @@ angular.module('unionvmsWeb').factory('loadingStatus',function() {
             counter: 0
 		},
 		FishingActivity: {
-		    message: 'spatial.loading_data',
+		    message: ['spatial.loading_data', 'activity.downloading_view'],
 		    value: false,
 		    counter: 0
 		},
