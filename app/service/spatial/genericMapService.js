@@ -647,13 +647,10 @@ angular.module('unionvmsWeb').factory('genericMapService',function($localStorage
             case 'm':
             case 'dms':
                 return coordToDMS(coord, 'EW');
-                break;
             case 'dd':
                 return coord.toFixed(2);
-                break;
             case 'ddm':
                 return coordToDDM(coord, 'EW');
-                break;
         }
     };
     
