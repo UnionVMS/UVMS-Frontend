@@ -27,6 +27,7 @@
     "running_program_polls_stop_title" : "Stop the polling program",
     "running_program_polls_remove_title" : "Remove the polling program",
     "running_program_polls_remove_confirm_text" : "Are you sure you want to remove the polling program?",
+    "polling_logs_click_to_view_polling_status" : "Click to view poll status",
     "polling_logs_search_zero_results_error" : "No polls matching you search criteria was found.",
     "polling_logs_by_id_search_zero_results_error" : "The poll could not be found.",
     "polling_logs_search_date_from_placeholder" : "From",

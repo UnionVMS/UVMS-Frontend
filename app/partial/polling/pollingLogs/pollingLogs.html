@@ -128,20 +128,20 @@ copy of the GNU General Public License along with the IFDM Suite. If not, see <h
                                 <td ng-attr-title="{{item.poll.type | pollTypeName}}">{{item.poll.type | pollTypeName}}</td>
                                 <td ng-attr-title="{{item.poll.attributes.TRANSPONDER | transponderName}}">{{item.poll.attributes.TRANSPONDER | transponderName}}</td>
                                 <td ng-attr-title="{{item.exchangePoll.identifier}}">{{item.exchangePoll.identifier}}</td>
-                                <td class="statusTime">
-                                    <div class="expandIcon" ng-show="item.exchangePoll.history.length > 1" ng-click="isExpanded = !isExpanded">
+                                <td class="statusTime" ng-click="isExpanded = !isExpanded">
+                                    <div class="expandIcon" ng-show="item.exchangePoll.history.length > 1">
                                         <i class="fa fa-plus-square" ng-show="!isExpanded"></i>
                                         <i class="fa fa-minus-square" ng-show="isExpanded"></i>
                                     </div>
                                     <div class="times">
-                                        <span ng-repeat="status in item.exchangePoll.history" ng-show="isExpanded || $index === 0" ng-attr-title="{{status.time | confDateFormat}}">
+                                        <span ng-repeat="status in item.exchangePoll.history | orderBy:'time':true" ng-show="isExpanded || $index === 0" ng-attr-title="{{'polling.polling_logs_click_to_view_polling_status' | i18n}}">
                                             {{ status.time | confDateFormat}}<br>
                                         </span>
                                     </div>
                                 </td>
                                 <td ng-attr-title="{{item.poll.attributes.USER}}">{{item.poll.attributes.USER}}</td>
                                 <td class="statusText">
-                                    <div ng-repeat="status in item.exchangePoll.history | orderBy:'status.time'" ng-show="isExpanded || $index === 0">
+                                    <div ng-repeat="status in item.exchangePoll.history | orderBy:'time':true" ng-show="isExpanded || $index === 0">
                                         <span class="label" ng-class="getStatusLabelClass(status.status)" ng-attr-title="{{status.status | exchangeStatusName | uppercase}}">
                                             {{status.status | exchangeStatusName | uppercase}}
                                         </span><br>
