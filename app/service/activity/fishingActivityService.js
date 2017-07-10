@@ -1198,24 +1198,30 @@ angular.module('unionvmsWeb').factory('fishingActivityService', function(activit
         loadingStatus.isLoading('FishingActivity', true, 1);
         var scrollContainer;
         var viewContainer;
+
         if(view === 'fishingActivityPanel'){
-            scrollContainer = angular.element('.trips-panel');
             viewContainer = angular.element('.fa-partial');
+        }
+
+        var width = viewContainer[0].offsetWidth;
+        var height = viewContainer[0].offsetHeight;
+
+        scrollContainer = angular.element('.trips-panel');
+        if(scrollContainer && scrollContainer.length){
             scrollContainer.css('overflow', 'visible');
         }
-        
+
         var topOffset;
-        var extraTopOffset;
+        var extraOffset = 1.055;
         if(title){
             topOffset = 30;
-            extraTopOffset = 20;
+            extraOffset = 1.095;
         }else{
             topOffset = 15;
-            extraTopOffset = 0;
         }
 
         var doc;
-        if(viewContainer[0].offsetWidth > viewContainer[0].offsetHeight + topOffset + extraTopOffset + 450){
+        if(width*0.7 > height*extraOffset){
             doc = new jsPDF('l', 'px', 'a4');
         }else{
             doc = new jsPDF('p', 'px', 'a4');
@@ -1231,7 +1237,7 @@ angular.module('unionvmsWeb').factory('fishingActivityService', function(activit
 
             writeFooter(doc, author);
 
-            doc.save("test.pdf");
+            doc.save("viewPrint.pdf");
             if(scrollContainer){
                 scrollContainer.css('overflow', '');
             }

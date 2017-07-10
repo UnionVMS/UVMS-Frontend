@@ -27,8 +27,8 @@ angular.module('unionvmsWeb').directive('printButton', function(fishingActivityS
 				}
             },
             position: {
-                my: 'right center',
-                at: 'left center',
+                my: 'right top',
+                at: 'left bottom',
                 target: $scope.el,
                 effect: false
             },
