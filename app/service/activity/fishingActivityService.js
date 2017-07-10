@@ -340,7 +340,7 @@ angular.module('unionvmsWeb').factory('fishingActivityService', function(activit
      * @alias getFishingActivity
 	 */
     faServ.getFishingActivity = function(obj, callback) {
-        loadingStatus.isLoading('FishingActivity', true);
+        loadingStatus.isLoading('FishingActivity', true, 0);
         var payload = {
             activityId: faServ.id
         };
@@ -1089,7 +1089,7 @@ angular.module('unionvmsWeb').factory('fishingActivityService', function(activit
      * @returns the purpose code
      */
      var getPurposeCodes = function(acronym, obj){
-        loadingStatus.isLoading('FishingActivity', true);
+        loadingStatus.isLoading('FishingActivity', true, 0);
         
         mdrCacheService.getCodeList(acronym).then(function(response){
             angular.forEach(obj.reportDetails.items,function(item){
@@ -1121,7 +1121,7 @@ angular.module('unionvmsWeb').factory('fishingActivityService', function(activit
         
         if(angular.isDefined(activityType) && activityType.length > 0){
             var acronym =activityType[0].achronym;
-            loadingStatus.isLoading('FishingActivity', true);
+            loadingStatus.isLoading('FishingActivity', true, 0);
             
             mdrCacheService.getCodeList(acronym).then(function(response){
                 angular.forEach(obj.activityDetails.items,function(item){
@@ -1180,35 +1180,62 @@ angular.module('unionvmsWeb').factory('fishingActivityService', function(activit
         doc.text(textOffset, 20, text);
     };
 
-    /*var writeFooter = function (doc) {
-        var textWidth = doc.getStringUnitWidth(text) * doc.internal.getFontSize() / doc.internal.scaleFactor;
-        var textOffset = (doc.internal.pageSize.width - textWidth) / 2;
+    var writeFooter = function (doc, text) {
         doc.setFontSize(10);
         doc.setTextColor(120, 120, 120);
-        doc.text(0, 10, moment().utc().format('YYYY-MM-DD HH:mm Z') + ' UTC');
-        doc.text(0, 10, locale.getString('spatial.map_export_copyright') + ' unionVMS');
-    };*/
 
-    faServ.printView = function (view) {
+        if(text){
+            var textWidth = doc.getStringUnitWidth(text) * doc.internal.getFontSize() / doc.internal.scaleFactor;
+            var textOffset = (doc.internal.pageSize.width - textWidth) / 2;
+            doc.text(textOffset, doc.internal.pageSize.height - 7, text);
+        }
+
+        var copyrightLabel = locale.getString('spatial.map_export_copyright') + ' unionVMS';
+        doc.text((doc.internal.pageSize.width - doc.getStringUnitWidth(copyrightLabel) * doc.internal.getFontSize() / doc.internal.scaleFactor) - 14, doc.internal.pageSize.height - 7, copyrightLabel);
+    };
+
+    faServ.printView = function (view, title, author) {
+        loadingStatus.isLoading('FishingActivity', true, 1);
+        var scrollContainer;
         var viewContainer;
         if(view === 'fishingActivityPanel'){
+            scrollContainer = angular.element('.trips-panel');
             viewContainer = angular.element('.fa-partial');
+            scrollContainer.css('overflow', 'visible');
         }
         
-        var doc = new jsPDF('l', 'pt', 'a4');
+        var topOffset;
+        var extraTopOffset;
+        if(title){
+            topOffset = 30;
+            extraTopOffset = 20;
+        }else{
+            topOffset = 15;
+            extraTopOffset = 0;
+        }
+
+        var doc;
+        if(viewContainer[0].offsetWidth > viewContainer[0].offsetHeight + topOffset + extraTopOffset + 450){
+            doc = new jsPDF('l', 'px', 'a4');
+        }else{
+            doc = new jsPDF('p', 'px', 'a4');
+        }
     
         doc.setTextColor(41, 128, 185);
         doc.setFontSize(18);
 
-        var options = {
-            pagesplit: true
-        };
+        doc.addHTML(viewContainer,0,topOffset,{},function(){
+            if(title){
+                centerText(doc, title);
+            }
 
-        doc.addHTML(viewContainer,0,30,options,function(){
-            centerText(doc, locale.getString('activity.title_fishing_activity'));
-            //Add footer
-            /*writeFooter(doc, 'landscape');*/
+            writeFooter(doc, author);
+
             doc.save("test.pdf");
+            if(scrollContainer){
+                scrollContainer.css('overflow', '');
+            }
+            loadingStatus.isLoading('FishingActivity', false);
         });
     };
     

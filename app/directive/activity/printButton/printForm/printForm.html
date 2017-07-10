@@ -10,7 +10,7 @@
                 <input type="text" class="form-control" maxlength="25" name="author" ng-model="author" ng-required="true"/>
             </div>
             <div class="btn-print-container">
-                <button type="button" class="btn-primary" ng-click="faServ.printView('fishingActivityPanel')">{{printLabel}}</button>
+                <button type="button" class="btn-primary" ng-click="faServ.printView('fishingActivityPanel', title, author)">{{printLabel}}</button>
             </div>
         </ng-form>
     </div>
