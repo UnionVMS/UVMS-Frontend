@@ -76,44 +76,6 @@ copy of the GNU General Public License along with the IFDM Suite. If not, see <h
                 </div>
             </div>
 
-            <!--SAMPLING
-            <div class="optionsSection">
-                <div class="row">
-                    <div class="col-md-12">
-                        <input type="radio" ng-disabled="!isSingleMobileTerminalSelected()" ng-model="pollingOptions.type" value="SAMPLING"/>
-                        <span class="pollType" ng-class="{'activePollType' : isSamplingPoll()}" ng-click="setPollType('SAMPLING')">{{'polling.wizard_second_step_sampling_poll' | i18n | uppercase}}</span>
-                        <span ng-hide="isSingleMobileTerminalSelected()" class="validation-warning">{{ "polling.wizard_second_step_sampling_poll_single_carrier_warning" | i18n }}</span>
-                    </div>
-                </div>
-                <div class="row">
-                    <div class="indentedSection">
-                        <div class="col-md-12">
-                            <table>
-                                <thead>
-                                    <tr>
-                                        <th>{{'polling.wizard_second_step_sampling_poll_start_date' | i18n}}</th>
-                                        <th>{{'polling.wizard_second_step_sampling_poll_end_date' | i18n}}</th>
-                                    </tr>
-                                </thead>
-                                <tbody>
-                                    <tr>
-                                        <td class="form-group" ng-class="{'has-error': pollingOptionsForm.samplingStartDate.$invalid && (submitAttempted || pollingOptionsForm.samplingStartDate.$dirty)}">
-                                            <datepicker-input name="samplingStartDate" model="pollingOptions.samplingPoll.startDate" max-date="pollingOptions.samplingPoll.endDate" ng-disabled="!isSamplingPoll()" ng-required="isSamplingPoll()" time="true" input-field-id="new-sampling-poll-start-date-picker"></datepicker-input>
-                                            <input-validation-message types="required, date, maxDate" input="pollingOptionsForm.samplingStartDate"></input-validation-message>
-                                        </td>
-
-                                        <td class="form-group" ng-class="{'has-error': pollingOptionsForm.samplingEndDate.$invalid && (submitAttempted || pollingOptionsForm.samplingEndDate.$dirty)}">
-                                            <datepicker-input name="samplingEndDate" model="pollingOptions.samplingPoll.endDate" min-date="pollingOptions.samplingPoll.startDate" ng-disabled="!isSamplingPoll()" ng-required="isSamplingPoll()" time="true" input-field-id="new-sampling-poll-end-date-picker"></datepicker-input>
-                                            <input-validation-message types="required, date, minDate" input="pollingOptionsForm.samplingEndDate"></input-validation-message>
-                                        </td>
-                                    </tr>
-                                </tbody>
-                            </table>
-                        </div>
-                    </div>
-                </div>
-            </div>-->
-
             <!--CHANNELS AND COMMENT-->
             <div class="optionsSection">
                 <div class="row">
