@@ -12,6 +12,12 @@ angular.module('unionvmsWeb').directive('printButton', function(fishingActivityS
 		}
 	};
 }).controller('printButtonCtrl', function($scope,$compile){
+
+    var closeTooltip = function(){
+        $($($scope.el).scrollParent()).off('scroll', closeTooltip);
+        $scope.api.destroy(true);
+        delete $scope.tip;
+    };
     
     $scope.openPrintForm = function(){
         $scope.tip = $scope.el.qtip({
@@ -40,12 +46,12 @@ angular.module('unionvmsWeb').directive('printButton', function(fishingActivityS
 				event: 'unfocus'
 			},
             events: {
-				/*show: function(event, api) {
-                    $compile(angular.element(event.target).find('[ng-controller="PrintFormCtrl"]')[0]);
-                },*/
+				show: function(event, api) {
+                    $scope.api = api;
+                    $($($scope.el).scrollParent()).scroll(closeTooltip);
+                },
                 hide: function(event, api) {
-                    api.destroy(true); // Destroy it immediately
-                    delete $scope.tip;
+                    closeTooltip();
                 }
             },
             style: {
