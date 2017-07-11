@@ -70,29 +70,25 @@ angular.module('unionvmsWeb').factory('unitConversionService',function($filter, 
 	    },
 	    duration: {
 	        timeToHuman: function(time){
-	            var days = Math.floor(time / (24 * 3600));
+	            var duration = moment.duration(Math.abs(time));
 	            
-	            var divisor_for_hours = time % (24 * 3600);
-	            var hours = Math.floor(divisor_for_hours / 3600);
-
-	            var divisor_for_minutes = time % 3600;
-	            var minutes = Math.floor(divisor_for_minutes / 60);
-
-	            var divisor_for_seconds = divisor_for_minutes % 60;
-	            var seconds = Math.ceil(divisor_for_seconds);
+	            var days = Math.floor(duration.asDays());
+	            var hours = Math.floor(duration.asHours()) - (days * 24);
+	            var minutes = Math.floor(duration.asMinutes()) - (days * 24 * 60) - (hours * 60);
+	            var seconds = Math.round(duration.asSeconds()  - (days * 24 * 3600) - (hours * 3600) - (minutes * 60));
 	            
 	            var value = '';
-	            if (days){
+	            if (days !== 0){
 	                value += days + 'd ';
 	            }
-	            if (hours){
+	            if (hours !== 0){
 	                value += hours + 'h ';
 	            }
-	            if (minutes){
+	            if (minutes !== 0){
 	                value += minutes + 'm ';
 	            }
 	            
-	            if (seconds){
+	            if (seconds !== 0){
 	                value += seconds + 's';
 	            }
 	            

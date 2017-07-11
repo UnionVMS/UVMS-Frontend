@@ -349,6 +349,12 @@ angular.module('unionvmsWeb').factory('fishingActivityService', function(activit
             payload.tripId = tripSummaryService.trip.id;
         }
         
+        if ($state.current.name === 'app.activity' && $state.params.tripId !== null && $state.params.activityId === faServ.id){
+            payload.tripId = $state.params.tripId;
+        }
+        
+        //if ($state.current.name === 'app.activity' && angular.isDefined())
+        
         activityRestService.getFishingActivityDetails(getViewNameByFaType(obj.faType), payload).then(function (response) {
             faServ.activityData = obj;
             faServ.activityData.fromJson(response);

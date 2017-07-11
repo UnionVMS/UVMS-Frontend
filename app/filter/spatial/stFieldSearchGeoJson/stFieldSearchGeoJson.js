@@ -135,8 +135,8 @@ angular.module('smart-table').filter('stFieldSearchGeoJson', function($filter, u
                     }
                 }
                 
-                //return converted input and seconds to add for upper boundary
-                return [fixedSeconds, secondsToAdd];
+                //return converted input and seconds as miliseconds to add for upper boundary
+                return [fixedSeconds * 1000, secondsToAdd * 1000];
             }
         };
         
