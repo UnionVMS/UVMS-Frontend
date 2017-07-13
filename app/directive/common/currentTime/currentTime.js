@@ -16,7 +16,7 @@ angular.module('unionvmsWeb').directive('currentTime', function($timeout, global
 
             function displayCurrentTime() {
 
-                // Create new UTC time and date
+                // Create UTC time and date
                 var format = globalSettingsService.getDateFormat(),
                     date = moment.utc().format('YYYY-MM-DD'),
                     time = moment.utc().format('HH:mm');
@@ -34,7 +34,7 @@ angular.module('unionvmsWeb').directive('currentTime', function($timeout, global
                 );
             }
 
-            // Update time, timeout to update every second if needed
+            // Update time every second
             function updateTime() {
                 $timeout(function() {
                   displayCurrentTime();
