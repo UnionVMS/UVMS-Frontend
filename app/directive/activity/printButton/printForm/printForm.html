@@ -1,0 +1,17 @@
+<div ng-controller="PrintFormCtrl">
+    <div class="print-form-container">
+        <ng-form name="printForm">
+            <div class="form-group">
+                <label>{{titleLabel}}</label>
+                <input type="text" class="form-control" maxlength="25" name="title" ng-model="title" ng-required="true"/>
+            </div>
+            <div class="form-group">
+                <label>{{authorLabel}}</label>
+                <input type="text" class="form-control" maxlength="25" name="author" ng-model="author" ng-required="true"/>
+            </div>
+            <div class="btn-print-container">
+                <button type="button" class="btn-primary" ng-click="faServ.printView('fishingActivityPanel', title, author)">{{printLabel}}</button>
+            </div>
+        </ng-form>
+    </div>
+</div>

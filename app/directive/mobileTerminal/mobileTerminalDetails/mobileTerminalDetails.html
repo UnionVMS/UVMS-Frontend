@@ -78,7 +78,7 @@
                             </div>
                             <div ng-repeat="communicationChannel in mobileTerminal.channels">
                                 <div ng-form="channelForm" class="channel-form" ng-class="{'single-channel': !isMultipleChannelsAllowed()}">
-                                    <div class="delete-channel" ng-show="!disableForm() && $index > 0">
+                                    <div class="delete-channel" ng-show="!disableForm() && mobileTerminal.channels.length > 1">
                                         <div class="btn btn-default" ng-click="removeChannel($index)" id="mt-{{listIndex}}-channel-{{$index}}-removeChannel">
                                             <i class="fa fa-trash" title="{{'common.remove' | i18n}}"></i>
                                         </div>
@@ -88,7 +88,6 @@
                                             <label>{{'mobileTerminal.form_inmarsatc_communication_selectedchannel_channel_label' | i18n}}</label>
                                             <input type="text" name="communicationChannel" id="mt-{{listIndex}}-channel-{{$index}}-communicationChannel" class="form-control" ng-model="communicationChannel.name">
                                         </div>
-                                        <!--Sandra-->
                                         <div class="form-group radio-button">
                                             <input type="checkbox" name="polling" ng-value="$index" ng-model="communicationChannel.capabilities.POLLABLE" ng-disabled="disableChannels.pollable($index)" id="mt-{{listIndex}}-channel-{{$index}}-checkbox-polling">
                                             <label for="mt-{{listIndex}}-channel-{{$index}}-checkbox-polling" ng-attr-title="{{getRadioButtonHelpText.pollable($index)}}">

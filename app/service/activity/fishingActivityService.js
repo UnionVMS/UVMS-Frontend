@@ -340,7 +340,7 @@ angular.module('unionvmsWeb').factory('fishingActivityService', function(activit
      * @alias getFishingActivity
 	 */
     faServ.getFishingActivity = function(obj, callback) {
-        loadingStatus.isLoading('FishingActivity', true);
+        loadingStatus.isLoading('FishingActivity', true, 0);
         var payload = {
             activityId: faServ.id
         };
@@ -765,7 +765,7 @@ angular.module('unionvmsWeb').factory('fishingActivityService', function(activit
         
         if(exceptions.indexOf(faType) === -1){
             finalSummary = loadFishingActivityDetails(data, faSummaryAttrsOrder);
-            if (angular.isDefined(data.characteristics) && !_.isEmpty(data.characteristics)) {
+            if (angular.isDefined(data.characteristics) && _.keys(data.characteristics).length) {
                 finalSummary.characteristics = data.characteristics;
             }
             finalSummary.title = locale.getString('activity.title_fishing_activity') + ': ' + locale.getString('activity.fa_type_' + faType);
@@ -1095,7 +1095,7 @@ angular.module('unionvmsWeb').factory('fishingActivityService', function(activit
      * @returns the purpose code
      */
      var getPurposeCodes = function(acronym, obj){
-        loadingStatus.isLoading('FishingActivity', true);
+        loadingStatus.isLoading('FishingActivity', true, 0);
         
         mdrCacheService.getCodeList(acronym).then(function(response){
             angular.forEach(obj.reportDetails.items,function(item){
@@ -1127,7 +1127,7 @@ angular.module('unionvmsWeb').factory('fishingActivityService', function(activit
         
         if(angular.isDefined(activityType) && activityType.length > 0){
             var acronym =activityType[0].achronym;
-            loadingStatus.isLoading('FishingActivity', true);
+            loadingStatus.isLoading('FishingActivity', true, 0);
             
             mdrCacheService.getCodeList(acronym).then(function(response){
                 angular.forEach(obj.activityDetails.items,function(item){
@@ -1178,6 +1178,122 @@ angular.module('unionvmsWeb').factory('fishingActivityService', function(activit
         }
 
         return clickable;
+    };
+
+    /**
+      * Adds the header title to the document
+      * 
+      * @memberof fishingActivityService
+      * @private
+      * @param {Object} doc - current document to be downloaded
+      * @param {String} text - title of the document
+      * @alias writeHeader
+      */
+    var writeHeader = function (doc, text) {
+        doc.setTextColor(41, 128, 185);
+        doc.setFontSize(18);
+
+        var textWidth = doc.getStringUnitWidth(text) * doc.internal.getFontSize() / doc.internal.scaleFactor;
+        var textOffset = (doc.internal.pageSize.width - textWidth) / 2;
+        doc.text(textOffset, 20, text);
+    };
+
+    /**
+      * Adds the author to the footer of the document
+      * 
+      * @memberof fishingActivityService
+      * @private
+      * @param {Object} doc - current document to be downloaded
+      * @param {String} text - author of the document
+      * @alias writeFooter
+      */
+    var writeFooter = function (doc, text) {
+        doc.setFontSize(10);
+        doc.setTextColor(120, 120, 120);
+
+        if(text){
+            var textWidth = doc.getStringUnitWidth(text) * doc.internal.getFontSize() / doc.internal.scaleFactor;
+            var textOffset = (doc.internal.pageSize.width - textWidth) / 2;
+            doc.text(textOffset, doc.internal.pageSize.height - 7, text);
+        }
+
+        var copyrightLabel = locale.getString('spatial.map_export_copyright') + ' unionVMS';
+        doc.text((doc.internal.pageSize.width - doc.getStringUnitWidth(copyrightLabel) * doc.internal.getFontSize() / doc.internal.scaleFactor) - 14, doc.internal.pageSize.height - 7, copyrightLabel);
+    };
+
+    /**
+      * Prints the view into a pdf
+      * 
+      * @memberof fishingActivityService
+      * @public
+      * @param {String} view - view to be exported
+      * @param {Object} title - title of the document
+      * @param {String} author - author of the document
+      * @alias printView
+      */
+    faServ.printView = function (view, title, author) {
+        loadingStatus.isLoading('FishingActivity', true, 1);
+        var scrollContainer;
+        var viewContainer;
+        var analogClock;
+        var areaTile;
+        if(view === 'fishingActivityPanel'){
+            viewContainer = angular.element('.fa-partial');
+        }
+
+        var width = viewContainer[0].offsetWidth;
+        var height = viewContainer[0].offsetHeight;
+
+        scrollContainer = angular.element('.trips-panel');
+        if(scrollContainer && scrollContainer.length){
+            scrollContainer.css('overflow', 'visible');
+        }
+        analogClock = angular.element(' .clock-subsection > analog-clock > .analog-clock > svg');
+        if(analogClock && analogClock.length){
+            analogClock.attr('width', angular.element('.analog-clock')[0].offsetWidth);
+            analogClock.attr('height', angular.element('.analog-clock')[0].offsetHeight-6);
+        }
+        areaTile = angular.element(' .area-subsection > analog-clock > .analog-clock > svg');
+        if(areaTile && areaTile.length){
+            areaTile.attr('width', angular.element('.analog-clock')[0].offsetWidth);
+            areaTile.attr('height', angular.element('.analog-clock')[0].offsetHeight-15);
+        }
+        var topOffset;
+        var extraOffset = 1.055;
+        if(title){
+            topOffset = 30;
+            extraOffset = 1.095;
+        }else{
+            topOffset = 15;
+        }
+
+        var doc;
+        if(width*0.7 > height*extraOffset){
+            doc = new jsPDF('l', 'px', 'a4');
+        }else{
+            doc = new jsPDF('p', 'px', 'a4');
+        }
+    
+        doc.addHTML(viewContainer,0,topOffset,{},function(){
+            if(title){
+                writeHeader(doc, title);
+            }
+            writeFooter(doc, author);
+
+            doc.save("viewPrint.pdf");
+            if(scrollContainer){
+                scrollContainer.css('overflow', '');
+            }
+            if(analogClock ){
+            analogClock.attr('width', "100%");
+            analogClock.attr('height', "100%");
+            }
+            if(areaTile){
+            areaTile.attr('width', "100%");
+            areaTile.attr('height', "100%");
+            }
+            loadingStatus.isLoading('FishingActivity', false);
+        });
     };
     
     /**

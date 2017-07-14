@@ -36,9 +36,6 @@ angular.module('unionvmsWeb').controller('NewpollwizardpollingoptionsCtrl',funct
     };
 
     $scope.setPollType = function(type){
-        if (!$scope.isSingleMobileTerminalSelected() && type === "SAMPLING") {
-            return;
-        }
         if (!$scope.isAllSelectedTerminalsOfTheSameType() && type === "CONFIGURATION") {
             return;
         }
@@ -60,11 +57,6 @@ angular.module('unionvmsWeb').controller('NewpollwizardpollingoptionsCtrl',funct
     //Is manual poll selected?
     $scope.isManualPoll = function(){
         return $scope.pollingOptions.type === 'MANUAL';
-    };
-
-    //Is sampling poll selected?
-    $scope.isSamplingPoll = function(){
-        return $scope.pollingOptions.type === 'SAMPLING';
     };
 
     //Get number of selected terminals
@@ -167,7 +159,7 @@ angular.module('unionvmsWeb').controller('NewpollwizardpollingoptionsCtrl',funct
             setProgramPollMinDate();
 
             // Change polling type if incompatible with current selection
-            if(!$scope.isSingleMobileTerminalSelected() && $scope.isSamplingPoll()){
+            if(!$scope.isSingleMobileTerminalSelected()){
                 $scope.pollingOptions.type = 'MANUAL';
             }
         }
