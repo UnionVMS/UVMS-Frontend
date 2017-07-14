@@ -1229,7 +1229,8 @@ angular.module('unionvmsWeb').factory('fishingActivityService', function(activit
         loadingStatus.isLoading('FishingActivity', true, 1);
         var scrollContainer;
         var viewContainer;
-
+        var analogClock;
+        var areaTile;
         if(view === 'fishingActivityPanel'){
             viewContainer = angular.element('.fa-partial');
         }
@@ -1241,7 +1242,16 @@ angular.module('unionvmsWeb').factory('fishingActivityService', function(activit
         if(scrollContainer && scrollContainer.length){
             scrollContainer.css('overflow', 'visible');
         }
-
+        analogClock = angular.element(' .clock-subsection > analog-clock > .analog-clock > svg');
+        if(analogClock && analogClock.length){
+            analogClock.attr('width', angular.element('.analog-clock')[0].offsetWidth);
+            analogClock.attr('height', angular.element('.analog-clock')[0].offsetHeight-6);
+        }
+        areaTile = angular.element(' .area-subsection > analog-clock > .analog-clock > svg');
+        if(areaTile && areaTile.length){
+            areaTile.attr('width', angular.element('.analog-clock')[0].offsetWidth);
+            areaTile.attr('height', angular.element('.analog-clock')[0].offsetHeight-15);
+        }
         var topOffset;
         var extraOffset = 1.055;
         if(title){
@@ -1267,6 +1277,14 @@ angular.module('unionvmsWeb').factory('fishingActivityService', function(activit
             doc.save("viewPrint.pdf");
             if(scrollContainer){
                 scrollContainer.css('overflow', '');
+            }
+            if(analogClock ){
+            analogClock.attr('width', "100%");
+            analogClock.attr('height', "100%");
+            }
+            if(areaTile){
+            areaTile.attr('width', "100%");
+            areaTile.attr('height', "100%");
             }
             loadingStatus.isLoading('FishingActivity', false);
         });
