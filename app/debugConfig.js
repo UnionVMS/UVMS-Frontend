@@ -1,5 +1,5 @@
 angular.module('debugConfig', [])
 
-.constant('DEBUG', false)
+.constant('DEBUG', true)
 
 ;
