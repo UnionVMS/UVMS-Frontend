@@ -20,6 +20,7 @@ copy of the GNU General Public License along with the IFDM Suite. If not, see <h
 			<span class="operationType" ng-if="faServ.isCorrection">{{'activity.optype_correction' | i18n}}</span>
 		</div>
         <a class="btn-trip-quit" title="{{'activity.trip_summary_quit_trip_detail' | i18n }}" ng-click="faServ.quitFaView()" ng-if="srcTab === 'reports'"><i class="fa fa-share-square-o"></i></a>
+        <print-button></print-button>
         <div class="row activity-summary-row">
             <fa-details-panel class="col-md-3 summary-section" ng-model="faServ.activityData.activityDetails"></fa-details-panel>
             <location-tile class="col-md-2 summary-section" is-clickable="faServ.isLocationClickable()" field-title="{{'activity.location' | i18n}}" location-details="faServ.activityData.locations" click-callback="faServ.locationClickCallback()"></location-tile>

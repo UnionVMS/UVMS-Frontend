@@ -87,4 +87,20 @@ angular.module('unionvmsWeb').controller('TripspanelCtrl', function ($scope, gen
             $scope.repNav.goToPreviousView();
         }
     };
+
+    $scope.printView = function (view) {
+        if(view === 'tripSummary'){
+            var doc = new jsPDF('p', 'pt', 'a4');
+            var viewContainer = angular.element('.trip-summary-tab');
+
+            var options = {
+                pagesplit: true
+            };
+
+            doc.addHTML(viewContainer,options,function()
+            {
+                doc.save("test.pdf");
+            });
+        }
+    };
 });

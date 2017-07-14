@@ -46,23 +46,6 @@ angular.module('unionvmsWeb').controller('AreaexitpanelCtrl', function ($scope, 
         console.log('This is the click callback');
     };
     
-    /**
-     * Check if an area should be clickable taking into consideration the route and the report configuration
-     * 
-     * @memberof AreaexitpanelCtrl
-     * @public
-     * @alias isAreaClickable
-     * @returns {Boolean} Whether the area should be clickable or not
-     */
-    $scope.isAreaClickable = function(){
-        var clickable = false;
-        if (($state.current.name === 'app.reporting-id' || $state.current.name === 'app.reporting') && tripSummaryService.withMap){
-            clickable = true;
-        }
-        
-        return clickable;
-    };
-
     init();
 
 });

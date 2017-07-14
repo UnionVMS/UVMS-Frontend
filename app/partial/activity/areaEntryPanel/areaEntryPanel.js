@@ -23,6 +23,7 @@ copy of the GNU General Public License along with the IFDM Suite. If not, see <h
  */
 angular.module('unionvmsWeb').controller('AreaentrypanelCtrl', function ($scope, $state, fishingActivityService, loadingStatus, FishingActivity, tripSummaryService) {
     $scope.faServ = fishingActivityService;
+    
     /**
      * Initialization function
      * 
@@ -45,23 +46,5 @@ angular.module('unionvmsWeb').controller('AreaentrypanelCtrl', function ($scope,
         console.log('This is the click callback');
     };
     
-    /**
-     * Check if an area should be clickable taking into consideration the route and the report configuration
-     * 
-     * @memberof AreaexitpanelCtrl
-     * @public
-     * @alias isAreaClickable
-     * @returns {Boolean} Whether the area should be clickable or not
-     */
-    $scope.isAreaClickable = function(){
-        var clickable = false;
-        if (($state.current.name === 'app.reporting-id' || $state.current.name === 'app.reporting') && tripSummaryService.withMap){
-            clickable = true;
-        }
-        
-        return clickable;
-    };
-    
     init();
-
 });

@@ -9,36 +9,13 @@ the hope that it will be useful, but WITHOUT ANY WARRANTY; without even the impl
 FITNESS FOR A PARTICULAR PURPOSE.  See the GNU General Public License for more details. You should have received a
 copy of the GNU General Public License along with the IFDM Suite. If not, see <http://www.gnu.org/licenses/>.
 */
-.area-tile {
-    .area-tile-body {
-        padding:0 25px;
-    }
-    .sub-title {
-        font-weight: bold;
-        margin-top: 15px;
-    }
-    /*.chart-title {
-        text-align: center;
-        padding:10px;
-        .panel-subtitle {
-            font-size: 15px;
-            font-family: Roboto, Arial;
-            font-weight: bold;
-        }
-    }*/
-    .area-subsection {
-        padding-bottom: 20px;
-        text-align: center;
-    }
-    .analog-clock {
-        padding: 5px 0;
-         
-    }
-    .lat-long {
-        margin-top: 5px;
-        &.is-clickable:hover {
-            cursor: pointer;
-            text-decoration: underline;
-        }
-    }
-}
+describe('printForm', function() {
+    beforeEach(module('unionvmsWeb'));
+
+    it('should ...', inject(function() {
+        expect(1).toBe(1);
+    }));
+});
+
+
+

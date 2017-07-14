@@ -103,7 +103,12 @@ angular.module('unionvmsWeb').directive('catchTile', function(locale,reportingNa
                 calculateTotal: true
 		    }];
 
-
+			/**
+			 * Initializes the catch panel directive
+			 * 
+			 * @memberof catchTile
+			 * @private
+			 */
 			var init = function(){
 				//columns of the second table(classes)
 				scope.classColumnOrder = ['LSC', 'BMS'];

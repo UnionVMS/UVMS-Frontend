@@ -14,6 +14,9 @@ copy of the GNU General Public License along with the IFDM Suite. If not, see <h
  * @ngdoc directive
  * @name faDetailsPanel
  * @attr {Array} ngModel - the content data of fa overview
+ * @attr {Function} isLocClickable - callback to check if location is clickable
+ * @attr {Function} locClickCallback - callback for the click in the location
+ * @attr {Array} locDetails - location data
  * @description
  *  A reusable tile that will display the fishing activity overview data in every fishing activity report panel
  */
@@ -29,10 +32,26 @@ angular.module('unionvmsWeb').directive('faDetailsPanel', function($filter) {
 		},
 		templateUrl: 'directive/activity/faDetailsPanel/faDetailsPanel.html',
 		link: function(scope, element, attrs, fn) {
+
+			/**
+			 * Checks if value is array
+			 * 
+			 * @memberof faDetailsPanel
+			 * @public
+			 * @param {Any} val - any value
+			 * @returns {Boolean} returns true if it's array
+			 */
 			scope.isArray = function(val){
 				 return _.isArray(val);
 			};
 
+			/**
+			 * Checks if has location data
+			 * 
+			 * @memberof faDetailsPanel
+			 * @public
+			 * @returns {Boolean} returns true if has location data
+			 */
 			scope.hasLocData = function(){
 				var status = false;
 				if (angular.isDefined(scope.locDetails) && ((_.isArray(scope.locDetails) && scope.locDetails.length > 0) || (!_.isArray(scope.locDetails) && !_.isEqual(scope.locDetails, {})))){
