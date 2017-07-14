@@ -12,8 +12,9 @@ copy of the GNU General Public License along with the IFDM Suite. If not, see <h
 /**
  * @memberof unionvmsWeb
  * @ngdoc controller
- * @name CharacteristicsModalCtrl
+ * @name PrintFormCtrl
  * @param $scope {Service} controller scope
+ * @param locale {Service} - The angular locale service
  * @param fishingActivityService {Service} the fishing activity service <p>{@link unionvmsWeb.fishingActivityService}</p>
  * @description
  *  The controller for print form

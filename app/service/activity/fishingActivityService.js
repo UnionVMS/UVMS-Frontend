@@ -1174,12 +1174,33 @@ angular.module('unionvmsWeb').factory('fishingActivityService', function(activit
         return clickable;
     };
 
-    var centerText = function (doc, text) {
+    /**
+      * Adds the header title to the document
+      * 
+      * @memberof fishingActivityService
+      * @private
+      * @param {Object} doc - current document to be downloaded
+      * @param {String} text - title of the document
+      * @alias writeHeader
+      */
+    var writeHeader = function (doc, text) {
+        doc.setTextColor(41, 128, 185);
+        doc.setFontSize(18);
+
         var textWidth = doc.getStringUnitWidth(text) * doc.internal.getFontSize() / doc.internal.scaleFactor;
         var textOffset = (doc.internal.pageSize.width - textWidth) / 2;
         doc.text(textOffset, 20, text);
     };
 
+    /**
+      * Adds the author to the footer of the document
+      * 
+      * @memberof fishingActivityService
+      * @private
+      * @param {Object} doc - current document to be downloaded
+      * @param {String} text - author of the document
+      * @alias writeFooter
+      */
     var writeFooter = function (doc, text) {
         doc.setFontSize(10);
         doc.setTextColor(120, 120, 120);
@@ -1194,6 +1215,16 @@ angular.module('unionvmsWeb').factory('fishingActivityService', function(activit
         doc.text((doc.internal.pageSize.width - doc.getStringUnitWidth(copyrightLabel) * doc.internal.getFontSize() / doc.internal.scaleFactor) - 14, doc.internal.pageSize.height - 7, copyrightLabel);
     };
 
+    /**
+      * Prints the view into a pdf
+      * 
+      * @memberof fishingActivityService
+      * @public
+      * @param {String} view - view to be exported
+      * @param {Object} title - title of the document
+      * @param {String} author - author of the document
+      * @alias printView
+      */
     faServ.printView = function (view, title, author) {
         loadingStatus.isLoading('FishingActivity', true, 1);
         var scrollContainer;
@@ -1227,14 +1258,10 @@ angular.module('unionvmsWeb').factory('fishingActivityService', function(activit
             doc = new jsPDF('p', 'px', 'a4');
         }
     
-        doc.setTextColor(41, 128, 185);
-        doc.setFontSize(18);
-
         doc.addHTML(viewContainer,0,topOffset,{},function(){
             if(title){
-                centerText(doc, title);
+                writeHeader(doc, title);
             }
-
             writeFooter(doc, author);
 
             doc.save("viewPrint.pdf");

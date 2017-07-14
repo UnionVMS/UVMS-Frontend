@@ -9,15 +9,27 @@ describe('printButton', function() {
     compile = $compile;
   }));
 
-  it('should ...', function() {
+  beforeEach(inject(function($httpBackend) {
+    //Mock
+    $httpBackend.whenGET(/usm/).respond();
+    $httpBackend.whenGET(/i18n/).respond();
+    $httpBackend.whenGET(/globals/).respond({data : []});
+	}));
 
-    /* 
-    To test your directive, you need to create some html that would use your directive,
-    send that through compile() then compare the results.
+  it('should compile', function() {
+    var container = angular.element('<div id="parent"></div>');
 
-    var element = compile('<div mydirective name="name">hi</div>')(scope);
-    expect(element.text()).toBe('hello, world');
-    */
+    var printButton = compile('<print-button></print-button>')(scope);
+    scope.$digest();
 
-  });
+    container.append(printButton);
+
+    var isolatedScope = printButton.isolateScope();
+    angular.element(printButton)[0].click();
+    isolatedScope.$digest();
+
+    angular.element(container).triggerHandler('scroll');
+    isolatedScope.$digest();
+	});
+
 });
