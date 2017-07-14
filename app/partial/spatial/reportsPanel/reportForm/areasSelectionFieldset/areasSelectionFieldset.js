@@ -583,10 +583,6 @@ angular.module('unionvmsWeb').controller('AreasselectionfieldsetCtrl',function($
             logo: false
         });
         
-        map.beforeRender(function(map){
-            map.updateSize();
-        });
-        
         map.setView(view);
         mapReference.areaSelection.map = map;
         

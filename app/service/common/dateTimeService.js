@@ -85,10 +85,10 @@ angular.module('unionvmsWeb').factory('dateTimeService',['$log', 'globalSettings
                 return moment(dateTimeInput, "YYYY-MM-DD HH:mm:ss").format(outputFormat);
             }
         },
-        //Formatted with time zone in format "2015-11-18 13:49:00 +01:00" or "2015-11-18 13:49:00 +0100"
+        //Formatted with time zone in format "2015-11-18 13:49:00 +01:00" or "2015-11-18 13:49:00 +0100" or "2015-11-18T:13:49.000+01:00"
         isFormattedWithTimeZone : function(dateTime){
             if(typeof dateTime === 'string'){
-              return dateTime.match(dateWithTimeZoneWithColonRegexp) || dateTime.match(dateWithTimeZoneWithoutColonRegexp);
+              return dateTime.match(dateWithTimeZoneWithColonRegexp) || dateTime.match(dateWithTimeZoneWithoutColonRegexp) || angular.isDefined(moment(dateTime)._tzm);
             }
             return false;
         },

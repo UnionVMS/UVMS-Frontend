@@ -152,8 +152,8 @@ angular.module('unionvmsWeb').controller('AreasCtrl',function($scope, $window, $
                     (angular.element('#areaManagement.fullscreen').length === 0 && evt.type.toUpperCase().indexOf("FULLSCREENCHANGE") !== -1))){
                 
                 
-                $('#areaManagement').css('height', w.height() + 'px');
-                $('#areaMap').css('height', w.height() + 'px');
+                $('#areaManagement').css('height', w.height() - 1 + 'px');
+                $('#areaMap').css('height', w.height() - 1 + 'px');
                 areaMapService.updateMapSize();
                 return;
             }
@@ -166,8 +166,8 @@ angular.module('unionvmsWeb').controller('AreasCtrl',function($scope, $window, $
                 newHeight = minHeight;
             }
             
-            $('#areaManagement').css('height', newHeight + 'px');
-            $('#areaMap').css('height', newHeight + 'px');
+            $('#areaManagement').css('height', newHeight - 1 + 'px');
+            $('#areaMap').css('height', newHeight - 1 + 'px');
             areaMapService.updateMapSize();
         }, 100);
     };

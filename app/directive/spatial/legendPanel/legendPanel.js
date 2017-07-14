@@ -278,29 +278,31 @@ angular.module('unionvmsWeb').directive('imageOnLoad', function(){
 		        
 		        layers.forEach(function(layer, idx){
 	                if (layer.get('visible')){
-	                    if (layer.getSource() instanceof ol.source.TileWMS){
+	                    var lyrSrc = layer.getSource();
+	                    
+	                    if (lyrSrc instanceof ol.source.TileWMS){
 	                        records.push(this.buildRecWMS(layer));  
 	                    }
 	                    
-	                    if (layer.getSource() instanceof ol.source.Vector){
+	                    if (lyrSrc instanceof ol.source.Vector || lyrSrc instanceof ol.source.ImageVector){
 	                        switch (layer.get('type')){
 	                            case 'vmspos':
-	                                if (layer.getSource().getSource().getFeatures().length !== 0){
+	                                if (lyrSrc.getSource().getFeatures().length !== 0){
 	                                    records.push(this.buildRecVmsPos(layer));
 	                                }
 	                                break;
 	                            case 'vmsseg':
-	                                if (layer.getSource().getFeatures().length !== 0){
+	                                if (lyrSrc.getSource().getFeatures().length !== 0){
 	                                    records.push(this.buildRecVmsSeg(layer));
                                     }
                                     break;
 	                            case 'ers':
-	                                if (layer.getSource().getFeatures().length !== 0){
+	                                if (lyrSrc.getFeatures().length !== 0){
                                         records.push(this.buildRecActivity(layer));
                                     }
 	                                break;
 	                            case 'alarms':
-	                                if (layer.getSource().getFeatures().length !== 0){
+	                                if (lyrSrc.getFeatures().length !== 0){
                                         records.push(this.buildRecAlarms(layer));
                                     }
                                     break;

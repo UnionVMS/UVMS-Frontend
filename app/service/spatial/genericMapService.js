@@ -632,6 +632,32 @@ angular.module('unionvmsWeb').factory('genericMapService',function($localStorage
     };
     
     /**
+     * Format graticule coordinate label according to the report/user preferences
+     * 
+     * @memberof genericMapService
+     * @public
+     * @alias formatCoordsForGraticule
+     * @param {String} format - The coordinate format to be displayed (e.g. dd, ddm, dms)
+     * @param {Number} coord - The coordinate that should be formated
+     * @param {String} hemispheres
+     * @returns {String} The converted coordinate
+     */
+    var formatCoordsForGraticule = function(format, coord, hemisphere){
+        switch (format) {
+            case 'm':
+            case 'dms':
+                return coordToDMS(coord, 'EW');
+                break;
+            case 'dd':
+                return coord.toFixed(2);
+                break;
+            case 'ddm':
+                return coordToDDM(coord, 'EW');
+                break;
+        }
+    };
+    
+    /**
      * Convert coordinates from Decimal Degrees to Degrees Minutes Seconds
      * 
      * @memberof genericMapService
@@ -829,7 +855,8 @@ angular.module('unionvmsWeb').factory('genericMapService',function($localStorage
 	    createPanInteractions: createPanInteractions,
 	    intersectGeomWithProj: intersectGeomWithProj,
 	    geomToGeoJson: geomToGeoJson,
-	    geoJsonToOlGeom: geoJsonToOlGeom
+	    geoJsonToOlGeom: geoJsonToOlGeom,
+	    formatCoordsForGraticule: formatCoordsForGraticule
 	};
 
 	return genericMapService;

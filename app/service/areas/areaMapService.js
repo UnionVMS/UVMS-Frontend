@@ -704,6 +704,7 @@ angular.module('unionvmsWeb').factory('areaMapService',function(locale, genericM
             };
         }
         
+        areaMs.graticuleFormat = ctrlDef.format;
         var olCtrl = genericMapService.addMousecoords(ctrlDef, 'areaMap-coordinates');
         return olCtrl;
     };
@@ -765,7 +766,17 @@ angular.module('unionvmsWeb').factory('areaMapService',function(locale, genericM
     };
     
     //Map graticule
-    areaMs.mapGraticule = new ol.Graticule({});
+    areaMs.graticuleFormat = 'dms';
+    areaMs.mapGraticule = new ol.Graticule({
+        showLabels: true,
+        lonLabelFormatter: function(lon){
+            return genericMapService.formatCoordsForGraticule(areaMs.graticuleFormat, lon, 'EW');
+        },
+        latLabelFormatter: function(lat){
+            return genericMapService.formatCoordsForGraticule(areaMs.graticuleFormat, lat, 'NS');
+        }
+    });
+    
     /**
      * Set mapGraticule in the current map according to a specified visibility status
      * 
