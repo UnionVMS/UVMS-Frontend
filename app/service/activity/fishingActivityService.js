@@ -1237,17 +1237,23 @@ angular.module('unionvmsWeb').factory('fishingActivityService', function(activit
         var viewContainer;
         var analogClock;
         var areaTile;
-        if(view === 'fishingActivityPanel'){
+        if(view === 'fishingActivityNavigator'){
             viewContainer = angular.element('.fa-partial');
+            scrollContainer = angular.element('.trips-panel');
+        }else if(view === 'activityDetails'){
+            viewContainer = angular.element('.activity-details');
         }
 
         var width = viewContainer[0].offsetWidth;
         var height = viewContainer[0].offsetHeight;
 
-        scrollContainer = angular.element('.trips-panel');
         if(scrollContainer && scrollContainer.length){
+            scrollContainer.addClass('printing-view');
             scrollContainer.css('overflow', 'visible');
+        }else{
+            angular.element('body').addClass('printing-view');
         }
+
         analogClock = angular.element(' .clock-subsection > analog-clock > .analog-clock > svg');
         if(analogClock && analogClock.length){
             analogClock.attr('width', angular.element('.analog-clock')[0].offsetWidth);
@@ -1282,16 +1288,21 @@ angular.module('unionvmsWeb').factory('fishingActivityService', function(activit
 
             doc.save("viewPrint.pdf");
             if(scrollContainer){
+                scrollContainer.removeClass('printing-view');
                 scrollContainer.css('overflow', '');
+            }else{
+                angular.element('body').removeClass('printing-view');
             }
+
             if(analogClock ){
-            analogClock.attr('width', "100%");
-            analogClock.attr('height', "100%");
+                analogClock.attr('width', "100%");
+                analogClock.attr('height', "100%");
             }
             if(areaTile){
-            areaTile.attr('width', "100%");
-            areaTile.attr('height', "100%");
+                areaTile.attr('width', "100%");
+                areaTile.attr('height', "100%");
             }
+            
             loadingStatus.isLoading('FishingActivity', false);
         });
     };
