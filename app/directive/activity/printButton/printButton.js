@@ -22,7 +22,7 @@ angular.module('unionvmsWeb').directive('printButton', function(fishingActivityS
 		restrict: 'E',
 		replace: true,
 		scope: {
-
+            viewToPrint: '='
 		},
 		controller: 'printButtonCtrl',
 		templateUrl: 'directive/activity/printButton/printButton.html',

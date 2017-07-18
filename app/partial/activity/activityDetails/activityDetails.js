@@ -20,4 +20,5 @@ copy of the GNU General Public License along with the IFDM Suite. If not, see <h
  */
 angular.module('unionvmsWeb').controller('ActivitydetailsCtrl',function($scope, fishingActivityService){
     $scope.faServ = fishingActivityService;
+    $scope.printView = 'activityDetails';
 });
