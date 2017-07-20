@@ -23,7 +23,9 @@
 
         /////////////////////////
 
-        //Create the marker
+        /**
+         * Creates a marker to show the location on the map
+         */
         function createMarker () {
             if (angular.isDefined(vm.location) && vm.location.latitude && vm.location.longitude) {
                 vm.markers.reportPosition = {

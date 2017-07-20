@@ -20,13 +20,15 @@
         vm.goToNewestVersion = goToNewestVersion;
         vm.dropdownItems = [];
 
-        //init dropdown items
+
         updateDropdownItems(vm.reportVersions);
         $scope.$watch("vm.reportVersions", function(newValue, oldValue, event) {
             updateDropdownItems(newValue);
         });
 
-
+        /**
+         * Initializes dropdown items
+         */
         function updateDropdownItems(reportVersions) {
             vm.dropdownItems = [];
             angular.forEach(reportVersions, function(version) {

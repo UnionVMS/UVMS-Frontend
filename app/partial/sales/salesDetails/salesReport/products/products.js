@@ -24,7 +24,10 @@
 
         /////////////////////////
 
-        //Filter product by species
+        /**
+         * Filters product by species
+         * @param species
+         */
         function filterProducts(species) {
             vm.selectedSpecies = species;
             vm.filteredProducts = _.where(vm.products, { 'species': species });
@@ -37,7 +40,6 @@
         ];
 
         function editSelectionCallBack(item) {
-            //vm.currentSearchResults.setLoading(true);
             var data = vm.products;
             if (item.code.toUpperCase() === 'EXPORT_SPECIE') {
                 data = _.where(data, { 'species': vm.selectedSpecies });

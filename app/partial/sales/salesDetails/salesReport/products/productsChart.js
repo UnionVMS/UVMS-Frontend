@@ -25,6 +25,7 @@
 
         ////////////////////
 
+
         function onInit() {
 
             vm.labels = [];

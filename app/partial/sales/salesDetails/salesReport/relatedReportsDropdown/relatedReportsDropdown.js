@@ -24,6 +24,7 @@
             updateDropdownItems(newValue);
         });
 
+
         function updateDropdownItems(relevantReports) {
             vm.dropdownItems = [];
             angular.forEach(relevantReports, function(report) {
