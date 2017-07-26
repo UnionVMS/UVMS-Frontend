@@ -28,7 +28,9 @@ angular.module('unionvmsWeb')
                 });
             },
             getExchangeMessages : function(){
-                return $resource( '/exchange/rest/exchange/list',{},
+                //FIXME remove when backend ready
+                //return $resource( '/exchange/rest/exchange/list',{},
+                return $resource( '/mock/exchange/list',{},
                 {
                     list : { method : 'POST'}
                 });

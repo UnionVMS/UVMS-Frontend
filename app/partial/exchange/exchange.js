@@ -18,6 +18,10 @@ angular.module('unionvmsWeb').controller('ExchangeCtrl',function($scope, $log, $
 
     $scope.exchangeLogsSearchResults = new SearchResults('dateReceived', true);
     $scope.exchangeLogsSearchResults.incomingOutgoing = 'all';
+    
+    $scope.checkedStatus = {
+        all: false
+    };
 
     $scope.newExchangeLogCount = 0;
     var longPollingIdPlugins, longPollingIdSendingQueue, longPollingIdExchangeList;
@@ -38,6 +42,7 @@ angular.module('unionvmsWeb').controller('ExchangeCtrl',function($scope, $log, $
         searchService.searchExchange().then(function(page) {
             if (page.hasItemWithGuid(guid)) {
                 $scope.exchangeLogsSearchResults.updateWithNewResults(page);
+                //$scope.displayedMessages = [].concat($scope.exchangeLogsSearchResults.items);
             }
             else {
                 $scope.newExchangeLogCount++;
@@ -70,14 +75,6 @@ angular.module('unionvmsWeb').controller('ExchangeCtrl',function($scope, $log, $
                 updateExchangeLogs(response.ids[0]);
             }
         });
-    };
-
-    $scope.filterIncomingOutgoing = function(message) {
-        if ($scope.exchangeLogsSearchResults.incomingOutgoing === "all") {
-            return true;
-        }
-
-        return message.incoming ? $scope.exchangeLogsSearchResults.incomingOutgoing === "incoming" : $scope.exchangeLogsSearchResults.incomingOutgoing === "outgoing";
     };
 
     $scope.sendQueuedMessages = function(messageIds){
@@ -169,17 +166,21 @@ angular.module('unionvmsWeb').controller('ExchangeCtrl',function($scope, $log, $
     };
 
     $scope.searchExchange = function() {
+        $scope.exchangeLogsSearchResults.loading = true;
         $scope.clearSelection();
         $scope.exchangeLogsSearchResults.clearErrorMessage();
         $scope.exchangeLogsSearchResults.setLoading(true);
         $scope.newExchangeLogCount = 0;
         searchService.searchExchange().then(function(page) {
             $scope.exchangeLogsSearchResults.updateWithNewResults(page);
+            $scope.displayedMessages = [].concat($scope.exchangeLogsSearchResults.items);
+            $scope.exchangeLogsSearchResults.loading = false;
         },
         function(error) {
             $scope.exchangeLogsSearchResults.removeAllItems();
             $scope.exchangeLogsSearchResults.setLoading(false);
             $scope.exchangeLogsSearchResults.setErrorMessage(locale.getString('common.search_failed_error'));
+            $scope.exchangeLogsSearchResults.loading = false;
         });
     };
 
@@ -306,42 +307,48 @@ angular.module('unionvmsWeb').controller('ExchangeCtrl',function($scope, $log, $
 
         //Set the data columns
         var getData = function() {
-            var exportItems;
+            var exportItems = [];
             //Export only selected items
             if(onlySelectedItems){
-                exportItems = $scope.selectedItems;
+                $.each($scope.displayedMessages, function(index, item){
+                    if (item.checked){
+                        exportItems.push(item);
+                    }
+                });
             }
             //Export all logs in the table
             else{
-                exportItems = $scope.exchangeLogsSearchResults.items;
+                exportItems = $scope.displayedMessages;
             }
+            
             return exportItems.reduce(
                 function(csvObject, item){
-                    if($scope.filterIncomingOutgoing(item)){
-                        var csvRow = [
-                            $filter('confDateFormat')(item.dateReceived),
-                            $filter('transponderName')(item.source),
-                            item.type,
-                            item.senderRecipient,
-                            item.forwardRule,
-                            item.recipient,
-                            $filter('confDateFormat')(item.dateForward),
-                            $scope.getStatusLabel(item.status)
-                        ];
-                        csvObject.push(csvRow);
-                    }
+                    var csvRow = [
+                        $filter('confDateFormat')(item.dateReceived),
+                        $filter('transponderName')(item.source),
+                        item.type,
+                        item.senderRecipient,
+                        item.forwardRule,
+                        item.recipient,
+                        $filter('confDateFormat')(item.dateForward),
+                        $scope.getStatusLabel(item.status)
+                    ];
+                    csvObject.push(csvRow);
                     return csvObject;
                 },[]
             );
         };
 
         //Create and download the file
-        csvService.downloadCSVFile(getData(), header, filename);
+        var exportData = getData();
+        if (exportData.length > 0){
+            csvService.downloadCSVFile(exportData, header, filename);
+        }
     };
 
     //Callback function for the "edit selection" dropdown
     $scope.editSelectionCallback = function(selectedItem){
-        if($scope.selectedItems.length){
+        if($scope.displayedMessages.length){
             if(selectedItem.code === 'EXPORT'){
                 $scope.exportLogsAsCSVFile(true);
             }
@@ -350,76 +357,36 @@ angular.module('unionvmsWeb').controller('ExchangeCtrl',function($scope, $log, $
         }
     };
 
-    //Selected by checkboxes
-    $scope.selectedItems = [];
-
     //Handle click on the top "check all" checkbox
-    $scope.checkAll = function(){
-        if($scope.isAllChecked()){
-            //Remove all
-            $scope.clearSelection();
-        }else{
-            //Add all
-            $scope.clearSelection();
-            $.each($scope.exchangeLogsSearchResults.items, function(index, item) {
-                $scope.addToSelection(item);
-            });
-        }
+    $scope.checkAll = function(type){
+        var status = $scope.checkedStatus[type];
+        $.each($scope.exchangeLogsSearchResults.items, function(index, item){
+            item.checked = status;
+        });
     };
-
-    $scope.check = function(item){
-        if($scope.isChecked(item)){
-            //Remove
-            $scope.removeFromSelection(item);
-        }else{
-            $scope.addToSelection(item);
-        }
-    };
-
-    $scope.isAllChecked = function(){
-        if(angular.isUndefined($scope.exchangeLogsSearchResults.items) || $scope.selectedItems.length === 0){
-            return false;
-        }
-
-        var allChecked = true;
-        $.each($scope.exchangeLogsSearchResults.items, function(index, item) {
-            if(!$scope.isChecked(item)){
-                allChecked = false;
-                return false;
+    
+    $scope.isAllChecked = function(type){
+        var globalCheckStatus = $scope.checkedStatus[type];
+        var checkedCounter = 0;
+        $.each($scope.exchangeLogsSearchResults.items, function(index, item){
+            if (item.checked){
+                checkedCounter += 1;
             }
         });
-        return allChecked;
-    };
-
-    $scope.isChecked = function(item){
-        var checked = false;
-        $.each($scope.selectedItems, function(index, exchangeMessage){
-            if(exchangeMessage.isEqualExchange(item)){
-                checked = true;
-                return false;
-            }
-        });
-        return checked;
+        
+        var finalStatus = true;
+        if (checkedCounter !== $scope.exchangeLogsSearchResults.items.length || checkedCounter === 0){
+            finalStatus = false;
+        }
+        $scope.checkedStatus[type] = finalStatus; 
     };
 
     //Clear the selection
     $scope.clearSelection = function(){
-        $scope.selectedItems = [];
-    };
-
-    //Add an item to the selection
-    $scope.addToSelection = function(item){
-        $scope.selectedItems.push(item);
-    };
-
-    //Remove an item from the selection
-    $scope.removeFromSelection = function(item){
-        $.each($scope.selectedItems, function(index, exchangeMessage){
-            if(exchangeMessage.isEqualExchange(item)){
-                $scope.selectedItems.splice(index, 1);
-                return false;
-            }
-        });
+        //FIXME
+        $scope.checkedStatus = {
+            all: false
+        }
     };
 
     $scope.$on("$destroy", function() {
@@ -456,6 +423,14 @@ angular.module('unionvmsWeb').controller('ExchangeCtrl',function($scope, $log, $
         $scope.sendQueuedMessages(sendingQueuesIds);
     };
     $scope.messageVisible = false;
+    
+    //Fire the filter function for incoming/outgoing/all messages to update smartable
+    $scope.$watch(function(){return $scope.exchangeLogsSearchResults.incomingOutgoing;}, function(newVal, oldVal){
+        if (newVal !== oldVal){
+            var el = angular.element('#exchangeLogFilter');
+            el.trigger('input');
+        }
+    });
 
     init();
 });

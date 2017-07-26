@@ -10,7 +10,11 @@ FITNESS FOR A PARTICULAR PURPOSE.  See the GNU General Public License for more d
 copy of the GNU General Public License along with the IFDM Suite. If not, see <http://www.gnu.org/licenses/>.
  */
 .exchangeContainer{
-
+    .loading-spinner-cl {
+        .loading-spinner {
+            color: #333333 !important;
+        }
+    }
     //INCOMING/OUTGOING
     .incoming-outgoing-toggle,
     .exchange-log-wrapper table.searchResults td.incoming-outgoing {
@@ -48,6 +52,9 @@ copy of the GNU General Public License along with the IFDM Suite. If not, see <h
 
     //EXCHANGE LOGS
     .exchange-log-wrapper {
+        .hidden-input {
+            display: none;
+        }
         .printAndExport{
             position: relative;
             top: 9px;
