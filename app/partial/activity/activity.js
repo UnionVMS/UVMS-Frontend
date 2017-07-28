@@ -21,13 +21,14 @@ copy of the GNU General Public License along with the IFDM Suite. If not, see <h
  * @description
  *  The controller for the activity tab  
  */
-angular.module('unionvmsWeb').controller('ActivityCtrl',function($scope, locale, activityService, breadcrumbService, mdrCacheService){
+angular.module('unionvmsWeb').controller('ActivityCtrl', function ($scope, locale, activityService, breadcrumbService,Trip, mdrCacheService,tripSummaryService) {
     $scope.actServ = activityService;
-    
-    if (mdrCacheService.isListAvailableLocally('FLUX_GP_PURPOSE') === false){
+    $scope.tripSummServ = tripSummaryService;
+    $scope.selectedTab = 'ACTIVITES';
+    if (mdrCacheService.isListAvailableLocally('FLUX_GP_PURPOSE') === false) {
         $scope.actServ.isGettingMdrCodes = true;
     }
-    
+
     /**
      * Check if partial should be visible according to the breadcrumbPages item status
      * 
@@ -40,7 +41,7 @@ angular.module('unionvmsWeb').controller('ActivityCtrl',function($scope, locale,
     $scope.isPartialVisible = function(idx){
         return $scope.actServ.breadcrumbPages[idx].visible;
     };
-    
+
     /**
      * Make a certain partial visible using the breadcrumbPages array
      * 
@@ -52,7 +53,7 @@ angular.module('unionvmsWeb').controller('ActivityCtrl',function($scope, locale,
     $scope.goToView = function(idx){
         breadcrumbService.goToItem(idx);
     };
-    
+
     /**
      * A callback function passed into the breadcrumb directive that will clean data objects upon breadcrumb click
      * 
@@ -65,9 +66,86 @@ angular.module('unionvmsWeb').controller('ActivityCtrl',function($scope, locale,
         angular.forEach(idxToBeCleared, function(idx) {
             $scope.actServ.clearAttributeByType($scope.actServ.breadcrumbPages[idx].type);
         });
-        
+
         if (breadcrumbService.getActiveItemIdx() === 0){
             $scope.actServ.clearAttributeByType('overview');
         }
     };
+
+    /**
+      * sets visible variable of selected tab to true
+      * 
+      *  @memberof ActivityCtrl
+      *  @public
+      *  @alias isTabSelected
+      *  @param {Number} tab - selected tab
+      */
+     $scope.isTabVisible = function (tab) {
+         var visible = true;
+         return visible;
+     };
+
+     /**
+      * selects the tab
+      * 
+      *  @memberof ActivityCtrl
+      *  @public
+      *  @alias selectTab
+      *  @param {Number} tab - selected tab
+      */
+     $scope.selectTab = function (tab) {
+         $scope.selectedTab = tab;
+     };
+     
+     /**
+      * Displays the selected tab 
+      * 
+      *  @memberof ActivityCtrl
+      *  @public
+      *  @alias isTabSelected
+      *  @param {Number} tab - Displays the selected tab
+      */
+     $scope.isTabSelected = function(tab){
+        return $scope.selectedTab === tab;
+     };
+   
+   
+    /**
+      * Creates a tab view with activites and trips tabs
+      * 
+      * @memberof ActivityCtrl
+      * @public
+      * @alias setActivityTabs
+      */
+     var setActivityTabs = function () {
+        var tabs = [{
+            'tab': 'ACTIVITES',
+            'title': locale.getString('activity.tab_activities')
+        }, {
+            'tab': 'TRIPS',
+            'title': locale.getString('activity.tab_trips')
+        }];
+
+        return tabs;
+     };
+    
+      // function of trip summary service to open new trip
+      $scope.tripSummServ.initializeTrip = function (tripId) {
+        if (angular.isDefined(tripId)) {
+            $scope.tripSummServ.trip = new Trip(tripId);
+            $scope.trip = $scope.tripSummServ.trip;
+        }
+      };
+    
+      /**
+	   * Initializes the ActivityCtrl
+	   * 
+	   * @memberof ActivityCtrl
+	   * @private
+	   */
+      var init = function(){
+         $scope.activityTabMenu = setActivityTabs();
+      };
+    
+      init();
 });

@@ -48,8 +48,20 @@ angular.module('unionvmsWeb').factory('activityService',function(locale, activit
         type: 'activitiesHistory',
         visible: false
     },{
+        title: 'activity.breadcrumb_report_trip_summary',
+        type: 'tripSummary',
+        visible: false
+    },{
+        title: 'activity.breadcrumb_report_catch_details',
+        type: 'catchDetails',
+        visible: false
+    },{
         title: 'activity.breadcrumb_report_details',
         type: 'details',
+        visible: false
+    },{
+        title: 'activity.breadcrumb_report_catch_evolution',
+        type: 'catchEvolution',
         visible: false
     }];
     

@@ -40,7 +40,7 @@ copy of the GNU General Public License along with the IFDM Suite. If not, see <h
             </uib-tab-heading>
             <!--TAB CONTENT-->
             <div class="trip-summary-tab" ng-if="tab.title === trip.id">
-                <div ng-include="'partial/spatial/tripsPanel/tripSummary/tripSummary.html'"></div>
+                <div ng-include="'partial/spatial/tripsPanel/tripSummary/tripSummary.html'" ng-init="srcTab = 'reports'"></div>
             </div>
         </uib-tab>
     </uib-tabset>

@@ -1,0 +1,60 @@
+<div class="col-md-12" ng-controller="TripreportslistCtrl">
+  <div st-table="displayedTrips" st-safe-src="executedReport" st-set-filter="stFieldSearchGeoJson">
+			<div class="table-responsive-force">
+				<table class="table table-striped table-condensed">
+					<thead>
+						<tr class="row">
+							<th lr-drag-src="headers" lr-drop-target="headers" ng-repeat="column in attrVisibility.tripsColumns" ng-show="attrVisibility.trips[column]" lr-drop-success="dropSuccess(e, item, collection)">
+								<div st-sort="tripIdSort" st-skip-natural="true" st-class-ascent="sorting_asc" st-class-descent="sorting_desc" ng-if="column === 'tripId'">{{'activity.tab_trip_table_header_id' | i18n }}</div>
+								<div st-sort="flagState" st-skip-natural="true" st-class-ascent="sorting_asc" st-class-descent="sorting_desc" ng-if="column === 'fs'">{{'spatial.tab_vms_pos_table_header_fs' | i18n }}</div>
+								<div st-sort="EXT_MARK" st-skip-natural="true" st-class-ascent="sorting_asc" st-class-descent="sorting_desc" ng-if="column === 'extMark'">{{'spatial.reports_form_vessel_search_table_header_external_marking' | i18n }}</div>
+								<div st-sort="IRCS" st-skip-natural="true" st-class-ascent="sorting_asc" st-class-descent="sorting_desc" ng-if="column === 'ircs'">{{'spatial.reports_form_vessel_search_table_header_ircs' | i18n }}</div>
+								<div st-sort="CFR" st-skip-natural="true" st-class-ascent="sorting_asc" st-class-descent="sorting_desc" ng-if="column === 'cfr'">{{'spatial.reports_form_vessel_search_table_header_cfr' | i18n }}</div>
+								<div st-sort="UVI" st-skip-natural="true" st-class-ascent="sorting_asc" st-class-descent="sorting_desc" ng-if="column === 'uvi'">{{'activity.fa_details_item_uvi' | i18n }}</div>
+								<div st-sort="ICCAT" st-skip-natural="true" st-class-ascent="sorting_asc" st-class-descent="sorting_desc" ng-if="column === 'iccat'">{{'activity.fa_details_item_iccat' | i18n }}</div>
+								<div st-sort="GFCM" st-skip-natural="true" st-class-ascent="sorting_asc" st-class-descent="sorting_desc" ng-if="column === 'gfcm'">{{'activity.fa_details_item_gfcm' | i18n }}</div>
+								<div st-sort="firstFishingActivity" st-skip-natural="true" st-class-ascent="sorting_asc" st-class-descent="sorting_desc" ng-if="column === 'firstEventType'">{{'activity.tab_trip_table_header_first_event' | i18n }}</div>
+								<div st-sort="firstFishingActivityDateTime" st-skip-natural="true" st-class-ascent="sorting_asc" st-class-descent="sorting_desc" ng-if="column === 'firstEventTime'">{{'activity.tab_trip_table_header_first_event_time' | i18n }}</div>
+								<div st-sort="lastFishingActivity" st-skip-natural="true" st-class-ascent="sorting_asc" st-class-descent="sorting_desc" ng-if="column === 'lastEventType'">{{'activity.tab_trip_table_header_last_event' | i18n }}</div>
+								<div st-sort="lastFishingActivityDateTime" st-skip-natural="true" st-class-ascent="sorting_asc" st-class-descent="sorting_desc" ng-if="column === 'lastEventTime'">{{'activity.tab_trip_table_header_last_event_time' | i18n }}</div>
+								<div st-sort="tripDuration" st-skip-natural="true" st-class-ascent="sorting_asc" st-class-descent="sorting_desc" ng-if="column === 'duration'">{{'activity.tab_trip_table_header_duration' | i18n }}</div>
+								<div st-sort="noOfCorrections" st-skip-natural="true" st-class-ascent="sorting_asc" st-class-descent="sorting_desc" ng-if="column === 'nCorrections'">{{'activity.tab_trip_table_header_nCorrections' | i18n }}</div>
+								<div st-sort="vmsPositionCount" st-skip-natural="true" st-class-ascent="sorting_asc" st-class-descent="sorting_desc" ng-if="column === 'nPositions'">{{'activity.tab_trip_table_header_nPositions' | i18n }}</div>
+								<div st-sort="alarm" st-skip-natural="true" st-class-ascent="sorting_asc" st-class-descent="sorting_desc" ng-if="column === 'alarm'">{{'activity.tab_trip_table_header_alarm' | i18n }}</div>
+							</th>
+							<th style="width:80px">{{'spatial.table_header_actions' | i18n }}</th>
+						</tr>
+					</thead>
+					<tbody>
+						<tr ng-repeat="trip in displayedTrips" class="row">
+							<td ng-repeat="column in attrVisibility.tripsColumns" ng-show="attrVisibility.trips[column]">
+								<div ng-show="attrVisibility.trips.tripId" ng-if="column === 'tripId'">{{ trip.schemeId}}:{{ trip.tripId }}</div>
+								<div ng-show="attrVisibility.trips.fs" ng-if="column === 'fs'">{{ trip.flagState}}</div>
+								<div ng-show="attrVisibility.trips.extMark" ng-if="column === 'extMark'">{{ trip.EXT_MARK }}</div>
+								<div ng-show="attrVisibility.trips.cfr" ng-if="column === 'cfr'">{{ trip.CFR }}</div>
+								<div ng-show="attrVisibility.trips.ircs" ng-if="column === 'ircs'">{{ trip.IRCS }}</div>
+								<div ng-show="attrVisibility.trips.uvi" ng-if="column === 'uvi'">{{ trip.UVI }}</div>
+								<div ng-show="attrVisibility.trips.iccat" ng-if="column === 'iccat'">{{ trip.ICCAT }}</div>
+								<div ng-show="attrVisibility.trips.gfcm" ng-if="column === 'gfcm'">{{ trip.GFCM }}</div>
+								<div ng-show="attrVisibility.trips.firstEventType" ng-if="column === 'firstEventType'" title="{{trip.firstFishingActivity}}">{{ 'abbreviations.activity_' + trip.firstFishingActivity | i18n }}</div>
+								<div ng-show="attrVisibility.trips.firstEventTime" ng-if="column === 'firstEventTime'">{{ trip.firstFishingActivityDateTime | stDateUtc }}</div>
+								<div ng-show="attrVisibility.trips.lastEventType" ng-if="column === 'lastEventType'" title="{{trip.lastFishingActivity}}">{{ 'abbreviations.activity_' + trip.lastFishingActivity | i18n }}</div>
+								<div ng-show="attrVisibility.trips.lastEventTime" ng-if="column === 'lastEventTime'">{{ trip.lastFishingActivityDateTime | stDateUtc }}</div>
+								<div ng-show="attrVisibility.trips.duration" ng-if="column === 'duration'">{{ trip.tripDuration  | stHumanizeTime }}</div>
+								<div ng-show="attrVisibility.trips.nCorrections" ng-if="column === 'nCorrections'">{{ trip.noOfCorrections }}</div>
+								<div ng-show="attrVisibility.trips.nPositions" ng-if="column === 'nPositions'">{{ trip.vmsPositionCount }}</div>
+								<div ng-show="attrVisibility.trips.alarm" ng-if="column === 'alarm'">
+									<a title="{{'spatial.alarm_raised'}}" ng-if="trip.alarm">
+										<i class="fa fa-exclamation-triangle alarms-icon"></i>
+									</a>
+								</div>
+							</td>
+							<td style="width:80px">
+								<button type="button" class="btn btn-default btn-xs btn-bottom-mg" title="Details" ng-click="openTripSummary(trip.tripId)"><span class="fa fa-eye"></span></button>
+							</td>
+						</tr>
+					</tbody>
+				</table>
+			</div>
+		</div>
+</div>

@@ -149,6 +149,6 @@ describe('ActivityreportslistCtrl', function() {
         scope.openDetails(0);
         
         expect(mockActServ.overview).toEqual(mockActServ.displayedActivities[0]);
-        expect(scope.goToView).toHaveBeenCalledWith(3);
+        expect(scope.goToView).toHaveBeenCalledWith(5);
     });
 });

@@ -24,9 +24,9 @@ angular.module('unionvmsWeb').controller('ActivityreportslistCtrl',function($sco
     $scope.actServ = activityService;
     $scope.faServ = fishingActivityService;
     $scope.attrVisibility = visibilityService;
-    
+    $scope.visServ = visibilityService;
     //Automatically open a fishing activity details page when navigating from another tab
-    if (_.keys($stateParams).length > 0 && $stateParams.activityId !== null && $stateParams.tripId !== null && $stateParams.activityType !== null){
+   /* if (_.keys($stateParams).length > 0 && $stateParams.activityId !== null && $stateParams.tripId !== null && $stateParams.activityType !== null){
         $scope.faServ.id = $stateParams.activityId;
         $scope.faServ.activityType = $stateParams.activityType.toLowerCase();
         if ($stateParams.faReportType !== null){
@@ -38,6 +38,12 @@ angular.module('unionvmsWeb').controller('ActivityreportslistCtrl',function($sco
         $stateParams.activityId = null;
         $stateParams.tripId = null;
         $stateParams.faReportType = null;
+    }*/
+    
+     if (_.keys($stateParams).length > 0 && $stateParams.tripId !== null){
+         $scope.tripSummServ.openNewTrip($stateParams.tripId);
+         $scope.goToView(3);
+         $stateParams.tripId = null;
     }
     
     /**
@@ -126,6 +132,18 @@ angular.module('unionvmsWeb').controller('ActivityreportslistCtrl',function($sco
     };
     
     /**
+     * Update the fishing activities column visibility settings
+     *  
+     * @memberof AdvancedsearchformCtrl
+     * @public
+     * @alias updateVisibilityCache
+     * @param {String} column - the column name property to be updated
+     */
+    $scope.updateVisibilityCache = function(column){
+        $scope.visServ.updateStorage(column);
+    };
+
+    /**
      * Open the activity details partial through the index of the table row record
      * 
      * @memberof ActivityreportslistCtrl
@@ -139,6 +157,6 @@ angular.module('unionvmsWeb').controller('ActivityreportslistCtrl',function($sco
         $scope.faServ.activityType = $scope.actServ.displayedActivities[idx].activityType.toLowerCase();
         $scope.faServ.documentType = $scope.actServ.displayedActivities[idx].FAReportType.toLowerCase();
         
-        $scope.goToView(3);
+        $scope.goToView(5);
     };
 });

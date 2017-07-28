@@ -9,6 +9,14 @@ the hope that it will be useful, but WITHOUT ANY WARRANTY; without even the impl
 FITNESS FOR A PARTICULAR PURPOSE.  See the GNU General Public License for more details. You should have received a
 copy of the GNU General Public License along with the IFDM Suite. If not, see <http://www.gnu.org/licenses/>.
 */
+.nav-tabs{
+   border-bottom: 0;
+}
+
+.nav-tabs > li.active > a, .nav-tabs > li.active > a:hover{
+  border-bottom-color: #ddd;
+}
+
 .activity {
     margin-bottom: 25px;
     .no-wrap-white-space {
@@ -17,4 +25,43 @@ copy of the GNU General Public License along with the IFDM Suite. If not, see <h
     .alert-container {
         padding-bottom: 15px;
     }
+    .trip-summary {
+		padding-right:8px;
+	}
+	.trip-summary >.btn-print {
+		right: -10px;
+		top: 13px;
+	}
+	.trip-summary >.activity-summary-row >.btn-detail-form {
+		right: -6px;
+	}
+	.catch-details {
+        padding-left:10px;
+	}
+	.catch-evolution-container{
+        padding-left:10px;
+	}
+    .top-tabs {
+		height: 65px;
+		li {
+			&.active {
+				background-color: white;
+			
+				a {
+					background-color: white;
+					color: @profileColor_darkgray;
+					&:hover {
+						background-color: white;
+						color: @profileColor_darkgray;
+					}
+				}
+			}
+			a {
+				padding: 0 15px;
+				line-height: 60px;
+				color: @primaryColor;
+				background-color: @profileColor_lightgray;
+			}
+		}
+	}
 }

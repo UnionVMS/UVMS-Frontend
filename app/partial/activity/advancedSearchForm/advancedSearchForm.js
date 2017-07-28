@@ -304,10 +304,10 @@ angular.module('unionvmsWeb').controller('AdvancedsearchformCtrl',function($scop
      * @alias updateVisibilityCache
      * @param {String} column - the column name property to be updated
      */
-    $scope.updateVisibilityCache = function(column){
+   /* $scope.updateVisibilityCache = function(column){
         $scope.visServ.updateStorage(column);
     };
-    
+    */
     /**
      * Get the data for all comboboxes used in the the advanced search form
      * 
