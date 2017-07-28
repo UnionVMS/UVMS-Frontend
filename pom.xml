@@ -57,6 +57,15 @@
             </properties>
         </profile>
         <profile>
+            <id>belgium-local</id>
+            <distributionManagement>
+                <snapshotRepository>
+                    <id>lv-snapshots</id>
+                    <url>https://apjenp01.dg3.be/nexus/repository/maven-snapshots/</url>
+                </snapshotRepository>
+            </distributionManagement>
+        </profile>
+        <profile>
             <id>proxy</id>
             <activation>
                 <property>
