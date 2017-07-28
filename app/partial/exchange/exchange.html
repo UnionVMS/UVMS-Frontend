@@ -125,57 +125,6 @@ copy of the GNU General Public License along with the IFDM Suite. If not, see <h
             			</tbody>
             		</table>
             	</div>
-                <!-- <div search-results-table search="exchangeLogsSearchResults"> -->
-    				<!-- Exchange log table -->
-    				<!-- <table class="searchResults exchangeLog colorOdd truncate-text">
-    					<thead>
-                            <th class="checkboxContainer"><input type="checkbox" ng-checked="isAllChecked()" ng-click="checkAll()" ng-disabled="!exchangeLogsSearchResults.items.length"/></th>
-                            <th></th>
-    						<th></th>
-    						<th	sortable-table-header by="exchangeLogsSearchResults.sortBy" reverse="exchangeLogsSearchResults.sortReverse" order="'dateReceived'">{{'exchange.table_header_date_received' | i18n}}</th>
-                            <th sortable-table-header by="exchangeLogsSearchResults.sortBy" reverse="exchangeLogsSearchResults.sortReverse" order="'source'">{{'exchange.table_header_source' | i18n}}</th>
-                            <th sortable-table-header by="exchangeLogsSearchResults.sortBy" reverse="exchangeLogsSearchResults.sortReverse" order="'logData.type'">{{'exchange.table_header_type' | i18n}}</th>
-    						<th sortable-table-header by="exchangeLogsSearchResults.sortBy" reverse="exchangeLogsSearchResults.sortReverse" order="'senderRecipient'">{{'exchange.table_header_sender_reciever' | i18n}}</th>
-    						<th sortable-table-header by="exchangeLogsSearchResults.sortBy" reverse="exchangeLogsSearchResults.sortReverse" order="'forwardRule'">{{'exchange.table_header_fwd_rule' | i18n}}</th>
-    						<th sortable-table-header by="exchangeLogsSearchResults.sortBy" reverse="exchangeLogsSearchResults.sortReverse" order="'recipient'">{{'exchange.table_header_recipient' | i18n}}</th>
-    						<th sortable-table-header by="exchangeLogsSearchResults.sortBy" reverse="exchangeLogsSearchResults.sortReverse" order="'dateFwd'">{{'exchange.table_header_date_fwd' | i18n}}</th>
-    						<th sortable-table-header by="exchangeLogsSearchResults.sortBy" reverse="exchangeLogsSearchResults.sortReverse" order="'status'">{{'exchange.table_header_status' | i18n}}</th>
-    					</thead>
-    					<tbody>
-    						<tr ng-repeat="message in exchangeLogsSearchResults.items | filter:filterIncomingOutgoing | orderBy:exchangeLogsSearchResults.sortBy:exchangeLogsSearchResults.sortReverse">
-                                <td class="checkboxContainer">
-                                    <input type="checkbox" ng-checked="isChecked(message)" ng-click="check(message)"/>
-                                </td>
-    							<td class="incoming-outgoing" ng-switch="message.incoming">
-    								<span ng-switch-when="true" class="fa fa-arrow-down incoming" title="{{'exchange.title_incoming' | i18n}}"></span>
-    								<span ng-switch-when="false" class="fa fa-arrow-up outgoing" title="{{'exchange.title_outgoing' | i18n}}"></span>
-    							</td>
-                                <td>
-                                    <a ng-show="exchangePath(message)" href="exchangePath(message)" title="{{'exchange.title_details' | i18n}}">
-                                        <span class="fa fa-search-plus details"></span>
-                                    </a>
-                                    <a ng-show="false" ng-click="showMessageDetails(message)" title="{{'exchange.title_details' | i18n}}">
-                                        <span class="fa fa-search-plus details"></span>
-                                    </a>
-                                </td>
-    							<td ng-class="{'notAvailable' : !message.dateReceived}" ng-attr-title="{{message.dateReceived | confDateFormat | dataNotAvailable}}">{{message.dateReceived | confDateFormat | dataNotAvailable}}</td>
-                                <td ng-class="{'notAvailable' : !message.source}" ng-attr-title="{{message.source | transponderName | dataNotAvailable}}">{{message.source | transponderName | dataNotAvailable}}</td>
-                                <td ng-class="{'notAvailable' : !message.type}" ng-attr-title="{{message.type | dataNotAvailable | removeUnderscore}}">{{message.type | dataNotAvailable | removeUnderscore}}</td>
-    							<td ng-class="{'notAvailable' : !message.senderRecipient}" ng-attr-title="{{message.senderRecipient | dataNotAvailable}}">{{message.senderRecipient | dataNotAvailable}}</td>
-    							<td ng-class="{'notAvailable' : !message.forwardRule}" ng-attr-title="{{message.forwardRule | dataNotAvailable}}">{{message.forwardRule | dataNotAvailable}}</td>
-    							<td ng-class="{'notAvailable' : !message.recipient}" ng-attr-title="{{message.recipient | dataNotAvailable}}">{{message.recipient | dataNotAvailable}}</td>
-    							<td ng-class="{'notAvailable' : !message.dateFwd}" ng-attr-title="{{message.dateFwd | confDateFormat | dataNotAvailable}}">{{message.dateFwd | confDateFormat | dataNotAvailable}}</td>
-    							<td class="status">
-                                    <span class="label" ng-class="getStatusLabelClass(message.status)">
-                                        {{getStatusLabel(message.status) | uppercase}}
-                                    </span>
-    							</td>
-    						</tr>
-    					</tbody>
-    				</table> -->
-
-                <!-- </div> -->
-
             </div>
         </div>
         <search-results-pagination ng-if="displayedMessages.length > 0 && !exchangeLogsSearchResults.loading" page='exchangeLogsSearchResults.page' total='exchangeLogsSearchResults.totalNumberOfPages' callback='gotoPage'></search-results-pagination >
