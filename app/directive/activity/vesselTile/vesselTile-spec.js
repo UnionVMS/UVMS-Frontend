@@ -28,7 +28,7 @@ describe('vesselTile', function() {
 	}));
 
 	beforeEach(inject(function() {
-    scope.vesselDetails = {
+    	scope.vesselDetails = {
 			"role":"Master",
 			"name":"Oleta Muller",
 			"country":"GE",
@@ -156,8 +156,6 @@ describe('vesselTile', function() {
 			}
 		};
 	}));
-
-	
 
 	it('should render all the fieldsets', function() {
       var vesselTile = compile('<vessel-tile ng-model="vesselDetails"></vessel-tile>')(scope);

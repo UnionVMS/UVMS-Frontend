@@ -12,13 +12,17 @@ copy of the GNU General Public License along with the IFDM Suite. If not, see <h
 /**
  * @memberof unionvmsWeb
  * @ngdoc controller
- * @name ActivitydetailsCtrl
+ * @name PrintFormCtrl
  * @param $scope {Service} controller scope
- * @param fishingActivityService {Service} The fishing activity service <p>{@link unionvmsWeb.fishingActivityService}</p>
+ * @param locale {Service} - The angular locale service
+ * @param fishingActivityService {Service} the fishing activity service <p>{@link unionvmsWeb.fishingActivityService}</p>
  * @description
- *  The controller for the activity details page
+ *  The controller for print form
  */
-angular.module('unionvmsWeb').controller('ActivitydetailsCtrl',function($scope, fishingActivityService){
+angular.module('unionvmsWeb').controller('PrintFormCtrl', function($scope, locale, fishingActivityService) {
     $scope.faServ = fishingActivityService;
-    $scope.printView = 'activityDetails';
+
+    $scope.titleLabel = locale.getString('activity.title');
+    $scope.authorLabel = locale.getString('activity.author');
+    $scope.printLabel = locale.getString('activity.print');
 });

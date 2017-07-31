@@ -17,7 +17,7 @@ angular.module('unionvmsWeb').directive('tableAlert', function() {
 		scope: {
 			type: '=',
 			msg: '=',
-			visible: '=',
+			visible: '=?',
 			timeout: '=',
 			noHide: '@',
 			closable: '@'

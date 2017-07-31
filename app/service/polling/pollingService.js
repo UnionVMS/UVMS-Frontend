@@ -175,12 +175,6 @@ angular.module('unionvmsWeb').factory('pollingService',function(pollingRestServi
 
             return attrs;
         }
-        else if (type === "SAMPLING") {
-            return [
-                getAttr("START_DATE", dateTimeService.formatUTCDateWithTimezone(pollingOptions.samplingPoll.startDate)),
-                getAttr("END_DATE", dateTimeService.formatUTCDateWithTimezone(pollingOptions.samplingPoll.endDate))
-            ];
-        }
         else { // type === MANUAL POLL
             return [];
         }
@@ -237,7 +231,6 @@ angular.module('unionvmsWeb').factory('pollingService',function(pollingRestServi
         pollingOptions.comment = comment;
         pollingOptions.programPoll = {};
         pollingOptions.configurationPoll = {};
-		pollingOptions.samplingPoll = {};
     }
 
 	var pollingService = {

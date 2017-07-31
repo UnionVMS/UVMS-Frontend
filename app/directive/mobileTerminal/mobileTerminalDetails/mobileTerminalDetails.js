@@ -49,7 +49,7 @@ angular.module('unionvmsWeb')
         //Init function
         var init = function(){
 
-            //Detect initial values of the Mobile Terminal object 
+            //Detect initial values of the Mobile Terminal object
             $scope.originalMobileTerminalValue = angular.copy($scope.mobileTerminal);
 
              //Get list transponder systems
@@ -87,7 +87,7 @@ angular.module('unionvmsWeb')
             }
         }, true);
 
-        //Check if form has been modified 
+        //Check if form has been modified
         $scope.setFormDirtyStatus = function(status) {
             if (angular.isDefined(status)) {
                 $scope.isFormDirty = status;
@@ -99,7 +99,7 @@ angular.module('unionvmsWeb')
             }
         };
 
-        //Set form submit attempted status 
+        //Set form submit attempted status
         $scope.setSubmitStatus = function(status) {
             if (angular.isDefined($scope.functions.setSubmitStatus)) {
                 $scope.functions.setSubmitStatus(status);
@@ -263,7 +263,7 @@ angular.module('unionvmsWeb')
         $scope.updateMobileTerminal = function() {
             if($scope.formScope.mobileTerminalForm.$valid){
                 modalComment.open($scope.updateMobileTerminalWithComment, {
-                    titleLabel: locale.getString("mobileTerminal.updating"),
+                    titleLabel: locale.getString("mobileTerminal.updating", [$scope.mobileTerminal.getSerialNumber()]),
                     saveLabel: locale.getString("common.update")
                 });
             }
@@ -281,9 +281,8 @@ angular.module('unionvmsWeb')
             alertService.showSuccessMessageWithTimeout(locale.getString('mobileTerminal.update_alert_message_on_success'));
             $scope.setFormDirtyStatus(false);
             $scope.setSubmitStatus(false);
-            //$scope.mobileTerminal = updatedMobileTerminal;
             $scope.originalMobileTerminalValue = angular.copy($scope.mobileTerminal);
-        
+
             if (angular.isDefined($scope.functions.updateMobileTerminals)) {
                 $scope.functions.updateMobileTerminals();
             }
@@ -393,10 +392,6 @@ angular.module('unionvmsWeb')
                 $scope.functions.displayMobileTerminalList();
             }
         };
-
-        $scope.getRadioButtonTitle = function(index) {
-
-        }; 
 
         var disabledMessage = locale.getString('mobileTerminal.form_inmarsatc_communication_disabledchannel_message');
         $scope.getRadioButtonHelpText = {

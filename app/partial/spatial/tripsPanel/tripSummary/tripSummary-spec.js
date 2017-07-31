@@ -9,16 +9,22 @@ the hope that it will be useful, but WITHOUT ANY WARRANTY; without even the impl
 FITNESS FOR A PARTICULAR PURPOSE.  See the GNU General Public License for more details. You should have received a
 copy of the GNU General Public License along with the IFDM Suite. If not, see <http://www.gnu.org/licenses/>.
 */
-/**
- * @memberof unionvmsWeb
- * @ngdoc controller
- * @name ActivitydetailsCtrl
- * @param $scope {Service} controller scope
- * @param fishingActivityService {Service} The fishing activity service <p>{@link unionvmsWeb.fishingActivityService}</p>
- * @description
- *  The controller for the activity details page
- */
-angular.module('unionvmsWeb').controller('ActivitydetailsCtrl',function($scope, fishingActivityService){
-    $scope.faServ = fishingActivityService;
-    $scope.printView = 'activityDetails';
+describe('TripsummaryCtrl', function() {
+
+	beforeEach(module('unionvmsWeb'));
+
+	var scope,ctrl;
+
+    beforeEach(inject(function($rootScope, $controller) {
+      scope = $rootScope.$new();
+      ctrl = $controller('TripsummaryCtrl', {$scope: scope});
+    }));	
+
+	it('should ...', inject(function() {
+
+		expect(1).toEqual(1);
+		
+	}));
+
 });
+

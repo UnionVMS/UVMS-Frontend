@@ -67,7 +67,7 @@ angular.module('unionvmsWeb').controller('ArrivalpanelCtrl', function($scope, $s
      * @returns Reason code
      */
     var getReasonCodes = function (obj) {
-        loadingStatus.isLoading('FishingActivity', true);
+        loadingStatus.isLoading('FishingActivity', true, 0);
         
         mdrCacheService.getCodeList('FA_REASON_ARRIVAL').then(function (response) {  
             var reasonDesc = _.where(response, { code: obj.reason });
