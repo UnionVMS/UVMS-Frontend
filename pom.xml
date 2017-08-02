@@ -7,7 +7,7 @@
     </parent>
     <groupId>eu.europa.ec.fisheries.uvms</groupId>
     <artifactId>unionvms-web</artifactId>
-    <version>3.0.5-SNAPSHOT</version>
+    <version>3.0.5</version>
     <name>unionvms-web</name>
     <packaging>war</packaging>
 
@@ -345,7 +345,7 @@
 
     <scm>
         <connection>${scm.connection}</connection>
-        <tag>HEAD</tag>
+        <tag>unionvms-web-3.0.5</tag>
     </scm>
 
 
