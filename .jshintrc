@@ -41,6 +41,7 @@
 		"screenfull": true,
 		"proj4": true,
         "palette": true,
-        "tinycolor": true
+        "tinycolor": true,
+        "vkbeautify": true
     }
 }

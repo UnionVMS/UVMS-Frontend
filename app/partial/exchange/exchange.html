@@ -74,7 +74,7 @@ copy of the GNU General Public License along with the IFDM Suite. If not, see <h
             			<thead>
             				<tr class="row">
             					<th>
-            						<input type="checkbox" ng-model="checkedStatus.all" ng-change="checkAll('all')" ng-disabled="displayedMessages.length === 0 || exchangeLogsSearchResults.loading"/>
+            						<input type="checkbox" ng-model="checkedStatus" ng-change="checkAll()" ng-disabled="displayedMessages.length === 0 || exchangeLogsSearchResults.loading"/>
             					</th>
             					<th></th>
 	            				<th st-sort="dateReceived" st-skip-natural="true" st-class-ascent="sorting_asc" st-class-descent="sorting_desc">{{'exchange.table_header_date_received' | i18n}}</th>
@@ -85,25 +85,26 @@ copy of the GNU General Public License along with the IFDM Suite. If not, see <h
 	            				<th st-sort="recipient" st-skip-natural="true" st-class-ascent="sorting_asc" st-class-descent="sorting_desc">{{'exchange.table_header_recipient' | i18n}}</th>
 	            				<th st-sort="dateFwd" st-skip-natural="true" st-class-ascent="sorting_asc" st-class-descent="sorting_desc">{{'exchange.table_header_date_fwd' | i18n}}</th>
 	            				<th st-sort="status" st-skip-natural="true" st-class-ascent="sorting_asc" st-class-descent="sorting_desc">{{'exchange.table_header_status' | i18n}}</th>
+	            				<th>{{'activity.header_fa_actions' | i18n }}</th>
             				</tr>
             				<tr class="row" ng-if="!exchangeLogsSearchResults.loading && exchangeLogsSearchResults.showZeroResultsMessage">
-								<th colspan="10">
+								<th colspan="11">
 									<table-alert type="'info'" msg="exchangeLogsSearchResults.zeroResultsErrorMessage" visible="true" no-hide="false"></table-alert>
 								</th>
 							</tr>
 							<tr class="row" ng-if="!exchangeLogsSearchResults.loading && exchangeLogsSearchResults.errorMessage !== undefined && displayedMessages.length === 0 && !exchangeLogsSearchResults.showZeroResultsMessage">
-								<th colspan="10">
+								<th colspan="11">
 									<table-alert type="'error'" msg="exchangeLogsSearchResults.errorMessage" visible="true" no-hide="false"></table-alert>
 								</th>
 							</tr>
 							<tr class="row" ng-if="exchangeLogsSearchResults.loading">
-								<th colspan="10" class="loading-spinner-cl"><i class="fa fa-spinner fa-spin loading-spinner"></i></th>
+								<th colspan="11" class="loading-spinner-cl"><i class="fa fa-spinner fa-spin loading-spinner"></i></th>
 							</tr>
             			</thead>
             			<tbody>
             				<tr ng-repeat="message in displayedMessages" class="row" ng-if="!exchangeLogsSearchResults.loading">
             					<td>
-            						<input type="checkbox" ng-model="message.checked" ng-change="isAllChecked('all')">
+            						<input type="checkbox" ng-model="message.checked" ng-change="isAllChecked()">
             					</td>
             					<td class="incoming-outgoing" ng-switch="message.incoming">
     								<span ng-switch-when="true" class="fa fa-arrow-down incoming" title="{{'exchange.title_incoming' | i18n}}"></span>
@@ -121,6 +122,11 @@ copy of the GNU General Public License along with the IFDM Suite. If not, see <h
                                         {{getStatusLabel(message.status) | uppercase}}
                                     </span>
     							</td>
+    							<td>
+                                    <button type="button" class="btn btn-xs btn-default" title="{{'exchange.title_details' | i18n }}" ng-click="showMessageDetails(message)" ng-if="message.logData.type">
+										<span class="fa fa-eye"></span>
+									</button>
+                                </td>
             				</tr>
             			</tbody>
             		</table>

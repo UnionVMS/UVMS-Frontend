@@ -9,7 +9,7 @@ the hope that it will be useful, but WITHOUT ANY WARRANTY; without even the impl
 FITNESS FOR A PARTICULAR PURPOSE.  See the GNU General Public License for more details. You should have received a
 copy of the GNU General Public License along with the IFDM Suite. If not, see <http://www.gnu.org/licenses/>.
  */
-angular.module('unionvmsWeb').controller('ExchangeCtrl',function($scope, $log, $filter,$location, locale, searchService, exchangeRestService, infoModal, ManualPosition, alertService, csvService, ExchangeService, SearchResults, $resource, longPolling){
+angular.module('unionvmsWeb').controller('ExchangeCtrl',function($scope, $log, $filter,$location, $modal, locale, searchService, exchangeRestService, infoModal, ManualPosition, alertService, csvService, ExchangeService, SearchResults, $resource, longPolling){
 
     $scope.transmissionStatuses = new SearchResults();
     $scope.sendingQueue = new SearchResults();
@@ -19,9 +19,7 @@ angular.module('unionvmsWeb').controller('ExchangeCtrl',function($scope, $log, $
     $scope.exchangeLogsSearchResults = new SearchResults('dateReceived', true);
     $scope.exchangeLogsSearchResults.incomingOutgoing = 'all';
     
-    $scope.checkedStatus = {
-        all: false
-    };
+    $scope.checkedStatus = false;
 
     $scope.newExchangeLogCount = 0;
     var longPollingIdPlugins, longPollingIdSendingQueue, longPollingIdExchangeList;
@@ -42,6 +40,7 @@ angular.module('unionvmsWeb').controller('ExchangeCtrl',function($scope, $log, $
         searchService.searchExchange().then(function(page) {
             if (page.hasItemWithGuid(guid)) {
                 $scope.exchangeLogsSearchResults.updateWithNewResults(page);
+                //TODO check this
                 //$scope.displayedMessages = [].concat($scope.exchangeLogsSearchResults.items);
             }
             else {
@@ -206,12 +205,40 @@ angular.module('unionvmsWeb').controller('ExchangeCtrl',function($scope, $log, $
                 case 'ALARM':
                     $location.path('/alarms/holdingtable/' + model.logData.guid);
                     break;
-
+                    
+                case 'FA_QUERY':
+                case 'FA_REPORT':
+                case 'FA_RESPONSE':
+                    exchangeRestService.getRawExchangeMessage(model.logData.guid).then(
+                            function(data){
+                                $scope.openXmlModal(data);
+                            },
+                            function(error){
+                                $log.error("Error getting the raw message.");
+                            });
+                    break;
+                    
                 default:
                     $log.info("No matching type in model");
                     break;
             }
         }
+    };
+    
+    $scope.openXmlModal = function(data){
+        var modalInstance = $modal.open({
+            templateUrl: 'partial/exchange/messageModal/messageModal.html',
+            controller: 'MessagemodalCtrl',
+            size: 'lg',
+            //windowClass: 'messageModal',
+//            backdropClass: 'alert-modal-backdrop',
+//            openedClass: 'alert-open',
+            resolve: {
+                msg: function(){
+                    return data;
+                }
+            }
+        });
     };
 
     $scope.openUpModal = function(model){
@@ -358,15 +385,15 @@ angular.module('unionvmsWeb').controller('ExchangeCtrl',function($scope, $log, $
     };
 
     //Handle click on the top "check all" checkbox
-    $scope.checkAll = function(type){
-        var status = $scope.checkedStatus[type];
+    $scope.checkAll = function(){
+        var status = $scope.checkedStatus;
         $.each($scope.exchangeLogsSearchResults.items, function(index, item){
             item.checked = status;
         });
     };
     
-    $scope.isAllChecked = function(type){
-        var globalCheckStatus = $scope.checkedStatus[type];
+    $scope.isAllChecked = function(){
+        var globalCheckStatus = $scope.checkedStatus;
         var checkedCounter = 0;
         $.each($scope.exchangeLogsSearchResults.items, function(index, item){
             if (item.checked){
@@ -378,15 +405,12 @@ angular.module('unionvmsWeb').controller('ExchangeCtrl',function($scope, $log, $
         if (checkedCounter !== $scope.exchangeLogsSearchResults.items.length || checkedCounter === 0){
             finalStatus = false;
         }
-        $scope.checkedStatus[type] = finalStatus; 
+        $scope.checkedStatus = finalStatus; 
     };
 
     //Clear the selection
     $scope.clearSelection = function(){
-        //FIXME
-        $scope.checkedStatus = {
-            all: false
-        }
+        $scope.checkedStatus = false;
     };
 
     $scope.$on("$destroy", function() {
@@ -422,7 +446,7 @@ angular.module('unionvmsWeb').controller('ExchangeCtrl',function($scope, $log, $
         }
         $scope.sendQueuedMessages(sendingQueuesIds);
     };
-    $scope.messageVisible = false;
+    $scope.messageVisible = false; //TODO check this
     
     //Fire the filter function for incoming/outgoing/all messages to update smartable
     $scope.$watch(function(){return $scope.exchangeLogsSearchResults.incomingOutgoing;}, function(newVal, oldVal){

@@ -16,7 +16,7 @@ angular.module('smart-table').filter('stExchangeLogFilter', function($filter){
                 if (item.incoming === incStatus){
                     finalData.push(item);
                 }
-            })
+            });
         }
         
         return finalData;
