@@ -7,6 +7,9 @@
 	"search_recipient": "Recipient",
 	"search_ircs_cfr_name": "IRCS, CFR, Name",
 	"search_to": "To",
+	"search_source": "Source",
+	"search_type": "Type",
+	"search_status": "Status",
 
     "message_details_modal_title" : "Message details",
 
