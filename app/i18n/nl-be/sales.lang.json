@@ -1,0 +1,20 @@
+﻿{
+    "table_details_button" : "Details",
+    "table_header_flag_state" : "F. S.",
+    "table_header_external_marketing" : "Ext. marking",
+    "table_header_ircs" : "IRCS",
+    "table_header_name": "Name",
+    "table_header_sales_date" : "Sales date",
+    "table_header_sales_location" : "Sales location",
+    "table_header_landing_date" : "Landing date",
+    "table_header_landing_port" : "Landing port",
+    "table_header_sales_type" : "Type",
+    "table_header_seller" : "Seller",
+    "table_header_buyer": "Buyer",
+    "table_header_details": "Details",
+
+    "search_zero_results_error": "No sales note matching your search criteria was found.",
+
+    "advanced_search_placeholder_flag_state":"Flag State"
+
+}

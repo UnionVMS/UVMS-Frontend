@@ -1,0 +1,15 @@
+﻿<div>
+    <div class="chart-y-axis">Weight (LSC | BMS)</div>
+    <canvas id="bar" class="chart chart-bar" chart-options="vm.options"
+            chart-data="vm.data" chart-labels="vm.labels"
+            chart-dataset-override="vm.datasetOverride"
+            chart-click="vm.chartClick"
+            chart-colors="vm.colorlist"></canvas>
+    <div>
+        <ol class="chart-legend">
+            <li><span ng-style="{'background-color': vm.colors.avg}"></span>Avg price</li>
+            <li><span ng-style="{'background-color': vm.colors.min}"></span>Min price</li>
+            <li><span ng-style="{'background-color': vm.colors.max}"></span>Max price</li>
+        </ol>
+    </div>
+</div>

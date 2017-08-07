@@ -1,0 +1,42 @@
+﻿<table class="searchResults colorOdd truncate-text productsTable">
+    <thead>
+        <tr>
+            <th ng-if="vm.showArea" sortable-table-header by="vm.products.sortBy" reverse="vm.products.sortReverse" order="'areas[0]'">{{'sales.products_table_header_area' | i18n}}</th>
+            <th sortable-table-header by="vm.products.sortBy" reverse="vm.products.sortReverse" order="'freshness'">{{'sales.products_table_header_freshness' | i18n}}</th>
+            <th sortable-table-header by="vm.products.sortBy" reverse="vm.products.sortReverse" order="'presentation'">{{'sales.products_table_header_presentation' | i18n}}</th>
+            <th sortable-table-header by="vm.products.sortBy" reverse="vm.products.sortReverse" order="'preservation'">{{'sales.products_table_header_preservation' | i18n}}</th>
+            <th sortable-table-header by="vm.products.sortBy" reverse="vm.products.sortReverse" order="'factor'">{{'sales.products_table_header_factor' | i18n}}</th>
+            <th sortable-table-header by="vm.products.sortBy" reverse="vm.products.sortReverse" order="'category'">{{'sales.products_table_header_category' | i18n}}</th>
+            <th sortable-table-header by="vm.products.sortBy" reverse="vm.products.sortReverse" order="'class'">{{'sales.products_table_header_class' | i18n}}</th>
+            <th sortable-table-header by="vm.products.sortBy" reverse="vm.products.sortReverse" order="'usage'">{{'sales.products_table_header_usage' | i18n}}</th>
+            <th sortable-table-header by="vm.products.sortBy" reverse="vm.products.sortReverse" order="'weight'">{{'sales.products_table_header_weight' | i18n}}</th>
+            <th sortable-table-header by="vm.products.sortBy" reverse="vm.products.sortReverse" order="'unit'">{{'sales.products_table_header_unit' | i18n}}</th>
+            <th sortable-table-header by="vm.products.sortBy" reverse="vm.products.sortReverse" order="'price'">{{'sales.products_table_header_price' | i18n}}</th>
+        </tr>
+    </thead>
+    <tbody>
+        <tr ng-repeat="product in vm.products | orderBy:vm.products.sortBy:vm.products.sortReverse track by $index ">
+            <td ng-if="vm.showArea" ng-attr-title="{{product.area}}">
+                <div ng-repeat="area in product.areas track by $index">
+                    <div ng-if="$first && product.areas.length > 1">                     
+                        {{area}}
+                        <a ng-click="product.areasOpen = !product.areasOpen">
+                            <span class="fa" ng-class="{'fa-caret-down':product.areasOpen, 'fa-caret-left':!product.areasOpen}"></span>
+                        </a>
+                    </div>
+                    <div ng-if="(!$first && product.areasOpen) ||  product.areas.length === 1">{{area}}</div>
+                </div>
+            </td>
+            <td ng-attr-title="{{product.freshness}}">{{product.freshness | codeList:'freshness'}}</td>
+            <td ng-attr-title="{{product.presentation}}">{{product.presentation | codeList:'presentations'}}</td>
+            <td ng-attr-title="{{product.preservation}}">{{product.preservation | codeList:'preservations'}}</td>
+            <td ng-attr-title="{{product.factor}}">{{product.factor | number: 2}}</td>
+            <td ng-attr-title="{{product.category}}">{{product.distributionCategory}}</td>
+            <td ng-attr-title="{{product.class}}">{{product.distributionClass | codeList:'distributionClasses'}}</td>
+            <td ng-attr-title="{{product.usage}}">{{product.usage | codeList:'usages'}}</td>
+            <td ng-attr-title="{{product.weight}}">{{product.weight}} kg</td>
+            <td ng-attr-title="{{product.unit}}">{{product.quantity}}</td>
+            <td ng-attr-title="{{product.price}}">{{product.price | currency: vm.currency}}</td>
+        </tr>
+    </tbody>
+</table>

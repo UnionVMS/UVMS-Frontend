@@ -63,6 +63,11 @@ angular.module('unionvmsWeb').controller('HeaderMenuCtrl',function($scope, $root
             $scope.addMenuItem(locale.getString('header.menu_movement'), movementLink, movementElemId);
         }
 
+        //Sales
+        if (checkAccess('Sales', 'viewSalesReports')) {
+            $scope.addMenuItem(locale.getString('header.menu_sales'), '/sales', 'sales');
+        }
+
         // Exchange
         if (checkAccess('Exchange', 'viewExchange')) {
             $scope.addMenuItem(locale.getString('header.menu_exchange'), '/exchange', 'exchange');

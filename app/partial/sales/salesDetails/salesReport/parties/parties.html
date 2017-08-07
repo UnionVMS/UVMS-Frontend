@@ -1,0 +1,66 @@
+﻿<h5>{{'sales.parties_header' | i18n}}</h5>
+<div class="row party" ng-if="vm.seller">
+    <div class="icon">
+        <div class="fa fa-4x fa-user"></div>
+    </div>
+    <div>
+        <div class="row data">
+            <div class="col-md-12">
+                <label>{{'sales.party_id' | i18n}}</label>
+                {{vm.seller.extId}}
+            </div>
+            <div class="col-md-12">
+                <label>{{'sales.party_name' | i18n}}</label>
+                {{vm.seller.name}}
+            </div>
+            <div class="col-md-12">
+                <label>{{'sales.party_role' | i18n}}</label>
+                {{'sales.table_header_seller' | i18n | uppercase}}
+            </div>
+        </div>
+    </div>
+</div>
+<hr />
+<div class="row party" ng-if="vm.buyer">
+    <div class="icon">
+        <div class="fa fa-4x fa-user"></div>
+    </div>
+    <div>
+        <div class="row data">
+            <div class="col-md-12">
+                <label>{{'sales.party_id' | i18n}}</label>
+                {{vm.buyer.extId}}
+            </div>
+            <div class="col-md-12">
+                <label>{{'sales.party_name' | i18n}}</label>
+                {{vm.buyer.name}}
+            </div>
+            <div class="col-md-12">
+                <label>{{'sales.party_role' | i18n}}</label>
+                {{'sales.table_header_buyer' | i18n | uppercase}}
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="row party" ng-if="vm.recipient">
+    <div class="icon">
+        <div class="fa fa-4x fa-user"></div>
+    </div>
+    <div>
+        <div class="row data">
+            <div class="col-md-12">
+                <label>{{'sales.party_id' | i18n}}</label>
+                {{vm.recipient.extId}}
+            </div>
+            <div class="col-md-12">
+                <label>{{'sales.party_name' | i18n}}</label>
+                {{vm.recipient.name}}
+            </div>
+            <div class="col-md-12">
+                <label>{{'sales.party_role' | i18n}}</label>
+                {{'sales.table_header_recipient' | i18n | uppercase}}
+            </div>
+        </div>
+    </div>
+</div>

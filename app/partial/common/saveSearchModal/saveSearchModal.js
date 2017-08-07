@@ -12,7 +12,7 @@ copy of the GNU General Public License along with the IFDM Suite. If not, see <h
 // Please note that $modalInstance represents a modal window (instance) dependency.
 // It is not the same as the $modal service used above.
 
-angular.module('unionvmsWeb').controller('SaveSearchModalInstanceCtrl', function ($scope, $modalInstance, locale, searchService, SearchField, SavedSearchGroup, savedSearchService, searchType, options, userService, alertService) {
+angular.module('unionvmsWeb').controller('SaveSearchModalInstanceCtrl', function ($scope, $modalInstance, locale, searchService, SearchField, SavedSearchGroup, savedSearchService, searchType, options, userService, alertService, salesSearchService) {
 
     $scope.waitingForCreateResponse = false;
 
@@ -61,8 +61,21 @@ angular.module('unionvmsWeb').controller('SaveSearchModalInstanceCtrl', function
                 $scope.savedSearchNameAlreadyExistsMessage = locale.getString('common.saved_search_group_exists');
                 skipSearchCriteriaKeys = ['ASSET_GROUP'];
                 break;
+            case "SALES":
+                $scope.existingGroups = salesSearchService.getSavedSearches();
+                saveSearchFunction = salesSearchService.createNewSavedSearch;
+                updateSearchFunction = salesSearchService.updateSavedSearch;
+                $scope.modalHeader = locale.getString('sales.save_search_modal_header');
+                $scope.inputPlaceholder = locale.getString('sales.save_search_modal_input_placeholder');
+                $scope.dropdownHeader = locale.getString('sales.save_search_modal_dropdown_header');
+                $scope.dropdownLabel = locale.getString('sales.save_search_modal_dropdown_label');
+                $scope.errorMessage = locale.getString('sales.save_search_modal_error');
+                $scope.saveSuccessMessage = locale.getString('common.saved_search_create_success');
+                $scope.updateSuccessMessage = locale.getString('common.saved_search_updated_success');
+                $scope.savedSearchNameAlreadyExistsMessage = locale.getString('common.saved_search_group_exists');
+                break;
             default:
-                console.error("Search type is missing for save search modal.");
+                console.error("Unknown search for save search modal. Search type is " + searchType);
         }
 
         isDynamic = !!options.dynamicSearch;
