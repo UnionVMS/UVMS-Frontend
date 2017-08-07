@@ -357,11 +357,4 @@
         <tag>HEAD</tag>
     </scm>
 
-
-    <distributionManagement>
-        <snapshotRepository>
-            <id>lv-snapshots</id>
-            <url>https://apjenp01.dg3.be/nexus/repository/maven-snapshots/</url>
-        </snapshotRepository>
-    </distributionManagement>
 </project>
