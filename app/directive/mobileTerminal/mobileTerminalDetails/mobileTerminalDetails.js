@@ -359,23 +359,6 @@ angular.module('unionvmsWeb')
             alertService.showErrorMessage(locale.getString('mobileTerminal.unassign_vessel_message_on_error'));
         };
 
-        //Channels - Add a new channel
-        $scope.addNewChannel = function(){
-            var newChannel = $scope.mobileTerminal.addNewChannel();
-            //Set LES for new channel
-            if(angular.isDefined($scope.mobileTerminal.plugin.labelName)){
-                //Set LES_DESCRIPTION if attribute is used for the channel
-                if($scope.getTerminalConfig().channelFields.LES_DESCRIPTION){
-                    newChannel.setLESDescription($scope.mobileTerminal.plugin.labelName);
-                }
-            }
-        };
-
-        //Channels - Remove a channel
-        $scope.removeChannel = function(channelIndex){
-            $scope.mobileTerminal.removeChannel(channelIndex);
-        };
-
         //Open history modal
         $scope.onMobileTerminalHistoryClick = function(){
             MobileTerminalHistoryModal.show($scope.mobileTerminal);
@@ -393,53 +376,72 @@ angular.module('unionvmsWeb')
             }
         };
 
+        //Channels - Add a new channel
+        $scope.addNewChannel = function(){
+            var newChannel = $scope.mobileTerminal.addNewChannel();
+            //Set LES for new channel
+            if(angular.isDefined($scope.mobileTerminal.plugin.labelName)){
+                //Set LES_DESCRIPTION if attribute is used for the channel
+                if($scope.getTerminalConfig().channelFields.LES_DESCRIPTION){
+                    newChannel.setLESDescription($scope.mobileTerminal.plugin.labelName);
+                }
+            }
+        };
+
+        //Channels - Remove a channel
+        $scope.removeChannel = function(communicationChannel){
+           $scope.mobileTerminal.removeChannel($scope.mobileTerminal.channels.indexOf(communicationChannel));
+        };
+
+        //Channels - Get help text
         var disabledMessage = locale.getString('mobileTerminal.form_inmarsatc_communication_disabledchannel_message');
         $scope.getRadioButtonHelpText = {
-            pollable: function(index) {
-                if ($scope.disableChannels.pollable(index)) {
+            pollable: function(communicationChannel) {
+                if ($scope.disableChannels.pollable(communicationChannel)) {
                     return disabledMessage;
                 }
                 return locale.getString('mobileTerminal.form_inmarsatc_communication_selectedchannel_poll_label');
             },
-            configurable: function(index) {
-                if ($scope.disableChannels.configurable(index)) {
+            configurable: function(communicationChannel) {
+                if ($scope.disableChannels.configurable(communicationChannel)) {
                     return disabledMessage;
                 }
                 return locale.getString('mobileTerminal.form_inmarsatc_communication_selectedchannel_con_label');
             },
-            defaultReporting: function(index) {
-                if ($scope.disableChannels.defaultReporting(index)) {
+            defaultReporting: function(communicationChannel) {
+                if ($scope.disableChannels.defaultReporting(communicationChannel)) {
                     return disabledMessage;
                 }
                 return locale.getString('mobileTerminal.form_inmarsatc_communication_selectedchannel_def_label');
             }
         };
 
+        //Channels - Disable channels
         $scope.disableChannels = {
-            pollable: function(index) {
+            pollable: function(communicationChannel) {
                 for (var i = 0; i < $scope.mobileTerminal.channels.length; i++) {
                     if ($scope.mobileTerminal.channels[i].capabilities.POLLABLE === true) {
-                        if (index === i) {
+                        if ($scope.mobileTerminal.channels[i] === communicationChannel) {
                             return false;
                         }
                         return true;
                     }
                 }
             },
-            configurable: function(index) {
+            configurable: function(communicationChannel) {
                 for (var i = 0; i < $scope.mobileTerminal.channels.length; i++) {
                     if ($scope.mobileTerminal.channels[i].capabilities.CONFIGURABLE === true) {
-                        if (index === i) {
+                        if ($scope.mobileTerminal.channels[i] === communicationChannel) {
                             return false;
                         }
                         return true;
                     }
                 }
             },
-            defaultReporting: function(index) {
+            defaultReporting: function(communicationChannel) {
                 for (var i = 0; i < $scope.mobileTerminal.channels.length; i++) {
                     if ($scope.mobileTerminal.channels[i].capabilities.DEFAULT_REPORTING === true) {
-                        if (index === i) {
+                        if ($scope.mobileTerminal.channels[i] === communicationChannel) {
                             return false;
                         } else {
                             return true;
