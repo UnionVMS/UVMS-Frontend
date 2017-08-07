@@ -1,4 +1,4 @@
-﻿<label ng-if="vm.currentReportIsNewestVersion">{{ 'sales.report_older_versions_label' | i18n }}</label>
+<label ng-if="vm.currentReportIsNewestVersion">{{ 'sales.report_older_versions_label' | i18n }}</label>
 <dropdown
           ng-if="vm.currentReportIsNewestVersion"
           ng-disabled="vm.reportVersions == null || vm.reportVersions.length == 0"
