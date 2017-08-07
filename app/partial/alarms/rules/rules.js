@@ -212,7 +212,6 @@ angular.module('unionvmsWeb').controller('RulesCtrl',function($scope, $log, $sta
         }
 
         //Send request
-        alertService.showInfoMessage(locale.getString('common.update_waiting_for_reponse_text'));
         ruleRestService.updateSubscription(ruleSubscriptionUpdate).then(function(updatedRule){
             alertService.showSuccessMessageWithTimeout(locale.getString('alarms.rule_subscription_update_success'));
             //Update subscription values
