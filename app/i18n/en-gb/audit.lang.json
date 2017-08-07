@@ -84,6 +84,7 @@
     "system_status_module_mobileTerminal": "Mobile terminal",
     "system_status_module_movement": "Movement",
     "system_status_module_rules": "Rules",
-    "system_status_module_asset": "Asset"
+    "system_status_module_asset": "Asset",
+    "system_status_module_sales": "Sales"
 
 }

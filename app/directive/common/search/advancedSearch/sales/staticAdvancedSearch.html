@@ -1,0 +1,73 @@
+<div>
+    <div class="col-md-12 smallerpadding">
+        <div class="row nomargin">
+            <div class="col-md-2 smallerpadding searchcriteria">
+                <input type="text" class="form-control searchText" ng-disabled="advancedSearchVisible" placeholder="{{'sales.search_placeholder_vessel_name' | i18n}}" ng-model="advancedSearchObject.vesselName" >
+            </div>
+            <div class="col-md-2 smallerpadding searchcriteria">
+                <datepicker-input model="advancedSearchObject.salesStartDate"
+                                  placeholder="{{'sales.search_placeholder_sales_start_date' | i18n}}"
+                                  ng-disabled="advancedSearchVisible"
+                                  ng-change-callback="updateSalesStartDate"
+                                  max-date="advancedSearchObject.salesEndDate">
+                </datepicker-input>
+            </div>
+            <div class="col-md-2 smallerpadding searchcriteria">
+                <datepicker-input model="advancedSearchObject.salesEndDate"
+                                  placeholder="{{'sales.search_placeholder_sales_end_date' | i18n}}"
+                                  ng-disabled="advancedSearchVisible"
+                                  ng-change-callback="updateSalesEndDate"
+                                  min-date="advancedSearchObject.salesStartDate">
+                </datepicker-input>
+            </div>
+
+            <div class="col-md-2 smallerpadding col-md-offset-4">
+                <div class="row nomargin">
+                    <div class="col-md-12 colNoPadding searchcriteria">
+                        <saved-search-dropdown type="SALES" class="dropdown simpleSearch" ng-model="savedSearches.selected" initialtext="{{'common.search_group_dropdown' | i18n}}" callback="performSavedSearch" enable-delete="true"></saved-search-dropdown>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="row nomargin">
+            <div class="col-md-1 smallerpadding searchcriteria">
+                <dropdown ng-model="advancedSearchObject.flagState" initialtext="{{'sales.advanced_search_placeholder_flag_state' | i18n}}" items="config.flagStates.items"></dropdown>
+            </div>
+            <div class="col-md-1 smallerpadding searchcriteria">
+                <dropdown ng-model="advancedSearchObject.salesCategory" initialtext="{{'sales.advanced_search_placeholder_sales_type' | i18n}}" items="config.salesCategories.items"></dropdown>
+            </div>
+            <div class="col-md-1 smallerpadding searchcriteria">
+                <dropdown ng-model="advancedSearchObject.salesLocation" initialtext="{{'sales.advanced_search_placeholder_sales_location' | i18n}}" items="config.salesLocations.items"></dropdown>
+            </div>
+            <div class="col-md-1 smallerpadding searchcriteria">
+                <dropdown ng-model="advancedSearchObject.landingPort" initialtext="{{'sales.advanced_search_placeholder_landing_port' | i18n}}" items="config.landingPorts.items"></dropdown>
+            </div>
+            <div class="col-md-4 smallerpadding searchcriteria">
+                <group-line-input initialtext="{{'sales.advanced_search_placeholder_species' | i18n}}"
+                                  items="config.species.items"
+                                  update-function="setCorrectSpecies">
+                </group-line-input>
+            </div>
+
+            <div class="col-md-1 smallerpadding col-md-offset-2">
+                <div class="row nomargin">
+                    <div class="col-md-12 colNoPadding searchcriteriadropdown">
+                        <button type="submit" class="btn btn-primary btn-sm fullWidth vmsbtn" ng-disabled="advancedSearchForm.$invalid" ng-click="performSearch()">
+                            {{'common.search' | i18n}}
+                        </button>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-1 smallerpadding">
+                <div class="row nomargin">
+                    <div class="col-md-12 colNoPadding searchcriteriadropdown">
+                        <button type="button" class="btn btn-default btn-sm fullWidth vmsbtn" ng-click="resetSearch()">
+                            {{'common.reset' | i18n}}
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

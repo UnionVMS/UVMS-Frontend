@@ -1,0 +1,61 @@
+﻿<div class="salesReport">
+    <div class="row card-header">
+        <div class="col-md-1">
+            <h3 class="label label-danger sales-report-status" ng-if="vm.salesReport.deletion">{{'sales.report_status_DELETED' | i18n}}</h3>
+            <h3 class="label label-danger sales-report-status" ng-if="!vm.salesReport.latestVersion">{{'sales.report_status_CORRECTED' | i18n}}</h3>
+        </div>
+        <div class="col-md-3"></div>
+        <div class="col-md-3">
+            <div>
+                <h3 class="textAlignCenter">
+                    <span>{{'sales.report_header_' + vm.salesReport.itemType | i18n}}</span>
+                    <span ng-if="vm.salesReport.category && vm.salesReport.category != 'FIRST_SALE'">- {{'sales.report_header_' + vm.salesReport.category | i18n}}</span>
+                </h3>
+            </div>
+        </div>
+        <div class="col-md-2">
+            <div class="actions">
+                    <sales-versions-dropdown report-versions="vm.salesReport.otherVersions"
+                                             current-report-is-newest-version="vm.salesReport.latestVersion">
+                    </sales-versions-dropdown>
+            </div>
+        </div>
+        <div class="col-md-2">
+            <div class="actions">
+                <sales-relevant-reports-dropdown
+                        reports="vm.salesReport.relatedReports">
+                </sales-relevant-reports-dropdown>
+            </div>
+        </div>
+        <div class="col-md-1">
+            <div class="actions">
+                <div class="closeIcon textAlignRight" ng-click="vm.close()">
+                    <i class="fa fa-sign-out signouticon" title="{{'common.close' | i18n}}"></i>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="row row-eq-height grayBorderBottom">
+        <div class="col-md-5ths col-xs-6 component grayBorderRight">
+            <sales-document document="vm.salesReport.document"></sales-document>
+        </div>
+        <div class="col-md-5ths col-xs-6 component grayBorderRight">
+            <sales-location location="vm.salesReport.location"></sales-location>
+        </div>
+        <div class="col-md-5ths col-xs-6 component grayBorderRight">
+            <sales-parties parties="vm.salesReport.parties"></sales-parties>
+        </div>
+        <div class="col-md-5ths col-xs-6 component grayBorderRight">
+            <sales-totals totals="vm.salesReport.totals" currency="vm.currency"></sales-totals>
+        </div>
+        <div class="col-md-5ths col-xs-6 component">
+            <sales-flux-report report="vm.salesReport.fluxReport"></sales-flux-report>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-md-12 component">
+            <sales-products products="vm.salesReport.products" currency="vm.currency" show-area="vm.salesReport.category !== 'VARIOUS_SUPPLY'"></sales-products>
+        </div>
+    </div>
+</div>

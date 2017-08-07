@@ -22,7 +22,7 @@ angular.module('unionvmsWeb').directive('currentTime', function($timeout, global
                     time = moment.utc().format('HH:mm');
 
                     if (format === 'YY/MM/DD HH:mm:ss') {
-                        date = moment.utc().format('YYYY/MM/DD');
+                        date = moment.utc().format('YY/MM/DD');
                     }
 
                 element.html(
@@ -37,8 +37,8 @@ angular.module('unionvmsWeb').directive('currentTime', function($timeout, global
             // Update time every second
             function updateTime() {
                 $timeout(function() {
-                  displayCurrentTime();
-                  updateTime();
+                    displayCurrentTime();
+                    updateTime();
                 }, 1000);
             }
 

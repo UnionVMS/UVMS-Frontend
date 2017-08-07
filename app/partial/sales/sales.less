@@ -1,0 +1,215 @@
+﻿/*.sales-component-header{
+    .grayBorderBottom();
+    margin-top: 0px;
+    margin-bottom: 0px;
+}*/
+
+.sales-top-card {
+    .card();
+    margin-top: 0px;
+    padding-top: 0px;
+}
+
+.salesReport {
+    .component {
+        margin-top: 10px;
+        margin-bottom: 10px;
+
+        h5 {
+            margin-top: 0px;
+            margin-bottom: 10px;
+            text-align: center;
+        }
+
+        .party {
+            margin: 8% 0 4% 0;
+
+            @media (max-width: @screen-md-max) {
+                .icon {
+                    display: none;
+                }
+            }
+
+            @media (min-width: 992px) {
+                .data {
+                    padding-right: 85px;
+                }
+            }
+
+            .icon {
+                float: right;
+                margin-right: 15px;
+            }
+        }
+
+        .totals {
+            font-size: 18px;
+            text-align: center;
+            margin-top: 25%;
+        }
+
+        .chart-y-axis {
+            -webkit-transform: rotate(-90deg);
+            -webkit-transform-origin: left top;
+            -ms-transform: rotate(-90deg);
+            -ms-transform-origin: left top;
+            transform: rotate(-90deg);
+            transform-origin: left top;
+            position: absolute;
+            text-align: right;
+            margin-left: -5px;
+            width: 100%;
+            margin-top: 100%;
+            font-size: smaller;
+        }
+
+        .chart {
+            float: right;
+        }
+
+        .chart-legend {
+            list-style-type: none;
+            margin-top: 10px;
+            text-align: center;
+            -webkit-padding-start: 0;
+            -moz-padding-start: 0;
+            padding-left: 0;
+            padding-top: 55%;
+        }
+
+        .chart-legend li {
+            display: inline-block;
+            white-space: nowrap;
+            position: relative;
+            margin-bottom: 4px;
+            border-radius: 5px;
+            padding: 2px 8px 2px 28px;
+            font-size: smaller;
+            cursor: default;
+        }
+
+        .chart-legend li span {
+            display: block;
+            position: absolute;
+            left: 0;
+            top: 0;
+            width: 20px;
+            height: 20px;
+            border-radius: 5px;
+        }
+    }
+}
+
+.productsTable {
+    td {
+        vertical-align: top;
+        padding-top: 10px;
+        padding-bottom: 10px;
+    }
+}
+/*
+ * 5 column layout
+ * --------------------------------------------------
+ */
+.col-xs-5ths,
+.col-sm-5ths,
+.col-md-5ths,
+.col-lg-5ths {
+    position: relative;
+    min-height: 1px;
+    padding-right: 15px;
+    padding-left: 15px;
+}
+
+.col-xs-5ths {
+    width: 20%;
+    float: left;
+}
+
+@media (min-width: 768px) {
+    .col-sm-5ths {
+        width: 20%;
+        float: left;
+    }
+}
+
+@media (min-width: 992px) {
+    .col-md-5ths {
+        width: 20%;
+        float: left;
+    }
+}
+
+@media (min-width: 1200px) {
+    .col-lg-5ths {
+        width: 20%;
+        float: left;
+    }
+}
+
+/*
+ * Row with equal height columns
+ * --------------------------------------------------
+ */
+.row-eq-height {
+    display: -webkit-box;
+    display: -webkit-flex;
+    display: -ms-flexbox;
+    display: flex;
+}
+
+
+.fa-ship-trip {
+    margin-top: -8px;
+    float: left;
+    padding-right: 5px;
+}
+
+sales-report-list {
+    tr {
+        background: none !important;
+    }
+
+    tbody {
+        border-bottom: solid 1px @searchResultsTableRowBorderColor !important;
+    }
+    tbody:nth-child(odd) {
+        background: @searchResultsTableOddRowColor !important;
+    }
+
+    .glyphicon-time {
+        margin: 7px 0 0;
+        opacity:0;
+    }
+
+    td .glyphicon-chevron-right {
+        cursor:pointer;
+    }
+
+
+    td .glyphicon-share-alt {
+        transform: matrix(1, 0, 0, -1, 0, 0);
+    }
+
+    .glyphicon-chevron-right {
+        margin: 4px 0 0;
+    }
+}
+
+.report-older-version {
+    *:not(i):not(span){
+        text-decoration: line-through;
+    }
+}
+.strike-through {
+    *:not(i):not(span){
+        text-decoration: line-through;
+    }
+}
+
+.sales-report-status {
+    font-size: 16px;
+    text-transform: uppercase;
+    display: inline-block;
+    padding: .3em .6em;
+}
