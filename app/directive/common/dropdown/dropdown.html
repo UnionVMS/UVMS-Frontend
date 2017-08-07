@@ -4,10 +4,10 @@
         <span class="caret"></span>
     </button>
     <ul uib-dropdown-menu role="menu" ng-click="dropdownMenuClick($event)" ng-keyup="dropdownMenuKeyboardEvent($event)">
-        <li ng-class="!initialtextSelectable ? 'disabled initial-text' : 'initial-text'" ng-show="initialValue" ng-click="selectVal(initialValue)">
+        <li ng-class="!initialtextSelectable ? 'disabled initial-text' : 'initial-text'" ng-show="initialValue">
             <a role="menuitem" tabindex="-1" ng-bind="initialValue.text" ng-focus="focusVal(initialValue)" id="{{inputFieldId}}-item-initialValue"></a>
         </li>
-        <li ng-class="disableItem(item) ? 'disabled' : ''" ng-repeat="item in items" role="presentation" ng-click="selectVal(item,$index)">
+        <li ng-class="disableItem(item) ? 'disabled' : ''" ng-repeat="item in items" role="presentation">
             <a role="menuitem" tabindex="-1" ng-bind="getItemLabel(item)" ng-focus="focusVal(item,$index)" id="{{inputFieldId}}-item-{{$index}}"></a>
         </li>
     </ul>
