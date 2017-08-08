@@ -117,10 +117,8 @@ copy of the GNU General Public License along with the IFDM Suite. If not, see <h
             					<td>{{message.forwardRule | dataNotAvailable}}</td>
             					<td>{{message.recipient | dataNotAvailable}}</td>
             					<td>{{message.dateFwd | confDateFormat | dataNotAvailable}}</td>
-            					<td class="status">
-                                    <span class="label" ng-class="getStatusLabelClass(message.status)">
-                                        {{getStatusLabel(message.status) | uppercase}}
-                                    </span>
+    							<td class="status">
+                                    <message-status ng-model="message" is-clickable="::isStatusClickable(message)"></message-status>
     							</td>
     							<td>
                                     <button type="button" class="btn btn-xs btn-default" title="{{'exchange.title_details' | i18n }}" ng-click="showMessageDetails(message)" ng-if="message.logData.type">

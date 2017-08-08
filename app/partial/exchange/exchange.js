@@ -230,9 +230,6 @@ angular.module('unionvmsWeb').controller('ExchangeCtrl',function($scope, $log, $
             templateUrl: 'partial/exchange/messageModal/messageModal.html',
             controller: 'MessagemodalCtrl',
             size: 'lg',
-            //windowClass: 'messageModal',
-//            backdropClass: 'alert-modal-backdrop',
-//            openedClass: 'alert-open',
             resolve: {
                 msg: function(){
                     return data;
@@ -254,43 +251,52 @@ angular.module('unionvmsWeb').controller('ExchangeCtrl',function($scope, $log, $
         $log.info("open a page... feature not implementet yet.");
     };
 
-    //Get status label for the exchange log items
-    $scope.getStatusLabel = function(status){
-        var label;
-        switch(status){
-            case 'SUCCESSFUL':
-                label = locale.getString('common.status_successful');
-                break;
-            case 'PENDING':
-                label = locale.getString('common.status_pending');
-                break;
-            case 'ERROR':
-                label = locale.getString('common.status_failed');
-                break;
-            default:
-                label = status;
+//    //Get status label for the exchange log items
+//    $scope.getStatusLabel = function(status){
+//        var label;
+//        switch(status){
+//            case 'SUCCESSFUL':
+//                label = locale.getString('common.status_successful');
+//                break;
+//            case 'PENDING':
+//                label = locale.getString('common.status_pending');
+//                break;
+//            case 'ERROR':
+//                label = locale.getString('common.status_failed');
+//                break;
+//            default:
+//                label = status;
+//        }
+//        return label;
+//    };
+//
+//    $scope.getStatusLabelClass = function(status){
+//        var cssClass;
+//        switch(status){
+//            case 'SUCCESSFUL' :
+//            case 'STARTED' :
+//            case 'ONLINE':
+//                cssClass = "label-success";
+//                break;
+//            case 'OFFLINE':
+//            case 'STOPPED':
+//            case 'ERROR' :
+//                cssClass = "label-danger";
+//                break;
+//            default:
+//            cssClass = "label-warning";
+//        }
+//        return cssClass;
+//    };
+    
+    $scope.isStatusClickable = function(msg){
+        var clickable = false;
+        var clickableStatus = ['FAILED', 'WARN', 'ERROR'];
+        if (msg.source === 'FLUX' && _.indexOf(clickableStatus, msg.status) !== -1){
+            clickable = true;
         }
-        return label;
-    };
-
-    $scope.getStatusLabelClass = function(status){
-        var cssClass;
-        switch(status){
-            case 'SUCCESSFUL' :
-            case 'STARTED' :
-            case 'ONLINE':
-                cssClass = "label-success";
-                break;
-            case 'OFFLINE':
-            case 'STOPPED':
-            case 'ERROR' :
-                cssClass = "label-danger";
-                break;
-            default:
-            cssClass = "label-warning";
-        }
-        return cssClass;
-    };
+        return clickable;
+    }
 
     //Get status label for the exchange transmission service items
     $scope.getTransmissionStatusLabel = function(status){
