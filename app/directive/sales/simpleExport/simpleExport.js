@@ -1,4 +1,4 @@
-﻿angular.module('unionvmsWeb').directive('simpleExport', function () {
+angular.module('unionvmsWeb').directive('simpleExport', function () {
     return {
         restrict: 'E',
         replace: true,
