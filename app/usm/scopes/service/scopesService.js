@@ -186,6 +186,19 @@ scopesServiceModule.factory('scopeServices', ['$resource', '$q', '$log', functio
             );
 
             return deferred.promise;
+        },
+        createNewScopeObject : function (scope) {
+            var createdObject={
+                "scopeId" : scope.scopeId,
+                "activeFrom" : scope.activeFrom ? moment.utc(scope.activeFrom).format("YYYY-MM-DDTHH:mm:ss.SSSZ") : null,
+                "activeTo" : scope.activeTo ? moment.utc(scope.activeTo).format("YYYY-MM-DDTHH:mm:ss.SSSZ") : null,
+                "dataFrom": scope.dataFrom ? moment.utc(scope.dataFrom).format("YYYY-MM-DDTHH:mm:ss.SSSZ") : null,
+                "dataTo" : scope.dataTo ? moment.utc(scope.dataTo).format("YYYY-MM-DDTHH:mm:ss.SSSZ") : null,
+                "description" : scope.description,
+                "name" : scope.name,
+                "status" : scope.status
+            };
+            return createdObject;
         }
     };
 }]);

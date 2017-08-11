@@ -786,31 +786,6 @@ usersModule.controller('editUserModalInstanceCtrl', ['$log', '$timeout', '$locat
                 $scope.showActiveToError = !(!_.isUndefined(newValue) && !_.isNull(newValue));
             }
         }, true);
-
-        //activeFrom date configuration
-        $scope.activeFromConfig =
-        {
-            id: 'activeFrom',
-            name: 'activeFrom',
-            dataModel: 'user.activeFrom',
-            defaultValue: '',
-            isDefaultValueWatched: true,
-            isDisabled: $scope.formDisabled,
-            isRequired: true,
-            page: 'userDetails'
-        };
-        // activeTo date configuration
-        $scope.activeToConfig =
-        {
-            id: 'activeTo',
-            name: 'activeTo',
-            dataModel: 'user.activeTo',
-            defaultValue: '',
-            isDefaultValueWatched: true,
-            isDisabled: $scope.formDisabled,
-            isRequired: true,
-            page: 'userDetails'
-        };
         // lockout datepicker
         $scope.lockout = {};
         $scope.openLockoutTo = function (event) {
@@ -822,12 +797,6 @@ usersModule.controller('editUserModalInstanceCtrl', ['$log', '$timeout', '$locat
         $scope.cancel = function () {
             $modalInstance.dismiss();
         };
-
-        $scope.activeFromConfig.defaultValue = user.activeFrom;
-        $scope.activeToConfig.defaultValue = user.activeTo;
-        if (!_.isUndefined($scope.user.activeFrom) && !_.isNull($scope.user.activeFrom)) {
-            $scope.minDateTo = $scope.user.activeFrom;
-        }
 
 
         // status dropdown

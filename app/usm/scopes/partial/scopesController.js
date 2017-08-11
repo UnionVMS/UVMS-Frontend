@@ -333,54 +333,8 @@ scopesModule.controller('scopesModalInstanceCtrl', ['$scope', '$modalInstance', 
             }
         );
 
-        //activeFrom date configuration
-        $scope.activeFromConfig =
-        {
-            id: 'activeFrom',
-            name: 'activeFrom',
-            dataModel: 'scope.activeFrom',
-            defaultValue: $scope.scope.activeFrom,
-            isDefaultValueWatched: true,
-            isRequired: true
-        };
-        // activeTo date configuration
-        $scope.activeToConfig =
-        {
-            id: 'activeTo',
-            name: 'activeTo',
-            dataModel: 'scope.activeTo',
-            defaultValue: $scope.scope.activeTo,
-            isDefaultValueWatched: true,
-            isRequired: true
-        };
-        //dataFrom date configuration
-        $scope.dataFromConfig =
-        {
-            id: 'dataFrom',
-            name: 'dataFrom',
-            dataModel: 'scope.dataFrom',
-            defaultValue: $scope.scope.dataFrom,
-            isDefaultValueWatched: true,
-            isRequired: false
-        };
-        // dataTo date configuration
-        $scope.dataToConfig =
-        {
-            id: 'dataTo',
-            name: 'dataTo',
-            dataModel: 'scope.dataTo',
-            defaultValue: $scope.scope.dataTo,
-            isDefaultValueWatched: true,
-            isRequired: false
-
-        };
-
         if (_.isEqual(mode, "delete")) {
             $scope.formDisabled = true;
-            $scope.activeFromConfig.isDisabled = $scope.formDisabled;
-            $scope.activeToConfig.isDisabled = $scope.formDisabled;
-            $scope.dataFromConfig.isDisabled = $scope.formDisabled;
-            $scope.dataToConfig.isDisabled = $scope.formDisabled;
         }
 
         // use this watches to check the existence of the From/To dates
@@ -395,16 +349,8 @@ scopesModule.controller('scopesModalInstanceCtrl', ['$scope', '$modalInstance', 
             }
         }, true);
 
-        // Firefox marks as invalid date the one coming from the datepicker.
-        // Try to build a javascript date from the input.
-        var trasformDate = function (date) {
-            var dateToken = date.split("-");
-            var days = dateToken[2].split(" ")[0];
-            return dateToken[0] + "-" + dateToken[1] + "-" + days;
-        };
-
         $scope.saveUpdateDelete = function (scope) {
-            scope.activeFrom = new Date(trasformDate(scope.activeFrom));
+            /*scope.activeFrom = new Date(trasformDate(scope.activeFrom));
             scope.activeTo = new Date(trasformDate(scope.activeTo));
             scope.dataFrom = !_.isNull(scope.dataFrom) && !_.isUndefined(scope.dataFrom) ? new Date(trasformDate(scope.dataFrom)) : null;
             scope.dataTo = !_.isNull(scope.dataTo) && !_.isUndefined(scope.dataTo) ? new Date(trasformDate(scope.dataTo)) : null;
@@ -412,12 +358,16 @@ scopesModule.controller('scopesModalInstanceCtrl', ['$scope', '$modalInstance', 
             scope.dataFrom = scope.dataFrom ? moment.utc(scope.dataFrom).format("YYYY-MM-DDTHH:mm:ss.SSSZ") : null;
             scope.dataTo = scope.dataTo ? moment.utc(scope.dataTo).format("YYYY-MM-DDTHH:mm:ss.SSSZ") : null;
             scope.activeFrom = scope.activeFrom ? moment.utc(scope.activeFrom).format("YYYY-MM-DDTHH:mm:ss.SSSZ") : null;
-            scope.activeTo = scope.activeTo ? moment.utc(scope.activeTo).format("YYYY-MM-DDTHH:mm:ss.SSSZ") : null;
+            scope.activeTo = scope.activeTo ? moment.utc(scope.activeTo).format("YYYY-MM-DDTHH:mm:ss.SSSZ") : null;*/
+
             if (mode === 'new') {
-                // remove unnecessary attributes total, result when creating a scope
-                delete scope.total;
-                delete scope.results;
-                scopeServices.createScope(scope).then(
+                /* As a workaround for the datepickerinput directive not properly handling model data containing UTC dates
+                 * we create a copy if the scope object and send it to the backend. this avoid the ugly rendering of a UTC date
+                 * in the dates fields when the rest service returns the saved object
+                 * TODO: fix the datepickerinput directive
+                 */
+                var objectToSubmit = scopeServices.createNewScopeObject(scope);
+                scopeServices.createScope(objectToSubmit).then(
                     function (response) {
                         $scope.newScope = response.newScope;
                         $scope.scopeCreated = true;
@@ -441,8 +391,9 @@ scopesModule.controller('scopesModalInstanceCtrl', ['$scope', '$modalInstance', 
                     if (_.isEqual(scope.dataTo, "Invalid date")) {
                         scope.dataTo = null;
                     }
-                    scope.updateDatasets = false;
-                    scopeServices.updateScope(scope).then(
+                    var objectToSubmit = scopeServices.createNewScopeObject(scope);
+                    objectToSubmit.updateDatasets = false;
+                    scopeServices.updateScope(objectToSubmit).then(
                         function (response) {
                             $scope.updatedScope = response.updatedScope;
                             $scope.scopeCreated = true;
