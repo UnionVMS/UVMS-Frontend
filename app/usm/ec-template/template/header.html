@@ -68,7 +68,7 @@ copy of the GNU General Public License along with the IFDM Suite. If not, see <h
                                             <a ng-click="switchContext()">Switch Context</a>
                                         </li>
                                         <li class="divider" ng-show="contexts.length > 1"></li>
-                                        <li ng-controller="ModifyPassword">
+                                        <li ng-controller="ModifyPassword" ng-if="!ldapEnabled">
                                             <a ng-click="modifyMyPassword()">Change Password</a>
                                         </li>
                                         <li ng-controller="ModifyContactDetails">

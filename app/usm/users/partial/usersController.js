@@ -73,7 +73,7 @@ usersModule.controller('usersListController', ['$scope', '$filter', '$http', '$l
             $scope.nation = {};
             // transform to dropdown input
             var orgNationsDropDown = [];
-            angular.forEach(orgNations, function(item){
+            angular.forEach(orgNations, function (item) {
                 var nation = {};
                 nation.label = item;
                 nation.value = item;
@@ -85,7 +85,7 @@ usersModule.controller('usersListController', ['$scope', '$filter', '$http', '$l
             $scope.organisation = {};
             // transform to dropdown input
             var organisationsDropDown = [];
-            angular.forEach(orgNames, function(item){
+            angular.forEach(orgNames, function (item) {
                 var organisation = {};
                 organisation.label = item.parentOrgName;
                 organisation.value = item.parentOrgName;
@@ -308,11 +308,21 @@ usersModule.controller('usersListController', ['$scope', '$filter', '$http', '$l
     }]);
 
 usersModule.controller('userDetailsCtlr', ['$log', '$scope', '$modal', '$stateParams', 'refData',
-    'userDetailsService', 'userContextsServices', 'userService', 'userPreferencesService',
-    function ($log, $scope, $modal, $stateParams, refData, userDetailsService, userContextsServices, userService, userPreferencesService) {
+    'userDetailsService', 'userContextsServices', 'userService', 'userPreferencesService', 'policiesService',
+    function ($log, $scope, $modal, $stateParams, refData, userDetailsService, userContextsServices, userService, userPreferencesService, policiesService) {
         $scope.loadingMessage = "Loading...";
         $scope.emptyResultMessage = "No results found.";
         $scope.userName = $stateParams.userName;
+        var criteria = {
+            name: 'ldap.enabled',
+            subject: 'Authentication'
+        };
+        policiesService.getPoliciesList(criteria).then(
+            function (response) {
+                $scope.ldapEnabled = _.isEqual(response.policies[0].value, 'true');
+            }
+        );
+
 
         $scope.checkAccess = function (feature) {
             return userService.isAllowed(feature, "USM", true);
@@ -420,8 +430,8 @@ usersModule.controller('userDetailsCtlr', ['$log', '$scope', '$modal', '$statePa
     }]);
 
 
-usersModule.controller('manageUserCtlr', ['$log', '$scope', '$modal', '$stateParams', 'userDetailsService',
-    function ($log, $scope, $modal, $stateParams, userDetailsService) {
+usersModule.controller('manageUserCtlr', ['$log', '$scope', '$modal', '$stateParams', 'userDetailsService', 'policyValues',
+    function ($log, $scope, $modal, $stateParams, userDetailsService, policyValues) {
 
         $scope.duplicateUserProfile = function (user) {
             var modalInstance = $modal.open({
@@ -465,6 +475,9 @@ usersModule.controller('manageUserCtlr', ['$log', '$scope', '$modal', '$statePar
                             copyUser.activeFrom =  moment(copyUser.activeFrom).format('YYYY-MM-DD');
                         }
                         return copyUser;
+                    },
+                    ldapEnabledPolicy: function () {
+                        return policyValues.getPolicyValue();
                     }
                 }
             });
@@ -636,6 +649,18 @@ usersModule.controller('setUserPasswordModalInstanceCtrl', ['$log', '$timeout', 
             $modalInstance.dismiss();
         };
 
+        // Transformation to submit object
+        var passwordSubmitObject = function (password) {
+            var objectToSubmit = user;
+            angular.copy(user);
+            objectToSubmit.password = password;
+
+            return {
+                "userName": objectToSubmit.userName,
+                "newPassword": objectToSubmit.password
+            };
+        };
+
         $scope.saveUserPassword = function (password, password2) {
 
 
@@ -662,18 +687,6 @@ usersModule.controller('setUserPasswordModalInstanceCtrl', ['$log', '$timeout', 
             );
         };
 
-
-        // Transformation to submit object
-        var passwordSubmitObject = function (password) {
-            var objectToSubmit = user;
-            angular.copy(user);
-            objectToSubmit.password = password;
-
-            return {
-                "userName": objectToSubmit.userName,
-                "newPassword": objectToSubmit.password
-            };
-        };
 
     }]);
 
@@ -717,8 +730,8 @@ usersModule.controller('setUserPasswordCtlr', ['$log', '$scope', '$modal', '$sta
 
 
 usersModule.controller('editUserModalInstanceCtrl', ['$log', '$timeout', '$location', '$scope', '$modalInstance', '$stateParams', 'refData',
-    'userDetailsService', 'organisationsService', 'accountService', 'user',
-    function ($log, $timeout, $location, $scope, $modalInstance, $stateParams, refData, userDetailsService, organisationsService, accountService, user) {
+    'userDetailsService', 'organisationsService', 'accountService', 'user', 'ldapEnabledPolicy',
+    function ($log, $timeout, $location, $scope, $modalInstance, $stateParams, refData, userDetailsService, organisationsService, accountService, user, ldapEnabledPolicy) {
         $scope.formDisabled = true;
         $scope.editForm = true;
         $scope.showSubmit = false;
@@ -740,7 +753,7 @@ usersModule.controller('editUserModalInstanceCtrl', ['$log', '$timeout', '$locat
             }
         ).then(
             function (response) {
-                if (!_.isNull($scope.user.organisation.parent) && !_.isUndefined($scope.user.organisation.parent) && !_.isEqual($scope.user.organisation.parent, "null") ) {
+                if (!_.isNull($scope.user.organisation.parent) && !_.isUndefined($scope.user.organisation.parent) && !_.isEqual($scope.user.organisation.parent, "null")) {
                     $scope.user.organisation_parent = $scope.user.organisation.parent + ' / ' + $scope.user.organisation.name;
                 } else {
                     $scope.user.organisation_parent = $scope.user.organisation.name;
@@ -762,6 +775,17 @@ usersModule.controller('editUserModalInstanceCtrl', ['$log', '$timeout', '$locat
                 }
             });
 
+        // use this watches to check the existence of the From/To dates
+        $scope.$watch('user.activeFrom', function (newValue, oldValue) {
+            if (!_.isNull(oldValue) || !_.isNull(newValue)) {
+                $scope.showActiveFromError = !(!_.isUndefined(newValue) && !_.isNull(newValue));
+            }
+        }, true);
+        $scope.$watch('user.activeTo', function (newValue, oldValue) {
+            if (!_.isNull(oldValue) || !_.isNull(newValue)) {
+                $scope.showActiveToError = !(!_.isUndefined(newValue) && !_.isNull(newValue));
+            }
+        }, true);
 
         //activeFrom date configuration
         $scope.activeFromConfig =
@@ -825,6 +849,7 @@ usersModule.controller('editUserModalInstanceCtrl', ['$log', '$timeout', '$locat
         };
 
         $scope.changeEditForm = function () {
+            $scope.ldapEnabled = _.isEqual(ldapEnabledPolicy[0].value, 'true');
             $scope.formDisabled = !$scope.formDisabled;
             $scope.showSubmit = !$scope.showSubmit;
             $scope.showEdit = !$scope.showEdit;

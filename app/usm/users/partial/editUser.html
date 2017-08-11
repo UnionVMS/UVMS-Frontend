@@ -63,7 +63,7 @@ copy of the GNU General Public License along with the IFDM Suite. If not, see <h
                             class="fa fa-asterisk mandatory"></sup></label>
 
                         <div class="col-md-3">
-                            <input type="text" class="form-control" id="firstName" name="firstName" ng-disabled="formDisabled"
+                            <input type="text" class="form-control" id="firstName" name="firstName" ng-disabled="formDisabled || ldapEnabled"
                                    ng-model="user.person.firstName" required>
 
                             <div class="error" ng-show="editUserForm.firstName.$dirty">
@@ -100,7 +100,7 @@ copy of the GNU General Public License along with the IFDM Suite. If not, see <h
                             class="fa fa-asterisk mandatory"></sup></label>
 
                         <div class="col-sm-3">
-                            <input type="text" class="form-control" id="lastName" name="lastName" ng-disabled="formDisabled"
+                            <input type="text" class="form-control" id="lastName" name="lastName" ng-disabled="formDisabled || ldapEnabled"
                                    ng-model="user.person.lastName" required>
 
                             <div class="error" ng-show="editUserForm.lastName.$dirty">
@@ -120,14 +120,12 @@ copy of the GNU General Public License along with the IFDM Suite. If not, see <h
                                 <span class="text-danger small" ng-show="activeFormRequiredAlert">Active From date is required</span>
                             </div>
                             -->
-                            <datepicker-input name="activeFrom"
-                                              model="user.activeFrom"
+                            <datepicker-input model="user.activeFrom"
                                               ng-required="true"
-                                              ng-disabled="formDisabled"
-                                              input-field-id="edit-user-active-from-date-picker">
+                                              ng-disabled="formDisabled">
                             </datepicker-input>
-                            <div class="error" ng-show="editUserForm.activeFrom.$dirty">
-                                <span class="text-danger small" ng-show="editUserForm.activeFrom.$error.required">
+                            <div>
+                                <span class="text-danger small" ng-show="showActiveFromError">
                                     Active From date is required
                                 </span>
                             </div>
@@ -142,8 +140,11 @@ copy of the GNU General Public License along with the IFDM Suite. If not, see <h
                         </label>
 
                         <div class="col-md-3">
-                            <input type="text" class="form-control" id="phoneNumber" name="phoneNumber" ng-disabled="formDisabled"
-                                   ng-model="user.person.phoneNumber">
+                            <input type="text" class="form-control" id="phoneNumber" name="phoneNumber" ng-disabled="formDisabled || ldapEnabled"
+                                   ng-model="user.person.phoneNumber" ng-pattern="/^\+{0,1}[0-9 ]+$/">
+                            <small class="text-danger" ng-show="editUserForm.phoneNumber.$invalid">
+                                    Not a valid phone number
+                            </small>
                         </div>
                         <label class="col-md-2 ">{{ 'users.activeTo' | translate }}
                             <sup class="fa fa-asterisk mandatory"></sup>
@@ -156,14 +157,12 @@ copy of the GNU General Public License along with the IFDM Suite. If not, see <h
                                 <span class="text-danger small" ng-show="activeToRequiredAlert">Active From date is required</span>
                             </div>
                             -->
-                            <datepicker-input name="activeTo"
-                                              model="user.activeTo"
+                            <datepicker-input model="user.activeTo"
                                               ng-required="true"
-                                              ng-disabled="formDisabled"
-                                              input-field-id="edit-user-active-to-date-picker">
+                                              ng-disabled="formDisabled">
                             </datepicker-input>
-                            <div class="error" ng-show="editUserForm.activeTo.$dirty">
-                            <span class="text-danger small" ng-show="editUserForm.activeTo.$error.required">
+                            <div>
+                                <span class="text-danger small" ng-show="showActiveToError">
                                 Active To date is required
                             </span>
                             </div>
@@ -178,14 +177,17 @@ copy of the GNU General Public License along with the IFDM Suite. If not, see <h
                         <label for="mobileNumber" class="col-md-2 ">{{ 'users.mobileNumber' | translate }}</label>
 
                         <div class="col-md-3">
-                            <input type="text" class="form-control" id="mobileNumber" ng-disabled="formDisabled"
-                                   ng-model="user.person.mobileNumber">
+                            <input type="text" class="form-control" id="mobileNumber" name="mobileNumber" ng-disabled="formDisabled || ldapEnabled"
+                                   ng-model="user.person.mobileNumber" ng-pattern="/^\+{0,1}[0-9 ]+$/">
+                            <small class="text-danger" ng-show="editUserForm.mobileNumber.$invalid">
+                                    Not a valid mobile number
+                            </small>
                         </div>
 
                         <label class="col-md-2 ">Lockout To</label>
 
                         <div class="col-md-3">
-                            <datepicker-input model="user.lockoutTo" ng-disabled="formDisabled" input-field-id="edit-user-lockout-to-date"></datepicker-input>
+                            <datepicker-input model="user.lockoutTo" ng-disabled="formDisabled"></datepicker-input>
                         </div>
                     </div>
                 </div>
@@ -197,8 +199,11 @@ copy of the GNU General Public License along with the IFDM Suite. If not, see <h
                         <label for="faxNumber" class="col-md-2 ">{{ 'users.faxNumber' | translate }}</label>
 
                         <div class="col-md-3">
-                            <input type="text" class="form-control" id="faxNumber" ng-disabled="formDisabled"
-                                   ng-model="user.person.faxNumber">
+                            <input type="text" class="form-control" id="faxNumber" name="faxNumber" ng-disabled="formDisabled || ldapEnabled"
+                                   ng-model="user.person.faxNumber" ng-pattern="/^\+{0,1}[0-9 ]+$/">
+                            <small class="text-danger" ng-show="editUserForm.faxNumber.$invalid">
+                                    Not a valid fax number
+                            </small>
                         </div>
 
                         <!-- lockOutReason -->
@@ -220,7 +225,7 @@ copy of the GNU General Public License along with the IFDM Suite. If not, see <h
 
                         <div class="col-md-9">
                             <div class="input-group">
-                                <input type="email" name="email" id="email" class="form-control" ng-disabled="formDisabled"
+                                <input type="email" name="email" id="email" class="form-control" ng-disabled="formDisabled || ldapEnabled"
                                        ng-model="user.person.email" required>
                                 <span class="input-group-addon"><span class="fa fa-envelope"></span></span>
                             </div>
@@ -243,7 +248,10 @@ copy of the GNU General Public License along with the IFDM Suite. If not, see <h
                         <label for="comments" class="col-md-2">{{ 'users.notes' | translate }}</label>
 
                         <div class="col-md-9">
-                            <textarea class="form-control" id="comments" rows="3" ng-disabled="formDisabled" ng-model="user.notes"></textarea>
+                            <textarea class="form-control" id="comments" name="comments" rows="3" ng-disabled="formDisabled" ng-model="user.notes"  ng-maxlength="512"></textarea>
+                            <small class="text-danger" ng-show="editUserForm.comments.$invalid">
+                                    This field must have maximum 512 characters
+                            </small>
                         </div>
                     </div>
                 </div>
@@ -258,7 +266,7 @@ copy of the GNU General Public License along with the IFDM Suite. If not, see <h
                             Edit
                         </button>
                         <button ng-show="showSubmit && !userUpdated" ng-click="changeEditForm()" type="submit" class="btn btn-primary btn-sm"
-                                ng-disabled="editUserForm.$invalid">
+                                ng-disabled="editUserForm.$invalid || showActiveFromError || showActiveToError">
                             Save
                         </button>
                         <button type="button" class="btn btn-success btn-sm" ng-show="userUpdated" ng-disabled="true">

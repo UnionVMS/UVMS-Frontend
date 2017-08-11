@@ -25,7 +25,7 @@ angular.module('users', [
 angular.module('users').config(['$urlRouterProvider', '$stateProvider', 'ACCESS', 'policyValuesProvider',
     function ($urlRouterProvider, $stateProvider, ACCESS, policyValues) {
         policyValues.setPolicyName("ldap.enabled");
-        policyValues.setPolicySubject("Administration");
+        policyValues.setPolicySubject("Authentication");
 
         var currentContextPromise = function (userService) {
             return userService.findSelectedContext();

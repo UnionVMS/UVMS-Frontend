@@ -34,8 +34,7 @@ accountModule.controller('newUserController', ['$scope', '$modal', 'accountServi
                         return angular.copy(newUser);
                     },
                     ldapEnabledPolicy: function(){
-                        var ldapEnabledPolicy = policyValues.getPolicyValue();
-                        return ldapEnabledPolicy;
+                        return policyValues.getPolicyValue();
                     }
                 }
             });
@@ -63,6 +62,8 @@ accountModule.controller('userModalInstanceCtrl', ['$scope', '$modalInstance', '
         $scope.formDisabled = false;
         //$scope.confirmCheckBox = true;
         //$scope.showConfirmation = false;
+        var today = new Date();
+        var activeFrom = today.getFullYear() + "-" + (today.getMonth() + 1) + "-" + today.getDate();
         $scope.minDateTo = moment().format('YYYY-MM-DD');
         $scope.user = {
             activeTo: refData.activeDateTo,
@@ -70,11 +71,7 @@ accountModule.controller('userModalInstanceCtrl', ['$scope', '$modalInstance', '
         };
 
         $scope.changeStatus = function (status) {
-            if (status !== 'E') {
-                $scope.mandatoryNotes = true;
-            } else {
-                $scope.mandatoryNotes = false;
-            }
+            $scope.mandatoryNotes = status !== 'E';
         };
 
         // organisation dropdown
@@ -126,11 +123,23 @@ accountModule.controller('userModalInstanceCtrl', ['$scope', '$modalInstance', '
 	        );
         };
 
+        // Firefox marks as invalid date the one coming from the datepicker.
+        // Try to build a javascript date from the input.
+        var trasformDate = function(date) {
+            var dateToken = date.split("-");
+            var days = dateToken[2].split(" ")[0];
+            return dateToken[0] + "-" + dateToken[1] + "-" + days;
+        };
+
         $scope.save = function (user) {
             //if ($scope.showConfirmation) {
                 // remove the parent name
-            var userCreated=accountService.createNewObject(user);
-               $log.log(user);
+            var copyUser = angular.copy(user);
+            copyUser.activeFrom = new Date(trasformDate(copyUser.activeFrom));
+            copyUser.activeTo = new Date(trasformDate(copyUser.activeTo));
+            $log.log(copyUser.activeFrom);
+            var userCreated=accountService.createNewObject(copyUser);
+               $log.log(userCreated);
                 $scope.formDisabled = true;
                 accountService.saveUser(userCreated).then(
                     function (response) {
@@ -155,8 +164,17 @@ accountModule.controller('userModalInstanceCtrl', ['$scope', '$modalInstance', '
             //}
         };
 
-
-
+        // use this watches to check the existence of the From/To dates
+        $scope.$watch('user.activeFrom', function (newValue, oldValue) {
+            if (!_.isNull(oldValue) || !_.isNull(newValue)) {
+                $scope.showActiveFromError = !(!_.isUndefined(newValue) && !_.isNull(newValue));
+            }
+        }, true);
+        $scope.$watch('user.activeTo', function (newValue, oldValue) {
+            if (!_.isNull(oldValue) || !_.isNull(newValue)) {
+                $scope.showActiveToError = !(!_.isUndefined(newValue) && !_.isNull(newValue));
+            }
+        }, true);
 
         $scope.cancel = function () {
             $modalInstance.dismiss();
