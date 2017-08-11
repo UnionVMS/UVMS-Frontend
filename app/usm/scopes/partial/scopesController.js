@@ -12,10 +12,10 @@ copy of the GNU General Public License along with the IFDM Suite. If not, see <h
 var scopesModule = angular.module('scopes');
 
 scopesModule.controller('scopesListCtrl', ['$log', '$scope', '$stateParams', '$state', 'refData', 'getApplications', 'scopeServices', 'userService', 'applicationNames',
-    function ($log, $scope, $stateParams, $state, refData, getApplications, scopeServices, userService,applicationNames) {
+    function ($log, $scope, $stateParams, $state, refData, getApplications, scopeServices, userService, applicationNames) {
         $scope.criteria = {};
-	    $scope.checkAccess = function(feature) {
-	    	return userService.isAllowed(feature,"USM",true);
+        $scope.checkAccess = function (feature) {
+            return userService.isAllowed(feature, "USM", true);
 	    };
 
         $scope.sort = {
@@ -31,13 +31,27 @@ scopesModule.controller('scopesListCtrl', ['$log', '$scope', '$stateParams', '$s
         $scope.statusList = refData.statusesSearchDropDown;
         // applications...
         var applicationsDropDown = [];
-        angular.forEach(applicationNames, function(item){
+        angular.forEach(applicationNames, function (item) {
             var application = {};
             application.label = item;
             application.value = item;
             applicationsDropDown.push(application);
         });
         $scope.applicationsList = applicationsDropDown;
+
+        // change url parameters
+        var changeUrlParams = function () {
+            $state.transitionTo($state.current, {
+                    page: $scope.paginationConfig.currentPage,
+                    sortColumn: $scope.sort.sortColumn,
+                    sortDirection: $scope.sort.sortDirection,
+                    name: $scope.criteria.name,
+                    application: $scope.criteria.application,
+                    status: $scope.criteria.status,
+                    scopeId: $state.params.scopeId
+                },
+                {notify: false});
+        };
 
         // this method is executed by the pagination directive whenever the current page is changed
         // (also true for the initial loading).
@@ -81,7 +95,7 @@ scopesModule.controller('scopesListCtrl', ['$log', '$scope', '$stateParams', '$s
 
         $scope.searchScope = function (criteria) {
             // replace null with empty string because null breaks the stateParam application
-            if(_.isNull(criteria.application)){
+            if (_.isNull(criteria.application)) {
                 $scope.criteria.application = "";
             }
             $scope.paginationConfig.currentPage = 0;
@@ -140,19 +154,6 @@ scopesModule.controller('scopesListCtrl', ['$log', '$scope', '$stateParams', '$s
             return 'fa-sort';
         };
 
-        // change url parameters
-        var changeUrlParams = function () {
-            $state.transitionTo($state.current, {
-                    page: $scope.paginationConfig.currentPage,
-                    sortColumn: $scope.sort.sortColumn,
-                    sortDirection: $scope.sort.sortDirection,
-                    name: $scope.criteria.name,
-                    application: $scope.criteria.application,
-                    status: $scope.criteria.status,
-                    scopeId: $state.params.scopeId
-                },
-                {notify: false});
-        };
 
         $scope.resetForm = function () {
             $scope.sort.sortColumn = 'name';
@@ -176,8 +177,8 @@ scopesModule.controller('scopesListCtrl', ['$log', '$scope', '$stateParams', '$s
 
 scopesModule.controller('scopeDetailsCtrl', ['$log', '$scope', '$stateParams', 'scopeServices', 'userService',
     function ($log, $scope, $stateParams, scopeServices, userService) {
-	    $scope.checkAccess = function(feature) {
-	    	return userService.isAllowed(feature,"USM",true);
+        $scope.checkAccess = function (feature) {
+            return userService.isAllowed(feature, "USM", true);
 	    };
 
         $scope.emptyResultMessage = "No datasets found. Please try to search again.";
@@ -239,11 +240,11 @@ scopesModule.controller('scopeDetailsCtrl', ['$log', '$scope', '$stateParams', '
         };
     }]);
 
-scopesModule.controller('manageScopeCtrl', ['$log', '$scope', '$modal', '$stateParams', 'userService','scopeServices',
+scopesModule.controller('manageScopeCtrl', ['$log', '$scope', '$modal', '$stateParams', 'userService', 'scopeServices',
     function ($log, $scope, $modal, $stateParams, userService, scopeServices) {
 
-	    $scope.checkAccess = function(feature) {
-	    	return userService.isAllowed(feature,"USM",true);
+        $scope.checkAccess = function (feature) {
+            return userService.isAllowed(feature, "USM", true);
 	    };
 
         $scope.manageScope = function (mode, scope) {
@@ -259,7 +260,7 @@ scopesModule.controller('manageScopeCtrl', ['$log', '$scope', '$modal', '$stateP
                     },
                     scopeItem: function () {
                         return scopeServices.getScopeDetails(scope.scopeId).then(
-                            function(response) {
+                            function (response) {
                                 return response.scopeDetails;
                             }
                         );
@@ -296,8 +297,8 @@ scopesModule.controller('manageScopeCtrl', ['$log', '$scope', '$modal', '$stateP
     }]);
 
 scopesModule.controller('scopesModalInstanceCtrl', ['$scope', '$modalInstance', '$log', '$timeout', '$location', 'refData', 'getApplications',
-    'scopeServices', 'mode', 'scopeItem', '$stateParams',
-    function ($scope, $modalInstance, $log, $timeout, $location, refData, getApplications, scopeServices, mode, scopeItem, $stateParams) {
+    'scopeServices', 'mode', 'scopeItem',
+    function ($scope, $modalInstance, $log, $timeout, $location, refData, getApplications, scopeServices, mode, scopeItem) {
         var confirmCreate = false;
         $scope.mode = mode;
         $scope.actionMessage = "";
@@ -307,13 +308,19 @@ scopesModule.controller('scopesModalInstanceCtrl', ['$scope', '$modalInstance', 
         $scope.showConfirmation = false;
         $scope.formDisabled = false;
 
-        if (!_.isEmpty(scopeItem)) {
-            $scope.scope = scopeItem;
-        } else {
-            $scope.scope = {status: 'E'};
-        }
         // status dropdown
         $scope.statusList = refData.statusesEnDis;
+
+        if (mode === 'new') {
+            $scope.scope = {
+                status: $scope.statusList[0]
+            };
+        } else {
+        if (!_.isEmpty(scopeItem)) {
+            $scope.scope = scopeItem;
+        }
+        }
+
 
         // application dropdown
         getApplications.get().then(
@@ -376,13 +383,36 @@ scopesModule.controller('scopesModalInstanceCtrl', ['$scope', '$modalInstance', 
             $scope.dataToConfig.isDisabled = $scope.formDisabled;
         }
 
+        // use this watches to check the existence of the From/To dates
+        $scope.$watch('scope.activeFrom', function (newValue, oldValue) {
+            if (!_.isUndefined(oldValue) || !_.isUndefined(newValue)) {
+                $scope.showActiveFromError = !(!_.isUndefined(newValue) && !_.isNull(newValue));
+            }
+        }, true);
+        $scope.$watch('scope.activeTo', function (newValue, oldValue) {
+            if (!_.isUndefined(oldValue) || !_.isUndefined(newValue)) {
+                $scope.showActiveToError = !(!_.isUndefined(newValue) && !_.isNull(newValue));
+            }
+        }, true);
+
+        // Firefox marks as invalid date the one coming from the datepicker.
+        // Try to build a javascript date from the input.
+        var trasformDate = function (date) {
+            var dateToken = date.split("-");
+            var days = dateToken[2].split(" ")[0];
+            return dateToken[0] + "-" + dateToken[1] + "-" + days;
+        };
+
         $scope.saveUpdateDelete = function (scope) {
+            scope.activeFrom = new Date(trasformDate(scope.activeFrom));
+            scope.activeTo = new Date(trasformDate(scope.activeTo));
+            scope.dataFrom = !_.isNull(scope.dataFrom) && !_.isUndefined(scope.dataFrom) ? new Date(trasformDate(scope.dataFrom)) : null;
+            scope.dataTo = !_.isNull(scope.dataTo) && !_.isUndefined(scope.dataTo) ? new Date(trasformDate(scope.dataTo)) : null;
             //Format dates
             scope.dataFrom = scope.dataFrom ? moment.utc(scope.dataFrom).format("YYYY-MM-DDTHH:mm:ss.SSSZ") : null;
             scope.dataTo = scope.dataTo ? moment.utc(scope.dataTo).format("YYYY-MM-DDTHH:mm:ss.SSSZ") : null;
             scope.activeFrom = scope.activeFrom ? moment.utc(scope.activeFrom).format("YYYY-MM-DDTHH:mm:ss.SSSZ") : null;
             scope.activeTo = scope.activeTo ? moment.utc(scope.activeTo).format("YYYY-MM-DDTHH:mm:ss.SSSZ") : null;
-            $log.log(scope);
             if (mode === 'new') {
                 // remove unnecessary attributes total, result when creating a scope
                 delete scope.total;
