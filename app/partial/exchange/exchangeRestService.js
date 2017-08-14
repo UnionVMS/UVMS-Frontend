@@ -62,6 +62,9 @@ angular.module('unionvmsWeb')
             },
             getExchangeConfig : function(){
                 return $resource('/exchange/rest/config');
+            },
+            getValidationResults: function(){
+                return $resource('/mock/exchange/validation/:guid');
             }
         };
     })
@@ -328,6 +331,20 @@ angular.module('unionvmsWeb')
         );
         return deferred.promise;
     };
+    
+    var getValidationResults = function(guid){
+        var deferred = $q.defer();
+        exchangeRestFactory.getValidationResults().get({guid: guid}, function(response) {
+            if (String(response.code) !== "200") {
+                deferred.reject("Invalid response");
+            }
+            deferred.resolve(response.data);
+        }, function(error) {
+            deferred.reject("Failed to get Exchange message");
+        });
+
+        return deferred.promise;
+    };
 
 
     return {
@@ -341,6 +358,7 @@ angular.module('unionvmsWeb')
         getSendingQueue : getSendingQueue,
         getExchangeMessage: getExchangeMessage,
         getExchangeConfig: getExchangeConfig,
-        getRawExchangeMessage: getRawExchangeMessage
+        getRawExchangeMessage: getRawExchangeMessage,
+        getValidationResults: getValidationResults
     };
 });

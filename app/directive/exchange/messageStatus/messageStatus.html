@@ -1,5 +1,5 @@
 <div class="message-status">
-	<span class="label" ng-class="::getStatusLabelClass(ngModel.status)">
-	    {{getStatusLabel(ngModel.status) | uppercase}}
+	<span class="label" ng-class="::getLabelClass(ngModel.status)" ng-click="openModal()">
+	    {{getLabelText(ngModel.status) | uppercase}}
 	</span>
 </div>

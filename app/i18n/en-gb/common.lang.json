@@ -95,6 +95,7 @@
     "show_on_map" : "Show on map",
     "status" : "Status",
     "status_upper_case" : "STATUS",
+    "status_error": "Error",
     "status_failed": "Failed",
     "status_pending": "Pending",
     "status_successful": "Successful",

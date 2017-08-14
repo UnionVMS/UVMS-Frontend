@@ -9,7 +9,7 @@ the hope that it will be useful, but WITHOUT ANY WARRANTY; without even the impl
 FITNESS FOR A PARTICULAR PURPOSE.  See the GNU General Public License for more details. You should have received a
 copy of the GNU General Public License along with the IFDM Suite. If not, see <http://www.gnu.org/licenses/>.
 */
-angular.module('unionvmsWeb').directive('messageStatus', function(locale) {
+angular.module('unionvmsWeb').directive('messageStatus', function(locale, $modal, exchangeRestService) {
 	return {
 		restrict: 'E',
 		replace: true,
@@ -19,7 +19,22 @@ angular.module('unionvmsWeb').directive('messageStatus', function(locale) {
 		},
 		templateUrl: 'directive/exchange/messageStatus/messageStatus.html',
 		link: function(scope, element, attrs, fn) {
-		    scope.getStatusLabel = function(status){
+		    scope.openModal = function(){
+		        if (angular.isDefined(scope.ngModel.logData) && scope.isClickable === true){
+		            var modalInstance = $modal.open({
+		               templateUrl: 'partial/exchange/validationResultsModal/validationResultsModal.html',
+		               controller: 'ValidationresultsmodalCtrl',
+		               size: 'lg',
+		               resolve: {
+		                   msgGuid: function(){
+		                       return scope.ngModel.logData.guid;
+		                   }
+		               }
+		            });
+		        }
+		    };
+		    
+		    scope.getLabelText = function(status){
 		        var label = locale.getString('common.status_' + status.toLowerCase());
 		        if (label === "%%KEY_NOT_FOUND%%"){
 		            label = status;
@@ -27,17 +42,13 @@ angular.module('unionvmsWeb').directive('messageStatus', function(locale) {
                 return label;
 		    };
 
-		    scope.getStatusLabelClass = function(status){
+		    scope.getLabelClass = function(status){
 		        var cssClass;
 		        switch(status){
 		            case 'SUCCESSFUL' :
-		            case 'STARTED' :
-		            case 'ONLINE':
 		            case 'OK':
 		                cssClass = "label-success";
 		                break;
-		            case 'OFFLINE':
-		            case 'STOPPED':
 		            case 'ERROR' :
 		            case 'FAILED' :
 		                cssClass = "label-danger";
@@ -52,7 +63,6 @@ angular.module('unionvmsWeb').directive('messageStatus', function(locale) {
 		        
 		        return cssClass;
 		    };
-
 		}
 	};
 });
