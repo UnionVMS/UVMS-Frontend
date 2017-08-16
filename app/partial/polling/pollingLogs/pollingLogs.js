@@ -91,11 +91,9 @@ angular.module('unionvmsWeb').controller('pollingLogsCtrl',function($scope, $sta
     $scope.getStatusLabelClass = function(status){
         switch(status){
             case 'SUCCESSFUL' :
-                return 'label-success';
+                return 'status-label-success';
             case 'FAILED' :
-                return 'label-danger';
-            default:
-                return 'label-warning';
+                return 'status-label-danger';
         }
     };
 
