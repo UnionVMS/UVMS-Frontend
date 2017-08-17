@@ -36,15 +36,38 @@ copy of the GNU General Public License along with the IFDM Suite. If not, see <h
                 }
             }
         }
+
+        .history-row {
+            display: block;
+            margin-top: 3px;
+
+            &:first-of-type {
+                margin-top: 0;
+            }
+        }
+
+        .status-label {
+            font-size: 11px;
+            letter-spacing: 0.5px;
+            padding: 3px 6px;
+            color: #fff;
+            border-radius: 3px;
+            font-weight: 500;
+            background: darken(@profileColor_gray, 15%);
+
+            &.status-label-danger {
+                background: @errorColor;
+            }
+
+            &.status-label-success {
+                background: @successColor;
+            }
+        }
     }
     .datepicker{
         width: 100%;
     }
 }
-
-
-
-
 
 table.pollingLogsTable{
     &>thead, &>tbody{
