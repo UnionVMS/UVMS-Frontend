@@ -69,7 +69,8 @@ copy of the GNU General Public License along with the IFDM Suite. If not, see <h
 
     <tabset class="organisationDetailsTabs">
         <!-- ENDPOINT TABLE BEGIN -->
-        <tab heading="Endpoints" ng-controller="organisationDetailsCtrl">
+        <tab heading="Endpoints">
+          <div class="panel panel-default" ng-controller="organisationDetailsCtrl">
 			<table st-table="displayedOrganisationEndpoints" st-safe-src="organisation.endpoints" class="table table-striped fixed">
 				<colgroup>
 					<col style="width: 190px;">
@@ -162,6 +163,7 @@ copy of the GNU General Public License along with the IFDM Suite. If not, see <h
 				</tfoot>
 
 			</table>
+          </div>
 		</tab>
 		<!-- ENDPOINT TABLE END -->
     </tabset>
