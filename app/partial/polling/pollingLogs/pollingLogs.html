@@ -134,17 +134,17 @@ copy of the GNU General Public License along with the IFDM Suite. If not, see <h
                                         <i class="fa fa-minus-square" ng-show="isExpanded"></i>
                                     </div>
                                     <div class="times">
-                                        <span ng-repeat="status in item.exchangePoll.history | orderBy:'time':true" ng-show="isExpanded || $index === 0" ng-attr-title="{{'polling.polling_logs_click_to_view_polling_status' | i18n}}">
-                                            {{ status.time | confDateFormat}}<br>
+                                        <span ng-repeat="status in item.exchangePoll.history | orderBy:'time':true" ng-show="isExpanded || $index === 0" ng-attr-title="{{'polling.polling_logs_click_to_view_polling_status' | i18n}}" class="history-row">
+                                            {{ status.time | confDateFormat}}
                                         </span>
                                     </div>
                                 </td>
                                 <td ng-attr-title="{{item.poll.attributes.USER}}">{{item.poll.attributes.USER}}</td>
                                 <td class="statusText">
-                                    <div ng-repeat="status in item.exchangePoll.history | orderBy:'time':true" ng-show="isExpanded || $index === 0">
-                                        <span class="label" ng-class="getStatusLabelClass(status.status)" ng-attr-title="{{status.status | exchangeStatusName | uppercase}}">
+                                    <div ng-repeat="status in item.exchangePoll.history | orderBy:'time':true" ng-show="isExpanded || $index === 0" class="history-row">
+                                        <span class="status-label" ng-class="getStatusLabelClass(status.status)" ng-attr-title="{{status.status | exchangeStatusName | uppercase}}">
                                             {{status.status | exchangeStatusName | uppercase}}
-                                        </span><br>
+                                        </span>
                                     </div>
                                 </td>
                                 <td class="textAlignCenter">
