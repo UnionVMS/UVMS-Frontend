@@ -28,13 +28,13 @@ copy of the GNU General Public License along with the IFDM Suite. If not, see <h
         <div class="form-group">
           <label class="col-md-4 col-md-offset-1" for="phoneNumber">Phone Number</label>
           <div class="col-md-5">
-            <input type="text" ng-pattern="/^\+{0,1}[0-9 ]+$/"
-                   class="form-control" 
-                   id="phoneNumber" 
-                   name="phoneNumber" 
+            <input type="text" ng-pattern="/^\+{0,1}[0-9- ]+$/"
+                   class="form-control"
+                   id="phoneNumber"
+                   name="phoneNumber"
                    ng-model="myContactDetails.phoneNumber">
               <div ng-show="setMyContactDetailsForm.phoneNumber.$invalid">
-                  <span class="text-danger small" ng-show="setMyContactDetailsForm.phoneNumber.$invalid">Phone Number has invalid format</span>
+                  <span class="text-danger small" ng-show="setMyContactDetailsForm.phoneNumber.$invalid">Invalid</span>
               </div>
           </div>
         </div>
@@ -43,13 +43,13 @@ copy of the GNU General Public License along with the IFDM Suite. If not, see <h
         <div class="form-group">
           <label class="col-md-4 col-md-offset-1" for="mobileNumber">Mobile Number</label>
           <div class="col-md-5">
-            <input type="text" ng-pattern="/^\+{0,1}[0-9 ]+$/"
-                   class="form-control" 
-                   id="mobileNumber" 
-                   name="mobileNumber" 
+            <input type="text" ng-pattern="/^\+{0,1}[0-9- ]+$/"
+                   class="form-control"
+                   id="mobileNumber"
+                   name="mobileNumber"
                    ng-model="myContactDetails.mobileNumber">
               <div ng-show="setMyContactDetailsForm.mobileNumber.$invalid">
-                  <span class="text-danger small" ng-show="setMyContactDetailsForm.mobileNumber.$invalid">Mobile Number has invalid format</span>
+                  <span class="text-danger small" ng-show="setMyContactDetailsForm.mobileNumber.$invalid">Invalid</span>
               </div>
           </div>
         </div>
@@ -58,13 +58,13 @@ copy of the GNU General Public License along with the IFDM Suite. If not, see <h
         <div class="form-group">
           <label class="col-md-4 col-md-offset-1" for="faxNumber">Fax Number</label>
           <div class="col-md-5">
-            <input type="text" ng-pattern="/^\+{0,1}[0-9 ]+$/"
-                   class="form-control" 
-                   id="faxNumber" 
-                   name="faxNumber" 
+            <input type="text" ng-pattern="/^\+{0,1}[0-9- ]+$/"
+                   class="form-control"
+                   id="faxNumber"
+                   name="faxNumber"
                    ng-model="myContactDetails.faxNumber">
               <div ng-show="setMyContactDetailsForm.faxNumber.$invalid">
-                  <span class="text-danger small" ng-show="setMyContactDetailsForm.faxNumber.$invalid">Fax number has invalid format</span>
+                  <span class="text-danger small" ng-show="setMyContactDetailsForm.faxNumber.$invalid">Invalid</span>
               </div>
           </div>
         </div>
@@ -74,15 +74,16 @@ copy of the GNU General Public License along with the IFDM Suite. If not, see <h
           <label class="col-md-4 col-md-offset-1" for="email">E-Mail
             <sup class="fa fa-asterisk mandatory" ></sup></label>
           <div class="col-md-5">
-            <input type="email"
-                   class="form-control" 
-                   id="email" 
-                   name="email" 
+            <input type=text
+                   ng-pattern="/[a-z0-9!#$%&'*+/=?^_{|}~-]+(?:.[a-z0-9!#$%&'*+/=?^_{|}~-]+)*@(?:[a-z0-9](?:[a-z0-9-]*[a-z0-9])?\.)+[a-z0-9](?:[a-z0-9-]*[a-z0-9])?/"
+                   class="form-control"
+                   id="email"
+                   name="email"
                    ng-model="myContactDetails.email"
                    required>
             <div ng-show="setMyContactDetailsForm.email.$dirty || setMyContactDetailsForm.email.$error.email">
-              <span class="text-danger small" ng-show="setMyContactDetailsForm.email.$error.required">E-Mail is required</span>
-                <span class="text-danger small" ng-show="setMyContactDetailsForm.email.$error.email">E-Mail has invalid format</span>
+              <span class="text-danger small" ng-show="setMyContactDetailsForm.email.$error.required">Required</span>
+                <span class="text-danger small" ng-show="setMyContactDetailsForm.email.$error.email">Invalid</span>
             </div>
           </div>
         </div>
@@ -92,14 +93,14 @@ copy of the GNU General Public License along with the IFDM Suite. If not, see <h
           <label class="col-md-4 col-md-offset-1" for="currentPassword">Password
             <sup class="fa fa-asterisk mandatory" ></sup></label>
           <div class="col-md-5">
-            <input type="password" 
-                   class="form-control" 
-                   id="currentPassword" 
-                   name="currentPassword" 
+            <input type="password"
+                   class="form-control"
+                   id="currentPassword"
+                   name="currentPassword"
                    ng-model="myContactDetails.currentPassword"
                    required>
             <div ng-show="setMyContactDetailsForm.currentPassword.$dirty || setMyContactDetailsForm.currentPassword.$error.minlength">
-              <span class="text-danger small" ng-show="setMyContactDetailsForm.currentPassword.$error.required">Password is required</span>
+              <span class="text-danger small" ng-show="setMyContactDetailsForm.currentPassword.$error.required">Required</span>
             </div>
           </div>
         </div>
