@@ -228,7 +228,7 @@ angular.module('unionvmsWeb').controller('VesselFormCtrl',function($scope, $log,
         }
 
         function onReject() {
-            alertService.showErrorMessage(locale.getString('vessel.archive_message_on_error'));
+            // If user cancel request of archiving
         }
 
         var modalOptions = {
