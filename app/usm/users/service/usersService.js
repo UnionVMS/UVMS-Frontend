@@ -179,7 +179,7 @@ usersService.factory('resetPasswordServices', ['$resource', '$q', '$log', functi
         					});
             },
         	function (error) {
-        		message = "Error: " + error.data.message;
+        		message = error.data.message;
         		deferred.reject(message);
             }
         );
