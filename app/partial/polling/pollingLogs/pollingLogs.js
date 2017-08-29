@@ -110,8 +110,8 @@ angular.module('unionvmsWeb').controller('pollingLogsCtrl',function($scope, $sta
             locale.getString('polling.polling_logs_table_header_poll_type'),
             locale.getString('polling.polling_logs_table_header_transponder'),
             locale.getString('polling.polling_logs_table_header_identifier'),
-            locale.getString('polling.polling_logs_table_header_time'),
             locale.getString('polling.polling_logs_table_header_user'),
+            locale.getString('polling.polling_logs_table_header_time'),
             locale.getString('polling.polling_logs_table_header_status'),
             locale.getString('common.comment')
         ];
@@ -136,8 +136,8 @@ angular.module('unionvmsWeb').controller('pollingLogsCtrl',function($scope, $sta
                         angular.isDefined(item.poll) ? $filter('pollTypeName')(item.poll.type) : '',
                         angular.isDefined(item.poll) ? $filter('transponderName')(item.poll.attributes.TRANSPONDER) : '',
                         angular.isDefined(item.poll) ? item.exchangePoll.identifier : '',
-                        angular.isDefined(item.exchangePoll) ? $filter('confDateFormat')(item.exchangePoll.history.slice(-1)[0].time) : '',
                         angular.isDefined(item.poll) ? item.poll.attributes.USER : '',
+                        angular.isDefined(item.exchangePoll) ? $filter('confDateFormat')(item.exchangePoll.history.slice(-1)[0].time) : '',
                         angular.isDefined(item.exchangePoll) ? $filter('exchangeStatusName')(item.exchangePoll.history.slice(-1)[0].status) : '',
                         angular.isDefined(item.poll) ? item.poll.comment : ''
                     ];
