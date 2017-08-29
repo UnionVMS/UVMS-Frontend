@@ -222,11 +222,13 @@ describe('pollingLogsCtrl', function(Poll) {
         expect(modalSpy).toHaveBeenCalled();
     }));
 
-    it('exportLogsAsCSVFile should call service for exporting to csv file', inject(function(PollingLog, csvService) {
+    it('exportLogsAsCSVFile should call service for exporting to csv file', inject(function(PollingLog, Poll, csvService) {
         var controller = createController();
 
         //Create fake result
         var pollingLog = new PollingLog();
+        var poll = new Poll;
+        pollingLog.poll = poll;
         scope.currentSearchResults.items.push(pollingLog);
 
         var csvSpy = spyOn(csvService, "downloadCSVFile").andCallFake(function(data, header, filename){
