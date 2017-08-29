@@ -129,17 +129,16 @@ angular.module('unionvmsWeb').controller('pollingLogsCtrl',function($scope, $sta
             }
             return exportItems.reduce(
                 function(csvObject, item){
-                    console.log(item.poll.comment);
                     var csvRow = [
                         angular.isDefined(item.vessel) ? item.vessel.name : '',
                         angular.isDefined(item.vessel) ? item.vessel.externalMarking : '',
                         angular.isDefined(item.poll) ? $filter('pollTypeName')(item.poll.type) : '',
                         angular.isDefined(item.poll) ? $filter('transponderName')(item.poll.attributes.TRANSPONDER) : '',
-                        angular.isDefined(item.poll) ? item.exchangePoll.identifier : '',
+                        angular.isDefined(item.exchangePoll) ? item.exchangePoll.identifier : '',
                         angular.isDefined(item.poll) ? item.poll.attributes.USER : '',
                         angular.isDefined(item.exchangePoll) ? $filter('confDateFormat')(item.exchangePoll.history.slice(-1)[0].time) : '',
                         angular.isDefined(item.exchangePoll) ? $filter('exchangeStatusName')(item.exchangePoll.history.slice(-1)[0].status) : '',
-                        angular.isDefined(item.poll) ? item.poll.comment : ''
+                        angular.isDefined(item.poll.comment) ? item.poll.comment : ''
                     ];
                     csvObject.push(csvRow);
                     return csvObject;
