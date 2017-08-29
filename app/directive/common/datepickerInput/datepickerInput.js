@@ -24,7 +24,8 @@ angular.module('unionvmsWeb').directive('datepickerInput', ['$compile',function(
             minDate : '=', //should be on format "YYYY-MM-DD HH:mm:ss Z"
             maxDate : '=', //should be on format "YYYY-MM-DD HH:mm:ss Z"
             inputFieldId: '@',
-            updateWhen: '@'
+            updateWhen: '@',
+            tabIndex : '='
 		},
 		templateUrl: 'directive/common/datepickerInput/datepickerInput.html',
 		link: function(scope, element, attrs, ngModel) {
