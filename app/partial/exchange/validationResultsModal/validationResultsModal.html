@@ -17,7 +17,7 @@ copy of the GNU General Public License along with the IFDM Suite. If not, see <h
         <h4 class="modal-title">{{'exchange.validation_results_modal_title' | i18n}}</h4>
     </div>
     <div class="modal-body">
-    	<div st-table="displayedResults" st-safe-src="validationResults" ng-if="isTableVisible">
+    	<div st-table="displayedResults" st-safe-src="validationResults" ng-show="isTableVisible">
     		<table class="table table-striped table-condensed">
     			<thead>
     				<tr class="row">
@@ -51,7 +51,7 @@ copy of the GNU General Public License along with the IFDM Suite. If not, see <h
     			</tbody>
     		</table>
    		</div>
-   		<div ng-if="!isTableVisible">
+   		<div ng-show="!isTableVisible">
    			<div class="back-btn">
    				<button type="button" class="btn btn-xs btn-default" title="{{'exchange.go_back' | i18n }}" ng-click="togglePanelVisibility()">
 					<span class="fa fa-arrow-circle-left"></span>
