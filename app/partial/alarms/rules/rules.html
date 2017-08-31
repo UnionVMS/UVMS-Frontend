@@ -17,13 +17,8 @@ copy of the GNU General Public License along with the IFDM Suite. If not, see <h
 
         <div ng-if="!isVisible.rulesForm" class="card">
             <div class="row card-header">
-                <div class="col-md-2">
-                    <button show-if-allowed="Rules:manageAlarmRules" type="button" class="btn btn-sm btn-primary full-width" ng-click="toggleAddNewRule()"><i class="fa fa-plus"></i> {{'alarms.add_new_rule' | i18n}}</button>
-                </div>
-                <div class="col-md-1 pull-right textAlignRight printAndExport">
-                    <button class="btn btn-sm btn-default exportButton">
-                        <i class="fa fa-lg fa-download" title="{{'common.export_as_csv' | i18n }}" ng-click="exportRulesAsCSVFile()"></i>
-                    </button>
+                <div class="col-md-3">
+                    <button show-if-allowed="Rules:manageAlarmRules" type="button" class="btn btn-sm btn-primary btn-addnew" ng-click="toggleAddNewRule()"><i class="fa fa-plus"></i> {{'alarms.add_new_rule' | i18n}}</button>
                 </div>
             </div>
 
@@ -38,7 +33,5 @@ copy of the GNU General Public License along with the IFDM Suite. If not, see <h
             <search-results-pagination page='currentSearchResults.page' total='currentSearchResults.totalNumberOfPages' callback='gotoPage'></search-results-pagination>
         </div>
 
-
     </div>
-
 </div>
