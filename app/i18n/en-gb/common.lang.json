@@ -28,7 +28,7 @@
     "edit": "Edit",
     "export_as_csv" : "Export data in CSV format",
     "export_csv": "Export CSV",
-    "export_selection": "Export selection",
+    "export_selection": "Export selection to CSV",
     "form_validation_error_message" : "The data in the form is not valid. Please fix the errors and try again.",
     "filter_zero_results" : "No item matches the filter.",
     "hours" : "Hours",
