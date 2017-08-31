@@ -11,18 +11,4 @@
     <div class="col-md-2 smallerpadding searchcriteria">
         <datepicker-input model="advancedSearchObject.TO_DATE" time="true" placeholder="{{'movement.search_movementEndDate_placeholder' | i18n}}" min-date="advancedSearchObject.FROM_DATE" input-field-id="simple-movement-search-to-date-picker"></datepicker-input>
     </div>
-    <div class="col-md-2 col-md-offset-2 smallerpaddingleft">
-        <div class="col-md-12 smallerpadding searchcriteriadropdown" style="padding-right: 0;">
-            <saved-search-dropdown type="MOVEMENT" ng-model="selectedSavedSearch" initialtext="{{'movement.advanced_search_placeholder_saved_searches' | i18n}}" callback="performSavedSearch" enable-delete="true"></saved-search-dropdown>
-        </div>
-        <div class="col-md-6 smallerpadding search-button" style="padding-right: 0;">
-            <button type="submit" class="btn btn-primary btn-sm vmsbtn" ng-click="performAdvancedMovementSearch()">{{'common.search' | i18n}}
-            </button>
-        </div>
-        <div class="col-md-6 smallerpadding search-button" style="padding-right: 0;">
-            <button type="button" class="btn btn-default btn-sm vmsbtn" ng-click="resetSearch()">
-                {{'common.reset' | i18n}}
-            </button>
-        </div>
-    </div>
 </div>

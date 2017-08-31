@@ -31,7 +31,7 @@
     <div class="col-md-2 smallerpadding searchcriteria">
         <dropdown ng-model="advancedSearchObject.GEAR_TYPE" initialtext="{{'movement.advanced_search_placeholder_gear_type' | i18n}}" items="gearType" callback="resetSavedSearchDropdown"></dropdown>
     </div>
-    <div class="col-md-2 smallerpaddingleft searchcriteria">
+    <div class="col-md-2 smallerpadding searchcriteria">
         <saved-search-dropdown type="VESSEL" class="dropdown simpleSearch" ng-model="selectedVesselGroup" initialtext="{{'movement.advanced_search_group_dropdown' | i18n}}" callback="selectVesselGroup"></saved-search-dropdown>
     </div>
 </div>
@@ -59,15 +59,5 @@
     </div>
     <div class="col-md-1 smallerpadding searchcriteria">
         <dropdown ng-model="advancedSearchObject.AREA_ID" initialtext="{{'movement.advanced_search_placeholder_map_area' | i18n}}" items="mapArea" callback="resetSavedSearchDropdown"></dropdown>
-    </div>
-    <div class="col-md-1 smallerpadding search-button">
-        <button type="submit" class="btn btn-primary btn-sm vmsbtn" ng-click="performAdvancedMovementSearch()">
-            {{'common.search' | i18n}}
-        </button>
-    </div>
-    <div class="col-md-1 smallerpaddingleft search-button">
-        <button type="button" class="btn btn-default btn-sm vmsbtn" ng-click="resetSearch()">
-            {{'common.reset' | i18n}}
-        </button>
     </div>
 </div>

@@ -22,17 +22,11 @@ copy of the GNU General Public License along with the IFDM Suite. If not, see <h
             </div>
             <advanced-search searchfunc="searchMovements" vesselGroupCallback="selectGroupCallback()" modeltype="'MOVEMENT'" advancedsearchvisible="true"></advanced-search>
       		<div class="row editSelectionsContainer">
-
-                <div class="col-md-1 smallerpaddingright">
-                    <dropdown ng-model="editSelection" initialtext="{{'common.actions' | i18n}}" items="editSelectionDropdownItems" menu-style callback="editSelectionCallback"></dropdown>
+                <div class="col-md-2 smallerpaddingright">
+                    <dropdown ng-model="editSelection" initialtext="{{'common.actions' | i18n}}" items="editSelectionDropdownItems" menu-style callback="editSelectionCallback" input-field-id="movement-dropdown-actions"></dropdown>
                 </div>
                 <div class="col-md-4 available-positions-refresh smallerpadding" ng-click="resetSearch()">
                     <a ng-if="newMovementsCount > 0"><i class="fa fa-refresh"></i> {{ "movement.new_positions_available" | i18n:[newMovementsCount] }}</a>
-                </div>
-                <div class="col-md-6 pull-right textAlignRight printAndExport smallerpaddingleft">
-                    <button class="btn btn-sm btn-default exportButton">
-                        <i class="fa fa-lg fa-download" title="{{'common.export_as_csv' | i18n }}" ng-click="exportAsCSVFile()"></i>
-                    </button>
                 </div>
             </div>
     		<div ng-include="'partial/movement/movementList/movementList.html'"></div>
