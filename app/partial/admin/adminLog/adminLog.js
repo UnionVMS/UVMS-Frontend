@@ -9,7 +9,7 @@ the hope that it will be useful, but WITHOUT ANY WARRANTY; without even the impl
 FITNESS FOR A PARTICULAR PURPOSE.  See the GNU General Public License for more details. You should have received a
 copy of the GNU General Public License along with the IFDM Suite. If not, see <http://www.gnu.org/licenses/>.
  */
-angular.module('unionvmsWeb').controller('AuditlogCtrl', function($scope, $q, $filter, locale, Audit, auditLogRestService, searchService, auditOptionsService, SearchResults, GetListRequest, infoModal, pollingRestService, mobileTerminalRestService, csvService) {
+angular.module('unionvmsWeb').controller('AuditlogCtrl', function($scope, $q, $filter, locale, Audit, auditLogRestService, searchService, auditOptionsService, SearchResults, GetListRequest, infoModal, pollingRestService, mobileTerminalRestService, csvService, alertService) {
 
     //Names used in the backend
     var TYPES = auditOptionsService.getTypes();
@@ -189,7 +189,7 @@ angular.module('unionvmsWeb').controller('AuditlogCtrl', function($scope, $q, $f
         };
 
         //Create and download the file
-        if ($scope.getSelectedItems().length > 0 && !$scope.isAllChecked()) {
+        if ($scope.getSelectedItems().length > 0) {
             csvService.downloadCSVFile(getData(), header, filename);
         } else {
             $scope.fetchAllItems(function(exportItems) {
@@ -306,6 +306,22 @@ angular.module('unionvmsWeb').controller('AuditlogCtrl', function($scope, $q, $f
                     'title': locale.getString('audit.tab_access_control')
                 }
             ];
+        }
+    };
+
+    //Add items to the "edit selection" dropdown
+    $scope.editSelectionDropdownItems = [
+        {text:locale.getString('common.export_selection'), code : 'EXPORT'}
+    ];
+
+    //Callback function for the "edit selection" dropdown
+    $scope.editSelectionCallback = function(selectedItem){
+        if($scope.getSelectedItems().length > 0){
+            if (selectedItem.code === 'EXPORT') {
+                $scope.exportLogsAsCSVFile(true);
+           }
+        } else{
+            alertService.showInfoMessageWithTimeout(locale.getString('common.no_items_selected'));
         }
     };
 

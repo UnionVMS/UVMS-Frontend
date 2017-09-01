@@ -200,7 +200,7 @@ angular.module('unionvmsWeb').controller('HoldingtableCtrl',function($scope, $lo
 
     //Export data as CSV file
     $scope.exportItemsAsCSVFile = function(onlySelectedItems){
-        if ((onlySelectedItems || $scope.selectedItems.length > 0) && !$scope.isAllChecked()) {
+        if ((onlySelectedItems || $scope.selectedItems.length > 0)) {
             alarmCsvService.exportAlarms($scope.selectedItems);
         } else {
             $scope.fetchAllItems(function(exportItems) {

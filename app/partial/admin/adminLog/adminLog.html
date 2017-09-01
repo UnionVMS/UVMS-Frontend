@@ -14,22 +14,24 @@ copy of the GNU General Public License along with the IFDM Suite. If not, see <h
 	<!-- Nav tabs -->
     <div class="containerWrapper pollingTabs">
         <div class="container">
-            <content-tabs 
-                selected-tab="selectedTab" 
+            <content-tabs
+                selected-tab="selectedTab"
                 functions="contentTabsFunctions">
             </content-tabs>
         </div>
     </div>
 	<div class="container containerWithTopBottomPadding nopaddingtop">
 		<div class="card nomargintop">
-            <div class="row card-header auditsearchform">
+            <div class="row auditsearchform">
                 <div class="col-md-11">
                     <advanced-search searchfunc="searchAuditLogs" modeltype="'AUDIT'" advancedsearchvisible="true"></advanced-search>
                 </div>
-                <div class="col-md-1 pull-right textAlignRight printAndExport">
-                    <button class="btn btn-sm btn-default exportButton">
-                        <i class="fa fa-lg fa-download" title="{{'common.export_as_csv' | i18n }}" ng-click="exportLogsAsCSVFile()"></i>
-                    </button>
+            </div>
+            <div class="row filterRow">
+                <div class="col-md-12 nopadding">
+                    <div class="col-md-2">
+                        <dropdown ng-model="editSelection" initialtext="{{'common.actions' | i18n}}" items="editSelectionDropdownItems" menu-style callback="editSelectionCallback" input-field-id="admin-dropdown-actions"></dropdown>
+                    </div>
                 </div>
             </div>
 

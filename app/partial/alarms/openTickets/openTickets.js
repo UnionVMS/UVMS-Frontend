@@ -286,7 +286,7 @@ angular.module('unionvmsWeb').controller('OpenticketsCtrl',function($scope, $log
         };
 
         //Create and download the file
-        if ((onlySelectedItems || $scope.selectedItems.length) && !$scope.isAllChecked()){
+        if ((onlySelectedItems || $scope.selectedItems.length)){
             csvService.downloadCSVFile(getData(), header, filename);
         } else {
             $scope.fetchAllItems(true, function(exportItems) {

@@ -6,6 +6,20 @@
         <div class="movementadvancedsearchcontent" ng-show="advancedSearch">
             <div static-include="directive/common/search/advancedSearch/movement/staticAdvancedSearch.html"></div>
         </div>
+        <div class="col-md-2 nopaddingright search-buttons">
+            <div class="col-md-12 smallerpadding nopaddingright searchcriteriadropdown">
+                <saved-search-dropdown type="MOVEMENT" ng-model="selectedSavedSearch" initialtext="{{'movement.advanced_search_placeholder_saved_searches' | i18n}}" callback="performSavedSearch" enable-delete="true"></saved-search-dropdown>
+            </div>
+            <div class="col-md-6 smallerpadding search-button">
+                <button type="submit" class="btn btn-primary btn-sm vmsbtn" ng-click="performAdvancedMovementSearch()">{{'common.search' | i18n}}
+                </button>
+            </div>
+            <div class="col-md-6 smallerpadding search-button">
+                <button type="button" class="btn btn-default btn-sm vmsbtn" ng-click="resetSearch()">
+                    {{'common.reset' | i18n}}
+                </button>
+            </div>
+        </div>
         <div class="col-md-12 searchFooter">
             <a ng-click="toggleAdvancedSearch()">
                 <span ng-hide="advancedSearch">{{'movement.toggle_advanced_search_adv' | i18n}}</span>
