@@ -96,9 +96,7 @@ angular.module('unionvmsWeb')
             exchangeRestFactory.getSendingQueue().get({},
                 function(response){
 
-//////////////////////////TODO
-                    
-                    response = {
+                    /* response = {
                         "data":[
                             {
                                 "recipient":"adas",
@@ -196,15 +194,7 @@ angular.module('unionvmsWeb')
                             }
                         ],
                         "code":200
-                    };
-
-
-
-
-
-
-
-//////////////////////TODO
+                    }; */
 
                     if (response.code !== 200) {
                         def.reject("Invalid response status");
