@@ -30,7 +30,7 @@ angular.module('unionvmsWeb')
         return JSON.stringify({
             pagination : {page: this.page, listSize: this.listSize},
             searchCriteria : {isDynamic: this.isDynamic, criterias: this.criterias},
-            sorting : {sortBy: this.sort.sortBy, reversed: this.reverse}
+            sorting : {sortBy: this.sorting.sortBy, reversed: this.sorting.reverse}
         });
     };
 
