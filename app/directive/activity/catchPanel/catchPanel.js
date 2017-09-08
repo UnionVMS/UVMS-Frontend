@@ -37,9 +37,9 @@ angular.module('unionvmsWeb').directive('catchPanel', function(locale, $compile)
         },
         templateUrl: 'directive/activity/catchPanel/catchPanel.html',
         link: function(scope, element, attrs, fn) {
-            
+
             scope.element = element;
-			
+
             /**
 			 * Initialize the charts with nvd3 properties
 			 * 
@@ -48,15 +48,19 @@ angular.module('unionvmsWeb').directive('catchPanel', function(locale, $compile)
 			 */
             var initCharts = function() {
                 scope.options = {};
-                angular.forEach(scope.ngModel, function(chartData, currentChart){
+                scope.catchPerArea = "";
+                angular.forEach(scope.ngModel, function(chartData, currentChart) {
                     var chartOptions = {
                         chart: {
                             type: 'pieChart',
                             height: scope.height,
                             x: function(d) { return d.speciesCode; },
-                            y: function(d) { return d.weight; },
-                            valueFormat: function(d) {
-                                return scope.formatWeight(d, chartData.total, scope.displayedUnit);
+                            y: function(d) {
+                                scope.catchPerArea = d.catchPerArea;
+                                return d.weight;
+                            },
+                            valueFormat: function (d) {
+                                return scope.formatWeight(d, chartData.total, scope.displayedUnit, scope.catchPerArea);
                             },
                             showLabels: false,
                             duration: 500,
@@ -80,25 +84,26 @@ angular.module('unionvmsWeb').directive('catchPanel', function(locale, $compile)
 			 * @param {Object} weightType - weight unit
 			 * @param {Object} totalWeight - total weight for the species
 			 */
-            scope.formatWeight = function(specieWeight, totalWeight, weightUnit) {
+            scope.formatWeight = function(specieWeight, totalWeight, weightUnit, catchesPerArea) {
                 var value = specieWeight / totalWeight * 100;
-                return specieWeight + weightUnit + ' (' + value.toFixed(2) + '%)';
+                var formattedCatches = "<div class='table'>" + "<div class='thead'><div class='tr' style='border-bottom:0'><div class='th' style='padding-bottom:0'>Area</div><div class='th' style='padding-bottom:0'>Weight</div></div></div>" + "<div class='tbody'>" + catchesPerArea + "</div>" + "</div>";
+                return specieWeight + weightUnit + ' (' + value.toFixed(2) + '%) ' + '<br>' + formattedCatches;
             };
 
             //when the trip is initialized
-            scope.$watch('ngModel', function() {
+            scope.$watch('ngModel', function () {
                 //TODO init must be called if the data is already loaded before the directive compilation
                 init();
             });
-            
+
             //To refresh the charts manually
             scope.$watch(function() { return angular.element(scope.element).is(':visible'); }, function() {
                 angular.forEach( angular.element('.nvd3-chart > nvd3', scope.element),function(item){
-                   var elem = angular.element(item);
-                   $compile(elem)(scope);
+                    var elem = angular.element(item);
+                    $compile(elem)(scope);
                 });
             });
-           
+
 			/**
 			 * Initializes the catch panel directive
 			 * 
@@ -107,8 +112,33 @@ angular.module('unionvmsWeb').directive('catchPanel', function(locale, $compile)
 			 */
             var init = function() {
                 scope.displayedUnit = locale.getString('activity.weight_unit_' + scope.unit);
+                formattedChartData();
                 initCharts();
             };
+          
+            /**
+			 * To create data for catches per area.
+			 * 
+			 * @memberof catchPanel
+			 * @private
+			 */
+            var catcheslist;
+            function formattedChartData() {
+                angular.forEach(scope.ngModel, function (chartData, currentChart) {
+                    angular.forEach(chartData, function (chartDataValue, chartDataKey) {
+                        angular.forEach(chartDataValue, function (areaInfoData, key) {
+                            angular.forEach(areaInfoData, function (areaInfoValue, areaInfokey) {
+                                if (areaInfokey === "areaInfo") {
+                                    angular.forEach(areaInfoValue, function (propertyValue, propertyKey) {
+                                        catcheslist = "<div class='tr' style='background-color:transparent;border-top:0'>" + "<div class='td'style='padding-top:0;padding-bottom:0;font-weight: normal'>" + propertyValue.areaName + "</div>" + "<div class='td' style='padding-top:0;padding-bottom:0; font-weight:normal'>" + propertyValue.weight + "kg" + "</div>" + "</div>";
+                                    });
+                                }
+                                areaInfoData.catchPerArea = catcheslist;
+                            });
+                        });
+                    });
+                });
+            }
 
         }
     };
