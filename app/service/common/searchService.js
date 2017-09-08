@@ -695,6 +695,9 @@ angular.module('unionvmsWeb').factory('searchService',function($q, $log, searchU
         setPage : function(page){
             getListRequest.page = page;
         },
+        setSorting : function(sort){
+            getListRequest.sorting = sort;
+        },
 		increasePage : function(){
 			getListRequest.page += 1;
 		},

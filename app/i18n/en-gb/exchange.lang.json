@@ -28,7 +28,6 @@
 	"sending_queue_table_allmessages_in_group": "Group",
 	"sending_queue_date_recieved" : "Date received",
 
-	"sending_queue_table_header_recipient" : "Recipient",
 	"sending_queue_table_header_message_type" : "Msg.type",
 	"sending_queue_table_header_unsent_reports" : "Unsent rep.",
 	"sending_queue_table_header_last_received" : "Last received.",
@@ -36,7 +35,7 @@
 
 	"table_header_actions": "Actions",
 	"table_header_date_fwd": "Date forwarded",
-	"table_header_date_received": "Date received",
+	"table_header_date_received_sent": "Date received/sent",
 	"table_header_fwd_rule": "Forward rule",
 	"table_header_recipient": "Recipient",
 	"table_header_sent_by": "From",
@@ -49,7 +48,10 @@
 
 	"sending_queue_detail_table_header_potision_time" : "Position time",
 	"sending_queue_detail_table_header_sender_recipient":"Sender/recipient",
+	"sending_queue_detail_table_header_recipient":"Recipient",
 	"sending_queue_detail_table_header_date_recieved":"Received",
+	"sending_queue_detail_table_header_date":"Date",
+	"sending_queue_detail_table_header_plugin":"Plugin",
 	"sending_queue_detail_table_header_asset_name":"Asset name",
 	"sending_queue_detail_table_header_longitude":"Longitude",
 	"sending_queue_detail_table_header_latitude":"Latidude",

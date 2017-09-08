@@ -12,17 +12,25 @@ copy of the GNU General Public License along with the IFDM Suite. If not, see <h
 angular.module('unionvmsWeb')
 .factory('GetListRequest', function(SearchField) {
 
-    function GetListRequest(page, listSize, isDynamic, criterias){
+    function GetListRequest(page, listSize, isDynamic, criterias, sorting){
         this.page = angular.isDefined(page) ? page : 1;
         this.listSize = angular.isDefined(listSize) ? listSize : 10;
         this.isDynamic = angular.isDefined(isDynamic) ? isDynamic : true;
         this.criterias = angular.isDefined(criterias) ? criterias : [];
+        this.sorting = angular.isDefined(sorting) ? sorting : [];
+
+        /* $scope.actServ.reportsList.sorting = {
+            sortBy: searchField,
+            reversed: sortOrder
+        }; */
+        
     }
 
     GetListRequest.prototype.toJson = function(){
         return JSON.stringify({
             pagination : {page: this.page, listSize: this.listSize},
-            searchCriteria : {isDynamic: this.isDynamic, criterias: this.criterias}
+            searchCriteria : {isDynamic: this.isDynamic, criterias: this.criterias},
+            sorting : {sortBy: this.sort.sortBy, reversed: this.reverse}
         });
     };
 
@@ -164,7 +172,8 @@ angular.module('unionvmsWeb')
     GetListRequest.prototype.DTOForExchangeMessageList = function(){
         return{
             exchangeSearchCriteria : {criterias: this.criterias, isDynamic: false},
-            pagination: {page: this.page, listSize: this.listSize}
+            pagination: {page: this.page, listSize: this.listSize},
+            sorting: this.sorting
         };
     };
 
@@ -285,6 +294,8 @@ angular.module('unionvmsWeb')
         copy.listSize = this.listSize;
         copy.isDynamic = this.isDynamic;
         copy.criterias = [];
+        copy.sorting = this.sorting;
+
         $.each(this.criterias, function(index, searchField){
             copy.criterias.push(searchField.copy());
         });

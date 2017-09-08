@@ -35,6 +35,8 @@ angular.module('unionvmsWeb')
                 pluginListItem.messageId = data.pluginList[0].sendingLogList[i].messageId;
                 pluginListItem.dateReceived = data.pluginList[0].sendingLogList[i].dateRecieved;
                 pluginListItem.senderRecipient = data.pluginList[0].sendingLogList[i].senderRecipient;
+                pluginListItem.recipient = data.pluginList[0].sendingLogList[i].recipient;
+                pluginListItem.plugin = data.pluginList[0].sendingLogList[i].plugin;
 
                 pluginListItem.POLL_TYPE = undefined;
                 pluginListItem.ASSET_NAME = undefined;
