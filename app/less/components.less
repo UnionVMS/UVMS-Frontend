@@ -169,3 +169,30 @@ ul.links{
         }
     }
 }
+
+.st-sort {
+    cursor: pointer;
+    position: relative;
+
+    &:after {
+        font: normal normal normal 14px/1 FontAwesome;
+        content: '\f0dc';
+        color: @primaryColor;
+        margin-left: 7px;
+        position: relative;
+    }
+
+    &.st-sort-ascent {
+        &:after {
+            content: '\f0de';
+            top: 3px;
+        }
+    }
+
+    &.st-sort-descent {
+        &:after {
+            content: '\f0dd';
+            top: -3px;
+        }
+    }
+}
