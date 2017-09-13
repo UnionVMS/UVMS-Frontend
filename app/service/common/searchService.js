@@ -11,7 +11,8 @@ copy of the GNU General Public License along with the IFDM Suite. If not, see <h
  */
 angular.module('unionvmsWeb').factory('searchService',function($q, $log, searchUtilsService, GetListRequest, VesselListPage, SearchField, vesselRestService, mobileTerminalRestService, pollingRestService, movementRestService, manualPositionRestService, GetPollableListRequest, SearchResultListPage, auditLogRestService, exchangeRestService, alarmRestService, userService) {
 
-    var DEFAULT_ITEMS_PER_PAGE = 20;
+    var DEFAULT_ITEMS_PER_PAGE = 20,
+        ALL_ITEMS = 10000000;
 
 	var getListRequest = new GetListRequest(1, DEFAULT_ITEMS_PER_PAGE, true, []),
         advancedSearchObject  = {};
@@ -280,7 +281,7 @@ angular.module('unionvmsWeb').factory('searchService',function($q, $log, searchU
                             });
 
                             if(latestMovements.length > 0) {
-                                vessels.totalNumberOfLatestMovements = latestMovements.length;                
+                                vessels.totalNumberOfLatestMovements = latestMovements.length;
                             }
 
                             deferred.resolve(vessels);
@@ -301,10 +302,13 @@ angular.module('unionvmsWeb').factory('searchService',function($q, $log, searchU
 
         //Do the search for vessels
 		searchVessels : function(){
-            var deferred = $q.defer();
+            var deferred = $q.defer(),
+                getListRequestAllItems = new GetListRequest(1, ALL_ITEMS, false, getListRequest.criterias);
+
             searchUtilsService.modifySpanAndTimeZones(getListRequest.criterias);
             searchUtilsService.replaceCommasWithPoint(getListRequest.criterias);
-			vesselRestService.getVesselList(getListRequest).then(function(vesselPage){
+
+			vesselRestService.getVesselList(getListRequestAllItems).then(function(vesselPage){
                 //Zero matches?
                 if(vesselPage.getNumberOfItems() === 0){
                     return deferred.resolve(vesselPage);
@@ -630,7 +634,7 @@ angular.module('unionvmsWeb').factory('searchService',function($q, $log, searchU
             //Get vessels first?
             if(vesselCriteria.length > 0){
                 var deferred = $q.defer();
-                var getVesselListRequest = new GetListRequest(1, 10000, vesselSearchIsDynamic, vesselCriteria);
+                var getVesselListRequest = new GetListRequest(1, 10000000, vesselSearchIsDynamic, vesselCriteria);
                 var outerThis = this;
                 //Get the vessels
                 vesselRestService.getAllMatchingVessels(getVesselListRequest).then(
