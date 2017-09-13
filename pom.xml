@@ -64,6 +64,9 @@
                     <url>https://apjenp01.dg3.be/nexus/repository/maven-snapshots/</url>
                 </snapshotRepository>
             </distributionManagement>
+            <properties>
+                <focus-pom.java.version>1.8</focus-pom.java.version>
+            </properties>
         </profile>
         <profile>
             <id>proxy</id>
