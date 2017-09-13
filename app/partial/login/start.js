@@ -52,9 +52,9 @@ angular.module('unionvmsWeb').factory('startPageService',function($log, globalSe
             case 'app.assets':
                 return accessToAssetsAndTerminals;
             case 'app.holdingTable':
-                return checkAccess(unionVMSApplication, 'viewAlarmsHoldingTable');
+                return checkAccess('Rules', 'viewAlarmsHoldingTable');
             case 'app.openTickets':
-                return checkAccess(unionVMSApplication, 'viewAlarmsOpenTickets');
+                return checkAccess('Rules', 'viewAlarmsOpenTickets');
             case 'app.auditLog':
                 return checkAccess('Audit', 'viewAudit');
             case 'app.usm.users':
