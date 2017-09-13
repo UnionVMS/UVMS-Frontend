@@ -14,6 +14,7 @@ angular.module('unionvmsWeb').factory('searchService',function($q, $log, searchU
     var DEFAULT_ITEMS_PER_PAGE = 20;
 
 	var getListRequest = new GetListRequest(1, DEFAULT_ITEMS_PER_PAGE, true, []),
+        getListRequestAllItems = new GetListRequest(1, 10000000, true, []),
         advancedSearchObject  = {};
 
     //Transform array of string to dict with value true
@@ -304,7 +305,7 @@ angular.module('unionvmsWeb').factory('searchService',function($q, $log, searchU
             var deferred = $q.defer();
             searchUtilsService.modifySpanAndTimeZones(getListRequest.criterias);
             searchUtilsService.replaceCommasWithPoint(getListRequest.criterias);
-			vesselRestService.getVesselList(getListRequest).then(function(vesselPage){
+			vesselRestService.getVesselList(getListRequestAllItems).then(function(vesselPage){
                 //Zero matches?
                 if(vesselPage.getNumberOfItems() === 0){
                     return deferred.resolve(vesselPage);

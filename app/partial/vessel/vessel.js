@@ -18,7 +18,7 @@ angular.module('unionvmsWeb').controller('VesselCtrl', function($scope, $log, $s
     //Keep track of visibility statuses
     $scope.isVisible = {
         search : true,
-        vesselForm : false, 
+        vesselForm : false,
         notificationCancelSearch : false
     };
 
@@ -122,18 +122,15 @@ angular.module('unionvmsWeb').controller('VesselCtrl', function($scope, $log, $s
         $scope.isVisible.notificationCancelSearch = false;
         $scope.currentSearchResults.updateWithNewResults(vesselListPage);
 
-        if(vesselListPage.totalNumberOfLatestMovements) {
-            $scope.currentSearchResults.sortBy = '-lastMovement.time';
-        }else{
-            $scope.currentSearchResults.sortBy = 'name';
-        }
+        $scope.allCurrentSearchResults = $scope.currentSearchResults.items;
+        $scope.currentSearchResultsByPage = $scope.currentSearchResults.items;
     };
 
     // Handle error from search results (listing vessel)
     var onGetSearchResultsError = function(response){
         $scope.isVisible.notificationCancelSearch = false;
 
-        // Error functions not to be runned if search has been cancelled 
+        // Error functions not to be runned if search has been cancelled
         if (response.status !== -1) {
             $scope.currentSearchResults.removeAllItems();
             $scope.currentSearchResults.setLoading(false);

@@ -11,6 +11,9 @@ copy of the GNU General Public License along with the IFDM Suite. If not, see <h
  */
 angular.module('unionvmsWeb').controller('VesselListCtrl',function($scope){
 
+    //Number of items displayed on each page
+    $scope.itemsByPage = 20;
+
     //Handle click on the top "check all" checkbox
     $scope.checkAll = function(){
         if($scope.isAllChecked()){
@@ -60,6 +63,5 @@ angular.module('unionvmsWeb').controller('VesselListCtrl',function($scope){
         });
         return checked;
     };
-
 
 });
