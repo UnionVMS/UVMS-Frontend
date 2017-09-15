@@ -1,0 +1,35 @@
+<div class="col-md-12" ng-controller="TripactivitydetailsCtrl" class="trip-activity-details">
+    <loading-panel class="activity-fa-loading" type="FishingActivity"></loading-panel>
+    <div>
+        <div ng-if="faServ.activityType === 'FISHING_OPERATION'">
+            <fishing-activity-navigator partial="partial/activity/fishingOperationPanel/fishingOperationPanel.html" tab-type="activity"></fishing-activity-navigator>
+        </div>
+        <div ng-if="faServ.activityType === 'DEPARTURE'">
+            <fishing-activity-navigator partial="partial/activity/departurePanel/departurePanel.html" tab-type="activity"></fishing-activity-navigator>
+        </div>
+        <div ng-if="faServ.activityType === 'ARRIVAL'">
+            <fishing-activity-navigator partial="partial/activity/arrivalPanel/arrivalPanel.html" tab-type="activity"></fishing-activity-navigator>
+        </div>
+        <div ng-if="faServ.activityType === 'LANDING'">
+            <fishing-activity-navigator partial="partial/activity/landingPanel/landingPanel.html" tab-type="activity"></fishing-activity-navigator>
+        </div>
+        <div ng-if="faServ.activityType === 'DISCARD'">
+            <fishing-activity-navigator partial="partial/activity/discardPanel/discardPanel.html" tab-type="activity"></fishing-activity-navigator>
+        </div>
+        <div ng-if="faServ.activityType === 'AREA_ENTRY'">
+            <fishing-activity-navigator partial="partial/activity/areaEntryPanel/areaEntryPanel.html" tab-type="activity"></fishing-activity-navigator>
+        </div>
+        <div ng-if="faServ.activityType === 'AREA_EXIT'">
+            <fishing-activity-navigator partial="partial/activity/areaExitPanel/areaExitPanel.html" tab-type="activity"></fishing-activity-navigator>
+        </div>
+        <div ng-if="faServ.activityType === 'TRANSHIPMENT'">
+            <fishing-activity-navigator partial="partial/activity/transhipmentPanel/transhipmentPanel.html" tab-type="activity"></fishing-activity-navigator>
+        </div>
+        <div ng-if="faServ.activityType === 'RELOCATION'">
+            <fishing-activity-navigator partial="partial/activity/relocationPanel/relocationPanel.html" tab-type="activity"></fishing-activity-navigator>
+        </div>
+        <div ng-if="faServ.activityType === 'JOINT_FISHING_OPERATION'">
+            <fishing-activity-navigator partial="partial/activity/jointFishingOperationPanel/jointFishingOperationPanel.html" tab-type="activity"></fishing-activity-navigator>
+        </div>
+    </div>
+</div>

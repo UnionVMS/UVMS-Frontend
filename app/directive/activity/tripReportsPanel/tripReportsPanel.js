@@ -115,17 +115,17 @@ angular.module('unionvmsWeb').directive('tripReportsPanel', function (loadingSta
                     fishingActivityService.id = node.id;
                     fishingActivityService.isCorrection = node.corrections;
                     fishingActivityService.documentType = node.documentType;
+                    tripReportsTimeline.setCurrentPreviousAndNextItem(node.id, parentId);
                     // Navigation to activity details in activity and reporting.  
                     if (scope.activityTrip === 'activity') {
-                        fishingActivityService.activityType = node.srcType.toLowerCase();
-                        breadcrumbService.goToItem(5);
+                       fishingActivityService.activityType = node.srcType;
+                       breadcrumbService.goToItem(7);
                     } else {
                         fishingActivityService.activityType = node.srcType;
-                        tripReportsTimeline.setCurrentPreviousAndNextItem(node.id, parentId);
                         reportingNavigatorService.goToView('tripsPanel',  'FishingActivityPanel',function(){
-                        var content = angular.element('fishing-activity-navigator');
-                        if(content.length){
-                            $compile(content)(scope);
+                            var content = angular.element('fishing-activity-navigator');
+                            if(content.length){
+                                $compile(content)(scope);
                             }
                         });
                     }

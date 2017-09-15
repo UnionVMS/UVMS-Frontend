@@ -63,6 +63,10 @@ angular.module('unionvmsWeb').factory('activityService',function(locale, activit
         title: 'activity.breadcrumb_report_catch_evolution',
         type: 'catchEvolution',
         visible: false
+    },{
+        title: 'Trip Activity Details',
+        type: 'tripActivityDetails',
+        visible: false
     }];
     
     actServ.alert= {

@@ -145,7 +145,7 @@ describe('activityService', function() {
     it('should be properly initialized', function() {
         expect(actServ).toBeDefined();
         expect(actServ.breadcrumbPages).toEqual(jasmine.any(Array));
-        expect(actServ.breadcrumbPages.length).toBe(7);
+        expect(actServ.breadcrumbPages.length).toBe(8);
         expect(actServ.activities).toEqual(jasmine.any(Array));
         expect(actServ.activitiesHistory).toEqual(jasmine.any(Array));
         expect(actServ.history).toEqual(jasmine.any(Array));

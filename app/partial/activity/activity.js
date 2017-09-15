@@ -21,10 +21,11 @@ copy of the GNU General Public License along with the IFDM Suite. If not, see <h
  * @description
  *  The controller for the activity tab  
  */
-angular.module('unionvmsWeb').controller('ActivityCtrl', function ($scope, locale, activityService, breadcrumbService,Trip, mdrCacheService,tripSummaryService) {
+angular.module('unionvmsWeb').controller('ActivityCtrl', function ($scope, locale, activityService, genericMapService, breadcrumbService,Trip, mdrCacheService,tripSummaryService) {
     $scope.actServ = activityService;
     $scope.tripSummServ = tripSummaryService;
     $scope.selectedTab = 'ACTIVITES';
+    $scope.tripSummServ.resetMapConfigs();
     if (mdrCacheService.isListAvailableLocally('FLUX_GP_PURPOSE') === false) {
         $scope.actServ.isGettingMdrCodes = true;
     }
@@ -128,7 +129,17 @@ angular.module('unionvmsWeb').controller('ActivityCtrl', function ($scope, local
 
         return tabs;
      };
-    
+      /**
+     * Sets map configs in trip summary service
+     * 
+     * @memberof TripspanelCtrl
+     * @private
+     */
+    var setTripSumServiceMapConfigs = function () {
+        $scope.tripSummServ.mapConfigs = angular.copy(genericMapService.mapBasicConfigs);
+    };
+
+    genericMapService.setMapBasicConfigs(setTripSumServiceMapConfigs);
       // function of trip summary service to open new trip
       $scope.tripSummServ.initializeTrip = function (tripId) {
         if (angular.isDefined(tripId)) {

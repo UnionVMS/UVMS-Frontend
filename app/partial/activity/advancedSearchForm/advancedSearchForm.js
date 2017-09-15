@@ -27,7 +27,7 @@ copy of the GNU General Public License along with the IFDM Suite. If not, see <h
  * @description
  *  The controller for the advanced search form of the activity tab table  
  */
-angular.module('unionvmsWeb').controller('AdvancedsearchformCtrl',function($scope, activityService, unitConversionService, mdrCacheService, vesselRestService, userService, locale, visibilityService){
+angular.module('unionvmsWeb').controller('AdvancedsearchformCtrl',function($scope, activityService, unitConversionService, $stateParams, mdrCacheService, vesselRestService, userService, locale, visibilityService){
     $scope.actServ = activityService;
     $scope.visServ = visibilityService;
     $scope.isFormVisible = true;
@@ -67,6 +67,7 @@ angular.module('unionvmsWeb').controller('AdvancedsearchformCtrl',function($scop
         master: undefined,
         minWeight: undefined,
         maxWeight: undefined
+      //  tripId: undefined
     };
     
     /**
@@ -254,6 +255,7 @@ angular.module('unionvmsWeb').controller('AdvancedsearchformCtrl',function($scop
                 maxWeight: 'QUANTITY_MAX',
                 comChannel: 'SOURCE',
                 activityType: 'ACTIVITY_TYPE'
+               // tripID: 'TRIP_ID'
             };
             
             //FIXME this is to be used in the future when we start having multiple criteria selection in the form
@@ -373,6 +375,11 @@ angular.module('unionvmsWeb').controller('AdvancedsearchformCtrl',function($scop
      */
     function init(){
         getComboboxData();
+         if (_.keys($stateParams).length > 0 && $stateParams.tripId !== null){
+           $scope.advancedSearchObject = {
+            tripId: $stateParams.tripId
+          };
+        }
     }
 
     init();
