@@ -15,6 +15,8 @@
     function fishingTripCtrl(userService, salesFishingActivityService) {
         /* jshint validthis:true */
         var vm = this;
+        vm.openFishingTrip = openFishingTrip;
+        vm.hasActivityPermission = hasActivityPermission;
 
         salesFishingActivityService.findFishingActivity("DEPARTURE", vm.trip.extId).then(function(result) {
             vm.trip.departureLocation = result.port;
@@ -26,5 +28,15 @@
         });
 
         vm.navigateToVesselAllowed = userService.isAllowed('viewVesselsAndMobileTerminals', 'Union-VMS', true);
+
+
+
+
+        function openFishingTrip() {
+        }
+
+        function hasActivityPermission() {
+            return userService.isAllowed('FISHING_TRIP_SUMMARY', 'Union-VMS', true);
+        }
     }
 })();
