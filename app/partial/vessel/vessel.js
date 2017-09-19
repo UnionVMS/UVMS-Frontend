@@ -122,8 +122,8 @@ angular.module('unionvmsWeb').controller('VesselCtrl', function($scope, $log, $s
         $scope.isVisible.notificationCancelSearch = false;
         $scope.currentSearchResults.updateWithNewResults(vesselListPage);
 
-        $scope.allCurrentSearchResults = $scope.currentSearchResults.items;
-        $scope.currentSearchResultsByPage = $scope.currentSearchResults.items;
+        $scope.allCurrentSearchResults = vesselListPage.items;
+        $scope.currentSearchResultsByPage = vesselListPage.items;
     };
 
     // Handle error from search results (listing vessel)
