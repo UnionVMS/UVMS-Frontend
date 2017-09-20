@@ -9,29 +9,46 @@ the hope that it will be useful, but WITHOUT ANY WARRANTY; without even the impl
 FITNESS FOR A PARTICULAR PURPOSE.  See the GNU General Public License for more details. You should have received a
 copy of the GNU General Public License along with the IFDM Suite. If not, see <http://www.gnu.org/licenses/>.
 -->
-<div class="row">
-	<div search-results-table search="currentSearchResults" class="col-md-12 rules-table">
-		<table class="searchResults colorOdd">
-			<thead>
-				<tr>
-					<th class="checkboxContainer"><input type="checkbox" ng-checked="isAllChecked()" ng-click="checkAll()" ng-disabled="!currentSearchResults.items.length"/></th>
-					<!-- <th></th> -->
-					<th sortable-table-header by="currentSearchResults.sortBy" reverse="currentSearchResults.sortReverse" order="'name'">{{'alarms.rules_table_name' | i18n}}</th>
-					<th sortable-table-header by="currentSearchResults.sortBy" reverse="currentSearchResults.sortReverse" order="'lastTriggered'">{{'alarms.rules_table_last_triggered' | i18n}}</th>
-                    <th sortable-table-header by="currentSearchResults.sortBy" reverse="currentSearchResults.sortReverse" order="'dateUpdated'">{{'alarms.rules_table_date_updated' | i18n}}</th>
-					<th sortable-table-header by="currentSearchResults.sortBy" reverse="currentSearchResults.sortReverse" order="'updatedBy'">{{'alarms.rules_table_updated_by' | i18n}}</th>
-                    <th class="notifyByTicket">{{'alarms.rules_table_subscription' | i18n}}</th>
-                    <th class="notifyByEmail">{{'alarms.rules_table_notify_by_email' | i18n}}</th>
-                    <th sortable-table-header by="currentSearchResults.sortBy" reverse="currentSearchResults.sortReverse" order="'active'">{{'alarms.rules_table_status' | i18n}}</th>
+<div class="row" st-table="currentSearchResultsByPage" st-safe-src="allCurrentSearchResults">
+    <div search-results-table search="currentSearchResults" class="col-md-12 rules-table">
+        <table class="searchResults colorOdd truncate-text">
+            <thead>
+                <tr>
+                    <th class="checkboxContainer">
+                        <input type="checkbox" ng-checked="isAllChecked()" ng-click="checkAll()" ng-disabled="!currentSearchResults.items.length"/>
+                    </th>
+                    <th class="st-sort" st-sort="name" st-skip-natural="true">
+                        {{'alarms.rules_table_name' | i18n}}
+                    </th>
+                    <th class="st-sort" st-sort="lastTriggered" st-skip-natural="true">
+                        {{'alarms.rules_table_last_triggered' | i18n}}
+                    </th>
+                    <th class="st-sort" st-sort="dateUpdated" st-sort-default="reverse" st-skip-natural="true">
+                        {{'alarms.rules_table_date_updated' | i18n}}
+                    </th>
+                    <th class="st-sort" st-sort="updatedBy" st-skip-natural="true">
+                        {{'alarms.rules_table_updated_by' | i18n}}
+                    </th>
+                    <th class="notifyByTicket">
+                        {{'alarms.rules_table_subscription' | i18n}}
+                    </th>
+                    <th class="notifyByEmail">
+                        {{'alarms.rules_table_notify_by_email' | i18n}}
+                    </th>
+                    <th class="st-sort" st-sort="active" st-skip-natural="true">
+                        {{'alarms.rules_table_status' | i18n}}
+                    </th>
                     <th></th>
-                    <th class="actions">{{'alarms.rules_table_actions' | i18n}}</th>
-				</tr>
-			</thead>
-			<tbody>
-				<tr ng-repeat="item in filteredItems = (currentSearchResults.items | orderBy:currentSearchResults.sortBy:currentSearchResults.sortReverse | filter:filterOnType)" ng-class="{'inactive':!item.active}">
-    				<td class="checkboxContainer"><input type="checkbox" ng-checked="isChecked(item)" ng-click="checkItem(item)" /></td>
-    				<td class="statusColored truncate-text" ng-attr-title="{{item.name}}">{{item.name}}</td>
-    				<td class="statusColored truncate-text" ng-attr-title="{{item.lastTriggered | confDateFormat}}">{{item.lastTriggered | confDateFormat}}</td>
+                    <th class="actions">
+                        {{'alarms.rules_table_actions' | i18n}}
+                    </th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr ng-repeat="item in currentSearchResultsByPage" ng-class="{'inactive':!item.active}">
+                    <td class="checkboxContainer"><input type="checkbox" ng-checked="isChecked(item)" ng-click="checkItem(item)" /></td>
+                    <td class="statusColored truncate-text" ng-attr-title="{{item.name}}">{{item.name}}</td>
+                    <td class="statusColored truncate-text" ng-attr-title="{{item.lastTriggered | confDateFormat}}">{{item.lastTriggered | confDateFormat}}</td>
                     <td class="statusColored truncate-text" ng-attr-title="{{item.dateUpdated | confDateFormat}}">{{item.dateUpdated | confDateFormat}}</td>
                     <td class="statusColored truncate-text" ng-attr-title="{{item.updatedBy}}">{{item.updatedBy}}</td>
                     <td class="statusColored notifyByTicket">
@@ -50,7 +67,7 @@ copy of the GNU General Public License along with the IFDM Suite. If not, see <h
                         <i ng-show="item.availability === 'GLOBAL'" class="fa fa-lg fa-users" tooltip-placement="bottom" tooltip="{{'alarms.rules_availability_global' | i18n}}"></i>
                         <i ng-show="item.availability === 'PRIVATE'" class="fa fa-lg fa-user" tooltip-placement="bottom" tooltip="{{'alarms.rules_availability_private' | i18n}}"></i>
                     </td>
-    				<td class="actions">
+                    <td class="actions">
                         <span>
                             <button type="button" class="btn btn-sm btn-default" ng-click="toggleRuleDetails(item)" title="{{'common.view_details'| i18n}}">
                                 <i class="fa fa-pencil"></i>
@@ -68,10 +85,16 @@ copy of the GNU General Public License along with the IFDM Suite. If not, see <h
                                 <i class="fa fa-trash"></i>
                             </button>
                         </span>
-
-    				</td>
-				</tr>
-			</tbody>
-		</table>
+                    </td>
+                </tr>
+            </tbody>
+            <tfoot>
+                <tr>
+                    <td colspan="12" class="text-right" ng-show="allCurrentSearchResults.length > itemsByPage">
+                        <div st-pagination st-items-by-page="itemsByPage" st-template="partial/common/reportsPagination/reportsPagination.html"></div>
+                    </td>
+                </tr>
+            </tfoot>
+        </table>
     </div>
 </div>

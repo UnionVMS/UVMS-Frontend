@@ -11,6 +11,9 @@ copy of the GNU General Public License along with the IFDM Suite. If not, see <h
  */
 angular.module('unionvmsWeb').controller('RulesCtrl',function($scope, $log, $stateParams, locale, csvService, alertService, $filter, Rule,  RuleDefinition, ruleRestService, SearchResults, SearchResultListPage, userService, personsService, confirmationModal, GetListRequest, RuleSubscriptionUpdate, openAlarmsAndTicketsService){
 
+    //Number of items displayed on each page
+    $scope.itemsByPage = 20;
+
     var checkAccessToFeature = function(feature) {
         return userService.isAllowed(feature, 'Rules', true);
     };
@@ -72,13 +75,6 @@ angular.module('unionvmsWeb').controller('RulesCtrl',function($scope, $log, $sta
         ruleRestService.getAllRulesForUser().then(updateSearchResults, onGetSearchResultsError);
     };
 
-    //Goto page in the search results
-    $scope.gotoPage = function(page){
-        if(angular.isDefined(page)){
-            //TODO: Implement. Currently there are no pagination in the result.
-        }
-    };
-
     //Callback when a new Rule has been creatad
     $scope.createdNewRuleCallback = function(newRule){
         //Add new rule to searchResult
@@ -102,6 +98,8 @@ angular.module('unionvmsWeb').controller('RulesCtrl',function($scope, $log, $sta
     var updateSearchResults = function(searchResultsListPage){
         $scope.currentSearchResults.updateWithNewResults(searchResultsListPage);
         $scope.setUserSubscribeValues();
+        $scope.allCurrentSearchResults = $scope.currentSearchResults.items;
+        $scope.currentSearchResultsByPage = $scope.currentSearchResults.items;
     };
 
     //Error during search

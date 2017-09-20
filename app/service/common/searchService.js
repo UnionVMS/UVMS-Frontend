@@ -151,7 +151,7 @@ angular.module('unionvmsWeb').factory('searchService',function($q, $log, searchU
     var searchAlarmsOrTickets = function(searchType, searchGetListRequest){
         //Use the default getListRequest if searchListRequest is not provided
         if(angular.isUndefined(searchGetListRequest)){
-            searchGetListRequest = getListRequest;
+            searchGetListRequest = new GetListRequest(1, ALL_ITEMS, true, getListRequest.criterias);
         }
         searchUtilsService.modifySpanAndTimeZones(searchGetListRequest.criterias);
 
@@ -160,7 +160,7 @@ angular.module('unionvmsWeb').factory('searchService',function($q, $log, searchU
         var alarmsOrTicketsCritieria = partition["default"];
         var vesselCriteria = partition["vessel"];
 
-        var vesselRequest = new GetListRequest(1, 10000, true, vesselCriteria);
+        var vesselRequest = new GetListRequest(1, ALL_ITEMS, true, vesselCriteria);
 
         //Set the new search criterias (without vessel criterias)
         searchGetListRequest.setSearchCriterias(alarmsOrTicketsCritieria);
