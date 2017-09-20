@@ -67,8 +67,9 @@ angular.module('unionvmsWeb').controller('MovementCtrl',function($scope, $timeou
     };
 
     var retriveMovementsSuccess = function(searchResultListPage){
-        console.info("Success in retrieveing movements..");
         $scope.currentSearchResults.updateWithNewResults(searchResultListPage);
+        $scope.allCurrentSearchResults = searchResultListPage.items;
+        $scope.currentSearchResultsByPage = searchResultListPage.items;
     };
 
     var retriveMovementsError = function(error){

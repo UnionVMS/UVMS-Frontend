@@ -11,7 +11,7 @@ copy of the GNU General Public License along with the IFDM Suite. If not, see <h
  */
 angular.module('unionvmsWeb').factory('searchService',function($q, $log, searchUtilsService, GetListRequest, VesselListPage, SearchField, vesselRestService, mobileTerminalRestService, pollingRestService, movementRestService, manualPositionRestService, GetPollableListRequest, SearchResultListPage, auditLogRestService, exchangeRestService, alarmRestService, userService) {
 
-    var DEFAULT_ITEMS_PER_PAGE = 20,
+    var DEFAULT_ITEMS_PER_PAGE = 1,
         ALL_ITEMS = 10000000;
 
 	var getListRequest = new GetListRequest(1, DEFAULT_ITEMS_PER_PAGE, true, []),
@@ -539,8 +539,8 @@ angular.module('unionvmsWeb').factory('searchService',function($q, $log, searchU
             var movementCritieria = partition["default"];
             var vesselCriteria = partition["vessel"];
 
-            var vesselRequest = new GetListRequest(1, 10000, getListRequest.isDynamic, vesselCriteria);
-            var movementRequest = new GetListRequest(getListRequest.page, getListRequest.listSize, getListRequest.isDynamic, movementCritieria);
+            var vesselRequest = new GetListRequest(1, ALL_ITEMS, getListRequest.isDynamic, vesselCriteria);
+            var movementRequest = new GetListRequest(getListRequest.page, ALL_ITEMS, getListRequest.isDynamic, movementCritieria);
 
             //Get vessels first?
             if(vesselRequest.getNumberOfSearchCriterias() > 0){
