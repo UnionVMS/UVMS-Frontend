@@ -11,7 +11,11 @@ copy of the GNU General Public License along with the IFDM Suite. If not, see <h
  */
 angular.module('unionvmsWeb').controller('OpenticketsCtrl',function($scope, $log, $filter, $stateParams, locale, Alarm, csvService, alertService, alarmRestService, SearchResults, SearchResultListPage, searchService, TicketModal, movementRestService, $resource, longPolling, mobileTerminalRestService, modalComment){
 
-    $scope.selectedItems = []; //Selected items by checkboxes
+    //Selected items by checkboxes
+    $scope.selectedItems = [];
+
+    //Number of items displayed on each page
+    $scope.itemsByPage = 20;
 
     $scope.newTicketsCount = 0;
     var longPollingId;
@@ -82,6 +86,8 @@ angular.module('unionvmsWeb').controller('OpenticketsCtrl',function($scope, $log
     //Update the search results
     var updateSearchResults = function(searchResultsListPage){
         $scope.currentSearchResults.updateWithNewResults(searchResultsListPage);
+        $scope.allCurrentSearchResults = searchResultsListPage.items;
+        $scope.currentSearchResultsByPage = searchResultsListPage.items;
     };
 
     //Error during search

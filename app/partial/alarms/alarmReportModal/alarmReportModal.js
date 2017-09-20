@@ -11,6 +11,9 @@ copy of the GNU General Public License along with the IFDM Suite. If not, see <h
  */
 angular.module('unionvmsWeb').controller('AlarmReportModalCtrl', function($scope, $log, $q, $timeout, $modalInstance, locale, alarm, options, GetListRequest, SearchResults, vesselRestService, dateTimeService, alarmRestService,  userService, configurationService, globalSettingsService, $filter, leafletData, alarmCsvService) {
 
+    //Number of items displayed on each page
+    $scope.itemsByPage = 5;
+
     $scope.alarm = alarm;
     $scope.knownVessel = angular.isDefined(alarm.vessel);
     $scope.options = options;
@@ -283,14 +286,13 @@ angular.module('unionvmsWeb').controller('AlarmReportModalCtrl', function($scope
 
     //Perform the serach
     $scope.searchVessel = function(){
-        console.log("searchVessel!");
         //Check that search input isn't empty
         if(typeof $scope.assignAssetSearchText !== 'string' || $scope.assignAssetSearchText.trim().length === 0){
             return;
         }
 
         //Create new request
-        getListRequest = new GetListRequest(1, 5, false, []);
+        getListRequest = new GetListRequest(1, 10000000, false, []);
         $scope.currentSearchResults.setLoading(true);
 
         //Set search criterias
@@ -312,6 +314,8 @@ angular.module('unionvmsWeb').controller('AlarmReportModalCtrl', function($scope
     //Search success
     var onSearchVesselSuccess = function(vesselListPage){
         $scope.currentSearchResults.updateWithNewResults(vesselListPage);
+        $scope.allCurrentSearchResults = vesselListPage.items;
+        $scope.currentSearchResultsByPage = vesselListPage.items;
     };
 
     //Search error
