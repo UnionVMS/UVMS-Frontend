@@ -11,6 +11,9 @@ copy of the GNU General Public License along with the IFDM Suite. If not, see <h
  */
 angular.module('unionvmsWeb').controller('ManualmovementlistCtrl',function($scope, globalSettingsService){
 
+	//Number of items displayed on each page
+    $scope.itemsByPage = 20;
+
 	$scope.speedUnit = globalSettingsService.getSpeedUnit();
 
 });
