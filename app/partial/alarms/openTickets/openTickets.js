@@ -86,8 +86,8 @@ angular.module('unionvmsWeb').controller('OpenticketsCtrl',function($scope, $log
     //Update the search results
     var updateSearchResults = function(searchResultsListPage){
         $scope.currentSearchResults.updateWithNewResults(searchResultsListPage);
-        $scope.allCurrentSearchResults = $scope.currentSearchResults.items;
-        $scope.currentSearchResultsByPage = $scope.currentSearchResults.items;
+        $scope.allCurrentSearchResults = searchResultsListPage.items;
+        $scope.currentSearchResultsByPage = searchResultsListPage.items;
     };
 
     //Error during search

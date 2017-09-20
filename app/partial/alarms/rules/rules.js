@@ -98,8 +98,8 @@ angular.module('unionvmsWeb').controller('RulesCtrl',function($scope, $log, $sta
     var updateSearchResults = function(searchResultsListPage){
         $scope.currentSearchResults.updateWithNewResults(searchResultsListPage);
         $scope.setUserSubscribeValues();
-        $scope.allCurrentSearchResults = $scope.currentSearchResults.items;
-        $scope.currentSearchResultsByPage = $scope.currentSearchResults.items;
+        $scope.allCurrentSearchResults = searchResultsListPage.items;
+        $scope.currentSearchResultsByPage = searchResultsListPage.items;
     };
 
     //Error during search
