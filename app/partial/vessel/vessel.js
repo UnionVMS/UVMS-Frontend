@@ -135,6 +135,7 @@ angular.module('unionvmsWeb').controller('VesselCtrl', function($scope, $log, $s
             $scope.currentSearchResults.removeAllItems();
             $scope.currentSearchResults.setLoading(false);
             $scope.currentSearchResults.setErrorMessage(locale.getString('common.search_failed_error'));
+            $scope.allCurrentSearchResults = $scope.currentSearchResults.items;
         }
     };
 

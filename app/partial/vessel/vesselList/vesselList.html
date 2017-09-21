@@ -13,18 +13,36 @@ copy of the GNU General Public License along with the IFDM Suite. If not, see <h
     <div search-results-table search="currentSearchResults" class="col-md-12">
         <table class="searchResults colorOdd truncate-text">
             <thead>
-            <tr>
-                <th class="checkboxContainer"><input type="checkbox" ng-checked="isAllChecked()" ng-click="checkAll()" ng-disabled="!currentSearchResults.items.length" id="asset-checkbox-select-all"/></th>
-                <th class="st-sort" st-sort="countryCode" st-skip-natural="true" id="asset-sort-countryCode">{{'vessel.table_header_flag_state' | i18n}}</th>
-                <th class="st-sort" st-sort="externalMarking" st-skip-natural="true" id="asset-sort-externalMarking">{{'vessel.table_header_external_marking' | i18n}}</th>
-                <th class="st-sort" st-sort="name" st-skip-natural="true" id="asset-sort-name">{{'vessel.table_header_name' | i18n}}</th>
-                <th class="st-sort" st-sort="ircs" st-skip-natural="true" id="asset-sort-ircs">{{'vessel.table_header_signal' | i18n}}</th>
-                <th class="st-sort" st-sort="cfr" st-skip-natural="true" id="asset-sort-cfr">{{'vessel.table_header_cfr' | i18n}}</th>
-                <th class="st-sort" st-sort="gearType" st-skip-natural="true" id="asset-sort-gearType">{{'vessel.table_header_gear_type' | i18n}}</th>
-                <th class="st-sort" st-sort="licenseType" st-skip-natural="true" id="asset-sort-licenseType">{{'vessel.table_header_license_type' | i18n}}</th>
-                <th class="st-sort" st-sort="lastMovement.time" st-sort-default="reverse" st-skip-natural="true" id="asset-sort-lastMovement">{{'vessel.table_header_last_report' | i18n}}</th>
-                <th>{{'vessel.table_header_details' | i18n}}</th>
-            </tr>
+                <tr>
+                    <th class="checkboxContainer">
+                        <input type="checkbox" ng-checked="isAllChecked()" ng-click="checkAll()" ng-disabled="!currentSearchResults.items.length" id="asset-checkbox-select-all"/>
+                    </th>
+                    <th class="st-sort" st-sort="countryCode" st-skip-natural="true" id="asset-sort-countryCode">
+                       {{'vessel.table_header_flag_state' | i18n}}
+                    </th>
+                    <th class="st-sort" st-sort="externalMarking" st-skip-natural="true" id="asset-sort-externalMarking">
+                        {{'vessel.table_header_external_marking' | i18n}}
+                    </th>
+                    <th class="st-sort" st-sort="name" st-skip-natural="true" id="asset-sort-name">
+                        {{'vessel.table_header_name' | i18n}}
+                    </th>
+                    <th class="st-sort" st-sort="ircs" st-skip-natural="true" id="asset-sort-ircs">
+                        {{'vessel.table_header_signal' | i18n}}
+                    </th>
+                    <th class="st-sort" st-sort="cfr" st-skip-natural="true" id="asset-sort-cfr">
+                        {{'vessel.table_header_cfr' | i18n}}
+                    </th>
+                    <th class="st-sort" st-sort="gearType" st-skip-natural="true" id="asset-sort-gearType">
+                        {{'vessel.table_header_gear_type' | i18n}}
+                    </th>
+                    <th class="st-sort" st-sort="licenseType" st-skip-natural="true" id="asset-sort-licenseType">
+                        {{'vessel.table_header_license_type' | i18n}}
+                    </th>
+                    <th class="st-sort" st-sort="lastMovement.time" st-sort-default="reverse" st-skip-natural="true" id="asset-sort-lastMovement">
+                        {{'vessel.table_header_last_report' | i18n}}
+                    </th>
+                    <th>{{'vessel.table_header_details' | i18n}}</th>
+                </tr>
             </thead>
             <tbody>
                 <tr ng-repeat="item in currentSearchResultsByPage" ng-class="{archived: !item.active}">
