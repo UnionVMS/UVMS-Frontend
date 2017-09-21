@@ -11,7 +11,11 @@ copy of the GNU General Public License along with the IFDM Suite. If not, see <h
  */
 angular.module('unionvmsWeb').controller('AssignvesselCtrl',function($scope, $location, GetListRequest, vesselRestService, mobileTerminalRestService, alertService, locale, modalComment, SearchResults){
 
-    var getListRequest;
+    var getListRequest,
+        ALL_ITEMS = 10000000;
+
+    //Number of items displayed on each page
+    $scope.itemsByPage = 5;
 
     //Watch for toggle (show) of AssignVessel partial and reset search and selectedVessel when that happens
     $scope.$watch(function () {
@@ -33,7 +37,7 @@ angular.module('unionvmsWeb').controller('AssignvesselCtrl',function($scope, $lo
         $scope.assignVesselFreeText = "";
         $scope.assignVesselSearchType = "ALL";
         $scope.assignVesselSearchInProgress = false;
-        getListRequest = new GetListRequest(1, 5, false, []);
+        getListRequest = new GetListRequest(1, ALL_ITEMS, false, []);
     };
 
     //Search objects and results
@@ -58,7 +62,7 @@ angular.module('unionvmsWeb').controller('AssignvesselCtrl',function($scope, $lo
     //Perform the serach
     $scope.assignVesselSearch = function(){
         //Create new request
-        getListRequest = new GetListRequest(1, 5, false, []);
+        getListRequest = new GetListRequest(1, ALL_ITEMS, false, []);
         $scope.currentSearchResults.clearErrorMessage();
         $scope.currentSearchResults.setLoading(true);
 
@@ -80,6 +84,8 @@ angular.module('unionvmsWeb').controller('AssignvesselCtrl',function($scope, $lo
     //Search success
     var onSearchVesselSuccess = function(vesselListPage){
         $scope.currentSearchResults.updateWithNewResults(vesselListPage);
+        $scope.allCurrentSearchResults = vesselListPage.items;
+        $scope.currentSearchResultsByPage = vesselListPage.items;
     };
 
     //Search error
@@ -87,6 +93,7 @@ angular.module('unionvmsWeb').controller('AssignvesselCtrl',function($scope, $lo
         $scope.currentSearchResults.removeAllItems();
         $scope.currentSearchResults.setLoading(false);
         $scope.currentSearchResults.setErrorMessage(locale.getString('common.search_failed_error'));
+        $scope.allCurrentSearchResults = $scope.currentSearchResults.items;
     };
 
     //Goto page in the search results

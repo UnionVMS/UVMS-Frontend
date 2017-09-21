@@ -46,33 +46,42 @@ copy of the GNU General Public License along with the IFDM Suite. If not, see <h
                         </div>
                     </form>
                 </div>
-                <div class="row">
-                    <div search-results-table search="currentSearchResults" class="col-md-12" ng-hide="assignVesselSearchInProgress">
+                <div class="row" st-table="currentSearchResultsByPage" st-safe-src="allCurrentSearchResults">
+                    <div search-results-table search="currentSearchResults" class="col-md-12">
                         <table class="searchResults colorOdd truncate-text">
                             <thead>
                                 <tr>
-                                    <th sortable-table-header by="currentSearchResults.sortBy" reverse="currentSearchResults.sortReverse" order="'ircs'" input-field-id="assign-asset-sort-ircs">{{"vessel.ircs" | i18n}}</th>
-                                    <th sortable-table-header by="currentSearchResults.sortBy" reverse="currentSearchResults.sortReverse" order="'name'" input-field-id="assign-asset-sort-name">{{"vessel.name" | i18n}}</th>
-                                    <th sortable-table-header by="currentSearchResults.sortBy" reverse="currentSearchResults.sortReverse" order="'cfr'" input-field-id="assign-asset-sort-cfr">{{"vessel.cfr" | i18n}}</th>
-                                    <th sortable-table-header by="currentSearchResults.sortBy" reverse="currentSearchResults.sortReverse" order="'externalMarking'" input-field-id="assign-asset-sort-externalMarking">{{"vessel.external_marking" | i18n}}</th>
+                                    <th class="st-sort" st-sort="ircs" st-skip-natural="true" id="assign-asset-sort-ircs">
+                                        {{"vessel.ircs" | i18n}}</th>
+                                    <th class="st-sort" st-sort="name" st-skip-natural="true" id="assign-asset-sort-name">
+                                        {{"vessel.name" | i18n}}</th>
+                                    <th class="st-sort" st-sort="cfr" st-skip-natural="true" id="assign-asset-sort-cfr">
+                                        {{"vessel.cfr" | i18n}}</th>
+                                    <th class="st-sort" st-sort="externalMarking" st-skip-natural="true" id="assign-asset-sort-externalMarking">
+                                        {{"vessel.external_marking" | i18n}}
+                                    </th>
                                     <th>&nbsp;</th>
                                 </tr>
                             </thead>
-                            <tr ng-repeat="vessel in currentSearchResults.items | orderBy:currentSearchResults.sortBy:currentSearchResults.sortReverse">
-                                <td ng-attr-title="{{vessel.ircs}}">{{vessel.ircs}}</td>
-                                <td ng-attr-title="{{vessel.name}}">{{vessel.name}}</td>
-                                <td ng-attr-title="{{vessel.cfr}}">{{vessel.cfr}}</td>
-                                <td ng-attr-title="{{vessel.externalMarking}}">{{vessel.externalMarking}}</td>
-                                <td class="textAlignRight">
-                                    <button type="button" class="btn btn-primary" ng-click="selectVessel(vessel)" ng-disabled="!vessel.ircs" title="{{ vessel.ircs ? '' : 'mobileTerminal.assign_vessel_ircs_required' | i18n }}" id="assign-asset-btn-select" style="pointer-events: auto;"><i class="fa fa-check"></i></button>
-                                </td>
-                            </tr>
+                            <tbody>
+                                <tr ng-repeat="item in currentSearchResultsByPage" ng-hide="currentSearchResults.items.length === 0">
+                                    <td ng-attr-title="{{item.ircs}}">{{item.ircs}}</td>
+                                    <td ng-attr-title="{{item.name}}">{{item.name}}</td>
+                                    <td ng-attr-title="{{item.cfr}}">{{item.cfr}}</td>
+                                    <td ng-attr-title="{{item.externalMarking}}">{{item.externalMarking}}</td>
+                                    <td class="textAlignRight">
+                                        <button type="button" class="btn btn-primary" ng-click="selectVessel(item)" ng-disabled="!item.ircs" title="{{ item.ircs ? '' : 'mobileTerminal.assign_vessel_ircs_required' | i18n }}" id="assign-asset-btn-select" style="pointer-events: auto;"><i class="fa fa-check"></i></button>
+                                    </td>
+                                </tr>
+                            </tbody>
+                            <tfoot>
+                                <tr>
+                                    <td colspan="12" class="text-right" ng-hide="currentSearchResults.items.length === 0" ng-show="allCurrentSearchResults.length > itemsByPage">
+                                        <div st-pagination st-items-by-page="itemsByPage" st-template="partial/common/reportsPagination/reportsPagination.html"></div>
+                                    </td>
+                                </tr>
+                            </tfoot>
                         </table>
-                    </div>
-                </div>
-                <div class="row">
-                    <div class="col-md-12">
-                        <search-results-pagination page='currentSearchResults.page' total='currentSearchResults.totalNumberOfPages' callback='gotoPage'></search-results-pagination >
                     </div>
                 </div>
             </div>

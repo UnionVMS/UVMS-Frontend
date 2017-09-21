@@ -11,7 +11,7 @@ copy of the GNU General Public License along with the IFDM Suite. If not, see <h
  */
 angular.module('unionvmsWeb').factory('searchService',function($q, $log, searchUtilsService, GetListRequest, VesselListPage, SearchField, vesselRestService, mobileTerminalRestService, pollingRestService, movementRestService, manualPositionRestService, GetPollableListRequest, SearchResultListPage, auditLogRestService, exchangeRestService, alarmRestService, userService) {
 
-    var DEFAULT_ITEMS_PER_PAGE = 1,
+    var DEFAULT_ITEMS_PER_PAGE = 20,
         ALL_ITEMS = 10000000;
 
 	var getListRequest = new GetListRequest(1, DEFAULT_ITEMS_PER_PAGE, true, []),
@@ -607,9 +607,12 @@ angular.module('unionvmsWeb').factory('searchService',function($q, $log, searchU
         // and all serach criterias are sent directly to mobile terminal search
         searchMobileTerminals : function(skipVesselSearch){
 
+            var getAllListRequest = new GetListRequest(1, ALL_ITEMS, getListRequest.isDynamic, getListRequest.criterias);
+
             //Get mobile terminals without getting vessels first
             if(skipVesselSearch){
-                return mobileTerminalRestService.getMobileTerminalList(getListRequest);
+                getAllListRequest = new GetListRequest(1, ALL_ITEMS, getListRequest.isDynamic, getListRequest.criterias);
+                return mobileTerminalRestService.getMobileTerminalList(getAllListRequest);
             }
 
             // Split search criteria into vessel and mobileTerminal
@@ -634,11 +637,10 @@ angular.module('unionvmsWeb').factory('searchService',function($q, $log, searchU
             //Get vessels first?
             if(vesselCriteria.length > 0){
                 var deferred = $q.defer();
-                var getVesselListRequest = new GetListRequest(1, 10000000, vesselSearchIsDynamic, vesselCriteria);
+                var getVesselListRequest = new GetListRequest(1, ALL_ITEMS, vesselSearchIsDynamic, vesselCriteria);
                 var outerThis = this;
                 //Get the vessels
                 vesselRestService.getAllMatchingVessels(getVesselListRequest).then(
-                    //TODO: Get more pages of vessels or error message that too many vessels were returned?
                     function(vessels){
                         //If no matchin vessels found
                         if(vessels.length === 0){
@@ -652,7 +654,8 @@ angular.module('unionvmsWeb').factory('searchService',function($q, $log, searchU
                             }
                         });
                         //Get mobile terminals
-                        mobileTerminalRestService.getMobileTerminalList(getListRequest).then(
+                        getAllListRequest = new GetListRequest(1, ALL_ITEMS, getListRequest.isDynamic, getListRequest.criterias);
+                        mobileTerminalRestService.getMobileTerminalList(getAllListRequest).then(
                             function(mobileTerminaListPage){
                                 return deferred.resolve(mobileTerminaListPage);
                             },
@@ -670,13 +673,16 @@ angular.module('unionvmsWeb').factory('searchService',function($q, $log, searchU
             }
             //No need to get vessels
             else{
-                return mobileTerminalRestService.getMobileTerminalList(getListRequest);
+                getAllListRequest = new GetListRequest(1, ALL_ITEMS, getListRequest.isDynamic, getListRequest.criterias);
+                return mobileTerminalRestService.getMobileTerminalList(getAllListRequest);
             }
         },
 
         searchAuditLogs: function() {
             searchUtilsService.modifySpanAndTimeZones(getListRequest.criterias);
-            return auditLogRestService.getAuditLogList(getListRequest);
+            var getAllListRequest = new GetListRequest(1, ALL_ITEMS, getListRequest.isDynamic, getListRequest.criterias);
+
+            return auditLogRestService.getAuditLogList(getAllListRequest);
         },
 
         searchExchange: function() {
