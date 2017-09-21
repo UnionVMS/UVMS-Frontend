@@ -23,21 +23,33 @@ copy of the GNU General Public License along with the IFDM Suite. If not, see <h
                 <span class="transponderType" id="mob-term-history-transponder-type">{{'mobileTerminal.history_modal_transpondertype' | i18n }}: <b>{{ mobileTerminal.type | transponderName}}</b></span>
             </div>
         </div>
-        <div class="row">
+        <div class="row" st-table="currentSearchResultsByPage" st-safe-src="allCurrentSearchResults">
             <div search-results-table search="currentSearchResults" class="col-md-12">
                 <table class="searchResults colorOdd truncate-text">
                     <thead>
                         <tr>
-                            <th sortable-table-header by="currentSearchResults.sortBy" reverse="currentSearchResults.sortReverse" order="'eventCode'">{{'mobileTerminal.history_modal_eventcode' | i18n }}</th>
-                            <th sortable-table-header by="currentSearchResults.sortBy" reverse="currentSearchResults.sortReverse" order="'mobileTerminal.associatedVessel.name'">{{'mobileTerminal.history_modal_vesselname' | i18n }}</th>
-                            <th sortable-table-header by="currentSearchResults.sortBy" reverse="currentSearchResults.sortReverse" order="'mobileTerminal.attributes.SERIAL_NUMBER'">{{'mobileTerminal.history_modal_serialnumber' | i18n }}</th>
-                            <th sortable-table-header by="currentSearchResults.sortBy" reverse="currentSearchResults.sortReverse" order="'mobileTerminal.attributes.SATELLITE_NUMBER'">{{'mobileTerminal.history_modal_satelliteno' | i18n }}</th>
-                            <th sortable-table-header by="currentSearchResults.sortBy" reverse="currentSearchResults.sortReverse" order="'changeDate'">{{'mobileTerminal.history_modal_changeddate' | i18n }}</th>
-                            <th sortable-table-header by="currentSearchResults.sortBy" reverse="currentSearchResults.sortReverse" order="'comment'">{{'mobileTerminal.history_modal_comments' | i18n }}</th>
+                            <th class="st-sort" st-sort="eventCode" st-skip-natural="true" id="mtHistory-sort-eventCode">
+                                {{'mobileTerminal.history_modal_eventcode' | i18n}}
+                            </th>
+                            <th class="st-sort" st-sort="mobileTerminal.associatedVessel.name" st-skip-natural="true" id="mtHistory-sort-asset">
+                                {{'mobileTerminal.history_modal_vesselname' | i18n}}
+                            </th>
+                            <th class="st-sort" st-sort="mobileTerminal.attributes.SERIAL_NUMBER" st-skip-natural="true" id="mtHistory-sort-serialnumber">
+                                {{'mobileTerminal.history_modal_serialnumber' | i18n}}
+                            </th>
+                            <th class="st-sort" st-sort="mobileTerminal.attributes.SATELLITE_NUMBER" st-skip-natural="true" id="mtHistory-sort-satelliteno">
+                                {{'mobileTerminal.history_modal_satelliteno' | i18n}}
+                            </th>
+                            <th class="st-sort" st-sort="changeDate" st-sort-default="reverse" st-skip-natural="true" id="mtHistory-sort-changeDate">
+                                {{'mobileTerminal.history_modal_changeddate' | i18n}}
+                            </th>
+                            <th class="st-sort" st-sort="comment" st-skip-natural="true" id="mtHistory-sort-comment">
+                                {{'mobileTerminal.history_modal_comments' | i18n}}
+                            </th>
                         </tr>
                     </thead>
                     <tbody>
-                        <tr ng-repeat="item in currentSearchResults.items | orderBy:currentSearchResults.sortBy:currentSearchResults.sortReverse">
+                        <tr ng-repeat="item in currentSearchResultsByPage">
                             <td>{{item.eventCode}}</td>
                             <td>
                                 <span ng-show="item.associatedVessel"><a href="#/assets/{{item.connectId}}" title="{{'common.view_details' | i18n}}" ng-click="cancel()" id="mob-term-history-to-vessel">{{item.associatedVessel.name}}</a></span>
@@ -53,25 +65,36 @@ copy of the GNU General Public License along with the IFDM Suite. If not, see <h
             </div>
         </div>
 
-
-
-
-        <div class="row" ng-repeat="channelResults in channelResultList">
+        <div class="row" st-table="currentChannelResultsByPage" st-safe-src="allCurrentSearchResults">
             <div search-results-table search="channelResults" class="col-md-12">
                 <table class="searchResults colorOdd truncate-text">
                     <thead>
                     <tr>
-                        <th sortable-table-header by="channelResults.sortBy" reverse="channelResults.sortReverse" order="'eventCode'">{{'mobileTerminal.history_modal_eventcode' | i18n }}</th>
-                        <th sortable-table-header by="channelResults.sortBy" reverse="channelResults.sortReverse" order="'name'">{{'mobileTerminal.history_modal_channel_name' | i18n }}</th>
-                        <th sortable-table-header by="channelResults.sortBy" reverse="channelResults.sortReverse" order="'mobileTerminal.channels[0].ids.DNID'">{{'mobileTerminal.history_modal_dnid' | i18n }}</th>
-                        <th sortable-table-header by="channelResults.sortBy" reverse="channelResults.sortReverse" order="'mobileTerminal.channels[0].ids.MEMBER_NUMBER'">{{'mobileTerminal.history_modal_memberno' | i18n }}</th>
-                        <th sortable-table-header by="channelResults.sortBy" reverse="channelResults.sortReverse" order="'mobileTerminal.attributes.INSTALLED_ON'">{{'mobileTerminal.history_modal_installed' | i18n }}</th>
-                        <th sortable-table-header by="channelResults.sortBy" reverse="channelResults.sortReverse" order="'mobileTerminal.attributes.UNINSTALLED_ON'">{{'mobileTerminal.history_modal_uninstalled' | i18n }}</th>
-                        <th sortable-table-header by="channelResults.sortBy" reverse="channelResults.sortReverse" order="'changeDate'">{{'mobileTerminal.history_modal_changeddate' | i18n }}</th>
+                        <th class="st-sort" st-sort="eventCode" st-skip-natural="true" id="mtHistory-sort-channel-comment">
+                            {{'mobileTerminal.history_modal_eventcode' | i18n }}
+                        </th>
+                        <th class="st-sort" st-sort="name" st-skip-natural="true" id="mtHistory-sort-channel-name">
+                            {{'mobileTerminal.history_modal_channel_name' | i18n }}
+                        </th>
+                        <th class="st-sort" st-sort="mobileTerminal.channels[0].ids.DNID" st-skip-natural="true" id="mtHistory-sort-channel-dnid">
+                            {{'mobileTerminal.history_modal_dnid' | i18n }}
+                        </th>
+                        <th class="st-sort" st-sort="mobileTerminal.channels[0].ids.MEMBER_NUMBER" st-skip-natural="true" id="mtHistory-sort-channel-memberNo">
+                            {{'mobileTerminal.history_modal_memberno' | i18n }}
+                        </th>
+                        <th class="st-sort" st-sort="mobileTerminal.attributes.INSTALLED_ON" st-skip-natural="true" id="mtHistory-sort-channel-installed">
+                            {{'mobileTerminal.history_modal_installed' | i18n }}
+                        </th>
+                        <th class="st-sort" st-sort="mobileTerminal.attributes.UNINSTALLED_ON" st-skip-natural="true" id="mtHistory-sort-channel-uninstalled">
+                            {{'mobileTerminal.history_modal_uninstalled' | i18n }}
+                        </th>
+                        <th class="st-sort" st-sort="changeDate" st-sort-default="reverse" st-skip-natural="true" id="mtHistory-sort-channel-changeDate">
+                            {{'mobileTerminal.history_modal_changeddate' | i18n }}
+                        </th>
                     </tr>
                     </thead>
                     <tbody>
-                    <tr ng-repeat="item in channelResults.items | orderBy:channelResults.sortBy:channelResults.sortReverse">
+                    <tr ng-repeat="item in currentChannelResultsByPage">
                         <td>{{item.eventCode}}</td>
                         <td>{{item.name}}</td>
                         <td>{{getAttribute(item, "DNID")}}</td>
