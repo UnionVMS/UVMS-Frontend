@@ -15,7 +15,6 @@
 
         vm.gotoPage = gotoPage;
         vm.searchSalesReports = searchSalesReports;
-        vm.currentSearchResults = salesSearchService.getSearchResults();
         vm.exportSalesReports = salesRestService.exportDocuments;
 
         vm.editSelectionCallBack = editSelectionCallBack;
