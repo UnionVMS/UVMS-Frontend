@@ -299,7 +299,7 @@
                         <goals>
                             <goal>grunt</goal>
                         </goals>
-                        <phase>${karma.phase}</phase>
+                        <phase>compile</phase>
                         <configuration>
                             <arguments>${grunt.build}</arguments>
                         </configuration>
