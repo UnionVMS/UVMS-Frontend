@@ -39,7 +39,7 @@ angular.module('unionvmsWeb').directive('layerTree', function($q, $modal, mapSer
 			};
 			
 			// call tree and map update
-			var selectHandler = function( evebt, data){
+			var selectHandler = function( event, data){
 			    updateBasemap( event, data );
 			    
 			    if (data.node.hasChildren() === true && !angular.isDefined(data.node.data.geoJson)){
