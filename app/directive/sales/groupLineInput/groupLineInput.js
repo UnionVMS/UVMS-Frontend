@@ -4,7 +4,7 @@
     angular
         .module('unionvmsWeb')
         .component('groupLineInput', {
-            templateUrl: 'directive/common/groupLineInput/groupLineInput.html',
+            templateUrl: 'directive/sales/groupLineInput/groupLineInput.html',
             controller: groupLineInputCtrl,
             controllerAs: 'vm',
             bindings: {
