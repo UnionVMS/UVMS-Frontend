@@ -35,6 +35,7 @@
     "fishing_trip_departure": "Departure",
     "fishing_trip_arrival": "Arrival",
     "fishing_trip_landing": "Landing",
+    "fishing_trip_link": "View Fishing Trip",
 
     "report_header_SALES_NOTE": "Sales Note",
     "report_header_TAKE_OVER_DOCUMENT": "Take Over Document",

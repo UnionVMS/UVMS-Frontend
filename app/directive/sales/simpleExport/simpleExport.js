@@ -6,7 +6,7 @@ angular.module('unionvmsWeb').directive('simpleExport', function () {
         scope: {
             exportfunc: "=",
         },
-        templateUrl: 'directive/common/simpleExport/simpleExport.html',
+        templateUrl: 'directive/sales/simpleExport/simpleExport.html',
         link: function (scope, element, attrs, fn) {
         }
     };
