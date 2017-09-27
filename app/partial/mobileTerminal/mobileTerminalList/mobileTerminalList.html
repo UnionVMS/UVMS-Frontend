@@ -9,64 +9,82 @@ the hope that it will be useful, but WITHOUT ANY WARRANTY; without even the impl
 FITNESS FOR A PARTICULAR PURPOSE.  See the GNU General Public License for more details. You should have received a
 copy of the GNU General Public License along with the IFDM Suite. If not, see <http://www.gnu.org/licenses/>.
 -->
-<div class="row" ng-controller="MobileterminallistCtrl">
+<div class="row" ng-controller="MobileterminallistCtrl" st-table="currentSearchResultsByPage" st-safe-src="allCurrentSearchResults">
     <div search-results-table search="currentSearchResults" class="col-md-12">
-        <table class="searchResults colorOdd mobileTerminalsTable truncate-text">
+        <table class="searchResults colorOdd truncate-text">
             <thead>
-            <tr>
-                <th class="checkboxContainer"><input type="checkbox" ng-checked="isAllChecked()" ng-click="checkAll()" ng-disabled="!currentSearchResults.items.length" input-field-id="mt-checkbox-select-all"/></th>
-
-                <th sortable-table-header by="currentSearchResults.sortBy" reverse="currentSearchResults.sortReverse" order="'associatedVessel.name'" input-field-id="mt-sort-name">{{'mobileTerminal.table_header_vessel_name' | i18n}}</th>
-
-                <th sortable-table-header by="currentSearchResults.sortBy" reverse="currentSearchResults.sortReverse" order="'attributes.SERIAL_NUMBER'" input-field-id="mt-sort-serialNumber">{{'mobileTerminal.table_header_serial_no' | i18n}}</th>
-
-                <th sortable-table-header by="currentSearchResults.sortBy" reverse="currentSearchResults.sortReverse" order="'channels[0].ids.MEMBER_NUMBER'" input-field-id="mt-sort-memberNumber">{{'mobileTerminal.table_header_member_no' | i18n}}</th>
-
-                <th sortable-table-header by="currentSearchResults.sortBy" reverse="currentSearchResults.sortReverse" order="'channels[0].ids.DNID'" input-field-id="mt-sort-dnid">{{'mobileTerminal.table_header_dnid' | i18n}}</th>
-
-                <th sortable-table-header by="currentSearchResults.sortBy" reverse="currentSearchResults.sortReverse" order="'type | transponderName'" input-field-id="mt-sort-transponderName">{{'mobileTerminal.table_header_transponder_type' | i18n}}</th>
-
-                <th sortable-table-header by="currentSearchResults.sortBy" reverse="currentSearchResults.sortReverse" order="'attributes.SATELLITE_NUMBER'" input-field-id="mt-sort-satelliteNumber">{{'mobileTerminal.table_header_satellite_number' | i18n}}</th>
-
-                <th sortable-table-header by="currentSearchResults.sortBy" reverse="currentSearchResults.sortReverse" order="'associatedVessel.mmsiNo'" input-field-id="mt-sort-mmsiNo">{{'mobileTerminal.table_header_mmsi_no' | i18n}}</th>
-
-                <th sortable-table-header by="currentSearchResults.sortBy" reverse="currentSearchResults.sortReverse" order="'active'" input-field-id="mt-sort-status">{{'mobileTerminal.table_header_status' | i18n}}</th>
-
-                <th>{{'mobileTerminal.table_header_detail_button' | i18n}}</th>
-            </tr>
+                <tr>
+                    <th class="checkboxContainer">
+                        <input type="checkbox" ng-checked="isAllChecked()" ng-click="checkAll()" ng-disabled="!allCurrentSearchResults.length" id="mt-checkbox-select-all"/>
+                    </th>
+                    <th class="st-sort" st-sort="associatedVessel.name" st-skip-natural="true" id="mt-sort-name">
+                        {{'mobileTerminal.table_header_vessel_name' | i18n}}
+                    </th>
+                    <th class="st-sort" st-sort="attributes.SERIAL_NUMBER" st-skip-natural="true" id="mt-sort-serialNumber">
+                        {{'mobileTerminal.table_header_serial_no' | i18n}}
+                    </th>
+                    <th class="st-sort" st-sort="channels[0].ids.MEMBER_NUMBER" st-skip-natural="true" id="mt-sort-memberNumber">
+                        {{'mobileTerminal.table_header_member_no' | i18n}}
+                    </th>
+                    <th class="st-sort" st-sort="channels[0].ids.DNID" st-skip-natural="true" id="mt-sort-dnid">
+                        {{'mobileTerminal.table_header_dnid' | i18n}}
+                    </th>
+                    <th class="st-sort" st-sort="type" st-skip-natural="true" id="mt-sort-transponderName">
+                        {{'mobileTerminal.table_header_transponder_type' | i18n}}
+                    </th>
+                    <th class="st-sort" st-sort="attributes.SATELLITE_NUMBER" st-skip-natural="true" id="mt-sort-satelliteNumber">
+                        {{'mobileTerminal.table_header_satellite_number' | i18n}}
+                    </th>
+                    <th class="st-sort" st-sort="associatedVessel.mmsiNo" st-skip-natural="true" id="mt-sort-mmsiNo">
+                        {{'mobileTerminal.table_header_mmsi_no' | i18n}}
+                    </th>
+                    <th class="st-sort" st-sort="active" st-skip-natural="true" id="mt-sort-status">
+                        {{'mobileTerminal.table_header_status' | i18n}}
+                    </th>
+                    <th>
+                        {{'mobileTerminal.table_header_detail_button' | i18n}}
+                    </th>
+                </tr>
             </thead>
             <tbody>
-            <tr ng-repeat="item in currentSearchResults.items | orderBy:currentSearchResults.sortBy:currentSearchResults.sortReverse" ng-class="{'inactive':!item.active}">
-                <td class="checkboxContainer">
-                    <input type="checkbox" ng-checked="isChecked(item)" ng-click="checkMobileTerminal(item)" id="mt-checkbox-listitem"/>
-                </td>
-                <td class="statusColored">
-                    <span ng-show="item.associatedVessel"><a href="#/assets/{{item.associatedVessel.getGuid()}}" ng-attr-title="{{'common.view_details' | i18n}}">{{item.associatedVessel.name}}</a></span>
-                    <span ng-show="item.connectId && !item.associatedVessel" class="assetNotFound" ng-attr-title="{{'mobileTerminal.warning_plugin_inactive' | i18n}}">{{'common.asset_not_found' | i18n}}</span>
-                    <span ng-show="!item.connectId && !item.associatedVessel" class="assetNotAssigned" ng-attr-title="{{'mobileTerminal.table_not_assigned_icon_tooltip' | i18n}}">{{'mobileTerminal.table_vessel_name_not_assigned' | i18n}}</span>
-                </td>
-                <td class="statusColored" ng-attr-title="{{item.attributes.SERIAL_NUMBER}}">{{item.attributes.SERIAL_NUMBER}}</td>
-                <td class="statusColored" ng-attr-title="{{getDefaultMemberNumber(item.channels)}}">{{getDefaultMemberNumber(item.channels)}}</td>
-                <td class="statusColored" ng-attr-title="{{getDefaultDnid(item.channels)}}">{{getDefaultDnid(item.channels)}}</td>
-                <td class="statusColored" ng-class="{'plugin-inactive': item.pluginIsInactive()}"
-                    ng-attr-title="{{ (item.pluginIsInactive()) ? ('mobileTerminal.warning_plugin_inactive' | i18n) : (item.type | transponderName)}}">
-                    {{item.type | transponderName}}
-                </td>
-                <td class="statusColored" ng-attr-title="{{item.attributes.SATELLITE_NUMBER}}">{{item.attributes.SATELLITE_NUMBER}}</td>
-                <td>
-                    <span ng-show="item.associatedVessel">{{item.associatedVessel.mmsiNo}}</span>
-                </td>
-                <td>
-                    <span ng-if="item.active" class="mobile-terminal-status label label-success">{{'common.active' | i18n | uppercase}}</span>
-                    <span ng-if="!item.active" class="mobile-terminal-status label label-danger">{{'common.inactive' | i18n | uppercase}}</span>
-                </td>
-                <td>
-                    <button class="btn btn-default btn-sm" ng-click="toggleMobileTerminalDetails(item)" id="mt-toggle-form">
-                        <i class="fa" ng-class="allowedToEditMobileTerminals() ? 'fa-pencil': 'fa-eye'"></i>
-                    </button>
-                </td>
-            </tr>
+                <tr ng-repeat="item in currentSearchResultsByPage" ng-class="{'inactive':!item.active}">
+                    <td class="checkboxContainer">
+                        <input type="checkbox" ng-checked="isChecked(item)" ng-click="checkMobileTerminal(item)" id="mt-checkbox-listitem"/>
+                    </td>
+                    <td class="statusColored">
+                        <span ng-show="item.associatedVessel"><a href="#/assets/{{item.associatedVessel.getGuid()}}" ng-attr-title="{{'common.view_details' | i18n}}">{{item.associatedVessel.name}}</a></span>
+                        <span ng-show="item.connectId && !item.associatedVessel" class="assetNotFound" ng-attr-title="{{'mobileTerminal.warning_plugin_inactive' | i18n}}">{{'common.asset_not_found' | i18n}}</span>
+                        <span ng-show="!item.connectId && !item.associatedVessel" class="assetNotAssigned" ng-attr-title="{{'mobileTerminal.table_not_assigned_icon_tooltip' | i18n}}">{{'mobileTerminal.table_vessel_name_not_assigned' | i18n}}</span>
+                    </td>
+                    <td class="statusColored" ng-attr-title="{{item.attributes.SERIAL_NUMBER}}">{{item.attributes.SERIAL_NUMBER}}</td>
+                    <td class="statusColored" ng-attr-title="{{getDefaultMemberNumber(item.channels)}}">{{getDefaultMemberNumber(item.channels)}}</td>
+                    <td class="statusColored" ng-attr-title="{{getDefaultDnid(item.channels)}}">{{getDefaultDnid(item.channels)}}</td>
+                    <td class="statusColored" ng-class="{'plugin-inactive': item.pluginIsInactive()}"
+                        ng-attr-title="{{ (item.pluginIsInactive()) ? ('mobileTerminal.warning_plugin_inactive' | i18n) : (item.type | transponderName)}}">
+                        {{item.type | transponderName}}
+                    </td>
+                    <td class="statusColored" ng-attr-title="{{item.attributes.SATELLITE_NUMBER}}">{{item.attributes.SATELLITE_NUMBER}}</td>
+                    <td>
+                        <span ng-show="item.associatedVessel">{{item.associatedVessel.mmsiNo}}</span>
+                    </td>
+                    <td>
+                        <span ng-if="item.active" class="mobile-terminal-status label label-success">{{'common.active' | i18n | uppercase}}</span>
+                        <span ng-if="!item.active" class="mobile-terminal-status label label-danger">{{'common.inactive' | i18n | uppercase}}</span>
+                    </td>
+                    <td>
+                        <button class="btn btn-default btn-sm" ng-click="toggleMobileTerminalDetails(item)" id="mt-toggle-form">
+                            <i class="fa" ng-class="allowedToEditMobileTerminals() ? 'fa-pencil': 'fa-eye'"></i>
+                        </button>
+                    </td>
+                </tr>
             </tbody>
+            <tfoot>
+                <tr>
+                    <td colspan="12" class="text-right" ng-show="allCurrentSearchResults.length > itemsByPage">
+                        <div st-pagination st-items-by-page="itemsByPage" st-template="partial/common/reportsPagination/reportsPagination.html"></div>
+                    </td>
+                </tr>
+            </tfoot>
         </table>
     </div>
 </div>

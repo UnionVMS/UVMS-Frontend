@@ -9,44 +9,57 @@ the hope that it will be useful, but WITHOUT ANY WARRANTY; without even the impl
 FITNESS FOR A PARTICULAR PURPOSE.  See the GNU General Public License for more details. You should have received a
 copy of the GNU General Public License along with the IFDM Suite. If not, see <http://www.gnu.org/licenses/>.
 -->
-<div ng-controller="MovementlistCtrl">
-    <div search-results-table search="currentSearchResults" class="movementtablecontainer">
-        <table class="searchResults colorOdd movementtable truncate-text">
+<div class="row" ng-controller="MovementlistCtrl" st-table="currentSearchResultsByPage" st-safe-src="allCurrentSearchResults">
+    <div search-results-table search="currentSearchResults" class="col-md-12">
+        <table class="searchResults colorOdd truncate-text">
             <thead>
                 <tr>
-                    <th class="checkboxContainer"><input type="checkbox" ng-if="selectedMovements" ng-checked="isAllChecked()" ng-click="checkAll()" ng-disabled="!currentSearchResults.items.length"/></th>
-
-                    <th sortable-table-header by="currentSearchResults.sortBy" reverse="currentSearchResults.sortReverse" order="'vessel.countryCode'">{{'movement.table_header_flag_state' | i18n}}</th>
-
-                    <th sortable-table-header by="currentSearchResults.sortBy" reverse="currentSearchResults.sortReverse" order="'vessel.externalMarking'">{{'movement.table_header_external_marking' | i18n}}</th>
-
-                    <th sortable-table-header by="currentSearchResults.sortBy" reverse="currentSearchResults.sortReverse" order="'vessel.ircs'">{{'movement.table_header_ircs' | i18n}}</th>
-
-                    <th sortable-table-header by="currentSearchResults.sortBy" reverse="currentSearchResults.sortReverse" order="'vessel.name'">{{'movement.table_header_name' | i18n}}</th>
-
-                    <th sortable-table-header by="currentSearchResults.sortBy" reverse="currentSearchResults.sortReverse" order="'time'">{{'movement.table_header_time' | i18n}}</th>
-
-                    <th sortable-table-header by="currentSearchResults.sortBy" reverse="currentSearchResults.sortReverse" order="'movement.latitude'">{{'movement.table_header_latitude' | i18n}}</th>
-
-                    <th sortable-table-header by="currentSearchResults.sortBy" reverse="currentSearchResults.sortReverse" order="'movement.longitude'">{{'movement.table_header_longitude' | i18n}}</th>
-
-                    <th sortable-table-header by="currentSearchResults.sortBy" reverse="currentSearchResults.sortReverse" order="'movement.status'">{{'movement.table_header_status' | i18n}}</th>
-
-                    <th sortable-table-header by="currentSearchResults.sortBy" reverse="currentSearchResults.sortReverse" order="'movement.reportedSpeed'" tooltip-placement="bottom" tooltip="{{'movement.table_header_ms_tooltip' | i18n}}" tooltip-append-to-body="true">{{'movement.table_header_ms' | i18n}}</th>
-
-                    <th sortable-table-header by="currentSearchResults.sortBy" reverse="currentSearchResults.sortReverse" order="'movement.calculatedSpeed'" tooltip-placement="bottom" tooltip="{{'movement.table_header_cs_tooltip' | i18n}}" tooltip-append-to-body="true">{{'movement.table_header_cs' | i18n}}</th>
-
-                    <th sortable-table-header by="currentSearchResults.sortBy" reverse="currentSearchResults.sortReverse" order="'movement.reportedCourse'">{{'movement.table_header_course' | i18n}}</th>
-
-                    <th sortable-table-header by="currentSearchResults.sortBy" reverse="currentSearchResults.sortReverse" order="'movement.movementType'">{{'movement.table_header_movement_type' | i18n}}</th>
-
-                    <th sortable-table-header by="currentSearchResults.sortBy" reverse="currentSearchResults.sortReverse" order="'movement.source'">{{'movement.table_header_source' | i18n}}</th>
-                    <th></th>
-
+                    <th class="checkboxContainer">
+                        <input type="checkbox" ng-checked="isAllChecked()" ng-click="checkAll()" ng-disabled="!allCurrentSearchResults.length" id="movement-checkbox-select-all"/>
+                    </th>
+                    <th class="st-sort" st-sort="vessel.countryCode" st-skip-natural="true" id="movement-sort-countryCode">
+                        {{'movement.table_header_flag_state' | i18n}}
+                    </th>
+                    <th class="st-sort" st-sort="vessel.externalMarking" st-skip-natural="true" id="movement-sort-externalMarking">
+                    {{'movement.table_header_external_marking' | i18n}}
+                        </th>
+                    <th class="st-sort" st-sort="vessel.ircs" st-skip-natural="true" id="movement-sort-ircs">
+                        {{'movement.table_header_ircs' | i18n}}
+                    </th>
+                    <th class="st-sort" st-sort="vessel.name" st-skip-natural="true" id="movement-sort-name">
+                        {{'movement.table_header_name' | i18n}}
+                    </th>
+                    <th class="st-sort" st-sort="time" st-sort-default="reverse" st-skip-natural="true" id="movement-sort-time">
+                        {{'movement.table_header_time' | i18n}}
+                    </th>
+                    <th class="st-sort" st-sort="movement.latitude" st-skip-natural="true" id="movement-sort-latitude">
+                        {{'movement.table_header_latitude' | i18n}}
+                    </th>
+                    <th class="st-sort" st-sort="movement.longitude" st-skip-natural="true" id="movement-sort-longitude">
+                        {{'movement.table_header_longitude' | i18n}}
+                    </th>
+                    <th class="st-sort" st-sort="movement.status" st-skip-natural="true" id="movement-sort-status">
+                        {{'movement.table_header_status' | i18n}}
+                    </th>
+                    <th class="st-sort" st-sort="movement.reportedSpeed" st-skip-natural="true" id="movement-sort-reportedSpeed" tooltip-placement="bottom" tooltip="{{'movement.table_header_ms_tooltip' | i18n}}" tooltip-append-to-body="true">
+                        {{'movement.table_header_ms' | i18n}}
+                    </th>
+                    <th class="st-sort" st-sort="movement.reportedCourse" st-skip-natural="true" id="movement-sort-reportedCourse" tooltip-placement="bottom" tooltip="{{'movement.table_header_cs_tooltip' | i18n}}" tooltip-append-to-body="true">
+                        {{'movement.table_header_cs' | i18n}}
+                    </th>
+                    <th class="st-sort" st-sort="movement.calculatedSpeed" st-skip-natural="true" id="movement-sort-calculatedSpeed">
+                        {{'movement.table_header_course' | i18n}}
+                    </th>
+                    <th class="st-sort" st-sort="movement.movementType" st-skip-natural="true" id="movement-sort-movementType">
+                        {{'movement.table_header_movement_type' | i18n}}
+                    </th>
+                    <th class="st-sort" st-sort="movement.source" st-skip-natural="true" id="movement-sort-source">
+                        {{'movement.table_header_source' | i18n}}
+                    </th>
                 </tr>
             </thead>
             <tbody>
-                <tr ng-repeat="movement in currentSearchResults.items | orderBy:currentSearchResults.sortBy : currentSearchResults.sortReverse | filter:searchFilter">
+                <tr ng-repeat="movement in currentSearchResultsByPage">
                     <td class="checkboxContainer"><input type="checkbox" ng-checked="isChecked(movement)" ng-click="checkItem(movement)" ng-if="selectedMovements"/></td>
                     <td ng-attr-title="{{movement.vessel.countryCode}}">{{movement.vessel.countryCode}}</td>
                     <td ng-attr-title="{{movement.vessel.externalMarking}}">{{movement.vessel.externalMarking}}</td>
@@ -56,8 +69,12 @@ copy of the GNU General Public License along with the IFDM Suite. If not, see <h
                     <td ng-attr-title="{{movement.movement.latitude | confCoordinateFormat}}">{{movement.movement.latitude | confCoordinateFormat}}</td>
                     <td ng-attr-title="{{movement.movement.longitude | confCoordinateFormat}}">{{movement.movement.longitude | confCoordinateFormat}}</td>
                     <td ng-attr-title="{{movement.movement.status}}">{{movement.movement.status}}</td>
-                    <td ng-attr-title="{{movement.movement.reportedSpeed | speed | number:2}} {{ 'common.speed_unit_' + speedUnit | i18n }}">{{movement.movement.reportedSpeed | speed | number:2}} {{ "common.speed_unit_" + speedUnit | i18n }}</td>
-                    <td ng-attr-title="{{movement.movement.calculatedSpeed | speed | number:2}} {{ 'common.speed_unit_' + speedUnit | i18n }}">{{movement.movement.calculatedSpeed | speed | number:2}} {{ "common.speed_unit_" + speedUnit | i18n }}</td>
+                    <td ng-attr-title="{{movement.movement.reportedSpeed | speed | number:2}} {{ 'common.speed_unit_' + speedUnit | i18n }}">
+                        {{movement.movement.reportedSpeed | speed | number:2}} {{ "common.speed_unit_" + speedUnit | i18n }}
+                    </td>
+                    <td ng-attr-title="{{movement.movement.calculatedSpeed | speed | number:2}} {{ 'common.speed_unit_' + speedUnit | i18n }}">
+                        {{movement.movement.calculatedSpeed | speed | number:2}} {{ "common.speed_unit_" + speedUnit | i18n }}
+                    </td>
                     <td ng-attr-title="{{movement.movement.reportedCourse}}&deg;">{{movement.movement.reportedCourse}}&deg;</td>
                     <td ng-attr-title="{{movement.movement.movementType}}">{{movement.movement.movementType}}</td>
                     <td ng-attr-title="{{movement.movement.source | transponderName}}">{{movement.movement.source | transponderName}}</td>
@@ -69,5 +86,8 @@ copy of the GNU General Public License along with the IFDM Suite. If not, see <h
                 </tr>
             </tbody>
         </table>
+        <div ng-show="allCurrentSearchResults.length > itemsByPage">
+            <div st-pagination st-items-by-page="itemsByPage" st-template="partial/common/reportsPagination/reportsPagination.html"></div>
+        </div>
     </div>
 </div>

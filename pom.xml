@@ -8,7 +8,7 @@
     </parent>
     <groupId>eu.europa.ec.fisheries.uvms</groupId>
     <artifactId>unionvms-web</artifactId>
-    <version>3.0.8-SNAPSHOT</version>
+    <version>3.0.9-SNAPSHOT</version>
     <name>unionvms-web</name>
     <packaging>war</packaging>
 
@@ -18,7 +18,7 @@
         <webroot>unionvms-web</webroot>
         <karma.phase>integration-test</karma.phase>
         <project.scm.id>github</project.scm.id>
-        <grunt.build>build</grunt.build>
+        <grunt.build>build-ci</grunt.build>
 
         <uvms.env.name>Local</uvms.env.name>
         <uvms.rest.base.url>http://localhost</uvms.rest.base.url>
@@ -165,6 +165,24 @@
             </properties>
             <build>
                 <plugins>
+                <plugin>
+                <groupId>com.github.eirslett</groupId>
+                <artifactId>frontend-maven-plugin</artifactId>
+                <executions>
+                    <execution>
+                        <id>grunt</id>
+                        <goals>
+                            <goal>grunt</goal>
+                        </goals>
+                        <phase>generate-resources</phase>
+                        <configuration>
+                            <arguments>build-docs</arguments>
+                            <outputdir>${basedir}/dist</outputdir>
+                        </configuration>
+                    </execution>
+                </executions>
+                </plugin>
+
                     <plugin>
                         <artifactId>maven-assembly-plugin</artifactId>
                         <version>2.2-beta-5</version>
@@ -280,24 +298,13 @@
                         </configuration>
                     </execution>
                     <execution>
-                        <id>grunt</id>
-                        <goals>
-                            <goal>grunt</goal>
-                        </goals>
-                        <phase>generate-resources</phase>
-                        <configuration>
-                            <arguments>${grunt.build} build-docs</arguments>
-                            <outputdir>${basedir}/dist</outputdir>
-                        </configuration>
-                    </execution>
-                    <execution>
                         <id>karma</id>
                         <goals>
                             <goal>grunt</goal>
                         </goals>
-                        <phase>${karma.phase}</phase>
+                        <phase>compile</phase>
                         <configuration>
-                            <arguments>test</arguments>
+                            <arguments>${grunt.build}</arguments>
                         </configuration>
                     </execution>
                 </executions>
