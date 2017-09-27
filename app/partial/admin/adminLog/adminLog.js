@@ -14,10 +14,13 @@ angular.module('unionvmsWeb').controller('AuditlogCtrl', function($scope, $q, $f
     //Names used in the backend
     var TYPES = auditOptionsService.getTypes();
 
-	// ************ Page setup ************
+    //Number of items displayed on each page
+    $scope.itemsByPage = 20;
 
-	$scope.isAudit = true; //Highlights submenu, aka "AUDIT LOGS"
-	$scope.selectedTab = "ALL"; //Set initial tab
+    // ************ Page setup ************
+
+    $scope.isAudit = true; //Highlights submenu, aka "AUDIT LOGS"
+    $scope.selectedTab = "ALL"; //Set initial tab
     auditOptionsService.setOptions($scope.selectedTab);
 
     $scope.currentSearchResults = new SearchResults('date', false);
@@ -28,11 +31,13 @@ angular.module('unionvmsWeb').controller('AuditlogCtrl', function($scope, $q, $f
         $scope.searchAuditLogs();
     };
 
-    $scope.$watch('selectedTab', function(newVal) {
-        auditOptionsService.setOptions(newVal);
-        searchService.reset();
-        auditOptionsService.resetDefaults();
-        $scope.searchAuditLogs();
+    $scope.$watch('selectedTab', function(newVal, oldVal) {
+        if (newVal !== oldVal) {
+            auditOptionsService.setOptions(newVal);
+            searchService.reset();
+            auditOptionsService.resetDefaults();
+            $scope.searchAuditLogs();
+        }
     });
 
     //Do the search
@@ -47,15 +52,23 @@ angular.module('unionvmsWeb').controller('AuditlogCtrl', function($scope, $q, $f
             }
         }
 
-        searchService.searchAuditLogs().then(function(searchResultListPage) {
-            $scope.currentSearchResults.updateWithNewResults(searchResultListPage);
-        },
-        function(error) {
-            console.log(error);
-            $scope.currentSearchResults.removeAllItems();
-            $scope.currentSearchResults.setLoading(false);
-            $scope.currentSearchResults.setErrorMessage(locale.getString('common.search_failed_error'));
-        });
+        searchService.searchAuditLogs()
+                .then(updateSearchResults, onGetSearchResultsError);
+    };
+
+    //Update the search results
+    var updateSearchResults = function(searchResultListPage){
+        $scope.currentSearchResults.updateWithNewResults(searchResultListPage);
+        $scope.allCurrentSearchResults = searchResultListPage.items;
+        $scope.currentSearchResultsByPage = searchResultListPage.items;
+    };
+
+    //Error during search
+    var onGetSearchResultsError = function(error){
+        $scope.currentSearchResults.removeAllItems();
+        $scope.currentSearchResults.setLoading(false);
+        $scope.currentSearchResults.setErrorMessage(locale.getString('common.search_failed_error'));
+        $scope.allCurrentSearchResults = $scope.currentSearchResults.items;
     };
 
     //Goto page in the search results

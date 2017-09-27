@@ -11,7 +11,11 @@ copy of the GNU General Public License along with the IFDM Suite. If not, see <h
  */
 angular.module('unionvmsWeb').controller('HoldingtableCtrl',function($scope, $log, $filter, $stateParams, locale, Alarm, alarmCsvService, alertService, SearchResults, SearchResultListPage, AlarmReportModal, userService, alarmRestService, searchService, $resource, longPolling){
 
-    $scope.selectedItems = []; //Selected items by checkboxes
+    //Selected items by checkboxes
+    $scope.selectedItems = [];
+
+    //Number of items displayed on each page
+    $scope.itemsByPage = 20;
 
     $scope.newAlarmsCount = 0;
     var longPollingId;
@@ -76,6 +80,8 @@ angular.module('unionvmsWeb').controller('HoldingtableCtrl',function($scope, $lo
     //Update the search results
     var updateSearchResults = function(searchResultsListPage){
         $scope.currentSearchResults.updateWithNewResults(searchResultsListPage);
+        $scope.allCurrentSearchResults = searchResultsListPage.items;
+        $scope.currentSearchResultsByPage = searchResultsListPage.items;
     };
 
     //Error during search
@@ -83,6 +89,7 @@ angular.module('unionvmsWeb').controller('HoldingtableCtrl',function($scope, $lo
         $scope.currentSearchResults.removeAllItems();
         $scope.currentSearchResults.setLoading(false);
         $scope.currentSearchResults.setErrorMessage(locale.getString('common.search_failed_error'));
+        $scope.allCurrentSearchResults = $scope.currentSearchResults.items;
     };
 
     //Goto page in the search results
