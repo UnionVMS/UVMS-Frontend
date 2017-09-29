@@ -18,16 +18,20 @@ angular.module('unionvmsWeb').factory('tableService',function(locale) {
 
 
         angular.forEach(obj, function(property,propertyName){
+            var label;
             if(angular.isObject(property)){
-
-                headers[level].push({title: propertyName, width: getColWidth(property)});
+                label = locale.getString(localePrefix + propertyName.toLowerCase());
+                label = label !== "%%KEY_NOT_FOUND%%"? label : propertyName;
+                headers[level].push({title: label, width: getColWidth(property)});
                 headers[level+1] = headers[level+1] || [];
                 headers[level+1].concat(getTableHeaders(property, localePrefix, headers, level));
             }else{
                 if(level === 0){
                     globalHeaders.push({title: propertyName === '_' ? '' : locale.getString(localePrefix + propertyName.toLowerCase()), width: 1});
                 }else{
-                    headers[level].push({title: propertyName, width: 1});
+                    label = locale.getString(localePrefix + propertyName.toLowerCase());
+                    label = label !== "%%KEY_NOT_FOUND%%"? label : propertyName;
+                    headers[level].push({title: label, width: 1});
                 }
             }
         });
