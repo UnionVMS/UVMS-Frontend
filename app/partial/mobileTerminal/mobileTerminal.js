@@ -173,6 +173,8 @@ angular.module('unionvmsWeb').controller('MobileTerminalCtrl',function($scope, $
     //Update the search results
     var updateSearchResults = function(searchResultsListPage){
         $scope.currentSearchResults.updateWithNewResults(searchResultsListPage);
+        $scope.allCurrentSearchResults = searchResultsListPage.items;
+        $scope.currentSearchResultsByPage = searchResultsListPage.items;
     };
 
     $scope.getOriginalMobileTerminal = function() {
@@ -209,6 +211,7 @@ angular.module('unionvmsWeb').controller('MobileTerminalCtrl',function($scope, $
         $scope.currentSearchResults.removeAllItems();
         $scope.currentSearchResults.setLoading(false);
         $scope.currentSearchResults.setErrorMessage(locale.getString('common.search_failed_error'));
+        $scope.allCurrentSearchResults = $scope.currentSearchResults.items;
     };
 
 

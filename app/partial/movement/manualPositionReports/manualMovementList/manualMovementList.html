@@ -9,25 +9,23 @@ the hope that it will be useful, but WITHOUT ANY WARRANTY; without even the impl
 FITNESS FOR A PARTICULAR PURPOSE.  See the GNU General Public License for more details. You should have received a
 copy of the GNU General Public License along with the IFDM Suite. If not, see <http://www.gnu.org/licenses/>.
 -->
-<div ng-controller="ManualmovementlistCtrl">
-	<div search-results-table search="currentSearchResults" class="movementtablecontainer">
-        <table class="searchResults colorOdd movementtable truncate-text">
+<div ng-controller="ManualmovementlistCtrl" st-table="currentSearchResultsByPage" st-safe-src="allCurrentSearchResults" st-set-filter="stSearchDynamic" class="manual-movement-list">
+    <div search-results-table search="currentSearchResults">
+        <table class="searchResults colorOdd truncate-text">
             <thead>
                 <tr class="searchInputRow">
                     <th>
-                        <input type="text" placeholder="{{'movement.external_marking_filter_external_marking' | i18n}}" ng-model="search.carrier.externalMarking">
+                        <input type="text" st-search="carrier.externalMarking" placeholder="{{'movement.external_marking_filter_external_marking' | i18n}}">
                     </th>
                     <th>
-                        <input type="text" placeholder="{{'movement.external_marking_filter_ircs' | i18n}}" ng-model="search.carrier.ircs">
+                        <input type="text" st-search="carrier.ircs" placeholder="{{'movement.external_marking_filter_ircs' | i18n}}">
                     </th>
                     <th>
-                        <input type="text" placeholder="{{'movement.external_marking_filter_cfr' | i18n}}" ng-model="search.carrier.cfr">
+                        <input type="text" st-search="carrier.cfr" placeholder="{{'movement.external_marking_filter_cfr' | i18n}}">
                     </th>
                     <th>
-                        <input type="text" placeholder="{{'movement.external_marking_filter_name' | i18n}}" ng-model="search.carrier.name">
+                        <input type="text" st-search="carrier.name" placeholder="{{'movement.external_marking_filter_name' | i18n}}">
                     </th>
-                    <th></th>
-                    <th></th>
                     <th></th>
                     <th></th>
                     <th></th>
@@ -35,26 +33,46 @@ copy of the GNU General Public License along with the IFDM Suite. If not, see <h
                     <th></th>
                 </tr>
                 <tr>
-                    <th sortable-table-header by="currentSearchResults.sortBy" reverse="currentSearchResults.sortReverse" order="'carrier.externalMarking'">{{'movement.table_header_external_marking' | i18n}}</th>
-                    <th sortable-table-header by="currentSearchResults.sortBy" reverse="currentSearchResults.sortReverse" order="'carrier.ircs'">{{'movement.table_header_ircs' | i18n}}</th>
-					<th sortable-table-header by="currentSearchResults.sortBy" reverse="currentSearchResults.sortReverse" order="'carrier.cfr'">{{'movement.table_header_cfr' | i18n}}</th>
-					<th sortable-table-header by="currentSearchResults.sortBy" reverse="currentSearchResults.sortReverse" order="'carrier.name'">{{'movement.table_header_name' | i18n}}</th>
-					<th sortable-table-header by="currentSearchResults.sortBy" reverse="currentSearchResults.sortReverse" order="'time'">{{'movement.table_header_time' | i18n}}</th>
-                    <th sortable-table-header by="currentSearchResults.sortBy" reverse="currentSearchResults.sortReverse" order="'position.latitude'">{{'movement.table_header_latitude' | i18n}}</th>
-                    <th sortable-table-header by="currentSearchResults.sortBy" reverse="currentSearchResults.sortReverse" order="'position.longitude'">{{'movement.table_header_longitude' | i18n}}</th>
-                    <th sortable-table-header by="currentSearchResults.sortBy" reverse="currentSearchResults.sortReverse" order="'speed'">{{'movement.table_header_measured_speed' | i18n}}</th>
-                    <th sortable-table-header by="currentSearchResults.sortBy" reverse="currentSearchResults.sortReverse" order="'course'">{{'movement.table_header_course' | i18n}}</th>
-                    <th sortable-table-header by="currentSearchResults.sortBy" reverse="currentSearchResults.sortReverse" order="'state'">{{'movement.table_header_status' | i18n}}</th>
+                    <th class="st-sort" st-sort="carrier.externalMarking" st-skip-natural="true" id="manualMovement-sort-externalMarking">
+                        {{'movement.table_header_external_marking' | i18n}}
+                    </th>
+                    <th class="st-sort" st-sort="carrier.ircs" st-skip-natural="true" id="manualMovement-sort-ircs">
+                        {{'movement.table_header_ircs' | i18n}}
+                    </th>
+                    <th class="st-sort" st-sort="carrier.cfr" st-skip-natural="true" id="manualMovement-sort-cfr">
+                        {{'movement.table_header_cfr' | i18n}}
+                    </th>
+                    <th class="st-sort" st-sort="carrier.name" st-skip-natural="true" id="manualMovement-sort-name">
+                        {{'movement.table_header_name' | i18n}}
+                    </th>
+                    <th class="st-sort" st-sort="time" st-sort-default="reverse" st-skip-natural="true" id="manualMovement-sort-time">
+                        {{'movement.table_header_time' | i18n}}
+                    </th>
+                    <th class="st-sort" st-sort="position.latitude" st-skip-natural="true" id="manualMovement-sort-latitude">
+                        {{'movement.table_header_latitude' | i18n}}
+                    </th>
+                    <th class="st-sort" st-sort="position.longitude" st-skip-natural="true" id="manualMovement-sort-longitude">
+                        {{'movement.table_header_longitude' | i18n}}
+                    </th>
+                    <th class="st-sort" st-sort="speed" st-skip-natural="true" id="manualMovement-sort-speed">
+                        {{'movement.table_header_measured_speed' | i18n}}
+                    </th>
+                    <th class="st-sort" st-sort="course" st-skip-natural="true" id="manualMovement-sort-course">
+                        {{'movement.table_header_course' | i18n}}
+                    </th>
+                    <th class="st-sort" st-sort="state" st-skip-natural="true" id="manualMovement-sort-state">
+                        {{'movement.table_header_status' | i18n}}
+                    </th>
                     <th></th>
                 </tr>
             </thead>
             <tbody>
-                <tr ng-repeat="item in filtered = (currentSearchResults.items | orderBy:currentSearchResults.sortBy : currentSearchResults.sortReverse | filter:search)">
+            <tr ng-repeat="item in currentSearchResultsByPage">
                     <td ng-attr-title="{{item.carrier.externalMarking}}">{{item.carrier.externalMarking}}</td>
                     <td ng-attr-title="{{item.carrier.ircs}}">{{item.carrier.ircs}}</td>
                     <td ng-attr-title="{{item.carrier.cfr}}">{{item.carrier.cfr}}</td>
                     <td ng-attr-title="{{item.carrier.name}}">{{item.carrier.name}}</td>
-                    <td ng-attr-title="{{item.time | confDateFormat}}">{{item.time | confDateFormat}}</td>
+                    <td ng-attr-title="{{item.time | confDateFormat}}">{{time}}{{item.time | confDateFormat}}</td>
                     <td ng-attr-title="{{item.position.latitude | confCoordinateFormat}}">{{item.position.latitude | confCoordinateFormat}}</td>
                     <td ng-attr-title="{{item.position.longitude | confCoordinateFormat}}">{{item.position.longitude | confCoordinateFormat}}</td>
                     <td ng-attr-title="{{item.speed | speed | number:2}} {{ 'common.speed_unit_' + speedUnit | i18n }}">{{item.speed | speed | number:2}} {{ "common.speed_unit_" + speedUnit | i18n }}</td>
@@ -80,6 +98,13 @@ copy of the GNU General Public License along with the IFDM Suite. If not, see <h
                     </td>
                 </tr>
             </tbody>
+            <tfoot>
+                <tr>
+                    <td colspan="12" class="text-right" ng-show="allCurrentSearchResults.length > itemsByPage">
+                        <div st-pagination st-items-by-page="itemsByPage" st-template="partial/common/reportsPagination/reportsPagination.html"></div>
+                    </td>
+                </tr>
+            </tfoot>
         </table>
     </div>
 </div>

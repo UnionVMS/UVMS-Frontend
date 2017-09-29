@@ -5,6 +5,9 @@
     <div class="col-md-6">
         <div class="actions">
             <!--Open fishing trip-->
+            <div class="closeIcon textAlignRight" ng-click="vm.openFishingTrip()" ng-show="vm.hasActivityPermission()">
+                <i class="fa fa-sign-out signouticon" title="{{'sales.fishing_trip_link' | i18n}}"></i>
+            </div>
         </div>
     </div>
 </div>

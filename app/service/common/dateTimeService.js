@@ -124,7 +124,7 @@ angular.module('unionvmsWeb').factory('dateTimeService',['$log', 'globalSettings
                 dateTime += getTimezoneString(globalSettingsService.getTimezone());
             }
 
-            var format = (inputFormat || "YYYY-MM-DD HH:mm") + "Z";
+            var format = (inputFormat || "YYYY-MM-DD HH:mm:ss") + "Z";
             var m = moment(dateTime, format);
             m.utc();
             return m.format("YYYY-MM-DD HH:mm:ss");
