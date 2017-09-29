@@ -326,7 +326,7 @@ angular.module('unionvmsWeb').controller('ExchangeCtrl',function($scope, $log, $
                             item.forwardRule,
                             item.recipient,
                             $filter('confDateFormat')(item.dateForward),
-                            locale.getString('common.status_' + item.status.toLowerCase())
+                            $scope.getStatusLabel(item.status)
                         ];
                         csvObject.push(csvRow);
                     }
