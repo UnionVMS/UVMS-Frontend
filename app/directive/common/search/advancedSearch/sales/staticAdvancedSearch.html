@@ -32,16 +32,35 @@
 
         <div class="row nomargin">
             <div class="col-md-1 smallerpadding searchcriteria">
-                <dropdown ng-model="advancedSearchObject.flagState" initialtext="{{'sales.advanced_search_placeholder_flag_state' | i18n}}" items="config.flagStates.items"></dropdown>
+                <input type="text" autocomplete="off"
+                       ng-model="advancedSearchObject.flagState"
+                       typeahead-wait-ms="500"
+                       typeahead="item.code as item.code for item in config.flagStates.items | filter:$viewValue"
+                       typeahead-editable="false"
+                       placeholder="{{'sales.advanced_search_placeholder_flag_state' | i18n}}"
+                       class="form-control">
             </div>
             <div class="col-md-1 smallerpadding searchcriteria">
                 <dropdown ng-model="advancedSearchObject.salesCategory" initialtext="{{'sales.advanced_search_placeholder_sales_type' | i18n}}" items="config.salesCategories.items"></dropdown>
             </div>
             <div class="col-md-1 smallerpadding searchcriteria">
-                <dropdown ng-model="advancedSearchObject.salesLocation" initialtext="{{'sales.advanced_search_placeholder_sales_location' | i18n}}" items="config.salesLocations.items"></dropdown>
+                <input type="text" autocomplete="off"
+                       ng-model="advancedSearchObject.salesLocation"
+                       typeahead-wait-ms="500"
+                       typeahead="item.code as item.code for item in config.salesLocations.items | filter:$viewValue"
+                       typeahead-editable="false"
+                       placeholder="{{'sales.advanced_search_placeholder_sales_location' | i18n}}"
+                       class="form-control">
+
             </div>
             <div class="col-md-1 smallerpadding searchcriteria">
-                <dropdown ng-model="advancedSearchObject.landingPort" initialtext="{{'sales.advanced_search_placeholder_landing_port' | i18n}}" items="config.landingPorts.items"></dropdown>
+                <input type="text" autocomplete="off"
+                       ng-model="advancedSearchObject.landingPort"
+                       typeahead-wait-ms="500"
+                       typeahead="item.code as item.code for item in config.landingPorts.items | filter:$viewValue"
+                       typeahead-editable="false"
+                       placeholder="{{'sales.advanced_search_placeholder_landing_port' | i18n}}"
+                       class="form-control">
             </div>
             <div class="col-md-4 smallerpadding searchcriteria">
                 <group-line-input initialtext="{{'sales.advanced_search_placeholder_species' | i18n}}"
