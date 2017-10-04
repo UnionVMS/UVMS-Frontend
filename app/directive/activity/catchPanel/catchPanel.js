@@ -37,10 +37,6 @@ angular.module('unionvmsWeb').directive('catchPanel', function(locale, $compile)
         },
         templateUrl: 'directive/activity/catchPanel/catchPanel.html',
         link: function(scope, element, attrs, fn) {
-            scope.pieChart= {
-                api: {}
-            };
-            
             scope.element = element;
 			
             /**
