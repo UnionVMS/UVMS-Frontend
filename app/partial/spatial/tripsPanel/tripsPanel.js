@@ -68,6 +68,8 @@ angular.module('unionvmsWeb').controller('TripspanelCtrl', function ($scope, gen
         if (angular.isDefined(tripId)) {
             $scope.tripSummServ.trip = new Trip(tripId);
             $scope.trip = $scope.tripSummServ.trip;
+
+            $scope.tripSummServ.initTripSummary();
         }
     };
 
