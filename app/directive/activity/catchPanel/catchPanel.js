@@ -103,13 +103,24 @@ angular.module('unionvmsWeb').directive('catchPanel', function(locale, $compile,
 			 */
             scope.formatWeight = function(specieWeight, totalWeight, weightUnit, catchesPerArea) {
                 var value = specieWeight / totalWeight * 100;
-                return specieWeight + weightUnit + ' (' + value.toFixed(2) + '%)';
+                return specieWeight.toFixed(3) + ' ' + weightUnit + ' (' + value.toFixed(2) + '%)';
             };
 
             //when the trip is initialized
             scope.$watch('ngModel', function () {
                 //TODO init must be called if the data is already loaded before the directive compilation
                 init();
+            });
+            
+            //To automatically refresh the charts in order to avoid sizing problems
+            scope.$watch(function() { return angular.element(scope.element).is(':visible'); }, function(newVal) {
+                if (newVal){
+                    angular.forEach(scope.options, function(value, key) {
+                        if (angular.isDefined(value.api)){
+                            value.api.refresh();
+                        }
+                    });
+                }
             });
 
 			/**

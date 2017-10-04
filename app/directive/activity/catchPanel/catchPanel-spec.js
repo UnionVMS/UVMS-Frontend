@@ -131,7 +131,7 @@ describe('catchPanel', function() {
     
 
     function getFormattedValue(value, total){
-        return value + ' (' + (value/total*100).toFixed(2) + '%)';
+        return value.toFixed(3) + '  (' + (value/total*100).toFixed(2) + '%)';
     }
 
 
