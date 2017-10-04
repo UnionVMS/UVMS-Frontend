@@ -68,8 +68,6 @@ angular.module('unionvmsWeb').factory('tripSummaryService',function($timeout, lo
                     }
                 });
             }
-            
-            this.initTripSummary();
         }
     };
 
