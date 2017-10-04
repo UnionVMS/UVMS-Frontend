@@ -37,6 +37,9 @@ angular.module('unionvmsWeb').directive('catchPanel', function(locale, $compile)
         },
         templateUrl: 'directive/activity/catchPanel/catchPanel.html',
         link: function(scope, element, attrs, fn) {
+            scope.pieChart= {
+                api: {}
+            };
             
             scope.element = element;
 			
@@ -91,12 +94,15 @@ angular.module('unionvmsWeb').directive('catchPanel', function(locale, $compile)
                 init();
             });
             
-            //To refresh the charts manually
-            scope.$watch(function() { return angular.element(scope.element).is(':visible'); }, function() {
-                angular.forEach( angular.element('.nvd3-chart > nvd3', scope.element),function(item){
-                   var elem = angular.element(item);
-                   $compile(elem)(scope);
-                });
+            //To automatically refresh the charts in order to avoid sizing problems
+            scope.$watch(function() { return angular.element(scope.element).is(':visible'); }, function(newVal) {
+                if (newVal){
+                    angular.forEach(scope.options, function(value, key) {
+                        if (angular.isDefined(value.api)){
+                            value.api.refresh();
+                        }
+                    });
+                }
             });
            
 			/**
