@@ -23,7 +23,7 @@ copy of the GNU General Public License along with the IFDM Suite. If not, see <h
  * @description
  *  A reusable tile that will display two pie charts side-by-side, and optionally a table and caption for the input data 
  */
-angular.module('unionvmsWeb').directive('catchPanel', function(locale, $compile) {
+angular.module('unionvmsWeb').directive('catchPanel', function(locale, $compile, $modal) {
     return {
         restrict: 'E',
         replace: false,
@@ -39,7 +39,7 @@ angular.module('unionvmsWeb').directive('catchPanel', function(locale, $compile)
         link: function(scope, element, attrs, fn) {
 
             scope.element = element;
-            
+
             //scope.catchPerArea
 
             /**
@@ -72,8 +72,16 @@ angular.module('unionvmsWeb').directive('catchPanel', function(locale, $compile)
                             pie: {
                                 dispatch: {
                                     elementClick: function(e){
-                                        console.log(e);
-                                        alert('OK');
+                                        var modalInstance = $modal.open({
+                                            templateUrl: 'partial/activity/pieChartModal/pieChartModal.html',
+                                            controller: 'PiechartmodalCtrl',
+                                            size: 'md',
+                                            resolve: {
+                                                modalData: function() {
+                                                    return e.data;
+                                                }
+                                            }
+                                        });
                                     }
                                 }
                             }
@@ -94,10 +102,6 @@ angular.module('unionvmsWeb').directive('catchPanel', function(locale, $compile)
 			 * @param {Object} totalWeight - total weight for the species
 			 */
             scope.formatWeight = function(specieWeight, totalWeight, weightUnit, catchesPerArea) {
-//                var value = specieWeight / totalWeight * 100;
-//                var formattedCatches = "<div class='table'>" + "<div class='thead'><div class='tr' style='border-bottom:0'><div class='th' style='padding-bottom:0'>Area</div><div class='th' style='padding-bottom:0'>Weight</div></div></div>" + "<div class='tbody'>" + catchesPerArea + "</div>" + "</div>";
-//                return specieWeight + weightUnit + ' (' + value.toFixed(2) + '%) ' + '<br>' + formattedCatches;
-                
                 var value = specieWeight / totalWeight * 100;
                 return specieWeight + weightUnit + ' (' + value.toFixed(2) + '%)';
             };
@@ -108,14 +112,6 @@ angular.module('unionvmsWeb').directive('catchPanel', function(locale, $compile)
                 init();
             });
 
-            //To refresh the charts manually
-            scope.$watch(function() { return angular.element(scope.element).is(':visible'); }, function() {
-                angular.forEach( angular.element('.nvd3-chart > nvd3', scope.element),function(item){
-                    var elem = angular.element(item);
-                    $compile(elem)(scope);
-                });
-            });
-
 			/**
 			 * Initializes the catch panel directive
 			 * 
@@ -124,33 +120,8 @@ angular.module('unionvmsWeb').directive('catchPanel', function(locale, $compile)
 			 */
             var init = function() {
                 scope.displayedUnit = locale.getString('activity.weight_unit_' + scope.unit);
-                formattedChartData();
                 initCharts();
             };
-          
-            /**
-			 * To create data for catches per area.
-			 * 
-			 * @memberof catchPanel
-			 * @private
-			 */
-            var catcheslist;
-            function formattedChartData() {
-                angular.forEach(scope.ngModel, function (chartData, currentChart) {
-                    angular.forEach(chartData, function (chartDataValue, chartDataKey) {
-                        angular.forEach(chartDataValue, function (areaInfoData, key) {
-                            angular.forEach(areaInfoData, function (areaInfoValue, areaInfokey) {
-                                if (areaInfokey === "areaInfo") {
-                                    angular.forEach(areaInfoValue, function (propertyValue, propertyKey) {
-                                        catcheslist = "<div class='tr' style='background-color:transparent;border-top:0'>" + "<div class='td'style='padding-top:0;padding-bottom:0;font-weight: normal'>" + propertyValue.areaName + "</div>" + "<div class='td' style='padding-top:0;padding-bottom:0; font-weight:normal'>" + propertyValue.weight + "kg" + "</div>" + "</div>";
-                                    });
-                                }
-                                areaInfoData.catchPerArea = catcheslist;
-                            });
-                        });
-                    });
-                });
-            }
 
         }
     };
