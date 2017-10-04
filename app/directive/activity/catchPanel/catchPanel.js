@@ -39,6 +39,8 @@ angular.module('unionvmsWeb').directive('catchPanel', function(locale, $compile)
         link: function(scope, element, attrs, fn) {
 
             scope.element = element;
+            
+            //scope.catchPerArea
 
             /**
 			 * Initialize the charts with nvd3 properties
@@ -56,18 +58,25 @@ angular.module('unionvmsWeb').directive('catchPanel', function(locale, $compile)
                             height: scope.height,
                             x: function(d) { return d.speciesCode; },
                             y: function(d) {
-                                scope.catchPerArea = d.catchPerArea;
                                 return d.weight;
                             },
                             valueFormat: function (d) {
-                                return scope.formatWeight(d, chartData.total, scope.displayedUnit, scope.catchPerArea);
+                                return scope.formatWeight(d, chartData.total, scope.displayedUnit);
                             },
                             showLabels: false,
                             duration: 500,
                             color: function(d, i) {
                                 return chartData.speciesList[i].color;
                             },
-                            showLegend: false
+                            showLegend: false,
+                            pie: {
+                                dispatch: {
+                                    elementClick: function(e){
+                                        console.log(e);
+                                        alert('OK');
+                                    }
+                                }
+                            }
                         }
                     };
                     scope.options[currentChart] = chartOptions;
@@ -85,9 +94,12 @@ angular.module('unionvmsWeb').directive('catchPanel', function(locale, $compile)
 			 * @param {Object} totalWeight - total weight for the species
 			 */
             scope.formatWeight = function(specieWeight, totalWeight, weightUnit, catchesPerArea) {
+//                var value = specieWeight / totalWeight * 100;
+//                var formattedCatches = "<div class='table'>" + "<div class='thead'><div class='tr' style='border-bottom:0'><div class='th' style='padding-bottom:0'>Area</div><div class='th' style='padding-bottom:0'>Weight</div></div></div>" + "<div class='tbody'>" + catchesPerArea + "</div>" + "</div>";
+//                return specieWeight + weightUnit + ' (' + value.toFixed(2) + '%) ' + '<br>' + formattedCatches;
+                
                 var value = specieWeight / totalWeight * 100;
-                var formattedCatches = "<div class='table'>" + "<div class='thead'><div class='tr' style='border-bottom:0'><div class='th' style='padding-bottom:0'>Area</div><div class='th' style='padding-bottom:0'>Weight</div></div></div>" + "<div class='tbody'>" + catchesPerArea + "</div>" + "</div>";
-                return specieWeight + weightUnit + ' (' + value.toFixed(2) + '%) ' + '<br>' + formattedCatches;
+                return specieWeight + weightUnit + ' (' + value.toFixed(2) + '%)';
             };
 
             //when the trip is initialized
