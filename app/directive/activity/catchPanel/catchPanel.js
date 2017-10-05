@@ -40,8 +40,6 @@ angular.module('unionvmsWeb').directive('catchPanel', function(locale, $compile,
 
             scope.element = element;
 
-            //scope.catchPerArea
-
             /**
 			 * Initialize the charts with nvd3 properties
 			 * 
@@ -101,7 +99,7 @@ angular.module('unionvmsWeb').directive('catchPanel', function(locale, $compile,
 			 * @param {Object} weightType - weight unit
 			 * @param {Object} totalWeight - total weight for the species
 			 */
-            scope.formatWeight = function(specieWeight, totalWeight, weightUnit, catchesPerArea) {
+            scope.formatWeight = function(specieWeight, totalWeight, weightUnit) {
                 var value = specieWeight / totalWeight * 100;
                 return specieWeight.toFixed(3) + ' ' + weightUnit + ' (' + value.toFixed(2) + '%)';
             };
