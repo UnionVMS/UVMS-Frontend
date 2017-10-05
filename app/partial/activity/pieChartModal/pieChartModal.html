@@ -1,0 +1,49 @@
+<!--
+Developed with the contribution of the European Commission - Directorate General for Maritime Affairs and Fisheries
+© European Union, 2015-2016.
+
+This file is part of the Integrated Fisheries Data Management (IFDM) Suite. The IFDM Suite is free software: you can
+redistribute it and/or modify it under the terms of the GNU General Public License as published by the
+Free Software Foundation, either version 3 of the License, or any later version. The IFDM Suite is distributed in
+the hope that it will be useful, but WITHOUT ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or
+FITNESS FOR A PARTICULAR PURPOSE.  See the GNU General Public License for more details. You should have received a
+copy of the GNU General Public License along with the IFDM Suite. If not, see <http://www.gnu.org/licenses/>.
+-->
+<div class="pie-chart-modal">
+	<!--  HEADER -->
+	<div class="modal-header">
+		<div class="pointer pull-right" ng-click="close()">
+			<i class="fa fa-times closeicon"></i>
+		</div>
+		<h4 class="modal-title">{{data.speciesCode}}</h4>
+	</div>
+	<!-- BODY -->
+	<div class="modal-body">
+		<table class="table-style">
+			<thead>
+				<tr>
+					<th>{{'activity.catch_panel_area_name' | i18n}}</th>
+					<th>{{'activity.catch_panel_column_weight' | i18n}}{{'activity.catch_panel_kg' | i18n}}</th>
+				</tr>
+			</thead>
+			<tbody>
+				<tr ng-repeat="item in data.areaInfo">
+					<td>{{item.areaName}}</td>
+					<td>{{item.weight | number:2}} </td>
+				</tr>
+				<tr>
+					<td class="total">Total</td>
+					<td class="total">{{data.weight | number:2}}</td>
+				</tr>
+			</tbody>
+		</table>
+	</div>
+	<!-- FOOTER -->
+	<div class="modal-footer">
+		<div class="row">
+			<div class="col-md-12">
+				<button class="btn btn-default btn-action" type="button" ng-click="close()">{{'common.close' | i18n}}</button>
+			</div>
+		</div>
+	</div>
+</div>

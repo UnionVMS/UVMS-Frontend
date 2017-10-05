@@ -141,6 +141,8 @@
     "catch_landing_presentatior":"Presentatior",
     "catch_landing_preservation":"Preservation",
     "catch_landing_gear_used":"Gear Used",
+    "catch_panel_kg":"(kg)",
+    "catch_panel_area_name":"Area Name",
 	"catch_panel_title_onboard": "On board",
 	"catch_panel_title_landed": "Landed",
 	"catch_panel_column_species": "Species",
