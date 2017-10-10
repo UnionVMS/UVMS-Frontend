@@ -28,14 +28,16 @@ angular.module('unionvmsWeb').controller('MdrcodelistCtrl',function($scope, $mod
     $scope.columns = [
         'code',
         'description',
-        'validityStart',
-        'validityEnd',
+        'startDate',
+        'endDate',
         'version'
     ];
 
     var searchAttrs = [
         'code',
         'description',
+        /* 'validityStart',
+        'validityEnd', */
         'version'
     ];
 
@@ -57,8 +59,8 @@ angular.module('unionvmsWeb').controller('MdrcodelistCtrl',function($scope, $mod
     var loadValidityDates = function(list) {
         angular.forEach(list, function(item){
             if(item.validity){
-                item.validityStart = item.validity.startDate;
-                item.validityEnd = item.validity.endDate;
+                item.startDate = item.validity.startDate;
+                item.endDate = item.validity.endDate;
             }
             delete item.validity;
         });
