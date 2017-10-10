@@ -388,5 +388,8 @@
     "title": "Title",
     "author": "Author",
     "print": "Print",
-    "downloading_view": "Downloading fishing activity"
+    "downloading_view": "Downloading fishing activity",
+
+    "validityStart": "Validity - Start date",
+    "validityEnd": "Validity - End date"
 }
