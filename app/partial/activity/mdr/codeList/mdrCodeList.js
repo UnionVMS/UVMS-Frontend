@@ -28,6 +28,14 @@ angular.module('unionvmsWeb').controller('MdrcodelistCtrl',function($scope, $mod
     $scope.columns = [
         'code',
         'description',
+        'validityStart',
+        'validityEnd',
+        'version'
+    ];
+
+    var searchAttrs = [
+        'code',
+        'description',
         'version'
     ];
 
@@ -46,6 +54,16 @@ angular.module('unionvmsWeb').controller('MdrcodelistCtrl',function($scope, $mod
         $modalInstance.close();
     };
 
+    var loadValidityDates = function(list) {
+        angular.forEach(list, function(item){
+            if(item.validity){
+                item.validityStart = item.validity.startDate;
+                item.validityEnd = item.validity.endDate;
+            }
+            delete item.validity;
+        });
+    };
+
     /**
      * Closes the mdr code list modal
      *
@@ -55,9 +73,10 @@ angular.module('unionvmsWeb').controller('MdrcodelistCtrl',function($scope, $mod
      * @param {Object} tableState - current state of filters and sorting of table
      */
     $scope.callServer = function(tableState) {
-        mdrRestService.getMDRCodeList(acronym, tableState, $scope.columns).then(function (result) {
+        mdrRestService.getMDRCodeList(acronym, tableState, searchAttrs).then(function (result) {
             if (angular.isDefined(result)) {
                 if(!angular.equals($scope.displayedMdrCodeList, result)){
+                    loadValidityDates(result);                    
                     $scope.displayedMdrCodeList = result;
                 }
             }else{

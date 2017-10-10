@@ -43,7 +43,10 @@ copy of the GNU General Public License along with the IFDM Suite. If not, see <h
                 </thead>
                 <tbody ng-show="!tableLoading && displayedMdrCodeList.length">
                     <tr ng-repeat="codeListEntry in displayedMdrCodeList">
-                        <td ng-repeat="column in columns">{{codeListEntry[column]}}</td>
+                        <td ng-repeat="column in ::columns" ng-switch="::(['validityStart','validityEnd'].indexOf(column) !== -1)">
+                            <div ng-switch-when="true">{{codeListEntry[column] | stDateUtc}}</div>
+                            <div ng-switch-default>{{codeListEntry[column]}}</div>
+                        </td>
                     </tr>
                 </tbody>
             </table>
