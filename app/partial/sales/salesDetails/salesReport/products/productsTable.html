@@ -18,7 +18,7 @@
         <tr ng-repeat="product in vm.products | orderBy:vm.products.sortBy:vm.products.sortReverse track by $index ">
             <td ng-if="vm.showArea" ng-attr-title="{{product.area}}">
                 <div ng-repeat="area in product.areas track by $index">
-                    <div ng-if="$first && product.areas.length > 1">                     
+                    <div ng-if="$first && product.areas.length > 1">
                         {{area}}
                         <a ng-click="product.areasOpen = !product.areasOpen">
                             <span class="fa" ng-class="{'fa-caret-down':product.areasOpen, 'fa-caret-left':!product.areasOpen}"></span>
@@ -36,7 +36,7 @@
             <td ng-attr-title="{{product.usage}}">{{product.usage | codeList:'usages'}}</td>
             <td ng-attr-title="{{product.weight}}">{{product.weight}} kg</td>
             <td ng-attr-title="{{product.unit}}">{{product.quantity}}</td>
-            <td ng-attr-title="{{product.price}}">{{product.price | currency: vm.currency}}</td>
+            <td ng-attr-title="{{product.price}}">{{product.price }} {{vm.currency}}</td>
         </tr>
     </tbody>
 </table>
