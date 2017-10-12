@@ -9,12 +9,14 @@
     <p class="input-group nomargin left col-md-4">
         <input type="text" autocomplete="off"
                ng-model="vm.tempItem"
-               typeahead="code as code for code in vm.codes | filter:$viewValue "
+               typeahead="code as code for code in vm.codes | filter:$viewValue:startsWith | limitTo: 10"
                typeahead-editable="false"
                typeahead-on-select="vm.onSelect(); vm.tempItem = '';"
+               typeahead-select-on-exact="true"
+               typeahead-wait-ms="500"
                placeholder="{{vm.initialtext}}"
                class="form-control">
-    </p> 
+    </p>
 
     <div class="btn-group dropdown left">
         <button type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown">

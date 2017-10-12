@@ -76,6 +76,10 @@ angular.module('unionvmsWeb')
             $scope.$broadcast("sales.perform-saved-search", searchService.getAdvancedSearchObject());
         };
 
+        $scope.startsWith = function(state, viewValue) {
+            return state && state.substr && state.substr(0, viewValue.length).toLowerCase() === viewValue.toLowerCase();
+        };
+
         init();
 
         /////////////////

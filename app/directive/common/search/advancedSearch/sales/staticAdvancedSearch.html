@@ -35,8 +35,9 @@
                 <input type="text" autocomplete="off"
                        ng-model="advancedSearchObject.flagState"
                        typeahead-wait-ms="500"
-                       typeahead="item.code as item.code for item in config.flagStates.items | filter:$viewValue"
+                       typeahead="item.code for item in config.flagStates.items | filter:{code:$viewValue}:startsWith | limitTo: 10"
                        typeahead-editable="false"
+                       typeahead-select-on-exact="true"
                        placeholder="{{'sales.advanced_search_placeholder_flag_state' | i18n}}"
                        class="form-control">
             </div>
@@ -47,8 +48,9 @@
                 <input type="text" autocomplete="off"
                        ng-model="advancedSearchObject.salesLocation"
                        typeahead-wait-ms="500"
-                       typeahead="item.code as item.code for item in config.salesLocations.items | filter:$viewValue"
+                       typeahead="item.code for item in config.salesLocations.items | filter:{code:$viewValue}:startsWith  | limitTo: 10"
                        typeahead-editable="false"
+                       typeahead-select-on-exact="true"
                        placeholder="{{'sales.advanced_search_placeholder_sales_location' | i18n}}"
                        class="form-control">
 
@@ -57,8 +59,10 @@
                 <input type="text" autocomplete="off"
                        ng-model="advancedSearchObject.landingPort"
                        typeahead-wait-ms="500"
-                       typeahead="item.code as item.code for item in config.landingPorts.items | filter:$viewValue"
+                       typeahead="item.code for item in config.landingPorts.items | filter:{code:$viewValue}:startsWith | limitTo: 10"
                        typeahead-editable="false"
+                       typeahead-select-on-exact="true"
+                       typeahead-should-select=""
                        placeholder="{{'sales.advanced_search_placeholder_landing_port' | i18n}}"
                        class="form-control">
             </div>
