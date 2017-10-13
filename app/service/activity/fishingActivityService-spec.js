@@ -472,6 +472,13 @@ describe('fishingActivityService', function() {
                             clickable: undefined,
                             onClick: undefined,
                             id: 'lengthWidth'
+                        }, {
+                            idx: 2,
+                            label: '',
+                            value: 5,
+                            clickable: undefined,
+                            onClick: undefined,
+                            id: 'numberOfGears'
                         }
                     ],
                     characteristics: {
@@ -502,6 +509,13 @@ describe('fishingActivityService', function() {
                             clickable: undefined,
                             onClick: undefined,
                             id: 'lengthWidth'
+                        }, {
+                            idx: 2,
+                            label: '',
+                            value: 3,
+                            clickable: undefined,
+                            onClick: undefined,
+                            id: 'numberOfGears'
                         }
                     ],
                     characteristics: {
@@ -520,61 +534,60 @@ describe('fishingActivityService', function() {
 
     function getReportDetailsResult() {
         return {
-            items:[
-                {
-                    idx:0,
-                    label:'',
-                    value:'DECLARATION',
-                    clickable:undefined,
-                    id:'type'
-                },
-                {
-                    idx:7,
-                    label:'',
-                    value:'2018-07-07T08:48:08+02:00',
-                    clickable:undefined,
-                    id:'acceptedDate'
-                },
-                {
-                    idx:5,
-                    label:'',
-                    value:'4bc9392b-3607-5d91-9032-194b83f89e28',
-                    clickable:undefined,
-                    id:'id'
-                },
-                {
-                    idx:6,
-                    label:'',
-                    value:'c0bd3ec3-b178-5951-9853-7e13bb76b607',
-                    clickable:true,
-                    id:'refId'
-                },
-                {
-                    idx:1,
-                    label:'',
-                    value:'2016-06-09T21:34:12+02:00',
-                    clickable:undefined,
-                    id:'creationDate'
-                },
-                {
-                    idx:3,
-                    label:'',
-                    value:'Budrilico cuwmaglo gij munhofip pi zuwbibum bi feh ke za ajunutoc mupzaj gop ho legipejo epdeli.',
-                    clickable:undefined,
-                    id:'purpose'
+            items: [{
+                    idx: 0,
+                    label: '',
+                    value: 'DECLARATION',
+                    clickable: undefined,
+                    id: 'type'
+                }, {
+                    idx: 7,
+                    label: '',
+                    value: '2018-07-07T08:48:08+02:00',
+                    clickable: undefined,
+                    id: 'acceptedDate'
+                }, {
+                    idx: 5,
+                    label: '',
+                    value: '4bc9392b-3607-5d91-9032-194b83f89e28',
+                    clickable: undefined,
+                    id: 'id'
+                }, {
+                    idx: 6,
+                    label: '',
+                    value: 'c0bd3ec3-b178-5951-9853-7e13bb76b607',
+                    clickable: true,
+                    id: 'refId'
+                }, {
+                    idx: 1,
+                    label: '',
+                    value: '2016-06-09T21:34:12+02:00',
+                    clickable: undefined,
+                    id: 'creationDate'
+                }, {
+                    idx: 2,
+                    label: '',
+                    value: 1,
+                    clickable: undefined,
+                    id: 'purposeCode'
+                }, {
+                    idx: 3,
+                    label: '',
+                    value: 'Budrilico cuwmaglo gij munhofip pi zuwbibum bi feh ke za ajunutoc mupzaj gop ho legipejo epdeli.',
+                    clickable: undefined,
+                    id: 'purpose'
                 }
             ],
-            subItems:[
-                {
-                    idx:9,
-                    label:'',
-                    value:'726b43ee-f70c-54ee-b4ad-a7976585ef42',
-                    clickable:undefined,
-                    id:'dcafedc4'
+            subItems: [{
+                    idx: 9,
+                    label: '',
+                    value: '726b43ee-f70c-54ee-b4ad-a7976585ef42',
+                    clickable: undefined,
+                    id: 'dcafedc4'
                 }
             ],
-            subTitle:'',
-            title:''
+            subTitle: '',
+            title: ''
         };
     }
 
