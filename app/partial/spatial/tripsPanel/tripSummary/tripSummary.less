@@ -33,7 +33,9 @@ copy of the GNU General Public License along with the IFDM Suite. If not, see <h
     .activity-summary-row {
         position: relative;
         &.summary-first-row {
-            min-height: 220px;
+            > .summary-section {
+                min-height: 220px;
+            }
         }
         .btn-detail-form,
         .btn-trip-evolution {
