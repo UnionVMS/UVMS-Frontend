@@ -17,8 +17,11 @@ copy of the GNU General Public License along with the IFDM Suite. If not, see <h
     .btn-print {
         right: 11px;
         top: 45px;
-    }
+    } 
     .catch-fieldset{
+        legend{
+            margin-bottom:0px;
+        }
         padding: 10px 0px 0px 10px;
         margin: 0;
     }
@@ -47,8 +50,11 @@ copy of the GNU General Public License along with the IFDM Suite. If not, see <h
     }
     .table-container {
         margin-top: 20px;
+        .catch-table {
+            border-left: 1px solid transparent;
+        }
         table {
-            border: 0;
+            border: 0;           
             thead {
                 &:first-child {
                     tr:first-child {
@@ -86,7 +92,7 @@ copy of the GNU General Public License along with the IFDM Suite. If not, see <h
                 }
                 .invisible-header {
                     border-top: 0;
-                    border-left: 0;
+                  border-left: 0;
                     cursor: default;
                 }
                 .total-col {
