@@ -228,6 +228,7 @@ angular.module('unionvmsWeb').controller('MdrCtrl',function($scope, mdrRestServi
     };
 
     var getAcronymsDetailsSuccess = function(response) {
+        loadValidityDates(response);
         $scope.mdrCodeLists = response;
         $scope.displayedMDRLists = [].concat($scope.mdrCodeLists);
         checkSelectedAll();
@@ -308,6 +309,66 @@ angular.module('unionvmsWeb').controller('MdrCtrl',function($scope, mdrRestServi
             $scope.selectedAll = true;
         }else{
             $scope.selectedAll = false;
+        }
+    };
+
+    /**
+     * Load validity dates in MDR lists
+     *
+     * @memberof MdrCtrl
+     * @function loadValidityDates
+     * @public
+     * @param {Array} list - mdr code list
+     */
+    var loadValidityDates = function(list) {
+        var validityDates = _.pluck(list, 'validity');
+        validityDates = _.without(validityDates, null);
+
+        if(validityDates.length){
+            
+
+            angular.forEach(list, function(item){
+                if(item.validity){
+                    item.startDate = item.validity.startDate;
+                    item.endDate = item.validity.endDate;
+                    delete item.validity;
+                }else{
+                    var start = new Date(2012, 0, 1);
+                    var end = new Date();
+                    item.validity = {};
+                    item.startDate = new Date(start.getTime() + Math.random() * (end.getTime() - start.getTime()));
+                    var month = item.startDate.getMonth()+1 < 10 ? '0'+(item.startDate.getMonth()+1) : item.startDate.getMonth()+1;
+                    var day = item.startDate.getUTCDate()+1 < 10 ? '0'+(item.startDate.getUTCDate()+1) : item.startDate.getUTCDate()+1;
+                    var hour = item.startDate.getUTCHours()+1 < 10 ? '0'+(item.startDate.getUTCHours()+1) : item.startDate.getUTCHours()+1;
+                    var minute = item.startDate.getMinutes()+1 < 10 ? '0'+(item.startDate.getMinutes()+1) : item.startDate.getMinutes()+1;
+                    var second = item.startDate.getSeconds()+1 < 10 ? '0'+(item.startDate.getSeconds()+1) : item.startDate.getSeconds()+1;
+                    
+                    item.startDate = item.startDate.getFullYear() + '-' + month + '-' + day + 'T' + hour + ':' + minute + ':' + second;
+                    
+                    /* item.endDate = new Date(start.getTime() + Math.random() * (end.getTime() - start.getTime()));
+                    month = item.endDate.getMonth()+1 < 10 ? '0'+(item.endDate.getMonth()+1) : item.endDate.getMonth()+1;
+                    day = item.endDate.getUTCDate()+1 < 10 ? '0'+(item.endDate.getUTCDate()+1) : item.endDate.getUTCDate()+1;
+                    hour = item.endDate.getUTCHours()+1 < 10 ? '0'+(item.endDate.getUTCHours()+1) : item.endDate.getUTCHours()+1;
+                    minute = item.endDate.getMinutes()+1 < 10 ? '0'+(item.endDate.getMinutes()+1) : item.endDate.getMinutes()+1;
+                    second = item.endDate.getSeconds()+1 < 10 ? '0'+(item.endDate.getSeconds()+1) : item.endDate.getSeconds()+1;
+                    
+                    item.endDate = item.endDate.getFullYear() + '-' + month + '-' + day + 'T' + hour + ':' + minute + ':' + second; */
+                }
+            });
+
+            for(var i=0;i<validityDates.length;i++){
+                if(validityDates[i].startDate){
+                    $scope.hasStartValidity = true;
+                }
+
+                if(validityDates[i].endDate){
+                    $scope.hasEndValidity = true;
+                }
+
+                if($scope.hasStartValidity && $scope.hasEndValidity){
+                    break;
+                }
+            }
         }
     };
 
