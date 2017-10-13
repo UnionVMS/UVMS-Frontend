@@ -36,7 +36,7 @@
                         <td ng-attr-title="{{item.location}}">{{item.location}}</td>
                         <td ng-attr-title="{{item.landingDate}}">{{item.landingDate | date:"yyyy-MM-dd HH:mm"}}</td>
                         <td ng-attr-title="{{item.landingPort}}">{{item.landingPort}}</td>
-                        <td ng-attr-title="{{item.category}}">{{item.category}}</td>
+                        <td ng-attr-title="{{'sales.sales_report_category_' + item.category | i18n}}">{{'sales.sales_report_category_' + item.category | i18n}}</td>
                         <td ng-attr-title="{{item.seller}}">{{item.seller}}</td>
                         <td ng-attr-title="{{vm.getBuyerOrRecipientTitle(item)}}">
                             <span ng-if="item.recipient == 'N/A'">{{item.buyer}}</span>
