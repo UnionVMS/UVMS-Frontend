@@ -27,7 +27,11 @@ angular.module('unionvmsWeb').filter('stActivityDateUtc',  function(unitConversi
      * @param {Number} dateInMiliseconds - datetime in milliseconds
      */
     return function(dateInMiliseconds) {
-        return unitConversionService.date.convertToUserFormat(new Date(dateInMiliseconds));
+        if(angular.isDefined(dateInMiliseconds) && !_.isNull(dateInMiliseconds)){
+            return unitConversionService.date.convertToUserFormat(new Date(dateInMiliseconds));
+        }else{
+            return '';
+        }
     };
 });
 

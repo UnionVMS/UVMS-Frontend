@@ -83,12 +83,12 @@ angular.module('unionvmsWeb').controller('MdrcodelistCtrl',function($scope, $mod
      * @param {Object} tableState - current state of filters and sorting of table
      */
     $scope.callServer = function(tableState) {
-        var tsServFormat = angular.copy(tableState);
-        if(angular.isDefined(tsServFormat.sort) && ['startDate', 'endDate'].indexOf(tsServFormat.sort.predicate) !== -1 ){
-            tsServFormat.sort.predicate = 'validity.' + tsServFormat.sort.predicate;
+        var sortAttr;
+        if(angular.isDefined(tableState.sort) && ['startDate', 'endDate'].indexOf(tableState.sort.predicate) !== -1 ){
+            sortAttr = 'validity.' + tableState.sort.predicate;
         }
 
-        mdrRestService.getMDRCodeList(acronym, tsServFormat, searchAttrs).then(function (result) {
+        mdrRestService.getMDRCodeList(acronym, tableState, searchAttrs, sortAttr).then(function (result) {
             if (angular.isDefined(result)) {
                 if(!angular.equals($scope.displayedMdrCodeList, result)){
                     loadValidityDates(result);                    
