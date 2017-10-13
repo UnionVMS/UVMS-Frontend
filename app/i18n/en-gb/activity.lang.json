@@ -294,7 +294,7 @@
     "fa_details_item_purpose": "Purpose",
     "fa_details_item_fmcmark": "FMC marking",
     "fa_details_item_vesselactivity": "Vessel Activity",
-    "fa_details_item_no_operations": "Number of operations",
+    "fa_details_item_nrofoperation": "Number of operations",
     "fa_details_item_duration": "Duration",
     "fa_details_item_start_landing": "Start of landing",
     "fa_details_item_end_landing": "End of landing",
@@ -391,5 +391,8 @@
     "downloading_view": "Downloading fishing activity",
 
     "startDate": "Validity - Start date",
-    "endDate": "Validity - End date"
+    "endDate": "Validity - End date",
+
+    "no_gears_reported": "No gears reported",
+    "no_catches_reported": "No catches reported"
 }

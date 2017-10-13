@@ -124,7 +124,7 @@ angular.module('unionvmsWeb').factory('fishingActivityService', function(activit
             type: 'string'
         },
         {
-            id: 'no_operations',
+            id: 'nrOfOperation',
             type: 'string'
         },
         {
@@ -614,7 +614,7 @@ angular.module('unionvmsWeb').factory('fishingActivityService', function(activit
                         finalSummary.subTitle = locale.getString('activity.trip_' + key);
                     }
                 }
-            }else if(angular.isDefined(value) && !_.isNull(value) && value.length > 0){
+            }else if(angular.isDefined(value) && !_.isNull(value)){
                 var attrData = _.where(attrOrder, {id: key});
                 if(attrData.length){
                     finalSummary.items.push(transformFaItem(value, key, attrOrder, attrKeys, attrData[0]));
