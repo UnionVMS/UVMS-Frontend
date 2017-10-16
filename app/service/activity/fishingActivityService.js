@@ -282,7 +282,15 @@ angular.module('unionvmsWeb').factory('fishingActivityService', function(activit
 	    {
 		    activityName: 'discard',
 		    achronym: 'FA_REASON_DISCARD'
-	    }
+        },
+        {
+		    activityName: 'arrival_notification',
+		    achronym: 'FA_REASON_ARRIVAL'
+        },
+        {
+		    activityName: 'arrival_declaration',
+		    achronym: 'FA_REASON_ARRIVAL'
+        }
      ];
 
 	/**
@@ -1126,7 +1134,7 @@ angular.module('unionvmsWeb').factory('fishingActivityService', function(activit
         var activityType = _.where(faMdrReason, {activityName: obj.faType});
         
         if(angular.isDefined(activityType) && activityType.length > 0){
-            var acronym =activityType[0].achronym;
+            var acronym = activityType[0].achronym;
             loadingStatus.isLoading('FishingActivity', true, 0);
             
             mdrCacheService.getCodeList(acronym).then(function(response){
