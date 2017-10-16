@@ -1,5 +1,5 @@
 <h5>{{'sales.parties_header' | i18n}}</h5>
-<div class="row party" ng-if="vm.seller">
+<div class="row party" ng-if="vm.provider">
     <div class="icon">
         <div class="fa fa-4x fa-user"></div>
     </div>
@@ -7,15 +7,15 @@
         <div class="row data">
             <div class="col-md-12">
                 <label>{{'sales.party_id' | i18n}}&nbsp;</label>
-                {{vm.seller.extId}}
+                {{vm.provider.extId}}
             </div>
             <div class="col-md-12">
                 <label>{{'sales.party_name' | i18n}}&nbsp;</label>
-                {{vm.seller.name}}
+                {{vm.provider.name}}
             </div>
             <div class="col-md-12">
                 <label>{{'sales.party_role' | i18n}}&nbsp;</label>
-                {{'sales.table_header_seller' | i18n}}
+                {{'sales.table_header_provider' | i18n}}
             </div>
         </div>
     </div>
