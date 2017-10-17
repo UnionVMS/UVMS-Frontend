@@ -282,14 +282,6 @@ angular.module('unionvmsWeb').factory('fishingActivityService', function(activit
 	    {
 		    activityName: 'discard',
 		    achronym: 'FA_REASON_DISCARD'
-        },
-        {
-		    activityName: 'arrival_notification',
-		    achronym: 'FA_REASON_ARRIVAL'
-        },
-        {
-		    activityName: 'arrival_declaration',
-		    achronym: 'FA_REASON_ARRIVAL'
         }
      ];
 
