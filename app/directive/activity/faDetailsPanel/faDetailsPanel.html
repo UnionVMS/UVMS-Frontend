@@ -6,7 +6,7 @@
         <span class="labels">{{::item.label}}</span>
         &nbsp;
         <a ng-switch-when="true" class="attr-clickable" ng-click="item.onClick(item.value)">{{::item.value}}</a>
-        <span ng-switch-default>{{::item.value}}</span>
+        <span ng-switch-default>{{item.value}}</span>
     </div>
 
     <fieldset class="col-md-12 fieldsetStyle fa-details-fieldset" ng-if="::(ngModel.subTitle || ngModel.subItems)">
@@ -17,7 +17,7 @@
             <span class="labels">{{::item.label}}</span>
             &nbsp;
             <a ng-switch-when="true" class="attr-clickable" ng-click="item.onClick(item.value)">{{::item.value}}</a>
-            <span ng-switch-default>{{::item.value}}</span>
+            <span ng-switch-default>{{item.value}}</span>
         </div>
     </fieldset>
     <fa-characteristics-modal ng-if="::ngModel.characteristics" class="characteristics" data="ngModel.characteristics"></fa-characteristics-modal>
