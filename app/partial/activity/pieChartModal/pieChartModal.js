@@ -9,13 +9,9 @@ the hope that it will be useful, but WITHOUT ANY WARRANTY; without even the impl
 FITNESS FOR A PARTICULAR PURPOSE.  See the GNU General Public License for more details. You should have received a
 copy of the GNU General Public License along with the IFDM Suite. If not, see <http://www.gnu.org/licenses/>.
 */
-.transhipment-panel {
-    .trans-vessel-tile {
-        min-height: 100px;
-    }
-    .main-content {
-        .no-border > fieldset{
-            padding-left:0;
-        } 
-    }
-}
+angular.module('unionvmsWeb').controller('PiechartmodalCtrl', function ($scope, $modalInstance, modalData, locale) {
+    $scope.data = modalData;
+    $scope.close = function () {
+        $modalInstance.dismiss('close');
+    };
+});

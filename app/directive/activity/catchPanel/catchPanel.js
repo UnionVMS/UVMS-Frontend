@@ -23,7 +23,7 @@ copy of the GNU General Public License along with the IFDM Suite. If not, see <h
  * @description
  *  A reusable tile that will display two pie charts side-by-side, and optionally a table and caption for the input data 
  */
-angular.module('unionvmsWeb').directive('catchPanel', function(locale, $compile) {
+angular.module('unionvmsWeb').directive('catchPanel', function(locale, $compile, $modal) {
     return {
         restrict: 'E',
         replace: false,
@@ -37,9 +37,9 @@ angular.module('unionvmsWeb').directive('catchPanel', function(locale, $compile)
         },
         templateUrl: 'directive/activity/catchPanel/catchPanel.html',
         link: function(scope, element, attrs, fn) {
-            
+
             scope.element = element;
-			
+
             /**
 			 * Initialize the charts with nvd3 properties
 			 * 
@@ -48,14 +48,17 @@ angular.module('unionvmsWeb').directive('catchPanel', function(locale, $compile)
 			 */
             var initCharts = function() {
                 scope.options = {};
-                angular.forEach(scope.ngModel, function(chartData, currentChart){
+                scope.catchPerArea = "";
+                angular.forEach(scope.ngModel, function(chartData, currentChart) {
                     var chartOptions = {
                         chart: {
                             type: 'pieChart',
                             height: scope.height,
                             x: function(d) { return d.speciesCode; },
-                            y: function(d) { return d.weight; },
-                            valueFormat: function(d) {
+                            y: function(d) {
+                                return d.weight;
+                            },
+                            valueFormat: function (d) {
                                 return scope.formatWeight(d, chartData.total, scope.displayedUnit);
                             },
                             showLabels: false,
@@ -63,7 +66,23 @@ angular.module('unionvmsWeb').directive('catchPanel', function(locale, $compile)
                             color: function(d, i) {
                                 return chartData.speciesList[i].color;
                             },
-                            showLegend: false
+                            showLegend: false,
+                            pie: {
+                                dispatch: {
+                                    elementClick: function(e){
+                                        var modalInstance = $modal.open({
+                                            templateUrl: 'partial/activity/pieChartModal/pieChartModal.html',
+                                            controller: 'PiechartmodalCtrl',
+                                            size: 'md',
+                                            resolve: {
+                                                modalData: function() {
+                                                    return e.data;
+                                                }
+                                            }
+                                        });
+                                    }
+                                }
+                            }
                         }
                     };
                     scope.options[currentChart] = chartOptions;
@@ -82,23 +101,26 @@ angular.module('unionvmsWeb').directive('catchPanel', function(locale, $compile)
 			 */
             scope.formatWeight = function(specieWeight, totalWeight, weightUnit) {
                 var value = specieWeight / totalWeight * 100;
-                return specieWeight + weightUnit + ' (' + value.toFixed(2) + '%)';
+                return specieWeight.toFixed(3) + ' ' + weightUnit + ' (' + value.toFixed(2) + '%)';
             };
 
             //when the trip is initialized
-            scope.$watch('ngModel', function() {
+            scope.$watch('ngModel', function () {
                 //TODO init must be called if the data is already loaded before the directive compilation
                 init();
             });
             
-            //To refresh the charts manually
-            scope.$watch(function() { return angular.element(scope.element).is(':visible'); }, function() {
-                angular.forEach( angular.element('.nvd3-chart > nvd3', scope.element),function(item){
-                   var elem = angular.element(item);
-                   $compile(elem)(scope);
-                });
+            //To automatically refresh the charts in order to avoid sizing problems
+            scope.$watch(function() { return angular.element(scope.element).is(':visible'); }, function(newVal) {
+                if (newVal){
+                    angular.forEach(scope.options, function(value, key) {
+                        if (angular.isDefined(value.api)){
+                            value.api.refresh();
+                        }
+                    });
+                }
             });
-           
+
 			/**
 			 * Initializes the catch panel directive
 			 * 
