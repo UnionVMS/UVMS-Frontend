@@ -124,7 +124,7 @@ angular.module('unionvmsWeb').factory('fishingActivityService', function(activit
             type: 'string'
         },
         {
-            id: 'no_operations',
+            id: 'nrOfOperation',
             type: 'string'
         },
         {
@@ -282,7 +282,7 @@ angular.module('unionvmsWeb').factory('fishingActivityService', function(activit
 	    {
 		    activityName: 'discard',
 		    achronym: 'FA_REASON_DISCARD'
-	    }
+        }
      ];
 
 	/**
@@ -614,7 +614,7 @@ angular.module('unionvmsWeb').factory('fishingActivityService', function(activit
                         finalSummary.subTitle = locale.getString('activity.trip_' + key);
                     }
                 }
-            }else if(angular.isDefined(value) && !_.isNull(value) && value.length > 0){
+            }else if(angular.isDefined(value) && !_.isNull(value)){
                 var attrData = _.where(attrOrder, {id: key});
                 if(attrData.length){
                     finalSummary.items.push(transformFaItem(value, key, attrOrder, attrKeys, attrData[0]));
@@ -1126,7 +1126,7 @@ angular.module('unionvmsWeb').factory('fishingActivityService', function(activit
         var activityType = _.where(faMdrReason, {activityName: obj.faType});
         
         if(angular.isDefined(activityType) && activityType.length > 0){
-            var acronym =activityType[0].achronym;
+            var acronym = activityType[0].achronym;
             loadingStatus.isLoading('FishingActivity', true, 0);
             
             mdrCacheService.getCodeList(acronym).then(function(response){
