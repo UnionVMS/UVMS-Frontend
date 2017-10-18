@@ -26,7 +26,7 @@
     </div>
     <div class="row no-data" ng-if="(!ngModel.items || (ngModel.items && ngModel.items.length === 0)) && (!ngModel.subTitle || !ngModel.subItems) && !hasLocaData()">
 		<div class="col-md-12">
-			<span>{{'activity.no_data' | i18n}}</span>
+			<span>{{ noDataMsg }}</span>
 		</div>
 	</div>
 </fieldset>
