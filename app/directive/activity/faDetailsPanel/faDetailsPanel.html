@@ -6,7 +6,7 @@
         <span class="labels">{{::item.label}}</span>
         &nbsp;
         <a ng-switch-when="true" class="attr-clickable" ng-click="item.onClick(item.value)">{{::item.value}}</a>
-        <span ng-switch-default>{{::item.value}}</span>
+        <span ng-switch-default>{{item.value}}</span>
     </div>
 
     <fieldset class="col-md-12 fieldsetStyle fa-details-fieldset" ng-if="::(ngModel.subTitle || ngModel.subItems)">
@@ -17,7 +17,7 @@
             <span class="labels">{{::item.label}}</span>
             &nbsp;
             <a ng-switch-when="true" class="attr-clickable" ng-click="item.onClick(item.value)">{{::item.value}}</a>
-            <span ng-switch-default>{{::item.value}}</span>
+            <span ng-switch-default>{{item.value}}</span>
         </div>
     </fieldset>
     <fa-characteristics-modal ng-if="::ngModel.characteristics" class="characteristics" data="ngModel.characteristics"></fa-characteristics-modal>
@@ -26,7 +26,7 @@
     </div>
     <div class="row no-data" ng-if="(!ngModel.items || (ngModel.items && ngModel.items.length === 0)) && (!ngModel.subTitle || !ngModel.subItems) && !hasLocaData()">
 		<div class="col-md-12">
-			<span>{{'activity.no_data' | i18n}}</span>
+			<span>{{ noDataMsg }}</span>
 		</div>
 	</div>
 </fieldset>
