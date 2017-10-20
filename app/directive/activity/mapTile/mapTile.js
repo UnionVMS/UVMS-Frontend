@@ -38,19 +38,19 @@ angular.module('unionvmsWeb').directive('mapTile', function($timeout, genericMap
                 }
             });
 
-		    scope.generateMapId();
-         
+            scope.generateMapId();
+            
 		    scope.$watch('mapData',function(newVal){
                 if(newVal){
                     $timeout(function(){
                         if (element.find('#' + scope.mapId)){
                             if (!angular.isDefined(scope.map)){
                                 scope.getMapConfigs();
-                            } else {
+                            } else {  
                                 scope.addVectorData();
                             }
                         }
-                    }, 0);
+                   }, 0);
                 } else {
                     if (angular.isDefined(scope.vectorLayer)){
                         scope.clearVectorData();
@@ -106,12 +106,15 @@ angular.module('unionvmsWeb').directive('mapTile', function($timeout, genericMap
      * @alias getMapConfigs
      */
     $scope.getMapConfigs = function(){
+        if(angular.isDefined( $scope.interval)){
+              stopInterval();
+        }
         $scope.interval = $interval(function(){
             if (angular.isDefined(tripSummaryService.mapConfigs)){
                 stopInterval();
                 $scope.createMap();
             }
-        }, 1000);
+        }, 1000);      
     };
     
     /**
