@@ -33,7 +33,8 @@
             updateSavedSearch: updateSavedSearch,
             deleteSavedSearch: deleteSavedSearch,
             getSavedSearches: getSavedSearches,
-            savedSearches: savedSearches
+            savedSearches: savedSearches,
+            setLoading: setLoading
         };
 
         return service;
@@ -161,6 +162,10 @@
             }, function (err) {
                 savedSearches.items = [];
             });
+        }
+
+        function setLoading(isLoading) {
+            searchResults.setLoading(isLoading);
         }
     }
 })();
