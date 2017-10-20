@@ -9,34 +9,25 @@
             controllerAs: 'vm'
         });
 
-    function salesReportListCtrl($state, salesSelectionService, $scope, salesSearchService) {
+    function salesReportListCtrl($state, salesSelectionService, salesSearchService) {
         /* jshint validthis:true */
         var vm = this;
 
         vm.displayedCollection = [];
         vm.salesReports = [];
-
         vm.selectAllCheckbox = false;
         vm.isLoading = false;
+        vm.sorting = {};
 
         vm.checkAllCallBack = checkAllCallBack;
         vm.checkItemCallBack = checkItemCallBack;
-
         vm.isNoteChecked = isNoteChecked;
         vm.isAllChecked = isAllChecked;
-
         vm.openSalesReport = openSalesReport;
-
         vm.searchSalesReports = searchSalesReports;
-
         vm.goToPage = goToPage;
-
         vm.callServer = callServer;
-
         vm.getBuyerOrRecipientTitle = getBuyerOrRecipientTitle;
-
-        vm.sorting = {};
-
 
 
         init();

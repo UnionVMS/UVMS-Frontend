@@ -16,14 +16,14 @@
         /* jshint validthis:true */
         var vm = this;
 
-        $$setSellerAndBuyer();
+        $$setProviderAndBuyer();
 
         /////////////////////////
 
-        function $$setSellerAndBuyer() {
+        function $$setProviderAndBuyer() {
             vm.parties.forEach(function (party) {
-                if (party.role === 'SELLER') {
-                    vm.seller = party;
+                if (party.role === 'PROVIDER') {
+                    vm.provider = party;
                 }
                 if (party.role === 'BUYER') {
                     vm.buyer = party;
