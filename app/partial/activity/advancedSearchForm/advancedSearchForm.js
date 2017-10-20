@@ -78,8 +78,7 @@ angular.module('unionvmsWeb').controller('AdvancedsearchformCtrl',function($scop
      * @returns {Array} An array with all communication channels
      */
     $scope.getComChannels = function(){
-        //FIXME replace with proper service
-        $scope.codeLists.comChannels =  [{code: 'FLUX', text: 'FLUX'}];
+        $scope.codeLists.comChannels = $scope.actServ.getCommChannelsData();
     };
     
     /**
