@@ -419,6 +419,30 @@ angular.module('unionvmsWeb').factory('activityService',function(locale, activit
         actServ.alert.hasError = hasError;
         actServ.alert.msg = message;
     };
+    
+    /**
+     * Gets the data for communication Channel
+     * 
+     * @memberof activityService
+     * @public
+     * @alias getCommChannelsData 
+     */
+    actServ.getCommChannelsData = function(){
+        var comboList = [];
+        activityRestService.getCommChannelsData().then(function (response) {
+            angular.forEach(response, function(item) {
+                var rec = {
+                    code: item,
+                    text: item
+                };
+                comboList.push(rec);
+            });
+
+        }, function (error) {
+        //TODO deal with error from service
+        });
+        return comboList;
+    }
 
 	return actServ;
 });
