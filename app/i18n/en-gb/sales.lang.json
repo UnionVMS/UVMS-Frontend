@@ -9,7 +9,7 @@
     "table_header_landing_date": "Landing date",
     "table_header_landing_port": "Landing port",
     "table_header_sales_type": "Type",
-    "table_header_seller": "Seller",
+    "table_header_provider": "Provider",
     "table_header_buyer": "Buyer",
     "table_header_recipient": "Recipient",
     "table_header_buyer_recipient": "Buyer/Recipient",
@@ -42,6 +42,10 @@
     "report_header_VARIOUS_SUPPLY": "Various Supply",
     "report_header_NEGOTIATED_SALE": "Negotiated Sale",
 
+    "sales_report_category_FIRST_SALE": "First sale",
+    "sales_report_category_VARIOUS_SUPPLY": "Various Supply",
+    "sales_report_category_NEGOTIATED_SALE": "Negotiated Sale",
+
     "report_status_CORRECTED": "Corrected",
     "report_status_DELETED": "Deleted",
 
@@ -55,7 +59,7 @@
     "party_name": "Name:",
     "party_role": "Role:",
     "party_role_buyer": "Buyer",
-    "party_role_seller": "Seller",
+    "party_role_provider": "Provider",
 
     "totals_header": "Totals",
     "totals_weight": "Weight:",

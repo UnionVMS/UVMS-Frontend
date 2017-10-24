@@ -4,7 +4,7 @@
     angular
         .module('unionvmsWeb')
         .filter('codeList', codeList);
-    
+
     function codeList(codeListService) {
 
         var codeLists = {};
@@ -16,7 +16,7 @@
 
             var text = codeLists[type].getValue(input);
             if (text) {
-                return input + ' - ' + text;
+                return text;
             }
             return input;
         }

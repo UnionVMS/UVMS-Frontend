@@ -18,7 +18,7 @@
         <tr ng-repeat="product in vm.products | orderBy:vm.products.sortBy:vm.products.sortReverse track by $index ">
             <td ng-if="vm.showArea" ng-attr-title="{{product.area}}">
                 <div ng-repeat="area in product.areas track by $index">
-                    <div ng-if="$first && product.areas.length > 1">                     
+                    <div ng-if="$first && product.areas.length > 1">
                         {{area}}
                         <a ng-click="product.areasOpen = !product.areasOpen">
                             <span class="fa" ng-class="{'fa-caret-down':product.areasOpen, 'fa-caret-left':!product.areasOpen}"></span>
@@ -27,16 +27,16 @@
                     <div ng-if="(!$first && product.areasOpen) ||  product.areas.length === 1">{{area}}</div>
                 </div>
             </td>
-            <td ng-attr-title="{{product.freshness}}">{{product.freshness | codeList:'freshness'}}</td>
-            <td ng-attr-title="{{product.presentation}}">{{product.presentation | codeList:'presentations'}}</td>
-            <td ng-attr-title="{{product.preservation}}">{{product.preservation | codeList:'preservations'}}</td>
+            <td ng-attr-title="{{product.freshness | codeList:'freshness'}}">{{product.freshness}}</td>
+            <td ng-attr-title="{{product.presentation | codeList:'presentations'}}">{{product.presentation}}</td>
+            <td ng-attr-title="{{product.preservation | codeList:'preservations'}}">{{product.preservation}}</td>
             <td ng-attr-title="{{product.factor}}">{{product.factor | number: 2}}</td>
-            <td ng-attr-title="{{product.category}}">{{product.distributionCategory}}</td>
-            <td ng-attr-title="{{product.class}}">{{product.distributionClass | codeList:'distributionClasses'}}</td>
+            <td ng-attr-title="{{product.distributionCategory}}">{{product.distributionCategory}}</td>
+            <td ng-attr-title="{{product.distributionClass | codeList:'distributionClasses'}}">{{product.distributionClass}}</td>
             <td ng-attr-title="{{product.usage}}">{{product.usage | codeList:'usages'}}</td>
             <td ng-attr-title="{{product.weight}}">{{product.weight}} kg</td>
             <td ng-attr-title="{{product.unit}}">{{product.quantity}}</td>
-            <td ng-attr-title="{{product.price}}">{{product.price | currency: vm.currency}}</td>
+            <td ng-attr-title="{{product.price}}">{{product.price }} {{vm.currency}}</td>
         </tr>
     </tbody>
 </table>

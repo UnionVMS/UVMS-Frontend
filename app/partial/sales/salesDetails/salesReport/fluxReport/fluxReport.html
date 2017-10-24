@@ -1,19 +1,19 @@
 <h5>{{'sales.report_header' | i18n}}</h5>
 <div class="row">
     <div class="col-md-12">
-        <label>{{'sales.report_id' | i18n}}</label>
+        <label>{{'sales.report_id' | i18n}}&nbsp;</label>
         {{vm.report.extId}}
     </div>
     <div class="col-md-12">
-        <label>{{'sales.report_creation' | i18n}}</label>
+        <label>{{'sales.report_creation' | i18n}}&nbsp;</label>
         {{vm.report.creation | date:"yyyy-MM-dd HH:mm"}}
     </div>
     <div class="col-md-12">
-        <label>{{'sales.report_purpose' | i18n}}</label>
+        <label>{{'sales.report_purpose' | i18n}}&nbsp;</label>
         {{vm.report.purposeCode}} - {{vm.report.purposeText}}
     </div>
     <div class="col-md-12">
-        <label>{{'sales.report_party' | i18n}}</label>
+        <label>{{'sales.report_party' | i18n}}&nbsp;</label>
         {{vm.report.fluxReportParty}}
     </div>
 </div>
