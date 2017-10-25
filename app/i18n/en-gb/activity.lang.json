@@ -158,6 +158,7 @@
     "clock_panel_estimated_time":"Estimated time of Arrival",
     "clock_panel_arrival_time":"Time of Arrival",
     "clock_panel_intended_start_time":"Intended start time of landing",
+    "clock_panel_accepted_time":"Accepted time",
 	"cronology_current_trip": "Current trip:",
 	"cronology_view_all": "View all",
 	"error_loading_trip_summary_vessel_data": "Error loading the vessel data in trip summary",
