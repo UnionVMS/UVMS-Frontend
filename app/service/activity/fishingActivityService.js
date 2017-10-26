@@ -98,11 +98,13 @@ angular.module('unionvmsWeb').factory('fishingActivityService', function(activit
             'vesselDetails'
         ],
         area_entry: [
+            'locations',
             'areas',
             'catches',
             'processingProducts'
         ],
         area_exit: [
+            'locations',
             'areas',
             'catches',
             'processingProducts'
