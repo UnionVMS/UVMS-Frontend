@@ -89,7 +89,8 @@ describe('catchPanel', function() {
                     "color": "#781c81",
                     "tableColor": {
                         "background-color": "rgba(120, 28, 129, 0.7)"
-                    }
+                    },
+                    "catchPerArea": "27.1 183950<br/>"
                 },
                 {
                     "speciesCode": "SEAFOOD",
@@ -97,7 +98,8 @@ describe('catchPanel', function() {
                     "color": "#447cbf",
                     "tableColor": {
                         "background-color": "rgba(68, 124, 191, 0.7)"
-                    }
+                    },
+                    "catchPerArea": "27.1 183950<br/>"
                 }],
                 "total": 555,
                 "title": "Landed"
@@ -109,7 +111,8 @@ describe('catchPanel', function() {
                     "color": "#781c81",
                     "tableColor": {
                         "background-color": "rgba(120, 28, 129, 0.7)"
-                    }
+                    },
+                    "catchPerArea": "27.1 183950<br/>"
                 },
                 {
                     "speciesCode": "SEAFOOD",
@@ -117,7 +120,8 @@ describe('catchPanel', function() {
                     "color": "#d92120",
                     "tableColor": {
                         "background-color": "rgba(217, 33, 32, 0.7)"
-                    }
+                    },
+                    "catchPerArea": "27.1 183950<br/>"
                 }],
                 "total": 222,
                 "title": "Cumulated Catch"
@@ -127,7 +131,7 @@ describe('catchPanel', function() {
     
 
     function getFormattedValue(value, total){
-        return value + ' (' + (value/total*100).toFixed(2) + '%)';
+        return value.toFixed(3) + '  (' + (value/total*100).toFixed(2) + '%)';
     }
 
 

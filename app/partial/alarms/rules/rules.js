@@ -77,8 +77,7 @@ angular.module('unionvmsWeb').controller('RulesCtrl',function($scope, $log, $sta
 
     //Callback when a new Rule has been creatad
     $scope.createdNewRuleCallback = function(newRule){
-        //Add new rule to searchResult
-        $scope.currentSearchResults.updateWithSingleItem(newRule);
+        ruleRestService.getAllRulesForUser().then(updateSearchResults, onGetSearchResultsError);
         $scope.setUserSubscribeValues();
 
         //Show search results

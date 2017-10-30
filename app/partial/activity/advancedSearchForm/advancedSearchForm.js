@@ -45,7 +45,7 @@ angular.module('unionvmsWeb').controller('AdvancedsearchformCtrl',function($scop
         reportTypes: null,
         gearTypes: null,
         activityTypes: null,
-        weightUnits: [{code: 'kg', text: 'Kg'}, {code: 't', text: 'Ton'}]
+        weightUnits: [{code: 'kg', text: 'Kg'}, {code: 'TNE', text: 'Ton'}]
     };
 
     $scope.advancedSearchObject = {
@@ -276,12 +276,12 @@ angular.module('unionvmsWeb').controller('AdvancedsearchformCtrl',function($scop
             };
             
             
-            if (angular.isDefined(formatedSearch.QUNTITY_MIN) || angular.isDefined(formatedSearch.QUNTITY_MAX)){
+            if (angular.isDefined(formatedSearch.QUANTITY_MIN) || angular.isDefined(formatedSearch.QUANTITY_MAX)){
                 formatedSearch.WEIGHT_MEASURE = $scope.advancedSearchObject.weightUnit;
             }
             
-            if (angular.isDefined(formatedSearch.QUNTITY_MAX) && !angular.isDefined(formatedSearch.QUNTITY_MIN)){
-                formatedSearch.QUNTITY_MIN = 0;
+            if (angular.isDefined(formatedSearch.QUANTITY_MAX) && !angular.isDefined(formatedSearch.QUANTITY_MIN)){
+                formatedSearch.QUANTITY_MIN = 0;
             }
             
             $scope.actServ.reportsList.searchObject = {

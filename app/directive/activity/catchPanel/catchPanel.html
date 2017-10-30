@@ -15,7 +15,7 @@
                             <!--SPECIE COUNT CHART-->
                             <div ng-class="{'col-md-6': withTable, 'col-md-12': !withTable}">
                                 <div class="nvd3-chart">
-                                    <nvd3 options="options[title]" data="data.speciesList" on-ready="api.refresh()" ng-if="!isLoading"></nvd3>
+                                    <nvd3 options="options[title]" data="data.speciesList" on-ready="api.refresh()" api="options[title].api" ng-if="!isLoading"></nvd3>
                                 </div>
                             </div>
                             <!--SPECIE COUNT TABLE-->
