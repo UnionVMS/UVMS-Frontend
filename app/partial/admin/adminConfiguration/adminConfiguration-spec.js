@@ -47,7 +47,7 @@ describe('AuditconfigurationCtrl', function() {
 
 	it('should only show tabs with at least one non-global setting', function() {
 		var controller = createController();
-		expect(scope.tabs).toEqual(["systemMonitor", "globalSettings", "reporting", "mobileTerminal"]);
+		expect(scope.tabs).toEqual(["systemMonitor", "globalSettings", "reporting","activity", "mobileTerminal"]);
 	});
 
 	it('should provide the right partial URLs', function() {
@@ -61,7 +61,10 @@ describe('AuditconfigurationCtrl', function() {
 		
 		scope.activeTab = "reporting";
         expect(scope.configurationPageUrl()).toBe("partial/admin/adminConfiguration/configurationReporting/configurationReporting.html");
-
+		
+		scope.activeTab = "activity";
+		expect(scope.configurationPageUrl()).toBe("partial/admin/adminConfiguration/configurationActivity/configurationActivity.html");
+		
 		scope.activeTab = "any other value";
 		expect(scope.configurationPageUrl()).toBe("partial/admin/adminConfiguration/configurationModule/configurationModule.html");
 	});
