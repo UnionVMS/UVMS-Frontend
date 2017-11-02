@@ -151,7 +151,7 @@ angular.module('unionvmsWeb').factory('spatialConfigRestFactory', function($reso
 	        spatialConfigRestFactory.getActivityAdminConfigs().get(function(response){
 	            deferred.resolve(response.data);
 	        }, function(error){
-	            console.error('Error getting mock activity admin configurations');
+	            console.error('Error getting activity admin configurations');
 	            deferred.reject(error);
 	        });
 	        return deferred.promise;
@@ -171,7 +171,7 @@ angular.module('unionvmsWeb').factory('spatialConfigRestFactory', function($reso
             spatialConfigRestFactory.saveActivityAdminConfigs().save(configs, function(response){
                 deferred.resolve(response);
             }, function(error){
-                console.error('Error saving mock activity admin configurations');
+                console.error('Error saving activity admin configurations');
                 deferred.reject(error);
             });
             return deferred.promise;
