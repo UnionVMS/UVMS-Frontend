@@ -158,6 +158,7 @@
     "clock_panel_estimated_time":"Estimated time of Arrival",
     "clock_panel_arrival_time":"Time of Arrival",
     "clock_panel_intended_start_time":"Intended start time of landing",
+    "clock_panel_accepted_time":"Accepted time",
 	"cronology_current_trip": "Current trip:",
 	"cronology_view_all": "View all",
 	"error_loading_trip_summary_vessel_data": "Error loading the vessel data in trip summary",
@@ -325,7 +326,7 @@
     "fa_locations_street": "Street",
     "fa_locations_city": "City",
     "fa_locations_postal_code": "Postal code",
-    "fa_locations_plotId": "Plot ID",
+    "fa_locations_plotId": "House number",
     "fa_locations_zoom_to_activity": "Zoom to activity in the map",
      
     "fa_fao_area": "FAO",
