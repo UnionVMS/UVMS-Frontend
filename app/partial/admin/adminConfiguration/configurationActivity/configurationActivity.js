@@ -9,14 +9,24 @@ the hope that it will be useful, but WITHOUT ANY WARRANTY; without even the impl
 FITNESS FOR A PARTICULAR PURPOSE.  See the GNU General Public License for more details. You should have received a
 copy of the GNU General Public License along with the IFDM Suite. If not, see <http://www.gnu.org/licenses/>.
 */
-angular.module('unionvmsWeb').controller('ConfigurationactivityCtrl',function($scope, spatialConfigRestService){
+angular.module('unionvmsWeb').controller('ConfigurationactivityCtrl', function ($scope, spatialConfigRestService, alertService, $anchorScroll, loadingStatus, locale) {
     $scope.settingsLevel = 'admin';
-   
-	$scope.save = function(){
-        var finalConfig = $scope.tresholds;
-        spatialConfigRestService.saveActivityAdminConfigs(finalConfig).then(function(response){
-            console.log("post"+JSON.stringify(response));
-        }, function(error){
-        });
+    $scope.save = function () {
+        if (_.keys($scope.configurationCatchThresholdForm.$error).length === 0) {
+            loadingStatus.isLoading('Preferences', true, 2);
+            var finalConfig = $scope.thresholds;
+            spatialConfigRestService.saveActivityAdminConfigs(finalConfig).then(function (response) {
+                $anchorScroll();
+                alertService.showSuccessMessageWithTimeout(locale.getString('common.global_setting_save_success_message'));
+                loadingStatus.isLoading('Preferences', false);
+            }, function (error) {
+                $anchorScroll();
+                alertService.showErrorMessageWithTimeout(locale.getString('common.global_setting_save_error_message'));
+                loadingStatus.isLoading('Preferences', false);
+            });
+        } else {
+            $anchorScroll();
+            alertService.showErrorMessageWithTimeout(locale.getString('spatial.invalid_data_saving'));
+        }
     };
 });

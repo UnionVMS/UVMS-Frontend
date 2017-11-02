@@ -19,7 +19,7 @@ angular.module('unionvmsWeb').factory('spatialConfigRestFactory', function($reso
             });
         },
         getActivityAdminConfigs: function(){
-            return $resource('/mock/activity/rest/config/admin', {}, {
+            return $resource('/activity/rest/config/admin', {}, {
                 'get': {
                     method: 'GET'
                 }
@@ -36,7 +36,7 @@ angular.module('unionvmsWeb').factory('spatialConfigRestFactory', function($reso
             });
         },
         saveActivityAdminConfigs: function(){
-            return $resource('/mock/activity/rest/config/admin/save', {}, {
+            return $resource('/activity/rest/config/admin', {}, {
                 'save': {
                     method: 'POST',
                     headers: {
@@ -149,7 +149,7 @@ angular.module('unionvmsWeb').factory('spatialConfigRestFactory', function($reso
         getActivityAdminConfigs: function(){
 	        var deferred = $q.defer();
 	        spatialConfigRestFactory.getActivityAdminConfigs().get(function(response){
-	            deferred.resolve(response);
+	            deferred.resolve(response.data);
 	        }, function(error){
 	            console.error('Error getting mock activity admin configurations');
 	            deferred.reject(error);

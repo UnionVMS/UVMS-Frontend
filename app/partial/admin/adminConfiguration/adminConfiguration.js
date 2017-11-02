@@ -71,8 +71,7 @@ angular.module('unionvmsWeb').controller('AuditconfigurationCtrl',function($scop
 		    loadingStatus.isLoading('Preferences',false);
 		});
 		spatialConfigRestService.getActivityAdminConfigs().then(function(response){
-            console.log("response"+JSON.stringify(response));
-            $scope.tresholds = response;
+			$scope.thresholds = response;
 		});
 	};
 

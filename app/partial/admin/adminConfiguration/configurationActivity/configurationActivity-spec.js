@@ -29,9 +29,21 @@ describe('ConfigurationactivityCtrl', function () {
         });
     }
     function saveActivityAdminConfigs() {
-        return { "catchTresholds": { "critical": 90, "warning": 43 } };
+        return {
+            "fishingActivityConfig": {
+                "summaryReport": {
+                    "values": ["FAReportType", "activityType", "occurrence", "purposeCode", "dataSource", "fromName", "startDate", "endDate", "cfr", "ircs", "extMark", "uvi", "iccat", "gfcm", "areas", "port", "fishingGear", "speciesCode", "quantity"],
+                    "order": ["FAReportType", "activityType", "occurrence", "purposeCode", "dataSource", "fromName", "startDate", "endDate", "cfr", "ircs", "extMark", "uvi", "iccat", "gfcm", "areas", "port", "fishingGear", "speciesCode", "quantity"]
+                }
+            },
+            "catchThresholds": {
+                "critical": null,
+                "warning": null
+            }
+        }
     }
     it('tresholds should be saved', inject(function () {
+        scope.configurationCatchThresholdForm = true;
         scope.save();
         expect(spatialConfigRestServiceSpy.saveActivityAdminConfigs.callCount).toBe(1);
         expect(1).toEqual(1);

@@ -15,30 +15,46 @@ copy of the GNU General Public License along with the IFDM Suite. If not, see <h
             <h5>{{'spatial.catch_figures_tresholds' | i18n}}</h5>
         </div>
         <div class="form-group col-md-12 fields">
-            <div class="col-md-1">
-                <span class="formLabel">{{'spatial.catch_tresholds_critical' | i18n}}</span>
-                <i class="fa fa-exclamation-circle"></i>
-            </div>
-            <div class="col-md-2">
-                <input type="text" class="form-control" ng-model="tresholds.catchTresholds.critical" name="criticalValue" />
-            </div>
-            <div class="col-md-9">
-                <div class="row">
-                    %
+            <div class="row">
+                <div class="col-md-1">
+                    <span class="formLabel">{{'spatial.catch_tresholds_critical' | i18n}}</span>
+                    <i class="fa fa-exclamation-circle"></i>
+                </div>
+                <div class="col-md-2">
+                    <input type="number" class="form-control" ng-model="thresholds.catchThresholds.critical" name="criticalValue" ng-class="{red: catchFiguresTresholdsForm.criticalValue.$invalid && catchFiguresTresholdsForm.criticalValue.$dirty}"
+                        min="1" max="100" required/>
+                </div>
+                <div class="col-md-9">
+                    <div class="row">
+                        <span> % </span>
+                        <span class="error-message fields" ng-messages="catchFiguresTresholdsForm.criticalValue.$error" ng-show="catchFiguresTresholdsForm.criticalValue.$dirty">
+                        <span ng-message="invalidNumber">{{'spatial.not_numeric_error_message' | i18n }}</span>
+                        <span ng-message="min">{{'spatial.invalid_range_error_message_3' | i18n }}</span>
+                        <span ng-message="max">{{'spatial.invalid_range_error_message_3' | i18n }}</span>
+                        </span>
+                    </div>
                 </div>
             </div>
         </div>
         <div class="form-group col-md-12 fields">
-            <div class="col-md-1">
-                <span class="formLabel">{{'spatial.catch_tresholds_warning' | i18n}}</span>
-                <i class="fa fa-exclamation-triangle"></i>
-            </div>
-            <div class="col-md-2">
-                <input type="text" class="form-control" ng-model="tresholds.catchTresholds.warning" name="warningValue" />
-            </div>
-            <div class="col-md-9">
-                <div class="row">
-                    %
+            <div class="row">
+                <div class="col-md-1">
+                    <span class="formLabel">{{'spatial.catch_tresholds_warning' | i18n}}</span>
+                    <i class="fa fa-exclamation-triangle"></i>
+                </div>
+                <div class="col-md-2">
+                    <input type="number" class="form-control" ng-model="thresholds.catchThresholds.warning" name="warningValue" ng-class="{red: catchFiguresTresholdsForm.warningValue.$invalid && catchFiguresTresholdsForm.warningValue.$dirty}"
+                        min="1" max="100" required />
+                </div>
+                <div class="col-md-9">
+                    <div class="row">
+                        <span> % </span>
+                        <span class="error-message" ng-messages="catchFiguresTresholdsForm.warningValue.$error" ng-show="catchFiguresTresholdsForm.warningValue.$dirty">
+                        <span  ng-message="invalidNumber">{{'spatial.not_numeric_error_message' | i18n }}</span>
+                        <span ng-message="min">{{'spatial.invalid_range_error_message_3' | i18n }}</span>
+                        <span ng-message="max">{{'spatial.invalid_range_error_message_3' | i18n }}</span>
+                        </span>
+                    </div>
                 </div>
             </div>
         </div>

@@ -454,6 +454,7 @@
 	"max_error_message": "'Max' cannot be lower than 'Min'",
 	"invalid_range_error_message": "Must be between 1 and 10",
 	"invalid_range_error_message_2": "Must be between 1 and 6",
+	"invalid_range_error_message_3": "Must be between 1 and 100",
 	"not_numeric_error_message": "Value shall be numeric",
 	"base_list_error": "There should be at least one selected background layer",
 	
