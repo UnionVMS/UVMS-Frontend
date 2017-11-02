@@ -121,10 +121,8 @@ describe('fishingActivityService', function() {
     function getReportDetails() {
         return {
             type: "DECLARATION",
-            acceptedDate: "2018-07-07T06:48:08",
             id: "4bc9392b-3607-5d91-9032-194b83f89e28",
             refId: "c0bd3ec3-b178-5951-9853-7e13bb76b607",
-            creationDate: "2016-06-09T19:34:12",
             purposeCode: 1,
             purpose: "Budrilico cuwmaglo gij munhofip pi zuwbibum bi feh ke za ajunutoc mupzaj gop ho legipejo epdeli.",
             relatedReports: [
@@ -541,12 +539,6 @@ describe('fishingActivityService', function() {
                     clickable: undefined,
                     id: 'type'
                 }, {
-                    idx: 7,
-                    label: '',
-                    value: '2018-07-07T08:48:08+02:00',
-                    clickable: undefined,
-                    id: 'acceptedDate'
-                }, {
                     idx: 5,
                     label: '',
                     value: '4bc9392b-3607-5d91-9032-194b83f89e28',
@@ -558,12 +550,6 @@ describe('fishingActivityService', function() {
                     value: 'c0bd3ec3-b178-5951-9853-7e13bb76b607',
                     clickable: true,
                     id: 'refId'
-                }, {
-                    idx: 1,
-                    label: '',
-                    value: '2016-06-09T21:34:12+02:00',
-                    clickable: undefined,
-                    id: 'creationDate'
                 }, {
                     idx: 2,
                     label: '',
