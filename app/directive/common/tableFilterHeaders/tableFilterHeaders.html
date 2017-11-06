@@ -16,7 +16,7 @@
 					<td ng-repeat="column in columns" ng-if="column.isVisible">
 						<span ng-if="column.srcObj">{{item[column.srcObj][column.srcProp]}}</span>
 						<span ng-if="column.isDate">{{item[column.srcProp] | stDateUtc}}</span>
-						<span ng-if="column.isDuration">{{item[column.srcProp] | stHumanizeTime}}</span>
+						<span ng-if="column.isDuration">{{item[column.srcProp] + ' ' + item.durationMeasure}}</span>
 						<span ng-if="column.translation">{{item['translated' + column.srcProp]}}</span>
 						<span ng-if="!column.srcObj && !column.isDate && !column.isDuration && !column.translation">{{item[column.srcProp]}}</span>
 					</td>
