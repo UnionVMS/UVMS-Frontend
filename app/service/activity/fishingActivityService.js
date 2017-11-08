@@ -42,7 +42,8 @@ angular.module('unionvmsWeb').factory('fishingActivityService', function(activit
         common: [
             'activityDetails',
             'reportDetails',
-            'tripDetails'
+            'tripDetails',
+            'history'
         ],
         departure: [
             'locations',
@@ -341,17 +342,26 @@ angular.module('unionvmsWeb').factory('fishingActivityService', function(activit
 	 * @public
      * @alias getFishingActivity
 	 */
-    faServ.getFishingActivity = function(obj, callback) {
+    faServ.getFishingActivity = function(obj, callback, actiId) {
         loadingStatus.isLoading('FishingActivity', true, 0);
+        
+        var faActivityId = "";
+        
+        if (actiId) {
+            faActivityId = actiId;
+        } else {
+            faActivityId = faServ.id;
+        }
+
         var payload = {
-            activityId: faServ.id
+            activityId: faActivityId
         };
         
         if ($state.current.name === 'app.reporting-id' || $state.current.name === 'app.reporting'){
             payload.tripId = tripSummaryService.trip.id;
         }
         
-        if ($state.current.name === 'app.activity' && $state.params.tripId !== null && $state.params.activityId === faServ.id){
+        if ($state.current.name === 'app.activity' && $state.params.tripId !== null && $state.params.activityId === faActivityId){
             payload.tripId = $state.params.tripId;
         }
         
@@ -1351,6 +1361,9 @@ angular.module('unionvmsWeb').factory('fishingActivityService', function(activit
                     break;
                 case 'locations':
                     obj.locations = data.locations;
+                    break;
+                case 'history':
+                    obj.history = data.history;
                     break;
                 case 'gears':
                     obj.gears = loadGears(data.gears);
