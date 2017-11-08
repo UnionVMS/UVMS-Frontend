@@ -9,37 +9,6 @@ the hope that it will be useful, but WITHOUT ANY WARRANTY; without even the impl
 FITNESS FOR A PARTICULAR PURPOSE.  See the GNU General Public License for more details. You should have received a
 copy of the GNU General Public License along with the IFDM Suite. If not, see <http://www.gnu.org/licenses/>.
 */
-.clock-panel {
-    height: 100%;
-    .catch-section {
-        height: 100%;
-        .clock-body {
-            margin: 0 5px;
-        }
-    }
-    .clock-subsection {
-        .fields {
-            font-weight: bold;
-            &.useColon::after {
-                content: ':'
-            }
-        }
-        padding-bottom: 20px;
-        text-align: center;
-        &:not(:first-child) {
-            border-top: 1px solid #ddd;
-            padding-top: 15px;
-        }
-    }
+angular.module('unionvmsWeb').controller('CatchfigurestresholdsCtrl',function($scope){
 
-    .clock-body.horizontal-align {
-        .clock-subsection {
-            padding-left: 30px;
-            padding-right: 30px;
-            &:not(:first-child) {
-                border-top: 0;
-                padding-top: 0;
-            }
-        }
-    }
-}
+});

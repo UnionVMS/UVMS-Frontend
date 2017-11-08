@@ -98,11 +98,13 @@ angular.module('unionvmsWeb').factory('fishingActivityService', function(activit
             'vesselDetails'
         ],
         area_entry: [
+            'locations',
             'areas',
             'catches',
             'processingProducts'
         ],
         area_exit: [
+            'locations',
             'areas',
             'catches',
             'processingProducts'
@@ -124,7 +126,7 @@ angular.module('unionvmsWeb').factory('fishingActivityService', function(activit
             type: 'string'
         },
         {
-            id: 'no_operations',
+            id: 'nrOfOperation',
             type: 'string'
         },
         {
@@ -282,7 +284,7 @@ angular.module('unionvmsWeb').factory('fishingActivityService', function(activit
 	    {
 		    activityName: 'discard',
 		    achronym: 'FA_REASON_DISCARD'
-	    }
+        }
      ];
 
 	/**
@@ -400,7 +402,7 @@ angular.module('unionvmsWeb').factory('fishingActivityService', function(activit
             angular.forEach(faCatches, function(faCatch){
                 var keys = ['BMS', 'LSC'];
                 for (var j = 0; j < keys.length; j++){
-                    if (angular.isDefined(faCatch.groupingDetails[keys[j]].gears) && faCatch.groupingDetails[keys[j]].gears.length > 0){
+                    if (angular.isDefined(faCatch.groupingDetails[keys[j]]) && angular.isDefined(faCatch.groupingDetails[keys[j]].gears) && faCatch.groupingDetails[keys[j]].gears.length > 0){
                         for (var i = 0; i < faCatch.groupingDetails[keys[j]].gears.length; i++){
                             var mdrRec = _.findWhere(response, { code:  faCatch.groupingDetails[keys[j]].gears[i].type});
                             if (angular.isDefined(mdrRec)) {
@@ -510,7 +512,7 @@ angular.module('unionvmsWeb').factory('fishingActivityService', function(activit
             var classes = ['LSC','BMS'];
             angular.forEach(faObj.catches, function(item) {
                 angular.forEach(classes, function(className) {
-                    if(angular.isDefined(item.groupingDetails[className].classProps)){
+                    if(angular.isDefined(item.groupingDetails[className]) && angular.isDefined(item.groupingDetails[className].classProps)){
                         var mdrRec = _.findWhere(response, {code: item.groupingDetails[className].classProps.weightingMeans});
                         if (angular.isDefined(mdrRec)){
                             if(!angular.isDefined(item.groupingDetails[className].classDescs)){
@@ -614,7 +616,7 @@ angular.module('unionvmsWeb').factory('fishingActivityService', function(activit
                         finalSummary.subTitle = locale.getString('activity.trip_' + key);
                     }
                 }
-            }else if(angular.isDefined(value) && !_.isNull(value) && value.length > 0){
+            }else if(angular.isDefined(value) && !_.isNull(value)){
                 var attrData = _.where(attrOrder, {id: key});
                 if(attrData.length){
                     finalSummary.items.push(transformFaItem(value, key, attrOrder, attrKeys, attrData[0]));
@@ -829,34 +831,40 @@ angular.module('unionvmsWeb').factory('fishingActivityService', function(activit
             angular.forEach(data, function(item){
                 angular.forEach(classes, function(className){
                     var classDetails = item.groupingDetails;
-
-                    if(angular.isDefined(classDetails[className].gears)){
-                        classDetails[className].gears = loadGears(classDetails[className].gears);
-                    }
-
-                    classDetails[className].classProps = {};
-
-                    if(angular.isDefined(classDetails[className].destinationLocation) && angular.isDefined(classDetails[className].destinationLocation[0])){
-                        classDetails[className].destinationLocation = classDetails[className].destinationLocation[0].id + ' - ' + classDetails[className].destinationLocation[0].name + ', ' +
-                            classDetails[className].destinationLocation[0].countryId;
-                    }
-
-                    angular.forEach(classDetails[className], function(attr,attrName){
-                        if(!_.isObject(attr) && !_.isArray(attr) && ['weight','unit'].indexOf(attrName) === -1){
-                            classDetails[className].classProps[attrName] = attr;
-                            delete classDetails[className][attrName];
+                    if(angular.isDefined(classDetails[className])){
+                        if(angular.isDefined(classDetails[className].gears)){
+                            classDetails[className].gears = loadGears(classDetails[className].gears);
                         }
-                    });
 
-                    if(_.isEmpty(classDetails[className].classProps)){
-                        delete classDetails[className].classProps;
-                    }
+                        classDetails[className].classProps = {};
 
-                    if(!angular.isDefined(classDetails[className].weight)){
-                        classDetails[className].weight = 0;
-                    }
-                    if(!angular.isDefined(classDetails[className].unit)){
-                        classDetails[className].unit = 0;
+                        if(angular.isDefined(classDetails[className].destinationLocation) && angular.isDefined(classDetails[className].destinationLocation[0])){
+                            classDetails[className].destinationLocation = classDetails[className].destinationLocation[0].id + ' - ' + classDetails[className].destinationLocation[0].name + ', ' +
+                                classDetails[className].destinationLocation[0].countryId;
+                        }
+
+                        angular.forEach(classDetails[className], function(attr,attrName){
+                            if(!_.isObject(attr) && !_.isArray(attr) && ['weight','unit'].indexOf(attrName) === -1){
+                                classDetails[className].classProps[attrName] = attr;
+                                delete classDetails[className][attrName];
+                            }
+                        });
+
+                        if(_.isEmpty(classDetails[className].classProps)){
+                            delete classDetails[className].classProps;
+                        }
+
+                        if(!angular.isDefined(classDetails[className].weight)){
+                            classDetails[className].weight = 0;
+                        }
+                        if(!angular.isDefined(classDetails[className].unit)){
+                            classDetails[className].unit = 0;
+                        }
+                    }else{
+                        classDetails[className] = {
+                            weight: 0,
+                            unit: 0
+                        };
                     }
                 });
             });
@@ -1126,7 +1134,7 @@ angular.module('unionvmsWeb').factory('fishingActivityService', function(activit
         var activityType = _.where(faMdrReason, {activityName: obj.faType});
         
         if(angular.isDefined(activityType) && activityType.length > 0){
-            var acronym =activityType[0].achronym;
+            var acronym = activityType[0].achronym;
             loadingStatus.isLoading('FishingActivity', true, 0);
             
             mdrCacheService.getCodeList(acronym).then(function(response){

@@ -1,4 +1,4 @@
-/*
+<!--
 Developed with the contribution of the European Commission - Directorate General for Maritime Affairs and Fisheries
 © European Union, 2015-2016.
 
@@ -8,38 +8,18 @@ Free Software Foundation, either version 3 of the License, or any later version.
 the hope that it will be useful, but WITHOUT ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or
 FITNESS FOR A PARTICULAR PURPOSE.  See the GNU General Public License for more details. You should have received a
 copy of the GNU General Public License along with the IFDM Suite. If not, see <http://www.gnu.org/licenses/>.
-*/
-.clock-panel {
-    height: 100%;
-    .catch-section {
-        height: 100%;
-        .clock-body {
-            margin: 0 5px;
-        }
-    }
-    .clock-subsection {
-        .fields {
-            font-weight: bold;
-            &.useColon::after {
-                content: ':'
-            }
-        }
-        padding-bottom: 20px;
-        text-align: center;
-        &:not(:first-child) {
-            border-top: 1px solid #ddd;
-            padding-top: 15px;
-        }
-    }
+-->
+<div class="row activity-config" ng-controller="ConfigurationactivityCtrl">
+	<div class="col-md-12 containerWrapper">
+	    <div class="row containerWithTopBottomPadding">
+	    	<loading-panel type="Preferences"></loading-panel>
+	    	<ng-form name="configurationCatchThresholdForm" novalidate>
+		    	<div class="collapsiblePanel" ng-include="'partial/spatial/configurations/catchFiguresTresholds/catchFiguresTresholds.html'"></div>
+				<button type="button" class="btn btn-primary pull-right save-btn btn-action" ng-click="save()">{{'common.save' | i18n}}</button>
+			</ng-form>
+		</div>
+	</div>
+</div>
 
-    .clock-body.horizontal-align {
-        .clock-subsection {
-            padding-left: 30px;
-            padding-right: 30px;
-            &:not(:first-child) {
-                border-top: 0;
-                padding-top: 0;
-            }
-        }
-    }
-}
+
+

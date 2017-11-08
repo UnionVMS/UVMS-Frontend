@@ -3,12 +3,12 @@
     <parent>
         <groupId>fish.focus.maven</groupId>
 	    <artifactId>focus-pom</artifactId>
-	    <version>1.9</version>
+	    <version>1.12</version>
         <relativePath />
     </parent>
     <groupId>eu.europa.ec.fisheries.uvms</groupId>
     <artifactId>unionvms-web</artifactId>
-    <version>3.0.11-SNAPSHOT</version>
+    <version>3.0.12-SNAPSHOT</version>
     <name>unionvms-web</name>
     <packaging>war</packaging>
 
