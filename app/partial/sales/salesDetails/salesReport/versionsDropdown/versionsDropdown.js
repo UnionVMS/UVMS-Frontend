@@ -33,7 +33,7 @@
             vm.dropdownItems = [];
             angular.forEach(reportVersions, function(version) {
                 var dropdownItem = {
-                    text : $filter('i18n')('sales.report_item_type_' + version.type) + " " + version.documentExtId,
+                    text : $filter('i18n')('sales.report_item_type_' + version.type) + " (" + $filter('date')(version.creationDate) + ")",
                     reportExtId: version.reportExtId
                 };
                 vm.dropdownItems.push(dropdownItem);
