@@ -26,7 +26,7 @@
 					<li ng-repeat="item in identifiers" class="item-container" ng-if="identifiers.length > 0"  ng-class="{'item-clickable': isItemClickable(item)}" ng-click="zoomToLocation(item)">
 						<span class="item-label">{{item.schemeId}}</span> 
 						<span>{{item.id}}</span>
-						<span ng-if="item.portDescription">- {{item.portDescription}}</span>
+						<span ng-if="item.description">- {{item.description}}</span>
 					</li>
 					<li ng-repeat="item in positions" class="item-container" ng-if="positions.length > 0" ng-class="{'item-clickable': isItemClickable(item)}" ng-click="zoomToLocation(item)">
 						<div class="item-field">
