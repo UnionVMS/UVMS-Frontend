@@ -389,6 +389,7 @@ angular.module('unionvmsWeb').factory('activityRestFactory', function ($resource
             var deferred = $q.defer();
             activityRestFactory.getFishingActivityDetails().get({fatype: type}, payload, function (response) {
                 //response.data.locations = [{"structuredAddresses":[],"identifier":{"schemeId":"FAO_AREA","id":"51.6"}},{"geometry":"POINT (45.75 -10.4167)","structuredAddresses":[],"identifier":{"schemeId":"LOCATION","id":"SCPOV"}},{"structuredAddresses":[],"identifier":{"schemeId":"FAO_AREA","id":"51.5"}}];
+                //response.data.history={"previousId":1,"nextId":3};
                 deferred.resolve(response.data);
             }, function (error) {
                 deferred.reject(error);
