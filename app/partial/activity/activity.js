@@ -209,23 +209,26 @@ angular.module('unionvmsWeb').controller('ActivityCtrl', function ($scope, local
     };
 
     genericMapService.setMapBasicConfigs(setTripSumServiceMapConfigs);
-      // function of trip summary service to open new trip
-      $scope.tripSummServ.initializeTrip = function (tripId) {
+
+    // function of trip summary service to open new trip
+    $scope.tripSummServ.initializeTrip = function (tripId) {
         if (angular.isDefined(tripId)) {
             $scope.tripSummServ.trip = new Trip(tripId);
             $scope.trip = $scope.tripSummServ.trip;
+
+            $scope.tripSummServ.initTripSummary();
         }
-      };
+    };
     
-      /**
-	   * Initializes the ActivityCtrl
-	   * 
-	   * @memberof ActivityCtrl
-	   * @private
-	   */
-      var init = function(){
-         $scope.activityTabMenu = setActivityTabs();
-      };
+    /**
+	 * Initializes the ActivityCtrl
+	 * 
+	 * @memberof ActivityCtrl
+	 * @private
+	 */
+    var init = function(){
+       $scope.activityTabMenu = setActivityTabs();
+    };
     
-      init();
+    init();
 });
