@@ -330,6 +330,15 @@ angular.module('unionvmsWeb').factory('activityService',function(locale, activit
             if (response.totalItemsCount !== 0){
                 actServ[listName].pagination.totalPages = Math.ceil(response.totalItemsCount / pageSize);
             }
+
+            if(listName === 'tripsList'){
+                angular.forEach(response.resultList, function(item){
+                    angular.forEach(item.vesselIdList, function(vesselValue,vesselId){
+                        item[vesselId] = vesselValue;
+                    });
+                    delete item.vesselIdList;
+                });
+            }
             
             actServ[arrName] = response.resultList;
             actServ[displayedArrName] = [].concat(actServ[arrName]);
@@ -345,7 +354,7 @@ angular.module('unionvmsWeb').factory('activityService',function(locale, activit
             if (!angular.isDefined(callback) && angular.isDefined(actServ[listName].tableState)){
                 actServ[listName].tableState.pagination.numberOfPages = actServ[listName].pagination.totalPages; 
             }
-            
+
             actServ[listName].isLoading = false;
             actServ[listName].hasError = false;
             actServ.isTableLoaded = true;

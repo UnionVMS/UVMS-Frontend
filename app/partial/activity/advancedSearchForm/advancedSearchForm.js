@@ -109,6 +109,12 @@ angular.module('unionvmsWeb').controller('AdvancedsearchformCtrl',function($scop
                      'PURPOSE': $scope.advancedSearchObject.purposeCode
                  }
              };
+
+             $scope.actServ.tripsList.searchObject = {
+                multipleCriteria: {
+                    'PURPOSE': $scope.advancedSearchObject.purposeCode
+                }
+            };
              
              $scope.codeLists.purposeCodes = list;
              $scope.actServ.isGettingMdrCodes = false;
@@ -240,6 +246,7 @@ angular.module('unionvmsWeb').controller('AdvancedsearchformCtrl',function($scop
         if ($scope.activityAdvancedSearchForm.$valid){
             $scope.isFormValid = true;
             $scope.actServ.reportsList.isLoading = true;
+            $scope.actServ.tripsList.isLoading = true;
             $scope.actServ.resetListTableStates();
             $scope.actServ.isTableLoaded = false;
             
@@ -292,6 +299,11 @@ angular.module('unionvmsWeb').controller('AdvancedsearchformCtrl',function($scop
             }
             
             $scope.actServ.reportsList.searchObject = {
+                simpleCriteria: formatedSearch,
+                multipleCriteria: multipleFormatedSearch
+            };
+
+            $scope.actServ.tripsList.searchObject = {
                 simpleCriteria: formatedSearch,
                 multipleCriteria: multipleFormatedSearch
             };

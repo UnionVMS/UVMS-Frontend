@@ -224,7 +224,7 @@ angular.module('unionvmsWeb').factory('activityRestFactory', function ($resource
         getTripsList: function (data) {
             var deferred = $q.defer();
             activityRestFactory.getTripsList().get(angular.toJson(data), function (response) {
-                response.data.resultList = angular.copy(response.data.fishingTripIdList);
+                response.data.resultList = angular.copy(response.data.fishingTripIdList) || [];
                 delete response.data.fishingTripIdList;
                 deferred.resolve(response.data);
             }, function (error) {
