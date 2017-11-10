@@ -1,0 +1,32 @@
+<ul class="group-line-selected-items left">
+    <li ng-repeat="item in vm.selectedItems">
+        <span>{{item}}</span>
+        <i class="fa-remove fa" ng-click="vm.removeItem(item)"></i>
+    </li>
+</ul>
+
+<div>
+    <p class="input-group nomargin left col-md-4">
+        <input type="text" autocomplete="off"
+               ng-model="vm.tempItem"
+               typeahead="code as code for code in vm.codes | filter:$viewValue:startsWith | limitTo: 10"
+               typeahead-editable="false"
+               typeahead-on-select="vm.onSelect(); vm.tempItem = '';"
+               typeahead-select-on-exact="true"
+               typeahead-wait-ms="500"
+               placeholder="{{vm.initialtext}}"
+               class="form-control">
+    </p>
+
+    <div class="btn-group dropdown left">
+        <button type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown">
+            {{vm.selectedFunction.toUpperCase()}}
+            <span class="function-caret"></span>
+        </button>
+        <ul class="dropdown-menu" role="menu">
+            <li ng-repeat="func in vm.functions" ng-click="vm.selectFunction(func)">
+                <a>{{'sales.advanced_search_species_function_' + func | i18n}}</a>
+            </li>
+        </ul>
+    </div>
+</div>

@@ -21,9 +21,34 @@ copy of the GNU General Public License along with the IFDM Suite. If not, see <h
  */
 angular.module('unionvmsWeb').controller('CatchdetailsCtrl', function ($scope, activityRestService, locale, tableService, reportService, loadingStatus, tripSummaryService) {
 
-    var prepareSummaryReport = function(){
+    var prepareSummaryRow = function(record){
+        var catchTypes = ['summaryFaCatchType','summaryFishSize'];
+        angular.forEach(catchTypes, function(ctype){
+            if(angular.isDefined(record[ctype])){
+                angular.forEach(record[ctype], function(value,key){
+                    if(angular.isDefined(record[ctype][key])){
+                        record[ctype][key] = {};
+                        record[ctype][key].all_species = value;
+                    }
+                });
+            }
+        });
+    };
 
-        if($scope.repServ.criteria){
+    var prepareSummaryReport = function(){
+        if($scope.repServ.criteria && $scope.repServ.criteria.recordDTOs && $scope.repServ.criteria.recordDTOs.length){
+            var rowTypes = ['recordDTOs','total'];
+            angular.forEach(rowTypes, function(rtype){
+                if(rtype === 'total'){
+                    prepareSummaryRow($scope.repServ.criteria.total);
+                }else{
+                    angular.forEach($scope.repServ.criteria[rtype], function(record){
+                        prepareSummaryRow(record.summaryTable);
+                    });
+                }
+                
+            });
+
             var summaryReport = prepareCatchData($scope.repServ.criteria);
             $scope.tables = {
                 catches: {
@@ -31,6 +56,9 @@ angular.module('unionvmsWeb').controller('CatchdetailsCtrl', function ($scope, a
                     total: summaryReport.total
                 }
             };
+
+            
+
             processTables();
         }
     };

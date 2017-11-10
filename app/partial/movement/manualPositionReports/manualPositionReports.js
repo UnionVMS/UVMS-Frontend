@@ -64,7 +64,6 @@ angular.module('unionvmsWeb').controller('ManualPositionReportsCtrl', function($
             textLabel : locale.getString("movement.manual_position_delete_confirm_text")
         };
         confirmationModal.open(function(){
-            console.log("Confirmed!");
             manualPositionRestService.deleteManualPositionReport(manualPositionReport).then(
                 function(){
                     alertService.showSuccessMessageWithTimeout(locale.getString('movement.manual_position_delete_success'));
@@ -88,7 +87,7 @@ angular.module('unionvmsWeb').controller('ManualPositionReportsCtrl', function($
             addAnother: addAnother || false,
             reloadFunction: $scope.searchManualPositions
         };
-        
+
         var reportObj;
         if(angular.isDefined(item)){
             reportObj = item.copy();
@@ -117,9 +116,10 @@ angular.module('unionvmsWeb').controller('ManualPositionReportsCtrl', function($
     };
 
     var retrivePositionSuccess = function(searchResultListPage){
-        console.info("Success in retrieveing manualPositions.");
-        console.info(searchResultListPage);
         $scope.currentSearchResults.updateWithNewResults(searchResultListPage);
+
+        $scope.allCurrentSearchResults = searchResultListPage.items;
+        $scope.currentSearchResultsByPage = searchResultListPage.items;
     };
 
     var retrivePositionsError = function(error){

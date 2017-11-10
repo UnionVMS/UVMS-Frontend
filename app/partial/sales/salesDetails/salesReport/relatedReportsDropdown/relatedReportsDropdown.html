@@ -1,0 +1,9 @@
+<label ng-if="vm.reports && vm.reports.length > 0">{{ 'sales.report_related_reports_label' | i18n }}</label>
+<dropdown
+          ng-if="vm.reports && vm.reports.length > 0"
+          class="menu-style"
+          ng-model="vm.selection"
+          initialtext="{{ 'sales.report_related_reports' | i18n }}"
+          items="vm.dropdownItems"
+          callback="vm.chooseRelatedReport">
+</dropdown>

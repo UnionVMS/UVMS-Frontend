@@ -1,0 +1,8 @@
+<div class="col-md-1 col-md-offset-10">
+    <button ng-if="!loading" type="submit" class="btn btn-primary btn-sm fullWidth vmsbtn" ng-click="performExport()">
+        {{'sales.report_export_all' | i18n}}
+    </button>
+    <button ng-if="loading" class="btn btn-primary btn-sm fullWidth vmsbtn disabled">
+        {{'sales.report_exporting_all' | i18n}}
+    </button>
+</div>        

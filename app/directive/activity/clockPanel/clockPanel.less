@@ -14,7 +14,7 @@ copy of the GNU General Public License along with the IFDM Suite. If not, see <h
     .catch-section {
         height: 100%;
         .clock-body {
-            padding:0 25px;
+            margin: 0 5px;
         }
     }
     .clock-subsection {
@@ -28,6 +28,18 @@ copy of the GNU General Public License along with the IFDM Suite. If not, see <h
         text-align: center;
         &:not(:first-child) {
             border-top: 1px solid #ddd;
+            padding-top: 15px;
+        }
+    }
+
+    .clock-body.horizontal-align {
+        .clock-subsection {
+            padding-left: 30px;
+            padding-right: 30px;
+            &:not(:first-child) {
+                border-top: 0;
+                padding-top: 0;
+            }
         }
     }
 }

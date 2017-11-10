@@ -32,7 +32,8 @@ angular.module('unionvmsWeb').directive('fishingActivityNavigator', function (tr
 		link: function (scope, element, attrs, fn) {
 			scope.timeline = tripReportsTimeline;
 			scope.repNav = reportingNavigatorService;
-
+			scope.printView = 'fishingActivityNavigator';
+		
             /**
              * Navigate to the specied activity
              * 

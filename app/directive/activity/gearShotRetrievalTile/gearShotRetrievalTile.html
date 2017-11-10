@@ -21,7 +21,7 @@
 					<location-tile class="row summary-section no-padding-right" location-details="selected.location" buffer-dist="5000" field-title="{{'activity.location' | i18n}}" is-clickable="faServ.isLocationClickable()"></location-tile>
 				</div>
 				<div class="col-md-6">
-					<carousel-tile class="row summary-section" tile-title="{{'activity.header_fa_gear' | i18n}}" ng-model="selected.gears" template-url="directive/activity/carouselTile/templates/gearTile/gearTile.html"></carousel-tile>
+					<carousel-tile class="row summary-section" tile-title="{{'activity.header_fa_gear' | i18n}}" ng-model="selected.gears" template-url="directive/activity/carouselTile/templates/gearTile/gearTile.html" no-data-msg-loc="activity.no_gears_reported"></carousel-tile>
 				</div>
 			</div>
 			<div class="row with-margin-top" ng-if="selected.gearProblems && selected.gearProblems.length > 0">

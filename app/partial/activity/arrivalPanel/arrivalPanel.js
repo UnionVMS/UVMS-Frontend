@@ -46,8 +46,19 @@ angular.module('unionvmsWeb').controller('ArrivalpanelCtrl', function($scope, $s
     var arrivalData = function() {
         $scope.data = [{
             "caption": (arrivalNotification === true) ? locale.getString('activity.clock_panel_estimated_time') : locale.getString('activity.clock_panel_arrival_time'),
-            "arrivalTime": $scope.faServ.activityData.activityDetails.arrivalTime
+            "arrivalTime": arrivalNotification ? $scope.faServ.activityData.activityDetails.occurrence : $scope.faServ.activityData.activityDetails.arrivalTime
         }];
+
+        if(arrivalNotification && $scope.faServ.activityData.reportDetails){
+            $scope.acceptedDate = _.where($scope.faServ.activityData.reportDetails.items, {id: 'acceptedDate'})[0];
+
+            if($scope.acceptedDate){
+                $scope.data.push({
+                    "caption": locale.getString('activity.clock_panel_accepted_time'),
+                    "arrivalTime": $scope.acceptedDate.value
+                });
+            }
+        }
         
         if ($scope.faServ.activityData.activityDetails.intendedLandingTime){
             $scope.data.push({
@@ -67,7 +78,7 @@ angular.module('unionvmsWeb').controller('ArrivalpanelCtrl', function($scope, $s
      * @returns Reason code
      */
     var getReasonCodes = function (obj) {
-        loadingStatus.isLoading('FishingActivity', true);
+        loadingStatus.isLoading('FishingActivity', true, 0);
         
         mdrCacheService.getCodeList('FA_REASON_ARRIVAL').then(function (response) {  
             var reasonDesc = _.where(response, { code: obj.reason });

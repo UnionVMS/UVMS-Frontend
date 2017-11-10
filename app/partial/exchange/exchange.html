@@ -39,11 +39,11 @@ copy of the GNU General Public License along with the IFDM Suite. If not, see <h
 
 		<!-- Toggle: ALL, INCOMING, OUTGOING -->
         <div class="row incoming-outgoing-toggle">
-            <div class="col-md-1 editSelection">
-                <dropdown ng-model="editSelection" initialtext="{{'common.actions' | i18n}}" items="editSelectionDropdownItems" menu-style callback="editSelectionCallback"></dropdown>
+            <div class="col-md-2 smallerpaddingright editSelection">
+                <dropdown ng-model="editSelection" initialtext="{{'common.actions' | i18n}}" items="editSelectionDropdownItems" menu-style callback="editSelectionCallback" input-field-id="exchange-dropdown-actions"></dropdown>
             </div>
 
-            <div class="col-md-10">
+            <div class="col-md-8">
                 <div class="">
                     <div class="btn-group">
                         <label class="btn btn-default" ng-model="exchangeLogsSearchResults.incomingOutgoing" btn-radio="'all'">
@@ -59,11 +59,6 @@ copy of the GNU General Public License along with the IFDM Suite. If not, see <h
                         </label>
                     </div>
                 </div>
-            </div>
-            <div class="col-md-1 textAlignRight printAndExport">
-                <button class="btn btn-sm btn-default exportButton">
-                    <i class="fa fa-lg fa-download" title="{{'common.export_as_csv' | i18n }}" ng-click="exportLogsAsCSVFile()"></i>
-                </button>
             </div>
         </div>
         <div class="row">

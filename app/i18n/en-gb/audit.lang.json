@@ -17,7 +17,6 @@
     "tab_access_control" : "Access control",
     "search_checkall" : "Check all",
     "search_uncheckall" : "Uncheck all",
-    "tab_access_control" : "Access control",
     "column_username": "Username",
     "column_operation": "Operation",
     "column_object_type": "Object type",
@@ -44,6 +43,7 @@
     "configuration_header_audit": "Audit",
     "configuration_header_positions": "Positions",
     "configuration_header_mdr": "MDR",
+    "configuration_header_activity": "Activity",
 
     "configuration_column_key": "Parameter",
     "configuration_column_value": "Value",
@@ -78,12 +78,14 @@
     "system_status_name": "System name",
     "system_status_online_timestamp": "Date",
 
+    "system_status_module_activity": "Activity",
     "system_status_module_audit": "Audit",
     "system_status_module_exchange": "Exchange",
     "system_status_module_exchange-dbaccess": "Exchange local DB",
     "system_status_module_mobileTerminal": "Mobile terminal",
     "system_status_module_movement": "Movement",
     "system_status_module_rules": "Rules",
-    "system_status_module_asset": "Asset"
+    "system_status_module_asset": "Asset",
+    "system_status_module_sales": "Sales"
 
 }

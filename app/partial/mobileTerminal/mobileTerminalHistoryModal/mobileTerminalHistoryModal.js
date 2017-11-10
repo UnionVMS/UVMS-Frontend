@@ -20,7 +20,10 @@ angular.module('unionvmsWeb').controller('mobileTerminalHistoryModalCtrl',functi
             $scope.currentSearchResults.setLoading(true);
             mobileTerminalRestService.getHistoryWithAssociatedVesselForMobileTerminal($scope.mobileTerminal).then(function(historyList){
                 var searchResultPage = new SearchResultListPage(historyList.events, 1, 1);
+
                 $scope.currentSearchResults.updateWithNewResults(searchResultPage);
+                $scope.allCurrentSearchResults = searchResultPage.items;
+                $scope.currentSearchResultsByPage = searchResultPage.items;
 
                 for (var index in historyList.channels) {
                     var channelResults = new SearchResults('changeDate', true, locale.getString('mobileTerminal.history_alert_message_on_zero_items'));
@@ -30,6 +33,7 @@ angular.module('unionvmsWeb').controller('mobileTerminalHistoryModalCtrl',functi
 
                     channelResults.updateWithNewResults(channelResultsPage);
                     $scope.channelResultList.push(channelResults);
+                    $scope.currentChannelResultsByPage = channelResults.items;
                 }
             }, function(err){
                 $scope.currentSearchResults.setLoading(false);
@@ -37,6 +41,8 @@ angular.module('unionvmsWeb').controller('mobileTerminalHistoryModalCtrl',functi
 
                 $scope.channelResults.setLoading(false);
                 $scope.channelResults.setErrorMessage(locale.getString('mobileTerminal.history_alert_message_on_failed_to_load_error'));
+
+                $scope.allCurrentSearchResults = $scope.currentSearchResults.items;
             });
         };
 

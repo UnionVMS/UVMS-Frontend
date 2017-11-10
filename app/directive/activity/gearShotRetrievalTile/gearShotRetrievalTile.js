@@ -14,8 +14,9 @@ copy of the GNU General Public License along with the IFDM Suite. If not, see <h
  * @ngdoc directive
  * @name gearShotRetrievalTile
  * @param locale {Service} - The angular locale service
- * @param $styate {Service} - The state provider service
+ * @param $state {Service} - The state provider service
  * @param tripSummaryService {Service} the trip summary service <p>{@link unionvmsWeb.tripSummaryService}</p>
+ * @param fishingActivityService {Service} the fishing activity service <p>{@link unionvmsWeb.fishingActivityService}</p>
  * @attr {String} tileTitle - The title of the tile
  * @attr {Array} srcData - An array containing the data to be displayed on the tile
  * @desc
@@ -54,6 +55,14 @@ angular.module('unionvmsWeb').directive('gearShotRetrievalTile', function(locale
                 isDuration: true
             }];
 		    
+            /**
+			 * Checks if has characteristics
+			 * 
+			 * @memberof gearShotRetrievalTile
+             * @param {Object} characteristics - object with characteristics
+			 * @public
+			 * @returns {Boolean} returns true if has characteristics
+			 */
 			scope.hasCharacteristics = function(characteristics){
 		        return characteristics && _.keys(characteristics).length;
 		    };

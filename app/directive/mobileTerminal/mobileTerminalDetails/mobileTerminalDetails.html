@@ -78,8 +78,8 @@
                             </div>
                             <div ng-repeat="communicationChannel in mobileTerminal.channels">
                                 <div ng-form="channelForm" class="channel-form" ng-class="{'single-channel': !isMultipleChannelsAllowed()}">
-                                    <div class="delete-channel" ng-show="!disableForm() && $index > 0">
-                                        <div class="btn btn-default" ng-click="removeChannel($index)" id="mt-{{listIndex}}-channel-{{$index}}-removeChannel">
+                                    <div class="delete-channel" ng-show="!disableForm() && mobileTerminal.channels.length > 1">
+                                        <div class="btn btn-default" ng-click="removeChannel(communicationChannel)" id="mt-{{listIndex}}-channel-{{$index}}-removeChannel">
                                             <i class="fa fa-trash" title="{{'common.remove' | i18n}}"></i>
                                         </div>
                                     </div>
@@ -88,22 +88,21 @@
                                             <label>{{'mobileTerminal.form_inmarsatc_communication_selectedchannel_channel_label' | i18n}}</label>
                                             <input type="text" name="communicationChannel" id="mt-{{listIndex}}-channel-{{$index}}-communicationChannel" class="form-control" ng-model="communicationChannel.name">
                                         </div>
-                                        <!--Sandra-->
                                         <div class="form-group radio-button">
-                                            <input type="checkbox" name="polling" ng-value="$index" ng-model="communicationChannel.capabilities.POLLABLE" ng-disabled="disableChannels.pollable($index)" id="mt-{{listIndex}}-channel-{{$index}}-checkbox-polling">
-                                            <label for="mt-{{listIndex}}-channel-{{$index}}-checkbox-polling" ng-attr-title="{{getRadioButtonHelpText.pollable($index)}}">
+                                            <input type="checkbox" name="polling" ng-value="$index" ng-model="communicationChannel.capabilities.POLLABLE" ng-disabled="disableChannels.pollable(communicationChannel)" id="mt-{{listIndex}}-channel-{{$index}}-checkbox-polling">
+                                            <label for="mt-{{listIndex}}-channel-{{$index}}-checkbox-polling" ng-attr-title="{{getRadioButtonHelpText.pollable(communicationChannel)}}">
                                                 <span>{{'mobileTerminal.form_inmarsatc_communication_selectedchannel_poll_label' | i18n}}</span>
                                             </label>
                                         </div>
                                         <div class="form-group radio-button">
-                                            <input type="checkbox" name="config" ng-value="$index" ng-model="communicationChannel.capabilities.CONFIGURABLE" ng-disabled="disableChannels.configurable($index)" id="mt-{{listIndex}}-channel-{{$index}}-checkbox-config">
-                                            <label for="mt-{{listIndex}}-channel-{{$index}}-checkbox-config" ng-attr-title="{{getRadioButtonHelpText.configurable($index)}}">
+                                            <input type="checkbox" name="config" ng-value="$index" ng-model="communicationChannel.capabilities.CONFIGURABLE" ng-disabled="disableChannels.configurable(communicationChannel)" id="mt-{{listIndex}}-channel-{{$index}}-checkbox-config">
+                                            <label for="mt-{{listIndex}}-channel-{{$index}}-checkbox-config" ng-attr-title="{{getRadioButtonHelpText.configurable(communicationChannel)}}">
                                                 <span>{{'mobileTerminal.form_inmarsatc_communication_selectedchannel_con_label' | i18n}}</span>
                                             </label>
                                         </div>
                                         <div class="form-group radio-button margin-right">
-                                            <input type="checkbox" name="default" ng-value="$index" ng-model="communicationChannel.capabilities.DEFAULT_REPORTING" ng-disabled="disableChannels.defaultReporting($index)" id="mt-{{listIndex}}-channel-{{$index}}-checkbox-default">
-                                            <label for="mt-{{listIndex}}-channel-{{$index}}-checkbox-default" ng-attr-title="{{getRadioButtonHelpText.defaultReporting($index)}}">
+                                            <input type="checkbox" name="default" ng-value="$index" ng-model="communicationChannel.capabilities.DEFAULT_REPORTING" ng-disabled="disableChannels.defaultReporting(communicationChannel)" id="mt-{{listIndex}}-channel-{{$index}}-checkbox-default">
+                                            <label for="mt-{{listIndex}}-channel-{{$index}}-checkbox-default" ng-attr-title="{{getRadioButtonHelpText.defaultReporting(communicationChannel)}}">
                                                 <span>{{'mobileTerminal.form_inmarsatc_communication_selectedchannel_def_label' | i18n}}</span>
                                             </label>
                                         </div>

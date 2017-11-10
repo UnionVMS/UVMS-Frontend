@@ -14,6 +14,7 @@ copy of the GNU General Public License along with the IFDM Suite. If not, see <h
  * @ngdoc directive
  * @name vesselTile
  * @attr {Object} ngModel - vessel details
+ * @attr {String} tileTitle - The title of the tile
  * @description
  *  A reusable tile that will display the vessel details
  */

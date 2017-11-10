@@ -10,1097 +10,904 @@ FITNESS FOR A PARTICULAR PURPOSE.  See the GNU General Public License for more d
 copy of the GNU General Public License along with the IFDM Suite. If not, see <http://www.gnu.org/licenses/>.
 */
 describe('fishingActivityService', function() {
-    var mockMdrServ, faObj;
+    var mockMdrServ, actRestServ;
     beforeEach(module('unionvmsWeb'));
 
     beforeEach(function() {
         mockMdrServ = jasmine.createSpyObj('mdrCacheService', ['getCodeList']);
+        actRestServ = jasmine.createSpyObj('activityRestService', ['getFishingActivityDetails']);
 
         module(function($provide) {
             $provide.value('mdrCacheService', mockMdrServ);
+            $provide.value('activityRestService', actRestServ);
         });
         builMocks();
     });
 
-    function getFaGears() {
-        return [{
-            "type": "LHM",
-            "role": "On board",
-            "meshSize": "139mm",
-            "lengthWidth": "11m",
-            "numberOfGears": 5,
-            "height": 66,
-            "nrOfLines": 135,
-            "nrOfNets": 4,
-            "nominalLengthOfNet": 950,
-            "quantity": 92,
-            "description": "Otdoki winad jakifi li vebahu waazu fow ebezijo asmaca relena lulas vaj lure bitehu weper ukojuj vumdabew ot."
-        }, {
-            "type": "TBB",
-            "role": "Deployed",
-            "meshSize": "211mm",
-            "lengthWidth": "99m",
-            "numberOfGears": 3,
-            "height": 200,
-            "nrOfLines": 127,
-            "nrOfNets": 9,
-            "nominalLengthOfNet": 109,
-            "quantity": 34,
-            "description": "Sec lufi mazwubkoz hesgos nemto neku sale kowijfa ju opa icopaze lisizo."
-        }];
-    }
 
-    function getFaGearsResult() {
-        return [{
-            "type": "LHM - Handlines and pole-lines (mechanized)",
-            "role": "On board",
-            "meshSize": "231mm",
-            "beamLength": "53m",
-            "numBeams": 2
-        }, {
-            "type": "SSC - Scottish seines",
-            "role": "On board",
-            "meshSize": "65mm",
-            "beamLength": "39m",
-            "numBeams": 4
-        }];
-    }
+    var faModels = {
+        common: [
+            'activityDetails',
+            'reportDetails',
+            'tripDetails'
+        ],
+        departure: [
+            'locations',
+            'gears',
+            'catches',
+            'processingProducts'
+        ],
+        landing: [
+            'locations',
+            'catches',
+            'processingProducts'
+        ],
+        arrival_notification: [
+            'locations',
+            'catches',
+            'processingProducts'
+        ],
+        arrival_declaration: [
+            'locations',
+            'gears'
+        ],
+        fishing_operation: [
+            'locations',
+            'gears',
+            'catches',
+            'processingProducts',
+            'gearShotRetrieval'
+        ],
+        discard: [
+            'locations',
+            'catches',
+            'processingProducts'
+        ],
+        joint_fishing_operation: [
+            'locations',
+            'gears',
+            'catches',
+            'processingProducts',
+            'relocation',
+            'vesselDetails',
+            'gearProblems'
+        ],
+        relocation: [
+            'locations',
+            'catches',
+            'processingProducts',
+            'vesselDetails'
+        ],
+        transhipment: [
+            'locations',
+            'catches',
+            'processingProducts',
+            'vesselDetails'
+        ],
+        area_entry: [
+            'areas',
+            'catches',
+            'processingProducts'
+        ],
+        area_exit: [
+            'areas',
+            'catches',
+            'processingProducts'
+        ]
+    };
 
-    function getFaResponse() {
-
+    function getActivityDetails() {
         return {
-            "activityDetails": {
-                "occurence": "2016-11-08T16:36:03",
-                "vessel_activity": "FSH - Fishing",
-                "no_operations": 57,
-                "fisheryType": "Demersal",
-                "targetedSpecies": [
+                occurence: "2016-11-08T16:36:03",
+                vessel_activity: "FSH - Fishing",
+                no_operations: 57,
+                fisheryType: "Demersal",
+                targetedSpecies: [
                     "GADUS"
                 ],
-                "fishing_time": {
-                    "duration": "10d 11h 20m"
+                fishing_time: {
+                    duration: "10d 11h 20m"
                 }
-            },
-            "locations": {
-                "name": "Jofajwud",
-                "geometry": "POINT(62.22296 -54.98633)"
-            },
-            "reportDetails": {
-                "type": "DECLARATION",
-                "acceptedDate": "2018-07-07T06:48:08",
-                "id": "4bc9392b-3607-5d91-9032-194b83f89e28",
-                "refId": "c0bd3ec3-b178-5951-9853-7e13bb76b607",
-                "creationDate": "2016-06-09T19:34:12",
-                "purposeCode": 1,
-                "purpose": "Budrilico cuwmaglo gij munhofip pi zuwbibum bi feh ke za ajunutoc mupzaj gop ho legipejo epdeli.",
-                "relatedReports": [
-                    {
-                        "id": "726b43ee-f70c-54ee-b4ad-a7976585ef42",
-                        "schemeId": "dcafedc4"
-                    }
-                ]
-            },
-            "catches": [
+            };
+    }
+
+    function getLocation() {
+        return {
+            name: "Jofajwud",
+            geometry: "POINT(62.22296 -54.98633)"
+        };
+    }
+
+    function getReportDetails() {
+        return {
+            type: "DECLARATION",
+            id: "4bc9392b-3607-5d91-9032-194b83f89e28",
+            refId: "c0bd3ec3-b178-5951-9853-7e13bb76b607",
+            purposeCode: 1,
+            purpose: "Budrilico cuwmaglo gij munhofip pi zuwbibum bi feh ke za ajunutoc mupzaj gop ho legipejo epdeli.",
+            relatedReports: [
                 {
-                    "type": "DISCARDED",
-                    "species": "TUR",
-                    "calculatedWeight": 1372,
-                    "groupingDetails": {
-                        "LSC": {
-                            "unit": 911,
-                            "weight": 1814,
-                            "weightingMeans": "WEIGHED",
-                            "stockId": "7da34062",
-                            "size": "orbecebo",
-                            "tripId": "8c3ea655-3cb6-5e67-8f75-40282589bc7a",
-                            "usage": "omregaj",
-                            "destinationLocation": [
-                                {
-                                    "id": "(508)",
-                                    "name": "Bojuguj",
-                                    "countryId": "NU"
-                                }
-                            ],
-                            "specifiedFluxLocations": [
-                                {
-                                    "name": "Lepeme",
-                                    "geometry": "POINT(17.93296 -15.83782)"
-                                },
-                                {
-                                    "name": "Colufcu",
-                                    "geometry": "POINT(-84.30513 -47.4552)"
-                                }
-                            ],
-                            "characteristics": [
-                                {
-                                    "typeCode": "ij",
-                                    "typeCodeListId": "f14129be-3ff6-50e8-9351-3ccb1e1ce45b",
-                                    "valueMeasure": 503,
-                                    "valueMeasureUnitCode": "jurpule",
-                                    "calculatedValueMeasure": 335,
-                                    "valueDateTime": "1366808461",
-                                    "valueIndicator": "law",
-                                    "valueCode": "puheve",
-                                    "valueText": "Ravgodec eg awi dimon zib cu cejsuh hu bi jafe cemove awfiz lodedza agoti vu uzeupaon.",
-                                    "valueQuantity": 195,
-                                    "valueQuantityCode": "na",
-                                    "calculatedValueQuantity": 443,
-                                    "description": "Lac ul pojolla gegikun ojihag sof vor peswiddaz dafver una lag zirot mugbumha sa atufid havbo ju hi."
-                                },
-                                {
-                                    "typeCode": "mop",
-                                    "typeCodeListId": "7917df18-e9f4-5351-bc8d-f79c516598e5",
-                                    "valueMeasure": 688,
-                                    "valueMeasureUnitCode": "wac",
-                                    "calculatedValueMeasure": 941,
-                                    "valueDateTime": "734037196",
-                                    "valueIndicator": "ridafiha",
-                                    "valueCode": "caleoku",
-                                    "valueText": "Cozebuh bof te oro ojmo wehhi ca agu geuworav vargunu carterem tamuz ewi ge.",
-                                    "valueQuantity": 706,
-                                    "valueQuantityCode": "paftif",
-                                    "calculatedValueQuantity": 939,
-                                    "description": "Cecubo vovbalos et po rihbe korah pabnawke se agonep ka rihle fazhaweb golkidim nitwa wip ke."
-                                }
-                            ],
-                            "gears": [
-                                {
-                                    "type": "LHM",
-                                    "role": "On board",
-                                    "meshSize": "139mm",
-                                    "lengthWidth": "11m",
-                                    "numberOfGears": 5,
-                                    "height": 66,
-                                    "nrOfLines": 135,
-                                    "nrOfNets": 4,
-                                    "nominalLengthOfNet": 950,
-                                    "quantity": 92,
-                                    "description": "Otdoki winad jakifi li vebahu waazu fow ebezijo asmaca relena lulas vaj lure bitehu weper ukojuj vumdabew ot."
-                                },
-                                {
-                                    "type": "TBB",
-                                    "role": "Deployed",
-                                    "meshSize": "211mm",
-                                    "lengthWidth": "99m",
-                                    "numberOfGears": 3,
-                                    "height": 200,
-                                    "nrOfLines": 127,
-                                    "nrOfNets": 9,
-                                    "nominalLengthOfNet": 109,
-                                    "quantity": 34,
-                                    "description": "Sec lufi mazwubkoz hesgos nemto neku sale kowijfa ju opa icopaze lisizo."
-                                }
-                            ]
-                        },
-                        "BMS": {
-                            "unit": 1432,
-                            "weight": 1788,
-                            "weightingMeans": "WEIGHED",
-                            "stockId": "83369cf5",
-                            "size": "oc",
-                            "tripId": "6f8c22ac-b410-54db-a2f3-c040c47adc88",
-                            "usage": "zezu",
-                            "destinationLocation": [
-                                {
-                                    "id": "(545)",
-                                    "name": "Zelihco",
-                                    "countryId": "SC"
-                                },
-                                {
-                                    "id": "(873)",
-                                    "name": "Goobri",
-                                    "countryId": "SY"
-                                },
-                                {
-                                    "id": "(233)",
-                                    "name": "Fepegez",
-                                    "countryId": "NI"
-                                },
-                                {
-                                    "id": "(201)",
-                                    "name": "Weduso",
-                                    "countryId": "LT"
-                                }
-                            ],
-                            "specifiedFluxLocations": [
-                                {
-                                    "name": "Macwosha",
-                                    "geometry": "POINT(-85.44089 -88.44016)"
-                                },
-                                {
-                                    "name": "Jomfiba",
-                                    "geometry": "POINT(-33.987 -83.40046)"
-                                },
-                                {
-                                    "name": "Minike",
-                                    "geometry": "POINT(81.47809 -43.04273)"
-                                },
-                                {
-                                    "name": "Jowsotobe",
-                                    "geometry": "POINT(20.24789 -69.17315)"
-                                }
-                            ],
-                            "characteristics": [
-                                {
-                                    "typeCode": "ba",
-                                    "typeCodeListId": "901c9f8f-f06d-5549-804d-f5d4c94a4654",
-                                    "valueMeasure": 117,
-                                    "valueMeasureUnitCode": "ag",
-                                    "calculatedValueMeasure": 247,
-                                    "valueDateTime": "341723797",
-                                    "valueIndicator": "opuah",
-                                    "valueCode": "lemamez",
-                                    "valueText": "Diper ef guukibi jimaskuk lizwofe evasab pajfak kepbovso jigafa mak ke abbaje esurokso gambozabu em pahhu bug kisfaopi.",
-                                    "valueQuantity": 942,
-                                    "valueQuantityCode": "pelitsu",
-                                    "calculatedValueQuantity": 887,
-                                    "description": "Ari wujamon vuj uglamus sejpu bimcibgaj upemadru tevubuj zepibbed ek temu pip jauz pef."
-                                },
-                                {
-                                    "typeCode": "evuhka",
-                                    "typeCodeListId": "b87980ab-dded-5bc1-a072-6835daa139a5",
-                                    "valueMeasure": 565,
-                                    "valueMeasureUnitCode": "as",
-                                    "calculatedValueMeasure": 308,
-                                    "valueDateTime": "1373985210",
-                                    "valueIndicator": "bahsophis",
-                                    "valueCode": "ruf",
-                                    "valueText": "Iciovsa epo keb husiffo pahjom keslatlab remonido mumhul ko fehvumi wumto widud ranuna riga nun wiviki naosit.",
-                                    "valueQuantity": 804,
-                                    "valueQuantityCode": "na",
-                                    "calculatedValueQuantity": 246,
-                                    "description": "Uv pugospuj ocipuk bazhal difeziman riuni appa jocefolab mu zeen befta toczaaki azeelza."
-                                },
-                                {
-                                    "typeCode": "af",
-                                    "typeCodeListId": "59c44e86-b19c-5949-b2fd-cd7ea68890a6",
-                                    "valueMeasure": 560,
-                                    "valueMeasureUnitCode": "jufegerek",
-                                    "calculatedValueMeasure": 276,
-                                    "valueDateTime": "521319180",
-                                    "valueIndicator": "etozobje",
-                                    "valueCode": "lubasmuf",
-                                    "valueText": "Ni daaseda zetadde fig saj jilizun topbif fi sojuzi ev moto novinal vano wu jolbisuc cihzinmej dajudbih wawcecad.",
-                                    "valueQuantity": 298,
-                                    "valueQuantityCode": "iveeco",
-                                    "calculatedValueQuantity": 760,
-                                    "description": "Buvejdo zig wet munuruh karnezor ivjompit hajaf ejunefo behulem him nenat pizviteko udrom niw."
-                                }
-                            ],
-                            "gears": [
-                                {
-                                    "type": "LHM",
-                                    "role": "On board",
-                                    "meshSize": "139mm",
-                                    "lengthWidth": "11m",
-                                    "numberOfGears": 5,
-                                    "height": 66,
-                                    "nrOfLines": 135,
-                                    "nrOfNets": 4,
-                                    "nominalLengthOfNet": 950,
-                                    "quantity": 92,
-                                    "description": "Otdoki winad jakifi li vebahu waazu fow ebezijo asmaca relena lulas vaj lure bitehu weper ukojuj vumdabew ot."
-                                },
-                                {
-                                    "type": "TBB",
-                                    "role": "Deployed",
-                                    "meshSize": "211mm",
-                                    "lengthWidth": "99m",
-                                    "numberOfGears": 3,
-                                    "height": 200,
-                                    "nrOfLines": 127,
-                                    "nrOfNets": 9,
-                                    "nominalLengthOfNet": 109,
-                                    "quantity": 34,
-                                    "description": "Sec lufi mazwubkoz hesgos nemto neku sale kowijfa ju opa icopaze lisizo."
-                                }
-                            ]
-                        }
-                    },
-                    "locations": {
-                        "gfcm_stat_rectangle": "Dezobin",
-                        "gfcm_gsa": "Damoze",
-                        "fao_area": "Moapiho"
-                    }
-                },
-                {
-                    "type": "TAKEN_ONBOARD",
-                    "species": "COD",
-                    "calculatedWeight": 1913,
-                    "groupingDetails": {
-                        "LSC": {
-                            "unit": 732,
-                            "weight": 1901,
-                            "weightingMeans": "STEREOSCOPIC",
-                            "stockId": "13afa034",
-                            "size": "ebsanlog",
-                            "tripId": "2a3afbd6-6aeb-5eb6-9d45-fefbbd31704a",
-                            "usage": "tak",
-                            "destinationLocation": [
-                                {
-                                    "id": "(961)",
-                                    "name": "Rewavfim",
-                                    "countryId": "SZ"
-                                },
-                                {
-                                    "id": "(837)",
-                                    "name": "Duneel",
-                                    "countryId": "TJ"
-                                }
-                            ],
-                            "specifiedFluxLocations": [
-                                {
-                                    "name": "Gavwiwji",
-                                    "geometry": "POINT(-81.76905 8.54789)"
-                                },
-                                {
-                                    "name": "Ebzifa",
-                                    "geometry": "POINT(155.04406 81.47475)"
-                                },
-                                {
-                                    "name": "Nestuipo",
-                                    "geometry": "POINT(87.22781 75.11277)"
-                                },
-                                {
-                                    "name": "Arkefig",
-                                    "geometry": "POINT(46.50919 3.38097)"
-                                }
-                            ],
-                            "gears": [
-                                {
-                                    "type": "LHM",
-                                    "role": "On board",
-                                    "meshSize": "139mm",
-                                    "lengthWidth": "11m",
-                                    "numberOfGears": 5,
-                                    "height": 66,
-                                    "nrOfLines": 135,
-                                    "nrOfNets": 4,
-                                    "nominalLengthOfNet": 950,
-                                    "quantity": 92,
-                                    "description": "Otdoki winad jakifi li vebahu waazu fow ebezijo asmaca relena lulas vaj lure bitehu weper ukojuj vumdabew ot."
-                                },
-                                {
-                                    "type": "TBB",
-                                    "role": "Deployed",
-                                    "meshSize": "211mm",
-                                    "lengthWidth": "99m",
-                                    "numberOfGears": 3,
-                                    "height": 200,
-                                    "nrOfLines": 127,
-                                    "nrOfNets": 9,
-                                    "nominalLengthOfNet": 109,
-                                    "quantity": 34,
-                                    "description": "Sec lufi mazwubkoz hesgos nemto neku sale kowijfa ju opa icopaze lisizo."
-                                }
-                            ]
-                        },
-                        "BMS": {
-                            "unit": 1262,
-                            "weight": 1079,
-                            "weightingMeans": "SAMPLING",
-                            "stockId": "7fbd2526",
-                            "size": "hawmambiz",
-                            "tripId": "db95acde-8a52-5739-aa44-93463b5d1727",
-                            "usage": "uka",
-                            "destinationLocation": [
-                                {
-                                    "id": "(848)",
-                                    "name": "Fusitkiw",
-                                    "countryId": "NF"
-                                },
-                                {
-                                    "id": "(476)",
-                                    "name": "Rutokaf",
-                                    "countryId": "FR"
-                                },
-                                {
-                                    "id": "(586)",
-                                    "name": "Etpuled",
-                                    "countryId": "VA"
-                                },
-                                {
-                                    "id": "(411)",
-                                    "name": "Zicriabo",
-                                    "countryId": "CY"
-                                },
-                                {
-                                    "id": "(900)",
-                                    "name": "Akavupi",
-                                    "countryId": "AU"
-                                }
-                            ],
-                            "specifiedFluxLocations": [
-                                {
-                                    "name": "Mewvadpa",
-                                    "geometry": "POINT(8.30149 87.56808)"
-                                },
-                                {
-                                    "name": "Makmofer",
-                                    "geometry": "POINT(-88.49438 30.70248)"
-                                }
-                            ],
-                            "characteristics": [
-                                {
-                                    "typeCode": "ba",
-                                    "typeCodeListId": "d24dcd99-4c8a-551a-a529-facf54d10d56",
-                                    "valueMeasure": 220,
-                                    "valueMeasureUnitCode": "lahenor",
-                                    "calculatedValueMeasure": 901,
-                                    "valueDateTime": "163161957",
-                                    "valueIndicator": "cuku",
-                                    "valueCode": "nel",
-                                    "valueText": "Ri zocseg tavubcit lavav ojhub zuknev pemir guzjofge zibe ruzkuna nufoulu urvijok.",
-                                    "valueQuantity": 295,
-                                    "valueQuantityCode": "beg",
-                                    "calculatedValueQuantity": 600,
-                                    "description": "Mev arbebweh ewpoji taffaju etanuswac uzkoop dem ti wawocho tupa gub pedtim gafmuoko hu izzahita."
-                                }
-                            ],
-                            "gears": [
-                                {
-                                    "type": "LHM",
-                                    "role": "On board",
-                                    "meshSize": "139mm",
-                                    "lengthWidth": "11m",
-                                    "numberOfGears": 5,
-                                    "height": 66,
-                                    "nrOfLines": 135,
-                                    "nrOfNets": 4,
-                                    "nominalLengthOfNet": 950,
-                                    "quantity": 92,
-                                    "description": "Otdoki winad jakifi li vebahu waazu fow ebezijo asmaca relena lulas vaj lure bitehu weper ukojuj vumdabew ot."
-                                },
-                                {
-                                    "type": "TBB",
-                                    "role": "Deployed",
-                                    "meshSize": "211mm",
-                                    "lengthWidth": "99m",
-                                    "numberOfGears": 3,
-                                    "height": 200,
-                                    "nrOfLines": 127,
-                                    "nrOfNets": 9,
-                                    "nominalLengthOfNet": 109,
-                                    "quantity": 34,
-                                    "description": "Sec lufi mazwubkoz hesgos nemto neku sale kowijfa ju opa icopaze lisizo."
-                                }
-                            ]
-                        }
-                    },
-                    "locations": {
-                        "fao_area": "Sitcicum",
-                        "effort_zone": "Edsotos",
-                        "rfmo": "Lajhuumu",
-                        "territory": "Arufisa"
-                    }
-                }
-            ],
-            "gears": [
-                {
-                    "type": "LHM",
-                    "role": "On board",
-                    "meshSize": "139mm",
-                    "lengthWidth": "11m",
-                    "numberOfGears": 5,
-                    "height": 66,
-                    "nrOfLines": 135,
-                    "nrOfNets": 4,
-                    "nominalLengthOfNet": 950,
-                    "quantity": 92,
-                    "description": "Otdoki winad jakifi li vebahu waazu fow ebezijo asmaca relena lulas vaj lure bitehu weper ukojuj vumdabew ot."
-                },
-                {
-                    "type": "TBB",
-                    "role": "Deployed",
-                    "meshSize": "211mm",
-                    "lengthWidth": "99m",
-                    "numberOfGears": 3,
-                    "height": 200,
-                    "nrOfLines": 127,
-                    "nrOfNets": 9,
-                    "nominalLengthOfNet": 109,
-                    "quantity": 34,
-                    "description": "Sec lufi mazwubkoz hesgos nemto neku sale kowijfa ju opa icopaze lisizo."
+                    id: "726b43ee-f70c-54ee-b4ad-a7976585ef42",
+                    schemeId: "dcafedc4"
                 }
             ]
         };
     }
 
-    function getFaModel() {
+    function getGears() {
+        return [
+            {
+                type: "LHM",
+                role: "On board",
+                meshSize: "139mm",
+                lengthWidth: "11m",
+                numberOfGears: 5,
+                height: 66,
+                nrOfLines: 135,
+                nrOfNets: 4,
+                nominalLengthOfNet: 950,
+                quantity: 92,
+                description: "Otdoki winad jakifi li vebahu waazu fow ebezijo asmaca relena lulas vaj lure bitehu weper ukojuj vumdabew ot."
+            },
+            {
+                type: "TBB",
+                role: "Deployed",
+                meshSize: "211mm",
+                lengthWidth: "99m",
+                numberOfGears: 3,
+                height: 200,
+                nrOfLines: 127,
+                nrOfNets: 9,
+                nominalLengthOfNet: 109,
+                quantity: 34,
+                description: "Sec lufi mazwubkoz hesgos nemto neku sale kowijfa ju opa icopaze lisizo."
+            }
+        ];
+    }
+
+    function getCatchClass() {
         return {
-            faType: 'fishing_operation',
-            operationType: undefined,
-            areas: undefined,
-            activityDetails: {
-                items: [{
-                        idx: 4,
-                        label: '',
-                        value: 'Demersal',
-                        clickable: undefined
-                    }
-                ],
-                subItems: [{
-                        idx: 6,
-                        label: '',
-                        value: '10d 11h 20m',
-                        clickable: undefined
-                    }
-                ],
-                subTitle: '',
-                title: ': '
-            },
-            locations: {
-                name: 'Jofajwud',
-                geometry: 'POINT(62.22296 -54.98633)'
-            },
-            gears: [{
-                    type: 'LHM - Handlines and pole-lines (mechanized)',
-                    role: 'On board',
-                    mainCharacteristics: {
-                        items: [{
-                                idx: 0,
-                                label: '',
-                                value: '139mm',
-                                clickable: undefined
-                            }, {
-                                idx: 1,
-                                label: '',
-                                value: '11m',
-                                clickable: undefined
-                            }
-                        ],
-                        characteristics: {
-                            height: 66,
-                            nrOfLines: 135,
-                            nrOfNets: 4,
-                            nominalLengthOfNet: 950,
-                            quantity: 92,
-                            description: 'Otdoki winad jakifi li vebahu waazu fow ebezijo asmaca relena lulas vaj lure bitehu weper ukojuj vumdabew ot.'
-                        },
-                        title: ''
-                    }
-                }, {
-                    type: 'TBB',
-                    role: 'Deployed',
-                    mainCharacteristics: {
-                        items: [{
-                                idx: 0,
-                                label: '',
-                                value: '211mm',
-                                clickable: undefined
-                            }, {
-                                idx: 1,
-                                label: '',
-                                value: '99m',
-                                clickable: undefined
-                            }
-                        ],
-                        characteristics: {
-                            height: 200,
-                            nrOfLines: 127,
-                            nrOfNets: 9,
-                            nominalLengthOfNet: 109,
-                            quantity: 34,
-                            description: 'Sec lufi mazwubkoz hesgos nemto neku sale kowijfa ju opa icopaze lisizo.'
-                        },
-                        title: ''
-                    }
+            unit: 911,
+            weight: 1814,
+            weightingMeans: "WEIGHED",
+            stockId: "7da34062",
+            size: "orbecebo",
+            tripId: "8c3ea655-3cb6-5e67-8f75-40282589bc7a",
+            usage: "omregaj",
+            destinationLocation: [
+                {
+                    id: "(508)",
+                    name: "Bojuguj",
+                    countryId: "NU"
                 }
             ],
-            reportDetails: {
-                items: [{
-                        idx: 0,
-                        label: '',
-                        value: 'DECLARATION',
-                        clickable: undefined
-                    }, {
-                        idx: 7,
-                        label: '',
-                        value: '2018-07-07T08:48:08+02:00',
-                        clickable: undefined
-                    }, {
-                        idx: 5,
-                        label: '',
-                        value: '4bc9392b-3607-5d91-9032-194b83f89e28',
-                        clickable: undefined
-                    }, {
-                        idx: 6,
-                        label: '',
-                        value: 'c0bd3ec3-b178-5951-9853-7e13bb76b607',
-                        clickable: true
-                    }, {
-                        idx: 1,
-                        label: '',
-                        value: '2016-06-09T21:34:12+02:00',
-                        clickable: undefined
-                    }, {
-                        idx: 3,
-                        label: '',
-                        value: 'Budrilico cuwmaglo gij munhofip pi zuwbibum bi feh ke za ajunutoc mupzaj gop ho legipejo epdeli.',
-                        clickable: undefined
-                    }
-                ],
-                subItems: [{
-                        idx: 9,
-                        label: '',
-                        value: '726b43ee-f70c-54ee-b4ad-a7976585ef42',
-                        clickable: undefined
-                    }
-                ],
-                subTitle: '',
-                title: ''
-            },
-            catches: [{
-                    type: 'DISCARDED',
-                    species: 'TUR',
-                    calculatedWeight: 1372,
-                    groupingDetails: {
-                        LSC: {
-                            unit: 911,
-                            weight: 1814,
-                            specifiedFluxLocations: [{
-                                    name: 'Lepeme',
-                                    geometry: 'POINT(17.93296 -15.83782)'
-                                }, {
-                                    name: 'Colufcu',
-                                    geometry: 'POINT(-84.30513 -47.4552)'
-                                }
-                            ],
-                            characteristics: [{
-                                    typeCode: 'ij',
-                                    typeCodeListId: 'f14129be-3ff6-50e8-9351-3ccb1e1ce45b',
-                                    valueMeasure: 503,
-                                    valueMeasureUnitCode: 'jurpule',
-                                    calculatedValueMeasure: 335,
-                                    valueDateTime: '1366808461',
-                                    valueIndicator: 'law',
-                                    valueCode: 'puheve',
-                                    valueText: 'Ravgodec eg awi dimon zib cu cejsuh hu bi jafe cemove awfiz lodedza agoti vu uzeupaon.',
-                                    valueQuantity: 195,
-                                    valueQuantityCode: 'na',
-                                    calculatedValueQuantity: 443,
-                                    description: 'Lac ul pojolla gegikun ojihag sof vor peswiddaz dafver una lag zirot mugbumha sa atufid havbo ju hi.'
-                                }, {
-                                    typeCode: 'mop',
-                                    typeCodeListId: '7917df18-e9f4-5351-bc8d-f79c516598e5',
-                                    valueMeasure: 688,
-                                    valueMeasureUnitCode: 'wac',
-                                    calculatedValueMeasure: 941,
-                                    valueDateTime: '734037196',
-                                    valueIndicator: 'ridafiha',
-                                    valueCode: 'caleoku',
-                                    valueText: 'Cozebuh bof te oro ojmo wehhi ca agu geuworav vargunu carterem tamuz ewi ge.',
-                                    valueQuantity: 706,
-                                    valueQuantityCode: 'paftif',
-                                    calculatedValueQuantity: 939,
-                                    description: 'Cecubo vovbalos et po rihbe korah pabnawke se agonep ka rihle fazhaweb golkidim nitwa wip ke.'
-                                }
-                            ],
-                            gears: [{
-                                    type: 'LHM',
-                                    role: 'On board',
-                                    mainCharacteristics: {
-                                        items: [{
-                                                idx: 0,
-                                                label: '',
-                                                value: '139mm',
-                                                clickable: undefined
-                                            }, {
-                                                idx: 1,
-                                                label: '',
-                                                value: '11m',
-                                                clickable: undefined
-                                            }
-                                        ],
-                                        characteristics: {
-                                            height: 66,
-                                            nrOfLines: 135,
-                                            nrOfNets: 4,
-                                            nominalLengthOfNet: 950,
-                                            quantity: 92,
-                                            description: 'Otdoki winad jakifi li vebahu waazu fow ebezijo asmaca relena lulas vaj lure bitehu weper ukojuj vumdabew ot.'
-                                        },
-                                        title: ''
-                                    }
-                                }, {
-                                    type: 'TBB',
-                                    role: 'Deployed',
-                                    mainCharacteristics: {
-                                        items: [{
-                                                idx: 0,
-                                                label: '',
-                                                value: '211mm',
-                                                clickable: undefined
-                                            }, {
-                                                idx: 1,
-                                                label: '',
-                                                value: '99m',
-                                                clickable: undefined
-                                            }
-                                        ],
-                                        characteristics: {
-                                            height: 200,
-                                            nrOfLines: 127,
-                                            nrOfNets: 9,
-                                            nominalLengthOfNet: 109,
-                                            quantity: 34,
-                                            description: 'Sec lufi mazwubkoz hesgos nemto neku sale kowijfa ju opa icopaze lisizo.'
-                                        },
-                                        title: ''
-                                    }
-                                }
-                            ],
-                            classProps: {
-                                weightingMeans: 'WEIGHED',
-                                stockId: '7da34062',
-                                size: 'orbecebo',
-                                tripId: '8c3ea655-3cb6-5e67-8f75-40282589bc7a',
-                                usage: 'omregaj',
-                                destinationLocation: '(508) - Bojuguj, NU'
-                            }
-                        },
-                        BMS: {
-                            unit: 1432,
-                            weight: 1788,
-                            specifiedFluxLocations: [{
-                                    name: 'Macwosha',
-                                    geometry: 'POINT(-85.44089 -88.44016)'
-                                }, {
-                                    name: 'Jomfiba',
-                                    geometry: 'POINT(-33.987 -83.40046)'
-                                }, {
-                                    name: 'Minike',
-                                    geometry: 'POINT(81.47809 -43.04273)'
-                                }, {
-                                    name: 'Jowsotobe',
-                                    geometry: 'POINT(20.24789 -69.17315)'
-                                }
-                            ],
-                            characteristics: [{
-                                    typeCode: 'ba',
-                                    typeCodeListId: '901c9f8f-f06d-5549-804d-f5d4c94a4654',
-                                    valueMeasure: 117,
-                                    valueMeasureUnitCode: 'ag',
-                                    calculatedValueMeasure: 247,
-                                    valueDateTime: '341723797',
-                                    valueIndicator: 'opuah',
-                                    valueCode: 'lemamez',
-                                    valueText: 'Diper ef guukibi jimaskuk lizwofe evasab pajfak kepbovso jigafa mak ke abbaje esurokso gambozabu em pahhu bug kisfaopi.',
-                                    valueQuantity: 942,
-                                    valueQuantityCode: 'pelitsu',
-                                    calculatedValueQuantity: 887,
-                                    description: 'Ari wujamon vuj uglamus sejpu bimcibgaj upemadru tevubuj zepibbed ek temu pip jauz pef.'
-                                }, {
-                                    typeCode: 'evuhka',
-                                    typeCodeListId: 'b87980ab-dded-5bc1-a072-6835daa139a5',
-                                    valueMeasure: 565,
-                                    valueMeasureUnitCode: 'as',
-                                    calculatedValueMeasure: 308,
-                                    valueDateTime: '1373985210',
-                                    valueIndicator: 'bahsophis',
-                                    valueCode: 'ruf',
-                                    valueText: 'Iciovsa epo keb husiffo pahjom keslatlab remonido mumhul ko fehvumi wumto widud ranuna riga nun wiviki naosit.',
-                                    valueQuantity: 804,
-                                    valueQuantityCode: 'na',
-                                    calculatedValueQuantity: 246,
-                                    description: 'Uv pugospuj ocipuk bazhal difeziman riuni appa jocefolab mu zeen befta toczaaki azeelza.'
-                                }, {
-                                    typeCode: 'af',
-                                    typeCodeListId: '59c44e86-b19c-5949-b2fd-cd7ea68890a6',
-                                    valueMeasure: 560,
-                                    valueMeasureUnitCode: 'jufegerek',
-                                    calculatedValueMeasure: 276,
-                                    valueDateTime: '521319180',
-                                    valueIndicator: 'etozobje',
-                                    valueCode: 'lubasmuf',
-                                    valueText: 'Ni daaseda zetadde fig saj jilizun topbif fi sojuzi ev moto novinal vano wu jolbisuc cihzinmej dajudbih wawcecad.',
-                                    valueQuantity: 298,
-                                    valueQuantityCode: 'iveeco',
-                                    calculatedValueQuantity: 760,
-                                    description: 'Buvejdo zig wet munuruh karnezor ivjompit hajaf ejunefo behulem him nenat pizviteko udrom niw.'
-                                }
-                            ],
-                            gears: [{
-                                    type: 'LHM',
-                                    role: 'On board',
-                                    mainCharacteristics: {
-                                        items: [{
-                                                idx: 0,
-                                                label: '',
-                                                value: '139mm',
-                                                clickable: undefined
-                                            }, {
-                                                idx: 1,
-                                                label: '',
-                                                value: '11m',
-                                                clickable: undefined
-                                            }
-                                        ],
-                                        characteristics: {
-                                            height: 66,
-                                            nrOfLines: 135,
-                                            nrOfNets: 4,
-                                            nominalLengthOfNet: 950,
-                                            quantity: 92,
-                                            description: 'Otdoki winad jakifi li vebahu waazu fow ebezijo asmaca relena lulas vaj lure bitehu weper ukojuj vumdabew ot.'
-                                        },
-                                        title: ''
-                                    }
-                                }, {
-                                    type: 'TBB',
-                                    role: 'Deployed',
-                                    mainCharacteristics: {
-                                        items: [{
-                                                idx: 0,
-                                                label: '',
-                                                value: '211mm',
-                                                clickable: undefined
-                                            }, {
-                                                idx: 1,
-                                                label: '',
-                                                value: '99m',
-                                                clickable: undefined
-                                            }
-                                        ],
-                                        characteristics: {
-                                            height: 200,
-                                            nrOfLines: 127,
-                                            nrOfNets: 9,
-                                            nominalLengthOfNet: 109,
-                                            quantity: 34,
-                                            description: 'Sec lufi mazwubkoz hesgos nemto neku sale kowijfa ju opa icopaze lisizo.'
-                                        },
-                                        title: ''
-                                    }
-                                }
-                            ],
-                            classProps: {
-                                weightingMeans: 'WEIGHED',
-                                stockId: '83369cf5',
-                                size: 'oc',
-                                tripId: '6f8c22ac-b410-54db-a2f3-c040c47adc88',
-                                usage: 'zezu',
-                                destinationLocation: '(545) - Zelihco, SC'
-                            }
-                        }
-                    },
-                    locations: {
-                        gfcm_stat_rectangle: 'Dezobin',
-                        gfcm_gsa: 'Damoze',
-                        fao_area: 'Moapiho'
-                    }
-                }, {
-                    type: 'TAKEN_ONBOARD',
-                    species: 'COD',
-                    calculatedWeight: 1913,
-                    groupingDetails: {
-                        LSC: {
-                            unit: 732,
-                            weight: 1901,
-                            specifiedFluxLocations: [{
-                                    name: 'Gavwiwji',
-                                    geometry: 'POINT(-81.76905 8.54789)'
-                                }, {
-                                    name: 'Ebzifa',
-                                    geometry: 'POINT(155.04406 81.47475)'
-                                }, {
-                                    name: 'Nestuipo',
-                                    geometry: 'POINT(87.22781 75.11277)'
-                                }, {
-                                    name: 'Arkefig',
-                                    geometry: 'POINT(46.50919 3.38097)'
-                                }
-                            ],
-                            gears: [{
-                                    type: 'LHM',
-                                    role: 'On board',
-                                    mainCharacteristics: {
-                                        items: [{
-                                                idx: 0,
-                                                label: '',
-                                                value: '139mm',
-                                                clickable: undefined
-                                            }, {
-                                                idx: 1,
-                                                label: '',
-                                                value: '11m',
-                                                clickable: undefined
-                                            }
-                                        ],
-                                        characteristics: {
-                                            height: 66,
-                                            nrOfLines: 135,
-                                            nrOfNets: 4,
-                                            nominalLengthOfNet: 950,
-                                            quantity: 92,
-                                            description: 'Otdoki winad jakifi li vebahu waazu fow ebezijo asmaca relena lulas vaj lure bitehu weper ukojuj vumdabew ot.'
-                                        },
-                                        title: ''
-                                    }
-                                }, {
-                                    type: 'TBB',
-                                    role: 'Deployed',
-                                    mainCharacteristics: {
-                                        items: [{
-                                                idx: 0,
-                                                label: '',
-                                                value: '211mm',
-                                                clickable: undefined
-                                            }, {
-                                                idx: 1,
-                                                label: '',
-                                                value: '99m',
-                                                clickable: undefined
-                                            }
-                                        ],
-                                        characteristics: {
-                                            height: 200,
-                                            nrOfLines: 127,
-                                            nrOfNets: 9,
-                                            nominalLengthOfNet: 109,
-                                            quantity: 34,
-                                            description: 'Sec lufi mazwubkoz hesgos nemto neku sale kowijfa ju opa icopaze lisizo.'
-                                        },
-                                        title: ''
-                                    }
-                                }
-                            ],
-                            classProps: {
-                                weightingMeans: 'STEREOSCOPIC',
-                                stockId: '13afa034',
-                                size: 'ebsanlog',
-                                tripId: '2a3afbd6-6aeb-5eb6-9d45-fefbbd31704a',
-                                usage: 'tak',
-                                destinationLocation: '(961) - Rewavfim, SZ'
-                            }
-                        },
-                        BMS: {
-                            unit: 1262,
-                            weight: 1079,
-                            specifiedFluxLocations: [{
-                                    name: 'Mewvadpa',
-                                    geometry: 'POINT(8.30149 87.56808)'
-                                }, {
-                                    name: 'Makmofer',
-                                    geometry: 'POINT(-88.49438 30.70248)'
-                                }
-                            ],
-                            characteristics: [{
-                                    typeCode: 'ba',
-                                    typeCodeListId: 'd24dcd99-4c8a-551a-a529-facf54d10d56',
-                                    valueMeasure: 220,
-                                    valueMeasureUnitCode: 'lahenor',
-                                    calculatedValueMeasure: 901,
-                                    valueDateTime: '163161957',
-                                    valueIndicator: 'cuku',
-                                    valueCode: 'nel',
-                                    valueText: 'Ri zocseg tavubcit lavav ojhub zuknev pemir guzjofge zibe ruzkuna nufoulu urvijok.',
-                                    valueQuantity: 295,
-                                    valueQuantityCode: 'beg',
-                                    calculatedValueQuantity: 600,
-                                    description: 'Mev arbebweh ewpoji taffaju etanuswac uzkoop dem ti wawocho tupa gub pedtim gafmuoko hu izzahita.'
-                                }
-                            ],
-                            gears: [{
-                                    type: 'LHM',
-                                    role: 'On board',
-                                    mainCharacteristics: {
-                                        items: [{
-                                                idx: 0,
-                                                label: '',
-                                                value: '139mm',
-                                                clickable: undefined
-                                            }, {
-                                                idx: 1,
-                                                label: '',
-                                                value: '11m',
-                                                clickable: undefined
-                                            }
-                                        ],
-                                        characteristics: {
-                                            height: 66,
-                                            nrOfLines: 135,
-                                            nrOfNets: 4,
-                                            nominalLengthOfNet: 950,
-                                            quantity: 92,
-                                            description: 'Otdoki winad jakifi li vebahu waazu fow ebezijo asmaca relena lulas vaj lure bitehu weper ukojuj vumdabew ot.'
-                                        },
-                                        title: ''
-                                    }
-                                }, {
-                                    type: 'TBB',
-                                    role: 'Deployed',
-                                    mainCharacteristics: {
-                                        items: [{
-                                                idx: 0,
-                                                label: '',
-                                                value: '211mm',
-                                                clickable: undefined
-                                            }, {
-                                                idx: 1,
-                                                label: '',
-                                                value: '99m',
-                                                clickable: undefined
-                                            }
-                                        ],
-                                        characteristics: {
-                                            height: 200,
-                                            nrOfLines: 127,
-                                            nrOfNets: 9,
-                                            nominalLengthOfNet: 109,
-                                            quantity: 34,
-                                            description: 'Sec lufi mazwubkoz hesgos nemto neku sale kowijfa ju opa icopaze lisizo.'
-                                        },
-                                        title: ''
-                                    }
-                                }
-                            ],
-                            classProps: {
-                                weightingMeans: 'SAMPLING',
-                                stockId: '7fbd2526',
-                                size: 'hawmambiz',
-                                tripId: 'db95acde-8a52-5739-aa44-93463b5d1727',
-                                usage: 'uka',
-                                destinationLocation: '(848) - Fusitkiw, NF'
-                            }
-                        }
-                    },
-                    locations: {
-                        fao_area: 'Sitcicum',
-                        effort_zone: 'Edsotos',
-                        rfmo: 'Lajhuumu',
-                        territory: 'Arufisa'
-                    }
+            specifiedFluxLocations: [
+                getLocation(),
+                getLocation()
+            ],
+            characteristics: [
+                {
+                    typeCode: "ij",
+                    typeCodeListId: "f14129be-3ff6-50e8-9351-3ccb1e1ce45b",
+                    valueMeasure: 503,
+                    valueMeasureUnitCode: "jurpule",
+                    calculatedValueMeasure: 335,
+                    valueDateTime: "1366808461",
+                    valueIndicator: "law",
+                    valueCode: "puheve",
+                    valueText: "Ravgodec eg awi dimon zib cu cejsuh hu bi jafe cemove awfiz lodedza agoti vu uzeupaon.",
+                    valueQuantity: 195,
+                    valueQuantityCode: "na",
+                    calculatedValueQuantity: 443,
+                    description: "Lac ul pojolla gegikun ojihag sof vor peswiddaz dafver una lag zirot mugbumha sa atufid havbo ju hi."
+                },
+                {
+                    typeCode: "mop",
+                    typeCodeListId: "7917df18-e9f4-5351-bc8d-f79c516598e5",
+                    valueMeasure: 688,
+                    valueMeasureUnitCode: "wac",
+                    calculatedValueMeasure: 941,
+                    valueDateTime: "734037196",
+                    valueIndicator: "ridafiha",
+                    valueCode: "caleoku",
+                    valueText: "Cozebuh bof te oro ojmo wehhi ca agu geuworav vargunu carterem tamuz ewi ge.",
+                    valueQuantity: 706,
+                    valueQuantityCode: "paftif",
+                    calculatedValueQuantity: 939,
+                    description: "Cecubo vovbalos et po rihbe korah pabnawke se agonep ka rihle fazhaweb golkidim nitwa wip ke."
                 }
             ],
-            tripDetails: undefined,
-            processingProducts: undefined,
-            gearShotRetrieval: undefined
+            gears: getGears()
         };
     }
 
-    function getGears() {
+    function getCatchDetail() {
+        return {
+            type: "DISCARDED",
+            species: "TUR",
+            calculatedWeight: 1372,
+            groupingDetails: {
+                LSC: getCatchClass(),
+                BMS: getCatchClass()
+            },
+            locations: {
+                "gfcm_stat_rectangle": "Dezobin",
+                "gfcm_gsa": "Damoze",
+                "fao_area": "Moapiho"
+            }
+        };
+    }
+
+    function getTripDetails() {
+        return {
+            vesselDetails:{
+                name: "MADONNA DI POMPEI",
+                country: "MLT",
+                contactParties:[
+                    {
+                        role: "MASTER",
+                        contactPerson:{
+                            alias: "Miguel Nunes"
+                        },
+                        structuredAddress:[
+                            {
+                            streetName: "MARSAXLOKK (KAVALLERIZZA)",
+                            countryCode: "MLT"
+                            }
+                        ]
+                    }
+                ],
+                vesselIds:[
+                    {
+                        id: "SWE000010025",
+                        schemeId: "CFR"
+                    }
+                ],
+                authorizations:[
+
+                ]
+            },
+            trips:[
+                {
+                    tripId:[
+                        {
+                            id: "MLT-TRP-20160630000001",
+                            schemeId: "EU_TRIP_ID"
+                        }
+                    ],
+                    arrivalTime: "2017-01-08T22:18:00",
+                    landingTime: "2017-01-09T10:46:00"
+                }
+            ]
+        };
+    }
+
+    function getProcessingProduct() {
+        return {  
+            type: "UNLOADED",
+            locations:{  
+                fao_area: "51.5"
+            },
+            species: "SKJ",
+            presentation: "WHL",
+            weight: 106854.0
+        };
+    }
+
+    function getVesselDetails() {
+        return {
+            country:"ESP",
+            role:"RECEIVER",
+            contactParties:[
+
+            ],
+            vesselIds:[
+                {
+                    id:"EA6395",
+                    schemeId:"IRCS"
+                }
+            ],
+            authorizations:[
+                {
+                    id:"fIdVessel2",
+                    schemeId:"sIdVEssel2"
+                },
+                {
+                    id:"fIdVessel",
+                    schemeId:"sIdVEssel"
+                },
+                {
+                    id:"fId123",
+                    schemeId:"sId123"
+                }
+            ]
+        };
+    }
+
+    function getGearShotRetrieval() {
+        return [
+            {
+                type:"GEAR_SHOT",
+                occurrence:"2016-12-20T01:31:00",
+                characteristics:{
+
+                },
+                gearProblems:[
+
+                ],
+                location:{
+                    geometry:"POINT (-11.303 49.683)",
+                    structuredAddresses:[
+
+                    ]
+                }
+            },
+            {
+                type:"GEAR_RETRIEVAL",
+                occurrence:"2016-12-20T06:02:00",
+                characteristics:{
+
+                },
+                gearProblems:[
+
+                ],
+                location:{
+                    geometry:"POINT (-11.382 49.439)",
+                    structuredAddresses:[
+
+                    ]
+                }
+            }
+        ];
+    }
+
+    function getRelocation() {
+        return {
+            roleName:"PARTICIPATING_VESSEL",
+            country:"MAR",
+            vesselIdentifiers:[
+                {
+                    id:"MA04",
+                    schemeId:"IRCS"
+                },
+                {
+                    id:"ATEU0MAR00004",
+                    schemeId:"ICCAT"
+                }
+            ],
+            name:"NAVIRE 4",
+            speciesCode:"BFT",
+            type:"ALLOCATED_TO_QUOTA",
+            weight:0,
+            unit:0,
+            characteristics:[
+
+            ]
+        };
+    }
+
+    function getAreas() {
+        return {
+            transmission:{
+                occurence:"2017-01-09T12:20:00"
+            },
+            crossing:{
+                occurence:"2017-01-09T12:20:00"
+            }
+        };
+    }
+
+    function getFaResponse() {
+        return {
+            activityDetails: getActivityDetails(),
+            locations: getLocation(),
+            reportDetails: getReportDetails(),
+            catches: [
+                getCatchDetail(),
+                getCatchDetail()
+            ],
+            gears: getGears(),
+            tripDetails: getTripDetails(),
+            processingProducts: [
+                getProcessingProduct(),
+                getProcessingProduct()
+            ],
+            vesselDetails: getVesselDetails(),
+            gearShotRetrievalList: getGearShotRetrieval(),
+            relocations: [
+                getRelocation(),
+                getRelocation()
+            ],
+            gearProblems: [],
+            areas: getAreas()
+        };
+    }
+
+
+    function getActivityDetailsResult() {
+        return {
+            items:[
+                {
+                    idx:4,
+                    label:'',
+                    value:'Demersal',
+                    clickable:undefined,
+                    onClick:undefined,
+                    id:'fisheryType'
+                }
+            ],
+            subItems:[
+                {
+                    idx:6,
+                    label:'',
+                    value:'10d 11h 20m',
+                    clickable:undefined,
+                    onClick:undefined,
+                    id:'duration'
+                }
+            ],
+            subTitle:'',
+            title:': '
+        };
+    }
+
+    function getGearsResult() {
         return [{
-            "code": "LHM",
-            "description": "Handlines and pole-lines (mechanized)"
+                type: 'LHM - Handlines and pole-lines (mechanized)',
+                role: 'On board',
+                mainCharacteristics: {
+                    items: [{
+                            idx: 0,
+                            label: '',
+                            value: '139mm',
+                            clickable: undefined,
+                            onClick: undefined,
+                            id: 'meshSize'
+                        }, {
+                            idx: 1,
+                            label: '',
+                            value: '11m',
+                            clickable: undefined,
+                            onClick: undefined,
+                            id: 'lengthWidth'
+                        }, {
+                            idx: 2,
+                            label: '',
+                            value: 5,
+                            clickable: undefined,
+                            onClick: undefined,
+                            id: 'numberOfGears'
+                        }
+                    ],
+                    characteristics: {
+                        height: 66,
+                        nrOfLines: 135,
+                        nrOfNets: 4,
+                        nominalLengthOfNet: 950,
+                        quantity: 92,
+                        description: 'Otdoki winad jakifi li vebahu waazu fow ebezijo asmaca relena lulas vaj lure bitehu weper ukojuj vumdabew ot.'
+                    },
+                    title: ''
+                }
+            }, {
+                type: 'TBB',
+                role: 'Deployed',
+                mainCharacteristics: {
+                    items: [{
+                            idx: 0,
+                            label: '',
+                            value: '211mm',
+                            clickable: undefined,
+                            onClick: undefined,
+                            id: 'meshSize'
+                        }, {
+                            idx: 1,
+                            label: '',
+                            value: '99m',
+                            clickable: undefined,
+                            onClick: undefined,
+                            id: 'lengthWidth'
+                        }, {
+                            idx: 2,
+                            label: '',
+                            value: 3,
+                            clickable: undefined,
+                            onClick: undefined,
+                            id: 'numberOfGears'
+                        }
+                    ],
+                    characteristics: {
+                        height: 200,
+                        nrOfLines: 127,
+                        nrOfNets: 9,
+                        nominalLengthOfNet: 109,
+                        quantity: 34,
+                        description: 'Sec lufi mazwubkoz hesgos nemto neku sale kowijfa ju opa icopaze lisizo.'
+                    },
+                    title: ''
+                }
+            }
+        ];
+    }
+
+    function getReportDetailsResult() {
+        return {
+            items: [{
+                    idx: 0,
+                    label: '',
+                    value: 'DECLARATION',
+                    clickable: undefined,
+                    id: 'type'
+                }, {
+                    idx: 5,
+                    label: '',
+                    value: '4bc9392b-3607-5d91-9032-194b83f89e28',
+                    clickable: undefined,
+                    id: 'id'
+                }, {
+                    idx: 6,
+                    label: '',
+                    value: 'c0bd3ec3-b178-5951-9853-7e13bb76b607',
+                    clickable: true,
+                    id: 'refId'
+                }, {
+                    idx: 2,
+                    label: '',
+                    value: 1,
+                    clickable: undefined,
+                    id: 'purposeCode'
+                }, {
+                    idx: 3,
+                    label: '',
+                    value: 'Budrilico cuwmaglo gij munhofip pi zuwbibum bi feh ke za ajunutoc mupzaj gop ho legipejo epdeli.',
+                    clickable: undefined,
+                    id: 'purpose'
+                }
+            ],
+            subItems: [{
+                    idx: 9,
+                    label: '',
+                    value: '726b43ee-f70c-54ee-b4ad-a7976585ef42',
+                    clickable: undefined,
+                    id: 'dcafedc4'
+                }
+            ],
+            subTitle: '',
+            title: ''
+        };
+    }
+
+    function getCatchClassResult() {
+        return {
+            unit: 911,
+            weight: 1814,
+            specifiedFluxLocations: [
+                getLocation(),
+                getLocation()
+            ],
+            characteristics: [{
+                    typeCode: 'ij',
+                    typeCodeListId: 'f14129be-3ff6-50e8-9351-3ccb1e1ce45b',
+                    valueMeasure: 503,
+                    valueMeasureUnitCode: 'jurpule',
+                    calculatedValueMeasure: 335,
+                    valueDateTime: '1366808461',
+                    valueIndicator: 'law',
+                    valueCode: 'puheve',
+                    valueText: 'Ravgodec eg awi dimon zib cu cejsuh hu bi jafe cemove awfiz lodedza agoti vu uzeupaon.',
+                    valueQuantity: 195,
+                    valueQuantityCode: 'na',
+                    calculatedValueQuantity: 443,
+                    description: 'Lac ul pojolla gegikun ojihag sof vor peswiddaz dafver una lag zirot mugbumha sa atufid havbo ju hi.'
+                }, {
+                    typeCode: 'mop',
+                    typeCodeListId: '7917df18-e9f4-5351-bc8d-f79c516598e5',
+                    valueMeasure: 688,
+                    valueMeasureUnitCode: 'wac',
+                    calculatedValueMeasure: 941,
+                    valueDateTime: '734037196',
+                    valueIndicator: 'ridafiha',
+                    valueCode: 'caleoku',
+                    valueText: 'Cozebuh bof te oro ojmo wehhi ca agu geuworav vargunu carterem tamuz ewi ge.',
+                    valueQuantity: 706,
+                    valueQuantityCode: 'paftif',
+                    calculatedValueQuantity: 939,
+                    description: 'Cecubo vovbalos et po rihbe korah pabnawke se agonep ka rihle fazhaweb golkidim nitwa wip ke.'
+                }
+            ],
+            gears: getGearsResult(),
+            classProps: {
+                weightingMeans: 'WEIGHED',
+                stockId: '7da34062',
+                size: 'orbecebo',
+                tripId: '8c3ea655-3cb6-5e67-8f75-40282589bc7a',
+                usage: 'omregaj',
+                destinationLocation: '(508) - Bojuguj, NU'
+            }
+        };
+    }
+
+    function getCatchDetailResult() {
+        return {
+            type: 'DISCARDED',
+            species: 'TUR',
+            calculatedWeight: 1372,
+            groupingDetails: {
+                LSC: getCatchClassResult(),
+                BMS: getCatchClassResult()
+            },
+            locations: {
+                gfcm_stat_rectangle: 'Dezobin',
+                gfcm_gsa: 'Damoze',
+                fao_area: 'Moapiho'
+            }
+        };
+    }
+
+    function getTripDetailsResult() {
+        return {
+            vesselDetails:{
+                name:'MADONNA DI POMPEI',
+                country:'MLT',
+                contactParties:[
+                    {
+                        role:'MASTER',
+                        contactPerson:{
+                        alias:'Miguel Nunes'
+                        },
+                        structuredAddress:[
+                        {
+                            streetName:'MARSAXLOKK (KAVALLERIZZA)',
+                            countryCode:'MLT'
+                        }
+                        ],
+                        type:'MASTER - Miguel Nunes'
+                    }
+                ],
+                vesselOverview:{
+                    items:[
+                        {
+                        idx:1,
+                        label:'',
+                        value:'MADONNA DI POMPEI',
+                        clickable:undefined,
+                        onClick:undefined,
+                        id:'name'
+                        },
+                        {
+                        idx:2,
+                        label:'',
+                        value:'MLT',
+                        clickable:undefined,
+                        onClick:undefined,
+                        id:'country'
+                        },
+                        {
+                        idx:3,
+                        label:'',
+                        value:'SWE000010025',
+                        clickable:undefined,
+                        onClick:undefined,
+                        id:'CFR'
+                        }
+                    ]
+                },
+                type:'MLT - MADONNA DI POMPEI'
+            },
+            trips:[
+                {
+                    tripId:[
+                        {
+                        id:'MLT-TRP-20160630000001',
+                        schemeId:'EU_TRIP_ID'
+                        }
+                    ],
+                    arrivalTime:'2017-01-08T22:18:00',
+                    landingTime:'2017-01-09T10:46:00'
+                }
+            ]
+        };
+    }
+
+    function getVesselDetailsResult() {
+        return [
+            {
+                country:'ESP',
+                role:'RECEIVER',
+                authorizations:{
+                    items:[
+                        {
+                            idx:0,
+                            label:'',
+                            value:'fIdVessel2',
+                            clickable:undefined,
+                            onClick:undefined,
+                            id:'sIdVEssel2'
+                        },
+                        {
+                            idx:1,
+                            label:'',
+                            value:'fIdVessel',
+                            clickable:undefined,
+                            onClick:undefined,
+                            id:'sIdVEssel'
+                        },
+                        {
+                            idx:2,
+                            label:'',
+                            value:'fId123',
+                            clickable:undefined,
+                            onClick:undefined,
+                            id:'sId123'
+                        }
+                    ],
+                    title:''
+                },
+                vesselOverview:{
+                    items:[
+                        {
+                            idx:2,
+                            label:'',
+                            value:'ESP',
+                            clickable:undefined,
+                            onClick:undefined,
+                            id:'country'
+                        },
+                        {
+                            idx:0,
+                            label:'',
+                            value:'RECEIVER',
+                            clickable:undefined,
+                            onClick:undefined,
+                            id:'role'
+                        },
+                        {
+                            idx:3,
+                            label:'',
+                            value:'EA6395',
+                            clickable:undefined,
+                            onClick:undefined,
+                            id:'IRCS'
+                        }
+                    ]
+                },
+                type:'ESP'
+            }
+        ];
+    }
+
+    function getGearShotRetrievalResult() {
+        return [
+            {
+                type:"GEAR_SHOT",
+                occurrence:"2016-12-20T01:31:00",
+                characteristics:{
+
+                },
+                gearProblems:[
+
+                ],
+                location:[
+                    {
+                        geometry:"POINT (-11.303 49.683)",
+                        structuredAddresses:[
+
+                        ]
+                    }
+                ]
+            },
+            {
+                type:"GEAR_RETRIEVAL",
+                occurrence:"2016-12-20T06:02:00",
+                characteristics:{
+
+                },
+                gearProblems:[
+
+                ],
+                location:[
+                    {
+                        geometry:"POINT (-11.382 49.439)",
+                        structuredAddresses:[
+
+                        ]
+                    }
+                ]
+            }
+        ];
+    }
+
+    function getRelocationResult() {
+        return {
+            roleName:"PARTICIPATING_VESSEL",
+            country:"MAR",
+            vesselIdentifiers:[
+                {
+                    id:"MA04",
+                    schemeId:"IRCS"
+                },
+                {
+                    id:"ATEU0MAR00004",
+                    schemeId:"ICCAT"
+                }
+            ],
+            name:"NAVIRE 4",
+            speciesCode:"BFT",
+            type:"ALLOCATED_TO_QUOTA",
+            weight:0,
+            unit:0,
+            characteristics:[
+
+            ],
+            ircs:"MA04",
+            vesselId:{
+                id:"ATEU0MAR00004",
+                schemeId:"ICCAT"
+            }
+        };
+    }
+
+    function getAreasResult() {
+        return {
+            areaData:{
+                transmission:{
+                    occurence:"2017-01-09T12:20:00"
+                },
+                crossing:{
+                    occurence:"2017-01-09T12:20:00"
+                }
+            },
+                title:"",
+                number:6
+        };
+    }
+
+    var finalModel = {
+        areas: getAreasResult(),
+        activityDetails: getActivityDetailsResult(),
+        locations: getLocation(),
+        gears: getGearsResult(),
+        reportDetails: getReportDetailsResult(),
+        catches: [
+            getCatchDetailResult(), 
+            getCatchDetailResult()
+        ],
+        tripDetails: getTripDetailsResult(),
+        processingProducts: [
+            getProcessingProduct(),
+            getProcessingProduct()
+        ],
+        vesselDetails: getVesselDetailsResult(),
+        gearShotRetrieval: getGearShotRetrievalResult(),
+        relocation: [
+            getRelocationResult(),
+            getRelocationResult()
+        ],
+        gearProblems: []
+    };
+
+    function getGearsDesc() {
+        return [{
+            code: "LHM",
+            description: "Handlines and pole-lines (mechanized)"
         },
         {
-            "code": "SSC",
-            "description": "Scottish seines"
+            code: "SSC",
+            description: "Scottish seines"
         }];
     }
 
     function getCatchType() {
         return [{
-            "code": "KEPT_IN_NET",
-            "description": "Catch kept in the net"
+            code: "KEPT_IN_NET",
+            description: "Catch kept in the net"
         }];
     }
 
     function getWeightMeans() {
         return [{
-            "code": "ESTIMATED",
-            "description": "Estimated weight mean"
+            code: "ESTIMATED",
+            description: "Estimated weight mean"
         }];
     }
 
@@ -1109,7 +916,7 @@ describe('fishingActivityService', function() {
             if (param === 'GEAR_TYPE') {
                 return {
                     then: function(callback) {
-                        return callback(getGears());
+                        return callback(getGearsDesc());
                     }
                 };
             } else if (param === 'FA_CATCH_TYPE') {
@@ -1128,12 +935,41 @@ describe('fishingActivityService', function() {
         });
     }
 
-    it('should load the fa model', inject(function(fishingActivityService, FishingActivity) {
-        var faObj = new FishingActivity('fishing_operation');
+    angular.forEach(faModels,function(type,typeName){
+        if(typeName !== 'common'){
+            var components = faModels.common.concat(type);
 
-        faObj.fromJson(getFaResponse());
-        /*expect(faObj).toBe(getFaModel());*/
-        /*expect(angular.equals(faObj, getFaModel())).toBe(true);*/
-    }));
+            describe(typeName, function() {
+                var faObj;
+
+                beforeEach(inject(function(FishingActivity) {
+                    faObj = new FishingActivity(typeName);
+                    faObj.fromJson(getFaResponse());
+                }));
+
+                angular.forEach(components, function(component){
+                    it('should load ' + component, function() {
+                        if(component === 'reportDetails'){
+                            angular.forEach(faObj[component].items, function(item){
+                                delete item.onClick;
+                            });
+                            angular.forEach(faObj[component].subItems, function(subItem){
+                                delete subItem.onClick;
+                            });
+                        }
+
+                        var exceptions = ['arrival_notification', 'arrival_declaration'];
+                        if(component === 'activityDetails' && exceptions.indexOf(typeName) !== -1){
+                            expect(faObj[component]).toEqual(getActivityDetails());
+                        }else{
+                            expect(faObj[component]).toEqual(finalModel[component]);
+                            expect(_.isEqual(faObj[component],finalModel[component])).toBeTruthy();
+                        }
+                    });
+                });
+
+            });
+        }
+    });
 
 });

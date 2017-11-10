@@ -12,6 +12,7 @@ copy of the GNU General Public License along with the IFDM Suite. If not, see <h
 /**
  * @memberof unionvmsWeb
  * @ngdoc directive
+ * @name relocationTile
  * @param {Service} locale - The angular locale service
  * @attr {String} tileTitle - The title of the tile
  * @attr {Array} srcData - An array containing the data to be displayed on the table within the tile

@@ -68,6 +68,8 @@ angular.module('unionvmsWeb').controller('TripspanelCtrl', function ($scope, gen
         if (angular.isDefined(tripId)) {
             $scope.tripSummServ.trip = new Trip(tripId);
             $scope.trip = $scope.tripSummServ.trip;
+
+            $scope.tripSummServ.initTripSummary();
         }
     };
 
@@ -85,6 +87,22 @@ angular.module('unionvmsWeb').controller('TripspanelCtrl', function ($scope, gen
             $scope.repNav.goToView('liveViewPanel', 'mapPanel');
         }else{
             $scope.repNav.goToPreviousView();
+        }
+    };
+
+    $scope.printView = function (view) {
+        if(view === 'tripSummary'){
+            var doc = new jsPDF('p', 'pt', 'a4');
+            var viewContainer = angular.element('.trip-summary-tab');
+
+            var options = {
+                pagesplit: true
+            };
+
+            doc.addHTML(viewContainer,options,function()
+            {
+                doc.save("test.pdf");
+            });
         }
     };
 });

@@ -1,24 +1,24 @@
 <div class="exchangeSearch" ng-controller="ExchangeSearchController">
 	<div class="row">
-		<div class="col-md-1">
+		<div class="col-md-1 smallerpaddingright">
 			<dropdown ng-model="advancedSearchObject.EXCHANGE_TIME_SPAN" no-placeholder-item items="timeSpanOptions"></dropdown>
 		</div>
-		<div class="col-md-2">
+		<div class="col-md-2 smallerpadding">
 			<datepicker-input model="advancedSearchObject.DATE_RECEIVED_FROM" time="true" max-date="advancedSearchObject.DATE_RECEIVED_TO" placeholder="{{'exchange.search_from' | i18n}}" input-field-id="exchange-log-search-from-date-picker"></datepicker-input>
 		</div>
-		<div class="col-md-2">
+		<div class="col-md-2 smallerpadding">
 			<datepicker-input model="advancedSearchObject.DATE_RECEIVED_TO" time="true" min-date="advancedSearchObject.DATE_RECEIVED_FROM" placeholder="{{'exchange.search_to' | i18n}}" input-field-id="exchange-log-search-to-date-picker"></datepicker-input>
 		</div>
-		<div class="col-md-2">
+		<div class="col-md-2 smallerpadding">
 			<input type="text" ng-model="advancedSearchObject.SENDER_RECEIVER" placeholder="{{'exchange.table_header_sender_reciever' | i18n}}" class="form-control"/>
 		</div>
-		<div class="col-md-2">
+		<div class="col-md-2 smallerpadding">
 			<dropdown ng-model="advancedSearchObject.RECIPIENT" initialtext="{{'exchange.search_recipient' | i18n}}" items="recipientItems"></dropdown>
 		</div>
-		<div class="col-md-1">
+		<div class="col-md-1 smallerpadding">
 			<button type="submit" class="btn btn-primary btn-sm searchButton vmsbtn" ng-click="performAdvancedSearch()">{{'common.search' | i18n}}</button>
 		</div>
-		<div class="col-md-1">
+		<div class="col-md-1 smallerpadding">
 			<button type="submit" class="btn btn-default btn-sm vmsbtn" ng-click="resetSearch()">{{'common.reset' | i18n}}</button>
 		</div>
 	</div>

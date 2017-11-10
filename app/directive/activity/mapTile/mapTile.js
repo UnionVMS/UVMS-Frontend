@@ -32,23 +32,25 @@ angular.module('unionvmsWeb').directive('mapTile', function($timeout, genericMap
 		templateUrl: 'directive/activity/mapTile/mapTile.html',
 		link: function(scope, element, attrs, fn) {
             
-            scope.$watch(function() { return angular.element(element).is(':visible'); }, function() {
-                genericMapService.updateMapSize(scope.map);
+            scope.$watch(function() { return angular.element(element).is(':visible'); }, function(newVal) {
+                if(newVal){
+                    genericMapService.updateMapSize(scope.map);
+                }
             });
 
-		    scope.generateMapId();
-         
+            scope.generateMapId();
+            
 		    scope.$watch('mapData',function(newVal){
                 if(newVal){
                     $timeout(function(){
                         if (element.find('#' + scope.mapId)){
                             if (!angular.isDefined(scope.map)){
                                 scope.getMapConfigs();
-                            } else {
+                            } else {  
                                 scope.addVectorData();
                             }
                         }
-                    }, 0);
+                   }, 0);
                 } else {
                     if (angular.isDefined(scope.vectorLayer)){
                         scope.clearVectorData();
@@ -104,12 +106,15 @@ angular.module('unionvmsWeb').directive('mapTile', function($timeout, genericMap
      * @alias getMapConfigs
      */
     $scope.getMapConfigs = function(){
+        if(angular.isDefined( $scope.interval)){
+              stopInterval();
+        }
         $scope.interval = $interval(function(){
             if (angular.isDefined(tripSummaryService.mapConfigs)){
                 stopInterval();
                 $scope.createMap();
             }
-        }, 1000);
+        }, 1000);      
     };
     
     /**

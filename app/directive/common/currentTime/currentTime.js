@@ -9,16 +9,21 @@ the hope that it will be useful, but WITHOUT ANY WARRANTY; without even the impl
 FITNESS FOR A PARTICULAR PURPOSE.  See the GNU General Public License for more details. You should have received a
 copy of the GNU General Public License along with the IFDM Suite. If not, see <http://www.gnu.org/licenses/>.
  */
-angular.module('unionvmsWeb').directive('currentTime', function($timeout) {
+angular.module('unionvmsWeb').directive('currentTime', function($timeout, globalSettingsService) {
 	return {
 		restrict: 'E',
 		link: function(scope, element, attrs, fn) {
 
             function displayCurrentTime() {
 
-                // Create new UTC time and date
-                var date = moment.utc().format('YYYY-MM-DD'),
+                // Create UTC time and date
+                var format = globalSettingsService.getDateFormat(),
+                    date = moment.utc().format('YYYY-MM-DD'),
                     time = moment.utc().format('HH:mm');
+
+                    if (format === 'YY/MM/DD HH:mm:ss') {
+                        date = moment.utc().format('YY/MM/DD');
+                    }
 
                 element.html(
                     '<span class="current-time">' +
@@ -29,11 +34,11 @@ angular.module('unionvmsWeb').directive('currentTime', function($timeout) {
                 );
             }
 
-            // Update time, timeout to update every second if needed
+            // Update time every second
             function updateTime() {
                 $timeout(function() {
-                  displayCurrentTime();
-                  updateTime();
+                    displayCurrentTime();
+                    updateTime();
                 }, 1000);
             }
 

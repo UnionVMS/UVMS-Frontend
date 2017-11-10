@@ -10,120 +10,100 @@ FITNESS FOR A PARTICULAR PURPOSE.  See the GNU General Public License for more d
 copy of the GNU General Public License along with the IFDM Suite. If not, see <http://www.gnu.org/licenses/>.
  */
 .pollingLogsContainer{
-    //SEARCH BUTTONS
-    .searchButton{
-        width:115px;
-        padding-top:5px;
-        width: 100%;
-    }
-    td.searchButton{
-        max-width: 100%;
+
+    .search-wrapper {
+        .row-padding {
+            padding: @standardContainerPadding 0;
+
+            &:last-of-type {
+                padding-bottom: 0;
+            }
+        }
+
+        .buttons-wrapper {
+            float: right;
+        }
     }
 
-    .searchResultsContainer{
+    .dropdown-actions {
+        padding-bottom: @standardContainerPadding;
+    }
+
+    .toggle-search-views {
+        padding-top: @standardContainerPadding;
+        padding-bottom: @standardContainerPadding * 2;
+    }
+
+    .textAlignLeft {
+        text-align: left;
+    }
+
+    .searchResultsContainer {
         min-height: 180px;
 
-        .loadingIndicator{
-            .spinner{
-                margin-top:70px;
-            }
-        }
-
-        &.isEmpty{
-            .loadingIndicator{
-                .spinner{
-                    margin-top:90px;
-                }
-            }
-        }
-    }
-    .datepicker{
-        width: 100%;
-    }
-}
-
-
-
-
-
-table.pollingLogsTable{
-    &>thead, &>tbody{
-        //Table wrow containing search fields
-        &>tr.searchInputRow{
-            &>th{
-                padding-right: 5px;
-                &>input, &>.dropdown{
-                    width:100%;
-                }
-                input{
-                    font-weight: normal;
-                }
-            }
-
-            //Date fields
-            &:first-child{
-                height: 50px;
-            }
-
-            .datepickerStart{
-                .datepicker{
-                    width: 100%;
-                }
-            }
-        }
-
-        &>tr{
-            &>td{
-                padding-top:8px;
-                vertical-align: top;
-                //Search
-                &:last-child {
-                    //width:0%;
-                }
-            }
-            &>td, &>th{
-                width: 10%;
-
-                //Checkbox
-                &:first-child {
-                    padding-left: 10px;
-                    width: 3%;
-                }
-            }
-            &>th{
-              //Search button
-                &:last-child {
-                    text-align: right;
-                    padding-right: 0px;
-                    padding-left: 5px;
-                }
-            }
-            &>td{
-                //Time
-                &:nth-child(7) {
-                    width: 14%;
-                    white-space: nowrap;
-                    padding-bottom:8px;
-                }
-            }
-
-            th.times{
-                padding-left: 25px;
-            }
-
-            td.statusTime{
-                cursor: pointer;
-
-                .expandIcon{
-                    position: absolute;
-                    width: 20px;
-                    color:@primaryColor;
-                }
-                div.times{
-                    padding-left: 25px;
-                }
+        .loadingIndicator {
+            .spinner {
+                margin-top: 60px;
             }
         }
     }
 
+    td {
+        padding-top: 8px;
+        vertical-align: top;
+    }
+
+    .col-time {
+        padding-left: 25px;
+
+        .row-time {
+            display: block;
+            margin-top: 3px;
+
+            &:first-of-type {
+                margin-top: 0;
+            }
+        }
+    }
+
+    .col-status-times {
+        cursor: pointer;
+
+        .expandIcon {
+            position: absolute;
+            width: 20px;
+            color: @primaryColor;
+        }
+
+        &.expanded {
+            padding-bottom: 8px;
+        }
+    }
+
+    .row-status {
+        display: block;
+        margin-top: 3px;
+
+        &:first-of-type {
+            margin-top: 0;
+        }
+
+        .status-label {
+            font-size: 11px;
+            letter-spacing: 0.5px;
+            padding: 3px 6px;
+            color: #fff;
+            border-radius: 3px;
+            font-weight: 500;
+            background: darken(@profileColor_gray, 15%);
+
+            &.status-label-danger {
+                background: @errorColor;
+            }
+
+            &.status-label-success {
+                background: @successColor;
+            }
+        }
+    }
 }

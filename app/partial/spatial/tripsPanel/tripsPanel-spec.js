@@ -16,7 +16,7 @@ describe('TripspanelCtrl', function() {
 	var scope,ctrl,spatialConfigAlertService,genMapServSpy,tripSumSpy,repNavSpy,Trip;
 
 	beforeEach(function(){
-		tripSumSpy = jasmine.createSpyObj('tripSummaryService',['resetMapConfigs','openNewTrip']);
+		tripSumSpy = jasmine.createSpyObj('tripSummaryService',['resetMapConfigs','openNewTrip','initTripSummary']);
 		genMapServSpy = jasmine.createSpyObj('genericMapService',['setMapBasicConfigs']);
 		repNavSpy = jasmine.createSpyObj('reportingNavigatorService',['goToPreviousView', 'getCurrentView', 'goToView']);
 		

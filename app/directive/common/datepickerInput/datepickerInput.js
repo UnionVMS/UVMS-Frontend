@@ -24,19 +24,20 @@ angular.module('unionvmsWeb').directive('datepickerInput', ['$compile',function(
             minDate : '=', //should be on format "YYYY-MM-DD HH:mm:ss Z"
             maxDate : '=', //should be on format "YYYY-MM-DD HH:mm:ss Z"
             inputFieldId: '@',
-            updateWhen: '@'
+            updateWhen: '@',
+            tabIndex : '='
 		},
 		templateUrl: 'directive/common/datepickerInput/datepickerInput.html',
 		link: function(scope, element, attrs, ngModel) {
             //Add input name if name attribute exists
             var name = attrs.name;
-            
+
             if(name) {
                 element.find('input').attr('name', name);
                 element.removeAttr("name");
                 $compile(element)(scope);
             }
-            
+
             //Add a random id to the input element
             element.find('input').attr('id', scope.inputFieldId);
 
@@ -48,7 +49,7 @@ angular.module('unionvmsWeb').directive('datepickerInput', ['$compile',function(
 
 angular.module('unionvmsWeb')
     .controller('datepickerInputCtrl',['$scope', 'dateTimeService','globalSettingsService', function($scope, dateTimeService, globalSettingsService){
-        
+
         var iso8601Dates = globalSettingsService.getDateFormat() === 'YYYY-MM-DD HH:mm:ss';
 
         //Formats used by momentjs and the picker
@@ -116,7 +117,7 @@ angular.module('unionvmsWeb')
                 closeOnDateSelect: true,
                 dayOfWeekStart:1, //monday
             };
-            
+
     		$scope.updateWhen = angular.isDefined($scope.updateWhen) ? $scope.updateWhen : 'blur';
 
             //Set default date to current date/time in UTC
@@ -189,7 +190,7 @@ angular.module('unionvmsWeb')
 
             newDefaultDate = dateTimeService.formatAccordingToUserSettings(newDefaultDate);
             newMaxDate = dateTimeService.formatAccordingToUserSettings(maxDate);
-            if (newMaxDate !== undefined) {
+            if (newMaxDate) {
                 newMaxDate = newMaxDate.split(" ")[0];
             }
 
@@ -230,7 +231,7 @@ angular.module('unionvmsWeb')
 
             newDefaultDate = dateTimeService.formatAccordingToUserSettings(newDefaultDate);
             newMinDate = dateTimeService.formatAccordingToUserSettings(minDate);
-            if (newMinDate !== undefined) {
+            if (newMinDate) {
                 newMinDate = newMinDate.split(" ")[0];
             }
 
@@ -247,7 +248,7 @@ angular.module('unionvmsWeb')
             };
             updateOptions(newOptions);
         });
-        
+
         var cleanup = function(){
             //Remove the datepicker from the DOM
             jQuery("#" +$scope.datepickerId).remove();
@@ -379,7 +380,7 @@ angular.module('unionvmsWeb').directive('datePickerInputMinDate', ['dateTimeServ
 
             function updateValidity(date, minDate) {
                 var valid = true;
-                if(date !== undefined && minDate !== undefined && date.trim().length > 0 && minDate.trim().length > 0){
+                if(date && minDate && date.trim().length > 0 && minDate.trim().length > 0){
                     var dateMoment = moment.utc(date, scope.FORMATS.WITH_TIMEZONE.MOMENTJS);
                     var minDateMoment = moment.utc(minDate, scope.FORMATS.WITH_TIMEZONE.MOMENTJS);
                     valid = dateMoment.isAfter(minDateMoment);
@@ -410,7 +411,7 @@ angular.module('unionvmsWeb').directive('datePickerInputMaxDate',['dateTimeServi
 
             function updateValidity(date, maxDate) {
                 var valid = true;
-                if(date !== undefined && maxDate !== undefined && date.trim().length > 0 && maxDate.trim().length > 0){
+                if(date && maxDate && date.trim().length > 0 && maxDate.trim().length > 0){
                     var dateMoment = moment.utc(date, scope.FORMATS.WITH_TIMEZONE.MOMENTJS);
                     var maxDateMoment = moment.utc(maxDate, scope.FORMATS.WITH_TIMEZONE.MOMENTJS);
                     valid = dateMoment.isBefore(maxDateMoment);

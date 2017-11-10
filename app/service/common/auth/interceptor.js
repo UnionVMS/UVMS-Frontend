@@ -272,19 +272,21 @@ angular.module('auth.interceptor', ['ngStorage','ui.bootstrap'])
                             unauth = false;
                             _log.debug($state.current);
                             $modalStack.dismissAll();
-                            //$state.reload($state.current);
-                            //$state.go($state.current, {}, {reload: true});
+                            $state.reload($state.current);
+                            $state.go($state.current, {}, {reload: true});
                             if (rejection.config.headers[config.authHeader]) {
                                 rejection.config.headers[config.authHeader] = null;
                             }
                                 return $http(rejection.config);
                         }, function () {
-                            $log.log("retry request failed?");
-                            unauth = true;
-                            userService.logout();
-                            $modalStack.dismissAll();
-                            $rootScope.$broadcast('authenticationNeeded');
-                            return $q.reject(rejection);
+                            if (unauth) {
+                                $log.log("retry request failed?");
+                                unauth = true;
+                                userService.logout();
+                                $modalStack.dismissAll();
+                                $rootScope.$broadcast('authenticationNeeded');
+                                return $q.reject(rejection);
+                            }
                         });
                         }
                     };

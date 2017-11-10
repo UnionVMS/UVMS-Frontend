@@ -36,6 +36,9 @@ angular.module('unionvmsWeb')
 
     //Set form partial depending on modelType
     switch($scope.modeltype) {
+        case "SALES":
+            $scope.formPartial = 'directive/common/search/advancedSearch/sales/advancedSearchSalesForm.html';
+            break;
         case "VESSEL":
             $scope.formPartial = 'directive/common/search/advancedSearch/vessel/advancedSearchVesselForm.html';
             break;

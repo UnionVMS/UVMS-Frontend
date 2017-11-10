@@ -1,0 +1,79 @@
+<div class="row" loading-indicator="vm.isLoading" size="small" type="SPINNER">
+    <div st-table="vm.salesReports.items" st-pipe="vm.callServer" class="col-md-12">
+        <table class="searchResults colorOdd truncate-text">
+            <thead>
+                <tr>
+                    <th><span class="glyphicon glyphicon-time"></span></th>
+                    <th class="checkboxContainer"><input type="checkbox" ng-checked="vm.isAllChecked()"
+                                                         ng-click="vm.checkAllCallBack()"
+                                                         ng-disabled="!vm.salesReports.items.length"/></th>
+                    <th st-sort="FLAG_STATE">{{'sales.table_header_flag_state' | i18n}}</th>
+                    <th>{{'sales.table_header_external_marketing' | i18n}}</th>
+                    <th>{{'sales.table_header_ircs' | i18n}}</th>
+                    <th st-sort="VESSEL_NAME">{{'sales.table_header_name' | i18n}}</th>
+                    <th st-sort="SALES_DATE">{{'sales.table_header_sales_date' | i18n}}</th>
+                    <th st-sort="SALES_LOCATION">{{'sales.table_header_sales_location' | i18n}}</th>
+                    <th st-sort="LANDING_DATE">{{'sales.table_header_landing_date' | i18n}}</th>
+                    <th st-sort="LANDING_PORT">{{'sales.table_header_landing_port' | i18n}}</th>
+                    <th st-sort="CATEGORY">{{'sales.table_header_sales_type' | i18n}}</th>
+                    <th>{{'sales.table_header_provider' | i18n}}</th>
+                    <th>{{'sales.table_header_buyer_recipient' | i18n}}</th>
+                    <th>{{'sales.table_header_details' | i18n}}</th>
+                </tr>
+            </thead>
+
+            <tbody ng-repeat="item in vm.salesReports.items track by $index" class="striped" ng-class="{'strike-through': item.deletion}">
+                    <tr>
+                        <td><span class="glyphicon glyphicon-chevron-right" ng-show="item.olderVersions.length" ng-click="item.openDropdown = !item.openDropdown"></span></td>
+                        <td class="checkboxContainer"><input type="checkbox" ng-checked="vm.isNoteChecked(item)"
+                                                             ng-click="vm.checkItemCallBack(item)"/></td>
+
+                        <td ng-attr-title="{{item.flagState}}">{{item.flagState}}</td>
+                        <td ng-attr-title="{{item.externalMarking}}">{{item.externalMarking}}</td>
+                        <td ng-attr-title="{{item.ircs}}">{{item.ircs}}</td>
+                        <td ng-attr-title="{{item.vesselName}}">{{item.vesselName}}</td>
+                        <td ng-attr-title="{{item.occurrence}}">{{item.occurrence | date:"yyyy-MM-dd HH:mm"}}</td>
+                        <td ng-attr-title="{{item.location}}">{{item.location}}</td>
+                        <td ng-attr-title="{{item.landingDate}}">{{item.landingDate | date:"yyyy-MM-dd HH:mm"}}</td>
+                        <td ng-attr-title="{{item.landingPort}}">{{item.landingPort}}</td>
+                        <td ng-attr-title="{{'sales.sales_report_category_' + item.category | i18n}}">{{'sales.sales_report_category_' + item.category | i18n}}</td>
+                        <td ng-attr-title="{{item.provider}}">{{item.provider}}</td>
+                        <td ng-attr-title="{{vm.getBuyerOrRecipientTitle(item)}}">
+                            <span ng-if="item.recipient == 'N/A'">{{item.buyer}}</span>
+                            <span ng-if="item.recipient != 'N/A'">{{item.recipient}}</span>
+                        </td>
+                        <td>
+                            <button class="btn btn-default btn-sm" ng-click="vm.openSalesReport(item)">
+                                <i class="fa fa-eye"></i>
+                            </button>
+                        </td>
+                    </tr>
+                <tr ng-show="item.openDropdown" class="report-older-version" ng-repeat="correctedReport in item.olderVersions">
+                    <td></td>
+                    <td><span class="glyphicon glyphicon-share-alt"></span></td>
+                    <td ng-attr-title="{{correctedReport.flagState}}">{{correctedReport.flagState}}</td>
+                    <td ng-attr-title="{{correctedReport.externalMarking}}">{{correctedReport.externalMarking}}</td>
+                    <td ng-attr-title="{{correctedReport.ircs}}">{{correctedReport.ircs}}</td>
+                    <td ng-attr-title="{{correctedReport.vesselName}}">{{correctedReport.vesselName}}</td>
+                    <td ng-attr-title="{{correctedReport.occurrence}}">{{correctedReport.occurrence | date:"yyyy-MM-dd HH:mm"}}</td>
+                    <td ng-attr-title="{{correctedReport.location}}">{{correctedReport.location}}</td>
+                    <td ng-attr-title="{{correctedReport.landingDate}}">{{correctedReport.landingDate | date:"yyyy-MM-dd HH:mm"}}</td>
+                    <td ng-attr-title="{{correctedReport.landingPort}}">{{correctedReport.landingPort}}</td>
+                    <td ng-attr-title="{{correctedReport.category}}">{{correctedReport.category}}</td>
+                    <td ng-attr-title="{{correctedReport.provider}}">{{correctedReport.provider}}</td>
+                    <td ng-attr-title="{{vm.getBuyerOrRecipientTitle(correctedReport)}}">
+                        <span ng-if="correctedReport.recipient == 'N/A'">{{correctedReport.buyer}}</span>
+                        <span ng-if="correctedReport.recipient != 'N/A'">{{correctedReport.recipient}}</span>
+                    </td>
+                    <td>
+                        <button class="btn btn-default btn-sm" ng-click="vm.openSalesReport(correctedReport)">
+                            <i class="fa fa-eye"></i>
+                        </button>
+                    </td>
+                </tr>
+            </tbody>
+        </table>
+        <search-results-pagination page='vm.salesReports.page' total='vm.salesReports.totalNumberOfPages'
+                                   callback='vm.goToPage'></search-results-pagination>
+    </div>
+</div>

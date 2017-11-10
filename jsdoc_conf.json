@@ -4,7 +4,7 @@
     "node_modules/angular-jsdoc/common/plugins/ngdoc"
   ],
   "source": {
-	"exclude": ["app/service/common/auth"]
+	"exclude": ["app/service/common/auth", "node_modules"]
   },
   "templates": {
     "cleverLinks": true,

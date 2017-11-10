@@ -26,7 +26,7 @@
 									</tr>
 								</thead>
 								<tbody>
-									<tr ng-repeat="class in classColumnOrder" ng-class="{'selected-row': selectedClass === class}" ng-click="selectClass(class)" ng-if="selectedSpecieLocation.groupingDetails[class].weight">
+									<tr ng-repeat="class in classColumnOrder" ng-class="{'selected-row': selectedClass === class}" ng-click="selectClass(class)">
 										<td>{{'activity.' + class | lowercase | i18n}}</td>
 										<td>{{selectedSpecieLocation.groupingDetails[class].weight}}</td>
 										<td>{{selectedSpecieLocation.groupingDetails[class].unit}}</td>
@@ -49,7 +49,7 @@
 						<div class="row location-gear-container">
 							<div class="location-gear-content">
 								<location-tile class="col-md-6 stretch" field-title="{{'activity.location' | i18n}}" multiple="true" location-details="selectedSpecieLocation.groupingDetails[selectedClass].specifiedFluxLocations" ng-if="selectedSpecieLocation.groupingDetails[selectedClass].specifiedFluxLocations" is-clickable="isLocationClickable" click-callback="clickCallback()" buffer-dist="5000"></location-tile>
-								<carousel-tile class="col-md-6 summary-section" tile-title="{{'activity.header_fa_gear' | i18n}}" ng-model="selectedSpecieLocation.groupingDetails[selectedClass].gears" template-url="directive/activity/carouselTile/templates/gearTile/gearTile.html"></carousel-tile>
+								<carousel-tile class="col-md-6 summary-section" tile-title="{{'activity.header_fa_gear' | i18n}}" ng-model="selectedSpecieLocation.groupingDetails[selectedClass].gears" template-url="directive/activity/carouselTile/templates/gearTile/gearTile.html" no-data-msg-loc="activity.no_gears_reported"></carousel-tile>
 							</div>
 						</div>
 					</div>
@@ -61,7 +61,7 @@
 	</div>
 	<div class="row no-data" ng-switch-when="false">
 		<div class="col-md-12">
-			<span>{{'activity.no_data' | i18n}}</span>
+			<span>{{'activity.no_catches_reported' | i18n}}</span>
 		</div>
 	</div>
 </fieldset>

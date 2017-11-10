@@ -103,7 +103,12 @@ angular.module('unionvmsWeb').directive('catchTile', function(locale,reportingNa
                 calculateTotal: true
 		    }];
 
-
+			/**
+			 * Initializes the catch panel directive
+			 * 
+			 * @memberof catchTile
+			 * @private
+			 */
 			var init = function(){
 				//columns of the second table(classes)
 				scope.classColumnOrder = ['LSC', 'BMS'];
@@ -112,7 +117,7 @@ angular.module('unionvmsWeb').directive('catchTile', function(locale,reportingNa
 				scope.ngModel[0].selected = true;
 				scope.selectedSpecieLocation = scope.ngModel[0];
 
-				if(scope.ngModel[0].groupingDetails.LSC.weight){
+				if(angular.isDefined(scope.ngModel[0].groupingDetails.LSC) && scope.ngModel[0].groupingDetails.LSC.weight){
 					scope.selectedClass = 'LSC';
 				}else{
 					scope.selectedClass = 'BMS';

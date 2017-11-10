@@ -12,6 +12,7 @@
 	"menu_admin" : "Admin",
 	"menu_exchange" : "Exchange",
     "menu_polling": "Polling",
+    "menu_sales":  "Sales",
     "switch_context": "Switch context",
     "update_contact_details": "Update contact details",
     "change_password": "Change password",

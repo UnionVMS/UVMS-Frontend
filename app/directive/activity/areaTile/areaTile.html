@@ -11,9 +11,9 @@
             	<div class="sub-title">
             		<span>{{ 'activity.area_'+key | i18n }}</span>
             	</div>
-                <analog-clock class="analog-clock" clock-data="value.occurence"></analog-clock>
-                <div><span>{{value.occurence | stDateUtc}}</span></div>
-                <div ng-click="geometryClick(value)" class="lat-long" ng-class="{'is-clickable': isItemClickable(value.geometry)}" ng-if="value.geometry">
+                <analog-clock class="col-md-push-2 col-md-8 col-md-push-2" clock-data="value.occurence"></analog-clock>
+                <div class="col-md-12"><span>{{value.occurence | stDateUtc}}</span></div>
+                <div ng-click="geometryClick(value)" class="row lat-long" ng-class="{'is-clickable': isItemClickable(value.geometry)}" ng-if="value.geometry">
                     <div><span class="sub-title">{{ 'activity.area_long' | i18n }} : </span><span>{{value.long}}</span></div>
                     <div><span class="sub-title">{{ 'activity.area_lat' | i18n }} : </span><span>{{value.lat}}</span></div>
                 </div>

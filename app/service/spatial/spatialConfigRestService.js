@@ -18,8 +18,25 @@ angular.module('unionvmsWeb').factory('spatialConfigRestFactory', function($reso
                 }
             });
         },
+        getActivityAdminConfigs: function(){
+            return $resource('/activity/rest/config/admin', {}, {
+                'get': {
+                    method: 'GET'
+                }
+            });
+        },
         saveAdminConfigs: function(){
             return $resource('/spatial/rest/config/admin/save', {}, {
+                'save': {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    }
+                }
+            });
+        },
+        saveActivityAdminConfigs: function(){
+            return $resource('/activity/rest/config/admin', {}, {
                 'save': {
                     method: 'POST',
                     headers: {
@@ -128,8 +145,18 @@ angular.module('unionvmsWeb').factory('spatialConfigRestFactory', function($reso
 	            deferred.reject(error);
 	        });
 	        return deferred.promise;
-	    },
-	    saveAdminConfigs: function(configs){
+        },
+        getActivityAdminConfigs: function(){
+	        var deferred = $q.defer();
+	        spatialConfigRestFactory.getActivityAdminConfigs().get(function(response){
+	            deferred.resolve(response.data);
+	        }, function(error){
+	            console.error('Error getting activity admin configurations');
+	            deferred.reject(error);
+	        });
+	        return deferred.promise;
+        },
+        saveAdminConfigs: function(configs){
 	       var deferred = $q.defer();
 	       spatialConfigRestFactory.saveAdminConfigs().save(configs, function(response){
 	           deferred.resolve(response);
@@ -138,7 +165,17 @@ angular.module('unionvmsWeb').factory('spatialConfigRestFactory', function($reso
 	           deferred.reject(error);
 	       });
 	       return deferred.promise;
-	    },
+        },
+        saveActivityAdminConfigs: function(configs){
+            var deferred = $q.defer();
+            spatialConfigRestFactory.saveActivityAdminConfigs().save(configs, function(response){
+                deferred.resolve(response);
+            }, function(error){
+                console.error('Error saving activity admin configurations');
+                deferred.reject(error);
+            });
+            return deferred.promise;
+         },
 	    getUserConfigs: function(settingsType,configModel,form,isReportConfig,merge,callback){
             var deferred = $q.defer();
             spatialConfigRestFactory.getUserConfigs().get(function(response){

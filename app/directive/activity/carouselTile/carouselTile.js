@@ -19,7 +19,7 @@ copy of the GNU General Public License along with the IFDM Suite. If not, see <h
  * @description
  *  A reusable tile that will display a carousel with specified data and angular template
  */
-angular.module('unionvmsWeb').directive('carouselTile', function() {
+angular.module('unionvmsWeb').directive('carouselTile', function(locale) {
 	return {
 		restrict: 'E',
 		replace: false,
@@ -28,14 +28,21 @@ angular.module('unionvmsWeb').directive('carouselTile', function() {
 		    tileTitle: '@',
 		    ngModel: '=',
 		    templateUrl: '@',
-		    useTopNav: '='
+            useTopNav: '=',
+            noDataMsgLoc: '@'
 		},
 		templateUrl: 'directive/activity/carouselTile/carouselTile.html',
 		link: function(scope, element, attrs, fn) {
 		    scope.displayTopNav = true;
 		    if (angular.isDefined(scope.useTopNav) && !scope.useTopNav){
 		        scope.displayTopNav = false;
-		    }
+            }
+            
+            if(scope.noDataMsgLoc){
+                scope.noDataMsg = locale.getString(scope.noDataMsgLoc);
+            }else{
+                scope.noDataMsg = locale.getString('activity.no_data');
+            }
 		}
 	};
 })
