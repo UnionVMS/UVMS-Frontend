@@ -37,6 +37,16 @@ angular.module('unionvmsWeb').factory('activityRestFactory', function ($resource
                 }
             });
         },
+        getTripsList: function (data) {
+            return $resource('/activity/rest/fa/listTrips', {}, {
+                'get': {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    }
+                }
+            });
+        },
         getReportHistory: function () {
             return $resource('/activity/rest/fa/history/:referenceId/:schemeId', {}, {
                 'get': {
@@ -199,6 +209,26 @@ angular.module('unionvmsWeb').factory('activityRestFactory', function ($resource
                 deferred.resolve(response);
             }, function (error) {
                 console.log('Error getting list of activity reports');
+                deferred.reject(error);
+            });
+            return deferred.promise;
+        },
+        /**
+         * Get a list of trips according to search criteria
+         * 
+         * @memberof activityRestService
+         * @public
+         * @param {Object} data - The search criteria and table pagination data object
+         * @returns {Promise} A promise with either the list of trips or reject error
+         */
+        getTripsList: function (data) {
+            var deferred = $q.defer();
+            activityRestFactory.getTripsList().get(angular.toJson(data), function (response) {
+                response.data.resultList = angular.copy(response.data.fishingTripIdList) || [];
+                delete response.data.fishingTripIdList;
+                deferred.resolve(response.data);
+            }, function (error) {
+                console.log('Error getting list of trips');
                 deferred.reject(error);
             });
             return deferred.promise;
