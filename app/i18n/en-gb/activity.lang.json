@@ -300,7 +300,10 @@
     "fa_details_item_start_landing": "Start of landing",
     "fa_details_item_end_landing": "End of landing",
     "fa_details_item_currency": "Currency",
-
+    
+    "fa_navigator_history":"History",
+    "fa_navigator_history_previous":"Previous",
+    "fa_navigator_history_next":"Next",
     "catch_class_specie_column_location": "Location",
     "catch_class_specie_column_specie": "Specie",
     "catch_class_specie_column_lsc": "LSC",
