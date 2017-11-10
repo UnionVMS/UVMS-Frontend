@@ -770,6 +770,11 @@ angular.module('unionvmsWeb').factory('searchService',function($q, $log, searchU
                 }
             }
         },
+        hardResetAdvancedSearch : function(){
+            for (var item in advancedSearchObject){
+                delete advancedSearchObject[item];
+            }
+        }
 
 	};
 
