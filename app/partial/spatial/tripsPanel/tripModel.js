@@ -348,50 +348,54 @@ angular.module('unionvmsWeb').factory('Trip',function(locale,unitConversionServi
      */
     var loadVesselRoles = function(self,data){
 
-        var vesselAttrOrder = [
-            {
-                id: 'name',
-                type: 'string'
-            },
-            {
-                id: 'exMark',
-                type: 'string'
-            },
-            {
-                id: 'country',
-                type: 'string'
+        if(data){
+
+            var vesselAttrOrder = [
+                {
+                    id: 'name',
+                    type: 'string'
+                },
+                {
+                    id: 'exMark',
+                    type: 'string'
+                },
+                {
+                    id: 'country',
+                    type: 'string'
+                }
+            ];
+
+            var vessel = angular.copy(data);
+            delete vessel.contactPersons;
+            
+            vessel.vesselOverview = {};
+
+            var attrOrder = angular.copy(vesselAttrOrder);
+            var vesselIdx = attrOrder.length;
+
+            angular.forEach(vessel,function(prop,propName){
+                if(!_.isObject(prop)){
+                    vessel.vesselOverview[propName] = prop;
+                    delete vessel[propName];
+                }
+            });
+
+            if(angular.isDefined(vessel.vesselIds) && vessel.vesselIds.length){
+                _.extend(vessel.vesselOverview,addExtraDetails(vessel.vesselIds,attrOrder,vesselIdx));
             }
-        ];
 
-        var vessel = angular.copy(data);
-        delete vessel.contactPersons;
-        
-        vessel.vesselOverview = {};
+            self.tripVessel = {};
+            self.tripVessel.vesselOverview = vessel.vesselOverview;
 
-        var attrOrder = angular.copy(vesselAttrOrder);
-        var vesselIdx = attrOrder.length;
+            self.tripVessel.vesselOverview = fishingActivityService.loadFaDetails(self.tripVessel.vesselOverview, attrOrder);
 
-        angular.forEach(vessel,function(prop,propName){
-            if(!_.isObject(prop)){
-                vessel.vesselOverview[propName] = prop;
-                delete vessel[propName];
-            }
-        });
 
-        if(angular.isDefined(vessel.vesselIds) && vessel.vesselIds.length){
-            _.extend(vessel.vesselOverview,addExtraDetails(vessel.vesselIds,attrOrder,vesselIdx));
+            angular.forEach(data.contactPersons,function(value, key) {
+                value.type = value.title + ' ' + value.givenName + ' ' + value.middleName + ' ' + value.familyName;
+            });
+            self.tripRoles = data.contactPersons;
+
         }
-
-        self.tripVessel = {};
-        self.tripVessel.vesselOverview = vessel.vesselOverview;
-
-        self.tripVessel.vesselOverview = fishingActivityService.loadFaDetails(self.tripVessel.vesselOverview, attrOrder);
-
-
-        angular.forEach(data.contactPersons,function(value, key) {
-            value.type = value.title + ' ' + value.givenName + ' ' + value.middleName + ' ' + value.familyName;
-        });
-        self.tripRoles = data.contactPersons;
     };
 
     /**

@@ -214,13 +214,19 @@ angular.module('unionvmsWeb').controller('AdvancedsearchformCtrl',function($scop
         	    $scope.advancedSearchObject[key] = undefined;
         	}
         });
-        $scope.actServ.resetReportsListTableState();
-        $scope.actServ.resetReportsListSearchObject();
+        $scope.actServ.resetListTableStates();
+        $scope.actServ.resetListSearchObject();
         $scope.actServ.reportsList.isLoading = true;
+        $scope.actServ.tripsList.isLoading = true;
         $scope.actServ.getActivityList(function(){
             $scope.actServ.reportsList.fromForm = true;
             $scope.actServ.reportsList.stCtrl.pipe();
-        });
+        }, undefined, 'reportsList');
+
+        $scope.actServ.getActivityList(function(){
+            $scope.actServ.tripsList.fromForm = true;
+            $scope.actServ.tripsList.stCtrl.pipe();
+        }, undefined, 'tripsList');
     };
     
     /**
@@ -235,7 +241,7 @@ angular.module('unionvmsWeb').controller('AdvancedsearchformCtrl',function($scop
         if ($scope.activityAdvancedSearchForm.$valid){
             $scope.isFormValid = true;
             $scope.actServ.reportsList.isLoading = true;
-            $scope.actServ.resetReportsListTableState();
+            $scope.actServ.resetListTableStates();
             $scope.actServ.isTableLoaded = false;
             
             var keyMapper = {
@@ -294,7 +300,12 @@ angular.module('unionvmsWeb').controller('AdvancedsearchformCtrl',function($scop
             $scope.actServ.getActivityList(function(){
                 $scope.actServ.reportsList.fromForm = true;
                 $scope.actServ.reportsList.stCtrl.pipe();
-            });
+            }, undefined, 'reportsList');
+    
+            $scope.actServ.getActivityList(function(){
+                $scope.actServ.tripsList.fromForm = true;
+                $scope.actServ.tripsList.stCtrl.pipe();
+            }, undefined, 'tripsList');
         }
     };
     

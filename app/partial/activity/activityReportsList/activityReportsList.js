@@ -45,75 +45,11 @@ angular.module('unionvmsWeb').controller('ActivityreportslistCtrl',function($sco
          $scope.goToView(3);
          $stateParams.tripId = null;
     }
-    
-    /**
-     * Pipe function used in the smartTable in order to support server side pagination and sorting
-     * 
-     * @memberof ActivityreportslistCtrl
-     * @public
-     * @alias callServer
-     */
-    $scope.callServer = function(tableState, ctrl){
-        $scope.actServ.reportsList.stCtrl = ctrl;
-        $scope.actServ.reportsList.tableState = tableState;
-        
-        if (!$scope.actServ.reportsList.isLoading && angular.isDefined($scope.actServ.reportsList.searchObject.multipleCriteria) && !$scope.actServ.isTableLoaded){
-            $scope.actServ.reportsList.isLoading = true;
-            
-            var searchField, sortOrder; 
-            if (angular.isDefined(tableState.sort.predicate)){
-                searchField = getTruePredicate(tableState.sort.predicate);
-                sortOrder = tableState.sort.reverse;
-            }
-            
-            $scope.actServ.reportsList.sorting = {
-                sortBy: searchField,
-                reversed: sortOrder
-            };
-            
-            $scope.actServ.getActivityList(callServerCallback, tableState);
-        } else {
-            if (!angular.isDefined(tableState.pagination.numberOfPages) || $scope.actServ.reportsList.fromForm){
-                callServerCallback(tableState);
-                $scope.actServ.reportsList.fromForm = false;
-            } else {
-                $scope.actServ.isTableLoaded = false;
-                ctrl.pipe();
-            }
-        }
+
+    $scope.updateActivityList = function(tableState, ctrl){
+        $scope.callServer(tableState, ctrl, 'reportsList');
     };
-    
-    /**
-     * A callback function to set the correct number of pages in the smartTable. To be used with the callServer function.
-     * 
-     * @memberof ActivityreportslistCtrl
-     * @private
-     */
-    function callServerCallback (tableState){
-        tableState.pagination.numberOfPages = $scope.actServ.reportsList.pagination.totalPages;
-    }
-    
-    /**
-     * Get the proper match between client and server side attributes in order to properly set the field and order to request FA reports
-     * 
-     * @memberof ActivityreportslistCtrl
-     * @private
-     * @param {String} tablePredicate - The name of the attribute in the client side 
-     * @returns {String} The name of the attribute in the server side
-     */
-    function getTruePredicate(tablePredicate){
-        var predicateMapping = {
-            activityType: 'ACTIVITY_TYPE',
-            purposeCode: 'PURPOSE',
-            occurence: 'OCCURRENCE',
-            startDate: 'PERIOD_START',
-            endDate: 'PERIOD_END',
-            FAReportType: 'REPORT_TYPE',
-            dataSource: 'SOURCE'
-        };
-        
-        return predicateMapping[tablePredicate];
-    }
+
     
     /**
      * Open the history partial through the index of the table row record

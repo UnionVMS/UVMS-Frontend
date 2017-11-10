@@ -139,6 +139,75 @@ angular.module('unionvmsWeb').controller('ActivityCtrl', function ($scope, local
         $scope.tripSummServ.mapConfigs = angular.copy(genericMapService.mapBasicConfigs);
     };
 
+    /**
+     * Get the proper match between client and server side attributes in order to properly set the field and order to request FA reports
+     * 
+     * @memberof TripspanelCtrl
+     * @private
+     * @param {String} tablePredicate - The name of the attribute in the client side 
+     * @returns {String} The name of the attribute in the server side
+     */
+    function getTruePredicate(tablePredicate){
+        var predicateMapping = {
+            activityType: 'ACTIVITY_TYPE',
+            purposeCode: 'PURPOSE',
+            occurence: 'OCCURRENCE',
+            startDate: 'PERIOD_START',
+            endDate: 'PERIOD_END',
+            FAReportType: 'REPORT_TYPE',
+            dataSource: 'SOURCE'
+        };
+        
+        return predicateMapping[tablePredicate];
+    }
+
+    /**
+     * A callback function to set the correct number of pages in the smartTable. To be used with the callServer function.
+     * 
+     * @memberof TripspanelCtrl
+     * @private
+     */
+    function callServerCallback (tableState, listName){
+        tableState.pagination.numberOfPages = $scope.actServ[listName].pagination.totalPages;
+    }
+
+    /**
+     * Pipe function used in the smartTable in order to support server side pagination and sorting
+     * 
+     * @memberof TripspanelCtrl
+     * @public
+     * @alias callServer
+     */
+    $scope.callServer = function(tableState, ctrl, listName){
+        $scope.actServ[listName].stCtrl = ctrl;
+        $scope.actServ[listName].tableState = tableState;
+        
+        if (!$scope.actServ[listName].isLoading && angular.isDefined($scope.actServ[listName].searchObject.multipleCriteria) && !$scope.actServ.isTableLoaded){
+            $scope.actServ[listName].isLoading = true;
+            
+            var searchField, sortOrder; 
+            if (angular.isDefined(tableState.sort.predicate)){
+                searchField = getTruePredicate(tableState.sort.predicate);
+                sortOrder = tableState.sort.reverse;
+            }
+            
+            $scope.actServ[listName].sorting = {
+                sortBy: searchField,
+                reversed: sortOrder
+            };
+            
+            $scope.actServ.getActivityList(callServerCallback, tableState, listName);
+        } else {
+            if (!angular.isDefined(tableState.pagination.numberOfPages) || $scope.actServ[listName].fromForm){
+                callServerCallback(tableState, listName);
+                $scope.actServ[listName].fromForm = false;
+            } else {
+                $scope.actServ.isTableLoaded = false;
+                ctrl.pipe();
+            }
+        }
+    };
+
     genericMapService.setMapBasicConfigs(setTripSumServiceMapConfigs);
       // function of trip summary service to open new trip
       $scope.tripSummServ.initializeTrip = function (tripId) {

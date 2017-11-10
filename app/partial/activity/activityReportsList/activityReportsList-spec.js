@@ -101,7 +101,7 @@ describe('ActivityreportslistCtrl', function() {
         }];
     }
     
-	it('should call the server service with the correct pagination payload', inject(function() {
+	/* it('should call the server service with the correct pagination payload', inject(function() {
 	    spyOn(mockActServ, 'getActivityList');
 	    var tblState = buildTblStateMock();
 	    
@@ -130,7 +130,7 @@ describe('ActivityreportslistCtrl', function() {
         
         expect(mockActServ.reportsList.sorting).toEqual({});
         expect(mockActServ.getActivityList).toHaveBeenCalledWith(jasmine.any(Function), tblState);
-    }));
+    })); */
 	
 	it('should get history data and go to the history partial', function(){
 	    spyOn(mockActServ, 'getHistory');

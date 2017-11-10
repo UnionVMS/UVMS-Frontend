@@ -1,11 +1,11 @@
 <div class="col-md-12" ng-controller="TripreportslistCtrl">
-  <div st-table="displayedTrips" st-safe-src="executedReport" st-set-filter="stFieldSearchGeoJson">
+  <div st-table="actServ.displayedTrips" st-safe-src="actServ.trips" st-pipe="updateTripsList">
 			<div class="table-responsive-force">
 				<table class="table table-striped table-condensed">
 					<thead>
 						<tr class="row">
 							<th lr-drag-src="headers" lr-drop-target="headers" ng-repeat="column in attrVisibility.tripsColumns" ng-show="attrVisibility.trips[column]" lr-drop-success="dropSuccess(e, item, collection)">
-								<div st-sort="tripIdSort" st-skip-natural="true" st-class-ascent="sorting_asc" st-class-descent="sorting_desc" ng-if="column === 'tripId'">{{'activity.tab_trip_table_header_id' | i18n }}</div>
+								<div st-sort="tripIdSort" st-skip-natural="true" st-sort-default="reverse" st-class-ascent="sorting_asc" st-class-descent="sorting_desc" ng-if="column === 'tripId'">{{'activity.tab_trip_table_header_id' | i18n }}</div>
 								<div st-sort="flagState" st-skip-natural="true" st-class-ascent="sorting_asc" st-class-descent="sorting_desc" ng-if="column === 'fs'">{{'spatial.tab_vms_pos_table_header_fs' | i18n }}</div>
 								<div st-sort="EXT_MARK" st-skip-natural="true" st-class-ascent="sorting_asc" st-class-descent="sorting_desc" ng-if="column === 'extMark'">{{'spatial.reports_form_vessel_search_table_header_external_marking' | i18n }}</div>
 								<div st-sort="IRCS" st-skip-natural="true" st-class-ascent="sorting_asc" st-class-descent="sorting_desc" ng-if="column === 'ircs'">{{'spatial.reports_form_vessel_search_table_header_ircs' | i18n }}</div>
@@ -26,7 +26,7 @@
 						</tr>
 					</thead>
 					<tbody>
-						<tr ng-repeat="trip in displayedTrips" class="row">
+						<tr ng-repeat="trip in actServ.displayedTrips" class="row">
 							<td ng-repeat="column in attrVisibility.tripsColumns" ng-show="attrVisibility.trips[column]">
 								<div ng-show="attrVisibility.trips.tripId" ng-if="column === 'tripId'">{{ trip.schemeId}}:{{ trip.tripId }}</div>
 								<div ng-show="attrVisibility.trips.fs" ng-if="column === 'fs'">{{ trip.flagState}}</div>
