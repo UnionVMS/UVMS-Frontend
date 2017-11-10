@@ -35,6 +35,7 @@ angular.module('unionvmsWeb').factory('FishingActivity',function(mdrCacheService
         this.gears = undefined;
         this.reportDetails = undefined;
         this.catches = undefined;
+        this.history = undefined;
     }
     
     /**

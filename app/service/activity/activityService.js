@@ -442,7 +442,7 @@ angular.module('unionvmsWeb').factory('activityService',function(locale, activit
         //TODO deal with error from service
         });
         return comboList;
-    }
+    };
 
 	return actServ;
 });
