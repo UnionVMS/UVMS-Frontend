@@ -27,7 +27,7 @@ angular.module('unionvmsWeb').directive('messageStatus', function(locale, $modal
 		               size: 'lg',
 		               resolve: {
 		                   msgGuid: function(){
-		                       return scope.ngModel.logData.guid;
+		                       return scope.ngModel.logData[0].guid;
 		                   }
 		               }
 		            });
@@ -46,7 +46,8 @@ angular.module('unionvmsWeb').directive('messageStatus', function(locale, $modal
 		        var cssClass;
 		        switch(status){
 		            case 'SUCCESSFUL' :
-		            case 'OK':
+					case 'OK':
+					case 'SENT':
 		                cssClass = "label-success";
 		                break;
 		            case 'ERROR' :

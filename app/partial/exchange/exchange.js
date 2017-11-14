@@ -18,6 +18,7 @@ angular.module('unionvmsWeb').controller('ExchangeCtrl',function($scope, $log, $
 
     $scope.exchangeLogsSearchResults = new SearchResults('dateReceived', true);
     $scope.exchangeLogsSearchResults.incomingOutgoing = 'all';
+    $scope.exchangeLogsSearchResults.loading = true;
     
     $scope.checkedStatus = false;
 
@@ -172,6 +173,18 @@ angular.module('unionvmsWeb').controller('ExchangeCtrl',function($scope, $log, $
         $scope.newExchangeLogCount = 0;
         searchService.searchExchange().then(function(page) {
             $scope.exchangeLogsSearchResults.updateWithNewResults(page);
+            var btnActionOrder = ['FA_QUERY', 'FA_RESPONSE', 'FA_REPORT'];
+            
+            angular.forEach($scope.exchangeLogsSearchResults.items, function(item){
+                if(item.logData && item.logData.length){
+                    var sortedLogData = [];
+                    angular.forEach(btnActionOrder, function(action){
+                        sortedLogData = sortedLogData.concat(_.where(item.logData, {type: action}));
+                    });
+                    item.logData = sortedLogData;
+                }
+            });
+            
             $scope.displayedMessages = [].concat($scope.exchangeLogsSearchResults.items);
             $scope.exchangeLogsSearchResults.loading = false;
         },
@@ -433,6 +446,58 @@ angular.module('unionvmsWeb').controller('ExchangeCtrl',function($scope, $log, $
         }
         $scope.sendQueuedMessages(sendingQueuesIds);
     };
+
+    $scope.getLogItem = function(log){
+        if(log.type === 'FA_QUERY'){
+            exchangeRestService.getRawExchangeMessage(log.guid).then(
+                function(data){
+                    $scope.openXmlModal(data);
+                },
+                function(error){
+                    $log.error("Error getting the raw message.");
+                });
+        }else{
+            exchangeRestService.getLogItem(log.guid).then(
+                function(data){
+                    $scope.isLinkActive = true;
+                    $scope.previousList = angular.copy($scope.exchangeLogsSearchResults.items);
+                    delete data.logData;
+                    $scope.exchangeLogsSearchResults.items = [data];
+                    $scope.displayedMessages = [].concat($scope.exchangeLogsSearchResults.items);
+                },
+                function(error){
+                    $log.error("Error getting the log item.");
+                });
+        }
+    };
+
+    $scope.goBackToList = function(){
+        delete $scope.isLinkActive;
+        $scope.exchangeLogsSearchResults.items = angular.copy($scope.previousList);
+        delete $scope.previousList;
+        $scope.displayedMessages = [].concat($scope.exchangeLogsSearchResults.items);
+    };
+
+    /**
+     * Pipe function used in the smartTable in order to support server side pagination and sorting
+     * 
+     * @memberof ActivityreportslistCtrl
+     * @public
+     * @alias callServer
+     */
+    $scope.callServer = function(tableState, ctrl){
+        if(!$scope.exchangeLogsSearchResults.loading){
+            var sorting = {
+                sortBy: tableState.sort.predicate,
+                reversed: tableState.sort.reverse
+            };
+            searchService.setPage(1);
+            searchService.setSorting(sorting);
+            $scope.searchExchange();
+            ctrl.pipe();
+        }
+    };
+
     $scope.messageVisible = false; //TODO check this
     
     //Fire the filter function for incoming/outgoing/all messages to update smartable
