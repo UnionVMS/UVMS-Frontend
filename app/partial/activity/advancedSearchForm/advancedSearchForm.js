@@ -66,8 +66,8 @@ angular.module('unionvmsWeb').controller('AdvancedsearchformCtrl',function($scop
         species: undefined,
         master: undefined,
         minWeight: undefined,
-        maxWeight: undefined
-      //  tripId: undefined
+        maxWeight: undefined,
+        tripId: undefined
     };
     
     /**
@@ -266,8 +266,8 @@ angular.module('unionvmsWeb').controller('AdvancedsearchformCtrl',function($scop
                 minWeight: 'QUANTITY_MIN',
                 maxWeight: 'QUANTITY_MAX',
                 comChannel: 'SOURCE',
-                activityType: 'ACTIVITY_TYPE'
-               // tripID: 'TRIP_ID'
+                activityType: 'ACTIVITY_TYPE',
+                tripId: 'TRIP_ID'
             };
             
             //FIXME this is to be used in the future when we start having multiple criteria selection in the form

@@ -1,6 +1,6 @@
-<div class="col-md-12" ng-controller="TripactivitydetailsCtrl" class="trip-activity-details">
-    <loading-panel class="activity-fa-loading" type="FishingActivity"></loading-panel>
-    <div>
+<div class="col-md-12 trip-activity-details" ng-controller="TripactivitydetailsCtrl">
+    <div class="row">
+        <loading-panel class="activity-fa-loading" type="FishingActivity"></loading-panel>
         <div ng-if="faServ.activityType === 'FISHING_OPERATION'">
             <fishing-activity-navigator partial="partial/activity/fishingOperationPanel/fishingOperationPanel.html" tab-type="activity"></fishing-activity-navigator>
         </div>
