@@ -10,6 +10,40 @@ FITNESS FOR A PARTICULAR PURPOSE.  See the GNU General Public License for more d
 copy of the GNU General Public License along with the IFDM Suite. If not, see <http://www.gnu.org/licenses/>.
 */
 .activityReportsList {
+    .buttonSection {
+        display: table;
+        margin-top: 10px;
+        margin-bottom: 20px;
+        .dropdown-menu {
+            width: 300px;
+            max-width: 300px;
+            .row {
+                margin-right: 15px;
+                margin-left: 15px;
+                .checkbox {
+                    margin-top: 5px;
+                    margin-bottom: 5px;
+                }
+            }
+        }
+        .btn-left {
+            display: table-cell;
+            text-align: left;
+            button {
+                padding: 5px;
+                span {
+                    margin-left: 5px;
+                }
+            }
+        }
+        .btn-right {
+            display: table-cell;
+            text-align: right;
+            button {
+                text-transform: uppercase;
+            }
+        }
+    }
     .table-responsive-force {
         width: 100%;
         overflow-y: hidden;

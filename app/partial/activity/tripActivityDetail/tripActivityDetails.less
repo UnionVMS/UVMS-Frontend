@@ -9,17 +9,24 @@ the hope that it will be useful, but WITHOUT ANY WARRANTY; without even the impl
 FITNESS FOR A PARTICULAR PURPOSE.  See the GNU General Public License for more details. You should have received a
 copy of the GNU General Public License along with the IFDM Suite. If not, see <http://www.gnu.org/licenses/>.
 */
-/**
- * @memberof unionvmsWeb
- * @ngdoc controller
- * @name TripsummaryCtrl
- * @param $scope {Service} controller scope
- * @param tripSummaryService {Service} the trip summary service <p>{@link unionvmsWeb.tripSummaryService}</p>
- * @description
- *  The controller for the trip summary tab  
- */
-angular.module('unionvmsWeb').controller('TripsummaryCtrl', function ($scope, tripSummaryService, breadcrumbService) {
-    $scope.tripSummServ = tripSummaryService;
-    $scope.breadcrumbServ = breadcrumbService;
-    $scope.activityTrip=$scope.srcTab === 'activity'?'activity':'';
-});
+.trip-activity-details {
+    .activity-fa-loading {
+        margin: -16px 0;
+    }
+    .fishingActivityNavigator {
+        .activity-slider {
+            &.slider-right {
+                right: 0;
+            }
+            &.slider-left {
+                left: 0;
+            }
+        }
+        .btn-print {
+            top: 12px;
+            right: 15px;
+            position: absolute;
+            font-size: 18px;
+        }
+    }
+}

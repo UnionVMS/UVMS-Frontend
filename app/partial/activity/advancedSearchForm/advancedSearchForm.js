@@ -27,7 +27,7 @@ copy of the GNU General Public License along with the IFDM Suite. If not, see <h
  * @description
  *  The controller for the advanced search form of the activity tab table  
  */
-angular.module('unionvmsWeb').controller('AdvancedsearchformCtrl',function($scope, activityService, unitConversionService, mdrCacheService, vesselRestService, userService, locale, visibilityService){
+angular.module('unionvmsWeb').controller('AdvancedsearchformCtrl',function($scope, activityService, unitConversionService, $stateParams, mdrCacheService, vesselRestService, userService, locale, visibilityService){
     $scope.actServ = activityService;
     $scope.visServ = visibilityService;
     $scope.isFormVisible = true;
@@ -66,7 +66,8 @@ angular.module('unionvmsWeb').controller('AdvancedsearchformCtrl',function($scop
         species: undefined,
         master: undefined,
         minWeight: undefined,
-        maxWeight: undefined
+        maxWeight: undefined,
+        tripId: undefined
     };
     
     /**
@@ -108,6 +109,12 @@ angular.module('unionvmsWeb').controller('AdvancedsearchformCtrl',function($scop
                      'PURPOSE': $scope.advancedSearchObject.purposeCode
                  }
              };
+
+             $scope.actServ.tripsList.searchObject = {
+                multipleCriteria: {
+                    'PURPOSE': $scope.advancedSearchObject.purposeCode
+                }
+            };
              
              $scope.codeLists.purposeCodes = list;
              $scope.actServ.isGettingMdrCodes = false;
@@ -212,13 +219,19 @@ angular.module('unionvmsWeb').controller('AdvancedsearchformCtrl',function($scop
         	    $scope.advancedSearchObject[key] = undefined;
         	}
         });
-        $scope.actServ.resetReportsListTableState();
-        $scope.actServ.resetReportsListSearchObject();
+        $scope.actServ.resetListTableStates();
+        $scope.actServ.resetListSearchObject();
         $scope.actServ.reportsList.isLoading = true;
+        $scope.actServ.tripsList.isLoading = true;
         $scope.actServ.getActivityList(function(){
             $scope.actServ.reportsList.fromForm = true;
             $scope.actServ.reportsList.stCtrl.pipe();
-        });
+        }, undefined, 'reportsList');
+
+        $scope.actServ.getActivityList(function(){
+            $scope.actServ.tripsList.fromForm = true;
+            $scope.actServ.tripsList.stCtrl.pipe();
+        }, undefined, 'tripsList');
     };
     
     /**
@@ -233,7 +246,8 @@ angular.module('unionvmsWeb').controller('AdvancedsearchformCtrl',function($scop
         if ($scope.activityAdvancedSearchForm.$valid){
             $scope.isFormValid = true;
             $scope.actServ.reportsList.isLoading = true;
-            $scope.actServ.resetReportsListTableState();
+            $scope.actServ.tripsList.isLoading = true;
+            $scope.actServ.resetListTableStates();
             $scope.actServ.isTableLoaded = false;
             
             var keyMapper = {
@@ -252,7 +266,8 @@ angular.module('unionvmsWeb').controller('AdvancedsearchformCtrl',function($scop
                 minWeight: 'QUANTITY_MIN',
                 maxWeight: 'QUANTITY_MAX',
                 comChannel: 'SOURCE',
-                activityType: 'ACTIVITY_TYPE'
+                activityType: 'ACTIVITY_TYPE',
+                tripId: 'TRIP_ID'
             };
             
             //FIXME this is to be used in the future when we start having multiple criteria selection in the form
@@ -287,11 +302,21 @@ angular.module('unionvmsWeb').controller('AdvancedsearchformCtrl',function($scop
                 simpleCriteria: formatedSearch,
                 multipleCriteria: multipleFormatedSearch
             };
+
+            $scope.actServ.tripsList.searchObject = {
+                simpleCriteria: formatedSearch,
+                multipleCriteria: multipleFormatedSearch
+            };
             
             $scope.actServ.getActivityList(function(){
                 $scope.actServ.reportsList.fromForm = true;
                 $scope.actServ.reportsList.stCtrl.pipe();
-            });
+            }, undefined, 'reportsList');
+    
+            $scope.actServ.getActivityList(function(){
+                $scope.actServ.tripsList.fromForm = true;
+                $scope.actServ.tripsList.stCtrl.pipe();
+            }, undefined, 'tripsList');
         }
     };
     
@@ -303,10 +328,10 @@ angular.module('unionvmsWeb').controller('AdvancedsearchformCtrl',function($scop
      * @alias updateVisibilityCache
      * @param {String} column - the column name property to be updated
      */
-    $scope.updateVisibilityCache = function(column){
+   /* $scope.updateVisibilityCache = function(column){
         $scope.visServ.updateStorage(column);
     };
-    
+    */
     /**
      * Get the data for all comboboxes used in the the advanced search form
      * 
@@ -372,6 +397,11 @@ angular.module('unionvmsWeb').controller('AdvancedsearchformCtrl',function($scop
      */
     function init(){
         getComboboxData();
+         if (_.keys($stateParams).length > 0 && $stateParams.tripId !== null){
+           $scope.advancedSearchObject = {
+            tripId: $stateParams.tripId
+          };
+        }
     }
 
     init();

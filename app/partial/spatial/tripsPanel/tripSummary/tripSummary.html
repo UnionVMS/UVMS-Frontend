@@ -10,7 +10,7 @@ FITNESS FOR A PARTICULAR PURPOSE.  See the GNU General Public License for more d
 copy of the GNU General Public License along with the IFDM Suite. If not, see <http://www.gnu.org/licenses/>.
 -->
 <div class="trip-summary" ng-controller="TripsummaryCtrl">
-    <a class="btn-trip-quit" title="{{'activity.trip_summary_quit_trip_detail' | i18n }}" ng-click="navigateBack()"><i class="fa fa-share-square-o"></i></a>
+    <a class="btn-trip-quit" title="{{'activity.trip_summary_quit_trip_detail' | i18n }}" ng-click="navigateBack()" ng-if="srcTab === 'reports'"><i class="fa fa-share-square-o"></i></a>
     <a class="btn-print" title="{{'activity.trip_summary_export_trip' | i18n }}" ng-click="printView('tripSummary')"><i class="fa fa-print"></i></a>
     <div class="row activity-summary-row summary-first-row">
         <fishing-trip-panel class="col-md-4 summary-section" trip="trip"></fishing-trip-panel>
@@ -22,15 +22,15 @@ copy of the GNU General Public License along with the IFDM Suite. If not, see <h
         <map-tile class="col-md-4 summary-section" tile-title="{{'activity.trip_summary_trip_map' | i18n }}" map-data="tripSummServ.trip.mapData" map-height="245"></map-tile>
         <catch-panel class="col-md-8 summary-section" ng-model="trip.catchDetails" with-table="true" is-loading="loadingStatus.isLoading('TripSummary')"
         title="{{'activity.trip_summary_catch'|i18n}}" height="220" unit="kg"></catch-panel>
-        <a class="btn-detail-form" title="{{'activity.catch_panel_see_catch_details' | i18n }}" ng-click="repNav.goToView('tripsPanel','catchDetails')">
+        <a class="btn-detail-form" title="{{'activity.catch_panel_see_catch_details' | i18n }}" ng-click="srcTab=='activity'?breadcrumbServ.goToItem(4):repNav.goToView('tripsPanel','catchDetails')">
             <i class="fa fa-table"></i>
         </a>
-        <a class="btn-trip-evolution" title="{{'activity.catch_panel_see_trip_evolution' | i18n }}" ng-click="repNav.goToView('tripsPanel','catchEvolution')">
+        <a class="btn-trip-evolution" title="{{'activity.catch_panel_see_trip_evolution' | i18n }}" ng-click="srcTab=='activity'?breadcrumbServ.goToItem(6):repNav.goToView('tripsPanel','catchEvolution')">
             <i class="fa fa-line-chart"></i>
         </a>
     </div>
     <div class="row activity-summary-row">
-        <trip-reports-panel class="col-md-12 summary-section" trip="trip" trip-alert="alert"></trip-reports-panel>
+        <trip-reports-panel class="col-md-12 summary-section" trip="trip" trip-alert="alert" activity-trip="activityTrip"></trip-reports-panel>
     </div>
 </div>
 
