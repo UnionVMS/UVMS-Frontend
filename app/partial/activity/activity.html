@@ -22,7 +22,7 @@ copy of the GNU General Public License along with the IFDM Suite. If not, see <h
 			<div class="row card-body">
 				<div class= "col-md-12">
 				<ul class=" nav nav-tabs top-tabs" role="tablist" ng-if="isPartialVisible(0)">
-					<li ng-repeat="tab in activityTabMenu" ng-show="isTabVisible('{{tab.tab}}')" class="vmssourcetab" ng-click="selectTab(tab.tab)"
+					<li ng-repeat="tab in activityTabMenu" ng-show="isTabVisible('{{tab.tab}}')" ng-click="selectTab(tab.tab)"
 						ng-class="{'active': selectedTab === '{{tab.tab}}'}"><a>{{tab.title}}</a></li>
 				</ul>
 				</div>
