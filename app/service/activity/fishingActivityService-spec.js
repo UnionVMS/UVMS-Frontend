@@ -549,7 +549,7 @@ describe('fishingActivityService', function() {
                     idx: 6,
                     label: '',
                     value: 'c0bd3ec3-b178-5951-9853-7e13bb76b607',
-                    clickable: true,
+                    clickable: undefined,
                     id: 'refId'
                 }, {
                     idx: 2,
