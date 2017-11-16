@@ -416,7 +416,7 @@ angular.module('unionvmsWeb').factory('fishingActivityService', function(activit
                         for (var i = 0; i < faCatch.groupingDetails[keys[j]].gears.length; i++){
                             var mdrRec = _.findWhere(response, { code:  faCatch.groupingDetails[keys[j]].gears[i].type});
                             if (angular.isDefined(mdrRec)) {
-                                faCatch.groupingDetails[keys[j]].gears[i].type = faCatch.groupingDetails[keys[j]].gears[i].type + ' - ' + mdrRec.description.replace('- ', '');
+                                faCatch.groupingDetails[keys[j]].gears[i].description = mdrRec.description.replace('- ', '');
                             }
                         }
                     }
