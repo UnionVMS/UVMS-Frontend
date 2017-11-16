@@ -45,7 +45,7 @@ angular.module('unionvmsWeb').factory('tripSummaryService',function($timeout, lo
      */
     tripSummaryService.openNewTrip = function(tripId, fromPopup){
         if (angular.isDefined(fromPopup) && fromPopup){
-            this.initializeTrip(tripId);
+            this.initializeTrip(tripId, true);
         } else {
             var self = this;
 

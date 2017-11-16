@@ -215,7 +215,6 @@ angular.module('unionvmsWeb').controller('ActivityCtrl', function ($scope, local
         if (angular.isDefined(tripId)) {
             $scope.tripSummServ.trip = new Trip(tripId);
             $scope.trip = $scope.tripSummServ.trip;
-
             $scope.tripSummServ.initTripSummary();
         }
     };

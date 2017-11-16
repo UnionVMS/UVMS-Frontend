@@ -25,10 +25,10 @@ copy of the GNU General Public License along with the IFDM Suite. If not, see <h
         <div class="row activity-summary-row">
             <fa-details-panel class="col-md-3 summary-section" ng-model="faServ.activityData.activityDetails"></fa-details-panel>
             <location-tile class="col-md-2 summary-section" is-clickable="faServ.isLocationClickable()" field-title="{{'activity.location' | i18n}}" location-details="faServ.activityData.locations" click-callback="faServ.locationClickCallback()"></location-tile>
-			<carousel-tile class="col-md-3 summary-section" tile-title="{{'activity.header_fa_gear' | i18n}}" ng-model="faServ.activityData.gears" template-url="directive/activity/carouselTile/templates/gearTile/gearTile.html" no-data-msg-loc="activity.no_gears_reported"></carousel-tile>
-            <fa-details-panel class="col-md-4 summary-section" ng-model="faServ.activityData.reportDetails"></fa-details-panel>
+			<!-- <carousel-tile class="col-md-3 summary-section" tile-title="{{'activity.header_fa_gear' | i18n}}" ng-model="faServ.activityData.gears" template-url="directive/activity/carouselTile/templates/gearTile/gearTile.html" no-data-msg-loc="activity.no_gears_reported"></carousel-tile>
+            <fa-details-panel class="col-md-4 summary-section" ng-model="faServ.activityData.reportDetails"></fa-details-panel> -->
         </div>
-        <div class="row activity-summary-row">
+        <!-- <div class="row activity-summary-row">
             <catch-tile class="col-md-12 summary-section" ng-model="faServ.activityData.catches" tile-title="{{'activity.catch_details_catches_table' | i18n}}" is-location-clickable="faServ.isLocationClickable()" buffer-distance="5000" click-callback="faServ.locationClickCallback()"></catch-tile>
         </div>
         <div class="row activity-summary-row" ng-if="faServ.activityData.processingProducts && faServ.activityData.processingProducts.length > 0">
@@ -36,6 +36,6 @@ copy of the GNU General Public License along with the IFDM Suite. If not, see <h
 		</div>
         <div class="row activity-summary-row" ng-if="faServ.activityData.gearShotRetrieval && faServ.activityData.gearShotRetrieval.length > 0">
 			<gear-shot-retrieval-tile class="col-md-12 summary-section" src-data="faServ.activityData.gearShotRetrieval" tile-title="{{'activity.gear_shot_and_retrieval' | i18n}}"></gear-shot-retrieval-tile>
-		</div>
+		</div> -->
     </div>
 </div>

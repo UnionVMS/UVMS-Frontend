@@ -63,13 +63,21 @@ angular.module('unionvmsWeb').controller('TripspanelCtrl', function ($scope, gen
      * @public
      * @alias initializeTrip
      * @param {String} tripId - The trip id
+     * @param {Boolean} fromPopup - If the initialization is started from the map popup
      */
-    $scope.tripSummServ.initializeTrip = function (tripId) {
+    $scope.tripSummServ.initializeTrip = function (tripId, fromPopup) {
+        var isPopup = false;
+        if (angular.isDefined(fromPopup)){
+            isPopup = fromPopup;
+        }
+        
         if (angular.isDefined(tripId)) {
             $scope.tripSummServ.trip = new Trip(tripId);
             $scope.trip = $scope.tripSummServ.trip;
-
-            $scope.tripSummServ.initTripSummary();
+            
+            if (isPopup === false){
+                $scope.tripSummServ.initTripSummary();
+            }
         }
     };
 

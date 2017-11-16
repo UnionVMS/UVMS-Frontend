@@ -118,9 +118,18 @@ angular.module('unionvmsWeb').directive('locationTile', function() {
             $scope.addresses = _.flatten($scope.addresses);
         }
         
+        var globalGeom;
+        if (angular.isDefined($scope.locationDetails.srcActivityGeom)){
+            globalGeom = $scope.locationDetails.srcActivityGeom;
+        }
+        
         if (angular.isDefined($scope.srcActivityGeom)){
+            globalGeom = $scope.srcActivityGeom;
+        }
+        
+        if (angular.isDefined(globalGeom)){
             $scope.activityGeom = {
-                geometry: $scope.srcActivityGeom
+                geometry: globalGeom
             };
         }
     }
