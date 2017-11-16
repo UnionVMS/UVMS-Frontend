@@ -393,6 +393,10 @@
 
     "trip_transhipmentTime": "Transhipment time",
     "receiver_vessel": "Receiver vessel",
+    "donor_vessel": "Donor vessel",
+    "pair_fishing_vessel": "Pair fishing vessel",
+    "participating_vessel": "Participating vessel",
+    "catching_vessel": "Catching vessel",
     "species": "Species",
     "columns": "Columns",
     "joint_fishing_vessel": "Joint fishing vessel",

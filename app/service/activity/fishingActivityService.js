@@ -70,7 +70,8 @@ angular.module('unionvmsWeb').factory('fishingActivityService', function(activit
             'gears',
             'catches',
             'processingProducts',
-            'gearShotRetrieval'
+            'gearShotRetrieval',
+            'vesselDetails',
         ],
         discard: [
             'locations',
