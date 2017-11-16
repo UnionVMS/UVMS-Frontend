@@ -16,6 +16,7 @@ copy of the GNU General Public License along with the IFDM Suite. If not, see <h
  * @param $scope {Service} controller scope
  * @param activityService {Service} The activity service
  * @param visibilityService {Service} The visibility service <p>{@link unionvmsWeb.visibilityService}</p>
+ * @param fishingActivityService {Service} The fishing activity service <p>{@link unionvmsWeb.fishingActivityService}</p>
  * @attr {Array} displayedActivities - The array of displayed activities used by smart tables
  * @description
  *  The controller for the fisihing activity reports table list
@@ -91,6 +92,7 @@ angular.module('unionvmsWeb').controller('ActivityreportslistCtrl',function($sco
         $scope.actServ.overview = $scope.actServ.displayedActivities[idx]; //TODO check if we need this
         $scope.faServ.id = $scope.actServ.displayedActivities[idx].fishingActivityId;
         $scope.faServ.activityType = $scope.actServ.displayedActivities[idx].activityType.toLowerCase();
+        $scope.faServ.isCorrection = $scope.actServ.displayedActivities[idx].hasCorrection;
         $scope.faServ.documentType = $scope.actServ.displayedActivities[idx].FAReportType.toLowerCase();
         
         $scope.goToView(5);

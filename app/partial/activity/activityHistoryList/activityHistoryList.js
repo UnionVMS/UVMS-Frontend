@@ -16,17 +16,22 @@ copy of the GNU General Public License along with the IFDM Suite. If not, see <h
  * @param $scope {Service} controller scope
  * @param activityService {Service} The activity service
  * @param visibilityService {Service} The visibility service <p>{@link unionvmsWeb.visibilityService}</p>
+ * @param fishingActivityService {Service} The fishing activity service <p>{@link unionvmsWeb.fishingActivityService}</p>
  * @attr {Array} displayedActivitiesHistory - The array of displayed activities used by smart tables
  * @description
  *  The controller for the fisihing activity reports table list
  */
-angular.module('unionvmsWeb').controller('ActivityhistorylistCtrl',function($scope, activityService, visibilityService){
+angular.module('unionvmsWeb').controller('ActivityhistorylistCtrl',function($scope, activityService, fishingActivityService, visibilityService){
     $scope.actServ = activityService;
+    $scope.faServ = fishingActivityService;
     $scope.attrVisibility = visibilityService;
     
     $scope.openDetails = function(idx){
-        //TODO fetch the data and load the partial
-        //$scope.actServ.overview = $scope.actServ.displayedActivities[idx];
-        $scope.goToView(3);
+        $scope.faServ.id = $scope.actServ.displayedActivitiesHistory[idx].fishingActivityId;
+        $scope.faServ.activityType = $scope.actServ.displayedActivitiesHistory[idx].activityType.toLowerCase();
+        $scope.faServ.isCorrection = $scope.actServ.displayedActivitiesHistory[idx].hasCorrection;
+        $scope.faServ.documentType = $scope.actServ.displayedActivitiesHistory[idx].FAReportType.toLowerCase();
+        
+        $scope.goToView(5);
     };
 });
