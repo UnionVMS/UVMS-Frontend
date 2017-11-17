@@ -70,7 +70,8 @@ angular.module('unionvmsWeb').factory('fishingActivityService', function(activit
             'gears',
             'catches',
             'processingProducts',
-            'gearShotRetrieval'
+            'gearShotRetrieval',
+            'vesselDetails',
         ],
         discard: [
             'locations',
@@ -229,21 +230,22 @@ angular.module('unionvmsWeb').factory('fishingActivityService', function(activit
         {
             id: 'refId',
             type: 'string',
-            clickable: true,
+            clickable: false, //FIXME
             onClick: function(refId){
-                var report = _.find(tripSummaryService.trip.reports, function(rep){
-                    return refId === rep.faUniqueReportID;
-                });
-
-                faServ.resetActivity();
-                faServ.id = report.id;
-                faServ.isCorrection = report.corrections;
-                faServ.documentType = report.documentType;
-                tripReportsTimeline.setCurrentPreviousAndNextItem(report.id);
-                var content = angular.element('fishing-activity-navigator');
-                
-                var scope = content.scope();
-                $compile(content)(scope);
+                //FIXME very important - open the historical linked activity
+//                var report = _.find(tripSummaryService.trip.reports, function(rep){
+//                    return refId === rep.faUniqueReportID;
+//                });
+//
+//                faServ.resetActivity();
+//                faServ.id = report.id;
+//                faServ.isCorrection = report.corrections;
+//                faServ.documentType = report.documentType;
+//                tripReportsTimeline.setCurrentPreviousAndNextItem(report.id);
+//                var content = angular.element('fishing-activity-navigator');
+//                
+//                var scope = content.scope();
+//                $compile(content)(scope);
             }
         },
         {
@@ -370,6 +372,11 @@ angular.module('unionvmsWeb').factory('fishingActivityService', function(activit
         activityRestService.getFishingActivityDetails(getViewNameByFaType(obj.faType), payload).then(function (response) {
             faServ.activityData = obj;
             faServ.activityData.fromJson(response);
+            
+//            if (angular.isDefined(faServ.activityData.history.previousId) && faServ.activityData.history.previousId === 0){
+//                faServ.isCorrection = false;
+//            }
+            
             if (angular.isDefined(callback)) {
                 callback();
             }
@@ -617,6 +624,11 @@ angular.module('unionvmsWeb').factory('fishingActivityService', function(activit
                     finalSummary.subItems = [];
                     angular.forEach(value,function(subItem,subKey){
                         var attrData = _.where(attrOrder, {id: subKey});
+                        subItem = '' + subItem;
+                        if (key === 'fishingTime' && subKey === 'duration' && angular.isDefined(value.unitCode)){
+                            subItem += ' ' + value.unitCode;
+                        }
+                         
                         if(angular.isDefined(subItem) && !_.isNull(subItem) && subItem.length > 0 && attrData.length){
                             finalSummary.subItems.push(transformFaItem(subItem, subKey, attrOrder, attrKeys, attrData[0]));
                         }
@@ -1383,6 +1395,10 @@ angular.module('unionvmsWeb').factory('fishingActivityService', function(activit
                     break;
                 case 'locations':
                     obj.locations = data.locations;
+                    if (angular.isDefined(data.activityDetails.geom)){
+                        obj.locations.srcActivityGeom = data.activityDetails.geom;
+                    }
+                    
                     break;
                 case 'history':
                     obj.history = data.history;

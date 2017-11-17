@@ -223,6 +223,8 @@ angular.module('unionvmsWeb').factory('activityService',function(locale, activit
             switch (type) {
                 case 'activities':
                     this.displayedActivities = [];
+                    break;
+                case 'trips':
                     this.displayedTrips = [];
                     break;
                 case 'history':
@@ -288,6 +290,7 @@ angular.module('unionvmsWeb').factory('activityService',function(locale, activit
      * when coming back from activity details or activity history
      */
     actServ.isTableLoaded = false;
+    
     /**
      * Get the list of activities according to the table pagination and search criteria
      * 
@@ -309,8 +312,6 @@ angular.module('unionvmsWeb').factory('activityService',function(locale, activit
             actServ.isTableLoaded = false;
         }else{
 
-            actServ.clearAttributeByType('activities');
-            
             var simpleCriteria = {};
             if (angular.isDefined(actServ[listName].searchObject.simpleCriteria)){
                 simpleCriteria = actServ[listName].searchObject.simpleCriteria;
@@ -338,6 +339,8 @@ angular.module('unionvmsWeb').factory('activityService',function(locale, activit
                 payload.pagination = payload.sorting = {};
             }
             
+            actServ.clearAttributeByType(arrName);
+
             activityRestService[serviceName](payload).then(function(response){
                 if (response.totalItemsCount !== 0){
                     actServ[listName].pagination.totalPages = Math.ceil(response.totalItemsCount / pageSize);
