@@ -453,7 +453,7 @@ describe('fishingActivityService', function() {
 
     function getGearsResult() {
         return [{
-                type: 'LHM - Handlines and pole-lines (mechanized)',
+                type: 'LHM',
                 role: 'On board',
                 mainCharacteristics: {
                     items: [{
@@ -488,7 +488,8 @@ describe('fishingActivityService', function() {
                         description: 'Otdoki winad jakifi li vebahu waazu fow ebezijo asmaca relena lulas vaj lure bitehu weper ukojuj vumdabew ot.'
                     },
                     title: ''
-                }
+                },
+                description: 'Handlines and pole-lines (mechanized)'
             }, {
                 type: 'TBB',
                 role: 'Deployed',
@@ -548,7 +549,7 @@ describe('fishingActivityService', function() {
                     idx: 6,
                     label: '',
                     value: 'c0bd3ec3-b178-5951-9853-7e13bb76b607',
-                    clickable: true,
+                    clickable: undefined,
                     id: 'refId'
                 }, {
                     idx: 2,

@@ -366,7 +366,7 @@ angular.module('unionvmsWeb').factory('Trip',function(locale,unitConversionServi
             ];
 
             var vessel = angular.copy(data);
-            delete vessel.contactPersons;
+            delete vessel.contactParties;
             
             vessel.vesselOverview = {};
 
@@ -390,10 +390,10 @@ angular.module('unionvmsWeb').factory('Trip',function(locale,unitConversionServi
             self.tripVessel.vesselOverview = fishingActivityService.loadFaDetails(self.tripVessel.vesselOverview, attrOrder);
 
 
-            angular.forEach(data.contactPersons,function(value, key) {
-                value.type = value.title + ' ' + value.givenName + ' ' + value.middleName + ' ' + value.familyName;
+            angular.forEach(data.contactParties,function(value, key) {
+                value.type = value.role + ' - ' + value.contactPerson.alias;
             });
-            self.tripRoles = data.contactPersons;
+            self.tripRoles = data.contactParties;
 
         }
     };

@@ -29,8 +29,8 @@ copy of the GNU General Public License along with the IFDM Suite. If not, see <h
             <fa-details-panel class="col-md-3 summary-section" ng-model="faServ.activityData.activityAuthorizations"></fa-details-panel>
             <fa-details-panel class="col-md-4 summary-section" ng-model="faServ.activityData.reportDetails"></fa-details-panel>
         </div>
-        <div class="row activity-summary-row" ng-if="faServ.activityData.vesselDetails">
-            <carousel-tile class="col-md-12" tile-title="{{'activity.receiver_vessel' | i18n}}" ng-model="faServ.activityData.vesselDetails" template-url="directive/activity/carouselTile/templates/vesselTileTemplate/vesselTileTemplate.html"></carousel-tile>
+        <div class="row activity-summary-row" ng-if="faServ.activityData.vesselDetails && faServ.activityData.vesselDetails.length > 0">
+            <carousel-tile class="col-md-12" tile-title="{{vesselTileTitle}}" ng-model="faServ.activityData.vesselDetails" template-url="directive/activity/carouselTile/templates/vesselTileTemplate/vesselTileTemplate.html"></carousel-tile>
         </div>
         <div class="row activity-summary-row">
 			<catch-tile class="col-md-12 summary-section" ng-model="faServ.activityData.catches" tile-title="{{'activity.catch_details_catches_table' | i18n}}" is-location-clickable="faServ.isLocationClickable()" buffer-distance="5000" click-callback="faServ.locationClickCallback()"></catch-tile>
