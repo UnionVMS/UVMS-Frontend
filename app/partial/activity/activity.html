@@ -36,6 +36,7 @@ copy of the GNU General Public License along with the IFDM Suite. If not, see <h
 					<div  ng-show="isTabSelected('TRIPS')">
 						<div ng-include="'partial/activity/tripReportsList/tripReportsList.html'" ng-if="isPartialVisible(0)"></div>	
 					</div>
+					<loading-panel type="TripSummary"></loading-panel>
 					<div class="trip-summary">
 						    <div ng-include="'partial/activity/activityTripSummary/activityTripSummary.html'" ng-if="isPartialVisible(3)"></div>						
 						    <div ng-include="'partial/spatial/tripsPanel/catchDetails/catchDetails.html'" ng-if="isPartialVisible(4)"></div>
