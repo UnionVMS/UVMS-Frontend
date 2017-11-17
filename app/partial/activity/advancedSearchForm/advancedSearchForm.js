@@ -248,7 +248,8 @@ angular.module('unionvmsWeb').controller('AdvancedsearchformCtrl',function($scop
             $scope.actServ.reportsList.isLoading = true;
             $scope.actServ.tripsList.isLoading = true;
             $scope.actServ.resetListTableStates();
-            $scope.actServ.isTableLoaded = false;
+            $scope.actServ.reportsList.isTableLoaded = false;
+            $scope.actServ.tripsList.isTableLoaded = false;
 
             var keyMapper = {
                 reportType: 'REPORT_TYPE',

@@ -24,4 +24,8 @@ angular.module('unionvmsWeb').controller('TripreportslistCtrl',function($scope,r
       $scope.tripSummServ.openNewTrip(tripId);
       $scope.goToView(3);
     };
+
+    $scope.tripIdSort = function(value){
+      return value.schemeId + ':' + value.tripId;
+  };
 });

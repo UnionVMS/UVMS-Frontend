@@ -110,6 +110,7 @@ angular.module('unionvmsWeb').factory('activityService',function(locale, activit
             tableState: undefined,
             stCtrl: undefined,
             fromForm: false,
+            isTableLoaded: false,
             pagination: {
                 offset: 0,
                 pageSize: pageSize,
@@ -201,7 +202,6 @@ angular.module('unionvmsWeb').factory('activityService',function(locale, activit
         this.activitiesHistoryList = getActivitiesHistoryListObject();
         this.allPurposeCodes = [];
         
-        this.isTableLoaded = false;
         this.isGettingMdrCodes = false;
         
         if (angular.isDefined(goToInitialPage) && goToInitialPage){
@@ -285,11 +285,6 @@ angular.module('unionvmsWeb').factory('activityService',function(locale, activit
        // });
     };
 	
-    /**
-     * A property to avoid automatic reloading of the table through the st-pipe, mainly used to avoid reloading data
-     * when coming back from activity details or activity history
-     */
-    actServ.isTableLoaded = false;
     
     /**
      * Get the list of activities according to the table pagination and search criteria
@@ -300,86 +295,72 @@ angular.module('unionvmsWeb').factory('activityService',function(locale, activit
      * @param {Object} searcObj - The object containing the search criteria to filter FA reports
      */    
     actServ.getActivityList = function(callback, tableState, listName){
-        if(tableState && tableState.isSorting){
-            delete tableState.isSorting;
-            _.sortBy(actServ.displayedTrips, tableState.sort.predicate);
+        var simpleCriteria = {};
+        if (angular.isDefined(actServ[listName].searchObject.simpleCriteria)){
+            simpleCriteria = actServ[listName].searchObject.simpleCriteria;
+        }
+        
+        var payload = {
+            pagination: getPaginationForServer(tableState),
+            sorting: actServ[listName].sorting,
+            searchCriteriaMap: simpleCriteria,
+            searchCriteriaMapMultipleValues: actServ[listName].searchObject.multipleCriteria
+        };
 
-            if(tableState.sort.reverse){
-                actServ.displayedTrips.reverse();
+        var serviceName;
+        var arrName;
+        var displayedArrName;
+        if(listName === 'reportsList'){
+            serviceName = 'getActivityList';
+            arrName = 'activities';
+            displayedArrName = 'displayedActivities';
+        }else{
+            serviceName = 'getTripsList';
+            arrName = 'trips';
+            displayedArrName = 'displayedTrips';
+            //FIXME
+            payload.pagination = payload.sorting = {};
+        }
+        
+        actServ.clearAttributeByType(arrName);
+
+        activityRestService[serviceName](payload).then(function(response){
+            if (response.totalItemsCount !== 0){
+                actServ[listName].pagination.totalPages = Math.ceil(response.totalItemsCount / pageSize);
             }
+
+            if(listName === 'tripsList'){
+                angular.forEach(response.resultList, function(item){
+                    angular.forEach(item.vesselIdList, function(vesselValue,vesselId){
+                        item[vesselId] = vesselValue;
+                    });
+                    delete item.vesselIdList;
+                });
+            }
+            
+            actServ[arrName] = response.resultList;
+            actServ[displayedArrName] = [].concat(actServ[arrName]);
+            if (angular.isDefined(callback)){
+                if (angular.isDefined(tableState)){
+                    callback(tableState, listName);
+                } else {
+                    callback(undefined, listName);
+                }
+                
+            }
+            
+            if (!angular.isDefined(callback) && angular.isDefined(actServ[listName].tableState)){
+                actServ[listName].tableState.pagination.numberOfPages = actServ[listName].pagination.totalPages; 
+            }
+
+            actServ[listName].isLoading = false;
+            actServ[listName].hasError = false;
+            actServ[listName].isTableLoaded = true;
+        }, function(error){
             actServ[listName].isLoading = false;
             actServ[listName].hasError = true;
-            actServ.isTableLoaded = false;
-        }else{
-
-            var simpleCriteria = {};
-            if (angular.isDefined(actServ[listName].searchObject.simpleCriteria)){
-                simpleCriteria = actServ[listName].searchObject.simpleCriteria;
-            }
-            
-            var payload = {
-                pagination: getPaginationForServer(tableState),
-                sorting: actServ[listName].sorting,
-                searchCriteriaMap: simpleCriteria,
-                searchCriteriaMapMultipleValues: actServ[listName].searchObject.multipleCriteria
-            };
-
-            var serviceName;
-            var arrName;
-            var displayedArrName;
-            if(listName === 'reportsList'){
-                serviceName = 'getActivityList';
-                arrName = 'activities';
-                displayedArrName = 'displayedActivities';
-            }else{
-                serviceName = 'getTripsList';
-                arrName = 'trips';
-                displayedArrName = 'displayedTrips';
-                //FIXME
-                payload.pagination = payload.sorting = {};
-            }
-            
-            actServ.clearAttributeByType(arrName);
-
-            activityRestService[serviceName](payload).then(function(response){
-                if (response.totalItemsCount !== 0){
-                    actServ[listName].pagination.totalPages = Math.ceil(response.totalItemsCount / pageSize);
-                }
-
-                if(listName === 'tripsList'){
-                    angular.forEach(response.resultList, function(item){
-                        angular.forEach(item.vesselIdList, function(vesselValue,vesselId){
-                            item[vesselId] = vesselValue;
-                        });
-                        delete item.vesselIdList;
-                    });
-                }
-                
-                actServ[arrName] = response.resultList;
-                actServ[displayedArrName] = [].concat(actServ[arrName]);
-                if (angular.isDefined(callback)){
-                    if (angular.isDefined(tableState)){
-                        callback(tableState, listName);
-                    } else {
-                        callback(undefined, listName);
-                    }
-                    
-                }
-                
-                if (!angular.isDefined(callback) && angular.isDefined(actServ[listName].tableState)){
-                    actServ[listName].tableState.pagination.numberOfPages = actServ[listName].pagination.totalPages; 
-                }
-
-                actServ[listName].isLoading = false;
-                actServ[listName].hasError = false;
-                actServ.isTableLoaded = true;
-            }, function(error){
-                actServ[listName].isLoading = false;
-                actServ[listName].hasError = true;
-                actServ.isTableLoaded = false;
-            });
-
-        }
+            actServ[listName].isTableLoaded = false;
+        });
 
     };
     
