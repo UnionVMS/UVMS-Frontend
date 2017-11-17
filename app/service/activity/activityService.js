@@ -300,72 +300,86 @@ angular.module('unionvmsWeb').factory('activityService',function(locale, activit
      * @param {Object} searcObj - The object containing the search criteria to filter FA reports
      */    
     actServ.getActivityList = function(callback, tableState, listName){
-        var simpleCriteria = {};
-        if (angular.isDefined(actServ[listName].searchObject.simpleCriteria)){
-            simpleCriteria = actServ[listName].searchObject.simpleCriteria;
-        }
-        
-        var payload = {
-            pagination: getPaginationForServer(tableState),
-            sorting: actServ[listName].sorting,
-            searchCriteriaMap: simpleCriteria,
-            searchCriteriaMapMultipleValues: actServ[listName].searchObject.multipleCriteria
-        };
+        if(tableState && tableState.isSorting){
+            delete tableState.isSorting;
+            _.sortBy(actServ.displayedTrips, tableState.sort.predicate);
 
-        var serviceName;
-        var arrName;
-        var displayedArrName;
-        if(listName === 'reportsList'){
-            serviceName = 'getActivityList';
-            arrName = 'activities';
-            displayedArrName = 'displayedActivities';
-        }else{
-            serviceName = 'getTripsList';
-            arrName = 'trips';
-            displayedArrName = 'displayedTrips';
-            //FIXME
-            payload.pagination = payload.sorting = {};
-        }
-        
-        actServ.clearAttributeByType(arrName);
-        
-        activityRestService[serviceName](payload).then(function(response){
-            if (response.totalItemsCount !== 0){
-                actServ[listName].pagination.totalPages = Math.ceil(response.totalItemsCount / pageSize);
+            if(tableState.sort.reverse){
+                actServ.displayedTrips.reverse();
             }
-
-            if(listName === 'tripsList'){
-                angular.forEach(response.resultList, function(item){
-                    angular.forEach(item.vesselIdList, function(vesselValue,vesselId){
-                        item[vesselId] = vesselValue;
-                    });
-                    delete item.vesselIdList;
-                });
-            }
-            
-            actServ[arrName] = response.resultList;
-            actServ[displayedArrName] = [].concat(actServ[arrName]);
-            if (angular.isDefined(callback)){
-                if (angular.isDefined(tableState)){
-                    callback(tableState, listName);
-                } else {
-                    callback(undefined, listName);
-                }
-                
-            }
-            
-            if (!angular.isDefined(callback) && angular.isDefined(actServ[listName].tableState)){
-                actServ[listName].tableState.pagination.numberOfPages = actServ[listName].pagination.totalPages; 
-            }
-
-            actServ[listName].isLoading = false;
-            actServ[listName].hasError = false;
-            actServ.isTableLoaded = true;
-        }, function(error){
             actServ[listName].isLoading = false;
             actServ[listName].hasError = true;
             actServ.isTableLoaded = false;
-        });
+        }else{
+
+            var simpleCriteria = {};
+            if (angular.isDefined(actServ[listName].searchObject.simpleCriteria)){
+                simpleCriteria = actServ[listName].searchObject.simpleCriteria;
+            }
+            
+            var payload = {
+                pagination: getPaginationForServer(tableState),
+                sorting: actServ[listName].sorting,
+                searchCriteriaMap: simpleCriteria,
+                searchCriteriaMapMultipleValues: actServ[listName].searchObject.multipleCriteria
+            };
+
+            var serviceName;
+            var arrName;
+            var displayedArrName;
+            if(listName === 'reportsList'){
+                serviceName = 'getActivityList';
+                arrName = 'activities';
+                displayedArrName = 'displayedActivities';
+            }else{
+                serviceName = 'getTripsList';
+                arrName = 'trips';
+                displayedArrName = 'displayedTrips';
+                //FIXME
+                payload.pagination = payload.sorting = {};
+            }
+            
+            actServ.clearAttributeByType(arrName);
+
+            activityRestService[serviceName](payload).then(function(response){
+                if (response.totalItemsCount !== 0){
+                    actServ[listName].pagination.totalPages = Math.ceil(response.totalItemsCount / pageSize);
+                }
+
+                if(listName === 'tripsList'){
+                    angular.forEach(response.resultList, function(item){
+                        angular.forEach(item.vesselIdList, function(vesselValue,vesselId){
+                            item[vesselId] = vesselValue;
+                        });
+                        delete item.vesselIdList;
+                    });
+                }
+                
+                actServ[arrName] = response.resultList;
+                actServ[displayedArrName] = [].concat(actServ[arrName]);
+                if (angular.isDefined(callback)){
+                    if (angular.isDefined(tableState)){
+                        callback(tableState, listName);
+                    } else {
+                        callback(undefined, listName);
+                    }
+                    
+                }
+                
+                if (!angular.isDefined(callback) && angular.isDefined(actServ[listName].tableState)){
+                    actServ[listName].tableState.pagination.numberOfPages = actServ[listName].pagination.totalPages; 
+                }
+
+                actServ[listName].isLoading = false;
+                actServ[listName].hasError = false;
+                actServ.isTableLoaded = true;
+            }, function(error){
+                actServ[listName].isLoading = false;
+                actServ[listName].hasError = true;
+                actServ.isTableLoaded = false;
+            });
+
+        }
 
     };
     
