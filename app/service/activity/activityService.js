@@ -110,6 +110,7 @@ angular.module('unionvmsWeb').factory('activityService',function(locale, activit
             tableState: undefined,
             stCtrl: undefined,
             fromForm: false,
+            isTableLoaded: false,
             pagination: {
                 offset: 0,
                 pageSize: pageSize,
@@ -201,7 +202,6 @@ angular.module('unionvmsWeb').factory('activityService',function(locale, activit
         this.activitiesHistoryList = getActivitiesHistoryListObject();
         this.allPurposeCodes = [];
         
-        this.isTableLoaded = false;
         this.isGettingMdrCodes = false;
         
         if (angular.isDefined(goToInitialPage) && goToInitialPage){
@@ -223,6 +223,8 @@ angular.module('unionvmsWeb').factory('activityService',function(locale, activit
             switch (type) {
                 case 'activities':
                     this.displayedActivities = [];
+                    break;
+                case 'trips':
                     this.displayedTrips = [];
                     break;
                 case 'history':
@@ -283,11 +285,7 @@ angular.module('unionvmsWeb').factory('activityService',function(locale, activit
        // });
     };
 	
-    /**
-     * A property to avoid automatic reloading of the table through the st-pipe, mainly used to avoid reloading data
-     * when coming back from activity details or activity history
-     */
-    actServ.isTableLoaded = false;
+    
     /**
      * Get the list of activities according to the table pagination and search criteria
      * 
@@ -297,8 +295,6 @@ angular.module('unionvmsWeb').factory('activityService',function(locale, activit
      * @param {Object} searcObj - The object containing the search criteria to filter FA reports
      */    
     actServ.getActivityList = function(callback, tableState, listName){
-        actServ.clearAttributeByType('activities');
-        
         var simpleCriteria = {};
         if (angular.isDefined(actServ[listName].searchObject.simpleCriteria)){
             simpleCriteria = actServ[listName].searchObject.simpleCriteria;
@@ -326,6 +322,8 @@ angular.module('unionvmsWeb').factory('activityService',function(locale, activit
             payload.pagination = payload.sorting = {};
         }
         
+        actServ.clearAttributeByType(arrName);
+
         activityRestService[serviceName](payload).then(function(response){
             if (response.totalItemsCount !== 0){
                 actServ[listName].pagination.totalPages = Math.ceil(response.totalItemsCount / pageSize);
@@ -357,11 +355,11 @@ angular.module('unionvmsWeb').factory('activityService',function(locale, activit
 
             actServ[listName].isLoading = false;
             actServ[listName].hasError = false;
-            actServ.isTableLoaded = true;
+            actServ[listName].isTableLoaded = true;
         }, function(error){
             actServ[listName].isLoading = false;
             actServ[listName].hasError = true;
-            actServ.isTableLoaded = false;
+            actServ[listName].isTableLoaded = false;
         });
 
     };

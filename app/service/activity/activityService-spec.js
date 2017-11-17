@@ -113,6 +113,7 @@ describe('activityService', function() {
             tableState: undefined,
             stCtrl: undefined,
             fromForm: false,
+            isTableLoaded : false,
             pagination: {
                 offset: 0,
                 pageSize: pageSize,

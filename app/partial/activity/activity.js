@@ -161,6 +161,22 @@ angular.module('unionvmsWeb').controller('ActivityCtrl', function ($scope, local
         return predicateMapping[tablePredicate];
     }
 
+    function sortTripsList(tableState, listName){
+        delete tableState.isSorting;
+        var sortedArr = _.sortBy($scope.actServ.displayedTrips, tableState.sort.predicate);
+
+        if(tableState.sort.reverse){
+            sortedArr = sortedArr.reverse();
+        }
+
+        $scope.actServ.displayedTrips.splice(0,$scope.actServ.displayedTrips.length);
+        angular.copy(sortedArr, $scope.actServ.displayedTrips);
+
+        $scope.actServ[listName].isLoading = false;
+        $scope.actServ[listName].hasError = false;
+        $scope.actServ[listName].isTableLoaded = true;
+    }
+
     /**
      * A callback function to set the correct number of pages in the smartTable. To be used with the callServer function.
      * 
@@ -169,6 +185,10 @@ angular.module('unionvmsWeb').controller('ActivityCtrl', function ($scope, local
      */
     function callServerCallback (tableState, listName){
         tableState.pagination.numberOfPages = $scope.actServ[listName].pagination.totalPages;
+
+        if(listName === 'tripsList' && tableState.sort && tableState.sort.predicate){
+            sortTripsList(tableState, listName);
+        }
     }
 
     /**
@@ -182,7 +202,7 @@ angular.module('unionvmsWeb').controller('ActivityCtrl', function ($scope, local
         $scope.actServ[listName].stCtrl = ctrl;
         $scope.actServ[listName].tableState = tableState;
         
-        if (!$scope.actServ[listName].isLoading && angular.isDefined($scope.actServ[listName].searchObject.multipleCriteria) && !$scope.actServ.isTableLoaded){
+        if (!$scope.actServ[listName].isLoading && angular.isDefined($scope.actServ[listName].searchObject.multipleCriteria) && !$scope.actServ[listName].isTableLoaded){
             $scope.actServ[listName].isLoading = true;
             
             var searchField, sortOrder; 
@@ -198,12 +218,16 @@ angular.module('unionvmsWeb').controller('ActivityCtrl', function ($scope, local
             
             $scope.actServ.getActivityList(callServerCallback, tableState, listName);
         } else {
-            if (!angular.isDefined(tableState.pagination.numberOfPages) || $scope.actServ[listName].fromForm){
-                callServerCallback(tableState, listName);
-                $scope.actServ[listName].fromForm = false;
-            } else {
-                $scope.actServ.isTableLoaded = false;
-                ctrl.pipe();
+            if(tableState && tableState.isSorting){
+                sortTripsList(tableState, listName);
+            }else{
+                if (!angular.isDefined(tableState.pagination.numberOfPages) || $scope.actServ[listName].fromForm){
+                    callServerCallback(tableState, listName);
+                    $scope.actServ[listName].fromForm = false;
+                } else {
+                    $scope.actServ[listName].isTableLoaded = false;
+                    ctrl.pipe();
+                }
             }
         }
     };
