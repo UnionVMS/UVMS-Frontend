@@ -196,12 +196,19 @@ angular.module('unionvmsWeb').factory('Trip',function(locale,unitConversionServi
 
         angular.forEach(reports,function(rep){
             if(angular.isDefined(rep.nodes)){
-                rep.correction = _.where(rep.nodes, {corrections: true}).length ? true : false;
                 rep.nodes = _.sortBy(rep.nodes, function(node){ return moment(node.date).unix(); });
                 rep.nodes = rep.nodes.reverse();
+                
+                //Final subnode reordering so that the last correction is displayed as a main node
+                var tmpMainNode = rep.nodes.splice(0, 1)[0];
+                tmpMainNode.nodes = rep.nodes;
+                var lastSubNode = _.clone(rep);
+                delete lastSubNode.nodes;
+                tmpMainNode.nodes.push(lastSubNode);
+                angular.copy(tmpMainNode, rep);
+                rep.correction = _.where(rep.nodes, {corrections: true}).length ? true : false;
             }
 
-            //FIXME need to change tripReportsTimeline to navigate in 2 levels of reports
             tripReportsTimeline.reports.push(rep);
         });
 
@@ -223,33 +230,36 @@ angular.module('unionvmsWeb').factory('Trip',function(locale,unitConversionServi
                 remarks = report.fishingGears[0].gearTypeCode;
             }
         }else{
-            remarks = unitConversionService.date.convertToUserFormat(report.faReportAcceptedDateTime);
+            if (report.faReportDocumentType === 'NOTIFICATION'){
+                remarks = unitConversionService.date.convertToUserFormat(report.occurence);
+            } else {
+                remarks = unitConversionService.date.convertToUserFormat(report.faReportAcceptedDateTime);
+            }
         }
 
-        //FIXME This needs to be translatable, check with backend
         switch(report.activityType){
             case 'DEPARTURE':
-                remarks += ' (gear)';
+                remarks += ' ' + locale.getString('activity.trip_summary_gear');
                 break;
             case 'FISHING_OPERATION':
-                remarks += ' (gear used)';
+                remarks += ' ' + locale.getString('activity.trip_summary_gear_used');
                 break;
             case 'ARRIVAL':
-                remarks += ' (est. time of arrival)';
+                remarks += ' ' + locale.getString('activity.trip_summary_est_time_arr');
                 break;
             case 'LANDING':
-                remarks += ' (end time landing)';
+                remarks += ' ' + locale.getString('activity.trip_summary_time_land');
                 break;
             case 'ENTRY':
             case 'EXIT':
             case 'RELOCATION':
-                remarks += ' (est. time)';
+                remarks += ' ' + locale.getString('activity.trip_summary_est_time');
                 break;
             case 'TRANSHIPMENT':
                 if(report.faReportDocumentType === 'DECLARATION'){
-                    remarks += ' (est. time transhipment)';
+                    remarks += ' ' + locale.getString('activity.trip_summary_est_time_trans');
                 }else if(report.faReportDocumentType === 'NOTIFICATION'){
-                    remarks += ' (est. time)';
+                    remarks += ' ' + locale.getString('activity.trip_summary_est_time');
                 }
                 break;
         }
