@@ -30,7 +30,11 @@ angular.module('unionvmsWeb').controller('RelocationpanelCtrl', function ($scope
      * @private
      */
     var init = function () {
-        $scope.faServ.getFishingActivity(new FishingActivity('relocation'), $scope.getTitle);
+        if ($scope.faServ.reloadFromActivityHistory === false){
+            $scope.faServ.getFishingActivity(new FishingActivity('relocation'), $scope.getTitle);
+        } else  {
+            $scope.faServ.reloadFromActivityHistory = false;
+        }
     };
     
     $scope.vesselTileTitle = '';

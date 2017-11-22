@@ -34,7 +34,8 @@ angular.module('unionvmsWeb').factory('fishingActivityService', function(activit
         isCorrection: false,
         documentType: undefined,
         activityType: undefined,
-        openFromMap: undefined
+        openFromMap: undefined,
+        reloadFromActivityHistory: false //this property is updated by the faHistoryNavigator only
 	};
 
     //tiles per fishing activity view
@@ -367,15 +368,9 @@ angular.module('unionvmsWeb').factory('fishingActivityService', function(activit
             payload.tripId = $state.params.tripId;
         }
         
-        //if ($state.current.name === 'app.activity' && angular.isDefined())
-        
         activityRestService.getFishingActivityDetails(getViewNameByFaType(obj.faType), payload).then(function (response) {
             faServ.activityData = obj;
             faServ.activityData.fromJson(response);
-            
-//            if (angular.isDefined(faServ.activityData.history.previousId) && faServ.activityData.history.previousId === 0){
-//                faServ.isCorrection = false;
-//            }
             
             if (angular.isDefined(callback)) {
                 callback();

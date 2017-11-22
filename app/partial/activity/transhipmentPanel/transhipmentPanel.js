@@ -29,7 +29,11 @@ angular.module('unionvmsWeb').controller('TranshipmentpanelCtrl', function($scop
      * @private
      */
     var init = function() {
-        $scope.faServ.getFishingActivity(new FishingActivity('transhipment'), $scope.getTitle);
+        if ($scope.faServ.reloadFromActivityHistory === false){
+            $scope.faServ.getFishingActivity(new FishingActivity('transhipment'), $scope.getTitle);
+        } else  {
+            $scope.faServ.reloadFromActivityHistory = false;
+        }
     };
     
     $scope.vesselTileTitle = '';
