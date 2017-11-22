@@ -20,12 +20,14 @@ angular.module('stateMock').service("$state", function($q){
     };
 });
 
-describe('ArrivalpanelCtrl', function() {
+describe('ArrivalpanelCtrl with states', function() {
 	beforeEach(module('unionvmsWeb'));
 	beforeEach(module('stateMock'));
 
 	var scope,ctrl,mockState, $state, mockTripSumServ, appStates;
-	
+	describe('Testing arrival panel with app states', function(){
+	    
+	})
 	beforeEach(function(){
 	    appStates = ['','app.reporting', 'app.reporting-id'];
 	    
@@ -81,6 +83,78 @@ describe('ArrivalpanelCtrl', function() {
 	    var test = scope.faServ.isLocationClickable();
 	    expect(test).toBeFalsy();
 	});
+
+});
+
+describe('ArrivalpanelCtrl', function() {
+
+    beforeEach(module('unionvmsWeb'));
+
+    var scope,ctrl,fishActRestServSpy;
+    
+    beforeEach(function(){
+        fishActRestServSpy = jasmine.createSpyObj('fishingActivityService', ['getFishingActivity', 'reloadFromActivityHistory']);
+        
+        module(function($provide){
+            $provide.value('fishingActivityService', fishActRestServSpy);
+        });
+    });
+
+    beforeEach(inject(function($httpBackend) {
+        //Mock
+        $httpBackend.whenGET(/usm/).respond();
+        $httpBackend.whenGET(/i18n/).respond();
+        $httpBackend.whenGET(/globals/).respond({data : []});
+    }));
+
+    
+
+    function getFishingActivity(){
+        return {code: 200};
+    }
+
+    function buildMocks() {
+        fishActRestServSpy.getFishingActivity.andCallFake(function(){
+            return {
+                then: function(callback){
+                        return callback(getFishingActivity());
+                }
+            };
+        });
+    }
+    
+    describe('Standard loading of the arrival', function(){
+        beforeEach(inject(function($rootScope, $controller) {
+            buildMocks();
+            fishActRestServSpy.reloadFromActivityHistory = false;
+            fishActRestServSpy.documentType = 'NOTIFICATION';
+            scope = $rootScope.$new();
+            ctrl = $controller('ArrivalpanelCtrl', {$scope: scope});
+            scope.$digest();
+        }));
+        
+        it('should initialize the arrival by calling the rest service', inject(function() {
+            expect(fishActRestServSpy.getFishingActivity).toHaveBeenCalled();
+            expect(fishActRestServSpy.reloadFromActivityHistory).toBeFalsy();
+        }));
+    });
+
+
+    describe('Loading of the arrival by faHistoryNavigator', function(){
+        beforeEach(inject(function($rootScope, $controller) {
+            buildMocks();
+            fishActRestServSpy.reloadFromActivityHistory = true;
+            fishActRestServSpy.documentType = 'NOTIFICATION';
+            scope = $rootScope.$new();
+            ctrl = $controller('ArrivalpanelCtrl', {$scope: scope});
+            scope.$digest();
+        }));
+        
+        it('should initialize the arrival through faHistoryNavigator', inject(function() {
+            expect(fishActRestServSpy.getFishingActivity).not.toHaveBeenCalled();
+            expect(fishActRestServSpy.reloadFromActivityHistory).toBeFalsy();
+        }));
+    });
 
 });
 

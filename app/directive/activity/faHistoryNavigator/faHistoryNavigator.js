@@ -64,8 +64,10 @@ angular.module('unionvmsWeb').directive('faHistoryNavigator', function (fishingA
                 scope.faServ.id = scope.status.id;
                 scope.faServ.documentType = scope.status.documentType;
                 scope.faServ.activityType = scope.status.activityType;
+                scope.faServ.reloadFromActivityHistory = true;
                 var content = angular.element('.activity-details');
                 $compile(content.contents())(scope);
+                
             };
             
             /**

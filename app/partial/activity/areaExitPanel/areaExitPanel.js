@@ -31,7 +31,11 @@ angular.module('unionvmsWeb').controller('AreaexitpanelCtrl', function ($scope, 
      * @private
      */
     var init = function () {
-        $scope.faServ.getFishingActivity(new FishingActivity('area_exit'));
+        if ($scope.faServ.reloadFromActivityHistory === false){
+            $scope.faServ.getFishingActivity(new FishingActivity('area_exit'));
+        } else  {
+            $scope.faServ.reloadFromActivityHistory = false;
+        }
     };
     
     /**

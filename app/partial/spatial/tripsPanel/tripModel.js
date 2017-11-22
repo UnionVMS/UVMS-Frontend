@@ -206,7 +206,7 @@ angular.module('unionvmsWeb').factory('Trip',function(locale,unitConversionServi
                 delete lastSubNode.nodes;
                 tmpMainNode.nodes.push(lastSubNode);
                 angular.copy(tmpMainNode, rep);
-                rep.correction = _.where(rep.nodes, {corrections: true}).length ? true : false;
+                rep.correction = true;
             }
 
             tripReportsTimeline.reports.push(rep);
