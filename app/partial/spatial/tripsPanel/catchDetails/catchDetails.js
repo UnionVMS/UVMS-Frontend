@@ -28,7 +28,11 @@ angular.module('unionvmsWeb').controller('CatchdetailsCtrl', function ($scope, a
                 angular.forEach(record[ctype], function(value,key){
                     if(angular.isDefined(record[ctype][key])){
                         record[ctype][key] = {};
-                        record[ctype][key].all_species = value;
+                        if(typeof value === 'object'){
+                            record[ctype][key] = value;
+                        }else{
+                            record[ctype][key].all_species = value;
+                        }
                     }
                 });
             }
@@ -101,6 +105,25 @@ angular.module('unionvmsWeb').controller('CatchdetailsCtrl', function ($scope, a
         }
     };
 
+
+    var setDefaultFields = function(defaults, row){
+        var newRow = angular.copy(defaults);
+        angular.forEach(defaults, function (classItem, className) {
+            if (angular.isDefined(row[className])) {
+                if(typeof row[className] === 'object'){
+                    angular.forEach(classItem, function (specie, specieName) {
+                        if (angular.isDefined(row[className][specieName])) {
+                            newRow[className][specieName] = row[className][specieName];
+                        }
+                    });
+                }else{
+                    newRow[className] = row[className];
+                }
+            }
+        });
+        return newRow;
+    };
+
     /**
       * gets data for catches Table 
       * 
@@ -146,19 +169,10 @@ angular.module('unionvmsWeb').controller('CatchdetailsCtrl', function ($scope, a
         });
 
         angular.forEach(items, function (row) {
-            angular.forEach(defaults, function (classItem, className) {
-                if (angular.isDefined(row[className])) {
-                    angular.forEach(classItem, function (specie, specieName) {
-                        if (!angular.isDefined(row[className][specieName])) {
-                            row[className][specieName] = specie;
-                        }
-                    });
-                } else {
-                    row[className] = classItem;
-                }
-            });
+            angular.copy(setDefaultFields(defaults, row),row);
         });
 
+        angular.copy(setDefaultFields(defaults, total),total);
 
         return {
             items: items,
