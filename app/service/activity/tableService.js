@@ -16,7 +16,6 @@ angular.module('unionvmsWeb').factory('tableService',function(locale) {
         headers[level] = headers[level] || [];
         var globalHeaders = level ? undefined : [];
 
-
         angular.forEach(obj, function(property,propertyName){
             var label;
             if(angular.isObject(property)){
@@ -27,7 +26,12 @@ angular.module('unionvmsWeb').factory('tableService',function(locale) {
                 headers[level+1].concat(getTableHeaders(property, localePrefix, headers, level));
             }else{
                 if(level === 0){
-                    globalHeaders.push({title: propertyName === '_' ? '' : locale.getString(localePrefix + propertyName.toLowerCase()), width: 1});
+                    var newHeader = {title: propertyName === '_' ? '' : locale.getString(localePrefix + propertyName.toLowerCase()), width: 1};
+                    if(propertyName.indexOf('DATE') !== -1){
+                        globalHeaders = [newHeader].concat(globalHeaders);
+                    }else{
+                        globalHeaders.push(newHeader);
+                    }
                 }else{
                     label = locale.getString(localePrefix + propertyName.toLowerCase());
                     label = label !== "%%KEY_NOT_FOUND%%"? label : propertyName;
@@ -125,9 +129,19 @@ angular.module('unionvmsWeb').factory('tableService',function(locale) {
       * @returns {Array} ordered row
       * @alias sortRow
       */
-    var sortRow = function(row, header) {
+    var sortRow = function(row, headers) {
         var currentRow = [];
-        angular.forEach(header, function(item) {
+        var sortedColumns = [];
+
+        angular.forEach(headers, function(header){
+            var columnIdx = _.intersection(sortedColumns, [header]).length;
+            var newItem = _.where(row, {key: header})[columnIdx];
+
+            currentRow.push(newItem);
+            sortedColumns.push(header);
+        });
+
+        /* angular.forEach(header, function(item) {
             angular.forEach(row, function(rowItem) {
                 if (rowItem.key === item) {
                     currentRow.push({
@@ -136,7 +150,7 @@ angular.module('unionvmsWeb').factory('tableService',function(locale) {
                     });
                 }
             });
-        });
+        }); */
         return currentRow;
     };
 
@@ -157,6 +171,10 @@ angular.module('unionvmsWeb').factory('tableService',function(locale) {
             orderedRows.push(rowData);
 
         });
+        orderedRows = _.sortBy(orderedRows, function(row){
+            return row[0].value;
+        });
+
         return orderedRows;
     };
 
@@ -182,9 +200,19 @@ angular.module('unionvmsWeb').factory('tableService',function(locale) {
                 table = getTableHeaders(data.items[0], localePrefix);
                 var optiRows = getTableRows(data.items);
                 var headerData = _.pluck(optiRows[0], 'key');
+                
+                var dateHeader = _.find(headerData, function(header){
+                    return header.indexOf('DATE') !== -1;
+                });
+
+                if(dateHeader){
+                    headerData.splice(headerData.indexOf(dateHeader),1);
+                    headerData = [dateHeader].concat(headerData);
+                }
+
                 // ordered rows
                 table.rows = sortTableRows(optiRows, headerData);
-                table.totals = data.total ? sortRow(getTableRow(data.total), headerData) : undefined;
+                table.totals = data.total ? sortRow(getTableRow(data.total), headerData.splice(table.nrGlobalHeaders,headerData.length)) : undefined;
 
             } else {
                 //landing

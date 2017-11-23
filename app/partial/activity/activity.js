@@ -163,7 +163,14 @@ angular.module('unionvmsWeb').controller('ActivityCtrl', function ($scope, local
 
     function sortTripsList(tableState, listName){
         delete tableState.isSorting;
-        var sortedArr = _.sortBy($scope.actServ.displayedTrips, tableState.sort.predicate);
+
+        var sortedArr = _.sortBy($scope.actServ.displayedTrips, function(item) {
+            if(tableState.sort.predicate === 'tripDuration'){
+                return Math.abs(item[tableState.sort.predicate]);
+            }else{
+                return item[tableState.sort.predicate];
+            }
+        });
 
         if(tableState.sort.reverse){
             sortedArr = sortedArr.reverse();
