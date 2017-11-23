@@ -409,6 +409,13 @@
     "endDate": "Validity - End date",
 
     "no_gears_reported": "No gears reported",
-    "no_catches_reported": "No catches reported"
+    "no_catches_reported": "No catches reported",
+    
+    "trip_summary_gear": "(gear)",
+    "trip_summary_gear_used": "(gear used)",
+    "trip_summary_est_time_arr": "(est. time of arrival)",
+    "trip_summary_time_land": "(end time of landing)",
+    "trip_summary_est_time": "(est. time)",
+    "trip_summary_est_time_trans": "(est. time transhipment)"
 
 }

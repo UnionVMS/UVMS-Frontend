@@ -22,7 +22,7 @@ copy of the GNU General Public License along with the IFDM Suite. If not, see <h
  * @attr {Object} reportDetails - An object containing all the data related with the fishing activity report document
  * @attr {Object} catches - An object containing all the data related with fishing data (like fish species and weights retained on board, locations 
  * @description
- *  A model to store all the data related to a departure in a standardized way
+ *  A model to store all the data related to a fishing activity in a standardized way
  */
 angular.module('unionvmsWeb').factory('FishingActivity',function(mdrCacheService, fishingActivityService, locale) {
     

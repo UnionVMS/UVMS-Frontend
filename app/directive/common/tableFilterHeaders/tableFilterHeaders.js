@@ -40,7 +40,7 @@ angular.module('unionvmsWeb').directive('tableFilterHeaders', function($compile,
                     element.find('table').attr('st-auto-select-row', true);
                 }
 
-                var initColumns = function(){
+                scope.initColumns = function(){
                     angular.forEach(scope.columns,function(column){
                         if(angular.isDefined(column.filterBy)){
                             column.filterBy = column.srcObj ? column.srcObj + '.' + column.filterBy : column.filterBy;
@@ -65,14 +65,19 @@ angular.module('unionvmsWeb').directive('tableFilterHeaders', function($compile,
                     return translation;
                 };
 
-                initColumns();
+                scope.initColumns();
 		    },
 		    post: function(scope, element, attrs, fn){
                 scope.hasTotals = false;
                 scope.isProcessed = false;
                 scope.displayedRecords = [];
                 scope.$watch('records', function(newVal, oldVal){
-                    if (angular.isDefined(newVal) && scope.isProcessed === false){
+                    var isMatch = _.isMatch(newVal, oldVal);
+                    if ((angular.isDefined(newVal) && scope.isProcessed === false) || isMatch === false){
+                        if (isMatch === false){
+                            scope.initColumns();
+                        }
+                        
                         scope.isProcessed = true;
                         scope.displayedRecords = [].concat(newVal);
                         
