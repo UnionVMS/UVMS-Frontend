@@ -9,8 +9,7 @@
                         <input type="text" class="form-control" ng-model="subscriptionForm.name" />
                     </div>
                     <div class="col-md-4 form-group isActive">
-
-                        <label><input type="checkbox" ng-model="subscriptionForm.isActive" ng-change=""/> {{'subscriptions.subscription_form_active' | i18n }}</label>
+                        <label><input type="checkbox" ng-model="subscriptionForm.isActive"/> {{'subscriptions.subscription_form_active' | i18n }}</label>
                     </div>
                     <div class="col-md-4 form-group">
                         <label>{{'subscriptions.subscription_form_organization' | i18n }}</label>
@@ -40,13 +39,13 @@
                         <div class="row">
                             <div class="col-md-6">
                                 <label>{{'subscriptions.subscription_valid_form' | i18n }}</label>
-                                <datepicker-input placeholder="dd/mm/yyyy" time="true" model="newSubscriptionForm.validFrom" name="periodStartFACriterion"
+                                <datepicker-input placeholder="dd/mm/yyyy" time="true" model="subscriptionForm.validFrom" name="periodStartFACriterion"
                                     max-date="subscriptionForm.validUntil" input-field-id="periodStartFACriterion" update-when="default"></datepicker-input>
                             </div>
                             <div class="col-md-6">
                                 <label>{{'subscriptions.subscription_valid_until' | i18n }}</label>
                                 <datepicker-input placeholder="dd/mm/yyyy" time="true" model="subscriptionForm.validUntil" name="periodStartFACriterion"
-                                    input-field-id="periodStartFACriterion" update-when="default"></datepicker-input>
+                                    input-field-id="periodEndFACriterion" update-when="default"></datepicker-input>
                             </div>
                         </div>
                     </div>
@@ -55,7 +54,6 @@
                         <combobox ng-model="subscriptionForm.commChannel" items="comboData.commChannel"></combobox>
                     </div>
                 </div>
-                <!-- Report parameters fieldset -->
                 <div class="row">
                     <div class="col-md-4 form-group">
                         <h5 class="section-text">Trigger</h5>
@@ -75,9 +73,12 @@
                         <combobox ng-model="subscriptionForm.messageType" items="comboData.messageType"></combobox>
                     </div>
                 </div>
-                <div class="row form-group" ng-include="'partial/subscriptions/newSubscription/repParamSubscription/repParamSubscription.html'"></div>
-                <button class="btn btn-primary button btn-action" type="button" ng-click="saveSubscription()">Save</button>
+                <ng-form name="reportBodyForm">
+                    <div class="row form-group" ng-include="'partial/spatial/reportsPanel/reportForm/vesselFieldset/vesselFieldset.html'"></div>
+                </ng-form>
+                <button class="btn btn-primary button btn-action" type="button" ng-click="saveSubscription(subscriptionForm)">Save</button>
             </form>
+           
         </div>
     </div>
 </div>
