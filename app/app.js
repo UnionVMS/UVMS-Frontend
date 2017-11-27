@@ -503,6 +503,56 @@ unionvmsWebApp.config(function($stateProvider, $compileProvider, tmhDynamicLocal
                 loadingStatus.resetState();
             }
         })
+        .state('app.manageSubscriptions', {
+            url: '/subscriptions/manageSubscriptions',
+            views: {
+                modulepage: {
+                    templateUrl: 'partial/subscriptions/manageSubscriptions/manageSubscriptions.html',
+                    controller: 'ManagesubscriptionsCtrl'
+                }
+            },
+            resolve: {
+                    config : function(initService){
+                    // FIX ME: uncomment the commented code and remove this code return { "$$state": {"status": 0}} 
+                    // return initService.loadConfigFor(["SUBSCRIPTION"]);
+                    return {
+                        "$$state": {
+                            "status": 0
+                        }
+                    };
+                }
+            },
+            data: {
+                //FIX ME uncomment the commented code
+                //access: 'viewSubscriptions',
+                pageTitle: 'header.page_title_subscriptions'
+            },
+        })
+        .state('app.newSubscription', {
+            url: '/subscriptions/newSubscription',
+            views: {
+                modulepage: {
+                    templateUrl: 'partial/subscriptions/newSubscription/newSubscription.html',
+                    controller: 'NewsubscriptionCtrl'
+                }
+            },
+            resolve: {
+                    config : function(initService){
+                    // FIX ME: uncomment the commented code and remove this code return { "$$state": {"status": 0}} 
+                    // return initService.loadConfigFor(["SUBSCRIPTION"]);
+                    return {
+                        "$$state": {
+                            "status": 0
+                        }
+                    };
+                }
+            },
+            data: {
+                //FIX ME uncomment the commented code
+                //access: 'viewSubscriptions',
+                pageTitle: 'header.page_title_subscriptions'
+            },
+        })
         .state('app.activity', {
             url: '/activity',
             views: {
@@ -901,6 +951,7 @@ unionvmsWebApp.factory('initService',function($log, configurationService, locale
                 'config',
                 'spatial',
                 'exchange',
+                'subscriptions',
                 'alarms',
                 'areas',
                 'sales',

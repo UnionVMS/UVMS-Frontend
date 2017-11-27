@@ -1,0 +1,14 @@
+<div class="container containerWithTopBottomPadding">
+    <div class="row">
+        <div class="col-md-8 pageMenu">
+            <ul class="horizontal pipeSeparator" show-if-allowed='Audit:viewAudit'>
+                <li ng-class="{active: isNewSubscription == false}">
+                    <a href="#/subscriptions/manageSubscriptions">{{'subscriptions.pagemenu_manage_subscriptions' | i18n }}</a>
+                </li>
+                <li ng-class="{active: isNewSubscription == true}" show-if-allowed='Audit:viewConfiguration'>
+                    <a href="#/subscriptions/newSubscription">{{'subscriptions.pagemenu_new_subscription' | i18n }}</a>
+                </li>
+            </ul>
+        </div>
+    </div>
+</div> 

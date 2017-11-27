@@ -1,0 +1,19 @@
+{
+	"pagemenu_manage_subscriptions" : "MANAGE SUBSCRIPTIONS",
+	"pagemenu_new_subscription" : "NEW SUBSCRIPTION",
+
+	"subscription_form_name": "Name",
+	"subscription_form_active": "Active",
+	"subscription_form_organization": "Organization",
+	"subscription_form_subscription_type": "Subscription Type",
+	"subscription_form_accessibility":"Accessibility",
+	"subscription_end_point":"End point",
+	"subscription_description": "Description",
+	"subscription_valid_form": "Valid From",
+	"subscription_valid_until":"Valid Until",
+	"subscription_communication_channel": "Communication Channel",
+	"subscription_manual": "Manual",
+	"subscription_auto": "Auto",
+	"subscription_retry_delay": "Retry Delay",
+	"subscription_message_type":"Message Type"
+}

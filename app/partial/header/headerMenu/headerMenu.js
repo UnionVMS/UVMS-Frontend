@@ -42,6 +42,28 @@ angular.module('unionvmsWeb').controller('HeaderMenuCtrl',function($scope, $root
             $scope.addMenuItem(locale.getString('header.menu_areas'), '/areas', 'areas');
         }
 
+        // Subscription
+        /* var subscriptionLink = false;
+        var subscriptionId;
+
+        if (checkAccess('newSubscription', 'viewNewSubscription')) {
+            subscriptionLink = '/subscriptions/newSubscription';
+            subscriptionId = '';
+        } else if (checkAccess('manageSubscriptions', 'viewManageSubscriptions')) {
+            subscriptionLink = '/subscriptions/manageSubscriptions';
+            subscriptionId = '';
+        }
+
+        if (subscriptionLink) {
+            $scope.addMenuItem(locale.getString('header.menu_admin'), subscriptionLink, subscriptionId);
+        } */
+        
+        // subscriptions
+        //FIX ME uncomment the commented code
+        //if (checkAccess('subscriptions','viewSubscriptions')) {
+            $scope.addMenuItem(locale.getString('header.menu_subscriptions'), '/subscriptions/newSubscription', 'newSubscriptions');
+        // }
+
         // Activity
         if (checkAccess('Activity', 'ACTIVITY_ALLOWED')) {
             $scope.addMenuItem(locale.getString('header.menu_activity'), '/activity', 'activity');

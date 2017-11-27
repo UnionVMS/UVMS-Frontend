@@ -1,0 +1,22 @@
+<fieldset class="col-md-12 rep-param-subscription" ng-controller="RepparamsubscriptionCtrl">
+    <legend class="fieldsetLegendStyle">
+        <a>afd</a>
+    </legend>
+    <div class="col-md-6">
+        <label>
+            <input type="radio" ng-model="subscriptions.reportParams.vesselIdType" ng-value="reportParams.original" name="reportParams">
+        </label>
+        <label>
+            <input type="radio" ng-model="subscriptions.reportParams.vesselIdType" ng-value="reportParams.newReport" name="reportParams">
+        </label>
+        <ul class="col-md-6 list-checkboxes" ng-if="subscriptions.reportParams.vesselIdType.type === 'new'">
+            <li ng-repeat="vesselID in vesselIdTypes">
+                <input type="checkbox" value="vesselID" />{{vesselID}}
+            </li>
+        </ul>
+
+    </div>
+    <div class="col-md-6">
+        
+    </div>
+</fieldset>
