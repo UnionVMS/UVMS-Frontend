@@ -16,7 +16,7 @@ copy of the GNU General Public License along with the IFDM Suite. If not, see <h
 		</legend>
 		<!-- CATCH DETAILS CONTAINER -->
 		<div class="catch-details-container" id="catch-details-container">
-			<a class="btn-trip-quit" ng-if="repNav.isSectionVisible('tripsPanel')" title="{{'activity.trip_summary_quit_trip_detail' | i18n }}" ng-click="navigateBack()"><i class="fa fa-share-square-o"></i></a>
+			<a class="btn-trip-quit" ng-if="repNav.isSectionVisible('tripsPanel')" title="{{'activity.trip_summary_quit_trip_detail' | i18n }}" ng-click="navigateBack()" ng-if="tabType === 'reports'"><i class="fa fa-share-square-o"></i></a>
     		<a class="btn-print" title="{{'activity.trip_summary_export_trip' | i18n }}"><i class="fa fa-print"></i></a>
 			<!-- TRIP OVERVIEW PANEL -->
 			<!--<div class="row summary-row" ng-if="tripId">
@@ -25,7 +25,7 @@ copy of the GNU General Public License along with the IFDM Suite. If not, see <h
 			<!-- TABLE CONTAINER -->
 			<div class="table-container">
 				<div class="table-responsive-force" ng-repeat="table in tables | orderBy: 'order'" ng-if="isCatchDetailsLoaded">
-					<table class="table table-striped table-condensed table-bordered">
+					<table class="table table-striped table-condensed table-bordered catch-table">
 						<thead>
 							<tr ng-repeat="headerRow in table.headers" ng-class="{'upperHeader': !$last}">
 								<th ng-if="$first && table.nrGlobalHeaders" rowspan="{{table.headers.length-1}}" colspan="{{table.nrGlobalHeaders}}" class="invisible-header table-title">

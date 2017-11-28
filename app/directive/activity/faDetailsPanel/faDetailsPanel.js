@@ -20,7 +20,7 @@ copy of the GNU General Public License along with the IFDM Suite. If not, see <h
  * @description
  *  A reusable tile that will display the fishing activity overview data in every fishing activity report panel
  */
-angular.module('unionvmsWeb').directive('faDetailsPanel', function($filter) {
+angular.module('unionvmsWeb').directive('faDetailsPanel', function($filter,locale) {
 	return {
 		restrict: 'E',
 		replace: false,
@@ -28,10 +28,19 @@ angular.module('unionvmsWeb').directive('faDetailsPanel', function($filter) {
 			ngModel: '=',
 			isLocClickable: '&',
 		    locClickCallback: '&',
-		    locDetails: '='
+			locDetails: '=',
+			noDataMsgLoc: '@'
 		},
 		templateUrl: 'directive/activity/faDetailsPanel/faDetailsPanel.html',
 		link: function(scope, element, attrs, fn) {
+
+			function init(){
+				if(scope.noDataMsgLoc){
+					scope.noDataMsg = locale.getString(scope.noDataMsgLoc);
+				}else{
+					scope.noDataMsg = locale.getString('activity.no_data');
+				}
+			}
 
 			/**
 			 * Checks if value is array
@@ -59,6 +68,8 @@ angular.module('unionvmsWeb').directive('faDetailsPanel', function($filter) {
 				}
 				return status;
 			};
+
+			init();
 		}
 	};
 });

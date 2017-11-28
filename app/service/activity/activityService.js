@@ -24,6 +24,7 @@ copy of the GNU General Public License along with the IFDM Suite. If not, see <h
  * @attr {Array} history - An array containing the history list of a fishing activity report
  * @attr {Array} displayedHistory - An array that is a copy of the history array and is used in the smart tables
  * @attr {Object} overview - An object containing the data to be displayed at the activity overview partial
+ * @attr {Object} tripsList - An object containing the state of the FA reports table such as pagination, sorting, smart table tableState
  * @attr {Object} reportsList - An object containing the state of the FA reports table such as pagination, sorting, smart table tableState
  * @attr {Object} historyList - An object containing the state of the FA history table
  * @attr {Array} allPurposeCodes - An array containing all purpose codes available to the user
@@ -34,6 +35,7 @@ copy of the GNU General Public License along with the IFDM Suite. If not, see <h
 angular.module('unionvmsWeb').factory('activityService',function(locale, activityRestService, visibilityService, breadcrumbService, fishingActivityService) {
     var actServ = {};
     var pageSize = 25;
+    var tableNames = ['reportsList','tripsList'];
     
     actServ.breadcrumbPages = [{
         title: 'activity.breadcrumb_reports_list',
@@ -48,8 +50,24 @@ angular.module('unionvmsWeb').factory('activityService',function(locale, activit
         type: 'activitiesHistory',
         visible: false
     },{
+        title: 'activity.breadcrumb_report_trip_summary',
+        type: 'tripSummary',
+        visible: false
+    },{
+        title: 'activity.breadcrumb_report_catch_details',
+        type: 'catchDetails',
+        visible: false
+    },{
         title: 'activity.breadcrumb_report_details',
         type: 'details',
+        visible: false
+    },{
+        title: 'activity.breadcrumb_report_catch_evolution',
+        type: 'catchEvolution',
+        visible: false
+    },{
+        title: 'Trip Activity Details',
+        type: 'tripActivityDetails',
         visible: false
     }];
     
@@ -60,6 +78,8 @@ angular.module('unionvmsWeb').factory('activityService',function(locale, activit
     
     actServ.activities = [];
     actServ.displayedActivities = [];
+    actServ.trips = [];
+    actServ.displayedTrips = [];
     actServ.overview = {};
     actServ.history = [];
     actServ.displayedHistory = [];
@@ -67,7 +87,8 @@ angular.module('unionvmsWeb').factory('activityService',function(locale, activit
     actServ.activitiesHistory = [];
     actServ.displayedActivitiesHistory = [];
     
-    actServ.reportsList = getReportsListObject();
+    actServ.reportsList = getListObject();
+    actServ.tripsList = getListObject();
     actServ.historyList = getHistoryListObject();
     actServ.activitiesHistoryList = getActivitiesHistoryListObject();
     
@@ -81,7 +102,7 @@ angular.module('unionvmsWeb').factory('activityService',function(locale, activit
      * @private
      * @returns {Object} The reportsList object
      */
-    function getReportsListObject(){
+    function getListObject(){
         return {
             isLoading: false,
             hasError: false,
@@ -89,6 +110,7 @@ angular.module('unionvmsWeb').factory('activityService',function(locale, activit
             tableState: undefined,
             stCtrl: undefined,
             fromForm: false,
+            isTableLoaded: false,
             pagination: {
                 offset: 0,
                 pageSize: pageSize,
@@ -137,18 +159,22 @@ angular.module('unionvmsWeb').factory('activityService',function(locale, activit
      * 
      * @memberof activityService
      * @public
-     * @alias resetReportsListTableState
+     * @alias resetListTableStates
      */
-    actServ.resetReportsListTableState = function(){
-        if (angular.isDefined(actServ.reportsList.tableState)){
-            actServ.reportsList.tableState.pagination.start = 0;
-        }
-         
-        actServ.reportsList.pagination = {
-            offset: 0,
-            pageSize: pageSize,
-            totalPages: undefined
-        };
+    actServ.resetListTableStates = function(){
+        
+        angular.forEach(tableNames, function(name){
+            if (angular.isDefined(actServ[name].tableState)){
+                actServ[name].tableState.pagination.start = 0;
+            }
+             
+            actServ[name].pagination = {
+                offset: 0,
+                pageSize: pageSize,
+                totalPages: undefined
+            };
+        });
+        
     };
     
     /**
@@ -162,18 +188,20 @@ angular.module('unionvmsWeb').factory('activityService',function(locale, activit
     actServ.reset = function(goToInitialPage){
         this.activities = [];
         this.displayedActivities = [];
+        this.trips = [];
+        this.displayedTrips = [];
         this.overview = {};
         this.history = [];
         this.displayedHistory = [];
         this.activitiesHistory = [];
         this.displayedActivitiesHistory = [];
-        this.reportsList = getReportsListObject();
+        this.tripsList = getListObject();
+        this.reportsList = getListObject();
         this.historyList = getHistoryListObject();
         this.selReportDoc = {};
         this.activitiesHistoryList = getActivitiesHistoryListObject();
         this.allPurposeCodes = [];
         
-        this.isTableLoaded = false;
         this.isGettingMdrCodes = false;
         
         if (angular.isDefined(goToInitialPage) && goToInitialPage){
@@ -195,6 +223,9 @@ angular.module('unionvmsWeb').factory('activityService',function(locale, activit
             switch (type) {
                 case 'activities':
                     this.displayedActivities = [];
+                    break;
+                case 'trips':
+                    this.displayedTrips = [];
                     break;
                 case 'history':
                     this.displayedHistory = [];
@@ -238,25 +269,23 @@ angular.module('unionvmsWeb').factory('activityService',function(locale, activit
     
     
     /**
-     * Reset the reports list search object
+     * Reset the lists search object
      * 
      * @memberof activityService
      * @public
-     * @alias resetReportsListSearchObject
+     * @alias resetListSearchObject
      */
-    actServ.resetReportsListSearchObject = function(){
-        actServ.reportsList.searchObject = {
-            multipleCriteria: {
-                'PURPOSE': actServ.getAllPurposeCodesArray()
-            }
-        };
+    actServ.resetListSearchObject = function(){
+        //angular.forEach(tableNames, function(name){
+            actServ.reportsList.searchObject = actServ.tripsList.searchObject = {
+                multipleCriteria: {
+                    'PURPOSE': actServ.getAllPurposeCodesArray()
+                }
+            };
+       // });
     };
 	
-    /**
-     * A property to avoid automatic reloading of the table through the st-pipe, mainly used to avoid reloading data
-     * when coming back from activity details or activity history
-     */
-    actServ.isTableLoaded = false;
+    
     /**
      * Get the list of activities according to the table pagination and search criteria
      * 
@@ -265,49 +294,74 @@ angular.module('unionvmsWeb').factory('activityService',function(locale, activit
      * @alias getActivityList
      * @param {Object} searcObj - The object containing the search criteria to filter FA reports
      */    
-    actServ.getActivityList = function(callback, tableState){
-        actServ.clearAttributeByType('activities');
-        
+    actServ.getActivityList = function(callback, tableState, listName){
         var simpleCriteria = {};
-        if (angular.isDefined(actServ.reportsList.searchObject.simpleCriteria)){
-            simpleCriteria = actServ.reportsList.searchObject.simpleCriteria;
+        if (angular.isDefined(actServ[listName].searchObject.simpleCriteria)){
+            simpleCriteria = actServ[listName].searchObject.simpleCriteria;
         }
         
         var payload = {
             pagination: getPaginationForServer(tableState),
-            sorting: actServ.reportsList.sorting,
+            sorting: actServ[listName].sorting,
             searchCriteriaMap: simpleCriteria,
-            searchCriteriaMapMultipleValues: actServ.reportsList.searchObject.multipleCriteria
+            searchCriteriaMapMultipleValues: actServ[listName].searchObject.multipleCriteria
         };
+
+        var serviceName;
+        var arrName;
+        var displayedArrName;
+        if(listName === 'reportsList'){
+            serviceName = 'getActivityList';
+            arrName = 'activities';
+            displayedArrName = 'displayedActivities';
+        }else{
+            serviceName = 'getTripsList';
+            arrName = 'trips';
+            displayedArrName = 'displayedTrips';
+            //FIXME
+            payload.pagination = payload.sorting = {};
+        }
         
-        activityRestService.getActivityList(payload).then(function(response){
+        actServ.clearAttributeByType(arrName);
+
+        activityRestService[serviceName](payload).then(function(response){
             if (response.totalItemsCount !== 0){
-                actServ.reportsList.pagination.totalPages = Math.ceil(response.totalItemsCount / pageSize);
+                actServ[listName].pagination.totalPages = Math.ceil(response.totalItemsCount / pageSize);
+            }
+
+            if(listName === 'tripsList'){
+                angular.forEach(response.resultList, function(item){
+                    angular.forEach(item.vesselIdList, function(vesselValue,vesselId){
+                        item[vesselId] = vesselValue;
+                    });
+                    delete item.vesselIdList;
+                });
             }
             
-            actServ.activities = response.resultList;
-            actServ.displayedActivities = [].concat(actServ.activities);
+            actServ[arrName] = response.resultList;
+            actServ[displayedArrName] = [].concat(actServ[arrName]);
             if (angular.isDefined(callback)){
                 if (angular.isDefined(tableState)){
-                    callback(tableState);
+                    callback(tableState, listName);
                 } else {
-                    callback();
+                    callback(undefined, listName);
                 }
                 
             }
             
-            if (!angular.isDefined(callback) && angular.isDefined(actServ.reportsList.tableState)){
-                actServ.reportsList.tableState.pagination.numberOfPages = actServ.reportsList.pagination.totalPages; 
+            if (!angular.isDefined(callback) && angular.isDefined(actServ[listName].tableState)){
+                actServ[listName].tableState.pagination.numberOfPages = actServ[listName].pagination.totalPages; 
             }
-            
-            actServ.reportsList.isLoading = false;
-            actServ.reportsList.hasError = false;
-            actServ.isTableLoaded = true;
+
+            actServ[listName].isLoading = false;
+            actServ[listName].hasError = false;
+            actServ[listName].isTableLoaded = true;
         }, function(error){
-            actServ.reportsList.isLoading = false;
-            actServ.reportsList.hasError = true;
-            actServ.isTableLoaded = false;
+            actServ[listName].isLoading = false;
+            actServ[listName].hasError = true;
+            actServ[listName].isTableLoaded = false;
         });
+
     };
     
     /**
@@ -418,6 +472,30 @@ angular.module('unionvmsWeb').factory('activityService',function(locale, activit
     actServ.setAlert = function(hasError, message){
         actServ.alert.hasError = hasError;
         actServ.alert.msg = message;
+    };
+    
+    /**
+     * Gets the data for communication Channel
+     * 
+     * @memberof activityService
+     * @public
+     * @alias getCommChannelsData 
+     */
+    actServ.getCommChannelsData = function(){
+        var comboList = [];
+        activityRestService.getCommChannelsData().then(function (response) {
+            angular.forEach(response, function(item) {
+                var rec = {
+                    code: item,
+                    text: item
+                };
+                comboList.push(rec);
+            });
+
+        }, function (error) {
+        //TODO deal with error from service
+        });
+        return comboList;
     };
 
 	return actServ;

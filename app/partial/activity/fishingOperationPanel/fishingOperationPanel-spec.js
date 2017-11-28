@@ -13,32 +13,24 @@ describe('FishingoperationpanelCtrl', function() {
 
 	beforeEach(module('unionvmsWeb'));
 
-	var scope,ctrl,fishActRestServSpy,fishOperSpy;
+	var scope,ctrl,fishActRestServSpy;
 	
 	beforeEach(function(){
-		fishActRestServSpy = jasmine.createSpyObj('fishingActivityService', ['getFishingActivity']);
-		fishOperSpy = jasmine.createSpy('FishingOperation');
+		fishActRestServSpy = jasmine.createSpyObj('fishingActivityService', ['getFishingActivity', 'reloadFromActivityHistory']);
 		
 		module(function($provide){
 			$provide.value('fishingActivityService', fishActRestServSpy);
-			$provide.value('FishingOperation', fishOperSpy);
 		});
 	});
 
 	beforeEach(inject(function($httpBackend) {
-		//Mock
-		$httpBackend.whenGET(/usm/).respond();
-		$httpBackend.whenGET(/i18n/).respond();
-		$httpBackend.whenGET(/globals/).respond({data : []});
-	}));
+        //Mock
+        $httpBackend.whenGET(/usm/).respond();
+        $httpBackend.whenGET(/i18n/).respond();
+        $httpBackend.whenGET(/globals/).respond({data : []});
+    }));
 
-	beforeEach(inject(function($rootScope, $controller) {
-		buildMocks();
-
-		scope = $rootScope.$new();
-		ctrl = $controller('FishingoperationpanelCtrl', {$scope: scope});
-		scope.$digest();
-	}));
+    
 
 	function getFishingActivity(){
 		return {code: 200};
@@ -53,10 +45,36 @@ describe('FishingoperationpanelCtrl', function() {
 			};
 		});
 	}
+	
+	describe('Standard loading of the fishing operation', function(){
+	    beforeEach(inject(function($rootScope, $controller) {
+	        buildMocks();
+	        fishActRestServSpy.reloadFromActivityHistory = false;
+	        scope = $rootScope.$new();
+	        ctrl = $controller('FishingoperationpanelCtrl', {$scope: scope});
+	        scope.$digest();
+	    }));
+	    
+	    it('should initialize the fishing operation by calling the rest service', inject(function() {
+	        expect(fishActRestServSpy.getFishingActivity).toHaveBeenCalled();
+	        expect(fishActRestServSpy.reloadFromActivityHistory).toBeFalsy();
+	    }));
+	});
 
 
-	it('should initialize the fishing activity', inject(function() {
-		expect(fishActRestServSpy.getFishingActivity).toHaveBeenCalled();
-	}));
+	describe('Loading of the fishing operation by faHistoryNavigator', function(){
+        beforeEach(inject(function($rootScope, $controller) {
+            buildMocks();
+            fishActRestServSpy.reloadFromActivityHistory = true;
+            scope = $rootScope.$new();
+            ctrl = $controller('FishingoperationpanelCtrl', {$scope: scope});
+            scope.$digest();
+        }));
+        
+        it('should initialize the fishing operation through faHistoryNavigator', inject(function() {
+            expect(fishActRestServSpy.getFishingActivity).not.toHaveBeenCalled();
+            expect(fishActRestServSpy.reloadFromActivityHistory).toBeFalsy();
+        }));
+    });
 
 });

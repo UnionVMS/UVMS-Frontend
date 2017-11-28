@@ -9,7 +9,7 @@ the hope that it will be useful, but WITHOUT ANY WARRANTY; without even the impl
 FITNESS FOR A PARTICULAR PURPOSE.  See the GNU General Public License for more details. You should have received a
 copy of the GNU General Public License along with the IFDM Suite. If not, see <http://www.gnu.org/licenses/>.
 */
-angular.module('unionvmsWeb').factory('reportService',function($rootScope, $timeout, $interval, $anchorScroll, locale, TreeModel, reportRestService, reportFormService, spatialRestService, spatialHelperService, defaultMapConfigs, mapService, unitConversionService, visibilityService, mapAlarmsService, loadingStatus, spatialConfigRestService, SpatialConfig, Report, globalSettingsService, userService, reportingNavigatorService, $modalStack, layerPanelService,tripReportsTimeline) {
+angular.module('unionvmsWeb').factory('reportService',function($rootScope, $timeout, $interval, $anchorScroll, locale, TreeModel, reportRestService, reportFormService, spatialRestService, spatialHelperService, defaultMapConfigs, mapService, unitConversionService, visibilityService, mapAlarmsService, loadingStatus, spatialConfigRestService, SpatialConfig, Report, globalSettingsService, userService, reportingNavigatorService, $modalStack, layerPanelService,tripReportsTimeline, tripSummaryService) {
 
     var rep = {
        id: undefined,
@@ -138,10 +138,12 @@ angular.module('unionvmsWeb').factory('reportService',function($rootScope, $time
                 rep.getConfigsTime = moment.utc().format('YYYY-MM-DDTHH:mm:ss');
                 
                 if ((report && report.withMap) || rep.isReportRefreshing){
+                    tripSummaryService.withMap = true;
                     spatialRestService.getConfigsForReport(rep.id, rep.getConfigsTime).then(getConfigSuccess, getConfigError);
                     reportingNavigatorService.goToView('liveViewPanel','mapPanel');
                     loadingStatus.isLoading('InitialReporting', false);
                 } else {
+                    tripSummaryService.withMap = false;
                     spatialRestService.getConfigsForReportWithoutMap(rep.getConfigsTime).then(getConfigWithoutMapSuccess, getConfigWithoutMapError);
                     if(rep.reportType === 'summary'){
                         reportingNavigatorService.goToView('liveViewPanel','catchDetails');

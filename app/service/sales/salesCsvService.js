@@ -18,7 +18,7 @@
                     locale.getString('sales.table_header_landing_date'),
                     locale.getString('sales.table_header_landing_port'),
                     locale.getString('sales.table_header_sales_type'),
-                    locale.getString('sales.table_header_seller'),
+                    locale.getString('sales.table_header_provider'),
                     locale.getString('sales.table_header_buyer')
                 ],
                 product: [

@@ -1,12 +1,12 @@
 <div class="col-md-12 gear-tile">
 	<div class="row">
-		<div class="col-md-12 gear-type">{{item.type}}</div>
+		<div class="col-md-12 gear-type">{{item.type}} <span ng-if="item.description">- {{::item.description}}</span></div>
 	</div>
 	<div class="row" ng-if="item.role">
 		<div class="col-md-12"><b>{{'activity.role' | i18n}}:</b> {{item.role}}</div>
 	</div>
 
 	<div class="row" ng-if="item.mainCharacteristics">
-		<fa-details-panel class="col-md-12" ng-model="item.mainCharacteristics"></fa-details-panel>
+		<fa-details-panel class="col-md-12" ng-model="item.mainCharacteristics" no-data-msg-loc="activity.no_gears_reported"></fa-details-panel>
 	</div>
 </div>

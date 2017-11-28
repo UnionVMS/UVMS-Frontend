@@ -12,12 +12,11 @@
             }
         });
 
-    function salesReportCtrl($state, codeListService) {
+    function salesReportCtrl($state) {
         /* jshint validthis:true */
         var vm = this;
 
         getCurrency();
-        getType();
 
         vm.close = closeSalesReport;
 
@@ -28,17 +27,7 @@
         }
 
         function getCurrency() {
-            codeListService.getCodeListAssured('currencies').then(
-                function (list) {
-                    vm.currency = list.getValue(vm.salesReport.document.currency);
-                });
-        }
-
-        function getType() {
-            codeListService.getCodeListAssured('salesCategories').then(
-                function (list) {
-                    vm.salesCategory = list.getValue(vm.salesReport.category);
-                });
+            vm.currency = vm.salesReport.document.currency;
         }
     }
 })();

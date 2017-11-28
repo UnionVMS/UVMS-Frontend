@@ -148,7 +148,7 @@ angular.module('unionvmsWeb').controller('VmspanelCtrl',function($scope, locale,
    //Alarms table config
    $scope.displayedAlarms = [].concat($scope.executedReport.alarms);
 
-   //Alarms table config
+   //Trips table config
    $scope.displayedTrips = [].concat($scope.executedReport.trips);
    
    $scope.getAlarmColor = function(status){

@@ -20,7 +20,7 @@
 	<div class="carousel-paginator" ng-if="ngModel.length > 1 && currentItem">{{ 'activity.carousel_paginator' | i18n:[currentItem, ngModel.length]}}</div>
 	<div class="row no-data" ng-if="!ngModel || ngModel.length === 0">
 		<div class="col-md-12">
-			<span>{{'activity.no_data' | i18n}}</span>
+			<span>{{ noDataMsg }}</span>
 		</div>
 	</div>
 </fieldset>
