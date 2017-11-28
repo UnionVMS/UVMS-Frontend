@@ -308,6 +308,7 @@ describe('locationTile', function() {
         });
         
         it('should properly process input activity geometry', function(){
+            scope.locationDetails = buildMock();
             scope.srcActivityGeom = getActivityGeom();
             scope.init();
             

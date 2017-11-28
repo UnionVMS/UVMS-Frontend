@@ -18,6 +18,8 @@ copy of the GNU General Public License along with the IFDM Suite. If not, see <h
  * @description
  *  The controller for the trip summary tab  
  */
-angular.module('unionvmsWeb').controller('TripsummaryCtrl', function ($scope, tripSummaryService) {
+angular.module('unionvmsWeb').controller('TripsummaryCtrl', function ($scope, tripSummaryService, breadcrumbService) {
     $scope.tripSummServ = tripSummaryService;
+    $scope.breadcrumbServ = breadcrumbService;
+    $scope.activityTrip=$scope.srcTab === 'activity'?'activity':'';
 });

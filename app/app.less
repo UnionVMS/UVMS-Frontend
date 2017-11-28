@@ -127,7 +127,10 @@ copy of the GNU General Public License along with the IFDM Suite. If not, see <h
 @import "widgets/numberWidget/numberWidget.less";
 @import "widgets/incomingMovements/incomingMovements.less";
 @import "widgets/exchangeHistory/exchangeHistory.less";
-
+/*SALES*/
+@import "partial/sales/sales.less";
+@import "directive/sales/groupLineInput/groupLineInput.less";
+/*SALES*/
 /*USM*/
 @import "usm/uvms-ui.less";
 
@@ -215,7 +218,6 @@ copy of the GNU General Public License along with the IFDM Suite. If not, see <h
 @import "directive/activity/catchPanel/catchPanel.less";
 @import "directive/activity/cronologyPanel/cronologyPanel.less";
 @import "directive/activity/fishingTripPanel/fishingTripPanel.less";
-@import "directive/activity/rolesPanel/rolesPanel.less";
 @import "directive/activity/tripReportsPanel/tripReportsPanel.less";
 @import "directive/activity/vesselTile/vesselTile.less";
 @import "directive/activity/tripOverviewPanel/tripOverviewPanel.less";
@@ -267,11 +269,18 @@ copy of the GNU General Public License along with the IFDM Suite. If not, see <h
 @import "directive/activity/carouselTile/templates/contactPartiesTile/contactPartiesTile.less";
 @import "directive/activity/relocationTile/relocationTile.less";
 @import "directive/activity/carouselTile/templates/vesselTileTemplate/vesselTileTemplate.less";
+@import "partial/activity/tripReportsList/tripReportsList.less";
+@import "partial/activity/activityTripSummary/activityTripSummary.less";
+@import "partial/activity/tripActivityDetail/tripActivityDetails.less";
 @import "directive/activity/printButton/printButton.less";
 @import "directive/activity/printButton/printForm/printForm.less";
 @import "partial/exchange/messageModal/messageModal.less";
 @import "partial/exchange/validationResultsModal/validationResultsModal.less";
 @import "directive/exchange/messageStatus/messageStatus.less";
+@import "partial/activity/pieChartModal/pieChartModal.less";
+@import "partial/admin/adminConfiguration/configurationActivity/configurationActivity.less";
+@import "partial/spatial/configurations/catchFiguresTresholds/catchFiguresTresholds.less";
+@import "directive/activity/faHistoryNavigator/faHistoryNavigator.less";
 
 /* Add Component LESS Above */
 /* Required for Angular UI Bootstrap */

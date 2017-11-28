@@ -15,7 +15,8 @@ angular.module('unionvmsWeb').directive('clockPanel', function(locale) {
         replace: false,
         scope: {
             faType: '@',
-            clockPanalData: '='
+            clockPanalData: '=',
+            horizontalAlign: '@'
         },
         templateUrl: 'directive/activity/clockPanel/clockPanel.html',
         link: function(scope, element, attrs, fn) {

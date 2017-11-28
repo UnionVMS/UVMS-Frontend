@@ -48,6 +48,8 @@ angular.module('unionvmsWeb').controller('pollingLogsCtrl',function($scope, $sta
     var longPollingId;
     var modalInstance;
 
+    $scope.advancedSearch = false;
+
     $scope.resetSearch = function() {
         searchService.resetAdvancedSearch();
         $scope.advancedSearchObject.TIME_SPAN = $scope.DATE_TODAY;
@@ -91,11 +93,9 @@ angular.module('unionvmsWeb').controller('pollingLogsCtrl',function($scope, $sta
     $scope.getStatusLabelClass = function(status){
         switch(status){
             case 'SUCCESSFUL' :
-                return 'label-success';
+                return 'status-label-success';
             case 'FAILED' :
-                return 'label-danger';
-            default:
-                return 'label-warning';
+                return 'status-label-danger';
         }
     };
 
@@ -109,9 +109,11 @@ angular.module('unionvmsWeb').controller('pollingLogsCtrl',function($scope, $sta
             locale.getString('polling.polling_logs_table_header_ext_no'),
             locale.getString('polling.polling_logs_table_header_poll_type'),
             locale.getString('polling.polling_logs_table_header_transponder'),
+            locale.getString('polling.polling_logs_table_header_identifier'),
+            locale.getString('polling.polling_logs_table_header_user'),
             locale.getString('polling.polling_logs_table_header_time'),
             locale.getString('polling.polling_logs_table_header_status'),
-            locale.getString('polling.polling_logs_table_header_user')
+            locale.getString('common.comment')
         ];
 
         //Set the data columns
@@ -132,9 +134,11 @@ angular.module('unionvmsWeb').controller('pollingLogsCtrl',function($scope, $sta
                         angular.isDefined(item.vessel) ? item.vessel.externalMarking : '',
                         angular.isDefined(item.poll) ? $filter('pollTypeName')(item.poll.type) : '',
                         angular.isDefined(item.poll) ? $filter('transponderName')(item.poll.attributes.TRANSPONDER) : '',
-                        angular.isDefined(item.exchangePoll) ? $filter('confDateFormat')(item.exchangePoll.history[0].time) : '',
-                        angular.isDefined(item.exchangePoll) ? $filter('exchangeStatusName')(item.exchangePoll.history[0].status) : '',
-                        angular.isDefined(item.poll) ? item.poll.attributes.USER : ''
+                        angular.isDefined(item.exchangePoll) ? item.exchangePoll.identifier : '',
+                        angular.isDefined(item.poll) ? item.poll.attributes.USER : '',
+                        angular.isDefined(item.exchangePoll) ? $filter('confDateFormat')(item.exchangePoll.history.slice(-1)[0].time) : '',
+                        angular.isDefined(item.exchangePoll) ? $filter('exchangeStatusName')(item.exchangePoll.history.slice(-1)[0].status) : '',
+                        angular.isDefined(item.poll.comment) ? item.poll.comment : ''
                     ];
                     csvObject.push(csvRow);
                     return csvObject;
@@ -236,24 +240,28 @@ angular.module('unionvmsWeb').controller('pollingLogsCtrl',function($scope, $sta
 
     //Handle click on the top "check all" checkbox
     $scope.checkAll = function(){
-        if($scope.isAllChecked()){
-            //Remove all
-            $scope.clearSelection();
-        }else{
-            //Add all
+        if ($scope.isAllChecked()) {
             $scope.clearSelection();
             $.each($scope.currentSearchResults.items, function(index, item) {
+                item.Selected = false;
+                $scope.removeFromSelection(item);
+            });
+        } else {
+            $scope.clearSelection();
+            $.each($scope.currentSearchResults.items, function(index, item) {
+                item.Selected = true;
                 $scope.addToSelection(item);
             });
         }
     };
 
     $scope.checkItem = function(item){
-        if($scope.isChecked(item)){
-            //Remove
-            $scope.removeFromSelection(item);
-        }else{
+        item.Selected = !item.Selected;
+
+        if (item.Selected){
             $scope.addToSelection(item);
+        } else {
+            $scope.removeFromSelection(item);
         }
     };
 
@@ -274,12 +282,11 @@ angular.module('unionvmsWeb').controller('pollingLogsCtrl',function($scope, $sta
 
     $scope.isChecked = function(item){
         var checked = false;
-        $.each($scope.selectedItems, function(index, item){
-            if(item.isEqualPollId(item)){
-                checked = true;
-                return false;
-            }
-        });
+
+        if (item.Selected) {
+            checked = true;
+        }
+
         return checked;
     };
 
@@ -295,12 +302,23 @@ angular.module('unionvmsWeb').controller('pollingLogsCtrl',function($scope, $sta
 
     //Remove an item from the selection
     $scope.removeFromSelection = function(item){
-        $.each($scope.selectedItems, function(index, item){
-            if(item.isEqualPollId(item)){
-                $scope.selectedItems.splice(index, 1);
-                return false;
-            }
-        });
+        $scope.selectedItems.splice(item, 1);
+    };
+
+    //Add items to the "edit selection" dropdown
+    $scope.editSelectionDropdownItems = [
+        {text:locale.getString('common.export_selection'), code : 'EXPORT'}
+    ];
+
+    //Callback function for the "edit selection" dropdown
+    $scope.editSelectionCallback = function(selectedItem){
+        if($scope.selectedItems.length > 0){
+            if (selectedItem.code === 'EXPORT') {
+                $scope.exportLogsAsCSVFile(true);
+           }
+        } else{
+            alertService.showInfoMessageWithTimeout(locale.getString('common.no_items_selected'));
+        }
     };
 
 
@@ -313,5 +331,4 @@ angular.module('unionvmsWeb').controller('pollingLogsCtrl',function($scope, $sta
     });
 
     init();
-
 });

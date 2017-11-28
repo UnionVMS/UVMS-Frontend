@@ -77,6 +77,7 @@ module.exports = function (grunt) {
                   '/mapfish-print',
                   '/usm-authentication/rest', '/usm-authorisation/rest', '/usm-administration/rest',
                   '/activity/rest',
+                  '/sales/rest',
                   '/mdr/rest'],
               host: 'localhost',
               port: 8080
@@ -139,7 +140,7 @@ module.exports = function (grunt) {
             options: {
                 destination: 'dist/docs',
                 configure: 'jsdoc_conf.json',
-                template: 'node_modules/angular-jsdoc/angular-template',
+                template: 'node_modules/angular-jsdoc/default',
                 readme: './README.md',
                 recurse: true
             }

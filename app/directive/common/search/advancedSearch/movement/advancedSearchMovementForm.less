@@ -9,13 +9,23 @@ the hope that it will be useful, but WITHOUT ANY WARRANTY; without even the impl
 FITNESS FOR A PARTICULAR PURPOSE.  See the GNU General Public License for more details. You should have received a
 copy of the GNU General Public License along with the IFDM Suite. If not, see <http://www.gnu.org/licenses/>.
  */
-.movementsearch{
-    button{
+.movementsearch {
+	margin-bottom: @standardContainerPadding * 2 !important;
+	position: relative;
+
+    button {
         width: 100%;
     }
 
-    .search-button {
-    	margin-bottom: 3px;
-    	margin-top: 3px;
+    .search-buttons {
+    	position: absolute;
+    	top: 0;
+    	right: 15px;
+
+    	.search-button {
+    		margin-bottom: 3px;
+    		margin-top: 3px;
+    		padding-right: 0;
+    	}
     }
 }

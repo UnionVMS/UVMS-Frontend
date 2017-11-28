@@ -9,15 +9,18 @@ the hope that it will be useful, but WITHOUT ANY WARRANTY; without even the impl
 FITNESS FOR A PARTICULAR PURPOSE.  See the GNU General Public License for more details. You should have received a
 copy of the GNU General Public License along with the IFDM Suite. If not, see <http://www.gnu.org/licenses/>.
  */
-angular.module('unionvmsWeb').controller('AuditlogCtrl', function($scope, $q, $filter, locale, Audit, auditLogRestService, searchService, auditOptionsService, SearchResults, GetListRequest, infoModal, pollingRestService, mobileTerminalRestService, csvService) {
+angular.module('unionvmsWeb').controller('AuditlogCtrl', function($scope, $q, $filter, locale, Audit, auditLogRestService, searchService, auditOptionsService, SearchResults, GetListRequest, infoModal, pollingRestService, mobileTerminalRestService, csvService, alertService) {
 
     //Names used in the backend
     var TYPES = auditOptionsService.getTypes();
 
-	// ************ Page setup ************
+    //Number of items displayed on each page
+    $scope.itemsByPage = 20;
 
-	$scope.isAudit = true; //Highlights submenu, aka "AUDIT LOGS"
-	$scope.selectedTab = "ALL"; //Set initial tab
+    // ************ Page setup ************
+
+    $scope.isAudit = true; //Highlights submenu, aka "AUDIT LOGS"
+    $scope.selectedTab = "ALL"; //Set initial tab
     auditOptionsService.setOptions($scope.selectedTab);
 
     $scope.currentSearchResults = new SearchResults('date', false);
@@ -28,11 +31,13 @@ angular.module('unionvmsWeb').controller('AuditlogCtrl', function($scope, $q, $f
         $scope.searchAuditLogs();
     };
 
-    $scope.$watch('selectedTab', function(newVal) {
-        auditOptionsService.setOptions(newVal);
-        searchService.reset();
-        auditOptionsService.resetDefaults();
-        $scope.searchAuditLogs();
+    $scope.$watch('selectedTab', function(newVal, oldVal) {
+        if (newVal !== oldVal) {
+            auditOptionsService.setOptions(newVal);
+            searchService.reset();
+            auditOptionsService.resetDefaults();
+            $scope.searchAuditLogs();
+        }
     });
 
     //Do the search
@@ -47,15 +52,23 @@ angular.module('unionvmsWeb').controller('AuditlogCtrl', function($scope, $q, $f
             }
         }
 
-        searchService.searchAuditLogs().then(function(searchResultListPage) {
-            $scope.currentSearchResults.updateWithNewResults(searchResultListPage);
-        },
-        function(error) {
-            console.log(error);
-            $scope.currentSearchResults.removeAllItems();
-            $scope.currentSearchResults.setLoading(false);
-            $scope.currentSearchResults.setErrorMessage(locale.getString('common.search_failed_error'));
-        });
+        searchService.searchAuditLogs()
+                .then(updateSearchResults, onGetSearchResultsError);
+    };
+
+    //Update the search results
+    var updateSearchResults = function(searchResultListPage){
+        $scope.currentSearchResults.updateWithNewResults(searchResultListPage);
+        $scope.allCurrentSearchResults = searchResultListPage.items;
+        $scope.currentSearchResultsByPage = searchResultListPage.items;
+    };
+
+    //Error during search
+    var onGetSearchResultsError = function(error){
+        $scope.currentSearchResults.removeAllItems();
+        $scope.currentSearchResults.setLoading(false);
+        $scope.currentSearchResults.setErrorMessage(locale.getString('common.search_failed_error'));
+        $scope.allCurrentSearchResults = $scope.currentSearchResults.items;
     };
 
     //Goto page in the search results
@@ -189,7 +202,7 @@ angular.module('unionvmsWeb').controller('AuditlogCtrl', function($scope, $q, $f
         };
 
         //Create and download the file
-        if ($scope.getSelectedItems().length > 0 && !$scope.isAllChecked()) {
+        if ($scope.getSelectedItems().length > 0) {
             csvService.downloadCSVFile(getData(), header, filename);
         } else {
             $scope.fetchAllItems(function(exportItems) {
@@ -306,6 +319,22 @@ angular.module('unionvmsWeb').controller('AuditlogCtrl', function($scope, $q, $f
                     'title': locale.getString('audit.tab_access_control')
                 }
             ];
+        }
+    };
+
+    //Add items to the "edit selection" dropdown
+    $scope.editSelectionDropdownItems = [
+        {text:locale.getString('common.export_selection'), code : 'EXPORT'}
+    ];
+
+    //Callback function for the "edit selection" dropdown
+    $scope.editSelectionCallback = function(selectedItem){
+        if($scope.getSelectedItems().length > 0){
+            if (selectedItem.code === 'EXPORT') {
+                $scope.exportLogsAsCSVFile(true);
+           }
+        } else{
+            alertService.showInfoMessageWithTimeout(locale.getString('common.no_items_selected'));
         }
     };
 

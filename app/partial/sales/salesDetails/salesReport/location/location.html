@@ -1,0 +1,16 @@
+<h5>{{'sales.location_header' | i18n}}</h5>
+<div class="row">
+    <div class="col-md-12">
+        <div class="mapContainer" ng-if="!vm.coordinatesmissing">
+            <leaflet center="vm.center" markers="vm.markers" height="200px" bounds="vm.bounds" width="100%"></leaflet>
+        </div>
+        <div ng-if="vm.coordinatesmissing">
+            <span class="fa fa-4x fa-ban"></span>
+        </div>
+    </div>
+</div>
+<div class="row">
+    <div class="col-md-12">
+       {{vm.location.extId}}
+    </div>
+</div>

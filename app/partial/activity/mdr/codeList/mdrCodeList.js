@@ -28,6 +28,16 @@ angular.module('unionvmsWeb').controller('MdrcodelistCtrl',function($scope, $mod
     $scope.columns = [
         'code',
         'description',
+        'startDate',
+        'endDate',
+        'version'
+    ];
+
+    var searchAttrs = [
+        'code',
+        'description',
+        /* 'validityStart',
+        'validityEnd', */
         'version'
     ];
 
@@ -47,6 +57,24 @@ angular.module('unionvmsWeb').controller('MdrcodelistCtrl',function($scope, $mod
     };
 
     /**
+     * Load validity dates in MDR lists
+     *
+     * @memberof MdrcodelistCtrl
+     * @function loadValidityDates
+     * @public
+     * @param {Array} list - mdr code list
+     */
+    var loadValidityDates = function(list) {
+        angular.forEach(list, function(item){
+            if(item.validity){
+                item.startDate = item.validity.startDate;
+                item.endDate = item.validity.endDate;
+            }
+            delete item.validity;
+        });
+    };
+
+    /**
      * Closes the mdr code list modal
      *
      * @memberof MdrcodelistCtrl
@@ -55,9 +83,15 @@ angular.module('unionvmsWeb').controller('MdrcodelistCtrl',function($scope, $mod
      * @param {Object} tableState - current state of filters and sorting of table
      */
     $scope.callServer = function(tableState) {
-        mdrRestService.getMDRCodeList(acronym, tableState, $scope.columns).then(function (result) {
+        var sortAttr;
+        if(angular.isDefined(tableState.sort) && ['startDate', 'endDate'].indexOf(tableState.sort.predicate) !== -1 ){
+            sortAttr = 'validity.' + tableState.sort.predicate;
+        }
+
+        mdrRestService.getMDRCodeList(acronym, tableState, searchAttrs, sortAttr).then(function (result) {
             if (angular.isDefined(result)) {
                 if(!angular.equals($scope.displayedMdrCodeList, result)){
+                    loadValidityDates(result);                    
                     $scope.displayedMdrCodeList = result;
                 }
             }else{

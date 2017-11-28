@@ -103,7 +103,7 @@ copy of the GNU General Public License along with the IFDM Suite. If not, see <h
     <script src="../bower_components/angular-bootstrap-slider/slider.js"></script>
     <script src="../bower_components/qtip2/jquery.qtip.min.js"></script>
     <script src="../bower_components/angular-qtip2-directive/qtip2.js"></script>
-    <script src="../bower_components/Chart.js/Chart.js"></script>
+    <script src="../bower_components/chart.js/dist/Chart.js"></script>
     <script src="../bower_components/angular-chart.js/dist/angular-chart.js"></script>
     <script src="../bower_components/palette/palette.js"></script>
     <script src="../bower_components/tinycolor/dist/tinycolor-min.js"></script>
@@ -128,6 +128,7 @@ copy of the GNU General Public License along with the IFDM Suite. If not, see <h
     <script src="directive/common/search/advancedSearch/mobileTerminal/advancedSearchMobileTerminalForm.js"></script>
     <script src="directive/common/search/advancedSearch/pollingMobileTerminal/searchPollingMobileTerminalForm.js"></script>
     <script src="directive/common/search/advancedSearch/vessel/advancedSearchVesselForm.js"></script>
+    <script src="directive/common/search/advancedSearch/sales/advancedSearchSalesForm.js"></script>
     <script src="directive/common/searchResultErrorAlert/searchResultErrorAlert.js"></script>
     <script src="directive/common/sortableTableHeader/sortableTableHeader.js"></script>
     <script src="directive/common/staticInclude/staticInclude.js"></script>
@@ -267,6 +268,39 @@ copy of the GNU General Public License along with the IFDM Suite. If not, see <h
     <script src="directive/common/search/advancedSearch/alarm/holdingTableSearchForm.js"></script>
     <script src="directive/common/search/advancedSearch/alarm/ticketSearchForm.js"></script>
     <script src="service/common/csvService.js"></script>
+
+    <!--Sales-->
+    <script src="partial/sales/sales.config.js"></script>
+    <script src="partial/sales/sales.js"></script>
+    <script src="partial/sales/salesReportList/salesReportList.js"></script>
+    <script src="partial/sales/salesDetails/salesDetails.js"></script>
+    <script src="partial/sales/salesDetails/fishingTrip/fishingTrip.js"></script>
+    <script src="partial/sales/salesDetails/salesReport/salesReport.js"></script>
+    <script src="partial/sales/salesDetails/salesReport/document/document.js"></script>
+    <script src="partial/sales/salesDetails/salesReport/fluxReport/fluxReport.js"></script>
+    <script src="partial/sales/salesDetails/salesReport/location/location.js"></script>
+    <script src="partial/sales/salesDetails/salesReport/parties/parties.js"></script>
+    <script src="partial/sales/salesDetails/salesReport/products/products.js"></script>
+    <script src="partial/sales/salesDetails/salesReport/products/productsTable.js"></script>
+    <script src="partial/sales/salesDetails/salesReport/products/productsChart.js"></script>
+    <script src="partial/sales/salesDetails/salesReport/totals/totals.js"></script>
+    <script src="partial/sales/salesDetails/salesReport/versionsDropdown/versionsDropdown.js"></script>
+    <script src="partial/sales/salesDetails/salesReport/relatedReportsDropdown/relatedReportsDropdown.js"></script>
+
+    <script src="service/sales/salesRestApi.js"></script>
+    <script src="service/sales/salesRestService.js"></script>
+    <script src="service/sales/salesSearchService.js"></script>
+    <script src="service/sales/salesFishingActivityService.js"></script>
+    <script src="service/sales/codeListService.js"></script>
+    <script src="service/sales/salesSelectionService.js"></script>
+    <script src="service/sales/salesCsvService.js"></script>
+    <script src="service/sales/model/salesReportListPageModel.js"></script>
+    <script src="service/sales/model/codeListModel.js"></script>
+
+    <script src="filter/sales/codeListFilter.js"></script>
+
+    <script src="directive/sales/groupLineInput/groupLineInput.js"></script>
+    <script src="directive/sales/simpleExport/simpleExport.js"></script>
 
     <!-- Assets in zone widget -->
     <script src="widgets/assetsInZone/assetsInZone.js"></script>
@@ -505,7 +539,6 @@ copy of the GNU General Public License along with the IFDM Suite. If not, see <h
     <script src="directive/activity/catchPanel/catchPanel.js"></script>
     <script src="directive/activity/cronologyPanel/cronologyPanel.js"></script>
     <script src="directive/activity/fishingTripPanel/fishingTripPanel.js"></script>
-    <script src="directive/activity/rolesPanel/rolesPanel.js"></script>
     <script src="directive/activity/tripReportsPanel/tripReportsPanel.js"></script>
     <script src="directive/activity/vesselTile/vesselTile.js"></script>
     <script src="filter/activity/stPurposeCode.js"></script>
@@ -563,16 +596,26 @@ copy of the GNU General Public License along with the IFDM Suite. If not, see <h
     <script src="directive/activity/areaTile/areaTile.js"></script>
     <script src="directive/activity/gearShotRetrievalTile/gearShotRetrievalTile.js"></script>
     <script src="directive/activity/faCharacteristicsModal/faCharacteristicsModal.js"></script>
-    <script src="directive/activity/faCharacteristicsModal/characteristicsModal/characteristicsModal.js"></script>   
+    <script src="directive/activity/faCharacteristicsModal/characteristicsModal/characteristicsModal.js"></script>
     <script src="directive/activity/relocationTile/relocationTile.js"></script>
     <script src="directive/common/ngModelFile/ngModelFile.js"></script>
+    <script src="partial/activity/tripReportsList/tripReportsList.js"></script>
+    <script src="partial/activity/activityTripSummary/activityTripSummary.js"></script>
+    <script src="partial/activity/tripActivityDetail/tripActivityDetails.js"></script>
     <script src="directive/activity/printButton/printButton.js"></script>
     <script src="directive/activity/printButton/printForm/printForm.js"></script>
+	<script src="filter/common/stSearchDynamic/stSearchDynamic.js"></script>
+
+    <script src="partial/activity/pieChartModal/pieChartModal.js"></script>
+    <script src="partial/admin/adminConfiguration/configurationActivity/configurationActivity.js"></script>
+    <script src="partial/spatial/configurations/catchFiguresTresholds/catchFiguresTresholds.js"></script>
+    <script src="directive/activity/faHistoryNavigator/faHistoryNavigator.js"></script>
+
     <script src="filter/exchange/stExchangeLogFilter/stExchangeLogFilter.js"></script>
     <script src="partial/exchange/messageModal/messageModal.js"></script>
-    <script src="partial/exchange/validationResultsModal/validationResultsModal.js"></script>
-    
+    <script src="partial/exchange/validationResultsModal/validationResultsModal.js"></script>    
     <script src="directive/exchange/messageStatus/messageStatus.js"></script>
+    
     <!-- Add New Component JS Above -->
 
     <div ui-view name="unionvmsHeader"></div>

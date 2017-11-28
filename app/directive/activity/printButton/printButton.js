@@ -22,7 +22,7 @@ angular.module('unionvmsWeb').directive('printButton', function(fishingActivityS
 		restrict: 'E',
 		replace: true,
 		scope: {
-
+            viewToPrint: '='
 		},
 		controller: 'printButtonCtrl',
 		templateUrl: 'directive/activity/printButton/printButton.html',
@@ -85,7 +85,6 @@ angular.module('unionvmsWeb').directive('printButton', function(fishingActivityS
         });
     
         var api = $scope.tip.qtip('api');
-
         var printForm = angular.element('<div><div ng-include="\'directive/activity/printButton/printForm/printForm.html\'"></div></div>');
         api.set('content.text', $compile(angular.element(printForm))($scope));
         api.show();

@@ -32,7 +32,11 @@ angular.module('unionvmsWeb').controller('DeparturepanelCtrl',function($scope, $
      * @private
      */
     var init = function(){
-        $scope.faServ.getFishingActivity(new FishingActivity('departure'));
+        if ($scope.faServ.reloadFromActivityHistory === false){
+            $scope.faServ.getFishingActivity(new FishingActivity('departure'));
+        } else  {
+            $scope.faServ.reloadFromActivityHistory = false;
+        }
     };
     
     init();

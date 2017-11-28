@@ -237,7 +237,10 @@ policiesModule.controller('managePolicyCtlr', ['$log', '$scope', '$modal', '$sta
             // It is a promise that resolves when modal is closed and rejected when modal is dismissed
             modalInstance.result.then(function (returnedPolicy) {
                 // Update the model (policy)
-                //$log.log(returnedPolicy);
+                //$log.log('returnedPolicy', returnedPolicy);
+                if (_.isEqual('ldap.enabled',returnedPolicy.name) && _.isEqual('Authentication',returnedPolicy.subject)) {
+                    $scope.$emit('ldapPolicyChanged');
+                }
                 if (!_.isUndefined($stateParams.policyName)) {
                     $scope.policy = returnedPolicy;
                 }

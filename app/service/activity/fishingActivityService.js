@@ -34,7 +34,8 @@ angular.module('unionvmsWeb').factory('fishingActivityService', function(activit
         isCorrection: false,
         documentType: undefined,
         activityType: undefined,
-        openFromMap: undefined
+        openFromMap: undefined,
+        reloadFromActivityHistory: false //this property is updated by the faHistoryNavigator only
 	};
 
     //tiles per fishing activity view
@@ -42,7 +43,8 @@ angular.module('unionvmsWeb').factory('fishingActivityService', function(activit
         common: [
             'activityDetails',
             'reportDetails',
-            'tripDetails'
+            'tripDetails',
+            'history'
         ],
         departure: [
             'locations',
@@ -69,7 +71,8 @@ angular.module('unionvmsWeb').factory('fishingActivityService', function(activit
             'gears',
             'catches',
             'processingProducts',
-            'gearShotRetrieval'
+            'gearShotRetrieval',
+            'vesselDetails',
         ],
         discard: [
             'locations',
@@ -98,11 +101,13 @@ angular.module('unionvmsWeb').factory('fishingActivityService', function(activit
             'vesselDetails'
         ],
         area_entry: [
+            'locations',
             'areas',
             'catches',
             'processingProducts'
         ],
         area_exit: [
+            'locations',
             'areas',
             'catches',
             'processingProducts'
@@ -124,7 +129,7 @@ angular.module('unionvmsWeb').factory('fishingActivityService', function(activit
             type: 'string'
         },
         {
-            id: 'no_operations',
+            id: 'nrOfOperation',
             type: 'string'
         },
         {
@@ -226,21 +231,22 @@ angular.module('unionvmsWeb').factory('fishingActivityService', function(activit
         {
             id: 'refId',
             type: 'string',
-            clickable: true,
+            clickable: false, //FIXME
             onClick: function(refId){
-                var report = _.find(tripSummaryService.trip.reports, function(rep){
-                    return refId === rep.faUniqueReportID;
-                });
-
-                faServ.resetActivity();
-                faServ.id = report.id;
-                faServ.isCorrection = report.corrections;
-                faServ.documentType = report.documentType;
-                tripReportsTimeline.setCurrentPreviousAndNextItem(report.id);
-                var content = angular.element('fishing-activity-navigator');
-                
-                var scope = content.scope();
-                $compile(content)(scope);
+                //FIXME very important - open the historical linked activity
+//                var report = _.find(tripSummaryService.trip.reports, function(rep){
+//                    return refId === rep.faUniqueReportID;
+//                });
+//
+//                faServ.resetActivity();
+//                faServ.id = report.id;
+//                faServ.isCorrection = report.corrections;
+//                faServ.documentType = report.documentType;
+//                tripReportsTimeline.setCurrentPreviousAndNextItem(report.id);
+//                var content = angular.element('fishing-activity-navigator');
+//                
+//                var scope = content.scope();
+//                $compile(content)(scope);
             }
         },
         {
@@ -282,7 +288,7 @@ angular.module('unionvmsWeb').factory('fishingActivityService', function(activit
 	    {
 		    activityName: 'discard',
 		    achronym: 'FA_REASON_DISCARD'
-	    }
+        }
      ];
 
 	/**
@@ -339,25 +345,33 @@ angular.module('unionvmsWeb').factory('fishingActivityService', function(activit
 	 * @public
      * @alias getFishingActivity
 	 */
-    faServ.getFishingActivity = function(obj, callback) {
+    faServ.getFishingActivity = function(obj, callback, actiId) {
         loadingStatus.isLoading('FishingActivity', true, 0);
+        
+        var faActivityId = "";
+        
+        if (actiId) {
+            faActivityId = actiId;
+        } else {
+            faActivityId = faServ.id;
+        }
+
         var payload = {
-            activityId: faServ.id
+            activityId: faActivityId
         };
         
         if ($state.current.name === 'app.reporting-id' || $state.current.name === 'app.reporting'){
             payload.tripId = tripSummaryService.trip.id;
         }
         
-        if ($state.current.name === 'app.activity' && $state.params.tripId !== null && $state.params.activityId === faServ.id){
+        if ($state.current.name === 'app.activity' && $state.params.tripId !== null && $state.params.activityId === faActivityId){
             payload.tripId = $state.params.tripId;
         }
-        
-        //if ($state.current.name === 'app.activity' && angular.isDefined())
         
         activityRestService.getFishingActivityDetails(getViewNameByFaType(obj.faType), payload).then(function (response) {
             faServ.activityData = obj;
             faServ.activityData.fromJson(response);
+            
             if (angular.isDefined(callback)) {
                 callback();
             }
@@ -381,7 +395,7 @@ angular.module('unionvmsWeb').factory('fishingActivityService', function(activit
             angular.forEach(gearObj, function(item) {
                 var mdrRec = _.findWhere(response, { code: item.type });
                 if (angular.isDefined(mdrRec)) {
-                    item.type = item.type + ' - ' + mdrRec.description.replace('- ', '');
+                    item.description = mdrRec.description.replace('- ', '');
                 }
             });
         });
@@ -393,18 +407,18 @@ angular.module('unionvmsWeb').factory('fishingActivityService', function(activit
      * @memberof fishingActivityService
      * @private
      * @param {Object} faCatches - A reference to the activity catches object
-     * @alias addGearDescription
+     * @alias addGearDescFromCatches
      */
     var addGearDescFromCatches = function(faCatches){
         mdrCacheService.getCodeList('GEAR_TYPE').then(function(response){
             angular.forEach(faCatches, function(faCatch){
                 var keys = ['BMS', 'LSC'];
                 for (var j = 0; j < keys.length; j++){
-                    if (angular.isDefined(faCatch.groupingDetails[keys[j]].gears) && faCatch.groupingDetails[keys[j]].gears.length > 0){
+                    if (angular.isDefined(faCatch.groupingDetails[keys[j]]) && angular.isDefined(faCatch.groupingDetails[keys[j]].gears) && faCatch.groupingDetails[keys[j]].gears.length > 0){
                         for (var i = 0; i < faCatch.groupingDetails[keys[j]].gears.length; i++){
                             var mdrRec = _.findWhere(response, { code:  faCatch.groupingDetails[keys[j]].gears[i].type});
                             if (angular.isDefined(mdrRec)) {
-                                faCatch.groupingDetails[keys[j]].gears[i].type = faCatch.groupingDetails[keys[j]].gears[i].type + ' - ' + mdrRec.description.replace('- ', '');
+                                faCatch.groupingDetails[keys[j]].gears[i].description = mdrRec.description.replace('- ', '');
                             }
                         }
                     }
@@ -510,7 +524,7 @@ angular.module('unionvmsWeb').factory('fishingActivityService', function(activit
             var classes = ['LSC','BMS'];
             angular.forEach(faObj.catches, function(item) {
                 angular.forEach(classes, function(className) {
-                    if(angular.isDefined(item.groupingDetails[className].classProps)){
+                    if(angular.isDefined(item.groupingDetails[className]) && angular.isDefined(item.groupingDetails[className].classProps)){
                         var mdrRec = _.findWhere(response, {code: item.groupingDetails[className].classProps.weightingMeans});
                         if (angular.isDefined(mdrRec)){
                             if(!angular.isDefined(item.groupingDetails[className].classDescs)){
@@ -605,6 +619,11 @@ angular.module('unionvmsWeb').factory('fishingActivityService', function(activit
                     finalSummary.subItems = [];
                     angular.forEach(value,function(subItem,subKey){
                         var attrData = _.where(attrOrder, {id: subKey});
+                        subItem = '' + subItem;
+                        if (key === 'fishingTime' && subKey === 'duration' && angular.isDefined(value.unitCode)){
+                            subItem += ' ' + value.unitCode;
+                        }
+                         
                         if(angular.isDefined(subItem) && !_.isNull(subItem) && subItem.length > 0 && attrData.length){
                             finalSummary.subItems.push(transformFaItem(subItem, subKey, attrOrder, attrKeys, attrData[0]));
                         }
@@ -614,7 +633,7 @@ angular.module('unionvmsWeb').factory('fishingActivityService', function(activit
                         finalSummary.subTitle = locale.getString('activity.trip_' + key);
                     }
                 }
-            }else if(angular.isDefined(value) && !_.isNull(value) && value.length > 0){
+            }else if(angular.isDefined(value) && !_.isNull(value)){
                 var attrData = _.where(attrOrder, {id: key});
                 if(attrData.length){
                     finalSummary.items.push(transformFaItem(value, key, attrOrder, attrKeys, attrData[0]));
@@ -695,8 +714,16 @@ angular.module('unionvmsWeb').factory('fishingActivityService', function(activit
 
             finalSummary = loadFishingActivityDetails(data, attrOrder);
 
-            if (angular.isDefined(data.characteristics) && !_.isEmpty(data.characteristics)) {
-                finalSummary.characteristics = data.characteristics;
+            if (angular.isDefined(data.characteristics)) {
+                angular.forEach(data.characteristics, function(characteristic,characteristicName){
+                    if(!angular.isDefined(characteristic) || _.isNull(characteristic) || characteristic.length === 0){
+                        delete data.characteristics[characteristicName];
+                    }
+                });
+
+                if(!_.isEmpty(data.characteristics)){
+                    finalSummary.characteristics = data.characteristics;
+                }
             }
             if (angular.isDefined(finalSummary.subItems)) {
                 finalSummary.subTitle = locale.getString('activity.activity_related_flux_doc_title');
@@ -765,8 +792,16 @@ angular.module('unionvmsWeb').factory('fishingActivityService', function(activit
         
         if(exceptions.indexOf(faType) === -1){
             finalSummary = loadFishingActivityDetails(data, faSummaryAttrsOrder);
-            if (angular.isDefined(data.characteristics) && _.keys(data.characteristics).length) {
-                finalSummary.characteristics = data.characteristics;
+            if (angular.isDefined(data.characteristics)) {
+                angular.forEach(data.characteristics, function(characteristic,characteristicName){
+                    if(!angular.isDefined(characteristic) || _.isNull(characteristic) || characteristic.length === 0){
+                        delete data.characteristics[characteristicName];
+                    }
+                });
+
+                if(_.keys(data.characteristics).length){
+                    finalSummary.characteristics = data.characteristics;
+                }
             }
             finalSummary.title = locale.getString('activity.title_fishing_activity') + ': ' + locale.getString('activity.fa_type_' + faType);
         }else{
@@ -829,34 +864,40 @@ angular.module('unionvmsWeb').factory('fishingActivityService', function(activit
             angular.forEach(data, function(item){
                 angular.forEach(classes, function(className){
                     var classDetails = item.groupingDetails;
-
-                    if(angular.isDefined(classDetails[className].gears)){
-                        classDetails[className].gears = loadGears(classDetails[className].gears);
-                    }
-
-                    classDetails[className].classProps = {};
-
-                    if(angular.isDefined(classDetails[className].destinationLocation) && angular.isDefined(classDetails[className].destinationLocation[0])){
-                        classDetails[className].destinationLocation = classDetails[className].destinationLocation[0].id + ' - ' + classDetails[className].destinationLocation[0].name + ', ' +
-                            classDetails[className].destinationLocation[0].countryId;
-                    }
-
-                    angular.forEach(classDetails[className], function(attr,attrName){
-                        if(!_.isObject(attr) && !_.isArray(attr) && ['weight','unit'].indexOf(attrName) === -1){
-                            classDetails[className].classProps[attrName] = attr;
-                            delete classDetails[className][attrName];
+                    if(angular.isDefined(classDetails[className])){
+                        if(angular.isDefined(classDetails[className].gears)){
+                            classDetails[className].gears = loadGears(classDetails[className].gears);
                         }
-                    });
 
-                    if(_.isEmpty(classDetails[className].classProps)){
-                        delete classDetails[className].classProps;
-                    }
+                        classDetails[className].classProps = {};
 
-                    if(!angular.isDefined(classDetails[className].weight)){
-                        classDetails[className].weight = 0;
-                    }
-                    if(!angular.isDefined(classDetails[className].unit)){
-                        classDetails[className].unit = 0;
+                        if(angular.isDefined(classDetails[className].destinationLocation) && angular.isDefined(classDetails[className].destinationLocation[0])){
+                            classDetails[className].destinationLocation = classDetails[className].destinationLocation[0].id + ' - ' + classDetails[className].destinationLocation[0].name + ', ' +
+                                classDetails[className].destinationLocation[0].countryId;
+                        }
+
+                        angular.forEach(classDetails[className], function(attr,attrName){
+                            if(!_.isObject(attr) && !_.isArray(attr) && ['weight','unit'].indexOf(attrName) === -1){
+                                classDetails[className].classProps[attrName] = attr;
+                                delete classDetails[className][attrName];
+                            }
+                        });
+
+                        if(_.isEmpty(classDetails[className].classProps)){
+                            delete classDetails[className].classProps;
+                        }
+
+                        if(!angular.isDefined(classDetails[className].weight)){
+                            classDetails[className].weight = 0;
+                        }
+                        if(!angular.isDefined(classDetails[className].unit)){
+                            classDetails[className].unit = 0;
+                        }
+                    }else{
+                        classDetails[className] = {
+                            weight: 0,
+                            unit: 0
+                        };
                     }
                 });
             });
@@ -1126,7 +1167,7 @@ angular.module('unionvmsWeb').factory('fishingActivityService', function(activit
         var activityType = _.where(faMdrReason, {activityName: obj.faType});
         
         if(angular.isDefined(activityType) && activityType.length > 0){
-            var acronym =activityType[0].achronym;
+            var acronym = activityType[0].achronym;
             loadingStatus.isLoading('FishingActivity', true, 0);
             
             mdrCacheService.getCodeList(acronym).then(function(response){
@@ -1237,17 +1278,23 @@ angular.module('unionvmsWeb').factory('fishingActivityService', function(activit
         var viewContainer;
         var analogClock;
         var areaTile;
-        if(view === 'fishingActivityPanel'){
+        if(view === 'fishingActivityNavigator'){
             viewContainer = angular.element('.fa-partial');
+            scrollContainer = angular.element('.trips-panel');
+        }else if(view === 'activityDetails'){
+            viewContainer = angular.element('.activity-details');
         }
 
         var width = viewContainer[0].offsetWidth;
         var height = viewContainer[0].offsetHeight;
 
-        scrollContainer = angular.element('.trips-panel');
         if(scrollContainer && scrollContainer.length){
+            scrollContainer.addClass('printing-view');
             scrollContainer.css('overflow', 'visible');
+        }else{
+            angular.element('body').addClass('printing-view');
         }
+
         analogClock = angular.element(' .clock-subsection > analog-clock > .analog-clock > svg');
         if(analogClock && analogClock.length){
             analogClock.attr('width', angular.element('.analog-clock')[0].offsetWidth);
@@ -1282,16 +1329,21 @@ angular.module('unionvmsWeb').factory('fishingActivityService', function(activit
 
             doc.save("viewPrint.pdf");
             if(scrollContainer){
+                scrollContainer.removeClass('printing-view');
                 scrollContainer.css('overflow', '');
+            }else{
+                angular.element('body').removeClass('printing-view');
             }
+
             if(analogClock ){
-            analogClock.attr('width', "100%");
-            analogClock.attr('height', "100%");
+                analogClock.attr('width', "100%");
+                analogClock.attr('height', "100%");
             }
             if(areaTile){
-            areaTile.attr('width', "100%");
-            areaTile.attr('height', "100%");
+                areaTile.attr('width', "100%");
+                areaTile.attr('height', "100%");
             }
+            
             loadingStatus.isLoading('FishingActivity', false);
         });
     };
@@ -1338,6 +1390,13 @@ angular.module('unionvmsWeb').factory('fishingActivityService', function(activit
                     break;
                 case 'locations':
                     obj.locations = data.locations;
+                    if (angular.isDefined(data.activityDetails.geom)){
+                        obj.locations.srcActivityGeom = data.activityDetails.geom;
+                    }
+                    
+                    break;
+                case 'history':
+                    obj.history = data.history;
                     break;
                 case 'gears':
                     obj.gears = loadGears(data.gears);

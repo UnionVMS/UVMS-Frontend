@@ -15,7 +15,7 @@ sharedModule.controller('MenuCtrl', ['$rootScope', '$scope', '$state', '$transla
     function ($rootScope, $scope, $state, $translate, $stateParams, $log, $cookies, userService, changesService) {
 
         var checkReviewContactDetails = function () {
-            if(userService.isLoggedIn()){
+            if (userService.isLoggedIn()) {
                 changesService.isReviewContactDetailsEnabled().then(
                     function (response) {
                         $scope.isReviewContactDetailsEnabled = response.isReviewContactDetailsEnabled;
@@ -37,7 +37,7 @@ sharedModule.controller('MenuCtrl', ['$rootScope', '$scope', '$state', '$transla
             return userService.isAllowed(feature, "USM", true);
         };
 
-        $rootScope.$on("ReviewContactDetails", function() {
+        $rootScope.$on("ReviewContactDetails", function () {
             checkReviewContactDetails();
         });
 
@@ -56,14 +56,27 @@ sharedModule.controller('FooterController', ['$scope', '$log', 'CFG',
 
 
     }]);
-sharedModule.controller('userMenuController', ['$log','selectContextPanel','authRouter', '$scope', 'userService', 'renewloginpanel', '$rootScope', '$state', '$location',
-    function ($log, selectContextPanel, authRouter, $scope, userService, renewloginpanel, $rootScope, $state, $location) {
+sharedModule.controller('userMenuController', ['$log', 'selectContextPanel', 'authRouter', '$scope', 'userService', 'renewloginpanel', '$rootScope', '$state', 'policiesService',
+    function ($log, selectContextPanel, authRouter, $scope, userService, renewloginpanel, $rootScope, $state, policiesService) {
+
+        var checkLdapEnabled = function () {
+            var criteria = {
+                name: 'ldap.enabled',
+                subject: 'Authentication'
+            };
+            policiesService.getPoliciesList(criteria).then(
+                function (response) {
+                    $scope.ldapEnabled = _.isEqual(response.policies[0].value, 'true');
+                }
+            );
+        };
     var init = function () {
         $scope.userName = userService.getUserName();
         $scope.authenticated = userService.isLoggedIn();
         $scope.contexts = userService.getContexts();
         $scope.currentContext = userService.getCurrentContext();
         $scope.logoutState = authRouter.getLogout();
+            checkLdapEnabled();
     };
     init();
     $rootScope.$on('AuthenticationSuccess', function () {
@@ -75,7 +88,9 @@ sharedModule.controller('userMenuController', ['$log','selectContextPanel','auth
     $rootScope.$on('ContextSwitch', function () {
         init();
     });
-
+        $rootScope.$on('ldapPolicyChanged', function () {
+            checkLdapEnabled();
+        });
     /*$scope.logout = function () {
         $state.go(authRouter.getLogout(),{logoutMessage:"You have successfully logged out."});
         init();
@@ -84,51 +99,75 @@ sharedModule.controller('userMenuController', ['$log','selectContextPanel','auth
         //$scope.openlogin();
     };*/
     $scope.openlogin = function () {
-        $state.go(authRouter.getLogin(),{toState:authRouter.getHome()});
+            $state.go(authRouter.getLogin(), {toState: authRouter.getHome()});
         //renewloginpanel.show().then(function () {
         //    init();
         //});
     };
     $scope.switchContext = function () {
         selectContextPanel.show().then(
-            function(selectedContext){
+                function (selectedContext) {
                 userService.setCurrentContext(selectedContext);
             init();
             },
-            function(error){
+                function (error) {
 
                 init();
                 $log.error(error);
         });
     };
 
-}]);
+    }]);
 
 sharedModule.controller('setMyPasswordModalInstanceCtrl', ['$state', '$log', '$timeout', '$scope', '$modalInstance', '$localStorage', '$stateParams',
-    'accountService', 'userService','expiredPwd',
-    function ($state, $log, $timeout, $scope, $modalInstance, $localStorage, $stateParams, accountService, userService,expiredPwd) {
+    'accountService', 'userService', 'expiredPwd',
+    function ($state, $log, $timeout, $scope, $modalInstance, $localStorage, $stateParams, accountService, userService, expiredPwd) {
 
         $scope.formDisabled = true;
         $scope.editForm = true;
         $scope.showSubmit = false;
         $scope.showEdit = true;
 
+
+        $scope.init = function () {
+
+            accountService.getPolicy().then(
+                function (response) {
+                    $scope.policy = response.policy;
+                },
+                function (error) {
+                    $log.log(">>> error : " + error);
+                }
+            );
+        };
+
+
         //panel
         $scope.userPasswordUpdated = false;
         $scope.showConfirmation = false;
-        if(expiredPwd){
+
+        $log.log(">>> expiredPwd: " + expiredPwd);
+        if (expiredPwd) {
             $scope.actionMessage = "Your password has expired and must be changed.";
         }
 
         $scope.cancel = function () {
 			$log.log("changepasswordpanel Closed in controller");
-			if(expiredPwd) {
+            if (expiredPwd) {
 				$log.log("Password HAS to be changed and cannot be deferred, go back to login");	
                 userService.logout();
 			}
             $modalInstance.dismiss();
         };
 
+        // Transformation to submit object
+        var passwordSubmitObject = function (passwordData, userName) {
+            return {
+                "userName": userName,
+                "currentPassword": passwordData.currentPassword,
+                "newPassword": passwordData.newPassword
+            };
+        };
         $scope.saveMyPassword = function (passwordData) {
 
             if (userService.getUserName()) {
@@ -155,14 +194,6 @@ sharedModule.controller('setMyPasswordModalInstanceCtrl', ['$state', '$log', '$t
             }
         };
 
-        // Transformation to submit object
-        var passwordSubmitObject = function (passwordData, userName) {
-            return {
-                "userName": userName,
-                "currentPassword": passwordData.currentPassword,
-                "newPassword": passwordData.newPassword
-            };
-        };
     }]);
 
 sharedModule.controller('ModifyPassword', ['$log', '$scope', '$modal', '$stateParams',
@@ -184,8 +215,7 @@ sharedModule.controller('ModifyPassword', ['$log', '$scope', '$modal', '$statePa
                     passwordData: function () {
                         return $scope.passwordData;
                     },
-                    expiredPwd : function() {
-                        // Assuming the password not expired.
+                    expiredPwd: function () {
                         return false;
                     }
                 }
@@ -237,7 +267,7 @@ sharedModule.controller('warningPasswordModalInstanceCtrl', ['$log', '$timeout',
     }]);
 
 sharedModule.controller('setModifySecurityAnswersModalInstanceCtrl',
-    ['$log', '$timeout', '$scope', '$modalInstance', 'personsService', 'userService','userChallengesService','refData','mySecurityQuestions',
+    ['$log', '$timeout', '$scope', '$modalInstance', 'personsService', 'userService', 'userChallengesService', 'refData', 'mySecurityQuestions',
         function ($log, $timeout, $scope, $modalInstance, personsService, userService, userChallengesService, refData, mySecurityQuestions) {
 
             $scope.securityQuestionsList = refData.securityQuestions;
@@ -247,19 +277,19 @@ sharedModule.controller('setModifySecurityAnswersModalInstanceCtrl',
             $scope.showSubmit = false;
             $scope.showEdit = true;
 
-            $scope.mySecurityQuestions={};
+            $scope.mySecurityQuestions = {};
             $scope.mySecurityQuestions.results = mySecurityQuestions.challengeInformationResponse;
             $scope.mySecurityQuestions.currentPassword = '';
 
             //to control the number of questions/answer that must be filled
-            if($scope.mySecurityQuestions.results.length===2){
+            if ($scope.mySecurityQuestions.results.length === 2) {
                 $scope.show2questions = true;
                 $scope.show3questions = false;
-            }else{
-                if($scope.mySecurityQuestions.results.length===1) {
+            } else {
+                if ($scope.mySecurityQuestions.results.length === 1) {
                     $scope.show2questions = false;
                     $scope.show3questions = false;
-                }else{
+                } else {
                     $scope.show2questions = true;
                     $scope.show3questions = true;
                 }
@@ -274,13 +304,33 @@ sharedModule.controller('setModifySecurityAnswersModalInstanceCtrl',
                 $modalInstance.dismiss();
             };
 
+            // Transformation to submit object
+            var securityQuestionsSubmitObject = function (mySecurityQuestions) {
+
+                var questions = [];
+                if ($scope.show3questions) {
+                    questions = mySecurityQuestions.results;
+                } else {
+                    if ($scope.show2questions) {
+                        questions[0] = mySecurityQuestions.results[0];
+                        questions[1] = mySecurityQuestions.results[1];
+                    } else {
+                        questions[0] = mySecurityQuestions.results[0];
+                    }
+                }
+                return {
+                    //  "userName": userName,
+                    "results": questions,
+                    "userPassword": mySecurityQuestions.currentPassword
+                };
+            };
             $scope.saveMySecurityAnswer = function (mySecurityQuestions) {
                 $log.info('userService.getUserName(): ' + userService.getUserName());
 
                 if (userService.getUserName()) {
                     var objectToSubmit = securityQuestionsSubmitObject(mySecurityQuestions);
 
-                    userChallengesService.setChallenges(userService.getUserName(),objectToSubmit).then(
+                    userChallengesService.setChallenges(userService.getUserName(), objectToSubmit).then(
                         function (response) {
                             var updatedSecurityAnswers = response;
 
@@ -302,34 +352,14 @@ sharedModule.controller('setModifySecurityAnswersModalInstanceCtrl',
                 }
             };
 
-            // Transformation to submit object
-            var securityQuestionsSubmitObject = function (mySecurityQuestions) {
-
-               var questions = [];
-                if($scope.show3questions){
-                    questions = mySecurityQuestions.results;
-                }else{
-                    if($scope.show2questions){
-                        questions[0]= mySecurityQuestions.results[0];
-                        questions[1]= mySecurityQuestions.results[1];
-                    }else{
-                        questions[0]= mySecurityQuestions.results[0];
-                    }
-                }
-                return {
-                    //  "userName": userName,
-                    "results":  questions,
-                    "userPassword": mySecurityQuestions.currentPassword
-                };
-            };
         }]);
 
 sharedModule.controller('ModifySecurityAnswer',
     ['$log', '$scope', '$modal', 'userChallengesService', 'userService',
-        function ($log, $scope, $modal, userChallengesService, userService ) {
+        function ($log, $scope, $modal, userChallengesService, userService) {
 
             $scope.modifySecurityAnswer = function () {
-                $scope.SecurityQuestionData= {
+                $scope.SecurityQuestionData = {
                     results: [],
                     confirmPassword: ''
                 };
@@ -358,7 +388,7 @@ sharedModule.controller('ModifySecurityAnswer',
                     templateUrl: 'usm/users/partial/modifySecurityAnswer.html',
                     controller: 'setModifySecurityAnswersModalInstanceCtrl',
                     resolve: {
-                        mySecurityQuestions: function() {
+                        mySecurityQuestions: function () {
                             return userChallengesService.getChallenges(userService.getUserName());
                         }
                     }
@@ -397,6 +427,17 @@ sharedModule.controller('setMyContactDetailsModalInstanceCtrl',
                 $modalInstance.dismiss();
             };
 
+            // Transformation to submit object
+            var contactDetailsSubmitObject = function (contactDetailsData, userName) {
+                return {
+                    "userName": userName,
+                    "password": contactDetailsData.currentPassword,
+                    "email": contactDetailsData.email,
+                    "phoneNumber": contactDetailsData.phoneNumber,
+                    "mobileNumber": contactDetailsData.mobileNumber,
+                    "faxNumber": contactDetailsData.faxNumber
+                };
+            };
             $scope.saveMyContactDetails = function (contactDetailsData) {
                 $log.info('userService.getUserName(): ' + userService.getUserName());
 
@@ -424,17 +465,7 @@ sharedModule.controller('setMyContactDetailsModalInstanceCtrl',
                 }
             };
 
-            // Transformation to submit object
-            var contactDetailsSubmitObject = function (contactDetailsData, userName) {
-                return {
-                    "userName": userName,
-                    "password": contactDetailsData.currentPassword,
-                    "email": contactDetailsData.email,
-                    "phoneNumber": contactDetailsData.phoneNumber,
-                    "mobileNumber": contactDetailsData.mobileNumber,
-                    "faxNumber": contactDetailsData.faxNumber
-                };
-            };
+
         }]);
 
 sharedModule.controller('ModifyContactDetails',
@@ -514,8 +545,7 @@ sharedModule.controller('changeMyPasswordCtlr', ['$log', '$scope', '$modal', '$s
                     user: function () {
                         return angular.copy(user);
                     },
-                    expiredPwd : function() {
-                        // Assuming the password not expired.
+                    expiredPwd: function () {
                         return false;
                     }
                 }

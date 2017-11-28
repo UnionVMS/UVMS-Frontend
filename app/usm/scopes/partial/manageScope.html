@@ -10,7 +10,7 @@ FITNESS FOR A PARTICULAR PURPOSE.  See the GNU General Public License for more d
 copy of the GNU General Public License along with the IFDM Suite. If not, see <http://www.gnu.org/licenses/>.
 -->
 <div ng-controller="manageScopeCtrl">
-    <form novalidate class="form-horizontal" name="manageScopeForm" ng-submit="manageScopeForm.$valid && saveUpdateDelete(scope)">
+    <form novalidate class="form-horizontal" name="manageScopeForm" ng-submit="(manageScopeForm.$valid || mode=='delete') && saveUpdateDelete(scope)">
         <div class="modal-header">
             <div class="row">
                 <div class="col-md-4">
@@ -86,14 +86,13 @@ copy of the GNU General Public License along with the IFDM Suite. If not, see <h
                     </label>
 
                     <div class="col-md-4">
-                        <datepicker-input name="activeFrom"
-                                          model="scope.activeFrom"
+                        <datepicker-input model="scope.activeFrom"
+                                          time="false"
                                           ng-required="true"
-                                          ng-disabled="formDisabled"
-                                          input-field-id="user-scope-active-from-date-picker">
+                                          ng-disabled="formDisabled">
                         </datepicker-input>
                         <div>
-                            <span class="text-danger small" ng-show="manageScopeForm.activeFrom.$error.required">
+                            <span class="text-danger small" ng-show="showActiveFromError">
                                 Active From date is required
                             </span>
                         </div>
@@ -107,14 +106,13 @@ copy of the GNU General Public License along with the IFDM Suite. If not, see <h
                     </label>
 
                     <div class="col-md-4">
-                        <datepicker-input name="activeTo"
-                                          model="scope.activeTo"
+                        <datepicker-input model="scope.activeTo"
+                                          time="false"
                                           ng-required="true"
-                                          ng-disabled="formDisabled"
-                                          input-field-id="user-scope-active-to-date-picker">
+                                          ng-disabled="formDisabled">
                         </datepicker-input>
                         <div>
-                            <span class="text-danger small" ng-show="manageScopeForm.activeTo.$error.required">
+                            <span class="text-danger small" ng-show="showActiveToError">
                                 Active To date is required
                             </span>
                         </div>
@@ -127,10 +125,8 @@ copy of the GNU General Public License along with the IFDM Suite. If not, see <h
                     </label>
 
                     <div class="col-md-4">
-                        <datepicker-input name="dataFrom"
-                                          model="scope.dataFrom"
-                                          ng-disabled="formDisabled"
-                                          input-field-id="user-scope-data-from-date-picker">
+                        <datepicker-input model="scope.dataFrom"
+                                          ng-disabled="formDisabled">
                         </datepicker-input>
                     </div>
                 </div>
@@ -141,10 +137,8 @@ copy of the GNU General Public License along with the IFDM Suite. If not, see <h
                     </label>
 
                     <div class="col-md-4">
-                        <datepicker-input name="dataTo"
-                                          model="scope.dataTo"
-                                          ng-disabled="formDisabled"
-                                          input-field-id="user-scope-data-to-date-picker">
+                        <datepicker-input model="scope.dataTo"
+                                          ng-disabled="formDisabled">
                         </datepicker-input>
                     </div>
                 </div>
@@ -155,9 +149,10 @@ copy of the GNU General Public License along with the IFDM Suite. If not, see <h
                 <div class="col-md-offset-8 col-md-4">
                     <input type="button" class="btn btn-warning btn-sm" ng-show="!scopeCreated" ng-click="cancel()" value="Cancel"/>
                     <input type="submit" class="btn btn-primary btn-sm" value="Save"
-                           ng-disabled="manageScopeForm.$invalid" ng-show="!scopeCreated && !showConfirmation" ng-if="mode=='new' || mode=='edit'"/>
+                           ng-disabled="manageScopeForm.$invalid || showActiveFromError || showActiveToError" ng-show="!scopeCreated && !showConfirmation" ng-if="mode=='new' || mode=='edit'"/>
                     <input type="submit" class="btn btn-primary btn-sm" value="Confirm"
-                           ng-disabled="manageScopeForm.$invalid" ng-show="!scopeCreated && showConfirmation" ng-if="mode=='delete' || mode=='edit'"/>
+                           ng-disabled="manageScopeForm.$invalid || showActiveFromError || showActiveToError" ng-show="!scopeCreated && showConfirmation" ng-if="mode=='edit'"/>
+                    <input type="submit" class="btn btn-primary btn-sm" value="Confirm" ng-show="!scopeCreated && showConfirmation" ng-if="mode=='delete'"/>
                     <input type="submit" class="btn btn-primary btn-sm" value="Delete"
                            ng-disabled="manageScopeForm.$invalid" ng-show="!scopeCreated && !showConfirmation" ng-if="mode=='delete'"/>
                     <label class="btn btn-success btn-sm fa fa-check" ng-show="scopeCreated" />

@@ -26,6 +26,7 @@
 					<li ng-repeat="item in identifiers" class="item-container" ng-if="identifiers.length > 0"  ng-class="{'item-clickable': isItemClickable(item)}" ng-click="zoomToLocation(item)">
 						<span class="item-label">{{item.schemeId}}</span> 
 						<span>{{item.id}}</span>
+						<span ng-if="item.description">- {{item.description}}</span>
 					</li>
 					<li ng-repeat="item in positions" class="item-container" ng-if="positions.length > 0" ng-class="{'item-clickable': isItemClickable(item)}" ng-click="zoomToLocation(item)">
 						<div class="item-field">
@@ -42,7 +43,7 @@
 		</div>
 		<div class="row" ng-if="addresses.length > 0">
 			<div class="col-md-12">
-				<carousel-tile tile-title="{{'activity.fa_locations_addresses' | i18n}}" ng-model="addresses" use-top-nav="false" template-url="directive/activity/carouselTile/templates/addressTile/addressTile.html"></carousel-tile>
+				<carousel-tile tile-title="{{'activity.fa_locations_address' | i18n}}" ng-model="addresses" use-top-nav="false" template-url="directive/activity/carouselTile/templates/addressTile/addressTile.html"></carousel-tile>
 			</div>
 		</div>
 	</div>

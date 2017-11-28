@@ -10,13 +10,13 @@ FITNESS FOR A PARTICULAR PURPOSE.  See the GNU General Public License for more d
 copy of the GNU General Public License along with the IFDM Suite. If not, see <http://www.gnu.org/licenses/>.
 -->
 <div class="col-md-12 departure-panel" ng-controller="DeparturepanelCtrl">
-	<!-- <div class="row summary-row" ng-if="srcTab === 'reports'"> -->
 	<div class="row activity-summary-row trip-overview-container">
 		<trip-overview-panel class="col-md-12 summary-section" trip="faServ.activityData.tripDetails"></trip-overview-panel>
 	</div>
 	<div class="col-md-12 main-content">
-		<a class="btn-trip-quit" title="{{'activity.trip_summary_quit_trip_detail' | i18n }}" ng-click="faServ.quitFaView()" ng-if="srcTab === 'reports'"><i class="fa fa-share-square-o"></i></a>
-		<print-button></print-button>
+		<fa-history-navigator history="faServ.activityData.history" activity-name="departure" ng-if="faServ.activityData.history.previousId || faServ.activityData.history.nextId"></fa-history-navigator>
+		<a class="btn-trip-quit" title="{{'activity.trip_summary_quit_trip_detail' | i18n }}" ng-click="faServ.quitFaView()" ng-if="tabType === 'reports'"><i class="fa fa-share-square-o"></i></a>
+		<print-button view-to-print="printView"></print-button>
 		<div class="row title">
 			<span ng-if="faServ.documentType === 'notification'">{{'activity.fa_report_document_type_notification_of' | i18n}}</span>
 			<span ng-class="{useColon: faServ.isCorrection}">{{'activity.fa_type_departure' | i18n}}</span>
@@ -25,7 +25,7 @@ copy of the GNU General Public License along with the IFDM Suite. If not, see <h
 		<div class="row activity-summary-row">
 			<fa-details-panel class="col-md-3 summary-section" ng-model="faServ.activityData.activityDetails"></fa-details-panel>
 			<location-tile class="col-md-3 summary-section" location-details="faServ.activityData.locations" src-activity-geom="faServ.activityData.activityDetails.items.geometry.value" is-clickable="faServ.isLocationClickable()" click-callback="faServ.locationClickCallback()" field-title="{{'activity.activity_location_port_departure' | i18n}}"></location-tile>
-			<carousel-tile class="col-md-3 summary-section" tile-title="{{'activity.header_fa_gear' | i18n}}" ng-model="faServ.activityData.gears" template-url="directive/activity/carouselTile/templates/gearTile/gearTile.html"></carousel-tile>
+			<carousel-tile class="col-md-3 summary-section" tile-title="{{'activity.header_fa_gear' | i18n}}" ng-model="faServ.activityData.gears" template-url="directive/activity/carouselTile/templates/gearTile/gearTile.html" no-data-msg-loc="activity.no_gears_reported"></carousel-tile>
 			<fa-details-panel class="col-md-3 summary-section" ng-model="faServ.activityData.reportDetails"></fa-details-panel>
 		</div>
 		<div class="row activity-summary-row">

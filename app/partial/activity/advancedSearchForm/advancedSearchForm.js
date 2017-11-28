@@ -27,25 +27,25 @@ copy of the GNU General Public License along with the IFDM Suite. If not, see <h
  * @description
  *  The controller for the advanced search form of the activity tab table  
  */
-angular.module('unionvmsWeb').controller('AdvancedsearchformCtrl',function($scope, activityService, unitConversionService, mdrCacheService, vesselRestService, userService, locale, visibilityService){
+angular.module('unionvmsWeb').controller('AdvancedsearchformCtrl',function($scope, activityService, unitConversionService, $stateParams, mdrCacheService, vesselRestService, userService, locale, visibilityService){
     $scope.actServ = activityService;
     $scope.visServ = visibilityService;
     $scope.isFormVisible = true;
     $scope.isFormValid = true;
-    
+
     $scope.visibleCombos = {
         reportType: true,
         activityType: true,
         gearType: true
     };
-    
+
     $scope.codeLists = {
         comChannels: null,
         purposeCodes: null,
         reportTypes: null,
         gearTypes: null,
         activityTypes: null,
-        weightUnits: [{code: 'kg', text: 'Kg'}, {code: 't', text: 'Ton'}]
+        weightUnits: [{code: 'kg', text: 'Kg'}, {code: 'TNE', text: 'Ton'}]
     };
 
     $scope.advancedSearchObject = {
@@ -66,9 +66,10 @@ angular.module('unionvmsWeb').controller('AdvancedsearchformCtrl',function($scop
         species: undefined,
         master: undefined,
         minWeight: undefined,
-        maxWeight: undefined
+        maxWeight: undefined,
+        tripId: undefined
     };
-    
+
     /**
      * Get all available communication channels from Activity module
      * 
@@ -78,10 +79,9 @@ angular.module('unionvmsWeb').controller('AdvancedsearchformCtrl',function($scop
      * @returns {Array} An array with all communication channels
      */
     $scope.getComChannels = function(){
-        //FIXME replace with proper service
-        $scope.codeLists.comChannels =  [{code: 'FLUX', text: 'FLUX'}];
+        $scope.codeLists.comChannels = $scope.actServ.getCommChannelsData();
     };
-    
+
     /**
      * Get all purpose codes and their human readable text from MDR
      * 
@@ -93,25 +93,31 @@ angular.module('unionvmsWeb').controller('AdvancedsearchformCtrl',function($scop
     $scope.getPurposeCodes = function(){
         $scope.codeLists.purposeCodes = [];
         mdrCacheService.getCodeList('FLUX_GP_PURPOSE').then(function(response){
-             var list = convertCodelistToCombolist(response, false, false);
-             if (!userService.isAllowed('SHOW_DELETED_FA_REPORTS', 'Activity', true)){
-                 list = _.reject(list, function(item){
-                     return item.code === '3';
-                 });
-             }
-             
-             angular.copy(list, $scope.actServ.allPurposeCodes); 
-             
-             $scope.advancedSearchObject.purposeCode = $scope.actServ.getAllPurposeCodesArray();
-             
-             $scope.actServ.reportsList.searchObject = {
-                 multipleCriteria: {
-                     'PURPOSE': $scope.advancedSearchObject.purposeCode
-                 }
-             };
-             
-             $scope.codeLists.purposeCodes = list;
-             $scope.actServ.isGettingMdrCodes = false;
+            var list = convertCodelistToCombolist(response, false, false);
+            if (!userService.isAllowed('SHOW_DELETED_FA_REPORTS', 'Activity', true)){
+                list = _.reject(list, function(item){
+                    return item.code === '3';
+                });
+            }
+
+            angular.copy(list, $scope.actServ.allPurposeCodes);
+
+            $scope.advancedSearchObject.purposeCode = $scope.actServ.getAllPurposeCodesArray();
+
+            $scope.actServ.reportsList.searchObject = {
+                multipleCriteria: {
+                    'PURPOSE': $scope.advancedSearchObject.purposeCode
+                }
+            };
+
+            $scope.actServ.tripsList.searchObject = {
+                multipleCriteria: {
+                    'PURPOSE': $scope.advancedSearchObject.purposeCode
+                }
+            };
+
+            $scope.codeLists.purposeCodes = list;
+            $scope.actServ.isGettingMdrCodes = false;
         }, function(error){
             //FIXME show other message
             $scope.actServ.setAlert(true, 'activity.activity_error_not_possible_to_query_activity_data');
@@ -119,7 +125,7 @@ angular.module('unionvmsWeb').controller('AdvancedsearchformCtrl',function($scop
             $scope.isFormVisible = false; //When we don't have MDR purpose codes we will not be able to do activity queries, so we hide the search form
         });
     };
-    
+
     /**
      * Get all report types from MDR
      * 
@@ -137,7 +143,7 @@ angular.module('unionvmsWeb').controller('AdvancedsearchformCtrl',function($scop
             $scope.visibleCombos.reportType = false;
         });
     };
-    
+
     /**
      * Get all gear types from MDR
      * 
@@ -155,7 +161,7 @@ angular.module('unionvmsWeb').controller('AdvancedsearchformCtrl',function($scop
             $scope.visibleCombos.gearType = false;
         });
     };
-    
+
     /**
      * Get all activity types from MDR
      * 
@@ -174,7 +180,7 @@ angular.module('unionvmsWeb').controller('AdvancedsearchformCtrl',function($scop
             $scope.visibleCombos.activityType = false;
         });
     };
-    
+
     /**
      * Get the list of the user's vessel groups
      * 
@@ -188,13 +194,13 @@ angular.module('unionvmsWeb').controller('AdvancedsearchformCtrl',function($scop
         vesselRestService.getVesselGroupsForUser().then(function(response){
             angular.forEach(response, function(item) {
                 $scope.vesselGroups.push({
-            	    code: item.id,
-            	    text: item.name
-            	});
+                    code: item.id,
+                    text: item.name
+                });
             });
         });
     };
-    
+
     /**
      * Reset search form and clear table results
      * 
@@ -205,23 +211,29 @@ angular.module('unionvmsWeb').controller('AdvancedsearchformCtrl',function($scop
     $scope.resetSearch = function(){
         var keys = _.keys($scope.advancedSearchObject);
         angular.forEach(keys, function(key) {
-        	if (key === 'weightUnit'){
-        	    $scope.advancedSearchObject.weightUnit = 'kg';
-        	} else if (key === 'purposeCode'){
-        	    $scope.advancedSearchObject[key] = $scope.actServ.getAllPurposeCodesArray();
-        	} else {
-        	    $scope.advancedSearchObject[key] = undefined;
-        	}
+            if (key === 'weightUnit'){
+                $scope.advancedSearchObject.weightUnit = 'kg';
+            } else if (key === 'purposeCode'){
+                $scope.advancedSearchObject[key] = $scope.actServ.getAllPurposeCodesArray();
+            } else {
+                $scope.advancedSearchObject[key] = undefined;
+            }
         });
-        $scope.actServ.resetReportsListTableState();
-        $scope.actServ.resetReportsListSearchObject();
+        $scope.actServ.resetListTableStates();
+        $scope.actServ.resetListSearchObject();
         $scope.actServ.reportsList.isLoading = true;
+        $scope.actServ.tripsList.isLoading = true;
         $scope.actServ.getActivityList(function(){
             $scope.actServ.reportsList.fromForm = true;
             $scope.actServ.reportsList.stCtrl.pipe();
-        });
+        }, undefined, 'reportsList');
+
+        $scope.actServ.getActivityList(function(){
+            $scope.actServ.tripsList.fromForm = true;
+            $scope.actServ.tripsList.stCtrl.pipe();
+        }, undefined, 'tripsList');
     };
-    
+
     /**
      * Search for FA reports using user search criteria defined in the search form
      * 
@@ -234,9 +246,11 @@ angular.module('unionvmsWeb').controller('AdvancedsearchformCtrl',function($scop
         if ($scope.activityAdvancedSearchForm.$valid){
             $scope.isFormValid = true;
             $scope.actServ.reportsList.isLoading = true;
-            $scope.actServ.resetReportsListTableState();
-            $scope.actServ.isTableLoaded = false;
-            
+            $scope.actServ.tripsList.isLoading = true;
+            $scope.actServ.resetListTableStates();
+            $scope.actServ.reportsList.isTableLoaded = false;
+            $scope.actServ.tripsList.isTableLoaded = false;
+
             var keyMapper = {
                 reportType: 'REPORT_TYPE',
                 fromId: 'FROM',
@@ -253,49 +267,60 @@ angular.module('unionvmsWeb').controller('AdvancedsearchformCtrl',function($scop
                 minWeight: 'QUANTITY_MIN',
                 maxWeight: 'QUANTITY_MAX',
                 comChannel: 'SOURCE',
-                activityType: 'ACTIVITY_TYPE'
+                activityType: 'ACTIVITY_TYPE',
+                tripId: 'TRIP_ID'
             };
-            
+
             //FIXME this is to be used in the future when we start having multiple criteria selection in the form
-//            var multipleKeyMapper = {
-//                purposeCode: 'PURPOSE',  
-//            };
-            
+            //            var multipleKeyMapper = {
+            //                purposeCode: 'PURPOSE',  
+            //            };
+
             var formatedSearch = {};
             angular.forEach($scope.advancedSearchObject, function(value, key) {
                 if (key !== 'weightUnit' && key !== 'purposeCode' && (angular.isDefined(value) && value !== null && value !== '')){
                     if (key === 'startDateTime' || key === 'endDateTime'){
                         value = unitConversionService.date.convertDate(value, 'to_server');
-                    } 
+                    }
                     this[keyMapper[key]] = value;
                 }
             }, formatedSearch);
-            
+
             var multipleFormatedSearch = {
                 'PURPOSE': $scope.advancedSearchObject.purposeCode
             };
-            
-            
-            if (angular.isDefined(formatedSearch.QUNTITY_MIN) || angular.isDefined(formatedSearch.QUNTITY_MAX)){
+
+
+            if (angular.isDefined(formatedSearch.QUANTITY_MIN) || angular.isDefined(formatedSearch.QUANTITY_MAX)){
                 formatedSearch.WEIGHT_MEASURE = $scope.advancedSearchObject.weightUnit;
             }
-            
-            if (angular.isDefined(formatedSearch.QUNTITY_MAX) && !angular.isDefined(formatedSearch.QUNTITY_MIN)){
-                formatedSearch.QUNTITY_MIN = 0;
+
+            if (angular.isDefined(formatedSearch.QUANTITY_MAX) && !angular.isDefined(formatedSearch.QUANTITY_MIN)){
+                formatedSearch.QUANTITY_MIN = 0;
             }
-            
+
             $scope.actServ.reportsList.searchObject = {
                 simpleCriteria: formatedSearch,
                 multipleCriteria: multipleFormatedSearch
             };
-            
+
+            $scope.actServ.tripsList.searchObject = {
+                simpleCriteria: formatedSearch,
+                multipleCriteria: multipleFormatedSearch
+            };
+
             $scope.actServ.getActivityList(function(){
                 $scope.actServ.reportsList.fromForm = true;
                 $scope.actServ.reportsList.stCtrl.pipe();
-            });
+            }, undefined, 'reportsList');
+
+            $scope.actServ.getActivityList(function(){
+                $scope.actServ.tripsList.fromForm = true;
+                $scope.actServ.tripsList.stCtrl.pipe();
+            }, undefined, 'tripsList');
         }
     };
-    
+
     /**
      * Update the fishing activities column visibility settings
      *  
@@ -304,10 +329,10 @@ angular.module('unionvmsWeb').controller('AdvancedsearchformCtrl',function($scop
      * @alias updateVisibilityCache
      * @param {String} column - the column name property to be updated
      */
-    $scope.updateVisibilityCache = function(column){
-        $scope.visServ.updateStorage(column);
-    };
-    
+    /* $scope.updateVisibilityCache = function(column){
+         $scope.visServ.updateStorage(column);
+     };
+     */
     /**
      * Get the data for all comboboxes used in the the advanced search form
      * 
@@ -315,13 +340,13 @@ angular.module('unionvmsWeb').controller('AdvancedsearchformCtrl',function($scop
      * @private
      */
     function getComboboxData(){
-        var lists = ['comChannels', 'purposeCodes', 'reportTypes', 'gearTypes', 'activityTypes', 'vesselGroups'];
+        var lists = ['comChannels', 'purposeCodes', 'reportTypes', 'gearTypes', 'activityTypes'];
         angular.forEach(lists, function(list) {
-        	var fnName = 'get' + list.substring(0,1).toUpperCase() + list.substring(1);
-        	$scope[fnName]();
+            var fnName = 'get' + list.substring(0,1).toUpperCase() + list.substring(1);
+            $scope[fnName]();
         });
     }
-    
+
     /**
      * Convert code lists array into combobox list array
      * 
@@ -349,10 +374,10 @@ angular.module('unionvmsWeb').controller('AdvancedsearchformCtrl',function($scop
                 } else {
                     rec.text = item.code;
                 }
-                
+
                 rec.desc = item.description;
             }
-            
+
             if (angular.isDefined(suportedCodes)){
                 if (_.indexOf(suportedCodes, item.code) !== -1 || (item.code === 'JOINT_FISHING_OPERATION' && _.indexOf(suportedCodes, 'JOINED_FISHING_OPERATION') !== -1)){
                     comboList.push(rec);
@@ -361,10 +386,10 @@ angular.module('unionvmsWeb').controller('AdvancedsearchformCtrl',function($scop
                 comboList.push(rec);
             }
         });
-        
+
         return comboList;
     }
-    
+
     /**
      * Initialization function
      * 
@@ -373,6 +398,16 @@ angular.module('unionvmsWeb').controller('AdvancedsearchformCtrl',function($scop
      */
     function init(){
         getComboboxData();
+        if (_.keys($stateParams).length > 0 && $stateParams.tripId !== null){
+            $scope.advancedSearchObject = {
+                tripId: $stateParams.tripId
+            };
+            $scope.$watch('activityAdvancedSearchForm.$valid', function (newVal) {
+                if (angular.isDefined(newVal)) {
+                    $scope.searchFAReports();
+                }
+            });
+        }
     }
 
     init();

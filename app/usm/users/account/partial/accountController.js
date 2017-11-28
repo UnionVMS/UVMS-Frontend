@@ -34,8 +34,7 @@ accountModule.controller('newUserController', ['$scope', '$modal', 'accountServi
                         return angular.copy(newUser);
                     },
                     ldapEnabledPolicy: function(){
-                        var ldapEnabledPolicy = policyValues.getPolicyValue();
-                        return ldapEnabledPolicy;
+                        return policyValues.getPolicyValue();
                     }
                 }
             });
@@ -70,11 +69,7 @@ accountModule.controller('userModalInstanceCtrl', ['$scope', '$modalInstance', '
         };
 
         $scope.changeStatus = function (status) {
-            if (status !== 'E') {
-                $scope.mandatoryNotes = true;
-            } else {
-                $scope.mandatoryNotes = false;
-            }
+            $scope.mandatoryNotes = status !== 'E';
         };
 
         // organisation dropdown
@@ -160,27 +155,6 @@ accountModule.controller('userModalInstanceCtrl', ['$scope', '$modalInstance', '
 
         $scope.cancel = function () {
             $modalInstance.dismiss();
-        };
-
-        // activeFrom date configuration
-        $scope.activeFromConfig =
-        {
-            id: 'activeFrom',
-            dataModel: 'user.activeFrom',
-            defaultValue: moment().format('YYYY-MM-DD'),
-            name: 'activeFrom',
-            isRequired: true,
-            page: 'createUser'
-        };
-        // activeTo date configuration
-        $scope.activeToConfig =
-        {
-            id: 'activeTo',
-            dataModel: 'user.activeTo',
-            defaultValue: refData.activeDateTo,
-            name: 'activeTo',
-            isRequired: true,
-            page: 'createUser'
         };
 
 

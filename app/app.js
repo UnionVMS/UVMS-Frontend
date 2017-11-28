@@ -904,6 +904,7 @@ unionvmsWebApp.factory('initService',function($log, configurationService, locale
                 'exchange',
                 'alarms',
                 'areas',
+                'sales',
                 'activity',
                 'abbreviations',
                 'login'
@@ -931,7 +932,8 @@ var restApiURLS = [
     '/activity/rest/',
     '/mdr/rest/',
     '/mapfish-print',
-    '/usm-authentication/rest', '/usm-authorisation/rest', '/usm-administration/rest'
+    '/usm-authentication/rest', '/usm-authorisation/rest', '/usm-administration/rest',
+    'sales/rest/'
 ];
 
 //Request interceptor that routes REST api request to the REST api server

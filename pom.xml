@@ -1,13 +1,14 @@
 <project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
     <modelVersion>4.0.0</modelVersion>
     <parent>
-        <groupId>eu.europa.ec.fisheries.uvms</groupId>
-        <artifactId>uvms-app-parent</artifactId>
-        <version>1.0.2</version>
+        <groupId>fish.focus.maven</groupId>
+	    <artifactId>focus-pom</artifactId>
+	    <version>1.12</version>
+        <relativePath />
     </parent>
     <groupId>eu.europa.ec.fisheries.uvms</groupId>
     <artifactId>unionvms-web</artifactId>
-    <version>3.0.5-SNAPSHOT</version>
+    <version>3.0.14-SNAPSHOT</version>
     <name>unionvms-web</name>
     <packaging>war</packaging>
 
@@ -17,8 +18,7 @@
         <webroot>unionvms-web</webroot>
         <karma.phase>integration-test</karma.phase>
         <project.scm.id>github</project.scm.id>
-        <maven-release-plugin>2.5.3</maven-release-plugin>
-        <grunt.build>build</grunt.build>
+        <grunt.build>build-ci</grunt.build>
 
         <uvms.env.name>Local</uvms.env.name>
         <uvms.rest.base.url>http://localhost</uvms.rest.base.url>
@@ -54,6 +54,18 @@
 
             <properties>
                 <scm.connection>scm:git:https://emserveje@webgate.ec.europa.eu/CITnet/stash/scm/unionvms/uvms-frontend.git</scm.connection>
+            </properties>
+        </profile>
+        <profile>
+            <id>belgium-local</id>
+            <distributionManagement>
+                <snapshotRepository>
+                    <id>lv-snapshots</id>
+                    <url>https://apjenp01.dg3.be/nexus/repository/maven-snapshots/</url>
+                </snapshotRepository>
+            </distributionManagement>
+            <properties>
+                <focus-pom.java.version>1.8</focus-pom.java.version>
             </properties>
         </profile>
         <profile>
@@ -112,17 +124,6 @@
             <build>
                 <plugins>
                     <plugin>
-                        <artifactId>maven-release-plugin</artifactId>
-                        <version>${maven-release-plugin}</version>
-                        <dependencies>
-                            <dependency>
-                                <groupId>org.apache.maven.scm</groupId>
-                                <artifactId>maven-scm-provider-gitexe</artifactId>
-                                <version>1.8.1</version>
-                            </dependency>
-                        </dependencies>
-                    </plugin>
-                    <plugin>
                         <groupId>org.wildfly.plugins</groupId>
                         <artifactId>wildfly-maven-plugin</artifactId>
                         <version>1.1.0.Alpha1</version>
@@ -164,6 +165,24 @@
             </properties>
             <build>
                 <plugins>
+                <plugin>
+                <groupId>com.github.eirslett</groupId>
+                <artifactId>frontend-maven-plugin</artifactId>
+                <executions>
+                    <execution>
+                        <id>grunt</id>
+                        <goals>
+                            <goal>grunt</goal>
+                        </goals>
+                        <phase>generate-resources</phase>
+                        <configuration>
+                            <arguments>build-docs</arguments>
+                            <outputdir>${basedir}/dist</outputdir>
+                        </configuration>
+                    </execution>
+                </executions>
+                </plugin>
+
                     <plugin>
                         <artifactId>maven-assembly-plugin</artifactId>
                         <version>2.2-beta-5</version>
@@ -279,31 +298,19 @@
                         </configuration>
                     </execution>
                     <execution>
-                        <id>grunt</id>
-                        <goals>
-                            <goal>grunt</goal>
-                        </goals>
-                        <phase>generate-resources</phase>
-                        <configuration>
-                            <arguments>${grunt.build} build-docs</arguments>
-                            <outputdir>${basedir}/dist</outputdir>
-                        </configuration>
-                    </execution>
-                    <execution>
                         <id>karma</id>
                         <goals>
                             <goal>grunt</goal>
                         </goals>
-                        <phase>${karma.phase}</phase>
+                        <phase>compile</phase>
                         <configuration>
-                            <arguments>test</arguments>
+                            <arguments>${grunt.build}</arguments>
                         </configuration>
                     </execution>
                 </executions>
             </plugin>
             <plugin>
                 <artifactId>maven-war-plugin</artifactId>
-                <version>2.6</version>
                 <configuration>
                     <warName>${project.artifactId}</warName>
                     <warSourceDirectory>${basedir}/dist</warSourceDirectory>
@@ -328,7 +335,6 @@
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-deploy-plugin</artifactId>
-                <version>2.8</version>
                 <configuration>
                     <deployAtEnd>true</deployAtEnd>
                 </configuration>
@@ -348,17 +354,4 @@
         <tag>HEAD</tag>
     </scm>
 
-
-    <distributionManagement>
-        <repository>
-            <id>focus-releases</id>
-            <name>UnionVms Repository</name>
-            <url>http://nexus.focus.fish/nexus/repository/releases/</url>
-        </repository>
-        <snapshotRepository>
-            <id>focus-snapshots</id>
-            <name>UnionVms Snapshot Repository</name>
-            <url>http://nexus.focus.fish/nexus/repository/snapshots/</url>
-        </snapshotRepository>
-    </distributionManagement>
 </project>

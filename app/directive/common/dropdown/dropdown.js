@@ -29,8 +29,8 @@ angular.module('unionvmsWeb')
             callback : '=',
             callbackParams : '=',
             ngDisabled : '=',
-            tabIndex : '=', 
-            ngRequired : '=', 
+            tabIndex : '=',
+            ngRequired : '=',
             name : '=',
             inputFieldId : '@'
 		},
@@ -46,20 +46,20 @@ angular.module('unionvmsWeb')
                 scope.initialitem = false;
             }
 
-            //Should be able to select the initial text item?
+            // Should be able to select the initial text item?
             scope.initialtextSelectable = false;
             if('initialtextSelectable' in attrs){
                 scope.initialtextSelectable = true;
             }
 
-            //Should dropdown be treated like a menu?
+            // Should dropdown be treated like a menu?
             scope.menuStyle = false;
             if('menuStyle' in attrs){
                 scope.menuStyle = true;
             }
 
-            //Get the label for an item
-            //Default item variable "text" is used if no title attr is set
+            // Get the label for an item
+            // Default item variable "text" is used if no title attr is set
             scope.getItemLabel = function(item){
                 var label;
                 if(attrs.title){
@@ -70,8 +70,8 @@ angular.module('unionvmsWeb')
                 return label;
             };
 
-            //Get the code (id) for an item
-            //Default item variable "code" is used if no data attr is set
+            // Get the code (id) for an item
+            // Default item variable "code" is used if no data attr is set
             var getItemCode = function(item){
                 if(attrs.data){
                     return item[attrs.data];
@@ -80,7 +80,7 @@ angular.module('unionvmsWeb')
                 }
             };
 
-            //Set the label of the dropdown based on the current value of ngMode
+            // Set the label of the dropdown based on the current value of ngMode
             scope.setLabel = function() {
                 if ((scope.ngModel !== undefined && scope.ngModel === "") || scope.ngModel === null || scope.ngModel === undefined) {
                     if(attrs.initialtext){
@@ -102,14 +102,14 @@ angular.module('unionvmsWeb')
                             }
                         }
                     }
-                    //If no label found, show value of ngModel
+                    // If no label found, show value of ngModel
                     if(angular.isUndefined(scope.currentItemLabel)){
                         scope.currentItemLabel = scope.ngModel;
                     }
                 }
             };
 
-            //Watch for changes to the ngModel and update the dropdown label
+            // Watch for changes to the ngModel and update the dropdown label
             scope.$watch(function () { return scope.ngModel;}, function (newVal, oldVal) {
                 if(newVal === null || newVal === undefined || newVal === ""){
                     if(attrs.initialtext){
@@ -132,14 +132,14 @@ angular.module('unionvmsWeb')
                 }
             });
 
-            //Select item in dropdown
+            // Select item in dropdown
             scope.selectVal = function(item){
-                //Disabled item
+                // Disabled item
                 if(scope.disableItem(item)){
                     return;
                 }
 
-                //Change ngModel and label value if not menu style
+                // Change ngModel and label value if not menu style
                 if(!scope.menuStyle){
                     scope.ngModel = getItemCode(item);
                     scope.currentItemLabel = scope.getItemLabel(item);
@@ -153,7 +153,7 @@ angular.module('unionvmsWeb')
                 }
             };
 
-            //Add a default value as first item in the dropdown
+            // Add a default value as first item in the dropdown
             scope.addDefaultValueToDropDown = function(){
                 if (scope.items !== undefined && attrs.initialtext !== ""){
                     var initialValue = {};
@@ -195,11 +195,11 @@ angular.module('unionvmsWeb')
                 if(!scope.ngDisabled) {
                     e.preventDefault();
                     e.stopPropagation();
-                    
+
                     angular.element(scope.currentTarget).toggleClass('open');
                     scope.currentTarget = event.currentTarget;
                     scope.status.isopen = !scope.status.isopen;
-                } 
+                }
             };
 
             // Make sure dropdown isn't toggled on menu events
@@ -207,21 +207,21 @@ angular.module('unionvmsWeb')
                 scope.status.isopen = true;
             };
 
-            // Close menu on enter 
+            // Close menu on enter
             scope.dropdownMenuKeyboardEvent = function(e) {
                 e.preventDefault();
                 e.stopPropagation();
-                
+
                 if(e.keyCode === 13) {
                     scope.closeDropdownMenu();
-                } 
+                }
             };
 
             scope.setLabel();
-            //Create a list item with the initaltext?
+            // Create a list item with the initaltext?
             if(scope.initialitem && !scope.menuStyle){
                 scope.addDefaultValueToDropDown();
-            }  
+            }
 		}
 	};
 });

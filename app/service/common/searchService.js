@@ -11,7 +11,8 @@ copy of the GNU General Public License along with the IFDM Suite. If not, see <h
  */
 angular.module('unionvmsWeb').factory('searchService',function($q, $log, searchUtilsService, GetListRequest, VesselListPage, SearchField, vesselRestService, mobileTerminalRestService, pollingRestService, movementRestService, manualPositionRestService, GetPollableListRequest, SearchResultListPage, auditLogRestService, exchangeRestService, alarmRestService, userService) {
 
-    var DEFAULT_ITEMS_PER_PAGE = 20;
+    var DEFAULT_ITEMS_PER_PAGE = 20,
+        ALL_ITEMS = 10000000;
 
 	var getListRequest = new GetListRequest(1, DEFAULT_ITEMS_PER_PAGE, true, []),
         advancedSearchObject  = {};
@@ -150,7 +151,7 @@ angular.module('unionvmsWeb').factory('searchService',function($q, $log, searchU
     var searchAlarmsOrTickets = function(searchType, searchGetListRequest){
         //Use the default getListRequest if searchListRequest is not provided
         if(angular.isUndefined(searchGetListRequest)){
-            searchGetListRequest = getListRequest;
+            searchGetListRequest = new GetListRequest(1, ALL_ITEMS, true, getListRequest.criterias);
         }
         searchUtilsService.modifySpanAndTimeZones(searchGetListRequest.criterias);
 
@@ -159,7 +160,7 @@ angular.module('unionvmsWeb').factory('searchService',function($q, $log, searchU
         var alarmsOrTicketsCritieria = partition["default"];
         var vesselCriteria = partition["vessel"];
 
-        var vesselRequest = new GetListRequest(1, 10000, true, vesselCriteria);
+        var vesselRequest = new GetListRequest(1, ALL_ITEMS, true, vesselCriteria);
 
         //Set the new search criterias (without vessel criterias)
         searchGetListRequest.setSearchCriterias(alarmsOrTicketsCritieria);
@@ -280,7 +281,7 @@ angular.module('unionvmsWeb').factory('searchService',function($q, $log, searchU
                             });
 
                             if(latestMovements.length > 0) {
-                                vessels.totalNumberOfLatestMovements = latestMovements.length;                
+                                vessels.totalNumberOfLatestMovements = latestMovements.length;
                             }
 
                             deferred.resolve(vessels);
@@ -301,10 +302,13 @@ angular.module('unionvmsWeb').factory('searchService',function($q, $log, searchU
 
         //Do the search for vessels
 		searchVessels : function(){
-            var deferred = $q.defer();
+            var deferred = $q.defer(),
+                getListRequestAllItems = new GetListRequest(1, ALL_ITEMS, false, getListRequest.criterias);
+
             searchUtilsService.modifySpanAndTimeZones(getListRequest.criterias);
             searchUtilsService.replaceCommasWithPoint(getListRequest.criterias);
-			vesselRestService.getVesselList(getListRequest).then(function(vesselPage){
+
+			vesselRestService.getVesselList(getListRequestAllItems).then(function(vesselPage){
                 //Zero matches?
                 if(vesselPage.getNumberOfItems() === 0){
                     return deferred.resolve(vesselPage);
@@ -535,8 +539,8 @@ angular.module('unionvmsWeb').factory('searchService',function($q, $log, searchU
             var movementCritieria = partition["default"];
             var vesselCriteria = partition["vessel"];
 
-            var vesselRequest = new GetListRequest(1, 10000, getListRequest.isDynamic, vesselCriteria);
-            var movementRequest = new GetListRequest(getListRequest.page, getListRequest.listSize, getListRequest.isDynamic, movementCritieria);
+            var vesselRequest = new GetListRequest(1, ALL_ITEMS, getListRequest.isDynamic, vesselCriteria);
+            var movementRequest = new GetListRequest(getListRequest.page, ALL_ITEMS, getListRequest.isDynamic, movementCritieria);
 
             //Get vessels first?
             if(vesselRequest.getNumberOfSearchCriterias() > 0){
@@ -603,9 +607,12 @@ angular.module('unionvmsWeb').factory('searchService',function($q, $log, searchU
         // and all serach criterias are sent directly to mobile terminal search
         searchMobileTerminals : function(skipVesselSearch){
 
+            var getAllListRequest = new GetListRequest(1, ALL_ITEMS, getListRequest.isDynamic, getListRequest.criterias);
+
             //Get mobile terminals without getting vessels first
             if(skipVesselSearch){
-                return mobileTerminalRestService.getMobileTerminalList(getListRequest);
+                getAllListRequest = new GetListRequest(1, ALL_ITEMS, getListRequest.isDynamic, getListRequest.criterias);
+                return mobileTerminalRestService.getMobileTerminalList(getAllListRequest);
             }
 
             // Split search criteria into vessel and mobileTerminal
@@ -630,11 +637,10 @@ angular.module('unionvmsWeb').factory('searchService',function($q, $log, searchU
             //Get vessels first?
             if(vesselCriteria.length > 0){
                 var deferred = $q.defer();
-                var getVesselListRequest = new GetListRequest(1, 10000, vesselSearchIsDynamic, vesselCriteria);
+                var getVesselListRequest = new GetListRequest(1, ALL_ITEMS, vesselSearchIsDynamic, vesselCriteria);
                 var outerThis = this;
                 //Get the vessels
                 vesselRestService.getAllMatchingVessels(getVesselListRequest).then(
-                    //TODO: Get more pages of vessels or error message that too many vessels were returned?
                     function(vessels){
                         //If no matchin vessels found
                         if(vessels.length === 0){
@@ -648,7 +654,8 @@ angular.module('unionvmsWeb').factory('searchService',function($q, $log, searchU
                             }
                         });
                         //Get mobile terminals
-                        mobileTerminalRestService.getMobileTerminalList(getListRequest).then(
+                        getAllListRequest = new GetListRequest(1, ALL_ITEMS, getListRequest.isDynamic, getListRequest.criterias);
+                        mobileTerminalRestService.getMobileTerminalList(getAllListRequest).then(
                             function(mobileTerminaListPage){
                                 return deferred.resolve(mobileTerminaListPage);
                             },
@@ -666,13 +673,16 @@ angular.module('unionvmsWeb').factory('searchService',function($q, $log, searchU
             }
             //No need to get vessels
             else{
-                return mobileTerminalRestService.getMobileTerminalList(getListRequest);
+                getAllListRequest = new GetListRequest(1, ALL_ITEMS, getListRequest.isDynamic, getListRequest.criterias);
+                return mobileTerminalRestService.getMobileTerminalList(getAllListRequest);
             }
         },
 
         searchAuditLogs: function() {
             searchUtilsService.modifySpanAndTimeZones(getListRequest.criterias);
-            return auditLogRestService.getAuditLogList(getListRequest);
+            var getAllListRequest = new GetListRequest(1, ALL_ITEMS, getListRequest.isDynamic, getListRequest.criterias);
+
+            return auditLogRestService.getAuditLogList(getAllListRequest);
         },
 
         searchExchange: function() {
@@ -763,6 +773,11 @@ angular.module('unionvmsWeb').factory('searchService',function($q, $log, searchU
                 }
             }
         },
+        hardResetAdvancedSearch : function(){
+            for (var item in advancedSearchObject){
+                delete advancedSearchObject[item];
+            }
+        }
 
 	};
 

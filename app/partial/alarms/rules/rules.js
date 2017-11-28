@@ -11,6 +11,9 @@ copy of the GNU General Public License along with the IFDM Suite. If not, see <h
  */
 angular.module('unionvmsWeb').controller('RulesCtrl',function($scope, $log, $stateParams, locale, csvService, alertService, $filter, Rule,  RuleDefinition, ruleRestService, SearchResults, SearchResultListPage, userService, personsService, confirmationModal, GetListRequest, RuleSubscriptionUpdate, openAlarmsAndTicketsService){
 
+    //Number of items displayed on each page
+    $scope.itemsByPage = 20;
+
     var checkAccessToFeature = function(feature) {
         return userService.isAllowed(feature, 'Rules', true);
     };
@@ -72,17 +75,9 @@ angular.module('unionvmsWeb').controller('RulesCtrl',function($scope, $log, $sta
         ruleRestService.getAllRulesForUser().then(updateSearchResults, onGetSearchResultsError);
     };
 
-    //Goto page in the search results
-    $scope.gotoPage = function(page){
-        if(angular.isDefined(page)){
-            //TODO: Implement. Currently there are no pagination in the result.
-        }
-    };
-
     //Callback when a new Rule has been creatad
     $scope.createdNewRuleCallback = function(newRule){
-        //Add new rule to searchResult
-        $scope.currentSearchResults.updateWithSingleItem(newRule);
+        ruleRestService.getAllRulesForUser().then(updateSearchResults, onGetSearchResultsError);
         $scope.setUserSubscribeValues();
 
         //Show search results
@@ -102,6 +97,8 @@ angular.module('unionvmsWeb').controller('RulesCtrl',function($scope, $log, $sta
     var updateSearchResults = function(searchResultsListPage){
         $scope.currentSearchResults.updateWithNewResults(searchResultsListPage);
         $scope.setUserSubscribeValues();
+        $scope.allCurrentSearchResults = searchResultsListPage.items;
+        $scope.currentSearchResultsByPage = searchResultsListPage.items;
     };
 
     //Error during search
@@ -212,7 +209,6 @@ angular.module('unionvmsWeb').controller('RulesCtrl',function($scope, $log, $sta
         }
 
         //Send request
-        alertService.showInfoMessage(locale.getString('common.update_waiting_for_reponse_text'));
         ruleRestService.updateSubscription(ruleSubscriptionUpdate).then(function(updatedRule){
             alertService.showSuccessMessageWithTimeout(locale.getString('alarms.rule_subscription_update_success'));
             //Update subscription values

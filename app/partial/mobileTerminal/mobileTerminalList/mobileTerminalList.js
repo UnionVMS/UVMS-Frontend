@@ -11,9 +11,11 @@ copy of the GNU General Public License along with the IFDM Suite. If not, see <h
  */
 angular.module('unionvmsWeb').controller('MobileterminallistCtrl',function($scope){
 
+    //Number of items displayed on each page
+    $scope.itemsByPage = 20;
 
     //Handle click on the top "check all" checkbox
-    $scope.checkAll = function(){        
+    $scope.checkAll = function(){
         if($scope.isAllChecked()){
             //Remove all
             $scope.clearSelection();
@@ -33,7 +35,7 @@ angular.module('unionvmsWeb').controller('MobileterminallistCtrl',function($scop
             $scope.removeFromSelection(item);
         }else{
             $scope.addToSelection(item);
-        }      
+        }
     };
 
     $scope.isAllChecked = function(){

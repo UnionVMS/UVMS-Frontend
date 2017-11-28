@@ -43,14 +43,17 @@ copy of the GNU General Public License along with the IFDM Suite. If not, see <h
                 </thead>
                 <tbody ng-show="!tableLoading && displayedMdrCodeList.length">
                     <tr ng-repeat="codeListEntry in displayedMdrCodeList">
-                        <td ng-repeat="column in columns">{{codeListEntry[column]}}</td>
+                        <td ng-repeat="column in ::columns" ng-switch="::(['startDate','endDate'].indexOf(column) !== -1)">
+                            <div ng-switch-when="true">{{codeListEntry[column] | stDateUtc}}</div>
+                            <div ng-switch-default>{{codeListEntry[column]}}</div>
+                        </td>
                     </tr>
                 </tbody>
             </table>
         </div>
         <div class="tfoot stFooterPagination" ng-if="displayedMdrCodeList.length && !tableLoading">
             <div class="tr">
-                <div class="td text-right" colspan="{{columns.length}}">
+                <div class="td text-right">
                     <div st-pagination st-items-by-page="itemsByPage" st-displayed-pages="7" st-template="partial/common/reportsPagination/reportsPagination.html"></div>
                 </div>
             </div>

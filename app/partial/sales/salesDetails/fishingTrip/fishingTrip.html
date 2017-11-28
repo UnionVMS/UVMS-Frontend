@@ -1,0 +1,40 @@
+<div class="row">
+    <div class="col-md-6">
+        <div><h5>{{'sales.fishing_trip_header' | i18n}}</h5></div>
+    </div>
+    <div class="col-md-6">
+        <div class="actions">
+            <!--Open fishing trip-->
+            <div class="closeIcon textAlignRight" ng-click="vm.openFishingTrip()" ng-show="vm.hasActivityPermission()">
+                <i class="fa fa-sign-out signouticon" title="{{'sales.fishing_trip_link' | i18n}}"></i>
+            </div>
+        </div>
+    </div>
+</div>
+<div>
+    <div class="row">
+        <div class="col-md-3">
+            <span>{{'sales.fishing_trip_id' | i18n}}:</span>
+            <span>{{vm.trip.extId}}</span>
+        </div>
+        <div class="col-md-2">
+            <div ng-if="vm.navigateToVesselAllowed">
+                <a ui-sref="app.assets-id({id: vm.trip.vesselGuid})"><span><i class="fa fa-ship fa-2x fa-ship-trip"></i></span></a>
+            </div>
+            <span ng-if="!vm.navigateToVesselAllowed"><i class="fa fa-ship fa-2x fa-ship-trip"></i></span>
+            <span>{{vm.trip.vesselName}} ({{vm.trip.vesselCFR}})</span>
+        </div>
+        <div class="col-md-2">
+            <span>{{'sales.fishing_trip_departure' | i18n}}:</span>
+            <span>{{vm.trip.departureDate | date:'yyyy-MM-dd HH:mm'}} {{'sales.fishing_trip_location_at' | i18n}} {{vm.trip.departureLocation}}</span>
+        </div>
+        <div class="col-md-2">
+            <span>{{'sales.fishing_trip_arrival' | i18n}}:</span>
+            <span>{{vm.trip.arrivalDate | date:'yyyy-MM-dd HH:mm'}} {{'sales.fishing_trip_location_at' | i18n}} {{vm.trip.arrivalLocation}}</span>
+        </div>
+        <div class="col-md-2">
+            <span>{{'sales.fishing_trip_landing' | i18n}}:</span>
+            <span>{{vm.trip.landingDate | date:'yyyy-MM-dd HH:mm'}} {{'sales.fishing_trip_location_at' | i18n}} {{vm.trip.landingLocation}}</span>
+        </div>
+    </div>
+</div>
