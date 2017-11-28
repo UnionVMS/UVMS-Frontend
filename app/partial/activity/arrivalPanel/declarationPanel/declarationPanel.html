@@ -14,7 +14,8 @@ copy of the GNU General Public License along with the IFDM Suite. If not, see <h
 		<trip-overview-panel class="col-md-12 summary-section" trip="faServ.activityData.tripDetails"></trip-overview-panel>
 	</div>
 	<div class="col-md-12 main-content">
-		<a class="btn-trip-quit" title="{{'activity.trip_summary_quit_trip_detail' | i18n }}" ng-click="faServ.quitFaView()" ng-if="srcTab === 'reports'"><i class="fa fa-share-square-o"></i></a>
+		<fa-history-navigator history="faServ.activityData.history" activity-name="arrival_declaration" ng-if="faServ.activityData.history.previousId || faServ.activityData.history.nextId"></fa-history-navigator>
+		<a class="btn-trip-quit" title="{{'activity.trip_summary_quit_trip_detail' | i18n }}" ng-click="faServ.quitFaView()" ng-if="tabType === 'reports'"><i class="fa fa-share-square-o"></i></a>
 		<print-button view-to-print="printView"></print-button>
 		<div class="row title">
 		    <span ng-class="{useColon: faServ.isCorrection}">{{'activity.fa_type_arrival' | i18n}}</span>
@@ -29,7 +30,7 @@ copy of the GNU General Public License along with the IFDM Suite. If not, see <h
 					<location-tile class="col-md-3 summary-section" is-clickable="faServ.isLocationClickable()" field-title="{{'activity.activity_location_port_arrival' | i18n}}"
 						location-details="faServ.activityData.locations" click-callback="faServ.locationClickCallback()"></location-tile>
 					<carousel-tile class="col-md-4 summary-section" tile-title="{{'activity.header_fa_gear' | i18n}}" ng-model="faServ.activityData.gears"
-						template-url="directive/activity/carouselTile/templates/gearTile/gearTile.html"></carousel-tile>
+						template-url="directive/activity/carouselTile/templates/gearTile/gearTile.html" no-data-msg-loc="activity.no_gears_reported"></carousel-tile>
 					<fa-details-panel class="col-md-5 summary-section" ng-model="faServ.activityData.reportDetails"></fa-details-panel>
 				</div>
 			</div>

@@ -40,43 +40,43 @@ copy of the GNU General Public License along with the IFDM Suite. If not, see <h
             </uib-tab-heading>
             <!--TAB CONTENT-->
             <div class="trip-summary-tab" ng-if="tab.title === trip.id">
-                <div ng-include="'partial/spatial/tripsPanel/tripSummary/tripSummary.html'"></div>
+                <div ng-include="'partial/spatial/tripsPanel/tripSummary/tripSummary.html'" ng-init="srcTab = 'reports'"></div>
             </div>
         </uib-tab>
     </uib-tabset>
     <div ng-if="repNav.isSectionVisible('tripsPanel') && repNav.isViewVisible('catchDetails')" ng-include="'partial/spatial/tripsPanel/catchDetails/catchDetails.html'"></div>
     <div ng-if="repNav.isViewVisible('catchEvolution')" ng-include="'partial/spatial/tripsPanel/catchEvolution/catchEvolution.html'"></div>
     
-    <div ng-show="repNav.isViewVisible('FishingActivityPanel')" ng-switch="faServ.activityType">
-        <div ng-switch-when="FISHING_OPERATION">
-            <fishing-activity-navigator partial="partial/spatial/tripsPanel/tripFishingOperationPanel/tripFishingOperationPanel.html"></fishing-activity-navigator>
+    <div ng-if="repNav.isViewVisible('FishingActivityPanel')">
+        <div ng-if="faServ.activityType === 'FISHING_OPERATION'">
+            <fishing-activity-navigator partial="partial/spatial/tripsPanel/tripFishingOperationPanel/tripFishingOperationPanel.html" tab-type = "reports"></fishing-activity-navigator>
         </div>
-        <div ng-switch-when="DEPARTURE">
-            <fishing-activity-navigator partial="partial/spatial/tripsPanel/tripDeparturePanel/tripDeparturePanel.html"></fishing-activity-navigator>
+        <div ng-if="faServ.activityType === 'DEPARTURE'">
+            <fishing-activity-navigator partial="partial/spatial/tripsPanel/tripDeparturePanel/tripDeparturePanel.html" tab-type = "reports"></fishing-activity-navigator>
         </div>
-        <div ng-switch-when="ARRIVAL">
-            <fishing-activity-navigator partial="partial/spatial/tripsPanel/tripArrivalPanel/tripArrivalPanel.html"></fishing-activity-navigator>
+        <div ng-if="faServ.activityType === 'ARRIVAL'">
+            <fishing-activity-navigator partial="partial/spatial/tripsPanel/tripArrivalPanel/tripArrivalPanel.html" tab-type = "reports"></fishing-activity-navigator>
         </div>
-        <div ng-switch-when="LANDING">
-            <fishing-activity-navigator partial="partial/spatial/tripsPanel/tripLandingPanel/tripLandingPanel.html"></fishing-activity-navigator>
+        <div ng-if="faServ.activityType === 'LANDING'">
+            <fishing-activity-navigator partial="partial/spatial/tripsPanel/tripLandingPanel/tripLandingPanel.html" tab-type = "reports"></fishing-activity-navigator>
         </div>
-        <div ng-switch-when="DISCARD">
-            <fishing-activity-navigator partial="partial/spatial/tripsPanel/tripDiscardPanel/tripDiscardPanel.html"></fishing-activity-navigator>
+        <div ng-if="faServ.activityType === 'DISCARD'">
+            <fishing-activity-navigator partial="partial/spatial/tripsPanel/tripDiscardPanel/tripDiscardPanel.html" tab-type = "reports"></fishing-activity-navigator>
         </div>
-        <div ng-switch-when="AREA_ENTRY">
-            <fishing-activity-navigator partial="partial/spatial/tripsPanel/tripAreaEntryPanel/tripAreaEntryPanel.html"></fishing-activity-navigator>
+        <div ng-if="faServ.activityType === 'AREA_ENTRY'">
+            <fishing-activity-navigator partial="partial/spatial/tripsPanel/tripAreaEntryPanel/tripAreaEntryPanel.html" tab-type = "reports"></fishing-activity-navigator>
         </div>
-        <div ng-switch-when="AREA_EXIT">
-            <fishing-activity-navigator partial="partial/spatial/tripsPanel/tripAreaExitPanel/tripAreaExitPanel.html"></fishing-activity-navigator>
+        <div ng-if="faServ.activityType === 'AREA_EXIT'">
+            <fishing-activity-navigator partial="partial/spatial/tripsPanel/tripAreaExitPanel/tripAreaExitPanel.html" tab-type = "reports"></fishing-activity-navigator>
         </div>
-        <div ng-switch-when="TRANSHIPMENT">
-            <fishing-activity-navigator partial="partial/spatial/tripsPanel/tripTranshipmentPanel/tripTranshipmentPanel.html"></fishing-activity-navigator>
+        <div ng-if="faServ.activityType === 'TRANSHIPMENT'">
+            <fishing-activity-navigator partial="partial/spatial/tripsPanel/tripTranshipmentPanel/tripTranshipmentPanel.html" tab-type = "reports"></fishing-activity-navigator>
         </div>
-        <div ng-switch-when="RELOCATION">
-            <fishing-activity-navigator partial="partial/spatial/tripsPanel/tripRelocationPanel/tripRelocationPanel.html"></fishing-activity-navigator>
+        <div ng-if="faServ.activityType === 'RELOCATION'">
+            <fishing-activity-navigator partial="partial/spatial/tripsPanel/tripRelocationPanel/tripRelocationPanel.html" tab-type = "reports"></fishing-activity-navigator>
         </div>
-        <div ng-switch-when="JOINT_FISHING_OPERATION">
-            <fishing-activity-navigator partial="partial/spatial/tripsPanel/tripJointFishingOperationPanel/tripJointFishingOperationPanel.html"></fishing-activity-navigator>
+        <div ng-if="faServ.activityType === 'JOINT_FISHING_OPERATION'">
+            <fishing-activity-navigator partial="partial/spatial/tripsPanel/tripJointFishingOperationPanel/tripJointFishingOperationPanel.html" tab-type = "reports"></fishing-activity-navigator>
         </div>
     </div>
 </div>

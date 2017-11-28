@@ -17,7 +17,6 @@
     "tab_access_control" : "Access control",
     "search_checkall" : "Check all",
     "search_uncheckall" : "Uncheck all",
-    "tab_access_control" : "Access control",
     "column_username": "Username",
     "column_operation": "Operation",
     "column_object_type": "Object type",
@@ -44,6 +43,7 @@
     "configuration_header_audit": "Audit",
     "configuration_header_positions": "Positions",
     "configuration_header_mdr": "MDR",
+    "configuration_header_activity": "Activity",
 
     "configuration_column_key": "Parameter",
     "configuration_column_value": "Value",

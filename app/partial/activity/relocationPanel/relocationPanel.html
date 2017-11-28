@@ -14,7 +14,8 @@ copy of the GNU General Public License along with the IFDM Suite. If not, see <h
         <trip-overview-panel class="col-md-12 summary-section" trip="faServ.activityData.tripDetails"></trip-overview-panel>
     </div>
     <div class="col-md-12 main-content">
-        <a class="btn-trip-quit" title="{{'activity.trip_summary_quit_trip_detail' | i18n }}" ng-click="faServ.quitFaView()" ng-if="srcTab === 'reports'"><i class="fa fa-share-square-o"></i></a>
+        <fa-history-navigator history="faServ.activityData.history" activity-name="relocation" ng-if="faServ.activityData.history.previousId || faServ.activityData.history.nextId"></fa-history-navigator>
+        <a class="btn-trip-quit" title="{{'activity.trip_summary_quit_trip_detail' | i18n }}" ng-click="faServ.quitFaView()" ng-if="tabType === 'reports'"><i class="fa fa-share-square-o"></i></a>
         <print-button view-to-print="printView"></print-button>
         <div class="row title">
             <span ng-if="faServ.documentType === 'notification'">{{'activity.fa_report_document_type_notification_of' | i18n}}</span>
@@ -28,8 +29,8 @@ copy of the GNU General Public License along with the IFDM Suite. If not, see <h
             <div class="col-md-3"></div>
             <fa-details-panel class="col-md-4 summary-section" ng-model="faServ.activityData.reportDetails"></fa-details-panel>
         </div>
-        <div class="row activity-summary-row" ng-if="faServ.activityData.vesselDetails">
-            <carousel-tile class="col-md-12" tile-title="{{'activity.receiver_vessel' | i18n}}" ng-model="faServ.activityData.vesselDetails" template-url="directive/activity/carouselTile/templates/vesselTileTemplate/vesselTileTemplate.html"></carousel-tile>
+        <div class="row activity-summary-row" ng-if="faServ.activityData.vesselDetails && faServ.activityData.vesselDetails.length > 0">
+            <carousel-tile class="col-md-12" tile-title="{{vesselTileTitle}}" ng-model="faServ.activityData.vesselDetails" template-url="directive/activity/carouselTile/templates/vesselTileTemplate/vesselTileTemplate.html"></carousel-tile>
         </div>
         <div class="row activity-summary-row">
 			<catch-tile class="col-md-12 summary-section" ng-model="faServ.activityData.catches" tile-title="{{'activity.catch_details_catches_table' | i18n}}" is-location-clickable="faServ.isLocationClickable()" buffer-distance="5000" click-callback="faServ.locationClickCallback()"></catch-tile>

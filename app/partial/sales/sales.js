@@ -47,7 +47,7 @@
 
         function editSelectionCallBack(item) {
             if (item.code.toUpperCase() === 'EXPORT') {
-                vm.currentSearchResults.setLoading(true);
+                salesSearchService.setLoading(true);
                 var exportlist = salesSelectionService.getExportList();
                 salesRestService.exportSelectedDocuments(exportlist)
                     .then(function (data) {
@@ -56,12 +56,12 @@
             }
         }
         function exportSelectionSuccess(data) {
-            vm.currentSearchResults.setLoading(false);
+            salesSearchService.setLoading(false);
             var header = salesCsvService.headers.salesReport;
             csvService.downloadCSVFile(data, header, "sales_documents_export.csv");
         }
         function exportSelectionFailed() {
-            vm.currentSearchResults.setLoading(false);
+            salesSearchService.setLoading(false);
             vm.currentSearchResults.setErrorMessage(locale.getString('sales.documents_export_failed'));
         }
     }

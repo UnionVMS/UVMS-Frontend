@@ -9,13 +9,108 @@ the hope that it will be useful, but WITHOUT ANY WARRANTY; without even the impl
 FITNESS FOR A PARTICULAR PURPOSE.  See the GNU General Public License for more details. You should have received a
 copy of the GNU General Public License along with the IFDM Suite. If not, see <http://www.gnu.org/licenses/>.
 */
-.activity {
+.nav-tabs{
+   border-bottom: 0;
+}
+
+.nav-tabs > li.active > a, .nav-tabs > li.active > a:hover{
+  border-bottom-color: #ddd;
+}
+
+.activity { 
     margin-bottom: 25px;
     .no-wrap-white-space {
         white-space: nowrap;
     }
     .alert-container {
         padding-bottom: 15px;
+    }
+    .trip-summary {
+		padding-right:8px;
+	}
+	.trip-summary >.btn-print {
+		right: -12px;
+		top: 13px;
+	}
+	.trip-summary >.activity-summary-row >.btn-detail-form {
+		right: -6px;
+	}
+	.catch-details {
+        padding-left:10px;
+	}
+	.catch-evolution-container{
+        padding-left:10px;
+	}
+    .top-tabs {
+        height: 47px;
+        border-bottom: 1px solid #ddd;
+		li {
+			&.active {
+				background-color: white;
+			
+				a {
+					background-color: white;
+					color: @profileColor_darkgray;
+					&:hover {
+						background-color: white;
+						color: @profileColor_darkgray;
+					}
+				}
+			}
+			a {
+				padding: 0 15px;
+				line-height: 45px;
+				color: @primaryColor;
+				background-color: @profileColor_lightgray;
+			}
+		}
+	}
+	 .no-data {
+        text-align: center;
+        top: 20px;
+        bottom: 0;
+        left: 15px;
+        right: 15px;
+        position: absolute;
+        background-color: #fff;
+        z-index: 2;
+        div {
+            display: table;
+            height: 100%;
+            span {
+                display: table-cell;
+                vertical-align: middle;
+                font-size: 22px;
+                color: #ddd;
+            }
+        }
+    }
+	
+	.main-content {
+        border: 1px solid #ddd;
+        padding-bottom: 15px;
+        .title {
+            text-align: center;
+            font-size: 20px;
+            font-weight: bold;
+            margin-top: 5px;
+            margin-bottom: 15px;
+            .useColon::after {
+                content: ':'
+            }
+            .operationType {
+                text-transform: uppercase;
+                color: @primaryColor;
+            }
+        }
+        .summary-section {
+            //padding-bottom: 15px;
+            margin-bottom: 0;
+        }
+        .btn-trip-quit {
+            top: 11px;
+            right: 13px;
+        }
     }
 }
 .legends-in-print {

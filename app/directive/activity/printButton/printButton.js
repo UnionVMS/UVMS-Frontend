@@ -55,14 +55,7 @@ angular.module('unionvmsWeb').directive('printButton', function(fishingActivityS
     $scope.openPrintForm = function(){
         $scope.tip = $scope.el.qtip({
             content: {
-				ajax: {
-					url: 'directive/activity/printButton/printForm/printForm.html',
-					success: function(data, status) {
-                        var elemContent = angular.element('.print-tooltip > .qtip-content');
-                        elemContent.empty();
-                        elemContent.append($compile(angular.element(data))($scope));
-					}
-				}
+				text: ''
             },
             position: {
                 my: 'right top',
@@ -92,6 +85,8 @@ angular.module('unionvmsWeb').directive('printButton', function(fishingActivityS
         });
     
         var api = $scope.tip.qtip('api');
+        var printForm = angular.element('<div><div ng-include="\'directive/activity/printButton/printForm/printForm.html\'"></div></div>');
+        api.set('content.text', $compile(angular.element(printForm))($scope));
         api.show();
     };
 });

@@ -14,7 +14,8 @@ copy of the GNU General Public License along with the IFDM Suite. If not, see <h
         <trip-overview-panel class="col-md-12 summary-section" trip="faServ.activityData.tripDetails"></trip-overview-panel>
     </div>
     <div class="col-md-12 main-content">
-        <a class="btn-trip-quit" title="{{'activity.trip_summary_quit_trip_detail' | i18n }}" ng-click="faServ.quitFaView()" ng-if="srcTab === 'reports'"><i class="fa fa-share-square-o"></i></a>
+        <fa-history-navigator history="faServ.activityData.history" activity-name="discard" ng-if="faServ.activityData.history.previousId || faServ.activityData.history.nextId"></fa-history-navigator>
+        <a class="btn-trip-quit" title="{{'activity.trip_summary_quit_trip_detail' | i18n }}" ng-click="faServ.quitFaView()" ng-if="tabType === 'reports'"><i class="fa fa-share-square-o"></i></a>
         <print-button view-to-print="printView"></print-button>
         <div class="row title">
             <span ng-if="faServ.documentType === 'notification'">{{'activity.fa_report_document_type_notification_of' | i18n}}</span>

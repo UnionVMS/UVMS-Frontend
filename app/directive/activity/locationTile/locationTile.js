@@ -95,7 +95,8 @@ angular.module('unionvmsWeb').directive('locationTile', function() {
                 $scope.identifiers.push({
                     id: record.identifier.id,
                     schemeId: schemeId !== "%%KEY_NOT_FOUND%%" ? schemeId : record.identifier.schemeId,
-                    geometry: record.geometry
+                    geometry: record.geometry,
+                    description: record.portDescription
                 });
             } else if (angular.isDefined(record.geometry)) {
                 //Here we get type = positions only from FLUX
@@ -117,9 +118,18 @@ angular.module('unionvmsWeb').directive('locationTile', function() {
             $scope.addresses = _.flatten($scope.addresses);
         }
         
+        var globalGeom;
+        if (angular.isDefined($scope.locationDetails.srcActivityGeom)){
+            globalGeom = $scope.locationDetails.srcActivityGeom;
+        }
+        
         if (angular.isDefined($scope.srcActivityGeom)){
+            globalGeom = $scope.srcActivityGeom;
+        }
+        
+        if (angular.isDefined(globalGeom)){
             $scope.activityGeom = {
-                geometry: $scope.srcActivityGeom
+                geometry: globalGeom
             };
         }
     }

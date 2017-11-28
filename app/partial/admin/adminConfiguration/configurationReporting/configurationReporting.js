@@ -13,7 +13,7 @@ angular.module('unionvmsWeb').controller('ConfigurationreportingCtrl',function($
 	$scope.settingsLevel = 'admin';
 	$scope.save = function(){
     	if(_.keys($scope.configurationReportForm.$error).length === 0){
-    		loadingStatus.isLoading('Preferences',true,2);
+			loadingStatus.isLoading('Preferences',true,2);
 	        var finalConfig = $scope.configModel.forAdminConfigToJson($scope.configurationReportForm);
 	        spatialConfigRestService.saveAdminConfigs(finalConfig).then(function(response){
 	        	$anchorScroll();

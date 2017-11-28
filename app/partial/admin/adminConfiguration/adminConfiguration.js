@@ -48,19 +48,17 @@ angular.module('unionvmsWeb').controller('AuditconfigurationCtrl',function($scop
 			var modules = uvmsModules.filter(function(module) {
 				return $scope.settings[module] !== undefined && getNonGlobalSettings($scope.settings[module]).length > 0;
 			});
-			
-			$scope.tabs = ["systemMonitor", "globalSettings", "reporting"].concat(modules);
+			$scope.tabs = ["systemMonitor", "globalSettings", "reporting", "activity"].concat(modules);
 
 			if(userService.isAllowed("CONFIGURE_MDR_SCHEDULER", "MDR Cache", true)){
 				$scope.tabs.push("mdr");
 			}
-
 			// Set tab name and title 
 			for (var i = 0; i < $scope.tabs.length; i++) {
 				$scope.setTabs.push({
 					"tab" : $scope.tabs[i],
 					"title" : $filter('i18n')('audit.configuration_header_'+$scope.tabs[i])
-				});
+				});                                  
 			}
 		});
 
@@ -72,6 +70,9 @@ angular.module('unionvmsWeb').controller('AuditconfigurationCtrl',function($scop
 	        angular.copy($scope.configModel, $scope.configCopy);
 		    loadingStatus.isLoading('Preferences',false);
 		});
+		spatialConfigRestService.getActivityAdminConfigs().then(function(response){
+			$scope.thresholds = response;
+		});
 	};
 
 	$scope.configurationPageUrl = function() {
@@ -81,7 +82,9 @@ angular.module('unionvmsWeb').controller('AuditconfigurationCtrl',function($scop
 			return "partial/admin/adminConfiguration/configurationGeneral/configurationGeneral.html";
 		} else if ($scope.activeTab === "reporting") {
 			return "partial/admin/adminConfiguration/configurationReporting/configurationReporting.html";
-		} else if ($scope.activeTab === "mdr") {
+		} else if ($scope.activeTab === "activity") {
+		    return "partial/admin/adminConfiguration/configurationActivity/configurationActivity.html";
+	    } else if ($scope.activeTab === "mdr") {
             return "partial/admin/adminConfiguration/configurationMDR/configurationMDR.html";
         }
 		else {

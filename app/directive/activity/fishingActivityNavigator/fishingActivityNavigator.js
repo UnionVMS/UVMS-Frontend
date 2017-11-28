@@ -20,16 +20,17 @@ copy of the GNU General Public License along with the IFDM Suite. If not, see <h
  * @description
  *  A directive to add support for ordered navigation between activities of a trip
  */
-angular.module('unionvmsWeb').directive('fishingActivityNavigator', function(tripReportsTimeline, fishingActivityService, reportingNavigatorService, $compile) {
+angular.module('unionvmsWeb').directive('fishingActivityNavigator', function (tripReportsTimeline, breadcrumbService, fishingActivityService, reportingNavigatorService, $compile) {
 	return {
 		restrict: 'E',
 		replace: false,
 		scope: {
-		    partial: '@'
+			partial: '@',
+			tabType: '@'
 		},
 		templateUrl: 'directive/activity/fishingActivityNavigator/fishingActivityNavigator.html',
-		link: function(scope, element, attrs, fn) {
-		    scope.timeline = tripReportsTimeline;
+		link: function (scope, element, attrs, fn) {
+			scope.timeline = tripReportsTimeline;
 			scope.repNav = reportingNavigatorService;
 			scope.printView = 'fishingActivityNavigator';
 		
@@ -40,27 +41,30 @@ angular.module('unionvmsWeb').directive('fishingActivityNavigator', function(tri
              * @private
              * @param {String} direction - direction might be previous/next fishing activity
              */
-            scope.goToItem = function(direction){
+			scope.goToItem = function (direction) {
 				var rec, parentId;
-				if(angular.isDefined(scope.timeline[direction + 'Item'].idx)){
+				if (angular.isDefined(scope.timeline[direction + 'Item'].idx)) {
 					rec = scope.timeline.reports[scope.timeline[direction + 'Item'].idx];
 				}
 
-				if (angular.isDefined(rec)){
+				if (angular.isDefined(rec)) {
 					fishingActivityService.resetActivity();
 					fishingActivityService.id = rec.id;
 					fishingActivityService.isCorrection = rec.corrections;
 					fishingActivityService.documentType = rec.documentType;
 					fishingActivityService.activityType = rec.srcType;
 					scope.timeline.setCurrentPreviousAndNextItem(rec.id, parentId);
-					
-					reportingNavigatorService.goToView('tripsPanel', 'FishingActivityPanel',function(){
+					if (scope.tabType === 'activity') {
 						var content = angular.element('fishing-activity-navigator');
 						$compile(content)(scope);
-					});
+					} else {
+						reportingNavigatorService.goToView('tripsPanel', 'FishingActivityPanel',function(){
+							var content = angular.element('fishing-activity-navigator');
+							$compile(content)(scope);
+						});
+					}
 				}
-            };
-
+			};
 		}
 	};
 });

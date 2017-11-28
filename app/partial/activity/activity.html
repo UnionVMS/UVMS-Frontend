@@ -12,18 +12,39 @@ copy of the GNU General Public License along with the IFDM Suite. If not, see <h
 <div class="col-md-12 activity">
 	<div class="container containerWithTopBottomPadding">
 		<div class="alert-container" ng-show="actServ.alert.hasError">
-			<table-alert type="'error'" msg="actServ.alert.msg" visible="actServ.alert.hasError" closable="true"></table-alert>	
+			<table-alert type="'error'" msg="actServ.alert.msg" visible="actServ.alert.hasError" closable="true"></table-alert>
 		</div>
 		<breadcrumb-navigator items="actServ.breadcrumbPages" callback="breadcrumbClick()" ng-if="actServ.breadcrumbPages.length > 0"></breadcrumb-navigator>
-        <div class="card">
-            <div class="row card-body">
-            	<div class="col-md-12" ng-include="'partial/activity/advancedSearchForm/advancedSearchForm.html'" ng-show="isPartialVisible(0)"></div>
-            	<div ng-include="'partial/activity/activityReportsList/activityReportsList.html'" ng-if="isPartialVisible(0)"></div>
-            	<div ng-include="'partial/activity/activityHistory/activityHistory.html'" ng-if="isPartialVisible(1)"></div>
-            	<div ng-include="'partial/activity/activityHistoryList/activityHistoryList.html'" ng-if="isPartialVisible(2)"></div>
-            	<div ng-include="'partial/activity/activityDetails/activityDetails.html'" ng-if="isPartialVisible(3)"></div>
-		    </div>
-        </div>
-    </div>
+		<div class="card">
+			<div class="row card-body">
+				<div class="col-md-12" ng-include="'partial/activity/advancedSearchForm/advancedSearchForm.html'" ng-show="isPartialVisible(0)"></div>
+			</div>
+			<div class="row card-body">
+				<div class= "col-md-12">
+				<ul class=" nav nav-tabs top-tabs" role="tablist" ng-if="isPartialVisible(0)">
+					<li ng-repeat="tab in activityTabMenu" ng-show="isTabVisible('{{tab.tab}}')" ng-click="selectTab(tab.tab)"
+						ng-class="{'active': selectedTab === '{{tab.tab}}'}"><a>{{tab.title}}</a></li>
+				</ul>
+				</div>
+				<div>
+					<div ng-show="isTabSelected('ACTIVITES')">
+						<div ng-include="'partial/activity/activityReportsList/activityReportsList.html'" ng-if="isPartialVisible(0)"></div>
+						<div ng-include="'partial/activity/activityHistory/activityHistory.html'" ng-if="isPartialVisible(1)"></div>
+						<div ng-include="'partial/activity/activityHistoryList/activityHistoryList.html'" ng-if="isPartialVisible(2)"></div>
+						<div ng-include="'partial/activity/activityDetails/activityDetails.html'" ng-if="isPartialVisible(5)"></div>
+					</div>
+					<div  ng-show="isTabSelected('TRIPS')">
+						<div ng-include="'partial/activity/tripReportsList/tripReportsList.html'" ng-if="isPartialVisible(0)"></div>	
+					</div>
+					<loading-panel type="TripSummary"></loading-panel>
+					<div class="trip-summary">
+						    <div ng-include="'partial/activity/activityTripSummary/activityTripSummary.html'" ng-if="isPartialVisible(3)"></div>						
+						    <div ng-include="'partial/spatial/tripsPanel/catchDetails/catchDetails.html'" ng-if="isPartialVisible(4)"></div>
+					        <div ng-include="'partial/spatial/tripsPanel/catchEvolution/catchEvolution.html'" ng-if="isPartialVisible(6)"></div>
+					</div>
+					<div ng-include="'partial/activity/tripActivityDetail/tripActivityDetails.html'" ng-if="isPartialVisible(7)"></div>
+				</div>
+			</div>
+		</div>
+	</div>
 </div>
-

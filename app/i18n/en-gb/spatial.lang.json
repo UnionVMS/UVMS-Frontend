@@ -401,7 +401,10 @@
     "visibility_configuration_table": "VMS Table",
 	"visibility_show_attr_names": "Show attribute names",
 	"general_settings": "General settings",
+	"catch_figures_tresholds":"Catch Figures Thresholds",
 	"general_configuration_geoserver_url": "Geoserver URL",
+	"catch_tresholds_critical": "Critical",
+	"catch_tresholds_warning": "Warning",
 	"general_configuration_bing_api_key": "Bing Maps Api Key",
 	"general_configuration_bing_key_tooltip": "Request Bing Maps Api key here",
 	"layer_settings": "Layer settings",
@@ -451,6 +454,7 @@
 	"max_error_message": "'Max' cannot be lower than 'Min'",
 	"invalid_range_error_message": "Must be between 1 and 10",
 	"invalid_range_error_message_2": "Must be between 1 and 6",
+	"invalid_range_error_message_3": "Must be between 1 and 100",
 	"not_numeric_error_message": "Value shall be numeric",
 	"base_list_error": "There should be at least one selected background layer",
 	

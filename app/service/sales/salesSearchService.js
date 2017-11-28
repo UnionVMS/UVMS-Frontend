@@ -9,7 +9,8 @@
         var DEFAULT_ITEMS_PER_PAGE = 10;
         var currentPageNr = 1;
         var isAdvancedSearchOpen = false;
-        var advancedSearchObject = searchService.getAdvancedSearchObject();
+        var advancedSearchObject = {};
+
         var lastSearchObject = angular.copy(advancedSearchObject);
         var searchResults = new SearchResults('', false, locale.getString('sales.search_zero_results_error'));
 
@@ -33,7 +34,8 @@
             updateSavedSearch: updateSavedSearch,
             deleteSavedSearch: deleteSavedSearch,
             getSavedSearches: getSavedSearches,
-            savedSearches: savedSearches
+            savedSearches: savedSearches,
+            setLoading: setLoading
         };
 
         return service;
@@ -42,6 +44,9 @@
 
         //Set state of searchService back to last known state
         function init() {
+            searchService.hardResetAdvancedSearch();
+            advancedSearchObject = searchService.getAdvancedSearchObject();
+
             //Wrap in timeout because it the search object might get reset by $destroy event on previous scope
             $timeout(function () {
                 angular.copy(lastSearchObject, advancedSearchObject);
@@ -161,6 +166,10 @@
             }, function (err) {
                 savedSearches.items = [];
             });
+        }
+
+        function setLoading(isLoading) {
+            searchResults.setLoading(isLoading);
         }
     }
 })();

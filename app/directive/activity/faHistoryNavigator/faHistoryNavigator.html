@@ -1,0 +1,12 @@
+<div class="fa-history-navigator">
+    <div class="btn-group">
+        <button type="button" class="btn btn-default dropdown-toggle btn-run-options" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                {{'activity.fa_navigator_history' | i18n}}
+                    <span><i class="fa fa-history" aria-hidden="true"></i></span>
+                </button>
+        <ul class="dropdown-menu dropdown-run-options">
+            <li ng-if="history.previousId"><a ng-click="openHistoryView(history.previousId)">{{'activity.fa_navigator_history_previous' | i18n}}</a></li>
+            <li ng-if="history.nextId"><a ng-click="openHistoryView(history.nextId)">{{'activity.fa_navigator_history_next' | i18n}}</a></li>
+        </ul>
+    </div>
+</div>

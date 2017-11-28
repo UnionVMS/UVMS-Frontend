@@ -548,8 +548,8 @@ copy of the GNU General Public License along with the IFDM Suite. If not, see <h
 			<div class="table-responsive-force">
 				<table class="table table-striped table-condensed">
 					<thead>
-						<tr class="with-bottom-border row">
-							<th colspan="15" class="table-tools">
+						<tr class="with-bottom-border">
+							<th colspan="{{::attrVisibility.tripsColumns.length}}" class="table-tools">
 								<i ng-click="toggleFiltersRow('trips')">{{isTripFilterVisible === false ? 'spatial.table_filters_activate' : 'spatial.table_filters_deactivate' | i18n}}</i>
 							</th>
 							<th>
@@ -559,7 +559,7 @@ copy of the GNU General Public License along with the IFDM Suite. If not, see <h
 							</th>
 						</tr>
 						<tr ng-show="isTripFilterVisible" class="no-border-row">
-							<th colspan="17">
+							<th colspan="{{::(attrVisibility.tripsColumns.length + 1)}}">
 								<div id="tripFiltersForm{{isModal ? 'Modal': ''}}" class="filter-form">
 									<!-- TRIPID -->
 									<div class="col-md-2 st-table-filters" ng-show="attrVisibility.trips.fs">
@@ -651,7 +651,7 @@ copy of the GNU General Public License along with the IFDM Suite. If not, see <h
 								</div>
 							</th>
 						</tr>
-						<tr class="row">
+						<tr>
 							<th lr-drag-src="headers" lr-drop-target="headers" ng-repeat="column in attrVisibility.tripsColumns" ng-show="attrVisibility.trips[column]" lr-drop-success="dropSuccess(e, item, collection)">
 								<div st-sort="tripIdSort" st-skip-natural="true" st-class-ascent="sorting_asc" st-class-descent="sorting_desc" ng-if="column === 'tripId'">{{'activity.tab_trip_table_header_id' | i18n }}</div>
 								<div st-sort="flagState" st-skip-natural="true" st-class-ascent="sorting_asc" st-class-descent="sorting_desc" ng-if="column === 'fs'">{{'spatial.tab_vms_pos_table_header_fs' | i18n }}</div>
@@ -674,10 +674,10 @@ copy of the GNU General Public License along with the IFDM Suite. If not, see <h
 						</tr>
 					</thead>
 					<tbody>
-						<tr ng-if="!displayedTrips.length && !executedReport.isReportExecuting" class="row">
-							<td colspan="17">{{'spatial.table_no_data' | i18n}}</td>
+						<tr ng-if="!displayedTrips.length && !executedReport.isReportExecuting">
+							<td colspan="{{::(attrVisibility.tripsColumns.length + 1)}}">{{'spatial.table_no_data' | i18n}}</td>
 						</tr>
-						<tr ng-repeat="trip in displayedTrips" class="row">
+						<tr ng-repeat="trip in displayedTrips">
 							<td ng-repeat="column in attrVisibility.tripsColumns" ng-show="attrVisibility.trips[column]">
 								<div ng-show="attrVisibility.trips.tripId" ng-if="column === 'tripId'">{{ trip.schemeId}}:{{ trip.tripId }}</div>
 								<div ng-show="attrVisibility.trips.fs" ng-if="column === 'fs'">{{ trip.flagState}}</div>
