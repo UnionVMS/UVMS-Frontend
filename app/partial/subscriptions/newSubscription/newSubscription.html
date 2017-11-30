@@ -1,3 +1,14 @@
+<!--
+Developed with the contribution of the European Commission - Directorate General for Maritime Affairs and Fisheries
+© European Union, 2015-2016.
+
+This file is part of the Integrated Fisheries Data Management (IFDM) Suite. The IFDM Suite is free software: you can
+redistribute it and/or modify it under the terms of the GNU General Public License as published by the
+Free Software Foundation, either version 3 of the License, or any later version. The IFDM Suite is distributed in
+the hope that it will be useful, but WITHOUT ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or
+FITNESS FOR A PARTICULAR PURPOSE.  See the GNU General Public License for more details. You should have received a
+copy of the GNU General Public License along with the IFDM Suite. If not, see <http://www.gnu.org/licenses/>.
+-->
 <div class="col-md-12 new-subscription" ng-controller="NewsubscriptionCtrl">
     <div static-include="partial/subscriptions/subscriptionsHeader/subscriptionsHeader.html"></div>
     <div class="container containerWithTopBottomPadding nopaddingtop">
@@ -56,12 +67,12 @@
                 </div>
                 <div class="row">
                     <div class="col-md-4 form-group">
-                        <h5 class="section-text">Trigger</h5>
-                        <div class="row col-md-6">
-                            <label><input type="checkbox" ng-model="subscription.manual" ng-change=""/> {{'subscriptions.subscription_manual' | i18n }}</label>
-                        </div>
-                        <div class="col-md-6">
-                            <label><input type="checkbox" ng-model="subscription.auto" ng-change=""/> {{'subscriptions.subscription_auto' | i18n }}</label>
+                        <label>{{'subscriptions.subscription_Trigger' | i18n }}</label>
+                        <div class="row trigger-group">
+                            <div class="col-md-12">
+                                <label><input type="radio" ng-model="subscription.trigger" value="manual" ng-checked="true"/> {{'subscriptions.subscription_manual' | i18n }}</label>
+                                <label><input type="radio" ng-model="subscription.trigger" value="auto" /> {{'subscriptions.subscription_auto' | i18n }}</label>
+                            </div>
                         </div>
                     </div>
                     <div class="col-md-4 form-group">
@@ -74,14 +85,16 @@
                     </div>
                 </div>
                 <ng-form name="reportBodyForm">
-                    <div class="col-md-12 form-group">
-                        <div class="row" ng-include="'partial/subscriptions/newSubscription/repParamSubscription/repParamSubscription.html'"></div>
+                    <div class="col-md-12">
+                        <div class="row form-group" ng-include="'partial/subscriptions/newSubscription/repParamSubscription/repParamSubscription.html'"></div>
+                        <div class="row filter-section">
+                            <div class="row form-group" ng-include="'partial/spatial/reportsPanel/reportForm/vesselFieldset/vesselFieldset.html'"></div>
+                            <div class="row form-group" ng-include="'partial/spatial/reportsPanel/reportForm/areasSelectionFieldset/areasSelectionFieldset.html'"></div>
+                        </div>
                     </div>
-                    <div class="row form-group" ng-include="'partial/spatial/reportsPanel/reportForm/vesselFieldset/vesselFieldset.html'"></div>
                 </ng-form>
-                <button class="btn btn-primary button btn-action" type="button" ng-click="saveSubscription(subscription)">Save</button>
+                <button class="btn btn-primary button btn-action" type="button" ng-click="saveSubscription()">Save</button>
             </form>
-           
         </div>
     </div>
 </div>

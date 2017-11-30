@@ -28,6 +28,10 @@ angular.module('unionvmsWeb').factory('Subscription', function (locale) {
 				selectedTypes: []
 			}
 		};
+		this.trigger = undefined;
+		this.validFrom = undefined;
+		this.validUntil = undefined;
+		this.vesselsSelection = [];
 	}
 
 	Subscription.prototype.fromJson = function (data) {
@@ -40,6 +44,9 @@ angular.module('unionvmsWeb').factory('Subscription', function (locale) {
 		this.description = data.description;
 		this.commChannel = data.commChannel;
 		this.retryDelay = data.retryDelay;
+		this.trigger = data.trigger;
+		this.validFrom = data.validFrom;
+		this.validUntil = data.validUntil;
 		this.messageType = data.messageType;
 
 	}

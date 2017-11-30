@@ -293,7 +293,7 @@ angular.module('unionvmsWeb').controller('AreasselectionfieldsetCtrl',function($
                     if ($scope.checkAreaIsSelected(area) === false){
                         area.isSelected = true;
                         $scope.selectedAreas.push(area);
-                        $scope.reportForm.reportBodyForm.$setDirty();
+                        $scope.reportBodyForm.$setDirty();
                     }
                 }
             }
@@ -315,7 +315,7 @@ angular.module('unionvmsWeb').controller('AreasselectionfieldsetCtrl',function($
      * @param {Object} record - Area object record
      */
     $scope.selectAreaFromTable = function(record){
-        $scope.reportForm.reportBodyForm.$setDirty();
+        $scope.reportBodyForm.$setDirty();
         if (record.isSelected){
             $scope.removeArea(record, false);
         } else {
@@ -334,7 +334,7 @@ angular.module('unionvmsWeb').controller('AreasselectionfieldsetCtrl',function($
      */
     $scope.selectAllAreasFromTable = function(){
         if(angular.isDefined($scope.searchedAreas) && $scope.searchedAreas.length > 0){
-            $scope.reportForm.reportBodyForm.$setDirty();
+            $scope.reportBodyForm.$setDirty();
         }
         angular.forEach($scope.searchedAreas, function(record) {
             if (!record.isSelected){
@@ -450,7 +450,7 @@ angular.module('unionvmsWeb').controller('AreasselectionfieldsetCtrl',function($
         var idx = _.findIndex($scope.selectedAreas, {gid: area.gid,areaType: area.areaType});
         
         if (idx !== -1){
-            $scope.reportForm.reportBodyForm.$setDirty();
+            $scope.reportBodyForm.$setDirty();
             $scope.selectedAreas.splice(idx, 1);
         }
         
@@ -471,7 +471,7 @@ angular.module('unionvmsWeb').controller('AreasselectionfieldsetCtrl',function($
      */
     $scope.removeAllAreas = function(){
         if($scope.selectedAreas.length > 0){
-            $scope.reportForm.reportBodyForm.$setDirty();
+            $scope.reportBodyForm.$setDirty();
         }
         $scope.selectedAreas.splice(0,$scope.selectedAreas.length);
         if ($scope.searchedAreas.length !== 0){

@@ -24,5 +24,6 @@
 	"individual_report": "Individual report",
 	"include_correction_history": "Include correction HISTORY",
 	"report_parameters": "Report parameters",
-	"reports_filter": "Reports filter"
+	"reports_filter": "Reports filter",
+	"subscription_Trigger":"Trigger"
 }

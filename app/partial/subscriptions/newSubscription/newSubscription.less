@@ -1,3 +1,14 @@
+/*
+Developed with the contribution of the European Commission - Directorate General for Maritime Affairs and Fisheries
+© European Union, 2015-2016.
+
+This file is part of the Integrated Fisheries Data Management (IFDM) Suite. The IFDM Suite is free software: you can
+redistribute it and/or modify it under the terms of the GNU General Public License as published by the
+Free Software Foundation, either version 3 of the License, or any later version. The IFDM Suite is distributed in
+the hope that it will be useful, but WITHOUT ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or
+FITNESS FOR A PARTICULAR PURPOSE.  See the GNU General Public License for more details. You should have received a
+copy of the GNU General Public License along with the IFDM Suite. If not, see <http://www.gnu.org/licenses/>.
+*/
 .new-subscription {
     h5 {
         margin-bottom: 10px;
@@ -8,5 +19,70 @@
     }
     .form-decription {
         resize: none;
+    }
+    .red-badge {
+		background-color: @profileColor_red;
+    }
+    .filter-section {
+		margin-top: 10px;
+		h3 {
+			margin-top: 0;
+			margin-bottom: 20px;
+			padding: 15px 15px 0 15px;
+			border-top: 1px solid #ddd;
+		}
+    }
+    .table {
+		.tablerow-has-btn {
+			th,
+			td {
+				line-height: 30px;
+			}
+		}
+		td,
+		.td {
+			vertical-align: middle;
+			button.btn-success,
+			button.btn-default,
+			button.btn-danger,
+			button.btn-warning {
+				width: 25px;
+				height: 25px;
+				font-size: 14px;
+				padding: 0;
+			}
+			button.btn-danger,
+			button.btn-warning {
+				&:hover {
+					background-color: #f2f2f2;
+				}
+			}
+			button.btn-default {
+				color: @profileColor_blue;
+			}
+			button.btn-warning {
+				background-color: #fff;
+				border-color: #b4bdc0;
+				color: @profileColor_lightorange;
+			}
+			button.btn-danger {
+				background-color: #fff;
+				border-color: #b4bdc0;
+				color: @profileColor_red;
+			}
+		}
+		.loading-spinner-cl {
+			background: transparent !important;
+		}
+		
+    }
+    .btn-action {
+		text-transform: uppercase;
+    	font-weight: bold;
+    }
+    .trigger-group {
+        label {
+            margin-right: 10px;
+        }
     }
 }
