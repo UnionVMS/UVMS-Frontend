@@ -1,4 +1,4 @@
-﻿<!-- 
+﻿<!--
 ﻿Developed with the contribution of the European Commission - Directorate General for Maritime Affairs and Fisheries
 © European Union, 2015-2016.
 
@@ -74,7 +74,7 @@ copy of the GNU General Public License along with the IFDM Suite. If not, see <h
             					<th></th>
 	            				<th st-sort="dateReceived" st-skip-natural="true" st-class-ascent="sorting_asc" st-class-descent="sorting_desc">{{'exchange.table_header_date_received_sent' | i18n}}</th>
 	            				<th st-sort="source" st-skip-natural="true" st-class-ascent="sorting_asc" st-class-descent="sorting_desc">{{'exchange.table_header_source' | i18n}}</th>
-	            				<th st-sort="type" st-skip-natural="true" st-class-ascent="sorting_asc" st-class-descent="sorting_desc">{{'exchange.table_header_type' | i18n}}</th>
+	            				<th st-sort="typeRefType" st-skip-natural="true" st-class-ascent="sorting_asc" st-class-descent="sorting_desc">{{'exchange.table_header_type' | i18n}}</th>
 	            				<th st-sort="senderRecipient" st-skip-natural="true" st-class-ascent="sorting_asc" st-class-descent="sorting_desc">{{'exchange.table_header_sender_reciever' | i18n}}</th>
 	            				<th st-sort="forwardRule" st-skip-natural="true" st-class-ascent="sorting_asc" st-class-descent="sorting_desc">{{'exchange.table_header_fwd_rule' | i18n}}</th>
 	            				<th st-sort="recipient" st-skip-natural="true" st-class-ascent="sorting_asc" st-class-descent="sorting_desc">{{'exchange.table_header_recipient' | i18n}}</th>
@@ -110,7 +110,7 @@ copy of the GNU General Public License along with the IFDM Suite. If not, see <h
     							</td>
             					<td>{{message.dateReceived | confDateFormat | dataNotAvailable}}</td>
             					<td>{{message.source | transponderName | dataNotAvailable}}</td>
-            					<td>{{message.type | dataNotAvailable | removeUnderscore}}</td>
+            					<td>{{message.typeRefType | dataNotAvailable | removeUnderscore}}</td>
             					<td>{{message.senderRecipient | dataNotAvailable}}</td>
             					<td>{{message.forwardRule | dataNotAvailable}}</td>
             					<td>{{message.recipient | dataNotAvailable}}</td>
@@ -119,12 +119,12 @@ copy of the GNU General Public License along with the IFDM Suite. If not, see <h
                                     <message-status ng-model="message" is-clickable="::isStatusClickable(message)"></message-status>
     							</td>
     							<td>
-                                    <!-- <button type="button" class="btn btn-xs btn-default" title="{{'exchange.title_details' | i18n }}" ng-click="showMessageDetails(message)" ng-if="message.logData.type">
+                                    <button type="button" class="btn btn-xs btn-default" title="{{'exchange.title_details' | i18n }}" ng-click="showMessageDetails(message)" ng-if="::showDetailsButton(message)">
 										<span class="fa fa-eye"></span>
-									</button> -->
-									<button ng-repeat="log in ::message.logData" type="button" class="btn btn-xs btn-default btn-log" title="{{'exchange.title_details' | i18n }}" ng-click="getLogItem(log)">
-										<span class="fa" ng-class="{'fa-eye': log.type === 'FA_QUERY', 'fa-level-down': log.type === 'FA_RESPONSE', 'fa-file-text-o': log.type === 'FA_REPORT'}"></span>
 									</button>
+									<!--<button ng-repeat="log in ::message.logData" type="button" class="btn btn-xs btn-default btn-log" title="{{'exchange.title_details' | i18n }}" ng-click="getLogItem(log)">
+                                    <span class="fa" ng-class="{'fa-eye': log.type === 'FA_QUERY', 'fa-level-down': log.type === 'FA_RESPONSE', 'fa-file-text-o': log.type === 'FA_REPORT'}"></span>
+                                    </button> -->
 									<!-- <button type="button" class="btn btn-xs btn-default" title="{{'exchange.title_details' | i18n }}" ng-click="getLogItem(message)" ng-if="message.logData.type">
 										<span class="fa fa-file-text-o"></span>
 									</button> -->

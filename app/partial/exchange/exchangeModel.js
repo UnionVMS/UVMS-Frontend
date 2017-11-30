@@ -25,6 +25,7 @@ angular.module('unionvmsWeb')
         this.forwardRule = undefined;
         this.source = undefined;
         this.type = undefined;
+        this.typeRefType = undefined;
 	}
 
 	Exchange.fromJson = function(data){
@@ -42,6 +43,7 @@ angular.module('unionvmsWeb')
 			exchange.forwardRule = data.rule;
             exchange.source = data.source;
 			exchange.type = data.type;
+			exchange.typeRefType = data.typeRefType;
 
 		}
 
