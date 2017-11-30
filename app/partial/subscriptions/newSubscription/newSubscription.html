@@ -1,3 +1,14 @@
+<!--
+Developed with the contribution of the European Commission - Directorate General for Maritime Affairs and Fisheries
+© European Union, 2015-2016.
+
+This file is part of the Integrated Fisheries Data Management (IFDM) Suite. The IFDM Suite is free software: you can
+redistribute it and/or modify it under the terms of the GNU General Public License as published by the
+Free Software Foundation, either version 3 of the License, or any later version. The IFDM Suite is distributed in
+the hope that it will be useful, but WITHOUT ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or
+FITNESS FOR A PARTICULAR PURPOSE.  See the GNU General Public License for more details. You should have received a
+copy of the GNU General Public License along with the IFDM Suite. If not, see <http://www.gnu.org/licenses/>.
+-->
 <div class="col-md-12 new-subscription">
     <div static-include="partial/subscriptions/subscriptionsHeader/subscriptionsHeader.html"></div>
     <div class="container containerWithTopBottomPadding nopaddingtop">
@@ -6,79 +17,84 @@
                 <div class="row">
                     <div class="col-md-4 form-group">
                         <label>{{'subscriptions.subscription_form_name' | i18n }}</label>
-                        <input type="text" class="form-control" ng-model="subscriptionForm.name" />
+                        <input type="text" class="form-control" ng-model="subscription.name" />
                     </div>
                     <div class="col-md-4 form-group isActive">
-                        <label><input type="checkbox" ng-model="subscriptionForm.isActive"/> {{'subscriptions.subscription_form_active' | i18n }}</label>
+                        <label><input type="checkbox" ng-model="subscription.isActive"/> {{'subscriptions.subscription_form_active' | i18n }}</label>
                     </div>
                     <div class="col-md-4 form-group">
                         <label>{{'subscriptions.subscription_form_organization' | i18n }}</label>
-                        <combobox ng-model="subscriptionForm.organization" items="comboData.organization"></combobox>
+                        <combobox ng-model="subscription.organization" items="comboData.organization"></combobox>
                     </div>
                 </div>
                 <div class="row">
                     <div class="col-md-4 form-group">
                         <label>{{'subscriptions.subscription_form_subscription_type' | i18n }}</label>
-                        <combobox ng-model="subscriptionForm.subscriptionType" items="comboData.subscriptionType"></combobox>
+                        <combobox ng-model="subscription.subscriptionType" items="comboData.subscriptionType"></combobox>
                     </div>
                     <div class="col-md-4 form-group">
                         <label>{{'subscriptions.subscription_form_accessibility' | i18n }}</label>
-                        <combobox ng-model="subscriptionForm.accessibility" items="comboData.accessibility"></combobox>
+                        <combobox ng-model="subscription.accessibility" items="comboData.accessibility"></combobox>
                     </div>
                     <div class="col-md-4 form-group">
                         <label>{{'subscriptions.subscription_end_point' | i18n }}</label>
-                        <combobox ng-model="subscriptionForm.endPoint" items="comboData.endPoint"></combobox>
+                        <combobox ng-model="subscription.endPoint" items="comboData.endPoint"></combobox>
                     </div>
                 </div>
                 <div class="row">
                     <div class="col-md-4 form-group">
                         <label>{{'subscriptions.subscription_description' | i18n }}</label>
-                        <textarea class="form-control form-decription" ng-model="subscriptionForm.description"></textarea>
+                        <textarea class="form-control form-decription" ng-model="subscription.description"></textarea>
                     </div>
                     <div class="col-md-4 form-group">
                         <div class="row">
                             <div class="col-md-6">
                                 <label>{{'subscriptions.subscription_valid_form' | i18n }}</label>
-                                <datepicker-input placeholder="dd/mm/yyyy" time="true" model="subscriptionForm.validFrom" name="periodStartFACriterion"
-                                    max-date="subscriptionForm.validUntil" input-field-id="periodStartFACriterion" update-when="default"></datepicker-input>
+                                <datepicker-input placeholder="dd/mm/yyyy" time="true" model="subscription.validFrom" name="periodStartFACriterion" max-date="subscriptionForm.validUntil"
+                                    input-field-id="periodStartFACriterion" update-when="default"></datepicker-input>
                             </div>
                             <div class="col-md-6">
                                 <label>{{'subscriptions.subscription_valid_until' | i18n }}</label>
-                                <datepicker-input placeholder="dd/mm/yyyy" time="true" model="subscriptionForm.validUntil" name="periodStartFACriterion"
+                                <datepicker-input placeholder="dd/mm/yyyy" time="true" model="subscription.validUntil" name="periodStartFACriterion"
                                     input-field-id="periodEndFACriterion" update-when="default"></datepicker-input>
                             </div>
                         </div>
                     </div>
                     <div class="col-md-4 form-group">
                         <label>{{'subscriptions.subscription_communication_channel' | i18n }}</label>
-                        <combobox ng-model="subscriptionForm.commChannel" items="comboData.commChannel"></combobox>
+                        <combobox ng-model="subscription.commChannel" items="comboData.commChannel"></combobox>
                     </div>
                 </div>
                 <div class="row">
                     <div class="col-md-4 form-group">
-                        <h5 class="section-text">Trigger</h5>
-                        <div class="row col-md-6">
-                            <label><input type="checkbox" ng-model="subscriptionForm.manual" ng-change=""/> {{'subscriptions.subscription_manual' | i18n }}</label>
-                        </div>
-                        <div class="col-md-6">
-                            <label><input type="checkbox" ng-model="subscriptionForm.auto" ng-change=""/> {{'subscriptions.subscription_auto' | i18n }}</label>
+                        <label>{{'subscriptions.subscription_Trigger' | i18n }}</label>
+                        <div class="row col-md-12">
+                            <div class="col-md-3">
+                                <label><input type="radio" ng-model="subscription.trigger" value="manual" ng-checked="true"/> {{'subscriptions.subscription_manual' | i18n }}</label>
+                            </div>
+                            <div class="col-md-9">
+                                <label><input type="radio" ng-model="subscription.trigger" value="auto" /> {{'subscriptions.subscription_auto' | i18n }}</label>
+                            </div>
                         </div>
                     </div>
                     <div class="col-md-4 form-group">
                         <label>{{'subscriptions.subscription_retry_delay' | i18n }}</label>
-                        <input type="text" class="form-control" ng-model="subscriptionForm.retryDelay" />
+                        <input type="text" class="form-control" ng-model="subscription.retryDelay" />
                     </div>
                     <div class="col-md-4 form-group">
                         <label>{{'subscriptions.subscription_message_type' | i18n }}</label>
-                        <combobox ng-model="subscriptionForm.messageType" items="comboData.messageType"></combobox>
+                        <combobox ng-model="subscription.messageType" items="comboData.messageType"></combobox>
                     </div>
                 </div>
-                <ng-form name="reportBodyForm">
-                    <div class="row form-group" ng-include="'partial/spatial/reportsPanel/reportForm/vesselFieldset/vesselFieldset.html'"></div>
+                <ng-form name="reportBodyForm" class="col-md-12">
+                    <div class="row filter-section">
+                        <div class="row form-group" ng-include="'partial/spatial/reportsPanel/reportForm/vesselFieldset/vesselFieldset.html'"></div>
+                        <div class="row form-group" ng-include="'partial/spatial/reportsPanel/reportForm/areasSelectionFieldset/areasSelectionFieldset.html'"></div>
+                    </div>
                 </ng-form>
-                <button class="btn btn-primary button btn-action" type="button" ng-click="saveSubscription(subscriptionForm)">Save</button>
+                <button class="btn btn-primary button btn-action" type="button" ng-click="saveSubscription()">Save</button>
             </form>
-           
+
         </div>
     </div>
 </div>

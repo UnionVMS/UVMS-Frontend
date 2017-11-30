@@ -15,5 +15,6 @@
 	"subscription_manual": "Manual",
 	"subscription_auto": "Auto",
 	"subscription_retry_delay": "Retry Delay",
-	"subscription_message_type":"Message Type"
+	"subscription_message_type":"Message Type",
+	"subscription_Trigger":"Trigger"
 }
