@@ -13,10 +13,10 @@ angular.module('unionvmsWeb').controller('NewsubscriptionCtrl',function($scope, 
         vessels: [],
         areas: []
     }; */
-    var subscriptions = new Subscription();
+    $scope.subscription = new Subscription();
+
     subscriptionsRestService.getFormDetails('1').then(function(response){
-        subscriptions.fromJson(response);
-        $scope.subscriptionForm = subscriptions;
+        $scope.subscription.fromJson(response);
     }, function(error){
         //TODO deal with error from service
     });
@@ -25,8 +25,8 @@ angular.module('unionvmsWeb').controller('NewsubscriptionCtrl',function($scope, 
     }, function(error){
         //TODO deal with error from service
     });
-    $scope.saveSubscription = function(subscriptionForm){
-        console.log("in save subscription"+JSON.stringify(subscriptionForm));
-    }
+    $scope.saveSubscription = function(subscription){
+        console.log("in save subscription"+JSON.stringify(subscription));
+    };
     
 });

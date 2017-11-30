@@ -2,17 +2,27 @@ describe('RepparamsubscriptionCtrl', function() {
 	
 	beforeEach(module('unionvmsWeb'));
 
-	var scope,ctrl;
+	var scope/* ,ctrl */;
 
-		beforeEach(inject(function($rootScope, $controller) {
+		beforeEach(inject(function($rootScope, $controller, Subscription) {
 			scope = $rootScope.$new();
-			ctrl = $controller('RepparamsubscriptionCtrl', {$scope: scope});
+			scope.subscription = new Subscription();
+			/* ctrl = $controller('RepparamsubscriptionCtrl', {$scope: scope}); */
 		}));	
 
-	it('should ...', inject(function() {
-
-		expect(1).toEqual(1);
+	it('should initialize the creation type as "Transport original report"', inject(function($compile) {
+		expect(scope.subscription.reportParams.vesselIdType.type).toEqual('original');
 		
+		scope.view = $compile('<div ng-include="\'partial/subscriptions/newSubscription/repParamSubscription/repParamSubscription.html\'"></div>')(scope);
+		scope.view.appendTo('#parent-container');
+	
+		scope.$digest();
+
+
+		var viewToRemove = angular.element('#parent-container');
+		if(viewToRemove){
+			viewToRemove.remove();
+		}
 	}));
 
 });

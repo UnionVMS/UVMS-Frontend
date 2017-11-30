@@ -21,6 +21,13 @@ angular.module('unionvmsWeb').factory('Subscription', function (locale) {
 		this.commChannel = undefined;
 		this.retryDelay = undefined;
 		this.messageType = undefined;
+		this.reportParams = {
+			reportsSelected: [],
+			vesselIdType: {
+				type: 'original',
+				selectedTypes: []
+			}
+		};
 	}
 
 	Subscription.prototype.fromJson = function (data) {

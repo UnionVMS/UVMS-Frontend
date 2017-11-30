@@ -15,5 +15,14 @@
 	"subscription_manual": "Manual",
 	"subscription_auto": "Auto",
 	"subscription_retry_delay": "Retry Delay",
-	"subscription_message_type":"Message Type"
+	"subscription_message_type":"Message Type",
+	"transport_original_report": "Transport original report",
+	"create_new_report_using_vessel_id_type": "Create new report using vessel ID type",
+	"reports_to_be_included": "Reports to be included",
+	"transmission_of_logbook": "Transmission of logbook",
+	"complete_elog": "Complete E-log",
+	"individual_report": "Individual report",
+	"include_correction_history": "Include correction HISTORY",
+	"report_parameters": "Report parameters",
+	"reports_filter": "Reports filter"
 }

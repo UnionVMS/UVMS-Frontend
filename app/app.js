@@ -532,8 +532,8 @@ unionvmsWebApp.config(function($stateProvider, $compileProvider, tmhDynamicLocal
             url: '/subscriptions/newSubscription',
             views: {
                 modulepage: {
-                    templateUrl: 'partial/subscriptions/newSubscription/newSubscription.html',
-                    controller: 'NewsubscriptionCtrl'
+                    templateUrl: 'partial/subscriptions/newSubscription/newSubscription.html'/* ,
+                    controller: 'NewsubscriptionCtrl' */
                 }
             },
             resolve: {
