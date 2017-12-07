@@ -22,6 +22,8 @@ angular.module('unionvmsWeb').controller('ExchangeCtrl',function($scope, $log, $
 
     $scope.checkedStatus = false;
 
+    $scope.previousList = [];
+
     $scope.newExchangeLogCount = 0;
     var longPollingIdPlugins, longPollingIdSendingQueue, longPollingIdExchangeList;
 
@@ -49,6 +51,7 @@ angular.module('unionvmsWeb').controller('ExchangeCtrl',function($scope, $log, $
     };
 
     $scope.resetSearch = function() {
+        delete $scope.isLinkActive;
         $scope.$broadcast("resetExchangeLogSearch");
     };
 
@@ -164,6 +167,7 @@ angular.module('unionvmsWeb').controller('ExchangeCtrl',function($scope, $log, $
     };
 
     $scope.searchExchange = function() {
+        delete $scope.isLinkActive;
         $scope.exchangeLogsSearchResults.loading = true;
         $scope.clearSelection();
         $scope.exchangeLogsSearchResults.clearErrorMessage();
@@ -171,18 +175,6 @@ angular.module('unionvmsWeb').controller('ExchangeCtrl',function($scope, $log, $
         $scope.newExchangeLogCount = 0;
         searchService.searchExchange($scope.exchangeLogsSearchResults.incomingOutgoing).then(function(page) {
             $scope.exchangeLogsSearchResults.updateWithNewResults(page);
-            /*var btnActionOrder = ['FA_QUERY', 'FA_RESPONSE', 'FA_REPORT'];
-
-            angular.forEach($scope.exchangeLogsSearchResults.items, function(item){
-                if(item.logData && item.logData.length){
-                    var sortedLogData = [];
-                    angular.forEach(btnActionOrder, function(action){
-                        sortedLogData = sortedLogData.concat(_.where(item.logData, {type: action}));
-                    });
-                    item.logData = sortedLogData;
-                }
-            });*/
-
             $scope.displayedMessages = [].concat($scope.exchangeLogsSearchResults.items);
             $scope.exchangeLogsSearchResults.loading = false;
         },
@@ -272,18 +264,18 @@ angular.module('unionvmsWeb').controller('ExchangeCtrl',function($scope, $log, $
                     $log.info("No matching type in model");
                     break;
             }
-        }
-
-        if (_.indexOf(faTypes, model.typeRefType) !== -1){
-            exchangeRestService.getRawExchangeMessage(model.id).then(
-            function(data){
-                $scope.openXmlModal(data);
-            },
-            function(error){
-                $log.error("Error getting the raw message.");
-            });
         } else {
-            $log.info("No matching type in model");
+            if (_.indexOf(faTypes, model.typeRefType) !== -1){
+                exchangeRestService.getRawExchangeMessage(model.id).then(
+                    function(data){
+                        $scope.openXmlModal(data);
+                    },
+                    function(error){
+                        $log.error("Error getting the raw message.");
+                    });
+            } else {
+                $log.info("No matching type in model");
+            }
         }
     };
 
@@ -313,12 +305,33 @@ angular.module('unionvmsWeb').controller('ExchangeCtrl',function($scope, $log, $
         $log.info("open a page... feature not implementet yet.");
     };
 
+    /**
+     * Get the title for the buttons of the linked messages
+     *
+     * @memberOf ExchangeCtrl
+     * @alias getLinkedBtnTitle
+     * @public
+     * @param {String} type - the type of message to be added to the title
+     * @returns {String} The translated title
+     */
+    $scope.getLinkedBtnTitle = function(type){
+        var title = locale.getString('exchange.title_details');
+
+        var typeTitle = locale.getString('exchange.title_' + type.toLowerCase());
+        if  (typeTitle !== "%%KEY_NOT_FOUND%%"){
+            title += ': ' + typeTitle;
+        }
+
+        return title;
+    };
+
     $scope.isStatusClickable = function(msg){
+        //FIXME when we integrate rules validation here
         var clickable = false;
-        var clickableStatus = ['FAILED', 'WARN', 'ERROR'];
+        /*var clickableStatus = ['FAILED', 'WARN', 'ERROR'];
         if (msg.source === 'FLUX' && _.indexOf(clickableStatus, msg.status) !== -1 && angular.isDefined(msg.relatedLogData) && msg.relatedLogData.length > 0){
             clickable = true;
-        }
+        }*/
         return clickable;
     };
 
@@ -339,6 +352,14 @@ angular.module('unionvmsWeb').controller('ExchangeCtrl',function($scope, $log, $
             cssClass = "label-warning";
         }
         return cssClass;
+    };
+
+    var getLabelText = function(status){
+        var label = locale.getString('common.status_' + status.toLowerCase());
+        if (label === "%%KEY_NOT_FOUND%%"){
+            label = status;
+        }
+        return label;
     };
 
     //Get status label for the exchange transmission service items
@@ -371,7 +392,7 @@ angular.module('unionvmsWeb').controller('ExchangeCtrl',function($scope, $log, $
 
         //Set the header columns
         var header = [
-            locale.getString('exchange.table_header_date_received'),
+            locale.getString('exchange.table_header_date_received_sent'),
             locale.getString('exchange.table_header_source'),
             locale.getString('exchange.table_header_type'),
             locale.getString('exchange.table_header_sent_by'),
@@ -406,8 +427,8 @@ angular.module('unionvmsWeb').controller('ExchangeCtrl',function($scope, $log, $
                         item.senderRecipient,
                         item.forwardRule,
                         item.recipient,
-                        $filter('confDateFormat')(item.dateForward),
-                        $scope.getStatusLabel(item.status)
+                        $filter('confDateFormat')(item.dateFwd),
+                        item.status
                     ];
                     csvObject.push(csvRow);
                     return csvObject;
@@ -496,41 +517,46 @@ angular.module('unionvmsWeb').controller('ExchangeCtrl',function($scope, $log, $
         $scope.sendQueuedMessages(sendingQueuesIds);
     };
 
-    $scope.getLogItem = function(log){
-        if(log.type === 'FA_QUERY'){
-            exchangeRestService.getRawExchangeMessage(log.guid).then(
-                function(data){
-                    $scope.openXmlModal(data);
-                },
-                function(error){
-                    $log.error("Error getting the raw message.");
-                });
-        }else{
-            exchangeRestService.getLogItem(log.guid).then(
-                function(data){
-                    $scope.isLinkActive = true;
-                    $scope.previousList = angular.copy($scope.exchangeLogsSearchResults.items);
-                    delete data.logData;
-                    $scope.exchangeLogsSearchResults.items = [data];
-                    $scope.displayedMessages = [].concat($scope.exchangeLogsSearchResults.items);
-                },
-                function(error){
-                    $log.error("Error getting the log item.");
-                });
-        }
+    /**
+     * Get linked message data to display in the smart table
+     *
+     * @memberOf ExchangeCtrl
+     * @public
+     * @param {Object} msg - the linked message object conatining a type and a guid
+     */
+    $scope.getLogItem = function(msg){
+        exchangeRestService.getLogItem(msg.guid).then(
+            function(data){
+                $scope.isLinkActive = true;
+                $scope.previousList.push(angular.copy($scope.exchangeLogsSearchResults.items));
+
+                $scope.exchangeLogsSearchResults.items = [data];
+                $scope.displayedMessages = [].concat($scope.exchangeLogsSearchResults.items);
+            },
+            function(error){
+                $log.error("Error getting the log item.");
+            });
     };
 
+    /**
+     * When seeing a linked message in the table, this function will allow to go back to the previous table results that
+     * were cached and avoiding another call to the server
+     *
+     * @memberOf ExchangeCtrl
+     * @public
+     */
     $scope.goBackToList = function(){
-        delete $scope.isLinkActive;
-        $scope.exchangeLogsSearchResults.items = angular.copy($scope.previousList);
-        delete $scope.previousList;
+        $scope.exchangeLogsSearchResults.items = $scope.previousList.pop();
         $scope.displayedMessages = [].concat($scope.exchangeLogsSearchResults.items);
+        if ($scope.previousList.length === 0){
+            delete $scope.isLinkActive;
+        }
     };
 
     /**
      * Pipe function used in the smartTable in order to support server side pagination and sorting
      *
-     * @memberof ActivityreportslistCtrl
+     * @memberof ExchangeCtrl
      * @public
      * @alias callServer
      */
@@ -560,6 +586,7 @@ angular.module('unionvmsWeb').controller('ExchangeCtrl',function($scope, $log, $
 
     $scope.$watch(function(){return $scope.exchangeLogsSearchResults.incomingOutgoing;}, function(newVal, oldVal){
         if (newVal !== oldVal){
+            delete $scope.isLinkActive;
             $scope.searchExchange();
         }
     });

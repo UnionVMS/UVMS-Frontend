@@ -11,7 +11,7 @@ copy of the GNU General Public License along with the IFDM Suite. If not, see <h
  */
 describe('ExchangeCtrl', function () {
 
-    var scope, ctrl, longpollingSpy, sendingQueueSpy, pluginsSpy;
+    var scope, ctrl, longpollingSpy, sendingQueueSpy, pluginsSpy, msgSpy;
 
     beforeEach(module('unionvmsWeb'));
 
@@ -23,6 +23,8 @@ describe('ExchangeCtrl', function () {
         sendingQueueSpy = spyOn(exchangeRestService, 'getSendingQueue').andReturn(deferred.promise);
         var deferred2 = $q.defer();
         pluginsSpy = spyOn(exchangeRestService, 'getTransmissionStatuses').andReturn(deferred2.promise);
+        var deferred3 = $q.defer();
+        msgSpy = spyOn(exchangeRestService, 'getRawExchangeMessage').andReturn(deferred3.promise);
         ctrl = $controller('ExchangeCtrl', { $scope: scope });
         scope.displayedMessages = [{
             "id": "7b661227-89a2-5587-9272-685c5be69770",
@@ -80,32 +82,6 @@ describe('ExchangeCtrl', function () {
         //sending queue
         expect(sendingQueueSpy).toHaveBeenCalled();
     }));
-
-
-	/*it('should allow all messages when filter all', inject(function() {
-		scope.exchangeLogsSearchResults.incomingOutgoing = "all";
-		expect(scope.filterIncomingOutgoing({incoming: true})).toBeTruthy();
-		expect(scope.filterIncomingOutgoing({incoming: false})).toBeTruthy();
-	}));
-
-	it('should only allow incoming', inject(function() {
-		scope.exchangeLogsSearchResults.incomingOutgoing = "incoming";
-		expect(scope.filterIncomingOutgoing({incoming: false})).toBeFalsy();
-		expect(scope.filterIncomingOutgoing({incoming: true})).toBeTruthy();
-	}));
-
-	it('should only allow outgoing', inject(function() {
-		scope.exchangeLogsSearchResults.incomingOutgoing = "outgoing";
-		expect(scope.filterIncomingOutgoing({incoming: false})).toBeTruthy();
-		expect(scope.filterIncomingOutgoing({incoming: true})).toBeFalsy();
-	}));
-
-	it('should not allow any', inject(function() {
-		scope.exchangeLogsSearchResults.incomingOutgoing = "banana";
-		expect(scope.filterIncomingOutgoing({incoming: true})).toBeFalsy();
-		expect(scope.filterIncomingOutgoing({incoming: false})).toBeFalsy();
-	}));*/
-
 
     describe('search exchange logs', function () {
         it('resetSearch should broadcast resetExchangeLogSearch event', inject(function ($rootScope) {
@@ -213,7 +189,7 @@ describe('ExchangeCtrl', function () {
 
         var exchangeLog = new Exchange();
         exchangeLog.logData = {
-            guid: 'abc'
+            guid: 'abc',
         };
 
         //POLL
@@ -231,13 +207,21 @@ describe('ExchangeCtrl', function () {
         //ALARM
         exchangeLog.logData.type = 'ALARM';
         scope.showMessageDetails(exchangeLog);
-        expect(locationChangeSpy).toHaveBeenCalledWith('/alarms/holdingtable/' + exchangeLog.logData.guid);
+        expect(locationChangeSpy).toHaveBeenCalledWith('/alerts/holdingtable/' + exchangeLog.logData.guid);
         expect(locationChangeSpy.callCount).toEqual(3);
 
-        //SOMETHING ELSE - location should not change
-        exchangeLog.logData.type = 'OTHER';
-        scope.showMessageDetails(exchangeLog);
-        expect(locationChangeSpy.callCount).toEqual(3);
+        //FISHING ACTIVITY MSG
+        var faTypes = ['FA_QUERY', 'FA_REPORT','FA_RESPONSE'];
+        exchangeLog.id = 1;
+        delete exchangeLog.logData;
+        var counter = 1;
+        angular.forEach(faTypes, function(value){
+            exchangeLog.typeRefType = value;
+            scope.showMessageDetails(exchangeLog);
+            expect(msgSpy).toHaveBeenCalledWith(1);
+            expect(msgSpy.callCount).toEqual(counter);
+            counter += 1;
+        });
     }));
 
 

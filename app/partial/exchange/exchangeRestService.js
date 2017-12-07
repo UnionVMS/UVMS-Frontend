@@ -405,7 +405,7 @@ angular.module('unionvmsWeb')
 
         return deferred.promise;
     };
-    
+
     var getRawExchangeMessage = function(guid) {
         var deferred = $q.defer();
         exchangeRestFactory.getRawExchangeMessage().get({guid: guid}, function(response) {
@@ -435,7 +435,7 @@ angular.module('unionvmsWeb')
         );
         return deferred.promise;
     };
-    
+
     var getValidationResults = function(guid){
         var deferred = $q.defer();
         exchangeRestFactory.getValidationResults().get({guid: guid}, function(response) {
@@ -457,7 +457,7 @@ angular.module('unionvmsWeb')
             if (String(response.code) !== "200") {
                 deferred.reject("Invalid response");
             }
-            deferred.resolve(response.data);
+            deferred.resolve(Exchange.fromJson(response.data));
         }, function(error) {
             deferred.reject("Failed to get Exchange message");
         });

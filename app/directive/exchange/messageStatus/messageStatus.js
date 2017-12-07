@@ -33,7 +33,7 @@ angular.module('unionvmsWeb').directive('messageStatus', function(locale, $modal
 		            });
 		        }
 		    };
-		    
+
 		    scope.getLabelText = function(status){
 		        var label = locale.getString('common.status_' + status.toLowerCase());
 		        if (label === "%%KEY_NOT_FOUND%%"){
@@ -55,13 +55,14 @@ angular.module('unionvmsWeb').directive('messageStatus', function(locale, $modal
 		                cssClass = "label-danger";
 		                break;
 		            default:
-		            cssClass = "label-warning";
+		                cssClass = "label-warning";
+		                break;
 		        }
-		        
+
 		        if (angular.isDefined(scope.ngModel) && scope.isClickable === true){
 		            cssClass += ' clickable-status';
 		        }
-		        
+
 		        return cssClass;
 		    };
 		}

@@ -26,6 +26,7 @@ angular.module('unionvmsWeb')
         this.source = undefined;
         this.type = undefined;
         this.typeRefType = undefined;
+        this.relatedLogData = undefined;
 	}
 
 	Exchange.fromJson = function(data){
@@ -45,14 +46,14 @@ angular.module('unionvmsWeb')
 			exchange.type = data.type;
 			exchange.typeRefType = data.typeRefType;
 
-		}
-
-		if (exchange.status === "SUCCESSFULL") {
-			exchange.status = "SUCCESSFUL";
-		}
-
-		if (exchange.status === "FAILED") {
-			exchange.status = "ERROR";
+            var linkedDataOrder = ['FA_RESPONSE', 'FA_REPORT'];
+            if (angular.isDefined(data.relatedLogData) && data.relatedLogData.length > 0){
+                var sortedData = [];
+                angular.forEach(linkedDataOrder, function(link){
+                    sortedData = sortedData.concat(_.where(data.relatedLogData, {type: link}));
+                });
+                exchange.relatedLogData = sortedData;
+			}
 		}
 
 		return exchange;

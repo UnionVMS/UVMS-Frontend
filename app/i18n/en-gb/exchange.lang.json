@@ -92,6 +92,8 @@
 	"title_incoming": "Incoming",
 	"title_outgoing": "Outgoing",
 	"title_forward": "Forward",
-	"title_resend": "Resend"
-
+	"title_resend": "Resend",
+	"title_fa_report": "FA Report",
+	"title_fa_response": "FA Response",
+	"title_fa_query": "FA Query"
 }

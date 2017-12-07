@@ -17,13 +17,7 @@ angular.module('unionvmsWeb')
         this.listSize = angular.isDefined(listSize) ? listSize : 10;
         this.isDynamic = angular.isDefined(isDynamic) ? isDynamic : true;
         this.criterias = angular.isDefined(criterias) ? criterias : [];
-        this.sorting = angular.isDefined(sorting) ? sorting : [];
-
-        /* $scope.actServ.reportsList.sorting = {
-            sortBy: searchField,
-            reversed: sortOrder
-        }; */
-        
+        this.sorting = angular.isDefined(sorting) ? sorting : {};
     }
 
     GetListRequest.prototype.toJson = function(){
