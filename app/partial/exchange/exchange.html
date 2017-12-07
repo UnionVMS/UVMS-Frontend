@@ -123,7 +123,7 @@ copy of the GNU General Public License along with the IFDM Suite. If not, see <h
                                         <span class="fa fa-eye"></span>
                                     </button>
                                     <button ng-repeat="relatedMsg in ::message.relatedLogData" type="button" class="btn btn-xs btn-default btn-log" title="{{getLinkedBtnTitle(relatedMsg.type)}}" ng-click="getLogItem(relatedMsg)">
-                                        <span class="fa" ng-class="{'fa-level-down': relatedMsg.type === 'FA_RESPONSE', 'fa-file-text-o': relatedMsg.type === 'FA_REPORT'}">
+                                        <span class="fa" ng-class="{'fa-level-down': relatedMsg.type === 'FA_RESPONSE', 'fa-file-text-o': relatedMsg.type === 'FA_REPORT'}"></span>
                                     </button>
                                 </td>
                             </tr>

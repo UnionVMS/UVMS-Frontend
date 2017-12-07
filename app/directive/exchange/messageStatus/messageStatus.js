@@ -20,14 +20,14 @@ angular.module('unionvmsWeb').directive('messageStatus', function(locale, $modal
 		templateUrl: 'directive/exchange/messageStatus/messageStatus.html',
 		link: function(scope, element, attrs, fn) {
 		    scope.openModal = function(){
-		        if (angular.isDefined(scope.ngModel.logData) && scope.isClickable === true){
+		        if (scope.isClickable === true){
 		            var modalInstance = $modal.open({
 		               templateUrl: 'partial/exchange/validationResultsModal/validationResultsModal.html',
 		               controller: 'ValidationresultsmodalCtrl',
 		               size: 'lg',
 		               resolve: {
 		                   msgGuid: function(){
-		                       return scope.ngModel.logData[0].guid;
+		                       return scope.ngModel.id;
 		                   }
 		               }
 		            });

@@ -64,10 +64,10 @@ angular.module('unionvmsWeb')
                 return $resource('/exchange/rest/config');
             },
             getValidationResults: function(){
-                return $resource('/mock/exchange/validation/:guid');
+                return $resource('/mock/exchange/validation/:guid'); //FIXME
             },
             getLogItem: function(){
-                return $resource('/mock/exchange/log/:guid');
+                return $resource('/mock/exchange/log/:guid'); //FIXME
             }
         };
     })
