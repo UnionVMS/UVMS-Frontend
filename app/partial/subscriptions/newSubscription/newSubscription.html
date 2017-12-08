@@ -50,13 +50,13 @@ copy of the GNU General Public License along with the IFDM Suite. If not, see <h
                         <div class="row">
                             <div class="col-md-6">
                                 <label>{{'subscriptions.subscription_valid_form' | i18n }}</label>
-                                <datepicker-input placeholder="dd/mm/yyyy" time="true" model="subscription.validFrom" name="periodStartFACriterion"
-                                    max-date="subscription.validUntil" input-field-id="periodStartFACriterion" update-when="default"></datepicker-input>
+                                <datepicker-input placeholder="dd/mm/yyyy" time="true" model="subscription.validFrom" name="periodStartFACriterion" max-date="subscription.validUntil"
+                                    input-field-id="periodStartFACriterion" update-when="default"></datepicker-input>
                             </div>
                             <div class="col-md-6">
                                 <label>{{'subscriptions.subscription_valid_until' | i18n }}</label>
-                                <datepicker-input placeholder="dd/mm/yyyy" time="true" model="subscription.validUntil" name="periodStartFACriterion"
-                                    input-field-id="periodEndFACriterion" update-when="default"></datepicker-input>
+                                <datepicker-input placeholder="dd/mm/yyyy" time="true" model="subscription.validUntil" name="periodStartFACriterion" input-field-id="periodEndFACriterion"
+                                    update-when="default"></datepicker-input>
                             </div>
                         </div>
                     </div>
@@ -86,7 +86,12 @@ copy of the GNU General Public License along with the IFDM Suite. If not, see <h
                 </div>
                 <ng-form name="reportBodyForm">
                     <div class="col-md-12">
-                        <div class="row form-group" ng-include="'partial/subscriptions/newSubscription/repParamSubscription/repParamSubscription.html'"></div>
+                        <div ng-if="subscription.subscriptionType == 'Tx-Pull'">
+                            <div class="row form-group" ng-include="'partial/subscriptions/newSubscription/queryParamSubscription/queryParamSubscription.html'"></div>
+                        </div>
+                        <div ng-if="subscription.subscriptionType == 'Tx-Push'">
+                            <div class="row form-group" ng-include="'partial/subscriptions/newSubscription/repParamSubscription/repParamSubscription.html'"></div>
+                        </div>
                         <div class="row filter-section">
                             <div class="row form-group" ng-include="'partial/spatial/reportsPanel/reportForm/vesselFieldset/vesselFieldset.html'"></div>
                             <div class="row form-group" ng-include="'partial/spatial/reportsPanel/reportForm/areasSelectionFieldset/areasSelectionFieldset.html'"></div>

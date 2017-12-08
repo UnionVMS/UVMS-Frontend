@@ -25,5 +25,8 @@
 	"include_correction_history": "Include correction HISTORY",
 	"report_parameters": "Report parameters",
 	"reports_filter": "Reports filter",
-	"subscription_Trigger":"Trigger"
+	"subscription_Trigger":"Trigger",
+	"query_parameters":"Query parameters",
+	"vessel_id_type":"Vessel ID Type",
+	"query_for_the_last":"Query for the last"
 }

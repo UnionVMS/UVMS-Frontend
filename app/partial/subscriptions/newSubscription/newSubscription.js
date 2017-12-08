@@ -29,7 +29,7 @@ angular.module('unionvmsWeb').controller('NewsubscriptionCtrl',function($scope, 
         $scope.report.areas = $scope.exportSelectedAreas();
         console.log("$scope.report"+JSON.stringify($scope.report));
         
-    }
+    };
 
     $scope.exportSelectedAreas = function(){
         var exported = [];
@@ -44,9 +44,14 @@ angular.module('unionvmsWeb').controller('NewsubscriptionCtrl',function($scope, 
         return exported;
     };
 
+/*  $scope.clearSearchProps = function(){
+        $scope.shared.searchVesselString = undefined;
+        $scope.shared.vessels = [];
+    }; */
     function init(){
+
         $scope.subscription = new Subscription();
-       
+        $scope.subscription.showqueryParam = false;
         $scope.subService.getFormDetails('1').then(function(response){
             $scope.subscription.fromJson(response);
             $scope.report = $scope.subscription;

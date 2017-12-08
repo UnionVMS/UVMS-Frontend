@@ -18,15 +18,23 @@ angular.module('unionvmsWeb').factory('Subscription', function (locale) {
 		this.accessibility = undefined;
 		this.endPoint = undefined;
 		this.description = undefined;
+		this.period = undefined;
 		this.commChannel = undefined;
 		this.retryDelay = undefined;
 		this.messageType = undefined;
+		this.vesselIdType = undefined;
 		this.reportParams = {
 			reportsSelected: [],
 			vesselIdType: {
 				type: 'original',
 				selectedTypes: []
 			}
+		};
+		this.queryParams = {
+			vesselId: undefined,
+			includeCorrectionHist: undefined, 
+			time: undefined,
+			timeUnit: undefined
 		};
 		this.trigger = undefined;
 		this.validFrom = undefined;
@@ -35,6 +43,7 @@ angular.module('unionvmsWeb').factory('Subscription', function (locale) {
 	}
 
 	Subscription.prototype.fromJson = function (data) {
+		console.log("model data"+JSON.stringify(data));
 		this.name = data.name;
 		this.isActive = data.isActive;
 		this.organization = data.organization;
@@ -48,8 +57,11 @@ angular.module('unionvmsWeb').factory('Subscription', function (locale) {
 		this.validFrom = data.validFrom;
 		this.validUntil = data.validUntil;
 		this.messageType = data.messageType;
+		this.period = data.period;
+		this.vesselIdType = data.vesselIdType;
+		this.queryParams = data.queryParams;
 
-	}
+	};
 	return Subscription;
 });
 
