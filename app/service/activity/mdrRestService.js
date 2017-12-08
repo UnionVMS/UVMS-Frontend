@@ -168,7 +168,7 @@ angular.module('unionvmsWeb').factory('mdrRestFactory',function($resource) {
          * @param {String} tableState - is an object representing the smart table state
          * @returns {Promise} A promise with either the MDR code list or reject error
          */
-  	    getMDRCodeList: function(acronym, tableState, searchAttribute) {
+  	    getMDRCodeList: function(acronym, tableState, searchAttribute, sortAttribute) {
             var payload;
 
             if(angular.isDefined(tableState)){
@@ -178,7 +178,7 @@ angular.module('unionvmsWeb').factory('mdrRestFactory',function($resource) {
                         pageSize: tableState.pagination.number || 10 // Number of entries showed per page.
                     },
                     sorting: {
-                        sortBy: tableState.sort.predicate,
+                        sortBy: sortAttribute ? sortAttribute : tableState.sort.predicate,
                         isReversed: tableState.sort.reverse
                     },
                     criteria: {

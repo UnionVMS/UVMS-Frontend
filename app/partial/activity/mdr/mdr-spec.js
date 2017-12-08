@@ -47,7 +47,11 @@ describe('MdrCtrl', function() {
                     "spanishName": "Esturinn del Adrictico",
                     "author": "Bonaparte 1836",
                     "family": "Acipenseridae",
-                    "order": "ACIPENSERIFORMES"
+                    "order": "ACIPENSERIFORMES",
+                    "validity": {
+                    	"endDate": "2100-12-31T00:00:00",
+                    	"startDate": "2100-12-31T00:00:00"
+                    }
                 },
                 {
                     "code": "AAB",
@@ -57,7 +61,11 @@ describe('MdrCtrl', function() {
                     "spanishName": "Sargo de dos bandas",
                     "author": "Forsskbl 1775",
                     "family": "Sparidae",
-                    "order": "PERCOIDEI"
+                    "order": "PERCOIDEI",
+                    "validity": {
+                    	"endDate": "2100-12-31T00:00:00",
+                    	"startDate": "2100-12-31T00:00:00"
+                    }
                 },
                 {
                     "code": "AAC",
@@ -67,7 +75,11 @@ describe('MdrCtrl', function() {
                     "spanishName": "",
                     "author": "Linnaeus 1766",
                     "family": "Amiidae",
-                    "order": "AMIIFORMES"
+                    "order": "AMIIFORMES",
+                    "validity": {
+                    	"endDate": "2100-12-31T00:00:00",
+                    	"startDate": "2100-12-31T00:00:00"
+                    }
                 }
             ];
     }
@@ -335,14 +347,14 @@ describe('MdrCtrl', function() {
         }));
 
 
-        it('should open the code list modal', inject(function() {
-            scope.openCodeListModal();
-            /*expect(scope.displayedMDRLists[1].schedulable).toBe(undefined);
-
-            scope.enableDisableAutoUpdate(1);
-            expect(scope.displayedMDRLists[1].schedulable).toEqual(true);
-            expect(mdrRestServSpy.enableDisableScheduledUpdate).toHaveBeenCalled();*/
-        }));
+//        it('should open the code list modal', inject(function() {
+//            scope.openCodeListModal();
+//            /*expect(scope.displayedMDRLists[1].schedulable).toBe(undefined);
+//
+//            scope.enableDisableAutoUpdate(1);
+//            expect(scope.displayedMDRLists[1].schedulable).toEqual(true);
+//            expect(mdrRestServSpy.enableDisableScheduledUpdate).toHaveBeenCalled();*/
+//        }));
 
     });
 });

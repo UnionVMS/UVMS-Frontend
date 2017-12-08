@@ -64,6 +64,11 @@ angular.module('unionvmsWeb').controller('MdrCtrl',function($scope, mdrRestServi
      */
     $scope.selectedAll = false;
 
+    /**
+     * @property {Number} numValidityColumns number of validity columns
+     */
+    $scope.numValidityColumns = 0;
+
 
     /**
      * initializes the cron job expression and the MDR code lists
@@ -228,6 +233,7 @@ angular.module('unionvmsWeb').controller('MdrCtrl',function($scope, mdrRestServi
     };
 
     var getAcronymsDetailsSuccess = function(response) {
+        loadValidityDates(response);
         $scope.mdrCodeLists = response;
         $scope.displayedMDRLists = [].concat($scope.mdrCodeLists);
         checkSelectedAll();
@@ -308,6 +314,54 @@ angular.module('unionvmsWeb').controller('MdrCtrl',function($scope, mdrRestServi
             $scope.selectedAll = true;
         }else{
             $scope.selectedAll = false;
+        }
+    };
+
+    /**
+     * Load validity dates in MDR lists
+     *
+     * @memberof MdrCtrl
+     * @function loadValidityDates
+     * @public
+     * @param {Array} list - mdr code list
+     */
+    var loadValidityDates = function(list) {
+        var validityDates = _.pluck(list, 'validity');
+        validityDates = _.without(validityDates, null);
+        var hasStartValidity;
+        var hasEndValidity;
+
+        if(validityDates.length){
+            for(var i=0;i<validityDates.length;i++){
+                if(validityDates[i].startDate){
+                    $scope.hasStartValidity = true;
+                }
+
+                if(validityDates[i].endDate){
+                    $scope.hasEndValidity = true;
+                }
+
+                if($scope.hasStartValidity && $scope.hasEndValidity){
+                    break;
+                }
+            }
+
+            $scope.numValidityColumns = 0;
+            if($scope.hasStartValidity){
+                $scope.numValidityColumns++;
+            }
+            
+            if($scope.hasEndValidity){
+                $scope.numValidityColumns++;
+            }
+
+            angular.forEach(list, function(item){
+                if(item.validity){
+                    item.startDate = item.validity.startDate;
+                    item.endDate = item.validity.endDate;
+                    delete item.validity;
+                }
+            });
         }
     };
 

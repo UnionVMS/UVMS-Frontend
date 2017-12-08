@@ -75,8 +75,12 @@ copy of the GNU General Public License along with the IFDM Suite. If not, see <h
                             <div class="th col-md-1 ckeckbox-column" st-skip-natural="true" st-class-ascent="sorting_asc" st-class-descent="sorting_desc">
                                 <input type="checkbox" ng-model="selectedAll" ng-change="selectDeselectAll()">
                             </div>
-                            <div class="th col-md-3" st-sort="objectAcronym" st-skip-natural="true" st-class-ascent="sorting_asc" st-class-descent="sorting_desc">{{'activity.code_list_table_acronym_header' | i18n}}</div>
-                            <div class="th col-md-3" st-sort="objectName" st-skip-natural="true" st-class-ascent="sorting_asc" st-class-descent="sorting_desc">{{'activity.code_list_table_name_header' | i18n}}</div>
+                            <div class="th" ng-class="{'col-md-2': numValidityColumns===2 , 'col-md-3': numValidityColumns!==2}" st-sort="objectAcronym" st-skip-natural="true" st-class-ascent="sorting_asc" st-class-descent="sorting_desc">{{'activity.code_list_table_acronym_header' | i18n}}</div>
+                            <div class="th" ng-class="{'col-md-2': numValidityColumns>0, 'col-md-3': numValidityColumns<2}" st-sort="objectName" st-skip-natural="true" st-class-ascent="sorting_asc" st-class-descent="sorting_desc">{{'activity.code_list_table_name_header' | i18n}}</div>
+
+                            <div ng-if="hasStartValidity" class="th col-md-1" st-sort="startDate" st-skip-natural="true" st-class-ascent="sorting_asc" st-class-descent="sorting_desc">{{'activity.startDate' | i18n}}</div>
+                            <div ng-if="hasEndValidity" class="th col-md-1" st-sort="endDate" st-skip-natural="true" st-class-ascent="sorting_asc" st-class-descent="sorting_desc">{{'activity.endDate' | i18n}}</div>
+
                             <div class="th col-md-1" st-sort="lastSuccess" st-skip-natural="true" st-class-ascent="sorting_asc" st-class-descent="sorting_desc">{{'activity.code_list_table_last_success_header' | i18n}}</div>
                             <div class="th col-md-1" st-sort="lastAttempt" st-skip-natural="true" st-class-ascent="sorting_asc" st-class-descent="sorting_desc">{{'activity.code_list_table_last_attempt_header' | i18n}}</div>
                             <div class="th col-md-1" st-sort="lastStatus" st-skip-natural="true" st-class-ascent="sorting_asc" st-class-descent="sorting_desc">{{'activity.code_list_table_last_attempt_status_header' | i18n}}</div>
@@ -95,8 +99,12 @@ copy of the GNU General Public License along with the IFDM Suite. If not, see <h
                             <div class="td col-md-1" st-skip-natural="true">
                                 <input type="checkbox" value="{{codeList.id}}" ng-model="codeList.isSelected" ng-change="enableDisableSynchButton()">
                             </div>
-                            <div class="td col-md-3" st-skip-natural="true">{{codeList.objectAcronym}}</div>
-                            <div class="td col-md-3" st-skip-natural="true">{{codeList.objectName}}</div>
+                            <div class="td" ng-class="{'col-md-2': numValidityColumns===2 , 'col-md-3': numValidityColumns!==2}" st-skip-natural="true">{{codeList.objectAcronym}}</div>
+                            <div class="td" ng-class="{'col-md-2': numValidityColumns>0, 'col-md-3': numValidityColumns<2}" st-skip-natural="true">{{codeList.objectName}}</div>
+
+                            <div ng-if="hasStartValidity" class="td col-md-1" st-skip-natural="true">{{codeList.startDate | stActivityDateUtc}}</div>
+                            <div ng-if="hasEndValidity" class="td col-md-1" st-skip-natural="true">{{codeList.endDate | stActivityDateUtc}}</div>
+
                             <div class="td col-md-1" st-skip-natural="true">{{codeList.lastSuccess | stActivityDateUtc}}</div>
                             <div class="td col-md-1" st-skip-natural="true">{{codeList.lastAttempt | stActivityDateUtc}}</div>
                             <div class="td col-md-1" st-skip-natural="true">{{codeList.lastStatus}}</div>
