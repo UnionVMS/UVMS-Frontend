@@ -2,12 +2,12 @@ describe('RepparamsubscriptionCtrl', function() {
 	
 	beforeEach(module('unionvmsWeb'));
 
-	var scope/* ,ctrl */;
+	var scope,ctrl;
 
 	beforeEach(inject(function($rootScope, $controller, Subscription) {
 		scope = $rootScope.$new();
 		scope.subscription = new Subscription();
-		/* ctrl = $controller('RepparamsubscriptionCtrl', {$scope: scope}); */
+		ctrl = $controller('RepparamsubscriptionCtrl', {$scope: scope});
 	}));
 
 	beforeEach(inject(function($httpBackend) {
@@ -18,9 +18,9 @@ describe('RepparamsubscriptionCtrl', function() {
 	}));
 
 	it('should initialize the creation type as "Transport original report"', inject(function($compile) {
-	//	expect(scope.subscription.reportParams.vesselIdType.type).toEqual('original');
+		expect(scope.subscription.reportParams.vesselIdType.type).toEqual('original');
 		
-		/* scope.view = $compile('<div ng-include="\'partial/subscriptions/newSubscription/repParamSubscription/repParamSubscription.html\'"></div>')(scope);
+		scope.view = $compile('<div ng-include="partial/subscriptions/newSubscription/repParamSubscription/repParamSubscription.html"></div>')(scope);
 		scope.view.appendTo('#parent-container');
 	
 		scope.$digest();
@@ -29,7 +29,7 @@ describe('RepparamsubscriptionCtrl', function() {
 		var viewToRemove = angular.element('#parent-container');
 		if(viewToRemove){
 			viewToRemove.remove();
-		} */
+		}
 	}));
 
 });
