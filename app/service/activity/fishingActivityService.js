@@ -73,6 +73,7 @@ angular.module('unionvmsWeb').factory('fishingActivityService', function(activit
             'processingProducts',
             'gearShotRetrieval',
             'vesselDetails',
+            'gearProblems'
         ],
         discard: [
             'locations',
@@ -475,19 +476,44 @@ angular.module('unionvmsWeb').factory('fishingActivityService', function(activit
      * @memberof fishingActivityService
      * @private
      * @param {Object} obj - A reference to the Fishing activity object
+     * @param {Boolean} isGearShotRetrieval - A flag to indicate if we are enriching the gearShotRetrieval object or the root gearProblems objec
      * @alias addGearProblemDesc
      */
-    var addGearProblemDesc = function(obj){
+    var addGearProblemDesc = function(obj, isGearShotRetrieval){
         mdrCacheService.getCodeList('FA_GEAR_PROBLEM').then(function(response){
-            angular.forEach(obj.gearShotRetrieval, function(item) {
-                angular.forEach(item.gearProblems, function(prob){
-                    var mdrRec = _.findWhere(response, { code: prob.type });
-                    if (angular.isDefined(mdrRec)) {
-                        prob.typeDesc = mdrRec.description;
-                    }
+            if (isGearShotRetrieval === true){
+                angular.forEach(obj.gearShotRetrieval, function(item) {
+                    angular.forEach(item.gearProblems, function(prob){
+                        prob.typeDesc = getGearProblemDescFromMDR(response, prob);
+                    });
                 });
-            });
+            } else {
+                angular.forEach(obj.gearProblems, function(prob) {
+                    prob.typeDesc = getGearProblemDescFromMDR(response, prob);
+                });
+            }
         });
+    };
+
+    /**
+     * Searches the gear problem description from within the MDR records.
+     *
+     * @memberOf fishingActivityService
+     * @private
+     * @alias getGearProblemDescFromMDR
+     * @param {Array} mdrRecs - An array containing all gear problems descriptions from MDR
+     * @param {Object} prob - the source object containing the fishing activity gear problem
+     * @returns {(String|Undefined)} the gear problem description or undefined
+     */
+    var getGearProblemDescFromMDR = function(mdrRecs, prob){
+        var desc = undefined;
+        var mdrRec = _.findWhere(mdrRecs, { code: prob.type });
+        if (angular.isDefined(mdrRec)) {
+            desc = mdrRec.description;
+
+        }
+
+        return desc;
     };
     
     /**
@@ -1420,12 +1446,12 @@ angular.module('unionvmsWeb').factory('fishingActivityService', function(activit
                     break;
                 case 'gearShotRetrieval':
                     obj.gearShotRetrieval = loadGearShotRetrieval(data.gearShotRetrievalList);
-                    addGearProblemDesc(obj);
+                    addGearProblemDesc(obj, true);
                     addGearDescFromGearShotRetrieval(obj.gearShotRetrieval);
                     break;
                 case 'gearProblems':
                     obj.gearProblems = loadGearProblem(data.gearProblems);
-                    addGearProblemDesc(obj);
+                    addGearProblemDesc(obj, false);
                     break;
                 case 'vesselDetails':
                     obj.vesselDetails = loadVesselDetails(data.vesselDetails);
