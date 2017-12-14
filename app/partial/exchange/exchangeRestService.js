@@ -29,15 +29,14 @@ angular.module('unionvmsWeb')
             },
             getExchangeMessages : function(){
                 //FIXME remove when backend ready
-                //return $resource( '/exchange/rest/exchange/list',{},
-                return $resource( '/mock/exchange/list',{},
+                return $resource( '/exchange/rest/exchange/list',{},
+                //return $resource( '/mock/exchange/list',{},
                 {
                     list : { method : 'POST'}
                 });
             },
             getRawExchangeMessage: function(){
-                //FIXME remove when backend ready
-                return $resource('/mock/exchange/message/:guid');
+                return $resource('/exchange/rest/exchange/message/:guid');
             },
             getExchangeMessage: function() {
                 return $resource('/exchange/rest/exchange/:guid');
@@ -67,6 +66,7 @@ angular.module('unionvmsWeb')
                 return $resource('/mock/exchange/validation/:guid'); //FIXME
             },
             getLogItem: function(){
+                //return $resource('/exchange/rest/exchange/log/:guid');
                 return $resource('/mock/exchange/log/:guid'); //FIXME
             }
         };

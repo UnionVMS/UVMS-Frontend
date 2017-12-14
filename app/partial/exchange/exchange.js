@@ -245,7 +245,7 @@ angular.module('unionvmsWeb').controller('ExchangeCtrl',function($scope, $log, $
     };
 
     $scope.showMessageDetails = function(model) {
-        if (angular.isDefined(model.logData) && model.logData.type){
+        if (angular.isDefined(model.logData) && model.logData.type && _.indexOf(faTypes, model.logData.type) === -1){
             switch(model.logData.type){
                 case 'POLL':
                     $location.path('/polling/logs/' + model.logData.guid);
@@ -523,7 +523,6 @@ angular.module('unionvmsWeb').controller('ExchangeCtrl',function($scope, $log, $
      * @param {Object} msg - the linked message object conatining a type and a guid
      */
     $scope.getLogItem = function(msg){
-        //FIXME after discussing with backenders
         exchangeRestService.getLogItem(msg.guid).then(
             function(data){
                 $scope.isLinkActive = true;
@@ -535,24 +534,6 @@ angular.module('unionvmsWeb').controller('ExchangeCtrl',function($scope, $log, $
             function(error){
                 $log.error("Error getting the log item.");
             });
-
-        /*delete $scope.isLinkActive;
-        $scope.exchangeLogsSearchResults.loading = true;
-        $scope.clearSelection();
-        $scope.exchangeLogsSearchResults.clearErrorMessage();
-        $scope.exchangeLogsSearchResults.setLoading(true);
-        $scope.newExchangeLogCount = 0;
-        searchService.searchExchange($scope.exchangeLogsSearchResults.incomingOutgoing).then(function(page) {
-                $scope.exchangeLogsSearchResults.updateWithNewResults(page);
-                $scope.displayedMessages = [].concat($scope.exchangeLogsSearchResults.items);
-                $scope.exchangeLogsSearchResults.loading = false;
-            },
-            function(error) {
-                $scope.exchangeLogsSearchResults.removeAllItems();
-                $scope.exchangeLogsSearchResults.setLoading(false);
-                $scope.exchangeLogsSearchResults.setErrorMessage(locale.getString('common.search_failed_error'));
-                $scope.exchangeLogsSearchResults.loading = false;
-            });*/
     };
 
     /**
