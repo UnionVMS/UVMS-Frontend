@@ -10,7 +10,7 @@ FITNESS FOR A PARTICULAR PURPOSE.  See the GNU General Public License for more d
 copy of the GNU General Public License along with the IFDM Suite. If not, see <http://www.gnu.org/licenses/>.
 */
 angular.module('unionvmsWeb').controller('LiveviewpanelCtrl',function($scope, $timeout, $window, locale, mapService, reportService, genericMapService){
-   
+   $scope.repService = reportService;
    $scope.$watch('repNav.isViewVisible("mapPanel")', function(newVal, oldVal){
       if (newVal){
           $timeout(mapService.updateMapContainerSize(), 100);
