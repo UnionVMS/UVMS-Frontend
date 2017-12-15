@@ -441,10 +441,12 @@ angular.module('unionvmsWeb').factory('Trip',function(locale,unitConversionServi
         if (angular.isDefined(specieList) && specieList.length > 0) {
             var colors = palette('tol-rainbow', specieList.length);
             angular.forEach(specieList, function(value, key) {
-                specieColors.push({
-                    code: value,
-                    color: colors[key]
-                });
+                if (angular.isDefined(value)) {
+                    specieColors.push({
+                        code: value,
+                        color: colors[key]
+                    });
+                }
             });           
             return specieColors;
         }
