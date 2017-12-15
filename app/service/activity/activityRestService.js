@@ -114,16 +114,6 @@ angular.module('unionvmsWeb').factory('activityRestFactory', function ($resource
                 }
             });
         },
-        getTripCatchDetail: function () {
-            return $resource('/mock/activity/catchdetails/:id', {}, {
-                'get': {
-                    method: 'GET',
-                    headers: {
-                        'Content-Type': 'application/json'
-                    }
-                }
-            });
-        },
         getTripCatchesLandingDetails: function () {
             return $resource('/activity/rest/catch/details/:id', {}, {
                 'get': {
@@ -348,23 +338,6 @@ angular.module('unionvmsWeb').factory('activityRestFactory', function ($resource
         getTripMapData: function(id){
             var deferred = $q.defer();
             activityRestFactory.getTripMapData().get({ id: id }, function (response) {
-                deferred.resolve(response.data);
-            }, function (error) {
-                deferred.reject(error);
-            });
-            return deferred.promise;
-        },
-        /**
-         * Get the Catch Details of a specific trip
-         * 
-         * @memberof activityRestService
-         * @public
-         * @param {String} id - The trip id of the selected trip
-         * @returns {Promise} A promise with either the trip catch details or reject error
-         */
-        getTripCatchDetail: function (id) {
-            var deferred = $q.defer();
-            activityRestFactory.getTripCatchDetail().get({ id: id }, function (response) {
                 deferred.resolve(response.data);
             }, function (error) {
                 deferred.reject(error);

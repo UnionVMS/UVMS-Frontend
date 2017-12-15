@@ -16,9 +16,12 @@ copy of the GNU General Public License along with the IFDM Suite. If not, see <h
 		</legend>
 		<!-- CATCH DETAILS CONTAINER -->
 		<div class="catch-details-container" id="catch-details-container">
-			<a class="btn-trip-quit" ng-if="repNav.isSectionVisible('tripsPanel')" title="{{'activity.trip_summary_quit_trip_detail' | i18n }}" ng-click="navigateBack()" ng-if="tabType === 'reports'"><i class="fa fa-share-square-o"></i></a>
-    		<a class="btn-print" title="{{'activity.trip_summary_export_trip' | i18n }}"><i class="fa fa-print"></i></a>
+			<a class="btn-trip-quit" ng-if="repNav.isSectionVisible('tripsPanel')" title="{{'activity.trip_summary_quit_trip_detail' | i18n }}" ng-click="navigateBack()"><i class="fa fa-share-square-o"></i></a>
+    		<!--FIXME when integrating priting be services-->
+			<!--<a class="btn-print" title="{{'activity.trip_summary_export_trip' | i18n }}"><i class="fa fa-print"></i></a>-->
+
 			<!-- TRIP OVERVIEW PANEL -->
+			<!--FIXME uncomment when doing be integration-->
 			<!--<div class="row summary-row" ng-if="tripId">
 				<trip-overview-panel class="col-md-12 summary-section" trip="fishingTripDetails"></trip-overview-panel>
 			</div>-->

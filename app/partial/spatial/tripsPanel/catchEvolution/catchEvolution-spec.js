@@ -16,7 +16,7 @@ describe('CatchevolutionCtrl', function() {
     var scope, ctrl, activityRestServiceSpy, $httpBackend, tripSummaryServiceSpy;
 
     beforeEach(function() {
-        activityRestServiceSpy = jasmine.createSpyObj('activityRestService', ['getTripCatchDetail', 'getTripCatchesEvolution']);
+        activityRestServiceSpy = jasmine.createSpyObj('activityRestService', ['getTripCatchesEvolution']);
         tripSummaryServiceSpy = jasmine.createSpyObj('tripSummaryService', ['trip']);
 
         module(function($provide) {
@@ -71,14 +71,6 @@ describe('CatchevolutionCtrl', function() {
         }
         ];
 
-        activityRestServiceSpy.getTripCatchDetail.andCallFake(function() {
-            return {
-                then: function(callback){
-                    return callback(getTripCatch);
-                }
-            }
-        });
-
         activityRestServiceSpy.getTripCatchesEvolution.andCallFake(function() {
             return {
                 then: function(callback){
@@ -92,7 +84,6 @@ describe('CatchevolutionCtrl', function() {
     it('should call the services only once', inject(function() {
         
         scope.speciesColors = tripSummaryServiceSpy.trip.specieColor;
-        expect(activityRestServiceSpy.getTripCatchDetail.callCount).toBe(1);
         expect(activityRestServiceSpy.getTripCatchesEvolution.callCount).toBe(1);
 
         angular.forEach(scope.catchEvolutionData.catchProgress, function(item){
@@ -120,14 +111,7 @@ describe('CatchevolutionCtrl', function() {
 
     function getTripCatch() {
         return {
-            "tripID": "BEL-TRP-O16-2016_0021",
-            "vesselName": "Beagle(BEL123456789)",
-            "departure": "2016-10-21T08:28:21",
-            "departureAt": ["BEZEE"],
-            "arrival": "2016-10-21T08:28:21",
-            "arrivalAt": ["BEOST"],
-            "landing": "2016-10-21T08:28:21",
-            "landingAt": ["BEOST"]
+
         };
     }
 
@@ -175,7 +159,8 @@ describe('CatchevolutionCtrl', function() {
                         "weight": 111
                     }],
                     "total": 222
-                }
+                },
+                "activityType":"DEPARTURE"
             },
             {
                 "onboard": {
@@ -219,7 +204,8 @@ describe('CatchevolutionCtrl', function() {
                         "weight": 111
                     }],
                     "total": 222
-                }
+                },
+                "activityType":"AREA_ENTRY"
             }],
             "finalCatch": {
                 "landed": {
@@ -264,6 +250,50 @@ describe('CatchevolutionCtrl', function() {
                     }],
                     "total": 222
                 }
+            },
+            "tripDetails": {
+                "vesselDetails": {
+                    "name": "Echo",
+                    "country": "SVN",
+                    "contactParties": [{
+                        "role": "MASTER",
+                        "contactPerson": {
+                            "alias": "Master E",
+                            "firstName": "Jake",
+                            "lastName": "E"
+                        },
+                        "structuredAddress": [{
+                            "cityName": "City L",
+                            "streetName": "Street K",
+                            "countryCode": "SVN"
+                        }]
+                    }],
+                    "vesselIds": [{
+                        "id": 2543,
+                        "schemeId": "ICCAT"
+                    },
+                        {
+                            "id": 87879,
+                            "schemeId": "IRCS"
+                        },
+                        {
+                            "id": 74334,
+                            "schemeId": "EXT_MARK"
+                        },
+                        {
+                            "id": 34434,
+                            "schemeId": "CFR"
+                        }
+                    ]
+                },
+                "trips": [{
+                    "tripId": [{
+                        "id": 344,
+                        "schemeId": "EU_TRIP_ID"
+                    }],
+                    "departureTime": "2017-06-22T07:30:00",
+                    "arrivalTime": "2017-06-27T22:45:00"
+                }]
             }
         }
     }
