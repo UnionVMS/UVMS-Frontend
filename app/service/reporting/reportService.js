@@ -17,6 +17,7 @@ angular.module('unionvmsWeb').factory('reportService',function($rootScope, $time
        isReportExecuting: false,
        isReportRefreshing: false,
        hasAlert: false, 
+       hideCatchDetails : true,
        message: undefined,
        alertType: undefined,
        positions: [],
@@ -146,6 +147,7 @@ angular.module('unionvmsWeb').factory('reportService',function($rootScope, $time
                     tripSummaryService.withMap = false;
                     spatialRestService.getConfigsForReportWithoutMap(rep.getConfigsTime).then(getConfigWithoutMapSuccess, getConfigWithoutMapError);
                     if(rep.reportType === 'summary'){
+                        tripSummaryService.trip = undefined;
                         reportingNavigatorService.goToView('liveViewPanel','catchDetails');
                     }else{
                         reportingNavigatorService.goToView('liveViewPanel','vmsPanel');
@@ -181,6 +183,7 @@ angular.module('unionvmsWeb').factory('reportService',function($rootScope, $time
                 rep.mergedReport.additionalProperties = getUnitSettings();
                 
                 reportRestService.executeWithoutSaving(rep.mergedReport).then(getVmsDataSuccess, getVmsDataError);
+                tripSummaryService.trip = undefined;
                 reportingNavigatorService.goToView('liveViewPanel','catchDetails');
             }else{
                 spatialConfigRestService.getUserConfigs().then(getUserConfigsSuccess, getUserConfigsFailure);
@@ -405,8 +408,10 @@ angular.module('unionvmsWeb').factory('reportService',function($rootScope, $time
             if(!angular.isDefined(rep.criteria.recordDTOs) || rep.criteria.recordDTOs.length === 0){
                 rep.hasAlert = true;
                 rep.alertType = 'warning';
+                rep.hideCatchDetails = false;
                 rep.message = locale.getString('spatial.report_no_ers_data');
             }else{
+                tripSummaryService.trip = undefined;
                 reportingNavigatorService.goToView('liveViewPanel','catchDetails');
             }
         }
