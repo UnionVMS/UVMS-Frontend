@@ -164,10 +164,16 @@ angular.module('unionvmsWeb').controller('ExchangeCtrl',function($scope, $log, $
         });
     };
 
+    var resetExchangeLogsList = function(){
+        $scope.exchangeLogsSearchResults.items = [];
+        $scope.displayedMessages = [];
+    };
+
     $scope.searchExchange = function() {
         delete $scope.isLinkActive;
         $scope.exchangeLogsSearchResults.loading = true;
         $scope.clearSelection();
+        resetExchangeLogsList();
         $scope.exchangeLogsSearchResults.clearErrorMessage();
         $scope.exchangeLogsSearchResults.setLoading(true);
         $scope.newExchangeLogCount = 0;
