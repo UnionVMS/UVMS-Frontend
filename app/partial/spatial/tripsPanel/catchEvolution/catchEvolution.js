@@ -30,13 +30,6 @@ angular.module('unionvmsWeb').controller('CatchevolutionCtrl', function($scope, 
        * @private
        */
     var init = function() {
-        // get fishing trip details.
-        //FIXME change with proper trip id
-        activityRestService.getTripCatchDetail('1234').then(function(response){
-            $scope.fishingTripDetails = response;  
-        }, function(error){
-            //TODO deal with error from service
-        });
         // get Catches Evolution details.
         //FIXME change with proper trip id
         activityRestService.getTripCatchesEvolution('1234').then(function(response){
