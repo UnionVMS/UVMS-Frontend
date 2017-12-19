@@ -270,6 +270,7 @@ angular.module('unionvmsWeb').controller('ExchangeCtrl',function($scope, $log, $
             }
         } else {
             if (_.indexOf(faTypes, model.typeRefType) !== -1){
+                $scope.isLoadingXml = model.id;
                 exchangeRestService.getRawExchangeMessage(model.id).then(
                     function(data){
                         $scope.openXmlModal(data);
@@ -284,6 +285,7 @@ angular.module('unionvmsWeb').controller('ExchangeCtrl',function($scope, $log, $
     };
 
     $scope.openXmlModal = function(data){
+        $scope.isLoadingXml = undefined;
         var modalInstance = $modal.open({
             templateUrl: 'partial/exchange/messageModal/messageModal.html',
             controller: 'MessagemodalCtrl',
@@ -333,7 +335,7 @@ angular.module('unionvmsWeb').controller('ExchangeCtrl',function($scope, $log, $
         var clickable = false;
         var clickableStatus = ['FAILED', 'WARN', 'ERROR'];
         var msgType = ['FA_REPORT', 'FA_RESPONSE', 'FA_QUERY'];
-        if (msg.source === 'FLUX' && _.indexOf(clickableStatus, msg.status) !== -1 && _.indexOf(msgType, msg.typeRefType) !== -1){
+        if (_.indexOf(clickableStatus, msg.status) !== -1 && _.indexOf(msgType, msg.typeRefType) !== -1){
             clickable = true;
         }
         return clickable;
@@ -529,6 +531,7 @@ angular.module('unionvmsWeb').controller('ExchangeCtrl',function($scope, $log, $
      * @param {Object} msg - the linked message object conatining a type and a guid
      */
     $scope.getLogItem = function(msg){
+        $scope.exchangeLogsSearchResults.loading = true;
         exchangeRestService.getLogItem(msg.guid).then(
             function(data){
                 $scope.isLinkActive = true;
@@ -536,8 +539,10 @@ angular.module('unionvmsWeb').controller('ExchangeCtrl',function($scope, $log, $
 
                 $scope.exchangeLogsSearchResults.items = [data];
                 $scope.displayedMessages = [].concat($scope.exchangeLogsSearchResults.items);
+                $scope.exchangeLogsSearchResults.loading = false;
             },
             function(error){
+                $scope.exchangeLogsSearchResults.loading = false;
                 $log.error("Error getting the log item.");
             });
     };

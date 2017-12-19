@@ -106,6 +106,7 @@
     "status_offline": "Offline",
     "status_stopped": "Stopped",
     "status_warn": "Warn",
+    "status_warning": "Warning",
     "status_issued": "Issued",
     "status_sent": "Sent",
     "status_pending": "Pending",

@@ -16,8 +16,8 @@ angular.module('unionvmsWeb').controller('ValidationresultsmodalCtrl',function($
     
     var init = function(){
         exchangeRestService.getValidationResults(msgGuid).then(function(response){
-            $scope.validationResults = response.rulesList;
-            $scope.displayedResults = [].concat(response.rulesList);
+            $scope.validationResults = response.validationList;
+            $scope.displayedResults = [].concat(response.validationList);
             $scope.msg = vkbeautify.xml(response.msg);
             $scope.isLoading = false;
         }, function(error){

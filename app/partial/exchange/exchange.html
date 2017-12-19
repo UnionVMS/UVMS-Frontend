@@ -120,7 +120,7 @@ copy of the GNU General Public License along with the IFDM Suite. If not, see <h
                                 </td>
                                 <td>
                                     <button type="button" class="btn btn-xs btn-default" title="{{'exchange.title_details' | i18n }}" ng-click="showMessageDetails(message)" ng-if="::showDetailsButton(message)">
-                                        <span class="fa fa-eye"></span>
+                                        <span class="fa" ng-class="{'fa-eye': message.id !== isLoadingXml, 'fa-spinner fa-spin': message.id === isLoadingXml}"></span>
                                     </button>
                                     <button ng-repeat="relatedMsg in ::message.relatedLogData" type="button" class="btn btn-xs btn-default btn-log" title="{{getLinkedBtnTitle(relatedMsg.type)}}" ng-click="getLogItem(relatedMsg)">
                                         <span class="fa" ng-class="{'fa-level-down': relatedMsg.type === 'FA_RESPONSE', 'fa-file-text-o': relatedMsg.type === 'FA_REPORT'}"></span>

@@ -63,11 +63,11 @@ angular.module('unionvmsWeb')
                 return $resource('/exchange/rest/config');
             },
             getValidationResults: function(){
-                return $resource('/mock/exchange/validation/:guid'); //FIXME
+                return $resource('/exchange/rest/exchange/validation/:guid');
             },
             getLogItem: function(){
-                //return $resource('/exchange/rest/exchange/log/:guid');
-                return $resource('/mock/exchange/log/:guid'); //FIXME
+                return $resource('/exchange/rest/exchange/:guid');
+                //return $resource('/mock/exchange/log/:guid'); //FIXME
             }
         };
     })
@@ -457,7 +457,7 @@ angular.module('unionvmsWeb')
             if (String(response.code) !== "200") {
                 deferred.reject("Invalid response");
             }
-            deferred.resolve(Exchange.fromJson(response.data));
+            deferred.resolve(Exchange.fromLinkedMsgJson(response.data));
         }, function(error) {
             deferred.reject("Failed to get Exchange message");
         });
