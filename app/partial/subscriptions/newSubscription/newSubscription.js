@@ -9,10 +9,19 @@ the hope that it will be useful, but WITHOUT ANY WARRANTY; without even the impl
 FITNESS FOR A PARTICULAR PURPOSE.  See the GNU General Public License for more details. You should have received a
 copy of the GNU General Public License along with the IFDM Suite. If not, see <http://www.gnu.org/licenses/>.
 */
-angular.module('unionvmsWeb').controller('NewsubscriptionCtrl',function($scope, locale, subscriptionsRestService , Subscription){
-    $scope.isNewSubscription = true;
-    $scope.subService = subscriptionsRestService;
-    $scope.vesselSearchItems = [
+angular.module('unionvmsWeb').controller('NewsubscriptionCtrl',function($scope, locale, subscriptionsService, subscriptionsRestService , Subscription){
+    $scope.subServ = subscriptionsService;
+
+    function init(){
+        $scope.subServ.layoutStstus.isForm = true;
+    }
+
+    init();
+
+    /*$scope.isSubscriptionForm = true;
+    $scope.subService = subscriptionsRestService;*/
+
+    /*$scope.vesselSearchItems = [
         {"text": locale.getString('spatial.reports_form_vessels_search_by_vessel'), "code": "asset"},
         {"text": locale.getString('spatial.reports_form_vessels_search_by_group'), "code": "vgroup"}
     ];
@@ -44,10 +53,10 @@ angular.module('unionvmsWeb').controller('NewsubscriptionCtrl',function($scope, 
         return exported;
     };
 
-/*  $scope.clearSearchProps = function(){
+/!*  $scope.clearSearchProps = function(){
         $scope.shared.searchVesselString = undefined;
         $scope.shared.vessels = [];
-    }; */
+    }; *!/
     function init(){
 
         $scope.subscription = new Subscription();
@@ -65,5 +74,5 @@ angular.module('unionvmsWeb').controller('NewsubscriptionCtrl',function($scope, 
         });
         
     }
-    init();
+    init();*/
 });

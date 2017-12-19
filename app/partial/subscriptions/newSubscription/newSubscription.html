@@ -19,15 +19,15 @@ copy of the GNU General Public License along with the IFDM Suite. If not, see <h
                         <label>{{'subscriptions.subscription_form_name' | i18n }}</label>
                         <input type="text" class="form-control" ng-model="subscription.name" />
                     </div>
-                    <div class="col-md-4 form-group isActive">
+                    <!--<div class="col-md-4 form-group isActive">
                         <label><input type="checkbox" ng-model="subscription.isActive"/> {{'subscriptions.subscription_form_active' | i18n }}</label>
                     </div>
                     <div class="col-md-4 form-group">
                         <label>{{'subscriptions.subscription_form_organization' | i18n }}</label>
                         <combobox ng-model="subscription.organization" items="comboData.organization"></combobox>
-                    </div>
+                    </div>-->
                 </div>
-                <div class="row">
+                <!--<div class="row">
                     <div class="col-md-4 form-group">
                         <label>{{'subscriptions.subscription_form_subscription_type' | i18n }}</label>
                         <combobox ng-model="subscription.subscriptionType" items="comboData.subscriptionType"></combobox>
@@ -40,8 +40,8 @@ copy of the GNU General Public License along with the IFDM Suite. If not, see <h
                         <label>{{'subscriptions.subscription_end_point' | i18n }}</label>
                         <combobox ng-model="subscription.endPoint" items="comboData.endPoint"></combobox>
                     </div>
-                </div>
-                <div class="row">
+                </div>-->
+                <!--<div class="row">
                     <div class="col-md-4 form-group">
                         <label>{{'subscriptions.subscription_description' | i18n }}</label>
                         <textarea class="form-control form-decription" ng-model="subscription.description"></textarea>
@@ -64,8 +64,8 @@ copy of the GNU General Public License along with the IFDM Suite. If not, see <h
                         <label>{{'subscriptions.subscription_communication_channel' | i18n }}</label>
                         <combobox ng-model="subscription.commChannel" items="comboData.commChannel"></combobox>
                     </div>
-                </div>
-                <div class="row">
+                </div>-->
+                <!--<div class="row">
                     <div class="col-md-4 form-group">
                         <label>{{'subscriptions.subscription_Trigger' | i18n }}</label>
                         <div class="row trigger-group">
@@ -83,21 +83,7 @@ copy of the GNU General Public License along with the IFDM Suite. If not, see <h
                         <label>{{'subscriptions.subscription_message_type' | i18n }}</label>
                         <combobox ng-model="subscription.messageType" items="comboData.messageType"></combobox>
                     </div>
-                </div>
-                <ng-form name="reportBodyForm">
-                    <div class="col-md-12">
-                        <div ng-if="subscription.subscriptionType == 'Tx-Pull'">
-                            <div class="row form-group" ng-include="'partial/subscriptions/newSubscription/queryParamSubscription/queryParamSubscription.html'"></div>
-                        </div>
-                        <div ng-if="subscription.subscriptionType == 'Tx-Push'">
-                            <div class="row form-group" ng-include="'partial/subscriptions/newSubscription/repParamSubscription/repParamSubscription.html'"></div>
-                        </div>
-                        <div class="row filter-section">
-                            <div class="row form-group" ng-include="'partial/spatial/reportsPanel/reportForm/vesselFieldset/vesselFieldset.html'"></div>
-                            <div class="row form-group" ng-include="'partial/spatial/reportsPanel/reportForm/areasSelectionFieldset/areasSelectionFieldset.html'"></div>
-                        </div>
-                    </div>
-                </ng-form>
+                </div>-->
                 <button class="btn btn-primary button btn-action" type="button" ng-click="saveSubscription()">Save</button>
             </form>
         </div>

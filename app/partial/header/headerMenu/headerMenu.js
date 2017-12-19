@@ -42,8 +42,8 @@ angular.module('unionvmsWeb').controller('HeaderMenuCtrl',function($scope, $root
             $scope.addMenuItem(locale.getString('header.menu_areas'), '/areas', 'areas');
         }
 
-        // subscriptions
-        //FIX ME uncomment the commented code
+        // Subscriptions
+        //FIXME
         //if (checkAccess('subscriptions','viewSubscriptions')) {
             $scope.addMenuItem(locale.getString('header.menu_subscriptions'), '/subscriptions/newSubscription', 'newSubscriptions');
         // }
