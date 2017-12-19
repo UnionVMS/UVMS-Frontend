@@ -14,7 +14,11 @@ angular.module('unionvmsWeb').controller('ExchangeSearchController', function($s
 	var init = function(){
 	    $scope.advancedSearchObject.EXCHANGE_TIME_SPAN = $scope.DATE_TODAY;
         $scope.resetSearch();
+
         $scope.recipientItems = configurationService.setTextAndCodeForDropDown(configurationService.getValue('EXCHANGE', 'RECIPIENT'), 'RECIPIENT', 'EXCHANGE', true);
+        $scope.statusItems = configurationService.setTextAndCodeForDropDown(configurationService.getValue('EXCHANGE', 'STATUS'), 'STATUS', 'EXCHANGE', true);
+        $scope.sourceItems = configurationService.setTextAndCodeForDropDown(configurationService.getValue('EXCHANGE', 'SOURCE'), 'SOURCE', 'EXCHANGE', true);
+        $scope.typeItems = configurationService.setTextAndCodeForDropDown(configurationService.getValue('EXCHANGE', 'TYPE'), 'TYPE', 'EXCHANGE', true);
     };
 
     $scope.$on("resetExchangeLogSearch", function() {
