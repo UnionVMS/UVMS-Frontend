@@ -7,8 +7,12 @@
 	"search_recipient": "Recipient",
 	"search_ircs_cfr_name": "IRCS, CFR, Name",
 	"search_to": "To",
+	"search_source": "Source",
+	"search_type": "Type",
+	"search_status": "Status",
 
     "message_details_modal_title" : "Message details",
+    "validation_results_modal_title": "Validation results",
 
 
 	"sending_queue_table_header_date_received": "Date received",
@@ -24,7 +28,6 @@
 	"sending_queue_table_allmessages_in_group": "Group",
 	"sending_queue_date_recieved" : "Date received",
 
-	"sending_queue_table_header_recipient" : "Recipient",
 	"sending_queue_table_header_message_type" : "Msg.type",
 	"sending_queue_table_header_unsent_reports" : "Unsent rep.",
 	"sending_queue_table_header_last_received" : "Last received.",
@@ -32,7 +35,7 @@
 
 	"table_header_actions": "Actions",
 	"table_header_date_fwd": "Date forwarded",
-	"table_header_date_received": "Date received",
+	"table_header_date_received_sent": "Date received/sent",
 	"table_header_fwd_rule": "Forward rule",
 	"table_header_recipient": "Recipient",
 	"table_header_sent_by": "From",
@@ -40,10 +43,15 @@
     "table_header_source": "Source",
 	"table_header_type": "Type",
 	"table_header_sender_reciever" : "Sender/Receiver",
+	"table_header_rule_id": "Rule ID",
+	"table_header_level": "Level",
 
 	"sending_queue_detail_table_header_potision_time" : "Position time",
 	"sending_queue_detail_table_header_sender_recipient":"Sender/recipient",
+	"sending_queue_detail_table_header_recipient":"Recipient",
 	"sending_queue_detail_table_header_date_recieved":"Received",
+	"sending_queue_detail_table_header_date":"Date",
+	"sending_queue_detail_table_header_plugin":"Plugin",
 	"sending_queue_detail_table_header_asset_name":"Asset name",
 	"sending_queue_detail_table_header_longitude":"Longitude",
 	"sending_queue_detail_table_header_latitude":"Latidude",
@@ -75,12 +83,17 @@
     "transmission_start_transmission_successfull" : "Plugin started.",
     "transmission_stop_transmission_error" : "Error. Could not stop plugin. Please try again later.",
     "transmission_stop_transmission_successfull" : "Plugin stopped.",
+    
+    "get_validation_results_error": "There was an error while fetching the validation results. Please try again later.",
+    "go_back": "Go back",
 
 	"title_all": "All",
     "title_details": "Show details",
 	"title_incoming": "Incoming",
 	"title_outgoing": "Outgoing",
 	"title_forward": "Forward",
-	"title_resend": "Resend"
-
+	"title_resend": "Resend",
+	"title_fa_report": "FA Report",
+	"title_fa_response": "FA Response",
+	"title_fa_query": "FA Query"
 }

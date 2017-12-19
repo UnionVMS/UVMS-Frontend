@@ -32,6 +32,8 @@ angular.module('unionvmsWeb').directive('exchangeSendingQueueDetails', function(
 			scope.showLatitude = showElement(scope.items[0].LATITUDE);
 			scope.showPositionTime = showElement(scope.items[0].POSITION_TIME);
 			scope.showEmail = showElement(scope.items[0].EMAIL);
+			scope.showRecipient = showElement(scope.items[0].recipient);
+			scope.showPlugin = showElement(scope.items[0].plugin);
 
 			scope.resendQueuedItemInGroup = function(itemid){
 				scope.$parent.resendQueuedItemInGroup(itemid);
