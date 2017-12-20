@@ -450,12 +450,18 @@ angular.module('unionvmsWeb').controller('ReportformCtrl',function($scope, $moda
             }
             reportFormService.report = undefined;
         } else if ($scope.formMode === 'EDIT-FROM-LIVEVIEW'){
-            $scope.repNav.goToView('liveViewPanel','mapPanel');
             angular.copy($scope.currentRepCopy,reportFormService.liveView.currentReport);
             delete $scope.currentRepCopy;
             angular.copy(reportFormService.liveView.currentReport, reportFormService.liveView.originalReport);
             reportFormService.liveView.outOfDate = false;
-            reportService.runReport($scope.report);
+            //reportService.runReport($scope.report);
+
+            if (reportFormService.liveView.currentReport.reportType === 'summary'){
+                $scope.repNav.goToView('liveViewPanel','catchDetails');
+            } else {
+                $scope.repNav.goToView('liveViewPanel','mapPanel');
+            }
+            
         }
         loadingStatus.isLoading('SaveReport',false);
     };
