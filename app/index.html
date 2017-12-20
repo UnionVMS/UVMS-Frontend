@@ -1,4 +1,4 @@
-<!--
+﻿<!-- 
 ﻿Developed with the contribution of the European Commission - Directorate General for Maritime Affairs and Fisheries
 © European Union, 2015-2016.
 
@@ -110,6 +110,9 @@ copy of the GNU General Public License along with the IFDM Suite. If not, see <h
     <script src="../bower_components/angular-resizable/angular-resizable.min.js"></script>
     <script src="../bower_components/slick-carousel/slick/slick.js"></script>
     <script src="../bower_components/angular-slick-carousel/dist/angular-slick.min.js"></script>
+    <script src="../bower_components/vkBeautify/vkbeautify.js"></script>
+    <script src="assets/highlight/highlight.pack.js"></script>
+    <script src="../bower_components/angular-highlightjs/angular-highlightjs.min.js"></script>
     <!-- Add New Bower Component JS Above -->
 
     <!-- Main App JS -->
@@ -579,16 +582,16 @@ copy of the GNU General Public License along with the IFDM Suite. If not, see <h
     <script src="partial/activity/areaEntryPanel/areaEntryPanel.js"></script>
     <script src="partial/activity/areaExitPanel/areaExitPanel.js"></script>
     <script src="partial/spatial/tripsPanel/tripAreaExitPanel/tripAreaExitPanel.js"></script>
-
+    
     <script src="partial/activity/transhipmentPanel/transhipmentPanel.js"></script>
     <script src="partial/spatial/tripsPanel/tripTranshipmentPanel/tripTranshipmentPanel.js"></script>
     <script src="partial/spatial/tripsPanel/tripRelocationPanel/tripRelocationPanel.js"></script>
     <script src="partial/activity/relocationPanel/relocationPanel.js"></script>
     <script src="partial/spatial/tripsPanel/tripJointFishingOperationPanel/tripJointFishingOperationPanel.js"></script>
     <script src="partial/activity/jointFishingOperationPanel/jointFishingOperationPanel.js"></script>
-
+    
     <script src="partial/activity/fishingActivityPanel/fishingActivityModel.js"></script>
-
+    
     <script src="service/activity/tableService.js"></script>
     <script src="directive/activity/areaTile/areaTile.js"></script>
     <script src="directive/activity/gearShotRetrievalTile/gearShotRetrievalTile.js"></script>
@@ -601,12 +604,18 @@ copy of the GNU General Public License along with the IFDM Suite. If not, see <h
     <script src="partial/activity/tripActivityDetail/tripActivityDetails.js"></script>
     <script src="directive/activity/printButton/printButton.js"></script>
     <script src="directive/activity/printButton/printForm/printForm.js"></script>
-    <script src="filter/common/stSearchDynamic/stSearchDynamic.js"></script>
+	<script src="filter/common/stSearchDynamic/stSearchDynamic.js"></script>
 
     <script src="partial/activity/pieChartModal/pieChartModal.js"></script>
     <script src="partial/admin/adminConfiguration/configurationActivity/configurationActivity.js"></script>
     <script src="partial/spatial/configurations/catchFiguresTresholds/catchFiguresTresholds.js"></script>
     <script src="directive/activity/faHistoryNavigator/faHistoryNavigator.js"></script>
+
+    <script src="filter/exchange/stExchangeLogFilter/stExchangeLogFilter.js"></script>
+    <script src="partial/exchange/messageModal/messageModal.js"></script>
+    <script src="partial/exchange/validationResultsModal/validationResultsModal.js"></script>    
+    <script src="directive/exchange/messageStatus/messageStatus.js"></script>
+    
     <!-- Add New Component JS Above -->
 
     <div ui-view name="unionvmsHeader"></div>

@@ -9,31 +9,64 @@ the hope that it will be useful, but WITHOUT ANY WARRANTY; without even the impl
 FITNESS FOR A PARTICULAR PURPOSE.  See the GNU General Public License for more details. You should have received a
 copy of the GNU General Public License along with the IFDM Suite. If not, see <http://www.gnu.org/licenses/>.
  */
-describe('ExchangeCtrl', function() {
+describe('ExchangeCtrl', function () {
 
-	var scope,ctrl,longpollingSpy, sendingQueueSpy, pluginsSpy;
+    var scope, ctrl, longpollingSpy, sendingQueueSpy, pluginsSpy, msgSpy;
 
-	beforeEach(module('unionvmsWeb'));
+    beforeEach(module('unionvmsWeb'));
 
-	beforeEach(inject(function($rootScope, $controller, $q, longPolling, exchangeRestService) {
-		scope = $rootScope.$new();
+    beforeEach(inject(function ($rootScope, $controller, $q, longPolling, exchangeRestService) {
+        scope = $rootScope.$new();
 
         longpollingSpy = spyOn(longPolling, 'poll');
         var deferred = $q.defer();
         sendingQueueSpy = spyOn(exchangeRestService, 'getSendingQueue').andReturn(deferred.promise);
         var deferred2 = $q.defer();
         pluginsSpy = spyOn(exchangeRestService, 'getTransmissionStatuses').andReturn(deferred2.promise);
-		ctrl = $controller('ExchangeCtrl', {$scope: scope});
-	}));
+        var deferred3 = $q.defer();
+        msgSpy = spyOn(exchangeRestService, 'getRawExchangeMessage').andReturn(deferred3.promise);
+        ctrl = $controller('ExchangeCtrl', { $scope: scope });
+        scope.displayedMessages = [{
+            "id": "7b661227-89a2-5587-9272-685c5be69770",
+            "incoming": true,
+            "dateReceived": "2018-10-01 06:25:51 +0000",
+            "senderRecipient": "Dedric24@gmail.com",
+            "recipient": "TESTDATA",
+            "dateFwd": "2018-08-18 15:49:01 +0000",
+            "status": "ERROR",
+            "logData": {
+                "guid": "b97e53e2-a76f-50e5-a01c-56af7e27890d",
+                "type": "FA_REPORT"
+            },
+            "forwardRule": "TESTDATA-RULE",
+            "source": "Inmarsat-C",
+            "type": "Flux FA Report Msg"
+        }];
+        scope.getStatusLabel = function (status) {
+            switch (status) {
+                case 'OPEN':
+                    return 'open';
+                case 'CLOSED':
+                    return 'closed';
+                case 'REJECTED':
+                    return 'rejected';
+                case 'REPROCESSED':
+                    return 'reprocessed';
+                default:
+                    return status;
+            }
+        };
+    }));
 
-    beforeEach(inject(function($httpBackend) {
+
+    beforeEach(inject(function ($httpBackend) {
         //Mock
         $httpBackend.whenGET(/usm/).respond();
         $httpBackend.whenGET(/i18n/).respond();
-        $httpBackend.whenGET(/globals/).respond({data : []});
+        $httpBackend.whenGET(/globals/).respond({ data: [] });
     }));
 
-    it('should start longPolling on init ', inject(function($rootScope) {
+    it('should start longPolling on init ', inject(function ($rootScope) {
         //Long polling for plugins
         expect(longpollingSpy).toHaveBeenCalledWith("/exchange/activity/plugins", jasmine.any(Function));
         //Long polling for sending queue
@@ -43,41 +76,15 @@ describe('ExchangeCtrl', function() {
     }));
 
 
-    it('should get plugin statuses and sending queue on init ', inject(function($rootScope) {
+    it('should get plugin statuses and sending queue on init ', inject(function ($rootScope) {
         //plugins
         expect(pluginsSpy).toHaveBeenCalled();
         //sending queue
         expect(sendingQueueSpy).toHaveBeenCalled();
     }));
 
-
-	it('should allow all messages when filter all', inject(function() {
-		scope.exchangeLogsSearchResults.incomingOutgoing = "all";
-		expect(scope.filterIncomingOutgoing({incoming: true})).toBeTruthy();
-		expect(scope.filterIncomingOutgoing({incoming: false})).toBeTruthy();
-	}));
-
-	it('should only allow incoming', inject(function() {
-		scope.exchangeLogsSearchResults.incomingOutgoing = "incoming";
-		expect(scope.filterIncomingOutgoing({incoming: false})).toBeFalsy();
-		expect(scope.filterIncomingOutgoing({incoming: true})).toBeTruthy();
-	}));
-
-	it('should only allow outgoing', inject(function() {
-		scope.exchangeLogsSearchResults.incomingOutgoing = "outgoing";
-		expect(scope.filterIncomingOutgoing({incoming: false})).toBeTruthy();
-		expect(scope.filterIncomingOutgoing({incoming: true})).toBeFalsy();
-	}));
-
-	it('should not allow any', inject(function() {
-		scope.exchangeLogsSearchResults.incomingOutgoing = "banana";
-		expect(scope.filterIncomingOutgoing({incoming: true})).toBeFalsy();
-		expect(scope.filterIncomingOutgoing({incoming: false})).toBeFalsy();
-	}));
-
-
-    describe('search exchange logs', function() {
-        it('resetSearch should broadcast resetExchangeLogSearch event', inject(function($rootScope) {
+    describe('search exchange logs', function () {
+        it('resetSearch should broadcast resetExchangeLogSearch event', inject(function ($rootScope) {
             var broadcastSpy = spyOn($rootScope, '$broadcast');
 
             scope.resetSearch();
@@ -85,13 +92,13 @@ describe('ExchangeCtrl', function() {
             expect(broadcastSpy).toHaveBeenCalledWith('resetExchangeLogSearch');
         }));
 
-        it('searchExchange should reset newExchangeLogCount', inject(function($rootScope, Alarm) {
+        it('searchExchange should reset newExchangeLogCount', inject(function ($rootScope, Alarm) {
             scope.newExchangeLogCount = 5;
             scope.searchExchange();
             expect(scope.newExchangeLogCount).toEqual(0);
         }));
 
-        it('searchExchange should get exchange logs from the server', inject(function($rootScope, $q, Exchange, searchService, SearchResultListPage) {
+        it('searchExchange should get exchange logs from the server', inject(function ($rootScope, $q, Exchange, searchService, SearchResultListPage) {
 
             var deferred = $q.defer();
             var searchSpy = spyOn(searchService, "searchExchange").andReturn(deferred.promise);
@@ -111,7 +118,7 @@ describe('ExchangeCtrl', function() {
         }));
 
 
-        it('searchExchange should handle search error', inject(function($rootScope, $q, searchService, locale) {
+        it('searchExchange should handle search error', inject(function ($rootScope, $q, searchService, locale) {
 
             var deferred = $q.defer();
             var searchSpy = spyOn(searchService, "searchExchange").andReturn(deferred.promise);
@@ -128,7 +135,7 @@ describe('ExchangeCtrl', function() {
             expect(scope.exchangeLogsSearchResults.errorMessage).not.toEqual('');
         }));
 
-        it('gotoPage should update search page and do a new search', inject(function($rootScope, $q, Alarm, searchService) {
+        it('gotoPage should update search page and do a new search', inject(function ($rootScope, $q, Alarm, searchService) {
 
             var deferred = $q.defer();
             var searchSpy = spyOn(searchService, "searchExchange").andReturn(deferred.promise);
@@ -146,25 +153,26 @@ describe('ExchangeCtrl', function() {
         }));
     });
 
-    it('selecteding export in edit selection dropdown should export as csv', inject(function(Exchange) {
-        var exportSpy = spyOn(scope, "exportLogsAsCSVFile").andCallFake(function(onlySelectedItems){
+    it('selecting export in edit selection dropdown should export as csv', inject(function (Exchange) {
+
+        var exportSpy = spyOn(scope, "exportLogsAsCSVFile").andCallFake(function (onlySelectedItems) {
             expect(onlySelectedItems).toEqual(true);
         });
 
         scope.selectedItems = [new Exchange()];
-        var selection = {code:'EXPORT'};
+        var selection = { code: 'EXPORT' };
         scope.editSelectionCallback(selection);
 
         expect(exportSpy).toHaveBeenCalled();
     }));
 
 
-    it('exportLogsAsCSVFile should call service for exporting to csv file', inject(function(Exchange, csvService) {
+    it('exportLogsAsCSVFile should call service for exporting to csv file', inject(function (Exchange, csvService) {
         //Create fake result
         var exchange = new Exchange();
         scope.exchangeLogsSearchResults.items.push(exchange);
 
-        var csvSpy = spyOn(csvService, "downloadCSVFile").andCallFake(function(data, header, filename){
+        var csvSpy = spyOn(csvService, "downloadCSVFile").andCallFake(function (data, header, filename) {
             expect(filename).toEqual('exchangeLogs.csv');
             expect(data.length).toEqual(1);
             expect(header.length).toBeGreaterThan(1, "Should be at least 1 column");
@@ -176,48 +184,56 @@ describe('ExchangeCtrl', function() {
         expect(csvSpy).toHaveBeenCalled();
     }));
 
-    it('showMessageDetails should go to details page', inject(function(Exchange, $location) {
+    it('showMessageDetails should go to details page', inject(function (Exchange, $location) {
         var locationChangeSpy = spyOn($location, "path");
 
         var exchangeLog = new Exchange();
         exchangeLog.logData = {
-            guid : 'abc'
+            guid: 'abc',
         };
 
         //POLL
         exchangeLog.logData.type = 'POLL';
         scope.showMessageDetails(exchangeLog);
-        expect(locationChangeSpy).toHaveBeenCalledWith('/polling/logs/' +exchangeLog.logData.guid);
+        expect(locationChangeSpy).toHaveBeenCalledWith('/polling/logs/' + exchangeLog.logData.guid);
         expect(locationChangeSpy.callCount).toEqual(1);
 
         //MOVEMENT
         exchangeLog.logData.type = 'MOVEMENT';
         scope.showMessageDetails(exchangeLog);
-        expect(locationChangeSpy).toHaveBeenCalledWith('/movement/' +exchangeLog.logData.guid);
+        expect(locationChangeSpy).toHaveBeenCalledWith('/movement/' + exchangeLog.logData.guid);
         expect(locationChangeSpy.callCount).toEqual(2);
 
         //ALARM
         exchangeLog.logData.type = 'ALARM';
         scope.showMessageDetails(exchangeLog);
-        expect(locationChangeSpy).toHaveBeenCalledWith('/alarms/holdingtable/' +exchangeLog.logData.guid);
+        expect(locationChangeSpy).toHaveBeenCalledWith('/alerts/holdingtable/' + exchangeLog.logData.guid);
         expect(locationChangeSpy.callCount).toEqual(3);
 
-        //SOMETHING ELSE - location should not change
-        exchangeLog.logData.type = 'OTHER';
-        scope.showMessageDetails(exchangeLog);
-        expect(locationChangeSpy.callCount).toEqual(3);
+        //FISHING ACTIVITY MSG
+        var faTypes = ['FA_QUERY', 'FA_REPORT','FA_RESPONSE'];
+        exchangeLog.id = 1;
+        delete exchangeLog.logData;
+        var counter = 1;
+        angular.forEach(faTypes, function(value){
+            exchangeLog.typeRefType = value;
+            scope.showMessageDetails(exchangeLog);
+            expect(msgSpy).toHaveBeenCalledWith(1);
+            expect(msgSpy.callCount).toEqual(counter);
+            counter += 1;
+        });
     }));
 
 
-    it('should clean up on scope destroy', inject(function($rootScope, alertService, searchService) {
+    it('should clean up on scope destroy', inject(function ($rootScope, alertService, searchService) {
         var alertSpy = spyOn(alertService, "hideMessage");
         scope.$destroy();
         expect(alertSpy).toHaveBeenCalled();
     }));
 
 
-    it('resendQueuedItemInGroup should send queue message with one item ', inject(function($rootScope) {
-        var sendQueuedMessagesSpy = spyOn(scope, "sendQueuedMessages").andCallFake(function(ids){
+    it('resendQueuedItemInGroup should send queue message with one item ', inject(function ($rootScope) {
+        var sendQueuedMessagesSpy = spyOn(scope, "sendQueuedMessages").andCallFake(function (ids) {
             expect(ids.length).toEqual(1);
         });
 
@@ -226,15 +242,15 @@ describe('ExchangeCtrl', function() {
         expect(sendQueuedMessagesSpy).toHaveBeenCalled();
     }));
 
-    it('resendAllQueueItemsInGroup should send queue message with all items in the group ', inject(function($rootScope, ExchangeSendingQueue) {
+    it('resendAllQueueItemsInGroup should send queue message with all items in the group ', inject(function ($rootScope, ExchangeSendingQueue) {
         //Create a mock group
         var group = new ExchangeSendingQueue();
-        group.recipient ="Test country";
-        var a = {messageId:'a'};
-        var b = {messageId:'b'};
-        var c = {messageId:'c'};
+        group.recipient = "Test country";
+        var a = { messageId: 'a' };
+        var b = { messageId: 'b' };
+        var c = { messageId: 'c' };
         group.sendingLogList = [a, b, c];
-        var sendQueuedMessagesSpy = spyOn(scope, "sendQueuedMessages").andCallFake(function(ids){
+        var sendQueuedMessagesSpy = spyOn(scope, "sendQueuedMessages").andCallFake(function (ids) {
             expect(ids.length).toEqual(3);
         });
 
@@ -243,24 +259,24 @@ describe('ExchangeCtrl', function() {
         expect(sendQueuedMessagesSpy).toHaveBeenCalled();
     }));
 
-    it('resendAllQueued should send queue message with all items in all groups ', inject(function($rootScope, ExchangeSendingQueue) {
+    it('resendAllQueued should send queue message with all items in all groups ', inject(function ($rootScope, ExchangeSendingQueue) {
         //Create mock data
         var group1 = new ExchangeSendingQueue();
-        group1.recipient ="Test country";
-        var a = {messageId:'a'};
-        var b = {messageId:'b'};
-        var c = {messageId:'c'};
+        group1.recipient = "Test country";
+        var a = { messageId: 'a' };
+        var b = { messageId: 'b' };
+        var c = { messageId: 'c' };
         group1.pluginList.sendingLogList = [a, b, c];
 
         var group2 = new ExchangeSendingQueue();
-        group2.recipient ="Another country";
-        var d = {messageId:'d'};
-        var e = {messageId:'e'};
+        group2.recipient = "Another country";
+        var d = { messageId: 'd' };
+        var e = { messageId: 'e' };
         group2.pluginList.sendingLogList = [d, e];
 
         scope.sendingQueue.items = [group1, group2];
 
-        var sendQueuedMessagesSpy = spyOn(scope, "sendQueuedMessages").andCallFake(function(ids){
+        var sendQueuedMessagesSpy = spyOn(scope, "sendQueuedMessages").andCallFake(function (ids) {
             expect(ids.length).toEqual(5);
         });
 

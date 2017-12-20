@@ -33,6 +33,9 @@ angular.module('unionvmsWeb')
                     list : { method : 'POST'}
                 });
             },
+            getRawExchangeMessage: function(){
+                return $resource('/exchange/rest/exchange/message/:guid');
+            },
             getExchangeMessage: function() {
                 return $resource('/exchange/rest/exchange/:guid');
             },
@@ -56,6 +59,12 @@ angular.module('unionvmsWeb')
             },
             getExchangeConfig : function(){
                 return $resource('/exchange/rest/config');
+            },
+            getValidationResults: function(){
+                return $resource('/exchange/rest/exchange/validation/:guid');
+            },
+            getLogItem: function(){
+                return $resource('/exchange/rest/exchange/:guid');
             }
         };
     })
@@ -83,6 +92,107 @@ angular.module('unionvmsWeb')
             var def = $q.defer();
             exchangeRestFactory.getSendingQueue().get({},
                 function(response){
+
+                    /* response = {
+                        "data":[
+                            {
+                                "recipient":"adas",
+                                "pluginList":[
+                                    {
+                                        "name":"asdas",
+                                        "sendingLogList":[
+                                            {
+                                            "messageId":1,
+                                            "dateRecieved":"2017-05-21 10:23",
+                                            "senderRecipient":"asdjlh",
+                                            "properties":{
+                                                "ads":"fds",
+                                                "cc":"pec"
+                                            }
+                                            }
+                                        ]
+                                    }
+                                ]
+                            },
+                            {
+                                "recipient":"adas",
+                                "pluginList":[
+                                    {
+                                        "name":"asdas",
+                                        "sendingLogList":[
+                                            {
+                                                "messageId":1,
+                                                "dateRecieved":"2017-05-21 10:23",
+                                                "senderRecipient":"asdjlh",
+                                                "properties":{
+                                                    "ads":"fds",
+                                                    "cc":"pec"
+                                                }
+                                            },
+                                            {
+                                                "messageId":2,
+                                                "dateRecieved":"2017-05-21 10:24",
+                                                "senderRecipient":"asdjlh",
+                                                "properties":{
+                                                    "ads":"fds",
+                                                    "cc":"pec"
+                                                }
+                                            },
+                                            {
+                                                "messageId":3,
+                                                "dateRecieved":"2017-05-21 19:23",
+                                                "senderRecipient":"asdjlh",
+                                                "properties":{
+                                                    "ads":"fds",
+                                                    "cc":"pec"
+                                                }
+                                            }
+                                        ]
+                                    }
+                                ]
+                            },
+                            {
+                                "recipient":"adas",
+                                "pluginList":[
+                                    {
+                                        "name":"asdas",
+                                        "sendingLogList":[
+                                            {
+                                            "messageId":1,
+                                            "dateRecieved":"2017-05-21 10:23",
+                                            "senderRecipient":"asdjlh",
+                                            "properties":{
+                                                "ads":"fds",
+                                                "cc":"pec"
+                                            }
+                                            }
+                                        ]
+                                    }
+                                ]
+                            },
+                            {
+                                "recipient":"FA reports",
+                                "pluginList":[
+                                    {
+                                        "sendingLogList":[
+                                            {
+                                            "messageId":2,
+                                            "dateRecieved":"2017-05-21 10:23",
+                                            "recipient":"asdjlh",
+                                            "plugin":"FA Flux plugin",
+                                            "properties":{
+                                                "ads":"fds",
+                                                "cc":"pec"
+                                            }
+                                            }
+                                        ]
+                                    }
+                                ]
+                            }
+                        ],
+                        "code":200
+                    }; */
+
                     if (response.code !== 200) {
                         def.reject("Invalid response status");
                         return;
@@ -293,6 +403,27 @@ angular.module('unionvmsWeb')
         return deferred.promise;
     };
 
+    var escapeXmlString = function(xml){
+        var escaped =  xml.replace(/(\\r\\n|\\n|\\r)/gm,"").replace(/\\"/g, '"');
+        return escaped;
+    }
+
+    var getRawExchangeMessage = function(guid) {
+        var deferred = $q.defer();
+        exchangeRestFactory.getRawExchangeMessage().get({guid: guid}, function(response) {
+            if (String(response.code) !== "200") {
+                deferred.reject("Invalid response");
+            }
+
+            response.data = escapeXmlString(response.data);
+            deferred.resolve(response.data);
+        }, function(error) {
+            deferred.reject("Failed to get Exchange message");
+        });
+
+        return deferred.promise;
+    };
+
     var getExchangeConfig = function(){
         var deferred = $q.defer();
         exchangeRestFactory.getExchangeConfig().get(
@@ -309,6 +440,37 @@ angular.module('unionvmsWeb')
         return deferred.promise;
     };
 
+    var getValidationResults = function(guid){
+        var deferred = $q.defer();
+        exchangeRestFactory.getValidationResults().get({guid: guid}, function(response) {
+            if (String(response.code) !== "200") {
+                deferred.reject("Invalid response");
+            }
+
+            response.data.msg = escapeXmlString(response.data.msg);
+            deferred.resolve(response.data);
+        }, function(error) {
+            deferred.reject("Failed to get Exchange message");
+        });
+
+        return deferred.promise;
+    };
+
+    var getLogItem = function(guid){
+        var deferred = $q.defer();
+        exchangeRestFactory.getLogItem().get({guid: guid},
+        function(response){
+            if (String(response.code) !== "200") {
+                deferred.reject("Invalid response");
+            }
+            deferred.resolve(Exchange.fromLinkedMsgJson(response.data));
+        }, function(error) {
+            deferred.reject("Failed to get Exchange message");
+        });
+
+        return deferred.promise;
+    };
+
 
     return {
         getTransmissionStatuses : getTransmissionStatuses,
@@ -320,6 +482,9 @@ angular.module('unionvmsWeb')
         sendQueue: sendQueue,
         getSendingQueue : getSendingQueue,
         getExchangeMessage: getExchangeMessage,
-        getExchangeConfig: getExchangeConfig
+        getExchangeConfig: getExchangeConfig,
+        getRawExchangeMessage: getRawExchangeMessage,
+        getValidationResults: getValidationResults,
+        getLogItem: getLogItem
     };
 });

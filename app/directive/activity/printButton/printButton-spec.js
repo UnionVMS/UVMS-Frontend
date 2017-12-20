@@ -14,6 +14,7 @@ describe('printButton', function() {
     $httpBackend.whenGET(/usm/).respond();
     $httpBackend.whenGET(/i18n/).respond();
     $httpBackend.whenGET(/globals/).respond({data : []});
+    $httpBackend.whenGET(/printForm/).respond({data : '<div></div>'});
 	}));
 
   it('should compile', function() {
