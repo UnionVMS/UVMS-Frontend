@@ -119,7 +119,7 @@ angular.module('unionvmsWeb').controller('ValidationresultsmodalCtrl',function($
                                 }
 
                                 angular.element(nextElement).addClass('xml-highlight');
-                                
+
                                 nextElement = angular.element(nextElement[0].nextSibling);
                                 while(nextElement && nextElement.length > 0){
                                     convertedText = convertTextToSpan(nextElement);
@@ -170,8 +170,15 @@ angular.module('unionvmsWeb').controller('ValidationresultsmodalCtrl',function($
         }
     };
 
+    var processXpaths = function(xpaths){
+        var xpathSrcs = xpaths.split(',');
+        angular.forEach(xpathSrcs, function(xpath){
+            highligthCode(xpath);
+        });
+    };
+
     $scope.showError = function(xpath){
-        highligthCode(xpath);
+        processXpaths(xpath);
         $scope.togglePanelVisibility();
     };
     
