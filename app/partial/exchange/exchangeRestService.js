@@ -28,9 +28,7 @@ angular.module('unionvmsWeb')
                 });
             },
             getExchangeMessages : function(){
-                //FIXME remove when backend ready
                 return $resource( '/exchange/rest/exchange/list',{},
-                //return $resource( '/mock/exchange/list',{},
                 {
                     list : { method : 'POST'}
                 });
@@ -67,7 +65,6 @@ angular.module('unionvmsWeb')
             },
             getLogItem: function(){
                 return $resource('/exchange/rest/exchange/:guid');
-                //return $resource('/mock/exchange/log/:guid'); //FIXME
             }
         };
     })
@@ -406,12 +403,19 @@ angular.module('unionvmsWeb')
         return deferred.promise;
     };
 
+    var escapeXmlString = function(xml){
+        var escaped =  xml.replace(/(\\r\\n|\\n|\\r)/gm,"").replace(/\\"/g, '"');
+        return escaped;
+    }
+
     var getRawExchangeMessage = function(guid) {
         var deferred = $q.defer();
         exchangeRestFactory.getRawExchangeMessage().get({guid: guid}, function(response) {
             if (String(response.code) !== "200") {
                 deferred.reject("Invalid response");
             }
+
+            response.data = escapeXmlString(response.data);
             deferred.resolve(response.data);
         }, function(error) {
             deferred.reject("Failed to get Exchange message");
@@ -442,6 +446,8 @@ angular.module('unionvmsWeb')
             if (String(response.code) !== "200") {
                 deferred.reject("Invalid response");
             }
+
+            response.data.msg = escapeXmlString(response.data.msg);
             deferred.resolve(response.data);
         }, function(error) {
             deferred.reject("Failed to get Exchange message");
