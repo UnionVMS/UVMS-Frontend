@@ -247,7 +247,7 @@ angular.module('unionvmsWeb').directive('combobox', function(comboboxService,loc
             }
 
             scope.$watch('initialtext',function(newVal,oldVal){
-                if(!angular.isDefined(scope.ngModel)){
+                if(!angular.isDefined(scope.ngModel) || newVal !== oldVal){
                     scope.currentItemLabel = newVal;
                 }
             });
