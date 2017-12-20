@@ -64,6 +64,14 @@ angular.module('unionvmsWeb').controller('CatchdetailsCtrl', function ($scope, a
             
 
             processTables();
+        } else{
+            $scope.tables = {
+                catches: {
+                    items: "",
+                    total: ""
+                }
+            };
+            processTables();
         }
     };
 
@@ -99,9 +107,7 @@ angular.module('unionvmsWeb').controller('CatchdetailsCtrl', function ($scope, a
             });
 
         } else {
-            if(!$scope.repServ.criteria){
-                $scope.$watchCollection('repServ.criteria', prepareSummaryReport, true);
-            }
+            $scope.$watchCollection('repServ.criteria', prepareSummaryReport, true);
         }
     };
 
