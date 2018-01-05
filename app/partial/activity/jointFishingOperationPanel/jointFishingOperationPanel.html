@@ -33,6 +33,9 @@ copy of the GNU General Public License along with the IFDM Suite. If not, see <h
         <div class="row activity-summary-row" ng-if="faServ.activityData.vesselDetails && faServ.activityData.vesselDetails.length > 0">
             <carousel-tile class="col-md-12" tile-title="{{'activity.joint_fishing_vessel' | i18n}}" ng-model="faServ.activityData.vesselDetails" template-url="directive/activity/carouselTile/templates/vesselTileTemplate/vesselTileTemplate.html"></carousel-tile>
         </div>
+        <div class="row activity-summary-row" ng-if="faServ.activityData.gearProblems && faServ.activityData.gearProblems.length > 0">
+            <carousel-tile class="col-md-12 gear-problem" tile-title="{{'activity.header_fa_gear_problem' | i18n}}" ng-model="faServ.activityData.gearProblems" template-url="directive/activity/carouselTile/templates/gearProblemTile/gearProblemTile.html"></carousel-tile>
+        </div>
         <div class="row activity-summary-row">
             <catch-tile class="col-md-12 summary-section" ng-model="faServ.activityData.catches" tile-title="{{'activity.catch_details_catches_table' | i18n}}" is-location-clickable="faServ.isLocationClickable()" buffer-distance="5000" click-callback="faServ.locationClickCallback()"></catch-tile>
         </div>

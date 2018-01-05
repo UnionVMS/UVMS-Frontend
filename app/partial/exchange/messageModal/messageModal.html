@@ -1,4 +1,4 @@
-/*
+<!--
 Developed with the contribution of the European Commission - Directorate General for Maritime Affairs and Fisheries
 © European Union, 2015-2016.
 
@@ -8,29 +8,15 @@ Free Software Foundation, either version 3 of the License, or any later version.
 the hope that it will be useful, but WITHOUT ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or
 FITNESS FOR A PARTICULAR PURPOSE.  See the GNU General Public License for more details. You should have received a
 copy of the GNU General Public License along with the IFDM Suite. If not, see <http://www.gnu.org/licenses/>.
-*/
-.gear-problem-tile {
-    text-align: left;
-    .item-container {
-        display: flex;
-        .labels {
-            font-weight: bold;
-            white-space: nowrap;
-            margin-right: 5px;
-            &::after {
-                content: ':'
-            }
-        }
-    }
-    .fa {
-        color: @primaryColor;
-        &:hover {
-            cursor: pointer
-        }
-    }
-    location-tile {
-        margin-top: 0px !important;
-        padding-left: 0px;
-        padding-right: 0px;
-    }
-}
+-->
+<div class="messageModal">
+    <div class="modal-header">
+        <div class="pointer pull-right" ng-click="cancel()">
+             <i class="fa fa-times closeicon"></i>
+        </div>
+        <h4 class="modal-title">{{'exchange.message_details_modal_title' | i18n}}</h4>
+    </div>
+    <div class="modal-body">
+    	<div hljs hljs-source="msg" class="xml-content"></div>
+    </div>
+</div>

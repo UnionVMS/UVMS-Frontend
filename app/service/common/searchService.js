@@ -685,7 +685,22 @@ angular.module('unionvmsWeb').factory('searchService',function($q, $log, searchU
             return auditLogRestService.getAuditLogList(getAllListRequest);
         },
 
-        searchExchange: function() {
+        searchExchange: function(messageDirection) {
+        	var criterias = getListRequest.criterias;
+        	if (!angular.isDefined(messageDirection)){
+        	    messageDirection = 'all';
+            }
+
+            var dirCriteria = _.findWhere(criterias, {key: 'MESSAGE_DIRECTION'});
+            if (!angular.isDefined(dirCriteria)){
+                criterias.push({
+                    key: 'MESSAGE_DIRECTION',
+                    value: messageDirection.toUpperCase()
+                });
+            } else {
+        	    dirCriteria.value = messageDirection.toUpperCase();
+            }
+
             searchUtilsService.modifySpanAndTimeZones(getListRequest.criterias);
             return exchangeRestService.getMessages(getListRequest);
         },
@@ -704,6 +719,9 @@ angular.module('unionvmsWeb').factory('searchService',function($q, $log, searchU
         },
         setPage : function(page){
             getListRequest.page = page;
+        },
+        setSorting : function(sort){
+            getListRequest.sorting = sort;
         },
 		increasePage : function(){
 			getListRequest.page += 1;

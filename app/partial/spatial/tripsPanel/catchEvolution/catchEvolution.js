@@ -20,9 +20,9 @@ copy of the GNU General Public License along with the IFDM Suite. If not, see <h
  *  The controller for the Catch Evolution panel  
  */
 angular.module('unionvmsWeb').controller('CatchevolutionCtrl', function($scope, activityRestService, locale, tripSummaryService) {
-    
+    var activityTypes = ['DEPARTURE', 'AREA_ENTRY', 'AREA_EXIT', 'FISHING_OPERATION', 'JOINT_FISHING_OPERATION', 'DISCARD', 'RELOCATION', 'TRANSHIPMENT', 'ARRIVAL', 'LANDING'];
     $scope.speciesColors = tripSummaryService.trip.specieColor;   
-  
+    $scope.sortedCatch = [];
     /**
        * Initialization function
        * 
@@ -30,13 +30,6 @@ angular.module('unionvmsWeb').controller('CatchevolutionCtrl', function($scope, 
        * @private
        */
     var init = function() {
-        // get fishing trip details.
-        //FIXME change with proper trip id
-        activityRestService.getTripCatchDetail('1234').then(function(response){
-            $scope.fishingTripDetails = response;  
-        }, function(error){
-            //TODO deal with error from service
-        });
         // get Catches Evolution details.
         //FIXME change with proper trip id
         activityRestService.getTripCatchesEvolution('1234').then(function(response){
@@ -48,22 +41,27 @@ angular.module('unionvmsWeb').controller('CatchevolutionCtrl', function($scope, 
     };
     
     function processEvolutionData(){
-        angular.forEach($scope.catchEvolutionData.catchProgress, function(item){
-            angular.forEach(item, function(chart,chartName){
-                if(chartName === 'cumulated'){
-                    chart.title = locale.getString('activity.catch_evolution_title_cumulated');
-                }
+        angular.forEach(activityTypes, function (activityName) {
+            angular.forEach($scope.catchEvolutionData.catchProgress, function(item){
+                if (activityName === item.activityType) {
+                    item.title = locale.getString('activity.activity_type_' + item.activityType.toLowerCase());
+                    angular.forEach(item, function(chart,chartName){
+                        if(chartName === 'cumulated'){
+                            chart.title = locale.getString('activity.catch_evolution_title_cumulated');
+                        }
 
-                if(angular.isDefined(chart.speciesList) && chart.speciesList.length > 0){
-                    angular.forEach(chart.speciesList, function(value,key){
-                        var specieCode = value.speciesCode;
-                        angular.forEach($scope.speciesColors, function(item){
-                          if(specieCode === item.code){
-
-                              chart.speciesList[key].color = '#' + item.color;
-                          }
-                        });
+                        if(angular.isDefined(chart.speciesList) && chart.speciesList.length > 0){
+                            angular.forEach(chart.speciesList, function(value,key){
+                                var specieCode = value.speciesCode;
+                                angular.forEach($scope.speciesColors, function(item){
+                                    if(specieCode === item.code){
+                                        chart.speciesList[key].color = '#' + item.color;
+                                    }
+                                });
+                            });
+                        }
                     });
+                    $scope.sortedCatch.push(item);
                 }
             });
         });

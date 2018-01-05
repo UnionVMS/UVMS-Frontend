@@ -11,7 +11,8 @@ copy of the GNU General Public License along with the IFDM Suite. If not, see <h
 -->
 <div class="trip-summary" ng-controller="TripsummaryCtrl">
     <a class="btn-trip-quit" title="{{'activity.trip_summary_quit_trip_detail' | i18n }}" ng-click="navigateBack()" ng-if="srcTab === 'reports'"><i class="fa fa-share-square-o"></i></a>
-    <a class="btn-print" title="{{'activity.trip_summary_export_trip' | i18n }}" ng-click="printView('tripSummary')"><i class="fa fa-print"></i></a>
+    <!--FIXME uncomment when having be printing service-->
+    <!--<a class="btn-print" title="{{'activity.trip_summary_export_trip' | i18n }}" ng-click="printView('tripSummary')"><i class="fa fa-print"></i></a>-->
     <div class="row activity-summary-row summary-first-row">
         <fishing-trip-panel class="col-md-4 summary-section" trip="trip"></fishing-trip-panel>
         <vessel-tile class="col-md-2 summary-section" ng-model="trip.tripVessel" tile-title="{{'activity.vessel_details' | i18n }}"></vessel-tile>
@@ -25,9 +26,10 @@ copy of the GNU General Public License along with the IFDM Suite. If not, see <h
         <a class="btn-detail-form" title="{{'activity.catch_panel_see_catch_details' | i18n }}" ng-click="srcTab=='activity'?breadcrumbServ.goToItem(4):repNav.goToView('tripsPanel','catchDetails')">
             <i class="fa fa-table"></i>
         </a>
-        <a class="btn-trip-evolution" title="{{'activity.catch_panel_see_trip_evolution' | i18n }}" ng-click="srcTab=='activity'?breadcrumbServ.goToItem(6):repNav.goToView('tripsPanel','catchEvolution')">
+        <!--FIXME uncomment when doing be integration-->
+        <!--<a class="btn-trip-evolution" title="{{'activity.catch_panel_see_trip_evolution' | i18n }}" ng-click="srcTab=='activity'?breadcrumbServ.goToItem(6):repNav.goToView('tripsPanel','catchEvolution')">
             <i class="fa fa-line-chart"></i>
-        </a>
+        </a>-->
     </div>
     <div class="row activity-summary-row">
         <trip-reports-panel class="col-md-12 summary-section" trip="trip" trip-alert="alert" activity-trip="activityTrip"></trip-reports-panel>

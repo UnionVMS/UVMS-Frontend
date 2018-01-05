@@ -10,7 +10,8 @@ FITNESS FOR A PARTICULAR PURPOSE.  See the GNU General Public License for more d
 copy of the GNU General Public License along with the IFDM Suite. If not, see <http://www.gnu.org/licenses/>.
 -->
 <div ng-controller="CatchevolutionCtrl" class="catch-evolution">
-    <a class="btn-trip-quit" title="{{'activity.trip_summary_quit_trip_detail' | i18n }}" ng-click="navigateBack()" ng-if="tabType === 'reports'"><i class="fa fa-share-square-o"></i></a>
+    <a class="btn-trip-quit" ng-if="repNav.isSectionVisible('tripsPanel')" title="{{'activity.trip_summary_quit_trip_detail' | i18n }}"
+        ng-click="navigateBack()" ng-if="tabType === 'reports'"><i class="fa fa-share-square-o"></i></a>
     <fieldset class="col-md-12 fieldsetStyle">
         <legend class="fieldsetLegendStyle">
             <a>{{'activity.catch_evolution_title' | i18n }}</a>
@@ -18,7 +19,7 @@ copy of the GNU General Public License along with the IFDM Suite. If not, see <h
         <!-- CATCH EVOLUTION CONTAINER -->
         <div class="row catch-evolution-container">
             <!-- TRIP OVERVIEW PANEL -->
-            <trip-overview-panel class="col-md-12 summary-section" trip="fishingTripDetails"></trip-overview-panel>
+            <trip-overview-panel class="col-md-12 summary-section" trip="catchEvolutionData.tripDetails"></trip-overview-panel>
             <div class="col-md-12 summary-section evolution-color-panel">
                 <fieldset class="col-md-12 fieldsetStyle">
                     <legend class="fieldsetLegendStyle">
@@ -37,8 +38,11 @@ copy of the GNU General Public License along with the IFDM Suite. If not, see <h
                 <div class="col-md-12 chart-panel">
                     <div class="row">
                         <div class="row">
+                            <div ng-repeat="item in sortedCatch track by $index">
+                                <catch-panel class="col-md-3" ng-model="item" title="{{item.title}}" unit="kg" ng-if="item.title"></catch-panel>
+                            </div>
                             <div ng-repeat="item in catchEvolutionData.catchProgress track by $index">
-                                <catch-panel class="col-md-3" ng-model="item" title="{{'activity.activity_type_day'| i18n }}{{$index+1}}" unit="kg"></catch-panel>
+                                <catch-panel class="col-md-3" ng-model="item" title="{{'activity.activity_type_day'| i18n }}{{$index+1}}" unit="kg" ng-if="!item.title"></catch-panel>
                             </div>
                         </div>
                     </div>
@@ -46,7 +50,8 @@ copy of the GNU General Public License along with the IFDM Suite. If not, see <h
             </div>
             <div class="col-md-12 chart-panel-table">
                 <div class="row">
-                    <catch-panel class="col-md-12" ng-model="catchEvolutionData.finalCatch" title="{{'activity.activity_type_landing'| i18n }}" unit="kg" with-table="true"></catch-panel>
+                    <catch-panel class="col-md-12" ng-model="catchEvolutionData.finalCatch" title="{{'activity.activity_type_landing'| i18n }}"
+                        unit="kg" with-table="true"></catch-panel>
                 </div>
             </div>
         </div>

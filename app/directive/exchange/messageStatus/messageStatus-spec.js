@@ -9,28 +9,26 @@ the hope that it will be useful, but WITHOUT ANY WARRANTY; without even the impl
 FITNESS FOR A PARTICULAR PURPOSE.  See the GNU General Public License for more details. You should have received a
 copy of the GNU General Public License along with the IFDM Suite. If not, see <http://www.gnu.org/licenses/>.
 */
-.gear-problem-tile {
-    text-align: left;
-    .item-container {
-        display: flex;
-        .labels {
-            font-weight: bold;
-            white-space: nowrap;
-            margin-right: 5px;
-            &::after {
-                content: ':'
-            }
-        }
-    }
-    .fa {
-        color: @primaryColor;
-        &:hover {
-            cursor: pointer
-        }
-    }
-    location-tile {
-        margin-top: 0px !important;
-        padding-left: 0px;
-        padding-right: 0px;
-    }
-}
+describe('messageStatus', function() {
+
+  beforeEach(module('unionvmsWeb'));
+
+  var scope,compile;
+
+  beforeEach(inject(function($rootScope,$compile) {
+    scope = $rootScope.$new();
+    compile = $compile;
+  }));
+
+  it('should ...', function() {
+
+    /* 
+    To test your directive, you need to create some html that would use your directive,
+    send that through compile() then compare the results.
+
+    var element = compile('<div mydirective name="name">hi</div>')(scope);
+    expect(element.text()).toBe('hello, world');
+    */
+
+  });
+});
