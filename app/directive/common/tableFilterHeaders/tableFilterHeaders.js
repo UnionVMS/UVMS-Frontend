@@ -289,7 +289,7 @@ angular.module('unionvmsWeb').directive('tableFilterHeaders', function($compile,
  * @description
  *  A directive to calculate totals for a specified smart table column. It should be used with {@link unionvmsWeb.tableFilterHeaders} directive.
  */
-.directive('stCalculateTotals', function(){
+.directive('stCalculateTotals', function($filter){
     return {
         restrict: 'E',
         require: '^stTable',
@@ -304,15 +304,18 @@ angular.module('unionvmsWeb').directive('tableFilterHeaders', function($compile,
                 if (angular.isDefined(data) && data.length && scope.isCalculating === false){
                     scope.total = 0;
                     scope.isCalculating = true;
-                    for (var i = 0; i < data.length; i++){
-                        if (!isNaN(data[i][scope.property])){
-                            scope.total += data[i][scope.property];
+                    for (var i = 0; i < data.length; i++){        
+                        if (!isNaN(data[i][scope.property])){   
+                         scope.total += data[i][scope.property];
                         }
                         if (i === data.length - 1){
                             scope.isCalculating = false;
                         }
-                    }
+                    } 
                 }
+                if (scope.property === 'calculatedWeight' || scope.property === 'packageWeight' || scope.property === 'weight'){
+                    scope.total = $filter('number')(scope.total, 2);
+                } 
             });
         }
     };

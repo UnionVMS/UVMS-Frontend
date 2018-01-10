@@ -10,7 +10,7 @@ FITNESS FOR A PARTICULAR PURPOSE.  See the GNU General Public License for more d
 copy of the GNU General Public License along with the IFDM Suite. If not, see <http://www.gnu.org/licenses/>.
 -->
 <nav class="header-menu" ng-controller="HeaderMenuCtrl" id="uvms-header-menu">
-    <ul>
+    <ul ng-class="{'ec':headerTemplate === 'EC'}">
          <li class="cell" ng-repeat="page in menu" ng-class="{active: isActive(page.url)}">
             <a ng-href="#{{page.url}}" ng-attr-id="{{'uvms-header-menu-item-' + page.elemId}}">
                 {{page.title}}

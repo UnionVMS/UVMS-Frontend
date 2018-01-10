@@ -39,11 +39,11 @@ copy of the GNU General Public License along with the IFDM Suite. If not, see <h
 						</thead>
 						<tbody>
 							<tr ng-repeat="row in table.rows">
-								<td ng-repeat="item in row track by $index" ng-class="{'global-table-attr': $index < table.nrGlobalHeaders}">{{item.value}}</td>
+								<td class="column-right" ng-repeat="item in row track by $index" ng-class="{'global-table-attr': $index < table.nrGlobalHeaders}">{{item.value}}</td>
 							</tr>
 							<tr ng-if="table.totals">
 								<td ng-if="table.nrGlobalHeaders" colspan="{{table.nrGlobalHeaders}}" class="total-col">{{'activity.catch_details_table_total' | i18n}}</td>
-								<td ng-repeat="total in table.totals track by $index">{{total.value}}</td>
+								<td class="column-right" ng-repeat="total in table.totals track by $index">{{total.value}}</td>
 							</tr>
 						</tbody>
 					</table>
