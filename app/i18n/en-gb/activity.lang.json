@@ -98,6 +98,7 @@
 	"trip_summary_roles_address": "Address",
     "catch_details_column_date_day": "Day",
     "catch_details_column_date": "Date",
+    "catch_details_column_vessel":"Vessel",
     "catch_details_column_effort_zone": "Effort Zone",
     "catch_details_column_rfmo": "RFMO",
     "catch_details_column_gfcm_gsa": "GFCM GSA",

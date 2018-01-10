@@ -41,7 +41,7 @@ describe('Table with combobox filters and calculated totals', function() {
             "type": "ONBOARD",
             "role": "CATCHING_VESSEL",
             "roleDesc": "The catching vessel",
-            "weight": 1444,
+            "weight": 1444.00,
             "locations": {
                 "rfmo": "Pepodo",
                 "fao": "Puvijhas"
@@ -50,7 +50,7 @@ describe('Table with combobox filters and calculated totals', function() {
             "type": "UNLOADED",
             "role": "PARTICIPATING_VESSEL",
             "roleDesc": "The participating vessel",
-            "weight": 1234,
+            "weight": 1234.00,
             "locations": {
                 "rfmo": "Uncifi",
                 "effort": "Mophalo",
@@ -318,10 +318,11 @@ describe('Table with combobox filters and calculated totals', function() {
     
     function calculateTotal(records, prop){
         var total = 0;
+        var filter = $filter('number');
         for (var i = 0; i < records.length; i++){
             total += records[i][prop];
         }
-        
+        total = filter(total, 2);
         return total.toString();
     }
     

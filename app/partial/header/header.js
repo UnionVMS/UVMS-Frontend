@@ -17,6 +17,8 @@ angular.module('unionvmsWeb').controller('HeaderCtrl',function($scope, $log, $st
     $scope.appState = $state.current.name;
     //AvailableLanguages holds list of languages that are selected in settings and exists in localeSupported
     var availableLanguages = globalSettingsService.getAvailableLanguages();
+    $scope.headerTemplate = globalSettingsService.getHeaderTemplate();
+    
     //Remove langs from availableLanguages if they don't exists in localeSupported
     for (var i = availableLanguages.length - 1; i >= 0; i--) {
         if($scope.languages.indexOf(availableLanguages[i]) < 0){

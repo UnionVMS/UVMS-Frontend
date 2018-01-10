@@ -23,17 +23,17 @@ copy of the GNU General Public License along with the IFDM Suite. If not, see <h
 			<thead>
 				<tr>
 					<th>{{'activity.catch_panel_area_name' | i18n}}</th>
-					<th>{{'activity.catch_panel_column_weight' | i18n}}{{'activity.catch_panel_kg' | i18n}}</th>
+					<th class="column-right">{{'activity.catch_panel_column_weight' | i18n}}{{'activity.catch_panel_kg' | i18n}}</th>
 				</tr>
 			</thead>
 			<tbody>
 				<tr ng-repeat="item in data.areaInfo">
 					<td>{{item.areaName}}</td>
-					<td>{{item.weight | number:2}} </td>
+					<td class="column-right">{{item.weight | number:2}} </td>
 				</tr>
 				<tr>
 					<td class="total">Total</td>
-					<td class="total">{{data.weight | number:2}}</td>
+					<td class="total column-right">{{data.weight | number:2}}</td>
 				</tr>
 			</tbody>
 		</table>
