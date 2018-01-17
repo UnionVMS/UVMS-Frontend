@@ -2,14 +2,6 @@
     <div class="col-md-6">
         <div><h5>{{'sales.fishing_trip_header' | i18n}}</h5></div>
     </div>
-    <div class="col-md-6">
-        <div class="actions">
-            <!--Open fishing trip-->
-            <div class="closeIcon textAlignRight" ng-click="vm.openFishingTrip()" ng-show="vm.hasActivityPermission()">
-                <i class="fa fa-sign-out signouticon" title="{{'sales.fishing_trip_link' | i18n}}"></i>
-            </div>
-        </div>
-    </div>
 </div>
 <div>
     <div class="row">
@@ -35,6 +27,14 @@
         <div class="col-md-2">
             <span>{{'sales.fishing_trip_landing' | i18n}}:</span>
             <span>{{vm.trip.landingDate | date:'yyyy-MM-dd HH:mm'}} {{'sales.fishing_trip_location_at' | i18n}} {{vm.trip.landingLocation}}</span>
+        </div>
+        <div class="col-md-1">
+            <div class="actions">
+                <!--Open fishing trip-->
+                <div class="closeIcon textAlignRight" ng-click="vm.openFishingTrip()" ng-show="vm.hasActivityPermission()">
+                    <i class="fa fa-sign-out signouticon" title="{{'sales.fishing_trip_link' | i18n}}"></i>
+                </div>
+            </div>
         </div>
     </div>
 </div>
