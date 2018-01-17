@@ -2,14 +2,19 @@
     <div class="container containerWithTopBottomPadding">
         <div class="card">
             <advanced-search searchfunc="vm.searchSalesReports" modeltype="'SALES'"></advanced-search>
+
             <div class="row">
                 <div class="col-md-1">
-                    <dropdown class="" ng-model="vm.editSelection" initialtext="{{'common.actions' | i18n}}" items="vm.editSelectionDropdownItems" menu-style callback="vm.editSelectionCallBack"></dropdown>
+                    <dropdown class="" ng-model="vm.editSelection" initialtext="{{'common.actions' | i18n}}"
+                              items="vm.editSelectionDropdownItems" menu-style
+                              callback="vm.editSelectionCallBack"></dropdown>
                 </div>
-               <simple-export exportfunc="vm.exportSalesReports"></simple-export>
+                <simple-export exportfunc="vm.exportSalesReports"
+                               amount-of-reports="vm.getAmountOfReportsInSearch()"></simple-export>
             </div>
+
             <sales-report-list>
             </sales-report-list>
-            </div>
+        </div>
     </div>
 </div>
