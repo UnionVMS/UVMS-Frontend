@@ -21,6 +21,10 @@
     "sign_out": "Sign out",
 	"current_time_title": "Current time",
 	"sales_title": "Sales",
+	"flux":"FLUX",
+	"fmc":" FMC",
+	"european":"European",
+	"commission":"Commission",
 
 	"page_title_default": "UnionVMS",
 	"page_title_reports": "Reports",

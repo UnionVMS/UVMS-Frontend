@@ -12,16 +12,25 @@ copy of the GNU General Public License along with the IFDM Suite. If not, see <h
 <header>
     <div ng-include="'assets/images/svgdefs.html'"></div>
     <div class="headercontainer">
-		<div class="header" ng-class="{'in-new-tab': appState === 'app.reporting-id'}">
-			<div class="pageinfo">
-                <svg class="uvms-logotype" ng-click="appState === 'app.reporting-id' || gotoStartPage()">
-                    <use xlink:href="#uvms-logotype"></use>
-                </svg>
-                <div class="right">
+       <!--  <div class="header" ng-class="{'in-new-tab': appState === 'app.reporting-id'}"> -->
+            <div  ng-class="{'ec-header':headerTemplate !== 'EC','header':headerTemplate === 'EC','in-new-tab': appState === 'app.reporting-id'}">
+            <div class="pageinfo">
+                <div class="left" ng-if="headerTemplate==='EC'">
+                    <img class="ec-logo" src="assets/images/ec_logo.svg" />
+                    <div class="flux-fmc"><div class="commission">{{'header.european' | i18n}}</div><div class="commission">{{'header.commission' | i18n}}</div></div>
+                    <div class="flux-fmc"><span class="flux">{{'header.flux' | i18n}}</span><span class="fmc">{{'header.fmc' | i18n}}</span></div>
+                </div>
+                <div class="left" ng-if="headerTemplate!=='EC'">
+                    <svg class="uvms-logotype" ng-click="appState === 'app.reporting-id' || gotoStartPage()">
+                        <use xlink:href="#uvms-logotype"></use>
+                    </svg>
+                </div>
+
+                <div class="right" ng-class="{'ec-right':headerTemplate==='EC'}">
                     <!-- <button type="button" class="btn btn-default button sales-btn" ng-click="sales()">{{'header.sales_title' | i18n}}</button> -->
                     <current-time class="currentTime" tooltip-placement="bottom" tooltip="{{'header.current_time_title' | i18n}}"></current-time>
                     <div class="notifications" ng-if="isAuthenticated && appState !== 'app.reporting-id'">
-                        <button class="btn btn-sm btn-default" ng-click="viewNotifications()"  ng-attr-title="{{'header.menu_alarmconditions' | i18n}}">
+                        <button class="btn btn-sm btn-default" ng-click="viewNotifications()" ng-attr-title="{{'header.menu_alarmconditions' | i18n}}">
                             <i class="fa fa-lg fa-bell"></i>
                             <span class="badge" ng-bind="numberOfOpenAlarmsAndTickets.alarms + numberOfOpenAlarmsAndTickets.tickets" ng-show="numberOfOpenAlarmsAndTickets.alarms > 0 || numberOfOpenAlarmsAndTickets.tickets > 0"></span>
                         </button>
@@ -41,15 +50,15 @@ copy of the GNU General Public License along with the IFDM Suite. If not, see <h
                             </ul>
                         </div>
                     </div>
-    			    <div class="signed-in" ng-if="isAuthenticated && appState !== 'app.reporting-id'">
-    					<div class="dropdown fullWidthDropdown login-drop-down">
-    						<button class="btn btn-default dropdown-toggle" type="button" id="user-menu" data-toggle="dropdown" aria-haspopup="true" aria-expanded="true">
+                    <div class="signed-in" ng-if="isAuthenticated && appState !== 'app.reporting-id'">
+                        <div class="dropdown fullWidthDropdown login-drop-down">
+                            <button class="btn btn-default dropdown-toggle" type="button" id="user-menu" data-toggle="dropdown" aria-haspopup="true" aria-expanded="true">
     							<div class="username">
                                     <i class="fa fa-lg fa-user"></i>{{userName}}
                                 </div>
     							<span class="caret"></span>
     						</button>
-    						<ul class="dropdown-menu dropdown-menu-right" aria-labelledby="user-menu" >
+                            <ul class="dropdown-menu dropdown-menu-right" aria-labelledby="user-menu" >
                                 <li ng-click="showFeatures()">
                                     <a>
                                         <i class="fa fa-user"></i><span>as {{currentContext.role.roleName}}</span>
@@ -74,16 +83,16 @@ copy of the GNU General Public License along with the IFDM Suite. If not, see <h
                                     <a ng-click="modifySecurityAnswer()">
                                         <i class="fa fa-key"></i><span ng-bind="'header.change_security_answer' | i18n"></span>
                                     </a>
-                                 </li>
+                                </li>
                                 <li role="separator" class="divider"></li>
-    							<li ng-click="signOut()">
+                                <li ng-click="signOut()">
                                     <a>
                                         <i class="fa fa-sign-out"></i><span ng-bind="'header.sign_out' | i18n"></span>
                                     </a>
                                 </li>
-    						</ul>
-    					</div>
-    				</div>
+                            </ul>
+                        </div>
+                    </div>
                     <div class="sign-in" ng-if="!isAuthenticated">
                         <a ng-click="signIn()">
                             <i class="fa fa-lg fa-user"></i><span ng-bind="'header.sign_in' | i18n" class="username"></span>
@@ -100,10 +109,10 @@ copy of the GNU General Public License along with the IFDM Suite. If not, see <h
                         </button>
                     </div>
                 </div>
-			</div>
-            <div class="header-menu-wrapper" ng-if="appState !== 'app.reporting-id'">
-			    <div ng-if="isAuthenticated" ng-include="'partial/header/headerMenu/headerMenu.html'"></div>
             </div>
-		</div>
-	</div>
+            <div ng-class="{'ec-header-menu-wrapper':headerTemplate === 'EC','header-menu-wrapper':headerTemplate !== 'EC'}" ng-if="appState !== 'app.reporting-id'">
+                <div ng-if="isAuthenticated" ng-include="'partial/header/headerMenu/headerMenu.html'"></div>
+            </div>
+        </div>
+    </div>
 </header>

@@ -140,6 +140,9 @@ angular.module('unionvmsWeb').factory('globalSettingsService',['$resource', '$q'
         getCoordinateFormat : function(){
             return this.get('coordinateFormat', false);
         },
+        getHeaderTemplate : function() {
+            return this.get('headerTemplate',false);
+        },
         getDateFormat : function(){
             return this.get('dateTimeFormat', false);
         },
