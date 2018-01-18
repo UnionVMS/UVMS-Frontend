@@ -12,7 +12,7 @@
             }
         });
 
-    function fishingTripCtrl(userService, salesFishingActivityService) {
+    function fishingTripCtrl(userService, salesFishingActivityService, $state) {
         /* jshint validthis:true */
         var vm = this;
         vm.openFishingTrip = openFishingTrip;
@@ -33,10 +33,11 @@
 
 
         function openFishingTrip() {
+            $state.go('app.activity', {tripId: vm.trip.extId});
         }
 
         function hasActivityPermission() {
-            return userService.isAllowed('FISHING_TRIP_SUMMARY', 'Union-VMS', true);
+            return userService.isAllowed('FISHING_TRIP_SUMMARY', 'Activity', true);
         }
     }
 })();
