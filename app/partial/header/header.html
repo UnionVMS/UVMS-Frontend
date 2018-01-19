@@ -17,8 +17,10 @@ copy of the GNU General Public License along with the IFDM Suite. If not, see <h
             <div class="pageinfo">
                 <div class="left" ng-if="headerTemplate==='EC'">
                     <img class="ec-logo" src="assets/images/ec_logo.svg" />
-                    <div class="flux-fmc"><div class="commission">{{'header.european' | i18n}}</div><div class="commission">{{'header.commission' | i18n}}</div></div>
-                    <div class="flux-fmc"><span class="flux">{{'header.flux' | i18n}}</span><span class="fmc">{{'header.fmc' | i18n}}</span></div>
+                    <div class="ec-text">
+                        <div class="flux-fmc"><div class="commission">{{'header.european' | i18n}}</div><div class="commission">{{'header.commission' | i18n}}</div></div>
+                        <div class="flux-fmc"><span class="flux">{{'header.flux' | i18n}}</span><span class="fmc">{{'header.fmc' | i18n}}</span></div>
+                    </div>
                 </div>
                 <div class="left" ng-if="headerTemplate!=='EC'">
                     <svg class="uvms-logotype" ng-click="appState === 'app.reporting-id' || gotoStartPage()">

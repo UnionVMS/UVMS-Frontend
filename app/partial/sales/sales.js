@@ -16,6 +16,8 @@
         vm.gotoPage = gotoPage;
         vm.searchSalesReports = searchSalesReports;
         vm.exportSalesReports = salesRestService.exportDocuments;
+        vm.exportDocuments = exportDocuments;
+        vm.getAmountOfReportsInSearch = getAmountOfReportsInSearch;
 
         vm.editSelectionCallBack = editSelectionCallBack;
 
@@ -26,6 +28,18 @@
 
         function init() {
             salesSearchService.init();
+            $('[data-toggle="popover"]').popover()
+        }
+
+        function getAmountOfReportsInSearch() {
+            var results = salesSearchService.getSearchResults();
+
+            return results.totalNumberOfPages * salesSearchService.DEFAULT_ITEMS_PER_PAGE;
+        }
+
+        function exportDocuments() {
+            $('#popover').popover('show')
+
         }
 
         //Search sales notes

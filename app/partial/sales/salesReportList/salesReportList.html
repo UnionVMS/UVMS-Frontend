@@ -59,7 +59,7 @@
                     <td ng-attr-title="{{correctedReport.location}}">{{correctedReport.location}}</td>
                     <td ng-attr-title="{{correctedReport.landingDate}}">{{correctedReport.landingDate | date:"yyyy-MM-dd HH:mm"}}</td>
                     <td ng-attr-title="{{correctedReport.landingPort}}">{{correctedReport.landingPort}}</td>
-                    <td ng-attr-title="{{correctedReport.category}}">{{correctedReport.category}}</td>
+                    <td ng-attr-title="{{'sales.sales_report_category_' + correctedReport.category | i18n}}">{{'sales.sales_report_category_' + correctedReport.category | i18n}}</td>
                     <td ng-attr-title="{{correctedReport.provider}}">{{correctedReport.provider}}</td>
                     <td ng-attr-title="{{vm.getBuyerOrRecipientTitle(correctedReport)}}">
                         <span ng-if="correctedReport.recipient == 'N/A'">{{correctedReport.buyer}}</span>
