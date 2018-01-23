@@ -9,26 +9,26 @@ the hope that it will be useful, but WITHOUT ANY WARRANTY; without even the impl
 FITNESS FOR A PARTICULAR PURPOSE.  See the GNU General Public License for more details. You should have received a
 copy of the GNU General Public License along with the IFDM Suite. If not, see <http://www.gnu.org/licenses/>.
 */
-describe('CatchevolutionCtrl', function() {
+describe('CatchevolutionCtrl', function () {
 
     beforeEach(module('unionvmsWeb'));
 
     var scope, ctrl, activityRestServiceSpy, $httpBackend, tripSummaryServiceSpy;
 
-    beforeEach(function() {
+    beforeEach(function () {
         activityRestServiceSpy = jasmine.createSpyObj('activityRestService', ['getTripCatchesEvolution']);
         tripSummaryServiceSpy = jasmine.createSpyObj('tripSummaryService', ['trip']);
 
-        module(function($provide) {
+        module(function ($provide) {
             $provide.value('activityRestService', activityRestServiceSpy);
         });
-        module(function($provide) {
+        module(function ($provide) {
             $provide.value('tripSummaryService', tripSummaryServiceSpy);
         });
     });
 
 
-    beforeEach(inject(function($rootScope, $controller, $injector) {
+    beforeEach(inject(function ($rootScope, $controller, $injector) {
         $httpBackend = $injector.get('$httpBackend');
         $httpBackend.whenGET(/usm/).respond();
         $httpBackend.whenGET(/i18n/).respond();
@@ -44,7 +44,7 @@ describe('CatchevolutionCtrl', function() {
         tripSummaryServiceSpy.trip.specieColor = [{
             "code": "COD",
             "color": "781c81"
-        }, 
+        },
         {
             "code": "DAB",
             "color": "3f51a3"
@@ -71,9 +71,9 @@ describe('CatchevolutionCtrl', function() {
         }
         ];
 
-        activityRestServiceSpy.getTripCatchesEvolution.andCallFake(function() {
+        activityRestServiceSpy.getTripCatchesEvolution.andCallFake(function () {
             return {
-                then: function(callback){
+                then: function (callback) {
                     return callback(getTripCatchesEvolution());
                 }
             }
@@ -81,31 +81,23 @@ describe('CatchevolutionCtrl', function() {
 
     }
 
-    it('should call the services only once', inject(function() {
-        
+    it('should call the services only once', inject(function () {
+
         scope.speciesColors = tripSummaryServiceSpy.trip.specieColor;
         expect(activityRestServiceSpy.getTripCatchesEvolution.callCount).toBe(1);
 
-        angular.forEach(scope.catchEvolutionData.catchProgress, function(item){
+        angular.forEach(scope.catchEvolutionData.catchProgress, function (item) {
             var keys = _.keys(item);
-            angular.forEach(keys, function(key){
-                if (key === 'cumulated'){
+            angular.forEach(keys, function (key) {
+                if (key === 'cumulated') {
                     expect(item[key]['title']).toBeDefined();
                 }
-                angular.forEach(item[key]['speciesList'], function(rec){
+                angular.forEach(item[key]['speciesList'], function (rec) {
                     expect(rec.color).toBeDefined();
                 })
             });
         });
 
-        angular.forEach(scope.catchEvolutionData.finalCatch, function(item){
-            var keys = _.keys(item);
-            expect(_.indexOf(keys, 'title')).not.toBe(-1);
-            angular.forEach(item.speciesList, function(rec){
-                expect(rec.color).toBeDefined();
-                expect(rec.tableColor['background-color']).toBeDefined();
-            });
-        });
     }));
 
 
@@ -118,139 +110,101 @@ describe('CatchevolutionCtrl', function() {
     function getTripCatchesEvolution() {
         return {
             "catchProgress": [{
-                "onboard": {
-                    "speciesList": [{
-                        "speciesCode": "COD",
-                        "weight": 111
+                "catchEvolution": {
+                    "onboard": {
+                        "speciesList": [{
+                            "speciesCode": "COD",
+                            "weight": 111
+                        },
+                        {
+                            "speciesCode": "DAB",
+                            "weight": 111
+                        },
+                        {
+                            "speciesCode": "HOM",
+                            "weight": 111
+                        },
+                        {
+                            "speciesCode": "LEM",
+                            "weight": 111
+                        },
+                        {
+                            "speciesCode": "PLE",
+                            "weight": 111
+                        },
+                        {
+                            "speciesCode": "SOL",
+                            "weight": 111
+                        },
+                        {
+                            "speciesCode": "WHG",
+                            "weight": "111"
+                        }],
+                        "total": 555
                     },
-                    {
-                        "speciesCode": "DAB",
-                        "weight": 111
-                    },
-                    {
-                        "speciesCode": "HOM",
-                        "weight": 111
-                    },
-                    {
-                        "speciesCode": "LEM",
-                        "weight": 111
-                    },
-                    {
-                        "speciesCode": "PLE",
-                        "weight": 111
-                    },
-                    {
-                        "speciesCode": "SOL",
-                        "weight": 111
-                    },
-                    {
-                        "speciesCode": "WHG",
-                        "weight": "111"
-                    }],
-                    "total": 555
+                    "cumulated": {
+                        "speciesList": [{
+                            "speciesCode": "COD",
+                            "weight": 111
+                        },
+                        {
+                            "speciesCode": "DAB",
+                            "weight": 111
+                        }],
+                        "total": 222
+                    }
                 },
-                "cumulated": {
-                    "speciesList": [{
-                        "speciesCode": "COD",
-                        "weight": 111
-                    },
-                    {
-                        "speciesCode": "DAB",
-                        "weight": 111
-                    }],
-                    "total": 222
-                },
-                "activityType":"DEPARTURE"
+                "activityType": "DEPARTURE",
+                "reportType": "NOTIFICATION"
             },
             {
-                "onboard": {
-                    "speciesList": [{
-                        "speciesCode": "COD",
-                        "weight": 111
+                "catchEvolution": {
+                    "onboard": {
+                        "speciesList": [{
+                            "speciesCode": "COD",
+                            "weight": 111
+                        },
+                        {
+                            "speciesCode": "DAB",
+                            "weight": 111
+                        },
+                        {
+                            "speciesCode": "HOM",
+                            "weight": 111
+                        },
+                        {
+                            "speciesCode": "LEM",
+                            "weight": 111
+                        },
+                        {
+                            "speciesCode": "PLE",
+                            "weight": 111
+                        },
+                        {
+                            "speciesCode": "SOL",
+                            "weight": 111
+                        },
+                        {
+                            "speciesCode": "WHG",
+                            "weight": "111"
+                        }],
+                        "total": 555
                     },
-                    {
-                        "speciesCode": "DAB",
-                        "weight": 111
-                    },
-                    {
-                        "speciesCode": "HOM",
-                        "weight": 111
-                    },
-                    {
-                        "speciesCode": "LEM",
-                        "weight": 111
-                    },
-                    {
-                        "speciesCode": "PLE",
-                        "weight": 111
-                    },
-                    {
-                        "speciesCode": "SOL",
-                        "weight": 111
-                    },
-                    {
-                        "speciesCode": "WHG",
-                        "weight": "111"
-                    }],
-                    "total": 555
+                    "cumulated": {
+                        "speciesList": [{
+                            "speciesCode": "COD",
+                            "weight": 111
+                        },
+                        {
+                            "speciesCode": "DAB",
+                            "weight": 111
+                        }],
+                        "total": 222
+                    }
                 },
-                "cumulated": {
-                    "speciesList": [{
-                        "speciesCode": "COD",
-                        "weight": 111
-                    },
-                    {
-                        "speciesCode": "DAB",
-                        "weight": 111
-                    }],
-                    "total": 222
-                },
-                "activityType":"AREA_ENTRY"
+                "activityType": "AREA_ENTRY",
+                "reportType": "NOTIFICATION"
             }],
-            "finalCatch": {
-                "landed": {
-                    "speciesList": [{
-                        "speciesCode": "COD",
-                        "weight": 111
-                    },
-                    {
-                        "speciesCode": "DAB",
-                        "weight": 111
-                    },
-                    {
-                        "speciesCode": "HOM",
-                        "weight": 111
-                    },
-                    {
-                        "speciesCode": "LEM",
-                        "weight": 111
-                    },
-                    {
-                        "speciesCode": "PLE",
-                        "weight": 111
-                    },
-                    {
-                        "speciesCode": "SOL",
-                        "weight": 111
-                    },
-                    {
-                        "speciesCode": "WHG",
-                        "weight": 111
-                    }],
-                    "total": 555
-                },
-                "cumulated": {
-                    "speciesList": [{
-                        "speciesCode": "COD",
-                        "weight": 111
-                    },
-                    {
-                        "speciesCode": "DAB",
-                        "weight": 111
-                    }],
-                    "total": 222
-                }
-            },
             "tripDetails": {
                 "vesselDetails": {
                     "name": "Echo",
@@ -272,18 +226,18 @@ describe('CatchevolutionCtrl', function() {
                         "id": 2543,
                         "schemeId": "ICCAT"
                     },
-                        {
-                            "id": 87879,
-                            "schemeId": "IRCS"
-                        },
-                        {
-                            "id": 74334,
-                            "schemeId": "EXT_MARK"
-                        },
-                        {
-                            "id": 34434,
-                            "schemeId": "CFR"
-                        }
+                    {
+                        "id": 87879,
+                        "schemeId": "IRCS"
+                    },
+                    {
+                        "id": 74334,
+                        "schemeId": "EXT_MARK"
+                    },
+                    {
+                        "id": 34434,
+                        "schemeId": "CFR"
+                    }
                     ]
                 },
                 "trips": [{

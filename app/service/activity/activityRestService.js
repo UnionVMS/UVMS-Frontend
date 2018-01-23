@@ -125,7 +125,7 @@ angular.module('unionvmsWeb').factory('activityRestFactory', function ($resource
             });
         },
         getTripCatchesEvolution: function () {
-            return $resource('/mock/activity/tripcatchevolution/:id', {}, {
+            return $resource('/activity/rest/trip/catchevolution/:fishingTripId', {}, {
                 'get': {
                     method: 'GET',
                     headers: {
@@ -371,7 +371,7 @@ angular.module('unionvmsWeb').factory('activityRestFactory', function ($resource
          */
         getTripCatchesEvolution: function (id) {
             var deferred = $q.defer();
-            activityRestFactory.getTripCatchesEvolution().get({ id: id }, function (response) {
+            activityRestFactory.getTripCatchesEvolution().get({ fishingTripId: id }, function (response) {
                 deferred.resolve(response.data);
             }, function (error) {
                 deferred.reject(error);
