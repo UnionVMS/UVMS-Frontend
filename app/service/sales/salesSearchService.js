@@ -35,7 +35,8 @@
             deleteSavedSearch: deleteSavedSearch,
             getSavedSearches: getSavedSearches,
             savedSearches: savedSearches,
-            setLoading: setLoading
+            setLoading: setLoading,
+            DEFAULT_ITEMS_PER_PAGE: DEFAULT_ITEMS_PER_PAGE
         };
 
         return service;
