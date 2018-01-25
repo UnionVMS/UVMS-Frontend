@@ -9,6 +9,27 @@ the hope that it will be useful, but WITHOUT ANY WARRANTY; without even the impl
 FITNESS FOR A PARTICULAR PURPOSE.  See the GNU General Public License for more details. You should have received a
 copy of the GNU General Public License along with the IFDM Suite. If not, see <http://www.gnu.org/licenses/>.
 */
-describe('NewsubscriptionCtrl', function() {
-	
+/**
+ * @memberof unionvmsWeb
+ * @ngdoc controller
+ * @name SubscriptionstopalertCtrl
+ * @param $scope {Service} controller scope
+ * @param subscriptionsService {Service} The subscriptions service <p>{@link unionvmsWeb.subscriptionsService}</p>
+ * @description
+ *  The controller for the subscriptions top alert
+ */
+
+angular.module('unionvmsWeb').controller('SubscriptionstopalertCtrl',function($scope, subscriptionsService){
+    $scope.subServ = subscriptionsService;
+
+    /**
+     * Close the alert
+     *
+     * @memberOf SubscriptionstopalertCtrl
+     * @public
+     * @alias close
+     */
+    $scope.close = function () {
+        $scope.subServ.resetAlert();
+    };
 });

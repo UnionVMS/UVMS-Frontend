@@ -1,8 +1,150 @@
-<div class="col-md-12" ng-controller="ManagesubscriptionsCtrl">
+<!--
+Developed with the contribution of the European Commission - Directorate General for Maritime Affairs and Fisheries
+© European Union, 2015-2016.
+
+This file is part of the Integrated Fisheries Data Management (IFDM) Suite. The IFDM Suite is free software: you can
+redistribute it and/or modify it under the terms of the GNU General Public License as published by the
+Free Software Foundation, either version 3 of the License, or any later version. The IFDM Suite is distributed in
+the hope that it will be useful, but WITHOUT ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or
+FITNESS FOR A PARTICULAR PURPOSE.  See the GNU General Public License for more details. You should have received a
+copy of the GNU General Public License along with the IFDM Suite. If not, see <http://www.gnu.org/licenses/>.
+-->
+<div class="col-md-12 manage-subscriptions"  ng-controller="ManagesubscriptionsCtrl">
     <div static-include="partial/subscriptions/subscriptionsHeader/subscriptionsHeader.html"></div>
+    <!--<div static-include="partial/subscriptions/subscriptionsTopAlert/subscriptionsTopAlert.html"></div>-->
     <div class="container containerWithTopBottomPadding nopaddingtop">
-        <div class="card nomargintop">
-            <h3>Manage Subscription view</h3>
+        <div class="card nomargintop col-md-12">
+            <div ng-include="'partial/subscriptions/subscriptionTopForm/subscriptionTopForm.html'"></div>
+            <div class="pull-right search-btns">
+                <button class="btn btn-primary button btn-action" type="button" ng-click="searchSubscriptions()">{{"common.search" | i18n }}</button>
+                <button class="btn btn-default button btn-action" type="button" ng-click="resetSearch()">{{"common.reset" | i18n }}</button>
+            </div>
+            <div st-table="displayedSubscriptions" st-safe-src="subscriptionsList">
+                <div class="table-responsive-force">
+                    <table class="table table-striped table-condensed">
+                        <thead>
+                        <tr>
+                            <th>
+                                <div st-sort="name" st-skip-natural="true" st-class-ascent="sorting_asc" st-class-descent="sorting_desc">{{'subscriptions.subscription_form_name' | i18n }}</div>
+                            </th>
+                            <th>
+                                <div st-sort="subscriptionType" st-skip-natural="true" st-class-ascent="sorting_asc" st-class-descent="sorting_desc">{{'subscriptions.subscription_form_subscription_type' | i18n }}</div>
+                            </th>
+                            <th>
+                                <div st-sort="description" st-skip-natural="true" st-class-ascent="sorting_asc" st-class-descent="sorting_desc">{{'subscriptions.subscription_description' | i18n }}</div>
+                            </th>
+                            <th>
+                                <div st-sort="organisation" st-skip-natural="true" st-class-ascent="sorting_asc" st-class-descent="sorting_desc">{{'subscriptions.subscription_form_organization' | i18n }}</div>
+                            </th>
+                            <th>
+                                <div st-sort="endPoint" st-skip-natural="true" st-class-ascent="sorting_asc" st-class-descent="sorting_desc">{{'subscriptions.subscription_end_point' | i18n }}</div>
+                            </th>
+                            <th>
+                                <div st-sort="communicationChannel" st-skip-natural="true" st-class-ascent="sorting_asc" st-class-descent="sorting_desc">{{'subscriptions.subscription_communication_channel' | i18n }}</div>
+                            </th>
+                            <th>
+                                <div st-sort="messageType" st-skip-natural="true" st-class-ascent="sorting_asc" st-class-descent="sorting_desc">{{'subscriptions.subscription_message_type' | i18n }}</div>
+                            </th>
+                            <th>
+                                <div st-sort="startDate" st-skip-natural="true" st-class-ascent="sorting_asc" st-class-descent="sorting_desc">{{'subscriptions.subscription_form' | i18n }}</div>
+                            </th>
+                            <th>
+                                <div st-sort="endDate" st-skip-natural="true" st-class-ascent="sorting_asc" st-class-descent="sorting_desc">{{'subscriptions.subscription_until' | i18n }}</div>
+                            </th>
+                            <th>
+                                <div st-sort="accessibility" st-skip-natural="true" st-class-ascent="sorting_asc" st-class-descent="sorting_desc">{{'subscriptions.subscription_form_accessibility' | i18n }}</div>
+                            </th>
+                            <th>
+                                <div st-sort="isActive" st-skip-natural="true" st-class-ascent="sorting_asc" st-class-descent="sorting_desc">{{'subscriptions.subscription_form_active' | i18n }}</div>
+                            </th>
+                            <th class="actions-column">
+                                <div class="notSortable">{{'common.actions' | i18n }}</div>
+                            </th>
+                        </tr>
+                        <tr>
+                            <th colspan="12" ng-if="!isLoading && msgStatus.visible">
+                                <table-alert type="msgStatus.type" msg="msgStatus.msg" visible="msgStatus.visible"></table-alert>
+                            </th>
+                        </tr>
+                        <tr>
+                            <th colspan="12" ng-if="!isLoading && displayedSubscriptions.length === 0 && !msgStatus.visible">
+                                <table-alert type="'info'" msg="'subscriptions.no_data'" visible="displayedSubscriptions.length === 0" no-hide="true"></table-alert>
+                            </th>
+                        </tr>
+                        <tr ng-if="isLoading">
+                            <th colspan="12" class="loading-spinner-cl"><i class="fa fa-spinner fa-spin loading-spinner"></i></th>
+                        </tr>
+                        </thead>
+                        <tbody>
+                        <tr ng-repeat="subs in displayedSubscriptions" ng-show="!isLoading">
+                            <td>
+                                <div>{{subs.name}}</div>
+                            </td>
+                            <td>
+                                <div>{{subs.subscriptionType | stTranslateSubscription: 'subscriptionType'}}</div>
+                            </td>
+                            <td>
+                                <div>{{subs.description}}</div>
+                            </td>
+                            <td>
+                                <div>{{subs.organisation}}</div>
+                            </td>
+                            <td>
+                                <div>{{subs.endPoint}}</div>
+                            </td>
+                            <td>
+                                <div>{{subs.communicationChannel}}</div>
+                            </td>
+                            <td>
+                                <div>{{subs.messageType | stTranslateSubscription: 'messageType'}}</div>
+                            </td>
+                            <td>
+                                <div>{{subs.startDate | stDateUtc }}</div>
+                            </td>
+                            <td>
+                                <div>{{subs.endDate | stDateUtc}}</div>
+                            </td>
+                            <td>
+                                <div class="text-center"><report-visibility ng-model="subs.accessibility"/></div>
+                            </td>
+                            <td>
+                                <div class="center-icon" ng-switch="subs.isActive">
+                                    <span class="fa fa-square-o" ng-switch-default></span>
+                                    <span class="fa fa-check-square-o" ng-switch-when="true"></span>
+                                </div>
+                            </td>
+                            <td class="no-wrap-white-space actions-column">
+                                <button type="button" class="btn btn-xs btn-default" title="{{'subscriptions.edit_subscription' | i18n }}" ng-click="editSubscription($index)">
+                                    <span class="fa fa-pencil"></span>
+                                </button>
+                                <div class="btn-group sharing">
+                                    <button type="button" class="btn btn-default btn-xs" title="{{'subscriptions.share_subscription' | i18n }}" data-toggle="dropdown" aria-haspopup="true" ><span class="fa fa-share-alt"></span></button>
+                                    <div class="dropdown-menu">
+                                        <div class="dropdown-body">
+                                            <a class="dropdown-item" ng-repeat="accessibilityLevel in ['PRIVATE', 'SCOPE', 'PUBLIC']" ng-click="shareSubscription($parent.$index, accessibilityLevel)">
+                                                <report-visibility visibility="accessibilityLevel"/>
+                                            </a>
+                                        </div>
+                                    </div>
+                                </div>
+                                <button type="button" class="btn btn-xs btn-danger" title="{{'subscriptions.delete_subscription' | i18n }}"  ng-click="deleteSubscription($index)">
+                                    <span class="fa fa-trash"></span>
+                                </button>
+                            </td>
+                        </tr>
+                        </tbody>
+                        <tfoot>
+                            <tr>
+                                <td colspan="12">
+                                    <div class="td text-right" ng-show="displayedSubscriptions.length > 0 && !isLoading">
+                                        <div st-pagination st-items-by-page="20" st-template="partial/common/reportsPagination/reportsPagination.html"></div>
+                                    </div>
+                                </td>
+                            </tr>
+                        </tfoot>
+                    </table>
+                </div>
+            </div>
         </div>
     </div>
 </div>

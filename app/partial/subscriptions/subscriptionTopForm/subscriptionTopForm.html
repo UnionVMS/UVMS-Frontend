@@ -1,0 +1,145 @@
+<!--
+Developed with the contribution of the European Commission - Directorate General for Maritime Affairs and Fisheries
+© European Union, 2015-2016.
+
+This file is part of the Integrated Fisheries Data Management (IFDM) Suite. The IFDM Suite is free software: you can
+redistribute it and/or modify it under the terms of the GNU General Public License as published by the
+Free Software Foundation, either version 3 of the License, or any later version. The IFDM Suite is distributed in
+the hope that it will be useful, but WITHOUT ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or
+FITNESS FOR A PARTICULAR PURPOSE.  See the GNU General Public License for more details. You should have received a
+copy of the GNU General Public License along with the IFDM Suite. If not, see <http://www.gnu.org/licenses/>.
+-->
+<div class="subscription-top-form" ng-controller="SubscriptiontopformCtrl">
+    <div class="row">
+        <!--<div class="col-md-4 form-group" ng-class="{'has-error': subServ.layoutStatus.isForm === true && subscriptionForm.subName.$dirty && subscriptionForm.subName.$invalid}">-->
+        <div class="col-md-4 form-group" ng-class="{'has-error': subServ.layoutStatus.isForm && subscriptionForm.subName.$invalid && (subscriptionForm.subName.$dirty || isSubmitting)}">
+            <!--<label ng-class="{'required-field': subServ.layoutStatus.isForm === true}">{{'subscriptions.subscription_form_name' | i18n }}</label>-->
+            <label ng-class="{'required-field': subServ.layoutStatus.isForm}">{{'subscriptions.subscription_form_name' | i18n }}</label>
+            <input name="subName" type="text" class="form-control" ng-model="subscription.name" ng-blur="checkName()" ng-required="{{subServ.layoutStatus.isForm}}"/>
+            <div class="innerErrorMessagesInputWithUpLabel" ng-messages="subscriptionForm.subName.$error" ng-show="subscriptionForm.subName.$invalid && (subscriptionForm.subName.$dirty || isSubmitting)">
+                <div ng-message="required">{{'spatial.required_field_error_message' | i18n }}</div>
+                <div ng-message="existingName">{{'subscriptions.sub_name_existing' | i18n}}</div>
+            </div>
+        </div>
+        <div class="col-md-4 form-group isActive" ng-if="::subServ.layoutStatus.isForm === true">
+            <label><input type="checkbox" ng-model="subscription.isActive"/> {{'subscriptions.subscription_form_active' | i18n }}</label>
+        </div>
+        <div class="col-md-4 form-group isActive-group" ng-if="::subServ.layoutStatus.isForm === false">
+                <div class="btn-group">
+                    <label class="btn btn-default" ng-model="subscription.isActive" btn-radio="'all'">
+                        {{'subscriptions.subscription_form_all' | i18n}}
+                    </label>
+                    <label class="btn btn-default" ng-model="subscription.isActive" btn-radio="true">
+                        <span class="fa fa-check-square-o"></span>
+                        {{'subscriptions.subscription_form_active' | i18n}}
+                    </label>
+                    <label class="btn btn-default" ng-model="subscription.isActive" btn-radio="false">
+                        <span class="fa fa-square-o"></span>
+                        {{'subscriptions.subscription_form_inactive' | i18n}}
+                    </label>
+                </div>
+        </div>
+        <div class="col-md-4 form-group">
+            <label ng-class="{'required-field': subServ.layoutStatus.isForm}">{{'subscriptions.subscription_form_organization' | i18n }}</label>
+            <div ng-if="::subServ.layoutStatus.isForm === true">
+                <div ng-class="{'has-error': (subscriptionForm.organisation.$dirty || isSubmitting === true) && subscriptionForm.organisation.$invalid}">
+                    <combobox name="organisation" ng-model="subscription.organisation" items="organisationItems" ng-change="loadEndPoints()" ng-required="true" ban-title="{{'subscriptions.subscription_organisation_disabled' | i18n }}"></combobox>
+                </div>
+                <div class="innerErrorMessagesComboboxWithUpLabel" ng-messages="subscriptionForm.organisation.$error" ng-show="subscriptionForm.organisation.$invalid && (subscriptionForm.organisation.$dirty || isSubmitting)">
+                    <div ng-message="required">{{'spatial.required_field_error_message' | i18n }}</div>
+                </div>
+            </div>
+            <combobox ng-model="subscription.organisation" items="organisationItems" initialtext="{{'common.all' | i18n }}" ng-change="loadEndPoints()" ng-if="::subServ.layoutStatus.isForm === false" ban-title="{{'subscriptions.subscription_organisation_disabled' | i18n }}"></combobox>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-md-4 form-group">
+            <label>{{'subscriptions.subscription_form_subscription_type' | i18n }}</label>
+            <combobox ng-model="subscription.subscriptionType" items="subscriptionTypeItems" ng-if="::subServ.layoutStatus.isForm === true"></combobox>
+            <combobox ng-model="subscription.subscriptionType" initialtext="{{'common.all' | i18n }}" items="subscriptionTypeItems" ng-if="::subServ.layoutStatus.isForm === false"></combobox>
+        </div>
+        <div class="col-md-4 form-group">
+            <label>{{'subscriptions.subscription_form_accessibility' | i18n }}</label>
+            <combobox ng-model="subscription.accessibility" items="accessibilityItems" ng-if="::subServ.layoutStatus.isForm === true"></combobox>
+            <combobox ng-model="subscription.accessibility" initialtext="{{'common.all' | i18n }}" items="accessibilityItems" ng-if="::subServ.layoutStatus.isForm === false"></combobox>
+        </div>
+        <div class="col-md-4 form-group">
+            <label ng-class="{'required-field': subServ.layoutStatus.isForm}">{{'subscriptions.subscription_end_point' | i18n }}</label>
+            <div ng-if="::subServ.layoutStatus.isForm === true">
+                <div ng-class="{'has-error': (subscriptionForm.endPoint.$dirty || isSubmitting === true) && subscriptionForm.endPoint.$invalid}">
+                    <combobox name="endPoint" ng-model="subscription.endPoint" items="endPointsItems" ng-change="loadCommChannels()" ng-disabled="endPointsItems.length === 0" ng-required="subscription.organisation !== undefined && endPointsItems.length > 0" ban-title="{{'subscriptions.subscription_endpoint_disabled' | i18n }}"></combobox>
+                </div>
+                <div class="innerErrorMessagesComboboxWithUpLabel" ng-messages="subscriptionForm.endPoint.$error" ng-show="subscriptionForm.endPoint.$invalid && (subscriptionForm.endPoint.$dirty || isSubmitting)">
+                    <div ng-message="required">{{'spatial.required_field_error_message' | i18n }}</div>
+                </div>
+            </div>
+            <combobox ng-model="subscription.endPoint" items="endPointsItems" initialtext="{{'common.all' | i18n }}" ng-change="loadCommChannels()" ng-disabled="endPointsItems.length === 0" ng-if="::subServ.layoutStatus.isForm === false" ban-title="{{'subscriptions.subscription_endpoint_disabled' | i18n }}"></combobox>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-md-4 form-group">
+            <label>{{'subscriptions.subscription_description' | i18n }}</label>
+            <textarea class="form-control form-decription" ng-model="subscription.description"></textarea>
+        </div>
+        <div class="col-md-4 form-group">
+            <div class="row">
+                <div class="col-md-6"  ng-class="{'has-error': (subscriptionForm.startDate.$dirty || isSubmitting === true) && subscriptionForm.startDate.$invalid}">
+                    <label ng-class="{'required-field': subServ.layoutStatus.isForm}">{{'subscriptions.subscription_valid_form' | i18n }}</label>
+                    <datepicker-input time="true" model="subscription.startDate" name="startDate" max-date="subscription.endDate"
+                                      input-field-id="{{startDateId}}" update-when="default" ng-required="subServ.layoutStatus.isForm"></datepicker-input>
+                    <div class="innerErrorMessagesDateWithUpLabel" ng-messages="subscriptionForm.startDate.$error" ng-show="subscriptionForm.startDate.$invalid && (subscriptionForm.startDate.$dirty || isSubmitting)">
+                        <div ng-message="required">{{'spatial.required_field_error_message' | i18n }}</div>
+                    </div>
+                </div>
+                <div class="col-md-6">
+                    <label>{{'subscriptions.subscription_valid_until' | i18n }}</label>
+                    <datepicker-input time="true" model="subscription.endDate" name="{{endDateId}}" min-date="subscription.startDate"
+                                      input-field-id="{{endDateId}}" update-when="default"></datepicker-input>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-4 form-group">
+            <div class="row">
+                <div class="col-md-12 form-group">
+                    <label ng-class="{'required-field': subServ.layoutStatus.isForm}">{{'subscriptions.subscription_communication_channel' | i18n }}</label>
+                    <div ng-if="::subServ.layoutStatus.isForm === true">
+                        <div ng-class="{'has-error': (subscriptionForm.commChannel.$dirty || isSubmitting === true) && subscriptionForm.commChannel.$invalid}">
+                            <combobox name="commChannel" ng-model="subscription.communicationChannel" items="commChannelItems" ng-disabled="commChannelItems.length === 0" ng-required="subscription.endPoint !== undefined && commChannelItems.length > 0"></combobox>
+                        </div>
+                        <div class="innerErrorMessagesComboboxWithUpLabel" ng-messages="subscriptionForm.commChannel.$error" ng-show="subscriptionForm.commChannel.$invalid && (subscriptionForm.commChannel.$dirty || isSubmitting)">
+                            <div ng-message="required">{{'spatial.required_field_error_message' | i18n }}</div>
+                        </div>
+                    </div>
+                    <combobox ng-model="subscription.communicationChannel" items="commChannelItems" ng-disabled="commChannelItems.length === 0" initialtext="{{'common.all' | i18n }}" ng-if="::subServ.layoutStatus.isForm === false"></combobox>
+                </div>
+            </div>
+            <div class="row" ng-if="::subServ.layoutStatus.isForm === false">
+                <div class="col-md-12 form-group">
+                    <label>{{'subscriptions.subscription_message_type' | i18n }}</label>
+                    <combobox ng-model="subscription.messageType" items="messageTypeItems" ng-if="::subServ.layoutStatus.isForm === true"></combobox>
+                    <combobox ng-model="subscription.messageType" initialtext="{{'common.all' | i18n }}" items="messageTypeItems" ng-if="::subServ.layoutStatus.isForm === false"></combobox>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="row" ng-if="::subServ.layoutStatus.isForm === true">
+        <div class="col-md-4 form-group">
+            <label>{{'subscriptions.subscription_Trigger' | i18n }}</label>
+            <div class="row trigger-group">
+                <div class="col-md-12">
+                    <label class="with-right-margin"><input type="radio" ng-model="subscription.triggerType" value="MANUAL" ng-checked="true"/> {{'subscriptions.subscription_manual' | i18n }}</label>
+                    <label><input type="radio" ng-model="subscription.triggerType" value="AUTO" /> {{'subscriptions.subscription_auto' | i18n }}</label>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-4 form-group">
+            <label>{{'subscriptions.subscription_retry_delay' | i18n }}</label>
+            <a href="" qtip at="top center" my="bottom center" content="{{'subscriptions.subscription_retry_delay_tooltip' | i18n }}" class="qtip-bootstrap qtip-custom"><i class="fa fa-question-circle"></i></a>
+            <input type="text" class="form-control" ng-model="subscription.delay" comma-separated-number ng-blur="formatDelay()"/>
+        </div>
+        <div class="col-md-4 form-group">
+            <label>{{'subscriptions.subscription_message_type' | i18n }}</label>
+            <combobox ng-model="subscription.messageType" items="messageTypeItems"></combobox>
+        </div>
+    </div>
+</div>

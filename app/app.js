@@ -58,7 +58,6 @@ var getGlobalSettingsPromise = function(globalSettingsService) {
 };
 getGlobalSettingsPromise.$inject = ['globalSettingsService'];
 
-
 var loadLocales = function(initService) {
     return initService.loadLanguageFiles();
 };
@@ -508,51 +507,39 @@ unionvmsWebApp.config(function($stateProvider, $compileProvider, tmhDynamicLocal
             url: '/subscriptions/manageSubscriptions',
             views: {
                 modulepage: {
-                    templateUrl: 'partial/subscriptions/manageSubscriptions/manageSubscriptions.html',
-                    controller: 'ManagesubscriptionsCtrl'
+                    templateUrl: 'partial/subscriptions/manageSubscriptions/manageSubscriptions.html'
                 }
             },
             resolve: {
-                    config : function(initService){
-                    // FIX ME: uncomment the commented code and remove this code return { "$$state": {"status": 0}} 
-                    // return initService.loadConfigFor(["SUBSCRIPTION"]);
-                    return {
-                        "$$state": {
-                            "status": 0
-                        }
-                    };
+                config : function(initService){
+                    return initService.loadConfigFor(["ORGANISATIONS"]);
                 }
             },
             data: {
-                //FIX ME uncomment the commented code
-                //access: 'viewSubscriptions',
                 pageTitle: 'header.page_title_subscriptions'
-            },
+            }
         })
         .state('app.newSubscription', {
             url: '/subscriptions/newSubscription',
             views: {
                 modulepage: {
-                    templateUrl: 'partial/subscriptions/newSubscription/newSubscription.html'/* ,
-                    controller: 'NewsubscriptionCtrl' */
+                    templateUrl: 'partial/subscriptions/newSubscription/newSubscription.html'
                 }
             },
             resolve: {
-                    config : function(initService){
-                    // FIX ME: uncomment the commented code and remove this code return { "$$state": {"status": 0}} 
-                    // return initService.loadConfigFor(["SUBSCRIPTION"]);
-                    return {
-                        "$$state": {
-                            "status": 0
-                        }
-                    };
+                config : function(initService){
+                    return initService.loadConfigFor(["ORGANISATIONS"]);
                 }
             },
             data: {
-                //FIX ME uncomment the commented code
-                //access: 'viewSubscriptions',
                 pageTitle: 'header.page_title_subscriptions'
             },
+            params: {
+                subToEdit: null
+            },
+            onExit: function (subscriptionsService) {
+                subscriptionsService.layoutStatus.isNewSub = true;
+            }
         })
         .state('app.activity', {
             url: '/activity',
@@ -984,7 +971,8 @@ var restApiURLS = [
     '/mdr/rest/',
     '/mapfish-print',
     '/usm-authentication/rest', '/usm-authorisation/rest', '/usm-administration/rest',
-    'sales/rest/'
+    'sales/rest/',
+    'subscription/rest'
 ];
 
 //Request interceptor that routes REST api request to the REST api server

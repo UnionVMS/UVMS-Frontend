@@ -78,9 +78,11 @@ module.exports = function (grunt) {
                   '/usm-authentication/rest', '/usm-authorisation/rest', '/usm-administration/rest',
                   '/activity/rest',
                   '/sales/rest',
-                  '/mdr/rest'],
+                  '/mdr/rest',
+                  '/subscription/rest'
+                ],
               host: 'localhost',
-              port: 8080
+              port: 28080
         },{
             context: '/mock/',
             host: 'localhost',

@@ -9,9 +9,48 @@ the hope that it will be useful, but WITHOUT ANY WARRANTY; without even the impl
 FITNESS FOR A PARTICULAR PURPOSE.  See the GNU General Public License for more details. You should have received a
 copy of the GNU General Public License along with the IFDM Suite. If not, see <http://www.gnu.org/licenses/>.
 */
-.new-subscription {
+.subscription-top-form {
     h5 {
         margin-bottom: 10px;
         text-transform: none;
+    }
+    .isActive {
+        margin-top: 25px;
+    }
+    .isActive-group {
+        margin-top: 17px;
+        label {
+          span {
+            color: @primaryColor;
+          }
+        }
+    }
+    .with-right-margin {
+        margin-right: 15px;
+    }
+    .form-decription {
+        height: 100px;
+        resize: none;
+    }
+    .no-padding-left {
+        padding-left: 0px;
+    }
+    .right-row {
+        margin-right: -30px;
+    }
+    .required-field::after {
+        content: "*";
+        color: @profileColor_red;
+        margin-left: 3px;
+    }
+    .qtip-bootstrap {
+        .qtip-content {
+            padding: 9px;
+        }
+    }
+    .qtip-custom {
+        border: 0px;
+        color: @primaryColor;
+        box-shadow: none;
     }
 }
