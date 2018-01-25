@@ -51,7 +51,7 @@ describe('HeaderMenuCtrl', function() {
         scope.setMenu();
 
         expect(userAllowedSpy).toHaveBeenCalled();
-        expect(scope.menu.length).toBe(2);
+        expect(scope.menu.length).toBe(1);
         expect(scope.menu[0].url).toBe('/today');
         expect(scope.menu[0].elemId).toBe('today');
     }));
@@ -61,15 +61,6 @@ describe('HeaderMenuCtrl', function() {
         scope.setMenu();
         expect(userAllowedSpy).toHaveBeenCalled();
         expect(scope.menu.length).toBeGreaterThan(1);
-    }));
-
-    it('444', inject(function(userService) {
-        var userAllowedSpy = spyOn(userService, "isAllowed").andReturn(true);
-        scope.addMenuItem('Activity', '/activity', 'activity');
-
-        expect(scope.menu.length).toBe(3);
-        expect(scope.menu[2].url).toBe('/activity');
-        expect(scope.menu[2].elemId).toBe('activity');
     }));
 
     it('should set menu if authentication success', function() {

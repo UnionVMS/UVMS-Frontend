@@ -19,13 +19,14 @@ copy of the GNU General Public License along with the IFDM Suite. If not, see <h
  * @description
  *  The controller for the Catch Details.  
  */
-angular.module('unionvmsWeb').controller('CatchdetailsCtrl', function ($scope, activityRestService, locale, tableService, reportService, loadingStatus, tripSummaryService) {
+angular.module('unionvmsWeb').controller('CatchdetailsCtrl', function ($scope, $filter, activityRestService, locale, tableService, reportService, loadingStatus, tripSummaryService) {
 
     var prepareSummaryRow = function(record){
         var catchTypes = ['summaryFaCatchType','summaryFishSize'];
         angular.forEach(catchTypes, function(ctype){
             if(angular.isDefined(record[ctype])){
                 angular.forEach(record[ctype], function(value,key){
+                    value = $filter('number')(value, 2);
                     if(angular.isDefined(record[ctype][key])){
                         record[ctype][key] = {};
                         if(typeof value === 'object'){
@@ -119,6 +120,7 @@ angular.module('unionvmsWeb').controller('CatchdetailsCtrl', function ($scope, a
                 if(typeof row[className] === 'object'){
                     angular.forEach(classItem, function (specie, specieName) {
                         if (angular.isDefined(row[className][specieName])) {
+                            row[className][specieName] = $filter('number')(row[className][specieName], 2);
                             newRow[className][specieName] = row[className][specieName];
                         }
                     });
@@ -126,7 +128,7 @@ angular.module('unionvmsWeb').controller('CatchdetailsCtrl', function ($scope, a
                     newRow[className] = row[className];
                 }
             }
-        });
+        });     
         return newRow;
     };
 
@@ -162,7 +164,7 @@ angular.module('unionvmsWeb').controller('CatchdetailsCtrl', function ($scope, a
                     }
                     angular.forEach(classItem, function (specie, specieName) {
                         if (!angular.isDefined(defaults[className][specieName])) {
-                            defaults[className][specieName] = 0;
+                            defaults[className][specieName] = $filter('number')(0, 2);
                         }
                     });
                 } else {
@@ -209,6 +211,7 @@ angular.module('unionvmsWeb').controller('CatchdetailsCtrl', function ($scope, a
                                         angular.forEach(defaultSpecie, function (defaultSubSpecie, defaultSubSpecieName) {
                                             angular.forEach(Specie, function (subSpecie, subSpecieName) {
                                                 if (defaultSubSpecieName === subSpecieName) {
+                                                    subSpecie = $filter('number')(subSpecie, 2);
                                                     currentLandingRow.push({
                                                         key: subSpecieName,
                                                         value: subSpecie

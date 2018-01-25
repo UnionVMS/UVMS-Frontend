@@ -4,7 +4,7 @@ describe('QueryparamsubscriptionCtrl', function() {
 
 	var scope,ctrl;
 
-	beforeEach(inject(function($rootScope, $controller, Subscription) {
+	/*beforeEach(inject(function($rootScope, $controller, Subscription) {
 		scope = $rootScope.$new();
 		scope.subscription = new Subscription();
 		ctrl = $controller('QueryparamsubscriptionCtrl', {$scope: scope});
@@ -29,6 +29,6 @@ describe('QueryparamsubscriptionCtrl', function() {
 		if(viewToRemove){
 			viewToRemove.remove();
 		}
-	}));
+	}));*/
 
 });

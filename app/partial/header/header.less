@@ -15,15 +15,20 @@ copy of the GNU General Public License along with the IFDM Suite. If not, see <h
 @header-container-fontsize:      1.07em;
 
 
-.header {
+.header, .ec-header{
     width: 100%;
-    background-color: @headerbackgroundcolor;
     min-height: @headerHeight;
     z-index: 12;
 
     &.in-new-tab {
     	min-height: @headerHeight - @bottomHeaderHeight;
     }
+}
+.header {
+    background-color:#FFFFFF;
+}
+.ec-header {
+    background-color: @headerbackgroundcolor;
 }
 
 .headercontainer {
@@ -35,13 +40,57 @@ copy of the GNU General Public License along with the IFDM Suite. If not, see <h
         padding: 2px @panel-body-padding 0;
         position: relative;
 
-        .uvms-logotype {
+        .left{
+            .flexbox();
+            align-items: center;
+            justify-content: flex-end;
             height: 100%;
-            width: 130px;
-            line-height: 0;
             position: absolute;
             top: 2px;
-            fill: #fff;
+            align-items: center;
+            .ec-text{
+                height:30px;
+                padding-top:10px;
+            
+                .flux-fmc {
+                    float:left;
+                    color: #0065a2;
+               
+                    .flux,.fmc {
+                        font-size: 24px;
+                    }
+                     .fmc {
+                        font-weight: bold;
+                    }
+                .commission {
+                        color:#656668;
+                        font-size: 13px;
+                        line-height: 1.2;
+                        font-weight:bold;
+                        padding-right:10px;
+                        border-right: 4px solid #0065a2;
+                        margin-right: 10px;
+                    }
+
+                }
+            }
+            
+        }
+
+        .ec-logo {
+            float:left;
+            width:118px;
+            font-size: 24px;
+            height:58px;
+            padding-right:10px;
+        }
+        
+        .uvms-logotype {
+            height: 50px;
+            width: 130px;
+            line-height: 0;
+            float:left;
+            fill: #FFFFFF;
             cursor: pointer;
             opacity: 0.9;
             .transition-specified-ease(all, 300ms);
@@ -279,7 +328,7 @@ copy of the GNU General Public License along with the IFDM Suite. If not, see <h
 
             .sign-out, .help {
                 margin-left: 15px;
-
+              
                 i.fa-lg {
                     margin-top: 2px;
                     vertical-align: 0;
@@ -289,6 +338,18 @@ copy of the GNU General Public License along with the IFDM Suite. If not, see <h
                     }
                 }
             }
+        }
+        .ec-right {
+            .current-time,.fa-bell,.fa-question,.fa-sign-out {
+                color:#656668;
+           }
+            .btn.btn-default.dropdown-toggle {
+                background-color: #FFFFFF;
+                color: #656668;
+                .caret {
+                   color: #656668;
+                }
+           }
         }
     }
 }

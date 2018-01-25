@@ -1,8 +1,18 @@
-<div class="col-md-1 col-md-offset-10">
-    <button ng-if="!loading" type="submit" class="btn btn-primary btn-sm fullWidth vmsbtn" ng-click="performExport()">
-        {{'sales.report_export_all' | i18n}}
+<div class="col-md-1 col-md-offset-10 simple-export">
+    <button
+            id="popoverbutton"
+            type="button" class="btn btn-primary btn-sm fullWidth vmsbtn"
+            data-toggle="popover"
+            data-content="{{'sales.report_export_more_results_than_max_export' | i18n}}"
+            data-placement="left"
+            data-trigger="manual"
+            ng-show="!loading"
+            ng-click="export()">
+        <span ng-show="!clicked">{{'sales.report_export_all' | i18n}}</span>
+        <span ng-show="needsConfirmation() && !confirmed && clicked">{{ 'sales.report_export_confirmation' | i18n}}</span>
     </button>
-    <button ng-if="loading" class="btn btn-primary btn-sm fullWidth vmsbtn disabled">
+
+    <button ng-show="loading" class="btn btn-primary btn-sm fullWidth vmsbtn disabled">
         {{'sales.report_exporting_all' | i18n}}
     </button>
-</div>        
+</div>
