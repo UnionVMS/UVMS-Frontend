@@ -91,6 +91,15 @@ unionvmsWebApp.config(function($stateProvider, $compileProvider, tmhDynamicLocal
     $urlRouterProvider.otherwise('/home');
 
     $stateProvider
+        .state('probing', {
+            url: '/probing',
+            views: {
+                app: {
+                    templateUrl: 'partial/probing/probing.html',
+                    controller: 'ProbingCtrl'
+                }
+            }
+        })
         .state('uvmsLogin', {
             url: '/login',
             params: {
