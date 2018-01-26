@@ -172,9 +172,16 @@ angular.module('unionvmsWeb').controller('SubscriptiontopformCtrl',function($sco
                 $scope.subscription.endPoint = undefined;
                 $scope.subscription.communicationChannel = undefined;
                 $scope.subServ.setAlertStatus('error', 'subscriptions.error_endpoint_is_deleted', true, undefined, 'endPoint');
-            } else if (rec.status === 'D'){
-                $scope.subServ.setAlertStatus('warning', 'subscriptions.subscription_endpoint_disabled', true, 5000);
+            } else {
                 $scope.loadCommChannels();
+                /*var channelRec = _.findWhere(rec.channelList, {channelId: $scope.subscription.communicationChannel});
+                if (angular.isUndefined(channelRec)){
+                    $scope.subscription.communicationChannel = undefined;
+                    $scope.subServ.setAlertStatus('warning', 'subscriptions.error_comm_channel_is_deleted', true, undefined, 'commChannel');
+                }*/
+                if (rec.status === 'D'){
+                    $scope.subServ.setAlertStatus('warning', 'subscriptions.subscription_endpoint_disabled', true, 5000);
+                }
             }
         }
     };

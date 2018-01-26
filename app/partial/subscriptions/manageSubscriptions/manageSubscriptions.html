@@ -102,7 +102,7 @@ copy of the GNU General Public License along with the IFDM Suite. If not, see <h
                                 <div>{{subs.startDate | stDateUtc }}</div>
                             </td>
                             <td>
-                                <div>{{subs.endDate | stDateUtc}}</div>
+                                <div>{{subs.endDate | stDateUtc | stRemoveEndOfTime}}</div>
                             </td>
                             <td>
                                 <div class="text-center"><report-visibility ng-model="subs.accessibility"/></div>

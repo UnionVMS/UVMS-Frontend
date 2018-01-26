@@ -17,7 +17,7 @@ copy of the GNU General Public License along with the IFDM Suite. If not, see <h
  * @description
  *  A model to store all the data related to a subscription in a standardized way
  */
-angular.module('unionvmsWeb').factory('Subscription', function (unitConversionService) {
+angular.module('unionvmsWeb').factory('Subscription', function (unitConversionService, $filter) {
 	function Subscription(isForSearch) {
 	    if (angular.isUndefined(isForSearch)){
 	        isForSearch = false;
@@ -105,8 +105,7 @@ angular.module('unionvmsWeb').factory('Subscription', function (unitConversionSe
     Subscription.prototype.fromJson = function(data){
         var sub = this.DTO(data);
         sub.startDate = unitConversionService.date.convertDate(sub.startDate, 'from_server');
-        sub.endDate = unitConversionService.date.convertDate(sub.endDate, 'from_server');
-
+        sub.endDate = $filter('stRemoveEndOfTime')(unitConversionService.date.convertDate(sub.endDate, 'from_server'));
         return sub;
     };
 

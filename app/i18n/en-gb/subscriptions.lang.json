@@ -55,6 +55,7 @@
     "error_validating_subscription_name": "There was an error while validating if your subscription's name already exists.",
     "error_loading_organisation": "There was an error loading the organisation details. No endpoints and communication channels can be shown at this time. Please try again.",
 	"error_no_organisations": "There are no enabled organisations.",
+    "subscription_organisation_disabled": "Organisation is disabled",
     "error_organisation_is_disabled": "This subscription's organisation has been disabled in USM. Please notice that this subscription will not be active.",
     "error_organisation_is_deleted": "This subscription's organisation has been deleted in USM. Please select a new organisation to make it a valid subscription.",
     "error_no_endpoint": "There are no Endpoints available. Please select another Organisation.",
