@@ -35,7 +35,8 @@ angular.module('unionvmsWeb').factory('subscriptionsService',function(locale, $t
             timer: undefined,
             type: undefined,
             msg: undefined,
-            isVisible: false
+            isVisible: false,
+            invalidType: undefined
         },
         /**
          * Cancel existing alert timeout
@@ -58,7 +59,7 @@ angular.module('unionvmsWeb').factory('subscriptionsService',function(locale, $t
          * @param {Boolean} visible - Whether the alert should be visible ot not
          * @param {Number} [timeout] - Optional closing alert timeout in miliseconds
          */
-        setAlertStatus: function (type, msg, visible, timeout) {
+        setAlertStatus: function (type, msg, visible, timeout, invalidType) {
             if (angular.isDefined(this.alertStatus.timer)){
                 this.cancelTimeout();
             }
@@ -66,7 +67,8 @@ angular.module('unionvmsWeb').factory('subscriptionsService',function(locale, $t
             this.alertStatus = {
                 type: type,
                 msg: locale.getString(msg),
-                isVisible: visible
+                isVisible: visible,
+                invalidType: invalidType
             };
 
             if (angular.isDefined(timeout)){
@@ -82,7 +84,17 @@ angular.module('unionvmsWeb').factory('subscriptionsService',function(locale, $t
          * @public
          */
         resetAlert: function () {
-            this.setAlertStatus(undefined, undefined, false);
+            this.setAlertStatus(undefined, undefined, false, undefined);
+        },
+        /**
+         * Get the alert invalid type
+         *
+         * @memberOf subscriptionsService
+         * @public
+         * @returns {String} The alert invalid type or undefined
+         */
+        getAlertInvalidType: function(){
+            return this.alertStatus.invalidType;
         }
     };
 

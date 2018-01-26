@@ -215,5 +215,9 @@ angular.module('unionvmsWeb').controller('ManagesubscriptionsCtrl',function($sco
         }
     };
 
+    $scope.$on('$destroy', function(){
+        $scope.subServ.resetAlert();
+    });
+
     init();
 });

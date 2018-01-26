@@ -104,7 +104,7 @@ copy of the GNU General Public License along with the IFDM Suite. If not, see <h
                     <label ng-class="{'required-field': subServ.layoutStatus.isForm}">{{'subscriptions.subscription_communication_channel' | i18n }}</label>
                     <div ng-if="::subServ.layoutStatus.isForm === true">
                         <div ng-class="{'has-error': (subscriptionForm.commChannel.$dirty || isSubmitting === true) && subscriptionForm.commChannel.$invalid}">
-                            <combobox name="commChannel" ng-model="subscription.communicationChannel" items="commChannelItems" ng-disabled="commChannelItems.length === 0" ng-required="subscription.endPoint !== undefined && commChannelItems.length > 0"></combobox>
+                            <combobox name="commChannel" ng-model="subscription.communicationChannel" items="commChannelItems" ng-change="checkForErrorMsg('commChannel')" ng-disabled="commChannelItems.length === 0" ng-required="subscription.endPoint !== undefined && commChannelItems.length > 0"></combobox>
                         </div>
                         <div class="innerErrorMessagesComboboxWithUpLabel" ng-messages="subscriptionForm.commChannel.$error" ng-show="subscriptionForm.commChannel.$invalid && (subscriptionForm.commChannel.$dirty || isSubmitting)">
                             <div ng-message="required">{{'spatial.required_field_error_message' | i18n }}</div>

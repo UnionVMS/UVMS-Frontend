@@ -86,6 +86,10 @@ angular.module('unionvmsWeb').controller('SubscriptiontopformCtrl',function($sco
             }
         });
 
+        if ($scope.organisationItems.length === 0){
+            $scope.subServ.setAlertStatus('error', 'subscriptions.error_no_organisations', true);
+        }
+
         if ($scope.isLoadingFromJson === true){
             var rec = _.findWhere(allOrganisations, {organisationId: $scope.subscription.organisation});
             if (angular.isDefined(rec)){
@@ -98,12 +102,41 @@ angular.module('unionvmsWeb').controller('SubscriptiontopformCtrl',function($sco
                 $scope.subscription.endPoint = undefined;
                 $scope.subscription.communicationChannel = undefined;
             }
-
-            //TODO deal with cases where the organisation is no longer available
         }
+    };
 
-        if ($scope.organisationItems.length === 0){
-            $scope.subServ.setAlertStatus('error', 'subscriptions.error_no_organisations', true);
+    /**
+     * Reset dependent comboboxes and reset endpoints and communication channels model
+     *
+     * @memberOf SubscriptiontopformCtrl
+     * @private
+     */
+    var resetDependentombos = function () {
+        $scope.endPointsItems = [];
+        $scope.commChannelItems = [];
+        if ($scope.isLoadingFromJson === false){
+            $scope.subscription.endPoint = undefined;
+            $scope.subscription.communicationChannel = undefined;
+        }
+    };
+
+    /**
+     * Get EndPoint and Communication Channel data for a specific organisation from USM
+     *
+     * @memberOf SubscriptiontopformCtrl
+     * @public
+     * @alias loadEndPoints
+     */
+    $scope.loadEndPoints = function(){
+        resetDependentombos();
+        $scope.checkForErrorMsg('endPoint');
+        if (angular.isDefined($scope.subscription.organisation)){
+            subscriptionsRestService.getOrganisationDetails($scope.subscription.organisation).then(function (response) {
+                $scope.organisationDetails =  response;
+                setupEndPointCombo();
+            }, function (error) {
+                $scope.subServ.setAlertStatus('error', 'subscriptions.error_loading_organisation', true, 5000);
+            });
         }
     };
 
@@ -120,61 +153,29 @@ angular.module('unionvmsWeb').controller('SubscriptiontopformCtrl',function($sco
             }
         });
 
+        if ($scope.endPointsItems.length === 0){
+            if ($scope.subServ.layoutStatus.isNewSub === false && $scope.isLoadingFromJson === true){
+                $scope.subscription.endPoint = undefined;
+                $scope.subscription.communicationChannel = undefined;
+                $scope.isLoadingFromJson = false;
+
+            }
+            if ($scope.subServ.layoutStatus.isForm === true){
+                $scope.subServ.setAlertStatus('error', 'subscriptions.error_no_endpoint', true, undefined, 'endPoint');
+            }
+        }
+
         if ($scope.isLoadingFromJson === true){
-            $scope.loadCommChannels();
-            //TODO - show error message where the endpoint is no longer available
-        }
-        //TODO - show error message if no endpoints are enabled
-    };
-
-    /**
-     * Setup the Communication Channel combobox items
-     *
-     * @memberOf SubscriptiontopformCtrl
-     * @private
-     * @param {Array} data - An array containing all communication channels belonging to a specific organisation and endpoint
-     */
-    var setupCommChannelCombo = function (data) {
-        angular.forEach(data.channelList, function (item) {
-            $scope.commChannelItems.push({'text': item.dataflow, 'code': item.channelId});
-        });
-
-        if ($scope.subServ.layoutStatus.isNewSub === false && $scope.isLoadingFromJson === true){
-            $scope.isLoadingFromJson = false;
-            //TODO show error message where the comm channel is no longer available
-        }
-        //TODO show error message if no comm channels are available
-    };
-
-    /**
-     * Reset dependent comboboxes and reset endpoints and communication channels model
-     */
-    var resetDependentombos = function () {
-        $scope.endPointsItems = [];
-        $scope.commChannelItems = [];
-        if ($scope.isLoadingFromJson === false){
-            $scope.subscription.endPoint = undefined;
-            $scope.subscription.communicationChannel = undefined;
-        }
-    };
-
-    /**
-     * Get EndPoint and Communication Channel data for a specific organisation from USM
-     *
-     * @memberOf SubscriptiontopformCtrl
-     * @public
-     * @alias setupEndPointCombo
-     */
-    $scope.loadEndPoints = function(){
-        //TODO - loading indicator
-        resetDependentombos();
-        if (angular.isDefined($scope.subscription.organisation)){
-            subscriptionsRestService.getOrganisationDetails($scope.subscription.organisation).then(function (response) {
-                $scope.organisationDetails =  response;
-                setupEndPointCombo();
-            }, function (error) {
-                //TODO deal with error
-            });
+            var rec = _.findWhere($scope.organisationDetails.endpoints, {endpointId : $scope.subscription.endPoint});
+            if (angular.isUndefined(rec)){
+                $scope.isLoadingFromJson = false;
+                $scope.subscription.endPoint = undefined;
+                $scope.subscription.communicationChannel = undefined;
+                $scope.subServ.setAlertStatus('error', 'subscriptions.error_endpoint_is_deleted', true, undefined, 'endPoint');
+            } else if (rec.status === 'D'){
+                $scope.subServ.setAlertStatus('warning', 'subscriptions.subscription_endpoint_disabled', true, 5000);
+                $scope.loadCommChannels();
+            }
         }
     };
 
@@ -187,16 +188,61 @@ angular.module('unionvmsWeb').controller('SubscriptiontopformCtrl',function($sco
      */
     $scope.loadCommChannels = function () {
         $scope.commChannelItems = [];
+        $scope.checkForErrorMsg('endPoint');
         if (angular.isDefined($scope.subscription.endPoint)){
             if ($scope.subServ.layoutStatus.isNewSub === false && $scope.isLoadingFromJson === false){
                 $scope.subscription.communicationChannel = undefined;
             }
             var filteredCommChannels = _.findWhere($scope.organisationDetails.endpoints, {endpointId : $scope.subscription.endPoint});
-            if (angular.isDefined(filteredCommChannels)){
-                setupCommChannelCombo(filteredCommChannels);
-            } else {
-                //TODO - display message that no comm  channels are available
+            setupCommChannelCombo(filteredCommChannels);
+        }
+    };
+
+    /**
+     * Setup the Communication Channel combobox items
+     *
+     * @memberOf SubscriptiontopformCtrl
+     * @private
+     * @param {Array} data - An array containing all communication channels belonging to a specific organisation and endpoint
+     */
+    var setupCommChannelCombo = function (data) {
+        if (angular.isDefined(data.channelList) && data.channelList.length > 0){
+            angular.forEach(data.channelList, function (item) {
+                $scope.commChannelItems.push({'text': item.dataflow, 'code': item.channelId});
+            });
+        }
+
+
+        if ($scope.commChannelItems.length === 0){
+            if ($scope.subServ.layoutStatus.isNewSub === false && $scope.isLoadingFromJson === true){
+                $scope.subscription.communicationChannel = undefined;
+                $scope.subServ.setAlertStatus('error', 'subscriptions.error_no_comm_channels', true, undefined, 'commChannel');
             }
+        }
+
+        if ($scope.subServ.layoutStatus.isNewSub === false && $scope.isLoadingFromJson === true){
+            $scope.isLoadingFromJson = false;
+            var rec = _.findWhere(data.channelList, {channelId : $scope.subscription.communicationChannel});
+            if (angular.isUndefined(rec)){
+                $scope.subscription.communicationChannel = undefined;
+                if ($scope.commChannelItems.length > 0){
+                    $scope.subServ.setAlertStatus('error', 'subscriptions.error_comm_channel_is_deleted', true, undefined, 'commChannel');
+                }
+            }
+        }
+    };
+
+    /**
+     * Check if there are visible error messages related with the combo type and clear them
+     *
+     * @memberOf SubscriptiontopformCtrl
+     * @public
+     * @alias checkForErrorMsg
+     * @param {String} type - The alert invalid type
+     */
+    $scope.checkForErrorMsg = function (type) {
+        if ($scope.subServ.getAlertInvalidType() === type){
+            $scope.subServ.resetAlert();
         }
     };
 
@@ -220,7 +266,6 @@ angular.module('unionvmsWeb').controller('SubscriptiontopformCtrl',function($sco
         }
     });
 
-
     /**
      * Check if the Subscription name already exists in the database
      *
@@ -238,8 +283,7 @@ angular.module('unionvmsWeb').controller('SubscriptiontopformCtrl',function($sco
                     $scope.shouldCheckName = false;
                 }
             }, function (error) {
-                console.log('error');
-                //TODO deal with error
+                $scope.subServ.setAlertStatus('error', 'subscriptions.error_validating_subscription_name', true, 5000);
             });
         }
     };

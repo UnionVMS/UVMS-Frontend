@@ -102,5 +102,9 @@ angular.module('unionvmsWeb').controller('NewsubscriptionCtrl',function($scope, 
         }
     };
 
+    $scope.$on('$destroy', function(){
+        $scope.subServ.resetAlert();
+    });
+
     init();
 });
