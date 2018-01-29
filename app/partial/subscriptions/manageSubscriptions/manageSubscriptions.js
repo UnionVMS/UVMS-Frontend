@@ -215,6 +215,24 @@ angular.module('unionvmsWeb').controller('ManagesubscriptionsCtrl',function($sco
         }
     };
 
+
+    $scope.stSorters = {
+        startDate: function(rec){
+            return $scope.stSorters.getDateInMiliseconds(rec, 'startDate');
+        },
+        endDate: function(rec){
+            return $scope.stSorters.getDateInMiliseconds(rec, 'endDate');
+        },
+        getDateInMiliseconds: function(rec, field){
+            var dateObj = new Date(rec[field]);
+            var ms = 0;
+            if (dateObj.getFullYear() !== 9999){
+                ms = dateObj.getTime();
+            }
+            return ms;
+        }
+    };
+
     $scope.$on('$destroy', function(){
         $scope.subServ.resetAlert();
     });
