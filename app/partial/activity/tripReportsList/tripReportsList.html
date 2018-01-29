@@ -57,5 +57,12 @@
 				</tbody>
 			</table>
 		</div>
+		<div class="stFooterPagination" ng-show="actServ.displayedTrips.length > 0 && !actServ.tripsList.isLoading">
+			<div class="tr">
+				<div class="td text-right">
+					<div st-pagination st-items-by-page="actServ.tripsList.pagination.pageSize" st-template="partial/common/reportsPagination/reportsPagination.html"></div>
+				</div>
+			</div>
+		</div>
 	</div>
 </div>
