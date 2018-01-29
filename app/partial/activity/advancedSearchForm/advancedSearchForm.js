@@ -308,16 +308,20 @@ angular.module('unionvmsWeb').controller('AdvancedsearchformCtrl',function($scop
                 simpleCriteria: formatedSearch,
                 multipleCriteria: multipleFormatedSearch
             };
-
+            
             $scope.actServ.getActivityList(function(){
                 $scope.actServ.reportsList.fromForm = true;
-                $scope.actServ.reportsList.stCtrl.pipe();
+                if(angular.isDefined($scope.actServ.reportsList)){
+                    $scope.actServ.reportsList.stCtrl.pipe();
+                }
             }, undefined, 'reportsList');
 
             $scope.actServ.getActivityList(function(){
                 $scope.actServ.tripsList.fromForm = true;
-                $scope.actServ.tripsList.stCtrl.pipe();
-            }, undefined, 'tripsList');
+                if(angular.isDefined($scope.actServ.tripsList)){
+                    $scope.actServ.tripsList.stCtrl.pipe();
+                }
+            }, undefined, 'tripsList');         
         }
     };
 
