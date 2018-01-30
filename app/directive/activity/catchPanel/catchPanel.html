@@ -6,7 +6,7 @@
             </legend>
             <div class="catch-details-body" ng-if="ngModel">
                 <div class="row">
-                    <div class="col-md-6 catch-subsection" ng-repeat="(title, data) in ngModel" ng-class="{'has-caption': data.caption}" ng-if="data.speciesList">
+                    <div ng-class="{'col-md-6': !onePanel, 'col-md-12': onePanel,'has-caption': data.caption}" class="catch-subsection" ng-repeat="(title, data) in ngModel" ng-if="data.speciesList">
                         <div class="row">
                             <!--TITLE-->
                             <div class="chart-title">
