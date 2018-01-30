@@ -16,7 +16,7 @@ copy of the GNU General Public License along with the IFDM Suite. If not, see <h
                 <li ng-class="{active: subServ.layoutStatus.isForm === false}">
                     <a href="#/subscriptions/manageSubscriptions">{{'subscriptions.pagemenu_manage_subscriptions' | i18n }}</a>
                 </li>
-                <li ng-class="{active: subServ.layoutStatus.isForm === true}">
+                <li ng-class="{active: subServ.layoutStatus.isForm === true}" ng-if="subServ.layoutStatus.isNewTabVisible">
                     <a href="#/subscriptions/newSubscription">{{ getTitle() }}</a>
                 </li>
             </ul>

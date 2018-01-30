@@ -16,10 +16,12 @@ copy of the GNU General Public License along with the IFDM Suite. If not, see <h
  * @param $scope {Service} controller scope
  * @param locale {Service} angular locale service
  * @param subscriptionsService {Service} The subscriptions service <p>{@link unionvmsWeb.subscriptionsService}</p>
+ * @param userService {Service} The USM user service
+ * @param $stateParams {Service} The angular ui router $stateParams service
  * @description
  *  The controller for the subscription tabbed header
  */
-angular.module('unionvmsWeb').controller('SubscriptionsheaderCtrl',function($scope, subscriptionsService, locale){
+angular.module('unionvmsWeb').controller('SubscriptionsheaderCtrl',function($scope, subscriptionsService, locale, userService, $stateParams){
     $scope.subServ = subscriptionsService;
 
     /**
@@ -38,4 +40,18 @@ angular.module('unionvmsWeb').controller('SubscriptionsheaderCtrl',function($sco
 
         return title;
     };
+
+    /**
+     * Initialization function
+     *
+     * @memberOf SubscriptionsheaderCtrl
+     * @private
+     */
+    function init(){
+        if(!userService.isAllowed('MANAGE_SUBSCRIPTION', 'Subscription', true) && _.keys($stateParams).length === 0){
+            $scope.subServ.layoutStatus.isNewTabVisible = false;
+        }
+    }
+
+    init();
 });

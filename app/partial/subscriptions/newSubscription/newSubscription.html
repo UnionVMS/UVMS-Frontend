@@ -18,7 +18,7 @@ copy of the GNU General Public License along with the IFDM Suite. If not, see <h
             <form name="subscriptionForm" id="subscriptionForm" novalidate>
                 <div ng-include="'partial/subscriptions/subscriptionTopForm/subscriptionTopForm.html'"></div>
             </form>
-            <div class="pull-right">
+            <div class="pull-right" ng-if="checkPrivileges()">
                 <button class="btn btn-primary button btn-action" type="button" ng-click="saveSubscription()">{{"common.save" | i18n }}</button>
             </div>
         </div>

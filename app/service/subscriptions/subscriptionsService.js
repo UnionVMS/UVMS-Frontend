@@ -23,12 +23,14 @@ angular.module('unionvmsWeb').factory('subscriptionsService',function(locale, $t
     var subscriptionsService = {
         layoutStatus: {
             isForm: false,
-            isNewSub: true
+            isNewSub: true,
+            isNewTabVisible: true
         },
         resetLayout: function(){
             this.layoutStatus = {
                 isForm: false,
-                isNewSub: true
+                isNewSub: true,
+                isNewTabVisible: true
             };
         },
         alertStatus: {

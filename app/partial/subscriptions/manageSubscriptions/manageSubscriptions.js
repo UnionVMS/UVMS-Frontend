@@ -181,6 +181,7 @@ angular.module('unionvmsWeb').controller('ManagesubscriptionsCtrl',function($sco
     $scope.editSubscription = function (index) {
         var record = $scope.displayedSubscriptions[index];
         $scope.subServ.layoutStatus.isNewSub = false;
+        $scope.subServ.layoutStatus.isNewTabVisible = true;
         $state.go('app.newSubscription', {subToEdit: record});
     };
 

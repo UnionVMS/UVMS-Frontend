@@ -23,7 +23,7 @@ copy of the GNU General Public License along with the IFDM Suite. If not, see <h
  * @description
  *  The controller for the subscription creating and editing view
  */
-angular.module('unionvmsWeb').controller('NewsubscriptionCtrl',function($scope, locale, subscriptionsService, subscriptionsRestService , Subscription, $stateParams, loadingStatus){
+angular.module('unionvmsWeb').controller('NewsubscriptionCtrl',function($scope, locale, subscriptionsService, subscriptionsRestService , Subscription, $stateParams, loadingStatus, userService){
     $scope.subServ = subscriptionsService;
     $scope.isSubmitting = false;
 
@@ -100,6 +100,22 @@ angular.module('unionvmsWeb').controller('NewsubscriptionCtrl',function($scope, 
                 }
             }
         }
+    };
+
+    /**
+     * Check if user has privileges to manage subscriptions
+     *
+     * @memberOf NewsubscriptionCtrl
+     * @public
+     * @alias checkPrivileges
+     * @returns {Boolean} Whether the user has privileges to manage subscriptions or not
+     */
+    $scope.checkPrivileges = function(){
+        var isAllowed = true;
+        if (!userService.isAllowed('MANAGE_SUBSCRIPTION', 'Subscription', true)){
+            isAllowed = false;
+        }
+        return isAllowed;
     };
 
     $scope.$on('$destroy', function(){
