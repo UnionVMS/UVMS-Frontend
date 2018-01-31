@@ -19,72 +19,115 @@ copy of the GNU General Public License along with the IFDM Suite. If not, see <h
  * @description
  *  The controller for the Catch Evolution panel  
  */
-angular.module('unionvmsWeb').controller('CatchevolutionCtrl', function($scope, activityRestService, locale, tripSummaryService) {
-    var activityTypes = ['DEPARTURE', 'AREA_ENTRY', 'AREA_EXIT', 'FISHING_OPERATION', 'JOINT_FISHING_OPERATION', 'DISCARD', 'RELOCATION', 'TRANSHIPMENT', 'ARRIVAL', 'LANDING'];
-    $scope.speciesColors = tripSummaryService.trip.specieColor;   
-    $scope.sortedCatch = [];
+angular.module('unionvmsWeb').controller('CatchevolutionCtrl', function ($scope, activityRestService, locale, tripSummaryService, loadingStatus) {
+    $scope.sencondLevel = [];
+    $scope.thirdLevel = [];
+
+    $scope.speciesColors = tripSummaryService.trip.specieColor;
+
     /**
        * Initialization function
        * 
        * @memberof CatchdetailsCtrl
        * @private
        */
-    var init = function() {
-        // get Catches Evolution details.
-        //FIXME change with proper trip id
-        activityRestService.getTripCatchesEvolution('1234').then(function(response){
-            $scope.catchEvolutionData = response;
-            processEvolutionData();
-        }, function(error){
-            //TODO deal with error from service
-        });
-    };
-    
-    function processEvolutionData(){
-        angular.forEach(activityTypes, function (activityName) {
-            angular.forEach($scope.catchEvolutionData.catchProgress, function(item){
-                if (activityName === item.activityType) {
-                    item.title = locale.getString('activity.activity_type_' + item.activityType.toLowerCase());
-                    angular.forEach(item, function(chart,chartName){
-                        if(chartName === 'cumulated'){
-                            chart.title = locale.getString('activity.catch_evolution_title_cumulated');
-                        }
+    var init = function () {
+       
+        if (angular.isDefined(tripSummaryService.trip)) {
+            loadingStatus.isLoading('TripSummary', true, 2);
+            $scope.tripId = tripSummaryService.trip.id;
+            // get Catches Evolution details.
+            activityRestService.getTripCatchesEvolution($scope.tripId).then(function (response) {
+                $scope.catchEvolutionData = response;
+                processEvolutionData();
+                
+            }, function (error) {
+                loadingStatus.isLoading('TripSummary', false);
+                //TODO deal with error from service
+            });
+        }
 
-                        if(angular.isDefined(chart.speciesList) && chart.speciesList.length > 0){
-                            angular.forEach(chart.speciesList, function(value,key){
-                                var specieCode = value.speciesCode;
-                                angular.forEach($scope.speciesColors, function(item){
-                                    if(specieCode === item.code){
-                                        chart.speciesList[key].color = '#' + item.color;
-                                    }
-                                });
-                            });
-                        }
+
+    };
+
+    function comparisionCharts(data, chartName, thirdLevel) {
+        if (thirdLevel === true) {
+            $scope.thirdLevel.push({
+                'catchEvolution': {
+                    'cumulative': data.catchEvolution[chartName]
+                },
+                'title': data.title
+            });
+        } else {
+            $scope.sencondLevel.push({
+                'catchEvolution': {
+                    'cumulative': data.catchEvolution[chartName]
+                },
+                'title': data.title
+            });
+        }
+    }
+
+    function prepareChartData(actiType, repType, level) {
+        var temp = _.where($scope.catchEvolutionData.catchProgress, { activityType: actiType, reportType: repType });
+
+        if (temp.length > 0) {
+            comparisionCharts(_.last(temp), '0onboard', level);
+        }
+    }
+
+    function processEvolutionData() {
+        angular.forEach($scope.catchEvolutionData.catchProgress, function (item) {
+            item.title = locale.getString('activity.activity_type_' + item.activityType.toLowerCase()) + ' (' + locale.getString('activity.' + item.reportType.toLowerCase()) + ')';
+            item.catchEvolution['0onboard'] = item.catchEvolution.onboard;
+            item.catchEvolution['1cumulated'] = item.catchEvolution.cumulated;
+            delete item.catchEvolution.onboard;
+            delete item.catchEvolution.cumulated;
+            angular.forEach(item.catchEvolution, function (chart, chartName) {
+                if (chartName.indexOf('cumulated') !== -1) {
+                    chart.title = locale.getString('activity.catch_evolution_title_cumulated');
+                }
+                if (angular.isDefined(chart.speciesList) && chart.speciesList.length > 0) {
+                    angular.forEach(chart.speciesList, function (value, key) {
+                        var specieCode = value.speciesCode;
+                        angular.forEach($scope.speciesColors, function (item) {
+                            if (specieCode === item.code) {
+                                chart.speciesList[key].color = '#' + item.color;
+                            }
+                        });
                     });
-                    $scope.sortedCatch.push(item);
                 }
             });
         });
-        
-        angular.forEach($scope.catchEvolutionData.finalCatch, function(chart,chartName){
-            if(chartName === 'cumulated'){
-                chart.title = locale.getString('activity.catch_evolution_title_cumulated_catch');
-            }else if(chartName === 'landed'){
-                chart.title = locale.getString('activity.catch_panel_title_landed');
-            }
 
-            if(angular.isDefined(chart.speciesList) && chart.speciesList.length > 0){
-                angular.forEach(chart.speciesList, function(value,key){
-                    var specieCode = value.speciesCode;
-                        angular.forEach($scope.speciesColors, function(item){
-                          if(specieCode === item.code){
-                             chart.speciesList[key].color = '#' + item.color;
-                             chart.speciesList[key].tableColor = {'background-color': tinycolor('#' + item.color).setAlpha(0.7).toRgbString()};
-                          }
-                        });
-                });
+        //second level chart:1
+        var lastchart = _.last($scope.catchEvolutionData.catchProgress);
+        if(lastchart !== null){
+            comparisionCharts(_.last($scope.catchEvolutionData.catchProgress), '1cumulated');
+        }
+        //second level chart:2
+        prepareChartData('ARRIVAL', 'NOTIFICATION');
+        //second level chart:3
+        prepareChartData('LANDING', 'DECLARATION');
+
+        // thrid level chart:1
+        var tranOrderID = _.where($scope.catchEvolutionData.catchProgress, { activityType: 'TRANSHIPMENT' })
+        if (tranOrderID.length > 0) {
+            var trandata = _.where($scope.catchEvolutionData.catchProgress, { orderId: tranOrderID[0].orderId - 1 });
+            if (trandata.length > 0) {
+                comparisionCharts(_.last(trandata), '1cumulated', true);
             }
-        });
+        }
+        // thrid level chart:2
+        prepareChartData('TRANSHIPMENT', 'NOTIFICATION', true);
+        // thrid level chart:3
+        var landecl = _.where($scope.catchEvolutionData.catchProgress, { activityType: 'LANDING', reportType: 'DECLARATION' });
+        if (landecl.length === 0) {
+            prepareChartData('TRANSHIPMENT', 'DECLARATION', true);
+        } else {
+            prepareChartData('LANDING', 'DECLARATION', true);
+        }
+        loadingStatus.isLoading('TripSummary', false);
     }
 
     init();

@@ -231,6 +231,12 @@ angular.module('unionvmsWeb')
             return this.vesselId.guid;
         }
     };
+    
+    Vessel.prototype.getHistoryGuid = function() {
+        if(angular.isDefined(this.eventHistory)){
+            return this.eventHistory.eventId;
+        }
+    };
 
     //Check if the vessel is equal to another vessel
     //Equal means same guid
