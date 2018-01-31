@@ -256,6 +256,12 @@ module.exports = function (grunt) {
                 filter:'isFile'
             },
             {
+                expand: true,
+                src: ['probing/**'],
+                dest: 'dist',
+                filter: 'isFile'
+            },
+            {
                 src: ['temp/config.json'],
                 dest: 'dist/config.json'
             }
