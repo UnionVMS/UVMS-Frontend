@@ -38,6 +38,14 @@ copy of the GNU General Public License along with the IFDM Suite. If not, see <h
 			.selected-combo-icon {
 				display: none;
 			}
+			.ban-icon {
+				position: absolute;
+				left: 3px;
+				top: 5px;
+				z-index: 1;
+				display: block;
+				color: @errorColor;
+			}
 		}
 		.loading-msg {
 			text-align: center;
@@ -90,6 +98,17 @@ copy of the GNU General Public License along with the IFDM Suite. If not, see <h
 }
 
 .combobox {
+    .ban-icon {
+      position: absolute;
+      left: 3px;
+      top: 6px;
+      z-index: 1;
+      display: block;
+      color: @errorColor;
+    }
+    .with-ban-icon {
+      margin-left: 8px;
+    }
 	&.comboLineStyle .dropdown {
 		.btn.btn-default.dropdown-toggle {
 			padding: 3px 28px 3px 12px;

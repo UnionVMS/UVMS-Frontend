@@ -17,6 +17,8 @@ copy of the GNU General Public License along with the IFDM Suite. If not, see <h
  * @param activityService {Service} The activity service
  * @param visibilityService {Service} The visibility service <p>{@link unionvmsWeb.visibilityService}</p>
  * @param fishingActivityService {Service} The fishing activity service <p>{@link unionvmsWeb.fishingActivityService}</p>
+ * @param $stateParams {Service} the angular ui router state params service
+ * @param $state {Service} the angular ui router state service
  * @attr {Array} displayedActivities - The array of displayed activities used by smart tables
  * @description
  *  The controller for the fisihing activity reports table list
@@ -27,26 +29,21 @@ angular.module('unionvmsWeb').controller('ActivityreportslistCtrl',function($sco
     $scope.attrVisibility = visibilityService;
     $scope.visServ = visibilityService;
     //Automatically open a fishing activity details page when navigating from another tab
-   /* if (_.keys($stateParams).length > 0 && $stateParams.activityId !== null && $stateParams.tripId !== null && $stateParams.activityType !== null){
-        $scope.faServ.id = $stateParams.activityId;
-        $scope.faServ.activityType = $stateParams.activityType.toLowerCase();
-        if ($stateParams.faReportType !== null){
-            $scope.faServ.documentType = $stateParams.faReportType.toLowerCase();
-        }
-        $scope.goToView(3);
-        
-        $stateParams.activityType = null;
-        $stateParams.activityId = null;
-        $stateParams.tripId = null;
-        $stateParams.faReportType = null;
-    }*/
-    
-     if (_.keys($stateParams).length > 0 && $stateParams.tripId !== null){
+    if (_.keys($stateParams).length > 0 && $stateParams.tripId !== null){
          $scope.tripSummServ.openNewTrip($stateParams.tripId);
          $scope.goToView(3);
          $stateParams.tripId = null;
     }
 
+    /**
+     * Update the Activvity list
+     *
+     * @memberOf ActivityreportslistCtrl
+     * @public
+     * @alias updateActivityList
+     * @param {Objec} tableState - The table state object containing pagination and sorting status
+     * @param {Obj} ctrl - The controller of the smart table
+     */
     $scope.updateActivityList = function(tableState, ctrl){
         $scope.callServer(tableState, ctrl, 'reportsList');
     };
@@ -71,7 +68,7 @@ angular.module('unionvmsWeb').controller('ActivityreportslistCtrl',function($sco
     /**
      * Update the fishing activities column visibility settings
      *  
-     * @memberof AdvancedsearchformCtrl
+     * @memberof ActivityreportslistCtrl
      * @public
      * @alias updateVisibilityCache
      * @param {String} column - the column name property to be updated

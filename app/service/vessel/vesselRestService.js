@@ -47,6 +47,11 @@ angular.module('unionvmsWeb')
             vesselHistory : function(){
                 return $resource('/asset/rest/history/asset');
             },
+            historyVessel : function(){
+                return $resource('/asset/rest/history/:id', {}, {
+                    update: {method: 'PUT'}
+                });
+            },
             getConfigValues : function(){
                 return $resource('/asset/rest/config');
             },
@@ -292,6 +297,23 @@ angular.module('unionvmsWeb')
         );
         return deferred.promise;
     };
+    
+    var getVesselByVesselHistoryId = function(vesselId) {
+        var deferred = $q.defer();
+        vesselRestFactory.historyVessel().get({id: vesselId}, function(response) {
+            if (response.code !== 200) {
+                deferred.reject("Invalid response status");
+                return;
+            }
+
+            deferred.resolve(Vessel.fromJson(response.data));
+        },
+        function(err) {
+            deferred.reject("could not load vessel with history ID " + vesselId);
+        });
+
+        return deferred.promise;
+    };
 
     var getVesselGroupsForUser = function (){
         var deferred = $q.defer();
@@ -387,6 +409,7 @@ angular.module('unionvmsWeb')
         getVessel: getVessel,
         getSearchableFields : getSearchableFields,
         getVesselHistoryListByVesselId : getVesselHistoryListByVesselId,
+        getVesselByVesselHistoryId : getVesselByVesselHistoryId,
         getVesselGroupsForUser : getVesselGroupsForUser,
         createNewVesselGroup : createNewVesselGroup,
         updateVesselGroup : updateVesselGroup,

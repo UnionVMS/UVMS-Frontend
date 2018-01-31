@@ -87,7 +87,7 @@ angular.module('unionvmsWeb')
         });
 
         return sortedData;
-    }
+    };
 
     Exchange.prototype.isEqualExchange = function(item) {
         return angular.isDefined(item) && item.id === this.id;
