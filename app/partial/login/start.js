@@ -63,7 +63,7 @@ angular.module('unionvmsWeb').factory('startPageService',function($log, globalSe
             case 'app.reporting':
                 return checkAccess('Reporting', 'LIST_REPORTS');
             case 'app.subscriptions':
-                return checkAccess('Subscriptions','viewNewSubscription');
+                return checkAccess('Subscription','VIEW_SUBSCRIPTION');
             default:
                 $log.info("State: " +state +" is missing from list. Returning false.");
                 return false;

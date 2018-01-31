@@ -111,7 +111,7 @@ angular.module('unionvmsWeb').controller('CatchevolutionCtrl', function ($scope,
         prepareChartData('LANDING', 'DECLARATION');
 
         // thrid level chart:1
-        var tranOrderID = _.where($scope.catchEvolutionData.catchProgress, { activityType: 'TRANSHIPMENT' })
+        var tranOrderID = _.where($scope.catchEvolutionData.catchProgress, { activityType: 'TRANSHIPMENT' });
         if (tranOrderID.length > 0) {
             var trandata = _.where($scope.catchEvolutionData.catchProgress, { orderId: tranOrderID[0].orderId - 1 });
             if (trandata.length > 0) {
