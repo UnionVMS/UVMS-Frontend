@@ -62,14 +62,14 @@ angular.module('unionvmsWeb').factory('searchService',function($q, $log, searchU
             var vesselRequest = new GetListRequest(1, page.getNumberOfItems(), true);
             $.each(page.items, function(index, movement) {
                 if(angular.isDefined(movement.connectId)){
-                    vesselRequest.addSearchCriteria("GUID", movement.connectId);
+                    vesselRequest.addSearchCriteria("HIST_GUID", movement.connectId);
                 }
             });
             vesselRestService.getAllMatchingVessels(vesselRequest).then(function(vessels){
                 var vesselPage = new VesselListPage(vessels, 1, 1);
                 //Update movement page by connecting each movement to a vessel
                 $.each(page.items, function(index, movement) {
-                    var vessel = vesselPage.getVesselByGuid(movement.connectId);
+                    var vessel = vesselPage.getVesselByHistoryGuid(movement.connectId);
                     if(angular.isDefined(vessel)){
                         movement.setVessel(vessel);
                     }
@@ -258,7 +258,7 @@ angular.module('unionvmsWeb').factory('searchService',function($q, $log, searchU
             var deferred = $q.defer();
             movementRestService.getLatestMovement(DEFAULT_ITEMS_PER_PAGE).then(function(latestMovements){
                 $.each(latestMovements, function(index, latestMovement) {
-                    getListRequest.addSearchCriteria("GUID", latestMovement.connectId);
+                    getListRequest.addSearchCriteria("HIST_GUID", latestMovement.connectId);
                 });
 
                 if(checkAccessToFeature('Vessel')){
@@ -277,7 +277,7 @@ angular.module('unionvmsWeb').factory('searchService',function($q, $log, searchU
                             };
 
                             $.each(vessels.items, function(index, vessel) {
-                                vessel.lastMovement = findGuid(vessel.vesselId.guid);
+                                vessel.lastMovement = findGuid(vessel.getHistoryGuid());
                             });
 
                             if(latestMovements.length > 0) {
@@ -317,13 +317,13 @@ angular.module('unionvmsWeb').factory('searchService',function($q, $log, searchU
                 if(checkAccessToFeature('Movement', 'viewMovements')){
                     var connectIds = [];
                     $.each(vesselPage.items, function(index, vessel) {
-                        connectIds.push(vessel.getGuid());
+                        connectIds.push(vessel.getHistoryGuid());
                     });
 
                     movementRestService.getLatestMovementsByConnectIds(connectIds).then(function(movementsPage){
                         //Map movements to vessels
                         $.each(vesselPage.items, function(index, vessel) {
-                            var movement = movementsPage.getItemByProperty('connectId', vessel.getGuid());
+                            var movement = movementsPage.getItemByProperty('connectId', vessel.getHistoryGuid());
                             vessel.lastMovement = movement;
                         });
                         deferred.resolve(vesselPage);

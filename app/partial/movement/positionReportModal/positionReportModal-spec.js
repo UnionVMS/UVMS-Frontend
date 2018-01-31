@@ -57,7 +57,7 @@ describe('PositionReportModalCtrl', function() {
         var vessel = new Vessel();
         vessel.name ="Test vessel";
         deferred2.resolve(vessel);
-        var getVesselSpy = spyOn(vesselRestService, "getVessel").andReturn(deferred2.promise);
+        var getVesselSpy = spyOn(vesselRestService, "getVesselByVesselHistoryId").andReturn(deferred2.promise);
 
         var ctrl = createController('ABC-123');
         scope.$digest();
