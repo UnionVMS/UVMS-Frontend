@@ -538,7 +538,7 @@ unionvmsWebApp.config(function($stateProvider, $compileProvider, tmhDynamicLocal
                 subToEdit: null
             },
             onExit: function (subscriptionsService) {
-                subscriptionsService.layoutStatus.isNewSub = true;
+                subscriptionsService.resetLayout();
             }
         })
         .state('app.activity', {
