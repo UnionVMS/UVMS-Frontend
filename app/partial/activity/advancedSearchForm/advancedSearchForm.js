@@ -308,7 +308,7 @@ angular.module('unionvmsWeb').controller('AdvancedsearchformCtrl',function($scop
                 simpleCriteria: formatedSearch,
                 multipleCriteria: multipleFormatedSearch
             };
-
+            
             $scope.actServ.getActivityList(function(){
                 $scope.actServ.reportsList.fromForm = true;
                 $scope.actServ.reportsList.stCtrl.pipe();
@@ -317,7 +317,7 @@ angular.module('unionvmsWeb').controller('AdvancedsearchformCtrl',function($scop
             $scope.actServ.getActivityList(function(){
                 $scope.actServ.tripsList.fromForm = true;
                 $scope.actServ.tripsList.stCtrl.pipe();
-            }, undefined, 'tripsList');
+            }, undefined, 'tripsList');         
         }
     };
 

@@ -318,15 +318,18 @@ angular.module('unionvmsWeb').factory('activityService',function(locale, activit
             serviceName = 'getTripsList';
             arrName = 'trips';
             displayedArrName = 'displayedTrips';
-            //FIXME
-            payload.pagination = payload.sorting = {};
+            payload.sorting = {};
         }
         
         actServ.clearAttributeByType(arrName);
 
         activityRestService[serviceName](payload).then(function(response){
             if (response.totalItemsCount !== 0){
+                if(listName === 'reportsList'){
                 actServ[listName].pagination.totalPages = Math.ceil(response.totalItemsCount / pageSize);
+                }else{
+                actServ[listName].pagination.totalPages = Math.ceil(response.totalCountOfRecords / pageSize);
+                }
             }
 
             if(listName === 'tripsList'){
@@ -350,7 +353,7 @@ angular.module('unionvmsWeb').factory('activityService',function(locale, activit
             }
             
             if (!angular.isDefined(callback) && angular.isDefined(actServ[listName].tableState)){
-                actServ[listName].tableState.pagination.numberOfPages = actServ[listName].pagination.totalPages; 
+                actServ[listName].tableState.pagination.numberOfPages = actServ[listName].pagination.totalPages;
             }
 
             actServ[listName].isLoading = false;
@@ -361,7 +364,7 @@ angular.module('unionvmsWeb').factory('activityService',function(locale, activit
             actServ[listName].hasError = true;
             actServ[listName].isTableLoaded = false;
         });
-
+        
     };
     
     /**
