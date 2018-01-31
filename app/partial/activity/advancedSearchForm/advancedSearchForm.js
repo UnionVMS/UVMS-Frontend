@@ -311,16 +311,12 @@ angular.module('unionvmsWeb').controller('AdvancedsearchformCtrl',function($scop
             
             $scope.actServ.getActivityList(function(){
                 $scope.actServ.reportsList.fromForm = true;
-                if(angular.isDefined($scope.actServ.reportsList)){
-                    $scope.actServ.reportsList.stCtrl.pipe();
-                }
+                $scope.actServ.reportsList.stCtrl.pipe();
             }, undefined, 'reportsList');
 
             $scope.actServ.getActivityList(function(){
                 $scope.actServ.tripsList.fromForm = true;
-                if(angular.isDefined($scope.actServ.tripsList)){
-                    $scope.actServ.tripsList.stCtrl.pipe();
-                }
+                $scope.actServ.tripsList.stCtrl.pipe();
             }, undefined, 'tripsList');         
         }
     };
