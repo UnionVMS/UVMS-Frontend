@@ -11,7 +11,7 @@ copy of the GNU General Public License along with the IFDM Suite. If not, see <h
  */
 (function(){
 
-    var configurationService = function($q, $log, locale, vesselRestService, movementRestService, mobileTerminalRestService, auditLogRestService, ruleRestService, alarmRestService, exchangeRestService){
+    var configurationService = function($q, $log, locale, vesselRestService, movementRestService, mobileTerminalRestService, auditLogRestService, ruleRestService, alarmRestService, exchangeRestService, subscriptionsRestService){
 
         //Dict of configuration parameters for all modules
         var configs = {};
@@ -27,7 +27,8 @@ copy of the GNU General Public License along with the IFDM Suite. If not, see <h
             "ALARM_STATUSES" : alarmRestService.getAlarmStatusConfig,
             "TICKET_STATUSES" : alarmRestService.getTicketStatusConfig,
             "EXCHANGE" : exchangeRestService.getExchangeConfig,
-            "MOVEMENT_AREAS": movementRestService.getAreas
+            "MOVEMENT_AREAS": movementRestService.getAreas,
+            "ORGANISATIONS": subscriptionsRestService.getOrganisations
         };
 
         //Clear the loaded configs
@@ -167,6 +168,6 @@ copy of the GNU General Public License along with the IFDM Suite. If not, see <h
     };
 
     angular.module('unionvmsWeb')
-	.factory('configurationService',['$q', '$log', 'locale', 'vesselRestService', 'movementRestService', 'mobileTerminalRestService', 'auditLogRestService', 'ruleRestService', 'alarmRestService', 'exchangeRestService', configurationService]);
+	.factory('configurationService',['$q', '$log', 'locale', 'vesselRestService', 'movementRestService', 'mobileTerminalRestService', 'auditLogRestService', 'ruleRestService', 'alarmRestService', 'exchangeRestService', 'subscriptionsRestService', configurationService]);
 
 }());

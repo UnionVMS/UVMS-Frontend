@@ -34,6 +34,7 @@ angular.module('unionvmsWeb').factory('startPageService',function($log, globalSe
         alarms : ['app.holdingTable', 'app.openTickets'],
         admin : ['app.auditLog'],
         user : ['app.usm.users'],
+        subscriptions : ['app.manageSubscriptions'],
         reporting : ['app.reporting'],
     };
 
@@ -61,6 +62,8 @@ angular.module('unionvmsWeb').factory('startPageService',function($log, globalSe
                 return userFeatureAccess.accessToAnyFeatureInList('USM');
             case 'app.reporting':
                 return checkAccess('Reporting', 'LIST_REPORTS');
+            case 'app.manageSubscriptions':
+                return checkAccess('Subscription','VIEW_SUBSCRIPTION');
             default:
                 $log.info("State: " +state +" is missing from list. Returning false.");
                 return false;

@@ -83,7 +83,12 @@ angular.module('unionvmsWeb').factory('loadingStatus',function() {
 		    message: 'activity.mdr_settings_loading',
             value: false,
             counter: 0
-		}
+		},
+		Subscriptions: {
+		    message: 'subscriptions.saving_subscription',
+            value: false,
+            counter: 0
+        }
 	};
 	
 	var loadingStatus = {

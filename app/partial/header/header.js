@@ -58,9 +58,6 @@ angular.module('unionvmsWeb').controller('HeaderCtrl',function($scope, $log, $st
         }
     };
 
-    $scope.sales = function(){
-        $state.go('app.activity', {tripId: 'HUN-TRP-3e5fef5feeee1x000000'});   
-    };
     var init = function(){
         $scope.userName = userService.getUserName();
         $scope.isAuthenticated = userService.isLoggedIn();

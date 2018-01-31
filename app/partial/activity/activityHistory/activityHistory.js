@@ -12,36 +12,22 @@ copy of the GNU General Public License along with the IFDM Suite. If not, see <h
 /**
  * @memberof unionvmsWeb
  * @ngdoc controller
- * @name ActivityoverviewCtrl
+ * @name ActivityhistoryCtrl
  * @param $scope {Service} controller scope
  * @param activityService {Service} The activity service
  * @description
- *  The controller for the fishing activity overview page
+ *  The controller for the fishing activity history overview page
  */
 angular.module('unionvmsWeb').controller('ActivityhistoryCtrl',function($scope, activityService){
     $scope.actServ = activityService;
-    
-    /**
-     * Get the details of an activity an open the activity details page
-     * 
-     * @memberof ActivityoverviewCtrl
-     * @public
-     * @alias getDetails
-     */
-    $scope.getDetails = function(){
-        //FIXME remove mock
-        $scope.actServ.details = {
-            name: 'Activity details will be here'
-        };
-        $scope.goToView(3);
-    };
-    
+
     /**
      * Open the activities history list page
      * 
-     * @memberof ActivityoverviewCtrl~
+     * @memberof ActivityhistoryCtrl
      * @public
      * @alias openActivityHistory
+     * @param {Number} idx - The index of the activity record for which history will be fetched
      */
     $scope.openActivityHistory = function(idx){
         $scope.actServ.activitiesHistoryList.isLoading = true;

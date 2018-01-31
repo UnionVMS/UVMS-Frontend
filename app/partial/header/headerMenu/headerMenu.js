@@ -42,6 +42,11 @@ angular.module('unionvmsWeb').controller('HeaderMenuCtrl',function($scope, $root
             $scope.addMenuItem(locale.getString('header.menu_areas'), '/areas', 'areas');
         }
 
+        // Subscriptions
+        if (checkAccess('Subscription','VIEW_SUBSCRIPTION') && checkAccess('USM', 'viewOrganisations')) {
+            $scope.addMenuItem(locale.getString('header.menu_subscriptions'), '/subscriptions/manageSubscriptions', 'manageSubscriptions');
+        }
+
         // Activity
         if (checkAccess('Activity', 'ACTIVITY_ALLOWED')) {
             $scope.addMenuItem(locale.getString('header.menu_activity'), '/activity', 'activity');

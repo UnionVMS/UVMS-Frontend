@@ -4,7 +4,8 @@
 			<div class="btn btn-default dropdown-toggle" ng-if="::!editable">
 				<!--selected label-->
 				<div ng-class="setplaceholdercolor ? 'placeholderColor':''" class="dropdowntext" ng-if="::!lineStyle" title="{{initialValue && multiple ? initialValue.text + ': ' +  currentItemLabel : currentItemLabel}}">
-					{{currentItemLabel}}
+					<i class="ban-icon fa fa-ban" ng-if="banTitle !== undefined && currentItemEnabled === false" title="{{::banTitle}}"></i>
+                    <span ng-class="{'with-ban-icon': banTitle !== undefined && currentItemEnabled === false}">{{currentItemLabel}}</span>
 					<!--MULTIPLE SELECTION-->
 					<ul class="selected-options" ng-if="multiple && (!hideSelectedItems || (hideSelectedItems && selectedItems.length === 1))">
 						<li ng-repeat="item in selectedItems" title="{{::item.text}}">
@@ -46,6 +47,7 @@
 			ng-repeat="item in loadedItems" ng-click="changeCheckSelection(item)" ng-if="!lineStyle && !comboSection && !isFilterActive && !isLoading"
 			title="{{::getItemDesc(item)}}" ng-show="(!group || (group && comboboxServ.isAvailableItem(group, ngModel, item.code)))">
 				<i class="selected-combo-icon fa fa-check"></i>
+                <i class="ban-icon fa fa-ban" ng-if="::(!isItemEnabled(item) && banTitle !== undefined)" title="{{::banTitle}}"></i>
 				<a ng-bind="::getItemLabel(item)"></a>
 			</li>
 			<!--COMBO WITH SECTIONS-->

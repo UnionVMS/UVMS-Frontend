@@ -406,7 +406,7 @@ angular.module('unionvmsWeb')
     var escapeXmlString = function(xml){
         var escaped =  xml.replace(/(\\r\\n|\\n|\\r)/gm,"").replace(/\\"/g, '"');
         return escaped;
-    }
+    };
 
     var getRawExchangeMessage = function(guid) {
         var deferred = $q.defer();
