@@ -40,12 +40,7 @@ angular.module('unionvmsWeb').controller('ActivityreportslistCtrl',function($sco
         $stateParams.tripId = null;
         $stateParams.faReportType = null;
     }*/
-    
-     if (_.keys($stateParams).length > 0 && $stateParams.tripId !== null){
-         $scope.tripSummServ.openNewTrip($stateParams.tripId);
-         $scope.goToView(3);
-         $stateParams.tripId = null;
-    }
+
 
     $scope.updateActivityList = function(tableState, ctrl){
         $scope.callServer(tableState, ctrl, 'reportsList');

@@ -27,7 +27,7 @@ copy of the GNU General Public License along with the IFDM Suite. If not, see <h
  * @description
  *  The controller for the advanced search form of the activity tab table  
  */
-angular.module('unionvmsWeb').controller('AdvancedsearchformCtrl',function($scope, activityService, unitConversionService, $stateParams, mdrCacheService, vesselRestService, userService, locale, visibilityService){
+angular.module('unionvmsWeb').controller('AdvancedsearchformCtrl',function($scope, alertService, activityService, activityRestService, unitConversionService, $stateParams, mdrCacheService, vesselRestService, userService, locale, visibilityService){
     $scope.actServ = activityService;
     $scope.visServ = visibilityService;
     $scope.isFormVisible = true;
@@ -399,14 +399,39 @@ angular.module('unionvmsWeb').controller('AdvancedsearchformCtrl',function($scop
     function init(){
         getComboboxData();
         if (_.keys($stateParams).length > 0 && $stateParams.tripId !== null){
-            $scope.advancedSearchObject = {
-                tripId: $stateParams.tripId
-            };
+            var id = $stateParams.tripId;
+            activityRestService.getTripsList({
+                "pagination": {
+                    "offset": 0,
+                    "pageSize": 25
+                },
+                "sorting": {},
+                "searchCriteriaMap": {
+                    "TRIP_ID": id
+                },
+                "searchCriteriaMapMultipleValues": {
+                    "PURPOSE": ["9", "1", "5", "3"]
+                }
+            }).then(function(response){
+                if(response.totalCountOfRecords > 0){
+                    $scope.advancedSearchObject = {
+                        tripId: id
+                    };
+                    $scope.tripSummServ.openNewTrip(id);
+                    $scope.goToView(3);
+                }else {
+                    $scope.goToView(0);
+                    alertService.showErrorMessageWithTimeout(locale.getString('activity.invalid_trip_id'));
+                    $scope.resetSearch();
+                } 
+            });
+           
             $scope.$watch('activityAdvancedSearchForm.$valid', function (newVal) {
                 if (angular.isDefined(newVal)) {
                     $scope.searchFAReports();
                 }
             });
+            $stateParams.tripId = null;
         }
     }
 
