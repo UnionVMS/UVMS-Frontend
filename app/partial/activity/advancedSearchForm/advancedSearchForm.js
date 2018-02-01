@@ -21,13 +21,14 @@ copy of the GNU General Public License along with the IFDM Suite. If not, see <h
  * @param userService {Service} The user service
  * @param locale {Service} The angular locale service
  * @param visibilityService {Service} The visibility service <p>{@link unionvmsWeb.visibilityService}</p>
+ * @param $interval {Service} The angular interval service
  * @attr {Boolean} isFormValid - A flag for validating the search form
  * @attr {Object} codeLists - An object containing all code lists items
  * @attr {Object} advancedSearchObject - An object containing all search criterias specified within the form
  * @description
  *  The controller for the advanced search form of the activity tab table  
  */
-angular.module('unionvmsWeb').controller('AdvancedsearchformCtrl',function($scope, activityService, unitConversionService, $stateParams, mdrCacheService, vesselRestService, userService, locale, visibilityService){
+angular.module('unionvmsWeb').controller('AdvancedsearchformCtrl',function($scope, alertService, activityService, activityRestService, unitConversionService, $stateParams, mdrCacheService, vesselRestService, userService, locale, visibilityService, $interval){
     $scope.actServ = activityService;
     $scope.visServ = visibilityService;
     $scope.isFormVisible = true;
@@ -235,6 +236,48 @@ angular.module('unionvmsWeb').controller('AdvancedsearchformCtrl',function($scop
     };
 
     /**
+     * Get properly formatted simple search criteria
+     *
+     * @memberOf AdvancedsearchformCtrl
+     * @private
+     *
+     * @returns {Object} The formatted search criteria
+     */
+    function getSimpleCriteria() {
+        var keyMapper = {
+            reportType: 'REPORT_TYPE',
+            fromId: 'FROM',
+            owner: 'OWNER',
+            startDateTime: 'PERIOD_START',
+            endDateTime: 'PERIOD_END',
+            vesselGroup: 'VESSEL_GROUP',
+            vessel: 'VESSEL',
+            gearType: 'GEAR',
+            species: 'SPECIES',
+            master: 'MASTER',
+            area: 'AREAS',
+            port: 'PORT',
+            minWeight: 'QUANTITY_MIN',
+            maxWeight: 'QUANTITY_MAX',
+            comChannel: 'SOURCE',
+            activityType: 'ACTIVITY_TYPE',
+            tripId: 'TRIP_ID'
+        };
+
+        var formatedSearch = {};
+        angular.forEach($scope.advancedSearchObject, function(value, key) {
+            if (key !== 'weightUnit' && key !== 'purposeCode' && (angular.isDefined(value) && value !== null && value !== '')){
+                if (key === 'startDateTime' || key === 'endDateTime'){
+                    value = unitConversionService.date.convertDate(value, 'to_server');
+                }
+                this[keyMapper[key]] = value;
+            }
+        }, formatedSearch);
+
+        return formatedSearch;
+    }
+
+    /**
      * Search for FA reports using user search criteria defined in the search form
      * 
      * @memberof AdvancedsearchformCtrl
@@ -251,40 +294,14 @@ angular.module('unionvmsWeb').controller('AdvancedsearchformCtrl',function($scop
             $scope.actServ.reportsList.isTableLoaded = false;
             $scope.actServ.tripsList.isTableLoaded = false;
 
-            var keyMapper = {
-                reportType: 'REPORT_TYPE',
-                fromId: 'FROM',
-                owner: 'OWNER',
-                startDateTime: 'PERIOD_START',
-                endDateTime: 'PERIOD_END',
-                vesselGroup: 'VESSEL_GROUP',
-                vessel: 'VESSEL',
-                gearType: 'GEAR',
-                species: 'SPECIES',
-                master: 'MASTER',
-                area: 'AREAS',
-                port: 'PORT',
-                minWeight: 'QUANTITY_MIN',
-                maxWeight: 'QUANTITY_MAX',
-                comChannel: 'SOURCE',
-                activityType: 'ACTIVITY_TYPE',
-                tripId: 'TRIP_ID'
-            };
+
 
             //FIXME this is to be used in the future when we start having multiple criteria selection in the form
             //            var multipleKeyMapper = {
             //                purposeCode: 'PURPOSE',  
             //            };
 
-            var formatedSearch = {};
-            angular.forEach($scope.advancedSearchObject, function(value, key) {
-                if (key !== 'weightUnit' && key !== 'purposeCode' && (angular.isDefined(value) && value !== null && value !== '')){
-                    if (key === 'startDateTime' || key === 'endDateTime'){
-                        value = unitConversionService.date.convertDate(value, 'to_server');
-                    }
-                    this[keyMapper[key]] = value;
-                }
-            }, formatedSearch);
+            var formatedSearch = getSimpleCriteria();
 
             var multipleFormatedSearch = {
                 'PURPOSE': $scope.advancedSearchObject.purposeCode
@@ -317,22 +334,10 @@ angular.module('unionvmsWeb').controller('AdvancedsearchformCtrl',function($scop
             $scope.actServ.getActivityList(function(){
                 $scope.actServ.tripsList.fromForm = true;
                 $scope.actServ.tripsList.stCtrl.pipe();
-            }, undefined, 'tripsList');         
+            }, undefined, 'tripsList');
         }
     };
 
-    /**
-     * Update the fishing activities column visibility settings
-     *  
-     * @memberof AdvancedsearchformCtrl
-     * @public
-     * @alias updateVisibilityCache
-     * @param {String} column - the column name property to be updated
-     */
-    /* $scope.updateVisibilityCache = function(column){
-         $scope.visServ.updateStorage(column);
-     };
-     */
     /**
      * Get the data for all comboboxes used in the the advanced search form
      * 
@@ -391,6 +396,51 @@ angular.module('unionvmsWeb').controller('AdvancedsearchformCtrl',function($scop
     }
 
     /**
+     * Check if the trip id passed through the angular ui router stateParams
+     *
+     * @memberOf AdvancedSearchCtrl
+     * @private
+     */
+    function checkTripIdIsValid(){
+        if (angular.isDefined($scope.advancedSearchObject.purposeCode) && $scope.activityAdvancedSearchForm.$valid === true){
+            var searchObj = {
+                "pagination": {
+                    "offset": 0,
+                    "pageSize": 25
+                },
+                "sorting": {},
+                "searchCriteriaMap": {
+                    "TRIP_ID": $stateParams.tripId
+                },
+                "searchCriteriaMapMultipleValues": {
+                    "PURPOSE": $scope.advancedSearchObject.purposeCode
+                }
+            };
+
+            activityRestService.getTripsList(searchObj).then(function(response){
+                if(response.totalCountOfRecords > 0){
+                    $scope.advancedSearchObject.tripId = $stateParams.tripId;
+                    var simpleCriteria = getSimpleCriteria();
+                    $scope.actServ.reportsList.searchObject.simpleCriteria = simpleCriteria;
+                    $scope.actServ.tripsList.searchObject.simpleCriteria = simpleCriteria;
+                    $scope.tripSummServ.openNewTrip($stateParams.tripId);
+                    $scope.goToView(3);
+                    $interval.cancel($scope.intervalForTrip);
+                    $scope.intervalForTrip = undefined;
+                    $stateParams.tripId = null;
+                }else {
+                    $interval.cancel($scope.intervalForTrip);
+                    $scope.intervalForTrip = undefined;
+                    $stateParams.tripId = null;
+                    alertService.showErrorMessageWithTimeout(locale.getString('activity.invalid_trip_id'));
+                    $scope.resetSearch();
+                }
+            });
+
+        }
+    }
+
+    /**
      * Initialization function
      * 
      * @memberof ActivityCtrl
@@ -398,15 +448,8 @@ angular.module('unionvmsWeb').controller('AdvancedsearchformCtrl',function($scop
      */
     function init(){
         getComboboxData();
-        if (_.keys($stateParams).length > 0 && $stateParams.tripId !== null){
-            $scope.advancedSearchObject = {
-                tripId: $stateParams.tripId
-            };
-            $scope.$watch('activityAdvancedSearchForm.$valid', function (newVal) {
-                if (angular.isDefined(newVal)) {
-                    $scope.searchFAReports();
-                }
-            });
+        if (_.keys($stateParams).length > 0 && angular.isDefined($stateParams.tripId) && $stateParams.tripId !== null){
+            $scope.intervalForTrip = $interval(checkTripIdIsValid, 3000);
         }
     }
 

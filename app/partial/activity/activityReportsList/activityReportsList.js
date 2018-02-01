@@ -28,12 +28,6 @@ angular.module('unionvmsWeb').controller('ActivityreportslistCtrl',function($sco
     $scope.faServ = fishingActivityService;
     $scope.attrVisibility = visibilityService;
     $scope.visServ = visibilityService;
-    //Automatically open a fishing activity details page when navigating from another tab
-    if (_.keys($stateParams).length > 0 && $stateParams.tripId !== null){
-         $scope.tripSummServ.openNewTrip($stateParams.tripId);
-         $scope.goToView(3);
-         $stateParams.tripId = null;
-    }
 
     /**
      * Update the Activvity list
@@ -45,7 +39,12 @@ angular.module('unionvmsWeb').controller('ActivityreportslistCtrl',function($sco
      * @param {Obj} ctrl - The controller of the smart table
      */
     $scope.updateActivityList = function(tableState, ctrl){
-        $scope.callServer(tableState, ctrl, 'reportsList');
+        if (angular.isUndefined($stateParams.tripId) || $stateParams.tripId === null){
+            $scope.callServer(tableState, ctrl, 'reportsList');
+        } else {
+            $scope.actServ.reportsList.stCtrl = ctrl;
+            $scope.actServ.reportsList.tableState = tableState;
+        }
     };
 
     

@@ -293,6 +293,7 @@
     "tab_trip_table_header_nCorrections": "Corrections",
     "tab_trip_table_header_nPositions": "Positions",
     "tab_trip_table_header_alarm": "Alarm",
+    "invalid_trip_id": "The provided Trip ID is either invalid or does not exist",
 
     "fa_details_item_reason": "Reason",
     "fa_details_item_fisherytype": "Fishery type",
