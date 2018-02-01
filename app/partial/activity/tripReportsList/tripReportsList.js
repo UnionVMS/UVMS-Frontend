@@ -1,4 +1,4 @@
-angular.module('unionvmsWeb').controller('TripreportslistCtrl',function($scope,reportService,visibilityService,locale,csvWKTService,tripSummaryService,reportingNavigatorService){
+angular.module('unionvmsWeb').controller('TripreportslistCtrl',function($scope,tripSummaryService,visibilityService,$stateParams){
 
     $scope.isTripFilterVisible = false;
     $scope.startDate = undefined;
@@ -14,7 +14,12 @@ angular.module('unionvmsWeb').controller('TripreportslistCtrl',function($scope,r
         tableState.isSorting = true;
       }
       stLastTableState = angular.copy(tableState);
-      $scope.callServer(tableState, ctrl, 'tripsList');
+      if (angular.isUndefined($stateParams.tripId) || $stateParams.tripId === null){
+          $scope.callServer(tableState, ctrl, 'tripsList');
+      } else {
+          $scope.actServ.tripsList.stCtrl = ctrl;
+          $scope.actServ.tripsList.tableState = tableState;
+      }
     };
 
     $scope.openTripSummary = function(tripId){

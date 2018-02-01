@@ -12,8 +12,7 @@ copy of the GNU General Public License along with the IFDM Suite. If not, see <h
 <header>
     <div ng-include="'assets/images/svgdefs.html'"></div>
     <div class="headercontainer">
-       <!--  <div class="header" ng-class="{'in-new-tab': appState === 'app.reporting-id'}"> -->
-            <div  ng-class="{'ec-header':headerTemplate !== 'EC','header':headerTemplate === 'EC','in-new-tab': appState === 'app.reporting-id'}">
+        <div  ng-class="{'ec-header':headerTemplate !== 'EC','header':headerTemplate === 'EC','in-new-tab': appState === 'app.reporting-id'}">
             <div class="pageinfo">
                 <div class="left" ng-if="headerTemplate==='EC'">
                     <img class="ec-logo" src="assets/images/ec_logo.svg" />
@@ -29,7 +28,6 @@ copy of the GNU General Public License along with the IFDM Suite. If not, see <h
                 </div>
 
                 <div class="right" ng-class="{'ec-right':headerTemplate==='EC'}">
-                    <!-- <button type="button" class="btn btn-default button sales-btn" ng-click="sales()">{{'header.sales_title' | i18n}}</button> -->
                     <current-time class="currentTime" tooltip-placement="bottom" tooltip="{{'header.current_time_title' | i18n}}"></current-time>
                     <div class="notifications" ng-if="isAuthenticated && appState !== 'app.reporting-id'">
                         <button class="btn btn-sm btn-default" ng-click="viewNotifications()" ng-attr-title="{{'header.menu_alarmconditions' | i18n}}">

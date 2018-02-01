@@ -26,24 +26,14 @@ angular.module('unionvmsWeb').controller('ActivityreportslistCtrl',function($sco
     $scope.faServ = fishingActivityService;
     $scope.attrVisibility = visibilityService;
     $scope.visServ = visibilityService;
-    //Automatically open a fishing activity details page when navigating from another tab
-   /* if (_.keys($stateParams).length > 0 && $stateParams.activityId !== null && $stateParams.tripId !== null && $stateParams.activityType !== null){
-        $scope.faServ.id = $stateParams.activityId;
-        $scope.faServ.activityType = $stateParams.activityType.toLowerCase();
-        if ($stateParams.faReportType !== null){
-            $scope.faServ.documentType = $stateParams.faReportType.toLowerCase();
-        }
-        $scope.goToView(3);
-        
-        $stateParams.activityType = null;
-        $stateParams.activityId = null;
-        $stateParams.tripId = null;
-        $stateParams.faReportType = null;
-    }*/
-
 
     $scope.updateActivityList = function(tableState, ctrl){
-        $scope.callServer(tableState, ctrl, 'reportsList');
+        if (angular.isUndefined($stateParams.tripId) || $stateParams.tripId === null){
+            $scope.callServer(tableState, ctrl, 'reportsList');
+        } else {
+            $scope.actServ.reportsList.stCtrl = ctrl;
+            $scope.actServ.reportsList.tableState = tableState;
+        }
     };
 
     
@@ -66,7 +56,7 @@ angular.module('unionvmsWeb').controller('ActivityreportslistCtrl',function($sco
     /**
      * Update the fishing activities column visibility settings
      *  
-     * @memberof AdvancedsearchformCtrl
+     * @memberof ActivityreportslistCtrl
      * @public
      * @alias updateVisibilityCache
      * @param {String} column - the column name property to be updated
