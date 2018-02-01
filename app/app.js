@@ -58,7 +58,6 @@ var getGlobalSettingsPromise = function(globalSettingsService) {
 };
 getGlobalSettingsPromise.$inject = ['globalSettingsService'];
 
-
 var loadLocales = function(initService) {
     return initService.loadLanguageFiles();
 };
@@ -504,6 +503,44 @@ unionvmsWebApp.config(function($stateProvider, $compileProvider, tmhDynamicLocal
                 loadingStatus.resetState();
             }
         })
+        .state('app.manageSubscriptions', {
+            url: '/subscriptions/manageSubscriptions',
+            views: {
+                modulepage: {
+                    templateUrl: 'partial/subscriptions/manageSubscriptions/manageSubscriptions.html'
+                }
+            },
+            resolve: {
+                config : function(initService){
+                    return initService.loadConfigFor(["ORGANISATIONS"]);
+                }
+            },
+            data: {
+                pageTitle: 'header.page_title_subscriptions'
+            }
+        })
+        .state('app.newSubscription', {
+            url: '/subscriptions/newSubscription',
+            views: {
+                modulepage: {
+                    templateUrl: 'partial/subscriptions/newSubscription/newSubscription.html'
+                }
+            },
+            resolve: {
+                config : function(initService){
+                    return initService.loadConfigFor(["ORGANISATIONS"]);
+                }
+            },
+            data: {
+                pageTitle: 'header.page_title_subscriptions'
+            },
+            params: {
+                subToEdit: null
+            },
+            onExit: function (subscriptionsService) {
+                subscriptionsService.resetLayout();
+            }
+        })
         .state('app.activity', {
             url: '/activity',
             views: {
@@ -902,6 +939,7 @@ unionvmsWebApp.factory('initService',function($log, configurationService, locale
                 'config',
                 'spatial',
                 'exchange',
+                'subscriptions',
                 'alarms',
                 'areas',
                 'sales',
@@ -933,7 +971,8 @@ var restApiURLS = [
     '/mdr/rest/',
     '/mapfish-print',
     '/usm-authentication/rest', '/usm-authorisation/rest', '/usm-administration/rest',
-    'sales/rest/'
+    'sales/rest/',
+    'subscription/rest'
 ];
 
 //Request interceptor that routes REST api request to the REST api server

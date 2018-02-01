@@ -1,0 +1,30 @@
+<fieldset class="fieldsetStyle col-md-12 query-params" ng-class="{'fieldset-closed': !subscription.showqueryParam}" ng-controller="QueryparamsubscriptionCtrl">
+    <legend class="fieldsetLegendStyle">
+        <input class="checkbox-margin" type="checkbox" ng-model="subscription.showqueryParam" ng-checked="subscription.showqueryParam"
+            ng-change="clearSearchProps()">
+        <a data-toggle="collapse" ng-click="subscription.showqueryParam = !subscription.showqueryParam;">{{'subscriptions.query_parameters' | i18n }}</a>
+    </legend>
+    <div ng-show="subscription.showqueryParam">
+        <div class="row">
+            <div class="col-md-4 form-group">
+                <label>{{'subscriptions.vessel_id_type' | i18n }}</label>
+                <combobox ng-model="subscription.queryParams.vesselId" items="vesselIdTypes"></combobox>
+            </div>
+            <div class="col-md-4 form-group isActive">
+                <div class="col-md-12 text-center">
+                    {{ 'subscriptions.include_correction_history'| i18n }}
+                    <input type="checkbox" ng-model="subscription.queryParams.includeCorrectionHist" />
+                </div>
+            </div>
+            <div class="col-md-4 form-group">
+                <label>{{'subscriptions.query_for_the_last' | i18n }}</label><br>
+                <div class="row query-last">
+                    <div class="col-md-12">
+                        <numeric-input validate-min-in-range class="form-control" ng-model="subscription.queryParams.time" type="number" min="0"></numeric-input>
+                        <combobox class="period" ng-model="subscription.queryParams.timeUnit" items="period"></combobox>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</fieldset>

@@ -78,7 +78,9 @@ module.exports = function (grunt) {
                   '/usm-authentication/rest', '/usm-authorisation/rest', '/usm-administration/rest',
                   '/activity/rest',
                   '/sales/rest',
-                  '/mdr/rest'],
+                  '/mdr/rest',
+                  '/subscription/rest'
+                ],
               host: 'localhost',
               port: 28080
         },{
@@ -252,6 +254,12 @@ module.exports = function (grunt) {
                 src: ['bower_components/angular-i18n/*'],
                 dest: 'dist/assets/locales',
                 filter:'isFile'
+            },
+            {
+                expand: true,
+                src: ['probing/**'],
+                dest: 'dist',
+                filter: 'isFile'
             },
             {
                 src: ['temp/config.json'],

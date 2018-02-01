@@ -17,6 +17,8 @@ copy of the GNU General Public License along with the IFDM Suite. If not, see <h
  * @param activityService {Service} The activity service
  * @param visibilityService {Service} The visibility service <p>{@link unionvmsWeb.visibilityService}</p>
  * @param fishingActivityService {Service} The fishing activity service <p>{@link unionvmsWeb.fishingActivityService}</p>
+ * @param $stateParams {Service} the angular ui router state params service
+ * @param $state {Service} the angular ui router state service
  * @attr {Array} displayedActivities - The array of displayed activities used by smart tables
  * @description
  *  The controller for the fisihing activity reports table list
@@ -27,6 +29,15 @@ angular.module('unionvmsWeb').controller('ActivityreportslistCtrl',function($sco
     $scope.attrVisibility = visibilityService;
     $scope.visServ = visibilityService;
 
+    /**
+     * Update the Activvity list
+     *
+     * @memberOf ActivityreportslistCtrl
+     * @public
+     * @alias updateActivityList
+     * @param {Objec} tableState - The table state object containing pagination and sorting status
+     * @param {Obj} ctrl - The controller of the smart table
+     */
     $scope.updateActivityList = function(tableState, ctrl){
         if (angular.isUndefined($stateParams.tripId) || $stateParams.tripId === null){
             $scope.callServer(tableState, ctrl, 'reportsList');

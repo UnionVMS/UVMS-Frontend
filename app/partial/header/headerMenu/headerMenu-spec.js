@@ -11,6 +11,8 @@ copy of the GNU General Public License along with the IFDM Suite. If not, see <h
  */
 describe('HeaderMenuCtrl', function() {
 
+    var scope, ctrl, state, rootScope;
+
     beforeEach(module('unionvmsWeb'));
 
     beforeEach(inject(function($rootScope, $controller, $state, $httpBackend) {
@@ -59,15 +61,6 @@ describe('HeaderMenuCtrl', function() {
         scope.setMenu();
         expect(userAllowedSpy).toHaveBeenCalled();
         expect(scope.menu.length).toBeGreaterThan(1);
-    }));
-
-    it('444', inject(function(userService) {
-        var userAllowedSpy = spyOn(userService, "isAllowed").andReturn(true);
-        scope.addMenuItem('Activity', '/activity', 'activity');
-
-        expect(scope.menu.length).toBe(2);
-        expect(scope.menu[1].url).toBe('/activity');
-        expect(scope.menu[1].elemId).toBe('activity');
     }));
 
     it('should set menu if authentication success', function() {

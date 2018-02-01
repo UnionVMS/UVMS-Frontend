@@ -506,7 +506,7 @@ angular.module('unionvmsWeb').factory('fishingActivityService', function(activit
      * @returns {(String|Undefined)} the gear problem description or undefined
      */
     var getGearProblemDescFromMDR = function(mdrRecs, prob){
-        var desc = undefined;
+        var desc;
         var mdrRec = _.findWhere(mdrRecs, { code: prob.type });
         if (angular.isDefined(mdrRec)) {
             desc = mdrRec.description;
