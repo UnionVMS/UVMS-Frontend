@@ -333,7 +333,7 @@ angular.module('unionvmsWeb').controller('ExchangeCtrl',function($scope, $log, $
 
     $scope.isStatusClickable = function(msg){
         var clickable = false;
-        var clickableStatus = ['FAILED', 'WARN', 'ERROR'];
+        var clickableStatus = ['FAILED', 'WARN', 'ERROR', 'SUCCESSFUL_WITH_WARNINGS'];
         var msgType = ['FA_REPORT', 'FA_RESPONSE', 'FA_QUERY'];
         if (_.indexOf(clickableStatus, msg.status) !== -1 && _.indexOf(msgType, msg.typeRefType) !== -1){
             clickable = true;

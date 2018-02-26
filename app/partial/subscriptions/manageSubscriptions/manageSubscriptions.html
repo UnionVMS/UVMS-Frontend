@@ -34,13 +34,13 @@ copy of the GNU General Public License along with the IFDM Suite. If not, see <h
                                 <div st-sort="description" st-skip-natural="true" st-class-ascent="sorting_asc" st-class-descent="sorting_desc">{{'subscriptions.subscription_description' | i18n }}</div>
                             </th>
                             <th>
-                                <div st-sort="organisation" st-skip-natural="true" st-class-ascent="sorting_asc" st-class-descent="sorting_desc">{{'subscriptions.subscription_form_organization' | i18n }}</div>
+                                <div st-sort="organisationName" st-skip-natural="true" st-class-ascent="sorting_asc" st-class-descent="sorting_desc">{{'subscriptions.subscription_form_organization' | i18n }}</div>
                             </th>
                             <th>
-                                <div st-sort="endPoint" st-skip-natural="true" st-class-ascent="sorting_asc" st-class-descent="sorting_desc">{{'subscriptions.subscription_end_point' | i18n }}</div>
+                                <div st-sort="endpointName" st-skip-natural="true" st-class-ascent="sorting_asc" st-class-descent="sorting_desc">{{'subscriptions.subscription_end_point' | i18n }}</div>
                             </th>
                             <th>
-                                <div st-sort="communicationChannel" st-skip-natural="true" st-class-ascent="sorting_asc" st-class-descent="sorting_desc">{{'subscriptions.subscription_communication_channel' | i18n }}</div>
+                                <div st-sort="channelName" st-skip-natural="true" st-class-ascent="sorting_asc" st-class-descent="sorting_desc">{{'subscriptions.subscription_communication_channel' | i18n }}</div>
                             </th>
                             <th>
                                 <div st-sort="messageType" st-skip-natural="true" st-class-ascent="sorting_asc" st-class-descent="sorting_desc">{{'subscriptions.subscription_message_type' | i18n }}</div>
@@ -87,13 +87,13 @@ copy of the GNU General Public License along with the IFDM Suite. If not, see <h
                                 <div>{{subs.description}}</div>
                             </td>
                             <td>
-                                <div>{{subs.organisation}}</div>
+                                <div>{{subs.organisationName}}</div>
                             </td>
                             <td>
-                                <div>{{subs.endPoint}}</div>
+                                <div>{{subs.endpointName}}</div>
                             </td>
                             <td>
-                                <div>{{subs.communicationChannel}}</div>
+                                <div>{{subs.channelName}}</div>
                             </td>
                             <td>
                                 <div>{{subs.messageType | stTranslateSubscription: 'messageType'}}</div>
