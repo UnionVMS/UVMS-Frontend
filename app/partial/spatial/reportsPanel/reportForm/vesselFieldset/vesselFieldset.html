@@ -43,7 +43,7 @@ copy of the GNU General Public License along with the IFDM Suite. If not, see <h
 							</button>
 						</div>
 					</div>
-					<div class="form-group col-md-12 search-table" st-table="displayedRecords" st-safe-src="shared.vessels">
+					<div class="form-group col-md-12 search-table" st-table="displayedRecords" st-safe-src="shared.vessels" st-pipe="tableCallback">
 						<div class="table tableSmart table-striped table-condensed">
 							<div class="thead col-md-12">
 								<div class="tr row" ng-class="{'tablerow-has-btn': displayedRecords.length > 0}">
@@ -69,7 +69,7 @@ copy of the GNU General Public License along with the IFDM Suite. If not, see <h
 									<div class="th loading-spinner-cl col-md-12"><i class="fa fa-spinner fa-spin loading-spinner"></i></div>
 								</div>
 							</div>
-							<div class="tbody col-md-12">
+							<div class="tbody col-md-12" ng-if="!vesselSearchLoading">
 								<div class="tr row" ng-repeat="vessel in displayedRecords">
 									<div class="td col-md-2" ng-hide="shared.vesselSearchBy === 'vgroup'">{{ vessel.countryCode }}</div>
 									<div class="td col-md-2" ng-hide="shared.vesselSearchBy === 'vgroup'">{{ vessel.ircs }}</div>
@@ -85,7 +85,7 @@ copy of the GNU General Public License along with the IFDM Suite. If not, see <h
 							<div class="tfoot stFooterPagination col-md-12" ng-if="!vesselSearchLoading && shared.vessels.length">
 								<div class="tr">
 									<div class="td text-right">
-										<div st-pagination st-items-by-page="vesselsByPage" st-template="partial/common/reportsPagination/reportsPagination.html"></div>
+										<div st-pagination st-items-by-page="vesselPagination.vesselsByPage" st-template="partial/common/reportsPagination/reportsPagination.html"></div>
 									</div>
 								</div>
 							</div>
