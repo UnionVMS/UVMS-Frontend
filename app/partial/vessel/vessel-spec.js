@@ -160,6 +160,14 @@ describe('VesselCtrl', function() {
             deferred.resolve(results);
 
             var controller = createController();
+            scope.stTable.tableState = {
+                pagination: {
+                    start: 0
+                },
+                sort: {
+                    predicate: undefined
+                }
+            }
 
             scope.searchVessels();
             expect(scope.currentSearchResults.loading).toBeTruthy();

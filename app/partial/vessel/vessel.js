@@ -36,6 +36,11 @@ angular.module('unionvmsWeb').controller('VesselCtrl', function($scope, $log, $s
         {text:locale.getString('common.export_selection'), code : 'EXPORT'}
     ];
 
+    $scope.stTable = {
+        tableState: undefined,
+        itemsByPage: 20,
+        page: undefined
+    };
 
     //Init function when entering page
     var init = function(){
@@ -80,14 +85,17 @@ angular.module('unionvmsWeb').controller('VesselCtrl', function($scope, $log, $s
     };
 
     // Search for vessels
-    $scope.searchVessels = function(options) {
+    $scope.searchVessels = function(options, page) {
+        if (angular.isUndefined(page)){
+            page = 1;
+        }
         $scope.selectedGroupGuid = angular.isDefined(options) && angular.isDefined(options.savedSearchGroup) ? options.savedSearchGroup.id : undefined;
 
         $scope.clearSelection();
         $scope.currentSearchResults.clearErrorMessage();
         $scope.currentSearchResults.filter = '';
         $scope.currentSearchResults.setLoading(true);
-        searchService.searchVessels()
+        searchService.searchVessels(page)
             .then(updateSearchResults, onGetSearchResultsError);
 
         var timeoutDisplayNotificationCancelSearch = 3000;
@@ -124,6 +132,20 @@ angular.module('unionvmsWeb').controller('VesselCtrl', function($scope, $log, $s
 
         $scope.allCurrentSearchResults = vesselListPage.items;
         $scope.currentSearchResultsByPage = vesselListPage.items;
+
+        $scope.stTable.page = vesselListPage.currentPage;
+        if ($scope.stTable.page !== ($scope.stTable.tableState.pagination.start / $scope.stTable.itemsByPage) + 1){
+            $scope.stTable.tableState.pagination.start = $scope.stTable.page;
+        }
+
+        $scope.stTable.tableState.pagination.numberOfPages = vesselListPage.totalNumberOfPages;
+        if (angular.isDefined($scope.stTable.tableState.sort.predicate)){
+            $scope.sortTableData($scope.stTable.tableState.sort.predicate, $scope.stTable.tableState.sort.reverse);
+        }
+    };
+
+    $scope.sortTableData = function(predicate, reverse){
+        $scope.currentSearchResultsByPage = $filter('orderBy')($scope.currentSearchResultsByPage, predicate, reverse);
     };
 
     // Handle error from search results (listing vessel)
@@ -372,7 +394,9 @@ angular.module('unionvmsWeb').controller('VesselCtrl', function($scope, $log, $s
 
     //Show a position report
     $scope.showReport = function(reportGuid){
-        PositionReportModal.showReportWithGuid(reportGuid);
+        if (angular.isDefined(reportGuid)){
+            PositionReportModal.showReportWithGuid(reportGuid);
+        }
     };
 
     $scope.$on("$destroy", function() {

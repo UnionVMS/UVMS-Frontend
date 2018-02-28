@@ -9,9 +9,9 @@ the hope that it will be useful, but WITHOUT ANY WARRANTY; without even the impl
 FITNESS FOR A PARTICULAR PURPOSE.  See the GNU General Public License for more details. You should have received a
 copy of the GNU General Public License along with the IFDM Suite. If not, see <http://www.gnu.org/licenses/>.
 -->
-<div class="row" ng-controller="VesselListCtrl" st-table="currentSearchResultsByPage" st-safe-src="allCurrentSearchResults">
+<div class="row asset-vessel-list" ng-controller="VesselListCtrl">
     <div search-results-table search="currentSearchResults" class="col-md-12">
-        <table class="searchResults colorOdd truncate-text">
+        <table class="searchResults colorOdd truncate-text" st-table="currentSearchResultsByPage" st-safe-src="allCurrentSearchResults" st-pipe="tableCallback">
             <thead>
                 <tr>
                     <th class="checkboxContainer">
@@ -54,7 +54,7 @@ copy of the GNU General Public License along with the IFDM Suite. If not, see <h
                     <td ng-attr-title="{{item.cfr}}">{{item.cfr}}</td>
                     <td ng-attr-title="{{item.gearType | vesselGearTypeTranslation}}">{{item.gearType | vesselGearTypeTranslation}}</td>
                     <td ng-attr-title="{{item.licenseType | vesselLicenseTypeTranslation}}">{{item.licenseType | vesselLicenseTypeTranslation}}</td>
-                    <td class="link" ng-click="showReport(item.lastMovement.guid)" ng-attr-title="{{item.lastMovement.time | timeAgo}}" id="asset-toggle-lastmovement">{{item.lastMovement.time | timeAgo}}</td>
+                    <td class="link" ng-class="{'no-hover': item.lastMovement.guid === undefined}" ng-click="showReport(item.lastMovement.guid)" ng-attr-title="{{item.lastMovement.time | timeAgo}}" id="asset-toggle-lastmovement">{{item.lastMovement.time | timeAgo}}</td>
                     <td>
                         <button class="btn btn-default btn-sm" ng-click="toggleViewVessel(item)" id="asset-toggle-form">
                             <i class="fa" ng-class="allowedToEditVessel(item) ? 'fa-pencil': 'fa-eye'"></i>
@@ -64,8 +64,8 @@ copy of the GNU General Public License along with the IFDM Suite. If not, see <h
             </tbody>
             <tfoot>
                 <tr>
-                    <td colspan="12" class="text-right" ng-show="allCurrentSearchResults.length > itemsByPage">
-                        <div st-pagination st-items-by-page="itemsByPage" st-template="partial/common/reportsPagination/reportsPagination.html"></div>
+                    <td colspan="12" class="text-right" ng-show="allCurrentSearchResults.length > 0">
+                        <div st-pagination st-items-by-page="stTable.itemsByPage" st-template="partial/common/reportsPagination/reportsPagination.html"></div>
                     </td>
                 </tr>
             </tfoot>
