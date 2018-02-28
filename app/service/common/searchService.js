@@ -301,9 +301,13 @@ angular.module('unionvmsWeb').factory('searchService',function($q, $log, searchU
         },
 
         //Do the search for vessels
-		searchVessels : function(){
+		searchVessels : function(pageNum){
+            if (angular.isUndefined(pageNum)){
+                pageNum = 1;
+            }
+
             var deferred = $q.defer(),
-                getListRequestAllItems = new GetListRequest(1, ALL_ITEMS, false, getListRequest.criterias);
+                getListRequestAllItems = new GetListRequest(pageNum, DEFAULT_ITEMS_PER_PAGE, false, getListRequest.criterias);
 
             searchUtilsService.modifySpanAndTimeZones(getListRequest.criterias);
             searchUtilsService.replaceCommasWithPoint(getListRequest.criterias);

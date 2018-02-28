@@ -42,7 +42,6 @@ angular.module('unionvmsWeb').controller('VesselfieldsetCtrl',function($scope, l
         vesselsByPage: 10,
         page: undefined
     };
-    $scope.vesselsByPage = 10;
     
     //Check if vessel record was already added to the report current selection
     $scope.checkVesselIsSelected = function(vesselSrc){
@@ -146,7 +145,7 @@ angular.module('unionvmsWeb').controller('VesselfieldsetCtrl',function($scope, l
         $scope.stTableState.pagination.numberOfPages = response.totalNumberOfPages;
     };
 
-    $scope.tableCallback = function(tableState, stCtrl){
+    $scope.tableCallback = function(tableState){
         $scope.stTableState = tableState;
         var pageNumber = $scope.stTableState.pagination.start / $scope.vesselPagination.vesselsByPage;
 
