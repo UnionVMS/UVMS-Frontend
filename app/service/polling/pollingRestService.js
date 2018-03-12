@@ -14,33 +14,33 @@ angular.module('unionvmsWeb')
 
         return {
             getRunningProgramPolls : function() {
-                return $resource('/mobileterminal/rest/poll/running');
+                return $resource('mobileterminal/rest/poll/running');
             },
             getPolls : function(){
-                return $resource('/mobileterminal/rest/poll/list/',{},{
+                return $resource('mobileterminal/rest/poll/list/',{},{
                     list : { method: 'POST'}
                 });
             },
             startProgramPoll : function() {
-                return $resource('/mobileterminal/rest/poll/start/:id', {}, {
+                return $resource('mobileterminal/rest/poll/start/:id', {}, {
                     save: {method: 'PUT'}
                 });
             },
             stopProgramPoll : function() {
-                return $resource('/mobileterminal/rest/poll/stop/:id', {}, {
+                return $resource('mobileterminal/rest/poll/stop/:id', {}, {
                     save: {method: 'PUT'}
                 });
             },
             inactivateProgramPoll : function() {
-                return $resource('/mobileterminal/rest/poll/inactivate/:id', {}, {
+                return $resource('mobileterminal/rest/poll/inactivate/:id', {}, {
                     save: {method: 'PUT'}
                 });
             },
             createPolls: function() {
-                return $resource('/mobileterminal/rest/poll');
+                return $resource('mobileterminal/rest/poll');
             },
             getPollableTerminals : function(){
-                return $resource('/mobileterminal/rest/poll/pollable',{},{
+                return $resource('mobileterminal/rest/poll/pollable',{},{
                      list : { method: 'POST'}
                 });
             }

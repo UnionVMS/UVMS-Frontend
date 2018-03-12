@@ -16,7 +16,7 @@ policiesService.factory('policiesService', ['$resource', '$q', '$log', function 
 	var _getPolicySubjList = function() {
   		var message = "";
 		var deferred = $q.defer();
-		var resource = $resource('/usm-administration/rest/policies/subjects');
+		var resource = $resource('usm-administration/rest/policies/subjects');
 		resource.get().$promise.then(
 			function (data) {
 				deferred.resolve({
@@ -35,7 +35,7 @@ policiesService.factory('policiesService', ['$resource', '$q', '$log', function 
 	var _updatePolicy = function (policy) {
         var message = "";
         var deferred = $q.defer();
-		var resource = $resource('/usm-administration/rest/policies', '', {updatePolicy: {method: 'PUT'}} );
+		var resource = $resource('usm-administration/rest/policies', '', {updatePolicy: {method: 'PUT'}} );
 		
 		resource.updatePolicy(policy).$promise.then(
             function (data) {
@@ -57,7 +57,7 @@ policiesService.factory('policiesService', ['$resource', '$q', '$log', function 
 		var message = "";
 		var deferred = $q.defer();
 		
-		var resource = $resource('/usm-administration/rest/policies');
+		var resource = $resource('usm-administration/rest/policies');
 		resource.query(criteria).$promise.then(
 			function (data) {
 				deferred.resolve({

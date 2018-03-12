@@ -28,9 +28,9 @@ angular.module('unionvmsWeb').controller('AuditconfigurationCtrl',function($scop
 		"audit"
 	];
 
-	var Settings = $resource("/config/rest/catalog");
+	var Settings = $resource("config/rest/catalog");
 
-	var SingleSetting = $resource("/config/rest/settings/:id", {}, {
+	var SingleSetting = $resource("config/rest/settings/:id", {}, {
 		"update": {
 			method: "PUT"
 		}

@@ -16,7 +16,7 @@ scopesServiceModule.factory('scopeServices', ['$resource', '$q', '$log', functio
         getScopes: function (criteria) {
             var message = "";
             var deferred = $q.defer();
-            var resource = $resource('/usm-administration/rest/scopes');
+            var resource = $resource('usm-administration/rest/scopes');
 
             resource.get(criteria).$promise.then(
                 function (data) {
@@ -37,7 +37,7 @@ scopesServiceModule.factory('scopeServices', ['$resource', '$q', '$log', functio
         searchScopes: function (criteria) {
             var message = "";
             var deferred = $q.defer();
-            var resource = $resource('/usm-administration/rest/scopes');
+            var resource = $resource('usm-administration/rest/scopes');
 
             resource.get(criteria).$promise.then(
                 function (data) {
@@ -57,7 +57,7 @@ scopesServiceModule.factory('scopeServices', ['$resource', '$q', '$log', functio
         getScopeDetails: function (scopeId) {
             var message = "";
             var deferred = $q.defer();
-            var resource = $resource('/usm-administration/rest/scopes/:scopeId', {'scopeId': scopeId});
+            var resource = $resource('usm-administration/rest/scopes/:scopeId', {'scopeId': scopeId});
 
             resource.get().$promise.then(
                 function (data) {
@@ -76,7 +76,7 @@ scopesServiceModule.factory('scopeServices', ['$resource', '$q', '$log', functio
         createScope: function (scope) {
             var message = "";
             var deferred = $q.defer();
-            var resource = $resource('/usm-administration/rest/scopes');
+            var resource = $resource('usm-administration/rest/scopes');
             resource.save(scope).$promise.then(
                 function (data) {
                     deferred.resolve({
@@ -94,7 +94,7 @@ scopesServiceModule.factory('scopeServices', ['$resource', '$q', '$log', functio
         updateScope: function (scope) {
             var message = "";
             var deferred = $q.defer();
-            var resource = $resource('/usm-administration/rest/scopes', {}, {updateScope: {method: 'PUT'}});
+            var resource = $resource('usm-administration/rest/scopes', {}, {updateScope: {method: 'PUT'}});
             resource.updateScope(scope).$promise.then(
                 function (data) {
                     //until we find a better way to avoid the issue of getting $promise in the object
@@ -115,7 +115,7 @@ scopesServiceModule.factory('scopeServices', ['$resource', '$q', '$log', functio
         deleteScope: function (scopeId) {
             var message = "";
             var deferred = $q.defer();
-            var resource = $resource('/usm-administration/rest/scopes/:scopeId', {"scopeId": scopeId});
+            var resource = $resource('usm-administration/rest/scopes/:scopeId', {"scopeId": scopeId});
             resource.delete().$promise.then(
                 function (data) {
                     deferred.resolve({
@@ -133,7 +133,7 @@ scopesServiceModule.factory('scopeServices', ['$resource', '$q', '$log', functio
         getCategories: function(){
             var message = "";
             var deferred = $q.defer();
-            var resource = $resource('/usm-administration/rest/scopes/datasets/category/names');
+            var resource = $resource('usm-administration/rest/scopes/datasets/category/names');
 
             resource.get().$promise.then(
                 function (data) {
@@ -152,7 +152,7 @@ scopesServiceModule.factory('scopeServices', ['$resource', '$q', '$log', functio
         getAllDatasets: function() {
             var message = "";
             var deferred = $q.defer();
-            var resource = $resource('/usm-administration/rest/scopes/datasets');
+            var resource = $resource('usm-administration/rest/scopes/datasets');
 
             resource.get().$promise.then(
                 function (data) {
@@ -171,7 +171,7 @@ scopesServiceModule.factory('scopeServices', ['$resource', '$q', '$log', functio
         searchDataset: function (criteria) {
             var message = "";
             var deferred = $q.defer();
-            var resource = $resource('/usm-administration/rest/scopes/datasets');
+            var resource = $resource('usm-administration/rest/scopes/datasets');
 
             resource.get(criteria).$promise.then(
                 function (data) {

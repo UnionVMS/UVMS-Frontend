@@ -12,14 +12,14 @@ copy of the GNU General Public License along with the IFDM Suite. If not, see <h
 angular.module('unionvmsWeb').factory('areaRestFactory', function($resource){
     return {
         getUserAreaTypes: function(){
-            return $resource('/spatial/rest/userarea/types', {}, {
+            return $resource('spatial/rest/userarea/types', {}, {
                 'get': {
                     method: 'GET'
                 }
             });
         },
         getUserAreaAsGeoJSON: function(){
-            return $resource('/spatial/rest/userarea/details', {}, {
+            return $resource('spatial/rest/userarea/details', {}, {
                 'get': {
                     method: 'POST',
                     headers: {
@@ -29,7 +29,7 @@ angular.module('unionvmsWeb').factory('areaRestFactory', function($resource){
             });
         },
         getUserAreaAsJSON: function(){
-            return $resource('/spatial/rest/userarea/details', {}, {
+            return $resource('spatial/rest/userarea/details', {}, {
                 'get': {
                     method: 'POST',
                     headers: {
@@ -39,7 +39,7 @@ angular.module('unionvmsWeb').factory('areaRestFactory', function($resource){
             });
         },
         createUserArea: function(){
-            return $resource('/spatial/rest/userarea', {}, {
+            return $resource('spatial/rest/userarea', {}, {
                 'save': {
                     method: 'POST',
                     headers: {
@@ -49,7 +49,7 @@ angular.module('unionvmsWeb').factory('areaRestFactory', function($resource){
             });
         },
         updateUserArea: function(){
-            return $resource('/spatial/rest/userarea', {}, {
+            return $resource('spatial/rest/userarea', {}, {
                 'update': {
                     method: 'PUT',
                     headers: {
@@ -59,21 +59,21 @@ angular.module('unionvmsWeb').factory('areaRestFactory', function($resource){
             });
         },
         deleteUserArea: function(){
-            return $resource('/spatial/rest/userarea/:id', {}, {
+            return $resource('spatial/rest/userarea/:id', {}, {
                 'delete': {
                     method: 'DELETE'
                 }
             });
         },
         getLayerMetadata: function(){
-            return $resource('/spatial/rest/servicelayer/:layer', {}, {
+            return $resource('spatial/rest/servicelayer/:layer', {}, {
                 'get': {
                     method: 'GET'
                 }
             });
         },
         updateLayerMetadata: function(){
-            return $resource('/spatial/rest/servicelayer/:id', {}, {
+            return $resource('spatial/rest/servicelayer/:id', {}, {
                 'update': {
                     method: 'PUT',
                     headers: {
@@ -83,28 +83,28 @@ angular.module('unionvmsWeb').factory('areaRestFactory', function($resource){
             });
         },
         getAreasByType: function(){
-            return $resource('/spatial/rest/userarea/list/:type', {}, {
+            return $resource('spatial/rest/userarea/list/:type', {}, {
                 'get': {
                     method: 'GET'
                 }
             });
         },
         createDataset: function(){
-            return $resource('/spatial/rest/area/datasets/:areaType/:areaGid/:datasetName', {}, {
+            return $resource('spatial/rest/area/datasets/:areaType/:areaGid/:datasetName', {}, {
                 'create': {
                     method: 'POST'
                 }
             });
         },
         getDatasets: function(){
-            return $resource('/spatial/rest/area/datasets/:areaType/:areaGid', {}, {
+            return $resource('spatial/rest/area/datasets/:areaType/:areaGid', {}, {
                 'get': {
                     method: 'GET'
                 }
             });
         },
         getAttributesToMap: function(){
-            return $resource('/spatial/rest/files/metadata', {}, {
+            return $resource('spatial/rest/files/metadata', {}, {
                 'get': {
                     method: 'POST',
                     transformRequest: function formDataObject(data) {
@@ -122,14 +122,14 @@ angular.module('unionvmsWeb').factory('areaRestFactory', function($resource){
             });
         },
         uploadArea: function(){
-            return $resource('/spatial/rest/files/upload/:areaType/:projection', {}, {
+            return $resource('spatial/rest/files/upload/:areaType/:projection', {}, {
                 'create': {
                     method: 'POST'
                 }
             });
         },
         updateAreaGroupDate: function(){
-            return $resource('/spatial/rest/userarea/updatedate', {}, {
+            return $resource('spatial/rest/userarea/updatedate', {}, {
                 'update': {
                     method: 'POST',
                     headers: {

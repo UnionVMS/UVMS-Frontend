@@ -130,7 +130,7 @@ copy of the GNU General Public License along with the IFDM Suite. If not, see <h
 
 		function getAssets() {
 			var deferred = $q.defer();
-			$resource('/movement/rest/movement/listByAreaAndTimeInterval').save(getQuery(), function(response) {
+			$resource('movement/rest/movement/listByAreaAndTimeInterval').save(getQuery(), function(response) {
 				if (response.code !== "200") {
 					// Could not get movements.
 					deferred.reject(response.data || "Invalid data.");
@@ -141,7 +141,7 @@ copy of the GNU General Public License along with the IFDM Suite. If not, see <h
 				}
 				else {
 					var connectIds = getUniqueConnectIds(response.data.movement);
-					return $resource('/asset/rest/asset/listGroupByFlagState').save(connectIds, function(response) {
+					return $resource('asset/rest/asset/listGroupByFlagState').save(connectIds, function(response) {
 						if (response.code !== 200) {
 							// Could not get assets.
 							deferred.reject(response.data || "Invalid data.");

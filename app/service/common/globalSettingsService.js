@@ -11,9 +11,9 @@ copy of the GNU General Public License along with the IFDM Suite. If not, see <h
  */
 angular.module('unionvmsWeb').factory('globalSettingsService',['$resource', '$q', '$log',function($resource, $q, $log) {
 
-    var GlobalSettings = $resource("/config/rest/globals");
+    var GlobalSettings = $resource("config/rest/globals");
 
-    var GlobalSetting = $resource("/config/rest/settings/:id", {}, {
+    var GlobalSetting = $resource("config/rest/settings/:id", {}, {
         'put' : {
             method: 'PUT'
         }

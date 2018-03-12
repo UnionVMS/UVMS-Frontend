@@ -14,28 +14,28 @@ angular.module('unionvmsWeb')
 
     return {
         getMovementList : function(){
-            return $resource('/movement/rest/movement/list',{},
+            return $resource('movement/rest/movement/list',{},
             {
                 list : { method : 'POST'}
             });
         },
         manualMovement: function() {
-            return $resource('/movement/rest/tempmovement/:guid', {}, {
+            return $resource('movement/rest/tempmovement/:guid', {}, {
                 update: { method: 'PUT' }
             });
         },
         manualMovements: function() {
-            return $resource('/movement/rest/tempmovement/list', {}, {
+            return $resource('movement/rest/tempmovement/list', {}, {
                 list: { method: 'POST' }
             });
         },
         deleteManualPositionReport : function(){
-            return $resource('/movement/rest/tempmovement/remove/:guid', {}, {
+            return $resource('movement/rest/tempmovement/remove/:guid', {}, {
                 removePut: { method: 'PUT' }
             });
         },
         sendMovement: function() {
-            return $resource( '/movement/rest/tempmovement/send/:guid', {}, {
+            return $resource( 'movement/rest/tempmovement/send/:guid', {}, {
                 send: { method: 'PUT' }
             });
         }

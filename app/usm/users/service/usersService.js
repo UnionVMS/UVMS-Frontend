@@ -16,7 +16,7 @@ usersService.factory('UsersListService', ['$resource', '$q', '$log', function ($
     var _getUsers = function (criteria) {
         var message = "";
         var deferred = $q.defer();
-        var resource = $resource('/usm-administration/rest/users');
+        var resource = $resource('usm-administration/rest/users');
         resource.get(criteria).$promise.then(
             function (data) {
                 deferred.resolve({
@@ -35,7 +35,7 @@ usersService.factory('UsersListService', ['$resource', '$q', '$log', function ($
     var _getUsersNames = function (criteria) {
         var message = "";
         var deferred = $q.defer();
-        var resource = $resource('/usm-administration/rest/users/names');
+        var resource = $resource('usm-administration/rest/users/names');
         resource.get(criteria).$promise.then(
             function (data) {
                 deferred.resolve({
@@ -64,7 +64,7 @@ usersService.factory('userDetailsService', ['$resource', '$q', '$log', function 
 		usr.toUserName = toUserName; //$q.activeUser.userName;
 		var deferred = $q.defer();
 
-		var resource = $resource('/usm-administration/rest/users/:toUserName/userPreferences', usr, {_copyUserPrefs: {method: 'PUT'}});
+		var resource = $resource('usm-administration/rest/users/:toUserName/userPreferences', usr, {_copyUserPrefs: {method: 'PUT'}});
 		resource._copyUserPrefs(arrComprehensiveUserContext).$promise.then(
 			function (data) {
 				deferred.resolve({
@@ -83,7 +83,7 @@ usersService.factory('userDetailsService', ['$resource', '$q', '$log', function 
 	var _getUser = function (userName) {
 		var message = "";
 		var deferred = $q.defer();
-		var resource = $resource('/usm-administration/rest/users/:userName', {'userName': userName});
+		var resource = $resource('usm-administration/rest/users/:userName', {'userName': userName});
 
 		resource.get().$promise.then(
 			function (data) {
@@ -121,7 +121,7 @@ usersService.factory('userChallengesService', ['$resource', '$q', '$log', functi
         usr.userName = userName; //$q.activeUser.userName;
         var deferred = $q.defer();
 
-        var resource = $resource('/usm-administration/rest/users/:userName/challenges', usr, {_setChallenges: {method: 'PUT'}});
+        var resource = $resource('usm-administration/rest/users/:userName/challenges', usr, {_setChallenges: {method: 'PUT'}});
         resource._setChallenges(challengeInformationResponse).$promise.then(
             function (data) {
                 deferred.resolve({
@@ -140,7 +140,7 @@ usersService.factory('userChallengesService', ['$resource', '$q', '$log', functi
     var _getChallenges = function (userName) {
         var message = "";
         var deferred = $q.defer();
-        var resource = $resource('/usm-administration/rest/users/:userName/challenges', {'userName': userName});
+        var resource = $resource('usm-administration/rest/users/:userName/challenges', {'userName': userName});
 
         resource.get().$promise.then(
             function (data) {
@@ -169,7 +169,7 @@ usersService.factory('resetPasswordServices', ['$resource', '$q', '$log', functi
         var message = "";
         var deferred = $q.defer();
 
-         var resource = $resource('/usm-administration/rest/users/resetUserPassword',{},{
+         var resource = $resource('usm-administration/rest/users/resetUserPassword',{},{
               get:{method: 'GET',headers: { 'userName': userName }} });
 
         resource.get().$promise.then(
@@ -194,7 +194,7 @@ usersService.factory('resetPasswordServices', ['$resource', '$q', '$log', functi
         var deferred = $q.defer();
         var isTemporaryPassword = false;
 
-        var resource = $resource('/usm-administration/rest/users/resetUserPassword',{}, {
+        var resource = $resource('usm-administration/rest/users/resetUserPassword',{}, {
           //  put:{ _setSecurityAnswers: {method: 'PUT', headers: { 'userName': userName }}} });
             update:{method: 'PUT', headers: { 'userName': userName, 'isTemporaryPassword' : isTemporaryPassword } , body: { 'challengeInformationResponse': challengeInformationResponse }  } });
 

@@ -46,7 +46,7 @@ copy of the GNU General Public License along with the IFDM Suite. If not, see <h
 			};
 
 			var deferred = $q.defer();
-			$resource('/rules/rest/tickets/list/vms_admin_com').save(query, function(response) {
+			$resource('rules/rest/tickets/list/vms_admin_com').save(query, function(response) {
 				deferred.resolve(response.data.totalNumberOfPages);
 			});
 

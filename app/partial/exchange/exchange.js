@@ -59,17 +59,17 @@ angular.module('unionvmsWeb').controller('ExchangeCtrl',function($scope, $log, $
         $scope.getSendingQueue();
         $scope.getTransmissionStatuses();
 
-        longPollingIdPlugins = longPolling.poll("/exchange/activity/plugins", function(response) {
+        longPollingIdPlugins = longPolling.poll("exchange/activity/plugins", function(response) {
             updatePluginStatuses(response);
         });
 
-        longPollingIdSendingQueue = longPolling.poll("/exchange/activity/queue", function(response) {
+        longPollingIdSendingQueue = longPolling.poll("exchange/activity/queue", function(response) {
             if (response.ids.length > 0) {
                 $scope.getSendingQueue();
             }
         });
 
-        longPollingIdExchangeList =  longPolling.poll("/exchange/activity/exchange", function(response) {
+        longPollingIdExchangeList =  longPolling.poll("exchange/activity/exchange", function(response) {
             if (response.ids.length > 0) {
                 updateExchangeLogs(response.ids[0]);
             }

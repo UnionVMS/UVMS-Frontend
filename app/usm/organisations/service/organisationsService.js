@@ -25,7 +25,7 @@ organisationsService.factory('organisationsService', ['$q', '$resource', '$log',
             criteria.name = name;
     	}
 
-        var resource = $resource('/usm-administration/rest/organisations');
+        var resource = $resource('usm-administration/rest/organisations');
 
         resource.get(criteria).$promise.then(
             function (data) {
@@ -46,7 +46,7 @@ organisationsService.factory('organisationsService', ['$q', '$resource', '$log',
     var _get = function () {
         var message = "";
         var deferred = $q.defer();
-        var resource = $resource("/usm-administration/rest/organisations/names");
+        var resource = $resource("usm-administration/rest/organisations/names");
 
         resource.get().$promise.then(
             function (data) {
@@ -64,7 +64,7 @@ organisationsService.factory('organisationsService', ['$q', '$resource', '$log',
     var _getNations = function () {
         var message = "";
         var deferred = $q.defer();
-        var resource = $resource("/usm-administration/rest/organisations/nations/names");
+        var resource = $resource("usm-administration/rest/organisations/nations/names");
 
         resource.get().$promise.then(
             function (data) {
@@ -91,7 +91,7 @@ organisationsService.factory('organisationsService', ['$q', '$resource', '$log',
 
         var message = "";
         var deferred = $q.defer();
-        var resource = $resource('/usm-administration/rest/organisations');
+        var resource = $resource('usm-administration/rest/organisations');
 
         resource.get(criteria).$promise.then(
             function (data) {
@@ -112,7 +112,7 @@ organisationsService.factory('organisationsService', ['$q', '$resource', '$log',
     var _getOrganisation = function (criteria) {
         var message = "";
         var deferred = $q.defer();
-        var resource = $resource('/usm-administration/rest/organisations/:organisationId', criteria);
+        var resource = $resource('usm-administration/rest/organisations/:organisationId', criteria);
 
         resource.get(criteria).$promise.then(
             function (data) {
@@ -133,7 +133,7 @@ organisationsService.factory('organisationsService', ['$q', '$resource', '$log',
 	var _createChannel = function (channel) {
         var message = "";
         var deferred = $q.defer();
-        var resource = $resource('/usm-administration/rest/channel');
+        var resource = $resource('usm-administration/rest/channel');
 
 		resource.save(channel).$promise.then(
             function (data) {
@@ -153,7 +153,7 @@ organisationsService.factory('organisationsService', ['$q', '$resource', '$log',
     var _updateChannel = function (channel) {
         var message = "";
         var deferred = $q.defer();
-		var resource = $resource('/usm-administration/rest/channel/', '', {updChannel: {method: 'PUT'}} );
+		var resource = $resource('usm-administration/rest/channel/', '', {updChannel: {method: 'PUT'}} );
 
 		resource.updChannel(channel).$promise.then(
             function (data) {
@@ -174,7 +174,7 @@ organisationsService.factory('organisationsService', ['$q', '$resource', '$log',
 		var message = "";
 		var deferred = $q.defer();
 
-		var resource = $resource('/usm-administration/rest/channel/:channelId/', channel);
+		var resource = $resource('usm-administration/rest/channel/:channelId/', channel);
 		resource.delete().$promise.then(
 			function (data) {
 				deferred.resolve({
@@ -194,7 +194,7 @@ organisationsService.factory('organisationsService', ['$q', '$resource', '$log',
 	var _createEndPointContact = function (endPointContact) {
         var message = "";
         var deferred = $q.defer();
-        var resource = $resource('/usm-administration/rest/endpointcontact');
+        var resource = $resource('usm-administration/rest/endpointcontact');
 
 		resource.save(endPointContact).$promise.then(
             function (data) {
@@ -215,7 +215,7 @@ organisationsService.factory('organisationsService', ['$q', '$resource', '$log',
 		var message = "";
 		var deferred = $q.defer();
 
-		var resource = $resource('/usm-administration/rest/endpointcontact/:endpointcontactId', endPointContact);
+		var resource = $resource('usm-administration/rest/endpointcontact/:endpointcontactId', endPointContact);
 		resource.delete().$promise.then(
 			function (data) {
 				deferred.resolve({
@@ -236,7 +236,7 @@ organisationsService.factory('organisationsService', ['$q', '$resource', '$log',
     var _getEndPointDetails = function (endPointId) {
         var message = "";
         var deferred = $q.defer();
-        var resource = $resource('/usm-administration/rest/organisations/endpoint/:endPointId', endPointId);
+        var resource = $resource('usm-administration/rest/organisations/endpoint/:endPointId', endPointId);
 
         resource.get().$promise.then(
             function (data) {
@@ -256,7 +256,7 @@ organisationsService.factory('organisationsService', ['$q', '$resource', '$log',
     var _createOrganisation = function (org) {
         var message = "";
         var deferred = $q.defer();
-        var resource = $resource('/usm-administration/rest/organisations');
+        var resource = $resource('usm-administration/rest/organisations');
 
         resource.save(org).$promise.then(
             function (data) {
@@ -280,7 +280,7 @@ organisationsService.factory('organisationsService', ['$q', '$resource', '$log',
     var _updateOrganisation = function (org) {
         var message = "";
         var deferred = $q.defer();
-        var resource = $resource('/usm-administration/rest/organisations/', {}, {updateOrganisation: {method: 'PUT'}});
+        var resource = $resource('usm-administration/rest/organisations/', {}, {updateOrganisation: {method: 'PUT'}});
         resource.updateOrganisation(org).$promise.then(
             function (data) {
                 deferred.resolve({
@@ -299,7 +299,7 @@ organisationsService.factory('organisationsService', ['$q', '$resource', '$log',
     var _deleteOrganisation = function (org) {
         var message = "";
         var deferred = $q.defer();
-        var resource = $resource('/usm-administration/rest/organisations/:organisationId', {"organisationId": org.organisationId});
+        var resource = $resource('usm-administration/rest/organisations/:organisationId', {"organisationId": org.organisationId});
 
         resource.delete().$promise.then(
             function (data) {
@@ -323,7 +323,7 @@ organisationsService.factory('organisationsService', ['$q', '$resource', '$log',
             organisationId = org.organisationId;
         }
         var deferred = $q.defer();
-        var resource = $resource("/usm-administration/rest/organisations/:organisationId/parent/names", {"organisationId": organisationId});
+        var resource = $resource("usm-administration/rest/organisations/:organisationId/parent/names", {"organisationId": organisationId});
 
         resource.get().$promise.then(
             function (data) {
@@ -340,7 +340,7 @@ organisationsService.factory('organisationsService', ['$q', '$resource', '$log',
     var _createEndPoint = function(endpoint){
         var message = "";
         var deferred = $q.defer();
-        var resource = $resource('/usm-administration/rest/endpoint');
+        var resource = $resource('usm-administration/rest/endpoint');
 
         resource.save(endpoint).$promise.then(
             function (data) {
@@ -360,7 +360,7 @@ organisationsService.factory('organisationsService', ['$q', '$resource', '$log',
     var _updateEndPoint = function(endpoint){
         var message = "";
         var deferred = $q.defer();
-        var resource = $resource('/usm-administration/rest/endpoint/', '', {updEndpoint: {method: 'PUT'}} );
+        var resource = $resource('usm-administration/rest/endpoint/', '', {updEndpoint: {method: 'PUT'}} );
 
         resource.updEndpoint(endpoint).$promise.then(
             function (data) {
@@ -381,7 +381,7 @@ organisationsService.factory('organisationsService', ['$q', '$resource', '$log',
         var message = "";
         var deferred = $q.defer();
 
-        var resource = $resource('/usm-administration/rest/endpoint/:endpointId/', endpoint);
+        var resource = $resource('usm-administration/rest/endpoint/:endpointId/', endpoint);
         resource.delete().$promise.then(
             function (data) {
                 deferred.resolve({

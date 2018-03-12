@@ -21,14 +21,14 @@ copy of the GNU General Public License along with the IFDM Suite. If not, see <h
 angular.module('unionvmsWeb').factory('activityRestFactory', function ($resource, $http) {
     return {
         getUserPreferences: function () {
-            return $resource('/activity/rest/config/user', {}, {
+            return $resource('activity/rest/config/user', {}, {
                 'get': {
                     method: 'GET'
                 }
             });
         },
         getActivityList: function (data) {
-            return $resource('/activity/rest/fa/list', {}, {
+            return $resource('activity/rest/fa/list', {}, {
                 'get': {
                     method: 'POST',
                     headers: {
@@ -38,7 +38,7 @@ angular.module('unionvmsWeb').factory('activityRestFactory', function ($resource
             });
         },
         getTripsList: function (data) {
-            return $resource('/activity/rest/fa/listTrips', {}, {
+            return $resource('activity/rest/fa/listTrips', {}, {
                 'get': {
                     method: 'POST',
                     headers: {
@@ -48,14 +48,14 @@ angular.module('unionvmsWeb').factory('activityRestFactory', function ($resource
             });
         },
         getReportHistory: function () {
-            return $resource('/activity/rest/fa/history/:referenceId/:schemeId', {}, {
+            return $resource('activity/rest/fa/history/:referenceId/:schemeId', {}, {
                 'get': {
                     method: 'GET',
                 }
             });
         },
         getTripCronology: function () {
-            return $resource('/activity/rest/trip/cronology/:id/:nrItems', {}, {
+            return $resource('activity/rest/trip/cronology/:id/:nrItems', {}, {
                 'get': {
                     method: 'GET',
                     headers: {
@@ -65,7 +65,7 @@ angular.module('unionvmsWeb').factory('activityRestFactory', function ($resource
             });
         },
         getTripVessel: function () {
-            return $resource('/activity/rest/trip/vessel/details/:id', {}, {
+            return $resource('activity/rest/trip/vessel/details/:id', {}, {
                 'get': {
                     method: 'GET',
                     headers: {
@@ -75,7 +75,7 @@ angular.module('unionvmsWeb').factory('activityRestFactory', function ($resource
             });
         },
         getTripMessageCount: function () {
-            return $resource('/activity/rest/trip/messages/:id', {}, {
+            return $resource('activity/rest/trip/messages/:id', {}, {
                 'get': {
                     method: 'GET',
                     headers: {
@@ -85,7 +85,7 @@ angular.module('unionvmsWeb').factory('activityRestFactory', function ($resource
             });
         },
         getTripCatches: function () {
-            return $resource('/activity/rest/trip/catches/:id', {}, {
+            return $resource('activity/rest/trip/catches/:id', {}, {
                 'get': {
                     method: 'GET',
                     headers: {
@@ -95,7 +95,7 @@ angular.module('unionvmsWeb').factory('activityRestFactory', function ($resource
             });
         },
         getTripReports: function () {
-            return $resource('/activity/rest/trip/reports/:id', {}, {
+            return $resource('activity/rest/trip/reports/:id', {}, {
                 'get': {
                     method: 'GET',
                     headers: {
@@ -105,7 +105,7 @@ angular.module('unionvmsWeb').factory('activityRestFactory', function ($resource
             });
         },
         getTripMapData: function(){
-            return $resource('/activity/rest/trip/mapData/:id', {}, {
+            return $resource('activity/rest/trip/mapData/:id', {}, {
                 'get': {
                     method: 'GET',
                     headers: {
@@ -115,7 +115,7 @@ angular.module('unionvmsWeb').factory('activityRestFactory', function ($resource
             });
         },
         getTripCatchesLandingDetails: function () {
-            return $resource('/activity/rest/catch/details/:id', {}, {
+            return $resource('activity/rest/catch/details/:id', {}, {
                 'get': {
                     method: 'GET',
                     headers: {
@@ -125,7 +125,7 @@ angular.module('unionvmsWeb').factory('activityRestFactory', function ($resource
             });
         },
         getTripCatchesEvolution: function () {
-            return $resource('/activity/rest/trip/catchevolution/:fishingTripId', {}, {
+            return $resource('activity/rest/trip/catchevolution/:fishingTripId', {}, {
                 'get': {
                     method: 'GET',
                     headers: {
@@ -135,7 +135,7 @@ angular.module('unionvmsWeb').factory('activityRestFactory', function ($resource
             });
         },
         getFishingActivityDetails: function(){
-            return $resource('/activity/rest/fa/views/:fatype', {}, {
+            return $resource('activity/rest/fa/views/:fatype', {}, {
                'get': {
                    method: 'POST',
                    headers: {
@@ -145,7 +145,7 @@ angular.module('unionvmsWeb').factory('activityRestFactory', function ($resource
             });
         },
         getCommChannelsData: function(){
-            return $resource('/activity/rest/fa/commChannel ', {}, {
+            return $resource('activity/rest/fa/commChannel ', {}, {
                'get': {
                    method: 'GET',
                    headers: {

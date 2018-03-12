@@ -14,31 +14,31 @@ angular.module('unionvmsWeb')
 
         return {
             rule : function(){
-                return $resource('/rules/rest/customrules/:id', {}, {
+                return $resource('rules/rest/customrules/:id', {}, {
                     update: {method: 'PUT'}
                 });
             },
             getAllSanityRules : function(){
-                return $resource('/rules/rest/sanityrules/listAll/');
+                return $resource('rules/rest/sanityrules/listAll/');
             },
             getAllRulesForUser : function(){
-                return $resource('/rules/rest/customrules/listAll/:userName');
+                return $resource('rules/rest/customrules/listAll/:userName');
             },
             getRulesByQuery : function(){
-                return $resource('/rules/rest/customrules/listByQuery',{},{
+                return $resource('rules/rest/customrules/listByQuery',{},{
                     list : { method: 'POST'}
                 });
             },
             subscription : function(){
-                return $resource('/rules/rest/customrules/subscription',{},{
+                return $resource('rules/rest/customrules/subscription',{},{
                     update : { method: 'POST'}
                 });
             },
             getConfig : function(){
-                return $resource('/rules/rest/config');
+                return $resource('rules/rest/config');
             },
             getAreaTypes: function() {
-                return $resource('/spatial/rest/area/types');
+                return $resource('spatial/rest/area/types');
             }
         };
     })

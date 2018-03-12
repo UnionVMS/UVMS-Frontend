@@ -61,26 +61,29 @@ module.exports = function (grunt) {
       ],
        proxies:grunt.file.exists('proxies.yaml')?grunt.file.readYAML('proxies.yaml'):[{
                 context: [
-                  '/asset/rest',
-                  '/mobileterminal/rest/',
-                  '/exchange/rest/',
-                  '/movement/rest/',
-                  '/movement/activity/',
-                  '/exchange/activity/',
-                  '/rules/activity/',
-                  '/audit/rest/',
-                  '/rules/rest/',
-                  '/reporting/rest/',
-                  '/spatial/rest/',
-                  '/spatial/image/',
-                  '/config/rest',
+                  '/app/asset/rest',
+                  '/app/mobileterminal/rest',
+                  '/app/exchange/rest',
+                  '/app/movement/rest',
+                  '/app/movement/activity',
+                  '/app/exchange/activity',
+                  '/app/rules/activity',
+                  '/app/audit/rest',
+                  '/app/rules/rest',
+                  '/app/reporting/rest',
+                  '/app/spatial/rest',
+                  '/app/spatial/image',
+                  '/app/config/rest',
                   '/mapfish-print',
-                  '/usm-authentication/rest', '/usm-authorisation/rest', '/usm-administration/rest',
-                  '/activity/rest',
-                  '/sales/rest',
-                  '/mdr/rest',
-                  '/subscription/rest'
+                  '/app/usm-authentication/rest', '/app/usm-authorisation/rest', '/app/usm-administration/rest',
+                  '/app/activity/rest',
+                  '/app/sales/rest',
+                  '/app/mdr/rest',
+                  '/app/subscription/rest'
                 ],
+              rewrite: {
+                  '^/app': '/unionvms'
+              },
               host: 'localhost',
               port: 28080
         },{

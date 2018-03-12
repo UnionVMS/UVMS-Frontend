@@ -12,21 +12,21 @@ copy of the GNU General Public License along with the IFDM Suite. If not, see <h
 angular.module('unionvmsWeb').factory('spatialConfigRestFactory', function($resource){
     return {
         getAdminConfigs: function(){
-            return $resource('/spatial/rest/config/admin', {}, {
+            return $resource('spatial/rest/config/admin', {}, {
                 'get': {
                     method: 'GET'
                 }
             });
         },
         getActivityAdminConfigs: function(){
-            return $resource('/activity/rest/config/admin', {}, {
+            return $resource('activity/rest/config/admin', {}, {
                 'get': {
                     method: 'GET'
                 }
             });
         },
         saveAdminConfigs: function(){
-            return $resource('/spatial/rest/config/admin/save', {}, {
+            return $resource('spatial/rest/config/admin/save', {}, {
                 'save': {
                     method: 'POST',
                     headers: {
@@ -36,7 +36,7 @@ angular.module('unionvmsWeb').factory('spatialConfigRestFactory', function($reso
             });
         },
         saveActivityAdminConfigs: function(){
-            return $resource('/activity/rest/config/admin', {}, {
+            return $resource('activity/rest/config/admin', {}, {
                 'save': {
                     method: 'POST',
                     headers: {
@@ -46,14 +46,14 @@ angular.module('unionvmsWeb').factory('spatialConfigRestFactory', function($reso
             });
         },
         getUserConfigs: function(){
-            return $resource('/spatial/rest/config/user', {}, {
+            return $resource('spatial/rest/config/user', {}, {
                 'get': {
                     method: 'GET'
                 }
             });
         },
         saveUserConfigs: function(){
-            return $resource('/spatial/rest/config/user/save', {}, {
+            return $resource('spatial/rest/config/user/save', {}, {
                 'save': {
                     method: 'POST',
                     headers: {
@@ -63,14 +63,14 @@ angular.module('unionvmsWeb').factory('spatialConfigRestFactory', function($reso
             });
         },
         getCountriesList: function(){
-            return $resource('/spatial/rest/countries', {}, {
+            return $resource('spatial/rest/countries', {}, {
                 'get': {
                     method: 'GET'
                  }
             });
         },
         resetSettings: function(){
-            return $resource('/spatial/rest/config/user/reset', {}, {
+            return $resource('spatial/rest/config/user/reset', {}, {
                 'reset': {
                     method: 'POST',
                     headers: {
@@ -80,49 +80,49 @@ angular.module('unionvmsWeb').factory('spatialConfigRestFactory', function($reso
             });
         },
         getSysArea: function(){
-            return $resource('/spatial/rest/servicelayer/layer/sysarea', {}, {
+            return $resource('spatial/rest/servicelayer/layer/sysarea', {}, {
                 'get': {
                     method: 'GET'
                 }
             });
         },
         getUserArea: function(){
-            return $resource('/spatial/rest/servicelayer/layer/userarea', {}, {
+            return $resource('spatial/rest/servicelayer/layer/userarea', {}, {
                 'get': {
                     method: 'GET'
                 }
             });
         },
         getAreaGroup: function(){
-            return $resource('/spatial/rest/servicelayer/layer/AREAGROUP', {}, {
+            return $resource('spatial/rest/servicelayer/layer/AREAGROUP', {}, {
                 'get': {
                     method: 'GET'
                 }
             });
         },
         getBackground: function(){
-            return $resource('/spatial/rest/servicelayer/layer/background', {}, {
+            return $resource('spatial/rest/servicelayer/layer/background', {}, {
                 'get': {
                     method: 'GET'
                 }
             });
         },
         getAdditionalCartography: function(){
-            return $resource('/spatial/rest/servicelayer/layer/additional', {}, {
+            return $resource('spatial/rest/servicelayer/layer/additional', {}, {
                 'get': {
                     method: 'GET'
                 }
             });
         },
         getPorts: function(){
-            return $resource('/spatial/rest/servicelayer/layer/port', {}, {
+            return $resource('spatial/rest/servicelayer/layer/port', {}, {
                 'get': {
                     method: 'GET'
                 }
             });
         },
         getMapConfigsFromReport: function(){
-            return $resource('/spatial/rest/config/fromreport', {}, {
+            return $resource('spatial/rest/config/fromreport', {}, {
                 'get': {
                     method: 'POST',
                     headers: {

@@ -12,21 +12,21 @@ copy of the GNU General Public License along with the IFDM Suite. If not, see <h
 angular.module('unionvmsWeb').factory('subscriptionsRestFactory', function ($resource, $http) {
     return {
         getOrganisations: function(){
-            return $resource('/usm-administration/rest/organisations', {}, {
+            return $resource('usm-administration/rest/organisations', {}, {
                 'get': {
                     method: 'GET'
                 }
             });
         },
         getOrganisationDetails: function () {
-            return $resource('/usm-administration/rest/organisations/:id', {}, {
+            return $resource('usm-administration/rest/organisations/:id', {}, {
                 'get': {
                     method: 'GET'
                 }
             });
         },
         createSubscription: function () {
-            return $resource('/subscription/rest/subscription', {}, {
+            return $resource('subscription/rest/subscription', {}, {
                 'create': {
                     method: 'POST',
                     headers: {
@@ -36,7 +36,7 @@ angular.module('unionvmsWeb').factory('subscriptionsRestFactory', function ($res
             });
         },
         updateSubscription: function () {
-            return $resource('/subscription/rest/subscription', {}, {
+            return $resource('subscription/rest/subscription', {}, {
                 'update': {
                     method: 'PUT',
                     headers: {
@@ -46,7 +46,7 @@ angular.module('unionvmsWeb').factory('subscriptionsRestFactory', function ($res
             });
         },
         getSubscriptionsList: function () {
-            return $resource('/subscription/rest/subscription/list', {}, {
+            return $resource('subscription/rest/subscription/list', {}, {
                 'get': {
                     method: 'POST',
                     headers: {
@@ -56,14 +56,14 @@ angular.module('unionvmsWeb').factory('subscriptionsRestFactory', function ($res
             });
         },
         deleteSubscription: function () {
-            return $resource('/subscription/rest/subscription/:id', {}, {
+            return $resource('subscription/rest/subscription/:id', {}, {
                 'delete': {
                     method: 'DELETE'
                 }
             });
         },
         getSubscriptionByName: function () {
-            return $resource('/subscription/rest/subscription/:name', {}, {
+            return $resource('subscription/rest/subscription/:name', {}, {
                 'get': {
                     method: 'GET'
                 }

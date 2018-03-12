@@ -13,7 +13,7 @@ var sharedModule = angular.module('shared');
 
 function policyMethods (name, subject, $http) {
     this.getAllPolicyValues = function() {
-        return $http.get("/usm-administration/rest/policies").then(
+        return $http.get("usm-administration/rest/policies").then(
             function(response) {
                 return response.data;
             }
@@ -21,7 +21,7 @@ function policyMethods (name, subject, $http) {
     };
 
     this.getPolicyValue = function() {
-        return $http.get("/usm-administration/rest/policies", {params: {name:name, subject:subject}}).then(
+        return $http.get("usm-administration/rest/policies", {params: {name:name, subject:subject}}).then(
             function(response) {
                 return response.data;
             }

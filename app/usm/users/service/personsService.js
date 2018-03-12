@@ -16,7 +16,7 @@ personsService.factory('personsService', ['$resource', '$q', '$log', function ($
     var _getPersons = function () {
       var message = "";
       var deferred = $q.defer();
-      var resource = $resource('/usm-administration/rest/persons/names');
+      var resource = $resource('usm-administration/rest/persons/names');
       resource.get().$promise.then(
               function (data) {
                 deferred.resolve({
@@ -34,7 +34,7 @@ personsService.factory('personsService', ['$resource', '$q', '$log', function ($
     var _getPersonDetail = function (personId) {
       var message = "";
       var deferred = $q.defer();
-      var resource = $resource('/usm-administration/rest/persons/:personId', {'personId': personId});
+      var resource = $resource('usm-administration/rest/persons/:personId', {'personId': personId});
 
       resource.get().$promise.then(
               function (data) {
@@ -53,7 +53,7 @@ personsService.factory('personsService', ['$resource', '$q', '$log', function ($
     var _getContactDetails = function (userName) {
       var message = "";
       var deferred = $q.defer();
-      var resource = $resource('/usm-administration/rest/persons/contactDetails/:userName', {'userName': userName});
+      var resource = $resource('usm-administration/rest/persons/contactDetails/:userName', {'userName': userName});
 
       resource.get().$promise.then(
               function (data) {
@@ -70,7 +70,7 @@ personsService.factory('personsService', ['$resource', '$q', '$log', function ($
     var _updateContactDetails = function (contactDetails) {
       var message = "";
       var deferred = $q.defer();
-      var resource = $resource("/usm-administration/rest/persons/contactDetails",
+      var resource = $resource("usm-administration/rest/persons/contactDetails",
               {},
               {updateContactDetails: {method: 'PUT'}});
 

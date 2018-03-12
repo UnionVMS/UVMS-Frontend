@@ -16,7 +16,7 @@ rolesServiceModule.factory('rolesServices', ['$resource', '$q', '$log', function
         getRoles: function (criteria) {
             var message = "";
             var deferred = $q.defer();
-            var resource = $resource('/usm-administration/rest/roles');
+            var resource = $resource('usm-administration/rest/roles');
 
             resource.get(criteria).$promise.then(
                 function (data) {
@@ -36,7 +36,7 @@ rolesServiceModule.factory('rolesServices', ['$resource', '$q', '$log', function
         getRolesNamesList: function () {
             var message = "";
             var deferred = $q.defer();
-            var resource = $resource('/usm-administration/rest/roles/names');
+            var resource = $resource('usm-administration/rest/roles/names');
 
             resource.get().$promise.then(
                 function (data) {
@@ -56,7 +56,7 @@ rolesServiceModule.factory('rolesServices', ['$resource', '$q', '$log', function
         searchRoles: function (criteria) {
             var message = "";
             var deferred = $q.defer();
-            var resource = $resource('/usm-administration/rest/roles');
+            var resource = $resource('usm-administration/rest/roles');
 
             resource.get(criteria).$promise.then(
                 function (data) {
@@ -76,7 +76,7 @@ rolesServiceModule.factory('rolesServices', ['$resource', '$q', '$log', function
         getRoleDetails: function (roleId) {
             var message = "";
             var deferred = $q.defer();
-            var resource = $resource('/usm-administration/rest/roles/:roleId', {'roleId': roleId});
+            var resource = $resource('usm-administration/rest/roles/:roleId', {'roleId': roleId});
 
             resource.get().$promise.then(
                 function (data) {
@@ -95,7 +95,7 @@ rolesServiceModule.factory('rolesServices', ['$resource', '$q', '$log', function
         createRole: function (role) {
             var message = "";
             var deferred = $q.defer();
-            var resource = $resource('/usm-administration/rest/roles');
+            var resource = $resource('usm-administration/rest/roles');
             resource.save(role).$promise.then(
                 function (data) {
                     deferred.resolve({
@@ -113,7 +113,7 @@ rolesServiceModule.factory('rolesServices', ['$resource', '$q', '$log', function
         updateRole: function (role) {
             var message = "";
             var deferred = $q.defer();
-            var resource = $resource('/usm-administration/rest/roles', {}, {updateRole: {method: 'PUT'}});
+            var resource = $resource('usm-administration/rest/roles', {}, {updateRole: {method: 'PUT'}});
             resource.updateRole(role).$promise.then(
                 function (data) {
                     deferred.resolve({
@@ -131,7 +131,7 @@ rolesServiceModule.factory('rolesServices', ['$resource', '$q', '$log', function
         deleteRole: function (role) {
             var message = "";
             var deferred = $q.defer();
-            var resource = $resource('/usm-administration/rest/roles/:roleId', {"roleId": role.roleId});
+            var resource = $resource('usm-administration/rest/roles/:roleId', {"roleId": role.roleId});
             resource.delete().$promise.then(
                 function (data) {
                     deferred.resolve({
@@ -155,7 +155,7 @@ rolesServiceModule.factory('permissionServices', ['$resource', '$q', '$log', fun
         searchFeature: function (criteria) {
             var message = "";
             var deferred = $q.defer();
-            var resource = $resource('/usm-administration/rest/roles');
+            var resource = $resource('usm-administration/rest/roles');
 
             resource.get(criteria).$promise.then(
                 function (data) {
@@ -174,7 +174,7 @@ rolesServiceModule.factory('permissionServices', ['$resource', '$q', '$log', fun
         addPermission: function (permission) {
             var message = "";
             var deferred = $q.defer();
-            var resource = $resource('/usm-administration/rest/roles/:roleId/feature/:featureId',
+            var resource = $resource('usm-administration/rest/roles/:roleId/feature/:featureId',
                 {"roleId" : permission.roleId, "featureId" : permission.featureId});
             resource.save().$promise.then(
                 function (data) {
@@ -194,7 +194,7 @@ rolesServiceModule.factory('permissionServices', ['$resource', '$q', '$log', fun
             var message = "";
             var deferred = $q.defer();
             //$log.log(permission);
-            var resource = $resource('/usm-administration/rest/roles/:roleId/feature/:featureId',
+            var resource = $resource('usm-administration/rest/roles/:roleId/feature/:featureId',
                 {"roleId": permission.roleId, "featureId": permission.featureId});
             resource.delete().$promise.then(
                 function (data) {
@@ -214,7 +214,7 @@ rolesServiceModule.factory('permissionServices', ['$resource', '$q', '$log', fun
         getGroups: function () {
             var message = "";
             var deferred = $q.defer();
-            var resource = $resource('/usm-administration/rest/roles/features/group/names');
+            var resource = $resource('usm-administration/rest/roles/features/group/names');
 
             resource.get().$promise.then(
                 function (data) {

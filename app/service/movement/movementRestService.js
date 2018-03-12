@@ -14,45 +14,45 @@ angular.module('unionvmsWeb')
 
     return {
         getMovementList : function(){
-            return $resource('/movement/rest/movement/list',{},
+            return $resource('movement/rest/movement/list',{},
             {
                 list : { method : 'POST'}
             });
         },
         getMinimalMovementList : function(){
-            return $resource('/movement/rest/movement/list/minimal',{},
+            return $resource('movement/rest/movement/list/minimal',{},
             {
                 list : { method : 'POST'}
             });
         },
         getLatestMovementsByConnectIds : function(){
-            return $resource('/movement/rest/movement/latest',{},
+            return $resource('movement/rest/movement/latest',{},
             {
                 list : { method : 'POST'}
             });
         },
         getMovement: function() {
-            return $resource('/movement/rest/movement/:id');
+            return $resource('movement/rest/movement/:id');
         },
         getLatestMovement: function() {
-            return $resource('/movement/rest/movement/latest/:id');
+            return $resource('movement/rest/movement/latest/:id');
         },
         savedSearch : function() {
-            return $resource('/movement/rest/search/group/:groupId', {}, {
+            return $resource('movement/rest/search/group/:groupId', {}, {
                 update: {method: 'PUT'}
             });
         },
         getSavedSearches : function() {
-            return $resource('/movement/rest/search/groups');
+            return $resource('movement/rest/search/groups');
         },
         getConfigForMovements : function(){
-            return $resource('/movement/rest/config');
+            return $resource('movement/rest/config');
         },
         getConfigForSourceTypes : function(){
-            return $resource('/movement/rest/config/movementSourceTypes');
+            return $resource('movement/rest/config/movementSourceTypes');
         },
         areas: function() {
-            return $resource('/movement/rest/areas');
+            return $resource('movement/rest/areas');
         }
     };
 })

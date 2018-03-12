@@ -14,52 +14,52 @@ angular.module('unionvmsWeb')
 
         return {
             getSearchableFields : function(){
-                return $resource('/asset/rest/config/searchfields/');
+                return $resource('asset/rest/config/searchfields/');
             },
             vessel : function(){
-                return $resource('/asset/rest/asset/:id', {}, {
+                return $resource('asset/rest/asset/:id', {}, {
                     update: {method: 'PUT'}
                 });
             },
             archiveVessel: function() {
-                return $resource('/asset/rest/asset/archive', {}, {
+                return $resource('asset/rest/asset/archive', {}, {
                     update: {method: 'PUT'}
                 });
             },
             getVesselList : function(){
-                return $resource('/asset/rest/asset/list/',{},{
+                return $resource('asset/rest/asset/list/',{},{
                     list : { method: 'POST', cancellable: true}
                 });
             },
             getVesselListCount : function(){
-                return $resource('/asset/rest/asset/listcount/',{},{
+                return $resource('asset/rest/asset/listcount/',{},{
                     list : { method: 'POST'}
                 });
             },
             vesselGroup : function(){
-                return $resource( '/asset/rest/group/:id', {}, {
+                return $resource( 'asset/rest/group/:id', {}, {
                     update: {method: 'PUT'}
                 });
             },
             getVesselGroupsForUser : function(){
-                return $resource('/asset/rest/group/list');
+                return $resource('asset/rest/group/list');
             },
             vesselHistory : function(){
-                return $resource('/asset/rest/history/asset');
+                return $resource('asset/rest/history/asset');
             },
             historyVessel : function(){
-                return $resource('/asset/rest/history/:id', {}, {
+                return $resource('asset/rest/history/:id', {}, {
                     update: {method: 'PUT'}
                 });
             },
             getConfigValues : function(){
-                return $resource('/asset/rest/config');
+                return $resource('asset/rest/config');
             },
             getConfigParameters : function(){
-                return $resource('/asset/rest/config/parameters');
+                return $resource('asset/rest/config/parameters');
             },
             getNoteActivityList : function(){
-                return $resource('/asset/rest/asset/activitycodes/');
+                return $resource('asset/rest/asset/activitycodes/');
             }
         };
     })
