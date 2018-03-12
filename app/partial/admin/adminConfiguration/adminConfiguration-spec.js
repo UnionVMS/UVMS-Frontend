@@ -22,10 +22,10 @@ describe('AuditconfigurationCtrl', function() {
 			return $controller('AuditconfigurationCtrl', {
 				'$scope': scope,
 				'$resource': function(url) {
-					if (url === "/config/rest/settings/:id") {
+					if (url === "config/rest/settings/:id") {
 						return singleSettingResource;
 					}
-					else if (url === "/config/rest/catalog") {
+					else if (url === "config/rest/catalog") {
 						return settingCatalogResource;
 					}
 				}
