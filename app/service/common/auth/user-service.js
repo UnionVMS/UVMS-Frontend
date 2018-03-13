@@ -31,7 +31,7 @@ angular.module('auth.user-service', ['auth.router'])
 
                 _reset();
 
-            var userContextResource = $resource('/usm-administration/rest/userContexts', {}, {
+            var userContextResource = $resource('usm-administration/rest/userContexts', {}, {
                     'get': {
                         headers: {
                             'X-Requested-With': 'XMLHttpRequest'
@@ -126,7 +126,7 @@ angular.module('auth.user-service', ['auth.router'])
                 // if we have already been logged out that call will be rejected anyway
                 // and this might in turn lead to a loop.
                 if($localStorage.sessionId){
-                    var resource = $resource('/usm-administration/rest/sessions/:sessionId',
+                    var resource = $resource('usm-administration/rest/sessions/:sessionId',
                         {sessionId: $localStorage.sessionId});
                     resource.delete().$promise.finally(
                         function (data) {

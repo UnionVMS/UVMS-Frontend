@@ -13,28 +13,28 @@ angular.module('unionvmsWeb').factory('reportRestFactory', function($resource) {
     
 	return {
 	    getReportsList: function(){
-	        return $resource('/reporting/rest/report/list', {}, {
+	        return $resource('reporting/rest/report/list', {}, {
 	            'get': {
 	                method: 'GET'
 	             }
 	        });
 	    },
 	    getReport: function(){
-	        return $resource('/reporting/rest/report/:id', {}, {
+	        return $resource('reporting/rest/report/:id', {}, {
 	            'get': {
 	                method: 'GET'
 	            }
 	        });
 	    },
 	    deleteReport: function(){
-	        return $resource('/reporting/rest/report/:id', {}, {
+	        return $resource('reporting/rest/report/:id', {}, {
 	            'delete': {
 	                method: 'DELETE'
 	             }
 	        });
 	    },
 	    updateReport: function(){
-	        return $resource('/reporting/rest/report/:id', {}, {
+	        return $resource('reporting/rest/report/:id', {}, {
                 'update': {
                     method: 'PUT',
                     headers: {
@@ -44,7 +44,7 @@ angular.module('unionvmsWeb').factory('reportRestFactory', function($resource) {
             });
 	    },
 	    createReport: function(){
-	        return $resource('/reporting/rest/report', {}, {
+	        return $resource('reporting/rest/report', {}, {
                 'create': {
                     method: 'POST',
                     headers: {
@@ -54,7 +54,7 @@ angular.module('unionvmsWeb').factory('reportRestFactory', function($resource) {
             });
 	    },
 	    executeReport: function(){
-	        return $resource('/reporting/rest/report/execute/:id', {}, {
+	        return $resource('reporting/rest/report/execute/:id', {}, {
 	           'get': {
 	               method: 'POST',
 	               headers: {
@@ -64,7 +64,7 @@ angular.module('unionvmsWeb').factory('reportRestFactory', function($resource) {
 	        });
 	    },
         shareReport: function(){
-            return $resource('/reporting/rest/report/share/:id/:visibility', {}, {
+            return $resource('reporting/rest/report/share/:id/:visibility', {}, {
                'put': {
                    method: 'PUT',
                    headers: {
@@ -74,7 +74,7 @@ angular.module('unionvmsWeb').factory('reportRestFactory', function($resource) {
             });
         },
 		executeWithoutSaving: function(){
-	        return $resource('/reporting/rest/report/execute/', {}, {
+	        return $resource('reporting/rest/report/execute/', {}, {
 	           'get': {
 	               method: 'POST',
 	               headers: {
@@ -84,7 +84,7 @@ angular.module('unionvmsWeb').factory('reportRestFactory', function($resource) {
 	        });
 	    },
 	    setDefaultReport: function(){
-	        return $resource('/reporting/rest/report/default/:id', {}, {
+	        return $resource('reporting/rest/report/default/:id', {}, {
 	            'set': {
 	                method: 'POST',
 	                headers: {
@@ -94,7 +94,7 @@ angular.module('unionvmsWeb').factory('reportRestFactory', function($resource) {
 	        });
 	    },
         getLastExecuted: function(){
-            return $resource('/reporting/rest/report/list/lastexecuted/:nrReports', {}, {
+            return $resource('reporting/rest/report/list/lastexecuted/:nrReports', {}, {
 	            'get': {
 	                method: 'GET',
 	                headers: {

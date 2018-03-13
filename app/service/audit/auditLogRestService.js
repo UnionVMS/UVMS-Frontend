@@ -13,12 +13,12 @@ angular.module('unionvmsWeb').factory('auditLogRestFactory', function($resource)
 
     return {
         getAuditLogList: function() {
-            return $resource('/audit/rest/audit/list', {}, {
+            return $resource('audit/rest/audit/list', {}, {
                 list: { method: 'POST' }
             });
         },
         getConfigValues : function(){
-            return $resource('/audit/rest/audit/config');
+            return $resource('audit/rest/audit/config');
         }
     };
 

@@ -12,22 +12,22 @@ copy of the GNU General Public License along with the IFDM Suite. If not, see <h
 angular.module('unionvmsWeb').factory('spatialRestFactory', function($resource,$http) {
     return {
         getAreaLayers: function(){
-            return $resource('/spatial/rest/area/layers', {}, {
+            return $resource('spatial/rest/area/layers', {}, {
                 'get': {method: 'GET'}
             });
         },
         getAreaLocationLayers: function(){
-            return $resource('/spatial/rest/area/locationlayers', {}, {
+            return $resource('spatial/rest/area/locationlayers', {}, {
                 'get': {method: 'GET'}
             });
         },
         getUserAreaLayer: function(){
-            return $resource('/spatial/rest/userarea/layers', {}, {
+            return $resource('spatial/rest/userarea/layers', {}, {
                 'get': {method: 'GET'}
             });
         },
         getAreaDetails: function(){
-            return $resource('/spatial/rest/area/details', {}, {
+            return $resource('spatial/rest/area/details', {}, {
                 'get': {
                     method: 'POST',
                     headers: {
@@ -37,7 +37,7 @@ angular.module('unionvmsWeb').factory('spatialRestFactory', function($resource,$
             });
         },
         getLocationDetails: function(){
-            return $resource('/spatial/rest/area/location/details', {}, {
+            return $resource('spatial/rest/area/location/details', {}, {
                 'get': {
                     method: 'POST',
                     headers: {
@@ -47,7 +47,7 @@ angular.module('unionvmsWeb').factory('spatialRestFactory', function($resource,$
             });
         },
         getAreasByFilter: function(){
-            return $resource('/spatial/rest/area/byfilter', {}, {
+            return $resource('spatial/rest/area/byfilter', {}, {
                 'get': {
                     method: 'POST',
                     headers: {
@@ -57,7 +57,7 @@ angular.module('unionvmsWeb').factory('spatialRestFactory', function($resource,$
             });
         },
         getUserAreasByFilter: function(){
-            return $resource('/spatial/rest/userarea/byfilter', {}, {
+            return $resource('spatial/rest/userarea/byfilter', {}, {
                 'get': {
                     method: 'POST',
                     headers: {
@@ -67,7 +67,7 @@ angular.module('unionvmsWeb').factory('spatialRestFactory', function($resource,$
             });
         },
         getAreasByCode: function(){
-            return $resource('/spatial/rest/area/bycode', {}, {
+            return $resource('spatial/rest/area/bycode', {}, {
                 'get': {
                     method: 'POST',
                     headers: {
@@ -77,7 +77,7 @@ angular.module('unionvmsWeb').factory('spatialRestFactory', function($resource,$
             });
         },
         getAreaProperties: function(){
-            return $resource('/spatial/rest/area/properties', {}, {
+            return $resource('spatial/rest/area/properties', {}, {
                 'get': {
                     method: 'POST',
                     headers: {
@@ -87,7 +87,7 @@ angular.module('unionvmsWeb').factory('spatialRestFactory', function($resource,$
             });
         },
         getConfigsForReport: function(){
-            return $resource('/spatial/rest/config/:id', {}, {
+            return $resource('spatial/rest/config/:id', {}, {
                 'get': {
                     method: 'POST',
                     headers: {
@@ -97,49 +97,49 @@ angular.module('unionvmsWeb').factory('spatialRestFactory', function($resource,$
             });
         },
         getConfigsForReportWithoutMap: function(){
-            return $resource('/spatial/rest/config/report', {}, {
+            return $resource('spatial/rest/config/report', {}, {
                 'get': {
                     method: 'GET'
                 }
             });
         },
         getSupportedProjections: function(){
-            return $resource('/spatial/rest/config/projections', {}, {
+            return $resource('spatial/rest/config/projections', {}, {
                 'get': {
                     method: 'GET'
                 }
             });
         },
         getMapConfigurations: function(){
-            return $resource('/spatial/rest/mapconfig/:id', {}, {
+            return $resource('spatial/rest/mapconfig/:id', {}, {
                 'get': {
                     method: 'GET'
                 }
             });
         },
         getBasicMapConfigurations: function(){
-            return $resource('/spatial/rest/config/basic', {}, {
+            return $resource('spatial/rest/config/basic', {}, {
                 'get': {
                     method: 'GET'
                 }
             });
         },
         getUserDefinedAreas: function(){
-          return $resource('/spatial/rest/userarea/list', {}, {
+          return $resource('spatial/rest/userarea/list', {}, {
                 'get': {
                     method: 'GET'
                 }
             });  
         },
         getBookmarkList: function(){
-            return $resource('/spatial/rest/bookmark/', {}, {
+            return $resource('spatial/rest/bookmark/', {}, {
 	              'get': {
 	                  method: 'GET'
 	              }
 	          });  
         },
         createBookmark: function(){
-        	return $resource('/spatial/rest/bookmark/', {}, {
+        	return $resource('spatial/rest/bookmark/', {}, {
         		  'create': {
                       method: 'POST',
                       headers: {
@@ -149,7 +149,7 @@ angular.module('unionvmsWeb').factory('spatialRestFactory', function($resource,$
               });  
         },
         deleteBookmark: function(){
-        	return $resource('/spatial/rest/bookmark/:id', {}, {
+        	return $resource('spatial/rest/bookmark/:id', {}, {
         		  'delete': {
                       method: 'DELETE',
                       headers: {
@@ -159,7 +159,7 @@ angular.module('unionvmsWeb').factory('spatialRestFactory', function($resource,$
               });  
         },
         uploadFile: function(){
-        	return $resource('/spatial/rest/files/upload', {}, {
+        	return $resource('spatial/rest/files/upload', {}, {
         		  'create': {
                       method: 'POST',
                       transformRequest: function formDataObject(data) {

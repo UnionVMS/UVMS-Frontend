@@ -13,58 +13,58 @@ angular.module('unionvmsWeb')
     .factory('exchangeRestFactory', function($resource){
         return {
             getTransmissionStatuses : function(){
-                return $resource('/exchange/rest/plugin/list');
+                return $resource('exchange/rest/plugin/list');
             },
             stopTransmission : function(){
-                 return $resource('/exchange/rest/plugin/stop/:serviceClassName',{},
+                 return $resource('exchange/rest/plugin/stop/:serviceClassName',{},
                 {
                     stop : { method: 'PUT'}
                 });
             },
             startTransmission : function(){
-                 return $resource('/exchange/rest/plugin/start/:serviceClassName',{},
+                 return $resource('exchange/rest/plugin/start/:serviceClassName',{},
                 {
                     start : { method: 'PUT'}
                 });
             },
             getExchangeMessages : function(){
-                return $resource( '/exchange/rest/exchange/list',{},
+                return $resource('exchange/rest/exchange/list',{},
                 {
                     list : { method : 'POST'}
                 });
             },
             getRawExchangeMessage: function(){
-                return $resource('/exchange/rest/exchange/message/:guid');
+                return $resource('exchange/rest/exchange/message/:guid');
             },
             getExchangeMessage: function() {
-                return $resource('/exchange/rest/exchange/:guid');
+                return $resource('exchange/rest/exchange/:guid');
             },
             getPollMessages : function(){
-                return $resource( '/exchange/rest/exchange/poll',{},
+                return $resource('exchange/rest/exchange/poll',{},
                 {
                     list : { method : 'POST'}
                 });
             },
             getPollMessage : function(){
-                return $resource( '/exchange/rest/exchange/poll/:typeRefGuid');
+                return $resource('exchange/rest/exchange/poll/:typeRefGuid');
             },
             sendQueuedMessages : function(){
-                return $resource('/exchange/rest/sendingqueue/send', {},
+                return $resource('exchange/rest/sendingqueue/send', {},
                 {
                     put: {method: 'PUT'}
                 });
             },
             getSendingQueue : function(){
-                return $resource( '/exchange/rest/sendingqueue/list');
+                return $resource('exchange/rest/sendingqueue/list');
             },
             getExchangeConfig : function(){
-                return $resource('/exchange/rest/config');
+                return $resource('exchange/rest/config');
             },
             getValidationResults: function(){
-                return $resource('/exchange/rest/exchange/validation/:guid');
+                return $resource('exchange/rest/exchange/validation/:guid');
             },
             getLogItem: function(){
-                return $resource('/exchange/rest/exchange/:guid');
+                return $resource('exchange/rest/exchange/:guid');
             }
         };
     })

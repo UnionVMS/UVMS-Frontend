@@ -7,7 +7,7 @@
 
     function salesRestApi($resource) {
 
-        var sales = $resource('/sales/rest/:domain/:action', {},
+        var sales = $resource('sales/rest/:domain/:action', {},
             {
                 search: {method: 'POST', params: {domain: 'report', action: 'search'}},
                 codeLists: {method: 'GET', params: {domain: 'codelists', action: ''}},

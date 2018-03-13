@@ -20,7 +20,7 @@ userContextsServiceModule.factory('userContextsServices', ['$resource', '$q', '$
 			$q.activeUser = u;
             var deferred = $q.defer();
 
-			var resource = $resource('/usm-administration/rest/users/:userName/userContexts', u);
+			var resource = $resource('usm-administration/rest/users/:userName/userContexts', u);
             resource.get().$promise.then(
                 function (data) {
                     deferred.resolve({
@@ -49,7 +49,7 @@ userContextsServiceModule.factory('userContextsServices', ['$resource', '$q', '$
 			  "roleId": context.roleId
 			};
 
-			var resource = $resource('/usm-administration/rest/users/:userName/userContexts', usr);
+			var resource = $resource('usm-administration/rest/users/:userName/userContexts', usr);
             resource.save(postData).$promise.then(
                 function (data) {
                     deferred.resolve({
@@ -69,7 +69,7 @@ userContextsServiceModule.factory('userContextsServices', ['$resource', '$q', '$
 			usr.userName = $q.activeUser.userName;
             var deferred = $q.defer();
 
-			var resource = $resource('/usm-administration/rest/users/:userName/userContexts', usr, {updateContext: {method: 'PUT'}});
+			var resource = $resource('usm-administration/rest/users/:userName/userContexts', usr, {updateContext: {method: 'PUT'}});
             resource.updateContext(context).$promise.then(
                 function (data) {
                     deferred.resolve({
@@ -91,7 +91,7 @@ userContextsServiceModule.factory('userContextsServices', ['$resource', '$q', '$
 			usr.userContextId = context.userContextId;
             var deferred = $q.defer();
 
-			var resource = $resource('/usm-administration/rest/users/:userName/userContexts/:userContextId/', usr);
+			var resource = $resource('usm-administration/rest/users/:userName/userContexts/:userContextId/', usr);
             resource.delete().$promise.then(
                 function (data) {
                     deferred.resolve({

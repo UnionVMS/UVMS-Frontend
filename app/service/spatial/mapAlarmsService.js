@@ -56,7 +56,7 @@ angular.module('unionvmsWeb').factory('mapAlarmsService',function(mapService, $r
     
     //Request resource
     var getResource = function(){
-        return $resource('/reporting/rest/alarms', {}, {
+        return $resource('reporting/rest/alarms', {}, {
             'get': {
                 method: 'POST',
                 headers: {

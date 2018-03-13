@@ -17,7 +17,7 @@ changesServiceModule.factory('changesService', ['$resource', '$q', '$log', funct
         isReviewContactDetailsEnabled: function() {
             var message = "";
             var deferred = $q.defer();
-            var resource = $resource('/usm-administration/rest/persons/isReviewContactDetailsEnabled');
+            var resource = $resource('usm-administration/rest/persons/isReviewContactDetailsEnabled');
 
             resource.get().$promise.then(
                 function (data) {
@@ -40,7 +40,7 @@ changesServiceModule.factory('changesService', ['$resource', '$q', '$log', funct
         findPendingContactDetails: function() {
             var message = "";
             var deferred = $q.defer();
-            var resource = $resource('/usm-administration/rest/persons/pendingContactDetails');
+            var resource = $resource('usm-administration/rest/persons/pendingContactDetails');
 
             resource.get().$promise.then(
                 function (data) {
@@ -59,7 +59,7 @@ changesServiceModule.factory('changesService', ['$resource', '$q', '$log', funct
         getPendingContactDetails: function(userName) {
             var message = "";
             var deferred = $q.defer();
-            var resource = $resource('/usm-administration/rest/persons/pendingContactDetails/:userName', {"userName":userName});
+            var resource = $resource('usm-administration/rest/persons/pendingContactDetails/:userName', {"userName":userName});
 
             resource.get().$promise.then(
                 function (data) {
@@ -78,7 +78,7 @@ changesServiceModule.factory('changesService', ['$resource', '$q', '$log', funct
         getContactDetails: function(userName) {
             var message = "";
             var deferred = $q.defer();
-            var resource = $resource('/usm-administration/rest/persons/contactDetails/:userName', {"userName":userName});
+            var resource = $resource('usm-administration/rest/persons/contactDetails/:userName', {"userName":userName});
 
             resource.get().$promise.then(
                 function (data) {
@@ -97,7 +97,7 @@ changesServiceModule.factory('changesService', ['$resource', '$q', '$log', funct
         rejectPendingContactDetails: function(userName) {
             var message = "";
             var deferred = $q.defer();
-            var resource = $resource('/usm-administration/rest/persons/pendingContactDetails/:userName/reject', {"userName":userName});
+            var resource = $resource('usm-administration/rest/persons/pendingContactDetails/:userName/reject', {"userName":userName});
 
             resource.get().$promise.then(
                 function (data) {
@@ -116,7 +116,7 @@ changesServiceModule.factory('changesService', ['$resource', '$q', '$log', funct
         acceptPendingContactDetails: function(userName) {
             var message = "";
             var deferred = $q.defer();
-            var resource = $resource('/usm-administration/rest/persons/pendingContactDetails/:userName/accept', {"userName":userName});
+            var resource = $resource('usm-administration/rest/persons/pendingContactDetails/:userName/accept', {"userName":userName});
 
             resource.get().$promise.then(
                 function (data) {

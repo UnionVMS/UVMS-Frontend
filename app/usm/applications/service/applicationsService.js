@@ -17,7 +17,7 @@ applicationsService.factory('applicationsService', ['$resource', '$q', '$log', f
         getApplicationFeatures: function (applicationName) {
             var message = "";
             var deferred = $q.defer();
-            var resource = $resource('/usm-administration/rest/applications/:applicationName/features', {'applicationName': applicationName});
+            var resource = $resource('usm-administration/rest/applications/:applicationName/features', {'applicationName': applicationName});
 
             resource.get().$promise.then(
                 function (data) {
@@ -36,7 +36,7 @@ applicationsService.factory('applicationsService', ['$resource', '$q', '$log', f
         getAllFeatures: function () {
             var message = "";
             var deferred = $q.defer();
-            var resource = $resource('/usm-administration/rest/applications/features');
+            var resource = $resource('usm-administration/rest/applications/features');
 
             resource.get().$promise.then(
                 function (data) {
@@ -55,7 +55,7 @@ applicationsService.factory('applicationsService', ['$resource', '$q', '$log', f
         getPermissionByCriteria: function (criteria) {
             var message = "";
             var deferred = $q.defer();
-            var resource = $resource('/usm-administration/rest/roles/permissions');
+            var resource = $resource('usm-administration/rest/roles/permissions');
 
             resource.get(criteria).$promise.then(
                 function (data) {
@@ -74,7 +74,7 @@ applicationsService.factory('applicationsService', ['$resource', '$q', '$log', f
         getApplications: function (criteria) {
             var message = "";
             var deferred = $q.defer();
-            var resource = $resource('/usm-administration/rest/applications');
+            var resource = $resource('usm-administration/rest/applications');
 
             resource.get(criteria).$promise.then(
                 function (data) {
@@ -94,7 +94,7 @@ applicationsService.factory('applicationsService', ['$resource', '$q', '$log', f
         getParentApplicationNames: function () {
             var message = "";
             var deferred = $q.defer();
-            var resource = $resource('/usm-administration/rest/applications/parent/names');
+            var resource = $resource('usm-administration/rest/applications/parent/names');
 
             resource.get().$promise.then(
                 function (data) {
@@ -113,7 +113,7 @@ applicationsService.factory('applicationsService', ['$resource', '$q', '$log', f
         getApplicationDetails: function (applicationName) {
             var message = "";
             var deferred = $q.defer();
-            var resource = $resource('/usm-administration/rest/applications/:applicationName', {"applicationName": applicationName});
+            var resource = $resource('usm-administration/rest/applications/:applicationName', {"applicationName": applicationName});
 
             resource.get().$promise.then(
                 function (data) {
@@ -144,7 +144,7 @@ applicationsService.factory('getApplications', ['$resource', '$q', '$log', funct
         get: function () {
             var message = "";
             var deferred = $q.defer();
-            var resource = $resource("/usm-administration/rest/applications/names");
+            var resource = $resource("usm-administration/rest/applications/names");
 
             resource.get().$promise.then(
                 function (data) {

@@ -68,11 +68,11 @@ describe('ExchangeCtrl', function () {
 
     it('should start longPolling on init ', inject(function ($rootScope) {
         //Long polling for plugins
-        expect(longpollingSpy).toHaveBeenCalledWith("/exchange/activity/plugins", jasmine.any(Function));
+        expect(longpollingSpy).toHaveBeenCalledWith("exchange/activity/plugins", jasmine.any(Function));
         //Long polling for sending queue
-        expect(longpollingSpy).toHaveBeenCalledWith("/exchange/activity/queue", jasmine.any(Function));
+        expect(longpollingSpy).toHaveBeenCalledWith("exchange/activity/queue", jasmine.any(Function));
         //Long polling for exchange logs
-        expect(longpollingSpy).toHaveBeenCalledWith("/exchange/activity/exchange", jasmine.any(Function));
+        expect(longpollingSpy).toHaveBeenCalledWith("exchange/activity/exchange", jasmine.any(Function));
     }));
 
 

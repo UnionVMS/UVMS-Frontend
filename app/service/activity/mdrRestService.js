@@ -20,14 +20,14 @@ copy of the GNU General Public License along with the IFDM Suite. If not, see <h
 angular.module('unionvmsWeb').factory('mdrRestFactory',function($resource) {
   return {
           getCronJobExpression: function(){
-              return $resource('/mdr/rest/service/scheduler/config', {}, {
+              return $resource('mdr/rest/service/scheduler/config', {}, {
                   'get': {
                       method: 'GET'
                   }
               });
           },
           updateCronJobExpression: function(){
-              return $resource('/mdr/rest/service/scheduler/config/update', {}, {
+              return $resource('mdr/rest/service/scheduler/config/update', {}, {
                   'save': {
                       method: 'PUT',
                       headers: {
@@ -37,7 +37,7 @@ angular.module('unionvmsWeb').factory('mdrRestFactory',function($resource) {
               });
           },
           getAcronymsDetails: function() {
-            return $resource('/mdr/rest/service/acronyms/details', {}, {
+            return $resource('mdr/rest/service/acronyms/details', {}, {
                   'get': {
                       method: 'GET'
                   }
@@ -46,7 +46,7 @@ angular.module('unionvmsWeb').factory('mdrRestFactory',function($resource) {
           getMDRCodeList: function() {
             //the URL should be /activity/rest/acronyms/details
             //return $resource('service/activity/codeList.json');
-            return $resource('/mdr/rest/cl/search' , {}, {
+            return $resource('mdr/rest/cl/search' , {}, {
                 'get': {
                     method: 'POST'
                 },
@@ -56,7 +56,7 @@ angular.module('unionvmsWeb').factory('mdrRestFactory',function($resource) {
             });
           },
           syncNow: function(){
-            return $resource('/mdr/rest/service/sync/list', {}, {
+            return $resource('mdr/rest/service/sync/list', {}, {
                 'update': {
                     method: 'POST',
                     headers: {
@@ -66,14 +66,14 @@ angular.module('unionvmsWeb').factory('mdrRestFactory',function($resource) {
             });
            },
           syncAllNow: function(){
-            return $resource('/mdr/rest/service/sync/all', {}, {
+            return $resource('mdr/rest/service/sync/all', {}, {
                 'get': {
                     method: 'GET'
                 }
             });
           },
           enableDisableScheduledUpdate: function() {
-               return $resource('/mdr/rest/service/status/schedulable/update/:acronym/:schedulable', {
+               return $resource('mdr/rest/service/status/schedulable/update/:acronym/:schedulable', {
                      acronym: '@acronymID',
                      schedulable: '@schedulableFlag'
                 }, {
@@ -83,7 +83,7 @@ angular.module('unionvmsWeb').factory('mdrRestFactory',function($resource) {
                });
           }/*,
           getCodeList: function(){
-              return $resource('/mock/mdr/cl/:acronym', {
+              return $resource('mock/mdr/cl/:acronym', {
                   acronym: '@acronym'
               }, {
                   'get': {

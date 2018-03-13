@@ -15,10 +15,10 @@ describe('globalSettingsService', function() {
 
     beforeEach(module(function($provide) {
         $provide.value({'$resource': function(url) {
-            if (url === "/config/rest/globals") {
+            if (url === "config/rest/globals") {
                 return mockGlobalSettingsResource;
             }
-            else if (url === "/config/rest/settings/:id") {
+            else if (url === "config/rest/settings/:id") {
                 return mockSingleSettingResource;
             }
         }});

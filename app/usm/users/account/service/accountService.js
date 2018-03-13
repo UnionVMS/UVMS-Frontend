@@ -15,7 +15,7 @@ accountServiceModule.factory('accountService', ['$q', '$resource', '$log', funct
     	var _saveUser = function (user) {
             var message = "";
             var deferred = $q.defer();
-            var resource = $resource("/usm-administration/rest/users");
+            var resource = $resource("usm-administration/rest/users");
 
             resource.save(user).$promise.then(
                 function (data) {
@@ -35,7 +35,7 @@ accountServiceModule.factory('accountService', ['$q', '$resource', '$log', funct
         var _updateUser = function (contactDetails) {
             var message = "";
             var deferred = $q.defer();
-            var resource = $resource("/usm-administration/rest/users", {}, {updateUser:{method:'PUT'}});
+            var resource = $resource("usm-administration/rest/users", {}, {updateUser:{method:'PUT'}});
 
             resource.updateUser(contactDetails).$promise.then(
                 function (data) {
@@ -56,7 +56,7 @@ accountServiceModule.factory('accountService', ['$q', '$resource', '$log', funct
         var _changePassword = function (user) {
             var message = "";
             var deferred = $q.defer();
-            var resource = $resource("/usm-administration/rest/users/password",{},{changePassword:{method:'PUT'}});
+            var resource = $resource("usm-administration/rest/users/password",{},{changePassword:{method:'PUT'}});
 
             resource.changePassword(user).$promise.then(
                 function (data) {
@@ -77,7 +77,7 @@ accountServiceModule.factory('accountService', ['$q', '$resource', '$log', funct
 		var _changeUserPassword = function (user) {
 		    var message = "";
 		    var deferred = $q.defer();
-		    var resource = $resource("/usm-administration/rest/profile/userPassword",{},{userUpdatePassword:{method:'PUT'}});
+		    var resource = $resource("usm-administration/rest/profile/userPassword",{},{userUpdatePassword:{method:'PUT'}});
 
 		    resource.userUpdatePassword(user).$promise.then(
 		        function (data) {
@@ -99,7 +99,7 @@ accountServiceModule.factory('accountService', ['$q', '$resource', '$log', funct
 		var _getLdapUser = function (userName) {
 		    var message = "";
 		    var deferred = $q.defer();
-		    var resource = $resource('/usm-administration/rest/ldap/:userName', {'userName': userName});
+		    var resource = $resource('usm-administration/rest/ldap/:userName', {'userName': userName});
 		    resource.get().$promise.then(
 		        function (data) {
 		            deferred.resolve({

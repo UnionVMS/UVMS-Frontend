@@ -62,7 +62,7 @@ angular.module('unionvmsWeb').factory('mapFishPrintRestFactory', function($resou
             });
         },
         getIconAndLegends: function(){
-            return $resource('/spatial/rest/image', {}, {
+            return $resource('spatial/rest/image', {}, {
                 'get': {
                     method: 'POST',
                     headers: {
