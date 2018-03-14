@@ -10,7 +10,6 @@ FITNESS FOR A PARTICULAR PURPOSE.  See the GNU General Public License for more d
 copy of the GNU General Public License along with the IFDM Suite. If not, see <http://www.gnu.org/licenses/>.
 -->
 <div class="col-md-12 activity-details" ng-controller="ActivitydetailsCtrl">
-	<loading-panel class="activity-fa-loading" type="FishingActivity"></loading-panel>
 	<div class="row">
 		<div ng-include="'partial/activity/landingPanel/landingPanel.html'" ng-init="srcTab = 'activity'" ng-if="faServ.activityType === 'landing'"></div>
 		<div ng-include="'partial/activity/discardPanel/discardPanel.html'" ng-init="srcTab = 'activity'" ng-if="faServ.activityType === 'discard'"></div>
