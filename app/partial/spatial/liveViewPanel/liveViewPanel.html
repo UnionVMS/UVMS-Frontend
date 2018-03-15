@@ -18,8 +18,8 @@ copy of the GNU General Public License along with the IFDM Suite. If not, see <h
 				<span>{{repServ.message}}</span>            
 			</span>
 		</div>
+		<loading-panel type="LiveviewMap" ng-if="!isModal"></loading-panel>
 		<div class="card rep-no-map-container">
-			<loading-panel type="LiveviewMap" ng-if="!isModal"></loading-panel>
 			<div class="row form-group">
 				<div class="col-md-4">
 					<combobox ng-model="repServ.selectedHistory" initialtext="{{repServ.name}}" items="repServ.reportsHistory" combo-section="true" callback="selectHistory" init-callback="initComboHistory"
