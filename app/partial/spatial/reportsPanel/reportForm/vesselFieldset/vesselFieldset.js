@@ -129,7 +129,13 @@ angular.module('unionvmsWeb').controller('VesselfieldsetCtrl',function($scope, l
             var getVesselListRequest = new GetListRequest($scope.vesselPagination.page, $scope.vesselPagination.vesselsByPage, false, []);
             
             for (var i = 0; i < searchableFields.length; i++){
-                getVesselListRequest.addSearchCriteria(searchableFields[i], $scope.shared.searchVesselString + '*');
+                var searchString = $scope.shared.searchVesselString;
+                if (angular.isUndefined(searchString)){
+                    searchString = '*';
+                } else {
+                    searchString += '*';
+                }
+                getVesselListRequest.addSearchCriteria(searchableFields[i], searchString);
             }
             
             vesselRestService.getVesselList(getVesselListRequest).then(getVesselsSuccess, getVesselsError);

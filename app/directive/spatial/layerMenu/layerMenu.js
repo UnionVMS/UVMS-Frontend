@@ -139,7 +139,7 @@ angular.module('unionvmsWeb').directive('layerMenu', function(locale, reportForm
                     if (!angular.equals(reportFormService.liveView.currentReport.currentMapConfig.mapConfiguration, data.mapSettings)){
                         reportFormService.liveView.currentReport.currentMapConfig.mapConfiguration = data.mapSettings;
                         reportFormService.liveView.outOfDate = true;
-                        reportService.runReportWithoutSaving(reportFormService.liveView.currentReport);
+                        reportService.runReportWithoutSaving(reportFormService.liveView.currentReport, true);
                     } else if (reportService.refresh.status){
                         reportService.setAutoRefresh();
                     }

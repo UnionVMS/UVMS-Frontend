@@ -475,6 +475,7 @@ angular.module('unionvmsWeb').factory('TreeModel',function(locale, mapService, u
 	    
 	    
 	    if (type === 'activities'){
+	    	node.type = 'ersdata';
 	        node.data.optionsEnabled = false; //FIXME this should be removed when we implement conmtext menu options for activities layer
 	        node.data.filterProperty = 'activityType';
 	            
@@ -493,6 +494,7 @@ angular.module('unionvmsWeb').factory('TreeModel',function(locale, mapService, u
                         title: abbr !== "%%KEY_NOT_FOUND%%" ? abbr : type,
                         filterType: type,
                         type: 'ers-type',
+                        excludeDnd: true,
                         selected: false
                     });
                 });
@@ -517,6 +519,7 @@ angular.module('unionvmsWeb').factory('TreeModel',function(locale, mapService, u
 	                    title: source,
 	                    filterType: source,
 	                    type: 'vmspos-type',
+                        excludeDnd: true,
 	                    selected: true
 	                });
 	            });
