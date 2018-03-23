@@ -65,7 +65,7 @@ angular.module('unionvmsWeb').controller('VesselListCtrl',function($scope){
         $scope.stTable.tableState = tableState;
         var pageNumber = $scope.stTable.tableState.pagination.start / $scope.stTable.itemsByPage;
 
-        if (angular.isDefined($scope.stTable.page) && pageNumber + 1 != $scope.stTable.page){
+        if (angular.isDefined($scope.stTable.page) && pageNumber + 1 !== $scope.stTable.page){
             $scope.stTable.page = pageNumber + 1;
             $scope.searchVessels(undefined, $scope.stTable.page);
         }  else {
@@ -73,5 +73,5 @@ angular.module('unionvmsWeb').controller('VesselListCtrl',function($scope){
                 $scope.sortTableData(tableState.sort.predicate, tableState.sort.reverse);
             }
         }
-    }
+    };
 });

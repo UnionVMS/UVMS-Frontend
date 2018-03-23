@@ -475,7 +475,6 @@ angular.module('unionvmsWeb').factory('TreeModel',function(locale, mapService, u
 	    
 	    
 	    if (type === 'activities'){
-	    	node.type = 'ersdata';
 	        node.data.optionsEnabled = false; //FIXME this should be removed when we implement conmtext menu options for activities layer
 	        node.data.filterProperty = 'activityType';
 	            

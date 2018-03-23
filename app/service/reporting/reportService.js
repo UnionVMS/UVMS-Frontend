@@ -223,7 +223,7 @@ angular.module('unionvmsWeb').factory('reportService',function($rootScope, $comp
             mapExtent: mapService.map.getView().calculateExtent(mapService.map.getSize()),
             treeStatus: layerPanelService.getLayerTreeStatus(undefined),
             vmsStatus: layerPanelService.getLayerTreeStatus('vmsdata'),
-            ersStatus: layerPanelService.getLayerTreeStatus('ersdata')
+            ersStatus: layerPanelService.getLayerTreeStatus('ers')
             //TODO ACTIVITIES and ALARMS
         };
         mapStateService.toStorage(state);
@@ -434,7 +434,7 @@ angular.module('unionvmsWeb').factory('reportService',function($rootScope, $comp
                                 node.children = updateVmsTreeSource(node.children, previousLayerState.vmsStatus[0].children, 'title');
                             }
 
-                            if (node.type === 'ersdata'){
+                            if (angular.isUndefined(node.type) && angular.isDefined(node.data) && node.data.filterProperty === 'activityType'){
                                 node.expanded = previousLayerState.ersStatus[0].expanded;
                                 node.selected = previousLayerState.ersStatus[0].selected;
                                 node.children = updateVmsTreeSource(node.children, previousLayerState.ersStatus[0].children, 'title');

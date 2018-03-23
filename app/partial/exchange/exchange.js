@@ -231,6 +231,9 @@ angular.module('unionvmsWeb').controller('ExchangeCtrl',function($scope, $log, $
                     tempVisibility = _.unique(tempVisibility);
                     if (tempVisibility.length === 1){
                         visible = tempVisibility[0];
+                        if (model.status === 'ISSUED' && feature[0] === 'viewMovements'){
+                            visible = false;
+                        }
                     } else {
                         if (operator === 'OR'){
                             visible = true;

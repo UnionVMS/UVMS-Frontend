@@ -261,7 +261,7 @@ angular.module('unionvmsWeb').factory('searchService',function($q, $log, searchU
                     getListRequest.addSearchCriteria("HIST_GUID", latestMovement.connectId);
                 });
 
-                if(checkAccessToFeature('Vessel')){
+                if(checkAccessToFeature('Vessel', 'getVesselList') || checkAccessToFeature('Union-VMS', 'viewVesselsAndMobileTerminals')){
                     searchUtilsService.modifySpanAndTimeZones(getListRequest.criterias);
                     searchUtilsService.replaceCommasWithPoint(getListRequest.criterias);
                     vesselRestService.getVesselList(getListRequest).then(function(vessels) {
