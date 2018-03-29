@@ -29,11 +29,11 @@ describe('reportService', function () {
         
         mockSpRestServ = jasmine.createSpyObj('spatialRestService', [ 'getConfigsForReport', 'getConfigsForReportWithoutMap']);
         mockRepRestServ = jasmine.createSpyObj('reportRestService', [ 'executeReport', 'getLastExecuted']);
-        mockMapServ = jasmine.createSpyObj('mapService', ['setMap', 'getMapProjectionCode', 'updateMapControls', 'updateMapView', 
+        mockMapServ = jasmine.createSpyObj('mapService', ['setMap', 'getMapExtent', 'getMapProjectionCode', 'updateMapControls', 'updateMapView',
                                                           'setPositionStylesObj', 'setSegmentStylesObj', 'setAlarmsStylesObj', 'setPopupVisibility',
                                                           'setLabelVisibility', 'updateMapSize', 'clearVectorLayers', 'resetLabelContainers',
                                                           'setDisplayedFlagStateCodes', 'getControlsByType', 'closePopup', 'deactivateVectorLabels']);
-        mockLayerPanServ = jasmine.createSpyObj('layerPanelService', ['updateLayerTreeSource']);
+        mockLayerPanServ = jasmine.createSpyObj('layerPanelService', ['updateLayerTreeSource', 'getLayerTreeStatus']);
         mockNavServ = jasmine.createSpyObj('reportingNavigatorService', ['goToView', 'isViewVisible']);
         
         module(function($provide){

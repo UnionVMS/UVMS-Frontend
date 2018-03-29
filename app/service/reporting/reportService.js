@@ -220,11 +220,11 @@ angular.module('unionvmsWeb').factory('reportService',function($rootScope, $comp
 	var setStateProperties = function(){
 	    var state = {
 	        repId: rep.id,
-            mapExtent: mapService.map.getView().calculateExtent(mapService.map.getSize()),
+            mapExtent: mapService.getMapExtent(),
             treeStatus: layerPanelService.getLayerTreeStatus(undefined),
             vmsStatus: layerPanelService.getLayerTreeStatus('vmsdata'),
             ersStatus: layerPanelService.getLayerTreeStatus('ers')
-            //TODO ACTIVITIES and ALARMS
+            //TODO ALARMS
         };
         mapStateService.toStorage(state);
     };
@@ -420,7 +420,6 @@ angular.module('unionvmsWeb').factory('reportService',function($rootScope, $comp
                 }
                 
                 //Add nodes to the tree and layers to the map
-                //FIXME check for activities in the data
                 if (rep.positions.length > 0 || rep.segments.length > 0 || rep.activities.length > 0){
                     var vectorNodeSource = new TreeModel();
                     vectorNodeSource = vectorNodeSource.nodeFromData(data);
@@ -428,13 +427,13 @@ angular.module('unionvmsWeb').factory('reportService',function($rootScope, $comp
                     var previousLayerState = mapStateService.fromStorage();
                     if (angular.isDefined(previousLayerState) && previousLayerState.repId === rep.id){
                         angular.forEach(vectorNodeSource, function(node){
-                            if (node.type === 'vmsdata'){
+                            if (node.type === 'vmsdata' && previousLayerState.vmsStatus.length > 0){
                                 node.expanded = previousLayerState.vmsStatus[0].expanded;
                                 node.selected = previousLayerState.vmsStatus[0].selected;
                                 node.children = updateVmsTreeSource(node.children, previousLayerState.vmsStatus[0].children, 'title');
                             }
 
-                            if (angular.isUndefined(node.type) && angular.isDefined(node.data) && node.data.filterProperty === 'activityType'){
+                            if (angular.isUndefined(node.type) && angular.isDefined(node.data) && node.data.filterProperty === 'activityType' && previousLayerState.ersStatus.length > 0){
                                 node.expanded = previousLayerState.ersStatus[0].expanded;
                                 node.selected = previousLayerState.ersStatus[0].selected;
                                 node.children = updateVmsTreeSource(node.children, previousLayerState.ersStatus[0].children, 'title');
@@ -444,9 +443,8 @@ angular.module('unionvmsWeb').factory('reportService',function($rootScope, $comp
                     
                     layerPanelService.addLayerTreeNode(vectorNodeSource);
                     
-                    if (reportingNavigatorService.isViewVisible('mapPanel')){
-                        //FIXME uncomment
-                        //mapService.zoomToPositionsLayer();
+                    if (reportingNavigatorService.isViewVisible('mapPanel') && angular.isUndefined(previousLayerState)){
+                        mapService.zoomToPositionsLayer();
                     }
                 } else if (rep.positions.length === 0 && rep.segments.length === 0){
                     rep.hasAlert = true;

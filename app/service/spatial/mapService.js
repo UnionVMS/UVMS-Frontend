@@ -3648,6 +3648,10 @@ angular.module('unionvmsWeb').factory('mapService', function(locale, $rootScope,
             species: filter(data.species, ', ')    
         };
     };
+
+    ms.getMapExtent = function(){
+        return ms.map.getView().calculateExtent(ms.map.getSize());
+    };
     
 	return ms;
 });
