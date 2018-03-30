@@ -56,6 +56,7 @@ angular.module('unionvmsWeb').controller('DetailsmodalCtrl',function($scope, $mo
     
     var init = function(){
         if ($scope.item.type === 'asset'){
+            //FIXME use new service to get vessel by history guid once it is implemented in ASSETS module
             vesselRestService.getVessel($scope.item.guid).then(
                 function(response){
                     $scope.detailedItem = response;

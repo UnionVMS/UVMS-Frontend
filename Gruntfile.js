@@ -231,11 +231,10 @@ module.exports = function (grunt) {
                 filter:'isFile'
             },
             {
-                expand:true,
-                flatten: true,
-                src: ['bower_components/bootstrap/fonts/*'],
-                dest: 'fonts/',
-                filter:'isFile'
+                cwd: 'bower_components/slick-carousel/slick/',
+                src: ['ajax-loader.gif'],
+                dest: 'dist/',
+                expand: true
             },
             {
                 cwd: 'app/',

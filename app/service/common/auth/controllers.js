@@ -513,7 +513,7 @@ angular.module('auth.controllers', ['ui.bootstrap', 'ui.router'])
     .controller('ecaslogincontroller', ['$scope', '$log', '$modalInstance', 'authenticateUser', 'userService', '$state', '$stateParams', '$window',
         function ($scope, $log, $modalInstance, authenticateUser, userService, $state, $stateParams, $window) {
             var callback = $window.document.URL.split('#')[0] + '#/jwtcallback';
-            var _url = "/usm-administration/rest/ping?jwtcallback=" + callback;
+            var _url = "usm-administration/rest/ping?jwtcallback=" + callback;
                 $scope.status = "unopened";
             var receiveMessage = function (event) {
                     $scope.status = "Event received";

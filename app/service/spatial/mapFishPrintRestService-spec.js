@@ -22,7 +22,7 @@ describe('mapFishPrintRestServiceTest', function() {
         printRestService = $injector.get('mapFishPrintRestService');
         $httpBackend.whenGET(/usm\/assets\/translate\/locale-.*\.json/).respond({});
         $httpBackend.whenGET(/i18n/).respond();
-        $httpBackend.whenGET('/usm-administration/rest/ping').respond({});
+        $httpBackend.whenGET('usm-administration/rest/ping').respond({});
         $httpBackend.whenGET('config/rest/globals').respond({});
     }));
 
