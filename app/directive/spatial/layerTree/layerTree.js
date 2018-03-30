@@ -299,7 +299,7 @@ angular.module('unionvmsWeb').directive('layerTree', function($q, $modal, mapSer
 			        if (!angular.equals(reportFormService.liveView.currentReport.currentMapConfig.mapConfiguration, data.mapSettings)){
 			            reportFormService.liveView.currentReport.currentMapConfig.mapConfiguration = data.mapSettings;
 			            reportFormService.liveView.outOfDate = true;
-			            reportService.runReportWithoutSaving(reportFormService.liveView.currentReport);
+			            reportService.runReportWithoutSaving(reportFormService.liveView.currentReport, true);
 			        } else if (reportService.refresh.status){
                         reportService.setAutoRefresh();
 			        }
@@ -454,7 +454,8 @@ angular.module('unionvmsWeb').directive('layerTree', function($q, $modal, mapSer
 					treeNode.data.mapLayer = layer;
 
 					mapService.map.removeLayer( layer );// remove to have it reordered
-					layer.set( 'visible', value.selected );// don't request tiles if not selected
+                    layer.set( 'visible', value.selected);// don't request tiles if not selected
+
 					if (layer.get('type') === 'ers' || (layer.get('type') === 'vmsseg' && !angular.isDefined(mapService.getLayerByType('ers')))){
 					    //Add feature highlight layer before the vms segments and positions
 					    var highlightLayer = mapService.getLayerByType('highlight');
@@ -464,6 +465,23 @@ angular.module('unionvmsWeb').directive('layerTree', function($q, $modal, mapSer
 					    mapService.addFeatureOverlay();
 					}
 					mapService.map.addLayer( layer );
+
+
+                    if (angular.isDefined(value.data.type) && (value.data.type === 'vmspos' || value.data.type === 'ers')){
+                        var unselectedSubNodes = _.filter(treeNode.children, {selected:false});
+                        var selectedSubNodes = _.filter(treeNode.children, {selected:true});
+                        if (selectedSubNodes.length > 0 && value.selected === false){
+                            layer.set( 'visible', true);
+                            if (unselectedSubNodes.length > 0){
+                                angular.forEach(unselectedSubNodes, function(node){
+                                    var data = {
+                                        node: node
+                                    };
+                                    applyGeoJsonFilter(data, false);
+                                });
+                            }
+                        }
+                    }
 				});
 			};
 
@@ -527,6 +545,52 @@ angular.module('unionvmsWeb').directive('layerTree', function($q, $modal, mapSer
 				    root.addChildren(nodes[i], scope.$tree.getFirstChild());
 				}
 				updateMap();
+			};
+
+			var getStatusFromNodes = function(nodes){
+                var status = [];
+                angular.forEach(nodes, function(node){
+                    var nodeObj = {};
+                    if (angular.isDefined(node.expanded)){
+                        nodeObj.expanded = node.expanded;
+                    }
+                    nodeObj.selected = node.selected;
+                    nodeObj.title = node.title;
+                    if (node.hasChildren()){
+                        nodeObj.children = getStatusFromNodes(node.getChildren());
+                    }
+
+                    if (angular.isDefined(node.data.params)){
+                        nodeObj.params = node.data.params;
+                    }
+
+                    if (angular.isDefined(node.data.contextItems)){
+                        nodeObj.contextItems = node.data.contextItems;
+                    }
+
+                    if (angular.isDefined(node.data.filterType)){
+                        nodeObj.filterType = node.data.filterType;
+                    }
+
+                    status.push(nodeObj);
+                }, status);
+
+                return status;
+            };
+
+			layerPanelService.getLayerTreeStatus = function(nodeType){
+				var nodes = getNodesByType(nodeType);
+				var status = getStatusFromNodes(nodes);
+				return status;
+			};
+
+			var getNodesByType = function(type){
+				var root = scope.$tree.getRootNode();
+				var selectedNodes = root.findAll(function(node){
+					return node.data.type === type;
+				});
+
+				return selectedNodes;
 			};
 			
 			layerPanelService.getChildrenByStatus = function(checkedStatus, parentType){

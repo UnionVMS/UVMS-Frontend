@@ -616,18 +616,18 @@ angular.module('unionvmsWeb').factory('genericMapService',function($localStorage
         var x,y;
         if (ctrl.epsgCode === 4326){
             if (ctrl.format === 'dd'){
-                return ol.coordinate.format(coord, '<b>LON:</b> {x}\u00b0 \u0090 <b>LAT:</b> {y}\u00b0' , 4);
+                return ol.coordinate.format(coord, '<b>LON:</b> {x}\u00b0 | <b>LAT:</b> {y}\u00b0' , 4);
             } else if (ctrl.format === 'dms'){
                 x = coordToDMS(coord[0], 'EW');
                 y = coordToDMS(coord[1], 'NS');
-                return '<b>LON:</b> ' + x + '\u0090 <b>LAT:</b> ' + y;
+                return '<b>LON:</b> ' + x + ' | <b>LAT:</b> ' + y;
             } else {
                 x = coordToDDM(coord[0], 'EW');
                 y = coordToDDM(coord[1], 'NS');
-                return '<b>LON:</b> ' + x + '\u0090 <b>LAT:</b> ' + y;
+                return '<b>LON:</b> ' + x + ' | <b>LAT:</b> ' + y;
             }
         } else {
-            return ol.coordinate.format(coord, '<b>X:</b> {x} m \u0090 <b>Y:</b> {y} m' , 4);
+            return ol.coordinate.format(coord, '<b>X:</b> {x} m | <b>Y:</b> {y} m' , 4);
         }
     };
     

@@ -9,7 +9,7 @@ the hope that it will be useful, but WITHOUT ANY WARRANTY; without even the impl
 FITNESS FOR A PARTICULAR PURPOSE.  See the GNU General Public License for more details. You should have received a
 copy of the GNU General Public License along with the IFDM Suite. If not, see <http://www.gnu.org/licenses/>.
 */
-angular.module('unionvmsWeb').factory('reportService',function($rootScope, $compile, $timeout, $interval, $anchorScroll, locale, TreeModel, reportRestService, reportFormService, spatialRestService, spatialHelperService, defaultMapConfigs, mapService, unitConversionService, visibilityService, mapAlarmsService, loadingStatus, spatialConfigRestService, SpatialConfig, Report, globalSettingsService, userService, reportingNavigatorService, $modalStack, layerPanelService,tripReportsTimeline, tripSummaryService) {
+angular.module('unionvmsWeb').factory('reportService',function($rootScope, $compile, $timeout, $interval, $anchorScroll, locale, TreeModel, reportRestService, reportFormService, spatialRestService, spatialHelperService, defaultMapConfigs, mapService, unitConversionService, visibilityService, mapAlarmsService, loadingStatus, spatialConfigRestService, SpatialConfig, Report, globalSettingsService, userService, reportingNavigatorService, $modalStack, layerPanelService,tripReportsTimeline, tripSummaryService, mapStateService) {
 
     var rep = {
        id: undefined,
@@ -161,7 +161,10 @@ angular.module('unionvmsWeb').factory('reportService',function($rootScope, $comp
         }, 10);
 	};
 	
-	rep.runReportWithoutSaving = function(report){
+	rep.runReportWithoutSaving = function(report, preserveMapState){
+	    if (angular.isDefined(preserveMapState) && preserveMapState === true){
+            setStateProperties();
+        }
 	    loadingStatus.isLoading('LiveviewMap',true, 0);
         spatialHelperService.fromFAView = false;
 	    tripReportsTimeline.reset();
@@ -213,9 +216,22 @@ angular.module('unionvmsWeb').factory('reportService',function($rootScope, $comp
             mapService.closePopup();
         }
 	};
+
+	var setStateProperties = function(){
+	    var state = {
+	        repId: rep.id,
+            mapExtent: mapService.getMapExtent(),
+            treeStatus: layerPanelService.getLayerTreeStatus(undefined),
+            vmsStatus: layerPanelService.getLayerTreeStatus('vmsdata'),
+            ersStatus: layerPanelService.getLayerTreeStatus('ers')
+            //TODO ALARMS
+        };
+        mapStateService.toStorage(state);
+    };
 	
 	rep.refreshReport = function(){
 	    if (angular.isDefined(rep.id)){
+	        setStateProperties();
 	        rep.clearMapOverlaysOnRefresh();
 	        rep.isReportRefreshing = true;
 	        if(reportFormService.liveView.outOfDate){
@@ -285,6 +301,7 @@ angular.module('unionvmsWeb').factory('reportService',function($rootScope, $comp
         rep.message = locale.getString('spatial.map_error_loading_report');
         rep.refresh.status = false;
         loadingStatus.isLoading('LiveviewMap', false);
+        mapStateService.clearState();
 	};
 	
 	var getRepConfig = function(){
@@ -360,10 +377,28 @@ angular.module('unionvmsWeb').factory('reportService',function($rootScope, $comp
         rep.message = locale.getString('spatial.map_error_alarms_data');
         loadingStatus.isLoading('LiveviewMap', false);
     };
-	
+
+    var updateVmsTreeSource = function(nodes, prevState, propertyName){
+        angular.forEach(nodes, function (node) {
+            var searchObj = {};
+            searchObj[propertyName] = node[propertyName];
+            var state = _.findWhere(prevState, searchObj);
+            if (angular.isDefined(state)){
+                if (angular.isDefined(state.expanded)){
+                    node.expanded = state.expanded;
+                }
+                node.selected = state.selected;
+                if (angular.isDefined(node.children) && node.children.length > 0){
+                    node.children = updateVmsTreeSource(node.children, state.children, 'filterType');
+                }
+            }
+        });
+
+        return nodes;
+    };
+
 	//Get VMS data Success callback
 	var getVmsDataSuccess = function(data){
-        
         rep.positions = data.movements.features;
         rep.segments = data.segments.features;
         rep.tracks = data.tracks;
@@ -385,16 +420,31 @@ angular.module('unionvmsWeb').factory('reportService',function($rootScope, $comp
                 }
                 
                 //Add nodes to the tree and layers to the map
-                //FIXME check for activities in the data
                 if (rep.positions.length > 0 || rep.segments.length > 0 || rep.activities.length > 0){
                     var vectorNodeSource = new TreeModel();
                     vectorNodeSource = vectorNodeSource.nodeFromData(data);
+
+                    var previousLayerState = mapStateService.fromStorage();
+                    if (angular.isDefined(previousLayerState) && previousLayerState.repId === rep.id){
+                        angular.forEach(vectorNodeSource, function(node){
+                            if (node.type === 'vmsdata' && previousLayerState.vmsStatus.length > 0){
+                                node.expanded = previousLayerState.vmsStatus[0].expanded;
+                                node.selected = previousLayerState.vmsStatus[0].selected;
+                                node.children = updateVmsTreeSource(node.children, previousLayerState.vmsStatus[0].children, 'title');
+                            }
+
+                            if (angular.isUndefined(node.type) && angular.isDefined(node.data) && node.data.filterProperty === 'activityType' && previousLayerState.ersStatus.length > 0){
+                                node.expanded = previousLayerState.ersStatus[0].expanded;
+                                node.selected = previousLayerState.ersStatus[0].selected;
+                                node.children = updateVmsTreeSource(node.children, previousLayerState.ersStatus[0].children, 'title');
+                            }
+                        });
+                    }
                     
                     layerPanelService.addLayerTreeNode(vectorNodeSource);
                     
-                    if (reportingNavigatorService.isViewVisible('mapPanel')){
-                        //FIXME uncomment
-                        //mapService.zoomToPositionsLayer();
+                    if (reportingNavigatorService.isViewVisible('mapPanel') && angular.isUndefined(previousLayerState)){
+                        mapService.zoomToPositionsLayer();
                     }
                 } else if (rep.positions.length === 0 && rep.segments.length === 0){
                     rep.hasAlert = true;
@@ -406,6 +456,8 @@ angular.module('unionvmsWeb').factory('reportService',function($rootScope, $comp
             if (rep.refresh.status === true) {
                 rep.setAutoRefresh();
             }
+
+            mapStateService.clearState();
         }else{
             if(!angular.isDefined(rep.criteria.recordDTOs) || rep.criteria.recordDTOs.length === 0){           
                 rep.hasAlert = true;
@@ -437,6 +489,7 @@ angular.module('unionvmsWeb').factory('reportService',function($rootScope, $comp
         rep.message = locale.getString('spatial.map_error_loading_report');
         rep.refresh.status = false;
         loadingStatus.isLoading('LiveviewMap', false);
+        mapStateService.clearState();
     };
     
     //Refresh report success callback
@@ -507,6 +560,48 @@ angular.module('unionvmsWeb').factory('reportService',function($rootScope, $comp
             }
         }
 	};
+
+    var adjustTreeSource = function(oldTreeSource, treeSourceFromCfg){
+        var newTreeSource = [];
+        angular.forEach(oldTreeSource, function(node){
+            var nodeCfgFromServer = _.findWhere(treeSourceFromCfg, {title: node.title});
+            if (angular.isDefined(node.expanded)){
+                nodeCfgFromServer.expanded = node.expanded;
+            }
+            nodeCfgFromServer.selected = node.selected;
+            if (angular.isDefined(node.children) && node.children.length > 0){
+                var children = _.clone(nodeCfgFromServer.children);
+                delete nodeCfgFromServer.children;
+                nodeCfgFromServer.children = adjustTreeSource(node.children, children);
+            }
+
+            if (angular.isDefined(node.params)){
+                nodeCfgFromServer.data.params.STYLES = node.params.STYLES;
+            }
+
+            if (angular.isDefined(node.contextItems)){
+                if (angular.isDefined(node.contextItems.geomLabelStyle)){
+                    nodeCfgFromServer.data.contextItems.geomLabelStyle = node.contextItems.geomLabelStyle;
+                }
+                if (angular.isDefined(node.contextItems.geomStyle)){
+                    nodeCfgFromServer.data.contextItems.geomStyle = node.contextItems.geomStyle;
+                }
+                if (angular.isDefined(node.contextItems.labelStyle)){
+                    nodeCfgFromServer.data.contextItems.labelStyle = node.contextItems.labelStyle;
+                }
+                if (angular.isDefined(node.contextItems.cqlHeader)){
+                    nodeCfgFromServer.data.contextItems.activeAreas = node.contextItems.activeAreas;
+                    nodeCfgFromServer.data.contextItems.allAreas = node.contextItems.allAreas;
+                    if (node.contextItems.allAreas.selected === true){
+                        nodeCfgFromServer.data.params.cql_filter = null;
+                    }
+                }
+            }
+            this.push(nodeCfgFromServer);
+        }, newTreeSource);
+
+        return newTreeSource;
+    };
 	
 	var configureMap = function(data){
 	    //Change map ol.View configuration
@@ -539,8 +634,16 @@ angular.module('unionvmsWeb').factory('reportService',function($rootScope, $comp
 	    //mapService.setLabelVisibility('activities', data.visibilitySettings.activities.labels); FIXME
 	    
 	    //Build tree object and update layer panel
-	    var treeSource = new TreeModel();
-	    treeSource = treeSource.fromConfig(data.map.layers);
+
+        var treeSource = new TreeModel();
+        treeSource = treeSource.fromConfig(data.map.layers);
+
+        //Maintain the map state if map is being refreshed
+        var previousLayerState = mapStateService.fromStorage();
+        if (angular.isDefined(previousLayerState) && previousLayerState.repId === rep.id){
+            treeSource = adjustTreeSource(previousLayerState.treeStatus, treeSource);
+        }
+
 	    $timeout(function() {
             layerPanelService.updateLayerTreeSource(treeSource);
 	    });

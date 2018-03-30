@@ -228,6 +228,7 @@
     "homePage_alarms": "Alerts",
     "homePage_admin": "Admin",
     "homePage_reporting": "Reporting",
+    "homePage_activity": "Activity",
 
     "coordinateFormat-degreesMinutesSeconds": "DD MM,SS'",
     "coordinateFormat-decimalDegrees": "DD.MMM",

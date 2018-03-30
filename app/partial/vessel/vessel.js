@@ -153,7 +153,7 @@ angular.module('unionvmsWeb').controller('VesselCtrl', function($scope, $log, $s
         $scope.isVisible.notificationCancelSearch = false;
 
         // Error functions not to be runned if search has been cancelled
-        if (response.status !== -1) {
+        if (angular.isUndefined(response) || response.status !== -1) {
             $scope.currentSearchResults.removeAllItems();
             $scope.currentSearchResults.setLoading(false);
             $scope.currentSearchResults.setErrorMessage(locale.getString('common.search_failed_error'));
