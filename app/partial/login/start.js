@@ -35,7 +35,7 @@ angular.module('unionvmsWeb').factory('startPageService',function($log, globalSe
         alarms : ['app.holdingTable', 'app.openTickets'],
         admin : ['app.auditLog'],
         user : ['app.usm.users'],
-        subscriptions : ['app.manageSubscriptions'],
+        subscription : ['app.manageSubscriptions'],
         reporting : ['app.reporting'],
         areaManagement:['app.areas']
     };
