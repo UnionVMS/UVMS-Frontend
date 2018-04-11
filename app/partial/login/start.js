@@ -26,6 +26,7 @@ angular.module('unionvmsWeb').factory('startPageService',function($log, globalSe
     //Matches pages (in global config) with states in the app
     //Order of pages and states are of importance only when user don't have access to the homepage set in the global config
     var pagesAndStates = {
+        today : ['app.today'],
         exchange : ['app.exchange'],
         positions : ['app.movement'],
         polling : ['app.pollingLogs'],
@@ -34,8 +35,9 @@ angular.module('unionvmsWeb').factory('startPageService',function($log, globalSe
         alarms : ['app.holdingTable', 'app.openTickets'],
         admin : ['app.auditLog'],
         user : ['app.usm.users'],
-        subscriptions : ['app.manageSubscriptions'],
+        subscription : ['app.manageSubscriptions'],
         reporting : ['app.reporting'],
+        areaManagement:['app.areas']
     };
 
     var userHasAccessToState = function(state){
@@ -64,6 +66,10 @@ angular.module('unionvmsWeb').factory('startPageService',function($log, globalSe
                 return checkAccess('Reporting', 'LIST_REPORTS');
             case 'app.manageSubscriptions':
                 return checkAccess('Subscription','VIEW_SUBSCRIPTION');
+            case 'app.areas':
+                return checkAccess('Spatial', 'VIEW_AREA_MANAGEMENT_UI');
+            case 'app.today':
+                return true;
             default:
                 $log.info("State: " +state +" is missing from list. Returning false.");
                 return false;
