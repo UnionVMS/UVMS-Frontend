@@ -52,7 +52,8 @@ angular.module('unionvmsWeb').controller('ConfigurationgeneralCtrl',function($sc
 		"reporting",
 		"today",
 		"areaManagement",
-		"subscription"
+		"subscription",
+		"user"
 
 	].map(function(page) {
 		return {
