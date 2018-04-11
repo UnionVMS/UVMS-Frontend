@@ -302,7 +302,7 @@ angular.module('unionvmsWeb').factory('genericMapService',function($localStorage
         var xhr = new XMLHttpRequest();
         xhr.open('GET', src, true);
         xhr.withCredentials = true;
-        xhr.setRequestHeader('Authorization', $localStorage.token);
+        xhr.setRequestHeader('Authorization', getToken());
         xhr.responseType = 'arraybuffer';
         xhr.onload = function(){
             var img = imageTile.getImage();
@@ -324,7 +324,15 @@ angular.module('unionvmsWeb').factory('genericMapService',function($localStorage
                 img.src = src;
             }
         };
+        xhr.onerror = function(){
+            var img = imageTile.getImage();
+            img.src = '';
+        };
         xhr.send();
+    };
+
+    var getToken = function(){
+        return $localStorage.token;
     };
     
     

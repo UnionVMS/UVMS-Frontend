@@ -321,7 +321,7 @@ describe('reportService', function () {
         expect(repServ.hasError).toBeFalsy();
         expect(mockRepFormServ.resetLiveView.callCount).toBe(2);
         expect(mockSpRestServ.getConfigsForReport.callCount).toBe(2);
-        expect(mockMapServ.resetLabelContainers.callCount).toBe(2);
+        expect(mockMapServ.resetLabelContainers.callCount).toBe(4);
         expect(mockMapServ.setMap.callCount).toBe(0);
         expect(mockNavServ.isViewVisible.callCount).toBe(3);
         expect(mockMapServ.updateMapControls.callCount).toBe(1);
@@ -423,9 +423,9 @@ describe('reportService', function () {
         
         
         it('should clear map overlays', function(){
-            spyOn(repServ, 'clearMapOverlaysOnRefresh');
+            spyOn(repServ, 'clearMapOverlays');
             repServ.refreshReport();
-            expect(repServ.clearMapOverlaysOnRefresh).toHaveBeenCalled();
+            expect(repServ.clearMapOverlays).toHaveBeenCalled();
         });
         
         it('should run the report again', function(){
