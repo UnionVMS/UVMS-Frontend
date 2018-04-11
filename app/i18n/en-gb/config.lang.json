@@ -229,6 +229,9 @@
     "homePage_admin": "Admin",
     "homePage_reporting": "Reporting",
     "homePage_activity": "Activity",
+    "homePage_today": "Today",
+    "homePage_areaManagement": "Area Management",
+    "homePage_subscription": "Subscription",
 
     "coordinateFormat-degreesMinutesSeconds": "DD MM,SS'",
     "coordinateFormat-decimalDegrees": "DD.MMM",

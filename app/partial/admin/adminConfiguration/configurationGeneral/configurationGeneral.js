@@ -49,7 +49,11 @@ angular.module('unionvmsWeb').controller('ConfigurationgeneralCtrl',function($sc
 		"assets",
 		"alarms",
 		"admin",
-		"reporting"
+		"reporting",
+		"today",
+		"areaManagement",
+		"subscription"
+
 	].map(function(page) {
 		return {
 			text: locale.getString("config.homePage_" + page),
