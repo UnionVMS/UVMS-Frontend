@@ -52,9 +52,7 @@ angular.module('unionvmsWeb').controller('ConfigurationgeneralCtrl',function($sc
 		"reporting",
 		"today",
 		"areaManagement",
-		"subscription",
-		"user"
-
+		"subscription"
 	].map(function(page) {
 		return {
 			text: locale.getString("config.homePage_" + page),

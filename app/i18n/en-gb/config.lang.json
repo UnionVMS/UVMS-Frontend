@@ -232,7 +232,6 @@
     "homePage_today": "Today",
     "homePage_areaManagement": "Area Management",
     "homePage_subscription": "Subscription",
-    "homePage_user": "User",
 
     "coordinateFormat-degreesMinutesSeconds": "DD MM,SS'",
     "coordinateFormat-decimalDegrees": "DD.MMM",
