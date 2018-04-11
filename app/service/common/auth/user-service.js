@@ -41,7 +41,7 @@ angular.module('auth.user-service', ['auth.router'])
 
                 var pingRequest = {
                     method: 'GET',
-                    url: '/usm-administration/rest/ping',
+                    url: 'usm-administration/rest/ping',
                     headers: {
                         'X-Requested-With': 'XMLHttpRequest'
                     }

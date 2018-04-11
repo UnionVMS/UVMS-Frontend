@@ -584,7 +584,7 @@ angular.module('unionvmsWeb').factory('TreeModel',function(locale, mapService, u
 	        }
 	    };
 	    
-	    return node;
+	    return [node];
 	};
 	
 	return TreeModel;

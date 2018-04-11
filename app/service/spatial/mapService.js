@@ -1821,7 +1821,11 @@ angular.module('unionvmsWeb').factory('mapService', function(locale, $rootScope,
   	 * @returns {Number} The output radians
   	 */
 	ms.degToRad = function(degrees){
-	    return degrees * Math.PI / 180;
+	    var rad = degrees * Math.PI / 180;
+	    if (isNaN(rad)){
+	        rad = 0;
+        }
+	    return rad;
 	};
 
 	/**
@@ -2867,15 +2871,17 @@ angular.module('unionvmsWeb').factory('mapService', function(locale, $rootScope,
         var containerName = type + 'Labels';
         var keys = _.keys(ms[containerName]);
         keys = _.without(keys, 'active', 'displayedIds');        
-        
-        angular.forEach(keys, function(key) {
-            ms.map.removeOverlay(this[key].overlay);
-            this[key].feature.set('overlayId', undefined);
-            this[key].feature.set('overlayHidden', undefined);
-            delete this[key];
-        }, ms[containerName]);
-        
-        ms[containerName].active = false;
+
+        if (angular.isDefined(keys) && angular.isDefined(ms.map)){
+            angular.forEach(keys, function(key) {
+                ms.map.removeOverlay(this[key].overlay);
+                this[key].feature.set('overlayId', undefined);
+                this[key].feature.set('overlayHidden', undefined);
+                delete this[key];
+            }, ms[containerName]);
+
+            ms[containerName].active = false;
+        }
     };
     
     /**

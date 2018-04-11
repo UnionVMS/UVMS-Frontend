@@ -840,10 +840,14 @@ angular.module('unionvmsWeb').factory('MapFish',function() {
             	} else {
             	    var feature;
             	    if (featuresInCluster.length === 1){
-            	        feature = angular.copy(featuresInCluster[0]);
+                        feature = featuresInCluster[0].clone();
             	    } else {
-            	        feature =  angular.copy(clusterFeat.get('featureToDisplay'));
+                        feature =  clusterFeat.get('featureToDisplay').clone();
             	    }
+
+            	    if (angular.isUndefined(feature.get('reportedCourse'))){
+            	        feature.set('reportedCourse', 0);
+                    }
             	    
             	    if (mapService.vmsposLabels.active){
             	        if (feature.get('overlayHidden') === false){

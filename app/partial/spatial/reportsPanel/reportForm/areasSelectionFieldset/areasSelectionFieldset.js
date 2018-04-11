@@ -281,13 +281,14 @@ angular.module('unionvmsWeb').controller('AreasselectionfieldsetCtrl',function($
             var area;
             $scope.clickResults = response.data.length;
             if (response.data.length > 1){
-                $scope.searchedAreas = convertAreasResponse(response.data);
+                $scope.searchedAreas = convertAreasResponse(response.data, data.areaType);
             } else {
                 if (response.data.length === 0){
                     $scope.showWarning = true;
                     $scope.warningMessage = locale.getString('spatial.area_selection_modal_get_sys_area_details_empty_result');
                     hideAlert();
                 } else {
+                    response.data[0].areaType = data.areaType;
                     area = new Area();
                     area = area.fromJson(response.data[0]);
                     if ($scope.checkAreaIsSelected(area) === false){
@@ -383,12 +384,16 @@ angular.module('unionvmsWeb').controller('AreasselectionfieldsetCtrl',function($
      * @memberof AreasselectionfieldsetCtrl
      * @private
      * @param {Array} data - The server side array with area data
+     * @param {String} areaType - The type of area
      * @returns {Array} An array with area model objects
      */
-    var convertAreasResponse = function(data){
+    var convertAreasResponse = function(data, areaType){
         var areas = [];
 
         angular.forEach(data, function(rec) {
+            if (angular.isDefined(areaType)){
+                rec.areaType = areaType;
+            }
             var area = new Area();
             area = area.fromJson(rec);
             area.isSelected = _.findIndex($scope.selectedAreas, {areaType: area.areaType, gid: area.gid}) === -1 ? false : true;

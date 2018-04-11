@@ -231,11 +231,10 @@ module.exports = function (grunt) {
                 filter:'isFile'
             },
             {
-                expand:true,
-                flatten: true,
-                src: ['bower_components/bootstrap/fonts/*'],
-                dest: 'fonts/',
-                filter:'isFile'
+                cwd: 'bower_components/slick-carousel/slick/',
+                src: ['ajax-loader.gif'],
+                dest: 'dist/',
+                expand: true
             },
             {
                 cwd: 'app/',
@@ -602,7 +601,6 @@ module.exports = function (grunt) {
 
     // Run Karma test
     grunt.registerTask('test',['ngconstant:development', 'dom_munger:read', 'ngtemplates', 'karma:services', 'karma:controllers', 'karma:directives', 'karma:filters', 'clean:after']);
-    grunt.registerTask('test-dev',['ngconstant:development', 'dom_munger:read', 'ngtemplates', 'karma:services', 'clean:after']);
 
     // Run application locally, connect web server on http://localhost:9001
     grunt.registerTask('serve', ['parallel:serve']);

@@ -88,6 +88,7 @@ angular.module('unionvmsWeb').factory('reportService',function($rootScope, $comp
     };
 
 	rep.runReport = function(report){
+        rep.clearMapOverlays();
         loadingStatus.isLoading('LiveviewMap',true, 0);
         spatialHelperService.fromFAView = false;
 
@@ -165,6 +166,7 @@ angular.module('unionvmsWeb').factory('reportService',function($rootScope, $comp
 	    if (angular.isDefined(preserveMapState) && preserveMapState === true){
             setStateProperties();
         }
+        rep.clearMapOverlays();
 	    loadingStatus.isLoading('LiveviewMap',true, 0);
         spatialHelperService.fromFAView = false;
 	    tripReportsTimeline.reset();
@@ -198,7 +200,7 @@ angular.module('unionvmsWeb').factory('reportService',function($rootScope, $comp
         }
 	};
 	
-	rep.clearMapOverlaysOnRefresh = function(){
+	rep.clearMapOverlays = function(){
 	    //Check for measuring overlays
         rep.untoggleToolbarBtns();
 	    
@@ -232,7 +234,7 @@ angular.module('unionvmsWeb').factory('reportService',function($rootScope, $comp
 	rep.refreshReport = function(){
 	    if (angular.isDefined(rep.id)){
 	        setStateProperties();
-	        rep.clearMapOverlaysOnRefresh();
+	        rep.clearMapOverlays();
 	        rep.isReportRefreshing = true;
 	        if(reportFormService.liveView.outOfDate){
 	        	rep.runReportWithoutSaving(rep.mergedReport);
