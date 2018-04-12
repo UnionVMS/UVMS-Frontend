@@ -329,7 +329,7 @@ angular.module('unionvmsWeb').controller('AdvancedsearchformCtrl',function($scop
             $scope.actServ.getActivityList(function(){
                 $scope.actServ.reportsList.fromForm = true;
                 $scope.actServ.reportsList.stCtrl.pipe();
-            }, undefined, 'reportsList');
+            }, undefined, 'reportsList', true);
 
             $scope.actServ.getActivityList(function(){
                 $scope.actServ.tripsList.fromForm = true;

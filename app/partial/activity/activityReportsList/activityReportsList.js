@@ -40,7 +40,7 @@ angular.module('unionvmsWeb').controller('ActivityreportslistCtrl',function($sco
      */
     $scope.updateActivityList = function(tableState, ctrl){
         if (angular.isUndefined($stateParams.tripId) || $stateParams.tripId === null){
-            $scope.callServer(tableState, ctrl, 'reportsList');
+            $scope.callServer(tableState, ctrl, 'reportsList', true);
         } else {
             $scope.actServ.reportsList.stCtrl = ctrl;
             $scope.actServ.reportsList.tableState = tableState;

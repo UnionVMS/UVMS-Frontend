@@ -37,7 +37,8 @@ angular.module('unionvmsWeb').factory('startPageService',function($log, globalSe
         user : ['app.usm.users'],
         subscription : ['app.manageSubscriptions'],
         reporting : ['app.reporting'],
-        areaManagement:['app.areas']
+        areaManagement: ['app.areas'],
+        activity: ['app.activity']
     };
 
     var userHasAccessToState = function(state){
@@ -70,6 +71,8 @@ angular.module('unionvmsWeb').factory('startPageService',function($log, globalSe
                 return checkAccess('Spatial', 'VIEW_AREA_MANAGEMENT_UI');
             case 'app.today':
                 return true;
+            case 'app.activity':
+                return checkAccess('Activity', 'ACTIVITY_ALLOWED');
             default:
                 $log.info("State: " +state +" is missing from list. Returning false.");
                 return false;
