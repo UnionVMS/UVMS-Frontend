@@ -294,7 +294,7 @@ angular.module('unionvmsWeb').factory('activityService',function(locale, activit
      * @alias getActivityList
      * @param {Object} searcObj - The object containing the search criteria to filter FA reports
      */    
-    actServ.getActivityList = function(callback, tableState, listName){
+    actServ.getActivityList = function(callback, tableState, listName, showLatest){
         var simpleCriteria = {};
         if (angular.isDefined(actServ[listName].searchObject.simpleCriteria)){
             simpleCriteria = actServ[listName].searchObject.simpleCriteria;
@@ -306,6 +306,10 @@ angular.module('unionvmsWeb').factory('activityService',function(locale, activit
             searchCriteriaMap: simpleCriteria,
             searchCriteriaMapMultipleValues: actServ[listName].searchObject.multipleCriteria
         };
+
+        if (angular.isDefined(showLatest)){
+            payload.showOnlyLatest = showLatest;
+        }
 
         var serviceName;
         var arrName;

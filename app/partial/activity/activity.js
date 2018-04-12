@@ -205,7 +205,7 @@ angular.module('unionvmsWeb').controller('ActivityCtrl', function ($scope, local
      * @public
      * @alias callServer
      */
-    $scope.callServer = function(tableState, ctrl, listName){
+    $scope.callServer = function(tableState, ctrl, listName, showLatest){
         $scope.actServ[listName].stCtrl = ctrl;
         $scope.actServ[listName].tableState = tableState;
         
@@ -223,7 +223,7 @@ angular.module('unionvmsWeb').controller('ActivityCtrl', function ($scope, local
                 reversed: sortOrder
             };
             
-            $scope.actServ.getActivityList(callServerCallback, tableState, listName);
+            $scope.actServ.getActivityList(callServerCallback, tableState, listName, showLatest);
         } else {
             if(tableState && tableState.isSorting){
                 sortTripsList(tableState, listName);
