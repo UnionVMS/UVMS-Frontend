@@ -190,6 +190,7 @@
 	"fa_report_document_type_notification": "Notification",
     "fa_report_document_type_notification_of": "Notification of",
 	"fa_report_document_type_correction": "Correction",
+    "fa_report_document_type_corrected": "Corrected",
     "trip_summary_quit_trip_detail": "Quit trip detail",
     "trip_summary_export_trip": "Export trip",
     "catch_panel_see_trip_evolution": "See trip evolution",

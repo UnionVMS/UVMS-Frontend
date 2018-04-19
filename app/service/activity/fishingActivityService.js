@@ -1169,7 +1169,9 @@ angular.module('unionvmsWeb').factory('fishingActivityService', function(activit
                 if(item.id === "purposeCode"){
                     var purposeCode = _.where(response, {code: item.value});
                     if(angular.isDefined(purposeCode) && purposeCode.length > 0){
-                        item.value = item.value +' - '+ purposeCode[0].description; 
+                        item.originalValue = item.value;
+                        item.value = item.value +' - '+ purposeCode[0].description;
+                        item.mdrValue = purposeCode[0].description;
                     }
                 }
             });

@@ -58,8 +58,8 @@ angular.module('unionvmsWeb').directive('printButton', function(fishingActivityS
 				text: ''
             },
             position: {
-                my: 'right top',
-                at: 'left bottom',
+                my: 'top right',
+                at: 'bottom center',
                 target: $scope.el,
                 effect: false
             },
