@@ -17,17 +17,18 @@ copy of the GNU General Public License along with the IFDM Suite. If not, see <h
         <h4 class="modal-title">{{'exchange.validation_results_modal_title' | i18n}}</h4>
     </div>
     <div class="modal-body">
-    	<div st-table="displayedResults" st-safe-src="validationResults" ng-show="isTableVisible">
+    	<div class="table-responsive-force" st-table="displayedResults" st-safe-src="validationResults" ng-show="isTableVisible">
     		<table class="table table-striped table-condensed">
     			<thead>
     				<tr class="row">
     					<th st-sort="id" st-skip-natural="true" st-class-ascent="sorting_asc" st-class-descent="sorting_desc">{{'exchange.table_header_level' | i18n}}</th>
 	    				<th st-sort="level" st-skip-natural="true" st-class-ascent="sorting_asc" st-class-descent="sorting_desc">{{'exchange.table_header_level' | i18n}}</th>
 	    				<th st-sort="status" st-skip-natural="true" st-class-ascent="sorting_asc" st-class-descent="sorting_desc">{{'exchange.table_header_status' | i18n}}</th>
+						<th class="message-column">{{'exchange.table_msg' | i18n}}</th>
 	    				<th>{{'exchange.table_header_actions' | i18n}}</th>
     				</tr>
     				<tr class="row" ng-if="isLoading">
-						<th colspan="4" class="loading-spinner-cl"><i class="fa fa-spinner fa-spin loading-spinner"></i></th>
+						<th colspan="5" class="loading-spinner-cl"><i class="fa fa-spinner fa-spin loading-spinner"></i></th>
 					</tr>
     			</thead>
     			<tbody>
@@ -37,6 +38,23 @@ copy of the GNU General Public License along with the IFDM Suite. If not, see <h
     					<td>
     						<message-status ng-model="rule" is-clickable="false"></message-status>
     					</td>
+						<td class="message-column">
+							<div ng-if="::rule.message">
+								<span>{{rule.message}}</span>
+							</div>
+                            <div ng-if="::rule.entity">
+                                <span class="rule-span-title">{{'exchange.table_entity' | i18n}}</span>
+                                <span>{{rule.entity}}</span>
+                            </div>
+							<div ng-if="::rule.note" title="{{rule.note}}">
+								<span class="rule-span-title">{{'exchange.table_note' | i18n}}</span>
+								<span class="rule-span-content">{{rule.note}}</span>
+							</div>
+                            <div ng-if="::rule.expression" title="{{rule.expression}}">
+                                <span class="rule-span-title">{{'exchange.table_expression' | i18n}}</span>
+                                <span class="rule-span-content">{{rule.expression}}</span>
+                            </div>
+						</td>
     					<td>
     						<button type="button" class="btn btn-xs btn-default" title="{{'exchange.title_details' | i18n }}" ng-click="showError(rule.xpaths)">
 								<span class="fa fa-eye"></span>
@@ -44,7 +62,7 @@ copy of the GNU General Public License along with the IFDM Suite. If not, see <h
     					</td>
     				</tr>
     				<tr class="row" ng-if="!isLoading && errorMessage !== undefined && validationResults.length === 0">
-						<th colspan="4">
+						<th colspan="5">
 							<table-alert type="'error'" msg="errorMessage" visible="true" no-hide="false"></table-alert>
 						</th>
 					</tr>
