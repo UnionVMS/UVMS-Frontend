@@ -45,6 +45,10 @@
 	"table_header_sender_reciever" : "Sender/Receiver",
 	"table_header_rule_id": "Rule ID",
 	"table_header_level": "Level",
+	"table_msg": "Message",
+    "table_entity": "Entity",
+    "table_expression": "Expression",
+	"table_note": "Note",
 
 	"sending_queue_detail_table_header_potision_time" : "Position time",
 	"sending_queue_detail_table_header_sender_recipient":"Sender/recipient",
