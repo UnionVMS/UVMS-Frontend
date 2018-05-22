@@ -70,7 +70,7 @@ angular.module('unionvmsWeb').factory('unitConversionService',function($filter, 
 	    },
 	    duration: {
 	        timeToHuman: function(time){
-	            var duration = moment.duration(Math.abs(time));
+	            var duration = moment.duration(Math.abs(time) * 1000);
 	            
 	            var days = Math.floor(duration.asDays());
 	            var hours = Math.floor(duration.asHours()) - (days * 24);

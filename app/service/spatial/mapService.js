@@ -583,17 +583,20 @@ angular.module('unionvmsWeb').factory('mapService', function(locale, $rootScope,
      * @alias zoomToPositionsLayer
      */
     ms.zoomToPositionsLayer = function(){
-        var layerSrc = ms.getLayerByType('vmspos').getSource();
-        var changeListenerKey = layerSrc.on('change', function(e){
-            if (layerSrc.getState() === 'ready' && layerSrc.getFeatures().length > 0){
-                var extent = layerSrc.getSource().getExtent();
-                var geom = new ol.geom.Polygon.fromExtent(extent);
-                ms.zoomTo(geom);
-                
-                //Unregister the listener
-                ol.Observable.unByKey(changeListenerKey);
-            }
-        });
+        var layer = ms.getLayerByType('vmspos');
+        if (angular.isDefined(layer)){
+            var layerSrc = layer.getSource();
+            var changeListenerKey = layerSrc.on('change', function(e){
+                if (layerSrc.getState() === 'ready' && layerSrc.getFeatures().length > 0){
+                    var extent = layerSrc.getSource().getExtent();
+                    var geom = new ol.geom.Polygon.fromExtent(extent);
+                    ms.zoomTo(geom);
+
+                    //Unregister the listener
+                    ol.Observable.unByKey(changeListenerKey);
+                }
+            });
+        }
     };
     
     /**
