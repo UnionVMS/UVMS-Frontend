@@ -35,7 +35,7 @@ angular.module('unionvmsWeb').controller('gazetteerCtrl', ['$scope', '$http', '$
         var selectedLanguage = tmhDynamicLocale.get();
         var reqPromise = $http({
             method: 'GET',
-            url: ' http://nominatim.openstreetmap.org/search',
+            url: ' https://nominatim.openstreetmap.org/search',
             params: {
                 format: 'json',
                 addressdetails: 1,
