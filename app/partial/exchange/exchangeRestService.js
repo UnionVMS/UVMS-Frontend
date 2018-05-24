@@ -446,9 +446,12 @@ angular.module('unionvmsWeb')
             if (String(response.code) !== "200") {
                 deferred.reject("Invalid response");
             }
-
-            response.data.msg = escapeXmlString(response.data.msg);
-            deferred.resolve(response.data);
+            if (angular.isUndefined(response.data) || response.data === null){
+                deferred.reject("Invalid response");
+            } else {
+                response.data.msg = escapeXmlString(response.data.msg);
+                deferred.resolve(response.data);
+            }
         }, function(error) {
             deferred.reject("Failed to get Exchange message");
         });
