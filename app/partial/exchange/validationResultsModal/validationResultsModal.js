@@ -13,6 +13,7 @@ angular.module('unionvmsWeb').controller('ValidationresultsmodalCtrl',function($
     $scope.isTableVisible = true;
     $scope.validationResults = [];
     $scope.isLoading = true;
+    $scope.inValidXpath = false;
     
     var init = function(){
         exchangeRestService.getValidationResults(msgGuid).then(function(response){
@@ -78,11 +79,16 @@ angular.module('unionvmsWeb').controller('ValidationresultsmodalCtrl',function($
                     }
                 }
 
-                var result = doc.evaluate(xpath, doc, null, XPathResult.STRING_TYPE, null);
+                try {
+                    var result = doc.evaluate(xpath, doc, null, XPathResult.STRING_TYPE, null);
 
-                if(result.stringValue){
-                    return xpath;
+                    if(result.stringValue){
+                        return xpath;
+                    }
+                } catch (e) {
+                    return undefined;
                 }
+
             }
             
         }
@@ -91,6 +97,7 @@ angular.module('unionvmsWeb').controller('ValidationresultsmodalCtrl',function($
     };
 
     var highligthCode = function(xpath){
+        $scope.inValidXpath = false;
         var xpathArr = xpath.split('\/\/\*');
         var selectorPath = getValidXPath(xpathArr);
 
@@ -175,6 +182,9 @@ angular.module('unionvmsWeb').controller('ValidationresultsmodalCtrl',function($
                     nextElement = angular.element(nextElement[0].nextSibling);
                 }
             }
+        } else {
+            $scope.inValidXpath = true;
+            $scope.errorMessage = locale.getString('exchange.invalid_xpath');
         }
     };
 
@@ -186,8 +196,10 @@ angular.module('unionvmsWeb').controller('ValidationresultsmodalCtrl',function($
     };
 
     $scope.showError = function(xpath){
-        processXpaths(xpath);
-        $scope.togglePanelVisibility();
+        if (xpath !== ''){
+            processXpaths(xpath);
+            $scope.togglePanelVisibility();
+        }
     };
     
     $scope.togglePanelVisibility = function(xpath){
