@@ -89,6 +89,7 @@
     "transmission_stop_transmission_successfull" : "Plugin stopped.",
     
     "get_validation_results_error": "There was an error while fetching the validation results. Please try again later.",
+	"invalid_xpath": "An invalid XPATH was retrieved. The XML elements cannot be highlighted.",
     "go_back": "Go back",
 
 	"title_all": "All",
