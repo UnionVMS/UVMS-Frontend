@@ -14,52 +14,52 @@ angular.module('unionvmsWeb')
 
         return {
             alarm : function(){
-                return $resource('rules/rest/alarms', {}, {
+                return $resource('movement-rules/rest/alarms', {}, {
                     update: {method: 'PUT'}
                 });
             },
             getAlarms : function(){
-                return $resource('rules/rest/alarms/list/',{},{
+                return $resource('movement-rules/rest/alarms/list/',{},{
                     list : { method: 'POST'}
                 });
             },
             getAlarm: function() {
-                return $resource('rules/rest/alarms/:guid');
+                return $resource('movement-rules/rest/alarms/:guid');
             },
             getOpenAlarmsCount: function() {
-                return $resource('rules/rest/alarms/countopen');
+                return $resource('movement-rules/rest/alarms/countopen');
             },
             getTicket: function() {
-                return $resource('rules/rest/tickets/:guid');
+                return $resource('movement-rules/rest/tickets/:guid');
             },
             getOpenTicketsCount: function() {
-                return $resource('rules/rest/tickets/countopen/:userName');
+                return $resource('movement-rules/rest/tickets/countopen/:userName');
             },
             getTickets : function(){
-                return $resource('rules/rest/tickets/list/:userName',null,{
+                return $resource('movement-rules/rest/tickets/list/:userName',null,{
                     list : { method: 'POST'}
                 });
             },
             ticketStatus : function() {
-                return $resource('rules/rest/tickets/status', {}, {
+                return $resource('movement-rules/rest/tickets/status', {}, {
                     update: { method: 'PUT' }
                 });
             },
             ticketStatusQuery : function() {
-                return $resource('rules/rest/tickets/status/:userName/:status', {}, {
+                return $resource('movement-rules/rest/tickets/status/:userName/:status', {}, {
                     update: { method: 'POST' }
                 });
             },
             reprocessAlarms : function(){
-                return $resource('rules/rest/alarms/reprocess', {}, {
+                return $resource('movement-rules/rest/alarms/reprocess', {}, {
                     reprocess: {method: 'POST'}
                 });
             },
             getAlarmStatusConfig : function(){
-                return $resource('rules/rest/config/alarmstatus');
+                return $resource('movement-rules/rest/config/alarmstatus');
             },
             getTicketStatusConfig : function(){
-                return $resource('rules/rest/config/ticketstatus');
+                return $resource('movement-rules/rest/config/ticketstatus');
             },
         };
     })

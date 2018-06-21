@@ -60,7 +60,7 @@ angular.module('unionvmsWeb').controller('OpenticketsCtrl',function($scope, $log
             });
         }
 
-        longPollingId = longPolling.poll("/rules/activity/ticket", {
+        longPollingId = longPolling.poll("/movement-rules/activity/ticket", {
             'onCreate': function(response) {
                 if (response.ids.length > 0) {
                     updateSearchWithGuid(response.ids[0], isOpenTicketSearch());

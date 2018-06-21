@@ -61,7 +61,7 @@ angular.module('unionvmsWeb').controller('HoldingtableCtrl',function($scope, $lo
             });
         }
 
-        longPollingId = longPolling.poll("/rules/activity/alarm", function(response) {
+        longPollingId = longPolling.poll("/movement-rules/activity/alarm", function(response) {
             if (response.ids.length > 0) {
                 updateSearchWithGuid(response.ids[0]);
             }

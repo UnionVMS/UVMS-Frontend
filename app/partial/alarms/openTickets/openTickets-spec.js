@@ -38,7 +38,7 @@ describe('OpenticketsCtrl', function() {
     it('should start longPolling on init ', inject(function($rootScope) {
         var controller = createController();
 
-        expect(longpollingSpy).toHaveBeenCalledWith("/rules/activity/ticket", jasmine.any(Object));
+        expect(longpollingSpy).toHaveBeenCalledWith("/movement-rules/activity/ticket", jasmine.any(Object));
     }));
 
 

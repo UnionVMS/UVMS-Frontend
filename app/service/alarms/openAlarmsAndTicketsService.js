@@ -52,7 +52,7 @@ angular.module('unionvmsWeb').factory('openAlarmsAndTicketsService',function($lo
             updateAlarmsCount();
 
             //Setup long polling
-            alarmsLongPolling = longPolling.poll("/rules/activity/alarmcount", function(response) {
+            alarmsLongPolling = longPolling.poll("/movement-rules/activity/alarmcount", function(response) {
                 if(response.updated){
                     //Get new value from REST service
                     updateAlarmsCount();
@@ -67,7 +67,7 @@ angular.module('unionvmsWeb').factory('openAlarmsAndTicketsService',function($lo
             //Get start value
             updateTicketsCount();
 
-            ticketsLongPolling = longPolling.poll("/rules/activity/ticketcount", function(response) {
+            ticketsLongPolling = longPolling.poll("/movement-rules/activity/ticketcount", function(response) {
                 if(response.updated){
                     //Get new value from REST service
                     updateTicketsCount();

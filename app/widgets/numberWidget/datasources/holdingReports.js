@@ -48,7 +48,7 @@ copy of the GNU General Public License along with the IFDM Suite. If not, see <h
 			};
 
 			var deferred = $q.defer();
-			$resource('rules/rest/alarms/list').save(query, function(response) {
+			$resource('movement-rules/rest/alarms/list').save(query, function(response) {
 				deferred.resolve(response.data.totalNumberOfPages);
 			});
 

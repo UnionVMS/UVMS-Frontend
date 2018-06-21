@@ -38,7 +38,7 @@ describe('HoldingtableCtrl', function() {
     it('should start longPolling on init ', inject(function($rootScope) {
         var controller = createController();
 
-        expect(longpollingSpy).toHaveBeenCalledWith("/rules/activity/alarm", jasmine.any(Function));
+        expect(longpollingSpy).toHaveBeenCalledWith("/movement-rules/activity/alarm", jasmine.any(Function));
     }));
 
     describe('search alarms', function() {
