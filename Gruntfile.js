@@ -386,7 +386,10 @@ module.exports = function (grunt) {
         frameworks: ['jasmine'],
         //browsers: ['PhantomJS', 'Chrome'],
         browsers: ['PhantomJS'],
-        browserNoActivityTimeout: 100000,
+        captureTimeout: 210000,
+        browserDisconnectTolerance: 3,
+        browserDisconnectTimeout : 210000,
+        browserNoActivityTimeout : 210000,
         proxies:  {
             '/config.json': 'http://localhost:9876/base/environment/local.json',
             '/partial/': 'http://localhost:9876/base/app/partial/'
