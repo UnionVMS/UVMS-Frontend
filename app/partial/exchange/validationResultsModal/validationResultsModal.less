@@ -19,8 +19,33 @@ copy of the GNU General Public License along with the IFDM Suite. If not, see <h
     }
   }
   .xml-highlight {
-    font-size: 17px;
     background-color: #f9cdcd;
+  }
+
+  .rule-span-title {
+    float: left;
+    font-weight: bold;
+  }
+
+  .rule-span-title:after {
+    content: ': ';
+    white-space: pre;
+  }
+
+  .rule-span-content {
+    width: 100%;
+    display: inline-block;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+  }
+
+  .message-column {
+    max-width: 250px !important;
+  }
+
+  .alert-margin {
+    margin-bottom: 15px !important;
   }
 }
 

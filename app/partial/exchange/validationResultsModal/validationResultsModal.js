@@ -13,6 +13,7 @@ angular.module('unionvmsWeb').controller('ValidationresultsmodalCtrl',function($
     $scope.isTableVisible = true;
     $scope.validationResults = [];
     $scope.isLoading = true;
+    $scope.inValidXpath = false;
     
     var init = function(){
         exchangeRestService.getValidationResults(msgGuid).then(function(response){
@@ -78,11 +79,16 @@ angular.module('unionvmsWeb').controller('ValidationresultsmodalCtrl',function($
                     }
                 }
 
-                var result = doc.evaluate(xpath, doc, null, XPathResult.STRING_TYPE, null);
+                try {
+                    var result = doc.evaluate(xpath, doc, null, XPathResult.STRING_TYPE, null);
 
-                if(result.stringValue){
-                    return xpath;
+                    if(result.stringValue){
+                        return xpath;
+                    }
+                } catch (e) {
+                    return undefined;
                 }
+
             }
             
         }
@@ -91,6 +97,7 @@ angular.module('unionvmsWeb').controller('ValidationresultsmodalCtrl',function($
     };
 
     var highligthCode = function(xpath){
+        $scope.inValidXpath = false;
         var xpathArr = xpath.split('\/\/\*');
         var selectorPath = getValidXPath(xpathArr);
 
@@ -101,6 +108,7 @@ angular.module('unionvmsWeb').controller('ValidationresultsmodalCtrl',function($
             var curElement = angular.element(angular.element(selector)[selectorPathArr[0].idx]);
             var nextElement;
             var closeRegex;
+            var closeRegex2;
             var convertedText;
 
             if(selectorPathArr.length>1){
@@ -108,16 +116,18 @@ angular.module('unionvmsWeb').controller('ValidationresultsmodalCtrl',function($
                 for(var i=1;i<selectorPathArr.length;i++){
                     var countIdx = 0;
                     while(nextElement && nextElement.length > 0){
+                        console.log('countIdx: ' + countIdx);
                         var openElement = angular.element(nextElement).find('span:contains("' + selectorPathArr[i].varName + '")');
-                        if(openElement.length && countIdx === selectorPathArr[i].idx){
+                        closeRegex = new RegExp("&lt;\/<span class\=\"hljs-name\"\>[a-z]*:" + selectorPathArr[i].varName + "<\/span>&gt;");
+                        closeRegex2 = new RegExp("&lt;\/<span class\=\"hljs-name\"\>" + selectorPathArr[i].varName + "<\/span>&gt;");
+                        if(openElement.length && countIdx === selectorPathArr[i].idx && openElement[0].parentElement.innerHTML.search(closeRegex) === -1){
                             if(i === selectorPathArr.length - 1){
-                                closeRegex = new RegExp("&lt;\/<span class\=\"hljs-name\"\>[a-z]*:" + selectorPathArr[i].varName + "<\/span>&gt;");
-
                                 convertedText = convertTextToSpan(nextElement);
                                 if(convertedText){
                                     nextElement = convertedText;
                                 }
 
+                                console.log('highlight');
                                 angular.element(nextElement).addClass('xml-highlight');
 
                                 nextElement = angular.element(nextElement[0].nextSibling);
@@ -129,7 +139,9 @@ angular.module('unionvmsWeb').controller('ValidationresultsmodalCtrl',function($
 
                                     angular.element(nextElement).addClass('xml-highlight');
 
-                                    if(nextElement[0].innerHTML.search(closeRegex) === -1){
+                                    if (nextElement.length && nextElement[0].innerHTML.search(closeRegex2) !== -1){
+                                        break;
+                                    } else if(nextElement.length && nextElement[0].innerHTML.search(closeRegex) === -1){
                                         nextElement =  angular.element(nextElement[0].nextSibling);
                                     }else{
                                         break;
@@ -141,6 +153,9 @@ angular.module('unionvmsWeb').controller('ValidationresultsmodalCtrl',function($
                                 break;
                             }
                         }else{
+                            if (openElement.length && openElement[0].parentElement.innerHTML.search(closeRegex) === -1){
+                                countIdx += 1;
+                            }
                             nextElement = nextElement.next();
                         }
                     }
@@ -167,6 +182,9 @@ angular.module('unionvmsWeb').controller('ValidationresultsmodalCtrl',function($
                     nextElement = angular.element(nextElement[0].nextSibling);
                 }
             }
+        } else {
+            $scope.inValidXpath = true;
+            $scope.errorMessage = locale.getString('exchange.invalid_xpath');
         }
     };
 
@@ -178,17 +196,27 @@ angular.module('unionvmsWeb').controller('ValidationresultsmodalCtrl',function($
     };
 
     $scope.showError = function(xpath){
-        processXpaths(xpath);
-        $scope.togglePanelVisibility();
+        if (xpath !== ''){
+            processXpaths(xpath);
+            $scope.togglePanelVisibility();
+        }
     };
     
     $scope.togglePanelVisibility = function(xpath){
+        //Clear existing highlights
+        if (!$scope.isTableVisible){
+            angular.element('.xml-highlight').removeClass('xml-highlight');
+        }
         $scope.isTableVisible = !$scope.isTableVisible;
     };
     
     //Close modal
     $scope.cancel = function () {
-        $modalInstance.dismiss('cancel');
+        if (!$scope.isTableVisible){
+            $scope.togglePanelVisibility();
+        } else {
+            $modalInstance.dismiss('cancel');
+        }
     };
     
     init();
