@@ -12,7 +12,7 @@ copy of the GNU General Public License along with the IFDM Suite. If not, see <h
 angular.module('unionvmsWeb').filter('dataNotAvailable', function($log, locale) {
 	return function(input) {
 	try	{
-			if(angular.isDefined(input)){
+			if(angular.isDefined(input) && input !== null){
 				return input;
 			} else {
 				return locale.getString('common.short_not_available');

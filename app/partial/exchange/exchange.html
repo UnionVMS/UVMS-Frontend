@@ -76,24 +76,26 @@ copy of the GNU General Public License along with the IFDM Suite. If not, see <h
                                 <th st-sort="source" st-skip-natural="true" st-class-ascent="sorting_asc" st-class-descent="sorting_desc">{{'exchange.table_header_source' | i18n}}</th>
                                 <th st-sort="typeRefType" st-skip-natural="true" st-class-ascent="sorting_asc" st-class-descent="sorting_desc">{{'exchange.table_header_type' | i18n}}</th>
                                 <th st-sort="senderRecipient" st-skip-natural="true" st-class-ascent="sorting_asc" st-class-descent="sorting_desc">{{'exchange.table_header_sender_reciever' | i18n}}</th>
+                                <th class="not-sortable">{{'exchange.table_header_message_uuid' | i18n}}</th>
+                                <th class="not-sortable">{{'exchange.table_header_on_value' | i18n}}</th>
+                                <th st-sort="status" st-skip-natural="true" st-class-ascent="sorting_asc" st-class-descent="sorting_desc">{{'exchange.table_header_status' | i18n}}</th>
+                                <th>{{'activity.header_fa_actions' | i18n }}</th>
                                 <th st-sort="forwardRule" st-skip-natural="true" st-class-ascent="sorting_asc" st-class-descent="sorting_desc">{{'exchange.table_header_fwd_rule' | i18n}}</th>
                                 <th st-sort="recipient" st-skip-natural="true" st-class-ascent="sorting_asc" st-class-descent="sorting_desc">{{'exchange.table_header_recipient' | i18n}}</th>
                                 <th st-sort="dateFwd" st-skip-natural="true" st-class-ascent="sorting_asc" st-class-descent="sorting_desc">{{'exchange.table_header_date_fwd' | i18n}}</th>
-                                <th st-sort="status" st-skip-natural="true" st-class-ascent="sorting_asc" st-class-descent="sorting_desc">{{'exchange.table_header_status' | i18n}}</th>
-                                <th>{{'activity.header_fa_actions' | i18n }}</th>
                             </tr>
                             <tr class="row" ng-if="!exchangeLogsSearchResults.loading && exchangeLogsSearchResults.showZeroResultsMessage">
-                                <th colspan="11">
+                                <th colspan="13">
                                     <table-alert type="'info'" msg="exchangeLogsSearchResults.zeroResultsErrorMessage" visible="true" no-hide="false"></table-alert>
                                 </th>
                             </tr>
                             <tr class="row" ng-if="!exchangeLogsSearchResults.loading && exchangeLogsSearchResults.errorMessage !== undefined && displayedMessages.length === 0 && !exchangeLogsSearchResults.showZeroResultsMessage">
-                                <th colspan="11">
+                                <th colspan="13">
                                     <table-alert type="'error'" msg="exchangeLogsSearchResults.errorMessage" visible="true" no-hide="false"></table-alert>
                                 </th>
                             </tr>
                             <tr class="row" ng-if="exchangeLogsSearchResults.loading">
-                                <th colspan="11" class="loading-spinner-cl"><i class="fa fa-spinner fa-spin loading-spinner"></i></th>
+                                <th colspan="13" class="loading-spinner-cl"><i class="fa fa-spinner fa-spin loading-spinner"></i></th>
                             </tr>
                         </thead>
                         <tbody>
@@ -112,9 +114,8 @@ copy of the GNU General Public License along with the IFDM Suite. If not, see <h
                                 <td>{{message.source | transponderName | dataNotAvailable}}</td>
                                 <td>{{message.typeRefType | dataNotAvailable | removeUnderscore}}</td>
                                 <td>{{message.senderRecipient | dataNotAvailable}}</td>
-                                <td>{{message.forwardRule | dataNotAvailable}}</td>
-                                <td>{{message.recipient | dataNotAvailable}}</td>
-                                <td>{{message.dateFwd | confDateFormat | dataNotAvailable}}</td>
+                                <td>{{message.logData.guid | dataNotAvailable}}</td>
+                                <td>{{message.on | dataNotAvailable}}</td>
                                 <td class="status">
                                     <message-status ng-model="message" is-clickable="::isStatusClickable(message)"></message-status>
                                 </td>
@@ -126,6 +127,9 @@ copy of the GNU General Public License along with the IFDM Suite. If not, see <h
                                         <span class="fa" ng-class="{'fa-level-down': relatedMsg.type === 'FA_RESPONSE', 'fa-file-text-o': relatedMsg.type === 'FA_REPORT'}"></span>
                                     </button>
                                 </td>
+                                <td>{{message.forwardRule | dataNotAvailable}}</td>
+                                <td>{{message.recipient | dataNotAvailable}}</td>
+                                <td>{{message.dateFwd | confDateFormat | dataNotAvailable}}</td>
                             </tr>
                         </tbody>
                     </table>
