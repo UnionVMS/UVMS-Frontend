@@ -16,7 +16,7 @@ angular.module('unionvmsWeb')
 		replace: false,
         controller: 'vesselNotesCtrl',
         scope: {
-            vesselNotes : '=',
+            vesselNote : '=',
             vesselForm : '=',
             submitAttempted : '=',
             disableForm : '=',
@@ -30,7 +30,7 @@ angular.module('unionvmsWeb')
             scope.required = false;
 
             // Only display fields as required if input has been modified
-            scope.$watch('vesselNotes', function(value) {
+            scope.$watch('vesselNote', function(value) {
                 for (var key in value) {
                     if (value[key]) {
                         scope.required = true;
@@ -58,8 +58,8 @@ angular.module('unionvmsWeb')
     .controller('vesselNotesCtrl', function($scope, locale, configurationService, vesselRestService){
 
         // Check if notes has been modified and set form dirty 
-        $scope.$watch('vesselNotes', function(newValue, oldValue){
-            if ($scope.vesselNotes.date && $scope.vesselNotes.activity) {
+        $scope.$watch('vesselNote', function(newValue, oldValue){
+            if ($scope.vesselNote.date && $scope.vesselNote.activity) {
                 $scope.dirtyStatus(true);
             }
         }, true);

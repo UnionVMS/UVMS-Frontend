@@ -1,14 +1,3 @@
-<!--
-﻿Developed with the contribution of the European Commission - Directorate General for Maritime Affairs and Fisheries
-© European Union, 2015-2016.
-
-This file is part of the Integrated Fisheries Data Management (IFDM) Suite. The IFDM Suite is free software: you can
-redistribute it and/or modify it under the terms of the GNU General Public License as published by the
-Free Software Foundation, either version 3 of the License, or any later version. The IFDM Suite is distributed in
-the hope that it will be useful, but WITHOUT ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or
-FITNESS FOR A PARTICULAR PURPOSE.  See the GNU General Public License for more details. You should have received a
-copy of the GNU General Public License along with the IFDM Suite. If not, see <http://www.gnu.org/licenses/>.
--->
 <div class="vesselNotesModalContainer">
     <div class="modal-header">
         <h4 class="modal-title">{{vesselName}}</h4>
@@ -27,29 +16,29 @@ copy of the GNU General Public License along with the IFDM Suite. If not, see <h
                 </div>
 
                 <div class="col-md-6">
-                    {{'vessel.vessel_notes_date' | i18n }}: <b>{{vesselNotes.date | confDateFormat}}</b>
+                    {{'vessel.vessel_notes_date' | i18n }}: <b>{{vesselNote.date | confDateFormat}}</b>
                 </div>
                 <div class="col-md-6">
-                    {{'vessel.vessel_notes_source' | i18n }}: <b>{{vesselNotes.source | capitalize | vesselHistoryReplaceEmptyValueWithDash}}</b>
-                </div>
-
-                <div class="col-md-6">
-                    {{'vessel.vessel_notes_activity' | i18n }}: <b>{{vesselNotes.activity | vesselHistoryReplaceEmptyValueWithDash}}</b>
-                </div>
-                <div class="col-md-6">
-                    {{'vessel.vessel_notes_user' | i18n }}: <b>{{vesselNotes.user | vesselHistoryReplaceEmptyValueWithDash}}</b>
+                    {{'vessel.vessel_notes_source' | i18n }}: <b>{{vesselNote.source | capitalize | vesselHistoryReplaceEmptyValueWithDash}}</b>
                 </div>
 
                 <div class="col-md-6">
-                    {{'vessel.vessel_notes_license_holder' | i18n }}: <b>{{vesselNotes.licenseHolder | vesselHistoryReplaceEmptyValueWithDash}}</b>
+                    {{'vessel.vessel_notes_activity' | i18n }}: <b>{{vesselNote.activity | vesselHistoryReplaceEmptyValueWithDash}}</b>
                 </div>
                 <div class="col-md-6">
-                    {{'vessel.vessel_notes_contact' | i18n }}: <b>{{vesselNotes.contact | vesselHistoryReplaceEmptyValueWithDash}}</b>
+                    {{'vessel.vessel_notes_user' | i18n }}: <b>{{vesselNote.user | vesselHistoryReplaceEmptyValueWithDash}}</b>
+                </div>
+
+                <div class="col-md-6">
+                    {{'vessel.vessel_notes_license_holder' | i18n }}: <b>{{vesselNote.licenseHolder | vesselHistoryReplaceEmptyValueWithDash}}</b>
+                </div>
+                <div class="col-md-6">
+                    {{'vessel.vessel_notes_contact' | i18n }}: <b>{{vesselNote.contact | vesselHistoryReplaceEmptyValueWithDash}}</b>
                 </div>
                 
                 <div class="col-md-12 textarea-notes">
                     {{'vessel.notes' | i18n}}:<br>
-                    <span class="lowercase"><b>{{vesselNotes.notes | vesselHistoryReplaceEmptyValueWithDash}}</b></span>
+                    <span class="lowercase"><b>{{vesselNote.notes | vesselHistoryReplaceEmptyValueWithDash}}</b></span>
                 </div>
 
                 <div class="col-md-12">
@@ -59,10 +48,10 @@ copy of the GNU General Public License along with the IFDM Suite. If not, see <h
                 </div>
 
                 <div class="col-md-6">
-                    {{'vessel.vessel_notes_ready_date' | i18n }}: <b>{{vesselNotes.readyDate | confDateFormat | vesselHistoryReplaceEmptyValueWithDash}}</b>
+                    {{'vessel.vessel_notes_ready_date' | i18n }}: <b>{{vesselNote.readyDate | confDateFormat | vesselHistoryReplaceEmptyValueWithDash}}</b>
                 </div>
                 <div class="col-md-6">
-                    {{'vessel.vessel_notes_sheet_number' | i18n }}: <b>{{vesselNotes.sheetNumber | vesselHistoryReplaceEmptyValueWithDash}}</b>
+                    {{'vessel.vessel_notes_sheet_number' | i18n }}: <b>{{vesselNote.sheetNumber | vesselHistoryReplaceEmptyValueWithDash}}</b>
                 </div>
 
 

@@ -1,15 +1,4 @@
-<!--
-﻿Developed with the contribution of the European Commission - Directorate General for Maritime Affairs and Fisheries
-© European Union, 2015-2016.
-
-This file is part of the Integrated Fisheries Data Management (IFDM) Suite. The IFDM Suite is free software: you can
-redistribute it and/or modify it under the terms of the GNU General Public License as published by the
-Free Software Foundation, either version 3 of the License, or any later version. The IFDM Suite is distributed in
-the hope that it will be useful, but WITHOUT ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or
-FITNESS FOR A PARTICULAR PURPOSE.  See the GNU General Public License for more details. You should have received a
-copy of the GNU General Public License along with the IFDM Suite. If not, see <http://www.gnu.org/licenses/>.
--->
-<div class="vesselForm" ng-controller="VesselFormCtrl">
+﻿<div class="vesselForm" ng-controller="VesselFormCtrl">
     <div class="vesselContainer">
         <form name="vesselForm" method="post" novalidate >
             <div class="card" loading-indicator="waitingForVesselDataResponse || waitingForCreateResponse" size="small" type="SPINNER">
@@ -40,20 +29,20 @@ copy of the GNU General Public License along with the IFDM Suite. If not, see <h
                                     </button>
                                 </div>
                                 <div ng-repeat="mobileTerminal in mobileTerminals | orderBy:'isCreateNewMode'">
-                                    <mobile-terminal-details mobile-terminal="mobileTerminal" vessel-id="vesselObj.vesselId.guid" modeltype="'VESSEL'" functions="mobileTerminalFunctions" submit-attempted-watcher="submitAttempted" dirty-status="setMobileTerminalDetailsDirtyStatus" list-index="$index"></mobile-terminal-details>
+                                    <mobile-terminal-details mobile-terminal="mobileTerminal" vessel-id="vesselObj.id" modeltype="'VESSEL'" functions="mobileTerminalFunctions" submit-attempted-watcher="submitAttempted" dirty-status="setMobileTerminalDetailsDirtyStatus" list-index="$index"></mobile-terminal-details>
                                 </div>
                             </div>
 
                             <!-- Tab: Contacts -->
                             <div ng-show="selectedContentTab === 'CONTACTS'" class="tab contacts-tab-container">
-                                <vessel-contacts  vessel="vesselObj" disable-form="disableForm()" functions="vesselContactsFunctions"></vessel-contacts>
+                                <vessel-contacts  vessel-contacts="vesselContacts" disable-form="disableForm()" functions="vesselContactsFunctions" dirty-status="setVesselContactsDirtyStatus"></vessel-contacts>
                             </div>
 
                             <!-- Tab: Notes -->
                             <div ng-show="selectedContentTab === 'NOTES'" class="tab no-padding notes-tab-container">
                                 <div class="wrapper">
                                     <div class="col-md-9 notesForm">
-                                        <vessel-notes vessel-notes="vesselNotesObj" vessel-form="vesselForm" disable-form="disableForm()" status="isVisible.vesselForm" submit-attempted="submitAttempted" dirty-status="setVesselNotesDirtyStatus"></vessel-notes>
+                                        <vessel-notes vessel-note="vesselNotesObj" vessel-form="vesselForm" disable-form="disableForm()" status="isVisible.vesselForm" submit-attempted="submitAttempted" dirty-status="setVesselNotesDirtyStatus"></vessel-notes>
                                     </div>
                                     <div class="col-md-3 notesListContainer">
                                         <div class="row">
@@ -61,12 +50,12 @@ copy of the GNU General Public License along with the IFDM Suite. If not, see <h
                                                 <h5 class="form-header">{{'vessel.vessel_notes' | i18n}}</h5>
                                             </div>
                                             <div class="col-md-6 textAlignRight">
-                                                <span ng-show="vesselObjOriginal.notes.length > vesselNotesSize">
+                                                <span ng-show="vesselNotes.length > vesselNotesSize">
                                                     <a ng-click="showVesselNotesList()" id="asset-btn-notes-view-all">{{'common.view_all' | i18n}}</a>
                                                 </span>
                                             </div>
                                         </div>
-                                        <table class="fullWidth" ng-show="vesselObjOriginal.notes.length > 0 && !isCreateNewMode()">
+                                        <table class="fullWidth" ng-show="vesselNotes.length > 0 && !isCreateNewMode()">
                                             <thead>
                                                 <tr>
                                                     <th class="list-header">{{'vessel.event_table_header_code' | i18n}}</th>
@@ -74,13 +63,13 @@ copy of the GNU General Public License along with the IFDM Suite. If not, see <h
                                                 </tr>
                                             </thead>
                                             <tbody>
-                                                <tr ng-repeat="item in vesselObjOriginal.notes | orderBy :'-date' | limitTo: vesselNotesSize track by item.id" class="list-item" ng-click="viewVesselNotesDetails(item)" id="asset-btn-notes-item">
-                                                    <td>{{item.activity}}</td>
+                                                <tr ng-repeat="item in vesselNotes | orderBy :'-date' | limitTo: vesselNotesSize track by item.id" class="list-item" ng-click="viewVesselNotesDetails(item)" id="asset-btn-notes-item">
+                                                    <td>{{item.activityCode}}</td>
                                                     <td>{{item.date | confDateFormat}}</td>
                                                 </tr>
                                             </tbody>
                                         </table>
-                                        <span ng-hide="vesselObjOriginal.notes.length > 0">
+                                        <span ng-hide="vesselNotes.length > 0">
                                             {{'vessel.vessel_notes_zero_message' | i18n}}
                                         </span>
                                     </div>
@@ -103,8 +92,8 @@ copy of the GNU General Public License along with the IFDM Suite. If not, see <h
                                             </thead>
                                             <tbody>
                                                 <tr ng-repeat="item in vesselHistory | orderBy :'-eventHistory.eventDate'" class="list-item" ng-click="viewHistoryDetails(item)" id="asset-btn-history-item">
-                                                    <td>{{item.eventHistory.eventCode}}</td>
-                                                    <td>{{item.eventHistory.eventDate | confDateFormat}}</td>
+                                                    <td>{{item.eventCode}}</td>
+                                                    <td>{{item.updateTime | confDateFormat}}</td>
                                                 </tr>
                                             </tbody>
                                         </table>

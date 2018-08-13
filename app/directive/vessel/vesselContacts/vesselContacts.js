@@ -16,9 +16,10 @@ angular.module('unionvmsWeb')
 		replace: false,
         controller: 'vesselContactsCtrl',
         scope: {
-            vessel : '=',
+        	vesselContacts : '=',
             disableForm : '=',
-            functions : '='
+            functions : '=',
+            dirtyStatus : '='
         },
 		templateUrl: 'directive/vessel/vesselContacts/vesselContacts.html',
 		link: function(scope, element, attrs, fn) {
@@ -39,5 +40,12 @@ angular.module('unionvmsWeb')
                     return 2;
             }
         };
+        
+        // Check if contacts has been modified and set form dirty 
+        $scope.$watch('vesselContacts', function(newValue, oldValue){
+        	if (oldValue.length > 0) {
+                $scope.dirtyStatus(true);
+        	}
+        }, true);
     }
 );

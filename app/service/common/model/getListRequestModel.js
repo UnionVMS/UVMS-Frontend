@@ -31,7 +31,7 @@ angular.module('unionvmsWeb')
     GetListRequest.prototype.DTOForVessel = function(){
         //Add * to all text searches for vessel
         var wildcardSearchKeys = ['NAME', 'IRCS', 'CFR', 'EXTERNAL_MARKING', 'HOMEPORT', 'IMO', 'PRODUCER_NAME', 'PRODUCER_CODE', 'CONTACT_NAME', 'CONTACT_NUMBER', 'CONTACT_EMAIL', 'MMSI'];
-        var updatedCriterias = [],
+        var updatedCriterias = {},
             searchFieldKey, searchFieldValue;
 
         $.each(this.criterias, function(index, searchField){
@@ -44,12 +44,21 @@ angular.module('unionvmsWeb')
                 }
 
             }
-            updatedCriterias.push(new SearchField(searchFieldKey, searchFieldValue));
+//            updatedCriterias.push(new SearchField(searchFieldKey, searchFieldValue));
+            if (!(searchFieldKey in updatedCriterias)) {
+            	updatedCriterias[searchFieldKey] = []; 
+            }
+            updatedCriterias[searchFieldKey].push(searchFieldValue);
         });
 
+//        return {
+//            pagination : {page: this.page, listSize: this.listSize},
+//            assetSearchCriteria : { isDynamic : this.isDynamic, criterias : updatedCriterias }
+//        };
         return {
-            pagination : {page: this.page, listSize: this.listSize},
-            assetSearchCriteria : { isDynamic : this.isDynamic, criterias : updatedCriterias }
+        	id : updatedCriterias['GUID'],
+        	historyId : updatedCriterias['HIST_GUID'],
+        	cfr : updatedCriterias['CRF']
         };
     };
 

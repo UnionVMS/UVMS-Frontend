@@ -45,21 +45,35 @@ angular.module('unionvmsWeb')
                 return $resource('asset/rest/group/list');
             },
             vesselHistory : function(){
-                return $resource('asset/rest/history/asset');
+                return $resource('asset/rest/asset/history/asset/:id');
             },
             historyVessel : function(){
-                return $resource('asset/rest/history/:id', {}, {
+                return $resource('asset/rest/asset/history/:id', {}, {
                     update: {method: 'PUT'}
                 });
             },
             getConfigValues : function(){
-                return $resource('asset/rest/config');
+                return $resource('asset/rest/customcodes/listcodesforconstant/flag_state');
             },
             getConfigParameters : function(){
                 return $resource('asset/rest/config/parameters');
             },
             getNoteActivityList : function(){
-                return $resource('asset/rest/asset/activitycodes/');
+                return $resource('asset/rest/customcodes/listcodesforconstant/notesactcode');
+            },
+            contactsForAsset : function() {
+            	return $resource('asset/rest/asset/:id/contacts');
+            },
+            updateContact : function() {
+            	return $resource('asset/rest/asset/contacts', {}, {
+                    update: {method: 'PUT'}
+                });
+            },
+            deleteContact : function() {
+            	return $resource('asset/rest/asset/contacts/:id');
+            },
+            notesForAsset : function() {
+            	return $resource('asset/rest/asset/:id/notes');
             }
         };
     })
@@ -73,20 +87,20 @@ angular.module('unionvmsWeb')
         var deferred = $q.defer();
 
         var getVesselListRequest = vesselRestFactory.getVesselList().list(getListRequest.DTOForVessel(),
-            function(response){
-                if(response.code !== 200){
+            function(response, header, status){
+                if(status !== 200){
                     deferred.reject("Invalid response status");
                     return;
                 }
 
                 var vessels = [];
-                if(angular.isArray(response.data.asset)){
-                    for (var i = 0; i < response.data.asset.length; i ++) {
-                        vessels.push(Vessel.fromJson(response.data.asset[i]));
+                if(angular.isArray(response.assetList)){
+                    for (var i = 0; i < response.assetList.length; i ++) {
+                        vessels.push(Vessel.fromJson(response.assetList[i]));
                     }
                 }
-                var currentPage = response.data.currentPage;
-                var totalNumberOfPages = response.data.totalNumberOfPages;
+                var currentPage = response.currentPage;
+                var totalNumberOfPages = response.totalNumberOfPages;
                 var vesselListPage = new VesselListPage(vessels, currentPage, totalNumberOfPages);
 
                 pendingRequests.splice(getVesselListRequest);
@@ -157,12 +171,12 @@ angular.module('unionvmsWeb')
 
     var createNewVessel = function(vessel){
         var deferred = $q.defer();
-        vesselRestFactory.vessel().save(vessel.DTO(), function(response) {
-            if(response.code !== 200){
-                deferred.reject(response.data);
+        vesselRestFactory.vessel().save(vessel.DTO(), function(response, header, status) {
+            if(status !== 200){
+                deferred.reject(response);
                 return;
             }
-            deferred.resolve(Vessel.fromJson(response.data));
+            deferred.resolve(Vessel.fromJson(response));
         }, function(error) {
             console.error("Error creating vessel");
             console.error(error);
@@ -173,13 +187,13 @@ angular.module('unionvmsWeb')
 
     var getVessel = function(vesselId) {
         var deferred = $q.defer();
-        vesselRestFactory.vessel().get({id: vesselId}, function(response) {
-            if (response.code !== 200) {
+        vesselRestFactory.vessel().get({id: vesselId}, function(response, header, status) {
+            if (status !== 200) {
                 deferred.reject("Invalid response status");
                 return;
             }
 
-            deferred.resolve(Vessel.fromJson(response.data));
+            deferred.resolve(Vessel.fromJson(response));
         },
         function(err) {
             deferred.reject("could not load vessel with ID " + vesselId);
@@ -190,12 +204,12 @@ angular.module('unionvmsWeb')
 
     var updateVessel = function(vessel){
         var deferred = $q.defer();
-        vesselRestFactory.vessel().update(vessel.DTO(), function(response) {
-            if(response.code !== 200){
+        vesselRestFactory.vessel().update(vessel.DTO(), function(response, header, status) {
+            if(status !== 200){
                 deferred.reject("Invalid response status");
                 return;
             }
-            deferred.resolve(Vessel.fromJson(response.data));
+            deferred.resolve(Vessel.fromJson(response));
         }, function(error) {
             console.error("Error updating vessel");
             console.error(error);
@@ -206,12 +220,12 @@ angular.module('unionvmsWeb')
 
     var archiveVessel = function(vessel, comment){
         var deferred = $q.defer();
-        vesselRestFactory.archiveVessel().update({ comment: comment }, vessel.DTO(), function(response) {
-            if(response.code !== 200){
+        vesselRestFactory.archiveVessel().update({ comment: comment }, vessel.DTO(), function(response, header, status) {
+            if(status !== 200){
                 deferred.reject("Invalid response status");
                 return;
             }
-            deferred.resolve(Vessel.fromJson(response.data));
+            deferred.resolve(Vessel.fromJson(response));
         }, function(error) {
             console.error("Error updating vessel");
             console.error(error);
@@ -223,13 +237,13 @@ angular.module('unionvmsWeb')
     var getSearchableFields = function (){
         var deferred = $q.defer();
         vesselRestFactory.getSearchableFields().get({
-        }, function(response) {
-            if(response.code !== 200){
+        }, function(response, header, status) {
+            if(status !== 200){
                 deferred.reject("Invalid response status");
                 return;
             }
             //TODO: parse and convert response.data to an object
-            deferred.resolve(response.data);
+            deferred.resolve(response);
         }, function(error) {
             console.error("Error getting searchable fields for vessel");
             deferred.reject(error);
@@ -240,12 +254,12 @@ angular.module('unionvmsWeb')
     var getConfigurationFromResource = function(resource){
         var deferred = $q.defer();
         resource.get({},
-            function(response){
-                if(response.code !== 200){
+            function(response, header, status){
+                if(status !== 200){
                     deferred.reject("Not valid vessel configuration status.");
                     return;
                 }
-                deferred.resolve(response.data);
+                deferred.resolve(response);
             }, function(error){
                 console.error("Error getting configuration for vessel.");
                 deferred.reject(error);
@@ -254,11 +268,17 @@ angular.module('unionvmsWeb')
     };
 
     var getNoteActivityList = function(){
-        return getConfigurationFromResource(vesselRestFactory.getNoteActivityList());
+    	var deferred = $q.defer();
+    	deferred.resolve({"code":["0","1","10","12","14","2","3","39","4","5","6","7","71","8","80","81","82","9","90","98","99","999","EL1","EL2","EL3","EL4","K01","K02","K03","K04","K06","K07","K08","K09","SAN","SAT","T1","T2","U1","U2","U3","V00","V01","V02","V03","V04","V05","V06","V07","V08","V09","V10","V11","V12","V13","V14","V15","V16","V17","V18","V19","V20","V21","V22","V23","V24","V25","V26","V28","V29","V30","V31","V32","V33","V35","V40","V41","V42","V43","V45","V49","V50","V51","V52","V53","V54","V60","V61","V62","V63","V65","V75","V80","V85","V86","V90","V92","V93","V95","V96","V98","V99","X1"]});
+    	return deferred.promise;
+//        return getConfigurationFromResource(vesselRestFactory.getNoteActivityList());
     };
 
     var getConfiguration = function(){
-        return getConfigurationFromResource(vesselRestFactory.getConfigValues());
+    	var deferred = $q.defer();
+    	deferred.resolve({"UNIT_TONNAGE":["LONDON","OSLO"],"UNIT_LENGTH":["LOA","LBP"],"ASSET_TYPE":["VESSEL"],"LICENSE_TYPE":["MOCK-license-DB"],"GEAR_TYPE":["PELAGIC","DERMERSAL","DEMERSAL_AND_PELAGIC","UNKNOWN"],"FLAG_STATE":["SWE","DNK","NOR"],"SPAN_LENGTH_LOA":["0-11,99","12-14,99","15-17,99","18-23,99","24+"],"SPAN_POWER_MAIN":["0-99","100-199","200-299","300+"]});
+    	return deferred.promise;
+//        return getConfigurationFromResource(vesselRestFactory.getConfigValues());
     };
 
     var getParameterConfiguration = function(){
@@ -269,24 +289,24 @@ angular.module('unionvmsWeb')
         var deferred = $q.defer();
         //Query object
         var queryObject = {
-            assetId : vesselId
+        		id : vesselId
         };
         if(maxNbr){
             queryObject['maxNbr'] = maxNbr;
         }
 
-        vesselRestFactory.vesselHistory().get(queryObject,
-            function(response) {
+        vesselRestFactory.vesselHistory().query(queryObject,
+            function(response, header, status) {
 
-                if(response.code !== 200){
+                if(status !== 200){
                     deferred.reject("Invalid response status");
                     return;
                 }
 
                 var vessels = [];
-                if(angular.isArray(response.data)){
-                    for (var i = 0; i < response.data.length; i ++) {
-                        vessels.push(Vessel.fromJson(response.data[i]));
+                if(angular.isArray(response)){
+                    for (var i = 0; i < response.length; i ++) {
+                        vessels.push(Vessel.fromJson(response[i]));
                     }
                 }
                 deferred.resolve(vessels);
@@ -398,6 +418,108 @@ angular.module('unionvmsWeb')
             request.$cancelRequest();
         });
     };
+    
+    var getContactsForAsset = function(vesselId) {
+    	var deferred = $q.defer();
+        vesselRestFactory.contactsForAsset().query({'id' : vesselId},
+            function(response, header, status) {
+                if(status !== 200){
+                    deferred.reject("Invalid response status");
+                    return;
+                }
+                deferred.resolve(response);
+        	},
+        	function(err){
+        		deferred.reject(err);
+        	}
+        );
+        return deferred.promise;
+    };
+    
+    var createContactForAsset = function(vesselId, contact) {
+    	var deferred = $q.defer();
+        vesselRestFactory.contactsForAsset().save({'id' : vesselId}, contact,
+            function(response, header, status) {
+                if(status !== 200){
+                    deferred.reject("Invalid response status");
+                    return;
+                }
+                deferred.resolve(response);
+        	},
+        	function(err){
+        		deferred.reject(err);
+        	}
+        );
+        return deferred.promise;
+    };
+
+    var updateContact = function(contact) {
+    	var deferred = $q.defer();
+        vesselRestFactory.updateContact().update(contact,
+            function(response, header, status) {
+                if(status !== 200){
+                    deferred.reject("Invalid response status");
+                    return;
+                }
+                deferred.resolve(response);
+        	},
+        	function(err){
+        		deferred.reject(err);
+        	}
+        );
+        return deferred.promise;
+    };
+    
+    var deleteContact = function(contactId) {
+    	var deferred = $q.defer();
+        vesselRestFactory.deleteContact().delete({'id' : contactId},
+            function(response, header, status) {
+                if(status !== 200){
+                    deferred.reject("Invalid response status");
+                    return;
+                }
+                deferred.resolve(response);
+        	},
+        	function(err){
+        		deferred.reject(err);
+        	}
+        );
+        return deferred.promise;
+    };
+    
+    var getNotesForAsset = function(vesselId) {
+    	var deferred = $q.defer();
+        vesselRestFactory.notesForAsset().query({'id' : vesselId},
+            function(response, header, status) {
+                if(status !== 200){
+                    deferred.reject("Invalid response status");
+                    return;
+                }
+                deferred.resolve(response);
+        	},
+        	function(err){
+        		deferred.reject(err);
+        	}
+        );
+        return deferred.promise;
+    };
+    
+    var createNoteForAsset = function(vesselId, note) {
+    	var deferred = $q.defer();
+        vesselRestFactory.notesForAsset().save({'id' : vesselId}, note,
+            function(response, header, status) {
+                if(status !== 200){
+                    deferred.reject("Invalid response status");
+                    return;
+                }
+                deferred.resolve(response);
+        	},
+        	function(err){
+        		deferred.reject(err);
+        	}
+        );
+        return deferred.promise;
+    };
 
     return {
         getVesselList: getVesselList,
@@ -417,6 +539,12 @@ angular.module('unionvmsWeb')
         getConfig : getConfiguration,
         getParameterConfig : getParameterConfiguration,
         getNoteActivityList : getNoteActivityList,
-        cancelPendingRequests : cancelPendingRequests
+        cancelPendingRequests : cancelPendingRequests,
+        getContactsForAsset : getContactsForAsset,
+        createContactForAsset : createContactForAsset,
+        updateContact : updateContact,
+        deleteContact : deleteContact,
+        getNotesForAsset : getNotesForAsset,
+        createNoteForAsset : createNoteForAsset
     };
 });

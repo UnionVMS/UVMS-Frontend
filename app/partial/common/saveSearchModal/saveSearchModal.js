@@ -109,7 +109,7 @@ angular.module('unionvmsWeb').controller('SaveSearchModalInstanceCtrl', function
         }
 
         return vessels.map(function(vessel) {
-            return new SearchField(vessel.vesselId.type, vessel.vesselId.value);
+            return new SearchField("GUID", vessel.id);
         });
     }
 

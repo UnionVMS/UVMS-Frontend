@@ -15,6 +15,8 @@ angular.module('unionvmsWeb')
     var SOURCE_INTERNAL = "INTERNAL";
 
     function Vessel(){
+    	this.id = undefined;
+    	this.historyId = undefined;
         this.active = true;
         this.cfr = null;
         this.contact = [];
@@ -50,22 +52,17 @@ angular.module('unionvmsWeb')
         var vessel = new Vessel();
         var i;
 
-        if(angular.isDefined(data.assetId)){
-            vessel.vesselId = {
-                guid : data.assetId.guid,
-                type : data.assetId.type,
-                value : data.assetId.value
-            };
-        }
+        vessel.id = data.id;
+        vessel.historyId = data.historyId;
         vessel.source = data.source;
         vessel.active = data.active;
         vessel.name = data.name;
-        vessel.countryCode = data.countryCode;
+        vessel.countryCode = data.flagStateCode;
         vessel.cfr = data.cfr;
-        vessel.mmsiNo = data.mmsiNo;
+        vessel.mmsiNo = data.mmsi;
         vessel.imo = data.imo;
         vessel.externalMarking = data.externalMarking;
-        vessel.homePort = data.homePort;
+        vessel.homePort = data.portOfRegistration;
 
         vessel.ircs = data.ircs;
         vessel.licenseType = data.licenseType;
@@ -79,7 +76,7 @@ angular.module('unionvmsWeb')
             vessel.lengthValue = data.lengthOverAll;
             vessel.lengthType = "LOA";
         }
-        vessel.powerMain = data.powerMain;
+        vessel.powerMain = data.powerOfMainEngine;
         vessel.grossTonnage = data.grossTonnage;
         vessel.grossTonnageUnit = data.grossTonnageUnit;
 
@@ -106,9 +103,11 @@ angular.module('unionvmsWeb')
             vessel.producer.fax = data.producer.fax;
         }
 
-        if (data.eventHistory) {
-            vessel.eventHistory = EventHistory.fromDTO(data.eventHistory);
-        }
+//        if (data.eventHistory) {
+//            vessel.eventHistory = EventHistory.fromDTO(data.eventHistory);
+//        }
+        vessel.eventCode = data.eventCode;
+        vessel.updateTime = data.updateTime;
 
         return vessel;
     };
@@ -129,22 +128,24 @@ angular.module('unionvmsWeb')
         }
 
         var dto = {
+        	id : this.id,
+        	historyId : this.historyId,
             active : this.active,
             source : this.source,
             cfr : this.cfr,
             name : this.name,
-            countryCode : this.countryCode,
+            flagStateCode : this.countryCode,
             imo : this.imo,
             externalMarking : this.externalMarking,
-            hasIrcs : this.hasIrcs(),
+            ircsIndicator : this.hasIrcs(),
             ircs : this.ircs,
             hasLicense : this.hasLicense(),
             licenseType : this.licenseType,
-            homePort : this.homePort,
+            portOfRegistration : this.homePort,
             lengthOverAll : lengthOverall,
             lengthBetweenPerpendiculars : lengthBetweenPerpendiculars,
-            powerMain : this.powerMain,
-            gearType : this.gearType,
+            powerOfMainEngine : this.powerMain,
+            gearFishingType : this.gearType,
             grossTonnage : this.grossTonnage,
             grossTonnageUnit : this.grossTonnageUnit,
             contact : this.contact,
@@ -154,14 +155,7 @@ angular.module('unionvmsWeb')
 
         if (this.mmsiNo) {
             // Do not send empty string, or other falsy values in general.
-            dto.mmsiNo = this.mmsiNo;
-        }
-
-        if(angular.isDefined(this.vesselId)){
-            dto['assetId'] = {
-                type : this.vesselId.type,
-                value : this.vesselId.value
-            };
+            dto.mmsi = this.mmsiNo;
         }
 
         return dto;
@@ -173,9 +167,12 @@ angular.module('unionvmsWeb')
         copy.active = this.active;
         copy.cfr = this.cfr;
         copy.countryCode = this.countryCode;
-        if(this.eventHistory){
-            copy.eventHistory = this.eventHistory.copy();
-        }
+//        if(this.eventHistory){
+//            copy.eventHistory = this.eventHistory.copy();
+//        }
+        copy.eventCode = this.eventCode;
+        copy.updateTime = this.updateTime;
+        
         copy.externalMarking = this.externalMarking;
         copy.grossTonnage = this.grossTonnage;
         copy.grossTonnageUnit = this.grossTonnageUnit;
@@ -191,13 +188,8 @@ angular.module('unionvmsWeb')
         copy.name = this.name;
         copy.powerMain = this.powerMain;
         copy.source = this.source;
-        if(this.vesselId){
-            copy.vesselId = {
-                guid : this.vesselId.guid,
-                type : this.vesselId.type,
-                value : this.vesselId.value
-            };
-        }
+        copy.id = this.id;
+        copy.historyId = this.historyId;
         if(this.contact){
             for (i = 0; i < this.contact.length; i++) {
                 copy.contact.push(this.contact[i].copy());
@@ -227,21 +219,17 @@ angular.module('unionvmsWeb')
     };
 
     Vessel.prototype.getGuid = function() {
-        if(angular.isDefined(this.vesselId)){
-            return this.vesselId.guid;
-        }
+    	return this.id;
     };
     
     Vessel.prototype.getHistoryGuid = function() {
-        if(angular.isDefined(this.eventHistory)){
-            return this.eventHistory.eventId;
-        }
+    	return this.historyId;
     };
 
     //Check if the vessel is equal to another vessel
     //Equal means same guid
     Vessel.prototype.equals = function(item) {
-        return this.getGuid() === item.getGuid();
+        return this.id === item.id;
     };
 
     Vessel.prototype.isLocalSource = function() {
@@ -250,9 +238,9 @@ angular.module('unionvmsWeb')
 
     Vessel.prototype.hasIrcs = function() {
         if(typeof this.ircs === 'string' && this.ircs.trim().length > 0){
-            return 'Y';
+            return true;
         }else{
-            return 'N';
+            return false;
         }
     };
 
