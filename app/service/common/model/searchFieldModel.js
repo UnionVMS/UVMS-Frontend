@@ -18,12 +18,12 @@ angular.module('unionvmsWeb')
     }
 
     SearchField.fromJson = function(data){
-        return new SearchField(data.key, data.value);
+        return new SearchField(data.field, data.value);
     };
 
     SearchField.prototype.toJson = function(){
         return JSON.stringify({
-            key : this.key,
+            field : this.key,
             value : this.value,
         });
     };

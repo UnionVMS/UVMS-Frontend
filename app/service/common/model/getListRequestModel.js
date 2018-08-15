@@ -58,7 +58,17 @@ angular.module('unionvmsWeb')
         return {
         	id : updatedCriterias['GUID'],
         	historyId : updatedCriterias['HIST_GUID'],
-        	cfr : updatedCriterias['CRF']
+        	cfr : updatedCriterias['CRF'],
+        	ircs : updatedCriterias['IRCS'],
+        	mmsi : updatedCriterias['MMSI'],
+        	name : updatedCriterias['NAME'],
+        	flagState : updatedCriterias['FLAG_STATE'],
+        	externalMarking : updatedCriterias['EXTERNAL_MARKING'],
+        	portOfRegistration : updatedCriterias['HOMEPORT']
+//        	minLength : updatedCriterias['MIN_LENGTH'][0],
+//        	maxLength : updatedCriterias['MAX_LENGTH'][0],
+//        	minPower : updatedCriterias['MIN_POWER'][0],
+//        	maxPower : updatedCriterias['MAX_POWER'][0]
         };
     };
 
