@@ -58,14 +58,11 @@ angular.module('unionvmsWeb')
                     update: {method: 'PUT'}
                 });
             },
-            getConfigValues : function(){
-                return $resource('asset/rest/customcodes/listcodesforconstant/flag_state');
+            getCustomCodes : function(){
+                return $resource('asset/rest/customcodes/listcodesforconstant/:constant');
             },
             getConfigParameters : function(){
                 return $resource('asset/rest/config/parameters');
-            },
-            getNoteActivityList : function(){
-                return $resource('asset/rest/customcodes/listcodesforconstant/notesactcode');
             },
             contactsForAsset : function() {
             	return $resource('asset/rest/asset/:id/contacts');
@@ -273,12 +270,34 @@ angular.module('unionvmsWeb')
             });
         return deferred.promise;
     };
+    
+    var getCustomCode = function(constant){
+        var deferred = $q.defer();
+        vesselRestFactory.getCustomCodes().query({'constant' : constant},
+            function(response, header, status){
+                if(status !== 200){
+                    deferred.reject("Not valid custom code status.");
+                    return;
+                }
+                deferred.resolve(response);
+            }, function(error){
+                console.error("Error getting asset custom codes.");
+                deferred.reject(error);
+            });
+        return deferred.promise;
+    };
 
     var getNoteActivityList = function(){
-    	var deferred = $q.defer();
-    	deferred.resolve({"code":["0","1","10","12","14","2","3","39","4","5","6","7","71","8","80","81","82","9","90","98","99","999","EL1","EL2","EL3","EL4","K01","K02","K03","K04","K06","K07","K08","K09","SAN","SAT","T1","T2","U1","U2","U3","V00","V01","V02","V03","V04","V05","V06","V07","V08","V09","V10","V11","V12","V13","V14","V15","V16","V17","V18","V19","V20","V21","V22","V23","V24","V25","V26","V28","V29","V30","V31","V32","V33","V35","V40","V41","V42","V43","V45","V49","V50","V51","V52","V53","V54","V60","V61","V62","V63","V65","V75","V80","V85","V86","V90","V92","V93","V95","V96","V98","V99","X1"]});
-    	return deferred.promise;
-//        return getConfigurationFromResource(vesselRestFactory.getNoteActivityList());
+        return getCustomCode("ACTIVITY_CODE").then(function(codes) {
+        	var activityCodes = {"code" : []};
+        	for (var i = 0; i < codes.length; i ++) {
+        		activityCodes["code"].push(codes[i].description);
+            }
+        	console.log(activityCodes);
+        	return activityCodes;
+        }, function(error) {
+        	$q.reject(error);
+        });
     };
 
     var getConfiguration = function(){
