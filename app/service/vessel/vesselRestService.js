@@ -293,7 +293,6 @@ angular.module('unionvmsWeb')
         	for (var i = 0; i < codes.length; i ++) {
         		activityCodes["code"].push(codes[i].description);
             }
-        	console.log(activityCodes);
         	return activityCodes;
         }, function(error) {
         	$q.reject(error);
@@ -416,7 +415,7 @@ angular.module('unionvmsWeb')
                     var fields = [];
                     if(angular.isArray(response)){
                         for (var i = 0; i < response.length; i ++) {
-                            fields.push(SearchField.fromJson(response[i]));
+                            fields.push(SearchField.fromJsonAsset(response[i]));
                         }
                     }
                     deferred.resolve(fields);

@@ -225,7 +225,7 @@ angular.module('unionvmsWeb').controller('VesselFormCtrl',function($scope, $log,
 
         function getMobileTerminals(archivedVessel) {
             // Fetch all mobile terminals connected to the archived vessel.
-            return mobileTerminalRestService.getAllMobileTerminalsWithConnectId(archivedVessel.vesselId.guid);
+            return mobileTerminalRestService.getAllMobileTerminalsWithConnectId(archivedVessel.id);
         }
 
         function inactivateAndUnassignMobileTerminals(mobileTerminals) {
@@ -400,7 +400,7 @@ angular.module('unionvmsWeb').controller('VesselFormCtrl',function($scope, $log,
         $scope.isThisVisible.showCompleteVesselHistoryLink = false;
         $scope.waitingForHistoryResponse = true;
         $scope.vesselHistoryError = undefined;
-        vesselRestService.getVesselHistoryListByVesselId($scope.vesselObj.vesselId.value)
+        vesselRestService.getVesselHistoryListByVesselId($scope.vesselObj.id)
             .then(onCompleteVesselHistoryListSuccess, onVesselHistoryListError);
     };
 

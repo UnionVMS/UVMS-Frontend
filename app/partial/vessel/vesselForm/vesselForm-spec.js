@@ -25,13 +25,11 @@ describe('VesselFormCtrl', function() {
         scope = $rootScope.$new();
         ctrl = $controller('VesselFormCtrl', {$scope: scope});
         scope.vesselObj = new Vessel();
+        scope.vesselContacts = [];
 
         //Dummy response for create
         createResponseVessel = new Vessel();
-        createResponseVessel.vesselId = {
-            type : "GUID",
-            value : "345345345-rf54235f-242f-4rads"
-        };
+        createResponseVessel.id = "345345345-rf54235f-242f-4rads";
 
         scope.setCreateMode = function(bool){
             scope.createNewMode = bool;
@@ -114,11 +112,10 @@ describe('VesselFormCtrl', function() {
         expect(scope.isCreateNewMode()).toEqual(false);
 
         //VesselID should be set on the vesselObj now
-        expect(scope.vesselObj.vesselId.type).toEqual(createResponseVessel.vesselId.type);
-        expect(scope.vesselObj.vesselId.value).toEqual(createResponseVessel.vesselId.value);
+        expect(scope.vesselObj.id).toEqual(createResponseVessel.id);
 
         //Check that get vessel history was called afterwards
-        expect(vesselRestService.getVesselHistoryListByVesselId).toHaveBeenCalledWith(scope.vesselObj.vesselId.value,15);
+        expect(vesselRestService.getVesselHistoryListByVesselId).toHaveBeenCalledWith(scope.vesselObj.id, 15);
 
     }));
 
@@ -159,11 +156,10 @@ describe('VesselFormCtrl', function() {
         scope.$digest();
 
         //VesselID should be set on the vesselObj now
-        expect(scope.vesselObj.vesselId.type).toEqual(createResponseVessel.vesselId.type);
-        expect(scope.vesselObj.vesselId.value).toEqual(createResponseVessel.vesselId.value);
+        expect(scope.vesselObj.id).toEqual(createResponseVessel.id);
 
         //Check that get vessel history was called afterwards
-        expect(vesselRestService.getVesselHistoryListByVesselId).toHaveBeenCalledWith(scope.vesselObj.vesselId.value,15);
+        expect(vesselRestService.getVesselHistoryListByVesselId).toHaveBeenCalledWith(scope.vesselObj.id,15);
 
         //Check that mergeCurrentVesselIntoSearchResults was called afterwards to update the vessel list
         expect(scope.mergeCurrentVesselIntoSearchResults).toHaveBeenCalledWith(scope.vesselObj);
@@ -187,11 +183,7 @@ describe('VesselFormCtrl', function() {
 
         var mockVessel = new Vessel();
         mockVessel.active = true;
-        mockVessel.vesselId = {
-            type : "GUID",
-            value : "345345345-rf54235f-242f-4rads",
-            guid: "345345345-rf54235f-242f-4rads"
-        };
+        mockVessel.id = "345345345-rf54235f-242f-4rads";
         scope.vesselObj = mockVessel;
 
         // A form to be valid
@@ -204,6 +196,8 @@ describe('VesselFormCtrl', function() {
         var viewListSpy = spyOn(scope, "toggleViewVessel");
         var deferred = $q.defer();
         var getVesselHistorySpy = spyOn(vesselRestService, "getVesselHistoryListByVesselId").andReturn(deferred.promise);
+        var getVesselContactsSpy = spyOn(vesselRestService, "getContactsForAsset").andReturn(deferred.promise);
+        var getVesselNotesSpy = spyOn(vesselRestService, "getNotesForAsset").andReturn(deferred.promise);
         deferred.resolve([]);
 
         var getMobileTerminalsSpy = spyOn(mobileTerminalRestService, "getMobileTerminalList").andReturn($q.when(MT_EMPTY_PAGE));
@@ -296,15 +290,13 @@ describe('VesselFormCtrl', function() {
         var vessel2 = new Vessel();
         var vessel2Name = 'Second rule';
         vessel2.name = vessel2Name;
-        vessel2.vesselId = {
-            guid : "123",
-            type : "GUID",
-            value : "123"
-        };
+        vessel2.id ="123";
         scope.vesselObj = vessel1;
 
         var deferred = $q.defer();
         var getVesselHistorySpy = spyOn(vesselRestService, "getVesselHistoryListByVesselId").andReturn(deferred.promise);
+        var getVesselContactsSpy = spyOn(vesselRestService, "getContactsForAsset").andReturn(deferred.promise);
+        var getVesselNotesSpy = spyOn(vesselRestService, "getNotesForAsset").andReturn(deferred.promise);
         deferred.resolve([]);
 
         var getMobileTerminalsSpy = spyOn(mobileTerminalRestService, "getMobileTerminalList").andReturn($q.when(MT_EMPTY_PAGE));
@@ -324,6 +316,10 @@ describe('VesselFormCtrl', function() {
 
         expect(getVesselHistorySpy).toHaveBeenCalled();
         expect(getVesselHistorySpy.callCount).toBe(1);
+        expect(getVesselContactsSpy).toHaveBeenCalled();
+        expect(getVesselContactsSpy.callCount).toBe(1);
+        expect(getVesselNotesSpy).toHaveBeenCalled();
+        expect(getVesselNotesSpy.callCount).toBe(1);
         expect(getMobileTerminalsSpy).toHaveBeenCalled();
         expect(getMobileTerminalsSpy.callCount).toBe(1);
         expect(scope.vesselObj.name).toEqual(vessel2Name);
@@ -347,6 +343,8 @@ describe('VesselFormCtrl', function() {
     it('viewCompleteVesselHistory should get all history items from the server', inject(function($rootScope, $compile, $q, Vessel, vesselRestService, mobileTerminalRestService) {
         var deferred = $q.defer();
         var vesselRestServiceSpy = spyOn(vesselRestService, "getVesselHistoryListByVesselId").andReturn(deferred.promise);
+        var getVesselContactsSpy = spyOn(vesselRestService, "getContactsForAsset").andReturn(deferred.promise);
+        var getVesselNotesSpy = spyOn(vesselRestService, "getNotesForAsset").andReturn(deferred.promise);
         var historyResult = ['a', 'b', 'c'];
         deferred.resolve(historyResult);
 
@@ -356,10 +354,7 @@ describe('VesselFormCtrl', function() {
         //Create mock vessel
         var mockVessel = new Vessel();
         mockVessel.active = true;
-        mockVessel.vesselId = {
-            type : "GUID",
-            value : "345345345-rf54235f-242f-4rads"
-        };
+        mockVessel.id = "345345345-rf54235f-242f-4rads";
         scope.vesselObj = mockVessel;
 
         // Create form
@@ -375,6 +370,8 @@ describe('VesselFormCtrl', function() {
 
         //History should have been required from the restService
         expect(vesselRestServiceSpy).toHaveBeenCalled();
+        expect(getVesselContactsSpy).toHaveBeenCalled();
+        expect(getVesselNotesSpy).toHaveBeenCalled();
 
         //The link should be hidden
         expect(scope.isThisVisible.showCompleteVesselHistoryLink).toBeFalsy();
@@ -390,10 +387,7 @@ describe('VesselFormCtrl', function() {
         //Create mock vessel
         var mockVessel = new Vessel();
         mockVessel.active = true;
-        mockVessel.vesselId = {
-            type : "GUID",
-            value : "345345345-rf54235f-242f-4rads"
-        };
+        mockVessel.id = "345345345-rf54235f-242f-4rads";
         scope.vesselObj = mockVessel;
 
         mockVessel.source = 'INTERNAL';
@@ -410,10 +404,7 @@ describe('VesselFormCtrl', function() {
         //Create mock vessel
         var mockVessel = new Vessel();
         mockVessel.active = true;
-        mockVessel.vesselId = {
-            type : "GUID",
-            value : "345345345-rf54235f-242f-4rads"
-        };
+        mockVessel.id = "345345345-rf54235f-242f-4rads";
         scope.vesselObj = mockVessel;
 
         mockVessel.source = 'INTERNAL';

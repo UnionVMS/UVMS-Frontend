@@ -30,11 +30,7 @@ describe('AssignvesselCtrl', function() {
 		scope.currentMobileTerminal = new MobileTerminal();
 		scope.toggleAssignVessel = function() {};
 		scope.selectedVessel = new Vessel();
-        scope.selectedVessel.vesselId = {
-            guid : "asdasd-234dsaf234we-234234-24",
-            type : "IRCS",
-            value : "TESTIRCS1"
-        };
+        scope.selectedVessel.id = "asdasd-234dsaf234we-234234-24";
     }));
 
     beforeEach(inject(function($httpBackend) {

@@ -34,17 +34,17 @@ angular.module('unionvmsWeb')
         this.name = undefined;
         this.notes = [];
         this.powerMain = null;
-        this.producer = {
-            id : undefined,
-            code : null,
-            name : undefined,
-            address : undefined,
-            zipcode : undefined,
-            city : undefined,
-            phone : undefined,
-            mobile : undefined,
-            fax : undefined
-        };
+//        this.producer = {
+//            id : undefined,
+//            code : null,
+//            name : undefined,
+//            address : undefined,
+//            zipcode : undefined,
+//            city : undefined,
+//            phone : undefined,
+//            mobile : undefined,
+//            fax : undefined
+//        };
         this.source = SOURCE_INTERNAL;
     }
 
@@ -80,28 +80,28 @@ angular.module('unionvmsWeb')
         vessel.grossTonnage = data.grossTonnage;
         vessel.grossTonnageUnit = data.grossTonnageUnit;
 
-        if (data.notes) {
-            for (i = 0; i < data.notes.length; i++) {
-                vessel.notes.push(VesselNotes.fromDTO(data.notes[i]));
-            }
-        }
-        if (data.contact) {
-            for (i = 0; i < data.contact.length; i++) {
-                vessel.contact.push(VesselContact.fromDTO(data.contact[i]));
-            }
-        }
-
-        if(data.producer){
-            vessel.producer.id = data.producer.id;
-            vessel.producer.code = data.producer.code;
-            vessel.producer.name = data.producer.name;
-            vessel.producer.address = data.producer.address;
-            vessel.producer.zipcode = data.producer.zipcode;
-            vessel.producer.city = data.producer.city;
-            vessel.producer.phone = data.producer.phone;
-            vessel.producer.mobile = data.producer.mobile;
-            vessel.producer.fax = data.producer.fax;
-        }
+//        if (data.notes) {
+//            for (i = 0; i < data.notes.length; i++) {
+//                vessel.notes.push(VesselNotes.fromDTO(data.notes[i]));
+//            }
+//        }
+//        if (data.contact) {
+//            for (i = 0; i < data.contact.length; i++) {
+//                vessel.contact.push(VesselContact.fromDTO(data.contact[i]));
+//            }
+//        }
+//
+//        if(data.producer){
+//            vessel.producer.id = data.producer.id;
+//            vessel.producer.code = data.producer.code;
+//            vessel.producer.name = data.producer.name;
+//            vessel.producer.address = data.producer.address;
+//            vessel.producer.zipcode = data.producer.zipcode;
+//            vessel.producer.city = data.producer.city;
+//            vessel.producer.phone = data.producer.phone;
+//            vessel.producer.mobile = data.producer.mobile;
+//            vessel.producer.fax = data.producer.fax;
+//        }
 
 //        if (data.eventHistory) {
 //            vessel.eventHistory = EventHistory.fromDTO(data.eventHistory);
@@ -148,9 +148,9 @@ angular.module('unionvmsWeb')
             gearFishingType : this.gearType,
             grossTonnage : this.grossTonnage,
             grossTonnageUnit : this.grossTonnageUnit,
-            contact : this.contact,
-            producer : this.producer,
-            notes : this.notes
+//            contact : this.contact,
+//            producer : this.producer,
+//            notes : this.notes
         };
 
         if (this.mmsiNo) {
@@ -190,31 +190,31 @@ angular.module('unionvmsWeb')
         copy.source = this.source;
         copy.id = this.id;
         copy.historyId = this.historyId;
-        if(this.contact){
-            for (i = 0; i < this.contact.length; i++) {
-                copy.contact.push(this.contact[i].copy());
-            }
-        }
-        if(this.producer){
-            copy.producer = {
-                id : this.producer.id,
-                code : this.producer.code,
-                name : this.producer.name,
-                address : this.producer.address,
-                zipcode : this.producer.zipcode,
-                city : this.producer.city,
-                phone : this.producer.phone,
-                mobile : this.producer.mobile,
-                fax : this.producer.fax
-            };
-        }
+//        if(this.contact){
+//            for (i = 0; i < this.contact.length; i++) {
+//                copy.contact.push(this.contact[i].copy());
+//            }
+//        }
+//        if(this.producer){
+//            copy.producer = {
+//                id : this.producer.id,
+//                code : this.producer.code,
+//                name : this.producer.name,
+//                address : this.producer.address,
+//                zipcode : this.producer.zipcode,
+//                city : this.producer.city,
+//                phone : this.producer.phone,
+//                mobile : this.producer.mobile,
+//                fax : this.producer.fax
+//            };
+//        }
         copy.gearType = this.gearType;
 
-        if(this.notes){
-            for (i = 0; i < this.notes.length; i++) {
-                copy.notes.push(this.notes[i].copy());
-            }
-        }
+//        if(this.notes){
+//            for (i = 0; i < this.notes.length; i++) {
+//                copy.notes.push(this.notes[i].copy());
+//            }
+//        }
         return copy;
     };
 
