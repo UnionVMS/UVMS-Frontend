@@ -213,7 +213,7 @@ angular.module('unionvmsWeb').factory('searchService',function($q, $log, searchU
                 var vesselRequest = new GetListRequest(1, page.getNumberOfItems()*10, true);
                 $.each(page.items, function(index, pageItem) {
                     //Search for vessels by GUID
-                    if(angular.isDefined(pageItem.vesselGuid)){
+                    if(angular.isDefined(pageItem.vesselGuid) && !(pageItem.vesselGuid === null)){
                         vesselRequest.addSearchCriteria('GUID', pageItem.vesselGuid);
                     }
                 });
