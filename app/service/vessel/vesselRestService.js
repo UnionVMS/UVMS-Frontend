@@ -44,7 +44,7 @@ angular.module('unionvmsWeb')
             getVesselGroupsForUser : function(){
                 return $resource('asset/rest/group/list');
             },
-            fieldsForGroup : function(){
+            fieldForGroup : function(){
                 return $resource('asset/rest/group/:id/field');
             },
             getFieldsForGroup : function(){
@@ -270,7 +270,7 @@ angular.module('unionvmsWeb')
             });
         return deferred.promise;
     };
-    
+
     var getCustomCode = function(constant){
         var deferred = $q.defer();
         vesselRestFactory.getCustomCodes().query({'constant' : constant},
@@ -342,7 +342,7 @@ angular.module('unionvmsWeb')
         );
         return deferred.promise;
     };
-    
+
     var getVesselByVesselHistoryId = function(vesselId) {
         var deferred = $q.defer();
         vesselRestFactory.historyVessel().get({id: vesselId}, function(response) {
@@ -376,7 +376,7 @@ angular.module('unionvmsWeb')
         	return $q.reject(error);
         });
     };
-    
+
     var getGroupsByUser = function(userName) {
     	var deferred = $q.defer();
     	vesselRestFactory.getVesselGroupsForUser().query({'user' : userName},
@@ -400,8 +400,8 @@ angular.module('unionvmsWeb')
                 }
             );
             return deferred.promise;
-    }
-    
+    };
+
     var getFieldsByGroup = function(groupId) {
     	var deferred = $q.defer();
     	vesselRestFactory.getFieldsForGroup().query({id : groupId},
@@ -415,7 +415,7 @@ angular.module('unionvmsWeb')
                     var fields = [];
                     if(angular.isArray(response)){
                         for (var i = 0; i < response.length; i ++) {
-                            fields.push(SearchField.fromJsonAsset(response[i]));
+                            fields.push(SearchField.fromJson(response[i]));
                         }
                     }
                     deferred.resolve(fields);
@@ -439,7 +439,7 @@ angular.module('unionvmsWeb')
         	return savedSearchGroup;
         });
     };
-    
+
     var createVesselGroup = function(vesselGroup) {
     	var deferred = $q.defer();
         vesselRestFactory.vesselGroup().save(vesselGroup.toVesselDTO(), function(response, header, status) {
@@ -454,23 +454,55 @@ angular.module('unionvmsWeb')
             deferred.reject(error);
         });
         return deferred.promise;
-    }
-    
+    };
+
     var createGroupField = function(groupId, field) {
     	var deferred = $q.defer();
-        vesselRestFactory.fieldsForGroup().save({id : groupId}, field.toJson(), function(response, header, status) {
+        vesselRestFactory.fieldForGroup().save({id : groupId}, field.toJson(), function(response, header, status) {
             if(status !== 200){
                 deferred.reject("Invalid response status");
                 return;
             }
             deferred.resolve(SearchField.fromJson(response));
         }, function(error) {
-            console.error("Error creating vessel group");
+            console.error("Error creating vessel group field");
             console.error(error);
             deferred.reject(error);
         });
         return deferred.promise;
-    }
+    };
+
+    var deleteGroupField = function(groupId, field) {
+    	var deferred = $q.defer();
+        vesselRestFactory.fieldForGroup().delete({id : groupId}, field.toJson(), function(response, header, status) {
+            if(status !== 200){
+                deferred.reject("Invalid response status");
+                return;
+            }
+            deferred.resolve(SearchField.fromJson(response));
+        }, function(error) {
+            console.error("Error deleting vessel group field");
+            console.error(error);
+            deferred.reject(error);
+        });
+        return deferred.promise;
+    };
+
+    var addGroupField = function(groupId, field) {
+    	var deferred = $q.defer();
+        vesselRestFactory.fieldForGroup().save({id : groupId}, field.toJson(), function(response, header, status) {
+            if(status !== 200){
+                deferred.reject("Invalid response status");
+                return;
+            }
+            deferred.resolve(SearchField.fromJson(response));
+        }, function(error) {
+            console.error("Error adding vessel group field");
+            console.error(error);
+            deferred.reject(error);
+        });
+        return deferred.promise;
+    };
 
     var updateVesselGroup = function(savedSearchGroup){
         var deferred = $q.defer();
@@ -513,7 +545,7 @@ angular.module('unionvmsWeb')
             request.$cancelRequest();
         });
     };
-    
+
     var getContactsForAsset = function(vesselId) {
     	var deferred = $q.defer();
         vesselRestFactory.contactsForAsset().query({'id' : vesselId},
@@ -530,7 +562,7 @@ angular.module('unionvmsWeb')
         );
         return deferred.promise;
     };
-    
+
     var createContactForAsset = function(vesselId, contact) {
     	var deferred = $q.defer();
         vesselRestFactory.contactsForAsset().save({'id' : vesselId}, contact,
@@ -564,7 +596,7 @@ angular.module('unionvmsWeb')
         );
         return deferred.promise;
     };
-    
+
     var deleteContact = function(contactId) {
     	var deferred = $q.defer();
         vesselRestFactory.deleteContact().delete({'id' : contactId},
@@ -581,7 +613,7 @@ angular.module('unionvmsWeb')
         );
         return deferred.promise;
     };
-    
+
     var getNotesForAsset = function(vesselId) {
     	var deferred = $q.defer();
         vesselRestFactory.notesForAsset().query({'id' : vesselId},
@@ -598,7 +630,7 @@ angular.module('unionvmsWeb')
         );
         return deferred.promise;
     };
-    
+
     var createNoteForAsset = function(vesselId, note) {
     	var deferred = $q.defer();
         vesselRestFactory.notesForAsset().save({'id' : vesselId}, note,
@@ -631,6 +663,8 @@ angular.module('unionvmsWeb')
         createNewVesselGroup : createNewVesselGroup,
         updateVesselGroup : updateVesselGroup,
         deleteVesselGroup : deleteVesselGroup ,
+        deleteGroupField : deleteGroupField,
+        addGroupField : addGroupField,
         getConfig : getConfiguration,
         getParameterConfig : getParameterConfiguration,
         getNoteActivityList : getNoteActivityList,
