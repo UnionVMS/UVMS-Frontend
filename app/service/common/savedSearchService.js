@@ -9,7 +9,7 @@ the hope that it will be useful, but WITHOUT ANY WARRANTY; without even the impl
 FITNESS FOR A PARTICULAR PURPOSE.  See the GNU General Public License for more details. You should have received a
 copy of the GNU General Public License along with the IFDM Suite. If not, see <http://www.gnu.org/licenses/>.
  */
-angular.module('unionvmsWeb').factory('savedSearchService',function($q, $modal, SavedSearchGroup, vesselRestService, movementRestService, userService) {
+angular.module('unionvmsWeb').factory('savedSearchService',function($q, $modal, SavedSearchGroup, vesselRestService, movementRestService, userService, SearchField) {
 
     var checkAccessToFeature = function(moduleName, feature) {
         return userService.isAllowed(feature, moduleName, true);
@@ -33,7 +33,7 @@ angular.module('unionvmsWeb').factory('savedSearchService',function($q, $modal, 
             if (vesselGroups[i].id === id) {
                 return vesselGroups[i];
             }
-        }        
+        }
     }
 
     //Load list of VesselGroups
@@ -118,19 +118,29 @@ angular.module('unionvmsWeb').factory('savedSearchService',function($q, $modal, 
 
             return defer.promise;
         },
-        removeVesselsFromGroup: function(savedSearchGroupGuid, vesselGuids) {
+        removeVesselsFromGroup: function(savedSearchGroupGuid, vesselGuids, success, error) {
             var group = getVesselGroup(savedSearchGroupGuid);
             if (angular.isUndefined(group)) {
-                return $q.reject('The selected group does not exist.');
+                return error($q.reject('The selected group does not exist.'));
             }
 
-            group = group.copy();
+            var searchFieldsToRemove = group.searchFields.filter(function(searchField) {
+                // Remove any search field with key = GUID and value in vesselGuids array.
+                return searchField.key === 'GUID' && vesselGuids.indexOf(searchField.value) >= 0;
+            });
+
+            for (var i = 0; i < searchFieldsToRemove.length; i++) {
+                var searchField = searchFieldsToRemove[i];
+                vesselRestService.deleteGroupField(searchField.fieldId);
+            }
+
+            /* Sync UI as well */
             group.searchFields = group.searchFields.filter(function(searchField) {
                 // Remove any search field with key = GUID and value in vesselGuids array.
                 return searchField.key !== 'GUID' || vesselGuids.indexOf(searchField.value) < 0;
             });
 
-            return savedSearchService.updateVesselGroup(group);
+            return success(group);
         },
         //Get all saved Movement searches
         getMovementSearches : function(){

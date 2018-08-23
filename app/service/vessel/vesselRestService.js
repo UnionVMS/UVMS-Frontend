@@ -47,6 +47,9 @@ angular.module('unionvmsWeb')
             fieldForGroup : function(){
                 return $resource('asset/rest/group/:id/field');
             },
+            field : function(){
+                return $resource('asset/rest/group/field/:id');
+            },
             getFieldsForGroup : function(){
                 return $resource('asset/rest/group/:id/fieldsForGroup');
             },
@@ -415,7 +418,10 @@ angular.module('unionvmsWeb')
                     var fields = [];
                     if(angular.isArray(response)){
                         for (var i = 0; i < response.length; i ++) {
-                            fields.push(SearchField.fromJson(response[i]));
+                            var searchField = SearchField.fromJson(response[i]);
+                            /* MONKEY PATCH */
+                            searchField.fieldId = response[i].id;
+                            fields.push(searchField);
                         }
                     }
                     deferred.resolve(fields);
@@ -472,9 +478,9 @@ angular.module('unionvmsWeb')
         return deferred.promise;
     };
 
-    var deleteGroupField = function(groupId, field) {
+    var deleteGroupField = function(fieldId) {
     	var deferred = $q.defer();
-        vesselRestFactory.fieldForGroup().delete({id : groupId}, field.toJson(), function(response, header, status) {
+        vesselRestFactory.field().delete({id : fieldId}, function(response, header, status) {
             if(status !== 200){
                 deferred.reject("Invalid response status");
                 return;

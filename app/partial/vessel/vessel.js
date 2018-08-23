@@ -328,7 +328,7 @@ angular.module('unionvmsWeb').controller('VesselCtrl', function($scope, $log, $s
             return;
         }
 
-        savedSearchService.removeVesselsFromGroup(groupId, selectedItems).then(function(group) {
+        savedSearchService.removeVesselsFromGroup(groupId, selectedItems, function(group) {
             $scope.$broadcast('refreshSavedSearch', group);
         }, function(error) {
             alertService.showErrorMessageWithTimeout(error);
