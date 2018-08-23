@@ -25,7 +25,7 @@ angular.module('unionvmsWeb')
         var searchFields = [];
         if($.isArray(dto.searchFields)){
             for (var i = 0; i < dto.searchFields.length; i ++) {
-                searchFields.push(SearchField.fromJsonAsset(dto.searchFields[i]));
+                searchFields.push(SearchField.fromJson(dto.searchFields[i]));
             }
         }
         searchUtilsService.replaceMinMaxValuesWithSpans(searchFields);

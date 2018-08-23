@@ -27,17 +27,6 @@ angular.module('unionvmsWeb')
             value : this.value,
         });
     };
-    
-    SearchField.fromJsonAsset = function(data){
-        return new SearchField(data.field, data.value);
-    };
-
-    SearchField.prototype.toJsonAsset = function(){
-        return JSON.stringify({
-            field : this.key,
-            value : this.value,
-        });
-    };
 
     SearchField.prototype.copy = function(){
         return new SearchField(this.key, this.value);

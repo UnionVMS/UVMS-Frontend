@@ -285,7 +285,7 @@ angular.module('unionvmsWeb').controller('VesselCtrl', function($scope, $log, $s
 
     function getVesselGuids(vessels) {
         return vessels.map(function(vessel) {
-            return vessel.vesselId.guid;
+            return vessel.id;
         });
     }
 
