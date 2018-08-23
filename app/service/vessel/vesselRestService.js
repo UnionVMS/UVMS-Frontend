@@ -80,7 +80,7 @@ angular.module('unionvmsWeb')
             }
         };
     })
-.factory('vesselRestService', function($q, $http, vesselRestFactory, VesselListPage, Vessel, SavedSearchGroup, SearchField, userService, $timeout){
+.factory('vesselRestService', function($q, $http, vesselRestFactory, VesselListPage, Vessel, VesselContact, SavedSearchGroup, SearchField, userService, $timeout){
 
     //Save pending requests
     var pendingRequests = [];
@@ -88,9 +88,8 @@ angular.module('unionvmsWeb')
     //Get vessel list
     var getVesselList = function(getListRequest){
         var deferred = $q.defer();
-
         var getVesselListRequest = vesselRestFactory.getVesselList().list(
-        		{'page' : getListRequest.page, 'size' : getListRequest.listSize}, getListRequest.DTOForVessel(),
+        		{'page' : getListRequest.page, 'size' : getListRequest.listSize, 'dynamic' : getListRequest.isDynamic}, getListRequest.DTOForVessel(),
             function(response, header, status){
                 if(status !== 200){
                     deferred.reject("Invalid response status");
@@ -458,7 +457,7 @@ angular.module('unionvmsWeb')
     
     var createGroupField = function(groupId, field) {
     	var deferred = $q.defer();
-        vesselRestFactory.fieldsForGroup().save({id : groupId}, field.toJson(), function(response, header, status) {
+        vesselRestFactory.fieldsForGroup().save({id : groupId}, field.toJsonAsset(), function(response, header, status) {
             if(status !== 200){
                 deferred.reject("Invalid response status");
                 return;
@@ -522,7 +521,13 @@ angular.module('unionvmsWeb')
                     deferred.reject("Invalid response status");
                     return;
                 }
-                deferred.resolve(response);
+                var contacts = [];
+                if(angular.isArray(response)){
+                    for (var i = 0; i < response.length; i ++) {
+                    	contacts.push(VesselContact.fromJson(response[i]));
+                    }
+                }
+                deferred.resolve(contacts);
         	},
         	function(err){
         		deferred.reject(err);
@@ -533,13 +538,13 @@ angular.module('unionvmsWeb')
     
     var createContactForAsset = function(vesselId, contact) {
     	var deferred = $q.defer();
-        vesselRestFactory.contactsForAsset().save({'id' : vesselId}, contact,
+        vesselRestFactory.contactsForAsset().save({'id' : vesselId}, contact.toJson(),
             function(response, header, status) {
                 if(status !== 200){
                     deferred.reject("Invalid response status");
                     return;
                 }
-                deferred.resolve(response);
+                deferred.resolve(VesselContact.fromJson(response));
         	},
         	function(err){
         		deferred.reject(err);
@@ -550,13 +555,13 @@ angular.module('unionvmsWeb')
 
     var updateContact = function(contact) {
     	var deferred = $q.defer();
-        vesselRestFactory.updateContact().update(contact,
+        vesselRestFactory.updateContact().update(contact.toJson(),
             function(response, header, status) {
                 if(status !== 200){
                     deferred.reject("Invalid response status");
                     return;
                 }
-                deferred.resolve(response);
+                deferred.resolve(VesselContact.fromJson(response));
         	},
         	function(err){
         		deferred.reject(err);
@@ -573,7 +578,7 @@ angular.module('unionvmsWeb')
                     deferred.reject("Invalid response status");
                     return;
                 }
-                deferred.resolve(response);
+                deferred.resolve(VesselContact.fromJson(response));
         	},
         	function(err){
         		deferred.reject(err);

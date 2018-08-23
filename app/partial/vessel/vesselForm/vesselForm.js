@@ -9,7 +9,7 @@ the hope that it will be useful, but WITHOUT ANY WARRANTY; without even the impl
 FITNESS FOR A PARTICULAR PURPOSE.  See the GNU General Public License for more details. You should have received a
 copy of the GNU General Public License along with the IFDM Suite. If not, see <http://www.gnu.org/licenses/>.
  */
-angular.module('unionvmsWeb').controller('VesselFormCtrl',function($scope, $log, $modal, $filter, Vessel, vesselRestService, alertService, locale, mobileTerminalRestService, confirmationModal, GetListRequest, userService, configurationService, assetCsvService, MobileTerminalHistoryModal, MobileTerminal, $q) {
+angular.module('unionvmsWeb').controller('VesselFormCtrl',function($scope, $log, $modal, $filter, Vessel, VesselContact, vesselRestService, alertService, locale, mobileTerminalRestService, confirmationModal, GetListRequest, userService, configurationService, assetCsvService, MobileTerminalHistoryModal, MobileTerminal, $q) {
 
     var checkAccessToFeature = function(feature) {
         return userService.isAllowed(feature, 'Union-VMS', true);
@@ -208,6 +208,9 @@ angular.module('unionvmsWeb').controller('VesselFormCtrl',function($scope, $log,
     function getVesselContacts() {
     	vesselRestService.getContactsForAsset($scope.getVesselObj().id).then(function(contacts) {
     		$scope.vesselContacts = contacts;
+    		if (contacts.length == 0) {
+    			$scope.vesselContacts.push(new VesselContact());
+    		}
     	});
     };
     
@@ -332,10 +335,10 @@ angular.module('unionvmsWeb').controller('VesselFormCtrl',function($scope, $log,
 
     //Add notes to Vessel object
     $scope.addNotes = function(){
-        if ($scope.vesselNotesObj.date && $scope.vesselNotesObj.activity) {
+        if ($scope.vesselNotesObj.date && $scope.vesselNotesObj.activityCode) {
         	var newNote = {
         		date: $scope.vesselNotesObj.date.slice(0,19).replace(' ','T'),
-                activityCode: $scope.vesselNotesObj.activity,
+                activityCode: $scope.vesselNotesObj.activityCode,
                 user: $scope.vesselNotesObj.user,
                 readyDate: $scope.vesselNotesObj.readyDate,
                 licenseHolder: $scope.vesselNotesObj.licenseHolder,
@@ -491,11 +494,7 @@ angular.module('unionvmsWeb').controller('VesselFormCtrl',function($scope, $log,
 
     // Add new row with contact item
     $scope.addContactItem = function(vesselContact) {
-        if (vesselContact.length === 0) {
-            vesselContact.push({}, {});
-        } else {
-            vesselContact.push({});
-        }
+    	vesselContact.push(new VesselContact());
     };
 
     // Remove row with contact item

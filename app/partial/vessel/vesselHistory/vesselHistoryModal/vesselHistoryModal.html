@@ -17,7 +17,7 @@
             </div>
 
             <div class="col-md-6">
-                {{'vessel.flag_state' | i18n }}: <b>{{vesselHistory.countryCode | vesselHistoryReplaceEmptyValueWithDash}}</b>
+                {{'vessel.flag_state' | i18n }}: <b>{{vesselHistory.flagStateCode | vesselHistoryReplaceEmptyValueWithDash}}</b>
             </div>
             <div class="col-md-6">
                 {{'vessel.ircs' | i18n }}: <b>{{vesselHistory.ircs | vesselHistoryReplaceEmptyValueWithDash}}</b>
@@ -38,10 +38,10 @@
             </div>
 
             <div class="col-md-6">
-                {{'vessel.home_port' | i18n }}: <b>{{vesselHistory.homePort | vesselHistoryReplaceEmptyValueWithDash}}</b>
+                {{'vessel.home_port' | i18n }}: <b>{{vesselHistory.portOfRegistration | vesselHistoryReplaceEmptyValueWithDash}}</b>
             </div> 
             <div class="col-md-6">
-                {{'vessel.mmsi_no' | i18n }}: <b>{{vesselHistory.mmsiNo | vesselHistoryReplaceEmptyValueWithDash}}</b>
+                {{'vessel.mmsi_no' | i18n }}: <b>{{vesselHistory.mmsi | vesselHistoryReplaceEmptyValueWithDash}}</b>
             </div>
 
             <div class="col-md-6">
@@ -94,7 +94,7 @@
 
             <div class="col-md-6">
                 {{'vessel.gear_type' | i18n }}: 
-                <b>{{vesselHistory.gearType | vesselGearTypeTranslation | vesselHistoryReplaceEmptyValueWithDash}}</b>
+                <b>{{vesselHistory.gearFishingType | vesselGearTypeTranslation | vesselHistoryReplaceEmptyValueWithDash}}</b>
             </div>
             <div class="col-md-6">
                 {{'vessel.tonnage_gt' | i18n }}: 

@@ -76,7 +76,6 @@ angular.module('unionvmsWeb')
         searchService.resetSearchCriterias();
         searchService.setDynamic(true);
         searchService.setSearchCriteriasToAdvancedSearch();
-
         //Do the search
         $scope.searchfunc();
     };

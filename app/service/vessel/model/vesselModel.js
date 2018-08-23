@@ -10,7 +10,7 @@ FITNESS FOR A PARTICULAR PURPOSE.  See the GNU General Public License for more d
 copy of the GNU General Public License along with the IFDM Suite. If not, see <http://www.gnu.org/licenses/>.
  */
 angular.module('unionvmsWeb')
-.factory('Vessel', function(EventHistory, VesselContact, VesselNotes) {
+.factory('Vessel', function() {
 
     var SOURCE_INTERNAL = "INTERNAL";
 
@@ -19,55 +19,50 @@ angular.module('unionvmsWeb')
     	this.historyId = undefined;
         this.active = true;
         this.cfr = null;
-        this.contact = [];
-        this.externalMarking = undefined;
-        this.grossTonnage = null;
-        this.grossTonnageUnit = "LONDON";
-        this.homePort = undefined;
         this.imo = null;
         this.ircs = undefined;
+        this.mmsi = null;
+        this.gfcm = undefined;
+        this.iccat = undefined;
+        this.uvi = undefined;
+        this.externalMarking = undefined;
+        this.eventCode = undefined;
+        this.flagStateCode = undefined;
+        this.grossTonnage = null;
+        this.grossTonnageUnit = "LONDON";
+        this.portOfRegistration = undefined;
         this.lastMovement = undefined;
         this.lengthType = "LOA";
         this.lengthValue = null;
         this.licenseType = undefined;
-        this.mmsiNo = null;
         this.name = undefined;
-        this.notes = [];
         this.powerMain = null;
-//        this.producer = {
-//            id : undefined,
-//            code : null,
-//            name : undefined,
-//            address : undefined,
-//            zipcode : undefined,
-//            city : undefined,
-//            phone : undefined,
-//            mobile : undefined,
-//            fax : undefined
-//        };
+        this.gearFishingType = undefined;
         this.source = SOURCE_INTERNAL;
     }
 
     Vessel.fromJson = function(data){
         var vessel = new Vessel();
-        var i;
 
         vessel.id = data.id;
         vessel.historyId = data.historyId;
         vessel.source = data.source;
         vessel.active = data.active;
         vessel.name = data.name;
-        vessel.countryCode = data.flagStateCode;
-        vessel.cfr = data.cfr;
-        vessel.mmsiNo = data.mmsi;
-        vessel.imo = data.imo;
-        vessel.externalMarking = data.externalMarking;
-        vessel.homePort = data.portOfRegistration;
-
+        vessel.flagStateCode = data.flagStateCode;
         vessel.ircs = data.ircs;
+        vessel.cfr = data.cfr;
+        vessel.mmsi = data.mmsi;
+        vessel.imo = data.imo;
+        vessel.gfcm = data.gfcm;
+        vessel.iccat = data.iccat;
+        vessel.uvi = data.uvi;
+        vessel.externalMarking = data.externalMarking;
+        vessel.portOfRegistration = data.portOfRegistration;
+
         vessel.licenseType = data.licenseType;
 
-        vessel.gearType = data.gearType;
+        vessel.gearFishingType = data.gearFishingType;
         //Set length value and type
         if(angular.isDefined(data.lengthBetweenPerpendiculars) && data.lengthBetweenPerpendiculars != null){
             vessel.lengthValue = data.lengthBetweenPerpendiculars;
@@ -79,33 +74,6 @@ angular.module('unionvmsWeb')
         vessel.powerMain = data.powerOfMainEngine;
         vessel.grossTonnage = data.grossTonnage;
         vessel.grossTonnageUnit = data.grossTonnageUnit;
-
-//        if (data.notes) {
-//            for (i = 0; i < data.notes.length; i++) {
-//                vessel.notes.push(VesselNotes.fromDTO(data.notes[i]));
-//            }
-//        }
-//        if (data.contact) {
-//            for (i = 0; i < data.contact.length; i++) {
-//                vessel.contact.push(VesselContact.fromDTO(data.contact[i]));
-//            }
-//        }
-//
-//        if(data.producer){
-//            vessel.producer.id = data.producer.id;
-//            vessel.producer.code = data.producer.code;
-//            vessel.producer.name = data.producer.name;
-//            vessel.producer.address = data.producer.address;
-//            vessel.producer.zipcode = data.producer.zipcode;
-//            vessel.producer.city = data.producer.city;
-//            vessel.producer.phone = data.producer.phone;
-//            vessel.producer.mobile = data.producer.mobile;
-//            vessel.producer.fax = data.producer.fax;
-//        }
-
-//        if (data.eventHistory) {
-//            vessel.eventHistory = EventHistory.fromDTO(data.eventHistory);
-//        }
         vessel.eventCode = data.eventCode;
         vessel.updateTime = data.updateTime;
 
@@ -134,28 +102,25 @@ angular.module('unionvmsWeb')
             source : this.source,
             cfr : this.cfr,
             name : this.name,
-            flagStateCode : this.countryCode,
+            flagStateCode : this.flagStateCode,
             imo : this.imo,
             externalMarking : this.externalMarking,
             ircsIndicator : this.hasIrcs(),
             ircs : this.ircs,
             hasLicense : this.hasLicense(),
             licenseType : this.licenseType,
-            portOfRegistration : this.homePort,
+            portOfRegistration : this.portOfRegistration,
             lengthOverAll : lengthOverall,
             lengthBetweenPerpendiculars : lengthBetweenPerpendiculars,
             powerOfMainEngine : this.powerMain,
-            gearFishingType : this.gearType,
+            gearFishingType : this.gearFishingType,
             grossTonnage : this.grossTonnage,
             grossTonnageUnit : this.grossTonnageUnit,
-//            contact : this.contact,
-//            producer : this.producer,
-//            notes : this.notes
         };
 
-        if (this.mmsiNo) {
+        if (this.mmsi) {
             // Do not send empty string, or other falsy values in general.
-            dto.mmsi = this.mmsiNo;
+            dto.mmsi = this.mmsi;
         }
 
         return dto;
@@ -163,13 +128,10 @@ angular.module('unionvmsWeb')
 
     Vessel.prototype.copy = function() {
         var copy = new Vessel();
-        var i;
         copy.active = this.active;
         copy.cfr = this.cfr;
-        copy.countryCode = this.countryCode;
-//        if(this.eventHistory){
-//            copy.eventHistory = this.eventHistory.copy();
-//        }
+        copy.flagStateCode = this.flagStateCode;
+
         copy.eventCode = this.eventCode;
         copy.updateTime = this.updateTime;
         
@@ -178,43 +140,20 @@ angular.module('unionvmsWeb')
         copy.grossTonnageUnit = this.grossTonnageUnit;
         copy.ircs = this.ircs;
         copy.licenseType = this.licenseType;
-        copy.homePort = this.homePort;
+        copy.portOfRegistration = this.portOfRegistration;
         copy.imo = this.imo;
         copy.lengthValue = this.lengthValue;
         copy.lengthType = this.lengthType;
         //copy.lengthOverAll = this.lengthOverAll;
         //copy.lengthBetweenPerpendiculars = this.lengthBetweenPerpendiculars;
-        copy.mmsiNo = this.mmsiNo;
+        copy.mmsi = this.mmsi;
         copy.name = this.name;
         copy.powerMain = this.powerMain;
         copy.source = this.source;
         copy.id = this.id;
         copy.historyId = this.historyId;
-//        if(this.contact){
-//            for (i = 0; i < this.contact.length; i++) {
-//                copy.contact.push(this.contact[i].copy());
-//            }
-//        }
-//        if(this.producer){
-//            copy.producer = {
-//                id : this.producer.id,
-//                code : this.producer.code,
-//                name : this.producer.name,
-//                address : this.producer.address,
-//                zipcode : this.producer.zipcode,
-//                city : this.producer.city,
-//                phone : this.producer.phone,
-//                mobile : this.producer.mobile,
-//                fax : this.producer.fax
-//            };
-//        }
-        copy.gearType = this.gearType;
+        copy.gearFishingType = this.gearFishingType;
 
-//        if(this.notes){
-//            for (i = 0; i < this.notes.length; i++) {
-//                copy.notes.push(this.notes[i].copy());
-//            }
-//        }
         return copy;
     };
 

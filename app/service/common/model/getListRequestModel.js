@@ -45,10 +45,12 @@ angular.module('unionvmsWeb')
 
             }
 //            updatedCriterias.push(new SearchField(searchFieldKey, searchFieldValue));
-            if (!(searchFieldKey in updatedCriterias)) {
-            	updatedCriterias[searchFieldKey] = []; 
+            if (searchFieldValue) {
+            	if (!(searchFieldKey in updatedCriterias)) {
+            		updatedCriterias[searchFieldKey] = []; 
+            	}
+            	updatedCriterias[searchFieldKey].push(searchFieldValue);
             }
-            updatedCriterias[searchFieldKey].push(searchFieldValue);
         });
 
 //        return {
@@ -58,7 +60,7 @@ angular.module('unionvmsWeb')
         return {
         	id : updatedCriterias['GUID'],
         	historyId : updatedCriterias['HIST_GUID'],
-        	cfr : updatedCriterias['CRF'],
+        	cfr : updatedCriterias['CFR'],
         	ircs : updatedCriterias['IRCS'],
         	mmsi : updatedCriterias['MMSI'],
         	name : updatedCriterias['NAME'],

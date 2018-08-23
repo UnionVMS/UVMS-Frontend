@@ -59,7 +59,7 @@ angular.module('unionvmsWeb')
 
         // Check if notes has been modified and set form dirty 
         $scope.$watch('vesselNote', function(newValue, oldValue){
-            if ($scope.vesselNote.date && $scope.vesselNote.activity) {
+            if ($scope.vesselNote.date && $scope.vesselNote.activityCode) {
                 $scope.dirtyStatus(true);
             }
         }, true);

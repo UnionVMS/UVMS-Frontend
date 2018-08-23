@@ -43,7 +43,7 @@ angular.module('unionvmsWeb')
         
         // Check if contacts has been modified and set form dirty 
         $scope.$watch('vesselContacts', function(newValue, oldValue){
-        	if (oldValue.length > 0) {
+        	if (oldValue && oldValue.length > 0) {
                 $scope.dirtyStatus(true);
         	}
         }, true);

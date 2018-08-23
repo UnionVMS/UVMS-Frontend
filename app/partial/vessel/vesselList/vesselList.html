@@ -1,4 +1,4 @@
-<!--
+﻿<!--
 ﻿Developed with the contribution of the European Commission - Directorate General for Maritime Affairs and Fisheries
 © European Union, 2015-2016.
 
@@ -17,7 +17,7 @@ copy of the GNU General Public License along with the IFDM Suite. If not, see <h
                     <th class="checkboxContainer">
                         <input type="checkbox" ng-checked="isAllChecked()" ng-click="checkAll()" ng-disabled="!currentSearchResults.items.length" id="asset-checkbox-select-all"/>
                     </th>
-                    <th class="st-sort" st-sort="countryCode" st-skip-natural="true" id="asset-sort-countryCode">
+                    <th class="st-sort" st-sort="flagStateCode" st-skip-natural="true" id="asset-sort-countryCode">
                        {{'vessel.table_header_flag_state' | i18n}}
                     </th>
                     <th class="st-sort" st-sort="externalMarking" st-skip-natural="true" id="asset-sort-externalMarking">
@@ -47,7 +47,7 @@ copy of the GNU General Public License along with the IFDM Suite. If not, see <h
             <tbody>
                 <tr ng-repeat="item in currentSearchResultsByPage" ng-class="{archived: !item.active}">
                     <td class="checkboxContainer"><input type="checkbox" ng-checked="isChecked(item)" ng-click="checkItem(item)" id="asset-checkbox-listitem"/></td>
-                    <td ng-attr-title="{{item.countryCode}}">{{item.countryCode}}</td>
+                    <td ng-attr-title="{{item.flagStateCode}}">{{item.flagStateCode}}</td>
                     <td ng-attr-title="{{item.externalMarking}}">{{item.externalMarking}}</td>
                     <td ng-attr-title="{{item.name}}">{{item.name}}</td>
                     <td ng-attr-title="{{item.ircs}}">{{item.ircs}}</td>

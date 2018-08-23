@@ -15,7 +15,7 @@ angular.module('unionvmsWeb')
         function VesselNotes() {
             this.id = undefined;
             this.date = undefined;
-            this.activity = undefined;
+            this.activityCode = undefined;
             this.user = undefined;
             this.readyDate = undefined;
             this.licenseHolder = undefined;
@@ -26,11 +26,11 @@ angular.module('unionvmsWeb')
             this.source = undefined;
         }
 
-        VesselNotes.fromDTO = function(data){
+        VesselNotes.fromJson = function(data){
             var notes = new VesselNotes();
             notes.id = data.id;
             notes.date = data.date;
-            notes.activity = data.activity;
+            notes.activityCode = data.activityCode;
             notes.user = data.user;
             notes.readyDate = data.readyDate;
             notes.licenseHolder = data.licenseHolder;
@@ -41,12 +41,28 @@ angular.module('unionvmsWeb')
             notes.source = data.source;
             return notes;
         };
+        
+        VesselNotes.prototype.toJson = function() {
+        	return JSON.stringify({
+        		id : this.id,
+                date : this.date,
+                activityCode : this.activityCode,
+                user : this.user,
+                readyDate : this.readyDate,
+                licenseHolder : this.licenseHolder,
+                contact : this.contact,
+                sheetNumber : this.sheetNumber,
+                notes : this.notes,
+                document : this.document,
+                source : this.source
+        	});
+        }
 
         VesselNotes.prototype.copy = function() {
             var copy = new VesselNotes();
             copy.id = this.id;
             copy.date = this.date;
-            copy.activity = this.activity;
+            copy.activityCode = this.activityCode;
             copy.user = this.user;
             copy.readyDate = this.readyDate;
             copy.licenseHolder = this.licenseHolder;

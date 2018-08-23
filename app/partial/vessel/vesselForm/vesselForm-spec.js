@@ -329,10 +329,10 @@ describe('VesselFormCtrl', function() {
         expect(scope.vesselForm.$pristine).toBeTruthy();
     }));
 
-    it('viewHistoryDetails show open modal with history information', inject(function($rootScope, EventHistory, $modal) {
+    it('viewHistoryDetails show open modal with history information', inject(function($rootScope, Vessel, $modal) {
         var modalSpy = spyOn($modal, "open");
 
-        var historyItem = new EventHistory();
+        var historyItem = new Vessel();
         //View history
         scope.viewHistoryDetails(historyItem);
 

@@ -15,7 +15,7 @@ describe('VesselContactModel', function() {
 
     var contactData = {
         "name": "Kaninen",
-        "number": "0701222222",
+        "phoneNumber": "0701222222",
         "email": "kanin@skogen",
         "owner": false,
         "source": "INTERNAL"
@@ -25,27 +25,27 @@ describe('VesselContactModel', function() {
         var contact = new VesselContact();
 
         expect(contact.name).toBeUndefined();
-        expect(contact.number).toBeUndefined();
+        expect(contact.phoneNumber).toBeUndefined();
         expect(contact.email).toBeUndefined();
         expect(contact.owner).toBeUndefined();
         expect(contact.source).toBeUndefined();
     }));
 
     it("fromDTO should create correct object", inject(function(VesselContact) {
-        var contact = VesselContact.fromDTO(contactData);
+        var contact = VesselContact.fromJson(contactData);
         expect(contact.name).toEqual(contactData.name);
-        expect(contact.number).toEqual(contactData.number);
+        expect(contact.phoneNumber).toEqual(contactData.phoneNumber);
         expect(contact.email).toEqual(contactData.email);
         expect(contact.owner).toEqual(contactData.owner);
         expect(contact.source).toEqual(contactData.source);
     }));
 
     it("copy should create an identical object", inject(function(VesselContact) {
-        var origContact = VesselContact.fromDTO(contactData);
+        var origContact = VesselContact.fromJson(contactData);
         var contactCopy = origContact.copy();
 
         expect(contactCopy.name).toEqual(origContact.name);
-        expect(contactCopy.number).toEqual(origContact.number);
+        expect(contactCopy.phoneNumber).toEqual(origContact.phoneNumber);
         expect(contactCopy.email).toEqual(origContact.email);
         expect(contactCopy.owner).toEqual(origContact.owner);
         expect(contactCopy.source).toEqual(origContact.source);
