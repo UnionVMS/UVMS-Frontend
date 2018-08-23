@@ -90,7 +90,7 @@ angular.module('unionvmsWeb')
         var deferred = $q.defer();
 
         var getVesselListRequest = vesselRestFactory.getVesselList().list(
-        		{'page' : getListRequest.page, 'size' : getListRequest.listSize, 'dynamic' : getListRequest.isDynamic}}, getListRequest.DTOForVessel(),
+        		{'page' : getListRequest.page, 'size' : getListRequest.listSize, 'dynamic' : getListRequest.isDynamic}, getListRequest.DTOForVessel(),
             function(response, header, status){
                 if(status !== 200){
                     deferred.reject("Invalid response status");
