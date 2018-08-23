@@ -45,7 +45,7 @@ angular.module('unionvmsWeb')
         VesselNotes.prototype.toJson = function() {
         	return JSON.stringify({
         		id : this.id,
-                date : this.date,
+                date : this.date.slice(0,19).replace(' ','T'),
                 activityCode : this.activityCode,
                 user : this.user,
                 readyDate : this.readyDate,
