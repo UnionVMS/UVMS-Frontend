@@ -9,14 +9,14 @@ the hope that it will be useful, but WITHOUT ANY WARRANTY; without even the impl
 FITNESS FOR A PARTICULAR PURPOSE.  See the GNU General Public License for more details. You should have received a
 copy of the GNU General Public License along with the IFDM Suite. If not, see <http://www.gnu.org/licenses/>.
  */
-angular.module('unionvmsWeb').controller('VesselFormCtrl',function($scope, $log, $modal, $filter, Vessel, VesselContact, vesselRestService, alertService, locale, mobileTerminalRestService, confirmationModal, GetListRequest, userService, configurationService, assetCsvService, MobileTerminalHistoryModal, MobileTerminal, $q) {
+angular.module('unionvmsWeb').controller('VesselFormCtrl',function($scope, $log, $modal, $filter, Vessel, VesselContact, VesselNotes, vesselRestService, alertService, locale, mobileTerminalRestService, confirmationModal, GetListRequest, userService, configurationService, assetCsvService, MobileTerminalHistoryModal, MobileTerminal, $q) {
 
     var checkAccessToFeature = function(feature) {
         return userService.isAllowed(feature, 'Union-VMS', true);
     };
 
     $scope.existingValues = {};
-    $scope.vesselNotesObj = {};
+    $scope.vesselNotesObj = new VesselNotes();
 
     //Keep track of visibility statuses
     $scope.isThisVisible = {
@@ -28,7 +28,7 @@ angular.module('unionvmsWeb').controller('VesselFormCtrl',function($scope, $log,
         $scope.vesselObj = $scope.getVesselObj();
         $scope.vesselForm.$setPristine();
         $scope.submitAttempted = false;
-        $scope.vesselNotesObj = {};
+        $scope.vesselNotesObj = new VesselNotes();
         $scope.vesselNotes = [];
         $scope.vesselContacts = []; 
         $scope.vesselObjOriginal = angular.copy($scope.vesselObj);
@@ -100,7 +100,7 @@ angular.module('unionvmsWeb').controller('VesselFormCtrl',function($scope, $log,
     $scope.setDefaultCountryCode = function(){
         $scope.countryCode  = configurationService.getValue('VESSEL_PARAMETERS', 'ASSET.DEFAULT.FLAGSTATE');
         if(angular.isDefined($scope.countryCode)){
-            $scope.vesselObj.countryCode = $scope.countryCode;
+            $scope.vesselObj.flagStateCode = $scope.countryCode;
         }
     };
 
@@ -336,19 +336,10 @@ angular.module('unionvmsWeb').controller('VesselFormCtrl',function($scope, $log,
     //Add notes to Vessel object
     $scope.addNotes = function(){
         if ($scope.vesselNotesObj.date && $scope.vesselNotesObj.activityCode) {
-        	var newNote = {
-        		date: $scope.vesselNotesObj.date.slice(0,19).replace(' ','T'),
-                activityCode: $scope.vesselNotesObj.activityCode,
-                user: $scope.vesselNotesObj.user,
-                readyDate: $scope.vesselNotesObj.readyDate,
-                licenseHolder: $scope.vesselNotesObj.licenseHolder,
-                contact: $scope.vesselNotesObj.contact,
-                sheetNumber: $scope.vesselNotesObj.sheetNumber,
-                notes: $scope.vesselNotesObj.notes,
-                source: 'INTERNAL'
-            }
-        	$scope.vesselNotes.push(newNote);
-        	vesselRestService.createNoteForAsset($scope.vesselObj.id, newNote);
+        	$scope.vesselNotesObj.source = 'INTERNAL';
+        	vesselRestService.createNoteForAsset($scope.vesselObj.id, $scope.vesselNotesObj).then(function(createdNote) {
+        		$scope.vesselNotes.push(createdNote);
+        	});
         } else {
             return false;
         }
@@ -356,11 +347,7 @@ angular.module('unionvmsWeb').controller('VesselFormCtrl',function($scope, $log,
 
     //Clear notes form to be able to submit new ones
     $scope.clearNotes = function(){
-        if (angular.isDefined($scope.vesselNotesObj.date)) {
-            for (var key in $scope.vesselNotesObj) {
-                $scope.vesselNotesObj[key] = "";
-            }
-        }
+    	$scope.vesselNotesObj = new VesselNotes();
     };
 
     //Update the Vessel

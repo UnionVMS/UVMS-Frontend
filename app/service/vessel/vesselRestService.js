@@ -83,7 +83,7 @@ angular.module('unionvmsWeb')
             }
         };
     })
-.factory('vesselRestService', function($q, $http, vesselRestFactory, VesselListPage, Vessel, VesselContact, SavedSearchGroup, SearchField, userService, $timeout){
+.factory('vesselRestService', function($q, $http, vesselRestFactory, VesselListPage, Vessel, VesselContact, VesselNotes, SavedSearchGroup, SearchField, userService, $timeout){
 
     //Save pending requests
     var pendingRequests = [];
@@ -634,7 +634,13 @@ angular.module('unionvmsWeb')
                     deferred.reject("Invalid response status");
                     return;
                 }
-                deferred.resolve(response);
+                var notes = [];
+                if(angular.isArray(response)){
+                	for (var i = 0; i < response.length; i ++) {
+                		notes.push(VesselNotes.fromJson(response[i]));
+                	}
+                }
+                deferred.resolve(notes);
         	},
         	function(err){
         		deferred.reject(err);
@@ -645,7 +651,7 @@ angular.module('unionvmsWeb')
 
     var createNoteForAsset = function(vesselId, note) {
     	var deferred = $q.defer();
-        vesselRestFactory.notesForAsset().save({'id' : vesselId}, note,
+        vesselRestFactory.notesForAsset().save({'id' : vesselId}, note.toJson(),
             function(response, header, status) {
                 if(status !== 200){
                     deferred.reject("Invalid response status");
