@@ -368,11 +368,7 @@ angular.module('unionvmsWeb')
         return getGroupsByUser(userName).then(function(groups) {
         	for (var i = 0; i < groups.length; i ++) {
         		var group = groups[i];
-        		getFieldsByGroup(group.id).then(function(fields) {
-        			group.searchFields = fields;
-        		}, function(error) {
-        			return $q.reject(error);
-        		});
+                initFieldsByGroup(group);
         	}
         	return groups;
         }, function(error) {
@@ -405,13 +401,12 @@ angular.module('unionvmsWeb')
             return deferred.promise;
     };
 
-    var getFieldsByGroup = function(groupId) {
-    	var deferred = $q.defer();
-    	vesselRestFactory.getFieldsForGroup().query({id : groupId},
+    var initFieldsByGroup = function(group) {
+    	vesselRestFactory.getFieldsForGroup().query({id : group.id},
                 function(response, header, status) {
 
                     if(status !== 200){
-                        deferred.reject("Invalid response status");
+                        console.error("initFieldsByGroup: Invalid response status");
                         return;
                     }
 
@@ -424,14 +419,14 @@ angular.module('unionvmsWeb')
                             fields.push(searchField);
                         }
                     }
-                    deferred.resolve(fields);
+                    group.searchFields = fields;
                 },
                 function(err){
-                    deferred.reject(err);
+                    console.error("initFieldsByGroup failed");
+                    console.error(error);
                 }
             );
-            return deferred.promise;
-    }
+    };
 
     var createNewVesselGroup = function(savedSearchGroup){
         return createVesselGroup(savedSearchGroup).then(function(savedGroup) {
