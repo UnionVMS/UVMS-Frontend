@@ -19,23 +19,23 @@ describe('SavedSearchGroup', function() {
 		name: "Test swe",
 		searchFields: [
 			{
-				field: "FLAG_STATE",
+				key: "FLAG_STATE",
 				value: "SWE"
 			},
 			{
-				field: "NAME",
+				key: "NAME",
 				value: "TEST"
 			},
             {
-                field: "MIN_LENGTH",
+                key: "MIN_LENGTH",
                 value: "4"
             },
             {
-                field: "MAX_LENGTH",
+                key: "MAX_LENGTH",
                 value: "12"
             },
             {
-                field: "MIN_POWER",
+                key: "MIN_POWER",
                 value: "5"
             },
 		],
