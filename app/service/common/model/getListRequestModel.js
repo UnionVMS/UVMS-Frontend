@@ -31,7 +31,7 @@ angular.module('unionvmsWeb')
     GetListRequest.prototype.DTOForVessel = function(){
         //Add * to all text searches for vessel
         var wildcardSearchKeys = ['NAME', 'IRCS', 'CFR', 'EXTERNAL_MARKING', 'HOMEPORT', 'IMO', 'PRODUCER_NAME', 'PRODUCER_CODE', 'CONTACT_NAME', 'CONTACT_NUMBER', 'CONTACT_EMAIL', 'MMSI'];
-        var updatedCriterias = [],
+        var updatedCriterias = {},
             searchFieldKey, searchFieldValue;
 
         $.each(this.criterias, function(index, searchField){
@@ -44,12 +44,33 @@ angular.module('unionvmsWeb')
                 }
 
             }
-            updatedCriterias.push(new SearchField(searchFieldKey, searchFieldValue));
+//            updatedCriterias.push(new SearchField(searchFieldKey, searchFieldValue));
+            if (searchFieldValue) {
+            	if (!(searchFieldKey in updatedCriterias)) {
+            		updatedCriterias[searchFieldKey] = []; 
+            	}
+            	updatedCriterias[searchFieldKey].push(searchFieldValue);
+            }
         });
 
+//        return {
+//            pagination : {page: this.page, listSize: this.listSize},
+//            assetSearchCriteria : { isDynamic : this.isDynamic, criterias : updatedCriterias }
+//        };
         return {
-            pagination : {page: this.page, listSize: this.listSize},
-            assetSearchCriteria : { isDynamic : this.isDynamic, criterias : updatedCriterias }
+        	id : updatedCriterias['GUID'],
+        	historyId : updatedCriterias['HIST_GUID'],
+        	cfr : updatedCriterias['CFR'],
+        	ircs : updatedCriterias['IRCS'],
+        	mmsi : updatedCriterias['MMSI'],
+        	name : updatedCriterias['NAME'],
+        	flagState : updatedCriterias['FLAG_STATE'],
+        	externalMarking : updatedCriterias['EXTERNAL_MARKING'],
+        	portOfRegistration : updatedCriterias['HOMEPORT']
+//        	minLength : updatedCriterias['MIN_LENGTH'][0],
+//        	maxLength : updatedCriterias['MAX_LENGTH'][0],
+//        	minPower : updatedCriterias['MIN_POWER'][0],
+//        	maxPower : updatedCriterias['MAX_POWER'][0]
         };
     };
 

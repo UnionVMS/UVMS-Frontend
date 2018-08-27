@@ -9,14 +9,14 @@ the hope that it will be useful, but WITHOUT ANY WARRANTY; without even the impl
 FITNESS FOR A PARTICULAR PURPOSE.  See the GNU General Public License for more details. You should have received a
 copy of the GNU General Public License along with the IFDM Suite. If not, see <http://www.gnu.org/licenses/>.
  */
-angular.module('unionvmsWeb').controller('VesselFormCtrl',function($scope, $log, $modal, $filter, Vessel, vesselRestService, alertService, locale, mobileTerminalRestService, confirmationModal, GetListRequest, userService, configurationService, assetCsvService, MobileTerminalHistoryModal, MobileTerminal, $q) {
+angular.module('unionvmsWeb').controller('VesselFormCtrl',function($scope, $log, $modal, $filter, Vessel, VesselContact, VesselNotes, vesselRestService, alertService, locale, mobileTerminalRestService, confirmationModal, GetListRequest, userService, configurationService, assetCsvService, MobileTerminalHistoryModal, MobileTerminal, $q) {
 
     var checkAccessToFeature = function(feature) {
         return userService.isAllowed(feature, 'Union-VMS', true);
     };
 
     $scope.existingValues = {};
-    $scope.vesselNotesObj = {};
+    $scope.vesselNotesObj = new VesselNotes();
 
     //Keep track of visibility statuses
     $scope.isThisVisible = {
@@ -28,7 +28,9 @@ angular.module('unionvmsWeb').controller('VesselFormCtrl',function($scope, $log,
         $scope.vesselObj = $scope.getVesselObj();
         $scope.vesselForm.$setPristine();
         $scope.submitAttempted = false;
-        $scope.vesselNotesObj = {};
+        $scope.vesselNotesObj = new VesselNotes();
+        $scope.vesselNotes = [];
+        $scope.vesselContacts = []; 
         $scope.vesselObjOriginal = angular.copy($scope.vesselObj);
 
         if (typeof newVal !== 'undefined') {
@@ -38,6 +40,8 @@ angular.module('unionvmsWeb').controller('VesselFormCtrl',function($scope, $log,
             }else{
                 getVesselHistory();
                 getMobileTerminals();
+                getVesselContacts();
+                getVesselNotes();
             }
         }
     });
@@ -66,6 +70,14 @@ angular.module('unionvmsWeb').controller('VesselFormCtrl',function($scope, $log,
             $scope.isVesselNotesDirtyStatus = status;
         }
     };
+    
+    //Check if vessel contacts has been modified
+    $scope.setVesselContactsDirtyStatus = function(status) {
+        if (angular.isDefined(status)) {
+        	console.log("Setting contacts dirty status: " + status);
+            $scope.isVesselContactsDirtyStatus = status;
+        }
+    };
 
     //Check if mobile terminal obj has been modified
     $scope.setMobileTerminalDetailsDirtyStatus = function(status) {
@@ -82,12 +94,13 @@ angular.module('unionvmsWeb').controller('VesselFormCtrl',function($scope, $log,
     $scope.isVesselDetailsDirty = false;
     $scope.isMobileTerminalDetailsDirtyStatus = false;
     $scope.isVesselNotesDirtyStatus = false;
+    $scope.isVesselContactsDirtyStatus = false;
 
     //Set default country code
     $scope.setDefaultCountryCode = function(){
-        $scope.countryCode  = configurationService.getValue('VESSEL_PARAMETERS', 'asset.default.flagstate');
+        $scope.countryCode  = configurationService.getValue('VESSEL_PARAMETERS', 'ASSET.DEFAULT.FLAGSTATE');
         if(angular.isDefined($scope.countryCode)){
-            $scope.vesselObj.countryCode = $scope.countryCode;
+            $scope.vesselObj.flagStateCode = $scope.countryCode;
         }
     };
 
@@ -119,7 +132,7 @@ angular.module('unionvmsWeb').controller('VesselFormCtrl',function($scope, $log,
     var getMobileTerminals = function() {
         $scope.mobileTerminalsError = undefined;
         var request = new GetListRequest(1, 1000, false, []);
-        request.addSearchCriteria("CONNECT_ID", $scope.vesselObj.vesselId.guid);
+        request.addSearchCriteria("CONNECT_ID", $scope.vesselObj.id);
 
         $scope.waitingForMobileTerminalsResponse = true;
         mobileTerminalRestService.getMobileTerminalList(request).then(function(page) {
@@ -191,6 +204,22 @@ angular.module('unionvmsWeb').controller('VesselFormCtrl',function($scope, $log,
             return true;
         }
     };
+    
+    function getVesselContacts() {
+    	vesselRestService.getContactsForAsset($scope.getVesselObj().id).then(function(contacts) {
+    		$scope.vesselContacts = contacts;
+    		if (contacts.length == 0) {
+    			$scope.vesselContacts.push(new VesselContact());
+    		}
+    	});
+    };
+    
+    function getVesselNotes() {
+    	vesselRestService.getNotesForAsset($scope.getVesselObj().id).then(function(notes) {
+    		$scope.vesselNotes = notes;
+    	});
+    }
+    
 
     function performArchiveVessel(comment) {
         // When you have just created a vessel the getOriginalVessel will return undefined.
@@ -199,7 +228,7 @@ angular.module('unionvmsWeb').controller('VesselFormCtrl',function($scope, $log,
 
         function getMobileTerminals(archivedVessel) {
             // Fetch all mobile terminals connected to the archived vessel.
-            return mobileTerminalRestService.getAllMobileTerminalsWithConnectId(archivedVessel.vesselId.guid);
+            return mobileTerminalRestService.getAllMobileTerminalsWithConnectId(archivedVessel.id);
         }
 
         function inactivateAndUnassignMobileTerminals(mobileTerminals) {
@@ -306,18 +335,11 @@ angular.module('unionvmsWeb').controller('VesselFormCtrl',function($scope, $log,
 
     //Add notes to Vessel object
     $scope.addNotes = function(){
-        if ($scope.vesselNotesObj.date && $scope.vesselNotesObj.activity) {
-            $scope.vesselObj.notes.push({
-                date: $scope.vesselNotesObj.date,
-                activity: $scope.vesselNotesObj.activity,
-                user: $scope.vesselNotesObj.user,
-                readyDate: $scope.vesselNotesObj.readyDate,
-                licenseHolder: $scope.vesselNotesObj.licenseHolder,
-                contact: $scope.vesselNotesObj.contact,
-                sheetNumber: $scope.vesselNotesObj.sheetNumber,
-                notes: $scope.vesselNotesObj.notes,
-                source: 'INTERNAL'
-            });
+        if ($scope.vesselNotesObj.date && $scope.vesselNotesObj.activityCode) {
+        	$scope.vesselNotesObj.source = 'INTERNAL';
+        	vesselRestService.createNoteForAsset($scope.vesselObj.id, $scope.vesselNotesObj).then(function(createdNote) {
+        		$scope.vesselNotes.push(createdNote);
+        	});
         } else {
             return false;
         }
@@ -325,18 +347,14 @@ angular.module('unionvmsWeb').controller('VesselFormCtrl',function($scope, $log,
 
     //Clear notes form to be able to submit new ones
     $scope.clearNotes = function(){
-        if (angular.isDefined($scope.vesselNotesObj.date)) {
-            for (var key in $scope.vesselNotesObj) {
-                $scope.vesselNotesObj[key] = "";
-            }
-        }
+    	$scope.vesselNotesObj = new VesselNotes();
     };
 
     //Update the Vessel
     $scope.updateVessel = function(){
         $scope.submitAttempted = true;
 
-        if($scope.vesselForm.$valid && ($scope.isVesselDetailsDirty || $scope.isVesselNotesDirtyStatus)) {
+        if($scope.vesselForm.$valid && ($scope.isVesselDetailsDirty || $scope.isVesselNotesDirtyStatus || $scope.isVesselContactsDirtyStatus)) {
             //MobileTerminals remove them cuz they do not exist in backend yet.
             delete $scope.vesselObj.mobileTerminals;
             $scope.updateContactItems();
@@ -372,7 +390,7 @@ angular.module('unionvmsWeb').controller('VesselFormCtrl',function($scope, $log,
         $scope.isThisVisible.showCompleteVesselHistoryLink = false;
         $scope.waitingForHistoryResponse = true;
         $scope.vesselHistoryError = undefined;
-        vesselRestService.getVesselHistoryListByVesselId($scope.vesselObj.vesselId.value)
+        vesselRestService.getVesselHistoryListByVesselId($scope.vesselObj.id)
             .then(onCompleteVesselHistoryListSuccess, onVesselHistoryListError);
     };
 
@@ -381,7 +399,7 @@ angular.module('unionvmsWeb').controller('VesselFormCtrl',function($scope, $log,
     var getVesselHistory = function() {
         $scope.waitingForHistoryResponse = true;
         $scope.vesselHistoryError = undefined;
-        vesselRestService.getVesselHistoryListByVesselId($scope.vesselObj.vesselId.value, vesselHistorySize)
+        vesselRestService.getVesselHistoryListByVesselId($scope.vesselObj.id, vesselHistorySize)
             .then(onVesselHistoryListSuccess, onVesselHistoryListError);
     };
 
@@ -430,13 +448,13 @@ angular.module('unionvmsWeb').controller('VesselFormCtrl',function($scope, $log,
     // Display list of vessel notes
     $scope.vesselNotesSize = 10;
     $scope.showVesselNotesList = function() {
-        var vesselNotesSizeAll = $scope.vesselObj.notes.length;
+        var vesselNotesSizeAll = $scope.vesselNotes.length;
         $scope.vesselNotesSize += vesselNotesSizeAll;
     };
 
     //View notes details
-    $scope.viewVesselNotesDetails = function(vesselNotes) {
-        $scope.vesselNotes = vesselNotes;
+    $scope.viewVesselNotesDetails = function(vesselNote) {
+        $scope.vesselNote = vesselNote;
         openVesselNotesModal();
     };
 
@@ -447,8 +465,8 @@ angular.module('unionvmsWeb').controller('VesselFormCtrl',function($scope, $log,
           controller: 'vesselNotesModalCtrl',
           size: "small",
           resolve: {
-            vesselNotes: function() {
-                return $scope.vesselNotes;
+            vesselNote: function() {
+                return $scope.vesselNote;
             },
             vesselName: function() {
                 return $scope.vesselObj.name;
@@ -463,29 +481,34 @@ angular.module('unionvmsWeb').controller('VesselFormCtrl',function($scope, $log,
 
     // Add new row with contact item
     $scope.addContactItem = function(vesselContact) {
-        if (vesselContact.length === 0) {
-            vesselContact.push({}, {});
-        } else {
-            vesselContact.push({});
-        }
+    	vesselContact.push(new VesselContact());
     };
 
     // Remove row with contact item
-    $scope.removeContactItem = function(vesselContact, index){
-        vesselContact.splice(index, 1);
+    $scope.removeContactItem = function(index){
+    	var contact = $scope.vesselContacts[index];
+    	if (contact.id) {
+        	vesselRestService.deleteContact(contact.id);
+        }
+    	$scope.vesselContacts.splice(index, 1);
     };
 
     // Update submitted contacts with default values or remove empty contact item rows
     $scope.updateContactItems = function() {
-        $scope.vesselObj.contact.slice(0).forEach(function (vesselContact) {
-            if (vesselContact.name || vesselContact.email || vesselContact.number) {
+        $scope.vesselContacts.slice(0).forEach(function (vesselContact) {
+            if (vesselContact.name || vesselContact.email || vesselContact.phoneNumber) {
                 Object.assign(vesselContact, { source: 'INTERNAL' });
                 // ToDo: Fix this in BE?
                 if (!vesselContact.name){
                     Object.assign(vesselContact, { name: '' });
                 }
             } else {
-                $scope.vesselObj.contact.splice($scope.vesselObj.contact.indexOf(vesselContact), 1);
+                $scope.vesselContacts.splice($scope.vesselContacts.indexOf(vesselContact), 1);
+            }
+            if (!vesselContact.id) {
+            	vesselRestService.createContactForAsset($scope.vesselObj.id, vesselContact)
+            } else {
+            	vesselRestService.updateContact(vesselContact);
             }
         });
     };
@@ -520,7 +543,7 @@ angular.module('unionvmsWeb').controller('VesselFormCtrl',function($scope, $log,
             return true;
         },
         disableSave: function() {
-            if ((!$scope.isVesselDetailsDirty && !$scope.isMobileTerminalDetailsDirtyStatus && !$scope.isVesselNotesDirtyStatus) || $scope.vesselForm.$invalid) {
+            if ((!$scope.isVesselDetailsDirty && !$scope.isMobileTerminalDetailsDirtyStatus && !$scope.isVesselNotesDirtyStatus && !$scope.isVesselContactsDirtyStatus) || $scope.vesselForm.$invalid) {
                 return true;
             }
             return false;

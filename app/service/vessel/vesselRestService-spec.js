@@ -22,45 +22,30 @@ describe('vesselRestService', function() {
                         //Success if id is defined, 500 otherwize
                         if(angular.isDefined(getObject.id)){
                             callback({
-                                code : 200,
-                                data: {
-                                    name : "1"
-                                }
-                            });
+                            	name : "1"
+                            }, undefined, 200);
                         }else{
-                            callback({
-                                code : 500,
-                            });
+                            callback({}, undefined, 500);
                         }
                     },
                     save: function(vesselDTO, callback) {
                         //Success if name is defined, 500 otherwize
                         if(angular.isDefined(vesselDTO.name)){
                             callback({
-                                code : 200,
-                                data: {
-                                    name : vesselDTO.name
-                                }
-                            });
+                            	name : vesselDTO.name
+                            }, undefined, 200);
                         }else{
-                            callback({
-                                code : 500,
-                            });
+                            callback({}, undefined, 500);
                         }
                     },
                     update: function(vesselDTO, callback) {
                         //Success if name is defined, 500 otherwize
                         if(angular.isDefined(vesselDTO.name)){
                             callback({
-                                code : 200,
-                                data: {
                                     name : vesselDTO.name
-                                }
-                            });
+                            }, undefined, 200);
                         }else{
-                            callback({
-                                code : 500,
-                            });
+                            callback({}, undefined, 500);
                         }
                     },
                 }
@@ -71,60 +56,41 @@ describe('vesselRestService', function() {
                         //Success if id is defined, 500 otherwize
                         if(angular.isDefined(getObject.id)){
                             callback({
-                                code : 200,
-                                data: {
-                                    name : "1"
-                                }
-                            });
+                            	name : "1"
+                            }, undefined, 200);
                         }else{
-                            callback({
-                                code : 500,
-                            });
+                            callback({}, undefined, 500);
                         }
                     },
                     save: function(vesselGroupDTO, callback) {
                         //Success if name is defined, 500 otherwize
                         if(angular.isDefined(vesselGroupDTO.name)){
                             callback({
-                                code : 200,
-                                data: {
-                                    name : vesselGroupDTO.name
-                                }
-                            });
+                            	name : vesselGroupDTO.name
+                            }, undefined, 200);
                         }else{
                             callback({
-                                code : 500,
-                            });
+                            }, undefined, 500);
                         }
                     },
                     update: function(vesselGroupDTO, callback) {
                         //Success if name is defined, 500 otherwize
                         if(angular.isDefined(vesselGroupDTO.name)){
                             callback({
-                                code : 200,
-                                data: {
-                                    name : vesselGroupDTO.name
-                                }
-                            });
+                            	name : vesselGroupDTO.name
+                            }, undefined, 200);
                         }else{
-                            callback({
-                                code : 500,
-                            });
+                            callback({}, undefined, 500);
                         }
                     },
                     delete: function(getObject, callback) {
                         //Success if id is defined, 500 otherwize
                         if(angular.isDefined(getObject.id)){
                             callback({
-                                code : 200,
-                                data: {
-                                    guid : getObject.id
-                                }
-                            });
+                            	id : getObject.id
+                            }, undefined, 200);
                         }else{
-                            callback({
-                                code : 500,
-                            });
+                            callback({}, undefined, 500);
                         }
                     },
                 }
@@ -132,13 +98,11 @@ describe('vesselRestService', function() {
             //List of vessels
             getVesselList: function() {
                 return {
-                    list: function(getListRequest, callback) {
+                    list: function(params, getListRequest, callback) {
                         //Success if page = 1, otherwize return 500
-                        if(getListRequest.pagination.page === 1){
+                        if(params.page === 1){
                             callback({
-                                code : 200,
-                                data: {
-                                    asset: [
+                                    assetList: [
                                         {
                                             name: "1",
                                         },
@@ -148,13 +112,9 @@ describe('vesselRestService', function() {
                                     ],
                                     currentPage : 12,
                                     totalNumberOfPages : 23
-                                }
-                            });
-                        }
-                        else{
-                            callback({
-                                code : 500,
-                            });
+                            }, undefined, 200);
+                        }else{
+                            callback({}, undefined, 500);
                         }
                     },
                 }
@@ -162,29 +122,32 @@ describe('vesselRestService', function() {
             //List of vesselsGroups for user
             getVesselGroupsForUser: function() {
                 return {
-                    get: function(getObject, callback) {
+                    query: function(getObject, callback) {
                         //Success if user is TEST
                         if(getObject.user === 'TEST'){
-                            callback({
-                                code : 200,
-                                data: [
+                            callback(
+                                [
                                     {
                                         guid: "ABC",
                                     },
                                     {
                                         guid: "DEF",
                                     }
-                                ],
-                            });
-                        }
-                        else{
-                            callback({
-                                code : 500,
-                            });
+                                ]
+                            , undefined, 200);
+                        }else{
+                            callback({}, undefined, 500);
                         }
                     },
                 }
             },
+            getFieldsForGroup: function() {
+            	return {
+            		query: function(getObject, callback) {
+            			callback([],undefined,200);
+            		}
+            	}
+            }
         };
 
         module(function ($provide) {

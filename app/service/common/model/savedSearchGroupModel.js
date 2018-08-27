@@ -30,7 +30,7 @@ angular.module('unionvmsWeb')
         }
         searchUtilsService.replaceMinMaxValuesWithSpans(searchFields);
         var savedSearchGroup = new SavedSearchGroup(dto.name, dto.user, dto.dynamic, searchFields);
-        savedSearchGroup.id = dto.guid;
+        savedSearchGroup.id = dto.id;
         return savedSearchGroup;
     };
 
@@ -43,7 +43,7 @@ angular.module('unionvmsWeb')
         var customSearchFields = searchUtilsService.replaceSpansWithMinMaxValues(copyOfSearchFields);
 
         return {
-            guid : this.id,
+            id : this.id,
             name : this.name,
             user : this.user,
             dynamic : this.dynamic,

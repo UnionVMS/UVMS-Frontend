@@ -307,7 +307,7 @@ angular.module('unionvmsWeb').factory('searchService',function($q, $log, searchU
             }
 
             var deferred = $q.defer(),
-                getListRequestAllItems = new GetListRequest(pageNum, DEFAULT_ITEMS_PER_PAGE, false, getListRequest.criterias);
+                getListRequestAllItems = new GetListRequest(pageNum, DEFAULT_ITEMS_PER_PAGE, getListRequest.isDynamic, getListRequest.criterias);
 
             searchUtilsService.modifySpanAndTimeZones(getListRequest.criterias);
             searchUtilsService.replaceCommasWithPoint(getListRequest.criterias);

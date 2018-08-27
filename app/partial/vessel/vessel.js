@@ -255,7 +255,6 @@ angular.module('unionvmsWeb').controller('VesselCtrl', function($scope, $log, $s
     $scope.toggleCreateNewVessel = function(){
         $scope.createNewMode = true;
         var newVessel = new Vessel();
-        newVessel.contact.push(new VesselContact());
         toggleVesselForm(newVessel);
     };
 
@@ -286,7 +285,7 @@ angular.module('unionvmsWeb').controller('VesselCtrl', function($scope, $log, $s
 
     function getVesselGuids(vessels) {
         return vessels.map(function(vessel) {
-            return vessel.vesselId.guid;
+            return vessel.id;
         });
     }
 
@@ -329,7 +328,7 @@ angular.module('unionvmsWeb').controller('VesselCtrl', function($scope, $log, $s
             return;
         }
 
-        savedSearchService.removeVesselsFromGroup(groupId, selectedItems).then(function(group) {
+        savedSearchService.removeVesselsFromGroup(groupId, selectedItems, function(group) {
             $scope.$broadcast('refreshSavedSearch', group);
         }, function(error) {
             alertService.showErrorMessageWithTimeout(error);

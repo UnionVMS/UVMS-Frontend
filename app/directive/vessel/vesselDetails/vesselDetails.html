@@ -3,8 +3,8 @@
         <div class="row">
             <div class="col-md-1 form-group smallerpaddingright" ng-class="{'has-error': (submitAttempted || vesselForm.countryCode.$dirty) && vesselForm.countryCode.$invalid}">
                 <label>{{ 'vessel.vessel_details_flagstate' | i18n }}<span ng-if="createNewMode" class="mandatory">{{ 'common.mandatory_field' | i18n }}</span></label>
-                <dropdown name="countryCode" input-field-id="asset-input-countryCode" ng-model="vessel.countryCode" initialtext="{{ 'vessel.vessel_details_flagstate' | i18n }}" items="vesselFlagState" required ng-if="!countryCode" ng-disabled="disableForm"></dropdown>
-                <dropdown name="countryCode" input-field-id="asset-input-countryCode" ng-model="vessel.countryCode" initialtext="{{countryCode}}" items="vesselFlagState" required ng-if="countryCode" ng-disabled="disableForm" id="flagstate"></dropdown>
+                <dropdown name="countryCode" input-field-id="asset-input-countryCode" ng-model="vessel.flagStateCode" initialtext="{{ 'vessel.vessel_details_flagstate' | i18n }}" items="vesselFlagState" required ng-if="!countryCode" ng-disabled="disableForm"></dropdown>
+                <dropdown name="countryCode" input-field-id="asset-input-countryCode" ng-model="vessel.flagStateCode" initialtext="{{countryCode}}" items="vesselFlagState" required ng-if="countryCode" ng-disabled="disableForm" id="flagstate"></dropdown>
                 <input-validation-message types="required" input="vesselForm.countryCode"></input-validation-message>
             </div>
             <div class="col-md-2 form-group smallerpadding" ng-class="{'has-error': (submitAttempted || vesselForm.ircs.$dirty) && vesselForm.ircs.$invalid}">
@@ -38,7 +38,7 @@
         <div class="row">
             <div class="col-md-3 form-group smallerpaddingright" ng-class="{'has-error': (submitAttempted || vesselForm.homeport.$dirty) && vesselForm.homeport.$invalid}">
                 <label>{{ 'vessel.vessel_details_home_port' | i18n }}</label>
-                <input type="text" name="homeport" id="asset-input-homeport" class="form-control" ng-model="vessel.homePort" ng-maxlength="30"/>
+                <input type="text" name="homeport" id="asset-input-homeport" class="form-control" ng-model="vessel.portOfRegistration" ng-maxlength="30"/>
                 <input-validation-message types="maxlength" input="vesselForm.homeport" custom-messages="{{getMaxLengthMessage(30)}}"></input-validation-message>
             </div>
             <div class="col-md-3 form-group smallerpadding" ng-class="{'has-error': (submitAttempted || vesselForm.gearType.$dirty) && vesselForm.gearType.$invalid}">
@@ -48,7 +48,7 @@
 
             <div class="col-md-2 form-group smallerpadding" ng-class="{'has-error': (submitAttempted || vesselForm.mmsi.$dirty) && vesselForm.mmsi.$invalid}">
                 <label>{{ 'vessel.vessel_details_MMSI_no' | i18n }}</label>
-                <input type="text" name="mmsi" id="asset-input-mmsi" class="form-control" ng-model="vessel.mmsiNo" ng-pattern="mmsiRegExp" existing="existingValues.mmsi">
+                <input type="text" name="mmsi" id="asset-input-mmsi" class="form-control" ng-model="vessel.mmsi" ng-pattern="mmsiRegExp" existing="existingValues.mmsi">
                 <input-validation-message types="pattern, unique" input="vesselForm.mmsi" custom-messages="{{mmsiValidationMessages}}"></input-validation-message >
             </div>
             <div class="col-md-4 smallerpaddingleft form-group" ng-class="{'has-error': (submitAttempted || vesselForm.licenseType.$dirty) && vesselForm.licenseType.$invalid}">

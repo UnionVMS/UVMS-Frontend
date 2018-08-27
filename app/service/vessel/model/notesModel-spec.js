@@ -15,7 +15,7 @@ describe('VesselNotesModel', function() {
 
     var notesData = {
       "date": "2016-03-29T08:55:27.795+02:00",
-      "activity": "V02",
+      "activityCode": "V02",
       "user": "VMS_ADMIN_COM",
       "readyDate": "2016-03-30T18:55:27.795+02:00",
       "licenseHolder": "781012-1234",
@@ -30,7 +30,7 @@ describe('VesselNotesModel', function() {
         var notes = new VesselNotes();
 
         expect(notes.date).toBeUndefined();
-        expect(notes.activity).toBeUndefined();
+        expect(notes.activityCode).toBeUndefined();
         expect(notes.user).toBeUndefined();
         expect(notes.readyDate).toBeUndefined();
         expect(notes.licenseHolder).toBeUndefined();
@@ -42,9 +42,9 @@ describe('VesselNotesModel', function() {
     }));
 
     it("fromDTO should create correct object", inject(function(VesselNotes) {
-        var notes = VesselNotes.fromDTO(notesData);
+        var notes = VesselNotes.fromJson(notesData);
         expect(notes.date).toEqual(notesData.date);
-        expect(notes.activity).toEqual(notesData.activity);
+        expect(notes.activityCode).toEqual(notesData.activityCode);
         expect(notes.user).toEqual(notesData.user);
         expect(notes.readyDate).toEqual(notesData.readyDate);
         expect(notes.licenseHolder).toEqual(notesData.licenseHolder);
@@ -56,11 +56,11 @@ describe('VesselNotesModel', function() {
     }));
 
     it("copy should create an identical object", inject(function(VesselNotes) {
-        var origNotes = VesselNotes.fromDTO(notesData);
+        var origNotes = VesselNotes.fromJson(notesData);
         var notesCopy = origNotes.copy();
 
         expect(notesCopy.date).toEqual(origNotes.date);
-        expect(notesCopy.activity).toEqual(origNotes.activity);
+        expect(notesCopy.activityCode).toEqual(origNotes.activityCode);
         expect(notesCopy.user).toEqual(origNotes.user);
         expect(notesCopy.readyDate).toEqual(origNotes.readyDate);
         expect(notesCopy.licenseHolder).toEqual(origNotes.licenseHolder);

@@ -21,6 +21,8 @@
 
         vm.editSelectionCallBack = editSelectionCallBack;
 
+        vm._searchResults = null;
+
 
         init();
 
@@ -32,9 +34,12 @@
         }
 
         function getAmountOfReportsInSearch() {
-            var results = salesSearchService.getSearchResults();
-
-            return results.totalNumberOfPages * salesSearchService.DEFAULT_ITEMS_PER_PAGE;
+            if (vm._searchResults == null) {
+                vm._searchResults = salesSearchService.getSearchResults();
+                return vm._searchResults.totalNumberOfPages * salesSearchService.DEFAULT_ITEMS_PER_PAGE;
+            } else {
+                return 0;
+            }
         }
 
         function exportDocuments() {
@@ -44,6 +49,7 @@
 
         //Search sales notes
         function searchSalesReports() {
+            vm._searchResults = null;
             salesSearchService.searchSalesReports().then(function () {
                 salesSelectionService.reset();
             });

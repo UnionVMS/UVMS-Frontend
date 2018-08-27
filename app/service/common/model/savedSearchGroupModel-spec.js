@@ -15,7 +15,7 @@ describe('SavedSearchGroup', function() {
 
 	var responseData = {
 		dynamic: true,
-		guid: 44,
+		id: 44,
 		name: "Test swe",
 		searchFields: [
 			{
@@ -46,7 +46,7 @@ describe('SavedSearchGroup', function() {
 	it('fromVesselDTO should build a correct object', inject(function(SavedSearchGroup) {
 		var group = SavedSearchGroup.fromVesselDTO(responseData);
 		expect(group.dynamic).toEqual(responseData.dynamic);
-		expect(group.id).toEqual(responseData.guid);
+		expect(group.id).toEqual(responseData.id);
 		expect(group.name).toEqual(responseData.name);
         expect(group.user).toEqual(responseData.user);
 
@@ -84,7 +84,7 @@ describe('SavedSearchGroup', function() {
         expect(group.searchFields.length).toEqual(4, 'Should be 4 searchFields in the group object');
 
         var dto = group.toVesselDTO(); //This function should create custom list of searchFields (replace spans with min/max values)
-        expect(dto.guid).toEqual(responseData.guid, 'guid should be set in the dto');
+        expect(dto.id).toEqual(responseData.id, 'guid should be set in the dto');
         expect(dto.name).toEqual(responseData.name, 'name should be set in the dto');
         expect(dto.dynamic).toEqual(responseData.dynamic, 'dynamic should be set in the dto');
         expect(dto.searchFields.length).toEqual(5, 'Should be 5 searchFields in the dto');
