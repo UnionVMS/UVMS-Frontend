@@ -94,13 +94,26 @@ angular.module('unionvmsWeb').factory('savedSearchService',function($q, $modal, 
         },
         updateVesselGroup : function(savedSearchGroup){
             var defer = $q.defer();
-            vesselRestService.updateVesselGroup(savedSearchGroup)
-            .then(function(group) {
-                getVesselGroupsForUser();
-                defer.resolve(group);
-            }, function(error){
-                defer.reject(error);
+            var preGroup = getVesselGroup(savedSearchGroup.id);
+            if (angular.isUndefined(preGroup)) {
+                return error($q.reject('The selected group does not exist.'));
+            }
+
+            var searchFieldsToAdd = savedSearchGroup.searchFields.filter(function(searchField) {
+                // Remove any search field with key = GUID and value in vesselGuids array.
+                var exists = preGroup.searchFields.filter(function(each) {
+                    return searchField.key === each.key && searchField.value === each.value;
+                });
+
+                return searchField.key === 'GUID' &&(!Array.isArray(exists) || !exists.length);
             });
+
+            for (var i = 0; i < searchFieldsToAdd.length; i++) {
+                var searchField = searchFieldsToAdd[i];
+                vesselRestService.addGroupField(savedSearchGroup.id, searchField);
+            }
+            getVesselGroupsForUser();
+            defer.resolve(savedSearchGroup);
 
             return defer.promise;
         },
