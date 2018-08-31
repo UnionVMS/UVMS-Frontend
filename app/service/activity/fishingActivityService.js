@@ -31,6 +31,7 @@ angular.module('unionvmsWeb').factory('fishingActivityService', function(activit
     var faServ = {
         activityData: {},
         id: undefined,
+        repId: undefined,
         isCorrection: false,
         documentType: undefined,
         activityType: undefined,
@@ -302,6 +303,7 @@ angular.module('unionvmsWeb').factory('fishingActivityService', function(activit
 	faServ.resetActivity = function(){
 	    faServ.activityData = {};
 	    faServ.id = undefined;
+        faServ.repId = undefined;
 	    faServ.isCorrection = false;
 	    faServ.activityType = undefined;
 	    faServ.documentType = undefined;
@@ -347,6 +349,7 @@ angular.module('unionvmsWeb').factory('fishingActivityService', function(activit
      * @alias getFishingActivity
 	 */
     faServ.getFishingActivity = function(obj, callback, actiId) {
+        //FIXME check how to deal with repId through params passed into the function
         loadingStatus.isLoading('FishingActivity', true, 0);
         
         var faActivityId = "";
@@ -358,7 +361,8 @@ angular.module('unionvmsWeb').factory('fishingActivityService', function(activit
         }
 
         var payload = {
-            activityId: faActivityId
+            activityId: faActivityId,
+            reportId: faServ.repId
         };
         
         if ($state.current.name === 'app.reporting-id' || $state.current.name === 'app.reporting'){

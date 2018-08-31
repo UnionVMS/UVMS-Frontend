@@ -1,5 +1,5 @@
-<div class="purpose-code-badge">
-    <div class="badge" ng-class="{'red-badge': isCorrected}" ng-show="finished">
+<div class="purpose-code-badge" ng-show="show">
+    <div class="badge" ng-class="{'badge-color-red': color === 'BLUE', 'badge-color-red': color === 'RED', 'badge-color-orange': color === 'ORANGE'}" ng-show="finished">
         <span class="badge-title">{{::getTitle()}}</span>
     </div>
 </div>

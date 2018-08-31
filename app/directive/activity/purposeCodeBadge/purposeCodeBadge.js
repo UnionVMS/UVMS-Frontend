@@ -24,8 +24,9 @@ angular.module('unionvmsWeb').directive('purposeCodeBadge', function(fishingActi
         replace: true,
         templateUrl: 'directive/activity/purposeCodeBadge/purposeCodeBadge.html',
         link: function(scope, element, attrs, fn) {
+            scope.show = false;
             scope.finished = false;
-            scope.isCorrected = false;
+            scope.color = undefined;
             scope.faServ = fishingActivityService;
             scope.getTitle = function(){
                 var title;
@@ -36,15 +37,24 @@ angular.module('unionvmsWeb').directive('purposeCodeBadge', function(fishingActi
                         scope.finished = true;
                         if (scope.faServ.isCorrection){
                             title = locale.getString('activity.optype_correction');
+                            scope.color = 'BLUE';
+                        } else if (parseInt(purposeCodeItem.originalValue) === 3){
+                            title = locale.getString('activity.optype_deletion');
+                            scope.color = 'RED';
+                        } else if (parseInt(purposeCodeItem.originalValue) === 1){
+                            title = locale.getString('activity.optype_cancellation');
+                            scope.color = 'ORANGE';
                         } else {
+                            //TODO check if this still works with the refactoring
                             if (parseInt(purposeCodeItem.originalValue) === 9 && (scope.faServ.activityData.history.previousId || scope.faServ.activityData.history.nextId)){
                                 title = locale.getString('activity.fa_report_document_type_corrected');
-                                scope.isCorrected = true;
+                                scope.color = 'RED';
                             }
-
-                            //TODO cancellation
                         }
                     }
+                }
+                if (angular.isDefined(title)){
+                    scope.show = true;
                 }
                 return title;
             }

@@ -237,6 +237,8 @@
     "fa_details_item_endoflanding":"End of landing",
     "fa_details_item_owner":"Owner",
     "optype_correction": "Correction",
+    "optype_cancellation": "Cancelled",
+    "optype_deletion": "Deleted",
     "title_fishing_activity": "Fishing Activity",
     "activity_landing_catch":"Catch",
     "activity_location_port_departure": "Port of departure",

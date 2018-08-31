@@ -72,7 +72,7 @@ describe('purposeCodeBadge', function () {
         expect(angular.element('.badge').css('display')).toEqual('block');
     });
 
-    it('it should render the badge with title as CORRECTED', function () {
+    /*it('it should render the badge with title as CORRECTED', function () {
         mockFaServ.isCorrection = false;
         badge = compile('<purpose-code-badge></purpose-code-badge>')(scope);
         badge.appendTo('#parent-container');
@@ -95,5 +95,5 @@ describe('purposeCodeBadge', function () {
         expect(scope.getTitle()).toBeUndefined();
         expect(angular.element('.badge').hasClass('ng-show')).toBeFalsy();
 
-    });
+    });*/
 });
