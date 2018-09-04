@@ -37,6 +37,7 @@ angular.module('unionvmsWeb').controller('VesselFormCtrl',function($scope, $log,
             if($scope.isCreateNewMode()){
                 //Set default country code when creating new vessel
                 $scope.setDefaultCountryCode();
+                $scope.vesselContacts.push(new VesselContact());
             }else{
                 getVesselHistory();
                 getMobileTerminals();
@@ -276,8 +277,6 @@ angular.module('unionvmsWeb').controller('VesselFormCtrl',function($scope, $log,
         $scope.submitAttempted = true;
 
         if($scope.vesselForm.$valid) {
-            $scope.updateContactItems();
-            $scope.addNotes();
 
             //Create new Vessel
             $scope.waitingForCreateResponse = true;
@@ -292,7 +291,10 @@ angular.module('unionvmsWeb').controller('VesselFormCtrl',function($scope, $log,
 
     //Success creating the new vessel
     var createVesselSuccess = function(createdVessel){
-        // Reset existing values
+    	$scope.updateContactItems(createdVessel.id);
+    	$scope.addNotes(createdVessel.id);
+
+    	// Reset existing values
         $scope.existingValues.cfr = undefined;
         $scope.existingValues.imo = undefined;
         $scope.existingValues.mmsi = undefined;
@@ -334,10 +336,10 @@ angular.module('unionvmsWeb').controller('VesselFormCtrl',function($scope, $log,
     };
 
     //Add notes to Vessel object
-    $scope.addNotes = function(){
+    $scope.addNotes = function(vesselId){
         if ($scope.vesselNotesObj.date && $scope.vesselNotesObj.activityCode) {
         	$scope.vesselNotesObj.source = 'INTERNAL';
-        	vesselRestService.createNoteForAsset($scope.vesselObj.id, $scope.vesselNotesObj).then(function(createdNote) {
+        	vesselRestService.createNoteForAsset(vesselId, $scope.vesselNotesObj).then(function(createdNote) {
         		$scope.vesselNotes.push(createdNote);
         	});
         } else {
@@ -357,8 +359,8 @@ angular.module('unionvmsWeb').controller('VesselFormCtrl',function($scope, $log,
         if($scope.vesselForm.$valid && ($scope.isVesselDetailsDirty || $scope.isVesselNotesDirtyStatus || $scope.isVesselContactsDirtyStatus)) {
             //MobileTerminals remove them cuz they do not exist in backend yet.
             delete $scope.vesselObj.mobileTerminals;
-            $scope.updateContactItems();
-            $scope.addNotes();
+            $scope.updateContactItems($scope.vesselObj.id);
+            $scope.addNotes($scope.vesselObj.id);
 
             //Update Vessel and take care of the response(eg. the promise) when the update is done.
             $scope.waitingForCreateResponse = true;
@@ -494,7 +496,7 @@ angular.module('unionvmsWeb').controller('VesselFormCtrl',function($scope, $log,
     };
 
     // Update submitted contacts with default values or remove empty contact item rows
-    $scope.updateContactItems = function() {
+    $scope.updateContactItems = function(vesselId) {
         $scope.vesselContacts.slice(0).forEach(function (vesselContact) {
             if (vesselContact.name || vesselContact.email || vesselContact.phoneNumber) {
                 Object.assign(vesselContact, { source: 'INTERNAL' });
@@ -506,7 +508,7 @@ angular.module('unionvmsWeb').controller('VesselFormCtrl',function($scope, $log,
                 $scope.vesselContacts.splice($scope.vesselContacts.indexOf(vesselContact), 1);
             }
             if (!vesselContact.id) {
-            	vesselRestService.createContactForAsset($scope.vesselObj.id, vesselContact)
+            	vesselRestService.createContactForAsset(vesselId, vesselContact)
             } else {
             	vesselRestService.updateContact(vesselContact);
             }
