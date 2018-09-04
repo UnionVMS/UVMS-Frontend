@@ -25,6 +25,7 @@ angular.module('unionvmsWeb').controller('AuditconfigurationCtrl',function($scop
 		"movement",
 		"exchange",
 		"rules",
+        "movementrules",
 		"audit"
 	];
 

@@ -147,7 +147,7 @@
                                     <goal>undeploy</goal>
                                 </goals>
                                 <configuration>
-                                    <ignore-missing-deployment>true</ignore-missing-deployment>
+                                    <ignoreMissingDeployment>true</ignoreMissingDeployment>
                                 </configuration>
                             </execution>
                         </executions>
