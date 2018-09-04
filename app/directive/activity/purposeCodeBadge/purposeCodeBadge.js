@@ -57,7 +57,7 @@ angular.module('unionvmsWeb').directive('purposeCodeBadge', function(fishingActi
                     scope.show = true;
                 }
                 return title;
-            }
+            };
         }
     };
 });

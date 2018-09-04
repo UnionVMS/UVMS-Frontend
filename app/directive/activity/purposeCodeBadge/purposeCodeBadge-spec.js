@@ -31,6 +31,12 @@ describe('purposeCodeBadge', function () {
                     case 'activity.fa_report_document_type_corrected':
                         title = 'CORRECTED';
                         break;
+                    case 'activity.optype_deletion':
+                        title = 'DELETED';
+                        break;
+                    case 'activity.optype_cancellation':
+                        title = 'CANCELLED';
+                        break;
                 }
 
                 return title;
@@ -69,10 +75,11 @@ describe('purposeCodeBadge', function () {
 
         expect(scope.finished).toBeTruthy();
         expect(scope.getTitle()).toEqual('CORRECTION');
+        expect(angular.element('.purpose-code-badge>.badge-color-blue')[0]).toBeDefined();
         expect(angular.element('.badge').css('display')).toEqual('block');
     });
 
-    /*it('it should render the badge with title as CORRECTED', function () {
+    it('it should render the badge with title as CORRECTED', function () {
         mockFaServ.isCorrection = false;
         badge = compile('<purpose-code-badge></purpose-code-badge>')(scope);
         badge.appendTo('#parent-container');
@@ -80,11 +87,39 @@ describe('purposeCodeBadge', function () {
 
         expect(scope.finished).toBeTruthy();
         expect(scope.getTitle()).toEqual('CORRECTED');
-        expect(angular.element('.purpose-code-badge>.red-badge')[0]).toBeDefined();
+        expect(angular.element('.purpose-code-badge>.badge-color-red')[0]).toBeDefined();
         expect(angular.element('.badge').css('display')).toEqual('block');
     });
 
-    it('it should not render the badge if it is not a correction, corrected or cancelled report', function () {
+    it('it should render the badge with title as DELETED', function () {
+        mockFaServ.isCorrection = false;
+        mockFaServ.activityData.reportDetails.items[0].originalValue = 3;
+
+        badge = compile('<purpose-code-badge></purpose-code-badge>')(scope);
+        badge.appendTo('#parent-container');
+        scope.$digest();
+
+        expect(scope.finished).toBeTruthy();
+        expect(scope.getTitle()).toEqual('DELETED');
+        expect(angular.element('.purpose-code-badge>.badge-color-red')[0]).toBeDefined();
+        expect(angular.element('.badge').css('display')).toEqual('block');
+    });
+
+    it('it should render the badge with title as CANCELLED', function () {
+        mockFaServ.isCorrection = false;
+        mockFaServ.activityData.reportDetails.items[0].originalValue = 1;
+
+        badge = compile('<purpose-code-badge></purpose-code-badge>')(scope);
+        badge.appendTo('#parent-container');
+        scope.$digest();
+
+        expect(scope.finished).toBeTruthy();
+        expect(scope.getTitle()).toEqual('CANCELLED');
+        expect(angular.element('.purpose-code-badge>.badge-color-orange')[0]).toBeDefined();
+        expect(angular.element('.badge').css('display')).toEqual('block');
+    });
+
+    /*it('it should not render the badge if it is not a correction, corrected or cancelled report', function () {
         mockFaServ.isCorrection = false;
         mockFaServ.activityData.history.nextId = 0;
         badge = compile('<purpose-code-badge></purpose-code-badge>')(scope);
