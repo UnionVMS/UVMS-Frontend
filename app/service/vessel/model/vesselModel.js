@@ -38,6 +38,8 @@ angular.module('unionvmsWeb')
         this.name = undefined;
         this.powerMain = null;
         this.gearFishingType = undefined;
+        this.prodOrgCode = undefined;
+        this.prodOrgName = undefined;
         this.source = SOURCE_INTERNAL;
     }
 
@@ -60,7 +62,7 @@ angular.module('unionvmsWeb')
         vessel.externalMarking = data.externalMarking;
         vessel.portOfRegistration = data.portOfRegistration;
 
-        vessel.licenseType = data.licenseType;
+        vessel.licenseType = data.licenceType;
 
         vessel.gearFishingType = data.gearFishingType;
         //Set length value and type
@@ -76,6 +78,9 @@ angular.module('unionvmsWeb')
         vessel.grossTonnageUnit = data.grossTonnageUnit;
         vessel.eventCode = data.eventCode;
         vessel.updateTime = data.updateTime;
+        
+        vessel.prodOrgCode = data.prodOrgCode;
+        vessel.prodOrgName = data.prodOrgName;
 
         return vessel;
     };
@@ -108,7 +113,7 @@ angular.module('unionvmsWeb')
             ircsIndicator : this.hasIrcs(),
             ircs : this.ircs,
             hasLicense : this.hasLicense(),
-            licenseType : this.licenseType,
+            licenceType : this.licenseType,
             portOfRegistration : this.portOfRegistration,
             lengthOverAll : lengthOverall,
             lengthBetweenPerpendiculars : lengthBetweenPerpendiculars,
@@ -116,6 +121,8 @@ angular.module('unionvmsWeb')
             gearFishingType : this.gearFishingType,
             grossTonnage : this.grossTonnage,
             grossTonnageUnit : this.grossTonnageUnit,
+            prodOrgCode : this.prodOrgCode,
+        	prodOrgName : this.prodOrgName
         };
 
         if (this.mmsi) {
@@ -153,6 +160,8 @@ angular.module('unionvmsWeb')
         copy.id = this.id;
         copy.historyId = this.historyId;
         copy.gearFishingType = this.gearFishingType;
+        copy.prodOrgCode = this.prodOrgCode;
+        copy.prodOrgName = this.prodOrgName;
 
         return copy;
     };
