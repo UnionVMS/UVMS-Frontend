@@ -43,7 +43,7 @@
             </div>
             <div class="col-md-3 form-group smallerpadding" ng-class="{'has-error': (submitAttempted || vesselForm.gearType.$dirty) && vesselForm.gearType.$invalid}">
                 <label>{{ 'vessel.vessel_details_gear_type' | i18n }}</label>
-                <dropdown name="gearType" input-field-id="asset-input-gearType" ng-model="vessel.gearType" initialtext="{{ 'vessel.vessel_details_gear_type' | i18n }}" items="vesselGearTypes" ng-disabled="disableForm"></dropdown>
+                <dropdown name="gearType" input-field-id="asset-input-gearType" ng-model="vessel.gearFishingType" initialtext="{{ 'vessel.vessel_details_gear_type' | i18n }}" items="vesselGearTypes" ng-disabled="disableForm"></dropdown>
             </div>
 
             <div class="col-md-2 form-group smallerpadding" ng-class="{'has-error': (submitAttempted || vesselForm.mmsi.$dirty) && vesselForm.mmsi.$invalid}">
@@ -96,11 +96,11 @@
             </div>
             <div class="col-md-2 form-group smallerpadding">
                 <label>{{ 'vessel.po_name' | i18n }}</label>
-                <input type="text" name="producername" id="asset-input-producername" class="form-control " ng-model="vessel.producer.name">
+                <input type="text" name="producername" id="asset-input-producername" class="form-control " ng-model="vessel.prodOrgName">
             </div>
             <div class="col-md-2 form-group smallerpaddingleft" ng-class="{'has-error': (submitAttempted || vesselForm.producercode.$dirty) && vesselForm.producercode.$invalid}">
                 <label>{{ 'vessel.po_code' | i18n }}</label>
-                <input type="text" name="producercode" id="asset-input-producercode" class="form-control" ng-model="vessel.producer.code" ng-pattern="producerCodePattern">
+                <input type="text" name="producercode" id="asset-input-producercode" class="form-control" ng-model="vessel.prodOrgCode" ng-pattern="producerCodePattern">
                 <input-validation-message types="pattern" input="vesselForm.producercode" custom-messages="{{producerCodeValidationMessages}}"></input-validation-message>
             </div>
         </div>

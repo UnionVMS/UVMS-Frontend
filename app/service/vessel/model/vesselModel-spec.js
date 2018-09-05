@@ -23,7 +23,7 @@ describe('VesselModel', function() {
         "gearFishingType": "TEST_TYPE",
         "ircs": "2342234",
         "hasLicense": true,
-        "licenseType": "TEST_LICENSE",
+        "licenceType": "TEST_LICENSE",
         "externalMarking": "Ext",
         "cfr": "dsfsdf",
         "imo": "345345",
@@ -64,7 +64,7 @@ describe('VesselModel', function() {
         expect(vessel.hasIrcs()).toEqual(true);
         expect(vessel.ircs).toEqual(vesselData.ircs);
         expect(vessel.hasLicense()).toEqual(vesselData.hasLicense);
-        expect(vessel.licenseType).toEqual(vesselData.licenseType);
+        expect(vessel.licenseType).toEqual(vesselData.licenceType);
         expect(vessel.portOfRegistration).toEqual(vesselData.portOfRegistration);
 
         expect(vessel.lengthOverAll).toBeUndefined();
