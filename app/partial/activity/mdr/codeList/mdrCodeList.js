@@ -25,25 +25,139 @@ angular.module('unionvmsWeb').controller('MdrcodelistCtrl',function($scope, $mod
 
     $scope.itemsByPage = 25;
     $scope.displayedMdrCodeList = [];
-    $scope.columns = [
-        'code',
-        'description',
-        'startDate',
-        'endDate',
-        'version'
-    ];
-
-    var searchAttrs = [
-        'code',
-        'description',
-        /* 'validityStart',
-        'validityEnd', */
-        'version'
-    ];
-
+    $scope.columns = ['code', 'description'];
+    $scope.searchAttrs = ['code', 'description', 'version'];
     $scope.acronym = acronym;
     var currentTableState;
     var lastTableState;
+
+    $scope.specialAcronymColumns = {
+        'CONVERSION_FACTOR': {
+            cols: ['state', 'presentation', 'factor', 'placesCode', 'legalSource', 'collective'],
+            mappings: {
+                'state': 'state',
+                'presentation': 'presentation',
+                'factor': 'factor',
+                'placesCode': 'places_code',
+                'legalSource': 'legal_source',
+                'collective': 'collective'
+            }
+        },
+        'EFFORT_ZONE': {
+            cols: ['legalReference'],
+            mappings: {
+                'legalReference': 'legal_reference'
+            }
+        },
+        'FA_BR': {
+            cols: ['fluxGpValidationTypeCode', 'activationIndicator'],
+            mappings: {
+                'activationIndicator': 'activation_indicator',
+                'fluxGpValidationTypeCode': 'flux_gp_validation_type_code'
+            }
+        },
+        'FA_BR_DEF': {
+            cols: ['field', 'messageIfFailing'],
+            mappings: {
+                'field': 'field',
+                'messageIfFailing': 'message_if_failing'
+            }
+        },
+        'FA_CHARACTERISTIC': {
+            cols: ['dataTypeDesc'],
+            mappings: {
+                'dataTypeDesc': 'data_type_desc'
+            }
+        },
+        'FA_GEAR_CHARACTERISTIC': {
+            cols: ['dataTypeDesc'],
+            mappings: {
+                'dataTypeDesc': 'data_type_desc'
+            }
+        },
+        'FAO_AREA': {
+            cols: ['enLevelName'],
+            mappings: {
+                'enLevelName': 'en_level_name'
+            }
+        },
+        'FAO_SPECIES': {
+            cols: ['family', 'bioOrder', 'scientificName', 'enName', 'taxoCode'],
+            mappings: {
+                'family': 'family',
+                'bioOrder': 'bio_order',
+                'scientificName': 'scientific_name',
+                'enName': 'en_name',
+                'taxoCode': 'taxo_code'
+            }
+        },
+        'FARM': {
+            cols: ['rfmoCode', 'contractingParty', 'placesCode'],
+            mappings: {
+                'rfmoCode': 'rfmo_code',
+                'contractingParty': 'contracting_party',
+                'placesCode': 'places_code'
+            }
+        },
+        'FISH_PRESENTATION': {
+            cols: ['enName'],
+            mappings: {
+                'enName': 'en_name'
+            }
+        },
+        'LOCATION': {
+            cols: ['latitude', 'longitude', 'enName', 'placesCode','unloCode', 'unFunctionCode'],
+            mappings: {
+                'enName': 'en_name',
+                'placesCode': 'places_code',
+                'unloCode': 'unlo_code',
+                'unFunctionCode': 'un_function_code'
+            }
+        },
+        'TERRITORY': {
+            cols: ['enName', 'landTypeCode'],
+            mappings: {
+                'enName': 'en_name',
+                'landTypeCode': 'land_type_code'
+            }
+        },
+        'STAT_RECTANGLE': {
+            cols: ['source'],
+            mappings: {
+                'source': 'source'
+            }
+        }
+    };
+
+    setColumns(acronym);
+    setSearchAttrs(acronym);
+
+    /**
+     * Sets the columns for acronym table
+     *
+     * @param {String} acronym - The acronym name
+     */
+    function setColumns (acronym){
+        if (_.has($scope.specialAcronymColumns, acronym)){
+            $scope.columns = $scope.columns.concat($scope.specialAcronymColumns[acronym].cols);
+        }
+
+        $scope.columns = $scope.columns.concat(['startDate', 'endDate', 'version']);
+    }
+
+    /**
+     * Sets the searching attributes to be sent in the search request headers
+     *
+     * @param {String} acronym - The acronym name
+     */
+    function setSearchAttrs(acronym) {
+        if (_.has($scope.specialAcronymColumns, acronym)){
+            var additionalAttrs = _.values($scope.specialAcronymColumns[acronym].mappings);
+            if (additionalAttrs.length > 0){
+                $scope.searchAttrs = $scope.searchAttrs.concat(additionalAttrs);
+            }
+        }
+    }
 
     /**
      * Closes the mdr code list modal
@@ -75,6 +189,21 @@ angular.module('unionvmsWeb').controller('MdrcodelistCtrl',function($scope, $mod
     };
 
     /**
+     * Sets the proper field names for server sorting and filtering of the acronym table
+     *
+     * @param {String} acronym - the acronym name
+     * @param {String} predicate - the predicate name being used in the smart table
+     * @returns {String} the field name to be used in the sorting and filtering request header
+     */
+    var setProperColNamesForSorting = function(acronym, predicate){
+        if (_.has($scope.specialAcronymColumns, acronym) && _.has($scope.specialAcronymColumns[acronym].mappings, predicate)){
+            return $scope.specialAcronymColumns[acronym].mappings[predicate];
+        } else {
+          return predicate;
+        }
+    };
+
+    /**
      * Closes the mdr code list modal
      *
      * @memberof MdrcodelistCtrl
@@ -88,10 +217,14 @@ angular.module('unionvmsWeb').controller('MdrcodelistCtrl',function($scope, $mod
             sortAttr = 'validity.' + tableState.sort.predicate;
         }
 
-        mdrRestService.getMDRCodeList(acronym, tableState, searchAttrs, sortAttr).then(function (result) {
+        if (angular.isUndefined(sortAttr) && angular.isDefined(tableState.sort)){
+            sortAttr = setProperColNamesForSorting(acronym, tableState.sort.predicate);
+        }
+
+        mdrRestService.getMDRCodeList(acronym, tableState, $scope.searchAttrs, sortAttr).then(function (result) {
             if (angular.isDefined(result)) {
                 if(!angular.equals($scope.displayedMdrCodeList, result)){
-                    loadValidityDates(result);                    
+                    loadValidityDates(result);
                     $scope.displayedMdrCodeList = result;
                 }
             }else{

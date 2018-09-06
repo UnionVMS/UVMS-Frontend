@@ -13,45 +13,63 @@ describe('MdrcodelistCtrl', function() {
 
     beforeEach(module('unionvmsWeb'));
 
-    var scope,ctrl,modalInstance,acronym,$timeout;
+    var scope,ctrl,modalInstance,acronym,$timeout,createController;
 
     beforeEach(inject(function($httpBackend) {
         //Mock
         $httpBackend.whenGET(/usm/).respond();
         $httpBackend.whenGET(/i18n/).respond();
         $httpBackend.whenGET(/globals/).respond({data : []});
-
     }));
 
     beforeEach(inject(function($rootScope, $controller, _$timeout_) {
-
         $timeout = _$timeout_;
+        scope = $rootScope.$new();
 
         // Create a mock object using spies
         modalInstance = {
-          close: jasmine.createSpy('modalInstance.close'),
-          dismiss: jasmine.createSpy('modalInstance.dismiss'),
-          result: {
-            then: jasmine.createSpy('modalInstance.result.then')
-          }
+            close: jasmine.createSpy('modalInstance.close'),
+            dismiss: jasmine.createSpy('modalInstance.dismiss'),
+            result: {
+                then: jasmine.createSpy('modalInstance.result.then')
+            }
         };
 
-        acronym = jasmine.createSpy('acronym');
+        createController = function(){
+            return $controller('MdrcodelistCtrl', {
+                $scope: scope,
+                $modalInstance: modalInstance,
+                acronym: acronym
+            })
+        }
 
-        scope = $rootScope.$new();
-
-        ctrl = $controller('MdrcodelistCtrl', {
-            $scope: scope,
-            $modalInstance: modalInstance,
-            acronym: acronym
-        });
-
-        scope.$digest();
     }));
 
-    it('should ...', inject(function() {
-        //TODO create unit test
-        expect(1).toEqual(1);
+    it('Should be able to close modal', inject(function(){
+        acronym = 'GENDER';
+        ctrl = createController();
+        scope.close();
+        expect(modalInstance.close).toHaveBeenCalled();
+    }));
+
+    it('Should create the proper columns and attributes for generic acronyms', inject(function() {
+        acronym = 'GENDER';
+        ctrl = createController();
+
+        expect(scope.columns.length).toEqual(5);
+        expect(scope.columns).toEqual(['code', 'description', 'startDate', 'endDate', 'version']);
+        expect(scope.searchAttrs.length).toEqual(3);
+        expect(scope.searchAttrs).toEqual(['code', 'description', 'version']);
+    }));
+
+    it('Should create the proper columns and attributes for more complex acronyms', inject(function() {
+        acronym = 'CONVERSION_FACTOR';
+        ctrl = createController();
+
+        expect(scope.columns.length).toEqual(11);
+        expect(scope.columns).toEqual(['code', 'description', 'state', 'presentation', 'factor', 'placesCode', 'legalSource', 'collective', 'startDate', 'endDate', 'version']);
+        expect(scope.searchAttrs.length).toEqual(9);
+        expect(scope.searchAttrs).toEqual(['code', 'description', 'version', 'state', 'presentation', 'factor', 'places_code', 'legal_source', 'collective']);
     }));
 
 });
