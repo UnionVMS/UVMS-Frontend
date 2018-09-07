@@ -179,8 +179,8 @@ angular.module('unionvmsWeb').factory('searchService',function($q, $log, searchU
 
                 //Update alarms/tickest search criterias with vessels
                 $.each(vessels, function(index, vessel) {
-                    if(angular.isDefined(vessel.vesselId)){
-                        searchGetListRequest.addSearchCriteria("ASSET_GUID", vessel.vesselId.guid);
+                    if(angular.isDefined(vessel.id)){
+                        searchGetListRequest.addSearchCriteria("ASSET_GUID", vessel.id);
                     }
                 });
                 vesselDeferred.resolve();
@@ -580,7 +580,7 @@ angular.module('unionvmsWeb').factory('searchService',function($q, $log, searchU
 
                         //Iterate over the vessels and add vessel guids to the list of connectIds
                         $.each(vessels, function(index, vessel){
-                            getPollablesListRequest.addConnectId(vessel.vesselId.guid);
+                            getPollablesListRequest.addConnectId(vessel.id);
                         });
                         //Get pollable channels
                         pollingRestService.getPollablesMobileTerminal(getPollablesListRequest).then(
@@ -653,8 +653,8 @@ angular.module('unionvmsWeb').factory('searchService',function($q, $log, searchU
 
                         //Iterate over the vessels to add new search criterias with CONNECT_ID as key and vessel GUID as value
                         $.each(vessels, function(index, vessel){
-                            if(angular.isDefined(vessel.vesselId.guid)){
-                                outerThis.addSearchCriteria("CONNECT_ID", vessel.vesselId.guid);
+                            if(angular.isDefined(vessel.id)){
+                                outerThis.addSearchCriteria("CONNECT_ID", vessel.id);
                             }
                         });
                         //Get mobile terminals
