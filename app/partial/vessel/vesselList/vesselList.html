@@ -32,7 +32,7 @@ copy of the GNU General Public License along with the IFDM Suite. If not, see <h
                     <th class="st-sort" st-sort="cfr" st-skip-natural="true" id="asset-sort-cfr">
                         {{'vessel.table_header_cfr' | i18n}}
                     </th>
-                    <th class="st-sort" st-sort="gearType" st-skip-natural="true" id="asset-sort-gearType">
+                    <th class="st-sort" st-sort="gearFishingType" st-skip-natural="true" id="asset-sort-gearType">
                         {{'vessel.table_header_gear_type' | i18n}}
                     </th>
                     <th class="st-sort" st-sort="licenseType" st-skip-natural="true" id="asset-sort-licenseType">
@@ -52,7 +52,7 @@ copy of the GNU General Public License along with the IFDM Suite. If not, see <h
                     <td ng-attr-title="{{item.name}}">{{item.name}}</td>
                     <td ng-attr-title="{{item.ircs}}">{{item.ircs}}</td>
                     <td ng-attr-title="{{item.cfr}}">{{item.cfr}}</td>
-                    <td ng-attr-title="{{item.gearType | vesselGearTypeTranslation}}">{{item.gearType | vesselGearTypeTranslation}}</td>
+                    <td ng-attr-title="{{item.gearFishingType | vesselGearTypeTranslation}}">{{item.gearFishingType | vesselGearTypeTranslation}}</td>
                     <td ng-attr-title="{{item.licenseType | vesselLicenseTypeTranslation}}">{{item.licenseType | vesselLicenseTypeTranslation}}</td>
                     <td class="link" ng-class="{'no-hover': item.lastMovement.guid === undefined}" ng-click="showReport(item.lastMovement.guid)" ng-attr-title="{{item.lastMovement.time | timeAgo}}" id="asset-toggle-lastmovement">{{item.lastMovement.time | timeAgo}}</td>
                     <td>

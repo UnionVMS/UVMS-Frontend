@@ -106,9 +106,9 @@ angular.module('unionvmsWeb').factory('searchService',function($q, $log, searchU
 
             var vesselsByGuid = {};
             $.each(vessels, function(index, vessel) {
-                if(angular.isDefined(vessel.vesselId)){
-                    movementRequest.addSearchCriteria("CONNECT_ID", vessel.getHistoryGuid());
-                    vesselsByGuid[vessel.getHistoryGuid()] = vessel;
+                if(angular.isDefined(vessel.historyId)){
+                    movementRequest.addSearchCriteria("CONNECT_ID", vessel.historyId);
+                    vesselsByGuid[vessel.historyId] = vessel;
                 }
             });
 

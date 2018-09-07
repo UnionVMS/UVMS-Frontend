@@ -1,4 +1,4 @@
-<!--
+﻿<!--
 ﻿Developed with the contribution of the European Commission - Directorate General for Maritime Affairs and Fisheries
 © European Union, 2015-2016.
 
@@ -17,7 +17,7 @@ copy of the GNU General Public License along with the IFDM Suite. If not, see <h
                     <th class="checkboxContainer">
                         <input type="checkbox" ng-checked="isAllChecked()" ng-click="checkAll()" ng-disabled="!allCurrentSearchResults.length" id="movement-checkbox-select-all"/>
                     </th>
-                    <th class="st-sort" st-sort="vessel.countryCode" st-skip-natural="true" id="movement-sort-countryCode">
+                    <th class="st-sort" st-sort="vessel.flagStateCode" st-skip-natural="true" id="movement-sort-countryCode">
                         {{'movement.table_header_flag_state' | i18n}}
                     </th>
                     <th class="st-sort" st-sort="vessel.externalMarking" st-skip-natural="true" id="movement-sort-externalMarking">
@@ -61,7 +61,7 @@ copy of the GNU General Public License along with the IFDM Suite. If not, see <h
             <tbody>
                 <tr ng-repeat="movement in currentSearchResultsByPage">
                     <td class="checkboxContainer"><input type="checkbox" ng-checked="isChecked(movement)" ng-click="checkItem(movement)" ng-if="selectedMovements"/></td>
-                    <td ng-attr-title="{{movement.vessel.countryCode}}">{{movement.vessel.countryCode}}</td>
+                    <td ng-attr-title="{{movement.vessel.flagStateCode}}">{{movement.vessel.flagStateCode}}</td>
                     <td ng-attr-title="{{movement.vessel.externalMarking}}">{{movement.vessel.externalMarking}}</td>
                     <td ng-attr-title="{{movement.vessel.ircs}}">{{movement.vessel.ircs}}</td>
                     <td><a href="#/assets/{{movement.vessel.getGuid()}}" title="{{'common.view_details' | i18n}}" ng-show="movement.vessel">{{movement.vessel.name}}</a></td>
