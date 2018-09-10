@@ -20,13 +20,14 @@ copy of the GNU General Public License along with the IFDM Suite. If not, see <h
  * @param $filter {Service} angular filter service
  * @param $state {Service} The angular $state service
  * @param tripSummaryService {Service} The trip summary service <p>{@link unionvmsWeb.tripSummaryService}</p>
+ * @param unitConversionService {Service} The unit conversion service <p>{@link unionvmsWeb.unitConversionService}</p>
  * @attr {Object} activityData - An object containing the activity data that will be used in the different views
  * @attr {String} id - Id of the current fishing activity
  * @attr {Boolean} isCorrection - Tells if the current fishing activity is a correction
  * @description
  *  A service to deal with any kind of fishing activity operation (e.g. Departure, Arrival, ...)
  */
-angular.module('unionvmsWeb').factory('fishingActivityService', function(activityRestService, loadingStatus, mdrCacheService, locale, $filter, $state, tripSummaryService, reportingNavigatorService, tripReportsTimeline, $compile, spatialHelperService, $modalStack) {
+angular.module('unionvmsWeb').factory('fishingActivityService', function(activityRestService, loadingStatus, mdrCacheService, locale, $filter, $state, tripSummaryService, reportingNavigatorService, tripReportsTimeline, unitConversionService,$compile, spatialHelperService, $modalStack) {
 
     var faServ = {
         activityData: {},
@@ -348,11 +349,11 @@ angular.module('unionvmsWeb').factory('fishingActivityService', function(activit
 	 * @public
      * @alias getFishingActivity
 	 */
-    faServ.getFishingActivity = function(obj, callback, actiId) {
-        //FIXME check how to deal with repId through params passed into the function
+    faServ.getFishingActivity = function(obj, callback, actiId, repId) {
         loadingStatus.isLoading('FishingActivity', true, 0);
         
         var faActivityId = "";
+        var faRepId = "";
         
         if (actiId) {
             faActivityId = actiId;
@@ -360,9 +361,15 @@ angular.module('unionvmsWeb').factory('fishingActivityService', function(activit
             faActivityId = faServ.id;
         }
 
+        if (repId) {
+            faRepId = repId;
+        } else {
+            faRepId = faServ.repId;
+        }
+
         var payload = {
             activityId: faActivityId,
-            reportId: faServ.repId
+            reportId: faRepId
         };
         
         if ($state.current.name === 'app.reporting-id' || $state.current.name === 'app.reporting'){
@@ -763,6 +770,63 @@ angular.module('unionvmsWeb').factory('fishingActivityService', function(activit
         finalSummary.title = locale.getString('activity.activity_report_doc_title');
 
         return finalSummary;
+    }
+
+    /**
+     * Loads the data for the history navigation of the view
+     *
+     * @memberof fishingActivityService
+     * @private
+     * @param {Object} data - A reference to the data to be loaded in the history dropdown
+     * @alias loadHistoryData
+     * @returns {Object} data to be displayed
+     */
+    var loadHistoryData = function(data){
+        var finalData = [];
+
+        var test = faServ;
+
+        //FIXME remove this when service is ready
+        //correction
+        /*data = [{
+            fishingActivityId: 2,
+            faReportID: 1,
+            acceptanceDate: '2017-06-12T19:02:00',
+            purposeCode: '9'
+        },{
+            fishingActivityId: 3,
+            faReportID: 3,
+            acceptanceDate: '2017-06-12T20:50:00',
+            purposeCode: '5'
+        }];*/
+
+        //deletion
+        data = [{
+            fishingActivityId: 4,
+            faReportID: 4,
+            acceptanceDate: '2017-06-11T04:43:00',
+            purposeCode: '9'
+        },{
+            fishingActivityId: 4,
+            faReportID: 5,
+            acceptanceDate: '2017-06-11T04:45:00',
+            purposeCode: '3'
+        }]
+
+
+
+        if (angular.isDefined(data) && data.length > 0){
+            finalData = _.sortBy(data, function(item){
+                return moment.utc(item.acceptanceDate, 'YYYY-MM-DDTHH:mm:ss').valueOf();
+            });
+
+            angular.forEach(finalData, function (item) {
+                item.displayDate = unitConversionService.date.convertToUserFormat(item.acceptanceDate);
+                item.enabled = true;
+            });
+        }
+
+        return finalData;
     };
 
     /**
@@ -1428,7 +1492,7 @@ angular.module('unionvmsWeb').factory('fishingActivityService', function(activit
                     
                     break;
                 case 'history':
-                    obj.history = data.history;
+                    obj.history = loadHistoryData(data.history);
                     break;
                 case 'gears':
                     obj.gears = loadGears(data.gears);

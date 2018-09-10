@@ -45,8 +45,9 @@ angular.module('unionvmsWeb').directive('purposeCodeBadge', function(fishingActi
                             title = locale.getString('activity.optype_cancellation');
                             scope.color = 'ORANGE';
                         } else {
-                            //TODO check if this still works with the refactoring
-                            if (parseInt(purposeCodeItem.originalValue) === 9 && (scope.faServ.activityData.history.previousId || scope.faServ.activityData.history.nextId)){
+                            //TODO check if this still works with the refactoring, maybe improve to display also cancelled, deleted
+                            var hasCorrectionInHistory = _.findWhere(scope.faServ.activityData.history, {purposeCode: "5"});
+                            if (parseInt(purposeCodeItem.originalValue) === 9 && angular.isDefined(hasCorrectionInHistory)){
                                 title = locale.getString('activity.fa_report_document_type_corrected');
                                 scope.color = 'RED';
                             }

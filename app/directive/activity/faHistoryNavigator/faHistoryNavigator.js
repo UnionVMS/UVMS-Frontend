@@ -31,27 +31,46 @@ angular.module('unionvmsWeb').directive('faHistoryNavigator', function (fishingA
         templateUrl: 'directive/activity/faHistoryNavigator/faHistoryNavigator.html',
         link: function (scope, element, attrs, fn) {
             scope.faServ = fishingActivityService;
-            
+
             scope.status = {
                 id: undefined,
                 documentType: undefined,
-                activityType: undefined
+                activityType: undefined,
+                repId: undefined
             };
+
+            /**
+             * Update hisotry items in order to enable/disable them in the dropdown menu
+             *
+             * @memberOf faHistoryNavigator
+             * @private
+             */
+            function updateHistoryItems(){
+                console.log('UPDATE HISTORY ITEMS');
+                angular.forEach(scope.history, function (item) {
+                    if (parseInt(item.fishingActivityId) === scope.faServ.id && parseInt(item.faReportID) === scope.faServ.repId){
+                        item.enabled = false;
+                    }
+                });
+            }
             
             /**
              * Load the activity from a previous/next version id
              * 
              * @memberof faHistoryNavigator
              * @public
-             * @param {Number} activityId - The id of the activity to be loaded
+             * @param {Object} item - The history item object containing the activity and report ID's to load the desired activity screen
              */
-            scope.openHistoryView = function (activityId) {
-                scope.status.id = activityId;
-                scope.status.documentType = scope.faServ.documentType;
-                scope.status.activityType = scope.faServ.activityType;
-              
-                scope.faServ.resetActivity();
-                scope.faServ.getFishingActivity(new FishingActivity(scope.activityName),scope.recompileView,activityId);  
+            scope.openHistoryView = function (item) {
+                if (item.enabled){
+                    scope.status.id = item.fishingActivityId;
+                    scope.status.documentType = scope.faServ.documentType;
+                    scope.status.activityType = scope.faServ.activityType;
+                    scope.status.repId = item.faReportID;
+
+                    scope.faServ.resetActivity();
+                    scope.faServ.getFishingActivity(new FishingActivity(scope.activityName), scope.recompileView, item.fishingActivityId, item.faReportID);
+                }
             };
             
             /**
@@ -64,7 +83,9 @@ angular.module('unionvmsWeb').directive('faHistoryNavigator', function (fishingA
                 scope.faServ.id = scope.status.id;
                 scope.faServ.documentType = scope.status.documentType;
                 scope.faServ.activityType = scope.status.activityType;
+                scope.faServ.repId = scope.status.repId;
                 scope.faServ.reloadFromActivityHistory = true;
+
                 var content = angular.element('.activity-details');
                 $compile(content.contents())(scope);
                 
@@ -74,17 +95,31 @@ angular.module('unionvmsWeb').directive('faHistoryNavigator', function (fishingA
              * Update the correction status of the activity service according to the history items provided by the REST service
              * 
              * @memberof faHistoryNavigator
-             * @public
+             * @private
              */
-            scope.updateCorrection = function(){
+            /*scope.updateCorrection = function(){
+                //FIXME check how to update this
                 var isCorrection = true;
-                if (!angular.isDefined(scope.history.previousId) || scope.history.previousId === 0){
+                /!*if (!angular.isDefined(scope.history.previousId) || scope.history.previousId === 0){
                     isCorrection = false;
-                }
+                }*!/
                 scope.faServ.isCorrection = isCorrection;
             };
           
-            scope.updateCorrection();
+            scope.updateCorrection();*/
+
+            function updateCorrectionStatus(){
+                var isCorrection = false;
+                var currentItem = _.findWhere(scope.history, {enabled: false});
+
+                if (angular.isDefined(currentItem) && parseInt(currentItem.purposeCode) === 5){
+                    isCorrection = true;
+                }
+                scope.faServ.isCorrection = isCorrection;
+            }
+
+            updateHistoryItems();
+            updateCorrectionStatus()
         }
     };
 });

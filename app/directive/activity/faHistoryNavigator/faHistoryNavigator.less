@@ -17,5 +17,30 @@ copy of the GNU General Public License along with the IFDM Suite. If not, see <h
         .fa-history {
             color: @primaryColor;
         }
+        .dropdown-menu {
+            .disabled {
+              a {
+                padding-left: 0px;
+                padding-right: 0px;
+                text-align: center;
+              }
+              span {
+                font-weight: bold;
+              }
+              .fa, fa-trash-o, .fa-ban  {
+                color: #999999;
+              }
+            }
+            i {
+              margin-right: 5px;
+            }
+            .fa {
+              color: @primaryColor;
+              font-size: 16px;
+            }
+            .fa-trash-o, .fa-ban {
+              color: @errorColor;
+            }
+        }
     }
 }
