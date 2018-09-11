@@ -253,6 +253,17 @@ angular.module('unionvmsWeb').controller('ExchangeCtrl',function($scope, $log, $
         return visible;
     };
 
+    function getRawXmlData (id){
+        $scope.isLoadingXml = id;
+        exchangeRestService.getRawExchangeMessage(id).then(
+        function(data){
+            $scope.openXmlModal(data);
+        },
+        function(error){
+            $log.error("Error getting the raw message.");
+        });
+    }
+
     $scope.showMessageDetails = function(model) {
         if (angular.isDefined(model.logData) && model.logData.type && _.indexOf(faTypes, model.logData.type) === -1){
             switch(model.logData.type){
@@ -261,7 +272,11 @@ angular.module('unionvmsWeb').controller('ExchangeCtrl',function($scope, $log, $
                     break;
 
                 case 'MOVEMENT':
-                    $location.path('/movement/' + model.logData.guid);
+                    if (model.source.toUpperCase() === 'FLUX'){
+                        getRawXmlData(model.id);
+                    } else {
+                        $location.path('/movement/' + model.logData.guid);
+                    }
                     break;
 
                 case 'ALARM':
@@ -273,14 +288,7 @@ angular.module('unionvmsWeb').controller('ExchangeCtrl',function($scope, $log, $
             }
         } else {
             if (_.indexOf(faTypes, model.typeRefType) !== -1){
-                $scope.isLoadingXml = model.id;
-                exchangeRestService.getRawExchangeMessage(model.id).then(
-                    function(data){
-                        $scope.openXmlModal(data);
-                    },
-                    function(error){
-                        $log.error("Error getting the raw message.");
-                    });
+                getRawXmlData(model.id);
             } else {
                 $log.info("No matching type in model");
             }

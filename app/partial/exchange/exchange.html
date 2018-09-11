@@ -114,8 +114,8 @@ copy of the GNU General Public License along with the IFDM Suite. If not, see <h
                                 <td>{{message.source | transponderName | dataNotAvailable}}</td>
                                 <td>{{message.typeRefType | dataNotAvailable | removeUnderscore}}</td>
                                 <td>{{message.senderRecipient | dataNotAvailable}}</td>
-                                <td>{{message.logData.guid | dataNotAvailable}}</td>
-                                <td>{{message.on | dataNotAvailable}}</td>
+                                <td title="{{message.logData.guid}}">{{message.logData.guid | dataNotAvailable}}</td>
+                                <td title="{{message.on}}">{{message.on | dataNotAvailable}}</td>
                                 <td class="status">
                                     <message-status ng-model="message" is-clickable="::isStatusClickable(message)"></message-status>
                                 </td>
@@ -124,7 +124,7 @@ copy of the GNU General Public License along with the IFDM Suite. If not, see <h
                                         <span class="fa" ng-class="{'fa-eye': message.id !== isLoadingXml, 'fa-spinner fa-spin': message.id === isLoadingXml}"></span>
                                     </button>
                                     <button ng-repeat="relatedMsg in ::message.relatedLogData" type="button" class="btn btn-xs btn-default btn-log" title="{{getLinkedBtnTitle(relatedMsg.type)}}" ng-click="getLogItem(relatedMsg)">
-                                        <span class="fa" ng-class="{'fa-level-down': relatedMsg.type === 'FA_RESPONSE', 'fa-file-text-o': relatedMsg.type === 'FA_REPORT'}"></span>
+                                        <span class="fa" ng-class="{'fa-level-down': relatedMsg.type === 'FA_RESPONSE' || relatedMsg.type === 'MOVEMENT_RESPONSE', 'fa-file-text-o': relatedMsg.type === 'FA_REPORT'}"></span>
                                     </button>
                                 </td>
                                 <td>{{message.forwardRule | dataNotAvailable}}</td>
