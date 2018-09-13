@@ -64,75 +64,77 @@ copy of the GNU General Public License along with the IFDM Suite. If not, see <h
         <div class="row">
             <div class="col-md-12">
                 <div st-table="displayedMessages" st-safe-src="exchangeLogsSearchResults.items" st-set-filter="stExchangeLogFilter" st-pipe="callServer">
-                    <input id="exchangeLogFilter" st-search="messageType" type="search" ng-model="exchangeLogsSearchResults.incomingOutgoing" class="hidden-input">
-                    <table class="table table-striped table-condensed searchResults truncate-text">
-                        <thead>
-                            <tr class="row">
-                                <th>
-                                    <input type="checkbox" ng-model="checkedStatus" ng-change="checkAll()" ng-disabled="displayedMessages.length === 0 || exchangeLogsSearchResults.loading"/>
-                                </th>
-                                <th></th>
-                                <th st-sort="dateReceived" st-skip-natural="true" st-class-ascent="sorting_asc" st-class-descent="sorting_desc">{{'exchange.table_header_date_received_sent' | i18n}}</th>
-                                <th st-sort="source" st-skip-natural="true" st-class-ascent="sorting_asc" st-class-descent="sorting_desc">{{'exchange.table_header_source' | i18n}}</th>
-                                <th st-sort="typeRefType" st-skip-natural="true" st-class-ascent="sorting_asc" st-class-descent="sorting_desc">{{'exchange.table_header_type' | i18n}}</th>
-                                <th st-sort="senderRecipient" st-skip-natural="true" st-class-ascent="sorting_asc" st-class-descent="sorting_desc">{{'exchange.table_header_sender_reciever' | i18n}}</th>
-                                <th class="not-sortable">{{'exchange.table_header_message_uuid' | i18n}}</th>
-                                <th class="not-sortable">{{'exchange.table_header_on_value' | i18n}}</th>
-                                <th st-sort="status" st-skip-natural="true" st-class-ascent="sorting_asc" st-class-descent="sorting_desc">{{'exchange.table_header_status' | i18n}}</th>
-                                <th>{{'activity.header_fa_actions' | i18n }}</th>
-                                <th st-sort="forwardRule" st-skip-natural="true" st-class-ascent="sorting_asc" st-class-descent="sorting_desc">{{'exchange.table_header_fwd_rule' | i18n}}</th>
-                                <th st-sort="recipient" st-skip-natural="true" st-class-ascent="sorting_asc" st-class-descent="sorting_desc">{{'exchange.table_header_recipient' | i18n}}</th>
-                                <th st-sort="dateFwd" st-skip-natural="true" st-class-ascent="sorting_asc" st-class-descent="sorting_desc">{{'exchange.table_header_date_fwd' | i18n}}</th>
-                            </tr>
-                            <tr class="row" ng-if="!exchangeLogsSearchResults.loading && exchangeLogsSearchResults.showZeroResultsMessage">
-                                <th colspan="13">
-                                    <table-alert type="'info'" msg="exchangeLogsSearchResults.zeroResultsErrorMessage" visible="true" no-hide="false"></table-alert>
-                                </th>
-                            </tr>
-                            <tr class="row" ng-if="!exchangeLogsSearchResults.loading && exchangeLogsSearchResults.errorMessage !== undefined && displayedMessages.length === 0 && !exchangeLogsSearchResults.showZeroResultsMessage">
-                                <th colspan="13">
-                                    <table-alert type="'error'" msg="exchangeLogsSearchResults.errorMessage" visible="true" no-hide="false"></table-alert>
-                                </th>
-                            </tr>
-                            <tr class="row" ng-if="exchangeLogsSearchResults.loading">
-                                <th colspan="13" class="loading-spinner-cl"><i class="fa fa-spinner fa-spin loading-spinner"></i></th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                            <tr ng-repeat="message in displayedMessages" class="row" ng-if="!exchangeLogsSearchResults.loading">
-                                <td ng-switch="isLinkActive">
-                                    <input ng-if="::!isLinkActive" type="checkbox" ng-model="message.checked" ng-change="isAllChecked()">
-                                    <button ng-if="::isLinkActive" type="button" class="btn btn-xs btn-default" title="{{'exchange.title_details' | i18n }}" ng-click="goBackToList()">
-                                        <span class="fa fa-reply"></span>
-                                    </button>
-                                </td>
-                                <td class="incoming-outgoing" ng-switch="message.incoming">
-                                    <span ng-switch-when="true" class="fa fa-arrow-down incoming" title="{{'exchange.title_incoming' | i18n}}"></span>
-                                    <span ng-switch-when="false" class="fa fa-arrow-up outgoing" title="{{'exchange.title_outgoing' | i18n}}"></span>
-                                </td>
-                                <td>{{message.dateReceived | confDateFormat | dataNotAvailable}}</td>
-                                <td>{{message.source | transponderName | dataNotAvailable}}</td>
-                                <td>{{message.typeRefType | dataNotAvailable | removeUnderscore}}</td>
-                                <td>{{message.senderRecipient | dataNotAvailable}}</td>
-                                <td>{{message.logData.guid | dataNotAvailable}}</td>
-                                <td>{{message.on | dataNotAvailable}}</td>
-                                <td class="status">
-                                    <message-status ng-model="message" is-clickable="::isStatusClickable(message)"></message-status>
-                                </td>
-                                <td>
-                                    <button type="button" class="btn btn-xs btn-default" title="{{'exchange.title_details' | i18n }}" ng-click="showMessageDetails(message)" ng-if="::showDetailsButton(message)">
-                                        <span class="fa" ng-class="{'fa-eye': message.id !== isLoadingXml, 'fa-spinner fa-spin': message.id === isLoadingXml}"></span>
-                                    </button>
-                                    <button ng-repeat="relatedMsg in ::message.relatedLogData" type="button" class="btn btn-xs btn-default btn-log" title="{{getLinkedBtnTitle(relatedMsg.type)}}" ng-click="getLogItem(relatedMsg)">
-                                        <span class="fa" ng-class="{'fa-level-down': relatedMsg.type === 'FA_RESPONSE', 'fa-file-text-o': relatedMsg.type === 'FA_REPORT'}"></span>
-                                    </button>
-                                </td>
-                                <td>{{message.forwardRule | dataNotAvailable}}</td>
-                                <td>{{message.recipient | dataNotAvailable}}</td>
-                                <td>{{message.dateFwd | confDateFormat | dataNotAvailable}}</td>
-                            </tr>
-                        </tbody>
-                    </table>
+                    <div class="table-responsive-force">
+                        <input id="exchangeLogFilter" st-search="messageType" type="search" ng-model="exchangeLogsSearchResults.incomingOutgoing" class="hidden-input">
+                        <table class="table table-striped table-condensed searchResults truncate-text">
+                            <thead>
+                                <tr class="row">
+                                    <th>
+                                        <input type="checkbox" ng-model="checkedStatus" ng-change="checkAll()" ng-disabled="displayedMessages.length === 0 || exchangeLogsSearchResults.loading"/>
+                                    </th>
+                                    <th></th>
+                                    <th st-sort="dateReceived" st-skip-natural="true" st-class-ascent="sorting_asc" st-class-descent="sorting_desc">{{'exchange.table_header_date_received_sent' | i18n}}</th>
+                                    <th st-sort="source" st-skip-natural="true" st-class-ascent="sorting_asc" st-class-descent="sorting_desc">{{'exchange.table_header_source' | i18n}}</th>
+                                    <th st-sort="typeRefType" st-skip-natural="true" st-class-ascent="sorting_asc" st-class-descent="sorting_desc">{{'exchange.table_header_type' | i18n}}</th>
+                                    <th st-sort="senderRecipient" st-skip-natural="true" st-class-ascent="sorting_asc" st-class-descent="sorting_desc">{{'exchange.table_header_sender_reciever' | i18n}}</th>
+                                    <th class="not-sortable">{{'exchange.table_header_message_uuid' | i18n}}</th>
+                                    <th class="not-sortable">{{'exchange.table_header_on_value' | i18n}}</th>
+                                    <th st-sort="status" st-skip-natural="true" st-class-ascent="sorting_asc" st-class-descent="sorting_desc">{{'exchange.table_header_status' | i18n}}</th>
+                                    <th>{{'activity.header_fa_actions' | i18n }}</th>
+                                    <th st-sort="forwardRule" st-skip-natural="true" st-class-ascent="sorting_asc" st-class-descent="sorting_desc">{{'exchange.table_header_fwd_rule' | i18n}}</th>
+                                    <th st-sort="recipient" st-skip-natural="true" st-class-ascent="sorting_asc" st-class-descent="sorting_desc">{{'exchange.table_header_recipient' | i18n}}</th>
+                                    <th st-sort="dateFwd" st-skip-natural="true" st-class-ascent="sorting_asc" st-class-descent="sorting_desc">{{'exchange.table_header_date_fwd' | i18n}}</th>
+                                </tr>
+                                <tr class="row" ng-if="!exchangeLogsSearchResults.loading && exchangeLogsSearchResults.showZeroResultsMessage">
+                                    <th colspan="13">
+                                        <table-alert type="'info'" msg="exchangeLogsSearchResults.zeroResultsErrorMessage" visible="true" no-hide="false"></table-alert>
+                                    </th>
+                                </tr>
+                                <tr class="row" ng-if="!exchangeLogsSearchResults.loading && exchangeLogsSearchResults.errorMessage !== undefined && displayedMessages.length === 0 && !exchangeLogsSearchResults.showZeroResultsMessage">
+                                    <th colspan="13">
+                                        <table-alert type="'error'" msg="exchangeLogsSearchResults.errorMessage" visible="true" no-hide="false"></table-alert>
+                                    </th>
+                                </tr>
+                                <tr class="row" ng-if="exchangeLogsSearchResults.loading">
+                                    <th colspan="13" class="loading-spinner-cl"><i class="fa fa-spinner fa-spin loading-spinner"></i></th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr ng-repeat="message in displayedMessages" class="row" ng-if="!exchangeLogsSearchResults.loading">
+                                    <td ng-switch="isLinkActive">
+                                        <input ng-if="::!isLinkActive" type="checkbox" ng-model="message.checked" ng-change="isAllChecked()">
+                                        <button ng-if="::isLinkActive" type="button" class="btn btn-xs btn-default" title="{{'exchange.title_details' | i18n }}" ng-click="goBackToList()">
+                                            <span class="fa fa-reply"></span>
+                                        </button>
+                                    </td>
+                                    <td class="incoming-outgoing" ng-switch="message.incoming">
+                                        <span ng-switch-when="true" class="fa fa-arrow-down incoming" title="{{'exchange.title_incoming' | i18n}}"></span>
+                                        <span ng-switch-when="false" class="fa fa-arrow-up outgoing" title="{{'exchange.title_outgoing' | i18n}}"></span>
+                                    </td>
+                                    <td>{{message.dateReceived | confDateFormat | dataNotAvailable}}</td>
+                                    <td>{{message.source | transponderName | dataNotAvailable}}</td>
+                                    <td>{{message.typeRefType | dataNotAvailable | removeUnderscore}}</td>
+                                    <td>{{message.senderRecipient | dataNotAvailable}}</td>
+                                    <td title="{{::getIdToDisplay(message)}}">{{::getIdToDisplay(message) | dataNotAvailable}}</td>
+                                    <td title="{{message.on}}">{{message.on | dataNotAvailable}}</td>
+                                    <td class="status">
+                                        <message-status ng-model="message" is-clickable="::isStatusClickable(message)"></message-status>
+                                    </td>
+                                    <td>
+                                        <button type="button" class="btn btn-xs btn-default" title="{{'exchange.title_details' | i18n }}" ng-click="showMessageDetails(message)" ng-if="::showDetailsButton(message)">
+                                            <span class="fa" ng-class="{'fa-eye': message.id !== isLoadingXml, 'fa-spinner fa-spin': message.id === isLoadingXml}"></span>
+                                        </button>
+                                        <button ng-repeat="relatedMsg in ::message.relatedLogData" type="button" class="btn btn-xs btn-default btn-log" title="{{getLinkedBtnTitle(relatedMsg.type)}}" ng-click="getLogItem(relatedMsg)">
+                                            <span class="fa" ng-class="{'fa-level-down': relatedMsg.type === 'FA_RESPONSE' || relatedMsg.type === 'MOVEMENT_RESPONSE', 'fa-file-text-o': relatedMsg.type === 'FA_REPORT'}"></span>
+                                        </button>
+                                    </td>
+                                    <td>{{message.forwardRule | dataNotAvailable}}</td>
+                                    <td>{{message.recipient | dataNotAvailable}}</td>
+                                    <td>{{message.dateFwd | confDateFormat | dataNotAvailable}}</td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
                 </div>
             </div>
         </div>

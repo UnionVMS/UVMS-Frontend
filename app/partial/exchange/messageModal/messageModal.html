@@ -17,6 +17,7 @@ copy of the GNU General Public License along with the IFDM Suite. If not, see <h
         <h4 class="modal-title">{{'exchange.message_details_modal_title' | i18n}}</h4>
     </div>
     <div class="modal-body">
+        <div class="loading-spinner-cl loading-spinner" ng-if="isLoading"><i class="fa fa-spinner fa-spin"></i></div>
     	<div hljs hljs-source="msg" class="xml-content"></div>
     </div>
 </div>

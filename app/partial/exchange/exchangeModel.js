@@ -83,7 +83,7 @@ angular.module('unionvmsWeb')
     };
 
     var orderRelatedLogs = function(relatedData){
-        var linkedDataOrder = ['FA_RESPONSE', 'FA_REPORT'];
+        var linkedDataOrder = ['FA_RESPONSE', 'FA_REPORT', 'MOVEMENT_RESPONSE'];
         var sortedData = [];
         angular.forEach(linkedDataOrder, function(link){
             sortedData = sortedData.concat(_.where(relatedData, {type: link}));
