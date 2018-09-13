@@ -322,6 +322,18 @@ angular.module('unionvmsWeb').controller('ExchangeCtrl',function($scope, $log, $
         $log.info("open a page... feature not implementet yet.");
     };
 
+    $scope.getIdToDisplay = function(item) {
+        if (angular.isDefined(item.logData)){
+            var id = item.logData.guid;
+            if (item.typeRefType.toUpperCase() === 'FA_RESPONSE'){
+                id = item.id;
+            }
+            return id;
+        } else {
+            return undefined;
+        }
+    };
+
     /**
      * Get the title for the buttons of the linked messages
      *
@@ -412,6 +424,8 @@ angular.module('unionvmsWeb').controller('ExchangeCtrl',function($scope, $log, $
             locale.getString('exchange.table_header_date_received_sent'),
             locale.getString('exchange.table_header_source'),
             locale.getString('exchange.table_header_type'),
+            locale.getString('exchange.table_header_message_uuid'),
+            locale.getString('exchange.table_header_on_value'),
             locale.getString('exchange.table_header_sent_by'),
             locale.getString('exchange.table_header_fwd_rule'),
             locale.getString('exchange.table_header_recipient'),
@@ -437,10 +451,13 @@ angular.module('unionvmsWeb').controller('ExchangeCtrl',function($scope, $log, $
 
             return exportItems.reduce(
                 function(csvObject, item){
+                    var id = $scope.getIdToDisplay(item);
                     var csvRow = [
                         $filter('confDateFormat')(item.dateReceived),
                         $filter('transponderName')(item.source),
                         item.typeRefType,
+                        id,
+                        item.on,
                         item.senderRecipient,
                         item.forwardRule,
                         item.recipient,
