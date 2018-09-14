@@ -102,5 +102,6 @@
 	"title_resend": "Resend",
 	"title_fa_report": "FA Report",
 	"title_fa_response": "FA Response",
-	"title_fa_query": "FA Query"
+	"title_fa_query": "FA Query",
+	"title_movement_response": "Movement Response"
 }

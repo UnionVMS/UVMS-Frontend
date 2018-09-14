@@ -9,11 +9,12 @@ the hope that it will be useful, but WITHOUT ANY WARRANTY; without even the impl
 FITNESS FOR A PARTICULAR PURPOSE.  See the GNU General Public License for more details. You should have received a
 copy of the GNU General Public License along with the IFDM Suite. If not, see <http://www.gnu.org/licenses/>.
 */
-angular.module('unionvmsWeb').controller('ValidationresultsmodalCtrl',function($scope, $modalInstance, $compile, $log, locale, exchangeRestService, msgGuid){
+angular.module('unionvmsWeb').controller('ValidationresultsmodalCtrl',function($scope, $modalInstance, $compile, $log, locale, $timeout, $interval, exchangeRestService, msgGuid){
     $scope.isTableVisible = true;
     $scope.validationResults = [];
     $scope.isLoading = true;
     $scope.inValidXpath = false;
+    $scope.isLoadingXml = true;
     
     var init = function(){
         exchangeRestService.getValidationResults(msgGuid).then(function(response){
@@ -96,6 +97,21 @@ angular.module('unionvmsWeb').controller('ValidationresultsmodalCtrl',function($
         return undefined;
     };
 
+    var scrollToTarget = function(target, containerEl) {
+        var isElement = target && target.nodeType === 1,
+            isNumber = Object.prototype.toString.call(target) === '[object Number]';
+
+        if (isElement) {
+            containerEl.scrollTop = target.offsetTop - 100;
+        } else if (isNumber) {
+            containerEl.scrollTop = target;
+        } else if (target === 'bottom') {
+            containerEl.scrollTop = containerEl.scrollHeight - containerEl.offsetHeight;
+        } else if (target === 'top') {
+            containerEl.scrollTop = 0;
+        }
+    };
+
     var highligthCode = function(xpath){
         $scope.inValidXpath = false;
         var xpathArr = xpath.split('\/\/\*');
@@ -116,7 +132,6 @@ angular.module('unionvmsWeb').controller('ValidationresultsmodalCtrl',function($
                 for(var i=1;i<selectorPathArr.length;i++){
                     var countIdx = 0;
                     while(nextElement && nextElement.length > 0){
-                        console.log('countIdx: ' + countIdx);
                         var openElement = angular.element(nextElement).find('span:contains("' + selectorPathArr[i].varName + '")');
                         closeRegex = new RegExp("&lt;\/<span class\=\"hljs-name\"\>[a-z]*:" + selectorPathArr[i].varName + "<\/span>&gt;");
                         closeRegex2 = new RegExp("&lt;\/<span class\=\"hljs-name\"\>" + selectorPathArr[i].varName + "<\/span>&gt;");
@@ -127,7 +142,6 @@ angular.module('unionvmsWeb').controller('ValidationresultsmodalCtrl',function($
                                     nextElement = convertedText;
                                 }
 
-                                console.log('highlight');
                                 angular.element(nextElement).addClass('xml-highlight');
 
                                 nextElement = angular.element(nextElement[0].nextSibling);
@@ -182,6 +196,15 @@ angular.module('unionvmsWeb').controller('ValidationresultsmodalCtrl',function($
                     nextElement = angular.element(nextElement[0].nextSibling);
                 }
             }
+
+            //Let's scroll into the highlight elements
+            var highlightedEls = document.querySelector('.xml-highlight');
+            if (highlightedEls !== null){
+                var scrollableDiv = document.querySelector('pre');
+                $timeout(function(){
+                    scrollToTarget(highlightedEls, scrollableDiv);
+                }, 0)
+            }
         } else {
             $scope.inValidXpath = true;
             $scope.errorMessage = locale.getString('exchange.invalid_xpath');
@@ -197,6 +220,7 @@ angular.module('unionvmsWeb').controller('ValidationresultsmodalCtrl',function($
 
     $scope.showError = function(xpath){
         if (xpath !== ''){
+            $scope.isLoadingXml = true;
             processXpaths(xpath);
             $scope.togglePanelVisibility();
         }
@@ -209,6 +233,18 @@ angular.module('unionvmsWeb').controller('ValidationresultsmodalCtrl',function($
         }
         $scope.isTableVisible = !$scope.isTableVisible;
     };
+
+    $scope.$watch('isTableVisible', function (newVal) {
+        if (newVal === false){
+            $scope.checkXmlInterval = $interval(function(){
+                var xmlDom = angular.element('.hljs-tag').length;
+                if (xmlDom > 0){
+                    $interval.cancel($scope.checkXmlInterval);
+                    $scope.isLoadingXml = false;
+                }
+            }, 1);
+        }
+    });
     
     //Close modal
     $scope.cancel = function () {

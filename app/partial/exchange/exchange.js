@@ -253,6 +253,17 @@ angular.module('unionvmsWeb').controller('ExchangeCtrl',function($scope, $log, $
         return visible;
     };
 
+    function getRawXmlData (id){
+        $scope.isLoadingXml = id;
+        exchangeRestService.getRawExchangeMessage(id).then(
+        function(data){
+            $scope.openXmlModal(data);
+        },
+        function(error){
+            $log.error("Error getting the raw message.");
+        });
+    }
+
     $scope.showMessageDetails = function(model) {
         if (angular.isDefined(model.logData) && model.logData.type && _.indexOf(faTypes, model.logData.type) === -1){
             switch(model.logData.type){
@@ -261,7 +272,11 @@ angular.module('unionvmsWeb').controller('ExchangeCtrl',function($scope, $log, $
                     break;
 
                 case 'MOVEMENT':
-                    $location.path('/movement/' + model.logData.guid);
+                    if (model.source.toUpperCase() === 'FLUX'){
+                        getRawXmlData(model.id);
+                    } else {
+                        $location.path('/movement/' + model.logData.guid);
+                    }
                     break;
 
                 case 'ALARM':
@@ -273,14 +288,7 @@ angular.module('unionvmsWeb').controller('ExchangeCtrl',function($scope, $log, $
             }
         } else {
             if (_.indexOf(faTypes, model.typeRefType) !== -1){
-                $scope.isLoadingXml = model.id;
-                exchangeRestService.getRawExchangeMessage(model.id).then(
-                    function(data){
-                        $scope.openXmlModal(data);
-                    },
-                    function(error){
-                        $log.error("Error getting the raw message.");
-                    });
+                getRawXmlData(model.id);
             } else {
                 $log.info("No matching type in model");
             }
@@ -312,6 +320,18 @@ angular.module('unionvmsWeb').controller('ExchangeCtrl',function($scope, $log, $
 
     $scope.openPosition = function(model){
         $log.info("open a page... feature not implementet yet.");
+    };
+
+    $scope.getIdToDisplay = function(item) {
+        if (angular.isDefined(item.logData)){
+            var id = item.logData.guid;
+            if (item.typeRefType.toUpperCase() === 'FA_RESPONSE'){
+                id = item.id;
+            }
+            return id;
+        } else {
+            return undefined;
+        }
     };
 
     /**
@@ -404,6 +424,8 @@ angular.module('unionvmsWeb').controller('ExchangeCtrl',function($scope, $log, $
             locale.getString('exchange.table_header_date_received_sent'),
             locale.getString('exchange.table_header_source'),
             locale.getString('exchange.table_header_type'),
+            locale.getString('exchange.table_header_message_uuid'),
+            locale.getString('exchange.table_header_on_value'),
             locale.getString('exchange.table_header_sent_by'),
             locale.getString('exchange.table_header_fwd_rule'),
             locale.getString('exchange.table_header_recipient'),
@@ -429,10 +451,13 @@ angular.module('unionvmsWeb').controller('ExchangeCtrl',function($scope, $log, $
 
             return exportItems.reduce(
                 function(csvObject, item){
+                    var id = $scope.getIdToDisplay(item);
                     var csvRow = [
                         $filter('confDateFormat')(item.dateReceived),
                         $filter('transponderName')(item.source),
                         item.typeRefType,
+                        id,
+                        item.on,
                         item.senderRecipient,
                         item.forwardRule,
                         item.recipient,

@@ -10,10 +10,21 @@ FITNESS FOR A PARTICULAR PURPOSE.  See the GNU General Public License for more d
 copy of the GNU General Public License along with the IFDM Suite. If not, see <http://www.gnu.org/licenses/>.
 */
 angular.module('unionvmsWeb').controller('MessagemodalCtrl',function($scope, $modalInstance, locale, msg){
+    $scope.isLoading = true;
     $scope.msg = vkbeautify.xml(msg);
     
     //Close modal
     $scope.cancel = function () {
         $modalInstance.dismiss('cancel');
     };
+
+    var unbind = $scope.$watch(
+        function () { return angular.element('.hljs-tag').length; },
+        function (newValue, oldValue) {
+            if (newValue > 0){
+                $scope.isLoading = false;
+                unbind();
+            }
+        }
+    );
 });
