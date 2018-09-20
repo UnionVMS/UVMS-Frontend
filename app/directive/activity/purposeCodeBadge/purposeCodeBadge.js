@@ -31,7 +31,22 @@ angular.module('unionvmsWeb').directive('purposeCodeBadge', function(fishingActi
                 var title;
                 if (angular.isDefined(scope.faServ.activityData) && _.keys(scope.faServ.activityData).length > 0){
                     var historyItemIdx = _.findIndex(scope.faServ.activityData.history, function(item){
-                        return item.fishingActivityId === scope.faServ.id && item.faReportID === scope.faServ.repId;
+                        var testId;
+                        if (item.fishingActivityIds.length === 1){
+                            testId = item.fishingActivityIds[0];
+                        } else {
+                            var idx = _.indexOf(item.fishingActivityIds, scope.faServ.id);
+                            if (angular.isDefined(idx)){
+                                testId = item.fishingActivityIds[testId];
+                            }
+                        }
+
+                        if (angular.isDefined(testId)){
+                            return testId === scope.faServ.id && item.faReportID === scope.faServ.repId;
+                        } else {
+                            return false;
+                        }
+
                     });
                     var statusItem;
                     var isFinalItem = false;
@@ -46,7 +61,7 @@ angular.module('unionvmsWeb').directive('purposeCodeBadge', function(fishingActi
                         var purposeCodeItem = _.findWhere(scope.faServ.activityData.reportDetails.items, {id: "purposeCode"});
                         statusItem = {
                             purposeCode: purposeCodeItem.originalValue
-                        }
+                        };
                         isFinalItem = true;
                     }
 
@@ -63,7 +78,7 @@ angular.module('unionvmsWeb').directive('purposeCodeBadge', function(fishingActi
                                     title = locale.getString('activity.optype_correction');
                                     scope.color = 'BLUE';
                                 } else {
-                                    title = locale.getString('activity.fa_report_document_type_corrected');6
+                                    title = locale.getString('activity.fa_report_document_type_corrected');
                                     scope.color = 'RED';
                                 }
                                 break;

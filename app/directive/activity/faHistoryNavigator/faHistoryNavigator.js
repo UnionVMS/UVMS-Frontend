@@ -40,16 +40,30 @@ angular.module('unionvmsWeb').directive('faHistoryNavigator', function (fishingA
                 repId: undefined
             };
 
+            /**
+             * Get the alert message to be displayed on hover on the history button
+             *
+             * @memberOf faHistoryNavigator
+             * @alias getAlertMsg
+             * @public
+             * @returns {string} The message to be displayed
+             */
             scope.getAlertMsg = function(){
                 var msg = '';
                 if (scope.hasMultipleItems === true){
-                    msg = locale.getString('activity.warn_msg_when_multiple_activitites_in_history')
+                    msg = locale.getString('activity.warn_msg_when_multiple_activitites_in_history');
                 }
 
                 return msg;
             }
 
-
+            /**
+             * Check if the history item is referring to the currently viewed activity and set the enabled status to false if true
+             *
+             * @memberOf faHistoryNavigator
+             * @private
+             * @param {Object} record - A history record object
+             */
             function checkIsCurrentActivity(record){
                 angular.forEach(record.fishingActivityIds, function(item){
                     if (parseInt(item) === scope.faServ.id && parseInt(record.faReportID) === scope.faServ.repId){
@@ -76,6 +90,16 @@ angular.module('unionvmsWeb').directive('faHistoryNavigator', function (fishingA
                 });
             }
 
+            /**
+             * Check if the acitvity should be disabled in the history menu
+             *
+             * @memberOf faHistoryNavigator
+             * @public
+             * @alias isActivityDisabled
+             * @param {Number|String} id - The id of the activity
+             * @param {Number|String} repId - The id of the FA report
+             * @returns {boolean} True if the activity should be disabled
+             */
             scope.isActivityDisabled = function(id, repId){
                 var disabled = false;
                 if (parseInt(id) === scope.faServ.id && parseInt(repId) === scope.faServ.id){
@@ -111,8 +135,9 @@ angular.module('unionvmsWeb').directive('faHistoryNavigator', function (fishingA
             
             /**
              * Recompile the activity view and update the fishing activity service
-             * 
+             *
              * @memberof faHistoryNavigator
+             * @alias recompileView
              * @public
              */
             scope.recompileView = function(){
@@ -126,24 +151,13 @@ angular.module('unionvmsWeb').directive('faHistoryNavigator', function (fishingA
                 $compile(content.contents())(scope);
                 
             };
-            
+
             /**
-             * Update the correction status of the activity service according to the history items provided by the REST service
-             * 
+             * Update the correction status of the FA service
+             *
              * @memberof faHistoryNavigator
              * @private
              */
-            /*scope.updateCorrection = function(){
-                //FIXME check how to update this
-                var isCorrection = true;
-                /!*if (!angular.isDefined(scope.history.previousId) || scope.history.previousId === 0){
-                    isCorrection = false;
-                }*!/
-                scope.faServ.isCorrection = isCorrection;
-            };
-          
-            scope.updateCorrection();*/
-
             function updateCorrectionStatus(){
                 var isCorrection = false;
                 var currentItem = _.findWhere(scope.history, {enabled: false});
