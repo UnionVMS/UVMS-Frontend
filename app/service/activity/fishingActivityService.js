@@ -770,7 +770,7 @@ angular.module('unionvmsWeb').factory('fishingActivityService', function(activit
         finalSummary.title = locale.getString('activity.activity_report_doc_title');
 
         return finalSummary;
-    }
+    };
 
     /**
      * Loads the data for the history navigation of the view
@@ -784,40 +784,10 @@ angular.module('unionvmsWeb').factory('fishingActivityService', function(activit
     var loadHistoryData = function(data){
         var finalData = [];
 
-        var test = faServ;
-
-        //FIXME remove this when service is ready
-        //correction
-        /*data = [{
-            fishingActivityId: 2,
-            faReportID: 1,
-            acceptanceDate: '2017-06-12T19:02:00',
-            purposeCode: '9'
-        },{
-            fishingActivityId: 3,
-            faReportID: 3,
-            acceptanceDate: '2017-06-12T20:50:00',
-            purposeCode: '5'
-        }];*/
-
-        //deletion
-        data = [{
-            fishingActivityId: 4,
-            faReportID: 4,
-            acceptanceDate: '2017-06-11T04:43:00',
-            purposeCode: '9'
-        },{
-            fishingActivityId: 4,
-            faReportID: 5,
-            acceptanceDate: '2017-06-11T04:45:00',
-            purposeCode: '3'
-        }]
-
-
-
         if (angular.isDefined(data) && data.length > 0){
             finalData = _.sortBy(data, function(item){
-                return moment.utc(item.acceptanceDate, 'YYYY-MM-DDTHH:mm:ss').valueOf();
+                var date = moment.utc(item.acceptanceDate, 'YYYY-MM-DDTHH:mm:ss').valueOf();
+                return -date;
             });
 
             angular.forEach(finalData, function (item) {

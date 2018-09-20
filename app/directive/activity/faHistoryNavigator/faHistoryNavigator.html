@@ -1,15 +1,23 @@
 <div class="fa-history-navigator">
     <div class="btn-group">
-        <button type="button" class="btn btn-default dropdown-toggle btn-run-options" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+        <button type="button" class="btn btn-default dropdown-toggle btn-run-options" title="{{getAlertMsg()}}" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                 {{'activity.fa_navigator_history' | i18n}}
-                    <span><i class="fa fa-history" aria-hidden="true"></i></span>
-                </button>
-        <ul class="dropdown-menu dropdown-run-options dropdown-menu-right">
-            <li ng-repeat="item in history" ng-class="{'disabled': item.enabled === false}">
-                <a ng-click="openHistoryView(item)"><i class="fa {{ item.purposeCode | stPurposeCode: true }}" title="{{ item.purposeCode | stPurposeCode}}"></i><span>{{item.displayDate}}</span></a>
+                <span ng-switch="::hasMultipleItems">
+                    <i ng-switch-when="false" class="fa fa-history" aria-hidden="true"></i>
+                    <i ng-switch-when="true" class="fa fa-exclamation-triangle" aria-hidden="true"></i>
+                </span>
+        </button>
+
+        <ul class="dropdown-menu dropdown-menu-right">
+            <li ng-repeat="item in history" ng-class="{'disabled': item.enabled === false, 'dropdown-submenu': item.fishingActivityIds.length > 1}">
+                <a ng-if="::item.fishingActivityIds.length === 1" ng-click="openHistoryView(item)"><i class="fa {{ item.purposeCode | stPurposeCode: true }}" title="{{ item.purposeCode | stPurposeCode}}"></i><span>{{item.displayDate}}</span></a>
+                <a ng-if="::item.fishingActivityIds.length > 1"><i class="fa fa-caret-left"></i><i class="fa {{ item.purposeCode | stPurposeCode: true }}" title="{{ item.purposeCode | stPurposeCode}}"></i><span>{{item.displayDate}}</span></a>
+                <ul class="dropdown-menu dropdown-menu-right">
+                    <li ng-repeat="id in item.fishingActivityIds" ng-class="{'disabled': isActivityDisabled(id, item.faReportID)}">
+                        <a ng-click="openHistoryView(item, id)">{{ 'activity.title_fishing_activity' | i18n }} ({{id}})</a>
+                    </li>
+                </ul>
             </li>
-            <!--<li ng-if="history.previousId"><a ng-click="openHistoryView(history.previousId)">{{'activity.fa_navigator_history_previous' | i18n}}</a></li>
-            <li ng-if="history.nextId"><a ng-click="openHistoryView(history.nextId)">{{'activity.fa_navigator_history_next' | i18n}}</a></li>-->
         </ul>
     </div>
 </div>

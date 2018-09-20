@@ -20,7 +20,7 @@ copy of the GNU General Public License along with the IFDM Suite. If not, see <h
  * @description
  *  A reusable button that will allow to navigate through the history of a particular fishing activity.
  */
-angular.module('unionvmsWeb').directive('faHistoryNavigator', function (fishingActivityService,FishingActivity, $compile) {
+angular.module('unionvmsWeb').directive('faHistoryNavigator', function (fishingActivityService,FishingActivity, $compile, locale) {
     return {
         restrict: 'E',
         replace: true,
@@ -31,6 +31,7 @@ angular.module('unionvmsWeb').directive('faHistoryNavigator', function (fishingA
         templateUrl: 'directive/activity/faHistoryNavigator/faHistoryNavigator.html',
         link: function (scope, element, attrs, fn) {
             scope.faServ = fishingActivityService;
+            scope.hasMultipleItems = false;
 
             scope.status = {
                 id: undefined,
@@ -39,6 +40,25 @@ angular.module('unionvmsWeb').directive('faHistoryNavigator', function (fishingA
                 repId: undefined
             };
 
+            scope.getAlertMsg = function(){
+                var msg = '';
+                if (scope.hasMultipleItems === true){
+                    msg = locale.getString('activity.warn_msg_when_multiple_activitites_in_history')
+                }
+
+                return msg;
+            }
+
+
+            function checkIsCurrentActivity(record){
+                angular.forEach(record.fishingActivityIds, function(item){
+                    if (parseInt(item) === scope.faServ.id && parseInt(record.faReportID) === scope.faServ.repId){
+                        record.enabled = false;
+                    }
+                });
+            }
+
+
             /**
              * Update hisotry items in order to enable/disable them in the dropdown menu
              *
@@ -46,13 +66,24 @@ angular.module('unionvmsWeb').directive('faHistoryNavigator', function (fishingA
              * @private
              */
             function updateHistoryItems(){
-                console.log('UPDATE HISTORY ITEMS');
                 angular.forEach(scope.history, function (item) {
-                    if (parseInt(item.fishingActivityId) === scope.faServ.id && parseInt(item.faReportID) === scope.faServ.repId){
-                        item.enabled = false;
+                    if (item.fishingActivityIds.length === 1){
+                        checkIsCurrentActivity(item);
+                    } else {
+                        scope.hasMultipleItems = true;
+                        checkIsCurrentActivity(item);
                     }
                 });
             }
+
+            scope.isActivityDisabled = function(id, repId){
+                var disabled = false;
+                if (parseInt(id) === scope.faServ.id && parseInt(repId) === scope.faServ.id){
+                    disabled = true;
+                }
+
+                return disabled;
+            };
             
             /**
              * Load the activity from a previous/next version id
@@ -61,15 +92,20 @@ angular.module('unionvmsWeb').directive('faHistoryNavigator', function (fishingA
              * @public
              * @param {Object} item - The history item object containing the activity and report ID's to load the desired activity screen
              */
-            scope.openHistoryView = function (item) {
-                if (item.enabled){
-                    scope.status.id = item.fishingActivityId;
+            scope.openHistoryView = function (item, id) {
+                if ((item.fishingActivityIds.length === 1 && item.enabled) || (item.fishingActivityIds.length > 1 && id !== scope.faServ.id)){
+                    if (angular.isDefined(id)){
+                        scope.status.id = id;
+                    } else {
+                        scope.status.id = item.fishingActivityIds[0];
+                    }
+
                     scope.status.documentType = scope.faServ.documentType;
                     scope.status.activityType = scope.faServ.activityType;
                     scope.status.repId = item.faReportID;
 
                     scope.faServ.resetActivity();
-                    scope.faServ.getFishingActivity(new FishingActivity(scope.activityName), scope.recompileView, item.fishingActivityId, item.faReportID);
+                    scope.faServ.getFishingActivity(new FishingActivity(scope.activityName), scope.recompileView, scope.status.id, item.faReportID);
                 }
             };
             
@@ -119,7 +155,7 @@ angular.module('unionvmsWeb').directive('faHistoryNavigator', function (fishingA
             }
 
             updateHistoryItems();
-            updateCorrectionStatus()
+            updateCorrectionStatus();
         }
     };
 });

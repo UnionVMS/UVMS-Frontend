@@ -25,39 +25,74 @@ angular.module('unionvmsWeb').directive('purposeCodeBadge', function(fishingActi
         templateUrl: 'directive/activity/purposeCodeBadge/purposeCodeBadge.html',
         link: function(scope, element, attrs, fn) {
             scope.show = false;
-            scope.finished = false;
-            scope.color = undefined;
+            scope.color = 'BLUE';
             scope.faServ = fishingActivityService;
             scope.getTitle = function(){
                 var title;
-                if (angular.isDefined(scope.faServ.activityData) && angular.isDefined(scope.faServ.activityData.reportDetails)){
-                    var items = scope.faServ.activityData.reportDetails.items;
-                    var purposeCodeItem = _.findWhere(items, {id: "purposeCode"});
-                    if (angular.isDefined(purposeCodeItem)){
-                        scope.finished = true;
-                        if (scope.faServ.isCorrection){
-                            title = locale.getString('activity.optype_correction');
-                            scope.color = 'BLUE';
-                        } else if (parseInt(purposeCodeItem.originalValue) === 3){
-                            title = locale.getString('activity.optype_deletion');
-                            scope.color = 'RED';
-                        } else if (parseInt(purposeCodeItem.originalValue) === 1){
-                            title = locale.getString('activity.optype_cancellation');
-                            scope.color = 'ORANGE';
+                if (angular.isDefined(scope.faServ.activityData) && _.keys(scope.faServ.activityData).length > 0){
+                    var historyItemIdx = _.findIndex(scope.faServ.activityData.history, function(item){
+                        return item.fishingActivityId === scope.faServ.id && item.faReportID === scope.faServ.repId;
+                    });
+                    var statusItem;
+                    var isFinalItem = false;
+                    if (angular.isDefined(historyItemIdx) && historyItemIdx !== -1){
+                        if (historyItemIdx > 0){
+                            statusItem = scope.faServ.activityData.history[historyItemIdx - 1];
                         } else {
-                            //TODO check if this still works with the refactoring, maybe improve to display also cancelled, deleted
-                            var hasCorrectionInHistory = _.findWhere(scope.faServ.activityData.history, {purposeCode: "5"});
-                            if (parseInt(purposeCodeItem.originalValue) === 9 && angular.isDefined(hasCorrectionInHistory)){
-                                title = locale.getString('activity.fa_report_document_type_corrected');
-                                scope.color = 'RED';
-                            }
+                            statusItem = scope.faServ.activityData.history[historyItemIdx];
+                            isFinalItem = true;
+                        }
+                    } else {
+                        var purposeCodeItem = _.findWhere(scope.faServ.activityData.reportDetails.items, {id: "purposeCode"});
+                        statusItem = {
+                            purposeCode: purposeCodeItem.originalValue
+                        }
+                        isFinalItem = true;
+                    }
+
+                    var properPurposeCode;
+                    if (angular.isDefined(statusItem)){
+                        properPurposeCode = parseInt(statusItem.purposeCode);
+                        switch (properPurposeCode){
+                            case 9:
+                                title = locale.getString('activity.fa_report_document_type_original');
+                                scope.color = 'BLUE';
+                                break;
+                            case 5:
+                                if (isFinalItem){
+                                    title = locale.getString('activity.optype_correction');
+                                    scope.color = 'BLUE';
+                                } else {
+                                    title = locale.getString('activity.fa_report_document_type_corrected');6
+                                    scope.color = 'RED';
+                                }
+                                break;
+                            case 3:
+                                if (isFinalItem){
+                                    title = locale.getString('activity.optype_deletion');
+                                    scope.color = 'ORANGE';
+                                } else {
+                                    title = locale.getString('activity.fa_report_document_type_deleted');
+                                    scope.color = 'RED';
+                                }
+                                break;
+                            case 1:
+                                if (isFinalItem){
+                                    title = locale.getString('activity.optype_cancellation');
+                                    scope.color = 'ORANGE';
+                                } else {
+                                    title = locale.getString('activity.fa_report_document_type_canceled');
+                                    scope.color = 'RED';
+                                }
+                                break;
                         }
                     }
+
+                    if (angular.isDefined(title)){
+                        scope.show = true;
+                    }
+                    return title;
                 }
-                if (angular.isDefined(title)){
-                    scope.show = true;
-                }
-                return title;
             };
         }
     };
