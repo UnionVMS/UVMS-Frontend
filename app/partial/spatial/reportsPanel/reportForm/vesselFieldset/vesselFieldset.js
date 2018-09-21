@@ -226,7 +226,6 @@ angular.module('unionvmsWeb').controller('VesselfieldsetCtrl',function($scope, l
 
     var checkSelectedAssets = function(group){
         angular.forEach($scope.shared.vessels, function(item){
-            console.log('vessels:', item);
             var itemGuid = group ? item.id : item.historyId;
             if(_.where($scope.report.vesselsSelection, { guid: itemGuid }).length > 0){
                 item.selected = true;
