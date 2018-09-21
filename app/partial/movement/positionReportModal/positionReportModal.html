@@ -44,9 +44,9 @@ copy of the GNU General Public License along with the IFDM Suite. If not, see <h
         <div class="row sub-section">
             <h1>{{'movement.asset' | i18n}}</h1>
 
-            <div class="col-md-2" ng-if="positionReport.vessel.countryCode">
+            <div class="col-md-2" ng-if="positionReport.vessel.flagStateCode">
                 <label>{{'movement.manual_position_field_label_flag_state' | i18n}}</label>
-                <p>{{positionReport.vessel.countryCode}}</p>
+                <p>{{positionReport.vessel.flagStateCode}}</p>
             </div>
             <div class="col-md-2" ng-if="positionReport.vessel.ircs">
                 <label>{{'movement.manual_position_field_label_ircs' | i18n}}</label>

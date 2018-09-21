@@ -31,7 +31,7 @@ copy of the GNU General Public License along with the IFDM Suite. If not, see <h
             </thead>
             <tbody>
                 <tr ng-repeat="movement in currentSearchResults.items | orderBy:currentSearchResults.sortBy : currentSearchResults.sortReverse | filter:searchFilter">
-                    <td ng-attr-title="{{movement.vessel.countryCode}}" style="padding-left: 15px">{{movement.vessel.countryCode}}</td>
+                    <td ng-attr-title="{{movement.vessel.flagStateCode}}" style="padding-left: 15px">{{movement.vessel.flagStateCode}}</td>
                     <td ng-attr-title="{{movement.vessel.externalMarking}}">{{movement.vessel.externalMarking}}</td>
                     <td ng-attr-title="{{movement.vessel.ircs}}">{{movement.vessel.ircs}}</td>
                     <td><a href="#/assets/{{movement.vessel.getGuid()}}" title="{{'common.view_details' | i18n}}" ng-show="movement.vessel">{{movement.vessel.name}}</a></td>
