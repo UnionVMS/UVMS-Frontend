@@ -87,7 +87,7 @@ angular.module('unionvmsWeb').factory('movementCsvService', function(csvService,
 
     function getRow(movement) {
         return [
-            movement.vessel.countryCode,
+            movement.vessel.flagStateCode,
             movement.vessel.externalMarking,
             movement.vessel.ircs,
             movement.vessel.name,
