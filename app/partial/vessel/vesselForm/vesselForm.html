@@ -91,7 +91,7 @@
                                                 </tr>
                                             </thead>
                                             <tbody>
-                                                <tr ng-repeat="item in vesselHistory | orderBy :'-eventHistory.eventDate'" class="list-item" ng-click="viewHistoryDetails(item)" id="asset-btn-history-item">
+                                                <tr ng-repeat="item in vesselHistory | orderBy :'-updateTime'" class="list-item" ng-click="viewHistoryDetails(item)" id="asset-btn-history-item">
                                                     <td>{{item.eventCode}}</td>
                                                     <td>{{item.updateTime | confDateFormat}}</td>
                                                 </tr>
