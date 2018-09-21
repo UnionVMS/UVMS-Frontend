@@ -42,9 +42,9 @@ copy of the GNU General Public License along with the IFDM Suite. If not, see <h
         				</tr>
         			</thead>
         			<tbody>
-        				<tr st-select-row-args="vessel" ng-click="clickHandler(vessel.vesselId.guid)" ng-repeat="vessel in displayedRecords">
-        					<td class="ng-hide">{{vessel.vesselId.guid}}</td>
-        					<td>{{vessel.name}}</td>
+        				<tr st-select-row-args="vessel" ng-click="clickHandler(vessel.id)" ng-repeat="vessel in displayedRecords">
+                            <td class="ng-hide">{{vessel.vesselId.id}}</td>
+                            <td>{{vessel.name}}</td>
         				</tr>
         			</tbody>
         			<tfoot class="stFooterPagination">

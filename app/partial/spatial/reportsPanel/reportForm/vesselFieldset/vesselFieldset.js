@@ -47,9 +47,9 @@ angular.module('unionvmsWeb').controller('VesselfieldsetCtrl',function($scope, l
     $scope.checkVesselIsSelected = function(vesselSrc){
         var response = false;
         for (var i = 0; i < $scope.report.vesselsSelection.length; i++){
-            if (angular.isDefined(vesselSrc.vesselId) && $scope.report.vesselsSelection[i].type === 'asset' && vesselSrc.eventHistory.eventId === $scope.report.vesselsSelection[i].guid){
+            if (angular.isDefined(vesselSrc.id) && $scope.report.vesselsSelection[i].type === 'asset' && vesselSrc.historyId === $scope.report.vesselsSelection[i].id){
                 response = true;
-            } else if (angular.isDefined(vesselSrc.guid) && $scope.report.vesselsSelection[i].type === 'vgroup' && vesselSrc.guid === $scope.report.vesselsSelection[i].guid){
+            } else if (angular.isDefined(vesselSrc.id) && $scope.report.vesselsSelection[i].type === 'vgroup' && vesselSrc.id === $scope.report.vesselsSelection[i].id){
                 response = true;
             }
         }
@@ -68,9 +68,9 @@ angular.module('unionvmsWeb').controller('VesselfieldsetCtrl',function($scope, l
                         var item = $scope.shared.vessels[idx];
                         item.type = $scope.shared.vesselSearchBy;
                         if (item.type === 'asset'){
-                            item.guid = $scope.shared.vessels[idx].vesselId.guid;
+                            item.guid = $scope.shared.vessels[idx].id;
                             //FIXME when getting details from asset history
-                            //item.guid = $scope.shared.vessels[idx].eventHistory.eventId;
+                            //item.guid = $scope.shared.vessels[idx].historyId;
                         }
                         
                         return item;
@@ -97,17 +97,17 @@ angular.module('unionvmsWeb').controller('VesselfieldsetCtrl',function($scope, l
         if (!vessel.selected){
             vessel.selected = true;
 
-            guid = $scope.shared.vesselSearchBy === 'asset'? vessel.eventHistory.eventId : vessel.guid;
+            guid = $scope.shared.vesselSearchBy === 'asset'? vessel.historyId : vessel.id;
             if(_.where($scope.report.vesselsSelection,{guid: guid}).length === 0){
                 var record = {
                     name: vessel.name
                 };
                 
                 if ($scope.shared.vesselSearchBy === 'asset'){
-                    record.guid = vessel.eventHistory.eventId;
+                    record.guid = vessel.historyId;
                     record.type = 'asset';
                 } else {
-                    record.guid = vessel.guid;
+                    record.guid = vessel.id;
                     record.user = vessel.user;
                     record.type = 'vgroup';
                 }
@@ -116,7 +116,7 @@ angular.module('unionvmsWeb').controller('VesselfieldsetCtrl',function($scope, l
             }
         }else{
             delete vessel.selected;
-            guid = $scope.shared.vesselSearchBy === 'asset'? vessel.eventHistory.eventId : vessel.guid;
+            guid = $scope.shared.vesselSearchBy === 'asset'? vessel.historyId : vessel.id;
             $scope.removeSelection(guid,$scope.report.vesselsSelection.indexOf(_.where($scope.report.vesselsSelection, {guid: guid})[0]));
         }
     };
@@ -226,8 +226,9 @@ angular.module('unionvmsWeb').controller('VesselfieldsetCtrl',function($scope, l
 
     var checkSelectedAssets = function(group){
         angular.forEach($scope.shared.vessels, function(item){
-            var itemGuid = group ? item.guid : item.eventHistory.eventId;
-            if(_.where($scope.report.vesselsSelection, {guid: itemGuid}).length > 0){
+            console.log('vessels:', item);
+            var itemGuid = group ? item.id : item.historyId;
+            if(_.where($scope.report.vesselsSelection, { guid: itemGuid }).length > 0){
                 item.selected = true;
             }
         });
@@ -238,7 +239,7 @@ angular.module('unionvmsWeb').controller('VesselfieldsetCtrl',function($scope, l
         $scope.reportBodyForm.$setDirty();
         $scope.report.vesselsSelection.splice(index,1);
         angular.forEach($scope.shared.vessels, function(item){
-            if(($scope.shared.vesselSearchBy === 'asset' && item.eventHistory.eventId === guid) || item.guid === guid){
+            if(($scope.shared.vesselSearchBy === 'asset' && item.historyId === guid) || item.id === guid){
                 delete item.selected;
             }
         });

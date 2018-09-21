@@ -71,7 +71,7 @@ copy of the GNU General Public License along with the IFDM Suite. If not, see <h
 							</div>
 							<div class="tbody col-md-12" ng-if="!vesselSearchLoading">
 								<div class="tr row" ng-repeat="vessel in displayedRecords">
-									<div class="td col-md-2" ng-hide="shared.vesselSearchBy === 'vgroup'">{{ vessel.countryCode }}</div>
+									<div class="td col-md-2" ng-hide="shared.vesselSearchBy === 'vgroup'">{{ vessel.flagStateCode }}</div>
 									<div class="td col-md-2" ng-hide="shared.vesselSearchBy === 'vgroup'">{{ vessel.ircs }}</div>
 									<div class="td col-md-2" ng-hide="shared.vesselSearchBy === 'vgroup'">{{ vessel.cfr }}</div>
 									<div class="td col-md-2" ng-hide="shared.vesselSearchBy === 'vgroup'">{{ vessel.externalMarking }}</div>
