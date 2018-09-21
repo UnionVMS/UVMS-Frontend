@@ -372,7 +372,7 @@ angular.module('unionvmsWeb').controller('VesselCtrl', function($scope, $log, $s
             return exportItems.reduce(
                 function(csvObject, item){
                     var csvRow = [
-                        item.countryCode,
+                        item.flagStateCode,
                         item.externalMarking,
                         item.name,
                         item.ircs,
