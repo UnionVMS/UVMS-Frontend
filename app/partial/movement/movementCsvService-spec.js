@@ -50,7 +50,7 @@ describe('movementCsvService', function() {
         },
         time: '2016-05-09 08:03:04',
         vessel: {
-            countryCode: 'SWE',
+            flagStateCode: 'SWE',
             externalMarking: 'Båt',
             ircs: 'ABC123',
             name: 'Båt nummer 1'

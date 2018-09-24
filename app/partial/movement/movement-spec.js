@@ -211,7 +211,7 @@ describe('MovementCtrl', function() {
 
         function createVessel(suffix) {
             var vessel = new Vessel();
-            vessel.countryCode = 'state' + suffix;
+            vessel.flagStateCode  = 'state' + suffix;
             vessel.externalMarking = 'ext' + suffix;
             vessel.ircs = 'ircs' + suffix;
             vessel.name = 'name' + suffix;
