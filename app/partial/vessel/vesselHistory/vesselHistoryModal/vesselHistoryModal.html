@@ -63,7 +63,7 @@
             </div>
             <div class="col-md-12">
                 <ul class="contacts">
-                    <li class="contact" ng-if="vesselHistory.contact.length <= 0">
+                    <li class="contact" ng-if="contactInfo.length <= 0">
                         <div class="col-md-12">
                             {{'vessel.contact_name' | i18n }}: <b>-</b>
                         </div>
@@ -74,7 +74,7 @@
                             {{'vessel.contact_number' | i18n }}: <b>-</b>
                         </div>
                     </li>
-                    <li class="contact" ng-repeat="contact in vesselHistory.contact" >
+                    <li class="contact" ng-repeat="contact in contactInfo" >
                         <div class="col-md-12">
                             {{'vessel.contact_name' | i18n }}: <b>{{contact.name | vesselHistoryReplaceEmptyValueWithDash}}</b>
                         </div>

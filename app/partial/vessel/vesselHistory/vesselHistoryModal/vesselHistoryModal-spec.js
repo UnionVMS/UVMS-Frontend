@@ -13,7 +13,7 @@ describe('VesselhistorymodalCtrl', function () {
 
   beforeEach(module('unionvmsWeb'));
 
-  var scope, ctrl, modalInstance, vesselHistory;
+  var scope, ctrl, modalInstance, vesselHistory, vesselRestServiceMock;
 
   // Initialize the controller and a mock scope
   beforeEach(inject(
@@ -25,9 +25,26 @@ describe('VesselhistorymodalCtrl', function () {
         result: {
           then: jasmine.createSpy('modalInstance.result.then')
         }
+      }; 
+      vesselHistory = {
+        id : '1234'
       };
-      vesselHistory = {};
-      ctrl = $controller('VesselhistorymodalCtrl', {$scope: scope, $modalInstance: modalInstance, vesselHistory: vesselHistory});
+     
+      vesselRestServiceMock = jasmine.createSpyObj('vesselRestService', ['getContactsForAsset']);
+      vesselRestServiceMock.getContactsForAsset.andCallFake(function(){
+        return {
+            then: function(callback){
+                return callback({
+                    'contactInfo': {
+                      name: 'Mr Boat McBoatface'
+                    }
+                });
+            }
+        };
+      });
+      scope.vesselHistory = vesselHistory;
+
+      ctrl = $controller('VesselhistorymodalCtrl', {$scope: scope, $modalInstance: modalInstance, vesselHistory: vesselHistory, vesselRestService: vesselRestServiceMock});
     })
   );
 
@@ -35,6 +52,10 @@ describe('VesselhistorymodalCtrl', function () {
     it('should dismiss the modal on cancel', function () {
       scope.cancel();
       expect(modalInstance.dismiss).toHaveBeenCalledWith('cancel');
+    });
+
+    it ('should call getContactsForAsset', function() {
+      expect(vesselRestServiceMock.getContactsForAsset).toHaveBeenCalled();
     });
   });
 });
