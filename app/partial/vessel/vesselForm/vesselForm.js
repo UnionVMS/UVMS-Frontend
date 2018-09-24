@@ -562,14 +562,15 @@ angular.module('unionvmsWeb').controller('VesselFormCtrl',function($scope, $log,
         },
         showExport: function(vessel) {
             if (vessel) {
-                return angular.isDefined(vessel.vesselId) && vessel.vesselId != null;
+                return angular.isDefined(vessel.id) && vessel.id != null;
             }
             return false;
         },
         archiveCallback: $scope.archiveVessel,
         showArchive: function(vessel) {
             if (vessel && $scope.vesselObj.isLocalSource()) {
-                return angular.isDefined(vessel.vesselId) && vessel.vesselId != null && vessel.active;
+                return angular.isDefined(vessel.id) && vessel.id != null && vessel.active;
+                
             }
             return false;
         },
@@ -579,6 +580,9 @@ angular.module('unionvmsWeb').controller('VesselFormCtrl',function($scope, $log,
             }
             return false;
         },
+        showRemove: function() {
+            return false;
+        }
     };
 
     $scope.vesselContactsFunctions = {
