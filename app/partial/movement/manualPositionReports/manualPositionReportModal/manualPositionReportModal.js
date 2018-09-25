@@ -360,7 +360,7 @@ angular.module('unionvmsWeb').controller('ManualPositionReportModalCtrl', functi
         $scope.positionReport.carrier.name = item.name;
         $scope.positionReport.carrier.externalMarking = item.externalMarking;
         $scope.positionReport.carrier.cfr = item.cfr;
-        $scope.positionReport.carrier.flagState = item.countryCode;
+        $scope.positionReport.carrier.flagState = item.flagStateCode;
 
         $scope.showLastMovementByVessel(item);
     };

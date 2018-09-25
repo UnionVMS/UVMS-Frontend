@@ -455,13 +455,13 @@ angular.module('unionvmsWeb').controller('VmspanelCtrl',function($scope, locale,
 			    	   				header.push(locale.getString('spatial.tab_vms_pos_table_header_fs'));
 			    	   			}
 			    	   			if (type === 'tracks'){
-			    	   			    itemProperty = rec.countryCode; 
+			    	   			    itemProperty = rec.flagStateCode; 
 			    	   			} else if (type === 'alarms'){
 			    	   			    itemProperty = rec.properties.fs;
 			    	   			} else if (type === 'trips'){
 			    	   			    itemProperty = rec.flagState;
 			    	   			} else {
-			    	   			    itemProperty = rec.properties.countryCode;
+			    	   			    itemProperty = rec.properties.flagStateCode;
 			    	   			}
 			    	   			row.push(itemProperty);
 			    	   			break;

@@ -85,7 +85,7 @@ describe('Movement', function() {
         var vessel = new Vessel();
         vessel.name = "TestName";
         vessel.ircs = "TestIRCS";
-        vessel.countryCode = "TestContryCode";
+        vessel.flagStateCode = "TestContryCode";
         vessel.externalMarking = "TestExternalMarking";
         movement.setVessel(vessel);
         expect(movement.vessel).toEqual(vessel);

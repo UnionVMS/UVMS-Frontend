@@ -1,11 +1,11 @@
 <div class="col-md-12 vesselDetailsContainer">
     <fieldset ng-disabled="disableForm">
         <div class="row">
-            <div class="col-md-1 form-group smallerpaddingright" ng-class="{'has-error': (submitAttempted || vesselForm.countryCode.$dirty) && vesselForm.countryCode.$invalid}">
+            <div class="col-md-1 form-group smallerpaddingright" ng-class="{'has-error': (submitAttempted || vesselForm.flagStateCode.$dirty) && vesselForm.flagStateCode.$invalid}">
                 <label>{{ 'vessel.vessel_details_flagstate' | i18n }}<span ng-if="createNewMode" class="mandatory">{{ 'common.mandatory_field' | i18n }}</span></label>
-                <dropdown name="countryCode" input-field-id="asset-input-countryCode" ng-model="vessel.flagStateCode" initialtext="{{ 'vessel.vessel_details_flagstate' | i18n }}" items="vesselFlagState" required ng-if="!countryCode" ng-disabled="disableForm"></dropdown>
-                <dropdown name="countryCode" input-field-id="asset-input-countryCode" ng-model="vessel.flagStateCode" initialtext="{{countryCode}}" items="vesselFlagState" required ng-if="countryCode" ng-disabled="disableForm" id="flagstate"></dropdown>
-                <input-validation-message types="required" input="vesselForm.countryCode"></input-validation-message>
+                <dropdown name="flagStateCode" input-field-id="asset-input-flagStateCode" ng-model="vessel.flagStateCode" initialtext="{{ 'vessel.vessel_details_flagstate' | i18n }}" items="vesselFlagState" required ng-if="!flagStateCode" ng-disabled="disableForm"></dropdown>
+                <dropdown name="flagStateCode" input-field-id="asset-input-flagStateCode" ng-model="vessel.flagStateCode" initialtext="{{flagStateCode}}" items="vesselFlagState" required ng-if="flagStateCode" ng-disabled="disableForm" id="flagStateCode"></dropdown>
+                <input-validation-message types="required" input="vesselForm.flagStateCode"></input-validation-message>
             </div>
             <div class="col-md-2 form-group smallerpadding" ng-class="{'has-error': (submitAttempted || vesselForm.ircs.$dirty) && vesselForm.ircs.$invalid}">
                 <label>{{ 'vessel.vessel_details_IRCS_code' | i18n }}<span ng-if="hasLinkedTerminal && !vessel.ircs.length" class="mandatory">{{ 'common.mandatory_field' | i18n }}</span></label>

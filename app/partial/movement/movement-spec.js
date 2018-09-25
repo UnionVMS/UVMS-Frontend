@@ -27,7 +27,7 @@ describe('MovementCtrl', function() {
         poll: function() {},
         cancel: function() {}
     };
-
+    
     var strings = {
         'common.not_implemented': 'not implemented',
         'common.no_items_selected': 'no items selected',

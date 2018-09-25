@@ -97,7 +97,7 @@ angular.module('unionvmsWeb').factory('alarmCsvService', function(csvService, $f
         return {
             flagState: function(alarm) {
                 if (angular.isDefined(alarm.placeholderVessel)) {
-                    return alarm.placeholderVessel.countryCode; 
+                    return alarm.placeholderVessel.flagStateCode; 
                 } else if (angular.isDefined(alarm.movement.flagState)) {
                     return alarm.movement.flagState; 
                 } else if (angular.isDefined(alarm.asset.ids.FLAG_STATE)) {

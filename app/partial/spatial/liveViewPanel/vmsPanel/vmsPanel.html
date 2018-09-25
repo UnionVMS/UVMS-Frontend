@@ -147,7 +147,7 @@ copy of the GNU General Public License along with the IFDM Suite. If not, see <h
 						</tr>
 						<tr class="row">
 							<th lr-drag-src="headers" lr-drop-target="headers" ng-repeat="column in attrVisibility.positionsColumns" ng-show="attrVisibility.positions[column]">
-								<div st-sort="properties.countryCode" st-skip-natural="true" st-class-ascent="sorting_asc" st-class-descent="sorting_desc" ng-show="attrVisibility.positions.fs" ng-if="column === 'fs'">{{'spatial.tab_vms_pos_table_header_fs' | i18n }}</div>
+								<div st-sort="properties.flagStateCode" st-skip-natural="true" st-class-ascent="sorting_asc" st-class-descent="sorting_desc" ng-show="attrVisibility.positions.fs" ng-if="column === 'fs'">{{'spatial.tab_vms_pos_table_header_fs' | i18n }}</div>
 								<div st-sort="properties.externalMarking" st-skip-natural="true" st-class-ascent="sorting_asc" st-class-descent="sorting_desc" ng-show="attrVisibility.positions.extMark" ng-if="column === 'extMark'">{{'spatial.tab_vms_pos_table_header_ext_mark' | i18n }}</div>
 								<div st-sort="properties.ircs" st-skip-natural="true" st-class-ascent="sorting_asc" st-class-descent="sorting_desc" ng-show="attrVisibility.positions.ircs" ng-if="column === 'ircs'">{{'spatial.tab_vms_pos_table_header_ircs' | i18n }}</div>
 								<div st-sort="properties.cfr" st-skip-natural="true" st-class-ascent="sorting_asc" st-class-descent="sorting_desc" ng-show="attrVisibility.positions.cfr" ng-if="column === 'cfr'">{{'spatial.tab_vms_pos_table_header_cfr' | i18n }}</div>
@@ -172,7 +172,7 @@ copy of the GNU General Public License along with the IFDM Suite. If not, see <h
 						</tr>
 						<tr ng-repeat="position in displayedPositions" class="row">
 							<td ng-repeat="column in attrVisibility.positionsColumns" ng-show="attrVisibility.positions[column]">
-								<div ng-show="attrVisibility.positions.fs" ng-if="column === 'fs'">{{ position.properties.countryCode }}</div>
+								<div ng-show="attrVisibility.positions.fs" ng-if="column === 'fs'">{{ position.properties.flagStateCode }}</div>
 								<div ng-show="attrVisibility.positions.extMark" ng-if="column === 'extMark'">{{ position.properties.externalMarking }}</div>
 								<div ng-show="attrVisibility.positions.ircs" ng-if="column === 'ircs'">{{ position.properties.ircs }}</div>
 								<div ng-show="attrVisibility.positions.cfr" ng-if="column === 'cfr'">{{ position.properties.cfr }}</div>
@@ -272,7 +272,7 @@ copy of the GNU General Public License along with the IFDM Suite. If not, see <h
 				    	</tr>
 				        <tr class="row">
 				        	<th lr-drag-src="headers" lr-drop-target="headers" ng-repeat="column in attrVisibility.segmentsColumns">
-					            <div st-sort="properties.countryCode" st-skip-natural="true" st-class-ascent="sorting_asc" st-class-descent="sorting_desc" ng-show="attrVisibility.segments.fs" ng-if="column === 'fs'">{{'spatial.tab_vms_pos_table_header_fs' | i18n }}</div>
+					            <div st-sort="properties.flagStateCode" st-skip-natural="true" st-class-ascent="sorting_asc" st-class-descent="sorting_desc" ng-show="attrVisibility.segments.fs" ng-if="column === 'fs'">{{'spatial.tab_vms_pos_table_header_fs' | i18n }}</div>
 					            <div st-sort="properties.externalMarking" st-skip-natural="true" st-class-ascent="sorting_asc" st-class-descent="sorting_desc" ng-show="attrVisibility.segments.extMark" ng-if="column === 'extMark'">{{'spatial.tab_vms_pos_table_header_ext_mark' | i18n }}</div>
 					            <div st-sort="properties.ircs" st-skip-natural="true" st-class-ascent="sorting_asc" st-class-descent="sorting_desc" ng-show="attrVisibility.segments.ircs" ng-if="column === 'ircs'">{{'spatial.tab_vms_pos_table_header_ircs' | i18n }}</div>
 					            <div st-sort="properties.cfr" st-skip-natural="true" st-class-ascent="sorting_asc" st-class-descent="sorting_desc" ng-show="attrVisibility.segments.cfr" ng-if="column === 'cfr'">{{'spatial.tab_vms_pos_table_header_cfr' | i18n }}</div>
@@ -292,7 +292,7 @@ copy of the GNU General Public License along with the IFDM Suite. If not, see <h
 						</tr>
 				        <tr ng-repeat="segment in displayedSegments" class="row">
 				        	<td ng-repeat="column in attrVisibility.segmentsColumns">
-					        	<div ng-show="attrVisibility.segments.fs" ng-if="column === 'fs'">{{ segment.properties.countryCode }}</div>
+					        	<div ng-show="attrVisibility.segments.fs" ng-if="column === 'fs'">{{ segment.properties.flagStateCode }}</div>
 					        	<div ng-show="attrVisibility.segments.extMark" ng-if="column === 'extMark'">{{ segment.properties.externalMarking }}</div>
 					            <div ng-show="attrVisibility.segments.ircs" ng-if="column === 'ircs'">{{ segment.properties.ircs }}</div>
 					            <div ng-show="attrVisibility.segments.cfr" ng-if="column === 'cfr'">{{ segment.properties.cfr }}</div>
@@ -397,7 +397,7 @@ copy of the GNU General Public License along with the IFDM Suite. If not, see <h
 						</tr>
 				        <tr ng-repeat="track in displayedTracks" class="row">
 				        	<td ng-repeat="column in attrVisibility.tracksColumns">
-					        	<div ng-show="attrVisibility.tracks.fs" ng-if="column === 'fs'">{{ track.countryCode }}</div>
+					        	<div ng-show="attrVisibility.tracks.fs" ng-if="column === 'fs'">{{ track.flagStateCode }}</div>
 					        	<div ng-show="attrVisibility.tracks.extMark" ng-if="column === 'extMark'">{{ track.externalMarking }}</div>
 					            <div ng-show="attrVisibility.tracks.ircs" ng-if="column === 'ircs'">{{ track.ircs }}</div>
 					            <div ng-show="attrVisibility.tracks.cfr" ng-if="column === 'cfr'">{{ track.cfr }}</div>

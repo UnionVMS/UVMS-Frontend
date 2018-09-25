@@ -43,7 +43,7 @@ copy of the GNU General Public License along with the IFDM Suite. If not, see <h
 
         function getRows(asset) {
             return [[
-                asset.countryCode,
+                asset.flagStateCode,
                 asset.ircs,
                 asset.name,
                 asset.externalMarking,
