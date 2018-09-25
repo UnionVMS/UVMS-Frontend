@@ -49,11 +49,6 @@ angular.module('unionvmsWeb')
             return $scope.functions.showSave($scope.ngModel);
         }
     };
-    $scope.includeCSVDownload = function() {
-        if (angular.isDefined($scope.functions.exportToCsvCallback && $scope.functions.showExport)) {
-            return $scope.functions.showExport($scope.ngModel);
-        }
-    };
     $scope.includeArchive = function() {
         if (angular.isDefined($scope.functions.archiveCallback && $scope.functions.showArchive)) {
             return $scope.functions.showArchive($scope.ngModel);

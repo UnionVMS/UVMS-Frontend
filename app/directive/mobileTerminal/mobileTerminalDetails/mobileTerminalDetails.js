@@ -475,12 +475,6 @@ angular.module('unionvmsWeb')
                 return false;
             },
             exportToCsvCallback: $scope.exportTerminalCSV,
-            showExport: function(mobileTerminal) {
-                if (mobileTerminal) {
-                    return angular.isDefined(mobileTerminal.guid) && mobileTerminal.guid != null;
-                }
-                return false;
-            },
             archiveCallback: $scope.archiveMobileTerminal,
             showArchive: function(mobileTerminal) {
                 if (mobileTerminal && checkAccessToFeature('manageMobileTerminals')) {

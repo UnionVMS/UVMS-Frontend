@@ -9,7 +9,7 @@ the hope that it will be useful, but WITHOUT ANY WARRANTY; without even the impl
 FITNESS FOR A PARTICULAR PURPOSE.  See the GNU General Public License for more details. You should have received a
 copy of the GNU General Public License along with the IFDM Suite. If not, see <http://www.gnu.org/licenses/>.
  */
-angular.module('unionvmsWeb').controller('VesselFormCtrl',function($scope, $log, $modal, $filter, Vessel, VesselContact, VesselNotes, vesselRestService, alertService, locale, mobileTerminalRestService, confirmationModal, GetListRequest, userService, configurationService, assetCsvService, MobileTerminalHistoryModal, MobileTerminal, $q) {
+angular.module('unionvmsWeb').controller('VesselFormCtrl',function($scope, $log, $modal, $filter, Vessel, VesselContact, VesselNotes, vesselRestService, alertService, locale, mobileTerminalRestService, confirmationModal, GetListRequest, userService, configurationService, MobileTerminalHistoryModal, MobileTerminal, $q) {
 
     var checkAccessToFeature = function(feature) {
         return userService.isAllowed(feature, 'Union-VMS', true);
@@ -556,9 +556,6 @@ angular.module('unionvmsWeb').controller('VesselFormCtrl',function($scope, $log,
         },
         showCancel: function() {
             return true;
-        },
-        exportToCsvCallback: function(vessel) {
-            assetCsvService.download($scope.vesselObj);
         },
         showExport: function(vessel) {
             if (vessel) {
