@@ -377,7 +377,7 @@ angular.module('unionvmsWeb').controller('VesselCtrl', function($scope, $log, $s
                         item.name,
                         item.ircs,
                         item.cfr,
-                        $filter('vesselGearTypeTranslation')(item.gearType),
+                        $filter('vesselGearTypeTranslation')(item.gearFishingType),
                         $filter('vesselLicenseTypeTranslation')(item.licenseType),
                         angular.isDefined(item.lastMovement) ? $filter('timeAgo')(item.lastMovement.time) : '',
                     ];

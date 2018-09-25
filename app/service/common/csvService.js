@@ -25,7 +25,6 @@ angular.module('unionvmsWeb').factory('csvService',function($timeout, $document,
             };
 
             CSV.stringify(csvData, options).then(function(csv){
-                console.log(csv);
 
                 var charset = "utf-8";
                 var blob = new Blob([csv], {
