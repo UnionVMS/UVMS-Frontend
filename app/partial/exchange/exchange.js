@@ -203,7 +203,7 @@ angular.module('unionvmsWeb').controller('ExchangeCtrl',function($scope, $log, $
     $scope.showDetailsButton = function(model){
         var visible = false;
         var feature, application, operator;
-        if (angular.isDefined(model.logData) && model.logData.type){
+        if (angular.isDefined(model.logData) && model.logData !== null && angular.isDefined(model.logData.type)) {
             switch(model.logData.type){
                 case 'POLL':
                     visible = true;
