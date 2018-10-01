@@ -133,12 +133,22 @@ angular.module('unionvmsWeb').controller('VesselCtrl', function($scope, $log, $s
         $scope.allCurrentSearchResults = vesselListPage.items;
         $scope.currentSearchResultsByPage = vesselListPage.items;
 
-        $scope.stTable.page = vesselListPage.currentPage;
-        if ($scope.stTable.page !== ($scope.stTable.tableState.pagination.start / $scope.stTable.itemsByPage) + 1){
-            $scope.stTable.tableState.pagination.start = $scope.stTable.page;
+        // We need to have a table state in order to be able to ypdate
+        if (!angular.isDefined($scope.stTable.tableState)) {
+            return;
         }
 
-        $scope.stTable.tableState.pagination.numberOfPages = vesselListPage.totalNumberOfPages;
+        var pagination =  $scope.stTable.tableState.pagination;
+        
+        $scope.stTable.page = vesselListPage.currentPage;        
+
+        if (angular.isDefined(pagination)) {
+            if ($scope.stTable.page !== ($scope.stTable.tableState.pagination.start / $scope.stTable.itemsByPage) + 1) {
+                $scope.stTable.tableState.pagination.start = $scope.stTable.page;
+            }
+            $scope.stTable.tableState.pagination.numberOfPages = vesselListPage.totalNumberOfPages;
+        }
+
         if (angular.isDefined($scope.stTable.tableState.sort.predicate)){
             $scope.sortTableData($scope.stTable.tableState.sort.predicate, $scope.stTable.tableState.sort.reverse);
         }
