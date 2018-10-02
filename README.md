@@ -17,10 +17,10 @@ The application is run on node.js please download and install [Node.js v 5.7.1](
 
 Clone this [repository](https://github.com/UnionVMS/UVMS-Frontend.git) and follow below step by step to get a development environment running.
 
-1. Run below command to install Yeoman, Bower and Grunt to be able to develop, serve and build the application
+1. Run below command to install Yeoman and Grunt to be able to develop, serve and build the application
 
 ```
-$ npm install --global yo bower grunt-cli
+$ npm install --global yo grunt-cli
 ```
 
 2. Install the [Angular generator](https://github.com/cgross/generator-cg-angular), this is needed to generate new frontend components
@@ -29,17 +29,21 @@ $ npm install --global yo bower grunt-cli
 $ npm install -g generator-cg-angular
 ```
 
-3. Install bower packages by running below command (specified in the manifest file `bower.json`)
-
-```
-$ bower i
-```
-
-4. Install npm packages by running below command (specified in the manifest file `package.json`)
+3. Install npm packages by running below command (specified in the manifest file `package.json`)
 
 ```
 $ npm i
 ```
+
+or use yarn
+
+```
+$ yarn
+```
+
+## Fonts
+
+Currently fonts aren't displayed correctly when developing locally. For a quick fix, add the font-awesome folder to the app\assets folder. 
 
 ## Grunt tasks
 
