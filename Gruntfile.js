@@ -299,7 +299,7 @@ module.exports = function (grunt) {
       read: {
         options: {
           read:[
-            {selector:'script[data-concat!="false"]',attribute:'src',writeto:'appjs', isPath: true},
+            {selector:'script[data-concat!="false"]',attribute:'src',writeto:'appjs'},
             {selector:'link[rel="stylesheet"][data-concat!="false"]',attribute:'href',writeto:'appcss'}
           ]
         },
@@ -313,7 +313,7 @@ module.exports = function (grunt) {
             {selector:'head',html:'<link rel="stylesheet" href="app.full.min.css?v=' + pkg.version +'">'}
           ]
         },
-        src:'app/index.html',
+        src: 'app/index.html',
         dest: 'dist/index.html'
       }
     },
