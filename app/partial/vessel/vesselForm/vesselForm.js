@@ -315,7 +315,7 @@ angular.module('unionvmsWeb').controller('VesselFormCtrl',function($scope, $log,
         if (vesselObj !== undefined) {
             var cfr = vesselObj.cfr;
             var imo = vesselObj.imo;
-            var mmsi = vesselObj.mmsiNo;
+            var mmsi = vesselObj.mmsi;
         }
 
         return function(error) {

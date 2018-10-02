@@ -35,7 +35,7 @@ copy of the GNU General Public License along with the IFDM Suite. If not, see <h
                     <th class="st-sort" st-sort="attributes.SATELLITE_NUMBER" st-skip-natural="true" id="mt-sort-satelliteNumber">
                         {{'mobileTerminal.table_header_satellite_number' | i18n}}
                     </th>
-                    <th class="st-sort" st-sort="associatedVessel.mmsiNo" st-skip-natural="true" id="mt-sort-mmsiNo">
+                    <th class="st-sort" st-sort="associatedVessel.mmsi" st-skip-natural="true" id="mt-sort-mmsiNo">
                         {{'mobileTerminal.table_header_mmsi_no' | i18n}}
                     </th>
                     <th class="st-sort" st-sort="active" st-skip-natural="true" id="mt-sort-status">
@@ -65,7 +65,7 @@ copy of the GNU General Public License along with the IFDM Suite. If not, see <h
                     </td>
                     <td class="statusColored" ng-attr-title="{{item.attributes.SATELLITE_NUMBER}}">{{item.attributes.SATELLITE_NUMBER}}</td>
                     <td>
-                        <span ng-show="item.associatedVessel">{{item.associatedVessel.mmsiNo}}</span>
+                        <span ng-show="item.associatedVessel">{{item.associatedVessel.mmsi}}</span>
                     </td>
                     <td>
                         <span ng-if="item.active" class="mobile-terminal-status label label-success">{{'common.active' | i18n | uppercase}}</span>

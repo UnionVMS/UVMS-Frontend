@@ -51,7 +51,7 @@ copy of the GNU General Public License along with the IFDM Suite. If not, see <h
                 asset.imo,
                 asset.homePort,
                 asset.gearType,
-                asset.mmsiNo,
+                asset.mmsi,
                 asset.licenseType,
                 $filter('length')(asset.lengthValue),
                 asset.grossTonnage,
