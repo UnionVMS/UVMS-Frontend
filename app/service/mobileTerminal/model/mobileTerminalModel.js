@@ -124,7 +124,9 @@ angular.module('unionvmsWeb').factory('MobileTerminal', function(CommunicationCh
             return {
                 attributes : attributesObjects,
                 channels : jsonChannels,
-                mobileTerminalId : { guid: this.guid },
+                // should fix the logic in the backend so we aren't forced to send this as a null value if it is a new mobile terminal: https://jira.havochvatten.se/jira/browse/UV-340
+                // JSON.stringify ignores objects with undefined values hence setting it to null here
+                mobileTerminalId : this.guid !== undefined ? { guid: this.guid } : null,
                 type : this.type,
                 plugin : this.plugin,
                 inactive : !this.active
