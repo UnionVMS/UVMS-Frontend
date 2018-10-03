@@ -73,7 +73,7 @@ angular.module('unionvmsWeb').controller('HeaderCtrl',function($scope, $log, $st
             }else{
                 $scope.setLanguage(localeConf.defaultLocale);
             }
-        }
+        }        
     };
     init();
     $rootScope.$on('AuthenticationSuccess', function () {
@@ -85,6 +85,10 @@ angular.module('unionvmsWeb').controller('HeaderCtrl',function($scope, $log, $st
     $rootScope.$on('ContextSwitch', function () {
         init();
         openAlarmsAndTicketsService.restart();
+    });
+
+    $rootScope.$on('holdingTable_searchResultsUpdated', function(event){
+        openAlarmsAndTicketsService.getUpdatedCounts();
     });
 
     $scope.getUser = function(){

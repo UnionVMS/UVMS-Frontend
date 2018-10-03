@@ -28,6 +28,6 @@ angular.module('unionvmsWeb')
 
         $scope.isActiveTab = function(tabName){
             return $scope.activeTab === tabName;
-        };
-        $scope.numberOfOpenAlarmsAndTickets = openAlarmsAndTicketsService.getCount();
+		};
+		$scope.numberOfOpenAlarmsAndTickets = openAlarmsAndTicketsService.getCount();
     });

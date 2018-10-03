@@ -120,7 +120,7 @@ angular.module('unionvmsWeb')
                 delete $scope.searchObject.TO_DATE;
             }
         });
-
+       
         init();
     }
 );
