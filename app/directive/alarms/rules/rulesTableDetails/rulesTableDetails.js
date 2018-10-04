@@ -27,7 +27,7 @@ angular.module('unionvmsWeb').directive('rulesTableDetails', function() {
 });
 
 angular.module('unionvmsWeb')
-    .controller('rulesTableDetailsCtrl', function($scope, $timeout, $log, locale, GetListRequest, SearchResults, SearchResultListPage, searchUtilsService, searchService, alarmRestService, movementRestService, PositionReportModal){
+    .controller('rulesTableDetailsCtrl', function($scope, $rootScope, $timeout, $log, locale, GetListRequest, SearchResults, SearchResultListPage, searchUtilsService, searchService, alarmRestService, movementRestService, PositionReportModal){
 
         $scope.searchObject = {};
         $scope.currentSearchResults = new SearchResults('openDate', false);
@@ -60,8 +60,8 @@ angular.module('unionvmsWeb')
 
         //Update the search results
         var updateSearchResults = function(searchResultsListPage){
-            console.log(searchResultsListPage);
             $scope.currentSearchResults.updateWithNewResults(searchResultsListPage);
+            $rootScope.$emit('rulesTableDetails_searchResultsUpdated');
         };
 
         //Error during search

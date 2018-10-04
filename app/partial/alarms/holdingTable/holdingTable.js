@@ -82,6 +82,7 @@ angular.module('unionvmsWeb').controller('HoldingtableCtrl',function($scope, $ro
         $scope.currentSearchResults.updateWithNewResults(searchResultsListPage);
         $scope.allCurrentSearchResults = searchResultsListPage.items;
         $scope.currentSearchResultsByPage = searchResultsListPage.items;
+        $rootScope.$emit('holdingTable_searchResultsUpdated');
     };
 
     //Error during search
@@ -321,10 +322,6 @@ angular.module('unionvmsWeb').controller('HoldingtableCtrl',function($scope, $ro
             return $filter('i18n')('alarms.alarms_affected_object_unknown');
         }
     };
-
-    $scope.$watch('currentSearchResults.items.length', function() {
-        $rootScope.$broadcast('holdingTable_searchResultsUpdated');
-    });
 
     init();
 
