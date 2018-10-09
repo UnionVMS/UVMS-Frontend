@@ -56,7 +56,7 @@ angular.module('unionvmsWeb')
                 document : this.document,
                 source : this.source
         	});
-        }
+        };
 
         VesselNotes.prototype.copy = function() {
             var copy = new VesselNotes();

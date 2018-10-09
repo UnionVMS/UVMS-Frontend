@@ -77,8 +77,7 @@ angular.module('unionvmsWeb')
         };
 
         $scope.startsWith = function(state, viewValue) {
-            return state && state.substr
-                && state.substr(0, viewValue.length).toLowerCase() === viewValue.toLowerCase();
+            return state && state.substr && state.substr(0, viewValue.length).toLowerCase() === viewValue.toLowerCase();
         };
 
         init();

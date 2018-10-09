@@ -209,11 +209,11 @@ angular.module('unionvmsWeb').controller('VesselFormCtrl',function($scope, $log,
     function getVesselContacts() {
     	vesselRestService.getContactsForAsset($scope.getVesselObj().id).then(function(contacts) {
     		$scope.vesselContacts = contacts;
-    		if (contacts.length == 0) {
+    		if (contacts.length === 0) {
     			$scope.vesselContacts.push(new VesselContact());
     		}
     	});
-    };
+    }
     
     function getVesselNotes() {
     	vesselRestService.getNotesForAsset($scope.getVesselObj().id).then(function(notes) {
@@ -508,7 +508,7 @@ angular.module('unionvmsWeb').controller('VesselFormCtrl',function($scope, $log,
                 $scope.vesselContacts.splice($scope.vesselContacts.indexOf(vesselContact), 1);
             }
             if (!vesselContact.id) {
-            	vesselRestService.createContactForAsset(vesselId, vesselContact)
+            	vesselRestService.createContactForAsset(vesselId, vesselContact);
             } else {
             	vesselRestService.updateContact(vesselContact);
             }

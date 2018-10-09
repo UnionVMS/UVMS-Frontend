@@ -43,5 +43,7 @@
         "palette": true,
         "tinycolor": true,
         "vkbeautify": true
-    }
+    },
+    "esversion" : 6,
+    "validthis": true
 }
