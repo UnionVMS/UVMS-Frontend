@@ -105,11 +105,7 @@ angular.module('unionvmsWeb').controller('HeaderCtrl',function($scope, $log, $st
     });
 
     $scope.getUser = function(){
-        $scope.user.name = "Antonia";
         $scope.user.name = userService.getUserName();
-
-        $scope.user.email = "antonia@havsochvattenmyndigheten.se";
-
     };
 
     $scope.getUser();
