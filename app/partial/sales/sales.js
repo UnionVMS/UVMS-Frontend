@@ -30,7 +30,7 @@
 
         function init() {
             salesSearchService.init();
-            $('[data-toggle="popover"]').popover()
+            $('[data-toggle="popover"]').popover();
         }
 
         function getAmountOfReportsInSearch() {
@@ -43,7 +43,7 @@
         }
 
         function exportDocuments() {
-            $('#popover').popover('show')
+            $('#popover').popover('show');
 
         }
 

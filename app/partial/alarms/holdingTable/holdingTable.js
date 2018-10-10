@@ -9,7 +9,7 @@ the hope that it will be useful, but WITHOUT ANY WARRANTY; without even the impl
 FITNESS FOR A PARTICULAR PURPOSE.  See the GNU General Public License for more details. You should have received a
 copy of the GNU General Public License along with the IFDM Suite. If not, see <http://www.gnu.org/licenses/>.
  */
-angular.module('unionvmsWeb').controller('HoldingtableCtrl',function($scope, $log, $filter, $stateParams, locale, Alarm, alarmCsvService, alertService, SearchResults, SearchResultListPage, AlarmReportModal, userService, alarmRestService, searchService, $resource, longPolling){
+angular.module('unionvmsWeb').controller('HoldingtableCtrl',function($scope, $rootScope, $log, $filter, $stateParams, locale, Alarm, alarmCsvService, alertService, SearchResults, SearchResultListPage, AlarmReportModal, userService, alarmRestService, searchService, $resource, longPolling){
 
     //Selected items by checkboxes
     $scope.selectedItems = [];
@@ -82,6 +82,7 @@ angular.module('unionvmsWeb').controller('HoldingtableCtrl',function($scope, $lo
         $scope.currentSearchResults.updateWithNewResults(searchResultsListPage);
         $scope.allCurrentSearchResults = searchResultsListPage.items;
         $scope.currentSearchResultsByPage = searchResultsListPage.items;
+        $rootScope.$emit('holdingTable_searchResultsUpdated');
     };
 
     //Error during search

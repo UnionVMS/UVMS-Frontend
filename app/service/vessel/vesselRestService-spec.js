@@ -339,7 +339,7 @@ describe('vesselRestService', function() {
 
             var rejected = false;
             vesselRestService.updateVesselGroup(vesselGroup).then(function(updatedVesselGroup){
-            },function(err){
+            }, function(err){
                 rejected = true;
             });
             $rootScope.$digest();

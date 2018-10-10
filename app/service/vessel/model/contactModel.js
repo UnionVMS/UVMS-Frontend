@@ -71,7 +71,7 @@ angular.module('unionvmsWeb')
                 updateTime : this.updateTime,
                 updatedBy : this.updatedBy
             });
-        }
+        };
 
         VesselContact.prototype.copy = function() {
             var copy = new VesselContact();

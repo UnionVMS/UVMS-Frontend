@@ -11,7 +11,7 @@ copy of the GNU General Public License along with the IFDM Suite. If not, see <h
  */
 angular.module('unionvmsWeb').filter('removeUnderscore', function() {
 	return function(text) {
-		if(angular.isDefined(text))
+		if(angular.isDefined(text) && text !== null)
 		{
 			text = text.replace(/_/g, " ");
 		}

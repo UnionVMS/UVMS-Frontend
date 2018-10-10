@@ -423,7 +423,7 @@ angular.module('unionvmsWeb')
                 },
                 function(err){
                     console.error("initFieldsByGroup failed");
-                    console.error(error);
+                    console.error(err);
                 }
             );
     };

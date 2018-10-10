@@ -9,7 +9,7 @@ the hope that it will be useful, but WITHOUT ANY WARRANTY; without even the impl
 FITNESS FOR A PARTICULAR PURPOSE.  See the GNU General Public License for more details. You should have received a
 copy of the GNU General Public License along with the IFDM Suite. If not, see <http://www.gnu.org/licenses/>.
  */
-angular.module('unionvmsWeb').controller('OpenticketsCtrl',function($scope, $log, $filter, $stateParams, locale, Alarm, csvService, alertService, alarmRestService, SearchResults, SearchResultListPage, searchService, TicketModal, movementRestService, $resource, longPolling, mobileTerminalRestService, modalComment){
+angular.module('unionvmsWeb').controller('OpenticketsCtrl',function($scope, $rootScope, $log, $filter, $stateParams, locale, Alarm, csvService, alertService, alarmRestService, SearchResults, SearchResultListPage, searchService, TicketModal, movementRestService, $resource, longPolling, mobileTerminalRestService, modalComment){
 
     //Selected items by checkboxes
     $scope.selectedItems = [];
@@ -88,6 +88,7 @@ angular.module('unionvmsWeb').controller('OpenticketsCtrl',function($scope, $log
         $scope.currentSearchResults.updateWithNewResults(searchResultsListPage);
         $scope.allCurrentSearchResults = searchResultsListPage.items;
         $scope.currentSearchResultsByPage = searchResultsListPage.items;
+        $rootScope.$emit('openTickets_searchResultsUpdated');
     };
 
     //Error during search
