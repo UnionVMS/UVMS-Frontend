@@ -367,9 +367,11 @@ angular.module('unionvmsWeb').factory('fishingActivityService', function(activit
             faRepId = faServ.repId;
         }
 
+        //FIXME
         var payload = {
             activityId: faActivityId,
-            reportId: faRepId
+            reportId: faRepId,
+            withHistory: true
         };
         
         if ($state.current.name === 'app.reporting-id' || $state.current.name === 'app.reporting'){
@@ -783,19 +785,6 @@ angular.module('unionvmsWeb').factory('fishingActivityService', function(activit
      */
     var loadHistoryData = function(data){
         var finalData = [];
-
-        data = [{
-            fishingActivityIds: [1],
-            faReportID: 1,
-            acceptanceDate: '2017-06-12T20:50:00',
-            purposeCode: '9'
-        },{
-            fishingActivityIds: [2,3],
-            faReportID: 2,
-            acceptanceDate: '2017-06-12T20:54:00',
-            purposeCode: '5'
-        }];
-
 
         if (angular.isDefined(data) && data.length > 0){
             finalData = _.sortBy(data, function(item){

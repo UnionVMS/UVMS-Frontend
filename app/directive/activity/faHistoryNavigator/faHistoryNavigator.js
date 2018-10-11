@@ -55,7 +55,7 @@ angular.module('unionvmsWeb').directive('faHistoryNavigator', function (fishingA
                 }
 
                 return msg;
-            }
+            };
 
             /**
              * Check if the history item is referring to the currently viewed activity and set the enabled status to false if true
@@ -66,7 +66,7 @@ angular.module('unionvmsWeb').directive('faHistoryNavigator', function (fishingA
              */
             function checkIsCurrentActivity(record){
                 angular.forEach(record.fishingActivityIds, function(item){
-                    if (parseInt(item) === scope.faServ.id && parseInt(record.faReportID) === scope.faServ.repId){
+                    if (parseInt(item) === scope.faServ.id && parseInt(record.faReportId) === scope.faServ.repId){
                         record.enabled = false;
                     }
                 });
@@ -126,10 +126,10 @@ angular.module('unionvmsWeb').directive('faHistoryNavigator', function (fishingA
 
                     scope.status.documentType = scope.faServ.documentType;
                     scope.status.activityType = scope.faServ.activityType;
-                    scope.status.repId = item.faReportID;
+                    scope.status.repId = item.faReportId;
 
                     scope.faServ.resetActivity();
-                    scope.faServ.getFishingActivity(new FishingActivity(scope.activityName), scope.recompileView, scope.status.id, item.faReportID);
+                    scope.faServ.getFishingActivity(new FishingActivity(scope.activityName), scope.recompileView, scope.status.id, item.faReportId);
                 }
             };
             
@@ -168,8 +168,10 @@ angular.module('unionvmsWeb').directive('faHistoryNavigator', function (fishingA
                 scope.faServ.isCorrection = isCorrection;
             }
 
-            updateHistoryItems();
-            updateCorrectionStatus();
+            if (scope.history.length > 1){
+                updateHistoryItems();
+                updateCorrectionStatus();
+            }
         }
     };
 });
