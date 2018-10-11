@@ -28,7 +28,7 @@ angular.module('unionvmsWeb').controller('ActivityhistorylistCtrl',function($sco
     
     $scope.openDetails = function(idx){
         $scope.faServ.id = $scope.actServ.displayedActivitiesHistory[idx].fishingActivityId;
-        $scope.faServ.repId = $scope.actServ.displayedActivities[idx].faReportID;
+        $scope.faServ.repId = $scope.actServ.displayedActivitiesHistory[idx].faReportID;
         $scope.faServ.activityType = $scope.actServ.displayedActivitiesHistory[idx].activityType.toLowerCase();
         $scope.faServ.isCorrection = $scope.actServ.displayedActivitiesHistory[idx].hasCorrection;
         $scope.faServ.documentType = $scope.actServ.displayedActivitiesHistory[idx].FAReportType.toLowerCase();

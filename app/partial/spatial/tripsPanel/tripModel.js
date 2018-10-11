@@ -161,14 +161,27 @@ angular.module('unionvmsWeb').factory('Trip',function(locale,unitConversionServi
 
         reportItem.id = node.fishingActivityId;
         reportItem.faUniqueReportID = node.faUniqueReportID;
+        reportItem.repId = node.faReportID;
 
         if(angular.isDefined(node.faReferenceID)){
             var mainNode = _.find(this, function(rep){
                 return rep.faUniqueReportID === node.faReferenceID;
             });
-            
-            mainNode.nodes = mainNode.nodes || [];
-            mainNode.nodes.push(reportItem);
+
+            if (angular.isDefined(mainNode)){
+                mainNode.nodes = mainNode.nodes || [];
+                mainNode.nodes.push(reportItem);
+            } else {
+                _.each(this, function(item){
+                   var tempRefNode = _.find(item.nodes, function(rep){
+                       return rep.faUniqueReportID === node.faReferenceID;
+                   });
+
+                   if (angular.isDefined(tempRefNode)){
+                       item.nodes.push(reportItem);
+                   }
+                });
+            }
         }else{
             this.push(reportItem);
         }

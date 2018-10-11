@@ -204,7 +204,7 @@ angular.module('unionvmsWeb').factory('activityService',function(locale, activit
         
         this.isGettingMdrCodes = false;
         
-        if (angular.isDefined(goToInitialPage) && goToInitialPage){
+        if (angular.isDefined(goToInitialPage) && goToInitialPage && angular.isDefined(breadcrumbService.goToItem)){
             breadcrumbService.goToItem(0);
         }
     };
