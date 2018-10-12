@@ -359,14 +359,14 @@ scopesModule.controller('scopesModalInstanceCtrl', ['$scope', '$modalInstance', 
             scope.dataTo = scope.dataTo ? moment.utc(scope.dataTo).format("YYYY-MM-DDTHH:mm:ss.SSSZ") : null;
             scope.activeFrom = scope.activeFrom ? moment.utc(scope.activeFrom).format("YYYY-MM-DDTHH:mm:ss.SSSZ") : null;
             scope.activeTo = scope.activeTo ? moment.utc(scope.activeTo).format("YYYY-MM-DDTHH:mm:ss.SSSZ") : null;*/
-
+            var objectToSubmit = null;
             if (mode === 'new') {
                 /* As a workaround for the datepickerinput directive not properly handling model data containing UTC dates
                  * we create a copy if the scope object and send it to the backend. this avoid the ugly rendering of a UTC date
                  * in the dates fields when the rest service returns the saved object
                  * TODO: fix the datepickerinput directive
                  */
-                var objectToSubmit = scopeServices.createNewScopeObject(scope);
+                objectToSubmit = scopeServices.createNewScopeObject(scope);
                 scopeServices.createScope(objectToSubmit).then(
                     function (response) {
                         $scope.newScope = response.newScope;
@@ -391,7 +391,7 @@ scopesModule.controller('scopesModalInstanceCtrl', ['$scope', '$modalInstance', 
                     if (_.isEqual(scope.dataTo, "Invalid date")) {
                         scope.dataTo = null;
                     }
-                    var objectToSubmit = scopeServices.createNewScopeObject(scope);
+                    objectToSubmit = scopeServices.createNewScopeObject(scope);
                     objectToSubmit.updateDatasets = false;
                     scopeServices.updateScope(objectToSubmit).then(
                         function (response) {

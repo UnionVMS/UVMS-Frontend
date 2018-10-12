@@ -96,7 +96,7 @@ angular.module('unionvmsWeb').factory('savedSearchService',function($q, $modal, 
             var defer = $q.defer();
             var preGroup = getVesselGroup(savedSearchGroup.id);
             if (angular.isUndefined(preGroup)) {
-                return error($q.reject('The selected group does not exist.'));
+                return $q.reject('The selected group does not exist.');
             }
 
             var searchFieldsToAdd = savedSearchGroup.searchFields.filter(function(searchField) {

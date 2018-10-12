@@ -30,7 +30,7 @@ describe('ExchangeCtrl', function () {
             "id": "7b661227-89a2-5587-9272-685c5be69770",
             "incoming": true,
             "dateReceived": "2018-10-01 06:25:51 +0000",
-            "senderRecipient": "Dedric24@gmail.com",
+            "senderRecipient": "test@test.com",
             "recipient": "TESTDATA",
             "dateFwd": "2018-08-18 15:49:01 +0000",
             "status": "ERROR",

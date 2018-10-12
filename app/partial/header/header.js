@@ -43,6 +43,11 @@ angular.module('unionvmsWeb').controller('HeaderCtrl',function($scope, $log, $st
         tmhDynamicLocale.set(lang);
         locale.setLocale(lang);
         moment.locale(lang);
+
+        // TODO: Fix UV-346 (https://jira.havochvatten.se/jira/browse/UV-346)
+        // Setting a language on stratup shoulnd't cause a reload of the app.
+        // The default language should be given on initial startup from the configuration.
+        // Otherwise we are calling initialize twice on the page which is completely unnecessary
         $state.go($state.$current, null, {reload: true});
     };
 
@@ -73,26 +78,34 @@ angular.module('unionvmsWeb').controller('HeaderCtrl',function($scope, $log, $st
             }else{
                 $scope.setLanguage(localeConf.defaultLocale);
             }
-        }
+        }        
     };
     init();
-    $rootScope.$on('AuthenticationSuccess', function () {
+    var removeAuthenticationSuccess = $rootScope.$on('AuthenticationSuccess', function () {
         init();
     });
-    $rootScope.$on('needsAuthentication', function () {
+    var removeNeedsAuthentication = $rootScope.$on('needsAuthentication', function () {
         init();
     });
-    $rootScope.$on('ContextSwitch', function () {
+    var removeContextSwitch = $rootScope.$on('ContextSwitch', function () {
         init();
         openAlarmsAndTicketsService.restart();
     });
 
+    var removeHoldingTableSearchResultsUpdated = $rootScope.$on('holdingTable_searchResultsUpdated', function(event){
+        openAlarmsAndTicketsService.getUpdatedCounts();
+    });
+
+    var removeTicketsTableSearchResultsUpdated = $rootScope.$on('openTickets_searchResultsUpdated', function(event){
+        openAlarmsAndTicketsService.getUpdatedCounts();
+    });
+
+    var removeRulesTableSearchResultsUpdated = $rootScope.$on('rulesTableDetails_searchResultsUpdated', function(event){
+        openAlarmsAndTicketsService.getUpdatedCounts();
+    });
+
     $scope.getUser = function(){
-        $scope.user.name = "Antonia";
         $scope.user.name = userService.getUserName();
-
-        $scope.user.email = "antonia@havsochvattenmyndigheten.se";
-
     };
 
     $scope.getUser();
@@ -168,4 +181,15 @@ angular.module('unionvmsWeb').controller('HeaderCtrl',function($scope, $log, $st
         var homeState = startPageService.getStartPageStateName();
         $state.go(homeState, {});
     };
+
+    // Un-register the events when destroying controller
+    $scope.$on('$destroy', function () {
+        removeAuthenticationSuccess();
+        removeNeedsAuthentication();
+        removeContextSwitch();
+        removeHoldingTableSearchResultsUpdated();
+        removeTicketsTableSearchResultsUpdated();
+        removeRulesTableSearchResultsUpdated();
+    });
+
 });

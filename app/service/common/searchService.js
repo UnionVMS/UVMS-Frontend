@@ -213,7 +213,7 @@ angular.module('unionvmsWeb').factory('searchService',function($q, $log, searchU
                 var vesselRequest = new GetListRequest(1, page.getNumberOfItems()*10, true);
                 $.each(page.items, function(index, pageItem) {
                     //Search for vessels by GUID
-                    if(angular.isDefined(pageItem.vesselGuid) && !(pageItem.vesselGuid === null)){
+                    if(angular.isDefined(pageItem.vesselGuid) && pageItem.vesselGuid !== null){
                         vesselRequest.addSearchCriteria('GUID', pageItem.vesselGuid);
                     }
                 });
@@ -813,7 +813,7 @@ angular.module('unionvmsWeb').factory('searchService',function($q, $log, searchU
     function explodeCriterias(criterias, explodeMap) {
         for (var i = 0; i < criterias.length; i++) {
             if (explodeMap.hasOwnProperty(criterias[i].key)) {
-                var criteria = criterias.splice(i, 1)[0];
+                const criteria = criterias.splice(i, 1)[0];
                 angular.forEach(explodeMap[criteria.key], function(k) {
                     criterias.splice(i++, 0, new SearchField(k, criteria.value));
                 });

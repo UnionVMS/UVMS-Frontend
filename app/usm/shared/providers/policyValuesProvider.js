@@ -11,7 +11,7 @@ copy of the GNU General Public License along with the IFDM Suite. If not, see <h
  */
 var sharedModule = angular.module('shared');
 
-function policyMethods (name, subject, $http) {
+function PolicyMethods (name, subject, $http) {
     this.getAllPolicyValues = function() {
         return $http.get("usm-administration/rest/policies").then(
             function(response) {
@@ -43,7 +43,7 @@ sharedModule.provider("policyValues", function PolicyValuesProvider() {
 
 
     this.$get = ['$http', function policyFactory($http) {
-        return new policyMethods(policyName, policySubject, $http);
+        return new PolicyMethods(policyName, policySubject, $http);
     }];
 
 });
