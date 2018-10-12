@@ -59,9 +59,11 @@ angular.module('unionvmsWeb').directive('purposeCodeBadge', function(fishingActi
                         }
                     } else {
                         var purposeCodeItem = _.findWhere(scope.faServ.activityData.reportDetails.items, {id: "purposeCode"});
-                        statusItem = {
-                            purposeCode: purposeCodeItem.originalValue
-                        };
+                        if (angular.isDefined(purposeCodeItem)){
+                            statusItem = {
+                                purposeCode: purposeCodeItem.originalValue
+                            };
+                        }
                         isFinalItem = true;
                     }
 

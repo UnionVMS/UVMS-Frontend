@@ -113,6 +113,7 @@ angular.module('unionvmsWeb').controller('MapCtrl',function($log, $scope, locale
         fishingActivityService.resetActivity();
         fishingActivityService.openFromMap = true;
         fishingActivityService.id = mapService.overlay.get('activityId');
+        fishingActivityService.repId = mapService.overlay.get('repId');
         fishingActivityService.isCorrection = mapService.overlay.get('isCorrection');
         fishingActivityService.documentType = mapService.overlay.get('documentType').toLowerCase();
         tripSummaryService.openNewTrip(mapService.overlay.get('tripId'), true);
