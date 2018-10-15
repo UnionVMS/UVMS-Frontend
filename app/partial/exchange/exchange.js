@@ -334,6 +334,14 @@ angular.module('unionvmsWeb').controller('ExchangeCtrl',function($scope, $log, $
         }
     };
 
+    $scope.getOnValueToDisplay = function(item){
+        if (angular.isDefined(item.typeRefType) && item.typeRefType === 'FA_REPORT' && item.source === 'FLUX'){
+            return item.on;
+        } else {
+            return undefined;
+        }
+    };
+
     /**
      * Get the title for the buttons of the linked messages
      *
