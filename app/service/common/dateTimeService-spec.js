@@ -191,11 +191,11 @@ describe('dateTimeService', function($provide) {
 
     //Already formatted with timezone, the change timezone
     d = '2015-11-18 13:49:00 +01:00';
-    expect(dateTimeService.formatUTCDateWithTimezone(d)).toEqual('2015-11-18 12:49:00 +00:00');
+    expect(dateTimeService.formatUTCDateWithTimezone(d)).toEqual('2015-11-18 12:49:00 +0000');
 
     //String date
     d = '2015-09-18 11:49:00';
-    expect(dateTimeService.formatUTCDateWithTimezone(d)).toEqual('2015-09-18 10:49:00 +00:00');
+    expect(dateTimeService.formatUTCDateWithTimezone(d)).toEqual('2015-09-18 10:49:00 +0000');
 
     //Strange format
     d = 'STRANGE DATE FORMAT';

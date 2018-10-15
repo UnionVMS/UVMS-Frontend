@@ -79,7 +79,7 @@ angular.module('unionvmsWeb').factory('dateTimeService',['$log', 'globalSettings
         },
         //Return date as string with timezone
         formatUTCDateWithTimezone : function(dateTimeInput, inputFormat) {
-            var outputFormat = 'YYYY-MM-DD HH:mm:ss +00:00';
+            var outputFormat = 'YYYY-MM-DD HH:mm:ss +0000';
             if(angular.isDefined(dateTimeInput)){
                 dateTimeInput = this.userTimezoneToUtc(dateTimeInput, inputFormat);
                 return moment(dateTimeInput, "YYYY-MM-DD HH:mm:ss").format(outputFormat);
