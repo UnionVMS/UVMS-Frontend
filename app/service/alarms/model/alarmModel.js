@@ -57,7 +57,7 @@ angular.module('unionvmsWeb').factory('Alarm', function(Movement) {
 
             //AssetID
             var assetId = rawMovement.assetId;
-            if(angular.isDefined(assetId)){
+            if(angular.isDefined(assetId) && assetId != null){
                 alarm.asset.type = assetId.assetType;
 
                 for (i = 0; i < assetId.assetIdList.length; i++) {
