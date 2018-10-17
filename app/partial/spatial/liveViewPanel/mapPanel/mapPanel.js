@@ -9,7 +9,7 @@ the hope that it will be useful, but WITHOUT ANY WARRANTY; without even the impl
 FITNESS FOR A PARTICULAR PURPOSE.  See the GNU General Public License for more details. You should have received a
 copy of the GNU General Public License along with the IFDM Suite. If not, see <http://www.gnu.org/licenses/>.
 */
-angular.module('unionvmsWeb').controller('MapCtrl',function($log, $scope, locale, $timeout, $document, $templateRequest, $modal, mapService, loadingStatus, spatialHelperService, reportService, mapFishPrintRestService, MapFish, MapFishPayload, spatialRestService, $window, projectionService, $state, $localStorage, reportFormService,comboboxService,userService,fishingActivityService,reportingNavigatorService,tripSummaryService,tripReportsTimeline){
+angular.module('unionvmsWeb').controller('MapCtrl',function($log, $scope, locale, $timeout, $document, $templateRequest, $uibModal, mapService, loadingStatus, spatialHelperService, reportService, mapFishPrintRestService, MapFish, MapFishPayload, spatialRestService, $window, projectionService, $state, $localStorage, reportFormService,comboboxService,userService,fishingActivityService,reportingNavigatorService,tripSummaryService,tripReportsTimeline){
     $scope.activeControl = '';
     $scope.showMeasureConfigWin = false;
     $scope.showMapFishConfigWin = false;
@@ -76,7 +76,7 @@ angular.module('unionvmsWeb').controller('MapCtrl',function($log, $scope, locale
     //Open modal with vms data
     $scope.showDataTables = function(){
         loadingStatus.isLoading('LiveviewMap',true,2);
-        var modalInstance = $modal.open({
+        var modalInstance = $uibModal.open({
             templateUrl: 'partial/spatial/liveViewPanel/vmsPanel/vmsPanelModal.html',
             controller: 'VmspanelmodalCtrl',
             backdrop: false,
@@ -90,7 +90,7 @@ angular.module('unionvmsWeb').controller('MapCtrl',function($log, $scope, locale
     $scope.getVesselDetails = function(){
         var assetId = mapService.overlay.get('vesselId');
         if (angular.isDefined(assetId)){
-            var modalInstance = $modal.open({
+            var modalInstance = $uibModal.open({
                 templateUrl: 'partial/spatial/reportsPanel/reportForm/vesselFieldset/detailsModal/detailsModal.html',
                 controller: 'DetailsmodalCtrl',
                 size: '',

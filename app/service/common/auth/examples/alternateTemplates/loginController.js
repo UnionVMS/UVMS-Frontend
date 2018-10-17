@@ -10,8 +10,8 @@ FITNESS FOR A PARTICULAR PURPOSE.  See the GNU General Public License for more d
 copy of the GNU General Public License along with the IFDM Suite. If not, see <http://www.gnu.org/licenses/>.
  */
 angular.module('loginCtrl',['auth'])
-    .controller('customLoginController',['$scope', '$log', 'authenticateUser', 'userService','$state','$stateParams','authRouter','$modal',
-        function ($scope, $log, authenticateUser,userService,$state,$stateParams,authRouter,$modal) {
+    .controller('customLoginController',['$scope', '$log', 'authenticateUser', 'userService','$state','$stateParams','authRouter','$uibModal',
+        function ($scope, $log, authenticateUser,userService,$state,$stateParams,authRouter,$uibModal) {
             $log.debug('$stateParams.toState',$stateParams.toState);
             var toState = $stateParams.toState;
             var toParams = $stateParams.toParams;
@@ -34,7 +34,7 @@ angular.module('loginCtrl',['auth'])
             };
             $scope.resetPassword = function () {
 
-                return $modal.open({
+                return $uibModal.open({
                     templateUrl: 'service/common/auth/templates/resetPassword.html',
                     controller: 'resetPasswordController'
                 }).result.then(

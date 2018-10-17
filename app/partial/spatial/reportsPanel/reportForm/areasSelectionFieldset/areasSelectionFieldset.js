@@ -14,7 +14,7 @@ copy of the GNU General Public License along with the IFDM Suite. If not, see <h
  * @ngdoc controller
  * @name AreasselectionfieldsetCtrl
  * @param $scope {service} controller scope
- * @param $modalInstance {service} bootstrap modal service
+ * @param $uibModalInstance {service} bootstrap modal service
  * @param $interval {service} angular interval service
  * @param $timeout {service} angular timeout service
  * @param locale {service} angular locale service
@@ -41,7 +41,7 @@ copy of the GNU General Public License along with the IFDM Suite. If not, see <h
  * @description
  *  The controller of the area selection fieldset used in the report form
  */
-angular.module('unionvmsWeb').controller('AreasselectionfieldsetCtrl',function($scope, /*$modalInstance,*/ $interval, $timeout, locale, mapReference, loadingStatus, genericMapService, /*selectedAreas,*/ spatialRestService, Area, userService, projectionService){
+angular.module('unionvmsWeb').controller('AreasselectionfieldsetCtrl',function($scope, /*$uibModalInstance,*/ $interval, $timeout, locale, mapReference, loadingStatus, genericMapService, /*selectedAreas,*/ spatialRestService, Area, userService, projectionService){
     mapReference.areaSelection = {};
     
     /**

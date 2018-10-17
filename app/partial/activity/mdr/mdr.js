@@ -19,9 +19,9 @@ copy of the GNU General Public License along with the IFDM Suite. If not, see <h
    * @param loadingStatus {service}
    * @param locale {service}
    * @param alertService {service}
-   * @param $modal {service}
+   * @param $uibModal {service}
    */
-angular.module('unionvmsWeb').controller('MdrCtrl',function($scope, mdrRestService, loadingStatus, locale, alertService, $modal, userService){
+angular.module('unionvmsWeb').controller('MdrCtrl',function($scope, mdrRestService, loadingStatus, locale, alertService, $uibModal, userService){
 
     /**
      * @property {Object} cronWidgetConfig is a configuration object, used by the angularjs-cron-plugin
@@ -279,7 +279,7 @@ angular.module('unionvmsWeb').controller('MdrCtrl',function($scope, mdrRestServi
      * @param {String} acronym - is the MDR code list acronym
      */
 	$scope.openCodeListModal = function(acronym) {
-        var modalInstance = $modal.open({
+        var modalInstance = $uibModal.open({
             templateUrl: 'partial/activity/mdr/codeList/mdrCodeList.html',
             controller: 'MdrcodelistCtrl',
             size: 'lg',

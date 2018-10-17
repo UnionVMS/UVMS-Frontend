@@ -12,14 +12,6 @@ copy of the GNU General Public License along with the IFDM Suite. If not, see <h
 (function (ng) {
     'use strict';
 
-    function isJqueryEventDataTransfer(){
-        return window.jQuery && (-1 === window.jQuery.event.props.indexOf('dataTransfer'));
-    }
-
-    if (isJqueryEventDataTransfer()) {
-        window.jQuery.event.props.push('dataTransfer');
-    }
-
     var module = ng.module('lrDragNDrop', []);
 
     module.service('lrDragStore', ['$document', function (document) {

@@ -10,7 +10,7 @@ FITNESS FOR A PARTICULAR PURPOSE.  See the GNU General Public License for more d
 copy of the GNU General Public License along with the IFDM Suite. If not, see <http://www.gnu.org/licenses/>.
  */
 angular.module('unionvmsWeb')
-    .controller('AdvancedSearchVesselFormCtrl', function($scope, $modal, searchService, savedSearchService, configurationService, vesselValidationService, locale, unitTransformer){
+    .controller('AdvancedSearchVesselFormCtrl', function($scope, $uibModal, searchService, savedSearchService, configurationService, vesselValidationService, locale, unitTransformer){
 
         $scope.advancedSearch = false;
         $scope.selectedVesselGroup = undefined;

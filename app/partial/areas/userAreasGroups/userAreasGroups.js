@@ -9,7 +9,7 @@ the hope that it will be useful, but WITHOUT ANY WARRANTY; without even the impl
 FITNESS FOR A PARTICULAR PURPOSE.  See the GNU General Public License for more details. You should have received a
 copy of the GNU General Public License along with the IFDM Suite. If not, see <http://www.gnu.org/licenses/>.
 */
-angular.module('unionvmsWeb').controller('UserareasgroupsCtrl',function($scope, locale, areaRestService, areaHelperService, areaMapService, $modal, userService, loadingStatus){
+angular.module('unionvmsWeb').controller('UserareasgroupsCtrl',function($scope, locale, areaRestService, areaHelperService, areaMapService, $uibModal, userService, loadingStatus){
 	$scope.areaHelper = areaHelperService;
 	$scope.areaGroup = {'type': ''};
 	$scope.currentContext = undefined;
@@ -79,7 +79,7 @@ angular.module('unionvmsWeb').controller('UserareasgroupsCtrl',function($scope, 
     
     //Area details modal
     $scope.openAreaDetailsModal = function(data){
-        var modalInstance = $modal.open({
+        var modalInstance = $uibModal.open({
            templateUrl: 'partial/areas/areaDetails/areaDetails.html',
            controller: 'AreadetailsCtrl',
            size: 'md',
@@ -93,7 +93,7 @@ angular.module('unionvmsWeb').controller('UserareasgroupsCtrl',function($scope, 
     };
     
     $scope.openAreaGroupEditorModal = function(){
-    	var modalInstance = $modal.open({
+    	var modalInstance = $uibModal.open({
             templateUrl: 'partial/areas/areaGroupEditorModal/areaGroupEditorModal.html',
             controller: 'AreagroupeditormodalCtrl',
             size: 'md',

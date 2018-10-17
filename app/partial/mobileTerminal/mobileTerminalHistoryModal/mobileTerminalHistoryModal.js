@@ -9,7 +9,7 @@ the hope that it will be useful, but WITHOUT ANY WARRANTY; without even the impl
 FITNESS FOR A PARTICULAR PURPOSE.  See the GNU General Public License for more details. You should have received a
 copy of the GNU General Public License along with the IFDM Suite. If not, see <http://www.gnu.org/licenses/>.
  */
-angular.module('unionvmsWeb').controller('mobileTerminalHistoryModalCtrl',function($scope, $modalInstance, SearchResults, mobileTerminalRestService, SearchResultListPage, mobileTerminal, locale){
+angular.module('unionvmsWeb').controller('mobileTerminalHistoryModalCtrl',function($scope, $uibModalInstance, SearchResults, mobileTerminalRestService, SearchResultListPage, mobileTerminal, locale){
 
     $scope.mobileTerminal = mobileTerminal;
         $scope.currentSearchResults = new SearchResults('changeDate', true, locale.getString('mobileTerminal.history_alert_message_on_zero_items'));
@@ -47,7 +47,7 @@ angular.module('unionvmsWeb').controller('mobileTerminalHistoryModalCtrl',functi
         };
 
         $scope.cancel = function () {
-            $modalInstance.dismiss('cancel');
+            $uibModalInstance.dismiss('cancel');
         };
 
         $scope.getAttribute = function(channelEvent, attribute) {
@@ -62,10 +62,10 @@ angular.module('unionvmsWeb').controller('mobileTerminalHistoryModalCtrl',functi
         init();
 });
 
-angular.module('unionvmsWeb').factory('MobileTerminalHistoryModal', function($modal) {
+angular.module('unionvmsWeb').factory('MobileTerminalHistoryModal', function($uibModal) {
     return {
         show: function(mobileTerminal) {
-            return $modal.open({
+            return $uibModal.open({
                 templateUrl: 'partial/mobileTerminal/mobileTerminalHistoryModal/mobileTerminalHistoryModal.html',
                 controller: 'mobileTerminalHistoryModalCtrl',
                 size: "lg",

@@ -21,7 +21,7 @@ sharedModule.controller('LogincontrollerCtrl', ['$rootScope', '$scope','$log', '
         authenticateUser.authenticate(loginInfo).then(
             function(response){
                 $log.log(response);
-                //$cookieStore.put("token", response.token);
+                //$cookies.put("token", response.token);
                 $localStorage.token = response.token;
 
                 //$storage.authData = response.authData;
@@ -41,7 +41,7 @@ sharedModule.controller('LogincontrollerCtrl', ['$rootScope', '$scope','$log', '
         );
     };
     $scope.logOut = function() {
-        //$cookieStore.remove("token");
+        //$cookies.remove("token");
         //delete $sessionStorage.token;
         $localStorage.$reset();
         delete $rootScope.error403;

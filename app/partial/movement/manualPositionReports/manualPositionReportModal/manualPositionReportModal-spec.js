@@ -40,7 +40,7 @@ describe('ManualPositionReportModalCtrl', function() {
 
         ctrl = $controller('ManualPositionReportModalCtrl', {
             $scope: scope,
-            $modalInstance: mockModalInstance,
+            $uibModalInstance: mockModalInstance,
             positionReport: new ManualPosition(),
             addAnother: false,
             reloadFunction: reloadSpy,

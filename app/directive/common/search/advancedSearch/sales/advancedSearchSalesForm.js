@@ -1,5 +1,5 @@
 angular.module('unionvmsWeb')
-    .controller('AdvancedSearchSalesFormCtrl', function ($scope, $modal, locale, unitTransformer, codeListService, dateTimeService, searchService, savedSearchService, salesSearchService, userService) { //TODO: salesValidationService,
+    .controller('AdvancedSearchSalesFormCtrl', function ($scope, $uibModal, locale, unitTransformer, codeListService, dateTimeService, searchService, savedSearchService, salesSearchService, userService) { //TODO: salesValidationService,
 
         $scope.advancedSearch = salesSearchService.getAdvancedSearchStatus;
         $scope.savedSearches = salesSearchService.savedSearches;

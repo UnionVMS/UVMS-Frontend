@@ -41,8 +41,8 @@ angular.module('auth.controllers', ['ui.bootstrap', 'ui.router'])
  * </pre>
  *
  */
-    .controller('selectContextController', ['$scope', '$log', '$modalInstance', 'userService', '$state',
-        function ($scope, $log, $modalInstance, userService, $state) {
+    .controller('selectContextController', ['$scope', '$log', '$uibModalInstance', 'userService', '$state',
+        function ($scope, $log, $uibModalInstance, userService, $state) {
             $scope.selectableContexts = userService.getContexts();
             $scope.selectedItem = userService.getCurrentContext();
             var toState = null;
@@ -68,7 +68,7 @@ angular.module('auth.controllers', ['ui.bootstrap', 'ui.router'])
                     }
             $scope.selectContext = function (ctxt) {
                 $log.debug('selected context', ctxt);
-                $modalInstance.close(ctxt);
+                $uibModalInstance.close(ctxt);
                 if (toState) {
                     $state.go(toState.state, toState.params);
                 } else {
@@ -77,12 +77,12 @@ angular.module('auth.controllers', ['ui.bootstrap', 'ui.router'])
             };
 
             $scope.cancel = function () {
-                $modalInstance.dismiss();
+                $uibModalInstance.dismiss();
         };
         }
     ])
-    .controller('modalLoginController', ['$scope', '$log', '$modalInstance', 'authenticateUser', 'userService', '$state', '$stateParams', '$modal', '$rootScope',
-        function ($scope, $log, $modalInstance, authenticateUser, userService, $state, $stateParams, $modal, $rootScope) {
+    .controller('modalLoginController', ['$scope', '$log', '$uibModalInstance', 'authenticateUser', 'userService', '$state', '$stateParams', '$uibModal', '$rootScope',
+        function ($scope, $log, $uibModalInstance, authenticateUser, userService, $state, $stateParams, $uibModal, $rootScope) {
             $scope.infoMessage = $stateParams.message;
 			if (!_.isUndefined($stateParams.toState)) {
                 $log.debug('Login required before accessing state ' + $stateParams.toState.name);
@@ -96,7 +96,7 @@ angular.module('auth.controllers', ['ui.bootstrap', 'ui.router'])
                         if (response.token) {
 							userService.login(response.token);
                             //thought about going to the requested state but this is probably not the right place
-                            $modalInstance.close();
+                            $uibModalInstance.close();
                             } else {
 							$scope.messageDivClass = "alert alert-danger";
 							$scope.actionMessage = "There was a problem logging you in. No token received";
@@ -121,7 +121,7 @@ angular.module('auth.controllers', ['ui.bootstrap', 'ui.router'])
 
             $scope.resetPassword = function () {
 
-                    return $modal.open({
+                    return $uibModal.open({
                     templateUrl: 'service/common/auth/templates/resetPassword.html',
                     controller: 'resetPasswordController'
                     }).result.then(
@@ -133,14 +133,14 @@ angular.module('auth.controllers', ['ui.bootstrap', 'ui.router'])
 
 				$scope.cancel = function () {
                 $log.debug('Dismissing login panel');
-					$modalInstance.dismiss();
+					$uibModalInstance.dismiss();
                 };
 
                                 }
 		])
 
-    .controller('loginController', ['$scope', '$log', 'authenticateUser', 'userService', '$state', '$stateParams', 'authRouter', '$modal',
-        function ($scope, $log, authenticateUser, userService, $state, $stateParams, authRouter, $modal) {
+    .controller('loginController', ['$scope', '$log', 'authenticateUser', 'userService', '$state', '$stateParams', 'authRouter', '$uibModal',
+        function ($scope, $log, authenticateUser, userService, $state, $stateParams, authRouter, $uibModal) {
             $log.debug('$stateParams.toState', $stateParams.toState);
             var toState = $stateParams.toState;
             var toParams = $stateParams.toParams;
@@ -163,7 +163,7 @@ angular.module('auth.controllers', ['ui.bootstrap', 'ui.router'])
                 };
                 $scope.resetPassword = function () {
 
-                  return $modal.open({
+                  return $uibModal.open({
                     templateUrl: 'service/common/auth/templates/resetPassword.html',
                         controller: 'resetPasswordController'
                      }).result.then(
@@ -194,10 +194,10 @@ angular.module('auth.controllers', ['ui.bootstrap', 'ui.router'])
 
                     }
     ])
-    .service('renewloginpanel', ['$window', '$modal', '$log',
-        function ($window, $modal, $log) {
+    .service('renewloginpanel', ['$window', '$uibModal', '$log',
+        function ($window, $uibModal, $log) {
             this.show = function () {
-                return $modal.open({
+                return $uibModal.open({
                     templateUrl: 'service/common/auth/templates/renewLogin.html',
                     controller: 'modalLoginController',
                     backdrop: 'static'
@@ -205,10 +205,10 @@ angular.module('auth.controllers', ['ui.bootstrap', 'ui.router'])
                 };
                     }
     ])
-    .service('selectContextPanel', ['$window', '$modal', '$log',
-        function ($window, $modal, $log) {
+    .service('selectContextPanel', ['$window', '$uibModal', '$log',
+        function ($window, $uibModal, $log) {
             this.show = function () {
-                return $modal.open({
+                return $uibModal.open({
                     templateUrl: 'service/common/auth/templates/selectContext.html',
                     controller: 'selectContextController'
                 }).result;
@@ -217,8 +217,8 @@ angular.module('auth.controllers', ['ui.bootstrap', 'ui.router'])
 		])
 
 
-    .controller('resetPasswordController', ['$scope', '$log', '$modalInstance', 'resetPasswordServices', '$state', '$stateParams', '$modal', '$timeout',
-        function ($scope, $log, $modalInstance, resetPasswordServices, $state, $stateParams, $modal, $timeout) {
+    .controller('resetPasswordController', ['$scope', '$log', '$uibModalInstance', 'resetPasswordServices', '$state', '$stateParams', '$uibModal', '$timeout',
+        function ($scope, $log, $uibModalInstance, resetPasswordServices, $state, $stateParams, $uibModal, $timeout) {
 
                 $scope.formDisabled = true;
                 $scope.editForm = true;
@@ -234,7 +234,7 @@ angular.module('auth.controllers', ['ui.bootstrap', 'ui.router'])
                 $scope.showConfirmation = false;
 
                 $scope.cancel = function () {
-                    $modalInstance.dismiss();
+                    $uibModalInstance.dismiss();
                 };
 
                 $scope.resetPasswordUser = function (userNameInfo) {
@@ -253,10 +253,10 @@ angular.module('auth.controllers', ['ui.bootstrap', 'ui.router'])
                                 $scope.messageDivClass = "alert alert-success";
 
                                 $timeout(function () {
-                                    $modalInstance.close(updatedResetPassword);
+                                    $uibModalInstance.close(updatedResetPassword);
                                 }, 2000);
 
-                                var modalInstance = $modal.open({
+                                var modalInstance = $uibModal.open({
                                     animation: true,
                                 backdrop: 'static',
                                     keyboard: true,
@@ -289,7 +289,7 @@ angular.module('auth.controllers', ['ui.bootstrap', 'ui.router'])
                                     $scope.actionMessage = "A new password has been sent to your email address.";
 
                                     $timeout(function () {
-                                        $modalInstance.close(updatedResetPassword);
+                                        $uibModalInstance.close(updatedResetPassword);
                                     }, 2000);
 
                             } else {
@@ -309,8 +309,8 @@ angular.module('auth.controllers', ['ui.bootstrap', 'ui.router'])
         ])
 
 
-    .controller('resetPasswordSecurityQuestionsModalInstanceCtrl', ['$scope', '$log', '$modalInstance', 'resetPasswordSecurityQuestions', 'resetPasswordServices', '$timeout',
-        function ($scope, $log, $modalInstance, resetPasswordSecurityQuestions, resetPasswordServices, $timeout) {
+    .controller('resetPasswordSecurityQuestionsModalInstanceCtrl', ['$scope', '$log', '$uibModalInstance', 'resetPasswordSecurityQuestions', 'resetPasswordServices', '$timeout',
+        function ($scope, $log, $uibModalInstance, resetPasswordSecurityQuestions, resetPasswordServices, $timeout) {
 
                 $scope.formDisabled = true;
                 $scope.editForm = true;
@@ -350,7 +350,7 @@ angular.module('auth.controllers', ['ui.bootstrap', 'ui.router'])
 
                 $scope.cancel = function () {
                     $log.info('Modal dismissed at');
-                    $modalInstance.dismiss();
+                    $uibModalInstance.dismiss();
                 };
 
                 $scope.saveMySecurityAnswer = function (mySecurityQuestions) {
@@ -370,7 +370,7 @@ angular.module('auth.controllers', ['ui.bootstrap', 'ui.router'])
                             $scope.securityQuestionsUpdated = true;
 
                             $timeout(function () {
-                                $modalInstance.close(updatedResetPasswordSecurityQs);
+                                $uibModalInstance.close(updatedResetPasswordSecurityQs);
                             }, 2000);
 
                         },
@@ -384,10 +384,10 @@ angular.module('auth.controllers', ['ui.bootstrap', 'ui.router'])
             }
         ])
 
-		.service('changepasswordpanel', ['$window','$modal', '$log',
-			function ($window, $modal,$log) {
+		.service('changepasswordpanel', ['$window','$uibModal', '$log',
+			function ($window, $uibModal,$log) {
 				this.show = function () {
-					return $modal.open({
+					return $uibModal.open({
 						templateUrl: 'usm/users/partial/changeMyPassword.html',
 						controller: 'setMyPasswordModalInstanceCtrl',
 						backdrop : 'static',
@@ -399,10 +399,10 @@ angular.module('auth.controllers', ['ui.bootstrap', 'ui.router'])
                 };
             }
         ])
-		.service('warningpasswordpanel', ['$window','$modal', '$log',
-			function ($window, $modal, $log) {
+		.service('warningpasswordpanel', ['$window','$uibModal', '$log',
+			function ($window, $uibModal, $log) {
                 this.show = function () {
-                    return $modal.open({
+                    return $uibModal.open({
 						templateUrl: 'usm/users/partial/warningPassword.html',
 						controller: 'warningPasswordModalInstanceCtrl'
                     }).result;
@@ -510,8 +510,8 @@ angular.module('auth.controllers', ['ui.bootstrap', 'ui.router'])
                 };
 
             }])
-    .controller('ecaslogincontroller', ['$scope', '$log', '$modalInstance', 'authenticateUser', 'userService', '$state', '$stateParams', '$window',
-        function ($scope, $log, $modalInstance, authenticateUser, userService, $state, $stateParams, $window) {
+    .controller('ecaslogincontroller', ['$scope', '$log', '$uibModalInstance', 'authenticateUser', 'userService', '$state', '$stateParams', '$window',
+        function ($scope, $log, $uibModalInstance, authenticateUser, userService, $state, $stateParams, $window) {
             var callback = $window.document.URL.split('#')[0] + '#/jwtcallback';
             var _url = "usm-administration/rest/ping?jwtcallback=" + callback;
                 $scope.status = "unopened";
@@ -555,7 +555,7 @@ angular.module('auth.controllers', ['ui.bootstrap', 'ui.router'])
                                 var token =   gup(url, 'jwt');
                                 userService.login(token);
                                 loginWindow.close();
-                                $modalInstance.dismiss();
+                                $uibModalInstance.dismiss();
                             }
 
                     } catch (e) {
@@ -564,14 +564,14 @@ angular.module('auth.controllers', ['ui.bootstrap', 'ui.router'])
                 };
 
                 $scope.cancel = function () {
-                    $modalInstance.dismiss();
+                    $uibModalInstance.dismiss();
                 };
             }
         ])
-    .service('ecasloginpanel', ['$window', '$modal', '$log',
-        function ($window, $modal, $log) {
+    .service('ecasloginpanel', ['$window', '$uibModal', '$log',
+        function ($window, $uibModal, $log) {
                 this.show = function () {
-                    return $modal.open({
+                    return $uibModal.open({
                     templateUrl: 'service/common/auth/templates/EcasLogin.html',
                         controller: 'ecaslogincontroller'
                     }).result;

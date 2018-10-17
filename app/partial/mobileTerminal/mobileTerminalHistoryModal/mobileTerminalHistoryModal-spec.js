@@ -26,7 +26,7 @@ describe('mobileTerminalHistoryModalCtrl', function() {
               then: jasmine.createSpy('modalInstance.result.then')
             }
         };
-        ctrl = $controller('mobileTerminalHistoryModalCtrl', {$scope: scope, $modalInstance: modalInstance, currentMobileTerminalHistory: currentMobileTerminalHistory, mobileTerminal: mobileTerminal});
+        ctrl = $controller('mobileTerminalHistoryModalCtrl', {$scope: scope, $uibModalInstance: modalInstance, currentMobileTerminalHistory: currentMobileTerminalHistory, mobileTerminal: mobileTerminal});
 
 
     }));	

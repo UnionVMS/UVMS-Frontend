@@ -44,7 +44,7 @@ describe('VesselhistorymodalCtrl', function () {
       });
       scope.vesselHistory = vesselHistory;
 
-      ctrl = $controller('VesselhistorymodalCtrl', {$scope: scope, $modalInstance: modalInstance, vesselHistory: vesselHistory, vesselRestService: vesselRestServiceMock});
+      ctrl = $controller('VesselhistorymodalCtrl', {$scope: scope, $uibModalInstance: modalInstance, vesselHistory: vesselHistory, vesselRestService: vesselRestServiceMock});
     })
   );
 

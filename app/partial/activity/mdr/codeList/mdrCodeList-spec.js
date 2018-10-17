@@ -42,7 +42,7 @@ describe('MdrcodelistCtrl', function() {
 
         ctrl = $controller('MdrcodelistCtrl', {
             $scope: scope,
-            $modalInstance: modalInstance,
+            $uibModalInstance: modalInstance,
             acronym: acronym
         });
 

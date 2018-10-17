@@ -14,12 +14,12 @@ copy of the GNU General Public License along with the IFDM Suite. If not, see <h
  * @ngdoc controller
  * @name CharacteristicsModalCtrl
  * @param $scope {Service} controller scope
- * @param $modalInstance {Service} angular service modalInstance
+ * @param $uibModalInstance {Service} angular service modalInstance
  * @param {Object} modalData - data for characteristics modal
  * @description
  *  The controller for characteristics modal
  */
-angular.module('unionvmsWeb').controller('CharacteristicsModalCtrl', function($scope, $modalInstance, modalData, locale) {
+angular.module('unionvmsWeb').controller('CharacteristicsModalCtrl', function($scope, $uibModalInstance, modalData, locale) {
 
     $scope.characteristics = [];
 
@@ -32,6 +32,6 @@ angular.module('unionvmsWeb').controller('CharacteristicsModalCtrl', function($s
     });
     
     $scope.close = function() {
-        $modalInstance.dismiss('close');
+        $uibModalInstance.dismiss('close');
     };
 });

@@ -14,7 +14,7 @@ copy of the GNU General Public License along with the IFDM Suite. If not, see <h
 
     var app = angular.module('unionvmsWeb');
 
-    app.controller('infoModalCtrl', function($scope, $modalInstance, options, locale) {
+    app.controller('infoModalCtrl', function($scope, $uibModalInstance, options, locale) {
 
         $scope.loading = false;
         $scope.labels = {
@@ -39,14 +39,14 @@ copy of the GNU General Public License along with the IFDM Suite. If not, see <h
         }
 
         $scope.cancel = function() {
-            $modalInstance.dismiss();
+            $uibModalInstance.dismiss();
         };
     });
 
-    app.factory('infoModal',function($modal){
+    app.factory('infoModal',function($uibModal){
         return {
             open :function(options){
-                return $modal.open({
+                return $uibModal.open({
                     templateUrl: 'partial/common/infoModal/infoModal.html',
                     controller: 'infoModalCtrl',
                     windowClass : "infoModal",

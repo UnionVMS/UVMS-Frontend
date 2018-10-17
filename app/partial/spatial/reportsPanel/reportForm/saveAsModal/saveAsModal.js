@@ -9,13 +9,13 @@ the hope that it will be useful, but WITHOUT ANY WARRANTY; without even the impl
 FITNESS FOR A PARTICULAR PURPOSE.  See the GNU General Public License for more details. You should have received a
 copy of the GNU General Public License along with the IFDM Suite. If not, see <http://www.gnu.org/licenses/>.
 */
-angular.module('unionvmsWeb').controller('SaveasmodalCtrl',function($scope,$modalInstance,reportData){
+angular.module('unionvmsWeb').controller('SaveasmodalCtrl',function($scope,$uibModalInstance,reportData){
 	$scope.report = reportData;
 	$scope.report.nameCopy = $scope.report.name;
 	$scope.report.descCopy = $scope.report.desc;
 	
 	$scope.cancel = function () {
-        $modalInstance.dismiss('cancel');
+        $uibModalInstance.dismiss('cancel');
         $scope.report = undefined;
     };
 
@@ -30,7 +30,7 @@ angular.module('unionvmsWeb').controller('SaveasmodalCtrl',function($scope,$moda
         	$scope.report.desc = $scope.report.descCopy;
         	delete $scope.report.nameCopy;
         	delete $scope.report.descCopy;
-            $modalInstance.close(angular.copy($scope.report));
+            $uibModalInstance.close(angular.copy($scope.report));
             $scope.report = undefined;
         }
     };

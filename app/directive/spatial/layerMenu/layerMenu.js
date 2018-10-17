@@ -9,7 +9,7 @@ the hope that it will be useful, but WITHOUT ANY WARRANTY; without even the impl
 FITNESS FOR A PARTICULAR PURPOSE.  See the GNU General Public License for more details. You should have received a
 copy of the GNU General Public License along with the IFDM Suite. If not, see <http://www.gnu.org/licenses/>.
 */
-angular.module('unionvmsWeb').directive('layerMenu', function(locale, reportFormService, reportService, reportRestService, Report, $modal, loadingStatus, layerPanelService) {
+angular.module('unionvmsWeb').directive('layerMenu', function(locale, reportFormService, reportService, reportRestService, Report, $uibModal, loadingStatus, layerPanelService) {
 	return {
 		restrict: 'A',
 		//templateUrl: 'directive/spatial/layerMenu/layerMenu.html',
@@ -115,7 +115,7 @@ angular.module('unionvmsWeb').directive('layerMenu', function(locale, reportForm
                     reportService.stopAutoRefreshInterval();
                 }
                 
-                var modalInstance = $modal.open({
+                var modalInstance = $uibModal.open({
                     templateUrl: 'partial/spatial/reportsPanel/reportForm/mapConfigurationModal/mapConfigurationModal.html',
                     controller: 'MapconfigurationmodalCtrl',
                     size: 'lg',

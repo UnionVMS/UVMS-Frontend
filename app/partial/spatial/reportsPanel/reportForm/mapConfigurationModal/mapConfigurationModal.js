@@ -9,7 +9,7 @@ the hope that it will be useful, but WITHOUT ANY WARRANTY; without even the impl
 FITNESS FOR A PARTICULAR PURPOSE.  See the GNU General Public License for more details. You should have received a
 copy of the GNU General Public License along with the IFDM Suite. If not, see <http://www.gnu.org/licenses/>.
 */
-angular.module('unionvmsWeb').controller('MapconfigurationmodalCtrl', function ($scope, $timeout, locale, reportConfigs, $modalInstance, SpatialConfig, reportService, spatialRestService, spatialConfigAlertService, $anchorScroll, $location, spatialConfigRestService, loadingStatus, displayComponents, PreferencesService) {
+angular.module('unionvmsWeb').controller('MapconfigurationmodalCtrl', function ($scope, $timeout, locale, reportConfigs, $uibModalInstance, SpatialConfig, reportService, spatialRestService, spatialConfigAlertService, $anchorScroll, $location, spatialConfigRestService, loadingStatus, displayComponents, PreferencesService) {
 	$scope.settingsLevel = 'report';
 	$scope.alert = spatialConfigAlertService;
 	$scope.alert.hasAlert = false;
@@ -20,12 +20,12 @@ angular.module('unionvmsWeb').controller('MapconfigurationmodalCtrl', function (
 	$scope.prefService = PreferencesService;
 	var userConfig;
 	
-	$modalInstance.opened.then(function(){
+	$uibModalInstance.opened.then(function(){
 	    loadingStatus.isLoading('LiveviewMap', false);
 	});
 	
     $scope.cancel = function () {
-        $modalInstance.dismiss('cancel');
+        $uibModalInstance.dismiss('cancel');
         $scope.initialConfig = undefined;
     };
     
@@ -48,7 +48,7 @@ angular.module('unionvmsWeb').controller('MapconfigurationmodalCtrl', function (
 
     $scope.save = function () {
         if ($scope.validate()){
-            $modalInstance.close($scope.exportMapConfiguration());
+            $uibModalInstance.close($scope.exportMapConfiguration());
             $scope.initialConfig = undefined;
         }
     };
@@ -56,7 +56,7 @@ angular.module('unionvmsWeb').controller('MapconfigurationmodalCtrl', function (
     $scope.apply = function(){
         if ($scope.validate()){
             var rep = $scope.exportMapConfiguration();
-            $modalInstance.close(rep);
+            $uibModalInstance.close(rep);
             $scope.initialConfig = undefined;
         }
     };

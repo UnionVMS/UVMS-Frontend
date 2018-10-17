@@ -11,11 +11,11 @@ copy of the GNU General Public License along with the IFDM Suite. If not, see <h
  */
 var userPreferencesModule = angular.module('preferences');
 
-userPreferencesModule.controller('userPreferencesCtrl', ['$scope', '$stateParams','$modal','userService','userPreferencesService',
-    function ($scope, $stateParams, $modal, userService,userPreferencesService) {
+userPreferencesModule.controller('userPreferencesCtrl', ['$scope', '$stateParams','$uibModal','userService','userPreferencesService',
+    function ($scope, $stateParams, $uibModal, userService,userPreferencesService) {
 
         $scope.manageUserPreference = function (mode, userPreference) {
-            var modalInstance = $modal.open({
+            var modalInstance = $uibModal.open({
                 animation: true,
                 backdrop: 'static',
                 keyboard: true,

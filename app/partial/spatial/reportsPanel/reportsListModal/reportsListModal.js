@@ -9,13 +9,13 @@ the hope that it will be useful, but WITHOUT ANY WARRANTY; without even the impl
 FITNESS FOR A PARTICULAR PURPOSE.  See the GNU General Public License for more details. You should have received a
 copy of the GNU General Public License along with the IFDM Suite. If not, see <http://www.gnu.org/licenses/>.
 */
-angular.module('unionvmsWeb').controller('ReportslistmodalCtrl',function($scope,$modalInstance,$timeout,reportService,reportingNavigatorService){
+angular.module('unionvmsWeb').controller('ReportslistmodalCtrl',function($scope,$uibModalInstance,$timeout,reportService,reportingNavigatorService){
     $scope.repServ = reportService;
 
     $scope.cancel = function () {
         reportingNavigatorService.rmStateParams();
         reportingNavigatorService.rmStateCallback();
-        $modalInstance.dismiss('cancel');
+        $uibModalInstance.dismiss('cancel');
     };
     
     $scope.close = function(keepState){
@@ -23,12 +23,12 @@ angular.module('unionvmsWeb').controller('ReportslistmodalCtrl',function($scope,
             reportingNavigatorService.rmStateParams();
             reportingNavigatorService.rmStateCallback();
         }
-        $modalInstance.close();
+        $uibModalInstance.close();
     };
     
     $scope.openReportForm = function(mode,report) {
         reportingNavigatorService.rmStateParams();
-        $modalInstance.close({action: mode, report: report});
+        $uibModalInstance.close({action: mode, report: report});
     };
 
 });

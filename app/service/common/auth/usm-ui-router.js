@@ -125,10 +125,10 @@ angular.module('auth.router', ['ui.bootstrap', 'auth.controllers', 'ui.router', 
                             toParams: null,
                             message: "Login required"
                         },
-                        onEnter: ['$stateParams', '$state', '$modal', '$log', 'authRouter', function ($stateParams, $state, $modal, $log, authRouter) {
+                        onEnter: ['$stateParams', '$state', '$uibModal', '$log', 'authRouter', function ($stateParams, $state, $uibModal, $log, authRouter) {
                             var toState = $stateParams.toState;
                             var toParams = $stateParams.toParams;
-                            $modal.open({
+                            $uibModal.open({
                                 templateUrl: 'service/common/auth/templates/renewLogin.html',
 
                                 controller: 'modalLoginController',
@@ -193,7 +193,7 @@ angular.module('auth.router', ['ui.bootstrap', 'auth.controllers', 'ui.router', 
 
             var routerConfig = this;
 
-            var $get = function ($state, $modal, $rootScope, $injector, $timeout, $location, userService, $log, renewloginpanel, ACCESS, $urlRouter) {
+            var $get = function ($state, $uibModal, $rootScope, $injector, $timeout, $location, userService, $log, renewloginpanel, ACCESS, $urlRouter) {
                 var preventedState = null;
                 var allowedState = null;
                 var expiredPasswordPanel = null;
@@ -500,7 +500,7 @@ angular.module('auth.router', ['ui.bootstrap', 'auth.controllers', 'ui.router', 
             }
                          };
                 };
-            $get.$inject = ['$state', '$modal', '$rootScope', '$injector', '$timeout', '$location', 'userService', '$log', 'renewloginpanel', 'ACCESS', '$urlRouter'];
+            $get.$inject = ['$state', '$uibModal', '$rootScope', '$injector', '$timeout', '$location', 'userService', '$log', 'renewloginpanel', 'ACCESS', '$urlRouter'];
             this.$get = $get;
 
             }])

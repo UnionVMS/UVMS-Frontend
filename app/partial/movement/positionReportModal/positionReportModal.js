@@ -9,7 +9,7 @@ the hope that it will be useful, but WITHOUT ANY WARRANTY; without even the impl
 FITNESS FOR A PARTICULAR PURPOSE.  See the GNU General Public License for more details. You should have received a
 copy of the GNU General Public License along with the IFDM Suite. If not, see <http://www.gnu.org/licenses/>.
  */
-angular.module('unionvmsWeb').controller('PositionReportModalCtrl', function($scope, $log, $modalInstance, locale, movementRestService, vesselRestService, dateTimeService, positionReport, positionReportGuid, globalSettingsService, movementCsvService, leafletData, $timeout) {
+angular.module('unionvmsWeb').controller('PositionReportModalCtrl', function($scope, $log, $uibModalInstance, locale, movementRestService, vesselRestService, dateTimeService, positionReport, positionReportGuid, globalSettingsService, movementCsvService, leafletData, $timeout) {
 
     $scope.waitingForResponse = false;
     $scope.waitingForResponseMessage = locale.getString('movement.positions_modal_loading_text');
@@ -21,8 +21,8 @@ angular.module('unionvmsWeb').controller('PositionReportModalCtrl', function($sc
     $scope.speedUnit = globalSettingsService.getSpeedUnit();
 
     /* Needed to invalidate map size after initial resize. */
-    if ($modalInstance.rendered) {
-        $modalInstance.rendered.then(function() {
+    if ($uibModalInstance.rendered) {
+        $uibModalInstance.rendered.then(function() {
             return leafletData.getMap().then(function(map) {
                 $timeout(function() {
                     map.invalidateSize();
@@ -91,16 +91,16 @@ angular.module('unionvmsWeb').controller('PositionReportModalCtrl', function($sc
 
 
     $scope.cancel = function() {
-        $modalInstance.dismiss();
+        $uibModalInstance.dismiss();
     };
 
     $scope.init();
 });
 
-angular.module('unionvmsWeb').factory('PositionReportModal', function($modal) {
+angular.module('unionvmsWeb').factory('PositionReportModal', function($uibModal) {
 
     var show = function(positionReport, positionReportGuid){
-        return $modal.open({
+        return $uibModal.open({
             templateUrl: 'partial/movement/positionReportModal/positionReportModal.html',
             controller: 'PositionReportModalCtrl',
             size: 'lg',

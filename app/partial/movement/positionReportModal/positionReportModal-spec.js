@@ -29,7 +29,7 @@ describe('PositionReportModalCtrl', function() {
         createController = function(positionReportGuid){
             return $controller('PositionReportModalCtrl', {
                 $scope: scope,
-                $modalInstance: mockModalInstance,
+                $uibModalInstance: mockModalInstance,
                 positionReport: mockPositionReport,
                 positionReportGuid : positionReportGuid
             });

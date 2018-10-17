@@ -9,7 +9,7 @@ the hope that it will be useful, but WITHOUT ANY WARRANTY; without even the impl
 FITNESS FOR A PARTICULAR PURPOSE.  See the GNU General Public License for more details. You should have received a
 copy of the GNU General Public License along with the IFDM Suite. If not, see <http://www.gnu.org/licenses/>.
 */
-angular.module('unionvmsWeb').controller('VesselfieldsetCtrl',function($scope, locale, $timeout, $modal, vesselRestService, GetListRequest, $filter){
+angular.module('unionvmsWeb').controller('VesselfieldsetCtrl',function($scope, locale, $timeout, $uibModal, vesselRestService, GetListRequest, $filter){
     $scope.selectedVesselMenu = 'SIMPLE';
     $scope.vesselSearchLoading = false;
     $scope.hasError = false;
@@ -57,7 +57,7 @@ angular.module('unionvmsWeb').controller('VesselfieldsetCtrl',function($scope, l
     };
     
     $scope.viewDetails = function(idx, source){
-        var modalInstance = $modal.open({
+        var modalInstance = $uibModal.open({
             templateUrl: 'partial/spatial/reportsPanel/reportForm/vesselFieldset/detailsModal/detailsModal.html',
             controller: 'DetailsmodalCtrl',
             size: '',

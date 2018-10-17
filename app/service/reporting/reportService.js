@@ -9,7 +9,7 @@ the hope that it will be useful, but WITHOUT ANY WARRANTY; without even the impl
 FITNESS FOR A PARTICULAR PURPOSE.  See the GNU General Public License for more details. You should have received a
 copy of the GNU General Public License along with the IFDM Suite. If not, see <http://www.gnu.org/licenses/>.
 */
-angular.module('unionvmsWeb').factory('reportService',function($rootScope, $compile, $timeout, $interval, $anchorScroll, locale, TreeModel, reportRestService, reportFormService, spatialRestService, spatialHelperService, defaultMapConfigs, mapService, unitConversionService, visibilityService, mapAlarmsService, loadingStatus, spatialConfigRestService, SpatialConfig, Report, globalSettingsService, userService, reportingNavigatorService, $modalStack, layerPanelService,tripReportsTimeline, tripSummaryService, mapStateService) {
+angular.module('unionvmsWeb').factory('reportService',function($rootScope, $compile, $timeout, $interval, $anchorScroll, locale, TreeModel, reportRestService, reportFormService, spatialRestService, spatialHelperService, defaultMapConfigs, mapService, unitConversionService, visibilityService, mapAlarmsService, loadingStatus, spatialConfigRestService, SpatialConfig, Report, globalSettingsService, userService, reportingNavigatorService, $uibModalStack, layerPanelService,tripReportsTimeline, tripSummaryService, mapStateService) {
 
     var rep = {
        id: undefined,
@@ -84,7 +84,7 @@ angular.module('unionvmsWeb').factory('reportService',function($rootScope, $comp
     
 
     var runSummaryReport = function(){
-        $modalStack.dismissAll();
+        $uibModalStack.dismissAll();
     };
 
 	rep.runReport = function(report){
@@ -98,7 +98,7 @@ angular.module('unionvmsWeb').factory('reportService',function($rootScope, $comp
             rep.reportType = report.reportType;
         }
         rep.hasAlert = false;
-        $modalStack.dismissAll();
+        $uibModalStack.dismissAll();
         if (angular.isDefined(rep.autoRefreshInterval)){
             rep.stopAutoRefreshInterval();
         }
@@ -171,7 +171,7 @@ angular.module('unionvmsWeb').factory('reportService',function($rootScope, $comp
         spatialHelperService.fromFAView = false;
 	    tripReportsTimeline.reset();
 	    rep.hasAlert = false;
-        $modalStack.dismissAll();
+        $uibModalStack.dismissAll();
 	    if (angular.isDefined(rep.autoRefreshInterval)){
             rep.stopAutoRefreshInterval();
         }

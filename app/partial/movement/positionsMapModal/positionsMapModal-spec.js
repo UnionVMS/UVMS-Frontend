@@ -35,7 +35,7 @@ describe('PositionsmapmodalCtrl', function() {
         scope = $rootScope.$new();
         ctrl = $controller('positionsMapModalCtrl', {
             $scope: scope,
-            $modalInstance: mockModalInstance,
+            $uibModalInstance: mockModalInstance,
             positionReports : [m1, m2]
         });
     }));

@@ -9,7 +9,7 @@ the hope that it will be useful, but WITHOUT ANY WARRANTY; without even the impl
 FITNESS FOR A PARTICULAR PURPOSE.  See the GNU General Public License for more details. You should have received a
 copy of the GNU General Public License along with the IFDM Suite. If not, see <http://www.gnu.org/licenses/>.
 */
-angular.module('unionvmsWeb').controller('ReportformCtrl',function($scope, $modal, $anchorScroll, reportMsgService, locale, Report, reportRestService, spatialRestService, configurationService, movementRestService, reportService, SpatialConfig, spatialConfigRestService, userService, loadingStatus, reportFormService){
+angular.module('unionvmsWeb').controller('ReportformCtrl',function($scope, $uibModal, $anchorScroll, reportMsgService, locale, Report, reportRestService, spatialRestService, configurationService, movementRestService, reportService, SpatialConfig, spatialConfigRestService, userService, loadingStatus, reportFormService){
     //Report form mode
     $scope.showVesselFilter = false;
 
@@ -310,7 +310,7 @@ angular.module('unionvmsWeb').controller('ReportformCtrl',function($scope, $moda
     };
 
     $scope.openMapConfigurationModal = function(){
-        var modalInstance = $modal.open({
+        var modalInstance = $uibModal.open({
             templateUrl: 'partial/spatial/reportsPanel/reportForm/mapConfigurationModal/mapConfigurationModal.html',
             controller: 'MapconfigurationmodalCtrl',
             size: 'lg',
@@ -378,7 +378,7 @@ angular.module('unionvmsWeb').controller('ReportformCtrl',function($scope, $moda
     	$scope.submitingReport = true;
         $scope.validateRanges();
         if ($scope.reportForm.reportBodyForm.$valid){
-        	var modalInstance = $modal.open({
+        	var modalInstance = $uibModal.open({
                 templateUrl: 'partial/spatial/reportsPanel/reportForm/saveAsModal/saveAsModal.html',
                 controller: 'SaveasmodalCtrl',
                 size: 'md',

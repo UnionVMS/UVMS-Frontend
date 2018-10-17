@@ -9,7 +9,7 @@ the hope that it will be useful, but WITHOUT ANY WARRANTY; without even the impl
 FITNESS FOR A PARTICULAR PURPOSE.  See the GNU General Public License for more details. You should have received a
 copy of the GNU General Public License along with the IFDM Suite. If not, see <http://www.gnu.org/licenses/>.
  */
-angular.module('unionvmsWeb').factory('savedSearchService',function($q, $modal, SavedSearchGroup, vesselRestService, movementRestService, userService, SearchField) {
+angular.module('unionvmsWeb').factory('savedSearchService',function($q, $uibModal, SavedSearchGroup, vesselRestService, movementRestService, userService, SearchField) {
 
     var checkAccessToFeature = function(moduleName, feature) {
         return userService.isAllowed(feature, moduleName, true);
@@ -200,7 +200,7 @@ angular.module('unionvmsWeb').factory('savedSearchService',function($q, $modal, 
         },
 
         openSaveSearchModal :function(searchType, options){
-            var modalInstance = $modal.open({
+            var modalInstance = $uibModal.open({
               templateUrl: 'partial/common/saveSearchModal/saveSearchModal.html',
               controller: 'SaveSearchModalInstanceCtrl',
               windowClass : "saveSearchModal",

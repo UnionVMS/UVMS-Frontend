@@ -9,11 +9,11 @@ the hope that it will be useful, but WITHOUT ANY WARRANTY; without even the impl
 FITNESS FOR A PARTICULAR PURPOSE.  See the GNU General Public License for more details. You should have received a
 copy of the GNU General Public License along with the IFDM Suite. If not, see <http://www.gnu.org/licenses/>.
  */
-angular.module('unionvmsWeb').controller('ManualPositionReportModalCtrl', function($scope, $location,$modalInstance, locale, manualPositionRestService, vesselRestService, GetListRequest, $filter, positionReport, ManualPosition, $timeout, movementRestService, coordinateFormatService, dateTimeService, vesselValidationService, leafletBoundsHelpers, addAnother, reloadFunction, readOnly, openedFromMovementPage, globalSettingsService, configurationService, leafletData) {
+angular.module('unionvmsWeb').controller('ManualPositionReportModalCtrl', function($scope, $location,$uibModalInstance, locale, manualPositionRestService, vesselRestService, GetListRequest, $filter, positionReport, ManualPosition, $timeout, movementRestService, coordinateFormatService, dateTimeService, vesselValidationService, leafletBoundsHelpers, addAnother, reloadFunction, readOnly, openedFromMovementPage, globalSettingsService, configurationService, leafletData) {
 
     /* Needed to invalidate map size after initial resize. */
-    if ($modalInstance.rendered) {
-        $modalInstance.rendered.then(function() {
+    if ($uibModalInstance.rendered) {
+        $uibModalInstance.rendered.then(function() {
             return leafletData.getMap().then(function(map) {
                 $timeout(function() {
                     map.invalidateSize();
@@ -167,7 +167,7 @@ angular.module('unionvmsWeb').controller('ManualPositionReportModalCtrl', functi
             result.name = $scope.positionReport.carrier.name;
         }
 
-        $modalInstance.close(result);
+        $uibModalInstance.close(result);
     };
 
     $scope.setSuccessText = function(text, action) {
@@ -249,7 +249,7 @@ angular.module('unionvmsWeb').controller('ManualPositionReportModalCtrl', functi
     };
 
     $scope.cancel = function() {
-        $modalInstance.dismiss();
+        $uibModalInstance.dismiss();
     };
 
     $scope.back = function() {
@@ -316,7 +316,7 @@ angular.module('unionvmsWeb').controller('ManualPositionReportModalCtrl', functi
 	};
 
 	$scope.dismiss = function() {
-		$modalInstance.dismiss();
+		$uibModalInstance.dismiss();
 	};
 
     //Auto suggestions search
@@ -411,10 +411,10 @@ angular.module('unionvmsWeb').controller('ManualPositionReportModalCtrl', functi
     $scope.init();
 });
 
-angular.module('unionvmsWeb').factory('ManualPositionReportModal', function($modal) {
+angular.module('unionvmsWeb').factory('ManualPositionReportModal', function($uibModal) {
 	return {
 		show: function(positionReport, options) {
-			return $modal.open({
+			return $uibModal.open({
 				templateUrl: 'partial/movement/manualPositionReports/manualPositionReportModal/manualPositionReportModal.html',
                 controller: 'ManualPositionReportModalCtrl as modalCtrl',
 				backdrop: 'static', //will not close when clicking outside the modal window

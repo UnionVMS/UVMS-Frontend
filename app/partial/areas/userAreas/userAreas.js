@@ -9,7 +9,7 @@ the hope that it will be useful, but WITHOUT ANY WARRANTY; without even the impl
 FITNESS FOR A PARTICULAR PURPOSE.  See the GNU General Public License for more details. You should have received a
 copy of the GNU General Public License along with the IFDM Suite. If not, see <http://www.gnu.org/licenses/>.
 */
-angular.module('unionvmsWeb').controller('UserareasCtrl',function($scope, locale, $modal, projectionService, UserArea, areaHelperService, areaMapService, areaRestService, spatialRestService, unitConversionService, userService, loadingStatus){
+angular.module('unionvmsWeb').controller('UserareasCtrl',function($scope, locale, $uibModal, projectionService, UserArea, areaHelperService, areaMapService, areaRestService, spatialRestService, unitConversionService, userService, loadingStatus){
     $scope.createBtnTitle = undefined;
     $scope.editBtnTitle = undefined;
     $scope.selectedProj = undefined;
@@ -537,7 +537,7 @@ angular.module('unionvmsWeb').controller('UserareasCtrl',function($scope, locale
     
     //CONFIRMATION MODAL ON WHICH GEOMETRY TO USE
     $scope.openGeomConfirmationModal = function(){
-        var modalInstance = $modal.open({
+        var modalInstance = $uibModal.open({
             templateUrl: 'partial/areas/areaManagementModal/areaManagementModal.html',
             controller: 'AreamanagementmodalCtrl',
             size: 'md'
@@ -558,7 +558,7 @@ angular.module('unionvmsWeb').controller('UserareasCtrl',function($scope, locale
     
     //Import geometry modal
     $scope.importArea = function(){
-        var modalInstance = $modal.open({
+        var modalInstance = $uibModal.open({
             templateUrl: 'partial/areas/uploadAreaModal/uploadAreaModal.html',
             controller: 'UploadareamodalCtrl',
             size: 'md',
@@ -594,7 +594,7 @@ angular.module('unionvmsWeb').controller('UserareasCtrl',function($scope, locale
     
     //Area details modal
     $scope.openAreaDetailsModal = function(data){
-        var modalInstance = $modal.open({
+        var modalInstance = $uibModal.open({
            templateUrl: 'partial/areas/areaDetails/areaDetails.html',
            controller: 'AreadetailsCtrl',
            size: 'md',

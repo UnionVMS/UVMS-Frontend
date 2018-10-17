@@ -9,7 +9,7 @@ the hope that it will be useful, but WITHOUT ANY WARRANTY; without even the impl
 FITNESS FOR A PARTICULAR PURPOSE.  See the GNU General Public License for more details. You should have received a
 copy of the GNU General Public License along with the IFDM Suite. If not, see <http://www.gnu.org/licenses/>.
 */
-angular.module('unionvmsWeb').controller('SpatialCtrl',function(/*tripSummaryService, */$scope, locale, mapService, spatialHelperService, Report, reportRestService, reportFormService, reportService, $anchorScroll, userService, loadingStatus, $state, $localStorage, comboboxService, reportingNavigatorService, $compile, $modal, confirmationModal){
+angular.module('unionvmsWeb').controller('SpatialCtrl',function(/*tripSummaryService, */$scope, locale, mapService, spatialHelperService, Report, reportRestService, reportFormService, reportService, $anchorScroll, userService, loadingStatus, $state, $localStorage, comboboxService, reportingNavigatorService, $compile, $uibModal, confirmationModal){
     $scope.reports = [];
     $scope.executedReport = {};
     $scope.repServ = reportService;
@@ -219,7 +219,7 @@ angular.module('unionvmsWeb').controller('SpatialCtrl',function(/*tripSummarySer
         }
         
         $scope.repNav.addStateCallback($scope.openReportList);
-        var modalInstance = $modal.open({
+        var modalInstance = $uibModal.open({
             templateUrl: 'partial/spatial/reportsPanel/reportsListModal/reportsListModal.html',
             controller: 'ReportslistmodalCtrl',
             size: 'lg'
@@ -287,7 +287,7 @@ angular.module('unionvmsWeb').controller('SpatialCtrl',function(/*tripSummarySer
     };
 
     $scope.discardReport = function(action){
-        /*$modalStack.dismissAll();
+        /*$uibModalStack.dismissAll();
         angular.element('body').removeClass('alert-open');*/
         $scope.repServ.resetReport();
         reportFormService.resetLiveView();

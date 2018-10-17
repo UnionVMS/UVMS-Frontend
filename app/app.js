@@ -20,6 +20,7 @@ var unionvmsWebApp = angular.module('unionvmsWeb', [
     'leaflet-directive',
     'ngCsv',
     'ui.router',
+    'ui.router.state.events',
     'usm',
     'checklist-model',
     'angularScreenfull',
@@ -63,7 +64,14 @@ var loadLocales = function(initService) {
 };
 
 
-unionvmsWebApp.config(function($stateProvider, $compileProvider, tmhDynamicLocaleProvider, $injector, $urlRouterProvider, $httpProvider, ACCESS, DEBUG) {
+unionvmsWebApp.config(function($stateProvider, 
+    $compileProvider, 
+    tmhDynamicLocaleProvider,
+    $urlRouterProvider,
+    $httpProvider, 
+    ACCESS,
+    DEBUG
+    ) {
     //initialize get if not there
     if (!$httpProvider.defaults.headers.get) {
         $httpProvider.defaults.headers.get = {};
@@ -76,11 +84,12 @@ unionvmsWebApp.config(function($stateProvider, $compileProvider, tmhDynamicLocal
     $httpProvider.defaults.headers.get['Pragma'] = 'no-cache';
 
     //Stops angular flooding console with debug info.
+    
     $compileProvider.debugInfoEnabled(DEBUG);
     if ($compileProvider.commentDirectivesEnabled) {
         $compileProvider.commentDirectivesEnabled(false);
     }
-
+    
     tmhDynamicLocaleProvider.localeLocationPattern("assets/locales/angular-locale_{{locale}}.js");
 
     var homeState = 'app.home';
@@ -904,12 +913,12 @@ unionvmsWebApp.value('localeConf', {
 });
 
 //Service used for bootstrapping the application
-unionvmsWebApp.factory('initService',function($log, configurationService, locale, tmhDynamicLocale, $window, $cookieStore, localeConf, languageNames) {
-    var userLocale = $cookieStore.get('COOKIE_LOCALE_LANG') || $window.navigator.userLanguage || $window.navigator.language;
+unionvmsWebApp.factory('initService',function($log, configurationService, locale, tmhDynamicLocale, $window, $cookies, localeConf, languageNames) {
+    var userLocale = $cookies.get('COOKIE_LOCALE_LANG') || $window.navigator.userLanguage || $window.navigator.language;
     //Check that the locale is available
     if(!(userLocale in languageNames)){
         $log.info("Locale " +userLocale +" is not available. Setting locale to " +localeConf.defaultLocale);
-        $cookieStore.put('COOKIE_LOCALE_LANG', localeConf.defaultLocale);
+        $cookies.put('COOKIE_LOCALE_LANG', localeConf.defaultLocale);
         userLocale = localeConf.defaultLocale;
     }
     tmhDynamicLocale.set(userLocale);
@@ -926,7 +935,7 @@ unionvmsWebApp.factory('initService',function($log, configurationService, locale
         },
         //Load the listed i18n files
         loadLanguageFiles : function(){
-            console.log("loadLanguageFiles: stored locale is [" + $cookieStore.get('COOKIE_LOCALE_LANG') + "].");
+            console.log("loadLanguageFiles: stored locale is [" + $cookies.get('COOKIE_LOCALE_LANG') + "].");
             console.log("loadLanguageFiles: locale is " + locale.getLocale());
             return locale.ready([
                 'common',
@@ -970,7 +979,9 @@ var restApiURLS = [
     'activity/rest/',
     'mdr/rest/',
     '/mapfish-print',
-    'usm-authentication/rest', 'usm-authorisation/rest', 'usm-administration/rest',
+    'usm-authentication/rest', 
+    'usm-authorisation/rest', 
+    'usm-administration/rest',
     'sales/rest/',
     'subscription/rest'
 ];

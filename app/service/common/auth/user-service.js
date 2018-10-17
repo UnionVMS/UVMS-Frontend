@@ -392,7 +392,10 @@ angular.module('auth.user-service', ['auth.router'])
                         $rootScope.$broadcast('UserPingError');
                     }, 15000);
                     return $http(pingRequest)
-						.success(function(response, status, headers, config) {
+						.then(function(response) {
+                            var status = response.status;
+                            var headers = response.headers;
+                            var config = response.config;
                             $timeout.cancel(pingTimeout);
                             $rootScope.$broadcast('UserPingSuccess');
                             $log.debug('_backendPing Success response:', response," - extstatus: ",headers()['extstatus']);
@@ -401,8 +404,7 @@ angular.module('auth.user-service', ['auth.router'])
 								//deferred.headers['extMessage'] = "'User authenticated but password expired. User should change password NOW!'"; //{ 'extMessage' : 'User authenticated but password expired. User should change password NOW!' };
 								//deferred.headers['extstatus'] = "701"; //{ 'extstatus' : '701' };
 							//}
-                        })
-						.error(function(error, status, headers, config) {
+                        }, function(error, status, headers, config) {   // Error
                             $timeout.cancel(pingTimeout);
                             $rootScope.$broadcast('UserPingError');
                             $log.debug('_backendPing error response (4): '+ error, pingRequest);
@@ -585,37 +587,37 @@ angular.module('auth.user-service', ['auth.router'])
                         //looks like we have some valid info with the current token
                         // let's check that we can successfully ping the backend
                         return _backendPing().then(
-                        function (response) {
-								if (!_.isUndefined(response.headers()["extstatus"])) {
+                            function (response) {
+                                if (!_.isUndefined(response.headers()["extstatus"])) {
                                     expired = false;
                                     if (response.headers()["extstatus"] === "701") {
                                         expired = true;
-										$rootScope.$broadcast('NeedChangePassword');
-										$log.debug("User authenticated but password expired (701). User should change password NOW!");
+                                        $rootScope.$broadcast('NeedChangePassword');
+                                        $log.debug("User authenticated but password expired (701). User should change password NOW!");
                                     } else if (response.headers()["extstatus"] === "773") {
-										$log.debug("User authenticated but password is about to expire (773). User is suggested to change password.");
-									}
-								}
+                                        $log.debug("User authenticated but password is about to expire (773). User is suggested to change password.");
+                                    }
+                                }
                                 $log.debug('_isUserIdentifiedPromise - The ping promise returned successfully with message', response);
                                 if (response.status && response.status + "" === "200") {
                                     $log.debug('Resolving _backendPing with "Authenticated", response.status: ' + response.status);
                                     $log.debug('_isUserIdentifiedPromise resolving with username : ', _getUserName());
                                     deferred.resolve(_getUserName());
-                            } else {
-                                    var message = response.status;
-                                    $log.debug('rejecting _backendPing promise (5): ' + message);
-                                    deferred.reject(message);
-                            }
+                                } else {
+                                        var message = response.status;
+                                        $log.debug('rejecting _backendPing promise (5): ' + message);
+                                        deferred.reject(message);
+                                }
                                 return deferred.promise;
-                        },
-                        function (error) {
+                            }, 
+                            function (error) {
                                 $log.debug('_backendPing error response (9): ' + error);
                                 var message;
                                 if (error && error.data && error.data.message) {
                                     message = 'Error: ' + error.data.message;
                                 } else {
                                     message = 'Failed';
-						}
+                                }
                                 $log.debug('_isUserIdentifiedPromise - The ping promise was rejected with message' + message, error);
                                 $log.debug('_isUserIdentifiedPromise - Clearing all user info using _logout()');
                                 //clear all user information
@@ -623,8 +625,8 @@ angular.module('auth.user-service', ['auth.router'])
                                 $log.debug('rejecting _backendPing promise (6): ' + message);
                                 deferred.reject(message);
                                 return deferred.promise;
-                        }
-                    );
+                            }
+                        );
                     } else {
                         validToken = false;
             }
@@ -634,8 +636,9 @@ angular.module('auth.user-service', ['auth.router'])
                         // we are not logged in
                         return _backendPing().then(
                         function (response) {
+                            
                             expired = false;
-								if (!_.isUndefined(response.headers()["extstatus"])) {
+								if (!_.isUndefined(response) && !_.isUndefined(response.headers()["extstatus"])) {
 
                                 if (response.headers()["extstatus"] === "701") {
                                     expired = true;
@@ -645,13 +648,13 @@ angular.module('auth.user-service', ['auth.router'])
 										$log.debug("User authenticated but password is about to expire (773). User is suggested to change password.");
                         }
             }
-                            if (response.status && response.status + "" === "200") {
+                            if (!_.isUndefined(response) && response.status && response.status + "" === "200") {
                                 $log.debug('Resolving _backendPing with "Authenticated", response.status: ' + response.status);
                                 $log.debug('_isUserIdentifiedPromise resolving with username : ', _getUserName());
                                     deferred.resolve(_getUserName());
                                     return deferred.promise;
                                 } else {
-                                if (response.data && response.data.status && (response.data.status === "ECAS_AUTHENTICATION_REQUIRED" || response.data.status === "CAS_AUTHENTICATION_REQUIRED")) {
+                                if (!_.isUndefined(response) && response.data && response.data.status && (response.data.status === "ECAS_AUTHENTICATION_REQUIRED" || response.data.status === "CAS_AUTHENTICATION_REQUIRED")) {
                                     $log.debug('ECAS/CAS AUth needed : ' + response.data);
                                     $log.debug('rejecting _backendPing promise (7): ' + response);
                                         deferred.reject(message);

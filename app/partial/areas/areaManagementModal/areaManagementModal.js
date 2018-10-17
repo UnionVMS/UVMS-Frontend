@@ -9,12 +9,12 @@ the hope that it will be useful, but WITHOUT ANY WARRANTY; without even the impl
 FITNESS FOR A PARTICULAR PURPOSE.  See the GNU General Public License for more details. You should have received a
 copy of the GNU General Public License along with the IFDM Suite. If not, see <http://www.gnu.org/licenses/>.
 */
-angular.module('unionvmsWeb').controller('AreamanagementmodalCtrl',function($scope, $modalInstance){
+angular.module('unionvmsWeb').controller('AreamanagementmodalCtrl',function($scope, $uibModalInstance){
     $scope.cancel = function () {
-        $modalInstance.dismiss('cancel');
+        $uibModalInstance.dismiss('cancel');
     };
     
     $scope.save = function(srcGeom){
-        $modalInstance.close(srcGeom);
+        $uibModalInstance.close(srcGeom);
     };
 });

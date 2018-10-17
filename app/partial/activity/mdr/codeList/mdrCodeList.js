@@ -14,14 +14,14 @@ copy of the GNU General Public License along with the IFDM Suite. If not, see <h
  * @ngdoc controller
  * @name MdrcodelistCtrl
  * @param $scope {Service} controller scope
- * @param $modalInstance {Service} angular service modalInstance
+ * @param $uibModalInstance {Service} angular service modalInstance
  * @param acronym {Service} the MDR code 
  * @param mdrRestService {Service} the mdr REST service <p>{@link unionvmsWeb.mdrRestService}</p>
  * @param $timeout {Service} angular service timeout
  * @description
  *  The controller for the mdr code list
  */
-angular.module('unionvmsWeb').controller('MdrcodelistCtrl',function($scope, $modalInstance, acronym, mdrRestService, $timeout){
+angular.module('unionvmsWeb').controller('MdrcodelistCtrl',function($scope, $uibModalInstance, acronym, mdrRestService, $timeout){
 
     $scope.itemsByPage = 25;
     $scope.displayedMdrCodeList = [];
@@ -53,7 +53,7 @@ angular.module('unionvmsWeb').controller('MdrcodelistCtrl',function($scope, $mod
      * @public
      */
     $scope.close = function() {
-        $modalInstance.close();
+        $uibModalInstance.close();
     };
 
     /**

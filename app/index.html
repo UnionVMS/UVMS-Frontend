@@ -39,80 +39,98 @@ copy of the GNU General Public License along with the IFDM Suite. If not, see <h
     <script src="http://localhost:35729/livereload.js" data-concat="false"></script>
 
     <!-- JS from Bower Components -->
-    <script src="../bower_components/less.js/dist/less.js" data-concat="false"></script>
-    <script src="../bower_components/jquery/jquery.js"></script>
-    <script src="../bower_components/jquery-ui/jquery-ui.js"></script>
-    <script src="../bower_components/bootstrap/dist/js/bootstrap.js"></script>
-    <script src="../bower_components/underscore/underscore.js"></script>
-    <script src="../bower_components/moment/min/moment-with-locales.min.js"></script>
-    <script src="../bower_components/angular/angular.js"></script>
-    <script src="../bower_components/angular-cookies/angular-cookies.min.js"></script>
-    <script src="../bower_components/angular-sanitize/angular-sanitize.min.js"></script>
-    <script src="../bower_components/angular-localization/angular-localization.min.js"></script>
-    <script src="../bower_components/angular-route/angular-route.js"></script>
-    <script src="../bower_components/angular-animate/angular-animate.js"></script>
-    <script src="../bower_components/angular-resource/angular-resource.js"></script>
-    <script src="../bower_components/angular-bootstrap/ui-bootstrap-tpls.js"></script>
-    <script src="../bower_components/angular-ui-utils/ui-utils.js"></script>
-    <script src="../bower_components/datetimepicker/jquery.datetimepicker.js"></script>
-    <script src="../bower_components/angular-dynamic-locale/dist/tmhDynamicLocale.js"></script>
-    <script src="../bower_components/leaflet/dist/leaflet.js"></script>
+    <!-- TODO: remove Bower dependency-->
+    <script src="../node_modules/less/dist/less.js" data-concat="false"></script>
+    <script src="../node_modules/jquery/dist/jquery.js"></script>
+    <script src="../node_modules/jquery-ui-dist/jquery-ui.min.js"></script>
+    <script src="../node_modules/bootstrap/dist/js/bootstrap.js"></script>
+    <script src="../node_modules/underscore/underscore.js"></script>
+    <script src="../node_modules/moment/min/moment-with-locales.min.js"></script>
+    <script src="../node_modules/angular/angular.js"></script>
+    <script src="../node_modules/angular-ui-utils/modules/format/format.js"></script>
+    <script src="../node_modules/angular-ui-utils/modules/highlight/highlight.js"></script>
+    <script src="../node_modules/angular-ui-utils/modules/include/include.js"></script>
+    <script src="../node_modules/angular-ui-utils/modules/indeterminate/indeterminate.js"></script>
+    <script src="../node_modules/angular-ui-utils/modules/inflector/inflector.js"></script>
+    <script src="../node_modules/angular-ui-utils/modules/jq/jq.js"></script>
+    <script src="../node_modules/angular-ui-utils/modules/keypress/keypress.js"></script>
+    <script src="../node_modules/angular-ui-utils/modules/mask/mask.js"></script>
+    <script src="../node_modules/angular-ui-utils/modules/reset/reset.js"></script>
+    <script src="../node_modules/angular-ui-utils/modules/route/route.js"></script>
+    <script src="../node_modules/angular-ui-utils/modules/scrollfix/scrollfix.js"></script>
+    <script src="../node_modules/angular-ui-utils/modules/scroll/scroll.js"></script>
+    <script src="../node_modules/angular-ui-utils/modules/scroll/scroll-jqlite.js"></script>
+    <script src="../node_modules/angular-ui-utils/modules/showhide/showhide.js"></script>
+    <script src="../node_modules/angular-ui-utils/modules/unique/unique.js"></script>
+    <script src="../node_modules/angular-ui-utils/modules/validate/validate.js"></script>
+    <script src="../node_modules/angular-ui-utils/modules/utils.js"></script>
+    <script src="../node_modules/angular-cookies/angular-cookies.min.js"></script>
+    <script src="../node_modules/angular-sanitize/angular-sanitize.min.js"></script>
+    <script src="../node_modules/angular-localization/dist/angular-localization.min.js"></script>
+    <script src="../node_modules/angular-route/angular-route.js"></script>
+    <script src="../node_modules/angular-animate/angular-animate.js"></script>
+    <script src="../node_modules/angular-resource/angular-resource.js"></script>
+    <script src="../node_modules/angular-ui-bootstrap/dist/ui-bootstrap-tpls.js"></script>
+
+    <script src="../node_modules/jquery-datetimepicker/jquery.datetimepicker.js"></script>
+    <script src="../node_modules/angular-dynamic-locale/dist/tmhDynamicLocale.js"></script>
+    <script src="../node_modules/leaflet/dist/leaflet.js"></script>
     <script src="../node_modules/angular-leaflet-directive/dist/angular-leaflet-directive.js"></script>
     <script src="assets/spatial/ol.min.js"></script>
     <script src="assets/spatial/ol_custom_controls.js"></script>
     <script src="assets/spatial/ol3-layerswitcher/src/ol3-layerswitcher.js"></script>
-    <script src="../bower_components/proj4/dist/proj4.js"></script>
-    <script src="../bower_components/ng-csv/build/ng-csv.min.js"></script>
-    <script src="../bower_components/fancytree/dist/jquery.fancytree-all.js"></script>
-    <script src="../bower_components/jQuery-contextMenu/dist/jquery.ui.position.min.js"></script>
-    <script src="../bower_components/jQuery-contextMenu/dist/jquery.contextMenu.min.js"></script>
-    <script src="../bower_components/mustache.js/mustache.min.js"></script>
-    <script src="../bower_components/turf/turf.min.js"></script>
-    <script src="../bower_components/checklist-model/checklist-model.js"></script>
-    <script src="../bower_components/screenfull/dist/screenfull.js"></script>
-    <script src="../bower_components/angular-screenfull/dist/angular-screenfull.js"></script>
-    <script src="../bower_components/angular-toggle-switch/angular-toggle-switch.min.js"></script>
-    <script src="../bower_components/angular-bootstrap-colorpicker/js/bootstrap-colorpicker-module.min.js"></script>
-    <script src="../bower_components/angular-file-upload/dist/angular-file-upload.min.js"></script>
-    <script src="../bower_components/file-saver/FileSaver.min.js"></script>
-    <script src="../bower_components/angular-cron-jobs/dist/angular-cron-jobs.min.js"></script>
-    <script src="../bower_components/d3/d3.min.js"></script>
-    <script src="../bower_components/nvd3/build/nv.d3.min.js"></script>
-    <script src="../bower_components/angular-nvd3/dist/angular-nvd3.min.js"></script>
-    <script src="../bower_components/angular-ui-tree/dist/angular-ui-tree.min.js"></script>
-    <script src="../bower_components/angular-ui-tree/dist/angular-ui-tree.min.js"></script>
-    <script src="../bower_components/html2canvas/build/html2canvas.min.js"></script>
-    <script src="../bower_components/jspdf/dist/jspdf.min.js"></script>
+    <script src="../node_modules/proj4/dist/proj4.js"></script>
+    <script src="../node_modules/ng-csv/build/ng-csv.min.js"></script>
+    <script src="../node_modules/jquery.fancytree/dist/jquery.fancytree-all.js"></script>
+    <script src="../node_modules/jQuery-contextMenu/dist/jquery.ui.position.min.js"></script>
+    <script src="../node_modules/jQuery-contextMenu/dist/jquery.contextMenu.min.js"></script>
+    <script src="../node_modules/mustache/mustache.min.js"></script>
+    <script src="../node_modules/turf/turf.min.js"></script>
+    <script src="../node_modules/checklist-model/checklist-model.js"></script>
+    <script src="../node_modules/screenfull/dist/screenfull.js"></script>
+    <script src="../node_modules/angular-screenfull/dist/angular-screenfull.js"></script>
+    <script src="../node_modules/angular-toggle-switch/angular-toggle-switch.min.js"></script>
+    <script src="../node_modules/angular-bootstrap-colorpicker/js/bootstrap-colorpicker-module.min.js"></script>
+    <script src="../node_modules/angular-file-upload/dist/angular-file-upload.min.js"></script>
+    <script src="../node_modules/angular-cron-jobs/dist/angular-cron-jobs.min.js"></script>
+    <script src="../node_modules/d3/d3.min.js"></script>
+    <script src="../node_modules/nvd3/build/nv.d3.min.js"></script>
+    <script src="../node_modules/angular-nvd3/dist/angular-nvd3.min.js"></script>
+    <script src="../node_modules/angular-ui-tree/dist/angular-ui-tree.min.js"></script>
+    <script src="../node_modules/angular-ui-tree/dist/angular-ui-tree.min.js"></script>
+    <script src="../node_modules/html2canvas/build/html2canvas.min.js"></script>
+    <script src="../node_modules/jspdf/dist/jspdf.min.js"></script>
 
     <!-- USM -->
-    <script src="../bower_components/angular-translate/angular-translate.js"></script>
-    <script src="../bower_components/angular-translate-loader-static-files/angular-translate-loader-static-files.min.js"></script>
-    <script src="../bower_components/angular-ui-router/release/angular-ui-router.js"></script>
-    <script src="../bower_components/angular-ui-router-tabs/src/ui-router-tabs.js"></script>
-    <script src="../bower_components/angular-smart-table/dist/smart-table.min.js"></script>
-    <script src="../bower_components/angular-ui-select/dist/select.js"></script>
-    <script src="../bower_components/ngstorage/ngStorage.min.js"></script>
-    <script src="../bower_components/angular-locker/dist/angular-locker.min.js"></script>
-    <script src="../bower_components/angular-jwt/dist/angular-jwt.js"></script>
-    <script src="../bower_components/angular-breadcrumb/dist/angular-breadcrumb.min.js"></script>
-    <script src="../bower_components/angular-google-chart/ng-google-chart.js"></script>
-    <script src="../bower_components/angular-simple-logger/dist/angular-simple-logger.min.js"></script>
-    <script src="../bower_components/angular-messages/angular-messages.min.js"></script>
-    <script src="../bower_components/angular-drag-and-drop-lists/angular-drag-and-drop-lists.min.js"></script>
-    <script src="../bower_components/seiyria-bootstrap-slider/dist/bootstrap-slider.min.js"></script>
-    <script src="../bower_components/angular-bootstrap-slider/slider.js"></script>
-    <script src="../bower_components/qtip2/jquery.qtip.min.js"></script>
-    <script src="../bower_components/angular-qtip2-directive/qtip2.js"></script>
-    <script src="../bower_components/chart.js/dist/Chart.js"></script>
-    <script src="../bower_components/angular-chart.js/dist/angular-chart.js"></script>
-    <script src="../bower_components/palette/palette.js"></script>
-    <script src="../bower_components/tinycolor/dist/tinycolor-min.js"></script>
-    <script src="../bower_components/angular-resizable/angular-resizable.min.js"></script>
-    <script src="../bower_components/slick-carousel/slick/slick.js"></script>
-    <script src="../bower_components/angular-slick-carousel/dist/angular-slick.min.js"></script>
-    <script src="../bower_components/vkBeautify/vkbeautify.js"></script>
+    <script src="../node_modules/angular-translate/dist/angular-translate.min.js"></script>
+    <script src="../node_modules/angular-translate-loader-static-files/angular-translate-loader-static-files.min.js"></script>    
+    <script src="../node_modules/angular-ui-event/dist/event.min.js"></script>
+    <script src="../node_modules/angular-ui-router/release/angular-ui-router.min.js"></script>
+    <script src="../node_modules/angular-ui-router/release/stateEvents.min.js"></script>
+    <script src="../node_modules/angular-ui-router-tabs/src/ui-router-tabs.js"></script>
+    <script src="../node_modules/angular-smart-table/dist/smart-table.min.js"></script>
+    <script src="../node_modules/ui-select/dist/select.js"></script>
+    <script src="../node_modules/ngstorage/ngStorage.min.js"></script>
+    <script src="../node_modules/angular-locker/dist/angular-locker.min.js"></script>
+    <script src="../node_modules/angular-jwt/dist/angular-jwt.js"></script>
+    <script src="../node_modules/angular-breadcrumb/dist/angular-breadcrumb.min.js"></script>
+    <script src="../node_modules/angular-google-chart/ng-google-chart.js"></script>
+    <script src="../node_modules/angular-simple-logger/dist/angular-simple-logger.min.js"></script>
+    <script src="../node_modules/angular-messages/angular-messages.min.js"></script>
+    <script src="../node_modules/angular-drag-and-drop-lists/angular-drag-and-drop-lists.min.js"></script>
+    <script src="../node_modules/angular-bootstrap-slider/slider.js"></script>
+    <script src="../node_modules/qtip2/dist/jquery.qtip.min.js"></script>
+    <script src="../node_modules/angular-qtip2-directive/qtip2.js"></script>
+    <script src="../node_modules/chart.js/dist/Chart.js"></script>
+    <script src="../node_modules/angular-chart.js/dist/angular-chart.js"></script>
+    <script src="../node_modules/google-palette/palette.js"></script>
+    <script src="../node_modules/tinycolor2/dist/tinycolor-min.js"></script>
+    <script src="../node_modules/angular-resizable/angular-resizable.min.js"></script>
+    <script src="../node_modules/slick-carousel/slick/slick.js"></script>
+    <script src="../node_modules/angular-slick-carousel/dist/angular-slick.min.js"></script>
+    <script src="../node_modules/vkBeautify/vkbeautify.js"></script>
     <script src="assets/highlight/highlight.pack.js"></script>
-    <script src="../bower_components/angular-highlightjs/angular-highlightjs.min.js"></script>
+    <script src="../node_modules/angular-highlightjs/angular-highlightjs.min.js"></script>
     <!-- Add New Bower Component JS Above -->
 
     <!-- Main App JS -->
@@ -630,8 +648,14 @@ copy of the GNU General Public License along with the IFDM Suite. If not, see <h
     <script src="filter/subscriptions/stRemoveEndOfTime/stRemoveEndOfTime.js"></script>
 
     <script src="service/spatial/mapStateService.js"></script>
+    
+    <!--<script src="app175.js"></script>-->
     <!-- Add New Component JS Above -->
-
+    <!--
+    <div ng-controller="MyController">
+        Hello {{greetMe}}!
+    </div>
+    -->
     <div ui-view name="unionvmsHeader"></div>
 
     <div id="contentWrapper">
@@ -645,6 +669,8 @@ copy of the GNU General Public License along with the IFDM Suite. If not, see <h
     </div>
 
     <div ui-view name="unionvmsFooter" ng-if="currentStateName !== 'app.reporting' && currentStateName !== 'app.reporting-id' && currentStateName !== 'app.areas'"></div>
+
+
 </body>
 
 </html>

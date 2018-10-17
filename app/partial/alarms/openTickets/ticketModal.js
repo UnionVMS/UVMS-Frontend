@@ -9,7 +9,7 @@ the hope that it will be useful, but WITHOUT ANY WARRANTY; without even the impl
 FITNESS FOR A PARTICULAR PURPOSE.  See the GNU General Public License for more details. You should have received a
 copy of the GNU General Public License along with the IFDM Suite. If not, see <http://www.gnu.org/licenses/>.
  */
-angular.module('unionvmsWeb').controller('TicketModalCtrl', function($scope, $log, $q, $timeout, $modalInstance, locale, alarm, options, GetListRequest, SearchResults, vesselRestService, dateTimeService, alarmRestService,  userService, configurationService, globalSettingsService, $filter, $state) {
+angular.module('unionvmsWeb').controller('TicketModalCtrl', function($scope, $log, $q, $timeout, $uibModalInstance, locale, alarm, options, GetListRequest, SearchResults, vesselRestService, dateTimeService, alarmRestService,  userService, configurationService, globalSettingsService, $filter, $state) {
 
     $scope.alarm = alarm;
     $scope.options = options;
@@ -20,12 +20,12 @@ angular.module('unionvmsWeb').controller('TicketModalCtrl', function($scope, $lo
     $scope.speedUnit = globalSettingsService.getSpeedUnit();
 
     $scope.cancel = function() {
-        $modalInstance.dismiss();
+        $uibModalInstance.dismiss();
     };
 
     $scope.closeTicket = function(ticket) {
         ticket.setStatusToClosed();
-        $modalInstance.close(ticket);
+        $uibModalInstance.close(ticket);
     };
 
     $scope.init = function() {
@@ -128,10 +128,10 @@ angular.module('unionvmsWeb').controller('TicketModalCtrl', function($scope, $lo
     $scope.init();
 });
 
-angular.module('unionvmsWeb').factory('TicketModal', function($modal) {
+angular.module('unionvmsWeb').factory('TicketModal', function($uibModal) {
     return {
         show: function(alarm, options) {
-            return $modal.open({
+            return $uibModal.open({
                 templateUrl: 'partial/alarms/openTickets/ticketModal.html',
                 controller: 'TicketModalCtrl',
                 windowClass : "alarmReportModal",

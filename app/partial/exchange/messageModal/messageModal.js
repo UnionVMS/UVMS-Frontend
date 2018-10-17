@@ -9,11 +9,11 @@ the hope that it will be useful, but WITHOUT ANY WARRANTY; without even the impl
 FITNESS FOR A PARTICULAR PURPOSE.  See the GNU General Public License for more details. You should have received a
 copy of the GNU General Public License along with the IFDM Suite. If not, see <http://www.gnu.org/licenses/>.
 */
-angular.module('unionvmsWeb').controller('MessagemodalCtrl',function($scope, $modalInstance, locale, msg){
+angular.module('unionvmsWeb').controller('MessagemodalCtrl',function($scope, $uibModalInstance, locale, msg){
     $scope.msg = vkbeautify.xml(msg);
     
     //Close modal
     $scope.cancel = function () {
-        $modalInstance.dismiss('cancel');
+        $uibModalInstance.dismiss('cancel');
     };
 });

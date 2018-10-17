@@ -23,7 +23,7 @@ copy of the GNU General Public License along with the IFDM Suite. If not, see <h
  * @description
  *  A reusable tile that will display two pie charts side-by-side, and optionally a table and caption for the input data 
  */
-angular.module('unionvmsWeb').directive('catchPanel', function(locale, $compile, $modal) {
+angular.module('unionvmsWeb').directive('catchPanel', function(locale, $compile, $uibModal) {
     return {
         restrict: 'E',
         replace: false,
@@ -71,7 +71,7 @@ angular.module('unionvmsWeb').directive('catchPanel', function(locale, $compile,
                             pie: {
                                 dispatch: {
                                     elementClick: function(e){
-                                        var modalInstance = $modal.open({
+                                        var modalInstance = $uibModal.open({
                                             templateUrl: 'partial/activity/pieChartModal/pieChartModal.html',
                                             controller: 'PiechartmodalCtrl',
                                             size: 'md',

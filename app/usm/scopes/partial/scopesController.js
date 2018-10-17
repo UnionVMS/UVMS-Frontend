@@ -240,15 +240,15 @@ scopesModule.controller('scopeDetailsCtrl', ['$log', '$scope', '$stateParams', '
         };
     }]);
 
-scopesModule.controller('manageScopeCtrl', ['$log', '$scope', '$modal', '$stateParams', 'userService', 'scopeServices',
-    function ($log, $scope, $modal, $stateParams, userService, scopeServices) {
+scopesModule.controller('manageScopeCtrl', ['$log', '$scope', '$uibModal', '$stateParams', 'userService', 'scopeServices',
+    function ($log, $scope, $uibModal, $stateParams, userService, scopeServices) {
 
         $scope.checkAccess = function (feature) {
             return userService.isAllowed(feature, "USM", true);
 	    };
 
         $scope.manageScope = function (mode, scope) {
-            var modalInstance = $modal.open({
+            var modalInstance = $uibModal.open({
                 animation: true,
                 backdrop: 'static',
                 keyboard: true,
@@ -296,9 +296,9 @@ scopesModule.controller('manageScopeCtrl', ['$log', '$scope', '$modal', '$stateP
         };
     }]);
 
-scopesModule.controller('scopesModalInstanceCtrl', ['$scope', '$modalInstance', '$log', '$timeout', '$location', 'refData', 'getApplications',
+scopesModule.controller('scopesModalInstanceCtrl', ['$scope', '$uibModalInstance', '$log', '$timeout', '$location', 'refData', 'getApplications',
     'scopeServices', 'mode', 'scopeItem',
-    function ($scope, $modalInstance, $log, $timeout, $location, refData, getApplications, scopeServices, mode, scopeItem) {
+    function ($scope, $uibModalInstance, $log, $timeout, $location, refData, getApplications, scopeServices, mode, scopeItem) {
         var confirmCreate = false;
         $scope.mode = mode;
         $scope.actionMessage = "";
@@ -374,7 +374,7 @@ scopesModule.controller('scopesModalInstanceCtrl', ['$scope', '$modalInstance', 
                         $scope.messageDivClass = "alert alert-success";
                         $scope.actionMessage = "New Scope created";
                         $timeout(function () {
-                            $modalInstance.close($scope.newScope);
+                            $uibModalInstance.close($scope.newScope);
                         }, 2000);
                     },
                     function (error) {
@@ -400,7 +400,7 @@ scopesModule.controller('scopesModalInstanceCtrl', ['$scope', '$modalInstance', 
                             $scope.messageDivClass = "alert alert-success";
                             $scope.actionMessage = "Scope Changes Saved";
                             $timeout(function () {
-                                $modalInstance.close($scope.updatedScope);
+                                $uibModalInstance.close($scope.updatedScope);
                             }, 2000);
                         },
                         function (error) {
@@ -423,7 +423,7 @@ scopesModule.controller('scopesModalInstanceCtrl', ['$scope', '$modalInstance', 
                             $scope.messageDivClass = "alert alert-success";
                             $scope.actionMessage = "Scope deleted";
                             $timeout(function () {
-                                $modalInstance.close($scope.deletedScope);
+                                $uibModalInstance.close($scope.deletedScope);
                             }, 2000);
                         },
                         function (error) {
@@ -440,15 +440,15 @@ scopesModule.controller('scopesModalInstanceCtrl', ['$scope', '$modalInstance', 
         };
 
         $scope.cancel = function () {
-            $modalInstance.dismiss();
+            $uibModalInstance.dismiss();
         };
 
     }]);
 
-scopesModule.controller('manageDatasetsCtrl', ['$log', '$scope', '$modal',
-    function ($log, $scope, $modal) {
+scopesModule.controller('manageDatasetsCtrl', ['$log', '$scope', '$uibModal',
+    function ($log, $scope, $uibModal) {
         $scope.manageDatasets = function (scopeDetails) {
-            var modalInstance = $modal.open({
+            var modalInstance = $uibModal.open({
                 animation: true,
                 backdrop: 'static',
                 keyboard: true,
@@ -477,9 +477,9 @@ scopesModule.controller('manageDatasetsCtrl', ['$log', '$scope', '$modal',
         };
     }]);
 
-scopesModule.controller('datatsetsModalInstanceCtrl', ['$log', '$scope', '$modalInstance', '$stateParams', '$timeout', 'scopeDetails',
+scopesModule.controller('datatsetsModalInstanceCtrl', ['$log', '$scope', '$uibModalInstance', '$stateParams', '$timeout', 'scopeDetails',
     'filterFilter', 'getApplications', 'scopeServices',
-    function ($log, $scope, $modalInstance, $stateParams, $timeout, scopeDetails, filterFilter, getApplications, scopeServices) {
+    function ($log, $scope, $uibModalInstance, $stateParams, $timeout, scopeDetails, filterFilter, getApplications, scopeServices) {
         $scope.header = {
             selectAll: false
         };
@@ -661,7 +661,7 @@ scopesModule.controller('datatsetsModalInstanceCtrl', ['$log', '$scope', '$modal
                         $scope.actionMessage = "Scope Changes Saved";
                         $log.log($scope.updatedScope);
                         $timeout(function () {
-                            $modalInstance.close($scope.updatedScope);
+                            $uibModalInstance.close($scope.updatedScope);
                         }, 2000);
                     },
                     function (error) {
@@ -677,6 +677,6 @@ scopesModule.controller('datatsetsModalInstanceCtrl', ['$log', '$scope', '$modal
         };
 
         $scope.cancel = function () {
-            $modalInstance.dismiss();
+            $uibModalInstance.dismiss();
         };
     }]);

@@ -9,10 +9,10 @@ the hope that it will be useful, but WITHOUT ANY WARRANTY; without even the impl
 FITNESS FOR A PARTICULAR PURPOSE.  See the GNU General Public License for more details. You should have received a
 copy of the GNU General Public License along with the IFDM Suite. If not, see <http://www.gnu.org/licenses/>.
  */
-// Please note that $modalInstance represents a modal window (instance) dependency.
-// It is not the same as the $modal service used above.
+// Please note that $uibModalInstance represents a modal window (instance) dependency.
+// It is not the same as the $uibModal service used above.
 
-angular.module('unionvmsWeb').controller('SaveSearchModalInstanceCtrl', function ($scope, $modalInstance, locale, searchService, SearchField, SavedSearchGroup, savedSearchService, searchType, options, userService, alertService, salesSearchService) {
+angular.module('unionvmsWeb').controller('SaveSearchModalInstanceCtrl', function ($scope, $uibModalInstance, locale, searchService, SearchField, SavedSearchGroup, savedSearchService, searchType, options, userService, alertService, salesSearchService) {
 
     $scope.waitingForCreateResponse = false;
 
@@ -170,13 +170,13 @@ angular.module('unionvmsWeb').controller('SaveSearchModalInstanceCtrl', function
     var onSaveSuccess = function(response){
         $scope.waitingForCreateResponse = false;
         alertService.showSuccessMessageWithTimeout($scope.saveSuccessMessage);
-        $modalInstance.close();
+        $uibModalInstance.close();
     };
 
     var onUpdateSuccess = function(response){
         $scope.waitingForCreateResponse = false;
         alertService.showSuccessMessageWithTimeout($scope.updateSuccessMessage);
-        $modalInstance.close();
+        $uibModalInstance.close();
     };
 
     var onSaveError = function(response){
@@ -211,7 +211,7 @@ angular.module('unionvmsWeb').controller('SaveSearchModalInstanceCtrl', function
     };
 
     $scope.cancel = function () {
-        $modalInstance.dismiss('cancel');
+        $uibModalInstance.dismiss('cancel');
     };
 
     init();

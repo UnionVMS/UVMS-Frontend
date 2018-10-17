@@ -9,7 +9,7 @@ the hope that it will be useful, but WITHOUT ANY WARRANTY; without even the impl
 FITNESS FOR A PARTICULAR PURPOSE.  See the GNU General Public License for more details. You should have received a
 copy of the GNU General Public License along with the IFDM Suite. If not, see <http://www.gnu.org/licenses/>.
 */
-angular.module('unionvmsWeb').controller('UploadareamodalCtrl',function($scope, $modalInstance, locale, FileUploader, projectionService, srcProjections, defaultProjection, $timeout){
+angular.module('unionvmsWeb').controller('UploadareamodalCtrl',function($scope, $uibModalInstance, locale, FileUploader, projectionService, srcProjections, defaultProjection, $timeout){
     $scope.hasError = false;
     $scope.hasWarning = false;
     $scope.errorMessage = undefined;
@@ -205,7 +205,7 @@ angular.module('unionvmsWeb').controller('UploadareamodalCtrl',function($scope, 
             
             if ($scope.isMulti){
                 geom = geom.getPolygon(0);
-                $modalInstance.close(geom);
+                $uibModalInstance.close(geom);
             }
             
             var firstCoord = geom.getFirstCoordinate();
@@ -240,7 +240,7 @@ angular.module('unionvmsWeb').controller('UploadareamodalCtrl',function($scope, 
     };
     
     $scope.cancel = function () {
-        $modalInstance.dismiss('cancel');
+        $uibModalInstance.dismiss('cancel');
     };
     
     $scope.upload = function(){
@@ -254,7 +254,7 @@ angular.module('unionvmsWeb').controller('UploadareamodalCtrl',function($scope, 
             }
             
             if (angular.isDefined(geom)){
-                $modalInstance.close(geom);
+                $uibModalInstance.close(geom);
             }
         } else {
             $scope.setError();

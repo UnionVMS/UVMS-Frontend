@@ -15,11 +15,11 @@ accountModule.controller('accountController', ['$scope', function ($scope) {
 
 }]);
 
-accountModule.controller('newUserController', ['$scope', '$modal', 'accountService', '$log','policyValues',
-    function ($scope, $modal, accountService, $log, policyValues) {
+accountModule.controller('newUserController', ['$scope', '$uibModal', 'accountService', '$log','policyValues',
+    function ($scope, $uibModal, accountService, $log, policyValues) {
 
         $scope.addNewUser = function (newUser) {
-            var modalInstance = $modal.open({
+            var modalInstance = $uibModal.open({
                 animation: true,
                 backdrop: 'static',
                 keyboard: true,
@@ -50,8 +50,8 @@ accountModule.controller('newUserController', ['$scope', '$modal', 'accountServi
 
     }]);
 
-accountModule.controller('userModalInstanceCtrl', ['$scope', '$modalInstance', '$log', 'organisationsService', 'refData', 'accountService', '$timeout','ldapEnabledPolicy',
-    function ($scope, $modalInstance, $log, organisationsService, refData, accountService, $timeout, ldapEnabledPolicy) {
+accountModule.controller('userModalInstanceCtrl', ['$scope', '$uibModalInstance', '$log', 'organisationsService', 'refData', 'accountService', '$timeout','ldapEnabledPolicy',
+    function ($scope, $uibModalInstance, $log, organisationsService, refData, accountService, $timeout, ldapEnabledPolicy) {
         var confirmCreate = false;
         $scope.ldapEnabled = ldapEnabledPolicy[0].value;
         $scope.actionMessage = "";
@@ -135,7 +135,7 @@ accountModule.controller('userModalInstanceCtrl', ['$scope', '$modalInstance', '
                         $scope.newUser = response.newUser;
                         $scope.userCreated = true;
                         $timeout(function () {
-                            $modalInstance.close($scope.newUser);
+                            $uibModalInstance.close($scope.newUser);
                         }, 2000);
                     },
                     function (error) {
@@ -154,7 +154,7 @@ accountModule.controller('userModalInstanceCtrl', ['$scope', '$modalInstance', '
 
 
         $scope.cancel = function () {
-            $modalInstance.dismiss();
+            $uibModalInstance.dismiss();
         };
 
 

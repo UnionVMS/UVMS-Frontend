@@ -9,7 +9,7 @@ the hope that it will be useful, but WITHOUT ANY WARRANTY; without even the impl
 FITNESS FOR A PARTICULAR PURPOSE.  See the GNU General Public License for more details. You should have received a
 copy of the GNU General Public License along with the IFDM Suite. If not, see <http://www.gnu.org/licenses/>.
 */
-angular.module('unionvmsWeb').controller('AreagroupeditormodalCtrl',function($scope,$modalInstance,areaGroupName,areaRestService,loadingStatus,locale,unitConversionService,userService){
+angular.module('unionvmsWeb').controller('AreagroupeditormodalCtrl',function($scope,$uibModalInstance,areaGroupName,areaRestService,loadingStatus,locale,unitConversionService,userService){
 	$scope.alert = {};
 	$scope.areaGroupName = areaGroupName;
 	$scope.areaGroup = {
@@ -17,7 +17,7 @@ angular.module('unionvmsWeb').controller('AreagroupeditormodalCtrl',function($sc
 	};
 	
 	$scope.cancel = function () {
-		$modalInstance.dismiss('cancel');
+		$uibModalInstance.dismiss('cancel');
 	};
 
 	$scope.save = function() {
@@ -46,7 +46,7 @@ angular.module('unionvmsWeb').controller('AreagroupeditormodalCtrl',function($sc
 			areaRestService.updateAreaGroupDate(obj).then(
 				function (data) {
 					loadingStatus.isLoading('EditAreaGroupModal',false);
-					$modalInstance.close(locale.getString('areas.edit_area_group_success'));
+					$uibModalInstance.close(locale.getString('areas.edit_area_group_success'));
 				}, function(error) {
 					$scope.alert.alertType = 'danger';
 					$scope.alert.alertMessage = locale.getString('areas.edit_area_group_error');
