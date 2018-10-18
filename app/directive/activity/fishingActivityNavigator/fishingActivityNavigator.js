@@ -50,6 +50,7 @@ angular.module('unionvmsWeb').directive('fishingActivityNavigator', function (tr
 				if (angular.isDefined(rec)) {
 					fishingActivityService.resetActivity();
 					fishingActivityService.id = rec.id;
+                    fishingActivityService.repId= rec.repId;
 					fishingActivityService.isCorrection = rec.corrections;
 					fishingActivityService.documentType = rec.documentType;
 					fishingActivityService.activityType = rec.srcType;

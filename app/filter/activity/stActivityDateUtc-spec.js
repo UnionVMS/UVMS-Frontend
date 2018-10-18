@@ -25,12 +25,10 @@ describe('stActivityDateUtc', function() {
               });
             }));
 
-    it('should ...', inject(function($filter ) {
-
+    it('should return the date as provided by the unitconversion service', inject(function($filter ) {
         var filter = $filter('stActivityDateUtc');
         var datetime = new Date().getTime();
         expect(filter(datetime)).toEqual(new Date(datetime)+'mock');
-
     }));
 
 });
