@@ -27,6 +27,7 @@ angular.module('unionvmsWeb')
         this.type = undefined;
         this.typeRefType = undefined;
         this.relatedLogData = undefined;
+        this.on = undefined;
 	}
 
 	Exchange.fromJson = function(data){
@@ -45,6 +46,7 @@ angular.module('unionvmsWeb')
             exchange.source = data.source;
 			exchange.type = data.type;
 			exchange.typeRefType = data.typeRefType;
+			exchange.on = data.on;
 
             if (angular.isDefined(data.relatedLogData) && data.relatedLogData !== null && data.relatedLogData.length > 0){
                 exchange.relatedLogData = orderRelatedLogs(data.relatedLogData);
@@ -70,6 +72,7 @@ angular.module('unionvmsWeb')
             exchange.source = data.source;
             exchange.type = data.type;
             exchange.typeRefType = data.typeRefType;
+            exchange.on = data.on;
 
             if (angular.isDefined(data.relatedLogData) && data.relatedLogData !== null && data.relatedLogData.length > 0){
                 exchange.relatedLogData = orderRelatedLogs(data.relatedLogData);
@@ -80,7 +83,7 @@ angular.module('unionvmsWeb')
     };
 
     var orderRelatedLogs = function(relatedData){
-        var linkedDataOrder = ['FA_RESPONSE', 'FA_REPORT'];
+        var linkedDataOrder = ['FA_RESPONSE', 'FA_REPORT', 'MOVEMENT_RESPONSE'];
         var sortedData = [];
         angular.forEach(linkedDataOrder, function(link){
             sortedData = sortedData.concat(_.where(relatedData, {type: link}));

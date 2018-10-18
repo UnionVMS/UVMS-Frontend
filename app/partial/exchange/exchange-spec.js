@@ -40,7 +40,8 @@ describe('ExchangeCtrl', function () {
             },
             "forwardRule": "TESTDATA-RULE",
             "source": "Inmarsat-C",
-            "type": "Flux FA Report Msg"
+            "type": "Flux FA Report Msg",
+            "typeRefType": "FA_REPORT"
         }];
         scope.getStatusLabel = function (status) {
             switch (status) {
@@ -198,23 +199,30 @@ describe('ExchangeCtrl', function () {
         expect(locationChangeSpy).toHaveBeenCalledWith('/polling/logs/' + exchangeLog.logData.guid);
         expect(locationChangeSpy.callCount).toEqual(1);
 
-        //MOVEMENT
-        exchangeLog.logData.type = 'MOVEMENT';
-        scope.showMessageDetails(exchangeLog);
-        expect(locationChangeSpy).toHaveBeenCalledWith('/movement/' + exchangeLog.logData.guid);
-        expect(locationChangeSpy.callCount).toEqual(2);
-
         //ALARM
         exchangeLog.logData.type = 'ALARM';
         scope.showMessageDetails(exchangeLog);
         expect(locationChangeSpy).toHaveBeenCalledWith('/alerts/holdingtable/' + exchangeLog.logData.guid);
+        expect(locationChangeSpy.callCount).toEqual(2);
+
+        //MOVEMENT
+        exchangeLog.logData.type = 'MOVEMENT';
+        exchangeLog.source = 'Inmarsat-C';
+        scope.showMessageDetails(exchangeLog);
+        expect(locationChangeSpy).toHaveBeenCalledWith('/movement/' + exchangeLog.logData.guid);
         expect(locationChangeSpy.callCount).toEqual(3);
+
+        exchangeLog.source = 'FLUX';
+        exchangeLog.id = 1;
+        scope.showMessageDetails(exchangeLog);
+        expect(msgSpy).toHaveBeenCalledWith(1);
+        expect(msgSpy.callCount).toEqual(1);
 
         //FISHING ACTIVITY MSG
         var faTypes = ['FA_QUERY', 'FA_REPORT','FA_RESPONSE'];
         exchangeLog.id = 1;
         delete exchangeLog.logData;
-        var counter = 1;
+        var counter = 2;
         angular.forEach(faTypes, function(value){
             exchangeLog.typeRefType = value;
             scope.showMessageDetails(exchangeLog);

@@ -49,6 +49,8 @@
     "table_entity": "Entity",
     "table_expression": "Expression",
 	"table_note": "Note",
+	"table_header_message_uuid": "Msg UUID",
+    "table_header_on_value": "ON",
 
 	"sending_queue_detail_table_header_potision_time" : "Position time",
 	"sending_queue_detail_table_header_sender_recipient":"Sender/recipient",
@@ -100,5 +102,6 @@
 	"title_resend": "Resend",
 	"title_fa_report": "FA Report",
 	"title_fa_response": "FA Response",
-	"title_fa_query": "FA Query"
+	"title_fa_query": "FA Query",
+	"title_movement_response": "Movement Response"
 }

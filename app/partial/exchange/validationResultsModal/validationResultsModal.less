@@ -12,11 +12,25 @@ copy of the GNU General Public License along with the IFDM Suite. If not, see <h
 .validationResultsModal{
   .back-btn {
     margin-bottom: 15px;
+    button {
+      span.fa {
+        color: @primaryColor;
+      }
+    }
   }
   .xml-content {
     pre {
       max-height: calc(~'100vh - @{headerHeight} - 95px');
+      background-color: #f8f8f8;
     }
+  }
+
+  .loading-spinner-xml {
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    background-color: transparent;
+    margin-top: 1px;
   }
   .xml-highlight {
     background-color: #f9cdcd;

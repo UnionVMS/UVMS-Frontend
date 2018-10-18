@@ -13,8 +13,19 @@ copy of the GNU General Public License along with the IFDM Suite. If not, see <h
   .xml-content {
     pre {
       max-height: calc(~'100vh - @{headerHeight} - 80px');
+      background-color: #f8f8f8;
     }
     
+  }
+  .loading-spinner {
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    background-color: transparent;
+    margin-top: -8px;
+    i.fa {
+      font-size: 20px;
+    }
   }
 }
 
