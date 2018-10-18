@@ -87,6 +87,7 @@ angular.module('unionvmsWeb').controller('ActivityreportslistCtrl',function($sco
     $scope.openDetails = function(idx){
         $scope.actServ.overview = $scope.actServ.displayedActivities[idx]; //TODO check if we need this
         $scope.faServ.id = $scope.actServ.displayedActivities[idx].fishingActivityId;
+        $scope.faServ.repId = $scope.actServ.displayedActivities[idx].faReportID;
         $scope.faServ.activityType = $scope.actServ.displayedActivities[idx].activityType.toLowerCase();
         $scope.faServ.isCorrection = $scope.actServ.displayedActivities[idx].hasCorrection;
         $scope.faServ.documentType = $scope.actServ.displayedActivities[idx].FAReportType.toLowerCase();

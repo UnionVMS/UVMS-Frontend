@@ -116,7 +116,7 @@ copy of the GNU General Public License along with the IFDM Suite. If not, see <h
                                     <td>{{message.typeRefType | dataNotAvailable | removeUnderscore}}</td>
                                     <td>{{message.senderRecipient | dataNotAvailable}}</td>
                                     <td title="{{::getIdToDisplay(message)}}">{{::getIdToDisplay(message) | dataNotAvailable}}</td>
-                                    <td title="{{message.on}}">{{message.on | dataNotAvailable}}</td>
+                                    <td title="{{::getOnValueToDisplay(message)}}">{{::getOnValueToDisplay(message) | dataNotAvailable}}</td>
                                     <td class="status">
                                         <message-status ng-model="message" is-clickable="::isStatusClickable(message)"></message-status>
                                     </td>

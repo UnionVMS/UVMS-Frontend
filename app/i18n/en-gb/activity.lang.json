@@ -216,6 +216,10 @@
 	"fa_report_document_type_notification": "Notification",
     "fa_report_document_type_notification_of": "Notification of",
 	"fa_report_document_type_correction": "Correction",
+    "fa_report_document_type_corrected": "Corrected",
+    "fa_report_document_type_deleted": "Deleted",
+    "fa_report_document_type_canceled": "Canceled",
+    "fa_report_document_type_original": "Original",
     "trip_summary_quit_trip_detail": "Quit trip detail",
     "trip_summary_export_trip": "Export trip",
     "catch_panel_see_trip_evolution": "See trip evolution",
@@ -262,6 +266,8 @@
     "fa_details_item_endoflanding":"End of landing",
     "fa_details_item_owner":"Owner",
     "optype_correction": "Correction",
+    "optype_cancellation": "Cancellation",
+    "optype_deletion": "Deletion",
     "title_fishing_activity": "Fishing Activity",
     "activity_landing_catch":"Catch",
     "activity_location_port_departure": "Port of departure",
@@ -447,6 +453,8 @@
     "trip_summary_est_time_arr": "(est. time of arrival)",
     "trip_summary_time_land": "(end time of landing)",
     "trip_summary_est_time": "(est. time)",
-    "trip_summary_est_time_trans": "(est. time transhipment)"
+    "trip_summary_est_time_trans": "(est. time transhipment)",
+
+    "warn_msg_when_multiple_activitites_in_history": "Due to several fishing activities being reported in the same FA Report Document, the system is not able to match them between documents. History is therefore displaying all reported activities of the same type."
 
 }

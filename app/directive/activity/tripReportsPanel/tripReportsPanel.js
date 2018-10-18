@@ -115,6 +115,7 @@ angular.module('unionvmsWeb').directive('tripReportsPanel', function (loadingSta
                     fishingActivityService.id = node.id;
                     fishingActivityService.isCorrection = node.corrections;
                     fishingActivityService.documentType = node.documentType;
+                    fishingActivityService.repId = node.repId;
                     tripReportsTimeline.setCurrentPreviousAndNextItem(node.id, parentId);
                     // Navigation to activity details in activity and reporting.  
                     if (scope.activityTrip === 'activity') {

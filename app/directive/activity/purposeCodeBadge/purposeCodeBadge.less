@@ -9,29 +9,25 @@ the hope that it will be useful, but WITHOUT ANY WARRANTY; without even the impl
 FITNESS FOR A PARTICULAR PURPOSE.  See the GNU General Public License for more details. You should have received a
 copy of the GNU General Public License along with the IFDM Suite. If not, see <http://www.gnu.org/licenses/>.
 */
-.trip-activity-details {
-    .activity-fa-loading {
-        margin: -16px 0;
-    }
-    .fishingActivityNavigator {
-        .activity-slider {
-            &.slider-right {
-                right: 0;
-            }
-            &.slider-left {
-                left: 0;
-            }
-        }
-        .btn-print {
-            top: 12px;
-            right: 15px;
-            position: absolute;
-        }
-        .fa-history-navigator {
-            .btn-group{
-                right: 53px;
-                top: 12px;
-            }
-        }
-    }
+.purpose-code-badge {
+  .badge{
+    -webkit-border-radius: 5px;
+    -moz-border-radius: 5px;
+    border-radius: 5px;
+    position: absolute;
+    left: 15px;
+    top: 13px;
+  }
+  .badge-color-blue {
+    background-color: @primaryColor;
+  }
+  .badge-color-red {
+    background-color: @errorColor;
+  }
+  .badge-color-orange {
+    background-color: @warningColor;
+  }
+  .badge-title {
+    text-transform: uppercase;
+  }
 }
