@@ -16,3 +16,4 @@ font-awesome
 app/app.css
 app/app.css.map
 *.sublime-*
+.vscode/
