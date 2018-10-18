@@ -323,7 +323,7 @@ angular.module('unionvmsWeb').controller('ExchangeCtrl',function($scope, $log, $
     };
 
     $scope.getIdToDisplay = function(item) {
-        if (angular.isDefined(item.logData) & item.logData !== null){
+        if (angular.isDefined(item.logData) && item.logData !== null){
             var id = item.logData.guid;
             if (item.typeRefType.toUpperCase() === 'FA_RESPONSE'){
                 id = item.id;
