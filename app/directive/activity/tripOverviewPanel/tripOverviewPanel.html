@@ -15,7 +15,7 @@
 					<div ng-repeat="id in trip.tripId">
 						<div class="field-format">
 							<span class="field-label">{{'activity.trip_id' | i18n }}:</span>
-							<span class="field-text">{{id.schemeId}}:{{id.id}}</span>
+							<span class="field-text">{{::getTripId(id, trip)}}</span>
 						</div>
 						<div class="field-format" ng-if="trip.departureTime">
 							<span class="field-label">{{'activity.trip_departure' | i18n }}:</span>

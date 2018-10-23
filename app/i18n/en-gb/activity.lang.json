@@ -367,12 +367,15 @@
     "package_quantity": "Package quantity",
     
     "fa_locations_country": "Country",
+    "fa_locations_sovereign": "Sovereign Country",
+    "fa_locations_jurisdiction": "Jurisdiction Country",
     "fa_locations_lon": "Lon",
     "fa_locations_lat": "Lat",
     "fa_locations_address": "Address",
     "fa_locations_street": "Street",
     "fa_locations_city": "City",
     "fa_locations_postal_code": "Postal code",
+    "fa_locations_postal_area": "Postal area",
     "fa_locations_plotId": "House number",
     "fa_locations_zoom_to_activity": "Zoom to activity in the map",
      

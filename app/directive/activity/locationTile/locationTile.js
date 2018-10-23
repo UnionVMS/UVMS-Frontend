@@ -65,6 +65,8 @@ angular.module('unionvmsWeb').directive('locationTile', function() {
      * @alias init
      */
     $scope.init = function(){
+        $scope.jurisdiction = [];
+        $scope.sovereign = [];
         $scope.countries = [];
         $scope.rfmo = [];
         $scope.identifiers = [];
@@ -84,6 +86,14 @@ angular.module('unionvmsWeb').directive('locationTile', function() {
         angular.forEach($scope.locationDetails, function(record){
             if (angular.isDefined(record.country) && _.indexOf($scope.countries, record.country) === -1){
                 $scope.countries.push(record.country);
+            }
+
+            if (angular.isDefined(record.sovereignCountry) && _.indexOf($scope.sovereign, record.sovereignCountry) === -1){
+                $scope.sovereign.push(record.sovereignCountry);
+            }
+
+            if (angular.isDefined(record.jurisdictionCountry) && _.indexOf($scope.jurisdiction, record.jurisdictionCountry) === -1){
+                $scope.jurisdiction.push(record.jurisdictionCountry);
             }
             
             if (angular.isDefined(record.rfmoCode) && _.indexOf($scope.rfmo, record.rfmoCode) === -1){

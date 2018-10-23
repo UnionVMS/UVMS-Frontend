@@ -39,6 +39,14 @@ angular.module('unionvmsWeb').directive('tripOverviewPanel', function () {
             scope.toggleVesselTile = function(){
                 scope.isVesselTileVisible = !scope.isVesselTileVisible;
             };
+
+            scope.getTripId = function(id, trip){
+                var tripId = id.schemeId + ':' + id.id;
+                if (angular.isDefined(trip.tripTypeCode)){
+                    tripId += ' [' + trip.tripTypeCode + ']';
+                }
+                return tripId;
+            }
         }
     };
 });
