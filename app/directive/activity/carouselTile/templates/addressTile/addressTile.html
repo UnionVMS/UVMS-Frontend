@@ -13,10 +13,16 @@
 	</div>
 	<div class="row" ng-if="item.postCode">
 		<div class="item-container">
-			<span class="item-label">{{'activity.fa_locations_postal_code' | i18n}}</span>
+			<span class="item-label">{{'activity.fa_locations_postal_area' | i18n}}</span>
 			<span>{{item.postCode}}</span>
 		</div>
 	</div>
+    <div class="row" ng-if="item.postcode">
+        <div class="item-container">
+            <span class="item-label">{{'activity.fa_locations_postal_code' | i18n}}</span>
+            <span>{{item.postcode}}</span>
+        </div>
+    </div>
 	<div class="row" ng-if="item.cityName">
 		<div class="item-container">
 			<span class="item-label">{{'activity.fa_locations_city' | i18n}}</span>

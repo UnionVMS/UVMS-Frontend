@@ -1461,7 +1461,6 @@ angular.module('unionvmsWeb').factory('fishingActivityService', function(activit
                     if (angular.isDefined(data.activityDetails.geom)){
                         obj.locations.srcActivityGeom = data.activityDetails.geom;
                     }
-                    
                     break;
                 case 'history':
                     obj.history = loadHistoryData(data.history);
