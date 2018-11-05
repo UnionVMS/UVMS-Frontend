@@ -12,8 +12,9 @@ copy of the GNU General Public License along with the IFDM Suite. If not, see <h
 angular.module('unionvmsWeb').controller('VesselhistorymodalCtrl',function($scope, $modalInstance, vesselHistory, vesselRestService, locale){
 
     $scope.vesselHistory = vesselHistory;
+
     // fetch the contact information of the user
-    vesselRestService.getContactsForAsset(vesselHistory.id).then( function (contactInfo) {
+    vesselRestService.getContactInfoListForAssetHistory(vesselHistory.id, vesselHistory.updateTime).then( function (contactInfo) {
         $scope.contactInfo = contactInfo;
     });
 

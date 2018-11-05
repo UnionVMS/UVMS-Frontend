@@ -70,6 +70,9 @@ angular.module('unionvmsWeb')
             contactsForAsset : function() {
             	return $resource('asset/rest/asset/:id/contacts');
             },
+            getContactInfoListForAssetHistory: function() {
+                return $resource('asset/rest/asset/:id/contacts/:date');
+            },
             updateContact : function() {
             	return $resource('asset/rest/asset/contacts', {}, {
                     update: {method: 'PUT'}
@@ -547,6 +550,29 @@ angular.module('unionvmsWeb')
         });
     };
 
+    var getContactInfoListForAssetHistory = function(vesselId, date) {
+        var deferred = $q.defer();
+        vesselRestFactory.getContactInfoListForAssetHistory().query({'id' : vesselId, 'date' : date},
+            function(response, header, status) {
+                if(status !== 200){
+                    deferred.reject("Invalid response status");
+                    return;
+                }
+                var contacts = [];
+                if(angular.isArray(response)){
+                	for (var i = 0; i < response.length; i ++) {
+                		contacts.push(VesselContact.fromJson(response[i]));
+                	}
+                }
+                deferred.resolve(contacts);
+        	},
+        	function(err){
+        		deferred.reject(err);
+        	}
+        );
+        return deferred.promise;
+    };
+
     var getContactsForAsset = function(vesselId) {
     	var deferred = $q.defer();
         vesselRestFactory.contactsForAsset().query({'id' : vesselId},
@@ -569,6 +595,7 @@ angular.module('unionvmsWeb')
         );
         return deferred.promise;
     };
+    
 
     var createContactForAsset = function(vesselId, contact) {
     	var deferred = $q.defer();
@@ -683,6 +710,7 @@ angular.module('unionvmsWeb')
         getNoteActivityList : getNoteActivityList,
         cancelPendingRequests : cancelPendingRequests,
         getContactsForAsset : getContactsForAsset,
+        getContactInfoListForAssetHistory : getContactInfoListForAssetHistory,
         createContactForAsset : createContactForAsset,
         updateContact : updateContact,
         deleteContact : deleteContact,
