@@ -359,8 +359,6 @@ angular.module('unionvmsWeb').controller('VesselFormCtrl',function($scope, $log,
         if($scope.vesselForm.$valid && ($scope.isVesselDetailsDirty || $scope.isVesselNotesDirtyStatus || $scope.isVesselContactsDirtyStatus)) {
             //MobileTerminals remove them cuz they do not exist in backend yet.
             delete $scope.vesselObj.mobileTerminals;
-            $scope.updateContactItems($scope.vesselObj.id);
-            $scope.addNotes($scope.vesselObj.id);
 
             //Update Vessel and take care of the response(eg. the promise) when the update is done.
             $scope.waitingForCreateResponse = true;
@@ -373,13 +371,19 @@ angular.module('unionvmsWeb').controller('VesselFormCtrl',function($scope, $log,
 
     //Vessel was successfully updated
     var updateVesselSuccess = function(updatedVessel){
-        $scope.clearNotes();
         $scope.waitingForCreateResponse = false;
         alertService.showSuccessMessageWithTimeout(locale.getString('vessel.update_alert_message_on_success'));
         $scope.vesselObj = updatedVessel;
+
+        // don't update contacts and notes before asset has been updated, 
+        $scope.updateContactItems($scope.vesselObj.id);
+        $scope.addNotes($scope.vesselObj.id);
+
         $scope.vesselObjOriginal = angular.copy($scope.vesselObj);
         $scope.mergeCurrentVesselIntoSearchResults($scope.vesselObj);
         getVesselHistory();
+        
+        $scope.clearNotes();
     };
     //Error updating vessel
     var updateVesselError = function(error){
