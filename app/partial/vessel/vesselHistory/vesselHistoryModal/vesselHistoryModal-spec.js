@@ -30,8 +30,8 @@ describe('VesselhistorymodalCtrl', function () {
         id : '1234'
       };
      
-      vesselRestServiceMock = jasmine.createSpyObj('vesselRestService', ['getContactsForAsset']);
-      vesselRestServiceMock.getContactsForAsset.andCallFake(function(){
+      vesselRestServiceMock = jasmine.createSpyObj('vesselRestService', ['getContactInfoListForAssetHistory']);
+      vesselRestServiceMock.getContactInfoListForAssetHistory.andCallFake(function(){
         return {
             then: function(callback){
                 return callback({
@@ -54,7 +54,7 @@ describe('VesselhistorymodalCtrl', function () {
       expect(modalInstance.dismiss).toHaveBeenCalledWith('cancel');
     });
 
-    it ('should call getContactsForAsset', function() {
+    it ('should call getContactInfoListForAssetHistory', function() {
       expect(vesselRestServiceMock.getContactsForAsset).toHaveBeenCalled();
     });
   });
