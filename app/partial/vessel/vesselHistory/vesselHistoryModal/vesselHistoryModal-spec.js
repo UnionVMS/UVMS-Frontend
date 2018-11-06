@@ -55,7 +55,7 @@ describe('VesselhistorymodalCtrl', function () {
     });
 
     it ('should call getContactInfoListForAssetHistory', function() {
-      expect(vesselRestServiceMock.getContactsForAsset).toHaveBeenCalled();
+      expect(vesselRestServiceMock.getContactInfoListForAssetHistory).toHaveBeenCalled();
     });
   });
 });
