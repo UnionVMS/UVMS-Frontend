@@ -38,6 +38,9 @@ copy of the GNU General Public License along with the IFDM Suite. If not, see <h
                     <th class="st-sort" st-sort="licenseType" st-skip-natural="true" id="asset-sort-licenseType">
                         {{'vessel.table_header_license_type' | i18n}}
                     </th>
+                    <th class="st-sort" st-sort="mainFishingGearCode" st-skip-natural="true" id="asset-sort-mainFishingGearCode">
+                        {{'vessel.table_header_main_fishing_gear_code' | i18n}}
+                    </th>
                     <th class="st-sort" st-sort="lastMovement.time" st-sort-default="reverse" st-skip-natural="true" id="asset-sort-lastMovement">
                         {{'vessel.table_header_last_report' | i18n}}
                     </th>
@@ -54,6 +57,8 @@ copy of the GNU General Public License along with the IFDM Suite. If not, see <h
                     <td ng-attr-title="{{item.cfr}}">{{item.cfr}}</td>
                     <td ng-attr-title="{{item.gearFishingType | vesselGearTypeTranslation}}">{{item.gearFishingType | vesselGearTypeTranslation}}</td>
                     <td ng-attr-title="{{item.licenseType | vesselLicenseTypeTranslation}}">{{item.licenseType | vesselLicenseTypeTranslation}}</td>
+                    <td ng-attr-title="{{item.mainFishingGearCode | vesselFishingGearCodeTranslation}}">{{item.mainFishingGearCode | vesselFishingGearCodeTranslation}}</td>
+
                     <td class="link" ng-class="{'no-hover': item.lastMovement.guid === undefined}" ng-click="showReport(item.lastMovement.guid)" ng-attr-title="{{item.lastMovement.time | timeAgo}}" id="asset-toggle-lastmovement">{{item.lastMovement.time | timeAgo}}</td>
                     <td>
                         <button class="btn btn-default btn-sm" ng-click="toggleViewVessel(item)" id="asset-toggle-form">

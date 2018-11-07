@@ -37,3 +37,23 @@ angular.module('unionvmsWeb').filter('vesselLicenseTypeTranslation', function(lo
         return name;
     };
 });
+
+
+angular.module('unionvmsWeb').filter('vesselFishingGearCodeTranslation', function(locale) {
+    return function(input) {
+
+        if (!input) {
+            return input;
+        }
+        var name = input;
+
+        //Lookup name in langugage file
+        var localeName = locale.getString('config.VESSEL_MAIN_FISHING_GEAR_CODE_' +input);
+        if(localeName.indexOf('%%KEY_NOT_FOUND%%') < 0){
+            name = localeName;
+        }
+
+        return name;
+    };
+});
+

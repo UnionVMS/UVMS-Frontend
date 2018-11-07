@@ -10,7 +10,6 @@ FITNESS FOR A PARTICULAR PURPOSE.  See the GNU General Public License for more d
 copy of the GNU General Public License along with the IFDM Suite. If not, see <http://www.gnu.org/licenses/>.
  */
 angular.module('unionvmsWeb').controller('VesselListCtrl',function($scope){
-
     //Handle click on the top "check all" checkbox
     $scope.checkAll = function(){
         if($scope.isAllChecked()){

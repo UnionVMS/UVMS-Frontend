@@ -62,7 +62,6 @@ var loadLocales = function(initService) {
     return initService.loadLanguageFiles();
 };
 
-
 unionvmsWebApp.config(function($stateProvider, $compileProvider, tmhDynamicLocaleProvider, $injector, $urlRouterProvider, $httpProvider, ACCESS, DEBUG) {
     //initialize get if not there
     if (!$httpProvider.defaults.headers.get) {
@@ -158,7 +157,7 @@ unionvmsWebApp.config(function($stateProvider, $compileProvider, tmhDynamicLocal
             resolve: {
                 currentContext : currentUserContextPromise,
                 globalSettings : getGlobalSettingsPromise,
-                locales : loadLocales,
+                locales : loadLocales
             }
         })
         .state('uvmsheader', {
@@ -266,7 +265,7 @@ unionvmsWebApp.config(function($stateProvider, $compileProvider, tmhDynamicLocal
             },
             resolve: {
                 config : function(initService){
-                    return initService.loadConfigFor(["VESSEL", "VESSEL_PARAMETERS", "MOBILETERMINAL", "MOBILE_TERMINAL_TRANSPONDERS"]);
+                    return initService.loadConfigFor(["VESSEL", "VESSEL_PARAMETERS", "MOBILETERMINAL", "MOBILE_TERMINAL_TRANSPONDERS", "VESSEL_CUSTOM_CODES"]);
                 }
             },
             data: {
@@ -284,7 +283,7 @@ unionvmsWebApp.config(function($stateProvider, $compileProvider, tmhDynamicLocal
             },
             resolve: {
                 config : function(initService){
-                    return initService.loadConfigFor(["VESSEL", "VESSEL_PARAMETERS", "MOBILE_TERMINAL_TRANSPONDERS"]);
+                    return initService.loadConfigFor(["VESSEL", "VESSEL_PARAMETERS", "MOBILE_TERMINAL_TRANSPONDERS", "VESSEL_CUSTOM_CODES"]);
                 }
             },
             data: {

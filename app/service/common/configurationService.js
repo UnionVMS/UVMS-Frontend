@@ -28,7 +28,8 @@ copy of the GNU General Public License along with the IFDM Suite. If not, see <h
             "TICKET_STATUSES" : alarmRestService.getTicketStatusConfig,
             "EXCHANGE" : exchangeRestService.getExchangeConfig,
             "MOVEMENT_AREAS": movementRestService.getAreas,
-            "ORGANISATIONS": subscriptionsRestService.getOrganisations
+            "ORGANISATIONS": subscriptionsRestService.getOrganisations,
+            "VESSEL_CUSTOM_CODES": vesselRestService.getCustomConfigCodes
         };
 
         //Clear the loaded configs
@@ -69,7 +70,7 @@ copy of the GNU General Public License along with the IFDM Suite. If not, see <h
             //Load all configs
             $.each(configsToLoad, function(index, configName){
                 if(angular.isUndefined(CONFIG_MODULES[configName])){
-                    return deferred.reject("TRIED TO LOAD NON EXISTING CONFIGURATION: " +configName);
+                    return deferred.reject("TRIED TO LOAD NON EXISTING CONFIGURATION: " + configName);
                 }
                 promises.push(getConfigForModule(configName, CONFIG_MODULES[configName]));
             });
@@ -163,7 +164,6 @@ copy of the GNU General Public License along with the IFDM Suite. If not, see <h
             getValue: getConfigValue,
             getConfig: getConfig,
             setTextAndCodeForDropDown : setTextAndCodeForDropDown
-
         };
     };
 
