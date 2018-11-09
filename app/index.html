@@ -56,7 +56,8 @@ copy of the GNU General Public License along with the IFDM Suite. If not, see <h
     <script src="../bower_components/angular-ui-utils/ui-utils.js"></script>
     <script src="../bower_components/datetimepicker/jquery.datetimepicker.js"></script>
     <script src="../bower_components/angular-dynamic-locale/dist/tmhDynamicLocale.js"></script>
-    <script src="../bower_components/leaflet/dist/leaflet.js"></script>
+    <!--<script src="../bower_components/leaflet/dist/leaflet.js"></script>-->
+    <script src="../node_modules/leaflet/dist/leaflet.js"></script>
     <script src="../bower_components/angular-leaflet-directive/dist/angular-leaflet-directive.js"></script>
     <script src="assets/spatial/ol.min.js"></script>
     <script src="assets/spatial/ol_custom_controls.js"></script>
@@ -151,6 +152,11 @@ copy of the GNU General Public License along with the IFDM Suite. If not, see <h
     <script src="partial/footer/footer.js"></script>
     <script src="partial/header/header.js"></script>
     <script src="partial/header/headerMenu/headerMenu.js"></script>
+
+    <!-- realtime map, todo: move this to after the page has loaded -->
+    <script src="partial/realtime/realtime.js"></script>
+    <script src="service/micromovement/microMovementModel.js"></script>
+    <script src="service/micromovement/microMovementRestService.js"></script>
 
     <script src="partial/mobileTerminal/assignVessel/assignVessel.js"></script>
     <script src="partial/mobileTerminal/mobileTerminal.js"></script>

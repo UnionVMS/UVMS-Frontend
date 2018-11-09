@@ -93,6 +93,9 @@ angular.module('unionvmsWeb').controller('HeaderMenuCtrl',function($scope, $root
             $scope.addMenuItem(locale.getString('header.menu_assets'), '/assets', 'assets');
         }
 
+        // Realtime map
+        $scope.addMenuItem('Realtime', '/realtime', 'realtime');
+
         // Alerts
         var alarmsLink = false;
         var alarmsElemId;

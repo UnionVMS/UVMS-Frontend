@@ -11,7 +11,8 @@ copy of the GNU General Public License along with the IFDM Suite. If not, see <h
  */
 @import "../bower_components/bootstrap/less/bootstrap.less";
 @import "../bower_components/font-awesome/less/font-awesome.less";
-@import "../bower_components/leaflet/dist/leaflet.css";
+//@import "../bower_components/leaflet/dist/leaflet.css";
+@import "../node_modules/leaflet/dist/leaflet.css"; //1.3.4 leaflet
 @import "../bower_components/OpenLayers/css/ol.css";
 @import "../bower_components/fancytree/dist/skin-awesome/ui.fancytree.css";
 @import "../bower_components/jQuery-contextMenu/dist/jquery.contextMenu.min.css";
@@ -131,6 +132,11 @@ copy of the GNU General Public License along with the IFDM Suite. If not, see <h
 @import "directive/sales/groupLineInput/groupLineInput.less";
 @import "directive/sales/simpleExport/simpleExport.less";
 /*SALES*/
+
+
+/* Realtime map */
+@import "partial/realtime/realtime.less";
+
 /*USM*/
 @import "usm/uvms-ui.less";
 

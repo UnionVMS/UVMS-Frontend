@@ -480,6 +480,31 @@ unionvmsWebApp.config(function($stateProvider, $compileProvider, tmhDynamicLocal
                 loadingStatus.resetState();
             }
         })
+        .state('app.realtime', {
+            url: '/realtime',
+
+            views: {
+                modulepage: {
+                    templateUrl: 'partial/realtime/realtime.html',
+                    controller: 'RealtimeCtrl'
+                }
+            },
+            resolve: {}
+            /*
+            views: {
+                modulepage: {
+                    templateUrl: 'partial/spatial/spatial.html',
+                    controller: 'SpatialCtrl'
+                }
+            },
+            resolve: {
+
+            },
+            data: {
+
+            }
+            */
+        })
         .state('app.areas', {
             url: '/areas',
             views: {
