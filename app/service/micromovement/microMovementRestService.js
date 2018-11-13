@@ -24,13 +24,6 @@ angular.module('unionvmsWeb')
     let getPositionList = function(date){
         let deferred = $q.defer();
         microMovementRestFactory.getMovementList().get({timestamp: date}, function(result) {
-                var positions = [];
-                /*
-                Object.values(result).forEach(v => {                      
-                    positions.push(MicroMovement.fromJson(v));
-                });
-                */
-
                 deferred.resolve(result);
             },
             function(error){

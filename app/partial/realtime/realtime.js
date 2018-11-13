@@ -50,27 +50,52 @@ angular.module('unionvmsWeb').controller('RealtimeCtrl', function($scope, $mdSid
         let color = '#' + intToRGB(hashCode(asset));
         drawPolyLine(positions,  color);
         // draw vessel on top of segments (segments on a seperate layer)
-        addMarker(positions[positions.length-1], color, "<b>" + asset + "</b>");
+        addMarker(positions[positions.length-1], color, asset);
 
     }
 
-    function addMarker(pos, c, popupInfoText) {
+    function addMarker(pos, c, assetId) {
         //var myIcon = L.divIcon({className: 'svg-div-icon', iconSize: [48, 64]});
-        var svg = 'http://localhost:9001/app/assets/images/map-marker-white.svg'; // insert your own svg
-        var png = 'http://localhost:9001/app/assets/images/close.png';
+        var svgUrl = './assets/images/map-marker.svg'; // insert your own svg
 
-        var iconUrl = 'data:image/svg+xml;base64,' + btoa(svg);
+        var svgType = 'image/svg+xml';
         
         var icon = L.icon({
-            iconUrl: iconUrl,
+            iconUrl: svgUrl,
             iconSize: [38, 95],
-            iconAnchor: [22, 94],
+            iconAnchor: [22, 46],
             popupAnchor: [-3, -76]
         });
-        let marker = L.marker(pos, { icon: icon, color: c}).addTo(map);
-        marker._icon.style.fill = c;
-        if (popupInfoText !== undefined) {
-            marker.bindPopup(popupInfoText).openPopup();
+        // Creates a red marker with the coffee icon
+        var vectorMarker = L.VectorMarkers.icon({
+            icon: 'ship',
+            markerColor: c,
+            iconColor: '#fff',
+            extraClasses: 'marker-icon-padding',
+        });
+        let marker = L.marker(pos, { icon: vectorMarker,  color: c}).addTo(map);
+
+        /*
+        // using svg icons, slow performance
+        //replace the outerhtml with svg object         
+        let previousStyle = marker._icon.style;
+        let markerId = 'marker_' + assetId;
+        marker._icon.outerHTML = "<object id='" + markerId + "' type='" + svgType + "' data='" + svgUrl +"' class='leaflet-marker-icon leaflet-zoom-animated leaflet-interactive' style='" + previousStyle.cssText + "'>";        
+        
+
+        let markerElement = document.getElementById(markerId);
+        
+        if (markerElement !== null && markerElement !== undefined) {
+            
+            markerElement.addEventListener('load', function(){
+                let svgElement = document.getElementById(markerId).contentDocument.firstChild;
+                svgElement.setAttribute('fill', c);
+            });
+        }
+        */
+
+        if (assetId !== undefined) {
+            marker.bindPopup(assetId).openPopup();
         }
     }
 
@@ -134,14 +159,17 @@ angular.module('unionvmsWeb').controller('RealtimeCtrl', function($scope, $mdSid
     // store local cache for last n minutes...
 
     // get the positions
+
     getPositions().then((positionsByAsset) => {
         // group positions by asset
         //let positionsByAsset = positions.groupBy('asset');
         console.log(positionsByAsset);
 
+        let i = 0;
         Object.values(positionsByAsset).forEach(value => {
+            
             let locations = [];
-                        
+
             if (value.map !== undefined) {
                 
                 value.map((v) => {
@@ -155,9 +183,7 @@ angular.module('unionvmsWeb').controller('RealtimeCtrl', function($scope, $mdSid
     }).catch(error => {
         console.error('Failed to get positions:', error);
     });
-    //addMarker([0, 0], "This is the boat!");
 
-    var popup = L.popup();
 
 });
 
