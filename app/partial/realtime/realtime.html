@@ -1,5 +1,5 @@
 <div id="mapid">
-    <div layout="column" style="height: 80px; " ng-cloak>
+    <div layout="column" style="height: 80px; margin-top: 100px" ng-cloak>
 
         <section layout="row" flex style="z-index: 2000;">
       
@@ -12,28 +12,19 @@
       
             <md-content layout-margin>
               <p>
-                This sidenav is not showing any backdrop, where users can click on it, to close the sidenav.
+                Content
               </p>
               <md-button ng-click="toggleLeft()" class="md-accent">
-                Close this Sidenav
+                Close
               </md-button>
             </md-content>
       
           </md-sidenav>
       
-          <md-content flex layout-padding>
-      
-            <div layout="column" layout-align="top center">
-              <div>
-                <md-button class="md-icon-button" aria-label="Settings" ng-click="toggleLeft()" class="md-raised">
-                  Toggle Sidenav
-                </md-button>
-              </div>
-      
-            </div>
-      
-          </md-content>
-      
+          
+          <md-button class="md-icon-button md-fab md-fab-bottom-left button-main" aria-label="Settings" ng-click="toggleLeft()" class="md-raised">
+              <md-icon md-svg-src="./assets/material-ui/baseline-menu-24px.svg"></md-icon>
+          </md-button>          
         </section>
       </div>
 

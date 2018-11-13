@@ -9,7 +9,7 @@ the hope that it will be useful, but WITHOUT ANY WARRANTY; without even the impl
 FITNESS FOR A PARTICULAR PURPOSE.  See the GNU General Public License for more details. You should have received a
 copy of the GNU General Public License along with the IFDM Suite. If not, see <http://www.gnu.org/licenses/>.
  */
-angular.module('unionvmsWeb').controller('RealtimeCtrl', function($scope, $mdSidenav, microMovementRestService, dateTimeService){
+angular.module('unionvmsWeb').controller('RealtimeCtrl', function($scope, $log, $mdSidenav, $localStorage, microMovementRestService, vesselRestService, dateTimeService){
     $scope.toggleLeft = buildToggler('left');
 
     function buildToggler(componentId) {
@@ -19,6 +19,9 @@ angular.module('unionvmsWeb').controller('RealtimeCtrl', function($scope, $mdSid
     }
     // hide the top bar
     $(document.getElementsByClassName("headercontainer")).hide();
+
+
+
 
     var map = L.map('mapid').fitWorld();
 
@@ -55,17 +58,7 @@ angular.module('unionvmsWeb').controller('RealtimeCtrl', function($scope, $mdSid
     }
 
     function addMarker(pos, c, assetId) {
-        //var myIcon = L.divIcon({className: 'svg-div-icon', iconSize: [48, 64]});
-        var svgUrl = './assets/images/map-marker.svg'; // insert your own svg
-
-        var svgType = 'image/svg+xml';
         
-        var icon = L.icon({
-            iconUrl: svgUrl,
-            iconSize: [38, 95],
-            iconAnchor: [22, 46],
-            popupAnchor: [-3, -76]
-        });
         // Creates a red marker with the coffee icon
         var vectorMarker = L.VectorMarkers.icon({
             icon: 'ship',
@@ -73,30 +66,53 @@ angular.module('unionvmsWeb').controller('RealtimeCtrl', function($scope, $mdSid
             iconColor: '#fff',
             extraClasses: 'marker-icon-padding',
         });
-        let marker = L.marker(pos, { icon: vectorMarker,  color: c}).addTo(map);
 
-        /*
-        // using svg icons, slow performance
-        //replace the outerhtml with svg object         
-        let previousStyle = marker._icon.style;
-        let markerId = 'marker_' + assetId;
-        marker._icon.outerHTML = "<object id='" + markerId + "' type='" + svgType + "' data='" + svgUrl +"' class='leaflet-marker-icon leaflet-zoom-animated leaflet-interactive' style='" + previousStyle.cssText + "'>";        
+        let marker = L.marker(pos, { icon: vectorMarker,  color: c, assetId: assetId}).on('click', onMarkerClick).addTo(map);
+       
         
+    }
 
-        let markerElement = document.getElementById(markerId);
-        
-        if (markerElement !== null && markerElement !== undefined) {
-            
-            markerElement.addEventListener('load', function(){
-                let svgElement = document.getElementById(markerId).contentDocument.firstChild;
-                svgElement.setAttribute('fill', c);
+    function onMarkerClick(e) {
+        let assetId = this.options.assetId;
+        if (assetId !== undefined) {
+            getAssetInfo(assetId).then((assetInfo) => {
+               
+                
+                this.bindPopup(assetId).openPopup();
+                
             });
         }
-        */
+    }
 
-        if (assetId !== undefined) {
-            marker.bindPopup(assetId).openPopup();
-        }
+    function getAssetInfo(assetId) {
+        let promise = new Promise(function(resolve, reject) {
+
+            let assetInfo = null;
+            
+            if (angular.isDefined($localStorage['realtimeDataAssets'])) {
+                
+                $localStorage['realtimeDataAssets'].filter(asset => {
+                    if (asset[0] === assetId) {
+                        assetInfo = asset[1];
+                        resolve(assetInfo);
+                    }
+                });
+                if (assetInfo == null) {
+                    vesselRestService.getVessel(assetId).then(
+                        function(vessel) {
+                            assetInfo = vessel;
+                            $localStorage['realtimeDataAssets'].push([assetId, assetInfo]);
+                            resolve(assetInfo);
+                        },
+                        function(error){
+                            $log.error(error);
+                            reject(error);
+                        }
+                    );
+                }
+            }            
+        });
+        return promise;
     }
 
     // Draws a polyline based on positions, takes an array of positions [lat, long]
@@ -111,12 +127,21 @@ angular.module('unionvmsWeb').controller('RealtimeCtrl', function($scope, $mdSid
         let promise = new Promise(function(resolve, reject) {
             let date = new Date(Date.now() - 86400000).getTime();    // get the positions of the last 30 minutes
             let dateString = dateTimeService.formatUTCDateWithTimezone(dateTimeService.toUTC(date));
+
+            // TODO: put a timeout for the data 
+            if (!angular.isDefined($localStorage['realtimeMapData'])) {
+                microMovementRestService.getPositionList(dateString).then((positions) => {
+                    $localStorage['realtimeMapData'] = positions;                    
+                    resolve(positions);
+                }).catch(error => {
+                    reject(error);
+                });
+            }
+            else {
+                resolve($localStorage['realtimeMapData']);
+            }
+
             
-            microMovementRestService.getPositionList(dateString).then((positions) => {
-                resolve(positions);
-            }).catch(error => {
-                reject(error);
-            });
         });
 
         return promise;
@@ -140,15 +165,12 @@ angular.module('unionvmsWeb').controller('RealtimeCtrl', function($scope, $mdSid
         return "00000".substring(0, 6 - c.length) + c;
     }
 
-    // move to utils class
-    Array.prototype.groupBy = function(prop) {
-        return this.reduce(function(groups, item) {
-            const val = item[prop];
-            groups[val] = groups[val] || [];
-            groups[val].push(item);
-            return groups;
-        }, {});
-    };
+    function initLocalCaches() {
+        if (!angular.isDefined($localStorage['realtimeDataAssets'])) {
+            $localStorage['realtimeDataAssets'] = [];
+        }
+        
+    }
 
     map.on('locationfound', onLocationFound);
     map.on('locationerror', onLocationError);
@@ -157,7 +179,7 @@ angular.module('unionvmsWeb').controller('RealtimeCtrl', function($scope, $mdSid
     map.locate({setView: true, maxZoom: 8});
 
     // store local cache for last n minutes...
-
+    initLocalCaches();
     // get the positions
 
     getPositions().then((positionsByAsset) => {
