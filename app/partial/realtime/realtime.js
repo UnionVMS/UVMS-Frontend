@@ -9,7 +9,16 @@ the hope that it will be useful, but WITHOUT ANY WARRANTY; without even the impl
 FITNESS FOR A PARTICULAR PURPOSE.  See the GNU General Public License for more details. You should have received a
 copy of the GNU General Public License along with the IFDM Suite. If not, see <http://www.gnu.org/licenses/>.
  */
-angular.module('unionvmsWeb').controller('RealtimeCtrl',function($scope, microMovementRestService, dateTimeService){
+angular.module('unionvmsWeb').controller('RealtimeCtrl', function($scope, $mdSidenav, microMovementRestService, dateTimeService){
+    $scope.toggleLeft = buildToggler('left');
+
+    function buildToggler(componentId) {
+      return function() {
+        $mdSidenav(componentId).toggle();
+      };
+    }
+    // hide the top bar
+    $(document.getElementsByClassName("headercontainer")).hide();
 
     var map = L.map('mapid').fitWorld();
 
@@ -36,32 +45,49 @@ angular.module('unionvmsWeb').controller('RealtimeCtrl',function($scope, microMo
         alert(e.message);
     }
 
-    function drawVesselWithSegments(vesselId, positions) {
+    function drawVesselWithSegments(asset, positions) {
         // draw segments from positions of the boat
-        drawPolyLine(positions, 'red');
+        let color = '#' + intToRGB(hashCode(asset));
+        drawPolyLine(positions,  color);
         // draw vessel on top of segments (segments on a seperate layer)
-        addMarker(positions[0], "<b>" + vesselId + "</b>");
+        addMarker(positions[positions.length-1], color, "<b>" + asset + "</b>");
 
     }
 
-    function addMarker(pos, popupInfoText) {
-        let marker = L.marker(pos).addTo(map);
+    function addMarker(pos, c, popupInfoText) {
+        //var myIcon = L.divIcon({className: 'svg-div-icon', iconSize: [48, 64]});
+        var svg = 'http://localhost:9001/app/assets/images/map-marker-white.svg'; // insert your own svg
+        var png = 'http://localhost:9001/app/assets/images/close.png';
+
+        var iconUrl = 'data:image/svg+xml;base64,' + btoa(svg);
+        
+        var icon = L.icon({
+            iconUrl: iconUrl,
+            iconSize: [38, 95],
+            iconAnchor: [22, 94],
+            popupAnchor: [-3, -76]
+        });
+        let marker = L.marker(pos, { icon: icon, color: c}).addTo(map);
+        marker._icon.style.fill = c;
         if (popupInfoText !== undefined) {
             marker.bindPopup(popupInfoText).openPopup();
         }
     }
 
     // Draws a polyline based on positions, takes an array of positions [lat, long]
-    function drawPolyLine(positions, color) {
-        var polyline = L.polyline(positions, {color : color}).addTo(map);
-    }
+    function drawPolyLine(positions, c) {
+        var polyline = L.polyline(positions, {color : c, smoothFactor: 10}).addTo(map);
+        positions.forEach(p => {
+            L.circle(p, { radius: 50, color: c}).addTo(map);
+        });
+    }    
 
     function getPositions() {
         let promise = new Promise(function(resolve, reject) {
-            let date = new Date(Date.now() - 1800000).getTime();    // get the positions of the last 30 minutes
+            let date = new Date(Date.now() - 86400000).getTime();    // get the positions of the last 30 minutes
             let dateString = dateTimeService.formatUTCDateWithTimezone(dateTimeService.toUTC(date));
-            microMovementRestService.getPositionList(dateString, (positions) => {
-                console.log(positions);
+            
+            microMovementRestService.getPositionList(dateString).then((positions) => {
                 resolve(positions);
             }).catch(error => {
                 reject(error);
@@ -72,19 +98,60 @@ angular.module('unionvmsWeb').controller('RealtimeCtrl',function($scope, microMo
 
     }
 
+    // TODO: Move to utils class
+    function hashCode(str) { // java String#hashCode
+        var hash = 0;
+        for (var i = 0; i < str.length; i++) {
+           hash = str.charCodeAt(i) + ((hash << 5) - hash);
+        }
+        return hash;
+    } 
+    
+    function intToRGB(i){
+        var c = (i & 0x00FFFFFF)
+            .toString(16)
+            .toUpperCase();
+    
+        return "00000".substring(0, 6 - c.length) + c;
+    }
+
+    // move to utils class
+    Array.prototype.groupBy = function(prop) {
+        return this.reduce(function(groups, item) {
+            const val = item[prop];
+            groups[val] = groups[val] || [];
+            groups[val].push(item);
+            return groups;
+        }, {});
+    };
+
     map.on('locationfound', onLocationFound);
     map.on('locationerror', onLocationError);
 
     // locate ourselves
     map.locate({setView: true, maxZoom: 8});
 
+    // store local cache for last n minutes...
 
     // get the positions
-    getPositions().then((positions) => {
-        // Create markers per boat
+    getPositions().then((positionsByAsset) => {
+        // group positions by asset
+        //let positionsByAsset = positions.groupBy('asset');
+        console.log(positionsByAsset);
 
-        console.log(positions);
-        // draw segments
+        Object.values(positionsByAsset).forEach(value => {
+            let locations = [];
+                        
+            if (value.map !== undefined) {
+                
+                value.map((v) => {
+                    let location = [v.location.latitude, v.location.longitude];
+                    locations.push(location);
+                });            
+                drawVesselWithSegments(value[0].asset, locations);   
+            }
+        });
+
     }).catch(error => {
         console.error('Failed to get positions:', error);
     });

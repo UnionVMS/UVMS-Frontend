@@ -14,7 +14,7 @@ angular.module('unionvmsWeb')
 
     return {
         getMovementList : function(){
-            return $resource('movement/rest/microMovementListAfter/:timestamp');
+            return $resource('movement/rest/movement/microMovementListAfter/:timestamp');
         }
     };
 })
@@ -23,20 +23,15 @@ angular.module('unionvmsWeb')
 
     let getPositionList = function(date){
         let deferred = $q.defer();
-        microMovementRestFactory.getMovementList().get({timestamp: date}, function(response) {
-                if(response.code !== "200"){
-                    deferred.reject("Invalid response status");
-                    return;
-                }
-
+        microMovementRestFactory.getMovementList().get({timestamp: date}, function(result) {
                 var positions = [];
+                /*
+                Object.values(result).forEach(v => {                      
+                    positions.push(MicroMovement.fromJson(v));
+                });
+                */
 
-                if(angular.isArray(response.data.movement)){
-                    for (var i = 0; i < response.data.movement.length; i++){
-                        positions.push(MicroMovement.fromJson(response.data.movement[i]));
-                    }
-                }
-                deferred.resolve(positions);
+                deferred.resolve(result);
             },
             function(error){
                 console.log("Error getting positions.", error);

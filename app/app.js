@@ -13,6 +13,7 @@ var unionvmsWebApp = angular.module('unionvmsWeb', [
     'ui.bootstrap',
     'ui.utils',
     'ngRoute',
+    'ngMaterial',
     'ngAnimate',
     'ngResource',
     'ngLocalize',
