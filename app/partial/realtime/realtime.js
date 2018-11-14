@@ -9,7 +9,7 @@ the hope that it will be useful, but WITHOUT ANY WARRANTY; without even the impl
 FITNESS FOR A PARTICULAR PURPOSE.  See the GNU General Public License for more details. You should have received a
 copy of the GNU General Public License along with the IFDM Suite. If not, see <http://www.gnu.org/licenses/>.
  */
-angular.module('unionvmsWeb').controller('RealtimeCtrl', function($scope, $log, $mdSidenav, $localStorage, microMovementRestService, vesselRestService, dateTimeService){
+angular.module('unionvmsWeb').controller('RealtimeCtrl', function($scope, $log, $mdSidenav, $localStorage, microMovementRestService, movementRestService, vesselRestService, dateTimeService){
     $scope.toggleLeft = buildToggler('left');
 
     function buildToggler(componentId) {
@@ -53,7 +53,9 @@ angular.module('unionvmsWeb').controller('RealtimeCtrl', function($scope, $log, 
         let color = '#' + intToRGB(hashCode(asset));
         drawPolyLine(positions,  color);
         // draw vessel on top of segments (segments on a seperate layer)
-        addMarker(positions[positions.length-1], color, asset);
+        var pos = positions[positions.length-1];
+        var posArray = [pos.location.latitude, pos.location.longitude];
+        addMarker(posArray, color, asset);
 
     }
 
@@ -76,14 +78,99 @@ angular.module('unionvmsWeb').controller('RealtimeCtrl', function($scope, $log, 
         let assetId = this.options.assetId;
         if (assetId !== undefined) {
             getAssetInfo(assetId).then((assetInfo) => {
-               
-                
-                this.bindPopup(assetId).openPopup();
-                
+               this.bindPopup(assetId).openPopup();
             });
         }
     }
 
+
+    // Draws a polyline based on positions, takes an array of positions [lat, long]
+    function drawPolyLine(positions, c) {
+        var positionData = [];
+        positions.map(p => {
+            // Draw positions
+            
+            L.circle([p.location.latitude, p.location.longitude], { radius: 50, color: c, positionGuid: p.guid}).on('click', onPositionClick).addTo(map);
+            
+            if (!angular.isDefined(positionData[p.asset])) {
+                positionData[p.asset] = [];
+            }
+            positionData[p.asset].push([p.location.latitude, p.location.longitude]);
+        });
+
+        Object.entries(positionData).forEach(p => {
+            var polyline = L.polyline(p[1], {color : c, smoothFactor: 10}).addTo(map);
+        });        
+    }    
+
+    function onPositionClick(e) {
+        getPosition(this.options.positionGuid).then((movement) => {
+            let data = "";
+            // format for nicer look
+            Object.entries(movement).forEach(m => {
+                data += m[0] + ":" + m[1];
+            });
+            this.bindPopup(data).openPopup();
+        });
+    }
+
+    function getPositions() {
+        let promise = new Promise(function(resolve, reject) {
+            let date = new Date(Date.now() - 86400000).getTime();    // get the positions of the last 30 minutes
+            let dateString = dateTimeService.formatUTCDateWithTimezone(dateTimeService.toUTC(date));
+
+            // TODO: put a timeout for the data 
+            if (!angular.isDefined($localStorage['realtimeMapData'])) {
+                microMovementRestService.getPositionList(dateString).then((positions) => {
+                    $localStorage['realtimeMapData'] = positions;                    
+                    resolve(positions);
+                }).catch(error => {
+                    reject(error);
+                });
+            }
+            else {
+                resolve($localStorage['realtimeMapData']);
+            }
+
+            
+        });
+
+        return promise;
+
+    }
+
+    /**
+     * Gets the movement based on the position guid
+     */
+    function getPosition(positionGuid) {
+        let promise = new Promise(function(resolve, reject) {
+            let movementInfo;
+            if (angular.isDefined($localStorage['realtimeDataMovementsInfo'])) {                    
+                $localStorage['realtimeDataMovementsInfo'].filter(movement => {
+                    if (movement[0] === positionGuid) {
+                        movementInfo = movement[1];
+                        resolve(movementInfo);
+                    }
+                });
+                if (movementInfo == null) {
+                    movementRestService.getMovement(positionGuid).then(
+                        function(movement) {
+                            movementInfo = movement;
+                            $localStorage['realtimeDataMovementsInfo'].push([positionGuid, movementInfo]);
+                            resolve(movementInfo);
+                        },
+                        function(error){
+                            $log.error(error);
+                            reject(error);
+                        }
+                    );
+                }
+            }
+        });   
+        return promise;
+    }
+
+    
     function getAssetInfo(assetId) {
         let promise = new Promise(function(resolve, reject) {
 
@@ -115,39 +202,6 @@ angular.module('unionvmsWeb').controller('RealtimeCtrl', function($scope, $log, 
         return promise;
     }
 
-    // Draws a polyline based on positions, takes an array of positions [lat, long]
-    function drawPolyLine(positions, c) {
-        var polyline = L.polyline(positions, {color : c, smoothFactor: 10}).addTo(map);
-        positions.forEach(p => {
-            L.circle(p, { radius: 50, color: c}).addTo(map);
-        });
-    }    
-
-    function getPositions() {
-        let promise = new Promise(function(resolve, reject) {
-            let date = new Date(Date.now() - 86400000).getTime();    // get the positions of the last 30 minutes
-            let dateString = dateTimeService.formatUTCDateWithTimezone(dateTimeService.toUTC(date));
-
-            // TODO: put a timeout for the data 
-            if (!angular.isDefined($localStorage['realtimeMapData'])) {
-                microMovementRestService.getPositionList(dateString).then((positions) => {
-                    $localStorage['realtimeMapData'] = positions;                    
-                    resolve(positions);
-                }).catch(error => {
-                    reject(error);
-                });
-            }
-            else {
-                resolve($localStorage['realtimeMapData']);
-            }
-
-            
-        });
-
-        return promise;
-
-    }
-
     // TODO: Move to utils class
     function hashCode(str) { // java String#hashCode
         var hash = 0;
@@ -169,7 +223,9 @@ angular.module('unionvmsWeb').controller('RealtimeCtrl', function($scope, $log, 
         if (!angular.isDefined($localStorage['realtimeDataAssets'])) {
             $localStorage['realtimeDataAssets'] = [];
         }
-        
+        if (!angular.isDefined($localStorage['realtimeDataMovementsInfo'])) {
+            $localStorage['realtimeDataMovementsInfo'] = [];
+        }
     }
 
     map.on('locationfound', onLocationFound);
@@ -182,23 +238,11 @@ angular.module('unionvmsWeb').controller('RealtimeCtrl', function($scope, $log, 
     initLocalCaches();
     // get the positions
 
-    getPositions().then((positionsByAsset) => {
-        // group positions by asset
-        //let positionsByAsset = positions.groupBy('asset');
-        console.log(positionsByAsset);
-
+    getPositions().then((positionsByAsset) => {        
         let i = 0;
-        Object.values(positionsByAsset).forEach(value => {
-            
-            let locations = [];
-
-            if (value.map !== undefined) {
-                
-                value.map((v) => {
-                    let location = [v.location.latitude, v.location.longitude];
-                    locations.push(location);
-                });            
-                drawVesselWithSegments(value[0].asset, locations);   
+        Object.values(positionsByAsset).forEach(positions => {            
+            if (positions.map !== undefined) {                
+                drawVesselWithSegments(positions[0].asset, positions);
             }
         });
 
