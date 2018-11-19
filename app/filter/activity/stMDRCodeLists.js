@@ -32,10 +32,11 @@ angular.module('unionvmsWeb').filter('stMDRCodeLists', function($filter) {
                 return true;
             }
 
-            var name = value.name === null ? -1 : value.objectName.toLowerCase().indexOf(searchString.toLowerCase());
-            var acronym = value.acronym === null ? -1 : value.objectAcronym.toLowerCase().indexOf(searchString.toLowerCase());
+            var name = value.objectName === null ? -1 : value.objectName.toLowerCase().indexOf(searchString.toLowerCase());
+            var acronym = value.objectAcronym === null ? -1 : value.objectAcronym.toLowerCase().indexOf(searchString.toLowerCase());
+            var desc = value.objectDescription === null ? -1 : value.objectDescription.toLowerCase().indexOf(searchString.toLowerCase());
 
-            if (name !== -1 || acronym !== -1){
+            if (name !== -1 || acronym !== -1 || desc !== -1){
                 return true;
             } else {
                 return false;

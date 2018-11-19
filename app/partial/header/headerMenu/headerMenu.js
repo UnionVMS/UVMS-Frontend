@@ -9,7 +9,18 @@ the hope that it will be useful, but WITHOUT ANY WARRANTY; without even the impl
 FITNESS FOR A PARTICULAR PURPOSE.  See the GNU General Public License for more details. You should have received a
 copy of the GNU General Public License along with the IFDM Suite. If not, see <http://www.gnu.org/licenses/>.
  */
-angular.module('unionvmsWeb').controller('HeaderMenuCtrl',function($scope, $rootScope, $location, $state, $timeout, $log, userService, userFeatureAccess, startPageService, locale){
+angular.module('unionvmsWeb').controller('HeaderMenuCtrl',function($scope, $rootScope, $location, $state, $timeout, $log, userService, userFeatureAccess, startPageService, locale, $window){
+
+    $scope.menuSpecs = {
+        width: 0,
+        wrapperWidth: 0,
+        items: [],
+        step: 0,
+        scrolls: {
+            left: false,
+            right: false
+        }
+    };
 
     var checkAccess = function(module, feature) {
         return userService.isAllowed(feature, module, true);
@@ -148,6 +159,180 @@ angular.module('unionvmsWeb').controller('HeaderMenuCtrl',function($scope, $root
         return getFirstPathSegment($location.path()) === (getFirstPathSegment(viewLocation));
     };
 
+    $scope.goToPage = function(url){
+        $location.path(url);
+    };
+
+    /**
+     * Calculate the width of the entire menu and wrapper
+     *
+     * @private
+     */
+    function calculateItemListWidth (){
+        var menuItems = angular.element('.menu-item');
+        var totalWidth = 0;
+        angular.forEach(menuItems, function (item) {
+            totalWidth += item.clientWidth;
+            $scope.menuSpecs.items.push({title: item.innerText, width: item.clientWidth});
+        });
+
+        $scope.menuSpecs.width = totalWidth;
+        $scope.menuSpecs.wrapperWidth = angular.element('.menu-wrapper')[0].clientWidth;
+    }
+
+    /**
+     * Set the scroll visibility
+     *
+     * @private
+     * @param {Object} scrollObj - an object containing the visibility of the scrolls ({'left': true, 'right': false}
+     */
+    function setScrollVisibility(scrollObj){
+        var keys = Object.keys(scrollObj);
+
+        angular.forEach(keys, function (key) {
+            $scope.menuSpecs.scrolls[key] = scrollObj[key];
+        });
+    }
+
+    /**
+     * Recalculate the menu specs for scrolling
+     *
+     * @private
+     */
+    function recalculateScrolls() {
+        calculateItemListWidth();
+        if ($scope.menuSpecs.width > $scope.menuSpecs.wrapperWidth){
+            setScrollVisibility({'right': true, 'left': false});
+        }
+        $scope.menuSpecs.step = 0;
+        angular.element('.menu-wrapper')[0].scrollLeft = 0;
+    }
+
+    /**
+     * Calculate scrolling width and divid it in steps if needed
+     *
+     * @private
+     * @param {String} direction - left or right
+     * @returns {number} - the width in pixels for scrolling
+     */
+    function calculateScrollWidth(direction){
+        $scope.menuSpecs.wrapperWidth = angular.element('.menu-wrapper')[0].clientWidth;
+        var steps = Math.ceil($scope.menuSpecs.width / $scope.menuSpecs.wrapperWidth);
+        var stepWidth =  Math.floor($scope.menuSpecs.width / steps);
+
+        var inItemsWidth = 0;
+        var outItemsWidth = 0;
+        angular.forEach($scope.menuSpecs.items, function (item) {
+            if (inItemsWidth<= $scope.menuSpecs.wrapperWidth){
+                inItemsWidth += item.width;
+            } else {
+                outItemsWidth += item.width;
+            }
+        });
+
+        var width = Math.abs($scope.menuSpecs.wrapperWidth - $scope.menuSpecs.width);
+        setScrollVisibility({'right': false, 'left': true});
+        if (steps > 2){
+            if (direction === 'right'){
+                $scope.menuSpecs.step += 1;
+            } else {
+                $scope.menuSpecs.step -= 1;
+            }
+            var invertedStep = Math.abs(($scope.menuSpecs.step + 1) - steps);
+            if (invertedStep + 1 === steps){
+                width = 0;
+            } else {
+                width = Math.abs(width - (stepWidth * invertedStep));
+            }
+
+            if ($scope.menuSpecs.step +1 === steps){
+                setScrollVisibility({'right': false, 'left': true});
+            } else {
+                setScrollVisibility({'right': true, 'left': true});
+            }
+        } else if (steps <= 2 && direction === 'left'){
+            width = 0;
+        }
+
+        if (width === 0){
+            setScrollVisibility({'right': true, 'left': false});
+        }
+
+        return width;
+    }
+
+    /**
+     * Animation function
+     *
+     * @private
+     * @param t - current time
+     * @param b - start value
+     * @param c - change in value
+     * @param d - duration
+     * @returns {Number}
+     */
+    function easeInOutQuad (t, b, c, d) {
+        t /= d/2;
+        if (t < 1) {
+            return c/2*t*t + b;
+        }
+        t--;
+        return -c/2 * (t*(t-2) - 1) + b;
+    }
+
+    /**
+     * Scroll menu with animation
+     *
+     * @private
+     * @param element - HTML element that shoudl be scrolled
+     * @param {Number} to - pixels to be scrolled
+     * @param {Number} duration - miliseconds for the duration of the animation
+     */
+    function sideScroll(element, to, duration){
+        var start = element.scrollLeft;
+        var change = to - start;
+        var currentTime = 0;
+        var increment = 20;
+
+        var animateScroll = function(){
+            currentTime += increment;
+            var val = easeInOutQuad(currentTime, start, change, duration);
+            element.scrollLeft = val;
+            if(currentTime < duration) {
+                setTimeout(animateScroll, increment);
+            }
+        };
+        animateScroll();
+    }
+
+    /**
+     * Check if scroll is visible
+     *
+     * @public
+     * @param {String} direction - left or right
+     */
+    $scope.isScrollVisible = function(direction){
+        return $scope.menuSpecs.scrolls[direction];
+    };
+
+    /**
+     * Scroll menu to the right
+     *
+     * @public
+     */
+    $scope.scrollRight = function(){
+        sideScroll(angular.element('.menu-wrapper')[0], calculateScrollWidth('right'), 200);
+    };
+
+    /**
+     * Scroll menu to the left
+     *
+     * @public
+     */
+    $scope.scrollLeft = function(){
+        sideScroll(angular.element('.menu-wrapper')[0],  calculateScrollWidth('left'), 200);
+    };
+
     $rootScope.$on('AuthenticationSuccess', function () {
         $scope.setMenu();
     });
@@ -172,4 +357,17 @@ angular.module('unionvmsWeb').controller('HeaderMenuCtrl',function($scope, $root
     });
 
     $scope.setMenu();
+
+    //Initial scroll setup
+    $timeout(function(){
+        calculateItemListWidth();
+        if ($scope.menuSpecs.width > $scope.menuSpecs.wrapperWidth){
+            setScrollVisibility({'right': true});
+        }
+    });
+
+    //Adjust scrolls on window resize
+    $($window).resize(function(){
+        recalculateScrolls();
+    });
 });

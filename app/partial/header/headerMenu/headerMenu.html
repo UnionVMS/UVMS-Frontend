@@ -9,7 +9,7 @@ the hope that it will be useful, but WITHOUT ANY WARRANTY; without even the impl
 FITNESS FOR A PARTICULAR PURPOSE.  See the GNU General Public License for more details. You should have received a
 copy of the GNU General Public License along with the IFDM Suite. If not, see <http://www.gnu.org/licenses/>.
 -->
-<nav class="header-menu" ng-controller="HeaderMenuCtrl" id="uvms-header-menu">
+<!--nav class="header-menu" ng-controller="HeaderMenuCtrl" id="uvms-header-menu">
     <ul ng-class="{'ec':headerTemplate === 'EC'}">
          <li class="cell" ng-repeat="page in menu" ng-class="{active: isActive(page.url)}">
             <a ng-href="#{{page.url}}" ng-attr-id="{{'uvms-header-menu-item-' + page.elemId}}">
@@ -17,4 +17,19 @@ copy of the GNU General Public License along with the IFDM Suite. If not, see <h
             </a>
         </li>
     </ul>
-</nav>
+</nav-->
+<section class="header-menu" ng-controller="HeaderMenuCtrl" id="uvms-header-menu">
+    <div class="menu-box">
+        <div class="scroller scroller-left" ng-click="scrollLeft()" ng-if="isScrollVisible('left')"><i class="fa fa-chevron-left" aria-hidden="true"></i></div>
+        <div class="scroller scroller-right" ng-click="scrollRight()" ng-if="isScrollVisible('right')"><i class="fa fa-chevron-right" aria-hidden="true"></i></div>
+        <div class="menu-wrapper">
+            <div class="menu-content" ng-repeat="page in menu">
+                <div class="menu-item" ng-class="{active: isActive(page.url)}" ng-click="goToPage(page.url)">
+                    <a ng-attr-id="{{'uvms-header-menu-item-' + page.elemId}}">
+                        {{page.title}}
+                    </a>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
