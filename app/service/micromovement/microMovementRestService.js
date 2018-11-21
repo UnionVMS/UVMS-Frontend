@@ -15,13 +15,19 @@ angular.module('unionvmsWeb')
     return {
         getMovementList : function(){
             return $resource('movement/rest/movement/microMovementListAfter/:timestamp');
+        },
+        getTrackById : function () {
+            return $resource('movement/rest/track/:id');
+        },
+        getSegmentByMovementGuid : function () {
+            return $resource('movement/rest/segment/segmentByDestinationMovement/:moveId');
         }
     };
 })
 
 .factory('microMovementRestService',function($q, microMovementRestFactory, MicroMovement){
 
-    let getPositionList = function(date){
+    let getMovementList = function(date){
         let deferred = $q.defer();
         microMovementRestFactory.getMovementList().get({timestamp: date}, function(result) {
                 deferred.resolve(result);
@@ -35,9 +41,36 @@ angular.module('unionvmsWeb')
 
     };
 
+    let getTrackById = function(id) {
+        let deferred = $q.defer();
+        microMovementRestFactory.getTrackById().get({id: id}, function(result) {
+                deferred.resolve(result);
+            },
+            function(error){
+                console.log("Error getting track info.", error);
+                deferred.reject(error);
+            }
+        );
+        return deferred.promise;
+    };
+
+    let getSegmentByMovementGuid = function(moveId) {
+        let deferred = $q.defer();
+        microMovementRestFactory.getSegmentByMovementGuid().get({moveId: moveId}, function(result) {
+                deferred.resolve(result);
+            },
+            function(error){
+                console.log("Error getting segment info.", error);
+                deferred.reject(error);
+            }
+        );
+        return deferred.promise;
+    };
 
     return {
-        getPositionList : getPositionList,
+        getMovementList : getMovementList,
+        getTrackById : getTrackById,
+        getSegmentByMovementGuid : getSegmentByMovementGuid
     };
 
 });

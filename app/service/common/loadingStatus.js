@@ -64,6 +64,11 @@ angular.module('unionvmsWeb').factory('loadingStatus',function() {
             value: false,
             counter: 0
 		},
+        Realtime: {
+            message: ['areas.inital_loading'],
+            value: false,
+            counter: 0
+        },
 		AreaManagementPanel: {
 		    message: 'areas.inital_loading',
             value: false,
