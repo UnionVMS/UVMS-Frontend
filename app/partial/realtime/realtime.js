@@ -9,7 +9,23 @@ the hope that it will be useful, but WITHOUT ANY WARRANTY; without even the impl
 FITNESS FOR A PARTICULAR PURPOSE.  See the GNU General Public License for more details. You should have received a
 copy of the GNU General Public License along with the IFDM Suite. If not, see <http://www.gnu.org/licenses/>.
  */
-angular.module('unionvmsWeb').controller('RealtimeCtrl', function($scope,loadingStatus, $window, $interval, genericMapService, areaMapService, defaultMapConfigs, projectionService, $log, $mdSidenav, $localStorage, microMovementRestService, movementRestService, vesselRestService, dateTimeService) {
+angular.module('unionvmsWeb').controller('RealtimeCtrl', function(
+    $scope,
+    loadingStatus,
+    $window,
+    $interval,
+    genericMapService,
+    areaMapService,
+    defaultMapConfigs,
+    projectionService,
+    $log,
+    $mdSidenav,
+    $localStorage,
+    microMovementRestService,
+    movementRestService,
+    vesselRestService,
+    dateTimeService,
+    microMovementServerSideEventsService) {
 
     angular.extend($scope, {
         center: {
@@ -101,6 +117,58 @@ angular.module('unionvmsWeb').controller('RealtimeCtrl', function($scope,loading
         })
     };
 
+    // todo: move to own class
+    function deg2rad(degrees) {
+        return Math.sin(degrees * Math.PI / 180);
+    }
+
+    // todo: move to own class
+    function createStyle(styleType, fillColor, strokeColor) {
+        let style = null;
+
+        switch (styleType) {
+            case 'circle':
+                style = new ol.style.Style({
+                    image: new ol.style.Circle({
+                        fill: new ol.style.Fill({color: fillColor}),
+                        stroke: new ol.style.Stroke({
+                            color: strokeColor, width: 2
+                        }),
+                        radius: 5,
+                    })
+                });
+            break;
+            case 'line':
+                style = new ol.style.Style({
+                    stroke: new ol.style.Stroke({
+                        color: fillColor,
+                        width: 2
+                    })
+                });
+            break;
+            case 'triangle':
+                style = new ol.style.Style({
+                    image: new ol.style.RegularShape({
+                        fill: new ol.style.Fill({
+                            color: fillColor
+                        }),
+                        stroke: new ol.style.Stroke({
+                            color: strokeColor,
+                            width: 2
+                        }),
+                        points: 3,
+                        radius: 10,
+                        rotation: 0,
+                        angle: 0
+                    })
+                });
+            break;
+        }
+        if (style == null) {
+            $log.error('Style type ' + style + '  not supported.');
+        }
+        return style;
+    }
 
     $scope.updateContainerSize = function (evt) {
         setTimeout(function () {
@@ -152,22 +220,8 @@ angular.module('unionvmsWeb').controller('RealtimeCtrl', function($scope,loading
             if (!_.isEqual(genericMapService.mapBasicConfigs, {})) {
                 areaMapService.setMap();
                 getMap().addLayer(vectorLayer);
-
                 $scope.stopInitInterval();
                 // get the positions
-
-                /*
-                getMap().on('click', function(evt){
-                    var feature = new ol.Feature(
-                        new ol.geom.Point(evt.coordinate)
-                    );
-                    const myStyle = styles.triangle;
-                    feature.setStyle(myStyle);
-
-                    vectorSource.addFeature(feature);
-                });
-                */
-
                 getPositions().then((positionsByAsset) => {
                     let i = 0;
                     Object.values(positionsByAsset).forEach(positions => {
@@ -179,6 +233,20 @@ angular.module('unionvmsWeb').controller('RealtimeCtrl', function($scope,loading
                 }).catch(error => {
                     console.error('Failed to get positions:', error);
                 });
+
+                // initialize server side event
+                if (!microMovementServerSideEventsService.hasSubscribed()) {
+                    microMovementServerSideEventsService.subscribe();
+                }
+
+                /*
+                microMovementServerSideEventsService.addEventListener('message', function(e) {
+                    $log.debug('message event received:', e);
+                });
+                microMovementServerSideEventsService.addEventListener('error', function(e) {
+                    $log.debug('error:', e);
+                });
+                */
             }
         }, 10);
     });
@@ -188,27 +256,19 @@ angular.module('unionvmsWeb').controller('RealtimeCtrl', function($scope,loading
         let color = '#' + intToRGB(hashCode(asset));
         drawSegment(positions, color);
         // draw vessel on top of segments (segments on a seperate layer)        
-        var pos = positions[positions.length - 1];
-        var posArray = [pos.location.latitude, pos.location.longitude];
-        addMarker(posArray, pos.heading, color, asset);
+        let pos = positions[positions.length - 1];
+        let posArray = [pos.location.latitude, pos.location.longitude];
+        addMarker(posArray, deg2rad(pos.heading), color, asset);
     }
 
     // Draws a polyline based on positions, takes an array of positions [lat, long]
     function drawSegment(positions, c) {
         var positionData = [];
         positions.map(p => {
-            // Draw positions
-
-            /*
-            L.circle([p.location.latitude, p.location.longitude], {
-                radius: 50,
-                color: c,
-                positionGuid: p.guid
-            }).on('click', onPositionClick).addTo(getMap());
-            */
 
             var feature = new ol.Feature(new ol.geom.Point(ol.proj.fromLonLat( [ p.location.longitude, p.location.latitude ])));
-            feature.setStyle(styles.circle);
+            var style = createStyle('circle', c, 'white');
+            feature.setStyle(style);
             vectorSource.addFeature(feature);
 
             if (!angular.isDefined(positionData[p.asset])) {
@@ -217,22 +277,18 @@ angular.module('unionvmsWeb').controller('RealtimeCtrl', function($scope,loading
             positionData[p.asset].push([p.location.longitude, p.location.latitude]);
         });
 
-
-        var points = [];
+        // Add lines
         Object.entries(positionData).forEach(p => {
-            //var polyline = L.polyline(p[1], {color: c, smoothFactor: 10}).addTo(getMap());
 
-            console.log(p[1]);
-            var geom = /*new ol.geom.LineString([points])*/
-                new ol.geom.MultiLineString([p[1]])
-                //new ol.geom.LineString([ [0, 0], [-8.784296853532169, 51.37259817516915]]);
+            var geom = new ol.geom.MultiLineString([p[1]]);
             geom.transform('EPSG:4326', 'EPSG:3857');
 
             var featureLine = new ol.Feature({
                 geometry: geom
             });
+            var style = createStyle('line', c, c);
 
-            featureLine.setStyle(styles.line);
+            featureLine.setStyle(style);
             vectorSource.addFeature(featureLine);
 
         });
@@ -248,16 +304,10 @@ angular.module('unionvmsWeb').controller('RealtimeCtrl', function($scope,loading
             iconColor: '#fff',
             extraClasses: 'marker-icon-padding',
         });
-/*
-        let marker = L.marker(pos, {
-            icon: vectorMarker,
-            color: c,
-            assetId: assetId
-        }).bindTooltip("my tooltip text").on('click', onMarkerClick).addTo(getMap());
 
-*/
         var feature = new ol.Feature(new ol.geom.Point(ol.proj.fromLonLat( [ pos[1], pos[0] ])));
-        feature.setStyle(styles.triangle);
+        var style = createStyle('triangle', c, 'white');
+        feature.setStyle(style);
         feature.getStyle().getImage().setRotation(angle);
         vectorSource.addFeature(feature);
     }

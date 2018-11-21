@@ -25,7 +25,7 @@ angular.module('unionvmsWeb')
     };
 })
 
-.factory('microMovementRestService',function($q, microMovementRestFactory, MicroMovement){
+.factory('microMovementRestService', function($q, microMovementRestFactory, MicroMovement){
 
     let getMovementList = function(date){
         let deferred = $q.defer();
@@ -73,4 +73,5 @@ angular.module('unionvmsWeb')
         getSegmentByMovementGuid : getSegmentByMovementGuid
     };
 
-});
+}
+);
