@@ -26,8 +26,7 @@ angular.module('unionvmsWeb').controller('RealtimeCtrl', function(
     movementRestService,
     vesselRestService,
     dateTimeService,
-    microMovementServerSideEventsService,
-    $interval) {
+    microMovementServerSideEventsService) {
 
     angular.extend($scope, {
         center: {
@@ -347,8 +346,23 @@ angular.module('unionvmsWeb').controller('RealtimeCtrl', function(
             $localStorage['realtimeDataAssets'].push(pos.asset);
         }
 
+
         if (!doesPositionExistInFeatureCache(pos.guid)) {
+            // check if there is space to insert, otherwise remove first position
+            let arrayLength = $localStorage['realtimeMapDataFeatures'].length;
+            if (arrayLength >= MAX_MOVEMENTS_IN_CACHE) {
+                // remove first element
+                console.log('not enough space in cache, removing first element.')
+                let cachedPos = $localStorage['realtimeMapDataFeatures'].shift();
+                if (cachedPos !== null && cachedPos !== undefined) {
+                    let cachedFeature = vectorSource.getFeatureById(cachedPos.guid);
+                    if (cachedFeature !== null && cachedFeature !== undefined) {
+                        vectorSource.removeFeature(cachedFeature);
+                    }
+                }
+            }
             $localStorage['realtimeMapDataFeatures'].push(pos);
+            vectorSource.refresh();
         }
 
         feature['assetId'] = pos.asset;
@@ -392,6 +406,10 @@ angular.module('unionvmsWeb').controller('RealtimeCtrl', function(
 
     function clearCacheRealTimeFeatures() {
         let cacheThresholdTime = Date.now() - MAX_TIME_FOR_MOVEMENT_IN_CACHE_MS;
+        let arrayLength = $localStorage['realtimeMapDataFeatures'].length;
+        if (arrayLength >= MAX_MOVEMENTS_IN_CACHE) {
+            $localStorage['realtimeMapDataFeatures'].slice(arrayLength - MAX_MOVEMENTS_IN_CACHE);
+        }
 
         for (let i = $localStorage['realtimeMapDataFeatures'].length - 1; i >= 0; i--) {
             let pos = $localStorage['realtimeMapDataFeatures'][i];
