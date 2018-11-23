@@ -10,6 +10,7 @@ FITNESS FOR A PARTICULAR PURPOSE.  See the GNU General Public License for more d
 copy of the GNU General Public License along with the IFDM Suite. If not, see <http://www.gnu.org/licenses/>.
  */
 angular.module('unionvmsWeb').controller('RealtimeCtrl', function(
+    $rootScope,
     $scope,
     loadingStatus,
     $window,
@@ -25,7 +26,8 @@ angular.module('unionvmsWeb').controller('RealtimeCtrl', function(
     movementRestService,
     vesselRestService,
     dateTimeService,
-    microMovementServerSideEventsService) {
+    microMovementServerSideEventsService,
+    $interval) {
 
     angular.extend($scope, {
         center: {
@@ -35,6 +37,9 @@ angular.module('unionvmsWeb').controller('RealtimeCtrl', function(
         }
     });
 
+    const MAX_MOVEMENTS_IN_CACHE = 2000;
+    const MAX_TIME_FOR_MOVEMENT_IN_CACHE_MS = 1800000;   // 5 hours
+    const CHECK_TIME_FOR_MOVEMENT_IN_CACHE_INTERVAL_MS = 900000;  // 15 min
 
     /*
     $scope.toggleLeft = buildToggler('left');
@@ -50,6 +55,37 @@ angular.module('unionvmsWeb').controller('RealtimeCtrl', function(
     $(document.getElementsByClassName("headercontainer")).hide();
 
     $($window).resize($scope.updateContainerSize);
+
+    // Listen to the changes of micromovement changes
+    $rootScope.$on('event:micromovement', (e, data) => {
+        let microMovement = JSON.parse(data);
+
+        let posExists = false;
+        let assetExists = false;
+        for (let key in $localStorage['realtimeMapData']) {
+            if (key === microMovement.asset){
+                let value = $localStorage['realtimeMapData'][key];
+                assetExists  = true;
+                if (value[0].guid !== microMovement.guid) {
+                    posExists = true;
+                    break;
+                }
+            }
+        }
+        if (!assetExists ) {
+            $localStorage['realtimeMapData'][microMovement.asset] = [];
+        }
+        if (!posExists) {
+            $localStorage['realtimeMapData'][microMovement.asset].push(microMovement);
+        }
+        drawVesselWithSegments(microMovement.asset, [microMovement], false);
+
+    });
+
+    let clearRealTimeMapDataCache = $interval(function () {
+        clearCacheRealTimeFeatures();
+    }, CHECK_TIME_FOR_MOVEMENT_IN_CACHE_INTERVAL_MS);
+
     var
         vectorSource = new ol.source.Vector(),
         vectorLayer = new ol.layer.Vector({
@@ -222,50 +258,49 @@ angular.module('unionvmsWeb').controller('RealtimeCtrl', function(
                 getMap().addLayer(vectorLayer);
                 $scope.stopInitInterval();
                 // get the positions
+                /*
                 getPositions().then((positionsByAsset) => {
                     let i = 0;
+                    // Todo: change to for loop to make faster
                     Object.values(positionsByAsset).forEach(positions => {
                         if (positions.map !== undefined) {
-                            drawVesselWithSegments(positions[0].asset, positions);
+                            drawVesselWithSegments(positions[0].asset, positions, true);
                         }
                     });
 
                 }).catch(error => {
                     console.error('Failed to get positions:', error);
                 });
+                */
+
+                // draw cached realtime positions
+                drawCachedRealtimeFeatures();
 
                 // initialize server side event
                 if (!microMovementServerSideEventsService.hasSubscribed()) {
                     microMovementServerSideEventsService.subscribe();
                 }
-
-                /*
-                microMovementServerSideEventsService.addEventListener('message', function(e) {
-                    $log.debug('message event received:', e);
-                });
-                microMovementServerSideEventsService.addEventListener('error', function(e) {
-                    $log.debug('error:', e);
-                });
-                */
             }
         }, 10);
     });
 
-    function drawVesselWithSegments(asset, positions) {
-        // draw segments from positions of the boat
-        let color = '#' + intToRGB(hashCode(asset));
-        drawSegment(positions, color);
-        // draw vessel on top of segments (segments on a seperate layer)        
+    function drawVesselWithSegments(asset, positions, drawSegment) {
         let pos = positions[positions.length - 1];
-        let posArray = [pos.location.latitude, pos.location.longitude];
-        addMarker(posArray, deg2rad(pos.heading), color, asset);
+        // draw segments from positions of the boat
+        let color = '#' + intToRGB(hashCode(pos.asset));
+        if (drawSegment) {
+            drawSegment(positions, color);
+        }
+
+        // draw vessel on top of segments (segments on a seperate layer)        
+
+        addMarker(pos, deg2rad(pos.heading), color);
     }
 
     // Draws a polyline based on positions, takes an array of positions [lat, long]
     function drawSegment(positions, c) {
         var positionData = [];
         positions.map(p => {
-
             var feature = new ol.Feature(new ol.geom.Point(ol.proj.fromLonLat( [ p.location.longitude, p.location.latitude ])));
             var style = createStyle('circle', c, 'white');
             feature.setStyle(style);
@@ -295,21 +330,88 @@ angular.module('unionvmsWeb').controller('RealtimeCtrl', function(
 
     }
 
-    function addMarker(pos, angle, c, assetId) {
+    function addMarker(pos, angle, c) {
+        let posArray = [pos.location.latitude, pos.location.longitude];
+        let feature = new ol.Feature(new ol.geom.Point(ol.proj.fromLonLat( [ posArray[1], posArray[0] ])));
 
-        // Creates a red marker with the coffee icon
-        var vectorMarker = L.VectorMarkers.icon({
-            icon: 'ship',
-            markerColor: c,
-            iconColor: '#fff',
-            extraClasses: 'marker-icon-padding',
-        });
+        let style = createStyle('triangle', c, 'white');
 
-        var feature = new ol.Feature(new ol.geom.Point(ol.proj.fromLonLat( [ pos[1], pos[0] ])));
-        var style = createStyle('triangle', c, 'white');
         feature.setStyle(style);
         feature.getStyle().getImage().setRotation(angle);
+        feature.getStyle().getImage().setOpacity(1);
+
+        if (doesAssetExistinCache(pos.asset)) {
+            setFeatureOpacity(pos.guid);
+        }
+        else {
+            $localStorage['realtimeDataAssets'].push(pos.asset);
+        }
+
+        if (!doesPositionExistInFeatureCache(pos.guid)) {
+            $localStorage['realtimeMapDataFeatures'].push(pos);
+        }
+
+        feature['assetId'] = pos.asset;
+        feature.setId(pos.guid);
+
         vectorSource.addFeature(feature);
+    }
+
+    function doesAssetExistinCache(assetId) {
+        for (let i = 0; i < $localStorage['realtimeDataAssets'].length; i++) {
+            if ($localStorage['realtimeDataAssets'][i] === assetId) {
+                return true;
+            }
+        }
+        return false;
+    }
+
+    function setFeatureOpacity(ignoreId) {
+        for (let i = 0; i < $localStorage['realtimeMapDataFeatures'].length; i++) {
+            let id = $localStorage['realtimeMapDataFeatures'][i].guid;
+            if (id !== ignoreId) {
+
+                let feature = vectorSource.getFeatureById(id);
+                if (feature !== null && feature !== undefined) {
+                    feature.getStyle().getImage().setOpacity(0.25);
+                }
+            }
+        }
+
+    }
+
+
+    function drawCachedRealtimeFeatures() {
+        for (let i = 0; i < $localStorage['realtimeMapDataFeatures'].length; i++) {
+            let pos = $localStorage['realtimeMapDataFeatures'][i];
+            if (pos !== null) {
+                drawVesselWithSegments(pos.asset, [pos], false);
+            }
+        }
+    }
+
+    function clearCacheRealTimeFeatures() {
+        let cacheThresholdTime = Date.now() - MAX_TIME_FOR_MOVEMENT_IN_CACHE_MS;
+
+        for (let i = $localStorage['realtimeMapDataFeatures'].length - 1; i >= 0; i--) {
+            let pos = $localStorage['realtimeMapDataFeatures'][i];
+            if (pos !== null) {
+                let time = new Date(pos.timestamp);
+                if (cacheThresholdTime >= time) {
+                    console.log('removing item from cache:', $localStorage['realtimeMapDataFeatures'][i]);
+                    $localStorage['realtimeMapDataFeatures'].splice(i, 1);
+                }
+            }
+        }
+    }
+
+    function doesPositionExistInFeatureCache(guid) {
+        for (let i = 0; i < $localStorage['realtimeMapDataFeatures'].length; i++) {
+            if ($localStorage['realtimeMapDataFeatures'][i].guid === guid) {
+                return true;
+            }
+        }
+        return false;
     }
 
     function getMap() {
@@ -368,14 +470,15 @@ angular.module('unionvmsWeb').controller('RealtimeCtrl', function(
             let dateString = dateTimeService.formatUTCDateWithTimezone(dateTimeService.toUTC(date));
 
             // TODO: put a timeout for the data
-            if (angular.isDefined($localStorage['realtimeMapData'] && $localStorage['realtimeMapData'].length > 0)) {
+            let hasItems = Object.keys($localStorage['realtimeMapData']).length > 0;
+            if (angular.isDefined($localStorage['realtimeMapData']) && hasItems) {
                 resolve($localStorage['realtimeMapData']);
             }
             else {
 
                 microMovementRestService.getMovementList(dateString).then((positions) => {
                     $localStorage['realtimeMapData'] = positions;
-                    resolve(positions);
+                    resolve($localStorage['realtimeMapData']);
                 }).catch(error => {
                     reject(error);
                 });
@@ -536,6 +639,28 @@ angular.module('unionvmsWeb').controller('RealtimeCtrl', function(
         }
         if (!angular.isDefined($localStorage['realtimeDataTrackInfo'])) {
             $localStorage['realtimeDataTrackInfo'] = [];
+        }
+
+        if (!angular.isDefined($localStorage['realtimeMapData'])) {
+            $localStorage['realtimeMapData'] = [];
+        }
+        if (!angular.isDefined($localStorage['realtimeMapDataFeatures'])) {
+            $localStorage['realtimeMapDataFeatures'] = [];
+        }
+
+    }
+
+    function onRealTimeMapDataUpdated(values) {
+        console.log('value updated:', values);
+    }
+
+    function refreshRealTimeMapDataFeatures() {
+        if (angular.isUndefined($localStorage['realtimeMapDataFeatures'])) {
+            return;
+        }
+        for (let i = 0; i < $localStorage['realtimeMapDataFeatures'].length; i++) {
+            let feature = $localStorage['realtimeMapDataFeatures'];
+
         }
     }
 });

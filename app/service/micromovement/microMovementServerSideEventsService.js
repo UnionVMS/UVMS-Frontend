@@ -11,7 +11,7 @@ copy of the GNU General Public License along with the IFDM Suite. If not, see <h
  */
 
 angular.module('unionvmsWeb')
-    .service('microMovementServerSideEventsService', function($log){
+    .service('microMovementServerSideEventsService', function($rootScope){
         var subscribed = false;
         var subscribe = function() {
             subscribed = true;
@@ -35,11 +35,11 @@ angular.module('unionvmsWeb')
                     }
                 };
                 source.addEventListener('Movement', function (e) {
-                    console.log(e);
+                    $rootScope.$broadcast('event:micromovement', e.data);
                 });
 
             } else {
-                $log.error('Could not fetch server side events.');
+                console.error('Could not fetch server side events.');
             }
         };
 
