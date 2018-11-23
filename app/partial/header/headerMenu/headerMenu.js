@@ -201,9 +201,11 @@ angular.module('unionvmsWeb').controller('HeaderMenuCtrl',function($scope, $root
      */
     function recalculateScrolls() {
         calculateItemListWidth();
+        var rightVisible = false;
         if ($scope.menuSpecs.width > $scope.menuSpecs.wrapperWidth){
-            setScrollVisibility({'right': true, 'left': false});
+            rightVisible = true;
         }
+        setScrollVisibility({'right': rightVisible, 'left': false});
         $scope.menuSpecs.step = 0;
         angular.element('.menu-wrapper')[0].scrollLeft = 0;
     }
