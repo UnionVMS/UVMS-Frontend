@@ -343,7 +343,7 @@ angular.module('unionvmsWeb')
        }));
 
        return deferred.promise;
-    }
+    };
 
     var getConfiguration = function(){
     	var deferred = $q.defer();
