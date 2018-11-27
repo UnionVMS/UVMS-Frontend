@@ -46,7 +46,7 @@ angular.module('unionvmsWeb').directive('tripOverviewPanel', function () {
                     tripId += ' [' + trip.tripTypeCode + ']';
                 }
                 return tripId;
-            }
+            };
         }
     };
 });
