@@ -11,14 +11,15 @@ copy of the GNU General Public License along with the IFDM Suite. If not, see <h
  */
 
 angular.module('unionvmsWeb')
-    .service('microMovementServerSideEventsService', function($rootScope){
+    .service('microMovementServerSideEventsService', function($rootScope, $localStorage){
         var subscribed = false;
         var subscribe = function() {
             subscribed = true;
-            if (!!window.EventSource) {
+            if (!!window.EventSourcePolyfill) {
+                var eventSourceInitDict = {headers: {'Authorization': $localStorage.token}};
 
                 // subscribe to sse
-                let source = new EventSource('movement/rest/sse/subscribe');
+                let source = new window.EventSourcePolyfill('movement/rest/sse/subscribe', eventSourceInitDict);
                 source.onmessage = function(e) {
                     console.log(e.data);
                 };
