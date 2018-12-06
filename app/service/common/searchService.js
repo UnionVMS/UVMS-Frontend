@@ -692,7 +692,7 @@ angular.module('unionvmsWeb').factory('searchService',function($q, $log, searchU
         searchExchange: function(messageDirection) {
         	var criterias = getListRequest.criterias;
 
-        	var hoursIdx = _.findIndex(criterias, {key: 'hours'})
+        	var hoursIdx = _.findIndex(criterias, {key: 'hours'});
         	if (hoursIdx !== -1){
                 criterias.splice(hoursIdx, 1);
         	    criterias.push({
