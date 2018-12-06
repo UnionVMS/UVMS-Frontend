@@ -17,7 +17,7 @@ describe('purposeCodeBadge', function () {
                 },
                 history: [{
                     fishingActivityIds: [1],
-                    faReportID: 1,
+                    faReportId: 1,
                     acceptanceDate: '2017-06-12T20:50:00',
                     purposeCode: '9'
                 }]
@@ -96,7 +96,7 @@ describe('purposeCodeBadge', function () {
         mockFaServ.repId = 2;
         mockFaServ.activityData.history = [{
             fishingActivityIds: [2],
-            faReportID: 2,
+            faReportId: 2,
             acceptanceDate: '2017-06-12T20:54:00',
             purposeCode: '5'
         }];
@@ -116,12 +116,12 @@ describe('purposeCodeBadge', function () {
         mockFaServ.repId = 1;
         mockFaServ.activityData.history = [{
             fishingActivityIds: [2],
-            faReportID: 2,
+            faReportId: 2,
             acceptanceDate: '2017-06-12T20:54:00',
             purposeCode: '5'
         },{
             fishingActivityIds: [1],
-            faReportID: 1,
+            faReportId: 1,
             acceptanceDate: '2017-06-12T20:50:00',
             purposeCode: '9'
         }];
@@ -141,12 +141,12 @@ describe('purposeCodeBadge', function () {
         mockFaServ.repId = 2;
         mockFaServ.activityData.history = [{
             fishingActivityIds: [2],
-            faReportID: 2,
+            faReportId: 2,
             acceptanceDate: '2017-06-12T20:54:00',
             purposeCode: '3'
         },{
             fishingActivityIds: [1],
-            faReportID: 1,
+            faReportId: 1,
             acceptanceDate: '2017-06-12T20:50:00',
             purposeCode: '9'
         }];
@@ -166,12 +166,12 @@ describe('purposeCodeBadge', function () {
         mockFaServ.repId = 1;
         mockFaServ.activityData.history = [{
             fishingActivityIds: [2],
-            faReportID: 2,
+            faReportId: 2,
             acceptanceDate: '2017-06-12T20:54:00',
             purposeCode: '3'
         },{
             fishingActivityIds: [1],
-            faReportID: 1,
+            faReportId: 1,
             acceptanceDate: '2017-06-12T20:50:00',
             purposeCode: '9'
         }];
@@ -191,12 +191,12 @@ describe('purposeCodeBadge', function () {
         mockFaServ.repId = 2;
         mockFaServ.activityData.history = [{
             fishingActivityIds: [2],
-            faReportID: 2,
+            faReportId: 2,
             acceptanceDate: '2017-06-12T20:54:00',
             purposeCode: '1'
         },{
             fishingActivityIds: [1],
-            faReportID: 1,
+            faReportId: 1,
             acceptanceDate: '2017-06-12T20:50:00',
             purposeCode: '9'
         }];
@@ -216,12 +216,12 @@ describe('purposeCodeBadge', function () {
         mockFaServ.repId = 1;
         mockFaServ.activityData.history = [{
             fishingActivityIds: [2],
-            faReportID: 2,
+            faReportId: 2,
             acceptanceDate: '2017-06-12T20:54:00',
             purposeCode: '1'
         },{
             fishingActivityIds: [1],
-            faReportID: 1,
+            faReportId: 1,
             acceptanceDate: '2017-06-12T20:50:00',
             purposeCode: '9'
         }];

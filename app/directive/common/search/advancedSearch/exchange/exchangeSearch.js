@@ -9,7 +9,7 @@ the hope that it will be useful, but WITHOUT ANY WARRANTY; without even the impl
 FITNESS FOR A PARTICULAR PURPOSE.  See the GNU General Public License for more details. You should have received a
 copy of the GNU General Public License along with the IFDM Suite. If not, see <http://www.gnu.org/licenses/>.
  */
-angular.module('unionvmsWeb').controller('ExchangeSearchController', function($scope, searchService, locale, configurationService) {
+angular.module('unionvmsWeb').controller('ExchangeSearchController', function($scope, searchService, locale, configurationService,globalSettingsService) {
 
 	var init = function(){
 	    $scope.advancedSearchObject.EXCHANGE_TIME_SPAN = $scope.DATE_TODAY;
@@ -19,6 +19,8 @@ angular.module('unionvmsWeb').controller('ExchangeSearchController', function($s
         $scope.statusItems = configurationService.setTextAndCodeForDropDown(configurationService.getValue('EXCHANGE', 'STATUS'), 'STATUS', 'EXCHANGE', true);
         $scope.sourceItems = configurationService.setTextAndCodeForDropDown(configurationService.getValue('EXCHANGE', 'SOURCE'), 'SOURCE', 'EXCHANGE', true);
         $scope.typeItems = configurationService.setTextAndCodeForDropDown(configurationService.getValue('EXCHANGE', 'TYPE'), 'TYPE', 'EXCHANGE', true);
+
+        $scope.timeSpanOptions.push({text: locale.getString('common.time_span_custom_hours'), code:'CUSTOM_HOURS'});
     };
 
     $scope.$on("resetExchangeLogSearch", function() {
@@ -30,27 +32,56 @@ angular.module('unionvmsWeb').controller('ExchangeSearchController', function($s
         //empty advancedSearchobject.
         $scope.resetAdvancedSearchForm(false);
         $scope.advancedSearchObject.EXCHANGE_TIME_SPAN = $scope.DATE_TODAY;
+        delete $scope.advancedSearchObject.hours;
         $scope.performAdvancedSearch();
     };
 
 	$scope.$watch("advancedSearchObject.DATE_RECEIVED_FROM", function(newValue) {
-		if (newValue) {
+		if (newValue && $scope.advancedSearchObject.EXCHANGE_TIME_SPAN !== 'CUSTOM_HOURS') {
 			$scope.advancedSearchObject.EXCHANGE_TIME_SPAN = $scope.DATE_CUSTOM;
 		}
 	});
 
 	$scope.$watch("advancedSearchObject.DATE_RECEIVED_TO", function(newValue) {
-		if (newValue) {
+		if (newValue && $scope.advancedSearchObject.EXCHANGE_TIME_SPAN !== 'CUSTOM_HOURS') {
 			$scope.advancedSearchObject.EXCHANGE_TIME_SPAN = $scope.DATE_CUSTOM;
 		}
 	});
 
 	$scope.$watch('advancedSearchObject.EXCHANGE_TIME_SPAN', function(newValue) {
-		if (newValue && newValue !== $scope.DATE_CUSTOM) {
-			delete $scope.advancedSearchObject.DATE_RECEIVED_FROM;
-			delete $scope.advancedSearchObject.DATE_RECEIVED_TO;
-		}
+	    if (newValue){
+            if (newValue === 'CUSTOM_HOURS') {
+                $scope.advancedSearchObject.hours = 1;
+            } else if (newValue === $scope.DATE_CUSTOM){
+                $scope.advancedSearchObject.DATE_RECEIVED_FROM = undefined;
+                $scope.advancedSearchObject.DATE_RECEIVED_TO = undefined;
+            } else {
+                delete $scope.advancedSearchObject.DATE_RECEIVED_FROM;
+                delete $scope.advancedSearchObject.DATE_RECEIVED_TO;
+                delete $scope.advancedSearchObject.hours;
+            }
+        }
 	});
+
+	function calculateTimeSpanForHours(value){
+        var dateFormat = 'YYYY-MM-DD HH:mm:ss +00:00';
+        var now = moment();
+        var before = now.clone();
+        before.subtract(value, 'hours');
+
+        $scope.advancedSearchObject.DATE_RECEIVED_FROM = moment.utc(before).format(dateFormat);
+        $scope.advancedSearchObject.DATE_RECEIVED_TO = moment.utc(now).format(dateFormat);
+    }
+
+	$scope.$watch('advancedSearchObject.hours', function(newValue){
+	    if ($scope.advancedSearchObject.EXCHANGE_TIME_SPAN === 'CUSTOM_HOURS'){
+            if (angular.isUndefined(newValue)){
+                $scope.advancedSearchObject.hours = 1;
+            }
+
+            calculateTimeSpanForHours(newValue);
+        }
+    });
 
     init();
 });
