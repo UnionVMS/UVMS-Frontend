@@ -119,6 +119,7 @@
     "time_second_short" : "s",
     "time_span_today" : "Today",
     "time_span_custom" : "Custom",
+    "time_span_custom_hours" : "Last X hours",
     "time_span_all" : "All",
     "tons" : "EUtons",
     "update" : "Update",

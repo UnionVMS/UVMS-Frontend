@@ -42,7 +42,7 @@ angular.module('unionvmsWeb').directive('purposeCodeBadge', function(fishingActi
                         }
 
                         if (angular.isDefined(testId)){
-                            return testId === scope.faServ.id && item.faReportID === scope.faServ.repId;
+                            return testId === scope.faServ.id && item.faReportId === scope.faServ.repId;
                         } else {
                             return false;
                         }

@@ -10,6 +10,7 @@
 	"search_source": "Source",
 	"search_type": "Type",
 	"search_status": "Status",
+    "search_hour_unit": "h",
 
     "message_details_modal_title" : "Message details",
     "validation_results_modal_title": "Validation results",
