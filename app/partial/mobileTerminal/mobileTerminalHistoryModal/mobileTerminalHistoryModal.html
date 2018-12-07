@@ -20,7 +20,7 @@ copy of the GNU General Public License along with the IFDM Suite. If not, see <h
     <div class="modal-body">
         <div class="row">
            <div class="col-md-12">
-                <span class="transponderType" id="mob-term-history-transponder-type">{{'mobileTerminal.history_modal_transpondertype' | i18n }}: <b>{{ mobileTerminal.type | transponderName}}</b></span>
+                <span class="transponderType" id="mob-term-history-transponder-type">{{'mobileTerminal.history_modal_transpondertype' | i18n }}: <b>{{ mobileTerminal.mobileTerminalType | transponderName}}</b></span>
             </div>
         </div>
         <div class="row" st-table="currentSearchResultsByPage" st-safe-src="allCurrentSearchResults">
@@ -34,10 +34,10 @@ copy of the GNU General Public License along with the IFDM Suite. If not, see <h
                             <th class="st-sort" st-sort="mobileTerminal.associatedVessel.name" st-skip-natural="true" id="mtHistory-sort-asset">
                                 {{'mobileTerminal.history_modal_vesselname' | i18n}}
                             </th>
-                            <th class="st-sort" st-sort="mobileTerminal.attributes.SERIAL_NUMBER" st-skip-natural="true" id="mtHistory-sort-serialnumber">
+                            <th class="st-sort" st-sort="mobileTerminal.serialNo" st-skip-natural="true" id="mtHistory-sort-serialnumber">
                                 {{'mobileTerminal.history_modal_serialnumber' | i18n}}
                             </th>
-                            <th class="st-sort" st-sort="mobileTerminal.attributes.SATELLITE_NUMBER" st-skip-natural="true" id="mtHistory-sort-satelliteno">
+                            <th class="st-sort" st-sort="mobileTerminal.satelliteNumber" st-skip-natural="true" id="mtHistory-sort-satelliteno">
                                 {{'mobileTerminal.history_modal_satelliteno' | i18n}}
                             </th>
                             <th class="st-sort" st-sort="changeDate" st-sort-default="reverse" st-skip-natural="true" id="mtHistory-sort-changeDate">

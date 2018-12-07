@@ -61,7 +61,7 @@ angular.module('unionvmsWeb')
             }
 
             if(angular.isDefined($scope.mobileTerminal) && angular.isDefined($scope.mobileTerminal.plugin)){
-                $scope.typeAndPlugin = $scope.getModelValueForTransponderSystemBySystemTypeAndPlugin($scope.mobileTerminal.type, $scope.mobileTerminal.plugin.labelName, $scope.mobileTerminal.plugin.serviceName);
+                $scope.typeAndPlugin = $scope.getModelValueForTransponderSystemBySystemTypeAndPlugin($scope.mobileTerminal.mobileTerminalType, $scope.mobileTerminal.plugin.name, $scope.mobileTerminal.plugin.pluginServiceName);
             }
         };
 
@@ -142,15 +142,15 @@ angular.module('unionvmsWeb')
             if($scope.isCreateNewMode()){
                 return $filter('i18n')('mobileTerminal.add_new_form_mobile_terminal_label');
             }
-            return $filter('transponderName')($scope.mobileTerminal.type);
+            return $filter('transponderName')($scope.mobileTerminal.mobileTerminalType);
         };
 
         //Get model value for the transponder system dropdown by system type and plugin
-        $scope.getModelValueForTransponderSystemBySystemTypeAndPlugin = function(type, labelName, serviceName){
+        $scope.getModelValueForTransponderSystemBySystemTypeAndPlugin = function(type, name, pluginServiceName){
             var value, tmp;
             $.each($scope.transponderSystems, function(index, system){
                 var systemAndTypeAndPluginItem = system.typeAndPlugin;
-                tmp = new SystemTypeAndPlugin(type, labelName, serviceName);
+                tmp = new SystemTypeAndPlugin(type, name, pluginServiceName);
                 if(systemAndTypeAndPluginItem.equals(tmp)){
                     value = systemAndTypeAndPluginItem;
                     return false;
@@ -176,7 +176,7 @@ angular.module('unionvmsWeb')
         //Get terminal config for the selected terminal type
         $scope.getTerminalConfig = function(){
             if(angular.isDefined($scope.mobileTerminal)){
-                var systemName = $scope.mobileTerminal.type;
+                var systemName = $scope.mobileTerminal.mobileTerminalType;
                 return $scope.transpondersConfig.getTerminalConfigBySystemName(systemName);
             }
         };
@@ -184,16 +184,16 @@ angular.module('unionvmsWeb')
         //Selected terminal type
         $scope.onTerminalSystemSelect = function(selectedItem){
             if(angular.isDefined(selectedItem) && angular.isDefined(selectedItem.typeAndPlugin)){
-                $scope.mobileTerminal.type = selectedItem.typeAndPlugin.type;
+                $scope.mobileTerminal.mobileTerminalType = selectedItem.typeAndPlugin.type;
 
                 //Reset channels
                 $scope.mobileTerminal.resetChannels();
 
-                var selectedLabelName = selectedItem.typeAndPlugin.plugin.labelName;
-                var selectedServiceName = selectedItem.typeAndPlugin.plugin.serviceName;
+                var selectedLabelName = selectedItem.typeAndPlugin.plugin.name;
+                var selectedServiceName = selectedItem.typeAndPlugin.plugin.pluginServiceName;
                 if(angular.isDefined(selectedLabelName) && angular.isDefined(selectedServiceName)){
-                    $scope.mobileTerminal.plugin.labelName = selectedLabelName;
-                    $scope.mobileTerminal.plugin.serviceName = selectedServiceName;
+                    $scope.mobileTerminal.plugin.name = selectedLabelName;
+                    $scope.mobileTerminal.plugin.pluginServiceName = selectedServiceName;
 
                     //Set LES_DESCRIPTION if attribute is used for the channel, otherwise set to undefined
                     $.each($scope.mobileTerminal.channels, function(index, channel){
@@ -204,13 +204,13 @@ angular.module('unionvmsWeb')
                         }
                     });
                 }else{
-                    delete $scope.mobileTerminal.plugin.labelName;
-                    delete $scope.mobileTerminal.plugin.serviceName;
+                    delete $scope.mobileTerminal.plugin.name;
+                    delete $scope.mobileTerminal.plugin.pluginServiceName;
                 }
             }else{
-                $scope.mobileTerminal.type = undefined;
-                delete $scope.mobileTerminal.plugin.labelName;
-                delete $scope.mobileTerminal.plugin.serviceName;
+                $scope.mobileTerminal.mobileTerminalType = undefined;
+                delete $scope.mobileTerminal.plugin.name;
+                delete $scope.mobileTerminal.plugin.pluginServiceName;
             }
         };
 
@@ -380,10 +380,10 @@ angular.module('unionvmsWeb')
         $scope.addNewChannel = function(){
             var newChannel = $scope.mobileTerminal.addNewChannel();
             //Set LES for new channel
-            if(angular.isDefined($scope.mobileTerminal.plugin.labelName)){
+            if(angular.isDefined($scope.mobileTerminal.plugin.name)){
                 //Set LES_DESCRIPTION if attribute is used for the channel
                 if($scope.getTerminalConfig().channelFields.LES_DESCRIPTION){
-                    newChannel.setLESDescription($scope.mobileTerminal.plugin.labelName);
+                    newChannel.setLESDescription($scope.mobileTerminal.plugin.name);
                 }
             }
         };

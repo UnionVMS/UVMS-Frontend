@@ -68,14 +68,7 @@ angular.module('unionvmsWeb')
                 existingChannels: []
             };
 
-            // Get serial number attribute
-            if (data.attributes) {
-                $.each(data.attributes, function(index, attribute) {
-                    if (attribute.type === "SERIAL_NUMBER") {
-                        mobileTerminal.serialNumber = attribute.value;
-                    }
-                });
-            }
+            mobileTerminal.serial_no = data.serial_no;
 
             if (data.channels) {
                 $.each(data.channels, function(index, channel) {

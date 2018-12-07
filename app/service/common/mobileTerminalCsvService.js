@@ -21,7 +21,7 @@ copy of the GNU General Public License along with the IFDM Suite. If not, see <h
         };
 
         function getHeader(mobileTerminal) {
-            if (mobileTerminal.type === 'INMARSAT_C') {
+            if (mobileTerminal.mobileTerminalType === 'INMARSAT_C') {
                 return [
                     locale.getString('mobileTerminal.table_header_transponder_type'),
                     locale.getString('mobileTerminal.add_new_form_ocean_region_label'),
@@ -49,7 +49,7 @@ copy of the GNU General Public License along with the IFDM Suite. If not, see <h
                     locale.getString("mobileTerminal.form_inmarsatc_in_port_grace_period_label")
                 ];
             }
-            else if (mobileTerminal.type === 'IRIDIUM') {
+            else if (mobileTerminal.mobileTerminalType === 'IRIDIUM') {
                 return [
                     locale.getString('mobileTerminal.table_header_transponder_type'),
                     locale.getString('mobileTerminal.table_header_serial_no'),
@@ -74,16 +74,16 @@ copy of the GNU General Public License along with the IFDM Suite. If not, see <h
         }
 
         function getRows(mobileTerminal) {
-            if (mobileTerminal.type === 'INMARSAT_C') {
+            if (mobileTerminal.mobileTerminalType === 'INMARSAT_C') {
                 return mobileTerminal.channels.map(function(channel) {
                     return [
-                        $filter('transponderName')(mobileTerminal.type),
+                        $filter('transponderName')(mobileTerminal.mobileTerminalType),
                         getOceanRegions(mobileTerminal),
-                        mobileTerminal.attributes.SERIAL_NUMBER,
-                        mobileTerminal.attributes.TRANSCEIVER_TYPE,
-                        mobileTerminal.attributes.SOFTWARE_VERSION,
-                        mobileTerminal.attributes.ANTENNA,
-                        mobileTerminal.attributes.SATELLITE_NUMBER,
+                        mobileTerminal.serialNo,
+                        mobileTerminal.transceiverType,
+                        mobileTerminal.softwareVersion,
+                        mobileTerminal.antenna,
+                        mobileTerminal.satelliteNumber,
                         mobileTerminal.attributes.ANSWER_BACK,
                         channel.name,
                         channel.capabilities["POLLABLE"],
@@ -104,11 +104,11 @@ copy of the GNU General Public License along with the IFDM Suite. If not, see <h
                     ];
                 });
             }
-            else if (mobileTerminal.type === 'IRIDIUM') {
+            else if (mobileTerminal.mobileTerminalType === 'IRIDIUM') {
                 return mobileTerminal.channels.map(function(channel) {
                     return [
-                        $filter('transponderName')(mobileTerminal.type),
-                        mobileTerminal.attributes.SERIAL_NUMBER,
+                        $filter('transponderName')(mobileTerminal.mobileTerminalType),
+                        mobileTerminal.serialNo,
                         channel.name,
                         channel.capabilities["POLLABLE"],
                         channel.capabilities["CONFIGURABLE"],
@@ -135,14 +135,14 @@ copy of the GNU General Public License along with the IFDM Suite. If not, see <h
         }
 
         function getTransponderType(mobileTerminal) {
-            return mobileTerminal.type + ": " + mobileTerminal.plugin.labelName;
+            return mobileTerminal.mobileTerminalType + ": " + mobileTerminal.plugin.name;
         }
 
         function getOceanRegions(mobileTerminal) {
             // Oceans supported by the mobile terminal type's configuration
             var terminalCapabilities = configurationService
                 .getConfig('MOBILE_TERMINAL_TRANSPONDERS')
-                .terminalConfigs[mobileTerminal.type]
+                .terminalConfigs[mobileTerminal.mobileTerminalType]
                 .capabilities;
 
             var selectedOceans = [];

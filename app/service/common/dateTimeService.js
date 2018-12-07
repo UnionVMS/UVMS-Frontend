@@ -137,6 +137,28 @@ angular.module('unionvmsWeb').factory('dateTimeService',['$log', 'globalSettings
         format: function(date) {
             return moment(date).format(getFormat());
         },
+        /**
+         * Example on how to send the value so it can be deserialized by Java's Duration class
+         * 
+         *    "PT20.345S" -- parses as "20.345 seconds"
+         *    "PT15M"     -- parses as "15 minutes" (where a minute is 60 seconds)
+         *    "PT10H"     -- parses as "10 hours" (where an hour is 3600 seconds)
+         *    "P2D"       -- parses as "2 days" (where a day is 24 hours or 86400 seconds)
+         *    "P2DT3H4M"  -- parses as "2 days, 3 hours and 4 minutes"
+         *    "P-6H3M"    -- parses as "-6 hours and +3 minutes"
+         *    "-P6H3M"    -- parses as "-6 hours and -3 minutes"
+         *    "-P-6H+3M"  -- parses as "+6 hours and -3 minutes"
+         * @param {*} value The value as an integer
+         */
+        formatHoursAsDuration : function(value) {            
+            return 'PT' + value + 'H';
+        },
+        formatMinutesAsDuration : function(value) {            
+            return 'PT' + value + 'M';
+        },        
+        formatSecondsAsDuration : function(value) {            
+            return 'PT' + value + 'S';
+        },
         getTimezoneString: getTimezoneString
     };
 

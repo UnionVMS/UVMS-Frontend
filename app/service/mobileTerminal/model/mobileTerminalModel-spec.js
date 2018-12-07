@@ -219,9 +219,9 @@ describe('MobileTerminalModel', function() {
 
     it('setSystemTypeToInmarsatC should set systemType to correct value', inject(function(MobileTerminal) {
         var mobileTerminal = new MobileTerminal();
-        expect(mobileTerminal.type).toBeUndefined();
+        expect(mobileTerminal.mobileTerminalType).toBeUndefined();
         mobileTerminal.setSystemTypeToInmarsatC();
-        expect(mobileTerminal.type).toEqual("INMARSAT_C");
+        expect(mobileTerminal.mobileTerminalType).toEqual("INMARSAT_C");
     }));
 
     it('addNewChannel should add a new channel to the end of the list of channels and return the new channel', inject(function(MobileTerminal) {

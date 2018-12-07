@@ -12,20 +12,25 @@ copy of the GNU General Public License along with the IFDM Suite. If not, see <h
 angular.module('unionvmsWeb').factory('MobileTerminal', function(CommunicationChannel) {
 
         function MobileTerminal(){
-            this.attributes = {};
-
+            this.serialNo = undefined;
+            this.satelliteNumber = undefined;
+            this.antenna = undefined;
+            this.transceiverType = undefined;
+            this.softwareVersion = undefined;
             //Add an initial channel
             this.channels = [createDefaultChannel()];
             this.active = false;
             this.connectId = undefined;
             this.associatedVessel = undefined;
-            this.guid = undefined;
-            this.type = undefined;
+            this.mobileTerminalType = undefined;
             this.archived = undefined;
+            this.inactivated = undefined;
+
+            this.source = 1; // (Internal: 1, National: 2)
             this.plugin = {
-                labelName : undefined,
-                serviceName : undefined,
-                inactive : false,
+                name : undefined,
+                pluginServiceName : undefined,
+                pluginInactive : false,
             };
         }
 
@@ -36,6 +41,7 @@ angular.module('unionvmsWeb').factory('MobileTerminal', function(CommunicationCh
                 "DEFAULT_REPORTING": true,
                 "POLLABLE": true
             };
+            
             return defaultChannel;
         }
 
@@ -43,42 +49,23 @@ angular.module('unionvmsWeb').factory('MobileTerminal', function(CommunicationCh
             var mobileTerminal = new MobileTerminal();
 
             mobileTerminal.active = !data.inactive;
-            mobileTerminal.guid = data.mobileTerminalId.guid;
+            mobileTerminal.id = data.id
             mobileTerminal.source = data.source;
-            mobileTerminal.type = data.type;
+            mobileTerminal.mobileTerminalType = data.mobileTerminalType;
             mobileTerminal.connectId = data.connectId;
             mobileTerminal.archived = data.archived;
-
+            mobileTerminal.serialNo = data.serialNo;
+            mobileTerminal.satelliteNumber = data.satelliteNumber;
+            mobileTerminal.antenna = data.antenna;
+            mobileTerminal.transceiverType = data.transceiverType;
+            mobileTerminal.softwareVersion = data.softwareVersion;
+            mobileTerminal.source = data.source;
             if(angular.isDefined(data.plugin)){
                 mobileTerminal.plugin = {
-                    labelName : data.plugin.labelName,
-                    serviceName : data.plugin.serviceName,
-                    inactive : data.plugin.inactive
+                    name : data.plugin.name,
+                    pluginServiceName : data.plugin.pluginServiceName,
+                    pluginInactive : data.plugin.pluginInactive
                 };
-            }
-
-            //Attributes
-            if (data.attributes !== null) {
-                mobileTerminal.attributes = {};
-                for (var i = 0; i < data.attributes.length; i++) {
-                    var value = data.attributes[i].value;
-                    if (angular.isDefined(value) && String(value).trim().length > 0){
-                        var key = data.attributes[i].type.toUpperCase();
-                        //If MULTIPLE_OCEAN the attribute should be a list
-                        if(key === "MULTIPLE_OCEAN"){
-                            if(angular.isDefined(mobileTerminal.attributes[key])){
-                                mobileTerminal.attributes[key].push(value);
-                            }else{
-                                mobileTerminal.attributes[key] = [value];
-                            }
-                        }
-                        else if (key === "FREQUENCY_EXPECTED" || key === "FREQUENCY_GRACE_PERIOD" || key === "FREQUENCY_IN_PORT") {
-                            mobileTerminal.attributes[key] = Number(value);
-                        } else {
-                            mobileTerminal.attributes[key] = value;
-                        }
-                    }
-                }
             }
 
             //Channels
@@ -97,22 +84,6 @@ angular.module('unionvmsWeb').factory('MobileTerminal', function(CommunicationCh
         };
 
         MobileTerminal.prototype.dataTransferObject = function() {
-            //Create array of attributes
-            var attributesObjects = [];
-            $.each(this.attributes, function(key, value){
-                if(angular.isDefined(value) && String(key).trim().length > 0 && String(value).trim().length > 0){
-                    //Value is an array of values?
-                    if(_.isArray(value)){
-                        $.each(value, function(i, listItem){
-                            attributesObjects.push({"type": key, "value": listItem});
-                        });
-                    }
-                    //Single value
-                    else{
-                        attributesObjects.push({"type": key, "value": value});
-                    }
-                }
-            });
 
             //Create array of Channels in json format
             var jsonChannels = [];
@@ -122,14 +93,19 @@ angular.module('unionvmsWeb').factory('MobileTerminal', function(CommunicationCh
             });
 
             return {
-                attributes : attributesObjects,
+                serialNo: this.serialNo,
+                satelliteNumber: this.satelliteNumber,
+                antenna : this.antenna,
+                transceiverType : this.transceiverType,
+                softwareVersion : this.softwareVersion,
                 channels : jsonChannels,
                 // should fix the logic in the backend so we aren't forced to send this as a null value if it is a new mobile terminal: https://jira.havochvatten.se/jira/browse/UV-340
                 // JSON.stringify ignores objects with undefined values hence setting it to null here
-                mobileTerminalId : this.guid !== undefined ? { guid: this.guid } : null,
-                type : this.type,
+                id : this.guid !== undefined ? { guid: this.guid } : null,
+                mobileTerminalType : this.mobileTerminalType,
                 plugin : this.plugin,
-                inactive : !this.active
+                inactivated : !this.active,
+                source : this.source
             };
         };
 
@@ -139,20 +115,20 @@ angular.module('unionvmsWeb').factory('MobileTerminal', function(CommunicationCh
 
         MobileTerminal.prototype.copy = function() {
             var copy = new MobileTerminal();
+            copy.serialNo = this.serialNo;
+            copy.satelliteNumber = this.satelliteNumber;
+            copy.antenna = this.antenna;
+            copy.transceiverType = this.transceiverType;
+            copy.softwareVersion = this.softwareVersion;
             copy.active = this.active;
             copy.associatedVessel = this.associatedVessel;
             copy.source = this.source;
-            for (var key in this.attributes) {
-                if (this.attributes.hasOwnProperty(key)) {
-                    copy.attributes[key] = this.attributes[key];
-                }
-            }
-
-            copy.type = this.type;
+            copy.mobileTerminalType = this.mobileTerminalType;
             copy.plugin = this.plugin;
-            copy.guid = this.guid;
+            copy.id = this.id;
             copy.connectId = this.connectId;
             copy.archived = this.archived;
+            copy.source = this.source;
             copy.channels = this.channels.map(function(ch) {
                 return ch.copy();
             });
@@ -168,7 +144,7 @@ angular.module('unionvmsWeb').factory('MobileTerminal', function(CommunicationCh
 
         MobileTerminal.prototype.getCarrierAssingmentDto = function(connectId) {
             return {
-                mobileTerminalId: { guid: this.guid },
+                id: { guid: this.guid },
                 connectId: connectId
             };
         };
@@ -182,7 +158,7 @@ angular.module('unionvmsWeb').factory('MobileTerminal', function(CommunicationCh
         };
 
         MobileTerminal.prototype.setSystemTypeToInmarsatC = function(){
-            this.type = 'INMARSAT_C';
+            this.mobileTerminalType = 'INMARSAT_C';
         };
 
         //Add a new channel to the end of the list
@@ -226,11 +202,6 @@ angular.module('unionvmsWeb').factory('MobileTerminal', function(CommunicationCh
             this.connectId = connectId;
         };
 
-        //Set the attributes
-        MobileTerminal.prototype.setAttributes = function(attributes){
-            this.attributes = attributes;
-        };
-
         //Set the channels
         MobileTerminal.prototype.setChannels = function(channels){
             this.channels = channels;
@@ -247,15 +218,15 @@ angular.module('unionvmsWeb').factory('MobileTerminal', function(CommunicationCh
         };
 
         MobileTerminal.prototype.getSerialNumber = function() {
-            return this.attributes["SERIAL_NUMBER"];
+            return this.serialNo;
         };
 
         MobileTerminal.prototype.getSystemType = function() {
-            return this.type;
+            return this.mobileTerminalType;
         };
 
         MobileTerminal.prototype.pluginIsInactive = function() {
-            return angular.isDefined(this.plugin) && this.plugin.inactive;
+            return angular.isDefined(this.plugin) && this.plugin.pluginInactive;
         };
 
         MobileTerminal.prototype.isEqualTerminal = function(item) {
@@ -268,13 +239,8 @@ angular.module('unionvmsWeb').factory('MobileTerminal', function(CommunicationCh
 
 
         //Check if the list of attributes and channels are equal for this and another mobile terminal
-        MobileTerminal.prototype.isEqualAttributesAndChannels = function(other) {
+        MobileTerminal.prototype.isEqualChannels = function(other) {
             if (!other) {
-                return false;
-            }
-
-            //Compare attributes
-            if(!angular.equals(this.attributes, other.attributes)){
                 return false;
             }
 
