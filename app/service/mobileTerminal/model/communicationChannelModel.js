@@ -12,12 +12,9 @@ copy of the GNU General Public License along with the IFDM Suite. If not, see <h
 angular.module('unionvmsWeb').factory('CommunicationChannel', function(dateTimeService) {
 
         //Create a new channel with the default type "VMS"
-        function CommunicationChannel(){
-            this.capabilities = {};
-            this.defaultReporting = undefined;
-            this.ids = {};
+        function CommunicationChannel(){            
             this.name = "VMS"; // Default name
-            this.guid = undefined;
+            this.id = undefined;
             this.DNID = undefined;
             
             // ids
@@ -38,55 +35,27 @@ angular.module('unionvmsWeb').factory('CommunicationChannel', function(dateTimeS
             this.pollChannel = true;
         }
 
-        function objectToTypeValueList(obj) {
-            var list = [];
-            $.each(obj, function(key, value) {
-                if(angular.isDefined(value)){
-                    list.push({"type": key, "value": value});
-                }
-            });
-
-            return list;
-        }
-
         CommunicationChannel.fromJson = function(data){
             var channel = new CommunicationChannel();
-            channel.defaultReporting = data.defaultReporting;
             channel.name = data.name;
-			channel.guid = data.guid;
+			channel.id = data.id;
             channel.DNID = data.DNID;
-             // ids
-             channel.frequencyGracePeriod = data.frequencyGracePeriod;
-             channel.expectedFrequencyInPort = data.expectedFrequencyInPort;
-             channel.expectedFrequency = data.expectedFrequency;
-             channel.lesDescription = data.lesDescription;
-             channel.memberNumber = data.memberNumber;
-             channel.installedBy = data.installedBy;
-             channel.installDate = data.installDate;
-             channel.uninstallDate = data.uninstallDate;
-             channel.startDate = data.startDate;
-             channel.endDate = data.endDate;
- 
-             // channel types
-             channel.defaultChannel = data.defaultChannel;
-             channel.configChannel = data.configChannel;
-             channel.pollChannel = data.pollChannel;
+            // ids
+            channel.frequencyGracePeriod = data.frequencyGracePeriod;
+            channel.expectedFrequencyInPort = data.expectedFrequencyInPort;
+            channel.expectedFrequency = data.expectedFrequency;
+            channel.lesDescription = data.lesDescription;
+            channel.memberNumber = data.memberNumber;
+            channel.installedBy = data.installedBy;
+            channel.installDate = data.installDate;
+            channel.uninstallDate = data.uninstallDate;
+            channel.startDate = data.startDate;
+            channel.endDate = data.endDate;
 
-            //IdList
-            if (angular.isArray(data.attributes)) {
-                for (var i = 0; i < data.attributes.length; i++) {
-                    var idType = data.attributes[i].type,
-                        idValue = data.attributes[i].value;
-                    channel.ids[idType] = idValue;
-                }
-            }
-
-            if (angular.isArray(data.capabilities)) {
-                for (var j = 0; j < data.capabilities.length; j++) {
-                    var capability = data.capabilities[j];
-                    channel.capabilities[capability.type] = capability.value;
-                }
-            }
+            // channel types
+            channel.defaultChannel = data.defaultChannel;
+            channel.configChannel = data.configChannel;
+            channel.pollChannel = data.pollChannel;
 
             return channel;
         };
@@ -97,11 +66,8 @@ angular.module('unionvmsWeb').factory('CommunicationChannel', function(dateTimeS
 
         CommunicationChannel.prototype.dataTransferObject = function() {
             return {
-                attributes: objectToTypeValueList(this.ids),
-                capabilities: objectToTypeValueList(this.capabilities),
-                defaultReporting: this.defaultReporting,
                 name : angular.isDefined(this.name) ? this.name : '',
-                guid: this.guid,
+                id: this.id,
                 DNID : this.DNID,
                 frequencyGracePeriod : dateTimeService.formatSecondsAsDuration(this.frequencyGracePeriod),
                 expectedFrequencyInPort : dateTimeService.formatSecondsAsDuration(this.expectedFrequencyInPort),
@@ -109,10 +75,10 @@ angular.module('unionvmsWeb').factory('CommunicationChannel', function(dateTimeS
                 lesDescription : this.lesDescription,
                 memberNumber : this.memberNumber,
                 installedBy : this.installedBy,
-                installDate : this.installDate,
-                uninstallDate : this.uninstallDate,
-                startDate : this.startDate,
-                endDate : this.endDate,
+                installDate : dateTimeService.formatISO8601(this.installDate),
+                uninstallDate : dateTimeService.formatISO8601(this.uninstallDate),
+                startDate : dateTimeService.formatISO8601(this.startDate),
+                endDate : dateTimeService.formatISO8601(this.endDate),
                 defaultChannel : this.defaultChannel,
                 configChannel : this.configChannel,
                 pollChannel : this.pollChannel
@@ -122,8 +88,7 @@ angular.module('unionvmsWeb').factory('CommunicationChannel', function(dateTimeS
         CommunicationChannel.prototype.copy = function() {
             var copy = new CommunicationChannel();
             copy.name = this.name;
-            copy.defaultReporting = this.defaultReporting;
-            copy.guid = this.guid;
+            copy.id = this.id;
                         
             // ids
             copy.frequencyGracePeriod = this.frequencyGracePeriod;
@@ -141,18 +106,6 @@ angular.module('unionvmsWeb').factory('CommunicationChannel', function(dateTimeS
             copy.defaultChannel = this.defaultChannel;
             copy.configChannel = this.configChannel;
             copy.pollChannel = this.pollChannel;
-
-            for (var key in this.ids) {
-                if (this.ids.hasOwnProperty(key)) {
-                    copy.ids[key] = this.ids[key];
-                }   
-            }
-
-            for (var k in this.capabilities) {
-                if (this.capabilities.hasOwnProperty(k)) {
-                    copy.capabilities[k] = this.capabilities[k];
-                }
-            }
 
             return copy;
         };

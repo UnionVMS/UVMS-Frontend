@@ -420,7 +420,7 @@ angular.module('unionvmsWeb')
         $scope.disableChannels = {
             pollable: function(communicationChannel) {
                 for (var i = 0; i < $scope.mobileTerminal.channels.length; i++) {
-                    if ($scope.mobileTerminal.channels[i].capabilities.POLLABLE === true) {
+                    if ($scope.mobileTerminal.channels[i].pollChannel === true) {
                         if ($scope.mobileTerminal.channels[i] === communicationChannel) {
                             return false;
                         }
@@ -430,7 +430,7 @@ angular.module('unionvmsWeb')
             },
             configurable: function(communicationChannel) {
                 for (var i = 0; i < $scope.mobileTerminal.channels.length; i++) {
-                    if ($scope.mobileTerminal.channels[i].capabilities.CONFIGURABLE === true) {
+                    if ($scope.mobileTerminal.channels[i].configChannel === true) {
                         if ($scope.mobileTerminal.channels[i] === communicationChannel) {
                             return false;
                         }
@@ -440,11 +440,9 @@ angular.module('unionvmsWeb')
             },
             defaultReporting: function(communicationChannel) {
                 for (var i = 0; i < $scope.mobileTerminal.channels.length; i++) {
-                    if ($scope.mobileTerminal.channels[i].capabilities.DEFAULT_REPORTING === true) {
+                    if ($scope.mobileTerminal.channels[i].defaultChannel === true) {
                         if ($scope.mobileTerminal.channels[i] === communicationChannel) {
                             return false;
-                        } else {
-                            return true;
                         }
                         return true;
                     }

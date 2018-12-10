@@ -344,8 +344,8 @@ angular.module('unionvmsWeb').controller('MobileTerminalCtrl',function($scope, $
                     var csvRow = [
                         item.associatedVessel? item.associatedVessel.name : locale.getString('mobileTerminal.table_vessel_name_not_assigned'),
                         item.serialNo,
-                        item.channels[0].ids.MEMBER_NUMBER,
-                        item.channels[0].ids.DNID,
+                        item.channels[0].memberNumber,
+                        item.channels[0].DNID,
                         $filter('transponderName')(item.type),
                         item.satelliteNumber,
                         item.associatedVessel? item.associatedVessel.mmsi : '',

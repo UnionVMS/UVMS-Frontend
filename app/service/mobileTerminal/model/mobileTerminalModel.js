@@ -19,6 +19,7 @@ angular.module('unionvmsWeb').factory('MobileTerminal', function(CommunicationCh
             this.softwareVersion = undefined;
             //Add an initial channel
             this.channels = [createDefaultChannel()];
+            // todo add channels
             this.active = false;
             this.connectId = undefined;
             this.associatedVessel = undefined;
@@ -48,8 +49,8 @@ angular.module('unionvmsWeb').factory('MobileTerminal', function(CommunicationCh
         MobileTerminal.fromJson = function(data){
             var mobileTerminal = new MobileTerminal();
 
-            mobileTerminal.active = !data.inactive;
-            mobileTerminal.id = data.id
+            mobileTerminal.active = !data.inactivated;
+            mobileTerminal.id = data.id;
             mobileTerminal.source = data.source;
             mobileTerminal.mobileTerminalType = data.mobileTerminalType;
             mobileTerminal.connectId = data.connectId;
@@ -101,7 +102,7 @@ angular.module('unionvmsWeb').factory('MobileTerminal', function(CommunicationCh
                 channels : jsonChannels,
                 // should fix the logic in the backend so we aren't forced to send this as a null value if it is a new mobile terminal: https://jira.havochvatten.se/jira/browse/UV-340
                 // JSON.stringify ignores objects with undefined values hence setting it to null here
-                id : this.guid !== undefined ? { guid: this.guid } : null,
+                id : this.id !== undefined ? { id: this.id } : null,
                 mobileTerminalType : this.mobileTerminalType,
                 plugin : this.plugin,
                 inactivated : !this.active,
