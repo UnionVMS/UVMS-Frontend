@@ -131,7 +131,7 @@ angular.module('unionvmsWeb')
 
         //Set status - Create New
         $scope.isCreateNewMode = function(){
-            if($scope.mobileTerminal.guid) {
+            if($scope.mobileTerminal.id) {
                 return false;
             }
             return true;

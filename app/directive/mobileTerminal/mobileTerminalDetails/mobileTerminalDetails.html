@@ -61,11 +61,11 @@
                             </div>
                             <div class="form-group medium-field" ng-show="getTerminalConfig().terminalFields.SATELLITE_NUMBER">
                                 <label>{{'mobileTerminal.form_inmarsatc_satellite_number_label' | i18n}}</label>
-                                <input type="text" name="satelliteNumber" id="mt-{{listIndex}}-satelliteNumber" class="form-control" ng-model="mobileTerminal.satellite"/>
+                                <input type="text" name="satelliteNumber" id="mt-{{listIndex}}-satelliteNumber" class="form-control" ng-model="mobileTerminal.satelliteNumber"/>
                             </div>
                             <div class="form-group long-field" ng-show="getTerminalConfig().terminalFields.ANSWER_BACK">
                                 <label>{{'mobileTerminal.form_inmarsatc_answer_back_label' | i18n}}</label>
-                                <input type="text" name="answerBack" id="mt-{{listIndex}}-answerBack" class="form-control" ng-model="mobileTerminal.attributes.ANSWER_BACK">
+                                <input type="text" name="answerBack" id="mt-{{listIndex}}-answerBack" class="form-control" ng-model="mobileTerminal.answerBack">
                             </div>
                         </div>
                         <div class="currentMobileTerminalTypes" ng-show="typeAndPlugin">
@@ -142,20 +142,20 @@
                                             <label>{{'mobileTerminal.form_inmarsatc_uninstalled_on_label' | i18n}}</label>
                                             <datepicker-input name="uninstalled" input-field-id="mt-{{listIndex}}-channel-{{$index}}-uninstalled" model="communicationChannel.uninstallDate" time="true" min-date="communicationChannel.installDate"></datepicker-input>
                                         </div>
-                                        <div class="form-group" ng-show="getTerminalConfig().channelFields.FREQUENCY_EXPECTED" ng-class="{'has-error': mobileTerminalForm.frequency_expected.$invalid && (submitAttempted || mobileTerminalForm.frequency_expected.$dirty)}">
+                                        <div class="form-group" ng-show="getTerminalConfig().channelFields.FREQUENCY_EXPECTED" ng-class="{'has-error': mobileTerminalForm.frequencyExpected.$invalid && (submitAttempted || mobileTerminalForm.frequencyExpected.$dirty)}">
                                             <label>{{'mobileTerminal.form_inmarsatc_expected_freq_label' | i18n}}</label>
                                             <period-input name="frequencyExpected" input-field-id="mt-{{listIndex}}-channel-{{$index}}-frequencyExpected" model="communicationChannel.expectedFrequency" no-minutes="true"></period-input>
-                                            <input-validation-message types="number" input="mobileTerminalForm.frequency_expected"></input-validation-message>
+                                            <input-validation-message types="number" input="mobileTerminalForm.frequencyExpected"></input-validation-message>
                                         </div>
-                                        <div class="form-group" ng-show="getTerminalConfig().channelFields.FREQUENCY_GRACE_PERIOD" ng-class="{'has-error': mobileTerminalForm.frequency_grace.$invalid && (submitAttempted || mobileTerminalForm.frequency_grace.$dirty)}">
+                                        <div class="form-group" ng-show="getTerminalConfig().channelFields.FREQUENCY_GRACE_PERIOD" ng-class="{'has-error': mobileTerminalForm.frequencyGrace.$invalid && (submitAttempted || mobileTerminalForm.frequencyGrace.$dirty)}">
                                             <label>{{'mobileTerminal.form_inmarsatc_grace_period_label' | i18n}}</label>
                                             <period-input name="frequencyGrace" input-field-id="mt-{{listIndex}}-channel-{{$index}}-frequencyGrace" model="communicationChannel.frequencyGracePeriod" no-minutes="true"></period-input>
-                                            <input-validation-message types="number" input="mobileTerminalForm.frequency_grace"></input-validation-message>
+                                            <input-validation-message types="number" input="mobileTerminalForm.frequencyGrace"></input-validation-message>
                                         </div>
-                                        <div class="form-group" ng-show="getTerminalConfig().channelFields.FREQUENCY_IN_PORT" ng-class="{'has-error': mobileTerminalForm.frequency_port.$invalid && (submitAttempted || mobileTerminalForm.frequency_port.$dirty)}">
+                                        <div class="form-group" ng-show="getTerminalConfig().channelFields.FREQUENCY_IN_PORT" ng-class="{'has-error': mobileTerminalForm.frequencyPort.$invalid && (submitAttempted || mobileTerminalForm.frequencyPort.$dirty)}">
                                             <label>{{'mobileTerminal.form_inmarsatc_in_port_grace_period_label' | i18n}}</label>
                                             <period-input name="frequencyPort" input-field-id="mt-{{listIndex}}-channel-{{$index}}-frequencyPort" model="communicationChannel.expectedFrequencyInPort" no-minutes="true"></period-input>
-                                            <input-validation-message types="number" input="mobileTerminalForm.frequency_port"></input-validation-message>
+                                            <input-validation-message types="number" input="mobileTerminalForm.frequencyPort"></input-validation-message>
                                         </div>
                                     </div>
                                 </div>

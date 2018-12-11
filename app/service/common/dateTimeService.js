@@ -166,6 +166,22 @@ angular.module('unionvmsWeb').factory('dateTimeService',['$log', 'globalSettings
         formatSecondsAsDuration : function(value) {            
             return 'PT' + value + 'S';
         },
+        isDurationType: function(value) {
+            var charsToSearch = ['H', 'M','S'];
+            return value.indexOf('PT') === 0 && charsToSearch.indexOf(value[value.length -1]) !== -1;
+        },
+        getDateFromDuration: function(value) {
+            
+            if (this.isDurationType(value)) {
+                var timeType = value[value.length -1];
+                var timeValue = value.substring(1, value.length -1);
+
+                switch(timeType) {
+
+                }
+                value.substring(1, )
+            }            
+        },
         getTimezoneString: getTimezoneString
     };
 

@@ -18,9 +18,9 @@ angular.module('unionvmsWeb').factory('CommunicationChannel', function(dateTimeS
             this.DNID = undefined;
             
             // ids
-            this.frequencyGracePeriod = undefined;
-            this.expectedFrequencyInPort = undefined;
-            this.expectedFrequency = undefined;
+            this.frequencyGracePeriod = 0;
+            this.expectedFrequencyInPort = 0;
+            this.expectedFrequency = 0;
             this.lesDescription = undefined;
             this.memberNumber = undefined;
             this.installedBy = undefined;
@@ -52,6 +52,8 @@ angular.module('unionvmsWeb').factory('CommunicationChannel', function(dateTimeS
             channel.startDate = data.startDate;
             channel.endDate = data.endDate;
 
+            channel.archived = false;
+
             // channel types
             channel.defaultChannel = data.defaultChannel;
             channel.configChannel = data.configChannel;
@@ -69,9 +71,9 @@ angular.module('unionvmsWeb').factory('CommunicationChannel', function(dateTimeS
                 name : angular.isDefined(this.name) ? this.name : '',
                 id: this.id,
                 DNID : this.DNID,
-                frequencyGracePeriod : dateTimeService.formatSecondsAsDuration(this.frequencyGracePeriod),
-                expectedFrequencyInPort : dateTimeService.formatSecondsAsDuration(this.expectedFrequencyInPort),
-                expectedFrequency : dateTimeService.formatSecondsAsDuration(this.expectedFrequency),
+                frequencyGracePeriod : dateTimeService.formatHoursAsDuration(this.frequencyGracePeriod),
+                expectedFrequencyInPort : dateTimeService.formatHoursAsDuration(this.expectedFrequencyInPort),
+                expectedFrequency : dateTimeService.formatHoursAsDuration(this.expectedFrequency),
                 lesDescription : this.lesDescription,
                 memberNumber : this.memberNumber,
                 installedBy : this.installedBy,

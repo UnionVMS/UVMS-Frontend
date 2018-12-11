@@ -17,9 +17,8 @@ angular.module('unionvmsWeb').factory('MobileTerminal', function(CommunicationCh
             this.antenna = undefined;
             this.transceiverType = undefined;
             this.softwareVersion = undefined;
-            //Add an initial channel
-            this.channels = [createDefaultChannel()];
-            // todo add channels
+            this.answerBack = undefined;            
+            this.channels = [createDefaultChannel()];            
             this.active = false;
             this.connectId = undefined;
             this.associatedVessel = undefined;
@@ -36,13 +35,10 @@ angular.module('unionvmsWeb').factory('MobileTerminal', function(CommunicationCh
         }
 
         function createDefaultChannel(){
-            var defaultChannel = new CommunicationChannel();
-            defaultChannel.capabilities = {
-                "CONFIGURABLE": true,
-                "DEFAULT_REPORTING": true,
-                "POLLABLE": true
-            };
-            
+            var defaultChannel = new CommunicationChannel();            
+            defaultChannel.defaultChannel = true;
+            defaultChannel.configChannel = true;
+            defaultChannel.pollChannel = true;            
             return defaultChannel;
         }
 
@@ -57,6 +53,7 @@ angular.module('unionvmsWeb').factory('MobileTerminal', function(CommunicationCh
             mobileTerminal.archived = data.archived;
             mobileTerminal.serialNo = data.serialNo;
             mobileTerminal.satelliteNumber = data.satelliteNumber;
+            mobileTerminal.answerBack = data.answerBack;
             mobileTerminal.antenna = data.antenna;
             mobileTerminal.transceiverType = data.transceiverType;
             mobileTerminal.softwareVersion = data.softwareVersion;
@@ -99,6 +96,7 @@ angular.module('unionvmsWeb').factory('MobileTerminal', function(CommunicationCh
                 antenna : this.antenna,
                 transceiverType : this.transceiverType,
                 softwareVersion : this.softwareVersion,
+                answerBack : this.answerBack,
                 channels : jsonChannels,
                 // should fix the logic in the backend so we aren't forced to send this as a null value if it is a new mobile terminal: https://jira.havochvatten.se/jira/browse/UV-340
                 // JSON.stringify ignores objects with undefined values hence setting it to null here
@@ -121,6 +119,8 @@ angular.module('unionvmsWeb').factory('MobileTerminal', function(CommunicationCh
             copy.antenna = this.antenna;
             copy.transceiverType = this.transceiverType;
             copy.softwareVersion = this.softwareVersion;
+            copy.answerBack = this.answerBack;
+
             copy.active = this.active;
             copy.associatedVessel = this.associatedVessel;
             copy.source = this.source;
