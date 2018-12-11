@@ -81,6 +81,7 @@ angular.module('unionvmsWeb').factory('CommunicationChannel', function(dateTimeS
                 uninstallDate : dateTimeService.formatISO8601(this.uninstallDate),
                 startDate : dateTimeService.formatISO8601(this.startDate),
                 endDate : dateTimeService.formatISO8601(this.endDate),
+                archived : this.archived,
                 defaultChannel : this.defaultChannel,
                 configChannel : this.configChannel,
                 pollChannel : this.pollChannel
