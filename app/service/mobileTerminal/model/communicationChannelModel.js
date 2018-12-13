@@ -24,10 +24,11 @@ angular.module('unionvmsWeb').factory('CommunicationChannel', function(dateTimeS
             this.lesDescription = undefined;
             this.memberNumber = undefined;
             this.installedBy = undefined;
-            this.installDate = undefined;
-            this.uninstallDate = undefined;
-            this.startDate = undefined;
-            this.endDate = undefined;
+            this.installDate = null;
+            this.uninstallDate = null;
+            this.startDate = null;
+            this.endDate = null;
+            this.archived = false;
 
             // channel types
             this.defaultChannel = true;
@@ -47,10 +48,10 @@ angular.module('unionvmsWeb').factory('CommunicationChannel', function(dateTimeS
             channel.lesDescription = data.lesDescription;
             channel.memberNumber = data.memberNumber;
             channel.installedBy = data.installedBy;
-            channel.installDate = data.installDate;
-            channel.uninstallDate = data.uninstallDate;
-            channel.startDate = data.startDate;
-            channel.endDate = data.endDate;
+            channel.installDate = channel.getFormattedDate(data.installDate);
+            channel.uninstallDate = channel.getFormattedDate(data.uninstallDate);
+            channel.startDate = channel.getFormattedDate(data.startDate);
+            channel.endDate = channel.getFormattedDate(data.endDate);
 
             channel.archived = false;
 
@@ -71,9 +72,9 @@ angular.module('unionvmsWeb').factory('CommunicationChannel', function(dateTimeS
                 name : angular.isDefined(this.name) ? this.name : '',
                 id: this.id,
                 DNID : this.DNID,
-                frequencyGracePeriod : dateTimeService.formatHoursAsDuration(this.frequencyGracePeriod),
-                expectedFrequencyInPort : dateTimeService.formatHoursAsDuration(this.expectedFrequencyInPort),
-                expectedFrequency : dateTimeService.formatHoursAsDuration(this.expectedFrequency),
+                frequencyGracePeriod : this.frequencyGracePeriod,
+                expectedFrequencyInPort : this.expectedFrequencyInPort,
+                expectedFrequency : this.expectedFrequency,
                 lesDescription : this.lesDescription,
                 memberNumber : this.memberNumber,
                 installedBy : this.installedBy,
@@ -119,6 +120,14 @@ angular.module('unionvmsWeb').factory('CommunicationChannel', function(dateTimeS
             }else{
                 delete this.lesDescription;
             }
+        };
+
+        CommunicationChannel.prototype.getFormattedDate = function(date) 
+        {
+            if (date === undefined || date === null) {
+                return date;
+            }
+            return moment(date, 'YYYY-MM-DDTHH:mm:ssZ').format("YYYY-MM-DD HH:mm:ss Z");
         };
 
         CommunicationChannel.prototype.getFormattedStartDate = function() {
