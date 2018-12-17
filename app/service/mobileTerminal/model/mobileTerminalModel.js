@@ -93,7 +93,7 @@ angular.module('unionvmsWeb').factory('MobileTerminal', function(CommunicationCh
                 jsonChannels.push(channelObject);
             });
 
-            return {
+            var returnObject = {
                 serialNo: this.serialNo,
                 satelliteNumber: this.satelliteNumber,
                 antenna : this.antenna,
@@ -101,16 +101,22 @@ angular.module('unionvmsWeb').factory('MobileTerminal', function(CommunicationCh
                 softwareVersion : this.softwareVersion,
                 answerBack : this.answerBack,
                 archived : this.archived,
-                channels : jsonChannels,
-                asset : {
-                    id: this.connectId
-                },
+                channels : jsonChannels,                
                 id : this.id !== undefined ? this.id : null,
                 mobileTerminalType : this.mobileTerminalType,
                 plugin : this.plugin,
                 inactivated : !this.active,
                 source : this.source
             };
+            
+            if (this.connectId !== undefined) {
+                returnObject.asset = undefined;
+                returnObject.asset = {
+                    id : this.connectId
+                }
+            }            
+
+            return returnObject;
         };
 
         MobileTerminal.prototype.toJson = function(){

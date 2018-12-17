@@ -30,6 +30,8 @@ angular.module('unionvmsWeb').factory('CommunicationChannel', function(dateTimeS
             this.endDate = undefined;
             this.archived = false;
 
+            this.mobileTerminal = undefined;
+
             // channel types
             this.defaultChannel = true;
             this.configChannel = true;
@@ -59,7 +61,7 @@ angular.module('unionvmsWeb').factory('CommunicationChannel', function(dateTimeS
             channel.defaultChannel = data.defaultChannel;
             channel.configChannel = data.configChannel;
             channel.pollChannel = data.pollChannel;
-
+                        
             return channel;
         };
 
@@ -67,8 +69,8 @@ angular.module('unionvmsWeb').factory('CommunicationChannel', function(dateTimeS
             return JSON.stringify(this.dataTransferObject());
         };
 
-        CommunicationChannel.prototype.dataTransferObject = function() {
-            return {
+        CommunicationChannel.prototype.dataTransferObject = function() {            
+            var dataTransferObject = {
                 name : angular.isDefined(this.name) ? this.name : '',
                 id: this.id,
                 DNID : this.DNID,
@@ -87,6 +89,8 @@ angular.module('unionvmsWeb').factory('CommunicationChannel', function(dateTimeS
                 configChannel : this.configChannel,
                 pollChannel : this.pollChannel
             };
+            
+            return dataTransferObject;
         };
 
         CommunicationChannel.prototype.copy = function() {
@@ -105,7 +109,7 @@ angular.module('unionvmsWeb').factory('CommunicationChannel', function(dateTimeS
             copy.uninstallDate = this.uninstallDate;
             copy.startDate = this.startDate;
             copy.endDate = this.endDate;
-
+            
             // channel types
             copy.defaultChannel = this.defaultChannel;
             copy.configChannel = this.configChannel;
