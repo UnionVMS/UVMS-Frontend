@@ -139,49 +139,12 @@ angular.module('unionvmsWeb').factory('dateTimeService',['$log', 'globalSettings
         },
         // Formats the date string as 2007-12-03T10:15:30+01:0
         formatISO8601: function(date) {            
-            if(angular.isDefined(date)){
+            if(angular.isDefined(date) && date !== null){
                 var d = moment(date).format("YYYY-MM-DDTHH:mm:ss+00:00");
                 return d;
             }                        
-        },
-        /**
-         * Example on how to send the value so it can be deserialized by Java's Duration class
-         * 
-         *    "PT20.345S" -- parses as "20.345 seconds"
-         *    "PT15M"     -- parses as "15 minutes" (where a minute is 60 seconds)
-         *    "PT10H"     -- parses as "10 hours" (where an hour is 3600 seconds)
-         *    "P2D"       -- parses as "2 days" (where a day is 24 hours or 86400 seconds)
-         *    "P2DT3H4M"  -- parses as "2 days, 3 hours and 4 minutes"
-         *    "P-6H3M"    -- parses as "-6 hours and +3 minutes"
-         *    "-P6H3M"    -- parses as "-6 hours and -3 minutes"
-         *    "-P-6H+3M"  -- parses as "+6 hours and -3 minutes"
-         * @param {*} value The value as an integer
-         */
-        formatHoursAsDuration : function(value) {            
-            return 'PT' + value + 'H';
-        },
-        formatMinutesAsDuration : function(value) {            
-            return 'PT' + value + 'M';
+            return date;
         },        
-        formatSecondsAsDuration : function(value) {            
-            return 'PT' + value + 'S';
-        },
-        isDurationType: function(value) {
-            var charsToSearch = ['H', 'M','S'];
-            return value.indexOf('PT') === 0 && charsToSearch.indexOf(value[value.length -1]) !== -1;
-        },
-        getDateFromDuration: function(value) {
-            
-            if (this.isDurationType(value)) {
-                var timeType = value[value.length -1];
-                var timeValue = value.substring(1, value.length -1);
-
-                switch(timeType) {
-
-                }
-                value.substring(1, )
-            }            
-        },
         getTimezoneString: getTimezoneString
     };
 

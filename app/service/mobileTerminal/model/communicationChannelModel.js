@@ -24,10 +24,10 @@ angular.module('unionvmsWeb').factory('CommunicationChannel', function(dateTimeS
             this.lesDescription = undefined;
             this.memberNumber = undefined;
             this.installedBy = undefined;
-            this.installDate = null;
-            this.uninstallDate = null;
-            this.startDate = null;
-            this.endDate = null;
+            this.installDate = undefined;
+            this.uninstallDate = undefined;
+            this.startDate = undefined;
+            this.endDate = undefined;
             this.archived = false;
 
             // channel types

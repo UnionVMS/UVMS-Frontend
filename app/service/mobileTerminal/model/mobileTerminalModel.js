@@ -19,7 +19,7 @@ angular.module('unionvmsWeb').factory('MobileTerminal', function(CommunicationCh
             this.softwareVersion = undefined;
             this.answerBack = undefined;            
             this.channels = [createDefaultChannel()];            
-            this.active = false;
+            this.active = false;            
             this.connectId = undefined;
             this.associatedVessel = undefined;
             this.mobileTerminalType = undefined;
@@ -49,7 +49,10 @@ angular.module('unionvmsWeb').factory('MobileTerminal', function(CommunicationCh
             mobileTerminal.id = data.id;
             mobileTerminal.source = data.source;
             mobileTerminal.mobileTerminalType = data.mobileTerminalType;
-            mobileTerminal.connectId = data.connectId;
+            if (data.asset !== undefined && data.asset !== null) {
+                mobileTerminal.connectId = data.asset.id;
+            }
+            
             mobileTerminal.archived = data.archived;
             mobileTerminal.serialNo = data.serialNo;
             mobileTerminal.satelliteNumber = data.satelliteNumber;
@@ -140,21 +143,6 @@ angular.module('unionvmsWeb').factory('MobileTerminal', function(CommunicationCh
         //Used when activating, inactivating and removing
         MobileTerminal.prototype.toSetStatusJson = function() {
             return JSON.stringify({ guid: this.guid });
-        };
-
-        MobileTerminal.prototype.getCarrierAssingmentDto = function(connectId) {
-            return {
-                id: { guid: this.guid },
-                connectId: connectId
-            };
-        };
-
-        MobileTerminal.prototype.toAssignJson = function(connectId){
-            return JSON.stringify(this.getCarrierAssingmentDto(connectId));
-        };
-
-        MobileTerminal.prototype.toUnassignJson = function() {
-            return JSON.stringify(this.getCarrierAssingmentDto(this.connectId));
         };
 
         MobileTerminal.prototype.setSystemTypeToInmarsatC = function(){
