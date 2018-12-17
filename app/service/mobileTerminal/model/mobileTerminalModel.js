@@ -102,6 +102,9 @@ angular.module('unionvmsWeb').factory('MobileTerminal', function(CommunicationCh
                 answerBack : this.answerBack,
                 archived : this.archived,
                 channels : jsonChannels,
+                asset : {
+                    id: this.connectId
+                },
                 id : this.id !== undefined ? this.id : null,
                 mobileTerminalType : this.mobileTerminalType,
                 plugin : this.plugin,

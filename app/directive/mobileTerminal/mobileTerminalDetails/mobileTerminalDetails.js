@@ -79,7 +79,7 @@ angular.module('unionvmsWeb')
         //Check if parent form is submitted and update or create mobile terminal
         $scope.$watch('submitAttemptedWatcher', function(newValue, oldValue) {
             if (angular.isDefined($scope.submitAttemptedWatcher) && newValue && $scope.isFormDirty) {
-                if (angular.isDefined($scope.mobileTerminal.guid)) {
+                if (angular.isDefined($scope.mobileTerminal.id)) {
                     $scope.updateMobileTerminalWithComment('updated from Asset page');
                 } else {
                     $scope.createNewMobileTerminal();
