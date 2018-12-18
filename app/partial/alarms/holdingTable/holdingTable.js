@@ -258,7 +258,7 @@ angular.module('unionvmsWeb').controller('HoldingtableCtrl',function($scope, $ro
             else if(selectedItem.code === 'REPROCESS_REPORTS'){
                 var processItems = function(items) {
                     var alarmGuids = items.reduce(function(guids, alarm){
-                        guids.push(alarm.guid);
+                        guids.push(alarm.id);
                         return guids;
                     }, []);
                     if(alarmGuids.length > 0){
