@@ -1,5 +1,5 @@
-<!--
-﻿Developed with the contribution of the European Commission - Directorate General for Maritime Affairs and Fisheries
+﻿<!--
+Developed with the contribution of the European Commission - Directorate General for Maritime Affairs and Fisheries
 © European Union, 2015-2016.
 
 This file is part of the Integrated Fisheries Data Management (IFDM) Suite. The IFDM Suite is free software: you can
@@ -43,29 +43,25 @@ copy of the GNU General Public License along with the IFDM Suite. If not, see <h
         <div class="row">
             <div alarm-report-field="'movement.manual_position_field_label_flag_state'"
                  field-value="alarm.placeholderVessel.flagStateCode"
-                 field-value-2="alarm.movement.flagState"
-                 field-value-3="alarm.asset.ids.FLAG_STATE"
+                 field-value-2="alarm.incomingMovement.flagState"
                  missing-text="true"
                  class="col-md-3">
             </div>
             <div alarm-report-field="'movement.manual_position_field_label_ircs'"
                  field-value="alarm.placeholderVessel.ircs"
-                 field-value-2="alarm.vessel.ircs"
-                 field-value-3="alarm.asset.ids.IRCS"
+                 field-value-2="alarm.incomingMovement.assetIRCS"
                  missing-text="true"
                  class="col-md-3">
             </div>
             <div alarm-report-field="'movement.manual_position_field_label_cfr'"
                  field-value="alarm.placeholderVessel.cfr"
-                 field-value-2="alarm.vessel.cfr"
-                 field-value-3="alarm.asset.ids.CFR"
+                 field-value-2="alarm.incomingMovement.assetCFR"
                  missing-text="true"
                  class="col-md-3">
             </div>
             <div alarm-report-field="'movement.manual_position_field_label_external_marking'"
                  field-value="alarm.placeholderVessel.externalMarking"
-                 field-value-2="alarm.movement.externalMarking"
-                 field-value-3="alarm.asset.ids.EXTERNAL_MARKING"
+                 field-value-2="alarm.incomingMovement.externalMarking"
                  missing-text="true"
                  class="col-md-3">
             </div>
@@ -74,8 +70,7 @@ copy of the GNU General Public License along with the IFDM Suite. If not, see <h
         <div class="row">
             <div alarm-report-field="'movement.manual_position_field_label_name'"
                  field-value="alarm.placeholderVessel.name"
-                 field-value-2="alarm.movement.assetName"
-                 field-value-3="alarm.asset.ids.NAME"
+                 field-value-2="alarm.incomingMovement.assetName"
                  missing-text="true"
                  class="col-md-3">
             </div>
@@ -179,29 +174,29 @@ copy of the GNU General Public License along with the IFDM Suite. If not, see <h
         <div ng-hide="loadingMovement || loadingMovementError">
             <div class="row">
                 <div alarm-report-field="'movement.manual_position_field_label_status'"
-                     field-value="alarm.movement.movement.status"
+                     field-value="alarm.incomingMovement.status"
                      class="col-md-3">
                 </div>
                 <div alarm-report-field="'movement.manual_position_field_label_date_time'"
-                     field-value="alarm.movement.time | confDateFormat"
+                     field-value="alarm.incomingMovement.positionTime | confDateFormat"
                      class="col-md-3">
                 </div>
             </div>
             <div class="row">
                 <div alarm-report-field="'movement.manual_position_field_label_latitude'"
-                     field-value="alarm.movement.movement.latitude | confCoordinateFormat"
+                     field-value="alarm.incomingMovement.latitude | confCoordinateFormat"
                      class="col-md-3">
                 </div>
                 <div alarm-report-field="'movement.manual_position_field_label_longitude'"
-                     field-value="alarm.movement.movement.longitude | confCoordinateFormat"
+                     field-value="alarm.incomingMovement.longitude | confCoordinateFormat"
                      class="col-md-3">
                 </div>
                 <div alarm-report-field="'movement.manual_position_field_label_measured_speed'"
-                     field-value="toSpeedString(alarm.movement.movement.reportedSpeed)"
+                     field-value="toSpeedString(alarm.incomingMovement.reportedSpeed)"
                      class="col-md-3">
                 </div>
                 <div alarm-report-field="'movement.manual_position_field_label_course'"
-                     field-value="toCourseString(alarm.movement.movement.reportedCourse)"
+                     field-value="toCourseString(alarm.incomingMovement.reportedCourse)"
                      class="col-md-3">
                 </div>
             </div>

@@ -223,9 +223,6 @@ angular.module('unionvmsWeb')
             $scope.movementSourceTypes = configurationService.setTextAndCodeForDropDown(configurationService.getConfig('MOVEMENT_SOURCE_TYPES'),'MOVEMENT_SOURCE_TYPES','MOVEMENT');
             $scope.advancedSearchObject.TIME_SPAN = $scope.DATE_TODAY;
 
-            var areas = configurationService.getConfig('MOVEMENT_AREAS');
-            $scope.mapArea = getAreaDropdownItems(areas);
-
             $scope.resetSearch();
         };
 

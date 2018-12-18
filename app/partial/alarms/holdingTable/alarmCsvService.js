@@ -63,15 +63,15 @@ angular.module('unionvmsWeb').factory('alarmCsvService', function(csvService, $f
     }
 
     function getVesselName(alarm) {
-        if (alarm.vessel === undefined) {
+        if (alarm.incomingMovemenet === undefined || alarm.incomingMovemenet.assetName === undefined) {
             return locale.getString('alarms.alarms_affected_object_unknown');
         }
 
-        return alarm.vessel.name;
+        return alarm.incomingMovemenet.assetName;
     }
 
     function getRuleNames(alarm) {
-        return alarm.alarmItems.map(function(alarmItem) {
+        return alarm.alarmItemList.map(function(alarmItem) {
             return alarmItem.ruleName;
         }).join(' & ');
     }
@@ -98,10 +98,8 @@ angular.module('unionvmsWeb').factory('alarmCsvService', function(csvService, $f
             flagState: function(alarm) {
                 if (angular.isDefined(alarm.placeholderVessel)) {
                     return alarm.placeholderVessel.flagStateCode; 
-                } else if (angular.isDefined(alarm.movement.flagState)) {
-                    return alarm.movement.flagState; 
-                } else if (angular.isDefined(alarm.asset.ids.FLAG_STATE)) {
-                    return alarm.asset.ids.FLAG_STATE; 
+                } else if (angular.isDefined(alarm.incomingMovement) && angular.isDefined(alarm.incomingMovement.flagState)) {
+                    return alarm.incomingMovement.flagState; 
                 } else {
                     return missingValueText;
                 }
@@ -109,10 +107,8 @@ angular.module('unionvmsWeb').factory('alarmCsvService', function(csvService, $f
             ircs: function(alarm) {
                 if (angular.isDefined(alarm.placeholderVessel)) {
                     return alarm.placeholderVessel.ircs; 
-                } else if (angular.isDefined(alarm.vessel)) {
-                    return alarm.vessel.ircs; 
-                } else if (angular.isDefined(alarm.asset.ids.IRCS)) {
-                    return alarm.asset.ids.IRCS; 
+                } else if (angular.isDefined(alarm.incomingMovement) && angular.isDefined(alarm.incomingMovement.assetIRCS)) {
+                    return alarm.incomingMovement.assetIRCS; 
                 } else {
                     return missingValueText;
                 }
@@ -120,10 +116,8 @@ angular.module('unionvmsWeb').factory('alarmCsvService', function(csvService, $f
             externalMarking: function(alarm) {
                 if (angular.isDefined(alarm.placeholderVessel)) {
                     return alarm.placeholderVessel.externalMarking; 
-                } else if (angular.isDefined(alarm.movement.externalMarking)) {
+                } else if (angular.isDefined(alarm.incomingMovement) && angular.isDefined(alarm.incomingMovement.externalMarking)) {
                     return alarm.movement.externalMarking; 
-                } else if (angular.isDefined(alarm.asset.ids.EXTERNAL_MARKING)) {
-                    return alarm.asset.ids.EXTERNAL_MARKING; 
                 } else {
                     return missingValueText;
                 }
@@ -131,10 +125,8 @@ angular.module('unionvmsWeb').factory('alarmCsvService', function(csvService, $f
             cfr: function(alarm) {
                 if (angular.isDefined(alarm.placeholderVessel)) {
                     return alarm.placeholderVessel.cfr; 
-                } else if (angular.isDefined(alarm.vessel)) {
-                    return alarm.vessel.cfr; 
-                } else if (angular.isDefined(alarm.asset.ids.CFR)) {
-                    return alarm.asset.ids.CFR; 
+                } else if (angular.isDefined(alarm.incomingMovement) && angular.isDefined(alarm.incomingMovement.assetCFR)) {
+                    return alarm.incomingMovement.assetCFR; 
                 } else {
                     return missingValueText;
                 }
@@ -142,42 +134,40 @@ angular.module('unionvmsWeb').factory('alarmCsvService', function(csvService, $f
             assetName: function(alarm) {
                 if (angular.isDefined(alarm.placeholderVessel)) {
                     return alarm.placeholderVessel.name; 
-                } else if (angular.isDefined(alarm.movement)) {
-                    return alarm.movement.assetName; 
-                } else if (angular.isDefined(alarm.asset.ids.NAME)) {
-                    return alarm.asset.ids.NAME; 
+                } else if (angular.isDefined(alarm.incomingMovement) && angular.isDefined(alarm.incomingMovement.assetName)) {
+                    return alarm.incomingMovement.assetName; 
                 } else {
                     return missingValueText;
                 }
             }, 
             movementStatus: function(alarm) {
-                if (angular.isDefined(alarm.movement.movement.status)) {
-                    return alarm.movement.movement.status;
+                if (angular.isDefined(alarm.incomingMovement) && angular.isDefined(alarm.incomingMovement.status)) {
+                    return alarm.incomingMovement.status;
                 }
             }, 
             movementDateTime: function(alarm) {
-                if (angular.isDefined(alarm.movement.time)) {
-                    return alarm.movement.time;
+                if (angular.isDefined(alarm.incomingMovement) && angular.isDefined(alarm.incomingMovement.positionTime)) {
+                    return alarm.incomingMovement.positionTime;
                 }
             }, 
             movementLatitude: function(alarm) {
-                if (angular.isDefined(alarm.movement.movement.latitude)) {
-                    return alarm.movement.movement.latitude;
+                if (angular.isDefined(alarm.incomingMovement) && angular.isDefined(alarm.incomingMovement.latitude)) {
+                    return alarm.incomingMovement.latitude;
                 }
             }, 
             movementLongitude: function(alarm) {
-                if (angular.isDefined(alarm.movement.movement.longitude)) {
-                    return alarm.movement.movement.longitude;
+                if (angular.isDefined(alarm.incomingMovement) && angular.isDefined(alarm.incomingMovement.longitude)) {
+                    return alarm.incomingMovement.longitude;
                 }
             }, 
             movementReportedSpeed: function(alarm) {
-                if (angular.isDefined(alarm.movement.movement.reportedSpeed)) {
-                    return alarm.movement.movement.reportedSpeed;
+                if (angular.isDefined(alarm.incomingMovement) && angular.isDefined(alarm.incomingMovement.reportedSpeed)) {
+                    return alarm.incomingMovement.reportedSpeed;
                 }
             }, 
             movementReportedCourse: function(alarm) {
-                if (angular.isDefined(alarm.movement.movement.reportedCourse)) {
-                    return alarm.movement.movement.reportedCourse;
+                if (angular.isDefined(alarm.incomingMovement) && angular.isDefined(alarm.incomingMovement.reportedCourse)) {
+                    return alarm.incomingMovement.reportedCourse;
                 }
             }
         };
@@ -185,7 +175,7 @@ angular.module('unionvmsWeb').factory('alarmCsvService', function(csvService, $f
 
     function getRow(alarm) {
         return [
-            $filter('confDateFormat')(alarm.openDate),
+            $filter('confDateFormat')(alarm.createdDate),
             getVesselName(alarm),
             getRuleNames(alarm),
             $filter('confDateFormat')(alarm.getResolvedDate()),

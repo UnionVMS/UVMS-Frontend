@@ -61,7 +61,7 @@ angular.module('unionvmsWeb').controller('HoldingtableCtrl',function($scope, $ro
             });
         }
 
-        longPollingId = longPolling.poll("/movement-rules/activity/alarm", function(response) {
+        longPollingId = longPolling.poll("/movement/activity/alarm", function(response) {
             if (response.ids.length > 0) {
                 updateSearchWithGuid(response.ids[0]);
             }
@@ -105,7 +105,7 @@ angular.module('unionvmsWeb').controller('HoldingtableCtrl',function($scope, $ro
 
     $scope.getRuleNamesTooltip = function(item){
         var ruleNames = [];
-        $.each(item.alarmItems, function(index, rule){
+        $.each(item.alarmItemList, function(index, rule){
             ruleNames.push(rule.ruleName);
         });
         return ruleNames.join(', ');
@@ -314,10 +314,10 @@ angular.module('unionvmsWeb').controller('HoldingtableCtrl',function($scope, $ro
 
     // Get list value of Object Affected
     $scope.getObjAffectedValue = function(item) {
-        if (angular.isDefined(item.movement.assetName)) {
-            return item.movement.assetName;
-        } else if (angular.isDefined(item.asset.ids.IRCS)) {
-            return item.asset.ids.IRCS;
+        if (angular.isDefined(item.incomingMovement.assetName)) {
+            return item.incomingMovement.assetName;
+        } else if (angular.isDefined(item.incomingMovement.assetIRCS)) {
+            return item.incomingMovement.assetIRCS;
         } else {
             return $filter('i18n')('alarms.alarms_affected_object_unknown');
         }
