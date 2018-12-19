@@ -53,7 +53,7 @@ describe('AlarmReportModalCtrl', function() {
     }));
 
     it('should compose a warning messsage', inject(function(locale) {
-        alarm.alarmItems = [{ruleName: 'Latitude missing'}, {ruleName: 'Terminal not found'}];
+        alarm.alarmItemList = [{ruleName: 'Latitude missing'}, {ruleName: 'Terminal not found'}];
         spyOn(locale, 'getString').andCallFake(function(key) {
             return {
                 'alarms.add_tranceiver_asset_reprocess': 'Add transceiver and reprocess asset.',
