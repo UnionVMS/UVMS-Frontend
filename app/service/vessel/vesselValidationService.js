@@ -30,7 +30,7 @@ angular.module('unionvmsWeb').factory('vesselValidationService',function() {
             return new RegExp(/^[0-9]{7}$/);
         },
         getProducerCodePattern: function() {
-            return new RegExp(/^\d{1,9}$/);
+            return new RegExp(/^\d{1,10}$/);
         },
         getGUIDPattern : function() {
             //5 Words each followed by dash (example: abc12345-6789-abc1-2345-6789abc12345). 
