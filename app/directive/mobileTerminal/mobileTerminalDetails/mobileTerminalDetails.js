@@ -340,7 +340,7 @@ angular.module('unionvmsWeb')
 
         //Unassign Mobile Terminal - Request
         $scope.unassignVesselWithComment = function(comment){
-            mobileTerminalRestService.unassignMobileTerminal($scope.mobileTerminal, $scope.vesselId, comment)
+            mobileTerminalRestService.unassignMobileTerminal($scope.mobileTerminal, comment)
                 .then(unassignMobileTerminalSuccess, unassignMobileTerminalError);
         };
 

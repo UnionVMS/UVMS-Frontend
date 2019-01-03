@@ -30,8 +30,6 @@ angular.module('unionvmsWeb').factory('CommunicationChannel', function(dateTimeS
             this.endDate = undefined;
             this.archived = false;
 
-            this.mobileTerminal = undefined;
-
             // channel types
             this.defaultChannel = true;
             this.configChannel = true;
