@@ -20,7 +20,7 @@ angular.module('unionvmsWeb')
             },
             mobileTerminal : function(){
                 return $resource('asset/rest/mobileterminal/', {}, {
-                    update: {method: 'PATCH'}
+                    update: {method: 'PUT'}
                 });
             },
             getMobileTerminals : function(){
