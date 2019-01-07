@@ -8,7 +8,7 @@
     </parent>
     <groupId>eu.europa.ec.fisheries.uvms</groupId>
     <artifactId>unionvms-web</artifactId>
-    <version>3.0.38-UVMS-SNAPSHOT</version>
+    <version>3.0.39-UVMS-SNAPSHOT</version>
     <name>unionvms-web</name>
     <packaging>war</packaging>
 

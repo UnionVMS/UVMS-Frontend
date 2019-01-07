@@ -15,7 +15,7 @@ angular.module('unionvmsWeb').controller('AlarmReportModalCtrl', function($scope
     $scope.itemsByPage = 5;
 
     $scope.alarm = alarm;
-    $scope.knownVessel = angular.isDefined(alarm.vessel);
+    $scope.knownVessel = angular.isDefined(alarm.assetGuid);
     $scope.options = options;
     $scope.readOnly = options.readOnly;
     $scope.waitingForStatusUpdateResponse = false;
@@ -64,7 +64,7 @@ angular.module('unionvmsWeb').controller('AlarmReportModalCtrl', function($scope
     }
 
     function getRuleNames(alarm) {
-        return alarm.alarmItems.map(function(alarmItem) {
+        return alarm.alarmItemList.map(function(alarmItem) {
             return alarmItem.ruleName;
         });
     }
@@ -129,12 +129,12 @@ angular.module('unionvmsWeb').controller('AlarmReportModalCtrl', function($scope
 
     //Add a marker to the map and center map on the marker
     $scope.addMarkerToMap = function(){
-        if(angular.isDefined($scope.alarm.movement) && angular.isDefined($scope.alarm.movement.movement)){
-            var lat = $scope.alarm.movement.movement.latitude;
-            var lng = $scope.alarm.movement.movement.longitude;
+        if(angular.isDefined($scope.alarm.incomingMovement)){
+            var lat = $scope.alarm.incomingMovement.latitude;
+            var lng = $scope.alarm.incomingMovement.longitude;
             if(angular.isDefined(lat) && angular.isDefined(lng) && lat !== null && lng !== null){
                 //Add marker
-                var formattedTime =  dateTimeService.formatAccordingToUserSettings($scope.alarm.movement.time);
+                var formattedTime =  dateTimeService.formatAccordingToUserSettings($scope.alarm.incomingMovement.positionTime);
                 var marker = {
                     lat: lat,
                     lng: lng,
@@ -202,7 +202,7 @@ angular.module('unionvmsWeb').controller('AlarmReportModalCtrl', function($scope
         $scope.waitingForStatusUpdateResponse = true;
         var copy = $scope.alarm.copy();
 
-        alarmRestService.reprocessAlarms([alarm.guid]).then(function(){
+        alarmRestService.reprocessAlarms([alarm.id]).then(function(){
             $scope.waitingForStatusUpdateResponse = false;
             $scope.alarm.setStatusToReprocessed();
             $scope.statusUpdatedSuccessfully = true;

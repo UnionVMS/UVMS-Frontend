@@ -1,4 +1,4 @@
-<!--
+﻿<!--
 ﻿Developed with the contribution of the European Commission - Directorate General for Maritime Affairs and Fisheries
 © European Union, 2015-2016.
 
@@ -17,7 +17,7 @@ copy of the GNU General Public License along with the IFDM Suite. If not, see <h
                     <th class="checkboxContainer">
                         <input type="checkbox" ng-checked="isAllChecked()" ng-click="checkAll()" ng-disabled="!currentSearchResults.items.length"/>
                     </th>
-                    <th class="st-sort" st-sort="openDate" st-sort-default="reverse" st-skip-natural="true">
+                    <th class="st-sort" st-sort="createdDate" st-sort-default="reverse" st-skip-natural="true">
                         {{'alarms.alarms_table_date_openend' | i18n}}
                     </th>
                     <th class="st-sort" st-sort="vessel.name" st-skip-natural="true">
@@ -43,14 +43,14 @@ copy of the GNU General Public License along with the IFDM Suite. If not, see <h
             <tbody>
                 <tr ng-repeat="item in currentSearchResultsByPage">
                     <td class="checkboxContainer"><input type="checkbox" ng-checked="isChecked(item)" ng-click="checkItem(item)" /></td>
-                    <td ng-attr-title="{{item.openDate | confDateFormat}}">{{item.openDate | confDateFormat}}</td>
+                    <td ng-attr-title="{{item.openDate | confDateFormat}}">{{item.createdDate | confDateFormat}}</td>
                     <td>
-                        <a ng-if="item.vessel" href="#/assets/{{item.vessel.getGuid()}}" title="{{'common.view_details' | i18n}}">{{item.vessel.name}}</a>
-                        <span ng-if="!item.vessel" ng-bind="getObjAffectedValue(item)"></span>
+                        <a ng-if="item.incomingMovement" href="#/assets/{{item.assetGuid}}" title="{{'common.view_details' | i18n}}">{{item.incomingMovement.assetName}}</a>
+                        <span ng-if="!item.incomingMovement" ng-bind="getObjAffectedValue(item)"></span>
                     </td>
                     <td>
-                        <span ng-show="item.alarmItems.length === 1" tooltip-placement="bottom" tooltip="{{getRuleNamesTooltip(item)}}">{{item.alarmItems[0].ruleName}}</span>
-                        <span ng-show="item.alarmItems.length > 1 " tooltip-placement="bottom" tooltip="{{getRuleNamesTooltip(item)}}">{{'alarms.alarms_table_number_of_rules' | i18n:item.alarmItems.length}}</span>
+                        <span ng-show="item.alarmItemList.length === 1" tooltip-placement="bottom" tooltip="{{getRuleNamesTooltip(item)}}">{{item.alarmItemList[0].ruleName}}</span>
+                        <span ng-show="item.alarmItemList.length > 1 " tooltip-placement="bottom" tooltip="{{getRuleNamesTooltip(item)}}">{{'alarms.alarms_table_number_of_rules' | i18n:item.alarmItemList.length}}</span>
                     </td>
                     <td ng-attr-title="{{item.getResolvedDate() | confDateFormat}}">{{item.getResolvedDate() | confDateFormat}}</td>
                     <td ng-attr-title="{{item.getResolvedBy()}}">{{item.getResolvedBy()}}</td>

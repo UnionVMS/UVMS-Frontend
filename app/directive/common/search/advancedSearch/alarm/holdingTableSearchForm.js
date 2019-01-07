@@ -9,7 +9,7 @@ the hope that it will be useful, but WITHOUT ANY WARRANTY; without even the impl
 FITNESS FOR A PARTICULAR PURPOSE.  See the GNU General Public License for more details. You should have received a
 copy of the GNU General Public License along with the IFDM Suite. If not, see <http://www.gnu.org/licenses/>.
  */
-angular.module('unionvmsWeb').controller('HoldingTableSearchController', function($scope, locale, configurationService, ruleRestService) {
+angular.module('unionvmsWeb').controller('HoldingTableSearchController', function($scope, locale, configurationService, alarmRestService) {
 
     var init = function(){
         //Add ALL option to timeSpan dropdown
@@ -19,10 +19,10 @@ angular.module('unionvmsWeb').controller('HoldingTableSearchController', functio
         $scope.statusOptions = configurationService.setTextAndCodeForDropDown(configurationService.getConfig('ALARM_STATUSES'), 'STATUS', 'ALARM', true);
 
         //Populate rules dropdown
-        ruleRestService.getAllSanityRules().then(function(rulesPage){
+        alarmRestService.getSanityRuleNames().then(function(rules){
             var rulesOptions = [];
-            $.each(rulesPage.items, function(i, rule){
-                rulesOptions.push({text: rule.name, code: rule.guid});
+            $.each(rules, function(i, rule){
+                rulesOptions.push({text: rule, code: rule});
             });
             rulesOptions = _.sortBy(rulesOptions, function(obj){return obj.text;});
             $scope.rules = rulesOptions;
