@@ -22,15 +22,10 @@ describe('alarmRestService', function() {
                         //Success if status is defined, 500 otherwize
                         if(angular.isDefined(alarmDTO.status)){
                             callback({
-                                code : 200,
-                                data: {
                                     status : 'CLOSED'
-                                }
-                            });
+                            } , undefined, 200);
                         }else{
-                            callback({
-                                code : 500,
-                            });
+                            callback({}, undefined, 500);
                         }
                     },
                 }
@@ -61,27 +56,22 @@ describe('alarmRestService', function() {
                         //Success if page = 1, otherwize return 500
                         if(getListRequest.pagination.page === 1){
                             callback({
-                                code : 200,
-                                data: {
-                                    alarms: [
+                                    alarmList: [
                                         {
-                                            guid: "1",
+                                            id: "1",
                                             status : 'CLOSED'
                                         },
                                         {
-                                            guid: "2",
+                                            id: "2",
                                             status : 'OPEN'
                                         }
                                     ],
                                     currentPage : 12,
                                     totalNumberOfPages : 23
-                                }
-                            });
+                            }, undefined, 200);
                         }
                         else{
-                            callback({
-                                code : 500,
-                            });
+                            callback({}, undefined, 500);
                         }
                     },
                 }
@@ -124,16 +114,11 @@ describe('alarmRestService', function() {
                         //Success if guid is defined, 500 otherwize
                         if(angular.isDefined(idObject.guid)){
                             callback({
-                                code : 200,
-                                data: {
-                                    guid : idObject.guid,
+                                    id : idObject.guid,
                                     status : 'CLOSED'
-                                }
-                            });
+                            }, undefined, 200);
                         }else{
-                            callback({
-                                code : 500,
-                            });
+                            callback({}, undefined, 500);
                         }
                     },
                 }
@@ -170,11 +155,8 @@ describe('alarmRestService', function() {
             },
             getOpenAlarmsCount: function() {
                 return {
-                    get: function(idObject, callback) {
-                        callback({
-                            code : 200,
-                            data: 3
-                        });
+                    getText: function(idObject, callback) {
+                        callback({content: 3, code: 200});
                     },
                 }
             },
@@ -330,7 +312,7 @@ describe('alarmRestService', function() {
             var resolved = false;
             alarmRestService.getAlarmReport(guid).then(function(alarm){
                 resolved = true;
-                expect(alarm.guid).toEqual(guid);
+                expect(alarm.id).toEqual(guid);
             });
             $rootScope.$digest();
             expect(resolved).toBe(true);

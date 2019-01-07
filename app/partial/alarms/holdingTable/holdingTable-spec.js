@@ -38,7 +38,7 @@ describe('HoldingtableCtrl', function() {
     it('should start longPolling on init ', inject(function($rootScope) {
         var controller = createController();
 
-        expect(longpollingSpy).toHaveBeenCalledWith("/movement-rules/activity/alarm", jasmine.any(Function));
+        expect(longpollingSpy).toHaveBeenCalledWith("/movement/activity/alarm", jasmine.any(Function));
     }));
 
     describe('search alarms', function() {
@@ -63,7 +63,7 @@ describe('HoldingtableCtrl', function() {
             var deferred = $q.defer();
             var searchSpy = spyOn(searchService, "searchAlarms").andReturn(deferred.promise);
             var alarm = new Alarm();
-            alarm.guid = "ABCD-123";
+            alarm.id = "ABCD-123";
             var items = [alarm];
             var results = new SearchResultListPage(items, 1, 10);
             deferred.resolve(results);
@@ -123,11 +123,11 @@ describe('HoldingtableCtrl', function() {
 
         //Create an alarm
         var alarm = new Alarm();
-        alarm.alarmItems.push({guid:"A1", ruleName: "First rule"});
+        alarm.alarmItemList.push({id:"A1", ruleName: "First rule"});
         expect(scope.getRuleNamesTooltip(alarm)).toEqual('First rule');
 
         //Multiple rules, then it should be a comma separated string
-        alarm.alarmItems.push({guid:"A2", ruleName: "Second rule"});
+        alarm.alarmItemList.push({id:"A2", ruleName: "Second rule"});
         expect(scope.getRuleNamesTooltip(alarm)).toEqual('First rule, Second rule');
     }));
 

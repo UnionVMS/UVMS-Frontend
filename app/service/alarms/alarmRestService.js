@@ -14,20 +14,27 @@ angular.module('unionvmsWeb')
 
         return {
             alarm : function(){
-                return $resource('movement-rules/rest/alarms', {}, {
+                return $resource('movement/rest/alarms', {}, {
                     update: {method: 'PUT'}
                 });
             },
             getAlarms : function(){
-                return $resource('movement-rules/rest/alarms/list/',{},{
+                return $resource('movement/rest/alarms/list/',{},{
                     list : { method: 'POST'}
                 });
             },
             getAlarm: function() {
-                return $resource('movement-rules/rest/alarms/:guid');
+                return $resource('movement/rest/alarms/:guid');
             },
             getOpenAlarmsCount: function() {
-                return $resource('movement-rules/rest/alarms/countopen');
+                return $resource('movement/rest/alarms/countopen', {} ,
+                {
+                	getText : {
+                		transformResponse: function(data, header, status) {
+                			return {content: data, code: status};
+                		}
+                	}
+                });
             },
             getTicket: function() {
                 return $resource('movement-rules/rest/tickets/:guid');
@@ -51,15 +58,18 @@ angular.module('unionvmsWeb')
                 });
             },
             reprocessAlarms : function(){
-                return $resource('movement-rules/rest/alarms/reprocess', {}, {
+                return $resource('movement/rest/alarms/reprocess', {}, {
                     reprocess: {method: 'POST'}
                 });
             },
             getAlarmStatusConfig : function(){
-                return $resource('movement-rules/rest/config/alarmstatus');
+                return $resource('movement/rest/config/alarmstatus');
             },
             getTicketStatusConfig : function(){
                 return $resource('movement-rules/rest/config/ticketstatus');
+            },
+            getSanityRuleNames : function() {
+            	return $resource('movement/rest/alarms/sanityrules');
             },
         };
     })
@@ -70,12 +80,12 @@ angular.module('unionvmsWeb')
         alarm.setUpdatedBy(userService.getUserName());
 
         var deferred = $q.defer();
-        alarmRestFactory.alarm().update(alarm.DTO(), function(response) {
-            if(response.code !== 200){
+        alarmRestFactory.alarm().update(alarm.DTO(), function(response, header, status) {
+            if(status !== 200){
                 deferred.reject("Invalid response status");
                 return;
             }
-            deferred.resolve(Alarm.fromDTO(response.data));
+            deferred.resolve(Alarm.fromDTO(response));
         }, function(error) {
             $log.error("Error updating alarm status");
             $log.error(error);
@@ -88,22 +98,22 @@ angular.module('unionvmsWeb')
         var deferred = $q.defer();
 
         //Get list of all alarms
-        alarmRestFactory.getAlarms().list(getListRequest.DTOForAlarms(), function(response){
-                if(parseInt(response.code) !== 200){
+        alarmRestFactory.getAlarms().list(getListRequest.DTOForAlarms(), function(response, header, status){
+                if(status !== 200){
                     deferred.reject("Invalid response status");
                     return;
                 }
                 var alarms = [],
                     searchResultListPage;
 
-                if(angular.isArray(response.data.alarms)) {
-                    for (var i = 0; i < response.data.alarms.length; i++) {
-                        alarms.push(Alarm.fromDTO(response.data.alarms[i]));
+                if(angular.isArray(response.alarmList)) {
+                    for (var i = 0; i < response.alarmList.length; i++) {
+                        alarms.push(Alarm.fromDTO(response.alarmList[i]));
                     }
                 }
 
-                var currentPage = response.data.currentPage;
-                var totalNumberOfPages = response.data.totalNumberOfPages;
+                var currentPage = response.currentPage;
+                var totalNumberOfPages = response.totalNumberOfPages;
                 searchResultListPage = new SearchResultListPage(alarms, currentPage, totalNumberOfPages);
 
                 deferred.resolve(searchResultListPage);
@@ -119,8 +129,8 @@ angular.module('unionvmsWeb')
 
     var reprocessAlarms = function(alarmGuids){
         var deferred = $q.defer();
-        alarmRestFactory.reprocessAlarms().reprocess(alarmGuids, function(response) {
-            if(response.code !== 200){
+        alarmRestFactory.reprocessAlarms().reprocess(alarmGuids, function(response, header, status) {
+            if(status !== 200){
                 deferred.reject("Invalid response status");
                 return;
             }
@@ -212,13 +222,13 @@ angular.module('unionvmsWeb')
 
     var getAlarmReport = function(guid) {
         var deferred = $q.defer();
-        alarmRestFactory.getAlarm().get({guid:guid}, function(response) {
-            if (response.code !== 200) {
+        alarmRestFactory.getAlarm().get({guid:guid}, function(response, header, status) {
+            if (status !== 200) {
                 deferred.reject("Invalid response status");
                 return;
             }
 
-            var alarmReport = Alarm.fromDTO(response.data);
+            var alarmReport = Alarm.fromDTO(response);
             deferred.resolve(alarmReport);
         },
         function(error) {
@@ -273,20 +283,31 @@ angular.module('unionvmsWeb')
         });
         return deferred.promise;
     };
-
+    
     var getOpenTicketsCount = function(){
         return getCountFromResource(alarmRestFactory.getOpenTicketsCount(), {userName: userService.getUserName()});
     };
 
     var getOpenAlarmsCount = function(){
-        return getCountFromResource(alarmRestFactory.getOpenAlarmsCount(), {});
+        var deferred = $q.defer();
+        alarmRestFactory.getOpenAlarmsCount().getText({}, function(response) {
+            if (response.code !== 200) {
+                deferred.reject("Invalid response status");
+                return;
+            }
+            deferred.resolve(parseInt(response.content));
+        },
+        function(error) {
+            deferred.reject("Error getting alarm count.");
+        });
+        return deferred.promise;
     };
 
-    var getConfigurationFromResource = function(resource){
+    var getConfigurationFromResource = function(resource, validCode){
         var deferred = $q.defer();
         resource.get({},
             function(response){
-                if(response.code !== 200){
+                if(response.code !== validCode){
                     deferred.reject("Not valid alarm/ticket statuses configuration status.");
                     return;
                 }
@@ -299,11 +320,27 @@ angular.module('unionvmsWeb')
     };
 
     var getAlarmStatusConfig = function(){
-        return getConfigurationFromResource(alarmRestFactory.getAlarmStatusConfig());
+        return getConfigurationFromResource(alarmRestFactory.getAlarmStatusConfig(), '200');
     };
 
     var getTicketStatusConfig = function(){
-        return getConfigurationFromResource(alarmRestFactory.getTicketStatusConfig());
+        return getConfigurationFromResource(alarmRestFactory.getTicketStatusConfig(), 200);
+    };
+    
+    var getSanityRuleNames = function() {
+    	var deferred = $q.defer();
+    	alarmRestFactory.getSanityRuleNames().query({},
+            function(response, header, status){
+                if(status !== 200){
+                    deferred.reject("No valid sanityrule names return status.");
+                    return;
+                }
+                deferred.resolve(response);
+            }, function(error){
+                console.error("Error getting sanityrule names.");
+                deferred.reject(error);
+            });
+        return deferred.promise;
     };
 
     return {
@@ -319,5 +356,6 @@ angular.module('unionvmsWeb')
         getOpenAlarmsCount: getOpenAlarmsCount,
         getAlarmStatusConfig: getAlarmStatusConfig,
         getTicketStatusConfig: getTicketStatusConfig,
+        getSanityRuleNames : getSanityRuleNames,
     };
 });

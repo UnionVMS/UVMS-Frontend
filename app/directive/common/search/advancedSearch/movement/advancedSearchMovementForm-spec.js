@@ -62,7 +62,6 @@ describe('advancedSearchMovementCtrl', function() {
         expect(scope.meassuredSpeed).toBeDefined('meassuredSpeed should be defined');
         expect(scope.status).toBeDefined('status should be defined');
         expect(scope.movementType).toBeDefined('movementType should be defined');
-        expect(scope.mapArea).toBeDefined('mapArea should be defined');
 
     }));
 

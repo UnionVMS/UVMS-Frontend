@@ -12,59 +12,44 @@ copy of the GNU General Public License along with the IFDM Suite. If not, see <h
 describe('Alarm', function() {
 
     var alarmData = {
-        "guid": "1",
+        "id": "1",
         "status": "OPEN",
-        "openDate": "2015-10-23 08:40:56 +0200",
+        "createdDate": "2015-10-23 08:40:56 +0200",
         "updated": "2015-10-23 08:40:56 +0200",
         "updatedBy": "CLOSING USER",
         "assetGuid": "ABCD1234",
-        "recipient" : "FIN",
-        "alarmItem": [
+        "pluginType" : "NAF",
+        "alarmItemList": [
           {
-            "guid": "ALARM_ITEM_GUID_1",
+            "id": "ALARM_ITEM_GUID_1",
             "ruleGuid": "RULE_GUID",
             "ruleName": "Sanity check - Latitude must exist"
           },
           {
-            "guid": "ALARM_ITEM_GUID_2",
+            "id": "ALARM_ITEM_GUID_2",
             "ruleGuid": "RULE_GUID",
             "ruleName": "Sanity check - Longitude must exist"
           }
         ],
-        "rawMovement": {
-            "guid": "RAW_MOVEMENT_GUID_1",
-            "connectId": "connectId_1",
-            "assetId": {
-                "assetType": "VESSEL",
-                "assetIdList": [
-                    {
-                        "idType": "CFR",
-                        "value": "SWE111111"
-                    }
-                ]
-            },
+        "incomingMovement": {
+            "id": "RAW_MOVEMENT_GUID_1",
+            "assetGuid": "connectId_1",
+            "assetCFR": "SWE111111",
             "comChannelType": "MOBILE_TERMINAL",
-            "mobileTerminal": {
-                "guid": "MOBILE_TERMINAL_GUID_1",
-                "connectId": "connectid_1",
-                "mobileTerminalIdList": null
-            },
-            "position": {
-                "longitude": 1.11,
-                "latitude": 1.22,
-                "altitude": 0.0
-            },
+            "mobileTerminalGuid": "MOBILE_TERMINAL_GUID_1",
+            "mobileTerminalConnectId": "connectid_1",
+            "longitude": 1.11,
+            "latitude": 1.22,
+            "altitude": 0.0,
             "positionTime": 1445582456984,
             "status": "010",
             "reportedSpeed": 11.1,
             "reportedCourse": 1.11,
             "movementType": "POS",
             "source": "INMARSAT_C",
-            "activity": {
-                "messageType": "COE",
-                "messageId": "messageid_1",
-                "callback": "callback_1"
-            }
+            "activityMessageType": "COE",
+            "activityMessageId": "messageid_1",
+            "activityCallback": "callback_1"
         }
     };
 
@@ -74,22 +59,22 @@ describe('Alarm', function() {
     it("should parse JSON correctly", inject(function(Alarm) {
         var alarm = Alarm.fromDTO(alarmData);
 
-        expect(alarm.guid).toEqual(alarmData.guid);
+        expect(alarm.id).toEqual(alarmData.id);
         expect(alarm.status).toEqual(alarmData.status);
-        expect(alarm.openDate).toEqual(alarmData.openDate);
+        expect(alarm.createdDate).toEqual(alarmData.createdDate);
         expect(alarm.updated).toEqual(alarmData.updated);
         expect(alarm.updatedBy).toEqual(alarmData.updatedBy);
-        expect(alarm.vesselGuid).toEqual(alarmData.assetGuid);
-        expect(alarm.recipient).toEqual(alarmData.recipient);
-        expect(alarm.alarmItems.length).toEqual(alarmData.alarmItem.length);
+        expect(alarm.assetGuid).toEqual(alarmData.assetGuid);
+        expect(alarm.pluginType).toEqual(alarmData.pluginType);
+        expect(alarm.alarmItemList.length).toEqual(alarmData.alarmItemList.length);
 
-        expect(alarm.asset.type).toEqual(alarmData.rawMovement.assetId.assetType);
-        expect(Object.keys(alarm.asset.ids).length).toEqual(alarmData.rawMovement.assetId.assetIdList.length);
+        expect(alarm.incomingMovement.assetGuid).toEqual(alarmData.incomingMovement.assetGuid);
+        expect(alarm.incomingMovement.assetCFR).toEqual(alarmData.incomingMovement.assetCFR);
 
         //Movement
-        expect(alarm.movement.guid).toEqual(alarmData.rawMovement.guid);
-        expect(alarm.movement.movementType).toEqual(alarmData.rawMovement.messageType);
-        expect(alarm.movement.connectId).toEqual(alarmData.rawMovement.connectId);
+        expect(alarm.incomingMovement.id).toEqual(alarmData.incomingMovement.id);
+        expect(alarm.incomingMovement.movementType).toEqual(alarmData.incomingMovement.movementType);
+        expect(alarm.incomingMovement.source).toEqual(alarmData.incomingMovement.source);
     }));
 
 
@@ -144,11 +129,11 @@ describe('Alarm', function() {
         var copy = alarm.copy();
 
         expect(copy.equals(alarm)).toBeTruthy();
-        expect(copy.alarmItems.length).toEqual(alarm.alarmItems.length);
+        expect(copy.alarmItemList.length).toEqual(alarm.alarmItemList.length);
 
         //Verify that original item isn't changed
-        copy.alarmItems[0].guid = 'CHANGED';
-        expect(alarm.alarmItems[0].guid).not.toEqual('CHANGED');
+        copy.alarmItemList[0].id = 'CHANGED';
+        expect(alarm.alarmItemList[0].id).not.toEqual('CHANGED');
 
 
     }));
@@ -168,7 +153,7 @@ describe('Alarm', function() {
 
         var dto = alarm.DTO();
 
-        expect(dto.guid).toEqual(alarm.guid);
+        expect(dto.id).toEqual(alarm.id);
         expect(dto.status).toEqual("REPROCESSED");
         expect(dto.updatedBy).toEqual("TEST");
         //Skip linkedVesselGuid for now
