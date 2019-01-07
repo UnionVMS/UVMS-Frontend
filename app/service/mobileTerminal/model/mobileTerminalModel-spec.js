@@ -115,10 +115,8 @@ describe('MobileTerminalModel', function() {
                 "name": "HAV"
             }
         ],
-        "inactive": false,
-        "mobileTerminalId": {
-            "guid": "1234-5678-9012-3456-7891-2345-678901"
-        },
+        "inactive": false,        
+        "id": "1234-5678-9012-3456-7891-2345-678901",        
         "source": "INTERNAL",
         "type": "INMARSAT_C",
         "plugin" : {
@@ -132,7 +130,7 @@ describe('MobileTerminalModel', function() {
     it('create new should set correct values', inject(function(MobileTerminal) {
         var mobileTerminal = new MobileTerminal();
 
-        expect(mobileTerminal.guid).toBeUndefined();
+        expect(mobileTerminal.id).toBeUndefined();
         expect(mobileTerminal.connectId).toBeUndefined();
         expect(mobileTerminal.plugin).toBeDefined();
         expect(Object.keys(mobileTerminal.attributes).length).toEqual(0);
@@ -143,7 +141,7 @@ describe('MobileTerminalModel', function() {
     it("should parse JSON correctly", inject(function(MobileTerminal) {
         var mt = MobileTerminal.fromJson(mobileTerminalData);
 
-        expect(mt.guid).toBe("1234-5678-9012-3456-7891-2345-678901");
+        expect(mt.id).toBe("1234-5678-9012-3456-7891-2345-678901");
         expect(mt.source).toBe("INTERNAL");
         expect(mt.type).toBe("INMARSAT_C");
         expect(mt.active).toBe(true);
