@@ -11,6 +11,7 @@
 	"search_type": "Type",
 	"search_status": "Status",
     "search_hour_unit": "h",
+    "search_sender_reciever" : "Sender/Receiver/ON/Msg UUID",
 
     "message_details_modal_title" : "Message details",
     "validation_results_modal_title": "Validation results",
