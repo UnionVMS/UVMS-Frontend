@@ -21,7 +21,7 @@ copy of the GNU General Public License along with the IFDM Suite. If not, see <h
         };
 
         function getHeader(mobileTerminal) {
-            if (mobileTerminal.type === 'INMARSAT_C') {
+            if (mobileTerminal.mobileTerminalType === 'INMARSAT_C') {
                 return [
                     locale.getString('mobileTerminal.table_header_transponder_type'),
                     locale.getString('mobileTerminal.add_new_form_ocean_region_label'),
@@ -49,7 +49,7 @@ copy of the GNU General Public License along with the IFDM Suite. If not, see <h
                     locale.getString("mobileTerminal.form_inmarsatc_in_port_grace_period_label")
                 ];
             }
-            else if (mobileTerminal.type === 'IRIDIUM') {
+            else if (mobileTerminal.mobileTerminalType === 'IRIDIUM') {
                 return [
                     locale.getString('mobileTerminal.table_header_transponder_type'),
                     locale.getString('mobileTerminal.table_header_serial_no'),
@@ -74,54 +74,54 @@ copy of the GNU General Public License along with the IFDM Suite. If not, see <h
         }
 
         function getRows(mobileTerminal) {
-            if (mobileTerminal.type === 'INMARSAT_C') {
+            if (mobileTerminal.mobileTerminalType === 'INMARSAT_C') {
                 return mobileTerminal.channels.map(function(channel) {
                     return [
-                        $filter('transponderName')(mobileTerminal.type),
+                        $filter('transponderName')(mobileTerminal.mobileTerminalType),
                         getOceanRegions(mobileTerminal),
-                        mobileTerminal.attributes.SERIAL_NUMBER,
-                        mobileTerminal.attributes.TRANSCEIVER_TYPE,
-                        mobileTerminal.attributes.SOFTWARE_VERSION,
-                        mobileTerminal.attributes.ANTENNA,
-                        mobileTerminal.attributes.SATELLITE_NUMBER,
-                        mobileTerminal.attributes.ANSWER_BACK,
-                        channel.name,
-                        channel.capabilities["POLLABLE"],
-                        channel.capabilities["CONFIGURABLE"],
-                        channel.capabilities["DEFAULT_REPORTING"],
-                        channel.ids.DNID,
-                        channel.ids.MEMBER_NUMBER,
-                        channel.ids.LES_DESCRIPTION,
-                        $filter('confDateFormat')(channel.ids.START_DATE),
-                        $filter('confDateFormat')(channel.ids.END_DATE),
-                        mobileTerminal.attributes.INSTALLED_BY,
-                        $filter('confDateFormat')(mobileTerminal.attributes.INSTALLED_ON),
-                        $filter('confDateFormat')(mobileTerminal.attributes.STARTED_ON),
-                        $filter('confDateFormat')(mobileTerminal.attributes.UNINSTALLED_ON),
-                        mobileTerminal.attributes.FREQUENCY_EXPECTED,
-                        mobileTerminal.attributes.FREQUENCY_GRACE_PERIOD,
-                        mobileTerminal.attributes.FREQUENCY_IN_PORT
+                        mobileTerminal.serialNo,
+                        mobileTerminal.transceiverType,
+                        mobileTerminal.softwareVersion,
+                        mobileTerminal.antenna,
+                        mobileTerminal.satelliteNumber,
+                        mobileTerminal.answerBack,
+                        channel.name,            
+                        channel.defaultChannel,
+                        channel.configChannel,
+                        channel.pollChannel,
+                        channel.DNID,
+                        channel.memberNumber,
+                        channel.lesDescription,
+                        $filter('confDateFormat')(channel.startDate),
+                        $filter('confDateFormat')(channel.endDate),
+                        channel.installedBy,
+                        $filter('confDateFormat')(channel.installDate),
+                        $filter('confDateFormat')(channel.startDate),
+                        $filter('confDateFormat')(channel.uninstallDate),
+                        channel.expectedFrequency,
+                        channel.frequencyGracePeriod,
+                        channel.expectedFrequencyInPort
                     ];
                 });
             }
-            else if (mobileTerminal.type === 'IRIDIUM') {
+            else if (mobileTerminal.mobileTerminalType === 'IRIDIUM') {
                 return mobileTerminal.channels.map(function(channel) {
                     return [
-                        $filter('transponderName')(mobileTerminal.type),
-                        mobileTerminal.attributes.SERIAL_NUMBER,
+                        $filter('transponderName')(mobileTerminal.mobileTerminalType),
+                        mobileTerminal.serialNo,
                         channel.name,
-                        channel.capabilities["POLLABLE"],
-                        channel.capabilities["CONFIGURABLE"],
-                        channel.capabilities["DEFAULT_REPORTING"],
-                        $filter('confDateFormat')(channel.ids.START_DATE),
-                        $filter('confDateFormat')(channel.ids.END_DATE),
-                        mobileTerminal.attributes.INSTALLED_BY,
-                        $filter('confDateFormat')(mobileTerminal.attributes.INSTALLED_ON),
-                        $filter('confDateFormat')(mobileTerminal.attributes.STARTED_ON),
-                        $filter('confDateFormat')(mobileTerminal.attributes.UNINSTALLED_ON),
-                        mobileTerminal.attributes.FREQUENCY_EXPECTED,
-                        mobileTerminal.attributes.FREQUENCY_GRACE_PERIOD,
-                        mobileTerminal.attributes.FREQUENCY_IN_PORT
+                        channel.defaultChannel,
+                        channel.configChannel,
+                        channel.pollChannel,
+                        $filter('confDateFormat')(channel.startDate),
+                        $filter('confDateFormat')(channel.endDate),
+                        channel.installedBy,
+                        $filter('confDateFormat')(channel.installDate),
+                        $filter('confDateFormat')(channel.startDate),
+                        $filter('confDateFormat')(channel.uninstallDate),
+                        channel.expectedFrequency,
+                        channel.frequencyGracePeriod,
+                        channel.expectedFrequencyInPort
                     ];
                 });
             }
@@ -135,14 +135,14 @@ copy of the GNU General Public License along with the IFDM Suite. If not, see <h
         }
 
         function getTransponderType(mobileTerminal) {
-            return mobileTerminal.type + ": " + mobileTerminal.plugin.labelName;
+            return mobileTerminal.mobileTerminalType + ": " + mobileTerminal.plugin.name;
         }
 
         function getOceanRegions(mobileTerminal) {
             // Oceans supported by the mobile terminal type's configuration
             var terminalCapabilities = configurationService
                 .getConfig('MOBILE_TERMINAL_TRANSPONDERS')
-                .terminalConfigs[mobileTerminal.type]
+                .terminalConfigs[mobileTerminal.mobileTerminalType]
                 .capabilities;
 
             var selectedOceans = [];

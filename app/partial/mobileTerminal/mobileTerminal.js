@@ -95,11 +95,11 @@ angular.module('unionvmsWeb').controller('MobileTerminalCtrl',function($scope, $
     };
 
     //Get model value for the transponder system dropdown by system type and plugin
-    $scope.getModelValueForTransponderSystemBySystemTypeAndPlugin = function(type, labelName, serviceName){
+    $scope.getModelValueForTransponderSystemBySystemTypeAndPlugin = function(type, name, pluginServiceName){
         var value, tmp;
         $.each($scope.transponderSystems, function(index, system){
             var systemAndTypeAndPluginItem = system.typeAndPlugin;
-            tmp = new SystemTypeAndPlugin(type, labelName, serviceName);
+            tmp = new SystemTypeAndPlugin(type, name, pluginServiceName);
             if(systemAndTypeAndPluginItem.equals(tmp)){
                 value = systemAndTypeAndPluginItem;
                 return false;
@@ -343,11 +343,11 @@ angular.module('unionvmsWeb').controller('MobileTerminalCtrl',function($scope, $
                 function(csvObject, item){
                     var csvRow = [
                         item.associatedVessel? item.associatedVessel.name : locale.getString('mobileTerminal.table_vessel_name_not_assigned'),
-                        item.attributes.SERIAL_NUMBER,
-                        item.channels[0].ids.MEMBER_NUMBER,
-                        item.channels[0].ids.DNID,
+                        item.serialNo,
+                        item.channels[0].memberNumber,
+                        item.channels[0].DNID,
                         $filter('transponderName')(item.type),
-                        item.attributes.SATELLITE_NUMBER,
+                        item.satelliteNumber,
                         item.associatedVessel? item.associatedVessel.mmsi : '',
                         item.active? locale.getString('common.active') : locale.getString('common.inactive')
                     ];

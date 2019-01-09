@@ -67,8 +67,8 @@ angular.module('unionvmsWeb').controller('MobileterminallistCtrl',function($scop
     $scope.getDefaultDnid = function(channels) {
         var defaultDnid;
         $.each(channels, function(index, channel){
-            if (channel.capabilities.DEFAULT_REPORTING && channel.ids.DNID !== undefined) {
-                defaultDnid = channel.ids.DNID;
+            if (channel.defaultChannel && channel.DNID !== undefined) {
+                defaultDnid = channel.DNID;
             }
         });
         return defaultDnid;
@@ -77,8 +77,8 @@ angular.module('unionvmsWeb').controller('MobileterminallistCtrl',function($scop
     $scope.getDefaultMemberNumber = function(channels) {
         var defaultMemberNumber;
         $.each(channels, function(index, channel){
-            if (channel.capabilities.DEFAULT_REPORTING && channel.ids.MEMBER_NUMBER !== undefined) {
-                defaultMemberNumber = channel.ids.MEMBER_NUMBER;
+            if (channel.defaultChannel && channel.memberNumber !== undefined) {
+                defaultMemberNumber = channel.memberNumber;
             }
         });
         return defaultMemberNumber;

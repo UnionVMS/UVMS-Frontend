@@ -49,7 +49,7 @@ describe('mobileTerminalDetailsCtrl', function() {
             }
         };
 
-        expect(scope.mobileTerminal.type).toBeUndefined();
+        expect(scope.mobileTerminal.mobileTerminalType).toBeUndefined();
         
         var selectItem = {
             text : "Inmarsat-C - Burum",
@@ -61,8 +61,8 @@ describe('mobileTerminalDetailsCtrl', function() {
         scope.$digest();
 
         //Type and plugin labelName should be updated
-        expect(scope.mobileTerminal.plugin.labelName).toEqual("BURUM");
-        expect(scope.mobileTerminal.type).toEqual("INMARSAT-C");
+        expect(scope.mobileTerminal.plugin.name).toEqual("BURUM");
+        expect(scope.mobileTerminal.mobileTerminalType).toEqual("INMARSAT-C");
     }));
 
     it('onTerminalSystemSelect should set only system type when LES is missing', inject(function($q, SystemTypeAndPlugin, MobileTerminal) {
@@ -82,7 +82,7 @@ describe('mobileTerminalDetailsCtrl', function() {
             }
         };
 
-        expect(scope.mobileTerminal.type).toBeUndefined();
+        expect(scope.mobileTerminal.mobileTerminalType).toBeUndefined();
         
         var selectItem = {
             text : "Iridium",
@@ -94,7 +94,7 @@ describe('mobileTerminalDetailsCtrl', function() {
         scope.$digest();
 
         //Type and plugin labelName should be updated
-        expect(scope.mobileTerminal.plugin.labelName).toBeUndefined();
-        expect(scope.mobileTerminal.type).toEqual("IRIDIUM");
+        expect(scope.mobileTerminal.plugin.name).toBeUndefined();
+        expect(scope.mobileTerminal.mobileTerminalType).toEqual("IRIDIUM");
     }));
 });

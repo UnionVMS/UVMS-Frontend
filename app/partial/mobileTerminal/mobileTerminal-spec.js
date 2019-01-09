@@ -32,9 +32,9 @@ describe('MobileTerminalCtrl', function() {
         inmarsatCConfig.viewName = "Inmarsat-C";
 
         var capabilityOptions = [];
-        var options1DTO = {labelName: "BURUM", serviceName: "eu.europa.plugin.inmarsat.burum"};
+        var options1DTO = { labelName: "BURUM", serviceName: "eu.europa.plugin.inmarsat.burum"};
         options1 = CapabilityOption.fromJson(options1DTO, 'PLUGIN');
-        var options2DTO = {labelName: "EIK", serviceName: "eu.europa.plugin.inmarsat.eik"};
+        var options2DTO = { labelName: "EIK", serviceName: "eu.europa.plugin.inmarsat.eik"};
         options2 = CapabilityOption.fromJson(options2DTO, 'PLUGIN');
         capabilityOptions.push(options1);
         capabilityOptions.push(options2);
@@ -71,20 +71,23 @@ describe('MobileTerminalCtrl', function() {
 
         //Validate dropdowns
         expect(scope.transponderSystems.length).toEqual(3);
+
         expect(scope.transponderSystems[0].typeAndPlugin).toBeDefined();
         expect(scope.transponderSystems[0].typeAndPlugin.type).toEqual(inmarsatCConfig.systemType);
-        expect(scope.transponderSystems[0].typeAndPlugin.plugin.labelName).toEqual(options1.attributes['LABELNAME']);
-        expect(scope.transponderSystems[0].typeAndPlugin.plugin.serviceName).toEqual(options1.attributes['SERVICENAME']);
+
+        expect(scope.transponderSystems[0].typeAndPlugin.plugin.name).toEqual(options1.attributes['LABELNAME']);
+
+        expect(scope.transponderSystems[0].typeAndPlugin.plugin.pluginServiceName).toEqual(options1.attributes['SERVICENAME']);
 
         expect(scope.transponderSystems[1].typeAndPlugin).toBeDefined();
         expect(scope.transponderSystems[1].typeAndPlugin.type).toEqual(inmarsatCConfig.systemType);
-        expect(scope.transponderSystems[1].typeAndPlugin.plugin.labelName).toEqual(options2.attributes['LABELNAME']);
-        expect(scope.transponderSystems[1].typeAndPlugin.plugin.serviceName).toEqual(options2.attributes['SERVICENAME']);
+        expect(scope.transponderSystems[1].typeAndPlugin.plugin.name).toEqual(options2.attributes['LABELNAME']);
+        expect(scope.transponderSystems[1].typeAndPlugin.plugin.pluginServiceName).toEqual(options2.attributes['SERVICENAME']);
 
         expect(scope.transponderSystems[2].typeAndPlugin).toBeDefined();
         expect(scope.transponderSystems[2].typeAndPlugin.type).toEqual(iridiumConfig.systemType);
-        expect(scope.transponderSystems[2].typeAndPlugin.plugin.labelName).toBeUndefined();
-        expect(scope.transponderSystems[2].typeAndPlugin.plugin.serviceName).toBeUndefined();
+        expect(scope.transponderSystems[2].typeAndPlugin.plugin.name).toBeUndefined();
+        expect(scope.transponderSystems[2].typeAndPlugin.plugin.pluginServiceName).toBeUndefined();
 	}));
 
     it('getModelValueForTransponderSystemBySystemTypeAndPlugin should return correct value', inject(function(TranspondersConfig, TerminalConfig, CapabilityOption) {
@@ -95,14 +98,14 @@ describe('MobileTerminalCtrl', function() {
         var returnValue = scope.getModelValueForTransponderSystemBySystemTypeAndPlugin(inmarsatCConfig.systemType, options2.attributes['LABELNAME'], options2.attributes['SERVICENAME']);
         expect(returnValue).toBeDefined();
         expect(returnValue.type).toEqual(inmarsatCConfig.systemType);
-        expect(returnValue.plugin.labelName).toEqual(options2.attributes['LABELNAME']);
-        expect(returnValue.plugin.serviceName).toEqual(options2.attributes['SERVICENAME']);
+        expect(returnValue.plugin.name).toEqual(options2.attributes['LABELNAME']);
+        expect(returnValue.plugin.pluginServiceName).toEqual(options2.attributes['SERVICENAME']);
 
         returnValue = scope.getModelValueForTransponderSystemBySystemTypeAndPlugin(iridiumConfig.systemType);
         expect(returnValue).toBeDefined();
         expect(returnValue.type).toEqual(iridiumConfig.systemType);
-        expect(returnValue.plugin.labelName).toBeUndefined();
-        expect(returnValue.plugin.serviceName).toBeUndefined();
+        expect(returnValue.plugin.name).toBeUndefined();
+        expect(returnValue.plugin.pluginServiceName).toBeUndefined();
     }));
 
     it('should search for mobile terminals on init', inject(function($q, searchService) {
