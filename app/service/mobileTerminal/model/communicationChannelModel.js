@@ -53,13 +53,13 @@ angular.module('unionvmsWeb').factory('CommunicationChannel', function(dateTimeS
             channel.startDate = channel.getFormattedDate(data.startDate);
             channel.endDate = channel.getFormattedDate(data.endDate);
 
-            channel.archived = false;
+            channel.archived = data.archived;
 
+            
             // channel types
             channel.defaultChannel = data.defaultChannel;
             channel.configChannel = data.configChannel;
             channel.pollChannel = data.pollChannel;
-                        
             return channel;
         };
 
@@ -95,7 +95,8 @@ angular.module('unionvmsWeb').factory('CommunicationChannel', function(dateTimeS
             var copy = new CommunicationChannel();
             copy.name = this.name;
             copy.id = this.id;
-                        
+            copy.DNID = this.DNID;
+
             // ids
             copy.frequencyGracePeriod = this.frequencyGracePeriod;
             copy.expectedFrequencyInPort = this.expectedFrequencyInPort;
@@ -107,7 +108,8 @@ angular.module('unionvmsWeb').factory('CommunicationChannel', function(dateTimeS
             copy.uninstallDate = this.uninstallDate;
             copy.startDate = this.startDate;
             copy.endDate = this.endDate;
-            
+            copy.archived = this.archived;
+
             // channel types
             copy.defaultChannel = this.defaultChannel;
             copy.configChannel = this.configChannel;

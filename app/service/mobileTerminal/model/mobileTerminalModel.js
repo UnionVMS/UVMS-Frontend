@@ -11,13 +11,13 @@ copy of the GNU General Public License along with the IFDM Suite. If not, see <h
  */
 angular.module('unionvmsWeb').factory('MobileTerminal', function(CommunicationChannel) {
 
-        function MobileTerminal(){
+        function MobileTerminal() {
             this.serialNo = undefined;
             this.satelliteNumber = undefined;
             this.antenna = undefined;
             this.transceiverType = undefined;
             this.softwareVersion = undefined;
-            this.answerBack = undefined;            
+            this.answerBack = undefined;
             this.channels = [createDefaultChannel()];            
             this.active = false;            
             this.connectId = undefined;
@@ -46,11 +46,18 @@ angular.module('unionvmsWeb').factory('MobileTerminal', function(CommunicationCh
             var mobileTerminal = new MobileTerminal();
 
             mobileTerminal.active = !data.inactivated;
+            mobileTerminal.inactivated = data.inactivated;
             mobileTerminal.id = data.id;
             mobileTerminal.source = data.source;
             mobileTerminal.mobileTerminalType = data.mobileTerminalType;
             if (data.asset !== undefined && data.asset !== null) {
                 mobileTerminal.connectId = data.asset.id;
+                if (this.connectId !== undefined) {
+                    mobileTerminal.asset = undefined;
+                    mobileTerminal.asset = {
+                        id : this.connectId
+                    };
+                }
             }
             
             mobileTerminal.archived = data.archived;
@@ -60,7 +67,6 @@ angular.module('unionvmsWeb').factory('MobileTerminal', function(CommunicationCh
             mobileTerminal.antenna = data.antenna;
             mobileTerminal.transceiverType = data.transceiverType;
             mobileTerminal.softwareVersion = data.softwareVersion;
-            mobileTerminal.source = data.source;
             if(angular.isDefined(data.plugin)){
                 mobileTerminal.plugin = {
                     name : data.plugin.name,
@@ -89,10 +95,10 @@ angular.module('unionvmsWeb').factory('MobileTerminal', function(CommunicationCh
             //Create array of Channels in json format
             var jsonChannels = [];
             $.each(this.channels, function(index, value){
-                var channelObject = JSON.parse(value.toJson());
+                var channelObject = value.dataTransferObject();
                 jsonChannels.push(channelObject);
             });
-
+        
             var returnObject = {
                 serialNo: this.serialNo,
                 satelliteNumber: this.satelliteNumber,
@@ -106,6 +112,7 @@ angular.module('unionvmsWeb').factory('MobileTerminal', function(CommunicationCh
                 mobileTerminalType : this.mobileTerminalType,
                 plugin : this.plugin,
                 inactivated : !this.active,
+                active: this.active,
                 source : this.source
             };
             
@@ -113,8 +120,8 @@ angular.module('unionvmsWeb').factory('MobileTerminal', function(CommunicationCh
                 returnObject.asset = undefined;
                 returnObject.asset = {
                     id : this.connectId
-                }
-            }            
+                };
+            }
 
             return returnObject;
         };
@@ -151,7 +158,7 @@ angular.module('unionvmsWeb').factory('MobileTerminal', function(CommunicationCh
 
         //Used when activating, inactivating and removing
         MobileTerminal.prototype.toSetStatusJson = function() {
-            return JSON.stringify({ guid: this.guid });
+            return JSON.stringify({ id: this.id });
         };
 
         MobileTerminal.prototype.setSystemTypeToInmarsatC = function(){
@@ -172,9 +179,9 @@ angular.module('unionvmsWeb').factory('MobileTerminal', function(CommunicationCh
 
             var defaultChannel = this.channels[0];
             $.each(removedChannels, function(index, removedChannel) {
-                $.each(removedChannel.capabilities, function(capability, removedValue) {
-                    defaultChannel.capabilities[capability] = defaultChannel.capabilities[capability] || removedValue;
-                });
+                defaultChannel.defaultChannel = defaultChannel.defaultChannel || removedChannel.defaultChannel;
+                defaultChannel.configChannel = defaultChannel.configChannel || removedChannel.configChannel ;
+                defaultChannel.pollChannel = defaultChannel.pollChannel || removedChannel.pollChannel;
             });
         };
 

@@ -140,7 +140,7 @@ angular.module('unionvmsWeb').factory('dateTimeService',['$log', 'globalSettings
         // Formats the date string as 2007-12-03T10:15:30+01:0
         formatISO8601: function(date) {            
             if(angular.isDefined(date) && date !== null){
-                var d = moment(date).format("YYYY-MM-DDTHH:mm:ss+00:00");
+                var d = moment(date).format("YYYY-MM-DDTHH:mm:ssZ");
                 return d;
             }                        
             return date;
