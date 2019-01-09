@@ -1053,8 +1053,8 @@ angular.module('unionvmsWeb').factory('mapService', function(locale, $rootScope,
         }
         
         angular.forEach(data, function(item){
-            if (src.displayedCodes.indexOf(item.properties.flagStateCode) === -1){
-                src.displayedCodes.push(item.properties.flagStateCode);
+            if (src.displayedCodes.indexOf(item.properties.countryCode) === -1){
+                src.displayedCodes.push(item.properties.countryCode);
             }
         }, src);
     };
@@ -3316,7 +3316,7 @@ angular.module('unionvmsWeb').factory('mapService', function(locale, $rootScope,
         
         return {
             name: data.name,
-            fs: data.flagStateCode,
+            fs: data.countryCode,
             extMark: data.externalMarking,
             ircs: data.ircs,
             cfr: data.cfr,
@@ -3454,7 +3454,7 @@ angular.module('unionvmsWeb').factory('mapService', function(locale, $rootScope,
     ms.formatSegmentDataForPopup = function(data){
         return {
             name: data.name,
-            fs: data.flagStateCode,
+            fs: data.countryCode,
             extMark: data.externalMarking,
             ircs: data.ircs,
             cfr: data.cfr,
