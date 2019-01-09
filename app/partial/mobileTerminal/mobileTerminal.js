@@ -115,7 +115,7 @@ angular.module('unionvmsWeb').controller('MobileTerminalCtrl',function($scope, $
             //LES capability
             if(config.capabilities["PLUGIN"] && _.isArray(config.capabilities["PLUGIN"])){
                 $.each(config.capabilities["PLUGIN"], function(key2, pluginOption){
-                    $scope.transponderSystems.push({text : config.viewName +" : " +pluginOption.text, typeAndPlugin : new SystemTypeAndPlugin(config.systemType, pluginOption.name, pluginOption.pluginServiceName)});
+                    $scope.transponderSystems.push({text : config.viewName +" : " +pluginOption.text, typeAndPlugin : new SystemTypeAndPlugin(config.systemType, pluginOption.attributes['LABELNAME'], pluginOption.attributes['SERVICENAME'])});
                 });
             }else{
                 $scope.transponderSystems.push({text : config.viewName, typeAndPlugin : new SystemTypeAndPlugin(config.systemType, undefined)});

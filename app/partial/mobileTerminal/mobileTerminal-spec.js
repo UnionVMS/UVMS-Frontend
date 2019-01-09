@@ -32,9 +32,9 @@ describe('MobileTerminalCtrl', function() {
         inmarsatCConfig.viewName = "Inmarsat-C";
 
         var capabilityOptions = [];
-        var options1DTO = {name: "BURUM", pluginServiceName: "eu.europa.plugin.inmarsat.burum"};
+        var options1DTO = { labelName: "BURUM", serviceName: "eu.europa.plugin.inmarsat.burum"};
         options1 = CapabilityOption.fromJson(options1DTO, 'PLUGIN');
-        var options2DTO = {name: "EIK", pluginServiceName: "eu.europa.plugin.inmarsat.eik"};
+        var options2DTO = { labelName: "EIK", serviceName: "eu.europa.plugin.inmarsat.eik"};
         options2 = CapabilityOption.fromJson(options2DTO, 'PLUGIN');
         capabilityOptions.push(options1);
         capabilityOptions.push(options2);
@@ -71,9 +71,12 @@ describe('MobileTerminalCtrl', function() {
 
         //Validate dropdowns
         expect(scope.transponderSystems.length).toEqual(3);
+
         expect(scope.transponderSystems[0].typeAndPlugin).toBeDefined();
         expect(scope.transponderSystems[0].typeAndPlugin.type).toEqual(inmarsatCConfig.systemType);
+
         expect(scope.transponderSystems[0].typeAndPlugin.plugin.name).toEqual(options1.attributes['LABELNAME']);
+
         expect(scope.transponderSystems[0].typeAndPlugin.plugin.pluginServiceName).toEqual(options1.attributes['SERVICENAME']);
 
         expect(scope.transponderSystems[1].typeAndPlugin).toBeDefined();
