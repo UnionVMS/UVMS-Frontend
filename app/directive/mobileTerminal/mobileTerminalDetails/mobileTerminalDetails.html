@@ -11,7 +11,7 @@
                         <div class="flexrow form-section-1">
                             <div class="transponderSystemSelect form-group medium-field-static" ng-class="{'has-error': mobileTerminalForm.typeAndPlugin.$invalid && (submitAttempted || mobileTerminalForm.typeAndPlugin.$dirty)}">
                                 <label>{{'mobileTerminal.transceiver_system' | i18n}}
-                                <span ng-show="mobileTerminal.type.length < 0 || isCreateNewMode()" class="mandatory">{{ 'common.mandatory_field' | i18n }}</span></label>
+                                <span ng-show="mobileTerminal.mobileTerminalType.length < 0 || isCreateNewMode()" class="mandatory">{{ 'common.mandatory_field' | i18n }}</span></label>
                                 <dropdown ng-model="typeAndPlugin" name="typeAndPlugin" input-field-id="mt-{{listIndex}}-typeAndPlugin" initialtext="{{ 'common.choose' | i18n }}" items="transponderSystems" callback="onTerminalSystemSelect" ng-disabled="!isCreateNewMode()" data="typeAndPlugin" ng-required="true"></dropdown>
                                 <input-validation-message types="required" input="mobileTerminalForm.typeAndPlugin"></input-validation-message>
                             </div>
@@ -27,13 +27,13 @@
                                 </div>
                                 <div class="form-group medium-field" ng-show="typeAndPlugin && getTerminalConfig().terminalFields.SERIAL_NUMBER" ng-class="{'has-error': mobileTerminalForm.serialNumber.$invalid && (submitAttempted || mobileTerminalForm.serialNumber.$dirty)}">
                                     <label>{{'mobileTerminal.form_inmarsatc_serial_no_label' | i18n}}
-                                    <span ng-show="mobileTerminal.attributes.SERIAL_NUMBER.length < 0 || isCreateNewMode()" class="mandatory">{{ 'common.mandatory_field' | i18n }}</span></label>
-                                    <input type="text" name="serialNumber" id="mt-{{listIndex}}-serialNumber" class="form-control" ng-model="mobileTerminal.attributes.SERIAL_NUMBER" ng-required="true"/>
+                                    <span ng-show="mobileTerminal.serialNo.length < 0 || isCreateNewMode()" class="mandatory">{{ 'common.mandatory_field' | i18n }}</span></label>
+                                    <input type="text" name="serialNumber" id="mt-{{listIndex}}-serialNumber" class="form-control" ng-model="mobileTerminal.serialNo" ng-required="true"/>
                                     <input-validation-message types="required" input="mobileTerminalForm.serialNumber"></input-validation-message>
                                 </div>
                                 <div class="form-group long-field" ng-show="typeAndPlugin" ng-show="getTerminalConfig().terminalFields.TRANSCEIVER_TYPE">
                                     <label>{{'mobileTerminal.form_inmarsatc_transceiver_type_label' | i18n}}</label>
-                                    <input type="text" name="tranciverType" id="mt-{{listIndex}}-tranciverType" class="form-control" ng-model="mobileTerminal.attributes.TRANSCEIVER_TYPE">
+                                    <input type="text" name="tranciverType" id="mt-{{listIndex}}-tranciverType" class="form-control" ng-model="mobileTerminal.transceiverType">
                                 </div>
                                 <div class="form-group align-right" ng-show="typeAndPlugin">
                                     <div class="switch-container">
@@ -53,19 +53,19 @@
                         <div class="flexrow form-section-2" ng-if="typeAndPlugin">
                             <div class="form-group medium-field" ng-show="getTerminalConfig().terminalFields.SOFTWARE_VERSION">
                                 <label>{{'mobileTerminal.form_inmarsatc_software_version_label' | i18n}}</label>
-                                <input type="text" name="softwareVersion" id="mt-{{listIndex}}-softwareVersion" class="form-control" ng-model="mobileTerminal.attributes.SOFTWARE_VERSION">
+                                <input type="text" name="softwareVersion" id="mt-{{listIndex}}-softwareVersion" class="form-control" ng-model="mobileTerminal.softwareVersion">
                             </div>
                             <div class="form-group long-field" ng-show="getTerminalConfig().terminalFields.ANTENNA">
                                 <label>{{'mobileTerminal.form_inmarsatc_antenna_label' | i18n}}</label>
-                                <input type="text" name="antenna" id="mt-{{listIndex}}-antenna"class="form-control" ng-model="mobileTerminal.attributes.ANTENNA">
+                                <input type="text" name="antenna" id="mt-{{listIndex}}-antenna"class="form-control" ng-model="mobileTerminal.antenna">
                             </div>
                             <div class="form-group medium-field" ng-show="getTerminalConfig().terminalFields.SATELLITE_NUMBER">
                                 <label>{{'mobileTerminal.form_inmarsatc_satellite_number_label' | i18n}}</label>
-                                <input type="text" name="satelliteNumber" id="mt-{{listIndex}}-satelliteNumber" class="form-control" ng-model="mobileTerminal.attributes.SATELLITE_NUMBER"/>
+                                <input type="text" name="satelliteNumber" id="mt-{{listIndex}}-satelliteNumber" class="form-control" ng-model="mobileTerminal.satelliteNumber"/>
                             </div>
                             <div class="form-group long-field" ng-show="getTerminalConfig().terminalFields.ANSWER_BACK">
                                 <label>{{'mobileTerminal.form_inmarsatc_answer_back_label' | i18n}}</label>
-                                <input type="text" name="answerBack" id="mt-{{listIndex}}-answerBack" class="form-control" ng-model="mobileTerminal.attributes.ANSWER_BACK">
+                                <input type="text" name="answerBack" id="mt-{{listIndex}}-answerBack" class="form-control" ng-model="mobileTerminal.answerBack">
                             </div>
                         </div>
                         <div class="currentMobileTerminalTypes" ng-show="typeAndPlugin">
@@ -89,73 +89,73 @@
                                             <input type="text" name="communicationChannel" id="mt-{{listIndex}}-channel-{{$index}}-communicationChannel" class="form-control" ng-model="communicationChannel.name">
                                         </div>
                                         <div class="form-group radio-button">
-                                            <input type="checkbox" name="polling" ng-value="$index" ng-model="communicationChannel.capabilities.POLLABLE" ng-disabled="disableChannels.pollable(communicationChannel)" id="mt-{{listIndex}}-channel-{{$index}}-checkbox-polling">
+                                            <input type="checkbox" name="polling" ng-value="$index" ng-model="communicationChannel.pollChannel" ng-disabled="disableChannels.pollable(communicationChannel)" id="mt-{{listIndex}}-channel-{{$index}}-checkbox-polling">
                                             <label for="mt-{{listIndex}}-channel-{{$index}}-checkbox-polling" ng-attr-title="{{getRadioButtonHelpText.pollable(communicationChannel)}}">
                                                 <span>{{'mobileTerminal.form_inmarsatc_communication_selectedchannel_poll_label' | i18n}}</span>
                                             </label>
                                         </div>
                                         <div class="form-group radio-button">
-                                            <input type="checkbox" name="config" ng-value="$index" ng-model="communicationChannel.capabilities.CONFIGURABLE" ng-disabled="disableChannels.configurable(communicationChannel)" id="mt-{{listIndex}}-channel-{{$index}}-checkbox-config">
+                                            <input type="checkbox" name="config" ng-value="$index" ng-model="communicationChannel.configChannel" ng-disabled="disableChannels.configurable(communicationChannel)" id="mt-{{listIndex}}-channel-{{$index}}-checkbox-config">
                                             <label for="mt-{{listIndex}}-channel-{{$index}}-checkbox-config" ng-attr-title="{{getRadioButtonHelpText.configurable(communicationChannel)}}">
                                                 <span>{{'mobileTerminal.form_inmarsatc_communication_selectedchannel_con_label' | i18n}}</span>
                                             </label>
                                         </div>
                                         <div class="form-group radio-button margin-right">
-                                            <input type="checkbox" name="default" ng-value="$index" ng-model="communicationChannel.capabilities.DEFAULT_REPORTING" ng-disabled="disableChannels.defaultReporting(communicationChannel)" id="mt-{{listIndex}}-channel-{{$index}}-checkbox-default">
+                                            <input type="checkbox" name="default" ng-value="$index" ng-model="communicationChannel.defaultChannel" ng-disabled="disableChannels.defaultReporting(communicationChannel)" id="mt-{{listIndex}}-channel-{{$index}}-checkbox-default">
                                             <label for="mt-{{listIndex}}-channel-{{$index}}-checkbox-default" ng-attr-title="{{getRadioButtonHelpText.defaultReporting(communicationChannel)}}">
                                                 <span>{{'mobileTerminal.form_inmarsatc_communication_selectedchannel_def_label' | i18n}}</span>
                                             </label>
                                         </div>
                                         <div class="form-group short-field" ng-class="{'has-error': channelForm.dnid.$invalid && (submitAttempted || channelForm.dnid.$dirty)}" ng-show="getTerminalConfig().channelFields.DNID">
                                             <label>{{'mobileTerminal.form_inmarsatc_communication_selectedchannel_dnid_label' | i18n}}<span ng-if="createNewMode" class="mandatory">{{ 'common.mandatory_field' | i18n }}</span></label>
-                                            <input type="text" name="dnid" id="mt-{{listIndex}}-channel-{{$index}}-dnid" class="form-control" ng-model="communicationChannel.ids.DNID" only-digits>
+                                            <input type="text" name="dnid" id="mt-{{listIndex}}-channel-{{$index}}-dnid" class="form-control" ng-model="communicationChannel.DNID" only-digits>
                                             <input-validation-message types="onlyDigits" input="channelForm.dnid"></input-validation-message>
                                         </div>
                                         <div class="form-group short-field" ng-class="{'has-error': channelForm.memberId.$invalid && (submitAttempted || channelForm.memberId.$dirty)}" ng-show="getTerminalConfig().channelFields.MEMBER_NUMBER">
                                             <label>{{'mobileTerminal.form_inmarsatc_communication_selectedchannel_member_no_label' | i18n}}<span ng-if="createNewMode" class="mandatory">{{ 'common.mandatory_field' | i18n }}</span></label>
-                                            <input type="text" name="memberId" id="mt-{{listIndex}}-channel-{{$index}}-memberId" class="form-control" ng-model="communicationChannel.ids.MEMBER_NUMBER" only-digits>
+                                            <input type="text" name="memberId" id="mt-{{listIndex}}-channel-{{$index}}-memberId" class="form-control" ng-model="communicationChannel.memberNumber" only-digits>
                                             <input-validation-message types="onlyDigits" input="channelForm.memberId"></input-validation-message>
                                         </div>
                                         <div class="form-group short-field" ng-show="getTerminalConfig().channelFields.LES_DESCRIPTION">
                                             <label>{{'mobileTerminal.form_inmarsatc_communication_selectedchannel_land_station_label' | i18n}}</label>
-                                            <input type="text" name="lesDescription" id="mt-{{listIndex}}-channel-{{$index}}-lesDescription" class="form-control" ng-model="communicationChannel.ids.LES_DESCRIPTION">
+                                            <input type="text" name="lesDescription" id="mt-{{listIndex}}-channel-{{$index}}-lesDescription" class="form-control" ng-model="communicationChannel.lesDescription">
                                         </div>
                                         <div class="form-group medium-field" ng-class="{'has-error': channelForm.started.$invalid && (submitAttempted || channelForm.started.$dirty)}" ng-show="getTerminalConfig().channelFields.START_DATE">
                                             <label>{{'mobileTerminal.form_inmarsatc_communication_selectedchannel_started_label' | i18n}}</label>
-                                            <datepicker-input name="started" input-field-id="mt-{{listIndex}}-channel-{{$index}}-started" model="communicationChannel.ids.START_DATE" time="true" max-date="communicationChannel.ids.END_DATE"></datepicker-input>
+                                            <datepicker-input name="started" input-field-id="mt-{{listIndex}}-channel-{{$index}}-started" model="communicationChannel.startDate" time="true" max-date="communicationChannel.endDate"></datepicker-input>
                                         </div>
                                         <div class="form-group medium-field" ng-class="{'has-error': channelForm.stopped.$invalid && (submitAttempted || channelForm.stopped.$dirty)}" ng-show="getTerminalConfig().channelFields.END_DATE">
                                             <label>{{'mobileTerminal.form_inmarsatc_communication_selectedchannel_stopped_label' | i18n}}</label>
-                                            <datepicker-input name="stopped" input-field-id="mt-{{listIndex}}-channel-{{$index}}-stopped" time="true" model="communicationChannel.ids.END_DATE" min-date="communicationChannel.ids.START_DATE"></datepicker-input>
+                                            <datepicker-input name="stopped" input-field-id="mt-{{listIndex}}-channel-{{$index}}-stopped" time="true" model="communicationChannel.endDate" min-date="communicationChannel.startDate"></datepicker-input>
                                         </div>
                                     </div>
                                     <div class="flexrow form-section-4">
                                         <div class="form-group medium-field" ng-show="getTerminalConfig().channelFields.INSTALLED_BY">
                                             <label>{{'mobileTerminal.form_inmarsatc_installed_by_label' | i18n}}</label>
-                                            <input type="text" name="installedBy" id="mt-{{listIndex}}-channel-{{$index}}-installedBy" class="form-control" ng-model="communicationChannel.ids.INSTALLED_BY">
+                                            <input type="text" name="installedBy" id="mt-{{listIndex}}-channel-{{$index}}-installedBy" class="form-control" ng-model="communicationChannel.installedBy">
                                         </div>
                                         <div class="form-group medium-field" ng-show="getTerminalConfig().channelFields.INSTALLED_ON">
                                             <label>{{'mobileTerminal.form_inmarsatc_installed_on_label' | i18n}}</label>
-                                            <datepicker-input name="installedOn" input-field-id="mt-{{listIndex}}-channel-{{$index}}-installedOn" model="communicationChannel.ids.INSTALLED_ON" time="true"></datepicker-input>
+                                            <datepicker-input name="installedOn" input-field-id="mt-{{listIndex}}-channel-{{$index}}-installedOn" model="communicationChannel.installDate" time="true"></datepicker-input>
                                         </div>
                                         <div class="form-group medium-field" ng-show="getTerminalConfig().channelFields.UNINSTALLED_ON" ng-class="{'has-error': mobileTerminalForm.uninstalled.$invalid && (submitAttempted || mobileTerminalForm.uninstalled.$dirty)}">
                                             <label>{{'mobileTerminal.form_inmarsatc_uninstalled_on_label' | i18n}}</label>
-                                            <datepicker-input name="uninstalled" input-field-id="mt-{{listIndex}}-channel-{{$index}}-uninstalled" model="communicationChannel.ids.UNINSTALLED_ON" time="true" min-date="communicationChannel.ids.INSTALLED_ON"></datepicker-input>
+                                            <datepicker-input name="uninstalled" input-field-id="mt-{{listIndex}}-channel-{{$index}}-uninstalled" model="communicationChannel.uninstallDate" time="true" min-date="communicationChannel.installDate"></datepicker-input>
                                         </div>
-                                        <div class="form-group" ng-show="getTerminalConfig().channelFields.FREQUENCY_EXPECTED" ng-class="{'has-error': mobileTerminalForm.frequency_expected.$invalid && (submitAttempted || mobileTerminalForm.frequency_expected.$dirty)}">
+                                        <div class="form-group" ng-show="getTerminalConfig().channelFields.FREQUENCY_EXPECTED" ng-class="{'has-error': mobileTerminalForm.frequencyExpected.$invalid && (submitAttempted || mobileTerminalForm.frequencyExpected.$dirty)}">
                                             <label>{{'mobileTerminal.form_inmarsatc_expected_freq_label' | i18n}}</label>
-                                            <period-input name="frequencyExpected" input-field-id="mt-{{listIndex}}-channel-{{$index}}-frequencyExpected" model="communicationChannel.ids.FREQUENCY_EXPECTED" no-minutes="true"></period-input>
-                                            <input-validation-message types="number" input="mobileTerminalForm.frequency_expected"></input-validation-message>
+                                            <period-input name="frequencyExpected" input-field-id="mt-{{listIndex}}-channel-{{$index}}-frequencyExpected" model="communicationChannel.expectedFrequency" no-minutes="true"></period-input>
+                                            <input-validation-message types="number" input="mobileTerminalForm.frequencyExpected"></input-validation-message>
                                         </div>
-                                        <div class="form-group" ng-show="getTerminalConfig().channelFields.FREQUENCY_GRACE_PERIOD" ng-class="{'has-error': mobileTerminalForm.frequency_grace.$invalid && (submitAttempted || mobileTerminalForm.frequency_grace.$dirty)}">
+                                        <div class="form-group" ng-show="getTerminalConfig().channelFields.FREQUENCY_GRACE_PERIOD" ng-class="{'has-error': mobileTerminalForm.frequencyGrace.$invalid && (submitAttempted || mobileTerminalForm.frequencyGrace.$dirty)}">
                                             <label>{{'mobileTerminal.form_inmarsatc_grace_period_label' | i18n}}</label>
-                                            <period-input name="frequencyGrace" input-field-id="mt-{{listIndex}}-channel-{{$index}}-frequencyGrace" model="communicationChannel.ids.FREQUENCY_GRACE_PERIOD" no-minutes="true"></period-input>
-                                            <input-validation-message types="number" input="mobileTerminalForm.frequency_grace"></input-validation-message>
+                                            <period-input name="frequencyGrace" input-field-id="mt-{{listIndex}}-channel-{{$index}}-frequencyGrace" model="communicationChannel.frequencyGracePeriod" no-minutes="true"></period-input>
+                                            <input-validation-message types="number" input="mobileTerminalForm.frequencyGrace"></input-validation-message>
                                         </div>
-                                        <div class="form-group" ng-show="getTerminalConfig().channelFields.FREQUENCY_IN_PORT" ng-class="{'has-error': mobileTerminalForm.frequency_port.$invalid && (submitAttempted || mobileTerminalForm.frequency_port.$dirty)}">
+                                        <div class="form-group" ng-show="getTerminalConfig().channelFields.FREQUENCY_IN_PORT" ng-class="{'has-error': mobileTerminalForm.frequencyPort.$invalid && (submitAttempted || mobileTerminalForm.frequencyPort.$dirty)}">
                                             <label>{{'mobileTerminal.form_inmarsatc_in_port_grace_period_label' | i18n}}</label>
-                                            <period-input name="frequencyPort" input-field-id="mt-{{listIndex}}-channel-{{$index}}-frequencyPort" model="communicationChannel.ids.FREQUENCY_IN_PORT" no-minutes="true"></period-input>
-                                            <input-validation-message types="number" input="mobileTerminalForm.frequency_port"></input-validation-message>
+                                            <period-input name="frequencyPort" input-field-id="mt-{{listIndex}}-channel-{{$index}}-frequencyPort" model="communicationChannel.expectedFrequencyInPort" no-minutes="true"></period-input>
+                                            <input-validation-message types="number" input="mobileTerminalForm.frequencyPort"></input-validation-message>
                                         </div>
                                     </div>
                                 </div>

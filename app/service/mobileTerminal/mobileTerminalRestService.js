@@ -29,23 +29,27 @@ angular.module('unionvmsWeb')
                 });
             },
             assignMobileTerminal : function(){
-                return $resource('asset/rest/mobileterminal/assign/');
+                return $resource('asset/rest/mobileterminal/assign/', {}, {
+                    save: { method: 'PUT'}
+                });
             },
             unassignMobileTerminal : function(){
-                return $resource('asset/rest/mobileterminal/unassign/');
+                return $resource('asset/rest/mobileterminal/unassign/', {}, {
+                    save: { method: 'PUT'}
+                });
             },
             activateMobileTerminal : function(){
-                return $resource('asset/rest/mobileterminal/status/activate', {}, {
+                return $resource('asset/rest/mobileterminal/status/activate/:id', {}, {
                     save: {method: 'PUT'}
                 });
             },
             inactivateMobileTerminal : function(){
-                return $resource('asset/rest/mobileterminal/status/inactivate', {}, {
+                return $resource('asset/rest/mobileterminal/status/inactivate/:id', {}, {
                     save: {method: 'PUT'}
                 });
             },
             removeMobileTerminal : function(){
-                return $resource('asset/rest/mobileterminal/status/remove', {}, {
+                return $resource('asset/rest/mobileterminal/status/remove/:id', {}, {
                     save: {method: 'PUT'}
                 });
             },
@@ -68,14 +72,7 @@ angular.module('unionvmsWeb')
                 existingChannels: []
             };
 
-            // Get serial number attribute
-            if (data.attributes) {
-                $.each(data.attributes, function(index, attribute) {
-                    if (attribute.type === "SERIAL_NUMBER") {
-                        mobileTerminal.serialNumber = attribute.value;
-                    }
-                });
-            }
+            mobileTerminal.serial_no = data.serial_no;
 
             if (data.channels) {
                 $.each(data.channels, function(index, channel) {
@@ -106,8 +103,8 @@ angular.module('unionvmsWeb')
             getTranspondersConfig : function(){
                 var deferred = $q.defer();
                 mobileTerminalRestFactory.getTranspondersConfig().get({
-                }, function(response) {
-                    if(response.code !== 200){
+                }, function(response, headers, status) {
+                    if(status !== 200){
                         deferred.reject("Invalid response status");
                         return;
                     }
@@ -122,8 +119,8 @@ angular.module('unionvmsWeb')
             getMobileTerminalList : function(getListRequest, skipGettingVessel){
                 var deferred = $q.defer();
                 //Get list of mobile terminals
-                mobileTerminalRestFactory.getMobileTerminals().list(getListRequest.DTOForMobileTerminal(), function(response){
-                        if(response.code !== 200){
+                mobileTerminalRestFactory.getMobileTerminals().list(getListRequest.DTOForMobileTerminal(), function(response, headers, status) {
+                        if(status !== 200){
                             deferred.reject("Invalid response status");
                             return;
                         }
@@ -131,13 +128,13 @@ angular.module('unionvmsWeb')
                             searchResultListPage;
 
                         //Create a SearchResultListPage object from the response
-                        if(angular.isArray(response.data.mobileTerminal)) {
-                            for (var i = 0; i < response.data.mobileTerminal.length; i++) {
-                                mobileTerminals.push(MobileTerminal.fromJson(response.data.mobileTerminal[i]));
+                        if(angular.isArray(response.mobileTerminalList)) {
+                            for (var i = 0; i < response.mobileTerminalList.length; i++) {
+                                mobileTerminals.push(MobileTerminal.fromJson(response.mobileTerminalList[i]));
                             }
                         }
-                        var currentPage = response.data.currentPage;
-                        var totalNumberOfPages = response.data.totalNumberOfPages;
+                        var currentPage = response.currentPage;
+                        var totalNumberOfPages = response.totalNumberOfPages;
                         searchResultListPage = new SearchResultListPage(mobileTerminals, currentPage, totalNumberOfPages);
 
                         //Get vessels for the mobileTerminals?
@@ -170,12 +167,12 @@ angular.module('unionvmsWeb')
 
             getMobileTerminalByGuid : function(guid){
                 var deferred = $q.defer();
-                mobileTerminalRestFactory.getMobileTerminalByGuid().get({id:guid}, function(response){
-                        if(response.code !== 200){
+                mobileTerminalRestFactory.getMobileTerminalByGuid().get({id:guid}, function(response, headers, status) {
+                        if(status !== 200){
                             deferred.reject("Invalid response status");
                             return;
                         }
-                        var mobileTerminal = MobileTerminal.fromJson(response.data);
+                        var mobileTerminal = MobileTerminal.fromJson(response);
 
                         //Get associated vessel for the mobileTerminal
                         try{
@@ -200,17 +197,17 @@ angular.module('unionvmsWeb')
 
             createNewMobileTerminal : function(mobileTerminal){
                 var deferred = $q.defer();
-                mobileTerminalRestFactory.mobileTerminal().save(mobileTerminal.toJson(), function(response) {
-                    if (response.code === 2806) {
+                mobileTerminalRestFactory.mobileTerminal().save(mobileTerminal.toJson(), function(response, headers, status) {
+                    if (status === 2806) {
                         // This mobile terminal or one of its channel already exist
-                        deferred.reject(getExistingMobileTerminalAttributes(response.data));
+                        deferred.reject(getExistingMobileTerminalAttributes(response));
                         return;
                     }
-                    else if(response.code !== 200) {
+                    else if(status !== 200) {
                         deferred.reject(response);
                         return;
                     }
-                    deferred.resolve(MobileTerminal.fromJson(response.data));
+                    deferred.resolve(MobileTerminal.fromJson(response));
                 }, function(error) {
                     $log.error("Error creating mobile terminal.");
                     deferred.reject(error);
@@ -220,17 +217,17 @@ angular.module('unionvmsWeb')
 
             updateMobileTerminal : function(mobileTerminal, comment){
                 var deferred = $q.defer();
-                mobileTerminalRestFactory.mobileTerminal().update({ comment:comment }, mobileTerminal.toJson(), function(response) {
-                    if (response.code === 2806) {
+                mobileTerminalRestFactory.mobileTerminal().update({ comment:comment }, mobileTerminal.toJson(), function(response, headers, status) {
+                    if (status === 2806) {
                         // This mobile terminal or one of its channel already exist
-                        deferred.reject(getExistingMobileTerminalAttributes(response.data));
+                        deferred.reject(getExistingMobileTerminalAttributes(response));
                         return;
                     }
-                    else if(response.code !== 200){
+                    else if(status !== 200){
                         deferred.reject("Invalid response status");
                         return;
                     }
-                    deferred.resolve(MobileTerminal.fromJson(response.data));
+                    deferred.resolve(MobileTerminal.fromJson(response));
                 }, function(error) {
                     $log.error("Error updating mobile terminal.");
                     deferred.reject(error);
@@ -240,12 +237,12 @@ angular.module('unionvmsWeb')
 
             assignMobileTerminal : function(mobileTerminal, vesselGUID, comment){
                 var deferred = $q.defer();
-                mobileTerminalRestFactory.assignMobileTerminal().save({ comment:comment }, mobileTerminal.toAssignJson(vesselGUID), function(response) {
-                    if(response.code !== 200){
+                mobileTerminalRestFactory.assignMobileTerminal().save({ comment: comment, connectId: vesselGUID }, JSON.stringify(mobileTerminal.id), function(response, headers, status) {
+                    if(status !== 200){
                         deferred.reject("Invalid response status");
                         return;
                     }
-                    deferred.resolve(MobileTerminal.fromJson(response.data));
+                    deferred.resolve(MobileTerminal.fromJson(response));
                 }, function(error) {
                     $log.error("Error assigning mobile terminal.");
                     deferred.reject(error);
@@ -253,14 +250,13 @@ angular.module('unionvmsWeb')
                 return deferred.promise;
             },
             unassignMobileTerminal : function(mobileTerminal, comment){
-                var unassignJson = mobileTerminal.toUnassignJson();
                 var deferred = $q.defer();
-                mobileTerminalRestFactory.unassignMobileTerminal().save({ comment:comment }, mobileTerminal.toUnassignJson(), function(response) {
-                    if(response.code !== 200){
+                mobileTerminalRestFactory.unassignMobileTerminal().save({ comment: comment, connectId: mobileTerminal.connectId }, JSON.stringify(mobileTerminal.id), function(response, headers, status) {
+                    if(status !== 200){
                         deferred.reject("Invalid response status");
                         return;
                     }
-                    deferred.resolve(MobileTerminal.fromJson(response.data));
+                    deferred.resolve(MobileTerminal.fromJson(response));
                 }, function(error) {
                     $log.error("Error unassigning mobile terminal.");
                     deferred.reject(error);
@@ -269,12 +265,12 @@ angular.module('unionvmsWeb')
             },
             activateMobileTerminal : function(mobileTerminal, comment){
                 var deferred = $q.defer();
-                mobileTerminalRestFactory.activateMobileTerminal().save({ comment:comment }, mobileTerminal.toSetStatusJson(), function(response) {
-                    if(response.code !== 200){
+                mobileTerminalRestFactory.activateMobileTerminal().save({ comment:comment }, JSON.stringify(mobileTerminal.id), function(response, headers, status) {
+                    if(status !== 200){
                         deferred.reject("Invalid response status");
                         return;
                     }
-                    deferred.resolve(MobileTerminal.fromJson(response.data));
+                    deferred.resolve(MobileTerminal.fromJson(response));
                 }, function(error) {
                     $log.error("Error activating mobile terminal.");
                     deferred.reject(error);
@@ -283,12 +279,12 @@ angular.module('unionvmsWeb')
             },
             inactivateMobileTerminal : function(mobileTerminal, comment){
                 var deferred = $q.defer();
-                mobileTerminalRestFactory.inactivateMobileTerminal().save({ comment:comment }, mobileTerminal.toSetStatusJson(), function(response) {
-                    if(response.code !== 200){
+                mobileTerminalRestFactory.inactivateMobileTerminal().save({ comment:comment }, JSON.stringify(mobileTerminal.id), function(response, headers, status) {
+                    if(status !== 200){
                         deferred.reject("Invalid response status");
                         return;
                     }
-                    deferred.resolve(MobileTerminal.fromJson(response.data));
+                    deferred.resolve(MobileTerminal.fromJson(response));
                 }, function(error) {
                     $log.error("Error inactivating mobile terminal.");
                     deferred.reject(error);
@@ -320,12 +316,12 @@ angular.module('unionvmsWeb')
             },
             removeMobileTerminal : function(mobileTerminal, comment){
                 var deferred = $q.defer();
-                mobileTerminalRestFactory.removeMobileTerminal().save({ comment:comment }, mobileTerminal.toSetStatusJson(), function(response) {
-                    if(response.code !== 200){
+                mobileTerminalRestFactory.removeMobileTerminal().save({ comment:comment }, JSON.stringify(mobileTerminal.id), function(response, headers, status) {
+                    if(status !== 200){
                         deferred.reject("Invalid response status");
                         return;
                     }
-                    deferred.resolve(MobileTerminal.fromJson(response.data));
+                    deferred.resolve(MobileTerminal.fromJson(response));
                 }, function(error) {
                     $log.error("Error removing mobile terminal.");
                     deferred.reject(error);
@@ -335,12 +331,12 @@ angular.module('unionvmsWeb')
             getConfig : function(){
                 var deferred = $q.defer();
                 mobileTerminalRestFactory.getConfigValues().get({},
-                    function(response){
-                        if(response.code !== 200){
+                    function(response, headers, status) {
+                        if(status !== 200){
                             deferred.reject("Not valid mobileterminal configuration status.");
                             return;
                         }
-                        deferred.resolve(response.data);
+                        deferred.resolve(response);
                     }, function(error){
                         $log.error("Error getting configuration values for mobileterminal.");
                         deferred.reject(error);
@@ -349,13 +345,13 @@ angular.module('unionvmsWeb')
             },
             getHistoryForMobileTerminalByGUID : function(mobileTerminalGUID){
                 var deferred = $q.defer();
-                mobileTerminalRestFactory.mobileTerminalHistory().get({id: mobileTerminalGUID}, function(response) {
-                    if (response.code !== 200) {
+                mobileTerminalRestFactory.mobileTerminalHistory().get({id: mobileTerminalGUID}, function(response, headers, status) {
+                    if (status !== 200) {
                         deferred.reject("Invalid response status");
                         return;
                     }
                     //Create list of MobileTerminalHistory
-                    var history = MobileTerminalHistory.fromJson(response.data);
+                    var history = MobileTerminalHistory.fromJson(response);
 
                     deferred.resolve(history);
                 }, function(error) {

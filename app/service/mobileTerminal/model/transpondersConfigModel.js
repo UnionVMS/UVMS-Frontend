@@ -144,16 +144,16 @@ angular.module('unionvmsWeb')
 angular.module('unionvmsWeb')
 .factory('SystemTypeAndPlugin', function(locale) {
 
-    function SystemTypeAndPlugin(type, labelName, serviceName){
+    function SystemTypeAndPlugin(type, name, pluginServiceName){
         this.type = type;
         this.plugin = {
-            labelName : labelName,
-            serviceName : serviceName,
+            name : name,
+            pluginServiceName : pluginServiceName,
         };
     }
 
     SystemTypeAndPlugin.prototype.equals = function(other){
-        return this.type === other.type && this.plugin.labelName === other.plugin.labelName && this.plugin.serviceName === other.plugin.serviceName;
+        return this.type === other.type && this.plugin.name === other.plugin.name && this.plugin.pluginServiceName === other.plugin.pluginServiceName;
     };
 
     return SystemTypeAndPlugin;
