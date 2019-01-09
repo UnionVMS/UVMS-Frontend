@@ -485,32 +485,7 @@ describe('ManualPositionReportModalCtrl', function() {
     it('should return if no vessel ID', inject(function(movementRestService) {
         spyOn(movementRestService, 'getLastMovement');
         scope.showLastMovementByVessel({
-            vessel: {
-                vesselId: undefined
-            }
-        });
-
-        expect(movementRestService.getLastMovement).not.toHaveBeenCalled();
-    }));
-
-    it('should return if vessel ID type not GUID', inject(function(movementRestService) {
-        spyOn(movementRestService, 'getLastMovement');
-        scope.showLastMovementByVessel({
-            vesselId: {
-                type: "GUID-A"
-            }
-        });
-
-        expect(movementRestService.getLastMovement).not.toHaveBeenCalled();
-    }));
-
-    it('should return if no vessel ID', inject(function(movementRestService) {
-        spyOn(movementRestService, 'getLastMovement');
-        scope.showLastMovementByVessel({
-            vesselId: {
-                type: "GUID",
-                value: undefined
-            }
+            
         });
 
         expect(movementRestService.getLastMovement).not.toHaveBeenCalled();
@@ -521,10 +496,7 @@ describe('ManualPositionReportModalCtrl', function() {
         spyOn(movementRestService, 'getLastMovement').andReturn(deferred.promise);
         spyOn(scope, 'setLastPosition');
         scope.showLastMovementByVessel({
-            vesselId: {
-                type: "GUID",
-                value: "ABC-123"
-            }
+        	historyId: "ABC-123"
         });
 
         expect(movementRestService.getLastMovement).toHaveBeenCalledWith("ABC-123");
