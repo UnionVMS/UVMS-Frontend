@@ -32,9 +32,9 @@ describe('MobileTerminalCtrl', function() {
         inmarsatCConfig.viewName = "Inmarsat-C";
 
         var capabilityOptions = [];
-        var options1DTO = {labelName: "BURUM", serviceName: "eu.europa.plugin.inmarsat.burum"};
+        var options1DTO = {name: "BURUM", pluginServiceName: "eu.europa.plugin.inmarsat.burum"};
         options1 = CapabilityOption.fromJson(options1DTO, 'PLUGIN');
-        var options2DTO = {labelName: "EIK", serviceName: "eu.europa.plugin.inmarsat.eik"};
+        var options2DTO = {name: "EIK", pluginServiceName: "eu.europa.plugin.inmarsat.eik"};
         options2 = CapabilityOption.fromJson(options2DTO, 'PLUGIN');
         capabilityOptions.push(options1);
         capabilityOptions.push(options2);
