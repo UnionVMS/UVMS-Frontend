@@ -10,7 +10,7 @@ FITNESS FOR A PARTICULAR PURPOSE.  See the GNU General Public License for more d
 copy of the GNU General Public License along with the IFDM Suite. If not, see <http://www.gnu.org/licenses/>.
  */
 angular.module('unionvmsWeb')
-.factory('VesselNotes', function() {
+.factory('VesselNotes', function(dateTimeService) {
 
         function VesselNotes() {
             this.id = undefined;
@@ -45,10 +45,10 @@ angular.module('unionvmsWeb')
         VesselNotes.prototype.toJson = function() {
         	return JSON.stringify({
         		id : this.id,
-                date : this.date.slice(0,19).replace(' ','T'),
+                date : dateTimeService.formatISO8601(this.date),
                 activityCode : this.activityCode,
                 user : this.user,
-                readyDate : this.readyDate,
+                readyDate : dateTimeService.formatISO8601(this.readyDate),
                 licenseHolder : this.licenseHolder,
                 contact : this.contact,
                 sheetNumber : this.sheetNumber,
