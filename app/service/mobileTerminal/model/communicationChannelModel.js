@@ -40,7 +40,7 @@ angular.module('unionvmsWeb').factory('CommunicationChannel', function(dateTimeS
             var channel = new CommunicationChannel();
             channel.name = data.name;
 			channel.id = data.id;
-            channel.DNID = data.DNID;
+            channel.DNID = data.dnid;
             // ids
             channel.frequencyGracePeriod = data.frequencyGracePeriod;
             channel.expectedFrequencyInPort = data.expectedFrequencyInPort;
@@ -71,7 +71,7 @@ angular.module('unionvmsWeb').factory('CommunicationChannel', function(dateTimeS
             var dataTransferObject = {
                 name : angular.isDefined(this.name) ? this.name : '',
                 id: this.id,
-                DNID : this.DNID,
+                dnid: this.DNID,
                 frequencyGracePeriod : this.frequencyGracePeriod,
                 expectedFrequencyInPort : this.expectedFrequencyInPort,
                 expectedFrequency : this.expectedFrequency,
