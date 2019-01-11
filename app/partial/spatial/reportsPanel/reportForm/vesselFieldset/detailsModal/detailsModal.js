@@ -28,7 +28,7 @@ angular.module('unionvmsWeb').controller('DetailsmodalCtrl',function($scope, $mo
     
     $scope.getVesselByGuid = function(id){
         for (var i = 0; i < $scope.vesselGroupList.length; i++){
-            if ($scope.vesselGroupList[i].vesselId.guid === id){
+            if ($scope.vesselGroupList[i].id === id){
                 return $scope.vesselGroupList[i];
             }
         }
@@ -36,13 +36,13 @@ angular.module('unionvmsWeb').controller('DetailsmodalCtrl',function($scope, $mo
     
     $scope.getVesselsForGroup = function(groupId){
         var deferred = $q.defer();
-        vesselRestFactory.vesselGroup().get({id: groupId}, function(response) {
-            if (response.code !== 200) {
+        vesselRestFactory.vesselGroup().get({id: groupId}, function(response, header, status) {
+            if (status !== 200) {
                 deferred.reject("Invalid response status");
                 return;
             }
 
-            deferred.resolve(SavedSearchGroup.fromVesselDTO(response.data));
+            deferred.resolve(SavedSearchGroup.fromVesselDTO(response));
         },
         function(error) {
             console.log('error was here');
@@ -56,7 +56,6 @@ angular.module('unionvmsWeb').controller('DetailsmodalCtrl',function($scope, $mo
     
     var init = function(){
         if ($scope.item.type === 'asset'){
-            //FIXME use new service to get vessel by history guid once it is implemented in ASSETS module
             vesselRestService.getVesselByVesselHistoryId($scope.item.guid).then(
                 function(response){
                     $scope.detailedItem = response;
