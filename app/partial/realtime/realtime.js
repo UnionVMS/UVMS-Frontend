@@ -36,8 +36,8 @@ angular.module('unionvmsWeb').controller('RealtimeCtrl', function(
         }
     });
 
-    const MAX_MOVEMENTS_IN_CACHE = 2000;
-    const MAX_TIME_FOR_MOVEMENT_IN_CACHE_MS = 1800000;   // 5 hours
+    const MAX_MOVEMENTS_IN_CACHE = 20000;
+    const MAX_TIME_FOR_MOVEMENT_IN_CACHE_MS = 18000000;   // 5 hours
     const CHECK_TIME_FOR_MOVEMENT_IN_CACHE_INTERVAL_MS = 900000;  // 15 min
 
     /*
@@ -59,6 +59,7 @@ angular.module('unionvmsWeb').controller('RealtimeCtrl', function(
     $rootScope.$on('event:micromovement', (e, data) => {
         let microMovement = JSON.parse(data);
         processRealtimeData(microMovement.asset, microMovement.guid, microMovement);
+
         drawVesselWithSegments(microMovement.asset, [microMovement], false);
     });
 
@@ -276,14 +277,17 @@ angular.module('unionvmsWeb').controller('RealtimeCtrl', function(
                 getMap().addLayer(vectorLayer);
                 $scope.stopInitInterval();
                 // get the positions
-
+/*
                 getPositions().then((positionsByAsset) => {
                     let i = 0;
                     // Todo: change to for loop to make faster
                     Object.values(positionsByAsset).forEach(positions => {
                         if (positions.map !== undefined) {
+                            //console.log('drawing vessel (positions):', i);
                             drawVesselWithSegments(positions[0].asset, positions, true);
                         }
+
+                        i++;
                     });
 
                 }).catch(error => {
@@ -291,6 +295,7 @@ angular.module('unionvmsWeb').controller('RealtimeCtrl', function(
                 });
 
                 // draw cached realtime positions
+                */
                 drawCachedRealtimeFeatures();
 
                 // initialize server side event
@@ -312,22 +317,33 @@ angular.module('unionvmsWeb').controller('RealtimeCtrl', function(
         // draw vessel on top of segments (segments on a seperate layer)        
 
         addMarker(pos, deg2rad(pos.heading), color);
+
     }
 
     // Draws a polyline based on positions, takes an array of positions [lat, long]
     function drawSegment(positions, c) {
+        var prevFeature;
+        var feature;
         var positionData = [];
-        positions.map(p => {
-            var feature = new ol.Feature(new ol.geom.Point(ol.proj.fromLonLat( [ p.location.longitude, p.location.latitude ])));
-            var style = createStyle('circle', c, 'white');
-            feature.setStyle(style);
-            vectorSource.addFeature(feature);
+        try {
 
-            if (!angular.isDefined(positionData[p.asset])) {
-                positionData[p.asset] = [];
-            }
-            positionData[p.asset].push([p.location.longitude, p.location.latitude]);
-        });
+            var count = 0;
+            positions.map(p => {
+                feature = new ol.Feature(new ol.geom.Point(ol.proj.fromLonLat( [ p.location.longitude, p.location.latitude])));
+
+                var style = createStyle('circle', c, 'white');
+                feature.setStyle(style);
+                vectorSource.addFeature(feature);
+
+                if (!angular.isDefined(positionData[p.asset])) {
+                    positionData[p.asset] = [];
+                }
+                positionData[p.asset].push([p.location.longitude, p.location.latitude]);
+                prevFeature = feature;
+                count++;
+            });
+
+
 
         // Add lines
         Object.entries(positionData).forEach(p => {
@@ -344,9 +360,15 @@ angular.module('unionvmsWeb').controller('RealtimeCtrl', function(
             vectorSource.addFeature(featureLine);
 
         });
-
+        } catch (error) {
+            console.log(error);
+            console.log('prevFeature:', prevFeature);
+            console.log('feature:', feature);
+        }
     }
-
+    function toFixed(number, decimals) {
+        return parseFloat(number.toFixed(decimals));
+    }
     function getTextStyle(text, colorFill, colorStroke, strokeWidth, offsetX, offsetY) {
         return new ol.style.Text({
             font: '12px Calibri,sans-serif',
@@ -362,7 +384,7 @@ angular.module('unionvmsWeb').controller('RealtimeCtrl', function(
 
     function addMarker(pos, angle, c) {
         let posArray = [pos.location.latitude, pos.location.longitude];
-        let feature = new ol.Feature(new ol.geom.Point(ol.proj.fromLonLat( [ posArray[1], posArray[0] ])));
+        let feature = new ol.Feature(new ol.geom.Point(ol.proj.fromLonLat( [ posArray[1], posArray[0]])));
 
         let style = createStyle('triangle', c, 'white');
 
@@ -429,6 +451,7 @@ angular.module('unionvmsWeb').controller('RealtimeCtrl', function(
 
 
     function drawCachedRealtimeFeatures() {
+
         for (let i = 0; i < $localStorage['realtimeMapDataFeatures'].length; i++) {
             let pos = $localStorage['realtimeMapDataFeatures'][i];
             if (pos !== null) {
@@ -527,6 +550,7 @@ angular.module('unionvmsWeb').controller('RealtimeCtrl', function(
             //}
             //else {
                 microMovementRestService.getMovementList(dateString).then((positions) => {
+
                     Object.entries(positions).forEach(p => {
 
                         let assetGuid = p[0];

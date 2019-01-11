@@ -19,24 +19,26 @@ angular.module('unionvmsWeb')
                 var eventSourceInitDict = {headers: {'Authorization': $localStorage.token}};
 
                 // subscribe to sse
-                let source = new window.EventSourcePolyfill('movement/rest/sse/subscribe', eventSourceInitDict);
-                source.onmessage = function(e) {
-                    console.log(e.data);
-                };
+                let source = new window.EventSourcePolyfill('http://livm73p.havochvatten.se/unionvms/movement/rest/sse/subscribe', eventSourceInitDict);
 
-                source.onopen = function(e) {
+                source.addEventListener("open",  function(e) {
                     // Connection was opened.
                     console.log('connection open');
-                };
-
-                source.onerror = function(e) {
+                });
+                source.addEventListener("message",  function(e) {
+                    console.log(e.data);
+                });
+                source.addEventListener("error", function(e) {
                     if (e.readyState === EventSource.CLOSED) {
                         // Connection was closed.
                         console.error('connection closed due to error.');
                     }
-                };
+                    console.error('error:', e);
+                });
+
                 source.addEventListener('Movement', function (e) {
                     $rootScope.$broadcast('event:micromovement', e.data);
+                    console.log('broadcasting:', e.data);
                 });
 
             } else {
