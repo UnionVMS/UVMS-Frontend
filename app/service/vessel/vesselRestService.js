@@ -351,13 +351,13 @@ angular.module('unionvmsWeb')
 
     var getVesselByVesselHistoryId = function(vesselId) {
         var deferred = $q.defer();
-        vesselRestFactory.historyVessel().get({id: vesselId}, function(response) {
-            if (response.code !== 200) {
+        vesselRestFactory.historyVessel().get({id: vesselId}, function(response, header, status) {
+            if (status !== 200) {
                 deferred.reject("Invalid response status");
                 return;
             }
 
-            deferred.resolve(Vessel.fromJson(response.data));
+            deferred.resolve(Vessel.fromJson(response));
         },
         function(err) {
             deferred.reject("could not load vessel with history ID " + vesselId);

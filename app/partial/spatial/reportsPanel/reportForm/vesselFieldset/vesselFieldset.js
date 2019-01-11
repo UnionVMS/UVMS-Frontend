@@ -67,11 +67,6 @@ angular.module('unionvmsWeb').controller('VesselfieldsetCtrl',function($scope, l
                     	idx = $scope.shared.vessels.indexOf($scope.displayedRecords[idx]);
                         var item = $scope.shared.vessels[idx];
                         item.type = $scope.shared.vesselSearchBy;
-                        if (item.type === 'asset'){
-                            item.guid = $scope.shared.vessels[idx].id;
-                            //FIXME when getting details from asset history
-                            //item.guid = $scope.shared.vessels[idx].historyId;
-                        }
                         
                         return item;
                     } else {
@@ -194,7 +189,7 @@ angular.module('unionvmsWeb').controller('VesselfieldsetCtrl',function($scope, l
         var records = [];
         for (var i = 0; i < data.length; i++){
             records.push({
-                guid: data[i].id,
+                id: data[i].id,
                 name: data[i].name,
                 user: data[i].user
             });
