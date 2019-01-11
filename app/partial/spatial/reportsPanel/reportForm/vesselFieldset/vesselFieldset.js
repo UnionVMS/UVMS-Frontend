@@ -67,11 +67,6 @@ angular.module('unionvmsWeb').controller('VesselfieldsetCtrl',function($scope, l
                     	idx = $scope.shared.vessels.indexOf($scope.displayedRecords[idx]);
                         var item = $scope.shared.vessels[idx];
                         item.type = $scope.shared.vesselSearchBy;
-                        if (item.type === 'asset'){
-                            item.guid = $scope.shared.vessels[idx].historyId;
-                        } else {
-                            item.guid = $scope.shared.vessels[idx].id;
-                        }
                         
                         return item;
                     } else {

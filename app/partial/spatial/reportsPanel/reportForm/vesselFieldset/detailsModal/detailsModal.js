@@ -56,7 +56,7 @@ angular.module('unionvmsWeb').controller('DetailsmodalCtrl',function($scope, $mo
     
     var init = function(){
         if ($scope.item.type === 'asset'){
-            vesselRestService.getVesselByVesselHistoryId($scope.item.guid).then(
+            vesselRestService.getVesselByVesselHistoryId($scope.item.historyId).then(
                 function(response){
                     $scope.detailedItem = response;
                     $scope.isLoading = false;
@@ -66,7 +66,7 @@ angular.module('unionvmsWeb').controller('DetailsmodalCtrl',function($scope, $mo
                     $scope.isLoading = false;
                 });
         } else {
-            $scope.getVesselsForGroup($scope.item.guid).then(function(response){
+            $scope.getVesselsForGroup($scope.item.id).then(function(response){
                 var listRequest = new GetListRequest(1, 100000, response.dynamic, response.searchFields);
                 vesselRestService.getVesselList(listRequest).then(function(response){
                     $scope.vesselGroupList = response.items;
