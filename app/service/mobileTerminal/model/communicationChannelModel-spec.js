@@ -18,7 +18,7 @@ describe('CommunicationChannel', function() {
         id: "1234-5678-9012-3456-2345-7891-678901",
         pollChannel: true,
         configChannel: false,
-        DNID :"1",
+        dnid :"1",
         memberNumber: "1123",
         startDate : "2015-06-01 09:00:00 +02:00",
         endDate : "2015-06-01 09:00:00 +02:00"

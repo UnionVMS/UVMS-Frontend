@@ -23,7 +23,7 @@ describe('MobileTerminalModel', function() {
         },
         "channels": [
             {
-                "DNID" : "11456",
+                "dnid" : "11456",
                 "memberNumber": "101",
                 "startDate" : "2019-01-08T09:00:00Z",
                 "endDate": "2019-01-08T15:00:00Z",
@@ -32,7 +32,7 @@ describe('MobileTerminalModel', function() {
                 "name": "VMS"
             },
             {
-                "DNID" : "11456",
+                "dnid" : "11456",
                 "memberNumber": "102",
                 "startDate" : "2019-01-07T09:00:00Z",
                 "endDate": "2019-01-07T15:00:00Z",
