@@ -20,7 +20,7 @@ copy of the GNU General Public License along with the IFDM Suite. If not, see <h
  * @description
  *  A reusable button that will allow to navigate through the history of a particular fishing activity.
  */
-angular.module('unionvmsWeb').directive('faHistoryNavigator', function (fishingActivityService,FishingActivity, $compile) {
+angular.module('unionvmsWeb').directive('faHistoryNavigator', function (fishingActivityService,FishingActivity, $compile, locale) {
     return {
         restrict: 'E',
         replace: true,
@@ -31,11 +31,82 @@ angular.module('unionvmsWeb').directive('faHistoryNavigator', function (fishingA
         templateUrl: 'directive/activity/faHistoryNavigator/faHistoryNavigator.html',
         link: function (scope, element, attrs, fn) {
             scope.faServ = fishingActivityService;
-            
+            scope.hasMultipleItems = false;
+
             scope.status = {
                 id: undefined,
                 documentType: undefined,
-                activityType: undefined
+                activityType: undefined,
+                repId: undefined
+            };
+
+            /**
+             * Get the alert message to be displayed on hover on the history button
+             *
+             * @memberOf faHistoryNavigator
+             * @alias getAlertMsg
+             * @public
+             * @returns {string} The message to be displayed
+             */
+            scope.getAlertMsg = function(){
+                var msg = '';
+                if (scope.hasMultipleItems === true){
+                    msg = locale.getString('activity.warn_msg_when_multiple_activitites_in_history');
+                }
+
+                return msg;
+            };
+
+            /**
+             * Check if the history item is referring to the currently viewed activity and set the enabled status to false if true
+             *
+             * @memberOf faHistoryNavigator
+             * @private
+             * @param {Object} record - A history record object
+             */
+            function checkIsCurrentActivity(record){
+                angular.forEach(record.fishingActivityIds, function(item){
+                    if (parseInt(item) === scope.faServ.id && parseInt(record.faReportId) === scope.faServ.repId){
+                        record.enabled = false;
+                    }
+                });
+            }
+
+
+            /**
+             * Update hisotry items in order to enable/disable them in the dropdown menu
+             *
+             * @memberOf faHistoryNavigator
+             * @private
+             */
+            function updateHistoryItems(){
+                angular.forEach(scope.history, function (item) {
+                    if (item.fishingActivityIds.length === 1){
+                        checkIsCurrentActivity(item);
+                    } else {
+                        scope.hasMultipleItems = true;
+                        checkIsCurrentActivity(item);
+                    }
+                });
+            }
+
+            /**
+             * Check if the acitvity should be disabled in the history menu
+             *
+             * @memberOf faHistoryNavigator
+             * @public
+             * @alias isActivityDisabled
+             * @param {Number|String} id - The id of the activity
+             * @param {Number|String} repId - The id of the FA report
+             * @returns {boolean} True if the activity should be disabled
+             */
+            scope.isActivityDisabled = function(id, repId){
+                var disabled = false;
+                if (parseInt(id) === scope.faServ.id && parseInt(repId) === scope.faServ.id){
+                    disabled = true;
+                }
+
+                return disabled;
             };
             
             /**
@@ -43,48 +114,64 @@ angular.module('unionvmsWeb').directive('faHistoryNavigator', function (fishingA
              * 
              * @memberof faHistoryNavigator
              * @public
-             * @param {Number} activityId - The id of the activity to be loaded
+             * @param {Object} item - The history item object containing the activity and report ID's to load the desired activity screen
              */
-            scope.openHistoryView = function (activityId) {
-                scope.status.id = activityId;
-                scope.status.documentType = scope.faServ.documentType;
-                scope.status.activityType = scope.faServ.activityType;
-              
-                scope.faServ.resetActivity();
-                scope.faServ.getFishingActivity(new FishingActivity(scope.activityName),scope.recompileView,activityId);  
+            scope.openHistoryView = function (item, id) {
+                if ((item.fishingActivityIds.length === 1 && item.enabled) || (item.fishingActivityIds.length > 1 && id !== scope.faServ.id)){
+                    if (angular.isDefined(id)){
+                        scope.status.id = id;
+                    } else {
+                        scope.status.id = item.fishingActivityIds[0];
+                    }
+
+                    scope.status.documentType = scope.faServ.documentType;
+                    scope.status.activityType = scope.faServ.activityType;
+                    scope.status.repId = item.faReportId;
+
+                    scope.faServ.resetActivity();
+                    scope.faServ.getFishingActivity(new FishingActivity(scope.activityName), scope.recompileView, scope.status.id, item.faReportId);
+                }
             };
             
             /**
              * Recompile the activity view and update the fishing activity service
-             * 
+             *
              * @memberof faHistoryNavigator
+             * @alias recompileView
              * @public
              */
             scope.recompileView = function(){
                 scope.faServ.id = scope.status.id;
                 scope.faServ.documentType = scope.status.documentType;
                 scope.faServ.activityType = scope.status.activityType;
+                scope.faServ.repId = scope.status.repId;
                 scope.faServ.reloadFromActivityHistory = true;
+
                 var content = angular.element('.activity-details');
                 $compile(content.contents())(scope);
                 
             };
-            
+
             /**
-             * Update the correction status of the activity service according to the history items provided by the REST service
-             * 
+             * Update the correction status of the FA service
+             *
              * @memberof faHistoryNavigator
-             * @public
+             * @private
              */
-            scope.updateCorrection = function(){
-                var isCorrection = true;
-                if (!angular.isDefined(scope.history.previousId) || scope.history.previousId === 0){
-                    isCorrection = false;
+            function updateCorrectionStatus(){
+                var isCorrection = false;
+                var currentItem = _.findWhere(scope.history, {enabled: false});
+
+                if (angular.isDefined(currentItem) && parseInt(currentItem.purposeCode) === 5){
+                    isCorrection = true;
                 }
                 scope.faServ.isCorrection = isCorrection;
-            };
-          
-            scope.updateCorrection();
+            }
+
+            if (scope.history.length > 1){
+                updateHistoryItems();
+                updateCorrectionStatus();
+            }
         }
     };
 });

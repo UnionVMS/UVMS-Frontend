@@ -3116,6 +3116,7 @@ angular.module('unionvmsWeb').factory('mapService', function(locale, $rootScope,
                 ms.overlay.set('featureId', data.id, true);
                 ms.overlay.set('vesselId', data.vesselId, true);
                 ms.overlay.set('vesselName', data.vesselName, true);
+                ms.overlay.set('repId', data.repId, true);
                 if (type === 'ers'){
                     ms.overlay.set('activityId', data.activityId);
                     ms.overlay.set('tripId', data.tripId);
@@ -3571,11 +3572,12 @@ angular.module('unionvmsWeb').factory('mapService', function(locale, $rootScope,
             activity: data,
             vesselName: feature.vesselName,
             vesselId: feature.vesselGuid,
-            activityId: feature.activityId,
+            activityId: parseInt(feature.activityId),
             tripId: feature.tripId,
             isCorrection: feature.isCorrection,
             reportType: feature.reportType,
             activityType: feature.activityType.toLowerCase(),
+            repId: parseInt(feature.faReportID),
             getTitle: function(){
                 return this.title;
             },

@@ -12,7 +12,80 @@ copy of the GNU General Public License along with the IFDM Suite. If not, see <h
 .fa-history-navigator {
     .btn-group{
         position: absolute;
-        left:15px;
-        top:5px;
+        right: 53px;
+        top: 5px;
+        .fa-history {
+            color: @primaryColor;
+        }
+        .fa-exclamation-triangle {
+          color: @profileColor_red;
+        }
+        .dropdown-menu {
+            overflow: visible;
+            text-align: center;
+            .disabled {
+                a {
+                  padding-left: 0px;
+                  padding-right: 0px;
+                  text-align: center;
+                }
+                span {
+                  font-weight: bold;
+                }
+                .fa, fa-trash-o, .fa-ban  {
+                  color: #999999;
+                }
+            }
+            i {
+               margin-right: 5px;
+            }
+            .fa {
+                color: @primaryColor;
+                font-size: 16px;
+            }
+            .fa-trash-o, .fa-ban {
+                color: @errorColor;
+            }
+            .fa-caret-left {
+                color: #999999;
+                position: absolute;
+                margin-left: -10px !important;
+            }
+
+            .dropdown-submenu {
+                position:relative;
+                .dropdown-menu {
+                    top:0;
+                    left:-98%;
+                    max-width:180px;
+                    margin-top:-6px;
+                    margin-right:-1px;
+                    -webkit-border-radius:6px 6px 6px 6px;
+                    -moz-border-radius:6px 6px 6px 6px;
+                    border-radius:6px 6px 6px 6px;
+                }
+                &:hover{
+                  .dropdown-menu {
+                      display: block;
+                  }
+                  a:after{
+                      border-left-color:#ffffff;
+                  }
+                }
+                &.pull-left{
+                    float: none !important;
+                    .dropdown-menu {
+                        left:-100%;
+                        margin-left:10px;
+                        -webkit-border-radius:6px 6px 6px 6px;
+                        -moz-border-radius:6px 6px 6px 6px;
+                        border-radius:6px 6px 6px 6px;
+                    }
+                }
+            }
+
+        }
     }
 }
+
+

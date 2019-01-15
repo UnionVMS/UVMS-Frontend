@@ -3,14 +3,20 @@
 		<div class="col-md-2">
 			<dropdown ng-model="advancedSearchObject.EXCHANGE_TIME_SPAN" no-placeholder-item items="timeSpanOptions"></dropdown>
 		</div>
-		<div class="col-md-2">
+		<div class="col-md-2" ng-if="advancedSearchObject.EXCHANGE_TIME_SPAN !== 'CUSTOM_HOURS'">
 			<datepicker-input model="advancedSearchObject.DATE_RECEIVED_FROM" time="true" max-date="advancedSearchObject.DATE_RECEIVED_TO" placeholder="{{'exchange.search_from' | i18n}}" input-field-id="exchange-log-search-from-date-picker"></datepicker-input>
 		</div>
-		<div class="col-md-2">
+		<div class="col-md-2" ng-if="advancedSearchObject.EXCHANGE_TIME_SPAN !== 'CUSTOM_HOURS'">
 			<datepicker-input model="advancedSearchObject.DATE_RECEIVED_TO" time="true" min-date="advancedSearchObject.DATE_RECEIVED_FROM" placeholder="{{'exchange.search_to' | i18n}}" input-field-id="exchange-log-search-to-date-picker"></datepicker-input>
 		</div>
+        <div class="form-group col-md-2" ng-if="advancedSearchObject.EXCHANGE_TIME_SPAN === 'CUSTOM_HOURS'">
+            <div class="unit-input">
+                <input type="number" ng-model="advancedSearchObject.hours" min="0" step="1" class="form-control"/>
+                <div class="unit-box">{{'exchange.search_hour_unit' | i18n}}</div>
+            </div>
+        </div>
 		<div class="col-md-2">
-			<input type="text" ng-model="advancedSearchObject.SENDER_RECEIVER" placeholder="{{'exchange.table_header_sender_reciever' | i18n}}" class="form-control"/>
+			<input type="text" ng-model="advancedSearchObject.SENDER_RECEIVER" placeholder="{{'exchange.search_sender_reciever' | i18n}}" class="form-control"/>
 		</div>
 	</div>
 	<div class="row">

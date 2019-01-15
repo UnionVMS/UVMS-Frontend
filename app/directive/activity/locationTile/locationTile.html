@@ -8,10 +8,22 @@
 		</span>
 	</legend>
 	<div ng-if="hasData()">
-		<div class="row" ng-if="countries.length > 0">
+        <div class="row" ng-if="countries.length > 0">
+            <div class="col-md-12 item-container">
+                <span class="item-label">{{'activity.fa_locations_country' | i18n}}</span>
+                <span>{{ countries | stArrayToString: ', '}}</span>
+            </div>
+        </div>
+        <div class="row" ng-if="sovereign.length > 0">
+            <div class="col-md-12 item-container">
+                <span class="item-label">{{'activity.fa_locations_sovereign' | i18n}}</span>
+                <span>{{ sovereign | stArrayToString: ', '}}</span>
+            </div>
+        </div>
+		<div class="row" ng-if="jurisdiction.length > 0">
 			<div class="col-md-12 item-container">
-				<span class="item-label">{{'activity.fa_locations_country' | i18n}}</span>
-				<span>{{ countries | stArrayToString: ', '}}</span>
+				<span class="item-label">{{'activity.fa_locations_jurisdiction' | i18n}}</span>
+				<span>{{ jurisdiction | stArrayToString: ', '}}</span>
 			</div>
 		</div>
 		<div class="row" ng-if="rfmo.length > 0">

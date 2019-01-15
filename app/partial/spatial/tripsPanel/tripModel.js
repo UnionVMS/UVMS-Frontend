@@ -130,6 +130,36 @@ angular.module('unionvmsWeb').factory('Trip',function(locale,unitConversionServi
     };
 
     /**
+     * Get the translated FA report document type for an activity
+     *
+     * @memberof Trip
+     * @private
+     * @param {Object} node - current node
+     * @returns {String] The translate FA report doc string
+     */
+    var getReportItemDocType = function (node) {
+        var type = '';
+        if (node.correction){
+            switch (parseInt(node.purposeCode)) {
+                case 5:
+                    type = locale.getString('activity.fa_report_document_type_correction');
+                    break;
+                case 1:
+                    type = locale.getString('activity.fa_report_document_type_deleted');
+                    node.correction = false;
+                    break;
+                case 3:
+                    type = locale.getString('activity.fa_report_document_type_canceled');
+                    node.correction = false;
+                    break;
+            }
+
+            type += ': ';
+        }
+        return type;
+    };
+
+    /**
      * Load the report messages into the model
      * 
      * @memberof Trip
@@ -140,7 +170,7 @@ angular.module('unionvmsWeb').factory('Trip',function(locale,unitConversionServi
         var reportItem = {};
         reportItem.srcType = node.activityType;
 
-        reportItem.type = (node.correction ? locale.getString('activity.fa_report_document_type_correction') + ': ' : '') + locale.getString('activity.activity_type_' + node.activityType.toLowerCase()) + ' (' + locale.getString('activity.fa_report_document_type_' + node.faReportDocumentType.toLowerCase()) + ')';
+        reportItem.type = getReportItemDocType(node) + locale.getString('activity.activity_type_' + node.activityType.toLowerCase()) + ' (' + locale.getString('activity.fa_report_document_type_' + node.faReportDocumentType.toLowerCase()) + ')';
 
         reportItem.documentType = node.faReportDocumentType.toLowerCase();
 
@@ -161,14 +191,27 @@ angular.module('unionvmsWeb').factory('Trip',function(locale,unitConversionServi
 
         reportItem.id = node.fishingActivityId;
         reportItem.faUniqueReportID = node.faUniqueReportID;
+        reportItem.repId = node.faReportID;
 
         if(angular.isDefined(node.faReferenceID)){
             var mainNode = _.find(this, function(rep){
                 return rep.faUniqueReportID === node.faReferenceID;
             });
-            
-            mainNode.nodes = mainNode.nodes || [];
-            mainNode.nodes.push(reportItem);
+
+            if (angular.isDefined(mainNode)){
+                mainNode.nodes = mainNode.nodes || [];
+                mainNode.nodes.push(reportItem);
+            } else {
+                _.each(this, function(item){
+                   var tempRefNode = _.find(item.nodes, function(rep){
+                       return rep.faUniqueReportID === node.faReferenceID;
+                   });
+
+                   if (angular.isDefined(tempRefNode)){
+                       item.nodes.push(reportItem);
+                   }
+                });
+            }
         }else{
             this.push(reportItem);
         }

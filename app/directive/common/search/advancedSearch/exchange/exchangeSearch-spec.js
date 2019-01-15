@@ -24,6 +24,7 @@ describe('ExchangeSearchController', function() {
             scope.advancedSearchObject = {};
             scope.DATE_CUSTOM = 'CUSTOM';
             scope.DATE_TODAY = 'TODAY';
+            scope.timeSpanOptions = [];
             return $controller('ExchangeSearchController', {$scope: scope});
         };
     }));
@@ -115,6 +116,30 @@ describe('ExchangeSearchController', function() {
         scope.advancedSearchObject.DATE_RECEIVED_TO = 'UPDATED_VALUE';
         scope.$digest();
         expect(scope.advancedSearchObject.EXCHANGE_TIME_SPAN).toEqual(scope.DATE_CUSTOM);
+    }));
+
+    it('should calculate DATE_RECEIVED_FROM and DATE_RECEIVED_TO when EXCHANGE_TIME_SPAN is CUSTOM_HOURS', inject(function ($q) {
+        var controller = createController();
+        scope.$digest();
+
+        scope.advancedSearchObject.DATE_RECEIVED_FROM = 'A';
+        scope.advancedSearchObject.DATE_RECEIVED_TO = 'B';
+        scope.advancedSearchObject.EXCHANGE_TIME_SPAN = scope.DATE_TODAY;
+        scope.$digest();
+
+        //Change EXCHANGE_TIME_SPAN to CUSTOM_HOURS
+        scope.advancedSearchObject.EXCHANGE_TIME_SPAN = 'CUSTOM_HOURS';
+        scope.$digest();
+
+        var fromDate = moment(scope.advancedSearchObject.DATE_RECEIVED_FROM, 'YYYY-MM-DD HH:mm:ss +00:00');
+        var toDate = moment(scope.advancedSearchObject.DATE_RECEIVED_TO, 'YYYY-MM-DD HH:mm:ss +00:00');
+        var duration = moment.duration(toDate.diff(fromDate))
+
+
+        expect(scope.advancedSearchObject.hours).toEqual(1);
+        expect(fromDate.isValid()).toBeTruthy();
+        expect(toDate.isValid()).toBeTruthy();
+        expect(duration.asHours()).toEqual(1);
     }));
 
 });

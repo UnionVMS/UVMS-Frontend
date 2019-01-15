@@ -32,13 +32,13 @@ $ npm install -g generator-cg-angular
 3. Install bower packages by running below command (specified in the manifest file `bower.json`)
 
 ```
-$ bower i
+$ bower install
 ```
 
 4. Install npm packages by running below command (specified in the manifest file `package.json`)
 
 ```
-$ npm i
+$ npm install
 ```
 
 ## Grunt tasks

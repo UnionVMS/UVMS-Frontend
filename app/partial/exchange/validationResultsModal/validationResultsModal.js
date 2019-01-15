@@ -203,7 +203,7 @@ angular.module('unionvmsWeb').controller('ValidationresultsmodalCtrl',function($
                 var scrollableDiv = document.querySelector('pre');
                 $timeout(function(){
                     scrollToTarget(highlightedEls, scrollableDiv);
-                }, 0)
+                }, 0);
             }
         } else {
             $scope.inValidXpath = true;
