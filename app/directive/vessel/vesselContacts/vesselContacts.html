@@ -1,5 +1,8 @@
 <div class="vesselContacts">
     <fieldset ng-disabled="disableForm">
+        <a id="asset-btn-add-contact" class="btn-addContact" ng-click="functions.addContactItemCallback(vesselContacts)" ng-hide="disableForm">
+            <i class="fa fa-plus"></i> {{ 'vessel.vessel_details_contact_add' | i18n }}
+        </a>
         <div class="contact-list">
             <div class="contact-item" ng-if="vesselContacts.length == 0">
                 <div class="col-md-2 form-group smallerpaddingright">
@@ -34,8 +37,5 @@
                 </div>
             </div>
         </div>
-        <a id="asset-btn-add-contact" class="btn-addContact" ng-click="functions.addContactItemCallback(vesselContacts)" ng-hide="disableForm">
-            <i class="fa fa-plus"></i> {{ 'vessel.vessel_details_contact_add' | i18n }}
-        </a>
     </fieldset>
 </div>

@@ -37,7 +37,7 @@ angular.module('unionvmsWeb').controller('VesselFormCtrl',function($scope, $log,
             if($scope.isCreateNewMode()){
                 //Set default country code when creating new vessel
                 $scope.setDefaultCountryCode();
-                $scope.vesselContacts.push(new VesselContact());
+                $scope.vesselContacts.unshift(new VesselContact());
             }else{
                 getVesselHistory();
                 getMobileTerminals();
@@ -210,7 +210,7 @@ angular.module('unionvmsWeb').controller('VesselFormCtrl',function($scope, $log,
     	vesselRestService.getContactsForAsset($scope.getVesselObj().id).then(function(contacts) {
     		$scope.vesselContacts = contacts;
     		if (contacts.length === 0) {
-    			$scope.vesselContacts.push(new VesselContact());
+    			$scope.vesselContacts.unshift(new VesselContact());
     		}
     	});
     }
@@ -487,7 +487,7 @@ angular.module('unionvmsWeb').controller('VesselFormCtrl',function($scope, $log,
 
     // Add new row with contact item
     $scope.addContactItem = function(vesselContact) {
-    	vesselContact.push(new VesselContact());
+    	vesselContact.unshift(new VesselContact());
     };
 
     // Remove row with contact item
