@@ -28,6 +28,23 @@ angular.module('unionvmsWeb')
 	};
 });
 
+
+angular.module('unionvmsWeb')
+    .directive('contactItem', function() {
+        return {
+            restrict: 'E',
+            replace: false,
+            controller: 'vesselContactsCtrl',
+            scope: {
+                contactItem: '=',
+                dirtyStatus : '='
+            },
+            link: function(scope, element, attrs, fn) {
+            }
+        };
+    });
+
+
 angular.module('unionvmsWeb')
     .controller('vesselContactsCtrl', function($scope){
 
@@ -40,12 +57,20 @@ angular.module('unionvmsWeb')
                     return 2;
             }
         };
-        
-        // Check if contacts has been modified and set form dirty 
-        $scope.$watch('vesselContacts', function(newValue, oldValue){
-        	if (oldValue && oldValue.length > 0) {
-                $scope.dirtyStatus(true);
-        	}
+
+        $scope.setVesselContactDirtyStatus = function(contact, status) {
+            if (angular.isDefined(contact)) {
+                contact.dirty = status;
+            }
+        };
+
+        $scope.$watch('contactItem', function(newValue, oldValue){
+            if (!angular.equals(oldValue.toJson(), newValue.toJson())) {
+                $scope.dirtyStatus(newValue, true);
+                if (newValue.dirty === true) {
+                    $scope.$parent.dirtyStatus(true);
+                }
+            }
         }, true);
     }
 );

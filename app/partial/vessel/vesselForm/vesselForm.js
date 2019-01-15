@@ -384,12 +384,23 @@ angular.module('unionvmsWeb').controller('VesselFormCtrl',function($scope, $log,
         getVesselHistory();
         
         $scope.clearNotes();
+        $scope.isVesselContactsDirtyStatus = false;
+
+        $scope.resetContactsDirtyStatus();
     };
     //Error updating vessel
     var updateVesselError = function(error){
         $scope.waitingForCreateResponse = false;
+        $scope.isVesselContactsDirtyStatus = false;
+
         alertService.showErrorMessage(locale.getString('vessel.update_alert_message_on_error'));
     };
+
+    $scope.resetContactsDirtyStatus = function() {
+        for (var i = 0; i < $scope.vesselContacts.length; i++) {
+             $scope.vesselContacts[i].dirty = false;
+        }
+    }
 
     //Get all history events for the vessel
     $scope.viewCompleteVesselHistory = function() {
@@ -502,19 +513,24 @@ angular.module('unionvmsWeb').controller('VesselFormCtrl',function($scope, $log,
     // Update submitted contacts with default values or remove empty contact item rows
     $scope.updateContactItems = function(vesselId) {
         $scope.vesselContacts.slice(0).forEach(function (vesselContact) {
-            if (vesselContact.name || vesselContact.email || vesselContact.phoneNumber) {
-                Object.assign(vesselContact, { source: 'INTERNAL' });
-                // ToDo: Fix this in BE?
-                if (!vesselContact.name){
-                    Object.assign(vesselContact, { name: '' });
+            if (vesselContact.dirty) {
+                if (vesselContact.name || vesselContact.email || vesselContact.phoneNumber) {
+                    Object.assign(vesselContact, { source: 'INTERNAL' });
+                    // ToDo: Fix this in BE?
+                    if (!vesselContact.name){
+                        Object.assign(vesselContact, { name: '' });
+                    }
+                } else {
+                    $scope.vesselContacts.splice($scope.vesselContacts.indexOf(vesselContact), 1);
                 }
-            } else {
-                $scope.vesselContacts.splice($scope.vesselContacts.indexOf(vesselContact), 1);
-            }
-            if (!vesselContact.id) {
-            	vesselRestService.createContactForAsset(vesselId, vesselContact);
-            } else {
-            	vesselRestService.updateContact(vesselContact);
+                if (!vesselContact.id) {
+                    vesselRestService.createContactForAsset(vesselId, vesselContact);
+                } else {
+                    vesselRestService.updateContact(vesselContact).then(contactResult => {
+
+                    });
+
+                }
             }
         });
     };
