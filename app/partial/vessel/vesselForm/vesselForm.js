@@ -391,7 +391,6 @@ angular.module('unionvmsWeb').controller('VesselFormCtrl',function($scope, $log,
     //Error updating vessel
     var updateVesselError = function(error){
         $scope.waitingForCreateResponse = false;
-        $scope.isVesselContactsDirtyStatus = false;
 
         alertService.showErrorMessage(locale.getString('vessel.update_alert_message_on_error'));
     };
@@ -513,7 +512,7 @@ angular.module('unionvmsWeb').controller('VesselFormCtrl',function($scope, $log,
     // Update submitted contacts with default values or remove empty contact item rows
     $scope.updateContactItems = function(vesselId) {
         $scope.vesselContacts.slice(0).forEach(function (vesselContact) {
-            if (vesselContact.dirty) {
+            if (vesselContact.dirty &&  isContactItemValid(vesselContact)) {
                 if (vesselContact.name || vesselContact.email || vesselContact.phoneNumber) {
                     Object.assign(vesselContact, { source: 'INTERNAL' });
                     // ToDo: Fix this in BE?
@@ -534,6 +533,21 @@ angular.module('unionvmsWeb').controller('VesselFormCtrl',function($scope, $log,
             }
         });
     };
+
+    var isContactItemValid = function(vesselContact) {
+        vesselContact.name = trimString(vesselContact.name);
+        vesselContact.email = trimString(vesselContact.email);
+        vesselContact.phoneNumber = trimString(vesselContact.phoneNumber);
+        if (vesselContact.name.length === 0|| vesselContact.email.length === 0 || vesselContact.phoneNumber.length === 0) {
+            return false;
+        }
+
+        return true;
+    }
+
+    var trimString = function(str) {
+        return str === undefined ? '' : str.trim();
+    }
 
     // Clear form on Cancel
     $scope.clearForm = function() {

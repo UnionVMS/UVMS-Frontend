@@ -65,11 +65,17 @@ angular.module('unionvmsWeb')
         };
 
         $scope.$watch('contactItem', function(newValue, oldValue){
-            if (!angular.equals(oldValue.toJson(), newValue.toJson())) {
+            if (oldValue === undefined || newValue === undefined){
+                return;
+            }
+            if (!angular.equals(oldValue.copy().toJson(), newValue.copy().toJson())) {
                 $scope.dirtyStatus(newValue, true);
                 if (newValue.dirty === true) {
                     $scope.$parent.dirtyStatus(true);
                 }
+            }
+            else {
+                $scope.$parent.dirtyStatus(false);
             }
         }, true);
     }

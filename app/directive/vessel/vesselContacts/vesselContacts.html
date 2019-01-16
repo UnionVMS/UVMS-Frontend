@@ -23,17 +23,17 @@
 
             <div class="contact-item" ng-repeat="contact in vesselContacts | orderBy:orderByOwner">
                 <contact-item contact-item="contact" dirty-status="setVesselContactDirtyStatus">
-                    <div class="col-md-2 form-group smallerpaddingright">
+                    <div class="col-md-2 form-group smallerpaddingright" ng-class="{'has-error': (contact.name === undefined || contact.name.length === 0)}" >
                         <label>{{ 'vessel.vessel_details_contact_name' | i18n }}</label>
-                        <input type="text" name="contactName" id="asset-input-contact-name-{{$index}}" class="form-control" ng-model="contact.name"/>
+                        <input type="text" name="contactName" id="asset-input-contact-name-{{$index}}" class="form-control" ng-model="contact.name" ng-required="true" />
                     </div>
-                    <div class="col-md-3 form-group smallerpadding">
+                    <div class="col-md-3 form-group smallerpadding" ng-class="{'has-error': (contact.email === undefined || contact.email.length === 0)}">
                         <label>{{ 'vessel.vessel_details_contact_email' | i18n }}</label>
-                        <input type="text" name="contactEmail" id="asset-input-contact-email-{{$index}}" class="form-control" ng-model="contact.email"/>
+                        <input type="email" name="contactEmail" id="asset-input-contact-email-{{$index}}" class="form-control" ng-model="contact.email" ng-required="true"/>
                     </div>
-                    <div class="col-md-2 form-group smallerpadding">
+                    <div class="col-md-2 form-group smallerpadding" ng-class="{'has-error': (contact.phoneNumber === undefined || contact.phoneNumber.length === 0)}">
                         <label>{{ 'vessel.vessel_details_contact_number' | i18n }}</label>
-                        <input type="text" name="contactNumber" id="asset-input-contact-number-{{$index}}" class="form-control" ng-model="contact.phoneNumber"/>
+                        <input type="text" name="contactNumber" id="asset-input-contact-number-{{$index}}" class="form-control" ng-model="contact.phoneNumber" ng-required="true"/>
                     </div>
                     <div id="asset-btn-remove-contact" class="btn btn-sm btn-default btn-removeContact" ng-if="vesselContacts.length > 1" ng-click="functions.removeContactItemCallback($index)" ng-hide="disableForm">
                         <i class="fa fa-trash" title="{{ 'vessel.vessel_details_contact_remove' | i18n }}"></i>
