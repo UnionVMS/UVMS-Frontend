@@ -69,7 +69,7 @@ angular.module('unionvmsWeb')
                 owner : this.owner,
                 source : this.source,
                 updateTime : this.updateTime,
-                updatedBy : this.updatedBy
+                updatedBy : this.updatedBy,
             });
         };
 
