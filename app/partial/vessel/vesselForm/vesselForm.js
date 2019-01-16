@@ -525,10 +525,7 @@ angular.module('unionvmsWeb').controller('VesselFormCtrl',function($scope, $log,
                 if (!vesselContact.id) {
                     vesselRestService.createContactForAsset(vesselId, vesselContact);
                 } else {
-                    vesselRestService.updateContact(vesselContact).then(contactResult => {
-
-                    });
-
+                    vesselRestService.updateContact(vesselContact);
                 }
             }
         });
