@@ -9,7 +9,7 @@
             </div>
             <div class="col-md-2 form-group smallerpadding" ng-class="{'has-error': (submitAttempted || vesselForm.ircs.$dirty) && vesselForm.ircs.$invalid}">
                 <label>{{ 'vessel.vessel_details_IRCS_code' | i18n }}<span ng-if="hasLinkedTerminal && !vessel.ircs.length" class="mandatory">{{ 'common.mandatory_field' | i18n }}</span></label>
-                <input type="text" name="ircs" id="asset-input-ircs" class="form-control" ng-model="vessel.ircs" ng-maxlength="8" ng-required="hasLinkedTerminal">
+                <input type="text" name="ircs" id="asset-input-ircs" class="form-control" ng-model="vessel.ircs" ng-maxlength="8" ng-required="hasLinkedTerminal" existing="existingValues.ircs">
                 <input-validation-message types="maxlength" input="vesselForm.ircs" custom-messages="{{getMaxLengthMessage(8)}}"></input-validation-message>
                 <input-validation-message types="required" input="vesselForm.ircs" custom-messages="{{ircsValidationMessages}}"></input-validation-message>
             </div>

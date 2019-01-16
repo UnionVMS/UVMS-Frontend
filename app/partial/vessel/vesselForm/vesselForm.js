@@ -37,7 +37,6 @@ angular.module('unionvmsWeb').controller('VesselFormCtrl',function($scope, $log,
             if($scope.isCreateNewMode()){
                 //Set default country code when creating new vessel
                 $scope.setDefaultCountryCode();
-                $scope.vesselContacts.unshift(new VesselContact());
             }else{
                 getVesselHistory();
                 getMobileTerminals();
@@ -75,7 +74,6 @@ angular.module('unionvmsWeb').controller('VesselFormCtrl',function($scope, $log,
     //Check if vessel contacts has been modified
     $scope.setVesselContactsDirtyStatus = function(status) {
         if (angular.isDefined(status)) {
-        	console.log("Setting contacts dirty status: " + status);
             $scope.isVesselContactsDirtyStatus = status;
         }
     };
@@ -298,6 +296,7 @@ angular.module('unionvmsWeb').controller('VesselFormCtrl',function($scope, $log,
         $scope.existingValues.cfr = undefined;
         $scope.existingValues.imo = undefined;
         $scope.existingValues.mmsi = undefined;
+        $scope.existingValues.ircs = undefined;
 
         $scope.clearNotes();
         $scope.waitingForCreateResponse = false;
@@ -316,22 +315,29 @@ angular.module('unionvmsWeb').controller('VesselFormCtrl',function($scope, $log,
             var cfr = vesselObj.cfr;
             var imo = vesselObj.imo;
             var mmsi = vesselObj.mmsi;
+            var ircs = vesselObj.ircs;
+
         }
 
         return function(error) {
             $scope.waitingForCreateResponse = false;
             alertService.showErrorMessage(locale.getString('vessel.add_new_alert_message_on_error'));
 
-            if (error) {
+            if (error.data.message) {
                 // Set existing values on scope
-                $scope.existingValues.cfr = error.match(/An asset with this CFR value already exists\./) ? cfr : undefined;
-                $scope.existingValues.imo = error.match(/An asset with this IMO value already exists\./) ? imo : undefined;
-                $scope.existingValues.mmsi = error.match(/An asset with this MMSI value already exists\./) ? mmsi : undefined;
+                $scope.existingValues.cfr = error.data.message.match('ERROR: duplicate key value violates unique constraint "asset_uc_cfr"') ? cfr : undefined;
+                $scope.existingValues.imo = error.data.message.match('ERROR: duplicate key value violates unique constraint "asset_uc_imo"') ? imo : undefined;
+                $scope.existingValues.mmsi = error.data.message.match('ERROR: duplicate key value violates unique constraint "asset_uc_mmsi"') ? mmsi : undefined;
+                $scope.existingValues.ircs = error.data.message.match('ERROR: duplicate key value violates unique constraint "asset_uc_ircs"') ? ircs : undefined;
+
+                alertService.showErrorMessage(error.data.message);
+
             }
             // Update validity, because model did not change here.
             $scope.vesselForm.cfr.$setValidity('unique', $scope.existingValues.cfr === undefined);
             $scope.vesselForm.imo.$setValidity('unique', $scope.existingValues.imo === undefined);
             $scope.vesselForm.mmsi.$setValidity('unique', $scope.existingValues.mmsi === undefined);
+            $scope.vesselForm.ircs.$setValidity('unique', $scope.existingValues.ircs === undefined);
         };
     };
 
