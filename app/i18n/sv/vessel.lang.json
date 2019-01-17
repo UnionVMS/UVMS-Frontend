@@ -127,6 +127,10 @@
     "vessel_details_email": "Email",
     "vessel_details_contact_name": "Contact name",
     "vessel_details_contact_number": "Contact number",
+    "vessel_details_contact_street_name": "Street",
+    "vessel_details_contact_city_name": "City",
+    "vessel_details_contact_country": "Country",
+    "vessel_details_contact_zip": "Zip",
     "warning_multiple_terminals": "There is more than one active terminal of the same type for this vessel.",
     "zero_connected_mobile_terminals" : "The are no mobile terminals connected to this vessel.",
     "view_vessel_on_failed_to_load_error" : "Failed to load the vessel  details."

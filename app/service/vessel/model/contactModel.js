@@ -29,6 +29,7 @@ angular.module('unionvmsWeb')
             this.source = undefined;
             this.updateTime = undefined;
             this.updatedBy = undefined;
+            this.zipCode = undefined;
         }
 
         VesselContact.fromJson = function(data){
@@ -49,6 +50,7 @@ angular.module('unionvmsWeb')
             contact.source = data.source;
             contact.updateTime = data.updateTime;
             contact.updatedBy = data.updatedBy;
+            contact.zipCode = data.zipCode;
             return contact;
         };
         
@@ -70,6 +72,7 @@ angular.module('unionvmsWeb')
                 source : this.source,
                 updateTime : this.updateTime,
                 updatedBy : this.updatedBy,
+                zipCode : this.zipCode
             });
         };
 
@@ -91,6 +94,7 @@ angular.module('unionvmsWeb')
             copy.source = this.source;
             copy.updateTime = this.updateTime;
             copy.updatedBy = this.updatedBy;
+            copy.zipCode = this.zipCode;
             return copy;
         };
 
