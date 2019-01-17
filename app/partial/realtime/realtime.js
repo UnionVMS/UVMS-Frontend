@@ -8,6 +8,7 @@ Free Software Foundation, either version 3 of the License, or any later version.
 the hope that it will be useful, but WITHOUT ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or
 FITNESS FOR A PARTICULAR PURPOSE.  See the GNU General Public License for more details. You should have received a
 copy of the GNU General Public License along with the IFDM Suite. If not, see <http://www.gnu.org/licenses/>.
+
  */
 angular.module('unionvmsWeb').controller('RealtimeCtrl', function(
     $rootScope,
@@ -49,7 +50,7 @@ angular.module('unionvmsWeb').controller('RealtimeCtrl', function(
       };
     }
     */
-
+    var popup = L.popup();
     // hide the top bar
     $(document.getElementsByClassName("headercontainer")).hide();
 
@@ -58,14 +59,14 @@ angular.module('unionvmsWeb').controller('RealtimeCtrl', function(
     // Listen to the changes of micromovement changes
     $rootScope.$on('event:micromovement', (e, data) => {
         let microMovement = JSON.parse(data);
-        processRealtimeData(microMovement.asset, microMovement.guid, microMovement);
+        //processRealtimeData(microMovement.asset, microMovement.guid, microMovement);
 
         drawVesselWithSegments(microMovement.asset, [microMovement], false);
     });
 
     function processRealtimeData(assetGuid, movementGuid, movementData) {
         let posExists = false;
-        let assetExists = doesAssetExistInRealtimeDataCache(assetGuid)
+        let assetExists = doesAssetExistInRealtimeDataCache(assetGuid);
 
         if (assetExists) {
             let values = $localStorage['realtimeMapData'][assetGuid];
@@ -189,7 +190,7 @@ angular.module('unionvmsWeb').controller('RealtimeCtrl', function(
                         stroke: new ol.style.Stroke({
                             color: strokeColor, width: 2
                         }),
-                        radius: 5,
+                        radius: 2,
                     })
                 });
             break;
@@ -197,7 +198,7 @@ angular.module('unionvmsWeb').controller('RealtimeCtrl', function(
                 style = new ol.style.Style({
                     stroke: new ol.style.Stroke({
                         color: fillColor,
-                        width: 2
+                        width: 1
                     })
                 });
             break;
@@ -209,7 +210,7 @@ angular.module('unionvmsWeb').controller('RealtimeCtrl', function(
                         }),
                         stroke: new ol.style.Stroke({
                             color: strokeColor,
-                            width: 2
+                            width: 1
                         }),
                         points: 3,
                         radius: 10,
@@ -274,10 +275,11 @@ angular.module('unionvmsWeb').controller('RealtimeCtrl', function(
         $scope.initInterval = $interval(function () {
             if (!_.isEqual(genericMapService.mapBasicConfigs, {})) {
                 areaMapService.setMap();
-                getMap().addLayer(vectorLayer);
+                initMap();
                 $scope.stopInitInterval();
                 // get the positions
-/*
+
+                /*
                 getPositions().then((positionsByAsset) => {
                     let i = 0;
                     // Todo: change to for loop to make faster
@@ -293,9 +295,9 @@ angular.module('unionvmsWeb').controller('RealtimeCtrl', function(
                 }).catch(error => {
                     console.error('Failed to get positions:', error);
                 });
-
-                // draw cached realtime positions
                 */
+                // draw cached realtime positions
+
                 drawCachedRealtimeFeatures();
 
                 // initialize server side event
@@ -305,6 +307,43 @@ angular.module('unionvmsWeb').controller('RealtimeCtrl', function(
             }
         }, 10);
     });
+
+    function initMap() {
+        getMap().addLayer(vectorLayer);
+        /*
+        getMap().overlay = getMap().addPopupOverlay();
+        getMap().overlays = [getMap().overlay];
+
+        getMap().on('singleclick', function(evt){
+
+            // Attempt to find a feature in one of the visible vector layers
+            var features = [];
+            var feature = getMap().forEachFeatureAtPixel(evt.pixel, function(feature, layer) {
+                console.log(layer);
+                console.log(vectorLayer);
+                features.push(feature);
+            }, {
+                hitTolerance: 10
+            }, function(layer) {
+                return layer === vectorLayer;
+            });
+
+            if (features.length > 0) {
+                features.forEach(feature => {
+                    if (feature) {
+                        onMarkerClick(feature);
+                    }
+
+                });
+
+            }
+
+
+        });
+        */
+    }
+
+
 
     function drawVesselWithSegments(asset, positions, shouldDrawSegment) {
         let pos = positions[positions.length - 1];
@@ -389,12 +428,14 @@ angular.module('unionvmsWeb').controller('RealtimeCtrl', function(
         let style = createStyle('triangle', c, 'white');
 
         // Add text to style
-        style.setText(getTextStyle(pos.asset, 'black', 'white', 2, 0, -24));
+        // Don't add text for now. takes too much space
+        //style.setText(getTextStyle(pos.asset, 'black', 'white', 2, 0, -24));
 
         feature.setStyle(style);
         feature.getStyle().getImage().setRotation(angle);
         feature.getStyle().getImage().setOpacity(1);
 
+        /*
         if (doesAssetExistinCache(pos.asset)) {
             setCachedFatureProperties(pos.asset, pos.guid);
         }
@@ -407,7 +448,7 @@ angular.module('unionvmsWeb').controller('RealtimeCtrl', function(
             let arrayLength = $localStorage['realtimeMapDataFeatures'].length;
             if (arrayLength >= MAX_MOVEMENTS_IN_CACHE) {
                 // remove first element
-                console.log('not enough space in cache, removing first element.')
+                console.log('not enough space in cache, removing first element.');
                 let cachedPos = $localStorage['realtimeMapDataFeatures'].shift();
                 if (cachedPos !== null && cachedPos !== undefined) {
                     let cachedFeature = vectorSource.getFeatureById(cachedPos.guid);
@@ -419,6 +460,7 @@ angular.module('unionvmsWeb').controller('RealtimeCtrl', function(
             $localStorage['realtimeMapDataFeatures'].push(pos);
             vectorSource.refresh();
         }
+*/
 
         feature['assetId'] = pos.asset;
         feature.setId(pos.guid);
@@ -506,11 +548,16 @@ angular.module('unionvmsWeb').controller('RealtimeCtrl', function(
         $log.error(e.message);
     }
 
-    function onMarkerClick(e) {
-        let assetId = this.options.assetId;
+    function onMarkerClick(feature) {
+        console.log(feature['assetId']);
+        let assetId = feature['assetId'];
         if (assetId !== undefined) {
             getAssetInfo(assetId).then((assetInfo) => {
-                this.bindPopup(assetId).openPopup();
+                popup = L.popup()
+                    .setLatLng(feature.getGeometry().getCoordinates())
+                    .setContent(assetInfo)
+                    .openOn(getMap());
+
             });
         }
     }
