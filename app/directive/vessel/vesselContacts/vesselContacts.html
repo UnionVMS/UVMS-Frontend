@@ -3,57 +3,16 @@
         <a id="asset-btn-add-contact" class="btn-addContact" ng-click="functions.addContactItemCallback(vesselContacts)" ng-hide="disableForm">
             <i class="fa fa-plus"></i> {{ 'vessel.vessel_details_contact_add' | i18n }}
         </a>
-        <div class="contact-list">
-            <div class="contact-item" ng-repeat="contact in vesselContacts | orderBy:orderByOwner">
-                <contact-item contact-item="contact" dirty-status="setVesselContactDirtyStatus">
-                    <div class="row card-header">
-                        <div class="col-md-8">
-                            <label>{{vesselContacts[0].name}}</label>
-                        </div>
-                    </div>
-                    <div class="row row-top">
-                        <div class="col-md-4 form-group smallerpaddingright">
-                            <label>{{ 'vessel.vessel_details_contact_name' | i18n }}</label>
-                            <input type="text" name="contactName" id="asset-input-contact-name-0" class="form-control" ng-model="vesselContacts[0].name"/>
-                        </div>
-                        <div class="col-md-3 form-group smallerpadding">
-                            <label>{{ 'vessel.vessel_details_contact_email' | i18n }}</label>
-                            <input type="text" name="contactEmail" id="asset-input-contact-email-0" class="form-control" ng-model="vesselContacts[0].email"/>
-                        </div>
-                        <div class="col-md-2 form-group smallerpadding">
-                            <label>{{ 'vessel.vessel_details_contact_number' | i18n }}</label>
-                            <input type="text" name="contactNumber" id="asset-input-contact-number-0" class="form-control" ng-model="vesselContacts[0].phoneNumber"/>
-                        </div>
-                    </div>
-                    <div class="row">
-                        <div class="col-md-2 form-group smallerpaddingright">
-                            <label>{{ 'vessel.vessel_details_contact_street_name' | i18n }}</label>
-                            <input type="text" name="contactStreetName" id="asset-input-contact-streetname-0" class="form-control" ng-model="vesselContacts[0].streetName"/>
-                        </div>
-                        <div class="col-md-2 form-group smallerpadding">
-                            <label>{{ 'vessel.vessel_details_contact_zip' | i18n }}</label>
-                            <input type="text" name="contactZipCode" id="asset-input-contact-zipcode-0" class="form-control" ng-model="vesselContacts[0].zipCode"/>
-                        </div>
-                        <div class="col-md-3 form-group smallerpadding">
-                            <label>{{ 'vessel.vessel_details_contact_city_name' | i18n }}</label>
-                            <input type="text" name="contactCityName" id="asset-input-contact-cityname-0" class="form-control" ng-model="vesselContacts[0].cityName"/>
-                        </div>
-                        <div class="col-md-2 form-group smallerpadding">
-                            <label>{{ 'vessel.vessel_details_contact_country' | i18n }}</label>
-                            <input type="text" name="contactZipCode" id="asset-input-contact-country-0" class="form-control" ng-model="vesselContacts[0].country"/>
-                        </div>
-                    </div>
-                </contact-item>
-            </div>
 
-            <div class="contact-item card" ng-repeat="contact in vesselContacts | orderBy:orderByOwner">
+
+            <div class="contact-item card" ng-if="vesselContacts.length > 0" ng-repeat="contact in vesselContacts | orderBy:orderByOwner">
                 <contact-item contact-item="contact" dirty-status="setVesselContactDirtyStatus">
                     <div class="row card-header">
                         <div class="col-md-8 textAlignLeft">
                             <label>{{contact.name}}</label>
                         </div>
                         <div class="textAlignRight">
-                            <div id="asset-btn-remove-contact" class="btn btn-sm btn-default btn-removeContact" ng-if="vesselContacts.length > 1" ng-click="functions.removeContactItemCallback($index)" ng-hide="disableForm">
+                            <div id="asset-btn-remove-contact" class="btn btn-sm btn-default btn-removeContact" ng-if="vesselContacts.length > 0" ng-click="functions.removeContactItemCallback($index)" ng-hide="disableForm">
                                 <i class="fa fa-trash" title="{{ 'vessel.vessel_details_contact_remove' | i18n }}"></i>
                             </div>
                         </div>

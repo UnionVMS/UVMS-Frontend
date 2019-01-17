@@ -207,9 +207,6 @@ angular.module('unionvmsWeb').controller('VesselFormCtrl',function($scope, $log,
     function getVesselContacts() {
     	vesselRestService.getContactsForAsset($scope.getVesselObj().id).then(function(contacts) {
     		$scope.vesselContacts = contacts;
-    		if (contacts.length === 0) {
-    			$scope.vesselContacts.unshift(new VesselContact());
-    		}
     	});
     }
     
