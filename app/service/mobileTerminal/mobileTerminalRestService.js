@@ -343,9 +343,18 @@ angular.module('unionvmsWeb')
                     });
                 return deferred.promise;
             },
-            getHistoryForMobileTerminalByGUID : function(mobileTerminalGUID){
+            getHistoryForMobileTerminalByGUID : function(mobileTerminalGUID, maxNbr){
                 var deferred = $q.defer();
-                mobileTerminalRestFactory.mobileTerminalHistory().get({id: mobileTerminalGUID}, function(response, headers, status) {
+
+                var queryObject = {
+                    id : mobileTerminalGUID
+                };
+
+                if(maxNbr){
+                    queryObject['maxNbr'] = maxNbr;
+                }
+
+                mobileTerminalRestFactory.mobileTerminalHistory().query(queryObject, function(response, headers, status) {
                     if (status !== 200) {
                         deferred.reject("Invalid response status");
                         return;
@@ -362,10 +371,10 @@ angular.module('unionvmsWeb')
             },
             getHistoryWithAssociatedVesselForMobileTerminal : function(mobileTerminal){
                 var deferred = $q.defer();
-                this.getHistoryForMobileTerminalByGUID(mobileTerminal.guid).then(function(history){
+                this.getHistoryForMobileTerminalByGUID(mobileTerminal.id, 15).then(function(history){
                     //Get associated carriers for all mobile terminals in the history items
                     var mobileTerminals = [];
-                    if (history) {
+                    if (history && history.events) {
                         $.each(history.events, function(index, historyItem) {
                             mobileTerminals.push(historyItem);
                         });
@@ -373,18 +382,19 @@ angular.module('unionvmsWeb')
 
                     mobileTerminalVesselService.getVesselsForListOfMobileTerminals(mobileTerminals).then(
                         function(vesselListPage){
-                            //Connect the mobileTerminals to the vessels
-
-                            $.each(history.events, function(index, historyItem){
-                                var connectId = historyItem.connectId;
-                                if(angular.isDefined(connectId) && typeof connectId === 'string' && connectId.trim().length >0){
-                                    var matchingVessel = vesselListPage.getVesselByGuid(connectId);
-                                        if(angular.isDefined(matchingVessel)){
-                                            historyItem.associatedVessel = matchingVessel;
+                            //Connect the mobileTerminals to the vessels)
+                            if (history.events) {
+                                $.each(history.events, function(index, historyItem){
+                                    var connectId = historyItem.connectId;
+                                    if(angular.isDefined(connectId) && typeof connectId === 'string' && connectId.trim().length >0){
+                                        var matchingVessel = vesselListPage.getVesselByGuid(connectId);
+                                            if(angular.isDefined(matchingVessel)){
+                                                historyItem.associatedVessel = matchingVessel;
+                                            }
                                         }
-                                    }
-                            });
+                                });
 
+                            }
                             deferred.resolve(history);
                         },
                         function(error){
