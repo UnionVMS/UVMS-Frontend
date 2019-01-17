@@ -490,7 +490,7 @@ angular.module('unionvmsWeb')
             historyCallback: $scope.onMobileTerminalHistoryClick,
             showHistory: function(mobileTerminal) {
                 if (mobileTerminal) {
-                    return angular.isDefined(mobileTerminal.guid) && mobileTerminal.guid != null;
+                    return angular.isDefined(mobileTerminal.id) && mobileTerminal.id != null;
                 }
                 return false;
             },
