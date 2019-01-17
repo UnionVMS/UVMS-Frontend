@@ -405,7 +405,7 @@ angular.module('unionvmsWeb').controller('VesselFormCtrl',function($scope, $log,
         for (var i = 0; i < $scope.vesselContacts.length; i++) {
              $scope.vesselContacts[i].dirty = false;
         }
-    }
+    };
 
     //Get all history events for the vessel
     $scope.viewCompleteVesselHistory = function() {
@@ -546,11 +546,11 @@ angular.module('unionvmsWeb').controller('VesselFormCtrl',function($scope, $log,
         }
 
         return true;
-    }
+    };
 
     var trimString = function(str) {
         return str === undefined ? '' : str.trim();
-    }
+    };
 
     // Clear form on Cancel
     $scope.clearForm = function() {
