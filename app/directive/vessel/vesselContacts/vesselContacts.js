@@ -46,7 +46,9 @@ angular.module('unionvmsWeb')
 
 
 angular.module('unionvmsWeb')
-    .controller('vesselContactsCtrl', function($scope){
+    .controller('vesselContactsCtrl', function($scope, configurationService){
+
+        $scope.countryCodes = configurationService.setTextAndCodeForDropDown(configurationService.getValue('VESSEL', 'FLAG_STATE'), 'FLAG_STATE', 'VESSEL', true);
 
         $scope.orderByOwner = function (contact) {
             switch (contact.owner) {
@@ -75,7 +77,7 @@ angular.module('unionvmsWeb')
                 }
             }
             else {
-                $scope.$parent.dirtyStatus(false);
+                //$scope.$parent.dirtyStatus(false);
             }
         }, true);
     }

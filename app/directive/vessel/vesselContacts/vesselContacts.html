@@ -51,7 +51,8 @@
                             </div>
                             <div class="col-md-2 form-group smallerpadding">
                                 <label>{{ 'vessel.vessel_details_contact_country' | i18n }}</label>
-                                <input type="text" name="contactZipCode" id="asset-input-contact-country-{{$index}}" class="form-control" ng-model="contact.country"/>
+                                <!--<input type="text" name="contactCountry" id="asset-input-contact-country-{{$index}}" class="form-control" ng-model="contact.country"/>-->
+                                <dropdown  ng-model="contact.country" items="countryCodes" initialtext="{{'vessel.vessel_details_contact_country' | i18n}}" input-field-id="asset-input-contact-country-{{$index}}"></dropdown>
                             </div>
                         </div>
                     </div>
