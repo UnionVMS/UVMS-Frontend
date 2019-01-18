@@ -476,7 +476,7 @@ angular.module('unionvmsWeb')
             archiveCallback: $scope.archiveMobileTerminal,
             showArchive: function(mobileTerminal) {
                 if (mobileTerminal && checkAccessToFeature('manageMobileTerminals')) {
-                    return angular.isDefined(mobileTerminal.guid) && mobileTerminal.guid != null && !mobileTerminal.archived;
+                    return angular.isDefined(mobileTerminal.id) && mobileTerminal.id != null && !mobileTerminal.archived;
                 }
                 return false;
             },
