@@ -1,4 +1,4 @@
-<!--
+﻿<!--
 ﻿Developed with the contribution of the European Commission - Directorate General for Maritime Affairs and Fisheries
 © European Union, 2015-2016.
 
@@ -60,8 +60,8 @@ copy of the GNU General Public License along with the IFDM Suite. If not, see <h
                     <td class="statusColored" ng-attr-title="{{getDefaultMemberNumber(item.channels)}}">{{getDefaultMemberNumber(item.channels)}}</td>
                     <td class="statusColored" ng-attr-title="{{getDefaultDnid(item.channels)}}">{{getDefaultDnid(item.channels)}}</td>
                     <td class="statusColored" ng-class="{'plugin-inactive': item.pluginIsInactive()}"
-                        ng-attr-title="{{ (item.pluginIsInactive()) ? ('mobileTerminal.warning_plugin_inactive' | i18n) : (item.type | transponderName)}}">
-                        {{item.type | transponderName}}
+                        ng-attr-title="{{ (item.pluginIsInactive()) ? ('mobileTerminal.warning_plugin_inactive' | i18n) : (item.mobileTerminalType | transponderName)}}">
+                        {{item.mobileTerminalType | transponderName}}
                     </td>
                     <td class="statusColored" ng-attr-title="{{item.satelliteNumber}}">{{item.satelliteNumber}}</td>
                     <td>
