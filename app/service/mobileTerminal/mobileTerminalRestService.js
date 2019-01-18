@@ -382,7 +382,7 @@ angular.module('unionvmsWeb')
                         function(vesselListPage){
                             //Connect the mobileTerminals to the vessels
 
-                            $.each(history, function(index, historyItem){
+                            $.each(mobileTerminals, function(index, historyItem){
                                 var connectId = historyItem.connectId;
                                 if(angular.isDefined(connectId) && typeof connectId === 'string' && connectId.trim().length >0){
                                     var matchingVessel = vesselListPage.getVesselByGuid(connectId);
