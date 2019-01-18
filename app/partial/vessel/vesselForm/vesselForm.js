@@ -302,7 +302,6 @@ angular.module('unionvmsWeb').controller('VesselFormCtrl',function($scope, $log,
         $scope.vesselObjOriginal = angular.copy($scope.vesselObj);
         $scope.setVesselObj(createdVessel.copy());
         $scope.setCreateMode(false);
-        getVesselHistory();
     };
 
     //Error creating the new vessel
