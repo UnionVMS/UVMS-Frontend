@@ -64,7 +64,7 @@ angular.module('unionvmsWeb')
 
         };
     })
-    .service('mobileTerminalRestService',function($q, mobileTerminalRestFactory, VesselListPage, MobileTerminal, SearchResultListPage, TranspondersConfig, GetListRequest, MobileTerminalHistory, mobileTerminalVesselService, $log){
+    .service('mobileTerminalRestService',function($q, mobileTerminalRestFactory, VesselListPage, MobileTerminal, SearchResultListPage, TranspondersConfig, GetListRequest, mobileTerminalVesselService, $log){
 
         function getExistingMobileTerminalAttributes(data) {
             var mobileTerminal = {
@@ -345,24 +345,22 @@ angular.module('unionvmsWeb')
             },
             getHistoryForMobileTerminalByGUID : function(mobileTerminalGUID, maxNbr){
                 var deferred = $q.defer();
-
+                
                 var queryObject = {
-                    id : mobileTerminalGUID
-                };
+                        id : mobileTerminalGUID
+                    };
 
                 if(maxNbr){
-                    queryObject['maxNbr'] = maxNbr;
+                	queryObject['maxNbr'] = maxNbr;
                 }
-
+                
                 mobileTerminalRestFactory.mobileTerminalHistory().query(queryObject, function(response, headers, status) {
                     if (status !== 200) {
                         deferred.reject("Invalid response status");
                         return;
                     }
-                    //Create list of MobileTerminalHistory
-                    var history = MobileTerminalHistory.fromJson(response);
 
-                    deferred.resolve(history);
+                    deferred.resolve(response);
                 }, function(error) {
                     $log.error("Error getting mobile terminal history.");
                     deferred.reject(error);
@@ -374,31 +372,30 @@ angular.module('unionvmsWeb')
                 this.getHistoryForMobileTerminalByGUID(mobileTerminal.id, 15).then(function(history){
                     //Get associated carriers for all mobile terminals in the history items
                     var mobileTerminals = [];
-                    if (history && history.events) {
-                        $.each(history.events, function(index, historyItem) {
-                            mobileTerminals.push(historyItem);
+                    if (history) {
+                        $.each(history, function(index, historyItem) {
+                            mobileTerminals.push(MobileTerminal.fromJson(historyItem));
                         });
                     }
 
                     mobileTerminalVesselService.getVesselsForListOfMobileTerminals(mobileTerminals).then(
                         function(vesselListPage){
-                            //Connect the mobileTerminals to the vessels)
-                            if (history.events) {
-                                $.each(history.events, function(index, historyItem){
-                                    var connectId = historyItem.connectId;
-                                    if(angular.isDefined(connectId) && typeof connectId === 'string' && connectId.trim().length >0){
-                                        var matchingVessel = vesselListPage.getVesselByGuid(connectId);
-                                            if(angular.isDefined(matchingVessel)){
-                                                historyItem.associatedVessel = matchingVessel;
-                                            }
-                                        }
-                                });
+                            //Connect the mobileTerminals to the vessels
 
-                            }
-                            deferred.resolve(history);
+                            $.each(history, function(index, historyItem){
+                                var connectId = historyItem.connectId;
+                                if(angular.isDefined(connectId) && typeof connectId === 'string' && connectId.trim().length >0){
+                                    var matchingVessel = vesselListPage.getVesselByGuid(connectId);
+                                        if(angular.isDefined(matchingVessel)){
+                                            historyItem.associatedVessel = matchingVessel;
+                                        }
+                                    }
+                            });
+
+                            deferred.resolve(mobileTerminals);
                         },
                         function(error){
-                            deferred.reject(history);
+                            deferred.reject(mobileTerminals);
                         });
                 }, function(error) {
                     $log.error("Error getting mobile terminal history.");

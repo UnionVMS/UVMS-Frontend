@@ -25,6 +25,8 @@ angular.module('unionvmsWeb').factory('MobileTerminal', function(CommunicationCh
             this.mobileTerminalType = undefined;
             this.archived = false;
             this.inactivated = undefined;
+            this.createTime = undefined;
+            this.updateTime = undefined;
 
             this.source = 1; // (Internal: 1, National: 2)
             this.plugin = {
@@ -67,7 +69,9 @@ angular.module('unionvmsWeb').factory('MobileTerminal', function(CommunicationCh
             mobileTerminal.antenna = data.antenna;
             mobileTerminal.transceiverType = data.transceiverType;
             mobileTerminal.softwareVersion = data.softwareVersion;
-            if(angular.isDefined(data.plugin)){
+            mobileTerminal.createTime = data.createTime;
+            mobileTerminal.updateTime = data.updateTime;
+            if(angular.isDefined(data.plugin) && data.plugin){
                 mobileTerminal.plugin = {
                     name : data.plugin.name,
                     pluginServiceName : data.plugin.pluginServiceName,
@@ -112,6 +116,8 @@ angular.module('unionvmsWeb').factory('MobileTerminal', function(CommunicationCh
                 mobileTerminalType : this.mobileTerminalType,
                 plugin : this.plugin,
                 inactivated : !this.active,
+                createTime : this.createTime,
+                updateTime : this.updateTime,
                 active: this.active,
                 source : this.source
             };
@@ -147,6 +153,8 @@ angular.module('unionvmsWeb').factory('MobileTerminal', function(CommunicationCh
             copy.id = this.id;
             copy.connectId = this.connectId;
             copy.archived = this.archived;
+            copy.createTime = this.createTime;
+            copy.updateTime = this.updateTime;
             copy.source = this.source;
             copy.channels = this.channels.map(function(ch) {
                 return ch.copy();
