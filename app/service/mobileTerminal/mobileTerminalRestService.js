@@ -127,10 +127,25 @@ angular.module('unionvmsWeb')
                         var mobileTerminals = [],
                             searchResultListPage;
 
+                        var cachedAssets = [];
                         //Create a SearchResultListPage object from the response
                         if(angular.isArray(response.mobileTerminalList)) {
                             for (var i = 0; i < response.mobileTerminalList.length; i++) {
-                                mobileTerminals.push(MobileTerminal.fromJson(response.mobileTerminalList[i]));
+                                // check if asset already exists in previous mobile terminal
+                                var mt = response.mobileTerminalList[i];
+
+                                if (mt.asset && mt.asset.id) {
+                                    cachedAssets.push(mt.asset);
+                                }
+                                else if (mt.asset) {
+                                    // json id
+                                    cachedAssets.forEach(function(a) {
+                                       if (a['@id'] === mt.asset) {
+                                           mt.asset = a;
+                                       }
+                                    });
+                                }
+                                mobileTerminals.push(MobileTerminal.fromJson(mt));
                             }
                         }
                         var currentPage = response.currentPage;
