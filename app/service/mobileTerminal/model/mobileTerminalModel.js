@@ -242,7 +242,7 @@ angular.module('unionvmsWeb').factory('MobileTerminal', function(CommunicationCh
         };
 
         MobileTerminal.prototype.isEqualTerminal = function(item) {
-            if(item.guid === this.guid){
+            if(item.id === this.id){
                 return true;
             }else{
                 return false;
