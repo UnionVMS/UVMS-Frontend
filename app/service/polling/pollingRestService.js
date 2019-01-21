@@ -144,7 +144,7 @@ angular.module('unionvmsWeb')
             },
             startProgramPoll : function(programPoll){
                 var deferred = $q.defer();
-                pollingRestFactory.startProgramPoll().save({id: programPoll.id}, {}, function(response, header, status) {
+                pollingRestFactory.startProgramPoll().get({id: programPoll.id}, {}, function(response, header, status) {
                     setProgramPollStatusSuccess(response, status, deferred);
                 }, function(error) {
                     console.error("Error starting program poll.");
@@ -154,7 +154,7 @@ angular.module('unionvmsWeb')
             },
             stopProgramPoll : function(programPoll){
                 var deferred = $q.defer();
-                pollingRestFactory.stopProgramPoll().save({id: programPoll.id}, {}, function(response, header, status) {
+                pollingRestFactory.stopProgramPoll().get({id: programPoll.id}, {}, function(response, header, status) {
                     setProgramPollStatusSuccess(response, status, deferred);
                 }, function(error) {
                     console.error("Error stopping program poll.");
@@ -164,7 +164,7 @@ angular.module('unionvmsWeb')
             },
             inactivateProgramPoll : function(programPoll){
                 var deferred = $q.defer();
-                pollingRestFactory.inactivateProgramPoll().save({id: programPoll.id}, {}, function(response, header, status) {
+                pollingRestFactory.inactivateProgramPoll().get({id: programPoll.id}, {}, function(response, header, status) {
                     setProgramPollStatusSuccess(response, status, deferred);
                 }, function(error) {
                     console.error("Error inactivating program poll.");
