@@ -110,12 +110,12 @@ angular.module('unionvmsWeb').controller('RulesCtrl',function($scope, $log, $sta
     //Remove rule from searchResults
     $scope.removeFromSearchResults = function(rule) {
         var index = $scope.currentSearchResults.items.indexOf(rule);
-        if (index > 0) {
+        if (index >= 0) {
         	$scope.currentSearchResults.items.splice(index, 1);
         }
         
         var index2 = $scope.allCurrentSearchResults.indexOf(rule);
-        if (index2 > 0) {
+        if (index2 >= 0) {
             $scope.allCurrentSearchResults.splice(index2, 1)
         }
     };
