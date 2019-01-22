@@ -516,11 +516,6 @@ angular.module('unionvmsWeb').controller('VesselFormCtrl',function($scope, $log,
         $scope.vesselContacts.slice(0).forEach(function (vesselContact) {
             if (vesselContact.dirty &&  isContactItemValid(vesselContact)) {
                 if (vesselContact.name || vesselContact.email || vesselContact.phoneNumber) {
-                    Object.assign(vesselContact, { source: 'INTERNAL' });
-                    // ToDo: Fix this in BE?
-                    if (!vesselContact.name){
-                        Object.assign(vesselContact, { name: '' });
-                    }
                 } else {
                     $scope.vesselContacts.splice($scope.vesselContacts.indexOf(vesselContact), 1);
                 }

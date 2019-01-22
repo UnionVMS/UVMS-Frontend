@@ -70,9 +70,12 @@ angular.module('unionvmsWeb')
             if (oldValue === undefined || newValue === undefined){
                 return;
             }
-            if (!angular.equals(oldValue.copy().toJson(), newValue.copy().toJson())) {
+            var oldValueJson = oldValue.copy().toJson();
+            var newValueJson = newValue.copy().toJson();
+
+            if (!angular.equals(oldValueJson, newValueJson)) {
                 $scope.dirtyStatus(newValue, true);
-                if (newValue.dirty === true) {
+                if (newValue.dirty === true || newValue.dirty === undefined) {
                     $scope.$parent.dirtyStatus(true);
                 }
             }
