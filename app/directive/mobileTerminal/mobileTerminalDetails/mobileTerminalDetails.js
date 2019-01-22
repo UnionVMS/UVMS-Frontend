@@ -251,12 +251,11 @@ angular.module('unionvmsWeb')
         //Create new Mobile Terminal With Vessel - Success
         var createNewMobileTerminalWithVesselSuccess = function(){
             alertService.showSuccessMessageWithTimeout(locale.getString('mobileTerminal.add_new_alert_message_on_success'));
-            $scope.functions.updateMobileTerminals();
-            $scope.setSubmitStatus(false);
 
             if (angular.isDefined($scope.functions.updateMobileTerminals)) {
                 $scope.functions.updateMobileTerminals();
             }
+            $scope.setSubmitStatus(false);
         };
 
         //Update Mobile Terminal - Add Comment
