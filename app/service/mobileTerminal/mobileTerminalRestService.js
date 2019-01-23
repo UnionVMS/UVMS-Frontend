@@ -347,9 +347,9 @@ angular.module('unionvmsWeb')
                     });
                 return deferred.promise;
             },
-            getHistoryForMobileTerminalByGUID : function(mobileTerminalGUID){
+            getHistoryForMobileTerminalByGUID : function(mobileTerminalGUID, maxHistoryItems){
                 var deferred = $q.defer();
-                mobileTerminalRestFactory.mobileTerminalHistory().get({id: mobileTerminalGUID}, function(response) {
+                mobileTerminalRestFactory.mobileTerminalHistory().get({id: mobileTerminalGUID, maxNbr: maxHistoryItems}, function(response) {
                     if (response.code !== 200) {
                         deferred.reject("Invalid response status");
                         return;
@@ -366,7 +366,7 @@ angular.module('unionvmsWeb')
             },
             getHistoryWithAssociatedVesselForMobileTerminal : function(mobileTerminal){
                 var deferred = $q.defer();
-                this.getHistoryForMobileTerminalByGUID(mobileTerminal.guid).then(function(history){
+                this.getHistoryForMobileTerminalByGUID(mobileTerminal.guid, 15).then(function(history){
                     //Get associated carriers for all mobile terminals in the history items
                     var mobileTerminals = [];
                     if (history) {

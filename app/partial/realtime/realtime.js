@@ -27,7 +27,8 @@ angular.module('unionvmsWeb').controller('RealtimeCtrl', function(
     movementRestService,
     vesselRestService,
     dateTimeService,
-    microMovementServerSideEventsService) {
+    microMovementServerSideEventsService,
+    mapService) {
 
     angular.extend($scope, {
         center: {
@@ -106,11 +107,11 @@ angular.module('unionvmsWeb').controller('RealtimeCtrl', function(
         clearCacheRealTimeFeatures();
     }, CHECK_TIME_FOR_MOVEMENT_IN_CACHE_INTERVAL_MS);
 
-    var
-        vectorSource = new ol.source.Vector(),
-        vectorLayer = new ol.layer.Vector({
-            source: vectorSource
-        });
+    var vectorSource = new ol.source.Vector();
+    var vectorLayer = new ol.layer.Vector({
+        source: vectorSource,
+        renderBuffer: 200
+    });
 
     var styles = {
         iconStyle: new ol.style.Style({
@@ -274,12 +275,13 @@ angular.module('unionvmsWeb').controller('RealtimeCtrl', function(
 
         $scope.initInterval = $interval(function () {
             if (!_.isEqual(genericMapService.mapBasicConfigs, {})) {
+                $scope.stopInitInterval();
                 areaMapService.setMap();
                 initMap();
-                $scope.stopInitInterval();
+
                 // get the positions
 
-                /*
+
                 getPositions().then((positionsByAsset) => {
                     let i = 0;
                     // Todo: change to for loop to make faster
@@ -295,7 +297,7 @@ angular.module('unionvmsWeb').controller('RealtimeCtrl', function(
                 }).catch(error => {
                     console.error('Failed to get positions:', error);
                 });
-                */
+
                 // draw cached realtime positions
 
                 drawCachedRealtimeFeatures();
@@ -308,19 +310,22 @@ angular.module('unionvmsWeb').controller('RealtimeCtrl', function(
         }, 10);
     });
 
+
+
+
     function initMap() {
-        getMap().addLayer(vectorLayer);
-        /*
-        getMap().overlay = getMap().addPopupOverlay();
-        getMap().overlays = [getMap().overlay];
 
-        getMap().on('singleclick', function(evt){
 
+
+        getMap().on('singleclick', function(e){
+            var map = getMap();
             // Attempt to find a feature in one of the visible vector layers
             var features = [];
-            var feature = getMap().forEachFeatureAtPixel(evt.pixel, function(feature, layer) {
-                console.log(layer);
+            map.forEachFeatureAtPixel(e.pixel, function(feature, layer){
+
                 console.log(vectorLayer);
+                console.log(layer);
+
                 features.push(feature);
             }, {
                 hitTolerance: 10
@@ -337,10 +342,12 @@ angular.module('unionvmsWeb').controller('RealtimeCtrl', function(
                 });
 
             }
-
-
         });
-        */
+        getMap().addLayer(vectorLayer);
+
+        getMap().overlay = mapService.addPopupOverlay();
+        getMap().overlays = [getMap().overlay];
+
     }
 
 
@@ -435,7 +442,7 @@ angular.module('unionvmsWeb').controller('RealtimeCtrl', function(
         feature.getStyle().getImage().setRotation(angle);
         feature.getStyle().getImage().setOpacity(1);
 
-        /*
+
         if (doesAssetExistinCache(pos.asset)) {
             setCachedFatureProperties(pos.asset, pos.guid);
         }
@@ -460,7 +467,7 @@ angular.module('unionvmsWeb').controller('RealtimeCtrl', function(
             $localStorage['realtimeMapDataFeatures'].push(pos);
             vectorSource.refresh();
         }
-*/
+
 
         feature['assetId'] = pos.asset;
         feature.setId(pos.guid);
