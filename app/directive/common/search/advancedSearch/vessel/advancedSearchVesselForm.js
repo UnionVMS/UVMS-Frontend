@@ -84,6 +84,7 @@ angular.module('unionvmsWeb')
                 searchService.addSearchCriteria("NAME", searchValue);
                 searchService.addSearchCriteria("CFR", searchValue);
                 searchService.addSearchCriteria("IRCS", searchValue);
+                searchService.addSearchCriteria("EXTERNAL_MARKING", searchValue);
                 searchService.setDynamic(false);
             }
 
