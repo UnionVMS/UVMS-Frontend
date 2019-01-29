@@ -28,7 +28,9 @@ angular.module('unionvmsWeb').controller('RealtimeCtrl', function(
     vesselRestService,
     dateTimeService,
     microMovementServerSideEventsService,
-    mapService) {
+    mapService,
+    PopupModal
+    ) {
 
     angular.extend($scope, {
         center: {
@@ -51,7 +53,7 @@ angular.module('unionvmsWeb').controller('RealtimeCtrl', function(
       };
     }
     */
-    var popup = L.popup();
+
     // hide the top bar
     $(document.getElementsByClassName("headercontainer")).hide();
 
@@ -277,6 +279,7 @@ angular.module('unionvmsWeb').controller('RealtimeCtrl', function(
             if (!_.isEqual(genericMapService.mapBasicConfigs, {})) {
                 $scope.stopInitInterval();
                 areaMapService.setMap();
+
                 initMap();
 
                 // get the positions
@@ -328,26 +331,27 @@ angular.module('unionvmsWeb').controller('RealtimeCtrl', function(
 
                 features.push(feature);
             }, {
-                hitTolerance: 10
+                hitTolerance: 1
             }, function(layer) {
                 return layer === vectorLayer;
             });
 
             if (features.length > 0) {
+                // only get the first one atm
+                onMarkerClick(features[0]);
+
+                /*
                 features.forEach(feature => {
                     if (feature) {
                         onMarkerClick(feature);
                     }
 
                 });
-
+                */
             }
+
         });
         getMap().addLayer(vectorLayer);
-
-        getMap().overlay = mapService.addPopupOverlay();
-        getMap().overlays = [getMap().overlay];
-
     }
 
 
@@ -560,10 +564,7 @@ angular.module('unionvmsWeb').controller('RealtimeCtrl', function(
         let assetId = feature['assetId'];
         if (assetId !== undefined) {
             getAssetInfo(assetId).then((assetInfo) => {
-                popup = L.popup()
-                    .setLatLng(feature.getGeometry().getCoordinates())
-                    .setContent(assetInfo)
-                    .openOn(getMap());
+                PopupModal.show($scope.data);
 
             });
         }

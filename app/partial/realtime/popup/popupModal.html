@@ -13,10 +13,16 @@ copy of the GNU General Public License along with the IFDM Suite. If not, see <h
     <div class="pointer pull-right" ng-click="cancel()">
         <i class="fa fa-times closeicon"></i>
     </div>
-    <h4 class="modal-title">{{ labels.title }}</h4>
+    <h4 class="modal-title">Hello</h4>
 </div>
 <div class="modal-body" loading-indicator="loading" type="SPINNER" size="small">
-    <div ng-bind-html="labels.text"></div>
+    <a id="close" ng-click="hide()">X</a>
+    <table>
+        <tr ng-repeat="item in data.items">
+            <td>{{item.id}}</td>
+            <td>{{item.pos}}</td>
+        </tr>
+    </table>
 </div>
 <div class="modal-footer">
 </div>
