@@ -43,7 +43,7 @@ angular.module('unionvmsWeb').controller('RealtimeCtrl', function(
     const MAX_MOVEMENTS_IN_CACHE = 20000;
     const MAX_TIME_FOR_MOVEMENT_IN_CACHE_MS = 18000000;   // 5 hours
     const CHECK_TIME_FOR_MOVEMENT_IN_CACHE_INTERVAL_MS = 900000;  // 15 min
-
+    const HIT_TOLERANCE = 10;
     /*
     $scope.toggleLeft = buildToggler('left');
 
@@ -325,29 +325,22 @@ angular.module('unionvmsWeb').controller('RealtimeCtrl', function(
             // Attempt to find a feature in one of the visible vector layers
             var features = [];
             map.forEachFeatureAtPixel(e.pixel, function(feature, layer){
-
-                console.log(vectorLayer);
-                console.log(layer);
-
                 features.push(feature);
             }, {
-                hitTolerance: 1
+                hitTolerance: HIT_TOLERANCE
             }, function(layer) {
                 return layer === vectorLayer;
             });
 
             if (features.length > 0) {
-                // only get the first one atm
-                onMarkerClick(features[0]);
-
-                /*
-                features.forEach(feature => {
+                for (var i = 0; i < features.length; i++) {
+                    var feature = features[i];
                     if (feature) {
                         onMarkerClick(feature);
+                        break;
                     }
+                }
 
-                });
-                */
             }
 
         });
@@ -564,7 +557,7 @@ angular.module('unionvmsWeb').controller('RealtimeCtrl', function(
         let assetId = feature['assetId'];
         if (assetId !== undefined) {
             getAssetInfo(assetId).then((assetInfo) => {
-                PopupModal.show($scope.data);
+                PopupModal.show(assetInfo);
 
             });
         }

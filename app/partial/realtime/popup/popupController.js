@@ -1,4 +1,6 @@
-angular.module('unionvmsWeb').controller('PopupCtrl', function($scope, $modalInstance) {
+angular.module('unionvmsWeb').controller('PopupCtrl', function($scope, $modalInstance, assetInfo) {
+
+    console.log('assetinfo:', assetInfo);
     $scope.isOpen = false;
     $scope.data = {
         items: {
