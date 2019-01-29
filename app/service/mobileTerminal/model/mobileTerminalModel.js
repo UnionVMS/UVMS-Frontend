@@ -176,6 +176,18 @@ angular.module('unionvmsWeb').factory('MobileTerminal', function(CommunicationCh
         //Add a new channel to the end of the list
         MobileTerminal.prototype.addNewChannel = function(){
             var newChannel = new CommunicationChannel();
+            for (var i = 0; i < this.channels.length; i++) {
+            	var channel = this.channels[i];
+            	if (newChannel.defaultChannel) {
+            		newChannel.defaultChannel = !channel.defaultChannel;
+            	}
+            	if (newChannel.configChannel) {
+            		newChannel.configChannel = !channel.configChannel;
+            	}
+            	if (newChannel.pollChannel) {
+            		newChannel.pollChannel = !channel.pollChannel;
+            	}
+            }
             this.channels.push(newChannel);
             return newChannel;
         };
