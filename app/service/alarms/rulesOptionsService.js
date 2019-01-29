@@ -151,8 +151,8 @@ angular.module('unionvmsWeb').factory('rulesOptionsService',function(configurati
         ruleDefinitionDropdowns.ACTIVITY.ACTIVITY_MESSAGE_TYPE = configurationService.setTextAndCodeForDropDown(configurationService.getValue('MOVEMENT', 'ACTIVITY_TYPE'), 'ACTIVITY_TYPE', 'MOVEMENT', true);
 
         //Asset subcriterias
-        ruleDefinitionDropdowns.ASSET.ASSET_ID_GEAR_TYPE = configurationService.setTextAndCodeForDropDown(configurationService.getValue('VESSEL', 'GEAR_TYPE'), 'GEAR_TYPE','VESSEL', true);
-        ruleDefinitionDropdowns.ASSET.FLAG_STATE = configurationService.setTextAndCodeForDropDown(configurationService.getValue('VESSEL', 'FLAG_STATE'), 'FLAG_STATE', 'VESSEL', true);
+        ruleDefinitionDropdowns.ASSET.ASSET_ID_GEAR_TYPE = configurationService.setTextAndCodeForDropDown(configurationService.getValue('VESSEL', 'FISHING_TYPE'), undefined,'VESSEL', true);
+        ruleDefinitionDropdowns.ASSET.FLAG_STATE = configurationService.setTextAndCodeForDropDown(configurationService.getValue('VESSEL', 'FLAG_STATE'), undefined, 'VESSEL', true);
         ruleDefinitionDropdowns.ASSET.VESSEL_STATUS = configurationService.setTextAndCodeForDropDown(configurationService.getValue('RULES', 'ASSET_STATUSES'), 'ASSET_STATUSES', 'RULES', true);
 
         //Mobile terminal subcriterias
@@ -197,8 +197,8 @@ angular.module('unionvmsWeb').factory('rulesOptionsService',function(configurati
     };
     var setupActionDropdowns = function(){
         //TODO: Get config from Rules?
-        actionDropdowns.SEND_TO_FLUX = configurationService.setTextAndCodeForDropDown(configurationService.getValue('VESSEL', 'FLAG_STATE'), 'FLAG_STATE', 'VESSEL', true);
-        actionDropdowns.SEND_TO_NAF = configurationService.setTextAndCodeForDropDown(configurationService.getValue('VESSEL', 'FLAG_STATE'), 'FLAG_STATE', 'VESSEL', true);
+        actionDropdowns.SEND_TO_FLUX = configurationService.setTextAndCodeForDropDown(configurationService.getValue('VESSEL', 'FLAG_STATE'), undefined, 'VESSEL', true);
+        actionDropdowns.SEND_TO_NAF = configurationService.setTextAndCodeForDropDown(configurationService.getValue('VESSEL', 'FLAG_STATE'), undefined, 'VESSEL', true);
     };
 
 	var rulesOptionsService = {
