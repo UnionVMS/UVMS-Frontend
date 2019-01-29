@@ -66,11 +66,12 @@ angular.module('unionvmsWeb')
         	name : updatedCriterias['NAME'],
         	flagState : updatedCriterias['FLAG_STATE'],
         	externalMarking : updatedCriterias['EXTERNAL_MARKING'],
-        	portOfRegistration : updatedCriterias['HOMEPORT']
-//        	minLength : updatedCriterias['MIN_LENGTH'][0],
-//        	maxLength : updatedCriterias['MAX_LENGTH'][0],
-//        	minPower : updatedCriterias['MIN_POWER'][0],
-//        	maxPower : updatedCriterias['MAX_POWER'][0]
+        	portOfRegistration : updatedCriterias['HOMEPORT'],
+        	gearType : updatedCriterias['GEAR_TYPE'] ? updatedCriterias['GEAR_TYPE'][0] : undefined,
+        	minLength : updatedCriterias['MIN_LENGTH'] ? updatedCriterias['MIN_LENGTH'][0] : undefined,
+        	maxLength : updatedCriterias['MAX_LENGTH'] ? updatedCriterias['MAX_LENGTH'][0] : undefined,
+        	minPower : updatedCriterias['MIN_POWER'] ? updatedCriterias['MIN_POWER'][0] : undefined,
+        	maxPower : updatedCriterias['MAX_POWER'] ? updatedCriterias['MAX_POWER'][0] : undefined
         };
     };
 

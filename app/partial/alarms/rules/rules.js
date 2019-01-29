@@ -116,7 +116,7 @@ angular.module('unionvmsWeb').controller('RulesCtrl',function($scope, $log, $sta
         
         var index2 = $scope.allCurrentSearchResults.indexOf(rule);
         if (index2 >= 0) {
-            $scope.allCurrentSearchResults.splice(index2, 1)
+            $scope.allCurrentSearchResults.splice(index2, 1);
         }
     };
 
