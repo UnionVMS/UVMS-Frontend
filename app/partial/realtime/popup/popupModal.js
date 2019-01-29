@@ -1,6 +1,6 @@
 angular.module('unionvmsWeb').factory('PopupModal', function($modal) {
     return {
-        show: function(assetInfo) {
+        show: function(data) {
             return $modal.open({
                 templateUrl: 'partial/realtime/popup/popupModal.html',
                 controller: 'PopupCtrl',
@@ -9,7 +9,7 @@ angular.module('unionvmsWeb').factory('PopupModal', function($modal) {
                 size: 'md',
                 resolve:{
                     assetInfo : function () {
-                        return assetInfo;
+                        return data;
                     }
                 }
             });

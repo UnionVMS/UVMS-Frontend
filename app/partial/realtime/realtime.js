@@ -17,7 +17,7 @@ angular.module('unionvmsWeb').controller('RealtimeCtrl', function(
     $window,
     $interval,
     genericMapService,
-    areaMapService,
+    realtimeMapService,
     defaultMapConfigs,
     projectionService,
     $log,
@@ -237,8 +237,8 @@ angular.module('unionvmsWeb').controller('RealtimeCtrl', function(
                 (angular.element('#realtime.fullscreen').length === 0 && evt.type.toUpperCase().indexOf("FULLSCREENCHANGE") !== -1))) {
 
                 $('#realtime').css('height', w.height() - 1 + 'px');
-                $('#areaMap').css('height', w.height() - 1 + 'px');
-                areaMapService.updateMapSize();
+                $('#realtimeMap').css('height', w.height() - 1 + 'px');
+                realtimeMapService.updateMapSize();
                 return;
             }
 
@@ -252,8 +252,8 @@ angular.module('unionvmsWeb').controller('RealtimeCtrl', function(
 
 
             $('#realtime').css('height', newHeight - 1 + 'px');
-            $('#areaMap').css('height', newHeight - 1 + 'px');
-            areaMapService.updateMapSize();
+            $('#realtimeMap').css('height', newHeight - 1 + 'px');
+            realtimeMapService.updateMapSize();
         }, 100);
 
     };
@@ -278,7 +278,7 @@ angular.module('unionvmsWeb').controller('RealtimeCtrl', function(
         $scope.initInterval = $interval(function () {
             if (!_.isEqual(genericMapService.mapBasicConfigs, {})) {
                 $scope.stopInitInterval();
-                areaMapService.setMap();
+                realtimeMapService.setMap();
 
                 initMap();
 
@@ -376,7 +376,7 @@ angular.module('unionvmsWeb').controller('RealtimeCtrl', function(
 
                 var style = createStyle('circle', c, 'white');
                 feature.setStyle(style);
-                vectorSource.addFeature(feature);
+                //vectorSource.addFeature(feature);
 
                 if (!angular.isDefined(positionData[p.asset])) {
                     positionData[p.asset] = [];
@@ -467,6 +467,7 @@ angular.module('unionvmsWeb').controller('RealtimeCtrl', function(
 
 
         feature['assetId'] = pos.asset;
+        feature['pos'] = pos;
         feature.setId(pos.guid);
 
         vectorSource.addFeature(feature);
@@ -535,7 +536,7 @@ angular.module('unionvmsWeb').controller('RealtimeCtrl', function(
     }
 
     function getMap() {
-        return areaMapService.map;
+        return realtimeMapService.map;
     }
 
 
@@ -557,7 +558,11 @@ angular.module('unionvmsWeb').controller('RealtimeCtrl', function(
         let assetId = feature['assetId'];
         if (assetId !== undefined) {
             getAssetInfo(assetId).then((assetInfo) => {
-                PopupModal.show(assetInfo);
+                var data = {
+                    asset : assetInfo,
+                    position : feature['pos']
+                }
+                PopupModal.show(data);
 
             });
         }
