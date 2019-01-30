@@ -492,21 +492,24 @@ unionvmsWebApp.config(function($stateProvider, $compileProvider, tmhDynamicLocal
                     controller: 'RealtimeCtrl'
                 }
             },
-            resolve: {}
-            /*
-            views: {
-                modulepage: {
-                    templateUrl: 'partial/spatial/spatial.html',
-                    controller: 'SpatialCtrl'
-                }
-            },
             resolve: {
-
             },
             data: {
+                loaded: true
+            },
+            onEnter: function($state,locale,userService,errorService) {
+                if (angular.isDefined($state.current.data)) {
 
+                    console.log('entering:', $state.current.data.loaded);
+                    if ($state.current.data.loaded) {
+                        console.log('it has been loaded');
+                    }
+
+                }
+            },
+            onExit: function(loadingStatus){
+                loadingStatus.resetState();
             }
-            */
         })
         .state('app.areas', {
             url: '/areas',

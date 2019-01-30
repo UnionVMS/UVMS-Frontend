@@ -44,6 +44,8 @@ angular.module('unionvmsWeb').controller('RealtimeCtrl', function(
     const MAX_TIME_FOR_MOVEMENT_IN_CACHE_MS = 18000000;   // 5 hours
     const CHECK_TIME_FOR_MOVEMENT_IN_CACHE_INTERVAL_MS = 900000;  // 15 min
     const HIT_TOLERANCE = 10;
+
+
     /*
     $scope.toggleLeft = buildToggler('left');
 
@@ -265,6 +267,15 @@ angular.module('unionvmsWeb').controller('RealtimeCtrl', function(
     };
 
     angular.element(document).ready(function () {
+        // TODO: Look into controllers loading twice on refresh in app.js ui-router
+        // ugly hack to prevent double loading on refresh.
+        if ($rootScope.realtimeLoaded) {
+            return;
+        }
+        else {
+            $rootScope.realtimeLoaded = true;
+        }
+
         loadingStatus.isLoading('Realtime', true, 0);
         genericMapService.setMapBasicConfigs();
         projectionService.getProjections();
@@ -561,7 +572,7 @@ angular.module('unionvmsWeb').controller('RealtimeCtrl', function(
                 var data = {
                     asset : assetInfo,
                     position : feature['pos']
-                }
+                };
                 PopupModal.show(data);
 
             });
