@@ -3,9 +3,9 @@
     <leaflet center="center" markers="markers" height="400px" width="100%"></leaflet>
 </div>
 -->
-<div id="realtime" class="realtime" ngsf-fullscreen="fullscreenCtrl">
+<div ui-view name="realtime" id="realtime" class="realtime" ngsf-fullscreen="fullscreenCtrl">
     <!--<leaflet center="center" paths="paths" markers="markers" defaults="defaults" height="100%"></leaflet>-->
-    <div id="realtimeMap" class="map">
+    <div -view name="realtimeMap" id="realtimeMap" class="map">
         <loading-panel type="Realtime"></loading-panel>
 
     </div>

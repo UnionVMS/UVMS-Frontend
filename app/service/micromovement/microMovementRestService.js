@@ -16,8 +16,8 @@ angular.module('unionvmsWeb')
         getMovementList : function(){
             return $resource('movement/rest/movement/microMovementListAfter/:timestamp');
         },
-        getTrackById : function () {
-            return $resource('movement/rest/track/:id');
+        getTrackByMovementId : function () {
+            return $resource('movement/rest/track/byMovementGUID/:id');
         },
         getSegmentByMovementGuid : function () {
             return $resource('movement/rest/segment/segmentByDestinationMovement/:moveId');
@@ -41,13 +41,13 @@ angular.module('unionvmsWeb')
 
     };
 
-    let getTrackById = function(id) {
+    let getTrackByMovementId = function(id) {
         let deferred = $q.defer();
-        microMovementRestFactory.getTrackById().get({id: id}, function(result) {
+        microMovementRestFactory.getTrackByMovementId().get({id: id}, function(result) {
                 deferred.resolve(result);
             },
             function(error){
-                console.log("Error getting track info.", error);
+                console.log("Error getting getTrackByMovementId info.", error);
                 deferred.reject(error);
             }
         );
@@ -69,7 +69,7 @@ angular.module('unionvmsWeb')
 
     return {
         getMovementList : getMovementList,
-        getTrackById : getTrackById,
+        getTrackByMovementId : getTrackByMovementId,
         getSegmentByMovementGuid : getSegmentByMovementGuid
     };
 

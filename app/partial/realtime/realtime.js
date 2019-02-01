@@ -32,50 +32,130 @@ angular.module('unionvmsWeb').controller('RealtimeCtrl', function(
     PopupModal
     ) {
 
-    angular.extend($scope, {
-        center: {
-            lat: 0,
-            lng: 0,
-            zoom: 8
-        }
+    var MAX_MOVEMENTS_IN_CACHE = 20000;
+    var MAX_TIME_FOR_MOVEMENT_IN_CACHE_MS = 18000000;   // 5 hours
+    var CHECK_TIME_FOR_MOVEMENT_IN_CACHE_INTERVAL_MS = 900000;  // 15 min
+    var HIT_TOLERANCE = 10;
+
+    var vectorSource = new ol.source.Vector();
+    var vectorLayer = new ol.layer.Vector({
+        source: vectorSource,
+        renderBuffer: 200
     });
 
-    const MAX_MOVEMENTS_IN_CACHE = 20000;
-    const MAX_TIME_FOR_MOVEMENT_IN_CACHE_MS = 18000000;   // 5 hours
-    const CHECK_TIME_FOR_MOVEMENT_IN_CACHE_INTERVAL_MS = 900000;  // 15 min
-    const HIT_TOLERANCE = 10;
+    var init = function() {
+        angular.extend($scope, {
+            center: {
+                lat: 0,
+                lng: 0,
+                zoom: 8
+            }
+        });
+
+        // hide the top bar
+        $(document.getElementsByClassName("headercontainer")).hide();
+
+        $($window).resize($scope.updateContainerSize);
 
 
-    /*
-    $scope.toggleLeft = buildToggler('left');
+        angular.element(document).ready(function () {
+            // TODO: Look into controllers loading twice on refresh in app.js ui-router
+            // ugly hack to prevent double loading on refresh.
+            if ($rootScope.realtimeLoaded) {
+                return;
+            }
+            else {
+                $rootScope.realtimeLoaded = true;
+            }
 
-    function buildToggler(componentId) {
-      return function() {
-        $mdSidenav(componentId).toggle();
-      };
-    }
-    */
 
-    // hide the top bar
-    $(document.getElementsByClassName("headercontainer")).hide();
 
-    $($window).resize($scope.updateContainerSize);
+            loadingStatus.isLoading('Realtime', true, 0);
+            genericMapService.setMapBasicConfigs();
+            projectionService.getProjections();
+
+            $($window).resize($scope.updateContainerSize);
+
+            $scope.updateContainerSize();
+
+            initLocalCaches();
+
+            $scope.initInterval = $interval(function () {
+                if (!_.isEqual(genericMapService.mapBasicConfigs, {})) {
+                    $scope.stopInitInterval();
+                    realtimeMapService.setMap();
+
+                    initMap();
+                    // get the positions
+
+
+                    $scope.getPositions().then((positionsByAsset) => {
+                        let i = 0;
+                        // Todo: change to for loop to make faster
+                        Object.values(positionsByAsset).forEach(positions => {
+                            if (positions.map !== undefined) {
+                                //console.log('drawing vessel (positions):', i);
+                                drawVesselWithSegments(positions[0].asset, positions, true);
+                            }
+
+                            i++;
+                        });
+
+                    }).catch(error => {
+                        console.error('Failed to get positions:', error);
+                    });
+
+                    // draw cached realtime positions
+
+                    drawCachedRealtimeFeatures();
+
+                    // initialize server side event
+                    if (!microMovementServerSideEventsService.hasSubscribed()) {
+                        microMovementServerSideEventsService.subscribe();
+                    }
+                }
+            }, 10);
+        });
+
+
+        let clearRealTimeMapDataCache = $interval(function () {
+            clearCacheRealTimeFeatures();
+        }, CHECK_TIME_FOR_MOVEMENT_IN_CACHE_INTERVAL_MS);
+
+
+
+    };
+
+
 
     // Listen to the changes of micromovement changes
-    $rootScope.$on('event:micromovement', (e, data) => {
+    var micromovementEvent = $rootScope.$on('event:micromovement', (e, data) => {
         let microMovement = JSON.parse(data);
         //processRealtimeData(microMovement.asset, microMovement.guid, microMovement);
 
-        drawVesselWithSegments(microMovement.asset, [microMovement], false);
+        drawVesselWithSegments(microMovement.asset, [microMovement], false, true);
     });
 
-    function processRealtimeData(assetGuid, movementGuid, movementData) {
+
+    var trackEvent = $rootScope.$on('event:micromovement:track', (e, result) => {
+        //drawVesselWithSegments(microMovement.asset, [microMovement], true, false);
+        let color = '#' + intToRGB(hashCode(result.data.position.asset));
+        drawTrack(result, color);
+    });
+
+    $scope.$on('$destroy', function () {
+        micromovementEvent();
+        trackEvent();
+
+    });
+
+    $scope.processRealtimeData = function(assetGuid, movementGuid, movementData) {
         let posExists = false;
-        let assetExists = doesAssetExistInRealtimeDataCache(assetGuid);
+        let assetExists = $scope.doesAssetExistInRealtimeDataCache(assetGuid);
 
         if (assetExists) {
             let values = $localStorage['realtimeMapData'][assetGuid];
-            posExists = doesPositionExistInCache(values, movementGuid);
+            posExists = $scope.doesPositionExistInCache(values, movementGuid);
         }
 
         if (!assetExists ) {
@@ -84,9 +164,9 @@ angular.module('unionvmsWeb').controller('RealtimeCtrl', function(
         if (!posExists) {
             $localStorage['realtimeMapData'][assetGuid].push(movementData);
         }
-    }
+    };
 
-    function doesAssetExistInRealtimeDataCache(assetGuid) {
+    $scope.doesAssetExistInRealtimeDataCache = function (assetGuid) {
         let exists = false;
         for (let key in $localStorage['realtimeMapData']) {
             if (key === assetGuid){
@@ -95,8 +175,9 @@ angular.module('unionvmsWeb').controller('RealtimeCtrl', function(
             }
         }
         return exists;
-    }
-    function doesPositionExistInCache(values, microMovementGuid) {
+    };
+
+    $scope.doesPositionExistInCache = function (values, microMovementGuid) {
         let exists = false;
         Object.values(values).forEach(v => {
             if (v.guid === microMovementGuid) {
@@ -105,86 +186,16 @@ angular.module('unionvmsWeb').controller('RealtimeCtrl', function(
             }
         });
         return exists;
-    }
+    };
 
-    let clearRealTimeMapDataCache = $interval(function () {
-        clearCacheRealTimeFeatures();
-    }, CHECK_TIME_FOR_MOVEMENT_IN_CACHE_INTERVAL_MS);
 
-    var vectorSource = new ol.source.Vector();
-    var vectorLayer = new ol.layer.Vector({
-        source: vectorSource,
-        renderBuffer: 200
-    });
-
-    var styles = {
-        iconStyle: new ol.style.Style({
-            image: new ol.style.Icon({
-                anchor: [0.5, 46],
-                anchorXUnits: 'fraction',
-                anchorYUnits: 'pixels',
-                opacity: 0.75,
-                src: './assets/images/close.png'
-            }),
-            text: new ol.style.Text({
-                font: '12px Calibri,sans-serif',
-                fill: new ol.style.Fill({color: '#000'}),
-                stroke: new ol.style.Stroke({
-                    color: '#fff', width: 2
-                }),
-                text: 'Some text'
-            }),
-        }),
-        square: new ol.style.Style({
-                image: new ol.style.RegularShape({
-                    fill: new ol.style.Fill({color: '#000'}),
-                    stroke: new ol.style.Stroke({
-                        color: '#fff', width: 2
-                    }),
-                    points: 4,
-                    radius: 10,
-                    angle: Math.PI / 4
-                })
-        }),
-        circle: new ol.style.Style({
-            image: new ol.style.Circle({
-                fill: new ol.style.Fill({color: '#000'}),
-                stroke: new ol.style.Stroke({
-                    color: '#fff', width: 2
-                }),
-                radius: 5,
-            })
-        }),
-        triangle: new ol.style.Style({
-                image: new ol.style.RegularShape({
-                    fill: new ol.style.Fill({
-                        color: 'red'
-                    }),
-                    stroke: new ol.style.Stroke({
-                        color: 'black',
-                        width: 2
-                    }),
-                    points: 3,
-                    radius: 10,
-                    rotation: 0,
-                    angle: 0
-                })
-        }),
-        line: new ol.style.Style({
-            stroke: new ol.style.Stroke({
-                color: '#ffcc33',
-                width: 2
-            })
-        })
+    // todo: move to own class
+    var deg2rad = function(degrees) {
+        return Math.sin(degrees * Math.PI / 180);
     };
 
     // todo: move to own class
-    function deg2rad(degrees) {
-        return Math.sin(degrees * Math.PI / 180);
-    }
-
-    // todo: move to own class
-    function createStyle(styleType, fillColor, strokeColor) {
+    var createStyle = function(styleType, fillColor, strokeColor) {
         let style = null;
 
         switch (styleType) {
@@ -229,7 +240,7 @@ angular.module('unionvmsWeb').controller('RealtimeCtrl', function(
             $log.error('Style type ' + style + '  not supported.');
         }
         return style;
-    }
+    };
 
     $scope.updateContainerSize = function (evt) {
         setTimeout(function () {
@@ -266,73 +277,72 @@ angular.module('unionvmsWeb').controller('RealtimeCtrl', function(
         loadingStatus.isLoading('Realtime', false);
     };
 
-    angular.element(document).ready(function () {
-        // TODO: Look into controllers loading twice on refresh in app.js ui-router
-        // ugly hack to prevent double loading on refresh.
-        if ($rootScope.realtimeLoaded) {
-            return;
-        }
-        else {
-            $rootScope.realtimeLoaded = true;
-        }
 
-        loadingStatus.isLoading('Realtime', true, 0);
-        genericMapService.setMapBasicConfigs();
-        projectionService.getProjections();
+    var initMap = function() {
 
-        $($window).resize($scope.updateContainerSize);
+        $scope.styles = {
+            iconStyle: new ol.style.Style({
+                image: new ol.style.Icon({
+                    anchor: [0.5, 46],
+                    anchorXUnits: 'fraction',
+                    anchorYUnits: 'pixels',
+                    opacity: 0.75,
+                    src: './assets/images/close.png'
+                }),
+                text: new ol.style.Text({
+                    font: '12px Calibri,sans-serif',
+                    fill: new ol.style.Fill({color: '#000'}),
+                    stroke: new ol.style.Stroke({
+                        color: '#fff', width: 2
+                    }),
+                    text: 'Some text'
+                }),
+            }),
+            square: new ol.style.Style({
+                image: new ol.style.RegularShape({
+                    fill: new ol.style.Fill({color: '#000'}),
+                    stroke: new ol.style.Stroke({
+                        color: '#fff', width: 2
+                    }),
+                    points: 4,
+                    radius: 10,
+                    angle: Math.PI / 4
+                })
+            }),
+            circle: new ol.style.Style({
+                image: new ol.style.Circle({
+                    fill: new ol.style.Fill({color: '#000'}),
+                    stroke: new ol.style.Stroke({
+                        color: '#fff', width: 2
+                    }),
+                    radius: 5,
+                })
+            }),
+            triangle: new ol.style.Style({
+                image: new ol.style.RegularShape({
+                    fill: new ol.style.Fill({
+                        color: 'red'
+                    }),
+                    stroke: new ol.style.Stroke({
+                        color: 'black',
+                        width: 2
+                    }),
+                    points: 3,
+                    radius: 10,
+                    rotation: 0,
+                    angle: 0
+                })
+            }),
+            line: new ol.style.Style({
+                stroke: new ol.style.Stroke({
+                    color: '#ffcc33',
+                    width: 2
+                })
+            })
+        };
 
-        $scope.updateContainerSize();
-
-        initLocalCaches();
-
-        $scope.initInterval = $interval(function () {
-            if (!_.isEqual(genericMapService.mapBasicConfigs, {})) {
-                $scope.stopInitInterval();
-                realtimeMapService.setMap();
-
-                initMap();
-
-                // get the positions
-
-
-                getPositions().then((positionsByAsset) => {
-                    let i = 0;
-                    // Todo: change to for loop to make faster
-                    Object.values(positionsByAsset).forEach(positions => {
-                        if (positions.map !== undefined) {
-                            //console.log('drawing vessel (positions):', i);
-                            drawVesselWithSegments(positions[0].asset, positions, true);
-                        }
-
-                        i++;
-                    });
-
-                }).catch(error => {
-                    console.error('Failed to get positions:', error);
-                });
-
-                // draw cached realtime positions
-
-                drawCachedRealtimeFeatures();
-
-                // initialize server side event
-                if (!microMovementServerSideEventsService.hasSubscribed()) {
-                    microMovementServerSideEventsService.subscribe();
-                }
-            }
-        }, 10);
-    });
-
-
-
-
-    function initMap() {
-
-
-
-        getMap().on('singleclick', function(e){
-            var map = getMap();
+        $scope.getMap().on('singleclick', function(e){
+            var map = $scope.getMap();
             // Attempt to find a feature in one of the visible vector layers
             var features = [];
             map.forEachFeatureAtPixel(e.pixel, function(feature, layer){
@@ -347,7 +357,7 @@ angular.module('unionvmsWeb').controller('RealtimeCtrl', function(
                 for (var i = 0; i < features.length; i++) {
                     var feature = features[i];
                     if (feature) {
-                        onMarkerClick(feature);
+                        $scope.onMarkerClick(feature);
                         break;
                     }
                 }
@@ -355,12 +365,12 @@ angular.module('unionvmsWeb').controller('RealtimeCtrl', function(
             }
 
         });
-        getMap().addLayer(vectorLayer);
-    }
+        $scope.getMap().addLayer(vectorLayer);
+    };
 
 
 
-    function drawVesselWithSegments(asset, positions, shouldDrawSegment) {
+    var drawVesselWithSegments = function(asset, positions, shouldDrawSegment, checkCache) {
         let pos = positions[positions.length - 1];
         // draw segments from positions of the boat
         let color = '#' + intToRGB(hashCode(pos.asset));
@@ -370,12 +380,11 @@ angular.module('unionvmsWeb').controller('RealtimeCtrl', function(
 
         // draw vessel on top of segments (segments on a seperate layer)        
 
-        addMarker(pos, deg2rad(pos.heading), color);
-
-    }
+        addMarker(pos, deg2rad(pos.heading), color, checkCache);
+    };
 
     // Draws a polyline based on positions, takes an array of positions [lat, long]
-    function drawSegment(positions, c) {
+    var drawSegment = function(positions, c) {
         var prevFeature;
         var feature;
         var positionData = [];
@@ -398,13 +407,12 @@ angular.module('unionvmsWeb').controller('RealtimeCtrl', function(
             });
 
 
-
-        // Add lines
+            // Add lines
         Object.entries(positionData).forEach(p => {
 
             var geom = new ol.geom.MultiLineString([p[1]]);
             geom.transform('EPSG:4326', 'EPSG:3857');
-
+            console.log(geom);
             var featureLine = new ol.Feature({
                 geometry: geom
             });
@@ -419,11 +427,13 @@ angular.module('unionvmsWeb').controller('RealtimeCtrl', function(
             console.log('prevFeature:', prevFeature);
             console.log('feature:', feature);
         }
-    }
-    function toFixed(number, decimals) {
+    };
+
+    $scope.toFixed = function(number, decimals) {
         return parseFloat(number.toFixed(decimals));
-    }
-    function getTextStyle(text, colorFill, colorStroke, strokeWidth, offsetX, offsetY) {
+    };
+
+    $scope.getTextStyle = function(text, colorFill, colorStroke, strokeWidth, offsetX, offsetY) {
         return new ol.style.Text({
             font: '12px Calibri,sans-serif',
             fill: new ol.style.Fill({color: colorFill}),
@@ -434,9 +444,9 @@ angular.module('unionvmsWeb').controller('RealtimeCtrl', function(
             offsetY: offsetY,
             text: text
         });
-    }
+    };
 
-    function addMarker(pos, angle, c) {
+    var addMarker = function(pos, angle, c, checkCache) {
         let posArray = [pos.location.latitude, pos.location.longitude];
         let feature = new ol.Feature(new ol.geom.Point(ol.proj.fromLonLat( [ posArray[1], posArray[0]])));
 
@@ -451,49 +461,54 @@ angular.module('unionvmsWeb').controller('RealtimeCtrl', function(
         feature.getStyle().getImage().setOpacity(1);
 
 
-        if (doesAssetExistinCache(pos.asset)) {
-            setCachedFatureProperties(pos.asset, pos.guid);
-        }
-        else {
-            $localStorage['realtimeDataAssets'].push(pos.asset);
-        }
+        if (checkCache) {
 
-        if (!doesPositionExistInFeatureCache(pos.guid)) {
-            // check if there is space to insert, otherwise remove first position
-            let arrayLength = $localStorage['realtimeMapDataFeatures'].length;
-            if (arrayLength >= MAX_MOVEMENTS_IN_CACHE) {
-                // remove first element
-                console.log('not enough space in cache, removing first element.');
-                let cachedPos = $localStorage['realtimeMapDataFeatures'].shift();
-                if (cachedPos !== null && cachedPos !== undefined) {
-                    let cachedFeature = vectorSource.getFeatureById(cachedPos.guid);
-                    if (cachedFeature !== null && cachedFeature !== undefined) {
-                        vectorSource.removeFeature(cachedFeature);
+            if (doesAssetExistinCache(pos.asset)) {
+                setCachedFatureProperties(pos.asset, pos.guid);
+            }
+            else {
+                $localStorage['realtimeDataAssets'].push(pos.asset);
+            }
+
+            if (!doesPositionExistInFeatureCache(pos.guid)) {
+                // check if there is space to insert, otherwise remove first position
+                let arrayLength = $localStorage['realtimeMapDataFeatures'].length;
+                if (arrayLength >= MAX_MOVEMENTS_IN_CACHE) {
+                    // remove first element
+                    console.log('not enough space in cache, removing first element.');
+                    let cachedPos = $localStorage['realtimeMapDataFeatures'].shift();
+                    if (cachedPos !== null && cachedPos !== undefined) {
+                        let cachedFeature = vectorSource.getFeatureById(cachedPos.guid);
+                        if (cachedFeature !== null && cachedFeature !== undefined) {
+                            vectorSource.removeFeature(cachedFeature);
+                        }
                     }
                 }
+                $localStorage['realtimeMapDataFeatures'].push(pos);
+                vectorSource.refresh();
             }
-            $localStorage['realtimeMapDataFeatures'].push(pos);
-            vectorSource.refresh();
-        }
 
+        }
 
         feature['assetId'] = pos.asset;
         feature['pos'] = pos;
         feature.setId(pos.guid);
 
         vectorSource.addFeature(feature);
-    }
+        vectorLayer.getSource().changed();
+        vectorLayer.getSource().refresh();
+    };
 
-    function doesAssetExistinCache(assetId) {
+    var doesAssetExistinCache = function (assetId) {
         for (let i = 0; i < $localStorage['realtimeDataAssets'].length; i++) {
             if ($localStorage['realtimeDataAssets'][i] === assetId) {
                 return true;
             }
         }
         return false;
-    }
+    };
 
-    function setCachedFatureProperties(assetId, ignoreId) {
+    var setCachedFatureProperties = function(assetId, ignoreId) {
         for (let i = 0; i < $localStorage['realtimeMapDataFeatures'].length; i++) {
             let id = $localStorage['realtimeMapDataFeatures'][i].guid;
             if (id !== ignoreId) {
@@ -504,21 +519,20 @@ angular.module('unionvmsWeb').controller('RealtimeCtrl', function(
                 }
             }
         }
+    };
 
-    }
 
-
-    function drawCachedRealtimeFeatures() {
+    var drawCachedRealtimeFeatures = function() {
 
         for (let i = 0; i < $localStorage['realtimeMapDataFeatures'].length; i++) {
             let pos = $localStorage['realtimeMapDataFeatures'][i];
             if (pos !== null) {
-                drawVesselWithSegments(pos.asset, [pos], false);
+                drawVesselWithSegments(pos.asset, [pos], false, true);
             }
         }
-    }
+    };
 
-    function clearCacheRealTimeFeatures() {
+    var clearCacheRealTimeFeatures = function() {
         let cacheThresholdTime = Date.now() - MAX_TIME_FOR_MOVEMENT_IN_CACHE_MS;
         let arrayLength = $localStorage['realtimeMapDataFeatures'].length;
         if (arrayLength >= MAX_MOVEMENTS_IN_CACHE) {
@@ -535,40 +549,27 @@ angular.module('unionvmsWeb').controller('RealtimeCtrl', function(
                 }
             }
         }
-    }
+    };
 
-    function doesPositionExistInFeatureCache(guid) {
+    var doesPositionExistInFeatureCache = function(guid) {
         for (let i = 0; i < $localStorage['realtimeMapDataFeatures'].length; i++) {
             if ($localStorage['realtimeMapDataFeatures'][i].guid === guid) {
                 return true;
             }
         }
         return false;
-    }
+    };
 
-    function getMap() {
+    $scope.getMap = function() {
         return realtimeMapService.map;
-    }
+    };
 
 
-    function onLocationFound(e) {
-        var radius = e.accuracy / 2;
-
-        L.marker(e.latlng).addTo(getMap())
-            .bindPopup("You are within " + radius + " meters from this point").openPopup();
-
-        L.circle(e.latlng, radius).addTo(getMap());
-    }
-
-    function onLocationError(e) {
-        $log.error(e.message);
-    }
-
-    function onMarkerClick(feature) {
+    $scope.onMarkerClick = function(feature) {
         console.log(feature['assetId']);
         let assetId = feature['assetId'];
         if (assetId !== undefined) {
-            getAssetInfo(assetId).then((assetInfo) => {
+            $scope.getAssetInfo(assetId).then((assetInfo) => {
                 var data = {
                     asset : assetInfo,
                     position : feature['pos']
@@ -577,32 +578,9 @@ angular.module('unionvmsWeb').controller('RealtimeCtrl', function(
 
             });
         }
-    }
+    };
 
-    function onPositionClick(e) {
-        getPosition(this.options.positionGuid).then((movement) => {
-            let data = "";
-            // format for nicer look
-            Object.entries(movement).forEach(m => {
-                data += m[0] + ":" + m[1];
-            });
-            this.bindPopup(data).openPopup();
-        });
-    }
-
-
-    function onSegmentClick(e) {
-        getSegmentByMovementGuid(this.options.segmentGuid).then((segment) => {
-            let data = "";
-            // format for nicer look
-            Object.entries(segment).forEach(m => {
-                data += m[0] + ":" + m[1];
-            });
-            this.bindPopup(data).openPopup();
-        });
-    }
-
-    function getPositions() {
+    $scope.getPositions = function() {
         let promise = new Promise(function (resolve, reject) {
             let date = new Date(Date.now() - 86400000).getTime();    // get the positions of the last 30 minutes
             let dateString = dateTimeService.formatUTCDateWithTimezone(dateTimeService.toUTC(date));
@@ -621,7 +599,7 @@ angular.module('unionvmsWeb').controller('RealtimeCtrl', function(
                         if (assetGuid !== '$promise' && assetGuid !== '$resolved') {
 
                             Object.values(p[1]).forEach(pos => {
-                                processRealtimeData(assetGuid, pos.guid, pos);
+                                $scope.processRealtimeData(assetGuid, pos.guid, pos);
                             });
                         }
 
@@ -638,12 +616,12 @@ angular.module('unionvmsWeb').controller('RealtimeCtrl', function(
 
         return promise;
 
-    }
+    };
 
     /**
      * Gets the movement based on the position guid
      */
-    function getPosition(positionGuid) {
+    $scope.getPosition = function(positionGuid) {
         let promise = new Promise(function (resolve, reject) {
             let movementInfo = null;
             if (angular.isDefined($localStorage['realtimeDataMovementsInfo'] && $localStorage['realtimeDataMovementsInfo'].length > 0)) {
@@ -669,10 +647,10 @@ angular.module('unionvmsWeb').controller('RealtimeCtrl', function(
             }
         });
         return promise;
-    }
+    };
 
 
-    function getAssetInfo(assetId) {
+    $scope.getAssetInfo = function(assetId) {
         let promise = new Promise(function (resolve, reject) {
 
             let assetInfo = null;
@@ -700,9 +678,9 @@ angular.module('unionvmsWeb').controller('RealtimeCtrl', function(
             }
         });
         return promise;
-    }
+    };
 
-    function getSegmentByMovementGuid(guid) {
+    $scope.getSegmentByMovementGuid = function(guid) {
         let promise = new Promise(function (resolve, reject) {
             let segmentInfo = null;
             if (angular.isDefined($localStorage['realtimeDataSegmentInfo'] && $localStorage['realtimeDataSegmentInfo'].length > 0)) {
@@ -728,9 +706,9 @@ angular.module('unionvmsWeb').controller('RealtimeCtrl', function(
             }
         });
         return promise;
-    }
+    };
 
-    function getTrackById(guid) {
+    $scope.getTrackByMovementId = function(guid) {
         let promise = new Promise(function (resolve, reject) {
             let trackInfo = null;
             if (angular.isDefined($localStorage['realtimeDataTrackInfo'] && $localStorage['realtimeDataTrackInfo'].length > 0)) {
@@ -741,7 +719,7 @@ angular.module('unionvmsWeb').controller('RealtimeCtrl', function(
                     }
                 });
                 if (trackInfo == null) {
-                    microMovementRestService.getTrackById(guid).then(
+                    microMovementRestService.getTrackByMovementId(guid).then(
                         function (track) {
                             trackInfo = track;
                             $localStorage['realtimeDataTrackInfo'].push([guid, trackInfo]);
@@ -756,7 +734,7 @@ angular.module('unionvmsWeb').controller('RealtimeCtrl', function(
             }
         });
         return promise;
-    }
+    };
 
     // TODO: Move to utils class
     function hashCode(str) { // java String#hashCode
@@ -811,4 +789,24 @@ angular.module('unionvmsWeb').controller('RealtimeCtrl', function(
 
         }
     }
+
+    var drawTrack = function(data, color) {
+
+        var wktStr = data.wkt; //'POLYGON((10.689 -25.092, 34.595 -20.170, 38.814 -35.639, 13.502 -39.155, 10.689 -25.092))';
+
+        var wkt = new ol.format.WKT();
+
+        var feature  = wkt.readFeature(wktStr, {
+            dataProjection: 'EPSG:4326',
+            featureProjection: 'EPSG:3857'
+        });
+        feature.setId('trackId_' + data.data.position.guid);
+        vectorSource.addFeature(feature);
+        vectorLayer.getSource().refresh();
+    };
+    var removeTrack = function(positionGuid) {
+        vectorSource.removeFeature(vectorSource.getFeatureById('trackId_' + positionGuid));
+        vectorLayer.getSource().refresh();
+    };
+    init();
 });
