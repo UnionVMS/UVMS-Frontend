@@ -23,11 +23,11 @@ copy of the GNU General Public License along with the IFDM Suite. If not, see <h
         <tbody>
         <tr>
             <td>Id:</td>
-            <td>{{data.asset.id}}</td>
+            <td>{{data.asset.id || data.position.asset}}</td>
         </tr>
         <tr>
             <td>Name:</td>
-            <td>{{data.asset.name}}</td>
+            <td> {{data.asset.name || data.position.assetName}} ({{data.asset.flagState || data.position.flagstate}})</td>
         </tr>
         </tbody>
     </table>
@@ -50,6 +50,10 @@ copy of the GNU General Public License along with the IFDM Suite. If not, see <h
         <tr>
             <td class="td-header font-weight-bold">Timestamp</td>
             <td>{{data.position.timestamp}}</td>
+        </tr>
+        <tr>
+            <td class="td-header font-weight-bold">Guid</td>
+            <td>{{data.position.guid}}</td>
         </tr>
         </tbody>
     </table>
