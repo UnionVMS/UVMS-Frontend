@@ -34,7 +34,7 @@ angular.module('unionvmsWeb').controller('PopupCtrl', function($scope, $rootScop
         });
     };
     $scope.removeTrack = function() {
-        //$scope.data.position.guid
+        $rootScope.$broadcast('event:track:remove', $scope.data.position.asset);
     };
 });
 

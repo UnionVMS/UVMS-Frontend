@@ -88,7 +88,7 @@ angular.module('unionvmsWeb').controller('RealtimeCtrl', function(
                     initMap();
                     // get the positions
 
-
+/*
                     $scope.getPositions().then((positionsByAsset) => {
                         let i = 0;
                         // Todo: change to for loop to make faster
@@ -108,7 +108,7 @@ angular.module('unionvmsWeb').controller('RealtimeCtrl', function(
                     // draw cached realtime positions
 
                     drawCachedRealtimeFeatures();
-
+*/
                     // initialize server side event
                     if (!microMovementServerSideEventsService.hasSubscribed()) {
                         microMovementServerSideEventsService.subscribe();
@@ -143,10 +143,15 @@ angular.module('unionvmsWeb').controller('RealtimeCtrl', function(
         drawTrack(result, color);
     });
 
+
+    var removeTrackEvent = $rootScope.$on('event:track:remove', (e, result) => {
+        removeTrack(result);
+    });
+
     $scope.$on('$destroy', function () {
         micromovementEvent();
         trackEvent();
-
+        removeTrackEvent();
     });
 
     $scope.processRealtimeData = function(assetGuid, movementGuid, movementData) {
@@ -447,54 +452,34 @@ angular.module('unionvmsWeb').controller('RealtimeCtrl', function(
     };
 
     var addMarker = function(pos, angle, c, checkCache) {
-        let posArray = [pos.location.latitude, pos.location.longitude];
-        let feature = new ol.Feature(new ol.geom.Point(ol.proj.fromLonLat( [ posArray[1], posArray[0]])));
 
-        let style = createStyle('triangle', c, 'white');
+        let cachedFeature = vectorSource.getFeatureById(pos.asset);
 
-        // Add text to style
-        // Don't add text for now. takes too much space
-        //style.setText(getTextStyle(pos.asset, 'black', 'white', 2, 0, -24));
+        //feature['assetId'] = pos.asset;
 
-        feature.setStyle(style);
-        feature.getStyle().getImage().setRotation(angle);
-        feature.getStyle().getImage().setOpacity(1);
+        // use asset id instead of position id for no caching of asset, update if exists instead of adding a new feature to the map.
 
+        if (cachedFeature !== null && cachedFeature !== undefined) {
+            cachedFeature['pos'] = pos;
+        }
+        else {
+            let posArray = [pos.location.latitude, pos.location.longitude];
+            let feature = new ol.Feature(new ol.geom.Point(ol.proj.fromLonLat( [ posArray[1], posArray[0]])));
+            let style = createStyle('triangle', c, 'white');
 
-        if (checkCache) {
+            // Add text to style
+            // Don't add text for now. takes too much space
+            //style.setText(getTextStyle(pos.asset, 'black', 'white', 2, 0, -24));
 
-            if (doesAssetExistinCache(pos.asset)) {
-                setCachedFatureProperties(pos.asset, pos.guid);
-            }
-            else {
-                $localStorage['realtimeDataAssets'].push(pos.asset);
-            }
+            feature.setStyle(style);
+            feature.getStyle().getImage().setRotation(angle);
+            feature.getStyle().getImage().setOpacity(1);
 
-            if (!doesPositionExistInFeatureCache(pos.guid)) {
-                // check if there is space to insert, otherwise remove first position
-                let arrayLength = $localStorage['realtimeMapDataFeatures'].length;
-                if (arrayLength >= MAX_MOVEMENTS_IN_CACHE) {
-                    // remove first element
-                    console.log('not enough space in cache, removing first element.');
-                    let cachedPos = $localStorage['realtimeMapDataFeatures'].shift();
-                    if (cachedPos !== null && cachedPos !== undefined) {
-                        let cachedFeature = vectorSource.getFeatureById(cachedPos.guid);
-                        if (cachedFeature !== null && cachedFeature !== undefined) {
-                            vectorSource.removeFeature(cachedFeature);
-                        }
-                    }
-                }
-                $localStorage['realtimeMapDataFeatures'].push(pos);
-                vectorSource.refresh();
-            }
-
+            feature['pos'] = pos;
+            feature.setId(pos.asset);
+            vectorSource.addFeature(feature);
         }
 
-        feature['assetId'] = pos.asset;
-        feature['pos'] = pos;
-        feature.setId(pos.guid);
-
-        vectorSource.addFeature(feature);
         vectorLayer.getSource().changed();
         vectorLayer.getSource().refresh();
     };
@@ -567,7 +552,8 @@ angular.module('unionvmsWeb').controller('RealtimeCtrl', function(
 
     $scope.onMarkerClick = function(feature) {
         console.log(feature['assetId']);
-        let assetId = feature['assetId'];
+        console.log(feature.getId());
+        let assetId = feature.getId() ? feature.getId() : feature['assetId'] ;
         if (assetId !== undefined) {
             $scope.getAssetInfo(assetId).then((assetInfo) => {
                 var data = {
@@ -800,13 +786,17 @@ angular.module('unionvmsWeb').controller('RealtimeCtrl', function(
             dataProjection: 'EPSG:4326',
             featureProjection: 'EPSG:3857'
         });
-        feature.setId('trackId_' + data.data.position.guid);
+        feature.setId('trackId_' + data.data.position.asset);
         vectorSource.addFeature(feature);
         vectorLayer.getSource().refresh();
+
     };
-    var removeTrack = function(positionGuid) {
-        vectorSource.removeFeature(vectorSource.getFeatureById('trackId_' + positionGuid));
-        vectorLayer.getSource().refresh();
+    var removeTrack = function(assetId) {
+        let cachedFeature = vectorSource.getFeatureById('trackId_' + assetId);
+        if (cachedFeature !== undefined) {
+            vectorSource.removeFeature(cachedFeature);
+            vectorLayer.getSource().refresh();
+        }
     };
     init();
 });
