@@ -453,29 +453,28 @@ angular.module('unionvmsWeb').controller('RealtimeCtrl', function(
 
     var addMarker = function(pos, angle, c, checkCache) {
 
-        let cachedFeature = vectorSource.getFeatureById(pos.asset);
 
         //feature['assetId'] = pos.asset;
 
         // use asset id instead of position id for no caching of asset, update if exists instead of adding a new feature to the map.
+        let posArray = [pos.location.latitude, pos.location.longitude];
+        let feature = new ol.Feature(new ol.geom.Point(ol.proj.fromLonLat( [ posArray[1], posArray[0]])));
+        feature['pos'] = pos;
+        let cachedFeature = vectorSource.getFeatureById(pos.asset);
 
         if (cachedFeature !== null && cachedFeature !== undefined) {
-            cachedFeature['pos'] = pos;
+            cachedFeature.setGeometry(feature.getGeometry());
+            cachedFeature.getStyle().getImage().setRotation(angle);
         }
         else {
-            let posArray = [pos.location.latitude, pos.location.longitude];
-            let feature = new ol.Feature(new ol.geom.Point(ol.proj.fromLonLat( [ posArray[1], posArray[0]])));
-            let style = createStyle('triangle', c, 'white');
 
             // Add text to style
             // Don't add text for now. takes too much space
             //style.setText(getTextStyle(pos.asset, 'black', 'white', 2, 0, -24));
-
+            let style = createStyle('triangle', c, 'white');
             feature.setStyle(style);
-            feature.getStyle().getImage().setRotation(angle);
             feature.getStyle().getImage().setOpacity(1);
-
-            feature['pos'] = pos;
+            feature.getStyle().getImage().setRotation(angle);
             feature.setId(pos.asset);
             vectorSource.addFeature(feature);
         }
