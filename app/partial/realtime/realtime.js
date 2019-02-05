@@ -42,6 +42,7 @@ angular.module('unionvmsWeb').controller('RealtimeCtrl', function(
         source: vectorSource,
         renderBuffer: 200
     });
+    let hoveredTrack = null;
 
     var init = function() {
         angular.extend($scope, {
@@ -145,7 +146,7 @@ angular.module('unionvmsWeb').controller('RealtimeCtrl', function(
 
 
     var removeTrackEvent = $rootScope.$on('event:track:remove', (e, result) => {
-        removeTrack(result);
+        removeTrack('trackId_' + result);
     });
 
     $scope.$on('$destroy', function () {
@@ -240,6 +241,37 @@ angular.module('unionvmsWeb').controller('RealtimeCtrl', function(
                     })
                 });
             break;
+            case 'track1':
+                style = new ol.style.Style({
+                    stroke: new ol.style.Stroke({
+                        color: strokeColor,
+                        width: 2,
+                        lineDash: [4,8],
+                        lineDashOffset: 6
+
+                    })
+                });
+            break;
+            case 'track2':
+                style = new ol.style.Style({
+                    stroke: new ol.style.Stroke({
+                        color: strokeColor,
+                        width: 2,
+                        lineDash: [4,8],
+
+                    })
+                });
+                break;
+            case 'highlightTrack':
+                style = new ol.style.Style({
+                    stroke: new ol.style.Stroke({
+                        color: strokeColor,
+                        width: 8,
+                        lineDash: [2,4],
+
+                    })
+                });
+                break;
         }
         if (style == null) {
             $log.error('Style type ' + style + '  not supported.');
@@ -369,6 +401,30 @@ angular.module('unionvmsWeb').controller('RealtimeCtrl', function(
 
             }
 
+        });
+        $scope.getMap().on('pointermove', function(e) {
+            var map = $scope.getMap();
+            // Attempt to find a feature in one of the visible vector layers
+            var features = [];
+            map.forEachFeatureAtPixel(e.pixel, function(feature, layer){
+                features.push(feature);
+            }, {
+                hitTolerance: HIT_TOLERANCE
+            }, function(layer) {
+                return layer === vectorLayer;
+            });
+
+            if (features.length > 0) {
+                for (var i = 0; i < features.length; i++) {
+                    var feature = features[i];
+                    // check for tracks
+                    if (feature && feature.getId().indexOf('track' > - 1)) {
+                        $scope.onTrackHover(feature);
+                        break;
+                    }
+                }
+
+            }
         });
         $scope.getMap().addLayer(vectorLayer);
     };
@@ -550,8 +606,6 @@ angular.module('unionvmsWeb').controller('RealtimeCtrl', function(
 
 
     $scope.onMarkerClick = function(feature) {
-        console.log(feature['assetId']);
-        console.log(feature.getId());
         let assetId = feature.getId() ? feature.getId() : feature['assetId'] ;
         if (assetId !== undefined) {
             $scope.getAssetInfo(assetId).then((assetInfo) => {
@@ -563,6 +617,39 @@ angular.module('unionvmsWeb').controller('RealtimeCtrl', function(
 
             });
         }
+    };
+
+    $scope.onTrackHover = function(feature) {
+        if (feature.getId().indexOf('trackId') > -1) {
+            $scope.highlightTrack(feature.getId());
+        }
+    };
+
+
+    $scope.highlightTrack = function(trackId) {
+        let cachedFeature = vectorSource.getFeatureById(trackId);
+        let highlightTrack = createStyle('highlightTrack', 'black', 'yellow');
+
+        // deselect previously selected track
+        if (hoveredTrack != null && hoveredTrack.getStyle().length > 1) {
+            hoveredTrack.getStyle().shift();
+            vectorLayer.getSource().refresh();
+        }
+        else {
+            hoveredTrack  = cachedFeature;
+
+            hoveredTrack.getStyle().unshift(highlightTrack);
+            vectorLayer.getSource().refresh();
+        }
+
+        /*
+        if (cachedFeature !== undefined) {
+            let highlightTrack = createStyle('highlightTrack', 'black', 'yellow');
+            let track2 = cachedFeature.getStyle()[1];
+            cachedFeature.setStyle([highlightTrack, track2])
+            vectorLayer.getSource().refresh();
+        }
+        */
     };
 
     $scope.getPositions = function() {
@@ -776,7 +863,11 @@ angular.module('unionvmsWeb').controller('RealtimeCtrl', function(
     }
 
     var drawTrack = function(data, color) {
-
+        let id = 'trackId_' + data.data.position.asset;
+        let cachedFeature = vectorSource.getFeatureById(id);
+        if (cachedFeature == null) {
+            removeTrack(id);
+        }
         var wktStr = data.wkt; //'POLYGON((10.689 -25.092, 34.595 -20.170, 38.814 -35.639, 13.502 -39.155, 10.689 -25.092))';
 
         var wkt = new ol.format.WKT();
@@ -785,14 +876,17 @@ angular.module('unionvmsWeb').controller('RealtimeCtrl', function(
             dataProjection: 'EPSG:4326',
             featureProjection: 'EPSG:3857'
         });
-        feature.setId('trackId_' + data.data.position.asset);
+        feature.setId(id);
+        let track1 = createStyle('track1', 'black', color);
+        feature.setStyle([track1]);
         vectorSource.addFeature(feature);
         vectorLayer.getSource().refresh();
 
+
     };
-    var removeTrack = function(assetId) {
-        let cachedFeature = vectorSource.getFeatureById('trackId_' + assetId);
-        if (cachedFeature !== undefined) {
+    var removeTrack = function(trackId) {
+        let cachedFeature = vectorSource.getFeatureById(trackId);
+        if (cachedFeature != null && cachedFeature !== undefined) {
             vectorSource.removeFeature(cachedFeature);
             vectorLayer.getSource().refresh();
         }
