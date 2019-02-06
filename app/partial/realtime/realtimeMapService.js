@@ -1019,6 +1019,27 @@ angular.module('unionvmsWeb').factory('realtimeMapService',function(locale, gene
         return ints;
     };
 
+
+    rtMs.getZoomLevel = function() {
+        return rtMs.map.getView().getZoom();
+    };
+
+    rtMs.getCenter = function() {
+        return rtMs.map.getView().getCenter();
+    };
+
+    rtMs.getMap = function() {
+        return rtMs.map;
+    };
+
+    rtMs.updateView = function(center, zoomLevel) {
+        let view = rtMs.map.getView();
+        view.setCenter(center);
+        view.setZoom(zoomLevel);
+        rtMs.map.setView(view);
+
+    };
+
     return rtMs;
 
 });

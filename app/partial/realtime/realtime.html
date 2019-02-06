@@ -5,9 +5,14 @@
 -->
 <div ui-view name="realtime" id="realtime" class="realtime" ngsf-fullscreen="fullscreenCtrl">
     <!--<leaflet center="center" paths="paths" markers="markers" defaults="defaults" height="100%"></leaflet>-->
-    <div -view name="realtimeMap" id="realtimeMap" class="map">
+    <div ui-view name="realtimeMap" id="realtimeMap" class="map">
         <loading-panel type="Realtime"></loading-panel>
-
+        <!-- TODO: move to template -->
+        <div id ="zoomContainer" ng-controller="ZoomCtrl">
+            <div ng-repeat="item in items" class="zoomImageContainer" ng-click="viewZoomLevel($index)" >
+                <img id="zoomImage{{item}}" class="zoomImage"/>
+            </div>
+        </div>
     </div>
 
 </div>

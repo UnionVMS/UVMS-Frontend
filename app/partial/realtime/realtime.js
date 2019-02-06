@@ -29,7 +29,9 @@ angular.module('unionvmsWeb').controller('RealtimeCtrl', function(
     dateTimeService,
     microMovementServerSideEventsService,
     mapService,
-    PopupModal
+    PopupModal,
+    ZoomModal,
+    zoomService
     ) {
 
     var MAX_MOVEMENTS_IN_CACHE = 20000;
@@ -69,6 +71,13 @@ angular.module('unionvmsWeb').controller('RealtimeCtrl', function(
                 $rootScope.realtimeLoaded = true;
             }
 
+            document.addEventListener('keyup', function(e) {
+
+                var zoomIndex = parseInt(e.key) ;
+                if (zoomIndex !== undefined && zoomIndex >= 0 && zoomIndex <= 5) {
+                    zoomService.saveZoomLevel(zoomIndex - 1);
+                }
+            });
 
 
             loadingStatus.isLoading('Realtime', true, 0);
@@ -114,6 +123,10 @@ angular.module('unionvmsWeb').controller('RealtimeCtrl', function(
                     if (!microMovementServerSideEventsService.hasSubscribed()) {
                         microMovementServerSideEventsService.subscribe();
                     }
+
+
+                    // load all zoom levels stored in cache
+                    zoomService.loadAllZoomLevels();
                 }
             }, 10);
         });
