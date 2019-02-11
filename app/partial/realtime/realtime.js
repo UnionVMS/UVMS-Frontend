@@ -615,7 +615,7 @@ angular.module('unionvmsWeb').controller('RealtimeCtrl', function(
                 let flagStyle = new ol.style.Style({
                     image: new ol.style.Icon({
                         src: './assets/flags/mini/' + flagState + '.png',
-                        anchor: [0, 2.3],
+                        anchor: [0.5, 2.4],
                         rotateWithView: true
                     })
                 });
@@ -624,9 +624,11 @@ angular.module('unionvmsWeb').controller('RealtimeCtrl', function(
                         src: './assets/flags/mini/icon.png',
                         anchor: [0.5, 1.1],
                         rotateWithView: true,
-                        color: c
+                        color: c,
+                        opacity: 0.75
                     })
                 });
+
 
                 flagFeature.setStyle([markerStyle, flagStyle]);
                 flagFeature.setId('flag_' + pos.asset);
