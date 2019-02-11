@@ -44,6 +44,13 @@ angular.module('unionvmsWeb').controller('RealtimeCtrl', function(
         source: vectorSource,
         renderBuffer: 200
     });
+
+    var infoSource = new ol.source.Vector();
+    var infoLayer = new ol.layer.Vector({
+        source: infoSource,
+        renderBuffer: 200
+    });
+
     let hoveredTrack = null;
 
     var init = function() {
@@ -159,7 +166,9 @@ angular.module('unionvmsWeb').controller('RealtimeCtrl', function(
 
 
     var removeTrackEvent = $rootScope.$on('event:track:remove', (e, result) => {
-        removeTrack('trackId_' + result);
+        removeFeature('trackId_' + result);
+        removeFeature('futurePos_0_' + result);
+        removeFeature('futurePos_1_' + result);
     });
 
     $scope.$on('$destroy', function () {
@@ -212,6 +221,11 @@ angular.module('unionvmsWeb').controller('RealtimeCtrl', function(
     var deg2rad = function(degrees) {
         return Math.sin(degrees * Math.PI / 180);
     };
+
+    function radToDeg(rad) {
+        return (180.0 * (rad / Math.PI));
+    }
+
 
     // todo: move to own class
     var createStyle = function(styleType, fillColor, strokeColor) {
@@ -285,6 +299,16 @@ angular.module('unionvmsWeb').controller('RealtimeCtrl', function(
                     })
                 });
                 break;
+            case 'arrow':
+                style = new ol.style.Style({
+                    image: new ol.style.Icon({
+                        src: './assets/images/arrow.png',
+                        anchor: [0.5, 0.5],
+                        rotateWithView: true,
+                        color: fillColor
+                    })
+                });
+            break;
         }
         if (style == null) {
             $log.error('Style type ' + style + '  not supported.');
@@ -388,6 +412,13 @@ angular.module('unionvmsWeb').controller('RealtimeCtrl', function(
                     color: '#ffcc33',
                     width: 2
                 })
+            }),
+            arrow: new ol.style.Style({
+                image: new ol.style.Icon({
+                    src: './assets/images/arrow.png',
+                    anchor: [0.75, 0.5],
+                    rotateWithView: true
+                })
             })
         };
 
@@ -396,7 +427,9 @@ angular.module('unionvmsWeb').controller('RealtimeCtrl', function(
             // Attempt to find a feature in one of the visible vector layers
             var features = [];
             map.forEachFeatureAtPixel(e.pixel, function(feature, layer){
-                features.push(feature);
+                if (layer === vectorLayer) {
+                    features.push(feature);
+                }
             }, {
                 hitTolerance: HIT_TOLERANCE
             }, function(layer) {
@@ -420,7 +453,9 @@ angular.module('unionvmsWeb').controller('RealtimeCtrl', function(
             // Attempt to find a feature in one of the visible vector layers
             var features = [];
             map.forEachFeatureAtPixel(e.pixel, function(feature, layer){
-                features.push(feature);
+                if (layer === vectorLayer) {
+                    features.push(feature);
+                }
             }, {
                 hitTolerance: HIT_TOLERANCE
             }, function(layer) {
@@ -439,7 +474,23 @@ angular.module('unionvmsWeb').controller('RealtimeCtrl', function(
 
             }
         });
+
+
+        $scope.getMap().getView().on('change:resolution', function (e) {
+
+            if ($scope.getMap().getView().getZoom() > 10) {
+                infoLayer.setVisible(true);
+            }
+            else {
+                infoLayer.setVisible(false);
+            }
+        });
+
+
         $scope.getMap().addLayer(vectorLayer);
+        // Add flag and vessel info layer
+        $scope.getMap().addLayer(infoLayer);
+        infoLayer.setVisible(false);
     };
 
 
@@ -522,16 +573,15 @@ angular.module('unionvmsWeb').controller('RealtimeCtrl', function(
 
     var addMarker = function(pos, angle, c, checkCache) {
 
-
-        //feature['assetId'] = pos.asset;
-
         // use asset id instead of position id for no caching of asset, update if exists instead of adding a new feature to the map.
         let posArray = [pos.location.latitude, pos.location.longitude];
         let feature = new ol.Feature(new ol.geom.Point(ol.proj.fromLonLat( [ posArray[1], posArray[0]])));
-        feature['pos'] = pos;
+
         let cachedFeature = vectorSource.getFeatureById(pos.asset);
 
         if (cachedFeature !== null && cachedFeature !== undefined) {
+            cachedFeature['pos'] = pos;
+
             cachedFeature.setGeometry(feature.getGeometry());
             cachedFeature.getStyle().getImage().setRotation(angle);
         }
@@ -541,6 +591,7 @@ angular.module('unionvmsWeb').controller('RealtimeCtrl', function(
             // Don't add text for now. takes too much space
             //style.setText(getTextStyle(pos.asset, 'black', 'white', 2, 0, -24));
             let style = createStyle('triangle', c, 'white');
+            feature['pos'] = pos;
             feature.setStyle(style);
             feature.getStyle().getImage().setOpacity(1);
             feature.getStyle().getImage().setRotation(angle);
@@ -550,6 +601,57 @@ angular.module('unionvmsWeb').controller('RealtimeCtrl', function(
 
         vectorLayer.getSource().changed();
         vectorLayer.getSource().refresh();
+
+        if (pos.flagstate !== 'UNK') {
+            let flagFeature = new ol.Feature(new ol.geom.Point(ol.proj.fromLonLat( [ posArray[1], posArray[0]])));
+            let cachedFlagFeature = infoSource.getFeatureById('flag_' + pos.asset);
+
+            if (cachedFlagFeature !== null && cachedFeature !== undefined) {
+                cachedFlagFeature.setGeometry(flagFeature.getGeometry());
+            }
+            else {
+                // add flag info
+                let flagState = getFlagStateImageName(pos.flagstate);
+                let flagStyle = new ol.style.Style({
+                    image: new ol.style.Icon({
+                        src: './assets/flags/mini/' + flagState + '.png',
+                        anchor: [0, 2.3],
+                        rotateWithView: true
+                    })
+                });
+                let markerStyle = new ol.style.Style({
+                    image: new ol.style.Icon({
+                        src: './assets/flags/mini/icon.png',
+                        anchor: [0.5, 1.1],
+                        rotateWithView: true,
+                        color: c
+                    })
+                });
+
+                flagFeature.setStyle([markerStyle, flagStyle]);
+                flagFeature.setId('flag_' + pos.asset);
+                infoSource.addFeature(flagFeature);
+            }
+            infoLayer.getSource().refresh();
+        }
+    };
+
+    var getFlagStateImageName = function(flagState) {
+        if (flagState === 'SWE') {
+            return 'sv';
+        }
+        if (flagState === 'DNK') {
+            return 'dk';
+        }
+        if (flagState === 'NOR') {
+            return 'no';
+        }
+        if (flagState === 'FIN') {
+            return 'fi';
+        }
+        if (flagState === 'UNK') {
+            return 'eu';
+        }
     };
 
     var doesAssetExistinCache = function (assetId) {
@@ -875,13 +977,45 @@ angular.module('unionvmsWeb').controller('RealtimeCtrl', function(
         }
     }
 
+    var drawFuturePosition = function(data) {
+        let speed = data.speed * 1.852; // km
+        let futureFeatures = [{}, {}];
+
+        for (let i = 0; i < 2; i++) {
+
+            let futurePosition = realtimeMapService.destinationPoint(data.lat, data.lon, speed * ((i+1) * 500), data.bearing);
+            let futureFeature = new ol.Feature(new ol.geom.Point(ol.proj.fromLonLat( [futurePosition[1], futurePosition[0] ])));
+
+            var futureStyle = createStyle('arrow', data.color, 'white');
+            futureFeature.setStyle(futureStyle);
+            futureFeature.setId('futurePos_' + i + '_' + data.assetId);
+            futureFeatures[i] = futureFeature;
+            vectorSource.addFeature(futureFeatures[i]);
+
+        }
+
+        // draw an arrow in the direction
+        // get the angle between current position and future position
+        let length = data.currentFeature.getGeometry().getCoordinates().length;
+
+        var dx = futureFeatures[1].getGeometry().getCoordinates()[1] - futureFeatures[0].getGeometry().getCoordinates()[1];
+        var dy = futureFeatures[1].getGeometry().getCoordinates()[0] - futureFeatures[0].getGeometry().getCoordinates()[0];
+        var rot = Math.atan2(dy, dx);
+        futureFeatures[0].getStyle().getImage().setRotation(rot);
+        futureFeatures[1].getStyle().getImage().setRotation(rot);
+
+        vectorLayer.getSource().refresh();
+
+
+    };
+
     var drawTrack = function(data, color) {
         let id = 'trackId_' + data.data.position.asset;
         let cachedFeature = vectorSource.getFeatureById(id);
         if (cachedFeature == null) {
-            removeTrack(id);
+            removeFeature(id);
         }
-        var wktStr = data.wkt; //'POLYGON((10.689 -25.092, 34.595 -20.170, 38.814 -35.639, 13.502 -39.155, 10.689 -25.092))';
+        var wktStr = data.wkt;
 
         var wkt = new ol.format.WKT();
 
@@ -893,11 +1027,26 @@ angular.module('unionvmsWeb').controller('RealtimeCtrl', function(
         let track1 = createStyle('track1', 'black', color);
         feature.setStyle([track1]);
         vectorSource.addFeature(feature);
+
         vectorLayer.getSource().refresh();
 
 
+        let speed = data.data.position.speed;
+        let bearing = data.data.position.heading;
+
+        drawFuturePosition({
+            lat : data.data.position.location.latitude,
+            lon: data.data.position.location.longitude,
+            speed: speed,
+            bearing: bearing,
+            assetId: data.data.position.asset,
+            currentFeature: feature,
+            color: color
+        });
+
     };
-    var removeTrack = function(trackId) {
+
+    var removeFeature = function(trackId) {
         let cachedFeature = vectorSource.getFeatureById(trackId);
         if (cachedFeature != null && cachedFeature !== undefined) {
             vectorSource.removeFeature(cachedFeature);
