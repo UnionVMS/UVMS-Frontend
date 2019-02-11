@@ -62,7 +62,7 @@
                 <div class="col-md-8 nopaddingleft nopaddingright form-group lengthValue" ng-class="{'has-error': (submitAttempted || vesselForm.lengthValue.$dirty) && vesselForm.lengthValue.$invalid}">
                     <label>{{ 'vessel.vessel_details_length' | i18n }}</label>
                     <div class="unit-input">
-                        <input type="text" name="lengthValue" id="asset-input-lengthValue" class="form-control" ng-model="vessel.lengthValue" ng-pattern="getlengthOverAllRegExp" transform-length>
+                        <input type="text" name="lengthValue" id="asset-input-lengthValue" class="form-control" ng-model="vessel.lengthValue" numeric ng-maxlength="7" ng-pattern="getlengthOverAllRegExp">
                         <div class="unit-box">{{"common.short_length_unit_" + lengthUnit | i18n}}</div>
                     </div>
                     <input-validation-message types="pattern" input="vesselForm.lengthValue" custom-messages="{{lengthOverAllValidationMessages}}"></input-validation-message>
