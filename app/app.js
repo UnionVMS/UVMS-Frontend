@@ -495,19 +495,27 @@ unionvmsWebApp.config(function($stateProvider, $compileProvider, tmhDynamicLocal
             resolve: {
             },
             data: {
+                access: 'REALTIME_ALLOWED',
                 loaded: true
             },
             onEnter: function($state,locale,userService,errorService) {
-                if (angular.isDefined($state.current.data)) {
-
-                    console.log('entering:', $state.current.data.loaded);
-                    if ($state.current.data.loaded) {
-                        console.log('it has been loaded');
+                if(_.isNull(userService.getCurrentContext().scope)){
+                    errorService.setErrorMessage(locale.getString('common.error_user_without_scope'));
+                    $state.go('error');
+                } else {
+                    if (angular.isDefined($state.current.data)) {
+                        console.log('entering:', $state.current.data.loaded);
+                        if ($state.current.data.loaded) {
+                            console.log('it has been loaded');
+                        }
                     }
-
                 }
+
+
             },
-            onExit: function(loadingStatus){
+            onExit: function(loadingStatus, $modalStack){
+                $modalStack.dismissAll();
+                $(document.getElementsByClassName("headercontainer")).show();
                 loadingStatus.resetState();
             }
         })

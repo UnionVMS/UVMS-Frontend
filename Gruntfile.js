@@ -85,8 +85,8 @@ module.exports = function (grunt) {
               rewrite: {
                   '^/app': '/unionvms'
               },
-              host: 'http://liaswf05p/unionvms/',
-              //host: 'localhost',
+              //host: 'http://liaswf05p/unionvms/',
+              host: 'localhost',
               port: 28080
         },{
             context: '/mock/',

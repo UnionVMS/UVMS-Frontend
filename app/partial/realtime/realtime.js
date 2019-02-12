@@ -709,7 +709,7 @@ angular.module('unionvmsWeb').controller('RealtimeCtrl', function(
     };
 
     var doesPositionExistInFeatureCache = function(guid) {
-        for (let i = 0; i < $localStorage['realtimeMapDataFeatures'].length; i++) {
+        for (let i = 0; i < $localStorage['realtimeMapDataFeatures'].length; i++) {RotateNorthControl
             if ($localStorage['realtimeMapDataFeatures'][i].guid === guid) {
                 return true;
             }
