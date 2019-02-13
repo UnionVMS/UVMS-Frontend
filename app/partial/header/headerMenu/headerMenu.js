@@ -94,10 +94,9 @@ angular.module('unionvmsWeb').controller('HeaderMenuCtrl',function($scope, $root
         }
 
         // Realtime
-        if (checkAccess('Realtime', 'REALTIME_ALLOWED')) {
+        //if (checkAccess('Realtime', 'REALTIME_ALLOWED')) {
             $scope.addMenuItem('Realtime', '/realtime', 'realtime');
-        }
-
+        //}
         // Alerts
         var alarmsLink = false;
         var alarmsElemId;

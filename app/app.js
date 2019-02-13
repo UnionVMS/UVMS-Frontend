@@ -495,7 +495,7 @@ unionvmsWebApp.config(function($stateProvider, $compileProvider, tmhDynamicLocal
             resolve: {
             },
             data: {
-                access: 'REALTIME_ALLOWED',
+                //access: 'REALTIME_ALLOWED',
                 loaded: true
             },
             onEnter: function($state,locale,userService,errorService) {
@@ -513,10 +513,11 @@ unionvmsWebApp.config(function($stateProvider, $compileProvider, tmhDynamicLocal
 
 
             },
-            onExit: function(loadingStatus, $modalStack){
+            onExit: function(loadingStatus, $state, $modalStack){
                 $modalStack.dismissAll();
                 $(document.getElementsByClassName("headercontainer")).show();
                 loadingStatus.resetState();
+                $state.current.data.loaded = false;
             }
         })
         .state('app.areas', {

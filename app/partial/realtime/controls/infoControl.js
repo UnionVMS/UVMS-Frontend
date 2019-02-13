@@ -1,17 +1,17 @@
 
-ol.control.TrackControl = function(opt_options){
+ol.control.InfoControl = function(opt_options){
         var options = opt_options || {};
         var this_ = this;
 
         var button = document.createElement('button');
-        button.innerHTML = 'T';
+        button.innerHTML = 'i';
 
         var element = document.createElement('div');
-        element.className = 'track-control ol-unselectable ol-control';
+        element.className = 'info-control ol-unselectable ol-control';
         element.appendChild(button);
 
-        var handleTrackControl = function(e){
-            console.log('handle track control', options.layer);
+        var handleInfoControl = function(e){
+            console.log('handle info control', options.layer);
             this_.getMap().getLayers().forEach(t => {
                     if(t.values_.id === options.layer) {
                         t.setVisible(!t.getVisible());
@@ -19,7 +19,7 @@ ol.control.TrackControl = function(opt_options){
             });
         };
 
-        button.addEventListener('click', handleTrackControl, false);
+        button.addEventListener('click', handleInfoControl, false);
         ol.control.Control.call(this, {
             element: element,
             target: options.target
@@ -27,4 +27,4 @@ ol.control.TrackControl = function(opt_options){
 
 
 };
-ol.inherits(ol.control.TrackControl, ol.control.Control);
+ol.inherits(ol.control.InfoControl, ol.control.Control);

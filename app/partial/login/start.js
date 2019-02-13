@@ -75,7 +75,8 @@ angular.module('unionvmsWeb').factory('startPageService',function($log, globalSe
             case 'app.activity':
                 return checkAccess('Activity', 'ACTIVITY_ALLOWED');
             case 'app.realtime':
-                return checkAccess('Realtime', 'REALTIME_ALLOWED');
+                //return checkAccess('Realtime', 'REALTIME_ALLOWED');
+                true;
             default:
                 $log.info("State: " +state +" is missing from list. Returning false.");
                 return false;

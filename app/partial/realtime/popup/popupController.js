@@ -1,4 +1,5 @@
-angular.module('unionvmsWeb').controller('PopupCtrl', function($scope, $rootScope, $modalInstance, microMovementRestService, dateTimeService, assetInfo) {
+angular.module('unionvmsWeb')
+    .controller('PopupCtrl', function($scope, $rootScope, $modalInstance,  microMovementRestService, dateTimeService, assetInfo) {
     $scope.data = assetInfo;
 
     $scope.cancel = function() {
@@ -20,5 +21,5 @@ angular.module('unionvmsWeb').controller('PopupCtrl', function($scope, $rootScop
     $scope.removeTrack = function() {
         $rootScope.$broadcast('event:track:remove', $scope.data.position.asset);
     };
-});
+    });
 

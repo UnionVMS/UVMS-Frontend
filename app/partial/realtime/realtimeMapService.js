@@ -659,7 +659,13 @@ angular.module('unionvmsWeb').factory('realtimeMapService',function(locale, gene
         if (genericMapService.mapBasicConfigs.success && genericMapService.mapBasicConfigs.layers.baseLayers.length > 1){
             resetStyle = 'ol-resetCql-right-side-with-switcher';
         }
+        ctrls.push(new ol.control.TrackControl({
+            layer: 'trackLayer'
 
+        }));
+        ctrls.push(new ol.control.InfoControl({
+            layer: 'infoLayer'
+        }));
         ctrls.push(new ol.control.ResetLayerFilter({
             controlClass: resetStyle,
             type: 'realtimeMapService',
@@ -668,6 +674,7 @@ angular.module('unionvmsWeb').factory('realtimeMapService',function(locale, gene
 
         return new ol.Collection(ctrls);
     };
+
 
     /**
      * Find control defintions by type

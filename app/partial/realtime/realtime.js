@@ -40,6 +40,7 @@ angular.module('unionvmsWeb').controller('RealtimeCtrl', function(
     var HIT_TOLERANCE = 10;
 
     var vectorSource = new ol.source.Vector();
+
     var vectorLayer = new ol.layer.Vector({
         source: vectorSource,
         renderBuffer: 200
@@ -48,9 +49,15 @@ angular.module('unionvmsWeb').controller('RealtimeCtrl', function(
     var infoSource = new ol.source.Vector();
     var infoLayer = new ol.layer.Vector({
         source: infoSource,
-        renderBuffer: 200
+        renderBuffer: 200,
+        id: 'infoLayer'
     });
-
+    var trackSource = new ol.source.Vector();
+    var trackLayer = new ol.layer.Vector({
+        source: trackSource,
+        renderBuffer: 200,
+        id: 'trackLayer'
+    });
     let hoveredTrack = null;
 
     var init = function() {
@@ -166,9 +173,9 @@ angular.module('unionvmsWeb').controller('RealtimeCtrl', function(
 
 
     var removeTrackEvent = $rootScope.$on('event:track:remove', (e, result) => {
-        removeFeature('trackId_' + result);
-        removeFeature('futurePos_0_' + result);
-        removeFeature('futurePos_1_' + result);
+        removeFeature('trackId_' + result, trackLayer);
+        removeFeature('futurePos_0_' + result, trackLayer);
+        removeFeature('futurePos_1_' + result, trackLayer);
     });
 
     $scope.$on('$destroy', function () {
@@ -477,7 +484,6 @@ angular.module('unionvmsWeb').controller('RealtimeCtrl', function(
 
 
         $scope.getMap().getView().on('change:resolution', function (e) {
-
             if ($scope.getMap().getView().getZoom() > 10) {
                 infoLayer.setVisible(true);
             }
@@ -486,11 +492,13 @@ angular.module('unionvmsWeb').controller('RealtimeCtrl', function(
             }
         });
 
-
         $scope.getMap().addLayer(vectorLayer);
         // Add flag and vessel info layer
         $scope.getMap().addLayer(infoLayer);
-        infoLayer.setVisible(false);
+        $scope.getMap().addLayer(trackLayer);
+        infoLayer.setVisible(true);
+        trackLayer.setVisible(true);
+
     };
 
 
@@ -584,6 +592,20 @@ angular.module('unionvmsWeb').controller('RealtimeCtrl', function(
 
             cachedFeature.setGeometry(feature.getGeometry());
             cachedFeature.getStyle().getImage().setRotation(angle);
+            // update tracks if we have any for this asset
+
+            let id = 'trackId_' + pos.asset;
+            let cachedFeature2 = trackSource.getFeatureById(id);
+            if (cachedFeature2 !== null && cachedFeature2 !== undefined) {
+                microMovementRestService.getTrackByMovementId(pos.guid).then((trackData) => {
+                        let data = {
+                            data: pos,
+                            wkt: trackData.wkt
+                        };
+
+                        drawTrack(data, c);
+                });
+            }
         }
         else {
 
@@ -709,7 +731,7 @@ angular.module('unionvmsWeb').controller('RealtimeCtrl', function(
     };
 
     var doesPositionExistInFeatureCache = function(guid) {
-        for (let i = 0; i < $localStorage['realtimeMapDataFeatures'].length; i++) {RotateNorthControl
+        for (let i = 0; i < $localStorage['realtimeMapDataFeatures'].length; i++) {
             if ($localStorage['realtimeMapDataFeatures'][i].guid === guid) {
                 return true;
             }
@@ -983,17 +1005,24 @@ angular.module('unionvmsWeb').controller('RealtimeCtrl', function(
         let speed = data.speed * 1.852; // km
         let futureFeatures = [{}, {}];
 
+
         for (let i = 0; i < 2; i++) {
 
             let futurePosition = realtimeMapService.destinationPoint(data.lat, data.lon, speed * ((i+1) * 500), data.bearing);
             let futureFeature = new ol.Feature(new ol.geom.Point(ol.proj.fromLonLat( [futurePosition[1], futurePosition[0] ])));
-
-            var futureStyle = createStyle('arrow', data.color, 'white');
-            futureFeature.setStyle(futureStyle);
-            futureFeature.setId('futurePos_' + i + '_' + data.assetId);
-            futureFeatures[i] = futureFeature;
-            vectorSource.addFeature(futureFeatures[i]);
-
+            let id = 'futurePos_' + i + '_' + data.assetId;
+            let cachedFeature = trackSource.getFeatureById(id);
+            if (cachedFeature == null) {
+                var futureStyle = createStyle('arrow', data.color, 'white');
+                futureFeature.setStyle(futureStyle);
+                futureFeature.setId('futurePos_' + i + '_' + data.assetId);
+                futureFeatures[i] = futureFeature;
+                trackSource.addFeature(futureFeatures[i]);
+            }
+            else {
+                cachedFeature.setGeometry(futureFeature.getGeometry());
+                futureFeatures[i] = futureFeature;
+            }
         }
 
         // draw an arrow in the direction
@@ -1006,16 +1035,16 @@ angular.module('unionvmsWeb').controller('RealtimeCtrl', function(
         futureFeatures[0].getStyle().getImage().setRotation(rot);
         futureFeatures[1].getStyle().getImage().setRotation(rot);
 
-        vectorLayer.getSource().refresh();
+        trackSource.refresh();
 
 
     };
 
     var drawTrack = function(data, color) {
         let id = 'trackId_' + data.data.position.asset;
-        let cachedFeature = vectorSource.getFeatureById(id);
+        let cachedFeature = trackSource.getFeatureById(id);
         if (cachedFeature == null) {
-            removeFeature(id);
+            removeFeature(id, trackLayer);
         }
         var wktStr = data.wkt;
 
@@ -1028,9 +1057,9 @@ angular.module('unionvmsWeb').controller('RealtimeCtrl', function(
         feature.setId(id);
         let track1 = createStyle('track1', 'black', color);
         feature.setStyle([track1]);
-        vectorSource.addFeature(feature);
+        trackSource.addFeature(feature);
 
-        vectorLayer.getSource().refresh();
+        trackLayer.getSource().refresh();
 
 
         let speed = data.data.position.speed;
@@ -1048,12 +1077,24 @@ angular.module('unionvmsWeb').controller('RealtimeCtrl', function(
 
     };
 
-    var removeFeature = function(trackId) {
+    var removeFeature = function(trackId, layer) {
         let cachedFeature = vectorSource.getFeatureById(trackId);
         if (cachedFeature != null && cachedFeature !== undefined) {
-            vectorSource.removeFeature(cachedFeature);
-            vectorLayer.getSource().refresh();
+            layer.getSource().removeFeature(cachedFeature);
+            layer.getSource().refresh();
         }
     };
+
+    var getLayerById = function(id) {
+        this.getMap().getLayers().forEach(function(layer) {
+            console.log(layer);
+            if (layer.name === id) {
+                return layer;
+            }
+        });
+    };
+
+
+
     init();
 });

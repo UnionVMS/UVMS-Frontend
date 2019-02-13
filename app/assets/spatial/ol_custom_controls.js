@@ -209,6 +209,8 @@ ol.control.ResetLayerFilter= function(opt_options){
         btn.addEventListener('click', resetFilterAreaMapService, false);
     } else if (options.type === 'areaselectionmodal'){
         btn.addEventListener('click', resetFilterAreaSelectionModal, false);
+    } else if (options.type === 'realtimeMapService'){
+        btn.addEventListener('click', resetFilterAreaMapService, false);
     }
     
     
