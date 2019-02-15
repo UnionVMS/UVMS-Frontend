@@ -94,7 +94,7 @@ angular.module('unionvmsWeb').controller('HeaderMenuCtrl',function($scope, $root
         }
 
         // Realtime
-        if (checkAccess('Realtime', 'REALTIME_ALLOWED')) {
+        if (checkAccess('Movement', 'viewMovements')) {
             $scope.addMenuItem('Realtime', '/realtime', 'realtime');
         }
         // Alerts

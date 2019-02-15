@@ -494,7 +494,7 @@ unionvmsWebApp.config(function($stateProvider, $compileProvider, tmhDynamicLocal
             resolve: {
             },
             data: {
-                access: 'REALTIME_ALLOWED',
+                access: 'viewMovements',
                 loaded: true
             },
             onEnter: function($state,locale,userService,errorService) {
