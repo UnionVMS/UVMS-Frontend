@@ -9,50 +9,57 @@ the hope that it will be useful, but WITHOUT ANY WARRANTY; without even the impl
 FITNESS FOR A PARTICULAR PURPOSE.  See the GNU General Public License for more details. You should have received a
 copy of the GNU General Public License along with the IFDM Suite. If not, see <http://www.gnu.org/licenses/>.
  */
-angular.module('unionvmsWeb').factory('CommunicationChannel', function() {
+angular.module('unionvmsWeb').factory('CommunicationChannel', function(dateTimeService) {
 
         //Create a new channel with the default type "VMS"
-        function CommunicationChannel(){
-            this.capabilities = {};
-            this.defaultReporting = undefined;
-            this.ids = {};
+        function CommunicationChannel(){            
             this.name = "VMS"; // Default name
-            this.guid = undefined;
-        }
+            this.id = undefined;
+            this.DNID = undefined;
+            
+            // ids
+            this.frequencyGracePeriod = 0;
+            this.expectedFrequencyInPort = 0;
+            this.expectedFrequency = 0;
+            this.lesDescription = undefined;
+            this.memberNumber = undefined;
+            this.installedBy = undefined;
+            this.installDate = undefined;
+            this.uninstallDate = undefined;
+            this.startDate = undefined;
+            this.endDate = undefined;
+            this.archived = false;
 
-        function objectToTypeValueList(obj) {
-            var list = [];
-            $.each(obj, function(key, value) {
-                if(angular.isDefined(value)){
-                    list.push({"type": key, "value": value});
-                }
-            });
-
-            return list;
+            // channel types
+            this.defaultChannel = true;
+            this.configChannel = true;
+            this.pollChannel = true;
         }
 
         CommunicationChannel.fromJson = function(data){
             var channel = new CommunicationChannel();
-            channel.defaultReporting = data.defaultReporting;
             channel.name = data.name;
-			channel.guid = data.guid;
+			channel.id = data.id;
+            channel.DNID = data.dnid;
+            // ids
+            channel.frequencyGracePeriod = data.frequencyGracePeriod;
+            channel.expectedFrequencyInPort = data.expectedFrequencyInPort;
+            channel.expectedFrequency = data.expectedFrequency;
+            channel.lesDescription = data.lesDescription;
+            channel.memberNumber = data.memberNumber;
+            channel.installedBy = data.installedBy;
+            channel.installDate = channel.getFormattedDate(data.installDate);
+            channel.uninstallDate = channel.getFormattedDate(data.uninstallDate);
+            channel.startDate = channel.getFormattedDate(data.startDate);
+            channel.endDate = channel.getFormattedDate(data.endDate);
 
-            //IdList
-            if (angular.isArray(data.attributes)) {
-                for (var i = 0; i < data.attributes.length; i++) {
-                    var idType = data.attributes[i].type,
-                        idValue = data.attributes[i].value;
-                    channel.ids[idType] = idValue;
-                }
-            }
+            channel.archived = data.archived;
 
-            if (angular.isArray(data.capabilities)) {
-                for (var j = 0; j < data.capabilities.length; j++) {
-                    var capability = data.capabilities[j];
-                    channel.capabilities[capability.type] = capability.value;
-                }
-            }
-
+            
+            // channel types
+            channel.defaultChannel = data.defaultChannel;
+            channel.configChannel = data.configChannel;
+            channel.pollChannel = data.pollChannel;
             return channel;
         };
 
@@ -60,50 +67,79 @@ angular.module('unionvmsWeb').factory('CommunicationChannel', function() {
             return JSON.stringify(this.dataTransferObject());
         };
 
-        CommunicationChannel.prototype.dataTransferObject = function() {
-            return {
-                attributes: objectToTypeValueList(this.ids),
-                capabilities: objectToTypeValueList(this.capabilities),
-                defaultReporting: this.defaultReporting,
+        CommunicationChannel.prototype.dataTransferObject = function() {            
+            var dataTransferObject = {
                 name : angular.isDefined(this.name) ? this.name : '',
-				guid: this.guid
+                id: this.id,
+                dnid: this.DNID,
+                frequencyGracePeriod : this.frequencyGracePeriod,
+                expectedFrequencyInPort : this.expectedFrequencyInPort,
+                expectedFrequency : this.expectedFrequency,
+                lesDescription : this.lesDescription,
+                memberNumber : this.memberNumber,
+                installedBy : this.installedBy,
+                installDate : dateTimeService.formatISO8601(this.installDate),
+                uninstallDate : dateTimeService.formatISO8601(this.uninstallDate),
+                startDate : dateTimeService.formatISO8601(this.startDate),
+                endDate : dateTimeService.formatISO8601(this.endDate),
+                archived : this.archived,
+                defaultChannel : this.defaultChannel,
+                configChannel : this.configChannel,
+                pollChannel : this.pollChannel
             };
+            
+            return dataTransferObject;
         };
 
         CommunicationChannel.prototype.copy = function() {
             var copy = new CommunicationChannel();
             copy.name = this.name;
-            copy.defaultReporting = this.defaultReporting;
-			copy.guid = this.guid;
-            for (var key in this.ids) {
-                if (this.ids.hasOwnProperty(key)) {
-                    copy.ids[key] = this.ids[key];
-                }
-            }
+            copy.id = this.id;
+            copy.DNID = this.DNID;
 
-            for (var k in this.capabilities) {
-                if (this.capabilities.hasOwnProperty(k)) {
-                    copy.capabilities[k] = this.capabilities[k];
-                }
-            }
+            // ids
+            copy.frequencyGracePeriod = this.frequencyGracePeriod;
+            copy.expectedFrequencyInPort = this.expectedFrequencyInPort;
+            copy.expectedFrequency = this.expectedFrequency;
+            copy.lesDescription = this.lesDescription;
+            copy.memberNumber = this.memberNumber;
+            copy.installedBy = this.installedBy;
+            copy.installDate = this.installDate;
+            copy.uninstallDate = this.uninstallDate;
+            copy.startDate = this.startDate;
+            copy.endDate = this.endDate;
+            copy.archived = this.archived;
+
+            // channel types
+            copy.defaultChannel = this.defaultChannel;
+            copy.configChannel = this.configChannel;
+            copy.pollChannel = this.pollChannel;
 
             return copy;
         };
 
         CommunicationChannel.prototype.setLESDescription = function(description) {
             if(angular.isDefined(description)){
-                this.ids.LES_DESCRIPTION = description;
+                this.lesDescription = description;
             }else{
-                delete this.ids.LES_DESCRIPTION;
+                delete this.lesDescription;
             }
         };
 
+        CommunicationChannel.prototype.getFormattedDate = function(date) 
+        {
+            if (date === undefined || date === null) {
+                return date;
+            }
+            return moment(date, 'YYYY-MM-DDTHH:mm:ssZ').format("YYYY-MM-DD HH:mm:ss Z");
+        };
+
         CommunicationChannel.prototype.getFormattedStartDate = function() {
-            return moment(this.ids["START_DATE"], 'YYYY-MM-DD HH:mm').format("YYYY-MM-DD HH:mm Z");
+            return moment(this.startDate, 'YYYY-MM-DD HH:mm').format("YYYY-MM-DD HH:mm Z");
         };
 
         CommunicationChannel.prototype.getFormattedStopDate = function() {
-            return moment(this.ids["STOP_DATE"], 'YYYY-MM-DD HH:mm').format("YYYY-MM-DD HH:mm Z");
+            return moment(this.endDate, 'YYYY-MM-DD HH:mm').format("YYYY-MM-DD HH:mm Z");
         };
 
         return CommunicationChannel;

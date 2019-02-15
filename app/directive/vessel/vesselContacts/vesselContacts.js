@@ -28,8 +28,27 @@ angular.module('unionvmsWeb')
 	};
 });
 
+
 angular.module('unionvmsWeb')
-    .controller('vesselContactsCtrl', function($scope){
+    .directive('contactItem', function() {
+        return {
+            restrict: 'E',
+            replace: false,
+            controller: 'vesselContactsCtrl',
+            scope: {
+                contactItem: '=',
+                dirtyStatus : '='
+            },
+            link: function(scope, element, attrs, fn) {
+            }
+        };
+    });
+
+
+angular.module('unionvmsWeb')
+    .controller('vesselContactsCtrl', function($scope, configurationService){
+
+        $scope.countryCodes = configurationService.setTextAndCodeForDropDown(configurationService.getValue('VESSEL', 'FLAG_STATE'), 'FLAG_STATE', 'VESSEL', true);
 
         $scope.orderByOwner = function (contact) {
             switch (contact.owner) {
@@ -40,12 +59,29 @@ angular.module('unionvmsWeb')
                     return 2;
             }
         };
-        
-        // Check if contacts has been modified and set form dirty 
-        $scope.$watch('vesselContacts', function(newValue, oldValue){
-        	if (oldValue && oldValue.length > 0) {
-                $scope.dirtyStatus(true);
-        	}
+
+        $scope.setVesselContactDirtyStatus = function(contact, status) {
+            if (angular.isDefined(contact)) {
+                contact.dirty = status;
+            }
+        };
+
+        $scope.$watch('contactItem', function(newValue, oldValue){
+            if (oldValue === undefined || newValue === undefined){
+                return;
+            }
+            var oldValueJson = oldValue.copy().toJson();
+            var newValueJson = newValue.copy().toJson();
+
+            if (!angular.equals(oldValueJson, newValueJson)) {
+                $scope.dirtyStatus(newValue, true);
+                if (newValue.dirty === true || newValue.dirty === undefined) {
+                    $scope.$parent.dirtyStatus(true);
+                }
+            }
+            else {
+                //$scope.$parent.dirtyStatus(false);
+            }
         }, true);
     }
 );

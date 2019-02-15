@@ -39,7 +39,7 @@ describe('SavedSearchGroup', function() {
                 value: "5"
             },
 		],
-		user: "FRONTEND_USER",
+		owner: "FRONTEND_USER",
 	};
 
 
@@ -48,7 +48,7 @@ describe('SavedSearchGroup', function() {
 		expect(group.dynamic).toEqual(responseData.dynamic);
 		expect(group.id).toEqual(responseData.id);
 		expect(group.name).toEqual(responseData.name);
-        expect(group.user).toEqual(responseData.user);
+        expect(group.owner).toEqual(responseData.user);
 
 		expect(group.searchFields.length).toEqual(4);
 

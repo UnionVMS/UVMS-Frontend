@@ -1,4 +1,4 @@
-<!--
+﻿<!--
 ﻿Developed with the contribution of the European Commission - Directorate General for Maritime Affairs and Fisheries
 © European Union, 2015-2016.
 
@@ -20,19 +20,19 @@ copy of the GNU General Public License along with the IFDM Suite. If not, see <h
                     <th class="st-sort" st-sort="associatedVessel.name" st-skip-natural="true" id="mt-sort-name">
                         {{'mobileTerminal.table_header_vessel_name' | i18n}}
                     </th>
-                    <th class="st-sort" st-sort="attributes.SERIAL_NUMBER" st-skip-natural="true" id="mt-sort-serialNumber">
+                    <th class="st-sort" st-sort="serialNo" st-skip-natural="true" id="mt-sort-serialNumber">
                         {{'mobileTerminal.table_header_serial_no' | i18n}}
                     </th>
-                    <th class="st-sort" st-sort="channels[0].ids.MEMBER_NUMBER" st-skip-natural="true" id="mt-sort-memberNumber">
+                    <th class="st-sort" st-sort="channels[0].memberNumber" st-skip-natural="true" id="mt-sort-memberNumber">
                         {{'mobileTerminal.table_header_member_no' | i18n}}
                     </th>
-                    <th class="st-sort" st-sort="channels[0].ids.DNID" st-skip-natural="true" id="mt-sort-dnid">
+                    <th class="st-sort" st-sort="channels[0].DNID" st-skip-natural="true" id="mt-sort-dnid">
                         {{'mobileTerminal.table_header_dnid' | i18n}}
                     </th>
                     <th class="st-sort" st-sort="type" st-skip-natural="true" id="mt-sort-transponderName">
                         {{'mobileTerminal.table_header_transponder_type' | i18n}}
                     </th>
-                    <th class="st-sort" st-sort="attributes.SATELLITE_NUMBER" st-skip-natural="true" id="mt-sort-satelliteNumber">
+                    <th class="st-sort" st-sort="satelliteNumber" st-skip-natural="true" id="mt-sort-satelliteNumber">
                         {{'mobileTerminal.table_header_satellite_number' | i18n}}
                     </th>
                     <th class="st-sort" st-sort="associatedVessel.mmsi" st-skip-natural="true" id="mt-sort-mmsiNo">
@@ -56,14 +56,14 @@ copy of the GNU General Public License along with the IFDM Suite. If not, see <h
                         <span ng-show="item.connectId && !item.associatedVessel" class="assetNotFound" ng-attr-title="{{'mobileTerminal.warning_plugin_inactive' | i18n}}">{{'common.asset_not_found' | i18n}}</span>
                         <span ng-show="!item.connectId && !item.associatedVessel" class="assetNotAssigned" ng-attr-title="{{'mobileTerminal.table_not_assigned_icon_tooltip' | i18n}}">{{'mobileTerminal.table_vessel_name_not_assigned' | i18n}}</span>
                     </td>
-                    <td class="statusColored" ng-attr-title="{{item.attributes.SERIAL_NUMBER}}">{{item.attributes.SERIAL_NUMBER}}</td>
+                    <td class="statusColored" ng-attr-title="{{item.serialNo}}">{{item.serialNo}}</td>
                     <td class="statusColored" ng-attr-title="{{getDefaultMemberNumber(item.channels)}}">{{getDefaultMemberNumber(item.channels)}}</td>
                     <td class="statusColored" ng-attr-title="{{getDefaultDnid(item.channels)}}">{{getDefaultDnid(item.channels)}}</td>
                     <td class="statusColored" ng-class="{'plugin-inactive': item.pluginIsInactive()}"
-                        ng-attr-title="{{ (item.pluginIsInactive()) ? ('mobileTerminal.warning_plugin_inactive' | i18n) : (item.type | transponderName)}}">
-                        {{item.type | transponderName}}
+                        ng-attr-title="{{ (item.pluginIsInactive()) ? ('mobileTerminal.warning_plugin_inactive' | i18n) : (item.mobileTerminalType | transponderName)}}">
+                        {{item.mobileTerminalType | transponderName}}
                     </td>
-                    <td class="statusColored" ng-attr-title="{{item.attributes.SATELLITE_NUMBER}}">{{item.attributes.SATELLITE_NUMBER}}</td>
+                    <td class="statusColored" ng-attr-title="{{item.satelliteNumber}}">{{item.satelliteNumber}}</td>
                     <td>
                         <span ng-show="item.associatedVessel">{{item.associatedVessel.mmsi}}</span>
                     </td>

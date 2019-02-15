@@ -117,7 +117,7 @@ angular.module('unionvmsWeb').controller('NewpollwizardpollingoptionsCtrl',funct
                     var pollResult = pollingService.getResult();
                     var redirectPage;
                     //Any unsent polls?
-                    if(pollResult.unsentPolls.length > 0){
+                    if(pollResult.unsentPolls.length > 0 && !pollResult.programPoll){
                         redirectPage = 'app.exchange';
                         var total = pollResult.sentPolls.length + pollResult.unsentPolls.length;
                         alertService.showErrorMessage(locale.getString('polling.wizard_second_step_creating_polls_unsent_error',{unsent : pollResult.unsentPolls.length, total: total}));

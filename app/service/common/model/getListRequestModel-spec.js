@@ -57,27 +57,6 @@ describe('GetListRequest', function() {
 		expect(angular.equals(toJsonObject.searchCriteria.criterias, criterias)).toBeTruthy();
 	}));
 
-    it('DTOForMobileTerminal should return correctly formatted data', inject(function(GetListRequest, SearchField) {
-        var searchField1 = new SearchField("NAME", "TEST"),
-            searchField2 = new SearchField("COUNTRY", "Swe"),
-            criterias = [searchField1, searchField2],
-            listSize = 15,
-            page = 2,
-            dynamic = false;
-        var getListRequest = new GetListRequest(page, listSize, dynamic, criterias);
-        var DTO = getListRequest.DTOForMobileTerminal();
-
-        expect(DTO.pagination.listSize).toEqual(listSize);
-        expect(DTO.pagination.page).toEqual(page);
-        expect(DTO.mobileTerminalSearchCriteria.isDynamic).toEqual(dynamic);
-        expect(DTO.mobileTerminalSearchCriteria.criterias.length).toBe(2);
-        expect(DTO.mobileTerminalSearchCriteria.criterias[0].key).toBe("NAME");
-        expect(DTO.mobileTerminalSearchCriteria.criterias[0].value).toBe("TEST*");
-        expect(DTO.mobileTerminalSearchCriteria.criterias[1].key).toBe("COUNTRY");
-        expect(DTO.mobileTerminalSearchCriteria.criterias[1].value).toBe("Swe");
-    }));
-
-
 	it('setPage should set correct page', inject(function(GetListRequest) {
 		var getListRequest = new GetListRequest();
 		getListRequest.setPage(5);

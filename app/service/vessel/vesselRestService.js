@@ -307,11 +307,46 @@ angular.module('unionvmsWeb')
 
     var getConfiguration = function(){
     	var deferred = $q.defer();
-    	deferred.resolve({"UNIT_TONNAGE":["LONDON","OSLO"],"UNIT_LENGTH":["LOA","LBP"],"ASSET_TYPE":["VESSEL"],"LICENSE_TYPE":["MOCK-license-DB"],"GEAR_TYPE":["PELAGIC","DERMERSAL","DEMERSAL_AND_PELAGIC","UNKNOWN"],"FLAG_STATE":["SWE","DNK","NOR"],"SPAN_LENGTH_LOA":["0-11,99","12-14,99","15-17,99","18-23,99","24+"],"SPAN_POWER_MAIN":["0-99","100-199","200-299","300+"]});
-    	return deferred.promise;
-//        return getConfigurationFromResource(vesselRestFactory.getConfigValues());
-    };
+    	
+    	var keys = [{constant : "UNIT_TONNAGE", getValue : getConfigCode}, 
+    				{constant : "UNIT_LENGTH", getValue : getConfigCode},
+    				{constant : "ASSET_TYPE", getValue : getConfigDescription},
+    				{constant : "LICENSE_TYPE", getValue : getConfigCode},
+    				{constant : "FISHING_TYPE", getValue : getConfigDescription},
+    				{constant : "FLAG_STATE", getValue : getConfigCode},
+    				{constant : "SPAN_LENGTH_LOA", getValue : getConfigCode},
+    				{constant : "SPAN_POWER_MAIN", getValue : getConfigCode}];
 
+    	var configurations = {};
+    	for (var i = 0; i < keys.length; i++) {
+    		var key = keys[i];
+    		configurations[key.constant] = getConfigValues(key.constant, key.getValue);
+    	}
+    	
+    	deferred.resolve(configurations);
+    	return deferred.promise;
+    };
+    
+    var getConfigCode = function(code) {
+    	return code.primaryKey.code;
+    };
+    
+    var getConfigDescription = function(code) {
+    	return code.description;
+    };
+    
+    var getConfigValues = function(constant, getValueFunction) {
+    	var values = [];
+    	getCustomCode(constant).then(function(codes) {
+        	for (var i = 0; i < codes.length; i++) {
+        		values.push(getValueFunction(codes[i]));
+            }
+        }, function(error) {
+        	console.error("Could not get config for " + constant);
+        });
+    	return values;
+    };
+    
     var getParameterConfiguration = function(){
         return getConfigurationFromResource(vesselRestFactory.getConfigParameters());
     };
@@ -351,13 +386,13 @@ angular.module('unionvmsWeb')
 
     var getVesselByVesselHistoryId = function(vesselId) {
         var deferred = $q.defer();
-        vesselRestFactory.historyVessel().get({id: vesselId}, function(response) {
-            if (response.code !== 200) {
+        vesselRestFactory.historyVessel().get({id: vesselId}, function(response, header, status) {
+            if (status !== 200) {
                 deferred.reject("Invalid response status");
                 return;
             }
 
-            deferred.resolve(Vessel.fromJson(response.data));
+            deferred.resolve(Vessel.fromJson(response));
         },
         function(err) {
             deferred.reject("could not load vessel with history ID " + vesselId);

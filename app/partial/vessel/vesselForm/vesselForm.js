@@ -37,7 +37,6 @@ angular.module('unionvmsWeb').controller('VesselFormCtrl',function($scope, $log,
             if($scope.isCreateNewMode()){
                 //Set default country code when creating new vessel
                 $scope.setDefaultCountryCode();
-                $scope.vesselContacts.push(new VesselContact());
             }else{
                 getVesselHistory();
                 getMobileTerminals();
@@ -75,7 +74,6 @@ angular.module('unionvmsWeb').controller('VesselFormCtrl',function($scope, $log,
     //Check if vessel contacts has been modified
     $scope.setVesselContactsDirtyStatus = function(status) {
         if (angular.isDefined(status)) {
-        	console.log("Setting contacts dirty status: " + status);
             $scope.isVesselContactsDirtyStatus = status;
         }
     };
@@ -209,9 +207,6 @@ angular.module('unionvmsWeb').controller('VesselFormCtrl',function($scope, $log,
     function getVesselContacts() {
     	vesselRestService.getContactsForAsset($scope.getVesselObj().id).then(function(contacts) {
     		$scope.vesselContacts = contacts;
-    		if (contacts.length === 0) {
-    			$scope.vesselContacts.push(new VesselContact());
-    		}
     	});
     }
     
@@ -298,6 +293,7 @@ angular.module('unionvmsWeb').controller('VesselFormCtrl',function($scope, $log,
         $scope.existingValues.cfr = undefined;
         $scope.existingValues.imo = undefined;
         $scope.existingValues.mmsi = undefined;
+        $scope.existingValues.ircs = undefined;
 
         $scope.clearNotes();
         $scope.waitingForCreateResponse = false;
@@ -306,7 +302,6 @@ angular.module('unionvmsWeb').controller('VesselFormCtrl',function($scope, $log,
         $scope.vesselObjOriginal = angular.copy($scope.vesselObj);
         $scope.setVesselObj(createdVessel.copy());
         $scope.setCreateMode(false);
-        getVesselHistory();
     };
 
     //Error creating the new vessel
@@ -316,22 +311,29 @@ angular.module('unionvmsWeb').controller('VesselFormCtrl',function($scope, $log,
             var cfr = vesselObj.cfr;
             var imo = vesselObj.imo;
             var mmsi = vesselObj.mmsi;
+            var ircs = vesselObj.ircs;
+
         }
 
         return function(error) {
             $scope.waitingForCreateResponse = false;
             alertService.showErrorMessage(locale.getString('vessel.add_new_alert_message_on_error'));
 
-            if (error) {
+            if (error.data.message) {
                 // Set existing values on scope
-                $scope.existingValues.cfr = error.match(/An asset with this CFR value already exists\./) ? cfr : undefined;
-                $scope.existingValues.imo = error.match(/An asset with this IMO value already exists\./) ? imo : undefined;
-                $scope.existingValues.mmsi = error.match(/An asset with this MMSI value already exists\./) ? mmsi : undefined;
+                $scope.existingValues.cfr = error.data.message.match('ERROR: duplicate key value violates unique constraint "asset_uc_cfr"') ? cfr : undefined;
+                $scope.existingValues.imo = error.data.message.match('ERROR: duplicate key value violates unique constraint "asset_uc_imo"') ? imo : undefined;
+                $scope.existingValues.mmsi = error.data.message.match('ERROR: duplicate key value violates unique constraint "asset_uc_mmsi"') ? mmsi : undefined;
+                $scope.existingValues.ircs = error.data.message.match('ERROR: duplicate key value violates unique constraint "asset_uc_ircs"') ? ircs : undefined;
+
+                alertService.showErrorMessage(error.data.message);
+
             }
             // Update validity, because model did not change here.
             $scope.vesselForm.cfr.$setValidity('unique', $scope.existingValues.cfr === undefined);
             $scope.vesselForm.imo.$setValidity('unique', $scope.existingValues.imo === undefined);
             $scope.vesselForm.mmsi.$setValidity('unique', $scope.existingValues.mmsi === undefined);
+            $scope.vesselForm.ircs.$setValidity('unique', $scope.existingValues.ircs === undefined);
         };
     };
 
@@ -384,11 +386,21 @@ angular.module('unionvmsWeb').controller('VesselFormCtrl',function($scope, $log,
         getVesselHistory();
         
         $scope.clearNotes();
+        $scope.isVesselContactsDirtyStatus = false;
+
+        $scope.resetContactsDirtyStatus();
     };
     //Error updating vessel
     var updateVesselError = function(error){
         $scope.waitingForCreateResponse = false;
+
         alertService.showErrorMessage(locale.getString('vessel.update_alert_message_on_error'));
+    };
+
+    $scope.resetContactsDirtyStatus = function() {
+        for (var i = 0; i < $scope.vesselContacts.length; i++) {
+             $scope.vesselContacts[i].dirty = false;
+        }
     };
 
     //Get all history events for the vessel
@@ -487,7 +499,7 @@ angular.module('unionvmsWeb').controller('VesselFormCtrl',function($scope, $log,
 
     // Add new row with contact item
     $scope.addContactItem = function(vesselContact) {
-    	vesselContact.push(new VesselContact());
+    	vesselContact.unshift(new VesselContact());
     };
 
     // Remove row with contact item
@@ -502,21 +514,33 @@ angular.module('unionvmsWeb').controller('VesselFormCtrl',function($scope, $log,
     // Update submitted contacts with default values or remove empty contact item rows
     $scope.updateContactItems = function(vesselId) {
         $scope.vesselContacts.slice(0).forEach(function (vesselContact) {
-            if (vesselContact.name || vesselContact.email || vesselContact.phoneNumber) {
-                Object.assign(vesselContact, { source: 'INTERNAL' });
-                // ToDo: Fix this in BE?
-                if (!vesselContact.name){
-                    Object.assign(vesselContact, { name: '' });
+            if (vesselContact.dirty &&  isContactItemValid(vesselContact)) {
+                if (vesselContact.name || vesselContact.email || vesselContact.phoneNumber) {
+                } else {
+                    $scope.vesselContacts.splice($scope.vesselContacts.indexOf(vesselContact), 1);
                 }
-            } else {
-                $scope.vesselContacts.splice($scope.vesselContacts.indexOf(vesselContact), 1);
-            }
-            if (!vesselContact.id) {
-            	vesselRestService.createContactForAsset(vesselId, vesselContact);
-            } else {
-            	vesselRestService.updateContact(vesselContact);
+                if (!vesselContact.id) {
+                    vesselRestService.createContactForAsset(vesselId, vesselContact);
+                } else {
+                    vesselRestService.updateContact(vesselContact);
+                }
             }
         });
+    };
+
+    var isContactItemValid = function(vesselContact) {
+        vesselContact.name = trimString(vesselContact.name);
+        vesselContact.email = trimString(vesselContact.email);
+        vesselContact.phoneNumber = trimString(vesselContact.phoneNumber);
+        if (vesselContact.name.length === 0|| vesselContact.email.length === 0 || vesselContact.phoneNumber.length === 0) {
+            return false;
+        }
+
+        return true;
+    };
+
+    var trimString = function(str) {
+        return str === undefined ? '' : str.trim();
     };
 
     // Clear form on Cancel

@@ -34,16 +34,16 @@ angular.module('unionvmsWeb').factory('rulesSuggestionsService',function($log, $
                     break;
                 case 'MT_DNID':
                     $.each(resultItem.channels, function(i, channel){
-                        suggestions.push(channel.ids.DNID);
+                        suggestions.push(channel.DNID);
                     });
                     break;
                 case 'MT_MEMBER_ID':
                     $.each(resultItem.channels, function(i, channel){
-                        suggestions.push(channel.ids.MEMBER_NUMBER);
+                        suggestions.push(channel.memberNumber);
                     });
                     break;
                 case 'MT_SERIAL_NO':
-                    suggestions.push(resultItem.attributes.SERIAL_NUMBER);
+                    suggestions.push(resultItem.serialNo);
                     break;
                 default:
                     break;

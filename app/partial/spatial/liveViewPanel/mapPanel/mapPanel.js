@@ -99,7 +99,7 @@ angular.module('unionvmsWeb').controller('MapCtrl',function($log, $scope, locale
                         var item = {
                             type: 'asset',
                             name: mapService.overlay.get('vesselName'),
-                            guid: assetId
+                            historyId: assetId
                         };
                         return item;
                     }

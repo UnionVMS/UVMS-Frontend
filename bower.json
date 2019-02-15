@@ -63,7 +63,8 @@
     "jspdf": "1.4.1",
     "html2canvas": "0.4.1",
     "vkBeautify": "https://github.com/vkiryukhin/vkBeautify.git",
-    "angular-highlightjs": "^0.7.1"
+    "angular-highlightjs": "^0.7.1",
+    "canvg": "git://github.com/canvg/canvg.git#1.5.3"
   },
   "devDependencies": {
     "jasmine-collection-matchers": "~0.1.2"

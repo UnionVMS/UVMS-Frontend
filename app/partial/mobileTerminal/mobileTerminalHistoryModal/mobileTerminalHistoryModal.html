@@ -1,4 +1,4 @@
-<!--
+﻿<!--
 ﻿Developed with the contribution of the European Commission - Directorate General for Maritime Affairs and Fisheries
 © European Union, 2015-2016.
 
@@ -10,109 +10,102 @@ FITNESS FOR A PARTICULAR PURPOSE.  See the GNU General Public License for more d
 copy of the GNU General Public License along with the IFDM Suite. If not, see <http://www.gnu.org/licenses/>.
 -->
 <div class="mobileTerminalHistoryModal">
-    <div class="modal-header" style="text-align:left">
-        <div class="pointer pull-right" ng-click="cancel()" id="mob-term-history-cancel-1">
-            <i class="fa fa-times closeicon"></i>
-        </div>
-        <h4 class="modal-title">{{ 'mobileTerminal.history_modal_header' | i18n}}</h4>
-    </div>
+	<div class="modal-header" style="text-align: left">
+		<div class="pointer pull-right" ng-click="cancel()"
+			id="mob-term-history-cancel-1">
+			<i class="fa fa-times closeicon"></i>
+		</div>
+		<h4 class="modal-title">{{ 'mobileTerminal.history_modal_header'
+			| i18n}}</h4>
+	</div>
 
-    <div class="modal-body">
-        <div class="row">
-           <div class="col-md-12">
-                <span class="transponderType" id="mob-term-history-transponder-type">{{'mobileTerminal.history_modal_transpondertype' | i18n }}: <b>{{ mobileTerminal.type | transponderName}}</b></span>
-            </div>
-        </div>
-        <div class="row" st-table="currentSearchResultsByPage" st-safe-src="allCurrentSearchResults">
-            <div search-results-table search="currentSearchResults" class="col-md-12">
-                <table class="searchResults colorOdd truncate-text">
-                    <thead>
-                        <tr>
-                            <th class="st-sort" st-sort="eventCode" st-skip-natural="true" id="mtHistory-sort-eventCode">
-                                {{'mobileTerminal.history_modal_eventcode' | i18n}}
-                            </th>
-                            <th class="st-sort" st-sort="mobileTerminal.associatedVessel.name" st-skip-natural="true" id="mtHistory-sort-asset">
-                                {{'mobileTerminal.history_modal_vesselname' | i18n}}
-                            </th>
-                            <th class="st-sort" st-sort="mobileTerminal.attributes.SERIAL_NUMBER" st-skip-natural="true" id="mtHistory-sort-serialnumber">
-                                {{'mobileTerminal.history_modal_serialnumber' | i18n}}
-                            </th>
-                            <th class="st-sort" st-sort="mobileTerminal.attributes.SATELLITE_NUMBER" st-skip-natural="true" id="mtHistory-sort-satelliteno">
-                                {{'mobileTerminal.history_modal_satelliteno' | i18n}}
-                            </th>
-                            <th class="st-sort" st-sort="changeDate" st-sort-default="reverse" st-skip-natural="true" id="mtHistory-sort-changeDate">
-                                {{'mobileTerminal.history_modal_changeddate' | i18n}}
-                            </th>
-                            <th class="st-sort" st-sort="comment" st-skip-natural="true" id="mtHistory-sort-comment">
-                                {{'mobileTerminal.history_modal_comments' | i18n}}
-                            </th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        <tr ng-repeat="item in currentSearchResultsByPage">
-                            <td>{{item.eventCode}}</td>
-                            <td>
-                                <span ng-show="item.associatedVessel"><a href="#/assets/{{item.connectId}}" title="{{'common.view_details' | i18n}}" ng-click="cancel()" id="mob-term-history-to-vessel">{{item.associatedVessel.name}}</a></span>
-                                <span ng-show="item.connectId && !item.associatedVessel">ConnectId: {{item.mobileTerminal.connectId}}</span>
-                            </td>
-                            <td>{{getAttribute(item, "SERIAL_NUMBER")}}</td>
-                            <td>{{getAttribute(item, "SATELLITE_NUMBER")}}</td>
-                            <td>{{item.changeDate | confDateFormat}}</td>
-                            <td>{{item.comments}}</td>
-                        </tr>
-                     </tbody>
-                </table>
-            </div>
-        </div>
+	<div class="modal-body">
+		<div class="row">
+			<div class="col-md-12">
+				<span class="transponderType" id="mob-term-history-transponder-type">{{'mobileTerminal.history_modal_transpondertype'
+					| i18n }}: <b>{{ mobileTerminal.mobileTerminalType |
+						transponderName}}</b>
+				</span>
+			</div>
+		</div>
+		<div class="row" st-table="currentSearchResultsByPage"
+			st-safe-src="allCurrentSearchResults">
+			<div search-results-table search="currentSearchResults"
+				class="col-md-12">
+				<table class="searchResults colorOdd truncate-text">
+					<thead>
+						<tr>
+							<th class="st-sort" st-sort="eventCode" st-skip-natural="true"
+								id="mtHistory-sort-eventCode">
+								{{'mobileTerminal.history_modal_eventcode' | i18n}}</th>
+							<th class="st-sort"
+								st-sort="mobileTerminal.associatedVessel.name"
+								st-skip-natural="true" id="mtHistory-sort-asset">
+								{{'mobileTerminal.history_modal_vesselname' | i18n}}</th>
+							<th class="st-sort" st-sort="mobileTerminal.serialNo"
+								st-skip-natural="true" id="mtHistory-sort-serialnumber">
+								{{'mobileTerminal.history_modal_serialnumber' | i18n}}</th>
+							<th class="st-sort" st-sort="mobileTerminal.satelliteNumber"
+								st-skip-natural="true" id="mtHistory-sort-satelliteno">
+								{{'mobileTerminal.history_modal_satelliteno' | i18n}}</th>
+							<th class="st-sort" st-sort="changeDate"
+								st-sort-default="reverse" st-skip-natural="true"
+								id="mtHistory-sort-changeDate">
+								{{'mobileTerminal.history_modal_changeddate' | i18n}}</th>
+							<th class="st-sort" st-sort="comment" st-skip-natural="true"
+								id="mtHistory-sort-comment">
+								{{'mobileTerminal.history_modal_comments' | i18n}}</th>
+						</tr>
+					</thead>
+					<tbody ng-repeat="item in currentSearchResultsByPage">
+						<tr>
+							<td>{{item.eventCode}}</td>
+							<td><span ng-show="item.associatedVessel"><a
+									href="#/assets/{{item.connectId}}"
+									title="{{'common.view_details' | i18n}}" ng-click="cancel()"
+									id="mob-term-history-to-vessel">{{item.associatedVessel.name}}</a></span>
+								<span ng-show="item.connectId && !item.associatedVessel">ConnectId:
+									{{item.mobileTerminal.connectId}}</span></td>
+							<td>{{item.serialNo}}</td>
+							<td>{{item.satelliteNumber}}</td>
+							<td>{{item.updateTime | confDateFormat}}</td>
+							<td>{{item.comments}}</td>
+						</tr>
 
-        <div class="row" st-table="currentChannelResultsByPage" st-safe-src="allCurrentSearchResults">
-            <div search-results-table search="channelResults" class="col-md-12">
-                <table class="searchResults colorOdd truncate-text">
-                    <thead>
-                    <tr>
-                        <th class="st-sort" st-sort="eventCode" st-skip-natural="true" id="mtHistory-sort-channel-comment">
-                            {{'mobileTerminal.history_modal_eventcode' | i18n }}
-                        </th>
-                        <th class="st-sort" st-sort="name" st-skip-natural="true" id="mtHistory-sort-channel-name">
-                            {{'mobileTerminal.history_modal_channel_name' | i18n }}
-                        </th>
-                        <th class="st-sort" st-sort="mobileTerminal.channels[0].ids.DNID" st-skip-natural="true" id="mtHistory-sort-channel-dnid">
-                            {{'mobileTerminal.history_modal_dnid' | i18n }}
-                        </th>
-                        <th class="st-sort" st-sort="mobileTerminal.channels[0].ids.MEMBER_NUMBER" st-skip-natural="true" id="mtHistory-sort-channel-memberNo">
-                            {{'mobileTerminal.history_modal_memberno' | i18n }}
-                        </th>
-                        <th class="st-sort" st-sort="mobileTerminal.attributes.INSTALLED_ON" st-skip-natural="true" id="mtHistory-sort-channel-installed">
-                            {{'mobileTerminal.history_modal_installed' | i18n }}
-                        </th>
-                        <th class="st-sort" st-sort="mobileTerminal.attributes.UNINSTALLED_ON" st-skip-natural="true" id="mtHistory-sort-channel-uninstalled">
-                            {{'mobileTerminal.history_modal_uninstalled' | i18n }}
-                        </th>
-                        <th class="st-sort" st-sort="changeDate" st-sort-default="reverse" st-skip-natural="true" id="mtHistory-sort-channel-changeDate">
-                            {{'mobileTerminal.history_modal_changeddate' | i18n }}
-                        </th>
-                    </tr>
-                    </thead>
-                    <tbody>
-                    <tr ng-repeat="item in currentChannelResultsByPage">
-                        <td>{{item.eventCode}}</td>
-                        <td>{{item.name}}</td>
-                        <td>{{getAttribute(item, "DNID")}}</td>
-                        <td>{{getAttribute(item, "MEMBER_NUMBER")}}</td>
-                        <td>{{getAttribute(item, "INSTALLED_ON") | confDateFormat}}</td>
-                        <td>{{getAttribute(item, "UNINSTALLED_ON") | confDateFormat}}</td>
-                        <td>{{item.changeDate | confDateFormat}}</td>
-                    </tr>
-                    </tbody>
-                </table>
-            </div>
-        </div>
-    </div>
-    <div class="modal-footer">
-        <div class="row">
-            <div class="col-md-12">
-                <button type="button" class="btn btn-primary" ng-click="cancel()" id="mob-term-history-cancel-2">{{ 'common.close' | i18n | uppercase}}</button>
-            </div>
-        </div>
-    </div>
+						<tr>		
+							<td class="mt-table-header">Channels</td>					
+							<td class="mt-table-header" id="mtHistory-sort-channel-name">
+								{{'mobileTerminal.history_modal_channel_name' | i18n }}</td>
+							<td class="mt-table-header" id="mtHistory-sort-channel-dnid">
+								{{'mobileTerminal.history_modal_dnid' | i18n }}</td>
+							<td class="mt-table-header" id="mtHistory-sort-channel-memberNo">
+								{{'mobileTerminal.history_modal_memberno' | i18n }}</td>
+							<td class="mt-table-header" id="mtHistory-sort-channel-installed">
+								{{'mobileTerminal.history_modal_installed' | i18n }}</td>
+							<td class="mt-table-header" id="mtHistory-sort-channel-uninstalled">
+								{{'mobileTerminal.history_modal_uninstalled' | i18n }}</td>
+						</tr>
+
+						<tr ng-repeat="channel in item.channels">
+							<td></td>
+							<td>{{channel.name}}</td>							
+							<td>{{channel.DNID}}</td>
+							<td>{{channel.memberNumber}}</td>
+							<td>{{channel.installDate | confDateFormat}}</td>
+							<td>{{channel.uninstallDate | confDateFormat}}</td>
+						</tr>
+					</tbody>
+				</table>
+			</div>
+		</div>
+	</div>
+	<div class="modal-footer">
+		<div class="row">
+			<div class="col-md-12">
+				<button type="button" class="btn btn-primary" ng-click="cancel()"
+					id="mob-term-history-cancel-2">{{ 'common.close' | i18n |
+					uppercase}}</button>
+			</div>
+		</div>
+	</div>
 </div>

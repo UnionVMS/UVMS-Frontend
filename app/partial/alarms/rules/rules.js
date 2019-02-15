@@ -109,16 +109,14 @@ angular.module('unionvmsWeb').controller('RulesCtrl',function($scope, $log, $sta
 
     //Remove rule from searchResults
     $scope.removeFromSearchResults = function(rule) {
-        var rules = $scope.currentSearchResults.items;
-        var index = rules.indexOf(rule);
-        if (index < 0) {
-            return;
+        var index = $scope.currentSearchResults.items.indexOf(rule);
+        if (index >= 0) {
+        	$scope.currentSearchResults.items.splice(index, 1);
         }
-
-        rules.splice(index, 1);
-        //Get rules again?
-        if($scope.currentSearchResults.items.length === 0){
-            $scope.searchRules();
+        
+        var index2 = $scope.allCurrentSearchResults.indexOf(rule);
+        if (index2 >= 0) {
+            $scope.allCurrentSearchResults.splice(index2, 1);
         }
     };
 
@@ -127,6 +125,7 @@ angular.module('unionvmsWeb').controller('RulesCtrl',function($scope, $log, $sta
         $scope.createNewMode = true;
         rule = rule.copy();
         //Unset some values
+        rule.guid = undefined;
         rule.lastTriggered = undefined;
         rule.updatedBy = undefined;
         rule.dateUpdated = undefined;
