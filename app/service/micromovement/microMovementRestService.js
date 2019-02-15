@@ -27,8 +27,8 @@ angular.module('unionvmsWeb')
 
 .factory('microMovementRestService', function($q, microMovementRestFactory, MicroMovement){
 
-    let getMovementList = function(date){
-        let deferred = $q.defer();
+    var getMovementList = function(date){
+        var deferred = $q.defer();
         microMovementRestFactory.getMovementList().get({timestamp: date}, function(result) {
                 deferred.resolve(result);
             },
@@ -41,8 +41,8 @@ angular.module('unionvmsWeb')
 
     };
 
-    let getTrackByMovementId = function(id) {
-        let deferred = $q.defer();
+    var getTrackByMovementId = function(id) {
+        var deferred = $q.defer();
         microMovementRestFactory.getTrackByMovementId().get({id: id}, function(result) {
                 deferred.resolve(result);
             },
@@ -54,8 +54,8 @@ angular.module('unionvmsWeb')
         return deferred.promise;
     };
 
-    let getSegmentByMovementGuid = function(moveId) {
-        let deferred = $q.defer();
+    var getSegmentByMovementGuid = function(moveId) {
+        var deferred = $q.defer();
         microMovementRestFactory.getSegmentByMovementGuid().get({moveId: moveId}, function(result) {
                 deferred.resolve(result);
             },
