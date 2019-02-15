@@ -48,6 +48,7 @@ angular.module('unionvmsWeb').factory('areaMapService',function(locale, genericM
         var view = genericMapService.createView(projObj);
         
 	    var map = new ol.Map({
+
 	        target: 'areaMap',
 	        controls: areaMs.getControls(),
 	        interactions: areaMs.getInteractions(),

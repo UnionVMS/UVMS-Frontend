@@ -1,0 +1,64 @@
+<!--
+﻿Developed with the contribution of the European Commission - Directorate General for Maritime Affairs and Fisheries
+© European Union, 2015-2016.
+
+This file is part of the Integrated Fisheries Data Management (IFDM) Suite. The IFDM Suite is free software: you can
+redistribute it and/or modify it under the terms of the GNU General Public License as published by the
+Free Software Foundation, either version 3 of the License, or any later version. The IFDM Suite is distributed in
+the hope that it will be useful, but WITHOUT ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or
+FITNESS FOR A PARTICULAR PURPOSE.  See the GNU General Public License for more details. You should have received a
+copy of the GNU General Public License along with the IFDM Suite. If not, see <http://www.gnu.org/licenses/>.
+-->
+<div class="modal-header" style="text-align:left" draggable-modal>
+
+    <div class="pointer pull-right" ng-click="cancel()">
+        <span class="fa fa-times closeicon"></span>
+    </div>
+    <h4 class="modal-title" id="popupModalHeader">{{data.asset.name || data.position.assetName || 'Untitled Ship'}}</h4>
+
+</div>
+<div id="popupModal" class="modal-body" loading-indicator="loading" type="SPINNER" size="small">
+    <table>
+        <thead><h5>Vessel</h5></thead>
+        <tbody>
+        <tr>
+            <td>Id:</td>
+            <td>{{data.asset.id || data.position.asset}}</td>
+        </tr>
+        <tr>
+            <td>Name:</td>
+            <td> {{data.asset.name || data.position.assetName}} ({{data.asset.flagState || data.position.flagstate}})</td>
+        </tr>
+        </tbody>
+    </table>
+    <table>
+        <thead><h5>Location</h5></thead>
+        <tbody>
+        <tr>
+            <td class="td-header font-weight-bold">Coordinates</td>
+            <td>{{data.position.location.longitude}}, {{data.position.location.latitude}}</td>
+        </tr>
+
+        <tr>
+            <td class="td-header font-weight-bold">Heading</td>
+            <td>{{data.position.heading}}</td>
+        </tr>
+        <tr>
+            <td class="td-header font-weight-bold">Speed</td>
+            <td>{{data.position.speed}}</td>
+        </tr>
+        <tr>
+            <td class="td-header font-weight-bold">Timestamp</td>
+            <td>{{data.position.timestamp}}</td>
+        </tr>
+        <tr>
+            <td class="td-header font-weight-bold">Guid</td>
+            <td>{{data.position.guid}}</td>
+        </tr>
+        </tbody>
+    </table>
+    <button class="btn btn-primary button btn-action" type="button" ng-click="showTrack()">Track</button>
+    <button class="btn btn-primary button btn-action" type="button" ng-click="removeTrack()">Remove Track</button>
+</div>
+<div class="modal-footer">
+</div>

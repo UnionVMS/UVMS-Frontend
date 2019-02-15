@@ -1,6 +1,6 @@
 {
   "name": "unionvmsWeb",
-  "version": "3.0.35",
+  "version": "3.0.48",
   "repository": {
     "type": "git",
     "url": "https://github.com/UnionVMS/UVMS-Frontend.git"
@@ -21,7 +21,7 @@
     "grunt-contrib-copy": "~1.0.0",
     "grunt-contrib-cssmin": "~2.1",
     "grunt-contrib-htmlmin": "~2.3",
-    "grunt-contrib-jshint": "~1.1",
+    "grunt-contrib-jshint": "^1.1.0",
     "grunt-contrib-less": "~1.4",
     "grunt-contrib-uglify": "~2.3",
     "grunt-contrib-watch": "~1.0",
@@ -43,9 +43,12 @@
     "karma-junit-reporter": "~1.2.0",
     "karma-mocha-reporter": "~2.2",
     "karma-phantomjs-launcher": "~1.0.4",
-    "load-grunt-tasks": "~3.5",
+    "load-grunt-tasks": "^3.5.2",
     "serve-static": "^1.12.1",
     "time-grunt": "~1.4.0"
   },
-  "license": "GPL-3.0"
+  "license": "GPL-3.0",
+  "dependencies": {
+    "eventsource": "^1.0.7"
+  }
 }

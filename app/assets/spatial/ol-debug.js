@@ -27690,21 +27690,24 @@ rbush.prototype = {
             path.push(node);
             if (node.leaf || path.length - 1 === level) break;
             minArea = minEnlargement = Infinity;
-            for (i = 0, len = node.children.length; i < len; i++) {
-                child = node.children[i];
-                area = bboxArea(child);
-                enlargement = enlargedArea(bbox, child) - area;
-                if (enlargement < minEnlargement) {
-                    minEnlargement = enlargement;
-                    minArea = area < minArea ? area : minArea;
-                    targetNode = child;
-                } else if (enlargement === minEnlargement) {
-                    if (area < minArea) {
-                        minArea = area;
+            if (node.children !== undefined) {
+                for (i = 0, len = node.children.length; i < len; i++) {
+                    child = node.children[i];
+                    area = bboxArea(child);
+                    enlargement = enlargedArea(bbox, child) - area;
+                    if (enlargement < minEnlargement) {
+                        minEnlargement = enlargement;
+                        minArea = area < minArea ? area : minArea;
                         targetNode = child;
+                    } else if (enlargement === minEnlargement) {
+                        if (area < minArea) {
+                            minArea = area;
+                            targetNode = child;
+                        }
                     }
                 }
             }
+
             node = targetNode || node.children[0];
         }
         return node;
@@ -27714,10 +27717,12 @@ rbush.prototype = {
             bbox = isNode ? item : toBBox(item),
             insertPath = [];
         var node = this._chooseSubtree(bbox, this.data, level, insertPath);
-        node.children.push(item);
+        if (node.children !== undefined) {
+            node.children.push(item);
+        }
         extend(node, bbox);
         while (level >= 0) {
-            if (insertPath[level].children.length > this._maxEntries) {
+            if (insertPath[level].children !== undefined && insertPath[level].children.length > this._maxEntries) {
                 this._split(insertPath, level);
                 level--;
             } else break;

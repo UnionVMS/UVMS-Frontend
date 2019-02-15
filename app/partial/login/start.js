@@ -38,7 +38,8 @@ angular.module('unionvmsWeb').factory('startPageService',function($log, globalSe
         subscription : ['app.manageSubscriptions'],
         reporting : ['app.reporting'],
         areaManagement: ['app.areas'],
-        activity: ['app.activity']
+        activity: ['app.activity'],
+        realtime: ['app.realtime']
     };
 
     var userHasAccessToState = function(state){
@@ -73,6 +74,8 @@ angular.module('unionvmsWeb').factory('startPageService',function($log, globalSe
                 return true;
             case 'app.activity':
                 return checkAccess('Activity', 'ACTIVITY_ALLOWED');
+            case 'app.realtime':
+                return checkAccess('Movement', 'viewMovements');
             default:
                 $log.info("State: " +state +" is missing from list. Returning false.");
                 return false;

@@ -14,6 +14,7 @@ var unionvmsWebApp = angular.module('unionvmsWeb', [
     'ui.utils',
     'ngRoute',
     'ngAnimate',
+    'ngMessages',
     'ngResource',
     'ngLocalize',
     'tmh.dynamicLocale',
@@ -479,6 +480,43 @@ unionvmsWebApp.config(function($stateProvider, $compileProvider, tmhDynamicLocal
             },
             onExit: function(loadingStatus){
                 loadingStatus.resetState();
+            }
+        })
+        .state('app.realtime', {
+            url: '/realtime',
+
+            views: {
+                modulepage: {
+                    templateUrl: 'partial/realtime/realtime.html',
+                    controller: 'RealtimeCtrl'
+                }
+            },
+            resolve: {
+            },
+            data: {
+                access: 'viewMovements',
+                loaded: true
+            },
+            onEnter: function($state,locale,userService,errorService) {
+                if(_.isNull(userService.getCurrentContext().scope)){
+                    errorService.setErrorMessage(locale.getString('common.error_user_without_scope'));
+                    $state.go('error');
+                } else {
+                    if (angular.isDefined($state.current.data)) {
+                        console.log('entering:', $state.current.data.loaded);
+                        if ($state.current.data.loaded) {
+                            console.log('it has been loaded');
+                        }
+                    }
+                }
+
+
+            },
+            onExit: function(loadingStatus, $state, $modalStack){
+                $modalStack.dismissAll();
+                $(document.getElementsByClassName("headercontainer")).show();
+                loadingStatus.resetState();
+                $state.current.data.loaded = false;
             }
         })
         .state('app.areas', {
@@ -969,7 +1007,7 @@ var restApiURLS = [
     'spatial/rest/',
     'activity/rest/',
     'mdr/rest/',
-    '/mapfish-print',
+    'mapfish-print',
     'usm-authentication/rest', 'usm-authorisation/rest', 'usm-administration/rest',
     'sales/rest/',
     'subscription/rest'

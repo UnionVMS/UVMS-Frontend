@@ -59,8 +59,10 @@ copy of the GNU General Public License along with the IFDM Suite. If not, see <h
     <script src="../bower_components/leaflet/dist/leaflet.js"></script>
     <script src="../bower_components/angular-leaflet-directive/dist/angular-leaflet-directive.js"></script>
     <script src="assets/spatial/ol.min.js"></script>
+    <!--<script src="assets/spatial/ol-debug.js"></script>-->
     <script src="assets/spatial/ol_custom_controls.js"></script>
     <script src="assets/spatial/ol3-layerswitcher/src/ol3-layerswitcher.js"></script>
+
     <script src="../bower_components/proj4/dist/proj4.js"></script>
     <script src="../bower_components/ng-csv/build/ng-csv.min.js"></script>
     <script src="../bower_components/fancytree/dist/jquery.fancytree-all.js"></script>
@@ -151,6 +153,15 @@ copy of the GNU General Public License along with the IFDM Suite. If not, see <h
     <script src="partial/footer/footer.js"></script>
     <script src="partial/header/header.js"></script>
     <script src="partial/header/headerMenu/headerMenu.js"></script>
+
+    <!-- EventSource -->
+    <script src="../node_modules/eventsource/example/eventsource-polyfill.js"></script>
+
+
+    <!-- realtime map, todo: move this to after the page has loaded -->
+    <script src="service/micromovement/microMovementServerSideEventsService.js"></script>
+    <script src="service/micromovement/microMovementModel.js"></script>
+    <script src="service/micromovement/microMovementRestService.js"></script>
 
     <script src="partial/mobileTerminal/assignVessel/assignVessel.js"></script>
     <script src="partial/mobileTerminal/mobileTerminal.js"></script>
@@ -629,6 +640,17 @@ copy of the GNU General Public License along with the IFDM Suite. If not, see <h
 
     <script src="service/spatial/mapStateService.js"></script>
     <!-- Add New Component JS Above -->
+    <script src="partial/realtime/controls/trackControl.js"></script>
+    <script src="partial/realtime/controls/infoControl.js"></script>
+    <script src="partial/realtime/directive/draggableModal.js"></script>
+
+    <script src="partial/realtime/zoom/zoomService.js"></script>
+    <script src="partial/realtime/zoom/zoomModal.js"></script>
+    <script src="partial/realtime/zoom/zoomController.js"></script>
+    <script src="partial/realtime/popup/popupModal.js"></script>
+    <script src="partial/realtime/popup/popupController.js"></script>
+    <script src="partial/realtime/realtimeMapService.js"></script>
+    <script src="partial/realtime/realtime.js"></script>
 
     <div ui-view name="unionvmsHeader"></div>
 
