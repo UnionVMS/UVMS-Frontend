@@ -16,7 +16,7 @@ angular.module('unionvmsWeb').factory('zoomService', function($localStorage, rea
 
             let imageHolder = document.getElementById('zoomImage' + index);
 
-            let imageData = map.renderer_.canvas_.toDataURL('image/jpeg', 0.1);
+            let imageData = map.B.b.toDataURL('image/jpeg', 0.1);
 
             imageHolder.src = imageData;
             imageHolder.style.width = '128px';

@@ -24,8 +24,8 @@ class AnimatedMarker {
                 return;
             }
 
-            let currentPoint = new Point(this.routeCoords[index]);
-            let feature = new Feature(currentPoint);
+            let currentPoint = new ol.geom.Point(this.routeCoords[index]);
+            let feature = new ol.Feature(currentPoint);
             vectorContext.drawFeature(feature, this.markerStyle);
         }
         this.map.render();  // todo, don't reference this from inside here, trigger an event instead

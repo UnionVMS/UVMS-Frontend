@@ -21,7 +21,6 @@ angular.module('unionvmsWeb').controller('RealtimeCtrl', function(
     defaultMapConfigs,
     projectionService,
     $log,
-    $mdSidenav,
     $localStorage,
     microMovementRestService,
     movementRestService,
