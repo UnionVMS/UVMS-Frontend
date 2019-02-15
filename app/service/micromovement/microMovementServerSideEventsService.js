@@ -19,16 +19,16 @@ angular.module('unionvmsWeb')
                 var eventSourceInitDict = {headers: {'Authorization': $localStorage.token}};
 
                 // subscribe to sse
-                let source = new window.EventSourcePolyfill('movement/rest/sse/subscribe', eventSourceInitDict);
+                var sourcePolyFill = new window.EventSourcePolyfill('http://liaswf05p:28080/unionvms/movement/rest/sse/subscribe', eventSourceInitDict);
                                                             //http://liaswf05p:28080/unionvms
-                source.addEventListener("open",  function(e) {
+                sourcePolyFill.addEventListener("open",  function(e) {
                     // Connection was opened.
                     console.log('connection open');
                 });
-                source.addEventListener("message",  function(e) {
+                sourcePolyFill.addEventListener("message",  function(e) {
                     console.log(e.data);
                 });
-                source.addEventListener("error", function(e) {
+                sourcePolyFill.addEventListener("error", function(e) {
                     if (e.readyState === EventSource.CLOSED) {
                         // Connection was closed.
                         console.error('connection closed due to error.');
@@ -36,7 +36,7 @@ angular.module('unionvmsWeb')
                     console.error('error:', e);
                 });
 
-                source.addEventListener('Movement', function (e) {
+                sourcePolyFill.addEventListener('Movement', function (e) {
                     $rootScope.$broadcast('event:micromovement', e.data);
                 });
 
