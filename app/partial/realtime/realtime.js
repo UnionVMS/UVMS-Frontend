@@ -57,7 +57,7 @@ angular.module('unionvmsWeb').controller('RealtimeCtrl', function(
         renderBuffer: 200,
         id: 'trackLayer'
     });
-    let hoveredTrack = null;
+    var hoveredTrack = null;
 
     var init = function() {
         angular.extend($scope, {
@@ -113,7 +113,7 @@ angular.module('unionvmsWeb').controller('RealtimeCtrl', function(
 
 /*
                     $scope.getPositions().then((positionsByAsset) => {
-                        let i = 0;
+                        var i = 0;
                         // Todo: change to for loop to make faster
                         Object.values(positionsByAsset).forEach(positions => {
                             if (positions.map !== undefined) {
@@ -145,7 +145,7 @@ angular.module('unionvmsWeb').controller('RealtimeCtrl', function(
         });
 
 
-        let clearRealTimeMapDataCache = $interval(function () {
+        var clearRealTimeMapDataCache = $interval(function () {
             clearCacheRealTimeFeatures();
         }, CHECK_TIME_FOR_MOVEMENT_IN_CACHE_INTERVAL_MS);
 
@@ -157,7 +157,7 @@ angular.module('unionvmsWeb').controller('RealtimeCtrl', function(
 
     // Listen to the changes of micromovement changes
     var micromovementEvent = $rootScope.$on('event:micromovement', (e, data) => {
-        let microMovement = JSON.parse(data);
+        var microMovement = JSON.parse(data);
         //processRealtimeData(microMovement.asset, microMovement.guid, microMovement);
 
         drawVesselWithSegments(microMovement.asset, [microMovement], false, true);
@@ -166,7 +166,7 @@ angular.module('unionvmsWeb').controller('RealtimeCtrl', function(
 
     var trackEvent = $rootScope.$on('event:micromovement:track', (e, result) => {
         //drawVesselWithSegments(microMovement.asset, [microMovement], true, false);
-        let color = '#' + intToRGB(hashCode(result.data.position.asset));
+        var color = '#' + intToRGB(hashCode(result.data.position.asset));
         drawTrack(result, color);
     });
 
@@ -184,11 +184,11 @@ angular.module('unionvmsWeb').controller('RealtimeCtrl', function(
     });
 
     $scope.processRealtimeData = function(assetGuid, movementGuid, movementData) {
-        let posExists = false;
-        let assetExists = $scope.doesAssetExistInRealtimeDataCache(assetGuid);
+        var posExists = false;
+        var assetExists = $scope.doesAssetExistInRealtimeDataCache(assetGuid);
 
         if (assetExists) {
-            let values = $localStorage['realtimeMapData'][assetGuid];
+            var values = $localStorage['realtimeMapData'][assetGuid];
             posExists = $scope.doesPositionExistInCache(values, movementGuid);
         }
 
@@ -201,7 +201,7 @@ angular.module('unionvmsWeb').controller('RealtimeCtrl', function(
     };
 
     $scope.doesAssetExistInRealtimeDataCache = function (assetGuid) {
-        let exists = false;
+        var exists = false;
         for (var key in $localStorage['realtimeMapData']) {
             if (key === assetGuid){
                 exists = true;
