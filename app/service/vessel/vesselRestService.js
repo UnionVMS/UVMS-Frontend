@@ -305,6 +305,7 @@ angular.module('unionvmsWeb')
         });
     };
 
+<<<<<<< HEAD
     var getCustomConfigCode = function(code){
         return getCustomCode(code).then(function(codes) {
             let customCodes = {};
@@ -345,6 +346,8 @@ angular.module('unionvmsWeb')
        return deferred.promise;
     };
 
+=======
+>>>>>>> parent of 220a1c03... Added fishing gear codes. WIP
     var getConfiguration = function(){
     	var deferred = $q.defer();
     	deferred.resolve({"UNIT_TONNAGE":["LONDON","OSLO"],"UNIT_LENGTH":["LOA","LBP"],"ASSET_TYPE":["VESSEL"],"LICENSE_TYPE":["MOCK-license-DB"],"GEAR_TYPE":["PELAGIC","DERMERSAL","DEMERSAL_AND_PELAGIC","UNKNOWN"],"FLAG_STATE":["SWE","DNK","NOR"],"SPAN_LENGTH_LOA":["0-11,99","12-14,99","15-17,99","18-23,99","24+"],"SPAN_POWER_MAIN":["0-99","100-199","200-299","300+"]});
@@ -748,7 +751,6 @@ angular.module('unionvmsWeb')
         getConfig : getConfiguration,
         getParameterConfig : getParameterConfiguration,
         getNoteActivityList : getNoteActivityList,
-        getCustomConfigCodes : getCustomConfigCodes,
         cancelPendingRequests : cancelPendingRequests,
         getContactsForAsset : getContactsForAsset,
         getContactInfoListForAssetHistory : getContactInfoListForAssetHistory,

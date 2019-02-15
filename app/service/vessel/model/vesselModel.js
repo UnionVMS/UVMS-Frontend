@@ -35,7 +35,6 @@ angular.module('unionvmsWeb')
         this.lengthType = "LOA";
         this.lengthValue = null;
         this.licenseType = undefined;
-        this.mainFishingGearCode = undefined;
         this.name = undefined;
         this.powerMain = null;
         this.gearFishingType = undefined;
@@ -66,7 +65,6 @@ angular.module('unionvmsWeb')
         vessel.licenseType = data.licenceType;
 
         vessel.gearFishingType = data.gearFishingType;
-        vessel.mainFishingGearCode = data.mainFishingGearCode;
         //Set length value and type
         if(angular.isDefined(data.lengthBetweenPerpendiculars) && data.lengthBetweenPerpendiculars != null){
             vessel.lengthValue = data.lengthBetweenPerpendiculars;
@@ -121,7 +119,6 @@ angular.module('unionvmsWeb')
             lengthBetweenPerpendiculars : lengthBetweenPerpendiculars,
             powerOfMainEngine : this.powerMain,
             gearFishingType : this.gearFishingType,
-            mainFishingGearCode : this.mainFishingGearCode,
             grossTonnage : this.grossTonnage,
             grossTonnageUnit : this.grossTonnageUnit,
             prodOrgCode : this.prodOrgCode,
@@ -163,7 +160,6 @@ angular.module('unionvmsWeb')
         copy.id = this.id;
         copy.historyId = this.historyId;
         copy.gearFishingType = this.gearFishingType;
-        copy.mainFishingGearCode = this.mainFishingGearCode;
         copy.prodOrgCode = this.prodOrgCode;
         copy.prodOrgName = this.prodOrgName;
 

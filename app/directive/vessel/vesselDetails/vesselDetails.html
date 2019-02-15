@@ -46,11 +46,6 @@
                 <dropdown name="gearType" input-field-id="asset-input-gearType" ng-model="vessel.gearFishingType" initialtext="{{ 'vessel.vessel_details_gear_type' | i18n }}" items="vesselGearTypes" ng-disabled="disableForm"></dropdown>
             </div>
 
-            <div class="col-md-3 form-group smallerpadding" ng-class="{'has-error': (submitAttempted || vesselForm.mainFishingGearCode.$dirty) && vesselForm.mainFishingGearCode.$invalid}">
-                <label>{{ 'vessel.vessel_details_main_fishing_gear_code' | i18n }}</label>
-                <dropdown name="mainFishingGearCode" input-field-id="asset-input-mainFishingGearCode" ng-model="vessel.mainFishingGearCode" initialtext="{{ 'vessel.vessel_details_main_fishing_gear_code' | i18n }}" items="vesselMainFishingGearCode" ng-disabled="disableForm"></dropdown>
-            </div>
-
             <div class="col-md-2 form-group smallerpadding" ng-class="{'has-error': (submitAttempted || vesselForm.mmsi.$dirty) && vesselForm.mmsi.$invalid}">
                 <label>{{ 'vessel.vessel_details_MMSI_no' | i18n }}</label>
                 <input type="text" name="mmsi" id="asset-input-mmsi" class="form-control" ng-model="vessel.mmsi" ng-pattern="mmsiRegExp" existing="existingValues.mmsi">

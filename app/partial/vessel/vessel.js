@@ -389,7 +389,6 @@ angular.module('unionvmsWeb').controller('VesselCtrl', function($scope, $log, $s
                         item.cfr,
                         $filter('vesselGearTypeTranslation')(item.gearFishingType),
                         $filter('vesselLicenseTypeTranslation')(item.licenseType),
-                        $filter('vesselFishingGearCodeTranslation')(item.mainFishingGearCode),
                         angular.isDefined(item.lastMovement) ? $filter('timeAgo')(item.lastMovement.time) : '',
                     ];
                     csvObject.push(csvRow);

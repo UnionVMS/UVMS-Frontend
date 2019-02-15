@@ -42,14 +42,6 @@ angular.module('unionvmsWeb')
         $scope.vesselLengthTypes = configurationService.setTextAndCodeForDropDown(configurationService.getValue('VESSEL','UNIT_LENGTH'),'LENGTH','VESSEL', true);
         $scope.vesselGrossTonnageUnits = configurationService.setTextAndCodeForDropDown(configurationService.getValue('VESSEL','UNIT_TONNAGE'), 'TONNAGE','VESSEL', true);
 
-        //$scope.vesselFishingGear = configurationService.getValue('VESSEL_CUSTOM_CODES', 'FISHING_GEAR');
-        //$scope.vesselFishingTypes = configurationService.getValue('VESSEL_CUSTOM_CODES', 'FISHING_TYPE');
-        //$scope.vesselFishingGear = configurationService.getValue('VESSEL_CUSTOM_CODES', 'FISHING_GEAR_TYPE');
-        let vesselFishingGearType= configurationService.getValue('VESSEL_CUSTOM_CODES', 'FISHING_GEAR');
-        $scope.vesselMainFishingGearCode = configurationService.setTextAndCodeForDropDown(vesselFishingGearType , 'MAIN_FISHING_GEAR_CODE', 'VESSEL', true);
-        //$scope.vesselFishingGearGroups = configurationService.getValue('VESSEL_CUSTOM_CODES', 'FISHING_GEAR_GROUP');
-        //$scope.vesselFishingGearMobility = configurationService.getValue('VESSEL_CUSTOM_CODES', 'FISHING_GEAR_MOBILITY');
-
         //Validation
         $scope.ircsValidationMessages = {
             'required' : locale.getString('vessel.vessel_details_terminal_linked_required_validation_message')
