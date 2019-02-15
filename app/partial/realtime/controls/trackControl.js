@@ -12,7 +12,7 @@ ol.control.TrackControl = function(opt_options){
 
         var handleTrackControl = function(e){
             console.log('handle track control', options.layer);
-            this_.getMap().getLayers().forEach(t => {
+            this_.getMap().getLayers().forEach(function(t) {
                     if(t.S.id === options.layer) {
                         t.setVisible(!t.getVisible());
                     }

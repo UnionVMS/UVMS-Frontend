@@ -1040,7 +1040,7 @@ angular.module('unionvmsWeb').factory('realtimeMapService',function(locale, gene
     };
 
     rtMs.updateView = function(center, zoomLevel) {
-        let view = rtMs.map.getView();
+        var view = rtMs.map.getView();
         view.setCenter(center);
         view.setZoom(zoomLevel);
         rtMs.map.setView(view);

@@ -202,7 +202,7 @@ angular.module('unionvmsWeb').controller('RealtimeCtrl', function(
 
     $scope.doesAssetExistInRealtimeDataCache = function (assetGuid) {
         let exists = false;
-        for (let key in $localStorage['realtimeMapData']) {
+        for (var key in $localStorage['realtimeMapData']) {
             if (key === assetGuid){
                 exists = true;
                 break;
@@ -212,7 +212,7 @@ angular.module('unionvmsWeb').controller('RealtimeCtrl', function(
     };
 
     $scope.doesPositionExistInCache = function (values, microMovementGuid) {
-        let exists = false;
+        var exists = false;
         Object.values(values).forEach(v => {
             if (v.guid === microMovementGuid) {
                 exists = true;
@@ -235,7 +235,7 @@ angular.module('unionvmsWeb').controller('RealtimeCtrl', function(
 
     // todo: move to own class
     var createStyle = function(styleType, fillColor, strokeColor) {
-        let style = null;
+        var style = null;
 
         switch (styleType) {
             case 'circle':
@@ -503,9 +503,9 @@ angular.module('unionvmsWeb').controller('RealtimeCtrl', function(
 
 
     var drawVesselWithSegments = function(asset, positions, shouldDrawSegment, checkCache) {
-        let pos = positions[positions.length - 1];
+        var pos = positions[positions.length - 1];
         // draw segments from positions of the boat
-        let color = '#' + intToRGB(hashCode(pos.asset));
+        var color = '#' + intToRGB(hashCode(pos.asset));
         if (shouldDrawSegment) {
             drawSegment(positions, color);
         }
@@ -581,10 +581,10 @@ angular.module('unionvmsWeb').controller('RealtimeCtrl', function(
     var addMarker = function(pos, angle, c, checkCache) {
 
         // use asset id instead of position id for no caching of asset, update if exists instead of adding a new feature to the map.
-        let posArray = [pos.location.latitude, pos.location.longitude];
-        let feature = new ol.Feature(new ol.geom.Point(ol.proj.fromLonLat( [ posArray[1], posArray[0]])));
+        var posArray = [pos.location.latitude, pos.location.longitude];
+        var feature = new ol.Feature(new ol.geom.Point(ol.proj.fromLonLat( [ posArray[1], posArray[0]])));
 
-        let cachedFeature = vectorSource.getFeatureById(pos.asset);
+        var cachedFeature = vectorSource.getFeatureById(pos.asset);
 
         if (cachedFeature !== null && cachedFeature !== undefined) {
             cachedFeature['pos'] = pos;
@@ -593,11 +593,11 @@ angular.module('unionvmsWeb').controller('RealtimeCtrl', function(
             cachedFeature.getStyle().getImage().setRotation(angle);
             // update tracks if we have any for this asset
 
-            let id = 'trackId_' + pos.asset;
-            let cachedFeature2 = trackSource.getFeatureById(id);
+            var id = 'trackId_' + pos.asset;
+            var cachedFeature2 = trackSource.getFeatureById(id);
             if (cachedFeature2 !== null && cachedFeature2 !== undefined) {
                 microMovementRestService.getTrackByMovementId(pos.guid).then((trackData) => {
-                        let data = {
+                        var data = {
                             data: pos,
                             wkt: trackData.wkt
                         };
@@ -611,7 +611,7 @@ angular.module('unionvmsWeb').controller('RealtimeCtrl', function(
             // Add text to style
             // Don't add text for now. takes too much space
             //style.setText(getTextStyle(pos.asset, 'black', 'white', 2, 0, -24));
-            let style = createStyle('triangle', c, 'white');
+            var style = createStyle('triangle', c, 'white');
             feature['pos'] = pos;
             feature.setStyle(style);
             feature.getStyle().getImage().setOpacity(1);
@@ -624,23 +624,23 @@ angular.module('unionvmsWeb').controller('RealtimeCtrl', function(
         vectorLayer.getSource().refresh();
 
         if (pos.flagstate !== 'UNK') {
-            let flagFeature = new ol.Feature(new ol.geom.Point(ol.proj.fromLonLat( [ posArray[1], posArray[0]])));
-            let cachedFlagFeature = infoSource.getFeatureById('flag_' + pos.asset);
+            var flagFeature = new ol.Feature(new ol.geom.Point(ol.proj.fromLonLat( [ posArray[1], posArray[0]])));
+            var cachedFlagFeature = infoSource.getFeatureById('flag_' + pos.asset);
 
             if (cachedFlagFeature !== null && cachedFeature !== undefined) {
                 cachedFlagFeature.setGeometry(flagFeature.getGeometry());
             }
             else {
                 // add flag info
-                let flagState = getFlagStateImageName(pos.flagstate);
-                let flagStyle = new ol.style.Style({
+                var flagState = getFlagStateImageName(pos.flagstate);
+                var flagStyle = new ol.style.Style({
                     image: new ol.style.Icon({
                         src: './assets/flags/mini/' + flagState + '.png',
                         anchor: [0.5, 2.4],
                         rotateWithView: true
                     })
                 });
-                let markerStyle = new ol.style.Style({
+                var markerStyle = new ol.style.Style({
                     image: new ol.style.Icon({
                         src: './assets/flags/mini/icon.png',
                         anchor: [0.5, 1.1],
@@ -678,7 +678,7 @@ angular.module('unionvmsWeb').controller('RealtimeCtrl', function(
     };
 
     var doesAssetExistinCache = function (assetId) {
-        for (let i = 0; i < $localStorage['realtimeDataAssets'].length; i++) {
+        for (var i = 0; i < $localStorage['realtimeDataAssets'].length; i++) {
             if ($localStorage['realtimeDataAssets'][i] === assetId) {
                 return true;
             }
@@ -687,10 +687,10 @@ angular.module('unionvmsWeb').controller('RealtimeCtrl', function(
     };
 
     var setCachedFatureProperties = function(assetId, ignoreId) {
-        for (let i = 0; i < $localStorage['realtimeMapDataFeatures'].length; i++) {
-            let id = $localStorage['realtimeMapDataFeatures'][i].guid;
+        for (var i = 0; i < $localStorage['realtimeMapDataFeatures'].length; i++) {
+            var id = $localStorage['realtimeMapDataFeatures'][i].guid;
             if (id !== ignoreId) {
-                let feature = vectorSource.getFeatureById(id);
+                var feature = vectorSource.getFeatureById(id);
                 if (feature !== null && feature !== undefined && feature['assetId'] === assetId) {
                     feature.getStyle().getImage().setOpacity(0.25);
                     feature.getStyle().setText(null);
@@ -702,8 +702,8 @@ angular.module('unionvmsWeb').controller('RealtimeCtrl', function(
 
     var drawCachedRealtimeFeatures = function() {
 
-        for (let i = 0; i < $localStorage['realtimeMapDataFeatures'].length; i++) {
-            let pos = $localStorage['realtimeMapDataFeatures'][i];
+        for (var i = 0; i < $localStorage['realtimeMapDataFeatures'].length; i++) {
+            var pos = $localStorage['realtimeMapDataFeatures'][i];
             if (pos !== null) {
                 drawVesselWithSegments(pos.asset, [pos], false, true);
             }
@@ -711,16 +711,16 @@ angular.module('unionvmsWeb').controller('RealtimeCtrl', function(
     };
 
     var clearCacheRealTimeFeatures = function() {
-        let cacheThresholdTime = Date.now() - MAX_TIME_FOR_MOVEMENT_IN_CACHE_MS;
-        let arrayLength = $localStorage['realtimeMapDataFeatures'].length;
+        var cacheThresholdTime = Date.now() - MAX_TIME_FOR_MOVEMENT_IN_CACHE_MS;
+        var arrayLength = $localStorage['realtimeMapDataFeatures'].length;
         if (arrayLength >= MAX_MOVEMENTS_IN_CACHE) {
             $localStorage['realtimeMapDataFeatures'].slice(arrayLength - MAX_MOVEMENTS_IN_CACHE);
         }
 
-        for (let i = $localStorage['realtimeMapDataFeatures'].length - 1; i >= 0; i--) {
-            let pos = $localStorage['realtimeMapDataFeatures'][i];
+        for (var i = $localStorage['realtimeMapDataFeatures'].length - 1; i >= 0; i--) {
+            var pos = $localStorage['realtimeMapDataFeatures'][i];
             if (pos !== null) {
-                let time = new Date(pos.timestamp);
+                var time = new Date(pos.timestamp);
                 if (cacheThresholdTime >= time) {
                     console.log('removing item from cache:', $localStorage['realtimeMapDataFeatures'][i]);
                     $localStorage['realtimeMapDataFeatures'].splice(i, 1);
@@ -730,7 +730,7 @@ angular.module('unionvmsWeb').controller('RealtimeCtrl', function(
     };
 
     var doesPositionExistInFeatureCache = function(guid) {
-        for (let i = 0; i < $localStorage['realtimeMapDataFeatures'].length; i++) {
+        for (var i = 0; i < $localStorage['realtimeMapDataFeatures'].length; i++) {
             if ($localStorage['realtimeMapDataFeatures'][i].guid === guid) {
                 return true;
             }
@@ -744,7 +744,7 @@ angular.module('unionvmsWeb').controller('RealtimeCtrl', function(
 
 
     $scope.onMarkerClick = function(feature) {
-        let assetId = feature.getId() ? feature.getId() : feature['assetId'] ;
+        var assetId = feature.getId() ? feature.getId() : feature['assetId'] ;
         if (assetId !== undefined) {
             $scope.getAssetInfo(assetId).then((assetInfo) => {
                 var data = {
@@ -765,8 +765,8 @@ angular.module('unionvmsWeb').controller('RealtimeCtrl', function(
 
 
     $scope.highlightTrack = function(trackId) {
-        let cachedFeature = vectorSource.getFeatureById(trackId);
-        let highlightTrack = createStyle('highlightTrack', 'black', 'yellow');
+        var cachedFeature = vectorSource.getFeatureById(trackId);
+        var highlightTrack = createStyle('highlightTrack', 'black', 'yellow');
 
         // deselect previously selected track
         if (hoveredTrack != null && hoveredTrack.getStyle().length > 1) {
@@ -782,8 +782,8 @@ angular.module('unionvmsWeb').controller('RealtimeCtrl', function(
 
         /*
         if (cachedFeature !== undefined) {
-            let highlightTrack = createStyle('highlightTrack', 'black', 'yellow');
-            let track2 = cachedFeature.getStyle()[1];
+            var highlightTrack = createStyle('highlightTrack', 'black', 'yellow');
+            var track2 = cachedFeature.getStyle()[1];
             cachedFeature.setStyle([highlightTrack, track2])
             vectorLayer.getSource().refresh();
         }
@@ -791,12 +791,12 @@ angular.module('unionvmsWeb').controller('RealtimeCtrl', function(
     };
 
     $scope.getPositions = function() {
-        let promise = new Promise(function (resolve, reject) {
-            let date = new Date(Date.now() - 86400000).getTime();    // get the positions of the last 30 minutes
-            let dateString = dateTimeService.formatUTCDateWithTimezone(dateTimeService.toUTC(date));
+        var promise = new Promise(function (resolve, reject) {
+            var date = new Date(Date.now() - 86400000).getTime();    // get the positions of the last 30 minutes
+            var dateString = dateTimeService.formatUTCDateWithTimezone(dateTimeService.toUTC(date));
 
 
-            //let hasItems = angular.isDefined($localStorage['realtimeMapDataHistory']) && Object.keys($localStorage['realtimeMapDataHistory']).length > 0;
+            //var hasItems = angular.isDefined($localStorage['realtimeMapDataHistory']) && Object.keys($localStorage['realtimeMapDataHistory']).length > 0;
             //if (angular.isDefined($localStorage['realtimeMapDataHistory']) && hasItems) {
             //    resolve($localStorage['realtimeMapDataHistory']);
             //}
@@ -805,7 +805,7 @@ angular.module('unionvmsWeb').controller('RealtimeCtrl', function(
 
                     Object.entries(positions).forEach(p => {
 
-                        let assetGuid = p[0];
+                        var assetGuid = p[0];
                         if (assetGuid !== '$promise' && assetGuid !== '$resolved') {
 
                             Object.values(p[1]).forEach(pos => {
@@ -832,8 +832,8 @@ angular.module('unionvmsWeb').controller('RealtimeCtrl', function(
      * Gets the movement based on the position guid
      */
     $scope.getPosition = function(positionGuid) {
-        let promise = new Promise(function (resolve, reject) {
-            let movementInfo = null;
+        var promise = new Promise(function (resolve, reject) {
+            var movementInfo = null;
             if (angular.isDefined($localStorage['realtimeDataMovementsInfo'] && $localStorage['realtimeDataMovementsInfo'].length > 0)) {
                 $localStorage['realtimeDataMovementsInfo'].filter(movement => {
                     if (movement[0] === positionGuid) {
@@ -861,9 +861,9 @@ angular.module('unionvmsWeb').controller('RealtimeCtrl', function(
 
 
     $scope.getAssetInfo = function(assetId) {
-        let promise = new Promise(function (resolve, reject) {
+        var promise = new Promise(function (resolve, reject) {
 
-            let assetInfo = null;
+            var assetInfo = null;
 
             if ($localStorage['realtimeDataAssets'].length > 0) {
                 $localStorage['realtimeDataAssets'].filter(asset => {
@@ -891,8 +891,8 @@ angular.module('unionvmsWeb').controller('RealtimeCtrl', function(
     };
 
     $scope.getSegmentByMovementGuid = function(guid) {
-        let promise = new Promise(function (resolve, reject) {
-            let segmentInfo = null;
+        var promise = new Promise(function (resolve, reject) {
+            var segmentInfo = null;
             if (angular.isDefined($localStorage['realtimeDataSegmentInfo'] && $localStorage['realtimeDataSegmentInfo'].length > 0)) {
                 $localStorage['realtimeDataSegmentInfo'].filter(segment => {
                     if (segment[0] === guid) {
@@ -919,8 +919,8 @@ angular.module('unionvmsWeb').controller('RealtimeCtrl', function(
     };
 
     $scope.getTrackByMovementId = function(guid) {
-        let promise = new Promise(function (resolve, reject) {
-            let trackInfo = null;
+        var promise = new Promise(function (resolve, reject) {
+            var trackInfo = null;
             if (angular.isDefined($localStorage['realtimeDataTrackInfo'] && $localStorage['realtimeDataTrackInfo'].length > 0)) {
                 $localStorage['realtimeDataTrackInfo'].filter(track => {
                     if (track[0] === guid) {
@@ -994,23 +994,23 @@ angular.module('unionvmsWeb').controller('RealtimeCtrl', function(
         if (angular.isUndefined($localStorage['realtimeMapDataFeatures'])) {
             return;
         }
-        for (let i = 0; i < $localStorage['realtimeMapDataFeatures'].length; i++) {
-            let feature = $localStorage['realtimeMapDataFeatures'];
+        for (var i = 0; i < $localStorage['realtimeMapDataFeatures'].length; i++) {
+            var feature = $localStorage['realtimeMapDataFeatures'];
 
         }
     }
 
     var drawFuturePosition = function(data) {
-        let speed = data.speed * 1.852; // km
-        let futureFeatures = [{}, {}];
+        var speed = data.speed * 1.852; // km
+        var futureFeatures = [{}, {}];
 
 
-        for (let i = 0; i < 2; i++) {
+        for (var i = 0; i < 2; i++) {
 
-            let futurePosition = realtimeMapService.destinationPoint(data.lat, data.lon, speed * ((i+1) * 500), data.bearing);
-            let futureFeature = new ol.Feature(new ol.geom.Point(ol.proj.fromLonLat( [futurePosition[1], futurePosition[0] ])));
-            let id = 'futurePos_' + i + '_' + data.assetId;
-            let cachedFeature = trackSource.getFeatureById(id);
+            var futurePosition = realtimeMapService.destinationPoint(data.lat, data.lon, speed * ((i+1) * 500), data.bearing);
+            var futureFeature = new ol.Feature(new ol.geom.Point(ol.proj.fromLonLat( [futurePosition[1], futurePosition[0] ])));
+            var id = 'futurePos_' + i + '_' + data.assetId;
+            var cachedFeature = trackSource.getFeatureById(id);
             if (cachedFeature == null) {
                 var futureStyle = createStyle('arrow', data.color, 'white');
                 futureFeature.setStyle(futureStyle);
@@ -1026,7 +1026,7 @@ angular.module('unionvmsWeb').controller('RealtimeCtrl', function(
 
         // draw an arrow in the direction
         // get the angle between current position and future position
-        let length = data.currentFeature.getGeometry().getCoordinates().length;
+        var length = data.currentFeature.getGeometry().getCoordinates().length;
 
         var dx = futureFeatures[1].getGeometry().getCoordinates()[1] - futureFeatures[0].getGeometry().getCoordinates()[1];
         var dy = futureFeatures[1].getGeometry().getCoordinates()[0] - futureFeatures[0].getGeometry().getCoordinates()[0];
@@ -1040,8 +1040,8 @@ angular.module('unionvmsWeb').controller('RealtimeCtrl', function(
     };
 
     var drawTrack = function(data, color) {
-        let id = 'trackId_' + data.data.position.asset;
-        let cachedFeature = trackSource.getFeatureById(id);
+        var id = 'trackId_' + data.data.position.asset;
+        var cachedFeature = trackSource.getFeatureById(id);
         if (cachedFeature == null) {
             removeFeature(id, trackLayer);
         }
@@ -1054,15 +1054,15 @@ angular.module('unionvmsWeb').controller('RealtimeCtrl', function(
             featureProjection: 'EPSG:3857'
         });
         feature.setId(id);
-        let track1 = createStyle('track1', 'black', color);
+        var track1 = createStyle('track1', 'black', color);
         feature.setStyle([track1]);
         trackSource.addFeature(feature);
 
         trackLayer.getSource().refresh();
 
 
-        let speed = data.data.position.speed;
-        let bearing = data.data.position.heading;
+        var speed = data.data.position.speed;
+        var bearing = data.data.position.heading;
 
         drawFuturePosition({
             lat : data.data.position.location.latitude,
@@ -1077,7 +1077,7 @@ angular.module('unionvmsWeb').controller('RealtimeCtrl', function(
     };
 
     var removeFeature = function(trackId, layer) {
-        let cachedFeature = vectorSource.getFeatureById(trackId);
+        var cachedFeature = vectorSource.getFeatureById(trackId);
         if (cachedFeature != null && cachedFeature !== undefined) {
             layer.getSource().removeFeature(cachedFeature);
             layer.getSource().refresh();

@@ -11,12 +11,12 @@ angular.module('unionvmsWeb').factory('zoomService', function($localStorage, rea
                 zoomLevel: realtimeMapService.getZoomLevel()
             };
 
-            let map = realtimeMapService.getMap();
+            var map = realtimeMapService.getMap();
 
 
-            let imageHolder = document.getElementById('zoomImage' + index);
+            var imageHolder = document.getElementById('zoomImage' + index);
 
-            let imageData = map.B.b.toDataURL('image/jpeg', 0.1);
+            var imageData = map.B.b.toDataURL('image/jpeg', 0.1);
 
             imageHolder.src = imageData;
             imageHolder.style.width = '128px';
@@ -31,7 +31,7 @@ angular.module('unionvmsWeb').factory('zoomService', function($localStorage, rea
 
         },
         loadZoomLevel: function (index) {
-            let options = $localStorage['mapZoomLevel'][index];
+            var options = $localStorage['mapZoomLevel'][index];
             realtimeMapService.updateView(
                 options.center,
                 options.zoomLevel
@@ -43,10 +43,10 @@ angular.module('unionvmsWeb').factory('zoomService', function($localStorage, rea
                 console.log('no zoom level stored in cache.');
                 return;
             }
-            for (let i = 0 ; i < $localStorage['mapZoomLevel'].length; i++) {
-                let zoomLevel = $localStorage['mapZoomLevel'][i];
+            for (var i = 0 ; i < $localStorage['mapZoomLevel'].length; i++) {
+                var zoomLevel = $localStorage['mapZoomLevel'][i];
                 if (zoomLevel.imageData) {
-                    let imageHolder = document.getElementById('zoomImage' + i);
+                    var imageHolder = document.getElementById('zoomImage' + i);
                     imageHolder.src = zoomLevel.imageData;
                     imageHolder.style.width = '128px';
                     imageHolder.style.height = '128px';

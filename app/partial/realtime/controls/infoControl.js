@@ -12,7 +12,7 @@ ol.control.InfoControl = function(opt_options){
 
         var handleInfoControl = function(e){
             console.log('handle info control', options.layer);
-            this_.getMap().getLayers().forEach(t => {
+            this_.getMap().getLayers().forEach(function(t) {
                     if(t.S.id === options.layer) {
                         t.setVisible(!t.getVisible());
                     }
