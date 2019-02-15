@@ -199,7 +199,7 @@ unionvmsWebApp.config(function($stateProvider, $compileProvider, tmhDynamicLocal
             },
             resolve: {
                 config : function(initService){
-                    return initService.loadConfigFor(["MOVEMENT","VESSEL","VESSEL_PARAMETERS","MOVEMENT_SOURCE_TYPES","MOVEMENT_AREAS"]);
+                    return initService.loadConfigFor(["MOVEMENT","VESSEL","VESSEL_PARAMETERS","MOVEMENT_SOURCE_TYPES"]);
                 }
             },
             data: {
@@ -1006,7 +1006,7 @@ var restApiURLS = [
     'spatial/rest/',
     'activity/rest/',
     'mdr/rest/',
-    '/mapfish-print',
+    'mapfish-print',
     'usm-authentication/rest', 'usm-authorisation/rest', 'usm-administration/rest',
     'sales/rest/',
     'subscription/rest'

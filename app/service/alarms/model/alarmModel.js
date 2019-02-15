@@ -12,60 +12,36 @@ copy of the GNU General Public License along with the IFDM Suite. If not, see <h
 angular.module('unionvmsWeb').factory('Alarm', function(Movement) {
 
     function Alarm(){
-        this.guid = undefined;
+        this.id = undefined;
         this.status = undefined;
-        this.openDate = undefined;
+        this.createdDate = undefined;
         this.updated = undefined;
         this.updatedBy = undefined;
-        this.alarmItems = [];
-        this.movement = undefined;
-        this.asset = {
-            type : undefined,
-            ids : {}
-        };
-        this.vesselGuid = undefined;
-        this.recipient = undefined;
-        this.vessel = undefined;
-        this.placeholderVessel = undefined;
+        this.alarmItemList = [];
+        this.incomingMovement = undefined;
+        this.assetGuid = undefined;
+        this.pluginType = undefined;
     }
 
     Alarm.fromDTO = function(dto){
         var alarm = new Alarm();
-        alarm.guid = dto.guid;
+        alarm.id = dto.id;
         alarm.status = dto.status;
-        alarm.openDate = dto.openDate;
+        alarm.createdDate = dto.createdDate;
         alarm.updated = dto.updated;
         alarm.updatedBy = dto.updatedBy;
-        alarm.vesselGuid = dto.assetGuid;
-        alarm.recipient = dto.recipient;
+        alarm.assetGuid = dto.assetGuid;
+        alarm.pluginType = dto.pluginType;
+        alarm.incomingMovement = dto.incomingMovement;
 
         //AlarmItem
         var i;
-        if (angular.isDefined(dto.alarmItem)) {
-            for (i = 0; i < dto.alarmItem.length; i++) {
-                alarm.alarmItems.push({guid: dto.alarmItem[i].guid, ruleName: dto.alarmItem[i].ruleName});
+        if (angular.isDefined(dto.alarmItemList)) {
+            for (i = 0; i < dto.alarmItemList.length; i++) {
+                alarm.alarmItemList.push({guid: dto.alarmItemList[i].id, ruleName: dto.alarmItemList[i].ruleName});
             }
         }
-
-        //rawMovement
-        var rawMovement = dto.rawMovement;
-        if(angular.isDefined(rawMovement)){
-            alarm.movement = Movement.fromJson(rawMovement);
-            alarm.movement.externalMarking = rawMovement.externalMarking;
-            alarm.movement.flagState = rawMovement.flagState;
-            alarm.movement.assetName = rawMovement.assetName;
-
-            //AssetID
-            var assetId = rawMovement.assetId;
-            if(angular.isDefined(assetId) && assetId != null){
-                alarm.asset.type = assetId.assetType;
-
-                for (i = 0; i < assetId.assetIdList.length; i++) {
-                    alarm.asset.ids[assetId.assetIdList[i].idType.toUpperCase()] = assetId.assetIdList[i].value;
-                }
-            }
-        }
-
+        
         return alarm;
     };
 
@@ -116,50 +92,38 @@ angular.module('unionvmsWeb').factory('Alarm', function(Movement) {
     //Used for updating status (accepting/rejecting)
     Alarm.prototype.DTO = function(){
         var dto = {
-            guid : this.guid,
+            id : this.id,
             status: this.status,
         };
         dto.updatedBy = this.updatedBy;
 
-        //Hide for now
-        /*if(angular.isDefined(this.placeholderVessel)){
-            dto.linkedVesselGuid = this.placeholderVessel.getGuid();
-        }*/
         return dto;
     };
 
     Alarm.prototype.copy = function() {
         var copy = new Alarm();
-        copy.guid = this.guid;
+        copy.id = this.id;
         copy.status = this.status;
-        copy.openDate = this.openDate;
+        copy.createdDate = this.createdDate;
         copy.updated = this.updated;
         copy.updatedBy = this.updatedBy;
-        for(var i=0; i < this.alarmItems.length; i++){
-            copy.alarmItems.push(_.clone(this.alarmItems[i]));
+        for(var i=0; i < this.alarmItemList.length; i++){
+            copy.alarmItemList.push(_.clone(this.alarmItemList[i]));
         }
-        if(angular.isDefined(this.movement)){
-            copy.movement = this.movement.copy();
-            copy.movement.flagState = this.movement.flagState;
-            copy.movement.externalMarking = this.movement.externalMarking;
-            copy.movement.assetName = this.movement.assetName;
+        if(angular.isDefined(this.incomingMovement)){
+            copy.incomingMovement = _.clone(this.incomingMovement);
         }
         copy.asset = _.clone(this.asset);
-        copy.vesselGuid = this.vesselGuid;
-        copy.recipient = this.recipient;
-        if(angular.isDefined(this.vessel)){
-            copy.vessel = this.vessel.copy();
-        }
-        if(angular.isDefined(this.placeholderVessel)){
-            copy.placeholderVessel = this.placeholderVessel.copy();
-        }
+        copy.assetGuid = this.assetGuid;
+        copy.pluginType = this.pluginType;
+
         return copy;
     };
 
     //Check if the Alarm is equal another Alarm
     //Equal means same guid
     Alarm.prototype.equals = function(item) {
-        return this.guid === item.guid;
+        return this.id === item.id;
     };
 
     return Alarm;

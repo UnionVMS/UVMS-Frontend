@@ -50,9 +50,6 @@ angular.module('unionvmsWeb')
         },
         getConfigForSourceTypes : function(){
             return $resource('movement/rest/config/movementSourceTypes');
-        },
-        areas: function() {
-            return $resource('movement/rest/areas');
         }
     };
 })
@@ -303,10 +300,6 @@ angular.module('unionvmsWeb')
         return getConfigFromResource(movementRestFactory.getConfigForSourceTypes());
     };
 
-    var getAreas = function() {
-        return getConfigFromResource(movementRestFactory.areas());
-    };
-
     return {
         getMovementList : getMovementList,
         getMinimalMovementList : getMinimalMovementList,
@@ -320,7 +313,6 @@ angular.module('unionvmsWeb')
         deleteSavedSearch : deleteSavedSearch,
         getConfig : getConfiguration,
         getConfigForSourceTypes : getConfigForSourceTypes,
-        getAreas: getAreas
     };
 
 });
