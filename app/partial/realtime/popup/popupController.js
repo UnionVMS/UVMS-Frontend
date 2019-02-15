@@ -9,7 +9,7 @@ angular.module('unionvmsWeb')
     $scope.showTrack = function() {
         var positionId = $scope.data.position.guid;
         console.log('show track for :', positionId);
-        microMovementRestService.getTrackByMovementId(positionId).then((trackData) => {
+        microMovementRestService.getTrackByMovementId(positionId).then(function(trackData) {
                 var data = {
                     data: $scope.data,
                     wkt: trackData.wkt

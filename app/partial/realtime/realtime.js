@@ -156,7 +156,7 @@ angular.module('unionvmsWeb').controller('RealtimeCtrl', function(
 
 
     // Listen to the changes of micromovement changes
-    var micromovementEvent = $rootScope.$on('event:micromovement', (e, data) => {
+    var micromovementEvent = $rootScope.$on('event:micromovement', function(e, data){
         var microMovement = JSON.parse(data);
         //processRealtimeData(microMovement.asset, microMovement.guid, microMovement);
 
@@ -164,14 +164,14 @@ angular.module('unionvmsWeb').controller('RealtimeCtrl', function(
     });
 
 
-    var trackEvent = $rootScope.$on('event:micromovement:track', (e, result) => {
+    var trackEvent = $rootScope.$on('event:micromovement:track', function(e, result) {
         //drawVesselWithSegments(microMovement.asset, [microMovement], true, false);
         var color = '#' + intToRGB(hashCode(result.data.position.asset));
         drawTrack(result, color);
     });
 
 
-    var removeTrackEvent = $rootScope.$on('event:track:remove', (e, result) => {
+    var removeTrackEvent = $rootScope.$on('event:track:remove', function(e, result) {
         removeFeature('trackId_' + result, trackLayer);
         removeFeature('futurePos_0_' + result, trackLayer);
         removeFeature('futurePos_1_' + result, trackLayer);
@@ -213,7 +213,7 @@ angular.module('unionvmsWeb').controller('RealtimeCtrl', function(
 
     $scope.doesPositionExistInCache = function (values, microMovementGuid) {
         var exists = false;
-        Object.values(values).forEach(v => {
+        Object.values(values).forEach(function(v) {
             if (v.guid === microMovementGuid) {
                 exists = true;
                 return;
@@ -523,7 +523,7 @@ angular.module('unionvmsWeb').controller('RealtimeCtrl', function(
         try {
 
             var count = 0;
-            positions.map(p => {
+            positions.map(function(p) {
                 feature = new ol.Feature(new ol.geom.Point(ol.proj.fromLonLat( [ p.location.longitude, p.location.latitude])));
 
                 var style = createStyle('circle', c, 'white');
@@ -540,7 +540,7 @@ angular.module('unionvmsWeb').controller('RealtimeCtrl', function(
 
 
             // Add lines
-        Object.entries(positionData).forEach(p => {
+        Object.entries(positionData).forEach(function(p) {
 
             var geom = new ol.geom.MultiLineString([p[1]]);
             geom.transform('EPSG:4326', 'EPSG:3857');
@@ -596,7 +596,7 @@ angular.module('unionvmsWeb').controller('RealtimeCtrl', function(
             var id = 'trackId_' + pos.asset;
             var cachedFeature2 = trackSource.getFeatureById(id);
             if (cachedFeature2 !== null && cachedFeature2 !== undefined) {
-                microMovementRestService.getTrackByMovementId(pos.guid).then((trackData) => {
+                microMovementRestService.getTrackByMovementId(pos.guid).then(function(trackData) {
                         var data = {
                             data: pos,
                             wkt: trackData.wkt
@@ -746,7 +746,7 @@ angular.module('unionvmsWeb').controller('RealtimeCtrl', function(
     $scope.onMarkerClick = function(feature) {
         var assetId = feature.getId() ? feature.getId() : feature['assetId'] ;
         if (assetId !== undefined) {
-            $scope.getAssetInfo(assetId).then((assetInfo) => {
+            $scope.getAssetInfo(assetId).then(function(assetInfo){
                 var data = {
                     asset : assetInfo,
                     position : feature['pos']
@@ -801,14 +801,14 @@ angular.module('unionvmsWeb').controller('RealtimeCtrl', function(
             //    resolve($localStorage['realtimeMapDataHistory']);
             //}
             //else {
-                microMovementRestService.getMovementList(dateString).then((positions) => {
+                microMovementRestService.getMovementList(dateString).then(function(positions) {
 
-                    Object.entries(positions).forEach(p => {
+                    Object.entries(positions).forEach(function(p) {
 
                         var assetGuid = p[0];
                         if (assetGuid !== '$promise' && assetGuid !== '$resolved') {
 
-                            Object.values(p[1]).forEach(pos => {
+                            Object.values(p[1]).forEach(function(pos) {
                                 $scope.processRealtimeData(assetGuid, pos.guid, pos);
                             });
                         }
@@ -816,7 +816,7 @@ angular.module('unionvmsWeb').controller('RealtimeCtrl', function(
                     });
 
                     resolve($localStorage['realtimeMapData']);
-                }).catch(error => {
+                }).catch(function(error) {
                     reject(error);
                 });
             //}
@@ -835,7 +835,7 @@ angular.module('unionvmsWeb').controller('RealtimeCtrl', function(
         var promise = new Promise(function (resolve, reject) {
             var movementInfo = null;
             if (angular.isDefined($localStorage['realtimeDataMovementsInfo'] && $localStorage['realtimeDataMovementsInfo'].length > 0)) {
-                $localStorage['realtimeDataMovementsInfo'].filter(movement => {
+                $localStorage['realtimeDataMovementsInfo'].filter(function(movement) {
                     if (movement[0] === positionGuid) {
                         movementInfo = movement[1];
                         resolve(movementInfo);
@@ -866,7 +866,7 @@ angular.module('unionvmsWeb').controller('RealtimeCtrl', function(
             var assetInfo = null;
 
             if ($localStorage['realtimeDataAssets'].length > 0) {
-                $localStorage['realtimeDataAssets'].filter(asset => {
+                $localStorage['realtimeDataAssets'].filter(function(asset) {
                     if (asset[0] === assetId) {
                         assetInfo = asset[1];
                         resolve(assetInfo);
@@ -894,7 +894,7 @@ angular.module('unionvmsWeb').controller('RealtimeCtrl', function(
         var promise = new Promise(function (resolve, reject) {
             var segmentInfo = null;
             if (angular.isDefined($localStorage['realtimeDataSegmentInfo'] && $localStorage['realtimeDataSegmentInfo'].length > 0)) {
-                $localStorage['realtimeDataSegmentInfo'].filter(segment => {
+                $localStorage['realtimeDataSegmentInfo'].filter(function(segment) {
                     if (segment[0] === guid) {
                         segmentInfo = segment[1];
                         resolve(segmentInfo);
@@ -922,7 +922,7 @@ angular.module('unionvmsWeb').controller('RealtimeCtrl', function(
         var promise = new Promise(function (resolve, reject) {
             var trackInfo = null;
             if (angular.isDefined($localStorage['realtimeDataTrackInfo'] && $localStorage['realtimeDataTrackInfo'].length > 0)) {
-                $localStorage['realtimeDataTrackInfo'].filter(track => {
+                $localStorage['realtimeDataTrackInfo'].filter(function(track) {
                     if (track[0] === guid) {
                         trackInfo = track[1];
                         resolve(trackInfo);
