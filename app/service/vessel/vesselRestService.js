@@ -305,49 +305,6 @@ angular.module('unionvmsWeb')
         });
     };
 
-<<<<<<< HEAD
-    var getCustomConfigCode = function(code){
-        return getCustomCode(code).then(function(codes) {
-            let customCodes = {};
-            customCodes[code] = [];
-        	for (let i = 0; i < codes.length; i ++) {
-        		customCodes[code].push(codes[i].primaryKey.code);
-            }
-        	return customCodes;
-        }, function(error) {
-        	$q.reject(error);
-        });
-    };
-
-    let getCustomConfigCodes = function(){
-        let deferred = $q.defer();
-
-        getCustomFishingCodes().then(b => {
-            Promise.all(b).then(c => {
-                let mappedGears = {};
-                c.map(a => {
-                    let prop = Object.getOwnPropertyNames(a);
-                    mappedGears[prop] = a[prop];
-                });
-                deferred.resolve(mappedGears);
-            });
-        });
-
-        return deferred.promise;
-
-    };
-
-    var getCustomFishingCodes = function() {
-        var deferred = $q.defer();
-        deferred.resolve(['FISHING_GEAR', 'FISHING_TYPE', 'FISHING_GEAR_TYPE', 'FISHING_GEAR_GROUP', 'FISHING_GEAR_MOBILITY'].map(function(customCode) {
-           return getCustomConfigCode(customCode);
-       }));
-
-       return deferred.promise;
-    };
-
-=======
->>>>>>> parent of 220a1c03... Added fishing gear codes. WIP
     var getConfiguration = function(){
     	var deferred = $q.defer();
     	deferred.resolve({"UNIT_TONNAGE":["LONDON","OSLO"],"UNIT_LENGTH":["LOA","LBP"],"ASSET_TYPE":["VESSEL"],"LICENSE_TYPE":["MOCK-license-DB"],"GEAR_TYPE":["PELAGIC","DERMERSAL","DEMERSAL_AND_PELAGIC","UNKNOWN"],"FLAG_STATE":["SWE","DNK","NOR"],"SPAN_LENGTH_LOA":["0-11,99","12-14,99","15-17,99","18-23,99","24+"],"SPAN_POWER_MAIN":["0-99","100-199","200-299","300+"]});
