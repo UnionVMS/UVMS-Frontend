@@ -19,7 +19,7 @@ angular.module('unionvmsWeb')
                 var eventSourceInitDict = {headers: {'Authorization': $localStorage.token}};
 
                 // subscribe to sse
-                var sourcePolyFill = new window.EventSourcePolyfill('http://liaswf05p:28080/unionvms/movement/rest/sse/subscribe', eventSourceInitDict);
+                var sourcePolyFill = new window.EventSourcePolyfill('movement/rest/sse/subscribe', eventSourceInitDict);
                                                             //http://liaswf05p:28080/unionvms
                 sourcePolyFill.addEventListener("open",  function(e) {
                     // Connection was opened.
