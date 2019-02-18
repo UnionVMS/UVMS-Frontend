@@ -1077,7 +1077,7 @@ angular.module('unionvmsWeb').controller('RealtimeCtrl', function(
     };
 
     var removeFeature = function(trackId, layer) {
-        var cachedFeature = vectorSource.getFeatureById(trackId);
+        var cachedFeature = layer.getSource().getFeatureById(trackId);
         if (cachedFeature != null && cachedFeature !== undefined) {
             layer.getSource().removeFeature(cachedFeature);
             layer.getSource().refresh();
