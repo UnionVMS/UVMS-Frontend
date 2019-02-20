@@ -379,14 +379,30 @@ module.exports = function (grunt) {
       options: {
         plugins: [
                 'karma-jasmine',
-                'karma-phantomjs-launcher',
+                'karma-chrome-launcher',
                 'karma-junit-reporter',
                 'karma-coverage',
                 'karma-mocha-reporter'
         ],
         frameworks: ['jasmine'],
         //browsers: ['PhantomJS', 'Chrome'],
-        browsers: ['PhantomJS'],
+        browsers: ['headless_chrome'],
+        customLaunchers: {
+            headless_chrome: {
+                base: 'Chrome',
+                flags: [
+                    '--headless',
+                    '--disable-gpu',
+                    // Without a remote debugging port, Google Chrome exits immediately.
+                    '--remote-debugging-port=9222',
+                    '--no-sandbox',
+                    '--disable-software-rasterizer',
+                    '--mute-audio',
+                    '--hide-scrollbars',
+                    '--disable-dev-shm-usage'
+                ]
+            }
+        },
         captureTimeout: 210000,
         browserDisconnectTolerance: 3,
         browserDisconnectTimeout : 210000,
