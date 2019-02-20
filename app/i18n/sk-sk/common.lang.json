@@ -101,6 +101,7 @@
     "time_hour_short" : "h",
     "time_minute_short" : "min",
     "time_second_short" : "s",
+    "time_span_last_hour" : "Last hour",
     "time_span_today" : "Today",
     "time_span_custom" : "Custom",
     "time_span_all" : "All",
