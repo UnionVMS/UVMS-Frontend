@@ -30,7 +30,7 @@ angular.module('unionvmsWeb')
             $scope.resetSearch();
         });
 
-        $scope.advancedSearchObject.TIME_SPAN = $scope.DATE_TODAY;
+        $scope.advancedSearchObject.TIME_SPAN = $scope.LAST_HOUR;
 
         var ASSET_GROUP_ID_SEARCH_KEY = 'ASSET_GROUP_ID';
 
@@ -46,7 +46,7 @@ angular.module('unionvmsWeb')
             $scope.resetAdvancedSearchForm(false);
 
             //Reset timespan dropdown and search!
-            $scope.advancedSearchObject.TIME_SPAN = $scope.DATE_TODAY;
+            $scope.advancedSearchObject.TIME_SPAN = $scope.LAST_HOUR;
         };
 
         function backupSearchObjectValues(keys) {

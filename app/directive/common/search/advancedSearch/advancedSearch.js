@@ -29,6 +29,7 @@ angular.module('unionvmsWeb')
     .controller('AdvancedSearchCtrl', function($scope, searchService, searchUtilsService, SearchField){
 
     $scope.DATE_CUSTOM = searchUtilsService.getTimeSpanCodeForCustom();
+    $scope.LAST_HOUR = searchUtilsService.getTimeSpanCodeForLastHour();
     $scope.DATE_TODAY = searchUtilsService.getTimeSpanCodeForToday();
 
     $scope.timeSpanOptions = searchUtilsService.getTimeSpanOptions();
