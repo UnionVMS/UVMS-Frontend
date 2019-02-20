@@ -360,7 +360,7 @@ angular.module('unionvmsWeb')
             },
             getHistoryForMobileTerminalByGUID : function(mobileTerminalGUID, maxNbr){
                 var deferred = $q.defer();
-                
+
                 var queryObject = {
                         id : mobileTerminalGUID
                     };
@@ -368,7 +368,7 @@ angular.module('unionvmsWeb')
                 if(maxNbr){
                 	queryObject['maxNbr'] = maxNbr;
                 }
-                
+
                 mobileTerminalRestFactory.mobileTerminalHistory().query(queryObject, function(response, headers, status) {
                     if (status !== 200) {
                         deferred.reject("Invalid response status");
