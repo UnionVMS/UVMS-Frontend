@@ -609,13 +609,12 @@ angular.module('unionvmsWeb').factory('searchService',function($q, $log, searchU
         //Do the search for mobile terminals
         //If skipVesselSearch=true then no search to vessel module is performed
         // and all serach criterias are sent directly to mobile terminal search
-        searchMobileTerminals : function(skipVesselSearch){
-
-            var getAllListRequest = new GetListRequest(1, ALL_ITEMS, getListRequest.isDynamic, getListRequest.criterias);
+        searchMobileTerminals : function(skipVesselSearch = false, isDynamic = getListRequest.isDynamic, criterias = getListRequest.criterias){
+            var getAllListRequest = new GetListRequest(1, ALL_ITEMS, isDynamic, criterias);
 
             //Get mobile terminals without getting vessels first
             if(skipVesselSearch){
-                getAllListRequest = new GetListRequest(1, ALL_ITEMS, getListRequest.isDynamic, getListRequest.criterias);
+                getAllListRequest = new GetListRequest(1, ALL_ITEMS, isDynamic, criterias);
                 return mobileTerminalRestService.getMobileTerminalList(getAllListRequest);
             }
 
@@ -658,7 +657,7 @@ angular.module('unionvmsWeb').factory('searchService',function($q, $log, searchU
                             }
                         });
                         //Get mobile terminals
-                        getAllListRequest = new GetListRequest(1, ALL_ITEMS, getListRequest.isDynamic, getListRequest.criterias);
+                        getAllListRequest = new GetListRequest(1, ALL_ITEMS, isDynamic, criterias);
                         mobileTerminalRestService.getMobileTerminalList(getAllListRequest).then(
                             function(mobileTerminaListPage){
                                 return deferred.resolve(mobileTerminaListPage);
@@ -677,7 +676,7 @@ angular.module('unionvmsWeb').factory('searchService',function($q, $log, searchU
             }
             //No need to get vessels
             else{
-                getAllListRequest = new GetListRequest(1, ALL_ITEMS, getListRequest.isDynamic, getListRequest.criterias);
+                getAllListRequest = new GetListRequest(1, ALL_ITEMS, isDynamic, criterias);
                 return mobileTerminalRestService.getMobileTerminalList(getAllListRequest);
             }
         },

@@ -166,7 +166,7 @@ angular.module('unionvmsWeb').controller('MobileTerminalCtrl',function($scope, $
         $scope.clearSelection();
         $scope.currentSearchResults.clearErrorMessage();
         $scope.currentSearchResults.setLoading(true);
-        searchService.searchMobileTerminals(false)
+        searchService.searchMobileTerminals(false, false)
                 .then(updateSearchResults, onGetSearchResultsError);
     };
 
