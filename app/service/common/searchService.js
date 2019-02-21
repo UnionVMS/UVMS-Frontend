@@ -609,7 +609,11 @@ angular.module('unionvmsWeb').factory('searchService',function($q, $log, searchU
         //Do the search for mobile terminals
         //If skipVesselSearch=true then no search to vessel module is performed
         // and all serach criterias are sent directly to mobile terminal search
-        searchMobileTerminals : function(skipVesselSearch = false, isDynamic = getListRequest.isDynamic, criterias = getListRequest.criterias){
+        searchMobileTerminals : function(skipVesselSearch, isDynamic, criterias){
+            skipVesselSearch = typeof skipVesselSearch !== 'undefined' ? skipVesselSearch : false;
+            isDynamic = typeof isDynamic !== 'undefined' ? isDynamic : getListRequest.isDynamic;
+            criterias = typeof criterias !== 'undefined' ? criterias : getListRequest.criterias;
+
             var getAllListRequest = new GetListRequest(1, ALL_ITEMS, isDynamic, criterias);
 
             //Get mobile terminals without getting vessels first
