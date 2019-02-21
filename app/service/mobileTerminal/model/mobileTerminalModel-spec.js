@@ -17,7 +17,7 @@ describe('MobileTerminalModel', function() {
         "satelliteNumber": "426 572 212",
         "antenna": "Sailor 640",
         "transceiverType": "Sailor 6140",
-        "softwareVersion" : "1.3-6",                
+        "softwareVersion" : "1.3-6",
         "asset": {
             "id" : "ebeec8ef-2eab-4d4f-9d6d-994ad8b57c34"
         },
@@ -42,7 +42,7 @@ describe('MobileTerminalModel', function() {
             }
         ],
         "active": true,
-        "id": "1234-5678-9012-3456-7891-2345-678901",        
+        "id": "1234-5678-9012-3456-7891-2345-678901",
         "source": "INTERNAL",
         "mobileTerminalType": "INMARSAT_C",
         "plugin" : {
@@ -58,13 +58,17 @@ describe('MobileTerminalModel', function() {
 
         expect(mobileTerminal.id).toBeUndefined();
         expect(mobileTerminal.connectId).toBeUndefined();
-        expect(mobileTerminal.plugin).toBeDefined();        
+        expect(mobileTerminal.plugin).toBeDefined();
         expect(mobileTerminal.channels.length).toEqual(1);
         expect(mobileTerminal.active).toEqual(false);
     }));
 
     it("should parse JSON correctly", inject(function(MobileTerminal, unitConversionService) {
         var mt = MobileTerminal.fromJson(mobileTerminalData);
+
+        var currentTimeZoneOffsetInHours = (new Date().getTimezoneOffset()) / 60;
+        var prefix = currentTimeZoneOffsetInHours >= 0 ? "+" : "-";
+        currentTimeZoneOffsetInHours = ("00" + Math.abs(currentTimeZoneOffsetInHours)).substr(-2,2);
 
         expect(mt.id).toBe("1234-5678-9012-3456-7891-2345-678901");
         expect(mt.source).toBe("INTERNAL");
@@ -92,20 +96,20 @@ describe('MobileTerminalModel', function() {
         var startDate1 = unitConversionService.date.convertDate(mt.channels[0].startDate, 'from_server');
         var endDate1 = unitConversionService.date.convertDate(mt.channels[0].endDate, 'from_server');
 
-        expect(startDate1).toBe("2019-01-08 10:00:00 +0000");
-        expect(endDate1).toBe("2019-01-08 16:00:00 +0000");
+        expect(startDate1).toBe("2019-01-08 09:00:00 " + prefix + currentTimeZoneOffsetInHours + "00");
+        expect(endDate1).toBe("2019-01-08 15:00:00 " + prefix + currentTimeZoneOffsetInHours + "00");
         expect(mt.channels[0].pollChannel).toBe(true);
         expect(mt.channels[0].configChannel).toBe(false);
 
-        expect(mt.channels[1].name).toBe("HAV");    
+        expect(mt.channels[1].name).toBe("HAV");
         expect(mt.channels[1].DNID).toBe("11456");
         expect(mt.channels[1].memberNumber).toBe("102");
 
         var startDate2 = unitConversionService.date.convertDate(mt.channels[1].startDate, 'from_server');
         var endDate2 = unitConversionService.date.convertDate(mt.channels[1].endDate, 'from_server');
 
-        expect(startDate2).toBe("2019-01-07 10:00:00 +0000");
-        expect(endDate2).toBe("2019-01-07 16:00:00 +0000");
+        expect(startDate2).toBe("2019-01-07 09:00:00 " + prefix + currentTimeZoneOffsetInHours + "00");
+        expect(endDate2).toBe("2019-01-07 15:00:00 " + prefix + currentTimeZoneOffsetInHours + "00");
         expect(mt.channels[1].pollChannel).toBe(false);
         expect(mt.channels[1].configChannel).toBe(true);
     }));
@@ -184,7 +188,7 @@ describe('MobileTerminalModel', function() {
     }));
 
     it('should transfer capabilities of removed channel to default channel', inject(function(CommunicationChannel, MobileTerminal) {
-        var channel = new CommunicationChannel();        
+        var channel = new CommunicationChannel();
         channel.pollChannel = true;
         channel.configChannel = true;
 
@@ -194,7 +198,7 @@ describe('MobileTerminalModel', function() {
         expect(mt.channels.length).toBe(2);
         mt.removeChannel(1);
         expect(mt.channels[0].pollChannel).toBeTruthy();
-        expect(mt.channels[0].configChannel).toBeTruthy();        
+        expect(mt.channels[0].configChannel).toBeTruthy();
     }));
 
 });
