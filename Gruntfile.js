@@ -494,8 +494,25 @@ module.exports = function (grunt) {
             }
         }
       },
+      testOne: {
+        options: {
+            files: karmaFiles.concat(['app/**/' + grunt.option('test') + '-spec.js']),
+            junitReporter: {
+              useBrowserName: false,
+              outputDir: 'testResults/filters',
+                outputFile: 'TESTS-results.xml'
+            },
+            preprocessors: {
+                'app/filter/**/!(*-spec).js': ['coverage']
+            },
+            coverageReporter: {
+                dir: 'testResults/filters/coverage',
+                type: 'lcov'
+            }
+        }
+      },
       during_watch: {
-        browsers: ['PhantomJS']
+        browsers: ['headless_chrome']
       }
     },
     compress: {
@@ -621,6 +638,9 @@ module.exports = function (grunt) {
 
     // Run Karma test
     grunt.registerTask('test',['ngconstant:development', 'dom_munger:read', 'ngtemplates', 'karma:services', 'karma:controllers', 'karma:directives', 'karma:filters', 'clean:after']);
+
+    // Run Karma one test
+    grunt.registerTask('testOne',['ngconstant:development', 'dom_munger:read', 'ngtemplates', 'karma:testOne', 'clean:after']);
 
     // Run application locally, connect web server on http://localhost:9001
     grunt.registerTask('serve', ['parallel:serve']);
