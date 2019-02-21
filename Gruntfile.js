@@ -85,7 +85,6 @@ module.exports = function (grunt) {
               rewrite: {
                   '^/app': '/unionvms'
               },
-              //host: 'http://liaswf05p/unionvms/',
               host: 'localhost',
               port: 28080
         },{
@@ -408,7 +407,7 @@ module.exports = function (grunt) {
         browserDisconnectTimeout : 210000,
         browserNoActivityTimeout : 210000,
         proxies:  {
-            '/config.json': 'http://localhost:9876/base/environment/local.json',
+            '/config.json': 'http://localhost:9876/base/environment/local-test.json',
             '/partial/': 'http://localhost:9876/base/app/partial/'
         },
         logLevel:'INFO',
