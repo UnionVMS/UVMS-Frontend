@@ -53,7 +53,7 @@ describe('GetListRequest', function() {
 
 		expect(toJsonObject.pagination.listSize).toEqual(listSize);
 		expect(toJsonObject.pagination.page).toEqual(page);
-		expect(toJsonObject.searchCriteria.dynamic).toEqual(dynamic);
+		expect(toJsonObject.searchCriteria.isDynamic).toEqual(dynamic);
 		expect(angular.equals(toJsonObject.searchCriteria.criterias, criterias)).toBeTruthy();
 	}));
 

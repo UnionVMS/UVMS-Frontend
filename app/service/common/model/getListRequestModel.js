@@ -23,7 +23,7 @@ angular.module('unionvmsWeb')
     GetListRequest.prototype.toJson = function(){
         return JSON.stringify({
             pagination : {page: this.page, listSize: this.listSize},
-            searchCriteria : {dynamic: this.isDynamic, criterias: this.criterias},
+            searchCriteria : {isDynamic: this.isDynamic, criterias: this.criterias},
             sorting : {sortBy: this.sorting.sortBy, reversed: this.sorting.reverse}
         });
     };
@@ -88,14 +88,14 @@ angular.module('unionvmsWeb')
 
         return {
             pagination : {page: this.page, listSize: this.listSize},
-            mobileTerminalSearchCriteria : {dynamic: this.isDynamic, criterias: criteria}
+            mobileTerminalSearchCriteria : {isDynamic: this.isDynamic, criterias: criteria}
         };
     };
 
     GetListRequest.prototype.DTOForPoll = function(){
         return {
             pagination : {page: this.page, listSize: this.listSize},
-            pollSearchCriteria : {dynamic: this.isDynamic, criterias: this.criterias}
+            pollSearchCriteria : {isDynamic: this.isDynamic, criterias: this.criterias}
         };
     };
 
@@ -187,7 +187,7 @@ angular.module('unionvmsWeb')
 
     GetListRequest.prototype.DTOForExchangeMessageList = function(){
         return{
-            exchangeSearchCriteria : {criterias: this.criterias, dynamic: false},
+            exchangeSearchCriteria : {criterias: this.criterias, isDynamic: false},
             pagination: {page: this.page, listSize: this.listSize},
             sorting: this.sorting
         };
@@ -216,7 +216,7 @@ angular.module('unionvmsWeb')
         return{
             alarmSearchCriteria : this.criterias,
             pagination: {page: this.page, listSize: this.listSize},
-            dynamic: this.isDynamic
+            isDynamic: this.isDynamic
         };
     };
 
