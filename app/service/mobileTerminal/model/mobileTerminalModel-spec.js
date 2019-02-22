@@ -98,8 +98,8 @@ describe('MobileTerminalModel', function() {
         var hoursBase9 = ("00" + (9+currentTimeZoneOffsetInHours)).substr(-2,2);
         var hoursBase15 = ("00" + (15+currentTimeZoneOffsetInHours)).substr(-2,2);
 
-        expect(startDate1).toBe("2019-01-08 " + hoursBase9 + ":00:00 " + prefix + currentTimeZoneOffsetInHoursFormatted + "00");
-        expect(endDate1).toBe("2019-01-08 " + hoursBase15 + ":00:00 " + prefix + currentTimeZoneOffsetInHoursFormatted + "00");
+        expect(startDate1).toBe("2019-01-08 " + hoursBase9 + ":00:00 +0000");
+        expect(endDate1).toBe("2019-01-08 " + hoursBase15 + ":00:00 +0000");
         expect(mt.channels[0].pollChannel).toBe(true);
         expect(mt.channels[0].configChannel).toBe(false);
 
@@ -116,8 +116,8 @@ describe('MobileTerminalModel', function() {
         hoursBase9 = ("00" + (9+currentTimeZoneOffsetInHours)).substr(-2,2);
         hoursBase15 = ("00" + (15+currentTimeZoneOffsetInHours)).substr(-2,2);
 
-        expect(startDate2).toBe("2019-01-07 " + hoursBase9 + ":00:00 " + prefix + currentTimeZoneOffsetInHoursFormatted + "00");
-        expect(endDate2).toBe("2019-01-07 " + hoursBase15 + ":00:00 " + prefix + currentTimeZoneOffsetInHoursFormatted + "00");
+        expect(startDate2).toBe("2019-01-07 " + hoursBase9 + ":00:00 +0000");
+        expect(endDate2).toBe("2019-01-07 " + hoursBase15 + ":00:00 +0000");
         expect(mt.channels[1].pollChannel).toBe(false);
         expect(mt.channels[1].configChannel).toBe(true);
     }));
