@@ -25,16 +25,17 @@ describe('CommunicationChannel', function() {
     };
 
     function verifyChannel(channel) {
-        var currentTimeZoneOffsetInHours = (new Date().getTimezoneOffset()) / 60;
+        var currentTimeZoneOffsetInHours = (new Date(responseData.startDate).getTimezoneOffset() * -1) / 60;
         var prefix = currentTimeZoneOffsetInHours >= 0 ? "+" : "-";
-        currentTimeZoneOffsetInHours = ("00" + Math.abs(currentTimeZoneOffsetInHours)).substr(-2,2);
+        var currentTimeZoneOffsetInHoursFormatted = ("00" + Math.abs(currentTimeZoneOffsetInHours)).substr(-2,2);
+        var hours = ("00" + (9+currentTimeZoneOffsetInHours)).substr(-2,2);
 
         expect(channel.name).toEqual("VMS2");
         expect(channel.id).toBe("1234-5678-9012-3456-2345-7891-678901");
         expect(channel.DNID).toEqual("1");
         expect(channel.memberNumber).toEqual("1123");
-        expect(channel.startDate).toEqual("2015-06-01 09:00:00 " + prefix + currentTimeZoneOffsetInHours + ":00");
-        expect(channel.endDate).toEqual("2015-06-01 09:00:00 " + prefix + currentTimeZoneOffsetInHours + ":00");
+        expect(channel.startDate).toEqual("2015-06-01 " + hours + ":00:00 " + prefix + currentTimeZoneOffsetInHoursFormatted + ":00");
+        expect(channel.endDate).toEqual("2015-06-01 " + hours + ":00:00 " + prefix + currentTimeZoneOffsetInHoursFormatted + ":00");
         expect(channel.pollChannel).toBe(true);
         expect(channel.configChannel).toBe(false);
     }
