@@ -66,10 +66,6 @@ describe('MobileTerminalModel', function() {
     it("should parse JSON correctly", inject(function(MobileTerminal, unitConversionService) {
         var mt = MobileTerminal.fromJson(mobileTerminalData);
 
-        var currentTimeZoneOffsetInHours = (new Date().getTimezoneOffset()) / 60;
-        var prefix = currentTimeZoneOffsetInHours >= 0 ? "+" : "-";
-        currentTimeZoneOffsetInHours = ("00" + Math.abs(currentTimeZoneOffsetInHours)).substr(-2,2);
-
         expect(mt.id).toBe("1234-5678-9012-3456-7891-2345-678901");
         expect(mt.source).toBe("INTERNAL");
         expect(mt.mobileTerminalType).toBe("INMARSAT_C");
@@ -96,8 +92,14 @@ describe('MobileTerminalModel', function() {
         var startDate1 = unitConversionService.date.convertDate(mt.channels[0].startDate, 'from_server');
         var endDate1 = unitConversionService.date.convertDate(mt.channels[0].endDate, 'from_server');
 
-        expect(startDate1).toBe("2019-01-08 09:00:00 " + prefix + currentTimeZoneOffsetInHours + "00");
-        expect(endDate1).toBe("2019-01-08 15:00:00 " + prefix + currentTimeZoneOffsetInHours + "00");
+        var currentTimeZoneOffsetInHours = (new Date(startDate1).getTimezoneOffset() * -1) / 60;
+        var prefix = currentTimeZoneOffsetInHours >= 0 ? "+" : "-";
+        var currentTimeZoneOffsetInHoursFormatted = ("00" + Math.abs(currentTimeZoneOffsetInHours)).substr(-2,2);
+        var hoursBase9 = ("00" + (9+currentTimeZoneOffsetInHours)).substr(-2,2);
+        var hoursBase15 = ("00" + (15+currentTimeZoneOffsetInHours)).substr(-2,2);
+
+        expect(startDate1).toBe("2019-01-08 " + hoursBase9 + ":00:00 " + prefix + currentTimeZoneOffsetInHoursFormatted + "00");
+        expect(endDate1).toBe("2019-01-08 " + hoursBase15 + ":00:00 " + prefix + currentTimeZoneOffsetInHoursFormatted + "00");
         expect(mt.channels[0].pollChannel).toBe(true);
         expect(mt.channels[0].configChannel).toBe(false);
 
@@ -108,8 +110,14 @@ describe('MobileTerminalModel', function() {
         var startDate2 = unitConversionService.date.convertDate(mt.channels[1].startDate, 'from_server');
         var endDate2 = unitConversionService.date.convertDate(mt.channels[1].endDate, 'from_server');
 
-        expect(startDate2).toBe("2019-01-07 09:00:00 " + prefix + currentTimeZoneOffsetInHours + "00");
-        expect(endDate2).toBe("2019-01-07 15:00:00 " + prefix + currentTimeZoneOffsetInHours + "00");
+        currentTimeZoneOffsetInHours = (new Date(startDate2).getTimezoneOffset() * -1) / 60;
+        prefix = currentTimeZoneOffsetInHours >= 0 ? "+" : "-";
+        currentTimeZoneOffsetInHoursFormatted = ("00" + Math.abs(currentTimeZoneOffsetInHours)).substr(-2,2);
+        hoursBase9 = ("00" + (9+currentTimeZoneOffsetInHours)).substr(-2,2);
+        hoursBase15 = ("00" + (15+currentTimeZoneOffsetInHours)).substr(-2,2);
+
+        expect(startDate2).toBe("2019-01-07 " + hoursBase9 + ":00:00 " + prefix + currentTimeZoneOffsetInHoursFormatted + "00");
+        expect(endDate2).toBe("2019-01-07 " + hoursBase15 + ":00:00 " + prefix + currentTimeZoneOffsetInHoursFormatted + "00");
         expect(mt.channels[1].pollChannel).toBe(false);
         expect(mt.channels[1].configChannel).toBe(true);
     }));
