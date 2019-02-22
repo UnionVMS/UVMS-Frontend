@@ -216,7 +216,7 @@ angular.module('unionvmsWeb')
         return{
             alarmSearchCriteria : this.criterias,
             pagination: {page: this.page, listSize: this.listSize},
-            isDynamic: this.isDynamic
+            dynamic: this.isDynamic
         };
     };
 
