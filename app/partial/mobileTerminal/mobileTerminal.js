@@ -346,7 +346,7 @@ angular.module('unionvmsWeb').controller('MobileTerminalCtrl',function($scope, $
                         item.serialNo,
                         item.channels[0].memberNumber,
                         item.channels[0].DNID,
-                        $filter('transponderName')(item.type),
+                        $filter('transponderName')(item.mobileTerminalType),
                         item.satelliteNumber,
                         item.associatedVessel? item.associatedVessel.mmsi : '',
                         item.active? locale.getString('common.active') : locale.getString('common.inactive')
