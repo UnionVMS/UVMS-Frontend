@@ -61,7 +61,7 @@ userManagementApp.constant('refData', {
         {value:'E', label:'Enabled'},
         {value:'D', label:'Disabled'}],
     statusesSearch: ['all', 'E', 'D'],
-    nations: ['BEL', 'EEC', 'FRA', 'GRC', 'SWE'],
+    nations: ['BEL', 'DNK', 'EEC', 'FIN', 'FRA', 'GRC', 'NOR', 'SWE'],
     securityQuestions: ['What is the last name of the teacher who gave you your first failing grade?',
                         'What was the name of your elementary / primary school?',
                         'In what city or town does your nearest sibling live?',
