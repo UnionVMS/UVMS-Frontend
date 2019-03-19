@@ -142,6 +142,8 @@ describe('ruleService', function() {
                 return mockLogicOperators;
             }else if(configName === 'CRITERIA'){
                 return mockCriterias;
+            }else if(module === 'ORGANISATIONS'){
+                return [];
             }
         });
         spyOn(configurationService, "getConfig").andCallFake(function(module){

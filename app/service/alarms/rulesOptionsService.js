@@ -196,9 +196,15 @@ angular.module('unionvmsWeb').factory('rulesOptionsService',function(configurati
         SEND_TO_NAF : [],
     };
     var setupActionDropdowns = function(){
-        //TODO: Get config from Rules?
-        actionDropdowns.SEND_TO_FLUX = configurationService.setTextAndCodeForDropDown(configurationService.getValue('VESSEL', 'FLAG_STATE'), undefined, 'VESSEL', true);
-        actionDropdowns.SEND_TO_NAF = configurationService.setTextAndCodeForDropDown(configurationService.getValue('VESSEL', 'FLAG_STATE'), undefined, 'VESSEL', true);
+        var allOrganisations = configurationService.getValue('ORGANISATIONS', 'results');
+        var nations = [];
+        for (var i = 0; i < allOrganisations.length; i++) {
+            if (nations.indexOf(allOrganisations[i].nation) === -1) {
+                nations.push(allOrganisations[i].nation);
+            }
+        }
+        actionDropdowns.SEND_TO_FLUX = configurationService.setTextAndCodeForDropDown(nations, undefined, undefined, true);
+        actionDropdowns.SEND_TO_NAF = configurationService.setTextAndCodeForDropDown(nations, undefined, undefined, true);
     };
 
 	var rulesOptionsService = {
