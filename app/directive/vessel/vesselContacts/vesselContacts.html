@@ -24,13 +24,13 @@
                                 <label>{{ 'vessel.vessel_details_contact_name' | i18n }}</label>
                                 <input type="text" name="contactName" id="asset-input-contact-name-{{$index}}" class="form-control" ng-model="contact.name" ng-required="true" />
                             </div>
-                            <div class="col-md-3 form-group smallerpadding" ng-class="{'has-error': (contact.email === undefined || contact.email.length === 0)}">
+                            <div class="col-md-3 form-group smallerpadding">
                                 <label>{{ 'vessel.vessel_details_contact_email' | i18n }}</label>
-                                <input type="email" name="contactEmail" id="asset-input-contact-email-{{$index}}" class="form-control" ng-model="contact.email" ng-required="true"/>
+                                <input type="email" name="contactEmail" id="asset-input-contact-email-{{$index}}" class="form-control" ng-model="contact.email"/>
                             </div>
-                            <div class="col-md-2 form-group smallerpadding" ng-class="{'has-error': (contact.phoneNumber === undefined || contact.phoneNumber.length === 0)}">
+                            <div class="col-md-2 form-group smallerpadding">
                                 <label>{{ 'vessel.vessel_details_contact_number' | i18n }}</label>
-                                <input type="text" name="contactNumber" id="asset-input-contact-number-{{$index}}" class="form-control" ng-model="contact.phoneNumber" ng-required="true"/>
+                                <input type="text" name="contactNumber" id="asset-input-contact-number-{{$index}}" class="form-control" ng-model="contact.phoneNumber"/>
                             </div>
 
                         </div>

@@ -56,6 +56,10 @@ angular.module('unionvmsWeb').factory('searchUtilsService',function(SearchField,
                 var fromDateKey = timeSpans[searchCriteriaKey].from;
                 var toDateKey = timeSpans[searchCriteriaKey].to;
                 switch(searchCriterias[i].value){
+                    case 'LAST_HOUR':
+                        searchCriterias.push(new SearchField(fromDateKey, dateTimeService.formatUTCDateWithTimezone(moment().subtract(1, 'hours').format("YYYY-MM-DD HH:mm"))));
+                        searchCriterias.push(new SearchField(toDateKey, dateTimeService.formatUTCDateWithTimezone(moment.utc().format())));
+                        break;
                     case 'TODAY':
                         searchCriterias.push(new SearchField(fromDateKey, dateTimeService.formatUTCDateWithTimezone(moment().startOf('day').format("YYYY-MM-DD HH:mm"))));
                         searchCriterias.push(new SearchField(toDateKey, dateTimeService.formatUTCDateWithTimezone(moment.utc().format())));
@@ -166,11 +170,16 @@ angular.module('unionvmsWeb').factory('searchUtilsService',function(SearchField,
 
     var getTimeSpanOptions = function() {
         var options = [
+            {text: locale.getString('common.time_span_last_hour'), code:'LAST_HOUR'},
             {text: locale.getString('common.time_span_today'), code:'TODAY'},
             {text: locale.getString('common.time_span_custom'), code:'CUSTOM'},
         ];
 
         return options;
+    };
+
+    var getTimeSpanCodeForLastHour = function() {
+        return 'LAST_HOUR';
     };
 
     var getTimeSpanCodeForToday = function() {
@@ -188,6 +197,7 @@ angular.module('unionvmsWeb').factory('searchUtilsService',function(SearchField,
         replaceCommasWithPoint : replaceCommasWithPoint,
         getSearchCriteriaPartition : getSearchCriteriaPartition,
         getTimeSpanOptions : getTimeSpanOptions,
+        getTimeSpanCodeForLastHour : getTimeSpanCodeForLastHour,
         getTimeSpanCodeForToday : getTimeSpanCodeForToday,
         getTimeSpanCodeForCustom : getTimeSpanCodeForCustom
     };

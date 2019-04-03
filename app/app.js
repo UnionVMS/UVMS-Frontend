@@ -705,7 +705,7 @@ unionvmsWebApp.config(function($stateProvider, $compileProvider, tmhDynamicLocal
             },
             resolve: {
                 config : function(initService){
-                    return initService.loadConfigFor(["RULES", "VESSEL", "MOBILETERMINAL", "MOVEMENT", "MOVEMENT_SOURCE_TYPES"]);
+                    return initService.loadConfigFor(["RULES", "VESSEL", "MOBILETERMINAL", "MOVEMENT", "MOVEMENT_SOURCE_TYPES", "ORGANISATIONS"]);
                 }
             },
             data: {
