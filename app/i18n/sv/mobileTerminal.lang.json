@@ -82,6 +82,7 @@
     "inactivate_link" : "Inaktivera",
     "inactivate_message_on_success" : "The mobile terminal was successfully inactivated.",
     "inactivate_message_on_error" : "The mobile terminal could not be inactivated.",
+    "include_archived": "Inkludera arkiverade",
     "new_terminal": "Ny terminal",
     "unassign_vessel" : "Koppla ifrån fartyg",
     "unassign_vessel_message_on_success" : "The mobile terminal was successfully unlinked from the asset.",
