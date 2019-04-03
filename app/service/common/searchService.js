@@ -609,16 +609,17 @@ angular.module('unionvmsWeb').factory('searchService',function($q, $log, searchU
         //Do the search for mobile terminals
         //If skipVesselSearch=true then no search to vessel module is performed
         // and all serach criterias are sent directly to mobile terminal search
-        searchMobileTerminals : function(skipVesselSearch, isDynamic, criterias){
+        searchMobileTerminals : function(skipVesselSearch, isDynamic, criterias, extraParams){
             skipVesselSearch = typeof skipVesselSearch !== 'undefined' ? skipVesselSearch : false;
             isDynamic = typeof isDynamic !== 'undefined' ? isDynamic : getListRequest.isDynamic;
             criterias = typeof criterias !== 'undefined' ? criterias : getListRequest.criterias;
+            extraParams = typeof extraParams !== 'undefined' ? extraParams : getListRequest.extraParams;
 
-            var getAllListRequest = new GetListRequest(1, ALL_ITEMS, isDynamic, criterias);
+            var getAllListRequest = new GetListRequest(1, ALL_ITEMS, isDynamic, criterias, {}, extraParams);
 
             //Get mobile terminals without getting vessels first
             if(skipVesselSearch){
-                getAllListRequest = new GetListRequest(1, ALL_ITEMS, isDynamic, criterias);
+                getAllListRequest = new GetListRequest(1, ALL_ITEMS, isDynamic, criterias, {}, extraParams);
                 return mobileTerminalRestService.getMobileTerminalList(getAllListRequest);
             }
 
@@ -644,7 +645,7 @@ angular.module('unionvmsWeb').factory('searchService',function($q, $log, searchU
             //Get vessels first?
             if(vesselCriteria.length > 0){
                 var deferred = $q.defer();
-                var getVesselListRequest = new GetListRequest(1, ALL_ITEMS, vesselSearchIsDynamic, vesselCriteria);
+                var getVesselListRequest = new GetListRequest(1, ALL_ITEMS, vesselSearchIsDynamic, vesselCriteria, {}, extraParams);
                 var outerThis = this;
                 //Get the vessels
                 vesselRestService.getAllMatchingVessels(getVesselListRequest).then(
@@ -661,7 +662,7 @@ angular.module('unionvmsWeb').factory('searchService',function($q, $log, searchU
                             }
                         });
                         //Get mobile terminals
-                        getAllListRequest = new GetListRequest(1, ALL_ITEMS, isDynamic, criterias);
+                        getAllListRequest = new GetListRequest(1, ALL_ITEMS, isDynamic, criterias, {}, extraParams);
                         mobileTerminalRestService.getMobileTerminalList(getAllListRequest).then(
                             function(mobileTerminaListPage){
                                 return deferred.resolve(mobileTerminaListPage);
@@ -680,7 +681,7 @@ angular.module('unionvmsWeb').factory('searchService',function($q, $log, searchU
             }
             //No need to get vessels
             else{
-                getAllListRequest = new GetListRequest(1, ALL_ITEMS, isDynamic, criterias);
+                getAllListRequest = new GetListRequest(1, ALL_ITEMS, isDynamic, criterias, {}, extraParams);
                 return mobileTerminalRestService.getMobileTerminalList(getAllListRequest);
             }
         },
@@ -781,6 +782,14 @@ angular.module('unionvmsWeb').factory('searchService',function($q, $log, searchU
         setSearchCriteriasToAdvancedSearch : function(){
             this.setSearchCriterias(this.getAdvancedSearchCriterias());
         },
+        setAdvancedExtraParams: function(){
+            const acceptedExtraParams = ['includeArchived'];
+            $.each(advancedSearchObject, function(key, value) {
+                if(acceptedExtraParams.indexOf(key) !== -1) {
+                    getListRequest.setExtraParams(key, value);
+                }
+            });
+        },
         reset : function(){
             getListRequest = new GetListRequest(1, DEFAULT_ITEMS_PER_PAGE, true, []);
             this.resetAdvancedSearch();
@@ -817,7 +826,7 @@ angular.module('unionvmsWeb').factory('searchService',function($q, $log, searchU
         for (var i = 0; i < criterias.length; i++) {
             if (explodeMap.hasOwnProperty(criterias[i].key)) {
                 const criteria = criterias.splice(i, 1)[0];
-                angular.forEach(explodeMap[criteria.key], function(k) {
+                angular.forEach(explodeMap[criteria.key], function(k) { // jshint ignore:line
                     criterias.splice(i++, 0, new SearchField(k, criteria.value));
                 });
             }

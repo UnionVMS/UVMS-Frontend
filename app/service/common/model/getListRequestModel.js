@@ -12,12 +12,13 @@ copy of the GNU General Public License along with the IFDM Suite. If not, see <h
 angular.module('unionvmsWeb')
 .factory('GetListRequest', function(SearchField) {
 
-    function GetListRequest(page, listSize, isDynamic, criterias, sorting){
+    function GetListRequest(page, listSize, isDynamic, criterias, sorting, extraParams){
         this.page = angular.isDefined(page) ? page : 1;
         this.listSize = angular.isDefined(listSize) ? listSize : 10;
         this.isDynamic = angular.isDefined(isDynamic) ? isDynamic : true;
         this.criterias = angular.isDefined(criterias) ? criterias : [];
         this.sorting = angular.isDefined(sorting) ? sorting : {};
+        this.extraParams = angular.isDefined(extraParams) ? extraParams : {};
     }
 
     GetListRequest.prototype.toJson = function(){
@@ -86,9 +87,18 @@ angular.module('unionvmsWeb')
             }
         });
 
+        var mobileTerminalSearchCriteria = {
+            isDynamic: this.isDynamic,
+            criterias: criteria
+        };
+        console.warn("HERE!", this.extraParams);
+        if(typeof this.extraParams['includeArchived'] !== 'undefined') {
+            mobileTerminalSearchCriteria['includeArchived'] = this.extraParams['includeArchived'];
+        }
+
         return {
             pagination : {page: this.page, listSize: this.listSize},
-            mobileTerminalSearchCriteria : {isDynamic: this.isDynamic, criterias: criteria}
+            mobileTerminalSearchCriteria : mobileTerminalSearchCriteria
         };
     };
 
@@ -298,6 +308,11 @@ angular.module('unionvmsWeb')
 
     GetListRequest.prototype.setDynamicToTrue = function(){
         this.isDynamic = true;
+    };
+
+    GetListRequest.prototype.setExtraParams = function(key, value){
+        this.extraParams[key] = value;
+        console.warn("setExtraParams", this.extraParams);
     };
 
     GetListRequest.prototype.getNumberOfSearchCriterias = function(){

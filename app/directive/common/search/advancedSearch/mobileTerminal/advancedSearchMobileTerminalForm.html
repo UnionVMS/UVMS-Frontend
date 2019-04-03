@@ -32,14 +32,18 @@
                 <div class="col-md-2 smallerpadding searchcriteria">
                     <input type="text" placeholder="{{'mobileTerminal.search_serialNumber_placeholder' | i18n}}"  class="form-control" tabindex="7" ng-model="advancedSearchObject.SERIAL_NUMBER" ng-change="onSearchInputChange()" id="mt-input-search-serialNumber">
                 </div>
-                <div class="col-md-2 smallerpadding searchcriteria">
+                <div class="col-md-1 smallerpadding searchcriteria">
                     <input type="text" placeholder="{{'mobileTerminal.search_dnid_placeholder' | i18n}}" class="form-control" tabindex="8" ng-model="advancedSearchObject.DNID" ng-change="onSearchInputChange()"  id="mt-input-search-dnid">
                 </div>
-                <div class="col-md-2 smallerpadding searchcriteria">
+                <div class="col-md-1 smallerpadding searchcriteria">
                     <input type="text" placeholder="{{'mobileTerminal.search_member_number_placeholder' | i18n}}" class="form-control" tabindex="9" ng-model="advancedSearchObject.MEMBER_NUMBER" ng-change="onSearchInputChange()" id="mt-input-search-memberNumber">
                 </div>
                 <div class="col-md-2 smallerpadding searchcriteria">
                     <input type="text" placeholder="{{'mobileTerminal.search_satellite_number_placeholder' | i18n}}" class="form-control" tabindex="10" ng-model="advancedSearchObject.SATELLITE_NUMBER" ng-change="onSearchInputChange()" id="mt-input-search-satelliteNumber">
+                </div>
+                <div class="col-md-2 smallerpadding searchcriteria">
+                    <label for="includeArchive">{{'mobileTerminal.include_archived' | i18n}}:</label>
+                    <input type="checkbox" name="includeArchive" ng-model="advancedSearchObject.includeArchived" ng-change="onSearchInputChange()">
                 </div>
                 <div class="col-md-1 smallerpadding">
                     <div class="row nomargin">
