@@ -91,7 +91,6 @@ angular.module('unionvmsWeb')
             isDynamic: this.isDynamic,
             criterias: criteria
         };
-        console.warn("HERE!", this.extraParams);
         if(typeof this.extraParams['includeArchived'] !== 'undefined') {
             mobileTerminalSearchCriteria['includeArchived'] = this.extraParams['includeArchived'];
         }
@@ -312,7 +311,6 @@ angular.module('unionvmsWeb')
 
     GetListRequest.prototype.setExtraParams = function(key, value){
         this.extraParams[key] = value;
-        console.warn("setExtraParams", this.extraParams);
     };
 
     GetListRequest.prototype.getNumberOfSearchCriterias = function(){
