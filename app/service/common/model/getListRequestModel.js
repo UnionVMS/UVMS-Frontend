@@ -87,16 +87,10 @@ angular.module('unionvmsWeb')
             }
         });
 
-        var searchObject = {
+        return searchObject = {
             pagination : {page: this.page, listSize: this.listSize},
             mobileTerminalSearchCriteria : { isDynamic: this.isDynamic, criterias: criteria }
         };
-
-        if(typeof this.extraParams['includeArchived'] !== 'undefined') {
-            searchObject['includeArchived'] = this.extraParams['includeArchived'];
-        }
-
-        return searchObject;
     };
 
     GetListRequest.prototype.DTOForPoll = function(){

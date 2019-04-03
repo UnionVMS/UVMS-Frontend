@@ -95,8 +95,9 @@ angular.module('unionvmsWeb')
     var getVesselList = function(getListRequest){
         var deferred = $q.defer();
 
+        var includeInactivated = typeof getListRequest.extraParams['includeInactivated'] !== 'undefined' ? getListRequest.extraParams['includeInactivated'] : false;
         var getVesselListRequest = vesselRestFactory.getVesselList().list(
-        		{'page' : getListRequest.page, 'size' : getListRequest.listSize, 'dynamic' : getListRequest.isDynamic}, getListRequest.DTOForVessel(),
+        		{'page' : getListRequest.page, 'size' : getListRequest.listSize, 'dynamic' : getListRequest.isDynamic, 'includeInactivated' : includeInactivated }, getListRequest.DTOForVessel(),
             function(response, header, status){
                 if(status !== 200){
                     deferred.reject("Invalid response status");
@@ -307,8 +308,8 @@ angular.module('unionvmsWeb')
 
     var getConfiguration = function(){
     	var deferred = $q.defer();
-    	
-    	var keys = [{constant : "UNIT_TONNAGE", getValue : getConfigCode}, 
+
+    	var keys = [{constant : "UNIT_TONNAGE", getValue : getConfigCode},
     				{constant : "UNIT_LENGTH", getValue : getConfigCode},
     				{constant : "ASSET_TYPE", getValue : getConfigDescription},
     				{constant : "LICENSE_TYPE", getValue : getConfigCode},
@@ -322,19 +323,19 @@ angular.module('unionvmsWeb')
     		var key = keys[i];
     		configurations[key.constant] = getConfigValues(key.constant, key.getValue);
     	}
-    	
+
     	deferred.resolve(configurations);
     	return deferred.promise;
     };
-    
+
     var getConfigCode = function(code) {
     	return code.primaryKey.code;
     };
-    
+
     var getConfigDescription = function(code) {
     	return code.description;
     };
-    
+
     var getConfigValues = function(constant, getValueFunction) {
     	var values = [];
     	getCustomCode(constant).then(function(codes) {
@@ -346,7 +347,7 @@ angular.module('unionvmsWeb')
         });
     	return values;
     };
-    
+
     var getParameterConfiguration = function(){
         return getConfigurationFromResource(vesselRestFactory.getConfigParameters());
     };
@@ -630,7 +631,7 @@ angular.module('unionvmsWeb')
         );
         return deferred.promise;
     };
-    
+
 
     var createContactForAsset = function(vesselId, contact) {
     	var deferred = $q.defer();

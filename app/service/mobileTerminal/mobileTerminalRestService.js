@@ -118,8 +118,10 @@ angular.module('unionvmsWeb')
 
             getMobileTerminalList : function(getListRequest, skipGettingVessel){
                 var deferred = $q.defer();
+
+                var includeArchived = typeof getListRequest.extraParams['includeArchived'] !== 'undefined' ? getListRequest.extraParams['includeArchived'] : false;
                 //Get list of mobile terminals
-                mobileTerminalRestFactory.getMobileTerminals().list(getListRequest.DTOForMobileTerminal(), function(response, headers, status) {
+                mobileTerminalRestFactory.getMobileTerminals().list({'includeArchived': includeArchived},getListRequest.DTOForMobileTerminal(), function(response, headers, status) {
                         if(status !== 200){
                             deferred.reject("Invalid response status");
                             return;
@@ -360,7 +362,7 @@ angular.module('unionvmsWeb')
             },
             getHistoryForMobileTerminalByGUID : function(mobileTerminalGUID, maxNbr){
                 var deferred = $q.defer();
-                
+
                 var queryObject = {
                         id : mobileTerminalGUID
                     };
@@ -368,7 +370,7 @@ angular.module('unionvmsWeb')
                 if(maxNbr){
                 	queryObject['maxNbr'] = maxNbr;
                 }
-                
+
                 mobileTerminalRestFactory.mobileTerminalHistory().query(queryObject, function(response, headers, status) {
                     if (status !== 200) {
                         deferred.reject("Invalid response status");

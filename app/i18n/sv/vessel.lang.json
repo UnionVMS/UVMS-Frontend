@@ -33,6 +33,7 @@
     "advanced_search_placeholder_mmsi" : "MMSI",
     "advanced_search_placeholder_homeport_name":"Homeport name",
     "advanced_search_placeholder_producer_name":"Producer name",
+    "include_inactivated": "Inkludera inaktiverade",
     "assign": "Link",
     "assign_back_to_search_result": "Go back to search result",
     "cancel": "Cancel",

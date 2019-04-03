@@ -307,7 +307,7 @@ angular.module('unionvmsWeb').factory('searchService',function($q, $log, searchU
             }
 
             var deferred = $q.defer(),
-                getListRequestAllItems = new GetListRequest(pageNum, DEFAULT_ITEMS_PER_PAGE, getListRequest.isDynamic, getListRequest.criterias);
+                getListRequestAllItems = new GetListRequest(pageNum, DEFAULT_ITEMS_PER_PAGE, getListRequest.isDynamic, getListRequest.criterias, {}, getListRequest.extraParams);
 
             searchUtilsService.modifySpanAndTimeZones(getListRequest.criterias);
             searchUtilsService.replaceCommasWithPoint(getListRequest.criterias);
@@ -783,7 +783,7 @@ angular.module('unionvmsWeb').factory('searchService',function($q, $log, searchU
             this.setSearchCriterias(this.getAdvancedSearchCriterias());
         },
         setAdvancedExtraParams: function(){
-            const acceptedExtraParams = ['includeArchived'];
+            const acceptedExtraParams = ['includeArchived', 'includeInactivated'];
             $.each(advancedSearchObject, function(key, value) {
                 if(acceptedExtraParams.indexOf(key) !== -1) {
                     getListRequest.setExtraParams(key, value);
