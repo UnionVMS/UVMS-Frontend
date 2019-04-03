@@ -18,8 +18,8 @@ angular.module('unionvmsWeb').factory('MobileTerminal', function(CommunicationCh
             this.transceiverType = undefined;
             this.softwareVersion = undefined;
             this.answerBack = undefined;
-            this.channels = [createDefaultChannel()];            
-            this.active = false;            
+            this.channels = [createDefaultChannel()];
+            this.active = false;
             this.connectId = undefined;
             this.associatedVessel = undefined;
             this.mobileTerminalType = undefined;
@@ -37,10 +37,10 @@ angular.module('unionvmsWeb').factory('MobileTerminal', function(CommunicationCh
         }
 
         function createDefaultChannel(){
-            var defaultChannel = new CommunicationChannel();            
+            var defaultChannel = new CommunicationChannel();
             defaultChannel.defaultChannel = true;
             defaultChannel.configChannel = true;
-            defaultChannel.pollChannel = true;            
+            defaultChannel.pollChannel = true;
             return defaultChannel;
         }
 
@@ -61,7 +61,7 @@ angular.module('unionvmsWeb').factory('MobileTerminal', function(CommunicationCh
                     };
                 }
             }
-            
+
             mobileTerminal.archived = data.archived;
             mobileTerminal.serialNo = data.serialNo;
             mobileTerminal.satelliteNumber = data.satelliteNumber;
@@ -102,7 +102,7 @@ angular.module('unionvmsWeb').factory('MobileTerminal', function(CommunicationCh
                 var channelObject = value.dataTransferObject();
                 jsonChannels.push(channelObject);
             });
-        
+
             var returnObject = {
                 serialNo: this.serialNo,
                 satelliteNumber: this.satelliteNumber,
@@ -111,7 +111,7 @@ angular.module('unionvmsWeb').factory('MobileTerminal', function(CommunicationCh
                 softwareVersion : this.softwareVersion,
                 answerBack : this.answerBack,
                 archived : this.archived,
-                channels : jsonChannels,                
+                channels : jsonChannels,
                 id : this.id !== undefined ? this.id : null,
                 mobileTerminalType : this.mobileTerminalType,
                 plugin : this.plugin,
@@ -121,7 +121,7 @@ angular.module('unionvmsWeb').factory('MobileTerminal', function(CommunicationCh
                 active: this.active,
                 source : this.source
             };
-            
+
             if (this.connectId !== undefined) {
                 returnObject.asset = undefined;
                 returnObject.asset = {

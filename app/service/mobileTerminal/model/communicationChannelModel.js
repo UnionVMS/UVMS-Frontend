@@ -12,11 +12,11 @@ copy of the GNU General Public License along with the IFDM Suite. If not, see <h
 angular.module('unionvmsWeb').factory('CommunicationChannel', function(dateTimeService) {
 
         //Create a new channel with the default type "VMS"
-        function CommunicationChannel(){            
+        function CommunicationChannel(){
             this.name = "VMS"; // Default name
             this.id = undefined;
             this.DNID = undefined;
-            
+
             // ids
             this.frequencyGracePeriod = 0;
             this.expectedFrequencyInPort = 0;
@@ -55,7 +55,7 @@ angular.module('unionvmsWeb').factory('CommunicationChannel', function(dateTimeS
 
             channel.archived = data.archived;
 
-            
+
             // channel types
             channel.defaultChannel = data.defaultChannel;
             channel.configChannel = data.configChannel;
@@ -67,7 +67,7 @@ angular.module('unionvmsWeb').factory('CommunicationChannel', function(dateTimeS
             return JSON.stringify(this.dataTransferObject());
         };
 
-        CommunicationChannel.prototype.dataTransferObject = function() {            
+        CommunicationChannel.prototype.dataTransferObject = function() {
             var dataTransferObject = {
                 name : angular.isDefined(this.name) ? this.name : '',
                 id: this.id,
@@ -87,7 +87,7 @@ angular.module('unionvmsWeb').factory('CommunicationChannel', function(dateTimeS
                 configChannel : this.configChannel,
                 pollChannel : this.pollChannel
             };
-            
+
             return dataTransferObject;
         };
 
@@ -126,20 +126,11 @@ angular.module('unionvmsWeb').factory('CommunicationChannel', function(dateTimeS
             }
         };
 
-        CommunicationChannel.prototype.getFormattedDate = function(date) 
-        {
+        CommunicationChannel.prototype.getFormattedDate = function(date) {
             if (date === undefined || date === null) {
                 return date;
             }
             return moment(date, 'YYYY-MM-DDTHH:mm:ssZ').format("YYYY-MM-DD HH:mm:ss Z");
-        };
-
-        CommunicationChannel.prototype.getFormattedStartDate = function() {
-            return moment(this.startDate, 'YYYY-MM-DD HH:mm').format("YYYY-MM-DD HH:mm Z");
-        };
-
-        CommunicationChannel.prototype.getFormattedStopDate = function() {
-            return moment(this.endDate, 'YYYY-MM-DD HH:mm').format("YYYY-MM-DD HH:mm Z");
         };
 
         return CommunicationChannel;

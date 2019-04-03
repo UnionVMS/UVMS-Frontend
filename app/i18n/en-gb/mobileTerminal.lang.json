@@ -90,6 +90,7 @@
     "inactivate_message_on_error" : "The mobile terminal could not be inactivated.",
     "archive_message_on_success" : "The mobile terminal was successfully archived.",
     "archive_message_on_error" : "The mobile terminal could not be archived.",
+    "include_archived": "Include archived",
     "new_terminal": "New terminal",
     "unassign_vessel" : "Unlink asset",
     "unassign_vessel_message_on_success" : "The mobile terminal was successfully unlinked from the asset.",
