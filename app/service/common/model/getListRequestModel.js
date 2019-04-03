@@ -87,18 +87,16 @@ angular.module('unionvmsWeb')
             }
         });
 
-        var mobileTerminalSearchCriteria = {
-            isDynamic: this.isDynamic,
-            criterias: criteria
+        var searchObject = {
+            pagination : {page: this.page, listSize: this.listSize},
+            mobileTerminalSearchCriteria : { isDynamic: this.isDynamic, criterias: criteria }
         };
+
         if(typeof this.extraParams['includeArchived'] !== 'undefined') {
-            mobileTerminalSearchCriteria['includeArchived'] = this.extraParams['includeArchived'];
+            searchObject['includeArchived'] = this.extraParams['includeArchived'];
         }
 
-        return {
-            pagination : {page: this.page, listSize: this.listSize},
-            mobileTerminalSearchCriteria : mobileTerminalSearchCriteria
-        };
+        return searchObject;
     };
 
     GetListRequest.prototype.DTOForPoll = function(){
