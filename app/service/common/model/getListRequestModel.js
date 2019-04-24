@@ -87,7 +87,7 @@ angular.module('unionvmsWeb')
             }
         });
 
-        return searchObject = {
+        return {
             pagination : {page: this.page, listSize: this.listSize},
             mobileTerminalSearchCriteria : { isDynamic: this.isDynamic, criterias: criteria }
         };
