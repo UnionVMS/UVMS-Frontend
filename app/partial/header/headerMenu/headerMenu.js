@@ -15,12 +15,16 @@ angular.module('unionvmsWeb').controller('HeaderMenuCtrl',function($scope, $root
         return userService.isAllowed(feature, module, true);
     };
 
-    $scope.addMenuItem = function(text, url, elemId) {
+    $scope.addMenuItem = function(text, url, elemId, external) {
+        if(typeof external === "undefined") {
+            external = false;
+        }
         $scope.menu.push(
             {
                 'title': text,
                 'url': url,
-                'elemId': elemId
+                'elemId': elemId,
+                'external': external
             }
         );
     };
@@ -95,7 +99,7 @@ angular.module('unionvmsWeb').controller('HeaderMenuCtrl',function($scope, $root
 
         // Realtime
         if (checkAccess('Movement', 'viewMovements')) {
-            $scope.addMenuItem('Realtime', '/realtime', 'realtime');
+            $scope.addMenuItem('Realtime', '/map/realtime', 'realtime', true);
         }
         // Alerts
         var alarmsLink = false;
