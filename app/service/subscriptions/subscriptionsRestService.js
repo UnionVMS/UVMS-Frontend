@@ -91,7 +91,7 @@ angular.module('unionvmsWeb').factory('subscriptionsRestFactory', function ($res
          */
         getOrganisations: function(){
             var deferred = $q.defer();
-            subscriptionsRestFactory.getOrganisations().get(function (response) {
+            subscriptionsRestFactory.getOrganisations().get({ limit: '100' }, function (response) {
                 deferred.resolve(response);
             }, function (error) {
                 console.log('Error getting organizations from USM');
