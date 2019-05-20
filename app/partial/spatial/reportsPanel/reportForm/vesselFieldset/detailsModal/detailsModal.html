@@ -16,7 +16,7 @@ copy of the GNU General Public License along with the IFDM Suite. If not, see <h
         </div>
         <span class="itemType" ng-if="item.type === 'vessel'">{{'spatial.reports_form_vessels_search_by_vessel' | i18n}}</span>
         <span class="itemType" ng-if="item.type === 'vgroup'">{{'spatial.reports_form_vessels_search_by_group' | i18n}}</span>
-        <span class="vesselName">{{item.name}}</span>
+        <span class="vesselName">{{detailedItem.name}}</span>
     </div>
     <div class="modal-body">
         <div class="row" ng-show="hasError === true">

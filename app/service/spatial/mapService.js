@@ -3116,6 +3116,7 @@ angular.module('unionvmsWeb').factory('mapService', function(locale, $rootScope,
                 ms.overlay.set('featureId', data.id, true);
                 ms.overlay.set('vesselId', data.vesselId, true);
                 ms.overlay.set('vesselName', data.vesselName, true);
+                ms.overlay.set('positionTime', data.positionTime, true);
                 if (type === 'ers'){
                     ms.overlay.set('activityId', data.activityId);
                     ms.overlay.set('tripId', data.tripId);
@@ -3255,6 +3256,7 @@ angular.module('unionvmsWeb').factory('mapService', function(locale, $rootScope,
             id: id,
             vesselName: feature.name,
             vesselId: feature.connectionId,
+            positionTime: feature.positionTime,
             getTitle: function(){
                 return this.title;
             },

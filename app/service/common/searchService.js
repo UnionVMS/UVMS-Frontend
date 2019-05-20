@@ -62,14 +62,14 @@ angular.module('unionvmsWeb').factory('searchService',function($q, $log, searchU
             var vesselRequest = new GetListRequest(1, page.getNumberOfItems(), true);
             $.each(page.items, function(index, movement) {
                 if(angular.isDefined(movement.connectId)){
-                    vesselRequest.addSearchCriteria("HIST_GUID", movement.connectId);
+                    vesselRequest.addSearchCriteria("GUID", movement.connectId);
                 }
             });
             vesselRestService.getAllMatchingVessels(vesselRequest).then(function(vessels){
                 var vesselPage = new VesselListPage(vessels, 1, 1);
                 //Update movement page by connecting each movement to a vessel
                 $.each(page.items, function(index, movement) {
-                    var vessel = vesselPage.getVesselByHistoryGuid(movement.connectId);
+                    var vessel = vesselPage.getVesselByGuid(movement.connectId);
                     if(angular.isDefined(vessel)){
                         movement.setVessel(vessel);
                     }
@@ -107,8 +107,8 @@ angular.module('unionvmsWeb').factory('searchService',function($q, $log, searchU
             var vesselsByGuid = {};
             $.each(vessels, function(index, vessel) {
                 if(angular.isDefined(vessel.historyId)){
-                    movementRequest.addSearchCriteria("CONNECT_ID", vessel.historyId);
-                    vesselsByGuid[vessel.historyId] = vessel;
+                    movementRequest.addSearchCriteria("CONNECT_ID", vessel.id);
+                    vesselsByGuid[vessel.id] = vessel;
                 }
             });
 

@@ -56,7 +56,7 @@ angular.module('unionvmsWeb').controller('DetailsmodalCtrl',function($scope, $mo
     
     var init = function(){
         if ($scope.item.type === 'asset'){
-            vesselRestService.getVesselByVesselHistoryId($scope.item.historyId).then(
+            vesselRestService.getVesselByIdAtDate($scope.item.id, $scope.item.positionTime).then(
                 function(response){
                     $scope.detailedItem = response;
                     $scope.isLoading = false;
