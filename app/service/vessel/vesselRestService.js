@@ -61,6 +61,9 @@ angular.module('unionvmsWeb')
                     update: {method: 'PUT'}
                 });
             },
+            vesselHistoryAtDate : function(){
+                return $resource('asset/rest/asset/history/guid/:id/:date');
+            },
             getCustomCodes : function(){
                 return $resource('asset/rest/customcodes/listcodesforconstant/:constant');
             },
@@ -86,7 +89,7 @@ angular.module('unionvmsWeb')
             }
         };
     })
-.factory('vesselRestService', function($q, $http, vesselRestFactory, VesselListPage, Vessel, VesselContact, VesselNotes, SavedSearchGroup, SearchField, userService, $timeout){
+.factory('vesselRestService', function($q, $http, vesselRestFactory, VesselListPage, Vessel, VesselContact, VesselNotes, SavedSearchGroup, SearchField, userService, $timeout, dateTimeService){
 
     //Save pending requests
     var pendingRequests = [];
@@ -388,6 +391,30 @@ angular.module('unionvmsWeb')
     var getVesselByVesselHistoryId = function(vesselId) {
         var deferred = $q.defer();
         vesselRestFactory.historyVessel().get({id: vesselId}, function(response, header, status) {
+            if (status !== 200) {
+                deferred.reject("Invalid response status");
+                return;
+            }
+
+            deferred.resolve(Vessel.fromJson(response));
+        },
+        function(err) {
+            deferred.reject("could not load vessel with history ID " + vesselId);
+        });
+
+        return deferred.promise;
+    };
+
+    var getVesselByIdAtDate = function(vesselId, date) {
+        var deferred = $q.defer();
+        var formattedDate;
+        if (date) {
+            var utcDate = dateTimeService.formatUTCDateWithTimezone(date);
+            formattedDate = dateTimeService.formatISO8601(utcDate);
+        } else {
+            formattedDate = dateTimeService.formatISO8601(moment());
+        }
+        vesselRestFactory.vesselHistoryAtDate().get({id: vesselId, date: formattedDate}, function(response, header, status) {
             if (status !== 200) {
                 deferred.reject("Invalid response status");
                 return;
@@ -735,6 +762,7 @@ angular.module('unionvmsWeb')
         getSearchableFields : getSearchableFields,
         getVesselHistoryListByVesselId : getVesselHistoryListByVesselId,
         getVesselByVesselHistoryId : getVesselByVesselHistoryId,
+        getVesselByIdAtDate : getVesselByIdAtDate,
         getVesselGroupsForUser : getVesselGroupsForUser,
         createNewVesselGroup : createNewVesselGroup,
         updateVesselGroup : updateVesselGroup,

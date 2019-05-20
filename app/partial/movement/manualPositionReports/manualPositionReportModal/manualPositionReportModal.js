@@ -397,11 +397,11 @@ angular.module('unionvmsWeb').controller('ManualPositionReportModalCtrl', functi
     };
 
     $scope.showLastMovementByVessel = function(vessel) {
-        if (vessel.historyId === undefined) {
+        if (vessel.id === undefined) {
             return;
         }
 
-        movementRestService.getLastMovement(vessel.historyId).then(function(movement) {
+        movementRestService.getLastMovement(vessel.id).then(function(movement) {
             $scope.setLastPosition(movement);
         }, function(error){
             console.log("Error getting last position for the vessel.");

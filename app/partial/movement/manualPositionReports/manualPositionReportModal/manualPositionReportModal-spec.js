@@ -496,7 +496,7 @@ describe('ManualPositionReportModalCtrl', function() {
         spyOn(movementRestService, 'getLastMovement').andReturn(deferred.promise);
         spyOn(scope, 'setLastPosition');
         scope.showLastMovementByVessel({
-        	historyId: "ABC-123"
+        	id: "ABC-123"
         });
 
         expect(movementRestService.getLastMovement).toHaveBeenCalledWith("ABC-123");

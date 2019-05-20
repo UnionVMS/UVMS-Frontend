@@ -66,7 +66,7 @@ angular.module('unionvmsWeb').controller('PositionReportModalCtrl', function($sc
                 createMarker();
                 //Get vessel
                 if(angular.isDefined($scope.positionReport.connectId)){
-                    vesselRestService.getVesselByVesselHistoryId($scope.positionReport.connectId).then(function(vessel) {
+                    vesselRestService.getVesselByIdAtDate($scope.positionReport.connectId, $scope.positionReport.time).then(function(vessel) {
                         $scope.positionReport.vessel = vessel;
                         $scope.waitingForResponse = false;
                     }, function(err){

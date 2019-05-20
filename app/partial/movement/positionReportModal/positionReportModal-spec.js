@@ -57,7 +57,7 @@ describe('PositionReportModalCtrl', function() {
         var vessel = new Vessel();
         vessel.name ="Test vessel";
         deferred2.resolve(vessel);
-        var getVesselSpy = spyOn(vesselRestService, "getVesselByVesselHistoryId").andReturn(deferred2.promise);
+        var getVesselSpy = spyOn(vesselRestService, "getVesselByIdAtDate").andReturn(deferred2.promise);
 
         var ctrl = createController('ABC-123');
         scope.$digest();
@@ -66,7 +66,7 @@ describe('PositionReportModalCtrl', function() {
         scope.$digest();
 
         //Marker should have been created
-        expect(getVesselSpy).toHaveBeenCalledWith('TestConnectId');
+        expect(getVesselSpy).toHaveBeenCalledWith('TestConnectId', '2015-01-01 12:00');
         //Get vessel should have been called
         expect(Object.keys(scope.markers).length).toEqual(1);
         scope.$digest();
