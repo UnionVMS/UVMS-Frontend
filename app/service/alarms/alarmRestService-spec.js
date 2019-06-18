@@ -36,11 +36,8 @@ describe('alarmRestService', function() {
                         //Success if status is defined, 500 otherwize
                         if(angular.isDefined(alarmDTO.status)){
                             callback({
-                                code : 200,
-                                data: {
                                     status : 'CLOSED'
-                                }
-                            });
+                                	}, undefined, 200);
                         }else{
                             callback({
                                 code : 500,
@@ -83,8 +80,6 @@ describe('alarmRestService', function() {
                         //Success if page = 1, otherwize return 500
                         if(getListRequest.pagination.page === 1){
                             callback({
-                                code : 200,
-                                data: {
                                     tickets: [
                                         {
                                             guid: "1",
@@ -97,8 +92,7 @@ describe('alarmRestService', function() {
                                     ],
                                     currentPage : 12,
                                     totalNumberOfPages : 23
-                                }
-                            });
+                                } , undefined, 200);
                         }
                         else{
                             callback({
@@ -129,12 +123,9 @@ describe('alarmRestService', function() {
                         //Success if guid is defined, 500 otherwize
                         if(angular.isDefined(idObject.guid)){
                             callback({
-                                code : 200,
-                                data: {
                                     guid : idObject.guid,
                                     status : 'CLOSED'
-                                }
-                            });
+                                }, undefined, 200);
                         }else{
                             callback({
                                 code : 500,
@@ -145,11 +136,8 @@ describe('alarmRestService', function() {
             },
             getOpenTicketsCount: function() {
                 return {
-                    get: function(idObject, callback) {
-                        callback({
-                            code : 200,
-                            data: 5
-                        });
+                    getText: function(idObject, callback) {
+                        callback({content: 5, code: 200});
                     },
                 }
             },

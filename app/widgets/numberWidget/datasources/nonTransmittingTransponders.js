@@ -36,7 +36,7 @@ copy of the GNU General Public License along with the IFDM Suite. If not, see <h
 		function getNonTransmittingCount() {
 			var deferred = $q.defer();
 			$resource("movement-rules/rest/tickets/countAssetsNotSending").get(function(response) {
-				deferred.resolve(response.data);
+				deferred.resolve(response);
 			});
 
 			return deferred.promise;

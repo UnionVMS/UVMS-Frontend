@@ -28,7 +28,7 @@ describe('Ticket', function() {
 
 
     it("should parse JSON correctly", inject(function(Ticket) {
-        var ticket = Ticket.fromDTO(ticketData);
+        var ticket = Ticket.fromJSON(ticketData);
 
         expect(ticket.guid).toEqual(ticketData.guid);
         expect(ticket.openDate).toEqual(ticketData.openDate);
@@ -46,7 +46,7 @@ describe('Ticket', function() {
 
 
     it("isOpen should return true only when status is OPEN", inject(function(Ticket) {
-        var ticket = Ticket.fromDTO(ticketData);
+        var ticket = Ticket.fromJSON(ticketData);
         ticket.status = "OPEN";
         expect(ticket.isOpen()).toBeTruthy();
 
@@ -61,7 +61,7 @@ describe('Ticket', function() {
     }));
 
     it("isClosed should return true only when status is CLOSED", inject(function(Ticket) {
-        var ticket = Ticket.fromDTO(ticketData);
+        var ticket = Ticket.fromJSON(ticketData);
         ticket.status = "CLOSED";
         expect(ticket.isClosed()).toBeTruthy();
 
@@ -76,7 +76,7 @@ describe('Ticket', function() {
     }));
 
     it("isPending should return true only when status is PENDING", inject(function(Ticket) {
-        var ticket = Ticket.fromDTO(ticketData);
+        var ticket = Ticket.fromJSON(ticketData);
         ticket.status = "PENDING";
         expect(ticket.isPending()).toBeTruthy();
 
@@ -103,7 +103,7 @@ describe('Ticket', function() {
     }));
 
     it('getResolvedDate should return updateDate when status isnt open or pending', inject(function(Ticket) {
-        var ticket = Ticket.fromDTO(ticketData);
+        var ticket = Ticket.fromJSON(ticketData);
         var updated = '2015-01-01 12:00:00';
         ticket.updated = updated;
 
@@ -121,7 +121,7 @@ describe('Ticket', function() {
     }));
 
     it('getResolvedBy should return updatedBy when status isnt open or pending', inject(function(Ticket) {
-        var ticket = Ticket.fromDTO(ticketData);
+        var ticket = Ticket.fromJSON(ticketData);
         var updatedBy = 'TEST_USER';
         ticket.updatedBy = updatedBy;
 

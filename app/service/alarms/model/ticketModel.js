@@ -28,21 +28,21 @@ angular.module('unionvmsWeb').factory('Ticket', function() {
         this.comment = undefined;
     }
 
-    Ticket.fromDTO = function(dto){
+    Ticket.fromJSON = function(data){
         var ticket = new Ticket();
-        ticket.guid = dto.guid;
-        ticket.openDate = dto.openDate;
+        ticket.guid = data.guid;
+        ticket.openDate = data.openDate;
 
-        ticket.vesselGuid = dto.assetGuid;
-        ticket.positionGuid = dto.movementGuid;
-        ticket.ruleName = dto.ruleName;
-        ticket.sender = dto.sender;
-        ticket.recipient = dto.recipient;
-        ticket.updated = dto.updated;
-        ticket.updatedBy = dto.updatedBy;
-        ticket.status = dto.status;
-        ticket.ticketCount = dto.ticketCount;
-        ticket.comment = dto.comment;
+        ticket.vesselGuid = data.assetGuid;
+        ticket.positionGuid = data.movementGuid;
+        ticket.ruleName = data.ruleName;
+        ticket.sender = data.sender;
+        ticket.recipient = data.recipient;
+        ticket.updated = data.updated;
+        ticket.updatedBy = data.updatedBy;
+        ticket.status = data.status;
+        ticket.ticketCount = data.ticketCount;
+        ticket.comment = data.comment;
         return ticket;
     };
 
