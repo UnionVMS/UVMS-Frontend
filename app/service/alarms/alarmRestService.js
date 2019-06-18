@@ -147,22 +147,22 @@ angular.module('unionvmsWeb')
         var deferred = $q.defer();
         var dto = getListRequest.DTOForTickets();
         //Get list of all tickets
-        alarmRestFactory.getTickets().list({userName : userService.getUserName()}, dto, function(response){
-                if(parseInt(response.code) !== 200){
+        alarmRestFactory.getTickets().list({userName : userService.getUserName()}, dto, function(response, header, status){
+                if(status !== 200){
                     deferred.reject("Invalid response status");
                     return;
                 }
                 var tickets = [],
                     searchResultListPage;
 
-                if(angular.isArray(response.data.tickets)) {
-                    for (var i = 0; i < response.data.tickets.length; i++) {
-                        tickets.push(Ticket.fromDTO(response.data.tickets[i]));
+                if(angular.isArray(response.tickets)) {
+                    for (var i = 0; i < response.tickets.length; i++) {
+                        tickets.push(Ticket.fromJSON(response.tickets[i]));
                     }
                 }
 
-                var currentPage = response.data.currentPage;
-                var totalNumberOfPages = response.data.totalNumberOfPages;
+                var currentPage = response.currentPage;
+                var totalNumberOfPages = response.totalNumberOfPages;
                 searchResultListPage = new SearchResultListPage(tickets, currentPage, totalNumberOfPages);
 
                 deferred.resolve(searchResultListPage);
@@ -181,12 +181,12 @@ angular.module('unionvmsWeb')
         ticket.setUpdatedBy(userService.getUserName());
 
         var deferred = $q.defer();
-        alarmRestFactory.ticketStatus().update(ticket.DTO(), function(response) {
-            if(response.code !== 200){
+        alarmRestFactory.ticketStatus().update(ticket.DTO(), function(response, header, status) {
+            if(status !== 200){
                 deferred.reject("Invalid response status");
                 return;
             }
-            deferred.resolve(Ticket.fromDTO(response.data));
+            deferred.resolve(Ticket.fromJSON(response));
         }, function(error) {
             $log.error("Error updating ticket status");
             $log.error(error);
@@ -197,17 +197,17 @@ angular.module('unionvmsWeb')
 
     var updateTicketStatusQuery = function(tickets, status){
         var deferred = $q.defer();
-        alarmRestFactory.ticketStatusQuery().update({userName: userService.getUserName(), status: status}, tickets, function(response) {
-            if(response.code !== 200){
+        alarmRestFactory.ticketStatusQuery().update({userName: userService.getUserName(), status: status}, tickets, function(response, header, status) {
+            if(status !== 200){
                 deferred.reject("Invalid response status");
                 return;
             }
             var tickets = [],
                 searchResultListPage;
 
-            if(angular.isArray(response.data)) {
-                for (var i = 0; i < response.data.length; i++) {
-                    tickets.push(Ticket.fromDTO(response.data[i]));
+            if(angular.isArray(response)) {
+                for (var i = 0; i < response.length; i++) {
+                    tickets.push(Ticket.fromJSON(response[i]));
                 }
             }
 
@@ -240,13 +240,13 @@ angular.module('unionvmsWeb')
 
     var getTicket = function(guid) {
         var deferred = $q.defer();
-        alarmRestFactory.getTicket().get({guid:guid}, function(response) {
-            if (response.code !== 200) {
+        alarmRestFactory.getTicket().get({guid:guid}, function(response, header, status) {
+            if (status !== 200) {
                 deferred.reject("Invalid response status");
                 return;
             }
 
-            var ticket = Ticket.fromDTO(response.data);
+            var ticket = Ticket.fromJSON(response);
 
             if(angular.isUndefined(ticket) || angular.isUndefined(ticket.vesselGuid)){
                 return deferred.resolve(ticket);
@@ -270,13 +270,13 @@ angular.module('unionvmsWeb')
 
     var getCountFromResource = function(resource, queryData) {
         var deferred = $q.defer();
-        resource.get(queryData, function(response) {
-            if (response.code !== 200) {
+        resource.get(queryData, function(response, header, status) {
+            if (status !== 200) {
                 deferred.reject("Invalid response status");
                 return;
             }
 
-            deferred.resolve(response.data);
+            deferred.resolve(response);
         },
         function(error) {
             deferred.reject("Error getting alarm or ticket count.");
@@ -303,15 +303,15 @@ angular.module('unionvmsWeb')
         return deferred.promise;
     };
 
-    var getConfigurationFromResource = function(resource, validCode){
+    var getConfigurationFromResource = function(resource, header, status){
         var deferred = $q.defer();
         resource.get({},
             function(response){
-                if(response.code !== validCode){
+                if(status !== 200){
                     deferred.reject("Not valid alarm/ticket statuses configuration status.");
                     return;
                 }
-                deferred.resolve(response.data);
+                deferred.resolve(response);
             }, function(error){
                 console.error("Error getting configuration for alarm/ticket statuses.");
                 deferred.reject(error);
@@ -324,7 +324,7 @@ angular.module('unionvmsWeb')
     };
 
     var getTicketStatusConfig = function(){
-        return getConfigurationFromResource(alarmRestFactory.getTicketStatusConfig(), 200);
+        return getConfigurationFromResource(alarmRestFactory.getTicketStatusConfig());
     };
     
     var getSanityRuleNames = function() {

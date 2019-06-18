@@ -43,13 +43,13 @@ angular.module('unionvmsWeb')
 
     var getConfigFromResource = function(configResource){
         var deferred = $q.defer();
-        configResource.get({}, function(response) {
-            if(response.code !== 200){
+        configResource.get({}, function(response, header, status) {
+            if(status !== 200){
                 deferred.reject("Invalid response status");
                 return;
             }
             //Return config data
-            deferred.resolve(response.data);
+            deferred.resolve(response);
         }, function(error) {
             $log.error("Error getting config for rules", error);
             deferred.reject(error);
@@ -63,13 +63,13 @@ angular.module('unionvmsWeb')
 
     var getRuleByGuid = function(guid){
         var deferred = $q.defer();
-        ruleRestFactory.rule().get({id: guid}, function(response){
-                if(parseInt(response.code) !== 200){
+        ruleRestFactory.rule().get({id: guid}, function(response, header, status){
+                if(status !== 200){
                     deferred.reject("Invalid response status");
                     return;
                 }
 
-                deferred.resolve(Rule.fromDTO(response.data));
+                deferred.resolve(Rule.fromDTO(response));
             },
             function(error) {
                 $log.error("Error getting Rule with guid: " +guid, error);
@@ -83,17 +83,17 @@ angular.module('unionvmsWeb')
         var deferred = $q.defer();
 
         //Get list of all rules
-        ruleRestFactory.getAllRulesForUser().get({userName: userService.getUserName()}, function(response){
-                if(parseInt(response.code) !== 200){
+        ruleRestFactory.getAllRulesForUser().query({userName: userService.getUserName()}, function(response, header, status){
+                if(status !== 200){
                     deferred.reject("Invalid response status");
                     return;
                 }
                 var rules = [],
                     searchResultListPage;
 
-                if(angular.isArray(response.data)) {
-                    for (var i = 0; i < response.data.length; i++) {
-                        rules.push(Rule.fromDTO(response.data[i]));
+                if(angular.isArray(response)) {
+                    for (var i = 0; i < response.length; i++) {
+                        rules.push(Rule.fromDTO(response[i]));
                     }
                 }
                 var currentPage = 0,
@@ -116,21 +116,21 @@ angular.module('unionvmsWeb')
 
     var getRulesByQuery = function(getListRequest){
         var deferred = $q.defer();
-        ruleRestFactory.getRulesByQuery().list(getListRequest.DTOForRules(), function(response){
-                if(parseInt(response.code) !== 200){
+        ruleRestFactory.getRulesByQuery().list(getListRequest.DTOForRules(), function(response, header , status){
+                if(status !== 200){
                     deferred.reject("Invalid response status");
                     return;
                 }
                 var rules = [],
                     searchResultListPage;
 
-                if(angular.isArray(response.data.customRules)) {
-                    for (var i = 0; i < response.data.customRules.length; i++) {
-                        rules.push(Rule.fromDTO(response.data.customRules[i]));
+                if(angular.isArray(response.customRules)) {
+                    for (var i = 0; i < response.customRules.length; i++) {
+                        rules.push(Rule.fromDTO(response.customRules[i]));
                     }
                 }
-                var currentPage = response.data.currentPage;
-                var totalNumberOfPages = response.data.totalNumberOfPages;
+                var currentPage = response.currentPage;
+                var totalNumberOfPages = response.totalNumberOfPages;
                 searchResultListPage = new SearchResultListPage(rules, currentPage, totalNumberOfPages);
                 deferred.resolve(searchResultListPage);
             },
@@ -146,12 +146,12 @@ angular.module('unionvmsWeb')
         var deferred = $q.defer();
         //Set subscriber name to the current user
         ruleSubscriptionUpdate.setOwner(userService.getUserName());
-        ruleRestFactory.subscription().update(ruleSubscriptionUpdate.DTO(), function(response){
-                if(parseInt(response.code) !== 200){
+        ruleRestFactory.subscription().update(ruleSubscriptionUpdate.DTO(), function(response, header , status){
+                if(status !== 200){
                     deferred.reject("Invalid response status");
                     return;
                 }
-                deferred.resolve(Rule.fromDTO(response.data));
+                deferred.resolve(Rule.fromDTO(response));
             },
             function(error) {
                 $log.error("Error updating subscription for rule", error);
@@ -165,12 +165,12 @@ angular.module('unionvmsWeb')
         var deferred = $q.defer();
         //Set setUpdatedBy to the current user
         rule.setUpdatedBy(userService.getUserName());
-        ruleRestFactory.rule().save(rule.DTO(), function(response) {
-            if(parseInt(response.code) !== 200){
+        ruleRestFactory.rule().save(rule.DTO(), function(response, header , status) {
+            if(status !== 200){
                 deferred.reject("Invalid response status");
                 return;
             }
-            deferred.resolve(Rule.fromDTO(response.data));
+            deferred.resolve(Rule.fromDTO(response));
         }, function(error) {
             $log.error("Error creating rule");
             $log.error(error);
@@ -185,12 +185,12 @@ angular.module('unionvmsWeb')
         var deferred = $q.defer();
         //Set setUpdatedBy to the current user
         rule.setUpdatedBy(userService.getUserName());
-        ruleRestFactory.rule().update(rule.DTO(), function(response) {
-            if(parseInt(response.code) !== 200){
+        ruleRestFactory.rule().update(rule.DTO(), function(response, header , status) {
+            if(status !== 200){
                 deferred.reject("Invalid response status");
                 return;
             }
-            deferred.resolve(Rule.fromDTO(response.data));
+            deferred.resolve(Rule.fromDTO(response));
         }, function(error) {
             $log.error("Error updating rule");
             $log.error(error);
@@ -204,13 +204,13 @@ angular.module('unionvmsWeb')
         $log.debug("About to delete rule:");
         $log.debug(rule);
         var deferred = $q.defer();
-        ruleRestFactory.rule().delete({id: rule.guid}, function(response) {
-            if (response.code !== 200) {
+        ruleRestFactory.rule().delete({id: rule.guid}, function(response, header , status) {
+            if (status !== 200) {
                 deferred.reject("Invalid response status");
                 return;
             }
 
-            deferred.resolve(Rule.fromDTO(response.data));
+            deferred.resolve(Rule.fromDTO(response));
         },
         function(error) {
             $log.error("Error when trying to delete a rule");
