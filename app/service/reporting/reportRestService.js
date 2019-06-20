@@ -110,7 +110,7 @@ angular.module('unionvmsWeb').factory('reportRestFactory', function($resource) {
     var reportRestService = {
         getReportsList: function(){
             var deferred = $q.defer();
-            reportRestFactory.getReportsList().get(function(response){
+            reportRestFactory.getReportsList().query(function(response){
                 deferred.resolve(response);
             }, function(error){
                 console.error('Error getting list of reports');
@@ -121,7 +121,7 @@ angular.module('unionvmsWeb').factory('reportRestFactory', function($resource) {
         getReport: function(reportId){
             var deferred = $q.defer();
             reportRestFactory.getReport().get({id: reportId}, function(response){
-                deferred.resolve(response.data);
+                deferred.resolve(response);
             }, function(error){
                 deferred.reject(error);
             });
@@ -133,7 +133,7 @@ angular.module('unionvmsWeb').factory('reportRestFactory', function($resource) {
                 response.index = reportIdx;
                 deferred.resolve(response);
             }, function(error){
-                deferred.reject(error.data);
+                deferred.reject(error);
             });
             return deferred.promise;
         },
@@ -164,7 +164,7 @@ angular.module('unionvmsWeb').factory('reportRestFactory', function($resource) {
         executeReport: function(id, config){
             var deferred = $q.defer();
             reportRestFactory.executeReport().get({id: id}, angular.toJson(config), function(response){
-                deferred.resolve(response.data);
+                deferred.resolve(response);
             }, function(error){
                 deferred.reject(error);
             });
@@ -185,7 +185,7 @@ angular.module('unionvmsWeb').factory('reportRestFactory', function($resource) {
         executeWithoutSaving: function(config){
             var deferred = $q.defer();
             reportRestFactory.executeWithoutSaving().get(config.toJsonCopy(), function(response){
-                deferred.resolve(response.data);
+                deferred.resolve(response);
             }, function(error){
                 deferred.reject(error);
             });
@@ -207,7 +207,7 @@ angular.module('unionvmsWeb').factory('reportRestFactory', function($resource) {
         },
         getLastExecuted: function(nrReports){
             var deferred = $q.defer();
-            reportRestFactory.getLastExecuted().get({nrReports: nrReports}, {}, function(response){
+            reportRestFactory.getLastExecuted().query({nrReports: nrReports}, {}, function(response){
                 deferred.resolve(response);
             }, function(error){
                 deferred.reject(error);

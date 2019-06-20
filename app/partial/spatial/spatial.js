@@ -86,7 +86,7 @@ angular.module('unionvmsWeb').controller('SpatialCtrl',function(/*tripSummarySer
    
    var loadUserReportsList = function(){
        reportRestService.getReportsList().then(function(response){
-           if(response.data.length){
+           if(response.length){
                $scope.repServ.loadReportHistory();
                $scope.repNav.goToView('liveViewPanel','mapPanel',$scope.openReportList,[undefined,true]);
            }else{

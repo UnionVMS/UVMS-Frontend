@@ -293,7 +293,7 @@ angular.module('unionvmsWeb').controller('ReportslistCtrl',function($scope, $fil
     
     //Get Report List Success callback
     var getReportsListSuccess = function(reports){
-        $scope.reportsList = reports.data;
+        $scope.reportsList = reports;
         $scope.isLoadingReportsList = false;
         if(angular.isDefined($scope.reportsList) && $scope.reportsList.length === 0){
             $scope.tableAlert.show('spatial.table_no_data', 'info');
