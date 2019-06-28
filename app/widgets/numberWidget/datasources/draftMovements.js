@@ -70,8 +70,8 @@ copy of the GNU General Public License along with the IFDM Suite. If not, see <h
 		function recursiveFn(page) {
 			var deferred = $q.defer();
 			$resource('movement/rest/tempmovement/list').save(getQuery(page), function(response) {
-				var drafts = countDrafts(response.data.movement);
-				if (response.data.currentPage < response.data.totalNumberOfPages) {
+				var drafts = countDrafts(response.movement);
+				if (response.currentPage < response.totalNumberOfPages) {
 					recursiveFn(page+1).then(function(moreDrafts) {
 						deferred.resolve(drafts + moreDrafts);
 					});

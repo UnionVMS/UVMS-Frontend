@@ -16,7 +16,7 @@ copy of the GNU General Public License along with the IFDM Suite. If not, see <h
 		.module('unionvmsWeb')
 		.service('exchangeHistoryService', HistogramService);
 
-	function HistogramService(exchangeRestService, GetListRequest) {
+	function HistogramService(exchangeRestService, GetListRequest, dateTimeService) {
 		return {
 			getHistory: getHistory
 		};
@@ -84,9 +84,10 @@ copy of the GNU General Public License along with the IFDM Suite. If not, see <h
 			return moment(dateTimeString, 'YYYY-MM-DD HH:mm:ss Z').valueOf();
 		}
 
-		/* Fromat timestamp as string. */
+		/* Format timestamp as string. */
 		function getDateTimeString(millis) {
-			return moment(millis).format('YYYY-MM-DD HH:mm:ss Z');
+            return dateTimeService.formatUTCDateWithTimezone(moment(millis));
+			// return moment(millis).format('YYYY-MM-DD HH:mm:ss Z');
 		}
 
 		/* Create request with from/to and pagination. */

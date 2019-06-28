@@ -130,25 +130,25 @@ copy of the GNU General Public License along with the IFDM Suite. If not, see <h
 
 		function getAssets() {
 			var deferred = $q.defer();
-			$resource('movement/rest/movement/listByAreaAndTimeInterval').save(getQuery(), function(response) {
-				if (response.code !== "200") {
+			$resource('movement/rest/movement/listByAreaAndTimeInterval').save(getQuery(), function(response, header, status) {
+				if (status !== 200) {
 					// Could not get movements.
-					deferred.reject(response.data || "Invalid data.");
+					deferred.reject(response || "Invalid data.");
 				}
-				else if (!angular.isArray(response.data.movement) || response.data.movement.length === 0) {
+				else if (!angular.isArray(response.movement) || response.movement.length === 0) {
 					// No movements exist for this time interval and area code.
 					deferred.resolve([]);
 				}
 				else {
-					var connectIds = getUniqueConnectIds(response.data.movement);
-					return $resource('asset/rest/asset/listGroupByFlagState').save(connectIds, function(response) {
-						if (response.code !== 200) {
+					var connectIds = getUniqueConnectIds(response.movement);
+					return $resource('asset/rest/asset/listGroupByFlagState').save(connectIds, function(response, header, status) {
+						if (status !== 200) {
 							// Could not get assets.
-							deferred.reject(response.data || "Invalid data.");
+							deferred.reject(response || "Invalid data.");
 						}
 						else {
 							// Resolve unique assets by flag state.
-							deferred.resolve(response.data.numberOfAssetsGroupByFlagState);
+							deferred.resolve(response.numberOfAssetsGroupByFlagState);
 						}
 					}, function(error) {
 						// Asset request failed.
