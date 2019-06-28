@@ -305,22 +305,6 @@ angular.module('unionvmsWeb')
         return deferred.promise;
     };
 
-    var getConfigurationFromResource = function(resource, validCode){
-        var deferred = $q.defer();
-        resource.get({},
-            function(response){
-                if(response.code !== validCode){
-                    deferred.reject("Not valid alarm/ticket statuses configuration status.");
-                    return;
-                }
-                deferred.resolve(response.data);
-            }, function(error){
-                console.error("Error getting configuration for alarm/ticket statuses.");
-                deferred.reject(error);
-            });
-        return deferred.promise;
-    };
-
     var getTicketStatusConfigFromResource = function(resource){
         var deferred = $q.defer();
         resource.query({},
@@ -339,7 +323,19 @@ angular.module('unionvmsWeb')
     };
 
     var getAlarmStatusConfig = function(){
-        return getConfigurationFromResource(alarmRestFactory.getAlarmStatusConfig(), '200');
+        var deferred = $q.defer();
+        alarmRestFactory.getAlarmStatusConfig().query({},
+            function(response, header, status){
+                if(status !== 200){
+                    deferred.reject("Not valid alarm/ticket statuses configuration status.");
+                    return;
+                }
+                deferred.resolve(response);
+            }, function(error){
+                console.error("Error getting configuration for alarm/ticket statuses.");
+                deferred.reject(error);
+            });
+        return deferred.promise;
     };
 
     var getTicketStatusConfig = function(){

@@ -258,7 +258,7 @@ angular.module('unionvmsWeb').factory('searchService',function($q, $log, searchU
             var deferred = $q.defer();
             movementRestService.getLatestMovement(DEFAULT_ITEMS_PER_PAGE).then(function(latestMovements){
                 $.each(latestMovements, function(index, latestMovement) {
-                    getListRequest.addSearchCriteria("HIST_GUID", latestMovement.connectId);
+                    getListRequest.addSearchCriteria("GUID", latestMovement.connectId);
                 });
 
                 if(checkAccessToFeature('Vessel', 'getVesselList') || checkAccessToFeature('Union-VMS', 'viewVesselsAndMobileTerminals')){

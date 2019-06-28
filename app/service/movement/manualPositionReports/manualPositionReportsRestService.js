@@ -45,13 +45,13 @@ angular.module('unionvmsWeb')
 
     var createManualMovement = function(movement) {
         var deferred = $q.defer();
-        manualPositionRestFactory.manualMovement().save(movement.getDto(), function(response) {
-            if(response.code !== "200") {
+        manualPositionRestFactory.manualMovement().save(movement.getDto(), function(response, header, status) {
+            if(status !== 200) {
                 deferred.reject("Invalid response status");
                 return;
             }
 
-            deferred.resolve(ManualPosition.fromJson(response.data));
+            deferred.resolve(ManualPosition.fromJson(response));
         }, function(error) {
             deferred.reject(error);
         });
@@ -61,13 +61,13 @@ angular.module('unionvmsWeb')
 
     var getManualMovement = function(guid) {
         var deferred = $q.defer();
-        manualPositionRestFactory.manualMovement().get({guid: guid}, function(response) {
-            if (response.code !== "200") {
+        manualPositionRestFactory.manualMovement().get({guid: guid}, function(response, header, status) {
+            if (status !== 200) {
                 deferred.reject("Invalid response status");
                 return;
             }
 
-            deferred.resolve(ManualPosition.fromJson(response.data));
+            deferred.resolve(ManualPosition.fromJson(response));
         },
         function(error) {
             deferred.reject(error);
@@ -78,13 +78,13 @@ angular.module('unionvmsWeb')
 
     var updateManualMovement = function(movement) {
         var deferred = $q.defer();
-        manualPositionRestFactory.manualMovement().update(movement.getDto(), function(response) {
-            if(response.code !== "200") {
+        manualPositionRestFactory.manualMovement().update(movement.getDto(), function(response, header, status) {
+            if(status !== 200) {
                 deferred.reject("Invalid response status");
                 return;
             }
 
-            deferred.resolve(ManualPosition.fromJson(response.data));
+            deferred.resolve(ManualPosition.fromJson(response));
         }, function(error) {
             deferred.reject(error);
         });
@@ -97,22 +97,22 @@ angular.module('unionvmsWeb')
         var deferred = $q.defer();
         getListRequest.listSize = 1000;
         manualPositionRestFactory.manualMovements().list(getListRequest.DTOForManualPosition(),
-            function(response){
+            function(response, header, status){
 
-                if(response.code !== "200"){
+                if(status !== 200){
                     deferred.reject("Invalid response status");
                     return;
                 }
 
                 var positions = [];
                 
-                if(angular.isArray(response.data.movement)){
-                    for (var i = 0; i < response.data.movement.length; i++){
-                        positions.push(ManualPosition.fromJson(response.data.movement[i]));
+                if(angular.isArray(response.movement)){
+                    for (var i = 0; i < response.movement.length; i++){
+                        positions.push(ManualPosition.fromJson(response.movement[i]));
                     }
                 }
-                var currentPage = response.data.currentPage;
-                var totalNumberOfPages = response.data.totalNumberOfPages;
+                var currentPage = response.currentPage;
+                var totalNumberOfPages = response.totalNumberOfPages;
                 var searchResultListPage = new SearchResultListPage(positions, currentPage, totalNumberOfPages);
                 deferred.resolve(searchResultListPage);
             },
@@ -127,13 +127,12 @@ angular.module('unionvmsWeb')
 
     var deleteManualPositionReport = function(manualPositionReport){
         var deferred = $q.defer();
-        manualPositionRestFactory.deleteManualPositionReport().removePut({guid: manualPositionReport.guid}, {}, function(response) {
-            if(response.code !== "200"){
+        manualPositionRestFactory.deleteManualPositionReport().removePut({guid: manualPositionReport.guid}, {}, function(response, header, status) {
+            if(status !== 200){
                 deferred.reject("Invalid response status");
                 return;
             }
-
-            deferred.resolve(ManualPosition.fromJson(response.data));
+            deferred.resolve(ManualPosition.fromJson(response));
         }, function(error) {
             console.error("Error when trying to delete a manual position report");
             console.error(error);
@@ -144,13 +143,13 @@ angular.module('unionvmsWeb')
 
     var sendMovement = function(movement) {
         var deferred = $q.defer();
-        manualPositionRestFactory.sendMovement().send({guid: movement.guid}, movement, function(response) {
-            if (response.code !== "200") {
+        manualPositionRestFactory.sendMovement().send({guid: movement.guid}, movement, function(response, header, status) {
+            if (status !== 200) {
                 deferred.reject("Invalid response status");
                 return;
             }
 
-            deferred.resolve(ManualPosition.fromJson(response.data));
+            deferred.resolve(ManualPosition.fromJson(response));
         },
         function(error) {
             deferred.reject(error);
@@ -194,5 +193,4 @@ angular.module('unionvmsWeb')
         deleteManualPositionReport : deleteManualPositionReport,
         saveAndSendMovement: saveAndSendMovement
      };
-
 });

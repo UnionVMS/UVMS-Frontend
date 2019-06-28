@@ -14,7 +14,7 @@ copy of the GNU General Public License along with the IFDM Suite. If not, see <h
 	angular.module('unionvmsWeb')
 		.controller('incomingMovementsController', IncomingMovementsController);
 
-	function IncomingMovementsController($scope, searchService, locale, $interval) {
+	function IncomingMovementsController($scope, searchService, locale, $interval, SearchField, dateTimeService) {
 		var vm = this;
 
 		reloadList();
@@ -31,6 +31,8 @@ copy of the GNU General Public License along with the IFDM Suite. If not, see <h
 		function reloadList() {
 			searchService.reset();
 			searchService.getListRequest().listSize = 10;
+			searchService.getListRequest().criterias.push(new SearchField('FROM_DATE', dateTimeService.formatUTCDateWithTimezone(moment().subtract(1, 'hours').format("YYYY-MM-DD HH:mm"))));
+            searchService.getListRequest().criterias.push(new SearchField('TO_DATE', dateTimeService.formatUTCDateWithTimezone(moment.utc().format())));
 			searchService.searchMovements().then(function(page) {
 				$scope.currentSearchResults = page;
 			});

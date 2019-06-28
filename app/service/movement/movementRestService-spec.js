@@ -49,50 +49,32 @@ describe('movementRestService', function() {
 
 		// Mocking the 200 OK response with paged movements
 		movementListPagedSpy = jasmine.createSpy('movementListPagedSpy').andCallFake(function(data, callback) {
-			callback({
-				code: '200',
-				data: {	currentPage: 3,	totalNumberOfPages: 87,	movement: movementData }
-			});
+			callback({currentPage: 3, totalNumberOfPages: 87, movement: movementData}, undefined, 200);
 		});
 
 		// Mocking the 200 OK response with a single movement
 		singleMovementSpy = jasmine.createSpy('singleMovementSpy').andCallFake(function(parms, callback) {
-			callback({
-				code: '200',
-				data: movementData[0]
-			});
+			callback(movementData[0], undefined, 200);
 		});
 
 		// Mocking the 200 OK response with a list of movements
 		movementListSpy = jasmine.createSpy('movementListSpy').andCallFake(function(data, callback) {
-			callback({
-				code: '200',
-				data: movementData
-			})
+			callback(movementData, undefined, 200)
 		});
 
 		// Mocking the 200 OK response with data for any resource returning a single saved search
 		singleSavedSearchCallbackSpy = jasmine.createSpy('singleSavedSearchCallbackSpy').andCallFake(function(data, callback) {
-			callback({
-				code: '200',
-				data: savedSearchGroupData
-			});
+			callback(savedSearchGroupData, undefined, 200);
 		});
 
 		// Mocking the 200 OK response for lists of saved searches
 		savedSearchListSpy = jasmine.createSpy('savedSearchListSpy').andCallFake(function(data, callback) {
-			callback({
-				code: '200',
-				data: [savedSearchGroupData]
-			});
+			callback([savedSearchGroupData], undefined, 200);
 		});
 
 		// Mocking the 200 OK response for get config
 		getConfigSpy = jasmine.createSpy('getConfigSpy').andCallFake(function(params, callback) {
-			callback({
-				code: '200',
-				data: { configKey: 'configValue' }
-			});
+			callback({configKey: 'configValue'}, undefined, 200);
 		});
 
 		// Spy on resolved promises
@@ -116,7 +98,7 @@ describe('movementRestService', function() {
 			},
 			getSavedSearches: function() {
 				return {
-					get: savedSearchListSpy
+					query: savedSearchListSpy
 				};
 			},
 			savedSearch: function() {
@@ -133,7 +115,7 @@ describe('movementRestService', function() {
 			},
             getConfigForSourceTypes: function() {
                 return {
-                    get: getConfigSpy
+                    query: getConfigSpy
                 };
             }
 		});
