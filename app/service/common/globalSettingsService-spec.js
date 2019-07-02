@@ -94,24 +94,20 @@ describe('globalSettingsService', function() {
         };
 
         spyOn(mockSingleSettingResource, 'save').andCallFake(function(data, callback, error) {
-            callback({
-                code: '200'
-            });
+            callback({}, undefined, 200);
         });
 
-        spyOn(mockGlobalSettingsResource, 'get').andCallFake(function(callback) {
-            callback({
-                code: '200',
-                data: [{
+        spyOn(mockGlobalSettingsResource, 'query').andCallFake(function(callback) {
+            callback([{
                     key: key,
                     value: isArray ? value.join() : value
-                }]
-            });
+                }], undefined, 200
+            );
         });
 
         globalSettingsService.set(key, value, isArray);
         expect(mockSingleSettingResource.save).toHaveBeenCalledWith(expected, jasmine.any(Function), jasmine.any(Function));
-        expect(mockGlobalSettingsResource.get).toHaveBeenCalled();
+        expect(mockGlobalSettingsResource.query).toHaveBeenCalled();
     };
 
     var getInitialSettings = function() {
@@ -126,19 +122,16 @@ describe('globalSettingsService', function() {
 
     var mockSingleSettingResource = {
         save: function(data, callback) {
-            callback({code: '200', data: {}});
+            callback({}, undefined, 200);
         },
         put: function(params, data, callback) {
-            callback({code: '200'});
+            callback({}, undefined, 200);
         }
     };
 
     var mockGlobalSettingsResource = {
-        get: function(callback) {
-            callback({
-                code: '200',
-                data: getInitialSettings()
-            });
+        query: function(callback) {
+            callback(getInitialSettings(), undefined, 200);
         }
     };
 
