@@ -126,7 +126,6 @@ describe('AuditconfigurationCtrl', function() {
 	}));
 
 	var catalog = {
-		data: {
 			"vessel": [
 				{
 					key: "key.1",
@@ -148,12 +147,9 @@ describe('AuditconfigurationCtrl', function() {
 					description: "A global mobile terminal setting",
 					global: true
 				}
-			]
-		}
-	};
+			]};
 
 	var response = {
-		data: {
 			id: 123,
 			key: "test.key",
 			value: "some_value",
@@ -161,7 +157,6 @@ describe('AuditconfigurationCtrl', function() {
 			description: "A setting for testing.",
 			module: "movement",
 			lastModified: 123
-		}
 	};
 
 	var singleSettingResource = {

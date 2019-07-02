@@ -88,6 +88,8 @@
     "system_status_module_movementrules": "Movement Rules",
     "system_status_module_rules": "Rules",
     "system_status_module_asset": "Asset",
+    "system_status_module_spatial": "Spatial",
+    "system_status_module_spatialSwe": "Spatial SWE",
     "system_status_module_sales": "Sales",
     "system_status_module_mdr": "MDR"
 

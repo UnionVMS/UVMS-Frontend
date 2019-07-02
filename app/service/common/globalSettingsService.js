@@ -23,8 +23,8 @@ angular.module('unionvmsWeb').factory('globalSettingsService',['$resource', '$q'
 
     var getSettingsFromServerWithoutUpdate = function(){
       var deferred = $q.defer();
-      GlobalSettings.get(function(response) {
-          if(String(response.code) !== '200'){
+      GlobalSettings.query(function(response, header, status) {
+          if(String(status) !== '200'){
               return deferred.reject("Failed to load global settings.");
           }
           deferred.resolve();
@@ -37,12 +37,12 @@ angular.module('unionvmsWeb').factory('globalSettingsService',['$resource', '$q'
 
     var getSettingFromServer = function(){
         var deferred = $q.defer();
-        GlobalSettings.get(function(response) {
-            if(String(response.code) !== '200'){
+        GlobalSettings.query(function(response, header, status) {
+            if(String(status) !== '200'){
                 return deferred.reject("Failed to load global settings.");
             }
 
-            $.each(response.data, function(index, setting) {
+            $.each(response, function(index, setting) {
                 settings[setting.key] = setting;
             });
 
@@ -72,8 +72,8 @@ angular.module('unionvmsWeb').factory('globalSettingsService',['$resource', '$q'
             "moduleName": ""
         };
 
-        GlobalSetting.save(dto, function(response) {
-            if(String(response.code) !== '200'){
+        GlobalSetting.save(dto, function(response, header, status) {
+            if(String(status) !== '200'){
                 return deferred.reject("Invalid response status");
             }
             getSettingFromServer();
@@ -91,8 +91,8 @@ angular.module('unionvmsWeb').factory('globalSettingsService',['$resource', '$q'
         var deferred = $q.defer();
         var setting = settings[key];
         setting.value = value;
-        GlobalSetting.put({id: setting.id}, setting, function(response) {
-            if(String(response.code) !== '200'){
+        GlobalSetting.put({id: setting.id}, setting, function(response, header, status) {
+            if(String(status) !== '200'){
                 return deferred.reject("Invalid response status");
             }
             deferred.resolve();

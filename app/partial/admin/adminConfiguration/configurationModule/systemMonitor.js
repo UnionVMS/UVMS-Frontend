@@ -18,8 +18,8 @@ angular.module('unionvmsWeb').controller('SystemMonitorController', function($sc
 
 	$resource("config/rest/pings").get(function(response) {
 		$scope.searchResults.loading = false;
-		$scope.searchResults.items = response.data;
-		$scope.searchResults.showZeroResultsMessage = Object.keys(response.data).length === 0;
+		$scope.searchResults.items = response;
+		$scope.searchResults.showZeroResultsMessage = Object.keys(response).length === 0;
 	});
 
 	$scope.statusLabel = function(status) {

@@ -45,7 +45,7 @@ angular.module('unionvmsWeb').controller('AuditconfigurationCtrl',function($scop
 
 	var init = function() {
 		Settings.get(function(response) {
-			$scope.settings = response.data;
+			$scope.settings = response;
 			var modules = uvmsModules.filter(function(module) {
 				return $scope.settings[module] !== undefined && getNonGlobalSettings($scope.settings[module]).length > 0;
 			});
@@ -172,7 +172,7 @@ angular.module('unionvmsWeb').controller('AuditconfigurationCtrl',function($scop
 	/* Sends an update request to backend. */
 	function updateSetting(setting) {
 		SingleSetting.update({ id: setting.id }, getSettingTO(setting), function(response) {
-			setting.lastModified = response.data.lastModified;
+			setting.lastModified = response.lastModified;
 		}, function(error) {
 			alertService.showErrorMessage(error);
 		});
