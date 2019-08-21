@@ -107,8 +107,8 @@ angular.module('unionvmsWeb')
         var ranges = [
             {
                 key : 'DATE',
-                from : {searchKey: 'FROM_DATE', defaultValue: '1970-01-01 00:00:00 +00:00'},
-                to : {searchKey: 'TO_DATE', defaultValue: '2070-01-01 00:00:00 +00:00'}
+                from : {searchKey: 'FROM_DATE', defaultValue: '1970-01-01 00:00:00 +0000'},
+                to : {searchKey: 'TO_DATE', defaultValue: '2070-01-01 00:00:00 +0000'}
             },
             {
                 key: 'MOVEMENT_SPEED',
