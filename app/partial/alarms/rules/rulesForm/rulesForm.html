@@ -260,7 +260,7 @@ copy of the GNU General Public License along with the IFDM Suite. If not, see <h
                                 <tr ng-repeat="item in currentRule.actions" ng-form="actionForm">
                                     <td class="action">
                                         <div class="form-group" ng-class="{'has-error': actionForm.action.$invalid && (submitAttempted || actionForm.action.$dirty)}">
-                                            <dropdown name="action" ng-model="item.action" no-placeholder-item items="DROPDOWNS.ACTIONS" disabled-items="disabledActions" callback="actionSelected" callback-params="item" required></dropdown>
+                                            <dropdown name="action" ng-model="getDropdownActionForAction(item)" no-placeholder-item items="DROPDOWNS.ACTIONS" disabled-items="disabledActions" callback="actionSelected" callback-params="item" required></dropdown>
                                         </div>
                                     </td>
                                     <td class="value">

@@ -15,6 +15,9 @@ angular.module('unionvmsWeb')
             getTransmissionStatuses : function(){
                 return $resource('exchange/rest/plugin/list');
             },
+            getPluginByCapability : function(){
+                return $resource('exchange/rest/plugin/capability/:capability');
+            },
             stopTransmission : function(){
                  return $resource('exchange/rest/plugin/stop/:serviceClassName',{},
                 {
@@ -279,6 +282,34 @@ angular.module('unionvmsWeb')
             return deferred.promise;
         };
 
+        var getPluginByCapability = function(capability){
+            var deferred = $q.defer();
+            exchangeRestFactory.getPluginByCapability().query({capability : capability},
+                function(response, header, status) {
+                    if(status !== 200){
+                        deferred.reject("Invalid response status");
+                        return;
+                    }
+                    var services = [];
+                    if(angular.isArray(response)){
+                        for (var i = 0; i < response.length; i++){
+                            services.push(ExchangeService.fromJson(response[i]));
+                        }
+                    }
+                    deferred.resolve(services);
+                },
+                function(error){
+                    console.log("Error getting exchange services.", error);
+                    deferred.reject(error);
+                }
+            );
+            return deferred.promise;
+        };
+
+        var getSendReportPlugins = function() {
+            return getPluginByCapability('send_report');
+        };
+
         var getMessages = function(getListRequest){
              var deferred = $q.defer();
              exchangeRestFactory.getExchangeMessages().list(getListRequest.DTOForExchangeMessageList(),
@@ -477,6 +508,8 @@ angular.module('unionvmsWeb')
 
     return {
         getTransmissionStatuses : getTransmissionStatuses,
+        getPluginByCapability : getPluginByCapability,
+        getSendReportPlugins : getSendReportPlugins,
         stopTransmission : stopTransmission,
         startTransmission : startTransmission,
         getMessages : getMessages,

@@ -9,7 +9,7 @@ the hope that it will be useful, but WITHOUT ANY WARRANTY; without even the impl
 FITNESS FOR A PARTICULAR PURPOSE.  See the GNU General Public License for more details. You should have received a
 copy of the GNU General Public License along with the IFDM Suite. If not, see <http://www.gnu.org/licenses/>.
  */
-angular.module('unionvmsWeb').factory('rulesOptionsService',function(configurationService, locale, savedSearchService, ruleRestService) {
+angular.module('unionvmsWeb').factory('rulesOptionsService',function(configurationService, locale, savedSearchService, ruleRestService, exchangeRestService) {
 
     var actionsThatRequireValue = [];
     var DROPDOWNS = {
@@ -53,6 +53,15 @@ angular.module('unionvmsWeb').factory('rulesOptionsService',function(configurati
         return {'text': text,'code':key};
     };
 
+    var createDropdownValueWithTarget = function(prefix, key, target){
+        var text = key;
+        var translation = locale.getString('config.RULES_' + prefix + "_" + key);
+        if(translation.indexOf('KEY_NOT_FOUND') < 0){
+            text = translation;
+        }
+        return {'text': text + ' ' + target,'code':key,'target':target};
+    };
+
     var setupDropdowns = function(){
         /*HARD CODED BELOW*/
 
@@ -79,10 +88,19 @@ angular.module('unionvmsWeb').factory('rulesOptionsService',function(configurati
         //Actions
         DROPDOWNS.ACTIONS = [];
         $.each(configurationService.getValue('RULES', 'ACTIONS'), function(key, requiresValue){
-            DROPDOWNS.ACTIONS.push(createDropdownValue('ACTIONS', key));
+            if (key != 'SEND_REPORT') {
+                DROPDOWNS.ACTIONS.push(createDropdownValue('ACTIONS', key));
+            }
             if(requiresValue){
                 actionsThatRequireValue.push(key);
             }
+        });
+        exchangeRestService.getSendReportPlugins().then(function(services) {
+            for (var i = 0; i < services.length; i++) {
+                DROPDOWNS.ACTIONS.push(createDropdownValueWithTarget('ACTIONS', 'SEND_REPORT', services[i].name));
+            }
+        }, function(error) {
+            return $q.reject(error);
         });
         DROPDOWNS.ACTIONS = _.sortBy(DROPDOWNS.ACTIONS, function(obj){return obj.text;});
 
@@ -192,8 +210,7 @@ angular.module('unionvmsWeb').factory('rulesOptionsService',function(configurati
 
     //Dropdown values for actions
     var actionDropdowns = {
-        SEND_TO_FLUX : [],
-        SEND_TO_NAF : [],
+        SEND_REPORT : [],
     };
     var setupActionDropdowns = function(){
         var allOrganisations = configurationService.getValue('ORGANISATIONS', 'results');
@@ -201,8 +218,7 @@ angular.module('unionvmsWeb').factory('rulesOptionsService',function(configurati
         for (var i = 0; i < allOrganisations.length; i++) {
             organisations.push(allOrganisations[i].name);
         }
-        actionDropdowns.SEND_TO_FLUX = configurationService.setTextAndCodeForDropDown(organisations, undefined, undefined, true);
-        actionDropdowns.SEND_TO_NAF = configurationService.setTextAndCodeForDropDown(organisations, undefined, undefined, true);
+        actionDropdowns.SEND_REPORT = configurationService.setTextAndCodeForDropDown(organisations, undefined, undefined, true);
     };
 
 	var rulesOptionsService = {

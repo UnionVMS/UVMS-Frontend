@@ -216,6 +216,7 @@ angular.module('unionvmsWeb').factory('RuleAction', function() {
 
     function RuleAction(){
         this.action = undefined;
+        this.target = undefined;
         this.value = undefined;
         this.order = undefined; //First one has order 0
     }
@@ -227,6 +228,7 @@ angular.module('unionvmsWeb').factory('RuleAction', function() {
     RuleAction.prototype.DTO = function(){
         return {
             action : this.action,
+            target : this.target,
             value : this.value,
             order : this.order,
         };
@@ -235,6 +237,7 @@ angular.module('unionvmsWeb').factory('RuleAction', function() {
     RuleAction.fromDTO = function(dto){
         var ruleAction = new RuleAction();
         ruleAction.action = dto.action;
+        ruleAction.target = dto.target;
         ruleAction.value = dto.value;
         ruleAction.order = dto.order;
 

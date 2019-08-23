@@ -392,6 +392,7 @@ angular.module('unionvmsWeb').controller('RulesformCtrl',function($scope, $timeo
     //Callback when selecting action in dropdown
     $scope.actionSelected = function(selection, ruleAction){
         ruleAction.action = selection.code;
+        ruleAction.target = selection.target;
         ruleAction.value = getRuleActionDefaultValue(ruleAction);
         $timeout($scope.updateDisabledActions, 10);
     };
@@ -430,6 +431,18 @@ angular.module('unionvmsWeb').controller('RulesformCtrl',function($scope, $timeo
 
         //Text input
         return "TEXT";
+    };
+
+    $scope.getDropdownActionForAction = function(action){
+        var text = action.action;
+        var translation = locale.getString('config.RULES_ACTIONS_' + text);
+        if(translation.indexOf('KEY_NOT_FOUND') < 0){
+            text = translation;
+        }
+        if (action.target) {
+            text = text + ' ' + action.target;
+        }
+        return text;
     };
 
     //Get dropdown values for the action  value

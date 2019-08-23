@@ -81,6 +81,9 @@ angular.module('unionvmsWeb').factory('ruleService',function(locale, $log, rules
         getRuleActionAsText : function(ruleAction){
             var actionText = locale.getString('alarms.rules_rule_as_text_action_' +ruleAction.action);
             var text = actionText;
+            if (ruleAction.target) {
+                text = text  + " " + ruleAction.target;
+            }
             //Show value?
             if(rulesOptionsService.actionShouldHaveValue(ruleAction.action)){
                 text += ' ';
@@ -182,7 +185,7 @@ angular.module('unionvmsWeb').factory('ruleService',function(locale, $log, rules
                         //Don't compare an object with it self
                         if(i !== j){
                             //Same action?
-                            if(thenAction.action === rule.actions[j].action){
+                            if(thenAction.action === rule.actions[j].action && thenAction.target === rule.actions[j].target) {
                                 //Action has a value?
                                 if(typeof thenAction.value === 'string' && thenAction.value.trim().length > 0){
                                     //Same value?

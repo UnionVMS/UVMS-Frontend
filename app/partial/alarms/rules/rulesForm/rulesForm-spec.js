@@ -15,7 +15,7 @@ describe('RulesformCtrl', function() {
 
     beforeEach(module('unionvmsWeb'));
 
-    beforeEach(inject(function($rootScope, $httpBackend, $controller, configurationService, Rule, RuleAction, RuleDefinition, ruleRestService, $q) {
+    beforeEach(inject(function($rootScope, $httpBackend, $controller, configurationService, Rule, RuleAction, RuleDefinition, ruleRestService, $q, exchangeRestService) {
         scope = $rootScope.$new();
 
         scope.allowedToManageGlobalRules = function(){
@@ -28,6 +28,10 @@ describe('RulesformCtrl', function() {
         createController = function(){
             return $controller('RulesformCtrl', {$scope: scope});
         };
+
+        var deferred = $q.defer();
+        deferred.resolve([]);
+        spyOn(exchangeRestService, "getSendReportPlugins").andReturn(deferred.promise);
 
         createRuleWithData = function(){
             var rule = new Rule();
