@@ -94,8 +94,7 @@
 
     "RULES_ACTIONS_EMAIL" : "Send email to",
     "RULES_ACTIONS_MANUAL_POLL" : "Manual poll (one time/immediate)",
-    "RULES_ACTIONS_SEND_TO_FLUX" : "Send to FLUX Endpoint",
-    "RULES_ACTIONS_SEND_TO_NAF" : "Send to NAF Endpoint",
+    "RULES_ACTIONS_SEND_REPORT" : "Send report to",
     "RULES_ACTIONS_TICKET" : "Create notification",
     "RULES_ACTIVE_STATUSES_ACTIVE" : "Active",
     "RULES_ACTIVE_STATUSES_INACTIVE" : "Inactive",

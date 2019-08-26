@@ -9,7 +9,7 @@ the hope that it will be useful, but WITHOUT ANY WARRANTY; without even the impl
 FITNESS FOR A PARTICULAR PURPOSE.  See the GNU General Public License for more details. You should have received a
 copy of the GNU General Public License along with the IFDM Suite. If not, see <http://www.gnu.org/licenses/>.
  */
-angular.module('unionvmsWeb').factory('rulesOptionsService',function(configurationService, locale, savedSearchService, ruleRestService) {
+angular.module('unionvmsWeb').factory('rulesOptionsService',function(configurationService, locale, savedSearchService, ruleRestService, exchangeRestService) {
 
     var actionsThatRequireValue = [];
     var DROPDOWNS = {
@@ -42,7 +42,6 @@ angular.module('unionvmsWeb').factory('rulesOptionsService',function(configurati
         }
         return options;
     };
-
 
     var createDropdownValue = function(prefix, key){
         var text = key;
@@ -192,8 +191,7 @@ angular.module('unionvmsWeb').factory('rulesOptionsService',function(configurati
 
     //Dropdown values for actions
     var actionDropdowns = {
-        SEND_TO_FLUX : [],
-        SEND_TO_NAF : [],
+        SEND_REPORT : {targets: [], values : []},
     };
     var setupActionDropdowns = function(){
         var allOrganisations = configurationService.getValue('ORGANISATIONS', 'results');
@@ -201,8 +199,16 @@ angular.module('unionvmsWeb').factory('rulesOptionsService',function(configurati
         for (var i = 0; i < allOrganisations.length; i++) {
             organisations.push(allOrganisations[i].name);
         }
-        actionDropdowns.SEND_TO_FLUX = configurationService.setTextAndCodeForDropDown(organisations, undefined, undefined, true);
-        actionDropdowns.SEND_TO_NAF = configurationService.setTextAndCodeForDropDown(organisations, undefined, undefined, true);
+        actionDropdowns.SEND_REPORT.values = configurationService.setTextAndCodeForDropDown(organisations, undefined, undefined, true);
+        var plugins = [];
+        exchangeRestService.getSendReportPlugins().then(function(services) {
+            for (var i = 0; i < services.length; i++) {
+                plugins.push(services[i].name);
+            }
+            actionDropdowns.SEND_REPORT.targets = configurationService.setTextAndCodeForDropDown(plugins, undefined, undefined, true);
+        }, function(error) {
+            return $q.reject(error);
+        });
     };
 
 	var rulesOptionsService = {
@@ -227,7 +233,13 @@ angular.module('unionvmsWeb').factory('rulesOptionsService',function(configurati
         //Get dropdown values for an action
         getDropdownValuesForAction : function(action){
             if(action.action in actionDropdowns){
-                return actionDropdowns[action.action];
+                return actionDropdowns[action.action].values;
+            }
+        },
+        //Get dropdown targets for an action
+        getDropdownTargetsForAction : function(action){
+            if(action.action in actionDropdowns){
+                return actionDropdowns[action.action].targets;
             }
         },
         //Is the value a coordinate?

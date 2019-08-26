@@ -313,7 +313,6 @@ angular.module('unionvmsWeb').controller('RulesformCtrl',function($scope, $timeo
         return actionVal;
     };
 
-
     //Update list of disabled actions
     $scope.updateDisabledActions = function(){
         $scope.disabledActions.length = 0;
@@ -389,9 +388,19 @@ angular.module('unionvmsWeb').controller('RulesformCtrl',function($scope, $timeo
         }
     }
 
+    function getRuleActionDefaultTarget(ruleAction) {
+        if (rulesOptionsService.actionShouldHaveValue(ruleAction.action)) {
+            var targets = rulesOptionsService.getDropdownTargetsForAction(ruleAction);
+            if (targets && targets.length > 0) {
+                return targets[0].code;
+            }
+        }
+    }
+
     //Callback when selecting action in dropdown
     $scope.actionSelected = function(selection, ruleAction){
         ruleAction.action = selection.code;
+        ruleAction.target = getRuleActionDefaultTarget(ruleAction);
         ruleAction.value = getRuleActionDefaultValue(ruleAction);
         $timeout($scope.updateDisabledActions, 10);
     };
@@ -435,6 +444,11 @@ angular.module('unionvmsWeb').controller('RulesformCtrl',function($scope, $timeo
     //Get dropdown values for the action  value
     $scope.getDropdownValuesForAction = function(action){
         return rulesOptionsService.getDropdownValuesForAction(action);
+    };
+
+    //Get dropdown targets for the action
+    $scope.getDropdownTargetsForAction = function(action){
+        return rulesOptionsService.getDropdownTargetsForAction(action);
     };
 
 
