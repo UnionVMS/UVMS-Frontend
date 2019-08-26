@@ -43,7 +43,6 @@ angular.module('unionvmsWeb').factory('rulesOptionsService',function(configurati
         return options;
     };
 
-
     var createDropdownValue = function(prefix, key){
         var text = key;
         var translation = locale.getString('config.RULES_' + prefix + "_" + key);
@@ -51,15 +50,6 @@ angular.module('unionvmsWeb').factory('rulesOptionsService',function(configurati
             text = translation;
         }
         return {'text': text,'code':key};
-    };
-
-    var createDropdownValueWithTarget = function(prefix, key, target){
-        var text = key;
-        var translation = locale.getString('config.RULES_' + prefix + "_" + key);
-        if(translation.indexOf('KEY_NOT_FOUND') < 0){
-            text = translation;
-        }
-        return {'text': text + ' ' + target,'code':key,'target':target};
     };
 
     var setupDropdowns = function(){
@@ -88,19 +78,10 @@ angular.module('unionvmsWeb').factory('rulesOptionsService',function(configurati
         //Actions
         DROPDOWNS.ACTIONS = [];
         $.each(configurationService.getValue('RULES', 'ACTIONS'), function(key, requiresValue){
-            if (key != 'SEND_REPORT') {
-                DROPDOWNS.ACTIONS.push(createDropdownValue('ACTIONS', key));
-            }
+            DROPDOWNS.ACTIONS.push(createDropdownValue('ACTIONS', key));
             if(requiresValue){
                 actionsThatRequireValue.push(key);
             }
-        });
-        exchangeRestService.getSendReportPlugins().then(function(services) {
-            for (var i = 0; i < services.length; i++) {
-                DROPDOWNS.ACTIONS.push(createDropdownValueWithTarget('ACTIONS', 'SEND_REPORT', services[i].name));
-            }
-        }, function(error) {
-            return $q.reject(error);
         });
         DROPDOWNS.ACTIONS = _.sortBy(DROPDOWNS.ACTIONS, function(obj){return obj.text;});
 
@@ -210,7 +191,7 @@ angular.module('unionvmsWeb').factory('rulesOptionsService',function(configurati
 
     //Dropdown values for actions
     var actionDropdowns = {
-        SEND_REPORT : [],
+        SEND_REPORT : {targets: [], values : []},
     };
     var setupActionDropdowns = function(){
         var allOrganisations = configurationService.getValue('ORGANISATIONS', 'results');
@@ -218,7 +199,16 @@ angular.module('unionvmsWeb').factory('rulesOptionsService',function(configurati
         for (var i = 0; i < allOrganisations.length; i++) {
             organisations.push(allOrganisations[i].name);
         }
-        actionDropdowns.SEND_REPORT = configurationService.setTextAndCodeForDropDown(organisations, undefined, undefined, true);
+        actionDropdowns.SEND_REPORT.values = configurationService.setTextAndCodeForDropDown(organisations, undefined, undefined, true);
+        var plugins = [];
+        exchangeRestService.getSendReportPlugins().then(function(services) {
+            for (var i = 0; i < services.length; i++) {
+                plugins.push(services[i].name);
+            }
+            actionDropdowns.SEND_REPORT.targets = configurationService.setTextAndCodeForDropDown(plugins, undefined, undefined, true);
+        }, function(error) {
+            return $q.reject(error);
+        });
     };
 
 	var rulesOptionsService = {
@@ -243,7 +233,13 @@ angular.module('unionvmsWeb').factory('rulesOptionsService',function(configurati
         //Get dropdown values for an action
         getDropdownValuesForAction : function(action){
             if(action.action in actionDropdowns){
-                return actionDropdowns[action.action];
+                return actionDropdowns[action.action].values;
+            }
+        },
+        //Get dropdown targets for an action
+        getDropdownTargetsForAction : function(action){
+            if(action.action in actionDropdowns){
+                return actionDropdowns[action.action].targets;
             }
         },
         //Is the value a coordinate?

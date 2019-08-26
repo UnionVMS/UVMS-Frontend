@@ -1,5 +1,5 @@
-<!--
-﻿Developed with the contribution of the European Commission - Directorate General for Maritime Affairs and Fisheries
+﻿<!-- 
+Developed with the contribution of the European Commission - Directorate General for Maritime Affairs and Fisheries
 © European Union, 2015-2016.
 
 This file is part of the Integrated Fisheries Data Management (IFDM) Suite. The IFDM Suite is free software: you can
@@ -260,7 +260,7 @@ copy of the GNU General Public License along with the IFDM Suite. If not, see <h
                                 <tr ng-repeat="item in currentRule.actions" ng-form="actionForm">
                                     <td class="action">
                                         <div class="form-group" ng-class="{'has-error': actionForm.action.$invalid && (submitAttempted || actionForm.action.$dirty)}">
-                                            <dropdown name="action" ng-model="getDropdownActionForAction(item)" no-placeholder-item items="DROPDOWNS.ACTIONS" disabled-items="disabledActions" callback="actionSelected" callback-params="item" required></dropdown>
+                                            <dropdown name="action" ng-model="item.action" no-placeholder-item items="DROPDOWNS.ACTIONS" disabled-items="disabledActions" callback="actionSelected" callback-params="item" required></dropdown>
                                         </div>
                                     </td>
                                     <td class="value">
@@ -273,6 +273,12 @@ copy of the GNU General Public License along with the IFDM Suite. If not, see <h
                                        <div class="form-group" ng-class="{'has-error': actionForm.value.$invalid && (submitAttempted || actionForm.value.$dirty)}" ng-if="getActionValueInputType(item) ==='EMAIL'">
                                             <input name="value" type="email" class="form-control" ng-model="item.value" name="value" ng-disabled="!actionShouldHaveValue(item.action)" ng-required="actionShouldHaveValue(item.action)">
                                             <input-validation-message types="email" input="actionForm.value"></input-validation-message>
+                                        </div>
+                                        <div class="form-group" ng-class="{'has-error': actionForm.target.$invalid && (submitAttempted || actionForm.target.$dirty)}" ng-if="getActionValueInputType(item) ==='DROPDOWN'">
+                                            <dropdown name="target" ng-model="item.target" items="getDropdownTargetsForAction(item)" ng-disabled="!actionShouldHaveValue(item.action)" no-placeholder-item class="floatLeft"></dropdown>
+                                        </div>
+                                         <div class="form-group" ng-class="{'has-error': actionForm.target.$invalid && (submitAttempted || actionForm.target.$dirty)}" ng-if="getActionValueInputType(item) ==='DROPDOWN_EMPTY'">
+                                            <dropdown name="target" ng-model="item.target" items="getDropdownTargetsForAction(item)" initialtext="{{'alarms.rules_form_definition_value_dropdown_empty_text' | i18n}}" ng-disabled="!actionShouldHaveValue(item.action)" class="floatLeft"></dropdown>
                                         </div>
                                         <div class="form-group" ng-class="{'has-error': actionForm.value.$invalid && (submitAttempted || actionForm.value.$dirty)}" ng-if="getActionValueInputType(item) ==='DROPDOWN'">
                                             <dropdown name="value" ng-model="item.value" items="getDropdownValuesForAction(item)" ng-disabled="!actionShouldHaveValue(item.action)" no-placeholder-item class="floatLeft"></dropdown>

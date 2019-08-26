@@ -81,11 +81,15 @@ angular.module('unionvmsWeb').factory('ruleService',function(locale, $log, rules
         getRuleActionAsText : function(ruleAction){
             var actionText = locale.getString('alarms.rules_rule_as_text_action_' +ruleAction.action);
             var text = actionText;
-            if (ruleAction.target) {
-                text = text  + " " + ruleAction.target;
-            }
             //Show value?
             if(rulesOptionsService.actionShouldHaveValue(ruleAction.action)){
+                if (ruleAction.target) {
+	                if(typeof ruleAction.target === 'string' && ruleAction.target.trim().length > 0){
+	                    text += ' ' + ruleAction.target;
+	                } else{
+	                   text += ' ???';
+	                }
+	            }
                 text += ' ';
                 if(typeof ruleAction.value === 'string' && ruleAction.value.trim().length > 0){
                      text += ruleAction.value;
