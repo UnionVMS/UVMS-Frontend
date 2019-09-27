@@ -57,7 +57,7 @@ module.exports = function (grunt) {
       },
       rules: [
           // Internal rewrite
-          {from: 'app/config.json', to: 'environment/local.json'}
+          {from: 'app/config.json', to: 'environment/general.json'}
       ],
        proxies:grunt.file.exists('proxies.yaml')?grunt.file.readYAML('proxies.yaml'):[{
                 context: [

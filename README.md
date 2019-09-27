@@ -20,7 +20,7 @@ Clone this [repository](https://github.com/UnionVMS/UVMS-Frontend.git) and follo
 1. Run below command to install Yeoman, Bower and Grunt to be able to develop, serve and build the application
 
 ```
-$ npm install --global yo bower grunt-cli
+$ npm install --global yo@1.8.5 bower grunt-cli
 ```
 
 2. Install the [Angular generator](https://github.com/cgross/generator-cg-angular), this is needed to generate new frontend components
@@ -48,6 +48,10 @@ The project is using Grunt as a task runner. The config file with all tasks can 
 ### Serve the application
 
 A backend environment needs to be present to be able to run the frontend code locally. Please follow the documentation on Focus fish on [how to setup a Docker environment](https://focusfish.atlassian.net/wiki/display/UVMS/Docker+Installation). Please specify the Wildfly port within the Gruntfile.js at connect:proxies, if you follow above guide the port should be set to '28080'.
+
+create a proxies.yaml file if using a docker-machine setup
+
+first make a call to grunt copy:serve to get the angular locale files into the assets
 
 Run below command to serve the application on a web server `http://localhost:9001`
 

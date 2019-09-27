@@ -1,0 +1,47 @@
+- 
+  context: 
+    - /app/asset/rest
+    - /app/mobileterminal/rest
+    - /app/exchange/rest
+    - /app/movement/rest
+    - /app/movement/activity
+    - /app/exchange/activity
+    - /app/rules/activity
+    - /app/audit/rest
+    - /app/rules/rest
+    - /app/reporting/rest
+    - /app/spatial/rest
+    - /app/spatial/image
+    - /app/config/rest
+    - /mapfish-print
+    - /geoserver
+    - /app/usm-authentication/rest
+    - /app/usm-authorisation/rest
+    - /app/usm-administration/rest
+    - /app/activity/rest
+    - /app/sales/rest
+    - /app/mdr/rest
+    - /app/subscription/rest
+  host: focus
+#  host: 'localhost'
+#  host: 'cygnus-dev.athens.intrasoft-intl.private'
+#  host: 'mare-usm-dev.intrasoft-intl.com'
+#  host: 'intrarolli.ngrok.io'
+#  port: 8080
+#  port: 80
+  port: 28080
+  rewrite: 
+    ^/app: /unionvms
+#  https: false
+#  secure: false
+# Change origin and headers.host required when trying to reach the server from outside
+#  changeOrigin: true
+#  headers:
+#    'origin': 'w130423.brussels.intrasoft-intl.private:7001'
+#    host: 'mare-usm-dev.intrasoft-intl.com'
+#    #host: 'intrarolli.ngrok.io'
+
+- 
+  context: /mock/
+  host: localhost
+  port: 8081

@@ -17,3 +17,4 @@ app/app.css
 app/app.css.map
 *.sublime-*
 *.directory
+proxies.yaml
