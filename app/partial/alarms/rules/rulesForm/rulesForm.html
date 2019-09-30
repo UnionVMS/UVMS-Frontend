@@ -66,6 +66,12 @@ copy of the GNU General Public License along with the IFDM Suite. If not, see <h
                                     <input-validation-message types="required" input="ruleForm.active"></input-validation-message>
                                 </div>
                             </div>
+                            <div class="col-md-4">
+                                <div class="form-group" ng-class="{'has-error': ruleForm.active.$invalid && (submitAttempted || ruleForm.active.$dirty)}">
+                                    <input type="checkbox" name="aggregateInvocations" ng-model="currentRule.aggregateInvocations"/>
+                                    <label>{{'alarms.rules_form_aggregate_label' | i18n}}</label>
+                                </div>
+                            </div>
                         </div>
                     </div>
                     <div class="col-md-5 col-md-offset-1">

@@ -84,6 +84,7 @@
     "rules_form_type_label" : "Rule type",
     "rules_form_availability_label" : "Rule availability",
     "rules_form_status_label" : "Rule status",
+    "rules_form_aggregate_label" : "Ticket counter",
     "rules_form_time_interval_add" : "Add an interval",
     "rules_form_time_interval_add_another" : "Add another interval",
     "rules_form_time_interval_zero" : "No intervals are set. This rule is active all the time.",
