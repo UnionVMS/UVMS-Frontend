@@ -59,6 +59,15 @@ Run below command to serve the application on a web server `http://localhost:900
 $ grunt serve
 ```
 
+### Configuration for local development
+
+The `Gruntfile.js` tries to read a file called `proxies.yaml`, to configure the development server. If not found, it uses defaults; search the Gruntfile for "proxies.yaml" to get an idea.
+There is a file `proxies.yaml.example` in the root of the application to get you started.
+This file configures the forwarding of requests from the front end to a running installation of the application.
+
+**Note:** The front end will ask the back end for the URL of the geoserver. This is configured in the `spatial` schema, in table `system_configurations` and key `geo_server_url`,
+which normally has the value `http://localhost:28080/geoserver/`. Setting it to just `/geoserver/` in a DB shared by the local WildFly and the Docker WildFly allows using both.
+
 ### Running the tests
 
 Running below command will start Mocha tests via Karma-runner. This will also create a coverage report found in `/testResults`.
