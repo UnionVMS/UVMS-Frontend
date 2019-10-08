@@ -941,7 +941,7 @@ angular.module('unionvmsWeb').factory('MapFish',function() {
                 opacity: 1,
                 renderAsSvg: true,
                 labelProjection: angular.isDefined(proj) ? 'EPSG:' + proj : 'EPSG:4326',
-                labelFomat: '%1.2f%s',
+                labelFormat: '%1.2f%s',
                 font: {
                     name: ['Arial'],
                     size: 8,
