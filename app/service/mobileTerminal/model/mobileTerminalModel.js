@@ -19,7 +19,7 @@ angular.module('unionvmsWeb').factory('MobileTerminal', function(CommunicationCh
             this.softwareVersion = undefined;
             this.answerBack = undefined;
             this.channels = [createDefaultChannel()];            
-            this.active = false;            
+            this.active = undefined;            
             this.connectId = undefined;
             this.associatedVessel = undefined;
             this.mobileTerminalType = undefined;
@@ -27,6 +27,11 @@ angular.module('unionvmsWeb').factory('MobileTerminal', function(CommunicationCh
             this.inactivated = undefined;
             this.createTime = undefined;
             this.updateTime = undefined;
+
+            this.westAtlanticOceanRegion = false;
+            this.eastAtlanticOceanRegion = false;
+            this.indianOceanRegion = false;
+            this.pacificOceanRegion = false;
 
             this.source = 1; // (Internal: 1, National: 2)
             this.plugin = {
@@ -47,8 +52,8 @@ angular.module('unionvmsWeb').factory('MobileTerminal', function(CommunicationCh
         MobileTerminal.fromJson = function(data){
             var mobileTerminal = new MobileTerminal();
 
-            mobileTerminal.active = !data.inactivated;
-            mobileTerminal.inactivated = data.inactivated;
+            mobileTerminal.active = data.active;
+            mobileTerminal.inactivated = !data.active;
             mobileTerminal.id = data.id;
             mobileTerminal.source = data.source;
             mobileTerminal.mobileTerminalType = data.mobileTerminalType;
@@ -71,6 +76,12 @@ angular.module('unionvmsWeb').factory('MobileTerminal', function(CommunicationCh
             mobileTerminal.softwareVersion = data.softwareVersion;
             mobileTerminal.createTime = data.createTime;
             mobileTerminal.updateTime = data.updateTime;
+
+            mobileTerminal.westAtlanticOceanRegion = data.westAtlanticOceanRegion;
+            mobileTerminal.eastAtlanticOceanRegion = data.eastAtlanticOceanRegion;
+            mobileTerminal.indianOceanRegion = data.indianOceanRegion;
+            mobileTerminal.pacificOceanRegion = data.pacificOceanRegion;
+
             if(angular.isDefined(data.plugin) && data.plugin){
                 mobileTerminal.plugin = {
                     name : data.plugin.name,
@@ -116,10 +127,15 @@ angular.module('unionvmsWeb').factory('MobileTerminal', function(CommunicationCh
                 mobileTerminalType : this.mobileTerminalType,
                 plugin : this.plugin,
                 inactivated : !this.active,
+                active : this.active,
                 createTime : this.createTime,
                 updateTime : this.updateTime,
                 active: this.active,
-                source : this.source
+                source : this.source,
+                westAtlanticOceanRegion : this.westAtlanticOceanRegion,
+                eastAtlanticOceanRegion : this.eastAtlanticOceanRegion,
+                indianOceanRegion : this.indianOceanRegion,
+                pacificOceanRegion : this.pacificOceanRegion
             };
             
             if (this.connectId !== undefined) {
@@ -144,7 +160,10 @@ angular.module('unionvmsWeb').factory('MobileTerminal', function(CommunicationCh
             copy.transceiverType = this.transceiverType;
             copy.softwareVersion = this.softwareVersion;
             copy.answerBack = this.answerBack;
-
+            copy.westAtlanticOceanRegion = this.westAtlanticOceanRegion;
+            copy.eastAtlanticOceanRegion = this.eastAtlanticOceanRegion;
+            copy.indianOceanRegion = this.indianOceanRegion;
+            copy.pacificOceanRegion = this.pacificOceanRegion;
             copy.active = this.active;
             copy.associatedVessel = this.associatedVessel;
             copy.source = this.source;
