@@ -181,6 +181,9 @@ angular.module('unionvmsWeb')
     };
 
     Vessel.prototype.isLocalSource = function() {
+        if(this.source === null){
+            return false;
+        }
         return this.source.toUpperCase() === SOURCE_INTERNAL;
     };
 
