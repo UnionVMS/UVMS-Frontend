@@ -51,8 +51,6 @@ angular.module('unionvmsWeb')
 
             //Detect initial values of the Mobile Terminal object
             $scope.originalMobileTerminalValue = angular.copy($scope.mobileTerminal);
-            console.log($scope.originalMobileTerminalValue);
-         
             
              //Get list transponder systems
             if(angular.isDefined(configurationService.getConfig('MOBILE_TERMINAL_TRANSPONDERS'))){
@@ -114,8 +112,6 @@ $scope.oceanreg = [{"name":"WEST_ATLANTIC","code":0,"text":"AOR-W","attributes":
                         newValue.indianOceanRegion = true;
                     }
                 });
-    
-                console.log("newValue: ", newValue);
             }
       
         }, true);

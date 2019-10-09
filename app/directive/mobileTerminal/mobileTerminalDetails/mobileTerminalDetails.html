@@ -22,15 +22,6 @@
                                     <div ng-show="getTerminalConfig().capabilities.SUPPORT_SINGLE_OCEAN">
                                         <dropdown ng-model="mobileTerminal.attributes.SINGLE_OCEAN" initialtext="{{ 'common.choose' | i18n }}" items="getTerminalConfig().capabilities.SUPPORT_SINGLE_OCEAN" input-field-id="mt-{{listIndex}}-singleOcean"></dropdown>
                                     </div>
-                                    <!-- 
-                                    <div ng-hide="getTerminalConfig().capabilities.SUPPORT_SINGLE_OCEAN">
-                                        <tag-select-input ng-model="mobileTerminal.attributes.MULTIPLE_OCEAN" ng-init="mobileTerminal.attributes.MULTIPLE_OCEAN = setOceanRegions()" placeholder="{{'common.choose' | i18n }}" items="getTerminalConfig().capabilities.SUPPORT_MULTIPLE_OCEAN" ng-disabled="disableForm()" input-field-id="mt-{{listIndex}}-multipleOcean"></tag-select-input>
-                                        {{ mobileTerminal.attributes.MULTIPLE_OCEAN }}
-                                    </div>
-
-                                    items="oceanreg"
--->
-
                                     <div ng-hide="getTerminalConfig().capabilities.SUPPORT_SINGLE_OCEAN">
                                         <tag-select-input  ng-model="mobileTerminal.attributes.MULTIPLE_OCEAN" ng-init="mobileTerminal.attributes.MULTIPLE_OCEAN = mobileTerminal.attributes.MULTIPLE_OCEAN || setOceanRegions()" items="oceanreg" ng-disabled="disableForm()" input-field-id="mt-{{listIndex}}-multipleOcean"></tag-select-input>
                                     </div>
