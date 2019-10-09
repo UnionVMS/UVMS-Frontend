@@ -19,7 +19,7 @@ angular.module('unionvmsWeb').factory('MobileTerminal', function(CommunicationCh
             this.softwareVersion = undefined;
             this.answerBack = undefined;
             this.channels = [createDefaultChannel()];            
-            this.active = undefined;            
+            this.active = false;            
             this.connectId = undefined;
             this.associatedVessel = undefined;
             this.mobileTerminalType = undefined;
@@ -165,6 +165,7 @@ angular.module('unionvmsWeb').factory('MobileTerminal', function(CommunicationCh
             copy.indianOceanRegion = this.indianOceanRegion;
             copy.pacificOceanRegion = this.pacificOceanRegion;
             copy.active = this.active;
+            copy.inactivated = this.inactivated;
             copy.associatedVessel = this.associatedVessel;
             copy.source = this.source;
             copy.mobileTerminalType = this.mobileTerminalType;

@@ -49,7 +49,12 @@ describe('MobileTerminalModel', function() {
             "name" : "BURUM",
             "pluginServiceName" : "TestName",
             "pluginInactive" : false
-        }
+        },
+        
+        "westAtlanticOceanRegion" : false,
+        "eastAtlanticOceanRegion" : false,
+        "indianOceanRegion" : false,
+        "pacificOceanRegion" : false
 
     };
 
