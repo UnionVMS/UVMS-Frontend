@@ -47,7 +47,7 @@
 							<div ng-show="attrVisibility.trips.firstEventTime" ng-if="column === 'firstEventTime'">{{ trip.firstFishingActivityDateTime | stDateUtc }}</div>
 							<div ng-show="attrVisibility.trips.lastEventType" ng-if="column === 'lastEventType'" title="{{trip.lastFishingActivity}}">{{ 'abbreviations.activity_' + trip.lastFishingActivity | i18n }}</div>
 							<div ng-show="attrVisibility.trips.lastEventTime" ng-if="column === 'lastEventTime'">{{ trip.lastFishingActivityDateTime | stDateUtc }}</div>
-							<div ng-show="attrVisibility.trips.duration" ng-if="column === 'duration'">{{ trip.tripDuration  | stHumanizeTime }}</div>
+							<div ng-show="attrVisibility.trips.duration" ng-if="column === 'duration'">{{ trip.tripDuration | stHumanizeTime:'milliseconds' }}</div>
 							<div ng-show="attrVisibility.trips.nCorrections" ng-if="column === 'nCorrections'">{{ trip.noOfCorrections }}</div>
 						</td>
 						<td style="width:80px">

@@ -35,7 +35,7 @@ angular.module('unionvmsWeb').factory('unitConversionService',function($filter, 
 	            if (value !== 0){
 	                value = $filter('number')(speed, decimalPlaces);
 	            }
-	            
+
 	            return value + ' ' + finalUnit;
 	        }
 	    },
@@ -64,19 +64,23 @@ angular.module('unionvmsWeb').factory('unitConversionService',function($filter, 
                 if (value !== 0){
                     value = $filter('number')(distance, decimalPlaces);
                 }
-                
+
                 return value + ' ' + unit;
             }
 	    },
 	    duration: {
-	        timeToHuman: function(time){
-	            var duration = moment.duration(Math.abs(time) * 1000);
-	            
+	        timeToHuman: function(time, type){
+                if (typeof type === 'undefined') {
+                    type = 'seconds';
+                }
+
+                var duration = moment.duration(Math.abs(time), type);
+
 	            var days = Math.floor(duration.asDays());
 	            var hours = Math.floor(duration.asHours()) - (days * 24);
 	            var minutes = Math.floor(duration.asMinutes()) - (days * 24 * 60) - (hours * 60);
 	            var seconds = Math.round(duration.asSeconds()  - (days * 24 * 3600) - (hours * 3600) - (minutes * 60));
-	            
+
 	            var value = '';
 	            if (days !== 0){
 	                value += days + 'd ';
@@ -87,20 +91,20 @@ angular.module('unionvmsWeb').factory('unitConversionService',function($filter, 
 	            if (minutes !== 0){
 	                value += minutes + 'm ';
 	            }
-	            
+
 	            if (seconds !== 0){
 	                value += seconds + 's';
 	            }
-	            
+
 	            if (value === ''){
 	                value = '0s';
 	            }
-	            
-	            return value;
+
+	            return value.trim();
 	        },
 	        humanToTime: function(duration){
 	            var parsedDuration = duration.match(/([0-9]+[dhms]{1})/ig);
-	            
+
 	            var finalDuration = 0;
 	            if (parsedDuration){
 	                for (var i = 0; i < parsedDuration.length; i++){
@@ -110,19 +114,19 @@ angular.module('unionvmsWeb').factory('unitConversionService',function($filter, 
 	                    if (parsedDuration[i].toUpperCase().indexOf('H') !== -1){
 	                        finalDuration += (parseInt(parsedDuration[i]) * 3600);
 	                    }
-	                    
+
 	                    if (parsedDuration[i].toUpperCase().indexOf('M') !== -1){
 	                        finalDuration += (parseInt(parsedDuration[i]) * 60);
 	                    }
-	                    
+
 	                    if (parsedDuration[i].toUpperCase().indexOf('S') !== -1){
 	                        finalDuration += parseInt(parsedDuration[i]);
 	                    }
 	                }
-	                
+
 	                return finalDuration;
 	            }
-	            
+
 	            return undefined;
 	        }
 	    },
@@ -137,7 +141,7 @@ angular.module('unionvmsWeb').factory('unitConversionService',function($filter, 
 	            var displayFormat = this.getDateFormat();
                 var src_format = 'YYYY-MM-DD HH:mm:ss Z';
                 var server_format = 'YYYY-MM-DDTHH:mm:ss';
-                
+
                 if (direction === 'to_server'){
                     if (moment.utc(date, src_format).isValid()){
                         return moment.utc(date, src_format).format(server_format);
