@@ -10,114 +10,114 @@ FITNESS FOR A PARTICULAR PURPOSE.  See the GNU General Public License for more d
 copy of the GNU General Public License along with the IFDM Suite. If not, see <http://www.gnu.org/licenses/>.
 -->
 <div class="row advancedActiviySearchForm" ng-controller="AdvancedsearchformCtrl">
-	<div ng-class="{'is-disabled': actServ.reportsList.isLoading || actServ.isGettingMdrCodes}" ng-show="isFormVisible">
-		<form name="activityAdvancedSearchForm" novalidate>
-			<div class="form-container">
-				<div class="col-md-2">
-					<!--communication channel criterion-->
-					<combobox ng-model="advancedSearchObject.comChannel" items="codeLists.comChannels" initialtext="{{'activity.advanced_search_placeholder_com_channel' | i18n}}" ></combobox>
-				</div>
-				<div class="col-md-2">
-					<!--FROM_ID criterion-->
-					<input id="fromIdFACriterion" type="text" class="form-control" name="fromIdFACriterion" ng-model="advancedSearchObject.fromId" placeholder="{{'activity.advanced_search_placeholder_from_id' | i18n}}"  maxlength="255"/>
-				</div>
-				<div class="col-md-2">
-					<!--FROM_NAME criterion-->
-					<input id="ownerFACriterion" type="text" class="form-control" name="ownerFACriterion" ng-model="advancedSearchObject.owner" placeholder="{{'activity.advanced_search_placeholder_owner' | i18n}}"  maxlength="255"/>
-				</div>
-				<div class="col-md-2">
-					<!--PERIOD_START criterion-->
-					<datepicker-input  placeholder="{{'activity.advanced_search_placeholder_start_date' | i18n}}" time="true" model="advancedSearchObject.startDateTime" name="periodStartFACriterion" max-date="advancedSearchObject.endDateTime"  input-field-id="periodStartFACriterion" update-when="default"></datepicker-input>
-				</div>
-				<div class="col-md-2">
-					<!--PERIOD_END criterion-->
-					<datepicker-input  placeholder="{{'activity.advanced_search_placeholder_end_date' | i18n}}" time="true" model="advancedSearchObject.endDateTime" name="periodEndFACriterion" min-date="advancedSearchObject.startDateTime" input-field-id="periodEndFACriterion"></datepicker-input>
-				</div>
-				<div class="col-md-2">
-					<!--VESSEL_ID criterion-->
-					<input id="vesselFACriterion" type="text" class="form-control" name="vesselFACriterion" ng-model="advancedSearchObject.vessel" placeholder="{{'activity.advanced_search_placeholder_vessel' | i18n}}"  maxlength="255"/>
-				</div>
-				<div class="col-md-2">
-					<!-- VESSEL_NAME criterion -->
-					<combobox ng-model="advancedSearchObject.vesselGroup" items="vesselGroups" initialtext="{{'activity.advanced_search_placeholder_vessel_group' | i18n}}" ></combobox>
-				</div>
-				<div class="col-md-2">
-					<!-- PURPOSE_CODE criterion -->
-					<combobox ng-model="advancedSearchObject.purposeCode" items="codeLists.purposeCodes" multiple="true" min-selections="1" hide-selected-items="true" initialtext="{{'activity.advanced_search_placeholder_purpose_code' | i18n}}"></combobox>
-				</div>
-				<div class="col-md-2" ng-show="visibleCombos.reportType">
-					<!-- REPORT_TYPE criterion -->
-					<combobox ng-model="advancedSearchObject.reportType" items="codeLists.reportTypes" initialtext="{{'activity.advanced_search_placeholder_report_type' | i18n}}" ></combobox>
-				</div>
-				<div class="col-md-2" ng-show="visibleCombos.activityType">
-					<!-- ACTIVITY_TYPE criterion -->
-					<combobox ng-model="advancedSearchObject.activityType" items="codeLists.activityTypes" initialtext="{{'activity.advanced_search_placeholder_activity_type' | i18n}}" ></combobox>
-				</div>
-				<div class="col-md-2">
-					<!-- AREA criterion -->
-					<input id="areaFACriterion" type="text" class="form-control" name="areaFACriterion" ng-model="advancedSearchObject.area" placeholder="{{'activity.advanced_search_placeholder_area' | i18n}}"  maxlength="255"/>
-				</div>
-				<div class="col-md-2">
-					<!-- PORT criterion -->
-					<input id="portFACriterion" type="text" class="form-control" name="portFACriterion" ng-model="advancedSearchObject.port" placeholder="{{'activity.advanced_search_placeholder_port' | i18n}}"  maxlength="255"/>
-				</div>
-				<div class="col-md-2" ng-show="visibleCombos.gearType">
-					<!-- GEAR_TYPE criterion -->
-					<combobox ng-model="advancedSearchObject.gearType" items="codeLists.gearTypes" initialtext="{{'activity.advanced_search_placeholder_gear_type' | i18n}}" ></combobox>
-				</div>
-				<div class="col-md-4">
-					<!-- SPECIES criterion -->
-					<input type="text" ng-model="advancedSearchObject.species" placeholder="{{'activity.advanced_search_placeholder_species' | i18n}}" uib-typeahead="speices for speices in getSpecies($viewValue)" typeahead-loading="loadingLocations" typeahead-no-results="noResults" class="form-control">
-					<!-- <i ng-show="loadingLocations" class="glyphicon glyphicon-refresh"></i>
-					<div ng-show="noResults">
-						<i class="glyphicon glyphicon-remove"></i> {{'activity.advanced_search_placeholder_species_no_results' | i18n}}
-					</div> -->
-				</div>
-				<div class="col-md-2">
-					<!-- MASTER criterion -->
-					<input id="masterFACriterion" type="text" class="form-control" name="masterFACriterion" ng-model="advancedSearchObject.master" placeholder="{{'activity.advanced_search_master' | i18n}}"  maxlength="255"/>
-				</div>
-				<div class="col-md-4">
-					<!-- TRIP ID criterion -->
-					<input id="tripIdCriterion" type="text" class="form-control" name="tripIdCriterion" ng-model="advancedSearchObject.tripId" placeholder="{{'activity.advanced_search_placeholder_trip_id' | i18n}}"  maxlength="255"/>
-				</div>
-				<div class="col-md-12">
-					<div class="row">
-						<div class="col-md-2 labelAlign">
-							<label>{{'activity.advanced_search_weight_range' | i18n }}</label>
-						</div>
-						<div class="col-md-2">
-							<combobox ng-model="advancedSearchObject.weightUnit" items="codeLists.weightUnits"></combobox>
-						</div>
-						<div class="col-md-2">
-							<div class="unit-input" ng-class="{'has-error': (activityAdvancedSearchForm.minWeightFACriterion.$dirty || isFormValid === true) && activityAdvancedSearchForm.minWeightFACriterion.$invalid}">  <!-- && submitingReport === true -->
-								<!-- QUANTITY MIN criterion -->
-								<numeric-input validate-min-in-range class="form-control" ng-model="advancedSearchObject.minWeight" name="minWeightFACriterion" type="number" min="0" max="advancedSearchObject.maxWeight"></numeric-input>
-								<div class="unit-box">{{'activity.advanced_search_min' | i18n}}</div>
-							</div>
-							<div class="belowErrorMessages" ng-messages="activityAdvancedSearchForm.minWeightFACriterion.$error" ng-show="(activityAdvancedSearchForm.minWeightFACriterion.$dirty || isFormValid === true) && activityAdvancedSearchForm.minWeightFACriterion.$invalid">
-								<div ng-message="invalidNumber">{{'spatial.not_numeric_error_message' | i18n }}</div>
-								<div ng-message="min">{{'spatial.min_value_1_error_message' | i18n }}</div>
-								<div ng-message="minBiggerThanMax">{{'spatial.min_value_bigger_than_max' | i18n}}</div>
-							</div>
-						</div>
-						<div class="col-md-2">
-							<div class="unit-input" ng-class="{'has-error': segmentSecForm.segMaxSpeed.$error.$invalid && submitingReport === true}">
-								<!-- QUANTITY MAX criterion -->
-								<numeric-input validate-max-in-range class="form-control" ng-model="advancedSearchObject.maxWeight" name="maxWeightFACriterion" min="advancedSearchObject.minWeight"></numeric-input>
-								<div class="unit-box">{{'activity.advanced_search_max' | i18n}}</div>
-							</div>
-						</div>
-					</div>
-				</div>
-			</div>
-			<div class="col-md-12 buttonSection">
-				<!-- FORM BUTTONS -->
-				<div class="btn-right">
-					<button class="btn btn-primary button" type="submit" ng-click="searchFAReports()" >{{"common.search" | i18n }}</button>
-					<button type="button" class="btn btn-default button" ng-click="resetSearch()">{{'common.reset' | i18n}}</button>
-				</div>
-			</div>
-		</form>
-	</div>
+    <div ng-class="{'is-disabled': actServ.reportsList.isLoading || actServ.isGettingMdrCodes}" ng-show="isFormVisible">
+        <form name="activityAdvancedSearchForm" novalidate>
+            <div class="form-container">
+                <div class="col-md-2">
+                    <!--communication channel criterion-->
+                    <combobox ng-model="advancedSearchObject.comChannel" items="codeLists.comChannels" initialtext="{{'activity.advanced_search_placeholder_com_channel' | i18n}}" ></combobox>
+                </div>
+                <div class="col-md-2">
+                    <!--FROM_ID criterion-->
+                    <input id="fromIdFACriterion" type="text" class="form-control" name="fromIdFACriterion" ng-model="advancedSearchObject.fromId" placeholder="{{'activity.advanced_search_placeholder_from_id' | i18n}}"  maxlength="255"/>
+                </div>
+                <div class="col-md-2">
+                    <!--FROM_NAME criterion-->
+                    <input id="ownerFACriterion" type="text" class="form-control" name="ownerFACriterion" ng-model="advancedSearchObject.owner" placeholder="{{'activity.advanced_search_placeholder_owner' | i18n}}"  maxlength="255"/>
+                </div>
+                <div class="col-md-2">
+                    <!--PERIOD_START criterion-->
+                    <datepicker-input  placeholder="{{'activity.advanced_search_placeholder_start_date' | i18n}}" time="true" model="advancedSearchObject.startDateTime" name="periodStartFACriterion" max-date="advancedSearchObject.endDateTime"  input-field-id="periodStartFACriterion" update-when="default"></datepicker-input>
+                </div>
+                <div class="col-md-2">
+                    <!--PERIOD_END criterion-->
+                    <datepicker-input  placeholder="{{'activity.advanced_search_placeholder_end_date' | i18n}}" time="true" model="advancedSearchObject.endDateTime" name="periodEndFACriterion" min-date="advancedSearchObject.startDateTime" input-field-id="periodEndFACriterion"></datepicker-input>
+                </div>
+                <div class="col-md-2">
+                    <!--VESSEL_ID criterion-->
+                    <input id="vesselFACriterion" type="text" class="form-control" name="vesselFACriterion" ng-model="advancedSearchObject.vessel" placeholder="{{'activity.advanced_search_placeholder_vessel' | i18n}}"  maxlength="255"/>
+                </div>
+                <div class="col-md-2">
+                    <!-- VESSEL_NAME criterion -->
+                    <combobox ng-model="advancedSearchObject.vesselGroup" items="vesselGroups" initialtext="{{'activity.advanced_search_placeholder_vessel_group' | i18n}}" ></combobox>
+                </div>
+                <div class="col-md-2">
+                    <!-- PURPOSE_CODE criterion -->
+                    <combobox ng-model="advancedSearchObject.purposeCode" items="codeLists.purposeCodes" multiple="true" min-selections="1" hide-selected-items="true" label-override="{{'activity.advanced_search_placeholder_purpose_code' | i18n}}" initialtext="{{'activity.advanced_search_placeholder_purpose_code' | i18n}}"></combobox>
+                </div>
+                <div class="col-md-2" ng-show="visibleCombos.reportType">
+                    <!-- REPORT_TYPE criterion -->
+                    <combobox ng-model="advancedSearchObject.reportType" items="codeLists.reportTypes" initialtext="{{'activity.advanced_search_placeholder_report_type' | i18n}}" ></combobox>
+                </div>
+                <div class="col-md-2" ng-show="visibleCombos.activityType">
+                    <!-- ACTIVITY_TYPE criterion -->
+                    <combobox ng-model="advancedSearchObject.activityType" items="codeLists.activityTypes" initialtext="{{'activity.advanced_search_placeholder_activity_type' | i18n}}" ></combobox>
+                </div>
+                <div class="col-md-2">
+                    <!-- AREA criterion -->
+                    <input id="areaFACriterion" type="text" class="form-control" name="areaFACriterion" ng-model="advancedSearchObject.area" placeholder="{{'activity.advanced_search_placeholder_area' | i18n}}"  maxlength="255"/>
+                </div>
+                <div class="col-md-2">
+                    <!-- PORT criterion -->
+                    <input id="portFACriterion" type="text" class="form-control" name="portFACriterion" ng-model="advancedSearchObject.port" placeholder="{{'activity.advanced_search_placeholder_port' | i18n}}"  maxlength="255"/>
+                </div>
+                <div class="col-md-2" ng-show="visibleCombos.gearType">
+                    <!-- GEAR_TYPE criterion -->
+                    <combobox ng-model="advancedSearchObject.gearType" items="codeLists.gearTypes" initialtext="{{'activity.advanced_search_placeholder_gear_type' | i18n}}" ></combobox>
+                </div>
+                <div class="col-md-4">
+                    <!-- SPECIES criterion -->
+                    <input type="text" ng-model="advancedSearchObject.species" placeholder="{{'activity.advanced_search_placeholder_species' | i18n}}" uib-typeahead="speices for speices in getSpecies($viewValue)" typeahead-loading="loadingLocations" typeahead-no-results="noResults" class="form-control">
+                    <!-- <i ng-show="loadingLocations" class="glyphicon glyphicon-refresh"></i>
+                    <div ng-show="noResults">
+                        <i class="glyphicon glyphicon-remove"></i> {{'activity.advanced_search_placeholder_species_no_results' | i18n}}
+                    </div> -->
+                </div>
+                <div class="col-md-2">
+                    <!-- MASTER criterion -->
+                    <input id="masterFACriterion" type="text" class="form-control" name="masterFACriterion" ng-model="advancedSearchObject.master" placeholder="{{'activity.advanced_search_master' | i18n}}"  maxlength="255"/>
+                </div>
+                <div class="col-md-4">
+                    <!-- TRIP ID criterion -->
+                    <input id="tripIdCriterion" type="text" class="form-control" name="tripIdCriterion" ng-model="advancedSearchObject.tripId" placeholder="{{'activity.advanced_search_placeholder_trip_id' | i18n}}"  maxlength="255"/>
+                </div>
+                <div class="col-md-12">
+                    <div class="row">
+                        <div class="col-md-2 labelAlign">
+                            <label>{{'activity.advanced_search_weight_range' | i18n }}</label>
+                        </div>
+                        <div class="col-md-2">
+                            <combobox ng-model="advancedSearchObject.weightUnit" items="codeLists.weightUnits"></combobox>
+                        </div>
+                        <div class="col-md-2">
+                            <div class="unit-input" ng-class="{'has-error': (activityAdvancedSearchForm.minWeightFACriterion.$dirty || isFormValid === true) && activityAdvancedSearchForm.minWeightFACriterion.$invalid}">  <!-- && submitingReport === true -->
+                                <!-- QUANTITY MIN criterion -->
+                                <numeric-input validate-min-in-range class="form-control" ng-model="advancedSearchObject.minWeight" name="minWeightFACriterion" type="number" min="0" max="advancedSearchObject.maxWeight"></numeric-input>
+                                <div class="unit-box">{{'activity.advanced_search_min' | i18n}}</div>
+                            </div>
+                            <div class="belowErrorMessages" ng-messages="activityAdvancedSearchForm.minWeightFACriterion.$error" ng-show="(activityAdvancedSearchForm.minWeightFACriterion.$dirty || isFormValid === true) && activityAdvancedSearchForm.minWeightFACriterion.$invalid">
+                                <div ng-message="invalidNumber">{{'spatial.not_numeric_error_message' | i18n }}</div>
+                                <div ng-message="min">{{'spatial.min_value_1_error_message' | i18n }}</div>
+                                <div ng-message="minBiggerThanMax">{{'spatial.min_value_bigger_than_max' | i18n}}</div>
+                            </div>
+                        </div>
+                        <div class="col-md-2">
+                            <div class="unit-input" ng-class="{'has-error': segmentSecForm.segMaxSpeed.$error.$invalid && submitingReport === true}">
+                                <!-- QUANTITY MAX criterion -->
+                                <numeric-input validate-max-in-range class="form-control" ng-model="advancedSearchObject.maxWeight" name="maxWeightFACriterion" min="advancedSearchObject.minWeight"></numeric-input>
+                                <div class="unit-box">{{'activity.advanced_search_max' | i18n}}</div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-12 buttonSection">
+                <!-- FORM BUTTONS -->
+                <div class="btn-right">
+                    <button class="btn btn-primary button" type="submit" ng-click="searchFAReports()" >{{"common.search" | i18n }}</button>
+                    <button type="button" class="btn btn-default button" ng-click="resetSearch()">{{'common.reset' | i18n}}</button>
+                </div>
+            </div>
+        </form>
+    </div>
 </div>
