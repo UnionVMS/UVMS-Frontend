@@ -38,11 +38,11 @@
 							<div ng-show="attrVisibility.trips.tripId" ng-if="column === 'tripId'">{{ trip.schemeId}}:{{ trip.tripId }}</div>
 							<div ng-show="attrVisibility.trips.fs" ng-if="column === 'fs'">{{ trip.flagState}}</div>
 							<div ng-show="attrVisibility.trips.extMark" ng-if="column === 'extMark'">{{ trip.EXT_MARK }}</div>
-							<div ng-show="attrVisibility.trips.cfr" ng-if="column === 'cfr'">{{ trip.CFR }}</div>
-							<div ng-show="attrVisibility.trips.ircs" ng-if="column === 'ircs'">{{ trip.IRCS }}</div>
-							<div ng-show="attrVisibility.trips.uvi" ng-if="column === 'uvi'">{{ trip.UVI }}</div>
-							<div ng-show="attrVisibility.trips.iccat" ng-if="column === 'iccat'">{{ trip.ICCAT }}</div>
-							<div ng-show="attrVisibility.trips.gfcm" ng-if="column === 'gfcm'">{{ trip.GFCM }}</div>
+							<div ng-show="attrVisibility.trips.cfr" ng-if="column === 'cfr'">{{ trip.vesselIdentifiersMap.CFR }} </div>
+							<div ng-show="attrVisibility.trips.ircs" ng-if="column === 'ircs'">{{ trip.vesselIdentifiersMap.IRCS }}</div>
+							<div ng-show="attrVisibility.trips.uvi" ng-if="column === 'uvi'">{{ trip.vesselIdentifiersMap.UVI }}</div>
+							<div ng-show="attrVisibility.trips.iccat" ng-if="column === 'iccat'">{{ trip.vesselIdentifiersMap.ICCAT }}</div>
+							<div ng-show="attrVisibility.trips.gfcm" ng-if="column === 'gfcm'">{{ trip.vesselIdentifiersMap.GFCM }}</div>
 							<div ng-show="attrVisibility.trips.firstEventType" ng-if="column === 'firstEventType'" title="{{trip.firstFishingActivity}}">{{ 'abbreviations.activity_' + trip.firstFishingActivity | i18n }}</div>
 							<div ng-show="attrVisibility.trips.firstEventTime" ng-if="column === 'firstEventTime'">{{ trip.firstFishingActivityDateTime | stDateUtc }}</div>
 							<div ng-show="attrVisibility.trips.lastEventType" ng-if="column === 'lastEventType'" title="{{trip.lastFishingActivity}}">{{ 'abbreviations.activity_' + trip.lastFishingActivity | i18n }}</div>
