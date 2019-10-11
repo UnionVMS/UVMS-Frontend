@@ -1,0 +1,74 @@
+/*
+Developed with the contribution of the European Commission - Directorate General for Maritime Affairs and Fisheries
+© European Union, 2015-2016.
+
+This file is part of the Integrated Fisheries Data Management (IFDM) Suite. The IFDM Suite is free software: you can
+redistribute it and/or modify it under the terms of the GNU General Public License as published by the
+Free Software Foundation, either version 3 of the License, or any later version. The IFDM Suite is distributed in
+the hope that it will be useful, but WITHOUT ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or
+FITNESS FOR A PARTICULAR PURPOSE.  See the GNU General Public License for more details. You should have received a
+copy of the GNU General Public License along with the IFDM Suite. If not, see <http://www.gnu.org/licenses/>.
+*/
+
+#grouped-combobox {
+    .btn.btn-default.dropdown-toggle.grouped-combobox {
+        margin-right: 0;
+        outline: none;
+        color:#999999;
+        &:hover {
+            background-color: #fff;
+        }
+        .dropdowntext {
+            text-align: left;
+            margin-right: 0;
+            overflow: hidden;
+            text-overflow: ellipsis;
+        }
+    }	
+}
+
+.group-title {
+	font-weight: 800;
+	font-size: 14px;
+}
+
+.group-item {
+	font-weight: 400;
+	font-size: 12px;
+	padding-left: 12px;
+	&:hover {
+		background-color: #f5f5f5
+	}
+}
+
+.grouped-combo-list {
+	background-color: #fff;
+	position: absolute;
+	.dropdown-menu {
+		padding: 10px;
+		overflow-x: hidden;
+		border: 1px solid @primaryColor;
+		border-radius: 0%;
+		z-index: 1071;
+		width: inherit;
+		min-width: inherit;
+		max-height: 200px;
+		> li {
+			position: relative;
+			overflow-x: hidden;
+		}
+		.loading-msg {
+			text-align: center;
+		}
+	}
+	li.combo-placeholder > a {
+		&,
+		:hover {
+			color: #999999;
+		}
+	}
+}
+
+.grouped-combobox-selected-item {
+	color: #555555;
+}

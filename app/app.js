@@ -45,7 +45,8 @@ var unionvmsWebApp = angular.module('unionvmsWeb', [
     'ui.tree',
     'angularResizable',
     'slickCarousel',
-    'hljs'
+    'hljs',
+    'angular.filter'
 ]);
 
 var currentUserContextPromise = function(userService) {
