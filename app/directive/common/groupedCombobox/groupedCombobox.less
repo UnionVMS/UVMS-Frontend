@@ -1,0 +1,107 @@
+/*
+Developed with the contribution of the European Commission - Directorate General for Maritime Affairs and Fisheries
+© European Union, 2015-2016.
+
+This file is part of the Integrated Fisheries Data Management (IFDM) Suite. The IFDM Suite is free software: you can
+redistribute it and/or modify it under the terms of the GNU General Public License as published by the
+Free Software Foundation, either version 3 of the License, or any later version. The IFDM Suite is distributed in
+the hope that it will be useful, but WITHOUT ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or
+FITNESS FOR A PARTICULAR PURPOSE.  See the GNU General Public License for more details. You should have received a
+copy of the GNU General Public License along with the IFDM Suite. If not, see <http://www.gnu.org/licenses/>.
+*/
+.comboList {
+	position: absolute;
+	background-color: #fff;
+	.dropdown-menu {
+        padding: 10px;
+		z-index: 1071;
+		width: inherit;
+		max-height: 200px;
+		.loading-msg {
+			text-align: center;
+		}
+	}
+}
+
+.combobox {
+	&.comboLineStyle .dropdown {
+		.btn.btn-default.dropdown-toggle {
+			padding: 3px 28px 3px 12px;
+			.caret {
+				position: absolute;
+				top: 13px;
+				right: 12px;
+				bottom: initial;
+				float: none;
+			}
+		}
+	}
+}
+
+.combobox[editable="true"] {
+	.fullWidthDropdown {
+		.comboButtonContainer {
+		    cursor: pointer;
+			overflow-y: hidden;
+    		height: 30px;
+			padding: 0 0 0 12px;
+	    	position: relative;
+	    	border: 1px solid @inputBorderColor;
+	    	box-shadow: inset 0 -2px 0 rgba(0, 0, 0, 0.09);
+	    	.combo-editable-input.form-control {
+	    	    cursor: pointer;
+	    		border: 0;
+	    		display: inline-block;
+	    		padding: 3px 20px 3px 0;
+	    		height: 26px;
+	    		border-radius: 0;
+	    	}
+	    	.caret {
+	    		color: @primaryColor;
+	    	}
+		}
+	}
+}
+
+.combobox .dropdown {
+	.comboButtonContainer[disabled]{
+		pointer-events: none;
+		&,
+		.combo-editable-input,
+		div.btn.btn-default.dropdown-toggle {
+			background-color: #ddd;
+		}
+	}
+	div.btn.btn-default.dropdown-toggle {
+		padding: 3px 20px 3px 12px;
+		position: relative;
+		border-radius: 0;
+		.dropdowntext {
+			text-align: left;
+			margin-right: 0;
+		}
+	}
+	.caret {
+		position: absolute;
+	    top: 50%;
+	    right: 10px;
+	    float: none;
+	    bottom: initial;
+	    pointer-events: none;
+	}
+}
+
+.group-title {
+    font-weight: 800;
+    font-size: 16px;
+}
+
+.group-item {
+    font-weight: 400;
+    font-size: 14px;
+    padding-left: 12px;
+    &:hover {
+        background-color: #f5f5f5
+    }
+}
+

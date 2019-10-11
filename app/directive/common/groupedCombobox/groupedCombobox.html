@@ -1,0 +1,34 @@
+<div class="combobox" ng-model-options="{allowInvalid: true}" combolist-id="{{::comboboxId}}">
+	<div class="dropdown fullWidthDropdown">
+		<div class="comboButtonContainer" ng-disabled="ngDisabled" ng-click="toggleCombo($event)">
+			<div class="btn btn-default dropdown-toggle" ng-if="::!editable">
+				<!--selected label-->
+				<div ng-class="setplaceholdercolor ? 'placeholderColor':''" class="dropdowntext" ng-if="::!lineStyle" title="{{initialValue && multiple ? initialValue.text + ': ' +  currentItemLabel : currentItemLabel}}">
+					<i class="ban-icon fa fa-ban" ng-if="banTitle !== undefined && currentItemEnabled === false" title="{{::banTitle}}"></i>
+                    <span ng-class="{'with-ban-icon': banTitle !== undefined && currentItemEnabled === false}">{{currentItemLabel}}</span>
+				</div>
+				<!--CARET-->
+				<span class="caret"></span>
+			</div>
+		</div>
+	</div>
+	<div class="comboList fullWidthDropdown {{::listClass}} " ng-class="{'open': isOpen}">
+		<ul class="dropdown-menu">
+			<!--PLACEHOLDER-->
+			<li class="combo-placeholder" ng-show="!isLoading" ng-click="selectVal(initialValue)" ng-if="::(!noPlaceholderOnList && initialValue)" title="{{::initialValue.text}}">
+				<a ng-bind="::initialValue.text"></a>
+			</li>
+			<li class="disabled" ng-if="!loadedItems || !loadedItems.length" title="{{ ::comboboxServ.noDataAvailableLabel }}">
+				<a ng-bind="::comboboxServ.noDataAvailableLabel"></a>
+			</li>
+			<ul class="group-title" ng-repeat="(item, value) in loadedItems | groupBy:'category'" ng-if="!isLoading" title="{{::getItemDesc(item)}}">
+                {{ item }}
+                <li class="group-item" ng-repeat="item in value" ng-click="selectVal(item)">{{ item.text}}</li>
+            </ul>
+			<!--LOADING LIST-->
+			<li class="loading-msg" ng-if="isLoading">
+				<i class="fa fa-spinner fa-spin"></i>
+			</li>
+		</ul>
+	</div>
+</div>
