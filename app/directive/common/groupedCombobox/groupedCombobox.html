@@ -1,0 +1,37 @@
+<div id="grouped-combobox">
+	<div class="combobox" combolist-id="{{::comboboxId}}">
+		<div class="dropdown">
+			<div class="combo-button-container grouped-combobox" ng-click="toggleCombo()">
+				<div class="btn btn-default dropdown-toggle grouped-combobox">
+					<!--selected label-->
+					<div ng-class="isPlaceholderValueSelected ? 'grouped-combobox-selected-item':''" class="dropdowntext" title="{{initialValue && multiple ? initialValue.text + ': ' +  currentItemLabel : currentItemLabel}}">
+						<span>{{currentItemLabel}}</span>
+					</div>
+					<!--CARET-->
+					<span class="caret"></span>
+				</div>
+			</div>
+		</div>
+		<div class="grouped-combo-list" ng-class="{'open': isOpen}">
+			<ul class="dropdown-menu">
+				<!--PLACEHOLDER-->
+				<li class="combo-placeholder" ng-show="!isLoading" ng-click="selectVal(initialValue, true)" title="{{::initialValue.text}}">
+					<a ng-bind="::initialValue.text"></a>
+				</li>
+				<li class="disabled" ng-if="!loadedItems || !loadedItems.length" title="{{ ::comboboxServ.noDataAvailableLabel }}">
+					<a ng-bind="::comboboxServ.noDataAvailableLabel"></a>
+				</li>
+				<ul class="group-title" ng-repeat="(item, value) in loadedItems | groupBy:'category'" ng-if="!isLoading">
+					{{ item }}
+					<li class="group-item" ng-repeat="item in value" ng-click="selectVal(item, false)" title="{{::getItemDesc(item)}}">{{ item.text}}</li>
+				</ul>
+				<!--LOADING LIST-->
+				<li class="loading-msg" ng-if="isLoading">
+					<i class="fa fa-spinner fa-spin"></i>
+				</li>
+			</ul>
+		</div>
+	</div>
+</div>
+
+

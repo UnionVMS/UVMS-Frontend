@@ -37,7 +37,10 @@ angular.module('unionvmsWeb').factory('comboboxService', function($window, $filt
 	 * @returns {Boolean} If the click happened over the active combobox
      */
 	var clickedInSameCombo = function(event) {
-		var isClickedElementChildOfPopup = activeCombo.element.find('.comboButtonContainer').find(event.target).length > 0 ||
+		// Is element a combobox OR a grouped combobox? 
+		// Users may click on 2 different targets inside the combobox 
+		var element = event.target.offsetParent.className.indexOf('grouped-combobox') > -1 || event.target.className.indexOf('grouped-combobox') > -1 ?  '.combo-button-container' : '.comboButtonContainer';
+		var isClickedElementChildOfPopup = activeCombo.element.find(element).find(event.target).length > 0 ||
 		angular.element('#' + activeCombo.comboboxId).find(event.target).length > 0;
 
         return isClickedElementChildOfPopup;
@@ -49,7 +52,7 @@ angular.module('unionvmsWeb').factory('comboboxService', function($window, $filt
      * @memberof comboboxService
      * @private
      */
-	var positionComboList = function() {
+	var positionComboList = function(grouped) {
     	if(activeCombo && activeCombo.isOpen){
             var relativePos = {'top':0,'left':0};
             if(activeCombo.destComboList){
@@ -62,10 +65,11 @@ angular.module('unionvmsWeb').factory('comboboxService', function($window, $filt
             
     		activeCombo.comboContainer = $('#' + activeCombo.comboboxId);
     		$(activeCombo.comboContainer).css('top', buttonPosition.top);
-    		$(activeCombo.comboContainer).css('left', buttonPosition.left);
-		
-			$(activeCombo.comboContainer).width($(activeCombo.element).find('.comboButtonContainer').outerWidth());
-    		
+			$(activeCombo.comboContainer).css('left', buttonPosition.left);
+			// grouped or normal combobox? 
+			var element = grouped === 'grouped' ? '.combo-button-container' : '.comboButtonContainer';
+			$(activeCombo.comboContainer).width($(activeCombo.element).find(element).outerWidth());
+			
     		var comboMenu = $('#' + activeCombo.comboboxId + '>.dropdown-menu');
     		var footerTop = angular.element('footer').length>0 ? $($window).height() - angular.element('footer')[0].offsetHeight + $window.pageYOffset : $($window).height() + $window.pageYOffset;
     		var bottomSpace = footerTop - buttonPosition.top;
@@ -141,7 +145,7 @@ angular.module('unionvmsWeb').factory('comboboxService', function($window, $filt
 	 * @alias setActiveCombo
      * @param {Object} comboScope
      */
-	cb.setActiveCombo = function(comboScope){
+	cb.setActiveCombo = function(comboScope, grouped){
 		if(activeCombo && activeCombo !== comboScope){
 			activeCombo.isOpen = false;
 		}
@@ -168,7 +172,7 @@ angular.module('unionvmsWeb').factory('comboboxService', function($window, $filt
 		}
 		
 		activeCombo = comboScope;
-		positionComboList();
+		positionComboList(grouped);
     };
 	
 	/**

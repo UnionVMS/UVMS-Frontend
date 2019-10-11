@@ -604,6 +604,8 @@ module.exports = function (grunt) {
 
     // Run Karma test
     grunt.registerTask('test',['ngconstant:development', 'dom_munger:read', 'ngtemplates', 'karma:services', 'karma:controllers', 'karma:directives', 'karma:filters', 'clean:after']);
+    // Run Karma for directives only
+    grunt.registerTask('test-directives',['ngconstant:development', 'dom_munger:read', 'ngtemplates', 'karma:directives', 'clean:after']);
 
     // Run application locally, connect web server on http://localhost:9001
     grunt.registerTask('serve', ['parallel:serve']);

@@ -26,7 +26,7 @@ copy of the GNU General Public License along with the IFDM Suite. If not, see <h
  * @attr {Object} codeLists - An object containing all code lists items
  * @attr {Object} advancedSearchObject - An object containing all search criterias specified within the form
  * @description
- *  The controller for the advanced search form of the activity tab table  
+ *  The controller for the advanced search form of the activity tab table
  */
 angular.module('unionvmsWeb').controller('AdvancedsearchformCtrl',function($scope, alertService, activityService, activityRestService, unitConversionService, $stateParams, mdrCacheService, vesselRestService, userService, locale, visibilityService, $interval){
     $scope.actServ = activityService;
@@ -73,7 +73,7 @@ angular.module('unionvmsWeb').controller('AdvancedsearchformCtrl',function($scop
 
     /**
      * Get all available communication channels from Activity module
-     * 
+     *
      * @memberof AdvancedsearchformCtrl
      * @public
      * @alias getComChannels
@@ -85,7 +85,7 @@ angular.module('unionvmsWeb').controller('AdvancedsearchformCtrl',function($scop
 
     /**
      * Get all purpose codes and their human readable text from MDR
-     * 
+     *
      * @memberof AdvancedsearchformCtrl
      * @public
      * @alias getPurposeCodes
@@ -129,7 +129,7 @@ angular.module('unionvmsWeb').controller('AdvancedsearchformCtrl',function($scop
 
     /**
      * Get all report types from MDR
-     * 
+     *
      * @memberof AdvancedsearchformCtrl
      * @public
      * @alias getReportTypes
@@ -147,7 +147,7 @@ angular.module('unionvmsWeb').controller('AdvancedsearchformCtrl',function($scop
 
     /**
      * Get all gear types from MDR
-     * 
+     *
      * @memberof AdvancedsearchformCtrl
      * @public
      * @alias getGearTypes
@@ -156,7 +156,12 @@ angular.module('unionvmsWeb').controller('AdvancedsearchformCtrl',function($scop
     $scope.getGearTypes = function(){
         $scope.codeLists.gearTypes = [];
         mdrCacheService.getCodeList('GEAR_TYPE').then(function(response){
-            $scope.codeLists.gearTypes = convertCodelistToCombolist(response, true, false);
+            var originalCodeList = angular.copy(response);
+            $scope.codeLists.gearTypes = convertCodelistToCombolist(originalCodeList, true, false, undefined, 'category');
+            // sort alphabetically by category and text
+            $scope.codeLists.gearTypes.sort(function(a, b) {
+                return a.category.localeCompare(b.category) || a.text.localeCompare(b.text);
+             });
         }, function(error){
             $scope.actServ.setAlert(true, 'activity.activity_error_getting_code_lists');
             $scope.visibleCombos.gearType = false;
@@ -165,7 +170,7 @@ angular.module('unionvmsWeb').controller('AdvancedsearchformCtrl',function($scop
 
     /**
      * Get all activity types from MDR
-     * 
+     *
      * @memberof AdvancedsearchformCtrl
      * @public
      * @alias getActivityTypes
@@ -184,7 +189,7 @@ angular.module('unionvmsWeb').controller('AdvancedsearchformCtrl',function($scop
 
     /**
      * Get the list of the user's vessel groups
-     * 
+     *
      * @memberof AdvancedsearchformCtrl
      * @public
      * @alias getVesselGroups
@@ -204,7 +209,7 @@ angular.module('unionvmsWeb').controller('AdvancedsearchformCtrl',function($scop
 
     /**
      * Reset search form and clear table results
-     * 
+     *
      * @memberof AdvancedsearchformCtrl
      * @public
      * @alias resetSearch
@@ -279,7 +284,7 @@ angular.module('unionvmsWeb').controller('AdvancedsearchformCtrl',function($scop
 
     /**
      * Search for FA reports using user search criteria defined in the search form
-     * 
+     *
      * @memberof AdvancedsearchformCtrl
      * @public
      * @alias searchFAReports
@@ -298,7 +303,7 @@ angular.module('unionvmsWeb').controller('AdvancedsearchformCtrl',function($scop
 
             //FIXME this is to be used in the future when we start having multiple criteria selection in the form
             //            var multipleKeyMapper = {
-            //                purposeCode: 'PURPOSE',  
+            //                purposeCode: 'PURPOSE',
             //            };
 
             var formatedSearch = getSimpleCriteria();
@@ -325,7 +330,7 @@ angular.module('unionvmsWeb').controller('AdvancedsearchformCtrl',function($scop
                 simpleCriteria: formatedSearch,
                 multipleCriteria: multipleFormatedSearch
             };
-            
+
             $scope.actServ.getActivityList(function(){
                 $scope.actServ.reportsList.fromForm = true;
                 $scope.actServ.reportsList.stCtrl.pipe();
@@ -340,7 +345,7 @@ angular.module('unionvmsWeb').controller('AdvancedsearchformCtrl',function($scop
 
     /**
      * Get the data for all comboboxes used in the the advanced search form
-     * 
+     *
      * @memberof AdvancedsearchformCtrl
      * @private
      */
@@ -354,7 +359,7 @@ angular.module('unionvmsWeb').controller('AdvancedsearchformCtrl',function($scop
 
     /**
      * Convert code lists array into combobox list array
-     * 
+     *
      * @memberof AdvancedsearchformCtrl
      * @private
      * @param {Array} data - The input data array
@@ -363,7 +368,7 @@ angular.module('unionvmsWeb').controller('AdvancedsearchformCtrl',function($scop
      * @param {Array} [suportedCodes] - An array containing the supported codes. This param is optional
      * @returns {Array} An array suitable for combobox use
      */
-    function convertCodelistToCombolist (data, withTooltip, useAbbreviations, suportedCodes){
+    function convertCodelistToCombolist (data, withTooltip, useAbbreviations, suportedCodes, extraField){
         var comboList = [];
         angular.forEach(data, function(item) {
             if (item.code === 'JOINED_FISHING_OPERATION'){
@@ -373,6 +378,12 @@ angular.module('unionvmsWeb').controller('AdvancedsearchformCtrl',function($scop
                 code: item.code,
                 text: item.description
             };
+
+            if (extraField) {
+                rec[extraField] = item[extraField];
+            }
+
+
             if (withTooltip){
                 if (useAbbreviations){
                     rec.text = locale.getString('abbreviations.activity_' + item.code);
@@ -442,7 +453,7 @@ angular.module('unionvmsWeb').controller('AdvancedsearchformCtrl',function($scop
 
     /**
      * Initialization function
-     * 
+     *
      * @memberof ActivityCtrl
      * @private
      */

@@ -61,9 +61,10 @@ copy of the GNU General Public License along with the IFDM Suite. If not, see <h
                     <!-- PORT criterion -->
                     <input id="portFACriterion" type="text" class="form-control" name="portFACriterion" ng-model="advancedSearchObject.port" placeholder="{{'activity.advanced_search_placeholder_port' | i18n}}"  maxlength="255"/>
                 </div>
+
                 <div class="col-md-2" ng-show="visibleCombos.gearType">
                     <!-- GEAR_TYPE criterion -->
-                    <combobox ng-model="advancedSearchObject.gearType" items="codeLists.gearTypes" initialtext="{{'activity.advanced_search_placeholder_gear_type' | i18n}}" ></combobox>
+                    <grouped-combobox ng-model="advancedSearchObject.gearType" items="codeLists.gearTypes" initialtext="{{'activity.advanced_search_placeholder_gear_type' | i18n}}" ></grouped-combobox>
                 </div>
                 <div class="col-md-4">
                     <!-- SPECIES criterion -->
