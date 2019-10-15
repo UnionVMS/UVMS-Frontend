@@ -13,7 +13,7 @@ angular.module('unionvmsWeb')
     .factory('mobileTerminalRestFactory',function($resource, $log){
         return {
             getTranspondersConfig : function(){
-                return $resource('asset/rest/config/MT/transponders');
+                return $resource('asset/rest/config2/MT/transponders');
             },
             getMobileTerminalByGuid : function(){
                 return $resource('asset/rest/mobileterminal/:id');
@@ -24,17 +24,17 @@ angular.module('unionvmsWeb')
                 });
             },
             getMobileTerminals : function(){
-                return $resource('asset/rest/mobileterminal/list/',{},{
+                return $resource('asset/rest/mobileterminal2/list/',{},{
                     list: { method: 'POST'}
                 });
             },
             assignMobileTerminal : function(){
-                return $resource('asset/rest/mobileterminal/assign/', {}, {
+                return $resource('asset/rest/mobileterminal2/:mtId/assign/:assetId', {}, {
                     save: { method: 'PUT'}
                 });
             },
             unassignMobileTerminal : function(){
-                return $resource('asset/rest/mobileterminal/unassign/', {}, {
+                return $resource('asset/rest/mobileterminal2/:mtId/unassign/:assetId', {}, {
                     save: { method: 'PUT'}
                 });
             },
@@ -59,7 +59,7 @@ angular.module('unionvmsWeb')
                 });
             },
             getConfigValues : function(){
-                return $resource('asset/rest/config/MT');
+                return $resource('asset/rest/config2/MT');
             }
 
         };
@@ -102,13 +102,13 @@ angular.module('unionvmsWeb')
 
             getTranspondersConfig : function(){
                 var deferred = $q.defer();
-                mobileTerminalRestFactory.getTranspondersConfig().get({
+                mobileTerminalRestFactory.getTranspondersConfig().query({
                 }, function(response, headers, status) {
                     if(status !== 200){
                         deferred.reject("Invalid response status");
                         return;
                     }
-                    deferred.resolve(TranspondersConfig.fromJson(response.data));
+                    deferred.resolve(TranspondersConfig.fromJson(response));
                 }, function(error) {
                     $log.error("Error getting transponders config");
                     deferred.reject(error);
@@ -136,17 +136,6 @@ angular.module('unionvmsWeb')
                                 // check if asset already exists in previous mobile terminal
                                 var mt = response.mobileTerminalList[i];
 
-                                if (mt.asset && mt.asset.id) {
-                                    cachedAssets.push(mt.asset);
-                                }
-                                else if (mt.asset) {
-                                    // json id
-                                    cachedAssets.forEach(function(a) {
-                                       if (a['@id'] === mt.asset) {
-                                           mt.asset = a;
-                                       }
-                                    });
-                                }
                                 mobileTerminals.push(MobileTerminal.fromJson(mt));
                             }
                         }
@@ -254,7 +243,7 @@ angular.module('unionvmsWeb')
 
             assignMobileTerminal : function(mobileTerminal, vesselGUID, comment){
                 var deferred = $q.defer();
-                mobileTerminalRestFactory.assignMobileTerminal().save({ comment: comment, connectId: vesselGUID }, JSON.stringify(mobileTerminal.id), function(response, headers, status) {
+                mobileTerminalRestFactory.assignMobileTerminal().save({mtId: mobileTerminal.id, assetId: vesselGUID}, {comment: comment}, function(response, headers, status) {
                     if(status !== 200){
                         deferred.reject("Invalid response status");
                         return;
@@ -268,7 +257,7 @@ angular.module('unionvmsWeb')
             },
             unassignMobileTerminal : function(mobileTerminal, comment){
                 var deferred = $q.defer();
-                mobileTerminalRestFactory.unassignMobileTerminal().save({ comment: comment, connectId: mobileTerminal.connectId }, JSON.stringify(mobileTerminal.id), function(response, headers, status) {
+                mobileTerminalRestFactory.unassignMobileTerminal().save({mtId: mobileTerminal.id, assetId: mobileTerminal.connectId}, {comment: comment}, function(response, headers, status) {
                     if(status !== 200){
                         deferred.reject("Invalid response status");
                         return;

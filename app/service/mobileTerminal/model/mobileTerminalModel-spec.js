@@ -18,9 +18,7 @@ describe('MobileTerminalModel', function() {
         "antenna": "Sailor 640",
         "transceiverType": "Sailor 6140",
         "softwareVersion" : "1.3-6",                
-        "asset": {
-            "id" : "ebeec8ef-2eab-4d4f-9d6d-994ad8b57c34"
-        },
+        "assetId": "ebeec8ef-2eab-4d4f-9d6d-994ad8b57c34",
         "channels": [
             {
                 "dnid" : "11456",
