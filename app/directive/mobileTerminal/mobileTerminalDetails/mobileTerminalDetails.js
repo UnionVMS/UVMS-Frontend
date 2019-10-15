@@ -94,11 +94,11 @@ $scope.oceanreg = [{"name":"WEST_ATLANTIC","code":0,"text":"AOR-W","attributes":
                     $scope.setFormDirtyStatus(true);
              
                 }
-                newValue.westAtlanticOceanRegion = false;
-                newValue.eastAtlanticOceanRegion = false;
-                newValue.pacificOceanRegion = false;
-                newValue.indianOceanRegion = false;
                 if (newValue.attributes) {
+                    newValue.westAtlanticOceanRegion = false;
+                    newValue.eastAtlanticOceanRegion = false;
+                    newValue.pacificOceanRegion = false;
+                    newValue.indianOceanRegion = false;
 	                newValue.attributes.MULTIPLE_OCEAN.forEach(function(element) {
 	                    if(element === 0){
 	                        newValue.westAtlanticOceanRegion = true;

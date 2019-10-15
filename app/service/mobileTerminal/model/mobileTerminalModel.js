@@ -109,6 +109,7 @@ angular.module('unionvmsWeb').factory('MobileTerminal', function(CommunicationCh
             });
         
             var returnObject = {
+                assetId: this.connectId,
                 serialNo: this.serialNo,
                 satelliteNumber: this.satelliteNumber,
                 antenna : this.antenna,
@@ -130,13 +131,6 @@ angular.module('unionvmsWeb').factory('MobileTerminal', function(CommunicationCh
                 indianOceanRegion : this.indianOceanRegion,
                 pacificOceanRegion : this.pacificOceanRegion
             };
-            
-            if (this.connectId !== undefined) {
-                returnObject.asset = undefined;
-                returnObject.asset = {
-                    id : this.connectId
-                };
-            }
 
             return returnObject;
         };
