@@ -57,16 +57,10 @@ angular.module('unionvmsWeb').factory('MobileTerminal', function(CommunicationCh
             mobileTerminal.id = data.id;
             mobileTerminal.source = data.source;
             mobileTerminal.mobileTerminalType = data.mobileTerminalType;
-            if (data.asset !== undefined && data.asset !== null) {
-                mobileTerminal.connectId = data.asset.id;
-                if (this.connectId !== undefined) {
-                    mobileTerminal.asset = undefined;
-                    mobileTerminal.asset = {
-                        id : this.connectId
-                    };
-                }
-            }
-            
+            mobileTerminal.connectId = data.assetId;
+            mobileTerminal.asset = {
+                id : this.connectId
+            };
             mobileTerminal.archived = data.archived;
             mobileTerminal.serialNo = data.serialNo;
             mobileTerminal.satelliteNumber = data.satelliteNumber;
@@ -115,6 +109,7 @@ angular.module('unionvmsWeb').factory('MobileTerminal', function(CommunicationCh
             });
         
             var returnObject = {
+                assetId: this.connectId,
                 serialNo: this.serialNo,
                 satelliteNumber: this.satelliteNumber,
                 antenna : this.antenna,
@@ -130,20 +125,12 @@ angular.module('unionvmsWeb').factory('MobileTerminal', function(CommunicationCh
                 active : this.active,
                 createTime : this.createTime,
                 updateTime : this.updateTime,
-                active: this.active,
                 source : this.source,
                 westAtlanticOceanRegion : this.westAtlanticOceanRegion,
                 eastAtlanticOceanRegion : this.eastAtlanticOceanRegion,
                 indianOceanRegion : this.indianOceanRegion,
                 pacificOceanRegion : this.pacificOceanRegion
             };
-            
-            if (this.connectId !== undefined) {
-                returnObject.asset = undefined;
-                returnObject.asset = {
-                    id : this.connectId
-                };
-            }
 
             return returnObject;
         };
@@ -172,6 +159,7 @@ angular.module('unionvmsWeb').factory('MobileTerminal', function(CommunicationCh
             copy.plugin = this.plugin;
             copy.id = this.id;
             copy.connectId = this.connectId;
+            copy.asset = this.asset;
             copy.archived = this.archived;
             copy.createTime = this.createTime;
             copy.updateTime = this.updateTime;

@@ -78,18 +78,26 @@ angular.module('unionvmsWeb')
 
     GetListRequest.prototype.DTOForMobileTerminal = function(){
         var wildcardKeys = ['NAME', 'IRCS', 'EXTERNAL_MARKING', 'CFR', 'HOMEPORT', 'MMSI', 'SERIAL_NUMBER', 'DNID', 'SATELLITE_NUMBER', 'MEMBER_NUMBER'];
-        var criteria = this.criterias.map(function(criteria) {
-            if (wildcardKeys.indexOf(criteria.key) >= 0) {
-                return new SearchField(criteria.key, '*' + criteria.value);
+
+        var updatedCriterias = {};
+        $.each(this.criterias, function(index, searchField){
+            if (!(searchField.key in updatedCriterias)) {
+                updatedCriterias[searchField.key] = [];
+            }
+            if (wildcardKeys.indexOf(searchField.key) >= 0) {
+                updatedCriterias[searchField.key].push('*' + searchField.value);
             }
             else {
-                return criteria;
+                updatedCriterias[searchField.key].push(searchField.value);
             }
         });
 
         return {
-            pagination : {page: this.page, listSize: this.listSize},
-            mobileTerminalSearchCriteria : { isDynamic: this.isDynamic, criterias: criteria }
+            assetIds : updatedCriterias['CONNECT_ID'],
+            dnids : updatedCriterias['DNID'],
+            memberNumbers : updatedCriterias['MEMBER_NUMBER'],
+            sateliteNumbers : updatedCriterias['SATELLITE_NUMBER'],
+            serialNumbers : updatedCriterias['SERIAL_NUMBER']
         };
     };
 

@@ -65,10 +65,10 @@ angular.module('unionvmsWeb')
             }
         };
 
-$scope.oceanreg = [{"name":"WEST_ATLANTIC","code":0,"text":"AOR-W","attributes":{"CODE":0,"NAME":"WEST_ATLANTIC"}},{"name":"EAST_ATLANTIC","code":1,"text":"AOR-E","attributes":{"CODE":1,"NAME":"EAST_ATLANTIC"}},{"name":"PACIFIC","code":2,"text":"POR","attributes":{"CODE":2,"NAME":"PACIFIC"}},{"name":"INDIAN","code":3,"text":"IOR","attributes":{"CODE":3,"NAME":"INDIAN"}}]
+$scope.oceanreg = [{"name":"WEST_ATLANTIC","code":0,"text":"AOR-W","attributes":{"CODE":0,"NAME":"WEST_ATLANTIC"}},{"name":"EAST_ATLANTIC","code":1,"text":"AOR-E","attributes":{"CODE":1,"NAME":"EAST_ATLANTIC"}},{"name":"PACIFIC","code":2,"text":"POR","attributes":{"CODE":2,"NAME":"PACIFIC"}},{"name":"INDIAN","code":3,"text":"IOR","attributes":{"CODE":3,"NAME":"INDIAN"}}];
 
         $scope.setOceanRegions = function(){
-            var oceanRegions = []
+            var oceanRegions = [];
             if($scope.originalMobileTerminalValue.westAtlanticOceanRegion  === true){
                 oceanRegions.push(0);
             }
@@ -81,8 +81,8 @@ $scope.oceanreg = [{"name":"WEST_ATLANTIC","code":0,"text":"AOR-W","attributes":
             if($scope.originalMobileTerminalValue.indianOceanRegion === true){
                 oceanRegions.push(3);
             }
-            return oceanRegions
-        }
+            return oceanRegions;
+        };
         //Watch for changes to the Mobile Terminal object compared to the initial object, maily to enable save button if changes has been made
         $scope.$watch('mobileTerminal', function(newValue, oldValue){
             if(angular.isDefined($scope.originalMobileTerminalValue)){
@@ -94,24 +94,26 @@ $scope.oceanreg = [{"name":"WEST_ATLANTIC","code":0,"text":"AOR-W","attributes":
                     $scope.setFormDirtyStatus(true);
              
                 }
-                newValue.westAtlanticOceanRegion = false;
-                newValue.eastAtlanticOceanRegion = false;
-                newValue.pacificOceanRegion = false;
-                newValue.indianOceanRegion = false;
-                newValue.attributes.MULTIPLE_OCEAN.forEach(function(element) {
-                    if(element === 0){
-                        newValue.westAtlanticOceanRegion = true;
-                    }
-                    if(element === 1){
-                        newValue.eastAtlanticOceanRegion = true;
-                    }
-                    if(element === 2){
-                        newValue.pacificOceanRegion = true;
-                    }
-                    if(element === 3){
-                        newValue.indianOceanRegion = true;
-                    }
-                });
+                if (newValue.attributes) {
+                    newValue.westAtlanticOceanRegion = false;
+                    newValue.eastAtlanticOceanRegion = false;
+                    newValue.pacificOceanRegion = false;
+                    newValue.indianOceanRegion = false;
+	                newValue.attributes.MULTIPLE_OCEAN.forEach(function(element) {
+	                    if(element === 0){
+	                        newValue.westAtlanticOceanRegion = true;
+	                    }
+	                    if(element === 1){
+	                        newValue.eastAtlanticOceanRegion = true;
+	                    }
+	                    if(element === 2){
+	                        newValue.pacificOceanRegion = true;
+	                    }
+	                    if(element === 3){
+	                        newValue.indianOceanRegion = true;
+	                    }
+	                });
+                }
             }
       
         }, true);
