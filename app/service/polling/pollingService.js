@@ -164,6 +164,7 @@ angular.module('unionvmsWeb').factory('pollingService',function(pollingRestServi
             var attrs = [];
             switch (getSelectedMobileTerminalType()) {
                 case 'INMARSAT_C':
+                    pushAttribute(attrs, "REPORT_FREQUENCY", pollingOptions.configurationPoll.freq, isNonZero);
                     pushAttribute(attrs, "GRACE_PERIOD", pollingOptions.configurationPoll.gracePeriod, isNonZero);
                     pushAttribute(attrs, "IN_PORT_GRACE", pollingOptions.configurationPoll.inPortGrace, isNonZero);
                     pushAttribute(attrs, "DNID", pollingOptions.configurationPoll.newDNID, isNonEmptyString);
