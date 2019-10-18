@@ -77,7 +77,7 @@ describe('exchangeRestService', function() {
                             callback({
                                 code : 200,
                                 data: {
-                                    logList: [
+                                    logs: [
                                         {
                                             id: "1",
                                         },
