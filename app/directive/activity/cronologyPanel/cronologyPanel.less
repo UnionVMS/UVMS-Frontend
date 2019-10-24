@@ -11,11 +11,6 @@ copy of the GNU General Public License along with the IFDM Suite. If not, see <h
 */
 .cronology-section {
     position: relative;
-    .current-trip {
-        border-bottom: 1px solid #ddd;
-        padding-bottom: 3px;
-        margin-bottom: 3px;
-    }
     a.trip-item {
         text-decoration: underline;
         &:hover {
@@ -28,6 +23,13 @@ copy of the GNU General Public License along with the IFDM Suite. If not, see <h
         right: 10px;
         &:hover {
             background-color: initial;
+        }
+    }
+
+    .selected-trip {
+        font-weight: 600;
+        a {
+            padding-right: 0;
         }
     }
 }
