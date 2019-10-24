@@ -205,5 +205,8 @@
     "tab_trip_table_header_duration": "Duration",
     "tab_trip_table_header_nCorrections": "Corrections",
     "tab_trip_table_header_nPositions": "Positions",
-    "tab_trip_table_header_alarm": "Alarm"
+    "tab_trip_table_header_alarm": "Alarm",
+    "trip_summary_start_date": "Started On",
+    "trip_summary_trip_id": "Trip ID",
+    "trip_summary_note": "Note: Newest trip on top."
 }

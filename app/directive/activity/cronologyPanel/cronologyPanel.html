@@ -3,22 +3,28 @@
         <legend class="fieldsetLegendStyle">
             <a>{{'activity.trip_summary_cronology' | i18n }}</a>
         </legend>
-        <div ng-if="::trip.cronology">
-            <!--CURRENT TRIP-->
-            <div class="row current-trip">
-                <a class="col-md-12 trip-item" ng-click="openTrip(cronology.currentTrip)">{{'activity.cronology_current_trip' | i18n }} {{::cronology.currentTrip}}</a>
+        <div>
+            <p>{{'activity.trip_summary_note' | i18n }}</p>
+        </div>
+        <div ng-if="trip.cronology">
+            <div class="row">
+                <span class="col-md-7"><b>{{'activity.trip_summary_trip_id' | i18n }}</b></span>
+                <span class="col-md-5"><b>{{'activity.trip_summary_start_date' | i18n }}</b></span>
             </div>
             <!--NEXT TRIPS-->
-            <div class="row" ng-repeat="tripName in ::cronology.nextTrips">
-                <a class="col-md-12 trip-item" ng-click="openTrip(tripName)">{{::tripName}}</a>
+            <div class="row" ng-repeat="item in cronology.nextTrips">
+                <a class="col-md-7 trip-item" ng-click="openTrip(item.tripId)">{{item.tripId}}</a>
+                <span class="col-md-5">{{item.tripDate | confDateFormat | dataNotAvailable}}</span>
             </div>
             <!--SELECTED TRIP-->
-            <div class="row">
-                <a class="col-md-12 trip-item" ng-click="openTrip(cronology.selectedTrip)">{{::cronology.selectedTrip}}</a>
+            <div class="row selected-trip">
+                <a class="col-md-7 trip-item" ng-click="openTrip(cronology.selectedTrip.tripId)"> >> {{cronology.selectedTrip.tripId}}</a>
+                <span class="col-md-5">{{cronology.selectedTrip.tripDate | confDateFormat | dataNotAvailable}}</span>
             </div>
             <!--PREVIOUS TRIPS-->
-            <div class="row" ng-repeat="tripName in ::cronology.previousTrips">
-                <a class="col-md-12 trip-item" ng-click="openTrip(tripName)">{{::tripName}}</a>
+            <div class="row" ng-repeat="item in cronology.previousTrips">
+                <a class="col-md-7 trip-item" ng-click="openTrip(item.tripId)">{{item.tripId}}</a>
+                <span class="col-md-5">{{item.tripDate | confDateFormat | dataNotAvailable}}</span>
             </div>
             <!--VIEW ALL LINK-->
            <!--  <a class="view-all">{{'activity.cronology_view_all' | i18n }}</a> -->
