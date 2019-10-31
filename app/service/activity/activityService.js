@@ -314,15 +314,14 @@ angular.module('unionvmsWeb').factory('activityService',function(locale, activit
         var serviceName;
         var arrName;
         var displayedArrName;
-        if(listName === 'reportsList'){
+        if (listName === 'reportsList') {
             serviceName = 'getActivityList';
             arrName = 'activities';
             displayedArrName = 'displayedActivities';
-        }else{
+        } else {
             serviceName = 'getTripsList';
             arrName = 'trips';
             displayedArrName = 'displayedTrips';
-            payload.sorting = {};
         }
 
         actServ.clearAttributeByType(arrName);

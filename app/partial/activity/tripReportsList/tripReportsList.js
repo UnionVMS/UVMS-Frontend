@@ -32,13 +32,8 @@ angular.module('unionvmsWeb').controller('TripreportslistCtrl',function($scope, 
     var stLastTableState;
 
     $scope.updateTripsList = function(tableState, ctrl){
-      delete tableState.isSorting;
-      if(stLastTableState && !_.isEqual(tableState.sort, stLastTableState.sort)){
-        tableState.isSorting = true;
-      }
-      stLastTableState = angular.copy(tableState);
       if (angular.isUndefined($stateParams.tripId) || $stateParams.tripId === null){
-          $scope.callServer(tableState, ctrl, 'tripsList');
+          $scope.callServer(tableState, ctrl, 'tripsList', true);
       } else {
           $scope.actServ.tripsList.stCtrl = ctrl;
           $scope.actServ.tripsList.tableState = tableState;
@@ -50,7 +45,4 @@ angular.module('unionvmsWeb').controller('TripreportslistCtrl',function($scope, 
       $scope.goToView(3);
     };
 
-    $scope.tripIdSort = function(value){
-      return value.schemeId + ':' + value.tripId;
-  };
 });
