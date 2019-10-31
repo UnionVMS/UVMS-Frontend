@@ -19,7 +19,7 @@ copy of the GNU General Public License along with the IFDM Suite. If not, see <h
  * @param breadcrumbService {Service} the breadcrumb service <p>{@link unionvmsWeb.breadcrumbService}</p>
  * @param mdrCacheService {Service} The MDR cache service <p>{@link unionvmsWeb.mdrCacheService}</p>
  * @description
- *  The controller for the activity tab  
+ *  The controller for the activity tab
  */
 angular.module('unionvmsWeb').controller('ActivityCtrl', function ($scope, locale, activityService, genericMapService, breadcrumbService,Trip, mdrCacheService,tripSummaryService) {
     $scope.actServ = activityService;
@@ -32,7 +32,7 @@ angular.module('unionvmsWeb').controller('ActivityCtrl', function ($scope, local
 
     /**
      * Check if partial should be visible according to the breadcrumbPages item status
-     * 
+     *
      * @memberof ActivityCtrl
      * @public
      * @alias isPartialVisible
@@ -45,7 +45,7 @@ angular.module('unionvmsWeb').controller('ActivityCtrl', function ($scope, local
 
     /**
      * Make a certain partial visible using the breadcrumbPages array
-     * 
+     *
      *  @memberof ActivityCtrl
      *  @public
      *  @alias goToView
@@ -57,7 +57,7 @@ angular.module('unionvmsWeb').controller('ActivityCtrl', function ($scope, local
 
     /**
      * A callback function passed into the breadcrumb directive that will clean data objects upon breadcrumb click
-     * 
+     *
      * @memberof ActivityCtrl
      * @public
      * @alias breadcrumbClick
@@ -75,7 +75,7 @@ angular.module('unionvmsWeb').controller('ActivityCtrl', function ($scope, local
 
     /**
       * sets visible variable of selected tab to true
-      * 
+      *
       *  @memberof ActivityCtrl
       *  @public
       *  @alias isTabSelected
@@ -88,7 +88,7 @@ angular.module('unionvmsWeb').controller('ActivityCtrl', function ($scope, local
 
      /**
       * selects the tab
-      * 
+      *
       *  @memberof ActivityCtrl
       *  @public
       *  @alias selectTab
@@ -97,10 +97,10 @@ angular.module('unionvmsWeb').controller('ActivityCtrl', function ($scope, local
      $scope.selectTab = function (tab) {
          $scope.selectedTab = tab;
      };
-     
+
      /**
-      * Displays the selected tab 
-      * 
+      * Displays the selected tab
+      *
       *  @memberof ActivityCtrl
       *  @public
       *  @alias isTabSelected
@@ -109,11 +109,11 @@ angular.module('unionvmsWeb').controller('ActivityCtrl', function ($scope, local
      $scope.isTabSelected = function(tab){
         return $scope.selectedTab === tab;
      };
-   
-   
+
+
     /**
       * Creates a tab view with activites and trips tabs
-      * 
+      *
       * @memberof ActivityCtrl
       * @public
       * @alias setActivityTabs
@@ -131,7 +131,7 @@ angular.module('unionvmsWeb').controller('ActivityCtrl', function ($scope, local
      };
       /**
      * Sets map configs in trip summary service
-     * 
+     *
      * @memberof TripspanelCtrl
      * @private
      */
@@ -141,10 +141,10 @@ angular.module('unionvmsWeb').controller('ActivityCtrl', function ($scope, local
 
     /**
      * Get the proper match between client and server side attributes in order to properly set the field and order to request FA reports
-     * 
+     *
      * @memberof TripspanelCtrl
      * @private
-     * @param {String} tablePredicate - The name of the attribute in the client side 
+     * @param {String} tablePredicate - The name of the attribute in the client side
      * @returns {String} The name of the attribute in the server side
      */
     function getTruePredicate(tablePredicate){
@@ -155,52 +155,39 @@ angular.module('unionvmsWeb').controller('ActivityCtrl', function ($scope, local
             startDate: 'PERIOD_START',
             endDate: 'PERIOD_END',
             FAReportType: 'REPORT_TYPE',
-            dataSource: 'SOURCE'
+            dataSource: 'SOURCE',
+            firstFishingActivityDateTime: 'PERIOD_START',
+            lastFishingActivityDateTime: 'PERIOD_END_TRIP',
+            flagState: 'FLAG_STATE',
+            extMark: 'EXT_MARK',
+            IRCS: 'IRCS',
+            CFR: 'CFR',
+            UVI: 'UVI',
+            ICCAT: 'ICCAT',
+            GFCM: 'GFCM',
+            firstFishingActivity: 'FIRST_FISHING_ACTIVITY',
+            lastFishingActivity: 'LAST_FISHING_ACTIVITY',
+            tripDuration: 'TRIP_DURATION',
+            noOfCorrections: 'NUMBER_OF_CORRECTIONS',
+            tripId: 'TRIP_ID'
         };
-        
+
         return predicateMapping[tablePredicate];
-    }
-
-    function sortTripsList(tableState, listName){
-        delete tableState.isSorting;
-
-        var sortedArr = _.sortBy($scope.actServ.displayedTrips, function(item) {
-            if(tableState.sort.predicate === 'tripDuration'){
-                return Math.abs(item[tableState.sort.predicate]);
-            }else{
-                return item[tableState.sort.predicate];
-            }
-        });
-
-        if(tableState.sort.reverse){
-            sortedArr = sortedArr.reverse();
-        }
-
-        $scope.actServ.displayedTrips.splice(0,$scope.actServ.displayedTrips.length);
-        angular.copy(sortedArr, $scope.actServ.displayedTrips);
-
-        $scope.actServ[listName].isLoading = false;
-        $scope.actServ[listName].hasError = false;
-        $scope.actServ[listName].isTableLoaded = true;
     }
 
     /**
      * A callback function to set the correct number of pages in the smartTable. To be used with the callServer function.
-     * 
+     *
      * @memberof TripspanelCtrl
      * @private
      */
     function callServerCallback (tableState, listName){
         tableState.pagination.numberOfPages = $scope.actServ[listName].pagination.totalPages;
-
-        if(listName === 'tripsList' && tableState.sort && tableState.sort.predicate){
-            sortTripsList(tableState, listName);
-        }
     }
 
     /**
      * Pipe function used in the smartTable in order to support server side pagination and sorting
-     * 
+     *
      * @memberof TripspanelCtrl
      * @public
      * @alias callServer
@@ -208,33 +195,29 @@ angular.module('unionvmsWeb').controller('ActivityCtrl', function ($scope, local
     $scope.callServer = function(tableState, ctrl, listName, showLatest){
         $scope.actServ[listName].stCtrl = ctrl;
         $scope.actServ[listName].tableState = tableState;
-        
+
         if (!$scope.actServ[listName].isLoading && angular.isDefined($scope.actServ[listName].searchObject.multipleCriteria) && !$scope.actServ[listName].isTableLoaded){
             $scope.actServ[listName].isLoading = true;
-            
-            var searchField, sortOrder; 
+
+            var searchField, sortOrder;
             if (angular.isDefined(tableState.sort.predicate)){
                 searchField = getTruePredicate(tableState.sort.predicate);
                 sortOrder = tableState.sort.reverse;
             }
-            
+
             $scope.actServ[listName].sorting = {
                 sortBy: searchField,
                 reversed: sortOrder
             };
-            
+
             $scope.actServ.getActivityList(callServerCallback, tableState, listName, showLatest);
         } else {
-            if(tableState && tableState.isSorting){
-                sortTripsList(tableState, listName);
-            }else{
-                if (!angular.isDefined(tableState.pagination.numberOfPages) || $scope.actServ[listName].fromForm){
-                    callServerCallback(tableState, listName);
-                    $scope.actServ[listName].fromForm = false;
-                } else {
-                    $scope.actServ[listName].isTableLoaded = false;
-                    ctrl.pipe();
-                }
+            if (!angular.isDefined(tableState.pagination.numberOfPages) || $scope.actServ[listName].fromForm){
+                callServerCallback(tableState, listName);
+                $scope.actServ[listName].fromForm = false;
+            } else {
+                $scope.actServ[listName].isTableLoaded = false;
+                ctrl.pipe();
             }
         }
     };
@@ -249,16 +232,16 @@ angular.module('unionvmsWeb').controller('ActivityCtrl', function ($scope, local
             $scope.tripSummServ.initTripSummary();
         }
     };
-    
+
     /**
 	 * Initializes the ActivityCtrl
-	 * 
+	 *
 	 * @memberof ActivityCtrl
 	 * @private
 	 */
     var init = function(){
        $scope.activityTabMenu = setActivityTabs();
     };
-    
+
     init();
 });
