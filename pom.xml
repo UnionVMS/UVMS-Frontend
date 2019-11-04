@@ -8,11 +8,13 @@
     </parent>
     <groupId>eu.europa.ec.fisheries.uvms</groupId>
     <artifactId>unionvms-web</artifactId>
-    <version>3.0.30-SNAPSHOT</version>
+    <version>3.0.30${changelist}${revision}</version>
     <name>unionvms-web</name>
     <packaging>war</packaging>
 
     <properties>
+        <changelist>-MARE</changelist>
+        <revision>-SNAPSHOT</revision>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
         <release.branch.name>uvms-3.0.0-boba-fett</release.branch.name>
         <webroot>unionvms-web</webroot>
@@ -212,7 +214,7 @@
                 <plugin>
                     <groupId>com.github.eirslett</groupId>
                     <artifactId>frontend-maven-plugin</artifactId>
-                    <version>1.3</version>
+                    <version>1.8.0</version>
                     <configuration>
                         <workingDirectory>${basedir}</workingDirectory>
                         <outputdir>${basedir}/dist</outputdir>
