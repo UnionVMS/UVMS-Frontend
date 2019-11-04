@@ -18,7 +18,7 @@
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
         <release.branch.name>uvms-3.0.0-boba-fett</release.branch.name>
         <webroot>unionvms-web</webroot>
-        <karma.phase>integration-test</karma.phase>
+        <karma.phase>test</karma.phase>
         <project.scm.id>github</project.scm.id>
         <grunt.build>build-ci</grunt.build>
 
@@ -304,7 +304,7 @@
                         <goals>
                             <goal>grunt</goal>
                         </goals>
-                        <phase>compile</phase>
+                        <phase>${karma.phase}</phase>
                         <configuration>
                             <arguments>${grunt.build}</arguments>
                         </configuration>
