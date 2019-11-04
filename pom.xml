@@ -19,6 +19,7 @@
         <release.branch.name>uvms-3.0.0-boba-fett</release.branch.name>
         <webroot>unionvms-web</webroot>
         <karma.phase>test</karma.phase>
+        <karma.force></karma.force>
         <project.scm.id>github</project.scm.id>
         <grunt.build>build-ci</grunt.build>
 
@@ -105,6 +106,17 @@
             </activation>
             <properties>
                 <karma.phase>no-phase</karma.phase>
+            </properties>
+        </profile>
+        <profile>
+            <id>karmaforce</id>
+            <activation>
+                <activeByDefault>false</activeByDefault>
+                <property><name>maven.test.failure.ignore</name>
+                <value>true</value></property>
+            </activation>
+            <properties>
+                <karma.force>--force</karma.force>
             </properties>
         </profile>
         <profile>
@@ -306,7 +318,7 @@
                         </goals>
                         <phase>${karma.phase}</phase>
                         <configuration>
-                            <arguments>${grunt.build}</arguments>
+                            <arguments>${grunt.build} ${karma.force}</arguments>
                         </configuration>
                     </execution>
                 </executions>
