@@ -99,11 +99,11 @@ angular.module('unionvmsWeb').factory('CommunicationChannel', function() {
         };
 
         CommunicationChannel.prototype.getFormattedStartDate = function() {
-            return moment(this.ids["START_DATE"], 'YYYY-MM-DD HH:mm Z').format("YYYY-MM-DD HH:mm Z");
+            return moment(this.ids["START_DATE"], 'YYYY-MM-DD HH:mm').format("YYYY-MM-DD HH:mm Z");
         };
 
         CommunicationChannel.prototype.getFormattedStopDate = function() {
-            return moment(this.ids["STOP_DATE"], 'YYYY-MM-DD HH:mm Z').format("YYYY-MM-DD HH:mm Z");
+            return moment(this.ids["STOP_DATE"], 'YYYY-MM-DD HH:mm').format("YYYY-MM-DD HH:mm Z");
         };
 
         return CommunicationChannel;
