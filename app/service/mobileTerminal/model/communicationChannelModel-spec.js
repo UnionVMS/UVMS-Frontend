@@ -70,12 +70,12 @@ describe('CommunicationChannel', function() {
 
     it('should format its start date correctly', inject(function(CommunicationChannel) {
         var channel = CommunicationChannel.fromJson(responseData);
-        expect(channel.getFormattedStartDate()).toEqual("2015-06-01 09:00 +02:00");
+        expect(channel.getFormattedStartDate()).toEqual(moment("2015-06-01 09:00 +02:00", 'YYYY-MM-DD HH:mm Z').format("YYYY-MM-DD HH:mm Z"));
     }));
 
     it('should format its stop date correctly', inject(function(CommunicationChannel) {
         var channel = CommunicationChannel.fromJson(responseData);
-        expect(channel.getFormattedStopDate()).toEqual("2015-06-01 09:00 +02:00");
+        expect(channel.getFormattedStopDate()).toEqual(moment("2015-06-01 09:00 +02:00", 'YYYY-MM-DD HH:mm Z').format("YYYY-MM-DD HH:mm Z"));
     }));
 
     it('should make an exact copy of itself', inject(function(CommunicationChannel) {
