@@ -30,7 +30,7 @@ angular.module('unionvmsWeb').controller('ValidationresultsmodalCtrl',function($
     };
     
     var getSelectorPath = function(xpath){
-        var regex = /(?:\[local\-name\(\)\=['"]([A-z1-9\-]+)['"]\](?:\)\[([1-9])+\])?)+/g;
+        var regex = /(?:\[local\-name\(\)\=['"]([A-z1-9\-]+)['"]\](?:\)\[([1-9]+)+\])?)+/g;
         var xpathArr = xpath.split('\/\/\*');
 
         var selectorPath = [];
