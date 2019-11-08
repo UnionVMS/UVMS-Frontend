@@ -203,9 +203,9 @@ angular.module('unionvmsWeb').factory('rulesOptionsService',function(configurati
         var plugins = [];
         exchangeRestService.getSendReportPlugins().then(function(services) {
             for (var i = 0; i < services.length; i++) {
-                plugins.push(services[i].name);
+                plugins.push({'text' : services[i].name, 'code' : services[i].serviceClassName});
             }
-            actionDropdowns.SEND_REPORT.targets = configurationService.setTextAndCodeForDropDown(plugins, undefined, undefined, true);
+            actionDropdowns.SEND_REPORT.targets = plugins;
         }, function(error) {
             return $q.reject(error);
         });
