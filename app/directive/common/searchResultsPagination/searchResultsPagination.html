@@ -1,5 +1,11 @@
 <div class="searchResultsPaginationContainer" ng-hide="total === 1 || page === 0">
     <ul class="pagination">
+       <li class="disabled page-size" ng-show="showListPage">
+           <span>
+               Page Size:
+                <select ng-options="item as item for item in listSizes" selected="listSize" ng-model="listSize" ng-change="onChangeListSize()" ></select>
+           </span>
+       </li>
         <li ng-class="prevPageDisabled()">
             <a href ng-click="firstPage()" title="{{'common.search_results_pagination_first_page_title' | i18n}}">
                 <span aria-hidden="true">&#60;&#60;</span>
