@@ -17,12 +17,13 @@ angular.module('unionvmsWeb').directive('searchResultsPagination', function() {
             page : '=',
             total : '=',
             callback : '=',
+            listSize: '=?',
+            showListPage: '=?'
+
 		},
         controller : 'searchResultsPaginationCtrl',
 		templateUrl: 'directive/common/searchResultsPagination/searchResultsPagination.html',
 		link: function(scope, element, attrs, fn) {
-
-
 		}
 	};
 });
@@ -30,9 +31,10 @@ angular.module('unionvmsWeb').directive('searchResultsPagination', function() {
 
 
 angular.module('unionvmsWeb')
-    .controller('searchResultsPaginationCtrl', function($scope, $timeout){
+    .controller('searchResultsPaginationCtrl', function($scope, $timeout, searchService){
 
         $scope.inputPage = $scope.page;
+        $scope.listSize = searchService.getListRequest().listSize;
 
         $scope.firstPage = function () {
             $scope.changePage(1);
@@ -87,5 +89,19 @@ angular.module('unionvmsWeb')
         $scope.$watch("page", function (newValue, oldValue) {
             $scope.inputPage = $scope.page;
         });
+
+        $scope.listSizes= [
+            10,
+            25,
+            50,
+            100
+        ];
+        $scope.onChangeListSize = function() {
+            if(angular.isDefined($scope.callback)) {
+                // override default page size of 25 records with selected page size
+                searchService.getListRequest().listSize = $scope.listSize;
+                $scope.callback($scope.page);
+            }
+        }
 
 });

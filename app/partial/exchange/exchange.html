@@ -138,7 +138,7 @@ copy of the GNU General Public License along with the IFDM Suite. If not, see <h
                 </div>
             </div>
         </div>
-        <search-results-pagination ng-if="displayedMessages.length > 0 && !exchangeLogsSearchResults.loading && !isLinkActive" page="exchangeLogsSearchResults.page" total="exchangeLogsSearchResults.totalNumberOfPages" callback="gotoPage"></search-results-pagination >
+        <search-results-pagination show-list-page="true" list-size="listSize" ng-if="displayedMessages.length > 0 && !exchangeLogsSearchResults.loading && !isLinkActive" page="exchangeLogsSearchResults.page" total="exchangeLogsSearchResults.totalNumberOfPages" callback="gotoPage"></search-results-pagination >
     </div>
 
 
