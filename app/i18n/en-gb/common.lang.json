@@ -162,5 +162,6 @@
     "no_data_available": "No data available",
     "items_selected": "items",
     "empty_value": "No value",
-    "add_all": "Add all"
+    "add_all": "Add all",
+    "search_results_page_size": "Page size"
 }
