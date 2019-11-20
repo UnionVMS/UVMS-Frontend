@@ -6,19 +6,19 @@
 					<tr class="row">
 						<th lr-drag-src="headers" lr-drop-target="headers" ng-repeat="column in attrVisibility.tripsColumns" ng-show="attrVisibility.trips[column]" lr-drop-success="dropSuccess(e, item, collection)">
 							<div st-sort="tripId" st-skip-natural="true" st-sort-default="reverse" st-class-ascent="sorting_asc" st-class-descent="sorting_desc" ng-if="column === 'tripId'">{{'activity.tab_trip_table_header_id' | i18n }}</div>
-							<div st-sort="flagState" st-skip-natural="true" st-class-ascent="sorting_asc" st-class-descent="sorting_desc" ng-if="column === 'fs'">{{'spatial.tab_vms_pos_table_header_fs' | i18n }}</div>
-							<div st-sort="extMark" st-skip-natural="true" st-class-ascent="sorting_asc" st-class-descent="sorting_desc" ng-if="column === 'extMark'">{{'spatial.reports_form_vessel_search_table_header_external_marking' | i18n }}</div>
-							<div st-sort="IRCS" st-skip-natural="true" st-class-ascent="sorting_asc" st-class-descent="sorting_desc" ng-if="column === 'ircs'">{{'spatial.reports_form_vessel_search_table_header_ircs' | i18n }}</div>
-							<div st-sort="CFR" st-skip-natural="true" st-class-ascent="sorting_asc" st-class-descent="sorting_desc" ng-if="column === 'cfr'">{{'spatial.reports_form_vessel_search_table_header_cfr' | i18n }}</div>
-							<div st-sort="UVI" st-skip-natural="true" st-class-ascent="sorting_asc" st-class-descent="sorting_desc" ng-if="column === 'uvi'">{{'activity.fa_details_item_uvi' | i18n }}</div>
-							<div st-sort="ICCAT" st-skip-natural="true" st-class-ascent="sorting_asc" st-class-descent="sorting_desc" ng-if="column === 'iccat'">{{'activity.fa_details_item_iccat' | i18n }}</div>
-							<div st-sort="GFCM" st-skip-natural="true" st-class-ascent="sorting_asc" st-class-descent="sorting_desc" ng-if="column === 'gfcm'">{{'activity.fa_details_item_gfcm' | i18n }}</div>
-							<div st-sort="firstFishingActivity" st-skip-natural="true" st-class-ascent="sorting_asc" st-class-descent="sorting_desc" ng-if="column === 'firstEventType'">{{'activity.tab_trip_table_header_first_event' | i18n }}</div>
+							<div ng-if="column === 'fs'">{{'spatial.tab_vms_pos_table_header_fs' | i18n }}</div>
+							<div ng-if="column === 'extMark'">{{'spatial.reports_form_vessel_search_table_header_external_marking' | i18n }}</div>
+							<div ng-if="column === 'ircs'">{{'spatial.reports_form_vessel_search_table_header_ircs' | i18n }}</div>
+							<div ng-if="column === 'cfr'">{{'spatial.reports_form_vessel_search_table_header_cfr' | i18n }}</div>
+							<div ng-if="column === 'uvi'">{{'activity.fa_details_item_uvi' | i18n }}</div>
+							<div ng-if="column === 'iccat'">{{'activity.fa_details_item_iccat' | i18n }}</div>
+							<div ng-if="column === 'gfcm'">{{'activity.fa_details_item_gfcm' | i18n }}</div>
+							<div ng-if="column === 'firstEventType'">{{'activity.tab_trip_table_header_first_event' | i18n }}</div>
 							<div st-sort="firstFishingActivityDateTime" st-skip-natural="true" st-class-ascent="sorting_asc" st-class-descent="sorting_desc" ng-if="column === 'firstEventTime'">{{'activity.tab_trip_table_header_first_event_time' | i18n }}</div>
-							<div st-sort="lastFishingActivity" st-skip-natural="true" st-class-ascent="sorting_asc" st-class-descent="sorting_desc" ng-if="column === 'lastEventType'">{{'activity.tab_trip_table_header_last_event' | i18n }}</div>
-							<div st-sort="lastFishingActivityDateTime" st-skip-natural="true" st-class-ascent="sorting_asc" st-class-descent="sorting_desc" ng-if="column === 'lastEventTime'">{{'activity.tab_trip_table_header_last_event_time' | i18n }}</div>
-							<div st-sort="tripDuration" st-skip-natural="true" st-class-ascent="sorting_asc" st-class-descent="sorting_desc" ng-if="column === 'duration'">{{'activity.tab_trip_table_header_duration' | i18n }}</div>
-							<div st-sort="noOfCorrections" st-skip-natural="true" st-class-ascent="sorting_asc" st-class-descent="sorting_desc" ng-if="column === 'nCorrections'">{{'activity.tab_trip_table_header_nCorrections' | i18n }}</div>
+							<div ng-if="column === 'lastEventType'">{{'activity.tab_trip_table_header_last_event' | i18n }}</div>
+							<div ng-if="column === 'lastEventTime'">{{'activity.tab_trip_table_header_last_event_time' | i18n }}</div>
+							<div ng-if="column === 'duration'">{{'activity.tab_trip_table_header_duration' | i18n }}</div>
+							<div ng-if="column === 'nCorrections'">{{'activity.tab_trip_table_header_nCorrections' | i18n }}</div>
 						</th>
 						<th style="width:80px">{{'spatial.table_header_actions' | i18n }}</th>
 					</tr>
