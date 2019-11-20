@@ -18,8 +18,8 @@ angular.module('unionvmsWeb').factory('MobileTerminal', function(CommunicationCh
             this.transceiverType = undefined;
             this.softwareVersion = undefined;
             this.answerBack = undefined;
-            this.channels = [createDefaultChannel()];            
-            this.active = false;            
+            this.channels = [createDefaultChannel()];
+            this.active = false;
             this.connectId = undefined;
             this.associatedVessel = undefined;
             this.mobileTerminalType = undefined;
@@ -27,7 +27,7 @@ angular.module('unionvmsWeb').factory('MobileTerminal', function(CommunicationCh
             this.inactivated = undefined;
             this.createTime = undefined;
             this.updateTime = undefined;
-
+            this.id = undefined;
             this.westAtlanticOceanRegion = false;
             this.eastAtlanticOceanRegion = false;
             this.indianOceanRegion = false;
@@ -38,16 +38,28 @@ angular.module('unionvmsWeb').factory('MobileTerminal', function(CommunicationCh
                 name : undefined,
                 pluginServiceName : undefined,
                 pluginInactive : false,
+                capabilities : undefined
             };
         }
 
         function createDefaultChannel(){
-            var defaultChannel = new CommunicationChannel();            
+            var defaultChannel = new CommunicationChannel();
             defaultChannel.defaultChannel = true;
             defaultChannel.configChannel = true;
-            defaultChannel.pollChannel = true;            
+            defaultChannel.pollChannel = true;
             return defaultChannel;
         }
+
+        function defaultCapabilities(pluginId){
+            return  {
+                id: undefined,
+                value: true,
+                updatedTime: undefined,
+                updatedBy: "UVMS",
+                plugin: pluginId
+            };
+        }
+
 
         MobileTerminal.fromJson = function(data){
             var mobileTerminal = new MobileTerminal();
@@ -80,7 +92,8 @@ angular.module('unionvmsWeb').factory('MobileTerminal', function(CommunicationCh
                 mobileTerminal.plugin = {
                     name : data.plugin.name,
                     pluginServiceName : data.plugin.pluginServiceName,
-                    pluginInactive : data.plugin.pluginInactive
+                    pluginInactive : data.plugin.pluginInactive,
+                    capabilities : [defaultCapabilities(data.plugin.id)]
                 };
             }
 
@@ -107,7 +120,7 @@ angular.module('unionvmsWeb').factory('MobileTerminal', function(CommunicationCh
                 var channelObject = value.dataTransferObject();
                 jsonChannels.push(channelObject);
             });
-        
+
             var returnObject = {
                 assetId: this.connectId,
                 serialNo: this.serialNo,
@@ -117,7 +130,7 @@ angular.module('unionvmsWeb').factory('MobileTerminal', function(CommunicationCh
                 softwareVersion : this.softwareVersion,
                 answerBack : this.answerBack,
                 archived : this.archived,
-                channels : jsonChannels,                
+                channels : jsonChannels,
                 id : this.id !== undefined ? this.id : null,
                 mobileTerminalType : this.mobileTerminalType,
                 plugin : this.plugin,
@@ -167,7 +180,6 @@ angular.module('unionvmsWeb').factory('MobileTerminal', function(CommunicationCh
             copy.channels = this.channels.map(function(ch) {
                 return ch.copy();
             });
-
 
             return copy;
         };

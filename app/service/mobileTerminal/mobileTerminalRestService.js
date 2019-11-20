@@ -13,7 +13,7 @@ angular.module('unionvmsWeb')
     .factory('mobileTerminalRestFactory',function($resource, $log){
         return {
             getTranspondersConfig : function(){
-                return $resource('asset/rest/config2/MT/transponders');
+                return $resource('asset/rest/config/MT/transponders');
             },
             getMobileTerminalByGuid : function(){
                 return $resource('asset/rest/mobileterminal/:id');
@@ -24,17 +24,17 @@ angular.module('unionvmsWeb')
                 });
             },
             getMobileTerminals : function(){
-                return $resource('asset/rest/mobileterminal2/list/',{},{
+                return $resource('asset/rest/mobileterminal/list/',{},{
                     list: { method: 'POST'}
                 });
             },
             assignMobileTerminal : function(){
-                return $resource('asset/rest/mobileterminal2/:mtId/assign/:assetId', {}, {
+                return $resource('asset/rest/mobileterminal/:mtId/assign/:assetId', {}, {
                     save: { method: 'PUT'}
                 });
             },
             unassignMobileTerminal : function(){
-                return $resource('asset/rest/mobileterminal2/:mtId/unassign/:assetId', {}, {
+                return $resource('asset/rest/mobileterminal/:mtId/unassign/:assetId', {}, {
                     save: { method: 'PUT'}
                 });
             },
@@ -59,7 +59,7 @@ angular.module('unionvmsWeb')
                 });
             },
             getConfigValues : function(){
-                return $resource('asset/rest/config2/MT');
+                return $resource('asset/rest/config/MT');
             }
 
         };

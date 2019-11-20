@@ -17,7 +17,7 @@ describe('MobileTerminalModel', function() {
         "satelliteNumber": "426 572 212",
         "antenna": "Sailor 640",
         "transceiverType": "Sailor 6140",
-        "softwareVersion" : "1.3-6",                
+        "softwareVersion" : "1.3-6",
         "assetId": "ebeec8ef-2eab-4d4f-9d6d-994ad8b57c34",
         "channels": [
             {
@@ -40,15 +40,21 @@ describe('MobileTerminalModel', function() {
             }
         ],
         "active": true,
-        "id": "1234-5678-9012-3456-7891-2345-678901",        
+        "id": "1234-5678-9012-3456-7891-2345-678901",
         "source": "INTERNAL",
         "mobileTerminalType": "INMARSAT_C",
         "plugin" : {
             "name" : "BURUM",
             "pluginServiceName" : "TestName",
-            "pluginInactive" : false
+            "pluginInactive" : false,
+            "capabilities" : [{
+                "value": true,
+                "updatedTime": undefined,
+                "updatedBy": "UVMS",
+                "plugin": undefined
+            }]
         },
-        
+
         "westAtlanticOceanRegion" : false,
         "eastAtlanticOceanRegion" : false,
         "indianOceanRegion" : false,
@@ -61,7 +67,7 @@ describe('MobileTerminalModel', function() {
 
         expect(mobileTerminal.id).toBeUndefined();
         expect(mobileTerminal.connectId).toBeUndefined();
-        expect(mobileTerminal.plugin).toBeDefined();        
+        expect(mobileTerminal.plugin).toBeDefined();
         expect(mobileTerminal.channels.length).toEqual(1);
         expect(mobileTerminal.active).toEqual(false);
     }));
@@ -100,7 +106,7 @@ describe('MobileTerminalModel', function() {
         expect(mt.channels[0].pollChannel).toBe(true);
         expect(mt.channels[0].configChannel).toBe(false);
 
-        expect(mt.channels[1].name).toBe("HAV");    
+        expect(mt.channels[1].name).toBe("HAV");
         expect(mt.channels[1].DNID).toBe("11456");
         expect(mt.channels[1].memberNumber).toBe("102");
 
@@ -187,7 +193,7 @@ describe('MobileTerminalModel', function() {
     }));
 
     it('should transfer capabilities of removed channel to default channel', inject(function(CommunicationChannel, MobileTerminal) {
-        var channel = new CommunicationChannel();        
+        var channel = new CommunicationChannel();
         channel.pollChannel = true;
         channel.configChannel = true;
 
@@ -197,7 +203,7 @@ describe('MobileTerminalModel', function() {
         expect(mt.channels.length).toBe(2);
         mt.removeChannel(1);
         expect(mt.channels[0].pollChannel).toBeTruthy();
-        expect(mt.channels[0].configChannel).toBeTruthy();        
+        expect(mt.channels[0].configChannel).toBeTruthy();
     }));
 
 });
