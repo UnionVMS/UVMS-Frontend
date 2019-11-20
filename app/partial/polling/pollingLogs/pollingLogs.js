@@ -31,7 +31,7 @@ angular.module('unionvmsWeb').controller('pollingLogsCtrl',function($scope, $sta
     $scope.pollTypes = [];
     $scope.pollTypes.push({"text": locale.getString('config.MOBILETERMINAL_POLL_TYPE_CONFIGURATION_POLL'), "code":"CONFIGURATION_POLL"});
     $scope.pollTypes.push({"text": locale.getString('config.MOBILETERMINAL_POLL_TYPE_MANUAL_POLL'), "code":"MANUAL_POLL"});
-    $scope.pollTypes.push({"text": locale.getString('config.MOBILETERMINAL_POLL_TYPE_SAMPLING_POLL'), "code":"SAMPLE_POLL"});
+    $scope.pollTypes.push({"text": locale.getString('config.MOBILETERMINAL_POLL_TYPE_SAMPLING_POLL'), "code":"SAMPLING_POLL"});
     $scope.pollTypes.push({"text": locale.getString('config.MOBILETERMINAL_POLL_TYPE_AUTOMATIC_POLL'), "code":"AUTOMATIC_POLL"});
     $scope.pollTypes = _.sortBy($scope.pollTypes, function(obj){return obj.text;});
 
