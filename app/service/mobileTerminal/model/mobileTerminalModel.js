@@ -38,7 +38,7 @@ angular.module('unionvmsWeb').factory('MobileTerminal', function(CommunicationCh
                 name : undefined,
                 pluginServiceName : undefined,
                 pluginInactive : false,
-                capabilities :undefined
+                capabilities : undefined
             };
         }
 
@@ -70,7 +70,6 @@ angular.module('unionvmsWeb').factory('MobileTerminal', function(CommunicationCh
             mobileTerminal.source = data.source;
             mobileTerminal.mobileTerminalType = data.mobileTerminalType;
             mobileTerminal.connectId = data.assetId;
-            mobileTerminal.connectId = data.assetId;
             mobileTerminal.asset = {
                 id : this.connectId
             };
@@ -94,7 +93,7 @@ angular.module('unionvmsWeb').factory('MobileTerminal', function(CommunicationCh
                     name : data.plugin.name,
                     pluginServiceName : data.plugin.pluginServiceName,
                     pluginInactive : data.plugin.pluginInactive,
-                    capabilities : [defaultCapabilities(data.id)]
+                    capabilities : [defaultCapabilities(data.plugin.id)]
                 };
             }
 
