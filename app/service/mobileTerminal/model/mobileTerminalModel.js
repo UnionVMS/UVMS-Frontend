@@ -27,7 +27,7 @@ angular.module('unionvmsWeb').factory('MobileTerminal', function(CommunicationCh
             this.inactivated = undefined;
             this.createTime = undefined;
             this.updateTime = undefined;
-
+            this.id = undefined;
             this.westAtlanticOceanRegion = false;
             this.eastAtlanticOceanRegion = false;
             this.indianOceanRegion = false;
