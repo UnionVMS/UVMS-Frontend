@@ -40,7 +40,7 @@ angular.module('unionvmsWeb')
                 return $resource('asset/rest/poll');
             },
             getPollableTerminals : function(){
-                return $resource('asset/rest/poll/pollable',{},{
+                return $resource('asset/rest/poll/getPollable',{},{
                      list : { method: 'POST'}
                 });
             }
