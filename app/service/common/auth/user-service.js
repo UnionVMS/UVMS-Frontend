@@ -11,22 +11,22 @@ copy of the GNU General Public License along with the IFDM Suite. If not, see <h
  */
 angular.module('auth.user-service', ['auth.router'])
     //todo: remove $state dependency
-    .factory('userService', ['selectContextPanel', '$resource', '$q', '$log', '$localStorage', 'jwtHelper', '$rootScope', '$http', '$state', '$timeout',
-        function (selectContextPanel, $resource, $q, $log, $localStorage, jwtHelper, $rootScope, $http, $state, $timeout) {
-                var userName,
-                    token,
-                    contexts,
-                    loggedin,
+    .factory('userService', ['selectContextPanel', '$resource', '$q', '$log', '$localStorage', 'jwtHelper', '$rootScope', '$http', '$state', '$timeout', '$window',
+        function (selectContextPanel, $resource, $q, $log, $localStorage, jwtHelper, $rootScope, $http, $state, $timeout, $window) {
+            var userName,
+                token,
+                contexts,
+                loggedin,
                 currentContext,
                 expired;
 
-                var _reset = function () {
-                    userName = "";
-                    token = {};
-                    loggedin = false;
+            var _reset = function () {
+                userName = "";
+                token = {};
+                loggedin = false;
                 expired = null;
-                    contexts = null;
-                    currentContext = null;
+                contexts = null;
+                currentContext = null;
                 };
 
                 _reset();
@@ -113,6 +113,7 @@ angular.module('auth.user-service', ['auth.router'])
                 var continueLogout = function(){
                     _reset();
                     delete $localStorage.token;
+                    $window.localStorage.removeItem('authToken');
                     //do not wait for the success or failure of the call to delete sessions
                     delete $localStorage.sessionId;
                         _clearContexts();
@@ -575,6 +576,7 @@ angular.module('auth.user-service', ['auth.router'])
                     return deferred.promise;
             }
                 $log.debug('No logged in user found');
+
                 var validToken = $localStorage.token;
                 if (validToken) {
                     $log.debug('Found token in localstorage, using it to log user in');
@@ -632,6 +634,15 @@ angular.module('auth.user-service', ['auth.router'])
                 if (!validToken) {
                         $log.debug('Token from localstorage was not valid. do a backend ping in case this is a CAS/ECAS handled session.');
                         // we are not logged in
+
+                        // comming from new frontend
+                        try{
+                            var newAuthToken = $window.localStorage.getItem('authToken');
+                            _storeToken(newAuthToken);
+                        } catch (e) {
+                            console.warn("No auth from new frontend: ",e);
+                        }
+
                         return _backendPing().then(
                         function (response) {
                             expired = false;
