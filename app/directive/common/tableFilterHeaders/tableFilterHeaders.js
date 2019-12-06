@@ -305,8 +305,8 @@ angular.module('unionvmsWeb').directive('tableFilterHeaders', function($compile,
                     scope.total = 0;
                     scope.isCalculating = true;
                     for (var i = 0; i < data.length; i++){
-                             if (!isNaN(data[i][scope.property])){
-                             handleCatch(data[i]['type'],data[i][scope.property])
+                        if (!isNaN(data[i][scope.property])){
+                            handleCatch(data[i]['type'],data[i][scope.property]);
                         }
                         if (i === data.length - 1){
                             scope.isCalculating = false;
@@ -401,5 +401,5 @@ angular.module('unionvmsWeb').directive('tableFilterHeaders', function($compile,
         } else {
             return input;
         }
-    }
+    };
 });
