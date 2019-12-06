@@ -227,6 +227,7 @@ angular.module('unionvmsWeb').factory('Trip',function(locale,unitConversionServi
      */
     var loadReportMessages = function(self,activityReports){
         var reports = [];
+        tripReportsTimeline.reset();
         self.reports = [];
 
         var mainNodes = _.filter(activityReports, function(rep){ return rep.faReferenceID === undefined; });
