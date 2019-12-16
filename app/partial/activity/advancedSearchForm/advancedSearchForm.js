@@ -350,7 +350,7 @@ angular.module('unionvmsWeb').controller('AdvancedsearchformCtrl',function($scop
      * @private
      */
     function getComboboxData(){
-        var lists = ['comChannels', 'purposeCodes', 'reportTypes', 'gearTypes', 'activityTypes'];
+        var lists = ['comChannels', 'purposeCodes', 'reportTypes', 'gearTypes', 'activityTypes', 'vesselGroups'];
         angular.forEach(lists, function(list) {
             var fnName = 'get' + list.substring(0,1).toUpperCase() + list.substring(1);
             $scope[fnName]();
