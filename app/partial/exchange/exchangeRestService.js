@@ -290,9 +290,9 @@ angular.module('unionvmsWeb')
 
                 var exchangeMessages = [];
 
-                if(angular.isArray(response.data.logs)){
-                    for (var i = 0; i < response.data.logs.length; i++){
-                        exchangeMessages.push(Exchange.fromJson(response.data.logs[i]));
+                if(angular.isArray(response.data.logList)){
+                    for (var i = 0; i < response.data.logList.length; i++){
+                        exchangeMessages.push(Exchange.fromJson(response.data.logList[i]));
                     }
                 }
 
@@ -305,7 +305,8 @@ angular.module('unionvmsWeb')
              function(error){
                 console.log("Error getting exchange messages.", error);
                 deferred.reject(error);
-            });
+            }
+            );
             return deferred.promise;
         };
 
