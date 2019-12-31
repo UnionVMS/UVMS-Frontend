@@ -118,7 +118,7 @@
 	"trip_summary_vessel_ircs": "IRCS",
 	"trip_summary_vessel_cfr": "CFR",
 	"trip_summary_roles": "Roles",
-	"trip_summary_cronology": "Cronology",
+    "trip_summary_cronology": "Trip history",
 	"trip_summary_trip_map": "Trip map",
 	"trip_summary_catch": "Catch",
 	"trip_summary_reports": "Reports",
@@ -193,7 +193,10 @@
     "clock_panel_arrival_time":"Time of Arrival",
     "clock_panel_intended_start_time":"Intended start time of landing",
     "clock_panel_accepted_time":"Accepted time",
-	"cronology_current_trip": "Current trip:",
+    "cronology_current_trip": "Current trip:",
+    "cronology_selected_trip": "Selected trip:",
+    "cronology_next_trip": "Next trips:",
+    "cronology_previous_trip": "Previous trips:",
 	"cronology_view_all": "View all",
 	"error_loading_trip_summary_vessel_data": "Error loading the vessel data in trip summary",
 	"error_loading_trip_summary_cronology": "Error loading the cronology in trip summary",
@@ -344,7 +347,7 @@
     "fa_details_item_start_landing": "Start of landing",
     "fa_details_item_end_landing": "End of landing",
     "fa_details_item_currency": "Currency",
-    
+
     "fa_navigator_history":"History",
     "fa_navigator_history_previous":"Previous",
     "fa_navigator_history_next":"Next",
@@ -365,7 +368,7 @@
     "packaging_type": "Packaging type",
     "package_weight": "Package weight (kg)",
     "package_quantity": "Package quantity",
-    
+
     "fa_locations_country": "Country",
     "fa_locations_sovereign": "Sovereign Country",
     "fa_locations_jurisdiction": "Jurisdiction Country",
@@ -378,7 +381,7 @@
     "fa_locations_postal_area": "Postal area",
     "fa_locations_plotId": "House number",
     "fa_locations_zoom_to_activity": "Zoom to activity in the map",
-     
+
     "fa_fao_area": "FAO",
     "fa_territory": "Territory",
     "fa_ices_stat_rectangle": "ICES Stat. Rect.",
@@ -425,7 +428,7 @@
     "ircs": "IRCS",
     "specie": "Specie",
     "alloc_type": "Allocation type",
-    
+
     "occurrence": "Occurrence",
     "gear_shot_and_retrieval": "Gear shot and retrieval",
     "gear_shot_retrieval_details": "Details:",
@@ -450,7 +453,7 @@
 
     "no_gears_reported": "No gears reported",
     "no_catches_reported": "No catches reported",
-    
+
     "trip_summary_gear": "(gear)",
     "trip_summary_gear_used": "(gear used)",
     "trip_summary_est_time_arr": "(est. time of arrival)",
@@ -458,6 +461,9 @@
     "trip_summary_est_time": "(est. time)",
     "trip_summary_est_time_trans": "(est. time transhipment)",
 
-    "warn_msg_when_multiple_activitites_in_history": "Due to several fishing activities being reported in the same FA Report Document, the system is not able to match them between documents. History is therefore displaying all reported activities of the same type."
+    "warn_msg_when_multiple_activitites_in_history": "Due to several fishing activities being reported in the same FA Report Document, the system is not able to match them between documents. History is therefore displaying all reported activities of the same type.",
+    "trip_summary_start_date": "Started On",
+    "trip_summary_trip_id": "Trip ID",
+    "trip_summary_note": "Note: Newest trip on top."
 
 }

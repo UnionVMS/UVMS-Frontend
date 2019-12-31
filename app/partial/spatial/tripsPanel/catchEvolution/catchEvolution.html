@@ -9,7 +9,7 @@ the hope that it will be useful, but WITHOUT ANY WARRANTY; without even the impl
 FITNESS FOR A PARTICULAR PURPOSE.  See the GNU General Public License for more details. You should have received a
 copy of the GNU General Public License along with the IFDM Suite. If not, see <http://www.gnu.org/licenses/>.
 -->
-<div ng-controller="CatchevolutionCtrl" class="catch-evolution">
+<div ng-controller="CatchEvolutionCtrl" class="catch-evolution">
     <a class="btn-trip-quit" ng-if="repNav.isSectionVisible('tripsPanel')" title="{{'activity.trip_summary_quit_trip_detail' | i18n }}"
         ng-click="navigateBack()" ng-if="tabType === 'reports'">
         <i class="fa fa-share-square-o"></i>
@@ -19,47 +19,35 @@ copy of the GNU General Public License along with the IFDM Suite. If not, see <h
             <a>{{'activity.catch_evolution_title' | i18n }}</a>
         </legend>
         <!-- CATCH EVOLUTION CONTAINER -->
-        <div class="row catch-evolution-container">
-            <!-- TRIP OVERVIEW PANEL -->
-            <trip-overview-panel class="col-md-12 summary-section" trip="catchEvolutionData.tripDetails"></trip-overview-panel>
-            <div class="col-md-12 summary-section evolution-color-panel">
-                <fieldset class="col-md-12 fieldsetStyle">
-                    <legend class="fieldsetLegendStyle">
-                        <a>{{'activity.catch_evolution_color_panel' | i18n }}</a>
-                    </legend>
-                    <div class="color-legend">
-                        <div class="color-panel" ng-repeat=" item in speciesColors">
-                            <div class="square" style="background-color: #{{item.color}};"></div>
-                            <div class="specie-code">{{item.code}}</div>
-                        </div>
-                    </div>
-                </fieldset>
+        <div class="catch-evolution-container">
+            <div class="row">
+                <trip-overview-panel class="col-md-12 summary-section" trip="catchEvolutionData.tripDetails"></trip-overview-panel>
             </div>
-            <!-- CHARTS PANEL -->
-            <div class="col-md-12">
-                <div class="col-md-12 chart-panel">
-                    <div class="row">
-                        <div class="row">
-                            <div ng-repeat="item in catchEvolutionData.catchProgress track by $index">
-                                <catch-panel class="col-md-3" ng-model="item.catchEvolution" title="{{item.title}}" unit="kg"
-                                ng-if="item.catchEvolution['0onboard'].total || item.catchEvolution['1cumulated'].total !== 0"></catch-panel>
+            <div class="row">
+                <!-- TRIP OVERVIEW PANEL -->
+                <div class="col-md-12 summary-section evolution-color-panel">
+                    <fieldset class="col-md-12 fieldsetStyle">
+                        <legend class="fieldsetLegendStyle">
+                            <a>{{'activity.catch_evolution_color_panel' | i18n }}</a>
+                        </legend>
+                        <div class="color-legend">
+                            <div class="color-panel" ng-repeat=" item in speciesColors">
+                                <div class="square" style="background-color: #{{item.color}};"></div>
+                                <div class="specie-code">{{item.code}}</div>
                             </div>
                         </div>
+                    </fieldset>
+                </div>
+                <!-- CHARTS PANEL -->
+                <div class="row catch-panel-section">
+                    <div class="col-md-12">
+                        <div class="col-sm-6 col-md-6 col-lg-4 col-xs-12" ng-repeat="item in catchEvolutionData.catchEvolutionProgress track by $index">
+                            <catch-progress-details data="item" date="{{item.date  | confDateFormat | dataNotAvailable}}" unit="kg"></catch-progress-details>
+                        </div>
                     </div>
                 </div>
-            </div>
-            <div class="col-md-12 chart-panel-table">
-                <div class="row">
-                    <div ng-repeat="item in sencondLevel">
-                        <catch-panel class="col-md-4" ng-model="item.catchEvolution" title="{{item.title}}" unit="kg" with-table="true" one-panel="true"
-                            ng-if="item.catchEvolution.cumulative.total !== 0"></catch-panel>
-                    </div>
-                </div>
-                <div class="row">
-                    <div ng-repeat="item in thirdLevel">
-                        <catch-panel class="col-md-4" ng-model="item.catchEvolution" title="{{item.title}}" unit="kg" with-table="true" one-panel="true"
-                            ng-if="item.catchEvolution.cumulative.total !== 0"></catch-panel>
-                    </div>
+                <div class="row catch-panel-section">
+                    <catch-panel-table class="col-md-12" data='tableData' species-colors="speciesColorsObject" headers='tableHeaders'></catch-panel-table>
                 </div>
             </div>
         </div>

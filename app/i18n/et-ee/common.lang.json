@@ -134,7 +134,7 @@
     "error_getting_data_from_server" : "Error getting data from server.",
     "help": "Help",
     "table_of_contents": "Table of contents",
-    "select_all": "Select all", 
+    "select_all": "Select all",
     "unselect_all": "Unselect all",
     "speed_unit_kts": "kts",
     "speed_unit_kph": "km/h",
@@ -143,5 +143,6 @@
     "mandatory_field":"*",
     "error_user_without_scope": "Module not accessible to accounts without a scope.",
     "no_data_available": "No data available",
-    "items_selected": "items selected"
+    "items_selected": "items selected",
+    "search_results_page_size": "Page size"
 }

@@ -1,0 +1,116 @@
+/*
+Developed with the contribution of the European Commission - Directorate General for Maritime Affairs and Fisheries
+© European Union, 2015-2016.
+
+This file is part of the Integrated Fisheries Data Management (IFDM) Suite. The IFDM Suite is free software: you can
+redistribute it and/or modify it under the terms of the GNU General Public License as published by the
+Free Software Foundation, either version 3 of the License, or any later version. The IFDM Suite is distributed in
+the hope that it will be useful, but WITHOUT ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or
+FITNESS FOR A PARTICULAR PURPOSE.  See the GNU General Public License for more details. You should have received a
+copy of the GNU General Public License along with the IFDM Suite. If not, see <http://www.gnu.org/licenses/>.
+*/
+.catch-progress-details {
+    .catch-details-container {
+        & > .row,
+        .catch-section {
+            height: 100%;
+        }
+        .catch-section {
+            .catch-details-body {
+                .catch-subsection {
+                    border-left: 1px solid #ddd;
+                    &.has-caption {
+                        padding-bottom: 30px;
+                    }
+                    h2 {
+                        text-align: center;
+                        margin: 0 0 -30px 0;
+                    }
+                    .chart-title {
+                        margin: 0 0 -40px 0;
+                        text-align: center;
+                        min-height: 21px;
+                        .panel-subtitle {
+                            font-size: 15px;
+                            font-family: Roboto, Arial;
+                        }
+                    }
+                    &:first-child {
+                        border-left: 0;
+                    }
+                    .chart-caption {
+                        position: absolute;
+                        left: 0;
+                        bottom: 0;
+                        text-align: center;
+                        width: 100%;
+                    }
+                    .table {
+                        width: auto !important;
+                        max-width: none;
+                        border: 1px solid #ddd;
+                        .tbody {
+                            max-height: 120px;
+                            overflow-y: auto;
+                            padding-right: 15px;
+                        }
+                        .tr {
+                            position: relative;
+                            padding-left: 10px;
+                        }
+                        .color-column {
+                            position: absolute;
+                            top: 0;
+                            left: 0;
+                            bottom: 0;
+                            z-index: 1;
+                        }
+                        .column-right {
+                            text-align: right;
+                        }
+                        .heading {
+                            padding-right: 20px;
+                        }
+                    }
+                }
+                .nvd3-chart {
+                    margin: 0 -15px;
+                }
+                .table-responsive-force {
+                    margin-top: 50px;
+                }
+            }
+        }
+        fieldset {
+            padding-bottom: 10px;
+            margin-bottom: 5px;
+            align-items: stretch;
+            legend {
+                margin: 0 5px 0 -5px;
+                padding: 0 5px;
+                a {
+                    cursor: default;
+                }
+            }
+        }
+    }
+    
+    .catch-panel-container {
+        min-height: 140px;
+        max-height: 140px;
+    }
+    
+    .red {
+        color: red;
+    }
+    
+    .pie-container {
+        padding-top: 18px;
+    }
+    
+    #catch-section .catch-section {
+        min-height: 220px;
+        max-height: 220px;
+    }
+}
+

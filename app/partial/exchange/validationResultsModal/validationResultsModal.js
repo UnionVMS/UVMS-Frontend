@@ -30,7 +30,7 @@ angular.module('unionvmsWeb').controller('ValidationresultsmodalCtrl',function($
     };
     
     var getSelectorPath = function(xpath){
-        var regex = /(?:\[local\-name\(\)\=['"]([A-z1-9\-]+)['"]\](?:\)\[([1-9])+\])?)+/g;
+        var regex = /(?:\[local\-name\(\)\=['"]([A-z1-9\-]+)['"]\](?:\)\[([1-9]+)+\])?)+/g;
         var xpathArr = xpath.split('\/\/\*');
 
         var selectorPath = [];
@@ -133,7 +133,7 @@ angular.module('unionvmsWeb').controller('ValidationresultsmodalCtrl',function($
                     var countIdx = 0;
                     while(nextElement && nextElement.length > 0){
                         var openElement = angular.element(nextElement).find('span:contains("' + selectorPathArr[i].varName + '")');
-                        closeRegex = new RegExp("&lt;\/<span class\=\"hljs-name\"\>[a-z]*:" + selectorPathArr[i].varName + "<\/span>&gt;");
+                        closeRegex = new RegExp("&lt;\/<span class\=\"hljs-name\"\>(?:[a-zA-Z0-9]*:)?" + selectorPathArr[i].varName + "<\/span>&gt;");
                         closeRegex2 = new RegExp("&lt;\/<span class\=\"hljs-name\"\>" + selectorPathArr[i].varName + "<\/span>&gt;");
                         if(openElement.length && countIdx === selectorPathArr[i].idx && openElement[0].parentElement.innerHTML.search(closeRegex) === -1){
                             if(i === selectorPathArr.length - 1){
@@ -177,7 +177,7 @@ angular.module('unionvmsWeb').controller('ValidationresultsmodalCtrl',function($
             }else{
                 curElement.addClass('xml-highlight');
                 nextElement = curElement.next();
-                closeRegex = new RegExp("&lt;\/<span class\=\"hljs-name\"\>[a-z]*:" + selectorPathArr[0].varName + "<\/span>&gt;");
+                closeRegex = new RegExp("&lt;\/<span class\=\"hljs-name\"\>(?:[a-zA-Z0-9]*:)?" + selectorPathArr[0].varName + "<\/span>&gt;");
                 while(nextElement && nextElement.length > 0){
 
                     convertedText = convertTextToSpan(nextElement);

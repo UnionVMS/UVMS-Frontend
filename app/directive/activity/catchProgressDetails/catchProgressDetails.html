@@ -1,0 +1,45 @@
+<div class="col-md-12 catch-progress-details ">
+    <div class="row">
+        <fieldset class="col-md-12 fieldsetStyle catch-section" id="catch-section">
+            <legend class="fieldsetLegendStyle">
+                <a> {{data.activityType | titleTransformer }} {{data.reportType | titleTransformer }} {{date}}</a>
+            </legend>
+            <div class="container catch-panel-container">
+                <div class="row" ng-if="!isLoading">
+                    <div class="{{graphClass}} pie-container" ng-if="data.previousCumulative | hasData">
+                        <nvd3 options="options" data="data.previousCumulative"></nvd3>
+                        <div class="text-center">Cumul: {{data.previousCumulativeGrandTotal}} {{unit}}</div>
+                    </div>
+                    <div class="{{graphClass}} pie-container" ng-if="data.total | hasData">
+                        <nvd3 options="options" data="data.total"></nvd3>
+                        <div class="text-center">Total: {{data.grandTotal}} {{unit}}</div>
+                    </div>
+                    <div class="{{graphClass}}" ng-if="data.loaded | hasData">
+                        <div class="text-center">LOADED</div>
+                        <nvd3 options="options" data="data.loaded | hasData"></nvd3>
+                        <div class="text-center">Total: {{data.grandLoadedTotal}} {{unit}}</div>
+                    </div>
+                    <div class="{{graphClass}}" ng-if="data.onBoard | hasData">
+                        <div class="text-center">ONBOARD</div>
+                        <nvd3 options="options" data="data.onBoard"></nvd3>
+                        <div class="text-center" ng-class="{'red': {{data.grandOnboardTotal !== data.cumulativeGrandTotal}}}">Total: {{data.grandOnboardTotal}} {{unit}}</div>
+                    </div>
+                    <div class="{{graphClass}}" ng-if="data.unLoaded | hasData">
+                        <div class="text-center">UNLOADED</div>
+                        <nvd3 options="options" data="data.unLoaded"></nvd3>
+                        <div class="text-center">Total: {{data.grandUnloadedTotal}} {{unit}}</div>
+                    </div>
+                    <div class="{{graphClass}} pie-container" ng-if="data.cumulative | hasData">
+                        <nvd3 options="options" data="data.cumulative"></nvd3>
+                        <div class="text-center" ng-class="{'red': data.last}">Cumul: {{data.cumulativeGrandTotal}} {{unit}}</div>
+                    </div>
+                </div>
+            </div>
+            <div class="row no-data" ng-if="data | hasNoCatches">
+                <div class="col-md-12">
+                    <span>{{'activity.no_data' | i18n}}</span>
+                </div>
+            </div>
+        </fieldset>
+    </div>
+</div>

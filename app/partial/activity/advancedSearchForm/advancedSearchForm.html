@@ -43,7 +43,8 @@ copy of the GNU General Public License along with the IFDM Suite. If not, see <h
                 </div>
                 <div class="col-md-2">
                     <!-- PURPOSE_CODE criterion -->
-                    <combobox ng-model="advancedSearchObject.purposeCode" items="codeLists.purposeCodes" multiple="true" min-selections="1" hide-selected-items="true" initialtext="{{'activity.advanced_search_placeholder_purpose_code' | i18n}}"></combobox>
+
+                    <combobox ng-model="advancedSearchObject.purposeCode" items="codeLists.purposeCodes" multiple="true" min-selections="1" hide-selected-items="true" label-override="{{'activity.advanced_search_placeholder_purpose_code' | i18n}}" initialtext="{{'activity.advanced_search_placeholder_purpose_code' | i18n}}"></combobox>
                 </div>
                 <div class="col-md-2" ng-show="visibleCombos.reportType">
                     <!-- REPORT_TYPE criterion -->
@@ -61,6 +62,7 @@ copy of the GNU General Public License along with the IFDM Suite. If not, see <h
                     <!-- PORT criterion -->
                     <input id="portFACriterion" type="text" class="form-control" name="portFACriterion" ng-model="advancedSearchObject.port" placeholder="{{'activity.advanced_search_placeholder_port' | i18n}}"  maxlength="255"/>
                 </div>
+
                 <div class="col-md-2 gear-type" ng-show="visibleCombos.gearType">
                     <!-- GEAR_TYPE criterion -->
                     <grouped-combobox ng-model="advancedSearchObject.gearType" is-filter-active="true" items="codeLists.gearTypes" initialtext="{{'activity.advanced_search_placeholder_gear_type' | i18n}}" ></grouped-combobox>
