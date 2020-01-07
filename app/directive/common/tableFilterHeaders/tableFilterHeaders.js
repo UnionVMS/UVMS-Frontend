@@ -15,9 +15,9 @@ copy of the GNU General Public License along with the IFDM Suite. If not, see <h
  * @name tableFilterHeaders
  * @attr {Array} columns - An array of objects defining all the columns of the table. Each object may containing the following properties: title, srcProp, srcObj, isArea, isVisible,
  *                         useComboFilter and calculateTotal
- * @attr {Array} records - An array containing all the data that should be displayed in the table  
+ * @attr {Array} records - An array containing all the data that should be displayed in the table
  * @attr {String} uniqueColumns - A string that defines the property name of the columns object indicating that a column is filled with a nested object
- * @attr {String} uniqueColumnsSrcData - A string that specifies the source nested object to use for unique columns 
+ * @attr {String} uniqueColumnsSrcData - A string that specifies the source nested object to use for unique columns
  * @description
  *  A reusable smart table directive that supports multiple and simultaneous combobox filters, and calculates totals according to an object that defines the table structure
  */
@@ -77,19 +77,19 @@ angular.module('unionvmsWeb').directive('tableFilterHeaders', function($compile,
                         if (isMatch === false){
                             scope.initColumns();
                         }
-                        
+
                         scope.isProcessed = true;
                         scope.displayedRecords = [].concat(newVal);
-                        
+
                         if (angular.isDefined(scope.uniqueColumnsSrcData)){
                             setColumnVisibility();
                         }
                     }
                 });
-                
+
                 /**
                  * Check if the footer with calculated totals should be render according to the definition object of columns
-                 * 
+                 *
                  * @memberof tableFilterHeaders
                  * @private
                  */
@@ -103,11 +103,11 @@ angular.module('unionvmsWeb').directive('tableFilterHeaders', function($compile,
                         }
                     }
                 }
-                
+
                 /**
                  * Set columns visibility if uniqueColumns and uniqueColumnsSrcData are specified.
                  * It will check the data, and hide those uniqueColumns if they are not present in the data.
-                 * 
+                 *
                  * @memberof tableFilterHeaders
                  * @private
                  */
@@ -126,10 +126,10 @@ angular.module('unionvmsWeb').directive('tableFilterHeaders', function($compile,
                         }
                     });
                 }
-                
+
                 /**
                  * Selects a row by index
-                 * 
+                 *
                  * @memberof tableFilterHeaders
                  * @public
                  * @alias selectRow
@@ -160,7 +160,7 @@ angular.module('unionvmsWeb').directive('tableFilterHeaders', function($compile,
  * @param {Service} locale - The angular locale service
  * @param {Service} $timeout - The angular timeout service
  * @attr {Array} collection - An array of objects containing the data that is displayed in the table
- * @attr {String} predicate - A string identifying the source property to be filtered   
+ * @attr {String} predicate - A string identifying the source property to be filtered
  * @attr {Boolean} isArea - A boolean which specifies if the column is related with an area nested object so that undefined values are supported within the filtering
  * @attr {String} translateColumn - A string with src locale file and initial text to translate (e.g.: abbreviation.gear_type_)
  * @description
@@ -182,10 +182,10 @@ angular.module('unionvmsWeb').directive('tableFilterHeaders', function($compile,
                 model: [],
                 items: []
             };
-            
+
             /**
              * Build filtering criteria object and call the smart table filtering function
-             * 
+             *
              * @memberof stSelectMultiple
              * @public
              * @alias doFilter
@@ -207,10 +207,10 @@ angular.module('unionvmsWeb').directive('tableFilterHeaders', function($compile,
                     table.search(query, scope.predicate);
                 });
             };
-            
+
             /**
              * Initialization function
-             * 
+             *
              * @memberof stSelectMultiple
              * @private
              */
@@ -226,10 +226,10 @@ angular.module('unionvmsWeb').directive('tableFilterHeaders', function($compile,
                     });
                 }
             }
-            
+
             /**
              * Build the combobox model and items list
-             * 
+             *
              * @memberof stSelectMultiple
              * @private
              */
@@ -246,14 +246,14 @@ angular.module('unionvmsWeb').directive('tableFilterHeaders', function($compile,
                         return item[props[0]][props[1]];
                     }));
                 }
-                
+
                 var uniqueValues = _.compact(testValues);
                 if (!_.isEqual(uniqueValues, testValues)){
                     hasEmptyValues = true;
                 }
-                
+
                 scope.combo.model = _.sortBy(uniqueValues, function(item){return item;});
-                
+
                 var items = [];
                 angular.forEach(scope.combo.model, function(val){
                     var text = val;
@@ -266,7 +266,7 @@ angular.module('unionvmsWeb').directive('tableFilterHeaders', function($compile,
                         text: text
                     });
                 });
-                
+
                 if (hasEmptyValues){
                     scope.combo.model.push('null_values');
                     items.push({
@@ -276,7 +276,7 @@ angular.module('unionvmsWeb').directive('tableFilterHeaders', function($compile,
                 }
                 scope.combo.items = items;
             }
-            
+
             init();
         }
     };
@@ -304,22 +304,33 @@ angular.module('unionvmsWeb').directive('tableFilterHeaders', function($compile,
                 if (angular.isDefined(data) && data.length && scope.isCalculating === false){
                     scope.total = 0;
                     scope.isCalculating = true;
-                    for (var i = 0; i < data.length; i++){        
-                        if (!isNaN(data[i][scope.property])){   
-                         scope.total += data[i][scope.property];
+                    for (var i = 0; i < data.length; i++){
+                             if (!isNaN(data[i][scope.property])){
+                             handleCatch(data[i]['type'],data[i][scope.property])
                         }
                         if (i === data.length - 1){
                             scope.isCalculating = false;
                         }
-                    } 
+                    }
                 }
                 if (scope.property === 'calculatedWeight' || scope.property === 'packageWeight' || scope.property === 'weight'){
                     scope.total = $filter('number')(scope.total, 2);
-                } 
+                }
             });
+
+            function handleCatch(type, weight){
+                if(['UNLOADED','DEMINIMIS','DISCARDED'].indexOf(type) >= 0){
+                    scope.total -= weight;
+                } else {
+                    scope.total += weight;
+                }
+            }
         }
     };
 })
+
+
+
 /**
  * @memberof unionvmsWeb
  * @ngdoc directive
@@ -338,7 +349,7 @@ angular.module('unionvmsWeb').directive('tableFilterHeaders', function($compile,
                         isSelected = true;
                     }
                 });
-                
+
                 if (!isSelected){
                     scope.selectRow(0);
                 }
@@ -350,7 +361,7 @@ angular.module('unionvmsWeb').directive('tableFilterHeaders', function($compile,
  * @memberof unionvmsWeb
  * @ngdoc filter
  * @name comboHeaderFilter
- * @param {Service} $filter - The angular filter service 
+ * @param {Service} $filter - The angular filter service
  * @desc
  *  Filtering function for multiple select filters on smart table. It should be used with {@link unionvmsWeb.tableFilterHeaders} and {@link unionvmsWeb.stSelectMultiple} directives.
  */
@@ -365,20 +376,30 @@ angular.module('unionvmsWeb').directive('tableFilterHeaders', function($compile,
                 if (splitKey.length > 1){
                     testValue = testValue[splitKey[1]];
                 }
-                
+
                 var nullIdx = _.indexOf(predictedObject[key].matchAny.items, 'null_values');
                 if (nullIdx !== -1){
                     predictedObject[key].matchAny.items[nullIdx] = undefined;
                 }
-                
+
                 if (status && !predictedObject[key].matchAny.all && _.indexOf(predictedObject[key].matchAny.items, testValue) === -1) {
                     status = false;
-                } 
+                }
             });
-            
+
             return status;
         });
-        
+
         return records;
     };
+
+})
+.filter('negateSubractedCatchType', function(){
+   return function(input, item){
+        if(['UNLOADED','DEMINIMIS','DISCARDED'].indexOf(item.type) >= 0){
+            return -input;
+        } else {
+            return input;
+        }
+    }
 });
