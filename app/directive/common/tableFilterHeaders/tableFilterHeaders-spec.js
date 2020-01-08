@@ -315,12 +315,16 @@ describe('Table with combobox filters and calculated totals', function() {
             expect(nrRows).toEqual(1);
         });
     });
-    
+
     function calculateTotal(records, prop){
         var total = 0;
         var filter = $filter('number');
-        for (var i = 0; i < records.length; i++){
-            total += records[i][prop];
+        for (var i = 0; i < records.length; i++) {
+            if (['UNLOADED','DEMINIMIS','DISCARDED'].indexOf(records[i].type) >= 0 ) {
+                total -= records[i][prop];
+            } else {
+                total += records[i][prop];
+            }
         }
         total = filter(total, 2);
         return total.toString();
