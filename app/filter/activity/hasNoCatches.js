@@ -25,5 +25,5 @@ angular.module('unionvmsWeb').filter('hasNoCatches',  function() {
         return Object.keys(object).every(function(key) {
             return object[key] === null || typeof object[key] !== 'object' || angular.equals({}, object[key]);
         });
-      }
+    };
 });

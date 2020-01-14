@@ -21,8 +21,9 @@ copy of the GNU General Public License along with the IFDM Suite. If not, see <h
     </div>
     <div class="row activity-summary-row">
         <map-tile class="col-md-4 summary-section" tile-title="{{'activity.trip_summary_trip_map' | i18n }}" map-data="tripSummServ.trip.mapData" map-height="245"></map-tile>
-        <catch-panel class="col-md-8 summary-section" ng-model="trip.catchDetails" with-table="true" is-loading="loadingStatus.isLoading('TripSummary')"
-        title="{{'activity.trip_summary_catch'|i18n}}" height="220" unit="kg"></catch-panel>
+        <catch-panel class="col-md-8 summary-section" ng-model="trip" is-loading="loadingStatus.isLoading('TripSummary')"
+        title="{{'activity.trip_summary_catch'|i18n}}"></catch-panel>
+
         <a class="btn-detail-form" title="{{'activity.catch_panel_see_catch_details' | i18n }}" ng-click="srcTab=='activity'?breadcrumbServ.goToItem(4):repNav.goToView('tripsPanel','catchDetails')">
             <i class="fa fa-table"></i>
         </a>

@@ -157,7 +157,7 @@ angular.module('unionvmsWeb').directive('groupedCombobox', function(comboboxServ
                 scope.currentItemLabel = scope.getItemLabel(selectedItem);
                 ctrl.$setViewValue(scope.ngModel);
                 scope.toggleCombo();
-            }
+            };
 
             function generateGUID() {
                 function s4() {
@@ -189,7 +189,7 @@ angular.module('unionvmsWeb').directive('groupedCombobox', function(comboboxServ
                
 
                 scope.setLabel();
-                loadLineStyleItems()
+                loadLineStyleItems();
                 scope.addDefaultValueToDropDown();
 
 
@@ -202,7 +202,7 @@ angular.module('unionvmsWeb').directive('groupedCombobox', function(comboboxServ
                 });
 
 
-            };
+            }
 
             init();
         }

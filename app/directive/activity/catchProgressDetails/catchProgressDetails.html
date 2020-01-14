@@ -2,7 +2,10 @@
     <div class="row">
         <fieldset class="col-md-12 fieldsetStyle catch-section" id="catch-section">
             <legend class="fieldsetLegendStyle">
-                <a> {{data.activityType | titleTransformer }} {{data.reportType | titleTransformer }} {{date}}</a>
+                <a ng-if="data.activityType"> {{data.activityType | titleTransformer }} {{data.reportType | titleTransformer }} {{date}}</a>
+                <a ng-if="data.onBoard && !data.activityType">ONBOARD</a>
+                <a ng-if="data.transhipment && !data.activityType">TRA(UNLOAD)</a>
+                <a ng-if="data.landing && !data.activityType">LAN(UNLOAD)</a>
             </legend>
             <div class="container catch-panel-container">
                 <div class="row" ng-if="!isLoading">
@@ -33,6 +36,7 @@
                         <nvd3 options="options" data="data.cumulative"></nvd3>
                         <div class="text-center" ng-class="{'red': data.last}">Cumul: {{data.cumulativeGrandTotal}} {{unit}}</div>
                     </div>
+                    
                 </div>
             </div>
             <div class="row no-data" ng-if="data | hasNoCatches">

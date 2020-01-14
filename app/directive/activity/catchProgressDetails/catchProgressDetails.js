@@ -43,7 +43,7 @@ angular.module('unionvmsWeb').directive('catchProgressDetails', function(locale,
                         return d.weight;
                     },
                     color: function(d) {
-                        return d.color
+                        return d.color;
                     },
                     showLegend: false,
                     showLabels: false,
@@ -64,7 +64,7 @@ angular.module('unionvmsWeb').directive('catchProgressDetails', function(locale,
                         }
                     }
                 }
-            }
+            };
 
             var graphs = [
                 'previousCumulative',
@@ -86,7 +86,7 @@ angular.module('unionvmsWeb').directive('catchProgressDetails', function(locale,
                     }
                 },this);
                 return occurenceCounter;
-            };
+            }
 
             // Get graph css class for each activity according to number of graphs that need to be shown
             function getGraphClass() {
