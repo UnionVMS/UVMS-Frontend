@@ -10,7 +10,7 @@ FITNESS FOR A PARTICULAR PURPOSE.  See the GNU General Public License for more d
 copy of the GNU General Public License along with the IFDM Suite. If not, see <http://www.gnu.org/licenses/>.
 */
 describe('activityRestService', function() {
-    var scope, callback, actRestServ, userPrefSpy, actListSpy, tripCronSpy, tripVesselSpy, tripMsgSpy, tripCatchesSpy, tripRepSpy;
+    var scope, callback, actRestServ, userPrefSpy, actListSpy, tripCronSpy, tripVesselSpy, tripMsgSpy, tripRepSpy, tripCatchesEvolutionSpy;
     
     beforeEach(module('unionvmsWeb'));
   
@@ -64,14 +64,14 @@ describe('activityRestService', function() {
                     get: tripMsgSpy
                 }
             },
-            getTripCatches: function(){
-                return {
-                    get: tripCatchesSpy
-                }
-            },
             getTripReports: function(){
                 return {
                     get: tripRepSpy
+                }
+            },
+            getTripCatchesEvolution: function() {
+                return {
+                    get: tripCatchesEvolutionSpy
                 }
             }
         });
@@ -137,19 +137,19 @@ describe('activityRestService', function() {
         scope.$digest();
         expect(callback).toHaveBeenCalled();
     });
-    
-    it('should get all catches of trip through its id', function(){
-        tripCatchesSpy = createSpy('tripCatchesSpy', true);
-        actRestServ.getTripCatches('NOR-TRIP').then(callback);
-        expect(tripCatchesSpy).toHaveBeenCalledWith({id: 'NOR-TRIP'}, jasmine.any(Function), jasmine.any(Function));
-        scope.$digest();
-        expect(callback).toHaveBeenCalled();
-    });
-    
+     
     it('should get all catches of trip through its id', function(){
         tripRepSpy = createSpy('tripRepSpy', true);
         actRestServ.getTripReports('NOR-TRIP').then(callback);
         expect(tripRepSpy).toHaveBeenCalledWith({id: 'NOR-TRIP'}, jasmine.any(Function), jasmine.any(Function));
+        scope.$digest();
+        expect(callback).toHaveBeenCalled();
+    });
+
+    xit(' xxxxxx should get all details of catch evolution of a trip through its id', function(){
+        tripRepSpy = createSpy('tripCatchesEvolutionSpy', true);
+        actRestServ.getTripCatchesEvolution('NOR-TRIP').then(callback);
+        expect(tripCatchesEvolutionSpy).toHaveBeenCalledWith({id: 'NOR-TRIP'}, jasmine.any(Function), jasmine.any(Function));
         scope.$digest();
         expect(callback).toHaveBeenCalled();
     });

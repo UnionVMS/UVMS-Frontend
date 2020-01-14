@@ -20,10 +20,6 @@ copy of the GNU General Public License along with the IFDM Suite. If not, see <h
  * @desc
  *      transforms text following a key, value mapping
  */
-
-
-var startingActivityTypes = ['DEPARTURE', 'AREA_ENTRY', 'AREA_EXIT'];
-var operationActivityTypes = ['FISHING_OPERATION', 'DISCARD', 'RELOCATION', 'JOINED_FISHING_OPERATION'];
 angular.module('unionvmsWeb').filter('titleTransformer',  function() {
 
     var valueMap = {
@@ -63,12 +59,10 @@ angular.module('unionvmsWeb').filter('titleTransformer',  function() {
         'LANDING_DECLARATION_UNLOADED': 'LAN DECL UNLOADED'
     };
 
-    var keys = Object.keys(valueMap);
-
     return function(title) {
         if (angular.isDefined(title) && !!valueMap[title]) {
             return valueMap[title];
         }
         return title;
-      }
+    };
 });

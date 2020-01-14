@@ -1,11 +1,12 @@
+
 <div class="container">
     <div class="table-responsive" class="catches-table">
         <table class="table table-striped" id="catches-table-calculations">
             <tr>
-                <th ng-repeat="key in headers">{{ key | titleTransformer }}</th>
+                <th class="table-headers" ng-repeat="key in headers track by $index">{{ key | titleTransformer }}</th>
             </tr>
-            <tr ng-repeat="(column, value) in data">
-                <td ng-repeat="key in headers">
+            <tr class="species-row" ng-repeat="(column, value) in data track by $index">
+                <td ng-repeat="key in headers track by $index">
                     <div class="square" ng-if="key === 'Species' && value[key] !== 'TOTAL'" style="background-color: #{{speciesColors[value[key]]}};"></div>
                     {{value[key] || '0'}}
                 </td>
@@ -13,3 +14,4 @@
         </table>
     </div>
 </div>
+

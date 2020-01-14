@@ -294,23 +294,6 @@ angular.module('unionvmsWeb').factory('activityRestFactory', function ($resource
             return deferred.promise;
         },
         /**
-         * Get the catch details of a specific trip
-         * 
-         * @memberof activityRestService
-         * @public
-         * @param {String} id - The trip id of the selected trip
-         * @returns {Promise} A promise with either the vessel and roles details or reject error
-         */
-        getTripCatches: function (id) {
-            var deferred = $q.defer();
-            activityRestFactory.getTripCatches().get({ id: id }, function (response) {
-                deferred.resolve(response);
-            }, function (error) {
-                deferred.reject(error);
-            });
-            return deferred.promise;
-        },
-        /**
          * Get the trip reports of a specific trip
          * 
          * @memberof activityRestService
