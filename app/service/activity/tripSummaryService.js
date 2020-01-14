@@ -120,6 +120,20 @@ angular.module('unionvmsWeb').factory('tripSummaryService',function($timeout, lo
         });
 
         loadingStatus.isLoading('TripSummary', true);
+        //get activity reports data for the specified trip
+        activityRestService.getTripCatchesEvolution(self.trip.id).then(function (response) {
+            self.trip.fromJson('catchEvolution', response);
+            loadingStatus.isLoading('TripSummary', false);
+        }, function (error) {
+            $anchorScroll();
+            spatialConfigAlertService.hasAlert = true;
+            spatialConfigAlertService.hasError = true;
+            spatialConfigAlertService.alertMessage = locale.getString('activity.error_loading_trip_summary_reports');
+            spatialConfigAlertService.hideAlert();
+            loadingStatus.isLoading('TripSummary', false);
+        });
+
+        loadingStatus.isLoading('TripSummary', true);
         // get trip catches data for the specific trip
         activityRestService.getTripCatches(self.trip.id).then(function (response) {
             self.trip.fromJson('catch', response.data);
