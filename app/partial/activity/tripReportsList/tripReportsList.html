@@ -37,7 +37,7 @@
 						<td ng-repeat="column in attrVisibility.tripsColumns" ng-show="attrVisibility.trips[column]">
 							<div ng-show="attrVisibility.trips.tripId" ng-if="column === 'tripId'">{{ trip.schemeId}}:{{ trip.tripId }}</div>
 							<div ng-show="attrVisibility.trips.fs" ng-if="column === 'fs'">{{ trip.flagState}}</div>
-							<div ng-show="attrVisibility.trips.extMark" ng-if="column === 'extMark'">{{ trip.EXT_MARK }}</div>
+							<div ng-show="attrVisibility.trips.extMark" ng-if="column === 'extMark'">{{ trip.vesselIdentifiersMap.EXT_MARK }}</div>
 							<div ng-show="attrVisibility.trips.cfr" ng-if="column === 'cfr'">{{ trip.vesselIdentifiersMap.CFR }} </div>
 							<div ng-show="attrVisibility.trips.ircs" ng-if="column === 'ircs'">{{ trip.vesselIdentifiersMap.IRCS }}</div>
 							<div ng-show="attrVisibility.trips.uvi" ng-if="column === 'uvi'">{{ trip.vesselIdentifiersMap.UVI }}</div>
