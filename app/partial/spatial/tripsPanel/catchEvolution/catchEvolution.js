@@ -61,7 +61,7 @@ angular.module('unionvmsWeb').controller('CatchEvolutionCtrl', function ($scope,
                     $scope.speciesColors.push({
                         code: $scope.speciesCodes[i],
                         color: availableColors[i]
-                    })
+                    });
                 }
 
                 var speciesKeys = $scope.speciesColors.map(function(item) {
@@ -226,7 +226,7 @@ angular.module('unionvmsWeb').controller('CatchEvolutionCtrl', function ($scope,
             Object.keys(currentCumulative).forEach(function(key) {
                 if (angular.isDefined(previousCumulative[key])) {
                     if (subtract){
-                        previousCumulative[key] -= currentCumulative[key]
+                        previousCumulative[key] -= currentCumulative[key];
                     } else {
                         previousCumulative[key] += currentCumulative[key];
                     }
@@ -334,7 +334,7 @@ angular.module('unionvmsWeb').controller('CatchEvolutionCtrl', function ($scope,
 
     function addIfNotExists(header) {
         if ($scope.tableHeaders.indexOf(header) === -1) {
-            $scope.tableHeaders.push(header)
+            $scope.tableHeaders.push(header);
         }
     }
 

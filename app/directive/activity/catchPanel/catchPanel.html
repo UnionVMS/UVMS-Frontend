@@ -2,50 +2,41 @@
     <div class="row">
         <fieldset class="col-md-12 fieldsetStyle catch-section">
             <legend class="fieldsetLegendStyle">
-                <a>{{title}}</a>
+                <span class="legend-title">
+                    Catch Summary
+                </span>
             </legend>
-            <div class="catch-details-body" ng-if="ngModel">
-                <div class="row">
-                    <div ng-class="{'col-md-6': !onePanel, 'col-md-12': onePanel,'has-caption': data.caption}" class="catch-subsection" ng-repeat="(title, data) in ngModel" ng-if="data.speciesList">
-                        <div class="row">
-                            <!--TITLE-->
-                            <div class="chart-title">
-                                <span class="panel-subtitle">{{data.title}}</span>
-                            </div>
-                            <!--SPECIE COUNT CHART-->
-                            <div ng-class="{'col-md-6': withTable, 'col-md-12': !withTable}">
-                                <div class="nvd3-chart">
-                                    <nvd3 options="options[title]" data="data.speciesList" on-ready="api.refresh()" api="options[title].api" ng-if="!isLoading"></nvd3>
-                                </div>
-                            </div>
-                            <!--SPECIE COUNT TABLE-->
-                            <div class="col-md-push-1 col-md-5" ng-if="withTable">
-                                <div class="table-responsive-force col-md-12" st-table="displayedCatch" st-safe-src="data.speciesList">
-                                    <div class="table tableSmart table-striped table-condensed row">
-                                        <div class="thead col-md-12">
-                                            <div class="tr row">
-                                                <div class="th color-column"></div>
-                                                <div class="th col-md-6" st-sort="speciesCode" title="{{'activity.catch_panel_column_species' | i18n }}" st-class-ascent="sorting_sm_asc" st-class-descent="sorting_sm_desc">{{'activity.catch_panel_column_species' | i18n }}</div>
-                                                <div class="th col-md-6 column-right heading" st-sort="weight" st-sort-default="reverse" title="{{'activity.catch_panel_column_weight' | i18n }}" st-class-ascent="sorting_sm_asc" st-class-descent="sorting_sm_desc">{{'activity.catch_panel_column_weight' | i18n }}</div>
-                                            </div>
-                                        </div>
-                                        <div class="tbody col-md-12">
-                                            <div class="tr row" ng-repeat="item in displayedCatch">
-                                                <div ng-style="item.tableColor" class="td color-column"></div>
-                                                <div class="td col-md-6" title="{{item.speciesCode}}">{{item.speciesCode}}</div>
-                                                <div class="td col-md-6 column-right" title="{{item.weight}}">{{item.weight | number:2}}</div>
-                                            </div>
-                                        </div>
+            <div class="row catch-details-body">
+                <div class="col-md-12 col-lg-12">
+                    <div class="col-sm-8 col-md-8 col-xs-12 catch-details-item summary-details-pie">
+                        <div class="{{ngModel.graphClass}} summary-pie-section" ng-repeat="item in ngModel.tripCatchSummary track by $index" ng-if="item.onBoard.length || item.transhipment.length ||item.landing.length">
+                            <fieldset class="summary-section catch-details-item-fieldsetStyle chart-section">
+                                    <legend class="fieldsetLegendStyle summary-pie-section-title">
+                                        <span class="onboard-section-title" ng-if="item.onBoard.length">ONBOARD</span>
+                                        <span class="transhipment-section-title" ng-if="item.transhipment.length">TRA(UNLOADED)</span>
+                                        <span class="landed-section-title" ng-if="item.landing.length">LAN(UNLOADED)</span>
+                                    </legend>
+                                    <div class="pie-container" ng-if="item.onBoard | hasData">
+                                        <nvd3 options="options" data="item.onBoard"></nvd3>
+                                        <div class="text-center onboard-total">Live weight: {{item.grandOnboardTotal}} kg</div>
+                                    </div>    
+                                    <div class="pie-container" ng-if="item.transhipment | hasData">
+                                        <nvd3 options="options" data="item.transhipment"></nvd3>
+                                        <div class="text-center transhipment-total">Live weight: {{item.grandTranshipmentTotal}} kg</div>
                                     </div>
-                                </div>
-                            </div>
+                                    <div class="pie-container" ng-if="item.landing | hasData">
+                                        <nvd3 options="options" data="item.landing"></nvd3>
+                                        <div class="text-center landing-total">Live weight: {{item.grandLandingTotal}} kg</div>
+                                    </div>
+                            </fieldset>
                         </div>
-                        <!--CHART CAPTION-->
-                        <span class="col-md-12 chart-caption" ng-if="data.caption">{{data.caption}}</span>
+                    </div>
+                    <div class="col-sm-4 col-md-4 catch-details-item summary-catch-table">
+                        <catch-panel-table data='ngModel.tripTableData' species-colors="ngModel.tripSpeciesColorsObject" headers='ngModel.tripTableHeaders'></catch-panel-table>
                     </div>
                 </div>
             </div>
-            <div class="row no-data" ng-if="!ngModel">
+            <div class="row no-data" ng-if="!ngModel.tripCatchSummary[0].onBoard.length && !ngModel.tripCatchSummary[1].landing.length && !ngModel.tripCatchSummary[2].transhipment.length">
                 <div class="col-md-12">
                     <span>{{'activity.no_data' | i18n}}</span>
                 </div>
