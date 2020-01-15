@@ -288,7 +288,7 @@ angular.module('unionvmsWeb').controller('CatchEvolutionCtrl', function ($scope,
             if (header !== SPECIES) {
                 for (var item in $scope.tableData) {
                     // DO NOT ADD TOTAL AGAIN
-                    if (item !== TOTAL) {
+                    if (item !== TOTAL && angular.isDefined($scope.tableData[item][header])) {
                         if (angular.isDefined($scope.tableData[TOTAL][header])) {
                             $scope.tableData[TOTAL][header] += $scope.tableData[item][header];
                         } else {

@@ -16,13 +16,13 @@
                     </div>
                     <div class="{{graphClass}}" ng-if="data.loaded | hasData">
                         <div class="text-center">LOADED</div>
-                        <nvd3 options="options" data="data.loaded | hasData"></nvd3>
+                        <nvd3 options="options" data="data.loaded"></nvd3>
                         <div class="text-center">Total: {{data.grandLoadedTotal}} {{unit}}</div>
                     </div>
                     <div class="{{graphClass}}" ng-if="data.onBoard | hasData">
                         <div class="text-center">ONBOARD</div>
                         <nvd3 options="options" data="data.onBoard"></nvd3>
-                        <div class="text-center" ng-class="{'red': {{data.grandOnboardTotal !== data.cumulativeGrandTotal}}}">Total: {{data.grandOnboardTotal}} {{unit}}</div>
+                        <div class="text-center" ng-class="{'red': (data.previousCumulativeGrandTotal && data.grandOnboardTotal !== data.previousCumulativeGrandTotal) || (data.cumulativeGrandTotal && data.grandOnboardTotal !== data.cumulativeGrandTotal)}">Total: {{data.grandOnboardTotal}} {{unit}}</div>
                     </div>
                     <div class="{{graphClass}}" ng-if="data.unLoaded | hasData">
                         <div class="text-center">UNLOADED</div>
