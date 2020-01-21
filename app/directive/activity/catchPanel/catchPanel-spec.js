@@ -342,34 +342,7 @@ describe('catchPanel', function() {
         var elementCount = catchPanel.find('.summary-pie-section-title').children().length;
         expect(elementCount).toEqual(3);
     });
-
-    it('should show the title for onboard pie', function() {
-        scope.data = getTripCatchesSummaryPiesData();
-        var catchPanel = compile('<catch-panel ng-model="data"></catch-panel>')(scope);
-        catchPanel.appendTo('#parent-container');
-        scope.$digest();
-        var element = catchPanel.find('.summary-pie-section-title').children('.onboard-section-title').text();
-        expect(element).toEqual('ONBOARD');
-    });
-
-    it('should show the title for transhipment pie', function() {
-        scope.data = getTripCatchesSummaryPiesData();
-        var catchPanel = compile('<catch-panel ng-model="data"></catch-panel>')(scope);
-        catchPanel.appendTo('#parent-container');
-        scope.$digest();
-        var element = catchPanel.find('.summary-pie-section-title').children('.transhipment-section-title').text();
-        expect(element).toEqual('TRA(UNLOADED)');
-    });
-
-    it('should show the title for landed pie', function() {
-        scope.data = getTripCatchesSummaryPiesData();
-        var catchPanel = compile('<catch-panel ng-model="data"></catch-panel>')(scope);
-        catchPanel.appendTo('#parent-container');
-        scope.$digest();
-        var element = catchPanel.find('.summary-pie-section-title').children('.landed-section-title').text();
-        expect(element).toEqual('LAN(UNLOADED)');
-    });
-    
+  
     it('should show the total weight for onboard pie', function() {
         scope.data = getTripCatchesSummaryPiesData();
         var catchPanel = compile('<catch-panel ng-model="data"></catch-panel>')(scope);

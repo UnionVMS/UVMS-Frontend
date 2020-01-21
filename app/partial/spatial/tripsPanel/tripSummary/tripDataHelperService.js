@@ -17,67 +17,36 @@ copy of the GNU General Public License along with the IFDM Suite. If not, see <h
  * @param $http {service} angular http service 
  * @description
 */
+angular.module('unionvmsWeb').service('tripDataHelperService', function () {
+    var startingActivityTypes = ['DEPARTURE', 'AREA_ENTRY', 'AREA_EXIT'];
+    var operationActivityTypes = ['FISHING_OPERATION', 'DISCARD', 'RELOCATION', 'JOINED_FISHING_OPERATION'];
+    
+    var TOTAL = 'TOTAL';
+    var SPECIES = 'Species';
+    var DIFFERENCE = 'Difference';
 
-(function() {
-    angular.module('unionvmsWeb').service('tripDataHelperService', function () {
-        var startingActivityTypes = ['DEPARTURE', 'AREA_ENTRY', 'AREA_EXIT'];
-        var operationActivityTypes = ['FISHING_OPERATION', 'DISCARD', 'RELOCATION', 'JOINED_FISHING_OPERATION'];
-        var speciesColors = [];
-    
-        // TRANSFORMATIONS FOR TABLE
-        var TOTAL = 'TOTAL';
-        var SPECIES = 'Species';
-        var DIFFERENCE = 'Difference';
-        var tableHeaders = [];
-        var tableData;
-        var dataForTable;
-        return tripDataHelperService = {
-           
-    
-        transformCatchEvolutionData: function(self, data) {
-            // Get data for graph use
-            var temp = angular.copy(data);
-            self.tripSpeciesCodes = this.getSpeciesCodes(temp);
-            var availableColors = palette('tol-rainbow', self.tripSpeciesCodes.length);
-    
-            speciesColors = [];
-            for (var i = 0; i < self.tripSpeciesCodes.length; i++) {
-                speciesColors.push({
-                    code: self.tripSpeciesCodes[i],
-                    color: availableColors[i]
-                });
+    var Context = function() {
+        this.tableHeaders = [];
+        this.tableData = undefined;
+        this.speciesColors = [];
+
+    };
+
+    Context.prototype = {
+        getGraphClass: function(catchSummary) {
+            var occurences =  this.calculateGraphClass(catchSummary);
+            switch(occurences) {
+                case 1:
+                    return 'col-md-10 col-lg-10 col-xs-10';
+                case 2:
+                    return 'col-md-6 col-lg-6 col-xs-6';
+                case 3:
+                    return 'col-md-6 col-lg-4 col-xs-6 col-sm-6';
+                default:
+                    return '';
             }
-    
-            // sort by orderId (ensure correct order)
-            var sorted = this.sortCatchEvolutionProgressByOrderId(temp);
-            var catchSummary = this.calculateCatchesSummary(sorted);
-            self.graphClass = this.getGraphClass(catchSummary);
-            this.catchSummaryToArray(catchSummary);
-    
-    
-            self.tripSpeciesColorsObject = this.transformArrayToObject(speciesColors);
-            var speciesKeys = speciesColors.map(function(item) {
-                return item.code;
-            });
-            tableHeaders = [SPECIES];
-            // Create object with species keys as properties (an object for direct access)
-            tableData = speciesKeys.reduce(function(current, item) {
-                current[item] = {};
-                return current;
-            }, {});
-            // Get data for table use (array for access in order)
-            dataForTable = angular.copy(data);
-            this.constructTable();
-            this.calculateTableTotals();
-            this.calculateDifferences();
-            self.tripCatchSummary = catchSummary;
-            self.tripTableData  = tableData;
-            self.tripTableHeaders = tableHeaders;
-    
-            return self;
         },
-    
-        calculateCatchesSummary: function(data){
+        calculateCatchesSummary: function(data) {
             var catchSummary = [];
             catchSummary.push({
                 onBoard : {}
@@ -112,21 +81,6 @@ copy of the GNU General Public License along with the IFDM Suite. If not, see <h
             },this);
             return catchSummary;
         },
-    
-        getGraphClass: function(catchSummary) {
-            var occurences =  this.calculateGraphClass(catchSummary);
-            switch(occurences) {
-                case 1:
-                  return 'col-md-10 col-lg-10 col-xs-10';
-                case 2:
-                  return 'col-md-6 col-lg-6 col-xs-6';
-                case 3:
-                  return 'col-md-6 col-lg-4 col-xs-6 col-sm-6';
-                default:
-                  return '';
-            }
-        },
-    
         calculateGraphClass: function(catchSummary) {
             var counter = 0; 
             angular.forEach(catchSummary, function(item) {
@@ -146,8 +100,7 @@ copy of the GNU General Public License along with the IFDM Suite. If not, see <h
             },this);
             return counter;
         },
-    
-        addCatchesToObject: function(obj, catches){
+        addCatchesToObject: function(obj, catches) {
             Object.keys(catches).forEach(function(key) {
                 if (angular.isDefined(obj[key])) {
                     obj[key] += catches[key];
@@ -156,7 +109,6 @@ copy of the GNU General Public License along with the IFDM Suite. If not, see <h
                 }
             }, this);
         },
-    
         getSpeciesCodes: function(data) {
             var speciesCodes = {};
             angular.forEach(data.catchEvolutionProgress, function(item) {
@@ -166,9 +118,8 @@ copy of the GNU General Public License along with the IFDM Suite. If not, see <h
                 this.extractUniqueSpeciesCodes(speciesCodes, item.unLoaded);
             },this);
             return Object.keys(speciesCodes);
-        },
-    
-        extractUniqueSpeciesCodes: function(speciesCodes, x) {
+        }, 
+        extractUniqueSpeciesCodes: function (speciesCodes, x) {
             if (angular.isDefined(x)) {
                 var i, propertyNames = Object.keys(x);
                 for( i = 0; i < propertyNames.length; i++ ) {
@@ -178,7 +129,6 @@ copy of the GNU General Public License along with the IFDM Suite. If not, see <h
                 }
             }
         },
-    
         transformArrayToObject: function(array){
             var obj = {};
             angular.forEach(array, function(item){
@@ -186,31 +136,25 @@ copy of the GNU General Public License along with the IFDM Suite. If not, see <h
             });
             return obj;
         },
-    
         sortCatchEvolutionProgressByOrderId: function(data) {
-            data.catchEvolutionProgress.sort(function(a, b) {
-                return a.orderId - b.orderId;
-            });
-            return data;
+                data.catchEvolutionProgress.sort(function(a, b) {
+                    return a.orderId - b.orderId;
+                });
+                return data;
         },
-    
-        catchSummaryToArray: function(data){
+        catchSummaryToArray: function(data) {
             this.transformResponseProperty(data[0], 'onBoard', 'grandOnboardTotal');
             this.transformResponseProperty(data[1], 'transhipment', 'grandTranshipmentTotal');
             this.transformResponseProperty(data[2], 'landing', 'grandLandingTotal');
             return data;
         },
-    
         transformResponseProperty: function(item, propertyName, grandTotalPropName) {
             if (item.hasOwnProperty(propertyName) && !angular.equals({}, item[propertyName])) {
-                var tempData = item[propertyName];
-                delete item[propertyName];
-                item[propertyName]  =  this.transformObjectToArray(tempData);
+                item[propertyName] = this.transformObjectToArray(item[propertyName]);
                 this.matchColorWithSpecies(item[propertyName]);
                 item[grandTotalPropName] = this.calculateGrandTotal(item[propertyName]);
             }
         },
-    
         transformObjectToArray: function(data) {
             var tempList = [];
             for (var key in data) {
@@ -223,27 +167,24 @@ copy of the GNU General Public License along with the IFDM Suite. If not, see <h
             }
             return tempList;
         },
-    
-        matchColorWithSpecies: function(list) {
+        matchColorWithSpecies: function (list) {
             // Match color with speciesCode
             angular.forEach(list, function(datum) {
-                angular.forEach(speciesColors, function(entry) {
+                angular.forEach(this.speciesColors, function(entry) {
                     if (datum.speciesCode === entry.code) {
                         datum.color = '#' + entry.color;
                     }
-                });
-            });
+                },this);
+            },this);
             return list;
         },
-    
         calculateGrandTotal: function(data) {
             return data.reduce(function(previous, next) {
                 return previous + next['weight'];
             },0);
         },
-    
-        constructTable: function() {
-            angular.forEach(dataForTable.catchEvolutionProgress, function(item) {
+        constructTable: function(data) {
+            angular.forEach(data.catchEvolutionProgress, function(item) {
                 if (item.affectsCumulative) {
                     if (item.activityType === 'TRANSHIPMENT') {
                         if (angular.isDefined(item.loaded)) {
@@ -269,61 +210,100 @@ copy of the GNU General Public License along with the IFDM Suite. If not, see <h
                     }
                 }
             },this);
-        },
-    
-        calculateTableTotals: function() {
-            tableData[TOTAL] = {};
-            tableData[TOTAL][SPECIES] = "TOTAL";
-            angular.forEach(tableHeaders, function(header) {
+        }, 
+        calculateTableTotals: function () {
+            this.tableData[TOTAL] = {};
+            this.tableData[TOTAL][SPECIES] = "TOTAL";
+            angular.forEach(this.tableHeaders, function(header) {
                 if (header !== SPECIES) {
-                    for (var item in tableData) {
+                    for (var item in this.tableData) {
                         // DO NOT ADD TOTAL AGAIN
-                        if (item !== TOTAL && angular.isDefined(tableData[item][header])) {
-                            if (angular.isDefined(tableData[TOTAL][header])) {
-                                tableData[TOTAL][header] += tableData[item][header];
+                        if (item !== TOTAL && angular.isDefined(this.tableData[item][header])) {
+                            if (angular.isDefined(this.tableData[TOTAL][header])) {
+                                this.tableData[TOTAL][header] += this.tableData[item][header];
                             } else {
-                                tableData[TOTAL][header] = tableData[item][header];
+                                this.tableData[TOTAL][header] = this.tableData[item][header];
                             }
                         }
                     }
                 }
             },this);
-        },
-    
-        performTableCalculations: function(object, header) {
+        }, 
+        performTableCalculations: function (object, header) {
             for (var property in object) {
-                tableData[property][SPECIES] = property;
-                if (angular.isDefined(tableData[property][header])) {
-                    tableData[property][header] += object[property];
+                this.tableData[property][SPECIES] = property;
+                if (angular.isDefined(this.tableData[property][header])) {
+                    this.tableData[property][header] += object[property];
                 } else {
-                    tableData[property][header] = object[property];
+                    this.tableData[property][header] = object[property];
                 }
             }
         },
-    
-        calculateDifferences: function() {
-            tableHeaders.push(DIFFERENCE);
-            for (var item in tableData) {
-                tableData[item][DIFFERENCE] = 0;
-                for (var property in tableData[item]) {
-                    if (tableData[item].hasOwnProperty(property)) {
+        calculateDifferences: function () {
+            this.tableHeaders.push(DIFFERENCE);
+            for (var item in this.tableData) {
+                this.tableData[item][DIFFERENCE] = 0;
+                for (var property in this.tableData[item]) {
+                    if (this.tableData[item].hasOwnProperty(property)) {
                         if (property === "CATCHES") {
-                            tableData[item][DIFFERENCE] += tableData[item][property];
+                            this.tableData[item][DIFFERENCE] += this.tableData[item][property];
                         } else if (property === "TRA" || property === "LAN") {
-                                tableData[item][DIFFERENCE] -= tableData[item][property];
+                                this.tableData[item][DIFFERENCE] -= this.tableData[item][property];
                         }
                     }
                 }
             }
         },
-    
-    
-        addIfNotExists: function(header) {
-            if (tableHeaders.indexOf(header) === -1) {
-                tableHeaders.push(header);
+        addIfNotExists: function (header) {
+            if (this.tableHeaders.indexOf(header) === -1) {
+                this.tableHeaders.push(header);
             }
-        }};
-    });
-})();
+        }
+    };
+
+    return tripDataHelperService = {
+        transformCatchEvolutionData: function(self, data) {
+            var context = new Context();
+        
+            // Get data for graph use
+            var temp = angular.copy(data);
+            self.tripSpeciesCodes = context.getSpeciesCodes(temp);
+            var availableColors = palette('tol-rainbow', self.tripSpeciesCodes.length);
+            //context.speciesColors = [];
+            for (var i = 0; i < self.tripSpeciesCodes.length; i++) {
+                context.speciesColors.push({
+                    code: self.tripSpeciesCodes[i],
+                    color: availableColors[i]
+                });
+            }
+            // sort by orderId (ensure correct order)
+            var sorted = context.sortCatchEvolutionProgressByOrderId(temp);
+            var catchSummary = context.calculateCatchesSummary(sorted);
+            self.graphClass = context.getGraphClass(catchSummary);
+            context.catchSummaryToArray(catchSummary);
+    
+    
+            self.tripSpeciesColorsObject = context.transformArrayToObject(context.speciesColors);
+            var speciesKeys = context.speciesColors.map(function(item) {
+                return item.code;
+            });
+            context.tableHeaders = [SPECIES];
+            // Create object with species keys as properties (an object for direct access)
+            context.tableData = speciesKeys.reduce(function(current, item) {
+                current[item] = {};
+                return current;
+            }, {});
+            context.constructTable(angular.copy(data));
+            context.calculateTableTotals();
+            context.calculateDifferences();
+            self.tripCatchSummary = catchSummary;
+            self.tripTableData  = context.tableData;
+            self.tripTableHeaders = context.tableHeaders;
+    
+            return self;
+        }
+    }
+});
+
 
 

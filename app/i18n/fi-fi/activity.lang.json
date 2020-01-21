@@ -81,7 +81,7 @@
 	"trip_summary_roles": "Roles",
 	"trip_summary_cronology": "Cronology",
 	"trip_summary_trip_map": "Trip map",
-	"trip_summary_catch": "Catch",
+	"trip_summary_catch": "Catch Summary",
 	"trip_summary_reports": "Reports",
 	"trip_summary_roles_name": "Name",
 	"trip_summary_roles_address": "Address",
@@ -208,5 +208,9 @@
     "tab_trip_table_header_alarm": "Alarm",
     "trip_summary_start_date": "Started On",
     "trip_summary_trip_id": "Trip ID",
-    "trip_summary_note": "Note: Newest trip on top."
+    "trip_summary_note": "Note: Newest trip on top.",
+    "catch_panel_onboard": "ONBOARD",
+    "catch_panel_transhipment": "TRA(UNLOADED)",
+    "catch_panel_landing": "LAN(UNLOADED)",
+    "catch_panel_weight": "Live weight"
 }

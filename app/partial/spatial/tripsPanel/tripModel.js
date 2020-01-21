@@ -26,7 +26,7 @@ copy of the GNU General Public License along with the IFDM Suite. If not, see <h
  * @description
  *  A model to store all the data related to a trip
  */
-angular.module('unionvmsWeb').factory('Trip',function($http,locale,unitConversionService,tripReportsTimeline,fishingActivityService, tripDataHelperService) {
+angular.module('unionvmsWeb').factory('Trip',function(locale,unitConversionService,tripReportsTimeline,fishingActivityService, tripDataHelperService) {
 
     /**
      * Trip constructor
