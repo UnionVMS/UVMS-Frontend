@@ -28,6 +28,7 @@ angular.module('unionvmsWeb').directive('catchPanelTable', function() {
             data: '=?',
             speciesColors: '=?',
             headers: '=?',
+            title:'@'
         },
         templateUrl: 'directive/activity/catchPanelTable/catchPanelTable.html'
     };
