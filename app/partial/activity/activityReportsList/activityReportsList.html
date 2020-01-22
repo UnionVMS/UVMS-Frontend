@@ -9,7 +9,7 @@ the hope that it will be useful, but WITHOUT ANY WARRANTY; without even the impl
 FITNESS FOR A PARTICULAR PURPOSE.  See the GNU General Public License for more details. You should have received a
 copy of the GNU General Public License along with the IFDM Suite. If not, see <http://www.gnu.org/licenses/>.
 -->
-<div class="col-md-12 activityReportsList" ng-controller="ActivityreportslistCtrl">
+<div class="activityReportsList" ng-controller="ActivityreportslistCtrl">
 	<div class="col-md-12 buttonSection">
 		<div class="row">
 			<!-- COLUMNS BUTTON -->
@@ -17,7 +17,7 @@ copy of the GNU General Public License along with the IFDM Suite. If not, see <h
 				<button type="button" class="btn btn-primary dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
 						{{'activity.columns' | i18n}}
 						<span class="caret"></span>
-					</button>
+				</button>
 				<div class="dropdown-menu" ng-click="$event.stopPropagation()">
 					<div class="row">
 						<div class="checkbox col-md-6">
@@ -225,7 +225,7 @@ copy of the GNU General Public License along with the IFDM Suite. If not, see <h
 		</div>
 		<div class="stFooterPagination" ng-show="actServ.displayedActivities.length > 0 && !actServ.reportsList.isLoading">
 			<div class="tr">
-				<div class="td text-right">
+				<div class="td text-right activity-reports-pagination">
 					<div st-pagination st-items-by-page="actServ.reportsList.pagination.pageSize" st-template="partial/common/reportsPagination/reportsPagination.html"></div>
 				</div>
 			</div>

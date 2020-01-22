@@ -136,21 +136,29 @@ angular.module('unionvmsWeb').factory('visibilityService',function($localStorage
          * @memberof visibilityService
          * @public
          */
-        initFromStorage: function(){
+        initFromStorage: function() {
             //FIXME - This is to be used until we have the preferences working on the backend
             var user = userService.getUserName();
             if (!angular.isDefined($localStorage.visibilitySettings)){
                 $localStorage.visibilitySettings = {};
             }
             if (!angular.isDefined($localStorage.visibilitySettings[user])){
-                $localStorage.visibilitySettings[user] = {
+                $localStorage.visibilitySettings[user] = {};
+
+                $localStorage.visibilitySettings[user].fishingActivities = {
                     values: this.fishingActivities,
                     order: this.fishingActivitiesColumns
                 };
+                $localStorage.visibilitySettings[user].trips = {
+                    values: this.trips,
+                    order: this.tripsColumns
+                };
             } else {
                 var localConfig = angular.copy($localStorage.visibilitySettings[user]);
-                this.fishingActivities = localConfig.values;
-                this.fishingActivitiesColumns = localConfig.order;
+                this.fishingActivities = localConfig.fishingActivities.values;
+                this.fishingActivitiesColumns = localConfig.fishingActivities.order;
+                this.trips = localConfig.trips.values;
+                this.tripsColumns = localConfig.trips.order;
             }
         },
         /**
@@ -160,9 +168,9 @@ angular.module('unionvmsWeb').factory('visibilityService',function($localStorage
          * @public
          * @param {String} prop - The property to be updated in the fishing activities visibility settings
          */
-        updateStorage: function(prop){
+        updateStorage: function(prop, name) {
             var user = userService.getUserName();
-            $localStorage.visibilitySettings[user]['values'][prop] = this.fishingActivities[prop];
+            $localStorage.visibilitySettings[user][name]['values'][prop] = this[name][prop]; 
         }
 	};
 	
