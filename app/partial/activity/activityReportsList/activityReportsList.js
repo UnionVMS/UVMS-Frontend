@@ -73,7 +73,7 @@ angular.module('unionvmsWeb').controller('ActivityreportslistCtrl',function($sco
      * @param {String} column - the column name property to be updated
      */
     $scope.updateVisibilityCache = function(column){
-        $scope.visServ.updateStorage(column);
+        $scope.visServ.updateStorage(column, 'fishingActivities');
     };
 
     /**

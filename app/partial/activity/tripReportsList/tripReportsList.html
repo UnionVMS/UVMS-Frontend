@@ -1,24 +1,134 @@
-<div class="col-md-12" ng-controller="TripreportslistCtrl">
+<div class="tripReportsList" ng-controller="TripreportslistCtrl">
+	<div class="col-md-12 buttonSection">
+		<div class="row">
+			<div class="btn-group btn-left">
+			<button type="button" class="btn btn-primary dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+				{{'activity.columns' | i18n}}
+				<span class="caret"></span>
+				</button>
+			<div class="dropdown-menu" ng-click="$event.stopPropagation()">
+				<div class="row">
+					<div class="checkbox col-md-6">
+						<label>
+							<input type="checkbox" ng-model="attrVisibility.trips.tripId" ng-change="updateVisibilityCache('tripId')">
+							{{'activity.tab_trip_table_header_id' | i18n }}
+						</label>
+					</div>
+					<div class="checkbox col-md-6">
+						<label>
+							<input type="checkbox" ng-model="attrVisibility.trips.fs" ng-change="updateVisibilityCache('fs')">
+							{{'spatial.tab_vms_pos_table_header_fs' | i18n }}
+						</label>
+					</div>
+				</div>
+				<div class="row">
+					<div class="checkbox col-md-6">
+						<label>
+							<input type="checkbox" ng-model="attrVisibility.trips.extMark" ng-change="updateVisibilityCache('extMark')">
+							{{'spatial.reports_form_vessel_search_table_header_external_marking' | i18n }}
+						</label>
+					</div>
+					<div class="checkbox col-md-6">
+						<label>
+							<input type="checkbox" ng-model="attrVisibility.trips.ircs" ng-change="updateVisibilityCache('ircs')">
+							{{'spatial.reports_form_vessel_search_table_header_ircs' | i18n }} 
+						</label>
+					</div>
+				</div>
+				<div class="row">
+					<div class="checkbox col-md-6">
+						<label>
+							<input type="checkbox" ng-model="attrVisibility.trips.cfr" ng-change="updateVisibilityCache('cfr')">
+							{{'spatial.reports_form_vessel_search_table_header_cfr' | i18n }}
+						</label>
+					</div>
+					<div class="checkbox col-md-6">
+						<label>
+							<input type="checkbox" ng-model="attrVisibility.trips.uvi" ng-change="updateVisibilityCache('uvi')">
+							{{'activity.fa_details_item_uvi' | i18n }}
+						</label>
+					</div>
+				</div>
+				<div class="row">
+					<div class="checkbox col-md-6">
+						<label>
+							<input type="checkbox" ng-model="attrVisibility.trips.iccat" ng-change="updateVisibilityCache('iccat')">
+							{{'activity.fa_details_item_iccat' | i18n }}
+						</label>
+					</div>
+					<div class="checkbox col-md-6">
+						<label>
+							<input type="checkbox" ng-model="attrVisibility.trips.gfcm" ng-change="updateVisibilityCache('gfcm')">
+							{{'activity.fa_details_item_gfcm' | i18n }} 
+						</label>
+					</div>
+				</div>
+				<div class="row">
+					<div class="checkbox col-md-6">
+						<label>
+							<input type="checkbox" ng-model="attrVisibility.trips.firstEventType" ng-change="updateVisibilityCache('firstEventType')"> 
+							{{'activity.tab_trip_table_header_first_event' | i18n }}
+						</label>
+					</div>
+					<div class="checkbox col-md-6">
+						<label>
+							<input type="checkbox" ng-model="attrVisibility.trips.lastEventType" ng-change="updateVisibilityCache('lastEventType')">
+							{{'activity.tab_trip_table_header_last_event' | i18n }}
+						</label>
+					</div>
+				</div>
+				<div class="row">
+					<div class="checkbox col-md-6">
+						<label>
+							<input type="checkbox" ng-model="attrVisibility.trips.firstEventTime" ng-change="updateVisibilityCache('firstEventTime')">
+							{{'activity.tab_trip_table_header_first_event_time' | i18n }}
+						</label>
+					</div>
+					<div class="checkbox col-md-6">
+						<label>
+							<input type="checkbox" ng-model="attrVisibility.trips.lastEventTime" ng-change="updateVisibilityCache('lastEventTime')">
+							{{'activity.tab_trip_table_header_last_event_time' | i18n }}
+						</label>
+					</div>
+				</div>
+				<div class="row">
+					<div class="checkbox col-md-6">
+						<label>
+							<input type="checkbox" ng-model="attrVisibility.trips.duration" ng-change="updateVisibilityCache('duration')">
+							{{'activity.tab_trip_table_header_duration' | i18n }} 
+						</label>
+					</div>
+					<div class="checkbox col-md-6">
+						<label>
+							<input type="checkbox" ng-model="attrVisibility.trips.nCorrections" ng-change="updateVisibilityCache('nCorrections')">
+							{{'activity.tab_trip_table_header_nCorrections' | i18n }}
+						</label>
+					</div>
+				</div>
+			</div>
+			</div>
+		</div>
+	</div>
     <div st-table="actServ.displayedTrips" st-safe-src="actServ.trips" st-pipe="updateTripsList" class="report-list-table">
 		<div class="table-responsive-force">
 			<table class="table table-striped table-condensed">
 				<thead>
 					<tr class="row">
 						<th lr-drag-src="headers" lr-drop-target="headers" ng-repeat="column in attrVisibility.tripsColumns" ng-show="attrVisibility.trips[column]" lr-drop-success="dropSuccess(e, item, collection)">
-							<div st-sort="tripId" st-skip-natural="true" st-sort-default="reverse" st-class-ascent="sorting_asc" st-class-descent="sorting_desc" ng-if="column === 'tripId'">{{'activity.tab_trip_table_header_id' | i18n }}</div>
-							<div ng-if="column === 'fs'">{{'spatial.tab_vms_pos_table_header_fs' | i18n }}</div>
-							<div ng-if="column === 'extMark'">{{'spatial.reports_form_vessel_search_table_header_external_marking' | i18n }}</div>
-							<div ng-if="column === 'ircs'">{{'spatial.reports_form_vessel_search_table_header_ircs' | i18n }}</div>
-							<div ng-if="column === 'cfr'">{{'spatial.reports_form_vessel_search_table_header_cfr' | i18n }}</div>
-							<div ng-if="column === 'uvi'">{{'activity.fa_details_item_uvi' | i18n }}</div>
-							<div ng-if="column === 'iccat'">{{'activity.fa_details_item_iccat' | i18n }}</div>
-							<div ng-if="column === 'gfcm'">{{'activity.fa_details_item_gfcm' | i18n }}</div>
-							<div ng-if="column === 'firstEventType'">{{'activity.tab_trip_table_header_first_event' | i18n }}</div>
-							<div st-sort="firstFishingActivityDateTime" st-skip-natural="true" st-class-ascent="sorting_asc" st-class-descent="sorting_desc" ng-if="column === 'firstEventTime'">{{'activity.tab_trip_table_header_first_event_time' | i18n }}</div>
-							<div ng-if="column === 'lastEventType'">{{'activity.tab_trip_table_header_last_event' | i18n }}</div>
-							<div ng-if="column === 'lastEventTime'">{{'activity.tab_trip_table_header_last_event_time' | i18n }}</div>
-							<div ng-if="column === 'duration'">{{'activity.tab_trip_table_header_duration' | i18n }}</div>
-							<div ng-if="column === 'nCorrections'">{{'activity.tab_trip_table_header_nCorrections' | i18n }}</div>
+							<div ng-show="attrVisibility.trips[column]" st-sort="tripId" st-skip-natural="true" st-sort-default="reverse" st-class-ascent="sorting_asc" st-class-descent="sorting_desc" ng-if="column === 'tripId'">{{'activity.tab_trip_table_header_id' | i18n }}</div>
+							<div ng-show="attrVisibility.trips[column]" ng-if="column === 'fs'">{{'spatial.tab_vms_pos_table_header_fs' | i18n }}</div>
+							<div ng-show="attrVisibility.trips[column]" ng-if="column === 'extMark'">{{'spatial.reports_form_vessel_search_table_header_external_marking' | i18n }}</div>
+							<div ng-show="attrVisibility.trips[column]" ng-if="column === 'ircs'">{{'spatial.reports_form_vessel_search_table_header_ircs' | i18n }}</div>
+							<div ng-show="attrVisibility.trips[column]" ng-if="column === 'cfr'">{{'spatial.reports_form_vessel_search_table_header_cfr' | i18n }}</div>
+							<div ng-show="attrVisibility.trips[column]" ng-if="column === 'uvi'">{{'activity.fa_details_item_uvi' | i18n }}</div>
+							<div ng-show="attrVisibility.trips[column]" ng-if="column === 'iccat'">{{'activity.fa_details_item_iccat' | i18n }}</div>
+							<div ng-show="attrVisibility.trips[column]" ng-if="column === 'gfcm'">{{'activity.fa_details_item_gfcm' | i18n }}</div>
+							<div ng-show="attrVisibility.trips[column]" ng-if="column === 'firstEventType'">{{'activity.tab_trip_table_header_first_event' | i18n }}</div>
+							<div ng-show="attrVisibility.trips[column]" st-sort="firstFishingActivityDateTime" st-skip-natural="true" st-class-ascent="sorting_asc" st-class-descent="sorting_desc" ng-if="column === 'firstEventTime'">{{'activity.tab_trip_table_header_first_event_time' | i18n }}</div>
+							<div ng-show="attrVisibility.trips[column]" ng-if="column === 'lastEventType'">{{'activity.tab_trip_table_header_last_event' | i18n }}</div>
+							<div ng-show="attrVisibility.trips[column]" ng-if="column === 'lastEventTime'">{{'activity.tab_trip_table_header_last_event_time' | i18n }}</div>
+							<div ng-show="attrVisibility.trips[column]" ng-if="column === 'duration'">{{'activity.tab_trip_table_header_duration' | i18n }}</div>
+							<div ng-show="attrVisibility.trips[column]" ng-if="column === 'nCorrections'">{{'activity.tab_trip_table_header_nCorrections' | i18n }}</div>
 						</th>
 						<th style="width:80px">{{'spatial.table_header_actions' | i18n }}</th>
 					</tr>
@@ -35,20 +145,20 @@
 				<tbody>
 					<tr ng-repeat="trip in actServ.displayedTrips" class="row">
 						<td ng-repeat="column in attrVisibility.tripsColumns" ng-show="attrVisibility.trips[column]">
-							<div ng-show="attrVisibility.trips.tripId" ng-if="column === 'tripId'">{{ trip.schemeId}}:{{ trip.tripId }}</div>
-							<div ng-show="attrVisibility.trips.fs" ng-if="column === 'fs'">{{ trip.flagState}}</div>
-							<div ng-show="attrVisibility.trips.extMark" ng-if="column === 'extMark'">{{ trip.vesselIdentifiersMap.EXT_MARK }}</div>
-							<div ng-show="attrVisibility.trips.cfr" ng-if="column === 'cfr'">{{ trip.vesselIdentifiersMap.CFR }} </div>
-							<div ng-show="attrVisibility.trips.ircs" ng-if="column === 'ircs'">{{ trip.vesselIdentifiersMap.IRCS }}</div>
-							<div ng-show="attrVisibility.trips.uvi" ng-if="column === 'uvi'">{{ trip.vesselIdentifiersMap.UVI }}</div>
-							<div ng-show="attrVisibility.trips.iccat" ng-if="column === 'iccat'">{{ trip.vesselIdentifiersMap.ICCAT }}</div>
-							<div ng-show="attrVisibility.trips.gfcm" ng-if="column === 'gfcm'">{{ trip.vesselIdentifiersMap.GFCM }}</div>
-							<div ng-show="attrVisibility.trips.firstEventType" ng-if="column === 'firstEventType'" title="{{trip.firstFishingActivity}}">{{ 'abbreviations.activity_' + trip.firstFishingActivity | i18n }}</div>
-							<div ng-show="attrVisibility.trips.firstEventTime" ng-if="column === 'firstEventTime'">{{ trip.firstFishingActivityDateTime | stDateUtc }}</div>
-							<div ng-show="attrVisibility.trips.lastEventType" ng-if="column === 'lastEventType'" title="{{trip.lastFishingActivity}}">{{ 'abbreviations.activity_' + trip.lastFishingActivity | i18n }}</div>
-							<div ng-show="attrVisibility.trips.lastEventTime" ng-if="column === 'lastEventTime'">{{ trip.lastFishingActivityDateTime | stDateUtc }}</div>
-							<div ng-show="attrVisibility.trips.duration" ng-if="column === 'duration'">{{ trip.tripDuration | stHumanizeTime:'milliseconds' }}</div>
-							<div ng-show="attrVisibility.trips.nCorrections" ng-if="column === 'nCorrections'">{{ trip.noOfCorrections }}</div>
+							<div ng-show="attrVisibility.trips[column]" ng-if="column === 'tripId'">{{ trip.schemeId}}:{{ trip.tripId }}</div>
+							<div ng-show="attrVisibility.trips[column]" ng-if="column === 'fs'">{{ trip.flagState}}</div>
+							<div ng-show="attrVisibility.trips[column]" ng-if="column === 'extMark'">{{ trip.vesselIdentifiersMap.EXT_MARK }}</div>
+							<div ng-show="attrVisibility.trips[column]" ng-if="column === 'cfr'">{{ trip.vesselIdentifiersMap.CFR }} </div>
+							<div ng-show="attrVisibility.trips[column]" ng-if="column === 'ircs'">{{ trip.vesselIdentifiersMap.IRCS }}</div>
+							<div ng-show="attrVisibility.trips[column]" ng-if="column === 'uvi'">{{ trip.vesselIdentifiersMap.UVI }}</div>
+							<div ng-show="attrVisibility.trips[column]" ng-if="column === 'iccat'">{{ trip.vesselIdentifiersMap.ICCAT }}</div>
+							<div ng-show="attrVisibility.trips[column]" ng-if="column === 'gfcm'">{{ trip.vesselIdentifiersMap.GFCM }}</div>
+							<div ng-show="attrVisibility.trips[column]" ng-if="column === 'firstEventType'" title="{{trip.firstFishingActivity}}">{{ 'abbreviations.activity_' + trip.firstFishingActivity | i18n }}</div>
+							<div ng-show="attrVisibility.trips[column]" ng-if="column === 'firstEventTime'">{{ trip.firstFishingActivityDateTime | stDateUtc }}</div>
+							<div ng-show="attrVisibility.trips[column]" ng-if="column === 'lastEventType'" title="{{trip.lastFishingActivity}}">{{ 'abbreviations.activity_' + trip.lastFishingActivity | i18n }}</div>
+							<div ng-show="attrVisibility.trips[column]" ng-if="column === 'lastEventTime'">{{ trip.lastFishingActivityDateTime | stDateUtc }}</div>
+							<div ng-show="attrVisibility.trips[column]" ng-if="column === 'duration'">{{ trip.tripDuration | stHumanizeTime:'milliseconds' }}</div>
+							<div ng-show="attrVisibility.trips[column]" ng-if="column === 'nCorrections'">{{ trip.noOfCorrections }}</div>
 						</td>
 						<td style="width:80px">
 							<button type="button" class="btn btn-default btn-xs btn-bottom-mg" title="Details" ng-click="openTripSummary(trip.tripId)"><span class="fa fa-eye"></span></button>
@@ -59,7 +169,7 @@
 		</div>
 		<div class="stFooterPagination" ng-show="actServ.displayedTrips.length > 0 && !actServ.tripsList.isLoading">
 			<div class="tr">
-				<div class="td text-right">
+				<div class="td text-right activity-trips-pagination">
 					<div st-pagination st-items-by-page="actServ.tripsList.pagination.pageSize" st-template="partial/common/reportsPagination/reportsPagination.html"></div>
 				</div>
 			</div>

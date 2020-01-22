@@ -30,6 +30,7 @@ angular.module('unionvmsWeb').controller('TripreportslistCtrl',function($scope, 
     $scope.tripSummServ = tripSummaryService;
     $scope.activityTypes = [];
     var stLastTableState;
+   
 
     $scope.updateTripsList = function(tableState, ctrl){
       if (angular.isUndefined($stateParams.tripId) || $stateParams.tripId === null){
@@ -44,5 +45,18 @@ angular.module('unionvmsWeb').controller('TripreportslistCtrl',function($scope, 
       $scope.tripSummServ.openNewTrip(tripId);
       $scope.goToView(3);
     };
+
+
+     /**
+     * Update the fishing activities column visibility settings
+     *  
+     * @memberof ActivityreportslistCtrl
+     * @public
+     * @alias updateVisibilityCache
+     * @param {String} column - the column name property to be updated
+     */
+    $scope.updateVisibilityCache = function(column){
+      $scope.attrVisibility.updateStorage(column, 'trips');
+  };
 
 });

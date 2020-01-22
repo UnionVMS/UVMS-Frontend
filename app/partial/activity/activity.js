@@ -24,7 +24,6 @@ copy of the GNU General Public License along with the IFDM Suite. If not, see <h
 angular.module('unionvmsWeb').controller('ActivityCtrl', function ($scope, locale, activityService, genericMapService, breadcrumbService,Trip, mdrCacheService,tripSummaryService) {
     $scope.actServ = activityService;
     $scope.tripSummServ = tripSummaryService;
-    $scope.selectedTab = 'ACTIVITES';
     $scope.tripSummServ.resetMapConfigs();
     if (mdrCacheService.isListAvailableLocally('FLUX_GP_PURPOSE') === false) {
         $scope.actServ.isGettingMdrCodes = true;
@@ -72,64 +71,7 @@ angular.module('unionvmsWeb').controller('ActivityCtrl', function ($scope, local
             $scope.actServ.clearAttributeByType('overview');
         }
     };
-
     /**
-      * sets visible variable of selected tab to true
-      *
-      *  @memberof ActivityCtrl
-      *  @public
-      *  @alias isTabSelected
-      *  @param {Number} tab - selected tab
-      */
-     $scope.isTabVisible = function (tab) {
-         var visible = true;
-         return visible;
-     };
-
-     /**
-      * selects the tab
-      *
-      *  @memberof ActivityCtrl
-      *  @public
-      *  @alias selectTab
-      *  @param {Number} tab - selected tab
-      */
-     $scope.selectTab = function (tab) {
-         $scope.selectedTab = tab;
-     };
-
-     /**
-      * Displays the selected tab
-      *
-      *  @memberof ActivityCtrl
-      *  @public
-      *  @alias isTabSelected
-      *  @param {Number} tab - Displays the selected tab
-      */
-     $scope.isTabSelected = function(tab){
-        return $scope.selectedTab === tab;
-     };
-
-
-    /**
-      * Creates a tab view with activites and trips tabs
-      *
-      * @memberof ActivityCtrl
-      * @public
-      * @alias setActivityTabs
-      */
-     var setActivityTabs = function () {
-        var tabs = [{
-            'tab': 'ACTIVITES',
-            'title': locale.getString('activity.tab_activities')
-        }, {
-            'tab': 'TRIPS',
-            'title': locale.getString('activity.tab_trips')
-        }];
-
-        return tabs;
-     };
-      /**
      * Sets map configs in trip summary service
      *
      * @memberof TripspanelCtrl
@@ -232,16 +174,17 @@ angular.module('unionvmsWeb').controller('ActivityCtrl', function ($scope, local
             $scope.tripSummServ.initTripSummary();
         }
     };
-
-    /**
-	 * Initializes the ActivityCtrl
-	 *
-	 * @memberof ActivityCtrl
-	 * @private
-	 */
-    var init = function(){
-       $scope.activityTabMenu = setActivityTabs();
+    $scope.contentTabsFunctions = {
+        setTabs: function() {
+            return [
+                {
+                    'tab': 'ACTIVITIES',
+                    'title': locale.getString('activity.tab_activities')
+                }, {
+                    'tab': 'TRIPS',
+                    'title': locale.getString('activity.tab_trips')
+                }
+            ];
+        }
     };
-
-    init();
 });

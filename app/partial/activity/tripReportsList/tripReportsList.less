@@ -1,3 +1,63 @@
-.report-list-table{
-    margin-top : 15px;
+
+.tripReportsList {
+    border: 1px solid #dddddd;
+    border-top: 0;
+    .buttonSection {
+        padding-left: 30px;
+        margin-top: 10px;
+        margin-bottom: 20px;
+        .dropdown-menu {
+            width: 300px;
+            max-width: 300px;
+            .row {
+                margin-right: 15px;
+                margin-left: 15px;
+                .checkbox {
+                    margin-top: 5px;
+                    margin-bottom: 5px;
+                }
+            }
+        }
+        .btn-left {
+            display: table-cell;
+            text-align: left;
+            button {
+                padding: 5px;
+                span {
+                    margin-left: 5px;
+                }
+            }
+        }
+        .btn-right {
+            display: table-cell;
+            text-align: right;
+            button {
+                text-transform: uppercase;
+            }
+        }
+    }
+    .table-responsive-force {
+        width: 100%;
+        overflow-y: hidden;
+        overflow-x: auto;
+        -ms-overflow-style: -ms-autohiding-scrollbar;
+        -webkit-overflow-scrolling: touch;
+        table > thead > tr > th {
+            position: relative;
+            padding: 8px;
+        }
+        .fa-trash-o, .fa-ban {
+            color: @errorColor;
+        }
+    }
+    .notSortable {
+        cursor: default;
+    }
+    .with-icon {
+        color: @primaryColor;
+        /*font-size: 16px;*/
+    }
+    .activity-trips-pagination {
+        padding-right: 10px;
+    }
 }
