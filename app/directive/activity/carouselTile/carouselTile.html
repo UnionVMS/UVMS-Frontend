@@ -12,7 +12,7 @@
 			</ul>
 		</span>
 	</legend>
-	<slick settings="slickConfig" ng-if="isLoaded">
+	<slick class="slick-selectable" settings="slickConfig" ng-if="isLoaded">
 		<div ng-repeat="item in ngModel track by $index">
 			<div ng-include="templateUrl"></div>
 		</div>
