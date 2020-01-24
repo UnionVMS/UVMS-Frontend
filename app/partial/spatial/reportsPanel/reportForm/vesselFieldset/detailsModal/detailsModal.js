@@ -12,20 +12,20 @@ copy of the GNU General Public License along with the IFDM Suite. If not, see <h
 angular.module('unionvmsWeb').controller('DetailsmodalCtrl',function($scope, $modalInstance, $q, $timeout, itemForDetail, vesselRestFactory, vesselRestService, SavedSearchGroup, GetListRequest){
     $scope.item = itemForDetail;
     $scope.vesselGroupList = [];
-    
+
     $scope.isLoading = true;
     $scope.hasError = false;
-    
+
     $scope.cancel = function () {
       $modalInstance.dismiss('cancel');
     };
-    
+
     $scope.vesselsByPage = 5;
-    
+
     $scope.clickHandler = function(data){
     	$scope.detailedItem = $scope.getVesselByGuid(data);
     };
-    
+
     $scope.getVesselByGuid = function(id){
         for (var i = 0; i < $scope.vesselGroupList.length; i++){
             if ($scope.vesselGroupList[i].vesselId.guid === id){
@@ -33,7 +33,7 @@ angular.module('unionvmsWeb').controller('DetailsmodalCtrl',function($scope, $mo
             }
         }
     };
-    
+
     $scope.getVesselsForGroup = function(groupId){
         var deferred = $q.defer();
         vesselRestFactory.vesselGroup().get({id: groupId}, function(response) {
@@ -53,11 +53,11 @@ angular.module('unionvmsWeb').controller('DetailsmodalCtrl',function($scope, $mo
 
         return deferred.promise;
     };
-    
+
     var init = function(){
         if ($scope.item.type === 'asset'){
             //FIXME use new service to get vessel by history guid once it is implemented in ASSETS module
-            vesselRestService.getVesselByVesselHistoryId($scope.item.guid).then(
+            vesselRestService.getVessel($scope.item.guid).then(
                 function(response){
                     $scope.detailedItem = response;
                     $scope.isLoading = false;
@@ -86,7 +86,7 @@ angular.module('unionvmsWeb').controller('DetailsmodalCtrl',function($scope, $mo
             });
         }
     };
-    
+
     init();
 });
 
