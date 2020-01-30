@@ -27,7 +27,7 @@ copy of the GNU General Public License along with the IFDM Suite. If not, see <h
  * @description
  *  A service to deal with any kind of fishing activity operation (e.g. Departure, Arrival, ...)
  */
-angular.module('unionvmsWeb').factory('fishingActivityService', function(activityRestService, loadingStatus, mdrCacheService, locale, $filter, $state, tripSummaryService, reportingNavigatorService, tripReportsTimeline, unitConversionService,$compile, spatialHelperService, $modalStack) {
+angular.module('unionvmsWeb').factory('fishingActivityService', function(activityRestService, loadingStatus, mdrCacheService, locale, $filter, $state, tripSummaryService, reportingNavigatorService, tripReportsTimeline, unitConversionService,$compile, spatialHelperService, $modalStack, $q) {
 
     var faServ = {
         activityData: {},
@@ -247,7 +247,7 @@ angular.module('unionvmsWeb').factory('fishingActivityService', function(activit
 //                faServ.documentType = report.documentType;
 //                tripReportsTimeline.setCurrentPreviousAndNextItem(report.id);
 //                var content = angular.element('fishing-activity-navigator');
-//                
+//
 //                var scope = content.scope();
 //                $compile(content)(scope);
             }
@@ -296,7 +296,7 @@ angular.module('unionvmsWeb').factory('fishingActivityService', function(activit
 
 	/**
 	 * Reset fishing activity service
-	 * 
+	 *
 	 * @memberof fishingActivityService
 	 * @public
 	 * @alias resetActivity
@@ -309,10 +309,10 @@ angular.module('unionvmsWeb').factory('fishingActivityService', function(activit
 	    faServ.activityType = undefined;
 	    faServ.documentType = undefined;
 	};
-	
+
 	/**
      * Reset activity data within the service
-     * 
+     *
      * @memberof fishingActivityService
      * @public
      * @alias resetActivityData
@@ -320,10 +320,10 @@ angular.module('unionvmsWeb').factory('fishingActivityService', function(activit
     faServ.resetActivityData = function() {
         faServ.activityData = {};
     };
-    
+
     /**
      * Get the view name for requesting data on each activity type
-     * 
+     *
      * @memberof fishingActivityService
      * @private
      * @param {String} type - The fishing activity type (e.g. area_exit)
@@ -338,23 +338,23 @@ angular.module('unionvmsWeb').factory('fishingActivityService', function(activit
             fishing_operation: 'fishingoperation',
             joint_fishing_operation: 'jointfishingoperation'
         };
-        
+
         return views[type.toLowerCase()] || type;
     }
 
 	/**
 	 * Get data for a specific fishing activity
-	 * 
+	 *
 	 * @memberof fishingActivityService
 	 * @public
      * @alias getFishingActivity
 	 */
     faServ.getFishingActivity = function(obj, callback, actiId, repId) {
         loadingStatus.isLoading('FishingActivity', true, 0);
-        
+
         var faActivityId = "";
         var faRepId = "";
-        
+
         if (actiId) {
             faActivityId = actiId;
         } else {
@@ -373,19 +373,19 @@ angular.module('unionvmsWeb').factory('fishingActivityService', function(activit
             reportId: faRepId,
             withHistory: true
         };
-        
+
         if ($state.current.name === 'app.reporting-id' || $state.current.name === 'app.reporting'){
             payload.tripId = tripSummaryService.trip.id;
         }
-        
+
         if ($state.current.name === 'app.activity' && $state.params.tripId !== null && $state.params.activityId === faActivityId){
             payload.tripId = $state.params.tripId;
         }
-        
+
         activityRestService.getFishingActivityDetails(getViewNameByFaType(obj.faType), payload).then(function (response) {
             faServ.activityData = obj;
             faServ.activityData.fromJson(response);
-            
+
             if (angular.isDefined(callback)) {
                 callback();
             }
@@ -398,7 +398,7 @@ angular.module('unionvmsWeb').factory('fishingActivityService', function(activit
 
     /**
      * Adds gear description from MDR code lists into the gears type attribute.
-     * 
+     *
      * @memberof fishingActivityService
      * @private
      * @param {Object} gearObj - A reference to the activity gear object
@@ -414,10 +414,10 @@ angular.module('unionvmsWeb').factory('fishingActivityService', function(activit
             });
         });
     };
-    
+
     /**
      * Adds gear description from MDR code lists into the gears type attribute inside catches
-     * 
+     *
      * @memberof fishingActivityService
      * @private
      * @param {Object} faCatches - A reference to the activity catches object
@@ -440,10 +440,10 @@ angular.module('unionvmsWeb').factory('fishingActivityService', function(activit
             });
         });
     };
-    
+
     /**
      * Adds gear description from MDR code lists into the gears type attribute inside gear shot retrieval
-     * 
+     *
      * @memberof fishingActivityService
      * @private
      * @param {Object} gearShotObj - A reference to the activity gearShotRetrieval object
@@ -463,10 +463,10 @@ angular.module('unionvmsWeb').factory('fishingActivityService', function(activit
             });
         });
     };
-    
+
     /**
      * Adds catch type description from MDR code lists into the details object.
-     * 
+     *
      * @memberof fishingActivityService
      * @private
      * @param {Object} faObj - A reference to the Fishing activity object
@@ -482,10 +482,10 @@ angular.module('unionvmsWeb').factory('fishingActivityService', function(activit
             });
         });
     };
-    
+
     /**
      * Adds gear problem description from MDR code lists into the details object.
-     * 
+     *
      * @memberof fishingActivityService
      * @private
      * @param {Object} obj - A reference to the Fishing activity object
@@ -528,10 +528,10 @@ angular.module('unionvmsWeb').factory('fishingActivityService', function(activit
 
         return desc;
     };
-    
+
     /**
      * Adds gear recovery description from MDR code lists into the details object.
-     * 
+     *
      * @memberof fishingActivityService
      * @private
      * @param {Object} obj - A reference to the Fishing activity object
@@ -552,7 +552,7 @@ angular.module('unionvmsWeb').factory('fishingActivityService', function(activit
 
 	/**
      * Adds weight means description from MDR code lists into the details object.
-     * 
+     *
      * @memberof fishingActivityService
      * @private
      * @param {Object} faObj - A reference to the Fishing activity object
@@ -576,10 +576,10 @@ angular.module('unionvmsWeb').factory('fishingActivityService', function(activit
             });
         });
     };
-   
+
     /**
      * Gets the name of the fishing activity panel.
-     * 
+     *
      * @memberof fishingActivityService
      * @public
      * @alias getFaView
@@ -595,10 +595,10 @@ angular.module('unionvmsWeb').factory('fishingActivityService', function(activit
 
         return view;
     };
-    
+
     /**
      * Quit the fishing activiy panel and navigate to the previous view
-     * 
+     *
      * @memberof fishingActivityService
      * @public
      * @alias quitFaView
@@ -614,10 +614,10 @@ angular.module('unionvmsWeb').factory('fishingActivityService', function(activit
 
         faServ.openFromMap = false;
     };
-    
+
     /**
      * Adds gear recovery description from MDR code lists into the details object.
-     * 
+     *
      * @memberof fishingActivityService
      * @private
      * @param {Object} faObj - A reference to the Fishing activity object
@@ -636,7 +636,7 @@ angular.module('unionvmsWeb').factory('fishingActivityService', function(activit
 
     /**
      * Loads the data to be presented in the fishing activity details panel
-     * 
+     *
      * @memberof fishingActivityService
      * @private
      * @param {Object} data - A reference to the data to be loaded in the fishing activity details panel
@@ -652,7 +652,7 @@ angular.module('unionvmsWeb').factory('fishingActivityService', function(activit
             finalSummary.items = [];
         }
 
-        angular.forEach(data,function(value,key){           
+        angular.forEach(data,function(value,key){
             if(angular.isObject(value) && !angular.isArray(value)){
                 if(!_.isEmpty(value) && key !== 'characteristics' && key !== 'authorizations'){
                     finalSummary.subItems = [];
@@ -662,7 +662,7 @@ angular.module('unionvmsWeb').factory('fishingActivityService', function(activit
                         if (key === 'fishingTime' && subKey === 'duration' && angular.isDefined(value.unitCode)){
                             subItem += ' ' + value.unitCode;
                         }
-                         
+
                         if(angular.isDefined(subItem) && !_.isNull(subItem) && subItem.length > 0 && attrData.length){
                             finalSummary.subItems.push(transformFaItem(subItem, subKey, attrOrder, attrKeys, attrData[0]));
                         }
@@ -689,7 +689,7 @@ angular.module('unionvmsWeb').factory('fishingActivityService', function(activit
 
     /**
      * Transform the FA item in order to be displayed
-     * 
+     *
      * @memberof fishingActivityService
      * @private
      * @param {Any} value - Field value
@@ -713,7 +713,7 @@ angular.module('unionvmsWeb').factory('fishingActivityService', function(activit
                 }
             });
         }
-        
+
         var itemLabel;
         if(key.indexOf(".") !== -1){
             itemLabel = key;
@@ -733,14 +733,14 @@ angular.module('unionvmsWeb').factory('fishingActivityService', function(activit
 
     /**
      * Loads the data to be presented in the report details
-     * 
+     *
      * @memberof fishingActivityService
      * @private
      * @param {Object} data - A reference to the data to be loaded in the report details
      * @alias loadFaDocData
      * @returns {Object} data to be displayed
      */
-    var loadFaDocData = function(data){   
+    var loadFaDocData = function(data){
         var finalSummary = {};
 
         if(angular.isDefined(data)){
@@ -803,7 +803,7 @@ angular.module('unionvmsWeb').factory('fishingActivityService', function(activit
 
     /**
      * Loads the data to be presented in the gears tile
-     * 
+     *
      * @memberof fishingActivityService
      * @private
      * @param {Object} data - A reference to the data to be loaded in the gears tile
@@ -838,13 +838,13 @@ angular.module('unionvmsWeb').factory('fishingActivityService', function(activit
         });
 
         var gears = data;
-       
+
         return gears;
     };
 
     /**
      * Loads the data to be presented in the activity details tile
-     * 
+     *
      * @memberof fishingActivityService
      * @private
      * @param {String} faType - Fishing activity type
@@ -855,7 +855,7 @@ angular.module('unionvmsWeb').factory('fishingActivityService', function(activit
     var loadSummaryData = function(faType,data){
         var exceptions = ['arrival_notification', 'arrival_declaration'];
         var finalSummary;
-        
+
         if(exceptions.indexOf(faType) === -1){
             finalSummary = loadFishingActivityDetails(data, faSummaryAttrsOrder);
             if (angular.isDefined(data.characteristics)) {
@@ -879,7 +879,7 @@ angular.module('unionvmsWeb').factory('fishingActivityService', function(activit
 
     /**
      * Loads the data to be presented in the area tile
-     * 
+     *
      * @memberof fishingActivityService
      * @private
      * @param {String} faType - Fishing activity type
@@ -894,11 +894,11 @@ angular.module('unionvmsWeb').factory('fishingActivityService', function(activit
         var wkt = new ol.format.WKT();
         areaSummary.title = locale.getString('activity.area_tile_' + faType);
         if (angular.isDefined(data.schemeId) && angular.isDefined(data.id)){
-            areaSummary.title += ' - ' + data.schemeId + ':' + data.id; 
+            areaSummary.title += ' - ' + data.schemeId + ':' + data.id;
         }
         delete data.schemeId;
         delete data.id;
-        
+
         areaSummary.number = 12 / (Object.keys(data).length);
 
         angular.forEach(data, function(value, key) {
@@ -917,7 +917,7 @@ angular.module('unionvmsWeb').factory('fishingActivityService', function(activit
 
     /**
      * Loads the data to be presented in the catch tile
-     * 
+     *
      * @memberof fishingActivityService
      * @private
      * @param {Object} data - A reference to the data to be loaded in the catch tile
@@ -970,10 +970,10 @@ angular.module('unionvmsWeb').factory('fishingActivityService', function(activit
         }
         return data;
     };
-    
+
     /**
      * Loads the data to be presented in the catch tile
-     * 
+     *
      * @memberof fishingActivityService
      * @private
      * @alias loadGearShotRetrieval
@@ -995,7 +995,7 @@ angular.module('unionvmsWeb').factory('fishingActivityService', function(activit
 
     /**
      * Loads the data to be presented in the gear problems tile
-     * 
+     *
      * @memberof fishingActivityService
      * @private
      * @alias loadGearProblem
@@ -1013,10 +1013,10 @@ angular.module('unionvmsWeb').factory('fishingActivityService', function(activit
         return data;
     };
 
- 
+
     /**
      * Loads the data to be presented in the catch tile
-     * 
+     *
      * @memberof fishingActivityService
      * @private
      * @param {String} obj - Fishing activity model
@@ -1029,13 +1029,13 @@ angular.module('unionvmsWeb').factory('fishingActivityService', function(activit
             data.vesselDetails.authorizations = data.authorizations;
             loadVesselDetails(data.vesselDetails);
         }
-      
+
         return data;
     };
 
     /**
      * Adds extra attributes to attrOrder
-     * 
+     *
      * @memberof fishingActivityService
      * @private
      * @param {Object} data - A reference to the data to be loaded in the attrOrder
@@ -1062,7 +1062,7 @@ angular.module('unionvmsWeb').factory('fishingActivityService', function(activit
 
     /**
      * Loads the data to be presented in the relocation tile
-     * 
+     *
      * @memberof fishingActivityService
      * @private
      * @param {Object} data - A reference to the data to be loaded in the relocation tile
@@ -1085,7 +1085,7 @@ angular.module('unionvmsWeb').factory('fishingActivityService', function(activit
 
     /**
      * Loads the data to be presented in the vessel tile
-     * 
+     *
      * @memberof fishingActivityService
      * @private
      * @param {Object} vesselDetails - A reference to the data to be loaded in the vessel tile
@@ -1162,7 +1162,7 @@ angular.module('unionvmsWeb').factory('fishingActivityService', function(activit
                         vessel.type = angular.isDefined(vessel.country) ? vessel.country : vessel.name;
                     }
                 }
-                
+
             });
 
             return vesselDetails;
@@ -1173,7 +1173,7 @@ angular.module('unionvmsWeb').factory('fishingActivityService', function(activit
 
     /**
      * Loads the characteristics data to be presented
-     * 
+     *
      * @memberof fishingActivityService
      * @private
      * @param {Object} characteristics - A reference to the characteristics to be loaded
@@ -1193,39 +1193,55 @@ angular.module('unionvmsWeb').factory('fishingActivityService', function(activit
         return characteristics;
     };
 
-     /**
-     * Get the human readable text from MDR for Purpose code in report Details
-     * 
-     * @memberof fishingActivityService
-     * @private
-     * @alias getPurposeCodes
-     * @returns the purpose code
-     */
-     var getPurposeCodes = function(acronym, obj){
+    /**
+      * Enrich the given object with the human readable text from MDR in report details.
+      *
+      * @param {*} obj The object to enrich
+      */
+     function enrichReportDetails(obj) {
         loadingStatus.isLoading('FishingActivity', true, 0);
-        
-        mdrCacheService.getCodeList(acronym).then(function(response){
-            angular.forEach(obj.reportDetails.items,function(item){
-                if(item.id === "purposeCode"){
-                    var purposeCode = _.where(response, {code: item.value});
-                    if(angular.isDefined(purposeCode) && purposeCode.length > 0){
+
+        $q.all({
+            'FLUX_GP_PURPOSE': mdrCacheService.getCodeList('FLUX_GP_PURPOSE'),
+            'FLUX_FA_FMC': mdrCacheService.getCodeList('FLUX_FA_FMC')
+        }).then(
+            function(result) {
+                angular.forEach(obj.reportDetails.items, function(item) {
+                    selectFromMdrResult({
+                        'purposeCode': 'FLUX_GP_PURPOSE',
+                        'fmcMark': 'FLUX_FA_FMC'
+                    })(result, item);
+                });
+
+                loadingStatus.isLoading('FishingActivity', false);
+            },
+            function(error) {
+                //TODO deal with error from rest service
+                loadingStatus.isLoading('FishingActivity', false);
+            }
+        );
+     }
+
+     function selectFromMdrResult(map) {
+        var propNames = Object.keys(map);
+
+        return function(result, item) {
+            angular.forEach(propNames, function(propName) {
+                if(item.id === propName) {
+                    var mdrValue = _.where(result[map[propName]], {code: item.value});
+                    if(angular.isDefined(mdrValue) && mdrValue.length > 0) {
                         item.originalValue = item.value;
-                        item.value = item.value +' - '+ purposeCode[0].description;
-                        item.mdrValue = purposeCode[0].description;
+                        item.mdrValue = mdrValue[0].description;
+                        item.value = item.originalValue + ' - ' + item.mdrValue;
                     }
                 }
             });
-
-            loadingStatus.isLoading('FishingActivity', false);  
-        },function(error) {
-               //TODO deal with error from rest service
-               loadingStatus.isLoading('FishingActivity', false);
-        });
-     };
+        };
+     }
 
      /**
      * Get the human readable text from MDR for reason in activity details
-     * 
+     *
      * @memberof fishingActivityService
      * @private
      * @alias getReasonCodes
@@ -1233,17 +1249,17 @@ angular.module('unionvmsWeb').factory('fishingActivityService', function(activit
      */
      var getReasonCodes = function(obj){
         var activityType = _.where(faMdrReason, {activityName: obj.faType});
-        
+
         if(angular.isDefined(activityType) && activityType.length > 0){
             var acronym = activityType[0].achronym;
             loadingStatus.isLoading('FishingActivity', true, 0);
-            
+
             mdrCacheService.getCodeList(acronym).then(function(response){
                 angular.forEach(obj.activityDetails.items,function(item){
                     var reasonDesc = _.where(response, {code: item.value});
                     if(item.id === "reason"){
-                        if(angular.isDefined(reasonDesc) && reasonDesc.length > 0){  
-                            item.value = item.value +' - '+reasonDesc[0].description; 
+                        if(angular.isDefined(reasonDesc) && reasonDesc.length > 0){
+                            item.value = item.value +' - '+reasonDesc[0].description;
                         }
                     }
                 });
@@ -1258,7 +1274,7 @@ angular.module('unionvmsWeb').factory('fishingActivityService', function(activit
 
     /**
      * The click location callback function
-     * 
+     *
      * @memberof fishingActivityService
      * @public
      * @alias locationClickCallback
@@ -1274,7 +1290,7 @@ angular.module('unionvmsWeb').factory('fishingActivityService', function(activit
 
     /**
       * Check if a location tile should be clickable taking into consideration the route and the report configuration
-      * 
+      *
       * @memberof fishingActivityService
       * @public
       * @alias isLocationClickable
@@ -1291,7 +1307,7 @@ angular.module('unionvmsWeb').factory('fishingActivityService', function(activit
 
     /**
       * Adds the header title to the document
-      * 
+      *
       * @memberof fishingActivityService
       * @private
       * @param {Object} doc - current document to be downloaded
@@ -1309,7 +1325,7 @@ angular.module('unionvmsWeb').factory('fishingActivityService', function(activit
 
     /**
       * Adds the author to the footer of the document
-      * 
+      *
       * @memberof fishingActivityService
       * @private
       * @param {Object} doc - current document to be downloaded
@@ -1332,7 +1348,7 @@ angular.module('unionvmsWeb').factory('fishingActivityService', function(activit
 
     /**
       * Prints the view into a pdf
-      * 
+      *
       * @memberof fishingActivityService
       * @public
       * @param {String} view - view to be exported
@@ -1388,7 +1404,7 @@ angular.module('unionvmsWeb').factory('fishingActivityService', function(activit
         }else{
             doc = new jsPDF('p', 'px', 'a4');
         }
-    
+
         doc.addHTML(viewContainer,0,topOffset,{},function(){
             if(title){
                 writeHeader(doc, title);
@@ -1411,14 +1427,14 @@ angular.module('unionvmsWeb').factory('fishingActivityService', function(activit
                 areaTile.attr('width', "100%");
                 areaTile.attr('height', "100%");
             }
-            
+
             loadingStatus.isLoading('FishingActivity', false);
         });
     };
-    
+
     /**
      * Loads all the fishing activity data in the model
-     * 
+     *
      * @memberof fishingActivityService
      * @public
      * @param {String} obj - Fishing activity model
@@ -1428,7 +1444,7 @@ angular.module('unionvmsWeb').factory('fishingActivityService', function(activit
      */
     faServ.faFromJson = function(obj,data){
         var model = faModels.common.concat(angular.isDefined(faModels[obj.faType]) ? faModels[obj.faType] : []);
-        
+
         if (obj.faType === 'transhipment' && angular.isDefined(data.activityDetails.authorizations)){
             if (data.activityDetails.authorizations.length > 0){
                 var authAttrOrder = [];
@@ -1454,7 +1470,7 @@ angular.module('unionvmsWeb').factory('fishingActivityService', function(activit
                     break;
                 case 'reportDetails':
                     obj.reportDetails = loadFaDocData(data.reportDetails);
-                    getPurposeCodes('FLUX_GP_PURPOSE',obj);                  
+                    enrichReportDetails(obj);
                     break;
                 case 'locations':
                     obj.locations = data.locations;
