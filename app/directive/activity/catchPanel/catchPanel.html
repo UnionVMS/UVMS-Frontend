@@ -19,7 +19,7 @@
                                     <div class="pie-container" ng-if="item.onBoard | hasData">
                                         <nvd3 options="options" data="item.onBoard"></nvd3>
                                         <div class="text-center onboard-total">{{'activity.catch_panel_weight' | i18n}}: {{item.grandOnboardTotal}} {{unit}}</div>
-                                    </div>    
+                                    </div>
                                     <div class="pie-container" ng-if="item.transhipment | hasData">
                                         <nvd3 options="options" data="item.transhipment"></nvd3>
                                         <div class="text-center transhipment-total">{{'activity.catch_panel_weight' | i18n}}: {{item.grandTranshipmentTotal}} {{unit}}</div>
@@ -31,7 +31,7 @@
                             </fieldset>
                         </div>
                     </div>
-                    <div class="col-sm-4 col-md-4 catch-details-item summary-catch-table">
+                    <div class="col-sm-4 col-md-4 catch-details-item summary-catch-table"  ng-if="ngModel.tripCatchSummary[0].onBoard.length || ngModel.tripCatchSummary[1].landing.length || ngModel.tripCatchSummary[2].transhipment.length">
                         <catch-panel-table data='ngModel.tripTableData' species-colors="ngModel.tripSpeciesColorsObject" headers='ngModel.tripTableHeaders'></catch-panel-table>
                     </div>
                 </div>
