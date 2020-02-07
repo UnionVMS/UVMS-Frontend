@@ -163,12 +163,12 @@ angular.module('unionvmsWeb').controller('CatchEvolutionCtrl', function ($scope,
                     item.cumulative = angular.copy(cumulativePerSpecies);
                 } else if (complexActivityTypes.indexOf(item.activityType) > -1) {
                     // add to cumulative per Species
-                    if (item.loaded.length) {
+                    if (!angular.equals({},item.loaded)) {
                         cumulativePerSpecies = calculateCumulativePerSpecies(cumulativePerSpecies, item.loaded);
                         item.cumulative = angular.copy(cumulativePerSpecies);
                     }
                     // subtract from cumulative per Species
-                    if (item.unLoaded.length) {
+                    if (!angular.equals({},item.unLoaded)) {
                         cumulativePerSpecies = calculateCumulativePerSpecies(cumulativePerSpecies, item.unLoaded, true);
                         item.cumulative = angular.copy(cumulativePerSpecies);
                     }
@@ -256,12 +256,19 @@ angular.module('unionvmsWeb').controller('CatchEvolutionCtrl', function ($scope,
 
     function constructTable() {
         angular.forEach($scope.dataForTable.catchEvolutionProgress, function(item) {
-            if (complexActivityTypes.indexOf(item.activityType) === -1) {
+            if (startingActivityTypes.indexOf(item.activityType) > -1) {
+                if (item.affectsCumulative) {
+                    if ($scope.tableHeaders.indexOf(CUMUL_CATCHES) === -1) {
+                        $scope.tableHeaders.push(CUMUL_CATCHES);
+                        performTableCalculations(item.total, CUMUL_CATCHES);
+                    }
+                }
+            } else if (operationActivityTypes.indexOf(item.activityType) > -1) {
                 if (item.affectsCumulative) {
                     addIfNotExists(CUMUL_CATCHES);
                     performTableCalculations(item.total, CUMUL_CATCHES);
                 }
-            } else {
+            } else if (complexActivityTypes.indexOf(item.activityType) > -1) {
                 if (!angular.equals({}, item.onBoard)) {
                     var onBoardTitle = item.activityType + '_' + item.reportType + '_' + ONBOARD;
                     addIfNotExists(onBoardTitle);
