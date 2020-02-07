@@ -54,7 +54,7 @@ describe('User List Duplicate Profile', function() {
 
 		//expect(accountDetailsPage.getPageUrl()).toBe(browser.baseUrl +'#/usm/users?user='+ userName);
 
-		usersPage.getTableRows().get(0).$$('td button').get(2).click();
+		usersPage.getTableRows().get(0).$('td button').get(2).click();
 
 		browser.waitForAngular();
 		element.all(by.id('userNameSrc')).click();

@@ -13,21 +13,21 @@ angular.module('unionvmsWeb').controller('ConfigpanelCtrl',function($scope, $anc
     $scope.settingsLevel = 'user';
 	$scope.alert = spatialConfigAlertService;
 	$scope.prefService = PreferencesService;
-	
+
 	var loadUserPreferences = function(){
 		loadingStatus.isLoading('Preferences',true,0);
 		spatialConfigRestService.getUserConfigs().then(getConfigsSuccess, getConfigsFailure);
 	};
-	
+
 	$scope.save = function(){
 		if(_.keys($scope.configPanelForm.$error).length === 0){
 			loadingStatus.isLoading('Preferences',true,2);
-		    
+
 			if ($scope.configPanelForm.$dirty){
 				var newConfig = new SpatialConfig();
 				newConfig = $scope.configModel.forUserPrefToServer($scope.configPanelForm);
-		    
-		        spatialConfigRestService.saveUserConfigs(newConfig).then(saveSuccess, saveFailure);  
+
+		        spatialConfigRestService.saveUserConfigs(newConfig).then(saveSuccess, saveFailure);
 		    } else {
 		        $anchorScroll();
 		        $scope.alert.hasAlert = true;
@@ -45,16 +45,16 @@ angular.module('unionvmsWeb').controller('ConfigpanelCtrl',function($scope, $anc
 		    $scope.submitedWithErrors = true;
 		}
 	};
-	
+
 	$scope.cancel = function(){
 		$scope.repNav.goToPreviousView();
 	};
-	
+
     //Update config copy after saving new preferences
     $scope.updateConfigCopy = function(src){
         var changes = angular.fromJson(src);
         var keys = _.keys(changes);
-        
+
         for (var i = 0; i < keys.length; i++){
         	if(keys[i] === 'layerSettings'){
         		$scope.configCopy.layerSettings = {};
@@ -65,13 +65,13 @@ angular.module('unionvmsWeb').controller('ConfigpanelCtrl',function($scope, $anc
         	}
         }
     };
-    
+
     $scope.removeHashKeys = function(arr){
     	angular.forEach(arr, function(item) {
-    		delete item.$$hashKey;
+    		delete item.$hashKey;
     	});
     };
-    
+
 	var saveSuccess = function(response){
 	    $anchorScroll();
 	    $scope.alert.hasAlert = true;
@@ -82,7 +82,7 @@ angular.module('unionvmsWeb').controller('ConfigpanelCtrl',function($scope, $anc
 		$scope.configPanelForm.$setPristine();
 	    loadingStatus.isLoading('Preferences',false);
 	};
-	
+
 	var saveFailure = function(error){
 	    $anchorScroll();
 	    $scope.alert.hasAlert = true;
@@ -91,7 +91,7 @@ angular.module('unionvmsWeb').controller('ConfigpanelCtrl',function($scope, $anc
 	    $scope.alert.hideAlert();
 	    loadingStatus.isLoading('Preferences',false);
 	};
-	
+
 	var getConfigsSuccess = function(response){
 	    var srcConfigObj = response;
 	    var model = new SpatialConfig();
@@ -100,7 +100,7 @@ angular.module('unionvmsWeb').controller('ConfigpanelCtrl',function($scope, $anc
         angular.copy($scope.configModel, $scope.configCopy);
         loadingStatus.isLoading('Preferences',false);
 	};
-	
+
 	var getConfigsFailure = function(error){
 	    $anchorScroll();
 	    $scope.alert.hasAlert = true;
@@ -115,5 +115,5 @@ angular.module('unionvmsWeb').controller('ConfigpanelCtrl',function($scope, $anc
             loadUserPreferences();
         }
     });
-	
+
 });

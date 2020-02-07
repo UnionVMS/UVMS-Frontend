@@ -411,10 +411,10 @@ angular.module('unionvmsWeb').controller('ManualPositionReportModalCtrl', functi
     $scope.init();
 });
 
-angular.module('unionvmsWeb').factory('ManualPositionReportModal', function($$uibModal) {
+angular.module('unionvmsWeb').factory('ManualPositionReportModal', function($uibModal) {
 	return {
 		show: function(positionReport, options) {
-			return $$uibModal.open({
+			return $uibModal.open({
 				templateUrl: 'partial/movement/manualPositionReports/manualPositionReportModal/manualPositionReportModal.html',
                 controller: 'ManualPositionReportModalCtrl as modalCtrl',
 				backdrop: 'static', //will not close when clicking outside the modal window

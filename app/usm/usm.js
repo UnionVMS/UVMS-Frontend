@@ -233,7 +233,7 @@ userManagementApp.run(['$rootScope', '$location', '$log', '$http', '$localStorag
     function ($rootScope, $location, $log, $http, $localStorage, jwtHelper, $uibModalStack, $cookies, $translate, userService,authRouter) {
 
         $rootScope.safeApply = function (fn) {
-            var phase = $rootScope.$$phase;
+            var phase = $rootScope.$phase;
             if (phase === '$apply' || phase === '$digest') {
                 if (fn && (typeof(fn) === 'function')) {
                     fn();

@@ -51,10 +51,10 @@ angular.module('unionvmsWeb').controller('positionsMapModalCtrl',function($scope
     init();
 });
 
-angular.module('unionvmsWeb').factory('PositionsMapModal', function($$uibModal) {
+angular.module('unionvmsWeb').factory('PositionsMapModal', function($uibModal) {
     return {
         show: function(positionReports) {
-            return $$uibModal.open({
+            return $uibModal.open({
                 templateUrl: 'partial/movement/positionsMapModal/positionsMapModal.html',
                 controller: 'positionsMapModalCtrl',
                 backdrop: 'static', //will not close when clicking outside the modal window

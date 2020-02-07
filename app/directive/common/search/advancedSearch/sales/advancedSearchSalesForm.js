@@ -15,13 +15,13 @@ angular.module('unionvmsWeb')
         //On click on the reset link
         $scope.resetSearch = function () {
             $scope.resetAdvancedSearchForm(true);
-            $$resetSelectedSearchGroup();
+            $resetSelectedSearchGroup();
             $scope.$broadcast("sales.advanced-search-reset");
         };
 
         $scope.toggleAdvancedSearch = function () {
             salesSearchService.toggleAdvancedSearch();
-            $$resetSearchFields();
+            $resetSearchFields();
         };
 
         $scope.performSearch = function () {
@@ -71,7 +71,7 @@ angular.module('unionvmsWeb')
             }
 
             salesSearchService.toggleAdvancedSearch(true);
-            $$resetSearchFields();
+            $resetSearchFields();
             $scope.performSavedGroupSearch(savedSearchGroup, true, true);
             $scope.$broadcast("sales.perform-saved-search", searchService.getAdvancedSearchObject());
         };
@@ -86,12 +86,12 @@ angular.module('unionvmsWeb')
         /////////////////
 
         //Reset all search fields
-        function $$resetSearchFields() {
+        function $resetSearchFields() {
             $scope.resetAdvancedSearchForm(false);
         }
 
         //Reset the saved search dropdown
-        function $$resetSelectedSearchGroup() {
+        function $resetSelectedSearchGroup() {
             //$scope.selectedSearchGroup = undefined;
             $scope.savedSearches.selected = undefined;
         }

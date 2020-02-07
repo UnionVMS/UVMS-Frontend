@@ -152,10 +152,10 @@ describe('combobox', function() {
 
       if(angular.isArray(isolatedScope[key])){
         angular.forEach(isolatedScope[key],function(item){
-          delete item.$$hashKey;
+          delete item.$hashKey;
           if(angular.isArray(item.items)){
             angular.forEach(item.items,function(subitem){
-              delete subitem.$$hashKey;
+              delete subitem.$hashKey;
             });
           }
         });
@@ -166,7 +166,7 @@ describe('combobox', function() {
       }else{
         expect(isolatedScope[key]).toEqual(scope[value.attr]);
       }
-      
+
     });
   }
 
@@ -275,7 +275,7 @@ describe('combobox', function() {
       var parentElement = angular.element('<div id="parent-container"></div>');
       parentElement.appendTo('body');
     }
-    
+
     scope.destComboList = '#parent-container';
 
     scope.group = 'group';
@@ -284,7 +284,7 @@ describe('combobox', function() {
     scope.callback = jasmine.createSpy('callback');
     scope.callbackParams = ['param1','param2'];
 
-    
+
     scope.lineStyle = true;
 
     scope.editable = true;
@@ -348,9 +348,9 @@ describe('combobox', function() {
       });
 
       describe('should work with all the states', function() {
-        
+
         angular.forEach(states,function(state, stateName){
-          
+
           if(!angular.isDefined(state.exclude) || state.exclude.indexOf(comboTypeName) === -1){
             it(stateName, function() {
 
@@ -410,7 +410,7 @@ describe('combobox', function() {
                 isolatedScope.$digest();
                 angular.element('.combobox[combolist-id="' + isolatedScope.comboboxId + '"] .selected-options > li:first-child > .item-remover')[0].click();
                 expect(isolatedScope.ngModel).toEqual([]);
-                
+
                 isolatedScope.minSelections = 2;
                 isolatedScope.ngModel = ['item4','item5','item7'];
                 isolatedScope.ngModel.push('item1');
@@ -423,7 +423,7 @@ describe('combobox', function() {
               }
 
               state.testFunc(comboTypeName,isolatedScope);
-              
+
               destroyCombo(isolatedScope);
             });
 

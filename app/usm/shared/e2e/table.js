@@ -17,20 +17,20 @@ var Table = function () {
     var EC = protractor.ExpectedConditions;
 
 //TABLE methods and elements
-    this.table = $$('.table');
-    this.tableRows = $$('.table tbody tr');
-    this.tableResultsRows = $$('.table tbody.table-bordered tr');
+    this.table = $('.table');
+    this.tableRows = $('.table tbody tr');
+    this.tableResultsRows = $('.table tbody.table-bordered tr');
 
     this.clickDetailButton = function (rowIndex) {
-        this.getTableRows().get(rowIndex).$$('td button').click();
+        this.getTableRows().get(rowIndex).$('td button').click();
         //  browser.wait(EC.visibilityOf(this.detailsSpanRole), 10000);
     };
 
     this.clickDetailViewButton = function (rowIndex) {
-        //this.getTableRows().get(rowIndex).$$('td button').get(1).click(); //The view details button occupies the second position in the table
+        //this.getTableRows().get(rowIndex).$('td button').get(1).click(); //The view details button occupies the second position in the table
 		var row = this.getTableRows().get(rowIndex);
 		browser.waitForAngular();
-		var cols = row.$$('td button');
+		var cols = row.$('td button');
 		cols.get(1).click();
         //browser.wait(EC.visibilityOf(this.detailsSpanRole), 10000);
     };
@@ -64,12 +64,12 @@ var Table = function () {
 
 
     this.clickRowEditButton = function (rowIndex) {
-        this.getTableRows().get(rowIndex).$$('td button').get(0).click(); //The edit button occupies the first position in the table
+        this.getTableRows().get(rowIndex).$('td button').get(0).click(); //The edit button occupies the first position in the table
         //  browser.wait(EC.visibilityOf(this.detailsSpanRole), 10000);
     };
 
     this.clickRowDeleteButton = function (rowIndex) {
-        this.getTableRows().get(rowIndex).$$('td button').get(2).click(); //The delete button occupies the third position in the table
+        this.getTableRows().get(rowIndex).$('td button').get(2).click(); //The delete button occupies the third position in the table
         //  browser.wait(EC.visibilityOf(this.detailsSpanRole), 10000);
     };
 
@@ -86,7 +86,7 @@ var Table = function () {
     };
 
     //Loading message
-    this.loadingMessage = $$('.table tbody.tr td');
+    this.loadingMessage = $('.table tbody.tr td');
 
     this.getLoadingMessage = function () {
         return this.loadingMessage.getText();

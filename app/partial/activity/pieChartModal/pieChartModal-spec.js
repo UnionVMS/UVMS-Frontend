@@ -17,7 +17,7 @@ describe('PiechartmodalCtrl', function () {
 
     beforeEach(inject(function ($rootScope, $controller) {
         scope = $rootScope.$new();
-        specieData = { "areaInfo": [{ "areaName": "27.6.b", "weight": 97074.90000000002 }, { "areaName": "GBR", "weight": 48537.450000000004 }, { "areaName": "XCA", "weight": 48537.45 }], "speciesCode": "HAD", "weight": 194149.80000000005, "color": "#519cb8", "tableColor": { "background-color": "rgba(81, 156, 184, 0.7)" }, "$$hashKey": "object:4444" };
+        specieData = { "areaInfo": [{ "areaName": "27.6.b", "weight": 97074.90000000002 }, { "areaName": "GBR", "weight": 48537.450000000004 }, { "areaName": "XCA", "weight": 48537.45 }], "speciesCode": "HAD", "weight": 194149.80000000005, "color": "#519cb8", "tableColor": { "background-color": "rgba(81, 156, 184, 0.7)" }, "$hashKey": "object:4444" };
         ctrl = $controller('PiechartmodalCtrl', {
             $scope: scope,
             $uibModalInstance: modalInstance,

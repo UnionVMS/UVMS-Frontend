@@ -103,7 +103,7 @@ describe('Test manage user', function() {
 		});
 
 		// check the content of the serch results
-		var columns = usersPage.getTableRow(0).$$('td');
+		var columns = usersPage.getTableRow(0).$('td');
 		expect(columns.get(0).getText()).toBe(userName);
 		expect(columns.get(1).getText()).toBe('FirstName');
 		expect(columns.get(2).getText()).toBe('LastName');
@@ -115,9 +115,9 @@ describe('Test manage user', function() {
 
 		// Select the details button and open the panel
 		usersPage.clickDetailButton(0);
-		
+
 		usersPage.clickOpenEditButton();
-		
+
 		usersPage.clickEditButton();
 		usersPage.setPhoneNumber('21111');
 		//usersPage.setOrganisation('FRA');
@@ -126,7 +126,7 @@ describe('Test manage user', function() {
 		usersPage.refreshPage();
 
 		//check the results whcih are visible inthe main list
-		//columns = usersPage.getTableRow(0).$$('td');
+		//columns = usersPage.getTableRow(0).$('td');
 		//expect(columns.get(3).getText()).toBe('FRA');
 		//expect(columns.get(4).getText()).toBe('FRA');
 	});

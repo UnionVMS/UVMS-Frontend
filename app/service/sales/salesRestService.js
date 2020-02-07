@@ -38,7 +38,7 @@
             }
 
             salesRestApi.sales.search({}, payload, function (response) {
-                if ($$valid(response, deferred)) {
+                if ($valid(response, deferred)) {
                     var salesReportListPage = new SalesReportListPage();
                     angular.extend(salesReportListPage, response.data);
                     deferred.resolve(salesReportListPage);
@@ -57,7 +57,7 @@
             var deferred = $q.defer();
 
             salesRestApi.sales.codeLists({}, {}, function (response) {
-                if ($$valid(response, deferred)) {
+                if ($valid(response, deferred)) {
                     deferred.resolve(response.data);
                 }
             },
@@ -74,7 +74,7 @@
 
             var params = { id: id };
             salesRestApi.sales.get(params, function (response) {
-                if ($$valid(response, deferred)) {
+                if ($valid(response, deferred)) {
                     deferred.resolve(response.data);
                 }
             },
@@ -90,10 +90,10 @@
             var deferred = $q.defer();
             var user = userService.getUserName();
             salesRestApi.sales.getSavedSearches({'user': user}, function (response) {
-                if ($$valid(response, deferred)) {
+                if ($valid(response, deferred)) {
                     var groups = [];
                     angular.forEach(response.data, function (groupDto) {
-                        groups.push($$dtoToSavedSearchGroup(groupDto));
+                        groups.push($dtoToSavedSearchGroup(groupDto));
                     });
                     deferred.resolve(groups);
                 }
@@ -115,8 +115,8 @@
                 fields: savedSearchGroup.searchFields
             };
             salesRestApi.sales.saveSearch(transferDto, function (response) {
-                if ($$valid(response, deferred)) {
-                    deferred.resolve($$dtoToSavedSearchGroup(response.data));
+                if ($valid(response, deferred)) {
+                    deferred.resolve($dtoToSavedSearchGroup(response.data));
                 }
             },
             function (err) {
@@ -130,7 +130,7 @@
         function deleteSavedSearch(savedSearchGroup) {
             var deferred = $q.defer();
             salesRestApi.sales.deleteSavedSearch(savedSearchGroup, { id: savedSearchGroup.id }, function (response) {
-                if ($$valid(response, deferred)) {
+                if ($valid(response, deferred)) {
                     deferred.resolve(angular.copy(savedSearchGroup));
                 }
             },
@@ -145,7 +145,7 @@
         function exportDocuments(filters) {
             var deferred = $q.defer();
             salesRestApi.sales.exportDocuments({}, { filters: filters }, function (response) {
-                if ($$valid(response, deferred)) {
+                if ($valid(response, deferred)) {
                     deferred.resolve(response.data);
                     console.log(response.data);
                 }
@@ -162,7 +162,7 @@
         function exportSelectedDocuments(exportList) {
             var deferred = $q.defer();
             salesRestApi.sales.exportSelectedDocuments({}, exportList, function (response) {
-                if ($$valid(response, deferred)) {
+                if ($valid(response, deferred)) {
                     deferred.resolve(response.data);
                 }
             },
@@ -176,7 +176,7 @@
         ////////////////////////////////
 
         //Check response code for errors
-        function $$valid(response, deferred) {
+        function $valid(response, deferred) {
             if (response.code === 200) {
                 return true;
             }
@@ -193,7 +193,7 @@
         }
 
         //Turn returned dto into SavedSearchGroup object
-        function $$dtoToSavedSearchGroup(dto) {
+        function $dtoToSavedSearchGroup(dto) {
             var searchFields = [];
             if ($.isArray(dto.fields)) {
                 for (var i = 0; i < dto.fields.length; i++) {

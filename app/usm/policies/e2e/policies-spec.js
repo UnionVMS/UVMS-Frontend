@@ -50,7 +50,7 @@ describe('Policies page', function () {
 
         // check the content of the serch results
         policiesPage.getTableRows().each(function (row) {
-            var columns = row.$$('td');
+            var columns = row.$('td');
             expect(columns.get(0).getText()).toMatch(/account.lockoutDuration/);
             expect(columns.get(2).getText()).toBe('Authentication');
         });
@@ -61,7 +61,7 @@ describe('Policies page', function () {
         policiesPage.search("account.lockoutDuration", "Authentication");
 
         var rowToSelect = Math.floor((Math.random() * initialPoliciesCount - 1) + 1);
-        var columns = policiesPage.getTableRow(0).$$('td');
+        var columns = policiesPage.getTableRow(0).$('td');
 
 		//console.log("rows: " + rowToSelect);
 		//console.log("cols: ", columns.length);

@@ -44,7 +44,7 @@ describe('Roles page', function () {
 
     var testRowsRoleTable = function (name, description, status) {
         rolesPage.getTableRows().each(function (row) {
-            var columns = row.$$('td');
+            var columns = row.$('td');
 
             expect(columns.get(0).getText() == 'No results found.').toBeFalsy();
 
@@ -68,7 +68,7 @@ describe('Roles page', function () {
 
         // check the content of the serch results
         rolesPage.getTableRows().each(function (row) {
-            var columns = row.$$('td');
+            var columns = row.$('td');
             expect(columns.get(0).getText()).toMatch(/SM/);
             //expect(columns.get(2).getText()).toBe('USM');
             expect(columns.get(2).getText()).toBe('Enabled');
@@ -78,7 +78,7 @@ describe('Roles page', function () {
 
     it('should test roles page details', function () {
         var rowToSelect = Math.floor((Math.random() * initialRolesCount - 1) + 1);
-        var columns = rolesPage.getTableRow(rowToSelect).$$('td');
+        var columns = rolesPage.getTableRow(rowToSelect).$('td');
 
         // retrieve row information and assign them in page variables for future use
         columns.get(0).getText().then(function(roleName){
@@ -159,7 +159,7 @@ describe('Roles page', function () {
         rolesPage.search(roleTestUpdatedName, null, "Enabled");
 
         rolesPage.getTableRows().each(function (row) {
-            var columns = row.$$('td');
+            var columns = row.$('td');
             expect(columns.get(0).getText() == roleTestUpdatedName).toBeFalsy();
         });
 

@@ -44,7 +44,7 @@ describe('Organisations page', function () {
 
     var testRowsOrganisationsTable = function ( parent, organisation, description, nation) {
         organisationsTable.getTableRows().each(function (row) {
-            var columns = row.$$('td');
+            var columns = row.$('td');
 
 			expect(columns.get(0).getText() == 'No results found.').toBeFalsy();
 
@@ -121,7 +121,7 @@ describe('Organisations page', function () {
         //expect(organisationsDetailsPage.getPageUrl()).toBe(browser.baseUrl +ORGANISATIONS_DETAILS_PAGE);
 
         organisationsDetailsTable.getTableRows().each(function (row) {
-            var columns = row.$$('td');
+            var columns = row.$('td');
             expect(columns.get(0).getText()).toMatch(/FLUX.GRC/);
             expect(columns.get(1).getText()).toMatch(/FLUX node for Greece/);
             expect(columns.get(2).getText()).toMatch(/.flux.gr/);
@@ -184,13 +184,13 @@ describe('Organisations page', function () {
         organisationsPage.refreshPage();
         //organisationsPage.search(orgTestUpdatedName, "EEC", "Enabled");
         //organisationsDetailsPage.getTableRows().each(function (row) {
-        //    var columns = row.$$('td');
+        //    var columns = row.$('td');
         //    expect(columns.get(0).getText()).toBe('No results found.');
         //});
 		organisationsPage.search('', "EEC", "Enabled");
 
         organisationsDetailsTable.getTableRows().each(function (row) {
-            var columns = row.$$('td');
+            var columns = row.$('td');
 			expect(columns.get(0).getText() == orgTestUpdatedName).toBeFalsy();
         });
 

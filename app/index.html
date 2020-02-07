@@ -39,20 +39,20 @@ copy of the GNU General Public License along with the IFDM Suite. If not, see <h
     <script src="http://localhost:35729/livereload.js" data-concat="false"></script>
 
     <!-- JS from Ex-Bower Components -->
-    <script src="../node_modules/jquery/jquery.min.js"></script>
-    <script src="../node_modules/jquery-datetimepicker/jquery.datetimepicker.min.js"></script>
-    <script src="../node_modules/jquery.fancytree/dist/jquery.fancytree-all-deps.min.js"></script>
-
-    <script src="../node_modules/jquery-contextmenu/dist/jquery.ui.position.min.js"></script>
-
-    <script src="../node_modules/jquery-contextmenu/dist/jquery.contextMenu.min.js"></script>
-    <script src="../node_modules/bootstrap/dist/js/bootstrap.min.js"></script>
     <script src="../node_modules/less/dist/less.min.js" data-concat="false"></script>
 
-    <script src="../node_modules/angular/angular.min.js"></script>
-    <script src="../node_modules/angular-ui-bootstrap/ui-bootstrap.min.js"></script>
+    <script src="../node_modules/jquery/jquery.js"></script>
 
-    <script src="../node_modules/angular-ui-bootstrap/ui-bootstrap-tpls.min.js"></script>
+    <script src="../node_modules/components-jqueryui/jquery-ui.min.js"></script>
+
+    <script src="../node_modules/bootstrap/dist/js/bootstrap.min.js"></script>
+
+    <script src="../node_modules/underscore/underscore-min.js"></script>
+
+    <script src="../node_modules/moment/min/moment-with-locales.min.js"></script>
+
+    <script src="../node_modules/angular/angular.js"></script>
+
     <script src="../node_modules/angular-cookies/angular-cookies.min.js"></script>
 
     <script src="../node_modules/angular-sanitize/angular-sanitize.min.js"></script>
@@ -64,48 +64,39 @@ copy of the GNU General Public License along with the IFDM Suite. If not, see <h
     <script src="../node_modules/angular-animate/angular-animate.min.js"></script>
 
     <script src="../node_modules/angular-resource/angular-resource.min.js"></script>
+
+    <script src="../node_modules/angular-ui-bootstrap/ui-bootstrap-tpls.min.js"></script>
+
+
+    <script src="../node_modules/angular-ui-utils/modules/event/event.js"></script>
+    <script src="../node_modules/angular-ui-utils/modules/format/format.js"></script>
+    <script src="../node_modules/angular-ui-utils/modules/highlight/highlight.js"></script>
+    <script src="../node_modules/angular-ui-utils/modules/include/include.js"></script>
+    <script src="../node_modules/angular-ui-utils/modules/indeterminate/indeterminate.js"></script>
+    <script src="../node_modules/angular-ui-utils/modules/inflector/inflector.js"></script>
+    <script src="../node_modules/angular-ui-utils/modules/jq/jq.js"></script>
+    <script src="../node_modules/angular-ui-utils/modules/keypress/keypress.js"></script>
+    <script src="../node_modules/angular-ui-utils/modules/mask/mask.js"></script>
+    <script src="../node_modules/angular-ui-utils/modules/reset/reset.js"></script>
+    <script src="../node_modules/angular-ui-utils/modules/route/route.js"></script>
+    <script src="../node_modules/angular-ui-utils/modules/scrollfix/scrollfix.js"></script>
+    <script src="../node_modules/angular-ui-utils/modules/scroll/scroll.js"></script>
+    <script src="../node_modules/angular-ui-utils/modules/scroll/scroll.js"></script>
+    <script src="../node_modules/angular-ui-utils/modules/scroll/scroll-jqlite.js"></script>
+    <script src="../node_modules/angular-ui-utils/modules/showhide/showhide.js"></script>
+    <script src="../node_modules/angular-ui-utils/modules/unique/unique.js"></script>
+    <script src="../node_modules/angular-ui-utils/modules/validate/validate.js"></script>
+
+
     <script src="../node_modules/angular-ui-utils/modules/utils.js"></script>
+
+    <script src="../node_modules/jquery-datetimepicker/build/jquery.datetimepicker.full.min.js"></script>
+
     <script src="../node_modules/angular-dynamic-locale/dist/tmhDynamicLocale.min.js"></script>
+
     <script src="../node_modules/leaflet/dist/leaflet.js"></script>
 
     <script src="../node_modules/angular-leaflet-directive/dist/angular-leaflet-directive.min.js"></script>
-      <!-- <script src="../bower_components/screenfull/dist/screenfull.js"></script> -->
-      <script src="../node_modules/angular-screenfull/dist/angular-screenfull.min.js"></script>
-
-      <script src="../node_modules/angular-toggle-switch/angular-toggle-switch.min.js"></script>
-
-      <script src="../node_modules/angular-bootstrap-colorpicker/js/bootstrap-colorpicker-module.min.js"></script>
-
-      <script src="../node_modules/angular-file-upload/dist/angular-file-upload.min.js"></script>
-      <script src="../node_modules/angular-cron-jobs/dist/angular-cron-jobs.min.js"></script>
-
-    <script src="../node_modules/angular-nvd3/dist/angular-nvd3.min.js"></script>
-
-
-    <script src="../node_modules/angular-ui-tree/dist/angular-ui-tree.min.js"></script>
-
-    <!-- <script src="../node_modules/jquery-ui/jquery-ui.js"></script> -->
-
-
-
-    <script src="../node_modules/underscore/underscore-min.js"></script>
-
-
-    <script src="../node_modules/moment/min/moment-with-locales.min.js"></script>
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
     <script src="assets/spatial/ol.min.js"></script>
     <script src="assets/spatial/ol_custom_controls.js"></script>
@@ -115,7 +106,10 @@ copy of the GNU General Public License along with the IFDM Suite. If not, see <h
 
     <script src="../node_modules/ng-csv/build/ng-csv.min.js"></script>
 
+    <script src="../node_modules/jquery.fancytree/dist/jquery.fancytree-all-deps.min.js"></script>
 
+    <script src="../node_modules/jquery-contextmenu/dist/jquery.ui.position.min.js"></script>
+    <script src="../node_modules/jquery-contextmenu/dist/jquery.contextMenu.min.js"></script>
 
     <script src="../node_modules/mustache/mustache.min.js"></script>
 
@@ -124,19 +118,29 @@ copy of the GNU General Public License along with the IFDM Suite. If not, see <h
     <script src="../node_modules/checklist-model/checklist-model.js"></script>
 
 
+    <!-- <script src="../bower_components/screenfull/dist/screenfull.js"></script> -->
 
+
+    <script src="../node_modules/angular-screenfull/dist/angular-screenfull.min.js"></script>
+
+    <script src="../node_modules/angular-toggle-switch/angular-toggle-switch.min.js"></script>
+
+    <script src="../node_modules/angular-bootstrap-colorpicker/js/bootstrap-colorpicker-module.min.js"></script>
+    <script src="../node_modules/angular-file-upload/dist/angular-file-upload.min.js"></script>
     <script src="../node_modules/file-saver/dist/FileSaver.min.js"></script>
-
-
-
+    <script src="../node_modules/angular-cron-jobs/dist/angular-cron-jobs.min.js"></script>
     <script src="../node_modules/d3/d3.min.js"></script>
 
     <script src="../node_modules/nvd3/build/nv.d3.min.js"></script>
-
-
+    <script src="../node_modules/angular-nvd3/dist/angular-nvd3.min.js"></script>
+    <script src="../node_modules/angular-ui-tree/dist/angular-ui-tree.min.js"></script>
     <script src="../node_modules/html2canvas/dist/html2canvas.min.js"></script>
-
     <script src="../node_modules/jspdf/dist/jspdf.min.js"></script>
+
+
+
+
+    <script src="../node_modules/angular-ui-bootstrap/ui-bootstrap.min.js"></script>
 
     <!-- USM -->
     <script src="../node_modules/angular-translate/dist/angular-translate.min.js"></script>
@@ -193,18 +197,12 @@ copy of the GNU General Public License along with the IFDM Suite. If not, see <h
     <!-- <script src="../bower_components/slick-carousel/slick/slick.js"></script> -->
 
     <script src="../node_modules/angular-slick-carousel/dist/angular-slick.min.js"></script>
-
-
-
-    <script src="assets/highlight/highlight.pack.js"></script>
-
-    <!-- REPLACES <script src="../node_modules/vkbeautify/index.js"></script> which is not available as a npm package and
+        <!-- REPLACES <script src="../node_modules/vkbeautify/index.js"></script> which is not available as a npm package and
     repo does not have a package.json -->
     <script src="assets/vkBeautify/index.js"></script>
 
-
+    <script src="assets/highlight/highlight.pack.js"></script>
     <script src="../node_modules/angular-highlightjs/angular-highlightjs.min.js"></script>
-
     <script src="../node_modules/angular-filter/dist/angular-filter.min.js"></script>
     <!-- Add New Bower Component JS Above -->
 

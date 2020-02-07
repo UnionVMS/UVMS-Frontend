@@ -143,12 +143,12 @@ var OrganisationsDetailsPage = function () {
     //PANEL OF ENDPOINT MANAGEMENT - END
 
     //TABLE methods and elements
-    this.endpointTable = $$('.table');
-    this.endpointTableRows = $$('.table tbody tr');
-    this.endpointTableResultsRows = $$('.table tbody.table-bordered tr');
+    this.endpointTable = $('.table');
+    this.endpointTableRows = $('.table tbody tr');
+    this.endpointTableResultsRows = $('.table tbody.table-bordered tr');
 
     this.clickDetailButton = function(rowIndex) {
-        this.getTableRows().get(rowIndex).$$('td button').click();
+        this.getTableRows().get(rowIndex).$('td button').click();
     };
 
     this.getTable = function () {
@@ -164,21 +164,21 @@ var OrganisationsDetailsPage = function () {
     };
 
     this.getDetailButton = function(rowIndex) {
-        return this.getTableRow(rowIndex).$$('td button');
+        return this.getTableRow(rowIndex).$('td button');
     };
 
     this.clickDetailViewButton = function(rowIndex) {
-		this.getTableRows().get(rowIndex).$$('td button').get(1).click(); //The view details button occupies the second position in the table		
+		this.getTableRows().get(rowIndex).$('td button').get(1).click(); //The view details button occupies the second position in the table
 		/*var row = this.getTableRow(rowIndex);
 		browser.waitForAngular();
-		var cols = row.$$('td button');
+		var cols = row.$('td button');
 		cols.get(1).click();
 		*/
         //browser.wait(EC.visibilityOf(this.detailsSpanRole), 10000);
     };
 
     this.getElementTable = function(rowIndex,columnIndex) {
-        this.getTableRows().get(rowIndex).$$('td').get(columnIndex).getText(); //To read the element in a position in the table
+        this.getTableRows().get(rowIndex).$('td').get(columnIndex).getText(); //To read the element in a position in the table
     };
 
     this.clickContactTab = function () {
@@ -188,7 +188,7 @@ var OrganisationsDetailsPage = function () {
         this.newEndpointButton.click();
     };
 
-    this.clickEditEndpointButton = function () {		
+    this.clickEditEndpointButton = function () {
         this.getEditEndpointButton().click();
     };
 

@@ -11,7 +11,7 @@ copy of the GNU General Public License along with the IFDM Suite. If not, see <h
  */
 var ApplicationsPage = function () {
     var EC = protractor.ExpectedConditions;
-    this.criteriaDropDowns = $$('button.dropdown-toggle');
+    this.criteriaDropDowns = $('button.dropdown-toggle');
 
     this.criteriaName = element(by.model('criteria.name'));
     this.criteriaParent = this.criteriaDropDowns.get(0);
@@ -43,7 +43,7 @@ var ApplicationsPage = function () {
     };
 
     //TABLE methods and elements
-    this.applicationsTableRows = $$('.table tbody tr');
+    this.applicationsTableRows = $('.table tbody tr');
 
     this.setCriteria = function (name, parent) {
         this.setCriteriaName(name);
@@ -70,11 +70,11 @@ var ApplicationsPage = function () {
     };
 
     this.getDetailButton = function(rowIndex) {
-        return this.getTableRows().get(rowIndex).$$('td button');
+        return this.getTableRows().get(rowIndex).$('td button');
     };
 
     this.clickDetailButton = function(rowIndex) {
-        this.getTableRows().get(rowIndex).$$('td button').click();
+        this.getTableRows().get(rowIndex).$('td button').click();
         browser.wait(EC.visibilityOf(this.detailsSpanApplication), 10000);
     };
 

@@ -25,13 +25,13 @@ var changesPage = function () {
     this.updateContactDetailsSaveButton = element(by.css('[value="Save"]'));
 
     //Variables of the table
-    this.changesTable = $$('.table');
-    this.changesTableRows = $$('.table tbody tr');
-	
-    this.changesTableResultsRows = $$('.table tbody.table-bordered tr');
+    this.changesTable = $('.table');
+    this.changesTableRows = $('.table tbody tr');
+
+    this.changesTableResultsRows = $('.table tbody.table-bordered tr');
 
     this.clickDetailButton = function(rowIndex) {
-		this.getTableRow(0).$$('td button').get(0).click();
+		this.getTableRow(0).$('td button').get(0).click();
     };
 
     this.clickApproveButton = function() {
@@ -43,7 +43,7 @@ var changesPage = function () {
                     deferred.fulfill(!isPresent);
                 });
             return deferred.promise;
-        });		
+        });
     };
 
     this.clickRejectButton = function() {
@@ -55,7 +55,7 @@ var changesPage = function () {
                     deferred.fulfill(!isPresent);
                 });
             return deferred.promise;
-        });		
+        });
     };
 
     this.getTable = function () {
@@ -71,11 +71,11 @@ var changesPage = function () {
     };
 
     this.getTableRowColumns = function(rowIndex) {
-        return this.getTableRows().get(rowIndex).$$('td');
+        return this.getTableRows().get(rowIndex).$('td');
     };
 
     this.getTableRowColumn = function(rowIndex, columnIndex) {
-        return this.getTableRows().get(rowIndex).$$('td').get(columnIndex);
+        return this.getTableRows().get(rowIndex).$('td').get(columnIndex);
     };
 
     this.getTableResultsRows = function () {
@@ -83,7 +83,7 @@ var changesPage = function () {
     };
 
     this.getDetailButton = function(rowIndex) {
-        return this.getTableRows().get(rowIndex).$$('td button');
+        return this.getTableRows().get(rowIndex).$('td button');
     };
 
     this.setUpdateContactDetailsPassword = function (value) {
@@ -95,7 +95,7 @@ var changesPage = function () {
         this.updateContactDetailsPhone.clear();
         this.updateContactDetailsPhone.sendKeys(value);
     };
-	
+
     this.clickUpdateContactDetailsSaveButton = function() {
         browser.wait(EC.elementToBeClickable(this.updateContactDetailsSaveButton), 10000);
         this.updateContactDetailsSaveButton.click();

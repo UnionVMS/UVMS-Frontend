@@ -11,7 +11,9 @@ copy of the GNU General Public License along with the IFDM Suite. If not, see <h
  */
 var unionvmsWebApp = angular.module('unionvmsWeb', [
     'ui.bootstrap',
+    'ui.bootstrap.tpls',
     'ui.utils',
+    'ui.event',
     'ngRoute',
     'ngAnimate',
     'ngResource',
@@ -36,7 +38,7 @@ var unionvmsWebApp = angular.module('unionvmsWeb', [
 	'widget.assetsInZone',
     'numberWidget',
     'unionvmsWeb.longPolling',
-    // 'qtip2',
+    'qtip2',
     'chart.js',
     'ngStorage',
     'debugConfig',
@@ -449,7 +451,7 @@ unionvmsWebApp.config(function($stateProvider, $compileProvider, tmhDynamicLocal
                     }
                 }
             },
-            onExit: function(loadingStatus,$$uibModalStack,spatialHelperService){
+            onExit: function(loadingStatus,$uibModalStack,spatialHelperService){
                 loadingStatus.resetState();
                 $uibModalStack.dismissAll();
                 angular.element('body').removeClass('modal-open');
@@ -733,7 +735,7 @@ unionvmsWebApp.run(function($log, $rootScope, $state, $timeout, errorService, us
     httpPendingRequestsService.setSkipList(['/translate/locale-', '.lang.json', '/rules/activity', '/ping']);
 
     $rootScope.safeApply = function(fn) {
-        var phase = $rootScope.$$phase;
+        var phase = $rootScope.$phase;
         if (phase === '$apply' || phase === '$digest') {
             if (fn && (typeof(fn) === 'function')) {
                 fn();

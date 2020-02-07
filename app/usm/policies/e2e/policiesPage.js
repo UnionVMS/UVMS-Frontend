@@ -11,16 +11,16 @@ copy of the GNU General Public License along with the IFDM Suite. If not, see <h
  */
 var PoliciesPage = function () {
     var EC = protractor.ExpectedConditions;
-    this.criteriaDropDowns = $$('button.dropdown-toggle');
+    this.criteriaDropDowns = $('button.dropdown-toggle');
     this.criteriaName = element(by.model('search.name'));
 	this.criteriaSubject = this.criteriaDropDowns.get(0);
     this.searchButton = element(by.id('searchButton'));
     this.modalEditButton = element(by.id('editButton')); //ng-click="editPolicy(policy)
     this.modalPolicyValue= element(by.model('policy.value'));
     this.modalSaveButton = element(by.buttonText('Save'));
-    this.policiesTable = $$('.table');
-    this.policiesTableRows = $$('.table tbody tr');
-    this.policiesTableResultsRows = $$('.table tbody.table-bordered tr');
+    this.policiesTable = $('.table');
+    this.policiesTableRows = $('.table tbody tr');
+    this.policiesTableResultsRows = $('.table tbody.table-bordered tr');
 
 
     this.policyName='';
@@ -81,7 +81,7 @@ var PoliciesPage = function () {
 	};
 
     this.getDetailButton = function(rowIndex) {
-		return this.getTableResultsRows().get(rowIndex).$$('td button');
+		return this.getTableResultsRows().get(rowIndex).$('td button');
     };
 
     this.clickDetailButton = function(rowIndex) {

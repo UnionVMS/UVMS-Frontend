@@ -62,9 +62,9 @@ var EndpointsChannelsPage = function () {
     //PANEL OF END POINTS DETAILS - End
 
     //TABLE methods and elements
-    //this.table = $$('.table');
-    //this.tableRows = $$('.table tbody tr');
-    //this.tableResultsRows = $$('.table tbody.table-bordered tr');
+    //this.table = $('.table');
+    //this.tableRows = $('.table tbody tr');
+    //this.tableResultsRows = $('.table tbody.table-bordered tr');
     //this.getTable = function () {
     //   return this.table;
     //};
@@ -75,7 +75,7 @@ var EndpointsChannelsPage = function () {
     //    return this.tableRows;
     //};
     //this.getElementTable = function(rowIndex,columnIndex) {
-    //    this.getTableRows().get(rowIndex).$$('td span').get(columnIndex).getText(); //To read the element in a position in the table
+    //    this.getTableRows().get(rowIndex).$('td span').get(columnIndex).getText(); //To read the element in a position in the table
     //};
 
     //TABS

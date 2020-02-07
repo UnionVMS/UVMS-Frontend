@@ -97,10 +97,10 @@ angular.module('unionvmsWeb').controller('PositionReportModalCtrl', function($sc
     $scope.init();
 });
 
-angular.module('unionvmsWeb').factory('PositionReportModal', function($$uibModal) {
+angular.module('unionvmsWeb').factory('PositionReportModal', function($uibModal) {
 
     var show = function(positionReport, positionReportGuid){
-        return $$uibModal.open({
+        return $uibModal.open({
             templateUrl: 'partial/movement/positionReportModal/positionReportModal.html',
             controller: 'PositionReportModalCtrl',
             size: 'lg',

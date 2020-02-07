@@ -33,7 +33,7 @@ describe('Application page', function() {
 
     var testRowsApplicationsTable = function (name, description, parent) {
         applicationsPage.getTableRows().each(function (row) {
-            var columns = row.$$('td');
+            var columns = row.$('td');
             expect(columns.get(0).getText()).toMatch(name);
             expect(columns.get(1).getText()).toMatch(description);
             expect(columns.get(2).getText()).toBe(parent);
@@ -67,19 +67,19 @@ describe('Application page', function() {
         applicationsPage.search("USM", "");
         testCountRowsTable();
         testRowsApplicationsTable(/USM/, /User Security Management Component/, '');
-        
+
 		// set the criteria and search by application parent name
         //applicationsPage.search("", "testJpaDaoApplicationName3");
         //testCountRowsTable();
         //testRowsApplicationsTable(/testJpa/, /Desciption for app testJpaDaoApplicationName/, 'testJpaDaoApplicationName3');
-        
+
 		// set the criteria and search by application name and application parent name
-        //applicationsPage.search("test", "testJpaDaoApplicationName3");        
-		//testCountRowsTable();        
+        //applicationsPage.search("test", "testJpaDaoApplicationName3");
+		//testCountRowsTable();
 		//testRowsApplicationsTable(/testJpaDaoApplicationName3_/, /Desciption for app testJpaDaoApplicationName/, 'testJpaDaoApplicationName3');
-		
+
         applicationsPage.clickDetailButton(0);
-        
+
 		applicationsPage.getDetailSpanRole().getText().then(function(text){
             //expect(text).toMatch(/testJpaDaoApplicationName3_/);
 			expect(text).toMatch(/USM/);
@@ -88,11 +88,11 @@ describe('Application page', function() {
 
     afterEach(function () {
 		loginPage.gotoHome();
-	
+
         // logout
         menuPage.clickLogOut();
 
 		browser.executeScript('window.sessionStorage.clear();');
-		browser.executeScript('window.localStorage.clear();');		
+		browser.executeScript('window.localStorage.clear();');
     });
 });

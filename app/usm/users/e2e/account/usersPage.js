@@ -51,29 +51,29 @@ var usersPage = function () {
     this.viewButton = element(by.id('viewButton'));
 
     //Variables of the table
-    this.usersTable = $$('.table');
-    this.usersTableRows = $$('.table tbody tr');
-	this.usersTableResultsRows = $$('.table tbody.table-bordered tr');
-	this.contextUserTab = $$('a:contains(Contexts)');
+    this.usersTable = $('.table');
+    this.usersTableRows = $('.table tbody tr');
+	this.usersTableResultsRows = $('.table tbody.table-bordered tr');
+	this.contextUserTab = $('a:contains(Contexts)');
 
     this.clickViewButton = function() {
-      //  return this.getTableRows().get(rowIndex).$$('td button');
+      //  return this.getTableRows().get(rowIndex).$('td button');
         this.viewButton.click();
     };
 
     this.clickDetailButton = function(rowIndex) {
-        this.getTableRows().get(rowIndex).$$('td button#viewUser').get(0).click();
+        this.getTableRows().get(rowIndex).$('td button#viewUser').get(0).click();
     };
 
 	this.clickOpenEditButton = function() {
 		browser.wait(EC.elementToBeClickable(this.openEditButton), 10000);
 		this.openEditButton.click();
 	};
-	
+
     this.clickEditButton = function() {
         browser.wait(EC.elementToBeClickable(this.editButton), 10000);
     	this.editButton.click();
-		
+
         browser.wait(function() {
             var deferred = protractor.promise.defer();
             element(by.id('btn-success')).isPresent()
@@ -81,14 +81,14 @@ var usersPage = function () {
                     deferred.fulfill(!isPresent);
                 });
             return deferred.promise;
-        });		
+        });
     };
 
     this.clickSaveButton = function() {
         browser.wait(EC.elementToBeClickable(this.saveButton), 10000);
 
         this.saveButton.click();
-		
+
         browser.wait(function() {
             var deferred = protractor.promise.defer();
             element(by.id('btn-success')).isPresent()
@@ -96,7 +96,7 @@ var usersPage = function () {
                     deferred.fulfill(!isPresent);
                 });
             return deferred.promise;
-        });		
+        });
     };
 
     this.getTable = function () {
@@ -116,11 +116,11 @@ var usersPage = function () {
     };
 
     this.getDetailButton = function(rowIndex) {
-        return this.getTableRows().get(rowIndex).$$('td button');
+        return this.getTableRows().get(rowIndex).$('td button');
     };
 
     this.clickUserViewButton = function(rowIndex) {
-        this.getTableResultsRows().get(rowIndex).$$('td:last-child span:last-child button').click();
+        this.getTableResultsRows().get(rowIndex).$('td:last-child span:last-child button').click();
         browser.wait(EC.visibilityOf(this.contextUserTab), 10000);
     };
 
@@ -204,12 +204,12 @@ var usersPage = function () {
     this.refreshPage = function () {
         return browser.navigate().refresh();
     };
-	
+
     this.clickDetailViewButton = function(rowIndex) {
-        this.getTableRows().get(rowIndex).$$('td button').get(1).click(); //The view details button occupies the second position in the table
+        this.getTableRows().get(rowIndex).$('td button').get(1).click(); //The view details button occupies the second position in the table
         //  browser.wait(EC.visibilityOf(this.detailsSpanRole), 10000);
     };
-	
+
 	this.clickContextTab = function() {
 		element(by.linkText('Contexts')).click();
 	};

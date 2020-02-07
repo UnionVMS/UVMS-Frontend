@@ -51,7 +51,7 @@ describe('User Contexts page', function() {
 
         // check the content of the serch results
         usersPage.getTableResultsRows().each(function (row) {
-            var columns = row.$$('td');
+            var columns = row.$('td');
             expect(columns.get(0).getText()).toMatch('vms_user*');
         });
     });
@@ -117,11 +117,11 @@ describe('User Contexts page', function() {
         //    console.log(rows.length);
         //});
 
-        //var grid2 = $$('.panel-default tbody tr');
+        //var grid2 = $('.panel-default tbody tr');
         //expect(grid2.count()).toBe(initial_rows_count);
 
         //grid.each(function(row) {
-        //   var rowElems = row.$$('td');
+        //   var rowElems = row.$('td');
         //   console.log(rowElems.count());
         //   expect(rowElems.count()).toBe(3);
         //   expect(rowElems.get(0).getText()).toMatch('/Col1$/');

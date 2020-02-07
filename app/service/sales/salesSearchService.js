@@ -107,25 +107,25 @@
 
         function getSavedSearches() {
             if (!savedSearches.loaded) {
-                $$getSavedSearches();
+                $getSavedSearches();
                 savedSearches.loaded = true;
             }
             return savedSearches.items;
         }
 
         function createNewSavedSearch(savedSearchGroup) {
-            return $$saveSearch(savedSearchGroup);
+            return $saveSearch(savedSearchGroup);
         }
 
         function updateSavedSearch(savedSearchGroup) {
-            return $$saveSearch(savedSearchGroup);
+            return $saveSearch(savedSearchGroup);
         }
 
         function deleteSavedSearch(savedSearchGroup) {
             var defer = $q.defer();
             salesRestService.deleteSavedSearch(savedSearchGroup).then(
                 function (deletedGroup) {
-                    $$getSavedSearches();
+                    $getSavedSearches();
                     defer.resolve(deletedGroup);
                 }, function (err) {
                     defer.reject(err);
@@ -150,10 +150,10 @@
         }
 
         ////////////////////////
-        function $$saveSearch(savedSearchGroup) {
+        function $saveSearch(savedSearchGroup) {
             var defer = $q.defer();
             salesRestService.saveSearch(savedSearchGroup).then(function () {
-                $$getSavedSearches();
+                $getSavedSearches();
                 defer.resolve();
             }, function (err) {
                 defer.reject(err);
@@ -161,7 +161,7 @@
             return defer.promise;
         }
 
-        function $$getSavedSearches() {
+        function $getSavedSearches() {
             salesRestService.getSavedSearches().then(function (groups) {
                 savedSearches.items = groups;
             }, function (err) {

@@ -32,12 +32,12 @@ var MenuPage = function () {
     this.logOut = element(by.linkText('Log out'))
 
     this.switchContext = this.userDropDown.element(by.linkText("Switch Context"));
-	
+
 //this.changePassword = this.userDropDown.element(by.linkText("Change Password"));
     this.changePassword = element(by.linkText("Change Password"));
 
 	this.username = element(by.binding('userName'));
-		
+
     //Buttons panel
     this.saveButton = element.all(by.buttonText('Save')).get(0); //Save button from the panel
     this.cancelButton = element(by.buttonText('Cancel')); //Cancel button from the panel
@@ -68,7 +68,7 @@ var MenuPage = function () {
     }
 
     this.selectedContext = $("#selectableContext b");
-    this.contextLinks = $$("#selectableContext a");
+    this.contextLinks = $("#selectableContext a");
 
     this.selectContext= function(context) {
         this.contextLinkElement(context).click();
@@ -156,11 +156,11 @@ var MenuPage = function () {
     };
 
     this.clickChangePassword = function () {
-		browser.wait(EC.elementToBeClickable(this.userDropDown), 2100);		
+		browser.wait(EC.elementToBeClickable(this.userDropDown), 2100);
         this.userDropDown.click().then(function() {
 //console.log("userDropDown clicked 3");
         });
-		
+
         browser.wait(EC.elementToBeClickable(this.changePassword), 10000);
         this.changePassword.click().then(function() {
             //console.log("changePassword clicked");
@@ -169,11 +169,11 @@ var MenuPage = function () {
     };
 
     this.clickUpdateContactDetails = function () {
-		browser.wait(EC.elementToBeClickable(this.userDropDown), 2100);		
+		browser.wait(EC.elementToBeClickable(this.userDropDown), 2100);
         this.userDropDown.click().then(function() {
 //console.log("userDropDown clicked 4");
         });
-		
+
         browser.wait(EC.elementToBeClickable(this.updateContactDetails), 10000);
         this.updateContactDetails.click().then(function() {
             browser.waitForAngular();
@@ -185,7 +185,7 @@ var MenuPage = function () {
         this.userDropDown.click().then(function() {
 //console.log("userDropDown clicked 5");
         });
-		
+
         browser.wait(EC.elementToBeClickable(this.changeSecurityQuestions), 10000);
         this.changeSecurityQuestions.click().then(function() {
             browser.waitForAngular();

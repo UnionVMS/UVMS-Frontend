@@ -13,7 +13,7 @@ var OrganisationsPage = function () {
     var EC = protractor.ExpectedConditions;
 
     //this.criteriaName = element(by.model('search.name'));
-    this.criteriaDropDowns = $$('button.dropdown-toggle');
+    this.criteriaDropDowns = $('button.dropdown-toggle');
     this.criteriaName = this.criteriaDropDowns.get(0);
     this.criteriaNation = this.criteriaDropDowns.get(1);
     this.criteriaStatus = this.criteriaDropDowns.get(2);
@@ -77,34 +77,34 @@ var OrganisationsPage = function () {
     };
 
     //TABLE methods and elements
-    this.organisationsTable = $$('.table');
-    this.organisationsTableRows = $$('.table tbody tr');
-    this.organisationsTableResultsRows = $$('.table tbody.table-bordered tr');
+    this.organisationsTable = $('.table');
+    this.organisationsTableRows = $('.table tbody tr');
+    this.organisationsTableResultsRows = $('.table tbody.table-bordered tr');
 
     this.clickDetailButton = function (rowIndex) {
-        this.getTableRows().get(rowIndex).$$('td button').click();
+        this.getTableRows().get(rowIndex).$('td button').click();
         //  browser.wait(EC.visibilityOf(this.detailsSpanRole), 10000);
     };
     this.clickDetailViewButton = function (rowIndex) {
-        //this.getTableRows().get(rowIndex).$$('td button').get(1).click(); //The view details button occupies the second position in the table
+        //this.getTableRows().get(rowIndex).$('td button').get(1).click(); //The view details button occupies the second position in the table
 		var row = this.getTableRows().get(rowIndex);
 		browser.waitForAngular();
-		var cols = row.$$('td button');
+		var cols = row.$('td button');
 		cols.get(1).click();
         //browser.wait(EC.visibilityOf(this.detailsSpanRole), 10000);
     };
 
     this.clickRowEditButton = function (rowIndex) {
-        this.getTableRows().get(rowIndex).$$('td button').get(0).click(); //The edit button occupies the first position in the table
+        this.getTableRows().get(rowIndex).$('td button').get(0).click(); //The edit button occupies the first position in the table
         //  browser.wait(EC.visibilityOf(this.detailsSpanRole), 10000);
     };
     this.clickRowDeleteButton = function (rowIndex) {
-        this.getTableRows().get(rowIndex).$$('td button').get(2).click(); //The delete button occupies the third position in the table
+        this.getTableRows().get(rowIndex).$('td button').get(2).click(); //The delete button occupies the third position in the table
         //  browser.wait(EC.visibilityOf(this.detailsSpanRole), 10000);
     };
 
     //Loading message
-    this.loadingMessage = $$('.table tbody.tr td');
+    this.loadingMessage = $('.table tbody.tr td');
 
     this.getLoadingMessage = function () {
         return this.loadingMessage.getText();
@@ -196,11 +196,11 @@ var OrganisationsPage = function () {
 
 
     this.getDetailButton = function (rowIndex) {
-        return this.getTableRows().get(rowIndex).$$('td button');
+        return this.getTableRows().get(rowIndex).$('td button');
     };
 
     this.clickDetailButton = function (rowIndex) {
-        this.getTableRows().get(rowIndex).$$('td button').click();
+        this.getTableRows().get(rowIndex).$('td button').click();
         // browser.wait(EC.visibilityOf(this.detailsSpanRole), 10000);
     };
 

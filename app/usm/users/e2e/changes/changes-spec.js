@@ -37,7 +37,7 @@ describe('User Changes page', function () {
         // check if policy 'review.contact.details.enabled' is 'true'. if 'false' enable it.
         policiesPage.search("review.contact.details.enabled", "Feature");
         policiesPage.getTableRows().each(function (row) {
-            var columns = row.$$('td');
+            var columns = row.$('td');
 
             columns.get(3).getText().then(function (value) {
                 if (value == 'false') {
@@ -59,7 +59,7 @@ describe('User Changes page', function () {
 
                 // get the index of the pending change
                 changesPage.getTableResultsRows().each(function (row, index) {
-                    var columns = row.$$('td');
+                    var columns = row.$('td');
                     columns.get(0).getText().then(function (username) {
                         if (username == userPendingChange) {
                             userPendingChangeExist = true;

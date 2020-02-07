@@ -55,7 +55,7 @@ describe('Change Password', function() {
 		*/
 
 		usersPage.getTableRows().each(function (row) {
-			var columns = row.$$('td');
+			var columns = row.$('td');
 
 			columns.get(0).getText().then(function (value) {
 				//console.log(user+" -> "+value);

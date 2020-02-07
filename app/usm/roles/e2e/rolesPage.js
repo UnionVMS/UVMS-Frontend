@@ -11,7 +11,7 @@ copy of the GNU General Public License along with the IFDM Suite. If not, see <h
  */
 var RolesPage = function () {
     var EC = protractor.ExpectedConditions;
-    this.criteriaDropDowns = $$('button.dropdown-toggle');
+    this.criteriaDropDowns = $('button.dropdown-toggle');
     this.criteriaRole = element(by.model('criteria.role'));
     this.criteriaApplication = this.criteriaDropDowns.get(0);
     this.criteriaStatus = this.criteriaDropDowns.get(1);
@@ -20,8 +20,8 @@ var RolesPage = function () {
     this.manageRoleSaveButton = element(by.buttonText("Save"));
     this.manageRoleDeleteButton = element(by.buttonText("Delete"));
     this.manageRoleConfirmButton = element(by.buttonText("Confirm"));
-    this.rolesTable = $$('.table');
-    this.rolesTableRows = $$('.table tbody tr');
+    this.rolesTable = $('.table');
+    this.rolesTableRows = $('.table tbody tr');
     this.detailsSpanRole = element(by.binding('roleDetails.name'));
     this.detailsSpanApplication = element(by.binding('roleDetails.application.name'));
 
@@ -96,7 +96,7 @@ var RolesPage = function () {
     };
 
     this.getDetailButton = function(rowIndex) {
-        return this.getTableRows().get(rowIndex).$$('td button');
+        return this.getTableRows().get(rowIndex).$('td button');
     };
 
     this.clickDetailButton = function(rowIndex) {
@@ -107,7 +107,7 @@ var RolesPage = function () {
 		//this.getDetailButton(rowIndex).get(1).click();
 		columns.get(1).click();
 
-        //this.getTableRows().get(rowIndex).$$('td button').click();
+        //this.getTableRows().get(rowIndex).$('td button').click();
         browser.wait(EC.visibilityOf(this.detailsSpanRole), 10000);
     };
 
@@ -176,11 +176,11 @@ var RolesPage = function () {
     };
 
     this.clickRowEditButton = function (rowIndex) {
-        this.getTableRows().get(rowIndex).$$('td button').get(0).click(); //The edit button occupies the first position in the table
+        this.getTableRows().get(rowIndex).$('td button').get(0).click(); //The edit button occupies the first position in the table
         //  browser.wait(EC.visibilityOf(this.detailsSpanRole), 10000);
     };
     this.clickRowDeleteButton = function (rowIndex) {
-        this.getTableRows().get(rowIndex).$$('td button').get(2).click(); //The delete button occupies the third position in the table
+        this.getTableRows().get(rowIndex).$('td button').get(2).click(); //The delete button occupies the third position in the table
         //  browser.wait(EC.visibilityOf(this.detailsSpanRole), 10000);
     };
 

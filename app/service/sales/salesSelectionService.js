@@ -22,7 +22,7 @@
 
         return service;
 
- 
+
 
         ////////////////////////////
 
@@ -61,30 +61,30 @@
         function checkItem(id, selected) {
             //export all and add one item
             if (selectAll && selected) {
-                $$removeFromList('exclude', id);
+                $removeFromList('exclude', id);
             } else if (selectAll && !selected) {
-                $$addToList('exclude', id);
+                $addToList('exclude', id);
             } else if (!selectAll && selected) {
-                $$addToList('include', id);
+                $addToList('include', id);
             } else if (!selectAll && !selected) {
-                $$removeFromList('include', id);
+                $removeFromList('include', id);
             }
         }
-        function $$removeFromList(listName, id) {
-            var list = $$getCorrectList(listName);
+        function $removeFromList(listName, id) {
+            var list = $getCorrectList(listName);
             $.each(list, function (index, tempId) {
                 if (id === tempId) {
                     list.splice(index, 1);
                 }
             });
         }
-        function $$addToList(listName, id) {
-            var list = $$getCorrectList(listName);
+        function $addToList(listName, id) {
+            var list = $getCorrectList(listName);
             if (list.indexOf(id) === -1) {
                 list.push(id);
             }
         }
-        function $$getCorrectList(listName) {
+        function $getCorrectList(listName) {
             if (listName === 'include') {
                 return toInclude;
             }
