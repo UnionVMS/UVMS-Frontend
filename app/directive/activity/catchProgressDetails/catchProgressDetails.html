@@ -30,7 +30,7 @@
                     <div class="{{graphClass}}" ng-if="data.unLoaded | hasData">
                         <div class="text-center">UNLOADED</div>
                         <nvd3 options="options" data="data.unLoaded"></nvd3>
-                        <div class="text-center">Total: {{data.grandUnloadedTotal}} {{unit}}</div>
+                        <div class="text-center">Total: -{{data.grandUnloadedTotal}} {{unit}}</div>
                     </div>
                     <div class="{{graphClass}} pie-container" ng-if="data.cumulative | hasData">
                         <nvd3 options="options" data="data.cumulative"></nvd3>

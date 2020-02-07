@@ -74,7 +74,11 @@ angular.module('unionvmsWeb').service('tripDataHelperService', function () {
                         if (angular.isDefined(item.unLoaded)) {
                             this.addCatchesToObject(catchSummary[2].landing, item.unLoaded);
                         }
-                    } else if (startingActivityTypes.indexOf(item.activityType) > -1 || operationActivityTypes.indexOf(item.activityType) > -1) {
+                    } else if (startingActivityTypes.indexOf(item.activityType) > -1){
+                        if(angular.equals({}, catchSummary[0].onBoard)){
+                            this.addCatchesToObject(catchSummary[0].onBoard, item.total);
+                        }
+                    } else if (operationActivityTypes.indexOf(item.activityType) > -1) {
                         this.addCatchesToObject(catchSummary[0].onBoard, item.total);
                     }
                 }
@@ -204,7 +208,12 @@ angular.module('unionvmsWeb').service('tripDataHelperService', function () {
                             this.addIfNotExists('LAN');
                             this.performTableCalculations(item.unLoaded, 'LAN');
                         }
-                    } else if (startingActivityTypes.indexOf(item.activityType) > -1 || operationActivityTypes.indexOf(item.activityType) > -1) {
+                    } else if (startingActivityTypes.indexOf(item.activityType) > -1) {
+                        if (this.tableHeaders.indexOf('CATCHES') === -1) {
+                            this.tableHeaders.push('CATCHES');
+                            this.performTableCalculations(item.total, 'CATCHES');
+                        }
+                    } else if (operationActivityTypes.indexOf(item.activityType) > -1) {
                         this.addIfNotExists('CATCHES');
                         this.performTableCalculations(item.total, 'CATCHES');
                     }
