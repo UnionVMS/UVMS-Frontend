@@ -9,7 +9,7 @@ the hope that it will be useful, but WITHOUT ANY WARRANTY; without even the impl
 FITNESS FOR A PARTICULAR PURPOSE.  See the GNU General Public License for more details. You should have received a
 copy of the GNU General Public License along with the IFDM Suite. If not, see <http://www.gnu.org/licenses/>.
  */
-angular.module('unionvmsWeb').controller('AlarmReportModalCtrl', function($scope, $log, $q, $timeout, $modalInstance, locale, alarm, options, GetListRequest, SearchResults, vesselRestService, dateTimeService, alarmRestService,  userService, configurationService, globalSettingsService, $filter, leafletData, alarmCsvService) {
+angular.module('unionvmsWeb').controller('AlarmReportModalCtrl', function($scope, $log, $q, $timeout, $uibModalInstance, locale, alarm, options, GetListRequest, SearchResults, vesselRestService, dateTimeService, alarmRestService,  userService, configurationService, globalSettingsService, $filter, leafletData, alarmCsvService) {
 
     //Number of items displayed on each page
     $scope.itemsByPage = 5;
@@ -40,8 +40,8 @@ angular.module('unionvmsWeb').controller('AlarmReportModalCtrl', function($scope
     $scope.speedUnit = globalSettingsService.getSpeedUnit();
 
     /* Needed to invalidate map size after initial resize. */
-    if ($modalInstance.rendered) {
-        $modalInstance.rendered.then(function() {
+    if ($uibModalInstance.rendered) {
+        $uibModalInstance.rendered.then(function() {
             return leafletData.getMap().then(function(map) {
                 $timeout(function() {
                     map.invalidateSize();
@@ -120,11 +120,11 @@ angular.module('unionvmsWeb').controller('AlarmReportModalCtrl', function($scope
     };
 
     $scope.closeModal = function() {
-        $modalInstance.close();
+        $uibModalInstance.close();
     };
 
     $scope.cancel = function() {
-        $modalInstance.dismiss();
+        $uibModalInstance.dismiss();
     };
 
     //Add a marker to the map and center map on the marker
@@ -367,10 +367,10 @@ angular.module('unionvmsWeb').controller('AlarmReportModalCtrl', function($scope
     $scope.init();
 });
 
-angular.module('unionvmsWeb').factory('AlarmReportModal', function($modal) {
+angular.module('unionvmsWeb').factory('AlarmReportModal', function($uibModal) {
     return {
         show: function(alarm, options) {
-            return $modal.open({
+            return $uibModal.open({
                 templateUrl: 'partial/alarms/alarmReportModal/alarmReportModal.html',
                 controller: 'AlarmReportModalCtrl',
                 windowClass : "alarmReportModal",

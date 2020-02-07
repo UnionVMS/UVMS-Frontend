@@ -9,20 +9,20 @@ the hope that it will be useful, but WITHOUT ANY WARRANTY; without even the impl
 FITNESS FOR A PARTICULAR PURPOSE.  See the GNU General Public License for more details. You should have received a
 copy of the GNU General Public License along with the IFDM Suite. If not, see <http://www.gnu.org/licenses/>.
 */
-angular.module('unionvmsWeb').controller('VesselfieldsetCtrl',function($scope, locale, $timeout, $modal, vesselRestService, GetListRequest, $filter){
+angular.module('unionvmsWeb').controller('VesselfieldsetCtrl',function($scope, locale, $timeout, $m$uibModalodal, vesselRestService, GetListRequest, $filter){
     $scope.selectedVesselMenu = 'SIMPLE';
     $scope.vesselSearchLoading = false;
     $scope.hasError = false;
     $scope.errorMessage = undefined;
-    
+
     $scope.isVesselMenuVisible = function(type){
         return $scope.selectedVesselMenu === type;
     };
-    
+
     $scope.toggleVesselMenuType = function(type){
         $scope.selectedVesselMenu = type;
     };
-    
+
     //Hide error message
     $scope.hideError = function(){
         $timeout(function(){
@@ -30,19 +30,19 @@ angular.module('unionvmsWeb').controller('VesselfieldsetCtrl',function($scope, l
             $scope.errorMessage = undefined;
         }, 5000);
     };
-    
+
     //CURRENT SELECTION TABLE
     $scope.vesselsSelectionTable = {};
-    
+
     //Table config
     $scope.vesselsSelectionByPage = 10;
-    
+
     $scope.vesselTable = {};
     $scope.vesselPagination = {
         vesselsByPage: 10,
         page: undefined
     };
-    
+
     //Check if vessel record was already added to the report current selection
     $scope.checkVesselIsSelected = function(vesselSrc){
         var response = false;
@@ -55,9 +55,9 @@ angular.module('unionvmsWeb').controller('VesselfieldsetCtrl',function($scope, l
         }
         return response;
     };
-    
+
     $scope.viewDetails = function(idx, source){
-        var modalInstance = $modal.open({
+        var modalInstance = $uibModal.open({
             templateUrl: 'partial/spatial/reportsPanel/reportForm/vesselFieldset/detailsModal/detailsModal.html',
             controller: 'DetailsmodalCtrl',
             size: '',
@@ -72,7 +72,7 @@ angular.module('unionvmsWeb').controller('VesselfieldsetCtrl',function($scope, l
                             //FIXME when getting details from asset history
                             //item.guid = $scope.shared.vessels[idx].eventHistory.eventId;
                         }
-                        
+
                         return item;
                     } else {
                     	idx = $scope.report.vesselsSelection.indexOf($scope.displayedRecordsSelection[idx]);
@@ -82,13 +82,13 @@ angular.module('unionvmsWeb').controller('VesselfieldsetCtrl',function($scope, l
             }
         });
     };
-    
+
     //Just for display purposes
     $scope.translateSelectionType = function(type){
         var searchString = 'spatial.reports_form_vessel_selection_type_' + type;
         return locale.getString(searchString);
     };
-    
+
     $scope.toggleVesselSelection = function(index){
     	$scope.reportBodyForm.$setDirty();
         var vessel = $scope.displayedRecords[index];
@@ -102,7 +102,7 @@ angular.module('unionvmsWeb').controller('VesselfieldsetCtrl',function($scope, l
                 var record = {
                     name: vessel.name
                 };
-                
+
                 if ($scope.shared.vesselSearchBy === 'asset'){
                     record.guid = vessel.eventHistory.eventId;
                     record.type = 'asset';
@@ -111,7 +111,7 @@ angular.module('unionvmsWeb').controller('VesselfieldsetCtrl',function($scope, l
                     record.user = vessel.user;
                     record.type = 'vgroup';
                 }
-                
+
                 $scope.report.vesselsSelection.push(record);
             }
         }else{
@@ -120,14 +120,14 @@ angular.module('unionvmsWeb').controller('VesselfieldsetCtrl',function($scope, l
             $scope.removeSelection(guid,$scope.report.vesselsSelection.indexOf(_.where($scope.report.vesselsSelection, {guid: guid})[0]));
         }
     };
-    
+
     $scope.searchVessels = function(){
         if ($scope.shared.searchVesselString !== ''){
             $scope.vesselSearchLoading = true;
             $scope.shared.vessels = [];
             var searchableFields = ['FLAG_STATE', 'EXTERNAL_MARKING', 'NAME', 'IRCS', 'CFR'];
             var getVesselListRequest = new GetListRequest($scope.vesselPagination.page, $scope.vesselPagination.vesselsByPage, false, []);
-            
+
             for (var i = 0; i < searchableFields.length; i++){
                 var searchString = $scope.shared.searchVesselString;
                 if (angular.isUndefined(searchString)){
@@ -137,11 +137,11 @@ angular.module('unionvmsWeb').controller('VesselfieldsetCtrl',function($scope, l
                 }
                 getVesselListRequest.addSearchCriteria(searchableFields[i], searchString);
             }
-            
+
             vesselRestService.getVesselList(getVesselListRequest).then(getVesselsSuccess, getVesselsError);
         }
     };
-    
+
     var getVesselsSuccess = function(response){
         $scope.vesselSearchLoading = false;
         $scope.shared.vessels = response.items;
@@ -168,14 +168,14 @@ angular.module('unionvmsWeb').controller('VesselfieldsetCtrl',function($scope, l
     var sortTableData = function(predicate, reverse){
         $scope.displayedRecords = $filter('orderBy')($scope.displayedRecords, predicate, reverse);
     };
-    
+
     var getVesselsError = function(error){
         $scope.vesselSearchLoading = false;
         $scope.hasError = true;
         $scope.errorMessage = locale.getString('spatial.reports_form_vessel_get_vessel_list_error');
         $scope.hideError();
     };
-    
+
     $scope.$watch('shared.vesselSearchBy', function(newVal, oldVal){
         if (angular.isDefined($scope.shared)){
             $scope.shared.searchVesselString = '';
@@ -183,13 +183,13 @@ angular.module('unionvmsWeb').controller('VesselfieldsetCtrl',function($scope, l
             $scope.shared.selectedVessels = 0;
             $scope.shared.vessels = [];
         }
-        
+
         if (newVal === 'vgroup'){
             $scope.vesselSearchLoading = true;
             vesselRestService.getVesselGroupsForUser().then(getVesselGroupsSuccess, getVesselsGroupError);
         }
     });
-    
+
     $scope.buildGroupRecords = function(data){
         var records = [];
         for (var i = 0; i < data.length; i++){
@@ -199,23 +199,23 @@ angular.module('unionvmsWeb').controller('VesselfieldsetCtrl',function($scope, l
                 user: data[i].user
             });
         }
-        
+
         return records;
     };
-    
+
     var getVesselGroupsSuccess = function(response){
         $scope.vesselSearchLoading = false;
         $scope.shared.vessels = $scope.buildGroupRecords(response);
         $scope.displayedRecords = [].concat($scope.shared.vessels);
     };
-    
+
     var getVesselsGroupError = function(error){
         $scope.vesselSearchLoading = false;
         $scope.hasError = true;
         $scope.errorMessage = locale.getString('spatial.reports_form_vessel_get_vgroup_list_error');
         $scope.hideError();
     };
-    
+
     $scope.removeSelections = function(){
         $scope.reportBodyForm.$setDirty();
         angular.forEach($scope.shared.vessels, function(item){
@@ -231,9 +231,9 @@ angular.module('unionvmsWeb').controller('VesselfieldsetCtrl',function($scope, l
                 item.selected = true;
             }
         });
-        
+
     };
-    
+
     $scope.removeSelection = function(guid,index){
         $scope.reportBodyForm.$setDirty();
         $scope.report.vesselsSelection.splice(index,1);
@@ -272,5 +272,5 @@ angular.module('unionvmsWeb').controller('VesselfieldsetCtrl',function($scope, l
             return _.where($scope.report.vesselsSelection, {type: type}).length;
         }
     };
-    
+
 });

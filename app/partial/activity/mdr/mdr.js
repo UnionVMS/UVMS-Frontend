@@ -19,9 +19,9 @@ copy of the GNU General Public License along with the IFDM Suite. If not, see <h
    * @param loadingStatus {service}
    * @param locale {service}
    * @param alertService {service}
-   * @param $modal {service}
+   * @param $uibModal {service}
    */
-angular.module('unionvmsWeb').controller('MdrCtrl',function($scope, mdrRestService, loadingStatus, locale, alertService, $modal, userService){
+angular.module('unionvmsWeb').controller('MdrCtrl',function($scope, mdrRestService, loadingStatus, locale, alertService, $uibModal, userService){
 
     /**
      * @property {Object} cronWidgetConfig is a configuration object, used by the angularjs-cron-plugin
@@ -58,7 +58,7 @@ angular.module('unionvmsWeb').controller('MdrCtrl',function($scope, mdrRestServi
      * @property {Boolean} tableLoading is a flag defining whether we need to show the loading icon.
      */
     $scope.tableLoading = true;
-    
+
     /**
      * @property {Boolean} selectedAll is a flag defining whether all mdr code lists have been selected or not
      */
@@ -279,7 +279,7 @@ angular.module('unionvmsWeb').controller('MdrCtrl',function($scope, mdrRestServi
      * @param {String} acronym - is the MDR code list acronym
      */
 	$scope.openCodeListModal = function(acronym) {
-        var modalInstance = $modal.open({
+        var modalInstance = $uibModal.open({
             templateUrl: 'partial/activity/mdr/codeList/mdrCodeList.html',
             controller: 'MdrcodelistCtrl',
             size: 'lg',
@@ -350,7 +350,7 @@ angular.module('unionvmsWeb').controller('MdrCtrl',function($scope, mdrRestServi
             if($scope.hasStartValidity){
                 $scope.numValidityColumns++;
             }
-            
+
             if($scope.hasEndValidity){
                 $scope.numValidityColumns++;
             }

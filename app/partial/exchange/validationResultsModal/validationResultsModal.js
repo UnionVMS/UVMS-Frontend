@@ -9,13 +9,13 @@ the hope that it will be useful, but WITHOUT ANY WARRANTY; without even the impl
 FITNESS FOR A PARTICULAR PURPOSE.  See the GNU General Public License for more details. You should have received a
 copy of the GNU General Public License along with the IFDM Suite. If not, see <http://www.gnu.org/licenses/>.
 */
-angular.module('unionvmsWeb').controller('ValidationresultsmodalCtrl',function($scope, $modalInstance, $compile, $log, locale, $timeout, $interval, exchangeRestService, msgGuid){
+angular.module('unionvmsWeb').controller('ValidationresultsmodalCtrl',function($scope, $uibModalInstance, $compile, $log, locale, $timeout, $interval, exchangeRestService, msgGuid){
     $scope.isTableVisible = true;
     $scope.validationResults = [];
     $scope.isLoading = true;
     $scope.inValidXpath = false;
     $scope.isLoadingXml = true;
-    
+
     var init = function(){
         exchangeRestService.getValidationResults(msgGuid).then(function(response){
             $scope.validationResults = response.validationList;
@@ -28,7 +28,7 @@ angular.module('unionvmsWeb').controller('ValidationresultsmodalCtrl',function($
             $scope.errorMessage = locale.getString('exchange.get_validation_results_error');
         });
     };
-    
+
     var getSelectorPath = function(xpath){
         var regex = /(?:\[local\-name\(\)\=['"]([A-z1-9\-]+)['"]\](?:\)\[([1-9]+)+\])?)+/g;
         var xpathArr = xpath.split('\/\/\*');
@@ -91,7 +91,7 @@ angular.module('unionvmsWeb').controller('ValidationresultsmodalCtrl',function($
                 }
 
             }
-            
+
         }
 
         return undefined;
@@ -225,7 +225,7 @@ angular.module('unionvmsWeb').controller('ValidationresultsmodalCtrl',function($
             $scope.togglePanelVisibility();
         }
     };
-    
+
     $scope.togglePanelVisibility = function(xpath){
         //Clear existing highlights
         if (!$scope.isTableVisible){
@@ -245,15 +245,15 @@ angular.module('unionvmsWeb').controller('ValidationresultsmodalCtrl',function($
             }, 1);
         }
     });
-    
+
     //Close modal
     $scope.cancel = function () {
         if (!$scope.isTableVisible){
             $scope.togglePanelVisibility();
         } else {
-            $modalInstance.dismiss('cancel');
+            $uibModalInstance.dismiss('cancel');
         }
     };
-    
+
     init();
 });

@@ -28,10 +28,10 @@ angular.module('unionvmsWeb').factory('alertModalService', function($timeout){
             }, 100);
         }
     };
-    
+
     return alertModalService;
 })
-.directive('alertModal', function($modal, $timeout, alertModalService) {
+.directive('alertModal', function($uibModal, $timeout, alertModalService) {
 	return {
 		restrict: 'E',
 		replace: true,
@@ -51,21 +51,21 @@ angular.module('unionvmsWeb').factory('alertModalService', function($timeout){
                 scope.displayMsg = undefined;
                 alertModalService.clearReference();
 		    };
-		    
-		    var modalCtrl = function ($scope, $modalInstance){
+
+		    var modalCtrl = function ($scope, $uibModalInstance){
 		        $scope.data = {
 		            msg: scope.displayMsg,
 		            type: scope.displayType,
 		            close: function(){
 		                resetModalStatus();
-		                $modalInstance.close();
+                        $uibModalInstance.close();
 		                delete scope.modalInstance;
 		            }
 		        };
 		    };
-		    
+
 		    scope.open = function(){
-		        scope.modalInstance = $modal.open({
+		        scope.modalInstance = $uibModal.open({
 	                templateUrl: 'directive/common/alertModal/alertModal.html',
 	                controller: modalCtrl,
 	                animation: true,
@@ -79,21 +79,21 @@ angular.module('unionvmsWeb').factory('alertModalService', function($timeout){
 	                    return scope.data;
 	                }
 	            });
-		        
+
 		        scope.modalInstance.rendered.then(function(){
 		            angular.element('.alert-modal-content').appendTo('#' + scope.targetElId);
-		            
+
 		            if (angular.isDefined(scope.sidePanelId)){
 		                alertModalService.setReference(scope.sidePanelId);
 		                alertModalService.setSize();
 		            }
 		        });
-		        
+
 		        scope.modalInstance.result.then(function(){
 		            resetModalStatus();
                     delete scope.modalInstance;
 		        });
-		        
+
 		        if (angular.isDefined(scope.timeout)){
                     $timeout(function(){
 						if(angular.isDefined(scope.modalInstance)){
@@ -103,7 +103,7 @@ angular.module('unionvmsWeb').factory('alertModalService', function($timeout){
                     }, parseInt(scope.timeout), true, scope.modalInstance);
                 }
 		    };
-		    
+
 		    scope.$watch('ngModel', function(newVal){
 		        if (newVal){
 		            scope.open();

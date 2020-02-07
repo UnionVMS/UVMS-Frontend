@@ -9,7 +9,7 @@ the hope that it will be useful, but WITHOUT ANY WARRANTY; without even the impl
 FITNESS FOR A PARTICULAR PURPOSE.  See the GNU General Public License for more details. You should have received a
 copy of the GNU General Public License along with the IFDM Suite. If not, see <http://www.gnu.org/licenses/>.
 */
-angular.module('unionvmsWeb').controller('SpatialCtrl',function(/*tripSummaryService, */$scope, locale, mapService, spatialHelperService, Report, reportRestService, reportFormService, reportService, $anchorScroll, userService, loadingStatus, $state, $localStorage, comboboxService, reportingNavigatorService, $compile, $modal, confirmationModal){
+angular.module('unionvmsWeb').controller('SpatialCtrl',function(/*tripSummaryService, */$scope, locale, mapService, spatialHelperService, Report, reportRestService, reportFormService, reportService, $anchorScroll, userService, loadingStatus, $state, $localStorage, comboboxService, reportingNavigatorService, $compile, $uibModal, confirmationModal){
     $scope.reports = [];
     $scope.executedReport = {};
     $scope.repServ = reportService;
@@ -20,34 +20,34 @@ angular.module('unionvmsWeb').controller('SpatialCtrl',function(/*tripSummarySer
     $scope.spatialHelper = spatialHelperService;
 
     $scope.repNav.clearNavigation();
-    
+
     //reset repServ
     $scope.repServ.clearVmsData();
-    
+
    locale.ready('spatial').then(function(){
  /*   reportingNavigatorService.goToView('tripsPanel','tripSummary');
       //tripSummaryService.openNewTrip('FRA-TRP-2016122102030');
       //tripSummaryService.openNewTrip('ESP-TRP-20160630000003');
       tripSummaryService.openNewTrip('MLT-TRP-20160630000001');
-      
+
       return;
 */
        loadingStatus.isLoading('InitialReporting', true);
-       
+
        //reset the map and remove references to it
        if (angular.isDefined(mapService.map)){
            mapService.map.setTarget(null);
            mapService.map = undefined;
        }
-       
+
        //reset report form service
        reportFormService.resetLiveView();
-       
+
        $scope.curState = $state.current.name;
        if($state.current.name === 'app.reporting-id'){
     	   $scope.spatialHelper.tbControl.newTab = false;
            $scope.repServ.isReportExecuting = true;
-           
+
            if(angular.isDefined($localStorage['report'+$state.params.id + '-' + $state.params.guid])){
                angular.copy($localStorage['report' + $state.params.id + '-' + $state.params.guid], reportFormService.liveView);
                var currentReport = new Report();
@@ -83,7 +83,7 @@ angular.module('unionvmsWeb').controller('SpatialCtrl',function(/*tripSummarySer
            }
        }
    });
-   
+
    var loadUserReportsList = function(){
        reportRestService.getReportsList().then(function(response){
            if(response.data.length){
@@ -98,11 +98,11 @@ angular.module('unionvmsWeb').controller('SpatialCtrl',function(/*tripSummarySer
            loadingStatus.isLoading('InitialReporting', false);
        });
    };
-   
+
    $scope.isAllowed = function(module, feature){
        return userService.isAllowed(feature, module, true);
    };
-   
+
    //Report filter definitions
    $scope.editReport = function(){
 	   $scope.repServ.isReportExecuting = true;
@@ -140,18 +140,18 @@ angular.module('unionvmsWeb').controller('SpatialCtrl',function(/*tripSummarySer
             $scope.repNav.goToView('reportsPanel','reportForm');
         }
    };
-   
+
    //Get Report Configs Success callback
    var getReportSuccess = function(response){
        var report = new Report();
        report = report.fromJson(response);
        reportFormService.liveView.originalReport = report;
-       
+
        reportFormService.liveView.currentReport = new Report();
        angular.copy(report, reportFormService.liveView.currentReport);
        $scope.loadReportEditing('EDIT-FROM-LIVEVIEW');
    };
-	   
+
    //Get Report Configs Failure callback
    var getReportError = function(error){
 	   $scope.repServ.isReportExecuting = false;
@@ -160,7 +160,7 @@ angular.module('unionvmsWeb').controller('SpatialCtrl',function(/*tripSummarySer
        $scope.repServ.hasAlert = true;
        $scope.repServ.message = locale.getString('spatial.error_entry_not_found');
    };
-   
+
    $scope.selectHistory = function(item){
         var report = angular.copy(item);
         delete report.code;
@@ -169,7 +169,7 @@ angular.module('unionvmsWeb').controller('SpatialCtrl',function(/*tripSummarySer
     };
 
     $scope.initComboHistory = function(comboId){
-        var comboFooter = angular.element('<div class="combo-history-footer col-md-12">' + 
+        var comboFooter = angular.element('<div class="combo-history-footer col-md-12">' +
                                             '<div class="row">' +
                                                 '<div class="footer-item" ng-click="openReportList($event)"' +
                                                 ' ng-class="{\'col-md-5\': isAllowed(\'Reporting\', \'CREATE_REPORT\'), \'col-md-12\': !isAllowed(\'Reporting\', \'CREATE_REPORT\')}">' +
@@ -209,17 +209,17 @@ angular.module('unionvmsWeb').controller('SpatialCtrl',function(/*tripSummarySer
             openReportsModal();
         }
 
-        
-        
+
+
     };
 
     var openReportsModal = function(){
         if (angular.isDefined($scope.repServ.autoRefreshInterval)){
             $scope.repServ.stopAutoRefreshInterval();
         }
-        
+
         $scope.repNav.addStateCallback($scope.openReportList);
-        var modalInstance = $modal.open({
+        var modalInstance = $uibModal.open({
             templateUrl: 'partial/spatial/reportsPanel/reportsListModal/reportsListModal.html',
             controller: 'ReportslistmodalCtrl',
             size: 'lg'
@@ -287,7 +287,7 @@ angular.module('unionvmsWeb').controller('SpatialCtrl',function(/*tripSummarySer
     };
 
     $scope.discardReport = function(action){
-        /*$modalStack.dismissAll();
+        /*$uibModalStack.dismissAll();
         angular.element('body').removeClass('alert-open');*/
         $scope.repServ.resetReport();
         reportFormService.resetLiveView();
@@ -309,7 +309,7 @@ angular.module('unionvmsWeb').controller('SpatialCtrl',function(/*tripSummarySer
         } else {
             angular.forEach(function(item) {
                 item.appendTo('body');
-            });              
+            });
         }
 	});*/
 

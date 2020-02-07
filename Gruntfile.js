@@ -42,7 +42,7 @@ module.exports = function (grunt) {
   //KARMA TEST FILES
   var karmaFiles = [
       '<%= dom_munger.data.appjs %>',
-      'bower_components/angular-mocks/angular-mocks.js',
+      'node_modules/angular-mocks/angular-mocks.js',
       'test/envConfigForTest.js',
       {pattern: 'environment/*.json', watched: true, included: false, served: true},
       {pattern: 'app/partial/**/*.html', watched: true, included: false, served: true}
@@ -176,7 +176,7 @@ module.exports = function (grunt) {
         options: {
             jshintrc: '.jshintrc',
             force: true,
-            ignores: ['protractor.conf.js', 'app/**/*-spec.js', 'app/assets/**/*.js', 'bower_components/**/*.js', 'app/**/e2e/*.js','app/**/e2e/**/*.js', 'node_modules/**/*.js']
+            ignores: ['protractor.conf.js', 'app/**/*-spec.js', 'app/assets/**/*.js', 'app/**/e2e/*.js','app/**/e2e/**/*.js', 'node_modules/**/*.js']
         },
         src: [createFolderGlobs('*.js')]
       }
@@ -209,7 +209,7 @@ module.exports = function (grunt) {
             url:    function(url) { return url.replace('app/', ''); }
 
         },
-        src: [createFolderGlobs('*.html'),'!index.html','!_SpecRunner.html','!app/bower_components/**/*.html' ],
+        src: [createFolderGlobs('*.html'),'!index.html','!_SpecRunner.html' ],
         dest: 'temp/templates.js'
       }
     },
@@ -217,7 +217,7 @@ module.exports = function (grunt) {
       dist: {
         files: [
             {
-                cwd: 'bower_components/',
+                cwd: 'node_modules/',
                 src: ['font-awesome/fonts/**'],
                 dest: 'dist/assets',
                 filter:'isFile',
@@ -226,12 +226,12 @@ module.exports = function (grunt) {
             {
                 expand:true,
                 flatten: true,
-                src: ['bower_components/bootstrap/fonts/*'],
+                src: ['node_modules/bootstrap/fonts/*'],
                 dest: 'dist/fonts/',
                 filter:'isFile'
             },
             {
-                cwd: 'bower_components/slick-carousel/slick/',
+                cwd: 'node_modules/angular-slick-carousel/',
                 src: ['ajax-loader.gif'],
                 dest: 'dist/',
                 expand: true
@@ -254,7 +254,7 @@ module.exports = function (grunt) {
             {
                 expand:true,
                 flatten: true,
-                src: ['bower_components/angular-i18n/*'],
+                src: ['node_modules/angular-i18n/*'],
                 dest: 'dist/assets/locales',
                 filter:'isFile'
             },
@@ -279,14 +279,14 @@ module.exports = function (grunt) {
       serve: {
         files: [
             {
-                cwd: 'bower_components/',
+                cwd: 'node_modules/',
                 src: ['font-awesome/fonts/**'],
                 dest: 'app/assets',
                 filter:'isFile',
                 expand:true
             },
             {
-                cwd: 'bower_components/angular-i18n/',
+                cwd: 'node_modules/angular-i18n/',
                 src: ['*.js'],
                 dest: 'app/assets/locales',
                 filter:'isFile',
@@ -570,7 +570,7 @@ module.exports = function (grunt) {
                 var files = [
                     {pattern: 'environment/*.json', watched: true, included: false, served: true},
                     '<%= dom_munger.data.appjs %>',
-                    'bower_components/angular-mocks/angular-mocks.js',
+                    'node_modules/angular-mocks/angular-mocks.js',
                     'test/envConfigForTest.js',
                     spec
                 ];

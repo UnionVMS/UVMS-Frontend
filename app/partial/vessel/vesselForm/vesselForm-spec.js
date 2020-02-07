@@ -58,8 +58,8 @@ describe('VesselFormCtrl', function() {
         };
 
         scope.vesselNoteValues = {
-            date : "1", 
-            activity : "1", 
+            date : "1",
+            activity : "1",
             source : "INTERNAL"
         };
 
@@ -98,8 +98,8 @@ describe('VesselFormCtrl', function() {
         deferred2.resolve([]);
 
         scope.vesselNoteValues = {
-            date : "1", 
-            activity : "1", 
+            date : "1",
+            activity : "1",
             source : "INTERNAL"
         };
 
@@ -333,8 +333,8 @@ describe('VesselFormCtrl', function() {
         expect(scope.vesselForm.$pristine).toBeTruthy();
     }));
 
-    it('viewHistoryDetails show open modal with history information', inject(function($rootScope, EventHistory, $modal) {
-        var modalSpy = spyOn($modal, "open");
+    it('viewHistoryDetails show open modal with history information', inject(function($rootScope, EventHistory, $uibModal) {
+        var modalSpy = spyOn($uibModal, "open");
 
         var historyItem = new EventHistory();
         //View history

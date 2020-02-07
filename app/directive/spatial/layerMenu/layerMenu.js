@@ -9,7 +9,7 @@ the hope that it will be useful, but WITHOUT ANY WARRANTY; without even the impl
 FITNESS FOR A PARTICULAR PURPOSE.  See the GNU General Public License for more details. You should have received a
 copy of the GNU General Public License along with the IFDM Suite. If not, see <http://www.gnu.org/licenses/>.
 */
-angular.module('unionvmsWeb').directive('layerMenu', function(locale, reportFormService, reportService, reportRestService, Report, $modal, loadingStatus, layerPanelService) {
+angular.module('unionvmsWeb').directive('layerMenu', function(locale, reportFormService, reportService, reportRestService, Report, $uibModal, loadingStatus, layerPanelService) {
 	return {
 		restrict: 'A',
 		//templateUrl: 'directive/spatial/layerMenu/layerMenu.html',
@@ -23,14 +23,14 @@ angular.module('unionvmsWeb').directive('layerMenu', function(locale, reportForm
 			scope.changeStyles = function(event){
                 var node = $.ui.fancytree.getNode(event.data.$trigger);
                 var input = $.contextMenu.getInputValues(event.data, event.data.$selected.data());
-                
+
                 if (node && node.data.mapLayer && input.hasOwnProperty('style')){
                     var def = node.data.contextItems[input.contextMenuKey];
                     var tileSource = node.data.mapLayer.getSource();
                     tileSource.updateParams( {'STYLES': input.style} );
-                    
+
                     var items = _.filter(node.data.contextItems, {radio: 'style'});
-                    
+
                     for (var i = 0; i < items.length; i++){
                         var status = false;
                         if (items[i].value === input.style){
@@ -38,24 +38,24 @@ angular.module('unionvmsWeb').directive('layerMenu', function(locale, reportForm
                         }
                         items[i].selected = status;
                     }
-                    
+
 					layerPanelService.reloadPanels();
                     //scope.$parent.$broadcast('reloadLegend');
                 }
             };
-			
+
 			//Change cql filters for user area groups layer
 			scope.changeFilters = function(event){
 			    var node = $.ui.fancytree.getNode(event.data.$trigger);
 			    var input =$.contextMenu.getInputValues(event.data, event.data.$selected.data());
-			    
+
 			    if (node && node.data.mapLayer && input.hasOwnProperty('filter')){
 			        var def = node.data.contextItems[input.contextMenuKey];
 			        var tileSource = node.data.mapLayer.getSource();
 			        tileSource.updateParams( {'cql_filter': def.cql} );
-			        
+
 			        var items = _.filter(node.data.contextItems, {radio: 'filter'});
-			        
+
 			        for (var i = 0; i < items.length; i++){
 			            var status = false;
 			            if (items[i].value === input.contextMenuKey){
@@ -70,7 +70,7 @@ angular.module('unionvmsWeb').directive('layerMenu', function(locale, reportForm
 				if ( !item.hasOwnProperty( 'radio' ) ) {
 					return;
 				}
-				
+
 				if (item.radio === 'style'){
 				    item.events = {
 	                    click: scope.changeStyles
@@ -81,15 +81,15 @@ angular.module('unionvmsWeb').directive('layerMenu', function(locale, reportForm
                     };
 				}
 			};
-			
+
 			scope.setupSettingsCallbak = function(item, node){
 			    item.callback = scope.openSettingsModal;
 			};
-			
+
 			scope.openSettingsModal = function(itemKey, opt){
                 var node = $.ui.fancytree.getNode(opt.$trigger);
                 var typeName = node.data.typeName;
-                
+
                 loadingStatus.isLoading('LiveviewMap', true, 2);
                 if (!angular.isDefined(reportFormService.liveView.currentReport)){
                     reportRestService.getReport(reportService.id).then(function(response){
@@ -108,14 +108,14 @@ angular.module('unionvmsWeb').directive('layerMenu', function(locale, reportForm
                     openModal(typeName);
                 }
             };
-            
+
             //Options modal
             var openModal = function(type){
                 if (angular.isDefined(reportService.autoRefreshInterval)){
                     reportService.stopAutoRefreshInterval();
                 }
-                
-                var modalInstance = $modal.open({
+
+                var modalInstance = $uibModal.open({
                     templateUrl: 'partial/spatial/reportsPanel/reportForm/mapConfigurationModal/mapConfigurationModal.html',
                     controller: 'MapconfigurationmodalCtrl',
                     size: 'lg',
@@ -129,12 +129,12 @@ angular.module('unionvmsWeb').directive('layerMenu', function(locale, reportForm
                                 referenceData: true,
                                 referenceDataType: type
                             };
-                            
+
                             return components;
                         }
                     }
                 });
-                
+
                 modalInstance.result.then(function(data){
                     if (!angular.equals(reportFormService.liveView.currentReport.currentMapConfig.mapConfiguration, data.mapSettings)){
                         reportFormService.liveView.currentReport.currentMapConfig.mapConfiguration = data.mapSettings;
@@ -167,16 +167,16 @@ angular.module('unionvmsWeb').directive('layerMenu', function(locale, reportForm
 						if ( !items.hasOwnProperty( rootProp ) ) {
 							continue;
 						}
-						
+
 						item = items[ rootProp ];
-						
+
 						if (rootProp === 'settingsMenu'){
 						    scope.setupSettingsCallbak(item, node);
 						} else {
 						    scope.setupRadioButton( item, node );
 						}
 					}
-					
+
 					var quit = {
 		                quitMenu: {
 		                    name: locale.getString('spatial.layer_tree_context_menu_quit_title'),

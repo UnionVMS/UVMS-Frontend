@@ -14,9 +14,9 @@ describe('ValidationresultsmodalCtrl', function () {
   beforeEach(module('unionvmsWeb'));
   beforeEach(function () {
 
-    modalInstanceSpy = jasmine.createSpyObj('$modalInstance', ['dismiss']);
+    modalInstanceSpy = jasmine.createSpyObj('$uibModalInstance', ['dismiss']);
     module(function ($provide) {
-      $provide.value('$modalInstance', modalInstanceSpy);
+      $provide.value('$uibModalInstance', modalInstanceSpy);
     });
     builMocks();
   });

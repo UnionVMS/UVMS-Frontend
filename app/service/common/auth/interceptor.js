@@ -263,7 +263,7 @@ angular.module('auth.interceptor', ['ngStorage','ui.bootstrap'])
 
                         var Retry = $injector.get('renewloginpanel');
                         var $http = $injector.get('$http');
-                        var $modalStack = $injector.get('$modalStack');
+                        var $uibModalStack = $injector.get('$uibModal');
 
                         return $timeout(angular.noop, 200).then(function () {
                             return Retry.show();
@@ -271,7 +271,7 @@ angular.module('auth.interceptor', ['ngStorage','ui.bootstrap'])
                             _log.log("retry request succeeded?");
                             unauth = false;
                             _log.debug($state.current);
-                            $modalStack.dismissAll();
+                            $uibModalStack.dismissAll();
                             $state.reload($state.current);
                             $state.go($state.current, {}, {reload: true});
                             if (rejection.config.headers[config.authHeader]) {
@@ -283,7 +283,7 @@ angular.module('auth.interceptor', ['ngStorage','ui.bootstrap'])
                                 $log.log("retry request failed?");
                                 unauth = true;
                                 userService.logout();
-                                $modalStack.dismissAll();
+                                $uibModalStack.dismissAll();
                                 $rootScope.$broadcast('authenticationNeeded');
                                 return $q.reject(rejection);
                             }

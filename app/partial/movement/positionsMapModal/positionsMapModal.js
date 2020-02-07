@@ -9,7 +9,7 @@ the hope that it will be useful, but WITHOUT ANY WARRANTY; without even the impl
 FITNESS FOR A PARTICULAR PURPOSE.  See the GNU General Public License for more details. You should have received a
 copy of the GNU General Public License along with the IFDM Suite. If not, see <http://www.gnu.org/licenses/>.
  */
-angular.module('unionvmsWeb').controller('positionsMapModalCtrl',function($scope, $modalInstance, locale, dateTimeService, leafletBoundsHelpers, positionReports){
+angular.module('unionvmsWeb').controller('positionsMapModalCtrl',function($scope, $uibModalInstance, locale, dateTimeService, leafletBoundsHelpers, positionReports){
     $scope.markers = {};
     $scope.bounds = {};
     $scope.center = {};
@@ -45,16 +45,16 @@ angular.module('unionvmsWeb').controller('positionsMapModalCtrl',function($scope
     };
 
     $scope.cancel = function() {
-        $modalInstance.dismiss();
+        $uibModalInstance.dismiss();
     };
 
     init();
 });
 
-angular.module('unionvmsWeb').factory('PositionsMapModal', function($modal) {
+angular.module('unionvmsWeb').factory('PositionsMapModal', function($$uibModal) {
     return {
         show: function(positionReports) {
-            return $modal.open({
+            return $$uibModal.open({
                 templateUrl: 'partial/movement/positionsMapModal/positionsMapModal.html',
                 controller: 'positionsMapModalCtrl',
                 backdrop: 'static', //will not close when clicking outside the modal window

@@ -14,7 +14,7 @@ copy of the GNU General Public License along with the IFDM Suite. If not, see <h
 
     var app = angular.module('unionvmsWeb');
 
-    app.controller('modalCommentCtrl', function($scope, $modalInstance, options, locale) {
+    app.controller('modalCommentCtrl', function($scope, $uibModalInstance, options, locale) {
         $scope.submitAttempted = false;
         $scope.comment = "";
         $scope.labels = {
@@ -27,19 +27,19 @@ copy of the GNU General Public License along with the IFDM Suite. If not, see <h
         $scope.save = function() {
             $scope.submitAttempted = true;
             if($scope.commentForm.$valid) {
-                $modalInstance.close($scope.comment);
+                $uibModalInstance.close($scope.comment);
             }
         };
 
         $scope.cancel = function() {
-            $modalInstance.dismiss();
+            $uibModalInstance.dismiss();
         };
     });
 
-    app.factory('modalComment', function($modal) {
+    app.factory('modalComment', function($uibModal) {
         return {
             open: function(callback, options) {
-                $modal.open({
+                $uibModal.open({
                     templateUrl: "service/common/modalComment/modalComment.html",
                     controller: "modalCommentCtrl",
                     backdrop: 'static', //will not close when clicking outside the modal window

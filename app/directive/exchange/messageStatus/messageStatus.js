@@ -9,7 +9,7 @@ the hope that it will be useful, but WITHOUT ANY WARRANTY; without even the impl
 FITNESS FOR A PARTICULAR PURPOSE.  See the GNU General Public License for more details. You should have received a
 copy of the GNU General Public License along with the IFDM Suite. If not, see <http://www.gnu.org/licenses/>.
 */
-angular.module('unionvmsWeb').directive('messageStatus', function(locale, $modal, exchangeRestService) {
+angular.module('unionvmsWeb').directive('messageStatus', function(locale, $uibModal, exchangeRestService) {
 	return {
 		restrict: 'E',
 		replace: true,
@@ -21,7 +21,7 @@ angular.module('unionvmsWeb').directive('messageStatus', function(locale, $modal
 		link: function(scope, element, attrs, fn) {
 		    scope.openModal = function(){
 		        if (scope.isClickable === true){
-		            var modalInstance = $modal.open({
+		            var modalInstance = $uibModal.open({
 		               templateUrl: 'partial/exchange/validationResultsModal/validationResultsModal.html',
 		               controller: 'ValidationresultsmodalCtrl',
 		               size: 'lg',

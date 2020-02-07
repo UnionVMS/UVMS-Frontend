@@ -9,22 +9,22 @@ the hope that it will be useful, but WITHOUT ANY WARRANTY; without even the impl
 FITNESS FOR A PARTICULAR PURPOSE.  See the GNU General Public License for more details. You should have received a
 copy of the GNU General Public License along with the IFDM Suite. If not, see <http://www.gnu.org/licenses/>.
 */
-angular.module('unionvmsWeb').controller('UploadareamodalCtrl',function($scope, $modalInstance, locale, FileUploader, projectionService, srcProjections, defaultProjection, $timeout){
+angular.module('unionvmsWeb').controller('UploadareamodalCtrl',function($scope, $uibModalInstance, locale, FileUploader, projectionService, srcProjections, defaultProjection, $timeout){
     $scope.hasError = false;
     $scope.hasWarning = false;
     $scope.errorMessage = undefined;
     $scope.isMulti = false;
-    
+
     $scope.uploader = new FileUploader();
     $scope.reader = new FileReader();
     $scope.srcProjections = srcProjections;
     $scope.projections = projectionService;
     $scope.defaultProjection = defaultProjection; //This is an array like [1, 'EPSG:4326']
-    
+
     if ($scope.projections.items.length > 0){
         $scope.selProjection = defaultProjection[0];
     }
-    
+
     //Uploader Filters and events
     $scope.uploader.filters.push({
        name: 'singleUpload',
@@ -35,13 +35,13 @@ angular.module('unionvmsWeb').controller('UploadareamodalCtrl',function($scope, 
            return item;
        }
     });
-    
+
     $scope.uploader.filters.push({
        name: 'fileExtension',
        fn: function(item){
            var supportedTypes = ['csv', 'txt', 'wkt'];
            var splitedItemName = item.name.split('.');
-           
+
            for (var i = 0; i < supportedTypes.length; i++){
                if (supportedTypes[i].toLowerCase() === splitedItemName[splitedItemName.length - 1].toLowerCase()){
                    return item;
@@ -49,7 +49,7 @@ angular.module('unionvmsWeb').controller('UploadareamodalCtrl',function($scope, 
            }
        }
     });
-    
+
     //Read uploaded file contents
     $scope.uploader.onAfterAddingFile = function(item) {
         $scope.isFileLoading = true;
@@ -61,7 +61,7 @@ angular.module('unionvmsWeb').controller('UploadareamodalCtrl',function($scope, 
             $scope.isFileLoading = false;
         }
     };
-    
+
     //Set intial status
     $scope.setStatus = function(){
         $scope.fileCommitted = false;
@@ -73,7 +73,7 @@ angular.module('unionvmsWeb').controller('UploadareamodalCtrl',function($scope, 
         }
     };
     $scope.setStatus();
-    
+
     //Reader events
     $scope.reader.onloadend = function(){
         $scope.fileContent =  $scope.reader.result;
@@ -81,29 +81,29 @@ angular.module('unionvmsWeb').controller('UploadareamodalCtrl',function($scope, 
         $scope.fileReadingSuccess = true;
         $scope.fileCommitted = true;
     };
-    
+
     //Format combobox
     $scope.format = 'csv';
     $scope.formatItems = [];
     $scope.formatItems.push({"text": locale.getString('areas.area_upload_modal_csv'), "code": "csv"});
     $scope.formatItems.push({"text": locale.getString('areas.area_upload_modal_wkt'), "code": "wkt"});
     //$scope.formatItems.push({"text": locale.getString('areas.area_upload_modal_gml'), "code": "gml"});
-    
+
     //CSV stuff
     $scope.containsFirstRow = false;
-    
+
     //CSV delimiters combobox
     $scope.delimiter = ',';
     $scope.delimiterItems = [];
     $scope.delimiterItems.push({"text": locale.getString('areas.area_upload_modal_comma'), "code": ","});
     $scope.delimiterItems.push({"text": locale.getString('areas.area_upload_modal_semicolon'), "code": ";"});
     $scope.delimiterItems.push({"text": locale.getString('areas.area_upload_modal_colon'), "code": ":"});
-    
+
     //CSV parser
     $scope.parseCSV = function(){
         var lines = $scope.fileContent.split('\n');
         var columns = lines[0].split($scope.delimiter).length;
-        
+
         var start = 0;
         var headers = [];
         if ($scope.containsFirstRow){
@@ -116,7 +116,7 @@ angular.module('unionvmsWeb').controller('UploadareamodalCtrl',function($scope, 
                 return;
             }
         }
-        
+
         var coords = [];
         for (var i = start; i < lines.length; i++){
             var currentLine = lines[i].split(new RegExp($scope.delimiter+'(?![^"]*"(?:(?:[^"]*"){2})*[^"]*$)'));
@@ -139,21 +139,21 @@ angular.module('unionvmsWeb').controller('UploadareamodalCtrl',function($scope, 
                 }
             }
         }
-        
+
         if (coords.length !== 0){
             //Lets validate if last pair of coordinates is the same as the first and if not we add it
             var firstCoord = coords[0];
             var lastCoord = coords[coords.length - 1];
             var diff = _.difference(firstCoord, lastCoord);
-            
+
             if (diff.length > 0){
                 coords.push(firstCoord);
             }
-            
+
             //Build geometry
             var geom = new ol.geom.Polygon();
             geom.setCoordinates([coords]);
-            
+
             if (geom.getArea() === 0){
                 $scope.errorMessage = locale.getString('areas.area_upload_modal_invalid_polygon');
                 $scope.setError();
@@ -168,7 +168,7 @@ angular.module('unionvmsWeb').controller('UploadareamodalCtrl',function($scope, 
             return;
         }
     };
-    
+
     //WKT Parser
     $scope.parseWKT = function(){
         $scope.isMulti = false;
@@ -177,13 +177,13 @@ angular.module('unionvmsWeb').controller('UploadareamodalCtrl',function($scope, 
             $scope.setError();
             return;
         }
-        
+
         if ($scope.fileContent.indexOf('MULTIPOLYGON') !== -1){
-            $scope.errorMessage = locale.getString('areas.area_upload_modal_wkt_no_multipolygon'); 
+            $scope.errorMessage = locale.getString('areas.area_upload_modal_wkt_no_multipolygon');
             $scope.setWarning();
             $scope.isMulti = true;
         }
-        
+
         if ($scope.isMulti){
             $timeout(function(){
                 return $scope.buildGeometryFromWKT();
@@ -192,25 +192,25 @@ angular.module('unionvmsWeb').controller('UploadareamodalCtrl',function($scope, 
             return $scope.buildGeometryFromWKT();
         }
     };
-    
+
     $scope.buildGeometryFromWKT = function(){
         var geomFormat = new ol.format.WKT();
         var srcProj = 'EPSG:' + $scope.projections.getProjectionEpsgById($scope.selProjection);
-        
+
         try {
             var geom = geomFormat.readGeometry($scope.fileContent, {
                 dataProjection: srcProj,
                 featureProjection: $scope.defaultProjection[1]
             });
-            
+
             if ($scope.isMulti){
                 geom = geom.getPolygon(0);
-                $modalInstance.close(geom);
+                $uibModalInstance.close(geom);
             }
-            
+
             var firstCoord = geom.getFirstCoordinate();
             var lastCoord = geom.getLastCoordinate();
-            
+
             if (geom.getArea() === 0){
                 $scope.errorMessage = locale.getString('areas.area_upload_modal_invalid_polygon');
                 $scope.setError();
@@ -226,10 +226,10 @@ angular.module('unionvmsWeb').controller('UploadareamodalCtrl',function($scope, 
         } catch (e) {
             $scope.errorMessage = locale.getString('areas.area_upload_modal_parsing_error_wkt');
             $scope.setError();
-            return; 
+            return;
         }
     };
-    
+
     //Check if selected projection differs from that of the map and, if so, warp it
     $scope.checkAndWarpGeometry = function(geom){
         var sourceProj = 'EPSG:' + $scope.projections.getProjectionEpsgById($scope.selProjection);
@@ -238,11 +238,11 @@ angular.module('unionvmsWeb').controller('UploadareamodalCtrl',function($scope, 
         }
         return geom;
     };
-    
+
     $scope.cancel = function () {
-        $modalInstance.dismiss('cancel');
+        $uibModalInstance.dismiss('cancel');
     };
-    
+
     $scope.upload = function(){
         $scope.uploaded = true;
         if ($scope.uploadAreaForm.$valid && $scope.fileCommitted && $scope.fileReadingSuccess){
@@ -252,34 +252,34 @@ angular.module('unionvmsWeb').controller('UploadareamodalCtrl',function($scope, 
             } else if ($scope.format === 'wkt'){
                 geom = $scope.parseWKT();
             }
-            
+
             if (angular.isDefined(geom)){
-                $modalInstance.close(geom);
+                $uibModalInstance.close(geom);
             }
         } else {
             $scope.setError();
             $scope.errorMessage = locale.getString('areas.area_upload_modal_form_errors');
         }
     };
-    
+
     //Error functions
     $scope.setError = function(){
         $scope.hasWarning = false;
         $scope.hasError = true;
         $scope.hideError();
     };
-    
+
     $scope.setWarning = function(){
         $scope.hasWarning = true;
         $scope.hasError = true;
         $scope.hideError();
     };
-    
+
     $scope.hideError = function(){
         $timeout(function(){
             $scope.hasError = false;
             $scope.hasWarning = false;
         }, 3000);
     };
-    
+
 });

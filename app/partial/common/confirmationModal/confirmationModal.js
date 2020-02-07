@@ -21,7 +21,7 @@ copy of the GNU General Public License along with the IFDM Suite. If not, see <h
         .factory('confirmationModal', ConfirmationModalFactory);
 
     /* @ngAnnotate */
-    function ConfirmationModalController($modalInstance, options, locale) {
+    function ConfirmationModalController($uibModalInstance, options, locale) {
         var vm = this;
         vm.confirm = confirm;
         vm.discard = options.discard ? confirm : undefined;
@@ -38,20 +38,20 @@ copy of the GNU General Public License along with the IFDM Suite. If not, see <h
         function confirm(discard) {
             vm.submitAttempted = true;
             if (!options.commentsEnabled || vm.commentForm.$valid) {
-                $modalInstance.close(vm.comment || discard);
+                $uibModalInstance.close(vm.comment || discard);
             }
         }
 
         function cancel() {
-            $modalInstance.dismiss();
+            $uibModalInstance.dismiss();
         }
     }
 
     /* @ngAnnotate */
-    function ConfirmationModalFactory($modal) {
+    function ConfirmationModalFactory($uibModal) {
 
         function openInstance(options) {
-            return $modal.open({
+            return $uibModal.open({
                 templateUrl: 'partial/common/confirmationModal/confirmationModal.html',
                 controller: 'confirmationModalCtrl',
                 controllerAs: 'modal',

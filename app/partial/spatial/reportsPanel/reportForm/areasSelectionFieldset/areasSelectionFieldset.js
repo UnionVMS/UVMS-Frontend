@@ -14,14 +14,14 @@ copy of the GNU General Public License along with the IFDM Suite. If not, see <h
  * @ngdoc controller
  * @name AreasselectionfieldsetCtrl
  * @param $scope {service} controller scope
- * @param $modalInstance {service} bootstrap modal service
+ * @param $uibModalInstance {service} bootstrap modal service
  * @param $interval {service} angular interval service
  * @param $timeout {service} angular timeout service
  * @param locale {service} angular locale service
  * @param mapReference {service} Service containing the reference of the map
  * @param loadingStatus {service} loading message service
  * @param genericMapService {service} generic map service <p>{@link unionvmsWeb.genericMapService}</p>
- * @param selectedAreas {Array} An array containing all report selected areas passed through the resolve function of the modalInstance 
+ * @param selectedAreas {Array} An array containing all report selected areas passed through the resolve function of the modalInstance
  * @param spatialRestService {service} Spatial REST API service
  * @param Area {service} Area model service
  * @param userService {service} USM user service
@@ -32,21 +32,21 @@ copy of the GNU General Public License along with the IFDM Suite. If not, see <h
  * @attr systemAreaTypes {Array} An array containing all available system area types (source data)
  * @attr systemItems {Array} An array containing the available system area types to be used in the system area selection combobox
  * @attr selectionType {Object} Selection type being used in both tabs (SYSTEM and USER). Possible values are: map and search. Default is <b>map</b>
- * @attr clickResults {Number} The total number of resuts returned by a click in the map. 
+ * @attr clickResults {Number} The total number of resuts returned by a click in the map.
  * @attr showWarning {Boolean} Whether there is a warning or not. Deafult is <b>false</b>
  * @attr warningMessage {String} The warning message to display. Default is <b>undefined</b>
  * @attr hasError {Boolean} Whether the warning is an error or not. Deafult is <b>false</b>
  * @attr searchString {String} The search string to search areas by properties. Default is <b>undefined</b>
- * @attr searchedAreas {Array} An array containing all the areas that were fetched by property search  
+ * @attr searchedAreas {Array} An array containing all the areas that were fetched by property search
  * @description
  *  The controller of the area selection fieldset used in the report form
  */
-angular.module('unionvmsWeb').controller('AreasselectionfieldsetCtrl',function($scope, /*$modalInstance,*/ $interval, $timeout, locale, mapReference, loadingStatus, genericMapService, /*selectedAreas,*/ spatialRestService, Area, userService, projectionService){
+angular.module('unionvmsWeb').controller('AreasselectionfieldsetCtrl',function($scope, /*$uibModalInstance,*/ $interval, $timeout, locale, mapReference, loadingStatus, genericMapService, /*selectedAreas,*/ spatialRestService, Area, userService, projectionService){
     mapReference.areaSelection = {};
-    
+
     /**
      * Initializing function that is called when the modal is opened
-     * 
+     *
      * @memberof AreasselectionfieldsetCtrl
      * @private
      */
@@ -68,17 +68,17 @@ angular.module('unionvmsWeb').controller('AreasselectionfieldsetCtrl',function($
         $scope.searchedAreas = [];
         $scope.displayedAreas = [].concat($scope.searchedAreas);
         $scope.itemsByPage = 5;
-        
+
         $scope.areaTabs = setTabs();
         setSystemItems();
         genericMapService.setMapBasicConfigs($scope.setMap);
     };
 
 
-    
+
     /**
      * Set the available tabs array
-     * 
+     *
      * @memberof AreasselectionfieldsetCtrl
      * @private
      * @returns {Array} An array with the tab definition objects
@@ -95,10 +95,10 @@ angular.module('unionvmsWeb').controller('AreasselectionfieldsetCtrl',function($
             }
         ];
     };
-    
+
     /**
      * Select a tab
-     * 
+     *
      * @memberof AreasselectionfieldsetCtrl
      * @public
      * @alias selectTab
@@ -112,7 +112,7 @@ angular.module('unionvmsWeb').controller('AreasselectionfieldsetCtrl',function($
             if (angular.isDefined($scope.sysAreaType)){
                 $scope.removeLayerByType($scope.sysAreaType);
             }
-            
+
             if (!angular.isDefined($scope.userAreaType)){
                 setUserAreaType();
             } else {
@@ -122,16 +122,16 @@ angular.module('unionvmsWeb').controller('AreasselectionfieldsetCtrl',function($
             if (angular.isDefined($scope.userAreaType)){
                 $scope.removeLayerByType($scope.userAreaType.typeName);
             }
-            
+
             if (angular.isDefined($scope.sysAreaType)){
                 lazyLoadWMSLayer();
             }
         }
     };
-    
+
     /**
      * Set the user area type layer definitions from Spatial REST API
-     * 
+     *
      * @memberof AreasselectionfieldsetCtrl
      * @private
      */
@@ -148,12 +148,12 @@ angular.module('unionvmsWeb').controller('AreasselectionfieldsetCtrl',function($
                 setWarning(true);
                 hideAlert();
             });
-        } 
+        }
     };
-    
+
     /**
      * Check if a tab is selected
-     * 
+     *
      * @memberof AreasselectionfieldsetCtrl
      * @public
      * @alias isTabSelected
@@ -163,10 +163,10 @@ angular.module('unionvmsWeb').controller('AreasselectionfieldsetCtrl',function($
     $scope.isTabSelected = function(tab){
         return $scope.selectedTab === tab;
     };
-    
+
     /**
-     * Set the source system areas array (systemAreaTypes) and the system areas combobox items (systemItems) 
-     * 
+     * Set the source system areas array (systemAreaTypes) and the system areas combobox items (systemItems)
+     *
      * @memberof AreasselectionfieldsetCtrl
      * @private
      */
@@ -187,7 +187,7 @@ angular.module('unionvmsWeb').controller('AreasselectionfieldsetCtrl',function($
             loadingStatus.isLoading('AreaSelectionFieldset',false);
         });
     };
-    
+
     $scope.$watch('sysAreaType', function(newVal, oldVal){
         if (angular.isDefined(newVal) && newVal !== oldVal){
             $scope.clickResults = 0;
@@ -196,17 +196,17 @@ angular.module('unionvmsWeb').controller('AreasselectionfieldsetCtrl',function($
             if ($scope.selectionType[$scope.selectedTab] === 'map'){
                 lazyLoadWMSLayer();
             }
-        } 
+        }
     });
-    
+
     $scope.$watch('selectionType.SYSTEM', function(newVal, oldVal){
         selectionTypeChange(newVal, oldVal);
     });
-    
+
     $scope.$watch('selectionType.USER', function(newVal, oldVal){
         selectionTypeChange(newVal, oldVal);
     });
-    
+
     /**
      * @memberof AreasselectionfieldsetCtrl
      * @private
@@ -220,10 +220,10 @@ angular.module('unionvmsWeb').controller('AreasselectionfieldsetCtrl',function($
             lazyLoadWMSLayer();
         }
     };
-    
+
     /**
      * Get full area definition for the selected system area type
-     * 
+     *
      * @memberof AreasselectionfieldsetCtrl
      * @public
      * @alias getFullDefForItem
@@ -239,10 +239,10 @@ angular.module('unionvmsWeb').controller('AreasselectionfieldsetCtrl',function($
         }
         return item;
     };
-    
+
     /**
      * Get area layer properties so that they can be used for the tooltips showing the area image
-     * 
+     *
      * @memberof AreasselectionfieldsetCtrl
      * @public
      * @alias getPropsForToolTip
@@ -252,9 +252,9 @@ angular.module('unionvmsWeb').controller('AreasselectionfieldsetCtrl',function($
         if ($scope.selectedTab === 'SYSTEM'){
             def = $scope.getFullDefForItem($scope.sysAreaType);
         } else {
-            def = $scope.userAreaType; 
+            def = $scope.userAreaType;
         }
-        
+
         if (angular.isDefined(def)){
             return {
                 url: def.serviceUrl,
@@ -266,10 +266,10 @@ angular.module('unionvmsWeb').controller('AreasselectionfieldsetCtrl',function($
             };
         }
     };
-    
+
     /**
      * Select areas by click on the map
-     * 
+     *
      * @memberof AreasselectionfieldsetCtrl
      * @public
      * @alias selectAreaFromMap
@@ -306,10 +306,10 @@ angular.module('unionvmsWeb').controller('AreasselectionfieldsetCtrl',function($
             loadingStatus.isLoading('AreaSelectionFieldset',false);
         });
     };
-    
+
     /**
      * Select area from table
-     * 
+     *
      * @memberof AreasselectionfieldsetCtrl
      * @public
      * @alias selectAreaFromTable
@@ -326,10 +326,10 @@ angular.module('unionvmsWeb').controller('AreasselectionfieldsetCtrl',function($
         }
         record.isSelected = !record.isSelected;
     };
-    
+
     /**
      * Select all areas from table
-     * 
+     *
      * @public
      * @alias selectAllAreasFromTable
      */
@@ -344,10 +344,10 @@ angular.module('unionvmsWeb').controller('AreasselectionfieldsetCtrl',function($
             }
         });
     };
-    
+
     /**
      * Search areas by properties
-     * 
+     *
      * @memberof AreasselectionfieldsetCtrl
      * @public
      * @alias searchByProps
@@ -365,7 +365,7 @@ angular.module('unionvmsWeb').controller('AreasselectionfieldsetCtrl',function($
             } else {
                 funcName = 'getUserAreasByFilter';
             }
-            
+
             spatialRestService[funcName](requestData).then(function(response){
                 $scope.searchedAreas = convertAreasResponse(response.data);
                 loadingStatus.isLoading('AreaSelectionFieldset',false);
@@ -377,10 +377,10 @@ angular.module('unionvmsWeb').controller('AreasselectionfieldsetCtrl',function($
             });
         }
     };
-    
+
     /**
      * Convert server data from search by properties into an array using the Area Model object
-     * 
+     *
      * @memberof AreasselectionfieldsetCtrl
      * @private
      * @param {Array} data - The server side array with area data
@@ -399,13 +399,13 @@ angular.module('unionvmsWeb').controller('AreasselectionfieldsetCtrl',function($
             area.isSelected = _.findIndex($scope.selectedAreas, {areaType: area.areaType, gid: area.gid}) === -1 ? false : true;
             areas.push(area);
         });
-        
-        return areas; 
+
+        return areas;
     };
-    
+
     /**
      * Clear search string and results
-     * 
+     *
      * @memberof AreasselectionfieldsetCtrl
      * @public
      * @alias clearSearchProps
@@ -414,10 +414,10 @@ angular.module('unionvmsWeb').controller('AreasselectionfieldsetCtrl',function($
         $scope.searchString = undefined;
         $scope.searchedAreas = [];
     };
-    
+
     /**
      * Check if an area is already selected
-     * 
+     *
      * @memberof AreasselectionfieldsetCtrl
      * @public
      * @alias checkAreaIsSelected
@@ -434,17 +434,17 @@ angular.module('unionvmsWeb').controller('AreasselectionfieldsetCtrl',function($
                 setWarning(false);
             }
         }
-        
+
         if ($scope.showWarning === true){
             hideAlert();
         }
-        
+
         return status;
     };
-    
+
     /**
      * Remove area from selection
-     * 
+     *
      * @memberof AreasselectionfieldsetCtrl
      * @public
      * @alias removeArea
@@ -453,23 +453,23 @@ angular.module('unionvmsWeb').controller('AreasselectionfieldsetCtrl',function($
      */
     $scope.removeArea = function(area, fromCard){
         var idx = _.findIndex($scope.selectedAreas, {gid: area.gid,areaType: area.areaType});
-        
+
         if (idx !== -1){
             $scope.reportBodyForm.$setDirty();
             $scope.selectedAreas.splice(idx, 1);
         }
-        
+
         if (fromCard){
             var rec = _.findWhere($scope.searchedAreas, {gid: area.gid, areaType: area.areaType});
             if (angular.isDefined(rec)){
                 rec.isSelected = false;
             }
-        } 
+        }
     };
-    
+
     /**
      * Remove all selected areas
-     * 
+     *
      * @memberof AreasselectionfieldsetCtrl
      * @public
      * @alias removeAllAreas
@@ -485,10 +485,10 @@ angular.module('unionvmsWeb').controller('AreasselectionfieldsetCtrl',function($
             });
         }
     };
-    
+
     /**
      * Go back to map visualization after displaying areas table on map click with multiple results
-     * 
+     *
      * @memberof AreasselectionfieldsetCtrl
      * @public
      * @alias goBackToMap
@@ -497,10 +497,10 @@ angular.module('unionvmsWeb').controller('AreasselectionfieldsetCtrl',function($
         $scope.clickResults = 0;
         lazyLoadWMSLayer();
     };
-    
+
     /**
      * Gets the tooltip to display the total number of selected areas
-     * 
+     *
      * @memberof AreasselectionfieldsetCtrl
      * @public
      * @alias getSelectionTip
@@ -510,10 +510,10 @@ angular.module('unionvmsWeb').controller('AreasselectionfieldsetCtrl',function($
     $scope.getSelectionTip = function(number){
         return number + ' ' + locale.getString('spatial.areas_selection_tooltip');
     };
-    
+
     /**
      * Set warning properties
-     * 
+     *
      * @memberof AreasselectionfieldsetCtrl
      * @private
      * @oaram {Boolean} True if the warning is an error, false if it is just a warning
@@ -522,10 +522,10 @@ angular.module('unionvmsWeb').controller('AreasselectionfieldsetCtrl',function($
         $scope.showWarning = true;
         $scope.hasError = isError;
     };
-    
+
     /**
      * Hide the error|warning alert row
-     * 
+     *
      * @memberof AreasselectionfieldsetCtrl
      * @private
      */
@@ -536,10 +536,10 @@ angular.module('unionvmsWeb').controller('AreasselectionfieldsetCtrl',function($
             $scope.warningMessage = undefined;
         }, 5000);
     };
-    
+
     /**
      * Set the map
-     * 
+     *
      * @memberof AreasselectionfieldsetCtrl
      * @private
      * @alias setMap
@@ -557,42 +557,42 @@ angular.module('unionvmsWeb').controller('AreasselectionfieldsetCtrl',function($
                 projObj = projectionService.getStaticProjMercator();
             }
         }
-        
+
         if(!angular.isDefined(projObj)){
             return;
         }
 
         var view = genericMapService.createView(projObj);
-        
+
         var controls = [];
         controls.push(new ol.control.Attribution({
             collapsible: false,
             collapsed: false
         }));
-        
+
         controls.push(genericMapService.createZoomCtrl()); //'ol-zoom-right-side'
-        
+
 //        controls.push(new ol.control.ResetLayerFilter({
 //            //controlClass: 'ol-resetCql-right-side',
 //            type: 'areamapservice',
 //            label: locale.getString('areas.map_tip_reset_layer_filter')
 //        }));
-        
+
         var interactions = genericMapService.createZoomInteractions();
         interactions = interactions.concat(genericMapService.createPanInteractions());
-        
+
         var map = new ol.Map({
             target: 'area-selection-map',
             controls: controls,
             interactions: interactions,
             logo: false
         });
-        
+
         map.setView(view);
         mapReference.areaSelection.map = map;
-        
+
         addBaseLayers();
-        
+
         var layers = map.getLayers();
         if (layers.getLength() > 1){
             var switcher = new ol.control.LayerSwitcher({
@@ -600,13 +600,13 @@ angular.module('unionvmsWeb').controller('AreasselectionfieldsetCtrl',function($
             });
             map.addControl(switcher);
         }
-        
+
         map.on('singleclick', function(evt){
             if ($scope.selectionType[$scope.selectedTab] === 'map' && (($scope.isTabSelected('SYSTEM') && angular.isDefined($scope.sysAreaType)) || ($scope.isTabSelected('USER') && angular.isDefined($scope.userAreaType)))){
                 var areaType = $scope.isTabSelected('SYSTEM') ? $scope.sysAreaType : $scope.userAreaType.typeName;
                 $scope.clickResults = 0;
                 var projection = map.getView().getProjection().getCode();
-                
+
                 var requestData = {
                     areaType: areaType,
                     isGeom: false,
@@ -622,10 +622,10 @@ angular.module('unionvmsWeb').controller('AreasselectionfieldsetCtrl',function($
             lazyLoadWMSLayer();
         }
     };
-    
+
     /**
      * Add base layer to the map
-     * 
+     *
      * @memberof AreasselectionfieldsetCtrl
      * @private
      */
@@ -649,10 +649,10 @@ angular.module('unionvmsWeb').controller('AreasselectionfieldsetCtrl',function($
             });
         }
     };
-    
+
     /**
      * Adds OpenStreeMap layer to the map
-     * 
+     *
      * @memberof AreasselectionfieldsetCtrl
      * @public
      * @alias addOSM
@@ -666,10 +666,10 @@ angular.module('unionvmsWeb').controller('AreasselectionfieldsetCtrl',function($
         layer.set('switchertype', 'base'); //Necessary for the layerswitcher control
         mapReference.areaSelection.map.addLayer(layer);
     };
-    
+
     /**
      * Adds BING layers to the map
-     * 
+     *
      * @memberof AreasselectionfieldsetCtrl
      * @public
      * @alias addBing
@@ -683,10 +683,10 @@ angular.module('unionvmsWeb').controller('AreasselectionfieldsetCtrl',function($
         layer.set('switchertype', 'base'); //Necessary for the layerswitcher control
         mapReference.areaSelection.map.addLayer(layer);
     };
-    
+
     /**
      * Adds generic WMS layer to the map.
-     * 
+     *
      * @memberof AreasselectionfieldsetCtrl
      * @public
      * @alias addWMS
@@ -700,19 +700,19 @@ angular.module('unionvmsWeb').controller('AreasselectionfieldsetCtrl',function($
         } else {
             config = genericMapService.getGenericLayerConfig(def, mapReference.areaSelection.map);
         }
-        
+
         var layer = genericMapService.defineWms(config);
-        
+
         if (isBaseLayer){
             layer.set('switchertype', 'base'); //Necessary for the layerswitcher control
         }
-        
+
         mapReference.areaSelection.map.addLayer(layer);
     };
-    
+
     /**
      * Stop the interval to add a WMS layer
-     * 
+     *
      * @memberof AreasselectionfieldsetCtrl
      * @private
      */
@@ -720,10 +720,10 @@ angular.module('unionvmsWeb').controller('AreasselectionfieldsetCtrl',function($
         $interval.cancel($scope.addWMSInterval);
         delete $scope.addWMSInterval;
     };
-    
+
     /**
      * Lazy load of WMS layers according to user selections. Used when user navigates from maps to tables and between tabs
-     * 
+     *
      * @memberof AreasselectionfieldsetCtrl
      * @private
      */
@@ -733,13 +733,13 @@ angular.module('unionvmsWeb').controller('AreasselectionfieldsetCtrl',function($
             item = $scope.getFullDefForItem($scope.sysAreaType);
             layerType = $scope.sysAreaType;
         }
-        
+
         if (angular.isDefined($scope.userAreaType) && $scope.isTabSelected('USER')){
             item = $scope.userAreaType;
             layerType = $scope.userAreaType.typeName;
         }
-        
-         
+
+
         if (angular.isDefined(item)){
             if (!angular.isDefined($scope.addWMSInterval)){
                 $scope.addWMSInterval = $interval(function(){
@@ -754,10 +754,10 @@ angular.module('unionvmsWeb').controller('AreasselectionfieldsetCtrl',function($
             }
         }
     };
-    
+
     /**
      * Remove layer from the map by type
-     * 
+     *
      * @memberof AreasselectionfieldsetCtrl
      * @public
      * @alias removeLayerByType
@@ -774,10 +774,10 @@ angular.module('unionvmsWeb').controller('AreasselectionfieldsetCtrl',function($
             }
         }
     };
-    
+
     /**
      * Update the counter and description displayed in the tooltip of the area selection counter
-     * 
+     *
      * @memberof AreasselectionfieldsetCtrl
      * @public
      * @alias updateCounterDescription

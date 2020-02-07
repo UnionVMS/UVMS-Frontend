@@ -20,7 +20,7 @@ copy of the GNU General Public License along with the IFDM Suite. If not, see <h
  * @description
  *  A reusable tile that will display pie charts
  */
-angular.module('unionvmsWeb').directive('catchProgressDetails', function(locale, $compile, $modal) {
+angular.module('unionvmsWeb').directive('catchProgressDetails', function(locale, $compile, $uibModal) {
 
     return {
         restrict: 'E',
@@ -50,7 +50,7 @@ angular.module('unionvmsWeb').directive('catchProgressDetails', function(locale,
                     pie: {
                         dispatch: {
                             elementClick: function(e){
-                                var modalInstance = $modal.open({
+                                var modalInstance =$uibModal.open({
                                     templateUrl: 'partial/activity/pieChartModal/pieChartModal.html',
                                     controller: 'PiechartmodalCtrl',
                                     size: 'md',

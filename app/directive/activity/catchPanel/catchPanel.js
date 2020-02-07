@@ -20,9 +20,9 @@ copy of the GNU General Public License along with the IFDM Suite. If not, see <h
  * @attr {Boolean} isLoading - Whether teh parent container is still loading or not
  * @attr {String} unit - The weight unit to be used for the directive
  * @description
- *  A reusable tile that will display two pie charts side-by-side, and optionally a table and caption for the input data 
+ *  A reusable tile that will display two pie charts side-by-side, and optionally a table and caption for the input data
  */
-angular.module('unionvmsWeb').directive('catchPanel', function($modal) {
+angular.module('unionvmsWeb').directive('catchPanel', function($uibModal) {
     return {
         restrict: 'E',
         replace: false,
@@ -52,7 +52,7 @@ angular.module('unionvmsWeb').directive('catchPanel', function($modal) {
                     pie: {
                         dispatch: {
                             elementClick: function(e){
-                                var modalInstance = $modal.open({
+                                var modalInstance =$uibModal.open({
                                     templateUrl: 'partial/activity/pieChartModal/pieChartModal.html',
                                     controller: 'PiechartmodalCtrl',
                                     size: 'md',

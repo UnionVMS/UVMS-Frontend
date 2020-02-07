@@ -27,7 +27,7 @@ copy of the GNU General Public License along with the IFDM Suite. If not, see <h
  * @description
  *  A service to deal with any kind of fishing activity operation (e.g. Departure, Arrival, ...)
  */
-angular.module('unionvmsWeb').factory('fishingActivityService', function(activityRestService, loadingStatus, mdrCacheService, locale, $filter, $state, tripSummaryService, reportingNavigatorService, tripReportsTimeline, unitConversionService,$compile, spatialHelperService, $modalStack, $q) {
+angular.module('unionvmsWeb').factory('fishingActivityService', function(activityRestService, loadingStatus, mdrCacheService, locale, $filter, $state, tripSummaryService, reportingNavigatorService, tripReportsTimeline, unitConversionService,$compile, spatialHelperService, $uibModalStack, $q) {
 
     var faServ = {
         activityData: {},
@@ -1282,7 +1282,7 @@ angular.module('unionvmsWeb').factory('fishingActivityService', function(activit
     faServ.locationClickCallback = function() {
         //TODO when we have it running with reports - mainly for hiding/showing stuff
         spatialHelperService.fromFAView = true;
-        $modalStack.dismissAll();
+        $uibModalStack.dismissAll();
         angular.element('body').removeClass('modal-open');
 
         reportingNavigatorService.goToView('liveViewPanel', 'mapPanel');

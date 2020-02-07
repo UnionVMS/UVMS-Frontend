@@ -229,8 +229,8 @@ userManagementApp.config(['$urlRouterProvider', '$stateProvider','$urlMatcherFac
 
 }]);
 
-userManagementApp.run(['$rootScope', '$location', '$log', '$http', '$localStorage', 'jwtHelper','$modalStack', '$cookies', '$translate', 'userService','authRouter',
-    function ($rootScope, $location, $log, $http, $localStorage, jwtHelper, $modalStack, $cookies, $translate, userService,authRouter) {
+userManagementApp.run(['$rootScope', '$location', '$log', '$http', '$localStorage', 'jwtHelper','$uibModalStack', '$cookies', '$translate', 'userService','authRouter',
+    function ($rootScope, $location, $log, $http, $localStorage, jwtHelper, $uibModalStack, $cookies, $translate, userService,authRouter) {
 
         $rootScope.safeApply = function (fn) {
             var phase = $rootScope.$$phase;
@@ -249,7 +249,7 @@ userManagementApp.run(['$rootScope', '$location', '$log', '$http', '$localStorag
 
 
         $rootScope.$on('event:loginRequired', function () {
-                $modalStack.dismissAll();
+                $uibModalStack.dismissAll();
                 //$location.path("login");
 
         });

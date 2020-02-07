@@ -9,7 +9,7 @@ the hope that it will be useful, but WITHOUT ANY WARRANTY; without even the impl
 FITNESS FOR A PARTICULAR PURPOSE.  See the GNU General Public License for more details. You should have received a
 copy of the GNU General Public License along with the IFDM Suite. If not, see <http://www.gnu.org/licenses/>.
 */
-angular.module('unionvmsWeb').controller('MapconfigurationmodalCtrl', function ($scope, $timeout, locale, reportConfigs, $modalInstance, SpatialConfig, reportService, spatialRestService, spatialConfigAlertService, $anchorScroll, $location, spatialConfigRestService, loadingStatus, displayComponents, PreferencesService) {
+angular.module('unionvmsWeb').controller('MapconfigurationmodalCtrl', function ($scope, $timeout, locale, reportConfigs, $uibModalInstance, SpatialConfig, reportService, spatialRestService, spatialConfigAlertService, $anchorScroll, $location, spatialConfigRestService, loadingStatus, displayComponents, PreferencesService) {
 	$scope.settingsLevel = 'report';
 	$scope.alert = spatialConfigAlertService;
 	$scope.alert.hasAlert = false;
@@ -19,16 +19,16 @@ angular.module('unionvmsWeb').controller('MapconfigurationmodalCtrl', function (
 	$scope.components = displayComponents;
 	$scope.prefService = PreferencesService;
 	var userConfig;
-	
-	$modalInstance.opened.then(function(){
+
+	$uibModalInstance.opened.then(function(){
 	    loadingStatus.isLoading('LiveviewMap', false);
 	});
-	
+
     $scope.cancel = function () {
-        $modalInstance.dismiss('cancel');
+        $uibModalInstance.dismiss('cancel');
         $scope.initialConfig = undefined;
     };
-    
+
     $scope.validate = function(){
         if(_.keys($scope.mapConfigurationForm.$error).length > 0 || angular.isDefined($scope.configModel.mapSettings.displayProjectionId) && !angular.isDefined($scope.configModel.mapSettings.coordinatesFormat)){
             $location.hash('mapConfigurationModal');
@@ -48,15 +48,15 @@ angular.module('unionvmsWeb').controller('MapconfigurationmodalCtrl', function (
 
     $scope.save = function () {
         if ($scope.validate()){
-            $modalInstance.close($scope.exportMapConfiguration());
+            $uibModalInstance.close($scope.exportMapConfiguration());
             $scope.initialConfig = undefined;
         }
     };
-    
+
     $scope.apply = function(){
         if ($scope.validate()){
             var rep = $scope.exportMapConfiguration();
-            $modalInstance.close(rep);
+            $uibModalInstance.close(rep);
             $scope.initialConfig = undefined;
         }
     };
@@ -67,7 +67,7 @@ angular.module('unionvmsWeb').controller('MapconfigurationmodalCtrl', function (
     	exported.mapSettings.spatialConnectId = $scope.initialConfig.spatialConnectId;
         return exported;
     };
-    
+
     var mergePreferences = function(){
     	if(!angular.isDefined($scope.initialConfig) || _.isEmpty($scope.initialConfig)){
 			$scope.configModel = new SpatialConfig();
@@ -90,7 +90,7 @@ angular.module('unionvmsWeb').controller('MapconfigurationmodalCtrl', function (
         		angular.copy(userConfig.stylesSettings.alarms, $scope.configModel.stylesSettings.alarms);
     		}
     	}
-    	
+
     	if(!angular.isDefined($scope.initialConfig) || !angular.isDefined($scope.initialConfig.layerSettings) || _.isEmpty($scope.initialConfig.layerSettings) || ((!angular.isDefined($scope.initialConfig.layerSettings.portLayers) || _.isEmpty($scope.initialConfig.layerSettings.portLayers)) &&
     			(!angular.isDefined($scope.initialConfig.layerSettings.areaLayers) || _.isEmpty($scope.initialConfig.layerSettings.areaLayers)) &&
     			(!angular.isDefined($scope.initialConfig.layerSettings.baseLayers) || _.isEmpty($scope.initialConfig.layerSettings.baseLayers)) &&
@@ -98,8 +98,8 @@ angular.module('unionvmsWeb').controller('MapconfigurationmodalCtrl', function (
     		$scope.configModel.layerSettings = {};
     		angular.copy(userConfig.layerSettings, $scope.configModel.layerSettings);
     	}
-    	if(!angular.isDefined($scope.initialConfig) || !angular.isDefined($scope.initialConfig.mapProjectionId) && 
-    			!angular.isDefined($scope.initialConfig.displayProjectionId) && !angular.isDefined($scope.initialConfig.coordinatesFormat) && 
+    	if(!angular.isDefined($scope.initialConfig) || !angular.isDefined($scope.initialConfig.mapProjectionId) &&
+    			!angular.isDefined($scope.initialConfig.displayProjectionId) && !angular.isDefined($scope.initialConfig.coordinatesFormat) &&
     			!angular.isDefined($scope.initialConfig.scaleBarUnits)){
     		$scope.configModel.mapSettings = {};
     		angular.copy(userConfig.mapSettings, $scope.configModel.mapSettings);
@@ -114,7 +114,7 @@ angular.module('unionvmsWeb').controller('MapconfigurationmodalCtrl', function (
     		angular.copy(userConfig.referenceDataSettings, $scope.configModel.referenceDataSettings);
     	}
     };
-    
+
     var getConfigsSuccess = function(response){
 	    var srcConfigObj = response;
 	    var model = new SpatialConfig();
@@ -124,7 +124,7 @@ angular.module('unionvmsWeb').controller('MapconfigurationmodalCtrl', function (
 		}
         loadingStatus.isLoading('Preferences',false);
 	};
-	
+
 	var getConfigsFailure = function(error){
 	    $anchorScroll();
 	    $scope.alert.hasAlert = true;
@@ -133,14 +133,14 @@ angular.module('unionvmsWeb').controller('MapconfigurationmodalCtrl', function (
 	    $scope.alert.hideAlert();
 	    loadingStatus.isLoading('Preferences',false);
 	};
-	
+
 	$scope.sortArray = function(data){
         var temp = _.clone(data);
         temp.sort();
-        
+
         return temp;
     };
-    
+
     var init = function(){
     	loadingStatus.isLoading('Preferences',true, 0);
     	$scope.configModel = new SpatialConfig();
@@ -158,7 +158,7 @@ angular.module('unionvmsWeb').controller('MapconfigurationmodalCtrl', function (
 			spatialConfigRestService.getUserConfigs(undefined,undefined,undefined,undefined,true).then(getConfigsSuccess, getConfigsFailure);
 		}
     };
-    
+
     init();
 });
 

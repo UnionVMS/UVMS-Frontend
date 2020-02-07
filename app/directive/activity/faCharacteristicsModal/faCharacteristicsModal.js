@@ -14,11 +14,11 @@ copy of the GNU General Public License along with the IFDM Suite. If not, see <h
  * @ngdoc directive
  * @name faCharacteristicsModal
  * @attr {Object} data - data for characteristics modal
- * @param $modalInstance {Service} angular service modalInstance
+ * @param $uibModalInstance {Service} angular service modalInstance
  * @description
  *  A reusable tile that will display the Characteristics
  */
-angular.module('unionvmsWeb').directive('faCharacteristicsModal', function($modal) {
+angular.module('unionvmsWeb').directive('faCharacteristicsModal', function($uibModal) {
     return {
         restrict: 'E',
         replace: false,
@@ -29,14 +29,14 @@ angular.module('unionvmsWeb').directive('faCharacteristicsModal', function($moda
         link: function(scope, element, attrs, fn) {
             /**
              * Opens the characteristics modal
-             * 
+             *
              * @memberof faCharacteristicsModal
              * @public
              * @alias openCharacteristicsModal
              * @returns modalData
              */
             scope.openCharacteristicsModal = function() {
-                var modalInstance = $modal.open({
+                var modalInstance = $uibModal.open({
                     templateUrl: 'directive/activity/faCharacteristicsModal/characteristicsModal/characteristicsModal.html',
                     controller: 'CharacteristicsModalCtrl',
                     size: 'md',

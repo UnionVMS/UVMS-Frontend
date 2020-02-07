@@ -232,15 +232,15 @@ rolesModule.controller('roleDetailsCtrl', ['$scope', '$stateParams', '$log', 'ro
 
     }]);
 
-rolesModule.controller('manageRoleCtrl', ['$scope', '$modal', '$log', 'rolesServices', 'userService',
-    function ($scope, $modal, $log, rolesServices, userService) {
+rolesModule.controller('manageRoleCtrl', ['$scope', '$uibModal', '$log', 'rolesServices', 'userService',
+    function ($scope, $uibModal, $log, rolesServices, userService) {
 
     $scope.checkAccess = function(feature) {
     	return userService.isAllowed(feature,"USM",true);
     };
 
         $scope.manageRole = function (mode, role) {
-            var modalInstance = $modal.open({
+            var modalInstance = $uibModal.open({
                 animation: true,
                 backdrop: 'static',
                 keyboard: true,
@@ -275,9 +275,9 @@ rolesModule.controller('manageRoleCtrl', ['$scope', '$modal', '$log', 'rolesServ
 
     }]);
 
-rolesModule.controller('rolesModalInstanceCtrl', ['$scope', '$modalInstance', '$log', '$timeout', '$location', 'refData', 'getApplications',
+rolesModule.controller('rolesModalInstanceCtrl', ['$scope', '$uibModalInstance', '$log', '$timeout', '$location', 'refData', 'getApplications',
     'rolesServices', 'mode', 'role', '$stateParams',
-    function ($scope, $modalInstance, $log, $timeout, $location, refData, getApplications, rolesServices, mode, role, $stateParams) {
+    function ($scope, $uibModalInstance, $log, $timeout, $location, refData, getApplications, rolesServices, mode, role, $stateParams) {
         var confirmCreate = false;
         $scope.mode = mode;
         $scope.actionMessage = "";
@@ -318,7 +318,7 @@ rolesModule.controller('rolesModalInstanceCtrl', ['$scope', '$modalInstance', '$
                         $scope.newRole = role;
                         $scope.roleCreated = true;
                         $timeout(function () {
-                            $modalInstance.close($scope.newRole);
+                            $uibModalInstance.close($scope.newRole);
                         }, 2000);
                     },
                     function (error) {
@@ -340,7 +340,7 @@ rolesModule.controller('rolesModalInstanceCtrl', ['$scope', '$modalInstance', '$
                             $scope.newRole = response.newRole;
                             $scope.roleCreated = true;
                             $timeout(function () {
-                                $modalInstance.close($scope.newRole);
+                                $uibModalInstance.close($scope.newRole);
                             }, 2000);
                         },
                         function (error) {
@@ -364,7 +364,7 @@ rolesModule.controller('rolesModalInstanceCtrl', ['$scope', '$modalInstance', '$
                             $scope.newRole = role;
                             $scope.roleCreated = true;
                             $timeout(function () {
-                                $modalInstance.close($scope.newRole);
+                                $uibModalInstance.close($scope.newRole);
                             }, 2000);
                         },
                         function (error) {
@@ -381,16 +381,16 @@ rolesModule.controller('rolesModalInstanceCtrl', ['$scope', '$modalInstance', '$
         };
 
         $scope.cancel = function () {
-            $modalInstance.dismiss();
+            $uibModalInstance.dismiss();
         };
 
     }]);
 
-rolesModule.controller('managePermissionCtrl', ['$scope', '$modal', '$log',
-    function ($scope, $modal, $log, $stateParams) {
+rolesModule.controller('managePermissionCtrl', ['$scope', '$uibModal', '$log',
+    function ($scope, $uibModal, $log, $stateParams) {
 
         $scope.managePermissions = function (roleDetails) {
-            var modalInstance = $modal.open({
+            var modalInstance = $uibModal.open({
                 animation: true,
                 backdrop: 'static',
                 keyboard: true,
@@ -421,9 +421,9 @@ rolesModule.controller('managePermissionCtrl', ['$scope', '$modal', '$log',
 
     }]);
 
-rolesModule.controller('permissionModalInstanceCtrl', ['$scope', '$modalInstance', '$log', '$timeout', '$location', 'refData', 'getApplications',
+rolesModule.controller('permissionModalInstanceCtrl', ['$scope', '$uibModalInstance', '$log', '$timeout', '$location', 'refData', 'getApplications',
     'permissionServices', 'roleDetails', '$stateParams', 'applicationsService', 'filterFilter', 'rolesServices', 'rolesCache',
-    function ($scope, $modalInstance, $log, $timeout, $location, refData, getApplications, permissionServices, roleDetails, $stateParams,
+    function ($scope, $uibModalInstance, $log, $timeout, $location, refData, getApplications, permissionServices, roleDetails, $stateParams,
               applicationsService, filterFilter, rolesServices, rolesCache) {
 
 
@@ -634,7 +634,7 @@ rolesModule.controller('permissionModalInstanceCtrl', ['$scope', '$modalInstance
                         $scope.newRole = response.newRole;
                         $scope.permissionsSaved = true;
                         $timeout(function () {
-                            $modalInstance.close($scope.newRole);
+                            $uibModalInstance.close($scope.newRole);
                         }, 2000);
                     },
                     function (error) {
@@ -650,7 +650,7 @@ rolesModule.controller('permissionModalInstanceCtrl', ['$scope', '$modalInstance
         };
 
         $scope.cancel = function () {
-            $modalInstance.dismiss();
+            $uibModalInstance.dismiss();
         };
 
     }]);

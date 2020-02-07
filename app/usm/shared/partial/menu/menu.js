@@ -119,9 +119,9 @@ sharedModule.controller('userMenuController', ['$log', 'selectContextPanel', 'au
 
     }]);
 
-sharedModule.controller('setMyPasswordModalInstanceCtrl', ['$state', '$log', '$timeout', '$scope', '$modalInstance', '$localStorage', '$stateParams',
+sharedModule.controller('setMyPasswordModalInstanceCtrl', ['$state', '$log', '$timeout', '$scope', '$uibModalInstance', '$localStorage', '$stateParams',
     'accountService', 'userService', 'expiredPwd',
-    function ($state, $log, $timeout, $scope, $modalInstance, $localStorage, $stateParams, accountService, userService, expiredPwd) {
+    function ($state, $log, $timeout, $scope, $uibModalInstance, $localStorage, $stateParams, accountService, userService, expiredPwd) {
 
         $scope.formDisabled = true;
         $scope.editForm = true;
@@ -154,10 +154,10 @@ sharedModule.controller('setMyPasswordModalInstanceCtrl', ['$state', '$log', '$t
         $scope.cancel = function () {
 			$log.log("changepasswordpanel Closed in controller");
             if (expiredPwd) {
-				$log.log("Password HAS to be changed and cannot be deferred, go back to login");	
+				$log.log("Password HAS to be changed and cannot be deferred, go back to login");
                 userService.logout();
 			}
-            $modalInstance.dismiss();
+            $uibModalInstance.dismiss();
         };
 
         // Transformation to submit object
@@ -181,7 +181,7 @@ sharedModule.controller('setMyPasswordModalInstanceCtrl', ['$state', '$log', '$t
                         $scope.actionMessage = "Password has been set";
 
                         $timeout(function () {
-                            $modalInstance.close(updatedUser);
+                            $uibModalInstance.close(updatedUser);
                         }, 2000);
                     },
                     function (error) {
@@ -196,8 +196,8 @@ sharedModule.controller('setMyPasswordModalInstanceCtrl', ['$state', '$log', '$t
 
     }]);
 
-sharedModule.controller('ModifyPassword', ['$log', '$scope', '$modal', '$stateParams',
-    function ($log, $scope, $modal, $stateParams) {
+sharedModule.controller('ModifyPassword', ['$log', '$scope', '$uibModal', '$stateParams',
+    function ($log, $scope, $uibModal, $stateParams) {
 
         $scope.modifyMyPassword = function () {
             $scope.passwordData = {
@@ -205,7 +205,7 @@ sharedModule.controller('ModifyPassword', ['$log', '$scope', '$modal', '$statePa
                 newPassword: "",
                 confirmPassword: ""
             };
-            var modalInstance = $modal.open({
+            var modalInstance = $uibModal.open({
                 animation: true,
                 backdrop: 'static',
                 keyboard: true,
@@ -241,17 +241,17 @@ sharedModule.controller('ModifyPassword', ['$log', '$scope', '$modal', '$statePa
         };
     }]);
 
-sharedModule.controller('WarningPassword', ['$log', '$scope', '$modal', '$stateParams',
-    function ($log, $scope, $modal, $stateParams) {
+sharedModule.controller('WarningPassword', ['$log', '$scope', '$uibModal', '$stateParams',
+    function ($log, $scope, $uibModal, $stateParams) {
 		$scope.expDays = $scope.expirationDays;
         $scope.messageDivClass = "alert alert-danger";
 		//$scope.actionMessage = "Password is about to expire in <strong>" + $scope.expDays + "</strong> days!";
 		$scope.actionMessage = "Password is about to expire in few days. Please change it";
     }]);
 
-sharedModule.controller('warningPasswordModalInstanceCtrl', ['$log', '$timeout', '$location', '$scope', '$modalInstance', '$localStorage', '$stateParams',
+sharedModule.controller('warningPasswordModalInstanceCtrl', ['$log', '$timeout', '$location', '$scope', '$uibModalInstance', '$localStorage', '$stateParams',
     'accountService', 'userService',
-    function ($log, $timeout, $location, $scope, $modalInstance, $localStorage, $stateParams, accountService, userService) {
+    function ($log, $timeout, $location, $scope, $uibModalInstance, $localStorage, $stateParams, accountService, userService) {
 
         $scope.formDisabled = true;
         $scope.editForm = true;
@@ -262,13 +262,13 @@ sharedModule.controller('warningPasswordModalInstanceCtrl', ['$log', '$timeout',
         $scope.showConfirmation = false;
 
         $scope.cancel = function () {
-            $modalInstance.dismiss();
+            $uibModalInstance.dismiss();
         };
     }]);
 
 sharedModule.controller('setModifySecurityAnswersModalInstanceCtrl',
-    ['$log', '$timeout', '$scope', '$modalInstance', 'personsService', 'userService', 'userChallengesService', 'refData', 'mySecurityQuestions',
-        function ($log, $timeout, $scope, $modalInstance, personsService, userService, userChallengesService, refData, mySecurityQuestions) {
+    ['$log', '$timeout', '$scope', '$uibModalInstance', 'personsService', 'userService', 'userChallengesService', 'refData', 'mySecurityQuestions',
+        function ($log, $timeout, $scope, $uibModalInstance, personsService, userService, userChallengesService, refData, mySecurityQuestions) {
 
             $scope.securityQuestionsList = refData.securityQuestions;
 
@@ -301,7 +301,7 @@ sharedModule.controller('setModifySecurityAnswersModalInstanceCtrl',
 
             $scope.cancel = function () {
                 $log.info('Modal dismissed at');
-                $modalInstance.dismiss();
+                $uibModalInstance.dismiss();
             };
 
             // Transformation to submit object
@@ -339,7 +339,7 @@ sharedModule.controller('setModifySecurityAnswersModalInstanceCtrl',
                             $scope.actionMessage = "Security questions/answers have been saved";
 
                             $timeout(function () {
-                                $modalInstance.close(updatedSecurityAnswers);
+                                $uibModalInstance.close(updatedSecurityAnswers);
                             }, 2000);
                         },
                         function (error) {
@@ -355,8 +355,8 @@ sharedModule.controller('setModifySecurityAnswersModalInstanceCtrl',
         }]);
 
 sharedModule.controller('ModifySecurityAnswer',
-    ['$log', '$scope', '$modal', 'userChallengesService', 'userService',
-        function ($log, $scope, $modal, userChallengesService, userService) {
+    ['$log', '$scope', '$uibModal', 'userChallengesService', 'userService',
+        function ($log, $scope, $uibModal, userChallengesService, userService) {
 
             $scope.modifySecurityAnswer = function () {
                 $scope.SecurityQuestionData = {
@@ -381,7 +381,7 @@ sharedModule.controller('ModifySecurityAnswer',
                     );
                 }
 
-                var modalInstance = $modal.open({
+                var modalInstance = $uibModal.open({
                     animation: true,
                     backdrop: 'static',
                     keyboard: true,
@@ -408,8 +408,8 @@ sharedModule.controller('ModifySecurityAnswer',
 
 
 sharedModule.controller('setMyContactDetailsModalInstanceCtrl',
-    ['$log', '$timeout', '$scope', '$modalInstance', 'personsService', 'userService', 'myContactDetails',
-        function ($log, $timeout, $scope, $modalInstance, personsService, userService, myContactDetails) {
+    ['$log', '$timeout', '$scope', '$uibModalInstance', 'personsService', 'userService', 'myContactDetails',
+        function ($log, $timeout, $scope, $uibModalInstance, personsService, userService, myContactDetails) {
 
             $scope.formDisabled = true;
             $scope.editForm = true;
@@ -424,7 +424,7 @@ sharedModule.controller('setMyContactDetailsModalInstanceCtrl',
 
             $scope.cancel = function () {
                 $log.info('Modal dismissed at');
-                $modalInstance.dismiss();
+                $uibModalInstance.dismiss();
             };
 
             // Transformation to submit object
@@ -452,7 +452,7 @@ sharedModule.controller('setMyContactDetailsModalInstanceCtrl',
                             $scope.actionMessage = "Contact Details have been saved";
 
                             $timeout(function () {
-                                $modalInstance.close(updatedDetails);
+                                $uibModalInstance.close(updatedDetails);
                             }, 2000);
                         },
                         function (error) {
@@ -469,8 +469,8 @@ sharedModule.controller('setMyContactDetailsModalInstanceCtrl',
         }]);
 
 sharedModule.controller('ModifyContactDetails',
-    ['$log', '$scope', '$modal', 'personsService', 'userService',
-        function ($log, $scope, $modal, personsService, userService) {
+    ['$log', '$scope', '$uibModal', 'personsService', 'userService',
+        function ($log, $scope, $uibModal, personsService, userService) {
 
             $scope.modifyMyContactDetails = function () {
 
@@ -503,7 +503,7 @@ sharedModule.controller('ModifyContactDetails',
                     );
                 }
 
-                var modalInstance = $modal.open({
+                var modalInstance = $uibModal.open({
                     animation: true,
                     backdrop: 'static',
                     keyboard: true,
@@ -531,11 +531,11 @@ sharedModule.controller('ModifyContactDetails',
         }]);
 
 
-sharedModule.controller('changeMyPasswordCtlr', ['$log', '$scope', '$modal', '$stateParams', 'userDetailsService',
-    function ($log, $scope, $modal, $stateParams, userDetailsService) {
+sharedModule.controller('changeMyPasswordCtlr', ['$log', '$scope', '$uibModal', '$stateParams', 'userDetailsService',
+    function ($log, $scope, $uibModal, $stateParams, userDetailsService) {
 
         $scope.setUserPassword = function (user) {
-            var modalInstance = $modal.open({
+            var modalInstance = $uibModal.open({
                 animation: true,
                 backdrop: 'static',
                 keyboard: true,

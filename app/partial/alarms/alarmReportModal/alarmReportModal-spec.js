@@ -27,7 +27,7 @@ describe('AlarmReportModalCtrl', function() {
         alarm = new Alarm();
         var options = {};
         createController = function(){
-            return $controller('AlarmReportModalCtrl', {$scope: scope, $modalInstance: modalInstance, alarm : alarm, options : options});
+            return $controller('AlarmReportModalCtrl', {$scope: scope, $uibModalInstance: modalInstance, alarm : alarm, options : options});
         };
     }));
 

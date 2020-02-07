@@ -9,7 +9,7 @@ the hope that it will be useful, but WITHOUT ANY WARRANTY; without even the impl
 FITNESS FOR A PARTICULAR PURPOSE.  See the GNU General Public License for more details. You should have received a
 copy of the GNU General Public License along with the IFDM Suite. If not, see <http://www.gnu.org/licenses/>.
 */
-angular.module('unionvmsWeb').controller('MapCtrl',function($log, $scope, locale, $timeout, $document, $templateRequest, $modal, mapService, loadingStatus, spatialHelperService, reportService, mapFishPrintRestService, MapFish, MapFishPayload, spatialRestService, $window, projectionService, $state, $localStorage, reportFormService,comboboxService,userService,fishingActivityService,reportingNavigatorService,tripSummaryService,tripReportsTimeline){
+angular.module('unionvmsWeb').controller('MapCtrl',function($log, $scope, locale, $timeout, $document, $templateRequest, $$uibModal, mapService, loadingStatus, spatialHelperService, reportService, mapFishPrintRestService, MapFish, MapFishPayload, spatialRestService, $window, projectionService, $state, $localStorage, reportFormService,comboboxService,userService,fishingActivityService,reportingNavigatorService,tripSummaryService,tripReportsTimeline){
     $scope.activeControl = '';
     $scope.showMeasureConfigWin = false;
     $scope.showMapFishConfigWin = false;
@@ -76,7 +76,7 @@ angular.module('unionvmsWeb').controller('MapCtrl',function($log, $scope, locale
     //Open modal with vms data
     $scope.showDataTables = function(){
         loadingStatus.isLoading('LiveviewMap',true,2);
-        var modalInstance = $modal.open({
+        var modalInstance = $uibModal.open({
             templateUrl: 'partial/spatial/liveViewPanel/vmsPanel/vmsPanelModal.html',
             controller: 'VmspanelmodalCtrl',
             backdrop: false,
@@ -90,7 +90,7 @@ angular.module('unionvmsWeb').controller('MapCtrl',function($log, $scope, locale
     $scope.getVesselDetails = function(){
         var assetId = mapService.overlay.get('vesselId');
         if (angular.isDefined(assetId)){
-            var modalInstance = $modal.open({
+            var modalInstance = $uibModal.open({
                 templateUrl: 'partial/spatial/reportsPanel/reportForm/vesselFieldset/detailsModal/detailsModal.html',
                 controller: 'DetailsmodalCtrl',
                 size: '',
@@ -108,7 +108,7 @@ angular.module('unionvmsWeb').controller('MapCtrl',function($log, $scope, locale
             $scope.spatialHelper.configureFullscreenModal(modalInstance);
         }
     };
-    
+
     $scope.goToFaView = function(){
         fishingActivityService.resetActivity();
         fishingActivityService.openFromMap = true;
@@ -246,7 +246,7 @@ angular.module('unionvmsWeb').controller('MapCtrl',function($log, $scope, locale
         }
         var mapEl = mapService.map.getTargetElement();
         mapEl.style.cursor = 'default';
-        
+
         //Clear the ng-model with title, subtitle, description, etc.
         angular.forEach($scope.mapFishLocalConfig, function(value, key) {
         	this[key] = undefined;
@@ -377,7 +377,7 @@ angular.module('unionvmsWeb').controller('MapCtrl',function($log, $scope, locale
 					var blob = new Blob([this.response], { type: type });
                     saveAs(blob, filename);
                 }
-            } 
+            }
         };
         xhr.send();
     };
@@ -638,7 +638,7 @@ angular.module('unionvmsWeb').controller('MapCtrl',function($log, $scope, locale
             $scope.toggleToolbarBtn($scope.activeControl);
         }
     };
-    
+
     $scope.openUserPrefs = function(){
         $scope.spatialHelper.deactivateFullscreen();
         $scope.repNav.goToSection('userPreferences');
@@ -660,21 +660,21 @@ angular.module('unionvmsWeb').controller('MapCtrl',function($log, $scope, locale
     		}
     	}, 100);
 	};
-	
+
 	$scope.isActivityDetailsAllowed = function(){
 	    var isAllowed = false;
 	    var suportedCodes = ['DEPARTURE', 'ARRIVAL', 'AREA_ENTRY', 'AREA_EXIT', 'FISHING_OPERATION', 'LANDING', 'DISCARD', 'TRANSHIPMENT', 'RELOCATION', 'JOINED_FISHING_OPERATION'];
 	    if ($scope.popupRecContainer.currentType === 'ers' && _.indexOf(suportedCodes, $scope.popupRecContainer.activityType.toUpperCase()) !== -1){
 	        isAllowed = true;
 	    }
-	    
+
 	    return isAllowed;
 	};
-	
+
 	$scope.backToFAView = function(){
 	    reportingNavigatorService.goToView('tripsPanel', 'FishingActivityPanel');
 	};
-    
+
     $scope.$watch(function(){return $scope.repNav.isViewVisible('mapPanel');}, function(newVal,oldVal){
         if(newVal === true && !angular.isDefined($scope.repServ.autoRefreshInterval) && $scope.repServ.refresh.status){
             $scope.repServ.setAutoRefresh();

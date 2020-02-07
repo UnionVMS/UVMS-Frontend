@@ -38,7 +38,7 @@ describe('MdrcodelistCtrl', function() {
         createController = function(){
             return $controller('MdrcodelistCtrl', {
                 $scope: scope,
-                $modalInstance: modalInstance,
+                $uibModalInstance: modalInstance,
                 acronym: acronym
             })
         }

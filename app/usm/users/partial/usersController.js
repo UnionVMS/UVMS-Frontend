@@ -307,9 +307,9 @@ usersModule.controller('usersListController', ['$scope', '$filter', '$http', '$l
 
     }]);
 
-usersModule.controller('userDetailsCtlr', ['$log', '$scope', '$modal', '$stateParams', 'refData',
+usersModule.controller('userDetailsCtlr', ['$log', '$scope', '$uibModal', '$stateParams', 'refData',
     'userDetailsService', 'userContextsServices', 'userService', 'userPreferencesService', 'policiesService',
-    function ($log, $scope, $modal, $stateParams, refData, userDetailsService, userContextsServices, userService, userPreferencesService, policiesService) {
+    function ($log, $scope, $uibModal, $stateParams, refData, userDetailsService, userContextsServices, userService, userPreferencesService, policiesService) {
         $scope.loadingMessage = "Loading...";
         $scope.emptyResultMessage = "No results found.";
         $scope.userName = $stateParams.userName;
@@ -395,7 +395,7 @@ usersModule.controller('userDetailsCtlr', ['$log', '$scope', '$modal', '$statePa
 
         //to include setUserPassword in the 'userDetailsCtlr'
         $scope.manageUserPassword = function (user) {
-            var modalInstance = $modal.open({
+            var modalInstance = $uibModal.open({
                 animation: true,
                 backdrop: 'static',
                 keyboard: true,
@@ -430,11 +430,11 @@ usersModule.controller('userDetailsCtlr', ['$log', '$scope', '$modal', '$statePa
     }]);
 
 
-usersModule.controller('manageUserCtlr', ['$log', '$scope', '$modal', '$stateParams', 'userDetailsService', 'policyValues',
-    function ($log, $scope, $modal, $stateParams, userDetailsService, policyValues) {
+usersModule.controller('manageUserCtlr', ['$log', '$scope', '$uibModal', '$stateParams', 'userDetailsService', 'policyValues',
+    function ($log, $scope, $uibModal, $stateParams, userDetailsService, policyValues) {
 
         $scope.duplicateUserProfile = function (user) {
-            var modalInstance = $modal.open({
+            var modalInstance = $uibModal.open({
                 animation: true,
                 backdrop: 'static',
                 keyboard: true,
@@ -458,7 +458,7 @@ usersModule.controller('manageUserCtlr', ['$log', '$scope', '$modal', '$statePar
         };
 
         $scope.editUser = function (user) {
-            var modalInstance = $modal.open({
+            var modalInstance = $uibModal.open({
                 animation: true,
                 backdrop: 'static',
                 keyboard: true,
@@ -513,9 +513,9 @@ usersModule.controller('manageUserCtlr', ['$log', '$scope', '$modal', '$statePar
         };
     }]);
 
-usersModule.controller('duplicateUserProfileModalInstanceCtrl', ['$scope', '$modalInstance', '$timeout', '$log', 'user', 'UsersListService',
+usersModule.controller('duplicateUserProfileModalInstanceCtrl', ['$scope', '$uibModalInstance', '$timeout', '$log', 'user', 'UsersListService',
     'userContextsServices', 'userDetailsService',
-    function ($scope, $modalInstance, $timeout, $log, user, UsersListService, userContextsServices, userDetailsService) {
+    function ($scope, $uibModalInstance, $timeout, $log, user, UsersListService, userContextsServices, userDetailsService) {
         $scope.formDisabled = false;
         $scope.editForm = true;
         $scope.actionSucceeded = false;
@@ -599,7 +599,7 @@ usersModule.controller('duplicateUserProfileModalInstanceCtrl', ['$scope', '$mod
 
         $scope.cancel = function () {
             $log.log("cancel");
-            $modalInstance.dismiss();
+            $uibModalInstance.dismiss();
         };
 
         $scope.duplicateProfile = function (user) {
@@ -614,7 +614,7 @@ usersModule.controller('duplicateUserProfileModalInstanceCtrl', ['$scope', '$mod
                         $scope.actionMessage = "Profile copied";
                         $scope.actionSucceeded = true;
                         $timeout(function () {
-                            $modalInstance.close($scope.destUserName);
+                            $uibModalInstance.close($scope.destUserName);
                         }, 2000);
                     },
                     function (error) {
@@ -630,9 +630,9 @@ usersModule.controller('duplicateUserProfileModalInstanceCtrl', ['$scope', '$mod
         };
     }]);
 
-usersModule.controller('setUserPasswordModalInstanceCtrl', ['$log', '$timeout', '$location', '$scope', '$modalInstance', '$stateParams', 'refData',
+usersModule.controller('setUserPasswordModalInstanceCtrl', ['$log', '$timeout', '$location', '$scope', '$uibModalInstance', '$stateParams', 'refData',
     'userDetailsService', 'accountService', 'user',
-    function ($log, $timeout, $location, $scope, $modalInstance, $stateParams, refData, userDetailsService, accountService, user) {
+    function ($log, $timeout, $location, $scope, $uibModalInstance, $stateParams, refData, userDetailsService, accountService, user) {
         $scope.formDisabled = true;
         $scope.editForm = true;
         $scope.showSubmit = false;
@@ -646,7 +646,7 @@ usersModule.controller('setUserPasswordModalInstanceCtrl', ['$log', '$timeout', 
         $scope.showConfirmation = false;
 
         $scope.cancel = function () {
-            $modalInstance.dismiss();
+            $uibModalInstance.dismiss();
         };
 
         // Transformation to submit object
@@ -675,7 +675,7 @@ usersModule.controller('setUserPasswordModalInstanceCtrl', ['$log', '$timeout', 
                     $scope.actionMessage = "Password has been set";
                     $scope.user = user;
                     $timeout(function () {
-                        $modalInstance.close(updatedUser);
+                        $uibModalInstance.close(updatedUser);
                     }, 2000);
                 },
                 function (error) {
@@ -691,11 +691,11 @@ usersModule.controller('setUserPasswordModalInstanceCtrl', ['$log', '$timeout', 
     }]);
 
 
-usersModule.controller('setUserPasswordCtlr', ['$log', '$scope', '$modal', '$stateParams', 'userDetailsService',
-    function ($log, $scope, $modal, $stateParams, userDetailsService) {
+usersModule.controller('setUserPasswordCtlr', ['$log', '$scope', '$uibModal', '$stateParams', 'userDetailsService',
+    function ($log, $scope, $uibModal, $stateParams, userDetailsService) {
 
         $scope.setUserPassword = function (user) {
-            var modalInstance = $modal.open({
+            var modalInstance = $uibModal.open({
                 animation: true,
                 backdrop: 'static',
                 keyboard: true,
@@ -729,9 +729,9 @@ usersModule.controller('setUserPasswordCtlr', ['$log', '$scope', '$modal', '$sta
     }]);
 
 
-usersModule.controller('editUserModalInstanceCtrl', ['$log', '$timeout', '$location', '$scope', '$modalInstance', '$stateParams', 'refData',
+usersModule.controller('editUserModalInstanceCtrl', ['$log', '$timeout', '$location', '$scope', '$uibModalInstance', '$stateParams', 'refData',
     'userDetailsService', 'organisationsService', 'accountService', 'user', 'ldapEnabledPolicy',
-    function ($log, $timeout, $location, $scope, $modalInstance, $stateParams, refData, userDetailsService, organisationsService, accountService, user, ldapEnabledPolicy) {
+    function ($log, $timeout, $location, $scope, $uibModalInstance, $stateParams, refData, userDetailsService, organisationsService, accountService, user, ldapEnabledPolicy) {
         $scope.formDisabled = true;
         $scope.editForm = true;
         $scope.showSubmit = false;
@@ -795,7 +795,7 @@ usersModule.controller('editUserModalInstanceCtrl', ['$log', '$timeout', '$locat
         };
 
         $scope.cancel = function () {
-            $modalInstance.dismiss();
+            $uibModalInstance.dismiss();
         };
 
 
@@ -832,7 +832,7 @@ usersModule.controller('editUserModalInstanceCtrl', ['$log', '$timeout', '$locat
                     $scope.messageDivClass = "alert alert-success";
                     $scope.actionMessage = "User Details Saved";
                     $timeout(function () {
-                        $modalInstance.close(response.updatedUser);
+                        $uibModalInstance.close(response.updatedUser);
                     }, 2000);
                 },
                 function (error) {

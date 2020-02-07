@@ -31,7 +31,7 @@ describe('characteristicsModel', function() {
         ctrl = $controller('CharacteristicsModalCtrl', {
             $scope: scope,
             modalData: data,
-            $modalInstance: modalInstance
+            $uibModalInstance: modalInstance
         });
 
     }));

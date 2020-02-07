@@ -45,10 +45,10 @@ userContextsModule.controller('userContextsControllerCtrl', ['$scope', '$statePa
 
 	}]);
 
-userContextsModule.controller('manageUserContextsCtrl', ['$log', '$scope', '$modal',
-    function ($log, $scope, $modal) {
+userContextsModule.controller('manageUserContextsCtrl', ['$log', '$scope', '$uibModal',
+    function ($log, $scope, $uibModal) {
 		$scope.manageUserContext = function (mode, user_context) {
-			var modalInstance = $modal.open({
+			var modalInstance = $uibModal.open({
 				animation: true,
 				backdrop: 'static',
 				keyboard: true,
@@ -95,8 +95,8 @@ userContextsModule.controller('manageUserContextsCtrl', ['$log', '$scope', '$mod
 		};
 	}]);
 
-userContextsModule.controller('userContextsModalInstanceCtrl', ['$scope', '$modalInstance', '$log', '$q', '$timeout', 'rolesServices', 'scopeServices', 'userContextsServices', 'mode', 'scope',
-		function ($scope, $modalInstance, $log, $q, $timeout, rolesServices, scopeServices, userContextsServices, mode, scope) {
+userContextsModule.controller('userContextsModalInstanceCtrl', ['$scope', '$uibModalInstance', '$log', '$q', '$timeout', 'rolesServices', 'scopeServices', 'userContextsServices', 'mode', 'scope',
+		function ($scope, $uibModalInstance, $log, $q, $timeout, rolesServices, scopeServices, userContextsServices, mode, scope) {
 			var confirmCreate = false;
 			$scope.mode = mode;
 			$scope.actionMessage = "";
@@ -191,7 +191,7 @@ userContextsModule.controller('userContextsModalInstanceCtrl', ['$scope', '$moda
 							$scope.actionMessage = "New User Context created";
 
 							$timeout(function () {
-								$modalInstance.close(newUserContext);
+								$uibModalInstance.close(newUserContext);
 							}, 2000);
 						},
 						function (error) {
@@ -224,7 +224,7 @@ userContextsModule.controller('userContextsModalInstanceCtrl', ['$scope', '$moda
 								$scope.messageDivClass = "alert alert-success";
 								$scope.actionMessage = "Context Changes Saved";
 								$timeout(function () {
-									$modalInstance.close(updatedUserContext);
+									$uibModalInstance.close(updatedUserContext);
 								}, 2000);
 							},
 							function (error) {
@@ -260,7 +260,7 @@ userContextsModule.controller('userContextsModalInstanceCtrl', ['$scope', '$moda
 								$scope.actionMessage = "Context deleted";
 
 								$timeout(function () {
-									$modalInstance.close(deletedUserContext);
+									$uibModalInstance.close(deletedUserContext);
 								}, 2000);
 							},
 							function (error) {
@@ -277,6 +277,6 @@ userContextsModule.controller('userContextsModalInstanceCtrl', ['$scope', '$moda
 			};
 
 			$scope.cancel = function () {
-				$modalInstance.dismiss();
+				$uibModalInstance.dismiss();
 			};
     }]);

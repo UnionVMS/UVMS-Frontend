@@ -11,8 +11,8 @@ copy of the GNU General Public License along with the IFDM Suite. If not, see <h
  */
 var changesModule = angular.module('changes');
 
-changesModule.controller('changesListCtrl', ['$log', '$scope', '$modal', 'changesService', 'userService',
-    function ($log, $scope, $modal, changesService, userService) {
+changesModule.controller('changesListCtrl', ['$log', '$scope', '$uibModal', 'changesService', 'userService',
+    function ($log, $scope, $uibModal, changesService, userService) {
 
         $scope.checkAccess = function (feature) {
             return userService.isAllowed(feature, "USM", true);
@@ -40,7 +40,7 @@ changesModule.controller('changesListCtrl', ['$log', '$scope', '$modal', 'change
         );
 
         $scope.manageChange = function (change) {
-            var modalInstance = $modal.open({
+            var modalInstance = $uibModal.open({
                 animation: true,
                 backdrop: 'static',
                 keyboard: true,
@@ -112,8 +112,8 @@ changesModule.controller('changesListCtrl', ['$log', '$scope', '$modal', 'change
         };
     }]);
 
-changesModule.controller('changesModalInstanceCtrl', ['$scope', '$log', '$modalInstance', '$timeout', 'changesService', 'change', 'oldValue',
-    function ($scope, $log, $modalInstance, $timeout, changesService, change, oldValue) {
+changesModule.controller('changesModalInstanceCtrl', ['$scope', '$log', '$uibModalInstance', '$timeout', 'changesService', 'change', 'oldValue',
+    function ($scope, $log, $uibModalInstance, $timeout, changesService, change, oldValue) {
 
         $scope.oldValue = oldValue;
         $scope.newValue = change;
@@ -125,7 +125,7 @@ changesModule.controller('changesModalInstanceCtrl', ['$scope', '$log', '$modalI
                     $scope.actionMessage = "Changes Approved";
                     $scope.changesSaved = true;
                     $timeout(function () {
-                        $modalInstance.close();
+                        $uibModalInstance.close();
                     }, 2000);
                 },
                 function (error) {
@@ -142,7 +142,7 @@ changesModule.controller('changesModalInstanceCtrl', ['$scope', '$log', '$modalI
                     $scope.actionMessage = "Changes Rejected";
                     $scope.changesSaved = true;
                     $timeout(function () {
-                        $modalInstance.close();
+                        $uibModalInstance.close();
                     }, 2000);
                 },
                 function (error) {
@@ -153,6 +153,6 @@ changesModule.controller('changesModalInstanceCtrl', ['$scope', '$log', '$modalI
         };
 
         $scope.cancel = function () {
-            $modalInstance.dismiss();
+            $uibModalInstance.dismiss();
         };
     }]);

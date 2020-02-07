@@ -10,7 +10,7 @@ FITNESS FOR A PARTICULAR PURPOSE.  See the GNU General Public License for more d
 copy of the GNU General Public License along with the IFDM Suite. If not, see <http://www.gnu.org/licenses/>.
  */
 //LOGIN CONTROLLER
-angular.module('unionvmsWeb').controller('uvmsLoginController', function($scope, $log, authenticateUser, userService, $state, $stateParams, $modal, locale) {
+angular.module('unionvmsWeb').controller('uvmsLoginController', function($scope, $log, authenticateUser, userService, $state, $stateParams, $uibModal, locale) {
 
     $log.debug('$stateParams.toState',$stateParams.toState);
     var toState = $stateParams.toState;
@@ -47,7 +47,7 @@ angular.module('unionvmsWeb').controller('uvmsLoginController', function($scope,
     //RESET PASSWORD
     $scope.resetPassword = function () {
 
-        return $modal.open({
+        return $uibModal.open({
             templateUrl: 'service/common/auth/templates/resetPassword.html',
             backdrop: 'static', //will not close when clicking outside the modal window
             controller: 'resetPasswordController'

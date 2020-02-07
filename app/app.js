@@ -36,7 +36,7 @@ var unionvmsWebApp = angular.module('unionvmsWeb', [
 	'widget.assetsInZone',
     'numberWidget',
     'unionvmsWeb.longPolling',
-    'qtip2',
+    // 'qtip2',
     'chart.js',
     'ngStorage',
     'debugConfig',
@@ -449,9 +449,9 @@ unionvmsWebApp.config(function($stateProvider, $compileProvider, tmhDynamicLocal
                     }
                 }
             },
-            onExit: function(loadingStatus,$modalStack,spatialHelperService){
+            onExit: function(loadingStatus,$$uibModalStack,spatialHelperService){
                 loadingStatus.resetState();
-                $modalStack.dismissAll();
+                $uibModalStack.dismissAll();
                 angular.element('body').removeClass('modal-open');
                 spatialHelperService.fromFAView = false;
             }
@@ -775,7 +775,7 @@ unionvmsWebApp.run(function($log, $rootScope, $state, $timeout, errorService, us
     });
 
     //Handle state change start
-    $rootScope.$on('$stateChangeStart', function(event, toState, toParams, fromState, fromParams, $modalStack) {
+    $rootScope.$on('$stateChangeStart', function(event, toState, toParams, fromState, fromParams, $uibModalStack) {
         var currentState = $state.$current;
         //Do nothing if new state is same as the old one
         if(currentState.name === toState.name){
@@ -1069,8 +1069,13 @@ function getEnvironmentConfig(envConfig) {
 }
 
 function bootstrapApplication() {
-    angular.element(document).ready(function() {
-        angular.bootstrap(document, ["unionvmsWeb"]);
-    });
+
+    angular.element(function() {
+        angular.bootstrap(document, ['unionvmsWeb']);
+      });
+
+    // angular.element(document).ready(function() {
+    //     angular.bootstrap(document, ["unionvmsWeb"]);
+    // });
 }
 getEnvironmentConfig().then(bootstrapApplication);

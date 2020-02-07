@@ -247,11 +247,11 @@ organisationsModule.controller('organisationsListCtrl', ['$scope', '$log', 'refD
     }]);
 
 
-organisationsModule.controller('manageOrganisationCtrl', ['$scope', '$modal', '$log', '$state', 'organisationsService','refData',
-    function ($scope, $modal, $log, $state, organisationsService, refData) {
+organisationsModule.controller('manageOrganisationCtrl', ['$scope', '$uibModal', '$log', '$state', 'organisationsService','refData',
+    function ($scope, $uibModal, $log, $state, organisationsService, refData) {
 
         $scope.manageOrganisation = function (mode, org) {
-            var modalInstance = $modal.open({
+            var modalInstance = $uibModal.open({
                 animation: true,
                 backdrop: 'static',
                 keyboard: true,
@@ -317,9 +317,9 @@ organisationsModule.controller('manageOrganisationCtrl', ['$scope', '$modal', '$
         };
     }]);
 
-organisationsModule.controller('manageOrgModalInstanceCtrl', ['$scope', '$modalInstance', '$log', '$timeout', '$location', 'refData', 'getApplications',
+organisationsModule.controller('manageOrgModalInstanceCtrl', ['$scope', '$uibModalInstance', '$log', '$timeout', '$location', 'refData', 'getApplications',
     'organisationsService', 'mode', 'org', '$stateParams', 'nations', 'parents',
-    function ($scope, $modalInstance, $log, $timeout, $location, refData, getApplications, organisationsService,
+    function ($scope, $uibModalInstance, $log, $timeout, $location, refData, getApplications, organisationsService,
               mode, org, $stateParams, nations, parents) {
         var confirmCreate = false;
         $scope.nations = nations;
@@ -360,7 +360,7 @@ organisationsModule.controller('manageOrgModalInstanceCtrl', ['$scope', '$modalI
                         //$scope.newOrg = response.newOrg;
                         $scope.actionSucceeded = true;
                         $timeout(function () {
-                            $modalInstance.close(response.newOrg);
+                            $uibModalInstance.close(response.newOrg);
                         }, 2000);
                     },
                     function (error) {
@@ -388,7 +388,7 @@ organisationsModule.controller('manageOrgModalInstanceCtrl', ['$scope', '$modalI
                         //$scope.updatedOrg = response.updatedOrg;
                         $scope.actionSucceeded = true;
                         $timeout(function () {
-                            $modalInstance.close(response.updatedOrg);
+                            $uibModalInstance.close(response.updatedOrg);
                         }, 2000);
                     },
                     function (error) {
@@ -406,7 +406,7 @@ organisationsModule.controller('manageOrgModalInstanceCtrl', ['$scope', '$modalI
                             // Close modal by passing the new user to update the table
                             $scope.actionSucceeded = true;
                             $timeout(function () {
-                                $modalInstance.close(org);
+                                $uibModalInstance.close(org);
                             }, 2000);
                         },
                         function (error) {
@@ -423,7 +423,7 @@ organisationsModule.controller('manageOrgModalInstanceCtrl', ['$scope', '$modalI
         };
 
         $scope.cancel = function () {
-            $modalInstance.dismiss();
+            $uibModalInstance.dismiss();
         };
 
     }]);
@@ -504,8 +504,8 @@ organisationsModule.controller('endPointsDetailsCtrl',
             });
         }]);
 
-organisationsModule.controller('organisationDetailsCtrl', ['$rootScope', '$log', '$scope', '$modal', '$stateParams', 'refData', 'organisationsService', 'userService',
-    function ($rootScope, $log, $scope, $modal, $stateParams, refData, organisationsService, userService) {
+organisationsModule.controller('organisationDetailsCtrl', ['$rootScope', '$log', '$scope', '$uibModal', '$stateParams', 'refData', 'organisationsService', 'userService',
+    function ($rootScope, $log, $scope, $uibModal, $stateParams, refData, organisationsService, userService) {
         $scope.isDataLoading = true;
         $scope.emptyResult = false;
         $scope.emptyResultMessage = "No results found. ";
@@ -588,15 +588,15 @@ organisationsModule.controller('organisationDetailsCtrl', ['$rootScope', '$log',
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
-organisationsModule.controller('manageOrganisationEndpointsCtrl', ['$log', '$scope', '$modal', '$state', 'userService',
-    function ($log, $scope, $modal, userService) {
+organisationsModule.controller('manageOrganisationEndpointsCtrl', ['$log', '$scope', '$uibModal', '$state', 'userService',
+    function ($log, $scope, $uibModall, userService) {
 
         $scope.checkAccess = function (feature) {
             return userService.isAllowed(feature, "USM", true);
         };
 
         $scope.manageEndpoint = function (mode, endpoint, organisationName) {
-            var modalInstance = $modal.open({
+            var modalInstance = $uibModal.open({
                 animation: true,
                 backdrop: 'static',
                 keyboard: true,
@@ -631,7 +631,7 @@ organisationsModule.controller('manageOrganisationEndpointsCtrl', ['$log', '$sco
                 if (mode === 'edit') {
                     angular.copy(returnedEndPoint, endpoint);
 					$scope.endpoint.channelList = $scope.displayedChannels;
-					$scope.endpoint.persons = $scope.displayedContacts;					
+					$scope.endpoint.persons = $scope.displayedContacts;
                 }
                 if (mode === 'delete') {
                     var deleteIndex = $scope.organisation.endpoints.indexOf(endpoint);
@@ -645,8 +645,8 @@ organisationsModule.controller('manageOrganisationEndpointsCtrl', ['$log', '$sco
         };
     }]);
 
-organisationsModule.controller('organisationEndpointsModalInstanceCtrl', ['$rootScope', '$scope', '$modalInstance', '$log', '$q', '$timeout', '$stateParams', 'refData', 'organisationsService', 'mode', 'organisationName', 'endpoint',
-    function ($rootScope, $scope, $modalInstance, $log, $q, $timeout, $stateParams, refData, organisationsService, mode, organisationName, endpoint) {
+organisationsModule.controller('organisationEndpointsModalInstanceCtrl', ['$rootScope', '$scope', '$uibModalInstance', '$log', '$q', '$timeout', '$stateParams', 'refData', 'organisationsService', 'mode', 'organisationName', 'endpoint',
+    function ($rootScope, $scope, $uibModalInstance, $log, $q, $timeout, $stateParams, refData, organisationsService, mode, organisationName, endpoint) {
         var confirmCreate = false;
         $scope.mode = mode;
         $scope.actionMessage = "";
@@ -682,7 +682,7 @@ organisationsModule.controller('organisationEndpointsModalInstanceCtrl', ['$root
                         $scope.actionSucceeded = true;
                         $scope.showConfirmation = true;
                         $timeout(function () {
-                            $modalInstance.close(response.newEndPoint);
+                            $uibModalInstance.close(response.newEndPoint);
                         }, 2000);
                     },
                     function (error) {
@@ -701,7 +701,7 @@ organisationsModule.controller('organisationEndpointsModalInstanceCtrl', ['$root
                         //$scope.updatedOrg = response.updatedOrg;
                         $scope.actionSucceeded = true;
                         $timeout(function () {
-                            $modalInstance.close(response.updatedEndpoint);
+                            $uibModalInstance.close(response.updatedEndpoint);
                         }, 2000);
                     },
                     function (error) {
@@ -720,7 +720,7 @@ organisationsModule.controller('organisationEndpointsModalInstanceCtrl', ['$root
                             // Close modal by passing the new user to update the table
                             $scope.actionSucceeded = true;
                             $timeout(function () {
-                                $modalInstance.close(endpoint);
+                                $uibModalInstance.close(endpoint);
                             }, 2000);
                         },
                         function (error) {
@@ -737,7 +737,7 @@ organisationsModule.controller('organisationEndpointsModalInstanceCtrl', ['$root
         };
 
         $scope.cancel = function () {
-            $modalInstance.dismiss();
+            $uibModalInstance.dismiss();
         };
     }]);
 
@@ -745,10 +745,10 @@ organisationsModule.controller('organisationEndpointsModalInstanceCtrl', ['$root
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
-organisationsModule.controller('manageOrganisationChannelsCtrl', ['$log', '$scope', '$modal',
-    function ($log, $scope, $modal) {
+organisationsModule.controller('manageOrganisationChannelsCtrl', ['$log', '$scope', '$uibModal',
+    function ($log, $scope,$uibModal) {
         $scope.manageOrgEndpointsChannel = function (mode, channel) {
-            var modalInstance = $modal.open({
+            var modalInstance = $uibModal.open({
                 animation: true,
                 backdrop: 'static',
                 keyboard: true,
@@ -786,9 +786,9 @@ organisationsModule.controller('manageOrganisationChannelsCtrl', ['$log', '$scop
     }]);
 
 organisationsModule.controller('organisationChannelsModalInstanceCtrl', [
-    '$scope', '$modalInstance', '$stateParams',
+    '$scope', '$uibModalInstance', '$stateParams',
     '$log', '$q', '$timeout', 'refData', 'mode', 'scope', 'organisationsService',
-    function ($scope, $modalInstance, $stateParams,
+    function ($scope, $uibModalInstance, $stateParams,
               $log, $q, $timeout, refData, mode, scope, organisationsService) {
         var confirmCreate = false;
         $scope.mode = mode;
@@ -830,7 +830,7 @@ organisationsModule.controller('organisationChannelsModalInstanceCtrl', [
                         $scope.actionMessage = "New Channel Created";
 
                         $timeout(function () {
-                            $modalInstance.close(response.newChannel);
+                            $uibModalInstance.close(response.newChannel);
                             /*selectedChannel*/
                         }, 2000);
                     },
@@ -850,7 +850,7 @@ organisationsModule.controller('organisationChannelsModalInstanceCtrl', [
                         $scope.actionMessage = "Channel Changes Saved";
 
                         $timeout(function () {
-                            $modalInstance.close(response.updatedChannel);
+                            $uibModalInstance.close(response.updatedChannel);
                             /*selectedChannel*/
                         }, 2000);
                     },
@@ -873,7 +873,7 @@ organisationsModule.controller('organisationChannelsModalInstanceCtrl', [
                             $scope.messageDivClass = "";
 
                             $timeout(function () {
-                                $modalInstance.close(selectedChannel);
+                                $uibModalInstance.close(selectedChannel);
                                 /* response.deletedChannel */
                             }, 2000);
                         },
@@ -891,7 +891,7 @@ organisationsModule.controller('organisationChannelsModalInstanceCtrl', [
         };
 
         $scope.cancel = function () {
-            $modalInstance.dismiss();
+            $uibModalInstance.dismiss();
         };
 
     }]);
@@ -923,10 +923,10 @@ organisationsModule.directive('numbersOnly', function () {
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
-organisationsModule.controller('manageOrganisationContactsCtrl', ['$log', '$scope', '$modal',
-    function ($log, $scope, $modal) {
+organisationsModule.controller('manageOrganisationContactsCtrl', ['$log', '$scope', '$uibModal',
+    function ($log, $scope, $uibModal) {
         $scope.manageOrgEndpointsContact = function (mode, contact) {
-            var modalInstance = $modal.open({
+            var modalInstance = $uibModal.open({
                 animation: true,
                 backdrop: 'static',
                 keyboard: true,
@@ -961,8 +961,8 @@ organisationsModule.controller('manageOrganisationContactsCtrl', ['$log', '$scop
         };
     }]);
 
-organisationsModule.controller('organisationContactsModalInstanceCtrl', ['$scope', '$modalInstance', '$log', '$q', '$timeout', '$stateParams', 'refData', 'mode', 'scope', 'organisationsService', 'personsService',
-    function ($scope, $modalInstance, $log, $q, $timeout, $stateParams, refData, mode, scope, organisationsService, personsService) {
+organisationsModule.controller('organisationContactsModalInstanceCtrl', ['$scope', '$uibModalInstance', '$log', '$q', '$timeout', '$stateParams', 'refData', 'mode', 'scope', 'organisationsService', 'personsService',
+    function ($scope, $uibModalInstance, $log, $q, $timeout, $stateParams, refData, mode, scope, organisationsService, personsService) {
         var confirmCreate = false;
         $scope.mode = mode;
         $scope.actionMessage = "";
@@ -1032,7 +1032,7 @@ organisationsModule.controller('organisationContactsModalInstanceCtrl', ['$scope
                         $scope.actionMessage = "Contact assigned";
 
                         $timeout(function () {
-                            $modalInstance.close(response.newEndPointContact);
+                            $uibModalInstance.close(response.newEndPointContact);
                             /*selectedContact*/
                         }, 2000);
                     },
@@ -1052,7 +1052,7 @@ organisationsModule.controller('organisationContactsModalInstanceCtrl', ['$scope
                             $scope.actionMessage = "Contact removed";
 
                             $timeout(function () {
-                                $modalInstance.close(selectedContact);
+                                $uibModalInstance.close(selectedContact);
                             }, 2000);
                         },
                         function (error) {
@@ -1069,6 +1069,6 @@ organisationsModule.controller('organisationContactsModalInstanceCtrl', ['$scope
         };
 
         $scope.cancel = function () {
-            $modalInstance.dismiss();
+            $uibModalInstance.dismiss();
         };
     }]);

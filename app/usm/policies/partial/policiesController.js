@@ -217,10 +217,10 @@ policiesModule.controller('policiesListController', ['$scope', '$resource', '$lo
 
 	}]);
 
-policiesModule.controller('managePolicyCtlr', ['$log', '$scope', '$modal', '$stateParams',
-	function ($log, $scope, $modal, $stateParams) {
+policiesModule.controller('managePolicyCtlr', ['$log', '$scope', '$uibModal', '$stateParams',
+	function ($log, $scope, $uibModal, $stateParams) {
         $scope.editPolicy = function (policy) {
-            var modalInstance = $modal.open({
+            var modalInstance = $uibModal.open({
                 animation: true,
                 backdrop: 'static',
                 keyboard: true,
@@ -251,8 +251,8 @@ policiesModule.controller('managePolicyCtlr', ['$log', '$scope', '$modal', '$sta
         };
 	}]);
 
-policiesModule.controller('editPolicyModalInstanceCtrl', ['$log', '$timeout', '$location', '$scope', '$modalInstance', '$stateParams', 'refData', 'policy', 'policiesService',
-    function ($log, $timeout, $location, $scope, $modalInstance, $stateParams, refData, policy, policiesService) {
+policiesModule.controller('editPolicyModalInstanceCtrl', ['$log', '$timeout', '$location', '$scope', '$uibModalInstance', '$stateParams', 'refData', 'policy', 'policiesService',
+    function ($log, $timeout, $location, $scope, $uibModalInstance, $stateParams, refData, policy, policiesService) {
         $scope.formDisabled = true;
         $scope.editForm = true;
         $scope.showSubmit = false;
@@ -261,7 +261,7 @@ policiesModule.controller('editPolicyModalInstanceCtrl', ['$log', '$timeout', '$
         $scope.policy = policy;
 
         $scope.cancel = function () {
-            $modalInstance.dismiss();
+            $uibModalInstance.dismiss();
         };
 
         $scope.changeEditForm = function () {
@@ -282,7 +282,7 @@ policiesModule.controller('editPolicyModalInstanceCtrl', ['$log', '$timeout', '$
                         $scope.$emit("ReviewContactDetails");
                     }
                     $timeout(function () {
-                        $modalInstance.close(policy);
+                        $uibModalInstance.close(policy);
                     }, 2000);
                 },
                 function (error) {
@@ -295,7 +295,7 @@ policiesModule.controller('editPolicyModalInstanceCtrl', ['$log', '$timeout', '$
 			//$scope.messageDivClass = "alert alert-success";
 			//$scope.actionMessage = "User Details Saved";
 			//$timeout(function () {
-			//	$modalInstance.close(policy);
+			//	$uibModalInstance.close(policy);
 			//}, 2000);
         };
 
