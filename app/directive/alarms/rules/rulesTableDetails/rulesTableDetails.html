@@ -31,9 +31,9 @@
                     <tr ng-repeat="item in currentSearchResults.items | orderBy:currentSearchResults.sortBy:currentSearchResults.sortReverse">
                         <td>
                             <div class="iconToTheLeftOfTheTableCell" ng-show="item.status">
-                                <i ng-show="item.isClosed()" class="fa fa-lg fa-circle closed" tooltip-placement="bottom" tooltip="{{'alarms.alarms_status_closed' | i18n}}"></i>
-                                <i ng-show="item.isOpen()" class="fa fa-lg fa-circle open" tooltip-placement="bottom" tooltip="{{'alarms.alarms_status_open' | i18n}}"></i>
-                                <i ng-show="item.isPending()" class="fa fa-lg fa-circle pending" tooltip-placement="bottom" tooltip="{{'alarms.alarms_status_pending' | i18n}}"></i>
+                                <i ng-show="item.isClosed()" class="fa fa-lg fa-circle closed" uibTooltip-placement="bottom" uibTooltip="{{'alarms.alarms_status_closed' | i18n}}"></i>
+                                <i ng-show="item.isOpen()" class="fa fa-lg fa-circle open" uibTooltip-placement="bottom" uibTooltip="{{'alarms.alarms_status_open' | i18n}}"></i>
+                                <i ng-show="item.isPending()" class="fa fa-lg fa-circle pending" uibTooltip-placement="bottom" uibTooltip="{{'alarms.alarms_status_pending' | i18n}}"></i>
                             </div>
                             {{item.openDate | confDateFormat}}
                         </td>

@@ -28,7 +28,7 @@ copy of the GNU General Public License along with the IFDM Suite. If not, see <h
                 </div>
 
                 <div class="right" ng-class="{'ec-right':headerTemplate==='EC'}">
-                    <current-time class="currentTime" tooltip-placement="bottom" tooltip="{{'header.current_time_title' | i18n}}"></current-time>
+                    <current-time class="currentTime" uibTooltip-placement="bottom" uibTooltip="{{'header.current_time_title' | i18n}}"></current-time>
                     <div class="notifications" ng-if="isAuthenticated && appState !== 'app.reporting-id'">
                         <button class="btn btn-sm btn-default" ng-click="viewNotifications()" ng-attr-title="{{'header.menu_alarmconditions' | i18n}}">
                             <i class="fa fa-lg fa-bell"></i>

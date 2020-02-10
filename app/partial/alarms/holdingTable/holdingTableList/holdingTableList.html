@@ -49,8 +49,8 @@ copy of the GNU General Public License along with the IFDM Suite. If not, see <h
                         <span ng-if="!item.vessel" ng-bind="getObjAffectedValue(item)"></span>
                     </td>
                     <td>
-                        <span ng-show="item.alarmItems.length === 1" tooltip-placement="bottom" tooltip="{{getRuleNamesTooltip(item)}}">{{item.alarmItems[0].ruleName}}</span>
-                        <span ng-show="item.alarmItems.length > 1 " tooltip-placement="bottom" tooltip="{{getRuleNamesTooltip(item)}}">{{'alarms.alarms_table_number_of_rules' | i18n:item.alarmItems.length}}</span>
+                        <span ng-show="item.alarmItems.length === 1" uibTooltip-placement="bottom" uibTooltip="{{getRuleNamesTooltip(item)}}">{{item.alarmItems[0].ruleName}}</span>
+                        <span ng-show="item.alarmItems.length > 1 " uibTooltip-placement="bottom" uibTooltip="{{getRuleNamesTooltip(item)}}">{{'alarms.alarms_table_number_of_rules' | i18n:item.alarmItems.length}}</span>
                     </td>
                     <td ng-attr-title="{{item.getResolvedDate() | confDateFormat}}">{{item.getResolvedDate() | confDateFormat}}</td>
                     <td ng-attr-title="{{item.getResolvedBy()}}">{{item.getResolvedBy()}}</td>

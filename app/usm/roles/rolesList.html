@@ -35,14 +35,14 @@ copy of the GNU General Public License along with the IFDM Suite. If not, see <h
                     <div>
                         <!--button id="searchButton" tooltips tooltip-delay={{toolTipsDelay}} tooltip-title="{{'roles.search_filter' | translate}}" class="btn btn-default" ng-click="searchRole(criteria)"-->
                         <input type="submit" id="searchButton"
-                                tooltip-popup-delay={{toolTipsDelay}}
-                                tooltip="{{'roles.search_filter' | translate}}"
+                                uibTooltip-popup-delay={{toolTipsDelay}}
+                                uibTooltip="{{'roles.search_filter' | translate}}"
                                 class="btn btn-primary btn-sm" ng-value="'common.search' | translate" />
 
                         <!--button type="button" tooltips tooltip-delay={{toolTipsDelay}} tooltip-title="{{'roles.refresh_filter' | translate}}" class="btn btn-default" ng-click="resetForm()"-->
                         <button type="button"
-                                tooltip-popup-delay={{toolTipsDelay}}
-                                tooltip="{{'roles.refresh_filter' | translate}}"
+                                uibTooltip-popup-delay={{toolTipsDelay}}
+                                uibTooltip="{{'roles.refresh_filter' | translate}}"
                                 class="btn btn-link btn-sm" ng-click="resetForm()">
                             {{'common.reset' | translate}}
                         </button>
@@ -69,8 +69,8 @@ copy of the GNU General Public License along with the IFDM Suite. If not, see <h
             <th class="text-center">
                 <div ng-controller="manageRoleCtrl" ng-if="checkAccess('manageRoles')">
                     <button id="newRoleButton"
-                        tooltip-popup-delay={{toolTipsDelay}}
-                        tooltip="{{'roles.new_button_tooltip' | translate}}"
+                        uibTooltip-popup-delay={{toolTipsDelay}}
+                        uibTooltip="{{'roles.new_button_tooltip' | translate}}"
                         class="btn btn-primary btn-sm" ng-click='manageRole("new", "")'>
                         <span class="fa fa-plus"></span>
                         <span>{{'roles.newRole' | translate}}</span>
@@ -89,15 +89,15 @@ copy of the GNU General Public License along with the IFDM Suite. If not, see <h
             <td class="actionTd text-center">
                 <span ng-controller="manageRoleCtrl" ng-if="checkAccess('manageRoles')">
 					<button type="button"
-                            tooltip-popup-delay={{toolTipsDelay}}
-                            tooltip="{{'roles.edit_button_tooltip' | translate}}"
+                            uibTooltip-popup-delay={{toolTipsDelay}}
+                            uibTooltip="{{'roles.edit_button_tooltip' | translate}}"
                             class="btn btn-sm btn-primary usm-action-btn" ng-click='manageRole("edit", role)'>
                         <span><i class="fa fa-pencil"></i></span>
                     </button>
                 </span>
                 <button type="button"
-                        tooltip-popup-delay={{toolTipsDelay}}
-                        tooltip="{{'roles.view_button_tooltip' | translate}}"
+                        uibTooltip-popup-delay={{toolTipsDelay}}
+                        uibTooltip="{{'roles.view_button_tooltip' | translate}}"
                         class="btn btn-sm btn-primary usm-action-btn"
                         ui-sref="app.usm.roles.role({roleId: role.roleId})"
                         ui-sref-opts="{ inherit : false }">
@@ -105,8 +105,8 @@ copy of the GNU General Public License along with the IFDM Suite. If not, see <h
                 </button>
                 <span ng-controller="manageRoleCtrl" ng-if="checkAccess('manageRoles')">
 					<button type="button"
-                            tooltip-popup-delay={{toolTipsDelay}}
-                            tooltip="{{'roles.del_button_tooltip' | translate}}"
+                            uibTooltip-popup-delay={{toolTipsDelay}}
+                            uibTooltip="{{'roles.del_button_tooltip' | translate}}"
                             class="btn btn-sm btn-danger usm-action-btn" ng-click='manageRole("delete", role)'>
                         <span><i class="fa fa-remove"></i></span>
                     </button>
