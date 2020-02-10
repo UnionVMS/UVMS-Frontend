@@ -28,7 +28,7 @@ copy of the GNU General Public License along with the IFDM Suite. If not, see <h
                 <div class="vesselcontainerwrapper">
                     <div class="vesselsearchboxfooter row">
                         <div class="col-md-2 nopaddingleft">
-                            <dropdown class="" ng-model="editSelection" initialtext="{{'common.actions' | i18n}}" items="editSelectionDropdownItems" menu-style callback="editSelectionCallback" input-field-id="asset-dropdown-actions"></dropdown>
+                            <uib-dropdown class="" ng-model="editSelection" initialtext="{{'common.actions' | i18n}}" items="editSelectionDropdownItems" menu-style callback="editSelectionCallback" input-field-id="asset-dropdown-actions"></uib-dropdown>
                         </div>
                         <div class="col-md-2">
                             <button class="btn btn-primary btn-sm addnewassetbtn" ng-click="toggleCreateNewVessel()" type="button" show-if-allowed="manageVessels" id="asset-btn-create"><i class="fa fa-plus"></i>  {{'vessel.new_asset' | i18n}}

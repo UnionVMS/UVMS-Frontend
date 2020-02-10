@@ -12,7 +12,7 @@ copy of the GNU General Public License along with the IFDM Suite. If not, see <h
 <div class="container containerWithTopBottomPadding exchangeContainer">
     <!-- NOTE: this is commented out until a proper permission is implemented  -->
     <!-- <div class="row exchange-grid-header">
-        
+
         <div class="col-md-5 smallerpaddingright">
             <div static-include="partial/exchange/tables/exchangeTransmissionStatus.html"></div>
         </div>
@@ -40,20 +40,20 @@ copy of the GNU General Public License along with the IFDM Suite. If not, see <h
         <!-- Toggle: ALL, INCOMING, OUTGOING -->
         <div class="row incoming-outgoing-toggle" ng-if="!isLinkActive">
             <div class="col-md-2 smallerpaddingright editSelection">
-                <dropdown ng-model="editSelection" initialtext="{{'common.actions' | i18n}}" items="editSelectionDropdownItems" menu-style callback="editSelectionCallback" input-field-id="exchange-dropdown-actions"></dropdown>
+                <uib-dropdown ng-model="editSelection" initialtext="{{'common.actions' | i18n}}" items="editSelectionDropdownItems" menu-style callback="editSelectionCallback" input-field-id="exchange-dropdown-actions"></uib-dropdown>
             </div>
 
             <div class="col-md-8">
                 <div class="">
                     <div class="btn-group">
-                        <label class="btn btn-default" ng-model="exchangeLogsSearchResults.incomingOutgoing" btn-radio="'all'">
+                        <label class="btn btn-default" ng-model="exchangeLogsSearchResults.incomingOutgoing" uib-btn-radio="'all'">
                             {{'exchange.title_all' | i18n}}
                         </label>
-                        <label class="btn btn-default" ng-model="exchangeLogsSearchResults.incomingOutgoing" btn-radio="'incoming'">
+                        <label class="btn btn-default" ng-model="exchangeLogsSearchResults.incomingOutgoing" uib-btn-radio="'incoming'">
                             <span class="fa fa-arrow-down incoming"></span>
                             {{'exchange.title_incoming' | i18n}}
                         </label>
-                        <label class="btn btn-default" ng-model="exchangeLogsSearchResults.incomingOutgoing" btn-radio="'outgoing'">
+                        <label class="btn btn-default" ng-model="exchangeLogsSearchResults.incomingOutgoing" uib-btn-radio="'outgoing'">
                             <span class="fa fa-arrow-up outgoing"></span>
                             {{'exchange.title_outgoing' | i18n}}
                         </label>

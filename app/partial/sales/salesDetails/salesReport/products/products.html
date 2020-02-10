@@ -7,12 +7,12 @@
         <div class="col-md-3">
             <div class="row">
                 <div class="col-md-4">
-                    <dropdown class="menu-style"
+                    <uib-dropdown class="menu-style"
                               ng-model="vm.editSelection"
                               initialtext="{{'common.actions' | i18n}}"
                               items="vm.editSelectionDropdownItems"
                               callback="vm.editSelectionCallBack">
-                    </dropdown>
+                    </uib-dropdown>
                 </div>
             </div>
             <sales-products-chart products="vm.products" filter-products="vm.filterProducts"></sales-products-chart>

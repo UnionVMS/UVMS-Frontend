@@ -33,16 +33,16 @@
                 <input type="text" placeholder="{{'vessel.advanced_search_placeholder_homeport_name' | i18n}}" class="form-control" tabindex="7" ng-model="advancedSearchObject.HOMEPORT" ng-change="resetSelectedVesselGroup()" tab-index="7" id="asset-input-search-homeport">
             </div>
             <div class="col-md-2 smallerpadding searchcriteria">
-                <dropdown ng-model="advancedSearchObject.GEAR_TYPE" initialtext="{{'vessel.advanced_search_placeholder_gear_type' | i18n}}" items="gearTypes" callback="resetSelectedVesselGroup" tab-index="8" input-field-id="asset-dropdown-search-gearType"></dropdown>
+                <uib-dropdown ng-model="advancedSearchObject.GEAR_TYPE" initialtext="{{'vessel.advanced_search_placeholder_gear_type' | i18n}}" items="gearTypes" callback="resetSelectedVesselGroup" tab-index="8" input-field-id="asset-dropdown-search-gearType"></uib-dropdown>
             </div>
             <div class="col-md-2 smallerpadding searchcriteria">
                 <input type="text" placeholder="{{'vessel.advanced_search_placeholder_producer_name' | i18n}}" class="form-control" ng-model="advancedSearchObject.PRODUCER_NAME" ng-change="resetSelectedVesselGroup()" tab-index="9" id="asset-dropdown-search-producername">
             </div>
             <div class="col-md-1 smallerpadding searchcriteria">
-                <dropdown ng-model="advancedSearchObject.LENGTH_SPAN" initialtext="{{'vessel.advanced_search_placeholder_length' | i18n}}" items="lengthSpans" callback="resetSelectedVesselGroup" tab-index="10" input-field-id="asset-dropdown-search-lengthValue"></dropdown>
+                <uib-dropdown ng-model="advancedSearchObject.LENGTH_SPAN" initialtext="{{'vessel.advanced_search_placeholder_length' | i18n}}" items="lengthSpans" callback="resetSelectedVesselGroup" tab-index="10" input-field-id="asset-dropdown-search-lengthValue"></uib-dropdown>
             </div>
             <div class="col-md-1 smallerpadding searchcriteria">
-                <dropdown ng-model="advancedSearchObject.POWER_SPAN" initialtext="{{'vessel.advanced_search_placeholder_power' | i18n}}" items="powerSpans" callback="resetSelectedVesselGroup" tab-index="11" input-field-id="asset-dropdown-search-power"></dropdown>
+                <uib-dropdown ng-model="advancedSearchObject.POWER_SPAN" initialtext="{{'vessel.advanced_search_placeholder_power' | i18n}}" items="powerSpans" callback="resetSelectedVesselGroup" tab-index="11" input-field-id="asset-dropdown-search-power"></uib-dropdown>
             </div>
             <div class="col-md-1 smallerpadding">
                 <div class="row nomargin">

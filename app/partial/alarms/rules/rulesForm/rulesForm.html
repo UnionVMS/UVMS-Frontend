@@ -46,7 +46,7 @@ copy of the GNU General Public License along with the IFDM Suite. If not, see <h
                            <div class="col-md-4">
                                   <div class="form-group" ng-class="{'has-error': ruleForm.availability.$invalid && (submitAttempted || ruleForm.availability.$dirty)}">
                                     <label>{{'alarms.rules_form_availability_label' | i18n}}</label>
-                                    <dropdown name="availability" ng-model="currentRule.availability" no-placeholder-item items="DROPDOWNS.AVAILABILITY_TYPES" disabled-items="disabledAvailabilityTypes" callback="onAvailabilitySelection" ng-disabled="disableAvailability" required></dropdown>
+                                    <uib-dropdown name="availability" ng-model="currentRule.availability" no-placeholder-item items="DROPDOWNS.AVAILABILITY_TYPES" disabled-items="disabledAvailabilityTypes" callback="onAvailabilitySelection" ng-disabled="disableAvailability" required></uib-dropdown>
                                     <input-validation-message types="required" input="ruleForm.availability"></input-validation-message>
                                 </div>
                             </div>
@@ -62,7 +62,7 @@ copy of the GNU General Public License along with the IFDM Suite. If not, see <h
                            <div class="col-md-4">
                                 <div class="form-group" ng-class="{'has-error': ruleForm.active.$invalid && (submitAttempted || ruleForm.active.$dirty)}">
                                     <label>{{'alarms.rules_form_status_label' | i18n}}</label>
-                                    <dropdown name="active" ng-model="currentRule.active" no-placeholder-item items="DROPDOWNS.ACTIVE_STATUSES" required></dropdown>
+                                    <uib-dropdown name="active" ng-model="currentRule.active" no-placeholder-item items="DROPDOWNS.ACTIVE_STATUSES" required></uib-dropdown>
                                     <input-validation-message types="required" input="ruleForm.active"></input-validation-message>
                                 </div>
                             </div>
@@ -135,23 +135,23 @@ copy of the GNU General Public License along with the IFDM Suite. If not, see <h
                                 <tr ng-repeat="item in currentRule.definitions" ng-form="definitionForm">
                                     <td class="startOperator">
                                         <div class="form-group">
-                                            <dropdown name="startOperator" ng-model="item.startOperator" initialtext="-" initialtext-selectable items="DROPDOWNS.START_OPERATORS"></dropdown>
+                                            <uib-dropdown name="startOperator" ng-model="item.startOperator" initialtext="-" initialtext-selectable items="DROPDOWNS.START_OPERATORS"></uib-dropdown>
                                         </div>
                                     </td>
 
                                     <td class="criteria">
                                         <div class="form-group" ng-class="{'has-error': definitionForm.criteria.$invalid && (submitAttempted || definitionForm.criteria.$dirty)}">
-                                            <dropdown name="criteria" ng-model="item.criteria" no-placeholder-item items="DROPDOWNS.CRITERIAS" callback="onCriteriaSelection" callback-params="item" required></dropdown>
+                                            <uib-dropdown name="criteria" ng-model="item.criteria" no-placeholder-item items="DROPDOWNS.CRITERIAS" callback="onCriteriaSelection" callback-params="item" required></uib-dropdown>
                                         </div>
                                     </td>
                                     <td class="subCriteria">
                                         <div class="form-group" ng-class="{'has-error': definitionForm.subCriteria.$invalid && (submitAttempted || definitionForm.subCriteria.$dirty)}">
-                                            <dropdown name="subCriteria" ng-model="item.subCriteria" no-placeholder-item items="DROPDOWNS.SUBCRITERIAS[item.criteria]" ng-required="true" callback="onSubCriteriaSelection" callback-params="item"></dropdown>
+                                            <uib-dropdown name="subCriteria" ng-model="item.subCriteria" no-placeholder-item items="DROPDOWNS.SUBCRITERIAS[item.criteria]" ng-required="true" callback="onSubCriteriaSelection" callback-params="item"></uib-dropdown>
                                         </div>
                                     </td>
                                     <td class="condition">
                                         <div class="form-group" ng-class="{'has-error': definitionForm.conditionTypes.$invalid && (submitAttempted || definitionForm.conditionTypes.$dirty)}">
-                                            <dropdown name="conditionTypes" ng-model="item.condition" no-placeholder-item items="DROPDOWNS.CONDITIONS[item.criteria][item.subCriteria]" required></dropdown>
+                                            <uib-dropdown name="conditionTypes" ng-model="item.condition" no-placeholder-item items="DROPDOWNS.CONDITIONS[item.criteria][item.subCriteria]" required></uib-dropdown>
                                         </div>
                                     </td>
                                     <td class="value">
@@ -183,10 +183,10 @@ copy of the GNU General Public License along with the IFDM Suite. If not, see <h
                                             </div>
                                         </div>
                                         <div class="form-group" ng-class="{'has-error': definitionForm.value.$invalid && (submitAttempted || definitionForm.value.$dirty)}" ng-if="getRuleDefinitionValueInputType(item) === 'DROPDOWN'">
-                                            <dropdown name="value" ng-model="item.value" items="getDropdownValuesForRuleDefinition(item)" no-placeholder-item required class="floatLeft"></dropdown>
+                                            <uib-dropdown name="value" ng-model="item.value" items="getDropdownValuesForRuleDefinition(item)" no-placeholder-item required class="floatLeft"></uib-dropdown>
                                         </div>
                                          <div class="form-group" ng-class="{'has-error': definitionForm.value.$invalid && (submitAttempted || definitionForm.value.$dirty)}" ng-if="getRuleDefinitionValueInputType(item) === 'DROPDOWN_EMPTY'">
-                                            <dropdown name="value" ng-model="item.value" items="getDropdownValuesForRuleDefinition(item)" initialtext="{{'alarms.rules_form_definition_value_dropdown_empty_text' | i18n}}" required class="floatLeft"></dropdown>
+                                            <uib-dropdown name="value" ng-model="item.value" items="getDropdownValuesForRuleDefinition(item)" initialtext="{{'alarms.rules_form_definition_value_dropdown_empty_text' | i18n}}" required class="floatLeft"></uib-dropdown>
                                         </div>
                                         <div class="form-group" ng-class="{'has-error': definitionForm.value.$invalid && (submitAttempted || definitionForm.value.$dirty)}" ng-if="getRuleDefinitionValueInputType(item) === 'DATETIME'">
                                             <datepicker-input model="item.value" time="true" ng-required="true" input-field-id="rule-condition-date-picker-{{$index}}"></datepicker-input>
@@ -202,12 +202,12 @@ copy of the GNU General Public License along with the IFDM Suite. If not, see <h
                                     </td>
                                     <td class="endOperator">
                                         <div class="form-group">
-                                            <dropdown name="endOperator" ng-model="item.endOperator" initialtext="-" initialtext-selectable items="DROPDOWNS.END_OPERATORS" class="floatLeft"></dropdown>
+                                            <uib-dropdown name="endOperator" ng-model="item.endOperator" initialtext="-" initialtext-selectable items="DROPDOWNS.END_OPERATORS" class="floatLeft"></uib-dropdown>
                                         </div>
                                     </td>
                                     <td class="logicBoolOperator">
                                         <div class="form-group" ng-class="{'has-error': definitionForm.logicBoolOperator.$invalid && (submitAttempted || definitionForm.logicBoolOperator.$dirty)}">
-                                            <dropdown name="logicBoolOperator" ng-model="item.logicBoolOperator" no-placeholder-item items="DROPDOWNS.LOGIC_OPERATORS" class="floatLeft" ng-required="$index +1 < currentRule.getNumberOfDefinitions()"></dropdown>
+                                            <uib-dropdown name="logicBoolOperator" ng-model="item.logicBoolOperator" no-placeholder-item items="DROPDOWNS.LOGIC_OPERATORS" class="floatLeft" ng-required="$index +1 < currentRule.getNumberOfDefinitions()"></uib-dropdown>
                                         </div>
                                     </td>
                                     <td class="remove">
@@ -260,7 +260,7 @@ copy of the GNU General Public License along with the IFDM Suite. If not, see <h
                                 <tr ng-repeat="item in currentRule.actions" ng-form="actionForm">
                                     <td class="action">
                                         <div class="form-group" ng-class="{'has-error': actionForm.action.$invalid && (submitAttempted || actionForm.action.$dirty)}">
-                                            <dropdown name="action" ng-model="item.action" no-placeholder-item items="DROPDOWNS.ACTIONS" disabled-items="disabledActions" callback="actionSelected" callback-params="item" required></dropdown>
+                                            <uib-dropdown name="action" ng-model="item.action" no-placeholder-item items="DROPDOWNS.ACTIONS" disabled-items="disabledActions" callback="actionSelected" callback-params="item" required></uib-dropdown>
                                         </div>
                                     </td>
                                     <td class="value">
@@ -275,10 +275,10 @@ copy of the GNU General Public License along with the IFDM Suite. If not, see <h
                                             <input-validation-message types="email" input="actionForm.value"></input-validation-message>
                                         </div>
                                         <div class="form-group" ng-class="{'has-error': actionForm.value.$invalid && (submitAttempted || actionForm.value.$dirty)}" ng-if="getActionValueInputType(item) ==='DROPDOWN'">
-                                            <dropdown name="value" ng-model="item.value" items="getDropdownValuesForAction(item)" ng-disabled="!actionShouldHaveValue(item.action)" no-placeholder-item class="floatLeft"></dropdown>
+                                            <uib-dropdown name="value" ng-model="item.value" items="getDropdownValuesForAction(item)" ng-disabled="!actionShouldHaveValue(item.action)" no-placeholder-item class="floatLeft"></uib-dropdown>
                                         </div>
                                          <div class="form-group" ng-class="{'has-error': actionForm.value.$invalid && (submitAttempted || actionForm.value.$dirty)}" ng-if="getActionValueInputType(item) ==='DROPDOWN_EMPTY'">
-                                            <dropdown name="value" ng-model="item.value" items="getDropdownValuesForAction(item)" initialtext="{{'alarms.rules_form_definition_value_dropdown_empty_text' | i18n}}" ng-disabled="!actionShouldHaveValue(item.action)" class="floatLeft"></dropdown>
+                                            <uib-dropdown name="value" ng-model="item.value" items="getDropdownValuesForAction(item)" initialtext="{{'alarms.rules_form_definition_value_dropdown_empty_text' | i18n}}" ng-disabled="!actionShouldHaveValue(item.action)" class="floatLeft"></uib-dropdown>
                                         </div>
                                     </td>
                                     <td class="endOperator">

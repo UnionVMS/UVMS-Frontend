@@ -1,10 +1,10 @@
 <div class="alarmSearchContainer" ng-controller="HoldingTableSearchController">
 	<div class="row">
         <div class="col-md-1 smallerpaddingright">
-            <dropdown ng-model="advancedSearchObject.STATUS" initialtext="{{'alarms.alarms_search_status' | i18n}}" items="statusOptions"></dropdown>
+            <uib-dropdown ng-model="advancedSearchObject.STATUS" initialtext="{{'alarms.alarms_search_status' | i18n}}" items="statusOptions"></uib-dropdown>
         </div>
 		<div class="col-md-1 smallerpadding">
-			<dropdown ng-model="advancedSearchObject.TIME_SPAN" no-placeholder-item items="timeSpanOptions"></dropdown>
+			<uib-dropdown ng-model="advancedSearchObject.TIME_SPAN" no-placeholder-item items="timeSpanOptions"></uib-dropdown>
 		</div>
 		<div class="col-md-2 smallerpadding">
 			<datepicker-input model="advancedSearchObject.FROM_DATE" time="true" max-date="advancedSearchObject.TO_DATE"  placeholder="{{'common.search_from' | i18n}}" input-field-id="holding-table-search-from-date-picker"></datepicker-input>
@@ -13,7 +13,7 @@
 			<datepicker-input model="advancedSearchObject.TO_DATE" time="true" min-date="advancedSearchObject.FROM_DATE"  placeholder="{{'common.search_to' | i18n}}" input-field-id="holding-table-search-to-date-picker"></datepicker-input>
 		</div>
         <div class="col-md-2 smallerpadding">
-            <dropdown ng-model="advancedSearchObject.RULE_GUID" initialtext="{{'alarms.alarms_search_rule' | i18n}}" items="rules"></dropdown>
+            <uib-dropdown ng-model="advancedSearchObject.RULE_GUID" initialtext="{{'alarms.alarms_search_rule' | i18n}}" items="rules"></uib-dropdown>
         </div>
 		<div class="col-md-1 smallerpadding">
 			<button type="submit" class="btn btn-primary btn-sm vmsbtn" ng-click="performAdvancedSearch()">{{'common.search' | i18n}}</button>

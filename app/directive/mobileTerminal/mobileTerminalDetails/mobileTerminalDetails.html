@@ -12,14 +12,14 @@
                             <div class="transponderSystemSelect form-group medium-field-static" ng-class="{'has-error': mobileTerminalForm.typeAndPlugin.$invalid && (submitAttempted || mobileTerminalForm.typeAndPlugin.$dirty)}">
                                 <label>{{'mobileTerminal.transceiver_system' | i18n}}
                                 <span ng-show="mobileTerminal.type.length < 0 || isCreateNewMode()" class="mandatory">{{ 'common.mandatory_field' | i18n }}</span></label>
-                                <dropdown ng-model="typeAndPlugin" name="typeAndPlugin" input-field-id="mt-{{listIndex}}-typeAndPlugin" initialtext="{{ 'common.choose' | i18n }}" items="transponderSystems" callback="onTerminalSystemSelect" ng-disabled="!isCreateNewMode()" data="typeAndPlugin" ng-required="true"></dropdown>
+                                <uib-dropdown ng-model="typeAndPlugin" name="typeAndPlugin" input-field-id="mt-{{listIndex}}-typeAndPlugin" initialtext="{{ 'common.choose' | i18n }}" items="transponderSystems" callback="onTerminalSystemSelect" ng-disabled="!isCreateNewMode()" data="typeAndPlugin" ng-required="true"></uib-dropdown>
                                 <input-validation-message types="required" input="mobileTerminalForm.typeAndPlugin"></input-validation-message>
                             </div>
                             <div class="flexrow" ng-if="typeAndPlugin">
                                 <div class="transponderSystemSelect form-group long-field" ng-show="getTerminalConfig().capabilities.SUPPORT_SINGLE_OCEAN || getTerminalConfig().capabilities.SUPPORT_MULTIPLE_OCEAN">
                                     <label>{{'mobileTerminal.add_new_form_ocean_region_label' | i18n}}</label>
                                     <div ng-show="getTerminalConfig().capabilities.SUPPORT_SINGLE_OCEAN">
-                                        <dropdown ng-model="mobileTerminal.attributes.SINGLE_OCEAN" initialtext="{{ 'common.choose' | i18n }}" items="getTerminalConfig().capabilities.SUPPORT_SINGLE_OCEAN" input-field-id="mt-{{listIndex}}-singleOcean"></dropdown>
+                                        <uib-dropdown ng-model="mobileTerminal.attributes.SINGLE_OCEAN" initialtext="{{ 'common.choose' | i18n }}" items="getTerminalConfig().capabilities.SUPPORT_SINGLE_OCEAN" input-field-id="mt-{{listIndex}}-singleOcean"></uib-dropdown>
                                     </div>
                                     <div ng-hide="getTerminalConfig().capabilities.SUPPORT_SINGLE_OCEAN">
                                         <tag-select-input ng-model="mobileTerminal.attributes.MULTIPLE_OCEAN" ng-placeholder="{{'common.choose' | i18n }}" items="getTerminalConfig().capabilities.SUPPORT_MULTIPLE_OCEAN" ng-disabled="disableForm()" input-field-id="mt-{{listIndex}}-multipleOcean"></tag-select-input>

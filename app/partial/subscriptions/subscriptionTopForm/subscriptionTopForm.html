@@ -26,14 +26,14 @@ copy of the GNU General Public License along with the IFDM Suite. If not, see <h
         </div>
         <div class="col-md-4 form-group isActive-group" ng-if="::subServ.layoutStatus.isForm === false">
                 <div class="btn-group">
-                    <label class="btn btn-default" ng-model="subscription.isActive" btn-radio="'all'">
+                    <label class="btn btn-default" ng-model="subscription.isActive" uib-btn-radio="'all'">
                         {{'subscriptions.subscription_form_all' | i18n}}
                     </label>
-                    <label class="btn btn-default" ng-model="subscription.isActive" btn-radio="true">
+                    <label class="btn btn-default" ng-model="subscription.isActive" uib-btn-radio="true">
                         <span class="fa fa-check-square-o"></span>
                         {{'subscriptions.subscription_form_active' | i18n}}
                     </label>
-                    <label class="btn btn-default" ng-model="subscription.isActive" btn-radio="false">
+                    <label class="btn btn-default" ng-model="subscription.isActive" uib-btn-radio="false">
                         <span class="fa fa-square-o"></span>
                         {{'subscriptions.subscription_form_inactive' | i18n}}
                     </label>
