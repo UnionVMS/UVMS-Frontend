@@ -10,18 +10,18 @@ FITNESS FOR A PARTICULAR PURPOSE.  See the GNU General Public License for more d
 copy of the GNU General Public License along with the IFDM Suite. If not, see <http://www.gnu.org/licenses/>.
 -->
 <div class="modal-header" style="text-align:left">
-    <div class="pointer pull-right" ng-click="cancel()"> 
+    <div class="pointer pull-right" ng-click="cancel()">
         <span class="fa fa-times closeicon"></span>
     </div>
     <h4 class="modal-title" id="saveSearchModalLabel">{{modalHeader}}</h4>
 </div>
 <div class="modal-body" loading-indicator="waitingForCreateResponse">
-    <alert type="danger" ng-show="error">
+    <uib-alert type="danger" ng-show="error">
         <span class="fa fa-exclamation-circle"></span>
         <span>
             {{errorMessage}}
         </span>
-    </alert>
+    </uib-alert>
 
     <div ng-show="allowSaving">
         <form name="saveForm" novalidate>
