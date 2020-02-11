@@ -5,9 +5,9 @@
 
             <div class="row">
                 <div class="col-md-1">
-                    <uib-dropdown class="" ng-model="vm.editSelection" initialtext="{{'common.actions' | i18n}}"
+                    <dropdown class="" ng-model="vm.editSelection" initialtext="{{'common.actions' | i18n}}"
                               items="vm.editSelectionDropdownItems" menu-style
-                              callback="vm.editSelectionCallBack"></uib-dropdown>
+                              callback="vm.editSelectionCallBack"></dropdown>
                 </div>
                 <simple-export exportfunc="vm.exportSalesReports"
                                amount-of-reports="vm.getAmountOfReportsInSearch()"></simple-export>

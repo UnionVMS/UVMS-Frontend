@@ -40,7 +40,7 @@ copy of the GNU General Public License along with the IFDM Suite. If not, see <h
         <!-- Toggle: ALL, INCOMING, OUTGOING -->
         <div class="row incoming-outgoing-toggle" ng-if="!isLinkActive">
             <div class="col-md-2 smallerpaddingright editSelection">
-                <uib-dropdown ng-model="editSelection" initialtext="{{'common.actions' | i18n}}" items="editSelectionDropdownItems" menu-style callback="editSelectionCallback" input-field-id="exchange-dropdown-actions"></uib-dropdown>
+                <dropdown ng-model="editSelection" initialtext="{{'common.actions' | i18n}}" items="editSelectionDropdownItems" menu-style callback="editSelectionCallback" input-field-id="exchange-dropdown-actions"></dropdown>
             </div>
 
             <div class="col-md-8">

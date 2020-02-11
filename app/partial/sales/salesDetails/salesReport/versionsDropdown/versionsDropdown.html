@@ -1,12 +1,12 @@
 <label ng-if="vm.currentReportIsNewestVersion && vm.reportVersions && vm.reportVersions.length > 0">{{ 'sales.report_older_versions_label' | i18n }}</label>
-<uib-dropdown
+<dropdown
           ng-if="vm.currentReportIsNewestVersion && vm.reportVersions && vm.reportVersions.length > 0"
           class="menu-style"
           ng-model="vm.selection"
           initialtext="{{ 'sales.report_older_versions' | i18n }}"
           items="vm.dropdownItems"
           callback="vm.chooseOlderVersion">
-</uib-dropdown>
+</dropdown>
 <button type="button" class="btn btn-default"
         ng-if="!vm.currentReportIsNewestVersion"
         ng-click="vm.goToNewestVersion()">

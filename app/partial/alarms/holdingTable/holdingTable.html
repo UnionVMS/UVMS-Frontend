@@ -19,7 +19,7 @@ copy of the GNU General Public License along with the IFDM Suite. If not, see <h
 
             <div class="row filterRow">
                 <div class="col-md-2 editSelection">
-                    <uib-dropdown ng-model="editSelection" initialtext="{{'common.actions' | i18n}}" items="editSelectionDropdownItems" menu-style callback="editSelectionCallback" input-field-id="holdingTable-dropdown-actions"></uib-dropdown>
+                    <dropdown ng-model="editSelection" initialtext="{{'common.actions' | i18n}}" items="editSelectionDropdownItems" menu-style callback="editSelectionCallback" input-field-id="holdingTable-dropdown-actions"></dropdown>
                 </div>
                 <div class="col-md-2 available-positions-refresh" ng-click="resetSearch()">
                     <a ng-if="newAlarmsCount > 0"><i class="fa fa-refresh"></i> {{ "alarms.new_items_available" | i18n:[newAlarmsCount] }}</a>

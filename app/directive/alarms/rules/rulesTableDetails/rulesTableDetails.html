@@ -6,7 +6,7 @@
                 <thead>
                     <tr class="searchInputRow dateSearch">
                         <th>
-                            <uib-dropdown ng-model="searchObject.TIME_SPAN" no-placeholder-item items="timeSpanOptions" ></uib-dropdown>
+                            <dropdown ng-model="searchObject.TIME_SPAN" no-placeholder-item items="timeSpanOptions" ></dropdown>
                         </th>
                         <th>
                             <datepicker-input model="searchObject.FROM_DATE" time="true"  max-date="searchObject.TO_DATE" placeholder="{{'common.search_from' | i18n}}" input-field-id="rules-search-from-date-picker"></datepicker-input>

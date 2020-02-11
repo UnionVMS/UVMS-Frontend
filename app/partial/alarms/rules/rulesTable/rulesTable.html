@@ -52,10 +52,10 @@ copy of the GNU General Public License along with the IFDM Suite. If not, see <h
                     <td class="statusColored truncate-text" ng-attr-title="{{item.dateUpdated | confDateFormat}}">{{item.dateUpdated | confDateFormat}}</td>
                     <td class="statusColored truncate-text" ng-attr-title="{{item.updatedBy}}">{{item.updatedBy}}</td>
                     <td class="statusColored notifyByTicket">
-                        <uib-dropdown ng-show="mySubscriptions[item.guid]" ng-model="mySubscriptions[item.guid].TICKET" no-placeholder-item items="subscriptionDropdownOptions" callback="onTicketSubscriptionSelect" callback-params="item" ng-disabled="item.isGlobal()"></uib-dropdown>
+                        <dropdown ng-show="mySubscriptions[item.guid]" ng-model="mySubscriptions[item.guid].TICKET" no-placeholder-item items="subscriptionDropdownOptions" callback="onTicketSubscriptionSelect" callback-params="item" ng-disabled="item.isGlobal()"></dropdown>
                     </td>
                     <td class="statusColored notifyByEmail">
-                        <uib-dropdown ng-show="mySubscriptions[item.guid]" ng-model="mySubscriptions[item.guid].EMAIL" no-placeholder-item items="subscriptionDropdownOptions" callback="onEmailSubscriptionSelect" callback-params="item"></uib-dropdown>
+                        <dropdown ng-show="mySubscriptions[item.guid]" ng-model="mySubscriptions[item.guid].EMAIL" no-placeholder-item items="subscriptionDropdownOptions" callback="onEmailSubscriptionSelect" callback-params="item"></dropdown>
                     </td>
                     <td ng-class="item.active ? 'active' : 'inactive'">
                         <span class="label" ng-class="item.active ? 'label-success' : 'label-danger'" ng-attr-title="{{getStatusLabelForRule(item)}}">

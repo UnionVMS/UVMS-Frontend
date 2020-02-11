@@ -22,7 +22,7 @@ copy of the GNU General Public License along with the IFDM Suite. If not, see <h
                         <form class="search-wrapper">
                             <div class="searchInputRow dateSearch" ng-if="!showPollByID">
                                 <div class="col-md-1 nopaddingleft smallerpadding">
-                                    <uib-dropdown ng-model="advancedSearchObject.TIME_SPAN" items="timeSpanOptions" no-placeholder-item input-field-id="polling-search-timespan"></uib-dropdown>
+                                    <dropdown ng-model="advancedSearchObject.TIME_SPAN" items="timeSpanOptions" no-placeholder-item input-field-id="polling-search-timespan"></dropdown>
                                 </div>
                                 <div class="col-md-2 smallerpadding">
                                     <datepicker-input model="advancedSearchObject.FROM_DATE" max-date="advancedSearchObject.TO_DATE" placeholder="{{'polling.polling_logs_search_date_from_placeholder' | i18n}}" time="true" tab-index="1" input-field-id="polling-search-fromdate"></datepicker-input>
@@ -55,11 +55,11 @@ copy of the GNU General Public License along with the IFDM Suite. If not, see <h
                                     </div>
 
                                     <div class="col-md-2 smallerpadding">
-                                        <uib-dropdown ng-model="advancedSearchObject.POLL_TYPE" initialtext="{{'polling.polling_logs_table_header_poll_type' | i18n}}" items="pollTypes" tab-index="5" input-field-id="polling-search-pollType"></uib-dropdown>
+                                        <dropdown ng-model="advancedSearchObject.POLL_TYPE" initialtext="{{'polling.polling_logs_table_header_poll_type' | i18n}}" items="pollTypes" tab-index="5" input-field-id="polling-search-pollType"></dropdown>
                                     </div>
 
                                     <div class="col-md-2 smallerpadding">
-                                        <uib-dropdown ng-model="advancedSearchObject.TERMINAL_TYPE" items="terminalTypes" initialtext="{{'polling.polling_logs_table_header_transponder' | i18n}}" tab-index="6" input-field-id="polling-search-terminalType"></uib-dropdown>
+                                        <dropdown ng-model="advancedSearchObject.TERMINAL_TYPE" items="terminalTypes" initialtext="{{'polling.polling_logs_table_header_transponder' | i18n}}" tab-index="6" input-field-id="polling-search-terminalType"></dropdown>
                                     </div>
 
                                     <div class="col-md-2 smallerpadding">
@@ -67,7 +67,7 @@ copy of the GNU General Public License along with the IFDM Suite. If not, see <h
                                     </div>
 
                                     <div class="col-md-2 smallerpadding">
-                                        <uib-dropdown ng-model="advancedSearchObject.STATUS" items="statusTypes" initialtext="{{'polling.polling_logs_table_header_status_short' | i18n}}" tab-index="8" input-field-id="polling-search-status"></uib-dropdown>
+                                        <dropdown ng-model="advancedSearchObject.STATUS" items="statusTypes" initialtext="{{'polling.polling_logs_table_header_status_short' | i18n}}" tab-index="8" input-field-id="polling-search-status"></dropdown>
                                     </div>
                                 </div>
                             </div>
@@ -82,7 +82,7 @@ copy of the GNU General Public License along with the IFDM Suite. If not, see <h
 
                         <div class="col-md-12 nopaddingleft dropdown-actions">
                             <div class="col-md-2 nopadding">
-                                <uib-dropdown ng-model="editSelection" initialtext="{{'common.actions' | i18n}}" items="editSelectionDropdownItems" menu-style callback="editSelectionCallback" input-field-id="polling-dropdown-actions"></uib-dropdown>
+                                <dropdown ng-model="editSelection" initialtext="{{'common.actions' | i18n}}" items="editSelectionDropdownItems" menu-style callback="editSelectionCallback" input-field-id="polling-dropdown-actions"></dropdown>
                             </div>
                         </div>
                     </div>

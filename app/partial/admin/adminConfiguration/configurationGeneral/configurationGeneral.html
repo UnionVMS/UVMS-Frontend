@@ -58,7 +58,7 @@ copy of the GNU General Public License along with the IFDM Suite. If not, see <h
 				<!-- Default homepage -->
 				<div class="col-md-4 col-md-offset-2 setting">
 					<h5 class="section-text">{{'audit.configuration_general_default_homepage' | i18n}}</h5>
-					<uib-dropdown ng-model="settings.defaultHomePage.value" items="homePages" no-placeholder-item callback="setDefaultHomePage"></uib-dropdown>
+					<dropdown ng-model="settings.defaultHomePage.value" items="homePages" no-placeholder-item callback="setDefaultHomePage"></dropdown>
 				</div>
 
 			</div>
@@ -67,13 +67,13 @@ copy of the GNU General Public License along with the IFDM Suite. If not, see <h
 				<!-- Distance unit -->
 				<div class="col-md-4 setting">
 					<h5 class="section-text">{{'audit.configuration_general_unit_distance' | i18n}}</h5>
-					<uib-dropdown ng-model="settings.distanceUnit.value" items="distanceUnits" no-placeholder-item callback="setDistanceUnit"></uib-dropdown>
+					<dropdown ng-model="settings.distanceUnit.value" items="distanceUnits" no-placeholder-item callback="setDistanceUnit"></dropdown>
 				</div>
 
 				<!-- Speed unit -->
 				<div class="col-md-4 col-md-offset-2 setting">
 					<h5 class="section-text">{{'audit.configuration_general_unit_speed' | i18n}}</h5>
-					<uib-dropdown ng-model="settings.speedUnit.value" items="speedUnits" no-placeholder-item callback="setSpeedUnit"></uib-dropdown>
+					<dropdown ng-model="settings.speedUnit.value" items="speedUnits" no-placeholder-item callback="setSpeedUnit"></dropdown>
 				</div>
 
 			</div>
@@ -88,7 +88,7 @@ copy of the GNU General Public License along with the IFDM Suite. If not, see <h
 				<!-- Timezone -->
 				<div class="col-md-4 col-md-offset-2 setting">
 					<h5 class="section-text">{{'audit.configuration_general_timezone' | i18n}}</h5>
-					<uib-dropdown ng-model="settings.timezone.value" items="timezones" no-placeholder-item callback="setTimezone"></uib-dropdown>
+					<dropdown ng-model="settings.timezone.value" items="timezones" no-placeholder-item callback="setTimezone"></dropdown>
 				</div>
 
 			</div>
@@ -98,7 +98,7 @@ copy of the GNU General Public License along with the IFDM Suite. If not, see <h
 			<h5 class="section-text">{{'audit.configuration_general_languages' | i18n}}</h5>
 				<div class="row" ng-repeat="l in selectedLanguages track by $index" style="display: flex; align-items: center;">
 					<div class="col-md-8">
-						<uib-dropdown items="languages" disabled-items="selectedLanguages" ng-model="selectedLanguages[$index]" callback="selectLanguage" callback-params="$index" initialtext="{{'config.select_language' | i18n}}"></uib-dropdown>
+						<dropdown items="languages" disabled-items="selectedLanguages" ng-model="selectedLanguages[$index]" callback="selectLanguage" callback-params="$index" initialtext="{{'config.select_language' | i18n}}"></dropdown>
 					</div>
 					<div class="col-md-4">
 						<a ng-click="removeLanguage($index)" ng-if="$index > 0">{{'common.remove' | i18n}}</a>

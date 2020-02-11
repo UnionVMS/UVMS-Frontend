@@ -1,7 +1,7 @@
 <div class="exchangeSearch" ng-controller="ExchangeSearchController">
 	<div class="row">
 		<div class="col-md-2">
-			<uib-dropdown ng-model="advancedSearchObject.EXCHANGE_TIME_SPAN" no-placeholder-item items="timeSpanOptions"></uib-dropdown>
+			<dropdown ng-model="advancedSearchObject.EXCHANGE_TIME_SPAN" no-placeholder-item items="timeSpanOptions"></dropdown>
 		</div>
 		<div class="col-md-2" ng-if="advancedSearchObject.EXCHANGE_TIME_SPAN !== 'CUSTOM_HOURS'">
 			<datepicker-input model="advancedSearchObject.DATE_RECEIVED_FROM" time="true" max-date="advancedSearchObject.DATE_RECEIVED_TO" placeholder="{{'exchange.search_from' | i18n}}" input-field-id="exchange-log-search-from-date-picker"></datepicker-input>
@@ -21,16 +21,16 @@
 	</div>
 	<div class="row">
 		<div class="col-md-2">
-			<uib-dropdown ng-model="advancedSearchObject.RECIPIENT" initialtext="{{'exchange.search_recipient' | i18n}}" items="recipientItems"></uib-dropdown>
+			<dropdown ng-model="advancedSearchObject.RECIPIENT" initialtext="{{'exchange.search_recipient' | i18n}}" items="recipientItems"></dropdown>
 		</div>
 		<div class="col-md-2">
-			<uib-dropdown ng-model="advancedSearchObject.SOURCE" initialtext="{{'exchange.search_source' | i18n}}" items="sourceItems"></uib-dropdown>
+			<dropdown ng-model="advancedSearchObject.SOURCE" initialtext="{{'exchange.search_source' | i18n}}" items="sourceItems"></dropdown>
 		</div>
 		<div class="col-md-2">
-			<uib-dropdown ng-model="advancedSearchObject.TYPE" initialtext="{{'exchange.search_type' | i18n}}" items="typeItems"></uib-dropdown>
+			<dropdown ng-model="advancedSearchObject.TYPE" initialtext="{{'exchange.search_type' | i18n}}" items="typeItems"></dropdown>
 		</div>
 		<div class="col-md-2">
-			<uib-dropdown ng-model="advancedSearchObject.STATUS" initialtext="{{'exchange.search_status' | i18n}}" items="statusItems"></uib-dropdown>
+			<dropdown ng-model="advancedSearchObject.STATUS" initialtext="{{'exchange.search_status' | i18n}}" items="statusItems"></dropdown>
 		</div>
 		<div class="col-md-4">
 			<div class="col-md-6">

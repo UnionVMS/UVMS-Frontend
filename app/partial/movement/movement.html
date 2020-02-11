@@ -23,7 +23,7 @@ copy of the GNU General Public License along with the IFDM Suite. If not, see <h
             <advanced-search searchfunc="searchMovements" vesselGroupCallback="selectGroupCallback()" modeltype="'MOVEMENT'" advancedsearchvisible="true"></advanced-search>
       		<div class="row editSelectionsContainer">
                 <div class="col-md-2 smallerpaddingright">
-                    <uib-dropdown ng-model="editSelection" initialtext="{{'common.actions' | i18n}}" items="editSelectionDropdownItems" menu-style callback="editSelectionCallback" input-field-id="movement-dropdown-actions"></uib-dropdown>
+                    <dropdown ng-model="editSelection" initialtext="{{'common.actions' | i18n}}" items="editSelectionDropdownItems" menu-style callback="editSelectionCallback" input-field-id="movement-dropdown-actions"></dropdown>
                 </div>
                 <div class="col-md-4 available-positions-refresh smallerpadding" ng-click="resetSearch()">
                     <a ng-if="newMovementsCount > 0"><i class="fa fa-refresh"></i> {{ "movement.new_positions_available" | i18n:[newMovementsCount] }}</a>
