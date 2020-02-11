@@ -69,6 +69,8 @@
     "ol": "3.21.0-beta.17",
     "proj4": "^2.3.14",
     "qtip2": "0.0.1",
+    "screenfull": "git+https://github.com/sindresorhus/screenfull.js.git#v3.0.2",
+    "slick-carousel": "^1.8.1",
     "tinycolor2": "^1.4.1",
     "ui-select": "^0.11.2",
     "underscore": "~1.8"
