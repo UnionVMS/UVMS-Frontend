@@ -270,12 +270,12 @@ describe('ManualPositionReportModalCtrl', function() {
         scope.positionReport = report;
         scope.confirmSend = true;
         scope.sendSuccess = false;
-        spyOn(manualPositionRestService, 'saveAndSendMovement').andReturn(deferred.promise);
+        spyOn(manualPositionRestService, 'createManualPosition').andReturn(deferred.promise);
         spyOn(scope, 'setSuccessText');
 
         // Send position and wait for promise to resolve
         scope.sendPosition();
-        expect(manualPositionRestService.saveAndSendMovement).toHaveBeenCalledWith(report);
+        expect(manualPositionRestService.createManualPosition).toHaveBeenCalledWith(report);
         expect(scope.waitingForResponse).toBe(true);
 
         // Resolve promise
@@ -289,7 +289,7 @@ describe('ManualPositionReportModalCtrl', function() {
 
     it('should update scope if sending of new position was unsuccessful', inject(function(manualPositionRestService, $q) {
         var deferred = $q.defer();
-        spyOn(manualPositionRestService, 'saveAndSendMovement').andReturn(deferred.promise);
+        spyOn(manualPositionRestService, 'createManualPosition').andReturn(deferred.promise);
         scope.confirmSend = true;
         spyOn(scope, 'setErrorText');
 

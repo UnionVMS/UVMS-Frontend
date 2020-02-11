@@ -222,7 +222,7 @@ angular.module('unionvmsWeb').controller('ManualPositionReportModalCtrl', functi
         $scope.submitAttempted = true;
         if ($scope.confirmSend) {
             $scope.waitingForResponse = true;
-            manualPositionRestService.saveAndSendMovement($scope.positionReport).then(function() {
+            manualPositionRestService.createManualPosition($scope.positionReport).then(function() {
                 if (angular.isFunction(reloadFunction)) {
                     reloadFunction();
                 }

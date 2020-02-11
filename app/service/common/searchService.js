@@ -654,7 +654,6 @@ angular.module('unionvmsWeb').factory('searchService',function($q, $log, searchU
             if(vesselCriteria.length > 0){
                 var deferred = $q.defer();
                 var getVesselListRequest = new GetListRequest(1, ALL_ITEMS, vesselSearchIsDynamic, vesselCriteria, {}, extraParams);
-                var outerThis = this;
                 //Get the vessels
                 vesselRestService.getAllMatchingVessels(getVesselListRequest).then(
                     function(vessels){
@@ -663,14 +662,14 @@ angular.module('unionvmsWeb').factory('searchService',function($q, $log, searchU
                             return deferred.resolve(new SearchResultListPage());
                         }
 
+                        getAllListRequest = new GetListRequest(1, ALL_ITEMS, isDynamic, criterias, {}, extraParams);
                         //Iterate over the vessels to add new search criterias with CONNECT_ID as key and vessel GUID as value
                         $.each(vessels, function(index, vessel){
                             if(angular.isDefined(vessel.id)){
-                                outerThis.addSearchCriteria("CONNECT_ID", vessel.id);
+                                getAllListRequest.addSearchCriteria("CONNECT_ID", vessel.id);
                             }
                         });
                         //Get mobile terminals
-                        getAllListRequest = new GetListRequest(1, ALL_ITEMS, isDynamic, criterias, {}, extraParams);
                         mobileTerminalRestService.getMobileTerminalList(getAllListRequest).then(
                             function(mobileTerminaListPage){
                                 return deferred.resolve(mobileTerminaListPage);

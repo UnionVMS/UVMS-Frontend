@@ -86,6 +86,30 @@ angular.module('unionvmsWeb').factory('ManualPosition', function() {
 		return data;
 	};
 
+	ManualPosition.prototype.getDto2 = function() {
+		var data = {};
+
+		data.movement = {
+			location: {
+				longitude: this.position.longitude,
+				latitude: this.position.latitude
+			},
+			heading: this.course,
+			timestamp: moment(this.time).unix(),
+			speed: this.speed
+		};
+
+		data.asset = {
+			cfr: this.carrier.cfr,
+			name: this.carrier.name,
+			extMarking: this.carrier.externalMarking,
+			ircs: this.carrier.ircs,
+			flagState: this.carrier.flagState
+		};
+
+		return data;
+	};
+
     ManualPosition.prototype.copy = function() {
         var copy = new ManualPosition();
         copy.guid = this.guid;

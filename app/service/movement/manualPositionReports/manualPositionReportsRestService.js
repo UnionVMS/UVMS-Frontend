@@ -38,6 +38,9 @@ angular.module('unionvmsWeb')
             return $resource( 'movement/rest/tempmovement/send/:guid', {}, {
                 send: { method: 'PUT' }
             });
+        },
+        manualPosition: function() {
+            return $resource( 'movement/rest/manualMovement');
         }
     };
 })
@@ -185,12 +188,29 @@ angular.module('unionvmsWeb')
         return deferred.promise;
     };
 
+    var createManualPosition = function(movement) {
+        var deferred = $q.defer();
+        manualPositionRestFactory.manualPosition().save(movement.getDto2(), function(response, header, status) {
+            if(status !== 200) {
+                deferred.reject("Invalid response status");
+                return;
+            }
+
+            deferred.resolve(ManualPosition.fromJson(response));
+        }, function(error) {
+            deferred.reject(error);
+        });
+
+        return deferred.promise;
+    };
+
     return {
         createManualMovement: createManualMovement,
         getManualMovement: getManualMovement,
         updateManualMovement: updateManualMovement,
         getManualPositionList : getManualPositionList,
         deleteManualPositionReport : deleteManualPositionReport,
-        saveAndSendMovement: saveAndSendMovement
+        saveAndSendMovement: saveAndSendMovement,
+        createManualPosition: createManualPosition
      };
 });
