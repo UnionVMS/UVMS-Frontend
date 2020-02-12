@@ -6,7 +6,6 @@
     "url": "https://github.com/UnionVMS/UVMS-Frontend.git"
   },
   "dependencies": {
-    "@turf/turf": "^3.0.15",
     "@uirouter/angularjs": "~0.2.14",
     "angular": "~1.5",
     "angular-animate": "~1.5",
@@ -72,6 +71,7 @@
     "screenfull": "git+https://github.com/sindresorhus/screenfull.js.git#v3.0.2",
     "slick-carousel": "^1.8.1",
     "tinycolor2": "^1.4.1",
+    "turf": "git+https://github.com/Turfjs/turf.git#v2.0.2",
     "ui-select": "^0.11.2",
     "underscore": "~1.8"
   },
