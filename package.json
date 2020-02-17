@@ -6,7 +6,6 @@
     "url": "https://github.com/UnionVMS/UVMS-Frontend.git"
   },
   "dependencies": {
-    "@uirouter/angularjs": "~0.2.14",
     "angular": "~1.5",
     "angular-animate": "~1.5",
     "angular-bootstrap-colorpicker": "~3.0.19",
@@ -42,6 +41,7 @@
     "angular-translate": "2.7.0",
     "angular-translate-loader-static-files": "2.7.0",
     "angular-ui-bootstrap": "https://github.com/angular-ui/bootstrap-bower.git#1.0.0",
+    "angular-ui-router": "git+https://github.com/angular-ui/ui-router.git#0.2.18",
     "angular-ui-router-tabs": "1.4.2",
     "angular-ui-tree": "^2.22.0",
     "angular-ui-utils": "~0.1",
