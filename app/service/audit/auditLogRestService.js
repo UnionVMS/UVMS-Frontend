@@ -27,20 +27,20 @@ angular.module('unionvmsWeb').factory('auditLogRestFactory', function($resource)
     return {
         getAuditLogList: function(request) {
             var deferred = $q.defer();
-            auditLogRestFactory.getAuditLogList().list(request.DTOForAuditLogList(), function(response) {
-                if (response.code !== "200") {
-                    deferred.reject("getAuditLogList: invalid response status: " + response.code);
+            auditLogRestFactory.getAuditLogList().list(request.DTOForAuditLogList(), function(response, header, status) {
+                if (status !== "200") {
+                    deferred.reject("getAuditLogList: invalid response status: " + status);
                     return;
                 }
 
                 var auditLogs = [];
-                if (response.data.auditLog) {
-                    for (var i = 0; i < response.data.auditLog.length; i++) {
-                        auditLogs.push(Audit.fromJson(response.data.auditLog[i]));
+                if (response.auditLog) {
+                    for (var i = 0; i < response.auditLog.length; i++) {
+                        auditLogs.push(Audit.fromJson(response.auditLog[i]));
                     }
                 }
 
-                deferred.resolve(new SearchResultListPage(auditLogs, response.data.currentPage, response.data.totalNumberOfPages));
+                deferred.resolve(new SearchResultListPage(auditLogs, response.currentPage, response.totalNumberOfPages));
             },
             function(error) {
                 deferred.reject(error);
