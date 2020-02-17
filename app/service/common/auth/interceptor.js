@@ -263,7 +263,7 @@ angular.module('auth.interceptor', ['ngStorage','ui.bootstrap'])
 
                         var Retry = $injector.get('renewloginpanel');
                         var $http = $injector.get('$http');
-                        var $uibModalStack = $injector.get('$uibModal');
+                        var $uibModalStack = $injector.get('$uibModalStack');
 
                         return $timeout(angular.noop, 200).then(function () {
                             return Retry.show();
