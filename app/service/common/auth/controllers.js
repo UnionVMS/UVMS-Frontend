@@ -425,7 +425,7 @@ angular.module('auth.controllers', ['ui.bootstrap', 'ui.router'])
                                     deferred.resolve({
                                         authenticated: data.authenticated,
                                         status: data.statusCode,
-                                                    token: data.jwtoken,
+                                                    token: data.JWToken,
                                         sessionId: data.sessionId
                                                 });
                                     $localStorage.sessionId = data.sessionId;
