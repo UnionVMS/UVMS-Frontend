@@ -95,7 +95,7 @@ angular.module('unionvmsWeb').factory('ManualPosition', function() {
 				latitude: this.position.latitude
 			},
 			heading: this.course,
-			timestamp: moment(this.time).unix(),
+			timestamp: moment(this.time).valueOf(),
 			speed: this.speed
 		};
 
