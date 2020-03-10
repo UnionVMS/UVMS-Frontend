@@ -20,7 +20,7 @@ copy of the GNU General Public License along with the IFDM Suite. If not, see <h
  * @param $anchorScroll {Service} angular $anchorScroll service
  * @param locale {Service} angular locale service
  * @attr {unionvmsWeb.Trip} trip - The current trip in trip summary
- * @attr {Object} mapConfigs - A property object that will contain the cronology of trips related to the current trip
+ * @attr {Object} mapConfigs - A property object that will contain the chronology of trips related to the current trip
  * @attr {Array} tabs - A property object that will be the catch details
  * @description
  *  Service to manage the trip summary view in the application

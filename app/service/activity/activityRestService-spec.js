@@ -49,7 +49,7 @@ describe('activityRestService', function() {
                     get: actListSpy
                 }
             },
-            getTripCronology: function(){
+            getTripChronology: function(){
                 return {
                     get: tripCronSpy
                 }
@@ -113,10 +113,10 @@ describe('activityRestService', function() {
         scope.$digest();
         expect(callback).toHaveBeenCalled();
     });
-    
-    it('should get the trip cronology', function(){
+
+    it('should get the trip chronology', function(){
         tripCronSpy = createSpy('tripCronSpy', true);
-        actRestServ.getTripCronology(1, 5).then(callback);
+        actRestServ.getTripChronology(1, 5).then(callback);
         expect(tripCronSpy).toHaveBeenCalledWith({id: 1, nrItems: 5}, jasmine.any(Function), jasmine.any(Function));
         scope.$digest();
         expect(callback).toHaveBeenCalled();

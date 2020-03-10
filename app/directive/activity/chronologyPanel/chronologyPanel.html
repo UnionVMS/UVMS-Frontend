@@ -1,37 +1,37 @@
 <div>
-    <fieldset class="col-md-12 fieldsetStyle cronology-section">
+    <fieldset class="col-md-12 fieldsetStyle chronology-section">
         <legend class="fieldsetLegendStyle">
-            <a>{{'activity.trip_summary_cronology' | i18n }}</a>
+            <a>{{'activity.trip_summary_chronology' | i18n }}</a>
         </legend>
         <div>
             <p>{{'activity.trip_summary_note' | i18n }}</p>
         </div>
-        <div ng-if="trip.cronology">
+        <div ng-if="chronology | hasData">
             <div class="row">
                 <span class="col-md-7"><b>{{'activity.trip_summary_trip_id' | i18n }}</b></span>
                 <span class="col-md-5"><b>{{'activity.trip_summary_start_date' | i18n }}</b></span>
             </div>
             <!--NEXT TRIPS-->
-            <div class="row" ng-repeat="item in cronology.nextTrips">
+            <div class="row" ng-repeat="item in chronology.nextTrips">
                 <a class="col-md-7 trip-item" ng-click="openTrip(item.tripId)">{{item.tripId}}</a>
                 <span class="col-md-5">{{item.tripDate | confDateFormat | dataNotAvailable}}</span>
             </div>
             <!--SELECTED TRIP-->
             <div class="row selected-trip">
-                <a class="col-md-7 trip-item" ng-click="openTrip(cronology.selectedTrip.tripId)"> >> {{cronology.selectedTrip.tripId}}</a>
-                <span class="col-md-5">{{cronology.selectedTrip.tripDate | confDateFormat | dataNotAvailable}}</span>
+                <a class="col-md-7 trip-item" ng-click="openTrip(chronology.selectedTrip.tripId)"> >> {{chronology.selectedTrip.tripId}}</a>
+                <span class="col-md-5">{{chronology.selectedTrip.tripDate | confDateFormat | dataNotAvailable}}</span>
             </div>
             <!--PREVIOUS TRIPS-->
-            <div class="row" ng-repeat="item in cronology.previousTrips">
+            <div class="row" ng-repeat="item in chronology.previousTrips">
                 <a class="col-md-7 trip-item" ng-click="openTrip(item.tripId)">{{item.tripId}}</a>
                 <span class="col-md-5">{{item.tripDate | confDateFormat | dataNotAvailable}}</span>
             </div>
             <!--VIEW ALL LINK-->
-           <!--  <a class="view-all">{{'activity.cronology_view_all' | i18n }}</a> -->
+           <!--  <a class="view-all">{{'activity.chronology_view_all' | i18n }}</a> -->
         </div>
-        <div class="row no-data" ng-if="!trip.cronology">
+        <div class="row no-data" ng-if="!(chronology | hasData)">
             <div class="col-md-12">
-                <span>{{'activity.no_data' | i18n}}</span>
+                <span>{{'activity.no_chronology_data' | i18n}}</span>
             </div>
         </div>
     </fieldset>

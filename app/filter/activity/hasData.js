@@ -21,7 +21,11 @@ copy of the GNU General Public License along with the IFDM Suite. If not, see <h
  *      checks if object is empty
  */
 angular.module('unionvmsWeb').filter('hasData',  function() {
-    return function(array) {
-        return angular.isDefined(array) && !!array.length;
+    return function(input) {
+        if(input instanceof Array){
+            return angular.isDefined(input) && !!input.length;
+        } else if (input instanceof Object){
+            return !angular.equals({},input);
+        }
     }
 });

@@ -329,8 +329,7 @@
                     <warName>${project.artifactId}</warName>
                     <warSourceDirectory>${basedir}/dist</warSourceDirectory>
                     <warSourceExcludes>${basedir}/dist/docs</warSourceExcludes>
-                    <packagingExcludes>unionvms-web.zip,app.full.js,app.full.js,app.full.min.js.map,config.js
-                    </packagingExcludes>
+                    <packagingExcludes>unionvms-web.zip,app.full.js,app.full.min.js.map,config.js</packagingExcludes>
                     <webResources>
                         <resource>
                             <directory>${basedir}/dist</directory>

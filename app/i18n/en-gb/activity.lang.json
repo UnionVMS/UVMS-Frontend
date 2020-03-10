@@ -118,7 +118,7 @@
 	"trip_summary_vessel_ircs": "IRCS",
 	"trip_summary_vessel_cfr": "CFR",
 	"trip_summary_roles": "Roles",
-    "trip_summary_cronology": "Trip history",
+    "trip_summary_chronology": "Trip history",
 	"trip_summary_trip_map": "Trip map",
 	"trip_summary_catch": "Catch Summary",
 	"trip_summary_reports": "Reports",
@@ -193,13 +193,13 @@
     "clock_panel_arrival_time":"Time of Arrival",
     "clock_panel_intended_start_time":"Intended start time of landing",
     "clock_panel_accepted_time":"Accepted time",
-    "cronology_current_trip": "Current trip:",
-    "cronology_selected_trip": "Selected trip:",
-    "cronology_next_trip": "Next trips:",
-    "cronology_previous_trip": "Previous trips:",
-	"cronology_view_all": "View all",
+    "chronology_current_trip": "Current trip:",
+    "chronology_selected_trip": "Selected trip:",
+    "chronology_next_trip": "Next trips:",
+    "chronology_previous_trip": "Previous trips:",
+	"chronology_view_all": "View all",
 	"error_loading_trip_summary_vessel_data": "Error loading the vessel data in trip summary",
-	"error_loading_trip_summary_cronology": "Error loading the cronology in trip summary",
+	"error_loading_trip_summary_chronology": "Error loading the chronology in trip summary",
 	"error_loading_trip_summary_message_counter": "Error loading the message counter in trip summary",
 	"error_loading_trip_summary_reports": "Error loading reports in trip summary",
 	"error_loading_trip_summary_catch_details": "Error loading catch details in trip summary",
@@ -308,6 +308,7 @@
     "fa_details_item_quantity": "Quantity",
     "fa_details_item_description": "Description",
     "no_data": "No data available",
+    "no_chronology_data":"Chronology not available",
     "units": "Unit(s)",
     "class": "Class",
     "bms": "BMS",
@@ -469,6 +470,6 @@
     "catch_panel_transhipment": "TRA(UNLOADED)",
     "catch_panel_landing": "LAN(UNLOADED)",
     "catch_panel_weight": "Live weight"
-    
+
 
 }
