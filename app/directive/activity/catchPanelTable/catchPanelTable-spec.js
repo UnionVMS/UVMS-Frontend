@@ -44,8 +44,8 @@ describe('catchPanelTable', function() {
             },
             "tripRoles":[
             ],
-            "cronology":{
-             
+            "chronology":{
+
             },
             "messageCount":{
             },

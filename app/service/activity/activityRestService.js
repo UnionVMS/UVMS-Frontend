@@ -54,8 +54,8 @@ angular.module('unionvmsWeb').factory('activityRestFactory', function ($resource
                 }
             });
         },
-        getTripCronology: function () {
-            return $resource('activity/rest/trip/cronology/:id/:nrItems', {}, {
+        getTripChronology: function () {
+            return $resource('activity/rest/trip/chronology/:id/:nrItems', {}, {
                 'get': {
                     method: 'GET',
                     headers: {
@@ -205,7 +205,7 @@ angular.module('unionvmsWeb').factory('activityRestFactory', function ($resource
         },
         /**
          * Get a list of trips according to search criteria
-         * 
+         *
          * @memberof activityRestService
          * @public
          * @param {Object} data - The search criteria and table pagination data object
@@ -242,17 +242,17 @@ angular.module('unionvmsWeb').factory('activityRestFactory', function ($resource
             return deferred.promise;
         },
         /**
-         * Get the trip cronology of a specific trip
-         * 
+         * Get the trip chronology of a specific trip
+         *
          * @memberof activityRestService
          * @public
          * @param {String} id - The trip id of the selected trip
-         * @param {Number} nrItems - The number of trips to display in trip cronology
-         * @returns {Promise} A promise with either the trip cronology or reject error
+         * @param {Number} nrItems - The number of trips to display in trip chronology
+         * @returns {Promise} A promise with either the trip chronology or reject error
          */
-        getTripCronology: function (id, nrItems) {
+        getTripChronology: function (id, nrItems) {
             var deferred = $q.defer();
-            activityRestFactory.getTripCronology().get({ id: id, nrItems: nrItems }, function (response) {
+            activityRestFactory.getTripChronology().get({ id: id, nrItems: nrItems }, function (response) {
                 deferred.resolve(response);
             }, function (error) {
                 deferred.reject(error);
@@ -328,8 +328,8 @@ angular.module('unionvmsWeb').factory('activityRestFactory', function ($resource
             return deferred.promise;
         },
         /**
-         * Get the Catches and Landing Details for Tables. 
-         * 
+         * Get the Catches and Landing Details for Tables.
+         *
          * @memberof activityRestService
          * @public
          * @param {String} id - The trip id of the selected trip

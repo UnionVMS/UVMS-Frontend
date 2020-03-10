@@ -20,7 +20,7 @@ copy of the GNU General Public License along with the IFDM Suite. If not, see <h
  * @attr {Object} reports - A property object that will contain the report messages
  * @attr {Object} tripVessel - A property object that will be the vessel details
  * @attr {Object} tripRoles - A property object that will contain the roles
- * @attr {Object} cronology - A property object that will contain the cronology of trips related to the current trip
+ * @attr {Object} chronology - A property object that will contain the chronology of trips related to the current trip
  * @attr {Object} catchDetails - A property object that will be the catch details
  * @attr {Object} messageCount - A property object that will contain the message types count
  * @description
@@ -42,7 +42,7 @@ angular.module('unionvmsWeb').factory('Trip',function(locale,unitConversionServi
         this.reports = undefined;
         this.tripVessel = undefined;
         this.tripRoles = undefined;
-        this.cronology = undefined;
+        this.chronology = undefined;
         this.catchDetails = undefined;
         this.messageCount = undefined;
         this.mapData = undefined;
@@ -66,8 +66,8 @@ angular.module('unionvmsWeb').factory('Trip',function(locale,unitConversionServi
             case 'vessel':
                 loadVesselRoles(this,data);
                 break;
-            case 'cronology':
-                loadCronology(this,data);
+            case 'chronology':
+                loadChronology(this,data);
                 break;
             case 'catch':
                 loadCatch(this,data);
@@ -455,22 +455,15 @@ angular.module('unionvmsWeb').factory('Trip',function(locale,unitConversionServi
     };
 
     /**
-     * Load the trip cronology into the model
-     * 
+     * Load the trip chronology into the model
+     *
      * @memberof Trip
      * @private
      * @param {Object} self - current trip object
-     * @param {Object} data - cronology data
+     * @param {Object} data - chronology data
      */
-    var loadCronology = function(self,data){
-        if(angular.isDefined(data.previousTrips) && data.previousTrips.length > 0){
-            data.previousTrips = data.previousTrips.reverse();
-        }
-        if(angular.isDefined(data.nextTrips) && data.nextTrips.length > 0){
-            data.nextTrips = data.nextTrips.reverse();
-        }
-
-        self.cronology = data;
+    var loadChronology = function(self,data){
+        self.chronology = data;
     };
 
     /**

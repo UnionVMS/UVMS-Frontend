@@ -167,7 +167,7 @@ describe('tripModel', function() {
       ]
     };
 
-    var cronologyData = {
+    var chronologyData = {
       currentTrip: "NOR-TRP-20160517234053706",
       selectedTrip: "NOR-TRP-20160517234053706",
       previousTrips: ["NOR-TRP-20160517234053704","NOR-TRP-20160517234053705"],
@@ -296,14 +296,14 @@ describe('tripModel', function() {
 
       expect(trip.tripRoles.length).toEqual(vesselData.contactPersons.length);*/
 
-      trip.fromJson('cronology',cronologyData);
-      expect(trip.cronology.previousTrips).toEqual(cronologyData.previousTrips.reverse());
-      expect(trip.cronology.nextTrips).toEqual(cronologyData.nextTrips.reverse());
+      trip.fromJson('chronology',chronologyData);
+      expect(trip.chronology.previousTrips).toEqual(chronologyData.previousTrips.reverse());
+      expect(trip.chronology.nextTrips).toEqual(chronologyData.nextTrips.reverse());
 
-      delete cronologyData.previousTrips;
-      delete cronologyData.nextTrips;
-      trip.fromJson('cronology',cronologyData);
-      expect(trip.cronology).toEqual(cronologyData);
+      delete chronologyData.previousTrips;
+      delete chronologyData.nextTrips;
+      trip.fromJson('chronology',chronologyData);
+      expect(trip.chronology).toEqual(chronologyData);
 
       trip.fromJson('catch',catchData);
       expect(trip.catchDetails.onboard.speciesList.length).toEqual(catchData.onboard.speciesList.length);
