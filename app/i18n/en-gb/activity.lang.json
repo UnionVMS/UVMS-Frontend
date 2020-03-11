@@ -325,7 +325,7 @@
     "tab_trip_table_header_first_event_time": "First event date",
     "tab_trip_table_header_last_event": "Last event",
     "tab_trip_table_header_last_event_time": "Last event date",
-    "tab_trip_table_header_duration": "Duration",
+    "tab_trip_table_header_duration": "Duration (at sea)",
     "tab_trip_table_header_nCorrections": "Corrections",
     "tab_trip_table_header_nPositions": "Positions",
     "tab_trip_table_header_alarm": "Alarm",
