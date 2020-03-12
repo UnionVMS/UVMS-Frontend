@@ -124,6 +124,8 @@
     "rules_definition_then_action_notification" : "Create notification",
 
     "rules_rule_as_text_action_SEND_REPORT" : "SEND REPORT TO",
+    "rules_rule_as_text_action_SEND_ENTRY_REPORT" : "SEND ENTRY REPORT TO",
+    "rules_rule_as_text_action_SEND_EXIT_REPORT" : "SEND EXIT REPORT TO",
     "rules_rule_as_text_action_EMAIL" : "SEND EMAIL TO",
     "rules_rule_as_text_action_TICKET" : "CREATE NOTIFICATION",
     "rules_rule_as_text_action_TICKET_ALL_USERS" : "CREATE NOTIFICATION FOR ALL USERS",

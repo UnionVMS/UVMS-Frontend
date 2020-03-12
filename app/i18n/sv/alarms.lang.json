@@ -115,6 +115,8 @@
 
     "rules_rule_as_text_action_TOP_BAR_NOTIFICATION" : "CREATE NOTIFICATION",
     "rules_rule_as_text_action_SEND_REPORT" : "SEND REPORT TO",
+    "rules_rule_as_text_action_SEND_ENTRY_REPORT" : "SEND ENTRY REPORT TO",
+    "rules_rule_as_text_action_SEND_EXIT_REPORT" : "SEND EXIT REPORT TO",
     "rules_rule_as_text_action_ON_HOLD" : "SEND TO HOLDING TABLE",
     "rules_rule_as_text_action_EMAIL" : "SEND EMAIL TO",
     "rules_rule_as_text_action_TICKET" : "CREATE TICKET",

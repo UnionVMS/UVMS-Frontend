@@ -192,6 +192,8 @@ angular.module('unionvmsWeb').factory('rulesOptionsService',function(configurati
     //Dropdown values for actions
     var actionDropdowns = {
         SEND_REPORT : {targets: [], values : []},
+        SEND_ENTRY_REPORT : {targets: [], values : []},
+        SEND_EXIT_REPORT : {targets: [], values : []}
     };
     var setupActionDropdowns = function(){
         var allOrganisations = configurationService.getValue('ORGANISATIONS', 'results');
@@ -200,12 +202,16 @@ angular.module('unionvmsWeb').factory('rulesOptionsService',function(configurati
             organisations.push(allOrganisations[i].name);
         }
         actionDropdowns.SEND_REPORT.values = configurationService.setTextAndCodeForDropDown(organisations, undefined, undefined, true);
+        actionDropdowns.SEND_ENTRY_REPORT.values = configurationService.setTextAndCodeForDropDown(organisations, undefined, undefined, true);
+        actionDropdowns.SEND_EXIT_REPORT.values = configurationService.setTextAndCodeForDropDown(organisations, undefined, undefined, true);
         var plugins = [];
         exchangeRestService.getSendReportPlugins().then(function(services) {
             for (var i = 0; i < services.length; i++) {
                 plugins.push({'text' : services[i].name, 'code' : services[i].serviceClassName});
             }
             actionDropdowns.SEND_REPORT.targets = plugins;
+            actionDropdowns.SEND_ENTRY_REPORT.targets = plugins;
+            actionDropdowns.SEND_EXIT_REPORT.targets = plugins;
         }, function(error) {
             return $q.reject(error);
         });
