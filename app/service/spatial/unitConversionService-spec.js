@@ -20,11 +20,11 @@ describe('The unitConversionService', function() {
 
     describe('when converting duration', function() {
         it('converts a duration to human-readable form, assuming seconds as the default unit', function() {
-            expect(sut.duration.timeToHuman(3665)).toBe('1h 1m 5s');
+            expect(sut.duration.timeToHuman(3665, undefined, true)).toBe('1h 1m 5s');
         });
 
         it('converts a duration to human-readable form, taking into account units in Moment format', function() {
-            expect(sut.duration.timeToHuman(90065000, 'milliseconds')).toBe('1d 1h 1m 5s');
+            expect(sut.duration.timeToHuman(90065000, 'milliseconds', true)).toBe('1d 1h 1m 5s');
         });
     });
 });
