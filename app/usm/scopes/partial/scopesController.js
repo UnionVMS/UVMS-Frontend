@@ -649,7 +649,10 @@ scopesModule.controller('datatsetsModalInstanceCtrl', ['$log', '$scope', '$modal
 
         $scope.saveScopeDatasets = function () {
             $log.log($scope.selection);
-            scopeDetails.dataSets = $scope.selection;
+            scopeDetails.dataSets = [];
+            for (var i = 0; i < $scope.selection.length; i ++) {
+                scopeDetails.dataSets.push({datasetId: $scope.selection[i]});
+            };
             scopeDetails.scopeId = $stateParams.scopeId;
             if (scopeDetails.activeUsers === 0 || $scope.showConfirmation) {
                 scopeServices.updateScope(scopeDetails).then(

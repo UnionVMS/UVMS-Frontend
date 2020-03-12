@@ -136,11 +136,11 @@ accountServiceModule.factory('accountService', ['$q', '$resource', '$log', funct
             "userName": user.userName,
             "person": user.person,
             "organisation_parent": user.organisation_parent,
-            "lockoutTo": user.lockoutTo ? moment.utc(user.lockoutTo).format("YYYY-MM-DDTHH:mm:ss.SSSZ") : null,
+            "lockoutTo": user.lockoutTo ? moment.utc(user.lockoutTo).valueOf() : null,
             "lockoutReason": user.lockoutReason,
             "notes": user.notes,
-            "activeFrom": user.activeFrom ? moment.utc(user.activeFrom).format("YYYY-MM-DDTHH:mm:ss.SSSZ") : null,
-            "activeTo": user.activeTo ? moment.utc(user.activeTo).format("YYYY-MM-DDTHH:mm:ss.SSSZ") : null,
+            "activeFrom": user.activeFrom ? moment.utc(user.activeFrom).valueOf() : null,
+            "activeTo": user.activeTo ? moment.utc(user.activeTo).valueOf() : null,
             "status": user.status,
             "organisation":user.organisation
         };

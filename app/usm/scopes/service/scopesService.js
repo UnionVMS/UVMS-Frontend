@@ -190,10 +190,10 @@ scopesServiceModule.factory('scopeServices', ['$resource', '$q', '$log', functio
         createNewScopeObject : function (scope) {
             var createdObject={
                 "scopeId" : scope.scopeId,
-                "activeFrom" : scope.activeFrom ? moment.utc(scope.activeFrom).format("YYYY-MM-DDTHH:mm:ss.SSSZ") : null,
-                "activeTo" : scope.activeTo ? moment.utc(scope.activeTo).format("YYYY-MM-DDTHH:mm:ss.SSSZ") : null,
-                "dataFrom": scope.dataFrom ? moment.utc(scope.dataFrom).format("YYYY-MM-DDTHH:mm:ss.SSSZ") : null,
-                "dataTo" : scope.dataTo ? moment.utc(scope.dataTo).format("YYYY-MM-DDTHH:mm:ss.SSSZ") : null,
+                "activeFrom" : scope.activeFrom ? moment.utc(scope.activeFrom).valueOf() : null,
+                "activeTo" : scope.activeTo ? moment.utc(scope.activeTo).valueOf() : null,
+                "dataFrom": scope.dataFrom ? moment.utc(scope.dataFrom).valueOf() : null,
+                "dataTo" : scope.dataTo ? moment.utc(scope.dataTo).valueOf() : null,
                 "description" : scope.description,
                 "name" : scope.name,
                 "status" : scope.status
