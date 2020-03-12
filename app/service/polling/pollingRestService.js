@@ -54,7 +54,7 @@ angular.module('unionvmsWeb')
                 return;
             }
 
-            var updatedProgramPoll = Poll.fromAttributeList(response.value);
+            var updatedProgramPoll = Poll.fromAttributeList(response.values);
             deferred.resolve(updatedProgramPoll);
         };
 
@@ -109,7 +109,7 @@ angular.module('unionvmsWeb')
                     //Create a list of Poll objects from the response
                     if(angular.isArray(response)) {
                         for (var i = 0; i < response.length; i++) {
-                            programPolls.push(Poll.fromAttributeList(response[i].value));
+                            programPolls.push(Poll.fromAttributeList(response[i].values));
                         }
                     }
 
@@ -188,7 +188,7 @@ angular.module('unionvmsWeb')
                         if(angular.isArray(response.pollableChannels)) {
                             for (var i = 0; i < response.pollableChannels.length; i++) {
                                 var pollingLog = new PollingLog();
-                                pollingLog.poll = Poll.fromAttributeList(response.pollableChannels[i].poll.value);
+                                pollingLog.poll = Poll.fromAttributeList(response.pollableChannels[i].poll.values);
                                 pollingLogs.push(pollingLog);
                             }
                         }
