@@ -69,7 +69,7 @@ angular.module('unionvmsWeb').factory('unitConversionService',function($filter, 
             }
 	    },
 	    duration: {
-	        timeToHuman: function(time, type){
+	        timeToHuman: function(time, type, showSeconds) {
                 if (typeof type === 'undefined') {
                     type = 'seconds';
                 }
@@ -92,7 +92,7 @@ angular.module('unionvmsWeb').factory('unitConversionService',function($filter, 
 	                value += minutes + 'm ';
 	            }
 
-	            if (seconds !== 0){
+	            if (showSeconds && seconds !== 0) {
 	                value += seconds + 's';
 	            }
 
