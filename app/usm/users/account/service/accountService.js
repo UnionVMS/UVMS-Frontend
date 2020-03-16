@@ -77,7 +77,7 @@ accountServiceModule.factory('accountService', ['$q', '$resource', '$log', funct
 		var _changeUserPassword = function (user) {
 		    var message = "";
 		    var deferred = $q.defer();
-		    var resource = $resource("usm-administration/rest/profile/userPassword",{},{userUpdatePassword:{method:'PUT'}});
+		    var resource = $resource("usm-administration/rest/users/password",{},{userUpdatePassword:{method:'PUT'}});
 
 		    resource.userUpdatePassword(user).$promise.then(
 		        function (data) {
