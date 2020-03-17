@@ -44,6 +44,7 @@ copy of the GNU General Public License along with the IFDM Suite. If not, see <h
 
 		function getQuery(page) {
 			return {
+                movementRangeSearchCriteria: getDateRangeCriteria(),
 				movementSearchCriteria: [],
 				pagination: {
 					page: page,
@@ -66,6 +67,13 @@ copy of the GNU General Public License along with the IFDM Suite. If not, see <h
 
 			return drafts;
 		}
+
+        function getDateRangeCriteria(){
+            var now = moment().startOf('hour');
+            var toDateInMillis = now.valueOf();
+            var fromDateInMillis = now.subtract(24, 'hours').valueOf();
+            return [{ key: "DATE", from: moment(fromDateInMillis).format('YYYY-MM-DD HH:mm:ss Z'), to: moment(toDateInMillis).format('YYYY-MM-DD HH:mm:ss Z')}];
+        }
 
 		function recursiveFn(page) {
 			var deferred = $q.defer();

@@ -31,10 +31,25 @@ copy of the GNU General Public License along with the IFDM Suite. If not, see <h
 		function reloadList() {
 			searchService.reset();
 			searchService.getListRequest().listSize = 10;
+            searchService.getListRequest().criterias = getDateRangeCriteria();
 			searchService.searchMovements().then(function(page) {
 				$scope.currentSearchResults = page;
 			});
 		}
+
+		function getDateRangeCriteria(){
+            var now = moment().startOf('hour');
+            var toDateInMillis = now.valueOf();
+            var fromDateInMillis = now.subtract(24, 'hours').valueOf();
+            return [{ key : 'FROM_DATE' , value : getDateTimeString(fromDateInMillis) },
+                    { key : 'TO_DATE' , value : getDateTimeString(toDateInMillis) }]
+
+        }
+
+        /* Format timestamp as string. */
+        function getDateTimeString(millis) {
+            return moment(millis).format('YYYY-MM-DD HH:mm:ss Z');
+        }
 	}
 
 })();
