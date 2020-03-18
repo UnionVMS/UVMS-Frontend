@@ -32,7 +32,7 @@ angular.module('unionvmsWeb')
     GetListRequest.prototype.DTOForVessel = function(){
         //Add * to all text searches for vessel
         var wildcardSearchKeys = ['NAME', 'IRCS', 'CFR', 'EXTERNAL_MARKING', 'HOMEPORT', 'IMO', 'PRODUCER_NAME', 'PRODUCER_CODE', 'CONTACT_NAME', 'CONTACT_NUMBER', 'CONTACT_EMAIL', 'MMSI'];
-        var updatedCriterias = {},
+        var updatedCriterias = [],
             searchFieldKey, searchFieldValue;
 
         $.each(this.criterias, function(index, searchField){
@@ -45,34 +45,14 @@ angular.module('unionvmsWeb')
                 }
 
             }
-//            updatedCriterias.push(new SearchField(searchFieldKey, searchFieldValue));
             if (searchFieldValue) {
-            	if (!(searchFieldKey in updatedCriterias)) {
-            		updatedCriterias[searchFieldKey] = [];
-            	}
-            	updatedCriterias[searchFieldKey].push(searchFieldValue);
+                updatedCriterias.push({searchField: searchFieldKey, searchValue: searchFieldValue});
             }
         });
 
-//        return {
-//            pagination : {page: this.page, listSize: this.listSize},
-//            assetSearchCriteria : { isDynamic : this.isDynamic, criterias : updatedCriterias }
-//        };
         return {
-        	id : updatedCriterias['GUID'],
-        	historyId : updatedCriterias['HIST_GUID'],
-        	cfr : updatedCriterias['CFR'],
-        	ircs : updatedCriterias['IRCS'],
-        	mmsi : updatedCriterias['MMSI'],
-        	name : updatedCriterias['NAME'],
-        	flagState : updatedCriterias['FLAG_STATE'],
-        	externalMarking : updatedCriterias['EXTERNAL_MARKING'],
-        	portOfRegistration : updatedCriterias['HOMEPORT'],
-        	gearType : updatedCriterias['GEAR_TYPE'] ? updatedCriterias['GEAR_TYPE'][0] : undefined,
-        	minLength : updatedCriterias['MIN_LENGTH'] ? updatedCriterias['MIN_LENGTH'][0] : undefined,
-        	maxLength : updatedCriterias['MAX_LENGTH'] ? updatedCriterias['MAX_LENGTH'][0] : undefined,
-        	minPower : updatedCriterias['MIN_POWER'] ? updatedCriterias['MIN_POWER'][0] : undefined,
-        	maxPower : updatedCriterias['MAX_POWER'] ? updatedCriterias['MAX_POWER'][0] : undefined
+            fields: updatedCriterias,
+            logicalAnd: false
         };
     };
 
