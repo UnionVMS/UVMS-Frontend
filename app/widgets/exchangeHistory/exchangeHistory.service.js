@@ -23,16 +23,17 @@ copy of the GNU General Public License along with the IFDM Suite. If not, see <h
 
 		/* Get history (returns promise). */
 		function getHistory() {
-			var now = moment().startOf('hour');
-			var toDate = now.valueOf();
-			var fromDate = now.subtract(24, 'hours').valueOf();
-			var step = 3600000;
+			var toDateRounded = moment().startOf('hour').valueOf();
+            var fromDateRounded = moment().startOf('hour').subtract(24, 'hours').valueOf();
+            var toDate = moment().valueOf();
+            var fromDate = moment().subtract(24, 'hours').valueOf();
+            var step = 3600000;
 
 			return getMessages(fromDate, toDate).then(function(messages) {
 				return {
 					incoming: createHistogram(incoming(messages), fromDate, toDate, step),
 					outgoing: createHistogram(outgoing(messages), fromDate, toDate, step),
-					timestamps: getTimestamps(fromDate, toDate, step)
+					timestamps: getTimestamps(fromDateRounded, toDateRounded, step)
 				};
 			});
 		}
