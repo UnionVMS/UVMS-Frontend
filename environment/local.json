@@ -1,4 +1,5 @@
 {
     "env_name": "Local",
-    "rest_api_base" : "http://localhost:9001/app/"
+    "rest_api_base" : "http://localhost:9001/app/",
+    "new_app_url": "http://localhost:4200"
 }
