@@ -31,8 +31,8 @@ copy of the GNU General Public License along with the IFDM Suite. If not, see <h
 
 			return getMessages(fromDate, toDate).then(function(messages) {
 				return {
-					incoming: createHistogram(incoming(messages), fromDate, toDate, step),
-					outgoing: createHistogram(outgoing(messages), fromDate, toDate, step),
+					incoming: createHistogram(incoming(messages), fromDateRounded, toDateRounded, step),
+					outgoing: createHistogram(outgoing(messages), fromDateRounded, toDateRounded, step),
 					timestamps: getTimestamps(fromDateRounded, toDateRounded, step)
 				};
 			});
@@ -107,7 +107,7 @@ copy of the GNU General Public License along with the IFDM Suite. If not, see <h
 			var bins = {};
 			angular.forEach(messages, function(message) {
 				var timestamp = parseDateTimeString(message.dateReceived);
-				var index = getIndex(timestamp);
+				var index = getIndex(timestamp) - 1;
 				bins[index] = (bins[index] || 0) + 1;
 			});
 
