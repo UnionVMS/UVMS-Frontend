@@ -9,7 +9,7 @@ the hope that it will be useful, but WITHOUT ANY WARRANTY; without even the impl
 FITNESS FOR A PARTICULAR PURPOSE.  See the GNU General Public License for more details. You should have received a
 copy of the GNU General Public License along with the IFDM Suite. If not, see <http://www.gnu.org/licenses/>.
  */
-angular.module('unionvmsWeb').controller('HeaderMenuCtrl',function($scope, $rootScope, $location, $state, $timeout, $log, userService, userFeatureAccess, startPageService, locale, $window){
+angular.module('unionvmsWeb').controller('HeaderMenuCtrl',function($scope, $rootScope, $location, $state, $timeout, $log, userService, userFeatureAccess, startPageService, locale, $window, ENV, envConfig){
 
     $scope.menuSpecs = {
         width: 0,
@@ -27,13 +27,25 @@ angular.module('unionvmsWeb').controller('HeaderMenuCtrl',function($scope, $root
     };
 
     $scope.addMenuItem = function(text, url, elemId) {
-        $scope.menu.push(
-            {
-                'title': text,
-                'url': url,
-                'elemId': elemId
-            }
-        );
+        var obj = {
+            'title': text,
+            'url': url,
+            'elemId': elemId
+        }
+        /* Subscriptions tab is a link to the new app,
+        * If we are in development environment we need to send token and sessionId with redirection url as
+        * local storage is available per domain
+        */
+        if (text === 'Subscriptions' && ENV.name === 'development') {
+            var token =  JSON.parse(localStorage.getItem('ngStorage-token'));
+            var sessionId =  JSON.parse(localStorage.getItem('ngStorage-sessionId'));
+            var roleName = JSON.parse(localStorage.getItem('ngStorage-roleName'));
+            var scopeName = JSON.parse(localStorage.getItem('ngStorage-scopeName'));
+            obj.href = envConfig.new_app_url + '/subscriptions?token=' + token + '&sessionId=' + sessionId + '&scopeName=' + scopeName + '&roleName=' + roleName;
+        } else if (text === 'Subscriptions') {
+            obj.href = envConfig.new_app_url + '/subscriptions';
+        }
+        $scope.menu.push(obj);
     };
 
     $scope.setMenu = function() {
@@ -159,8 +171,13 @@ angular.module('unionvmsWeb').controller('HeaderMenuCtrl',function($scope, $root
         return getFirstPathSegment($location.path()) === (getFirstPathSegment(viewLocation));
     };
 
-    $scope.goToPage = function(url){
-        $location.path(url);
+    $scope.goToPage = function(url, href) {
+        // if href exists then menu tab is a link to the new app
+        if (href) {
+            window.location.href = href
+        } else {
+            $location.path(url);
+        }
     };
 
     /**

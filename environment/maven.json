@@ -1,4 +1,6 @@
 {
     "env_name": "${uvms.env.name}",
-    "rest_api_base" : "${uvms.rest.base.url}:${uvms.rest.base.port}"
+    "rest_api_base" : "${uvms.rest.base.url}:${uvms.rest.base.port}",
+    "new_app_url": "http://localhost:4200"
+    
 }
