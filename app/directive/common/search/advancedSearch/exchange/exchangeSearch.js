@@ -60,6 +60,8 @@ angular.module('unionvmsWeb').controller('ExchangeSearchController', function($s
                 delete $scope.advancedSearchObject.DATE_RECEIVED_TO;
                 delete $scope.advancedSearchObject.hours;
             }
+        } else {
+            $scope.advancedSearchObject.EXCHANGE_TIME_SPAN = $scope.DATE_TODAY;
         }
 	});
 
