@@ -9,7 +9,7 @@ the hope that it will be useful, but WITHOUT ANY WARRANTY; without even the impl
 FITNESS FOR A PARTICULAR PURPOSE.  See the GNU General Public License for more details. You should have received a
 copy of the GNU General Public License along with the IFDM Suite. If not, see <http://www.gnu.org/licenses/>.
  */
-angular.module('unionvmsWeb').controller('HeaderMenuCtrl',function($scope, $rootScope, $location, $state, $timeout, $log, userService, userFeatureAccess, startPageService, locale, $window, ENV, envConfig){
+angular.module('unionvmsWeb').controller('HeaderMenuCtrl',function($scope, $rootScope, $location, $state, $timeout, $log, userService, userFeatureAccess, startPageService, locale, $window, envConfig, ENV_NAME){
 
     $scope.menuSpecs = {
         width: 0,
@@ -36,7 +36,7 @@ angular.module('unionvmsWeb').controller('HeaderMenuCtrl',function($scope, $root
         * If we are in development environment we need to send token and sessionId with redirection url as
         * local storage is available per domain
         */
-        if (text === 'Subscriptions' && ENV.name === 'development') {
+        if (text === 'Subscriptions' && ENV_NAME === 'development') {
             var token =  JSON.parse(localStorage.getItem('ngStorage-token'));
             var sessionId =  JSON.parse(localStorage.getItem('ngStorage-sessionId'));
             var roleName = JSON.parse(localStorage.getItem('ngStorage-roleName'));
