@@ -57,7 +57,7 @@ module.exports = function (grunt) {
       },
       rules: [
           // Internal rewrite
-          {from: 'app/config.json', to: 'environment/general.json'}
+          {from: 'app/config.json', to: 'environment/local.json'}
       ],
        proxies:grunt.file.exists('proxies.yaml')?grunt.file.readYAML('proxies.yaml'):[{
                 context: [
@@ -535,7 +535,8 @@ module.exports = function (grunt) {
           dest: 'app/debugConfig.js'
         },
         constants: {
-          DEBUG: true
+          DEBUG: true,
+          ENV_NAME: 'development'
         }
       },
       production: {
@@ -543,7 +544,8 @@ module.exports = function (grunt) {
           dest: 'app/debugConfig.js'
         },
         constants: {
-          DEBUG: false
+          DEBUG: false,
+          ENV_NAME: 'production'
         }
       }
     }
@@ -608,7 +610,7 @@ module.exports = function (grunt) {
     grunt.registerTask('test-directives',['ngconstant:development', 'dom_munger:read', 'ngtemplates', 'karma:directives', 'clean:after']);
 
     // Run application locally, connect web server on http://localhost:9001
-    grunt.registerTask('serve', ['parallel:serve']);
+    grunt.registerTask('serve', ['ngconstant:development', 'parallel:serve']);
 
     grunt.registerTask('serve-no-watch', ['less', 'dom_munger:read', 'configureProxies', 'configureRewriteRules', 'connect:development']);
 
