@@ -1,0 +1,21 @@
+@import '../../../../vars';
+:host {
+  display: flex;
+  letter-spacing: 0.8px;
+  color: $shuttle-grey;
+  font-size: 15px;
+}
+
+.date {
+  font-weight: 300;
+  padding-right: 5px;
+}
+
+.time {
+  font-weight: 500;
+}
+
+.format {
+  font-size: 70%;
+  vertical-align: text-top;
+}

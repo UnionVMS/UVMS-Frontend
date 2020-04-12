@@ -1,0 +1,32 @@
+@import '../../../../vars';
+.search-button {
+  margin-right: 10px;
+}
+
+textarea {
+  resize: none;
+}
+
+.filter-buttons {
+  padding-top: 32px;
+}
+
+.active {
+  color: green;
+}
+.inactive {
+  color: red;
+}
+
+.data-table {
+  margin-top: 15px;
+}
+
+.page-size-select {
+  height: 22px;
+  margin-top: 10px;
+  background-color: $cerulean;
+  color: white;
+}
+
+
