@@ -1,0 +1,68 @@
+ <!-- <span *ngIf="isAuthenticated$  | async as isAuthenticated">
+    Hello {{ isAuthenticated }}
+  </span>
+  <span *ngIf="authenticatedUser$  | async as authenticatedUser">
+    Hello {{ authenticatedUser.username }}
+
+  </span> -->
+
+<section class="branding">
+  <div class="logo-image">
+    <img src="assets/ec_logo.svg" width="118" height="58" alt="">
+  </div>
+  <div class="logo-text-ec">
+    <div>European</div>
+    <div>Commission</div>
+  </div>
+  <div class="logo-text-flux-fmc">
+    FLUX <span class="logo-text-bold">FMC</span>
+  </div>
+</section>
+<section class="utilities">
+  <div>
+    <app-clock></app-clock>
+  </div>
+  <button type="button" (click)="viewNotifications()">
+    <fa-icon class="header-icon" [icon]="faBell"></fa-icon>
+  </button>
+  <div ngbDropdown class="d-inline-block">
+    <button class="header-dropdown" id="languageDropdown" ngbDropdownToggle>
+      <span>
+        <img src="assets/flags/gb.png" height="20" width="28">
+      </span>
+    </button>
+    <div ngbDropdownMenu aria-labelledby="userDropdown">
+        <button disabled ngbDropdownItem>English (GB)</button>
+    </div>
+  </div>
+  <div ngbDropdown class="d-inline-block">
+    <button class="header-dropdown" id="userDropdown" ngbDropdownToggle>
+      <fa-icon class="header-icon" [icon]="faUser"></fa-icon>
+      <span>
+        {{username}}
+      </span>
+    </button>
+  <div ngbDropdownMenu aria-labelledby="userDropdown">
+      <button disabled ngbDropdownItem>as ....</button>
+      <button disabled ngbDropdownItem>
+        Switch Context
+      </button>
+      <button disabled ngbDropdownItem>Update contact details</button>
+      <button disabled ngbDropdownItem>Change password</button>
+      <button disabled ngbDropdownItem>Change security answer</button>
+    </div>
+  </div>
+  <div>
+    <a href="https://focusfish.atlassian.net/wiki/display/UVMS/Union+VMS+-+User+Manual" target="_blank" role="button">
+      <fa-icon class="header-icon" [icon]="faQuestion"></fa-icon>
+    </a>
+  </div>
+  <button type="button" (click)="signOut()">
+    <fa-icon class="header-icon" [icon]="faSignOutAlt"></fa-icon>
+  </button>
+
+
+
+</section>
+
+

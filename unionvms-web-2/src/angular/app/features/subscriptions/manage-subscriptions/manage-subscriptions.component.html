@@ -1,0 +1,235 @@
+<form [formGroup]="filterSubscriptionsForm" (ngSubmit)="onSubmit()">
+	<div class="form-row">
+		<div class="form-group col-md-4">
+			<label for="name">Name</label>
+			<input type="text" formControlName="name" class="form-control" id="name">
+		</div>
+		<div class="form-group col-md-4 filter-buttons">
+			<div class="btn-group btn-group-toggle" ngbRadioGroup name="radioBasic" formControlName="active">
+				<label ngbButtonLabel class="btn-outline-primary">
+					<input ngbButton type="radio" [value]=""> All
+				</label>
+				<label ngbButtonLabel class="btn-outline-primary">
+					<input ngbButton type="radio" [value]="true"> Active
+				</label>
+				<label ngbButtonLabel class="btn-outline-primary">
+					<input ngbButton type="radio" [value]="false"> Inactive
+				</label>
+			</div>
+		</div>
+		<div class="form-group col-md-4">
+			<label for="organization">Organization</label>
+			<select class="form-control" id="organization" formControlName="organization">
+				<option value=null>All</option>
+				<option *ngFor="let item of organizations" value={{item.organisationId}}>
+					<span *ngIf="item.parent">{{item.parent}}</span> {{item.name}}
+				</option>
+			</select>
+		</div>
+	</div>
+	<div class="form-row">
+    <div class="form-group col-md-4">
+			<label for="description">Description</label>
+			<textarea rows="5" class="form-control" id="description" formControlName="description"></textarea>
+		</div>
+		<div class="form-group col-md-4">
+			<div class="row">
+				<div class="col-md-6">
+          <label for="dates">Valid from</label>
+          <div class="input-group"> 
+            <input class="form-control"
+                name="dpstart" formControlName="startDate" ngbDatepicker #dpstart="ngbDatepicker">
+            <div class="input-group-append">
+              <button class="btn btn-outline-primary" (click)="dpstart.toggle()" type="button">
+                  <fa-icon [icon]="faCalendar"></fa-icon>
+              </button>
+            </div>
+          </div>
+				</div>
+				<div class="col-md-6">
+					<label for="dates">Valid Until</label>
+					<div class="input-group"> 
+            <input class="form-control"
+                name="dpend" formControlName="endDate" ngbDatepicker #dpend="ngbDatepicker">
+            <div class="input-group-append">
+              <button class="btn btn-outline-primary" (click)="dpend.toggle()" type="button">
+                  <fa-icon [icon]="faCalendar"></fa-icon>
+              </button>
+            </div>
+          </div>
+				</div>
+			</div>
+		</div>
+		<div class="form-group col-md-4">
+      <div class="form-row">
+				<div class="form-group col-md-12">
+          <label for="endpoint">Endpoint</label>
+          <select class="form-control" id="endpoint" formControlName="endpoint">
+            <option value=null>All</option>
+            <option *ngFor="let item of endpointItems" value={{item.endpointId}} >{{item.name}}</option>
+          </select>
+				</div>
+      </div>
+      <div class="form-row">
+				<div class="form-group col-md-12">
+          <label for="channel">Communication Channel</label>
+					<select class="form-control" id="communicationChannel" formControlName="channel">
+						<option value=null>All</option>
+						<option *ngFor="let item of communicationChannels" value={{item.channelId}} >{{item.dataflow}}</option>
+					</select>
+				</div>
+      </div>
+    </div>
+	</div>
+	<div class="form-row">
+		<div class="form-group offset-md-8 col-md-4">
+      <label for="messageType">Message Type</label>
+      <select class="form-control" id="messageType" formControlName="messageType">
+        <option value=null>-</option>
+        <option *ngFor="let item of messageTypeItems" value={{item.value}}>{{item.name}}</option>
+      </select>
+		</div>
+	</div>
+	<div class="form-row justify-content-end">
+		<button type="submit" class="btn btn-primary search-button">Search</button>
+		<button type="button" (click)="onReset()" class="btn btn-outline-secondary">Reset</button>
+	</div>
+</form>
+
+<!-- offset {{searchObj.pagination.offset}} count {{count}} limit{{searchObj.pagination.pageSize}} -->
+<div class="data-table">
+	<ngx-datatable
+    class="bootstrap"
+    [rows]="subscriptionList"
+    [loadingIndicator]="loadingIndicator"
+    [columnMode]="ColumnMode.force"
+    [headerHeight]="40"
+    [footerHeight]="40"
+    rowHeight="auto"
+    columnWidth="auto"
+    [reorderable]="reorderable"
+    [externalPaging]="true"
+    [count]="count"
+    [offset]="searchObj.pagination.offset"
+    [limit]="searchObj.pagination.pageSize"
+    (page)="setPage($event)"
+    (sort)="onSort($event)"
+    #SubscriptionListTable>
+    <ngx-datatable-column name="Name" [sortable]="true">
+      <ng-template let-column="column" let-sort="sortFn" ngx-datatable-header-template>
+        <span (click)="sort()">{{ column.name }}</span>
+      </ng-template>
+      <ng-template let-row="row" let-value="value" ngx-datatable-cell-template>
+        {{value}}
+      </ng-template>
+    </ngx-datatable-column>
+    <ngx-datatable-column name="Description" [sortable]="true">
+      <ng-template let-column="column" let-sort="sortFn" ngx-datatable-header-template>
+        <span (click)="sort()">{{ column.name }}</span>
+      </ng-template>
+      <ng-template let-row="row" let-value="value" ngx-datatable-cell-template>
+        {{value}}
+      </ng-template>
+    </ngx-datatable-column>
+    <ngx-datatable-column name="Organization" [sortable]="true" prop="organisationName">
+      <ng-template let-column="column" let-sort="sortFn" ngx-datatable-header-template>
+        <span (click)="sort()">{{ column.name }}</span>
+      </ng-template>
+      <ng-template let-row="row" let-value="value" ngx-datatable-cell-template>
+        {{value}}
+      </ng-template>
+    </ngx-datatable-column>
+    <ngx-datatable-column name="Endpoint" [sortable]="true" prop="endpointName">
+      <ng-template let-column="column" let-sort="sortFn" ngx-datatable-header-template>
+        <span (click)="sort()">{{ column.name }}</span>
+      </ng-template>
+      <ng-template let-row="row" let-value="value" ngx-datatable-cell-template>
+        {{value}}
+      </ng-template>
+    </ngx-datatable-column>
+    <ngx-datatable-column name="Comm. Channel" [sortable]="true" prop="channelName">
+      <ng-template let-column="column" let-sort="sortFn" ngx-datatable-header-template>
+        <span (click)="sort()">{{ column.name }}</span>
+      </ng-template>
+      <ng-template let-row="row" let-value="value" ngx-datatable-cell-template>
+        {{value}}
+      </ng-template>
+    </ngx-datatable-column>
+    <ngx-datatable-column name="Message Type" [sortable]="true" prop="messageType">
+      <ng-template let-column="column" let-sort="sortFn" ngx-datatable-header-template>
+        <span (click)="sort()">{{ column.name }}</span>
+      </ng-template>
+      <ng-template let-row="row" let-value="value" ngx-datatable-cell-template>
+        {{value}}
+      </ng-template>
+    </ngx-datatable-column>
+    <ngx-datatable-column name="From" [sortable]="true" prop="startDate">
+      <ng-template let-column="column" let-sort="sortFn" ngx-datatable-header-template>
+        <span (click)="sort()">{{ column.name }}</span>
+      </ng-template>
+      <ng-template let-row="row" let-value="value" ngx-datatable-cell-template>
+        {{value|  date: "yyyy-MM-dd hh:mm:ss"}}
+      </ng-template>
+    </ngx-datatable-column>
+    <ngx-datatable-column name="Until" [sortable]="true" prop="endDate">
+      <ng-template let-column="column" let-sort="sortFn" ngx-datatable-header-template>
+        <span (click)="sort()">{{ column.name }}</span>
+      </ng-template>
+      <ng-template let-row="row" let-value="value" ngx-datatable-cell-template>
+        {{value | date: "yyyy-MM-dd hh:mm:ss"}}
+      </ng-template>
+    </ngx-datatable-column>
+    <ngx-datatable-column name="Active" prop="active">
+      <ng-template let-column="column" let-sort="sortFn" ngx-datatable-header-template>
+       {{ column.name }}
+      </ng-template>
+      <ng-template let-row="row" let-value="value" ngx-datatable-cell-template>
+        <div *ngIf="value">
+          <fa-icon class="active" [icon]="faCheck"></fa-icon>
+        </div>
+        <div *ngIf="!value">
+          <fa-icon class="inactive" [icon]="faTimes"></fa-icon>
+        </div>
+      </ng-template>
+    </ngx-datatable-column>
+    <ngx-datatable-column name="Actions" [sortable]="false">
+      <ng-template let-column="column" ngx-datatable-header-template>
+        {{ column.name }}
+      </ng-template>
+    </ngx-datatable-column>
+    <ngx-datatable-footer>
+      <ng-template
+        ngx-datatable-footer-template
+        let-pageSize="pageSize"
+        let-rowCount="rowCount"
+        let-curPage="curPage"
+        let-offset="offset"
+        >
+        <div class="pagination-extra-content">
+          Page Size:
+          <span>
+            <select  class="page-size-select" style="width:40px;" [ngModel]="searchObj.pagination.pageSize" (ngModelChange)="onPageSizeChange($event)" >
+              <option *ngFor="let size of sizeList" [value]="size"> {{size}}</option>
+            </select>
+          </span>
+        </div>
+        <datatable-pager
+          [pagerLeftArrowIcon]="'datatable-icon-left'"
+          [pagerRightArrowIcon]="'datatable-icon-right'"
+          [pagerPreviousIcon]="'datatable-icon-prev'"
+          [pagerNextIcon]="'datatable-icon-skip'"
+          [page]="curPage"
+          [size]="pageSize"
+          [count]="count"
+          [hidden]="!((rowCount / pageSize) > 1)"
+          (change)="SubscriptionListTable.onFooterPage($event)">
+        </datatable-pager>
+          <!-- <div *ngIf="offset">
+            <span>
+              Page {{offset}} of {{rowCount}}  / {{pageSize}}
+            </span>
+          </div> -->
+      </ng-template>
+    </ngx-datatable-footer>
+  </ngx-datatable>
+</div>

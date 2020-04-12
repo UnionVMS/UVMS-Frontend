@@ -1,0 +1,63 @@
+@import '../../../../vars';
+
+
+:host {
+  height: 55px;
+  display: flex;
+  justify-content: space-between;
+  padding: 0 15px;
+  background-color: $basic-white;
+}
+
+.branding {
+  display: flex;
+  align-items: flex-end;
+
+}
+
+.logo-text-ec {
+  display: flex;
+  flex-direction: column;
+  color: $shuttle-grey;
+  font-size: 13px;
+  line-height: 1.2;
+  font-weight: 700;
+  padding-right: 10px;
+  border-right: 4px solid $cerulean;
+  margin-right: 10px;
+}
+
+.logo-text-flux-fmc {
+  display: flex;
+  color: $cerulean;
+  font-size: 24px;
+  align-self: flex-end;
+  .logo-text-bold {
+    font-weight: 700;
+    margin-left: 5px;
+  }
+
+}
+
+.utilities {
+  color: $shuttle-grey;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  div {
+    padding: 0 10px;
+  }
+  .header-icon {
+    color: $shuttle-grey
+  }
+
+  .header-dropdown {
+    border: 0;
+    background: $basic-white;
+    color: $shuttle-grey
+
+  }
+
+
+}
+

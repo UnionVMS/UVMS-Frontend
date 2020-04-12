@@ -1,0 +1,102 @@
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+  <modelVersion>4.0.0</modelVersion>
+
+  <parent>
+    <groupId>fish.focus.maven</groupId>
+    <artifactId>focus-pom</artifactId>
+    <version>1.14</version>
+    <relativePath />
+  </parent>
+
+  <groupId>eu.europa.ec.fisheries.uvms</groupId>
+  <artifactId>unionvms-web-2</artifactId>
+  <version>3.0.30${changelist}${revision}</version>
+  <name>unionvms-web (in modern Angular)</name>
+  <packaging>war</packaging>
+
+  <properties>
+    <changelist>-MARE</changelist>
+    <revision>-SNAPSHOT</revision>
+    <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+    <base.href>/unionvms/uvms-poc/</base.href>
+  </properties>
+
+  <dependencies>
+    <dependency>
+      <groupId>javax.servlet</groupId>
+      <artifactId>javax.servlet-api</artifactId>
+      <version>3.1.0</version>
+      <scope>provided</scope>
+    </dependency>
+  </dependencies>
+
+  <build>
+    <finalName>${project.name}</finalName>
+    <pluginManagement>
+      <plugins>
+        <plugin>
+          <groupId>com.github.eirslett</groupId>
+          <artifactId>frontend-maven-plugin</artifactId>
+          <version>1.9.1</version>
+          <configuration>
+            <workingDirectory>${basedir}</workingDirectory>
+            <outputdir>${basedir}/dist</outputdir>
+            <nodeVersion>v12.16.1</nodeVersion>
+            <npmVersion>6.9.0</npmVersion>
+            <nodeDownloadRoot>https://nodejs.org/dist/</nodeDownloadRoot>
+            <npmDownloadRoot>https://registry.npmjs.org/npm/-/</npmDownloadRoot>
+            <environmentVariables>
+              <NODE_ENV>${NODE_ENV}</NODE_ENV>
+            </environmentVariables>
+          </configuration>
+        </plugin>
+      </plugins>
+    </pluginManagement>
+    <plugins>
+      <plugin>
+        <artifactId>maven-clean-plugin</artifactId>
+        <configuration>
+          <filesets>
+            <fileset>
+              <directory>dist</directory>
+            </fileset>
+          </filesets>
+        </configuration>
+      </plugin>
+      <plugin>
+        <groupId>com.github.eirslett</groupId>
+        <artifactId>frontend-maven-plugin</artifactId>
+        <executions>
+          <execution>
+            <id>install-node-and-npm</id>
+            <goals>
+              <goal>install-node-and-npm</goal>
+            </goals>
+          </execution>
+          <execution>
+            <id>npm-install</id>
+            <goals>
+              <goal>npm</goal>
+            </goals>
+          </execution>
+          <execution>
+            <id>build-prod</id>
+            <goals>
+              <goal>npm</goal>
+            </goals>
+            <configuration>
+              <arguments>run-script build -- --prod --base-href ${base.href}</arguments>
+            </configuration>
+          </execution>
+        </executions>
+      </plugin>
+      <plugin>
+        <artifactId>maven-war-plugin</artifactId>
+        <configuration>
+          <warSourceDirectory>${basedir}/dist</warSourceDirectory>
+          <failOnMissingWebXml>false</failOnMissingWebXml>
+        </configuration>
+      </plugin>
+    </plugins>
+  </build>
+</project>
