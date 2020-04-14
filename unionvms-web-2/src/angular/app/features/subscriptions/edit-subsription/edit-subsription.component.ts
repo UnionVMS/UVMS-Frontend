@@ -3,11 +3,11 @@ import { SubscriptionFormModel } from '../subscription-form.model';
 import { FeaturesService } from '../../features.service';
 
 @Component({
-  selector: 'app-new-subscription',
-  templateUrl: './new-subscription.component.html',
-  styleUrls: ['./new-subscription.component.scss']
+  selector: 'app-edit-subsription',
+  templateUrl: './edit-subsription.component.html',
+  styleUrls: ['./edit-subsription.component.scss']
 })
-export class NewSubscriptionComponent implements OnInit {
+export class EditSubsriptionComponent implements OnInit {
   subscription: SubscriptionFormModel;
 
   constructor(private featuresService: FeaturesService) { }
@@ -15,8 +15,9 @@ export class NewSubscriptionComponent implements OnInit {
   ngOnInit(): void {
   }
 
-  createSubscription() {
-    console.log('create');
+  editSubscription() {
+    console.log('edit');
+
   }
 
 }

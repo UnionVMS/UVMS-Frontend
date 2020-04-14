@@ -10,8 +10,9 @@ import { FeaturesService } from '../../features.service';
 import { CommunicationChannel } from '../communication-channel.model';
 import * as SUB from '../subscriptions.actions';
 import { ColumnMode } from '@swimlane/ngx-datatable';
-import { faCheck, faTimes, faCalendar } from '@fortawesome/free-solid-svg-icons';
+import { faCheck, faTimes, faCalendar, faEdit } from '@fortawesome/free-solid-svg-icons';
 import {NgbDateParserFormatter} from '@ng-bootstrap/ng-bootstrap';
+import { Router } from '@angular/router';
 
 
 @Component({
@@ -33,6 +34,7 @@ export class ManageSubscriptionsComponent implements OnInit, OnDestroy {
   faCheck = faCheck;
   faTimes = faTimes;
   faCalendar = faCalendar;
+  faEdit = faEdit;
   count;
   sizeList;
   initialFormValues;
@@ -45,7 +47,7 @@ export class ManageSubscriptionsComponent implements OnInit, OnDestroy {
 
 
   constructor(private store: Store<fromRoot.State>, private featuresService: FeaturesService, private fb: FormBuilder,
-              private ngbDateParserFormatter: NgbDateParserFormatter) {
+              private ngbDateParserFormatter: NgbDateParserFormatter, private router: Router) {
     this.sizeList = [
       '10',
       '20',
@@ -270,6 +272,13 @@ export class ManageSubscriptionsComponent implements OnInit, OnDestroy {
   setPage(pageInfo) {
     this.searchObj.pagination.offset = pageInfo.offset;
     this.fetchSubscriptionsList();
+  }
+
+  editSubscription({id}) {
+   // debugger;
+    console.log(id);
+    this.router.navigate(['subscriptions/edit-subscription', id]);
+
   }
 
   ngOnDestroy() {

@@ -8,6 +8,8 @@ import { MainModule } from '../core/main/main.module';
 import { ManageSubscriptionsComponent } from './subscriptions/manage-subscriptions/manage-subscriptions.component';
 import { NewSubscriptionComponent } from './subscriptions/new-subscription/new-subscription.component';
 import { FeaturesRoutingModule } from './features-routing.module';
+import { EditSubsriptionComponent } from './subscriptions/edit-subsription/edit-subsription.component';
+import { SubscriptionFormComponent } from './subscriptions/subscription-form/subscription-form.component';
 
 @NgModule({
   declarations: [
@@ -15,7 +17,9 @@ import { FeaturesRoutingModule } from './features-routing.module';
     SubscriptionsComponent,
     NotFoundComponent,
     ManageSubscriptionsComponent,
-    NewSubscriptionComponent
+    NewSubscriptionComponent,
+    EditSubsriptionComponent,
+    SubscriptionFormComponent
 
   ],
   imports: [
