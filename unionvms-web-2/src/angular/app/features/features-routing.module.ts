@@ -6,6 +6,7 @@ import { NotFoundComponent } from './pagenotfound/notfound.component';
 import { ManageSubscriptionsComponent } from './subscriptions/manage-subscriptions/manage-subscriptions.component';
 import { NewSubscriptionComponent } from './subscriptions/new-subscription/new-subscription.component';
 import { SubscriptionsGuard } from './subscriptions/subscriptions.guard';
+import { EditSubsriptionComponent } from './subscriptions/edit-subsription/edit-subsription.component';
 
 
 export const featureRoutes: Routes = [
@@ -13,7 +14,8 @@ export const featureRoutes: Routes = [
   { path: 'subscriptions', component: SubscriptionsComponent, canActivate: [SubscriptionsGuard], children: [
     {path: '', redirectTo: 'manage-subscriptions', pathMatch: 'full'},
     { path: 'manage-subscriptions', component: ManageSubscriptionsComponent },
-    { path: 'new-subscription', component: NewSubscriptionComponent }
+    { path: 'new-subscription', component: NewSubscriptionComponent },
+    { path: 'edit-subscription/:id', component: EditSubsriptionComponent}
   ] },
   { path: '**', component: NotFoundComponent }
 ];

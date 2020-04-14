@@ -31,4 +31,12 @@ export class FeaturesService {
     return this.http.get<Organization>(`${environment.baseURL}${FEATURES_ENDPOINTS.getOrganizationDetails}${organizationId}`).toPromise();
   }
 
+  saveSubscription() {
+
+  }
+
+  editSubscription() {
+      
+  }
+
 }

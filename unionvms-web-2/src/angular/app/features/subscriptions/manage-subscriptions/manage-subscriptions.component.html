@@ -36,7 +36,7 @@
 			<div class="row">
 				<div class="col-md-6">
           <label for="dates">Valid from</label>
-          <div class="input-group"> 
+          <div class="input-group">
             <input class="form-control"
                 name="dpstart" formControlName="startDate" ngbDatepicker #dpstart="ngbDatepicker">
             <div class="input-group-append">
@@ -48,7 +48,7 @@
 				</div>
 				<div class="col-md-6">
 					<label for="dates">Valid Until</label>
-					<div class="input-group"> 
+					<div class="input-group">
             <input class="form-control"
                 name="dpend" formControlName="endDate" ngbDatepicker #dpend="ngbDatepicker">
             <div class="input-group-append">
@@ -195,6 +195,11 @@
     <ngx-datatable-column name="Actions" [sortable]="false">
       <ng-template let-column="column" ngx-datatable-header-template>
         {{ column.name }}
+      </ng-template>
+      <ng-template let-row="row" let-value="value" ngx-datatable-cell-template>
+        <button class="btn btn-sm btn-outline-primary" (click)="editSubscription(row)">
+          <fa-icon [icon]="faEdit"></fa-icon>
+        </button>
       </ng-template>
     </ngx-datatable-column>
     <ngx-datatable-footer>
