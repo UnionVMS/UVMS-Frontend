@@ -110,7 +110,6 @@ export class ManageSubscriptionsComponent implements OnInit, OnDestroy {
       endDate: [null],
       channel: [{value: null, disabled: true}],
       messageType: [null]
-
     });
 
 
