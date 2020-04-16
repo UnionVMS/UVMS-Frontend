@@ -2,8 +2,9 @@ import { SubscriptionFormOutput } from './subscription-form-output.model';
 import { SubscriptionFormExecution } from './subscription-form-execution.model';
 
 export interface SubscriptionFormModel {
+    id?: number;
     name: string;
-    accessibility: string;
+    accessibility?: string;
     description: string;
     active: boolean;
     output: SubscriptionFormOutput;

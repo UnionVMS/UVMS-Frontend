@@ -15,8 +15,9 @@ export class NewSubscriptionComponent implements OnInit {
   ngOnInit(): void {
   }
 
-  createSubscription() {
+  async createSubscription($event) {
     console.log('create');
+    const result = await this.featuresService.createSubscription($event);
   }
 
 }

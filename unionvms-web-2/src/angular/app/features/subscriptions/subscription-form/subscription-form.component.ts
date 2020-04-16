@@ -1,6 +1,6 @@
 import { Component, OnInit, Input, Output, EventEmitter, OnDestroy } from '@angular/core';
 import { faCalendar, faRetweet } from '@fortawesome/free-solid-svg-icons';
-import { FormGroup, FormBuilder } from '@angular/forms';
+import { FormGroup, FormBuilder, Validators } from '@angular/forms';
 import { SubscriptionFormModel } from '../subscription-form.model';
 import { Organization } from '../organization.model';
 import { Store } from '@ngrx/store';
@@ -41,16 +41,16 @@ export class SubscriptionFormComponent implements OnInit, OnDestroy  {
 
   initForm() {
     this.subscriptionForm = this.fb.group({
-      name: [''],
-      accessibility: [''],
+      name: ['', Validators.required],
       description: [''],
-      active: [false],
+      active: [false, Validators.required],
       output: this.fb.group({
         messageType: [''],
         emails: [''],
+        body: [''],
         alert: [false],
         subscriber: this.fb.group({
-          organizationId: [null],
+          organisationId: [null],
           endpointId: [{value: null, disabled: true}],
           channelId: [{value: null, disabled: true}]
         }),
@@ -75,7 +75,7 @@ export class SubscriptionFormComponent implements OnInit, OnDestroy  {
 
   initSubscriptions() {
       // Changes for organization
-    this.subscription.add(this.subscriptionForm.get('output.subscriber.organizationId').valueChanges.subscribe(value => {
+    this.subscription.add(this.subscriptionForm.get('output.subscriber.organisationId').valueChanges.subscribe(value => {
       console.log('organization changed', value);
       this.onOrganizationChange(value);
     }));
@@ -97,7 +97,9 @@ export class SubscriptionFormComponent implements OnInit, OnDestroy  {
   }
 
   onSubmit(event) {
-    this.save.emit();
+    // debugger;
+    const formValues = {...this.subscriptionForm.getRawValue()};
+    this.save.emit(formValues);
   }
 
   async onOrganizationChange(value) {

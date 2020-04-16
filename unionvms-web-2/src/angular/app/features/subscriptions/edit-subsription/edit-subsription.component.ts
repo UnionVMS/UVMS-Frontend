@@ -1,23 +1,41 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, AfterViewInit, ViewChild } from '@angular/core';
 import { SubscriptionFormModel } from '../subscription-form.model';
 import { FeaturesService } from '../../features.service';
+import { ActivatedRoute } from '@angular/router';
+import { SubscriptionFormComponent } from '../subscription-form/subscription-form.component';
+
 
 @Component({
   selector: 'app-edit-subsription',
   templateUrl: './edit-subsription.component.html',
   styleUrls: ['./edit-subsription.component.scss']
 })
-export class EditSubsriptionComponent implements OnInit {
+export class EditSubsriptionComponent implements OnInit, AfterViewInit {
   subscription: SubscriptionFormModel;
+  @ViewChild(SubscriptionFormComponent)
+  private subscriptionFormComponent: SubscriptionFormComponent;
+  currentSubscription;
+  currentSubscriptionId;
 
-  constructor(private featuresService: FeaturesService) { }
+  constructor(private featuresService: FeaturesService, private activatedRoute: ActivatedRoute) { }
 
   ngOnInit(): void {
+    this.currentSubscriptionId = +this.activatedRoute.snapshot.paramMap.get('id');
+
   }
 
-  editSubscription() {
+  async ngAfterViewInit() {
+    const result = await this.featuresService.getSubscriptionDetails(this.currentSubscriptionId);
+    this.currentSubscription = result.data;
+
+    this.subscriptionFormComponent.subscriptionForm.patchValue(this.currentSubscription);
+
+  }
+
+
+
+  async editSubscription($event) {
     console.log('edit');
-
+    const result = this.featuresService.editSubscription($event, this.currentSubscriptionId);
   }
-
 }
