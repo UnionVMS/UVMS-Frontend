@@ -1,8 +1,11 @@
 
 <form [formGroup]="subscriptionForm" (ngSubmit)="onSubmit($event)">
+  <div>
+    {{subscriptionForm.value |json}}
+  </div>
   <div class="form-row justify-content-end">
-		<button type="submit" class="btn btn-primary mr-1">Save</button>
-		<button type="button" class="btn btn-outline-secondary">Cancel</button>
+    <button type="button" class="btn btn-outline-secondary mr-1">Cancel</button>
+    <button type="submit" class="btn btn-primary" [disabled]="!subscriptionForm.valid">Save</button>
   </div>
   <fieldset class="border p-2">
     <legend  class="w-auto">General Configuration</legend>
@@ -67,7 +70,7 @@
             <div class="form-group row">
                 <label for="messageType" class="col-sm-4 col-form-label-sm">Message Type</label>
                 <div class="col-sm-7">
-                    <select class="form-control" id="organization" formControlName="messageType">
+                    <select class="form-control" id="messageType" formControlName="messageType">
                         <option value="">-</option>
                         <option *ngFor="let item of messageTypes" value={{item.value}}>
                             {{item.key}}
@@ -79,7 +82,7 @@
               <div class="form-group row">
                 <label for="organizationId" class="col-sm-4 col-form-label-sm">Organisation</label>
                 <div class="col-sm-7">
-                	<select class="form-control" id="organizationId" formControlName="organizationId">
+                  <select class="form-control" id="organizationId" formControlName="organisationId">
                     <option value=null>All</option>
                     <option *ngFor="let item of organizations" value={{item.organisationId}}>
                       <span *ngIf="item.parent">{{item.parent}}</span> {{item.name}}
@@ -117,23 +120,23 @@
               <textarea formControlName="emails" type="text" class="form-control" id="emails"></textarea>
               <div class="form-group row">
                 <div class="form-check form-check-inline">
-                  <input class="form-check-input" type="checkbox" id="inlineCheckbox1" value="option">
+                  <input class="form-check-input" type="checkbox" disabled id="inlineCheckbox1" value="option">
                   <label class="form-check-label" for="inlineCheckbox1">Include link to trip overview</label>
                 </div>
             </div>
             </div>
             <div class="col-sm-6">
                 <div class="form-group row">
-                    <div class=" offset-md-4 col-sm-7">
-                        <button type="button" class="btn btn-primary">
+                    <div class="offset-md-5 col-sm-7">
+                        <button type="button" class="btn btn-primary" disabled>
                           <fa-icon [icon]="faRetweet"></fa-icon>
                         </button>
                          Reset Default
                     </div>
                 </div>
                 <div class="form-group row email-body">
-                    <label for="body" class="col-sm-4 col-form-label-sm">Body</label>
-                    <div class="col-sm-7">
+                    <label for="body" class="col-sm-3 offset-md-2 col-form-label-sm">Body</label>
+                    <div class="col-sm-6">
                         <textarea formControlName="body" rows="4" class="form-control" id="body"></textarea>
                     </div>
                 </div>
@@ -147,7 +150,7 @@
                     <label class="form-check-label" for="pdf">PDF</label>
                 </div>
             </div>
-            <div class="offset-sm-2 col-sm-4">
+            <div class="offset-sm-2 col-sm-2">
                 <div class="form-check form-check-inline">
                     <input class="form-check-input" type="checkbox" id="xml" value="option">
                     <label class="form-check-label" for="xml">XML</label>
@@ -160,8 +163,8 @@
                     <option value="">Template</option>
                 </select>
             </div>
-            <div class="offset-sm-2 col-sm-4">
-                <select class="form-control" id="fluxmessage">
+            <div class="offset-sm-2 col-sm-3">
+                <select class="form-control" id="fluxmessage" disabled>
                     <option value="">Flux Message</option>
                 </select>
             </div>
@@ -173,20 +176,19 @@
                     <label class="form-check-label" for="pdf">Zip Attachments</label>
                 </div>
             </div>
-            <div class="offset-sm-2 col-sm-4">
-                <select class="form-control" id="dataflow">
+            <div class="offset-sm-2 col-sm-3">
+                <select class="form-control" id="dataflow" disabled>
                     <option value="">Dataflow</option>
                 </select>
             </div>
         </div>
         <div class="form-group row">
             <div class="offset-sm-2 col-sm-4">
-                <input class="form-control" type="text" id="password">
+                <input class="form-control" type="text" id="password" placeholder="add password optional">
             </div>
         </div>
       </fieldset>
     </fieldset>
-
     <fieldset class="border p-2">
         <legend  class="w-auto">Message Configuration</legend>
         <div class="form-group row">
@@ -204,50 +206,84 @@
                 <label class="custom-control-label" for="active"></label>
             </div>
             </div>
-            <label for="history" class="col-sm-1 col-form-label-sm">History</label>
-            <div class="col-sm-2">
-            <input type="text" formControlName="history" class="form-control" id="history">
+            <label for="history" class="col-sm-1 col-form-label-sm offset-md-1">History</label>
+            <div class="col-sm-1 mx-0 px-0">
+                <input type="number" formControlName="history" class="form-control" id="history">
+            </div>
+            <div class="col-sm-2 mx-0 px-0">
+                <select class="form-control" id="dataflow">
+                  <option value="">Days</option>
+              </select>
             </div>
         </div>
         <div class="form-group row">
             <label for="consolidated" class="col-sm-2 col-form-label-sm">Consolidated</label>
             <div class="col-sm-1">
-            <div class="custom-control custom-switch">
-                <input type="checkbox" formControlName="consolidated" class="custom-control-input" id="consolidated">
-                <label class="custom-control-label" for="logbook"></label>
-            </div>
+                <div class="custom-control custom-switch">
+                    <input type="checkbox" formControlName="consolidated" class="custom-control-input" id="consolidated">
+                    <label class="custom-control-label" for="logbook"></label>
+                </div>
             </div>
             <label for="identifiers" class="col-sm-2 col-form-label-sm">Identifiers</label>
-            <div class="col-sm-2">
-            <select class="form-control" id="identifiers" formControlName="vesselIds">
-                <option value="">Identifiers</option>
-            </select>
+            <div class="col-sm-6 identifiers-group">
+                <div class="form-check form-check-inline identifiers-item">
+                    <input class="form-check-input" type="checkbox" id="identifierCheckbox1" formControlName="vesselIds" value="CFR">
+                    <label class="form-check-label" for="identifierCheckbox1">CFR</label>
+                </div>
+                <div class="form-check form-check-inline identifiers-item">
+                    <input class="form-check-input" type="checkbox" id="identifierCheckbox2" formControlName="vesselIds" value="IRCS">
+                    <label class="form-check-label" for="inlineCheckbox2">IRCS</label>
+                </div>
+                <div class="form-check form-check-inline identifiers-item">
+                    <input class="form-check-input" type="checkbox" id="identifierCheckbox3" formControlName="vesselIds" value="ICCAT">
+                    <label class="form-check-label" for="identifierCheckbox3">ICCAT</label>
+                </div>
+                <div class="form-check form-check-inline identifiers-item">
+                    <input class="form-check-input" type="checkbox" id="identifierCheckbox4" formControlName="vesselIds" value="EXT MARK">
+                    <label class="form-check-label" for="identifierCheckbox4">EXT MARK</label>
+                </div>
+                <div class="form-check form-check-inline identifiers-item">
+                    <input class="form-check-input" type="checkbox" id="identifierCheckbox5" formControlName="vesselIds" value="UVI">
+                    <label class="form-check-label" for="identifierCheckbox5">UVI</label>
+                </div>
             </div>
         </div>
-    </fieldset>
-    <fieldset class="border p-2" formGroupName="execution">
-        <legend  class="w-auto">Execution</legend>
-        <div class="form-group row">
-          <label for="name" class="col-sm-2 col-form-label-sm">Trigger</label>
-          <div class="col-sm-3">
-            <select class="form-control" id="dataflow" formControlName="triggerType">
-              <option value="">Trigger</option>
-          </select>
-          </div>
-          <div class="offset-sm-2 col-sm-2">
-            <div class="form-check form-check-inline">
-                <input class="form-check-input" type="checkbox" id="scheduler" value="option">
-                <label class="form-check-label" for="scheduler">Scheduler</label>
-            </div>
-        </div>
-        <label for="immediate" class="col-form-label-sm">Immediate</label>
-        <div class="col-sm-2">
-          <div class="custom-control custom-switch">
-            <input type="checkbox" formControlName="immediate" formControlName="immediate" class="custom-control-input" id="immediate">
-            <label class="custom-control-label" for="immediate"></label>
-          </div>
-        </div>
-      </div>
     </fieldset>
   </div>
+  <fieldset class="border p-2" formGroupName="execution">
+    <legend  class="w-auto">Execution</legend>
+    <div class="form-group row">
+      <label for="name" class="col-sm-2 col-form-label-sm">Trigger</label>
+      <div class="col-sm-3">
+        <select class="form-control" id="dataflow" formControlName="triggerType">
+          <option value="">Trigger</option>
+      </select>
+      </div>
+      <div class="offset-sm-2 col-sm-2">
+        <div class="form-check form-check-inline">
+            <input class="form-check-input" type="checkbox" id="scheduler" value="option">
+            <label class="form-check-label" for="scheduler">Scheduler</label>
+        </div>
+      </div>
+      <label for="immediate" class="col-form-label-sm">Immediate</label>
+      <div class="col-sm-2">
+        <div class="custom-control custom-switch">
+          <input type="checkbox" formControlName="immediate" formControlName="immediate" class="custom-control-input" id="immediate">
+          <label class="custom-control-label" for="immediate"></label>
+        </div>
+      </div>
+    </div>
+    <div class="form-group row">
+      <label for="frequency" class="col-sm-1 offset-md-7 col-form-label-sm">Frequency</label>
+      <div class="col-sm-2">
+        <select class="form-control" id="frequency" formControlName="frequency">
+          <option value="">-</option>
+        </select>
+      </div>
+      <label for="at" class="label-content-adjusted">at</label>
+      <div class="col-sm-1">
+        <input type="text" class="form-control" id="at" placeholder="hh:mm">
+      </div>
+    </div>
+  </fieldset>
 </form>
