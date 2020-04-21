@@ -16,6 +16,7 @@ export class EditSubsriptionComponent implements OnInit, AfterViewInit {
   private subscriptionFormComponent: SubscriptionFormComponent;
   currentSubscription;
   currentSubscriptionId;
+  errorMessage = '';
 
   constructor(private featuresService: FeaturesService, private activatedRoute: ActivatedRoute) { }
 
@@ -29,6 +30,9 @@ export class EditSubsriptionComponent implements OnInit, AfterViewInit {
     this.currentSubscription = result.data;
 
     this.subscriptionFormComponent.subscriptionForm.patchValue(this.currentSubscription);
+    this.subscriptionFormComponent.subscriptionForm.updateValueAndValidity();
+
+
 
   }
 
@@ -36,6 +40,13 @@ export class EditSubsriptionComponent implements OnInit, AfterViewInit {
 
   async editSubscription($event) {
     console.log('edit');
-    const result = this.featuresService.editSubscription($event, this.currentSubscriptionId);
+    try {
+      const result = this.featuresService.editSubscription($event, this.currentSubscriptionId);
+
+    } catch (err) {
+      this.errorMessage = 'There is an error';
+
+    }
+
   }
 }

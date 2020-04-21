@@ -18,7 +18,7 @@ import { CommunicationChannel } from '../communication-channel.model';
   styleUrls: ['./subscription-form.component.scss']
 })
 export class SubscriptionFormComponent implements OnInit, OnDestroy  {
-  @Input() subscriptionObject: SubscriptionFormModel;
+  @Input() errorMessage;
   @Output() save = new EventEmitter<any>();
   endpointItems: EndPoint[] = [];
   communicationChannels: CommunicationChannel[] = [];
@@ -41,9 +41,9 @@ export class SubscriptionFormComponent implements OnInit, OnDestroy  {
 
   initForm() {
     this.subscriptionForm = this.fb.group({
-      name: ['', Validators.required],
+      name: [''],  // Validators.required
       description: [''],
-      active: [false, Validators.required],
+      active: [false], // Validators.required
       output: this.fb.group({
         messageType: [''],
         emails: [''],
@@ -74,7 +74,7 @@ export class SubscriptionFormComponent implements OnInit, OnDestroy  {
   }
 
   initSubscriptions() {
-      // Changes for organization
+    // Changes for organization
     this.subscription.add(this.subscriptionForm.get('output.subscriber.organisationId').valueChanges.subscribe(value => {
       console.log('organization changed', value);
       this.onOrganizationChange(value);
@@ -97,7 +97,6 @@ export class SubscriptionFormComponent implements OnInit, OnDestroy  {
   }
 
   onSubmit(event) {
-    // debugger;
     const formValues = {...this.subscriptionForm.getRawValue()};
     this.save.emit(formValues);
   }

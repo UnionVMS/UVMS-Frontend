@@ -9,6 +9,7 @@ import { FeaturesService } from '../../features.service';
 })
 export class NewSubscriptionComponent implements OnInit {
   subscription: SubscriptionFormModel;
+  errorMessage = '';
 
   constructor(private featuresService: FeaturesService) { }
 
@@ -17,7 +18,13 @@ export class NewSubscriptionComponent implements OnInit {
 
   async createSubscription($event) {
     console.log('create');
-    const result = await this.featuresService.createSubscription($event);
+    try {
+      const result = await this.featuresService.createSubscription($event);
+
+    } catch (err) {
+      this.errorMessage = 'There is an error';
+
+    }
   }
 
 }

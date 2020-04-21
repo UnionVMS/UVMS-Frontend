@@ -38,17 +38,15 @@ export class FeaturesService {
   }
 
   editSubscription(subscription: SubscriptionFormModel, id) {
-    debugger;
     // tslint:disable-next-line: max-line-length
     return this.http.put<SubscriptionFormModel>(`${environment.baseURL}${FEATURES_ENDPOINTS.createSubscription}/${id}`, subscription).toPromise();
   }
 
   getSubscriptionDetails(id): Promise<any> {
-    debugger;
     // return this.http.get<SubscriptionFormModel>(`${environment.baseURL}${FEATURES_ENDPOINTS.getSubscriptionDetails}/${id}`).toPromise();
     return of({
       "data": {
-        "id": 108,
+        "id": 131,
         "name": "mySub1",
         "accessibility": "SCOPE",
         "description": "description",
@@ -59,10 +57,19 @@ export class FeaturesService {
                 "mail1",
                 "mail2"
             ],
+            "hasEmail": true,
+            "emailConfiguration": {
+                "body": "lorem ipsum dolores",
+                "isPdf": true,
+                "hasAttachments": true,
+                "password": "password",
+                "passwordIsPlaceholder": true,
+                "isXml": true
+            },
             "messageType": "FA_REPORT",
             "subscriber": {
-                "organisationId": 4,
-                "endpointId": 5,
+                "organisationId": 1,
+                "endpointId": 1,
                 "channelId": 1
             },
             "logbook": true,
@@ -72,7 +79,8 @@ export class FeaturesService {
                 "IRCS"
             ],
             "generateNewReportId": true,
-            "history": 1
+            "history": 1,
+            "historyUnit": "MONTHS"
         },
         "execution": {
             "triggerType": "MANUAL",

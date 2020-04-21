@@ -1,7 +1,6 @@
-
+<!-- <ngb-alert *ngIf="errorMessage" type="danger">{{ errorMessage }}</ngb-alert> -->
 <form [formGroup]="subscriptionForm" (ngSubmit)="onSubmit($event)">
   <div>
-    {{subscriptionForm.value |json}}
   </div>
   <div class="form-row justify-content-end">
     <button type="button" class="btn btn-outline-secondary mr-1">Cancel</button>

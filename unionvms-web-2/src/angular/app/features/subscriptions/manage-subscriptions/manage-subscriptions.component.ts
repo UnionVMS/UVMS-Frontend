@@ -274,7 +274,6 @@ export class ManageSubscriptionsComponent implements OnInit, OnDestroy {
   }
 
   editSubscription({id}) {
-   // debugger;
     console.log(id);
     this.router.navigate(['subscriptions/edit-subscription', id]);
 
