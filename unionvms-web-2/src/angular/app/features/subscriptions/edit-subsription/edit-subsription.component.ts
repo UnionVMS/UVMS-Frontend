@@ -22,20 +22,17 @@ export class EditSubsriptionComponent implements OnInit, AfterViewInit {
 
   ngOnInit(): void {
     this.currentSubscriptionId = +this.activatedRoute.snapshot.paramMap.get('id');
-
   }
 
   async ngAfterViewInit() {
     const result = await this.featuresService.getSubscriptionDetails(this.currentSubscriptionId);
     this.currentSubscription = result.data;
+    // debugger;
 
     this.subscriptionFormComponent.subscriptionForm.patchValue(this.currentSubscription);
+    // debugger;
     this.subscriptionFormComponent.subscriptionForm.updateValueAndValidity();
-
-
-
   }
-
 
 
   async editSubscription($event) {
@@ -46,6 +43,21 @@ export class EditSubsriptionComponent implements OnInit, AfterViewInit {
     } catch (err) {
       this.errorMessage = 'There is an error';
 
+    }
+
+  }
+
+
+  async checkName($event) {
+    try {
+      const result: any = await this.featuresService.checkNameOnEdit($event, this.currentSubscriptionId);
+      const { data } = result;
+      if (!data) {
+        // tslint:disable-next-line: no-string-literal
+        this.subscriptionFormComponent.subscriptionForm.controls['name'].setErrors({ 'incorrect': true});
+      }
+    } catch (err) {
+      this.errorMessage = 'There is an error';
     }
 
   }

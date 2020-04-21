@@ -1,7 +1,6 @@
 import { Component, OnInit, Input, Output, EventEmitter, OnDestroy } from '@angular/core';
 import { faCalendar, faRetweet } from '@fortawesome/free-solid-svg-icons';
 import { FormGroup, FormBuilder, Validators } from '@angular/forms';
-import { SubscriptionFormModel } from '../subscription-form.model';
 import { Organization } from '../organization.model';
 import { Store } from '@ngrx/store';
 import * as fromRoot from 'app/app.reducer';
@@ -9,6 +8,7 @@ import { Observable, Subscription } from 'rxjs';
 import { FeaturesService } from 'app/features/features.service';
 import { EndPoint } from '../endpoint.model';
 import { CommunicationChannel } from '../communication-channel.model';
+import { NgbDateParserFormatter } from '@ng-bootstrap/ng-bootstrap';
 
 
 
@@ -20,6 +20,7 @@ import { CommunicationChannel } from '../communication-channel.model';
 export class SubscriptionFormComponent implements OnInit, OnDestroy  {
   @Input() errorMessage;
   @Output() save = new EventEmitter<any>();
+  @Output() checkName = new EventEmitter<any>();
   endpointItems: EndPoint[] = [];
   communicationChannels: CommunicationChannel[] = [];
   faCalendar = faCalendar;
@@ -28,14 +29,21 @@ export class SubscriptionFormComponent implements OnInit, OnDestroy  {
   messageTypes;
   organizations$: Observable<Organization[]> = this.store.select(fromRoot.getOrganizations);
   organizations: Organization[];
+  historyUnits = [];
+  triggerTypes = [];
+  accessibilityItems = [];
   private subscription: Subscription = new Subscription();
 
 
-  constructor(private fb: FormBuilder, private store: Store<fromRoot.State>, private featuresService: FeaturesService) { }
+  constructor(private fb: FormBuilder, private store: Store<fromRoot.State>,
+              private featuresService: FeaturesService,  private ngbDateParserFormatter: NgbDateParserFormatter) { }
 
   ngOnInit(): void {
     this.initForm();
     this.initMessageTypes();
+    this.setHistoryUnits();
+    this.setTriggerTypes();
+    this.setAccessibilityItems();
     this.subscription.add(this.organizations$.subscribe(organizations => this.organizations = organizations));
   }
 
@@ -43,11 +51,20 @@ export class SubscriptionFormComponent implements OnInit, OnDestroy  {
     this.subscriptionForm = this.fb.group({
       name: [''],  // Validators.required
       description: [''],
+      accessibility: [null],
       active: [false], // Validators.required
       output: this.fb.group({
-        messageType: [''],
-        emails: [''],
-        body: [''],
+        messageType: ['NONE'],
+        emails: [[]],
+        hasEmail: [false],
+        emailConfiguration: this.fb.group({
+          body: [''],
+          isPdf: [false],
+          hasAttachments: [false],
+          password: [''],
+          passwordIsPlaceholder: [false],
+          isXml: [false]
+        }),
         alert: [false],
         subscriber: this.fb.group({
           organisationId: [null],
@@ -56,15 +73,16 @@ export class SubscriptionFormComponent implements OnInit, OnDestroy  {
         }),
         logbook: [false],
         consolidated: [false],
-        vesselIds: [''],
+        vesselIds: [[]],
         generateNewReportId: [false],
-        history: [1]
+        history: [1],
+        historyUnit: ['DAYS']
       }),
       execution: this.fb.group({
-        triggerType: [''],
-        frequency: [''],
+        triggerType: ['SCHEDULER'],
+        frequency: [0],
         immediate: [false],
-        timeExpression: ['']
+        timeExpression: ['06:00']
       }),
       startDate: [null],
       endDate: [null]
@@ -98,6 +116,56 @@ export class SubscriptionFormComponent implements OnInit, OnDestroy  {
 
   onSubmit(event) {
     const formValues = {...this.subscriptionForm.getRawValue()};
+
+    // Transform object for back end compatibility
+
+     // Work with dates, ng datepicker returns a NgbDateStruct which we manually need to format
+    // tslint:disable-next-line: no-string-literal
+    const startDateFormValue = this.subscriptionForm.controls['startDate'].value;
+    if (startDateFormValue) {
+      const tempStartDate = this.ngbDateParserFormatter.format(startDateFormValue);
+      const startDate = `${tempStartDate}T00:00:00+01:00`;
+      formValues.startDate = startDate;
+    }
+    // tslint:disable-next-line: no-string-literal
+    const endDateFormValue = this.subscriptionForm.controls['endDate'].value;
+    if (endDateFormValue) {
+      const tempEndDate = this.ngbDateParserFormatter.format(endDateFormValue);
+      const endDate = `${tempEndDate}T00:00:00+01:00`;
+      formValues.endDate = endDate;
+    }
+
+    // TODO: perform all transformations here e.g. cast string to number for dropdowns
+
+    // accessibilty
+
+    const accessibilityRawValue = this.subscriptionForm.get('accessibility').value;
+    // handle changing from a real value to -
+    if (accessibilityRawValue === 'null') {
+      formValues.accessibility = null;
+    }
+
+    /* organizationId, endPointId, channelId
+    * By default select returns a string but we need to cast it to a number for back-end
+    */
+
+    const matchArray = ['organisationId', 'endpointId', 'channelId'];
+    for (const [key, value] of Object.entries(formValues.output.subscriber)) {
+     if (matchArray.includes(key)) {
+       if (value !== null) {
+         formValues.output.subscriber[key] = Number(value);
+       }
+     }
+   }
+
+   // Cases where we would expect null but select by default returns 'null' for subscriber field group
+   for (const [key, value] of Object.entries(formValues.output.subscriber)) {
+    if (matchArray.includes(key)) {
+      if (value === "null") {
+        formValues.output.subscriber[key] = null;
+      }
+    }
+  }
     this.save.emit(formValues);
   }
 
@@ -142,6 +210,42 @@ export class SubscriptionFormComponent implements OnInit, OnDestroy  {
       this.subscriptionForm.get('output.subscriber.channelId').setValue(null);
 
     }
+  }
+
+  setHistoryUnits() {
+      this.historyUnits = [
+          { key: 'Days', value: 'DAYS'},
+          { key: 'Weeks', value: 'WEEKS'},
+          { key: 'Months', value: 'MONTHS'}
+      ];
+  }
+
+  setTriggerTypes() {
+    this.triggerTypes = [
+      { key: 'Manual', value: 'MANUAL'},
+      { key: 'Scheduler', value: 'SCHEDULER'},
+      { key: 'INC FA Report', value: 'INC_FA_REPORT'},
+      { key: 'INC FA Query', value: 'INC_FA_QUERY'},
+      { key: 'INC Position', value: 'INC_POSITION'}
+    ];
+  }
+
+  setAccessibilityItems() {
+    this.accessibilityItems = [
+      { key: 'Scope', value: 'SCOPE' },
+      { key: 'Public', value: 'PUBLIC'}
+    ];
+  }
+
+  get name() {
+    return this.subscriptionForm.get('name');
+  }
+
+  onCheckName() {
+    // send value for field 'name'
+    // tslint:disable-next-line: no-string-literal
+    const name = this.subscriptionForm.controls['name'].value;
+    this.checkName.emit(name);
   }
 
   ngOnDestroy() {
