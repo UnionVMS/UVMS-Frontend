@@ -43,55 +43,17 @@ export class FeaturesService {
   }
 
   getSubscriptionDetails(id): Promise<any> {
-    // return this.http.get<SubscriptionFormModel>(`${environment.baseURL}${FEATURES_ENDPOINTS.getSubscriptionDetails}/${id}`).toPromise();
-    return of({
-      "data": {
-        "id": 131,
-        "name": "mySub1",
-        "accessibility": "SCOPE",
-        "description": "description",
-        "active": true,
-        "output": {
-            "alert": true,
-            "emails": [
-                "mail1",
-                "mail2"
-            ],
-            "hasEmail": true,
-            "emailConfiguration": {
-                "body": "lorem ipsum dolores",
-                "isPdf": true,
-                "hasAttachments": true,
-                "password": "password",
-                "passwordIsPlaceholder": true,
-                "isXml": true
-            },
-            "messageType": "FA_REPORT",
-            "subscriber": {
-                "organisationId": 1,
-                "endpointId": 1,
-                "channelId": 1
-            },
-            "logbook": true,
-            "consolidated": true,
-            "vesselIds": [
-                "CFR",
-                "IRCS"
-            ],
-            "generateNewReportId": true,
-            "history": 1,
-            "historyUnit": "MONTHS"
-        },
-        "execution": {
-            "triggerType": "MANUAL",
-            "frequency": 1,
-            "immediate": true,
-            "timeExpression": "06:00"
-        },
-        "startDate": "2016-08-01T11:50:16",
-        "endDate": "9999-01-01T00:00:00"
-    },
-    "code": 200
-  }).toPromise();
+    return this.http.get<SubscriptionFormModel>(`${environment.baseURL}${FEATURES_ENDPOINTS.getSubscriptionDetails}/${id}`).toPromise();
+  }
+
+
+
+  checkNameOnCreate(name) {
+    return this.http.get(`${environment.baseURL}${FEATURES_ENDPOINTS.checkSubscriptionName}?name=${name}`).toPromise();
+  }
+
+
+  checkNameOnEdit(name, id) {
+    return this.http.get(`${environment.baseURL}${FEATURES_ENDPOINTS.checkSubscriptionName}?name=${name}&id=${id}`).toPromise();
   }
 }

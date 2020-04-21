@@ -1,15 +1,20 @@
+import { SubscriptionEmailConfiguration } from './subscription-email-configuration.model';
 export interface SubscriptionFormOutput {
-    messageType: string;
-    emails: [];
-    alert: boolean;
-    subscriber: {
-        organizationId: number;
-        endpointId: number;
-        channelId: number;
-    };
-    logbook: boolean;
-    consolidated: boolean;
-    vesselIds: [];
-    generateNewReportId: boolean;
-    history: boolean;
+  alert: boolean;
+  emails: [];
+  hasEmail: boolean;
+  emailConfiguration: SubscriptionEmailConfiguration;
+  messageType: string;
+  subscriber: {
+      organizationId: number;
+      endpointId: number;
+      channelId: number;
+  };
+  logbook: boolean;
+  consolidated: boolean;
+  vesselIds: [];
+  generateNewReportId: boolean;
+  history: number;
+  historyUnit: string;
+
 }
