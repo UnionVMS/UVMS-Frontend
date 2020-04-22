@@ -4,6 +4,11 @@ import { FeaturesService } from '../../features.service';
 import { ActivatedRoute } from '@angular/router';
 import { SubscriptionFormComponent } from '../subscription-form/subscription-form.component';
 
+interface Alert {
+  type: string;
+  message: string;
+}
+
 
 @Component({
   selector: 'app-edit-subsription',
@@ -16,7 +21,7 @@ export class EditSubsriptionComponent implements OnInit, AfterViewInit {
   private subscriptionFormComponent: SubscriptionFormComponent;
   currentSubscription;
   currentSubscriptionId;
-  errorMessage = '';
+  alerts: Alert[];
 
   constructor(private featuresService: FeaturesService, private activatedRoute: ActivatedRoute) { }
 
@@ -27,10 +32,24 @@ export class EditSubsriptionComponent implements OnInit, AfterViewInit {
   async ngAfterViewInit() {
     const result = await this.featuresService.getSubscriptionDetails(this.currentSubscriptionId);
     this.currentSubscription = result.data;
-    // debugger;
+
 
     this.subscriptionFormComponent.subscriptionForm.patchValue(this.currentSubscription);
-    // debugger;
+
+
+    // bind dates
+    const rawStartDateTime = this.currentSubscription.startDate;
+    const rawEndDateTime = this.currentSubscription.endDate;
+
+    const startDate = rawStartDateTime.split('T');
+    const endDate = rawEndDateTime.split('T');
+    const tempStartDate = startDate[0].split('-').reverse().join('-');
+    const tempEndDate = endDate[0].split('-').reverse().join('-');
+
+
+    this.subscriptionFormComponent.subscriptionForm.get('startDate').setValue(tempStartDate);
+    this.subscriptionFormComponent.subscriptionForm.get('endDate').setValue(tempEndDate);
+
     this.subscriptionFormComponent.subscriptionForm.updateValueAndValidity();
   }
 
@@ -40,9 +59,18 @@ export class EditSubsriptionComponent implements OnInit, AfterViewInit {
     try {
       const result = this.featuresService.editSubscription($event, this.currentSubscriptionId);
       // TODO: bind new values to form
+      this.alerts = [];
+      this.alerts.push({
+        type: 'success',
+        message: 'Subscription successfuly updated!'
+      });
 
     } catch (err) {
-      this.errorMessage = 'There is an error';
+      this.alerts = [];
+      this.alerts.push({
+        type: 'danger',
+        message: err.error.msg
+      });
 
     }
 
@@ -59,7 +87,6 @@ export class EditSubsriptionComponent implements OnInit, AfterViewInit {
         this.subscriptionFormComponent.subscriptionForm.controls['name'].setErrors({ 'incorrect': true});
       }
     } catch (err) {
-      this.errorMessage = 'There is an error';
     }
 
   }
