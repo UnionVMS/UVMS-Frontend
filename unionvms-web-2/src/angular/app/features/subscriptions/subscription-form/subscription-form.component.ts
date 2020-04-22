@@ -120,18 +120,18 @@ export class SubscriptionFormComponent implements OnInit, OnDestroy  {
 
     // Transform object for back end compatibility
 
-     // Work with dates, ng datepicker returns a NgbDateStruct which we manually need to format
+     // Work with dates
     // tslint:disable-next-line: no-string-literal
     const startDateFormValue = this.subscriptionForm.controls['startDate'].value;
     if (startDateFormValue) {
-      const tempStartDate = this.ngbDateParserFormatter.format(startDateFormValue);
+      const tempStartDate = startDateFormValue.split('-').reverse().join('-');
       const startDate = `${tempStartDate}T00:00:00+01:00`;
       formValues.startDate = startDate;
     }
     // tslint:disable-next-line: no-string-literal
     const endDateFormValue = this.subscriptionForm.controls['endDate'].value;
     if (endDateFormValue) {
-      const tempEndDate = this.ngbDateParserFormatter.format(endDateFormValue);
+      const tempEndDate = endDateFormValue.split('-').reverse().join('-');
       const endDate = `${tempEndDate}T23:59:59+01:00`;
       formValues.endDate = endDate;
     }

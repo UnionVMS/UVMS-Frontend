@@ -10,6 +10,9 @@ import { NewSubscriptionComponent } from './subscriptions/new-subscription/new-s
 import { FeaturesRoutingModule } from './features-routing.module';
 import { EditSubsriptionComponent } from './subscriptions/edit-subsription/edit-subsription.component';
 import { SubscriptionFormComponent } from './subscriptions/subscription-form/subscription-form.component';
+import { NgbDateAdapter, NgbDateParserFormatter } from '@ng-bootstrap/ng-bootstrap';
+import { CustomAdapter } from './date-custom-adapter';
+import { CustomDateParserFormatter } from './date-custom-parser-formatter';
 
 @NgModule({
   declarations: [
@@ -37,6 +40,10 @@ import { SubscriptionFormComponent } from './subscriptions/subscription-form/sub
   exports: [
     TodayComponent,
     SubscriptionsComponent
+  ],
+  providers: [
+    {provide: NgbDateAdapter, useClass: CustomAdapter},
+    {provide: NgbDateParserFormatter, useClass: CustomDateParserFormatter}
   ]
 })
 export class FeaturesModule { }
