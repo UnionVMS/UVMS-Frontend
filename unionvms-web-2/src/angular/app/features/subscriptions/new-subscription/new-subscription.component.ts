@@ -2,6 +2,11 @@ import { Component, OnInit, ViewChild } from '@angular/core';
 import { SubscriptionFormModel } from '../subscription-form.model';
 import { FeaturesService } from '../../features.service';
 import { SubscriptionFormComponent } from '../subscription-form/subscription-form.component';
+import { subscriptionFormInitialValues } from '../subscriptions-helper';
+interface Alert {
+  type: string;
+  message: string;
+}
 
 @Component({
   selector: 'app-new-subscription',
@@ -12,9 +17,9 @@ export class NewSubscriptionComponent implements OnInit {
   @ViewChild(SubscriptionFormComponent)
   private subscriptionFormComponent: SubscriptionFormComponent;
   subscription: SubscriptionFormModel;
-  errorMessage = '';
+  alerts: Alert[];
 
-  constructor(private featuresService: FeaturesService) { }
+  constructor(private featuresService: FeaturesService) {}
 
   ngOnInit(): void {
   }
@@ -23,9 +28,20 @@ export class NewSubscriptionComponent implements OnInit {
     console.log('create');
     try {
       const result = await this.featuresService.createSubscription($event);
+      this.subscriptionFormComponent.subscriptionForm.reset(subscriptionFormInitialValues);
+      this.alerts = [];
+      this.alerts.push({
+        type: 'success',
+        message: 'Subscription successfuly saved!'
+      });
 
     } catch (err) {
-      this.errorMessage = 'There is an error';
+      // empty alerts
+      this.alerts = [];
+      this.alerts.push({
+        type: 'danger',
+        message: err.error.msg
+      });
 
     }
   }
@@ -40,7 +56,7 @@ export class NewSubscriptionComponent implements OnInit {
         this.subscriptionFormComponent.subscriptionForm.controls['name'].setErrors({ 'incorrect': true});
       }
     } catch (err) {
-      this.errorMessage = 'There is an error';
+
     }
 
   }

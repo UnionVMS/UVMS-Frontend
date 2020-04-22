@@ -1,12 +1,14 @@
-<!-- <ngb-alert *ngIf="errorMessage" type="danger">{{ errorMessage }}</ngb-alert> -->
+<p *ngFor="let alert of alerts">
+  <ngb-alert [type]="alert.type" (close)="close(alert)">{{ alert.message }}</ngb-alert>
+</p>
 <form [formGroup]="subscriptionForm" (ngSubmit)="onSubmit($event)">
   <div>
     {{subscriptionForm.value | json}}
     {{subscriptionForm.valid}}
   </div>
   <div class="form-row justify-content-end">
-    <button type="button" class="btn btn-outline-secondary mr-1">Cancel</button>
-    <button type="submit" class="btn btn-primary" [disabled]="!subscriptionForm.valid" >Save</button>
+    <button type="button" class="btn btn-outline-secondary mr-1" (click)="reset()">Cancel</button>
+    <button type="submit" class="btn btn-primary" [disabled]="!subscriptionForm.valid">Save</button>
   </div>
   <fieldset class="border p-2">
     <legend  class="w-auto">General Configuration</legend>

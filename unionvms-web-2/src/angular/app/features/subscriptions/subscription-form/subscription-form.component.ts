@@ -9,6 +9,7 @@ import { FeaturesService } from 'app/features/features.service';
 import { EndPoint } from '../endpoint.model';
 import { CommunicationChannel } from '../communication-channel.model';
 import { NgbDateParserFormatter } from '@ng-bootstrap/ng-bootstrap';
+import { subscriptionFormInitialValues } from '../subscriptions-helper';
 
 
 
@@ -18,7 +19,7 @@ import { NgbDateParserFormatter } from '@ng-bootstrap/ng-bootstrap';
   styleUrls: ['./subscription-form.component.scss']
 })
 export class SubscriptionFormComponent implements OnInit, OnDestroy  {
-  @Input() errorMessage;
+  @Input() alerts;
   @Output() save = new EventEmitter<any>();
   @Output() checkName = new EventEmitter<any>();
   endpointItems: EndPoint[] = [];
@@ -131,7 +132,7 @@ export class SubscriptionFormComponent implements OnInit, OnDestroy  {
     const endDateFormValue = this.subscriptionForm.controls['endDate'].value;
     if (endDateFormValue) {
       const tempEndDate = this.ngbDateParserFormatter.format(endDateFormValue);
-      const endDate = `${tempEndDate}T00:00:00+01:00`;
+      const endDate = `${tempEndDate}T23:59:59+01:00`;
       formValues.endDate = endDate;
     }
 
@@ -159,9 +160,9 @@ export class SubscriptionFormComponent implements OnInit, OnDestroy  {
    }
 
    // Cases where we would expect null but select by default returns 'null' for subscriber field group
-   for (const [key, value] of Object.entries(formValues.output.subscriber)) {
+    for (const [key, value] of Object.entries(formValues.output.subscriber)) {
     if (matchArray.includes(key)) {
-      if (value === "null") {
+      if (value === 'null') {
         formValues.output.subscriber[key] = null;
       }
     }
@@ -246,6 +247,14 @@ export class SubscriptionFormComponent implements OnInit, OnDestroy  {
     // tslint:disable-next-line: no-string-literal
     const name = this.subscriptionForm.controls['name'].value;
     this.checkName.emit(name);
+  }
+
+  close(alert) {
+    this.alerts.splice(this.alerts.indexOf(alert), 1);
+  }
+
+  reset() {
+    this.subscriptionForm.reset(subscriptionFormInitialValues);
   }
 
   ngOnDestroy() {
