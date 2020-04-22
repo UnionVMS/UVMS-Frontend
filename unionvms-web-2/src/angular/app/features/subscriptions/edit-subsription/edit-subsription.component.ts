@@ -39,11 +39,13 @@ export class EditSubsriptionComponent implements OnInit, AfterViewInit {
     console.log('edit');
     try {
       const result = this.featuresService.editSubscription($event, this.currentSubscriptionId);
+      // TODO: bind new values to form
 
     } catch (err) {
       this.errorMessage = 'There is an error';
 
     }
+
 
   }
 
