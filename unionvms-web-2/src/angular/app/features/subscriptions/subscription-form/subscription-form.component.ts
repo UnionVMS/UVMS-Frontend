@@ -1,6 +1,6 @@
 import { Component, OnInit, Input, Output, EventEmitter, OnDestroy } from '@angular/core';
 import { faCalendar, faRetweet } from '@fortawesome/free-solid-svg-icons';
-import { FormGroup, FormBuilder, Validators } from '@angular/forms';
+import { FormGroup, FormBuilder, Validators, FormControl } from '@angular/forms';
 import { Organization } from '../organization.model';
 import { Store } from '@ngrx/store';
 import * as fromRoot from 'app/app.reducer';
@@ -34,6 +34,9 @@ export class SubscriptionFormComponent implements OnInit, OnDestroy  {
   triggerTypes = [];
   accessibilityItems = [];
   private subscription: Subscription = new Subscription();
+
+  // Please do not change order of elements
+  vesselIdentifiers = ['CFR', 'IRCS', 'ICCAT', 'EXT_MARK', 'UVI'];
 
 
   constructor(private fb: FormBuilder, private store: Store<fromRoot.State>,
@@ -74,7 +77,7 @@ export class SubscriptionFormComponent implements OnInit, OnDestroy  {
         }),
         logbook: [false],
         consolidated: [false],
-        vesselIds: [[]],
+        vesselIds: this.fb.array(this.vesselIdentifiers.map(x => !1)),
         generateNewReportId: [false],
         history: [1],
         historyUnit: ['DAYS']
@@ -91,6 +94,9 @@ export class SubscriptionFormComponent implements OnInit, OnDestroy  {
 
     this.initSubscriptions();
   }
+
+
+
 
   initSubscriptions() {
     // Changes for organization
@@ -167,6 +173,30 @@ export class SubscriptionFormComponent implements OnInit, OnDestroy  {
       }
     }
   }
+
+  /*vessel Identifiers. By default we get the state of each checkbox aka checked/ not checked.
+    We need to transform values for back-end
+  */
+    const validVesselIdIndices = this.subscriptionForm.get('output.vesselIds').value.reduce( (acc, current, i) => {
+      if (current === true) {
+          acc.push(i);
+      }
+      return acc;
+    }, []);
+    const vesselIdsArray = [];
+
+    validVesselIdIndices.forEach(index => {
+      vesselIdsArray.push(this.vesselIdentifiers[index]);
+    });
+    formValues.output.vesselIds = vesselIdsArray;
+
+    // password
+    // Revisit this
+    // const passwordIsPlaceholder = this.subscriptionForm.get('output.emailConfiguration.password').value === '****';
+
+    // this.subscriptionForm.get('output.emailConfiguration.passwordIsPlaceholder').setValue(passwordIsPlaceholder);
+
+
     this.save.emit(formValues);
   }
 

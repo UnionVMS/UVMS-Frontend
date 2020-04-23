@@ -242,26 +242,10 @@
             </div>
             <label for="identifiers" class="col-sm-2 col-form-label-sm">Identifiers</label>
             <div class="col-sm-6 identifiers-group">
-                <div class="form-check form-check-inline identifiers-item">
-                    <input disabled class="form-check-input" type="checkbox" id="identifierCheckbox1" formControlName="vesselIds" value="CFR">
-                    <label class="form-check-label" for="identifierCheckbox1">CFR</label>
-                </div>
-                <div class="form-check form-check-inline identifiers-item">
-                    <input disabled class="form-check-input" type="checkbox" id="identifierCheckbox2" formControlName="vesselIds" value="IRCS">
-                    <label class="form-check-label" for="inlineCheckbox2">IRCS</label>
-                </div>
-                <div class="form-check form-check-inline identifiers-item">
-                    <input disabled class="form-check-input" type="checkbox" id="identifierCheckbox3" formControlName="vesselIds" value="ICCAT">
-                    <label class="form-check-label" for="identifierCheckbox3">ICCAT</label>
-                </div>
-                <div class="form-check form-check-inline identifiers-item">
-                    <input disabled class="form-check-input" type="checkbox" id="identifierCheckbox4" formControlName="vesselIds" value="EXT MARK">
-                    <label class="form-check-label" for="identifierCheckbox4">EXT MARK</label>
-                </div>
-                <div class="form-check form-check-inline identifiers-item">
-                    <input disabled class="form-check-input" type="checkbox" id="identifierCheckbox5" formControlName="vesselIds" value="UVI">
-                    <label class="form-check-label" for="identifierCheckbox5">UVI</label>
-                </div>
+              <div class="form-check form-check-inline identifiers-item" *ngFor="let item of vesselIdentifiers; let i = index" formArrayName="vesselIds">
+                <input class="form-check-input" type="checkbox" id="identifierCheckbox_{{i}}" [formControlName]="i">
+                <label class="form-check-label" for="identifierCheckbox_{{i}}">{{item| removeUnderscore }}</label>
+              </div>
             </div>
         </div>
     </fieldset>
