@@ -4,7 +4,8 @@ import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { HttpClientModule } from '@angular/common/http';
 import { FontAwesomeModule } from '@fortawesome/angular-fontawesome';
 import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
-import { DateTimePickerComponent } from './date-time-picker/date-time-picker.component';
+
+import { RemoveUnderscorePipe } from './remove_underscore.pipe';
 
 
 const MODULES = [
@@ -20,14 +21,14 @@ const MODULES = [
 
 @NgModule({
   declarations: [
-    DateTimePickerComponent
+    RemoveUnderscorePipe
   ],
   imports: [
     ...MODULES
   ],
   exports: [
     ...MODULES,
-    DateTimePickerComponent
+    RemoveUnderscorePipe
   ]
 })
 export class SharedModule { }
