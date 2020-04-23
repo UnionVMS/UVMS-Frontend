@@ -1,5 +1,5 @@
 import { Component, OnInit, Input, Output, EventEmitter, OnDestroy } from '@angular/core';
-import { faCalendar, faRetweet } from '@fortawesome/free-solid-svg-icons';
+import { faCalendar, faRetweet, faEye  } from '@fortawesome/free-solid-svg-icons';
 import { FormGroup, FormBuilder, Validators, FormControl } from '@angular/forms';
 import { Organization } from '../organization.model';
 import { Store } from '@ngrx/store';
@@ -26,6 +26,7 @@ export class SubscriptionFormComponent implements OnInit, OnDestroy  {
   communicationChannels: CommunicationChannel[] = [];
   faCalendar = faCalendar;
   faRetweet = faRetweet;
+  faEye = faEye;
   subscriptionForm: FormGroup;
   messageTypes;
   organizations$: Observable<Organization[]> = this.store.select(fromRoot.getOrganizations);

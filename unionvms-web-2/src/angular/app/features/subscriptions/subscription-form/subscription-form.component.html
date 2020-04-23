@@ -2,7 +2,7 @@
   <ngb-alert [type]="alert.type" (close)="close(alert)">{{ alert.message }}</ngb-alert>
 </p>
 <form [formGroup]="subscriptionForm" (ngSubmit)="onSubmit($event)" novalidate>
-  <div class="form-row justify-content-end">
+  <div class="form-row justify-content-end buttons-row">
     <button type="button" class="btn btn-outline-secondary mr-1" (click)="reset()">Cancel</button>
     <button type="submit" class="btn btn-primary" [disabled]="!subscriptionForm.valid" >Save</button>
   </div>
@@ -18,9 +18,9 @@
         </div>
         <label for="active" class="col-sm-2 col-form-label-sm">Active</label>
         <div class="col-sm-4">
-          <div class="custom-control custom-switch">
+          <div class="custom-control custom-switch custom-switch-md">
             <input type="checkbox" formControlName="active" class="custom-control-input" id="active">
-            <label class="custom-control-label" for="active"></label>
+            <label class="custom-control-label form-switch" for="active"></label>
           </div>
         </div>
     </div>
@@ -32,7 +32,7 @@
         <div class="col-sm-6">
           <div class="form-group row">
             <label for="startDate" class="col-sm-4 col-form-label-sm">From</label>
-            <div class="input-group col-sm-7">
+            <div class="input-group col-sm-8">
               <input class="form-control"
                   name="dpstart" formControlName="startDate" ngbDatepicker #dpstart="ngbDatepicker">
               <div class="input-group-append">
@@ -44,7 +44,7 @@
           </div>
           <div class="form-group row">
             <label for="endDate" class="col-sm-4 col-form-label-sm">Till</label>
-            <div class="input-group col-sm-7">
+            <div class="input-group col-sm-8">
               <input class="form-control"
                   name="dpend" ngbDatepicker formControlName="endDate" #dpend="ngbDatepicker">
               <div class="input-group-append">
@@ -74,15 +74,15 @@
       <div class="form-group row">
         <label for="alert" class="col-sm-2 col-form-label-sm">Alert</label>
         <div class="col-sm-4">
-          <div class="custom-control custom-switch">
+          <div class="custom-control custom-switch custom-switch-md">
             <input type="checkbox" formControlName="alert" class="custom-control-input" id="alert">
-            <label class="custom-control-label" for="alert"></label>
+            <label class="custom-control-label form-switch" for="alert"></label>
           </div>
         </div>
         <div class="col-sm-6">
             <div class="form-group row">
                 <label for="messageType" class="col-sm-4 col-form-label-sm">Message Type</label>
-                <div class="col-sm-7">
+                <div class="col-sm-8">
                     <select class="form-control" id="messageType" formControlName="messageType">
                         <option *ngFor="let item of messageTypes" value={{item.value}}>
                             {{item.key}}
@@ -93,7 +93,7 @@
             <div formGroupName="subscriber">
               <div class="form-group row">
                 <label for="organizationId" class="col-sm-4 col-form-label-sm">Organisation</label>
-                <div class="col-sm-7">
+                <div class="col-sm-8">
                   <select class="form-control" id="organizationId" formControlName="organisationId">
                     <option value=null>All</option>
                     <option *ngFor="let item of organizations" value={{item.organisationId}}>
@@ -104,7 +104,7 @@
               </div>
               <div class="form-group row">
                   <label for="endPoint" class="col-sm-4 col-form-label-sm">End Point</label>
-                  <div class="col-sm-7">
+                  <div class="col-sm-8">
                     <select class="form-control" id="endpoint" formControlName="endpointId">
                       <option value=null>All</option>
                       <option *ngFor="let item of endpointItems" value={{item.endpointId}} >{{item.name}}</option>
@@ -113,7 +113,7 @@
               </div>
               <div class="form-group row">
                   <label for="communicationChannel" class="col-sm-4 col-form-label-sm">Comminication Channel</label>
-                  <div class="col-sm-7">
+                  <div class="col-sm-8">
                     <select class="form-control" id="communicationChannel" formControlName="channelId">
                       <option value=null>All</option>
                       <option *ngFor="let item of communicationChannels" value={{item.channelId}} >{{item.dataflow}}</option>
@@ -124,107 +124,110 @@
             </div>
         </div>
       </div>
-      <fieldset class="border p-2">
-        <legend class="w-auto">Email</legend>
-        <div class="form-group row">
-            <label for="emails" class="col-sm-2 col-form-label-sm">Emails</label>
-            <div class="col-sm-4">
-              <textarea disabled formControlName="emails" type="text" class="form-control" id="emails"></textarea>
-              <div class="form-group row">
-                <div class="form-check form-check-inline">
-                  <input class="form-check-input" type="checkbox" disabled id="inlineCheckbox1" value="option">
-                  <label class="form-check-label" for="inlineCheckbox1">Include link to trip overview</label>
-                </div>
-            </div>
-            </div>
-            <div formGroupName="emailConfiguration" class="col-sm-6">
-                <div class="form-group row">
-                    <div class="offset-md-5 col-sm-7">
-                        <button type="button" class="btn btn-primary" disabled>
-                          <fa-icon [icon]="faRetweet"></fa-icon>
-                        </button>
-                         Reset Default
-                    </div>
-                </div>
-                <div class="form-group row email-body">
-                    <label for="body" class="col-sm-3 offset-md-2 col-form-label-sm">Body</label>
-                    <div class="col-sm-6">
-                        <textarea formControlName="body" rows="4" class="form-control" id="body"></textarea>
-                    </div>
-                </div>
-            </div>
-        </div>
-        <div formGroupName="emailConfiguration">
-            <div class="form-group row">
-              <label for="attachments" class="col-sm-2 col-form-label-sm">Attachments</label>
+      <div id="email-fieldset">
+        <fieldset class="border p-2">
+          <legend class="w-auto">Email</legend>
+          <div class="form-group row">
+              <label for="emails" class="col-sm-2 col-form-label-sm">Emails</label>
               <div class="col-sm-4">
-                  <div class="form-check form-check-inline">
-                      <input class="form-check-input" type="checkbox" id="pdf" formControlName="isPdf" value="option">
-                      <label class="form-check-label" for="pdf">PDF</label>
+                <textarea disabled formControlName="emails" type="text" class="form-control" id="emails"></textarea>
+                <div class="form-group row">
+                  <div class="custom-control custom-checkbox custom-control-inline">
+                    <input class="custom-control-input" type="checkbox" disabled id="inlineCheckbox1" value="option">
+                    <label class="custom-control-label" for="inlineCheckbox1">Include link to trip overview</label>
                   </div>
               </div>
-              <div class="offset-sm-2 col-sm-2">
-                  <div class="form-check form-check-inline">
-                      <input class="form-check-input" type="checkbox" formControlName="isXml" id="xml" value="option">
-                      <label class="form-check-label" for="xml">XML</label>
+              </div>
+              <div formGroupName="emailConfiguration" class="col-sm-6">
+                  <div class="form-group row">
+                      <div class="offset-md-4 col-sm-6">
+                          <button type="button" class="btn btn-primary" disabled>
+                            <fa-icon [icon]="faRetweet"></fa-icon>
+                          </button>
+                           Reset Default
+                      </div>
+                  </div>
+                  <div class="form-group row email-body">
+                      <label for="body" class="col-sm-4 col-form-label-sm">Body</label>
+                      <div class="col-sm-8">
+                          <textarea formControlName="body" rows="4" class="form-control" id="body"></textarea>
+                      </div>
                   </div>
               </div>
           </div>
-          <div class="form-group row">
-              <div class="offset-sm-2 col-sm-4">
-                  <select class="form-control" id="template" disabled>
-                      <option value="">Template</option>
-                  </select>
-              </div>
-              <div class="offset-sm-2 col-sm-3">
-                  <select class="form-control" id="fluxmessage" disabled>
-                      <option value="">Flux Message</option>
-                  </select>
-              </div>
+          <div formGroupName="emailConfiguration">
+              <div class="form-group row">
+                <label for="attachments" class="col-sm-2 col-form-label-sm">Attachments</label>
+                <div class="col-sm-4">
+                    <div class="custom-control custom-checkbox custom-control-inline">
+                        <input class="custom-control-input" type="checkbox" id="pdf" formControlName="isPdf" value="option">
+                        <label class="custom-control-label" for="pdf">PDF</label>
+                    </div>
+                </div>
+                <div class="offset-sm-2 col-sm-2">
+                    <div class="custom-control custom-checkbox custom-control-inline">
+                        <input class="custom-control-input" type="checkbox" formControlName="isXml" id="xml" value="option">
+                        <label class="custom-control-label" for="xml">XML</label>
+                    </div>
+                </div>
+            </div>
+            <div class="form-group row">
+                <div class="offset-sm-2 col-sm-4">
+                    <select class="form-control" id="template" disabled>
+                        <option value="">Template</option>
+                    </select>
+                </div>
+                <div class="offset-sm-2 col-sm-4">
+                    <select class="form-control" id="fluxmessage" disabled>
+                        <option value="">Flux Message</option>
+                    </select>
+                </div>
+            </div>
+            <div class="form-group row">
+                <div class="offset-sm-2 col-sm-4">
+                    <div class="custom-control custom-checkbox custom-control-inline">
+                        <input class="custom-control-input" type="checkbox" formControlName="hasAttachments" id="zipAttachments" value="option">
+                        <label class="custom-control-label" for="zipAttachments">Zip Attachments</label>
+                    </div>
+                </div>
+                <div class="offset-sm-2 col-sm-4">
+                    <select class="form-control" id="dataflow" disabled>
+                        <option value="">Dataflow</option>
+                    </select>
+                </div>
+            </div>
+            <div class="form-group row">
+                <div class="offset-sm-2 col-sm-4">
+                    <input class="form-control password-input" type="password" formControlName="password" id="password" placeholder="add password optional">
+                    <fa-icon class="password-icon" [icon]="faEye"></fa-icon>
+                </div>
+            </div>
           </div>
-          <div class="form-group row">
-              <div class="offset-sm-2 col-sm-4">
-                  <div class="form-check form-check-inline">
-                      <input class="form-check-input" type="checkbox" formControlName="hasAttachments" id="zipAttachments" value="option">
-                      <label class="form-check-label" for="zipAttachments">Zip Attachments</label>
-                  </div>
-              </div>
-              <div class="offset-sm-2 col-sm-3">
-                  <select class="form-control" id="dataflow" disabled>
-                      <option value="">Dataflow</option>
-                  </select>
-              </div>
-          </div>
-          <div class="form-group row">
-              <div class="offset-sm-2 col-sm-4">
-                  <input class="form-control" type="password" formControlName="password" id="password" placeholder="add password optional">
-              </div>
-          </div>
-        </div>
-      </fieldset>
+        </fieldset>
+      </div>
     </fieldset>
     <fieldset class="border p-2">
         <legend  class="w-auto">Message Configuration</legend>
         <div class="form-group row">
             <label for="name" class="col-sm-2 col-form-label-sm">Logbook</label>
-            <div class="col-sm-1">
-            <div class="custom-control custom-switch">
-                <input type="checkbox" formControlName="logbook" class="custom-control-input" id="logbook">
-                <label class="custom-control-label" for="logbook"></label>
-            </div>
+            <div class="col-sm-2">
+              <div class="custom-control custom-switch custom-switch-md">
+                  <input type="checkbox" formControlName="logbook" class="custom-control-input" id="logbook">
+                  <label class="custom-control-label form-switch" for="logbook"></label>
+              </div>
             </div>
             <label for="generateNewReportId" class="col-sm-2 col-form-label-sm">New Report ID</label>
-            <div class="col-sm-1">
-            <div class="custom-control custom-switch">
-                <input type="checkbox" formControlName="generateNewReportId" class="custom-control-input" id="generateNewReportId">
-                <label class="custom-control-label" for="generateNewReportId"></label>
+            <div class="col-sm-2">
+              <div class="custom-control custom-switch custom-switch-md">
+                  <input type="checkbox" formControlName="generateNewReportId" class="custom-control-input" id="generateNewReportId">
+                  <label class="custom-control-label form-switch" for="generateNewReportId"></label>
+              </div>
             </div>
-            </div>
-            <label for="history" class="col-sm-1 col-form-label-sm offset-md-1">History</label>
+            <label for="history" class="col-sm-1 col-form-label-sm">History</label>
             <div class="col-sm-1 mx-0 px-0">
                 <input type="number" formControlName="history" class="form-control" id="history" min="0">
             </div>
-            <div class="col-sm-2 mx-0 px-0">
+            <div class="col-sm-1 mx-0 px-0">
                 <select class="form-control" id="historyUnit" formControlName="historyUnit">
                   <option *ngFor="let item of historyUnits" value={{item.value}}>
                     {{item.key}}
@@ -235,16 +238,16 @@
         <div class="form-group row">
             <label for="consolidated" class="col-sm-2 col-form-label-sm">Consolidated</label>
             <div class="col-sm-1">
-                <div class="custom-control custom-switch">
+                <div class="custom-control custom-switch custom-switch-md">
                     <input type="checkbox" formControlName="consolidated" class="custom-control-input" id="consolidated">
-                    <label class="custom-control-label" for="consolidated"></label>
+                    <label class="custom-control-label form-switch" for="consolidated"></label>
                 </div>
             </div>
             <label for="identifiers" class="col-sm-2 col-form-label-sm">Identifiers</label>
             <div class="col-sm-6 identifiers-group">
-              <div class="form-check form-check-inline identifiers-item" *ngFor="let item of vesselIdentifiers; let i = index" formArrayName="vesselIds">
-                <input class="form-check-input" type="checkbox" id="identifierCheckbox_{{i}}" [formControlName]="i">
-                <label class="form-check-label" for="identifierCheckbox_{{i}}">{{item| removeUnderscore }}</label>
+              <div class="custom-control custom-checkbox custom-control-inline" *ngFor="let item of vesselIdentifiers; let i = index" formArrayName="vesselIds">
+                <input class="custom-control-input" type="checkbox" id="identifierCheckbox_{{i}}" [formControlName]="i">
+                <label class="custom-control-label" for="identifierCheckbox_{{i}}">{{item| removeUnderscore }}</label>
               </div>
             </div>
         </div>
@@ -262,16 +265,16 @@
         </select>
       </div>
       <div class="offset-sm-2 col-sm-2">
-        <div class="form-check form-check-inline">
-            <input class="form-check-input" type="checkbox" id="scheduler" value="option">
-            <label class="form-check-label" for="scheduler">Scheduler</label>
+        <div class="custom-control custom-checkbox custom-control-inline">
+            <input class="custom-control-input" type="checkbox" id="scheduler" value="option">
+            <label class="custom-control-label" for="scheduler">Scheduler</label>
         </div>
       </div>
       <label for="immediate" class="col-form-label-sm">Immediate</label>
       <div class="col-sm-2">
-        <div class="custom-control custom-switch">
+        <div class="custom-control custom-switch custom-switch-md">
           <input type="checkbox" formControlName="immediate" formControlName="immediate" class="custom-control-input" id="immediate">
-          <label class="custom-control-label" for="immediate"></label>
+          <label class="custom-control-label form-switch" for="immediate"></label>
         </div>
       </div>
     </div>
