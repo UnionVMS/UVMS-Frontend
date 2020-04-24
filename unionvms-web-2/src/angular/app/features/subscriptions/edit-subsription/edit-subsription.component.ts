@@ -34,6 +34,7 @@ export class EditSubsriptionComponent implements OnInit, AfterViewInit {
   async ngAfterViewInit() {
     const result = await this.featuresService.getSubscriptionDetails(this.currentSubscriptionId);
     this.currentSubscription = result.data;
+    //debugger;
 
 
     this.subscriptionFormComponent.subscriptionForm.patchValue(this.currentSubscription);
@@ -42,6 +43,10 @@ export class EditSubsriptionComponent implements OnInit, AfterViewInit {
     // bind dates
     const rawStartDateTime = this.currentSubscription.startDate;
     const rawEndDateTime = this.currentSubscription.endDate;
+
+
+
+
 
 
     if (rawStartDateTime) {

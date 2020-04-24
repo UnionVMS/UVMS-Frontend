@@ -103,12 +103,25 @@ fieldset {
   border: 3px solid $basic-white;
 }
 
-.password-icon {
+.password-icon, .email-plus-icon {
   position: absolute;
   right: 21px;
   top: 1px;
+}
+
+.password-icon {
   font-size: 27px;
   color: $light-sky-blue ;
+}
+
+.email-plus-icon {
+  color: green;
+  cursor: pointer;
+}
+
+.email-minus-icon {
+  color: red;
+  cursor: pointer;
 }
 
 .password-input {
@@ -125,4 +138,14 @@ fieldset {
   border-bottom: 0 !important;
 }
 
+.email-list {
+  border: 1px solid #ced4da;
+  min-height: 100px;
+  max-height: 100px;
+  overflow-y: auto;
+}
+
+#emails-list input {
+    border: 0 !important;
+}
 

@@ -7,7 +7,7 @@ export const subscriptionFormInitialValues = {
     messageType: 'NONE',
     emails: [],
     hasEmail: false,
-    emailConfiguration:{
+    emailConfiguration: {
       body: '',
       isPdf: false,
       hasAttachments: false,
