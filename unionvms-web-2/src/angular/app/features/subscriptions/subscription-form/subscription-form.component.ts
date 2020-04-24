@@ -1,6 +1,6 @@
-import { Component, OnInit, Input, Output, EventEmitter, OnDestroy } from '@angular/core';
-import { faCalendar, faRetweet, faEye  } from '@fortawesome/free-solid-svg-icons';
-import { FormGroup, FormBuilder, Validators, FormControl } from '@angular/forms';
+import { Component, OnInit, Input, Output, EventEmitter, OnDestroy, ApplicationRef } from '@angular/core';
+import { faCalendar, faRetweet, faEye, faPlus, faTrash  } from '@fortawesome/free-solid-svg-icons';
+import { FormGroup, FormBuilder, Validators, FormControl, FormArray } from '@angular/forms';
 import { Organization } from '../organization.model';
 import { Store } from '@ngrx/store';
 import * as fromRoot from 'app/app.reducer';
@@ -10,6 +10,7 @@ import { EndPoint } from '../endpoint.model';
 import { CommunicationChannel } from '../communication-channel.model';
 import { NgbDateParserFormatter } from '@ng-bootstrap/ng-bootstrap';
 import { subscriptionFormInitialValues } from '../subscriptions-helper';
+import {NgbModal, ModalDismissReasons} from '@ng-bootstrap/ng-bootstrap';
 
 
 
@@ -27,6 +28,8 @@ export class SubscriptionFormComponent implements OnInit, OnDestroy  {
   faCalendar = faCalendar;
   faRetweet = faRetweet;
   faEye = faEye;
+  faPlus = faPlus;
+  faTrash = faTrash;
   subscriptionForm: FormGroup;
   messageTypes;
   organizations$: Observable<Organization[]> = this.store.select(fromRoot.getOrganizations);
@@ -39,9 +42,12 @@ export class SubscriptionFormComponent implements OnInit, OnDestroy  {
   // Please do not change order of elements
   vesselIdentifiers = ['CFR', 'IRCS', 'ICCAT', 'EXT_MARK', 'UVI'];
 
+  // initialEmailArray = ['test1', 'test2'];
+
 
   constructor(private fb: FormBuilder, private store: Store<fromRoot.State>,
-              private featuresService: FeaturesService,  private ngbDateParserFormatter: NgbDateParserFormatter) { }
+              private featuresService: FeaturesService,  private ngbDateParserFormatter: NgbDateParserFormatter,
+              private modalService: NgbModal) { }
 
   ngOnInit(): void {
     this.initForm();
@@ -60,7 +66,7 @@ export class SubscriptionFormComponent implements OnInit, OnDestroy  {
       active: [false], // Validators.required
       output: this.fb.group({
         messageType: ['NONE'],
-        emails: [[]],
+        emails: this.fb.array([]),
         hasEmail: [false],
         emailConfiguration: this.fb.group({
           body: [''],
@@ -96,7 +102,13 @@ export class SubscriptionFormComponent implements OnInit, OnDestroy  {
     this.initSubscriptions();
   }
 
+  get emails() {
+    return this.subscriptionForm.get('output.emails') as FormArray;
+  }
 
+  get name() {
+    return this.subscriptionForm.get('name');
+  }
 
 
   initSubscriptions() {
@@ -269,10 +281,6 @@ export class SubscriptionFormComponent implements OnInit, OnDestroy  {
     ];
   }
 
-  get name() {
-    return this.subscriptionForm.get('name');
-  }
-
   onCheckName() {
     // send value for field 'name'
     // tslint:disable-next-line: no-string-literal
@@ -286,6 +294,30 @@ export class SubscriptionFormComponent implements OnInit, OnDestroy  {
 
   reset() {
     this.subscriptionForm.reset(subscriptionFormInitialValues);
+  }
+
+
+
+  addEmail(content) {
+    console.log('add');
+    this.modalService.open(content).result.then((result) => {
+      debugger;
+      if (result.emails) {
+        const formattedEmailArray = result.emails.split(';');
+        formattedEmailArray.forEach(item => {
+          this.emails.push(new FormControl(item));
+        });
+      }
+    }, (reason) => {
+
+    });
+    this.subscriptionForm.updateValueAndValidity();
+  }
+
+  removeEmail(index) {
+    this.emails.removeAt(index);
+    console.log(index);
+
   }
 
   ngOnDestroy() {
