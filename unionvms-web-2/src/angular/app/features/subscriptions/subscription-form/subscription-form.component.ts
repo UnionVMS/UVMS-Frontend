@@ -77,8 +77,8 @@ export class SubscriptionFormComponent implements OnInit, OnDestroy  {
           channelId: [{value: null, disabled: true}]
         }),
         logbook: [false],
-        consolidated: [false],
-        vesselIds: this.fb.array(this.vesselIdentifiers.map(x => !1)),
+        consolidated: [true],
+        vesselIds: this.fb.array(this.vesselIdentifiers),
         generateNewReportId: [false],
         history: [1],
         historyUnit: ['DAYS']
@@ -86,7 +86,7 @@ export class SubscriptionFormComponent implements OnInit, OnDestroy  {
       execution: this.fb.group({
         triggerType: ['SCHEDULER'],
         frequency: [0],
-        immediate: [false],
+        immediate: [true],
         timeExpression: ['06:00']
       }),
       startDate: [null],
