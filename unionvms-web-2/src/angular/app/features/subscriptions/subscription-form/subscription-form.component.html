@@ -21,7 +21,10 @@
         <label for="name" class="col-sm-2 col-form-label-sm">Name</label>
         <div class="col-sm-4">
           <input type="text" formControlName="name" class="form-control" id="name" (blur)="onCheckName()">
-          <span class="validation-error" *ngIf="name.invalid">
+          <span class="validation-error" *ngIf="name.errors?.required && name.touched">
+            Field is required
+          </span>
+          <span class="validation-error" *ngIf="name.errors?.incorrect">
             Name is already in use
           </span>
         </div>
@@ -248,7 +251,7 @@
     <fieldset class="border p-2">
         <legend  class="w-auto">Message Configuration</legend>
         <div class="form-group row">
-            <label for="name" class="col-sm-2 col-form-label-sm">Logbook</label>
+            <label for="logbook" class="col-sm-2 col-form-label-sm">Logbook</label>
             <div class="col-sm-2">
               <div class="custom-control custom-switch custom-switch-md">
                   <input type="checkbox" formControlName="logbook" class="custom-control-input" id="logbook">

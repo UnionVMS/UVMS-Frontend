@@ -51,15 +51,16 @@ export class NewSubscriptionComponent implements OnInit {
 
 
   async checkName($event) {
-    try {
-      const result: any = await this.featuresService.checkNameOnCreate($event);
-      const { data } = result;
-      if (!data) {
-        // tslint:disable-next-line: no-string-literal
-        this.subscriptionFormComponent.subscriptionForm.controls['name'].setErrors({ 'incorrect': true});
+    if ($event) {
+      try {
+        const result: any = await this.featuresService.checkNameOnCreate($event);
+        const { data } = result;
+        if (!data) {
+          // tslint:disable-next-line: no-string-literal
+          this.subscriptionFormComponent.subscriptionForm.controls['name'].setErrors({ 'incorrect': true});
+        }
+      } catch (err) {
       }
-    } catch (err) {
-
     }
   }
 
