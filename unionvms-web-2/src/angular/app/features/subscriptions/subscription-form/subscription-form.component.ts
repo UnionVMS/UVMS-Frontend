@@ -42,11 +42,9 @@ export class SubscriptionFormComponent implements OnInit, OnDestroy  {
   // Please do not change order of elements
   vesselIdentifiers = ['CFR', 'IRCS', 'ICCAT', 'EXT_MARK', 'UVI'];
 
-  // initialEmailArray = ['test1', 'test2'];
-
 
   constructor(private fb: FormBuilder, private store: Store<fromRoot.State>,
-              private featuresService: FeaturesService,  private ngbDateParserFormatter: NgbDateParserFormatter,
+              private featuresService: FeaturesService,
               private modalService: NgbModal) { }
 
   ngOnInit(): void {
@@ -60,7 +58,7 @@ export class SubscriptionFormComponent implements OnInit, OnDestroy  {
 
   initForm() {
     this.subscriptionForm = this.fb.group({
-      name: ['', ],  // Validators.required
+      name: ['', Validators.required ],
       description: [''],
       accessibility: [null],
       active: [false], // Validators.required
@@ -82,12 +80,12 @@ export class SubscriptionFormComponent implements OnInit, OnDestroy  {
           endpointId: [{value: null, disabled: true}],
           channelId: [{value: null, disabled: true}]
         }),
-        logbook: [false],
-        consolidated: [true],
+        logbook: [{value: false, disabled: true}],
+        consolidated: [{value: true, disabled: true}],
         vesselIds: this.fb.array(this.vesselIdentifiers),
-        generateNewReportId: [false],
-        history: [1],
-        historyUnit: ['DAYS']
+        generateNewReportId: [{value: false, disabled: true}],
+        history: [{value: 1, disabled: true}],
+        historyUnit: [{value: 'DAYS', disabled: true}]
       }),
       execution: this.fb.group({
         triggerType: ['SCHEDULER'],
@@ -122,6 +120,10 @@ export class SubscriptionFormComponent implements OnInit, OnDestroy  {
       console.log('end point changed', value);
       this.onEndpointChange(value);
     }));
+    this.subscription.add(this.subscriptionForm.get('output.messageType').valueChanges.subscribe(value => {
+        console.log('message type changed', value);
+        this.onMessageTypeChange(value);
+      }));
   }
 
   initMessageTypes() {
@@ -155,7 +157,7 @@ export class SubscriptionFormComponent implements OnInit, OnDestroy  {
       formValues.endDate = endDate;
     }
 
-    // TODO: perform all transformations here e.g. cast string to number for dropdowns
+    // Perform all transformations here e.g. cast string to number for dropdowns
 
     // accessibilty
 
@@ -316,6 +318,35 @@ export class SubscriptionFormComponent implements OnInit, OnDestroy  {
   removeEmail(index) {
     this.emails.removeAt(index);
     console.log(index);
+
+  }
+  onMessageTypeChange(value) {
+    debugger;
+    // Message configuration fields (except identifiers) should only be available for FA_REPORT and FA_QUERY
+    const messageConfigurationEnabledFor = ['FA_REPORT', 'FA_QUERY'];
+    if (!messageConfigurationEnabledFor.includes(value)) {
+        this.subscriptionForm.get('output.logbook').disable();
+        this.subscriptionForm.get('output.consolidated').disable();
+        this.subscriptionForm.get('output.generateNewReportId').disable();
+        this.subscriptionForm.get('output.history').disable();
+        this.subscriptionForm.get('output.historyUnit').disable();
+    } else {
+        this.subscriptionForm.get('output.logbook').enable();
+        this.subscriptionForm.get('output.consolidated').enable();
+        this.subscriptionForm.get('output.generateNewReportId').enable();
+        this.subscriptionForm.get('output.history').enable();
+        this.subscriptionForm.get('output.historyUnit').enable();
+    }
+    // Subscriber details required for all types except NONE
+    const subscriberRequiredFor = ['FA_REPORT', 'FA_QUERY', 'POSITION', 'SALE_NOTE'];
+    if (subscriberRequiredFor.includes(value)) {
+        debugger;
+        this.subscriptionForm.get('output.subscriber.organisationId').setValidators([Validators.required]);
+        this.subscriptionForm.get('output.subscriber.organisationId').updateValueAndValidity();
+
+    }
+
+
 
   }
 
