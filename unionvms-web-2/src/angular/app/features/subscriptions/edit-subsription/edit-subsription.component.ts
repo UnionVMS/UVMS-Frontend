@@ -3,10 +3,12 @@ import { SubscriptionFormModel } from '../subscription-form.model';
 import { FeaturesService } from '../../features.service';
 import { ActivatedRoute } from '@angular/router';
 import { SubscriptionFormComponent } from '../subscription-form/subscription-form.component';
+import { FormArray, FormControl } from '@angular/forms';
 
 interface Alert {
   type: string;
-  message: string;
+  title: string;
+  body: object[];
 }
 
 
@@ -25,6 +27,7 @@ export class EditSubsriptionComponent implements OnInit, AfterViewInit {
   // Please do not change order of elements
   vesselIdentifiers = ['CFR', 'IRCS', 'ICCAT', 'EXT_MARK', 'UVI'];
 
+
   constructor(private featuresService: FeaturesService, private activatedRoute: ActivatedRoute) { }
 
   ngOnInit(): void {
@@ -34,21 +37,16 @@ export class EditSubsriptionComponent implements OnInit, AfterViewInit {
   async ngAfterViewInit() {
     const result = await this.featuresService.getSubscriptionDetails(this.currentSubscriptionId);
     this.currentSubscription = result.data;
-    //debugger;
-
+    // Work with emails formArray
+    const emailFormArray = this.subscriptionFormComponent.subscriptionForm.get('output.emails') as FormArray;
+    this.currentSubscription.output.emails.forEach(item => {
+      emailFormArray.push(new FormControl(item));
+    });
 
     this.subscriptionFormComponent.subscriptionForm.patchValue(this.currentSubscription);
-
-
     // bind dates
     const rawStartDateTime = this.currentSubscription.startDate;
     const rawEndDateTime = this.currentSubscription.endDate;
-
-
-
-
-
-
     if (rawStartDateTime) {
       const startDate = rawStartDateTime.split('T');
       const tempStartDate = startDate[0].split('-').reverse().join('-');
@@ -87,26 +85,27 @@ export class EditSubsriptionComponent implements OnInit, AfterViewInit {
   async editSubscription($event) {
     console.log('edit');
     try {
-      const result = this.featuresService.editSubscription($event, this.currentSubscriptionId);
+      const result = await this.featuresService.editSubscription($event, this.currentSubscriptionId);
       // TODO: bind new values to form
       this.alerts = [];
       this.alerts.push({
         type: 'success',
-        message: 'Subscription successfuly updated!'
+        title: 'Success',
+        body: [{
+            message: 'Subscription Successfully updated!'
+        }]
       });
 
     } catch (err) {
       this.alerts = [];
       this.alerts.push({
         type: 'danger',
-        message: err.error.msg
+        title: 'Subscription could not be updated',
+        body: err.error.data
       });
 
     }
-
-
   }
-
 
   async checkName($event) {
     try {
