@@ -23,7 +23,7 @@ export const subscriptionFormInitialValues = {
     },
     logbook: false,
     consolidated: false,
-    vesselIds: [],
+    vesselIds: [true, true, true, true, true],
     generateNewReportId: false,
     history: 1,
     historyUnit: 'DAYS'

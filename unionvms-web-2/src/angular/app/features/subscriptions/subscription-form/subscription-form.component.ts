@@ -1,5 +1,5 @@
 import { Component, OnInit, Input, Output, EventEmitter, OnDestroy, ApplicationRef } from '@angular/core';
-import { faCalendar, faRetweet, faEye, faPlus, faTrash  } from '@fortawesome/free-solid-svg-icons';
+import { faCalendar, faRetweet, faEye, faPlusSquare, faTrash  } from '@fortawesome/free-solid-svg-icons';
 import { FormGroup, FormBuilder, Validators, FormControl, FormArray } from '@angular/forms';
 import { Organization } from '../organization.model';
 import { Store } from '@ngrx/store';
@@ -28,7 +28,7 @@ export class SubscriptionFormComponent implements OnInit, OnDestroy  {
   faCalendar = faCalendar;
   faRetweet = faRetweet;
   faEye = faEye;
-  faPlus = faPlus;
+  faPlusSquare = faPlusSquare;
   faTrash = faTrash;
   subscriptionForm: FormGroup;
   messageTypes;
@@ -60,7 +60,7 @@ export class SubscriptionFormComponent implements OnInit, OnDestroy  {
 
   initForm() {
     this.subscriptionForm = this.fb.group({
-      name: [''],  // Validators.required
+      name: ['', ],  // Validators.required
       description: [''],
       accessibility: [null],
       active: [false], // Validators.required
@@ -301,7 +301,6 @@ export class SubscriptionFormComponent implements OnInit, OnDestroy  {
   addEmail(content) {
     console.log('add');
     this.modalService.open(content).result.then((result) => {
-      debugger;
       if (result.emails) {
         const formattedEmailArray = result.emails.split(';');
         formattedEmailArray.forEach(item => {

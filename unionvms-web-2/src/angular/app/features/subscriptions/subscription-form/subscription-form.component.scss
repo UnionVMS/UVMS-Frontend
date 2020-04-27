@@ -105,7 +105,7 @@ fieldset {
 
 .password-icon, .email-plus-icon {
   position: absolute;
-  right: 21px;
+  right: 35px;
   top: 1px;
 }
 
@@ -117,11 +117,13 @@ fieldset {
 .email-plus-icon {
   color: green;
   cursor: pointer;
+  font-size: 24px;
 }
 
-.email-minus-icon {
+.email-trash-icon {
   color: red;
   cursor: pointer;
+  margin-left: 5px;
 }
 
 .password-input {
@@ -143,9 +145,6 @@ fieldset {
   min-height: 100px;
   max-height: 100px;
   overflow-y: auto;
-}
-
-#emails-list input {
-    border: 0 !important;
+  padding: 15px;
 }
 

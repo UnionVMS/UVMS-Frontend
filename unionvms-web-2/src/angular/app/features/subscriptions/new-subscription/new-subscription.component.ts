@@ -5,7 +5,8 @@ import { SubscriptionFormComponent } from '../subscription-form/subscription-for
 import { subscriptionFormInitialValues } from '../subscriptions-helper';
 interface Alert {
   type: string;
-  message: string;
+  title: string;
+  body: object[];
 }
 
 @Component({
@@ -32,17 +33,19 @@ export class NewSubscriptionComponent implements OnInit {
       this.alerts = [];
       this.alerts.push({
         type: 'success',
-        message: 'Subscription successfuly saved!'
+        title: 'Success',
+        body: [{
+            message: 'Subscription Successfully saved!'
+        }]
       });
-
     } catch (err) {
       // empty alerts
       this.alerts = [];
       this.alerts.push({
         type: 'danger',
-        message: err.error.msg
+        title: 'Subscription could not be saved',
+        body: err.error.data
       });
-
     }
   }
 
@@ -58,7 +61,6 @@ export class NewSubscriptionComponent implements OnInit {
     } catch (err) {
 
     }
-
   }
 
 }

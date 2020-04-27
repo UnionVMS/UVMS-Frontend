@@ -1,5 +1,11 @@
 <p *ngFor="let alert of alerts">
-  <ngb-alert [type]="alert.type" (close)="close(alert)">{{ alert.message }}</ngb-alert>
+  <ngb-alert [type]="alert.type" (close)="close(alert)">
+  <h5>{{ alert.title }}</h5>
+  <p *ngFor="let item of alert.body">
+    <b>Message :</b>{{item.message}}
+    <span *ngIf="item.path"> <b>Path:</b> {{item.path}}</span>
+  </p>
+  </ngb-alert>
 </p>
 <form [formGroup]="subscriptionForm" (ngSubmit)="onSubmit($event)" novalidate>
   <div>
@@ -145,20 +151,23 @@
                           <form #emailForm="ngForm">
                             <div class="form-group">
                               <pre>{{emailForm.value | json}}</pre>
-                              <label for="exampleInputEmail1">Email addresses</label>
-                              <input ngModel name="emails" type="email" class="form-control" id="exampleInputEmail1" aria-describedby="email">
+                              <label for="email">Email addresses</label>
+                              <textarea rows="4" pattern="^[a-zA-Z0-9@;.]+$" ngModel name="emails" type="email" class="form-control" id="email" aria-describedby="email"></textarea>
                               <small id="emailHelp" class="form-text text-muted">Insert multiple emails using ;</small>
+                              <span class="validation-error" *ngIf="emails.invalid && (emails.dirty || emails.touched)">
+                                Please insert only valid characters
+                              </span>
                             </div>
                           </form>
                         </div>
                         <div class="modal-footer">
-                          <button type="button" class="btn btn-outline-dark" (click)="modal.close(emailForm.value)">Save</button>
+                          <button type="button" class="btn btn-outline-dark" (click)="modal.close(emailForm.value)" [disabled]="!emailForm.valid">Save</button>
                         </div>
                     </ng-template>
-                  <fa-icon class="email-plus-icon" (click)="addEmail(content)" [icon]="faPlus"></fa-icon>
+                  <fa-icon class="email-plus-icon" (click)="addEmail(content)" [icon]="faPlusSquare"></fa-icon>
                   <div id="emails-list" formArrayName="emails" *ngFor="let item of emails.value; let i = index;">
                     <label id="emails_{{i}}">{{item}}</label>
-                    <fa-icon class="email-minus-icon" (click)="removeEmail(i)" [icon]="faTrash"></fa-icon>
+                    <fa-icon class="email-trash-icon" (click)="removeEmail(i)" [icon]="faTrash"></fa-icon>
                   </div>
                 </div>
                 <div class="form-group row">
