@@ -106,12 +106,15 @@
               <div class="form-group row">
                 <label for="organizationId" class="col-sm-4 col-form-label-sm">Organisation</label>
                 <div class="col-sm-8">
-                  <select class="form-control" id="organizationId" formControlName="organisationId">
+                  <select class="form-control" id="organisationId" formControlName="organisationId">
                     <option value=null>All</option>
                     <option *ngFor="let item of organizations" value={{item.organisationId}}>
                       <span *ngIf="item.parent">{{item.parent}}</span> {{item.name}}
                     </option>
                   </select>
+                  <span class="validation-error" *ngIf="organisationId.errors?.required">
+                    Field is required
+                  </span>
                 </div>
               </div>
               <div class="form-group row">
@@ -121,6 +124,9 @@
                       <option value=null>All</option>
                       <option *ngFor="let item of endpointItems" value={{item.endpointId}} >{{item.name}}</option>
                     </select>
+                    <span class="validation-error" *ngIf="endpointId.errors?.required">
+                      Field is required
+                    </span>
                   </div>
               </div>
               <div class="form-group row">
@@ -130,6 +136,9 @@
                       <option value=null>All</option>
                       <option *ngFor="let item of communicationChannels" value={{item.channelId}} >{{item.dataflow}}</option>
                     </select>
+                    <span class="validation-error" *ngIf="channelId.errors?.required">
+                      Field is required
+                    </span>
                   </div>
               </div>
 
