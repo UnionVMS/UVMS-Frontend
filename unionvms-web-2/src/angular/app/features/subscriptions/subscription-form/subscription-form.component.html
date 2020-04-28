@@ -8,9 +8,9 @@
   </ngb-alert>
 </p>
 <form [formGroup]="subscriptionForm" (ngSubmit)="onSubmit($event)" novalidate>
-  <div>
+  <!-- <div>
     {{subscriptionForm.value | json}}
-  </div>
+  </div> -->
   <div class="form-row justify-content-end buttons-row">
     <button type="button" class="btn btn-outline-secondary mr-1" (click)="reset()">Cancel</button>
     <button type="submit" class="btn btn-primary" [disabled]="!subscriptionForm.valid" >Save</button>
@@ -162,7 +162,7 @@
                         <div class="modal-body">
                           <form #emailForm="ngForm">
                             <div class="form-group">
-                              <pre>{{emailForm.value | json}}</pre>
+                              <!-- <pre>{{emailForm.value | json}}</pre> -->
                               <label for="email">Email addresses</label>
                               <textarea rows="4" pattern="^[a-zA-Z0-9@;.]+$" ngModel name="emails" type="email" class="form-control" id="email" aria-describedby="email"></textarea>
                               <small id="emailHelp" class="form-text text-muted">Insert multiple emails using ;</small>
