@@ -44,6 +44,53 @@ export class FeaturesService {
 
   getSubscriptionDetails(id): Promise<any> {
     return this.http.get<SubscriptionFormModel>(`${environment.baseURL}${FEATURES_ENDPOINTS.getSubscriptionDetails}/${id}`).toPromise();
+    // return of(
+    //   {
+    //     data :{
+    //       "id":130,
+    //       "name":"testPassword28",
+    //       "description":"",
+    //       "active":false,
+    //       "output":{
+    //          "alert":false,
+    //          "emails":[
+    
+    //          ],
+    //          "hasEmail":false,
+    //          "emailConfiguration":{
+    //             "isPdf":false,
+    //             "hasAttachments":false,
+    //             "password":"*****",
+    //             "passwordIsPlaceholder":true,
+    //             "isXml":false
+    //          },
+    //          "messageType":"NONE",
+    //          "subscriber":{
+    //             "organisationId":4,
+    //             "endpointId":5,
+    //             "channelId":1
+    //          },
+    //          "logbook":false,
+    //          "consolidated":true,
+    //          "vesselIds":[
+    
+    //          ],
+    //          "generateNewReportId":false,
+    //          "history":1,
+    //          "historyUnit":"DAYS"
+    //       },
+    //       "execution":{
+    //          "triggerType":"SCHEDULER",
+    //          "frequency":0,
+    //          "immediate":true,
+    //          "timeExpression":"06:00"
+    //       }
+    //    },
+
+    //   }
+      
+     
+    // ).toPromise();
   }
 
 
