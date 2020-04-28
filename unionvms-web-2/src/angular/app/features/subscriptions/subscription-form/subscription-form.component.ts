@@ -61,7 +61,7 @@ export class SubscriptionFormComponent implements OnInit, OnDestroy  {
       name: ['', Validators.required ],
       description: [''],
       accessibility: [null],
-      active: [false], // Validators.required
+      active: [false],
       output: this.fb.group({
         messageType: ['NONE'],
         emails: this.fb.array([]),
@@ -106,6 +106,18 @@ export class SubscriptionFormComponent implements OnInit, OnDestroy  {
 
   get name() {
     return this.subscriptionForm.get('name');
+  }
+
+  get organisationId() {
+    return this.subscriptionForm.get('output.subscriber.organisationId');
+  }
+
+  get endpointId() {
+    return this.subscriptionForm.get('output.subscriber.endpointId');
+  }
+
+  get channelId() {
+    return this.subscriptionForm.get('output.subscriber.channelId');
   }
 
 
@@ -321,7 +333,6 @@ export class SubscriptionFormComponent implements OnInit, OnDestroy  {
 
   }
   onMessageTypeChange(value) {
-    debugger;
     // Message configuration fields (except identifiers) should only be available for FA_REPORT and FA_QUERY
     const messageConfigurationEnabledFor = ['FA_REPORT', 'FA_QUERY'];
     if (!messageConfigurationEnabledFor.includes(value)) {
@@ -340,10 +351,21 @@ export class SubscriptionFormComponent implements OnInit, OnDestroy  {
     // Subscriber details required for all types except NONE
     const subscriberRequiredFor = ['FA_REPORT', 'FA_QUERY', 'POSITION', 'SALE_NOTE'];
     if (subscriberRequiredFor.includes(value)) {
-        debugger;
-        this.subscriptionForm.get('output.subscriber.organisationId').setValidators([Validators.required]);
-        this.subscriptionForm.get('output.subscriber.organisationId').updateValueAndValidity();
+        this.organisationId.setValidators([Validators.required]);
+        this.organisationId.updateValueAndValidity();
+        this.endpointId.setValidators([Validators.required]);
+        this.endpointId.updateValueAndValidity();
+        this.channelId.setValidators([Validators.required]);
+        this.channelId.updateValueAndValidity();
 
+    } else {
+      // Remove validators
+      this.organisationId.clearValidators();
+      this.organisationId.updateValueAndValidity();
+      this.endpointId.clearValidators();
+      this.endpointId.updateValueAndValidity();
+      this.channelId.clearValidators();
+      this.channelId.updateValueAndValidity();
     }
 
 
