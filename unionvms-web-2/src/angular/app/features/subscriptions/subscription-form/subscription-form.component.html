@@ -8,9 +8,9 @@
   </ngb-alert>
 </p>
 <form [formGroup]="subscriptionForm" (ngSubmit)="onSubmit($event)" novalidate>
-  <!-- <div>
+  <div>
     {{subscriptionForm.value | json}}
-  </div> -->
+  </div>
   <div class="form-row justify-content-end buttons-row">
     <button type="button" class="btn btn-outline-secondary mr-1" (click)="reset()">Cancel</button>
     <button type="submit" class="btn btn-primary" [disabled]="!subscriptionForm.valid" >Save</button>
@@ -147,7 +147,12 @@
       </div>
       <div id="email-fieldset">
         <fieldset class="border p-2">
-          <legend class="w-auto">Email</legend>
+          <legend class="w-auto">
+            <div class="custom-control custom-checkbox custom-control-inline">
+              <input class="custom-control-input" type="checkbox" id="email" formControlName="hasEmail">
+              <label class="custom-control-label" for="email">Email</label>
+          </div>
+          </legend>
           <div class="form-group row">
               <label for="emails" class="col-sm-2 col-form-label-sm">Emails</label>
               <div class="col-sm-4">
@@ -162,9 +167,8 @@
                         <div class="modal-body">
                           <form #emailForm="ngForm">
                             <div class="form-group">
-                              <!-- <pre>{{emailForm.value | json}}</pre> -->
                               <label for="email">Email addresses</label>
-                              <textarea rows="4" pattern="^[a-zA-Z0-9@;.]+$" ngModel name="emails" type="email" class="form-control" id="email" aria-describedby="email"></textarea>
+                              <textarea rows="4" pattern="^[a-zA-Z0-9@;._]+$" ngModel name="emails" #emails="ngModel"  type="email" class="form-control" id="email" aria-describedby="email"></textarea>
                               <small id="emailHelp" class="form-text text-muted">Insert multiple emails using ;</small>
                               <span class="validation-error" *ngIf="emails.invalid && (emails.dirty || emails.touched)">
                                 Please insert only valid characters
@@ -202,6 +206,9 @@
                       <label for="body" class="col-sm-4 col-form-label-sm">Body</label>
                       <div class="col-sm-8">
                           <textarea formControlName="body" rows="4" class="form-control" id="body"></textarea>
+                          <div class="validation-error" *ngIf="body.errors?.required">
+                            Field is required
+                          </div>
                       </div>
                   </div>
               </div>
@@ -249,7 +256,8 @@
             </div>
             <div class="form-group row">
                 <div class="offset-sm-2 col-sm-4">
-                    <input class="form-control password-input" type="password" formControlName="password" id="password" placeholder="add password optional">
+                    <input class="form-control password-input" type="password"
+                      formControlName="password" id="password" placeholder="add password optional" (blur)="onPasswordChange()">
                     <fa-icon class="password-icon" [icon]="faEye"></fa-icon>
                 </div>
             </div>
@@ -284,6 +292,9 @@
                     {{item.key}}
                   </option>
               </select>
+              <div class="validation-error" *ngIf="historyUnit.errors?.required">
+                Field is required
+              </div>
             </div>
         </div>
         <div class="form-group row">
@@ -309,7 +320,7 @@
     <div class="form-group row">
       <label for="triggerType" class="col-sm-2 col-form-label-sm">Trigger</label>
       <div class="col-sm-3">
-        <select class="form-control" id="triggerType" formControlName="triggerType">
+        <select class="form-control" id="triggerType" formControlName="triggerType" (change)="onTriggerTypeChange()">
           <option *ngFor="let item of triggerTypes" value={{item.value}}>
             {{item.key}}
           </option>
@@ -333,10 +344,16 @@
       <label for="frequency" class="col-sm-1 offset-md-7 col-form-label-sm">Frequency</label>
       <div class="col-sm-1">
         <input type="number" formControlName="frequency" class="form-control" id="frequency" min="0">
+        <div class="validation-error" *ngIf="frequency.errors?.required">
+          Field is required
+        </div>
       </div>
       <label for="at" class="label-content-adjusted">at</label>
       <div class="col-sm-1">
         <input type="text" class="form-control" formControlName="timeExpression" id="at" placeholder="hh:mm">
+        <div class="validation-error" *ngIf="timeExpression.errors?.required">
+          Field is required
+        </div>
       </div>
     </div>
   </fieldset>

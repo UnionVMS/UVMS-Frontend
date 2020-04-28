@@ -11,6 +11,8 @@ import { CommunicationChannel } from '../communication-channel.model';
 import { NgbDateParserFormatter } from '@ng-bootstrap/ng-bootstrap';
 import { subscriptionFormInitialValues } from '../subscriptions-helper';
 import {NgbModal, ModalDismissReasons} from '@ng-bootstrap/ng-bootstrap';
+import { debounceTime, distinctUntilChanged } from 'rxjs/operators';
+import { ThrowStmt } from '@angular/compiler';
 
 
 
@@ -89,9 +91,9 @@ export class SubscriptionFormComponent implements OnInit, OnDestroy  {
       }),
       execution: this.fb.group({
         triggerType: ['SCHEDULER'],
-        frequency: [0],
+        frequency: [0, Validators.required],
         immediate: [true],
-        timeExpression: ['06:00']
+        timeExpression: ['06:00', Validators.required]
       }),
       startDate: [null],
       endDate: [null]
@@ -120,22 +122,71 @@ export class SubscriptionFormComponent implements OnInit, OnDestroy  {
     return this.subscriptionForm.get('output.subscriber.channelId');
   }
 
+  get passwordIsPlaceholder() {
+    return this.subscriptionForm.get('output.emailConfiguration.passwordIsPlaceholder');
+  }
+
+  get body() {
+    return this.subscriptionForm.get('output.emailConfiguration.body');
+  }
+
+  get logbook() {
+    return this.subscriptionForm.get('output.logbook');
+  }
+
+  get consolidated() {
+    return this.subscriptionForm.get('output.consolidated');
+  }
+
+  get history() {
+    return this.subscriptionForm.get('output.history');
+  }
+
+  get historyUnit() {
+    return this.subscriptionForm.get('output.historyUnit');
+  }
+
+  get generateNewReportId() {
+    return this.subscriptionForm.get('output.generateNewReportId');
+  }
+
+  get frequency() {
+    return this.subscriptionForm.get('execution.frequency');
+  }
+
+  get timeExpression() {
+    return this.subscriptionForm.get('execution.timeExpression');
+  }
+
+  get triggerType() {
+    return this.subscriptionForm.get('execution.triggerType');
+  }
 
   initSubscriptions() {
     // Changes for organization
-    this.subscription.add(this.subscriptionForm.get('output.subscriber.organisationId').valueChanges.subscribe(value => {
+    this.subscription.add(this.subscriptionForm.get('output.subscriber.organisationId').valueChanges
+    .pipe(distinctUntilChanged())
+    .subscribe(value => {
       console.log('organization changed', value);
       this.onOrganizationChange(value);
     }));
     // Changes for endpoint
-    this.subscription.add(this.subscriptionForm.get('output.subscriber.endpointId').valueChanges.subscribe(value => {
+    this.subscription.add(this.subscriptionForm.get('output.subscriber.endpointId').valueChanges
+    .subscribe(value => {
       console.log('end point changed', value);
       this.onEndpointChange(value);
     }));
-    this.subscription.add(this.subscriptionForm.get('output.messageType').valueChanges.subscribe(value => {
-        console.log('message type changed', value);
-        this.onMessageTypeChange(value);
-      }));
+    this.subscription.add(this.subscriptionForm.get('output.messageType').valueChanges
+    .subscribe(value => {
+      console.log('message type changed', value);
+      this.onMessageTypeChange(value);
+    }));
+    this.subscription.add(this.subscriptionForm.get('output.hasEmail').valueChanges
+    .pipe(distinctUntilChanged())
+    .subscribe(value => {
+      console.log('has email changed', value);
+      this.onHasEmailChange(value);
+    }));
   }
 
   initMessageTypes() {
@@ -216,13 +267,6 @@ export class SubscriptionFormComponent implements OnInit, OnDestroy  {
       vesselIdsArray.push(this.vesselIdentifiers[index]);
     });
     formValues.output.vesselIds = vesselIdsArray;
-
-    // password
-    // Revisit this
-    // const passwordIsPlaceholder = this.subscriptionForm.get('output.emailConfiguration.password').value === '****';
-
-    // this.subscriptionForm.get('output.emailConfiguration.passwordIsPlaceholder').setValue(passwordIsPlaceholder);
-
 
     this.save.emit(formValues);
   }
@@ -310,8 +354,6 @@ export class SubscriptionFormComponent implements OnInit, OnDestroy  {
     this.subscriptionForm.reset(subscriptionFormInitialValues);
   }
 
-
-
   addEmail(content) {
     console.log('add');
     this.modalService.open(content).result.then((result) => {
@@ -336,30 +378,36 @@ export class SubscriptionFormComponent implements OnInit, OnDestroy  {
     // Message configuration fields (except identifiers) should only be available for FA_REPORT and FA_QUERY
     const messageConfigurationEnabledFor = ['FA_REPORT', 'FA_QUERY'];
     if (!messageConfigurationEnabledFor.includes(value)) {
-        this.subscriptionForm.get('output.logbook').disable();
-        this.subscriptionForm.get('output.consolidated').disable();
-        this.subscriptionForm.get('output.generateNewReportId').disable();
-        this.subscriptionForm.get('output.history').disable();
-        this.subscriptionForm.get('output.historyUnit').disable();
+        this.logbook.disable();
+        this.consolidated.disable();
+        this.generateNewReportId.disable();
+        this.history.disable();
+        this.history.clearValidators();
+        this.history.updateValueAndValidity();
+        this.historyUnit.disable();
     } else {
-        this.subscriptionForm.get('output.logbook').enable();
-        this.subscriptionForm.get('output.consolidated').enable();
-        this.subscriptionForm.get('output.generateNewReportId').enable();
-        this.subscriptionForm.get('output.history').enable();
-        this.subscriptionForm.get('output.historyUnit').enable();
+        this.logbook.enable();
+        this.consolidated.enable();
+        this.generateNewReportId.enable();
+        this.history.enable();
+        this.history.setValidators([Validators.required]);
+        this.history.updateValueAndValidity();
+        this.historyUnit.enable();
+
     }
     // Subscriber details required for all types except NONE
     const subscriberRequiredFor = ['FA_REPORT', 'FA_QUERY', 'POSITION', 'SALE_NOTE'];
     if (subscriberRequiredFor.includes(value)) {
-        this.organisationId.setValidators([Validators.required]);
-        this.organisationId.updateValueAndValidity();
-        this.endpointId.setValidators([Validators.required]);
-        this.endpointId.updateValueAndValidity();
-        this.channelId.setValidators([Validators.required]);
-        this.channelId.updateValueAndValidity();
+      this.organisationId.setValidators([Validators.required]);
+      // TODO: search if we can update value and validity for the whole form group
+      this.organisationId.updateValueAndValidity();
+      this.endpointId.setValidators([Validators.required]);
+      this.endpointId.updateValueAndValidity();
+      this.channelId.setValidators([Validators.required]);
+      this.channelId.updateValueAndValidity();
 
     } else {
-      // Remove validators
+     // Remove validators
       this.organisationId.clearValidators();
       this.organisationId.updateValueAndValidity();
       this.endpointId.clearValidators();
@@ -367,9 +415,35 @@ export class SubscriptionFormComponent implements OnInit, OnDestroy  {
       this.channelId.clearValidators();
       this.channelId.updateValueAndValidity();
     }
+  }
 
+  onPasswordChange() {
+    this.passwordIsPlaceholder.setValue(false);
+  }
 
+  onHasEmailChange(value) {
+    if (value) {
+      this.body.setValidators([Validators.required]);
+      this.body.updateValueAndValidity();
+    } else {
+      this.body.clearValidators();
+      this.body.updateValueAndValidity();
+    }
+  }
 
+  onTriggerTypeChange() {
+    const triggerType = this.triggerType.value;
+    if (triggerType === 'SCHEDULER') {
+        this.frequency.setValidators([Validators.required]);
+        this.frequency.updateValueAndValidity();
+        this.timeExpression.setValidators([Validators.required]);
+        this.timeExpression.updateValueAndValidity();
+    } else {
+      this.frequency.clearValidators();
+      this.frequency.updateValueAndValidity();
+      this.timeExpression.clearValidators();
+      this.timeExpression.updateValueAndValidity();
+    }
   }
 
   ngOnDestroy() {
