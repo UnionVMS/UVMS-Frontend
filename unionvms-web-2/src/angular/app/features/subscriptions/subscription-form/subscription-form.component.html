@@ -148,7 +148,7 @@
             <div class="custom-control custom-checkbox custom-control-inline">
               <input class="custom-control-input" type="checkbox" id="email" formControlName="hasEmail">
               <label class="custom-control-label" for="email">Email</label>
-          </div>
+            </div>
           </legend>
           <div class="form-group row">
               <label for="emails" class="col-sm-2 col-form-label-sm">Emails</label>
@@ -352,6 +352,21 @@
           Field is required
         </div>
       </div>
+    </div>
+  </fieldset>
+  <fieldset class="border p-2">
+    <legend  class="w-auto">Start Conditions</legend>
+    <div class="form-group row">
+      <div class="col-sm-4">
+        <div class="custom-control custom-checkbox custom-control-inline">
+            <input class="custom-control-input" type="checkbox" id="hasAreas" formControlName="hasAreas">
+            <label class="custom-control-label" for="hasAreas">Areas</label>
+        </div>
+      </div>
+    </div>
+    <pre>{{hasAreas.value}}</pre>
+    <div [ngbCollapse]="!hasAreas.value">
+      <app-area-selection></app-area-selection>
     </div>
   </fieldset>
 </form>

@@ -56,4 +56,9 @@ export class FeaturesService {
   checkNameOnEdit(name, id) {
     return this.http.get(`${environment.baseURL}${FEATURES_ENDPOINTS.checkSubscriptionName}?name=${name}&id=${id}`).toPromise();
   }
+
+
+  getAreaLayers() {
+    return this.http.get(`${environment.baseURL}${FEATURES_ENDPOINTS.getAreaLayers}`).toPromise();
+  }
 }
