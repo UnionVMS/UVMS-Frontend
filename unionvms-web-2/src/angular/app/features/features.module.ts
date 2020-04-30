@@ -13,6 +13,7 @@ import { SubscriptionFormComponent } from './subscriptions/subscription-form/sub
 import { NgbDateAdapter, NgbDateParserFormatter } from '@ng-bootstrap/ng-bootstrap';
 import { CustomAdapter } from './date-custom-adapter';
 import { CustomDateParserFormatter } from './date-custom-parser-formatter';
+import { AreaSelectionComponent } from './areas/area-selection/area-selection.component';
 
 @NgModule({
   declarations: [
@@ -22,7 +23,8 @@ import { CustomDateParserFormatter } from './date-custom-parser-formatter';
     ManageSubscriptionsComponent,
     NewSubscriptionComponent,
     EditSubsriptionComponent,
-    SubscriptionFormComponent
+    SubscriptionFormComponent,
+    AreaSelectionComponent
 
   ],
   imports: [

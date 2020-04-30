@@ -8,11 +8,10 @@ import { Observable, Subscription } from 'rxjs';
 import { FeaturesService } from 'app/features/features.service';
 import { EndPoint } from '../endpoint.model';
 import { CommunicationChannel } from '../communication-channel.model';
-import { NgbDateParserFormatter } from '@ng-bootstrap/ng-bootstrap';
 import { subscriptionFormInitialValues } from '../subscriptions-helper';
-import {NgbModal, ModalDismissReasons} from '@ng-bootstrap/ng-bootstrap';
-import { debounceTime, distinctUntilChanged } from 'rxjs/operators';
-import { ThrowStmt } from '@angular/compiler';
+import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
+import { distinctUntilChanged } from 'rxjs/operators';
+
 
 
 
@@ -96,7 +95,8 @@ export class SubscriptionFormComponent implements OnInit, OnDestroy  {
         timeExpression: ['06:00', Validators.required]
       }),
       startDate: [null],
-      endDate: [null]
+      endDate: [null],
+      hasAreas: [true]
     });
 
     this.initSubscriptions();
@@ -160,6 +160,10 @@ export class SubscriptionFormComponent implements OnInit, OnDestroy  {
 
   get triggerType() {
     return this.subscriptionForm.get('execution.triggerType');
+  }
+
+  get hasAreas() {
+    return this.subscriptionForm.get('hasAreas');
   }
 
   initSubscriptions() {

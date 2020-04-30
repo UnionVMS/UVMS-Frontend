@@ -1,0 +1,38 @@
+.area-selection-container{
+  display: flex;
+  flex-direction: row;
+  height: 500px;
+
+  .area-selection {
+    flex: 2;
+    .system-section {
+      margin-top: 10px;
+    }
+  }
+
+  .area-selection-list {
+    flex: 1;
+    margin-top: 41px;
+    border-top: 1px solid #dee2e6;
+    padding-top: 15px;
+    
+  }
+
+  .card {
+    padding: 0px;
+    height: 400px;
+  }
+
+  .card-header {
+    display: flex;
+    background-color: white;
+    justify-content: space-between;
+  }
+
+  .badge.badge-primary {
+    background-color: #089fd7;
+    border-radius: 10px;
+    margin-left: 5px;
+  }
+
+}

@@ -5,5 +5,6 @@ export const FEATURES_ENDPOINTS = {
   createSubscription: '/subscription/rest/subscription',
   editSubscription: '/subscription/rest/subscription/',
   getSubscriptionDetails: '/subscription/rest/subscription',
-  checkSubscriptionName: '/subscription/rest/subscription/available'
+  checkSubscriptionName: '/subscription/rest/subscription/available',
+  getAreaLayers: '/spatial/rest/area/layers'
 };
