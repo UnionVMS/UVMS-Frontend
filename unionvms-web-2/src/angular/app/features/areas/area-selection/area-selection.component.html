@@ -4,31 +4,28 @@
         <li ngbNavItem>
         <a ngbNavLink>SYSTEM AREAS</a>
         <ng-template ngbNavContent>
-          <form class="system-section">
-            <pre>choice: {{systemSelectionCategory.value}}</pre>
+          <form class="system-section" #systemAreaMapSelectionForm="ngForm">
             <div class="row">
               <div class="col-md-5">
-                <select class="form-control" id="template">
-                  <option value=null>All</option>
-                  <option *ngFor="let item of layersList">{{item.typeName}}</option>
+                <select class="form-control" id="mapLayer" ngModel name="systemMapLayer" #systemMapLayer="ngModel">
+                  <option value="" >Area type</option>
+                  <option *ngFor="let item of systemLayersList">{{item.typeName}}</option>
                 </select>
               </div>
             </div>
             <div class="form-check form-check-inline">
-              <input class="form-check-input" type="radio" id="inlineCheckbox1" ngModel name="systemSelectionCategory" #systemSelectionCategory="ngModel" value="fromMap">
-              <label class="form-check-label" for="inlineCheckbox1">Select area on map</label>
+              <input class="form-check-input" type="radio" id="systemSelectionRadio1" ngModel name="systemSelectionCategory" #systemSelectionCategory="ngModel" value="systemFromMap">
+              <label class="form-check-label" for="systemSelectionRadio1">Select area on map</label>
             </div>
             <div class="form-check form-check-inline">
-              <input class="form-check-input" type="radio" ngModel name="systemSelectionCategory" #systemSelectionCategory="ngModel" id="inlineCheckbox2" value="byProperty">
-              <label class="form-check-label" for="inlineCheckbox2">Search by area properties</label>
+              <input class="form-check-input" type="radio" ngModel name="systemSelectionCategory" #systemSelectionCategory="ngModel" id="systemSelectionRadio2" value="systemByProperty">
+              <label class="form-check-label" for="systemSelectionRadio2">Search by area properties</label>
             </div>
-            <div *ngIf="systemSelectionCategory.value === 'fromMap'">
-              MAP
-
+            <div *ngIf="systemSelectionCategory.value === 'systemFromMap'">
+              <app-area-selection-map [systemAreas]= "systemLayersList"></app-area-selection-map>
             </div>
-            <div *ngIf="systemSelectionCategory.value === 'byProperty'">
-              SEARCH
-
+            <div *ngIf="systemSelectionCategory.value === 'systemByProperty'">
+              <app-area-selection-table></app-area-selection-table>
             </div>
           </form>
 
@@ -37,14 +34,24 @@
         <li ngbNavItem>
         <a ngbNavLink>USER AREAS</a>
         <ng-template ngbNavContent>
-          <div class="form-check form-check-inline">
-            <input class="form-check-input" type="checkbox" id="inlineCheckbox1" value="properties1">
-            <label class="form-check-label" for="inlineCheckbox1">Select area on map</label>
-          </div>
-          <div class="form-check form-check-inline">
-            <input class="form-check-input" type="checkbox" id="inlineCheckbox2" value="properties2">
-            <label class="form-check-label" for="inlineCheckbox2">Search by area properties</label>
-          </div>
+          <form>
+            <div class="form-check form-check-inline">
+              <input class="form-check-input" type="radio" id="userSelectionCheckbox1" ngModel name="userSelectionCategory" #userSelectionCategory="ngModel" value="userFromMap">
+              <label class="form-check-label" for="userSelectionCheckbox1">Select area on map</label>
+            </div>
+            <div class="form-check form-check-inline">
+              <input class="form-check-input" type="radio" id="userSelectionCheckbox2"  ngModel name="userSelectionCategory" #userSelectionCategory="ngModel" value="userByProperty">
+              <label class="form-check-label" for="userSelectionCheckbox2">Search by area properties</label>
+            </div>
+            <div *ngIf="userSelectionCategory.value === 'userFromMap'">
+              <app-area-selection-map [userAreas]= "userLayersList"></app-area-selection-map>
+            </div>
+            <div *ngIf="userSelectionCategory.value === 'userByProperty'">
+              <app-area-selection-table></app-area-selection-table>
+            </div>
+
+          </form>
+
 
         </ng-template>
         </li>

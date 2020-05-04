@@ -14,6 +14,8 @@ import { NgbDateAdapter, NgbDateParserFormatter } from '@ng-bootstrap/ng-bootstr
 import { CustomAdapter } from './date-custom-adapter';
 import { CustomDateParserFormatter } from './date-custom-parser-formatter';
 import { AreaSelectionComponent } from './areas/area-selection/area-selection.component';
+import { AreaSelectionMapComponent } from './areas/area-selection/area-selection-map/area-selection-map.component';
+import { AreaSelectionTableComponent } from './areas/area-selection/area-selection-table/area-selection-table.component';
 
 @NgModule({
   declarations: [
@@ -24,7 +26,9 @@ import { AreaSelectionComponent } from './areas/area-selection/area-selection.co
     NewSubscriptionComponent,
     EditSubsriptionComponent,
     SubscriptionFormComponent,
-    AreaSelectionComponent
+    AreaSelectionComponent,
+    AreaSelectionMapComponent,
+    AreaSelectionTableComponent
 
   ],
   imports: [

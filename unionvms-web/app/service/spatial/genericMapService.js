@@ -540,6 +540,7 @@ angular.module('unionvmsWeb').factory('genericMapService',function($localStorage
      * @returms {ol.View} The OL map view 
      */
     var createView = function(config){
+        debugger;
         var proj = this.setProjection(config);
         var center = ol.proj.transform([-1.81185, 52.44314], 'EPSG:4326', 'EPSG:' + config.epsgCode);
         var view = new ol.View({

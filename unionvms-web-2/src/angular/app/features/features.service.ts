@@ -58,7 +58,15 @@ export class FeaturesService {
   }
 
 
-  getAreaLayers() {
-    return this.http.get(`${environment.baseURL}${FEATURES_ENDPOINTS.getAreaLayers}`).toPromise();
+  getSystemAreaLayers() {
+    return this.http.get(`${environment.baseURL}${FEATURES_ENDPOINTS.getSystemAreaLayers}`).toPromise();
+  }
+
+  getUserAreaLayers() {
+    return this.http.get(`${environment.baseURL}${FEATURES_ENDPOINTS.getUserAreaLayers}`).toPromise();
+  }
+
+  getMapBasicConfig() {
+      return this.http.get(`${environment.baseURL}${FEATURES_ENDPOINTS.getBasicMapConfig}`).toPromise();
   }
 }

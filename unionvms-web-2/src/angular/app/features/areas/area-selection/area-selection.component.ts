@@ -8,22 +8,37 @@ import { FeaturesService } from '../../features.service';
 })
 export class AreaSelectionComponent implements OnInit {
 
-  layersList;
+  systemLayersList;
+  userLayersList;
 
   constructor(private featuresService: FeaturesService) { }
 
   ngOnInit(): void {
-    this.initLayers();
+    this.initSystemLayers();
+    this.initUserLayers();
   }
 
-  async initLayers() {
+  async initSystemLayers() {
     try {
-      const result: any = await this.featuresService.getAreaLayers();
+      const result: any = await this.featuresService.getSystemAreaLayers();
       const {data: layersList} = result;
-      this.layersList = layersList;
+      this.systemLayersList = layersList;
     } catch (err) {
 
     }
   }
+
+  async initUserLayers() {
+    try {
+      const result: any = await this.featuresService.getUserAreaLayers();
+      const {data: layersList} = result;
+      this.userLayersList = layersList;
+    } catch (err) {
+
+    }
+
+  }
+
+
 
 }
