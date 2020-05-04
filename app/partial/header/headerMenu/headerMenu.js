@@ -34,12 +34,12 @@ angular.module('unionvmsWeb').controller('HeaderMenuCtrl',function($scope, $root
         $scope.menu = [];
 
         // Today
-        $scope.addMenuItem(locale.getString('header.menu_today'), '/today', 'today');
+        // $scope.addMenuItem(locale.getString('header.menu_today'), '/today', 'today');
 
-        // Reports
-        if (checkAccess('Reporting', 'LIST_REPORTS')) {
-            $scope.addMenuItem(locale.getString('header.menu_reporting'), '/reporting', 'reporting');
-        }
+        // // Reports
+        // if (checkAccess('Reporting', 'LIST_REPORTS')) {
+        //     $scope.addMenuItem(locale.getString('header.menu_reporting'), '/reporting', 'reporting');
+        // }
 
         // Area management
         if (checkAccess('Spatial', 'VIEW_AREA_MANAGEMENT_UI') && (checkAccess('Spatial', 'MANAGE_USER_DEFINED_AREAS') || checkAccess('Spatial', 'MANAGE_REFERENCE_DATA') || checkAccess('Spatial', 'MANAGE_ANY_USER_AREA'))) {
@@ -87,15 +87,15 @@ angular.module('unionvmsWeb').controller('HeaderMenuCtrl',function($scope, $root
             $scope.addMenuItem(locale.getString('header.menu_polling'), '/polling/logs', 'polling-logs');
         }
 
-        // Mobile Terminals
-        if (checkAccess('Union-VMS', 'viewVesselsAndMobileTerminals')) {
-            $scope.addMenuItem(locale.getString('header.menu_communication'), '/communication', 'communication');
-        }
-
-        // Assets
-        if (checkAccess('Union-VMS', 'viewVesselsAndMobileTerminals')) {
-            $scope.addMenuItem(locale.getString('header.menu_assets'), '/assets', 'assets');
-        }
+        // // Mobile Terminals
+        // if (checkAccess('Union-VMS', 'viewVesselsAndMobileTerminals')) {
+        //     $scope.addMenuItem(locale.getString('header.menu_communication'), '/communication', 'communication');
+        // }
+        //
+        // // Assets
+        // if (checkAccess('Union-VMS', 'viewVesselsAndMobileTerminals')) {
+        //     $scope.addMenuItem(locale.getString('header.menu_assets'), '/assets', 'assets');
+        // }
 
         // Realtime
         if (checkAccess('Movement', 'viewMovements')) {
