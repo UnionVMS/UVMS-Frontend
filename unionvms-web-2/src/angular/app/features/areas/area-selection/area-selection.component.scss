@@ -1,6 +1,7 @@
 .area-selection-container{
   display: flex;
   flex-direction: row;
+  flex-wrap: wrap;
   height: 500px;
 
   .area-selection {
@@ -15,12 +16,12 @@
     margin-top: 41px;
     border-top: 1px solid #dee2e6;
     padding-top: 15px;
-    
+
   }
 
   .card {
     padding: 0px;
-    height: 400px;
+    min-height: 530px;
   }
 
   .card-header {
@@ -36,7 +37,7 @@
   }
 
   .area-selection-map {
-      min-height: 500px;
+    min-height: 500px;
   }
 
 }
