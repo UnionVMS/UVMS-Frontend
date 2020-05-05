@@ -2,7 +2,9 @@ import { Component, OnInit, Input, Output, EventEmitter, OnDestroy } from '@angu
 import { FeaturesService } from 'app/features/features.service';
 import { ColumnMode } from '@swimlane/ngx-datatable';
 import { faCheck  } from '@fortawesome/free-solid-svg-icons';
-import { Subscription } from 'rxjs';
+import { Subscription, Observable } from 'rxjs';
+import { Store } from '@ngrx/store';
+import * as fromRoot from 'app/app.reducer';
 
 @Component({
   selector: 'app-area-selection-table',
@@ -19,12 +21,17 @@ export class AreaSelectionTableComponent implements OnInit, OnDestroy {
   loadingIndicator = true;
   faCheck = faCheck;
   private subscription: Subscription = new Subscription();
+  clearForm$: Observable<boolean> = this.store.select(fromRoot.clearSubscriptionForm);
 
 
-  constructor(private featuresService: FeaturesService) { }
+  constructor(private featuresService: FeaturesService, private store: Store<fromRoot.State>) { }
 
   ngOnInit(): void {
-    this.subscription.add();
+    this.subscription.add(this.clearForm$.subscribe( clear => {
+      if (clear) {
+        this.results = [];
+      }
+    }));
   }
 
   async onSubmit(form) {

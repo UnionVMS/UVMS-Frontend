@@ -4,6 +4,9 @@ import { FeaturesService } from '../../features.service';
 import { SubscriptionFormComponent } from '../subscription-form/subscription-form.component';
 import { subscriptionFormInitialValues } from '../subscriptions-helper';
 import { FormArray } from '@angular/forms';
+import { Store } from '@ngrx/store';
+import * as fromRoot from 'app/app.reducer';
+import * as SUB from '../subscriptions.actions';
 interface Alert {
   type: string;
   title: string;
@@ -21,7 +24,8 @@ export class NewSubscriptionComponent implements OnInit {
   subscription: SubscriptionFormModel;
   alerts: Alert[];
 
-  constructor(private featuresService: FeaturesService) {}
+
+  constructor(private featuresService: FeaturesService, private store: Store<fromRoot.State>) {}
 
   ngOnInit(): void {
   }
@@ -35,6 +39,8 @@ export class NewSubscriptionComponent implements OnInit {
       debugger;
       const areas = this.subscriptionFormComponent.subscriptionForm.get('areas') as FormArray;
       areas.clear();
+      // Inform all subscribed components to clear previous values
+      this.store.dispatch(new SUB.ClearSubscriptionForm());
 
       this.alerts = [];
       this.alerts.push({
