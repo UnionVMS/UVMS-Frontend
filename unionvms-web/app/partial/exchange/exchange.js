@@ -271,17 +271,14 @@ angular.module('unionvmsWeb').controller('ExchangeCtrl',function($scope, $log, $
                     $location.path('/polling/logs/' + model.logData.guid);
                     break;
 
-                case 'MOVEMENT':
-                    if (model.source.toUpperCase() === 'FLUX'){
-                        getRawXmlData(model.id);
-                    } else {
-                        $location.path('/movement/' + model.logData.guid);
-                    }
-                    break;
-
                 case 'ALARM':
                     $location.path('/alerts/holdingtable/' + model.logData.guid);
                     break;
+
+                case 'MOVEMENT':
+                    getRawXmlData(model.id);
+                    break;
+
                 default:
                     $log.info("No matching type in model");
                     break;
