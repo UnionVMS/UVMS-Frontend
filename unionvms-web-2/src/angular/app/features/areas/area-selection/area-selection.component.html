@@ -66,15 +66,14 @@
               <b>AREA SELECTION</b>
               <span class="badge badge-primary">{{areas.value.length}}</span>
             </div>
-            <div>Clear All</div>
+            <a (click)="clearAllAreas()">Clear All</a>
           </div>
           <div class="card-body">
-
-            <div class="alert alert-secondary" *ngFor="let item of areas.value; let i = index" role="alert">
-              <a class="btn btn-primary"  (click)="removeArea(i)">
-                <fa-icon class="password-icon" [icon]="faTimes"></fa-icon>
-              </a>
-              {{item | json}}
+            <div class="alert alert-secondary area-selection-item" *ngFor="let item of areas.value; let i = index" role="alert">
+              <div> {{item.name}}({{item.areaType}})</div>
+              <span class="pull-right" (click)="removeArea(i)">
+                <fa-icon [icon]="faTimes"></fa-icon>
+              </span>
             </div>
           </div>
         </div>

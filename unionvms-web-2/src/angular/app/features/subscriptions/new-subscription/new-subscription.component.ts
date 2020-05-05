@@ -3,6 +3,7 @@ import { SubscriptionFormModel } from '../subscription-form.model';
 import { FeaturesService } from '../../features.service';
 import { SubscriptionFormComponent } from '../subscription-form/subscription-form.component';
 import { subscriptionFormInitialValues } from '../subscriptions-helper';
+import { FormArray } from '@angular/forms';
 interface Alert {
   type: string;
   title: string;
@@ -30,6 +31,11 @@ export class NewSubscriptionComponent implements OnInit {
     try {
       const result = await this.featuresService.createSubscription($event);
       this.subscriptionFormComponent.subscriptionForm.reset(subscriptionFormInitialValues);
+      this.subscriptionFormComponent.numberOfSelectedAreas = 0;
+      debugger;
+      const areas = this.subscriptionFormComponent.subscriptionForm.get('areas') as FormArray;
+      areas.clear();
+
       this.alerts = [];
       this.alerts.push({
         type: 'success',

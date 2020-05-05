@@ -28,6 +28,9 @@
     display: flex;
     background-color: white;
     justify-content: space-between;
+    a {
+      cursor: pointer;
+    }
   }
 
   .badge.badge-primary {
@@ -38,6 +41,15 @@
 
   .area-selection-map {
     min-height: 500px;
+  }
+
+  .area-selection-item {
+      display: flex;
+      justify-content: space-between;
+      fa-icon {
+        color: red;
+        cursor: pointer;
+      }
   }
 
 }

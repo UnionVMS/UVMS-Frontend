@@ -381,8 +381,6 @@ export class SubscriptionFormComponent implements OnInit, OnDestroy  {
 
   removeEmail(index) {
     this.emails.removeAt(index);
-    console.log(index);
-
   }
   onMessageTypeChange(value) {
     // Message configuration fields (except identifiers) should only be available for FA_REPORT and FA_QUERY
