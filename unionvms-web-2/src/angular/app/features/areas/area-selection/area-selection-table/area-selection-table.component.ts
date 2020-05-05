@@ -52,9 +52,7 @@ export class AreaSelectionTableComponent implements OnInit {
   }
 
   onSelectArea(row) {
-    debugger;
     this.selectArea.emit(row);
-
   }
 
 }

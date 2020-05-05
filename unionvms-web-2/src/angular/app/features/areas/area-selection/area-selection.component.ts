@@ -1,23 +1,18 @@
-import { Component, OnInit, Output, EventEmitter, forwardRef, HostBinding, } from '@angular/core';
+import { Component, OnInit, Output, EventEmitter, forwardRef, HostBinding, Input, } from '@angular/core';
 import { FeaturesService } from '../../features.service';
-import { ControlValueAccessor, NG_VALUE_ACCESSOR } from '@angular/forms';
+import { ControlContainer, FormGroup, FormControl, FormArray } from '@angular/forms';
 import { faTimes  } from '@fortawesome/free-solid-svg-icons';
 
 @Component({
   selector: 'app-area-selection',
   templateUrl: './area-selection.component.html',
-  styleUrls: ['./area-selection.component.scss'],
-  providers: [
-    {
-      provide: NG_VALUE_ACCESSOR,
-      useExisting: forwardRef(() => AreaSelectionComponent),
-      multi: true
-    }
-  ]
+  styleUrls: ['./area-selection.component.scss']
 })
-export class AreaSelectionComponent implements OnInit, ControlValueAccessor  {
+export class AreaSelectionComponent implements OnInit  {
 
   @Output() selectedAreasChange = new EventEmitter<any>();
+  @Input() formArrayName;
+  @Input() formGroup: FormGroup;
   systemLayersList;
   userLayersList;
   system = 'SYSTEM';
@@ -29,8 +24,12 @@ export class AreaSelectionComponent implements OnInit, ControlValueAccessor  {
   selectedAreas = [];
   faTimes = faTimes;
 
+  get areas() {
+    return this.formGroup.get('areas') as FormArray;
+  }
 
-  constructor(private featuresService: FeaturesService) { }
+
+  constructor(private featuresService: FeaturesService, public controlContainer: ControlContainer ) { }
 
   ngOnInit(): void {
     this.initSystemLayers();
@@ -63,26 +62,11 @@ export class AreaSelectionComponent implements OnInit, ControlValueAccessor  {
   }
 
   selectArea(selectedArea) {
-    //debugger;
-    this.selectedAreas.push(selectedArea);
-    this.selectedAreasChange.emit(this.selectedAreas.length)
-
+    this.areas.push(new FormControl(selectedArea));
+    this.selectedAreasChange.emit(this.areas.value.length);
   }
 
   removeArea(index) {
 
   }
-
-  writeValue(obj: any): void {
-  }
-
-  registerOnChange(fn: any): void {
-  }
-
-  registerOnTouched(fn: any): void {
-
-  }
-
-
-
 }
