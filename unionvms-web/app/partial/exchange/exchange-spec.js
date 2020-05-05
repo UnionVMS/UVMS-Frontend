@@ -193,6 +193,8 @@ describe('ExchangeCtrl', function () {
             guid: 'abc',
         };
 
+        exchangeLog.id = 1;
+
         //POLL
         exchangeLog.logData.type = 'POLL';
         scope.showMessageDetails(exchangeLog);
@@ -209,18 +211,11 @@ describe('ExchangeCtrl', function () {
         exchangeLog.logData.type = 'MOVEMENT';
         exchangeLog.source = 'Inmarsat-C';
         scope.showMessageDetails(exchangeLog);
-        expect(locationChangeSpy).toHaveBeenCalledWith('/movement/' + exchangeLog.logData.guid);
-        expect(locationChangeSpy.callCount).toEqual(3);
-
-        exchangeLog.source = 'FLUX';
-        exchangeLog.id = 1;
-        scope.showMessageDetails(exchangeLog);
-        expect(msgSpy).toHaveBeenCalledWith(1);
+        expect(msgSpy).toHaveBeenCalledWith( exchangeLog.id);
         expect(msgSpy.callCount).toEqual(1);
 
         //FISHING ACTIVITY MSG
         var faTypes = ['FA_QUERY', 'FA_REPORT','FA_RESPONSE'];
-        exchangeLog.id = 1;
         delete exchangeLog.logData;
         var counter = 2;
         angular.forEach(faTypes, function(value){
