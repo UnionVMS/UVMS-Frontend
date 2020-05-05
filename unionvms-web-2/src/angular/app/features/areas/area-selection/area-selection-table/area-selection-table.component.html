@@ -12,7 +12,7 @@
     </div>
   </div>
 </form>
-<div *ngIf="results" class="results-table">
+<div *ngIf="results?.length" class="results-table">
     <ngx-datatable
     class="bootstrap"
     [rows]="results"
