@@ -67,6 +67,13 @@ export class FeaturesService {
   }
 
   getMapBasicConfig() {
-      return this.http.get(`${environment.baseURL}${FEATURES_ENDPOINTS.getBasicMapConfig}`).toPromise();
+    return this.http.get(`${environment.baseURL}${FEATURES_ENDPOINTS.getBasicMapConfig}`).toPromise();
+  }
+
+  getUserAreasByFilter(filter) {
+    return this.http.post(`${environment.baseURL}${FEATURES_ENDPOINTS.getUserAreasByFilter}`, filter).toPromise();
+  }
+  getSystemAreasByFilter(filter) {
+    return this.http.post(`${environment.baseURL}${FEATURES_ENDPOINTS.getSystemAreasByFilter}`, filter).toPromise();
   }
 }

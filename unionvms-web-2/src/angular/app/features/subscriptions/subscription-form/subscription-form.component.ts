@@ -1,4 +1,4 @@
-import { Component, OnInit, Input, Output, EventEmitter, OnDestroy, ApplicationRef } from '@angular/core';
+import { Component, OnInit, Input, Output, EventEmitter, OnDestroy } from '@angular/core';
 import { faCalendar, faRetweet, faEye, faPlusSquare, faTrash  } from '@fortawesome/free-solid-svg-icons';
 import { FormGroup, FormBuilder, Validators, FormControl, FormArray } from '@angular/forms';
 import { Organization } from '../organization.model';
@@ -38,7 +38,9 @@ export class SubscriptionFormComponent implements OnInit, OnDestroy  {
   historyUnits = [];
   triggerTypes = [];
   accessibilityItems = [];
+  numberOfSelectedAreas: number;
   private subscription: Subscription = new Subscription();
+
 
   // Please do not change order of elements
   vesselIdentifiers = ['CFR', 'IRCS', 'ICCAT', 'EXT_MARK', 'UVI'];
@@ -96,7 +98,8 @@ export class SubscriptionFormComponent implements OnInit, OnDestroy  {
       }),
       startDate: [null],
       endDate: [null],
-      hasAreas: [true]
+      hasAreas: [true],
+      areas: this.fb.array([])
     });
 
     this.initSubscriptions();
@@ -448,6 +451,12 @@ export class SubscriptionFormComponent implements OnInit, OnDestroy  {
       this.timeExpression.clearValidators();
       this.timeExpression.updateValueAndValidity();
     }
+  }
+
+
+  onSelectedAreasChange($event) {
+    this.numberOfSelectedAreas = $event;
+
   }
 
   ngOnDestroy() {

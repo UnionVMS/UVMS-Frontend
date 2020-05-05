@@ -360,13 +360,15 @@
       <div class="col-sm-4">
         <div class="custom-control custom-checkbox custom-control-inline">
             <input class="custom-control-input" type="checkbox" id="hasAreas" formControlName="hasAreas">
-            <label class="custom-control-label" for="hasAreas">Areas</label>
+            <label class="custom-control-label" for="hasAreas">Areas
+              <span *ngIf="numberOfSelectedAreas" class="badge badge-danger">{{numberOfSelectedAreas}}</span>
+            </label>
         </div>
       </div>
     </div>
     <pre>{{hasAreas.value}}</pre>
     <div [ngbCollapse]="!hasAreas.value">
-      <app-area-selection></app-area-selection>
+      <app-area-selection  (selectedAreasChange)="onSelectedAreasChange($event)"></app-area-selection>
     </div>
   </fieldset>
 </form>

@@ -1,1 +1,71 @@
-<p>area-selection-table works!</p>
+<pre> MODE: {{mode}}</pre>
+<form #AreaPropertySearchForm="ngForm" (ngSubmit)="onSubmit(AreaPropertySearchForm.value)" >
+  <div class="form-row">
+    <div class="col-auto">
+      <input type="text" class="form-control mb-2" id="filter" name="filter" ngModel name="filter" #filter="ngModel" placeholder="Search text">
+    </div>
+    <div class="col-auto">
+      <button type="submit" class="btn btn-primary mb-2">SEARCH</button>
+    </div>
+    <div class="col-auto">
+      <button type="button" class="btn btn-outline-secondary mb-2">RESET</button>
+    </div>
+  </div>
+</form>
+<!-- <div>
+  AREA TYPE {{areaType}}
+</div>
+
+<div>
+  RESULTS: {{results | json}}
+</div> -->
+<div *ngIf="results" class="results-table">
+    <ngx-datatable
+    class="bootstrap"
+    [rows]="results"
+    [loadingIndicator]="loadingIndicator"
+    [columnMode]="ColumnMode.force"
+    [headerHeight]="40"
+    [footerHeight]="40"
+    rowHeight="auto"
+    [limit]="5"
+    columnWidth="auto">
+    <ngx-datatable-column name="Name">
+        <ng-template let-column="column" let-sort="sortFn" ngx-datatable-header-template>
+        <span (click)="sort()">{{ column.name }}</span>
+        </ng-template>
+        <ng-template let-row="row" let-value="value" ngx-datatable-cell-template>
+        {{value}}
+        </ng-template>
+    </ngx-datatable-column>
+    <ngx-datatable-column name="Code" [sortable]="true" *ngIf="mode === 'SYSTEM'">
+        <ng-template let-column="column" let-sort="sortFn" ngx-datatable-header-template>
+        <span (click)="sort()">{{ column.name }}</span>
+        </ng-template>
+        <ng-template let-row="row" let-value="value" ngx-datatable-cell-template>
+        {{value}}
+        </ng-template>
+    </ngx-datatable-column>
+    <ngx-datatable-column name="Description" [sortable]="true" prop="desc" *ngIf="mode === 'USER'">
+        <ng-template let-column="column" let-sort="sortFn" ngx-datatable-header-template>
+        <span (click)="sort()">{{ column.name }}</span>
+        </ng-template>
+        <ng-template let-row="row" let-value="value" ngx-datatable-cell-template>
+        {{value}}
+        </ng-template>
+    </ngx-datatable-column>
+    <ngx-datatable-column name="Actions" [sortable]="false">
+      <ng-template let-column="column" ngx-datatable-header-template>
+        {{ column.name }}
+      </ng-template>
+      <ng-template let-row="row" let-value="value" ngx-datatable-cell-template>
+        <button class="btn btn-sm btn-outline-primary" (click)="onSelectArea(row)">
+          <fa-icon [icon]="faCheck"></fa-icon>
+        </button>
+      </ng-template>
+    </ngx-datatable-column>
+
+</ngx-datatable>
+
+</div>
+
