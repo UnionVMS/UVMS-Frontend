@@ -12,13 +12,6 @@
     </div>
   </div>
 </form>
-<!-- <div>
-  AREA TYPE {{areaType}}
-</div>
-
-<div>
-  RESULTS: {{results | json}}
-</div> -->
 <div *ngIf="results" class="results-table">
     <ngx-datatable
     class="bootstrap"
@@ -54,10 +47,7 @@
         {{value}}
         </ng-template>
     </ngx-datatable-column>
-    <ngx-datatable-column name="Actions" [sortable]="false">
-      <ng-template let-column="column" ngx-datatable-header-template>
-        {{ column.name }}
-      </ng-template>
+    <ngx-datatable-column [sortable]="false">
       <ng-template let-row="row" let-value="value" ngx-datatable-cell-template>
         <button class="btn btn-sm btn-outline-primary" (click)="onSelectArea(row)">
           <fa-icon [icon]="faCheck"></fa-icon>

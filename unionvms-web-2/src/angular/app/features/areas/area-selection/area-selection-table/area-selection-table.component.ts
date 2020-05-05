@@ -1,14 +1,15 @@
-import { Component, OnInit, Input, Output, EventEmitter } from '@angular/core';
+import { Component, OnInit, Input, Output, EventEmitter, OnDestroy } from '@angular/core';
 import { FeaturesService } from 'app/features/features.service';
 import { ColumnMode } from '@swimlane/ngx-datatable';
 import { faCheck  } from '@fortawesome/free-solid-svg-icons';
+import { Subscription } from 'rxjs';
 
 @Component({
   selector: 'app-area-selection-table',
   templateUrl: './area-selection-table.component.html',
   styleUrls: ['./area-selection-table.component.scss']
 })
-export class AreaSelectionTableComponent implements OnInit {
+export class AreaSelectionTableComponent implements OnInit, OnDestroy {
 
   @Input() mode;
   @Input() areaType?;
@@ -17,11 +18,13 @@ export class AreaSelectionTableComponent implements OnInit {
   ColumnMode = ColumnMode;
   loadingIndicator = true;
   faCheck = faCheck;
+  private subscription: Subscription = new Subscription();
 
 
   constructor(private featuresService: FeaturesService) { }
 
   ngOnInit(): void {
+    this.subscription.add();
   }
 
   async onSubmit(form) {
@@ -53,6 +56,10 @@ export class AreaSelectionTableComponent implements OnInit {
 
   onSelectArea(row) {
     this.selectArea.emit(row);
+  }
+
+  ngOnDestroy() {
+    this.subscription.unsubscribe();
   }
 
 }

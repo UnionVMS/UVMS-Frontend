@@ -62,11 +62,19 @@ export class AreaSelectionComponent implements OnInit  {
   }
 
   selectArea(selectedArea) {
+    debugger;
     this.areas.push(new FormControl(selectedArea));
     this.selectedAreasChange.emit(this.areas.value.length);
   }
 
   removeArea(index) {
+    this.areas.removeAt(index);
+    this.selectedAreasChange.emit(this.areas.value.length);
 
+  }
+
+  clearAllAreas() {
+    this.areas.clear();
+    this.selectedAreasChange.emit(this.areas.value.length);
   }
 }
