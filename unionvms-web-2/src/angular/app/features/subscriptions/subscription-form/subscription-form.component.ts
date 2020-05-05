@@ -168,6 +168,9 @@ export class SubscriptionFormComponent implements OnInit, OnDestroy  {
   get hasAreas() {
     return this.subscriptionForm.get('hasAreas');
   }
+  get areas() {
+    return this.subscriptionForm.get('areas') as FormArray;
+  }
 
   initSubscriptions() {
     // Changes for organization
@@ -454,9 +457,8 @@ export class SubscriptionFormComponent implements OnInit, OnDestroy  {
   }
 
 
-  onSelectedAreasChange($event) {
-    this.numberOfSelectedAreas = $event;
-
+  onSelectedAreasChange(numberOfSelectedAreas) {
+    this.numberOfSelectedAreas = numberOfSelectedAreas;
   }
 
   ngOnDestroy() {
