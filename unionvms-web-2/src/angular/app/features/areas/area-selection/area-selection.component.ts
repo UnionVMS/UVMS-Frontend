@@ -1,10 +1,11 @@
-import { Component, OnInit, Output, EventEmitter, Input, OnDestroy, } from '@angular/core';
+import { Component, OnInit, Output, EventEmitter, Input, OnDestroy, OnChanges, } from '@angular/core';
 import { FeaturesService } from '../../features.service';
 import { ControlContainer, FormGroup, FormControl, FormArray } from '@angular/forms';
 import { faTimes  } from '@fortawesome/free-solid-svg-icons';
 import { Store } from '@ngrx/store';
 import * as fromRoot from 'app/app.reducer';
 import { Subscription, Observable } from 'rxjs';
+import { distinctUntilChanged } from 'rxjs/operators';
 
 @Component({
   selector: 'app-area-selection',
@@ -20,7 +21,7 @@ export class AreaSelectionComponent implements OnInit, OnDestroy  {
   userLayersList;
   system = 'SYSTEM';
   user = 'USER';
-  areaType;
+  areaType = '';
   checked = true;
   systemSelectionCategory = 'systemFromMap';
   userSelectionCategory = 'userFromMap';
@@ -38,6 +39,7 @@ export class AreaSelectionComponent implements OnInit, OnDestroy  {
               private store: Store<fromRoot.State> ) { }
 
   ngOnInit(): void {
+    //debugger;
     this.initSystemLayers();
     this.initUserLayers();
     this.subscription.add(this.clearForm$.subscribe( clear => {
@@ -47,6 +49,12 @@ export class AreaSelectionComponent implements OnInit, OnDestroy  {
         this.systemSelectionCategory = 'systemFromMap';
         this.userSelectionCategory = 'userFromMap';
       }
+    }));
+
+    this.subscription.add(this.formGroup.get('areas').valueChanges
+    .pipe(distinctUntilChanged())
+    .subscribe(value => {
+        this.selectedAreasChange.emit(this.areas.value.length);
     }));
   }
 
@@ -77,22 +85,36 @@ export class AreaSelectionComponent implements OnInit, OnDestroy  {
 
   selectArea(selectedArea) {
     debugger;
-    this.areas.push(new FormControl(selectedArea));
-    this.selectedAreasChange.emit(this.areas.value.length);
+    if (Array.isArray(selectedArea)) {
+      selectedArea.forEach(item => {
+        const obj = {
+          gid: item.gid,
+          areaType: item.areaType,
+          name: item.name
+        };
+        this.areas.push(new FormControl(obj));
+      });
+
+    } else {
+      const obj = {
+        gid: selectedArea.gid,
+        areaType: selectedArea.areaType,
+        name: selectedArea.name
+      };
+      this.areas.push(new FormControl(obj));
+    }
   }
 
   removeArea(index) {
     this.areas.removeAt(index);
-    this.selectedAreasChange.emit(this.areas.value.length);
-
   }
 
   clearAllAreas() {
     this.areas.clear();
-    this.selectedAreasChange.emit(this.areas.value.length);
   }
 
   ngOnDestroy() {
+    debugger;
     this.subscription.unsubscribe();
   }
 }

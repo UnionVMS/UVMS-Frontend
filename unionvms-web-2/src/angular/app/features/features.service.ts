@@ -43,7 +43,75 @@ export class FeaturesService {
   }
 
   getSubscriptionDetails(id): Promise<any> {
-    return this.http.get<SubscriptionFormModel>(`${environment.baseURL}${FEATURES_ENDPOINTS.getSubscriptionDetails}/${id}`).toPromise();
+    // return this.http.get<SubscriptionFormModel>(`${environment.baseURL}${FEATURES_ENDPOINTS.getSubscriptionDetails}/${id}`).toPromise();
+    return of(
+      {
+        "data":{
+           "id":2,
+           "name":"name",
+           "accessibility":"SCOPE",
+           "description":"description",
+           "active":true,
+           "output":{
+              "alert":false,
+              "emails":[
+
+              ],
+              "hasEmail":false,
+              "emailConfiguration":{
+                 "isPdf":false,
+                 "hasAttachments":false,
+                 "password":"",
+                 "passwordIsPlaceholder":true,
+                 "isXml":false
+              },
+              "messageType":"FA_QUERY",
+              "subscriber":{
+                 "organisationId":1,
+                 "endpointId":4,
+                 "channelId":1
+              },
+              "logbook":false,
+              "consolidated":false,
+              "vesselIds":[
+
+              ],
+              "generateNewReportId":false,
+              "history":1,
+              "historyUnit":"DAYS"
+           },
+           "execution":{
+              "triggerType":"MANUAL",
+              "frequency":0,
+              "immediate":false,
+              "timeExpression":"06:00"
+           },
+           "startDate":"2016-08-01T00:00:00",
+           "endDate":"9999-01-01T23:59:59",
+           areas: [
+              {
+                 id: 1,
+                 gid: 129,
+                 areaType: 'EEZ'
+
+              },
+              {
+                 id: 1,
+                 gid: 195,
+                 areaType: 'EEZ'
+
+              },
+              {
+                 id: 1,
+                 gid: 106,
+                 areaType: 'EEZ'
+
+              },
+           ]
+        },
+        "code":200
+     }
+    ).toPromise()
   }
 
 
@@ -75,5 +143,10 @@ export class FeaturesService {
   }
   getSystemAreasByFilter(filter) {
     return this.http.post(`${environment.baseURL}${FEATURES_ENDPOINTS.getSystemAreasByFilter}`, filter).toPromise();
+  }
+
+  getAreaProperties(areas) {
+    return this.http.post(`${environment.baseURL}${FEATURES_ENDPOINTS.getAreaProperties}`, areas).toPromise();
+
   }
 }

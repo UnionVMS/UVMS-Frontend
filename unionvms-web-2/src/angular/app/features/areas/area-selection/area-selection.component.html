@@ -9,9 +9,9 @@
               <form class="system-section" #systemAreaMapSelectionForm="ngForm">
                 <div class="row">
                   <div class="col-md-5">
-                    <select class="form-control" id="mapLayer" ngModel name="systemMapLayer" #systemMapLayer="ngModel" (change)="onSystemAreaChange($event.target.value)">
+                    <select class="form-control" id="mapLayer" [(ngModel)]="areaType" name="areaType">
                       <option value="" >Area type</option>
-                      <option *ngFor="let item of systemLayersList" [value]="item.typeName">{{item.typeName}}</option>
+                      <option *ngFor="let item of systemLayersList">{{item.typeName}}</option>
                     </select>
                   </div>
                 </div>

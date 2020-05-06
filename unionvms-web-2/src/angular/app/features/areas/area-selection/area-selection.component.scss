@@ -1,7 +1,6 @@
 .area-selection-container{
   display: flex;
   flex-direction: row;
-  flex-wrap: wrap;
   height: 500px;
 
   .area-selection {
@@ -16,7 +15,6 @@
     margin-top: 41px;
     border-top: 1px solid #dee2e6;
     padding-top: 15px;
-
   }
 
   .card {
@@ -31,6 +29,11 @@
     a {
       cursor: pointer;
     }
+  }
+
+  .card-body {
+    height: 300px;
+    overflow-y: auto;
   }
 
   .badge.badge-primary {

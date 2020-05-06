@@ -359,15 +359,14 @@
     <div class="form-group row">
       <div class="col-sm-4">
         <div class="custom-control custom-checkbox custom-control-inline">
-            <input class="custom-control-input" type="checkbox" id="hasAreas" formControlName="hasAreas">
+            <input class="custom-control-input" type="checkbox" id="hasAreas" (change)="isCollapsed = !isCollapsed">
             <label class="custom-control-label" for="hasAreas">Areas
               <span *ngIf="numberOfSelectedAreas" class="badge badge-danger">{{ numberOfSelectedAreas }}</span>
             </label>
         </div>
       </div>
     </div>
-    <pre>{{hasAreas.value}}</pre>
-    <div [ngbCollapse]="!hasAreas.value">
+    <div [ngbCollapse]="isCollapsed">
       <app-area-selection formArrayName="areas" [formGroup]="subscriptionForm" (selectedAreasChange)="onSelectedAreasChange($event)"></app-area-selection>
     </div>
   </fieldset>

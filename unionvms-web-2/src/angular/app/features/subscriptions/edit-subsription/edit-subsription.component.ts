@@ -37,6 +37,22 @@ export class EditSubsriptionComponent implements OnInit, AfterViewInit {
   async ngAfterViewInit() {
     const result = await this.featuresService.getSubscriptionDetails(this.currentSubscriptionId);
     this.currentSubscription = result.data;
+    // Areas
+    const areaProperties = await this.getAreaProperties(result.data.areas);
+
+    const temp = [...this.currentSubscription.areas];
+
+    temp.forEach(item => {
+      const match = areaProperties.find(element => element.gid === item.gid);
+      item.name = match.name;
+    })
+
+    const areasFormArray = this.subscriptionFormComponent.subscriptionForm.get('areas') as FormArray;
+
+    temp.forEach(item => {
+      areasFormArray.push(new FormControl(item))
+    })
+
     // Work with emails formArray
     const emailFormArray = this.subscriptionFormComponent.subscriptionForm.get('output.emails') as FormArray;
     this.currentSubscription.output.emails.forEach(item => {
@@ -118,5 +134,12 @@ export class EditSubsriptionComponent implements OnInit, AfterViewInit {
     } catch (err) {
     }
 
+  }
+
+
+  async getAreaProperties(areas) {
+    const result: any = await this.featuresService.getAreaProperties(areas);
+    debugger;
+    return result.data;
   }
 }
