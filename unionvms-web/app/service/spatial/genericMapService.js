@@ -26,7 +26,7 @@ copy of the GNU General Public License along with the IFDM Suite. If not, see <h
 angular.module('unionvmsWeb').factory('genericMapService',function($localStorage, $location, $window, locale, spatialRestService) {
     /**
      * Gets the base projection of the map
-     * 
+     *
      * @memberof genericMapService
      * @public
      * @param {ol.Map} map - The input OL map
@@ -35,10 +35,10 @@ angular.module('unionvmsWeb').factory('genericMapService',function($localStorage
     var getMapProjectionCode = function(map){
         return map.getView().getProjection().getCode();
     };
-    
+
     /**
      * Force a recalculation of the map viewport size
-     * 
+     *
      * @memberof genericMapService
      * @public
      * @param {ol.Map} map - The input OL map
@@ -49,10 +49,10 @@ angular.module('unionvmsWeb').factory('genericMapService',function($localStorage
         }
         map.updateSize();
     };
-    
+
     /**
      * Calculates the numeric scale of the current view of the map
-     * 
+     *
      * @memberof genericMapService
      * @public
      * @param {ol.Map} map - The input OL map
@@ -64,13 +64,13 @@ angular.module('unionvmsWeb').factory('genericMapService',function($localStorage
         var units = view.getProjection().getUnits();
         var dpi = 25.4 / 0.28;
         var mpu = ol.proj.METERS_PER_UNIT[units];
-        
+
         return res * mpu * 39.37 * dpi;
     };
-    
+
     /**
      * Get the first layer with the specified title
-     * 
+     *
      * @memberof genericMapService
      * @public
      * @param {String} title - The title of the layer to find
@@ -88,7 +88,7 @@ angular.module('unionvmsWeb').factory('genericMapService',function($localStorage
 
     /**
      * Get the first layer with the specified type
-     * 
+     *
      * @memberof genericMapService
      * @public
      * @param {String} type - The type of the layer to find
@@ -103,7 +103,7 @@ angular.module('unionvmsWeb').factory('genericMapService',function($localStorage
 
         return layer[0];
     };
-    
+
     /**
      * Get list of controls by type
      *
@@ -118,10 +118,10 @@ angular.module('unionvmsWeb').factory('genericMapService',function($localStorage
         var ctrls = controls.filter(function(ctrl){
             return ctrl instanceof ol.control[type] === true;
         });
-        
+
         return ctrls;
     };
-    
+
     /**
      * Get list of interactions by type
      *
@@ -136,13 +136,13 @@ angular.module('unionvmsWeb').factory('genericMapService',function($localStorage
         var ints = interactions.filter(function(int){
             return int instanceof ol.interaction[type] === true;
         });
-        
+
         return ints;
     };
-    
+
     /**
      * Define map projections
-     * 
+     *
      * @memberof genericMapService
      * @public
      * @param {Object} proj - The definition of the projection
@@ -150,13 +150,13 @@ angular.module('unionvmsWeb').factory('genericMapService',function($localStorage
      */
     var setProjection = function(proj){
         registerProjInProj4(proj);
-        
+
         var worldExtent = [-180, -89.99, 180, 89.99];
         if (angular.isDefined(proj.worldExtent)){
             var tempExt = proj.worldExtent.split(';');
             worldExtent = [parseFloat(tempExt[0]), parseFloat(tempExt[1]), parseFloat(tempExt[2]), parseFloat(tempExt[3])];
         }
-        
+
         var ext = proj.extent.split(';');
         var projection = new ol.proj.Projection({
             code: 'EPSG:' + proj.epsgCode,
@@ -169,10 +169,10 @@ angular.module('unionvmsWeb').factory('genericMapService',function($localStorage
 
         return projection;
     };
-    
+
     /**
      * Register a specific projection within the proj4js workspace
-     * 
+     *
      * @memberof genericMapService
      * @public
      * @param {Object} proj - The definition of the projection
@@ -182,10 +182,10 @@ angular.module('unionvmsWeb').factory('genericMapService',function($localStorage
             proj4.defs('EPSG:' + proj.epsgCode, proj.projDef);
         }
     };
-    
+
     /**
      * Remove all layers from the map
-     * 
+     *
      * @memberof genericMapService
      * @public
      * @param {ol.Map} map - The OL map
@@ -196,10 +196,10 @@ angular.module('unionvmsWeb').factory('genericMapService',function($localStorage
             layers.clear();
         }
     };
-    
+
     /**
      * Remove layer from map by type
-     * 
+     *
      * @memberof genericMapService
      * @public
      * @param {String} type - The layer type
@@ -211,10 +211,10 @@ angular.module('unionvmsWeb').factory('genericMapService',function($localStorage
             map.removeLayer(layer);
         }
     };
-    
+
     /**
      * Define OpenStreetMap layer
-     * 
+     *
      * @memberof genericMapService
      * @public
      * @param {Object} [config={}] - Configurations for the layer
@@ -224,20 +224,20 @@ angular.module('unionvmsWeb').factory('genericMapService',function($localStorage
         if (!angular.isDefined(config)){
             config = {};
         }
-        
+
         var layer = new ol.layer.Tile({
             type: config.type ? config.type : 'osm',
             title: config.title ? config.title : null,
             isBaseLayer: config.isBaseLayer ? config.isBaseLayer : null,
             source: new ol.source.OSM()
-        }); 
-        
+        });
+
         return layer;
     };
-    
+
     /**
      * Define OpenSeaMap layer
-     * 
+     *
      * @memberof genericMapService
      * @public
      * @param {Object} [config={}] - The layer configuration object
@@ -247,7 +247,7 @@ angular.module('unionvmsWeb').factory('genericMapService',function($localStorage
         if (!angular.isDefined(config)){
             config = {};
         }
-        
+
         var layer = new ol.layer.Tile({
             type: config.type ? config.type : 'osea',
             title: config.title ? config.title: null,
@@ -262,13 +262,13 @@ angular.module('unionvmsWeb').factory('genericMapService',function($localStorage
                 crossOrigin: null
             })
         });
-        
+
         return layer;
     };
-    
+
     /**
      * Define BING layers
-     * 
+     *
      * @memberof genericMapService
      * @public
      * @param {Object} config - The layer configuration object
@@ -286,13 +286,13 @@ angular.module('unionvmsWeb').factory('genericMapService',function($localStorage
                 maxZoom: 19
             })
         });
-        
+
         return layer;
     };
-    
+
     /**
      * Custom tile load function to include USM jwt header in the requests
-     * 
+     *
      * @memberof genericMapService
      * @private
      * @param {ol.Tile} imageTile - imageTile object provided by OL
@@ -334,8 +334,8 @@ angular.module('unionvmsWeb').factory('genericMapService',function($localStorage
     var getToken = function(){
         return $localStorage.token;
     };
-    
-    
+
+
     /**
      * Compares a URL with the current application URL
      * @memberof genericMapService
@@ -347,17 +347,17 @@ angular.module('unionvmsWeb').factory('genericMapService',function($localStorage
         var isEqual = true;
         var parser = document.createElement('a');
         parser.href = baseUrl;
-        
+
         if (parser.protocol !== $location.protocol() || parser.hostname !== $location.host() || parser.port !== $location.port()){
             isEqual = false;
         }
-        
+
         return isEqual;
     };
-    
+
     /**
      * Build the configuration object for WMS base layers
-     * 
+     *
      * @memberof genericMapService
      * @public
      * @param {Object} def - The initial layer definition object
@@ -376,17 +376,17 @@ angular.module('unionvmsWeb').factory('genericMapService',function($localStorage
                 }
             });
         }
-        
+
         var serverType;
         if (angular.isDefined(def.serverType)){
             serverType = def.serverType;
         }
-        
+
         var attribution;
         if (angular.isDefined(def.shortCopyright)){
             attribution = def.shortCopyright;
         }
-        
+
         var config = {
             title: def.title,
             type: def.type,
@@ -400,15 +400,15 @@ angular.module('unionvmsWeb').factory('genericMapService',function($localStorage
                 'TILED': true,
                 'TILESORIGIN': mapExtent[0] + ',' + mapExtent[1],
                 'STYLES': style
-            }   
+            }
         };
-        
+
         return config;
     };
-    
+
     /**
      * Build the configuration object for WMS overlay layers
-     * 
+     *
      * @memberof genericMapService
      * @public
      * @param {Object} def - The initial layer definition object
@@ -417,12 +417,12 @@ angular.module('unionvmsWeb').factory('genericMapService',function($localStorage
      */
     var getGenericLayerConfig = function(def, map){
         var mapExtent = map.getView().getProjection().getExtent();
-        
+
         var attribution;
         if (angular.isDefined(def.shortCopyright)){
             attribution = def.shortCopyright;
         }
-        
+
         var config = {
             type: def.typeName,
             url: def.serviceUrl,
@@ -435,15 +435,15 @@ angular.module('unionvmsWeb').factory('genericMapService',function($localStorage
                 'TILESORIGIN': mapExtent[0] + ',' + mapExtent[1],
                 'STYLES': def.style,
                 'cql_filter': angular.isDefined(def.cql) ? def.cql : null
-            }   
+            }
         };
-        
+
         return config;
     };
-    
+
     /**
      * Define WMS layer
-     * 
+     *
      * @memberof genericMapService
      * @public
      * @param {Object} config - Configurations for the WMS layer
@@ -452,21 +452,21 @@ angular.module('unionvmsWeb').factory('genericMapService',function($localStorage
     var defineWms = function(config){
         var source, layer, attribution, isCrossOrigin,
             isInternal = false;
-        
+
         if (angular.isDefined(config.attribution)){
             attribution = new ol.Attribution({
-               html: config.attribution 
+               html: config.attribution
             });
         }
-        
+
         if (angular.isDefined(config.serverType) && config.serverType === 'geoserver'){
             isInternal = true;
         }
-        
+
         if (!compareUrlWithLocation(config.url) && isInternal){
             isCrossOrigin = 'anonymous';
         }
-        
+
         source = new ol.source.TileWMS({
             attributions: angular.isDefined(attribution) ? [attribution] : undefined,
             url: config.url,
@@ -474,11 +474,11 @@ angular.module('unionvmsWeb').factory('genericMapService',function($localStorage
             params: config.params,
             crossOrigin: isCrossOrigin
         });
-        
+
         if (isInternal){
             source.setTileLoadFunction(customTileLoaderFunction);
         }
-        
+
         layer = new ol.layer.Tile({
             title: config.title,
             isInternal: isInternal,
@@ -487,13 +487,13 @@ angular.module('unionvmsWeb').factory('genericMapService',function($localStorage
             isBaseLayer: angular.isDefined(config.isBaseLayer) ? config.isBaseLayer : undefined,
             source: source
         });
-        
+
         return layer;
     };
-    
+
     /**
      * Refresh WMS layer in the map
-     * 
+     *
      * @memberof genericMapService
      * @public
      * @param {String} type - The layer type
@@ -505,10 +505,10 @@ angular.module('unionvmsWeb').factory('genericMapService',function($localStorage
             layer.getSource().updateParams({time_: (new Date()).getTime()});
         }
     };
-    
+
     /**
      * Get basic map configurations stored in USM (to use in all maps except liveview) and stores them in mapBasicConfigs property object
-     * 
+     *
      * @memberof genericMapService
      * @public
      */
@@ -530,17 +530,16 @@ angular.module('unionvmsWeb').factory('genericMapService',function($localStorage
             }
         });
     };
-    
+
     /**
      * Create a OL map view from config object
-     * 
+     *
      * @memberof genericMapService
      * @public
      * @param {Object} config - The map configuration object
-     * @returms {ol.View} The OL map view 
+     * @returms {ol.View} The OL map view
      */
     var createView = function(config){
-        debugger;
         var proj = this.setProjection(config);
         var center = ol.proj.transform([-1.81185, 52.44314], 'EPSG:4326', 'EPSG:' + config.epsgCode);
         var view = new ol.View({
@@ -553,13 +552,13 @@ angular.module('unionvmsWeb').factory('genericMapService',function($localStorage
             //minZoom: 3,
             enableRotation: false
         });
-        
+
         return view;
     };
-    
+
     /**
      * Updates a map view using a new configuration object
-     * 
+     *
      * @memberof genericMapService
      * @public
      * @param {Object} config - The map configuration object
@@ -569,10 +568,10 @@ angular.module('unionvmsWeb').factory('genericMapService',function($localStorage
         var view = this.createView(config);
         map.setView(view);
     };
-    
+
     /**
      * Create the scale control
-     * 
+     *
      * @memberof genericMapService
      * @public
      * @alias addScale
@@ -584,18 +583,18 @@ angular.module('unionvmsWeb').factory('genericMapService',function($localStorage
             units: ctrl.units,
             className: 'ol-scale-line'
         });
-        
+
         return olCtrl;
     };
-    
+
     /**
      * Create Mouse Coordinates control
-     * 
+     *
      * @memberof genericMapService
      * @public
      * @alias addMousecoords
      * @param {Object} ctrl - An object containing the definitions for controls
-     * @param {String} targetId - The ID of the target DOM element where the coordinates will be displayed 
+     * @param {String} targetId - The ID of the target DOM element where the coordinates will be displayed
      * @returns {ol.control.MousePosition} The mouse coordinates OL control
      */
     var addMousecoords = function(ctrl, targetId){
@@ -607,13 +606,13 @@ angular.module('unionvmsWeb').factory('genericMapService',function($localStorage
             target: angular.element('#' + targetId)[0],
             className: 'mouse-position'
         });
-        
+
         return olCtrl;
     };
-    
+
     /**
      * Format mouse position coordinates according to the report/user preferences
-     * 
+     *
      * @memberof genericMapService
      * @private
      * @alias formatCoords
@@ -639,10 +638,10 @@ angular.module('unionvmsWeb').factory('genericMapService',function($localStorage
             return ol.coordinate.format(coord, '<b>X:</b> {x} m | <b>Y:</b> {y} m' , 4);
         }
     };
-    
+
     /**
      * Format graticule coordinate label according to the report/user preferences
-     * 
+     *
      * @memberof genericMapService
      * @public
      * @alias formatCoordsForGraticule
@@ -662,10 +661,10 @@ angular.module('unionvmsWeb').factory('genericMapService',function($localStorage
                 return coordToDDM(coord, 'EW');
         }
     };
-    
+
     /**
      * Convert coordinates from Decimal Degrees to Degrees Minutes Seconds
-     * 
+     *
      * @memberof genericMapService
      * @private
      * @alias coordToDMS
@@ -684,7 +683,7 @@ angular.module('unionvmsWeb').factory('genericMapService',function($localStorage
 
     /**
      * Convert coordinates from Decimal Degrees to Degrees Decimal Minutes
-     * 
+     *
      * @memberof genericMapService
      * @private
      * @alias coordToDDM
@@ -699,27 +698,27 @@ angular.module('unionvmsWeb').factory('genericMapService',function($localStorage
             ((x / 60) % 60).toFixed(2) + '\u2032 ' +
             hemispheres.charAt(normalized < 0 ? 1 : 0);
     };
-    
+
     /**
      * Create OL Zoom control
-     * 
+     *
      * @memberof genericMapService
      * @public
      * @returns {ol.control.Zoom} The OL Zoom control
      */
     var createZoomCtrl = function(customClass){
         var ctrl = new ol.control.Zoom({
-            className: angular.isDefined(customClass) ? customClass : undefined, 
+            className: angular.isDefined(customClass) ? customClass : undefined,
             zoomInTipLabel: locale.getString('spatial.map_tip_zoomin'),
             zoomOutTipLabel: locale.getString('spatial.map_tip_zoomout')
         });
 
         return ctrl;
     };
-    
+
     /**
      * Create all OL Zoom interactions
-     * 
+     *
      * @memberof genericMapService
      * @public
      * @returns {Array<ol.interaction>} An array with zoom related interactions
@@ -735,13 +734,13 @@ angular.module('unionvmsWeb').factory('genericMapService',function($localStorage
             condition: ol.events.condition.altKeyOnly
         }));
         interactions.push(new ol.interaction.PinchZoom());
-        
+
         return interactions;
     };
-    
+
     /**
      * Create all OL Pan interactions
-     * 
+     *
      * @memberof genericMapService
      * @public
      * @returns {Array<ol.interaction>} An array with pan related interactions
@@ -750,13 +749,13 @@ angular.module('unionvmsWeb').factory('genericMapService',function($localStorage
         var interactions = [];
         interactions.push(new ol.interaction.DragPan());
         interactions.push(new ol.interaction.KeyboardPan());
-        
+
         return interactions;
     };
-    
+
     /**
      * Focus to map div
-     * 
+     *
      * @memberof genericMapService
      * @public
      * @param {String} mapId - The id of the div containing the map
@@ -767,12 +766,12 @@ angular.module('unionvmsWeb').factory('genericMapService',function($localStorage
             mapElement.focus();
         }
     };
-    
+
     /**
      * Calculates the intersection between a given geometry and the map projection extent.
-     * The input geometry must be in WGS 84 ('EPSG:4326'). The returned geometry will have the 
+     * The input geometry must be in WGS 84 ('EPSG:4326'). The returned geometry will have the
      * projection of the source map.
-     * 
+     *
      * @memberof genericMapService
      * @public
      * @param {ol.geom.Geometry} geom - The input geometry
@@ -785,25 +784,25 @@ angular.module('unionvmsWeb').factory('genericMapService',function($localStorage
         var projCode = projObj.getCode();
         var extent = projObj.getExtent();
         var polygon = new ol.geom.Polygon.fromExtent(extent);
-        
+
         if (projCode.indexOf('4326') === -1){
             reproject = true;
             polygon.transform(projCode, 'EPSG:4326');
         }
-        
+
         var intersection = turf.intersect(geomToGeoJson(polygon), geomToGeoJson(geom));
         intersection = geoJsonToOlGeom(intersection);
-        
+
         if (reproject){
             intersection.transform('EPSG:4326', projCode);
         }
-        
+
         return intersection;
     };
-    
+
     /**
      * Convert an OL geometry to a GeoJSON feature object
-     * 
+     *
      * @memberof genericMapService
      * @public
      * @param {ol.geom.Geometry} geom - The input OL geometry
@@ -813,13 +812,13 @@ angular.module('unionvmsWeb').factory('genericMapService',function($localStorage
         var format = new ol.format.GeoJSON();
         var feature = new ol.Feature();
         feature.setGeometry(geom);
-        
+
         return format.writeFeatureObject(feature);
     };
-    
+
     /**
      * Convert a GeoJSON feature object to an OL geometry
-     * 
+     *
      * @memberof genericMapService
      * @public
      * @param {Object} feature - The GeoJSON feature object
@@ -829,10 +828,10 @@ angular.module('unionvmsWeb').factory('genericMapService',function($localStorage
         var format = new ol.format.GeoJSON();
         return format.readFeature(feature).getGeometry();
     };
-    
+
 	var genericMapService = {
 	    mapBasicConfigs: {},
-	    setMapBasicConfigs: setMapBasicConfigs, 
+	    setMapBasicConfigs: setMapBasicConfigs,
 	    getMapProjectionCode: getMapProjectionCode,
 	    createView: createView,
 	    updateMapView: updateMapView,
