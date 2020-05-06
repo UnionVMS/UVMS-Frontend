@@ -6,6 +6,7 @@ import { Store } from '@ngrx/store';
 import * as fromRoot from 'app/app.reducer';
 import { Subscription, Observable } from 'rxjs';
 import { distinctUntilChanged } from 'rxjs/operators';
+import { ClearAction } from 'app/features/subscriptions/subscriptions.reducer';
 
 @Component({
   selector: 'app-area-selection',
@@ -28,7 +29,7 @@ export class AreaSelectionComponent implements OnInit, OnDestroy  {
   selectedAreas = [];
   faTimes = faTimes;
   private subscription: Subscription = new Subscription();
-  clearForm$: Observable<boolean> = this.store.select(fromRoot.clearSubscriptionForm);
+  clearForm$: Observable<ClearAction> = this.store.select(fromRoot.clearSubscriptionForm);
 
   get areas() {
     return this.formGroup.get('areas') as FormArray;
@@ -39,12 +40,13 @@ export class AreaSelectionComponent implements OnInit, OnDestroy  {
               private store: Store<fromRoot.State> ) { }
 
   ngOnInit(): void {
-    //debugger;
     this.initSystemLayers();
     this.initUserLayers();
+    /* The following fields are not part of the form and on form reset, they maintain their previous state.
+      This component needs to listen for an action fired from the new-subscription component so that it resets them.
+    */
     this.subscription.add(this.clearForm$.subscribe( clear => {
-      if (clear) {
-        debugger;
+      if (clear.status) {
         this.areaType = '';
         this.systemSelectionCategory = 'systemFromMap';
         this.userSelectionCategory = 'userFromMap';
@@ -84,7 +86,6 @@ export class AreaSelectionComponent implements OnInit, OnDestroy  {
   }
 
   selectArea(selectedArea) {
-    debugger;
     if (Array.isArray(selectedArea)) {
       selectedArea.forEach(item => {
         const obj = {
@@ -114,7 +115,6 @@ export class AreaSelectionComponent implements OnInit, OnDestroy  {
   }
 
   ngOnDestroy() {
-    debugger;
     this.subscription.unsubscribe();
   }
 }

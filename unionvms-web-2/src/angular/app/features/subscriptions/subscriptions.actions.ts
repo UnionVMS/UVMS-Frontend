@@ -1,6 +1,7 @@
 import { Action } from '@ngrx/store';
 import { Organization } from './organization.model';
 import { Subscription } from './subscription.model';
+import { ClearAction } from './subscriptions.reducer';
 
 
 export const SET_ORGANIZATIONS = '[SUBSCRIPTIONS] Set Organizations';
@@ -24,7 +25,8 @@ export class SetSubscriptionsList implements Action {
 
 export class ClearSubscriptionForm implements Action {
   readonly type = CLEAR_SUBSCRIPTION_FORM;
-  constructor() {
+  // Explanation on why this is an object https://github.com/ngrx/platform/issues/208
+  constructor(public payload: ClearAction) {
   }
 }
 // create custom type for safety

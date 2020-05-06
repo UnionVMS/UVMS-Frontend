@@ -139,7 +139,6 @@ export class EditSubsriptionComponent implements OnInit, AfterViewInit {
 
   async getAreaProperties(areas) {
     const result: any = await this.featuresService.getAreaProperties(areas);
-    debugger;
     return result.data;
   }
 }

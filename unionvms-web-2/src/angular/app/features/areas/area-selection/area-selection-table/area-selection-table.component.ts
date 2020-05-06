@@ -5,6 +5,7 @@ import { faCheck  } from '@fortawesome/free-solid-svg-icons';
 import { Subscription, Observable } from 'rxjs';
 import { Store } from '@ngrx/store';
 import * as fromRoot from 'app/app.reducer';
+import { ClearAction } from 'app/features/subscriptions/subscriptions.reducer';
 
 @Component({
   selector: 'app-area-selection-table',
@@ -17,19 +18,19 @@ export class AreaSelectionTableComponent implements OnInit, OnDestroy {
   @Input() areaType?;
   @Output() selectArea = new EventEmitter<any>();
   results: [];
+  filter: '';
   ColumnMode = ColumnMode;
   loadingIndicator = true;
   faCheck = faCheck;
   private subscription: Subscription = new Subscription();
-  clearForm$: Observable<boolean> = this.store.select(fromRoot.clearSubscriptionForm);
+  clearForm$: Observable<ClearAction> = this.store.select(fromRoot.clearSubscriptionForm);
 
 
   constructor(private featuresService: FeaturesService, private store: Store<fromRoot.State>) { }
 
   ngOnInit(): void {
-    debugger;
     this.subscription.add(this.clearForm$.subscribe( clear => {
-      if (clear) {
+      if (clear.status) {
         this.results = [];
       }
     }));
@@ -74,6 +75,11 @@ export class AreaSelectionTableComponent implements OnInit, OnDestroy {
     if (this.results) {
       this.selectArea.emit(this.results);
     }
+  }
+
+  onReset() {
+    this.results = [];
+    this.filter = '';
   }
 
 }

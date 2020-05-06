@@ -31,10 +31,8 @@ export class AreaSelectionMapComponent implements OnInit {
   }
 
   async getMapConfig() {
-    //debugger;
       try {
         const result: any = await this.featureService.getMapBasicConfig();
-        // debugger;
         this.mapBasicConfig = result.data.map;
         this.initMap();
 

@@ -27,5 +27,5 @@ export const getAuthenticatedUserContexts = createSelector(getAuthState, fromAut
 
 export const getSubState = createFeatureSelector<fromSub.State>('sub');
 export const getOrganizations = createSelector(getSubState, fromSub.getOrganizations);
-export const clearSubscriptionForm = createSelector(getSubState, fromSub.clearSubscriptionForm);
+export const clearSubscriptionForm = createSelector(getSubState, fromSub.getClearSubscriptionForm);
 
