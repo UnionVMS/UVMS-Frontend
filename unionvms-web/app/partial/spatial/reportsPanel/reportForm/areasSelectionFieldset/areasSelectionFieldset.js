@@ -189,7 +189,6 @@ angular.module('unionvmsWeb').controller('AreasselectionfieldsetCtrl',function($
     };
 
     $scope.$watch('sysAreaType', function(newVal, oldVal){
-        debugger;
         if (angular.isDefined(newVal) && newVal !== oldVal){
             $scope.clickResults = 0;
             $scope.clearSearchProps();
@@ -546,7 +545,6 @@ angular.module('unionvmsWeb').controller('AreasselectionfieldsetCtrl',function($
      * @alias setMap
      */
     $scope.setMap = function(clicked){
-        debugger;
         if(clicked && $scope.selectionType[$scope.selectedTab] !== 'map'){
             return;
         }
@@ -563,7 +561,6 @@ angular.module('unionvmsWeb').controller('AreasselectionfieldsetCtrl',function($
         if(!angular.isDefined(projObj)){
             return;
         }
-        debugger;
 
         var view = genericMapService.createView(projObj);
 
@@ -697,7 +694,6 @@ angular.module('unionvmsWeb').controller('AreasselectionfieldsetCtrl',function($
      * @param {Boolean} isBaselayer - True if layer is a base layer
      */
     $scope.addWMS = function(def, isBaseLayer){
-        debugger;
         var config;
         if (isBaseLayer){
             config = genericMapService.getBaseLayerConfig(def, mapReference.areaSelection.map);
@@ -732,7 +728,6 @@ angular.module('unionvmsWeb').controller('AreasselectionfieldsetCtrl',function($
      * @private
      */
     var lazyLoadWMSLayer = function(){
-        debugger;
         var item, layerType;
         if (angular.isDefined($scope.sysAreaType) && $scope.isTabSelected('SYSTEM')){
             item = $scope.getFullDefForItem($scope.sysAreaType);
@@ -749,7 +744,6 @@ angular.module('unionvmsWeb').controller('AreasselectionfieldsetCtrl',function($
             if (!angular.isDefined($scope.addWMSInterval)){
                 $scope.addWMSInterval = $interval(function(){
                     if (angular.isDefined(mapReference.areaSelection.map)){
-                        debugger;
                         var layer = genericMapService.getLayerByType(layerType, mapReference.areaSelection.map);
                         if (!angular.isDefined(layer)){
                             $scope.addWMS(item);

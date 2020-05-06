@@ -4,14 +4,15 @@
   height: 500px;
 
   .area-selection {
-    flex: 2;
+    flex: 2 2 auto;
+    min-width: 0;
     .system-section {
       margin-top: 10px;
     }
   }
 
   .area-selection-list {
-    flex: 1;
+    flex: 1 1 auto;
     margin-top: 41px;
     border-top: 1px solid #dee2e6;
     padding-top: 15px;
