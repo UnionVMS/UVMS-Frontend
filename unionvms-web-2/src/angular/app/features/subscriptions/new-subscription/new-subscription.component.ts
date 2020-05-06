@@ -36,11 +36,12 @@ export class NewSubscriptionComponent implements OnInit {
       const result = await this.featuresService.createSubscription($event);
       this.subscriptionFormComponent.subscriptionForm.reset(subscriptionFormInitialValues);
       this.subscriptionFormComponent.numberOfSelectedAreas = 0;
-      debugger;
       const areas = this.subscriptionFormComponent.subscriptionForm.get('areas') as FormArray;
       areas.clear();
-      // Inform all subscribed components to clear previous values
-      this.store.dispatch(new SUB.ClearSubscriptionForm());
+      // Inform all subscribed components to clear previous values for non-form fields
+      this.store.dispatch(new SUB.ClearSubscriptionForm({
+        status: true
+      }));
 
       this.alerts = [];
       this.alerts.push({

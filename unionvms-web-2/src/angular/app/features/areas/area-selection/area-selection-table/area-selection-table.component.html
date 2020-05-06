@@ -2,13 +2,13 @@
 <form #AreaPropertySearchForm="ngForm" (ngSubmit)="onSubmit(AreaPropertySearchForm.value)" >
   <div class="form-row">
     <div class="col-auto">
-      <input type="text" class="form-control mb-2" id="filter" name="filter" ngModel name="filter" #filter="ngModel" placeholder="Search text">
+      <input type="text" class="form-control mb-2" id="filter" required name="filter" [(ngModel)]="filter" placeholder="Search text">
     </div>
     <div class="col-auto">
-      <button type="submit" class="btn btn-primary mb-2">SEARCH</button>
+      <button type="submit" class="btn btn-primary mb-2" [disabled]="!AreaPropertySearchForm.valid" >SEARCH</button>
     </div>
     <div class="col-auto">
-      <button type="button" class="btn btn-outline-secondary mb-2">RESET</button>
+      <button type="button" class="btn btn-outline-secondary mb-2" (click)="onReset()">RESET</button>
     </div>
   </div>
 </form>
