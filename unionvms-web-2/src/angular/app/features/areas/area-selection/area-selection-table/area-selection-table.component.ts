@@ -1,4 +1,4 @@
-import { Component, OnInit, Input, Output, EventEmitter, OnDestroy } from '@angular/core';
+import { Component, OnInit, Input, Output, EventEmitter, OnDestroy, OnChanges } from '@angular/core';
 import { FeaturesService } from 'app/features/features.service';
 import { ColumnMode } from '@swimlane/ngx-datatable';
 import { faCheck  } from '@fortawesome/free-solid-svg-icons';
@@ -27,6 +27,7 @@ export class AreaSelectionTableComponent implements OnInit, OnDestroy {
   constructor(private featuresService: FeaturesService, private store: Store<fromRoot.State>) { }
 
   ngOnInit(): void {
+    debugger;
     this.subscription.add(this.clearForm$.subscribe( clear => {
       if (clear) {
         this.results = [];
@@ -67,6 +68,12 @@ export class AreaSelectionTableComponent implements OnInit, OnDestroy {
 
   ngOnDestroy() {
     this.subscription.unsubscribe();
+  }
+
+  addAllAreas() {
+    if (this.results) {
+      this.selectArea.emit(this.results);
+    }
   }
 
 }

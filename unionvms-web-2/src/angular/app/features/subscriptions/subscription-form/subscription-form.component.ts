@@ -39,6 +39,7 @@ export class SubscriptionFormComponent implements OnInit, OnDestroy  {
   triggerTypes = [];
   accessibilityItems = [];
   numberOfSelectedAreas: number;
+  isCollapsed = true;
   private subscription: Subscription = new Subscription();
 
 
@@ -98,7 +99,6 @@ export class SubscriptionFormComponent implements OnInit, OnDestroy  {
       }),
       startDate: [null],
       endDate: [null],
-      hasAreas: [true],
       areas: this.fb.array([])
     });
 
@@ -278,6 +278,12 @@ export class SubscriptionFormComponent implements OnInit, OnDestroy  {
     });
     formValues.output.vesselIds = vesselIdsArray;
 
+
+    // Remove name property from each area
+
+    formValues.areas.forEach(element => {
+      delete element.name;
+    });
     this.save.emit(formValues);
   }
 
