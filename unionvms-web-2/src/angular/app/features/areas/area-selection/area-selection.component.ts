@@ -85,9 +85,45 @@ export class AreaSelectionComponent implements OnInit, OnDestroy  {
     this.areaType = value;
   }
 
-  selectArea(selectedArea) {
-    if (Array.isArray(selectedArea)) {
-      selectedArea.forEach(item => {
+  toggleArea(selectedArea) {
+    const obj = {
+        gid: selectedArea.gid,
+        areaType: selectedArea.areaType,
+        name: selectedArea.name
+      };
+    // list is empty = add selected area
+    if (!this.areas.length) {
+      this.areas.push(new FormControl(obj));
+    } else {
+      const diff = this.areas.value.findIndex(element => element.gid === selectedArea.gid);
+      if (diff > -1) {
+        this.areas.removeAt(diff);
+      } else {
+        this.areas.push(new FormControl(obj));
+      }
+    }
+
+  }
+
+  selectAllAreas(allAreas) {
+    // list is empty, add all
+    if (!this.areas.length) {
+      allAreas.forEach(item => {
+        const obj = {
+          gid: item.gid,
+          areaType: item.areaType,
+          name: item.name
+        };
+        this.areas.push(new FormControl(obj));
+      });
+    } else {
+      // find objects from incoming array not in current array
+      const diff = allAreas.filter(item => {
+        return !this.areas.value.some(element => {
+          return item.gid === element.gid;
+        });
+      });
+      diff.forEach(item => {
         const obj = {
           gid: item.gid,
           areaType: item.areaType,
@@ -96,14 +132,9 @@ export class AreaSelectionComponent implements OnInit, OnDestroy  {
         this.areas.push(new FormControl(obj));
       });
 
-    } else {
-      const obj = {
-        gid: selectedArea.gid,
-        areaType: selectedArea.areaType,
-        name: selectedArea.name
-      };
-      this.areas.push(new FormControl(obj));
+
     }
+
   }
 
   removeArea(index) {

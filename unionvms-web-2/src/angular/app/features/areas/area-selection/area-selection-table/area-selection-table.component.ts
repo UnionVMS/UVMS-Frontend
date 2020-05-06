@@ -6,6 +6,7 @@ import { Subscription, Observable } from 'rxjs';
 import { Store } from '@ngrx/store';
 import * as fromRoot from 'app/app.reducer';
 import { ClearAction } from 'app/features/subscriptions/subscriptions.reducer';
+import { FormGroup, FormArray } from '@angular/forms';
 
 @Component({
   selector: 'app-area-selection-table',
@@ -16,12 +17,15 @@ export class AreaSelectionTableComponent implements OnInit, OnDestroy {
 
   @Input() mode;
   @Input() areaType?;
-  @Output() selectArea = new EventEmitter<any>();
+  @Input() formGroup: FormGroup;
+  @Output() toggleArea = new EventEmitter<any>();
+  @Output() selectAllAreas = new EventEmitter<any>();
   results: [];
   filter: '';
   ColumnMode = ColumnMode;
   loadingIndicator = true;
   faCheck = faCheck;
+  isSelected = true;
   private subscription: Subscription = new Subscription();
   clearForm$: Observable<ClearAction> = this.store.select(fromRoot.clearSubscriptionForm);
 
@@ -34,6 +38,10 @@ export class AreaSelectionTableComponent implements OnInit, OnDestroy {
         this.results = [];
       }
     }));
+  }
+
+  get areas() {
+    return this.formGroup.get('areas') as FormArray;
   }
 
   async onSubmit(form) {
@@ -64,7 +72,7 @@ export class AreaSelectionTableComponent implements OnInit, OnDestroy {
   }
 
   onSelectArea(row) {
-    this.selectArea.emit(row);
+    this.toggleArea.emit(row);
   }
 
   ngOnDestroy() {
@@ -73,13 +81,17 @@ export class AreaSelectionTableComponent implements OnInit, OnDestroy {
 
   addAllAreas() {
     if (this.results) {
-      this.selectArea.emit(this.results);
+      this.selectAllAreas.emit(this.results);
     }
   }
 
   onReset() {
     this.results = [];
     this.filter = '';
+  }
+
+  getIsSelected(row) {
+    return this.areas.value.some(item => item.gid === row.gid);
   }
 
 }

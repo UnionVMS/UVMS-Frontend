@@ -28,7 +28,7 @@
                     <app-area-selection-map [systemAreas]= "systemLayersList"></app-area-selection-map>
                   </div>
                   <div *ngIf="systemSelectionCategory === 'systemByProperty'">
-                    <app-area-selection-table [mode]="system" [areaType]="areaType" (selectArea)="selectArea($event)" ></app-area-selection-table>
+                    <app-area-selection-table [formGroup]="formGroup" [mode]="system" [areaType]="areaType" (selectAllAreas)="selectAllAreas($event)" (toggleArea)="toggleArea($event)" ></app-area-selection-table>
                   </div>
                 </div>
               </form>
@@ -51,7 +51,7 @@
                   <app-area-selection-map [userAreas]= "userLayersList"></app-area-selection-map>
                 </div>
                 <div *ngIf="userSelectionCategory === 'userByProperty'">
-                  <app-area-selection-table [mode]="user" (selectArea)="selectArea($event)"></app-area-selection-table>
+                  <app-area-selection-table [formGroup]="formGroup" [mode]="user" (selectAllAreas)="selectAllAreas($event)" (toggleArea)="toggleArea($event)"></app-area-selection-table>
                 </div>
               </form>
             </ng-template>
