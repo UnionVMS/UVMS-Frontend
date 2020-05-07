@@ -11,6 +11,8 @@ import { CommunicationChannel } from '../communication-channel.model';
 import { subscriptionFormInitialValues } from '../subscriptions-helper';
 import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
 import { distinctUntilChanged } from 'rxjs/operators';
+import { StatusAction } from '../subscriptions.reducer';
+
 
 
 
@@ -40,12 +42,13 @@ export class SubscriptionFormComponent implements OnInit, OnDestroy  {
   accessibilityItems = [];
   numberOfSelectedAreas: number;
   isCollapsed = true;
+  isChecked = false;
   private subscription: Subscription = new Subscription();
+  isCollapsed$: Observable<StatusAction> = this.store.select(fromRoot.toggleSubscriptionAreasSection);
 
 
   // Please do not change order of elements
   vesselIdentifiers = ['CFR', 'IRCS', 'ICCAT', 'EXT_MARK', 'UVI'];
-
 
   constructor(private fb: FormBuilder, private store: Store<fromRoot.State>,
               private featuresService: FeaturesService,
@@ -58,11 +61,14 @@ export class SubscriptionFormComponent implements OnInit, OnDestroy  {
     this.setTriggerTypes();
     this.setAccessibilityItems();
     this.subscription.add(this.organizations$.subscribe(organizations => this.organizations = organizations));
+    this.subscription.add(this.isCollapsed$.subscribe( collapsed => {
+      this.isCollapsed = collapsed.status;
+    }));
   }
 
   initForm() {
     this.subscriptionForm = this.fb.group({
-      name: ['', Validators.required ],
+      name: ['', Validators.required],
       description: [''],
       accessibility: [null],
       active: [false],
@@ -266,7 +272,7 @@ export class SubscriptionFormComponent implements OnInit, OnDestroy  {
     We need to transform values for back-end
   */
     const validVesselIdIndices = this.subscriptionForm.get('output.vesselIds').value.reduce( (acc, current, i) => {
-      if (current === true) {
+      if (current !== false) {
           acc.push(i);
       }
       return acc;
@@ -279,8 +285,8 @@ export class SubscriptionFormComponent implements OnInit, OnDestroy  {
     formValues.output.vesselIds = vesselIdsArray;
 
 
-    // Remove name property from each area
 
+    // Remove name property from each area
     formValues.areas.forEach(element => {
       delete element.name;
     });

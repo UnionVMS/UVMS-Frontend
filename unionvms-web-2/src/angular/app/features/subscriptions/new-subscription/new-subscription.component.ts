@@ -24,7 +24,6 @@ export class NewSubscriptionComponent implements OnInit {
   subscription: SubscriptionFormModel;
   alerts: Alert[];
 
-
   constructor(private featuresService: FeaturesService, private store: Store<fromRoot.State>) {}
 
   ngOnInit(): void {
@@ -36,10 +35,15 @@ export class NewSubscriptionComponent implements OnInit {
       const result = await this.featuresService.createSubscription($event);
       this.subscriptionFormComponent.subscriptionForm.reset(subscriptionFormInitialValues);
       this.subscriptionFormComponent.numberOfSelectedAreas = 0;
+      const emails = this.subscriptionFormComponent.subscriptionForm.get('output.emails') as FormArray;
+      emails.clear();
       const areas = this.subscriptionFormComponent.subscriptionForm.get('areas') as FormArray;
       areas.clear();
       // Inform all subscribed components to clear previous values for non-form fields
       this.store.dispatch(new SUB.ClearSubscriptionForm({
+        status: true
+      }));
+      this.store.dispatch(new SUB.ToggleSubscriptionAreasSection({
         status: true
       }));
 

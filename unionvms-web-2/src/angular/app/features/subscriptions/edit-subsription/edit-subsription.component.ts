@@ -30,6 +30,9 @@ export class EditSubsriptionComponent implements OnInit, AfterViewInit {
 
   constructor(private featuresService: FeaturesService, private activatedRoute: ActivatedRoute) { }
 
+  // TODO: Areas and Emails need to be 'refreshed' when showing and updating results. Create a function to handle refreshing
+  // and use it on ngAfterViewInit and on editSubscription since code is repeated
+
   ngOnInit(): void {
     this.currentSubscriptionId = +this.activatedRoute.snapshot.paramMap.get('id');
   }
@@ -38,26 +41,29 @@ export class EditSubsriptionComponent implements OnInit, AfterViewInit {
     const result = await this.featuresService.getSubscriptionDetails(this.currentSubscriptionId);
     this.currentSubscription = result.data;
     // Areas
-    const areaProperties = await this.getAreaProperties(result.data.areas);
+    if (this.currentSubscription.areas.length) {
+      const areaProperties = await this.getAreaProperties(result.data.areas);
 
-    const temp = [...this.currentSubscription.areas];
+      const temp = [...this.currentSubscription.areas];
 
-    temp.forEach(item => {
-      const match = areaProperties.find(element => element.gid === item.gid);
-      item.name = match.name;
-    })
+      temp.forEach(item => {
+        const match = areaProperties.find(element => element.gid === item.gid && element.areaType === item.areaType);
+        item.name = match.name;
+      });
 
-    const areasFormArray = this.subscriptionFormComponent.subscriptionForm.get('areas') as FormArray;
+      const areasFormArray = this.subscriptionFormComponent.subscriptionForm.get('areas') as FormArray;
 
-    temp.forEach(item => {
-      areasFormArray.push(new FormControl(item))
-    })
+      temp.forEach(item => {
+        areasFormArray.push(new FormControl(item));
+      });
+    }
 
     // Work with emails formArray
     const emailFormArray = this.subscriptionFormComponent.subscriptionForm.get('output.emails') as FormArray;
     this.currentSubscription.output.emails.forEach(item => {
       emailFormArray.push(new FormControl(item));
     });
+
 
     this.subscriptionFormComponent.subscriptionForm.patchValue(this.currentSubscription);
     // bind dates
@@ -84,12 +90,12 @@ export class EditSubsriptionComponent implements OnInit, AfterViewInit {
 
     if (vesselIdsRawValue.length) {
      this.vesselIdentifiers.forEach(item => {
-         const hasIdentifier = vesselIdsRawValue.includes(item);
-         transformedVesselIdsArray.push(hasIdentifier);
+        const hasIdentifier = vesselIdsRawValue.includes(item);
+        transformedVesselIdsArray.push(hasIdentifier);
      });
     } else {
-        // initialise array with false values, reactive form throws and error otherwise
-        transformedVesselIdsArray = [false, false, false, false, false];
+      // initialise array with false values, reactive form throws and error otherwise
+      transformedVesselIdsArray = [false, false, false, false, false];
     }
 
     this.subscriptionFormComponent.subscriptionForm.get('output.vesselIds').setValue(transformedVesselIdsArray);
@@ -99,16 +105,43 @@ export class EditSubsriptionComponent implements OnInit, AfterViewInit {
 
 
   async editSubscription($event) {
-    console.log('edit');
     try {
-      const result = await this.featuresService.editSubscription($event, this.currentSubscriptionId);
+      const result: any = await this.featuresService.editSubscription($event, this.currentSubscriptionId);
       // TODO: bind new values to form
+
+      // Show updated areas
+      const areasFormArray = this.subscriptionFormComponent.subscriptionForm.get('areas') as FormArray;
+      areasFormArray.clear();
+
+      if (result.data.areas.length) {
+        const areaProperties = await this.getAreaProperties(result.data.areas);
+        const temp = [...result.data.areas];
+
+        temp.forEach(item => {
+          const match = areaProperties.find(element => element.gid === item.gid && element.areaType === item.areaType);
+          item.name = match.name;
+        });
+        temp.forEach(item => {
+          areasFormArray.push(new FormControl(item));
+        });
+      }
+      // Show updated emails
+      const emailsFormArray = this.subscriptionFormComponent.subscriptionForm.get('output.emails') as FormArray;
+      emailsFormArray.clear();
+
+      if (result.data.output.emails.length) {
+        const tempEmails = [...result.data.output.emails];
+        tempEmails.forEach(item => {
+            emailsFormArray.push(new FormControl(item));
+        });
+      }
+
       this.alerts = [];
       this.alerts.push({
         type: 'success',
         title: 'Success',
         body: [{
-            message: 'Subscription Successfully updated!'
+          message: 'Subscription Successfully updated!'
         }]
       });
 

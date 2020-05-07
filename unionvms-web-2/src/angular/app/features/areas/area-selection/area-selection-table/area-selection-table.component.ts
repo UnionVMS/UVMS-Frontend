@@ -5,7 +5,7 @@ import { faCheck  } from '@fortawesome/free-solid-svg-icons';
 import { Subscription, Observable } from 'rxjs';
 import { Store } from '@ngrx/store';
 import * as fromRoot from 'app/app.reducer';
-import { ClearAction } from 'app/features/subscriptions/subscriptions.reducer';
+import { StatusAction } from 'app/features/subscriptions/subscriptions.reducer';
 import { FormGroup, FormArray } from '@angular/forms';
 
 @Component({
@@ -27,7 +27,7 @@ export class AreaSelectionTableComponent implements OnInit, OnDestroy {
   faCheck = faCheck;
   isSelected = true;
   private subscription: Subscription = new Subscription();
-  clearForm$: Observable<ClearAction> = this.store.select(fromRoot.clearSubscriptionForm);
+  clearForm$: Observable<StatusAction> = this.store.select(fromRoot.clearSubscriptionForm);
 
 
   constructor(private featuresService: FeaturesService, private store: Store<fromRoot.State>) { }
@@ -91,7 +91,7 @@ export class AreaSelectionTableComponent implements OnInit, OnDestroy {
   }
 
   getIsSelected(row) {
-    return this.areas.value.some(item => item.gid === row.gid);
+    return this.areas.value.some(item => item.gid === row.gid &&  item.areaType === row.areaType);
   }
 
 }
