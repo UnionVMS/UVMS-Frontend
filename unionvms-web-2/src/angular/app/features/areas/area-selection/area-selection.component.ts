@@ -6,7 +6,7 @@ import { Store } from '@ngrx/store';
 import * as fromRoot from 'app/app.reducer';
 import { Subscription, Observable } from 'rxjs';
 import { distinctUntilChanged } from 'rxjs/operators';
-import { ClearAction } from 'app/features/subscriptions/subscriptions.reducer';
+import { StatusAction } from 'app/features/subscriptions/subscriptions.reducer';
 
 @Component({
   selector: 'app-area-selection',
@@ -29,7 +29,7 @@ export class AreaSelectionComponent implements OnInit, OnDestroy  {
   selectedAreas = [];
   faTimes = faTimes;
   private subscription: Subscription = new Subscription();
-  clearForm$: Observable<ClearAction> = this.store.select(fromRoot.clearSubscriptionForm);
+  clearForm$: Observable<StatusAction> = this.store.select(fromRoot.clearSubscriptionForm);
 
   get areas() {
     return this.formGroup.get('areas') as FormArray;
@@ -95,7 +95,7 @@ export class AreaSelectionComponent implements OnInit, OnDestroy  {
     if (!this.areas.length) {
       this.areas.push(new FormControl(obj));
     } else {
-      const diff = this.areas.value.findIndex(element => element.gid === selectedArea.gid);
+      const diff = this.areas.value.findIndex(element => element.gid === selectedArea.gid && element.areaType === selectedArea.areaType);
       if (diff > -1) {
         this.areas.removeAt(diff);
       } else {
@@ -120,7 +120,7 @@ export class AreaSelectionComponent implements OnInit, OnDestroy  {
       // find objects from incoming array not in current array
       const diff = allAreas.filter(item => {
         return !this.areas.value.some(element => {
-          return item.gid === element.gid;
+          return item.gid === element.gid && item.areaType === element.areaType ;
         });
       });
       diff.forEach(item => {

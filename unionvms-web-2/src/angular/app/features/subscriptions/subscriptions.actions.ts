@@ -1,12 +1,13 @@
 import { Action } from '@ngrx/store';
 import { Organization } from './organization.model';
 import { Subscription } from './subscription.model';
-import { ClearAction } from './subscriptions.reducer';
+import { StatusAction } from './subscriptions.reducer';
 
 
 export const SET_ORGANIZATIONS = '[SUBSCRIPTIONS] Set Organizations';
 export const SET_SUBSCRIPTIONS_LIST = '[SUBSCRIPTIONS] Set Subscriptions List';
 export const CLEAR_SUBSCRIPTION_FORM = '[SUBSCRIPTIONS] Clear Subscription Form';
+export const TOGGLE_SUBSCRIPTION_FORM_AREAS = '[SUBSCRIPTIONS] Toggle Subscription Form Areas';
 
 
 
@@ -26,8 +27,14 @@ export class SetSubscriptionsList implements Action {
 export class ClearSubscriptionForm implements Action {
   readonly type = CLEAR_SUBSCRIPTION_FORM;
   // Explanation on why this is an object https://github.com/ngrx/platform/issues/208
-  constructor(public payload: ClearAction) {
+  constructor(public payload: StatusAction) {
+  }
+}
+export class ToggleSubscriptionAreasSection implements Action {
+  readonly type = TOGGLE_SUBSCRIPTION_FORM_AREAS;
+  // Explanation on why this is an object https://github.com/ngrx/platform/issues/208
+  constructor(public payload: StatusAction) {
   }
 }
 // create custom type for safety
-export type SUBActions = SetOrganizations | SetSubscriptionsList | ClearSubscriptionForm;
+export type SUBActions = SetOrganizations | SetSubscriptionsList | ClearSubscriptionForm | ToggleSubscriptionAreasSection;
