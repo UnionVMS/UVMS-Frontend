@@ -150,113 +150,115 @@
               <label class="custom-control-label" for="email">Email</label>
             </div>
           </legend>
-          <div class="form-group row">
-              <label for="emails" class="col-sm-2 col-form-label-sm">Emails</label>
-              <div class="col-sm-4">
-                <div class="email-list">
-                    <ng-template #content let-modal>
-                        <div class="modal-header">
-                          <h4 class="modal-title" id="modal-basic-title">Add E-mail(s)</h4>
-                          <button type="button" class="close" aria-label="Close" (click)="modal.dismiss('Cross click')">
-                            <span aria-hidden="true">&times;</span>
-                          </button>
-                        </div>
-                        <div class="modal-body">
-                          <form #emailForm="ngForm">
-                            <div class="form-group">
-                              <label for="email">Email addresses</label>
-                              <textarea rows="4" pattern="^[a-zA-Z0-9@;._]+$" ngModel name="emails" #emails="ngModel"  type="email" class="form-control" id="email" aria-describedby="email"></textarea>
-                              <small id="emailHelp" class="form-text text-muted">Insert multiple emails using ;</small>
-                              <span class="validation-error" *ngIf="emails.invalid && (emails.dirty || emails.touched)">
-                                Please insert only valid characters
-                              </span>
-                            </div>
-                          </form>
-                        </div>
-                        <div class="modal-footer">
-                          <button type="button" class="btn btn-outline-dark" (click)="modal.close(emailForm.value)" [disabled]="!emailForm.valid">Save</button>
-                        </div>
-                    </ng-template>
-                  <fa-icon class="email-plus-icon" (click)="addEmail(content)" [icon]="faPlusSquare"></fa-icon>
-                  <div id="emails-list" formArrayName="emails" *ngFor="let item of emails.value; let i = index;">
-                    <label id="emails_{{i}}">{{item}}</label>
-                    <fa-icon class="email-trash-icon" (click)="removeEmail(i)" [icon]="faTrash"></fa-icon>
-                  </div>
-                </div>
-                <div class="form-group row">
-                  <div class="custom-control custom-checkbox custom-control-inline">
-                    <input class="custom-control-input" type="checkbox" disabled id="inlineCheckbox1" value="option">
-                    <label class="custom-control-label" for="inlineCheckbox1">Include link to trip overview</label>
-                  </div>
-              </div>
-              </div>
-              <div formGroupName="emailConfiguration" class="col-sm-6">
-                  <div class="form-group row">
-                      <div class="offset-md-4 col-sm-6">
-                          <button type="button" class="btn btn-primary" disabled>
-                            <fa-icon [icon]="faRetweet"></fa-icon>
-                          </button>
-                           Reset Default
-                      </div>
-                  </div>
-                  <div class="form-group row email-body">
-                      <label for="body" class="col-sm-4 col-form-label-sm">Body</label>
-                      <div class="col-sm-8">
-                          <textarea formControlName="body" rows="4" class="form-control" id="body"></textarea>
-                          <div class="validation-error" *ngIf="body.errors?.required">
-                            Field is required
-                          </div>
-                      </div>
-                  </div>
-              </div>
-          </div>
-          <div formGroupName="emailConfiguration">
-              <div class="form-group row">
-                <label for="attachments" class="col-sm-2 col-form-label-sm">Attachments</label>
+          <div [ngbCollapse]="!hasEmail.value" >
+            <div class="form-group row">
+                <label for="emails" class="col-sm-2 col-form-label-sm">Emails</label>
                 <div class="col-sm-4">
+                  <div class="email-list">
+                      <ng-template #content let-modal>
+                          <div class="modal-header">
+                            <h4 class="modal-title" id="modal-basic-title">Add E-mail(s)</h4>
+                            <button type="button" class="close" aria-label="Close" (click)="modal.dismiss('Cross click')">
+                              <span aria-hidden="true">&times;</span>
+                            </button>
+                          </div>
+                          <div class="modal-body">
+                            <form #emailForm="ngForm">
+                              <div class="form-group">
+                                <label for="email">Email addresses</label>
+                                <textarea rows="4" pattern="^[a-zA-Z0-9@;._]+$" ngModel name="emails" #emails="ngModel"  type="email" class="form-control" id="email" aria-describedby="email"></textarea>
+                                <small id="emailHelp" class="form-text text-muted">Insert multiple emails using ;</small>
+                                <span class="validation-error" *ngIf="emails.invalid && (emails.dirty || emails.touched)">
+                                  Please insert only valid characters
+                                </span>
+                              </div>
+                            </form>
+                          </div>
+                          <div class="modal-footer">
+                            <button type="button" class="btn btn-outline-dark" (click)="modal.close(emailForm.value)" [disabled]="!emailForm.valid">Save</button>
+                          </div>
+                      </ng-template>
+                    <fa-icon class="email-plus-icon" (click)="addEmail(content)" [icon]="faPlusSquare"></fa-icon>
+                    <div id="emails-list" formArrayName="emails" *ngFor="let item of emails.value; let i = index;">
+                      <label id="emails_{{i}}">{{item}}</label>
+                      <fa-icon class="email-trash-icon" (click)="removeEmail(i)" [icon]="faTrash"></fa-icon>
+                    </div>
+                  </div>
+                  <div class="form-group row">
                     <div class="custom-control custom-checkbox custom-control-inline">
-                        <input class="custom-control-input" type="checkbox" id="pdf" formControlName="isPdf" value="option">
-                        <label class="custom-control-label" for="pdf">PDF</label>
+                      <input class="custom-control-input" type="checkbox" disabled id="inlineCheckbox1" value="option">
+                      <label class="custom-control-label" for="inlineCheckbox1">Include link to trip overview</label>
                     </div>
                 </div>
-                <div class="offset-sm-2 col-sm-2">
-                    <div class="custom-control custom-checkbox custom-control-inline">
-                        <input class="custom-control-input" type="checkbox" formControlName="isXml" id="xml" value="option">
-                        <label class="custom-control-label" for="xml">XML</label>
+                </div>
+                <div formGroupName="emailConfiguration" class="col-sm-6">
+                    <div class="form-group row">
+                        <div class="offset-md-4 col-sm-6">
+                            <button type="button" class="btn btn-primary" disabled>
+                              <fa-icon [icon]="faRetweet"></fa-icon>
+                            </button>
+                             Reset Default
+                        </div>
+                    </div>
+                    <div class="form-group row email-body">
+                        <label for="body" class="col-sm-4 col-form-label-sm">Body</label>
+                        <div class="col-sm-8">
+                            <textarea formControlName="body" rows="4" class="form-control" id="body"></textarea>
+                            <div class="validation-error" *ngIf="body.errors?.required">
+                              Field is required
+                            </div>
+                        </div>
                     </div>
                 </div>
             </div>
-            <div class="form-group row">
-                <div class="offset-sm-2 col-sm-4">
-                    <select class="form-control" id="template" disabled>
-                        <option value="">Template</option>
-                    </select>
-                </div>
-                <div class="offset-sm-2 col-sm-4">
-                    <select class="form-control" id="fluxmessage" disabled>
-                        <option value="">Flux Message</option>
-                    </select>
-                </div>
-            </div>
-            <div class="form-group row">
-                <div class="offset-sm-2 col-sm-4">
-                    <div class="custom-control custom-checkbox custom-control-inline">
-                        <input class="custom-control-input" type="checkbox" formControlName="hasAttachments" id="zipAttachments" value="option">
-                        <label class="custom-control-label" for="zipAttachments">Zip Attachments</label>
-                    </div>
-                </div>
-                <div class="offset-sm-2 col-sm-4">
-                    <select class="form-control" id="dataflow" disabled>
-                        <option value="">Dataflow</option>
-                    </select>
-                </div>
-            </div>
-            <div class="form-group row">
-                <div class="offset-sm-2 col-sm-4">
-                    <input class="form-control password-input" type="text"
-                      formControlName="password" id="password" placeholder="add password optional" (blur)="onPasswordChange()">
-                    <fa-icon class="password-icon" [icon]="faEye"></fa-icon>
-                </div>
+            <div formGroupName="emailConfiguration">
+                <div class="form-group row">
+                  <label for="attachments" class="col-sm-2 col-form-label-sm">Attachments</label>
+                  <div class="col-sm-4">
+                      <div class="custom-control custom-checkbox custom-control-inline">
+                          <input class="custom-control-input" type="checkbox" id="pdf" formControlName="isPdf" value="option">
+                          <label class="custom-control-label" for="pdf">PDF</label>
+                      </div>
+                  </div>
+                  <div class="offset-sm-2 col-sm-2">
+                      <div class="custom-control custom-checkbox custom-control-inline">
+                          <input class="custom-control-input" type="checkbox" formControlName="isXml" id="xml" value="option">
+                          <label class="custom-control-label" for="xml">XML</label>
+                      </div>
+                  </div>
+              </div>
+              <div class="form-group row">
+                  <div class="offset-sm-2 col-sm-4">
+                      <select class="form-control" id="template" disabled>
+                          <option value="">Template</option>
+                      </select>
+                  </div>
+                  <div class="offset-sm-2 col-sm-4">
+                      <select class="form-control" id="fluxmessage" disabled>
+                          <option value="">Flux Message</option>
+                      </select>
+                  </div>
+              </div>
+              <div class="form-group row">
+                  <div class="offset-sm-2 col-sm-4">
+                      <div class="custom-control custom-checkbox custom-control-inline">
+                          <input class="custom-control-input" type="checkbox" formControlName="hasAttachments" id="zipAttachments" value="option">
+                          <label class="custom-control-label" for="zipAttachments">Zip Attachments</label>
+                      </div>
+                  </div>
+                  <div class="offset-sm-2 col-sm-4">
+                      <select class="form-control" id="dataflow" disabled>
+                          <option value="">Dataflow</option>
+                      </select>
+                  </div>
+              </div>
+              <div class="form-group row">
+                  <div class="offset-sm-2 col-sm-4">
+                      <input class="form-control password-input" [type]="fieldType ? 'text' : 'password'"
+                        formControlName="password" id="password" placeholder="add password optional" (blur)="onPasswordChange()">
+                      <fa-icon class="password-icon" (click)="togglePassword()" [icon]="faEye"></fa-icon>
+                  </div>
+              </div>
             </div>
           </div>
         </fieldset>
@@ -357,7 +359,6 @@
   <fieldset class="border p-2">
     <legend  class="w-auto">Start Conditions</legend>
     <div class="form-group row">
-      <!-- <pre>isChecked :{{isCollapsed}}</pre> -->
       <div class="col-sm-4">
         <div class="custom-control custom-checkbox custom-control-inline">
             <input class="custom-control-input" type="checkbox" id="hasAreas" [checked]="!isCollapsed" (change)="isCollapsed = !isCollapsed">

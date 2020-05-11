@@ -17,6 +17,7 @@ import { StatusAction } from '../subscriptions.reducer';
 
 
 
+
 @Component({
   selector: 'app-subscription-form',
   templateUrl: './subscription-form.component.html',
@@ -43,6 +44,7 @@ export class SubscriptionFormComponent implements OnInit, OnDestroy  {
   numberOfSelectedAreas: number;
   isCollapsed = true;
   isChecked = false;
+  fieldType;
   private subscription: Subscription = new Subscription();
   isCollapsed$: Observable<StatusAction> = this.store.select(fromRoot.toggleSubscriptionAreasSection);
 
@@ -113,6 +115,9 @@ export class SubscriptionFormComponent implements OnInit, OnDestroy  {
 
   get emails() {
     return this.subscriptionForm.get('output.emails') as FormArray;
+  }
+  get hasEmail() {
+    return this.subscriptionForm.get('output.hasEmail');
   }
 
   get name() {
@@ -469,6 +474,10 @@ export class SubscriptionFormComponent implements OnInit, OnDestroy  {
 
   onSelectedAreasChange(numberOfSelectedAreas) {
     this.numberOfSelectedAreas = numberOfSelectedAreas;
+  }
+
+  togglePassword() {
+    this.fieldType = !this.fieldType;
   }
 
   ngOnDestroy() {
