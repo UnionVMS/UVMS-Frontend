@@ -1,24 +1,32 @@
-import { Component, OnInit, Input } from '@angular/core';
+import { Component, OnInit, Input, SimpleChanges, OnChanges } from '@angular/core';
 import { FeaturesService } from 'app/features/features.service';
 import {Map, View} from 'ol';
 import TileLayer from 'ol/layer/Tile';
 import OSM from 'ol/source/OSM';
+import BingMaps from 'ol/source/BingMaps';
+import Layer from 'ol/layer/Layer';
 import * as olProj from 'ol/proj';
 import * as olControl from 'ol/control';
 import * as olInteraction from 'ol/interaction';
+import TileWMS from 'ol/source/TileWMS';
 // import * as olEvents from 'ol/events';
+import LayerSwitcher from 'ol-layerswitcher';
+import { SystemArea } from './system-area.model';
+import { environment } from '../../../../../environments/environment';
 
 @Component({
   selector: 'app-area-selection-map',
   templateUrl: './area-selection-map.component.html',
   styleUrls: ['./area-selection-map.component.scss']
 })
-export class AreaSelectionMapComponent implements OnInit {
+export class AreaSelectionMapComponent implements OnInit, OnChanges {
 
-  @Input() systemAreas?: [];
-  @Input() userAreas?: [];
+  @Input() systemAreasTypes?: SystemArea[];
+  @Input() userAreaType?: [];
+  @Input() selectedArea;
   mapBasicConfig;
   map;
+  timeout;
 
 
 
@@ -30,20 +38,22 @@ export class AreaSelectionMapComponent implements OnInit {
     this.getMapConfig();
   }
 
+  ngOnChanges(changes: SimpleChanges) {
+    this.removeLayerByType(changes.selectedArea.previousValue);
+    this.lazyLoadWMSLayer();
+  }
+
   async getMapConfig() {
-      try {
-        const result: any = await this.featureService.getMapBasicConfig();
-        this.mapBasicConfig = result.data.map;
-        this.initMap();
-
-
-      } catch (err) {
-
-      }
+    try {
+      const result: any = await this.featureService.getMapBasicConfig();
+      this.mapBasicConfig = result.data.map;
+      this.initMap();
+    } catch (err) {
+    }
   }
 
   initMap() {
-    let controls = [];
+    const controls = [];
     controls.push(new olControl.Attribution({
         collapsible: false,
         collapsed: false,
@@ -57,20 +67,24 @@ export class AreaSelectionMapComponent implements OnInit {
 
     this.map = new Map({
       target: 'map',
-      // controls,
-      interactions,
-      layers: [
-        new TileLayer({
-          source: new OSM()
-        })
-      ]
+      interactions
     });
     const mapView = this.createMapView(this.mapBasicConfig.projection);
 
     this.map.setView(new View(mapView));
+    this.addBaseLayers();
+    const layers = this.map.getLayers();
+    if (layers.getLength() > 1) {
+        const switcher = new LayerSwitcher({
+            controlClass: 'left-side-up'
+        });
+        this.map.addControl(switcher);
+    }
 
 
-
+    this.map.on('singleclick', (evt) => {
+     console.log('clicked on map', evt);
+  });
   }
 
   setProjection(proj) {
@@ -78,12 +92,12 @@ export class AreaSelectionMapComponent implements OnInit {
 
     let worldExtent = [-180, -89.99, 180, 89.99];
     if (proj.worldExtent) {
-      let tempExt = proj.worldExtent.split(';');
+      const tempExt = proj.worldExtent.split(';');
       worldExtent = [parseFloat(tempExt[0]), parseFloat(tempExt[1]), parseFloat(tempExt[2]), parseFloat(tempExt[3])];
     }
 
-    let ext = proj.extent.split(';');
-    let projection = new olProj.Projection({
+    const ext = proj.extent.split(';');
+    const projection = new olProj.Projection({
         code: 'EPSG:' + proj.epsgCode,
         units: proj.units,
         axisOrientation: proj.axis,
@@ -108,7 +122,6 @@ export class AreaSelectionMapComponent implements OnInit {
     };
 
     return viewObj;
-
   }
 
 
@@ -129,15 +142,298 @@ export class AreaSelectionMapComponent implements OnInit {
 
   createPanInteractions() {
     // TODO: optimize
-      let interactions = [];
-      interactions.push(new olInteraction.DragPan());
-      interactions.push(new olInteraction.KeyboardPan());
-      return interactions;
+    const interactions = [];
+    interactions.push(new olInteraction.DragPan());
+    interactions.push(new olInteraction.KeyboardPan());
+    return interactions;
   }
 
   addBaseLayers() {
-    
+    debugger;
+    console.log(this.mapBasicConfig);
+    this.mapBasicConfig.layers.baseLayers.forEach(layerConfig => {
+      switch (layerConfig.type) {
+        case 'OSM':
+            this.addOSM(layerConfig);
+            break;
+        case 'WMS':
+            this.addWMS(layerConfig, true);
+            break;
+        case 'BING':
+            this.addBing(layerConfig);
+            break;
+      }
+    });
   }
+
+  addOSM(layerConfig) {
+    const layer = this.defineOsm(layerConfig);
+    layer.set('switchertype', 'base'); // Necessary for the layerswitcher control
+    this.map.addLayer(layer);
+  }
+
+  addWMS(layerConfig, isBaseLayer = false) {
+    debugger;
+    let config;
+    if (isBaseLayer) {
+        config = this.getBaseLayerConfig(layerConfig);
+    } else {
+        config = this.getGenericLayerConfig(layerConfig);
+    }
+
+    const layer = this.defineWms(config);
+
+    if (isBaseLayer) {
+        layer.set('switchertype', 'base'); // Necessary for the layerswitcher control
+    }
+
+    this.map.addLayer(layer);
+  }
+
+  addBing(layerConfig) {
+    const layer = this.defineBing(layerConfig);
+    layer.set('switchertype', 'base'); // Necessary for the layerswitcher control
+    this.map.addLayer(layer);
+  }
+
+  defineOsm(config) {
+    const layer = new TileLayer({
+        type: config.type ? config.type : 'osm',
+        title: config.title ? config.title : null,
+        isBaseLayer: config.isBaseLayer ? config.isBaseLayer : null,
+        source: new OSM()
+    });
+
+    return layer;
+  }
+
+  defineBing(config) {
+    const layer = new TileLayer({
+      type: config.type,
+      title: config.title,
+      isBaseLayer: config.isBaseLayer,
+      // preload: Infinity,
+      source: new BingMaps({
+          key: config.apiKey,
+          imagerySet: config.layerGeoName,
+          maxZoom: 19
+      })
+  });
+
+    return layer;
+  }
+
+  defineWms(config) {
+    debugger;
+    let source, layer, attribution, isCrossOrigin,
+            isInternal = false;
+
+    if (config.attribution) {
+      attribution = new TileWMS.Attribution({
+          html: config.attribution
+      });
+    }
+
+    if (config.serverType && config.serverType === 'geoserver') {
+      isInternal = true;
+    }
+
+        // if (!compareUrlWithLocation(config.url) && isInternal){
+        //     isCrossOrigin = 'anonymous';
+        // }
+
+    source = new TileWMS({
+        attributions: attribution ? [attribution] : undefined,
+        url: environment.geoserverURL,
+        serverType: isInternal ? config.serverType : undefined,
+        params: config.params,
+        crossOrigin: 'anonymous'
+    });
+
+    if (isInternal) {
+      source.setTileLoadFunction(this.customTileLoaderFunction);
+    }
+
+    layer = new TileLayer({
+      title: config.title,
+      isInternal,
+      type: config.type ? config.type : 'WMS',
+      longAttribution: config.longAttribution ? config.longAttribution : undefined,
+      isBaseLayer: config.isBaseLayer ? config.isBaseLayer : undefined,
+      source
+    });
+
+    return layer;
+
+  }
+
+  customTileLoaderFunction(imageTile, src) {
+    let xhr = new XMLHttpRequest();
+    xhr.open('GET', src, true);
+    xhr.withCredentials = true;
+    xhr.setRequestHeader('Authorization', localStorage.getItem('token'));
+    xhr.responseType = 'arraybuffer';
+    xhr.onload = function() {
+        let img = imageTile.getImage();
+        if (typeof window.btoa === 'function') {
+            if (this.status === 200) {
+                let uInt8Array = new Uint8Array(this.response);
+                let i = uInt8Array.length;
+                let binaryString = new Array(i);
+                while (i--) {
+                    binaryString[i] = String.fromCharCode(uInt8Array[i]);
+                }
+                let data = binaryString.join('');
+                let type = xhr.getResponseHeader('content-type');
+                if (type.indexOf('image') === 0) {
+                    img.src = 'data:' + type + ';base64,' + window.btoa(data);
+                }
+            }
+        } else {
+            img.src = src;
+        }
+    };
+    xhr.onerror = () => {
+        let img = imageTile.getImage();
+        img.src = '';
+    };
+    xhr.send();
+
+  }
+
+
+
+
+  getBaseLayerConfig(def) {
+    debugger;
+    const mapExtent = this.map.getView().getProjection().getExtent();
+    let style = null;
+    if (def.styles) {
+
+      def.styles.forEach((sldName, styleName) => {
+        if (styleName === 'labelGeom') {
+          style = sldName;
+        } else if (styleName === 'geom' && style === null) {
+          style = sldName;
+        }
+      });
+    }
+
+    let serverType;
+    if (def.serverType) {
+      serverType = def.serverType;
+    }
+
+    let attribution;
+    if (def.shortCopyright) {
+      attribution = def.shortCopyright;
+    }
+
+    const config = {
+        title: def.title,
+        type: def.type,
+        isBaseLayer: def.isBaseLayer,
+        url: environment.geoserverURL,
+        serverType,
+        attribution,
+        params: {
+          time_: (new Date()).getTime(),
+          LAYERS: def.layerGeoName,
+          TILED: true,
+          TILESORIGIN: mapExtent[0] + ',' + mapExtent[1],
+          STYLES: style
+        }
+    };
+
+    return config;
+
+  }
+
+  getGenericLayerConfig(def) {
+    const mapExtent = this.map.getView().getProjection().getExtent();
+
+    let attribution;
+    if (def.shortCopyright) {
+        attribution = def.shortCopyright;
+    }
+
+    const config = {
+        type: def.typeName,
+        url: environment.geoserverURL,
+        serverType: 'geoserver',
+        attribtution: attribution,
+        params: {
+          time_: (new Date()).getTime(),
+          LAYERS: def.geoName,
+          TILED: true,
+          TILESORIGIN: mapExtent[0] + ',' + mapExtent[1],
+          STYLES: def.style,
+          cql_filter: def.cql ? def.cql : null
+        }
+    };
+
+    return config;
+
+  }
+
+
+  getFullDefForItem(type) {
+    let item;
+
+    for (let entry of this.systemAreasTypes) {
+      if (entry.typeName === type) {
+        item = entry;
+      }
+    }
+    return item;
+  }
+
+  lazyLoadWMSLayer() {
+    debugger;
+    let item;
+    if (this.selectedArea.typeName === 'USERAREA') {
+      item = this.userAreaType;
+    } else {
+      item = this.getFullDefForItem(this.selectedArea);
+    }
+
+
+    debugger;
+
+    this.timeout = setTimeout(() => { this.addWMS(item); }, 100);
+
+
+    //this.addWMS(item);
+
+    //let layer = this.getLayerByType(this.selectedArea, this.map);
+    // if (layer){
+    //    this.addWMS(item);
+    // }
+
+  }
+
+  // getLayerByType(type, map) {
+  //   // setInterval()
+  //   var layers = map.getLayers().getArray();
+  //   let layer = layers.filter(function(layer) {
+  //     return layer.get('type') === type;
+  //   });
+
+  //   return layer[0];
+
+  // }
+
+  removeLayerByType(layerType) {
+    if (this.map) {
+        const mapLayers = this.map.getLayers();
+        if (mapLayers.getLength() > 1) {
+            const layer = mapLayers.getArray().find(item => item.get('type') === layerType);
+            this.map.removeLayer(layer);
+        }
+    }
+  }
+
+
 
 
 

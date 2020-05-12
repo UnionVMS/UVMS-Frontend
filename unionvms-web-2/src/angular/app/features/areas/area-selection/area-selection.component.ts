@@ -18,8 +18,8 @@ export class AreaSelectionComponent implements OnInit, OnDestroy  {
   @Output() selectedAreasChange = new EventEmitter<any>();
   @Input() formArrayName;
   @Input() formGroup: FormGroup;
-  systemLayersList;
-  userLayersList;
+  systemLayersTypeList;
+  userLayerType;
   system = 'SYSTEM';
   user = 'USER';
   areaType = '';
@@ -64,7 +64,7 @@ export class AreaSelectionComponent implements OnInit, OnDestroy  {
     try {
       const result: any = await this.featuresService.getSystemAreaLayers();
       const {data: layersList} = result;
-      this.systemLayersList = layersList;
+      this.systemLayersTypeList = layersList;
     } catch (err) {
 
     }
@@ -73,8 +73,8 @@ export class AreaSelectionComponent implements OnInit, OnDestroy  {
   async initUserLayers() {
     try {
       const result: any = await this.featuresService.getUserAreaLayers();
-      const {data: layersList} = result;
-      this.userLayersList = layersList;
+      const {data: userLayerType} = result;
+      this.userLayerType = userLayerType;
     } catch (err) {
 
     }

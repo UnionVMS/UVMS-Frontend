@@ -46,8 +46,6 @@ export class FeaturesService {
     return this.http.get<SubscriptionFormModel>(`${environment.baseURL}${FEATURES_ENDPOINTS.getSubscriptionDetails}/${id}`).toPromise();
   }
 
-
-
   checkNameOnCreate(name) {
     return this.http.get(`${environment.baseURL}${FEATURES_ENDPOINTS.checkSubscriptionName}?name=${name}`).toPromise();
   }
@@ -67,7 +65,77 @@ export class FeaturesService {
   }
 
   getMapBasicConfig() {
-    return this.http.get(`${environment.baseURL}${FEATURES_ENDPOINTS.getBasicMapConfig}`).toPromise();
+    // return this.http.get(`${environment.baseURL}${FEATURES_ENDPOINTS.getBasicMapConfig}`).toPromise();
+    return of({
+        "data":{
+           "map":{
+              "projection":{
+                 "epsgCode":3857,
+                 "units":"m",
+                 "global":true,
+                 "extent":"-20026376.39;-20048966.10;20026376.39;20048966.10",
+                 "axis":"enu",
+                 "projDef":"+proj=merc +a=6378137 +b=6378137 +lat_ts=0.0 +lon_0=0.0 +x_0=0.0 +y_0=0 +k=1.0 +units=m +nadgrids=@null +wktext  +no_defs",
+                 "worldExtent":"-180;-89.99;180;89.99"
+              },
+              "control":[
+                 {
+                    "type":"zoom"
+                 },
+                 {
+                    "type":"drag"
+                 },
+                 {
+                    "type":"scale",
+                    "units":"nautical"
+                 },
+                 {
+                    "type":"mousecoords",
+                    "epsgCode":4326,
+                    "format":"dd"
+                 },
+                 {
+                    "type":"history"
+                 }
+              ],
+              "layers":{
+                 "baseLayers":[
+                    {
+                       "type":"OSM",
+                       "title":"OpenStreetMap",
+                       "isBaseLayer":true,
+                       "typeName":"OSM"
+                    },
+                    {
+                       "type":"BING",
+                       "title":"bing_roads",
+                       "isBaseLayer":true,
+                       "layerGeoName":"Road",
+                       "apiKey":"ssss",
+                       "typeName":"BINGROAD"
+                    },
+                    {
+                       "type":"BING",
+                       "title":"bing_aerial",
+                       "isBaseLayer":true,
+                       "layerGeoName":"Aerial",
+                       "apiKey":"ssss",
+                       "typeName":"BINGAREAL"
+                    },
+                    {
+                       "type":"BING",
+                       "title":"bing_aerial_labels",
+                       "isBaseLayer":true,
+                       "layerGeoName":"AerialWithLabels",
+                       "apiKey":"ssss",
+                       "typeName":"BINGAREALLABELS"
+                    }
+                 ]
+              }
+           }
+        },
+        "code":200
+     }).toPromise();
   }
 
   getUserAreasByFilter(filter) {
