@@ -10,8 +10,8 @@
                 <div class="row">
                   <div class="col-md-5">
                     <select class="form-control" id="mapLayer" [(ngModel)]="areaType" name="areaType">
-                      <option value="" >Area type</option>
-                      <option *ngFor="let item of systemLayersList">{{item.typeName}}</option>
+                      <option value="">Area type</option>
+                      <option *ngFor="let item of systemLayersTypeList">{{item.typeName}}</option>
                     </select>
                   </div>
                 </div>
@@ -25,7 +25,7 @@
                     <label class="form-check-label" for="systemSelectionRadio2">Search by area properties</label>
                   </div>
                   <div *ngIf="systemSelectionCategory === 'systemFromMap'">
-                    <app-area-selection-map [systemAreas]= "systemLayersList"></app-area-selection-map>
+                    <app-area-selection-map [selectedArea]="areaType" [systemAreasTypes]= "systemLayersTypeList"></app-area-selection-map>
                   </div>
                   <div *ngIf="systemSelectionCategory === 'systemByProperty'">
                     <app-area-selection-table [formGroup]="formGroup" [mode]="system" [areaType]="areaType" (selectAllAreas)="selectAllAreas($event)" (toggleArea)="toggleArea($event)" ></app-area-selection-table>
@@ -48,7 +48,7 @@
                   <label class="form-check-label" for="userSelectionCheckbox2">Search by area properties</label>
                 </div>
                 <div *ngIf="userSelectionCategory === 'userFromMap'">
-                  <app-area-selection-map [userAreas]= "userLayersList"></app-area-selection-map>
+                  <app-area-selection-map [selectedArea]="userLayerType" [userAreaType]= "userLayerType"></app-area-selection-map>
                 </div>
                 <div *ngIf="userSelectionCategory === 'userByProperty'">
                   <app-area-selection-table [formGroup]="formGroup" [mode]="user" (selectAllAreas)="selectAllAreas($event)" (toggleArea)="toggleArea($event)"></app-area-selection-table>
