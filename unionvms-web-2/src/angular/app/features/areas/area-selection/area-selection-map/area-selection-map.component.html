@@ -1,6 +1,11 @@
 
 
 
+show map {{showMap}}
+<div [hidden]="!showMap" id="map">test{{map}}</div>
+<div [hidden]="showMap">
+  <button type="button" class="btn btn-sm btn-primary" (click)="onShowMap()">BACK TO MAP</button>
+  TABLE
+  <!--maybe a new component here? app-area-selection-map-table -->
 
-<div id="map"></div>
-<div>selectedArea: {{selectedArea}} </div>
+</div>

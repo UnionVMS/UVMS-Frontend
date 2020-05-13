@@ -1,4 +1,4 @@
-import { Component, OnInit, Input, SimpleChanges, OnChanges } from '@angular/core';
+import { Component, OnInit, Input, SimpleChanges, OnChanges, Output, EventEmitter, OnDestroy } from '@angular/core';
 import { FeaturesService } from 'app/features/features.service';
 import {Map, View} from 'ol';
 import TileLayer from 'ol/layer/Tile';
@@ -19,14 +19,17 @@ import { environment } from '../../../../../environments/environment';
   templateUrl: './area-selection-map.component.html',
   styleUrls: ['./area-selection-map.component.scss']
 })
-export class AreaSelectionMapComponent implements OnInit, OnChanges {
+export class AreaSelectionMapComponent implements OnInit, OnChanges, OnDestroy {
 
   @Input() systemAreasTypes?: SystemArea[];
   @Input() userAreaType?: [];
-  @Input() selectedArea;
+  @Input() selectedAreaType;
+  @Output() selectMapArea = new EventEmitter<any>();
   mapBasicConfig;
   map;
   timeout;
+  showMap = true;
+  multipleAreasFromMap: [];
 
 
 
@@ -39,7 +42,7 @@ export class AreaSelectionMapComponent implements OnInit, OnChanges {
   }
 
   ngOnChanges(changes: SimpleChanges) {
-    this.removeLayerByType(changes.selectedArea.previousValue);
+    this.removeLayerByType(changes.selectedAreaType.previousValue);
     this.lazyLoadWMSLayer();
   }
 
@@ -83,7 +86,19 @@ export class AreaSelectionMapComponent implements OnInit, OnChanges {
 
 
     this.map.on('singleclick', (evt) => {
-     console.log('clicked on map', evt);
+      debugger;
+      console.log('clicked on map', evt);
+      const projection = this.map.getView().getProjection().getCode();
+      debugger;
+
+      let requestData = {
+         areaType: typeof(this.selectedAreaType) === 'string' ? this.selectedAreaType : this.selectedAreaType.typeName,
+         isGeom: false,
+         longitude: evt.coordinate[0],
+         latitude: evt.coordinate[1],
+         crs: projection.split(':')[1]
+      };
+      this.selectAreaFromMap(requestData);
   });
   }
 
@@ -379,7 +394,6 @@ export class AreaSelectionMapComponent implements OnInit, OnChanges {
 
   getFullDefForItem(type) {
     let item;
-
     for (let entry of this.systemAreasTypes) {
       if (entry.typeName === type) {
         item = entry;
@@ -391,38 +405,17 @@ export class AreaSelectionMapComponent implements OnInit, OnChanges {
   lazyLoadWMSLayer() {
     debugger;
     let item;
-    if (this.selectedArea.typeName === 'USERAREA') {
+    if (this.selectedAreaType.typeName === 'USERAREA') {
       item = this.userAreaType;
     } else {
-      item = this.getFullDefForItem(this.selectedArea);
+      item = this.getFullDefForItem(this.selectedAreaType);
     }
 
 
     debugger;
 
     this.timeout = setTimeout(() => { this.addWMS(item); }, 100);
-
-
-    //this.addWMS(item);
-
-    //let layer = this.getLayerByType(this.selectedArea, this.map);
-    // if (layer){
-    //    this.addWMS(item);
-    // }
-
   }
-
-  // getLayerByType(type, map) {
-  //   // setInterval()
-  //   var layers = map.getLayers().getArray();
-  //   let layer = layers.filter(function(layer) {
-  //     return layer.get('type') === type;
-  //   });
-
-  //   return layer[0];
-
-  // }
-
   removeLayerByType(layerType) {
     if (this.map) {
         const mapLayers = this.map.getLayers();
@@ -431,6 +424,50 @@ export class AreaSelectionMapComponent implements OnInit, OnChanges {
             this.map.removeLayer(layer);
         }
     }
+  }
+
+  async selectAreaFromMap(area) {
+    debugger;
+    try {
+      const result: any = await this.featureService.getAreaDetails(area);
+      debugger;
+      let numberOfResults = result.data.length;
+
+      if (numberOfResults === 0) {
+        // no results
+        this.selectMapArea.emit('No selectable area found');
+
+      } else if (numberOfResults === 1) {
+        // just one result
+        this.selectMapArea.emit({
+          gid: result.data[0].gid,
+          name: result.data[0].name,
+          areaType: typeof(this.selectedAreaType) === 'string' ? this.selectedAreaType : this.selectedAreaType.typeName
+        });
+
+      } else {
+        // multiple results
+        this.selectMapArea.emit(result.data);
+        this.showMap = false;
+        this.multipleAreasFromMap = result.data;
+
+      }
+
+
+
+    } catch (err) {
+
+    }
+    // get details from back end and send to selected areas list
+
+  }
+
+  onShowMap() {
+    this.showMap = true;
+
+  }
+
+  ngOnDestroy() {
   }
 
 

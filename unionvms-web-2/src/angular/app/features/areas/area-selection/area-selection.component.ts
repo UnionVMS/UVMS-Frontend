@@ -8,6 +8,12 @@ import { Subscription, Observable } from 'rxjs';
 import { distinctUntilChanged } from 'rxjs/operators';
 import { StatusAction } from 'app/features/subscriptions/subscriptions.reducer';
 
+
+interface Alert {
+    type: string;
+    message: string;
+  }
+
 @Component({
   selector: 'app-area-selection',
   templateUrl: './area-selection.component.html',
@@ -27,14 +33,16 @@ export class AreaSelectionComponent implements OnInit, OnDestroy  {
   systemSelectionCategory = 'systemFromMap';
   userSelectionCategory = 'userFromMap';
   selectedAreas = [];
+  selectedMapAreas: number;
   faTimes = faTimes;
+  staticAlertClosed = false;
+  alerts: Alert[] = [];
   private subscription: Subscription = new Subscription();
   clearForm$: Observable<StatusAction> = this.store.select(fromRoot.clearSubscriptionForm);
 
   get areas() {
     return this.formGroup.get('areas') as FormArray;
   }
-
 
   constructor(private featuresService: FeaturesService, public controlContainer: ControlContainer,
               private store: Store<fromRoot.State> ) { }
@@ -143,6 +151,42 @@ export class AreaSelectionComponent implements OnInit, OnDestroy  {
 
   clearAllAreas() {
     this.areas.clear();
+  }
+
+  selectMapArea(selectedArea) {
+    debugger;
+    if (typeof selectedArea === 'string') {
+      this.staticAlertClosed = false;
+      this.alerts = [];
+      this.alerts.push({
+        type: 'warning',
+        message: 'There is no selectable area on the specified location.'
+      });
+      this.closeAlert();
+      return;
+    }
+    if (selectedArea.length === 1) {
+      const diff = this.areas.value.findIndex(element => element.gid === selectedArea.gid && element.areaType === selectedArea.areaType);
+      if (diff > -1) {
+        this.staticAlertClosed = false;
+        this.alerts = [];
+        this.alerts.push({
+          type: 'warning',
+          message: 'This area is already added to you current selection'
+        });
+        this.closeAlert();
+      } else {
+        this.areas.push(new FormControl(selectedArea));
+      }
+    } else {
+
+    }
+
+  }
+
+  closeAlert() {
+    setTimeout(() => this.staticAlertClosed = true, 5000);
+    this.staticAlertClosed = false;
   }
 
   ngOnDestroy() {

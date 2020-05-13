@@ -3,6 +3,6 @@ export const environment = {
   baseURL: '/unionvms',
   // configurable route to old application
   oldBaseURL: '/unionvms',
-  // TODO: production URL
+  // TODO: is this the production URL?
   geoserverURL: 'http://localhost:8080/geoserver/wms'
 };
