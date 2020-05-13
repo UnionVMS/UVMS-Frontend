@@ -347,6 +347,16 @@
           Field is required
         </div>
       </div>
+      <div class="col-sm-1 mx-0 px-0">
+        <select class="form-control" id="frequencyUnit" formControlName="frequencyUnit">
+          <option *ngFor="let item of frequencyUnits" value={{item.value}}>
+            {{item.key}}
+          </option>
+        </select>
+        <div class="validation-error" *ngIf="frequencyUnit.errors?.required">
+          Field is required
+        </div>
+      </div>
       <label for="at" class="label-content-adjusted">at</label>
       <div class="col-sm-1">
         <input type="text" class="form-control" formControlName="timeExpression" id="at" placeholder="hh:mm">
