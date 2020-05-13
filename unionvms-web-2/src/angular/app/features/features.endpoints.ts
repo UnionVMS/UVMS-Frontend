@@ -11,5 +11,6 @@ export const FEATURES_ENDPOINTS = {
   getUserAreaLayers: '/spatial/rest/userarea/layers',
   getSystemAreasByFilter: '/spatial/rest/area/byfilter',
   getUserAreasByFilter: '/spatial/rest/userarea/byfilter',
-  getAreaProperties: '/spatial/rest/area/properties'
+  getAreaProperties: '/spatial/rest/area/properties',
+  getAreaDetails: '/spatial/rest/area/details'
 };

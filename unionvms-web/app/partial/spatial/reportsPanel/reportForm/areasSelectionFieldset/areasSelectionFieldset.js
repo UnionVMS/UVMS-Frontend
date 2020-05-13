@@ -279,6 +279,7 @@ angular.module('unionvmsWeb').controller('AreasselectionfieldsetCtrl',function($
      * @param {Object} data - Object to send in the request to the Spatial REST API
      */
     $scope.selectAreaFromMap = function(data){
+        debugger;
         loadingStatus.isLoading('AreaSelectionFieldset',true);
         spatialRestService.getAreaDetails(data).then(function(response){
             var area;
@@ -391,6 +392,7 @@ angular.module('unionvmsWeb').controller('AreasselectionfieldsetCtrl',function($
      * @returns {Array} An array with area model objects
      */
     var convertAreasResponse = function(data, areaType){
+        debugger;
         var areas = [];
 
         angular.forEach(data, function(rec) {
@@ -605,6 +607,7 @@ angular.module('unionvmsWeb').controller('AreasselectionfieldsetCtrl',function($
         }
 
         map.on('singleclick', function(evt){
+            debugger;
             if ($scope.selectionType[$scope.selectedTab] === 'map' && (($scope.isTabSelected('SYSTEM') && angular.isDefined($scope.sysAreaType)) || ($scope.isTabSelected('USER') && angular.isDefined($scope.userAreaType)))){
                 var areaType = $scope.isTabSelected('SYSTEM') ? $scope.sysAreaType : $scope.userAreaType.typeName;
                 $scope.clickResults = 0;

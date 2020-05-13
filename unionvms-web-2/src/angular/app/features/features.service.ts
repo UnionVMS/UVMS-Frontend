@@ -147,6 +147,9 @@ export class FeaturesService {
 
   getAreaProperties(areas) {
     return this.http.post(`${environment.baseURL}${FEATURES_ENDPOINTS.getAreaProperties}`, areas).toPromise();
+  }
 
+  getAreaDetails(data) {
+    return this.http.post(`${environment.baseURL}${FEATURES_ENDPOINTS.getAreaDetails}`, data).toPromise();
   }
 }
