@@ -39,6 +39,7 @@ export class SubscriptionFormComponent implements OnInit, OnDestroy  {
   organizations$: Observable<Organization[]> = this.store.select(fromRoot.getOrganizations);
   organizations: Organization[];
   historyUnits = [];
+  frequencyUnits = [];
   triggerTypes = [];
   accessibilityItems = [];
   numberOfSelectedAreas: number;
@@ -60,6 +61,7 @@ export class SubscriptionFormComponent implements OnInit, OnDestroy  {
     this.initForm();
     this.initMessageTypes();
     this.setHistoryUnits();
+    this.setFrequencyUnits();
     this.setTriggerTypes();
     this.setAccessibilityItems();
     this.subscription.add(this.organizations$.subscribe(organizations => this.organizations = organizations));
@@ -102,6 +104,7 @@ export class SubscriptionFormComponent implements OnInit, OnDestroy  {
       execution: this.fb.group({
         triggerType: ['SCHEDULER'],
         frequency: [0, Validators.required],
+        frequencyUnit: [{value: 'DAYS'}],
         immediate: [true],
         timeExpression: ['06:00', Validators.required]
       }),
@@ -166,6 +169,10 @@ export class SubscriptionFormComponent implements OnInit, OnDestroy  {
 
   get frequency() {
     return this.subscriptionForm.get('execution.frequency');
+  }
+
+  get frequencyUnit() {
+    return this.subscriptionForm.get('execution.frequencyUnit');
   }
 
   get timeExpression() {
@@ -347,6 +354,14 @@ export class SubscriptionFormComponent implements OnInit, OnDestroy  {
           { key: 'Weeks', value: 'WEEKS'},
           { key: 'Months', value: 'MONTHS'}
       ];
+  }
+
+  setFrequencyUnits() {
+    this.frequencyUnits = [
+        { key: 'Days', value: 'DAYS'},
+        { key: 'Weeks', value: 'WEEKS'},
+        { key: 'Months', value: 'MONTHS'}
+    ];
   }
 
   setTriggerTypes() {
