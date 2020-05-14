@@ -18,6 +18,8 @@ export class AreaSelectionTableComponent implements OnInit, OnDestroy {
   @Input() mode;
   @Input() areaType?;
   @Input() formGroup: FormGroup;
+  @Input() isMapTable?;
+  @Input() resultsFromMap?: [];
   @Output() toggleArea = new EventEmitter<any>();
   @Output() selectAllAreas = new EventEmitter<any>();
   results: [];
@@ -38,6 +40,9 @@ export class AreaSelectionTableComponent implements OnInit, OnDestroy {
         this.results = [];
       }
     }));
+    if (this.isMapTable) {
+      this.loadingIndicator = false;
+    }
   }
 
   get areas() {
@@ -72,6 +77,7 @@ export class AreaSelectionTableComponent implements OnInit, OnDestroy {
   }
 
   onSelectArea(row) {
+    debugger;
     this.toggleArea.emit(row);
   }
 
@@ -80,8 +86,10 @@ export class AreaSelectionTableComponent implements OnInit, OnDestroy {
   }
 
   addAllAreas() {
-    if (this.results) {
-      this.selectAllAreas.emit(this.results);
+    debugger;
+    const data = this.results || this.resultsFromMap;
+    if (data) {
+      this.selectAllAreas.emit(data);
     }
   }
 

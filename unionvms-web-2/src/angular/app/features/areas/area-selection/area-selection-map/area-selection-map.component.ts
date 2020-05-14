@@ -13,6 +13,7 @@ import TileWMS from 'ol/source/TileWMS';
 import LayerSwitcher from 'ol-layerswitcher';
 import { SystemArea } from './system-area.model';
 import { environment } from '../../../../../environments/environment';
+import { FormGroup, FormArray, FormControl } from '@angular/forms';
 
 @Component({
   selector: 'app-area-selection-map',
@@ -25,15 +26,20 @@ export class AreaSelectionMapComponent implements OnInit, OnChanges, OnDestroy {
   @Input() userAreaType?: [];
   @Input() selectedAreaType;
   @Output() selectMapArea = new EventEmitter<any>();
+  @Input() formGroup?: FormGroup;
   mapBasicConfig;
   map;
   timeout;
   showMap = true;
-  multipleAreasFromMap: [];
+  multipleAreasFromMap: any;
+  isMapTable = true;
+  system = 'SYSTEM';
 
 
 
-
+  get areas() {
+    return this.formGroup.get('areas') as FormArray;
+  }
 
   constructor(private featureService: FeaturesService) { }
 
@@ -432,11 +438,9 @@ export class AreaSelectionMapComponent implements OnInit, OnChanges, OnDestroy {
       const result: any = await this.featureService.getAreaDetails(area);
       debugger;
       let numberOfResults = result.data.length;
-
       if (numberOfResults === 0) {
         // no results
-        this.selectMapArea.emit('No selectable area found');
-
+        this.selectMapArea.emit({message: 'No selectable area found'});
       } else if (numberOfResults === 1) {
         // just one result
         this.selectMapArea.emit({
@@ -444,26 +448,76 @@ export class AreaSelectionMapComponent implements OnInit, OnChanges, OnDestroy {
           name: result.data[0].name,
           areaType: typeof(this.selectedAreaType) === 'string' ? this.selectedAreaType : this.selectedAreaType.typeName
         });
-
       } else {
         // multiple results
-        this.selectMapArea.emit(result.data);
+        const temp = [...result.data];
+        temp.forEach(item => {
+          item.areaType = typeof(this.selectedAreaType) === 'string' ? this.selectedAreaType : this.selectedAreaType.typeName;
+        })
+        this.selectMapArea.emit(temp);
         this.showMap = false;
-        this.multipleAreasFromMap = result.data;
+        this.multipleAreasFromMap = temp;
 
       }
-
-
-
     } catch (err) {
 
     }
-    // get details from back end and send to selected areas list
-
   }
 
   onShowMap() {
     this.showMap = true;
+
+  }
+
+  selectAllAreas(allAreas) {
+    debugger;
+     // list is empty, add all
+    if (!this.areas.length) {
+      allAreas.forEach(item => {
+        const obj = {
+          gid: item.gid,
+          areaType: item.areaType,
+          name: item.name
+        };
+        this.areas.push(new FormControl(obj));
+      });
+    } else {
+      // find objects from incoming array not in current array
+      const diff = allAreas.filter(item => {
+        return !this.areas.value.some(element => {
+          return item.gid === element.gid && item.areaType === element.areaType ;
+        });
+      });
+      diff.forEach(item => {
+        const obj = {
+          gid: item.gid,
+          areaType: item.areaType,
+          name: item.name
+        };
+        this.areas.push(new FormControl(obj));
+      });
+    }
+
+  }
+
+  toggleArea(selectedArea) {
+    const obj = {
+      gid: selectedArea.gid,
+      areaType: selectedArea.areaType,
+      name: selectedArea.name
+    };
+  // list is empty = add selected area
+    if (!this.areas.length) {
+    this.areas.push(new FormControl(obj));
+  } else {
+    const diff = this.areas.value.findIndex(element => element.gid === selectedArea.gid && element.areaType === selectedArea.areaType);
+    if (diff > -1) {
+      this.areas.removeAt(diff);
+    } else {
+      this.areas.push(new FormControl(obj));
+    }
+  }
+
 
   }
 
