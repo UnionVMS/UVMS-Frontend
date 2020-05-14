@@ -28,22 +28,19 @@
                     <label class="form-check-label" for="systemSelectionRadio2">Search by area properties</label>
                   </div>
                   <div *ngIf="systemSelectionCategory === 'systemFromMap'">
-                    <app-area-selection-map [selectedAreaType]="areaType" [systemAreasTypes]= "systemLayersTypeList" (selectMapArea)="selectMapArea($event)"></app-area-selection-map>
+                    <app-area-selection-map [formGroup]="formGroup" [selectedAreaType]="areaType" [systemAreasTypes]= "systemLayersTypeList" (selectMapArea)="selectMapArea($event)"></app-area-selection-map>
                   </div>
                   <div *ngIf="systemSelectionCategory === 'systemByProperty'">
                     <app-area-selection-table [formGroup]="formGroup" [mode]="system" [areaType]="areaType" (selectAllAreas)="selectAllAreas($event)" (toggleArea)="toggleArea($event)" ></app-area-selection-table>
                   </div>
                 </div>
               </form>
-
             </ng-template>
             </li>
             <li ngbNavItem>
             <a ngbNavLink>USER AREAS</a>
             <ng-template ngbNavContent>
               <form>
-                alerts {{alerts | json}}
-                staticAlertClosed {{staticAlertClosed}}
                  <p *ngFor="let alert of alerts">
                    <ngb-alert *ngIf="!staticAlertClosed" [type]="alert.type" (close)="staticAlertClosed = true" >{{ alert.message }}</ngb-alert>
                  </p>
@@ -87,10 +84,7 @@
         </div>
       </div>
     </div>
-
   </div>
-
-
 </ng-container>
 
 

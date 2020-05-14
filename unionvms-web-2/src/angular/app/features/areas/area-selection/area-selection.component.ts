@@ -114,6 +114,7 @@ export class AreaSelectionComponent implements OnInit, OnDestroy  {
   }
 
   selectAllAreas(allAreas) {
+    debugger;
     // list is empty, add all
     if (!this.areas.length) {
       allAreas.forEach(item => {
@@ -139,10 +140,7 @@ export class AreaSelectionComponent implements OnInit, OnDestroy  {
         };
         this.areas.push(new FormControl(obj));
       });
-
-
     }
-
   }
 
   removeArea(index) {
@@ -155,7 +153,7 @@ export class AreaSelectionComponent implements OnInit, OnDestroy  {
 
   selectMapArea(selectedArea) {
     debugger;
-    if (typeof selectedArea === 'string') {
+    if (!Array.isArray(selectedArea) && selectedArea.hasOwnProperty('message')) {
       this.staticAlertClosed = false;
       this.alerts = [];
       this.alerts.push({
@@ -164,8 +162,7 @@ export class AreaSelectionComponent implements OnInit, OnDestroy  {
       });
       this.closeAlert();
       return;
-    }
-    if (selectedArea.length === 1) {
+    } else if (!Array.isArray(selectedArea)) {
       const diff = this.areas.value.findIndex(element => element.gid === selectedArea.gid && element.areaType === selectedArea.areaType);
       if (diff > -1) {
         this.staticAlertClosed = false;
@@ -178,10 +175,10 @@ export class AreaSelectionComponent implements OnInit, OnDestroy  {
       } else {
         this.areas.push(new FormControl(selectedArea));
       }
-    } else {
+    } else if (Array.isArray(selectedArea) ) {
+      debugger;
 
     }
-
   }
 
   closeAlert() {

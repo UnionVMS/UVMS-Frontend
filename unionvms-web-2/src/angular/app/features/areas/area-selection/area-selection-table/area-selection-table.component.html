@@ -1,5 +1,5 @@
 <form #AreaPropertySearchForm="ngForm" (ngSubmit)="onSubmit(AreaPropertySearchForm.value)">
-  <div class="form-row">
+  <div class="form-row" *ngIf="!isMapTable">
     <div class="col-auto">
       <input type="text" class="form-control mb-2" id="filter" required name="filter" [(ngModel)]="filter" placeholder="Search text">
     </div>
@@ -11,10 +11,11 @@
     </div>
   </div>
 </form>
-<div *ngIf="results?.length" class="results-table">
+
+<div *ngIf="results?.length || resultsFromMap?.length" class="results-table" [ngClass]="{'position-override': !isMapTable}">
     <ngx-datatable
     class="bootstrap"
-    [rows]="results"
+    [rows]="results || resultsFromMap"
     [loadingIndicator]="loadingIndicator"
     [columnMode]="ColumnMode.force"
     [headerHeight]="40"

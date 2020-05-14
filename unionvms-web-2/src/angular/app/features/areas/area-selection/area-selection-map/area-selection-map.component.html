@@ -1,11 +1,10 @@
 
 
 
-show map {{showMap}}
-<div [hidden]="!showMap" id="map">test{{map}}</div>
-<div [hidden]="showMap">
+
+<div [hidden]="!showMap" id="map"></div>
+<div [hidden]="showMap" class="map-table">
   <button type="button" class="btn btn-sm btn-primary" (click)="onShowMap()">BACK TO MAP</button>
-  TABLE
-  <!--maybe a new component here? app-area-selection-map-table -->
+  <app-area-selection-table [isMapTable]="isMapTable" [resultsFromMap]="multipleAreasFromMap" [formGroup]="formGroup" [mode]='system' (selectAllAreas)="selectAllAreas($event)" (toggleArea)="toggleArea($event)" ></app-area-selection-table>
 
 </div>
