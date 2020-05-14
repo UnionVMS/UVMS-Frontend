@@ -523,12 +523,4 @@ export class AreaSelectionMapComponent implements OnInit, OnChanges, OnDestroy {
 
   ngOnDestroy() {
   }
-
-
-
-
-
-
-
-
 }

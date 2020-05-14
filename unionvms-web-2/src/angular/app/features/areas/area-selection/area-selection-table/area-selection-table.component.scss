@@ -11,5 +11,18 @@
   width: 60%;
   height: 80%;
   position: absolute;
+}
 
+.show-preview {
+  margin-right: 5px;
+}
+
+.tooltip-class {
+  background-color: white !important;;
+  color: black !important;
+}
+
+#preview-map {
+  height: 200px;
+  width: 200px;
 }
