@@ -96,7 +96,6 @@ angular.module('unionvmsWeb').factory('genericMapService',function($localStorage
      * @returns {ol.layer} The OL layer
      */
     var getLayerByType = function(type, map){
-        debugger;
         var layers = map.getLayers().getArray();
         var layer = layers.filter(function(layer){
             return layer.get('type') === type;
@@ -366,7 +365,6 @@ angular.module('unionvmsWeb').factory('genericMapService',function($localStorage
      * @returns {Object} The final layer configuration object
      */
     var getBaseLayerConfig = function(def, map){
-        debugger;
         var mapExtent = map.getView().getProjection().getExtent();
         var style = null;
         if (angular.isDefined(def.styles)){
@@ -418,7 +416,6 @@ angular.module('unionvmsWeb').factory('genericMapService',function($localStorage
      * @returns {Object} The final layer configuration object
      */
     var getGenericLayerConfig = function(def, map){
-        debugger;
         var mapExtent = map.getView().getProjection().getExtent();
 
         var attribution;

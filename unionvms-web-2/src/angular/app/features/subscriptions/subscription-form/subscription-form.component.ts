@@ -25,6 +25,7 @@ import { StatusAction } from '../subscriptions.reducer';
 })
 export class SubscriptionFormComponent implements OnInit, OnDestroy  {
   @Input() alerts;
+  @Input() mode;
   @Output() save = new EventEmitter<any>();
   @Output() checkName = new EventEmitter<any>();
   endpointItems: EndPoint[] = [];

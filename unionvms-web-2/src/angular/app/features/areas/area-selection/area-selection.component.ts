@@ -114,7 +114,6 @@ export class AreaSelectionComponent implements OnInit, OnDestroy  {
   }
 
   selectAllAreas(allAreas) {
-    debugger;
     // list is empty, add all
     if (!this.areas.length) {
       allAreas.forEach(item => {
@@ -152,7 +151,6 @@ export class AreaSelectionComponent implements OnInit, OnDestroy  {
   }
 
   selectMapArea(selectedArea) {
-    debugger;
     if (!Array.isArray(selectedArea) && selectedArea.hasOwnProperty('message')) {
       this.staticAlertClosed = false;
       this.alerts = [];
@@ -175,9 +173,6 @@ export class AreaSelectionComponent implements OnInit, OnDestroy  {
       } else {
         this.areas.push(new FormControl(selectedArea));
       }
-    } else if (Array.isArray(selectedArea) ) {
-      debugger;
-
     }
   }
 

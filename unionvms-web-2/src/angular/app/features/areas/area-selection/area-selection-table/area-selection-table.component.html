@@ -52,25 +52,12 @@
         <button type="button" class="btn btn-success" (click)="addAllAreas()">Add all</button>
       </ng-template>
       <ng-template let-row="row" let-value="value" ngx-datatable-cell-template>
-        <button class="btn btn-sm btn-outline-primary show-preview" tooltipClass="tooltip-class" placement="right" triggers="click:blur"  container="body" [ngbTooltip]="tipContent" (click)="onShowPreviewData()">
-          <fa-icon [icon]="faEye"></fa-icon>
-        </button>
         <button class="btn btn-sm btn-outline-primary" [ngClass]="{'selected': getIsSelected(row) }" (click)="onSelectArea(row)">
           <fa-icon [icon]="faCheck"></fa-icon>
         </button>
       </ng-template>
-      <!-- <ng-template>
-        <div id="preview-map">
-
-        </div>
-      </ng-template> -->
     </ngx-datatable-column>
 
 </ngx-datatable>
-
-<div id="preview-map"  #tipContent>
-
-</div>
-
 </div>
 

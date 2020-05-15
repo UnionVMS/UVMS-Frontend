@@ -8,6 +8,7 @@
   </ngb-alert>
 </p>
 <form [formGroup]="subscriptionForm" (ngSubmit)="onSubmit($event)" novalidate>
+  <span> <b>{{mode}} Subscription</b></span>
   <div class="form-row justify-content-end buttons-row">
     <button type="button" class="btn btn-outline-secondary mr-1" (click)="reset()">Cancel</button>
     <button type="submit" class="btn btn-primary" [disabled]="!subscriptionForm.valid" >Save</button>
