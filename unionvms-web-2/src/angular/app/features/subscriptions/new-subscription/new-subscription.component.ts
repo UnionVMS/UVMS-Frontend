@@ -23,6 +23,7 @@ export class NewSubscriptionComponent implements OnInit {
   private subscriptionFormComponent: SubscriptionFormComponent;
   subscription: SubscriptionFormModel;
   alerts: Alert[];
+  mode = 'New';
 
   constructor(private featuresService: FeaturesService, private store: Store<fromRoot.State>) {}
 

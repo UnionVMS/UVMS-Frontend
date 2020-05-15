@@ -43,7 +43,7 @@ copy of the GNU General Public License along with the IFDM Suite. If not, see <h
  */
 angular.module('unionvmsWeb').controller('AreasselectionfieldsetCtrl',function($scope, /*$modalInstance,*/ $interval, $timeout, locale, mapReference, loadingStatus, genericMapService, /*selectedAreas,*/ spatialRestService, Area, userService, projectionService){
     mapReference.areaSelection = {};
-    debugger;
+
 
     /**
      * Initializing function that is called when the modal is opened
@@ -139,7 +139,6 @@ angular.module('unionvmsWeb').controller('AreasselectionfieldsetCtrl',function($
     var setUserAreaType = function() {
         if(!angular.isDefined($scope.userAreaType)) {
             spatialRestService.getUserAreaLayer().then(function(response){
-                debugger;
                 $scope.userAreaType = response.data;
                 $scope.userAreaType.cql = "(user_name = '" + userService.getUserName() + "' OR scopes ilike '%#" + userService.getCurrentContext().scope.scopeName +"#%')";
                 if ($scope.selectionType[$scope.selectedTab] === 'map'){
@@ -233,7 +232,6 @@ angular.module('unionvmsWeb').controller('AreasselectionfieldsetCtrl',function($
      * @returns {Object} The source definition object of the area type
      */
     $scope.getFullDefForItem = function(type){
-        debugger
         var item;
         for (var i = 0; i < $scope.systemAreaTypes.length; i++){
             if ($scope.systemAreaTypes[i].typeName === type){
@@ -279,7 +277,6 @@ angular.module('unionvmsWeb').controller('AreasselectionfieldsetCtrl',function($
      * @param {Object} data - Object to send in the request to the Spatial REST API
      */
     $scope.selectAreaFromMap = function(data){
-        debugger;
         loadingStatus.isLoading('AreaSelectionFieldset',true);
         spatialRestService.getAreaDetails(data).then(function(response){
             var area;
@@ -392,7 +389,6 @@ angular.module('unionvmsWeb').controller('AreasselectionfieldsetCtrl',function($
      * @returns {Array} An array with area model objects
      */
     var convertAreasResponse = function(data, areaType){
-        debugger;
         var areas = [];
 
         angular.forEach(data, function(rec) {
@@ -607,7 +603,6 @@ angular.module('unionvmsWeb').controller('AreasselectionfieldsetCtrl',function($
         }
 
         map.on('singleclick', function(evt){
-            debugger;
             if ($scope.selectionType[$scope.selectedTab] === 'map' && (($scope.isTabSelected('SYSTEM') && angular.isDefined($scope.sysAreaType)) || ($scope.isTabSelected('USER') && angular.isDefined($scope.userAreaType)))){
                 var areaType = $scope.isTabSelected('SYSTEM') ? $scope.sysAreaType : $scope.userAreaType.typeName;
                 $scope.clickResults = 0;
@@ -640,7 +635,6 @@ angular.module('unionvmsWeb').controller('AreasselectionfieldsetCtrl',function($
             $scope.addOSM();
         } else {
             angular.forEach(genericMapService.mapBasicConfigs.layers.baseLayers, function(layerConf) {
-                debugger;
                 switch (layerConf.type) {
                     case 'OSM':
                         $scope.addOSM(layerConf);
@@ -701,7 +695,6 @@ angular.module('unionvmsWeb').controller('AreasselectionfieldsetCtrl',function($
      * @param {Boolean} isBaselayer - True if layer is a base layer
      */
     $scope.addWMS = function(def, isBaseLayer){
-        debugger;
         var config;
         if (isBaseLayer){
             config = genericMapService.getBaseLayerConfig(def, mapReference.areaSelection.map);
@@ -736,7 +729,6 @@ angular.module('unionvmsWeb').controller('AreasselectionfieldsetCtrl',function($
      * @private
      */
     var lazyLoadWMSLayer = function(){
-        debugger;
         var item, layerType;
         if (angular.isDefined($scope.sysAreaType) && $scope.isTabSelected('SYSTEM')){
             item = $scope.getFullDefForItem($scope.sysAreaType);
@@ -753,7 +745,6 @@ angular.module('unionvmsWeb').controller('AreasselectionfieldsetCtrl',function($
             if (!angular.isDefined($scope.addWMSInterval)){
                 $scope.addWMSInterval = $interval(function(){
                     if (angular.isDefined(mapReference.areaSelection.map)){
-                        debugger;
                         var layer = genericMapService.getLayerByType(layerType, mapReference.areaSelection.map);
                         if (!angular.isDefined(layer)){
                             $scope.addWMS(item);

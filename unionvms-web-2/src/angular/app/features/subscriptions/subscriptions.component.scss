@@ -1,9 +1,17 @@
 
-.subscriptions-content {
-  margin-top: 10px;
+.subscriptions-nav-item {
+  background-color: #ecf0f1;
+  border: 1px solid #ced4da;
+  margin-right: 4px;
 }
 
+.nav-pills .nav-link.active {
+  background: #fff;
+  color: black;
+  box-shadow: inset 0 -4px 0 #089fd7;
+  border-radius: 0;
+}
 
-.nested-nav-link {
-  border-radius: 25px;
+.card {
+  border-top: 0;
 }

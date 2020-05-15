@@ -7,7 +7,7 @@
             <a ngbNavLink>SYSTEM AREAS</a>
             <ng-template ngbNavContent>
               <form class="system-section" #systemAreaMapSelectionForm="ngForm">
-                <p *ngFor="let alert of alerts">
+                <p class="map-alert" *ngFor="let alert of alerts">
                   <ngb-alert *ngIf="!staticAlertClosed" [type]="alert.type" (close)="staticAlertClosed = true" >{{ alert.message }}</ngb-alert>
                 </p>
                 <div class="row">
@@ -41,7 +41,7 @@
             <a ngbNavLink>USER AREAS</a>
             <ng-template ngbNavContent>
               <form>
-                 <p *ngFor="let alert of alerts">
+                 <p class="map-alert" *ngFor="let alert of alerts">
                    <ngb-alert *ngIf="!staticAlertClosed" [type]="alert.type" (close)="staticAlertClosed = true" >{{ alert.message }}</ngb-alert>
                  </p>
                 <div class="form-check form-check-inline">
@@ -53,7 +53,7 @@
                   <label class="form-check-label" for="userSelectionCheckbox2">Search by area properties</label>
                 </div>
                 <div *ngIf="userSelectionCategory === 'userFromMap'">
-                  <app-area-selection-map [selectedAreaType]="userLayerType" [userAreaType]= "userLayerType" (selectMapArea)="selectMapArea($event)"></app-area-selection-map>
+                  <app-area-selection-map [formGroup]="formGroup" [selectedAreaType]="userLayerType" [userAreaType]= "userLayerType" (selectMapArea)="selectMapArea($event)"></app-area-selection-map>
                 </div>
                 <div *ngIf="userSelectionCategory === 'userByProperty'">
                   <app-area-selection-table [formGroup]="formGroup" [mode]="user" (selectAllAreas)="selectAllAreas($event)" (toggleArea)="toggleArea($event)"></app-area-selection-table>

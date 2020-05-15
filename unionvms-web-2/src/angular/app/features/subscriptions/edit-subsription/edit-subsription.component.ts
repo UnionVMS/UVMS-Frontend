@@ -26,6 +26,7 @@ export class EditSubsriptionComponent implements OnInit, AfterViewInit {
   alerts: Alert[];
   // Please do not change order of elements
   vesselIdentifiers = ['CFR', 'IRCS', 'ICCAT', 'EXT_MARK', 'UVI'];
+  mode = 'Edit';
 
 
   constructor(private featuresService: FeaturesService, private activatedRoute: ActivatedRoute) { }

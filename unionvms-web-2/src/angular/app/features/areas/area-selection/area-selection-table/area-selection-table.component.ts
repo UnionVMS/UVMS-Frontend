@@ -1,16 +1,12 @@
 import { Component, OnInit, Input, Output, EventEmitter, OnDestroy, OnChanges } from '@angular/core';
 import { FeaturesService } from 'app/features/features.service';
 import { ColumnMode } from '@swimlane/ngx-datatable';
-import { faCheck, faEye  } from '@fortawesome/free-solid-svg-icons';
+import { faCheck } from '@fortawesome/free-solid-svg-icons';
 import { Subscription, Observable } from 'rxjs';
 import { Store } from '@ngrx/store';
 import * as fromRoot from 'app/app.reducer';
 import { StatusAction } from 'app/features/subscriptions/subscriptions.reducer';
 import { FormGroup, FormArray } from '@angular/forms';
-import {Map, View} from 'ol';
-import TileLayer from 'ol/layer/Tile';
-import OSM from 'ol/source/OSM';
-import * as olProj from 'ol/proj';
 
 @Component({
   selector: 'app-area-selection-table',
@@ -31,7 +27,6 @@ export class AreaSelectionTableComponent implements OnInit, OnDestroy {
   ColumnMode = ColumnMode;
   loadingIndicator = true;
   faCheck = faCheck;
-  faEye = faEye;
   isSelected = true;
   previewMap;
   private subscription: Subscription = new Subscription();
@@ -83,7 +78,6 @@ export class AreaSelectionTableComponent implements OnInit, OnDestroy {
   }
 
   onSelectArea(row) {
-    debugger;
     this.toggleArea.emit(row);
   }
 
@@ -92,7 +86,6 @@ export class AreaSelectionTableComponent implements OnInit, OnDestroy {
   }
 
   addAllAreas() {
-    debugger;
     const data = this.results || this.resultsFromMap;
     if (data) {
       this.selectAllAreas.emit(data);
@@ -107,22 +100,4 @@ export class AreaSelectionTableComponent implements OnInit, OnDestroy {
   getIsSelected(row) {
     return this.areas.value.some(item => item.gid === row.gid &&  item.areaType === row.areaType);
   }
-
-  onShowPreviewData() {
-    debugger;
-    this.previewMap = new Map({
-      target: 'preview-map',
-      layers: [
-        new TileLayer({
-          source: new OSM()
-        })
-      ],
-      view: new View({
-        center: olProj.fromLonLat([37.41, 8.82]),
-        zoom: 4
-      })
-    });
-
-  }
-
 }
