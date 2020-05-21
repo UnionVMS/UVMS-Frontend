@@ -105,7 +105,7 @@ export class SubscriptionFormComponent implements OnInit, OnDestroy  {
       execution: this.fb.group({
         triggerType: ['SCHEDULER'],
         frequency: [0, Validators.required],
-        frequencyUnit: [{value: 'DAYS'}],
+        frequencyUnit: ['DAYS'],
         immediate: [true],
         timeExpression: ['06:00', Validators.required]
       }),
