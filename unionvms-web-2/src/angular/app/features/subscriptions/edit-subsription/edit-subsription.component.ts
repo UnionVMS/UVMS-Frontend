@@ -59,6 +59,18 @@ export class EditSubsriptionComponent implements OnInit, AfterViewInit {
       });
     }
 
+    // Assets
+
+    if (this.currentSubscription.assets.length) {
+      const assetsFormArray = this.subscriptionFormComponent.subscriptionForm.get('assets') as FormArray;
+
+      const tempAssets = [...this.currentSubscription.assets];
+      tempAssets.forEach(item => {
+        assetsFormArray.push(new FormControl(item));
+      });
+
+    }
+
     // Work with emails formArray
     const emailFormArray = this.subscriptionFormComponent.subscriptionForm.get('output.emails') as FormArray;
     this.currentSubscription.output.emails.forEach(item => {

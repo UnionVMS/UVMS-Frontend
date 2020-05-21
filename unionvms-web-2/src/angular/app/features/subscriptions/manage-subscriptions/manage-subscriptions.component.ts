@@ -11,7 +11,6 @@ import { CommunicationChannel } from '../communication-channel.model';
 import * as SUB from '../subscriptions.actions';
 import { ColumnMode } from '@swimlane/ngx-datatable';
 import { faCheck, faTimes, faCalendar, faEdit } from '@fortawesome/free-solid-svg-icons';
-import {NgbDateParserFormatter} from '@ng-bootstrap/ng-bootstrap';
 import { Router } from '@angular/router';
 
 
@@ -47,7 +46,7 @@ export class ManageSubscriptionsComponent implements OnInit, OnDestroy {
 
 
   constructor(private store: Store<fromRoot.State>, private featuresService: FeaturesService, private fb: FormBuilder,
-              private ngbDateParserFormatter: NgbDateParserFormatter, private router: Router) {
+              private router: Router) {
     this.sizeList = [
       '10',
       '20',
@@ -164,14 +163,14 @@ export class ManageSubscriptionsComponent implements OnInit, OnDestroy {
     // tslint:disable-next-line: no-string-literal
     const startDateFormValue = this.filterSubscriptionsForm.controls['startDate'].value;
     if (startDateFormValue) {
-      const tempStartDate = this.ngbDateParserFormatter.format(startDateFormValue);
+      const tempStartDate = startDateFormValue.split('-').reverse().join('-');
       const startDate = `${tempStartDate}T00:00:00+01:00`;
       this.searchObj.criteria.startDate = startDate;
     }
     // tslint:disable-next-line: no-string-literal
     const endDateFormValue = this.filterSubscriptionsForm.controls['endDate'].value;
     if (endDateFormValue) {
-      const tempEndDate = this.ngbDateParserFormatter.format(endDateFormValue);
+      const tempEndDate = endDateFormValue.split('-').reverse().join('-');
       const endDate = `${tempEndDate}T00:00:00+01:00`;
       this.searchObj.criteria.endDate = endDate;
     }

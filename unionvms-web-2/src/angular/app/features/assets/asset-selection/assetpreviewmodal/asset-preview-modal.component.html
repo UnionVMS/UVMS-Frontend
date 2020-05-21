@@ -1,0 +1,140 @@
+<div class="modal-header">
+  <h4 class="modal-title" id="modal-basic-title">
+    <div>
+      <span class="assets-group-title" *ngIf="assetType === assetTypes.group">
+        ASSETS GROUP
+      </span>
+      <span>
+        {{title}}
+      </span>
+    </div>
+    </h4>
+    <button type="button" class="close" aria-label="Close" (click)="activeModal.close('Cross click')">
+      <span aria-hidden="true">&times;</span>
+    </button>
+</div>
+<div class="modal-body">
+  <div class="container">
+    <div class="row" class="loading-spinner" *ngIf="loadingIndicator">
+      <fa-icon [icon]="faSpinner" [spin]="true"></fa-icon>
+    </div>
+    <div class="row" *ngIf="assetType === assetTypes.group && selectedGroup.length">
+      <div class="col-md-12">
+        <ngx-datatable
+        class="bootstrap"
+        [rows]="selectedGroup"
+        [loadingIndicator]="loadingIndicator"
+        [columnMode]="ColumnMode.force"
+        [headerHeight]="40"
+        [footerHeight]="40"
+        rowHeight="auto"
+        columnWidth="auto"
+        [reorderable]="reorderable"
+        [externalPaging]="true"
+        [count]="count"
+        [selected]="selectedAsset"
+        [offset]="searchObj.pagination.page"
+        [selectionType]="SelectionType.single"
+        [limit]="searchObj.pagination.listSize"
+        (page)="setPage($event)"
+        (select)="onSelectRow($event)"
+        #AssetListGroupTable>
+        <ngx-datatable-column name="Asset name" [sortable]="true" prop="name">
+        <ng-template let-column="column" let-sort="sortFn" ngx-datatable-header-template>
+            <span (click)="sort()">{{ column.name }}</span>
+        </ng-template>
+        <ng-template let-row="row" let-value="value" ngx-datatable-cell-template>
+            {{value}}
+        </ng-template>
+        </ngx-datatable-column>
+        <ngx-datatable-footer>
+            <ng-template
+              ngx-datatable-footer-template
+              let-pageSize="pageSize"
+              let-rowCount="rowCount"
+              let-curPage="curPage"
+              let-offset="offset"
+              >
+              <datatable-pager
+                [pagerLeftArrowIcon]="'datatable-icon-left'"
+                [pagerRightArrowIcon]="'datatable-icon-right'"
+                [pagerPreviousIcon]="'datatable-icon-prev'"
+                [pagerNextIcon]="'datatable-icon-skip'"
+                [page]="curPage"
+                [size]="pageSize"
+                [count]="count"
+                [hidden]="!((rowCount / pageSize) > 1)"
+                (change)="AssetListGroupTable.onFooterPage($event)">
+              </datatable-pager>
+            </ng-template>
+          </ngx-datatable-footer>
+        </ngx-datatable>
+        <hr>
+      </div>
+    </div>
+    <div *ngIf="!loadingIndicator && selectedAsset.length && selectedGroup.length">
+      <div *ngFor="let item of selectedAsset">
+        <div class="row">
+            <div class="col-md-12 modal-tech-info">
+                Administrative Information
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-md-6">
+                <div>
+                    Flag State: <b>{{item.countryCode}}</b>
+                </div>
+                <div>
+                    Ext.Marking: <b>{{item.externalMarking}}</b>
+                </div>
+                <div>
+                    MMSI No: <b>{{item.mmsiNo}}</b>
+                </div>
+                <div>
+                    Home port: <b>{{item.homePort}}</b>
+                </div>
+            </div>
+            <div class="col-md-6">
+                <div>
+                    IRCS: <b>{{item.ircs}}</b>
+                </div>
+                <div>
+                    CFR: <b>{{item.cfr}}</b>
+                </div>
+                <div>
+                    License: <b>{{item.hasLicense ? 'YES' : 'NO'}}</b>
+                </div>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-md-12 modal-tech-info">
+                Technical Information
+            </div>
+        </div>
+        <div class="row">
+        <div class="col-md-6">
+            <div>
+                License type: <b>{{item.licenseType}}</b>
+            </div>
+            <div>
+                Main power: <b>{{item.powerMain}} KW</b>
+            </div>
+        </div>
+        <div class="col-md-6">
+            <div>
+                Tonnage G.T: <b>{{item.grossTonnage}} EUTons</b>
+            </div>
+            <div>
+                Length: <b>{{item.lengthBetweenPerpendiculars}} m LBP</b>
+            </div>
+            </div>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="container" *ngIf="!loadingIndicator && !selectedGroup.length && assetType === assetTypes.group">
+    <div class="alert alert-warning" role="alert">
+      No data available
+    </div>
+  </div>
+</div>

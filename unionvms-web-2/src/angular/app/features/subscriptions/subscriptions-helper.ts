@@ -36,6 +36,5 @@ export const subscriptionFormInitialValues = {
     timeExpression: '06:00'
   },
   startDate: null,
-  endDate: null,
-  areas: []
+  endDate: null
 };

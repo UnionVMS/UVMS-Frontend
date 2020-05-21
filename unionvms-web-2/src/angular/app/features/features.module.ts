@@ -16,6 +16,8 @@ import { CustomDateParserFormatter } from './date-custom-parser-formatter';
 import { AreaSelectionComponent } from './areas/area-selection/area-selection.component';
 import { AreaSelectionMapComponent } from './areas/area-selection/area-selection-map/area-selection-map.component';
 import { AreaSelectionTableComponent } from './areas/area-selection/area-selection-table/area-selection-table.component';
+import { AssetSelectionComponent } from './assets/asset-selection/asset-selection.component';
+import { AssetPreviewModalComponent } from './assets/asset-selection/assetpreviewmodal/asset-preview-modal.component';
 
 @NgModule({
   declarations: [
@@ -28,7 +30,10 @@ import { AreaSelectionTableComponent } from './areas/area-selection/area-selecti
     SubscriptionFormComponent,
     AreaSelectionComponent,
     AreaSelectionMapComponent,
-    AreaSelectionTableComponent
+    AreaSelectionTableComponent,
+    AssetSelectionComponent,
+    AssetPreviewModalComponent
+
 
   ],
   imports: [
@@ -50,6 +55,8 @@ import { AreaSelectionTableComponent } from './areas/area-selection/area-selecti
   providers: [
     {provide: NgbDateAdapter, useClass: CustomAdapter},
     {provide: NgbDateParserFormatter, useClass: CustomDateParserFormatter}
-  ]
+  ],
+  entryComponents: [AssetPreviewModalComponent]
+
 })
 export class FeaturesModule { }

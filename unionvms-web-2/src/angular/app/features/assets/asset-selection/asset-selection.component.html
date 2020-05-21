@@ -1,0 +1,148 @@
+<ng-container [formGroup]="formGroup">
+  <div [formArrayName]="formArrayName" >
+    <div class='container-fluid'>
+      <div class="row">
+        <div class="col-md-7 p-0">
+          <div class="asset-selection-table">
+            <form class="form-inline" (ngSubmit)="searchAsset()">
+              <div class="form-group mb-2">
+                <select class="form-control" id="assetType" [(ngModel)]="assetType" name="assetType" (change)="onAssetTypeChange()">
+                  <option *ngFor="let item of vesselSearchItems" value={{item.value}}>{{item.name}}</option>
+                </select>
+              </div>
+              <div class="form-group mx-sm-3 mb-2" *ngIf="assetType === assetTypes.asset">
+                <input type="text" class="form-control" id="searchText" name="searchText" [(ngModel)]="searchText" placeholder="Search Text">
+              </div>
+              <button *ngIf="assetType === assetTypes.asset" type="submit" class="btn btn-primary mb-2">SEARCH</button>
+              <button *ngIf="assetType === assetTypes.asset" type="button" (click)="onReset()" class="btn btn-secondary mb-2 ml-2">RESET</button>
+            </form>
+            <div class="data-table">
+              <ngx-datatable
+              class="bootstrap"
+              [rows]="result"
+              [loadingIndicator]="loadingIndicator"
+              [columnMode]="ColumnMode.force"
+              [headerHeight]="40"
+              [footerHeight]="40"
+              rowHeight="auto"
+              columnWidth="auto"
+              [reorderable]="reorderable"
+              [offset]="searchObj.pagination.page"
+              [externalPaging]="true"
+              [count]="count"
+              [limit]="searchObj.pagination.listSize"
+              (page)="setPage($event)"
+              (sort)="onSort($event)"
+              #AssetListTable>
+                <ngx-datatable-column name="FS" [sortable]="true" prop="countryCode" *ngIf="assetType === assetTypes.asset">
+                  <ng-template let-column="column" let-sort="sortFn" ngx-datatable-header-template>
+                    <span (click)="sort()">{{ column.name }}</span>
+                  </ng-template>
+                  <ng-template let-row="row" let-value="value" ngx-datatable-cell-template>
+                    {{value}}
+                  </ng-template>
+                </ngx-datatable-column>
+                <ngx-datatable-column name="IRCS" [sortable]="true" prop="ircs" *ngIf="assetType === assetTypes.asset">
+                  <ng-template let-column="column" let-sort="sortFn" ngx-datatable-header-template>
+                    <span (click)="sort()">{{ column.name }}</span>
+                  </ng-template>
+                  <ng-template let-row="row" let-value="value" ngx-datatable-cell-template>
+                    {{value}}
+                  </ng-template>
+                </ngx-datatable-column>
+                <ngx-datatable-column name="CFR" [sortable]="true" prop="cfr" *ngIf="assetType === assetTypes.asset">
+                  <ng-template let-column="column" let-sort="sortFn" ngx-datatable-header-template>
+                    <span (click)="sort()">{{ column.name }}</span>
+                  </ng-template>
+                  <ng-template let-row="row" let-value="value" ngx-datatable-cell-template>
+                    {{value}}
+                  </ng-template>
+                </ngx-datatable-column>
+                <ngx-datatable-column name="Ext.Mark" [sortable]="true" prop="externalMarking" *ngIf="assetType === assetTypes.asset">
+                  <ng-template let-column="column" let-sort="sortFn" ngx-datatable-header-template>
+                    <span (click)="sort()">{{ column.name }}</span>
+                  </ng-template>
+                  <ng-template let-row="row" let-value="value" ngx-datatable-cell-template>
+                    {{value}}
+                  </ng-template>
+                </ngx-datatable-column>
+                <ngx-datatable-column name="Name" [sortable]="true" prop="name">
+                  <ng-template let-column="column" let-sort="sortFn" ngx-datatable-header-template>
+                    <span (click)="sort()">{{ column.name }}</span>
+                  </ng-template>
+                  <ng-template let-row="row" let-value="value" ngx-datatable-cell-template>
+                    {{value}}
+                  </ng-template>
+                </ngx-datatable-column>
+                <ngx-datatable-column [sortable]="false">
+                  <ng-template let-column="column"  ngx-datatable-header-template>
+                    <button type="button" class="btn btn-success" (click)="addAllAssets()">Add all</button>
+                  </ng-template>
+                  <ng-template let-row="row" let-value="value" ngx-datatable-cell-template>
+                    <button type="button" class="btn btn-sm btn-outline-primary" (click)="onPreviewAsset(row)">
+                      <fa-icon [icon]="faEye"></fa-icon>
+                    </button>
+                    <button type="button" class="btn btn-sm btn-outline-primary ml-2" [ngClass]="{'selected': getIsSelected(row) }" (click)="onToggleAsset(row)">
+                      <fa-icon [icon]="faCheck"></fa-icon>
+                    </button>
+                  </ng-template>
+                </ngx-datatable-column>
+                <ngx-datatable-footer>
+                  <ng-template
+                    ngx-datatable-footer-template
+                    let-pageSize="pageSize"
+                    let-rowCount="rowCount"
+                    let-curPage="curPage"
+                    let-offset="offset"
+                    >
+                    <datatable-pager
+                      [pagerLeftArrowIcon]="'datatable-icon-left'"
+                      [pagerRightArrowIcon]="'datatable-icon-right'"
+                      [pagerPreviousIcon]="'datatable-icon-prev'"
+                      [pagerNextIcon]="'datatable-icon-skip'"
+                      [page]="curPage"
+                      [size]="pageSize"
+                      [count]="count"
+                      [hidden]="!((rowCount / pageSize) > 1)"
+                      (change)="AssetListTable.onFooterPage($event)">
+                    </datatable-pager>
+                  </ng-template>
+                </ngx-datatable-footer>
+              </ngx-datatable>
+
+            </div>
+          </div>
+        </div>
+        <div class="col-md-5 p-0">
+          <div class="asset-selection-list">
+            <div class="card">
+              <div class="card-header">
+                <div>
+                  <b>ASSETS SELECTION</b>
+                  <div>
+                    Assets
+                    <span *ngIf="selectedAssets" class="badge badge-primary">{{selectedAssets}}</span>
+                  </div>
+                  <div>
+                    Asset Groups
+                    <span *ngIf="selectedGroups" class="badge badge-success">{{selectedGroups}}</span>
+                  </div>
+                </div>
+                <a (click)="clearAllAssets()">Clear All</a>
+              </div>
+              <div class="card-body">
+                <div class="alert alert-secondary selected-item" [ngClass]="{'asset-selection-item-asset': item.type === assetTypes.asset, 'asset-selection-item-assetgroup' : item.type === assetTypes.group }" *ngFor="let item of assets.value; let i = index" role="alert">
+                  <div>{{item.name}}</div>
+                  <div class="pull-right icon" (click)="removeAsset(i)">
+                    <fa-icon [icon]="faTimes"></fa-icon>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</ng-container>
+

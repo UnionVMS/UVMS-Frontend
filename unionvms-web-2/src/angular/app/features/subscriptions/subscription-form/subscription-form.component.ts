@@ -43,8 +43,10 @@ export class SubscriptionFormComponent implements OnInit, OnDestroy  {
   frequencyUnits = [];
   triggerTypes = [];
   accessibilityItems = [];
-  numberOfSelectedAreas: number;
+  numberOfSelectedAreas = 0;
+  numberOfSelectedAssets = 0;
   isCollapsed = true;
+  isAssetsCollapsed = true;
   isChecked = false;
   fieldType;
   private subscription: Subscription = new Subscription();
@@ -68,6 +70,7 @@ export class SubscriptionFormComponent implements OnInit, OnDestroy  {
     this.subscription.add(this.organizations$.subscribe(organizations => this.organizations = organizations));
     this.subscription.add(this.isCollapsed$.subscribe( collapsed => {
       this.isCollapsed = collapsed.status;
+      this.isAssetsCollapsed = collapsed.status;
     }));
   }
 
@@ -111,7 +114,8 @@ export class SubscriptionFormComponent implements OnInit, OnDestroy  {
       }),
       startDate: [null],
       endDate: [null],
-      areas: this.fb.array([])
+      areas: this.fb.array([]),
+      assets: this.fb.array([])
     });
 
     this.initSubscriptions();
@@ -189,6 +193,9 @@ export class SubscriptionFormComponent implements OnInit, OnDestroy  {
   }
   get areas() {
     return this.subscriptionForm.get('areas') as FormArray;
+  }
+  get assets() {
+    return this.subscriptionForm.get('assets') as FormArray;
   }
 
   initSubscriptions() {
@@ -350,18 +357,18 @@ export class SubscriptionFormComponent implements OnInit, OnDestroy  {
   }
 
   setHistoryUnits() {
-      this.historyUnits = [
-          { key: 'Days', value: 'DAYS'},
-          { key: 'Weeks', value: 'WEEKS'},
-          { key: 'Months', value: 'MONTHS'}
-      ];
+    this.historyUnits = [
+        { key: 'Days', value: 'DAYS'},
+        { key: 'Weeks', value: 'WEEKS'},
+        { key: 'Months', value: 'MONTHS'}
+    ];
   }
 
   setFrequencyUnits() {
     this.frequencyUnits = [
-        { key: 'Days', value: 'DAYS'},
-        { key: 'Weeks', value: 'WEEKS'},
-        { key: 'Months', value: 'MONTHS'}
+      { key: 'Days', value: 'DAYS'},
+      { key: 'Weeks', value: 'WEEKS'},
+      { key: 'Months', value: 'MONTHS'}
     ];
   }
 
@@ -395,6 +402,8 @@ export class SubscriptionFormComponent implements OnInit, OnDestroy  {
 
   reset() {
     this.subscriptionForm.reset(subscriptionFormInitialValues);
+    this.assets.clear();
+
   }
 
   addEmail(content) {
@@ -490,6 +499,10 @@ export class SubscriptionFormComponent implements OnInit, OnDestroy  {
 
   onSelectedAreasChange(numberOfSelectedAreas) {
     this.numberOfSelectedAreas = numberOfSelectedAreas;
+  }
+
+  onSelectedAssetsChange(numberOfSelectedAssets) {
+    this.numberOfSelectedAssets = numberOfSelectedAssets;
   }
 
   togglePassword() {
