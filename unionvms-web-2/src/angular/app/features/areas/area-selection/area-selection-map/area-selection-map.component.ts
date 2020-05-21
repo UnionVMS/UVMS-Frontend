@@ -11,7 +11,6 @@ import * as olEventsCondition from 'ol/events/condition';
 import TileWMS from 'ol/source/TileWMS';
 import LayerSwitcher from 'ol-layerswitcher';
 import { SystemArea } from './system-area.model';
-import { environment } from '../../../../../environments/environment';
 import { FormGroup, FormArray, FormControl } from '@angular/forms';
 
 @Component({
@@ -43,20 +42,24 @@ export class AreaSelectionMapComponent implements OnInit, OnChanges, OnDestroy {
   constructor(private featureService: FeaturesService) { }
 
   ngOnInit(): void {
-    this.getMapConfig();
   }
 
   ngOnChanges(changes: SimpleChanges) {
-    this.removeLayerByType(changes.selectedAreaType.previousValue);
-    this.lazyLoadWMSLayer();
+    if (!this.map) {
+      this.setUpMap();
+    } else {
+      this.removeLayerByType(changes.selectedAreaType.previousValue);
+      this.loadWMSLayer();
+    }
     this.showMap = true;
   }
 
-  async getMapConfig() {
+  async setUpMap() {
     try {
       const result: any = await this.featureService.getMapBasicConfig();
       this.mapBasicConfig = result.data.map;
       this.initMap();
+      this.loadWMSLayer();
     } catch (err) {
     }
   }
@@ -235,8 +238,8 @@ export class AreaSelectionMapComponent implements OnInit, OnChanges, OnDestroy {
   }
 
   defineWms(config) {
-    let source, attribution,
-        isInternal = false;
+    let attribution = false;
+    let isInternal = false;
 
     if (config.attribution) {
       attribution = new TileWMS.Attribution({
@@ -247,9 +250,9 @@ export class AreaSelectionMapComponent implements OnInit, OnChanges, OnDestroy {
     if (config.serverType && config.serverType === 'geoserver') {
       isInternal = true;
     }
-    source = new TileWMS({
+    const source = new TileWMS({
         attributions: attribution ? [attribution] : undefined,
-        url: environment.geoserverURL,
+        url: config.url,
         serverType: isInternal ? config.serverType : undefined,
         params: config.params,
         crossOrigin: 'anonymous'
@@ -332,7 +335,7 @@ export class AreaSelectionMapComponent implements OnInit, OnChanges, OnDestroy {
       title: def.title,
       type: def.type,
       isBaseLayer: def.isBaseLayer,
-      url: environment.geoserverURL,
+      url: def.serviceUrl,
       serverType,
       attribution,
       params: {
@@ -357,7 +360,7 @@ export class AreaSelectionMapComponent implements OnInit, OnChanges, OnDestroy {
 
     const config = {
       type: def.typeName,
-      url: environment.geoserverURL,
+      url: def.serviceUrl,
       serverType: 'geoserver',
       attribtution: attribution,
       params: {
@@ -383,15 +386,16 @@ export class AreaSelectionMapComponent implements OnInit, OnChanges, OnDestroy {
     return item;
   }
 
-  lazyLoadWMSLayer() {
+  loadWMSLayer() {
     let item;
     if (this.selectedAreaType.typeName === 'USERAREA') {
       item = this.userAreaType;
     } else {
       item = this.getFullDefForItem(this.selectedAreaType);
     }
-    this.timeout = setTimeout(() => { this.addWMS(item); }, 100);
+    this.addWMS(item);
   }
+
   removeLayerByType(layerType) {
     if (this.map) {
         const mapLayers = this.map.getLayers();
@@ -405,7 +409,7 @@ export class AreaSelectionMapComponent implements OnInit, OnChanges, OnDestroy {
   async selectAreaFromMap(area) {
     try {
       const result: any = await this.featureService.getAreaDetails(area);
-      let numberOfResults = result.data.length;
+      const numberOfResults = result.data.length;
       if (numberOfResults === 0) {
         // no results
         this.selectMapArea.emit({message: 'No selectable area found'});

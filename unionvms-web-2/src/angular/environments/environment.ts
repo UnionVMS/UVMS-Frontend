@@ -6,8 +6,7 @@ export const environment = {
   production: false,
   baseURL: 'http://localhost:4200/unionvms',
   // configurable route to old application
-  oldBaseURL: 'http://localhost:9001/app',
-  geoserverURL: 'http://localhost:4200/geoserver/wms'
+  oldBaseURL: 'http://localhost:9001/app'
 };
 
 /*

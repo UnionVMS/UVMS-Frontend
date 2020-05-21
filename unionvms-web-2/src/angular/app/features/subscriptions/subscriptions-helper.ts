@@ -31,6 +31,7 @@ export const subscriptionFormInitialValues = {
   execution: {
     triggerType: 'SCHEDULER',
     frequency: 0,
+    frequencyUnit: 'DAYS',
     immediate: false,
     timeExpression: '06:00'
   },
