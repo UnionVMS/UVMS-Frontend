@@ -19,6 +19,12 @@ export class CustomDateParserFormatter extends NgbDateParserFormatter {
   }
 
   format(date: NgbDateStruct | null): string {
-    return date ? date.day + this.DELIMITER + date.month + this.DELIMITER + date.year : '';
+    let formattedDay;
+    let formattedMonth;
+    if (date) {
+      formattedDay = date.day < 10 ? `0${date.day}` : date.day;
+      formattedMonth = date.month < 10 ? `0${date.month}` : date.month;
+    }
+    return date ? formattedDay + this.DELIMITER + formattedMonth + this.DELIMITER + date.year : '';
   }
 }

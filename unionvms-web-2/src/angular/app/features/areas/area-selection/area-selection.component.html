@@ -1,84 +1,90 @@
 <ng-container [formGroup]="formGroup">
   <div [formArrayName]="formArrayName">
-    <div class="area-selection-container">
-      <div class="area-selection">
-        <ul ngbNav #nav="ngbNav" class="nav-tabs">
-            <li ngbNavItem>
-            <a ngbNavLink>SYSTEM AREAS</a>
-            <ng-template ngbNavContent>
-              <form class="system-section" #systemAreaMapSelectionForm="ngForm">
-                <p class="map-alert" *ngFor="let alert of alerts">
-                  <ngb-alert *ngIf="!staticAlertClosed" [type]="alert.type" (close)="staticAlertClosed = true" >{{ alert.message }}</ngb-alert>
-                </p>
-                <div class="row">
-                  <div class="col-md-5">
-                    <select class="form-control" id="mapLayer" [(ngModel)]="areaType" name="areaType">
-                      <option value="">Area type</option>
-                      <option *ngFor="let item of systemLayersTypeList">{{item.typeName}}</option>
-                    </select>
-                  </div>
-                </div>
-                <div *ngIf="areaType">
-                  <div class="form-check form-check-inline">
-                    <input class="form-check-input" type="radio" id="systemSelectionRadio1" [(ngModel)]="systemSelectionCategory" name="systemSelectionCategory" value="systemFromMap">
-                    <label class="form-check-label" for="systemSelectionRadio1">Select area on map</label>
-                  </div>
-                  <div class="form-check form-check-inline">
-                    <input class="form-check-input" type="radio" name="systemSelectionCategory" [(ngModel)]="systemSelectionCategory" id="systemSelectionRadio2" value="systemByProperty">
-                    <label class="form-check-label" for="systemSelectionRadio2">Search by area properties</label>
-                  </div>
-                  <div *ngIf="systemSelectionCategory === 'systemFromMap'">
-                    <app-area-selection-map [formGroup]="formGroup" [selectedAreaType]="areaType" [systemAreasTypes]= "systemLayersTypeList" (selectMapArea)="selectMapArea($event)"></app-area-selection-map>
-                  </div>
-                  <div *ngIf="systemSelectionCategory === 'systemByProperty'">
-                    <app-area-selection-table [formGroup]="formGroup" [mode]="system" [areaType]="areaType" (selectAllAreas)="selectAllAreas($event)" (toggleArea)="toggleArea($event)" ></app-area-selection-table>
-                  </div>
-                </div>
-              </form>
-            </ng-template>
-            </li>
-            <li ngbNavItem>
-            <a ngbNavLink>USER AREAS</a>
-            <ng-template ngbNavContent>
-              <form>
-                 <p class="map-alert" *ngFor="let alert of alerts">
-                   <ngb-alert *ngIf="!staticAlertClosed" [type]="alert.type" (close)="staticAlertClosed = true" >{{ alert.message }}</ngb-alert>
-                 </p>
-                <div class="form-check form-check-inline">
-                  <input class="form-check-input" type="radio" id="userSelectionCheckbox1" [(ngModel)]="userSelectionCategory" name="userSelectionCategory" value="userFromMap">
-                  <label class="form-check-label" for="userSelectionCheckbox1">Select area on map</label>
-                </div>
-                <div class="form-check form-check-inline">
-                  <input class="form-check-input" type="radio" id="userSelectionCheckbox2" [(ngModel)]="userSelectionCategory" name="userSelectionCategory" value="userByProperty">
-                  <label class="form-check-label" for="userSelectionCheckbox2">Search by area properties</label>
-                </div>
-                <div *ngIf="userSelectionCategory === 'userFromMap'">
-                  <app-area-selection-map [formGroup]="formGroup" [selectedAreaType]="userLayerType" [userAreaType]= "userLayerType" (selectMapArea)="selectMapArea($event)"></app-area-selection-map>
-                </div>
-                <div *ngIf="userSelectionCategory === 'userByProperty'">
-                  <app-area-selection-table [formGroup]="formGroup" [mode]="user" (selectAllAreas)="selectAllAreas($event)" (toggleArea)="toggleArea($event)"></app-area-selection-table>
-                </div>
-              </form>
-            </ng-template>
-            </li>
-        </ul>
-        <div [ngbNavOutlet]="nav"></div>
-      </div>
-      <div class="area-selection-list">
-        <div class="card">
-          <div class="card-header">
-            <div>
-              <b>AREA SELECTION</b>
-              <span class="badge badge-primary">{{areas.value.length}}</span>
-            </div>
-            <a (click)="clearAllAreas()">Clear All</a>
+    <div class="container-fluid">
+      <div class="row">
+        <div class="col-md-7 p-0">
+          <div class="area-selection">
+            <ul ngbNav #nav="ngbNav" class="nav-tabs">
+                <li ngbNavItem>
+                <a ngbNavLink>SYSTEM AREAS</a>
+                <ng-template ngbNavContent>
+                  <form class="system-section" #systemAreaMapSelectionForm="ngForm">
+                    <p class="map-alert" *ngFor="let alert of alerts">
+                      <ngb-alert *ngIf="!staticAlertClosed" [type]="alert.type" (close)="staticAlertClosed = true" >{{ alert.message }}</ngb-alert>
+                    </p>
+                    <div class="row">
+                      <div class="col-md-5">
+                        <select class="form-control" id="mapLayer" [(ngModel)]="areaType" name="areaType">
+                          <option value="">Area type</option>
+                          <option *ngFor="let item of systemLayersTypeList">{{item.typeName}}</option>
+                        </select>
+                      </div>
+                    </div>
+                    <div *ngIf="areaType">
+                      <div class="form-check form-check-inline">
+                        <input class="form-check-input" type="radio" id="systemSelectionRadio1" [(ngModel)]="systemSelectionCategory" name="systemSelectionCategory" value="systemFromMap">
+                        <label class="form-check-label" for="systemSelectionRadio1">Select area on map</label>
+                      </div>
+                      <div class="form-check form-check-inline">
+                        <input class="form-check-input" type="radio" name="systemSelectionCategory" [(ngModel)]="systemSelectionCategory" id="systemSelectionRadio2" value="systemByProperty">
+                        <label class="form-check-label" for="systemSelectionRadio2">Search by area properties</label>
+                      </div>
+                      <div *ngIf="systemSelectionCategory === 'systemFromMap'">
+                        <app-area-selection-map [formGroup]="formGroup" [selectedAreaType]="areaType" [systemAreasTypes]= "systemLayersTypeList" (selectMapArea)="selectMapArea($event)"></app-area-selection-map>
+                      </div>
+                      <div *ngIf="systemSelectionCategory === 'systemByProperty'">
+                        <app-area-selection-table [formGroup]="formGroup" [mode]="system" [areaType]="areaType" (selectAllAreas)="selectAllAreas($event)" (toggleArea)="toggleArea($event)" ></app-area-selection-table>
+                      </div>
+                    </div>
+                  </form>
+                </ng-template>
+                </li>
+                <li ngbNavItem>
+                <a ngbNavLink>USER AREAS</a>
+                <ng-template ngbNavContent>
+                  <form>
+                     <p class="map-alert" *ngFor="let alert of alerts">
+                       <ngb-alert *ngIf="!staticAlertClosed" [type]="alert.type" (close)="staticAlertClosed = true" >{{ alert.message }}</ngb-alert>
+                     </p>
+                    <div class="form-check form-check-inline">
+                      <input class="form-check-input" type="radio" id="userSelectionCheckbox1" [(ngModel)]="userSelectionCategory" name="userSelectionCategory" value="userFromMap">
+                      <label class="form-check-label" for="userSelectionCheckbox1">Select area on map</label>
+                    </div>
+                    <div class="form-check form-check-inline">
+                      <input class="form-check-input" type="radio" id="userSelectionCheckbox2" [(ngModel)]="userSelectionCategory" name="userSelectionCategory" value="userByProperty">
+                      <label class="form-check-label" for="userSelectionCheckbox2">Search by area properties</label>
+                    </div>
+                    <div *ngIf="userSelectionCategory === 'userFromMap'">
+                      <app-area-selection-map [formGroup]="formGroup" [selectedAreaType]="userLayerType" [userAreaType]= "userLayerType" (selectMapArea)="selectMapArea($event)"></app-area-selection-map>
+                    </div>
+                    <div *ngIf="userSelectionCategory === 'userByProperty'">
+                      <app-area-selection-table [formGroup]="formGroup" [mode]="user" (selectAllAreas)="selectAllAreas($event)" (toggleArea)="toggleArea($event)"></app-area-selection-table>
+                    </div>
+                  </form>
+                </ng-template>
+                </li>
+            </ul>
+            <div [ngbNavOutlet]="nav"></div>
           </div>
-          <div class="card-body">
-            <div class="alert alert-secondary area-selection-item" *ngFor="let item of areas.value; let i = index" role="alert">
-              <div> {{item.name}}({{item.areaType}})</div>
-              <span class="pull-right" (click)="removeArea(i)">
-                <fa-icon [icon]="faTimes"></fa-icon>
-              </span>
+        </div>
+        <div class="col-md-5 p-0">
+          <div class="area-selection-list">
+            <div class="card">
+              <div class="card-header">
+                <div>
+                  <b>AREA SELECTION</b>
+                  <span class="badge badge-primary">{{areas.value.length}}</span>
+                </div>
+                <a (click)="clearAllAreas()">Clear All</a>
+              </div>
+              <div class="card-body">
+                <div class="alert alert-secondary area-selection-item" *ngFor="let item of areas.value; let i = index" role="alert">
+                  <div> {{item.name}}({{item.areaType}})</div>
+                  <span class="pull-right" (click)="removeArea(i)">
+                    <fa-icon [icon]="faTimes"></fa-icon>
+                  </span>
+                </div>
+              </div>
             </div>
           </div>
         </div>

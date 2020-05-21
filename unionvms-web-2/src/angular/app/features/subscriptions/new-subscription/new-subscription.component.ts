@@ -34,8 +34,11 @@ export class NewSubscriptionComponent implements OnInit {
     console.log('create');
     try {
       const result = await this.featuresService.createSubscription($event);
+      const assets = this.subscriptionFormComponent.subscriptionForm.get('assets') as FormArray;
+      assets.clear();
       this.subscriptionFormComponent.subscriptionForm.reset(subscriptionFormInitialValues);
       this.subscriptionFormComponent.numberOfSelectedAreas = 0;
+      this.subscriptionFormComponent.numberOfSelectedAssets = 0;
       const emails = this.subscriptionFormComponent.subscriptionForm.get('output.emails') as FormArray;
       emails.clear();
       const areas = this.subscriptionFormComponent.subscriptionForm.get('areas') as FormArray;

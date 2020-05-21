@@ -82,4 +82,16 @@ export class FeaturesService {
   getAreaDetails(data) {
     return this.http.post(`${environment.baseURL}${FEATURES_ENDPOINTS.getAreaDetails}`, data).toPromise();
   }
+
+  getAssets(obj) {
+    return this.http.post(`${environment.baseURL}${FEATURES_ENDPOINTS.getAssets}`, obj).toPromise();
+  }
+
+  getAssetsGroups(obj, username) {
+    return this.http.post(`${environment.baseURL}${FEATURES_ENDPOINTS.getAssetsGroups}${username}`, obj).toPromise();
+  }
+
+  getAssetsGroupsDetails(guid) {
+    return this.http.get(`${environment.baseURL}${FEATURES_ENDPOINTS.getAssetsGroupsDetails}${guid}`).toPromise();
+  }
 }

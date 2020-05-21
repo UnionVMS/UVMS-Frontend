@@ -1,0 +1,75 @@
+.card {
+  padding: 0px;
+  min-height: 820px;
+}
+
+.card-header {
+  display: flex;
+  background-color: white;
+  justify-content: space-between;
+  a {
+    cursor: pointer;
+    color: #089fd7;
+    text-decoration: none;
+  }
+}
+
+.card-body {
+  height: 300px;
+  overflow-y: auto;
+}
+
+.badge.badge-primary {
+  background-color: #089fd7;
+  border-radius: 10px;
+  margin-left: 5px;
+}
+
+.asset-selection-table {
+  padding: 0 85px 0 10px;
+}
+
+.selected {
+  background: green !important;
+  color: white !important;
+}
+
+.asset-selection-item-asset {
+  -webkit-box-shadow: -5px 4px 5px 0px rgba(8,159,215,1);
+  -moz-box-shadow: -5px 4px 5px 0px rgba(8,159,215,1);
+  box-shadow: -5px 4px 5px 0px rgba(8,159,215,1);
+}
+.asset-selection-item-assetgroup {
+  -webkit-box-shadow: -5px 4px 5px 0px rgba(40,167,69,1);
+  -moz-box-shadow: -5px 4px 5px 0px rgba(40,167,69,1);
+  box-shadow: -5px 4px 5px 0px rgba(40,167,69,1);
+}
+
+.alert {
+  padding-left: 15px;
+}
+
+.selected-item {
+  display: flex;
+  justify-content: space-between;
+  fa-icon {
+    color: red;
+    cursor: pointer;
+  }
+}
+
+.icon {
+  align-self: flex-end;
+}
+
+.list-item {
+  border: 1px solid #c2c9cc;
+  border-radius: 5px;
+  margin-bottom: 15px;
+  height: 28px;
+}
+
+
+
+
+

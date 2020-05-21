@@ -7,7 +7,7 @@
   </p>
   </ngb-alert>
 </p>
-<form [formGroup]="subscriptionForm" (ngSubmit)="onSubmit($event)" novalidate>
+<form [formGroup]="subscriptionForm" (ngSubmit)="onSubmit($event)" autocomplete="off">
   <span> <b>{{mode}} Subscription</b></span>
   <div class="form-row justify-content-end buttons-row">
     <button type="button" class="btn btn-outline-secondary mr-1" (click)="reset()">Cancel</button>
@@ -384,5 +384,22 @@
         <app-area-selection formArrayName="areas" [formGroup]="subscriptionForm" (selectedAreasChange)="onSelectedAreasChange($event)"></app-area-selection>
       </div>
     </div>
+    <hr *ngIf="!isCollapsed">
+    <div class="form-group row">
+      <div class="col-sm-4">
+        <div class="custom-control custom-checkbox custom-control-inline">
+            <input class="custom-control-input" type="checkbox" id="hasAssets" [checked]="!isAssetsCollapsed" (change)="isAssetsCollapsed = !isAssetsCollapsed">
+            <label class="custom-control-label" for="hasAssets">Assets
+              <span *ngIf="numberOfSelectedAssets" class="badge badge-danger">{{ numberOfSelectedAssets }}</span>
+            </label>
+        </div>
+      </div>
+    </div>
+    <div class="form-group row" [ngbCollapse]="isAssetsCollapsed" class="subscription-form-assets">
+      <div class="col-md-12">
+        <app-asset-selection formArrayName="assets" [formGroup]="subscriptionForm" (selectedAssetsChange)="onSelectedAssetsChange($event)" ></app-asset-selection>
+      </div>
+    </div>
+    <hr *ngIf="!isAssetsCollapsed">
   </fieldset>
 </form>
