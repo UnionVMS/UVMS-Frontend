@@ -19,7 +19,7 @@ angular.module('unionvmsWeb').controller('MessagemodalCtrl',function($scope, $mo
     };
 
     var unbind = $scope.$watch(
-        function () { return angular.element('.hljs-tag').length; },
+        function () { return angular.element('.hljs').length; },
         function (newValue, oldValue) {
             if (newValue > 0){
                 $scope.isLoading = false;

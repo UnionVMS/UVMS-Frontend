@@ -272,7 +272,9 @@ angular.module('unionvmsWeb').controller('ExchangeCtrl',function($scope, $log, $
                     break;
 
                 case 'MOVEMENT':
-                    if (model.source.toUpperCase() === 'FLUX'){
+                    if (model.source && model.source.toUpperCase() === 'FLUX'){
+                        getRawXmlData(model.id);
+                    } else if (model.type === 'SENT_MOVEMENT') {
                         getRawXmlData(model.id);
                     } else {
                         $location.path('/movement/' + model.logData.guid);
