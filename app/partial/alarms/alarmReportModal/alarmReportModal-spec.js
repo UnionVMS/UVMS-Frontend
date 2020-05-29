@@ -25,6 +25,7 @@ describe('AlarmReportModalCtrl', function() {
             }
         };
         alarm = new Alarm();
+        alarm.incomingMovement = {};
         var options = {};
         createController = function(){
             return $controller('AlarmReportModalCtrl', {$scope: scope, $modalInstance: modalInstance, alarm : alarm, options : options});
@@ -72,6 +73,7 @@ describe('AlarmReportModalCtrl', function() {
             var updateStatusSpy = spyOn(alarmRestService, "reprocessAlarms").andReturn(deferred.promise);
             var updatedAlarm = new Alarm();
             updatedAlarm.setStatusToReprocessed();
+            updatedAlarm.incomingMovement = {};
             deferred.resolve(updatedAlarm);
 
             var controller = createController();
