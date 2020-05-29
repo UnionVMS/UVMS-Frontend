@@ -112,6 +112,12 @@ angular.module('unionvmsWeb').controller('AlarmReportModalCtrl', function($scope
             $scope.addMarkerToMap();
         }
 
+        if ($scope.alarm.incomingMovement.mobileTerminalDNID) {
+            $scope.showDnid = true;
+            $scope.showMemberNumber = true;
+            $scope.channelDnid = $scope.alarm.incomingMovement.mobileTerminalDNID;
+            $scope.channelMemberNumber = $scope.alarm.incomingMovement.mobileTerminalMemberNumber;
+        }
         var ruleNames = getRuleNames(alarm);
         var actions = getAlarmWarningActions(ruleNames);
         $scope.warningMessage = ruleNames.map(function(ruleName) {
