@@ -1,7 +1,6 @@
 export const subscriptionFormInitialValues = {
   name: '',
   description: '',
-  accessibility: null,
   active: false,
   output: {
     messageType: 'NONE',
