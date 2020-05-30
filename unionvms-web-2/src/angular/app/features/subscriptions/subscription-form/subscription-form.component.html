@@ -69,17 +69,6 @@
           </div>
         </div>
     </div>
-    <div class="form-group row">
-      <label for="accessibility" class="col-sm-2 col-form-label-sm">Accessibility</label>
-      <div class="input-group col-sm-4">
-        <select class="form-control" id="accessibility" formControlName="accessibility">
-          <option value=null>-</option>
-          <option *ngFor="let item of accessibilityItems" value={{item.value}}>
-            {{item.key}}
-        </option>
-        </select>
-      </div>
-    </div>
   </fieldset>
   <div formGroupName="output">
     <fieldset class="border p-2">
@@ -329,13 +318,7 @@
           </option>
         </select>
       </div>
-      <div class="offset-sm-2 col-sm-2">
-        <div class="custom-control custom-checkbox custom-control-inline">
-            <input class="custom-control-input" type="checkbox" id="scheduler" value="option">
-            <label class="custom-control-label" for="scheduler">Scheduler</label>
-        </div>
-      </div>
-      <label for="immediate" class="col-form-label-sm">Immediate</label>
+      <label for="immediate" class="offset-sm-2 col-sm-1 col-form-label-sm">Immediate</label>
       <div class="col-sm-2">
         <div class="custom-control custom-switch custom-switch-md">
           <input type="checkbox" formControlName="immediate" formControlName="immediate" class="custom-control-input" id="immediate">

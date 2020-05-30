@@ -15,10 +15,6 @@ import { StatusAction } from '../subscriptions.reducer';
 
 
 
-
-
-
-
 @Component({
   selector: 'app-subscription-form',
   templateUrl: './subscription-form.component.html',
@@ -44,7 +40,6 @@ export class SubscriptionFormComponent implements OnInit, OnDestroy  {
   historyUnits = [];
   frequencyUnits = [];
   triggerTypes = [];
-  accessibilityItems = [];
   deadlineUnits = [];
   numberOfSelectedAreas = 0;
   numberOfSelectedAssets = 0;
@@ -70,7 +65,6 @@ export class SubscriptionFormComponent implements OnInit, OnDestroy  {
     this.setHistoryUnits();
     this.setFrequencyUnits();
     this.setTriggerTypes();
-    this.setAccessibilityItems();
     this.setDeadlineUnits();
     this.getActivities();
     this.subscription.add(this.organizations$.subscribe(organizations => this.organizations = organizations));
@@ -84,7 +78,6 @@ export class SubscriptionFormComponent implements OnInit, OnDestroy  {
     this.subscriptionForm = this.fb.group({
       name: ['', Validators.required],
       description: [''],
-      accessibility: [null],
       active: [false],
       output: this.fb.group({
         messageType: ['NONE'],
@@ -272,14 +265,6 @@ export class SubscriptionFormComponent implements OnInit, OnDestroy  {
 
     // Perform all transformations here e.g. cast string to number for dropdowns
 
-    // accessibilty
-
-    const accessibilityRawValue = this.subscriptionForm.get('accessibility').value;
-    // handle changing from a real value to -
-    if (accessibilityRawValue === 'null') {
-      formValues.accessibility = null;
-    }
-
     /* organizationId, endPointId, channelId
     * By default select returns a string but we need to cast it to a number for back-end
     */
@@ -406,13 +391,6 @@ export class SubscriptionFormComponent implements OnInit, OnDestroy  {
     ];
   }
 
-  setAccessibilityItems() {
-    this.accessibilityItems = [
-      { key: 'Scope', value: 'SCOPE' },
-      { key: 'Public', value: 'PUBLIC'}
-    ];
-  }
-
   onCheckName() {
     // send value for field 'name'
     // tslint:disable-next-line: no-string-literal
@@ -519,7 +497,6 @@ export class SubscriptionFormComponent implements OnInit, OnDestroy  {
       this.timeExpression.updateValueAndValidity();
     }
   }
-
 
   onSelectedAreasChange(numberOfSelectedAreas) {
     this.numberOfSelectedAreas = numberOfSelectedAreas;
