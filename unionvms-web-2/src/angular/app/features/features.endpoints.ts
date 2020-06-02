@@ -15,5 +15,6 @@ export const FEATURES_ENDPOINTS = {
   getAreaDetails: '/spatial/rest/area/details',
   getAssets: '/asset/rest/asset/zeroBased/list',
   getAssetsGroups: '/asset/rest/group/zeroBased/list?user=',
-  getAssetsGroupsDetails: '/asset/rest/group/'
+  getAssetsGroupsDetails: '/asset/rest/group/',
+  deleteSubscription: '/subscription/rest/subscription/'
 };

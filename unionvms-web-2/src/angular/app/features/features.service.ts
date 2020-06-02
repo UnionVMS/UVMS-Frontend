@@ -94,4 +94,8 @@ export class FeaturesService {
   getAssetsGroupsDetails(guid) {
     return this.http.get(`${environment.baseURL}${FEATURES_ENDPOINTS.getAssetsGroupsDetails}${guid}`).toPromise();
   }
+
+  deleteSubscription(id): Observable<any> {
+    return this.http.delete(`${environment.baseURL}${FEATURES_ENDPOINTS.deleteSubscription}${id}`);
+  }
 }

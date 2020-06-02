@@ -10,8 +10,10 @@ import { FeaturesService } from '../../features.service';
 import { CommunicationChannel } from '../communication-channel.model';
 import * as SUB from '../subscriptions.actions';
 import { ColumnMode } from '@swimlane/ngx-datatable';
-import { faCheck, faTimes, faCalendar, faEdit } from '@fortawesome/free-solid-svg-icons';
+import { faCheck, faTimes, faCalendar, faEdit, faTrash } from '@fortawesome/free-solid-svg-icons';
 import { Router } from '@angular/router';
+import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
+import { ConfirmModalComponent } from '../confirmmodal/confirm-modal.component';
 
 
 @Component({
@@ -34,6 +36,7 @@ export class ManageSubscriptionsComponent implements OnInit, OnDestroy {
   faTimes = faTimes;
   faCalendar = faCalendar;
   faEdit = faEdit;
+  faTrash = faTrash;
   count;
   sizeList;
   initialFormValues;
@@ -46,7 +49,7 @@ export class ManageSubscriptionsComponent implements OnInit, OnDestroy {
 
 
   constructor(private store: Store<fromRoot.State>, private featuresService: FeaturesService, private fb: FormBuilder,
-              private router: Router) {
+              private router: Router, private modalService: NgbModal) {
     this.sizeList = [
       '10',
       '20',
@@ -275,6 +278,24 @@ export class ManageSubscriptionsComponent implements OnInit, OnDestroy {
   editSubscription({id}) {
     console.log(id);
     this.router.navigate(['subscriptions/edit-subscription', id]);
+  }
+
+   deleteSubscription({id, name}) {
+    const modalRef = this.modalService.open(ConfirmModalComponent);
+    modalRef.componentInstance.name = name;
+    modalRef.result.then(res => {
+      if (res === "OK") {
+        this.featuresService.deleteSubscription(id).subscribe(
+          data => {
+            if (data.code === 200) {
+              this.fetchSubscriptionsList(this.searchObj);
+            }
+          }
+        );
+      }
+    }, dismiss => {
+    });
+
 
   }
 

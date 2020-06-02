@@ -28,6 +28,7 @@ export class SubscriptionFormComponent implements OnInit, OnDestroy  {
   @Input() mode;
   @Output() save = new EventEmitter<any>();
   @Output() checkName = new EventEmitter<any>();
+  @Output() delete = new EventEmitter<any>();
   endpointItems: EndPoint[] = [];
   communicationChannels: CommunicationChannel[] = [];
   faCalendar = faCalendar;
@@ -507,6 +508,10 @@ export class SubscriptionFormComponent implements OnInit, OnDestroy  {
 
   togglePassword() {
     this.fieldType = !this.fieldType;
+  }
+
+  deleteSubscription() {
+    this.delete.emit();
   }
 
   ngOnDestroy() {

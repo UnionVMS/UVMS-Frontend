@@ -198,6 +198,9 @@
         <button class="btn btn-sm btn-outline-primary" (click)="editSubscription(row)">
           <fa-icon [icon]="faEdit"></fa-icon>
         </button>
+        <button class="btn btn-sm btn-outline-danger ml-2" (click)="deleteSubscription(row)">
+          <fa-icon class="delete-icon" [icon]="faTrash"></fa-icon>
+        </button>
       </ng-template>
     </ngx-datatable-column>
     <ngx-datatable-footer>

@@ -9,6 +9,9 @@
 </p>
 <form [formGroup]="subscriptionForm" (ngSubmit)="onSubmit($event)" autocomplete="off">
   <span> <b>{{mode}} Subscription</b></span>
+  <button *ngIf="mode === 'Edit'" type="button" class="btn btn-sm btn-outline-danger ml-4" (click)="deleteSubscription()">
+    <fa-icon class="delete-icon" [icon]="faTrash"></fa-icon>
+  </button>
   <div class="form-row justify-content-end buttons-row">
     <button type="button" class="btn btn-outline-secondary mr-1" (click)="reset()">Cancel</button>
     <button type="submit" class="btn btn-primary" [disabled]="!subscriptionForm.valid" >Save</button>
