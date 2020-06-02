@@ -18,6 +18,7 @@ import { AreaSelectionMapComponent } from './areas/area-selection/area-selection
 import { AreaSelectionTableComponent } from './areas/area-selection/area-selection-table/area-selection-table.component';
 import { AssetSelectionComponent } from './assets/asset-selection/asset-selection.component';
 import { AssetPreviewModalComponent } from './assets/asset-selection/assetpreviewmodal/asset-preview-modal.component';
+import { ConfirmModalComponent } from './subscriptions/confirmmodal/confirm-modal.component';
 
 @NgModule({
   declarations: [
@@ -32,7 +33,8 @@ import { AssetPreviewModalComponent } from './assets/asset-selection/assetprevie
     AreaSelectionMapComponent,
     AreaSelectionTableComponent,
     AssetSelectionComponent,
-    AssetPreviewModalComponent
+    AssetPreviewModalComponent,
+    ConfirmModalComponent
 
 
   ],
@@ -56,7 +58,7 @@ import { AssetPreviewModalComponent } from './assets/asset-selection/assetprevie
     {provide: NgbDateAdapter, useClass: CustomAdapter},
     {provide: NgbDateParserFormatter, useClass: CustomDateParserFormatter}
   ],
-  entryComponents: [AssetPreviewModalComponent]
+  entryComponents: [AssetPreviewModalComponent, ConfirmModalComponent]
 
 })
 export class FeaturesModule { }

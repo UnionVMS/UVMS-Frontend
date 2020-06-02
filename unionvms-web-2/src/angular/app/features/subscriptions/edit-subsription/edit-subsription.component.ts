@@ -1,9 +1,11 @@
 import { Component, OnInit, AfterViewInit, ViewChild } from '@angular/core';
 import { SubscriptionFormModel } from '../subscription-form.model';
 import { FeaturesService } from '../../features.service';
-import { ActivatedRoute } from '@angular/router';
+import { ActivatedRoute, Router } from '@angular/router';
 import { SubscriptionFormComponent } from '../subscription-form/subscription-form.component';
 import { FormArray, FormControl } from '@angular/forms';
+import { ConfirmModalComponent } from '../confirmmodal/confirm-modal.component';
+import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
 
 interface Alert {
   type: string;
@@ -29,7 +31,8 @@ export class EditSubsriptionComponent implements OnInit, AfterViewInit {
   mode = 'Edit';
 
 
-  constructor(private featuresService: FeaturesService, private activatedRoute: ActivatedRoute) { }
+  constructor(private featuresService: FeaturesService, private activatedRoute: ActivatedRoute, private modalService: NgbModal,
+              private router: Router) { }
 
   // TODO: Areas and Emails need to be 'refreshed' when showing and updating results. Create a function to handle refreshing
   // and use it on ngAfterViewInit and on editSubscription since code is repeated
@@ -167,6 +170,24 @@ export class EditSubsriptionComponent implements OnInit, AfterViewInit {
       });
 
     }
+  }
+
+  deleteSubscription() {
+    const modalRef = this.modalService.open(ConfirmModalComponent);
+    modalRef.componentInstance.name = this.currentSubscription.name;
+    modalRef.result.then(res => {
+      if (res === "OK") {
+        this.featuresService.deleteSubscription(this.currentSubscriptionId).subscribe(
+          data => {
+            if (data.code === 200) {
+              this.router.navigate(['subscriptions/manage-subscriptions']);
+            }
+          }
+        );
+      }
+    }, dismiss => {
+    });
+
   }
 
   async checkName($event) {
