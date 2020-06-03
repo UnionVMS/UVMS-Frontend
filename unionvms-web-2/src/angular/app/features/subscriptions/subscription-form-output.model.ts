@@ -1,7 +1,7 @@
 import { SubscriptionEmailConfiguration } from './subscription-email-configuration.model';
 export interface SubscriptionFormOutput {
   alert: boolean;
-  emails: [];
+  emails: Array<any>;
   hasEmail: boolean;
   emailConfiguration: SubscriptionEmailConfiguration;
   messageType: string;
@@ -12,9 +12,8 @@ export interface SubscriptionFormOutput {
   };
   logbook: boolean;
   consolidated: boolean;
-  vesselIds: [];
+  vesselIds: Array<any>;
   generateNewReportId: boolean;
   history: number;
   historyUnit: string;
-
 }
