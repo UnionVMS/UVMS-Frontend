@@ -18,6 +18,7 @@ import { StatusAction } from '../subscriptions.reducer';
 
 
 
+
 @Component({
   selector: 'app-subscription-form',
   templateUrl: './subscription-form.component.html',
@@ -44,12 +45,14 @@ export class SubscriptionFormComponent implements OnInit, OnDestroy  {
   frequencyUnits = [];
   triggerTypes = [];
   accessibilityItems = [];
+  deadlineUnits = [];
   numberOfSelectedAreas = 0;
   numberOfSelectedAssets = 0;
   isCollapsed = true;
   isAssetsCollapsed = true;
   isChecked = false;
   fieldType;
+  activitiesList;
   private subscription: Subscription = new Subscription();
   isCollapsed$: Observable<StatusAction> = this.store.select(fromRoot.toggleSubscriptionAreasSection);
 
@@ -68,6 +71,8 @@ export class SubscriptionFormComponent implements OnInit, OnDestroy  {
     this.setFrequencyUnits();
     this.setTriggerTypes();
     this.setAccessibilityItems();
+    this.setDeadlineUnits();
+    this.getActivities();
     this.subscription.add(this.organizations$.subscribe(organizations => this.organizations = organizations));
     this.subscription.add(this.isCollapsed$.subscribe( collapsed => {
       this.isCollapsed = collapsed.status;
@@ -116,7 +121,11 @@ export class SubscriptionFormComponent implements OnInit, OnDestroy  {
       startDate: [null],
       endDate: [null],
       areas: this.fb.array([]),
-      assets: this.fb.array([])
+      assets: this.fb.array([]),
+      deadline: [0],
+      deadlineUnit: ['DAYS'],
+      stopWhenQuitArea: [true],
+      stopActivities: this.fb.array([])
     });
 
     this.initSubscriptions();
@@ -197,6 +206,10 @@ export class SubscriptionFormComponent implements OnInit, OnDestroy  {
   }
   get assets() {
     return this.subscriptionForm.get('assets') as FormArray;
+  }
+
+  get stopActivities() {
+    return this.subscriptionForm.get('stopActivities') as FormArray;
   }
 
   initSubscriptions() {
@@ -306,6 +319,8 @@ export class SubscriptionFormComponent implements OnInit, OnDestroy  {
     formValues.output.vesselIds = vesselIdsArray;
 
 
+    // StopActivities
+
 
     // Remove name property from each area
     formValues.areas.forEach(element => {
@@ -367,6 +382,14 @@ export class SubscriptionFormComponent implements OnInit, OnDestroy  {
 
   setFrequencyUnits() {
     this.frequencyUnits = [
+      { key: 'Days', value: 'DAYS'},
+      { key: 'Weeks', value: 'WEEKS'},
+      { key: 'Months', value: 'MONTHS'}
+    ];
+  }
+
+  setDeadlineUnits() {
+    this.deadlineUnits = [
       { key: 'Days', value: 'DAYS'},
       { key: 'Weeks', value: 'WEEKS'},
       { key: 'Months', value: 'MONTHS'}
@@ -512,6 +535,70 @@ export class SubscriptionFormComponent implements OnInit, OnDestroy  {
 
   deleteSubscription() {
     this.delete.emit();
+  }
+
+  async getActivities() {
+      try {
+        // Back end service expects an object of a particular form
+        const searchObj = {
+          pagination: {
+            offset: 0,
+            pageSize: 25
+          },
+          sorting: {
+            sortBy: 'code',
+            isReversed: true
+          },
+          criteria: {
+            acronym: 'FLUX_FA_TYPE',
+            filter: '*',
+            searchAttribute: [
+              'code',
+              'description',
+              'version'
+            ]
+          }
+        };
+       // contains data for each fishing activity including code
+        const result = await this.featuresService.getFishingActivitiesMasterData(searchObj);
+
+        // get code for each fishing activity and construct a new array containing all activities per type
+        this.activitiesList = result.resultList.reduce((acc, next) => {
+          acc.push(
+            {
+              type: 'NOTIFICATION',
+              value: next.code
+            },
+            {
+              type: 'DECLARATION',
+              value: next.code
+            });
+          return acc;
+        }, []);
+      } catch (err) {
+      }
+  }
+
+  onChangeActivity(activity, status) {
+    if (!this.stopActivities.length) {
+      this.stopActivities.push(new FormControl(activity));
+    } else {
+        const diff = this.stopActivities.value.findIndex(element => element.type === activity.type && element.value === activity.value);
+        if (status && diff === -1) {
+          this.stopActivities.push(new FormControl(activity));
+        } else if (!status && diff > -1) {
+          this.stopActivities.removeAt(diff);
+        }
+    }
+  }
+
+  getIsChecked(activity) {
+    if (!this.stopActivities.value.length) {
+      return false;
+    } else {
+      // check if entry exists in stopActivities form array
+      return this.stopActivities.value.some(item => item.type === activity.type &&  item.value === activity.value);
+    }
   }
 
   ngOnDestroy() {

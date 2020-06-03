@@ -6,6 +6,7 @@ import { FontAwesomeModule } from '@fortawesome/angular-fontawesome';
 import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
 
 import { RemoveUnderscorePipe } from './remove_underscore.pipe';
+import { GroupByPipe } from './group_by.pipe';
 
 
 const MODULES = [
@@ -21,14 +22,16 @@ const MODULES = [
 
 @NgModule({
   declarations: [
-    RemoveUnderscorePipe
+    RemoveUnderscorePipe,
+    GroupByPipe
   ],
   imports: [
     ...MODULES
   ],
   exports: [
     ...MODULES,
-    RemoveUnderscorePipe
+    RemoveUnderscorePipe,
+    GroupByPipe
   ]
 })
 export class SharedModule { }

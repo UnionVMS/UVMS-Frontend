@@ -4,7 +4,7 @@ export const FEATURES_ENDPOINTS = {
   getOrganizationDetails: '/usm-administration/rest/organisations/',
   createSubscription: '/subscription/rest/subscription',
   editSubscription: '/subscription/rest/subscription/',
-  getSubscriptionDetails: '/subscription/rest/subscription',
+  getSubscriptionDetails: '/subscription/rest/subscription/',
   checkSubscriptionName: '/subscription/rest/subscription/available',
   getSystemAreaLayers: '/spatial/rest/area/layers',
   getBasicMapConfig: '/spatial/rest/config/basic',
@@ -16,5 +16,6 @@ export const FEATURES_ENDPOINTS = {
   getAssets: '/asset/rest/asset/zeroBased/list',
   getAssetsGroups: '/asset/rest/group/zeroBased/list?user=',
   getAssetsGroupsDetails: '/asset/rest/group/',
-  deleteSubscription: '/subscription/rest/subscription/'
+  deleteSubscription: '/subscription/rest/subscription/',
+  getActivitiesMasterData: '/mdr/rest/cl/search'
 };

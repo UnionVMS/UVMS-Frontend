@@ -9,9 +9,6 @@ import { Organization } from './subscriptions/organization.model';
 import { SubscriptionFormModel } from './subscriptions/subscription-form.model';
 
 
-
-
-
 // provide in features module?
 @Injectable({
   providedIn: 'root',
@@ -39,22 +36,20 @@ export class FeaturesService {
 
   editSubscription(subscription: SubscriptionFormModel, id) {
     // tslint:disable-next-line: max-line-length
-    return this.http.put<SubscriptionFormModel>(`${environment.baseURL}${FEATURES_ENDPOINTS.createSubscription}/${id}`, subscription).toPromise();
+    return this.http.put<SubscriptionFormModel>(`${environment.baseURL}${FEATURES_ENDPOINTS.editSubscription}${id}`, subscription).toPromise();
   }
 
   getSubscriptionDetails(id): Promise<any> {
-    return this.http.get<SubscriptionFormModel>(`${environment.baseURL}${FEATURES_ENDPOINTS.getSubscriptionDetails}/${id}`).toPromise();
+    return this.http.get<SubscriptionFormModel>(`${environment.baseURL}${FEATURES_ENDPOINTS.getSubscriptionDetails}${id}`).toPromise();
   }
 
   checkNameOnCreate(name) {
     return this.http.get(`${environment.baseURL}${FEATURES_ENDPOINTS.checkSubscriptionName}?name=${name}`).toPromise();
   }
 
-
   checkNameOnEdit(name, id) {
     return this.http.get(`${environment.baseURL}${FEATURES_ENDPOINTS.checkSubscriptionName}?name=${name}&id=${id}`).toPromise();
   }
-
 
   getSystemAreaLayers() {
     return this.http.get(`${environment.baseURL}${FEATURES_ENDPOINTS.getSystemAreaLayers}`).toPromise();
@@ -97,5 +92,9 @@ export class FeaturesService {
 
   deleteSubscription(id): Observable<any> {
     return this.http.delete(`${environment.baseURL}${FEATURES_ENDPOINTS.deleteSubscription}${id}`);
+  }
+
+  getFishingActivitiesMasterData(searchObj): Promise<any> {
+    return this.http.post(`${environment.baseURL}${FEATURES_ENDPOINTS.getActivitiesMasterData}`, searchObj).toPromise();
   }
 }

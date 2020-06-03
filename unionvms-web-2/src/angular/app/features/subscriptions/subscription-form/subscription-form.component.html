@@ -405,4 +405,55 @@
     </div>
     <hr *ngIf="!isAssetsCollapsed">
   </fieldset>
+  <fieldset class="border p-2">
+    <legend  class="w-auto">Stop Conditions</legend>
+    <div class="row">
+      <div class="col-md-6">
+        <div class="form-group row">
+          <label for="deadline" class="col-sm-2 col-form-label-sm">Deadline</label>
+          <div class="col-sm-2">
+            <input type="number" formControlName="deadline" class="form-control" id="deadline">
+          </div>
+          <div class="col-sm-3">
+            <select class="form-control" id="deadlineUnit" formControlName="deadlineUnit">
+              <option *ngFor="let item of deadlineUnits" value={{item.value}}>
+                {{item.key}}
+              </option>
+            </select>
+          </div>
+        </div>
+        <div class="form-group row">
+          <label for="quitArea" class="col-sm-2 col-form-label-sm">Quit Area</label>
+          <div class="col-sm-4">
+            <div class="custom-control custom-switch custom-switch-md">
+              <input type="checkbox" formControlName="stopWhenQuitArea" class="custom-control-input" id="quitArea">
+              <label class="custom-control-label form-switch" for="quitArea"></label>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="col-md-6">
+        <div class="form-group row">
+          <label for="activities" class="col-sm-2 col-form-label-sm">Declares Activities</label>
+          <div class="col-sm-8 activities-list">
+            <div *ngFor="let item of activitiesList | groupBy: 'type'" >
+             <div class="group-title">
+              <b>{{item.key | titlecase }}s</b>
+              <hr>
+             </div>
+             <div *ngFor="let entry of item.value; let i = index;">
+              <div class="custom-control custom-checkbox" formArrayName="stopActivities" >
+                <input class="custom-control-input" type="checkbox" id="activity_{{item.key}}_{{i}}" [checked]="getIsChecked(entry)" (change)="onChangeActivity(entry, $event.target.checked)">
+                <label class="custom-control-label" for="activity_{{item.key}}_{{i}}">
+                  {{entry.value}}
+                </label>
+              </div>
+             </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+    </div>
+  </fieldset>
 </form>
