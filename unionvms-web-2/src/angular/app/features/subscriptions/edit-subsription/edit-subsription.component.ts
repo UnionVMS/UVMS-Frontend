@@ -80,6 +80,15 @@ export class EditSubsriptionComponent implements OnInit, AfterViewInit {
       emailFormArray.push(new FormControl(item));
     });
 
+    // Stop Activities
+    if (this.currentSubscription.stopActivities.length) {
+      const stopActivitiesFormArray = this.subscriptionFormComponent.subscriptionForm.get('stopActivities') as FormArray;
+      const stopActivitiesTemp = this.currentSubscription.stopActivities;
+      stopActivitiesTemp.forEach(item => {
+          stopActivitiesFormArray.push(new FormControl(item));
+      });
+
+    }
 
     this.subscriptionFormComponent.subscriptionForm.patchValue(this.currentSubscription);
     // bind dates
