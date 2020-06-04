@@ -37,7 +37,14 @@ angular.module('unionvmsWeb')
                 });
             },
             getRawExchangeMessage: function(){
-                return $resource('exchange/rest/exchange/message/:guid');
+                return $resource('exchange/rest/exchange/message/:guid', {} ,
+                {
+                    getText : {
+                        transformResponse: function(data, header, status) {
+                            return {content: data, code: status};
+                        }
+                    }
+                });
             },
             getExchangeMessage: function() {
                 return $resource('exchange/rest/exchange/:guid');
@@ -45,7 +52,7 @@ angular.module('unionvmsWeb')
             getPollMessages : function(){
                 return $resource('exchange/rest/exchange/poll',{},
                 {
-                    list : { method : 'POST'}
+                    list : { method : 'POST', isArray: true}
                 });
             },
             getPollMessage : function(){
@@ -76,8 +83,8 @@ angular.module('unionvmsWeb')
 
         var sendQueue = function(messages){
             var def = $q.defer();
-            exchangeRestFactory.sendQueuedMessages().put(messages, function(response){
-                if(response.code !== 200){
+            exchangeRestFactory.sendQueuedMessages().put(messages, function(response, header, status){
+                if(status !== 200){
                     def.reject("Invalid response status");
                     return;
                 }
@@ -93,8 +100,8 @@ angular.module('unionvmsWeb')
 
         var getSendingQueue = function(){
             var def = $q.defer();
-            exchangeRestFactory.getSendingQueue().get({},
-                function(response){
+            exchangeRestFactory.getSendingQueue().query({},
+                function(response, header, status){
 
                     /* response = {
                         "data":[
@@ -196,15 +203,15 @@ angular.module('unionvmsWeb')
                         "code":200
                     }; */
 
-                    if (response.code !== 200) {
+                    if (status !== 200) {
                         def.reject("Invalid response status");
                         return;
                     }
                     var queue = [];
 
-                    if (angular.isArray(response.data)){
-                        for(var i = 0; i < response.data.length; i++){
-                            queue.push(ExchangeSendingQueue.fromJson(response.data[i]));
+                    if (angular.isArray(response)){
+                        for(var i = 0; i < response.length; i++){
+                            queue.push(ExchangeSendingQueue.fromJson(response[i]));
                         }
                     }
                     def.resolve(queue);
@@ -221,8 +228,8 @@ angular.module('unionvmsWeb')
             var deferred = $q.defer();
 
             exchangeRestFactory.stopTransmission().stop({serviceClassName: serviceClassName},{},
-                function(response){
-                    if(response.code !== 200){
+                function(response, header, status){
+                    if(status !== 200){
                         deferred.reject("Invalid response status");
                         return;
                     }
@@ -240,8 +247,8 @@ angular.module('unionvmsWeb')
             var deferred = $q.defer();
 
             exchangeRestFactory.startTransmission().start({serviceClassName: serviceClassName}, {},
-                function(response){
-                    if(response.code !== 200){
+                function(response, header, status){
+                    if(status !== 200){
                         deferred.reject("Invalid response status");
                         return;
                     }
@@ -258,18 +265,18 @@ angular.module('unionvmsWeb')
 
         var getTransmissionStatuses = function(){
             var deferred = $q.defer();
-            exchangeRestFactory.getTransmissionStatuses().get({},
-                function(response) {
-                    if(response.code !== 200){
+            exchangeRestFactory.getTransmissionStatuses().query({},
+                function(response, header, status) {
+                    if(status !== 200){
                         deferred.reject("Invalid response status");
                         return;
                     }
 
                     var services = [];
 
-                    if(angular.isArray(response.data)){
-                        for (var i = 0; i < response.data.length; i++){
-                            services.push(ExchangeService.fromJson(response.data[i]));
+                    if(angular.isArray(response)){
+                        for (var i = 0; i < response.length; i++){
+                            services.push(ExchangeService.fromJson(response[i]));
                         }
                     }
                     deferred.resolve(services);
@@ -313,22 +320,22 @@ angular.module('unionvmsWeb')
         var getMessages = function(getListRequest){
              var deferred = $q.defer();
              exchangeRestFactory.getExchangeMessages().list(getListRequest.DTOForExchangeMessageList(),
-             function(response){
-                  if(response.code !== 200){
+             function(response, header, status){
+                  if(status !== 200){
                     deferred.reject("Invalid response status");
                     return;
                 }
 
                 var exchangeMessages = [];
 
-                if(angular.isArray(response.data.logList)){
-                    for (var i = 0; i < response.data.logList.length; i++){
-                        exchangeMessages.push(Exchange.fromJson(response.data.logList[i]));
+                if(angular.isArray(response.logList)){
+                    for (var i = 0; i < response.logList.length; i++){
+                        exchangeMessages.push(Exchange.fromJson(response.logList[i]));
                     }
                 }
 
-                var currentPage = response.data.currentPage;
-                var totalNumberOfPages = response.data.totalNumberOfPages;
+                var currentPage = response.currentPage;
+                var totalNumberOfPages = response.totalNumberOfPages;
                 var searchResultListPage = new SearchResultListPage(exchangeMessages, currentPage, totalNumberOfPages);
 
                 deferred.resolve(searchResultListPage);
@@ -344,13 +351,13 @@ angular.module('unionvmsWeb')
         var getPollMessage = function(typeRefGuid){
             var deferred = $q.defer();
             exchangeRestFactory.getPollMessage().get({typeRefGuid : typeRefGuid},
-            function(response){
-                if(response.code !== 200){
+            function(response, header, status){
+                if(status !== 200){
                     deferred.reject("Invalid response status");
                     return;
                 }
 
-                var pollMessage = ExchangePoll.fromDTO(response.data);
+                var pollMessage = ExchangePoll.fromDTO(response);
                 deferred.resolve(pollMessage);
 
             },
@@ -364,17 +371,17 @@ angular.module('unionvmsWeb')
         var getPollMessages = function(getListRequest){
             var deferred = $q.defer();
             exchangeRestFactory.getPollMessages().list(getListRequest.DTOForExchangePollList(),
-            function(response){
-                if(response.code !== 200){
+            function(response, header, status){
+                if(status !== 200){
                     deferred.reject("Invalid response status");
                     return;
                 }
 
                 var pollMessages = [];
 
-                if(angular.isArray(response.data)){
-                    for (var i = 0; i < response.data.length; i++){
-                        pollMessages.push(ExchangePoll.fromDTO(response.data[i]));
+                if(angular.isArray(response)){
+                    for (var i = 0; i < response.length; i++){
+                        pollMessages.push(ExchangePoll.fromDTO(response[i]));
                     }
                 }
 
@@ -393,20 +400,20 @@ angular.module('unionvmsWeb')
     var resendExchangeMessage = function(exchangeMessage){
         var defer = $q.defer();
         exchangeRestFactory.resendExchangeMessage.list(exchangeMessage,
-            function(response){
-                if(response.code !== "200"){
+            function(response, header, status){
+                if(status !== "200"){
                     defer.reject("Invalid response status");
                     return;
                 }
                 var exchangeMessages = [];
 
-                if(angular.isArray(response.data.exchange)){
-                    for (var i = 0; i < response.data.exchange.length; i++){
-                        exchangeMessages.push(Exchange.fromJson(response.data.exchange[i]));
+                if(angular.isArray(response.exchange)){
+                    for (var i = 0; i < response.exchange.length; i++){
+                        exchangeMessages.push(Exchange.fromJson(response.exchange[i]));
                     }
                 }
-                var currentPage = response.data.currentPage;
-                var totalNumberOfPages = response.data.totalNumberOfPages;
+                var currentPage = response.currentPage;
+                var totalNumberOfPages = response.totalNumberOfPages;
                 var searchResultListPage = new SearchResultListPage(exchangeMessages, currentPage, totalNumberOfPages);
                 defer.resolve(searchResultListPage);
 
@@ -421,12 +428,12 @@ angular.module('unionvmsWeb')
 
     var getExchangeMessage = function(guid) {
         var deferred = $q.defer();
-        exchangeRestFactory.getExchangeMessage().get({guid: guid}, function(response) {
-            if (String(response.code) !== "200") {
+        exchangeRestFactory.getExchangeMessage().get({guid: guid}, function(response, header, status) {
+            if (status !== 200) {
                 deferred.reject("Invalid response");
             }
 
-            deferred.resolve(Exchange.fromJson(response.data));
+            deferred.resolve(Exchange.fromJson(response));
         }, function(error) {
             deferred.reject("Failed to get Exchange message");
         });
@@ -441,13 +448,13 @@ angular.module('unionvmsWeb')
 
     var getRawExchangeMessage = function(guid) {
         var deferred = $q.defer();
-        exchangeRestFactory.getRawExchangeMessage().get({guid: guid}, function(response) {
-            if (String(response.code) !== "200") {
+        exchangeRestFactory.getRawExchangeMessage().getText({guid: guid}, function(response) {
+            if (response.code !== 200) {
                 deferred.reject("Invalid response");
             }
 
-            response.data = escapeXmlString(response.data);
-            deferred.resolve(response.data);
+            response.content = escapeXmlString(response.content);
+            deferred.resolve(response.content);
         }, function(error) {
             deferred.reject("Failed to get Exchange message");
         });
@@ -458,11 +465,11 @@ angular.module('unionvmsWeb')
     var getExchangeConfig = function(){
         var deferred = $q.defer();
         exchangeRestFactory.getExchangeConfig().get(
-            function(response){
-                if (response.code !== 200) {
+            function(response, header, status){
+                if (status !== 200) {
                     deferred.reject("Invalid response");
                 }
-                deferred.resolve(response.data);
+                deferred.resolve(response);
             },
             function(error) {
                 deferred.reject("Failed to get Exchange config");
@@ -473,15 +480,15 @@ angular.module('unionvmsWeb')
 
     var getValidationResults = function(guid){
         var deferred = $q.defer();
-        exchangeRestFactory.getValidationResults().get({guid: guid}, function(response) {
-            if (String(response.code) !== "200") {
+        exchangeRestFactory.getValidationResults().get({guid: guid}, function(response, header, status) {
+            if (status !== 200) {
                 deferred.reject("Invalid response");
             }
-            if (angular.isUndefined(response.data) || response.data === null){
+            if (angular.isUndefined(response) || response === null){
                 deferred.reject("Invalid response");
             } else {
-                response.data.msg = escapeXmlString(response.data.msg);
-                deferred.resolve(response.data);
+                response.msg = escapeXmlString(response.msg);
+                deferred.resolve(response);
             }
         }, function(error) {
             deferred.reject("Failed to get Exchange message");
@@ -493,11 +500,11 @@ angular.module('unionvmsWeb')
     var getLogItem = function(guid){
         var deferred = $q.defer();
         exchangeRestFactory.getLogItem().get({guid: guid},
-        function(response){
-            if (String(response.code) !== "200") {
+        function(response, header, status){
+            if (status !== 200) {
                 deferred.reject("Invalid response");
             }
-            deferred.resolve(Exchange.fromLinkedMsgJson(response.data));
+            deferred.resolve(Exchange.fromLinkedMsgJson(response));
         }, function(error) {
             deferred.reject("Failed to get Exchange message");
         });

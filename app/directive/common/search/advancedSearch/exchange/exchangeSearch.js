@@ -12,7 +12,7 @@ copy of the GNU General Public License along with the IFDM Suite. If not, see <h
 angular.module('unionvmsWeb').controller('ExchangeSearchController', function($scope, searchService, locale, configurationService) {
 
 	var init = function(){
-	    $scope.advancedSearchObject.EXCHANGE_TIME_SPAN = $scope.DATE_TODAY;
+	    $scope.advancedSearchObject.EXCHANGE_TIME_SPAN = $scope.LAST_HOUR;
         $scope.resetSearch();
 
         $scope.recipientItems = configurationService.setTextAndCodeForDropDown(configurationService.getValue('EXCHANGE', 'RECIPIENT'), 'RECIPIENT', 'EXCHANGE', true);
@@ -29,7 +29,7 @@ angular.module('unionvmsWeb').controller('ExchangeSearchController', function($s
     $scope.resetSearch = function(){
         //empty advancedSearchobject.
         $scope.resetAdvancedSearchForm(false);
-        $scope.advancedSearchObject.EXCHANGE_TIME_SPAN = $scope.DATE_TODAY;
+        $scope.advancedSearchObject.EXCHANGE_TIME_SPAN = $scope.LAST_HOUR;
         $scope.performAdvancedSearch();
     };
 

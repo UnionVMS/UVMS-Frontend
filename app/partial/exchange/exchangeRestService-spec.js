@@ -14,9 +14,7 @@ describe('exchangeRestService', function() {
     beforeEach(module('unionvmsWeb'));
 
     var doErrorCallback = function(callback){
-        callback({
-            code : 500,
-        });
+        callback(undefined, undefined, 500);
     };
 
     //MOCK RESOURCE
@@ -25,14 +23,11 @@ describe('exchangeRestService', function() {
             //List of transmission statuses
             getTransmissionStatuses: function() {
                 return {
-                    get: function(getObject, callback) {
-                        callback({
-                            code : 200,
-                            data: [
+                    query: function(getObject, callback) {
+                        callback([
                                 {id: 'a'},
                                 {id: 'b'}
-                            ]
-                        });
+                            ], undefined, 200);
                     },
                 }
             },
@@ -41,11 +36,7 @@ describe('exchangeRestService', function() {
                     stop: function(params, getObject, callback) {
                         //Success if serviceClassName is defined, 500 otherwize
                         if(angular.isDefined(params.serviceClassName)){
-                            callback({
-                                code : 200,
-                                data: {
-                                }
-                            });
+                            callback({}, undefined, 200);
                         }else{
                             doErrorCallback(callback);
                         }
@@ -57,11 +48,7 @@ describe('exchangeRestService', function() {
                     start: function(params, getObject, callback) {
                         //Success if serviceClassName is defined, 500 otherwize
                         if(angular.isDefined(params.serviceClassName)){
-                            callback({
-                                code : 200,
-                                data: {
-                                }
-                            });
+                            callback({}, undefined, 200);
                         }else{
                             doErrorCallback(callback);
                         }
@@ -74,10 +61,7 @@ describe('exchangeRestService', function() {
                     list: function(getListRequest, callback) {
                         //Success if page = 1, otherwize return 500
                         if(getListRequest.pagination.page === 1){
-                            callback({
-                                code : 200,
-                                data: {
-                                    logList: [
+                            callback({logList: [
                                         {
                                             id: "1",
                                         },
@@ -87,8 +71,7 @@ describe('exchangeRestService', function() {
                                     ],
                                     currentPage : 12,
                                     totalNumberOfPages : 23
-                                }
-                            });
+                                }, undefined, 200);
                         }
                         else{
                             doErrorCallback(callback);
@@ -101,17 +84,14 @@ describe('exchangeRestService', function() {
                     list: function(getListRequest, callback) {
                         //Success if searchObj.status is defined otherwize return 500
                         if(angular.isDefined(getListRequest.status)){
-                            callback({
-                                code : 200,
-                                data: [
+                            callback([
                                     {
                                         id: "1",
                                     },
                                     {
                                         id: "2",
                                     }
-                                ]
-                            });
+                                ], undefined, 200);
                         }
                         else{
                             doErrorCallback(callback);
@@ -123,10 +103,7 @@ describe('exchangeRestService', function() {
                 return {
                     get: function(getObject, callback) {
                         if(angular.isDefined(getObject.typeRefGuid)){
-                            callback({
-                                code : 200,
-                                data: {id: 'a'}
-                            });
+                            callback({id: 'a'}, undefined, 200);
                         }else{
                             doErrorCallback(callback);
                         }
@@ -137,10 +114,7 @@ describe('exchangeRestService', function() {
                 return {
                     put: function(ids, callback) {
                         if(ids.length > 0){
-                            callback({
-                                code : 200,
-                                data: {id: 'a'}
-                            });
+                            callback({id: 'a'}, undefined, 200);
                         }else{
                             doErrorCallback(callback);
                         }
@@ -153,11 +127,8 @@ describe('exchangeRestService', function() {
                         //Success if guid is defined, 500 otherwize
                         if(angular.isDefined(getObject.guid)){
                             callback({
-                                code : 200,
-                                data: {
                                     id: 'a'
-                                }
-                            });
+                                }, undefined, 200);
                         }else{
                             doErrorCallback(callback);
                         }
@@ -168,10 +139,7 @@ describe('exchangeRestService', function() {
             getExchangeConfig: function() {
                 return {
                     get: function(callback) {
-                        callback({
-                            code : 200,
-                            data: {id : 'a'}
-                        });
+                        callback({id : 'a'}, undefined, 200);
                     },
                 }
             },
