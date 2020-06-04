@@ -9,7 +9,7 @@ the hope that it will be useful, but WITHOUT ANY WARRANTY; without even the impl
 FITNESS FOR A PARTICULAR PURPOSE.  See the GNU General Public License for more details. You should have received a
 copy of the GNU General Public License along with the IFDM Suite. If not, see <http://www.gnu.org/licenses/>.
  */
-angular.module('unionvmsWeb').controller('RulesCtrl',function($scope, $log, $stateParams, locale, csvService, alertService, $filter, Rule,  RuleDefinition, ruleRestService, SearchResults, SearchResultListPage, userService, personsService, confirmationModal, GetListRequest, RuleSubscriptionUpdate, openAlarmsAndTicketsService){
+angular.module('unionvmsWeb').controller('RulesCtrl',function($scope, $log, $stateParams, locale, csvService, alertService, $filter, Rule,  RuleDefinition, RuleAction, ruleRestService, SearchResults, SearchResultListPage, userService, personsService, confirmationModal, GetListRequest, RuleSubscriptionUpdate, openAlarmsAndTicketsService){
 
     //Number of items displayed on each page
     $scope.itemsByPage = 20;
@@ -404,7 +404,13 @@ angular.module('unionvmsWeb').controller('RulesCtrl',function($scope, $log, $sta
     //Toggle (show/hide) new rule
     $scope.toggleAddNewRule = function(){
         $scope.createNewMode = true;
-        toggleRuleForm(new Rule());
+        var rule = new Rule();
+        // Add create ticket action
+        var ruleAction = new RuleAction();
+        ruleAction.action = "CREATE_TICKET";
+        ruleAction.order = 0;
+        rule.addAction(ruleAction);
+        toggleRuleForm(rule);
     };
 
     //Toggle (show/hide) viewing of a rule

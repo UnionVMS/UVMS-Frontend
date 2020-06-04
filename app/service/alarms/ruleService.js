@@ -24,16 +24,12 @@ angular.module('unionvmsWeb').factory('ruleService',function(locale, $log, rules
             });
 
             text += ' ' +locale.getString('alarms.rules_definition_then');
-            //Global rule? Add text "CREATE NOTIFICATION FOR ALL USERS AND"
-            if(rule.isGlobal()){
-                text += ' ' +locale.getString('alarms.rules_rule_as_text_action_TICKET_ALL_USERS');
-            }else{
-                text += ' ' +locale.getString('alarms.rules_rule_as_text_action_TICKET');
-            }
 
             $.each(rule.actions, function(index, action){
-                text += ' ' +locale.getString('alarms.rules_definition_and') +' ';
-                text += ruleService.getRuleActionAsText(action);
+                if (index != 0) {
+                    text += ' ' +locale.getString('alarms.rules_definition_and');
+                }
+                text += ' ' + ruleService.getRuleActionAsText(action);
             });
             return text;
         },

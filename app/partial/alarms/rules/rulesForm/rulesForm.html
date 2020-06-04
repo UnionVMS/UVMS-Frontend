@@ -246,23 +246,6 @@ copy of the GNU General Public License along with the IFDM Suite. If not, see <h
                                 </tr>
                             </thead>
                             <tbody>
-                                <tr>
-                                    <td class="action" ng-show="currentRule.isGlobal()">
-                                        <input type="text" class="form-control disabledNotificationAction" disabled value="{{'alarms.rules_definition_then_action_notification_all_users' | i18n}}">
-                                    </td>
-                                    <td class="action" ng-hide="currentRule.isGlobal()">
-                                        <input type="text" class="form-control disabledNotificationAction" disabled value="{{'alarms.rules_definition_then_action_notification' | i18n}}">
-                                    </td>
-                                    <td class="value">
-                                    </td>
-                                    <td class="endOperator">
-                                        <div class="form-group">
-                                            <span ng-bind="'alarms.rules_definition_and' | i18n | uppercase" ng-show="currentRule.getNumberOfActions() > 0"></span>
-                                        </div>
-                                    </td>
-                                    <td class="remove">
-                                    </td>
-                                </tr>
                                 <tr ng-repeat="item in currentRule.actions" ng-form="actionForm">
                                     <td class="action">
                                         <div class="form-group" ng-class="{'has-error': actionForm.action.$invalid && (submitAttempted || actionForm.action.$dirty)}">

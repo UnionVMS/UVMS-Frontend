@@ -22,7 +22,6 @@
     "alarms_table_resolved_by" : "Resolved by",
     "alarms_table_resolve" : "Resolve",
     "alarms_table_resolve_title" : "Resolve alarm",
-    "alarms_table_resolve_title" : "Resolve alarm",
     "alarms_table_close" : "Close",
     "alarms_table_close_title" : "Close alarm",
     "alarms_filter_all" : "All",
@@ -119,7 +118,8 @@
     "rules_rule_as_text_action_SEND_EXIT_REPORT" : "SEND EXIT REPORT TO",
     "rules_rule_as_text_action_ON_HOLD" : "SEND TO HOLDING TABLE",
     "rules_rule_as_text_action_EMAIL" : "SEND EMAIL TO",
-    "rules_rule_as_text_action_TICKET" : "CREATE TICKET",
+    "rules_rule_as_text_action_CREATE_TICKET" : "CREATE TICKET",
+    "rules_rule_as_text_action_CREATE_INCIDENT" : "CREATE INCIDENT",
     "rules_rule_as_text_action_MANUAL_POLL" : "CREATE A MANUAL POLL",
     "rules_rule_as_text_action_SMS" : "SEND SMS TO",
 

@@ -56,6 +56,13 @@ angular.module('unionvmsWeb').controller('RulesformCtrl',function($scope, $timeo
     $scope.clearForm = function(){
         $log.debug("Clear form!");
         $scope.currentRule = new Rule();
+
+        // Add create ticket action
+        var ruleAction = new RuleAction();
+        ruleAction.action = "CREATE_TICKET";
+        ruleAction.order = $scope.currentRule.getNumberOfActions();
+        $scope.currentRule.addAction(ruleAction);
+
         $scope.updateFormToMatchTheCurrentRule();
     };
 

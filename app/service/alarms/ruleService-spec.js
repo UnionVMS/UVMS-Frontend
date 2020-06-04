@@ -156,14 +156,14 @@ describe('ruleService', function() {
     it("getRuleAsText should return correct text for complete Global rule", inject(function(ruleService, Rule) {
         var rule = Rule.fromDTO(ruleDTO);
         rule.availability = 'GLOBAL';
-        var expectedText = 'IF (ASSET_ID.ASSET_ID_TYPE EQ SWE111222 OR ASSET_ID.ASSET_ID_VALUE NE SWE111333) AND POSITION.LONGITUDE NEQ 21.4 THEN [TRANSLATED_TEXT] AND [TRANSLATED_TEXT] ABC123 AND [TRANSLATED_TEXT]';
+        var expectedText = 'IF (ASSET_ID.ASSET_ID_TYPE EQ SWE111222 OR ASSET_ID.ASSET_ID_VALUE NE SWE111333) AND POSITION.LONGITUDE NEQ 21.4 THEN [TRANSLATED_TEXT] ABC123 AND [TRANSLATED_TEXT]';
         expect(ruleService.getRuleAsText(rule)).toEqual(expectedText);
     }));
 
     it("getRuleAsText should return correct text for complete Public rule", inject(function(ruleService, Rule) {
         var rule = Rule.fromDTO(ruleDTO);
         rule.availability = 'PUBLIC';
-        var expectedText = 'IF (ASSET_ID.ASSET_ID_TYPE EQ SWE111222 OR ASSET_ID.ASSET_ID_VALUE NE SWE111333) AND POSITION.LONGITUDE NEQ 21.4 THEN [TRANSLATED_TEXT] AND [TRANSLATED_TEXT] ABC123 AND [TRANSLATED_TEXT]';
+        var expectedText = 'IF (ASSET_ID.ASSET_ID_TYPE EQ SWE111222 OR ASSET_ID.ASSET_ID_VALUE NE SWE111333) AND POSITION.LONGITUDE NEQ 21.4 THEN [TRANSLATED_TEXT] ABC123 AND [TRANSLATED_TEXT]';
         expect(ruleService.getRuleAsText(rule)).toEqual(expectedText);
     }));
 
