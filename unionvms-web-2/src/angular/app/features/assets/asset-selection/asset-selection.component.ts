@@ -151,7 +151,7 @@ export class AssetSelectionComponent implements OnInit, OnDestroy {
   }
 
   onToggleAsset(selectedRow) {
-    const guid = selectedRow.assetId?.guid || selectedRow.guid;
+    const guid = selectedRow.eventHistory?.eventId || selectedRow.guid;
 
     const obj = {
       name: selectedRow.name,
@@ -196,7 +196,7 @@ export class AssetSelectionComponent implements OnInit, OnDestroy {
   }
 
   getIsSelected(selectedRow) {
-    const guid = selectedRow.assetId?.guid || selectedRow.guid;
+    const guid = selectedRow.eventHistory?.eventId || selectedRow.guid;
     return this.assets.value.some(item => item.guid === guid);
   }
 
