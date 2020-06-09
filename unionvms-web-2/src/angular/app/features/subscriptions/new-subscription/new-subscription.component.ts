@@ -38,6 +38,8 @@ export class NewSubscriptionComponent implements OnInit {
       assets.clear();
       const stopActivities = this.subscriptionFormComponent.subscriptionForm.get('stopActivities') as FormArray;
       stopActivities.clear();
+      const startActivities = this.subscriptionFormComponent.subscriptionForm.get('startActivities') as FormArray;
+      startActivities.clear();
       this.subscriptionFormComponent.subscriptionForm.reset(subscriptionFormInitialValues);
       this.subscriptionFormComponent.numberOfSelectedAreas = 0;
       this.subscriptionFormComponent.numberOfSelectedAssets = 0;
