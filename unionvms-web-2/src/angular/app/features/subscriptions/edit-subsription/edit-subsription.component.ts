@@ -87,7 +87,14 @@ export class EditSubsriptionComponent implements OnInit, AfterViewInit {
       stopActivitiesTemp.forEach(item => {
           stopActivitiesFormArray.push(new FormControl(item));
       });
-
+    }
+    // Start Activities
+    if (this.currentSubscription.startActivities.length) {
+      const startActivitiesFormArray = this.subscriptionFormComponent.subscriptionForm.get('startActivities') as FormArray;
+      const startActivitiesTemp = this.currentSubscription.startActivities;
+      startActivitiesTemp.forEach(item => {
+        startActivitiesFormArray.push(new FormControl(item));
+      });
     }
 
     this.subscriptionFormComponent.subscriptionForm.patchValue(this.currentSubscription);

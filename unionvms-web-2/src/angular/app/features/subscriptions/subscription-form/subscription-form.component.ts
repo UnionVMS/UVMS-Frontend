@@ -118,7 +118,8 @@ export class SubscriptionFormComponent implements OnInit, OnDestroy  {
       deadline: [0],
       deadlineUnit: ['DAYS'],
       stopWhenQuitArea: [true],
-      stopActivities: this.fb.array([])
+      stopActivities: this.fb.array([]),
+      startActivities: this.fb.array([])
     });
 
     this.initSubscriptions();
@@ -203,6 +204,9 @@ export class SubscriptionFormComponent implements OnInit, OnDestroy  {
 
   get stopActivities() {
     return this.subscriptionForm.get('stopActivities') as FormArray;
+  }
+  get startActivities() {
+    return this.subscriptionForm.get('startActivities') as FormArray;
   }
 
   initSubscriptions() {
@@ -556,25 +560,25 @@ export class SubscriptionFormComponent implements OnInit, OnDestroy  {
       }
   }
 
-  onChangeActivity(activity, status) {
-    if (!this.stopActivities.length) {
-      this.stopActivities.push(new FormControl(activity));
+  onChangeActivity(activity, status, type) {
+    if (!this[type].length) {
+      this[type].push(new FormControl(activity));
     } else {
-        const diff = this.stopActivities.value.findIndex(element => element.type === activity.type && element.value === activity.value);
-        if (status && diff === -1) {
-          this.stopActivities.push(new FormControl(activity));
-        } else if (!status && diff > -1) {
-          this.stopActivities.removeAt(diff);
-        }
+      const diff = this[type].value.findIndex(element => element.type === activity.type && element.value === activity.value);
+      if (status && diff === -1) {
+        this[type].push(new FormControl(activity));
+      } else if (!status && diff > -1) {
+        this[type].removeAt(diff);
+      }
     }
   }
 
-  getIsChecked(activity) {
-    if (!this.stopActivities.value.length) {
+  getIsChecked(activity, type) {
+    if (!this[type].value.length) {
       return false;
     } else {
       // check if entry exists in stopActivities form array
-      return this.stopActivities.value.some(item => item.type === activity.type &&  item.value === activity.value);
+      return this[type].value.some(item => item.type === activity.type &&  item.value === activity.value);
     }
   }
 

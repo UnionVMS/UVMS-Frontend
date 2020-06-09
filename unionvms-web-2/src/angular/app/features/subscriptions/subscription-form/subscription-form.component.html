@@ -258,97 +258,103 @@
       </div>
     </fieldset>
     <fieldset class="border p-2">
-        <legend  class="w-auto">Message Configuration</legend>
-        <div class="form-group row">
-            <label for="logbook" class="col-sm-2 col-form-label-sm">Logbook</label>
-            <div class="col-sm-2">
-              <div class="custom-control custom-switch custom-switch-md">
-                  <input type="checkbox" formControlName="logbook" class="custom-control-input" id="logbook">
-                  <label class="custom-control-label form-switch" for="logbook"></label>
-              </div>
-            </div>
-            <label for="generateNewReportId" class="col-sm-2 col-form-label-sm">New Report ID</label>
-            <div class="col-sm-2">
-              <div class="custom-control custom-switch custom-switch-md">
-                  <input type="checkbox" formControlName="generateNewReportId" class="custom-control-input" id="generateNewReportId">
-                  <label class="custom-control-label form-switch" for="generateNewReportId"></label>
-              </div>
-            </div>
-            <label for="history" class="col-sm-1 col-form-label-sm">History</label>
-            <div class="col-sm-1 mx-0 px-0">
-                <input type="number" formControlName="history" class="form-control" id="history" min="0">
-            </div>
-            <div class="col-sm-1 mx-0 px-0">
-                <select class="form-control" id="historyUnit" formControlName="historyUnit">
-                  <option *ngFor="let item of historyUnits" value={{item.value}}>
-                    {{item.key}}
-                  </option>
-              </select>
-              <div class="validation-error" *ngIf="historyUnit.errors?.required">
-                Field is required
-              </div>
-            </div>
+      <legend  class="w-auto">Message Configuration</legend>
+      <div class="form-group row">
+        <label for="logbook" class="col-sm-2 col-form-label-sm">Logbook</label>
+        <div class="col-sm-2">
+          <div class="custom-control custom-switch custom-switch-md">
+              <input type="checkbox" formControlName="logbook" class="custom-control-input" id="logbook">
+              <label class="custom-control-label form-switch" for="logbook"></label>
+          </div>
         </div>
-        <div class="form-group row">
-            <label for="consolidated" class="col-sm-2 col-form-label-sm">Consolidated</label>
-            <div class="col-sm-1">
-                <div class="custom-control custom-switch custom-switch-md">
-                    <input type="checkbox" formControlName="consolidated" class="custom-control-input" id="consolidated">
-                    <label class="custom-control-label form-switch" for="consolidated"></label>
-                </div>
-            </div>
-            <label for="identifiers" class="col-sm-2 col-form-label-sm">Identifiers</label>
-            <div class="col-sm-6 identifiers-group">
-              <div class="custom-control custom-checkbox custom-control-inline" *ngFor="let item of vesselIdentifiers; let i = index" formArrayName="vesselIds">
-                <input class="custom-control-input" type="checkbox" id="identifierCheckbox_{{i}}" [formControlName]="i">
-                <label class="custom-control-label" for="identifierCheckbox_{{i}}">{{item| removeUnderscore }}</label>
-              </div>
-            </div>
+        <label for="generateNewReportId" class="col-sm-2 col-form-label-sm">New Report ID</label>
+        <div class="col-sm-2">
+          <div class="custom-control custom-switch custom-switch-md">
+              <input type="checkbox" formControlName="generateNewReportId" class="custom-control-input" id="generateNewReportId">
+              <label class="custom-control-label form-switch" for="generateNewReportId"></label>
+          </div>
         </div>
+        <label for="history" class="col-sm-1 col-form-label-sm pr-0">History</label>
+        <div class="col-sm-1 pr-0 mr-0">
+            <input type="number" formControlName="history" class="form-control" id="history" min="0">
+        </div>
+        <div class="col-sm-2 pl-0 ml-0">
+            <select class="form-control" id="historyUnit" formControlName="historyUnit">
+              <option *ngFor="let item of historyUnits" value={{item.value}}>
+                {{item.key}}
+              </option>
+          </select>
+          <div class="validation-error" *ngIf="historyUnit.errors?.required">
+            Field is required
+          </div>
+        </div>
+      </div>
+      <div class="form-group row">
+        <label for="consolidated" class="col-sm-2 col-form-label-sm">Consolidated</label>
+        <div class="col-sm-1">
+          <div class="custom-control custom-switch custom-switch-md">
+              <input type="checkbox" formControlName="consolidated" class="custom-control-input" id="consolidated">
+              <label class="custom-control-label form-switch" for="consolidated"></label>
+          </div>
+        </div>
+        <label for="identifiers" class="col-sm-2 col-form-label-sm">Identifiers</label>
+        <div class="col-sm-7 ">
+          <div class="identifiers-group">
+            <div class="custom-control custom-checkbox custom-control-inline" *ngFor="let item of vesselIdentifiers; let i = index" formArrayName="vesselIds">
+              <input class="custom-control-input" type="checkbox" id="identifierCheckbox_{{i}}" [formControlName]="i">
+              <label class="custom-control-label" for="identifierCheckbox_{{i}}">{{item| removeUnderscore }}</label>
+            </div>
+          </div>
+        </div>
+      </div>
     </fieldset>
   </div>
   <fieldset class="border p-2" formGroupName="execution">
     <legend  class="w-auto">Execution</legend>
     <div class="form-group row">
       <label for="triggerType" class="col-sm-2 col-form-label-sm">Trigger</label>
-      <div class="col-sm-3">
+      <div class="col-sm-4">
         <select class="form-control" id="triggerType" formControlName="triggerType" (change)="onTriggerTypeChange()">
           <option *ngFor="let item of triggerTypes" value={{item.value}}>
             {{item.key}}
           </option>
         </select>
       </div>
-      <label for="immediate" class="offset-sm-2 col-sm-1 col-form-label-sm">Immediate</label>
-      <div class="col-sm-2">
-        <div class="custom-control custom-switch custom-switch-md">
-          <input type="checkbox" formControlName="immediate" formControlName="immediate" class="custom-control-input" id="immediate">
-          <label class="custom-control-label form-switch" for="immediate"></label>
+      <div class="col-sm-6">
+        <div class="form-group row">
+          <label for="immediate" class="col-sm-4 col-form-label-sm">Immediate</label>
+          <div class="col-sm-8">
+            <div class="custom-control custom-switch custom-switch-md">
+              <input type="checkbox" formControlName="immediate" formControlName="immediate" class="custom-control-input" id="immediate">
+              <label class="custom-control-label form-switch" for="immediate"></label>
+            </div>
+          </div>
         </div>
-      </div>
-    </div>
-    <div class="form-group row">
-      <label for="frequency" class="col-sm-1 offset-md-7 col-form-label-sm">Frequency</label>
-      <div class="col-sm-1">
-        <input type="number" formControlName="frequency" class="form-control" id="frequency" min="0">
-        <div class="validation-error" *ngIf="frequency.errors?.required">
-          Field is required
-        </div>
-      </div>
-      <div class="col-sm-1 mx-0 px-0">
-        <select class="form-control" id="frequencyUnit" formControlName="frequencyUnit">
-          <option *ngFor="let item of frequencyUnits" value={{item.value}}>
-            {{item.key}}
-          </option>
-        </select>
-        <div class="validation-error" *ngIf="frequencyUnit.errors?.required">
-          Field is required
-        </div>
-      </div>
-      <label for="at" class="label-content-adjusted">at</label>
-      <div class="col-sm-1">
-        <input type="text" class="form-control" formControlName="timeExpression" id="at" placeholder="hh:mm">
-        <div class="validation-error" *ngIf="timeExpression.errors?.required">
-          Field is required
+        <div class="form-group row">
+          <label for="frequency" class="col-sm-4 col-form-label-sm">Frequency</label>
+          <div class="col-sm-2">
+            <input type="number" formControlName="frequency" class="form-control" id="frequency" min="0">
+            <div class="validation-error" *ngIf="frequency.errors?.required">
+              Field is required
+            </div>
+          </div>
+          <div class="col-sm-3">
+            <select class="form-control" id="frequencyUnit" formControlName="frequencyUnit">
+              <option *ngFor="let item of frequencyUnits" value={{item.value}}>
+                {{item.key}}
+              </option>
+            </select>
+            <div class="validation-error" *ngIf="frequencyUnit.errors?.required">
+              Field is required
+            </div>
+          </div>
+          <label for="at" class="col-sm-1 content-adjusted">at</label>
+          <div class="col-sm-2">
+            <input type="text" class="form-control" formControlName="timeExpression" id="at" placeholder="hh:mm">
+            <div class="validation-error" *ngIf="timeExpression.errors?.required">
+              Field is required
+            </div>
+          </div>
         </div>
       </div>
     </div>
@@ -358,10 +364,10 @@
     <div class="form-group row">
       <div class="col-sm-4">
         <div class="custom-control custom-checkbox custom-control-inline">
-            <input class="custom-control-input" type="checkbox" id="hasAreas" [checked]="!isCollapsed" (change)="isCollapsed = !isCollapsed">
-            <label class="custom-control-label" for="hasAreas">Areas
-              <span *ngIf="numberOfSelectedAreas" class="badge badge-danger">{{ numberOfSelectedAreas }}</span>
-            </label>
+          <input class="custom-control-input" type="checkbox" id="hasAreas" [checked]="!isCollapsed" (change)="isCollapsed = !isCollapsed">
+          <label class="custom-control-label" for="hasAreas">Areas
+            <span *ngIf="numberOfSelectedAreas" class="badge badge-danger">{{ numberOfSelectedAreas }}</span>
+          </label>
         </div>
       </div>
     </div>
@@ -374,10 +380,10 @@
     <div class="form-group row">
       <div class="col-sm-4">
         <div class="custom-control custom-checkbox custom-control-inline">
-            <input class="custom-control-input" type="checkbox" id="hasAssets" [checked]="!isAssetsCollapsed" (change)="isAssetsCollapsed = !isAssetsCollapsed">
-            <label class="custom-control-label" for="hasAssets">Assets
-              <span *ngIf="numberOfSelectedAssets" class="badge badge-danger">{{ numberOfSelectedAssets }}</span>
-            </label>
+          <input class="custom-control-input" type="checkbox" id="hasAssets" [checked]="!isAssetsCollapsed" (change)="isAssetsCollapsed = !isAssetsCollapsed">
+          <label class="custom-control-label" for="hasAssets">Assets
+            <span *ngIf="numberOfSelectedAssets" class="badge badge-danger">{{ numberOfSelectedAssets }}</span>
+          </label>
         </div>
       </div>
     </div>
@@ -387,6 +393,32 @@
       </div>
     </div>
     <hr *ngIf="!isAssetsCollapsed">
+    <div class="row">
+      <div class="col-md-6">
+        <div class="form-group row">
+          <label for="activities" class="col-sm-2 col-form-label-sm">Activities</label>
+          <div class="col-sm-8 activities-list">
+            <div *ngFor="let item of activitiesList | groupBy: 'type'" >
+             <div class="group-title">
+              <b>{{item.key | titlecase }}s</b>
+              <hr>
+             </div>
+             <div *ngFor="let entry of item.value; let i = index;">
+              <div class="custom-control custom-checkbox" formArrayName="startActivities" >
+                <input class="custom-control-input" type="checkbox" id="activity_start_{{item.key}}_{{i}}" [checked]="getIsChecked(entry, 'startActivities')" (change)="onChangeActivity(entry, $event.target.checked, 'startActivities')">
+                <label class="custom-control-label" for="activity_start_{{item.key}}_{{i}}">
+                  {{entry.value}}
+                </label>
+              </div>
+             </div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="col-md-6">
+          <!-- placeholder for senders -->
+      </div>
+    </div>
   </fieldset>
   <fieldset class="border p-2">
     <legend  class="w-auto">Stop Conditions</legend>
@@ -417,26 +449,27 @@
       </div>
       <div class="col-md-6">
         <div class="form-group row">
-          <label for="activities" class="col-sm-2 col-form-label-sm">Declares Activities</label>
-          <div class="col-sm-8 activities-list">
-            <div *ngFor="let item of activitiesList | groupBy: 'type'" >
-             <div class="group-title">
-              <b>{{item.key | titlecase }}s</b>
-              <hr>
-             </div>
-             <div *ngFor="let entry of item.value; let i = index;">
-              <div class="custom-control custom-checkbox" formArrayName="stopActivities" >
-                <input class="custom-control-input" type="checkbox" id="activity_{{item.key}}_{{i}}" [checked]="getIsChecked(entry)" (change)="onChangeActivity(entry, $event.target.checked)">
-                <label class="custom-control-label" for="activity_{{item.key}}_{{i}}">
-                  {{entry.value}}
-                </label>
-              </div>
-             </div>
+          <label for="activities" class="col-sm-4 col-form-label-sm">Declares Activities</label>
+          <div class="col-sm-8">
+            <div class="activities-list">
+              <div *ngFor="let item of activitiesList | groupBy: 'type'" >
+                <div class="group-title">
+                 <b>{{item.key | titlecase }}s</b>
+                 <hr>
+                </div>
+                <div *ngFor="let entry of item.value; let i = index;">
+                 <div class="custom-control custom-checkbox" formArrayName="stopActivities" >
+                   <input class="custom-control-input" type="checkbox" id="activity_stop_{{item.key}}_{{i}}" [checked]="getIsChecked(entry, 'stopActivities')" (change)="onChangeActivity(entry, $event.target.checked, 'stopActivities')">
+                   <label class="custom-control-label" for="activity_stop_{{item.key}}_{{i}}">
+                     {{entry.value}}
+                   </label>
+                 </div>
+                </div>
+               </div>
             </div>
           </div>
         </div>
       </div>
-
     </div>
   </fieldset>
 </form>
