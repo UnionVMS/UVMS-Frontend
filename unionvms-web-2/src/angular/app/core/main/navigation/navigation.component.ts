@@ -32,15 +32,11 @@ export class NavigationComponent implements OnInit {
     //     this.userPemissions = authUser.permissions;
     //   }
     // );
-
-    console.log(this.userPemissions);
     // A tab can be shown if appropriate permission exists withing the jwt token features array
     // this.availableTabs = NAVIGATION_TABS.filter(element => element.permissions.some(entry => this.userPemissions.includes(entry)));
 
     // No checks for now
     this.availableTabs = NAVIGATION_TABS;
-
-    console.log(this.availableTabs);
     this.setUpAutoResize();
 
 

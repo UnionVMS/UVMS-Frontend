@@ -73,7 +73,6 @@ export class ManageSubscriptionsComponent implements OnInit, OnDestroy {
     this.setMessageTypeItems();
     this.subscription.add(this.organizations$.subscribe(organizations => this.organizations = organizations));
 
-    console.log(this.organizations);
     this.initForm();
     this.searchObj = {
       pagination: {
@@ -116,12 +115,10 @@ export class ManageSubscriptionsComponent implements OnInit, OnDestroy {
 
 
     this.subscription.add(this.filterSubscriptionsForm.get('organization').valueChanges.subscribe(value => {
-      console.log('changed', value);
       this.onOrganizationChange(value);
     }));
 
     this.subscription.add(this.filterSubscriptionsForm.get('endpoint').valueChanges.subscribe(value => {
-      console.log('end point changed', value);
       this.onEndpointChange(value);
     }));
   }
@@ -138,7 +135,6 @@ export class ManageSubscriptionsComponent implements OnInit, OnDestroy {
   onSubmit() {
     // Reset pagination on every search
     this.searchObj.pagination.offset = 0;
-    console.warn(this.filterSubscriptionsForm.getRawValue());
     const formValues = {...this.filterSubscriptionsForm.getRawValue()};
 
     const matchArray = ['endpoint', 'organization', 'channel'];
@@ -157,7 +153,6 @@ export class ManageSubscriptionsComponent implements OnInit, OnDestroy {
         formValues[key] = null;
       }
     }
-    console.log(formValues);
     // override initial values
     this.searchObj.criteria = formValues;
 
@@ -209,7 +204,6 @@ export class ManageSubscriptionsComponent implements OnInit, OnDestroy {
       this.filterSubscriptionsForm.get('channel').setValue(null);
       return;
     }
-    console.log(this.endpointItems);
     let matchingEndpoint = [];
     if (this.endpointItems && this.endpointItems.length) {
       matchingEndpoint = this.endpointItems.filter(item => {
@@ -231,14 +225,11 @@ export class ManageSubscriptionsComponent implements OnInit, OnDestroy {
 
   async fetchSubscriptionsList(searchObj = this.searchObj) {
     this.loadingIndicator = true;
-    console.log('search obj', searchObj);
     const result = await this.featuresService.fetchSubscriptionsList(searchObj);
-    console.log('RESULT', result);
     // this.searchObj.pagination.offset = result.data.currentPage;
     this.count = result.data.totalCount;
     const { subscriptionList } = result.data;
     this.subscriptionList = subscriptionList;
-    console.log('list', this.subscriptionList);
     this.loadingIndicator = false;
     this.store.dispatch(new SUB.SetSubscriptionsList(subscriptionList));
   }
@@ -276,7 +267,6 @@ export class ManageSubscriptionsComponent implements OnInit, OnDestroy {
   }
 
   editSubscription({id}) {
-    console.log(id);
     this.router.navigate(['subscriptions/edit-subscription', id]);
   }
 
@@ -284,7 +274,7 @@ export class ManageSubscriptionsComponent implements OnInit, OnDestroy {
     const modalRef = this.modalService.open(ConfirmModalComponent);
     modalRef.componentInstance.name = name;
     modalRef.result.then(res => {
-      if (res === "OK") {
+      if (res === 'OK') {
         this.featuresService.deleteSubscription(id).subscribe(
           data => {
             if (data.code === 200) {

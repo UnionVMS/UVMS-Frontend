@@ -6,11 +6,7 @@ import { Store } from '@ngrx/store';
 import * as fromRoot from 'app/app.reducer';
 import * as SUB from '../subscriptions.actions';
 import { Router } from '@angular/router';
-interface Alert {
-  type: string;
-  title: string;
-  body: object[];
-}
+import { Alert } from 'app/shared/alert.model';
 
 @Component({
   selector: 'app-new-subscription',
@@ -63,5 +59,4 @@ export class NewSubscriptionComponent implements OnInit {
       }
     }
   }
-
 }

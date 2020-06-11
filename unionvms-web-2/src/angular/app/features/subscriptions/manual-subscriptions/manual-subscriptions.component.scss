@@ -1,0 +1,44 @@
+@import '../../../../vars';
+.subscriber-section {
+  border-right: 1px solid #ced4da;
+}
+
+.no-borders fieldset {
+  border-right: 0 !important;
+  border-left: 0 !important;
+  border-bottom: 0 !important;
+}
+
+.query-input {
+  margin-top: 8px;
+}
+
+.selection-badge {
+  height: 14px;
+  margin-top: 5px;
+  border-radius: 7px;
+  margin-left: 5px;
+}
+
+.validation-error {
+  color: red;
+}
+
+
+.dimmed {
+  position: relative;
+  padding: 10px;
+  pointer-events: none;
+}
+
+.dimmed:after {
+  content: " ";
+  z-index: 10;
+  display: block;
+  position: absolute;
+  height: 100%;
+  top: 0;
+  left: 0;
+  right: 0;
+  background: rgba(0, 0, 0, 0.1);
+}

@@ -26,3 +26,18 @@ Run `ng e2e` to execute the end-to-end tests via [Protractor](http://www.protrac
 ## Further help
 
 To get more help on the Angular CLI use `ng help` or go check out the [Angular CLI README](https://github.com/angular/angular-cli/blob/master/README.md).
+
+
+## Known Issues
+
+Library ng-multiselect-dropdown seems to use a reserved name for a component property. This leads to the following warning 
+
+' It looks like you're using the disabled attribute with a reactive form directive. If you set disabled to true
+when you set up this control in your component class, the disabled attribute will actually be set in the DOM for
+you.'
+This does not seem to affect the form in any other way. 
+Disabling the field programmatically, via the reactive form does not work. 
+
+This has been reported:  https://github.com/NileshPatel17/ng-multiselect-dropdown/issues/144
+
+Please check at a later time if it has been resolved. 
