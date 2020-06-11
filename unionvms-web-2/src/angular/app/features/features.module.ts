@@ -19,6 +19,8 @@ import { AreaSelectionTableComponent } from './areas/area-selection/area-selecti
 import { AssetSelectionComponent } from './assets/asset-selection/asset-selection.component';
 import { AssetPreviewModalComponent } from './assets/asset-selection/assetpreviewmodal/asset-preview-modal.component';
 import { ConfirmModalComponent } from './subscriptions/confirmmodal/confirm-modal.component';
+import { ManualSubscriptionsComponent } from './subscriptions/manual-subscriptions/manual-subscriptions.component';
+import { NgMultiSelectDropDownModule } from 'ng-multiselect-dropdown';
 
 @NgModule({
   declarations: [
@@ -34,7 +36,8 @@ import { ConfirmModalComponent } from './subscriptions/confirmmodal/confirm-moda
     AreaSelectionTableComponent,
     AssetSelectionComponent,
     AssetPreviewModalComponent,
-    ConfirmModalComponent
+    ConfirmModalComponent,
+    ManualSubscriptionsComponent
 
 
   ],
@@ -48,7 +51,8 @@ import { ConfirmModalComponent } from './subscriptions/confirmmodal/confirm-moda
         totalMessage: 'total', // Footer total message
         selectedMessage: 'selected' // Footer selected message
       }
-    })
+    }),
+    NgMultiSelectDropDownModule.forRoot()
   ],
   exports: [
     TodayComponent,

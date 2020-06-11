@@ -1,0 +1,200 @@
+<form [formGroup]="manualSubscriptionForm" (ngSubmit)="onSubmit()" autocomplete="off">
+  <p *ngFor="let alert of alerts">
+    <ngb-alert [type]="alert.type" (close)="close(alert)">
+    <h5>{{ alert.title }}</h5>
+    <p *ngFor="let item of alert.body">
+      <b>Message :</b>{{item.message}}
+      <span *ngIf="item.path"> <b>Path:</b> {{item.path}}</span>
+    </p>
+    </ngb-alert>
+  </p>
+  <div class="row">
+    <div class="col-sm-6 subscriber-section" formGroupName="output">
+      <div class="form-row" >
+        <div class="form-group col-md-6">
+          <label for="messageType">Message Type</label>
+          <select class="form-control" id="messageType" formControlName="messageType" readonly>
+            <option *ngFor="let item of messageTypes" value={{item.value}}>
+                {{item.key}}
+            </option>
+          </select>
+        </div>
+        <div class="form-group col-md-6" formGroupName="subscriber">
+          <label for="organisation">Organisation *</label>
+          <select class="form-control" id="organisationId" formControlName="organisationId">
+            <option value="">All</option>
+            <option *ngFor="let item of organizations" value={{item.organisationId}}>
+              <span *ngIf="item.parent">{{item.parent}}</span> {{item.name}}
+            </option>
+          </select>
+          <div *ngIf="organisationId.dirty">
+            <span class="validation-error" *ngIf="organisationId.errors?.required">
+              Field is required
+            </span>
+          </div>
+        </div>
+      </div>
+      <div class="form-row" formGroupName="subscriber">
+        <div class="form-group col-md-6">
+          <label for="endpoint">End Point * </label>
+          <select class="form-control" id="endpoint" formControlName="endpointId">
+            <option value="">All</option>
+            <option *ngFor="let item of endpointItems" value={{item.endpointId}} >{{item.name}}</option>
+          </select>
+          <span class="validation-error" *ngIf="endpointId.errors?.required">
+            Field is required
+          </span>
+        </div>
+        <div class="form-group col-md-6">
+          <label for="commChannel">Communication Channel *</label>
+          <select class="form-control" id="communicationChannel" formControlName="channelId">
+            <option value="">All</option>
+            <option *ngFor="let item of communicationChannels" value={{item.channelId}} >{{item.dataflow}}</option>
+          </select>
+          <span class="validation-error" *ngIf="channelId.errors?.required">
+            Field is required
+          </span>
+        </div>
+      </div>
+    </div>
+    <div class="col-sm-6" formGroupName="output">
+      <div class="form-row">
+        <div class="form-group col-md-6">
+          <label for="vesselIdType">Vessel ID Type *</label>
+          <ng-multiselect-dropdown
+            name="vesselIdType"
+            [settings]="dropdownSettings"
+            [data]="vesselIdsList"
+            [disabled]="inputsDisabled"
+            formControlName="vesselIds">
+        </ng-multiselect-dropdown>
+        <span class="validation-error" *ngIf="vesselIds.errors?.required">
+          Field is required
+        </span>
+        </div>
+        <div class="form-group col-md-6">
+          <div class="form-check">
+            <input class="form-check-input" type="radio" name="query" (change)="onQuerySelectionChange($event.target.value)" id="query1" value="last">
+            <label class="form-check-label" for="query1">
+              Query for the last *
+            </label>
+          </div>
+          <div class="row">
+            <div class="col-sm-4 pr-0 mr-0">
+              <input type="number" formControlName="history" class="form-control query-input" id="history" min="1">
+              <div *ngIf="history.dirty">
+                <span class="validation-error" *ngIf="history.errors?.required">
+                  Field is required
+                </span>
+                <span class="validation-error" *ngIf="history.errors?.min">
+                  Minimum value is 1
+                </span>
+              </div>
+            </div>
+            <div class="col-sm-8 pl-0 ml-0">
+              <select class="form-control query-input" id="frequencyUnit" formControlName="historyUnit">
+                <option *ngFor="let item of historyUnits" value={{item.value}}>
+                  {{item.key}}
+                </option>
+              </select>
+              <div *ngIf="historyUnit.dirty">
+                <span class="validation-error" *ngIf="historyUnit.errors?.required">
+                  Field is required
+                </span>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="form-row">
+        <div class="form-group col-sm-6">
+          <label for="consolidated">Consolidated</label>
+          <div class="custom-control custom-switch custom-switch-md">
+            <input type="checkbox" formControlName="consolidated" class="custom-control-input" id="consolidated">
+            <label class="custom-control-label form-switch" for="consolidated"></label>
+          </div>
+        </div>
+        <div class="form-group col-sm-6">
+          <div class="form-check">
+            <input class="form-check-input" type="radio" (change)="onQuerySelectionChange($event.target.value)" name="query" id="query2" value="period" [checked]="query === 'period'">
+            <label class="form-check-label" for="query2">
+              Query period *
+            </label>
+          </div>
+          <div class="row">
+            <div class="col-sm-6">
+              <div class="input-group query-input">
+                <input class="form-control" name="dpstart" formControlName="queryStartDate" ngbDatepicker #dpstart="ngbDatepicker">
+                <div class="input-group-append">
+                  <button class="btn btn-outline-primary" (click)="dpstart.toggle()" type="button" [disabled]="query === 'last'">
+                     <fa-icon [icon]="faCalendar"></fa-icon>
+                  </button>
+                </div>
+                <div *ngIf="queryStartDate.dirty">
+                  <span class="validation-error" *ngIf="queryStartDate.errors?.required">
+                    Field is required
+                  </span>
+                </div>
+              </div>
+            </div>
+            <div class="col-sm-6">
+              <div class="input-group query-input">
+                <input class="form-control" name="dpend" ngbDatepicker formControlName="queryEndDate" #dpend="ngbDatepicker">
+                <div class="input-group-append">
+                  <button class="btn btn-outline-primary" (click)="dpend.toggle()" type="button" [disabled]="query === 'last'">
+                    <fa-icon [icon]="faCalendar"></fa-icon>
+                  </button>
+                </div>
+                <div *ngIf="queryEndDate.dirty">
+                  <span class="validation-error" *ngIf="queryEndDate.errors?.required">
+                    Field is required
+                  </span>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="row">
+    <div  [ngClass]="{ 'no-borders' : isAssetsCollapsed }" class="col-md-12">
+      <fieldset class="border p-2">
+        <legend class="w-auto">
+          <div class="custom-control custom-checkbox custom-control-inline">
+            <input class="custom-control-input" type="checkbox" id="assets" [checked]="!isAssetsCollapsed" (change)="isAssetsCollapsed = !isAssetsCollapsed" >
+            <label class="custom-control-label" for="assets">Select assets</label>
+            <span *ngIf="numberOfSelectedAssets" class="badge badge-danger selection-badge">{{ numberOfSelectedAssets }}</span>
+          </div>
+        </legend>
+        <div [ngbCollapse]="isAssetsCollapsed" >
+          <div class="col-sm-12" [ngClass]="{ 'dimmed' : inputsDisabled }">
+            <app-asset-selection formArrayName="assets" [formGroup]="manualSubscriptionForm" (selectedAssetsChange)="onSelectedAssetsChange($event)" ></app-asset-selection>
+          </div>
+        </div>
+      </fieldset>
+    </div>
+  </div>
+  <div class="row">
+    <div [ngClass]="{ 'no-borders' : isAreasCollapsed }" class="col-md-12">
+      <fieldset class="border p-2" >
+        <legend class="w-auto">
+          <div class="custom-control custom-checkbox custom-control-inline">
+            <input class="custom-control-input" type="checkbox" id="areas" [checked]="!isAreasCollapsed" (change)="isAreasCollapsed = !isAreasCollapsed" >
+            <label class="custom-control-label" for="areas">Select areas</label>
+            <span *ngIf="numberOfSelectedAreas" class="badge badge-danger selection-badge">{{ numberOfSelectedAreas }}</span>
+          </div>
+        </legend>
+        <div [ngbCollapse]="isAreasCollapsed" >
+          <div class="col-sm-12" [ngClass]="{ 'dimmed' : inputsDisabled }">
+            <app-area-selection formArrayName="areas" [formGroup]="manualSubscriptionForm" (selectedAreasChange)="onSelectedAreasChange($event)"></app-area-selection>
+          </div>
+        </div>
+      </fieldset>
+    </div>
+  </div>
+  <div class="form-row justify-content-end buttons-row">
+    <button type="button" class="btn btn-outline-secondary mr-1" (click)="cancel()" [disabled]="inputsDisabled">Cancel</button>
+    <button type="submit" class="btn btn-primary" [disabled]="!manualSubscriptionForm.valid || inputsDisabled" >Run</button>
+  </div>
+</form>

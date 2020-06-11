@@ -214,24 +214,20 @@ export class SubscriptionFormComponent implements OnInit, OnDestroy  {
     this.subscription.add(this.subscriptionForm.get('output.subscriber.organisationId').valueChanges
     .pipe(distinctUntilChanged())
     .subscribe(value => {
-      console.log('organization changed', value);
       this.onOrganizationChange(value);
     }));
     // Changes for endpoint
     this.subscription.add(this.subscriptionForm.get('output.subscriber.endpointId').valueChanges
     .subscribe(value => {
-      console.log('end point changed', value);
       this.onEndpointChange(value);
     }));
     this.subscription.add(this.subscriptionForm.get('output.messageType').valueChanges
     .subscribe(value => {
-      console.log('message type changed', value);
       this.onMessageTypeChange(value);
     }));
     this.subscription.add(this.subscriptionForm.get('output.hasEmail').valueChanges
     .pipe(distinctUntilChanged())
     .subscribe(value => {
-      console.log('has email changed', value);
       this.onHasEmailChange(value);
     }));
   }
@@ -341,7 +337,6 @@ export class SubscriptionFormComponent implements OnInit, OnDestroy  {
       this.subscriptionForm.get('output.subscriber.channelId').setValue(null);
       return;
     }
-    console.log(this.endpointItems);
     let matchingEndpoint = [];
     if (this.endpointItems && this.endpointItems.length) {
       matchingEndpoint = this.endpointItems.filter(item => {
@@ -409,11 +404,10 @@ export class SubscriptionFormComponent implements OnInit, OnDestroy  {
   reset() {
     this.subscriptionForm.reset(subscriptionFormInitialValues);
     this.assets.clear();
-
+    this.areas.clear();
   }
 
   addEmail(content) {
-    console.log('add');
     this.modalService.open(content).result.then((result) => {
       if (result.emails) {
         const formattedEmailArray = result.emails.split(';');
@@ -430,6 +424,7 @@ export class SubscriptionFormComponent implements OnInit, OnDestroy  {
   removeEmail(index) {
     this.emails.removeAt(index);
   }
+
   onMessageTypeChange(value) {
     // Message configuration fields (except identifiers) should only be available for FA_REPORT and FA_QUERY
     const messageConfigurationEnabledFor = ['FA_REPORT', 'FA_QUERY'];

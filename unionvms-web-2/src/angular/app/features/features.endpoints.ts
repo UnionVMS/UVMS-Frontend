@@ -17,5 +17,6 @@ export const FEATURES_ENDPOINTS = {
   getAssetsGroups: '/asset/rest/group/zeroBased/list?user=',
   getAssetsGroupsDetails: '/asset/rest/group/',
   deleteSubscription: '/subscription/rest/subscription/',
-  getActivitiesMasterData: '/mdr/rest/cl/search'
+  getActivitiesMasterData: '/mdr/rest/cl/search',
+  createManualSubscription: '/subscription/rest/subscription/create-manual'
 };

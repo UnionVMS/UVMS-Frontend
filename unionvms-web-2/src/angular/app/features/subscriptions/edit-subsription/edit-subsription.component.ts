@@ -6,13 +6,7 @@ import { SubscriptionFormComponent } from '../subscription-form/subscription-for
 import { FormArray, FormControl } from '@angular/forms';
 import { ConfirmModalComponent } from '../confirmmodal/confirm-modal.component';
 import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
-
-interface Alert {
-  type: string;
-  title: string;
-  body: object[];
-}
-
+import { Alert } from 'app/shared/alert.model';
 
 @Component({
   selector: 'app-edit-subsription',

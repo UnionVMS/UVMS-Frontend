@@ -97,4 +97,9 @@ export class FeaturesService {
   getFishingActivitiesMasterData(searchObj): Promise<any> {
     return this.http.post(`${environment.baseURL}${FEATURES_ENDPOINTS.getActivitiesMasterData}`, searchObj).toPromise();
   }
+
+  createManualSubscription(manualSubscription): Promise<any> {
+    // tslint:disable-next-line: max-line-length
+    return this.http.post<SubscriptionFormModel>(`${environment.baseURL}${FEATURES_ENDPOINTS.createManualSubscription}`, manualSubscription).toPromise();
+  }
 }
