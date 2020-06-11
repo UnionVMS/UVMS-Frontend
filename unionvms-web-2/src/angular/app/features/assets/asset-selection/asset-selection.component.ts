@@ -62,6 +62,12 @@ export class AssetSelectionComponent implements OnInit, OnDestroy {
     this.subscription.add(this.formGroup.get('assets').valueChanges
     .pipe(distinctUntilChanged())
     .subscribe(value => {
+      // TODO: For some reason when clearing assets form array the value is set to an array of nulls
+      // instead of an empty array. This does not happen with areas form array. Investigate
+      // This is a temp solution and not the optimal as this is called twice.
+      if (this.assets.value.every(elem => elem === null)) {
+        this.assets.value.length = 0;
+      }
       this.selectedAssetsChange.emit(this.assets.value.length);
       this.countSelectedAssetTypes(value);
     }));
@@ -70,7 +76,7 @@ export class AssetSelectionComponent implements OnInit, OnDestroy {
       This component needs to listen for an action fired from the new-subscription component so that it resets them.
     */
     // Comment in if you need to clear the 'asset selection' part of the form
-    // this.subscription.add(this.clearForm$.subscribe( clear => {
+    // this.subscription.add(this.clearForm$.subscribe(clear => {
     //   if (clear.status) {
     //     this.result = [];
     //     this.count = 0;
@@ -118,7 +124,7 @@ export class AssetSelectionComponent implements OnInit, OnDestroy {
   buildSearchCriteria() {
     const searchableFields = ['FLAG_STATE', 'EXTERNAL_MARKING', 'NAME', 'IRCS', 'CFR'];
     return searchableFields.map(item => {
-      let obj = {
+      const obj = {
         key: item,
         value: `${this.searchText}*`
       };
@@ -143,7 +149,7 @@ export class AssetSelectionComponent implements OnInit, OnDestroy {
     const { userName: username } = jwt_decode(token);
     console.log(username)
 
-    let obj = {...this.searchObj};
+    const obj = {...this.searchObj};
     delete obj.assetSearchCriteria.criterias;
     const result: any = await this.featuresService.getAssetsGroups(obj, username);
     this.result = result.data.assetGroup;

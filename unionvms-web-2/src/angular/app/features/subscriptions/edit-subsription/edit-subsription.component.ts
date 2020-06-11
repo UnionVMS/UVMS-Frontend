@@ -6,18 +6,10 @@ import { SubscriptionFormComponent } from '../subscription-form/subscription-for
 import { FormArray, FormControl } from '@angular/forms';
 import { ConfirmModalComponent } from '../confirmmodal/confirm-modal.component';
 import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
-import { Observable } from 'rxjs/internal/Observable';
 import { Store } from '@ngrx/store';
 import * as fromRoot from 'app/app.reducer';
 import * as SUB from '../subscriptions.actions';
-
-
-interface Alert {
-  type: string;
-  title: string;
-  body: object[];
-}
-
+import { Alert } from 'app/shared/alert.model';
 
 @Component({
   selector: 'app-edit-subsription',
@@ -150,9 +142,7 @@ export class EditSubsriptionComponent implements OnInit, AfterViewInit {
     this.subscriptionFormComponent.subscriptionForm.get('output.vesselIds').setValue(transformedVesselIdsArray);
 
     this.subscriptionFormComponent.subscriptionForm.updateValueAndValidity();
-
   }
-
 
   async editSubscription($event) {
     try {
