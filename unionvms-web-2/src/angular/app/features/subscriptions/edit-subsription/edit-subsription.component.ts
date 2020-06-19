@@ -6,6 +6,11 @@ import { SubscriptionFormComponent } from '../subscription-form/subscription-for
 import { FormArray, FormControl } from '@angular/forms';
 import { ConfirmModalComponent } from '../confirmmodal/confirm-modal.component';
 import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
+import { Observable } from 'rxjs/internal/Observable';
+import { Store } from '@ngrx/store';
+import * as fromRoot from 'app/app.reducer';
+import * as SUB from '../subscriptions.actions';
+
 
 interface Alert {
   type: string;
@@ -30,15 +35,27 @@ export class EditSubsriptionComponent implements OnInit, AfterViewInit {
   vesselIdentifiers = ['CFR', 'IRCS', 'ICCAT', 'EXT_MARK', 'UVI'];
   mode = 'Edit';
 
-
   constructor(private featuresService: FeaturesService, private activatedRoute: ActivatedRoute, private modalService: NgbModal,
-              private router: Router) { }
+              private router: Router, private store: Store<fromRoot.State>) { }
 
   // TODO: Areas and Emails need to be 'refreshed' when showing and updating results. Create a function to handle refreshing
   // and use it on ngAfterViewInit and on editSubscription since code is repeated
 
   ngOnInit(): void {
     this.currentSubscriptionId = +this.activatedRoute.snapshot.paramMap.get('id');
+    // on successful create a success param is sent
+    const data = history.state.data;
+    if (data && data.success) {
+      this.alerts = [];
+      this.alerts.push({
+        type: 'success',
+        title: 'Success',
+        body: [{
+          message: 'Subscription Successfully saved!'
+        }]
+      });
+      this.store.dispatch(new SUB.CloseTimedAlert());
+    }
   }
 
   async ngAfterViewInit() {
@@ -133,6 +150,7 @@ export class EditSubsriptionComponent implements OnInit, AfterViewInit {
     this.subscriptionFormComponent.subscriptionForm.get('output.vesselIds').setValue(transformedVesselIdsArray);
 
     this.subscriptionFormComponent.subscriptionForm.updateValueAndValidity();
+
   }
 
 
@@ -167,7 +185,7 @@ export class EditSubsriptionComponent implements OnInit, AfterViewInit {
             emailsFormArray.push(new FormControl(item));
         });
       }
-
+      this.store.dispatch(new SUB.OpenTimedAlert());
       this.alerts = [];
       this.alerts.push({
         type: 'success',
@@ -176,6 +194,7 @@ export class EditSubsriptionComponent implements OnInit, AfterViewInit {
           message: 'Subscription Successfully updated!'
         }]
       });
+      this.store.dispatch(new SUB.CloseTimedAlert());
 
     } catch (err) {
       this.alerts = [];

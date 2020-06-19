@@ -2,11 +2,10 @@ import { Component, OnInit, ViewChild } from '@angular/core';
 import { SubscriptionFormModel } from '../subscription-form.model';
 import { FeaturesService } from '../../features.service';
 import { SubscriptionFormComponent } from '../subscription-form/subscription-form.component';
-import { subscriptionFormInitialValues } from '../subscriptions-helper';
-import { FormArray } from '@angular/forms';
 import { Store } from '@ngrx/store';
 import * as fromRoot from 'app/app.reducer';
 import * as SUB from '../subscriptions.actions';
+import { Router } from '@angular/router';
 interface Alert {
   type: string;
   title: string;
@@ -25,7 +24,7 @@ export class NewSubscriptionComponent implements OnInit {
   alerts: Alert[];
   mode = 'New';
 
-  constructor(private featuresService: FeaturesService, private store: Store<fromRoot.State>) {}
+  constructor(private featuresService: FeaturesService, private store: Store<fromRoot.State>, private router: Router) {}
 
   ngOnInit(): void {
   }
@@ -34,35 +33,11 @@ export class NewSubscriptionComponent implements OnInit {
     console.log('create');
     try {
       const result = await this.featuresService.createSubscription($event);
-      const assets = this.subscriptionFormComponent.subscriptionForm.get('assets') as FormArray;
-      assets.clear();
-      const stopActivities = this.subscriptionFormComponent.subscriptionForm.get('stopActivities') as FormArray;
-      stopActivities.clear();
-      const startActivities = this.subscriptionFormComponent.subscriptionForm.get('startActivities') as FormArray;
-      startActivities.clear();
-      this.subscriptionFormComponent.subscriptionForm.reset(subscriptionFormInitialValues);
-      this.subscriptionFormComponent.numberOfSelectedAreas = 0;
-      this.subscriptionFormComponent.numberOfSelectedAssets = 0;
-      const emails = this.subscriptionFormComponent.subscriptionForm.get('output.emails') as FormArray;
-      emails.clear();
-      const areas = this.subscriptionFormComponent.subscriptionForm.get('areas') as FormArray;
-      areas.clear();
-      // Inform all subscribed components to clear previous values for non-form fields
-      this.store.dispatch(new SUB.ClearSubscriptionForm({
-        status: true
-      }));
       this.store.dispatch(new SUB.ToggleSubscriptionAreasSection({
-        status: true
+        status: false
       }));
 
-      this.alerts = [];
-      this.alerts.push({
-        type: 'success',
-        title: 'Success',
-        body: [{
-            message: 'Subscription Successfully saved!'
-        }]
-      });
+      this.router.navigate(['subscriptions/edit-subscription', result.data.id], {state: {data: {success: true}}});
     } catch (err) {
       // empty alerts
       this.alerts = [];
