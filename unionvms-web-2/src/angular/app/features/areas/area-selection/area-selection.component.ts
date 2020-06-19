@@ -53,13 +53,14 @@ export class AreaSelectionComponent implements OnInit, OnDestroy  {
     /* The following fields are not part of the form and on form reset, they maintain their previous state.
       This component needs to listen for an action fired from the new-subscription component so that it resets them.
     */
-    this.subscription.add(this.clearForm$.subscribe( clear => {
-      if (clear.status) {
-        this.areaType = '';
-        this.systemSelectionCategory = 'systemFromMap';
-        this.userSelectionCategory = 'userFromMap';
-      }
-    }));
+    // Comment in if you need to clear the 'areas selection' part of form
+    // this.subscription.add(this.clearForm$.subscribe( clear => {
+    //   if (clear.status) {
+    //     this.areaType = '';
+    //     this.systemSelectionCategory = 'systemFromMap';
+    //     this.userSelectionCategory = 'userFromMap';
+    //   }
+    // }));
 
     this.subscription.add(this.formGroup.get('areas').valueChanges
     .pipe(distinctUntilChanged())

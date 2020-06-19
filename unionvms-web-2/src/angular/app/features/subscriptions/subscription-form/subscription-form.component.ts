@@ -8,10 +8,10 @@ import { Observable, Subscription } from 'rxjs';
 import { FeaturesService } from 'app/features/features.service';
 import { EndPoint } from '../endpoint.model';
 import { CommunicationChannel } from '../communication-channel.model';
-import { subscriptionFormInitialValues } from '../subscriptions-helper';
 import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
 import { distinctUntilChanged } from 'rxjs/operators';
 import { StatusAction } from '../subscriptions.reducer';
+import { Router } from '@angular/router';
 
 
 
@@ -48,8 +48,10 @@ export class SubscriptionFormComponent implements OnInit, OnDestroy  {
   isChecked = false;
   fieldType;
   activitiesList;
+  timedAlertClosed = false;
   private subscription: Subscription = new Subscription();
   isCollapsed$: Observable<StatusAction> = this.store.select(fromRoot.toggleSubscriptionAreasSection);
+  timedAlertClosed$: Observable<any> = this.store.select(fromRoot.closeTimedAlert);
 
 
   // Please do not change order of elements
@@ -57,7 +59,7 @@ export class SubscriptionFormComponent implements OnInit, OnDestroy  {
 
   constructor(private fb: FormBuilder, private store: Store<fromRoot.State>,
               private featuresService: FeaturesService,
-              private modalService: NgbModal) { }
+              private modalService: NgbModal, private router: Router) { }
 
   ngOnInit(): void {
     this.initForm();
@@ -72,6 +74,14 @@ export class SubscriptionFormComponent implements OnInit, OnDestroy  {
       this.isCollapsed = collapsed.status;
       this.isAssetsCollapsed = collapsed.status;
     }));
+
+    this.subscription.add(this.timedAlertClosed$.subscribe(close => {
+      if (close) {
+        this.closeTimedAlert();
+      } else {
+        this.timedAlertClosed = false;
+      }
+  }));
   }
 
   initForm() {
@@ -307,10 +317,6 @@ export class SubscriptionFormComponent implements OnInit, OnDestroy  {
     });
     formValues.output.vesselIds = vesselIdsArray;
 
-
-    // StopActivities
-
-
     // Remove name property from each area
     formValues.areas.forEach(element => {
       delete element.name;
@@ -406,10 +412,12 @@ export class SubscriptionFormComponent implements OnInit, OnDestroy  {
     this.alerts.splice(this.alerts.indexOf(alert), 1);
   }
 
-  reset() {
-    this.subscriptionForm.reset(subscriptionFormInitialValues);
-    this.assets.clear();
+  closeTimedAlert() {
+    setTimeout(() => this.timedAlertClosed = true, 5000);
+  }
 
+  reset() {
+    this.router.navigate(['subscriptions/manage-subscriptions']);
   }
 
   addEmail(content) {
@@ -430,6 +438,7 @@ export class SubscriptionFormComponent implements OnInit, OnDestroy  {
   removeEmail(index) {
     this.emails.removeAt(index);
   }
+
   onMessageTypeChange(value) {
     // Message configuration fields (except identifiers) should only be available for FA_REPORT and FA_QUERY
     const messageConfigurationEnabledFor = ['FA_REPORT', 'FA_QUERY'];
