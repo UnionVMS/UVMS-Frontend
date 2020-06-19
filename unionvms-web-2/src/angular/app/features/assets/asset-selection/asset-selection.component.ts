@@ -69,16 +69,17 @@ export class AssetSelectionComponent implements OnInit, OnDestroy {
     /* The following fields are not part of the form and on form reset, they maintain their previous state.
       This component needs to listen for an action fired from the new-subscription component so that it resets them.
     */
-    this.subscription.add(this.clearForm$.subscribe( clear => {
-      if (clear.status) {
-        this.result = [];
-        this.count = 0;
-        this.assets.clear();
-        this.selectedAssetsChange.emit(this.assets.value.length);
-        this.selectedAssets = 0;
-        this.selectedGroups = 0;
-      }
-    }));
+    // Comment in if you need to clear the 'asset selection' part of the form
+    // this.subscription.add(this.clearForm$.subscribe( clear => {
+    //   if (clear.status) {
+    //     this.result = [];
+    //     this.count = 0;
+    //     this.assets.clear();
+    //     this.selectedAssetsChange.emit(this.assets.value.length);
+    //     this.selectedAssets = 0;
+    //     this.selectedGroups = 0;
+    //   }
+    // }));
     this.searchObj = {
       pagination: {
         page: 0,
