@@ -26,7 +26,7 @@ export class ManualSubscriptionsComponent implements OnInit, OnDestroy {
   manualSubscriptionForm: FormGroup;
   messageTypes;
   faCalendar = faCalendar;
-  query = 'period';
+  queryControl: FormControl;
   historyUnits = [];
   numberOfSelectedAssets;
   numberOfSelectedAreas;
@@ -105,6 +105,7 @@ export class ManualSubscriptionsComponent implements OnInit, OnDestroy {
   }
 
   initForm() {
+    this.queryControl = this.fb.control('period');
     this.manualSubscriptionForm = this.fb.group({
       output: this.fb.group({
         messageType: ['FA_QUERY'],
@@ -123,6 +124,7 @@ export class ManualSubscriptionsComponent implements OnInit, OnDestroy {
       areas: this.fb.array([]),
       assets: this.fb.array([]),
     });
+    this.subscription.add(this.queryControl.valueChanges.subscribe(this.onQuerySelectionChange.bind(this)));
     this.initSubscriptions();
   }
 
@@ -195,6 +197,7 @@ export class ManualSubscriptionsComponent implements OnInit, OnDestroy {
 
       this.manualSubscriptionForm.disable();
       this.inputsDisabled = true;
+      this.queryControl.disable();
 
     } catch (err) {
       // empty alerts
@@ -208,6 +211,9 @@ export class ManualSubscriptionsComponent implements OnInit, OnDestroy {
   }
 
   onQuerySelectionChange(value) {
+    if (this.inputsDisabled) {
+      return;
+    }
     if (value === 'period') {
       this.history.setValue(null);
       this.history.disable();
@@ -223,9 +229,6 @@ export class ManualSubscriptionsComponent implements OnInit, OnDestroy {
       this.history.enable();
       this.historyUnit.enable();
     }
-
-    this.query = value;
-
   }
 
   initSubscriptions() {
@@ -257,8 +260,8 @@ export class ManualSubscriptionsComponent implements OnInit, OnDestroy {
         this.manualSubscriptionForm.get('output.subscriber.endpointId').enable();
       }
     }
-
   }
+
   onEndpointChange(value) {
     if (value === '') {
       this.manualSubscriptionForm.get('output.subscriber.channelId').disable();
@@ -283,7 +286,6 @@ export class ManualSubscriptionsComponent implements OnInit, OnDestroy {
     }
   }
 
-
   onSelectedAssetsChange(numberOfSelectedAssets) {
     this.numberOfSelectedAssets = numberOfSelectedAssets;
   }
@@ -302,7 +304,6 @@ export class ManualSubscriptionsComponent implements OnInit, OnDestroy {
     this.assets.clear();
 
   }
-
 
   ngOnDestroy() {
     this.subscription.unsubscribe();
