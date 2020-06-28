@@ -138,7 +138,6 @@
                     </span>
                   </div>
               </div>
-
             </div>
         </div>
       </div>
@@ -405,13 +404,13 @@
         <div class="form-group row">
           <label for="activities" class="col-sm-2 col-form-label-sm">Activities</label>
           <div class="col-sm-8 activities-list">
-            <div *ngFor="let item of activitiesList | groupBy: 'type'" >
+            <div *ngFor="let item of activitiesList | groupBy: 'type'" class="group-of-choices">
              <div class="group-title">
               <b>{{item.key | titlecase }}s</b>
               <hr>
              </div>
              <div *ngFor="let entry of item.value; let i = index;">
-              <div class="custom-control custom-checkbox" formArrayName="startActivities" >
+              <div class="custom-control custom-checkbox" formArrayName="startActivities">
                 <input class="custom-control-input" type="checkbox" id="activity_start_{{item.key}}_{{i}}" [checked]="getIsChecked(entry, 'startActivities')" (change)="onChangeActivity(entry, $event.target.checked, 'startActivities')">
                 <label class="custom-control-label" for="activity_start_{{item.key}}_{{i}}">
                   {{entry.value}}
@@ -423,7 +422,12 @@
         </div>
       </div>
       <div class="col-md-6">
-          <!-- placeholder for senders -->
+        <div class="form-group row">
+          <label class="col-sm-2 col-form-label-sm">Sender</label>
+          <div class="col-sm-8 sender-list">
+            <app-cbmultiselect [items]="allSenders" formControlName="senders"></app-cbmultiselect>
+          </div>
+        </div>
       </div>
     </div>
   </fieldset>
@@ -459,7 +463,7 @@
           <label for="activities" class="col-sm-4 col-form-label-sm">Declares Activities</label>
           <div class="col-sm-8">
             <div class="activities-list">
-              <div *ngFor="let item of activitiesList | groupBy: 'type'" >
+              <div *ngFor="let item of activitiesList | groupBy: 'type'" class="group-of-choices">
                 <div class="group-title">
                  <b>{{item.key | titlecase }}s</b>
                  <hr>

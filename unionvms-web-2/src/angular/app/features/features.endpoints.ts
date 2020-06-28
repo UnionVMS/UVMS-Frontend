@@ -18,5 +18,6 @@ export const FEATURES_ENDPOINTS = {
   getAssetsGroupsDetails: '/asset/rest/group/',
   deleteSubscription: '/subscription/rest/subscription/',
   getActivitiesMasterData: '/mdr/rest/cl/search',
-  createManualSubscription: '/subscription/rest/subscription/create-manual'
+  createManualSubscription: '/subscription/rest/subscription/create-manual',
+  fetchAllSenders: '/user/rest/organisations/withEndPointsAndChannels'
 };

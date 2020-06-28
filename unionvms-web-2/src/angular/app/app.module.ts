@@ -13,7 +13,7 @@ import { AuthGuard } from './auth/auth.guard';
 import { HTTP_INTERCEPT_PROVIDERS } from './http-interceptors';
 import { SubscriptionsGuard } from './features/subscriptions/subscriptions.guard';
 import { SharedModule } from './shared/shared.module';
-
+import { ComponentsModule } from 'app/components/components.module';
 
 
 @NgModule({
@@ -27,6 +27,7 @@ import { SharedModule } from './shared/shared.module';
     AuthModule,
     MainModule,
     FeaturesModule,
+    ComponentsModule,
     SharedModule,
     StoreModule.forRoot(REDUCERS)
   ],
