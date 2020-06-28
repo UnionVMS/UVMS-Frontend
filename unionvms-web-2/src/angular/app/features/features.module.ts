@@ -21,6 +21,7 @@ import { AssetPreviewModalComponent } from './assets/asset-selection/assetprevie
 import { ConfirmModalComponent } from './subscriptions/confirmmodal/confirm-modal.component';
 import { ManualSubscriptionsComponent } from './subscriptions/manual-subscriptions/manual-subscriptions.component';
 import { NgMultiSelectDropDownModule } from 'ng-multiselect-dropdown';
+import { ComponentsModule } from 'app/components/components.module';
 
 @NgModule({
   declarations: [
@@ -38,13 +39,12 @@ import { NgMultiSelectDropDownModule } from 'ng-multiselect-dropdown';
     AssetPreviewModalComponent,
     ConfirmModalComponent,
     ManualSubscriptionsComponent
-
-
   ],
   imports: [
     SharedModule,
     MainModule,
     FeaturesRoutingModule,
+    ComponentsModule,
     NgxDatatableModule.forRoot({
       messages: {
         emptyMessage: 'No data to display', // Message to show when array is presented, but contains no values
@@ -63,6 +63,5 @@ import { NgMultiSelectDropDownModule } from 'ng-multiselect-dropdown';
     {provide: NgbDateParserFormatter, useClass: CustomDateParserFormatter}
   ],
   entryComponents: [AssetPreviewModalComponent, ConfirmModalComponent]
-
 })
-export class FeaturesModule { }
+export class FeaturesModule {}

@@ -1,0 +1,12 @@
+hr {
+  margin-top: 0.5rem;
+  margin-bottom: 0.5rem;
+}
+
+.group-of-choices {
+  margin-top: 20px;
+
+  &:first-child {
+    margin-top: 0;
+  }
+}

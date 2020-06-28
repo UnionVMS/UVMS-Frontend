@@ -1,0 +1,14 @@
+<div *ngFor="let item of itemsByType" class="group-of-choices">
+  <div class="group-title">
+    <b>{{ item.key }}</b>
+    <hr>
+  </div>
+  <div *ngFor="let entry of item.value; let i = index;">
+    <div class="custom-control custom-checkbox">
+      <input class="custom-control-input" id="{{idPrefix}}-{{item.key}}-{{i}}" type="checkbox" [formControl]="form.get([item.key,i])" [checked]="form.get([item.key,i]).value">
+      <label class="custom-control-label" for="{{idPrefix}}-{{item.key}}-{{i}}">
+        {{ entry.displayName }}
+      </label>
+    </div>
+  </div>
+</div>

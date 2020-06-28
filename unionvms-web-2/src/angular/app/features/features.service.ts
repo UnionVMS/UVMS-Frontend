@@ -7,6 +7,7 @@ import { Observable, of } from 'rxjs';
 import { environment } from '../../environments/environment';
 import { Organization } from './subscriptions/organization.model';
 import { SubscriptionFormModel } from './subscriptions/subscription-form.model';
+import { ResponseDto, OrganisationDto } from './features.model';
 
 
 // provide in features module?
@@ -101,5 +102,9 @@ export class FeaturesService {
   createManualSubscription(manualSubscription): Promise<any> {
     // tslint:disable-next-line: max-line-length
     return this.http.post<SubscriptionFormModel>(`${environment.baseURL}${FEATURES_ENDPOINTS.createManualSubscription}`, manualSubscription).toPromise();
+  }
+
+  fetchAllSenders(): Promise<ResponseDto<OrganisationDto[]>> {
+    return this.http.get<ResponseDto<OrganisationDto[]>>(`${environment.baseURL}${FEATURES_ENDPOINTS.fetchAllSenders}`).toPromise();
   }
 }

@@ -1,5 +1,5 @@
 import { Component, OnInit, Input, Output, EventEmitter, OnDestroy } from '@angular/core';
-import { faCalendar, faRetweet, faEye, faPlusSquare, faTrash  } from '@fortawesome/free-solid-svg-icons';
+import { faCalendar, faRetweet, faEye, faPlusSquare, faTrash, faAngleRight  } from '@fortawesome/free-solid-svg-icons';
 import { FormGroup, FormBuilder, Validators, FormControl, FormArray } from '@angular/forms';
 import { Organization } from '../organization.model';
 import { Store } from '@ngrx/store';
@@ -12,15 +12,20 @@ import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
 import { distinctUntilChanged } from 'rxjs/operators';
 import { StatusAction } from '../subscriptions.reducer';
 import { Router } from '@angular/router';
+import { SubscriptionSubscriberDto } from 'app/features/features.model';
 
-
+interface SenderElement {
+  type: string;
+  displayName: string;
+  value: SubscriptionSubscriberDto;
+}
 
 @Component({
   selector: 'app-subscription-form',
   templateUrl: './subscription-form.component.html',
   styleUrls: ['./subscription-form.component.scss']
 })
-export class SubscriptionFormComponent implements OnInit, OnDestroy  {
+export class SubscriptionFormComponent implements OnInit, OnDestroy {
   @Input() alerts;
   @Input() mode;
   @Output() save = new EventEmitter<any>();
@@ -52,7 +57,7 @@ export class SubscriptionFormComponent implements OnInit, OnDestroy  {
   private subscription: Subscription = new Subscription();
   isCollapsed$: Observable<StatusAction> = this.store.select(fromRoot.toggleSubscriptionAreasSection);
   timedAlertClosed$: Observable<any> = this.store.select(fromRoot.closeTimedAlert);
-
+  allSenders: SenderElement[];
 
   // Please do not change order of elements
   vesselIdentifiers = ['CFR', 'IRCS', 'ICCAT', 'EXT_MARK', 'UVI'];
@@ -69,6 +74,7 @@ export class SubscriptionFormComponent implements OnInit, OnDestroy  {
     this.setTriggerTypes();
     this.setDeadlineUnits();
     this.getActivities();
+    this.fetchAllSenders();
     this.subscription.add(this.organizations$.subscribe(organizations => this.organizations = organizations));
     this.subscription.add(this.isCollapsed$.subscribe( collapsed => {
       this.isCollapsed = collapsed.status;
@@ -81,7 +87,7 @@ export class SubscriptionFormComponent implements OnInit, OnDestroy  {
       } else {
         this.timedAlertClosed = false;
       }
-  }));
+    }));
   }
 
   initForm() {
@@ -129,7 +135,8 @@ export class SubscriptionFormComponent implements OnInit, OnDestroy  {
       deadlineUnit: ['DAYS'],
       stopWhenQuitArea: [true],
       stopActivities: this.fb.array([]),
-      startActivities: this.fb.array([])
+      startActivities: this.fb.array([]),
+      senders: this.fb.control([])
     });
 
     this.initSubscriptions();
@@ -335,8 +342,8 @@ export class SubscriptionFormComponent implements OnInit, OnDestroy  {
         this.subscriptionForm.get('output.subscriber.endpointId').enable();
       }
     }
-
   }
+
   onEndpointChange(value) {
     if (value === 'null') {
       this.subscriptionForm.get('output.subscriber.channelId').disable();
@@ -350,7 +357,7 @@ export class SubscriptionFormComponent implements OnInit, OnDestroy  {
       });
     }
     if (matchingEndpoint.length) {
-       // Assuming there will always be only one matching endpoint
+      // Assuming there will always be only one matching endpoint
       this.communicationChannels = matchingEndpoint[0].channelList;
     }
     if (this.communicationChannels.length) {
@@ -358,7 +365,6 @@ export class SubscriptionFormComponent implements OnInit, OnDestroy  {
     } else {
       this.subscriptionForm.get('output.subscriber.channelId').disable();
       this.subscriptionForm.get('output.subscriber.channelId').setValue(null);
-
     }
   }
 
@@ -543,7 +549,7 @@ export class SubscriptionFormComponent implements OnInit, OnDestroy  {
             ]
           }
         };
-       // contains data for each fishing activity including code
+        // contains data for each fishing activity including code
         const result = await this.featuresService.getFishingActivitiesMasterData(searchObj);
 
         // get code for each fishing activity and construct a new array containing all activities per type
@@ -585,8 +591,26 @@ export class SubscriptionFormComponent implements OnInit, OnDestroy  {
     }
   }
 
+  private async fetchAllSenders() {
+    this.featuresService.fetchAllSenders()
+      .then(resp => {
+        this.allSenders = resp.data.reduce((aggr, organisation) => {
+          return aggr.concat((organisation.endPointList || []).reduce((epAggr, endpoint) => {
+            return epAggr.concat((endpoint.channel || []).map(channel => ({
+              type: organisation.isoa3code,
+              displayName: endpoint.name + ' - ' + channel.dataflow,
+              value: {
+                organisationId: organisation.organisationId,
+                endpointId: endpoint.endPointId,
+                channelId: channel.channelId
+              }
+            })));
+          }, [] as SenderElement[]));
+        }, [] as SenderElement[]);
+      });
+  }
+
   ngOnDestroy() {
     this.subscription.unsubscribe();
   }
-
 }
