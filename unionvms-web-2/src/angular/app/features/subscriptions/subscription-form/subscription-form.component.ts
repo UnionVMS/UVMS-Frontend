@@ -117,21 +117,21 @@ export class SubscriptionFormComponent implements OnInit, OnDestroy {
         consolidated: [{value: true, disabled: true}],
         vesselIds: this.fb.array(this.vesselIdentifiers),
         generateNewReportId: [{value: false, disabled: true}],
-        history: [{value: 1, disabled: true}],
+        history: [{value: 1, disabled: true}, [Validators.min(0), Validators.max(9999)]],
         historyUnit: [{value: 'DAYS', disabled: true}]
       }),
       execution: this.fb.group({
         triggerType: ['SCHEDULER'],
-        frequency: [0, Validators.required],
+        frequency: [0, [Validators.required, Validators.min(0), Validators.max(9999)]],
         frequencyUnit: ['DAYS'],
         immediate: [true],
-        timeExpression: ['06:00', Validators.required]
+        timeExpression: ['06:00', [Validators.required, Validators.pattern(/^(?:23|22|21|20|[01]?[0-9]):[0-5][0-9]$/)]]
       }),
       startDate: [null],
       endDate: [null],
       areas: this.fb.array([]),
       assets: this.fb.array([]),
-      deadline: [0],
+      deadline: [0, [Validators.min(0), Validators.max(9999)]],
       deadlineUnit: ['DAYS'],
       stopWhenQuitArea: [true],
       stopActivities: this.fb.array([]),
@@ -394,7 +394,6 @@ export class SubscriptionFormComponent implements OnInit, OnDestroy {
 
   setTriggerTypes() {
     this.triggerTypes = [
-      { key: 'Manual', value: 'MANUAL'},
       { key: 'Scheduler', value: 'SCHEDULER'},
       { key: 'INC FA Report', value: 'INC_FA_REPORT'},
       { key: 'INC FA Query', value: 'INC_FA_QUERY'},

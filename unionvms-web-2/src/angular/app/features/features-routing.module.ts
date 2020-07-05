@@ -12,13 +12,19 @@ import { ManualSubscriptionsComponent } from './subscriptions/manual-subscriptio
 
 export const featureRoutes: Routes = [
   { path: 'today', component: TodayComponent },
-  { path: 'subscriptions', component: SubscriptionsComponent, canActivate: [SubscriptionsGuard], children: [
-    {path: '', redirectTo: 'manage-subscriptions', pathMatch: 'full'},
-    { path: 'manage-subscriptions', component: ManageSubscriptionsComponent },
-    { path: 'new-subscription', component: NewSubscriptionComponent },
-    { path: 'edit-subscription/:id', component: EditSubsriptionComponent},
-    { path: 'manual-subscriptions', component: ManualSubscriptionsComponent}
-  ] },
+  { path: 'subscriptions', component: SubscriptionsComponent,
+    canActivate: [SubscriptionsGuard],
+    data: {
+      pageTitle: 'Subscriptions'
+    },
+    children: [
+      { path: '', redirectTo: 'manage-subscriptions', pathMatch: 'full' },
+      { path: 'manage-subscriptions', component: ManageSubscriptionsComponent },
+      { path: 'new-subscription', component: NewSubscriptionComponent },
+      { path: 'edit-subscription/:id', component: EditSubsriptionComponent },
+      { path: 'manual-subscriptions', component: ManualSubscriptionsComponent }
+    ]
+  },
   { path: '**', component: NotFoundComponent }
 ];
 
