@@ -127,7 +127,7 @@
                   </div>
               </div>
               <div class="form-group row">
-                  <label for="communicationChannel" class="col-sm-4 col-form-label-sm">Comminication Channel</label>
+                  <label for="communicationChannel" class="col-sm-4 col-form-label-sm">Communication Channel</label>
                   <div class="col-sm-8">
                     <select class="form-control" id="communicationChannel" formControlName="channelId">
                       <option value=null>All</option>
@@ -165,7 +165,7 @@
                             <form #emailForm="ngForm">
                               <div class="form-group">
                                 <label for="email">Email addresses</label>
-                                <textarea rows="4" pattern="^[a-zA-Z0-9@;._]+$" ngModel name="emails" #emails="ngModel"  type="email" class="form-control" id="email" aria-describedby="email"></textarea>
+                                <textarea rows="4" pattern="^\s*(?:[a-zA-Z0-9@._-]+@[a-zA-Z0-9@._-]+)(?:\s*;\s*(?:[a-zA-Z0-9@._-]+@[a-zA-Z0-9@._-]+))*(?:\s*;\s*)?$" ngModel name="emails" #emails="ngModel"  type="email" class="form-control" id="email" aria-describedby="email"></textarea>
                                 <small id="emailHelp" class="form-text text-muted">Insert multiple emails using ;</small>
                                 <span class="validation-error" *ngIf="emails.invalid && (emails.dirty || emails.touched)">
                                   Please insert only valid characters

@@ -48,8 +48,8 @@ export class NavigationComponent implements OnInit {
       .pipe(throttleTime(200))
       .pipe()
       .subscribe(() => {
-        console.log('resize');
-        console.log(window.innerWidth);
+//        console.log('resize');
+//        console.log(window.innerWidth);
       });
 
   }
