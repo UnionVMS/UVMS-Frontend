@@ -1,5 +1,5 @@
 import { Component, OnInit, OnDestroy, ViewChild } from '@angular/core';
-import { MessageTypeItem } from '../message-type-item.model';
+import { NameAndValue } from 'app/shared/name-and-value';
 import { Store } from '@ngrx/store';
 import * as fromRoot from '../../../app.reducer';
 import { Observable, Subscription } from 'rxjs';
@@ -23,7 +23,8 @@ import { ConfirmModalComponent } from '../confirmmodal/confirm-modal.component';
 })
 export class ManageSubscriptionsComponent implements OnInit, OnDestroy {
   @ViewChild('SubscriptionListTable') subscriptionListTable: any;
-  messageTypeItems: MessageTypeItem[];
+  messageTypeItems: NameAndValue<string>[];
+  triggerTypeItems: NameAndValue<string>[];
   endpointItems: EndPoint[] = [];
   communicationChannels: CommunicationChannel[] = [];
   filterSubscriptionsForm: FormGroup;
@@ -41,12 +42,9 @@ export class ManageSubscriptionsComponent implements OnInit, OnDestroy {
   sizeList;
   initialFormValues;
 
-
-
   organizations$: Observable<Organization[]> = this.store.select(fromRoot.getOrganizations);
   organizations: Organization[];
   private subscription: Subscription = new Subscription();
-
 
   constructor(private store: Store<fromRoot.State>, private featuresService: FeaturesService, private fb: FormBuilder,
               private router: Router, private modalService: NgbModal) {
@@ -65,12 +63,14 @@ export class ManageSubscriptionsComponent implements OnInit, OnDestroy {
       startDate: null,
       endDate: null,
       channel: null,
-      messageType: null
+      messageType: null,
+      withAnyTriggerType: null
     };
   }
 
   ngOnInit(): void {
-    this.setMessageTypeItems();
+    this.initMessageTypeItems();
+    this.initTriggerTypeItems();
     this.subscription.add(this.organizations$.subscribe(organizations => this.organizations = organizations));
 
     this.initForm();
@@ -79,17 +79,7 @@ export class ManageSubscriptionsComponent implements OnInit, OnDestroy {
           offset: 0,
           pageSize: 10
       },
-      criteria: {
-        name: '',
-        active : null,
-        organisation: null,
-        endpoint: null,
-        channel: null,
-        description: '',
-        startDate: null,
-        endDate: null,
-        messageType: null
-      },
+      criteria: this.filterSubscriptionsForm.getRawValue(),
       orderBy: {
         direction: 'ASC',
         field: 'ID'
@@ -110,7 +100,8 @@ export class ManageSubscriptionsComponent implements OnInit, OnDestroy {
       startDate: [null],
       endDate: [null],
       channel: [{value: null, disabled: true}],
-      messageType: [null]
+      messageType: [null],
+      withAnyTriggerType: [null]
     });
 
 
@@ -122,13 +113,23 @@ export class ManageSubscriptionsComponent implements OnInit, OnDestroy {
       this.onEndpointChange(value);
     }));
   }
-  setMessageTypeItems() {
+
+  private initMessageTypeItems() {
     this.messageTypeItems = [
       { name: 'None', value: 'NONE'},
       { name: 'FA Report', value: 'FA_REPORT'},
       { name: 'FA Query', value: 'FA_QUERY'},
       { name: 'Position', value: 'POSITION'},
       { name: 'Sale Note', value: 'SALE_NOTE'},
+    ];
+  }
+
+  private initTriggerTypeItems() {
+    this.triggerTypeItems = [
+      { name: 'Scheduler', value: 'SCHEDULER' },
+      { name: 'INC FA Report', value: 'INC_FA_REPORT' },
+      { name: 'INC FA Query', value: 'INC_FA_QUERY' },
+      { name: 'INC Position', value: 'INC_POSITION' }
     ];
   }
 
@@ -171,6 +172,9 @@ export class ManageSubscriptionsComponent implements OnInit, OnDestroy {
       const tempEndDate = endDateFormValue.split('-').reverse().join('-');
       const endDate = `${tempEndDate}T00:00:00+01:00`;
       this.searchObj.criteria.endDate = endDate;
+    }
+    if (this.searchObj.criteria.withAnyTriggerType) {
+      this.searchObj.criteria.withAnyTriggerType = [this.searchObj.criteria.withAnyTriggerType];
     }
     this.fetchSubscriptionsList(this.searchObj);
   }
