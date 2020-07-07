@@ -1,6 +1,7 @@
 export interface ResponseDto<T> {
   data: T;
-  code: string;
+  code: number;
+  msg?: string;
 }
 
 export interface ChannelDto {

@@ -14,7 +14,8 @@ import { faCheck, faTimes, faCalendar, faEdit, faTrash } from '@fortawesome/free
 import { Router } from '@angular/router';
 import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
 import { ConfirmModalComponent } from '../confirmmodal/confirm-modal.component';
-
+import { Subscription as SubscriptionModel } from 'app/features/subscriptions/subscription.model';
+import * as moment from 'moment';
 
 @Component({
   selector: 'app-manage-subscriptions',
@@ -28,7 +29,7 @@ export class ManageSubscriptionsComponent implements OnInit, OnDestroy {
   endpointItems: EndPoint[] = [];
   communicationChannels: CommunicationChannel[] = [];
   filterSubscriptionsForm: FormGroup;
-  subscriptionList: Subscription[];
+  subscriptionList: SubscriptionModel[];
   ColumnMode = ColumnMode;
   loadingIndicator = true;
   reorderable = true;
@@ -87,7 +88,6 @@ export class ManageSubscriptionsComponent implements OnInit, OnDestroy {
     };
 
     this.fetchSubscriptionsList();
-
   }
 
   initForm() {
@@ -274,7 +274,7 @@ export class ManageSubscriptionsComponent implements OnInit, OnDestroy {
     this.router.navigate(['subscriptions/edit-subscription', id]);
   }
 
-   deleteSubscription({id, name}) {
+  deleteSubscription({id, name}) {
     const modalRef = this.modalService.open(ConfirmModalComponent);
     modalRef.componentInstance.name = name;
     modalRef.result.then(res => {
@@ -289,12 +289,13 @@ export class ManageSubscriptionsComponent implements OnInit, OnDestroy {
       }
     }, dismiss => {
     });
+  }
 
-
+  isInValidRange(subscription: SubscriptionModel): boolean {
+    return moment().isBetween(subscription.startDate, subscription.endDate);
   }
 
   ngOnDestroy() {
     this.subscription.unsubscribe();
   }
-
 }

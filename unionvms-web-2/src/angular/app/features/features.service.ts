@@ -8,6 +8,7 @@ import { environment } from '../../environments/environment';
 import { Organization } from './subscriptions/organization.model';
 import { SubscriptionFormModel } from './subscriptions/subscription-form.model';
 import { ResponseDto, OrganisationDto } from './features.model';
+import { SubscriptionListResponseDto } from 'app/features/subscriptions/subscription.model';
 
 
 // provide in features module?
@@ -22,8 +23,9 @@ export class FeaturesService {
     return this.http.get<Organization[]>(`${environment.baseURL}${FEATURES_ENDPOINTS.getOrganizations}`).toPromise();
   }
 
-  fetchSubscriptionsList(searchObj): Promise<any> {
-    return this.http.post(`${environment.baseURL}${FEATURES_ENDPOINTS.getSubscriptionsList}`, searchObj).toPromise();
+  fetchSubscriptionsList(searchObj): Promise<ResponseDto<SubscriptionListResponseDto>> {
+    // tslint:disable-next-line: max-line-length
+    return this.http.post<ResponseDto<SubscriptionListResponseDto>>(`${environment.baseURL}${FEATURES_ENDPOINTS.getSubscriptionsList}`, searchObj).toPromise();
   }
 
   getOrganizationDetails(organizationId): Promise<Organization> {

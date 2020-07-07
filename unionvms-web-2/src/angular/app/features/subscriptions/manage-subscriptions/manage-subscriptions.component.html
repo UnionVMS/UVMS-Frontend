@@ -97,31 +97,7 @@
     (page)="setPage($event)"
     (sort)="onSort($event)"
     #SubscriptionListTable>
-    <ngx-datatable-column name="Name" [sortable]="true">
-      <ng-template let-column="column" let-sort="sortFn" ngx-datatable-header-template>
-        <span (click)="sort()">{{ column.name }}</span>
-      </ng-template>
-      <ng-template let-row="row" let-value="value" ngx-datatable-cell-template>
-        {{value}}
-      </ng-template>
-    </ngx-datatable-column>
-    <ngx-datatable-column name="Description" [sortable]="true">
-      <ng-template let-column="column" let-sort="sortFn" ngx-datatable-header-template>
-        <span (click)="sort()">{{ column.name }}</span>
-      </ng-template>
-      <ng-template let-row="row" let-value="value" ngx-datatable-cell-template>
-        {{value}}
-      </ng-template>
-    </ngx-datatable-column>
     <ngx-datatable-column name="Organization" [sortable]="true" prop="organisationName">
-      <ng-template let-column="column" let-sort="sortFn" ngx-datatable-header-template>
-        <span (click)="sort()">{{ column.name }}</span>
-      </ng-template>
-      <ng-template let-row="row" let-value="value" ngx-datatable-cell-template>
-        {{value}}
-      </ng-template>
-    </ngx-datatable-column>
-    <ngx-datatable-column name="Endpoint" [sortable]="true" prop="endpointName">
       <ng-template let-column="column" let-sort="sortFn" ngx-datatable-header-template>
         <span (click)="sort()">{{ column.name }}</span>
       </ng-template>
@@ -137,7 +113,31 @@
         {{value}}
       </ng-template>
     </ngx-datatable-column>
+    <ngx-datatable-column name="Endpoint" [sortable]="true" prop="endpointName">
+      <ng-template let-column="column" let-sort="sortFn" ngx-datatable-header-template>
+        <span (click)="sort()">{{ column.name }}</span>
+      </ng-template>
+      <ng-template let-row="row" let-value="value" ngx-datatable-cell-template>
+        {{value}}
+      </ng-template>
+    </ngx-datatable-column>
     <ngx-datatable-column name="Message Type" [sortable]="true" prop="messageType">
+      <ng-template let-column="column" let-sort="sortFn" ngx-datatable-header-template>
+        <span (click)="sort()">{{ column.name }}</span>
+      </ng-template>
+      <ng-template let-row="row" let-value="value" ngx-datatable-cell-template>
+        {{value}}
+      </ng-template>
+    </ngx-datatable-column>
+    <ngx-datatable-column name="Trigger" [sortable]="true" prop="triggerType">
+      <ng-template let-column="column" let-sort="sortFn" ngx-datatable-header-template>
+        <span (click)="sort()">{{ column.name }}</span>
+      </ng-template>
+      <ng-template let-row="row" let-value="value" ngx-datatable-cell-template>
+        {{value}}
+      </ng-template>
+    </ngx-datatable-column>
+    <ngx-datatable-column name="Name" [sortable]="true">
       <ng-template let-column="column" let-sort="sortFn" ngx-datatable-header-template>
         <span (click)="sort()">{{ column.name }}</span>
       </ng-template>
@@ -161,16 +161,22 @@
         {{value | date: "yyyy-MM-dd hh:mm:ss"}}
       </ng-template>
     </ngx-datatable-column>
-    <ngx-datatable-column name="Active" prop="active">
+    <ngx-datatable-column [sortable]="false" [resizeable]="false" [width]="32">
+      <ng-template let-row="row" ngx-datatable-cell-template>
+        <div [ngSwitch]="isInValidRange(row)">
+          <fa-icon *ngSwitchCase="true" class="active" [icon]="faCheck"></fa-icon>
+          <fa-icon *ngSwitchDefault   class="inactive" [icon]="faTimes"></fa-icon>
+        </div>
+      </ng-template>
+    </ngx-datatable-column>
+    <ngx-datatable-column name="Enabled" prop="active" [resizeable]="false" [width]="70">
       <ng-template let-column="column" let-sort="sortFn" ngx-datatable-header-template>
        {{ column.name }}
       </ng-template>
       <ng-template let-row="row" let-value="value" ngx-datatable-cell-template>
-        <div *ngIf="value">
-          <fa-icon class="active" [icon]="faCheck"></fa-icon>
-        </div>
-        <div *ngIf="!value">
-          <fa-icon class="inactive" [icon]="faTimes"></fa-icon>
+        <div [ngSwitch]="value" class="active-icon-container">
+          <fa-icon *ngSwitchCase="true" class="active" [icon]="faCheck"></fa-icon>
+          <fa-icon *ngSwitchDefault   class="inactive" [icon]="faTimes"></fa-icon>
         </div>
       </ng-template>
     </ngx-datatable-column>
