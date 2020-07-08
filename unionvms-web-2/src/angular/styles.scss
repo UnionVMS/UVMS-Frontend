@@ -198,6 +198,12 @@ fieldset {
   background-color: #e9ecef !important;
 }
 
+.form-group label {
+  font-weight: 700;
 
-
-
+  &.required::after {
+    content: "*";
+    color: $label-required-after;
+    margin-left: 3px;
+  }
+}

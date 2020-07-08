@@ -26,7 +26,7 @@
   <fieldset class="border p-2">
     <legend  class="w-auto">General Configuration</legend>
     <div class="form-group row">
-        <label for="name" class="col-sm-2 col-form-label-sm">Name</label>
+        <label for="name" class="col-sm-2 col-form-label-sm required">Name</label>
         <div class="col-sm-4">
           <input type="text" formControlName="name" class="form-control" id="name" (blur)="onCheckName()">
           <span class="validation-error" *ngIf="name.errors?.required && name.touched">
@@ -63,7 +63,7 @@
             </div>
           </div>
           <div class="form-group row">
-            <label for="endDate" class="col-sm-4 col-form-label-sm">Till</label>
+            <label for="endDate" class="col-sm-4 col-form-label-sm">Until</label>
             <div class="input-group col-sm-8">
               <input class="form-control"
                   name="dpend" ngbDatepicker formControlName="endDate" #dpend="ngbDatepicker">
@@ -101,7 +101,7 @@
             </div>
             <div formGroupName="subscriber">
               <div class="form-group row">
-                <label for="organizationId" class="col-sm-4 col-form-label-sm">Organisation</label>
+                <label for="organizationId" class="col-sm-4 col-form-label-sm" [class.required]="messageType.value !== 'NONE'">Organisation</label>
                 <div class="col-sm-8">
                   <select class="form-control" id="organisationId" formControlName="organisationId">
                     <option value=null>All</option>
@@ -115,7 +115,7 @@
                 </div>
               </div>
               <div class="form-group row">
-                  <label for="endPoint" class="col-sm-4 col-form-label-sm">End Point</label>
+                  <label for="endPoint" class="col-sm-4 col-form-label-sm" [class.required]="messageType.value !== 'NONE'">End Point</label>
                   <div class="col-sm-8">
                     <select class="form-control" id="endpoint" formControlName="endpointId">
                       <option value=null>All</option>
@@ -127,7 +127,7 @@
                   </div>
               </div>
               <div class="form-group row">
-                  <label for="communicationChannel" class="col-sm-4 col-form-label-sm">Communication Channel</label>
+                  <label for="communicationChannel" class="col-sm-4 col-form-label-sm" [class.required]="messageType.value !== 'NONE'">Communication Channel</label>
                   <div class="col-sm-8">
                     <select class="form-control" id="communicationChannel" formControlName="channelId">
                       <option value=null>All</option>
@@ -162,7 +162,7 @@
                             </button>
                           </div>
                           <div class="modal-body">
-                            <form #emailForm="ngForm">
+                            <form #emailForm="ngForm" autocomplete="off">
                               <div class="form-group">
                                 <label for="email">Email addresses</label>
                                 <textarea rows="4" pattern="^\s*(?:[a-zA-Z0-9@._-]+@[a-zA-Z0-9@._-]+)(?:\s*;\s*(?:[a-zA-Z0-9@._-]+@[a-zA-Z0-9@._-]+))*(?:\s*;\s*)?$" ngModel name="emails" #emails="ngModel"  type="email" class="form-control" id="email" aria-describedby="email"></textarea>
@@ -200,7 +200,7 @@
                         </div>
                     </div>
                     <div class="form-group row email-body">
-                        <label for="body" class="col-sm-4 col-form-label-sm">Body</label>
+                        <label for="body" class="col-sm-4 col-form-label-sm" [class.required]="hasEmail.value">Body</label>
                         <div class="col-sm-8">
                             <textarea formControlName="body" rows="4" class="form-control" id="body"></textarea>
                             <div class="validation-error" *ngIf="body.errors?.required">
@@ -254,7 +254,7 @@
               <div class="form-group row">
                   <div class="offset-sm-2 col-sm-4">
                       <input class="form-control password-input" [type]="fieldType ? 'text' : 'password'"
-                        formControlName="password" id="password" placeholder="add password optional" (blur)="onPasswordChange()">
+                        formControlName="password" id="password" placeholder="add password optional" (blur)="onPasswordChange()" autocomplete="new-password">
                       <fa-icon class="password-icon" (click)="togglePassword()" [icon]="faEye"></fa-icon>
                   </div>
               </div>
@@ -337,7 +337,7 @@
           </div>
         </div>
         <div class="form-group row">
-          <label for="frequency" class="col-sm-4 col-form-label-sm">Frequency</label>
+          <label for="frequency" class="col-sm-4 col-form-label-sm required">Frequency</label>
           <div class="col-sm-2">
             <input type="number" formControlName="frequency" class="form-control" id="frequency" min="0">
             <div class="validation-error" *ngIf="frequency.errors?.required">
@@ -354,7 +354,7 @@
               Field is required
             </div>
           </div>
-          <label for="at" class="col-sm-1 content-adjusted">at</label>
+          <label for="at" class="col-sm-1 content-adjusted required">at</label>
           <div class="col-sm-2">
             <input type="text" class="form-control" formControlName="timeExpression" id="at" placeholder="hh:mm">
             <div class="validation-error" *ngIf="timeExpression.errors?.required">

@@ -20,6 +20,12 @@ interface SenderElement {
   value: SubscriptionSubscriberDto;
 }
 
+// Message configuration fields (except identifiers) should only be available for FA_REPORT and FA_QUERY
+const messageConfigurationEnabledFor = ['FA_REPORT', 'FA_QUERY'];
+
+// Subscriber details required for all types except NONE
+const subscriberRequiredFor = ['FA_REPORT', 'FA_QUERY', 'POSITION', 'SALE_NOTE'];
+
 @Component({
   selector: 'app-subscription-form',
   templateUrl: './subscription-form.component.html',
@@ -145,12 +151,17 @@ export class SubscriptionFormComponent implements OnInit, OnDestroy {
   get emails() {
     return this.subscriptionForm.get('output.emails') as FormArray;
   }
+
   get hasEmail() {
     return this.subscriptionForm.get('output.hasEmail');
   }
 
   get name() {
     return this.subscriptionForm.get('name');
+  }
+
+  get messageType() {
+    return this.subscriptionForm.get('output.messageType');
   }
 
   get organisationId() {
@@ -438,9 +449,7 @@ export class SubscriptionFormComponent implements OnInit, OnDestroy {
     this.emails.removeAt(index);
   }
 
-  onMessageTypeChange(value) {
-    // Message configuration fields (except identifiers) should only be available for FA_REPORT and FA_QUERY
-    const messageConfigurationEnabledFor = ['FA_REPORT', 'FA_QUERY'];
+  private onMessageTypeChange(value) {
     if (!messageConfigurationEnabledFor.includes(value)) {
         this.logbook.disable();
         this.consolidated.disable();
@@ -459,8 +468,7 @@ export class SubscriptionFormComponent implements OnInit, OnDestroy {
         this.historyUnit.enable();
 
     }
-    // Subscriber details required for all types except NONE
-    const subscriberRequiredFor = ['FA_REPORT', 'FA_QUERY', 'POSITION', 'SALE_NOTE'];
+
     if (subscriberRequiredFor.includes(value)) {
       this.organisationId.setValidators([Validators.required]);
       // TODO: search if we can update value and validity for the whole form group
@@ -485,7 +493,7 @@ export class SubscriptionFormComponent implements OnInit, OnDestroy {
     this.passwordIsPlaceholder.setValue(false);
   }
 
-  onHasEmailChange(value) {
+  private onHasEmailChange(value) {
     if (value) {
       this.body.setValidators([Validators.required]);
       this.body.updateValueAndValidity();
@@ -498,10 +506,10 @@ export class SubscriptionFormComponent implements OnInit, OnDestroy {
   onTriggerTypeChange() {
     const triggerType = this.triggerType.value;
     if (triggerType === 'SCHEDULER') {
-        this.frequency.setValidators([Validators.required]);
-        this.frequency.updateValueAndValidity();
-        this.timeExpression.setValidators([Validators.required]);
-        this.timeExpression.updateValueAndValidity();
+      this.frequency.setValidators([Validators.required]);
+      this.frequency.updateValueAndValidity();
+      this.timeExpression.setValidators([Validators.required]);
+      this.timeExpression.updateValueAndValidity();
     } else {
       this.frequency.clearValidators();
       this.frequency.updateValueAndValidity();
