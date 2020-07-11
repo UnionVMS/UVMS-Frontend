@@ -109,4 +109,8 @@ export class FeaturesService {
   fetchAllSenders(): Promise<ResponseDto<OrganisationDto[]>> {
     return this.http.get<ResponseDto<OrganisationDto[]>>(`${environment.baseURL}${FEATURES_ENDPOINTS.fetchAllSenders}`).toPromise();
   }
+
+  fetchDefaultEmailBody(): Promise<ResponseDto<string>> {
+    return this.http.get<ResponseDto<string>>(`${environment.baseURL}${FEATURES_ENDPOINTS.fetchDefaultEmailBody}`).toPromise();
+  }
 }
