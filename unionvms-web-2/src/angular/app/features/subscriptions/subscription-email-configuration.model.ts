@@ -1,7 +1,7 @@
 export interface SubscriptionEmailConfiguration {
   body: string;
   isPdf: boolean;
-  hasAttachments: boolean;
+  zipAttachments: boolean;
   password: string;
   passwordIsPlaceholder: boolean;
   isXml: boolean;

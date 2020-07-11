@@ -108,7 +108,7 @@ export class SubscriptionFormComponent implements OnInit, OnDestroy {
         emailConfiguration: this.fb.group({
           body: [''],
           isPdf: [false],
-          hasAttachments: [false],
+          zipAttachments: [false],
           password: [''],
           passwordIsPlaceholder: [false],
           isXml: [false]
@@ -615,6 +615,11 @@ export class SubscriptionFormComponent implements OnInit, OnDestroy {
           }, [] as SenderElement[]));
         }, [] as SenderElement[]);
       });
+  }
+
+  resetEmailBodyToDefault() {
+    this.featuresService.fetchDefaultEmailBody()
+      .then(resp => this.body.setValue(resp.data));
   }
 
   ngOnDestroy() {

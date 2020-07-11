@@ -118,7 +118,7 @@ export class ManualSubscriptionsComponent implements OnInit, OnDestroy {
         vesselIds: [this.selectedItems, Validators.required],
         queryStartDate: [null, Validators.required],
         queryEndDate: [null, Validators.required],
-        history: [{value: null, disabled: true}, [Validators.required, Validators.min(1)]],
+        history: [{value: null, disabled: true}, [Validators.required, Validators.min(1), Validators.max(9999)]],
         historyUnit: [{value: null, disabled: true}, Validators.required]
       }),
       areas: this.fb.array([]),

@@ -9,7 +9,7 @@ export const subscriptionFormInitialValues = {
     emailConfiguration: {
       body: '',
       isPdf: false,
-      hasAttachments: false,
+      zipAttachments: false,
       password: '',
       passwordIsPlaceholder: false,
       isXml: false
