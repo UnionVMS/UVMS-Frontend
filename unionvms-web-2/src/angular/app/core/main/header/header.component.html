@@ -22,8 +22,9 @@
   <div>
     <app-clock></app-clock>
   </div>
-  <button type="button" (click)="viewNotifications()">
+  <button type="button" (click)="viewNotifications()" class="notifications-btn">
     <fa-icon class="header-icon" [icon]="faBell"></fa-icon>
+    <span *ngIf="openAlarms + openUserTickets > 0" class="badge">{{openAlarms + openUserTickets}}</span>
   </button>
   <div ngbDropdown class="d-inline-block">
     <button class="header-dropdown" id="languageDropdown" ngbDropdownToggle>
@@ -60,9 +61,4 @@
   <button type="button" (click)="signOut()">
     <fa-icon class="header-icon" [icon]="faSignOutAlt"></fa-icon>
   </button>
-
-
-
 </section>
-
-

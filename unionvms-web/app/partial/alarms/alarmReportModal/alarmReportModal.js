@@ -15,6 +15,9 @@ angular.module('unionvmsWeb').controller('AlarmReportModalCtrl', function($scope
     $scope.itemsByPage = 5;
 
     $scope.alarm = alarm;
+    $scope.alarmHasRule = alarm.alarmItems.every(function(item) {
+        return !!item.ruleGuid;
+    });
     $scope.knownVessel = angular.isDefined(alarm.vessel);
     $scope.options = options;
     $scope.readOnly = options.readOnly;

@@ -1,16 +1,12 @@
 import { AuthService } from './../../../auth/auth.service';
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, Input } from '@angular/core';
 import { Router } from '@angular/router';
 import { Store } from '@ngrx/store';
 import * as fromRoot from '../../../app.reducer';
 import * as AUTH from '../../../auth/auth.actions';
-
-// import { AuthResponse } from 'src/app/auth/auth-response.model';
-// import { Observable } from 'rxjs';
 import { faSignOutAlt, faQuestion, faBell, faUser } from '@fortawesome/free-solid-svg-icons';
-// import { UserContexts } from 'src/app/auth/user-contexts.model';
 import * as jwt_decode from 'jwt-decode';
-import { environment } from '../../../../environments/environment';
+import { environment } from 'environments/environment';
 
 
 @Component({
@@ -19,6 +15,12 @@ import { environment } from '../../../../environments/environment';
   styleUrls: ['./header.component.scss']
 })
 export class HeaderComponent implements OnInit {
+  @Input()
+  openAlarms: number;
+
+  @Input()
+  openUserTickets: number;
+
   faSignOutAlt = faSignOutAlt;
   faQuestion = faQuestion;
   faBell = faBell;
@@ -52,10 +54,6 @@ export class HeaderComponent implements OnInit {
   }
 
   viewNotifications() {
-
+    window.location.href = `${environment.oldBaseURL}/#/alerts/holdingtable`;
   }
-
-
-
-
 }

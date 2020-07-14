@@ -58,6 +58,21 @@
 
   }
 
+  .notifications-btn {
+    position: relative;
+  }
 
+  .badge {
+    position: absolute;
+    top: -11px;
+    left: 17px;
+    min-width: 20px;
+    line-height: 20px;
+    text-align: center;
+    padding-top: 0px;
+    padding-bottom: 0px;
+    background-color: #df1f26;
+    color: white;
+    border-radius: 1rem;
+  }
 }
-

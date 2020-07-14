@@ -1,11 +1,5 @@
-<!-- *ngIf="isAuthenticated" -->
-
-<app-header></app-header>
+<app-header [openAlarms]="openAlarms" [openUserTickets]="openUserTickets"></app-header>
 <app-navigation></app-navigation>
 <div class="container-fluid main">
   <router-outlet></router-outlet>
 </div>
-
-
-
-
