@@ -1,5 +1,4 @@
-import { Component, OnInit, ElementRef } from '@angular/core';
-// import { Observable } from 'rxjs';
+import { Component, OnInit, ElementRef, OnDestroy } from '@angular/core';
 import { Store } from '@ngrx/store';
 import * as fromRoot from '../../app.reducer';
 import { MainService } from './main.service';
@@ -10,31 +9,35 @@ import * as jwt_decode from 'jwt-decode';
   templateUrl: './main.component.html',
   styleUrls: ['./main.component.scss']
 })
-export class MainComponent implements OnInit {
-  // isAuthenticated$: Observable<boolean> ;
-  openAlarms;
-  openUserTickets;
+export class MainComponent implements OnInit, OnDestroy {
+  openAlarms: number;
+  openUserTickets: number;
+  private intervalId: any;
 
   constructor(private store: Store<fromRoot.State>, private mainService: MainService, private element: ElementRef) { }
 
   ngOnInit(): void {
-    // Does not persist page refresh
-    // this.isAuthenticated$ = this.store.select(fromRoot.getIsAuthenticated);
     this.init();
+    this.intervalId = setInterval(this.init.bind(this), 60000);
   }
 
-
-  init() {
+  private init() {
     this.getOpenAlarms();
     this.getUserOpenTickets();
   }
 
-  async getOpenAlarms() {
-    this.openAlarms = await this.mainService.countOpenAlarms();
+  private async getOpenAlarms() {
+    const openAlarmsResponse = await this.mainService.countOpenAlarms();
+    this.openAlarms = openAlarmsResponse.data;
   }
 
-  async getUserOpenTickets() {
+  private async getUserOpenTickets() {
     const { userName: username } = jwt_decode(localStorage.getItem('token'));
-    this.openUserTickets = await this.mainService.countUserOpenTickets(username);
+    const openUserTicketsResponse = await this.mainService.countUserOpenTickets(username);
+    this.openUserTickets = openUserTicketsResponse.data;
+  }
+
+  ngOnDestroy(): void {
+    clearInterval(this.intervalId);
   }
 }

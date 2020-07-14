@@ -43,13 +43,13 @@ angular.module('unionvmsWeb').factory('Alarm', function(Movement) {
         var i;
         if (angular.isDefined(dto.alarmItem)) {
             for (i = 0; i < dto.alarmItem.length; i++) {
-                alarm.alarmItems.push({guid: dto.alarmItem[i].guid, ruleName: dto.alarmItem[i].ruleName});
+                alarm.alarmItems.push({guid: dto.alarmItem[i].guid, ruleName: dto.alarmItem[i].ruleName, ruleGuid: dto.alarmItem[i].ruleGuid});
             }
         }
 
         //rawMovement
         var rawMovement = dto.rawMovement;
-        if(angular.isDefined(rawMovement)){
+        if(rawMovement != null){
             alarm.movement = Movement.fromJson(rawMovement);
             alarm.movement.externalMarking = rawMovement.externalMarking;
             alarm.movement.flagState = rawMovement.flagState;
