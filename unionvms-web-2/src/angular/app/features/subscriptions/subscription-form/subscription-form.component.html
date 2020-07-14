@@ -252,11 +252,12 @@
                   </div>
               </div>
               <div class="form-group row">
-                  <div class="offset-sm-2 col-sm-4">
-                      <input class="form-control password-input" [type]="fieldType ? 'text' : 'password'"
-                        formControlName="password" id="password" placeholder="add password optional" (blur)="onPasswordChange()" autocomplete="new-password">
-                      <fa-icon class="password-icon" (click)="togglePassword()" [icon]="faEye"></fa-icon>
-                  </div>
+                <label for="password" class="col-sm-2 col-form-label-sm">Password</label>
+                <div class="col-sm-4">
+                  <input class="form-control password-input" [type]="fieldType ? 'text' : 'password'"
+                    formControlName="password" id="password" placeholder="add password optional" (blur)="onPasswordChange()" autocomplete="new-password">
+                  <fa-icon class="password-icon" (click)="togglePassword()" [icon]="faEye"></fa-icon>
+                </div>
               </div>
             </div>
           </div>

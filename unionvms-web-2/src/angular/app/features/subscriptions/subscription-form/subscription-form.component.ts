@@ -107,7 +107,7 @@ export class SubscriptionFormComponent implements OnInit, OnDestroy {
         hasEmail: [false],
         emailConfiguration: this.fb.group({
           body: [''],
-          isPdf: [false],
+          isPdf: [{value: false, disabled: true}],
           zipAttachments: [false],
           password: [''],
           passwordIsPlaceholder: [false],
@@ -240,24 +240,20 @@ export class SubscriptionFormComponent implements OnInit, OnDestroy {
   initSubscriptions() {
     // Changes for organization
     this.subscription.add(this.subscriptionForm.get('output.subscriber.organisationId').valueChanges
-    .pipe(distinctUntilChanged())
-    .subscribe(value => {
-      this.onOrganizationChange(value);
-    }));
+      .pipe(distinctUntilChanged())
+      .subscribe(value => this.onOrganizationChange(value))
+    );
     // Changes for endpoint
     this.subscription.add(this.subscriptionForm.get('output.subscriber.endpointId').valueChanges
-    .subscribe(value => {
-      this.onEndpointChange(value);
-    }));
+      .subscribe(value => this.onEndpointChange(value)));
     this.subscription.add(this.subscriptionForm.get('output.messageType').valueChanges
-    .subscribe(value => {
-      this.onMessageTypeChange(value);
-    }));
+      .subscribe(value => this.onMessageTypeChange(value)));
     this.subscription.add(this.subscriptionForm.get('output.hasEmail').valueChanges
-    .pipe(distinctUntilChanged())
-    .subscribe(value => {
-      this.onHasEmailChange(value);
-    }));
+      .pipe(distinctUntilChanged())
+      .subscribe(value => this.onHasEmailChange(value))
+    );
+    this.subscription.add(this.subscriptionForm.get('output.logbook').valueChanges
+      .subscribe(value => this.onLogbookChange(value)));
   }
 
   initMessageTypes() {
@@ -620,6 +616,15 @@ export class SubscriptionFormComponent implements OnInit, OnDestroy {
   resetEmailBodyToDefault() {
     this.featuresService.fetchDefaultEmailBody()
       .then(resp => this.body.setValue(resp.data));
+  }
+
+  private onLogbookChange(value: boolean) {
+    if (!!value) {
+      this.subscriptionForm.get('output.emailConfiguration.isPdf').enable();
+    } else {
+      this.subscriptionForm.get('output.emailConfiguration.isPdf').setValue(false);
+      this.subscriptionForm.get('output.emailConfiguration.isPdf').disable();
+    }
   }
 
   ngOnDestroy() {
