@@ -25,7 +25,8 @@ angular.module('unionvmsWeb').controller('AuditconfigurationCtrl',function($scop
 		"movement",
 		"exchange",
 		"rules",
-		"audit"
+        "audit",
+        "subscription"
 	];
 
 	var Settings = $resource("config/rest/catalog");
@@ -53,12 +54,12 @@ angular.module('unionvmsWeb').controller('AuditconfigurationCtrl',function($scop
 			if(userService.isAllowed("CONFIGURE_MDR_SCHEDULER", "MDR Cache", true)){
 				$scope.tabs.push("mdr");
 			}
-			// Set tab name and title 
+			// Set tab name and title
 			for (var i = 0; i < $scope.tabs.length; i++) {
 				$scope.setTabs.push({
 					"tab" : $scope.tabs[i],
 					"title" : $filter('i18n')('audit.configuration_header_'+$scope.tabs[i])
-				});                                  
+				});
 			}
 		});
 

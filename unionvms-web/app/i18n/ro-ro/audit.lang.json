@@ -44,6 +44,7 @@
     "configuration_header_audit": "Audit",
     "configuration_header_positions": "Positions",
     "configuration_header_mdr": "MDR",
+    "configuration_header_subscription": "Subscriptions",
 
     "configuration_column_key": "Parameter",
     "configuration_column_value": "Value",
