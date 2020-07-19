@@ -85,7 +85,7 @@ export class CbMultiselectComponent implements OnInit, OnDestroy {
   }
 
   private extractValue(itemByType: {key: string, value: CbMultiselectItem[]}, newValue: {[key: string]: boolean[]}): any[] {
-    const checked = newValue[itemByType.key];
+    const checked = newValue[itemByType.key] || [];
     return itemByType.value.reduce((aggr, item, index) => checked[index] ? [...aggr, item.value] : aggr, []);
   }
 
