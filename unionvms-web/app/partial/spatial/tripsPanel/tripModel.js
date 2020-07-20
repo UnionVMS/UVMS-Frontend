@@ -30,7 +30,7 @@ angular.module('unionvmsWeb').factory('Trip',function(locale,unitConversionServi
 
     /**
      * Trip constructor
-     * 
+     *
      * @memberof Trip
      * @public
 	 * @alias Trip
@@ -51,7 +51,7 @@ angular.module('unionvmsWeb').factory('Trip',function(locale,unitConversionServi
 
     /**
      * Load the model with the trip data
-     * 
+     *
      * @memberof Trip
      * @public
 	 * @alias Trip
@@ -85,7 +85,7 @@ angular.module('unionvmsWeb').factory('Trip',function(locale,unitConversionServi
     };
 	/**
 	 * Load the map data of a trip into the model
-	 * 
+	 *
 	 * @memberof Trip
 	 * @private
 	 * @param {Object} self - current trip object
@@ -97,7 +97,7 @@ angular.module('unionvmsWeb').factory('Trip',function(locale,unitConversionServi
 
     /**
      * Load the trip overview and the report messages into the model
-     * 
+     *
      * @memberof Trip
      * @private
      * @param {Object} self - current trip object
@@ -110,7 +110,7 @@ angular.module('unionvmsWeb').factory('Trip',function(locale,unitConversionServi
 
     /**
      * Load the trip overview into the model
-     * 
+     *
      * @memberof Trip
      * @private
      * @param {Object} self - current trip object
@@ -163,7 +163,7 @@ angular.module('unionvmsWeb').factory('Trip',function(locale,unitConversionServi
 
     /**
      * Load the report messages into the model
-     * 
+     *
      * @memberof Trip
      * @private
      * @param {Object} node - current node
@@ -221,7 +221,7 @@ angular.module('unionvmsWeb').factory('Trip',function(locale,unitConversionServi
 
     /**
      * Load the report messages into the model
-     * 
+     *
      * @memberof Trip
      * @private
      * @param {Object} self - current trip object
@@ -244,7 +244,7 @@ angular.module('unionvmsWeb').factory('Trip',function(locale,unitConversionServi
             if(angular.isDefined(rep.nodes)){
                 rep.nodes = _.sortBy(rep.nodes, function(node){ return moment(node.date).unix(); });
                 rep.nodes = rep.nodes.reverse();
-                
+
                 //Final subnode reordering so that the last correction is displayed as a main node
                 var tmpMainNode = rep.nodes.splice(0, 1)[0];
                 tmpMainNode.nodes = rep.nodes;
@@ -263,7 +263,7 @@ angular.module('unionvmsWeb').factory('Trip',function(locale,unitConversionServi
 
     /**
      * Builds the remarks column to be displayed in reports panel
-     * 
+     *
      * @memberof Trip
      * @private
      * @param {Object} report - report message
@@ -276,7 +276,7 @@ angular.module('unionvmsWeb').factory('Trip',function(locale,unitConversionServi
                 remarks = report.fishingGears[0].gearTypeCode;
             }
         }else{
-            if (report.faReportDocumentType === 'NOTIFICATION'){
+            if (report.faReportDocumentType === 'NOTIFICATION' || report.faReportDocumentType === 'DECLARATION'){
                 remarks = unitConversionService.date.convertToUserFormat(report.occurence);
             } else {
                 remarks = unitConversionService.date.convertToUserFormat(report.faReportAcceptedDateTime);
@@ -291,7 +291,7 @@ angular.module('unionvmsWeb').factory('Trip',function(locale,unitConversionServi
                 remarks += ' ' + locale.getString('activity.trip_summary_gear_used');
                 break;
             case 'ARRIVAL':
-                remarks += ' ' + locale.getString('activity.trip_summary_est_time_arr');
+                remarks += ' ' + locale.getString('activity.trip_summary_est_start_of_landing');
                 break;
             case 'LANDING':
                 remarks += ' ' + locale.getString('activity.trip_summary_time_land');
@@ -315,7 +315,7 @@ angular.module('unionvmsWeb').factory('Trip',function(locale,unitConversionServi
 
     /**
      * Build the date column to be displayed in reports panel
-     * 
+     *
      * @memberof Trip
      * @private
      * @param {String} acceptedDateTime - accepted report message date time
@@ -369,7 +369,7 @@ angular.module('unionvmsWeb').factory('Trip',function(locale,unitConversionServi
 
     /**
      * Adds extra attributes to attrOrder
-     * 
+     *
      * @memberof Trip
      * @private
      * @param {Object} data - A reference to the data to be loaded in the attrOrder
@@ -396,7 +396,7 @@ angular.module('unionvmsWeb').factory('Trip',function(locale,unitConversionServi
 
     /**
      * Load the vessel details and the trip roles into the model
-     * 
+     *
      * @memberof Trip
      * @private
      * @param {Object} self - current trip object
@@ -423,7 +423,7 @@ angular.module('unionvmsWeb').factory('Trip',function(locale,unitConversionServi
 
             var vessel = angular.copy(data);
             delete vessel.contactParties;
-            
+
             vessel.vesselOverview = {};
 
             var attrOrder = angular.copy(vesselAttrOrder);
@@ -468,7 +468,7 @@ angular.module('unionvmsWeb').factory('Trip',function(locale,unitConversionServi
 
     /**
      * generates colors for species
-     * 
+     *
      * @memberof Trip
      * @private
      * @param {Object} catchData - catch details data
@@ -486,7 +486,7 @@ angular.module('unionvmsWeb').factory('Trip',function(locale,unitConversionServi
                         color: colors[key]
                     });
                 }
-            });           
+            });
             return specieColors;
         }
     };
@@ -494,14 +494,14 @@ angular.module('unionvmsWeb').factory('Trip',function(locale,unitConversionServi
 
     /**
      * Load the catch details into the model
-     * 
+     *
      * @memberof Trip
      * @private
      * @param {Object} self - current trip object
      * @param {Object} data - catch details data
      */
     var loadCatch = function(self,data){
-        
+
        self.specieColor = generateSpecieColors(data);
         //if has speciesList in the child properties
         if(_.without(_.pluck(data, 'speciesList'),undefined).length > 0){
