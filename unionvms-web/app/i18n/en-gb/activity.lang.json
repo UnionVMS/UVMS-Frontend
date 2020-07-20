@@ -25,7 +25,6 @@
     "description": "Description",
     "version": "Version",
     "state": "State",
-    "presentation": "Presentation",
     "legalReference": "Legal Reference",
     "factor": "Factor",
     "placesCode": "Country",
@@ -457,6 +456,7 @@
 
     "trip_summary_gear": "(gear)",
     "trip_summary_gear_used": "(gear used)",
+    "trip_summary_est_start_of_landing": "(est. start of landing)",
     "trip_summary_est_time_arr": "(est. time of arrival)",
     "trip_summary_time_land": "(end time of landing)",
     "trip_summary_est_time": "(est. time)",
