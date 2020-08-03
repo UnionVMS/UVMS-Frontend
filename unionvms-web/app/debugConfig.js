@@ -1,7 +1,7 @@
 angular.module('debugConfig', [])
 
-.constant('DEBUG', false)
+.constant('DEBUG', true)
 
-.constant('ENV_NAME', 'production')
+.constant('ENV_NAME', 'development')
 
 ;
