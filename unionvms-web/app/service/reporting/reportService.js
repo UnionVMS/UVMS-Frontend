@@ -400,6 +400,11 @@ angular.module('unionvmsWeb').factory('reportService',function($rootScope, $comp
         return nodes;
     };
 
+    rep.getPositions = function () {
+        return rep.positions;
+    };
+
+
 	//Get VMS data Success callback
 	var getVmsDataSuccess = function(data){
         rep.positions = data.movements.features;
