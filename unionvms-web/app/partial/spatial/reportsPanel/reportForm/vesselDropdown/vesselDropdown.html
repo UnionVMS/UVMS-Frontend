@@ -1,0 +1,56 @@
+<!--
+Developed with the contribution of the European Commission - Directorate General for Maritime Affairs and Fisheries
+© European Union, 2015-2016.
+
+This file is part of the Integrated Fisheries Data Management (IFDM) Suite. The IFDM Suite is free software: you can
+redistribute it and/or modify it under the terms of the GNU General Public License as published by the
+Free Software Foundation, either version 3 of the License, or any later version. The IFDM Suite is distributed in
+the hope that it will be useful, but WITHOUT ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or
+FITNESS FOR A PARTICULAR PURPOSE.  See the GNU General Public License for more details. You should have received a
+copy of the GNU General Public License along with the IFDM Suite. If not, see <http://www.gnu.org/licenses/>.
+-->
+<div class="vesselDropdown-container">
+    <div class="vesselDropdown-display" ng-click="show()">
+        <span class="text" ng-if="selected">{{display}}</span>
+        <span class="text placeholder" ng-if="!selected">Go to vessel</span>
+        <i class="clear-selection fa fa-times" ng-click="clearSelection($event)" ng-if="selected"></i>
+        <span class="caret"></span>
+    </div>
+    <div class="vesselDropdown-list" ng-if="listVisible">
+        <div>
+            <table st-table="vesselsFromMovements" class="table table-striped table-condensed">
+                <thead>
+                    <tr class="row">
+                        <th colspan="5">
+                            <input type="text" st-search placeholder="Search..."/>
+                        </th>
+                    </tr>
+                    <tr class="row">
+                        <th>Name</th>
+                        <th>CFR</th>
+                        <th>IRCS</th>
+                        <th>Ext. marking</th>
+                        <th>ICCAT</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr ng-repeat="item in vesselsFromMovements" ng-click="select(item)"  class="row" ng-class="{ selected: isSelected(item) }">
+                        <td>{{item.name | dataNotAvailable}}</td>
+                        <td>{{item.cfr | dataNotAvailable}}</td>
+                        <td>{{item.ircs | dataNotAvailable}}</td>
+                        <td>{{item.externalMarking | dataNotAvailable}}</td>
+                        <td>{{item.iccat | dataNotAvailable}}</td>
+                    </tr>
+                </tbody>
+                <tfoot>
+                    <tr class="footer">
+                        <td colspan="12" class="text-right" ng-show="vesselsFromMovements.length > 0">
+                            <div st-pagination st-items-by-page="5" st-template="partial/common/reportsPagination/reportsPagination.html"></div>
+                        </td>
+                    </tr>
+                </tfoot>
+            </table>
+        </div>
+    </div>
+</div>
+{{place}}
