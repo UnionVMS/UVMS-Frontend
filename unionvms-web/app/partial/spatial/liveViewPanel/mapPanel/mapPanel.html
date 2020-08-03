@@ -33,6 +33,9 @@ copy of the GNU General Public License along with the IFDM Suite. If not, see <h
                     <!-- <button type="button" id="buffer-config-btn" ng-class="{active: activeControl === 'buffer'}" class="btn btn-default btn-toolbar" title="{{'spatial.map_tip_buffer' | i18n }}" ng-click="toggleToolbarBtn('buffer')"><span class="fa fa-dot-circle-o"></span></button> -->
                     <button type="button" id="map-fish-print-config-btn" ng-class="{active: activeControl === 'mapFishPrint'}" class="btn btn-default btn-toolbar" title="{{'spatial.mapfish_tip_print' | i18n }}" ng-click="toggleToolbarBtn('mapFishPrint')" ng-show="mapFish.isDeployed && isAllowed('Reporting', 'PRINT_REPORT')"><span class="fa fa-print"></span></button>
                 </div>
+                <div class="combo-report-history">
+                    <vessel-dropdown class="vesselDropdown"></vessel-dropdown>
+                </div>
             </div>
             <div class="btn-group-right">
             	<div id="map-coordinates"></div>
