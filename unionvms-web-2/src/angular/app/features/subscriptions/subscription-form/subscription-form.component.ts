@@ -13,7 +13,7 @@ import { distinctUntilChanged } from 'rxjs/operators';
 import { StatusAction } from '../subscriptions.reducer';
 import { Router } from '@angular/router';
 import { SubscriptionSubscriberDto } from 'app/features/features.model';
-import {IDropdownSettings} from "ng-multiselect-dropdown";
+import { IDropdownSettings } from 'ng-multiselect-dropdown';
 
 interface SenderElement {
   type: string;
@@ -107,6 +107,7 @@ export class SubscriptionFormComponent implements OnInit, OnDestroy {
   }
 
   initForm() {
+    this.resetEmailBodyToDefault();
     this.subscriptionForm = this.fb.group({
       name: ['', Validators.required],
       description: [''],
@@ -308,13 +309,13 @@ export class SubscriptionFormComponent implements OnInit, OnDestroy {
     */
 
     const matchArray = ['organisationId', 'endpointId', 'channelId'];
-      for (const [key, value] of Object.entries(formValues.output.subscriber)) {
-       if (matchArray.includes(key)) {
-         if (value !== null) {
-           formValues.output.subscriber[key] = Number(value);
-         }
-       }
-     }
+    for (const [key, value] of Object.entries(formValues.output.subscriber)) {
+      if (matchArray.includes(key)) {
+        if (value !== null) {
+          formValues.output.subscriber[key] = Number(value);
+        }
+      }
+    }
 
     // Cases where we would expect null but select by default returns 'null' for subscriber field group
     for (const [key, value] of Object.entries(formValues.output.subscriber)) {
@@ -452,7 +453,7 @@ export class SubscriptionFormComponent implements OnInit, OnDestroy {
         this.history.clearValidators();
         this.history.updateValueAndValidity();
         this.historyUnit.disable();
-        this.vesselIds.disable()
+        this.vesselIds.disable();
     } else {
         this.logbook.enable();
         this.consolidated.enable();
