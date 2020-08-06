@@ -293,6 +293,7 @@
 	"area_selection_modal_system_tab": "System areas",
 	"area_selection_modal_user_tab": "User areas",
 	"area_selection_modal_area_type_label": "Area type",
+	"area_selection_modal_area_group_label": "Area group",
 	"area_selection_modal_select_on_map_radio": "Select area on map",
 	"area_selection_modal_search_area": "Search by area properties",
 	"area_selection_modal_table_area_type_header": "Area type",
