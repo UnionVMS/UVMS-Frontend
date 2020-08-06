@@ -262,10 +262,10 @@ copy of the GNU General Public License along with the IFDM Suite. If not, see <h
 						</div>
 					</div>
 					<div class="form-group userAreaTypeGroup" >
-						<label class="col-md-12 withoutPadding required-field" for="userAreaType">{{'areas.user_area_type' | i18n }}</label>
+						<label class="col-md-12 withoutPadding required-field" for="userAreaType">{{'areas.user_area_group' | i18n }}</label>
 						<div class="col-md-12 withoutPadding" ng-class="{'has-error': (userAreaForm.userAreaType.$dirty || userAreaSubmitted) && userAreaForm.userAreaType.$invalid}">
 							<div class="col-md-6 withoutPadding rightPadding">
-								<combobox ng-model="userArea.subType" items="areaTypes" editable="true" uppercase="true" name="userAreaType" initialtext="{{'spatial.area_selection_modal_area_type_label' | i18n | uppercase}}" ng-required="true" is-loading="isLoadingAreaTypes" dest-combo-list="#areaManagement"></combobox>
+								<combobox ng-model="userArea.subType" items="areaTypes" editable="true" uppercase="true" name="userAreaType" initialtext="{{'spatial.area_selection_modal_area_group_label' | i18n | uppercase}}" ng-required="true" is-loading="isLoadingAreaTypes" dest-combo-list="#areaManagement"></combobox>
 							</div>
 							<div class="col-md-6 withoutPadding leftPadding">
 								<div ng-messages="userAreaForm.userAreaType.$error" ng-show="(userAreaForm.userAreaType.$dirty || userAreaSubmitted) && userAreaForm.userAreaType.$invalid">

@@ -48,7 +48,7 @@
 	"user_area_description": "Description",
 	"user_area_valid_from": "Active from",
 	"user_area_valid_to": "Active until",
-	"user_area_type": "Type",
+    "user_area_group": "Group (write to enter a new value)",
 	"user_area_scope_selection": "Share with scope",
 	"user_area_select_scope": "Select the scopes",
 	"user_area_dataset_name": "Dataset name",
