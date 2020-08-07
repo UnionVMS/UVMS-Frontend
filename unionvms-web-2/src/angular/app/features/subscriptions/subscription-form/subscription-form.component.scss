@@ -100,3 +100,7 @@
     margin-top: 0;
   }
 }
+
+ng-multiselect-dropdown.notClickable{
+ pointer-events: none;
+}

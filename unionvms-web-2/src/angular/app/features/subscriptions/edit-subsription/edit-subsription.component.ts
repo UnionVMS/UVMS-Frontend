@@ -122,24 +122,8 @@ export class EditSubsriptionComponent implements OnInit, AfterViewInit {
       this.subscriptionFormComponent.subscriptionForm.get('endDate').setValue(tempEndDate);
     }
 
-    /*vesselIds array. Back end returns an array of strings but checkbox expects state
-    for it to be checked or not. Transform.
-    */
-    const vesselIdsRawValue = this.currentSubscription.output.vesselIds;
-
-    let transformedVesselIdsArray = [];
-
-    if (vesselIdsRawValue.length) {
-     this.vesselIdentifiers.forEach(item => {
-        const hasIdentifier = vesselIdsRawValue.includes(item);
-        transformedVesselIdsArray.push(hasIdentifier);
-     });
-    } else {
-      // initialise array with false values, reactive form throws and error otherwise
-      transformedVesselIdsArray = [false, false, false, false, false];
-    }
-
-    this.subscriptionFormComponent.subscriptionForm.get('output.vesselIds').setValue(transformedVesselIdsArray);
+    const vesselIds = this.currentSubscription.output.vesselIds;
+    this.subscriptionFormComponent.subscriptionForm.get('output.vesselIds').setValue(vesselIds);
 
     this.subscriptionFormComponent.subscriptionForm.updateValueAndValidity();
   }

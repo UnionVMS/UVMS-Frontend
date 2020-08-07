@@ -13,6 +13,7 @@ import { distinctUntilChanged } from 'rxjs/operators';
 import { StatusAction } from '../subscriptions.reducer';
 import { Router } from '@angular/router';
 import { SubscriptionSubscriberDto } from 'app/features/features.model';
+import {IDropdownSettings} from "ng-multiselect-dropdown";
 
 interface SenderElement {
   type: string;
@@ -67,6 +68,8 @@ export class SubscriptionFormComponent implements OnInit, OnDestroy {
 
   // Please do not change order of elements
   vesselIdentifiers = ['CFR', 'IRCS', 'ICCAT', 'EXT_MARK', 'UVI'];
+  selectedItems: Array<any> = [];
+  dropdownSettings: IDropdownSettings = {};
 
   constructor(private fb: FormBuilder, private store: Store<fromRoot.State>,
               private featuresService: FeaturesService,
@@ -94,6 +97,13 @@ export class SubscriptionFormComponent implements OnInit, OnDestroy {
         this.timedAlertClosed = false;
       }
     }));
+    this.selectedItems = ['CFR', 'IRCS', 'ICCAT', 'EXT_MARK', 'UVI'];
+    this.dropdownSettings = {
+      singleSelection: false,
+      selectAllText: 'Select All',
+      unSelectAllText: 'Unselect All',
+      itemsShowLimit: 5,
+    };
   }
 
   initForm() {
@@ -121,7 +131,7 @@ export class SubscriptionFormComponent implements OnInit, OnDestroy {
         }),
         logbook: [{value: false, disabled: true}],
         consolidated: [{value: true, disabled: true}],
-        vesselIds: this.fb.array(this.vesselIdentifiers),
+        vesselIds: [{value: this.selectedItems, disabled: true}],
         generateNewReportId: [{value: false, disabled: true}],
         history: [{value: 1, disabled: true}, [Validators.min(0), Validators.max(9999)]],
         historyUnit: [{value: 'DAYS', disabled: true}]
@@ -202,6 +212,10 @@ export class SubscriptionFormComponent implements OnInit, OnDestroy {
 
   get generateNewReportId() {
     return this.subscriptionForm.get('output.generateNewReportId');
+  }
+
+  get vesselIds() {
+    return this.subscriptionForm.get('output.vesselIds');
   }
 
   get frequency() {
@@ -294,38 +308,22 @@ export class SubscriptionFormComponent implements OnInit, OnDestroy {
     */
 
     const matchArray = ['organisationId', 'endpointId', 'channelId'];
-    for (const [key, value] of Object.entries(formValues.output.subscriber)) {
-     if (matchArray.includes(key)) {
-       if (value !== null) {
-         formValues.output.subscriber[key] = Number(value);
+      for (const [key, value] of Object.entries(formValues.output.subscriber)) {
+       if (matchArray.includes(key)) {
+         if (value !== null) {
+           formValues.output.subscriber[key] = Number(value);
+         }
        }
      }
-   }
 
-   // Cases where we would expect null but select by default returns 'null' for subscriber field group
+    // Cases where we would expect null but select by default returns 'null' for subscriber field group
     for (const [key, value] of Object.entries(formValues.output.subscriber)) {
-    if (matchArray.includes(key)) {
-      if (value === 'null') {
-        formValues.output.subscriber[key] = null;
+      if (matchArray.includes(key)) {
+        if (value === 'null') {
+          formValues.output.subscriber[key] = null;
+        }
       }
     }
-  }
-
-  /*vessel Identifiers. By default we get the state of each checkbox aka checked/ not checked.
-    We need to transform values for back-end
-  */
-    const validVesselIdIndices = this.subscriptionForm.get('output.vesselIds').value.reduce( (acc, current, i) => {
-      if (current !== false) {
-          acc.push(i);
-      }
-      return acc;
-    }, []);
-    const vesselIdsArray = [];
-
-    validVesselIdIndices.forEach(index => {
-      vesselIdsArray.push(this.vesselIdentifiers[index]);
-    });
-    formValues.output.vesselIds = vesselIdsArray;
 
     // Remove name property from each area
     formValues.areas.forEach(element => {
@@ -454,6 +452,7 @@ export class SubscriptionFormComponent implements OnInit, OnDestroy {
         this.history.clearValidators();
         this.history.updateValueAndValidity();
         this.historyUnit.disable();
+        this.vesselIds.disable()
     } else {
         this.logbook.enable();
         this.consolidated.enable();
@@ -462,7 +461,7 @@ export class SubscriptionFormComponent implements OnInit, OnDestroy {
         this.history.setValidators([Validators.required]);
         this.history.updateValueAndValidity();
         this.historyUnit.enable();
-
+        this.vesselIds.enable();
     }
 
     if (subscriberRequiredFor.includes(value)) {
