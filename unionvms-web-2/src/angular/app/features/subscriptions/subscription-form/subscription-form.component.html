@@ -306,12 +306,14 @@
         </div>
         <label for="identifiers" class="col-sm-2 col-form-label-sm">Identifiers</label>
         <div class="col-sm-7 ">
-          <div class="identifiers-group">
-            <div class="custom-control custom-checkbox custom-control-inline" *ngFor="let item of vesselIdentifiers; let i = index" formArrayName="vesselIds">
-              <input class="custom-control-input" type="checkbox" id="identifierCheckbox_{{i}}" [formControlName]="i">
-              <label class="custom-control-label" for="identifierCheckbox_{{i}}">{{item| removeUnderscore }}</label>
-            </div>
-          </div>
+          <ng-multiselect-dropdown
+            name="vesselIdType"
+            formControlName="vesselIds"
+            [settings]="dropdownSettings"
+            [data]="vesselIdentifiers"
+            [disabled]="vesselIds.disabled"
+            [ngClass]="{'notClickable' : vesselIds.disabled}">
+          </ng-multiselect-dropdown>
         </div>
       </div>
     </fieldset>
