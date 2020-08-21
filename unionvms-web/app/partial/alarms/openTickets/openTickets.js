@@ -83,6 +83,32 @@ angular.module('unionvmsWeb').controller('OpenticketsCtrl',function($scope, $log
                 .then(updateSearchResults, onGetSearchResultsError);
     };
 
+    $scope.getVesselName = function(item) {
+        var name;
+        if( angular.isDefined(item.vessel) ){
+            name = item.vessel.name;
+            if( name === 'N/A') {
+                name = null;
+            }
+            if( name === null) {
+                name = item.vessel.cfr;
+            }
+            if( name === null) {
+                name = item.vessel.ircs;
+            }
+            if( name === null) {
+                name = item.vessel.externalMarking;
+            }
+            if( name === null) {
+                name = item.vessel.imo;
+            }
+            if( name === null) {
+                name = 'N/A';
+            }
+        }
+        return name;
+    };
+
     //Update the search results
     var updateSearchResults = function(searchResultsListPage){
         $scope.currentSearchResults.updateWithNewResults(searchResultsListPage);
