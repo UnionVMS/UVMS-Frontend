@@ -63,7 +63,8 @@ angular.module('unionvmsWeb').factory('SpatialConfig',function() {
                 labels: {
                     names:{},
                     values:{}
-                }
+                },
+                titles:{}
             },
             segments: {
                 table: {
@@ -76,7 +77,8 @@ angular.module('unionvmsWeb').factory('SpatialConfig',function() {
                 labels: {
                     names:{},
                     values:{}
-                }
+                },
+                titles:{}
             },
             tracks: {
                 table: {
@@ -368,19 +370,28 @@ angular.module('unionvmsWeb').factory('SpatialConfig',function() {
                     if(visibType !== 'track' || visibType === 'track' && contentType === 'Table'){
                         var visibilityCurrentSettings = model.visibilitySettings[visibType + 's'][contentType.toLowerCase() === 'label' ? contentType.toLowerCase() + 's' : contentType.toLowerCase()];
                         var visibilityCurrentAttrs = model.visibilitySettings[visibType + contentType + 'Attrs'];
+                        var visibilityCurrentTitles = model.visibilitySettings[visibType + "s"]["form" + contentType + 'Titles'];
                         var visibilities = {};
                         visibilities.names = [];
                         visibilities.values = [];
                         visibilities.order = [];
+                        visibilities.titles = [];
                         visibilities.isAttributeVisible = visibilityCurrentSettings.isAttributeVisible;
-                        var content;
+                        var attr;
                         for(var i = 0; i < visibilityCurrentAttrs.length; i++){
-                            visibilities.order.push(visibilityCurrentAttrs[i].value);
+                            var code = visibilityCurrentAttrs[i].value;
+                            visibilities.order.push(code);
+                            if(angular.isDefined(visibilityCurrentTitles)){
+                                attr = visibilityCurrentTitles[code];
+                                if(angular.isDefined(attr) && attr.trim().length > 0) {
+                                    visibilities.titles.push({"code":code,"title":attr});
+                                }
+                            }
                         }
 
                         if(angular.isDefined(visibilityCurrentSettings.values)){
                             for(var j = 0; j < visibilities.order.length; j++){
-                                var attr = visibilities.order[j];
+                                attr = visibilities.order[j];
                                 if(visibilityCurrentSettings.values.indexOf(attr) !== -1){
                                     visibilities.values.push(attr);
                                 }

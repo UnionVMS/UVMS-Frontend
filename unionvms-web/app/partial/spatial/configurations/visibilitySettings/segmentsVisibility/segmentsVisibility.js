@@ -76,7 +76,8 @@ angular.module('unionvmsWeb').controller('SegmentsvisibilityCtrl',function($scop
 		        title: locale.getString('spatial.tab_vms_seg_table_header_category'),
 		        value: 'cat'
 		    }];
-		    
+            $scope.configModel.visibilitySettings.segments.formPopupTitles = {};
+
 		    $scope.configModel.visibilitySettings.segmentLabelAttrs = [{
 		        title: locale.getString('spatial.reports_form_vessel_search_table_header_flag_state'),
 		        value: 'fs'
@@ -108,19 +109,31 @@ angular.module('unionvmsWeb').controller('SegmentsvisibilityCtrl',function($scop
 		        title: locale.getString('spatial.tab_vms_seg_table_header_category'),
 		        value: 'cat'
 		    }];
-		    
+            $scope.configModel.visibilitySettings.segments.formLabelTitles = {};
+
 		    var contentTypes = ['Table','Popup','Label'];
 			angular.forEach(contentTypes, function(contentType) {
 				var segments = [];
-				var segmentVisibilitySettings = $scope.configModel.visibilitySettings.segments[contentType.toLowerCase() === 'label' ? contentType.toLowerCase() + 's' : contentType.toLowerCase()]; 
+				var contentTypeLocal = contentType.toLowerCase() === 'label' ? contentType.toLowerCase() + 's' : contentType.toLowerCase();
+				var segmentVisibilitySettings = $scope.configModel.visibilitySettings.segments[contentTypeLocal];
 				var segmentVisibilityAttrs = $scope.configModel.visibilitySettings['segment' + contentType + 'Attrs'];
-				
+                var segmentVisibilityTitles = $scope.configModel.visibilitySettings.segments[contentTypeLocal].titles;
+
 				if(segmentVisibilitySettings.order && segmentVisibilitySettings.order.length > 0){
 					angular.forEach(segmentVisibilitySettings.order, function(item) {
 						for(var i=0;i<segmentVisibilityAttrs.length;i++){
-							if(item === segmentVisibilityAttrs[i].value){
+						    var code = segmentVisibilityAttrs[i].value;
+							if(item === code){
 								segments.push(segmentVisibilityAttrs[i]);
 							}
+                            if(angular.isDefined(segmentVisibilityTitles)){
+                                for(var j =0; j < segmentVisibilityTitles.length;j++) {
+                                    if(code === segmentVisibilityTitles[j].code){
+                                        $scope.configModel.visibilitySettings.segments["form"+contentType+"Titles"][code] = segmentVisibilityTitles[j].title;
+                                        break;
+                                    }
+                                }
+                            }
 						}
 					});
 					angular.copy(segments,segmentVisibilityAttrs);
