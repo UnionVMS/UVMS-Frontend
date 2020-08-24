@@ -2723,6 +2723,17 @@ angular.module('unionvmsWeb').factory('mapService', function(locale, $rootScope,
     ms.setLabelVisibility = function(type, config){
         ms.labelVisibility[type] = config.values;
         ms.labelVisibility[type + 'Titles'] = angular.isDefined(config.isAttributeVisible) ? config.isAttributeVisible : false;
+        ms.labelVisibility[type + 'ReplacementTitles'] = undefined;
+
+        if(angular.isDefined(config.titles) && config.titles.length > 0){
+            var replacements = {};
+            angular.forEach(config.titles,function(item){
+                var key = item.code;
+                replacements[key] = item.title;
+            });
+            ms.labelVisibility[type + 'ReplacementTitles'] = replacements;
+        }
+
         if(type !== 'activities'){
             ms.labelVisibility[type + 'Names'] = angular.isDefined(config.names) ? config.names : [];
         }
@@ -2993,7 +3004,8 @@ angular.module('unionvmsWeb').factory('mapService', function(locale, $rootScope,
         feature.set('overlayId', overlayId);
         feature.set('overlayHidden', false);
     };
-    ms.getLabelAttrName = function(titles,type,index){
+
+    ms.getLabelAttrName = function(titles,replacementTitles,type,index){
         var name = ms.labelVisibility[type][index];
         var found = false;
         for(var i =0; i < ms.labelVisibility[type+'Names'].length; i++){
@@ -3003,7 +3015,14 @@ angular.module('unionvmsWeb').factory('mapService', function(locale, $rootScope,
             }
         }
         if(found) {
-            return titles[name];
+            var title ;
+            if(angular.isDefined(replacementTitles)){
+                title = replacementTitles[name];
+            }
+            if(!angular.isDefined(title)){
+                title = titles[name];
+            }
+            return title;
         }
         return '';
     };
@@ -3019,16 +3038,17 @@ angular.module('unionvmsWeb').factory('mapService', function(locale, $rootScope,
      * @returns {Object} The object containing all the necessary data for the label
      */
     ms.setLabelObj = function(feature, type, id){
-        var titles, srcData, showTitles, i;
+        var titles, replacementTitles, srcData, showTitles, i;
         var data = [];
         if (type === 'vmspos'){
             showTitles = ms.labelVisibility.positionsNames.length > 0;
             titles = ms.getPositionTitles();
+            replacementTitles = ms.labelVisibility.positionsReplacementTitles;
             srcData = ms.formatPositionDataForPopup(feature.getProperties());
             
             for (i = 0; i < ms.labelVisibility.positions.length; i++){
                 data.push({
-                    title: ms.getLabelAttrName(titles,'positions',i),
+                    title: ms.getLabelAttrName(titles,replacementTitles,'positions',i),
                     value: srcData[ms.labelVisibility.positions[i]]
                 });
             }
@@ -3045,12 +3065,13 @@ angular.module('unionvmsWeb').factory('mapService', function(locale, $rootScope,
             }
         } else {
             showTitles = ms.labelVisibility.segmentsNames.length > 0;
+            replacementTitles = ms.labelVisibility.segmentsReplacementTitles;
             titles = ms.getSegmentTitles();
             srcData = ms.formatSegmentDataForPopup(feature.getProperties());
             
             for (i = 0; i < ms.labelVisibility.segments.length; i++){
                 data.push({
-                    title: ms.getLabelAttrName(titles,'segments',i),
+                    title: ms.getLabelAttrName(titles,replacementTitles,'segments',i),
                     value: srcData[ms.labelVisibility.segments[i]]
                 });
             }
@@ -3244,6 +3265,15 @@ angular.module('unionvmsWeb').factory('mapService', function(locale, $rootScope,
 	ms.setPopupVisibility = function(type, config){
 	    ms.popupVisibility[type] = config.values;
 	    ms.popupVisibility[type + 'Titles'] = angular.isDefined(config.isAttributeVisible) ? config.isAttributeVisible: false;
+        ms.popupVisibility[type + 'ReplacementTitles'] = undefined;
+        if(angular.isDefined(config.titles) && config.titles.length > 0){
+            var replacements = {};
+            angular.forEach(config.titles,function(item){
+                var key = item.code;
+                replacements[key] = item.title;
+            });
+            ms.popupVisibility[type + 'ReplacementTitles'] = replacements;
+        }
 	    if(type !== 'ers'){
             ms.popupVisibility[type + 'Names'] = angular.isDefined(config.names) ? config.names : [];
         }
@@ -3296,7 +3326,7 @@ angular.module('unionvmsWeb').factory('mapService', function(locale, $rootScope,
         }
     };
 
-    ms.getPopupAttrName = function(titles,type,index){
+    ms.getPopupAttrName = function(titles,replacementTitles,type,index){
         var name = ms.popupVisibility[type][index];
         var found = false;
         for(var i =0; i < ms.popupVisibility[type+'Names'].length; i++){
@@ -3305,10 +3335,16 @@ angular.module('unionvmsWeb').factory('mapService', function(locale, $rootScope,
                 break;
             }
         }
+        var title = '';
         if(found) {
-            return titles[name];
+            if(angular.isDefined(replacementTitles)){
+                title = replacementTitles[name];
+            }
+            if(!angular.isDefined(title)){
+                title = titles[name];
+            }
         }
-        return '';
+        return title;
     };
 	//POPUP - Define the object that will be used in the popup for vms positions
 	/**
@@ -3325,10 +3361,11 @@ angular.module('unionvmsWeb').factory('mapService', function(locale, $rootScope,
         var titles = ms.getPositionTitles();
         var srcData = ms.formatPositionDataForPopup(feature);
         var showAttrNames = ms.popupVisibility.positions.length > 0;
+        var replacementTitles = ms.popupVisibility.positionsReplacementTitles;
         var data = [];
         for (var i = 0; i < ms.popupVisibility.positions.length; i++){
             data.push({
-                title: ms.getPopupAttrName(titles,'positions',i),
+                title: ms.getPopupAttrName(titles,replacementTitles,'positions',i),
                 value: srcData[ms.popupVisibility.positions[i]]
             });
         }
@@ -3499,10 +3536,11 @@ angular.module('unionvmsWeb').factory('mapService', function(locale, $rootScope,
         var titles = ms.getSegmentTitles();
         var srcData = ms.formatSegmentDataForPopup(feature);
         var showAttrNames = ms.popupVisibility.segmentsNames.length > 0;
+        var replacementTitles = ms.popupVisibility.segmentsReplacementTitles;
         var data = [];
         for (var i = 0; i < ms.popupVisibility.segments.length; i++){
             data.push({
-                title: ms.getPopupAttrName(titles,'segments',i),
+                title: ms.getPopupAttrName(titles,replacementTitles,'segments',i),
                 value: srcData[ms.popupVisibility.segments[i]]
             });
         }
