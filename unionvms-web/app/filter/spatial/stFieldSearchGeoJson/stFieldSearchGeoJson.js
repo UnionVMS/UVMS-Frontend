@@ -5,12 +5,21 @@ angular.module('smart-table').filter('stFieldSearchGeoJson', function($filter, u
         //check predicted object type and parse it back
         var pKey = _.keys(predictedObject);
         var srcObjects = [];
+        var dataObject;
+        var lastX;
         var type = 'tracks';
         if (pKey.length === 1){
-            srcObjects = JSON.parse(predictedObject[pKey[0]]);
+            dataObject = JSON.parse(predictedObject[pKey[0]]);
+            srcObjects = dataObject.objects;
+            if(angular.isDefined(dataObject.lastX) && dataObject.lastX !== ''){
+                lastX = parseInt(dataObject.lastX);
+            }
+            if(isNaN(lastX)){
+                lastX = undefined;
+            }
             type = pKey[0];
         }
-
+         
         //Filter
         var filterFilter = $filter('filter');
 
@@ -132,12 +141,19 @@ angular.module('smart-table').filter('stFieldSearchGeoJson', function($filter, u
         if(srcObjects.length === 0) {
             srcObjects.push({});
         }
+        var lastXVessels;
+        if(angular.isDefined(lastX)){
+            lastXVessels = {
+                last_x_count : lastX
+            };
+        }
         for(var idx =0; idx < srcObjects.length; idx++) {
             var srcObject = srcObjects[idx];
             var searchableKeys = _.keys(srcObject);
             var searchObj = {};
             var additionalFilters = {
                 doSearch: false,
+                vessels : lastXVessels,
                 recs: []
             };
 
@@ -248,6 +264,9 @@ angular.module('smart-table').filter('stFieldSearchGeoJson', function($filter, u
                             }
                             return include;
                         };
+            if(angular.isDefined(additionalFilters.vessels)){
+                additionalFilters.doSearch = true;
+            }
 
             if (additionalFilters.doSearch === true){
                 var additionalKeys = _.keys(additionalFilters);
@@ -399,6 +418,21 @@ angular.module('smart-table').filter('stFieldSearchGeoJson', function($filter, u
                           include = updateInclude(temp, include);
                     }
 
+                    if (include && angular.isDefined(this.vessels) && type !== 'trips'){
+                        var connectId = type === 'tracks' ? rec.guid : rec.properties.connectionId;
+                        if(angular.isDefined(connectId)){
+                            if(!angular.isDefined(this.vessels[connectId])){
+                                this.vessels[connectId] = 1;
+                            }
+                            if(this.vessels[connectId] <= this.vessels.last_x_count){
+                                this.vessels[connectId] += 1;
+                            }
+                            else{
+                                include = false;
+                            }
+                        }
+
+                    }
                     if (include){
                         this.recs.push(rec);
                     }
