@@ -57,7 +57,7 @@ angular.module('unionvmsWeb').service('tripDataHelperService', function () {
             catchSummary.push({
                 landing : {}
             });
-    
+
             angular.forEach(data.catchEvolutionProgress, function(item) {
                 if (item.affectsCumulative){
                     if (item.activityType === 'TRANSHIPMENT') {
@@ -141,10 +141,12 @@ angular.module('unionvmsWeb').service('tripDataHelperService', function () {
             return obj;
         },
         sortCatchEvolutionProgressByOrderId: function(data) {
+            if(angular.isDefined(data.catchEvolutionProgress)){
                 data.catchEvolutionProgress.sort(function(a, b) {
                     return a.orderId - b.orderId;
                 });
-                return data;
+            }
+            return data;
         },
         catchSummaryToArray: function(data) {
             this.transformResponseProperty(data[0], 'onBoard', 'grandOnboardTotal');
