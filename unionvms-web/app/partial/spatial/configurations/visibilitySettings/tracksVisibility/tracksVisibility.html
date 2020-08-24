@@ -17,7 +17,7 @@ copy of the GNU General Public License along with the IFDM Suite. If not, see <h
 					<tr>
 						<th>
 							{{'spatial.visibility_configuration_table' | i18n}}
-							<input type="checkbox" ng-model="selectAll.tracks.table" ng-change="selectAllChange('tracks','table')">	
+                            <input type="checkbox" title="{{'spatial.visibility_show_all_attr' | i18n}}" ng-model="selectAll.tracks.table.values" ng-change="selectAllChange('tracks','table')">
 						</th>
 					</tr>
 				</thead>
@@ -32,7 +32,7 @@ copy of the GNU General Public License along with the IFDM Suite. If not, see <h
 								dnd-moved="configModel.visibilitySettings.trackTableAttrs.splice($index, 1);visibilitySettingsForm.$setDirty();">
 									<div class="handle">:::</div>
 									<span>{{attr.title}}</span>
-									<input type="checkbox" checklist-model="configModel.visibilitySettings.tracks.table.values" checklist-value="attr.value" ng-change="selectAllChange('tracks','table',true)">
+                                    <input type="checkbox" title="{{'spatial.visibility_show_attr_val' | i18n}}" checklist-model="configModel.visibilitySettings.tracks.table.values" checklist-value="attr.value" ng-change="onListItemChange('values','tracks','table')">
 								</li>
 							</ul>
 						</td>

@@ -136,10 +136,16 @@ angular.module('unionvmsWeb').controller('SegmentsvisibilityCtrl',function($scop
 				});
 				
 				if(!angular.isDefined(segmentVisibilitySettings.values) || segmentVisibilitySettings.order.length !== segmentVisibilitySettings.values.length){
-					$scope.selectAll.segments[contentType.toLowerCase()] = false;
+					$scope.selectAll.segments[contentType.toLowerCase()].values = false;
 				}else{
-					$scope.selectAll.segments[contentType.toLowerCase()] = true;
+					$scope.selectAll.segments[contentType.toLowerCase()].values = true;
 				}
+
+				if(!angular.isDefined(segmentVisibilitySettings.names) || segmentVisibilitySettings.order.length !== segmentVisibilitySettings.names.length){
+                    $scope.selectAll.segments[contentType.toLowerCase()].names = false;
+                }else{
+                    $scope.selectAll.segments[contentType.toLowerCase()].names = true;
+                }
 			});
 		}
 	});
