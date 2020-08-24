@@ -54,17 +54,35 @@ angular.module('unionvmsWeb').factory('SpatialConfig',function() {
         };
         this.visibilitySettings = {
             positions: {
-                table: {},
-                popup: {},
-                labels: {}
+                table: {
+                    values:{}
+                },
+                popup: {
+                    names:{},
+                    values:{}
+                },
+                labels: {
+                    names:{},
+                    values:{}
+                }
             },
             segments: {
-                table: {},
-                popup: {},
-                labels: {}
+                table: {
+                    values:{}
+                },
+                popup: {
+                    names:{},
+                    values:{}
+                },
+                labels: {
+                    names:{},
+                    values:{}
+                }
             },
             tracks: {
-                table: {}
+                table: {
+                    values:{}
+                }
             }
         };
         this.referenceDataSettings = {};
@@ -357,6 +375,7 @@ angular.module('unionvmsWeb').factory('SpatialConfig',function() {
                         var visibilityCurrentSettings = model.visibilitySettings[visibType + 's'][contentType.toLowerCase() === 'label' ? contentType.toLowerCase() + 's' : contentType.toLowerCase()];
                         var visibilityCurrentAttrs = model.visibilitySettings[visibType + contentType + 'Attrs'];
                         var visibilities = {};
+                        visibilities.names = [];
                         visibilities.values = [];
                         visibilities.order = [];
                         visibilities.isAttributeVisible = visibilityCurrentSettings.isAttributeVisible;
@@ -367,10 +386,15 @@ angular.module('unionvmsWeb').factory('SpatialConfig',function() {
                         
                         if(angular.isDefined(visibilityCurrentSettings.values)){
                             for(var j = 0; j < visibilities.order.length; j++){
-                                if(visibilityCurrentSettings.values.indexOf(visibilities.order[j]) !== -1){
-                                    visibilities.values.push(visibilities.order[j]);
+                                var attr = visibilities.order[j];
+                                if(visibilityCurrentSettings.values.indexOf(attr) !== -1){
+                                    visibilities.values.push(attr);
+                                }
+                                if(angular.isDefined(visibilityCurrentSettings.names) && visibilityCurrentSettings.names.indexOf(attr) !== -1){
+                                    visibilities.names.push(attr);
                                 }
                             }
+
                             angular.copy(visibilities,visibilityCurrentSettings);
                         }
                     }
