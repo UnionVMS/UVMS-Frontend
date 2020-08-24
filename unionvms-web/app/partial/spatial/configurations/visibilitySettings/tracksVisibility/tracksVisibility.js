@@ -118,9 +118,9 @@ angular.module('unionvmsWeb').controller('TracksvisibilityCtrl',function($scope,
 				});
 				
 				if(!angular.isDefined(trackVisibilitySettings.values) || trackVisibilitySettings.order.length !== trackVisibilitySettings.values.length){
-					$scope.selectAll.tracks[contentType.toLowerCase()] = false;
+					$scope.selectAll.tracks[contentType.toLowerCase()].values = false;
 				}else{
-					$scope.selectAll.tracks[contentType.toLowerCase()] = true;
+					$scope.selectAll.tracks[contentType.toLowerCase()].values = true;
 				}
 			});
 		}
