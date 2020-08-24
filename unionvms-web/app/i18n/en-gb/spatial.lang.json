@@ -260,6 +260,7 @@
 	"tab_vms_pos_table_header_source": "Source",
 	"tab_vms_pos_table_zoom_btn_title": "Zoom to position",
 	"tab_vms_pos_table_pan_btn_title": "Pan to position",
+    "tab_vms_table_header_last_x": "Last X",
 	"rule_table_details_btn_title": "Alert details",
 	"tab_vms_pos_table_lat_dd_qtip": "<p>Lat</p>Value must be between -90 and 90<br>e.g. 10.5",
 	"tab_vms_pos_table_lon_dd_qtip": "<p>Lon</p>Value must be between -180 and 180<br>e.g. 47.5",
