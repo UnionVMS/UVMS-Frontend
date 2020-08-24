@@ -1045,7 +1045,7 @@ angular.module('unionvmsWeb').factory('mapService', function(locale, $rootScope,
     
     /**
      * Set the displayed flag state codes in the styles object
-     * 
+     *
      * @memberof mapService
      * @public
      * @alias setDisplayedFlagStateCodes
@@ -1877,7 +1877,7 @@ angular.module('unionvmsWeb').factory('mapService', function(locale, $rootScope,
 	/**
 	 * Calculates the middle point between the first and last coordinate of a geometry.
 	 * To be used with linestring geometries representing segments.
-	 * 
+	 *
 	 * @memberof mapService
      * @public
      * @alias getMiddlePoint
@@ -2702,8 +2702,10 @@ angular.module('unionvmsWeb').factory('mapService', function(locale, $rootScope,
     //label visibility settings object
     ms.labelVisibility = {
         positions: ['fs', 'extMark', 'ircs', 'cfr', 'name', 'posTime', 'lat', 'lon', 'stat', 'm_spd', 'c_spd', 'crs', 'msg_tp', 'act_tp', 'source'],
+        positionsNames: ['fs', 'extMark', 'ircs', 'cfr', 'name', 'posTime', 'lat', 'lon', 'stat', 'm_spd', 'c_spd', 'crs', 'msg_tp', 'act_tp', 'source'],
         positionsTitles: true,
         segments: ['fs', 'extMark', 'ircs', 'cfr', 'name', 'dist', 'dur', 'spd', 'crs', 'cat'],
+        segmentsNames: ['fs', 'extMark', 'ircs', 'cfr', 'name', 'dist', 'dur', 'spd', 'crs', 'cat'],
         segmentsTitles: true,
         activities: ['fs', 'ext_mark', 'ircs', 'cfr', 'gfcm', 'iccat', 'uvi', 'name', 'source', 'activityType', 'reportType', 'purposeCode', 'occurrence', 'areas', 'gears', 'species'],
         activitiesTitles: true
@@ -2721,6 +2723,9 @@ angular.module('unionvmsWeb').factory('mapService', function(locale, $rootScope,
     ms.setLabelVisibility = function(type, config){
         ms.labelVisibility[type] = config.values;
         ms.labelVisibility[type + 'Titles'] = angular.isDefined(config.isAttributeVisible) ? config.isAttributeVisible : false;
+        if(type !== 'activities'){
+            ms.labelVisibility[type + 'Names'] = angular.isDefined(config.names) ? config.names : [];
+        }
         if (!angular.isDefined(ms.labelVisibility[type])){
             ms.labelVisibility[type] = [];
         }
@@ -2988,7 +2993,20 @@ angular.module('unionvmsWeb').factory('mapService', function(locale, $rootScope,
         feature.set('overlayId', overlayId);
         feature.set('overlayHidden', false);
     };
-    
+    ms.getLabelAttrName = function(titles,type,index){
+        var name = ms.labelVisibility[type][index];
+        var found = false;
+        for(var i =0; i < ms.labelVisibility[type+'Names'].length; i++){
+            if(name === ms.labelVisibility[type+'Names'][i]){
+                found = true;
+                break;
+            }
+        }
+        if(found) {
+            return titles[name];
+        }
+        return '';
+    };
     /**
      * Build the label object that will be used with Mustache
      * 
@@ -3004,13 +3022,13 @@ angular.module('unionvmsWeb').factory('mapService', function(locale, $rootScope,
         var titles, srcData, showTitles, i;
         var data = [];
         if (type === 'vmspos'){
-            showTitles = ms.labelVisibility.positionsTitles;
+            showTitles = ms.labelVisibility.positionsNames.length > 0;
             titles = ms.getPositionTitles();
             srcData = ms.formatPositionDataForPopup(feature.getProperties());
             
             for (i = 0; i < ms.labelVisibility.positions.length; i++){
                 data.push({
-                    title: titles[ms.labelVisibility.positions[i]],
+                    title: ms.getLabelAttrName(titles,'positions',i),
                     value: srcData[ms.labelVisibility.positions[i]]
                 });
             }
@@ -3026,13 +3044,13 @@ angular.module('unionvmsWeb').factory('mapService', function(locale, $rootScope,
                 });
             }
         } else {
-            showTitles = ms.labelVisibility.segmentsTitles;
+            showTitles = ms.labelVisibility.segmentsNames.length > 0;
             titles = ms.getSegmentTitles();
             srcData = ms.formatSegmentDataForPopup(feature.getProperties());
             
             for (i = 0; i < ms.labelVisibility.segments.length; i++){
                 data.push({
-                    title: titles[ms.labelVisibility.segments[i]],
+                    title: ms.getLabelAttrName(titles,'segments',i),
                     value: srcData[ms.labelVisibility.segments[i]]
                 });
             }
@@ -3043,6 +3061,9 @@ angular.module('unionvmsWeb').factory('mapService', function(locale, $rootScope,
                 id: id,
                 data: data,
                 includeTitles: showTitles,
+                includeTitle: function(){
+                    return this.title !== '';
+                },
                 getTitle: function(){
                     return this.title;
                 },
@@ -3193,7 +3214,7 @@ angular.module('unionvmsWeb').factory('mapService', function(locale, $rootScope,
 
 	    return overlay;
 	};
-	
+
 	/**
      * Close OL popup overlay
      * 
@@ -3211,8 +3232,10 @@ angular.module('unionvmsWeb').factory('mapService', function(locale, $rootScope,
 	//Popup visibility settings object
 	ms.popupVisibility = {
 	    positions: ['fs', 'extMark', 'ircs', 'cfr', 'name', 'posTime', 'lat', 'lon', 'stat', 'm_spd', 'c_spd', 'crs', 'msg_tp', 'act_tp', 'source'],
+	    positionsNames: ['fs', 'extMark', 'ircs', 'cfr', 'name', 'posTime', 'lat', 'lon', 'stat', 'm_spd', 'c_spd', 'crs', 'msg_tp', 'act_tp', 'source'],
 	    positionsTitles: true,
 	    segments: ['fs', 'extMark', 'ircs', 'cfr', 'name', 'dist', 'dur', 'spd', 'crs', 'cat'],
+	    segmentsNames: ['fs', 'extMark', 'ircs', 'cfr', 'name', 'dist', 'dur', 'spd', 'crs', 'cat'],
 	    segmentsTitles: true,
 	    ers: ['fs', 'ext_mark', 'ircs', 'cfr', 'gfcm', 'iccat', 'uvi', 'name', 'source', 'activityType', 'reportType', 'purposeCode', 'occurrence', 'areas', 'gears', 'species'],
 	    ersTitles: true
@@ -3221,6 +3244,9 @@ angular.module('unionvmsWeb').factory('mapService', function(locale, $rootScope,
 	ms.setPopupVisibility = function(type, config){
 	    ms.popupVisibility[type] = config.values;
 	    ms.popupVisibility[type + 'Titles'] = angular.isDefined(config.isAttributeVisible) ? config.isAttributeVisible: false;
+	    if(type !== 'ers'){
+            ms.popupVisibility[type + 'Names'] = angular.isDefined(config.names) ? config.names : [];
+        }
 	    if (!angular.isDefined(ms.popupVisibility[type])){
 	        ms.popupVisibility[type] = [];
 	    }
@@ -3270,6 +3296,20 @@ angular.module('unionvmsWeb').factory('mapService', function(locale, $rootScope,
         }
     };
 
+    ms.getPopupAttrName = function(titles,type,index){
+        var name = ms.popupVisibility[type][index];
+        var found = false;
+        for(var i =0; i < ms.popupVisibility[type+'Names'].length; i++){
+            if(name === ms.popupVisibility[type+'Names'][i]){
+                found = true;
+                break;
+            }
+        }
+        if(found) {
+            return titles[name];
+        }
+        return '';
+    };
 	//POPUP - Define the object that will be used in the popup for vms positions
 	/**
      * Create object containing all the necessary position information to be displayed in the popup
@@ -3284,21 +3324,24 @@ angular.module('unionvmsWeb').factory('mapService', function(locale, $rootScope,
     ms.setPositionsObjPopup = function(feature, id){
         var titles = ms.getPositionTitles();
         var srcData = ms.formatPositionDataForPopup(feature);
-        
+        var showAttrNames = ms.popupVisibility.positions.length > 0;
         var data = [];
         for (var i = 0; i < ms.popupVisibility.positions.length; i++){
             data.push({
-                title: titles[ms.popupVisibility.positions[i]],
+                title: ms.getPopupAttrName(titles,'positions',i),
                 value: srcData[ms.popupVisibility.positions[i]]
             });
         }
-        
+
         return {
-            showTitles: ms.popupVisibility.positionsTitles,
+            showTitles: showAttrNames,
             position: data,
             id: id,
             vesselName: feature.name,
             vesselId: feature.connectionId,
+            showTitle: function(){
+                return this.title !== '';
+            },
             getTitle: function(){
                 return this.title;
             },
@@ -3455,18 +3498,21 @@ angular.module('unionvmsWeb').factory('mapService', function(locale, $rootScope,
     ms.setSegmentsObjPopup = function(feature){
         var titles = ms.getSegmentTitles();
         var srcData = ms.formatSegmentDataForPopup(feature);
-        
+        var showAttrNames = ms.popupVisibility.segmentsNames.length > 0;
         var data = [];
         for (var i = 0; i < ms.popupVisibility.segments.length; i++){
             data.push({
-                title: titles[ms.popupVisibility.segments[i]],
+                title: ms.getPopupAttrName(titles,'segments',i),
                 value: srcData[ms.popupVisibility.segments[i]]
             });
         }
-        
+
         return {
-            showTitles: ms.popupVisibility.segmentsTitles,
+            showTitles: showAttrNames,
             segment: data,
+            showTitle: function(){
+                return this.title !== '';
+            },
             getTitle: function(){
                 return this.title;
             },
