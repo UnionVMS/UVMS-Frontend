@@ -109,7 +109,8 @@ angular.module('unionvmsWeb').controller('PositionsvisibilityCtrl',function($sco
 		        title: locale.getString('spatial.tab_vms_pos_table_header_source'),
 		        value: 'source'
 		    }];
-		    
+            $scope.configModel.visibilitySettings.positions.formPopupTitles = {};
+
 		    $scope.configModel.visibilitySettings.positionLabelAttrs = [{
 		        title: locale.getString('spatial.reports_form_vessel_search_table_header_flag_state'),
 		        value: 'fs'
@@ -156,18 +157,30 @@ angular.module('unionvmsWeb').controller('PositionsvisibilityCtrl',function($sco
 		        title: locale.getString('spatial.tab_vms_pos_table_header_source'),
 		        value: 'source'
 		    }];
-		    
+            $scope.configModel.visibilitySettings.positions.formLabelTitles = {};
+
 		    var contentTypes = ['Table','Popup','Label'];
 			angular.forEach(contentTypes, function(contentType) {
 				var positions = [];
-				var positionVisibilitySettings = $scope.configModel.visibilitySettings.positions[contentType.toLowerCase() === 'label' ? contentType.toLowerCase() + 's' : contentType.toLowerCase()];
+				var contentTypeLocal = contentType.toLowerCase() === 'label' ? contentType.toLowerCase() + 's' : contentType.toLowerCase();
+				var positionVisibilitySettings = $scope.configModel.visibilitySettings.positions[contentTypeLocal];
 				var positionVisibilityAttrs = $scope.configModel.visibilitySettings['position' + contentType + 'Attrs'];
-				
+                var positionVisibilityTitles = $scope.configModel.visibilitySettings.positions[contentTypeLocal].titles;
+
 				if(positionVisibilitySettings.order && positionVisibilitySettings.order.length > 0){
 					angular.forEach(positionVisibilitySettings.order, function(item) {
 						for(var i=0;i<positionVisibilityAttrs.length;i++){
-							if(item === positionVisibilityAttrs[i].value){
+						    var code = positionVisibilityAttrs[i].value;
+							if(item === code){
 								positions.push(positionVisibilityAttrs[i]);
+							}
+							if(angular.isDefined(positionVisibilityTitles)){
+							    for(var j =0; j < positionVisibilityTitles.length;j++) {
+							        if(code === positionVisibilityTitles[j].code){
+							            $scope.configModel.visibilitySettings.positions["form"+contentType+"Titles"][code] = positionVisibilityTitles[j].title;
+							            break;
+							        }
+							    }
 							}
 						}
 					});
