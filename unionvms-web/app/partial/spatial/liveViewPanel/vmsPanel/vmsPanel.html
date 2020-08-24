@@ -145,13 +145,21 @@ copy of the GNU General Public License along with the IFDM Suite. If not, see <h
                                         </div>
                                     </div>
                                 </div>
+                                <div class="container">
+                                    <div class="row">
+                                        <div class="col-md-1 last-x">
+                                            <input name="lastX" id="positions-lastX" placeholder="{{'spatial.tab_vms_table_header_last_x' | i18n }}" class="input-sm form-control" type="search">
+                                            <a href="" qtip at="top left" my="bottom right" content="{{'spatial.tab_vms_table_header_last_x' | i18n }}" class="info-qtip qtip-blue"><i class="fa fa-question-circle"></i></a>
+                                        </div>
+                                    </div>
+                                </div>
                                 <div class="col-md-12 vms-search-btns">
                                     <button type="button" class="btn btn-default" ng-click="getFilters('positions')">
                                         <span class="fa fa-search"></span>&nbsp;
                                         <span>{{'spatial.reports_table_search_header' | i18n}}</span>
                                     </button>
                                     <input id="positionsFilters{{isModal ? 'Modal' : ''}}" st-search="positions" class="hidden-st-control" type="search">
-                                    <st-reset-search form-id="posFiltersForm{{isModal ? 'Modal' : ''}}" clear-dates="clearDateFilters()"></st-reset-search>
+                                    <st-reset-search form-id="posFiltersForm{{isModal ? 'Modal' : ''}}" clear-dates="clearDateFilters()" last-x-id="positions-lastX"></st-reset-search>
                                     <button type="button" class="btn btn-default plus" ng-click="addDynamicForm('positions')">
                                         <span class="fa fa-plus"></span>&nbsp;
                                     </button>
@@ -285,13 +293,21 @@ copy of the GNU General Public License along with the IFDM Suite. If not, see <h
                                         </div>
                                     </div>
                                 </div>
+                                <div class="container">
+                                    <div class="row">
+                                        <div class="col-md-1 last-x">
+                                            <input name="lastX" id="segments-lastX" placeholder="{{'spatial.tab_vms_table_header_last_x' | i18n }}" class="input-sm form-control" type="search">
+                                            <a href="" qtip at="top left" my="bottom right" content="{{'spatial.tab_vms_table_header_last_x' | i18n }}" class="info-qtip qtip-blue"><i class="fa fa-question-circle"></i></a>
+                                        </div>
+                                    </div>
+                                </div>
                                 <div class="col-md-12 vms-search-btns">
                                     <button type="button" class="btn btn-default" ng-click="getFilters('segments')">
                                         <span class="fa fa-search"></span>&nbsp;
                                         <span>{{'spatial.reports_table_search_header' | i18n}}</span>
                                     </button>
                                     <input id="segmentsFilters{{isModal ? 'Modal' : ''}}" st-search="segments" class="hidden-st-control" type="search">
-                                    <st-reset-search form-id="segFiltersForm{{isModal ? 'Modal' : ''}}"></st-reset-search>
+                                    <st-reset-search form-id="segFiltersForm{{isModal ? 'Modal' : ''}}" last-x-id="segments-lastX"></st-reset-search>
                                     <button type="button" class="btn btn-default plus" ng-click="addDynamicForm('segments')">
                                         <span class="fa fa-plus"></span>&nbsp;
                                     </button>
@@ -406,13 +422,21 @@ copy of the GNU General Public License along with the IFDM Suite. If not, see <h
                                         </div>
                                     </div>
                                 </div>
+                                <div class="container">
+                                    <div class="row">
+                                        <div class="col-md-1 last-x">
+                                            <input name="lastX" id="tracks-lastX" placeholder="{{'spatial.tab_vms_table_header_last_x' | i18n }}" class="input-sm form-control" type="search">
+                                            <a href="" qtip at="top left" my="bottom right" content="{{'spatial.tab_vms_table_header_last_x' | i18n }}" class="info-qtip qtip-blue"><i class="fa fa-question-circle"></i></a>
+                                        </div>
+                                    </div>
+                                </div>
                                 <div class="col-md-12 vms-search-btns">
                                     <button type="button" class="btn btn-default" ng-click="getFilters('tracks')">
                                         <span class="fa fa-search"></span>&nbsp;
                                         <span>{{'spatial.reports_table_search_header' | i18n}}</span>
                                     </button>
                                     <input id="tracksFilters{{isModal ? 'Modal' : ''}}" st-search="tracks" class="hidden-st-control" type="search">
-                                    <st-reset-search form-id="trackFiltersForm{{isModal ? 'Modal' : ''}}"></st-reset-search>
+                                    <st-reset-search form-id="trackFiltersForm{{isModal ? 'Modal' : ''}}" last-x-id="tracks-lastX"></st-reset-search>
                                     <button type="button" class="btn btn-default plus" ng-click="addDynamicForm('tracks')">
                                         <span class="fa fa-plus"></span>&nbsp;
                                     </button>
@@ -540,13 +564,21 @@ copy of the GNU General Public License along with the IFDM Suite. If not, see <h
                                         </div>
                                     </div>
                                 </div>
+                                <div class="container">
+                                    <div class="row">
+                                        <div class="col-md-1 last-x">
+                                            <input name="lastX" id="alarms-lastX" placeholder="{{'spatial.tab_vms_table_header_last_x' | i18n }}" class="input-sm form-control" type="search">
+                                            <a href="" qtip at="top left" my="bottom right" content="{{'spatial.tab_vms_table_header_last_x' | i18n }}" class="info-qtip qtip-blue"><i class="fa fa-question-circle"></i></a>
+                                        </div>
+                                    </div>
+                                </div>
                                 <div class="col-md-12 vms-search-btns">
                                     <button type="button" class="btn btn-default" ng-click="getFilters('alarms')">
                                         <span class="fa fa-search"></span>&nbsp;
                                         <span>{{'spatial.reports_table_search_header' | i18n}}</span>
                                     </button>
                                     <input id="alarmsFilters{{(isModal ? 'Modal' : '')}}" st-search="alarms" class="hidden-st-control" type="search">
-                                    <st-reset-search form-id="alarmFiltersForm{{isModal ? 'Modal' : ''}}" clear-dates="clearDateFilters()"></st-reset-search>
+                                    <st-reset-search form-id="alarmFiltersForm{{isModal ? 'Modal' : ''}}" clear-dates="clearDateFilters()" last-x-id="alarms-lastX"></st-reset-search>
                                     <button type="button" class="btn btn-default plus" ng-click="addDynamicForm('alarms')">
                                         <span class="fa fa-plus"></span>&nbsp;
                                     </button>
