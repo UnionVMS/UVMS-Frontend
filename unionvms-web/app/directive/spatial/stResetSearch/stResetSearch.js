@@ -26,8 +26,8 @@ angular.module('unionvmsWeb').directive('stResetSearch', function() {
             
             scope.resetFields = function(){
                 var coordFields = ['lon|dd', 'lat|dd', 'lon|deg', 'lat|deg', 'lon|min', 'lat|min'];
-                $('#' + scope.formId + ' [name]').each(
-                    function(index){  
+                $('[id^=' + scope.formId + '] [name]').each(
+                    function(index){
                         var input = $(this);
                         var name = input.attr('name');
                         input.val('');
