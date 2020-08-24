@@ -110,7 +110,10 @@ angular.module('unionvmsWeb').controller('VisibilitysettingsCtrl',function($scop
     };
 
     $scope.isDisabledName = function(visibilityType,contentType,name) {
-       return !$scope.configModel.visibilitySettings[visibilityType][contentType].values.includes(name);
+        if($scope.configModel.visibilitySettings[visibilityType][contentType].values.length > 0) {
+            return !$scope.configModel.visibilitySettings[visibilityType][contentType].values.includes(name);
+        }
+        return true;
     };
 
     $scope.isAllNamesDisabled = function(visibilityType,contentType) {

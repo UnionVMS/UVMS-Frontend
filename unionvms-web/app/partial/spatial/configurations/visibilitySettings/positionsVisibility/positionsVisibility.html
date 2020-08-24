@@ -45,7 +45,7 @@ copy of the GNU General Public License along with the IFDM Suite. If not, see <h
 								dnd-moved="configModel.visibilitySettings.positionTableAttrs.splice($index, 1);visibilitySettingsForm.$setDirty();">
 									<div class="handle">:::</div>
 									<span>{{attr.title}}</span>
-									<input type="checkbox" title="{{'spatial.visibility_show_attr_val' | i18n}}" checklist-model="configModel.visibilitySettings.positions.table.values" checklist-value="attr.value" ng-change="onListItemChange('values','positions','table')">
+									<input type="checkbox" checklist-model="configModel.visibilitySettings.positions.table.values" checklist-value="attr.value" ng-change="selectAllChange('positions','table',true)">
 								</li>
 							</ul>
 						</td>
@@ -58,6 +58,7 @@ copy of the GNU General Public License along with the IFDM Suite. If not, see <h
 								dnd-moved="configModel.visibilitySettings.positionPopupAttrs.splice($index, 1);visibilitySettingsForm.$setDirty();">
 									<div class="handle">:::</div>
 									<span>{{attr.title}}</span>
+                                    <input type="text" class="replacement" ng-model="configModel.visibilitySettings.positions.formPopupTitles[attr.value]">
 									<input type="checkbox" title="{{'spatial.visibility_show_attr_name' | i18n}}" ng-disabled="isDisabledName('positions','popup',attr.value)" checklist-model="configModel.visibilitySettings.positions.popup.names" checklist-value="attr.value" ng-change="onListItemChange('names','positions','popup')" class="lb-name">
 									<input type="checkbox" title="{{'spatial.visibility_show_attr_val' | i18n}}" checklist-model="configModel.visibilitySettings.positions.popup.values" checklist-value="attr.value" ng-change="onListItemChange('values','positions','popup')">
 								</li>
@@ -72,23 +73,13 @@ copy of the GNU General Public License along with the IFDM Suite. If not, see <h
 								dnd-moved="configModel.visibilitySettings.positionLabelAttrs.splice($index, 1);visibilitySettingsForm.$setDirty();">
 									<div class="handle">:::</div>
 									<span>{{attr.title}}</span>
+                                    <input type="text" class="replacement" ng-model="configModel.visibilitySettings.positions.formLabelTitles[attr.value]">
 									<input type="checkbox" title="{{'spatial.visibility_show_attr_name' | i18n}}" ng-disabled="isDisabledName('positions','labels',attr.value)" checklist-model="configModel.visibilitySettings.positions.labels.names" checklist-value="attr.value" ng-change="onListItemChange('names','positions','label')" class="lb-name">
 									<input type="checkbox" title="{{'spatial.visibility_show_attr_val' | i18n}}" checklist-model="configModel.visibilitySettings.positions.labels.values" checklist-value="attr.value" ng-change="onListItemChange('values','positions','label')">
 								</li>
 							</ul>
 						</td>
 					</tr>
-<!--					<tr ng-if="!isPositionVisLoading">-->
-<!--						<td></td>-->
-<!--						<td class="is-attr-visible-row" ng-if="settingsLevel !== 'report' || (settingsLevel === 'report' && (components.map || components.visibility.position))">-->
-<!--							<span>{{'spatial.visibility_show_attr_names' | i18n}}</span>-->
-<!--							<input type="checkbox" ng-model="configModel.visibilitySettings.positions.popup.isAttributeVisible">-->
-<!--						</td>-->
-<!--						<td class="is-attr-visible-row" ng-if="settingsLevel !== 'report' || (settingsLevel === 'report' && (components.map || components.visibility.position))">-->
-<!--							<span>{{'spatial.visibility_show_attr_names' | i18n}}</span>-->
-<!--							<input type="checkbox" ng-model="configModel.visibilitySettings.positions.labels.isAttributeVisible">-->
-<!--						</td>-->
-<!--					</tr>-->
 				</tbody>
 			</table>
 		</div>
