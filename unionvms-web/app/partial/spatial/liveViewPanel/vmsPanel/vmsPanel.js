@@ -39,6 +39,7 @@ angular.module('unionvmsWeb').controller('VmspanelCtrl',function($scope, locale,
         'alarms' : [0],
         'trips' : [0]
     };
+    $scope.lastX = undefined;
 
     //Define VMS tabs
     var setVmsTabs = function(){
@@ -327,7 +328,7 @@ angular.module('unionvmsWeb').controller('VmspanelCtrl',function($scope, locale,
 
        var data = $scope.getFilterData(formId,type);
 
-       valid = $scope.validateDDMCoords(formId,type,data);
+       valid = $scope.validateDDMCoords(formId,type,data.objects);
 
        if (valid){
            el.val(JSON.stringify(data));
@@ -392,7 +393,12 @@ angular.module('unionvmsWeb').controller('VmspanelCtrl',function($scope, locale,
    			   return value !== '';
    		    });
           }
-          return objects;
+          var lastXInput = $('#' + type+'-lastX');
+          var data = {
+            "lastX" : lastXInput.val(),
+            "objects" : objects
+          };
+          return data;
       };
 
 

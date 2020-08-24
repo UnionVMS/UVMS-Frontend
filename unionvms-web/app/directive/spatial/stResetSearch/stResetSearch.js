@@ -15,6 +15,7 @@ angular.module('unionvmsWeb').directive('stResetSearch', function() {
         require: '^stTable',
         scope: {
             formId: '@',
+            lastXId: '@',
             clearDates: '&',
             clearCombos: '&'
         },
@@ -43,7 +44,9 @@ angular.module('unionvmsWeb').directive('stResetSearch', function() {
                         }
                     }
                 );
-                
+
+                $('#'+scope.lastXId).val('');
+
                 if (angular.isDefined(attrs.clearDates)){
                     scope.clearDates();
                 }
