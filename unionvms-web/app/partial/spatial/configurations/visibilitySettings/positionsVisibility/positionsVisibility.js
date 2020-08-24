@@ -184,10 +184,15 @@ angular.module('unionvmsWeb').controller('PositionsvisibilityCtrl',function($sco
 				});
 				
 				if(!angular.isDefined(positionVisibilitySettings.values) || positionVisibilitySettings.order.length !== positionVisibilitySettings.values.length){
-					$scope.selectAll.positions[contentType.toLowerCase()] = false;
+					$scope.selectAll.positions[contentType.toLowerCase()].values = false;
 				}else{
-					$scope.selectAll.positions[contentType.toLowerCase()] = true;
+					$scope.selectAll.positions[contentType.toLowerCase()].values = true;
 				}
+				if(!angular.isDefined(positionVisibilitySettings.names) || positionVisibilitySettings.order.length !== positionVisibilitySettings.names.length){
+                	$scope.selectAll.positions[contentType.toLowerCase()].names = false;
+                }else{
+                    $scope.selectAll.positions[contentType.toLowerCase()].names = true;
+                }
 			});
 			$scope.isPositionVisLoading = false;
 		}

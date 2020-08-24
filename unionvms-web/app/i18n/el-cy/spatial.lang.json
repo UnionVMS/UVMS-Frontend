@@ -317,7 +317,6 @@
 	"gfcm_config_modal_title": "GFCM settings",
 	"fao_config_modal_title": "FAO settings",
 	"fmz_config_modal_title": "FMZ settings",
-
     "save_as_modal_title": "Save report as...",
     "map_configuration_map_projection": "Map projection",
     "map_configuration_display_projection": "Display projection",
@@ -380,7 +379,6 @@
 	"preferences_auto_refresh_status": "Auto refresh status",
 	"preferences_alarm_status_category_title": "Alert status",
 	"tab_config_table_header_vessel_color": "Asset color",
-
 	"settings_reset_btn": "Reset to defaults",
 	"map_settings": "Map settings",
 	"style_settings": "Style settings",
@@ -390,6 +388,10 @@
 	"visibility_configuration_label": "Label contents",
 	"visibility_configuration_table": "Table contents",
 	"visibility_show_attr_names": "Show attribute names",
+    "visibility_show_attr_name": "Show this attribute name",
+    "visibility_show_all_attr_name": "Show all attribute names",
+    "visibility_show_all_attr": "Show all attributes",
+    "visibility_show_attr_val": "Show this attribute value",
 	"general_settings": "General settings",
 	"general_configuration_geoserver_url": "Geoserver URL",
 	"general_configuration_bing_api_key": "Bing Maps Api Key",
@@ -411,7 +413,6 @@
 	"property_add_rule": "Add rule",
 	"property_rm_rule": "Remove rule",
 	"default_color": "Default color",
-
 	"user_preferences_error_saving": "There was an error while saving your preferences. Please try again.",
 	"user_preferences_success_saving": "Your preferences were successfuly saved. Please re-run your report, in order to reflect the changes onto the report result. Be aware that some of the settings might be overridden by report level preferences.",
 	"user_preferences_reset_map_settings_success": "Your map settings were successfuly reset.",
@@ -443,7 +444,6 @@
 	"invalid_range_error_message_2": "Must be between 1 and 6",
 	"not_numeric_error_message": "Value shall be numeric",
 	"base_list_error": "There should be at least one selected background layer",
-
 	"styles_attr_countryCode": "F.S",
 	"styles_attr_type": "Msg. Type",
 	"styles_attr_activity": "Act. Type",
@@ -475,7 +475,6 @@
 	"ref_data_group_already_added_msg": "This group is already selected.",
 	"ref_data_empty_search_by_click_msg": "There is no data at the selected location.",
 	"ref_data_empty_search_by_prop_msg": "There is no data that matches your search criteria.",
-
 	"previous": "Previous",
 	"next": "Next",
 	"more_details": "More...",
