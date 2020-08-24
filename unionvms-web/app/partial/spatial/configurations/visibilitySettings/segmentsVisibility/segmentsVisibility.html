@@ -55,6 +55,7 @@ copy of the GNU General Public License along with the IFDM Suite. If not, see <h
 								dnd-moved="configModel.visibilitySettings.segmentPopupAttrs.splice($index, 1);visibilitySettingsForm.$setDirty();">
 									<div class="handle">:::</div>
 									<span>{{attr.title}}</span>
+                                    <input type="text" class="replacement" ng-model="configModel.visibilitySettings.segments.formPopupTitles[attr.value]">
                                     <input type="checkbox" title="{{'spatial.visibility_show_attr_name' | i18n}}" ng-disabled="isDisabledName('segments','popup',attr.value)" checklist-model="configModel.visibilitySettings.segments.popup.names" checklist-value="attr.value" ng-change="onListItemChange('names','segments','popup')" class="lb-name">
                                     <input type="checkbox" title="{{'spatial.visibility_show_attr_val' | i18n}}" checklist-model="configModel.visibilitySettings.segments.popup.values" checklist-value="attr.value" ng-change="onListItemChange('values','segments','popup')">
 								</li>
@@ -69,23 +70,13 @@ copy of the GNU General Public License along with the IFDM Suite. If not, see <h
 								dnd-moved="configModel.visibilitySettings.segmentLabelAttrs.splice($index, 1);visibilitySettingsForm.$setDirty();">
 									<div class="handle">:::</div>
 									<span>{{attr.title}}</span>
+                                    <input type="text" class="replacement" ng-model="configModel.visibilitySettings.segments.formLabelTitles[attr.value]">
                                     <input type="checkbox" title="{{'spatial.visibility_show_attr_name' | i18n}}" ng-disabled="isDisabledName('segments','labels',attr.value)" checklist-model="configModel.visibilitySettings.segments.labels.names" checklist-value="attr.value" ng-change="onListItemChange('names','segments','label')" class="lb-name">
                                     <input type="checkbox" title="{{'spatial.visibility_show_attr_val' | i18n}}" checklist-model="configModel.visibilitySettings.segments.labels.values" checklist-value="attr.value" ng-change="onListItemChange('values','segments','label')">
 								</li>
 							</ul>
 						</td>
 					</tr>
-<!--					<tr>-->
-<!--						<td></td>-->
-<!--						<td class="is-attr-visible-row" ng-if="settingsLevel !== 'report' || (settingsLevel === 'report' && (components.map || components.visibility.segment))">-->
-<!--							<span>{{'spatial.visibility_show_attr_names' | i18n}}</span>-->
-<!--							<input type="checkbox" ng-model="configModel.visibilitySettings.segments.popup.isAttributeVisible">-->
-<!--						</td>-->
-<!--						<td class="is-attr-visible-row" ng-if="settingsLevel !== 'report' || (settingsLevel === 'report' && (components.map || components.visibility.segment))">-->
-<!--							<span>{{'spatial.visibility_show_attr_names' | i18n}}</span>-->
-<!--							<input type="checkbox" ng-model="configModel.visibilitySettings.segments.labels.isAttributeVisible">-->
-<!--						</td>-->
-<!--					</tr>-->
 				</tbody>
 			</table>
     	</div>
