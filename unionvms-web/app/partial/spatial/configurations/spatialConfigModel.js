@@ -10,7 +10,6 @@ FITNESS FOR A PARTICULAR PURPOSE.  See the GNU General Public License for more d
 copy of the GNU General Public License along with the IFDM Suite. If not, see <http://www.gnu.org/licenses/>.
 */
 angular.module('unionvmsWeb').factory('SpatialConfig',function() {
-
     function SpatialConfig(){
         this.toolSettings = {
             control: [],
@@ -43,7 +42,6 @@ angular.module('unionvmsWeb').factory('SpatialConfig',function() {
 	        areaLayers: [],
 	        baseLayers: [],
 	        portLayers: []
-
         };
         this.mapSettings = {
             mapProjectionId: undefined,
@@ -55,17 +53,35 @@ angular.module('unionvmsWeb').factory('SpatialConfig',function() {
         };
         this.visibilitySettings = {
             positions: {
-                table: {},
-                popup: {},
-                labels: {}
+                table: {
+                    values:{}
+                },
+                popup: {
+                    names:{},
+                    values:{}
+                },
+                labels: {
+                    names:{},
+                    values:{}
+                }
             },
             segments: {
-                table: {},
-                popup: {},
-                labels: {}
+                table: {
+                    values:{}
+                },
+                popup: {
+                    names:{},
+                    values:{}
+                },
+                labels: {
+                    names:{},
+                    values:{}
+                }
             },
             tracks: {
-                table: {}
+                table: {
+                    values:{}
+                }
             }
         };
         this.referenceDataSettings = {};
@@ -105,7 +121,6 @@ angular.module('unionvmsWeb').factory('SpatialConfig',function() {
         var config = new SpatialConfig();
         config.toolSettings = undefined;
         config.systemSettings = undefined;
-
         if (angular.isDefined(data.mapSettings)){
             config.mapSettings = data.mapSettings;
         }
@@ -133,7 +148,6 @@ angular.module('unionvmsWeb').factory('SpatialConfig',function() {
         var config = new SpatialConfig();
         config.toolSettings = undefined;
         config.systemSettings = undefined;
-
         config = checkMapSettings(this,'user',config,form.mapSettingsForm.$dirty);
         config = checkStylesSettings(this,'user',config,form.stylesSettingsForm.$dirty);
         config = checkVisibilitySettings(this,'user',config,form.visibilitySettingsForm.$dirty);
@@ -153,7 +167,6 @@ angular.module('unionvmsWeb').factory('SpatialConfig',function() {
             layerSettingsForm: angular.isDefined(form.layerSettingsForm) ? form.layerSettingsForm.$dirty : false,
             referenceDataSettingsForm: angular.isDefined(form.referenceDataSettingsForm) ? form.referenceDataSettingsForm.$dirty : false
         };
-
         if(userConfig.mapSettings.spatialConnectId !== this.mapSettings.spatialConnectId || userConfig.mapSettings.mapProjectionId !== this.mapSettings.mapProjectionId ||
         userConfig.mapSettings.displayProjectionId !== this.mapSettings.displayProjectionId || userConfig.mapSettings.coordinatesFormat !== this.mapSettings.coordinatesFormat ||
         userConfig.mapSettings.scaleBarUnits !== this.mapSettings.scaleBarUnits || formStatus.mapSettingsForm){
@@ -186,7 +199,6 @@ angular.module('unionvmsWeb').factory('SpatialConfig',function() {
 
         return config;
     };
-
     //Used in the report form map configuration modal
     SpatialConfig.prototype.forReportConfigFromJson = function(data){
         var config = new SpatialConfig();
@@ -290,7 +302,6 @@ angular.module('unionvmsWeb').factory('SpatialConfig',function() {
                     }else{
                         properties.attribute = model[item + 'Style'].attribute;
                         properties.style = {};
-
                         if(item==='segment'){
                             properties.style.lineStyle = model.segmentStyle.lineStyle;
                             properties.style.lineWidth = model.segmentStyle.lineWidth;
@@ -358,6 +369,7 @@ angular.module('unionvmsWeb').factory('SpatialConfig',function() {
                         var visibilityCurrentSettings = model.visibilitySettings[visibType + 's'][contentType.toLowerCase() === 'label' ? contentType.toLowerCase() + 's' : contentType.toLowerCase()];
                         var visibilityCurrentAttrs = model.visibilitySettings[visibType + contentType + 'Attrs'];
                         var visibilities = {};
+                        visibilities.names = [];
                         visibilities.values = [];
                         visibilities.order = [];
                         visibilities.isAttributeVisible = visibilityCurrentSettings.isAttributeVisible;
@@ -368,10 +380,15 @@ angular.module('unionvmsWeb').factory('SpatialConfig',function() {
 
                         if(angular.isDefined(visibilityCurrentSettings.values)){
                             for(var j = 0; j < visibilities.order.length; j++){
-                                if(visibilityCurrentSettings.values.indexOf(visibilities.order[j]) !== -1){
-                                    visibilities.values.push(visibilities.order[j]);
+                                var attr = visibilities.order[j];
+                                if(visibilityCurrentSettings.values.indexOf(attr) !== -1){
+                                    visibilities.values.push(attr);
+                                }
+                                if(angular.isDefined(visibilityCurrentSettings.names) && visibilityCurrentSettings.names.indexOf(attr) !== -1){
+                                    visibilities.names.push(attr);
                                 }
                             }
+
                             angular.copy(visibilities,visibilityCurrentSettings);
                         }
                     }
@@ -381,7 +398,6 @@ angular.module('unionvmsWeb').factory('SpatialConfig',function() {
                 });
             });
         }
-
         if (angular.isDefined(config.visibilitySettings)){
             angular.forEach(visibilityTypes, function(visibType){
                 angular.forEach(contentTypes, function(contentType){
@@ -389,7 +405,6 @@ angular.module('unionvmsWeb').factory('SpatialConfig',function() {
                 });
             });
         }
-
         return config;
     };
 
