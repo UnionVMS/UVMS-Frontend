@@ -55,7 +55,7 @@ angular.module('unionvmsWeb').factory('mapService', function(locale, $rootScope,
 	ms.sp = spatialHelperService;
 	/**
 	 * Set liveview map according to report/preferences configurations
-	 * 
+	 *
 	 * @memberof mapService
 	 * @public
 	 * @alias setMap
@@ -65,7 +65,7 @@ angular.module('unionvmsWeb').factory('mapService', function(locale, $rootScope,
 	    ms.controls = [];
 	    ms.interactions = [];
 	    ms.overlay = ms.addPopupOverlay();
-        
+
 	    //Get all controls and interactions that will be added to the map
 	    var controlsToMap = ms.setControls(config.map.control);
 
@@ -85,16 +85,16 @@ angular.module('unionvmsWeb').factory('mapService', function(locale, $rootScope,
                     control.updateHistory();
                 }
             }, controls);
-            
+
             //Adjust print extent to the new map scale
             var printLayer = ms.getLayerByType('print');
             if (angular.isDefined(printLayer) && ms.map.getView().getResolution() !== ms.mapPrintResolution){
                 ms.addPrintExtent();
             }
-            
+
             ms.checkLabelStatus();
 	    });
-	    
+
 	    map.on('change:size', function(e){
 	        //Adjust print extent to the new map scale
             var printLayer = ms.getLayerByType('print');
@@ -108,7 +108,7 @@ angular.module('unionvmsWeb').factory('mapService', function(locale, $rootScope,
 	        var coordinate = evt.coordinate;
 	        var selInteraction = ms.getInteractionsByType('Select')[0];
 	        var dragInteraction = ms.getCustomInteraction('Pointer', 'dragExtent')[0];
-	        
+
 	        //get feature info
 	        if (angular.equals({}, ms.measureInteraction) && !angular.isDefined(dragInteraction)){
 	            var records = [];
@@ -120,12 +120,12 @@ angular.module('unionvmsWeb').factory('mapService', function(locale, $rootScope,
 	                        var selFeat;
 	                        if (positions.length === 1){
 	                            selFeat = positions[0];
-	                        } 
-	                        
+	                        }
+
 	                        if (feature.get('featNumber') === 1 && !angular.isDefined(selFeat)) {
 	                            selFeat = feature.get('featureToDisplay');
 	                        }
-	                        
+
 	                        if (angular.isDefined(selFeat)){
 	                            records.push({
                                     type: type,
@@ -146,7 +146,7 @@ angular.module('unionvmsWeb').factory('mapService', function(locale, $rootScope,
 	                    }
 	                }
 	            });
-	            
+
 	            //Check features in exploded cluster
 	            if (angular.isDefined(selInteraction) && selInteraction.getFeatures().getLength() > 0){
 	                var positions = selInteraction.getFeatures().getArray()[0].get('features');
@@ -166,12 +166,12 @@ angular.module('unionvmsWeb').factory('mapService', function(locale, $rootScope,
 	                        }
 	                    }
 	                });
-	                
+
 	                if (angular.isDefined(record)){
 	                    records.push(record);
 	                }
 	            }
-	            
+
 	            if (records.length > 0){
 	                ms.popupRecContainer.reset();
                     var data = ms.setObjPopup(records[0]);
@@ -181,15 +181,15 @@ angular.module('unionvmsWeb').factory('mapService', function(locale, $rootScope,
                 }
 	        }
 	    });
-	    
+
 	    var view = ms.createView(config.map.projection);
 	    map.setView(view);
 	    ms.map = map;
 	    ms.addBlankLayer();
-	    
+
 	    //Remove display none of the popup on initial loading
 	    angular.element('#popup').css('display', 'block');
-	    
+
 	    ms.map.getViewport().addEventListener('contextmenu', function(e){
             e.preventDefault();
             var select = ms.getInteractionsByType('Select')[0];
@@ -207,14 +207,14 @@ angular.module('unionvmsWeb').factory('mapService', function(locale, $rootScope,
                             if (selFeatures.getLength() > 0){
                                 selFeatures.clear();
                             }
-                            
+
                             if (feature.get('featNumber') > 1){
                                 selFeatures.push(feature);
                                 foundedFeatures = true;
                             }
                         }
                     });
-                    
+
                     if (foundedFeatures === false){
                         selFeatures.clear();
                     } else if (foundedFeatures === true && angular.isDefined(ms.overlay) && ms.overlay.get('fromCluster') === true){
@@ -223,22 +223,22 @@ angular.module('unionvmsWeb').factory('mapService', function(locale, $rootScope,
                 }
             }
         });
-	    
+
 	    ms.setDragBoxEvent(ms.map);
 	};
-	
+
 	/**
 	 * Create a OL map view from config object
-	 * 
+	 *
 	 * @memberof mapService
 	 * @public
 	 * @alias createView
 	 * @param {Object} config - The map configuration object
-	 * @returns {ol.View} The OL map view 
+	 * @returns {ol.View} The OL map view
 	 */
 	ms.createView = function(config){
 	    var view = genericMapService.createView(config);
-	    
+
 	    view.on('change:resolution', function(evt){
             //Clear features on expanded clusters when zooming
             var select = ms.getInteractionsByType('Select')[0];
@@ -248,17 +248,17 @@ angular.module('unionvmsWeb').factory('mapService', function(locale, $rootScope,
                     ms.closePopup();
                 }
             }
-            
+
             layerPanelService.reloadPanels();
             //$rootScope.$broadcast('reloadLegend');
         });
-	    
+
 	    return view;
 	};
-	
+
 	/**
 	 * Update map view with new configuration object
-	 * 
+	 *
 	 * @memberof mapService
 	 * @public
 	 * @alias updateMapView
@@ -268,31 +268,31 @@ angular.module('unionvmsWeb').factory('mapService', function(locale, $rootScope,
 	    var view = ms.createView(config);
 	    ms.map.setView(view);
 	};
-	
+
 	/**
 	 * Remove all layers from the map
-	 * 
+	 *
 	 * @memberof mapService
 	 * @public
 	 * @alias removeAllLayers
 	 */
 	ms.removeAllLayers = function(){
 	    genericMapService.removeAllLayers(ms.map);
-	    
+
 	    //Always add blank layer
 	    ms.addBlankLayer();
 	};
-	
+
 	//Add layers
 	/**
 	 * Create and add a blank base layer to the map
-	 * 
+	 *
 	 * @memberof mapService
 	 * @public
 	 * @alias addBlankLayers
 	 */
 	ms.addBlankLayer = function(){
-	    var proj = ms.map.getView().getProjection(); 
+	    var proj = ms.map.getView().getProjection();
 	    var layer = new ol.layer.Image({
 	        type: 'mapbackground',
 	        opacity: 1,
@@ -303,14 +303,14 @@ angular.module('unionvmsWeb').factory('mapService', function(locale, $rootScope,
 	            imageSize: [256,256]
 	        })
 	    });
-	    
+
 	    ms.map.addLayer(layer);
 	};
-	
+
     //create layer, returns ol.layer.* or undefined
 	/**
 	 * Generic function to create all types of layers
-	 * 
+	 *
 	 * @memberof mapService
 	 * @public
 	 * @alias createLayer
@@ -349,14 +349,14 @@ angular.module('unionvmsWeb').factory('mapService', function(locale, $rootScope,
 
         return ( layer );
     };
-    
+
     /**
      * Create OpenStreeMap layer
-     * 
+     *
      * @memberof mapService
      * @public
      * @alias createOsm
-     * @param {Object} config - The layer configuration object 
+     * @param {Object} config - The layer configuration object
      * @returns {ol.layer.Tile} The OSM layer
      */
     ms.createOsm = function( config ){
@@ -366,7 +366,7 @@ angular.module('unionvmsWeb').factory('mapService', function(locale, $rootScope,
 
     /**
      * Create OpenSeaMap layer
-     * 
+     *
      * @memberof mapService
      * @public
      * @alias createOseam
@@ -377,10 +377,10 @@ angular.module('unionvmsWeb').factory('mapService', function(locale, $rootScope,
         var layer = genericMapService.defineOseam(config);
         return (layer);
     };
-    
+
     /**
      * Create BING layers
-     * 
+     *
      * @memberof mapService
      * @public
      * @alias createBing
@@ -395,20 +395,20 @@ angular.module('unionvmsWeb').factory('mapService', function(locale, $rootScope,
     //create WMS tile layer
     /**
      * Create WMS layers
-     * 
+     *
      * @memberof mapService
      * @public
      * @alias createWms
      * @param {Object} config - The layer configuration object
-     * @returns {ol.layer.Tile} - The WMS layer 
+     * @returns {ol.layer.Tile} - The WMS layer
      */
     ms.createWms = function( config ){
         var layer = genericMapService.defineWms(config);
-        layer.set('serverType', config.serverType); 
-        
+        layer.set('serverType', config.serverType);
+
         return ( layer );
     };
-    
+
     //Map graticule
     ms.graticuleFormat = 'dms';
     ms.mapGraticule = new ol.Graticule({
@@ -422,7 +422,7 @@ angular.module('unionvmsWeb').factory('mapService', function(locale, $rootScope,
     });
     /**
      * Set mapGraticule in the current map according to a specified visibility status
-     * 
+     *
      * @memberof mapService
      * @public
      * @alias setGraticule
@@ -435,11 +435,11 @@ angular.module('unionvmsWeb').factory('mapService', function(locale, $rootScope,
             ms.mapGraticule.setMap(ms.map);
         }
     };
-    
+
     //Add alarms layer
     /**
      * Create alarms layer
-     * 
+     *
      * @memberof mapService
      * @public
      * @alias createAlarmsLayer
@@ -450,27 +450,27 @@ angular.module('unionvmsWeb').factory('mapService', function(locale, $rootScope,
         var attribution = new ol.Attribution({
             html: locale.getString('spatial.alarms_copyright')
         });
-        
+
         var source = new ol.source.Vector({
             attributions: [attribution],
             features: (new ol.format.GeoJSON()).readFeatures(config.geoJson)
         });
-        
+
         var layer = new ol.layer.Vector({
             title: config.title,
             type: config.type,
             longAttribution: config.longAttribution,
             isBaseLayer: false,
             source: source,
-            style: ms.setAlarmsStyle 
+            style: ms.setAlarmsStyle
         });
-        
+
         return( layer );
     };
-    
+
     /**
      * Create fishing activities layer
-     * 
+     *
      * @memberof mapService
      * @public
      * @alias createActivityLayer
@@ -481,17 +481,17 @@ angular.module('unionvmsWeb').factory('mapService', function(locale, $rootScope,
         var attribution = new ol.Attribution({
             html: locale.getString('spatial.activities_copyright')
         });
-        
+
         var features = (new ol.format.GeoJSON()).readFeatures(config.geoJson, {
             dataProjection: 'EPSG:4326',
             featureProjection: ms.getMapProjectionCode()
         });
-        
+
         var source = new ol.source.Vector({
             attributions: [attribution],
             features: features
         });
-        
+
         var layer = new ol.layer.Vector({
             title: config.title,
             type: config.type,
@@ -500,13 +500,13 @@ angular.module('unionvmsWeb').factory('mapService', function(locale, $rootScope,
             source: source,
             style: ms.setActivitiesStyle
         });
-      
+
         return( layer );
     };
 
     /**
      * Create VMS positions layer
-     * 
+     *
      * @memberof mapService
      * @public
      * @alias createPositionsLayer
@@ -518,28 +518,28 @@ angular.module('unionvmsWeb').factory('mapService', function(locale, $rootScope,
             dataProjection: 'EPSG:4326',
             featureProjection: ms.getMapProjectionCode()
         });
-        
+
         var count = 0;
         angular.forEach(features, function(feature) {
             count += 1;
         	feature.setId(count);
         	feature.set('isVisible', true);
         });
-        
+
         var source = new ol.source.Vector({
-            features: features 
+            features: features
         });
-        
+
         var attribution = new ol.Attribution({
             html: locale.getString('spatial.vms_positions_copyright')
         });
-        
+
         var cluster = new ol.source.Cluster({
             attributions: [attribution],
             distance: 20,
             source: source
         });
-        
+
         cluster.on('change', function(e){
             //hide popup if position is clustered
             if (angular.isDefined(ms.overlay)){
@@ -554,14 +554,14 @@ angular.module('unionvmsWeb').factory('mapService', function(locale, $rootScope,
                             visible = true;
                         }
                     });
-                        
+
                     if (!visible){
                         ms.closePopup();
                     }
                 }
             }
         });
-        
+
         var layer = new ol.layer.Vector({
             title: config.title,
             type: config.type,
@@ -570,15 +570,15 @@ angular.module('unionvmsWeb').factory('mapService', function(locale, $rootScope,
             source: cluster,
             style: ms.setClusterStyle
         });
-        
+
         ms.addClusterExploder(layer);
-      
+
         return( layer );
     };
-    
+
     /**
      * Zoom to the extent containing all VMS positions
-     * 
+     *
      * @memberof mapService
      * @public
      * @alias zoomToPositionsLayer
@@ -599,10 +599,10 @@ angular.module('unionvmsWeb').factory('mapService', function(locale, $rootScope,
             });
         }
     };
-    
+
     /**
      * Create and add map interaction to explode the clusters (VMS positions)
-     * 
+     *
      * @memberof mapService
      * @public
      * @alias addClusterExploder
@@ -619,10 +619,10 @@ angular.module('unionvmsWeb').factory('mapService', function(locale, $rootScope,
 
         ms.map.addInteraction(exploder);
     };
-    
+
     /**
      * Collapse expanded clusters
-     * 
+     *
      * @memberof mapService
      * @public
      */
@@ -632,10 +632,10 @@ angular.module('unionvmsWeb').factory('mapService', function(locale, $rootScope,
             select.getFeatures().clear();
         }
     };
-    
+
     /**
      * Create VMS segements layer
-     * 
+     *
      * @memberof mapService
      * @public
      * @alias createSegmentsLayer
@@ -646,7 +646,7 @@ angular.module('unionvmsWeb').factory('mapService', function(locale, $rootScope,
         var attribution = new ol.Attribution({
             html: locale.getString('spatial.vms_segments_copyright')
         });
-        
+
         var layer = new ol.layer.Image({
             title: config.title,
             type: config.type,
@@ -663,14 +663,14 @@ angular.module('unionvmsWeb').factory('mapService', function(locale, $rootScope,
                 style: ms.setSegStyle
             })
           });
-        
+
         return( layer );
     };
-    
+
     //Clear vms data from layers
     /**
      * Clear vms data from vector layers (VMS positions and segments)
-     * 
+     *
      * @memberof mapService
      * @public
      * @alias clearVmsLayers
@@ -683,12 +683,12 @@ angular.module('unionvmsWeb').factory('mapService', function(locale, $rootScope,
             }
         }
     };
-    
+
     //MAPFISH PRINT
     //Add printing extent layer
     /**
      * Create and add map layer to show the printing extent supported by the mapfish print server
-     * 
+     *
      * @memberof mapService
      * @public
      * @alias addPrintLayer
@@ -705,24 +705,24 @@ angular.module('unionvmsWeb').factory('mapService', function(locale, $rootScope,
 
         ms.map.addLayer(layer);
     };
-    
+
     ms.mapPrintResolution = undefined;
-    
+
     /**
      * Add print extent vector feature to the printing layer
-     * 
+     *
      * @memberof mapService
      * @public
      * @alias addPrintExtent
      */
     ms.addPrintExtent = function(){
         ms.mapPrintResolution = ms.map.getView().getResolution();
-        
+
         var mapSize = ms.map.getSize();
         var currentMapRatio = mapSize[0] / mapSize[1];
         var scaleFactor = 0.9;
         var desiredPrintRatio = MapFish.printMapSize[0] / MapFish.printMapSize[1];
-        
+
         var targetWidth, targetHeight;
         if (desiredPrintRatio >= currentMapRatio){
             targetWidth = mapSize[0] * scaleFactor;
@@ -731,18 +731,18 @@ angular.module('unionvmsWeb').factory('mapService', function(locale, $rootScope,
             targetHeight = mapSize[1] * scaleFactor;
             targetWidth = targetHeight * desiredPrintRatio;
         }
-        
+
         var geomExtent = ms.map.getView().calculateExtent([targetWidth, targetHeight]);
         var printFeature = new ol.Feature(ol.geom.Polygon.fromExtent(geomExtent));
-        
+
         var layer = ms.getLayerByType('print').getSource();
         layer.clear(true);
         layer.addFeature(printFeature);
     };
-    
+
     /**
      * Create and add a vector layer to display OSM Nominatim search results
-     * 
+     *
      *  @memberof mapService
      *  @public
      *  @alias addNominatimLayer
@@ -757,15 +757,15 @@ angular.module('unionvmsWeb').factory('mapService', function(locale, $rootScope,
             }),
             style: ms.setNominatimStyle
         });
-        
+
         ms.map.addLayer(layer);
-        
+
         return layer;
     };
-    
+
     /**
      * Create and add vector layer used to highlight vector features in the map
-     * 
+     *
      * @memberof mapService
      * @public
      * @alias  addFeatureOverlay
@@ -785,7 +785,7 @@ angular.module('unionvmsWeb').factory('mapService', function(locale, $rootScope,
 
     /**
      * Highlight feature in the map
-     * 
+     *
      * @memberof mapService
      * @public
      * @alias highlightFeature
@@ -800,10 +800,10 @@ angular.module('unionvmsWeb').factory('mapService', function(locale, $rootScope,
         layer.clear(true);
         layer.addFeature(feature);
     };
-    
+
     /**
      * Create and add a vector layer for measurement controls
-     * 
+     *
      * @memberof mapService
      * @public
      * @alias addMeasureLayer
@@ -816,14 +816,14 @@ angular.module('unionvmsWeb').factory('mapService', function(locale, $rootScope,
             style: ms.setMeasureStyle
         });
         ms.map.addLayer(layer);
-        
+
         return layer;
     };
-    
+
     //STYLES
     /**
      * Set print style
-     * 
+     *
      * @memberof mapService
      * @public
      * @alias setPrintStyle
@@ -840,14 +840,14 @@ angular.module('unionvmsWeb').factory('mapService', function(locale, $rootScope,
                 color: 'rgba(255, 255, 255, 0.3)'
             })
         });
-        
+
         return [style];
     };
-    
+
     //Highlight styles
     /**
      * Set the highlight style
-     * 
+     *
      * @memberof mapService
      * @public
      * @alias setHighlightStyle
@@ -874,7 +874,7 @@ angular.module('unionvmsWeb').factory('mapService', function(locale, $rootScope,
             if (angular.isDefined(ms.styles.segments.style.lineWidth)){
                 width = parseInt(ms.styles.segments.style.lineWidth) + 6;
             }
-            
+
             style = new ol.style.Style({
                 stroke: new ol.style.Stroke({
                     color: color,
@@ -885,11 +885,11 @@ angular.module('unionvmsWeb').factory('mapService', function(locale, $rootScope,
 
         return [style];
     };
-    
+
     //Measure styles
     /**
      * Set the measurement styles
-     * 
+     *
      * @memberof mapService
      * @public
      * @alias setMeasureStyle
@@ -901,7 +901,7 @@ angular.module('unionvmsWeb').factory('mapService', function(locale, $rootScope,
         var styles = [];
         var coords = feature.getGeometry().getCoordinates();
         coords.shift();
-        
+
         var bufferLineStyle = new ol.style.Style({
             stroke: new ol.style.Stroke({
                 color: 'rgba(255, 255, 255, 0.8)',
@@ -909,15 +909,15 @@ angular.module('unionvmsWeb').factory('mapService', function(locale, $rootScope,
             })
         });
         styles.push(bufferLineStyle);
-        
+
         var lineStyle = new ol.style.Style({
             stroke: new ol.style.Stroke({
                 color: 'rgba(120, 120, 120, 1)',
                 width: 2
-            }) 
+            })
         });
         styles.push(lineStyle);
-        
+
         var pointStyle = new ol.style.Style({
             image: new ol.style.Circle({
                 radius: 5,
@@ -934,13 +934,13 @@ angular.module('unionvmsWeb').factory('mapService', function(locale, $rootScope,
             }
         });
         styles.push(pointStyle);
-        
+
         return styles;
     };
-    
+
     /**
      * Set the Nominatim styles
-     * 
+     *
      * @memberof mapService
      * @public
      * @alias setNominatimStyle
@@ -980,11 +980,11 @@ angular.module('unionvmsWeb').factory('mapService', function(locale, $rootScope,
                         fillOpacity: 0.3,
                     }
     };
-    
-    
+
+
     /**
      * Calculate breaks for range classification on VMS data. Stores the breaks under each type style object
-     * 
+     *
      * @memberof mapService
      * @public
      * @alias calculateBreaks
@@ -996,7 +996,7 @@ angular.module('unionvmsWeb').factory('mapService', function(locale, $rootScope,
             defaultColor: undefined,
             intervals: []
         };
-        
+
         angular.forEach(style, function(value, key){
             var gapNum = key.split('-');
             var tempBreak = [];
@@ -1013,36 +1013,36 @@ angular.module('unionvmsWeb').factory('mapService', function(locale, $rootScope,
                 breaks.intervals.push(tempBreak);
             }
         });
-        
+
         //Sort intervals
         if (breaks.intervals.length > 0){
             breaks.intervals.sort(function(a,b){
                 return (a[0] < b[0]) ? -1 : 1;
             });
         }
-        
+
         if (type === 'positions'){
             ms.styles.positions.breaks = breaks;
         } else {
             ms.styles.segments.breaks = breaks;
         }
     };
-    
+
     //COLORING BY ATTRIBUTES
     /**
      * Get color definition by Flag State
-     * 
+     *
      * @memberof mapService
      * @public
      * @alias getColorByFlagState
-     * @param {Object} src - The source styles object containing all style definitions 
-     * @param {String} fs - The countryCode of the desired Flag State 
-     * @returns {String} The hexadecimal color code  
+     * @param {Object} src - The source styles object containing all style definitions
+     * @param {String} fs - The countryCode of the desired Flag State
+     * @returns {String} The hexadecimal color code
      */
     ms.getColorByFlagState = function(src, fs){
         return src.style[fs.toUpperCase()];
     };
-    
+
     /**
      * Set the displayed flag state codes in the styles object
      *
@@ -1057,21 +1057,21 @@ angular.module('unionvmsWeb').factory('mapService', function(locale, $rootScope,
         if (!angular.isDefined(src.displayedCodes)){
             src.displayedCodes = [];
         }
-        
+
         angular.forEach(data, function(item){
             if (src.displayedCodes.indexOf(item.properties.countryCode) === -1){
                 src.displayedCodes.push(item.properties.countryCode);
             }
         }, src);
     };
-    
+
     /**
-     * Get color code for a specific value of a field that is classified by range 
-     * 
+     * Get color code for a specific value of a field that is classified by range
+     *
      * @memberof mapService
      * @public
      * @alias getColorByRange
-     * @param {Object} src - The source styles object containing all style definitions 
+     * @param {Object} src - The source styles object containing all style definitions
      * @param {Number} value - The property value to match within an interval
      * @returns {String} The hexadecimal color code
      */
@@ -1084,17 +1084,17 @@ angular.module('unionvmsWeb').factory('mapService', function(locale, $rootScope,
                 break;
             }
         }
-        
+
         if (angular.isDefined(color)){
             return color;
         } else {
             return src.breaks.defaultColor;
         }
     };
-    
+
     /**
      * Get color code to style fields with discrete classification (such as MovementType, ActivityType, SegmentCategory)
-     * 
+     *
      * @memberof mapService
      * @public
      * @alias getColorByStaticFields
@@ -1109,10 +1109,10 @@ angular.module('unionvmsWeb').factory('mapService', function(locale, $rootScope,
             return src.style[type];
         }
     };
-    
+
     /**
      * Set the styles object for VMS positions
-     * 
+     *
      * @memberof mapService
      * @public
      * @alias setPositionStylesObj
@@ -1120,16 +1120,16 @@ angular.module('unionvmsWeb').factory('mapService', function(locale, $rootScope,
      */
     ms.setPositionStylesObj = function(styles){
         ms.styles.positions = styles;
-        
+
         var rangeFields = ['reportedSpeed', 'reportedCourse', 'calculatedSpeed'];
         if (_.indexOf(rangeFields, ms.styles.positions.attribute) !== -1){
             ms.calculateBreaks('positions', ms.styles.positions.style);
         }
     };
-    
+
     /**
      * Get color code for each VMS position according to the styles definitions of report/user preferences
-     * 
+     *
      * @memberof mapService
      * @public
      * @alias getColorForPosition
@@ -1158,10 +1158,10 @@ angular.module('unionvmsWeb').factory('mapService', function(locale, $rootScope,
             return 'rgba(0,0,0,0)';
         }
     };
-    
+
     /**
      * Get color code for each VMS position according to the styles definitions of report/user preferences without depending on isVisible value.
-     * 
+     *
      * @memberof mapService
      * @public
      * @alias getColorForPositionWithoutIsVisible
@@ -1186,18 +1186,18 @@ angular.module('unionvmsWeb').factory('mapService', function(locale, $rootScope,
                 return '#0066FF'; //default color
         }
     };
-    
+
     //OL VMS positions cluster style
     ms.clusterStyles = {};
     ms.currentResolution = undefined;
     ms.clusterMaxFeatureCount = 1;
     ms.clusterMinFeatureCount = 100000;
     ms.vmsSources = {};
-    
+
     //Calculate necessary max and min amount of features of the available map clusters at each resolution
     /**
      * Calculate the maximum and minimum cluster sizes (number of features inside clusters) at the current map resolution
-     * 
+     *
      * @memberof mapService
      * @public
      * @alias calculateClusterInfo
@@ -1205,13 +1205,13 @@ angular.module('unionvmsWeb').factory('mapService', function(locale, $rootScope,
     ms.calculateClusterInfo = function(){
         var layer = ms.getLayerByType('vmspos');
         var features = layer.getSource().getFeatures();
-        
+
         angular.forEach(features, function(clusterFeat) {
         	var includedPositions = clusterFeat.get('features');
         	clusterFeat.set('featNumber', includedPositions.length);
         	ms.clusterMaxFeatureCount = Math.max(ms.clusterMaxFeatureCount, includedPositions.length);
             ms.clusterMinFeatureCount = Math.min(ms.clusterMinFeatureCount, includedPositions.length);
-            
+
             var counter = 0;
             var displayedFeature;
             if (includedPositions.length > 1){
@@ -1222,22 +1222,22 @@ angular.module('unionvmsWeb').factory('mapService', function(locale, $rootScope,
                     }
                 });
             }
-            
+
             if (counter === 1){
                 clusterFeat.set('featureToDisplay', displayedFeature);
             } else {
                 clusterFeat.set('featureToDisplay', undefined);
             }
-            
+
             if (clusterFeat.get('featNumber') !== counter && clusterFeat.get('featNumber') > 1){
                 clusterFeat.set('featNumber', counter);
             }
         });
     };
-    
+
     /**
      * Builds the name of the cluster style
-     * 
+     *
      * @memberof mapService
      * @private
      * @returns {String} The style name to be cached
@@ -1249,14 +1249,14 @@ angular.module('unionvmsWeb').factory('mapService', function(locale, $rootScope,
                 name += key;
             }
         });
-        
+
         name.replace(/\s/g, '');
         return name;
     };
-    
+
     /**
      * Set the cluster styles
-     * 
+     *
      * @memberof mapService
      * @public
      * @alias setClusterStyle
@@ -1271,7 +1271,7 @@ angular.module('unionvmsWeb').factory('mapService', function(locale, $rootScope,
         }
         var size = feature.get('featNumber');
         var inFeatures = feature.get('features');
-        
+
         var style;
         if (inFeatures.length === 1){ //caso de um cluster so com uma feature
             style = ms.setPosStyle(inFeatures[0]);
@@ -1293,7 +1293,7 @@ angular.module('unionvmsWeb').factory('mapService', function(locale, $rootScope,
                     } else if (ms.clusterMaxFeatureCount > 50 && ms.clusterMaxFeatureCount <= 100){
                         maxRadius = 20;
                     }
-                    
+
                     //Normalize radius to scale between maxRadius and minRadius
                     var radius = Math.round((maxRadius - minRadius) * (Math.abs(feature.get('featNumber') - ms.clusterMinFeatureCount)) / (ms.clusterMaxFeatureCount - ms.clusterMinFeatureCount));
                     if (isNaN(radius) || !isFinite(radius) || radius < 0){
@@ -1301,18 +1301,18 @@ angular.module('unionvmsWeb').factory('mapService', function(locale, $rootScope,
                     }
                     radius += minRadius;
                     feature.set('radius', radius);
-                    
+
                     if (!angular.isDefined(size)){
                         var a = 'test';
                     }
-                    
+
                     //Apply cluster style
                     style = new ol.style.Style({
                         image: new ol.style.Circle({
                             radius: radius,
                             stroke: new ol.style.Stroke({
                                 color: '#F7580D',
-                                width: 2    
+                                width: 2
                             }),
                             fill: new ol.style.Fill({
                                 color: 'rgba(255, 255, 255, 0.7)',
@@ -1328,19 +1328,19 @@ angular.module('unionvmsWeb').factory('mapService', function(locale, $rootScope,
                             })
                         })
                     });
-                    
+
                     ms.clusterStyles[styleName] = style;
                 }
             }
         }
-        
+
         return [style];
     };
-    
+
     //Set style for positons when cluster is expanded
     /**
      * Set the style for unclustered style
-     * 
+     *
      * @memberof mapService
      * @public
      * @alias setUnclusteredStyle
@@ -1351,16 +1351,16 @@ angular.module('unionvmsWeb').factory('mapService', function(locale, $rootScope,
         var positions = feature.get('features');
         if (positions.length > 1){
             var centerCoords = feature.getGeometry().getCoordinates();
-            
+
             var mapExtent = ms.map.getView().calculateExtent(ms.map.getSize());
             var mapSize = Math.min(ol.extent.getWidth(mapExtent), ol.extent.getHeight(mapExtent));
-            
-            
+
+
             var items = positions.length;
             if (positions.length !== feature.get('featNumber')){
                 items = feature.get('featNumber');
             }
-            
+
             var radius = mapSize / 10;
             if (items > 20){
                 radius = items * radius / 20;
@@ -1368,15 +1368,15 @@ angular.module('unionvmsWeb').factory('mapService', function(locale, $rootScope,
                     radius = mapSize / 2.5;
                 }
             }
-            
+
             var circle = new ol.geom.Circle(centerCoords, radius);
             var circlePoly = ol.geom.Polygon.fromCircle(circle);
             circlePoly.transform(ms.getMapProjectionCode(), 'EPSG:4326');
-            
+
             var line = turf.linestring(circlePoly.getCoordinates()[0]);
-            
+
             var length = turf.lineDistance(line, 'radians') / items;
-            
+
             var styles = [];
             var j = 0;
             for (var i = 0; i < positions.length; i++){
@@ -1388,17 +1388,17 @@ angular.module('unionvmsWeb').factory('mapService', function(locale, $rootScope,
                     j += 1;
                 }
             }
-            
+
             return _.flatten(styles);
         } else {
             return [ms.setPosStyle(positions[0])];
         }
-        
+
     };
-    
+
     /**
      * Set the spider style for unclustered data
-     * 
+     *
      * @memberof mapService
      * @public
      * @alias setSpiderStyle
@@ -1422,7 +1422,7 @@ angular.module('unionvmsWeb').factory('mapService', function(locale, $rootScope,
                 return new ol.geom.Point(pointCoords);
             }
         });
-        
+
         var lineStyle = new ol.style.Style({
             stroke: new ol.style.Stroke({
                 color: 'rgba(120, 120, 120, 0.7)',
@@ -1432,13 +1432,13 @@ angular.module('unionvmsWeb').factory('mapService', function(locale, $rootScope,
                 return new ol.geom.LineString([pointCoords, feature.getGeometry().getCoordinates()]);
             }
         });
-        
+
         var centerStyle = new ol.style.Style({
             image: new ol.style.Circle({
                 radius: 5,
                 fill: new ol.style.Fill({
                     color: 'rgba(255, 255, 255, 0.7)',
-                    
+
                 }),
                 stroke: new ol.style.Stroke({
                     color: '#F7580D',
@@ -1449,13 +1449,13 @@ angular.module('unionvmsWeb').factory('mapService', function(locale, $rootScope,
                 }
             })
         });
-        
+
         return [pointStyle, lineStyle, centerStyle];
     };
-    
+
     /**
      * Set the style for VMS positions
-     * 
+     *
      * @memberof mapService
      * @public
      * @alias setPosStyle
@@ -1482,13 +1482,13 @@ angular.module('unionvmsWeb').factory('mapService', function(locale, $rootScope,
                 }
             }
         });
-        
+
         return style;
     };
-    
+
     /**
      * Set the styles object for VMS segments
-     * 
+     *
      * @memberof mapService
      * @public
      * @alias setSegmentStylesObj
@@ -1496,16 +1496,16 @@ angular.module('unionvmsWeb').factory('mapService', function(locale, $rootScope,
      */
     ms.setSegmentStylesObj = function(styles){
         ms.styles.segments = styles;
-        
+
         var rangeFields = ['speedOverGround', 'distance', 'courseOverGround'];
         if (_.indexOf(rangeFields, ms.styles.segments.attribute) !== -1){
             ms.calculateBreaks('segments', ms.styles.segments.style);
         }
     };
-    
+
     /**
      * Get color code for each VMS segment according to the styles definitions of report/user preferences
-     * 
+     *
      * @memberof mapService
      * @public
      * @alias getColorForSegment
@@ -1528,7 +1528,7 @@ angular.module('unionvmsWeb').factory('mapService', function(locale, $rootScope,
                 return '#0066FF'; //default color
         }
     };
-    
+
 //    ms.calculateJenkinsIntervals = function(geoJson){
 //        var breaks = turf.jenks(geoJson, 'speedOverGround', 4);
 //        if (breaks !== null){
@@ -1536,7 +1536,7 @@ angular.module('unionvmsWeb').factory('mapService', function(locale, $rootScope,
 //            ms.styles.speedBreaks[4] = ms.styles.speedBreaks[4] + 1;
 //        }
 //    };
-//    
+//
 //    ms.getColorBySpeed = function(speed){
 //        for (var i = 1; i < ms.styles.speedBreaks.length; i++){
 //            if (speed >= ms.styles.speedBreaks[i-1] && speed < ms.styles.speedBreaks[i]){
@@ -1545,10 +1545,10 @@ angular.module('unionvmsWeb').factory('mapService', function(locale, $rootScope,
 //            }
 //        }
 //    };
-    
+
     /**
      * Set the style of VMS segments
-     * 
+     *
      * @memberof mapService
      * @public
      * @alias setSegStyle
@@ -1559,12 +1559,12 @@ angular.module('unionvmsWeb').factory('mapService', function(locale, $rootScope,
     ms.setSegStyle = function(feature, resolution){
         var geometry = feature.getGeometry();
         var color = ms.getColorForSegment(feature);
-        
+
         var width = 2;
         if (angular.isDefined(ms.styles.segments.style.lineWidth)){
             width = parseInt(ms.styles.segments.style.lineWidth);
         }
-        
+
         var lineDash = null;
         if (angular.isDefined(ms.styles.segments.style.lineStyle)){
             switch (ms.styles.segments.style.lineStyle) {
@@ -1582,12 +1582,12 @@ angular.module('unionvmsWeb').factory('mapService', function(locale, $rootScope,
                     break;
             }
         }
-        
+
         var fontSize = 10;
         if (width > 2){
             fontSize = Math.round((width - 2) * 2.5 + 10);
         }
-        
+
         var style;
         if (feature.getGeometry().getLength() > 0){
             style = [
@@ -1625,10 +1625,10 @@ angular.module('unionvmsWeb').factory('mapService', function(locale, $rootScope,
 
         return style;
     };
-    
+
     /**
      * Set the styles object for VMS alarms
-     * 
+     *
      * @memberof mapService
      * @public
      * @alias setAlarmsStylesObj
@@ -1637,10 +1637,10 @@ angular.module('unionvmsWeb').factory('mapService', function(locale, $rootScope,
     ms.setAlarmsStylesObj = function(styles){
         ms.styles.alarms = styles;
     };
-    
+
     /**
      * Get color code by alarm status
-     * 
+     *
      * @memberof mapService
      * @public
      * @alias getColorByStatus
@@ -1651,10 +1651,10 @@ angular.module('unionvmsWeb').factory('mapService', function(locale, $rootScope,
     ms.getColorByStatus = function(src, status){
         return src[status.toLowerCase()];
     };
-    
+
     /**
      * Set the style for the alarms layer
-     * 
+     *
      * @memberof mapService
      * @public
      * @alias setAlarmsStyle
@@ -1675,7 +1675,7 @@ angular.module('unionvmsWeb').factory('mapService', function(locale, $rootScope,
                 })
             })
         });
-        
+
         return [style];
     };
 
@@ -1687,10 +1687,10 @@ angular.module('unionvmsWeb').factory('mapService', function(locale, $rootScope,
             fillOpacity: 0.3,
         };
     };
-    
+
     /**
      * Set the style for the fishing activities layer
-     * 
+     *
      * @memberof mapService
      * @public
      * @alias setActivitiesStyle
@@ -1711,10 +1711,10 @@ angular.module('unionvmsWeb').factory('mapService', function(locale, $rootScope,
                 })
             })
         });
-        
+
         return [style];
     };
-    
+
     //Buffering vector data
     /*ms.addVmsSelectCtrl = function(type){
         //TODO Check if interaction is there
@@ -1724,7 +1724,7 @@ angular.module('unionvmsWeb').factory('mapService', function(locale, $rootScope,
                 layers: [layer],
                 condition: ol.events.condition.click
             });
-            
+
             ms.map.addInteraction(sel);
         }
     };*/
@@ -1733,7 +1733,7 @@ angular.module('unionvmsWeb').factory('mapService', function(locale, $rootScope,
     /**
      * Clear and remove all vector layers from the map as well as reseting the cluster styles.
      * This function is used before running a new report.
-     * 
+     *
      * @memberof mapService
      * @public
      * @alias clearVectorLayers
@@ -1745,7 +1745,7 @@ angular.module('unionvmsWeb').factory('mapService', function(locale, $rootScope,
                 ms.map.removeLayer(layers[i]);
             }
         }
-	    
+
 	    //Clear the cluster styles applied to vms positions
 	    ms.clusterStyles = {};
 	    ms.currentResolution = undefined;
@@ -1759,7 +1759,7 @@ angular.module('unionvmsWeb').factory('mapService', function(locale, $rootScope,
 
 	/**
 	 * Get the first layer with the specified title
-	 * 
+	 *
 	 * @memberof mapService
 	 * @public
 	 * @alias getLayerByTitle
@@ -1772,20 +1772,20 @@ angular.module('unionvmsWeb').factory('mapService', function(locale, $rootScope,
 
 	/**
      * Get the first layer with the specified type
-     * 
+     *
      * @memberof mapService
      * @public
-     * @alias getLayerByType 
+     * @alias getLayerByType
      * @param {String} type - The type of the layer to find
      * @returns {ol.layer} The OL layer
      */
     ms.getLayerByType = function(type){
         return genericMapService.getLayerByType(type, ms.map);
     };
-    
+
     /**
      * Calculates the numeric scale of the current view of the map
-     * 
+     *
      * @memberof mapService
      * @public
      * @alias getCurrentScale
@@ -1797,7 +1797,7 @@ angular.module('unionvmsWeb').factory('mapService', function(locale, $rootScope,
 
     /**
      * Gets the base projection of the map
-     * 
+     *
      * @memberof mapService
      * @public
      * @alias getMapProjectionCode
@@ -1809,7 +1809,7 @@ angular.module('unionvmsWeb').factory('mapService', function(locale, $rootScope,
 
     /**
      * Force a recalculation of the map viewport size
-     * 
+     *
      * @memberof mapService
      * @public
      * @alias updateMapSize
@@ -1818,40 +1818,40 @@ angular.module('unionvmsWeb').factory('mapService', function(locale, $rootScope,
     ms.updateMapSize = function(){
         genericMapService.updateMapSize(ms.map);
     };
-    
+
     /**
      * Update map div container size
-     * 
+     *
      * @memberof mapService
      * @public
      * @alias updateMapContainerSize
      * @param {Event} evt
      */
     ms.updateMapContainerSize = function(evt) {
-    	
+
     	setTimeout(function() {
 	        var w = angular.element(window);
 	        if(evt && (angular.element('.mapPanelContainer.fullscreen').length > 0 ||
 	        		(angular.element('.mapPanelContainer.fullscreen').length === 0 && evt.type.toUpperCase().indexOf("FULLSCREENCHANGE") !== -1))){
-	        	
-	        	
+
+
 	    		$('.map-container').css('height', w.height() + 'px');
 	            $('#map').css('height', w.height() + 'px');
 	            ms.updateMapSize();
 	            return;
 	        }
-	        
+
 	        var minHeight = 400;
 	        var headerHeight = angular.element('header')[0].offsetHeight;
 	        var newHeight = w.height() - headerHeight;
-	        
+
 	        if (newHeight < minHeight) {
 	            newHeight = minHeight;
 	        }
-	        
+
 	        $('.map-container').css('height', newHeight);
 	        $('#map').css('height', newHeight + 'px');
-	        
+
 	        ms.updateMapSize();
         }, 100);
   	};
@@ -1859,7 +1859,7 @@ angular.module('unionvmsWeb').factory('mapService', function(locale, $rootScope,
     //GENERIC FUNCTIONS FOR CONTROLS AND STYLES
   	/**
   	 * Convert degrees to radians
-  	 * 
+  	 *
   	 * @memberof mapService
   	 * @public
   	 * @alias degToRad
@@ -1881,27 +1881,27 @@ angular.module('unionvmsWeb').factory('mapService', function(locale, $rootScope,
 	 * @memberof mapService
      * @public
      * @alias getMiddlePoint
-     * @param {ol.geom.Geometry} geometry - The OL geometry 
+     * @param {ol.geom.Geometry} geometry - The OL geometry
      * @returns {ol.Coordinate} The coordinates of the middle point
 	 */
 	ms.getMiddlePoint = function(geometry){
 	    var sourceProj = ms.getMapProjectionCode();
 	    var p1 = ms.pointCoordsToTurf(ol.proj.transform(geometry.getFirstCoordinate(), sourceProj, 'EPSG:4326'));
 	    var p2 = ms.pointCoordsToTurf(ol.proj.transform(geometry.getLastCoordinate(), sourceProj, 'EPSG:4326'));
-	    
+
 	    var middlePoint = ms.turfToOlGeom(turf.midpoint(p1, p2));
-	   
+
 	    return geometry.getClosestPoint(middlePoint.getCoordinates());
 	};
 
 	/**
 	 * Calculate the rotation of the arrows added in the segments symbology. Rotation is calculated taking into consideration
 	 * the linestring geometry direction
-	 * 
+	 *
 	 * @memberof mapService
      * @public
      * @alias getRotationForArrow
-     * @param {ol.geom.Geometry} geometry - The OL geometry 
+     * @param {ol.geom.Geometry} geometry - The OL geometry
      * @returns {Number} The rotation
 	 */
 	ms.getRotationForArrow = function(geometry){
@@ -1917,7 +1917,7 @@ angular.module('unionvmsWeb').factory('mapService', function(locale, $rootScope,
     //SETTERS
     /**
      * Set map projection
-     * 
+     *
      * @memberof mapService
      * @public
      * @alias setProjection
@@ -1932,7 +1932,7 @@ angular.module('unionvmsWeb').factory('mapService', function(locale, $rootScope,
 	ms.addedControls = []; //quick reference to added controls
 	/**
 	 * Set the controls in the map
-	 * 
+	 *
 	 * @memberof mapService
      * @public
      * @alias setControls
@@ -1956,11 +1956,11 @@ angular.module('unionvmsWeb').factory('mapService', function(locale, $rootScope,
 
 	    return [new ol.Collection(ms.controls), new ol.Collection(ms.interactions)];
 	};
-	
+
 	//Update map controls according to configuration from server
 	/**
 	 * Update all map controls using configurations from report/user preferences.
-	 * 
+	 *
 	 * @memberof mapService
      * @public
      * @alias setControls
@@ -1969,7 +1969,7 @@ angular.module('unionvmsWeb').factory('mapService', function(locale, $rootScope,
 	ms.updateMapControls = function(controls){
 	    var tempControls = [];
 	    var mousecoordsCtrl, scaleCtrl;
-	    
+
 	    angular.forEach(controls, function(ctrl){
 	        tempControls.push(ctrl.type);
 	        if (ctrl.type === 'mousecoords'){
@@ -1979,11 +1979,11 @@ angular.module('unionvmsWeb').factory('mapService', function(locale, $rootScope,
 	            scaleCtrl = ctrl;
 	        }
 	    });
-	    
+
 	    var ctrlsToRemove = _.difference(ms.addedControls, tempControls);
 	    var ctrlsToAdd = _.difference(tempControls, ms.addedControls);
 	    var ctrlsToUpdate = _.intersection(ms.addedControls, tempControls);
-	    
+
 	    //Remove controls and interactions
 	    if (ctrlsToRemove.length > 0){
 	        angular.forEach(ctrlsToRemove, function(ctrl){
@@ -1991,7 +1991,7 @@ angular.module('unionvmsWeb').factory('mapService', function(locale, $rootScope,
 	            ms[fnName]();
 	        }, ms);
 	    }
-	    
+
 	    //Update controls
 	    if (ctrlsToUpdate.length > 0){
 	        angular.forEach(ctrlsToUpdate, function(ctrl){
@@ -2002,14 +2002,14 @@ angular.module('unionvmsWeb').factory('mapService', function(locale, $rootScope,
 	            } else if (ctrl === 'scale'){
 	                config = scaleCtrl;
 	            }
-	            
+
 	            if (angular.isDefined(config)){
 	                var fnName = 'update' + ctrl.charAt(0).toUpperCase() + ctrl.slice(1);
 	                ms[fnName](config);
 	            }
 	        }, ms);
 	    }
-	    
+
 	    //Add controls
 	    if (ctrlsToAdd.length > 0){
 	        angular.forEach(ctrlsToAdd, function(ctrl){
@@ -2020,15 +2020,15 @@ angular.module('unionvmsWeb').factory('mapService', function(locale, $rootScope,
                 } else if (ctrl === 'scale'){
                     config = scaleCtrl;
                 }
-                
+
                 var fnName = 'add' + ctrl.charAt(0).toUpperCase() + ctrl.slice(1);
                 ms[fnName](config, false);
 	        }, ms);
 	    }
-	    
+
 	    ms.addedControls = _.union(ctrlsToAdd, ctrlsToUpdate);
 	};
-	
+
 	/**
      * Get list of controls by type
      *
@@ -2041,7 +2041,7 @@ angular.module('unionvmsWeb').factory('mapService', function(locale, $rootScope,
 	ms.getControlsByType = function(type){
 	    return genericMapService.getControlsByType(type, ms.map);
 	};
-	
+
 	/**
      * Get list of interactions by type
      *
@@ -2054,7 +2054,7 @@ angular.module('unionvmsWeb').factory('mapService', function(locale, $rootScope,
     ms.getInteractionsByType = function(type){
         return genericMapService.getInteractionsByType(type, ms.map);
     };
-    
+
     //Get custom interactions by type
     /**
      * @memberof mapService
@@ -2069,13 +2069,13 @@ angular.module('unionvmsWeb').factory('mapService', function(locale, $rootScope,
         var ints = interactions.filter(function(int){
             return int instanceof ol.interaction[olType] === true && int instanceof ms[type];
         });
-        
+
         return ints;
     };
 
     /**
      * Add zoom controls and interactions to the map
-     * 
+     *
      * @memberof mapService
      * @public
      * @alias addZoom
@@ -2084,16 +2084,16 @@ angular.module('unionvmsWeb').factory('mapService', function(locale, $rootScope,
      */
 	ms.addZoom = function(ctrl, initial){
         var olCtrl = genericMapService.createZoomCtrl('ol-zoom-liveview');
-        
+
         var iconSpan = document.createElement('span');
         iconSpan.className = 'fa fa-globe';
         var fullExtent = new ol.control.ZoomToExtent({
             label: iconSpan,
             tipLabel: locale.getString('spatial.map_tip_full_extent')
         });
-        
+
         var interactions = genericMapService.createZoomInteractions();
-        
+
         if (initial){
             ms.controls.push(olCtrl);
             ms.controls.push(fullExtent);
@@ -2103,13 +2103,13 @@ angular.module('unionvmsWeb').factory('mapService', function(locale, $rootScope,
             ms.map.addControl(fullExtent);
             for (var i = 0; i < interactions.length; i++){
                 ms.map.addInteraction(interactions[i]);
-            } 
+            }
         }
 	};
-	
+
 	/**
 	 * Remove all zoom controls and interactions from map
-	 * 
+	 *
 	 * @memberof mapService
 	 * @public
 	 * @alias removeZoom
@@ -2126,10 +2126,10 @@ angular.module('unionvmsWeb').factory('mapService', function(locale, $rootScope,
 	    }
 	    ms.map.removeInteraction(ms.getInteractionsByType('PinchZoom')[0]);
 	};
-	
+
 	/**
 	 * Creates and adds the navigation history control to the map
-	 * 
+	 *
 	 * @memberof mapService
 	 * @public
 	 * @alias addHistory
@@ -2141,17 +2141,17 @@ angular.module('unionvmsWeb').factory('mapService', function(locale, $rootScope,
             backLabel: locale.getString('spatial.map_tip_go_back'),
             forwardLabel: locale.getString('spatial.map_tip_go_forward')
         });
-        
+
         if (initial){
             ms.controls.push(olCtrl);
         } else {
             ms.map.addControl(olCtrl);
         }
     };
-    
+
     /**
      * Removes the navigation history control from the map
-     * 
+     *
      * @memberof mapService
      * @public
      * @alias removeHistory
@@ -2159,10 +2159,10 @@ angular.module('unionvmsWeb').factory('mapService', function(locale, $rootScope,
     ms.removeHistory = function(){
         ms.map.removeControl(ms.getControlsByType('HistoryControl')[0]);
     };
-    
+
     /**
      * Creates and adds the scale control to the map
-     * 
+     *
      * @memberof mapService
      * @public
      * @alias addHistory
@@ -2171,18 +2171,18 @@ angular.module('unionvmsWeb').factory('mapService', function(locale, $rootScope,
      */
 	ms.addScale = function(ctrl, initial){
 	    var olCtrl = genericMapService.addScale(ctrl);
-	    
+
 	    if (initial){
 	        ms.controls.push(olCtrl);
 	    } else {
 	        ms.map.addControl(olCtrl);
 	    }
 	};
-	
-	
+
+
 	/**
      * Updates the scale control of the map
-     * 
+     *
      * @memberof mapService
      * @public
      * @alias updateScale
@@ -2192,10 +2192,10 @@ angular.module('unionvmsWeb').factory('mapService', function(locale, $rootScope,
 	    ms.map.removeControl(ms.getControlsByType('ScaleLine')[0]);
         ms.addScale(config, false);
 	};
-	
+
 	/**
      * Removes the scale control from the map
-     * 
+     *
      * @memberof mapService
      * @public
      * @alias removeScale
@@ -2203,10 +2203,10 @@ angular.module('unionvmsWeb').factory('mapService', function(locale, $rootScope,
 	ms.removeScale = function(){
 	    ms.map.removeControl(ms.getControlsByType('ScaleLine')[0]);
 	};
-	
+
 	/**
      * Creates and adds all drag related interactions to the map
-     * 
+     *
      * @memberof mapService
      * @public
      * @alias addDrag
@@ -2222,12 +2222,12 @@ angular.module('unionvmsWeb').factory('mapService', function(locale, $rootScope,
 	            ms.map.addInteraction(interactions[i]);
 	        }
 	    }
-	    
+
 	};
-	
+
 	/**
 	 * Removes all drag related interactions from the map
-	 *  
+	 *
 	 * @memberof mapService
      * @public
      * @alias removeDrag
@@ -2236,10 +2236,10 @@ angular.module('unionvmsWeb').factory('mapService', function(locale, $rootScope,
 	    ms.map.removeInteraction(ms.getInteractionsByType('DragPan')[0]);
 	    ms.map.removeInteraction(ms.getInteractionsByType('KeyboardPan')[0]);
 	};
-	
+
 	/**
 	 * Create and add Mouse Coordinates control to the map
-	 * 
+	 *
 	 * @memberof mapService
      * @public
      * @alias addMousecoords
@@ -2248,17 +2248,17 @@ angular.module('unionvmsWeb').factory('mapService', function(locale, $rootScope,
 	 */
 	ms.addMousecoords = function(ctrl, initial){
 	    var olCtrl = genericMapService.addMousecoords(ctrl, 'map-coordinates');
-	    
+
 	    if (initial){
 	        ms.controls.push(olCtrl);
 	    } else {
 	        ms.map.addControl(olCtrl);
 	    }
     };
-    
+
     /**
      * Updates the mouse coordinates control of the map
-     * 
+     *
      * @memberof mapService
      * @public
      * @alias updateMousecoords
@@ -2268,10 +2268,10 @@ angular.module('unionvmsWeb').factory('mapService', function(locale, $rootScope,
         ms.map.removeControl(ms.getControlsByType('MousePosition')[0]);
         ms.addMousecoords(config, false);
     };
-    
+
     /**
      * Removes the mouse coordinates control from the map
-     * 
+     *
      * @memberof mapService
      * @public
      * @alias removeMousecoords
@@ -2282,12 +2282,12 @@ angular.module('unionvmsWeb').factory('mapService', function(locale, $rootScope,
 
     /**
      * Zoom to a specified geometry
-     * 
+     *
      * @memberof mapService
      * @public
      * @alias zoomTo
      * @param {ol.geom.Geometry} geom - The OL geometry to zoom to
-     * @param {Boolean} nearest - Zoom to nearest zoom level possible. Default is <b>false</b> 
+     * @param {Boolean} nearest - Zoom to nearest zoom level possible. Default is <b>false</b>
      */
 	ms.zoomTo = function(geom, nearest){
 	    var opt = {
@@ -2302,7 +2302,7 @@ angular.module('unionvmsWeb').factory('mapService', function(locale, $rootScope,
 
 	/**
 	 * Pan map to specified coordinates
-	 * 
+	 *
 	 * @memberof mapService
      * @public
      * @alias panTo
@@ -2311,10 +2311,10 @@ angular.module('unionvmsWeb').factory('mapService', function(locale, $rootScope,
 	ms.panTo = function(coords){
 	    ms.map.getView().setCenter(coords);
 	};
-	
+
 	/**
 	 * Add drag interaction for the print extent feature
-	 * 
+	 *
 	 * @memberof mapService
      * @public
      * @alias addDragPrintExtent
@@ -2323,11 +2323,11 @@ angular.module('unionvmsWeb').factory('mapService', function(locale, $rootScope,
 	    var ctrl = new ms.dragExtent();
 	    ms.map.addInteraction(ctrl);
 	};
-	
+
 	//Custum drag interaction for print extent
 	/**
 	 * Creates the custom drag print extent interaction
-	 * 
+	 *
 	 * @memberof mapService
      * @public
      * @alias dragExtent
@@ -2339,14 +2339,14 @@ angular.module('unionvmsWeb').factory('mapService', function(locale, $rootScope,
 	        handleMoveEvent: ms.dragExtent.prototype.handleMoveEvent,
 	        handleUpEvent: ms.dragExtent.prototype.handleUpEvent
 	    });
-	    
+
 	    this._coordinate = null;
 	    this._feature = null;
 	    this._cursor = 'pointer';
 	    this._previousCursor = 'default';
 	};
 	ol.inherits(ms.dragExtent, ol.interaction.Pointer);
-	
+
 	ms.dragExtent.prototype.handleDownEvent = function(evt){
 	    var map = evt.map;
 	    var feature = map.forEachFeatureAtPixel(evt.pixel, function(feature, layer){
@@ -2357,15 +2357,15 @@ angular.module('unionvmsWeb').factory('mapService', function(locale, $rootScope,
 	    }, this, function(layer){
 	        return layer.get('type') === 'print';
 	    });
-	    
+
 	    if (feature){
 	        this._coordinate = evt.coordinate;
 	        this._feature = feature;
 	    }
-	    
+
 	    return !!feature;
 	};
-	
+
 	ms.dragExtent.prototype.handleDragEvent = function(evt){
 	    var deltaX = evt.coordinate[0] - this._coordinate[0];
         var deltaY = evt.coordinate[1] - this._coordinate[1];
@@ -2376,7 +2376,7 @@ angular.module('unionvmsWeb').factory('mapService', function(locale, $rootScope,
         this._coordinate[0] = evt.coordinate[0];
         this._coordinate[1] = evt.coordinate[1];
 	};
-	
+
 	ms.dragExtent.prototype.handleMoveEvent = function(evt){
 	    if (this._cursor) {
 	        var map = evt.map;
@@ -2398,18 +2398,18 @@ angular.module('unionvmsWeb').factory('mapService', function(locale, $rootScope,
             }
         }
 	};
-	
+
 	ms.dragExtent.prototype.handleUpEvent = function(evt){
 	    this._coordinate = null;
         this._feature = null;
         return false;
 	};
-	
+
 	//Measuring interaction
 	ms.measureInteraction = {};
 	/**
 	 * Add measure control and start it automatically
-	 * 
+	 *
 	 * @memberof mapService
 	 * @public
 	 * @alias startMeasureControl
@@ -2447,18 +2447,18 @@ angular.module('unionvmsWeb').factory('mapService', function(locale, $rootScope,
                 })
             })
         });
-        
+
         ms.map.addInteraction(draw);
         ms.registerDrawEvents(draw, layer);
         ms.measureInteraction = draw;
 	};
-	
+
 	ms.measurePointsLength = 0;
 	ms.measureOverlays = [];
 	ms.measureETA = undefined;
 	/**
 	 * Register all draw events for the measure control
-	 * 
+	 *
 	 * @memberof mapService
 	 * @public
 	 * @alias registerDrawEvents
@@ -2469,13 +2469,13 @@ angular.module('unionvmsWeb').factory('mapService', function(locale, $rootScope,
 	        //Clear any vector features previous drawn
 	        layer.getSource().clear();
 	        ms.clearMeasureOverlays();
-	        
+
 	        //Disable user input on config window
 	        ms.sp.measure.disabled = true;
-	        
+
 	        var feature = evt.feature;
-	        ms.measurePointsLength = feature.getGeometry().getCoordinates().length - 1; 
-	        
+	        ms.measurePointsLength = feature.getGeometry().getCoordinates().length - 1;
+
 	        listener = feature.getGeometry().on('change', function(evt){
 	            var coords = evt.target.getCoordinates();
 	            if (coords.length !== ms.measurePointsLength + 1){
@@ -2487,7 +2487,7 @@ angular.module('unionvmsWeb').factory('mapService', function(locale, $rootScope,
 	            }
 	        });
 	    });
-	    
+
 	    draw.on('drawend', function(evt){
 	        ms.measurePointsLength = 0;
 	        ms.sp.measure.disabled = false;
@@ -2499,10 +2499,10 @@ angular.module('unionvmsWeb').factory('mapService', function(locale, $rootScope,
 	        ms.measureETA = undefined;
 	    });
 	};
-	
+
 	/**
 	 * Calculate length over the sphere, bearing and ETA of the measures drawn
-	 *  
+	 *
 	 *  @memberof mapService
 	 *  @public
 	 *  @alias calculateLengthAndBearingAndETA
@@ -2512,7 +2512,7 @@ angular.module('unionvmsWeb').factory('mapService', function(locale, $rootScope,
 	ms.calculateLengthAndBearingAndETA = function(line){
 	    var coords = line.getCoordinates();
 	    var sourceProj = ms.getMapProjectionCode();
-	    
+
 	    //Calculate distance
 	    if (coords.length > 2){
     	    var c1 = ms.pointCoordsToTurf(ol.proj.transform(coords[coords.length - 3], sourceProj, 'EPSG:4326'));
@@ -2523,15 +2523,15 @@ angular.module('unionvmsWeb').factory('mapService', function(locale, $rootScope,
     	        units = 'miles';
     	        displayUnits = 'mi';
     	    }
-    	    
+
     	    var distance = turf.distance(c1, c2, units);
     	    var bearing = turf.bearing(c1, c2);
-    	    
+
     	    //Calculate ETA
             if(angular.isDefined(ms.sp.measure.speed) && angular.isDefined(ms.sp.measure.startDate) && ms.sp.measure.speed !== null && ms.sp.measure.speed > 0){
                 //Convert knots to kmh
                 var avgSpeed = ms.sp.measure.speed * 1.852;
-                
+
                 //Make sure we use distance in km
                 var distanceForETA;
                 if (displayUnits === 'mi'){
@@ -2539,54 +2539,54 @@ angular.module('unionvmsWeb').factory('mapService', function(locale, $rootScope,
                 } else {
                     distanceForETA = distance;
                 }
-                
+
                 //Calculate necessary time for the specified distance
                 var timeSpent = distanceForETA / avgSpeed; //in hours
-                
+
                 if (!angular.isDefined(ms.measureETA)){
                     ms.measureETA = moment.utc(ms.sp.measure.startDate, 'YYYY-MM-DD HH:mm:ss Z');
                 }
                 ms.measureETA.add(timeSpent, 'hours');
             }
-    	    
-    	    
+
+
     	    if (ms.sp.measure.units === 'nm'){
     	        displayUnits = 'nm';
     	        distance = distance * 1000 / 1852;
     	    }
-    	    
+
     	    if (distance < 1 && displayUnits === 'km'){
     	        distance = distance * 1000;
     	        displayUnits = 'm';
     	    }
-    	    
+
     	    if (bearing < 0){
     	        bearing = bearing + 360;
     	    }
-    	    
+
     	    distance = Math.round(distance * 100) / 100; //2 decimals
     	    bearing = Math.round(bearing * 100) / 100; //2 decimals
-    	    
-    	    
+
+
     	    var response = {
     	        distance: distance,
-    	        dist_units: displayUnits, 
+    	        dist_units: displayUnits,
     	        bearing: bearing,
     	        bearing_units: '\u00b0',
     	        anchorPosition: coords[coords.length - 2]
     	    };
-    	    
+
     	    if (angular.isDefined(ms.measureETA)){
     	        response.eta = ms.measureETA.format(globalSettingsService.getDateFormat());
     	    }
-    	    
+
     	    return response;
 	    }
 	};
-	
+
 	/**
 	 * Create the measure tooltips
-	 * 
+	 *
 	 * @memberof mapService
 	 * @public
 	 * @alias createMeasureTooltip
@@ -2595,14 +2595,14 @@ angular.module('unionvmsWeb').factory('mapService', function(locale, $rootScope,
 	ms.createMeasureTooltip = function(data){
 	    var el = document.createElement('div');
 	    el.className = 'map-tooltip map-tooltip-small';
-	    
+
 	    data.dist_title = locale.getString('spatial.map_measure_distance_title');
 	    data.bearing_title = locale.getString('spatial.map_measure_bearing_title');
 	    if (angular.isDefined(data.eta)){
 	        data.eta_title = locale.getString('spatial.map_measure_eta_title');
 	        el.className = 'map-tooltip map-tooltip-large';
 	    }
-	   
+
 	    var templateURL = 'partial/spatial/templates/measure_tooltip.html';
 	    $templateRequest(templateURL).then(function(template){
             var rendered = Mustache.render(template, data);
@@ -2610,7 +2610,7 @@ angular.module('unionvmsWeb').factory('mapService', function(locale, $rootScope,
         }, function(){
             console.log('error fetching template');
         });
-	    
+
 	    var offset = [];
 	    if (data.bearing >= 0 && data.bearing <= 90){
 	        offset = [-135, -45];
@@ -2630,21 +2630,21 @@ angular.module('unionvmsWeb').factory('mapService', function(locale, $rootScope,
                 offset = [-163, 6];
             }
 	    }
-	    
+
 	    var tooltip = new ol.Overlay({
 	        element: el,
 	        offset: offset,
 	        insertFirst: false
 	    });
-	    
+
 	    ms.map.addOverlay(tooltip);
 	    tooltip.setPosition(data.anchorPosition);
 	    ms.measureOverlays.push(tooltip);
 	};
-	
+
 	/**
      * Remove all measure tooltip overlays
-     * 
+     *
      * @memberof mapService
      * @public
      * @alias clearMeasureOverlays
@@ -2655,10 +2655,10 @@ angular.module('unionvmsWeb').factory('mapService', function(locale, $rootScope,
 	    }
 	    ms.measureOverlays = [];
 	};
-	
+
 	/**
      * Clear the measure control by removing it from the map and destroying all tooltip overlyas
-     * 
+     *
      * @memberof mapService
      * @public
      * @alias clearMeasureControl
@@ -2669,10 +2669,10 @@ angular.module('unionvmsWeb').factory('mapService', function(locale, $rootScope,
 	    ms.map.removeLayer(ms.getLayerByType('measure-vector'));
 	    ms.measureInteraction = {};
 	};
-	
+
 	/**
 	 * Convert point coordinates to GeoJSON so that they can be used in Turf
-	 * 
+	 *
 	 * @memberof mapService
 	 * @public
 	 * @alias pointCoordsToTurf
@@ -2683,10 +2683,10 @@ angular.module('unionvmsWeb').factory('mapService', function(locale, $rootScope,
 	    var geom = new ol.geom.Point(coords);
 	    return genericMapService.geomToGeoJson(geom);
 	};
-	
+
 	/**
      * Convert GeoJSON to OL feature
-     * 
+     *
      * @memberof mapService
      * @public
      * @alias turfToOlGeom
@@ -2697,7 +2697,7 @@ angular.module('unionvmsWeb').factory('mapService', function(locale, $rootScope,
 	    var geom = genericMapService.geoJsonToOlGeom(feature);
         return geom.transform('EPSG:4326', ms.getMapProjectionCode());
     };
-    
+
     //VECTOR LABELS
     //label visibility settings object
     ms.labelVisibility = {
@@ -2710,15 +2710,15 @@ angular.module('unionvmsWeb').factory('mapService', function(locale, $rootScope,
         activities: ['fs', 'ext_mark', 'ircs', 'cfr', 'gfcm', 'iccat', 'uvi', 'name', 'source', 'activityType', 'reportType', 'purposeCode', 'occurrence', 'areas', 'gears', 'species'],
         activitiesTitles: true
     };
-    
+
     /**
      * Set labels visibility according to the user configurations
-     * 
+     *
      * @memberof mapService
      * @public
      * @alias setLabelVisibility
      * @param {String} type - The label type (either <b>positions</b> or <b>segments</b>)
-     * @param {Object} config - The label configuration object 
+     * @param {Object} config - The label configuration object
      */
     ms.setLabelVisibility = function(type, config){
         ms.labelVisibility[type] = config.values;
@@ -2741,26 +2741,26 @@ angular.module('unionvmsWeb').factory('mapService', function(locale, $rootScope,
             ms.labelVisibility[type] = [];
         }
     };
-    
+
     //Container for displayed label overlays
     ms.vmsposLabels = {
        active: false,
        displayedIds: []
     };
-    
+
     ms.vmssegLabels = {
        active: false,
        displayedIds: []
     };
-    
+
     ms.ersLabels = {
         active: false,
         displayedIds: []
     };
-    
+
     /**
      * Reset all label container objects
-     * 
+     *
      * @memberof mapService
      * @public
      * @alias resetLabelContainers
@@ -2770,22 +2770,22 @@ angular.module('unionvmsWeb').factory('mapService', function(locale, $rootScope,
             active: false,
             displayedIds: []
         };
-        
+
         ms.vmssegLabels = {
             active: false,
             displayedIds: []
         };
-        
+
         ms.ersLabels = {
             active: false,
             displayedIds: []
         };
     };
-    
-    
+
+
     /**
      * Check label status and activate them if necessary
-     * 
+     *
      * @memberof mapService
      * @public
      * @alias checkLabelStatus
@@ -2795,39 +2795,39 @@ angular.module('unionvmsWeb').factory('mapService', function(locale, $rootScope,
         if (ms.vmsposLabels.active === true){
             ms.activateVectorLabels('vmspos');
         }
-        
+
         if (ms.vmssegLabels.active === true){
             ms.activateVectorLabels('vmsseg');
         }
-        
+
         if (ms.ersLabels.active === true){
             ms.activateVectorLabels('ers');
         }
     };
-    
+
     //Activate Vector Label Overlays
     /**
      * Activate vector labels
-     * 
+     *
      * @memberof mapService
      * @public
      * @alias activateVectorLabels
      * @param {String} type - The type of labels to be activated (either <b>positions</b> or <b>segments</b>)
      */
     ms.activateVectorLabels = function(type){
-        if ((type === 'vmspos' && ms.labelVisibility.positions.length > 0) || 
+        if ((type === 'vmspos' && ms.labelVisibility.positions.length > 0) ||
                 (type === 'vmsseg' && ms.labelVisibility.segments.length > 0) ||
                 (type === 'ers' && ms.labelVisibility.activities.length > 0)){
-            var containerName = type + 'Labels'; 
+            var containerName = type + 'Labels';
             ms[containerName].active = true;
             ms[containerName].displayedIds = [];
-            
+
             var layer = ms.getLayerByType(type);
-            
+
             var extent = ms.map.getView().calculateExtent(ms.map.getSize());
             var size = Math.min.apply(Math, ol.extent.getSize(extent));
             //var resolution = ms.map.getView().getResolution();
-            
+
             var src = layer.getSource();
             if (type === 'vmsseg'){
                 src = src.getSource();
@@ -2841,11 +2841,11 @@ angular.module('unionvmsWeb').factory('mapService', function(locale, $rootScope,
                     if (containedFeatures.length === 1){
                         feat = containedFeatures[0];
                     }
-                    
+
                     if (feature.get('featNumber') === 1 && containedFeatures.length > 1){
                         feat = feature.get('featureToDisplay');
                     }
-                    
+
                     if (angular.isDefined(feat) && feat.get('isVisible')){
                         overlayId = feat.get('overlayId');
                         if (!angular.isDefined(overlayId)){
@@ -2888,15 +2888,15 @@ angular.module('unionvmsWeb').factory('mapService', function(locale, $rootScope,
                     }
                 }
             });
-            
+
             //Finally we remove overlays that are no longer visible
             ms.removeLabelsByMapChange(type);
         }
     };
-    
+
     /**
      * Remove labels when map changes (by zooming or panning)
-     *  
+     *
      * @memberof mapService
      * @public
      * @alias removeLabelsByMapChange
@@ -2907,7 +2907,7 @@ angular.module('unionvmsWeb').factory('mapService', function(locale, $rootScope,
         var containerName = type + 'Labels';
         var existingKeys = _.keys(ms[containerName]);
         existingKeys = _.without(existingKeys, 'active', 'displayedIds');
-        
+
         var diff = _.difference(existingKeys, ms[containerName].displayedIds);
         angular.forEach(diff, function(key){
             var hidden = this[key].feature.get('overlayHidden');
@@ -2919,10 +2919,10 @@ angular.module('unionvmsWeb').factory('mapService', function(locale, $rootScope,
             }
         }, ms[containerName]);
     };
-    
+
     /**
      * Remove labels when map changes (by zooming or panning)
-     *  
+     *
      * @memberof mapService
      * @public
      * @alias deactivateVectorLabels
@@ -2932,7 +2932,7 @@ angular.module('unionvmsWeb').factory('mapService', function(locale, $rootScope,
     ms.deactivateVectorLabels = function(type){
         var containerName = type + 'Labels';
         var keys = _.keys(ms[containerName]);
-        keys = _.without(keys, 'active', 'displayedIds');        
+        keys = _.without(keys, 'active', 'displayedIds');
 
         if (angular.isDefined(keys) && angular.isDefined(ms.map)){
             angular.forEach(keys, function(key) {
@@ -2945,15 +2945,15 @@ angular.module('unionvmsWeb').factory('mapService', function(locale, $rootScope,
             ms[containerName].active = false;
         }
     };
-    
+
     /**
      * Add label overlay
-     * 
+     *
      * @memberof mapService
      * @public
      * @alias addLabelsOverlay
      * @param {ol.Feature} feature - The OL feature object that will be labeled
-     * @param {String} type - The type of label (either <b>vmspos</b> or <b>vmsseg</b>) 
+     * @param {String} type - The type of label (either <b>vmspos</b> or <b>vmsseg</b>)
      * @param {String} overlayId - The GUID of the overlay
      */
     ms.addLabelsOverlay = function(feature, type, overlayId){
@@ -2965,37 +2965,37 @@ angular.module('unionvmsWeb').factory('mapService', function(locale, $rootScope,
         } else {
             coords = ms.getMiddlePoint(feature.getGeometry());
         }
-        
+
         var containerName = type + 'Labels';
-            
+
         //HTML DOM
         var labelEl = document.createElement('div');
         labelEl.className = 'col-md-12 vector-label vector-label-' + type;
-        
+
         var toolsEl = document.createElement('div');
-        
+
         var closeBtn = document.createElement('span');
         closeBtn.className = 'fa fa-times close-icon pull-right';
         closeBtn.addEventListener('click', closeLabelOverlay(containerName, overlayId), false);
-        
+
         toolsEl.appendChild(closeBtn);
         labelEl.appendChild(toolsEl);
-        
+
         var contentEl = document.createElement('div');
         contentEl.className = 'col-md-12 label-content';
         labelEl.appendChild(contentEl);
-        
+
         //Mustache
         var data = ms.setLabelObj(feature, type);
         ms.requestLabelTemplate(type, data, contentEl);
-        
+
         var overlay = new ol.Overlay({
             element: labelEl,
             autoPan: false,
             position: coords,
             positioning: 'top-left'
         });
-        
+
         ms.map.addOverlay(overlay);
         ms[containerName][overlayId] = {
             feature: feature,
@@ -3028,7 +3028,7 @@ angular.module('unionvmsWeb').factory('mapService', function(locale, $rootScope,
     };
     /**
      * Build the label object that will be used with Mustache
-     * 
+     *
      * @memberof mapService
      * @public
      * @alias setLabelObj
@@ -3045,7 +3045,7 @@ angular.module('unionvmsWeb').factory('mapService', function(locale, $rootScope,
             titles = ms.getPositionTitles();
             replacementTitles = ms.labelVisibility.positionsReplacementTitles;
             srcData = ms.formatPositionDataForPopup(feature.getProperties());
-            
+
             for (i = 0; i < ms.labelVisibility.positions.length; i++){
                 data.push({
                     title: ms.getLabelAttrName(titles,replacementTitles,'positions',i),
@@ -3056,7 +3056,7 @@ angular.module('unionvmsWeb').factory('mapService', function(locale, $rootScope,
             showTitles = ms.labelVisibility.activitiesTitles;
             titles = ms.getActivityTitles();
             srcData = ms.formatActivityDataForPopup(feature.getProperties());
-            
+
             for (i = 0; i < ms.labelVisibility.activities.length; i++){
                 data.push({
                     title: titles[ms.labelVisibility.activities[i]],
@@ -3068,7 +3068,7 @@ angular.module('unionvmsWeb').factory('mapService', function(locale, $rootScope,
             replacementTitles = ms.labelVisibility.segmentsReplacementTitles;
             titles = ms.getSegmentTitles();
             srcData = ms.formatSegmentDataForPopup(feature.getProperties());
-            
+
             for (i = 0; i < ms.labelVisibility.segments.length; i++){
                 data.push({
                     title: ms.getLabelAttrName(titles,replacementTitles,'segments',i),
@@ -3076,7 +3076,7 @@ angular.module('unionvmsWeb').factory('mapService', function(locale, $rootScope,
                 });
             }
         }
-        
+
         if (data.length > 0){
             return {
                 id: id,
@@ -3094,10 +3094,10 @@ angular.module('unionvmsWeb').factory('mapService', function(locale, $rootScope,
             };
         }
     };
-    
+
     /**
      * Request label template and render it using Mustache
-     * 
+     *
      * @memberof mapService
      * @public
      * @alias requestLabelTemplate
@@ -3114,10 +3114,10 @@ angular.module('unionvmsWeb').factory('mapService', function(locale, $rootScope,
             console.log('error getting template');
         });
     };
-    
+
     /**
      * Close a single label overlay by id
-     * 
+     *
      * @memberof mapService
      * @private
      * @param {String} container - The label container name
@@ -3134,10 +3134,10 @@ angular.module('unionvmsWeb').factory('mapService', function(locale, $rootScope,
             }
         };
     };
-    
+
     /**
      * Generate an overlay id (GUID)
-     * 
+     *
      * @memberof mapService
      * @public
      * @alias generateOverlayId
@@ -3146,20 +3146,20 @@ angular.module('unionvmsWeb').factory('mapService', function(locale, $rootScope,
      */
     ms.generateOverlayId = function(container){
         var id = generateGUID();
-        
+
         if (_.has(container, id) === true){
             ms.generateOverlayId(container);
         } else {
             return id;
         }
     };
-    
+
     /**
      * Generate random GUID
-     * 
+     *
      * @memberof mapService
      * @public
-     * @returns {String} The generated GUID 
+     * @returns {String} The generated GUID
      */
     var generateGUID = function(){
         function s4() {
@@ -3169,12 +3169,12 @@ angular.module('unionvmsWeb').factory('mapService', function(locale, $rootScope,
         }
         return s4() + s4() + '-' + s4() + '-' + s4() + '-' + s4() + '-' + s4() + s4() + s4();
     };
-	
+
     //POPUPS
 	//Render popup info using mustache
     /**
      * Request popup template and render it using Mustache
-     * 
+     *
      * @memberof mapService
      * @public
      * @alias requestPopupTemplate
@@ -3185,11 +3185,11 @@ angular.module('unionvmsWeb').factory('mapService', function(locale, $rootScope,
      */
     ms.requestPopupTemplate = function(data, type, coords, fromCluster){
         ms.popupRecContainer.currentType = type;
-        
+
         if (type === 'ers'){
             ms.popupRecContainer.activityType = data.activityType;
         }
-        
+
         var templateURL = 'partial/spatial/templates/' + type + '.html';
         $templateRequest(templateURL).then(function(template){
             var rendered = Mustache.render(template, data);
@@ -3216,10 +3216,10 @@ angular.module('unionvmsWeb').factory('mapService', function(locale, $rootScope,
             console.log('error getting template');
         });
     };
-    
+
     /**
      * Add OL popup overlay
-     * 
+     *
      * @memberof mapService
      * @public
      * @alias addPopupOverlay
@@ -3238,7 +3238,7 @@ angular.module('unionvmsWeb').factory('mapService', function(locale, $rootScope,
 
 	/**
      * Close OL popup overlay
-     * 
+     *
      * @memberof mapService
      * @public
      * @alias closePopup
@@ -3249,7 +3249,7 @@ angular.module('unionvmsWeb').factory('mapService', function(locale, $rootScope,
 	    ms.popupRecContainer.reset();
 	    return false;
 	};
-	
+
 	//Popup visibility settings object
 	ms.popupVisibility = {
 	    positions: ['fs', 'extMark', 'ircs', 'cfr', 'name', 'posTime', 'lat', 'lon', 'stat', 'm_spd', 'c_spd', 'crs', 'msg_tp', 'act_tp', 'source'],
@@ -3261,7 +3261,7 @@ angular.module('unionvmsWeb').factory('mapService', function(locale, $rootScope,
 	    ers: ['fs', 'ext_mark', 'ircs', 'cfr', 'gfcm', 'iccat', 'uvi', 'name', 'source', 'activityType', 'reportType', 'purposeCode', 'occurrence', 'areas', 'gears', 'species'],
 	    ersTitles: true
 	};
-	
+
 	ms.setPopupVisibility = function(type, config){
 	    ms.popupVisibility[type] = config.values;
 	    ms.popupVisibility[type + 'Titles'] = angular.isDefined(config.isAttributeVisible) ? config.isAttributeVisible: false;
@@ -3281,15 +3281,15 @@ angular.module('unionvmsWeb').factory('mapService', function(locale, $rootScope,
 	        ms.popupVisibility[type] = [];
 	    }
 	};
-	
-	//POPUP - decide which function to call so that data is properly formated 
+
+	//POPUP - decide which function to call so that data is properly formated
 	/**
 	 * Create object containing all the necessary information to be displayed in the popup
-	 * 
+	 *
 	 * @memberof mapService
 	 * @public
 	 * @alias setObjPopup
-	 * @param {Object} record - The source record for which a popup will be displayed 
+	 * @param {Object} record - The source record for which a popup will be displayed
 	 * @returns {Object} An object containing the necessary information to be displayed in the popup
 	 */
 	ms.setObjPopup = function(record){
@@ -3311,10 +3311,10 @@ angular.module('unionvmsWeb').factory('mapService', function(locale, $rootScope,
             default:
                 break;
         }
-	    
+
 	    return data;
 	};
-	
+
 	ms.popupRecContainer = {
 	    records: [],
 	    currentType: undefined,
@@ -3349,11 +3349,11 @@ angular.module('unionvmsWeb').factory('mapService', function(locale, $rootScope,
 	//POPUP - Define the object that will be used in the popup for vms positions
 	/**
      * Create object containing all the necessary position information to be displayed in the popup
-     * 
+     *
      * @memberof mapService
      * @public
      * @alias setPositionsObjPopup
-     * @param {ol.Feature} feature - The OL feature used to display the popup 
+     * @param {ol.Feature} feature - The OL feature used to display the popup
      * @param {String} [id] - The id of the feature
      * @returns {Object} An object containing the necessary position information to be displayed in the popup
      */
@@ -3394,11 +3394,11 @@ angular.module('unionvmsWeb').factory('mapService', function(locale, $rootScope,
             }
         };
     };
-    
+
     //Popup attribute names for positions
     /**
      * Get attributes names for positional data
-     * 
+     *
      * @memberof mapService
      * @public
      * @alias getPositionTitles
@@ -3423,11 +3423,11 @@ angular.module('unionvmsWeb').factory('mapService', function(locale, $rootScope,
             source: locale.getString('spatial.tab_vms_pos_table_header_source')
         };
     };
-    
+
     //Popup data values for positions
     /**
      * Format positional data to be displayed in the popup taking into consideration user preferences
-     * 
+     *
      * @memberof mapService
      * @public
      * @alias formatPositionDataForPopup
@@ -3437,7 +3437,7 @@ angular.module('unionvmsWeb').factory('mapService', function(locale, $rootScope,
     ms.formatPositionDataForPopup = function(data){
         var coords = data.geometry.getCoordinates();
         var repCoords = ol.proj.transform(coords, ms.getMapProjectionCode(), 'EPSG:4326');
-        
+
         return {
             name: data.name,
             fs: data.countryCode,
@@ -3456,10 +3456,10 @@ angular.module('unionvmsWeb').factory('mapService', function(locale, $rootScope,
             source: data.source
         };
     };
-    
+
     /**
      * Do the mapping between application object properties and the source data properties
-     * 
+     *
      * @memberof mapService
      * @public
      * @alias getMappingTitlesProperties
@@ -3506,7 +3506,7 @@ angular.module('unionvmsWeb').factory('mapService', function(locale, $rootScope,
                 asset:'name'
             };
         }
-        
+
         if (type === 'vmsseg'){
             return {
                 name: 'name',
@@ -3525,11 +3525,11 @@ angular.module('unionvmsWeb').factory('mapService', function(locale, $rootScope,
 
     /**
      * Create object containing all the necessary segment information to be displayed in the popup
-     * 
+     *
      * @memberof mapService
      * @public
      * @alias setSegmentsObjPopup
-     * @param {ol.Feature} feature - The OL feature used to display the popup 
+     * @param {ol.Feature} feature - The OL feature used to display the popup
      * @returns {Object} An object containing the necessary position information to be displayed in the popup
      */
     ms.setSegmentsObjPopup = function(feature){
@@ -3566,11 +3566,11 @@ angular.module('unionvmsWeb').factory('mapService', function(locale, $rootScope,
             }
         };
     };
-    
+
     //Popup attribute names for segments
     /**
      * Get attributes names for segment data
-     * 
+     *
      * @memberof mapService
      * @public
      * @alias getSegmentTitles
@@ -3590,11 +3590,11 @@ angular.module('unionvmsWeb').factory('mapService', function(locale, $rootScope,
             cat: locale.getString('spatial.tab_vms_seg_table_header_category')
         };
     };
-    
+
     //Popup data values for segments
     /**
      * Format segment data to be displayed in the popup taking into consideration user preferences
-     * 
+     *
      * @memberof mapService
      * @public
      * @alias formatPositionDataForPopup
@@ -3615,18 +3615,18 @@ angular.module('unionvmsWeb').factory('mapService', function(locale, $rootScope,
             cat: data.segmentCategory
         };
     };
-    
+
     //POPUP - alarms
     //Define the object that will be used in the popup for alarms
     /**
      * Create the alarms object that will be used in the popup
-     * 
+     *
      * @memberof mapService
      * @public
      * @alias setAlarmsObjPopup
-     * @param {ol.Feature} feature - The OL feature representing the alarm 
+     * @param {ol.Feature} feature - The OL feature representing the alarm
      * @param {Boolean} includeAsset - Whether the details button should be displayed in the popup or not
-     * @returns {Object}  
+     * @returns {Object}
      */
     ms.setAlarmsObjPopup = function(feature, includeAsset){
         if (!angular.isDefined(includeAsset)){
@@ -3634,7 +3634,7 @@ angular.module('unionvmsWeb').factory('mapService', function(locale, $rootScope,
         }
         var titles = ms.getAlarmTitles();
         var srcData = ms.formatAlarmDataForPopup(feature);
-        
+
         return {
             alarmTitle: locale.getString('spatial.popup_alarms_title'),
             titles: titles,
@@ -3642,11 +3642,11 @@ angular.module('unionvmsWeb').factory('mapService', function(locale, $rootScope,
             includeAssetDetails: includeAsset
         };
     };
-    
+
     //Popup attribute names for alarms
     /**
      * Get attributes names for alarms data
-     * 
+     *
      * @memberof mapService
      * @public
      * @alias getAlarmTitles
@@ -3667,17 +3667,17 @@ angular.module('unionvmsWeb').factory('mapService', function(locale, $rootScope,
             updatedBy: locale.getString('spatial.rule_updated_by')
         };
     };
-    
+
     /**
      * Format alarm data to be displayed in the popup taking into consideration user preferences
-     * 
+     *
      * @memberof mapService
      * @public
      * @alias formatAlarmDataForPopup
      * @param {Object} data - The object containing initial data
      * @returns {Object} An object containing properly formated alarm data
      */
-    ms.formatAlarmDataForPopup = function(data){        
+    ms.formatAlarmDataForPopup = function(data){
         return {
             name: data.name,
             fs: data.fs,
@@ -3694,20 +3694,20 @@ angular.module('unionvmsWeb').factory('mapService', function(locale, $rootScope,
             color: ms.getColorByStatus(ms.styles.alarms, data.ticketStatus)
         };
     };
-    
+
     /**
      * Create object containing all the necessary fishing activity information to be displayed in the popup
-     * 
+     *
      * @memberof mapService
      * @public
      * @alias setActivitiesObjPopup
-     * @param {ol.Feature} feature - The OL feature used to display the popup 
+     * @param {ol.Feature} feature - The OL feature used to display the popup
      * @returns {Object} An object containing the necessary position information to be displayed in the popup
      */
     ms.setActivitiesObjPopup = function(feature){
         var titles = ms.getActivityTitles();
         var srcData = ms.formatActivityDataForPopup(feature);
-        
+
         var data = [];
         for (var i = 0; i < ms.popupVisibility.ers.length; i++){
             data.push({
@@ -3715,7 +3715,7 @@ angular.module('unionvmsWeb').factory('mapService', function(locale, $rootScope,
                 value: srcData[ms.popupVisibility.ers[i]]
             });
         }
-        
+
         return {
             showTitles: ms.popupVisibility.ersTitles,
             activity: data,
@@ -3742,11 +3742,11 @@ angular.module('unionvmsWeb').factory('mapService', function(locale, $rootScope,
             }
         };
     };
-    
+
     //Popup attribute names for fishing activities
     /**
      * Get attributes names for activity data
-     * 
+     *
      * @memberof mapService
      * @public
      * @alias getActivityTitles
@@ -3773,11 +3773,11 @@ angular.module('unionvmsWeb').factory('mapService', function(locale, $rootScope,
             species: locale.getString('spatial.criteria_species')
         };
     };
-    
+
     //Popup data values for activities
     /**
      * Format segment data to be displayed in the popup taking into consideration user preferences
-     * 
+     *
      * @memberof mapService
      * @public
      * @alias formatActivityDataForPopup
@@ -3787,7 +3787,7 @@ angular.module('unionvmsWeb').factory('mapService', function(locale, $rootScope,
     ms.formatActivityDataForPopup = function(data){
         var filter = $filter('stArrayToString');
         var pCodeDesc = mdrCacheService.getDescriptionByCode('FLUX_GP_PURPOSE', data.purposeCode);
-        
+
         return {
             fs: data.flagState,
             name: data.vesselName,
@@ -3804,8 +3804,8 @@ angular.module('unionvmsWeb').factory('mapService', function(locale, $rootScope,
             occurrence: unitConversionService.date.convertToUserFormat(data.acceptedDateTime),
             areas: filter(data.areas, ' - '),
             //ports: data.ports,
-            gears: filter(data.gears, ' - '), 
-            species: filter(data.species, ', ')    
+            gears: filter(data.gears, ' - '),
+            species: filter(data.species, ', ')
         };
     };
 
@@ -3815,11 +3815,11 @@ angular.module('unionvmsWeb').factory('mapService', function(locale, $rootScope,
 
     //array holding features selected by DragBox
     ms.selectedFeatures = [];
-    
+
     ms.getSelectedFeatures = function() {
         return ms.selectedFeatures;
     };
-    
+
     ms.setDragBoxEvent = function(map){
         var dragBox = new ol.interaction.DragBox({
             condition: ol.events.condition.shiftKeyOnly
@@ -3831,7 +3831,7 @@ angular.module('unionvmsWeb').factory('mapService', function(locale, $rootScope,
         dragBox.on('boxstart', function () {
             ms.selectedFeatures = [];
         });
-        
+
         ms.wktFormatter = new ol.format.WKT();
 
         dragBox.on('boxend', function () {
@@ -3847,13 +3847,13 @@ angular.module('unionvmsWeb').factory('mapService', function(locale, $rootScope,
             ms.resetHighlightedFeatures();
         });
     };
-    
+
     ms.resetHighlightedFeatures = function() {
         var layer = ms.getLayerByType('highlight').getSource();
         layer.clear(true);
         layer.addFeatures(ms.selectedFeatures);
     };
-    
+
     ms.getFeaturesIntersectingExtent = function(source, extend, geomType, layer) {
         source.forEachFeatureIntersectingExtent(extend, function (feature) {
             ms.selectedFeatures.push(feature);
@@ -3861,14 +3861,14 @@ angular.module('unionvmsWeb').factory('mapService', function(locale, $rootScope,
             feature.getGeometry().set("GeometryType", geomType);
         });
     } ;
-    
+
     ms.clearFeaturesOfUnselectedLayer = function(layer) {
         ms.selectedFeatures = ms.selectedFeatures.filter(function(feature) {
             return feature.get('layerType') !== layer;
         });
         ms.resetHighlightedFeatures();
     };
-    
+
     ms.getSelectedFeaturesForExport = function(identifier) {
         var features = {};
         angular.forEach(ms.selectedFeatures, function (feature) {
@@ -3893,7 +3893,7 @@ angular.module('unionvmsWeb').factory('mapService', function(locale, $rootScope,
         }
         return parent[name];
     };
-        
+
     ms.getFlagState = function(feature) {
         if(feature.get('layerType') === 'ers')  {
             return feature.get('flagState') !== "" ? feature.get('flagState') : "UNKNOWN";
@@ -3903,7 +3903,7 @@ angular.module('unionvmsWeb').factory('mapService', function(locale, $rootScope,
             return feature.get('countryCode') !== "" ? feature.get('countryCode') : "UNKNOWN";
         }
     };
-    
+
     ms.getIdentifier = function(feature, identifier) {
         if(feature.get('layerType') === 'ers')  {
             return identifier.toUpperCase() + ": " + feature.get(identifier.toUpperCase());
@@ -3913,7 +3913,7 @@ angular.module('unionvmsWeb').factory('mapService', function(locale, $rootScope,
             return identifier.toUpperCase() + ": " + feature.get(identifier.toLowerCase());
         }
     };
-    
+
     ms.pushFeatureInRelevantLayerFolder = function(parent, feature) {
         var layerFolder;
         if(feature.get('layerType') === 'ers')  {
@@ -3927,7 +3927,7 @@ angular.module('unionvmsWeb').factory('mapService', function(locale, $rootScope,
             layerFolder.push(ms.segmentFeatureToDto(feature));
         }
     };
-    
+
     ms.getTransformedCoordinates = function(feature) {
         var src = 'EPSG:3857';
         var dest = 'EPSG:4326';
@@ -3935,13 +3935,13 @@ angular.module('unionvmsWeb').factory('mapService', function(locale, $rootScope,
         clonedFeature.getGeometry().transform(src, dest);
         return clonedFeature.getGeometry().getCoordinates();
     };
-    
+
     ms.positionFeatureToDto = function(feature) {
         var dto = {};
 
         dto['geometry'] = ms.getTransformedCoordinates(feature).join();
         dto['color'] = ms.getColorForPositionWithoutIsVisible(feature);
-        
+
         var properties = feature.get('features')[0].getProperties();
         dto['positionTime'] = properties['positionTime'];
         dto['connectionId'] = properties['connectionId'];
@@ -3968,7 +3968,7 @@ angular.module('unionvmsWeb').factory('mapService', function(locale, $rootScope,
             dto['geometry'].push(coordinates.join());
         });
         dto['color'] = ms.getColorForSegment(feature);
-        
+
         var properties = feature.getProperties();
         dto['cfr'] = properties['cfr'];
         dto['countryCode'] = properties['countryCode'];
@@ -3988,7 +3988,7 @@ angular.module('unionvmsWeb').factory('mapService', function(locale, $rootScope,
         var dto = {};
 
         dto['geometry'] = ms.getTransformedCoordinates(feature).join();
-        
+
         var properties = feature.getProperties();
         dto['activityId'] = parseInt(properties['activityId']);
         dto['faReportID'] = parseInt(properties['faReportID']);
@@ -4016,7 +4016,6 @@ angular.module('unionvmsWeb').factory('mapService', function(locale, $rootScope,
         dto['vesselIdentifiers'] = vesselIds;
         return dto;
     };
-    
+
 	return ms;
 });
-
