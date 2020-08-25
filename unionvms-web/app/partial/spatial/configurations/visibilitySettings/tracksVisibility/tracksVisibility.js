@@ -10,7 +10,7 @@ FITNESS FOR A PARTICULAR PURPOSE.  See the GNU General Public License for more d
 copy of the GNU General Public License along with the IFDM Suite. If not, see <http://www.gnu.org/licenses/>.
 */
 angular.module('unionvmsWeb').controller('TracksvisibilityCtrl',function($scope, locale){
-		    
+
 	$scope.$watch('configModel.visibilitySettings.tracks', function(newVal) {
 		if(newVal){
 			$scope.configModel.visibilitySettings.trackTableAttrs = [{
@@ -20,25 +20,25 @@ angular.module('unionvmsWeb').controller('TracksvisibilityCtrl',function($scope,
 		        title: locale.getString('spatial.reports_form_vessel_search_table_header_external_marking'),
 		        value: 'extMark'
 		    },{
-		        title: locale.getString('spatial.reports_form_vessel_search_table_header_ircs'), 
+		        title: locale.getString('spatial.reports_form_vessel_search_table_header_ircs'),
 		        value: 'ircs'
 		    },{
-		        title: locale.getString('spatial.reports_form_vessel_search_table_header_cfr'), 
+		        title: locale.getString('spatial.reports_form_vessel_search_table_header_cfr'),
 		        value: 'cfr'
 		    },{
-		        title: locale.getString('spatial.reports_form_vessel_search_table_header_name'), 
+		        title: locale.getString('spatial.reports_form_vessel_search_table_header_name'),
 		        value: 'name'
 		    },{
 		        title: locale.getString('spatial.tab_vms_seg_table_header_distance'),
 		        value: 'dist'
 		    },{
-		        title: locale.getString('spatial.tab_vms_seg_table_header_duration'), 
+		        title: locale.getString('spatial.tab_vms_seg_table_header_duration'),
 		        value: 'dur'
 		    },{
-		        title: locale.getString('spatial.reports_form_vms_tracks_time_at_sea'), 
+		        title: locale.getString('spatial.reports_form_vms_tracks_time_at_sea'),
 		        value: 'timeSea'
 		    }];
-		    
+
 		    $scope.configModel.visibilitySettings.trackPopupAttrs = [{
 		        title: locale.getString('spatial.reports_form_vessel_search_table_header_flag_state'),
 		        value: 'fs'
@@ -46,25 +46,25 @@ angular.module('unionvmsWeb').controller('TracksvisibilityCtrl',function($scope,
 		        title: locale.getString('spatial.reports_form_vessel_search_table_header_external_marking'),
 		        value: 'extMark'
 		    },{
-		        title: locale.getString('spatial.reports_form_vessel_search_table_header_ircs'), 
+		        title: locale.getString('spatial.reports_form_vessel_search_table_header_ircs'),
 		        value: 'ircs'
 		    },{
-		        title: locale.getString('spatial.reports_form_vessel_search_table_header_cfr'), 
+		        title: locale.getString('spatial.reports_form_vessel_search_table_header_cfr'),
 		        value: 'cfr'
 		    },{
-		        title: locale.getString('spatial.reports_form_vessel_search_table_header_name'), 
+		        title: locale.getString('spatial.reports_form_vessel_search_table_header_name'),
 		        value: 'name'
 		    },{
 		        title: locale.getString('spatial.tab_vms_seg_table_header_distance'),
 		        value: 'dist'
 		    },{
-		        title: locale.getString('spatial.tab_vms_seg_table_header_duration'), 
+		        title: locale.getString('spatial.tab_vms_seg_table_header_duration'),
 		        value: 'dur'
 		    },{
-		        title: locale.getString('spatial.reports_form_vms_tracks_time_at_sea'), 
+		        title: locale.getString('spatial.reports_form_vms_tracks_time_at_sea'),
 		        value: 'timeSea'
 		    }];
-		    
+
 		    $scope.configModel.visibilitySettings.trackLabelAttrs = [{
 		        title: locale.getString('spatial.reports_form_vessel_search_table_header_flag_state'),
 		        value: 'fs'
@@ -72,31 +72,31 @@ angular.module('unionvmsWeb').controller('TracksvisibilityCtrl',function($scope,
 		        title: locale.getString('spatial.reports_form_vessel_search_table_header_external_marking'),
 		        value: 'extMark'
 		    },{
-		        title: locale.getString('spatial.reports_form_vessel_search_table_header_ircs'), 
+		        title: locale.getString('spatial.reports_form_vessel_search_table_header_ircs'),
 		        value: 'ircs'
 		    },{
-		        title: locale.getString('spatial.reports_form_vessel_search_table_header_cfr'), 
+		        title: locale.getString('spatial.reports_form_vessel_search_table_header_cfr'),
 		        value: 'cfr'
 		    },{
-		        title: locale.getString('spatial.reports_form_vessel_search_table_header_name'), 
+		        title: locale.getString('spatial.reports_form_vessel_search_table_header_name'),
 		        value: 'name'
 		    },{
 		        title: locale.getString('spatial.tab_vms_seg_table_header_distance'),
 		        value: 'dist'
 		    },{
-		        title: locale.getString('spatial.tab_vms_seg_table_header_duration'), 
+		        title: locale.getString('spatial.tab_vms_seg_table_header_duration'),
 		        value: 'dur'
 		    },{
-		        title: locale.getString('spatial.reports_form_vms_tracks_time_at_sea'), 
+		        title: locale.getString('spatial.reports_form_vms_tracks_time_at_sea'),
 		        value: 'timeSea'
 		    }];
-		    
+
 		    var contentTypes = ['Table'];
 			angular.forEach(contentTypes, function(contentType) {
 				var tracks = [];
 				var trackVisibilitySettings = $scope.configModel.visibilitySettings.tracks[contentType.toLowerCase() === 'label' ? contentType.toLowerCase() + 's' : contentType.toLowerCase()];
 				var trackVisibilityAttrs = $scope.configModel.visibilitySettings['track' + contentType + 'Attrs'];
-				
+
 				if(trackVisibilitySettings.order && trackVisibilitySettings.order.length > 0){
 					angular.forEach(trackVisibilitySettings.order, function(item) {
 						for(var i=0;i<trackVisibilityAttrs.length;i++){
@@ -112,11 +112,11 @@ angular.module('unionvmsWeb').controller('TracksvisibilityCtrl',function($scope,
 						trackVisibilitySettings.order.push(trackVisibilityAttrs[i].value);
 					}
 				}
-				
+
 				angular.forEach(trackVisibilityAttrs, function(item) {
 					item.type = contentType;
 				});
-				
+
 				if(!angular.isDefined(trackVisibilitySettings.values) || trackVisibilitySettings.order.length !== trackVisibilitySettings.values.length){
 					$scope.selectAll.tracks[contentType.toLowerCase()].values = false;
 				}else{
