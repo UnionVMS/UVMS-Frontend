@@ -161,7 +161,7 @@
         {{value | date: "yyyy-MM-dd hh:mm:ss"}}
       </ng-template>
     </ngx-datatable-column>
-    <ngx-datatable-column [sortable]="false" [resizeable]="false" [width]="32">
+    <ngx-datatable-column [sortable]="false" [canAutoResize]="false" [width]="32">
       <ng-template let-row="row" ngx-datatable-cell-template>
         <div [ngSwitch]="isInValidRange(row)">
           <fa-icon *ngSwitchCase="true" class="active" [icon]="faCheck"></fa-icon>
@@ -169,7 +169,7 @@
         </div>
       </ng-template>
     </ngx-datatable-column>
-    <ngx-datatable-column name="Enabled" prop="active" [resizeable]="false" [width]="70">
+    <ngx-datatable-column name="Enabled" prop="active" [canAutoResize]="false" [width]="70">
       <ng-template let-column="column" let-sort="sortFn" ngx-datatable-header-template>
        {{ column.name }}
       </ng-template>
