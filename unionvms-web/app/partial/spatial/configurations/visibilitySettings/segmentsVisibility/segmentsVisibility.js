@@ -10,7 +10,7 @@ FITNESS FOR A PARTICULAR PURPOSE.  See the GNU General Public License for more d
 copy of the GNU General Public License along with the IFDM Suite. If not, see <http://www.gnu.org/licenses/>.
 */
 angular.module('unionvmsWeb').controller('SegmentsvisibilityCtrl',function($scope, locale){
-		    
+
 	$scope.$watch('configModel.visibilitySettings.segments', function(newVal) {
 		if(newVal){
 			$scope.configModel.visibilitySettings.segmentTableAttrs = [{
@@ -20,31 +20,31 @@ angular.module('unionvmsWeb').controller('SegmentsvisibilityCtrl',function($scop
 		        title: locale.getString('spatial.reports_form_vessel_search_table_header_external_marking'),
 		        value: 'extMark'
 		    },{
-		        title: locale.getString('spatial.reports_form_vessel_search_table_header_ircs'), 
+		        title: locale.getString('spatial.reports_form_vessel_search_table_header_ircs'),
 		        value: 'ircs'
 		    },{
-		        title: locale.getString('spatial.reports_form_vessel_search_table_header_cfr'), 
+		        title: locale.getString('spatial.reports_form_vessel_search_table_header_cfr'),
 		        value: 'cfr'
 		    },{
-		        title: locale.getString('spatial.reports_form_vessel_search_table_header_name'), 
+		        title: locale.getString('spatial.reports_form_vessel_search_table_header_name'),
 		        value: 'name'
 		    },{
 		        title: locale.getString('spatial.tab_vms_seg_table_header_distance'),
 		        value: 'dist'
 		    },{
-		        title: locale.getString('spatial.tab_vms_seg_table_header_duration'), 
+		        title: locale.getString('spatial.tab_vms_seg_table_header_duration'),
 		        value: 'dur'
 		    },{
-		        title: locale.getString('spatial.tab_vms_seg_table_header_speed_ground'), 
+		        title: locale.getString('spatial.tab_vms_seg_table_header_speed_ground'),
 		        value: 'spd'
 		    },{
-		        title: locale.getString('spatial.tab_vms_seg_table_header_course_ground'), 
+		        title: locale.getString('spatial.tab_vms_seg_table_header_course_ground'),
 		        value: 'crs'
 		    },{
 		        title: locale.getString('spatial.tab_vms_seg_table_header_category'),
 		        value: 'cat'
 		    }];
-		    
+
 		    $scope.configModel.visibilitySettings.segmentPopupAttrs = [{
 		        title: locale.getString('spatial.reports_form_vessel_search_table_header_flag_state'),
 		        value: 'fs'
@@ -52,25 +52,25 @@ angular.module('unionvmsWeb').controller('SegmentsvisibilityCtrl',function($scop
 		        title: locale.getString('spatial.reports_form_vessel_search_table_header_external_marking'),
 		        value: 'extMark'
 		    },{
-		        title: locale.getString('spatial.reports_form_vessel_search_table_header_ircs'), 
+		        title: locale.getString('spatial.reports_form_vessel_search_table_header_ircs'),
 		        value: 'ircs'
 		    },{
-		        title: locale.getString('spatial.reports_form_vessel_search_table_header_cfr'), 
+		        title: locale.getString('spatial.reports_form_vessel_search_table_header_cfr'),
 		        value: 'cfr'
 		    },{
-		        title: locale.getString('spatial.reports_form_vessel_search_table_header_name'), 
+		        title: locale.getString('spatial.reports_form_vessel_search_table_header_name'),
 		        value: 'name'
 		    },{
 		        title: locale.getString('spatial.tab_vms_seg_table_header_distance'),
 		        value: 'dist'
 		    },{
-		        title: locale.getString('spatial.tab_vms_seg_table_header_duration'), 
+		        title: locale.getString('spatial.tab_vms_seg_table_header_duration'),
 		        value: 'dur'
 		    },{
-		        title: locale.getString('spatial.tab_vms_seg_table_header_speed_ground'), 
+		        title: locale.getString('spatial.tab_vms_seg_table_header_speed_ground'),
 		        value: 'spd'
 		    },{
-		        title: locale.getString('spatial.tab_vms_seg_table_header_course_ground'), 
+		        title: locale.getString('spatial.tab_vms_seg_table_header_course_ground'),
 		        value: 'crs'
 		    },{
 		        title: locale.getString('spatial.tab_vms_seg_table_header_category'),
@@ -85,25 +85,25 @@ angular.module('unionvmsWeb').controller('SegmentsvisibilityCtrl',function($scop
 		        title: locale.getString('spatial.reports_form_vessel_search_table_header_external_marking'),
 		        value: 'extMark'
 		    },{
-		        title: locale.getString('spatial.reports_form_vessel_search_table_header_ircs'), 
+		        title: locale.getString('spatial.reports_form_vessel_search_table_header_ircs'),
 		        value: 'ircs'
 		    },{
-		        title: locale.getString('spatial.reports_form_vessel_search_table_header_cfr'), 
+		        title: locale.getString('spatial.reports_form_vessel_search_table_header_cfr'),
 		        value: 'cfr'
 		    },{
-		        title: locale.getString('spatial.reports_form_vessel_search_table_header_name'), 
+		        title: locale.getString('spatial.reports_form_vessel_search_table_header_name'),
 		        value: 'name'
 		    },{
 		        title: locale.getString('spatial.tab_vms_seg_table_header_distance'),
 		        value: 'dist'
 		    },{
-		        title: locale.getString('spatial.tab_vms_seg_table_header_duration'), 
+		        title: locale.getString('spatial.tab_vms_seg_table_header_duration'),
 		        value: 'dur'
 		    },{
-		        title: locale.getString('spatial.tab_vms_seg_table_header_speed_ground'), 
+		        title: locale.getString('spatial.tab_vms_seg_table_header_speed_ground'),
 		        value: 'spd'
 		    },{
-		        title: locale.getString('spatial.tab_vms_seg_table_header_course_ground'), 
+		        title: locale.getString('spatial.tab_vms_seg_table_header_course_ground'),
 		        value: 'crs'
 		    },{
 		        title: locale.getString('spatial.tab_vms_seg_table_header_category'),
@@ -143,11 +143,11 @@ angular.module('unionvmsWeb').controller('SegmentsvisibilityCtrl',function($scop
 						segmentVisibilitySettings.order.push(segmentVisibilityAttrs[i].value);
 					}
 				}
-				
+
 				angular.forEach(segmentVisibilityAttrs, function(item) {
 					item.type = contentType;
 				});
-				
+
 				if(!angular.isDefined(segmentVisibilitySettings.values) || segmentVisibilitySettings.order.length !== segmentVisibilitySettings.values.length){
 					$scope.selectAll.segments[contentType.toLowerCase()].values = false;
 				}else{
