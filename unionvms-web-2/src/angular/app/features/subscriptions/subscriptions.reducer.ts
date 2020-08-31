@@ -1,15 +1,21 @@
-import { SUBActions, SET_ORGANIZATIONS, SET_SUBSCRIPTIONS_LIST, CLEAR_SUBSCRIPTION_FORM,
-          TOGGLE_SUBSCRIPTION_FORM_AREAS, CLOSE_TIMED_ALERT, OPEN_TIMED_ALERT } from './subscriptions.actions';
-import { Organization } from './organization.model';
-import { Subscription } from './subscription.model';
-import { CloseTimedAlert } from './subscriptions.actions';
+import {
+  CLEAR_SUBSCRIPTION_FORM,
+  CLOSE_TIMED_ALERT,
+  OPEN_TIMED_ALERT,
+  SET_ORGANISATIONS,
+  SET_SUBSCRIPTIONS_LIST,
+  SUBActions,
+  TOGGLE_SUBSCRIPTION_FORM_AREAS
+} from './subscriptions.actions';
+import {Organisation} from './organisation.model';
+import {Subscription} from './subscription.model';
 
 export interface StatusAction {
   status: boolean;
 }
 
 export interface State {
-  organizations: Organization[];
+  organisations: Organisation[];
   subscriptionsList: Subscription[];
   clearSubscriptionForm: StatusAction;
   toggleSubscriptionAreasSection: StatusAction;
@@ -19,7 +25,7 @@ export interface State {
 
 
 const initialState: State = {
-  organizations: [],
+  organisations: [],
   subscriptionsList: [],
   clearSubscriptionForm: {
     status: false
@@ -32,10 +38,10 @@ const initialState: State = {
 
 export function subReducer(state = initialState, action: SUBActions ) {
   switch (action.type) {
-    case SET_ORGANIZATIONS:
+    case SET_ORGANISATIONS:
       return {
         ...state,
-        organizations: action.payload
+        organisations: action.payload
       };
     case SET_SUBSCRIPTIONS_LIST:
       return {
@@ -70,7 +76,7 @@ export function subReducer(state = initialState, action: SUBActions ) {
 }
 
 
-export const getOrganizations = (state: State) => state.organizations;
+export const getOrganisations = (state: State) => state.organisations;
 export const getClearSubscriptionForm = (state: State) => state.clearSubscriptionForm;
 export const getToggleSubscriptionAreasSection = (state: State) => state.toggleSubscriptionAreasSection;
 export const closeTimedAlert = (state: State) => state.closeTimedAlert;

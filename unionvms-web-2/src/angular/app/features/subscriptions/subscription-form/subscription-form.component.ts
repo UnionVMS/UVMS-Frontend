@@ -1,7 +1,7 @@
 import { Component, OnInit, Input, Output, EventEmitter, OnDestroy } from '@angular/core';
 import { faCalendar, faRetweet, faEye, faPlusSquare, faTrash, faAngleRight  } from '@fortawesome/free-solid-svg-icons';
 import { FormGroup, FormBuilder, Validators, FormControl, FormArray } from '@angular/forms';
-import { Organization } from '../organization.model';
+import { Organisation } from '../organisation.model';
 import { Store } from '@ngrx/store';
 import * as fromRoot from 'app/app.reducer';
 import { Observable, Subscription } from 'rxjs';
@@ -47,8 +47,8 @@ export class SubscriptionFormComponent implements OnInit, OnDestroy {
   faTrash = faTrash;
   subscriptionForm: FormGroup;
   messageTypes;
-  organizations$: Observable<Organization[]> = this.store.select(fromRoot.getOrganizations);
-  organizations: Organization[];
+  organisations$: Observable<Organisation[]> = this.store.select(fromRoot.getOrganisations);
+  organisations: Organisation[];
   historyUnits = [];
   frequencyUnits = [];
   triggerTypes = [];
@@ -84,7 +84,7 @@ export class SubscriptionFormComponent implements OnInit, OnDestroy {
     this.setDeadlineUnits();
     this.getActivities();
     this.fetchAllSenders();
-    this.subscription.add(this.organizations$.subscribe(organizations => this.organizations = organizations));
+    this.subscription.add(this.organisations$.subscribe(organisations => this.organisations = organisations));
     this.subscription.add(this.isCollapsed$.subscribe( collapsed => {
       this.isCollapsed = collapsed.status;
       this.isAssetsCollapsed = collapsed.status;
@@ -252,10 +252,10 @@ export class SubscriptionFormComponent implements OnInit, OnDestroy {
   }
 
   initSubscriptions() {
-    // Changes for organization
+    // Changes for organisation
     this.subscription.add(this.subscriptionForm.get('output.subscriber.organisationId').valueChanges
       .pipe(distinctUntilChanged())
-      .subscribe(value => this.onOrganizationChange(value))
+      .subscribe(value => this.onOrganisationChange(value))
     );
     // Changes for endpoint
     this.subscription.add(this.subscriptionForm.get('output.subscriber.endpointId').valueChanges
@@ -303,7 +303,7 @@ export class SubscriptionFormComponent implements OnInit, OnDestroy {
 
     // Perform all transformations here e.g. cast string to number for dropdowns
 
-    /* organizationId, endPointId, channelId
+    /* organisationId, endPointId, channelId
     * By default select returns a string but we need to cast it to a number for back-end
     */
 
@@ -332,7 +332,7 @@ export class SubscriptionFormComponent implements OnInit, OnDestroy {
     this.save.emit(formValues);
   }
 
-  async onOrganizationChange(value) {
+  async onOrganisationChange(value) {
     if (value === 'null' || value === null) {
       this.subscriptionForm.get('output.subscriber.endpointId').disable();
       this.subscriptionForm.get('output.subscriber.endpointId').setValue(null);
@@ -341,7 +341,7 @@ export class SubscriptionFormComponent implements OnInit, OnDestroy {
       return;
     }
     if (value !== 'null') {
-      const { endpoints } = await this.featuresService.getOrganizationDetails(value);
+      const { endpoints } = await this.featuresService.getOrganisationDetails(value);
       this.endpointItems = endpoints;
       if (endpoints && this.endpointItems.length) {
         this.subscriptionForm.get('output.subscriber.endpointId').enable();

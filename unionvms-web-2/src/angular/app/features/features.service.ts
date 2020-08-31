@@ -5,7 +5,7 @@ import { HttpClient } from '@angular/common/http';
 import { Observable, of } from 'rxjs';
 
 import { environment } from '../../environments/environment';
-import { Organization } from './subscriptions/organization.model';
+import { Organisation } from './subscriptions/organisation.model';
 import { SubscriptionFormModel } from './subscriptions/subscription-form.model';
 import { ResponseDto, OrganisationDto } from './features.model';
 import { SubscriptionListResponseDto } from 'app/features/subscriptions/subscription.model';
@@ -19,8 +19,8 @@ export class FeaturesService {
 
   constructor(private http: HttpClient) { }
 
-  getOrganizations(): Promise<any> {
-    return this.http.get<Organization[]>(`${environment.baseURL}${FEATURES_ENDPOINTS.getOrganizations}`).toPromise();
+  getOrganisations(): Promise<any> {
+    return this.http.get<Organisation[]>(`${environment.baseURL}${FEATURES_ENDPOINTS.getOrganisations}`).toPromise();
   }
 
   fetchSubscriptionsList(searchObj): Promise<ResponseDto<SubscriptionListResponseDto>> {
@@ -28,8 +28,8 @@ export class FeaturesService {
     return this.http.post<ResponseDto<SubscriptionListResponseDto>>(`${environment.baseURL}${FEATURES_ENDPOINTS.getSubscriptionsList}`, searchObj).toPromise();
   }
 
-  getOrganizationDetails(organizationId): Promise<Organization> {
-    return this.http.get<Organization>(`${environment.baseURL}${FEATURES_ENDPOINTS.getOrganizationDetails}${organizationId}`).toPromise();
+  getOrganisationDetails(organisationId): Promise<Organisation> {
+    return this.http.get<Organisation>(`${environment.baseURL}${FEATURES_ENDPOINTS.getOrganisationDetails}${organisationId}`).toPromise();
   }
 
   createSubscription(subscription: SubscriptionFormModel): Promise<any> {

@@ -3,7 +3,7 @@ import { NameAndValue } from 'app/shared/name-and-value';
 import { Store } from '@ngrx/store';
 import * as fromRoot from '../../../app.reducer';
 import { Observable, Subscription } from 'rxjs';
-import { Organization } from '../organization.model';
+import { Organisation } from '../organisation.model';
 import { FormGroup, FormBuilder } from '@angular/forms';
 import { EndPoint } from '../endpoint.model';
 import { FeaturesService } from '../../features.service';
@@ -43,8 +43,8 @@ export class ManageSubscriptionsComponent implements OnInit, OnDestroy {
   sizeList;
   initialFormValues;
 
-  organizations$: Observable<Organization[]> = this.store.select(fromRoot.getOrganizations);
-  organizations: Organization[];
+  organisations$: Observable<Organisation[]> = this.store.select(fromRoot.getOrganisations);
+  organisations: Organisation[];
   private subscription: Subscription = new Subscription();
 
   constructor(private store: Store<fromRoot.State>, private featuresService: FeaturesService, private fb: FormBuilder,
@@ -58,7 +58,7 @@ export class ManageSubscriptionsComponent implements OnInit, OnDestroy {
     this.initialFormValues = {
       name: '',
       active: null,
-      organization: null,
+      organisation: null,
       endpoint: null,
       description: '',
       startDate: null,
@@ -72,7 +72,7 @@ export class ManageSubscriptionsComponent implements OnInit, OnDestroy {
   ngOnInit(): void {
     this.initMessageTypeItems();
     this.initTriggerTypeItems();
-    this.subscription.add(this.organizations$.subscribe(organizations => this.organizations = organizations));
+    this.subscription.add(this.organisations$.subscribe(organisations => this.organisations = organisations));
 
     this.initForm();
     this.searchObj = {
@@ -94,7 +94,7 @@ export class ManageSubscriptionsComponent implements OnInit, OnDestroy {
     this.filterSubscriptionsForm = this.fb.group({
       name: [''],
       active: [null],
-      organization: [null],
+      organisation: [null],
       endpoint: [{value: null, disabled: true}],
       description: [''],
       startDate: [null],
@@ -105,8 +105,8 @@ export class ManageSubscriptionsComponent implements OnInit, OnDestroy {
     });
 
 
-    this.subscription.add(this.filterSubscriptionsForm.get('organization').valueChanges.subscribe(value => {
-      this.onOrganizationChange(value);
+    this.subscription.add(this.filterSubscriptionsForm.get('organisation').valueChanges.subscribe(value => {
+      this.onOrganisationChange(value);
     }));
 
     this.subscription.add(this.filterSubscriptionsForm.get('endpoint').valueChanges.subscribe(value => {
@@ -138,8 +138,8 @@ export class ManageSubscriptionsComponent implements OnInit, OnDestroy {
     this.searchObj.pagination.offset = 0;
     const formValues = {...this.filterSubscriptionsForm.getRawValue()};
 
-    const matchArray = ['endpoint', 'organization', 'channel'];
-    // for endpoint, organization, comm. channel if they exist in formValues
+    const matchArray = ['endpoint', 'organisation', 'channel'];
+    // for endpoint, organisation, comm. channel if they exist in formValues
     // cast string to number as select returns a string but back end expects number
     for (const [key, value] of Object.entries(formValues)) {
       if (matchArray.includes(key)) {
@@ -184,7 +184,7 @@ export class ManageSubscriptionsComponent implements OnInit, OnDestroy {
     this.searchObj.criteria.endDate = null;
   }
 
-  async onOrganizationChange(value) {
+  async onOrganisationChange(value) {
     if (value === 'null' || value === null) {
       this.filterSubscriptionsForm.get('endpoint').disable();
       this.filterSubscriptionsForm.get('endpoint').setValue(null);
@@ -193,7 +193,7 @@ export class ManageSubscriptionsComponent implements OnInit, OnDestroy {
       return;
     }
     if (value !== 'null') {
-      const { endpoints } = await this.featuresService.getOrganizationDetails(value);
+      const { endpoints } = await this.featuresService.getOrganisationDetails(value);
       this.endpointItems = endpoints;
       if (endpoints && this.endpointItems.length) {
         this.filterSubscriptionsForm.get('endpoint').enable();

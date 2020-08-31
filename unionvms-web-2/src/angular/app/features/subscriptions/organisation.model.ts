@@ -1,5 +1,5 @@
 import { EndPoint } from './endpoint.model';
-export interface Organization {
+export interface Organisation {
   name: string;
   description: string;
   nation: string;
