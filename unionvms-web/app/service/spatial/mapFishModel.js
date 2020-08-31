@@ -768,7 +768,7 @@ angular.module('unionvmsWeb').factory('MapFish',function() {
             var obj = {
                 type: 'geojson',
                 style: styleFuncs.buildVMSSEG(layer),
-                geojson: getGeoJSON(layer)
+                geojson: getGeoJSON(mapService.getLayerByType('vmsseg'))
             };
 
             if (mapService.vmssegLabels.active){
@@ -848,7 +848,7 @@ angular.module('unionvmsWeb').factory('MapFish',function() {
             	    if (angular.isUndefined(feature.get('reportedCourse'))){
             	        feature.set('reportedCourse', 0);
                     }
-            	    
+
             	    if (mapService.vmsposLabels.active){
             	        if (feature.get('overlayHidden') === false){
             	            var overCoords = mapService.vmsposLabels[feature.get('overlayId')].overlay.getPosition();
@@ -961,7 +961,7 @@ angular.module('unionvmsWeb').factory('MapFish',function() {
         var printLayerSrc = mapService.getLayerByType('print').getSource();
         var src = layer.getSource();
 
-        var features = angular.copy(src.getFeaturesInExtent(printLayerSrc.getExtent()));
+        var features = angular.copy(src.getSource().getFeaturesInExtent(printLayerSrc.getExtent()));
         if (layer.get('type') === 'vmsseg' && mapService.vmssegLabels.active){
             angular.forEach(features, function(feature) {
             	if (feature.get('overlayHidden') === false){
