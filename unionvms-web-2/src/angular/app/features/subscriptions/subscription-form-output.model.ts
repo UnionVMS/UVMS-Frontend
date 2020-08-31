@@ -6,7 +6,7 @@ export interface SubscriptionFormOutput {
   emailConfiguration: SubscriptionEmailConfiguration;
   messageType: string;
   subscriber: {
-      organizationId: number;
+      organisationId: number;
       endpointId: number;
       channelId: number;
   };

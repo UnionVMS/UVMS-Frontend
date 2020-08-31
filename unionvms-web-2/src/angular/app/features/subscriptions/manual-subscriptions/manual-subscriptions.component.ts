@@ -2,7 +2,7 @@ import { Component, OnInit, OnDestroy } from '@angular/core';
 import { FormBuilder, FormGroup, FormArray, FormControl, Validators } from '@angular/forms';
 import { FeaturesService } from '../../features.service';
 import { faCalendar  } from '@fortawesome/free-solid-svg-icons';
-import { Organization } from '../organization.model';
+import { Organisation } from '../organisation.model';
 import { Store } from '@ngrx/store';
 import * as fromRoot from 'app/app.reducer';
 import { Observable, Subscription } from 'rxjs';
@@ -30,8 +30,8 @@ export class ManualSubscriptionsComponent implements OnInit, OnDestroy {
   historyUnits = [];
   numberOfSelectedAssets;
   numberOfSelectedAreas;
-  organizations$: Observable<Organization[]> = this.store.select(fromRoot.getOrganizations);
-  organizations: Organization[];
+  organisations$: Observable<Organisation[]> = this.store.select(fromRoot.getOrganisations);
+  organisations: Organisation[];
   private subscription: Subscription = new Subscription();
   endpointItems: EndPoint[] = [];
   communicationChannels: CommunicationChannel[] = [];
@@ -91,7 +91,7 @@ export class ManualSubscriptionsComponent implements OnInit, OnDestroy {
 
     this.initMessageTypes();
     this.setHistoryUnits();
-    this.subscription.add(this.organizations$.subscribe(organizations => this.organizations = organizations));
+    this.subscription.add(this.organisations$.subscribe(organisations => this.organisations = organisations));
 
     this.vesselIdsList =  ['CFR', 'IRCS', 'ICCAT', 'EXT_MARK', 'UVI'];
     this.selectedItems = ['CFR', 'IRCS', 'ICCAT', 'EXT_MARK', 'UVI'];
@@ -163,7 +163,7 @@ export class ManualSubscriptionsComponent implements OnInit, OnDestroy {
 
     // Perform all transformations here e.g. cast string to number for dropdowns
 
-    /* organizationId, endPointId, channelId
+    /* organisationId, endPointId, channelId
     * By default select returns a string but we need to cast it to a number for back-end
     */
 
@@ -232,11 +232,11 @@ export class ManualSubscriptionsComponent implements OnInit, OnDestroy {
   }
 
   initSubscriptions() {
-    // Changes for organization
+    // Changes for organisation
     this.subscription.add(this.manualSubscriptionForm.get('output.subscriber.organisationId').valueChanges
     .pipe(distinctUntilChanged())
     .subscribe(value => {
-      this.onOrganizationChange(value);
+      this.onOrganisationChange(value);
     }));
     // Changes for endpoint
     this.subscription.add(this.manualSubscriptionForm.get('output.subscriber.endpointId').valueChanges
@@ -245,7 +245,7 @@ export class ManualSubscriptionsComponent implements OnInit, OnDestroy {
     }));
   }
 
-  async onOrganizationChange(value) {
+  async onOrganisationChange(value) {
     if (value === 'null' || value === '') {
       this.manualSubscriptionForm.get('output.subscriber.endpointId').disable();
       this.manualSubscriptionForm.get('output.subscriber.endpointId').setValue('');
@@ -254,7 +254,7 @@ export class ManualSubscriptionsComponent implements OnInit, OnDestroy {
       return;
     }
     if (value !== 'null') {
-      const { endpoints } = await this.featuresService.getOrganizationDetails(value);
+      const { endpoints } = await this.featuresService.getOrganisationDetails(value);
       this.endpointItems = endpoints;
       if (endpoints && this.endpointItems.length) {
         this.manualSubscriptionForm.get('output.subscriber.endpointId').enable();

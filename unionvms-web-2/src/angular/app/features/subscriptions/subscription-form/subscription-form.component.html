@@ -101,11 +101,11 @@
             </div>
             <div formGroupName="subscriber">
               <div class="form-group row">
-                <label for="organizationId" class="col-sm-4 col-form-label-sm" [class.required]="messageType.value !== 'NONE'">Organisation</label>
+                <label for="organisationId" class="col-sm-4 col-form-label-sm" [class.required]="messageType.value !== 'NONE'">Organisation</label>
                 <div class="col-sm-8">
                   <select class="form-control" id="organisationId" formControlName="organisationId">
                     <option value=null>All</option>
-                    <option *ngFor="let item of organizations" value={{item.organisationId}}>
+                    <option *ngFor="let item of organisations" value={{item.organisationId}}>
                       <span *ngIf="item.parent">{{item.parent}}</span> {{item.name}}
                     </option>
                   </select>

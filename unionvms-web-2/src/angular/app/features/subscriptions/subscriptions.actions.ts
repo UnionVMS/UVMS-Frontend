@@ -1,10 +1,10 @@
 import { Action } from '@ngrx/store';
-import { Organization } from './organization.model';
+import { Organisation } from './organisation.model';
 import { Subscription } from './subscription.model';
 import { StatusAction } from './subscriptions.reducer';
 
 
-export const SET_ORGANIZATIONS = '[SUBSCRIPTIONS] Set Organizations';
+export const SET_ORGANISATIONS = '[SUBSCRIPTIONS] Set OrganiSations';
 export const SET_SUBSCRIPTIONS_LIST = '[SUBSCRIPTIONS] Set Subscriptions List';
 export const CLEAR_SUBSCRIPTION_FORM = '[SUBSCRIPTIONS] Clear Subscription Form';
 export const TOGGLE_SUBSCRIPTION_FORM_AREAS = '[SUBSCRIPTIONS] Toggle Subscription Form Areas';
@@ -14,9 +14,9 @@ export const OPEN_TIMED_ALERT = '[SUBSCRIPTIONS] Open Timed Alert';
 
 
 
-export class SetOrganizations implements Action {
-  readonly type = SET_ORGANIZATIONS;
-  constructor(public payload: Organization[]) {
+export class SetOrganisations implements Action {
+  readonly type = SET_ORGANISATIONS;
+  constructor(public payload: Organisation[]) {
   }
 }
 
@@ -48,5 +48,5 @@ export class OpenTimedAlert implements Action {
 }
 
 // create custom type for safety
-export type SUBActions = SetOrganizations | SetSubscriptionsList | ClearSubscriptionForm
+export type SUBActions = SetOrganisations | SetSubscriptionsList | ClearSubscriptionForm
 | ToggleSubscriptionAreasSection | CloseTimedAlert | OpenTimedAlert;

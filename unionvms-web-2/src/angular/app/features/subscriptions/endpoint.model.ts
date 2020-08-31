@@ -7,7 +7,7 @@ export interface EndPoint {
   email: string;
   endpointId: number;
   channelList: CommunicationChannel[];
-  organizationName: string;
+  organisationName: string;
   persons: [];
   uri: string;
 }

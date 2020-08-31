@@ -1,10 +1,10 @@
 <form [formGroup]="filterSubscriptionsForm" (ngSubmit)="onSubmit()">
   <div class="form-row">
     <div class="form-group col-md-4">
-      <label for="organization">Organization</label>
-      <select class="form-control" id="organization" formControlName="organization">
+      <label for="organisation">Organisation</label>
+      <select class="form-control" id="organisation" formControlName="organisation">
         <option value=null>All</option>
-        <option *ngFor="let item of organizations" value={{item.organisationId}}>
+        <option *ngFor="let item of organisations" value={{item.organisationId}}>
           <span *ngIf="item.parent">{{item.parent}}</span> {{item.name}}
         </option>
       </select>
@@ -97,7 +97,7 @@
     (page)="setPage($event)"
     (sort)="onSort($event)"
     #SubscriptionListTable>
-    <ngx-datatable-column name="Organization" [sortable]="true" prop="organisationName">
+    <ngx-datatable-column name="Organisation" [sortable]="true" prop="organisationName">
       <ng-template let-column="column" let-sort="sortFn" ngx-datatable-header-template>
         <span (click)="sort()">{{ column.name }}</span>
       </ng-template>

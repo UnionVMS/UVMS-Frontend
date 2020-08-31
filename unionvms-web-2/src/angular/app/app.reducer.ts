@@ -26,7 +26,7 @@ export const getAuthenticatedUser = createSelector(getAuthState, fromAuth.getAut
 export const getAuthenticatedUserContexts = createSelector(getAuthState, fromAuth.getAuthenticatedUserContexts);
 
 export const getSubState = createFeatureSelector<fromSub.State>('sub');
-export const getOrganizations = createSelector(getSubState, fromSub.getOrganizations);
+export const getOrganisations = createSelector(getSubState, fromSub.getOrganisations);
 export const clearSubscriptionForm = createSelector(getSubState, fromSub.getClearSubscriptionForm);
 export const toggleSubscriptionAreasSection = createSelector(getSubState, fromSub.getToggleSubscriptionAreasSection);
 export const closeTimedAlert = createSelector(getSubState, fromSub.closeTimedAlert);
