@@ -20,5 +20,7 @@ export const FEATURES_ENDPOINTS = {
   getActivitiesMasterData: '/mdr/rest/cl/search',
   createManualSubscription: '/subscription/rest/subscription/create-manual',
   fetchAllSenders: '/user/rest/organisations/withEndPointsAndChannels',
-  fetchDefaultEmailBody: '/subscription/rest/email/defaultBodyTemplate'
+  fetchDefaultEmailBody: '/subscription/rest/email/defaultBodyTemplate',
+  activateSubscription: '/subscription/rest/subscription/activate/',
+  deactivateSubscription: '/subscription/rest/subscription/deactivate/'
 };

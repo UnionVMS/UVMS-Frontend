@@ -29,3 +29,15 @@
 .active-icon-container {
   text-align: center;
 }
+
+.custom-checkbox {
+  left: 35%;
+}
+
+.custom-checkbox .custom-control-input:checked ~ .custom-control-label::before {
+  top: 2px;
+}
+
+.custom-checkbox .custom-control-input:checked ~ .custom-control-label::after {
+  top: 2px;
+}
