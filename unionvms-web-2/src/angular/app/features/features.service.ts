@@ -113,4 +113,12 @@ export class FeaturesService {
   fetchDefaultEmailBody(): Promise<ResponseDto<string>> {
     return this.http.get<ResponseDto<string>>(`${environment.baseURL}${FEATURES_ENDPOINTS.fetchDefaultEmailBody}`).toPromise();
   }
+
+  activateSubscription(id): Promise<ResponseDto<string>> {
+    return this.http.post<ResponseDto<string>>(`${environment.baseURL}${FEATURES_ENDPOINTS.activateSubscription}${id}`, {}).toPromise();
+  }
+
+  deactivateSubscription(id): Promise<ResponseDto<string>> {
+    return this.http.post<ResponseDto<string>>(`${environment.baseURL}${FEATURES_ENDPOINTS.deactivateSubscription}${id}`, {}).toPromise();
+  }
 }

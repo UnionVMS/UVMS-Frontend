@@ -1,3 +1,12 @@
+<p *ngFor="let alert of alerts">
+  <ngb-alert *ngIf="alert.type === 'danger'" [type]="alert.type" (close)="close(alert)">
+    <h5>{{ alert.title }}</h5>
+    <p *ngFor="let item of alert.body">
+      <b>Message :</b>{{item.message}}
+      <span *ngIf="item.path"> <b>Path:</b> {{item.path}}</span>
+    </p>
+  </ngb-alert>
+</p>
 <form [formGroup]="filterSubscriptionsForm" (ngSubmit)="onSubmit()">
   <div class="form-row">
     <div class="form-group col-md-4">
@@ -173,10 +182,10 @@
       <ng-template let-column="column" let-sort="sortFn" ngx-datatable-header-template>
        {{ column.name }}
       </ng-template>
-      <ng-template let-row="row" let-value="value" ngx-datatable-cell-template>
-        <div [ngSwitch]="value" class="active-icon-container">
-          <fa-icon *ngSwitchCase="true" class="active" [icon]="faCheck"></fa-icon>
-          <fa-icon *ngSwitchDefault   class="inactive" [icon]="faTimes"></fa-icon>
+      <ng-template let-rowIndex="rowIndex" let-row="row" let-value="value" ngx-datatable-cell-template>
+        <div class="custom-control custom-checkbox custom-control-inline">
+            <input id="checkbox_{{rowIndex}}" class="custom-control-input" type="checkbox" [checked]="value" (click)="onActiveChange($event, row)">
+            <label for="checkbox_{{rowIndex}}" class="custom-control-label"></label>
         </div>
       </ng-template>
     </ngx-datatable-column>

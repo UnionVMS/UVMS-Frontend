@@ -1,4 +1,4 @@
-import { Component, OnInit, OnDestroy, ViewChild } from '@angular/core';
+import {Component, OnInit, OnDestroy, ViewChild} from '@angular/core';
 import { NameAndValue } from 'app/shared/name-and-value';
 import { Store } from '@ngrx/store';
 import * as fromRoot from '../../../app.reducer';
@@ -24,6 +24,7 @@ import * as moment from 'moment';
 })
 export class ManageSubscriptionsComponent implements OnInit, OnDestroy {
   @ViewChild('SubscriptionListTable') subscriptionListTable: any;
+  alerts;
   messageTypeItems: NameAndValue<string>[];
   triggerTypeItems: NameAndValue<string>[];
   endpointItems: EndPoint[] = [];
@@ -297,5 +298,50 @@ export class ManageSubscriptionsComponent implements OnInit, OnDestroy {
 
   ngOnDestroy() {
     this.subscription.unsubscribe();
+  }
+
+  close(alert) {
+    this.alerts.splice(this.alerts.indexOf(alert), 1);
+  }
+
+  onActiveChange(event, {id}) {
+    event.preventDefault();
+    if(event.target.checked) {
+      this.activateSubscription(event.target, id);
+    } else {
+      this.deactivateSubscription(event.target, id);
+    }
+  }
+
+  async activateSubscription(target, id) {
+    target.disabled = true;
+    try {
+      await this.featuresService.activateSubscription(id);
+      target.checked = true;
+    } catch (err) {
+      this.alerts = [];
+      this.alerts.push({
+        type: 'danger',
+        title: 'Subscription could not be activated',
+        body: err.error.data
+      });
+    }
+    target.disabled = null;
+  }
+
+  async deactivateSubscription(target, id) {
+    target.disabled = true;
+    try {
+      await this.featuresService.deactivateSubscription(id);
+      target.checked = false;
+    } catch (err) {
+      this.alerts = [];
+      this.alerts.push({
+        type: 'danger',
+        title: 'Subscription could not be deactivated',
+        body: err.error.data
+      });
+    }
+    target.disabled = null;
   }
 }
