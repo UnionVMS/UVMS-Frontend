@@ -65,6 +65,11 @@ angular.module('unionvmsWeb').controller('VisibilitysettingsCtrl',function($scop
     		popup: true,
     		label: true
     	},
+        activity: {
+            table: true,
+            popup: true,
+            label: true
+        },
     	segments: {
     		table: true,
     		popup: true,
