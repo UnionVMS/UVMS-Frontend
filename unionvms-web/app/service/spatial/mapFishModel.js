@@ -160,9 +160,15 @@ angular.module('unionvmsWeb').factory('MapFish',function() {
                     }
                 }
             } else {
-                obj = {
-                    title: getSubtitle(styles)
-                };
+                if(type === 'activity'){
+                    obj = {
+                        title: ''
+                    };
+                } else {
+                    obj = {
+                        title: getSubtitle(styles)
+                    };
+                }
 
                 if (type === 'segments'){
                     switch (styles.style.lineStyle) {
@@ -179,6 +185,12 @@ angular.module('unionvmsWeb').factory('MapFish',function() {
                             obj.lineStyle = '0,0';
                             break;
                     }
+                } else if(type === 'activity'){
+                    obj.cluster = {
+                        text: 'Fishing Activity',
+                        bgcolor: '#FFFFFF',
+                        bordercolor: '#078dbe'
+                    };
                 } else {
                     obj.cluster = {
                         text: locale.getString('spatial.print_cluster_legend_title'),
@@ -358,11 +370,17 @@ angular.module('unionvmsWeb').factory('MapFish',function() {
         buildALARMS: function(layer, iconLeg){
             return this.buildVectorLegend(layer, iconLeg, 'alarms');
         },
+        buildERS: function(layer, iconLeg){
+           return this.buildVectorLegend(layer, iconLeg, 'ers');
+        },
         buildVectorLegend: function(layer, iconLeg, type){
             var url = getUrl();
             url += iconLeg.legend.base;
 
             switch (type) {
+                case 'ers':
+                    url += iconLeg.legend.activity;
+                    break;
                 case 'vmspos':
                     url += iconLeg.legend.positions;
                     break;
@@ -435,6 +453,41 @@ angular.module('unionvmsWeb').factory('MapFish',function() {
             };
 
             this.buildVectorStyle(style, styleDef, 'vmspos', iconLeg);
+
+            return style;
+        },
+        buildERS: function(features, iconLeg){
+
+            var style = {
+                version: 2,
+                strokeColor: '#ffffff',
+                strokeWidth: 2,
+                fillColor: '#078dbe',
+                fillOpacity: 0.3,
+                fontWeight: 'BOLD',
+                labelAlign: 'cm',
+                labelXOffset: -1,
+                labelYOffset: -1
+            };
+
+            var name;
+            angular.forEach(features, function(feature) {
+                var radius = 7;
+
+                name = "[";
+                name +="radius = " + radius;
+                name += "]";
+
+                style[name] = {
+                    symbolizers: [{
+                        type: 'point',
+                        pointRadius: radius
+                    },{
+                        type: 'text',
+                        label: '[printLabel]'
+                    }]
+                };
+            });
 
             return style;
         },
@@ -932,6 +985,43 @@ angular.module('unionvmsWeb').factory('MapFish',function() {
 
             return output;
         },
+        buildERS: function(layer, iconLeg){
+
+            var printLayerSrc = mapService.getLayerByType('print').getSource();
+            var src = layer.getSource();
+
+            var features = src.getFeaturesInExtent(printLayerSrc.getExtent());
+            var clusters = [];
+
+            angular.forEach(features, function(entry) {
+                var feature = entry.clone();
+                entry.getGeometry().set('type','Point');
+                var clusterToPrint = new ol.Feature({
+                    geometry: entry.getGeometry()
+                });
+                clusterToPrint.set('radius', 7);
+                clusterToPrint.set('printLabel', '');
+                clusters.push(clusterToPrint);
+
+                if (mapService.ersLabels.active) {
+                    if (feature.get('overlayHidden') === false) {
+                        var overCoords = mapService.ersLabels[feature.get('overlayId')].overlay.getPosition();
+                        feature.set('popupX', overCoords[0]);
+                        feature.set('popupY', overCoords[1]);
+                    }
+                }
+
+            });
+
+
+            var format = new ol.format.GeoJSON();
+            return {
+                    type: 'geojson',
+                    style: styleFuncs.buildERS(clusters, iconLeg),
+                    geojson: format.writeFeaturesObject(clusters)
+                };
+
+        },
         buildGrid: function(){
             var proj = projectionService.getProjectionEpsgById(MapFish.projectionId);
             var obj = {
@@ -1015,8 +1105,8 @@ angular.module('unionvmsWeb').factory('MapFish',function() {
 
         mapLayers.forEach(function(lyr, idx, lyrs){
             var type = lyr.get('type');
-            var supportedTypes = ['OSM', 'vmspos', 'vmsseg', 'alarms', 'WMS', 'OSEA'];
-            var supportedLegTypes = ['WMS', 'vmspos', 'vmsseg', 'alarms'];
+            var supportedTypes = ['OSM', 'vmspos', 'vmsseg', 'alarms', 'WMS', 'OSEA','ers'];
+            var supportedLegTypes = ['WMS', 'vmspos', 'vmsseg', 'alarms','ers'];
             if (angular.isDefined(type) && _.indexOf(supportedTypes, type) !== -1 && lyr.get('visible') === true){
                 var fn = 'build' + type.toUpperCase();
                 var layerObj;
@@ -1027,7 +1117,7 @@ angular.module('unionvmsWeb').factory('MapFish',function() {
                 }
 
                 var legObj;
-                if (_.indexOf(supportedLegTypes, type) !== -1 && (type === 'vmspos' || type === 'vmsseg' || type === 'alarms')){
+                if (_.indexOf(supportedLegTypes, type) !== -1 && (type === 'vmspos' || type === 'vmsseg' || type === 'alarms' || type === 'ers')){
                     legObj = legendFuncs[fn](lyr, iconLeg);
                 } else if (_.indexOf(supportedLegTypes, type) !== -1){
                     legObj = legendFuncs[fn](lyr);
