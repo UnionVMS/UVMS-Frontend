@@ -972,7 +972,12 @@ angular.module('unionvmsWeb').factory('mapService', function(locale, $rootScope,
     ms.styles = {
         positions: undefined,
         segments: undefined,
-        alarms: undefined
+        alarms: undefined,
+        activity: {   strokeColor: '#ffffff',
+                        strokeWidth: 2,
+                        fillColor: '#078dbe',
+                        fillOpacity: 0.3,
+                    }
     };
     
     
@@ -1644,6 +1649,15 @@ angular.module('unionvmsWeb').factory('mapService', function(locale, $rootScope,
         
         return [style];
     };
+
+    ms.setActivityStylesObj = function(styles){
+        ms.styles.activities = {
+            strokeColor: '#ffffff',
+            strokeWidth: 2,
+            fillColor: '#078dbe',
+            fillOpacity: 0.3,
+        };
+    };
     
     /**
      * Set the style for the fishing activities layer
@@ -1696,7 +1710,7 @@ angular.module('unionvmsWeb').factory('mapService', function(locale, $rootScope,
      * @alias clearVectorLayers
      */
 	ms.clearVectorLayers = function(){
-	    var layers = [ms.getLayerByType('highlight'), ms.getLayerByType('vmspos'), ms.getLayerByType('vmsseg'), ms.getLayerByType('alarms')];
+	    var layers = [ms.getLayerByType('highlight'), ms.getLayerByType('vmspos'), ms.getLayerByType('vmsseg'), ms.getLayerByType('alarms'),ms.getLayerByType('ers')];
         for (var i = 0; i < layers.length; i++){
             if (angular.isDefined(layers[i])){
                 ms.map.removeLayer(layers[i]);
