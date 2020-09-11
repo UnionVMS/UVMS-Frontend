@@ -482,6 +482,7 @@ angular.module('unionvmsWeb').factory('reportService',function($rootScope, $comp
     var getVmsDataError = function(error){
         rep.loadReportHistory();
         rep.positions = [];
+        rep.activities = [];
         rep.segments = [];
         rep.tracks = [];
         rep.isReportExecuting = false;
@@ -500,6 +501,7 @@ angular.module('unionvmsWeb').factory('reportService',function($rootScope, $comp
         rep.positions = data.movements.features;
         rep.segments = data.segments.features;
         rep.tracks = data.tracks;
+        rep.activities = data.activities.features;
         //TODO activities
         
         //Remove existing vms vector layers from the map
@@ -532,6 +534,7 @@ angular.module('unionvmsWeb').factory('reportService',function($rootScope, $comp
         rep.positions = [];
         rep.segments = [];
         rep.tracks = [];
+        rep.activities = [];
         //TODO activities
         
         mapService.resetLabelContainers();
@@ -621,6 +624,7 @@ angular.module('unionvmsWeb').factory('reportService',function($rootScope, $comp
 	    mapService.setPositionStylesObj(data.vectorStyles.positions); 
 	    mapService.setSegmentStylesObj(data.vectorStyles.segments);
 	    mapService.setAlarmsStylesObj(data.vectorStyles.alarms);
+        // mapService.setActivityStylesObj(data.vectorStyles.activities); Uncomment when activity settings are added in spatial
 	    
 	    //Set vms table attribute visibility
 	    visibilityService.setVisibility(data.visibilitySettings);

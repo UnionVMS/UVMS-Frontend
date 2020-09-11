@@ -282,6 +282,7 @@ angular.module('unionvmsWeb').controller('MapCtrl',function($log, $scope, locale
 		        var payload = new MapFishPayload();
 
 		        var positions = payload.getIconPayload('positions');
+                var activities = payload.getIconPayload('activity');
 		        var segments = payload.getIconPayload('segments');
 		        var alarms = payload.getIconPayload('alarms');
 
@@ -291,6 +292,10 @@ angular.module('unionvmsWeb').controller('MapCtrl',function($log, $scope, locale
 		        if (angular.isDefined(positions) && angular.isDefined(mapService.getLayerByType('vmspos')) && mapService.getLayerByType('vmspos').get('visible')){
 		            iconPayload.positions = positions;
 		        }
+
+                if (angular.isDefined(activities) && angular.isDefined(mapService.getLayerByType('ers')) && mapService.getLayerByType('ers').get('visible')){
+                    iconPayload.activities = activities;
+                }
 
 		        if (angular.isDefined(segments) && angular.isDefined(mapService.getLayerByType('vmsseg')) && mapService.getLayerByType('vmsseg').get('visible')){
                     iconPayload.segments = segments;
