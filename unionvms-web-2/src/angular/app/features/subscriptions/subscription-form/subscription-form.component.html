@@ -8,7 +8,7 @@
   <ngb-alert *ngIf=" alert.type === 'success' && !timedAlertClosed" [type]="alert.type" (close)="timedAlertClosed = true" >
     <h5>{{ alert.title }}</h5>
     <p *ngFor="let item of alert.body">
-      <b>Message :</b>{{item.message}}
+      <b>Message: </b>{{item.message}}
       <span *ngIf="item.path"> <b>Path:</b> {{item.path}}</span>
     </p>
   </ngb-alert>
