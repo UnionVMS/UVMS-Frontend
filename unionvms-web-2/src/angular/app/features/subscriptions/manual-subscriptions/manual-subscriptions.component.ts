@@ -191,7 +191,7 @@ export class ManualSubscriptionsComponent implements OnInit, OnDestroy {
         type: 'success',
         title: 'Success',
         body: [{
-            message: 'Subscription Successfully saved!'
+            message: 'Query successfully registered for transmission!'
         }]
       });
 
