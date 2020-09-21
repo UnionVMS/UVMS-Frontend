@@ -3375,6 +3375,28 @@ angular.module('unionvmsWeb').factory('mapService', function(locale, $rootScope,
                 source: 'source'
             };
         }
+        if (type === 'ers'){
+            return {
+                name: 'name',
+                fs: 'flagState',
+                ext_mark: 'EXT_MARK',
+                ircs: 'IRCS',
+                cfr: 'CFR',
+                gfcm: 'GFCM',
+                date: 'acceptedDateTime',
+                iccat: 'ICCAT',
+                uvi: 'UVI',
+                source: 'dataSource',
+                activityType: 'activityType',
+                reportType: 'reportType',
+                purposeCode: 'purposeCode',
+                occurrence: 'acceptedDateTime',
+                areas: 'areas',
+                gears: 'gears',
+                species: 'species',
+                asset:'name'
+            };
+        }
         
         if (type === 'vmsseg'){
             return {
