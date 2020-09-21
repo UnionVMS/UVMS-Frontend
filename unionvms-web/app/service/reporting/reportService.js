@@ -211,6 +211,7 @@ angular.module('unionvmsWeb').factory('reportService',function($rootScope, $comp
         if (mapService.vmssegLabels.active === true){
             mapService.deactivateVectorLabels('vmsseg');
         }
+
         mapService.resetLabelContainers();
         
         //Deactivate popups
