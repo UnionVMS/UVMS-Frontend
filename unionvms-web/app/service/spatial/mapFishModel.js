@@ -491,6 +491,14 @@ angular.module('unionvmsWeb').factory('MapFish',function() {
 
             return style;
         },
+        buildERSPOS: function(features, iconLeg){
+
+            var style = {
+
+            };
+
+            return style;
+        },
         buildALARMS: function(layer){
             var styleDef = mapService.styles.alarms;
 
@@ -989,37 +997,104 @@ angular.module('unionvmsWeb').factory('MapFish',function() {
 
             var printLayerSrc = mapService.getLayerByType('print').getSource();
             var src = layer.getSource();
-
+            var singleFeatures = [];
             var features = src.getFeaturesInExtent(printLayerSrc.getExtent());
             var clusters = [];
 
+            var format = new ol.format.GeoJSON();
+
             angular.forEach(features, function(entry) {
-                var feature = entry.clone();
-                entry.getGeometry().set('type','Point');
-                var clusterToPrint = new ol.Feature({
-                    geometry: entry.getGeometry()
-                });
-                clusterToPrint.set('radius', 7);
-                clusterToPrint.set('printLabel', '');
-                clusters.push(clusterToPrint);
 
                 if (mapService.ersLabels.active) {
+                    var feature = entry.clone();
                     if (feature.get('overlayHidden') === false) {
                         var overCoords = mapService.ersLabels[feature.get('overlayId')].overlay.getPosition();
                         feature.set('popupX', overCoords[0]);
                         feature.set('popupY', overCoords[1]);
-                    }
-                }
 
+                        var srcCoords = feature.getGeometry().getCoordinates();
+                        var proj = mapService.getMapProjectionCode();
+                        if (proj !== 'EPSG:4326'){
+                            srcCoords = ol.proj.toLonLat(srcCoords, proj);
+                        }
+
+                        feature.set('disp_lon', coordinateFormatService.formatAccordingToUserSettings(srcCoords[0]));
+                        feature.set('disp_lat', coordinateFormatService.formatAccordingToUserSettings(srcCoords[1]));
+                        feature.set('positionTime', unitConversionService.date.convertToUserFormat(feature.get('positionTime')));
+                        feature.set('reportedSpeed', unitConversionService.speed.formatSpeed(feature.get('reportedSpeed'), 5));
+                        feature.set('calculatedSpeed', unitConversionService.speed.formatSpeed(feature.get('calculatedSpeed'), 5));
+
+                    }
+                    singleFeatures.push(feature);
+                } else {
+                    entry.getGeometry().set('type','Point');
+                    var clusterToPrint = new ol.Feature({
+                        geometry: entry.getGeometry()
+                    });
+                    clusterToPrint.set('radius', 7);
+                    clusterToPrint.set('printLabel', '');
+                    clusters.push(clusterToPrint);
+                }
             });
 
+            var output = {};
+            if (singleFeatures.length > 0) {
+                output.singleFeatures = {
+                    type: 'geojson',
+                    style: styleFuncs.buildERSPOS(singleFeatures, iconLeg),
+                    geojson: format.writeFeaturesObject(singleFeatures)
+                };
 
-            var format = new ol.format.GeoJSON();
-            return {
+                var dataFields = [];
+                var fields = mapService.labelVisibility.activities;
+                var mappings = mapService.getMappingTitlesProperties('ers');
+                var titles = mapService.getActivityTitles();
+
+                if (fields.length > 0) {
+                    angular.forEach(fields, function (item) {
+                        var def = {
+                            displayName: titles[item]
+                        };
+
+                        if (item === 'lon') {
+                            def.propName = 'disp_lon';
+                        } else if (item === 'lat') {
+                            def.propName = 'disp_lat';
+                        } else {
+                            def.propName = mappings[item];
+                        }
+
+                        if (!_.isEqual(def, {})) {
+                            dataFields.push(def);
+                        }
+                    });
+
+                    var labelEl = $('.vector-label-ers').first();
+                    output.singleFeatures.popupProperties = {
+                        showAttrNames: mapService.labelVisibility.activitiesTitles,
+                        dataFields: dataFields,
+                        popupStyle: {
+                            width: parseInt(labelEl.css('width')),
+                            radius: parseInt(labelEl.css('border-radius')),
+                            border: {
+                                color: rgbToHex(labelEl.css('border-left-color')),
+                                width: parseInt(labelEl.css('border-left-width'))
+                            }
+                        }
+                    };
+                   return output.singleFeatures;
+                }
+            }
+
+            if (clusters.length > 0){
+                output  = {
                     type: 'geojson',
                     style: styleFuncs.buildERS(clusters, iconLeg),
                     geojson: format.writeFeaturesObject(clusters)
                 };
+                return  output;
+            }
+
 
         },
         buildGrid: function(){
