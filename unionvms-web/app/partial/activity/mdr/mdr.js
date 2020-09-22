@@ -58,7 +58,7 @@ angular.module('unionvmsWeb').controller('MdrCtrl',function($scope, mdrRestServi
      * @property {Boolean} tableLoading is a flag defining whether we need to show the loading icon.
      */
     $scope.tableLoading = true;
-    
+
     /**
      * @property {Boolean} selectedAll is a flag defining whether all mdr code lists have been selected or not
      */
@@ -68,6 +68,15 @@ angular.module('unionvmsWeb').controller('MdrCtrl',function($scope, mdrRestServi
      * @property {Number} numValidityColumns number of validity columns
      */
     $scope.numValidityColumns = 0;
+
+    /**
+     * @property {Object} holding the information of the webservice configuration, used to synchronise mdr
+     */
+    $scope.webserviceConfig = {
+        'wsdlLocation' : '',
+        'webserviceName' : '',
+        'webserviceNamespace' : ''
+    };
 
 
     /**
@@ -80,6 +89,7 @@ angular.module('unionvmsWeb').controller('MdrCtrl',function($scope, mdrRestServi
 	$scope.init = function() {
 	    if ($scope.isAllowed('CONFIGURE_MDR_SCHEDULER')) {
             mdrRestService.getCronJobExpression().then(getCronJobExpressionSuccess, getCronJobExpressionFailed);
+            mdrRestService.getWebserviceConfiguration().then(getWebserviceConfigurationSuccess, getWebserviceConfigurationFailed);
         }
 
 	    if ($scope.isAllowed('LIST_MDR_CODE_LISTS')) {
@@ -101,6 +111,13 @@ angular.module('unionvmsWeb').controller('MdrCtrl',function($scope, mdrRestServi
             mdrRestService.updateCronJobExpression($scope.configModel.cronJobExpression).then(saveSuccess, saveFailure);
 		}
 	};
+
+	$scope.saveWebserviceConfig = function() {
+	    if(angular.isDefined($scope.webserviceConfig.wsdlLocation) && angular.isDefined($scope.webserviceConfig.webserviceName) && angular.isDefined($scope.webserviceConfig.webserviceNamespace)) {
+            loadingStatus.isLoading('MdrSettings',true, 2);
+            mdrRestService.updateWebserviceConfiguration($scope.webserviceConfig).then(saveWebserviceConfigSuccess, saveWebserviceConfigFailure);
+        }
+    };
 
     /**
      * method that sends a MDR update request with a list of selected acronyms and on success response, it updates the MDR code lists table.
@@ -258,6 +275,16 @@ angular.module('unionvmsWeb').controller('MdrCtrl',function($scope, mdrRestServi
         alertService.showErrorMessageWithTimeout(locale.getString('activity.mdr_cron_load_failed'));
     };
 
+    var getWebserviceConfigurationSuccess = function(response) {
+        $scope.webserviceConfig.wsdlLocation = response.wsdlLocation;
+        $scope.webserviceConfig.webserviceName = response.webserviceName;
+        $scope.webserviceConfig.webserviceNamespace = response .webserviceNamespace;
+    };
+
+    var getWebserviceConfigurationFailed = function(error) {
+        alertService.showErrorMessageWithTimeout(locale.getString('activity.mdr_webservice_config_load_failed'));
+    };
+
 	var saveSuccess = function(response){
 	    loadingStatus.isLoading('MdrSettings',false);
 	    alertService.showSuccessMessageWithTimeout(locale.getString('activity.mdr_cron_save_success'));
@@ -267,6 +294,16 @@ angular.module('unionvmsWeb').controller('MdrCtrl',function($scope, mdrRestServi
 	var saveFailure = function(error){
 	    loadingStatus.isLoading('MdrSettings',false);
 	    alertService.showErrorMessageWithTimeout(locale.getString('activity.mdr_cron_save_failed'));
+	};
+
+	var saveWebserviceConfigSuccess = function(response){
+	    loadingStatus.isLoading('MdrSettings',false);
+	    alertService.showSuccessMessageWithTimeout(locale.getString('activity.mdr_webservice_config_save_success'));
+	};
+
+	var saveWebserviceConfigFailure = function(error){
+	    loadingStatus.isLoading('MdrSettings',false);
+	    alertService.showErrorMessageWithTimeout(locale.getString('activity.mdr_webservice_config_save_failed'));
 	};
 
 
@@ -350,7 +387,7 @@ angular.module('unionvmsWeb').controller('MdrCtrl',function($scope, mdrRestServi
             if($scope.hasStartValidity){
                 $scope.numValidityColumns++;
             }
-            
+
             if($scope.hasEndValidity){
                 $scope.numValidityColumns++;
             }
