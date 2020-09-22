@@ -19,14 +19,14 @@ copy of the GNU General Public License along with the IFDM Suite. If not, see <h
  */
 angular.module('unionvmsWeb').factory('mdrRestFactory',function($resource) {
   return {
-          getCronJobExpression: function(){
+            getCronJobExpression: function(){
               return $resource('mdr/rest/service/scheduler/config', {}, {
                   'get': {
                       method: 'GET'
                   }
               });
-          },
-          updateCronJobExpression: function(){
+            },
+            updateCronJobExpression: function(){
               return $resource('mdr/rest/service/scheduler/config/update', {}, {
                   'save': {
                       method: 'PUT',
@@ -35,15 +35,15 @@ angular.module('unionvmsWeb').factory('mdrRestFactory',function($resource) {
                       }
                   }
               });
-          },
-          getAcronymsDetails: function() {
+            },
+            getAcronymsDetails: function() {
             return $resource('mdr/rest/service/acronyms/details', {}, {
                   'get': {
                       method: 'GET'
                   }
               });
-          },
-          getMDRCodeList: function() {
+            },
+            getMDRCodeList: function() {
             //the URL should be /activity/rest/acronyms/details
             //return $resource('service/activity/codeList.json');
             return $resource('mdr/rest/cl/search' , {}, {
@@ -54,8 +54,8 @@ angular.module('unionvmsWeb').factory('mdrRestFactory',function($resource) {
                     'Content-Type': 'application/json'
                 }
             });
-          },
-          syncNow: function(){
+            },
+            syncNow: function(){
             return $resource('mdr/rest/service/sync/list', {}, {
                 'update': {
                     method: 'POST',
@@ -64,15 +64,15 @@ angular.module('unionvmsWeb').factory('mdrRestFactory',function($resource) {
                     }
                 }
             });
-           },
-          syncAllNow: function(){
+            },
+            syncAllNow: function(){
             return $resource('mdr/rest/service/sync/all', {}, {
                 'get': {
                     method: 'GET'
                 }
             });
-          },
-          enableDisableScheduledUpdate: function() {
+            },
+            enableDisableScheduledUpdate: function() {
                return $resource('mdr/rest/service/status/schedulable/update/:acronym/:schedulable', {
                      acronym: '@acronymID',
                      schedulable: '@schedulableFlag'
@@ -81,7 +81,22 @@ angular.module('unionvmsWeb').factory('mdrRestFactory',function($resource) {
                         method:'PUT'
                     }
                });
-          }/*,
+            },
+            getWebserviceConfiguration: function () {
+                return $resource('mdr/rest/service/webservice/config', {}, {
+                    'get': {
+                        method: 'GET'
+                    }
+                });
+            },
+            updateWebserviceConfiguration: function () {
+                return $resource('mdr/rest/service/webservice/config', {}, {
+                    update: {
+                        method: 'PUT'
+                    }
+                });
+            }
+      /*,
           getCodeList: function(){
               return $resource('mock/mdr/cl/:acronym', {
                   acronym: '@acronym'
@@ -101,7 +116,7 @@ angular.module('unionvmsWeb').factory('mdrRestFactory',function($resource) {
    * @ngdoc service
    * @name mdrRestService
    * @param $q {service} angular $q service
-   * @param mdrRestFactory {service} The REST factory for the Master Data Registry(MDR) <p>{@link unionvmsWeb.mdrRestFactory}</p> 
+   * @param mdrRestFactory {service} The REST factory for the Master Data Registry(MDR) <p>{@link unionvmsWeb.mdrRestFactory}</p>
    * @description
    *  REST services for the Master Data Registry(MDR)
    */
@@ -110,7 +125,7 @@ angular.module('unionvmsWeb').factory('mdrRestFactory',function($resource) {
   	var mdrRestService = {
         /**
          * Get the current cronJob expression
-         * 
+         *
          * @memberof mdrRestService
          * @public
          * @returns {Promise} A promise with either the current cronJob expression or reject error
@@ -127,7 +142,7 @@ angular.module('unionvmsWeb').factory('mdrRestFactory',function($resource) {
   	    },
         /**
          * Save the current cronJob expression
-         * 
+         *
          * @memberof mdrRestService
          * @public
          * @returns {Promise} A promise with either the success code or reject error
@@ -144,7 +159,7 @@ angular.module('unionvmsWeb').factory('mdrRestFactory',function($resource) {
   	    },
         /**
          * Save the current cronJob expression
-         * 
+         *
          * @memberof mdrRestService
          * @public
          * @returns {Promise} A promise with either the MDR code list or reject error
@@ -267,7 +282,44 @@ angular.module('unionvmsWeb').factory('mdrRestFactory',function($resource) {
                      deferred.reject(error);
                 });
           return deferred.promise;
-        }/*,
+        },
+        /**
+         * Used to get webservice configuration data, for mdr synchronisation.
+         *
+         * @memberof mdrRestService
+         * @returns {*} {Promise} containing either the success code and data or the reject error
+         */
+        getWebserviceConfiguration: function() {
+            var deferred = $q.defer();
+            mdrRestFactory.getWebserviceConfiguration().get(function(response){
+                    deferred.resolve(response.data);
+                },
+                function(error) {
+                    console.error('Error getting webservice configuration');
+                    deferred.reject(error);
+                });
+            return deferred.promise;
+        },
+        /**
+         * Used to update webservice configuration data.
+         *
+         * @memberof mdrRestService
+         * @param {Object} webserviceConfig - object holding the webservice configuration data
+         * @returns {*} {Promise} containing either the success code or the reject error
+         */
+        updateWebserviceConfiguration: function(webserviceConfig) {
+            var deferred = $q.defer();
+            mdrRestFactory.updateWebserviceConfiguration().update(webserviceConfig,
+                function(response){
+                    deferred.resolve(response.data);
+                },
+                function(error) {
+                    console.error('Error updating webservice configuration: ' + webserviceConfig);
+                    deferred.reject(error);
+                });
+            return deferred.promise;
+        }
+        /*,
         getCodeList: function(acronym){
             var deferred = $q.defer();
             //TODO the payload for pagination
