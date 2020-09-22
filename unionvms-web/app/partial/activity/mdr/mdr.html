@@ -33,10 +33,34 @@ copy of the GNU General Public License along with the IFDM Suite. If not, see <h
                     <button class="btn btn-primary button btn-action" type="button" ng-click="mdrConfigurationForm.$pristine || saveCron()">{{"activity.cron_save_btn" | i18n }}</button>
                 </div>
             </div>
-            
+
         </fieldset>
     </ng-form>
 
+    <fieldset class="fieldsetStyle col-md-12 code-list-status-container" ng-show="isAllowed('CONFIGURE_MDR_SCHEDULER')">
+        <legend class="fieldsetLegendStyle">
+            <a data-toggle="collapse" >{{'activity.webservice_config_fieldset_label' | i18n }}</a>
+        </legend>
+        <div class="form-group row">
+            <div class="col-md-4">
+                <label for="wsdlLocation">Wsdl location:</label>
+                <input type="text" id="wsdlLocation" name="wsdlLocation" ng-model="webserviceConfig.wsdlLocation">
+            </div>
+            <div class="col-md-4">
+                <label for="webserviceName">Web service name:</label>
+                <input type="text" id="webserviceName" name="webserviceName" ng-model="webserviceConfig.webserviceName">
+            </div>
+            <div class="col-md-4">
+                <label for="webserviceNamespace">Web service namespace:</label>
+                <input type="text" id="webserviceNamespace" name="webserviceNamespace" ng-model="webserviceConfig.webserviceNamespace">
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-md-12 form-group btn-container">
+                <button class="btn btn-primary button btn-action" type="button" ng-click="saveWebserviceConfig()">{{"activity.cron_save_btn" | i18n }}</button>
+            </div>
+        </div>
+    </fieldset>
 
     <!--SMART TABLE containing all the MDR code lists-->
     <fieldset class="fieldsetStyle col-md-12 code-list-status-container" ng-show="isAllowed('LIST_MDR_CODE_LISTS')">
