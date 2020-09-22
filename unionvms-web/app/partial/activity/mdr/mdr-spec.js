@@ -17,8 +17,8 @@ describe('MdrCtrl', function() {
 
     beforeEach(function(){
         userServSpy = jasmine.createSpyObj('userService', ['isAllowed','getRoleName','getScopeName']);
-        mdrRestServSpy = jasmine.createSpyObj('mdrRestService', ['getCronJobExpression','getAcronymsDetails','updateCronJobExpression','syncNow','syncAllNow','enableDisableScheduledUpdate']);
-        
+        mdrRestServSpy = jasmine.createSpyObj('mdrRestService', ['getWebserviceConfiguration','getCronJobExpression','getAcronymsDetails','updateCronJobExpression','syncNow','syncAllNow','enableDisableScheduledUpdate']);
+
         module(function($provide){
             $provide.value('userService', userServSpy);
             $provide.value('mdrRestService', mdrRestServSpy);
@@ -194,6 +194,18 @@ describe('MdrCtrl', function() {
           return true;
         });
 
+        mdrRestServSpy.getWebserviceConfiguration.andCallFake(function(){
+          return {
+              then: function(callback){
+                  return callback({
+                    wsdlLocation: '',
+                    webserviceName: '',
+                    webserviceNamespace: ''
+                  });
+              }
+          };
+        });
+
         mdrRestServSpy.getCronJobExpression.andCallFake(function(){
           return {
               then: function(callback){
@@ -233,7 +245,7 @@ describe('MdrCtrl', function() {
               }
           };
         });
-        
+
         mdrRestServSpy.enableDisableScheduledUpdate.andCallFake(function(){
           return {
               then: function(callback){
@@ -241,7 +253,7 @@ describe('MdrCtrl', function() {
               }
           };
         });
-        
+
     }
 
     it('should not load if not allowed', inject(function($rootScope,$controller) {
@@ -291,7 +303,7 @@ describe('MdrCtrl', function() {
         it('should synchronize selected mdr codes', inject(function() {
             angular.copy(getMDRCodeListsWithSelected(),scope.mdrCodeLists);
             scope.displayedMDRLists = [].concat(scope.mdrCodeLists);
-            
+
             scope.$digest();
 
             scope.updateNow();
@@ -324,7 +336,7 @@ describe('MdrCtrl', function() {
                 item.isSelected = true;
                 scope.enableDisableSynchButton();
             });
-            
+
             expect(scope.selectedAll).toBe(true);
 
             scope.selectedAll = false;
