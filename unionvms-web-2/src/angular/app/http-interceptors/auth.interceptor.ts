@@ -16,8 +16,10 @@ export class AuthInterceptor implements HttpInterceptor {
     return next.handle(authReq).pipe(
       tap((event: HttpEvent<any>) => {
           if (event instanceof HttpResponse) {
-            // read header from response
-            localStorage.setItem('token', event.headers.get('Authorization'));
+            const authorizationHeader = event.headers.get('Authorization');
+            if (authorizationHeader) {
+              localStorage.setItem('token', authorizationHeader);
+            }
           }
         }, (err: any) => {
           if (err instanceof HttpErrorResponse) {
