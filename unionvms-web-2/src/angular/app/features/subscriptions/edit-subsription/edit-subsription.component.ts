@@ -72,7 +72,6 @@ export class EditSubsriptionComponent implements OnInit, AfterViewInit {
     }
 
     // Assets
-
     if (this.currentSubscription.assets.length) {
       const assetsFormArray = this.subscriptionFormComponent.subscriptionForm.get('assets') as FormArray;
 
@@ -80,7 +79,6 @@ export class EditSubsriptionComponent implements OnInit, AfterViewInit {
       tempAssets.forEach(item => {
         assetsFormArray.push(new FormControl(item));
       });
-
     }
 
     // Work with emails formArray
@@ -105,6 +103,10 @@ export class EditSubsriptionComponent implements OnInit, AfterViewInit {
         startActivitiesFormArray.push(new FormControl(item));
       });
     }
+
+
+    // The following line is a patch for UNIONVMS-4832; do not alter without testing for regression!
+    this.subscriptionFormComponent.subscriptionForm.get('output.logbook').setValue(!!this.currentSubscription.output.logbook);
 
     this.subscriptionFormComponent.subscriptionForm.patchValue(this.currentSubscription);
     // bind dates
@@ -177,7 +179,6 @@ export class EditSubsriptionComponent implements OnInit, AfterViewInit {
         title: 'Subscription could not be updated',
         body: err.error.data
       });
-
     }
   }
 
@@ -185,7 +186,7 @@ export class EditSubsriptionComponent implements OnInit, AfterViewInit {
     const modalRef = this.modalService.open(ConfirmModalComponent);
     modalRef.componentInstance.name = this.currentSubscription.name;
     modalRef.result.then(res => {
-      if (res === "OK") {
+      if (res === 'OK') {
         this.featuresService.deleteSubscription(this.currentSubscriptionId).subscribe(
           data => {
             if (data.code === 200) {
@@ -205,7 +206,7 @@ export class EditSubsriptionComponent implements OnInit, AfterViewInit {
       const { data } = result;
       if (!data) {
         // tslint:disable-next-line: no-string-literal
-        this.subscriptionFormComponent.subscriptionForm.controls['name'].setErrors({ 'incorrect': true});
+        this.subscriptionFormComponent.subscriptionForm.controls['name'].setErrors({ incorrect: true});
       }
     } catch (err) {
     }

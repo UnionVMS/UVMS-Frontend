@@ -252,7 +252,7 @@ export class SubscriptionFormComponent implements OnInit, OnDestroy {
     return this.subscriptionForm.get('startActivities') as FormArray;
   }
 
-  initSubscriptions() {
+  private initSubscriptions() {
     // Changes for organisation
     this.subscription.add(this.subscriptionForm.get('output.subscriber.organisationId').valueChanges
       .pipe(distinctUntilChanged())
