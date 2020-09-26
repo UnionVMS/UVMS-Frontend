@@ -51,83 +51,90 @@ export class EditSubsriptionComponent implements OnInit, AfterViewInit {
   }
 
   async ngAfterViewInit() {
-    const result = await this.featuresService.getSubscriptionDetails(this.currentSubscriptionId);
-    this.currentSubscription = result.data;
-    // Areas
-    if (this.currentSubscription.areas.length) {
-      const areaProperties = await this.getAreaProperties(result.data.areas);
+    try {
+      const result = await this.featuresService.getSubscriptionDetails(this.currentSubscriptionId);
+      this.currentSubscription = result.data;
+      // Areas
+      if (this.currentSubscription.areas.length) {
+        const areaProperties = await this.getAreaProperties(result.data.areas);
 
-      const temp = [...this.currentSubscription.areas];
+        const temp = [...this.currentSubscription.areas];
 
-      temp.forEach(item => {
-        const match = areaProperties.find(element => element.gid === item.gid && element.areaType === item.areaType);
-        item.name = match.name;
+        temp.forEach(item => {
+          const match = areaProperties.find(element => element.gid === item.gid && element.areaType === item.areaType);
+          item.name = match.name;
+        });
+
+        const areasFormArray = this.subscriptionFormComponent.subscriptionForm.get('areas') as FormArray;
+
+        temp.forEach(item => {
+          areasFormArray.push(new FormControl(item));
+        });
+      }
+
+      // Assets
+      if (this.currentSubscription.assets.length) {
+        const assetsFormArray = this.subscriptionFormComponent.subscriptionForm.get('assets') as FormArray;
+
+        const tempAssets = [...this.currentSubscription.assets];
+        tempAssets.forEach(item => {
+          assetsFormArray.push(new FormControl(item));
+        });
+      }
+
+      // Work with emails formArray
+      const emailFormArray = this.subscriptionFormComponent.subscriptionForm.get('output.emails') as FormArray;
+      this.currentSubscription.output.emails.forEach(item => {
+        emailFormArray.push(new FormControl(item));
       });
 
-      const areasFormArray = this.subscriptionFormComponent.subscriptionForm.get('areas') as FormArray;
+      // Stop Activities
+      if (this.currentSubscription.stopActivities.length) {
+        const stopActivitiesFormArray = this.subscriptionFormComponent.subscriptionForm.get('stopActivities') as FormArray;
+        const stopActivitiesTemp = this.currentSubscription.stopActivities;
+        stopActivitiesTemp.forEach(item => {
+            stopActivitiesFormArray.push(new FormControl(item));
+        });
+      }
+      // Start Activities
+      if (this.currentSubscription.startActivities.length) {
+        const startActivitiesFormArray = this.subscriptionFormComponent.subscriptionForm.get('startActivities') as FormArray;
+        const startActivitiesTemp = this.currentSubscription.startActivities;
+        startActivitiesTemp.forEach(item => {
+          startActivitiesFormArray.push(new FormControl(item));
+        });
+      }
 
-      temp.forEach(item => {
-        areasFormArray.push(new FormControl(item));
-      });
+      // The following line is a patch for UNIONVMS-4832; do not alter without testing for regression!
+      this.subscriptionFormComponent.subscriptionForm.get('output.logbook').setValue(!!this.currentSubscription.output.logbook);
+
+      this.subscriptionFormComponent.subscriptionForm.patchValue(this.currentSubscription);
+      // bind dates
+      const rawStartDateTime = this.currentSubscription.startDate;
+      const rawEndDateTime = this.currentSubscription.endDate;
+      if (rawStartDateTime) {
+        const startDate = rawStartDateTime.split('T');
+        const tempStartDate = startDate[0].split('-').reverse().join('-');
+        this.subscriptionFormComponent.subscriptionForm.get('startDate').setValue(tempStartDate);
+      }
+
+      if (rawEndDateTime) {
+        const endDate = rawEndDateTime.split('T');
+        const tempEndDate = endDate[0].split('-').reverse().join('-');
+        this.subscriptionFormComponent.subscriptionForm.get('endDate').setValue(tempEndDate);
+      }
+
+      const vesselIds = this.currentSubscription.output.vesselIds;
+      this.subscriptionFormComponent.subscriptionForm.get('output.vesselIds').setValue(vesselIds);
+
+      this.subscriptionFormComponent.subscriptionForm.updateValueAndValidity();
+    } catch(e) {
+      if (e.status === 404) {
+        this.router.navigate(['subscriptions/not-found/' + this.currentSubscriptionId]);
+      } else {
+        throw e;
+      }
     }
-
-    // Assets
-    if (this.currentSubscription.assets.length) {
-      const assetsFormArray = this.subscriptionFormComponent.subscriptionForm.get('assets') as FormArray;
-
-      const tempAssets = [...this.currentSubscription.assets];
-      tempAssets.forEach(item => {
-        assetsFormArray.push(new FormControl(item));
-      });
-    }
-
-    // Work with emails formArray
-    const emailFormArray = this.subscriptionFormComponent.subscriptionForm.get('output.emails') as FormArray;
-    this.currentSubscription.output.emails.forEach(item => {
-      emailFormArray.push(new FormControl(item));
-    });
-
-    // Stop Activities
-    if (this.currentSubscription.stopActivities.length) {
-      const stopActivitiesFormArray = this.subscriptionFormComponent.subscriptionForm.get('stopActivities') as FormArray;
-      const stopActivitiesTemp = this.currentSubscription.stopActivities;
-      stopActivitiesTemp.forEach(item => {
-          stopActivitiesFormArray.push(new FormControl(item));
-      });
-    }
-    // Start Activities
-    if (this.currentSubscription.startActivities.length) {
-      const startActivitiesFormArray = this.subscriptionFormComponent.subscriptionForm.get('startActivities') as FormArray;
-      const startActivitiesTemp = this.currentSubscription.startActivities;
-      startActivitiesTemp.forEach(item => {
-        startActivitiesFormArray.push(new FormControl(item));
-      });
-    }
-
-
-    // The following line is a patch for UNIONVMS-4832; do not alter without testing for regression!
-    this.subscriptionFormComponent.subscriptionForm.get('output.logbook').setValue(!!this.currentSubscription.output.logbook);
-
-    this.subscriptionFormComponent.subscriptionForm.patchValue(this.currentSubscription);
-    // bind dates
-    const rawStartDateTime = this.currentSubscription.startDate;
-    const rawEndDateTime = this.currentSubscription.endDate;
-    if (rawStartDateTime) {
-      const startDate = rawStartDateTime.split('T');
-      const tempStartDate = startDate[0].split('-').reverse().join('-');
-      this.subscriptionFormComponent.subscriptionForm.get('startDate').setValue(tempStartDate);
-    }
-
-    if (rawEndDateTime) {
-      const endDate = rawEndDateTime.split('T');
-      const tempEndDate = endDate[0].split('-').reverse().join('-');
-      this.subscriptionFormComponent.subscriptionForm.get('endDate').setValue(tempEndDate);
-    }
-
-    const vesselIds = this.currentSubscription.output.vesselIds;
-    this.subscriptionFormComponent.subscriptionForm.get('output.vesselIds').setValue(vesselIds);
-
-    this.subscriptionFormComponent.subscriptionForm.updateValueAndValidity();
   }
 
   async editSubscription($event) {

@@ -64,6 +64,7 @@ angular.module('unionvmsWeb').factory("auditOptionsService", function(searchServ
         },
         OTHER : {
             SETTING : 'Setting',
+            SUBSCRIPTION: 'Subscription'
         },
     };
 
