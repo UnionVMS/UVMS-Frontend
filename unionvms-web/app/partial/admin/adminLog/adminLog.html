@@ -69,7 +69,7 @@ copy of the GNU General Public License along with the IFDM Suite. If not, see <h
                                 <td>{{audit.objectType}}</td>
                                 <td>{{audit.date | confDateFormat}}</td>
                                 <td>
-                                    <a ng-href="#{{affectedObjectPath(audit)}}" ng-show="affectedObjectPath(audit)" title="{{'common.view_details' | i18n}}">{{affectedObjectLinkText(audit)}}</a>
+                                    <a ng-href="{{affectedObjectPath(audit)}}" ng-show="affectedObjectPath(audit)" title="{{'common.view_details' | i18n}}">{{affectedObjectLinkText(audit)}}</a>
                                     <span ng-show="!affectedObjectPath(audit) && affectedObjectText(audit)">{{affectedObjectText(audit)}}</span>
                                 </td>
                                 <td class="textAlignCenter">

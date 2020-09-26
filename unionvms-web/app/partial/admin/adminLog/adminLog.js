@@ -9,10 +9,12 @@ the hope that it will be useful, but WITHOUT ANY WARRANTY; without even the impl
 FITNESS FOR A PARTICULAR PURPOSE.  See the GNU General Public License for more details. You should have received a
 copy of the GNU General Public License along with the IFDM Suite. If not, see <http://www.gnu.org/licenses/>.
  */
-angular.module('unionvmsWeb').controller('AuditlogCtrl', function($scope, $q, $filter, locale, Audit, auditLogRestService, searchService, auditOptionsService, SearchResults, GetListRequest, infoModal, pollingRestService, mobileTerminalRestService, csvService, alertService) {
+angular.module('unionvmsWeb').controller('AuditlogCtrl', function($scope, $q, $filter, locale, Audit, auditLogRestService, searchService, auditOptionsService, SearchResults, GetListRequest, infoModal, pollingRestService, mobileTerminalRestService, csvService, alertService, envConfig, ENV_NAME) {
 
     //Names used in the backend
     var TYPES = auditOptionsService.getTypes();
+
+    var ID_NAME_RE = /([0-9]+)(?::(.*))?/;
 
     //Number of items displayed on each page
     $scope.itemsByPage = 20;
@@ -59,6 +61,9 @@ angular.module('unionvmsWeb').controller('AuditlogCtrl', function($scope, $q, $f
     //Update the search results
     var updateSearchResults = function(searchResultListPage){
         $scope.currentSearchResults.updateWithNewResults(searchResultListPage);
+        searchResultListPage.items.forEach(function(item) {
+            item.operation = item.operation[0] + item.operation.substr(1).toLowerCase();
+        });
         $scope.allCurrentSearchResults = searchResultListPage.items;
         $scope.currentSearchResultsByPage = searchResultListPage.items;
     };
@@ -133,6 +138,13 @@ angular.module('unionvmsWeb').controller('AuditlogCtrl', function($scope, $q, $f
                 case TYPES.ACCESS_CONTROL.USER:
                 case TYPES.ACCESS_CONTROL.USER_PASSWORD:
                     return audit.affectedObject;
+                case TYPES.OTHER.SUBSCRIPTION:
+                    var x = ID_NAME_RE.exec(audit.affectedObject);
+                    if (!x) {
+                        return 'Subscription';
+                    }
+                    var name = x[2] || 'Subscription';
+                    return name;
                 default:
                     return locale.getString('audit.show_object');
             }
@@ -144,29 +156,47 @@ angular.module('unionvmsWeb').controller('AuditlogCtrl', function($scope, $q, $f
         if(audit.affectedObject){
             switch(audit.objectType){
                 case TYPES.ASSETS_AND_TERMINALS.MOBILE_TERMINAL:
-                    return "/communication/" + audit.affectedObject;
+                    return "#/communication/" + audit.affectedObject;
                 case TYPES.ASSETS_AND_TERMINALS.ASSET:
-                    return "/assets/" + audit.affectedObject;
+                    return "#/assets/" + audit.affectedObject;
                 case TYPES.ASSETS_AND_TERMINALS.POLL:
-                    return "/polling/logs/" + audit.affectedObject;
+                    return "#/polling/logs/" + audit.affectedObject;
                 case TYPES.ASSETS_AND_TERMINALS.POLLING_PROGRAM:
-                    return "/polling/logs/" + audit.affectedObject;
+                    return "#/polling/logs/" + audit.affectedObject;
                 case TYPES.ALARMS.ALARM:
-                    return "/alerts/holdingtable/" + audit.affectedObject;
+                    return "#/alerts/holdingtable/" + audit.affectedObject;
                 case TYPES.ALARMS.TICKET:
-                    return "/alerts/notifications/" + audit.affectedObject;
+                    return "#/alerts/notifications/" + audit.affectedObject;
                 case TYPES.ALARMS.CUSTOM_RULE:
                 case TYPES.ALARMS.CUSTOM_RULE_SUBSCRIPTION:
                 case TYPES.ALARMS.CUSTOM_RULE_ACTION_TRIGGERED:
-                    return "/alerts/rules/" + audit.affectedObject;
+                    return "#/alerts/rules/" + audit.affectedObject;
                 case TYPES.POSITION_REPORTS.AUTOMATIC_POSITION_REPORT:
                 case TYPES.POSITION_REPORTS.MANUAL_POSITION_REPORT:
-                    return "/movement/" + audit.affectedObject;
+                    return "#/movement/" + audit.affectedObject;
                 case TYPES.POSITION_REPORTS.TEMPORARY_POSITION_REPORT:
-                    return "/movement/manual/" + audit.affectedObject;
+                    return "#/movement/manual/" + audit.affectedObject;
                 case TYPES.ACCESS_CONTROL.USER:
                 case TYPES.ACCESS_CONTROL.USER_PASSWORD:
-                    return "/usm/users/" + audit.affectedObject;
+                    return "#/usm/users/" + audit.affectedObject;
+                case TYPES.OTHER.SUBSCRIPTION:
+                    var x = ID_NAME_RE.exec(audit.affectedObject);
+                    if (!x) {
+                        return;
+                    }
+                    // Subscriptions tab is a link to the new app,
+                    // If we are in development environment we need to send token and sessionId with redirection url as
+                    // local storage is available per domain
+                    if (ENV_NAME === 'development') {
+                        var token =  JSON.parse(localStorage.getItem('ngStorage-token'));
+                        var sessionId =  JSON.parse(localStorage.getItem('ngStorage-sessionId'));
+                        var roleName = JSON.parse(localStorage.getItem('ngStorage-roleName'));
+                        var scopeName = JSON.parse(localStorage.getItem('ngStorage-scopeName'));
+                        return envConfig.new_app_url + '/subscriptions/edit-subscription/' + x[1] + '?token=' + token + '&sessionId=' + sessionId + '&scopeName=' + scopeName + '&roleName=' + roleName;
+                    } else {
+                        return envConfig.new_app_url + '/subscriptions/edit-subscription/' + x[1];
+                    }
+                    break;
                 default:
                     return;
             }
