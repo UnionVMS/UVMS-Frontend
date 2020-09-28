@@ -39,7 +39,7 @@ angular.module('unionvmsWeb').controller('UploadareamodalCtrl',function($scope, 
     $scope.uploader.filters.push({
        name: 'fileExtension',
        fn: function(item){
-           var supportedTypes = ['csv', 'txt', 'wkt'];
+           var supportedTypes = ['csv', 'txt', 'wkt', "gml", "xml"];
            var splitedItemName = item.name.split('.');
            
            for (var i = 0; i < supportedTypes.length; i++){
@@ -87,7 +87,7 @@ angular.module('unionvmsWeb').controller('UploadareamodalCtrl',function($scope, 
     $scope.formatItems = [];
     $scope.formatItems.push({"text": locale.getString('areas.area_upload_modal_csv'), "code": "csv"});
     $scope.formatItems.push({"text": locale.getString('areas.area_upload_modal_wkt'), "code": "wkt"});
-    //$scope.formatItems.push({"text": locale.getString('areas.area_upload_modal_gml'), "code": "gml"});
+    $scope.formatItems.push({"text": locale.getString('areas.area_upload_modal_gml'), "code": "gml"});
     
     //CSV stuff
     $scope.containsFirstRow = false;
@@ -164,6 +164,38 @@ angular.module('unionvmsWeb').controller('UploadareamodalCtrl',function($scope, 
             }
         } else {
             $scope.errorMessage = locale.getString('areas.area_upload_modal_parsing_error');
+            $scope.setError();
+            return;
+        }
+    };
+    
+    $scope.parseGML = function() {
+        try {
+            var srcProj = 'EPSG:' + $scope.projections.getProjectionEpsgById($scope.selProjection);
+            var wfsFormat = new ol.format.WFS();
+            var geometries = wfsFormat.readFeatures($scope.fileContent, {
+                defaultProjection: srcProj,
+                featureProjection: $scope.defaultProjection[1]
+            });
+            
+            var geom = geometries[0].getGeometry();
+            var firstCoord = geom.getFirstCoordinate();
+            var lastCoord = geom.getLastCoordinate();
+
+            if (geom.getArea() === 0){
+                $scope.errorMessage = locale.getString('areas.area_upload_modal_invalid_polygon');
+                $scope.setError();
+                return;
+            } else {
+                if (!(firstCoord[0] === lastCoord[0] &&  firstCoord[1] === lastCoord[1])){
+                    var coords = geom.getCoordinates();
+                    coords[0].push(firstCoord);
+                    geom.setCoordinates(coords);
+                }
+                return $scope.checkAndWarpGeometry(geom);
+            }
+        }  catch (e) {
+            $scope.errorMessage = locale.getString('areas.area_upload_modal_parsing_error_gml');
             $scope.setError();
             return;
         }
@@ -251,6 +283,8 @@ angular.module('unionvmsWeb').controller('UploadareamodalCtrl',function($scope, 
                 geom = $scope.parseCSV();
             } else if ($scope.format === 'wkt'){
                 geom = $scope.parseWKT();
+            } else if ($scope.format === 'gml'){
+                geom = $scope.parseGML();
             }
             
             if (angular.isDefined(geom)){
