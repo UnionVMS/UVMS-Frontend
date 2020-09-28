@@ -84,6 +84,7 @@
 	"area_upload_modal_parsing_error": "There was an error while parsing your file. Please check if your file and settings are correct and try again.",
 	"area_upload_modal_invalid_polygon": "Your uploaded polygon is not valid. Please fix your data and try to upload again.",
 	"area_upload_modal_parsing_error_wkt": "There was an error while parsing your file. Please check that your WKT file is valid.",
+	"area_upload_modal_parsing_error_gml": "There was an error while parsing your file. Please check that your GML file is valid.",
 	"area_upload_modal_wkt_no_polygon": "Only POLYGON geometries are supported.",
 	"area_upload_modal_wkt_no_multipolygon": "You have provided a MULTIPOLYGON geometry. Parsing this is possible but it will only extract the first POLYGON geometry.",
 	"area_upload_modal_form_errors": "There are errors in your settings. Please fix them and try again.",
