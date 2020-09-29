@@ -146,7 +146,7 @@
 	"report_reason_fishing": "Fishing",
     "trip_summary_quit_trip_detail": "Quit trip detail",
     "trip_summary_export_trip": "Export trip",
-    "catch_panel_see_trip_evolution": "See trip evolution",
+    "catch_panel_see_catch_evolution": "See catch evolution",
     "catch_panel_see_catch_details": "See catch details",
     "advanced_search_placeholder_com_channel": "Communication Channel",
     "advanced_search_placeholder_from_id": "From (ID)",
