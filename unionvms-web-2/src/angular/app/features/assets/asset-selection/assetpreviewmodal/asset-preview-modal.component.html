@@ -39,12 +39,12 @@
         (page)="setPage($event)"
         (select)="onSelectRow($event)"
         #AssetListGroupTable>
-        <ngx-datatable-column name="Asset name" [sortable]="true" prop="name">
-        <ng-template let-column="column" let-sort="sortFn" ngx-datatable-header-template>
-            <span (click)="sort()">{{ column.name }}</span>
+        <ngx-datatable-column name="Asset name">
+        <ng-template let-column="column" ngx-datatable-header-template>
+            <span>Assets</span>
         </ng-template>
-        <ng-template let-row="row" let-value="value" ngx-datatable-cell-template>
-            {{value}}
+        <ng-template let-row="row" ngx-datatable-cell-template>
+            {{getAvailableIdentifier(row)}}
         </ng-template>
         </ngx-datatable-column>
         <ngx-datatable-footer>

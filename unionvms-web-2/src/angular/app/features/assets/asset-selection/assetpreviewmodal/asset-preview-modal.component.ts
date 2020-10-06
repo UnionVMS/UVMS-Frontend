@@ -73,4 +73,20 @@ constructor(private featuresService: FeaturesService, public activeModal: NgbAct
   onSelectRow(row) {
     this.selectedAsset = [row.selected[0]];
   }
+
+  getAvailableIdentifier(asset) {
+    if(asset.name) {
+      return asset.name;
+    } else if (asset.cfr) {
+      return "CFR: " + asset.cfr;
+    } else if (asset.ircs) {
+      return "IRCS: " + asset.ircs;
+    } else if (asset.uvi) {
+      return "UVI: " + asset.uvi;
+    } else if (asset.externalMarking) {
+      return "Ext. Marking: " + asset.externalMarking;
+    } else if (asset.iccat) {
+      return "ICCAT: " + asset.iccat;
+    }
+  }
 }
