@@ -58,6 +58,9 @@ angular.module('unionvmsWeb').directive('layerTree', function($q, $modal, mapSer
 			    }
 			    vmsVisibilityListener(data.node);
 			    layerPanelService.reloadPanels();
+			    if(!data.node.isSelected()) {
+                    mapService.clearFeaturesOfUnselectedLayer(data.node.data.type);
+                }
 			};
 			
 			var getCheckedStatusForMainNode = function(node){

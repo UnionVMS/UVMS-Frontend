@@ -53,7 +53,6 @@ copy of the GNU General Public License along with the IFDM Suite. If not, see <h
 angular.module('unionvmsWeb').factory('mapService', function(locale, $rootScope, $window, $localStorage, $timeout, $interval, $templateRequest, $filter, spatialHelperService, globalSettingsService, unitConversionService, coordinateFormatService, MapFish, genericMapService, layerPanelService, mdrCacheService) {
 	var ms = {};
 	ms.sp = spatialHelperService;
-
 	/**
 	 * Set liveview map according to report/preferences configurations
 	 * 
@@ -224,6 +223,8 @@ angular.module('unionvmsWeb').factory('mapService', function(locale, $rootScope,
                 }
             }
         });
+	    
+	    ms.setDragBoxEvent(ms.map);
 	};
 	
 	/**
@@ -3662,6 +3663,58 @@ angular.module('unionvmsWeb').factory('mapService', function(locale, $rootScope,
 
     ms.getMapExtent = function(){
         return ms.map.getView().calculateExtent(ms.map.getSize());
+    };
+
+    //array holding features selected by DragBox
+    ms.selectedFeatures = [];
+    
+    ms.setDragBoxEvent = function(map){
+        var dragBox = new ol.interaction.DragBox({
+            condition: ol.events.condition.shiftKeyOnly
+        });
+
+        map.addInteraction(dragBox);
+
+        // clear selection when drawing a new box and when clicking on the map
+        dragBox.on('boxstart', function () {
+            ms.selectedFeatures = [];
+        });
+        
+        ms.wktFormatter = new ol.format.WKT();
+
+        dragBox.on('boxend', function () {
+            if (layerPanelService.getLayerTreeStatus('ers')[0].selected){
+                ms.getFeaturesIntersectingExtent(ms.getLayerByType('ers').getSource(), dragBox.getGeometry().getExtent(), "Point", 'ers');
+            }
+            if (layerPanelService.getLayerTreeStatus('vmspos')[0].selected){
+                ms.getFeaturesIntersectingExtent(ms.getLayerByType('vmspos').getSource(), dragBox.getGeometry().getExtent(), "Point", 'vmspos');
+            }
+            if (layerPanelService.getLayerTreeStatus('vmsseg')[0].selected){
+                ms.getFeaturesIntersectingExtent(ms.getLayerByType("vmsseg").getSource().getSource(), dragBox.getGeometry().getExtent(), "LineString", 'vmsseg');
+            }
+            ms.resetHighlightedFeatures();
+        });
+    };
+    
+    ms.resetHighlightedFeatures = function() {
+        var layer = ms.getLayerByType('highlight').getSource();
+        layer.clear(true);
+        layer.addFeatures(ms.selectedFeatures);
+    };
+    
+    ms.getFeaturesIntersectingExtent = function(source, extend, geomType, layer) {
+        source.forEachFeatureIntersectingExtent(extend, function (feature) {
+            ms.selectedFeatures.push(feature);
+            feature.set('layerType', layer);
+            feature.getGeometry().set("GeometryType", geomType);
+        });
+    } ;
+    
+    ms.clearFeaturesOfUnselectedLayer = function(layer) {
+        ms.selectedFeatures = ms.selectedFeatures.filter(function(feature) {
+            return feature.get('layerType') !== layer;
+        });
+        ms.resetHighlightedFeatures();
     };
     
 	return ms;
