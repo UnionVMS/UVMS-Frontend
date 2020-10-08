@@ -252,6 +252,10 @@ export class SubscriptionFormComponent implements OnInit, OnDestroy {
     return this.subscriptionForm.get('startActivities') as FormArray;
   }
 
+  get alert() {
+    return this.subscriptionForm.get('output.alert')
+  }
+
   private initSubscriptions() {
     // Changes for organisation
     this.subscription.add(this.subscriptionForm.get('output.subscriber.organisationId').valueChanges
@@ -511,6 +515,13 @@ export class SubscriptionFormComponent implements OnInit, OnDestroy {
       this.frequency.updateValueAndValidity();
       this.timeExpression.clearValidators();
       this.timeExpression.updateValueAndValidity();
+    }
+
+    if (triggerType !== 'INC_POSITION') {
+      this.alert.setValue(false);
+      this.alert.disable();
+    } else {
+      this.alert.enable();
     }
   }
 
