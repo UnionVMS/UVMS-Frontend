@@ -124,7 +124,7 @@ export class SubscriptionFormComponent implements OnInit, OnDestroy {
           passwordIsPlaceholder: [false],
           isXml: [false]
         }),
-        alert: [false],
+        alert: [{value: false, disabled: true}],
         subscriber: this.fb.group({
           organisationId: [null],
           endpointId: [{value: null, disabled: true}],
