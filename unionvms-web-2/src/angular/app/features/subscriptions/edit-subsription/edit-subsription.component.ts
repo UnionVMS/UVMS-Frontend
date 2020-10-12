@@ -127,6 +127,10 @@ export class EditSubsriptionComponent implements OnInit, AfterViewInit {
       const vesselIds = this.currentSubscription.output.vesselIds;
       this.subscriptionFormComponent.subscriptionForm.get('output.vesselIds').setValue(vesselIds);
 
+      if (this.currentSubscription.execution.triggerType === 'INC_POSITION') {
+        this.subscriptionFormComponent.subscriptionForm.get('output.alert').enable();
+      }
+
       this.subscriptionFormComponent.subscriptionForm.updateValueAndValidity();
     } catch(e) {
       if (e.status === 404) {
