@@ -132,7 +132,7 @@
               </div>
               <div class="card-body">
                 <div class="alert alert-secondary selected-item" [ngClass]="{'asset-selection-item-asset': item.type === assetTypes.asset, 'asset-selection-item-assetgroup' : item.type === assetTypes.group }" *ngFor="let item of assets.value; let i = index" role="alert">
-                  <div>{{item.name}}</div>
+                  <div>{{getAvailableIdentifier(item)}}</div>
                   <div class="pull-right icon" (click)="removeAsset(i)">
                     <fa-icon [icon]="faTimes"></fa-icon>
                   </div>

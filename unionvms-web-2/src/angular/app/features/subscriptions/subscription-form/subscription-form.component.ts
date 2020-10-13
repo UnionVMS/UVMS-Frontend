@@ -326,11 +326,37 @@ export class SubscriptionFormComponent implements OnInit, OnDestroy {
       }
     }
 
+    for(let i = 0; i < formValues.assets.length; i++){
+      let item = formValues.assets[i];
+      const guid = item.eventHistory?.eventId || item.guid;
+      formValues.assets[i] = {
+        guid,
+        type: item.type,
+        name: this.getAvailableIdentifier(item)
+      };
+    }
+
     // Remove name property from each area
     formValues.areas.forEach(element => {
       delete element.name;
     });
     this.save.emit(formValues);
+  }
+
+  getAvailableIdentifier(asset) {
+    if(asset.name) {
+      return asset.name;
+    } else if (asset.cfr) {
+      return "CFR: " + asset.cfr;
+    } else if (asset.ircs) {
+      return "IRCS: " + asset.ircs;
+    } else if (asset.uvi) {
+      return "UVI: " + asset.uvi;
+    } else if (asset.externalMarking) {
+      return "Ext. Marking: " + asset.externalMarking;
+    } else if (asset.iccat) {
+      return "ICCAT: " + asset.iccat;
+    }
   }
 
   async onOrganisationChange(value) {
