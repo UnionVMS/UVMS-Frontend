@@ -176,6 +176,16 @@ export class ManualSubscriptionsComponent implements OnInit, OnDestroy {
       }
    }
 
+    for(let i = 0; i < formValues.assets.length; i++){
+      let item = formValues.assets[i];
+      const guid = item.eventHistory?.eventId || item.guid;
+      formValues.assets[i] = {
+        guid,
+        type: item.type,
+        name: this.getAvailableIdentifier(item)
+      };
+    }
+
    // Cases where we would expect null but select by default returns 'null' for subscriber field group
     for (const [key, value] of Object.entries(formValues.output.subscriber)) {
       if (matchArray.includes(key)) {
@@ -207,6 +217,22 @@ export class ManualSubscriptionsComponent implements OnInit, OnDestroy {
         title: 'Subscription could not be saved',
         body: err.error.data
       });
+    }
+  }
+
+  getAvailableIdentifier(asset) {
+    if(asset.name) {
+      return asset.name;
+    } else if (asset.cfr) {
+      return "CFR: " + asset.cfr;
+    } else if (asset.ircs) {
+      return "IRCS: " + asset.ircs;
+    } else if (asset.uvi) {
+      return "UVI: " + asset.uvi;
+    } else if (asset.externalMarking) {
+      return "Ext. Marking: " + asset.externalMarking;
+    } else if (asset.iccat) {
+      return "ICCAT: " + asset.iccat;
     }
   }
 

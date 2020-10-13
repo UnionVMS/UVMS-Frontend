@@ -159,21 +159,16 @@ export class AssetSelectionComponent implements OnInit, OnDestroy {
 
   onToggleAsset(selectedRow) {
     const guid = selectedRow.eventHistory?.eventId || selectedRow.guid;
-
-    const obj = {
-      name: selectedRow.name,
-      guid,
-      type: this.assetType
-    };
+    selectedRow.type = this.assetType;
   // list is empty = add selected area
     if (!this.assets.length) {
-      this.assets.push(new FormControl(obj));
+      this.assets.push(new FormControl(selectedRow));
     } else {
       const diff = this.assets.value.findIndex(element => element.guid === guid);
       if (diff > -1) {
         this.assets.removeAt(diff);
       } else {
-        this.assets.push(new FormControl(obj));
+        this.assets.push(new FormControl(selectedRow));
       }
     }
   }
@@ -211,13 +206,8 @@ export class AssetSelectionComponent implements OnInit, OnDestroy {
     // list is empty, add all
     if (!this.assets.length) {
       this.result.forEach(item => {
-        const guid = item.assetId?.guid || item.guid;
-        const obj = {
-          guid,
-          type: this.assetType,
-          name: item.name
-        };
-        this.assets.push(new FormControl(obj));
+        item.type = this.assetType;
+        this.assets.push(new FormControl(item));
       });
     } else {
       // find objects from results array not in assets array
@@ -229,13 +219,8 @@ export class AssetSelectionComponent implements OnInit, OnDestroy {
         });
       });
       diff.forEach(item => {
-        const guid = item.assetId?.guid || item.guid;
-        const obj = {
-          guid,
-          type: this.assetType,
-          name: item.name
-        };
-        this.assets.push(new FormControl(obj));
+        item.type = this.assetType;
+        this.assets.push(new FormControl(item));
       });
     }
 
@@ -259,6 +244,22 @@ export class AssetSelectionComponent implements OnInit, OnDestroy {
       this.searchAsset();
     }  else {
       this.getAssetGroups();
+    }
+  }
+
+  getAvailableIdentifier(asset) {
+    if(asset.name) {
+      return asset.name;
+    } else if (asset.cfr) {
+      return "CFR: " + asset.cfr;
+    } else if (asset.ircs) {
+      return "IRCS: " + asset.ircs;
+    } else if (asset.uvi) {
+      return "UVI: " + asset.uvi;
+    } else if (asset.externalMarking) {
+      return "Ext. Marking: " + asset.externalMarking;
+    } else if (asset.iccat) {
+      return "ICCAT: " + asset.iccat;
     }
   }
 
