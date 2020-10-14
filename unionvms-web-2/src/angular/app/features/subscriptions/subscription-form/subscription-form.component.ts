@@ -22,10 +22,13 @@ interface SenderElement {
 }
 
 // Message configuration fields (except identifiers) should only be available for FA_REPORT and FA_QUERY
-const messageConfigurationEnabledFor = ['FA_REPORT', 'FA_QUERY'];
+const MESSAGE_CONFIG_ENABLED_FOR = ['FA_REPORT', 'FA_QUERY'];
+
+// Vessel identifiers should be available for FA_REPORT, FA_QUERY and POSITION
+const VESSEL_IDS_ENABLED_FOR = ['FA_REPORT', 'FA_QUERY', 'POSITION'];
 
 // Subscriber details required for all types except NONE
-const subscriberRequiredFor = ['FA_REPORT', 'FA_QUERY', 'POSITION', 'SALE_NOTE'];
+const SUBSCRIBER_REQUIRED_FOR = ['FA_REPORT', 'FA_QUERY', 'POSITION', 'SALE_NOTE'];
 
 @Component({
   selector: 'app-subscription-form',
@@ -449,7 +452,7 @@ export class SubscriptionFormComponent implements OnInit, OnDestroy {
   }
 
   private onMessageTypeChange(value) {
-    if (!messageConfigurationEnabledFor.includes(value)) {
+    if (!MESSAGE_CONFIG_ENABLED_FOR.includes(value)) {
         this.logbook.disable();
         this.consolidated.disable();
         this.generateNewReportId.disable();
@@ -457,7 +460,6 @@ export class SubscriptionFormComponent implements OnInit, OnDestroy {
         this.history.clearValidators();
         this.history.updateValueAndValidity();
         this.historyUnit.disable();
-        this.vesselIds.disable();
     } else {
         this.logbook.enable();
         this.consolidated.enable();
@@ -466,10 +468,11 @@ export class SubscriptionFormComponent implements OnInit, OnDestroy {
         this.history.setValidators([Validators.required]);
         this.history.updateValueAndValidity();
         this.historyUnit.enable();
-        this.vesselIds.enable();
     }
 
-    if (subscriberRequiredFor.includes(value)) {
+    this.vesselIds[VESSEL_IDS_ENABLED_FOR.includes(value) ? 'enable' : 'disable']();
+
+    if (SUBSCRIBER_REQUIRED_FOR.includes(value)) {
       this.organisationId.setValidators([Validators.required]);
       // TODO: search if we can update value and validity for the whole form group
       this.organisationId.updateValueAndValidity();
@@ -477,7 +480,6 @@ export class SubscriptionFormComponent implements OnInit, OnDestroy {
       this.endpointId.updateValueAndValidity();
       this.channelId.setValidators([Validators.required]);
       this.channelId.updateValueAndValidity();
-
     } else {
      // Remove validators
       this.organisationId.clearValidators();
