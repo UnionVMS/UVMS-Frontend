@@ -19,7 +19,7 @@ angular.module('smart-table').filter('stFieldSearchGeoJson', function($filter, u
             }
             type = pKey[0];
         }
-         
+
         //Filter
         var filterFilter = $filter('filter');
 
@@ -28,31 +28,31 @@ angular.module('smart-table').filter('stFieldSearchGeoJson', function($filter, u
             if (_.isNumber(num)){
                 num = num.toString();
             }
-            
+
             var numSplit = num.split(".")[1];
             var decimals = 0;
             if (angular.isDefined(numSplit)){
                 decimals = numSplit.length;
             }
-            return decimals; 
+            return decimals;
         };
-        
+
         var getDecimalsAsString = function(num){
             if (_.isNumber(num)){
                 num = num.toString();
             }
             return num.split(".")[1];
         };
-        
+
         var fixDecimalNotation = function(numStr){
             return numStr.replace(',','.');
         };
-        
+
         var checkDecimalDegrees = function(dd, geomCoord){
             //src dd filter
             var numerical = parseFloat(fixDecimalNotation(dd));
             var decimals = getNumDecimals(numerical);
-            
+
             var resp = false;
             if (Math.sign(geomCoord) === Math.sign(numerical)){
                 if (decimals === 0){
@@ -61,23 +61,23 @@ angular.module('smart-table').filter('stFieldSearchGeoJson', function($filter, u
                     resp = Math.abs(Math.trunc(numerical)) === Math.abs(Math.trunc(geomCoord)) && getDecimalsAsString(geomCoord).indexOf(getDecimalsAsString(numerical)) === 0;
                 }
             }
-            
+
             return resp;
         };
-        
+
         var getMinutesFromDD = function(dd){
             var num = dd.toString();
             var numSplit = num.split('.');
-            
+
             var minutes;
             if (angular.isDefined(numSplit[1])){
                 var decimals = numSplit[1].length;
                 minutes = parseInt(numSplit[1]) / Math.pow(10, decimals) * 60;
             }
-            
+
             return minutes;
         };
-        
+
         var checkDecimalMinutes = function(minutes, geomCoord){
             var decimals = getNumDecimals(minutes);
             minutes = parseFloat(minutes).toString();
@@ -87,15 +87,15 @@ angular.module('smart-table').filter('stFieldSearchGeoJson', function($filter, u
             } else {
                 coordMin = coordMin.toFixed(decimals);
             }
-            
+
             var resp = false;
             if (coordMin.indexOf(minutes) === 0){
                 resp = true;
             }
-            
+
             return resp;
         };
-        
+
         //Function to calculate upper boundary when filtering fields with duration/time
         var dehumanizeTimeAndCalculateUpBoundary = function(time){
             var parsedStr = time.match(/([0-9]+[dhms]{1})/ig);
@@ -126,10 +126,10 @@ angular.module('smart-table').filter('stFieldSearchGeoJson', function($filter, u
                     }
                     //seconds
                     if (parsedStr[i].toUpperCase().indexOf('S') !== -1){
-                        fixedSeconds += parseInt(parsedStr[i]); 
+                        fixedSeconds += parseInt(parsedStr[i]);
                     }
                 }
-                
+
                 //return converted input and seconds as miliseconds to add for upper boundary
                 return [fixedSeconds * 1000, secondsToAdd * 1000];
             }
@@ -237,6 +237,10 @@ angular.module('smart-table').filter('stFieldSearchGeoJson', function($filter, u
                             keyIn = true;
                             additionalFilters['tripId'] = srcObject[searchableKeys[i]];
                             additionalFilters.doSearch = true;
+                        } else if (searchableKeys[i] === 'tripIds') {
+                             keyIn = true;
+                             additionalFilters['tripIds'] = srcObject[searchableKeys[i]];
+                             additionalFilters.doSearch = true;
                         }
                     }
                 }
@@ -433,6 +437,12 @@ angular.module('smart-table').filter('stFieldSearchGeoJson', function($filter, u
                         }
 
                     }
+
+                     if (angular.isDefined(this.tripIds)) {
+                        temp = rec.tripIds.includes(this.tripIds);
+                        include = updateInclude(temp, include);
+                     }
+
                     if (include){
                         this.recs.push(rec);
                     }
@@ -461,7 +471,7 @@ angular.module('smart-table').filter('stFieldSearchGeoJson', function($filter, u
                     }
                 }
         }
-        
+
         return filteredRecs;
     };
 });
