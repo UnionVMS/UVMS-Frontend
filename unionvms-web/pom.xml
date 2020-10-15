@@ -351,6 +351,14 @@
                             <directory>${basedir}/WebContent</directory>
                         <filtering>true</filtering>
                         </resource>
+			<resource>
+                            <directory>${project.basedir}/lib</directory>
+                            <targetPath>WEB-INF/lib</targetPath>
+                            <filtering>false</filtering>
+                            <includes>
+                                <include>**/*.jar</include>
+                            </includes>
+                        </resource>
                     </webResources>
                     <overlays>
                         <overlay>

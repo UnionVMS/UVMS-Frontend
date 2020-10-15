@@ -5,4 +5,21 @@
 	 xsi:schemaLocation="http://java.sun.com/xml/ns/javaee http://java.sun.com/xml/ns/javaee/web-app_3_0.xsd"
 	 version="3.0">
 
+    <!-- thisrequires only authentication but not authorization -->
+    <security-constraint>
+        <web-resource-collection>
+            <web-resource-name>uvms frontend</web-resource-name>
+            <description>Requires users to be authenticated but does not require them to be authorized</description>
+            <url-pattern>/*</url-pattern>
+        </web-resource-collection>
+        <auth-constraint>
+            <description>allow any authenticated role</description>
+	        <role-name>**</role-name>
+        </auth-constraint>
+        <user-data-constraint>
+            <description>Encryption is not required for the application in general.</description>
+            <transport-guarantee>NONE</transport-guarantee>
+        </user-data-constraint>
+    </security-constraint>
+
 </web-app>
