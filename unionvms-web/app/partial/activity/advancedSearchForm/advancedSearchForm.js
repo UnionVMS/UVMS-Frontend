@@ -68,7 +68,8 @@ angular.module('unionvmsWeb').controller('AdvancedsearchformCtrl',function($scop
         master: undefined,
         minWeight: undefined,
         maxWeight: undefined,
-        tripId: undefined
+        tripId: undefined,
+        fluxFaReportId: undefined
     };
 
     /**
@@ -266,7 +267,8 @@ angular.module('unionvmsWeb').controller('AdvancedsearchformCtrl',function($scop
             maxWeight: 'QUANTITY_MAX',
             comChannel: 'SOURCE',
             activityType: 'ACTIVITY_TYPE',
-            tripId: 'TRIP_ID'
+            tripId: 'TRIP_ID',
+            fluxFaReportId: 'FLUX_FA_REPORT_ID'
         };
 
         var formatedSearch = {};
