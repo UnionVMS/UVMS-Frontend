@@ -142,6 +142,10 @@ copy of the GNU General Public License along with the IFDM Suite. If not, see <h
                                                 <input name="source" placeholder="{{'spatial.tab_vms_pos_table_header_source' | i18n }}" class="input-sm form-control" type="search">
                                                 <a href="" qtip at="top left" my="bottom right" content="{{'spatial.tab_vms_pos_table_header_source' | i18n }}" class="info-qtip qtip-blue"><i class="fa fa-question-circle"></i></a>
                                             </div>
+                                            <div class="col-md-2 st-table-filters" ng-show="attrVisibility.positions.fs">
+                                                <input name="tripIds" placeholder="{{'activity.tab_trip_table_header_id' | i18n }}" class="input-sm form-control" type="search">
+                                                <a href="" qtip at="top left" my="bottom right" content="{{'activity.tab_trip_table_header_id' | i18n }}" class="info-qtip qtip-blue"><i class="fa fa-question-circle"></i></a>
+                                            </div>
                                         </div>
                                     </div>
                                 </div>
@@ -289,6 +293,10 @@ copy of the GNU General Public License along with the IFDM Suite. If not, see <h
                                             <div class="col-md-2 st-table-filters" ng-show="attrVisibility.segments.cat">
                                                 <input name="segmentCategory" placeholder="{{'spatial.tab_vms_seg_table_header_category' | i18n }}" class="input-sm form-control" type="search">
                                                 <a href="" qtip at="top left" my="bottom right" content="{{'spatial.tab_vms_seg_table_header_category' | i18n }}" class="info-qtip qtip-blue"><i class="fa fa-question-circle"></i></a>
+                                            </div>
+                                            <div class="col-md-2 st-table-filters" ng-show="attrVisibility.segments.fs">
+                                                <input name="tripIds" placeholder="{{'activity.tab_trip_table_header_id' | i18n }}" class="input-sm form-control" type="search">
+                                                <a href="" qtip at="top left" my="bottom right" content="{{'activity.tab_trip_table_header_id' | i18n }}" class="info-qtip qtip-blue"><i class="fa fa-question-circle"></i></a>
                                             </div>
                                         </div>
                                     </div>
