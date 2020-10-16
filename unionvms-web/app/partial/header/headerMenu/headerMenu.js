@@ -127,7 +127,30 @@ angular.module('unionvmsWeb').controller('HeaderMenuCtrl',function($scope, $root
 
         // User
         if (userFeatureAccess.accessToAnyFeatureInList('USM')) {
-            $scope.addMenuItem(locale.getString('header.menu_user'), '/usm/users', 'users');
+            var usersLink = false;
+            var usersElemId;
+
+             if (checkAccess('USM', 'manageUsers') || checkAccess('USM', 'viewUsers')) {
+                usersLink = 'usm/users';
+                usersElemId = 'users';
+             } else if (checkAccess('USM', 'manageOrganisations') || checkAccess('USM', 'viewOrganisations')) {
+                 usersLink = 'usm/organisations';
+                usersElemId = 'organisations';
+             } else if (checkAccess('USM', 'manageRoles') || checkAccess('USM', 'viewRoles')) {
+                usersLink = 'usm/roles';
+                usersElemId = 'roles';
+             } else if (checkAccess('USM', 'manageScopes') || checkAccess('USM', 'viewScopes')) {
+                usersLink = 'usm/scopes';
+                usersElemId = 'scopes';
+             } else if (checkAccess('USM', 'manageApplications') || checkAccess('USM', 'viewApplications')) {
+                usersLink = 'usm/applications';
+                usersElemId = 'applications';
+             } else if (checkAccess('USM', 'configurePolicies')) {
+                usersLink = 'usm/policies';
+                usersElemId = 'policies';
+            }
+
+            $scope.addMenuItem(locale.getString('header.menu_user'), usersLink, usersElemId);
         }
 
         // Admin
