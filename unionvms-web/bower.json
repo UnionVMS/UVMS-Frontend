@@ -1,6 +1,6 @@
 {
   "dependencies": {
-    "chart.js": "^2.1.6",
+    "chart.js": "2.9.3",
     "OpenLayers": "~3.16",
     "angular": "~1.5",
     "angular-animate": "~1.5",
