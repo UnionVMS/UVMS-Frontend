@@ -20,6 +20,14 @@
     <base.href>/unionvms/uvms-poc/</base.href>
   </properties>
 
+  <repositories>
+    <repository>
+      <id>digit</id>
+      <name>digit</name>
+      <url>https://citnet.tech.ec.europa.eu/CITnet/nexus/repository/digit</url>
+    </repository>
+  </repositories>
+
   <dependencies>
     <dependency>
       <groupId>javax.servlet</groupId>
@@ -27,10 +35,31 @@
       <version>3.1.0</version>
       <scope>provided</scope>
     </dependency>
+    <dependency>
+      <groupId>org.apache.logging.log4j</groupId>
+      <artifactId>log4j-1.2-api</artifactId>
+      <version>2.13.3</version>
+    </dependency>
+    <dependency>
+      <groupId>eu.europa.ec.fisheries.uvms.user</groupId>
+      <artifactId>user-authentication-rest</artifactId>
+      <version>2.0.15-MARE-SNAPSHOT</version>
+    </dependency>
+    <dependency>
+      <groupId>eu.europa.ec.mare.usm</groupId>
+      <artifactId>jwt-handler-impl</artifactId>
+      <version>2.1.11</version>
+    </dependency>
+    <dependency>
+      <groupId>eu.europa.ec.digit.iam.ecas.client</groupId>
+      <artifactId>ecas-jsr196</artifactId>
+      <version>4.61.0</version>
+      <scope>provided</scope>
+    </dependency>
   </dependencies>
 
   <build>
-    <finalName>${project.name}</finalName>
+    <finalName>${project.artifactId}</finalName>
     <pluginManagement>
       <plugins>
         <plugin>

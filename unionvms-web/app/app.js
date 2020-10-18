@@ -947,6 +947,9 @@ function handleEnvironmentConfigurationError(error, $log){
 ///Bootstrap the application by getting the environment config that points out the REST api URL
 var envConfigJsonPath = "config.json?ts=" +(new Date()).getTime();
 
+var TICKET_RE = /^(?:(?:\?ticket=)|(?:&ticket=))(.*)&?$/;
+var MATRIX_PARAM_RE = /;(?:.+)=(?:.+)/;
+
 function getEnvironmentConfig(envConfig) {
     var initInjector = angular.injector(["ng"]);
     var $http = initInjector.get("$http");
@@ -966,6 +969,16 @@ function getEnvironmentConfig(envConfig) {
             deferred.reject(error);
             return;
         }
+
+        var ticket = TICKET_RE.exec(document.location.search);
+
+        var pathnameWithoutMatrixParams = document.location.pathname.replace(MATRIX_PARAM_RE, '');
+        if (ticket || pathnameWithoutMatrixParams !== document.location.pathname) {
+            document.location.replace(document.location.protocol + '//' + document.location.host + pathnameWithoutMatrixParams + document.location.hash);
+            deferred.reject();
+            return;
+        }
+
         $('#appLoading').remove();
         deferred.resolve();
     }, function(error) {

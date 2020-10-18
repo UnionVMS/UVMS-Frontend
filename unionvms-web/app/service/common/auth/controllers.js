@@ -412,12 +412,12 @@ angular.module('auth.controllers', ['ui.bootstrap', 'ui.router'])
 
     .factory('authenticateUser', ['$http', '$q', '$resource', '$log', '$localStorage',
         function ($http, $q, $resource, $log, $localStorage) {
-                return {
+            return {
                 authenticate: function (loginInfo) {
 
                         var message = "";
                         var deferred = $q.defer();
-                        var resource = $resource('usm-administration/rest/authenticate');
+                        var resource = $resource('authentication/authenticate');
                         resource.save({},loginInfo).$promise.then(
                             function(data){
                                 //$log.log(data);

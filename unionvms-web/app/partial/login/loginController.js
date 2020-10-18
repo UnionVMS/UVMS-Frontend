@@ -23,26 +23,24 @@ angular.module('unionvmsWeb').controller('uvmsLoginController', function($scope,
 
     //LOGIN
     $scope.submitAttempted = false;
-    $scope.performLogin = function (loginInfo) {
+    (function (loginInfo) {
         $scope.submitAttempted = true;
-        if($scope.loginForm.$valid) {
-            $scope.actionMessage = undefined;
-            authenticateUser.authenticate(loginInfo).then(
-                function (response) {
-                    if(response.token) {
-                        userService.login(response.token);
-                        $state.go(toState, toParams, {location: 'replace'});
-                    } else {
-                        $scope.actionMessage = locale.getString('login.login_error_no_token_received');
-                    }
-                },
-                function (error) {
-                    $log.error("Error loggin in.", error);
-                    $scope.actionMessage = error;
+        $scope.actionMessage = undefined;
+        authenticateUser.authenticate(loginInfo).then(
+            function (response) {
+                if(response.token) {
+                    userService.login(response.token);
+                    $state.go(toState, toParams, {location: 'replace'});
+                } else {
+                    $scope.actionMessage = locale.getString('login.login_error_no_token_received');
                 }
-            );
-        }
-    };
+            },
+            function (error) {
+                $log.error('Error loggin in.', error);
+                $state.go('uvmsLogout');
+            }
+        );
+    })({});
 
     //RESET PASSWORD
     $scope.resetPassword = function () {
@@ -61,16 +59,18 @@ angular.module('unionvmsWeb').controller('uvmsLoginController', function($scope,
 });
 
 //LOGOUT CONTROLLER
-angular.module('unionvmsWeb').controller('uvmsLogoutController', function($scope, $timeout, $state, $stateParams, userService, configurationService) {
+angular.module('unionvmsWeb').controller('uvmsLogoutController', function($scope, $timeout, $state, $stateParams, userService, configurationService, $http) {
 
-    $scope.loginState = $stateParams.loginState;
-    $scope.logoutMessage = $stateParams.logoutMessage;
-    //Logout and clear configurations
-    userService.logout();
-    configurationService.clear();
-
-    //Go to login page after 1500ms
-    $timeout(function(){
-        $state.go('uvmsLogin', {}, {location: 'replace'});
-    }, 1500);
+    $scope.loggingOut = true;
+    $http.post('logout', null).then(
+        function(response) {
+            $scope.loginState = $stateParams.loginState;
+            $scope.logoutMessage = $stateParams.logoutMessage;
+            //Logout and clear configurations
+            userService.logout();
+            configurationService.clear();
+            $scope.loggingOut = false;
+            $scope.ecasLogoutUrl = response.data;
+        }
+    );
 });
