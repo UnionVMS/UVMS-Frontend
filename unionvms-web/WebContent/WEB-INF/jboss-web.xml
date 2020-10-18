@@ -1,4 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <jboss-web>
-	<context-root>/unionvms</context-root>
+    <context-root>/unionvms</context-root>
+    <security-domain>ecas</security-domain>
 </jboss-web>

@@ -38,7 +38,7 @@ angular.module('auth.interceptor', ['ngStorage','ui.bootstrap'])
          * On false, 403 error response will simply broadcast an "authenticationNeeded" event.
          *
          */
-        this.injectPanel = true;
+        this.injectPanel = false;
 
         /**
          * @ngdoc function

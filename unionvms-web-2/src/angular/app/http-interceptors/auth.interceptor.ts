@@ -9,7 +9,7 @@ export class AuthInterceptor implements HttpInterceptor {
   intercept(request: HttpRequest<any>, next: HttpHandler) {
     // send token for all requests except login
     let authReq: HttpRequest<any> = request;
-    if (!request.url.includes('usm-administration/rest/authenticate')) {
+    if (!request.url.includes('authentication/authenticate')) {
       const TOKEN = localStorage.getItem('token');
       authReq = request.clone({ setHeaders: { Authorization: TOKEN } });
     }
