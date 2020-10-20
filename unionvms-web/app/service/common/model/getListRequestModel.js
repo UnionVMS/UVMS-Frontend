@@ -12,19 +12,21 @@ copy of the GNU General Public License along with the IFDM Suite. If not, see <h
 angular.module('unionvmsWeb')
 .factory('GetListRequest', function(SearchField) {
 
-    function GetListRequest(page, listSize, isDynamic, criterias, sorting){
+    function GetListRequest(page, listSize, isDynamic, criterias, sorting, orderByCriteria){
         this.page = angular.isDefined(page) ? page : 1;
         this.listSize = angular.isDefined(listSize) ? listSize : 10;
         this.isDynamic = angular.isDefined(isDynamic) ? isDynamic : true;
         this.criterias = angular.isDefined(criterias) ? criterias : [];
         this.sorting = angular.isDefined(sorting) ? sorting : {};
+        this.orderByCriteria = angular.isDefined(orderByCriteria) ? orderByCriteria : {};
     }
 
     GetListRequest.prototype.toJson = function(){
         return JSON.stringify({
             pagination : {page: this.page, listSize: this.listSize},
             searchCriteria : {isDynamic: this.isDynamic, criterias: this.criterias},
-            sorting : {sortBy: this.sorting.sortBy, reversed: this.sorting.reverse}
+            sorting : {sortBy: this.sorting.sortBy, reversed: this.sorting.reverse},
+            orderByCriteria : this.orderByCriteria
         });
     };
 
@@ -47,10 +49,16 @@ angular.module('unionvmsWeb')
             updatedCriterias.push(new SearchField(searchFieldKey, searchFieldValue));
         });
 
-        return {
+        var DTOForVessel =  {
             pagination : {page: this.page, listSize: this.listSize},
-            assetSearchCriteria : { isDynamic : this.isDynamic, criterias : updatedCriterias }
+            assetSearchCriteria : { isDynamic : this.isDynamic, criterias : updatedCriterias },
         };
+
+        if(this.orderByCriteria && this.orderByCriteria.orderByParam){
+            DTOForVessel.orderByCriteria = this.orderByCriteria;
+        }
+
+        return DTOForVessel;
     };
 
     GetListRequest.prototype.DTOForMobileTerminal = function(){
@@ -149,6 +157,19 @@ angular.module('unionvmsWeb')
         };
     };
 
+    GetListRequest.prototype.mapOrderByParam = function (orderByParam){
+        var orderByParamMap = {
+            name: "NAME",
+            externalMarking: "EXTERNAL_MARKING",
+            countryCode: "FLAG_STATE",
+            ircs: "IRCS",
+            cfr: "CFR",
+            gearType: "GEAR_TYPE",
+            licenseType: "LICENSE_TYPE"
+        };
+        return orderByParamMap[orderByParam];
+    };
+
     GetListRequest.prototype.DTOForManualPosition = function(){
          return {
             movementSearchCriteria : this.criterias,
@@ -230,6 +251,15 @@ angular.module('unionvmsWeb')
         if(!alreadyExists){
             this.criterias.push(new SearchField(key, value));
         }
+    };
+
+    GetListRequest.prototype.addOrderByCriteria = function(orderByParam, isOrderByDescOrder){
+        this.removeOrderByCriteria();
+        this.orderByCriteria = {orderByParam: this.mapOrderByParam(orderByParam), isOrderByDescOrder: isOrderByDescOrder};
+    };
+
+    GetListRequest.prototype.removeOrderByCriteria = function() {
+        delete this.orderByCriteria;
     };
 
     //Removes criterias with the specified key
