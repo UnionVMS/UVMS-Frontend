@@ -124,6 +124,13 @@ angular.module('unionvmsWeb').controller('AuditlogCtrl', function($scope, $q, $f
                 case TYPES.ALARMS.CUSTOM_RULE_ACTION_TRIGGERED:
                 case TYPES.OTHER.SETTING:
                     return audit.affectedObject;
+                case TYPES.OTHER.SUBSCRIPTION:
+                    if (audit.affectedObject.indexOf('MANUAL:') === 0) {
+                        return 'Manual Query (' + audit.affectedObject.substring('MANUAL:'.length) + ')';
+                    } else if (audit.operation.toUpperCase() === 'DELETE') {
+                        return audit.affectedObject;
+                    }
+                    return '';
                 default:
                     return;
             }
@@ -180,6 +187,9 @@ angular.module('unionvmsWeb').controller('AuditlogCtrl', function($scope, $q, $f
                 case TYPES.ACCESS_CONTROL.USER_PASSWORD:
                     return "#/usm/users/" + audit.affectedObject;
                 case TYPES.OTHER.SUBSCRIPTION:
+                    if (audit.affectedObject.indexOf('MANUAL:') === 0 || audit.operation.toUpperCase() === 'DELETE') {
+                        return;
+                    }
                     var x = ID_NAME_RE.exec(audit.affectedObject);
                     if (!x) {
                         return;
