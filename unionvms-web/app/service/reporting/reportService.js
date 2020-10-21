@@ -404,6 +404,17 @@ angular.module('unionvmsWeb').factory('reportService',function($rootScope, $comp
         return rep.positions;
     };
 
+    function coordsEqual(c1, c2) {
+        return c1[0] === c2[0] && c1[1] === c2[1];
+    }
+
+    function mergeTrips(t1, t2) {
+        t2.forEach(function(tripId) {
+            if (t1.indexOf(tripId) < 0) {
+                t1.push(tripId);
+            }
+        });
+    }
 
 	//Get VMS data Success callback
 	var getVmsDataSuccess = function(data){
@@ -415,27 +426,35 @@ angular.module('unionvmsWeb').factory('reportService',function($rootScope, $comp
         rep.criteria = data.criteria;
 
         //add tripIds to positions
-        rep.positions.forEach(pos => {
-            pos.tripIds = [];
-            let dtList = [];
-            data.trips.forEach(dt => {
-               if (dt.EXT_MARK === pos.properties.externalMarking && moment(pos.properties.positionTime).isBetween(dt.firstFishingActivityDateTime, dt.lastFishingActivityDateTime)) {
-                   dtList.push(dt.tripId);
-               }
-            })
-            pos.tripIds = dtList;
-         })
+        var tripsMap = data.trips.reduce(function(acc, trip) {
+            var key = trip.CFR + '|' + trip.EXT_MARK + '|' + trip.IRCS + '|' + trip.flagState;
+            acc[key] = (acc[key] || []);
+            acc[key].push(trip);
+            return acc;
+        }, {});
+        var emptyArray = [];
+        rep.positions.forEach(function(pos) {
+            var p = pos.properties;
+            var key = p.cfr + '|' + p.externalMarking + '|' + p.ircs + '|' + p.countryCode;
+            var pTime = moment(pos.properties.positionTime);
+            pos.tripIds = (tripsMap[key] || emptyArray).reduce(function(acc, trip) {
+                if (pTime.isBetween(trip.firstFishingActivityDateTime, trip.lastFishingActivityDateTime)) {
+                    acc.push(trip.tripId);
+                }
+                return acc;
+            }, []);
+        });
 
-         //add tripIds to segments
-         rep.segments.forEach(seg => {
-           seg.tripIds = []
-           rep.positions.forEach(pos => {
-               seg.geometry.coordinates.forEach(c => {
-                if (JSON.stringify(c) === JSON.stringify(pos.geometry.coordinates))
-                    seg.tripIds = pos.tripIds;
-               })
-           })
-         })
+        //add tripIds to segments
+        rep.segments.forEach(function(seg) {
+            seg.tripIds = [];
+            rep.positions.forEach(function(pos) {
+                seg.geometry.coordinates.forEach(function(c) {
+                if (coordsEqual(c, pos.geometry.coordinates))
+                    mergeTrips(seg.tripIds, pos.tripIds);
+                });
+            });
+        });
 
         if(rep.reportType === 'standard'){
             rep.loadReportHistory();
