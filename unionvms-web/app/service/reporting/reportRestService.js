@@ -9,7 +9,7 @@ the hope that it will be useful, but WITHOUT ANY WARRANTY; without even the impl
 FITNESS FOR A PARTICULAR PURPOSE.  See the GNU General Public License for more details. You should have received a
 copy of the GNU General Public License along with the IFDM Suite. If not, see <http://www.gnu.org/licenses/>.
 */
-angular.module('unionvmsWeb').factory('reportRestFactory', function($resource) {
+angular.module('unionvmsWeb').factory('reportRestFactory', function($resource, $http) {
     
 	return {
 	    getReportsList: function(){
@@ -102,10 +102,19 @@ angular.module('unionvmsWeb').factory('reportRestFactory', function($resource) {
 	                }
 	            }
 	        });
+        },
+        postForKMLExportUUID: function () {
+	        return $http.post('reporting/rest/kml', null);
+        },
+        startKMLFileDownload: function (id) {
+            return $http.get('reporting/rest/kml/' + id);
+        },
+        sendDataForKMLExport: function (id, features) {
+            return $http.put('reporting/rest/kml/' + id, features);
         }
 	};
 })
-.service('reportRestService', function($q, reportRestFactory){
+.service('reportRestService', function($q, reportRestFactory, $timeout){
 
     var reportRestService = {
         getReportsList: function(){
@@ -213,6 +222,39 @@ angular.module('unionvmsWeb').factory('reportRestFactory', function($resource) {
                 deferred.reject(error);
             });
             return deferred.promise;
+        },
+        sendDataForExport: function(uuid, features) {
+            var self = this;
+            if(!angular.equals(features, {})) {
+                var firstFeatureKey = Object.keys(features)[0];
+                var featuresAsJson = JSON.stringify({"features" : { [firstFeatureKey] : features[firstFeatureKey]}});
+                reportRestFactory.sendDataForKMLExport(uuid,featuresAsJson).then(function() {
+                    delete features[firstFeatureKey];
+                    self.sendDataForExport(uuid, features);
+                }, function() {
+                    console.error("Failed to put data for " + firstFeatureKey);
+                    alert("Failed to send data to sever");
+                }, self)
+            } else {
+                reportRestFactory.sendDataForKMLExport(uuid, null);
+            }
+        },
+        export: function(features){
+            var self = this;
+            return reportRestFactory.postForKMLExportUUID().then(function(response) {
+                var uuid = response.data;
+                var waitForFile = reportRestFactory.startKMLFileDownload(uuid).then(function(response) {
+                    return response.data;
+                }, function () {
+                    console.error("Failed to get file with UUID: " + uuid);
+                    alert("Selections not exported, failed to get file");
+                });
+                $timeout(self.sendDataForExport(uuid, features), 4000);
+                return waitForFile;
+            }, function () {
+                console.error("Failed to get file UUID");
+                alert("Selections not exported, failed to get file UUID");
+            }, self);
         }
     };
     return reportRestService;

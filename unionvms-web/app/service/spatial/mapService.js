@@ -1154,6 +1154,34 @@ angular.module('unionvmsWeb').factory('mapService', function(locale, $rootScope,
         }
     };
     
+    /**
+     * Get color code for each VMS position according to the styles definitions of report/user preferences without depending on isVisible value.
+     * 
+     * @memberof mapService
+     * @public
+     * @alias getColorForPositionWithoutIsVisible
+     * @param {ol.Feature} feature - The OL vector feature
+     * @returns {String} The hexadecimal color code
+     */
+    ms.getColorForPositionWithoutIsVisible = function(feature){
+        switch (ms.styles.positions.attribute) {
+            case 'countryCode':
+                return ms.getColorByFlagState(ms.styles.positions, feature.get('features')[0].get('countryCode'));
+            case 'type':
+                return ms.getColorByStaticFields(ms.styles.positions, feature.get('features')[0].get('movementType'));
+            case 'activity':
+                return ms.getColorByStaticFields(ms.styles.positions, feature.get('features')[0].get('activityType'));
+            case 'reportedSpeed':
+                return ms.getColorByRange(ms.styles.positions, feature.get('features')[0].get('reportedSpeed'));
+            case 'reportedCourse':
+                return ms.getColorByRange(ms.styles.positions, feature.get('features')[0].get('reportedCourse'));
+            case 'calculatedSpeed':
+                return ms.getColorByRange(ms.styles.positions, feature.get('features')[0].get('calculatedSpeed'));
+            default:
+                return '#0066FF'; //default color
+        }
+    };
+    
     //OL VMS positions cluster style
     ms.clusterStyles = {};
     ms.currentResolution = undefined;
@@ -3668,6 +3696,10 @@ angular.module('unionvmsWeb').factory('mapService', function(locale, $rootScope,
     //array holding features selected by DragBox
     ms.selectedFeatures = [];
     
+    ms.getSelectedFeatures = function() {
+        return ms.selectedFeatures;
+    };
+    
     ms.setDragBoxEvent = function(map){
         var dragBox = new ol.interaction.DragBox({
             condition: ol.events.condition.shiftKeyOnly
@@ -3715,6 +3747,154 @@ angular.module('unionvmsWeb').factory('mapService', function(locale, $rootScope,
             return feature.get('layerType') !== layer;
         });
         ms.resetHighlightedFeatures();
+    };
+    
+    ms.getSelectedFeaturesForExport = function(identifier) {
+        var features = {};
+        angular.forEach(ms.selectedFeatures, function (feature) {
+            var flagStateFolder = ms.defineObjectIfUndefined(features, ms.getFlagState(feature));
+            var identifierFolder = ms.defineObjectIfUndefined(flagStateFolder, ms.getIdentifier(feature, identifier));
+            ms.pushFeatureInRelevantLayerFolder(identifierFolder, feature);
+        });
+        var formatter = new ol.format.KML();
+        return features;
+    };
+
+    ms.defineObjectIfUndefined = function(parent, name) {
+        if(!parent[name]) {
+            parent[name] = {};
+        }
+        return parent[name];
+    };
+
+    ms.defineArrayIfUndefined = function(parent, name) {
+        if(!parent[name]) {
+            parent[name] = [];
+        }
+        return parent[name];
+    };
+        
+    ms.getFlagState = function(feature) {
+        if(feature.get('layerType') === 'ers')  {
+            return feature.get('flagState') !== "" ? feature.get('flagState') : "UNKNOWN";
+        } else if(feature.get('layerType') === 'vmspos') {
+            return feature.get('countryCode') !== "" ? feature.get('features')[0].get('countryCode') : "UNKNOWN";
+        } else if(feature.get('layerType') === 'vmsseg') {
+            return feature.get('countryCode') !== "" ? feature.get('countryCode') : "UNKNOWN";
+        }
+    };
+    
+    ms.getIdentifier = function(feature, identifier) {
+        if(feature.get('layerType') === 'ers')  {
+            return identifier.toUpperCase() + ": " + feature.get(identifier.toUpperCase());
+        } else if(feature.get('layerType') === 'vmspos') {
+            return identifier.toUpperCase() + ": " + feature.get('features')[0].get(identifier.toLowerCase());
+        } else if(feature.get('layerType') === 'vmsseg') {
+            return identifier.toUpperCase() + ": " + feature.get(identifier.toLowerCase());
+        }
+    };
+    
+    ms.pushFeatureInRelevantLayerFolder = function(parent, feature) {
+        var layerFolder;
+        if(feature.get('layerType') === 'ers')  {
+            layerFolder = ms.defineArrayIfUndefined(parent, 'activities');
+            layerFolder.push(ms.activityFeatureToDto(feature));
+        } else if(feature.get('layerType') === 'vmspos') {
+            layerFolder = ms.defineArrayIfUndefined(parent, 'positions');
+            layerFolder.push(ms.positionFeatureToDto(feature));
+        } else if(feature.get('layerType') === 'vmsseg') {
+            layerFolder = ms.defineArrayIfUndefined(parent, 'segments');
+            layerFolder.push(ms.segmentFeatureToDto(feature));
+        }
+    };
+    
+    ms.getTransformedCoordinates = function(feature) {
+        var src = 'EPSG:3857';
+        var dest = 'EPSG:4326';
+        var clonedFeature = feature.clone();
+        clonedFeature.getGeometry().transform(src, dest);
+        return clonedFeature.getGeometry().getCoordinates();
+    };
+    
+    ms.positionFeatureToDto = function(feature) {
+        var dto = {};
+
+        dto['geometry'] = ms.getTransformedCoordinates(feature).join();
+        dto['color'] = ms.getColorForPositionWithoutIsVisible(feature);
+        
+        var properties = feature.get('features')[0].getProperties();
+        dto['positionTime'] = properties['positionTime'];
+        dto['connectionId'] = properties['connectionId'];
+        dto['reportedCourse'] = properties['reportedCourse'];
+        dto['movementType'] = properties['movementType'];
+        dto['reportedSpeed'] = properties['reportedSpeed'];
+        dto['cfr'] = properties['cfr'];
+        dto['countryCode'] = properties['countryCode'];
+        dto['calculatedSpeed'] = properties['calculatedSpeed'];
+        dto['ircs'] = properties['ircs'];
+        dto['name'] = properties['name'];
+        dto['movementGuid'] = properties['movementGuid'];
+        dto['externalMarking'] = properties['externalMarking'];
+        dto['source'] = properties['source'];
+        dto['isVisible'] = properties['isVisible'];
+        return dto;
+    };
+
+    ms.segmentFeatureToDto = function(feature) {
+        var dto = {};
+
+        dto['geometry'] = [];
+        angular.forEach(ms.getTransformedCoordinates(feature), function(coordinates) {
+            dto['geometry'].push(coordinates.join());
+        });
+        dto['color'] = ms.getColorForSegment(feature);
+        
+        var properties = feature.getProperties();
+        dto['cfr'] = properties['cfr'];
+        dto['countryCode'] = properties['countryCode'];
+        dto['courseOverGround'] = parseInt(properties['courseOverGround']);
+        dto['distance'] = parseFloat(properties['distance']);
+        dto['duration'] = parseInt(properties['duration']);
+        dto['externalMarking'] = properties['externalMarking'];
+        dto['ircs'] = properties['ircs'];
+        dto['name'] = properties['name'];
+        dto['segmentCategory'] = properties['segmentCategory'];
+        dto['speedOverGround'] = parseFloat(properties['speedOverGround']);
+        dto['trackId'] = properties['trackId'];
+        return dto;
+    };
+
+    ms.activityFeatureToDto = function(feature) {
+        var dto = {};
+
+        dto['geometry'] = ms.getTransformedCoordinates(feature).join();
+        
+        var properties = feature.getProperties();
+        dto['activityId'] = parseInt(properties['activityId']);
+        dto['faReportID'] = parseInt(properties['faReportID']);
+        dto['activityType'] = properties['activityType'];
+        dto['acceptedDateTime'] = properties['acceptedDateTime'];
+        dto['dataSource'] = properties['dataSource'];
+        dto['reportType'] = properties['reportType'];
+        dto['purposeCode'] = properties['purposeCode'];
+        dto['vesselName'] = properties['vesselName'];
+        dto['vesselGuid'] = properties['vesselGuid'];
+        dto['tripId'] = properties['tripId'];
+        dto['flagState'] = properties['flagState'];
+        dto['isCorrection'] = properties['isCorrection'];
+        dto['gears'] = properties['gears'];
+        dto['species'] = properties['species'];
+        dto['ports'] = properties['ports'];
+        dto['areas'] = properties['areas'];
+        var vesselIds = [];
+        vesselIds.push({'key' : 'EXT_MARK' , 'value' : properties['EXT_MARK']});
+        vesselIds.push({'key' : 'IRCS' , 'value' : properties['IRCS']});
+        vesselIds.push({'key' : 'CFR' , 'value' : properties['CFR']});
+        vesselIds.push({'key' : 'UVI' , 'value' : properties['UVI']});
+        vesselIds.push({'key' : 'ICCAT' , 'value' : properties['ICCAT']});
+        vesselIds.push({'key' : 'GFCM' , 'value' : properties['GFCM']});
+        dto['vesselIdentifiers'] = vesselIds;
+        return dto;
     };
     
 	return ms;

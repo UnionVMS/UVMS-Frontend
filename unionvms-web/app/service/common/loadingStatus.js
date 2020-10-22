@@ -44,6 +44,11 @@ angular.module('unionvmsWeb').factory('loadingStatus',function() {
             value: false,
             counter: 0
 		},
+        ExportSelections: {
+            message: ['spatial.reports_exporting_selections'],
+            value: false,
+            counter: 0
+        },
 		SearchReferenceData: {
 		    message: 'spatial.loading_data',
             value: false,

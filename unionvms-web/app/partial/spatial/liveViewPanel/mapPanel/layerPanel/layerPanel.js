@@ -9,10 +9,14 @@ the hope that it will be useful, but WITHOUT ANY WARRANTY; without even the impl
 FITNESS FOR A PARTICULAR PURPOSE.  See the GNU General Public License for more details. You should have received a
 copy of the GNU General Public License along with the IFDM Suite. If not, see <http://www.gnu.org/licenses/>.
 */
-angular.module('unionvmsWeb').controller('LayerpanelCtrl',function($scope, $timeout, $state, $window, mapService, locale, reportService, reportFormService, reportRestService, loadingStatus, alertModalService){
+angular.module('unionvmsWeb').controller('LayerpanelCtrl', function($scope, $timeout, $state, $window, mapService, locale, reportService, reportFormService, reportRestService, loadingStatus, alertModalService){
     $scope.expanded = true;
     $scope.tab = "LAYERTREE";
     $scope.tabTitle = undefined;
+    $scope.loadingStatus = loadingStatus;
+    $scope.exportSettings = {
+        identifierForExport: 'CFR'
+    };
     
     locale.ready('spatial').then(function(){
          setTabTitle();
@@ -31,6 +35,31 @@ angular.module('unionvmsWeb').controller('LayerpanelCtrl',function($scope, $time
                 break;
         }
     };
+    
+    $scope.getValueInDropdownForm = function(value) {
+        return {'text' : value, 'code' : value};
+    };
+    
+    $scope.identifiersForExport = [$scope.getValueInDropdownForm("CFR"), $scope.getValueInDropdownForm("IRCS"), $scope.getValueInDropdownForm("UVI"), $scope.getValueInDropdownForm("Ext. Marking"), $scope.getValueInDropdownForm("ICCAT")];
+        
+    $scope.exportSelectedFeatures = function () {
+        var features = mapService.getSelectedFeaturesForExport($scope.exportSettings.identifierForExport);
+        loadingStatus.isLoading('ExportSelections', true, 0);
+        reportRestService.export(features).then(function (data) {
+            if(data) {
+                var file = new Blob([data], {type: 'application/xml;charset=UTF-8'});
+                $window.saveAs(file, "kmlExport" + moment().format("YYYY-MM-DDTHH:mm") + ".kml");
+            }
+            loadingStatus.isLoading('ExportSelections',false);
+        }, function (error) {
+            loadingStatus.isLoading('ExportSelections',false);
+        });
+    };
+    
+    $scope.checkIfSelectedFeatures = function() {
+        return mapService.getSelectedFeatures().length > 0;
+    };
+    
     
     $scope.switchCollapse = function(){
         $scope.expanded = !$scope.expanded;

@@ -65,6 +65,20 @@ copy of the GNU General Public License along with the IFDM Suite. If not, see <h
 	   			{{ 'header.page_title_areas' | i18n }}
 	   		</div>
 	   	</div>
+        <div class="panel-component-item-with-button" ng-if="checkIfSelectedFeatures()">
+            <div class="panel-component-inner-item">
+                <span class="fa fa-download"></span>&nbsp;&nbsp;
+                {{ 'header.page_title_export' | i18n }}
+                <div class="row no-gutters">
+                    <div class="col-md-8">
+                        <dropdown items="identifiersForExport" ng-model="exportSettings.identifierForExport" class="dropup" initialtext="{{'header.dropdown_title_vessel_identifier' | i18n}}"></dropdown>
+                    </div>
+                    <div class="col-md-3">
+                        <button type="button" class="btn btn-primary" ng-click="exportSelectedFeatures()">Export</button>
+                    </div>
+                </div>
+            </div>
+        </div>
 	</div>
 </div>
 
