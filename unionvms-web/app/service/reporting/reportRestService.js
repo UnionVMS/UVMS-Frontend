@@ -10,7 +10,7 @@ FITNESS FOR A PARTICULAR PURPOSE.  See the GNU General Public License for more d
 copy of the GNU General Public License along with the IFDM Suite. If not, see <http://www.gnu.org/licenses/>.
 */
 angular.module('unionvmsWeb').factory('reportRestFactory', function($resource, $http) {
-    
+
 	return {
 	    getReportsList: function(){
 	        return $resource('reporting/rest/report/list', {}, {
@@ -60,7 +60,7 @@ angular.module('unionvmsWeb').factory('reportRestFactory', function($resource, $
 	               headers: {
 	                   'Content-Type': 'application/json'
 	               }
-	           } 
+	           }
 	        });
 	    },
         shareReport: function(){
@@ -70,7 +70,7 @@ angular.module('unionvmsWeb').factory('reportRestFactory', function($resource, $
                    headers: {
                         'Content-Type': 'application/json'
                     }
-               } 
+               }
             });
         },
 		executeWithoutSaving: function(){
@@ -80,7 +80,7 @@ angular.module('unionvmsWeb').factory('reportRestFactory', function($resource, $
 	               headers: {
 	                   'Content-Type': 'application/json'
 	               }
-	           } 
+	           }
 	        });
 	    },
 	    setDefaultReport: function(){
@@ -177,7 +177,7 @@ angular.module('unionvmsWeb').factory('reportRestFactory', function($resource, $
             }, function(error){
                 deferred.reject(error);
             });
-            
+
             return deferred.promise;
         },
         shareReport: function(id, visibility, reportIdx){
@@ -198,7 +198,7 @@ angular.module('unionvmsWeb').factory('reportRestFactory', function($resource, $
             }, function(error){
                 deferred.reject(error);
             });
-            
+
             return deferred.promise;
         },
         setDefaultReport: function(id, override){
@@ -227,7 +227,9 @@ angular.module('unionvmsWeb').factory('reportRestFactory', function($resource, $
             var self = this;
             if(!angular.equals(features, {})) {
                 var firstFeatureKey = Object.keys(features)[0];
-                var featuresAsJson = JSON.stringify({"features" : { [firstFeatureKey] : features[firstFeatureKey]}});
+                var featuresAsObject = { features: {} };
+                featuresAsObject.features[firstFeatureKey] = features[firstFeatureKey];
+                var featuresAsJson = JSON.stringify(featuresAsObject);
                 reportRestFactory.sendDataForKMLExport(uuid,featuresAsJson).then(function() {
                     delete features[firstFeatureKey];
                     self.sendDataForExport(uuid, features);
