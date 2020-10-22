@@ -15,6 +15,7 @@ angular.module('unionvmsWeb')
     function GetListRequest(page, listSize, isDynamic, criterias, sorting, extraParams){
         this.page = angular.isDefined(page) ? page : 1;
         this.listSize = angular.isDefined(listSize) ? listSize : 10;
+        // is this always true?
         this.isDynamic = angular.isDefined(isDynamic) ? isDynamic : true;
         this.criterias = angular.isDefined(criterias) ? criterias : [];
         this.sorting = angular.isDefined(sorting) ? sorting : {};
@@ -176,7 +177,8 @@ angular.module('unionvmsWeb')
 
     GetListRequest.prototype.DTOForExchangeMessageList = function(){
         return{
-            exchangeSearchCriteria : {criterias: this.criterias, isDynamic: false},
+            // isDynamic will here mean logicalAnd. The opposite of the meaning i backend
+            exchangeSearchCriteria : {criterias: this.criterias, isDynamic: true},
             pagination: {page: this.page, listSize: this.listSize},
             sorting: this.sorting
         };
