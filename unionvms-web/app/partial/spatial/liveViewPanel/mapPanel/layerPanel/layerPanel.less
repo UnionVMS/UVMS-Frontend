@@ -15,7 +15,6 @@ copy of the GNU General Public License along with the IFDM Suite. If not, see <h
 	overflow-y: hidden;
 	position: absolute;
 	top: 56px;
-	bottom: 200px;
 	left: 10px;
 	z-index: 1035;
 	
@@ -160,4 +159,30 @@ copy of the GNU General Public License along with the IFDM Suite. If not, see <h
 			
 		}
 	}
+	.panel-component-item-with-button {
+        border: 1px solid @profileColor_gray;
+        border-left: none;
+        border-right: none;
+        border-top: none;
+        height: 66px;
+		cursor: pointer;
+		.panel-component-inner-item {
+			color: @profileColor_blue;
+			border-top: 0;
+			padding: 0 7px;
+			span {
+				line-height: 30px;
+			}			
+		}
+	}
+    .no-gutters {
+        margin-right: 0;
+        margin-left: 0;
+        > .col,
+        > [class*="col-"] {
+            padding: 0;
+            margin-left: 1px;
+            margin-right: 1px;
+        }
+    }
 }

@@ -30,6 +30,7 @@
 	"page_title_default": "UnionVMS",
 	"page_title_reports": "Reports",
 	"page_title_areas": "Area management",
+	"page_title_export": "Export selection to KML",
 	"page_title_subscriptions": "Subscriptions",
 	"page_title_activity": "Activity",
 	"page_title_movements": "Position reports",
@@ -44,5 +45,7 @@
 	"page_title_rules": "Rules",
 	"page_title_audit_logs": "Audit logs",
 	"page_title_configuration": "Configuration",
-	"page_title_help": "Help"
+	"page_title_help": "Help",
+    
+    "dropdown_title_vessel_identifier": "Vessel Identifier"
 }
