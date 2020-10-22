@@ -13,6 +13,8 @@ angular.module('unionvmsWeb').factory('MapFish',function() {
 
     var model = {
 
+        spatialServerUrl: undefined,
+
         isDeployed : false,
 
         jobStatusData : {
@@ -51,6 +53,10 @@ angular.module('unionvmsWeb').factory('MapFish',function() {
         includeLongCopyright: false,
 
         printMapSize: [],
+
+        initSpatialServerUrl: function(spatialServerUrl) {
+            model.spatialServerUrl = spatialServerUrl;
+        },
 
         reset: function(){
             model.templates = [];
@@ -126,7 +132,12 @@ angular.module('unionvmsWeb').factory('MapFish',function() {
     return model;
 
 })
-.factory('MapFishPayload',function(locale, $location, Color, MapFish, mapService, mapFishPrintRestService, unitConversionService, projectionService, coordinateFormatService){
+.factory('MapFishPayload',function(locale, $location, Color, MapFish, mapService, mapFishPrintRestService, unitConversionService, projectionService, coordinateFormatService, spatialConfigRestService){
+
+    spatialConfigRestService.getAdminConfigs().then(function(configs) {
+        this.spatialServerUrl = configs.systemSettings.spatialServerUrl;
+    });
+
     function mapFishPayload(){
         this.layout = undefined;
         this.attributes = {};
@@ -334,9 +345,14 @@ angular.module('unionvmsWeb').factory('MapFish',function() {
     };
 
     var getUrl = function(){
-        var url = $location.protocol() + '://' + $location.host();
-        if ($location.port() !== 80){
-            url += ':' + $location.port();
+        var url = null;
+        if (this.spatialServerUrl) {
+            url = this.spatialServerUrl;
+        } else {
+            var url = $location.protocol() + '://' + $location.host();
+            if ($location.port() !== 80){
+                url += ':' + $location.port();
+            }
         }
 
         return url;
