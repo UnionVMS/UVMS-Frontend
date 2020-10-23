@@ -163,7 +163,7 @@ copy of the GNU General Public License along with the IFDM Suite. If not, see <h
                                         <span>{{'spatial.reports_table_search_header' | i18n}}</span>
                                     </button>
                                     <input id="positionsFilters{{isModal ? 'Modal' : ''}}" st-search="positions" class="hidden-st-control" type="search">
-                                    <st-reset-search form-id="posFiltersForm{{isModal ? 'Modal' : ''}}" clear-dates="clearDateFilters()" last-x-id="positions-lastX"></st-reset-search>
+                                    <st-reset-search form-id="posFiltersForm{{isModal ? 'Modal' : ''}}" ng-click="clearDynamicForms('positions')" clear-dates="clearDateFilters()" last-x-id="positions-lastX"></st-reset-search>
                                     <button type="button" class="btn btn-default plus" ng-click="addDynamicForm('positions')">
                                         <span class="fa fa-plus"></span>&nbsp;
                                     </button>
@@ -315,7 +315,7 @@ copy of the GNU General Public License along with the IFDM Suite. If not, see <h
                                         <span>{{'spatial.reports_table_search_header' | i18n}}</span>
                                     </button>
                                     <input id="segmentsFilters{{isModal ? 'Modal' : ''}}" st-search="segments" class="hidden-st-control" type="search">
-                                    <st-reset-search form-id="segFiltersForm{{isModal ? 'Modal' : ''}}" last-x-id="segments-lastX"></st-reset-search>
+                                    <st-reset-search form-id="segFiltersForm{{isModal ? 'Modal' : ''}}" ng-click="clearDynamicForms('segments')" last-x-id="segments-lastX"></st-reset-search>
                                     <button type="button" class="btn btn-default plus" ng-click="addDynamicForm('segments')">
                                         <span class="fa fa-plus"></span>&nbsp;
                                     </button>
@@ -444,7 +444,7 @@ copy of the GNU General Public License along with the IFDM Suite. If not, see <h
                                         <span>{{'spatial.reports_table_search_header' | i18n}}</span>
                                     </button>
                                     <input id="tracksFilters{{isModal ? 'Modal' : ''}}" st-search="tracks" class="hidden-st-control" type="search">
-                                    <st-reset-search form-id="trackFiltersForm{{isModal ? 'Modal' : ''}}" last-x-id="tracks-lastX"></st-reset-search>
+                                    <st-reset-search form-id="trackFiltersForm{{isModal ? 'Modal' : ''}}" ng-click="clearDynamicForms('tracks')" last-x-id="tracks-lastX"></st-reset-search>
                                     <button type="button" class="btn btn-default plus" ng-click="addDynamicForm('tracks')">
                                         <span class="fa fa-plus"></span>&nbsp;
                                     </button>
@@ -586,7 +586,7 @@ copy of the GNU General Public License along with the IFDM Suite. If not, see <h
                                         <span>{{'spatial.reports_table_search_header' | i18n}}</span>
                                     </button>
                                     <input id="alarmsFilters{{(isModal ? 'Modal' : '')}}" st-search="alarms" class="hidden-st-control" type="search">
-                                    <st-reset-search form-id="alarmFiltersForm{{isModal ? 'Modal' : ''}}" clear-dates="clearDateFilters()" last-x-id="alarms-lastX"></st-reset-search>
+                                    <st-reset-search form-id="alarmFiltersForm{{isModal ? 'Modal' : ''}}" ng-click="clearDynamicForms('alarms')" clear-dates="clearDateFilters()" last-x-id="alarms-lastX"></st-reset-search>
                                     <button type="button" class="btn btn-default plus" ng-click="addDynamicForm('alarms')">
                                         <span class="fa fa-plus"></span>&nbsp;
                                     </button>
@@ -753,7 +753,7 @@ copy of the GNU General Public License along with the IFDM Suite. If not, see <h
                                         <span>{{'spatial.reports_table_search_header' | i18n}}</span>
                                     </button>
                                     <input id="tripsFilters{{isModal ? 'Modal' : ''}}" st-search="trips" class="hidden-st-control" type="search">
-                                    <st-reset-search form-id="tripFiltersForm{{isModal ? 'Modal' : ''}}" clear-dates="clearDateFilters()" clear-combos="clearComboFilters()"></st-reset-search>
+                                    <st-reset-search form-id="tripFiltersForm{{isModal ? 'Modal' : ''}}" ng-click="clearDynamicForms('trips')" clear-dates="clearDateFilters()" clear-combos="clearComboFilters()"></st-reset-search>
                                     <button type="button" class="btn btn-default plus" ng-click="addDynamicForm('trips')">
                                         <span class="fa fa-plus"></span>&nbsp;
                                     </button>
