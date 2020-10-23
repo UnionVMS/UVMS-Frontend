@@ -155,6 +155,10 @@ angular.module('unionvmsWeb').controller('VmspanelCtrl',function($scope, locale,
            $scope.lastEventDates = [];
        }
    };
+   
+   $scope.clearDynamicForms = function(tab) {
+       $scope.dynamicSearchArray[tab] = [0];
+   };
 
    $scope.clearComboFilters = function(){
        $scope.firstFishingActivityTypes = [];
