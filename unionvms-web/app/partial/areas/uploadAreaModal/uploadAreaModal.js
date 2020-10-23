@@ -179,6 +179,8 @@ angular.module('unionvmsWeb').controller('UploadareamodalCtrl',function($scope, 
             });
             
             var geom = geometries[0].getGeometry();
+
+            geom.setCoordinates($scope.transformXYZCoordsToXY(geom.getCoordinates()[0]));
             var firstCoord = geom.getFirstCoordinate();
             var lastCoord = geom.getLastCoordinate();
 
@@ -199,6 +201,18 @@ angular.module('unionvmsWeb').controller('UploadareamodalCtrl',function($scope, 
             $scope.setError();
             return;
         }
+    };
+
+    $scope.transformXYZCoordsToXY = function(coords) {
+        var xyCoords = [];
+        xyCoords.push([]);
+        angular.forEach(coords, function (xyzCoors) {
+            var innerCoords = [];
+            innerCoords.push(xyzCoors[1]);
+            innerCoords.push(xyzCoors[0]);
+            xyCoords[0].push(innerCoords)
+        }, this);
+        return xyCoords;
     };
     
     //WKT Parser
