@@ -33,7 +33,11 @@ angular.module('unionvmsWeb').factory('reportService',function($rootScope, $comp
        errorLoadingDefault: false,
        lastMapConfigs: undefined,
        getConfigsTime: undefined,
-       getReportTime: undefined
+       getReportTime: undefined,
+       mapZoom: undefined,
+       mapCenter: undefined,
+       layerConfiguration: {},
+       layersConfig: {}
     };
 
     rep.clearVmsData = function(){
@@ -87,6 +91,15 @@ angular.module('unionvmsWeb').factory('reportService',function($rootScope, $comp
         $modalStack.dismissAll();
     };
 
+    rep.pushLayerConfig = function(node, value) {
+       rep.layersConfig[node] = value;
+    };
+
+
+    rep.getLayerConfig = function() {
+        return rep.layersConfig;
+    };
+
 	rep.runReport = function(report){
         rep.clearMapOverlays();
         loadingStatus.isLoading('LiveviewMap',true, 0);
@@ -96,6 +109,9 @@ angular.module('unionvmsWeb').factory('reportService',function($rootScope, $comp
 
         if(angular.isDefined(report)){
             rep.reportType = report.reportType;
+            rep.layerConfiguration = JSON.parse(report.mapLayerConfig ? report.mapLayerConfig : '{}');
+            rep.mapZoom = report.mapZoom;
+            rep.mapCenter = report.mapCenter;
         }
         rep.hasAlert = false;
         $modalStack.dismissAll();
@@ -176,6 +192,11 @@ angular.module('unionvmsWeb').factory('reportService',function($rootScope, $comp
             rep.stopAutoRefreshInterval();
         }
 		rep.isReportExecuting = true;
+		 if (angular.isDefined(report)) {
+            rep.layerConfiguration = JSON.parse(report.mapLayerConfig ? report.mapLayerConfig : '{}');
+            rep.mapZoom = report.mapZoom;
+            rep.mapCenter = report.mapCenter;
+         }
 		rep.mergedReport = angular.copy(report);
         if(rep.mergedReport.withMap && rep.mergedReport.reportType === 'standard'){
             spatialConfigRestService.getUserConfigs().then(getUserConfigsSuccess, getUserConfigsFailure);
@@ -233,6 +254,11 @@ angular.module('unionvmsWeb').factory('reportService',function($rootScope, $comp
     };
 
 	rep.refreshReport = function(){
+	    if (angular.isDefined(reportFormService.liveView.currentReport) && reportFormService.liveView.currentReport !== null) {
+	         rep.layerConfiguration = JSON.parse(reportFormService.liveView.currentReport.mapLayerConfig ? reportFormService.liveView.currentReport.mapLayerConfig : '{}');
+             rep.mapZoom = reportFormService.liveView.currentReport.mapZoom;
+             rep.mapCenter = reportFormService.liveView.currentReport.mapCenter;
+	    }
 	    if (angular.isDefined(rep.id)){
 	        setStateProperties();
 	        rep.clearMapOverlays();
@@ -472,7 +498,29 @@ angular.module('unionvmsWeb').factory('reportService',function($rootScope, $comp
                 //Add nodes to the tree and layers to the map
                 if (rep.positions.length > 0 || rep.segments.length > 0 || rep.activities.length > 0){
                     var vectorNodeSource = new TreeModel();
-                    vectorNodeSource = vectorNodeSource.nodeFromData(data);
+
+                    vectorNodeSource = vectorNodeSource.nodeFromData(data, rep.layerConfiguration);
+
+                    angular.forEach(vectorNodeSource, function(VNSChild) {
+                        var selected = false;
+
+                        angular.forEach(VNSChild.children, function(child){
+                            if (child.selected === true) {
+                                selected = true;
+                            }
+                            if (!child.data && child.type === 'ers-type') {
+                                rep.pushLayerConfig(child.filterType, child.selected);
+                            } else {
+                                rep.pushLayerConfig(child.data.type, child.selected);
+                                if (child.children) {
+                                    angular.forEach(child.children, function(child2){
+                                        rep.pushLayerConfig(child2.type, child.selected);
+                                    });
+                                }
+                            }
+                        });
+                        rep.pushLayerConfig(VNSChild.data ? VNSChild.data.type : VNSChild.type, selected);
+                    });
 
                     var previousLayerState = mapStateService.fromStorage();
                     if (angular.isDefined(previousLayerState) && previousLayerState.repId === rep.id){
@@ -494,7 +542,10 @@ angular.module('unionvmsWeb').factory('reportService',function($rootScope, $comp
                     layerPanelService.addLayerTreeNode(vectorNodeSource);
 
                     if (reportingNavigatorService.isViewVisible('mapPanel') && angular.isUndefined(previousLayerState)){
-                        mapService.zoomToPositionsLayer();
+                        if (angular.isDefined(rep.mapZoom) && rep.mapZoom === null) {
+                             mapService.zoomToPositionsLayer();
+                        }
+
                     }
                 } else if (rep.positions.length === 0 && rep.segments.length === 0){
                     rep.hasAlert = true;
@@ -653,6 +704,10 @@ angular.module('unionvmsWeb').factory('reportService',function($rootScope, $comp
             this.push(nodeCfgFromServer);
         }, newTreeSource);
 
+        if (angular.isDefined(oldTreeSource) && oldTreeSource.length === 0) {
+            newTreeSource = treeSourceFromCfg;
+        }
+
         return newTreeSource;
     };
 
@@ -661,6 +716,22 @@ angular.module('unionvmsWeb').factory('reportService',function($rootScope, $comp
 	    if (mapService.getMapProjectionCode() !== 'EPSG:' + data.map.projection.epsgCode){
 	        mapService.updateMapView(data.map.projection);
 	    }
+
+	    if (angular.isDefined(rep.mapCenter) && rep.mapCenter !== null) {
+            rep.mapCenter = rep.mapCenter.replace('[','');
+            rep.mapCenter = rep.mapCenter.replace(']','');
+
+            var centerArray = [];
+            if (angular.isDefined(centerArray)) {
+                centerArray.push(parseFloat(rep.mapCenter.split(',')[0]));
+                centerArray.push(parseFloat(rep.mapCenter.split(',')[1]));
+                mapService.map.getView().setCenter(centerArray);
+            }
+        }
+
+        if (angular.isDefined(rep.mapZoom) && rep.mapZoom !== null) {
+            mapService.map.getView().setZoom(rep.mapZoom);
+        }
 
 	    //Set map controls
 	    mapService.updateMapControls(data.map.control);
@@ -690,7 +761,24 @@ angular.module('unionvmsWeb').factory('reportService',function($rootScope, $comp
 	    //Build tree object and update layer panel
 
         var treeSource = new TreeModel();
-        treeSource = treeSource.fromConfig(data.map.layers);
+        treeSource = treeSource.fromConfig(data.map.layers, rep.layerConfiguration);
+
+        angular.forEach(treeSource, function(ts) {
+            var selected = false;
+            angular.forEach(ts.children, function(ch) {
+                var type = ch.data.type === 'WMS' ? ch.data.typeName : ch.data.type;
+                if (ch.children) {
+                    angular.forEach(ch.children, function(dc) {
+                        rep.pushLayerConfig(type, dc.selected ? dc.selected : false);
+                    });
+                }
+                if (ch.selected) {
+                    selected = true;
+                }
+                rep.pushLayerConfig(type, ch.selected ? ch.selected : false);
+            });
+            rep.pushLayerConfig(ts.data.type, selected);
+        });
 
         //Maintain the map state if map is being refreshed
         var previousLayerState = mapStateService.fromStorage();
@@ -816,6 +904,9 @@ angular.module('unionvmsWeb').factory('reportService',function($rootScope, $comp
 	};
 
 	var getMapConfigsFromReportSuccess = function(data){
+	    rep.mergedReport.layerConfiguration = rep.layerConfiguration;
+	    rep.mergedReport.mapZoom = rep.mapZoom;
+	    rep.mergedReport.mapCenter = rep.mapCenter;
 		prepareReportToRun(rep.mergedReport);
 		configureMap(data[0]);
 
