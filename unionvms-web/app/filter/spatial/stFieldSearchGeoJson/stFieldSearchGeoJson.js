@@ -95,7 +95,15 @@ angular.module('smart-table').filter('stFieldSearchGeoJson', function($filter, u
 
             return resp;
         };
-
+        
+        var getIdentifier = function (obj) {
+            if(type === 'trips') {
+                return obj['tripId'];
+            } else {
+                return obj['id'];
+            }
+        };
+        
         //Function to calculate upper boundary when filtering fields with duration/time
         var dehumanizeTimeAndCalculateUpBoundary = function(time){
             var parsedStr = time.match(/([0-9]+[dhms]{1})/ig);
@@ -459,7 +467,7 @@ angular.module('smart-table').filter('stFieldSearchGeoJson', function($filter, u
                             var tempRec = tempRecs[y];
                             var added = false;
                             for(var innerY=0; innerY < filteredRecs.length; innerY++){
-                                if(tempRec.id === filteredRecs[innerY].id){
+                                if(getIdentifier(tempRec) === getIdentifier(filteredRecs[innerY])){
                                             added = true;
                                             break;
                                         }
