@@ -9,7 +9,7 @@ the hope that it will be useful, but WITHOUT ANY WARRANTY; without even the impl
 FITNESS FOR A PARTICULAR PURPOSE.  See the GNU General Public License for more details. You should have received a
 copy of the GNU General Public License along with the IFDM Suite. If not, see <http://www.gnu.org/licenses/>.
 */
-angular.module('unionvmsWeb').controller('ReportformCtrl',function($scope, $modal, $anchorScroll, reportMsgService, locale, Report, reportRestService, spatialRestService, configurationService, movementRestService, reportService, SpatialConfig, spatialConfigRestService, userService, loadingStatus, reportFormService){
+angular.module('unionvmsWeb').controller('ReportformCtrl',function($scope, $modal, $anchorScroll, reportMsgService, locale, Report, reportRestService, spatialRestService, configurationService, movementRestService, reportService, SpatialConfig, spatialConfigRestService, userService, loadingStatus, reportFormService, mapService){
     //Report form mode
     $scope.showVesselFilter = false;
 
@@ -21,7 +21,7 @@ angular.module('unionvmsWeb').controller('ReportformCtrl',function($scope, $moda
         {"text": locale.getString('spatial.reports_form_type_standard'), "code": "standard"},
         {"text": locale.getString('spatial.reports_form_type_summary'), "code": "summary"}
     ];
-    
+
     //Set positions selector dropdown options
     $scope.positionItems = [
         {"text": locale.getString('spatial.reports_form_positions_selector_option_all'), "code": "all"},
@@ -53,7 +53,7 @@ angular.module('unionvmsWeb').controller('ReportformCtrl',function($scope, $moda
     $scope.movementSourceTypes = configurationService.setTextAndCodeForDropDown(configurationService.getConfig('MOVEMENT_SOURCE_TYPES'),'MOVEMENT_SOURCE_TYPES','MOVEMENT');
 
     $scope.submitingReport = false;
-    
+
     $scope.repFormServ = reportFormService;
 
 
@@ -145,7 +145,7 @@ angular.module('unionvmsWeb').controller('ReportformCtrl',function($scope, $moda
         }
         return result;
     };
-    
+
     $scope.init = function(){
         $scope.formAlert = {
             visible: false,
@@ -167,17 +167,17 @@ angular.module('unionvmsWeb').controller('ReportformCtrl',function($scope, $moda
             vessels: [],
             areas: []
         };
-        
+
         if ($scope.report.movSources.length === 0){
             $scope.report.movSources = [];
             angular.forEach($scope.movementSourceTypes, function(item){
                 $scope.report.movSources.push(item.code);
             });
         }
-        
+
         $scope.checkVisibilities();
     };
-    
+
     $scope.checkVisibilities = function(){
         $scope.visibilities = [{"text": locale.getString('spatial.reports_table_share_label_private'), "code": "private"}];
         var availableVisibilities = ['SCOPE', 'PUBLIC'];
@@ -211,7 +211,7 @@ angular.module('unionvmsWeb').controller('ReportformCtrl',function($scope, $moda
         if (angular.isDefined($scope.report.vmsFilters.positions) && !_.isEmpty($scope.report.vmsFilters.positions)){
             min = $scope.report.vmsFilters.positions.movMinSpeed;
             max = $scope.report.vmsFilters.positions.movMaxSpeed;
-            
+
             validateRangeFieldGroup(min,max,'movMinSpeed','movMaxSpeed','positionSecForm');
         }
 
@@ -219,7 +219,7 @@ angular.module('unionvmsWeb').controller('ReportformCtrl',function($scope, $moda
         if (angular.isDefined($scope.report.vmsFilters.segments) && !_.isEmpty($scope.report.vmsFilters.segments)){
             min = $scope.report.vmsFilters.segments.segMinSpeed;
             max = $scope.report.vmsFilters.segments.segMaxSpeed;
-            
+
             validateRangeFieldGroup(min,max,'segMinSpeed','segMaxSpeed','segmentSecForm');
 
             minD = $scope.report.vmsFilters.segments.segMinDuration;
@@ -232,16 +232,16 @@ angular.module('unionvmsWeb').controller('ReportformCtrl',function($scope, $moda
         if (angular.isDefined($scope.report.vmsFilters.tracks) && !_.isEmpty($scope.report.vmsFilters.tracks)){
             min = $scope.report.vmsFilters.tracks.trkMinTime;
             max = $scope.report.vmsFilters.tracks.trkMaxTime;
-            
+
             validateRangeFieldGroup(min,max,'trkMinTime','trkMaxTime','trackSecForm');
 
             minD = $scope.report.vmsFilters.tracks.trkMinDuration;
             maxD = $scope.report.vmsFilters.tracks.trkMaxDuration;
-            
+
             validateRangeFieldGroup(minD,maxD,'trkMinDuration','trkMaxDuration','trackSecForm');
         }
     };
-    
+
     var validateRangeFieldGroup = function(min,max,fieldMin,fieldMax,subForm){
     	if(angular.isDefined(min) && min<0){
     		$scope.reportForm.reportBodyForm[subForm][fieldMin].$setValidity('minError', false);
@@ -268,6 +268,13 @@ angular.module('unionvmsWeb').controller('ReportformCtrl',function($scope, $moda
             $scope.report.areas = $scope.exportSelectedAreas();
         	$scope.currentRepCopy = angular.copy($scope.report);
         	$scope.report.currentMapConfig.mapConfiguration.layerSettings = reportFormService.checkLayerSettings($scope.report.currentMapConfig.mapConfiguration.layerSettings);
+            if (angular.isDefined(mapService.map)) {
+                $scope.report.mapZoom = mapService.map.getView().getZoom();
+                $scope.report.mapCenter = JSON.stringify(mapService.map.getView().getCenter());
+            } else {
+                $scope.report.mapZoom = null;
+                $scope.report.mapCenter = null;
+            }
             $scope.report = reportFormService.checkMapConfigDifferences($scope.report);
             switch ($scope.formMode) {
                 case 'CREATE':
@@ -283,7 +290,7 @@ angular.module('unionvmsWeb').controller('ReportformCtrl',function($scope, $moda
                         loadingStatus.isLoading('SaveReport',false);
                         $scope.repNav.goToView('liveViewPanel','mapPanel');
                     }
-                   
+
                     break;
             }
         } else {
@@ -325,7 +332,7 @@ angular.module('unionvmsWeb').controller('ReportformCtrl',function($scope, $moda
                             segment: true
                         }
                     };
-                    
+
                     if ($scope.report.withMap){
                         components.map = true;
                         components.layers = true;
@@ -336,7 +343,7 @@ angular.module('unionvmsWeb').controller('ReportformCtrl',function($scope, $moda
                             alarm: true
                         };
                     }
-                    
+
                     return components;
                 }
             }
@@ -349,14 +356,14 @@ angular.module('unionvmsWeb').controller('ReportformCtrl',function($scope, $moda
         	}
         });
     };
-    
+
     $scope.runReport = function() {
     	$scope.submitingReport = true;
     	$scope.validateRanges();
     	if($scope.reportForm.reportBodyForm.$valid){
     	    $scope.report.areas = $scope.exportSelectedAreas();
     		reportService.runReportWithoutSaving($scope.report);
-    		
+
     		if (!angular.equals($scope.report, reportFormService.liveView.originalReport)){
                 reportFormService.liveView.outOfDate = true;
             } else {
@@ -373,7 +380,7 @@ angular.module('unionvmsWeb').controller('ReportformCtrl',function($scope, $moda
             }
     	}
     };
-    
+
     $scope.saveAsReport = function() {
     	$scope.submitingReport = true;
         $scope.validateRanges();
@@ -404,9 +411,9 @@ angular.module('unionvmsWeb').controller('ReportformCtrl',function($scope, $moda
                 errorElm.scrollIntoView();
             }
         }
-    	
+
     };
-    
+
     $scope.$watch('report.positionSelector', function(newVal, oldVal){
         if ($scope.report && newVal === 'all'){
             //Reset X Value field
@@ -440,7 +447,7 @@ angular.module('unionvmsWeb').controller('ReportformCtrl',function($scope, $moda
 
     var updateReportSuccess = function(response){
         reportService.loadReportHistory();
-        
+
         reportMsgService.show('spatial.success_update_report', 'success', true, 8000);
         if ($scope.formMode === 'EDIT'){
             if($scope.repNav.hasPreviousState()){
@@ -461,7 +468,7 @@ angular.module('unionvmsWeb').controller('ReportformCtrl',function($scope, $moda
             } else {
                 $scope.repNav.goToView('liveViewPanel','mapPanel');
             }
-            
+
         }
         loadingStatus.isLoading('SaveReport',false);
     };
@@ -484,14 +491,14 @@ angular.module('unionvmsWeb').controller('ReportformCtrl',function($scope, $moda
             }
             errorMsg = locale.getString(msg);
         }
-        
+
         if (!angular.isDefined(errorMsg) || errorMsg.indexOf('KEY_NOT_FOUND') !== -1 || errorMsg === ''){
             errorMsg = locale.getString(defaultMsg);
         }
-        
+
         $scope.formAlert.msg = errorMsg;
     };
-    
+
     $scope.resetReport = function(){
         loadingStatus.isLoading('ResetReport',true);
     	$scope.reportForm.$setPristine();
@@ -511,7 +518,7 @@ angular.module('unionvmsWeb').controller('ReportformCtrl',function($scope, $moda
             loadingStatus.isLoading('ResetReport',false);
     	});
     };
-    
+
     $scope.cancel = function(){
         if ($scope.formMode === 'EDIT-FROM-LIVEVIEW'){
             angular.copy(reportFormService.liveView.currentTempReport, reportFormService.liveView.currentReport);
@@ -524,7 +531,7 @@ angular.module('unionvmsWeb').controller('ReportformCtrl',function($scope, $moda
         }
         $scope.repNav.goToPreviousView();
     };
-    
+
     var loadReportForm = function(){
         switch($scope.formMode){
             case 'CREATE':
@@ -539,7 +546,7 @@ angular.module('unionvmsWeb').controller('ReportformCtrl',function($scope, $moda
                 reportFormService.liveView.currentTempReport = angular.copy($scope.report);
                 break;
         }
-        
+
         $scope.init();
 
         if (angular.isDefined($scope.report.areas) && $scope.report.areas.length > 0){
@@ -552,7 +559,7 @@ angular.module('unionvmsWeb').controller('ReportformCtrl',function($scope, $moda
 
     /**
      * Export all selected areas when modal is closed while saving
-     * 
+     *
      * @memberof ReportformCtrl
      * @public
      * @alias exportSelectedAreas
@@ -563,17 +570,17 @@ angular.module('unionvmsWeb').controller('ReportformCtrl',function($scope, $moda
         for (var i = 0; i < $scope.selectedAreas.length; i++){
             var area = {
                 gid: parseInt($scope.selectedAreas[i].gid),
-                areaType: $scope.selectedAreas[i].areaType    
+                areaType: $scope.selectedAreas[i].areaType
             };
             exported.push(area);
         }
-        
+
         return exported;
     };
 
     /**
      * Build proper array from the modal resolved selected areas. This is to be used to request area properties to server
-     * 
+     *
      * @memberof AreasselectionfieldsetCtrl
      * @private
      */
@@ -590,7 +597,7 @@ angular.module('unionvmsWeb').controller('ReportformCtrl',function($scope, $moda
 
     /**
      * Get area properties from the Spatial REST API
-     * 
+     *
      * @memberof AreasselectionfieldsetCtrl
      * @private
      */
@@ -606,7 +613,7 @@ angular.module('unionvmsWeb').controller('ReportformCtrl',function($scope, $moda
 
     /**
      * Build properly formated array out of the area properties server response data and merge it with the existent modal resolved selected areas.
-     * 
+     *
      * @memberof AreasselectionfieldsetCtrl
      * @private
      */
@@ -622,15 +629,15 @@ angular.module('unionvmsWeb').controller('ReportformCtrl',function($scope, $moda
             }
             finalAreas.push(area);
         }
-        
+
         return finalAreas;
     };
-    
+
     $scope.$watch(function(){return $scope.repNav.isViewVisible('reportForm');}, function(newVal,oldVal){
         if(newVal===true){
             loadReportForm();
         }
     });
-    
+
 });
 
