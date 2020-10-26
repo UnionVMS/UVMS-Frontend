@@ -12,18 +12,28 @@ copy of the GNU General Public License along with the IFDM Suite. If not, see <h
 angular.module('unionvmsWeb').factory('TreeModel',function(locale, mapService, userService) {
 
 	function TreeModel(){}
-	
+
 	var baseLayerCounter = 0;
-	
+
 	//Build tree node for OSM based layers
-	var buildOsmBasedNodes = function(src){
+	var buildOsmBasedNodes = function(src, layerConfig){
 	    if (src.isBaseLayer === true){
 	        baseLayerCounter += 1;
 	    }
-	    
+
+	    var selectedOsmBaseNode =  src.isBaseLayer === false ? undefined : (baseLayerCounter === 1 ? true : false);
+
+        if (src.type === 'OSM' && layerConfig.hasOwnProperty('OSM')) {
+            selectedOsmBaseNode = layerConfig['OSM'];
+        }
+
+        if (src.type === 'OSEA' && layerConfig.hasOwnProperty('OSEA')) {
+            selectedOsmBaseNode = layerConfig['OSEA'];
+        }
+
 	    var node = {
 	        title: src.title,
-	        selected: src.isBaseLayer === false ? undefined : (baseLayerCounter === 1 ? true : false),
+	        selected: selectedOsmBaseNode,
 	        extraClasses: src.isBaseLayer === true ? 'layertree-basemap' : undefined,
 	        data: {
 	            type: src.type,
@@ -31,73 +41,93 @@ angular.module('unionvmsWeb').factory('TreeModel',function(locale, mapService, u
 	            title: src.title
 	        }
 	    };
-	    
+
 	    return node;
 	};
-	
+
 	//Build tree node for Bing based layers
-	var buildBingBasedNodes = function(src){
-	    if (angular.isDefined(src.apiKey) && src.apiKey !== ''){
-	        baseLayerCounter += 1;
-	        
-	        var layerTitle = locale.getString('spatial.layer_tree_' + src.title);
-	        var node = {
-	            title: layerTitle,
-	            selected: baseLayerCounter === 1 ? true : false,
-	            extraClasses: 'layertree-basemap',
-	            data: {
-	                type: src.type,
-	                isBaseLayer: true,
-	                title: layerTitle,
-	                layerGeoName: src.layerGeoName,
-	                apiKey: src.apiKey
-	            }
-	        };
-	        
-	        return node;
-	    }
-	};
-	
+	var buildBingBasedNodes = function(src, layerConfig){
+        if (angular.isDefined(src.apiKey) && src.apiKey !== ''){
+            baseLayerCounter += 1;
+
+            var layerTitle = locale.getString('spatial.layer_tree_' + src.title);
+            var node = {
+                title: layerTitle,
+                selected: baseLayerCounter === 1 ? true : false,
+                extraClasses: 'layertree-basemap',
+                data: {
+                    type: src.type,
+                    isBaseLayer: true,
+                    title: layerTitle,
+                    layerGeoName: src.layerGeoName,
+                    apiKey: src.apiKey
+                }
+            };
+
+            return node;
+        }
+    };
+
+
 	//Build a tree node for WMS layers
-	var buildWmsNode = function(src){
+	var buildWmsNode = function(src, layerConfig){
 	    var stylesForObject = [];
 	    var selected = false;
 	    if (angular.isDefined(src.styles)){
 	        stylesForObject = checkWmStylesAvailability(src.styles);
 	    }
-	    
+
 	    var filtersForObject;
 	    //This is for user areas only
 	    if (angular.isDefined(src.filters)){
 	        filtersForObject = buildCqlContext(src.filters, 'USERAREAS');
         }
-	    
+
 	    //This is for system areas and port data
 	    if (angular.isDefined(src.groupFilter)){
 	        filtersForObject = buildCqlContext(src.groupFilter, 'REFDATA');
 	    }
-	    
+
 	    if (src.isBaseLayer === true){
 	        baseLayerCounter += 1;
 	        if (baseLayerCounter === 1){
 	            selected = true;
 	        }
 	    }
-	    
+
 	    if (!angular.isDefined(src.cql)){
 	        src.cql = null;
 	    }
-	    
+
+	    var finalSelected =  false;
+
+        switch(src.typeName) {
+          case 'PORT':
+            finalSelected = layerConfig.hasOwnProperty('PORT') ? layerConfig['PORT'] : selected;
+            break;
+          case'PORTAREA':
+            finalSelected = layerConfig.hasOwnProperty('PORTAREA') ? layerConfig['PORTAREA'] : selected;
+            break;
+          case'RFMO':
+            finalSelected = layerConfig.hasOwnProperty('RFMO') ? layerConfig['RFMO'] : selected;
+            break;
+          case'EEZ':
+            finalSelected = layerConfig.hasOwnProperty('EEZ') ? layerConfig['EEZ'] : selected;
+            break;
+          default:
+           finalSelected = selected;
+        }
+
 	    //Final node
 	    var mapExtent = mapService.map.getView().getProjection().getExtent();
 	    var node = {
 	        title: src.title,
-	        selected: selected,
+	        selected: finalSelected,
 	        extraClasses: src.isBaseLayer === true ? 'layertree-basemap' : undefined,
 	        data: {
 	            type: 'WMS',
 	            title: src.title,
-	            typeName: angular.isDefined(src.typeName) ? src.typeName : undefined, 
+	            typeName: angular.isDefined(src.typeName) ? src.typeName : undefined,
 	            isBaseLayer: src.isBaseLayer,
 	            attribution: src.shortCopyright,
 	            longAttribution: angular.isDefined(src.longCopyright) ? src.longCopyright : undefined,
@@ -108,30 +138,30 @@ angular.module('unionvmsWeb').factory('TreeModel',function(locale, mapService, u
 	                'LAYERS': src.layerGeoName,
 	                'TILED': true,
 	                'TILESORIGIN': mapExtent[0] + ',' + mapExtent[1],
-	                'STYLES': angular.isDefined(stylesForObject) === true ? stylesForObject[0] : '', 
+	                'STYLES': angular.isDefined(stylesForObject) === true ? stylesForObject[0] : '',
 	                'cql_filter': src.cql
 	            }
 	        }
 	    };
-	    
+
 	    if (angular.isDefined(filtersForObject)){
             node.data.contextItems =  filtersForObject;
         }
-	    
-	    
+
+
 	    var menuSep = {
 	        className: 'context-menu-item context-menu-separator context-menu-not-selectable'
 	    };
-	    
+
 	    if (stylesForObject.length > 1){
 	        if (angular.isDefined(node.data.contextItems)){
 	            _.extend(node.data.contextItems, {sep1: menuSep});
-	            _.extend(node.data.contextItems, stylesForObject[1]); 
+	            _.extend(node.data.contextItems, stylesForObject[1]);
 	        } else {
 	            node.data.contextItems = stylesForObject[1];
 	        }
 	    }
-	    
+
 	    if ((angular.isDefined(src.areaType) && src.areaType === 'SYSAREA') || (angular.isDefined(src.typeName) && (src.typeName === 'PORT' || src.typeName === 'PORTAREA'))){
 	        _.extend(node.data.contextItems, {sep2: menuSep});
 	        var settings = {
@@ -145,17 +175,17 @@ angular.module('unionvmsWeb').factory('TreeModel',function(locale, mapService, u
             };
             _.extend(node.data.contextItems, settings);
 	    }
-	    
+
 	    if (angular.isDefined(node.data.contextItems)){
 	        node.data.contextTip = locale.getString('spatial.layer_tree_tip_context_menu');
 	        _.extend(node.data.contextItems, {sep3: menuSep});
 	    }
-	    
+
 	    return node;
 	};
-	
+
 	//Build area nodes
-	var buildAreaNode = function(src){
+	var buildAreaNode = function(src, layerConfig){
 	    var node;
 	    if (src.areaType === 'SYSAREA'){
 	        if (angular.isDefined(src.cql)){
@@ -164,20 +194,20 @@ angular.module('unionvmsWeb').factory('TreeModel',function(locale, mapService, u
 	                allCql: null
 	            };
 	        }
-	        node = buildWmsNode(src);
+	        node = buildWmsNode(src, layerConfig);
 	    } else if (src.areaType === 'AREAGROUP'){
-	        node = buildUserAreaGroupNode(src);
+	        node = buildUserAreaGroupNode(src, layerConfig);
 	    } else {
-	        node = buildUserAreaNode(src);
+	        node = buildUserAreaNode(src, layerConfig);
 	    }
-	    
+
 	    return node;
 	};
-	
+
 	//User area group specific node
-	var buildUserAreaGroupNode = function(src){
+	var buildUserAreaGroupNode = function(src, layerConfig){
 	    var cql = "(user_name = '" + userService.getUserName() + "' OR scopes ilike '%#" + userService.getCurrentContext().scope.scopeName +"#%')";
-	    
+
 	    var newDef = {
             isBaseLayer: src.isBaseLayer,
             layerGeoName: src.layerGeoName,
@@ -195,19 +225,19 @@ angular.module('unionvmsWeb').factory('TreeModel',function(locale, mapService, u
                 activeCql: src.cql_active
             }
         };
-        
-        return buildWmsNode(newDef);
+
+        return buildWmsNode(newDef, layerConfig);
 	};
-	
+
 	//User area specific node
-	var buildUserAreaNode = function(src){
+	var buildUserAreaNode = function(src, layerConfig){
 	    var filter;
 	    if (src.areaType === 'USERAREA'){
 	        filter = 'gid = ' + src.gid;
 	    } else {
 	        filter = "user_name = '" + userService.getUserName() + "' AND " + src.cql;
 	    }
-	    
+
 	    var newDef = {
             isBaseLayer: src.isBaseLayer,
             layerGeoName: src.layerGeoName,
@@ -218,27 +248,27 @@ angular.module('unionvmsWeb').factory('TreeModel',function(locale, mapService, u
             type: src.url,
             url: src.url,
             title: src.title,
-            cql: filter 
+            cql: filter
         };
-	    
-	    return buildWmsNode(newDef);
+
+	    return buildWmsNode(newDef, layerConfig);
 	};
-	
+
 	//Check how many WMS styles are available, set the default style and build the style context menu
 	var checkWmStylesAvailability = function(styles){
 	    var finalStyles = [];
 	    var styleKeys = Object.keys(styles);
 	    var defaultStyle = styles[styleKeys[0]];
-	    
+
 	    finalStyles.push(defaultStyle);
 	    if (styleKeys.length > 1){
 	        var contextMenuItems = buildStyleContext(styles, defaultStyle);
 	        finalStyles.push(contextMenuItems);
 	    }
-	    
+
 	    return finalStyles;
 	};
-	
+
 	//Cql options for user area group layers (type is USERAREAS), and for ref data (type is REFDATA)
 	var buildCqlContext = function(filters, type){
 	    var cqlContext = {
@@ -247,8 +277,8 @@ angular.module('unionvmsWeb').factory('TreeModel',function(locale, mapService, u
                 disabled: true,
                 className: 'layer-menu-header'
             }
-        }; 
-	    
+        };
+
 	    var name_1, name_2, cql_1, cql_2;
 	    if (type === 'USERAREAS'){
 	        name_1 = locale.getString('spatial.layer_tree_context_menu_active_areas_title');
@@ -261,7 +291,7 @@ angular.module('unionvmsWeb').factory('TreeModel',function(locale, mapService, u
             name_2 = locale.getString('spatial.layer_tree_context_menu_all_groups_title');
             cql_2 = filters.allCql;
 	    }
-	    
+
 	    cqlContext.activeAreas = {
             name: name_1,
             type: 'radio',
@@ -270,7 +300,7 @@ angular.module('unionvmsWeb').factory('TreeModel',function(locale, mapService, u
             cql: cql_1,
             selected: true
         };
-	    
+
 	    cqlContext.allAreas = {
 	        name: name_2,
 	        type: 'radio',
@@ -279,10 +309,10 @@ angular.module('unionvmsWeb').factory('TreeModel',function(locale, mapService, u
 	        cql: cql_2,
 	        selected: false
 	    };
-	
+
 	    return cqlContext;
 	};
-	
+
 	//Build style contextmenu object
 	var buildStyleContext = function(styles, defaultStyle){
 	    var styleContext = {
@@ -292,7 +322,7 @@ angular.module('unionvmsWeb').factory('TreeModel',function(locale, mapService, u
 	            className: 'layer-menu-header'
 	        }
 	    };
-	    
+
 	    if (angular.isDefined(styles.geom)){
 	        styleContext.geomStyle = {
 	            name: locale.getString('spatial.layer_tree_context_menu_geom_style'),
@@ -302,7 +332,7 @@ angular.module('unionvmsWeb').factory('TreeModel',function(locale, mapService, u
                 selected: styles.geom === defaultStyle ? true : false
 	        };
 	    }
-	    
+
 	    if (angular.isDefined(styles.labelGeom)){
 	        styleContext.geomLabelStyle = {
                 name: locale.getString('spatial.layer_tree_context_menu_geom_label_style'),
@@ -312,7 +342,7 @@ angular.module('unionvmsWeb').factory('TreeModel',function(locale, mapService, u
                 selected: styles.labelGeom === defaultStyle ? true : false
             };
 	    }
-	    
+
 	    if (angular.isDefined(styles.label)){
 	        styleContext.labelStyle = {
                 name: locale.getString('spatial.layer_tree_context_menu_label_style'),
@@ -322,40 +352,40 @@ angular.module('unionvmsWeb').factory('TreeModel',function(locale, mapService, u
                 selected: styles.label === defaultStyle ? true : false
             };
 	    }
-	    
+
 	    return styleContext;
 	};
-	
-	var loopAndBuildNode = function(nodeFromServer){
+
+	var loopAndBuildNode = function(nodeFromServer, layerConfig){
 	    var nodeArray = [];
 	    for (var i = 0; i < nodeFromServer.length; i++){
 	        var def = nodeFromServer[i];
 	        switch(def.type){
                 case 'WMS':
                     if (angular.isDefined(def.areaType)){
-                        nodeArray.push(buildAreaNode(def));
+                        nodeArray.push(buildAreaNode(def, layerConfig));
                     } else {
-                        nodeArray.push(buildWmsNode(def));
+                        nodeArray.push(buildWmsNode(def, layerConfig));
                     }
                     break;
                 case 'OSM':
-                    nodeArray.push(buildOsmBasedNodes(def));
+                    nodeArray.push(buildOsmBasedNodes(def, layerConfig));
                     break;
                 case 'OSEA':
-                    nodeArray.push(buildOsmBasedNodes(def));
+                    nodeArray.push(buildOsmBasedNodes(def, layerConfig));
                     break;
                 case 'BING':
-                    var node = buildBingBasedNodes(def);
+                    var node = buildBingBasedNodes(def, layerConfig);
                     if (angular.isDefined(node)){
                         nodeArray.push(node);
                     }
                     break;
             }
 	    }
-	    
+
 	    return nodeArray;
 	};
-	
+
 	//Check if ports and port areas have been configured with group selection
 	var setAdditionalPortSettings = function(data){
 	    angular.forEach(data, function(rec) {
@@ -366,51 +396,60 @@ angular.module('unionvmsWeb').factory('TreeModel',function(locale, mapService, u
                 };
 	    	}
 	    });
-	    
+
 	    return data;
 	};
-	
-	TreeModel.prototype.fromConfig = function(config){
+
+	TreeModel.prototype.fromConfig = function(config, layerConfig){
 	    var tree = [];
 
 	    //Ports
 	    if (angular.isDefined(config.port)){
-	        var portNodes = loopAndBuildNode(setAdditionalPortSettings(config.port));
+	        var portNodes = loopAndBuildNode(setAdditionalPortSettings(config.port), layerConfig);
 	        tree.push({
               title: locale.getString('spatial.layer_tree_ports'),
               folder: true,
               expanded: false,
-              children: portNodes
+              children: portNodes,
+              data: {
+                type: 'PortMain'
+              }
 	        });
 	    }
-	    
+
 	    //Areas
 	    if (angular.isDefined(config.areas) && config.areas.length > 0){
-	        var areaNodes = loopAndBuildNode(config.areas);
+	        var areaNodes = loopAndBuildNode(config.areas, layerConfig);
 	        var areaFolder = {
                 title: locale.getString('spatial.layer_tree_areas'),
                 folder: true,
                 expanded: false,
-                children: areaNodes
+                children: areaNodes,
+                data: {
+                    type: 'AreasMain'
+                }
 	        };
-	        
+
 	        tree.push(areaFolder);
 	    }
-	    
+
 	    //Additional cartography
 	    if (angular.isDefined(config.additional)){
-	        var additionalNodes =  loopAndBuildNode(config.additional);
+	        var additionalNodes =  loopAndBuildNode(config.additional, layerConfig);
             tree.push({
                 title: locale.getString('spatial.layer_tree_additional_cartography'),
                 folder: true,
                 expanded: false,
-                children: additionalNodes
+                children: additionalNodes,
+                data: {
+                  type: 'CartographyMain'
+                }
             });
         }
-	    
+
    	    //Baselayers
         if (angular.isDefined(config.baseLayers)){
-            var baseNodes = loopAndBuildNode(config.baseLayers);
+            var baseNodes = loopAndBuildNode(config.baseLayers, layerConfig);
             tree.push({
                 title: locale.getString('spatial.layer_tree_background_layers'),
                 folder: true,
@@ -419,27 +458,31 @@ angular.module('unionvmsWeb').factory('TreeModel',function(locale, mapService, u
                 hideCheckbox: true,
                 extraClasses: 'layertree-baselayer-node',
                 key: 'basemap',
-                children: baseNodes
+                children: baseNodes,
+                data: {
+                    type: 'BaseMain'
+                }
             });
         }
 
-	    baseLayerCounter = 0; 
+	    baseLayerCounter = 0;
 	    return tree;
 	};
-	
+
 	//Build vector nodes for positions and segments
-	var buildVectorNodes = function(type, data){
+	var buildVectorNodes = function(type, data, layerConfiguration){
 	    var title, lyrType, longCopyright, extraCls;
 	    var selected = false;
-	    
+
 	    switch (type) {
             case 'positions':
                 title = locale.getString('spatial.layer_tree_positions');
-                selected = true;
+                selected = layerConfiguration.hasOwnProperty('vmspos') ? layerConfiguration['vmspos'] : true;
                 lyrType = 'vmspos';
                 longCopyright = locale.getString('spatial.vms_positions_long_copyright');
                 break;
             case 'segments':
+                selected = layerConfiguration.hasOwnProperty('vmsseg') ? layerConfiguration['vmsseg'] : selected;
                 title = locale.getString('spatial.layer_tree_segments');
                 lyrType = 'vmsseg';
                 longCopyright = locale.getString('spatial.vms_positions_long_copyright');
@@ -452,7 +495,7 @@ angular.module('unionvmsWeb').factory('TreeModel',function(locale, mapService, u
             default:
                 break;
         }
-	    
+
 	    var node = {
 	        title: title,
 	        selected: selected,
@@ -470,48 +513,63 @@ angular.module('unionvmsWeb').factory('TreeModel',function(locale, mapService, u
 	            geoJson: data
 	        }
 	    };
-	    
+
 	    var childNodes = [];
-	    
-	    
+
+
 	    if (type === 'activities'){
 	        node.data.optionsEnabled = false; //FIXME this should be removed when we implement conmtext menu options for activities layer
 	        node.data.filterProperty = 'activityType';
-	            
+
             var activityTypes = _.map(data.features, function(feat){
                 return feat.properties.activityType;
             });
-	            
+
             activityTypes = _.sortBy(_.uniq(activityTypes), function(type){
                 return type;
             });
-            
+
             if (activityTypes.length > 0){
                 angular.forEach(activityTypes, function(type){
+                    var selectedByType = false;
+                    if (type === 'ARRIVAL') {
+                        selectedByType =  layerConfiguration.hasOwnProperty('ARRIVAL') ? layerConfiguration['ARRIVAL'] : selectedByType;
+                    } else if (type === 'DEPARTURE') {
+                        selectedByType =  layerConfiguration.hasOwnProperty('DEPARTURE') ? layerConfiguration['DEPARTURE'] : selectedByType;
+                    } else if (type === 'FISHING_OPERATION') {
+                        selectedByType =  layerConfiguration.hasOwnProperty('FISHING_OPERATION') ? layerConfiguration['FISHING_OPERATION'] : selectedByType;
+                    }
                     var abbr = locale.getString('abbreviations.activity_' + type);
                     childNodes.push({
                         title: abbr !== "%%KEY_NOT_FOUND%%" ? abbr : type,
                         filterType: type,
                         type: 'ers-type',
                         excludeDnd: true,
-                        selected: false
+                        selected: selectedByType
                     });
                 });
-                
+
                 node.children = childNodes;
             }
 	    }
-	    
+
 	    if (type === 'positions'){
 	        node.data.filterProperty = 'source';
 	        var sourceArray = _.map(data.features, function(feat){
 	            return feat.properties.source;
 	        });
-	        
+
 	        sourceArray = _.sortBy(_.uniq(sourceArray), function(src){
 	            return src;
 	        });
-	        
+
+	        var selectedVmsPosType = false;
+	        if (layerConfiguration.hasOwnProperty('vmspos') && layerConfiguration['vmspos'] === false) {
+	            selectedVmsPosType =  false;
+	        } else {
+	            selectedVmsPosType = layerConfiguration.hasOwnProperty('vmspos-type') ?  layerConfiguration['vmspos-type'] : false;
+	        }
+
 	        if (sourceArray.length > 0){
 	            angular.forEach(sourceArray, function(source){
 	                childNodes.push({
@@ -519,29 +577,29 @@ angular.module('unionvmsWeb').factory('TreeModel',function(locale, mapService, u
 	                    filterType: source,
 	                    type: 'vmspos-type',
                         excludeDnd: true,
-	                    selected: true
+	                    selected: selectedVmsPosType
 	                });
 	            });
-	            
+
 	            node.children = childNodes;
 	        }
 	    }
-	    
+
 	    return node;
 	};
-	
+
 	//Build parent folder node for vms layers
-	TreeModel.prototype.nodeFromData = function(data){
+	TreeModel.prototype.nodeFromData = function(data, layerConfiguration){
 	    var finalNodes = [];
 	    var vectorNodes = [];
 	    //FIXME uncomment
 	    if (data.movements.features.length > 0){
-	        vectorNodes.push(buildVectorNodes('positions', data.movements));
+	        vectorNodes.push(buildVectorNodes('positions', data.movements, layerConfiguration));
 	    }
 	    if (data.segments.features.length > 0){
-	        vectorNodes.push(buildVectorNodes('segments', data.segments));
+	        vectorNodes.push(buildVectorNodes('segments', data.segments, layerConfiguration));
 	    }
-	    
+
 	    if (vectorNodes.length > 0){
 	        var node = {
                 title: locale.getString('spatial.layer_tree_vms'),
@@ -552,21 +610,21 @@ angular.module('unionvmsWeb').factory('TreeModel',function(locale, mapService, u
             };
             finalNodes.push(node);
 	    }
-	    
+
 	    if (data.activities.features.length > 0){
-	        finalNodes.push(buildVectorNodes('activities', data.activities));
+	        finalNodes.push(buildVectorNodes('activities', data.activities, layerConfiguration));
         }
-	    
+
 	    if (finalNodes.length > 0){
 	        return finalNodes;
 	    }
-	    
+
 	};
-	
+
 	//Build node for alarms
 	TreeModel.prototype.nodeForAlarms = function(data){
 	    var longCopyright = locale.getString('spatial.alarms_long_copyright');
-	    var title = locale.getString('spatial.layer_tree_alarms'); 
+	    var title = locale.getString('spatial.layer_tree_alarms');
 	    var node = {
 	        title: title,
 	        type: 'alarms',
@@ -583,9 +641,9 @@ angular.module('unionvmsWeb').factory('TreeModel',function(locale, mapService, u
                 geoJson: data
 	        }
 	    };
-	    
+
 	    return [node];
 	};
-	
+
 	return TreeModel;
 });
