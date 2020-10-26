@@ -22,6 +22,9 @@ angular.module('unionvmsWeb').factory('Report',function(unitConversionService, u
 	    this.positionSelector = 'all';
 	    this.positionTypeSelector = 'positions';
 	    this.xValue = undefined;
+        this.mapLayerConfig = undefined;
+        this.mapZoom = undefined;
+        this.mapCenter = undefined;
 
 	    //Components
 	    this.withMap = true;
@@ -42,7 +45,7 @@ angular.module('unionvmsWeb').factory('Report',function(unitConversionService, u
 		this.faFilters = {};
 
 	    this.areas = [];
-	    
+
 	    //Spatial configs
         this.mapConfiguration = {
     		stylesSettings: undefined,
@@ -50,14 +53,14 @@ angular.module('unionvmsWeb').factory('Report',function(unitConversionService, u
 	        visibilitySettings: undefined
         };
         this.currentMapConfig = {
-            mapConfiguration: {}   
+            mapConfiguration: {}
         };
 	}
 
 //	var getDateFormat = function(){
 //	    return globalSettingsService.getDateFormat();
 //	};
-//	
+//
 //	var getTimeZone = function(){
 //	    return parseInt(globalSettingsService.getTimezone());
 //	};
@@ -111,7 +114,10 @@ angular.module('unionvmsWeb').factory('Report',function(unitConversionService, u
 	        report.createdBy = data.createdBy;
 	        report.withMap = data.withMap;
 	        report.visibility = data.visibility;
-	        
+	        report.mapLayerConfig = data.mapLayerConfig;
+            report.mapCenter = data.mapCenter;
+            report.mapZoom = data.mapZoom;
+
 	        if (report.visibility !== 'private' && !userService.isAllowed('SHARE_REPORT_' + report.visibility.toUpperCase(), 'Reporting', true) && !userService.isAllowed('MANAGE_ALL_REPORTS', 'Reporting', true)){
 	            report.visibility = 'private';
 	        }
@@ -126,7 +132,7 @@ angular.module('unionvmsWeb').factory('Report',function(unitConversionService, u
 
 	        //Vessel filters
 	        report.vesselsSelection = filter.assets;
-	        
+
 			if(angular.isDefined(data.reportType)){
 				report.reportType = data.reportType;
 			}
@@ -195,7 +201,7 @@ angular.module('unionvmsWeb').factory('Report',function(unitConversionService, u
 				});
 			}
 			report.sortFilters = filter.criteria;
-	        
+
 	        if (angular.isDefined(data.mapConfiguration)){
 	        	if(angular.isDefined(data.mapConfiguration.layerSettings) && angular.isDefined(data.mapConfiguration.layerSettings.areaLayers) && !_.isEmpty(data.mapConfiguration.layerSettings.areaLayers)){
 	        		angular.forEach(data.mapConfiguration.layerSettings.areaLayers, function(item) {
@@ -207,7 +213,7 @@ angular.module('unionvmsWeb').factory('Report',function(unitConversionService, u
 	            report.mapConfiguration = data.mapConfiguration;
 	            report.currentMapConfig.mapConfiguration = angular.copy(data.mapConfiguration);
 	        }
-	        
+
 	    }
 
 	    return report;
@@ -225,7 +231,7 @@ angular.module('unionvmsWeb').factory('Report',function(unitConversionService, u
 			if ((angular.isDefined(this.vmsFilters.positions) && !_.isEmpty(this.vmsFilters.positions)) || (angular.isDefined(this.movSources) && !_.isEmpty(this.movSources))){
 				vmsFilters.vmsposition = this.vmsFilters.positions;
 				if (this.movSources.length > 0){
-					vmsFilters.vmsposition.movsources = this.movSources; 
+					vmsFilters.vmsposition.movsources = this.movSources;
 				}
 
 				if(angular.isDefined(this.vmsFilters.positions) && !_.isEmpty(this.vmsFilters.positions)){
@@ -325,7 +331,7 @@ angular.module('unionvmsWeb').factory('Report',function(unitConversionService, u
 	    if (angular.isDefined(this.vesselsSelection) && this.vesselsSelection.length){
             filter.assets = this.vesselsSelection;
         }
-	    
+
 	    var dto = {
 	        id: this.id,
 	        name: this.name,
@@ -333,9 +339,12 @@ angular.module('unionvmsWeb').factory('Report',function(unitConversionService, u
 			reportType: this.reportType,
 	        visibility: angular.isDefined(this.visibility) ? this.visibility : 'private',
 	        withMap: this.reportType === 'standard' ? this.withMap : false,
-	        filterExpression: filter
+	        filterExpression: filter,
+	        mapZoom: this.mapZoom,
+            mapCenter: this.mapCenter,
+            mapLayerConfig: this.mapLayerConfig
 	    };
-	    
+
 		if(this.reportType === 'standard'){
 			if(this.withMap === true){
 				dto.mapConfiguration = this.mapConfiguration;
@@ -352,27 +361,30 @@ angular.module('unionvmsWeb').factory('Report',function(unitConversionService, u
 				}
 			}
 		}
-	    
+
 	    if(angular.isDefined(this.additionalProperties)){
         	dto.additionalProperties = this.additionalProperties;
         }
-	    
+
 	    return dto;
 	};
-	
+
 	Report.prototype.toJsonCopy = function(){
 	    return angular.toJson(this.DTOCopy());
 	};
-	
+
 	Report.prototype.DTOCopy = function(){
 		var report = {};
-		
+
         report.name = this.name;
         report.desc = this.desc !== '' ? this.desc : undefined;
 		report.reportType = this.reportType;
         report.withMap = this.withMap;
         report.visibility = angular.isDefined(this.visibility) ? this.visibility : 'private';
-        
+        report.mapLayerConfig = this.mapLayerConfig;
+        report.mapCenter = this.mapCenter;
+        report.mapZoom = this.mapZoom;
+
         report.filterExpression = {};
         report.filterExpression.common = {};
         report.filterExpression.common.startDate = this.startDateTime === undefined ? undefined : unitConversionService.date.convertDate(this.startDateTime, 'to_server');
@@ -380,7 +392,7 @@ angular.module('unionvmsWeb').factory('Report',function(unitConversionService, u
     	report.filterExpression.common.positionTypeSelector = this.positionTypeSelector;
     	report.filterExpression.common.positionSelector = this.positionSelector;
     	report.filterExpression.common.xValue = this.xValue;
-        
+
         report.filterExpression.areas = [];
         if(angular.isDefined(this.areas) && this.areas.length > 0){
 		    angular.forEach(this.areas, function(item) {
@@ -390,7 +402,7 @@ angular.module('unionvmsWeb').factory('Report',function(unitConversionService, u
 		    	});
 		    });
         }
-        
+
         if (angular.isDefined(this.vesselsSelection) && this.vesselsSelection.length){
         	report.filterExpression.assets = [];
             angular.forEach(this.vesselsSelection, function(item) {
@@ -401,7 +413,7 @@ angular.module('unionvmsWeb').factory('Report',function(unitConversionService, u
             	});
             });
         }
-        
+
 		if(this.hasVmsFilter){
         	report.filterExpression.vms = {};
 			if ((angular.isDefined(this.vmsFilters.positions) && !_.isEmpty(this.vmsFilters.positions)) || (angular.isDefined(this.movSources) && !_.isEmpty(this.movSources))){
@@ -415,12 +427,12 @@ angular.module('unionvmsWeb').factory('Report',function(unitConversionService, u
 						type: "vmspos"
 					};
 				}
-				
+
 				if (this.movSources.length > 0){
 					if(!angular.isDefined(report.filterExpression.vms.vmsposition)){
 						report.filterExpression.vms.vmsposition = {};
 					}
-					report.filterExpression.vms.vmsposition.movsources = this.movSources; 
+					report.filterExpression.vms.vmsposition.movsources = this.movSources;
 				}
 				if (validateFilterObject(report.filterExpression.vms.vmsposition,true) === false){
 					report.filterExpression.vms.vmsposition = undefined;
@@ -519,11 +531,11 @@ angular.module('unionvmsWeb').factory('Report',function(unitConversionService, u
 				}
 			}
 		}
-        
+
         if(angular.isDefined(this.additionalProperties)){
         	report.additionalProperties = this.additionalProperties;
         }
-        
+
 	    return report;
 	};
 

@@ -37,11 +37,39 @@ angular.module('unionvmsWeb').directive('layerTree', function($q, $modal, mapSer
 					return ( false );
 				}
 			};
-			
+
+			var pushLayerConfigByType = function(node, value) {
+                if(node.data) {
+                    if (node.data.type === 'ers-type') {
+                        reportService.pushLayerConfig(node.data.filterType, value);
+                    } else if (node.data.type === 'WMS') {
+                        reportService.pushLayerConfig(node.data.typeName, value);
+                    } else {
+                        reportService.pushLayerConfig(node.data.type, value);
+                    }
+                }
+            };
+
 			// call tree and map update
 			var selectHandler = function( event, data){
+
+			    if (data.node.hasOwnProperty("selected")) {
+                	pushLayerConfigByType(data.node, data.node.selected);
+               }
+
+               if (angular.isDefined(data.node.children)) {
+                   angular.forEach(data.node.children, function(firstChild) {
+                       pushLayerConfigByType(firstChild, data.node.selected);
+                       if (angular.isDefined(firstChild.children)) {
+                           angular.forEach(firstChild.children, function(secondChild) {
+                               pushLayerConfigByType(secondChild, data.node.selected);
+                           });
+                       }
+                   });
+               }
+
 			    updateBasemap( event, data );
-			    
+
 			    if (data.node.hasChildren() === true && !angular.isDefined(data.node.data.geoJson)){
 			        loopFolderNodes(data.node);
 			    } else {
@@ -50,7 +78,7 @@ angular.module('unionvmsWeb').directive('layerTree', function($q, $modal, mapSer
 			            data.node.data.mapLayer.set('visible', data.node.isSelected());
 			        } else if (!angular.isDefined(data.node.data.geoJson) && !angular.isDefined(data.node.data.mapLayer)){
 			            applyGeoJsonFilter(data, false);
-			            var parent = data.node.getParent(); 
+			            var parent = data.node.getParent();
 			            parent.data.mapLayer.set('visible', getCheckedStatusForMainNode(parent));
 			        } else {
 			            data.node.data.mapLayer.set('visible', data.node.isSelected());
@@ -62,7 +90,7 @@ angular.module('unionvmsWeb').directive('layerTree', function($q, $modal, mapSer
                     mapService.clearFeaturesOfUnselectedLayer(data.node.data.type);
                 }
 			};
-			
+
 			var getCheckedStatusForMainNode = function(node){
 			    var checked = false;
 			    angular.forEach(node.getChildren(), function(child) {
@@ -70,25 +98,25 @@ angular.module('unionvmsWeb').directive('layerTree', function($q, $modal, mapSer
 			    	    checked = true;
 			    	}
 			    });
-			    
+
 			    return checked;
 			};
-			
+
 			var applyGeoJsonFilter = function(data, isParent){
 			    var parent;
 			    if (!isParent){
 			        parent = data.node.getParent();
 			    } else {
 			        parent = data.node;
-			    } 
-			    
+			    }
+
 			    //Get source GeoJSON as features
 			    var features = (new ol.format.GeoJSON()).readFeatures(parent.data.geoJson, {
                     dataProjection: 'EPSG:4326',
                     featureProjection: mapService.getMapProjectionCode()
                 });
-			    
-			    
+
+
 			    var filteredFeatures;
 			    if (!isParent){
 			        //Here we need filtering
@@ -99,34 +127,34 @@ angular.module('unionvmsWeb').directive('layerTree', function($q, $modal, mapSer
 	                        filter.push(child.data.filterType);
 	                    }
 	                });
-			        
+
 			        filteredFeatures = features.filter(function(feature){
 			            return _.indexOf(filter, feature.get(parent.data.filterProperty)) !== -1;
 			        });
 			    } else {
 			        filteredFeatures = features;
 			    }
-			    
+
 			    //Apply data to the source layer
 			    var vectorSource = parent.data.mapLayer.getSource();
 			    vectorSource.clear();
 			    if (parent.data.type === 'vmspos'){
 			        var clusterSource = vectorSource.getSource();
 			        clusterSource.clear();
-			        
+
                     var count = 0;
                     angular.forEach(filteredFeatures, function(feature) {
                         count += 1;
                         feature.setId(count);
                         feature.set('isVisible', true);
                     });
-                    
+
                     clusterSource.addFeatures(filteredFeatures);
                 } else {
                     vectorSource.addFeatures(filteredFeatures);
                 }
 			};
-			
+
 			var loopFolderNodes = function(parent){
                 $.each(parent.children, function(index, node){
                     if (node.hasChildren() && !angular.isDefined(node.data.geoJson)){
@@ -159,26 +187,26 @@ angular.module('unionvmsWeb').directive('layerTree', function($q, $modal, mapSer
 		                selFeatures.clear();
 			        }
                 }
-			    
+
 			    if (node.data.type === 'ers' && node.isSelected() === false && mapService.ersLabels.active === true){
 			        mapService.deactivateVectorLabels('ers');
                     removeActiveLabelClass(node);
 			    }
-			    
+
 			    if (node.data.type === 'vmsseg' && mapService.vmssegLabels.active === true && node.isSelected() === false){
                     mapService.deactivateVectorLabels('vmsseg');
                     removeActiveLabelClass(node);
                 }
-			    
+
 			    if (node.data.type === 'vmspos-type' && mapService.vmsposLabels.active === true){
 			        mapService.deactivateVectorLabels('vmspos');
 			        if (getCheckedStatusForMainNode(node.getParent()) === true){
 			            mapService.activateVectorLabels('vmspos');
 			        } else {
 			            removeActiveLabelClass(node.getParent());
-			        }		            
+			        }
 			    }
-			    
+
 			    if (node.data.type === 'ers-type' && mapService.ersLabels.active === true){
 			        mapService.deactivateVectorLabels('ers');
 			        if (getCheckedStatusForMainNode(node.getParent()) === true){
@@ -187,7 +215,7 @@ angular.module('unionvmsWeb').directive('layerTree', function($q, $modal, mapSer
 			            removeActiveLabelClass(node.getParent());
 			        }
 			    }
-                
+
                 if (node.data.type === 'vmsdata' && node.isSelected() === false){
                     var children = node.getChildren();
                     angular.forEach(children, function(child){
@@ -195,21 +223,21 @@ angular.module('unionvmsWeb').directive('layerTree', function($q, $modal, mapSer
                         removeActiveLabelClass(child);
                     });
                 }
-                
+
                 //Deal with popups
                 var nodeTitles = ['vmsseg', 'vmspos', 'alarms', 'vmspos-type', 'ers', 'ers-type'];
                 if (angular.isDefined(mapService.overlay) && node.isSelected() === false && _.indexOf(nodeTitles, node.data.type) !== -1){
                     mapService.closePopup();
                 }
 			};
-			
+
 			var removeActiveLabelClass = function(node){
 			    var target = $(node.span).children('.fancytree-title').children('.fa.fa-tag');
                 var className = 'label-selected-' + node.data.type;
-                
+
                 if (angular.isDefined(target) && target.hasClass(className)){
                     target.removeClass(className);
-                } 
+                }
 			};
 
 			var renderNodeHandler = function( event, data ) {
@@ -226,23 +254,23 @@ angular.module('unionvmsWeb').directive('layerTree', function($q, $modal, mapSer
 				if (data.node.data.labelEnabled === true){
 				    addLabel( data );
 				}
-				
+
 				if (data.node.data.optionsEnabled === true){
 				    addOptions(data);
 				}
 
 			};
-			
+
 			//add options button for vectors
 			var addOptions = function(data){
 			    var tip,
                     $title = $( data.node.span ).children( '.fancytree-title' ),
                     $options = $title.children('.fa.fa-cog');
-    
+
 			    if ( $options.length > 0) {
 			        return;
 			    }
-    
+
 		        tip = locale.getString(data.node.data.optionsTip);
 		        $('<span class="fa fa-cog fancytree-clickable fancytree-vector-options" title="'+tip+'"></span>')
 		            .appendTo($title)
@@ -251,13 +279,13 @@ angular.module('unionvmsWeb').directive('layerTree', function($q, $modal, mapSer
 		                openSettingsModal(data);
 		            });
 			};
-			
+
 			//Options modal
 			var openModal = function(type){
 			    if (angular.isDefined(reportService.autoRefreshInterval)){
 			        reportService.stopAutoRefreshInterval();
 		        }
-			    
+
 			    var modalInstance = $modal.open({
                     templateUrl: 'partial/spatial/reportsPanel/reportForm/mapConfigurationModal/mapConfigurationModal.html',
                     controller: 'MapconfigurationmodalCtrl',
@@ -276,7 +304,7 @@ angular.module('unionvmsWeb').directive('layerTree', function($q, $modal, mapSer
                             	}
                             	displayStatus.push(status);
                             });
-                            
+
                             var components = {
                                 fromLayerTree: locale.getString('spatial.' + type + '_config_modal_title'),
                                 styles: {
@@ -285,19 +313,19 @@ angular.module('unionvmsWeb').directive('layerTree', function($q, $modal, mapSer
                                     alarm: displayStatus[2]
                                 }
                             };
-                            
+
                             if (type !== 'alarms'){
                                 components.visibility = {
                                     position: displayStatus[0],
-                                    segment: displayStatus[1]    
+                                    segment: displayStatus[1]
                                 };
                             }
-                                
+
                             return components;
                         }
                     }
                 });
-			    
+
 			    modalInstance.result.then(function(data){
 			        if (!angular.equals(reportFormService.liveView.currentReport.currentMapConfig.mapConfiguration, data.mapSettings)){
 			            reportFormService.liveView.currentReport.currentMapConfig.mapConfiguration = data.mapSettings;
@@ -314,7 +342,7 @@ angular.module('unionvmsWeb').directive('layerTree', function($q, $modal, mapSer
 
 				spatialHelperService.configureFullscreenModal(modalInstance);
 			};
-			
+
 			var openSettingsModal = function(data){
 			    var type = data.node.data.type;
 			    if (!angular.isDefined(reportFormService.liveView.currentReport)){
@@ -322,7 +350,7 @@ angular.module('unionvmsWeb').directive('layerTree', function($q, $modal, mapSer
 			            var report = new Report();
 			            report = report.fromJson(response);
 			            reportFormService.liveView.originalReport = report;
-			            
+
 			            reportFormService.liveView.currentReport = new Report();
 			            angular.copy(report, reportFormService.liveView.currentReport);
 			            openModal(type);
@@ -335,7 +363,7 @@ angular.module('unionvmsWeb').directive('layerTree', function($q, $modal, mapSer
 			        openModal(type);
 			    }
 			};
-			
+
 			//add label button for vectors
 			var addLabel = function(data){
 			    var tip,
@@ -350,7 +378,7 @@ angular.module('unionvmsWeb').directive('layerTree', function($q, $modal, mapSer
 			    var cls = 'fa fa-tag fancytree-clickable';
 
 			    var empty = false;
-			    if ((data.node.data.type === 'vmspos' && mapService.labelVisibility.positions.length === 0) || 
+			    if ((data.node.data.type === 'vmspos' && mapService.labelVisibility.positions.length === 0) ||
 			            (data.node.data.type === 'vmsseg' && mapService.labelVisibility.segments.length === 0) ||
 			            (data.node.data.type === 'ers' && mapService.labelVisibility.activities.length === 0)){
 			        tip = locale.getString('spatial.layer_tree_empty_popup_label_visibility_settings');
@@ -540,7 +568,7 @@ angular.module('unionvmsWeb').directive('layerTree', function($q, $modal, mapSer
 				scope.$tree.reload( source );
 				updateMap();
 			};
-			
+
 			//nodes is an array
 			layerPanelService.addLayerTreeNode = function(nodes) {
 				var root = scope.$tree.getRootNode();
@@ -595,7 +623,7 @@ angular.module('unionvmsWeb').directive('layerTree', function($q, $modal, mapSer
 
 				return selectedNodes;
 			};
-			
+
 			layerPanelService.getChildrenByStatus = function(checkedStatus, parentType){
 			    var root = scope.$tree.getRootNode();
 			    var targetNode = root.findAll(function(node){
@@ -609,7 +637,7 @@ angular.module('unionvmsWeb').directive('layerTree', function($q, $modal, mapSer
                         nodes.push(child.data.filterType);
                     }
                 });
-                
+
                 return nodes;
 			};
 
@@ -627,7 +655,7 @@ angular.module('unionvmsWeb').directive('layerTree', function($q, $modal, mapSer
 					}
 				});
 			};
-			
+
 			layerPanelService.toggleCheckNode = function(type, status){
 			    var root = scope.$tree.getRootNode();
 			    var node = root.findAll(function(node){
