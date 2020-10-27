@@ -275,6 +275,7 @@ angular.module('unionvmsWeb').controller('ReportformCtrl',function($scope, $moda
                 $scope.report.mapZoom = null;
                 $scope.report.mapCenter = null;
             }
+            $scope.report.mapLayerConfig = JSON.stringify(reportService.getLayerConfig());
             $scope.report = reportFormService.checkMapConfigDifferences($scope.report);
             switch ($scope.formMode) {
                 case 'CREATE':
