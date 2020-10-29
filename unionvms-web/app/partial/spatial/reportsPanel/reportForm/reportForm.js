@@ -266,17 +266,16 @@ angular.module('unionvmsWeb').controller('ReportformCtrl',function($scope, $moda
         $scope.validateRanges();
         if ($scope.reportForm.$valid){
             $scope.report.areas = $scope.exportSelectedAreas();
-        	$scope.currentRepCopy = angular.copy($scope.report);
-        	$scope.report.currentMapConfig.mapConfiguration.layerSettings = reportFormService.checkLayerSettings($scope.report.currentMapConfig.mapConfiguration.layerSettings);
-            if (angular.isDefined(mapService.map)) {
+            if (angular.isDefined(mapService.map) && $scope.formMode !== 'CREATE') {
                 $scope.report.mapZoom = mapService.map.getView().getZoom();
                 $scope.report.mapCenter = JSON.stringify(mapService.map.getView().getCenter());
-            } else {
-                $scope.report.mapZoom = null;
-                $scope.report.mapCenter = null;
             }
-            $scope.report.mapLayerConfig = JSON.stringify(reportService.getLayerConfig());
-            $scope.report = reportFormService.checkMapConfigDifferences($scope.report);
+            if ($scope.formMode !== 'CREATE') {
+                $scope.report.mapLayerConfig = JSON.stringify(reportService.getLayerConfig());
+            }
+        	$scope.currentRepCopy = angular.copy($scope.report);
+        	$scope.report.currentMapConfig.mapConfiguration.layerSettings = reportFormService.checkLayerSettings($scope.report.currentMapConfig.mapConfiguration.layerSettings);
+        	$scope.report = reportFormService.checkMapConfigDifferences($scope.report);
             switch ($scope.formMode) {
                 case 'CREATE':
                     reportRestService.createReport($scope.report).then(createReportSuccess, createReportError);

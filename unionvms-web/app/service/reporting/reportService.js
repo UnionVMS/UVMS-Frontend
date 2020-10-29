@@ -192,6 +192,11 @@ angular.module('unionvmsWeb').factory('reportService',function($rootScope, $comp
             rep.stopAutoRefreshInterval();
         }
 		rep.isReportExecuting = true;
+		 if (angular.isDefined(report)) {
+            rep.layerConfiguration = JSON.parse(report.mapLayerConfig ? report.mapLayerConfig : '{}');
+            rep.mapZoom = report.mapZoom;
+            rep.mapCenter = report.mapCenter;
+         }
 		rep.mergedReport = angular.copy(report);
         if(rep.mergedReport.withMap && rep.mergedReport.reportType === 'standard'){
             spatialConfigRestService.getUserConfigs().then(getUserConfigsSuccess, getUserConfigsFailure);
@@ -248,6 +253,11 @@ angular.module('unionvmsWeb').factory('reportService',function($rootScope, $comp
     };
 
 	rep.refreshReport = function(){
+	    if (angular.isDefined(reportFormService.liveView.currentReport) && reportFormService.liveView.currentReport !== null) {
+	         rep.layerConfiguration = JSON.parse(reportFormService.liveView.currentReport.mapLayerConfig ? reportFormService.liveView.currentReport.mapLayerConfig : '{}');
+             rep.mapZoom = reportFormService.liveView.currentReport.mapZoom;
+             rep.mapCenter = reportFormService.liveView.currentReport.mapCenter;
+	    }
 	    if (angular.isDefined(rep.id)){
 	        setStateProperties();
 	        rep.clearMapOverlays();
@@ -484,7 +494,10 @@ angular.module('unionvmsWeb').factory('reportService',function($rootScope, $comp
                     layerPanelService.addLayerTreeNode(vectorNodeSource);
 
                     if (reportingNavigatorService.isViewVisible('mapPanel') && angular.isUndefined(previousLayerState)){
-                        mapService.zoomToPositionsLayer();
+                        if (angular.isDefined(rep.mapZoom) && rep.mapZoom === null) {
+                             mapService.zoomToPositionsLayer();
+                        }
+
                     }
                 } else if (rep.positions.length === 0 && rep.segments.length === 0){
                     rep.hasAlert = true;
@@ -839,6 +852,9 @@ angular.module('unionvmsWeb').factory('reportService',function($rootScope, $comp
 	};
 
 	var getMapConfigsFromReportSuccess = function(data){
+	    rep.mergedReport.layerConfiguration = rep.layerConfiguration;
+	    rep.mergedReport.mapZoom = rep.mapZoom;
+	    rep.mergedReport.mapCenter = rep.mapCenter;
 		prepareReportToRun(rep.mergedReport);
 		configureMap(data[0]);
 

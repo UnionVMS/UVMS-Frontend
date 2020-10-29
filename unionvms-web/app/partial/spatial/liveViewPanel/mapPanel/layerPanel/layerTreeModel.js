@@ -488,7 +488,6 @@ angular.module('unionvmsWeb').factory('TreeModel',function(locale, mapService, u
                 longCopyright = locale.getString('spatial.vms_positions_long_copyright');
                 break;
             case 'activities':
-                selected = layerConfiguration.hasOwnProperty('ers') ? layerConfiguration['ers'] : selected;
                 title = locale.getString('spatial.layer_tree_activities');
                 lyrType = 'ers';
                 longCopyright = locale.getString('spatial.activities_long_copyright');
@@ -543,10 +542,10 @@ angular.module('unionvmsWeb').factory('TreeModel',function(locale, mapService, u
                     var abbr = locale.getString('abbreviations.activity_' + type);
                     childNodes.push({
                         title: abbr !== "%%KEY_NOT_FOUND%%" ? abbr : type,
-                        filterType: selectedByType,
+                        filterType: type,
                         type: 'ers-type',
                         excludeDnd: true,
-                        selected: false
+                        selected: selectedByType
                     });
                 });
 
@@ -564,6 +563,13 @@ angular.module('unionvmsWeb').factory('TreeModel',function(locale, mapService, u
 	            return src;
 	        });
 
+	        var selectedVmsPosType = false;
+	        if (layerConfiguration.hasOwnProperty('vmspos') && layerConfiguration['vmspos'] === false) {
+	            selectedVmsPosType =  false;
+	        } else {
+	            selectedVmsPosType = layerConfiguration.hasOwnProperty('vmspos-type') ?  layerConfiguration['vmspos-type'] : false;
+	        }
+
 	        if (sourceArray.length > 0){
 	            angular.forEach(sourceArray, function(source){
 	                childNodes.push({
@@ -571,7 +577,7 @@ angular.module('unionvmsWeb').factory('TreeModel',function(locale, mapService, u
 	                    filterType: source,
 	                    type: 'vmspos-type',
                         excludeDnd: true,
-	                    selected: layerConfiguration.hasOwnProperty('vmspos-type') ?  layerConfiguration['vmspos-type'] : true
+	                    selected: selectedVmsPosType
 	                });
 	            });
 
@@ -600,8 +606,7 @@ angular.module('unionvmsWeb').factory('TreeModel',function(locale, mapService, u
                 type: 'vmsdata',
                 folder: true,
                 expanded: true,
-                children: vectorNodes,
-                selected: layerConfiguration.hasOwnProperty('vmsdata') ? layerConfiguration['vmsdata'] : true
+                children: vectorNodes
             };
             finalNodes.push(node);
 	    }
