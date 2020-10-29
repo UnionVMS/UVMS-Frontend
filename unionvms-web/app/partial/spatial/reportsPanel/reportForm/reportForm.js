@@ -397,6 +397,11 @@ angular.module('unionvmsWeb').controller('ReportformCtrl',function($scope, $moda
             });
 
             modalInstance.result.then(function(data){
+                 if (angular.isDefined(mapService.map)) {
+                    data.mapZoom = mapService.map.getView().getZoom();
+                    data.mapCenter = JSON.stringify(mapService.map.getView().getCenter());
+                }
+                data.mapLayerConfig = JSON.stringify(reportService.getLayerConfig());
                 data.areas = $scope.exportSelectedAreas();
             	data.currentMapConfig.mapConfiguration.layerSettings = reportFormService.checkLayerSettings(data.currentMapConfig.mapConfiguration.layerSettings);
             	data = reportFormService.checkMapConfigDifferences(data);
