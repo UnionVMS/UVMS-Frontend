@@ -19,13 +19,8 @@ copy of the GNU General Public License along with the IFDM Suite. If not, see <h
                 <b>{{getTitle}}</b>
                 {{/showTitle}}
             </td>
+			{{/showTitles}}
 			<td class="col-md-6">{{getValue}}</td>
-			{{/showTitles}}
-			{{^showTitles}}
-				{{#doDisplay}}
-				<td class="col-md-6">{{getValue}}</td>
-				{{/doDisplay}}
-			{{/showTitles}}
 		</tr>
 		{{/segment}}
 	</table>
