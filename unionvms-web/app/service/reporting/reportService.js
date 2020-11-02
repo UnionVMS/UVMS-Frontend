@@ -475,12 +475,14 @@ angular.module('unionvmsWeb').factory('reportService',function($rootScope, $comp
         rep.segments.forEach(function(seg) {
             seg.tripIds = [];
             rep.positions.forEach(function(pos) {
-                seg.geometry.coordinates.forEach(function(c) {
-                if (coordsEqual(c, pos.geometry.coordinates))
-                    mergeTrips(seg.tripIds, pos.tripIds);
-                });
-            });
-        });
+                seg.geometry.coordinates.forEach(function(c, index) {
+                    if (coordsEqual(c, pos.geometry.coordinates)) {
+                        mergeTrips(seg.tripIds, pos.tripIds);
+                        if(index === 1) {
+                            seg.properties.positionTime = pos.properties.positionTime;
+                            seg.properties.connectionId = pos.properties.connectionId;
+                        }
+        }})})});
 
         if(rep.reportType === 'standard'){
             rep.loadReportHistory();
