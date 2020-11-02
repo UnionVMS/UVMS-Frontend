@@ -95,7 +95,7 @@ angular.module('smart-table').filter('stFieldSearchGeoJson', function($filter, u
 
             return resp;
         };
-        
+
         var getIdentifier = function (obj) {
             if(type === 'trips') {
                 return obj['tripId'];
@@ -103,7 +103,7 @@ angular.module('smart-table').filter('stFieldSearchGeoJson', function($filter, u
                 return obj['id'];
             }
         };
-        
+
         //Function to calculate upper boundary when filtering fields with duration/time
         var dehumanizeTimeAndCalculateUpBoundary = function(time){
             var parsedStr = time.match(/([0-9]+[dhms]{1})/ig);
@@ -284,6 +284,11 @@ angular.module('smart-table').filter('stFieldSearchGeoJson', function($filter, u
                 var additionalKeys = _.keys(additionalFilters);
                 additionalKeys.splice(0,1);
                 var temp;
+                if (type === 'segments' && angular.isDefined(lastX)){
+                       tempRecs = tempRecs.sort(function(a, b){
+                                                return new Date(b.properties.positionTime) - new Date(a.properties.positionTime);
+                                            });
+                }
                 angular.forEach(tempRecs, function(rec, idx){
                     var filterDate, recDate;
                     var includeArray = [];
@@ -430,20 +435,20 @@ angular.module('smart-table').filter('stFieldSearchGeoJson', function($filter, u
                           include = updateInclude(temp, include);
                     }
 
-                    if (include && angular.isDefined(this.vessels) && type !== 'trips'){
-                        var connectId = type === 'tracks' ? rec.guid : rec.properties.connectionId;
-                        if(angular.isDefined(connectId)){
-                            if(!angular.isDefined(this.vessels[connectId])){
-                                this.vessels[connectId] = 1;
-                            }
-                            if(this.vessels[connectId] <= this.vessels.last_x_count){
-                                this.vessels[connectId] += 1;
-                            }
-                            else{
-                                include = false;
+                    if (include && angular.isDefined(this.vessels)){
+                        if (type === 'positions' || type === 'segments') {
+                            var connectId = rec.properties.connectionId;
+                            if (angular.isDefined(connectId)) {
+                                if (!angular.isDefined(this.vessels[connectId])) {
+                                    this.vessels[connectId] = 1;
+                                }
+                                if (this.vessels[connectId] <= this.vessels.last_x_count) {
+                                    this.vessels[connectId] += 1;
+                                } else {
+                                    include = false;
+                                }
                             }
                         }
-
                     }
 
                      if (angular.isDefined(this.tripIds)) {
