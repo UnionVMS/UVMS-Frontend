@@ -3360,7 +3360,7 @@ angular.module('unionvmsWeb').factory('mapService', function(locale, $rootScope,
     ms.setPositionsObjPopup = function(feature, id){
         var titles = ms.getPositionTitles();
         var srcData = ms.formatPositionDataForPopup(feature);
-        var showAttrNames = ms.popupVisibility.positions.length > 0;
+        var showAttrNames = ms.popupVisibility.positionsNames.length > 0;
         var replacementTitles = ms.popupVisibility.positionsReplacementTitles;
         var data = [];
         for (var i = 0; i < ms.popupVisibility.positions.length; i++){
@@ -3384,13 +3384,6 @@ angular.module('unionvmsWeb').factory('mapService', function(locale, $rootScope,
             },
             getValue: function(){
                 return this.value;
-            },
-            doDisplay: function(){
-                if (!angular.isDefined(this.value) || this.value === ''){
-                    return false;
-                } else {
-                    return true;
-                }
             }
         };
     };
@@ -3556,13 +3549,6 @@ angular.module('unionvmsWeb').factory('mapService', function(locale, $rootScope,
             },
             getValue: function(){
                 return this.value;
-            },
-            doDisplay: function(){
-                if (!angular.isDefined(this.value) || this.value === ''){
-                    return false;
-                } else {
-                    return true;
-                }
             }
         };
     };
