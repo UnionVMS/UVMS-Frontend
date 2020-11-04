@@ -56,12 +56,6 @@ export const NAVIGATION_TABS = [
     // permissions: [100034]
   },
   {
-    id: 10,
-    name: 'Mobile terminals',
-    href: `${environment.oldBaseURL}/#/communication`,
-    // permissions: [300001]
-  },
-  {
     id: 11,
     name: 'Assets',
     href: `${environment.oldBaseURL}/#/assets`,
