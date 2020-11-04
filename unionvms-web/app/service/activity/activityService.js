@@ -32,7 +32,7 @@ copy of the GNU General Public License along with the IFDM Suite. If not, see <h
  * @description
  *  A service to deal with all activity data
  */
-angular.module('unionvmsWeb').factory('activityService',function(locale, activityRestService, visibilityService, breadcrumbService, fishingActivityService) {
+angular.module('unionvmsWeb').factory('activityService',function(locale, activityRestService, visibilityService, breadcrumbService, fishingActivityService, $window) {
     var actServ = {};
     var pageSize = 25;
     var tableNames = ['reportsList','tripsList'];
@@ -504,6 +504,32 @@ angular.module('unionvmsWeb').factory('activityService',function(locale, activit
         //TODO deal with error from service
         });
         return comboList;
+    };
+
+    actServ.csvLoading = false;
+
+    actServ.exportActivityListToCsv = function() {
+        actServ.csvLoading = true;
+
+        var simpleCriteria = {};
+        if (angular.isDefined(actServ['reportsList'].searchObject.simpleCriteria)){
+            simpleCriteria = actServ['reportsList'].searchObject.simpleCriteria;
+        }
+
+        var payload = {
+            pagination: getPaginationForServer(undefined),
+            sorting: actServ['reportsList'].sorting,
+            searchCriteriaMap: simpleCriteria,
+            searchCriteriaMapMultipleValues: actServ['reportsList'].searchObject.multipleCriteria,
+            showOnlyLatest: true
+        };
+        activityRestService.exportActivityListToCsv(payload).then(function (data) {
+            if(!angular.equals({}, data)) {
+                var file = new Blob([data], {type: 'text/csv;charset=UTF-8'});
+                $window.saveAs(file, "csvExport" + moment().format("YYYY-MM-DDTHH:mm") + ".csv");
+            }
+            actServ.csvLoading = false;
+        })
     };
 
 	return actServ;
