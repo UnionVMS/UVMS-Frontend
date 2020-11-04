@@ -13,6 +13,12 @@ copy of the GNU General Public License along with the IFDM Suite. If not, see <h
 	<div class="col-md-12 buttonSection">
 		<div class="row">
 			<!-- COLUMNS BUTTON -->
+            <div class="col-md-2 nopaddingleft">
+                <dropdown class="activity-actions" ng-disabled="actServ.csvLoading" callback="selectFromDropdown" ng-model="selectionsDropdown.selection" initialtext="{{'common.actions' | i18n}}" items="dropdownItems" menu-style input-field-id="asset-dropdown-actions"></dropdown>
+            </div>
+            <div class="col-md-1 spinner" ng-if="actServ.csvLoading">
+                <i class="fa fa-spinner fa-spin loading-spinner"></i>
+            </div>
 			<div class="btn-group btn-left">
 				<button type="button" class="btn btn-primary dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
 						{{'activity.columns' | i18n}}
