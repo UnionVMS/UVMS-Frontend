@@ -29,6 +29,16 @@ angular.module('unionvmsWeb').controller('ActivityreportslistCtrl',function($sco
     $scope.attrVisibility = visibilityService;
     $scope.visServ = visibilityService;
 
+    $scope.selectionsDropdown = {
+      'selection' : ''
+    };
+    $scope.dropdownItems = [{'text':'Export results to CSV','code':'EXPORT'}];
+    $scope.selectFromDropdown = function(selectedItem) {
+        if(selectedItem.code === 'EXPORT') {
+            activityService.exportActivityListToCsv();
+        }
+    };
+
     /**
      * Update the Activvity list
      *
