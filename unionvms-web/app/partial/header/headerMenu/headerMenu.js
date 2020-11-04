@@ -101,16 +101,6 @@ angular.module('unionvmsWeb').controller('HeaderMenuCtrl',function($scope, $root
             $scope.addMenuItem(locale.getString('header.menu_exchange'), '/exchange', 'exchange');
         }
 
-        // Polling
-        if (checkAccess('Union-VMS', 'viewMobileTerminalPolls')) {
-            $scope.addMenuItem(locale.getString('header.menu_polling'), '/polling/logs', 'polling-logs');
-        }
-
-        // Mobile Terminals
-        if (checkAccess('Union-VMS', 'viewVesselsAndMobileTerminals')) {
-            $scope.addMenuItem(locale.getString('header.menu_communication'), '/communication', 'communication');
-        }
-
         // Assets
         if (checkAccess('Union-VMS', 'viewVesselsAndMobileTerminals')) {
             $scope.addMenuItem(locale.getString('header.menu_assets'), '/assets', 'assets');
