@@ -153,6 +153,9 @@ angular.module('unionvmsWeb').factory('activityRestFactory', function ($resource
                    }
                }
             });
+        },
+        exportActivityListToCsv: function (query) {
+            return $http.post('activity/rest/csv/', query);
         }
     };
 
@@ -397,6 +400,15 @@ angular.module('unionvmsWeb').factory('activityRestFactory', function ($resource
                 deferred.reject(error);
             });
             return deferred.promise;
+        },
+        exportActivityListToCsv: function (query) {
+            return activityRestFactory.exportActivityListToCsv(query).then(
+                function (response) {
+                    return response.data;
+                }, function () {
+                    console.error('Failed to export activities to CSV');
+                    return {};
+            });
         }
     };
 
