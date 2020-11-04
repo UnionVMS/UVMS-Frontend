@@ -37,9 +37,6 @@ angular.module('unionvmsWeb')
         case "VESSEL":
             $scope.formPartial = 'directive/common/menuBar/vessel/vesselMenuBar.html';
             break;
-        case "MOBILE_TERMINAL":
-            $scope.formPartial = 'directive/common/menuBar/mobileTerminal/mobileTerminalMenuBar.html';
-            break;
         default:
             console.error("ModelType is missing for menu bar. " + $scope.modeltype);
     }
