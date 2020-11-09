@@ -165,12 +165,12 @@ copy of the GNU General Public License along with the IFDM Suite. If not, see <h
 								ng-if="column === 'startDate'">{{'activity.header_fa_start_date' | i18n }}</div>
 							<div st-sort="endDate" st-skip-natural="true" st-class-ascent="sorting_asc" st-class-descent="sorting_desc" ng-show="attrVisibility.fishingActivities[column]"
 								ng-if="column === 'endDate'">{{'activity.header_fa_end_date' | i18n }}</div>
-							<div ng-show="attrVisibility.fishingActivities[column]" ng-if="column === 'cfr'">{{'spatial.reports_form_vessel_search_table_header_cfr' | i18n }}</div>
-							<div ng-show="attrVisibility.fishingActivities[column]" ng-if="column === 'ircs'">{{'spatial.reports_form_vessel_search_table_header_ircs' | i18n }}</div>
-							<div ng-show="attrVisibility.fishingActivities[column]" ng-if="column === 'extMark'">{{'spatial.reports_form_vessel_search_table_header_external_marking' | i18n }}</div>
-							<div ng-show="attrVisibility.fishingActivities[column]" ng-if="column === 'uvi'">{{'activity.header_fa_uvi' | i18n }}</div>
-							<div ng-show="attrVisibility.fishingActivities[column]" ng-if="column === 'iccat'">{{'activity.header_fa_iccat' | i18n }}</div>
-							<div ng-show="attrVisibility.fishingActivities[column]" ng-if="column === 'gfcm'">{{'activity.header_fa_gfcm' | i18n }}</div>
+							<div st-sort="CFR" st-skip-natural="true" st-class-ascent="sorting_asc" st-class-descent="sorting_desc" ng-show="attrVisibility.fishingActivities[column]" ng-if="column === 'cfr'">{{'spatial.reports_form_vessel_search_table_header_cfr' | i18n }}</div>
+							<div st-sort="IRCS" st-skip-natural="true" st-class-ascent="sorting_asc" st-class-descent="sorting_desc" ng-show="attrVisibility.fishingActivities[column]" ng-if="column === 'ircs'">{{'spatial.reports_form_vessel_search_table_header_ircs' | i18n }}</div>
+							<div  st-sort="extMark" st-skip-natural="true" st-class-ascent="sorting_asc" st-class-descent="sorting_desc" ng-show="attrVisibility.fishingActivities[column]" ng-if="column === 'extMark'">{{'spatial.reports_form_vessel_search_table_header_external_marking' | i18n }}</div>
+							<div st-sort="UVI" st-skip-natural="true" st-class-ascent="sorting_asc" st-class-descent="sorting_desc" ng-show="attrVisibility.fishingActivities[column]" ng-if="column === 'uvi'">{{'activity.header_fa_uvi' | i18n }}</div>
+							<div st-sort="ICCAT" st-skip-natural="true" st-class-ascent="sorting_asc" st-class-descent="sorting_desc" ng-show="attrVisibility.fishingActivities[column]" ng-if="column === 'iccat'">{{'activity.header_fa_iccat' | i18n }}</div>
+							<div st-sort="GFCM" st-skip-natural="true" st-class-ascent="sorting_asc" st-class-descent="sorting_desc" ng-show="attrVisibility.fishingActivities[column]" ng-if="column === 'gfcm'">{{'activity.header_fa_gfcm' | i18n }}</div>
 							<div ng-show="attrVisibility.fishingActivities[column]" ng-if="column === 'areas'">{{'activity.header_fa_areas' | i18n }}</div>
 							<div ng-show="attrVisibility.fishingActivities[column]" ng-if="column === 'port'">{{'activity.header_fa_port' | i18n }}</div>
 							<div ng-show="attrVisibility.fishingActivities[column]" ng-if="column === 'fishingGear'">{{'activity.header_fa_gear' | i18n }}</div>
