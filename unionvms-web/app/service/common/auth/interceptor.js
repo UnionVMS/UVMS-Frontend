@@ -221,18 +221,6 @@ angular.module('auth.interceptor', ['ngStorage','ui.bootstrap'])
 								$localStorage.token = response.headers()["authorization"];
                                 unauth = false;
 							}
-                            //TODO: handle expired password status
-                            if (!_.isUndefined(response.headers()["extstatus"])) {
-                                _log.debug("extstatus header",response.headers()["extstatus"]);
-                                if (response.headers()["extstatus"] === "701") {
-                                    $log.debug("User authenticated but password expired (701). User should change password NOW!");
-                                    $rootScope.$broadcast('NeedChangePassword');
-                                } else if (response.headers()["extstatus"] === "773") {
-                                    $log.debug("User authenticated but password is about to expire (773). Should suggest to change password.");
-                                    $rootScope.$broadcast('WarningChangePassword');
-                                }
-                            }
-
 						}
 					);
 					return response;

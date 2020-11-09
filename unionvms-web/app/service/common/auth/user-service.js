@@ -586,27 +586,18 @@ angular.module('auth.user-service', ['auth.router'])
                         // let's check that we can successfully ping the backend
                         return _backendPing().then(
                         function (response) {
-								if (!_.isUndefined(response.headers()["extstatus"])) {
-                                    expired = false;
-                                    if (response.headers()["extstatus"] === "701") {
-                                        expired = true;
-										$rootScope.$broadcast('NeedChangePassword');
-										$log.debug("User authenticated but password expired (701). User should change password NOW!");
-                                    } else if (response.headers()["extstatus"] === "773") {
-										$log.debug("User authenticated but password is about to expire (773). User is suggested to change password.");
-									}
-								}
-                                $log.debug('_isUserIdentifiedPromise - The ping promise returned successfully with message', response);
-                                if (response.status && response.status + "" === "200") {
-                                    $log.debug('Resolving _backendPing with "Authenticated", response.status: ' + response.status);
-                                    $log.debug('_isUserIdentifiedPromise resolving with username : ', _getUserName());
-                                    deferred.resolve(_getUserName());
+                            expired = false;
+                            $log.debug('_isUserIdentifiedPromise - The ping promise returned successfully with message', response);
+                            if (response.status && response.status + "" === "200") {
+                                $log.debug('Resolving _backendPing with "Authenticated", response.status: ' + response.status);
+                                $log.debug('_isUserIdentifiedPromise resolving with username : ', _getUserName());
+                                deferred.resolve(_getUserName());
                             } else {
                                     var message = response.status;
                                     $log.debug('rejecting _backendPing promise (5): ' + message);
                                     deferred.reject(message);
                             }
-                                return deferred.promise;
+                            return deferred.promise;
                         },
                         function (error) {
                                 $log.debug('_backendPing error response (9): ' + error);
