@@ -41,3 +41,7 @@
 .custom-checkbox .custom-control-input:checked ~ .custom-control-label::after {
   top: 2px;
 }
+
+.disabled-checkbox {
+  pointer-events: none !important;
+}
