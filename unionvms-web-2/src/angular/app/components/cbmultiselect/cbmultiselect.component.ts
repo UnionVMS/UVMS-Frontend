@@ -26,6 +26,8 @@ function simpleEquals(a: any, b: any): boolean {
 })
 export class CbMultiselectComponent implements OnInit, OnDestroy {
 
+  @Input() canEdit;
+
   @Output()
   valueChanged = new EventEmitter<any[]>();
 

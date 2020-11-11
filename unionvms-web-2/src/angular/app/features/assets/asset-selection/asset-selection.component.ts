@@ -24,6 +24,7 @@ export class AssetSelectionComponent implements OnInit, OnDestroy {
   @ViewChild('AssetListGroupTable') assetListGroupTable: any;
   @Input() formGroup: FormGroup;
   @Input() formArrayName;
+  @Input() canEdit;
   @Output() selectedAssetsChange = new EventEmitter<any>();
   vesselSearchItems = [];
   assetType = ASSET_TYPE.asset;
@@ -50,7 +51,6 @@ export class AssetSelectionComponent implements OnInit, OnDestroy {
   assetGroupCount;
   assetGroupSearchObj;
   isVisible = false;
-
   get assets() {
     return this.formGroup.get('assets') as FormArray;
   }

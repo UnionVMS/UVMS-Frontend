@@ -165,7 +165,7 @@
         </legend>
         <div [ngbCollapse]="isAssetsCollapsed" >
           <div class="col-sm-12" [ngClass]="{ 'dimmed' : inputsDisabled }">
-            <app-asset-selection formArrayName="assets" [formGroup]="manualSubscriptionForm" (selectedAssetsChange)="onSelectedAssetsChange($event)" ></app-asset-selection>
+            <app-asset-selection formArrayName="assets" [canEdit]="true" [formGroup]="manualSubscriptionForm" (selectedAssetsChange)="onSelectedAssetsChange($event)" ></app-asset-selection>
           </div>
         </div>
       </fieldset>
@@ -183,7 +183,7 @@
         </legend>
         <div [ngbCollapse]="isAreasCollapsed" >
           <div class="col-sm-12" [ngClass]="{ 'dimmed' : inputsDisabled }">
-            <app-area-selection formArrayName="areas" [formGroup]="manualSubscriptionForm" (selectedAreasChange)="onSelectedAreasChange($event)"></app-area-selection>
+            <app-area-selection formArrayName="areas" [canEdit]="true" [formGroup]="manualSubscriptionForm" (selectedAreasChange)="onSelectedAreasChange($event)"></app-area-selection>
           </div>
         </div>
       </fieldset>
