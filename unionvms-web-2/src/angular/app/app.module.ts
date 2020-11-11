@@ -14,6 +14,7 @@ import { HTTP_INTERCEPT_PROVIDERS } from './http-interceptors';
 import { SubscriptionsGuard } from './features/subscriptions/subscriptions.guard';
 import { SharedModule } from './shared/shared.module';
 import { ComponentsModule } from 'app/components/components.module';
+import {EditSubscriptionsGuard} from "./features/subscriptions/edit.subscriptions.guard";
 
 
 @NgModule({
@@ -31,7 +32,7 @@ import { ComponentsModule } from 'app/components/components.module';
     SharedModule,
     StoreModule.forRoot(REDUCERS)
   ],
-  providers: [AuthGuard, HTTP_INTERCEPT_PROVIDERS, SubscriptionsGuard ],
+  providers: [AuthGuard, HTTP_INTERCEPT_PROVIDERS, SubscriptionsGuard, EditSubscriptionsGuard],
   bootstrap: [AppComponent]
 })
 export class AppModule { }

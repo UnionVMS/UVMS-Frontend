@@ -1,15 +1,16 @@
 import { Injectable } from '@angular/core';
-import { CanActivate, ActivatedRouteSnapshot, RouterStateSnapshot, Router } from '@angular/router';
+import {CanActivate, ActivatedRouteSnapshot, RouterStateSnapshot, Router, UrlTree} from '@angular/router';
 import { Observable } from 'rxjs';
 import { isDevMode } from '@angular/core';
 import { environment } from '../../../environments/environment';
+import {SubscriptionRightsService} from "../../services/subscription-rights.service";
 
 @Injectable()
 export class SubscriptionsGuard implements CanActivate {
   canActivateRoute: boolean;
 
 
-  constructor() {
+  constructor(private subscriptionRightsService: SubscriptionRightsService) {
   }
 
   canActivate(next: ActivatedRouteSnapshot, state: RouterStateSnapshot): Observable<boolean> | Promise<boolean> | boolean {
@@ -19,10 +20,17 @@ export class SubscriptionsGuard implements CanActivate {
       window.location.href = `${environment.oldBaseURL}/#/login`;
       return false;
     }
-    return true;
+    return this.subscriptionRightsService.canView().then(canView => {
+      if(canView) {
+        return true;
+      } else {
+        window.location.href = `${environment.oldBaseURL}/#/login`;
+        return false;
+      }
+    });
   }
 
-  checkToken() {
+  private checkToken() {
     let token;
     if (isDevMode()) {
       token = localStorage.getItem('token');

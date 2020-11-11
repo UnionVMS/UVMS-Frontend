@@ -8,6 +8,7 @@ import { NewSubscriptionComponent } from './subscriptions/new-subscription/new-s
 import { SubscriptionsGuard } from './subscriptions/subscriptions.guard';
 import { EditSubsriptionComponent } from './subscriptions/edit-subsription/edit-subsription.component';
 import { ManualSubscriptionsComponent } from './subscriptions/manual-subscriptions/manual-subscriptions.component';
+import {EditSubscriptionsGuard} from "./subscriptions/edit.subscriptions.guard";
 
 
 export const featureRoutes: Routes = [
@@ -20,9 +21,9 @@ export const featureRoutes: Routes = [
     children: [
       { path: '', redirectTo: 'manage-subscriptions', pathMatch: 'full' },
       { path: 'manage-subscriptions', component: ManageSubscriptionsComponent },
-      { path: 'new-subscription', component: NewSubscriptionComponent },
+      { path: 'new-subscription', component: NewSubscriptionComponent, canActivate : [EditSubscriptionsGuard]},
       { path: 'edit-subscription/:id', component: EditSubsriptionComponent },
-      { path: 'manual-subscriptions', component: ManualSubscriptionsComponent }
+      { path: 'manual-subscriptions', component: ManualSubscriptionsComponent, canActivate : [EditSubscriptionsGuard]}
     ]
   },
   { path: '**', component: NotFoundComponent }

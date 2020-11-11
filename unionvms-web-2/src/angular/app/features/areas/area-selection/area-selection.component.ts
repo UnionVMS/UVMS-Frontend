@@ -24,6 +24,7 @@ export class AreaSelectionComponent implements OnInit, OnDestroy  {
   @Output() selectedAreasChange = new EventEmitter<any>();
   @Input() formArrayName;
   @Input() formGroup: FormGroup;
+  @Input() canEdit;
   systemLayersTypeList;
   userLayerType;
   system = 'SYSTEM';

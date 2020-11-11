@@ -185,7 +185,7 @@
       <ng-template let-rowIndex="rowIndex" let-row="row" let-value="value" ngx-datatable-cell-template>
         <div class="custom-control custom-checkbox custom-control-inline">
             <input id="checkbox_{{rowIndex}}" class="custom-control-input" type="checkbox" [checked]="value" (click)="onActiveChange($event, row)">
-            <label for="checkbox_{{rowIndex}}" class="custom-control-label"></label>
+            <label for="checkbox_{{rowIndex}}" class="custom-control-label" [ngClass]="{'disabled-checkbox' : !canEdit}"></label>
         </div>
       </ng-template>
     </ngx-datatable-column>
@@ -197,7 +197,7 @@
         <button class="btn btn-sm btn-outline-primary" (click)="editSubscription(row)">
           <fa-icon [icon]="faEdit"></fa-icon>
         </button>
-        <button class="btn btn-sm btn-outline-danger ml-2" (click)="deleteSubscription(row)">
+        <button class="btn btn-sm btn-outline-danger ml-2" (click)="deleteSubscription(row)" [attr.disabled]="!canEdit ? true : null">
           <fa-icon class="delete-icon" [icon]="faTrash"></fa-icon>
         </button>
       </ng-template>

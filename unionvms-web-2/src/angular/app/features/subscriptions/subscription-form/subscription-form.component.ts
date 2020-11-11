@@ -1,19 +1,20 @@
-import { Component, OnInit, Input, Output, EventEmitter, OnDestroy } from '@angular/core';
-import { faCalendar, faRetweet, faEye, faPlusSquare, faTrash, faAngleRight  } from '@fortawesome/free-solid-svg-icons';
-import { FormGroup, FormBuilder, Validators, FormControl, FormArray } from '@angular/forms';
-import { Organisation } from '../organisation.model';
-import { Store } from '@ngrx/store';
+import {Component, EventEmitter, Input, OnDestroy, OnInit, Output} from '@angular/core';
+import {faCalendar, faEye, faPlusSquare, faRetweet, faTrash} from '@fortawesome/free-solid-svg-icons';
+import {FormArray, FormBuilder, FormControl, FormGroup, Validators} from '@angular/forms';
+import {Organisation} from '../organisation.model';
+import {Store} from '@ngrx/store';
 import * as fromRoot from 'app/app.reducer';
-import { Observable, Subscription } from 'rxjs';
-import { FeaturesService } from 'app/features/features.service';
-import { EndPoint } from '../endpoint.model';
-import { CommunicationChannel } from '../communication-channel.model';
-import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
-import { distinctUntilChanged } from 'rxjs/operators';
-import { StatusAction } from '../subscriptions.reducer';
-import { Router } from '@angular/router';
-import { SubscriptionSubscriberDto } from 'app/features/features.model';
-import { IDropdownSettings } from 'ng-multiselect-dropdown';
+import {Observable, Subscription} from 'rxjs';
+import {FeaturesService} from 'app/features/features.service';
+import {EndPoint} from '../endpoint.model';
+import {CommunicationChannel} from '../communication-channel.model';
+import {NgbModal} from '@ng-bootstrap/ng-bootstrap';
+import {distinctUntilChanged} from 'rxjs/operators';
+import {StatusAction} from '../subscriptions.reducer';
+import {Router} from '@angular/router';
+import {SubscriptionSubscriberDto} from 'app/features/features.model';
+import {IDropdownSettings} from 'ng-multiselect-dropdown';
+import {SubscriptionRightsService} from "../../../services/subscription-rights.service";
 
 interface SenderElement {
   type: string;
@@ -41,6 +42,7 @@ export class SubscriptionFormComponent implements OnInit, OnDestroy {
   @Output() save = new EventEmitter<any>();
   @Output() checkName = new EventEmitter<any>();
   @Output() delete = new EventEmitter<any>();
+  canEdit = false;
   endpointItems: EndPoint[] = [];
   communicationChannels: CommunicationChannel[] = [];
   faCalendar = faCalendar;
@@ -76,9 +78,12 @@ export class SubscriptionFormComponent implements OnInit, OnDestroy {
 
   constructor(private fb: FormBuilder, private store: Store<fromRoot.State>,
               private featuresService: FeaturesService,
-              private modalService: NgbModal, private router: Router) { }
+              private modalService: NgbModal, private router: Router, private subscriptionRightsService: SubscriptionRightsService) { }
 
   ngOnInit(): void {
+    this.subscriptionRightsService.canEdit().then(canEdit => {
+      this.canEdit = canEdit;
+    });
     this.initForm();
     this.initMessageTypes();
     this.setHistoryUnits();

@@ -15,14 +15,14 @@
 </p>
 <form [formGroup]="subscriptionForm" (ngSubmit)="onSubmit($event)" autocomplete="off">
   <span> <b>{{mode}} Subscription</b></span>
-  <button *ngIf="mode === 'Edit'" type="button" class="btn btn-sm btn-outline-danger ml-4" (click)="deleteSubscription()">
+  <button *ngIf="mode === 'Edit'" [attr.disabled]="!canEdit ? true : null" type="button" class="btn btn-sm btn-outline-danger ml-4" (click)="deleteSubscription()">
     <fa-icon class="delete-icon" [icon]="faTrash"></fa-icon>
   </button>
   <div class="form-row justify-content-end buttons-row">
     <button type="button" class="btn btn-outline-secondary mr-1" (click)="reset()">Cancel</button>
-    <button type="submit" class="btn btn-primary" [disabled]="!subscriptionForm.valid" >Save</button>
+    <button type="submit" class="btn btn-primary" [disabled]="!subscriptionForm.valid || !canEdit" >Save</button>
   </div>
-  <fieldset class="border p-2">
+  <fieldset [attr.disabled]="!canEdit ? true : null" class="border p-2">
     <legend  class="w-auto">General Configuration</legend>
     <div class="form-group row">
         <label for="name" class="col-sm-2 col-form-label-sm required">Name</label>
@@ -77,7 +77,7 @@
     </div>
   </fieldset>
   <div formGroupName="output">
-    <fieldset class="border p-2">
+    <fieldset [attr.disabled]="!canEdit ? true : null" class="border p-2">
       <legend class="w-auto">Output</legend>
       <div class="form-group row">
         <label for="alert" class="col-sm-2 col-form-label-sm">Alert</label>
@@ -141,7 +141,7 @@
         </div>
       </div>
       <div id="email-fieldset">
-        <fieldset class="border p-2">
+        <fieldset [attr.disabled]="!canEdit ? true : null" class="border p-2">
           <legend class="w-auto">
             <div class="custom-control custom-checkbox custom-control-inline">
               <input class="custom-control-input" type="checkbox" id="email" formControlName="hasEmail">
@@ -176,10 +176,10 @@
                             <button type="button" class="btn btn-outline-dark" (click)="modal.close(emailForm.value)" [disabled]="!emailForm.valid">Save</button>
                           </div>
                       </ng-template>
-                    <fa-icon class="email-plus-icon" (click)="addEmail(content)" [icon]="faPlusSquare"></fa-icon>
+                    <fa-icon class="email-plus-icon" (click)="addEmail(content)" [icon]="faPlusSquare" [ngClass]="{'disabled-fa-icon' : !canEdit}"></fa-icon>
                     <div id="emails-list" formArrayName="emails" *ngFor="let item of emails.value; let i = index;">
                       <label id="emails_{{i}}">{{item}}</label>
-                      <fa-icon class="email-trash-icon" (click)="removeEmail(i)" [icon]="faTrash"></fa-icon>
+                      <fa-icon class="email-trash-icon" (click)="removeEmail(i)" [icon]="faTrash" [ngClass]="{'disabled-fa-icon' : !canEdit}"></fa-icon>
                     </div>
                   </div>
                   <div class="form-group row">
@@ -263,7 +263,7 @@
         </fieldset>
       </div>
     </fieldset>
-    <fieldset class="border p-2">
+    <fieldset [attr.disabled]="!canEdit ? true : null" class="border p-2">
       <legend  class="w-auto">Message Configuration</legend>
       <div class="form-group row">
         <label for="logbook" class="col-sm-2 col-form-label-sm">Logbook</label>
@@ -310,14 +310,14 @@
             formControlName="vesselIds"
             [settings]="dropdownSettings"
             [data]="vesselIdentifiers"
-            [disabled]="vesselIds.disabled"
-            [ngClass]="{'notClickable' : vesselIds.disabled}">
+            [disabled]="vesselIds.disabled || !canEdit"
+            [ngClass]="{'notClickable' : vesselIds.disabled || !canEdit}">
           </ng-multiselect-dropdown>
         </div>
       </div>
     </fieldset>
   </div>
-  <fieldset class="border p-2" formGroupName="execution">
+  <fieldset [attr.disabled]="!canEdit ? true : null" class="border p-2" formGroupName="execution">
     <legend  class="w-auto">Execution</legend>
     <div class="form-group row">
       <label for="triggerType" class="col-sm-2 col-form-label-sm">Trigger</label>
@@ -381,7 +381,7 @@
     </div>
     <div class="form-group row" [ngbCollapse]="isCollapsed" class="subscription-form-areas">
       <div class="col-md-12">
-        <app-area-selection formArrayName="areas" [formGroup]="subscriptionForm" (selectedAreasChange)="onSelectedAreasChange($event)"></app-area-selection>
+        <app-area-selection formArrayName="areas" [canEdit]="canEdit" [formGroup]="subscriptionForm" (selectedAreasChange)="onSelectedAreasChange($event)"></app-area-selection>
       </div>
     </div>
     <hr *ngIf="!isCollapsed">
@@ -397,7 +397,7 @@
     </div>
     <div class="form-group row" [ngbCollapse]="isAssetsCollapsed" class="subscription-form-assets">
       <div class="col-md-12">
-        <app-asset-selection formArrayName="assets" [formGroup]="subscriptionForm" (selectedAssetsChange)="onSelectedAssetsChange($event)" ></app-asset-selection>
+        <app-asset-selection formArrayName="assets" [canEdit]="canEdit" [formGroup]="subscriptionForm" (selectedAssetsChange)="onSelectedAssetsChange($event)" ></app-asset-selection>
       </div>
     </div>
     <hr *ngIf="!isAssetsCollapsed">
@@ -413,7 +413,7 @@
              </div>
              <div *ngFor="let entry of item.value; let i = index;">
               <div class="custom-control custom-checkbox" formArrayName="startActivities">
-                <input class="custom-control-input" type="checkbox" id="activity_start_{{item.key}}_{{i}}" [checked]="getIsChecked(entry, 'startActivities')" (change)="onChangeActivity(entry, $event.target.checked, 'startActivities')">
+                <input [attr.disabled]="!canEdit ? true : null" class="custom-control-input" type="checkbox" id="activity_start_{{item.key}}_{{i}}" [checked]="getIsChecked(entry, 'startActivities')" (change)="onChangeActivity(entry, $event.target.checked, 'startActivities')">
                 <label class="custom-control-label" for="activity_start_{{item.key}}_{{i}}">
                   {{entry.value}}
                 </label>
@@ -423,17 +423,17 @@
           </div>
         </div>
       </div>
-      <div class="col-md-6">
+      <div class="col-md-6" disabled="true">
         <div class="form-group row">
           <label class="col-sm-2 col-form-label-sm">Sender</label>
           <div class="col-sm-8 sender-list">
-            <app-cbmultiselect [items]="allSenders" formControlName="senders"></app-cbmultiselect>
+            <app-cbmultiselect [canEdit]="canEdit" [items]="allSenders" formControlName="senders"></app-cbmultiselect>
           </div>
         </div>
       </div>
     </div>
   </fieldset>
-  <fieldset class="border p-2">
+  <fieldset [attr.disabled]="!canEdit ? true : null" class="border p-2">
     <legend  class="w-auto">Stop Conditions</legend>
     <div class="row">
       <div class="col-md-6">

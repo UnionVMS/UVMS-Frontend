@@ -5,8 +5,8 @@
   </div>
   <div *ngFor="let entry of item.value; let i = index;">
     <div class="custom-control custom-checkbox">
-      <input class="custom-control-input" id="{{idPrefix}}-{{item.key}}-{{i}}" type="checkbox" [formControl]="form.get([item.key,i])" [checked]="form.get([item.key,i]).value">
-      <label class="custom-control-label" for="{{idPrefix}}-{{item.key}}-{{i}}">
+      <input class="custom-control-input" id="{{idPrefix}}-{{item.key}}-{{i}}" type="checkbox" [formControl]="form.get([item.key,i])" [checked]="form.get([item.key,i]).value" [attr.disabled]="!canEdit ? true : null">
+      <label class="custom-control-label" for="{{idPrefix}}-{{item.key}}-{{i}}" [attr.disabled]="!canEdit ? true : null">
         {{ entry.displayName }}
       </label>
     </div>
