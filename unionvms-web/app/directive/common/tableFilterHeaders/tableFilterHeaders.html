@@ -21,7 +21,7 @@
 						<span ng-if="column.isDuration">{{item[column.srcProp] + ' ' + item.durationMeasure}}</span>
 						<span ng-if="column.translation">{{item['translated' + column.srcProp]}}</span>
 						<span ng-if="!column.srcObj && !column.isDate && !column.isDuration && !column.translation && column.srcProp !== 'calculatedWeight' && column.srcProp !=='packageWeight' && column.srcProp !=='weight' && column.srcProp !=='conversionFactor' ">{{item[column.srcProp]}}</span>
-                        <span  ng-if="column.srcProp ==='conversionFactor'||column.srcProp === 'calculatedWeight'|| column.srcProp === 'packageWeight'|| column.srcProp === 'weight'">{{item[column.srcProp] | negateSubractedCatchType: item | number:2}}</span>
+                        <span ng-class="{'conversion-factor-from-mdr' : item.conversionFactorIsFromMdr}" ng-if="column.srcProp ==='conversionFactor'||column.srcProp === 'calculatedWeight'|| column.srcProp === 'packageWeight'|| column.srcProp === 'weight'">{{item[column.srcProp] | negateSubractedCatchType: item | number:2}}</span>
 					</td>
 				</tr>
 			</tbody>
