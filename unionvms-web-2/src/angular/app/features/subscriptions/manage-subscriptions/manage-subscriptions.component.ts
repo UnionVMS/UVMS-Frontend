@@ -16,6 +16,7 @@ import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
 import { ConfirmModalComponent } from '../confirmmodal/confirm-modal.component';
 import { Subscription as SubscriptionModel } from 'app/features/subscriptions/subscription.model';
 import * as moment from 'moment';
+import {SubscriptionRightsService} from "../../../services/subscription-rights.service";
 
 @Component({
   selector: 'app-manage-subscriptions',
@@ -24,6 +25,7 @@ import * as moment from 'moment';
 })
 export class ManageSubscriptionsComponent implements OnInit, OnDestroy {
   @ViewChild('SubscriptionListTable') subscriptionListTable: any;
+  canEdit: boolean = false;
   alerts;
   messageTypeItems: NameAndValue<string>[];
   triggerTypeItems: NameAndValue<string>[];
@@ -49,7 +51,12 @@ export class ManageSubscriptionsComponent implements OnInit, OnDestroy {
   private subscription: Subscription = new Subscription();
 
   constructor(private store: Store<fromRoot.State>, private featuresService: FeaturesService, private fb: FormBuilder,
-              private router: Router, private modalService: NgbModal) {
+              private router: Router, private modalService: NgbModal, subscriptionRightsService: SubscriptionRightsService) {
+
+    subscriptionRightsService.canEdit().then(canEdit => {
+      this.canEdit = canEdit;
+    });
+
     this.sizeList = [
       '10',
       '20',

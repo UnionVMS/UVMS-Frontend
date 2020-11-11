@@ -3,10 +3,10 @@
   <li class="subscriptions-nav-item nav-item">
     <a class="nav-link" routerLink="/subscriptions/manage-subscriptions" routerLinkActive="active">MANAGE SUBSCRIPTIONS</a>
   </li>
-  <li class=" subscriptions-nav-item nav-item">
+  <li class=" subscriptions-nav-item nav-item" *ngIf="canEdit">
     <a class="nav-link" routerLink="/subscriptions/new-subscription" routerLinkActive="active">NEW SUBSCRIPTION</a>
   </li>
-  <li class=" subscriptions-nav-item nav-item">
+  <li class=" subscriptions-nav-item nav-item" *ngIf="canEdit">
     <a class="nav-link" routerLink="/subscriptions/manual-subscriptions" routerLinkActive="active">MANUAL QUERY</a>
   </li>
 </ul>
