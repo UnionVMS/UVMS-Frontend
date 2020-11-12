@@ -29,4 +29,8 @@ export class AuthService {
   logOut(sessionId) {
     return this.http.delete(`${environment.baseURL}${AUTH_ENDPOINTS.userLogout}${sessionId}`).toPromise();
   }
+
+  getUserIsReviewContactDetailsEnabled() {
+    return this.http.get(`${environment.baseURL}${AUTH_ENDPOINTS.getIsReviewContactDetailsEnabled}`);
+  }
 }
