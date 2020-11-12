@@ -1,6 +1,7 @@
 export const AUTH_ENDPOINTS = {
   userLogin: '/usm-administration/rest/authenticate',
   getUserContexts: '/usm-administration/rest/userContexts',
-  userLogout: '/usm-administration/rest/sessions/'
+  userLogout: '/usm-administration/rest/sessions/',
+  getIsReviewContactDetailsEnabled: '/usm-administration/rest/persons/isReviewContactDetailsEnabled'
 };
 
