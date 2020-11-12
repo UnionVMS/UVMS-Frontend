@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { CanActivate, ActivatedRouteSnapshot, RouterStateSnapshot, Router } from '@angular/router';
+import {CanActivate, ActivatedRouteSnapshot, RouterStateSnapshot, Router, UrlTree} from '@angular/router';
 import { Observable } from 'rxjs';
 import { isDevMode } from '@angular/core';
 import { environment } from '../../../environments/environment';
@@ -20,7 +20,14 @@ export class SubscriptionsGuard implements CanActivate {
       window.location.href = `${environment.oldBaseURL}/#/login`;
       return false;
     }
-    return this.subscriptionRightsService.canView();
+    return this.subscriptionRightsService.canView().then(canView => {
+      if(canView) {
+        return true;
+      } else {
+        window.location.href = `${environment.oldBaseURL}/#/login`;
+        return false;
+      }
+    });
   }
 
   private checkToken() {
