@@ -287,10 +287,7 @@ angular.module('auth.interceptor', ['ngStorage','ui.bootstrap'])
 							return $q.reject(rejection);
                     	}, forbidden);
                     } else if (rejection.status === 403 && !unauth) {
-                        _log.log("Request rejected with status 403");
-                        unauth = true;
-                        userService.logout();
-                        $rootScope.$broadcast('authenticationNeeded');
+                        _log.log("Request rejected with status 403: " + rejection.config.url);
                         return $q.reject(rejection);
 					} else {
 						return $q.reject(rejection);
