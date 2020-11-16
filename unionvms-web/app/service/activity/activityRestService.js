@@ -14,7 +14,7 @@ copy of the GNU General Public License along with the IFDM Suite. If not, see <h
  * @ngdoc service
  * @name activityRestFactory
  * @param $resource {service} angular resource service
- * @param $http {service} angular http service 
+ * @param $http {service} angular http service
  * @description
  *  REST factory for the activity module
  */
@@ -155,7 +155,10 @@ angular.module('unionvmsWeb').factory('activityRestFactory', function ($resource
             });
         },
         exportActivityListToCsv: function (query) {
-            return $http.post('activity/rest/csv/', query);
+            return $http.post('activity/rest/csv/activities/', query);
+        },
+        exportTripListToCsv: function (query) {
+            return $http.post('activity/rest/csv/trips/', query);
         }
     };
 
@@ -165,7 +168,7 @@ angular.module('unionvmsWeb').factory('activityRestFactory', function ($resource
  * @ngdoc service
  * @name activityRestService
  * @param $q {service} angular $q service
- * @param activityRestFactory {service} The REST factory for the activity module <p>{@link unionvmsWeb.activityRestFactory}</p> 
+ * @param activityRestFactory {service} The REST factory for the activity module <p>{@link unionvmsWeb.activityRestFactory}</p>
  * @description
  *  REST services for the activity module
  */
@@ -173,7 +176,7 @@ angular.module('unionvmsWeb').factory('activityRestFactory', function ($resource
     var activityService = {
         /**
          * Get the user preferences for the activty module
-         * 
+         *
          * @memberof activityRestService
          * @public
          * @returns {Promise} A promise with either the user preferences of the activity module or reject error
@@ -190,7 +193,7 @@ angular.module('unionvmsWeb').factory('activityRestFactory', function ($resource
         },
         /**
          * Get a list of fishing activity reports according to search criteria
-         * 
+         *
          * @memberof activityRestService
          * @public
          * @param {Object} data - The search criteria and table pagination data object
@@ -228,7 +231,7 @@ angular.module('unionvmsWeb').factory('activityRestFactory', function ($resource
         },
         /**
 	     * Get the history for a FA report
-         * 
+         *
     	 * @memberof activityRestService
 	     * @public
          * @param {Number} refId - The reference ID
@@ -264,7 +267,7 @@ angular.module('unionvmsWeb').factory('activityRestFactory', function ($resource
         },
         /**
          * Get the vessel and roles details of a specific trip
-         * 
+         *
          * @memberof activityRestService
          * @public
          * @param {String} id - The trip id of the selected trip
@@ -281,7 +284,7 @@ angular.module('unionvmsWeb').factory('activityRestFactory', function ($resource
         },
         /**
          * Get the message type count of a specific trip
-         * 
+         *
          * @memberof activityRestService
          * @public
          * @param {String} id - The trip id of the selected trip
@@ -298,7 +301,7 @@ angular.module('unionvmsWeb').factory('activityRestFactory', function ($resource
         },
         /**
          * Get the trip reports of a specific trip
-         * 
+         *
          * @memberof activityRestService
          * @public
          * @param {String} id - The trip id of the selected trip
@@ -315,7 +318,7 @@ angular.module('unionvmsWeb').factory('activityRestFactory', function ($resource
         },
         /**
          * Get the trip map data
-         * 
+         *
          * @memberof activityRestService
          * @public
          * @param {String} id - The trip id of the selected trip
@@ -348,8 +351,8 @@ angular.module('unionvmsWeb').factory('activityRestFactory', function ($resource
             return deferred.promise;
         },
         /**
-         * Get the Catches Evolution Details. 
-         * 
+         * Get the Catches Evolution Details.
+         *
          * @memberof activityRestService
          * @public
          * @param {String} id - The trip id of the selected trip
@@ -367,11 +370,11 @@ angular.module('unionvmsWeb').factory('activityRestFactory', function ($resource
         },
         /**
          * Get Fishing Activity details by type
-         * 
+         *
          * @memberof activityRestService
          * @public
          * @param {String} type - The fisihing activity type (e.g. departure, landing, arrival)
-         * @param {Object} payload - The post payload containing the activity id (mandatory) and the trip id (not mandatory and to be used only in the report tab) 
+         * @param {Object} payload - The post payload containing the activity id (mandatory) and the trip id (not mandatory and to be used only in the report tab)
          * @returns {Promise}  A promise with either the fishing activity details or reject error
          */
         getFishingActivityDetails: function(type, payload){
@@ -387,7 +390,7 @@ angular.module('unionvmsWeb').factory('activityRestFactory', function ($resource
         },
         /**
          * Get commchannels data
-         * 
+         *
          * @memberof activityRestService
          * @public
          * @returns {Promise}  A promise with either the fishing activity details or reject error
@@ -408,7 +411,16 @@ angular.module('unionvmsWeb').factory('activityRestFactory', function ($resource
                 }, function () {
                     console.error('Failed to export activities to CSV');
                     return {};
-            });
+                });
+        },
+        exportTripListToCsv: function (query) {
+            return activityRestFactory.exportTripListToCsv(query).then(
+                function (response) {
+                    return response.data;
+                }, function () {
+                    console.error('Failed to export trips to CSV');
+                    return {};
+                });
         }
     };
 
