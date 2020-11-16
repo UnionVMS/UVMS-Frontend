@@ -21,7 +21,7 @@ copy of the GNU General Public License along with the IFDM Suite. If not, see <h
  * @description
  *  The controller for the fisihing trips reports table list
  */
-angular.module('unionvmsWeb').controller('TripreportslistCtrl',function($scope, tripSummaryService, visibilityService, $stateParams){
+angular.module('unionvmsWeb').controller('TripreportslistCtrl',function($scope, tripSummaryService, activityService, visibilityService, $stateParams){
 
     $scope.isTripFilterVisible = false;
     $scope.startDate = undefined;
@@ -30,7 +30,16 @@ angular.module('unionvmsWeb').controller('TripreportslistCtrl',function($scope, 
     $scope.tripSummServ = tripSummaryService;
     $scope.activityTypes = [];
     var stLastTableState;
-   
+
+    $scope.selectionsDropdown = {
+        'selection' : ''
+    };
+    $scope.dropdownItems = [{'text':'Export results to CSV','code':'EXPORT'}];
+    $scope.selectFromDropdown = function(selectedItem) {
+        if(selectedItem.code === 'EXPORT') {
+            activityService.exportTripListToCsv();
+        }
+    };
 
     $scope.updateTripsList = function(tableState, ctrl){
       if (angular.isUndefined($stateParams.tripId) || $stateParams.tripId === null){
@@ -49,7 +58,7 @@ angular.module('unionvmsWeb').controller('TripreportslistCtrl',function($scope, 
 
      /**
      * Update the fishing activities column visibility settings
-     *  
+     *
      * @memberof ActivityreportslistCtrl
      * @public
      * @alias updateVisibilityCache

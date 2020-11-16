@@ -14,9 +14,9 @@ copy of the GNU General Public License along with the IFDM Suite. If not, see <h
 		<div class="row">
 			<!-- COLUMNS BUTTON -->
             <div class="col-md-2 nopaddingleft">
-                <dropdown class="activity-actions" ng-disabled="actServ.csvLoading" callback="selectFromDropdown" ng-model="selectionsDropdown.selection" initialtext="{{'common.actions' | i18n}}" items="dropdownItems" menu-style input-field-id="asset-dropdown-actions"></dropdown>
+                <dropdown class="activity-actions" ng-disabled="actServ.activitiesCsvLoading" callback="selectFromDropdown" ng-model="selectionsDropdown.selection" initialtext="{{'common.actions' | i18n}}" items="dropdownItems" menu-style input-field-id="asset-dropdown-actions"></dropdown>
             </div>
-            <div class="col-md-1 spinner" ng-if="actServ.csvLoading">
+            <div class="col-md-1 spinner" ng-if="actServ.activitiesCsvLoading">
                 <i class="fa fa-spinner fa-spin loading-spinner"></i>
             </div>
 			<div class="btn-group btn-left">
@@ -45,7 +45,7 @@ copy of the GNU General Public License along with the IFDM Suite. If not, see <h
 						</div>
 						<div class="checkbox col-md-6">
 							<label>
-								<input type="checkbox" ng-model="visServ.fishingActivities.purposeCode" ng-change="updateVisibilityCache('purposeCode')">{{'activity.header_fa_purpose_code' | i18n }} 
+								<input type="checkbox" ng-model="visServ.fishingActivities.purposeCode" ng-change="updateVisibilityCache('purposeCode')">{{'activity.header_fa_purpose_code' | i18n }}
 								</label>
 						</div>
 					</div>
@@ -57,7 +57,7 @@ copy of the GNU General Public License along with the IFDM Suite. If not, see <h
 						</div>
 						<div class="checkbox col-md-6">
 							<label>
-								<input type="checkbox" ng-model="visServ.fishingActivities.fromName" ng-change="updateVisibilityCache('fromName')">{{'activity.header_fa_from_name' | i18n }} 
+								<input type="checkbox" ng-model="visServ.fishingActivities.fromName" ng-change="updateVisibilityCache('fromName')">{{'activity.header_fa_from_name' | i18n }}
 								</label>
 						</div>
 					</div>
@@ -69,7 +69,7 @@ copy of the GNU General Public License along with the IFDM Suite. If not, see <h
 						</div>
 						<div class="checkbox col-md-6">
 							<label>
-								<input type="checkbox" ng-model="visServ.fishingActivities.endDate" ng-change="updateVisibilityCache('endDate')">{{'activity.header_fa_end_date' | i18n }} 
+								<input type="checkbox" ng-model="visServ.fishingActivities.endDate" ng-change="updateVisibilityCache('endDate')">{{'activity.header_fa_end_date' | i18n }}
 								</label>
 						</div>
 					</div>
@@ -81,7 +81,7 @@ copy of the GNU General Public License along with the IFDM Suite. If not, see <h
 						</div>
 						<div class="checkbox col-md-6">
 							<label>
-								<input type="checkbox" ng-model="visServ.fishingActivities.ircs" ng-change="updateVisibilityCache('ircs')">{{'spatial.reports_form_vessel_search_table_header_ircs' | i18n }} 
+								<input type="checkbox" ng-model="visServ.fishingActivities.ircs" ng-change="updateVisibilityCache('ircs')">{{'spatial.reports_form_vessel_search_table_header_ircs' | i18n }}
 								</label>
 						</div>
 					</div>
@@ -93,7 +93,7 @@ copy of the GNU General Public License along with the IFDM Suite. If not, see <h
 						</div>
 						<div class="checkbox col-md-6">
 							<label>
-								<input type="checkbox" ng-model="visServ.fishingActivities.uvi" ng-change="updateVisibilityCache('uvi')">{{'activity.header_fa_uvi' | i18n }} 
+								<input type="checkbox" ng-model="visServ.fishingActivities.uvi" ng-change="updateVisibilityCache('uvi')">{{'activity.header_fa_uvi' | i18n }}
 								</label>
 						</div>
 					</div>
@@ -105,7 +105,7 @@ copy of the GNU General Public License along with the IFDM Suite. If not, see <h
 						</div>
 						<div class="checkbox col-md-6">
 							<label>
-								<input type="checkbox" ng-model="visServ.fishingActivities.gfcm" ng-change="updateVisibilityCache('gfcm')">{{'activity.header_fa_gfcm' | i18n }} 
+								<input type="checkbox" ng-model="visServ.fishingActivities.gfcm" ng-change="updateVisibilityCache('gfcm')">{{'activity.header_fa_gfcm' | i18n }}
 								</label>
 						</div>
 					</div>
@@ -117,7 +117,7 @@ copy of the GNU General Public License along with the IFDM Suite. If not, see <h
 						</div>
 						<div class="checkbox col-md-6">
 							<label>
-								<input type="checkbox" ng-model="visServ.fishingActivities.port" ng-change="updateVisibilityCache('port')">{{'activity.header_fa_port' | i18n }} 
+								<input type="checkbox" ng-model="visServ.fishingActivities.port" ng-change="updateVisibilityCache('port')">{{'activity.header_fa_port' | i18n }}
 								</label>
 						</div>
 					</div>
@@ -129,7 +129,7 @@ copy of the GNU General Public License along with the IFDM Suite. If not, see <h
 						</div>
 						<div class="checkbox col-md-6">
 							<label>
-								<input type="checkbox" ng-model="visServ.fishingActivities.speciesCode" ng-change="updateVisibilityCache('speciesCode')">{{'activity.header_fa_species' | i18n }} 
+								<input type="checkbox" ng-model="visServ.fishingActivities.speciesCode" ng-change="updateVisibilityCache('speciesCode')">{{'activity.header_fa_species' | i18n }}
 								</label>
 						</div>
 					</div>
