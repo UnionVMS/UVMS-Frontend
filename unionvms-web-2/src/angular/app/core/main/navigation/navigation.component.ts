@@ -31,11 +31,7 @@ export class NavigationComponent implements OnInit {
   ngOnInit() {
     this.userPemissions = jwt_decode(localStorage.getItem('token'))['features'];
     this.setAvailableTabs();
-    console.log(jwt_decode(localStorage.getItem('token')));
-
     this.setUpAutoResize();
-
-
   }
 
   private setAvailableTabs() {

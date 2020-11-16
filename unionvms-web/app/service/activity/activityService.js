@@ -506,10 +506,11 @@ angular.module('unionvmsWeb').factory('activityService',function(locale, activit
         return comboList;
     };
 
-    actServ.csvLoading = false;
+    actServ.activitiesCsvLoading = false;
+    actServ.tripsCsvLoading = false;
 
     actServ.exportActivityListToCsv = function() {
-        actServ.csvLoading = true;
+        actServ.activitiesCsvLoading = true;
 
         var simpleCriteria = {};
         if (angular.isDefined(actServ['reportsList'].searchObject.simpleCriteria)){
@@ -528,7 +529,31 @@ angular.module('unionvmsWeb').factory('activityService',function(locale, activit
                 var file = new Blob([data], {type: 'text/csv;charset=UTF-8'});
                 $window.saveAs(file, "csvExport" + moment().format("YYYY-MM-DDTHH:mm") + ".csv");
             }
-            actServ.csvLoading = false;
+            actServ.activitiesCsvLoading = false;
+        })
+    };
+
+    actServ.exportTripListToCsv = function() {
+        actServ.tripsCsvLoading = true;
+
+        var simpleCriteria = {};
+        if (angular.isDefined(actServ['tripsList'].searchObject.simpleCriteria)){
+            simpleCriteria = actServ['tripsList'].searchObject.simpleCriteria;
+        }
+
+        var payload = {
+            pagination: getPaginationForServer(undefined),
+            sorting: actServ['tripsList'].sorting,
+            searchCriteriaMap: simpleCriteria,
+            searchCriteriaMapMultipleValues: actServ['tripsList'].searchObject.multipleCriteria,
+            showOnlyLatest: true
+        };
+        activityRestService.exportTripListToCsv(payload).then(function (data) {
+            if(!angular.equals({}, data)) {
+                var file = new Blob([data], {type: 'text/csv;charset=UTF-8'});
+                $window.saveAs(file, "csvExport" + moment().format("YYYY-MM-DDTHH:mm") + ".csv");
+            }
+            actServ.tripsCsvLoading = false;
         })
     };
 
