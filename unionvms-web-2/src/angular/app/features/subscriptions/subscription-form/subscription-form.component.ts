@@ -469,7 +469,9 @@ export class SubscriptionFormComponent implements OnInit, OnDestroy {
       if (result.emails) {
         const formattedEmailArray = result.emails.split(';');
         formattedEmailArray.forEach(item => {
-          this.emails.push(new FormControl(item));
+          if(item.trim()) {
+            this.emails.push(new FormControl(item));
+          }
         });
       }
     }, (reason) => {
