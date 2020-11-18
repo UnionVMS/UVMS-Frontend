@@ -545,8 +545,7 @@ angular.module('unionvmsWeb').factory('activityService',function(locale, activit
             pagination: getPaginationForServer(undefined),
             sorting: actServ['tripsList'].sorting,
             searchCriteriaMap: simpleCriteria,
-            searchCriteriaMapMultipleValues: actServ['tripsList'].searchObject.multipleCriteria,
-            showOnlyLatest: true
+            searchCriteriaMapMultipleValues: actServ['tripsList'].searchObject.multipleCriteria
         };
         activityRestService.exportTripListToCsv(payload).then(function (data) {
             if(!angular.equals({}, data)) {
