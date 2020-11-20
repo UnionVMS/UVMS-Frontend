@@ -64,14 +64,18 @@ angular.module('unionvmsWeb').controller('VesselListCtrl',function($scope){
     $scope.tableCallback = function(tableState){
         $scope.stTable.tableState = tableState;
         var pageNumber = $scope.stTable.tableState.pagination.start / $scope.stTable.itemsByPage;
-
+        var predicate = undefined;
+        var reverse = undefined;
+        var options = undefined;
+        var page = undefined;
         if (angular.isDefined($scope.stTable.page) && pageNumber + 1 !== $scope.stTable.page){
             $scope.stTable.page = pageNumber + 1;
-            $scope.searchVessels(undefined, $scope.stTable.page);
-        }  else {
-            if (angular.isDefined(tableState.sort.predicate) && angular.isDefined($scope.currentSearchResultsByPage) && $scope.currentSearchResultsByPage.length > 0){
-                $scope.sortTableData(tableState.sort.predicate, tableState.sort.reverse);
-            }
+            page = $scope.stTable.page;
+        } 
+        if (angular.isDefined(tableState.sort.predicate) && angular.isDefined($scope.currentSearchResultsByPage) && $scope.currentSearchResultsByPage.length > 0){
+            predicate = tableState.sort.predicate;
+            reverse = tableState.sort.reverse;
         }
+        $scope.sortTableData(predicate, reverse, options, page);
     };
 });
