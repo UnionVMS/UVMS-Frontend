@@ -96,7 +96,7 @@ angular.module('unionvmsWeb').controller('VesselCtrl', function($scope, $log, $s
         $scope.currentSearchResults.filter = '';
         $scope.currentSearchResults.setLoading(true);
         searchService.searchVessels(page)
-            .then(updateSearchResults, onGetSearchResultsError).finally(searchService.removeOrderByCriteria);
+            .then(updateSearchResults, onGetSearchResultsError);
 
         var timeoutDisplayNotificationCancelSearch = 3000;
         $timeout(function(){
@@ -141,9 +141,11 @@ angular.module('unionvmsWeb').controller('VesselCtrl', function($scope, $log, $s
         $scope.stTable.tableState.pagination.numberOfPages = vesselListPage.totalNumberOfPages;
     };
 
-    $scope.sortTableData = function(predicate, reverse){
-        searchService.addOrderByCriteria(predicate, reverse);
-        $scope.searchVessels();
+    $scope.sortTableData = function(predicate, reverse, options, page){
+        if(angular.isDefined(predicate) && angular.isDefined(reverse)) {
+            searchService.addOrderByCriteria(predicate, reverse);
+        }
+        $scope.searchVessels(options, page);
     };
 
     // Handle error from search results (listing vessel)
