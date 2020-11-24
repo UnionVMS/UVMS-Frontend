@@ -18,6 +18,9 @@ copy of the GNU General Public License along with the IFDM Suite. If not, see <h
 					<th>
 						{{ "audit.system_status_name" | i18n }}
 					</th>
+                    <th>
+                        {{ "audit.system_status_version" | i18n }}
+                    </th>
 					<th>
 						{{ "audit.system_status_online_timestamp" | i18n }}
 					</th>
@@ -31,6 +34,7 @@ copy of the GNU General Public License along with the IFDM Suite. If not, see <h
 						</span>
 					</td>
 					<td>{{ "audit.system_status_module_" + system | i18n }}</td>
+                    <td>{{ platformVersionData[system] }}</td>
 					<td>{{ status.lastPing | confDateFormat }}</td>
 				</tr>
 			</tbody>
