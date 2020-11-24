@@ -78,6 +78,7 @@
 
     "system_status_name": "System name",
     "system_status_online_timestamp": "Date",
+    "system_status_version": "Version",
 
     "system_status_module_activity": "Activity",
     "system_status_module_audit": "Audit",
