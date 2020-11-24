@@ -15,12 +15,17 @@ angular.module('unionvmsWeb').controller('SystemMonitorController', function($sc
 		loading: true,
 		zeroResultsErrorMessage: locale.getString('config.no_pings_message')
 	};
+    $scope.platformVersionData = {}
 
 	$resource("config/rest/pings").get(function(response) {
 		$scope.searchResults.loading = false;
 		$scope.searchResults.items = response.data;
 		$scope.searchResults.showZeroResultsMessage = Object.keys(response.data).length === 0;
 	});
+
+	$resource("config/rest/module/all").get(function(response) {
+        $scope.platformVersionData = response.data.modules;
+    });
 
 	$scope.statusLabel = function(status) {
 		return status.online ? 'config.online' : 'config.offline';
