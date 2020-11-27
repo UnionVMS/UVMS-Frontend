@@ -45,7 +45,6 @@ angular.module('unionvmsWeb').factory('PollChannel', function() {
 
     PollChannel.prototype.toCreatePoll = function() {
         return {
-            connectId: this.connectId,
             comChannelId: this.comChannelId,
             mobileTerminalId : this.mobileTerminalId
         };
