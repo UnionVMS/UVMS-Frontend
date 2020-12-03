@@ -200,6 +200,7 @@ describe('MdrCtrl', function() {
                   return callback({
                     wsdlLocation: '',
                     webserviceName: '',
+                    portName: '',
                     webserviceNamespace: ''
                   });
               }
