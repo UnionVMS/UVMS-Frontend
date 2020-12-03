@@ -75,6 +75,7 @@ angular.module('unionvmsWeb').controller('MdrCtrl',function($scope, mdrRestServi
     $scope.webserviceConfig = {
         'wsdlLocation' : '',
         'webserviceName' : '',
+        'portName' : '',
         'webserviceNamespace' : ''
     };
 
@@ -113,7 +114,7 @@ angular.module('unionvmsWeb').controller('MdrCtrl',function($scope, mdrRestServi
 	};
 
 	$scope.saveWebserviceConfig = function() {
-	    if(angular.isDefined($scope.webserviceConfig.wsdlLocation) && angular.isDefined($scope.webserviceConfig.webserviceName) && angular.isDefined($scope.webserviceConfig.webserviceNamespace)) {
+	    if(angular.isDefined($scope.webserviceConfig.wsdlLocation) && angular.isDefined($scope.webserviceConfig.webserviceName) && angular.isDefined($scope.webserviceConfig.portName) && angular.isDefined($scope.webserviceConfig.webserviceNamespace)) {
             loadingStatus.isLoading('MdrSettings',true, 2);
             mdrRestService.updateWebserviceConfiguration($scope.webserviceConfig).then(saveWebserviceConfigSuccess, saveWebserviceConfigFailure);
         }
@@ -278,6 +279,7 @@ angular.module('unionvmsWeb').controller('MdrCtrl',function($scope, mdrRestServi
     var getWebserviceConfigurationSuccess = function(response) {
         $scope.webserviceConfig.wsdlLocation = response.wsdlLocation;
         $scope.webserviceConfig.webserviceName = response.webserviceName;
+        $scope.webserviceConfig.portName = response.portName;
         $scope.webserviceConfig.webserviceNamespace = response .webserviceNamespace;
     };
 
