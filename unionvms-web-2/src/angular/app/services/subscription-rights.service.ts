@@ -34,8 +34,9 @@ export class SubscriptionRightsService {
 
   private contextContainsFeature(userContexts: UserContexts, featureName: String) : boolean {
     let scopeName = localStorage.getItem('scopeName');
+    let roleName = localStorage.getItem('roleName');
     return userContexts.contextSet.contexts.some((context: Context) =>
-      context.scope.scopeName === scopeName && context.role.features.some((feature: Feature) => feature.featureName === featureName)
+      context.scope.scopeName === scopeName && context.role.roleName === roleName && context.role.features.some((feature: Feature) => feature.featureName === featureName)
     );
   }
 }
