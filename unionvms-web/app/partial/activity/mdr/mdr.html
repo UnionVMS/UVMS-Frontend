@@ -42,15 +42,19 @@ copy of the GNU General Public License along with the IFDM Suite. If not, see <h
             <a data-toggle="collapse" >{{'activity.webservice_config_fieldset_label' | i18n }}</a>
         </legend>
         <div class="form-group row">
-            <div class="col-md-4">
+            <div class="col-md-3">
                 <label for="wsdlLocation">Wsdl location:</label>
                 <input type="text" id="wsdlLocation" name="wsdlLocation" ng-model="webserviceConfig.wsdlLocation">
             </div>
-            <div class="col-md-4">
+            <div class="col-md-3">
                 <label for="webserviceName">Web service name:</label>
                 <input type="text" id="webserviceName" name="webserviceName" ng-model="webserviceConfig.webserviceName">
             </div>
-            <div class="col-md-4">
+            <div class="col-md-3">
+                <label for="portName">Port name:</label>
+                <input type="text" id="portName" name="portName" ng-model="webserviceConfig.portName">
+            </div>
+            <div class="col-md-3">
                 <label for="webserviceNamespace">Web service namespace:</label>
                 <input type="text" id="webserviceNamespace" name="webserviceNamespace" ng-model="webserviceConfig.webserviceNamespace">
             </div>
