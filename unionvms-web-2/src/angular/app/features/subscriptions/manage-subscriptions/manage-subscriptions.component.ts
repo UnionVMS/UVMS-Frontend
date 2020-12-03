@@ -73,7 +73,8 @@ export class ManageSubscriptionsComponent implements OnInit, OnDestroy {
       endDate: null,
       channel: null,
       messageType: null,
-      withAnyTriggerType: null
+      withAnyTriggerType: null,
+      alert: null
     };
   }
 
@@ -109,7 +110,8 @@ export class ManageSubscriptionsComponent implements OnInit, OnDestroy {
       endDate: [null],
       channel: [{value: null, disabled: true}],
       messageType: [null],
-      withAnyTriggerType: [null]
+      withAnyTriggerType: [null],
+      alert: [null]
     });
 
 
@@ -171,14 +173,14 @@ export class ManageSubscriptionsComponent implements OnInit, OnDestroy {
     const startDateFormValue = this.filterSubscriptionsForm.controls['startDate'].value;
     if (startDateFormValue) {
       const tempStartDate = startDateFormValue.split('-').reverse().join('-');
-      const startDate = `${tempStartDate}T00:00:00+01:00`;
+      const startDate = new Date(tempStartDate).toISOString();
       this.searchObj.criteria.startDate = startDate;
     }
     // tslint:disable-next-line: no-string-literal
     const endDateFormValue = this.filterSubscriptionsForm.controls['endDate'].value;
     if (endDateFormValue) {
       const tempEndDate = endDateFormValue.split('-').reverse().join('-');
-      const endDate = `${tempEndDate}T00:00:00+01:00`;
+      const endDate = new Date(tempEndDate).toISOString();
       this.searchObj.criteria.endDate = endDate;
     }
     if (this.searchObj.criteria.withAnyTriggerType) {
