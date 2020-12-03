@@ -8,9 +8,9 @@ import {AuthResponse} from 'app/auth/auth-response.model';
 import {fromEvent, Observable} from 'rxjs';
 import {NAVIGATION_TABS} from './navigation-tabs';
 import {NavigationTab} from './navigation-tab.model';
-import * as jwt_decode from 'jwt-decode';
 import {environment} from "../../../../environments/environment";
 import {AuthService} from "../../../auth/auth.service";
+import {Context, Feature, UserContexts} from "../../../auth/user-contexts.model";
 
 
 @Component({
@@ -29,8 +29,17 @@ export class NavigationComponent implements OnInit {
   constructor(private store: Store<fromRoot.State>, private activatedRoute: ActivatedRoute, private authService: AuthService) { }
 
   ngOnInit() {
-    this.userPemissions = jwt_decode(localStorage.getItem('token'))['features'];
-    this.setAvailableTabs();
+    let scopeName = localStorage.getItem('scopeName');
+    let roleName = localStorage.getItem('roleName');
+    this.authService.getUserContexts().toPromise().then((contexts: UserContexts) => {
+      let currentContext: Context = contexts.contextSet.contexts.find((context:Context)  => {
+        return context.scope.scopeName === scopeName && context.role.roleName === roleName;
+      });
+      this.userPemissions = currentContext.role.features.map((feature: Feature) => {
+        return feature.featureId;
+      });
+      this.setAvailableTabs();
+    });
     this.setUpAutoResize();
   }
 
