@@ -39,8 +39,8 @@ angular.module('unionvmsWeb').controller('HeaderMenuCtrl',function($scope, $root
         if (text === 'Subscriptions' && ENV_NAME === 'development') {
             var token =  JSON.parse(localStorage.getItem('ngStorage-token'));
             var sessionId =  JSON.parse(localStorage.getItem('ngStorage-sessionId'));
-            var roleName = JSON.parse(localStorage.getItem('ngStorage-roleName'));
-            var scopeName = JSON.parse(localStorage.getItem('ngStorage-scopeName'));
+            var roleName = userService.getRoleName();//JSON.parse(localStorage.getItem('ngStorage-roleName'));
+            var scopeName = userService.getScopeName();//JSON.parse(localStorage.getItem('ngStorage-scopeName'));
             obj.href = envConfig.new_app_url + '/subscriptions?token=' + token + '&sessionId=' + sessionId + '&scopeName=' + scopeName + '&roleName=' + roleName;
         } else if (text === 'Subscriptions') {
             obj.href = envConfig.new_app_url + '/subscriptions';
