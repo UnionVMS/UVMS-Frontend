@@ -51,7 +51,7 @@
     <div class="form-group col-md-4">
       <label for="active">Alerts</label>
       <select class="form-control" id="alert" formControlName="alert">
-        <option value="">ALL</option>
+        <option value="">All</option>
         <option value="true">Yes</option>
         <option value="false">No</option>
       </select>
@@ -85,7 +85,7 @@
     <div class="form-group col-md-4">
       <label for="active">Enabled</label>
       <select class="form-control" id="active" formControlName="active">
-        <option value="">ALL</option>
+        <option value="">All</option>
         <option value="true">Yes</option>
         <option value="false">No</option>
       </select>
@@ -175,7 +175,7 @@
         <span (click)="sort()">{{ column.name }}</span>
       </ng-template>
       <ng-template let-row="row" let-value="value" ngx-datatable-cell-template>
-        {{value|  date: "yyyy-MM-dd"}}
+        {{value|  date: "dd-MM-yyyy"}}
       </ng-template>
     </ngx-datatable-column>
     <ngx-datatable-column name="Until" [sortable]="true" prop="endDate">
@@ -183,7 +183,7 @@
         <span (click)="sort()">{{ column.name }}</span>
       </ng-template>
       <ng-template let-row="row" let-value="value" ngx-datatable-cell-template>
-        {{value | date: "yyyy-MM-dd"}}
+        {{value | date: "dd-MM-yyyy"}}
       </ng-template>
     </ngx-datatable-column>
     <ngx-datatable-column [sortable]="false" [canAutoResize]="false" [width]="32">
