@@ -5,7 +5,6 @@ import { HttpClient } from '@angular/common/http';
 import { environment } from '../../../environments/environment';
 import { ResponseDto } from 'app/features/features.model';
 
-
 // provide in main module?
 @Injectable({
   providedIn: 'root',
@@ -21,4 +20,9 @@ export class MainService {
   countUserOpenTickets(username): Promise<ResponseDto<number>> {
     return this.http.get<ResponseDto<number>>(`${environment.baseURL}${MAIN_ENDPOINTS.countUserOpenTickets}/${username}`).toPromise();
   }
+
+  async getPlatformVersion() {
+    return this.http.get(`${environment.baseURL}${MAIN_ENDPOINTS.getPlatformVersion}`).toPromise();
+  }
+
 }
