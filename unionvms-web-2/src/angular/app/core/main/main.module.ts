@@ -5,16 +5,15 @@ import { SharedModule } from '../../shared/shared.module';
 import { MainRoutingModule } from './main-routing.module';
 import { HeaderComponent } from './header/header.component';
 import { NavigationComponent } from './navigation/navigation.component';
-
-
-
+import { FooterComponent } from './footer/footer.component'
 
 @NgModule({
   declarations: [
     MainComponent,
     HeaderComponent,
     NavigationComponent,
-    ClockComponent
+    ClockComponent,
+    FooterComponent
   ],
   imports: [
     SharedModule,
