@@ -504,6 +504,8 @@ export class SubscriptionFormComponent implements OnInit, OnDestroy {
     }
 
     this.vesselIds[VESSEL_IDS_ENABLED_FOR.includes(value) ? 'enable' : 'disable']();
+    VESSEL_IDS_ENABLED_FOR.includes(value) ? this.vesselIds.setValidators([Validators.required]) : this.vesselIds.clearValidators();
+    this.vesselIds.updateValueAndValidity();
 
     if (SUBSCRIBER_REQUIRED_FOR.includes(value)) {
       this.organisationId.setValidators([Validators.required]);
