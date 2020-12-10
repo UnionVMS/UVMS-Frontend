@@ -303,7 +303,7 @@
               <label class="custom-control-label form-switch" for="consolidated"></label>
           </div>
         </div>
-        <label for="identifiers" class="col-sm-2 col-form-label-sm">Identifiers</label>
+        <label for="identifiers" class="col-sm-2 col-form-label-sm" [ngClass]="{'required' : vesselIds.validator}">Identifiers</label>
         <div class="col-sm-7 ">
           <ng-multiselect-dropdown
             name="vesselIdType"
