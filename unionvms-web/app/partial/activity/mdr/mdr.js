@@ -128,7 +128,6 @@ angular.module('unionvmsWeb').controller('MdrCtrl',function($scope, mdrRestServi
      * @public
      */
     $scope.updateNow = function() {
-        loadingStatus.isLoading('MdrSettings',true);
         var acronymArray = [];
         angular.forEach($scope.displayedMDRLists, function (value, key) {
              if (value.isSelected) {
@@ -136,17 +135,10 @@ angular.module('unionvmsWeb').controller('MdrCtrl',function($scope, mdrRestServi
              }
         });
 
-        mdrRestService.syncNow(acronymArray).then(function(response) {
-            if(angular.isDefined(response.includedObject)){
-                loadingStatus.isLoading('MdrSettings',true);
-                $scope.tableLoading = true;
-                getAcronymsDetailsSuccess(response.includedObject);
-            }
-            //$scope.getAcronymsDetails();
-            loadingStatus.isLoading('MdrSettings',false);
+        mdrRestService.syncNow(acronymArray).then(function() {
+            alertService.showSuccessMessageWithTimeout(locale.getString('activity.mdr_sync_success'));
         }, function(error) {
             alertService.showErrorMessageWithTimeout(locale.getString('activity.error_sync_now'));
-            loadingStatus.isLoading('MdrSettings',false);
         });
     };
 
@@ -159,15 +151,8 @@ angular.module('unionvmsWeb').controller('MdrCtrl',function($scope, mdrRestServi
      * @public
      */
      $scope.updateAllNow = function() {
-        loadingStatus.isLoading('MdrSettings',true);
-        mdrRestService.syncAllNow().then(function(response) {
-            if(response.includedObject){
-                loadingStatus.isLoading('MdrSettings',true);
-                $scope.tableLoading = true;
-                getAcronymsDetailsSuccess(response.includedObject);
-            }
-            //$scope.getAcronymsDetails();
-            loadingStatus.isLoading('MdrSettings',false);
+        mdrRestService.syncAllNow().then(function(){
+            alertService.showSuccessMessageWithTimeout(locale.getString('activity.mdr_sync_success'));
         }, function(error) {
             alertService.showErrorMessageWithTimeout(locale.getString('activity.error_sync_all_now'));
             loadingStatus.isLoading('MdrSettings',false);

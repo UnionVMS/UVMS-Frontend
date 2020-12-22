@@ -235,7 +235,7 @@ angular.module('unionvmsWeb').factory('mdrRestFactory',function($resource) {
   	    syncNow: function(acronymsArray) {
   	        var deferred = $q.defer();
   	        mdrRestFactory.syncNow().update(acronymsArray, function(response){
-                deferred.resolve(response.data);
+                deferred.resolve(response);
   	        },
   	        function(error) {
                 console.error('Error requesting synchronization of the following acronyms: ' + acronymsArray);
@@ -253,7 +253,7 @@ angular.module('unionvmsWeb').factory('mdrRestFactory',function($resource) {
         syncAllNow: function() {
             var deferred = $q.defer();
             mdrRestFactory.syncAllNow().get(function(response){
-                 deferred.resolve(response.data);
+                 deferred.resolve(response);
             },
             function(error) {
                  console.error('Error requesting synchronization of all acronyms.');

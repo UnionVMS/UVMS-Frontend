@@ -24,6 +24,7 @@
     "mdr_webservice_config_load_failed": "Unable to load MDR webservice configuration",
     "mdr_webservice_config_save_success": "MDR webservice configuration successfully modified.",
     "mdr_webservice_config_save_failed": "Unable to modify MDR webservice configuration.",
+    "mdr_sync_success": "Sync process has begun, refresh in a few moments for results.",
     "mdr_code_list_modal_title": "Code List with Acronym ",
     "code": "Code",
     "description": "Description",
