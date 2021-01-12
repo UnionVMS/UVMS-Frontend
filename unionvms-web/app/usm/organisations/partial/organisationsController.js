@@ -247,8 +247,20 @@ organisationsModule.controller('organisationsListCtrl', ['$scope', '$log', 'refD
     }]);
 
 
-organisationsModule.controller('manageOrganisationCtrl', ['$scope', '$modal', '$log', '$state', 'organisationsService','refData',
-    function ($scope, $modal, $log, $state, organisationsService, refData) {
+organisationsModule.controller('manageOrganisationCtrl', ['$scope', '$modal', '$log', '$state', 'organisationsService','refData', 'mdrCacheService',
+    function ($scope, $modal, $log, $state, organisationsService, refData, mdrCacheService) {
+
+        $scope.getNations = mdrCacheService.getCodeList('FLUX_GP_PARTY').then(function(response){
+            var nations = [];
+            angular.forEach(response, function(item) {
+                if (angular.isDefined(item.code)) {
+                    nations.push(item.code);
+                }
+            });
+            return nations;
+        },function(error) {
+            return [];
+        });
 
         $scope.manageOrganisation = function (mode, org) {
             var modalInstance = $modal.open({
@@ -265,7 +277,7 @@ organisationsModule.controller('manageOrganisationCtrl', ['$scope', '$modal', '$
                         return angular.copy(org);
                     },
                     nations: function () {
-                        return refData.nations;
+                        return $scope.getNations;
                         /*
                         return organisationsService.getNations().then(
                             function (response) {
@@ -631,7 +643,7 @@ organisationsModule.controller('manageOrganisationEndpointsCtrl', ['$log', '$sco
                 if (mode === 'edit') {
                     angular.copy(returnedEndPoint, endpoint);
 					$scope.endpoint.channelList = $scope.displayedChannels;
-					$scope.endpoint.persons = $scope.displayedContacts;					
+					$scope.endpoint.persons = $scope.displayedContacts;
                 }
                 if (mode === 'delete') {
                     var deleteIndex = $scope.organisation.endpoints.indexOf(endpoint);
