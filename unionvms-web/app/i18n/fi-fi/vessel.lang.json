@@ -30,6 +30,8 @@
     "advanced_search_placeholder_name" : "Name",
     "advanced_search_placeholder_signal_ircs" : "IRCS",
     "advanced_search_placeholder_cfr" : "CFR",
+    "advanced_search_placeholder_uvi" : "UVI",
+    "advanced_search_placeholder_uvi" : "UVI",
     "advanced_search_placeholder_mmsi" : "MMSI No",
     "advanced_search_placeholder_homeport_name":"Homeport name",
     "advanced_search_placeholder_producer_name":"Producer name",
