@@ -63,6 +63,11 @@ angular.module('unionvmsWeb')
             'pattern' : locale.getString('vessel.vessel_details_imo_pattern_validation_message')
         };
 
+        $scope.uviRegExp = vesselValidationService.getUVIPattern();
+        $scope.uviValidationMessages = {
+            'pattern' : locale.getString('vessel.vessel_details_uvi_pattern_validation_message')
+        };
+        
         $scope.maxTwoDecimalsRegExp = vesselValidationService.getMaxTwoDecimalsPattern();
         $scope.maxTwoDecimalsValidationMessages = {
             'pattern' : locale.getString('vessel.vessel_details_max_decimals_pattern_validation_message', "2")

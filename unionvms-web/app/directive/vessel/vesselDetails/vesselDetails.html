@@ -28,10 +28,10 @@
                 <input type="text" name="cfr" id="asset-input-cfr" class="form-control" ng-model="vessel.cfr" ng-pattern="cfrRegExp" existing="existingValues.cfr" ng-required="hasLinkedTerminal">
                 <input-validation-message types="pattern,required,unique" input="vesselForm.cfr" custom-messages="{{cfrValidationMessages}}"></input-validation-message>
             </div>
-            <div class="col-md-2 form-group smallerpaddingleft" ng-class="{'has-error': (submitAttempted || vesselForm.imo.$dirty) && vesselForm.imo.$invalid}">
-                <label>{{ 'vessel.vessel_details_IMO' | i18n }}</label>
-                <input type="text" name="imo" id="asset-input-imo" class="form-control" ng-model="vessel.imo" ng-pattern="imoRegExp" existing="existingValues.imo">
-                <input-validation-message types="pattern, unique" input="vesselForm.imo" custom-messages="{{imoValidationMessages}}"></input-validation-message>
+            <div class="col-md-2 form-group smallerpaddingleft" ng-class="{'has-error': (submitAttempted || vesselForm.uvi.$dirty) && vesselForm.uvi.$invalid}">
+                <label>{{ 'vessel.vessel_details_UVI' | i18n }}</label>
+                <input type="text" name="uvi" id="asset-input-uvi" class="form-control" ng-model="vessel.uvi" ng-pattern="uviRegExp" existing="existingValues.uvi">
+                <input-validation-message types="pattern, unique" input="vesselForm.uvi" custom-messages="{{uviValidationMessages}}"></input-validation-message>
             </div>
         </div>
 
