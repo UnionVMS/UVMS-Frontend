@@ -29,6 +29,9 @@ angular.module('unionvmsWeb').factory('vesselValidationService',function() {
         getIMOPattern: function() {
             return new RegExp(/^[0-9]{7}$/);
         },
+        getUVIPattern: function() {
+            return new RegExp(/^[0-9]{7}$/);
+        },
         getProducerCodePattern: function() {
             return new RegExp(/^\d{1,9}$/);
         },
