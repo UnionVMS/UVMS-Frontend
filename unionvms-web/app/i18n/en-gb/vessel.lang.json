@@ -16,6 +16,7 @@
     "table_header_reports" : "Reports",
     "table_header_signal" : "IRCS",
     "table_header_cfr" : "CFR",
+    "table_header_uvi" : "UVI",
     "table_header_gear_type" : "Gear Type",
     "table_report_button" : "Report",
     "add_new" : "Add new",
