@@ -16,6 +16,12 @@
             <div class="col-md-2 smallerpadding searchcriteria">
                 <input type="text" placeholder="{{'vessel.advanced_search_placeholder_cfr' | i18n}}" class="form-control" tabindex="5" ng-model="advancedSearchObject.CFR" ng-change="resetSelectedVesselGroup()" id="asset-input-search-cfr">
             </div>
+            <div class="col-md-2 smallerpadding searchcriteria">
+                <input type="text" placeholder="{{'vessel.advanced_search_placeholder_uvi' | i18n}}" class="form-control" tabindex="5" ng-model="advancedSearchObject.UVI" ng-change="resetSelectedVesselGroup()" id="asset-input-search-uvi">
+            </div>
+        </div>
+
+        <div class="row nomargin">
             <div class="col-md-2 smallerpadding">
                 <div class="row nomargin">
                     <div class="col-md-12 colNoPadding searchcriteria">
@@ -23,9 +29,6 @@
                     </div>
                 </div>
             </div>
-        </div>
-
-        <div class="row nomargin">
             <div class="col-md-2 smallerpadding searchcriteria">
                 <input type="text" name="searchmmsi" placeholder="{{'vessel.advanced_search_placeholder_mmsi' | i18n}}" class="form-control" tabindex="6" ng-model="advancedSearchObject.MMSI" ng-change="resetSelectedVesselGroup()" tab-index="6" id="asset-input-search-mmsi">
             </div>
@@ -44,7 +47,9 @@
             <div class="col-md-1 smallerpadding searchcriteria">
                 <dropdown ng-model="advancedSearchObject.POWER_SPAN" initialtext="{{'vessel.advanced_search_placeholder_power' | i18n}}" items="powerSpans" callback="resetSelectedVesselGroup" tab-index="11" input-field-id="asset-dropdown-search-power"></dropdown>
             </div>
-            <div class="col-md-1 smallerpadding">
+        </div>
+        <div class="row nomargin">
+            <div class="col-md-1 col-md-offset-10 smallerpadding">
                 <div class="row nomargin">
                     <div class="col-md-12 colNoPadding searchcriteriadropdown">
                         <button type="submit" class="btn btn-primary btn-sm fullWidth vmsbtn" ng-disabled="advancedSearchForm.$invalid" ng-click="performSearch()" tabindex="12" id="asset-btn-advanced-search">
