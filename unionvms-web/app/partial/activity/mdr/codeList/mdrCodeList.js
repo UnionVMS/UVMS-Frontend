@@ -15,7 +15,7 @@ copy of the GNU General Public License along with the IFDM Suite. If not, see <h
  * @name MdrcodelistCtrl
  * @param $scope {Service} controller scope
  * @param $modalInstance {Service} angular service modalInstance
- * @param acronym {Service} the MDR code 
+ * @param acronym {Service} the MDR code
  * @param mdrRestService {Service} the mdr REST service <p>{@link unionvmsWeb.mdrRestService}</p>
  * @param $timeout {Service} angular service timeout
  * @description
@@ -177,9 +177,13 @@ angular.module('unionvmsWeb').controller('MdrcodelistCtrl',function($scope, $mod
      * @function loadValidityDates
      * @public
      * @param {Array} list - mdr code list
+     * @param String acronym - mdr acronym
      */
-    var loadValidityDates = function(list) {
+    var loadValidityDates = function(list, acronym) {
         angular.forEach(list, function(item){
+            if (angular.isDefined(item.endDate) && acronym === 'FA_BR') {
+               item.endDate = endDateReformat(item.endDate);
+            }
             if(item.validity){
                 item.startDate = item.validity.startDate;
                 item.endDate = item.validity.endDate;
@@ -187,6 +191,13 @@ angular.module('unionvmsWeb').controller('MdrcodelistCtrl',function($scope, $mod
             delete item.validity;
         });
     };
+
+    var endDateReformat = function(data) {
+        var tempEndDate = new Date(data);
+        var momTime = moment.utc(tempEndDate);
+        momTime.set({h: 23, m: 59, s: 59});
+        return momTime.toDate().getTime();
+    }
 
     /**
      * Sets the proper field names for server sorting and filtering of the acronym table
@@ -224,7 +235,7 @@ angular.module('unionvmsWeb').controller('MdrcodelistCtrl',function($scope, $mod
         mdrRestService.getMDRCodeList(acronym, tableState, $scope.searchAttrs, sortAttr).then(function (result) {
             if (angular.isDefined(result)) {
                 if(!angular.equals($scope.displayedMdrCodeList, result)){
-                    loadValidityDates(result);
+                    loadValidityDates(result, acronym);
                     $scope.displayedMdrCodeList = result;
                 }
             }else{
@@ -243,7 +254,7 @@ angular.module('unionvmsWeb').controller('MdrcodelistCtrl',function($scope, $mod
 
         var state = angular.copy(tableState);
         delete state.pagination.numberOfPages;
-        
+
         if(!_.isEqual(lastTableState,state)){
             $scope.tableLoading = true;
             if ($scope.requestTimer){
