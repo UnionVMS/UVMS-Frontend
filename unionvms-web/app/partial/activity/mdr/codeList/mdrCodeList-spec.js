@@ -56,20 +56,20 @@ describe('MdrcodelistCtrl', function() {
         acronym = 'GENDER';
         ctrl = createController();
 
-        expect(scope.columns.length).toEqual(5);
-        expect(scope.columns).toEqual(['code', 'description', 'startDate', 'endDate', 'version']);
-        expect(scope.searchAttrs.length).toEqual(3);
-        expect(scope.searchAttrs).toEqual(['code', 'description', 'version']);
+        expect(scope.columns.length).toEqual(4);
+        expect(scope.columns).toEqual(['code', 'description', 'startDate', 'endDate']);
+        expect(scope.searchAttrs.length).toEqual(2);
+        expect(scope.searchAttrs).toEqual(['code', 'description']);
     }));
 
     it('Should create the proper columns and attributes for more complex acronyms', inject(function() {
         acronym = 'CONVERSION_FACTOR';
         ctrl = createController();
 
-        expect(scope.columns.length).toEqual(11);
-        expect(scope.columns).toEqual(['code', 'description', 'state', 'presentation', 'factor', 'placesCode', 'legalSource', 'collective', 'startDate', 'endDate', 'version']);
-        expect(scope.searchAttrs.length).toEqual(9);
-        expect(scope.searchAttrs).toEqual(['code', 'description', 'version', 'state', 'presentation', 'factor', 'places_code', 'legal_source', 'collective']);
+        expect(scope.columns.length).toEqual(10);
+        expect(scope.columns).toEqual(['code', 'description', 'state', 'presentation', 'factor', 'placesCode', 'legalSource', 'collective', 'startDate', 'endDate']);
+        expect(scope.searchAttrs.length).toEqual(8);
+        expect(scope.searchAttrs).toEqual(['code', 'description', 'state', 'presentation', 'factor', 'places_code', 'legal_source', 'collective']);
     }));
 
 });

@@ -26,7 +26,7 @@ angular.module('unionvmsWeb').controller('MdrcodelistCtrl',function($scope, $mod
     $scope.itemsByPage = 25;
     $scope.displayedMdrCodeList = [];
     $scope.columns = ['code', 'description'];
-    $scope.searchAttrs = ['code', 'description', 'version'];
+    $scope.searchAttrs = ['code', 'description'];
     $scope.acronym = acronym;
     var currentTableState;
     var lastTableState;
@@ -142,7 +142,7 @@ angular.module('unionvmsWeb').controller('MdrcodelistCtrl',function($scope, $mod
             $scope.columns = $scope.columns.concat($scope.specialAcronymColumns[acronym].cols);
         }
 
-        $scope.columns = $scope.columns.concat(['startDate', 'endDate', 'version']);
+        $scope.columns = $scope.columns.concat(['startDate', 'endDate']);
     }
 
     /**
