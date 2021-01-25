@@ -142,7 +142,7 @@ angular.module('unionvmsWeb').controller('MdrcodelistCtrl',function($scope, $mod
             $scope.columns = $scope.columns.concat($scope.specialAcronymColumns[acronym].cols);
         }
 
-        $scope.columns = $scope.columns.concat(['startDate', 'endDate', 'version']);
+        $scope.columns = $scope.columns.concat(['startDate', 'endDate']);
     }
 
     /**
