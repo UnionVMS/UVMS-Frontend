@@ -251,7 +251,9 @@ angular.module('unionvmsWeb').factory('reportRestFactory', function($resource, $
                     console.error("Failed to get file with UUID: " + uuid);
                     alert("Selections not exported, failed to get file");
                 });
-                $timeout(self.sendDataForExport(uuid, features), 4000);
+                $timeout( function(){ 
+                    self.sendDataForExport(uuid, features);
+                }, 2000);
                 return waitForFile;
             }, function () {
                 console.error("Failed to get file UUID");
