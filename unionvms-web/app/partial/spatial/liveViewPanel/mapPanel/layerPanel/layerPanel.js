@@ -42,17 +42,18 @@ angular.module('unionvmsWeb').controller('LayerpanelCtrl', function($scope, $tim
     
     $scope.identifiersForExport = [$scope.getValueInDropdownForm("CFR"), $scope.getValueInDropdownForm("IRCS"), $scope.getValueInDropdownForm("UVI"), $scope.getValueInDropdownForm("Ext. Marking"), $scope.getValueInDropdownForm("ICCAT")];
         
+    $scope.exportIsDisabled = false;
     $scope.exportSelectedFeatures = function () {
         var features = mapService.getSelectedFeaturesForExport($scope.exportSettings.identifierForExport);
-        loadingStatus.isLoading('ExportSelections', true, 0);
+        $scope.exportIsDisabled = true;
         reportRestService.export(features).then(function (data) {
             if(data) {
                 var file = new Blob([data], {type: 'application/xml;charset=UTF-8'});
                 $window.saveAs(file, "kmlExport" + moment().format("YYYY-MM-DDTHH:mm") + ".kml");
             }
-            loadingStatus.isLoading('ExportSelections',false);
+            $scope.exportIsDisabled = false;
         }, function (error) {
-            loadingStatus.isLoading('ExportSelections',false);
+            $scope.exportIsDisabled = false;
         });
     };
     
