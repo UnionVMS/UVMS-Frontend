@@ -3821,13 +3821,13 @@ angular.module('unionvmsWeb').factory('mapService', function(locale, $rootScope,
         ms.wktFormatter = new ol.format.WKT();
 
         dragBox.on('boxend', function () {
-            if (layerPanelService.getLayerTreeStatus('ers')[0].selected){
+            if (layerPanelService.getLayerTreeStatus('ers')[0] && layerPanelService.getLayerTreeStatus('ers')[0].selected){
                 ms.getFeaturesIntersectingExtent(ms.getLayerByType('ers').getSource(), dragBox.getGeometry().getExtent(), "Point", 'ers');
             }
-            if (layerPanelService.getLayerTreeStatus('vmspos')[0].selected){
+            if (layerPanelService.getLayerTreeStatus('vmspos')[0] && layerPanelService.getLayerTreeStatus('vmspos')[0].selected){
                 ms.getFeaturesIntersectingExtent(ms.getLayerByType('vmspos').getSource(), dragBox.getGeometry().getExtent(), "Point", 'vmspos');
             }
-            if (layerPanelService.getLayerTreeStatus('vmsseg')[0].selected){
+            if (layerPanelService.getLayerTreeStatus('vmsseg')[0] && layerPanelService.getLayerTreeStatus('vmsseg')[0].selected){
                 ms.getFeaturesIntersectingExtent(ms.getLayerByType("vmsseg").getSource().getSource(), dragBox.getGeometry().getExtent(), "LineString", 'vmsseg');
             }
             ms.resetHighlightedFeatures();
