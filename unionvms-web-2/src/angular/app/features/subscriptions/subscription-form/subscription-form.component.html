@@ -141,7 +141,7 @@
         </div>
       </div>
       <div id="email-fieldset">
-        <fieldset [attr.disabled]="!canEdit ? true : null" class="border p-2">
+        <fieldset [attr.disabled]="!canHaveEmail ? true : null" class="border p-2">
           <legend class="w-auto">
             <div class="custom-control custom-checkbox custom-control-inline">
               <input class="custom-control-input" type="checkbox" id="email" formControlName="hasEmail">
@@ -176,10 +176,10 @@
                             <button type="button" class="btn btn-outline-dark" (click)="modal.close(emailForm.value)" [disabled]="!emailForm.valid">Save</button>
                           </div>
                       </ng-template>
-                    <fa-icon class="email-plus-icon" (click)="addEmail(content)" [icon]="faPlusSquare" [ngClass]="{'disabled-fa-icon' : !canEdit}"></fa-icon>
+                    <fa-icon class="email-plus-icon" (click)="addEmail(content)" [icon]="faPlusSquare" [ngClass]="{'disabled-fa-icon' : !canHaveEmail}"></fa-icon>
                     <div id="emails-list" formArrayName="emails" *ngFor="let item of emails.value; let i = index;">
                       <label id="emails_{{i}}">{{item}}</label>
-                      <fa-icon class="email-trash-icon" (click)="removeEmail(i)" [icon]="faTrash" [ngClass]="{'disabled-fa-icon' : !canEdit}"></fa-icon>
+                      <fa-icon class="email-trash-icon" (click)="removeEmail(i)" [icon]="faTrash" [ngClass]="{'disabled-fa-icon' : !canHaveEmail}"></fa-icon>
                     </div>
                   </div>
                   <div class="form-group row">
