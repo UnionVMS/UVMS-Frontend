@@ -43,6 +43,7 @@ export class SubscriptionFormComponent implements OnInit, OnDestroy {
   @Output() checkName = new EventEmitter<any>();
   @Output() delete = new EventEmitter<any>();
   canEdit = false;
+  canHaveEmail = true;
   endpointItems: EndPoint[] = [];
   communicationChannels: CommunicationChannel[] = [];
   faCalendar = faCalendar;
@@ -485,6 +486,19 @@ export class SubscriptionFormComponent implements OnInit, OnDestroy {
   }
 
   private onMessageTypeChange(value) {
+    if(value === 'FA_QUERY') {
+      this.canHaveEmail = false;
+      this.emails.reset();
+      this.body.setValidators([]);
+      this.body.updateValueAndValidity();
+      this.hasEmail.setValue(false);
+      this.hasEmail.disable();
+    } else {
+      this.hasEmail.enable();
+      this.body.setValidators([Validators.required]);
+      this.body.updateValueAndValidity();
+      this.canHaveEmail = this.canEdit;
+    }
     if (!MESSAGE_CONFIG_ENABLED_FOR.includes(value)) {
         this.logbook.disable();
         this.consolidated.disable();
