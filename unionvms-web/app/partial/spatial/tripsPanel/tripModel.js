@@ -281,6 +281,10 @@ angular.module('unionvmsWeb').factory('Trip',function(locale,unitConversionServi
             } else {
                 remarks = unitConversionService.date.convertToUserFormat(report.faReportAcceptedDateTime);
             }
+            if(report.activityType === 'ARRIVAL' && report.faReportDocumentType === 'DECLARATION'
+                && report.fluxCharacteristics && report.fluxCharacteristics[0] && report.fluxCharacteristics[0].valueDateTime) {
+                remarks = unitConversionService.date.convertToUserFormat(report.fluxCharacteristics[0].valueDateTime);
+            }
         }
 
         switch(report.activityType){
