@@ -280,7 +280,12 @@ describe('tripModel', function() {
             faReportDocumentType: docType,
             correction: reportId % 2 ? true : false
           };
-
+          if(actType === "ARRIVAL" && docType === "DECLARATION") {
+              actRep.fluxCharacteristics = [];
+              actRep.fluxCharacteristics.push({
+                  valueDateTime:  "2013-05-26T09:40:31"
+              });
+          }
           reportsData.activityReports.push(actRep);
           reportId++;
         });
