@@ -36,7 +36,7 @@ export class SubscriptionRightsService {
     let scopeName = localStorage.getItem('scopeName');
     let roleName = localStorage.getItem('roleName');
     return userContexts.contextSet.contexts.some((context: Context) =>
-      context.scope.scopeName === scopeName && context.role.roleName === roleName && context.role.features.some((feature: Feature) => feature.featureName === featureName)
+      context.scope && context.scope.scopeName === scopeName && context.role && context.role.roleName === roleName && context.role.features.some((feature: Feature) => feature.featureName === featureName)
     );
   }
 }
