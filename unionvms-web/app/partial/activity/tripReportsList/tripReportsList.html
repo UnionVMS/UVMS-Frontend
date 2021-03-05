@@ -1,6 +1,12 @@
 <div class="tripReportsList" ng-controller="TripreportslistCtrl">
 	<div class="col-md-12 buttonSection">
 		<div class="row">
+            <div class="col-md-2 nopaddingleft">
+                <dropdown class="activity-actions" ng-disabled="actServ.tripsCsvLoading" callback="selectFromDropdown" ng-model="selectionsDropdown.selection" initialtext="{{'common.actions' | i18n}}" items="dropdownItems" menu-style input-field-id="asset-dropdown-actions"></dropdown>
+            </div>
+            <div class="col-md-1 spinner" ng-if="actServ.tripsCsvLoading">
+                <i class="fa fa-spinner fa-spin loading-spinner"></i>
+            </div>
 			<div class="btn-group btn-left">
 			<button type="button" class="btn btn-primary dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
 				{{'activity.columns' | i18n}}
@@ -31,7 +37,7 @@
 					<div class="checkbox col-md-6">
 						<label>
 							<input type="checkbox" ng-model="attrVisibility.trips.ircs" ng-change="updateVisibilityCache('ircs')">
-							{{'spatial.reports_form_vessel_search_table_header_ircs' | i18n }} 
+							{{'spatial.reports_form_vessel_search_table_header_ircs' | i18n }}
 						</label>
 					</div>
 				</div>
@@ -59,14 +65,14 @@
 					<div class="checkbox col-md-6">
 						<label>
 							<input type="checkbox" ng-model="attrVisibility.trips.gfcm" ng-change="updateVisibilityCache('gfcm')">
-							{{'activity.fa_details_item_gfcm' | i18n }} 
+							{{'activity.fa_details_item_gfcm' | i18n }}
 						</label>
 					</div>
 				</div>
 				<div class="row">
 					<div class="checkbox col-md-6">
 						<label>
-							<input type="checkbox" ng-model="attrVisibility.trips.firstEventType" ng-change="updateVisibilityCache('firstEventType')"> 
+							<input type="checkbox" ng-model="attrVisibility.trips.firstEventType" ng-change="updateVisibilityCache('firstEventType')">
 							{{'activity.tab_trip_table_header_first_event' | i18n }}
 						</label>
 					</div>
@@ -95,7 +101,7 @@
 					<div class="checkbox col-md-6">
 						<label>
 							<input type="checkbox" ng-model="attrVisibility.trips.duration" ng-change="updateVisibilityCache('duration')">
-							{{'activity.tab_trip_table_header_duration' | i18n }} 
+							{{'activity.tab_trip_table_header_duration' | i18n }}
 						</label>
 					</div>
 					<div class="checkbox col-md-6">
