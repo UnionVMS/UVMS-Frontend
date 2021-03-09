@@ -516,6 +516,12 @@ export class SubscriptionFormComponent implements OnInit, OnDestroy {
         this.history.updateValueAndValidity();
         this.historyUnit.enable();
     }
+    if(value === 'POSITION') {
+      this.subscriptionForm.get('output.emailConfiguration.isXml').setValue(false);
+      this.subscriptionForm.get('output.emailConfiguration.isXml').disable();
+    } else {
+      this.subscriptionForm.get('output.emailConfiguration.isXml').enable();
+    }
 
     this.vesselIds[VESSEL_IDS_ENABLED_FOR.includes(value) ? 'enable' : 'disable']();
     VESSEL_IDS_ENABLED_FOR.includes(value) ? this.vesselIds.setValidators([Validators.required]) : this.vesselIds.clearValidators();
