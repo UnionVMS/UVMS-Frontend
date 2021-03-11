@@ -19,8 +19,8 @@ export class FeaturesService {
 
   constructor(private http: HttpClient) { }
 
-  getOrganisations(): Promise<any> {
-    return this.http.get<Organisation[]>(`${environment.baseURL}${FEATURES_ENDPOINTS.getOrganisations}`).toPromise();
+  getOrganisations(limit): Promise<any> {
+    return this.http.get<Organisation[]>(`${environment.baseURL}${FEATURES_ENDPOINTS.getOrganisations}?limit=${limit}`).toPromise();
   }
 
   fetchSubscriptionsList(searchObj): Promise<ResponseDto<SubscriptionListResponseDto>> {
