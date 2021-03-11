@@ -25,7 +25,7 @@ export class SubscriptionsComponent implements OnInit {
   }
 
   async getOrganisations() {
-    const {results: organisations} = await this.featuresService.getOrganisations();
+    const {results: organisations} = await this.featuresService.getOrganisations(100);
     this.store.dispatch(new SUB.SetOrganisations(organisations));
   }
 }
