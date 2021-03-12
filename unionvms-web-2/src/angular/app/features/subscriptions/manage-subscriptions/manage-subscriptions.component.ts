@@ -17,6 +17,7 @@ import { ConfirmModalComponent } from '../confirmmodal/confirm-modal.component';
 import { Subscription as SubscriptionModel } from 'app/features/subscriptions/subscription.model';
 import * as moment from 'moment';
 import {SubscriptionRightsService} from "../../../services/subscription-rights.service";
+import {sortCommunicationChannels, sortEndpoints, sortOrganisations} from "../organisation-utils";
 
 @Component({
   selector: 'app-manage-subscriptions',
@@ -81,7 +82,10 @@ export class ManageSubscriptionsComponent implements OnInit, OnDestroy {
   ngOnInit(): void {
     this.initMessageTypeItems();
     this.initTriggerTypeItems();
-    this.subscription.add(this.organisations$.subscribe(organisations => this.organisations = organisations));
+    this.subscription.add(this.organisations$.subscribe(organisations => {
+      this.organisations = organisations;
+      sortOrganisations(this.organisations);
+    }));
 
     this.initForm();
     this.searchObj = {
@@ -206,6 +210,7 @@ export class ManageSubscriptionsComponent implements OnInit, OnDestroy {
       const { endpoints } = await this.featuresService.getOrganisationDetails(value);
       this.endpointItems = endpoints;
       if (endpoints && this.endpointItems.length) {
+        sortEndpoints(this.endpointItems);
         this.filterSubscriptionsForm.get('endpoint').enable();
       }
     }
@@ -229,6 +234,7 @@ export class ManageSubscriptionsComponent implements OnInit, OnDestroy {
       this.communicationChannels = matchingEndpoint[0].channelList;
     }
     if (this.communicationChannels.length) {
+      sortCommunicationChannels(this.communicationChannels);
       this.filterSubscriptionsForm.get('channel').enable();
     } else {
       this.filterSubscriptionsForm.get('channel').disable();

@@ -12,6 +12,7 @@ import { CommunicationChannel } from '../communication-channel.model';
 import {  IDropdownSettings } from 'ng-multiselect-dropdown';
 import { Alert } from 'app/shared/alert.model';
 import { manualSubscriptionsInitialFormValues } from '../subscriptions-helper';
+import {sortCommunicationChannels, sortEndpoints, sortOrganisations} from "../organisation-utils";
 
 
 
@@ -91,7 +92,10 @@ export class ManualSubscriptionsComponent implements OnInit, OnDestroy {
 
     this.initMessageTypes();
     this.setHistoryUnits();
-    this.subscription.add(this.organisations$.subscribe(organisations => this.organisations = organisations));
+    this.subscription.add(this.organisations$.subscribe(organisations => {
+      this.organisations = organisations;
+      sortOrganisations(this.organisations);
+    }));
 
     this.vesselIdsList =  ['CFR', 'IRCS', 'ICCAT', 'EXT_MARK', 'UVI'];
     this.selectedItems = ['CFR', 'IRCS', 'ICCAT', 'EXT_MARK', 'UVI'];
@@ -283,6 +287,7 @@ export class ManualSubscriptionsComponent implements OnInit, OnDestroy {
       const { endpoints } = await this.featuresService.getOrganisationDetails(value);
       this.endpointItems = endpoints;
       if (endpoints && this.endpointItems.length) {
+        sortEndpoints(this.endpointItems);
         this.manualSubscriptionForm.get('output.subscriber.endpointId').enable();
       }
     }
@@ -305,6 +310,7 @@ export class ManualSubscriptionsComponent implements OnInit, OnDestroy {
       this.communicationChannels = matchingEndpoint[0].channelList;
     }
     if (this.communicationChannels.length) {
+      sortCommunicationChannels(this.communicationChannels);
       this.manualSubscriptionForm.get('output.subscriber.channelId').enable();
     } else {
       this.manualSubscriptionForm.get('output.subscriber.channelId').disable();

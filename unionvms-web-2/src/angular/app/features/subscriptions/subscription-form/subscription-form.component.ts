@@ -15,6 +15,7 @@ import {Router} from '@angular/router';
 import {SubscriptionSubscriberDto} from 'app/features/features.model';
 import {IDropdownSettings} from 'ng-multiselect-dropdown';
 import {SubscriptionRightsService} from "../../../services/subscription-rights.service";
+import {sortCommunicationChannels, sortEndpoints, sortOrganisations} from "../organisation-utils";
 
 interface SenderElement {
   type: string;
@@ -93,7 +94,10 @@ export class SubscriptionFormComponent implements OnInit, OnDestroy {
     this.setDeadlineUnits();
     this.getActivities();
     this.fetchAllSenders();
-    this.subscription.add(this.organisations$.subscribe(organisations => this.organisations = organisations));
+    this.subscription.add(this.organisations$.subscribe(organisations => {
+      this.organisations = organisations;
+      sortOrganisations(this.organisations);
+    }));
     this.subscription.add(this.isCollapsed$.subscribe( collapsed => {
       this.isCollapsed = collapsed.status;
       this.isAssetsCollapsed = collapsed.status;
@@ -384,6 +388,7 @@ export class SubscriptionFormComponent implements OnInit, OnDestroy {
       const { endpoints } = await this.featuresService.getOrganisationDetails(value);
       this.endpointItems = endpoints;
       if (endpoints && this.endpointItems.length) {
+        sortEndpoints(this.endpointItems);
         this.subscriptionForm.get('output.subscriber.endpointId').enable();
       }
     }
@@ -406,6 +411,7 @@ export class SubscriptionFormComponent implements OnInit, OnDestroy {
       this.communicationChannels = matchingEndpoint[0].channelList;
     }
     if (this.communicationChannels.length) {
+      sortCommunicationChannels(this.communicationChannels);
       this.subscriptionForm.get('output.subscriber.channelId').enable();
     } else {
       this.subscriptionForm.get('output.subscriber.channelId').disable();
