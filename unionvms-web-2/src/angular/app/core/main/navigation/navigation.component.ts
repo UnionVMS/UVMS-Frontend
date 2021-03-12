@@ -33,7 +33,7 @@ export class NavigationComponent implements OnInit {
     let roleName = localStorage.getItem('roleName');
     this.authService.getUserContexts().toPromise().then((contexts: UserContexts) => {
       let currentContext: Context = contexts.contextSet.contexts.find((context:Context)  => {
-        return context.scope.scopeName === scopeName && context.role.roleName === roleName;
+        return context.scope && context.scope.scopeName === scopeName && context.role && context.role.roleName === roleName;
       });
       this.userPemissions = currentContext.role.features.map((feature: Feature) => {
         return feature.featureId;
