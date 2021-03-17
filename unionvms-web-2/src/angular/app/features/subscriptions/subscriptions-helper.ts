@@ -41,11 +41,6 @@ export const subscriptionFormInitialValues = {
 export const manualSubscriptionsInitialFormValues = {
   output: {
     messageType: 'FA_QUERY',
-    subscriber: {
-      organisationId: '',
-      endpointId: '',
-      channelId: ''
-    },
     consolidated: true,
     vesselIds: ['CFR', 'IRCS', 'ICCAT', 'EXT_MARK', 'UVI'],
     queryStartDate: null,

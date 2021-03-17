@@ -330,11 +330,17 @@ export class ManualSubscriptionsComponent implements OnInit, OnDestroy {
     this.alerts.splice(this.alerts.indexOf(alert), 1);
   }
 
-  cancel() {
-    this.manualSubscriptionForm.reset(manualSubscriptionsInitialFormValues);
+  reset() {
+    this.inputsDisabled = false;
+    this.alerts = [];
     this.areas.clear();
     this.assets.clear();
-
+    this.manualSubscriptionForm.enable();
+    this.manualSubscriptionForm.reset(manualSubscriptionsInitialFormValues);
+    this.manualSubscriptionForm.get('output.subscriber.organisationId').setValue('');
+    this.queryControl.reset();
+    this.queryControl.setValue('period');
+    this.queryControl.enable();
   }
 
   ngOnDestroy() {
