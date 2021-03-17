@@ -190,7 +190,7 @@
     </div>
   </div>
   <div class="form-row justify-content-end buttons-row">
-    <button type="button" class="btn btn-outline-secondary mr-1" (click)="cancel()" [disabled]="inputsDisabled">Cancel</button>
+    <button type="button" class="btn btn-outline-secondary mr-1" (click)="reset()">Reset</button>
     <button type="submit" class="btn btn-primary" [disabled]="!manualSubscriptionForm.valid || inputsDisabled" >Run</button>
   </div>
 </form>
