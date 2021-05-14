@@ -51,9 +51,14 @@
                 <input type="text" name="mmsi" id="asset-input-mmsi" class="form-control" ng-model="vessel.mmsiNo" ng-pattern="mmsiRegExp" existing="existingValues.mmsi">
                 <input-validation-message types="pattern, unique" input="vesselForm.mmsi" custom-messages="{{mmsiValidationMessages}}"></input-validation-message >
             </div>
-            <div class="col-md-4 smallerpaddingleft form-group" ng-class="{'has-error': (submitAttempted || vesselForm.licenseType.$dirty) && vesselForm.licenseType.$invalid}">
+            <div class="col-md-2 smallerpaddingleft form-group" ng-class="{'has-error': (submitAttempted || vesselForm.licenseType.$dirty) && vesselForm.licenseType.$invalid}">
                 <label>{{ 'vessel.vessel_details_license_type' | i18n }}</label>
                 <dropdown name="licenseType" input-field-id="asset-input-licenseType" ng-model="vessel.licenseType" initialtext="{{ 'vessel.vessel_details_license_type' | i18n }}" items="vesselLicensTypes" ng-disabled="disableForm"></dropdown>
+            </div>
+            <div class="col-md-2 form-group smallerpaddingleft" ng-class="{'has-error': (submitAttempted || vesselForm.iccat.$dirty) && vesselForm.iccat.$invalid}">
+                <label>{{ 'vessel.vessel_details_ICCAT' | i18n }}</label>
+                <input type="text" name="iccat" id="asset-input-iccat" class="form-control" ng-model="vessel.iccat" ng-pattern="iccatRegExp" existing="existingValues.iccat">
+                <input-validation-message types="pattern, unique" input="vesselForm.iccat" custom-messages="{{iccatValidationMessages}}"></input-validation-message>
             </div>
         </div>
 
