@@ -233,7 +233,7 @@ angular.module('unionvmsWeb').controller('ExchangeCtrl',function($scope, $log, $
                     if (tempVisibility.length === 1){
                         visible = tempVisibility[0];
                         if (model.status === 'ISSUED' && feature[0] === 'viewMovements'){
-                            visible = false;
+                            visible = true;
                         }
                     } else {
                         if (operator === 'OR'){
