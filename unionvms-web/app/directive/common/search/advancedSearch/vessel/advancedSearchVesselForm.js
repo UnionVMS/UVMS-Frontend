@@ -84,6 +84,8 @@ angular.module('unionvmsWeb')
                 searchService.addSearchCriteria("NAME", searchValue);
                 searchService.addSearchCriteria("CFR", searchValue);
                 searchService.addSearchCriteria("IRCS", searchValue);
+                searchService.addSearchCriteria("UVI", searchValue);
+                searchService.addSearchCriteria("ICCAT", searchValue);
             }
 
             //Do the search
