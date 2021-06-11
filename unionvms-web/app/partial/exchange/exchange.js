@@ -209,6 +209,7 @@ angular.module('unionvmsWeb').controller('ExchangeCtrl',function($scope, $log, $
                     visible = true;
                     break;
                 case 'MOVEMENT':
+                case 'MOVEMENT_RESPONSE':
                     feature = ['viewMovements'];
                     application = 'Movement';
                     break;
@@ -232,7 +233,7 @@ angular.module('unionvmsWeb').controller('ExchangeCtrl',function($scope, $log, $
                     if (tempVisibility.length === 1){
                         visible = tempVisibility[0];
                         if (model.status === 'ISSUED' && feature[0] === 'viewMovements'){
-                            visible = false;
+                            visible = true;
                         }
                     } else {
                         if (operator === 'OR'){
@@ -276,6 +277,7 @@ angular.module('unionvmsWeb').controller('ExchangeCtrl',function($scope, $log, $
                     break;
 
                 case 'MOVEMENT':
+                case 'MOVEMENT_RESPONSE':
                     getRawXmlData(model.id);
                     break;
 

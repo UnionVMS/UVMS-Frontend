@@ -24,6 +24,7 @@ angular.module('unionvmsWeb')
         this.homePort = undefined;
         this.imo = null;
         this.uvi = null;
+        this.iccat = null;
         this.ircs = undefined;
         this.lastMovement = undefined;
         this.lengthType = "LOA";
@@ -66,6 +67,7 @@ angular.module('unionvmsWeb')
         vessel.mmsiNo = data.mmsiNo;
         vessel.imo = data.imo;
         vessel.uvi = data.uvi;
+        vessel.iccat = data.iccat;
         vessel.externalMarking = data.externalMarking;
         vessel.homePort = data.homePort;
 
@@ -138,6 +140,7 @@ angular.module('unionvmsWeb')
             countryCode : this.countryCode,
             imo : this.imo,
             uvi : this.uvi,
+            iccat: this.iccat,
             externalMarking : this.externalMarking,
             hasIrcs : this.hasIrcs(),
             ircs : this.ircs,
@@ -187,6 +190,7 @@ angular.module('unionvmsWeb')
         copy.homePort = this.homePort;
         copy.imo = this.imo;
         copy.uvi = this.uvi;
+        copy.iccat = this.iccat;
         copy.lengthValue = this.lengthValue;
         copy.lengthType = this.lengthType;
         //copy.lengthOverAll = this.lengthOverAll;
