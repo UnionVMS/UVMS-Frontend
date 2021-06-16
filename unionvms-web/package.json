@@ -7,9 +7,7 @@
   },
   "devDependencies": {
     "angular-jsdoc": "~1.5.0",
-    "bower": "~1.8.12",
-    "cheerio": "^1.0.0-rc.10",
-    "cheerio-select": "~0.0.3",
+    "bower": "~1.8.0",
     "grunt": "~1.0.1",
     "grunt-angular-templates": "~1.1",
     "grunt-cli": "~1.2.0",
@@ -32,7 +30,7 @@
     "grunt-jsdoc": "~2.1.0",
     "grunt-karma": "~2.0.0",
     "grunt-ng-annotate": "~3.0",
-    "grunt-ng-constant": "^2.0.3",
+    "grunt-ng-constant": "~2.0.1",
     "grunt-parallel": "^0.5.1",
     "grunt-replace": "~1.0.1",
     "jsdoc": "~3.4.3",
@@ -47,7 +45,9 @@
     "karma-phantomjs-launcher": "~1.0.4",
     "load-grunt-tasks": "~3.5",
     "serve-static": "^1.12.1",
-    "time-grunt": "~1.4.0"
+    "time-grunt": "~1.4.0",
+    "cheerio": "~1.0.0-rc.3",
+    "cheerio-select": "~0.0.3"
   },
   "license": "GPL-3.0"
 }
