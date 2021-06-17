@@ -97,8 +97,8 @@ export class ManualSubscriptionsComponent implements OnInit, OnDestroy {
       sortOrganisations(this.organisations);
     }));
 
-    this.vesselIdsList =  ['CFR', 'IRCS', 'ICCAT', 'EXT_MARK', 'UVI'];
-    this.selectedItems = ['CFR', 'IRCS', 'ICCAT', 'EXT_MARK', 'UVI'];
+    this.vesselIdsList =  ['CFR', 'IRCS', 'ICCAT', 'EXT_MARK', 'UVI','GFCM'];
+    this.selectedItems = ['CFR', 'IRCS', 'ICCAT', 'EXT_MARK', 'UVI','GFCM'];
     this.dropdownSettings = {
       singleSelection: false,
       selectAllText: 'Select All',
@@ -237,6 +237,8 @@ export class ManualSubscriptionsComponent implements OnInit, OnDestroy {
       return "Ext. Marking: " + asset.externalMarking;
     } else if (asset.iccat) {
       return "ICCAT: " + asset.iccat;
+    } else if (asset.gfcm) {
+      return "GFCM: " + asset.gfcm;
     }
   }
 
