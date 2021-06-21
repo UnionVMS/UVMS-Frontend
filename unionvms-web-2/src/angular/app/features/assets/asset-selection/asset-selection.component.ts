@@ -260,6 +260,8 @@ export class AssetSelectionComponent implements OnInit, OnDestroy {
       return "Ext. Marking: " + asset.externalMarking;
     } else if (asset.iccat) {
       return "ICCAT: " + asset.iccat;
+    } else if (asset.gfcm) {
+      return "GFCM: " + asset.gfcm;
     }
   }
 

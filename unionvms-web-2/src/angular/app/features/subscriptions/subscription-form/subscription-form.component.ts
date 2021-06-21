@@ -74,7 +74,7 @@ export class SubscriptionFormComponent implements OnInit, OnDestroy {
   allSenders: SenderElement[];
 
   // Please do not change order of elements
-  vesselIdentifiers = ['CFR', 'IRCS', 'ICCAT', 'EXT_MARK', 'UVI'];
+  vesselIdentifiers = ['CFR', 'IRCS', 'ICCAT', 'EXT_MARK', 'UVI', 'GFCM'];
   selectedItems: Array<any> = [];
   dropdownSettings: IDropdownSettings = {};
 
@@ -110,7 +110,7 @@ export class SubscriptionFormComponent implements OnInit, OnDestroy {
         this.timedAlertClosed = false;
       }
     }));
-    this.selectedItems = ['CFR', 'IRCS', 'ICCAT', 'EXT_MARK', 'UVI'];
+    this.selectedItems = ['CFR', 'IRCS', 'ICCAT', 'EXT_MARK', 'UVI','GFCM'];
     this.dropdownSettings = {
       singleSelection: false,
       selectAllText: 'Select All',
@@ -373,6 +373,8 @@ export class SubscriptionFormComponent implements OnInit, OnDestroy {
       return "Ext. Marking: " + asset.externalMarking;
     } else if (asset.iccat) {
       return "ICCAT: " + asset.iccat;
+    } else if (asset.gfcm) {
+      return "GFCM: " + asset.gfcm;
     }
   }
 
