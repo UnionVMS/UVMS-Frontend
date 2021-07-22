@@ -210,6 +210,7 @@ angular.module('unionvmsWeb').controller('ExchangeCtrl',function($scope, $log, $
                     break;
                 case 'MOVEMENT':
                 case 'MOVEMENT_RESPONSE':
+                case 'MOVEMENT_REPORT':
                     feature = ['viewMovements'];
                     application = 'Movement';
                     break;
@@ -278,6 +279,7 @@ angular.module('unionvmsWeb').controller('ExchangeCtrl',function($scope, $log, $
 
                 case 'MOVEMENT':
                 case 'MOVEMENT_RESPONSE':
+                case 'MOVEMENT_REPORT':
                     getRawXmlData(model.id);
                     break;
 
