@@ -417,7 +417,7 @@ export class AreaSelectionMapComponent implements OnInit, OnChanges, OnDestroy {
         // just one result
         this.selectMapArea.emit({
           gid: result.data[0].gid,
-          name: result.data[0].name,
+          name: result.data[0].code,
           areaType: typeof(this.selectedAreaType) === 'string' ? this.selectedAreaType : this.selectedAreaType.typeName
         });
       } else {
