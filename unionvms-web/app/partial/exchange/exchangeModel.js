@@ -51,6 +51,7 @@ angular.module('unionvmsWeb')
 			exchange.responseStatus = data.responseStatus;
 
             if (angular.isDefined(data.relatedLogData) && data.relatedLogData !== null && data.relatedLogData.length > 0){
+                data.relatedLogData[0].type2= data.type;
                 exchange.relatedLogData = orderRelatedLogs(data.relatedLogData);
             }
 		}
@@ -78,6 +79,7 @@ angular.module('unionvmsWeb')
             exchange.responseStatus = data.responseStatus;
 
             if (angular.isDefined(data.relatedLogData) && data.relatedLogData !== null && data.relatedLogData.length > 0){
+                data.relatedLogData[0].type2= data.type;
                 exchange.relatedLogData = orderRelatedLogs(data.relatedLogData);
             }
         }
@@ -89,7 +91,9 @@ angular.module('unionvmsWeb')
         var linkedDataOrder = ['FA_RESPONSE', 'FA_REPORT', 'MOVEMENT_RESPONSE'];
         var sortedData = [];
         angular.forEach(linkedDataOrder, function(link){
+            if(relatedData[0].type2 != 'SEND_FLUX_FA_REPORT_MSG'){
             sortedData = sortedData.concat(_.where(relatedData, {type: link}));
+            }
         });
 
         return sortedData;
