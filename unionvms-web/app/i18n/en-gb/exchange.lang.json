@@ -42,6 +42,7 @@
 	"table_header_recipient": "Recipient",
 	"table_header_sent_by": "From",
     "table_header_status": "Status",
+    "table_header_response_status": "Transmission Status",
     "table_header_source": "Source",
 	"table_header_type": "Type",
 	"table_header_sender_reciever" : "Sender/Receiver",

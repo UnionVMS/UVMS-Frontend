@@ -80,6 +80,7 @@ copy of the GNU General Public License along with the IFDM Suite. If not, see <h
                                     <th class="not-sortable">{{'exchange.table_header_message_uuid' | i18n}}</th>
                                     <th class="not-sortable">{{'exchange.table_header_on_value' | i18n}}</th>
                                     <th st-sort="status" st-skip-natural="true" st-class-ascent="sorting_asc" st-class-descent="sorting_desc">{{'exchange.table_header_status' | i18n}}</th>
+                                    <th st-sort="responseStatus" st-skip-natural="true" st-class-ascent="sorting_asc" st-class-descent="sorting_desc">{{'exchange.table_header_response_status' | i18n}}</th>
                                     <th>{{'activity.header_fa_actions' | i18n }}</th>
                                     <th st-sort="forwardRule" st-skip-natural="true" st-class-ascent="sorting_asc" st-class-descent="sorting_desc">{{'exchange.table_header_fwd_rule' | i18n}}</th>
                                     <th st-sort="recipient" st-skip-natural="true" st-class-ascent="sorting_asc" st-class-descent="sorting_desc">{{'exchange.table_header_recipient' | i18n}}</th>
@@ -119,6 +120,9 @@ copy of the GNU General Public License along with the IFDM Suite. If not, see <h
                                     <td class="full-cell-display" title="{{::getOnValueToDisplay(message)}}">{{::getOnValueToDisplay(message) | dataNotAvailable}}</td>
                                     <td class="status">
                                         <message-status ng-model="message" is-clickable="::isStatusClickable(message)"></message-status>
+                                    </td>                                    
+                                    <td class="responseStatus">
+                                        <message-status ng-model="message" is-clickable="false" is-response-status="true"></message-status>
                                     </td>
                                     <td>
                                         <button type="button" class="btn btn-xs btn-default" title="{{'exchange.title_details' | i18n }}" ng-click="showMessageDetails(message)" ng-if="::showDetailsButton(message)">

@@ -15,7 +15,8 @@ angular.module('unionvmsWeb').directive('messageStatus', function(locale, $modal
 		replace: true,
 		scope: {
 	        isClickable: '=',
-	        ngModel: '='
+	        ngModel: '=',
+	        isResponseStatus: '='
 		},
 		templateUrl: 'directive/exchange/messageStatus/messageStatus.html',
 		link: function(scope, element, attrs, fn) {
@@ -48,11 +49,16 @@ angular.module('unionvmsWeb').directive('messageStatus', function(locale, $modal
 		            case 'SUCCESSFUL' :
 					case 'OK':
 					case 'SENT':
+					case 'SENT':
+					case 'ALLOWED':
 		                cssClass = "label-success";
 		                break;
 		            case 'ERROR' :
 		            case 'FAILED' :
 		                cssClass = "label-danger";
+		                break;
+		            case 'BLOCKED':
+		                cssClass = "label-blocked";
 		                break;
 		            default:
 		                cssClass = "label-warning";
@@ -64,6 +70,11 @@ angular.module('unionvmsWeb').directive('messageStatus', function(locale, $modal
 		        }
 
 		        return cssClass;
+		    };
+		    
+		    
+		    scope.isResponseStatus = function(){
+                return angular.isDefined(scope.isResponseStatus) && scope.isResponseStatus === true;
 		    };
 		}
 	};
