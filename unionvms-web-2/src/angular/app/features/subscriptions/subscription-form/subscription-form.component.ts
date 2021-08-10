@@ -16,6 +16,7 @@ import {SubscriptionSubscriberDto} from 'app/features/features.model';
 import {IDropdownSettings} from 'ng-multiselect-dropdown';
 import {SubscriptionRightsService} from "../../../services/subscription-rights.service";
 import {sortCommunicationChannels, sortEndpoints, sortOrganisations} from "../organisation-utils";
+import {trigger} from "@angular/animations";
 
 interface SenderElement {
   type: string;
@@ -72,6 +73,7 @@ export class SubscriptionFormComponent implements OnInit, OnDestroy {
   isCollapsed$: Observable<StatusAction> = this.store.select(fromRoot.toggleSubscriptionAreasSection);
   timedAlertClosed$: Observable<any> = this.store.select(fromRoot.closeTimedAlert);
   allSenders: SenderElement[];
+  selectedType = true;
 
   // Please do not change order of elements
   vesselIdentifiers = ['CFR', 'IRCS', 'ICCAT', 'EXT_MARK', 'UVI', 'GFCM'];
@@ -581,6 +583,12 @@ export class SubscriptionFormComponent implements OnInit, OnDestroy {
       this.alert.disable();
     } else {
       this.alert.enable();
+    }
+
+    if(triggerType === 'INC_FA_QUERY'){
+      this.selectedType = false;
+    } else {
+      this.selectedType = true;
     }
   }
 
