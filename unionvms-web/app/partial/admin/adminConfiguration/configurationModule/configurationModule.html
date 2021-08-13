@@ -25,13 +25,13 @@ copy of the GNU General Public License along with the IFDM Suite. If not, see <h
 				<th sortable-table-header by="sortBy" reverse="reverseSort" order="'lastModified'">
 					{{ "audit.configuration_column_last_modified" | i18n }}
 				</th>
-				<th>
+				<th ng-show="settingsEditable[activeTab]===true">
 					<!-- {{ "audit.configuration_column_actions" | i18n }} -->
 				</th>
 			</tr>
 		</thead>
 		<tbody>
-			<tr ng-repeat="c in settings[activeTab] | filter:{global: false} | orderBy:sortBy:reverseSort">
+			<tr ng-repeat="c in settings[activeTab].settings | filter:{global: false} | orderBy:sortBy:reverseSort">
 				<td class="key" ng-attr-title="{{c.key}}">{{ c.key }}</td>
 				<td ng-switch="!!c.editing" class="value" ng-class="{editing: c.editing}">
 					<!-- Value or input -->
@@ -46,7 +46,7 @@ copy of the GNU General Public License along with the IFDM Suite. If not, see <h
 					<input ng-switch-when="true" type="text" ng-model="c.description"/>
 				</td>
 				<td ng-attr-title="{{c.lastModified | confDateFormat}}">{{c.lastModified | confDateFormat }}</td>
-				<td ng-switch on="!!c.editing">
+				<td ng-switch on="!!c.editing" ng-show="settingsEditable[activeTab]===true">
 					<!-- "Edit" or "Done" / "Delete" buttons -->
 					<button ng-switch-when="false" class="btn btn-default" ng-click="setEditing(c, true)" title="{{'common.edit'| i18n}}">
                         <i class="fa fa-pencil"></i>
