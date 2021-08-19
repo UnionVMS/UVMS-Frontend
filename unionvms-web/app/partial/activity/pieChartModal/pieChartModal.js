@@ -14,4 +14,7 @@ angular.module('unionvmsWeb').controller('PiechartmodalCtrl', function ($scope, 
     $scope.close = function () {
         $modalInstance.dismiss('close');
     };
+    scope.formatWeight = function(weight){
+        return parseFloat(weight).toLocaleString().replace(/,/g, ' ');
+    };
 });

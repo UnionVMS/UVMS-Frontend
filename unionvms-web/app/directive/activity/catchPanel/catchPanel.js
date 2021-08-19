@@ -67,6 +67,10 @@ angular.module('unionvmsWeb').directive('catchPanel', function($modal) {
                     }
                 }
             };
+    
+            scope.formatWeight = function(weight){
+                return parseFloat(weight).toLocaleString().replace(/,/g, ' ');
+            };
 		}
     };
 });

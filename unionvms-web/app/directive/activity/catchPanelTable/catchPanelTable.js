@@ -30,6 +30,10 @@ angular.module('unionvmsWeb').directive('catchPanelTable', function() {
             headers: '=?',
             title:'@'
         },
-        templateUrl: 'directive/activity/catchPanelTable/catchPanelTable.html'
+        templateUrl: 'directive/activity/catchPanelTable/catchPanelTable.html',
+        
+        scope.formatWeight = function(weight){
+            return parseFloat(weight).toLocaleString().replace(/,/g, ' ');
+        };
     };
 });

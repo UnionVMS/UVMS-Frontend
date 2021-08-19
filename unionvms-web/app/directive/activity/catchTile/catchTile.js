@@ -191,6 +191,10 @@ angular.module('unionvmsWeb').directive('catchTile', function(locale,reportingNa
 			scope.hasData = function(model){
 				return angular.isDefined(model) && !_.isEmpty(model);
 			};
+			
+            scope.formatWeight = function(weight){
+                return parseFloat(weight).toLocaleString().replace(/,/g, ' ');
+            };
 
 			//if ngModel is not defined add a watch to wait for the model
 			var watchRef;

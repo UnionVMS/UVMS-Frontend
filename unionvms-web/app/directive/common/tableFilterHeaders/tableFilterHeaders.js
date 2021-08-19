@@ -325,6 +325,10 @@ angular.module('unionvmsWeb').directive('tableFilterHeaders', function($compile,
                     scope.total += weight;
                 }
             }
+            
+            function formatWeight(weight){
+                return parseFloat(weight).toLocaleString().replace(/,/g, ' ');
+            };
         }
     };
 })

@@ -28,7 +28,7 @@
 								<tbody>
 									<tr ng-repeat="class in classColumnOrder" ng-class="{'selected-row': selectedClass === class}" ng-click="selectClass(class)">
 										<td>{{'activity.' + class | lowercase | i18n}}</td>
-										<td class="column-right">{{selectedSpecieLocation.groupingDetails[class].weight | number:2}}</td>
+										<td class="column-right">{{formatWeight(selectedSpecieLocation.groupingDetails[class].weight)}}</td>
 										<td>{{selectedSpecieLocation.groupingDetails[class].unit}}</td>
 									</tr>
 								</tbody>

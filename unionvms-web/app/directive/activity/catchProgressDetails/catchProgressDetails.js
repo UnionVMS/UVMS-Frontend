@@ -106,6 +106,10 @@ angular.module('unionvmsWeb').directive('catchProgressDetails', function(locale,
                       return '';
                 }
             }
+            
+            scope.formatWeight = function(weight){
+                return parseFloat(weight).toLocaleString().replace(/,/g, ' ');
+            };
 
             scope.graphClass = getGraphClass();
         }

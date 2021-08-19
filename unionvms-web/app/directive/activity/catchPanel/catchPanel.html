@@ -18,7 +18,7 @@
                                     </legend>
                                     <div class="pie-container" ng-if="item.onBoard | hasData">
                                         <nvd3 options="options" data="item.onBoard"></nvd3>
-                                        <div class="text-center onboard-total">{{'activity.catch_panel_weight' | i18n}}: {{item.grandOnboardTotal}} {{unit}}</div>
+                                        <div class="text-center onboard-total">{{'activity.catch_panel_weight' | i18n}}: {{formatWeight(item.grandOnboardTotal)}} {{unit}}</div>
                                     </div>
                                     <div class="pie-container" ng-if="item.transhipment | hasData">
                                         <nvd3 options="options" data="item.transhipment"></nvd3>

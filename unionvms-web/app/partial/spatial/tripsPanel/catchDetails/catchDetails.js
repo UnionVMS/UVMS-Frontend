@@ -397,6 +397,11 @@ angular.module('unionvmsWeb').controller('CatchdetailsCtrl', function ($scope, $
         }
         loadingStatus.isLoading('TripSummary', false);
     };
+    
+    
+    var formatWeight = function(weight){
+        return parseFloat(weight).toLocaleString().replace(/,/g, ' ');
+    };
 
     init();
 });
