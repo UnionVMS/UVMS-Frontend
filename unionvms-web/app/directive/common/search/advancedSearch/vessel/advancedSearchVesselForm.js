@@ -10,7 +10,7 @@ FITNESS FOR A PARTICULAR PURPOSE.  See the GNU General Public License for more d
 copy of the GNU General Public License along with the IFDM Suite. If not, see <http://www.gnu.org/licenses/>.
  */
 angular.module('unionvmsWeb')
-    .controller('AdvancedSearchVesselFormCtrl', function($scope, $modal, searchService, savedSearchService, configurationService, vesselValidationService, locale, unitTransformer){
+    .controller('AdvancedSearchVesselFormCtrl', function($scope, $modal, searchService, savedSearchService, configurationService, vesselValidationService, locale, unitTransformer,mdrCacheService,componentUtilsService){
 
         $scope.advancedSearch = false;
         $scope.selectedVesselGroup = undefined;
@@ -24,12 +24,27 @@ angular.module('unionvmsWeb')
         var init = function(){
             //Setup dropdowns
             $scope.flagStates = configurationService.setTextAndCodeForDropDown(configurationService.getValue('VESSEL', 'FLAG_STATE'), 'FLAG_STATE', 'VESSEL', true);
-            $scope.gearTypes = configurationService.setTextAndCodeForDropDown(configurationService.getValue('VESSEL', 'GEAR_TYPE'), 'GEAR_TYPE','VESSEL', true);
             $scope.powerSpans = configurationService.setTextAndCodeForDropDown(configurationService.getValue('VESSEL', 'SPAN_POWER_MAIN'));
             $scope.lengthSpans = toLengthUnitView(configurationService.setTextAndCodeForDropDown(configurationService.getValue('VESSEL', 'SPAN_LENGTH_LOA')));
 
             //TODO: Need this from backend?
             $scope.activeTypes = [{'text':'Yes','code':'true'},{'text':'No','code':'false'}];
+            loadGearTypes(); 
+        };
+        
+        function loadGearTypes () {
+            $scope.gearTypes = [];
+            mdrCacheService.getCodeList('GEAR_TYPE').then(function(response){
+                var originalCodeList = angular.copy(response);
+                $scope.gearTypes = componentUtilsService.convertCodelistToCombolist(originalCodeList, true, false, undefined, 'category');
+                // sort alphabetically by category and text
+                $scope.gearTypes.sort(function(a, b) {
+                    return a.category.localeCompare(b.category) || a.text.localeCompare(b.text);
+                 });
+            }, function(error){
+                $scope.actServ.setAlert(true, 'activity.activity_error_getting_code_lists');
+                $scope.visibleCombos.gearType = false;
+            });
         };
 
         var toLengthUnitView = function(spans) {

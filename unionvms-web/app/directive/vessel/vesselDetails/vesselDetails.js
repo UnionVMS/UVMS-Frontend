@@ -33,14 +33,29 @@ angular.module('unionvmsWeb')
 });
 
 angular.module('unionvmsWeb')
-    .controller('vesselDetailsCtrl', function($scope, locale, configurationService, vesselValidationService, globalSettingsService){
+    .controller('vesselDetailsCtrl', function($scope, locale, configurationService, vesselValidationService, globalSettingsService, mdrCacheService, componentUtilsService){
 
         //Dropdown values
         $scope.vesselFlagState = configurationService.setTextAndCodeForDropDown(configurationService.getValue('VESSEL', 'FLAG_STATE'), 'FLAG_STATE', 'VESSEL', true);
         $scope.vesselLicensTypes = configurationService.setTextAndCodeForDropDown(configurationService.getValue('VESSEL','LICENSE_TYPE'),'LICENSE_TYPE','VESSEL', true);
-        $scope.vesselGearTypes = configurationService.setTextAndCodeForDropDown(configurationService.getValue('VESSEL','GEAR_TYPE'), 'GEAR_TYPE','VESSEL', true);
         $scope.vesselLengthTypes = configurationService.setTextAndCodeForDropDown(configurationService.getValue('VESSEL','UNIT_LENGTH'),'LENGTH','VESSEL', true);
         $scope.vesselGrossTonnageUnits = configurationService.setTextAndCodeForDropDown(configurationService.getValue('VESSEL','UNIT_TONNAGE'), 'TONNAGE','VESSEL', true);
+        loadGearTypes();
+        
+        function loadGearTypes (){
+            $scope.vesselGearTypes = [];
+            mdrCacheService.getCodeList('GEAR_TYPE').then(function(response){
+                var originalCodeList = angular.copy(response);
+                $scope.vesselGearTypes = componentUtilsService.convertCodelistToCombolist(originalCodeList, true, false, undefined, 'category');
+                // sort alphabetically by category and text
+                $scope.vesselGearTypes.sort(function(a, b) {
+                    return a.category.localeCompare(b.category) || a.text.localeCompare(b.text);
+                 });
+            }, function(error){
+                $scope.actServ.setAlert(true, 'activity.activity_error_getting_code_lists');
+                $scope.visibleCombos.gearType = false;
+            });
+        };
 
         //Validation
         $scope.ircsValidationMessages = {
