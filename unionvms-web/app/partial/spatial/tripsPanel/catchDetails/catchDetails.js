@@ -19,7 +19,7 @@ copy of the GNU General Public License along with the IFDM Suite. If not, see <h
  * @description
  *  The controller for the Catch Details.  
  */
-angular.module('unionvmsWeb').controller('CatchdetailsCtrl', function ($scope, $filter, activityRestService, locale, tableService, reportService, loadingStatus, tripSummaryService) {
+angular.module('unionvmsWeb').controller('CatchdetailsCtrl', function ($scope, $filter, activityRestService, locale, tableService, reportService, loadingStatus, tripSummaryService, activityService) {
 
     var prepareSummaryRow = function(record){
         var catchTypes = ['summaryFaCatchType','summaryFishSize'];
@@ -396,6 +396,11 @@ angular.module('unionvmsWeb').controller('CatchdetailsCtrl', function ($scope, $
             $scope.isCatchDetailsLoaded = true;
         }
         loadingStatus.isLoading('TripSummary', false);
+    };
+    
+    
+    $scope.formatWeight = function(weight){
+        return activityService.formatWeight(weight);
     };
 
     init();

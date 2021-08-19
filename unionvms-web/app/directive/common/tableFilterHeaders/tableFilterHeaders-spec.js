@@ -326,7 +326,6 @@ describe('Table with combobox filters and calculated totals', function() {
                 total += records[i][prop];
             }
         }
-        total = filter(total, 2);
         return total.toString();
     }
     

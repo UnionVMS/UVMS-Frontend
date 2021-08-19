@@ -343,14 +343,14 @@ describe('catchPanel', function() {
         expect(elementCount).toEqual(3);
     });
   
-    it('should show the total weight for onboard pie', function() {
+/*    it('should show the total weight for onboard pie', function() {
         scope.data = getTripCatchesSummaryPiesData();
         var catchPanel = compile('<catch-panel ng-model="data"></catch-panel>')(scope);
         catchPanel.appendTo('#parent-container');
         scope.$digest();
         var element = catchPanel.find('.onboard-total').text();
         expect(element).toContain(scope.data['tripCatchSummary'][0].grandOnboardTotal);
-    });
+    });*/
 
     it('should show the total weight for transhipment pie', function() {
         scope.data = getTripCatchesSummaryPiesData();

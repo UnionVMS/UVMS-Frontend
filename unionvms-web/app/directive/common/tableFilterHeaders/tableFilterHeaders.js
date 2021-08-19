@@ -21,7 +21,7 @@ copy of the GNU General Public License along with the IFDM Suite. If not, see <h
  * @description
  *  A reusable smart table directive that supports multiple and simultaneous combobox filters, and calculates totals according to an object that defines the table structure
  */
-angular.module('unionvmsWeb').directive('tableFilterHeaders', function($compile, locale) {
+angular.module('unionvmsWeb').directive('tableFilterHeaders', function($compile, locale, activityService) {
 	return {
 		restrict: 'E',
 		replace: false,
@@ -55,6 +55,10 @@ angular.module('unionvmsWeb').directive('tableFilterHeaders', function($compile,
                         }
                     });
                 };
+                
+                scope.formatWeight = function(weight){
+                     return activityService.formatWeight(weight);
+                }
 
                 var getTranslation = function(item,column){
                     var val = item[column.filterBy ? column.filterBy : column.srcProp];
@@ -144,6 +148,11 @@ angular.module('unionvmsWeb').directive('tableFilterHeaders', function($compile,
                         scope.selectedItem = scope.displayedRecords[idx];
                     }
                 };
+                
+                            
+                scope.formatWeight = function(weight){
+                    return activityService.formatWeight(weight);
+                }
 
                 if (angular.isDefined(scope.uniqueColumnsSrcData)){
                     setColumnVisibility();
@@ -289,7 +298,7 @@ angular.module('unionvmsWeb').directive('tableFilterHeaders', function($compile,
  * @description
  *  A directive to calculate totals for a specified smart table column. It should be used with {@link unionvmsWeb.tableFilterHeaders} directive.
  */
-.directive('stCalculateTotals', function($filter){
+.directive('stCalculateTotals', function($filter, activityService){
     return {
         restrict: 'E',
         require: '^stTable',
@@ -314,9 +323,13 @@ angular.module('unionvmsWeb').directive('tableFilterHeaders', function($compile,
                     }
                 }
                 if (scope.property === 'calculatedWeight' || scope.property === 'packageWeight' || scope.property === 'weight'){
-                    scope.total = $filter('number')(scope.total, 2);
+                    scope.total = scope.formatWeight(scope.total);    //$filter('number')(scope.total, 2);
                 }
             });
+            
+            scope.formatWeight = function(weight){
+                return activityService.formatWeight(weight);
+            }
 
             function handleCatch(type, weight){
                 if(['UNLOADED','DEMINIMIS','DISCARDED'].indexOf(type) >= 0){
@@ -324,7 +337,7 @@ angular.module('unionvmsWeb').directive('tableFilterHeaders', function($compile,
                 } else {
                     scope.total += weight;
                 }
-            }
+            };
         }
     };
 })
