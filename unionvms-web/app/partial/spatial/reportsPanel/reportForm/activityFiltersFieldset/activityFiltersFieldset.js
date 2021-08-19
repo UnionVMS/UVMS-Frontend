@@ -19,7 +19,7 @@ copy of the GNU General Public License along with the IFDM Suite. If not, see <h
  * @description
  *  The controller for the activity filters fieldset
  */
-angular.module('unionvmsWeb').controller('ActivityfiltersfieldsetCtrl', function ($scope, locale, mdrCacheService) {
+angular.module('unionvmsWeb').controller('ActivityfiltersfieldsetCtrl', function ($scope, locale, mdrCacheService, componentUtilsService) {
 
     $scope.codeLists = {
         comChannels: null,
@@ -91,7 +91,7 @@ angular.module('unionvmsWeb').controller('ActivityfiltersfieldsetCtrl', function
         $scope.codeLists.activityTypes = [];
         mdrCacheService.getCodeList('FLUX_FA_TYPE').then(function (response) {
             var suportedCodes = ['DEPARTURE', 'ARRIVAL', 'AREA_ENTRY', 'AREA_EXIT', 'FISHING_OPERATION', 'LANDING', 'DISCARD', 'TRANSHIPMENT', 'RELOCATION', 'JOINED_FISHING_OPERATION'];
-            $scope.codeLists.activityTypes = convertCodelistToCombolist(response, true, true, suportedCodes);
+            $scope.codeLists.activityTypes = componentUtilsService.convertCodelistToCombolist(response, true, true, suportedCodes);
         }, function (error) {
             $scope.actServ.setAlert(true, 'activity.activity_error_getting_code_lists');
             $scope.visibleCombos.activityType = false;
@@ -109,7 +109,7 @@ angular.module('unionvmsWeb').controller('ActivityfiltersfieldsetCtrl', function
     $scope.getReportTypes = function () {
         $scope.codeLists.reportTypes = [];
         mdrCacheService.getCodeList('FLUX_FA_REPORT_TYPE').then(function (response) {
-            $scope.codeLists.reportTypes = convertCodelistToCombolist(response, false, false);
+            $scope.codeLists.reportTypes = componentUtilsService.convertCodelistToCombolist(response, false, false);
         }, function (error) {
             $scope.actServ.setAlert(true, 'activity.activity_error_getting_code_lists');
             $scope.visibleCombos.reportType = false;
@@ -128,55 +128,12 @@ angular.module('unionvmsWeb').controller('ActivityfiltersfieldsetCtrl', function
     $scope.getGearTypes = function () {
         $scope.codeLists.gearTypes = [];
         mdrCacheService.getCodeList('GEAR_TYPE').then(function (response) {
-            $scope.codeLists.gearTypes = convertCodelistToCombolist(response, true, false);
+            $scope.codeLists.gearTypes = componentUtilsService.convertCodelistToCombolist(response, true, false);
         }, function (error) {
             $scope.actServ.setAlert(true, 'activity.activity_error_getting_code_lists');
             $scope.visibleCombos.gearType = false;
         });
     };
-
-    /**
-     * Convert code lists array into combobox list array
-     * 
-     * @memberof ActivityfiltersfieldsetCtrl
-     * @private
-     * @param {Array} data - The input data array
-     * @param {Boolean} withTooltip - True if the item text and tooltip description should be different
-     * @parm {Boolean} useAbbreviations - Whether the item text should be fetched from the abbreviations lang file or not
-     * @param {Array} [suportedCodes] - An array containing the supported codes. This param is optional
-     * @returns {Array} An array suitable for combobox use
-     */
-    function convertCodelistToCombolist(data, withTooltip, useAbbreviations, suportedCodes) {
-        var comboList = [];
-        angular.forEach(data, function (item) {
-            if (item.code === 'JOINED_FISHING_OPERATION') {
-                item.code = 'JOINT_FISHING_OPERATION';
-            }
-            var rec = {
-                code: item.code,
-                text: item.description
-            };
-            if (withTooltip) {
-                if (useAbbreviations) {
-                    rec.text = locale.getString('abbreviations.activity_' + item.code);
-                } else {
-                    rec.text = item.code;
-                }
-
-                rec.desc = item.description;
-            }
-
-            if (angular.isDefined(suportedCodes)) {
-                if (_.indexOf(suportedCodes, item.code) !== -1 || (item.code === 'JOINT_FISHING_OPERATION' && _.indexOf(suportedCodes, 'JOINED_FISHING_OPERATION') !== -1)) {
-                    comboList.push(rec);
-                }
-            } else {
-                comboList.push(rec);
-            }
-        });
-
-        return comboList;
-    }
 
     /**
      * Initialization function
