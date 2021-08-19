@@ -22,7 +22,7 @@ copy of the GNU General Public License along with the IFDM Suite. If not, see <h
  * @description
  *  A reusable tile that will display two pie charts side-by-side, and optionally a table and caption for the input data 
  */
-angular.module('unionvmsWeb').directive('catchPanel', function($modal) {
+angular.module('unionvmsWeb').directive('catchPanel', function($modal, activityService) {
     return {
         restrict: 'E',
         replace: false,
@@ -66,6 +66,10 @@ angular.module('unionvmsWeb').directive('catchPanel', function($modal) {
                         }
                     }
                 }
+            };
+    
+            scope.formatWeight = function(weight){
+                return activityService.formatWeight(weight);
             };
 		}
     };

@@ -555,6 +555,24 @@ angular.module('unionvmsWeb').factory('activityService',function(locale, activit
             actServ.tripsCsvLoading = false;
         })
     };
+    
+    
+    /**
+     * This function is used to replace the thousands separator with a blank in the weight field.
+     * The input to this method are also strings like dates and labels, so we need to filter them out.
+     */
+    actServ.formatWeight = function(weight){
+        if (typeof weight === 'string' && /^[0-9.,]+$/.test(weight) === false) {
+                return weight;
+        } else if (weight == null || !angular.isDefined(weight) || isNaN(parseFloat(weight))) {
+            return '0';
+        }
+                
+        if (typeof weight === 'string' && weight.indexOf(',') !== -1) {
+            return weight.replace(/,/g, " ").split(".")[0];
+        } 
+        return parseFloat(weight).toLocaleString().split(".")[0].replace(/,/g, " ");
+    };
 
 	return actServ;
 });

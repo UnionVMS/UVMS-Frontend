@@ -21,7 +21,7 @@ copy of the GNU General Public License along with the IFDM Suite. If not, see <h
  * @description
  *  A widget to display data about the catch details with the species per class
  */
-angular.module('unionvmsWeb').directive('catchTile', function(locale,reportingNavigatorService) {
+angular.module('unionvmsWeb').directive('catchTile', function(locale,reportingNavigatorService, activityService) {
 	return {
 		restrict: 'E',
 		replace: false,
@@ -191,6 +191,10 @@ angular.module('unionvmsWeb').directive('catchTile', function(locale,reportingNa
 			scope.hasData = function(model){
 				return angular.isDefined(model) && !_.isEmpty(model);
 			};
+			
+            scope.formatWeight = function(weight){
+                return activityService.formatWeight(weight);
+            };
 
 			//if ngModel is not defined add a watch to wait for the model
 			var watchRef;

@@ -29,11 +29,11 @@ copy of the GNU General Public License along with the IFDM Suite. If not, see <h
 			<tbody>
 				<tr ng-repeat="item in data.areaInfo">
 					<td>{{item.areaName}}</td>
-					<td class="column-right">{{item.weight | number:2}} </td>
+					<td class="column-right">{{formatWeight(item.weight)}} </td>
 				</tr>
 				<tr>
 					<td class="total">Total</td>
-					<td class="total column-right">{{data.weight | number:2}}</td>
+					<td class="total column-right">{{formatWeight(data.weight)}}</td>
 				</tr>
 			</tbody>
 		</table>

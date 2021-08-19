@@ -104,4 +104,8 @@ angular.module('unionvmsWeb').controller('ActivityreportslistCtrl',function($sco
         
         $scope.goToView(5);
     };
+    
+    $scope.formatWeight = function(weight) {
+       return activityService.formatWeight(weight);
+    }
 });

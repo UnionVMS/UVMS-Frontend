@@ -11,30 +11,30 @@
                 <div class="row" ng-if="!isLoading">
                     <div class="{{graphClass}} pie-container" ng-if="data.previousCumulative | hasData">
                         <nvd3 options="options" data="data.previousCumulative"></nvd3>
-                        <div class="text-center">Cumul: {{data.previousCumulativeGrandTotal}} {{unit}}</div>
+                        <div class="text-center">Cumul: {{formatWeight(data.previousCumulativeGrandTotal)}} {{unit}}</div>
                     </div>
                     <div class="{{graphClass}} pie-container" ng-if="data.total | hasData">
                         <nvd3 options="options" data="data.total"></nvd3>
-                        <div class="text-center">Total: {{data.grandTotal}} {{unit}}</div>
+                        <div class="text-center">Total: {{formatWeight(data.grandTotal)}} {{unit}}</div>
                     </div>
                     <div class="{{graphClass}}" ng-if="data.loaded | hasData">
                         <div class="text-center">LOADED</div>
                         <nvd3 options="options" data="data.loaded"></nvd3>
-                        <div class="text-center">Total: {{data.grandLoadedTotal}} {{unit}}</div>
+                        <div class="text-center">Total: {{formatWeight(data.grandLoadedTotal)}} {{unit}}</div>
                     </div>
                     <div class="{{graphClass}}" ng-if="data.onBoard | hasData">
                         <div class="text-center">ONBOARD</div>
                         <nvd3 options="options" data="data.onBoard"></nvd3>
-                        <div class="text-center" ng-class="{'red': (data.previousCumulativeGrandTotal && data.grandOnboardTotal !== data.previousCumulativeGrandTotal) || (data.cumulativeGrandTotal && data.grandOnboardTotal !== data.cumulativeGrandTotal)}">Total: {{data.grandOnboardTotal}} {{unit}}</div>
+                        <div class="text-center" ng-class="{'red': (data.previousCumulativeGrandTotal && data.grandOnboardTotal !== data.previousCumulativeGrandTotal) || (data.cumulativeGrandTotal && data.grandOnboardTotal !== data.cumulativeGrandTotal)}">Total: {{formatWeight(data.grandOnboardTotal)}} {{unit}}</div>
                     </div>
                     <div class="{{graphClass}}" ng-if="data.unLoaded | hasData">
                         <div class="text-center">UNLOADED</div>
                         <nvd3 options="options" data="data.unLoaded"></nvd3>
-                        <div class="text-center">Total: -{{data.grandUnloadedTotal}} {{unit}}</div>
+                        <div class="text-center">Total: -{{formatWeight(data.grandUnloadedTotal)}} {{unit}}</div>
                     </div>
                     <div class="{{graphClass}} pie-container" ng-if="data.cumulative | hasData">
                         <nvd3 options="options" data="data.cumulative"></nvd3>
-                        <div class="text-center" ng-class="{'red': data.last}">Cumul: {{data.cumulativeGrandTotal}} {{unit}}</div>
+                        <div class="text-center" ng-class="{'red': data.last}">Cumul: {{formatWeight(data.cumulativeGrandTotal)}} {{unit}}</div>
                     </div>
                     
                 </div>
