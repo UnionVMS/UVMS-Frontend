@@ -10,7 +10,7 @@ FITNESS FOR A PARTICULAR PURPOSE.  See the GNU General Public License for more d
 copy of the GNU General Public License along with the IFDM Suite. If not, see <http://www.gnu.org/licenses/>.
  */
 angular.module('unionvmsWeb')
-    .controller('AdvancedSearchVesselFormCtrl', function($scope, $modal, searchService, savedSearchService, configurationService, vesselValidationService, locale, unitTransformer){
+    .controller('AdvancedSearchVesselFormCtrl', function($scope, $modal, searchService, savedSearchService, configurationService, vesselValidationService, locale, unitTransformer,mdrCacheService){
 
         $scope.advancedSearch = false;
         $scope.selectedVesselGroup = undefined;
@@ -24,12 +24,66 @@ angular.module('unionvmsWeb')
         var init = function(){
             //Setup dropdowns
             $scope.flagStates = configurationService.setTextAndCodeForDropDown(configurationService.getValue('VESSEL', 'FLAG_STATE'), 'FLAG_STATE', 'VESSEL', true);
-            $scope.gearTypes = configurationService.setTextAndCodeForDropDown(configurationService.getValue('VESSEL', 'GEAR_TYPE'), 'GEAR_TYPE','VESSEL', true);
+            $scope.gearTypes =  $scope.getGearTypes(); //configurationService.setTextAndCodeForDropDown(configurationService.getValue('VESSEL', 'GEAR_TYPE'), 'GEAR_TYPE','VESSEL', true);
             $scope.powerSpans = configurationService.setTextAndCodeForDropDown(configurationService.getValue('VESSEL', 'SPAN_POWER_MAIN'));
             $scope.lengthSpans = toLengthUnitView(configurationService.setTextAndCodeForDropDown(configurationService.getValue('VESSEL', 'SPAN_LENGTH_LOA')));
 
             //TODO: Need this from backend?
             $scope.activeTypes = [{'text':'Yes','code':'true'},{'text':'No','code':'false'}];
+        };
+        
+        function getGearTypes(){
+            var gearTypes = [];
+            mdrCacheService.getCodeList('GEAR_TYPE').then(function(response){
+                var originalCodeList = angular.copy(response);
+                gearTypes = convertCodelistToCombolist(originalCodeList, true, false, undefined, 'category');
+                // sort alphabetically by category and text
+                gearTypes.sort(function(a, b) {
+                    return a.category.localeCompare(b.category) || a.text.localeCompare(b.text);
+                 });
+            }, function(error){
+                $scope.actServ.setAlert(true, 'activity.activity_error_getting_code_lists');
+                $scope.visibleCombos.gearType = false;
+            });
+            return gearTypes;
+        };
+
+        function convertCodelistToCombolist (data, withTooltip, useAbbreviations, suportedCodes, extraField){
+             var comboList = [];
+             angular.forEach(data, function(item) {
+                 if (item.code === 'JOINED_FISHING_OPERATION'){
+                     item.code = 'JOINT_FISHING_OPERATION';
+                 }
+                 var rec = {
+                     code: item.code,
+                     text: item.description
+                 };
+     
+                 if (extraField) {
+                     rec[extraField] = item[extraField];
+                 }
+     
+     
+                 if (withTooltip){
+                     if (useAbbreviations){
+                         rec.text = locale.getString('abbreviations.activity_' + item.code);
+                     } else {
+                         rec.text = item.code;
+                     }
+     
+                     rec.desc = item.description;
+                 }
+     
+                 if (angular.isDefined(suportedCodes)){
+                     if (_.indexOf(suportedCodes, item.code) !== -1 || (item.code === 'JOINT_FISHING_OPERATION' && _.indexOf(suportedCodes, 'JOINED_FISHING_OPERATION') !== -1)){
+                         comboList.push(rec);
+                     }
+                 } else {
+                     comboList.push(rec);
+                 }
+             });
+     
+             return comboList;
         };
 
         var toLengthUnitView = function(spans) {
