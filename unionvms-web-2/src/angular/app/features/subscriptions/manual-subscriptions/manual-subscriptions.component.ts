@@ -98,7 +98,7 @@ export class ManualSubscriptionsComponent implements OnInit, OnDestroy {
     }));
 
     this.vesselIdsList =  ['CFR', 'IRCS', 'ICCAT', 'EXT_MARK', 'UVI','GFCM'];
-    this.selectedItems = ['CFR', 'IRCS', 'ICCAT', 'EXT_MARK', 'UVI','GFCM'];
+    this.selectedItems = ['CFR'];
     this.dropdownSettings = {
       singleSelection: false,
       selectAllText: 'Select All',
