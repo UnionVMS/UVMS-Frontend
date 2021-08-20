@@ -77,7 +77,7 @@ export class SubscriptionFormComponent implements OnInit, OnDestroy {
 
   // Please do not change order of elements
   vesselIdentifiers = ['CFR', 'IRCS', 'ICCAT', 'EXT_MARK', 'UVI', 'GFCM'];
-  selectedItems: Array<any> = ['CFR'];
+  selectedItems: Array<any> = [];
   dropdownSettings: IDropdownSettings = {};
 
   constructor(private fb: FormBuilder, private store: Store<fromRoot.State>,
