@@ -239,7 +239,7 @@
                     <configuration>
                         <workingDirectory>${basedir}</workingDirectory>
                         <outputdir>${basedir}/dist</outputdir>
-                        <nodeVersion>v5.7.1</nodeVersion>
+                        <nodeVersion>6.11.5</nodeVersion>
                         <npmVersion>3.6.0</npmVersion>
                         <nodeDownloadRoot>https://nodejs.org/dist/</nodeDownloadRoot>
                         <npmDownloadRoot>https://registry.npmjs.org/npm/-/</npmDownloadRoot>
