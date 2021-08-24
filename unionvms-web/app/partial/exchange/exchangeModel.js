@@ -28,6 +28,7 @@ angular.module('unionvmsWeb')
         this.typeRefType = undefined;
         this.relatedLogData = undefined;
         this.on = undefined;
+        this.responseStatus = undefined;
 	}
 
 	Exchange.fromJson = function(data){
@@ -47,6 +48,7 @@ angular.module('unionvmsWeb')
 			exchange.type = data.type;
 			exchange.typeRefType = data.typeRefType;
 			exchange.on = data.on;
+			exchange.responseStatus = data.responseStatus;
 
             if (angular.isDefined(data.relatedLogData) && data.relatedLogData !== null && data.relatedLogData.length > 0){
                 exchange.relatedLogData = orderRelatedLogs(data.relatedLogData);
@@ -73,6 +75,7 @@ angular.module('unionvmsWeb')
             exchange.type = data.type;
             exchange.typeRefType = data.typeRefType;
             exchange.on = data.on;
+            exchange.responseStatus = data.responseStatus;
 
             if (angular.isDefined(data.relatedLogData) && data.relatedLogData !== null && data.relatedLogData.length > 0){
                 exchange.relatedLogData = orderRelatedLogs(data.relatedLogData);
