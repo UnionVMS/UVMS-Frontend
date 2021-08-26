@@ -15,8 +15,8 @@ accountModule.controller('accountController', ['$scope', function ($scope) {
 
 }]);
 
-accountModule.controller('newUserController', ['$scope', '$modal', 'accountService', '$log','policyValues',
-    function ($scope, $modal, accountService, $log, policyValues) {
+accountModule.controller('newUserController', ['$scope', '$modal', 'accountService', '$log',
+    function ($scope, $modal, accountService, $log) {
 
         $scope.addNewUser = function (newUser) {
             var modalInstance = $modal.open({
@@ -33,9 +33,7 @@ accountModule.controller('newUserController', ['$scope', '$modal', 'accountServi
                     newUser: function(){
                         return angular.copy(newUser);
                     },
-                    ldapEnabledPolicy: function(){
-                        return policyValues.getPolicyValue();
-                    }
+                   
                 }
             });
             // It is a promise that resolves when modal is closed and rejected when modal is dismissed
@@ -50,10 +48,10 @@ accountModule.controller('newUserController', ['$scope', '$modal', 'accountServi
 
     }]);
 
-accountModule.controller('userModalInstanceCtrl', ['$scope', '$modalInstance', '$log', 'organisationsService', 'refData', 'accountService', '$timeout','ldapEnabledPolicy',
-    function ($scope, $modalInstance, $log, organisationsService, refData, accountService, $timeout, ldapEnabledPolicy) {
+accountModule.controller('userModalInstanceCtrl', ['$scope', '$modalInstance', '$log', 'organisationsService', 'refData', 'accountService', '$timeout',
+    function ($scope, $modalInstance, $log, organisationsService, refData, accountService, $timeout) {
         var confirmCreate = false;
-        $scope.ldapEnabled = ldapEnabledPolicy[0].value;
+        $scope.ldapEnabled = true;
         $scope.actionMessage = "";
         $scope.selectedStatus = "";
         $scope.organisation = {};
@@ -95,7 +93,7 @@ accountModule.controller('userModalInstanceCtrl', ['$scope', '$modalInstance', '
         	accountService.getLdapUser(user.userName).then(
 	            function (response) {
 		            $log.log(response);
-		            $scope.ldapUser = response.ldapUser;
+		            $scope.ldapUser = true;
 		            // Fill Data in the form...
 		            //$scope.user = {};
                     user.userName = response.ldapUser.userName;

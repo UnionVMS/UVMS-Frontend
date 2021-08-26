@@ -317,11 +317,6 @@ usersModule.controller('userDetailsCtlr', ['$log', '$scope', '$modal', '$statePa
             name: 'ldap.enabled',
             subject: 'Authentication'
         };
-        policiesService.getPoliciesList(criteria).then(
-            function (response) {
-                $scope.ldapEnabled = _.isEqual(response.policies[0].value, 'true');
-            }
-        );
 
 
         $scope.checkAccess = function (feature) {
@@ -475,9 +470,6 @@ usersModule.controller('manageUserCtlr', ['$log', '$scope', '$modal', '$statePar
                             copyUser.activeFrom =  moment(copyUser.activeFrom).format('YYYY-MM-DD');
                         }
                         return copyUser;
-                    },
-                    ldapEnabledPolicy: function () {
-                        return policyValues.getPolicyValue();
                     }
                 }
             });
@@ -730,8 +722,8 @@ usersModule.controller('setUserPasswordCtlr', ['$log', '$scope', '$modal', '$sta
 
 
 usersModule.controller('editUserModalInstanceCtrl', ['$log', '$timeout', '$location', '$scope', '$modalInstance', '$stateParams', 'refData',
-    'userDetailsService', 'organisationsService', 'accountService', 'user', 'ldapEnabledPolicy',
-    function ($log, $timeout, $location, $scope, $modalInstance, $stateParams, refData, userDetailsService, organisationsService, accountService, user, ldapEnabledPolicy) {
+    'userDetailsService', 'organisationsService', 'accountService', 'user', 
+    function ($log, $timeout, $location, $scope, $modalInstance, $stateParams, refData, userDetailsService, organisationsService, accountService, user) {
         $scope.formDisabled = true;
         $scope.editForm = true;
         $scope.showSubmit = false;
@@ -818,7 +810,7 @@ usersModule.controller('editUserModalInstanceCtrl', ['$log', '$timeout', '$locat
         };
 
         $scope.changeEditForm = function () {
-            $scope.ldapEnabled = _.isEqual(ldapEnabledPolicy[0].value, 'true');
+            $scope.ldapEnabled = true;
             $scope.formDisabled = !$scope.formDisabled;
             $scope.showSubmit = !$scope.showSubmit;
             $scope.showEdit = !$scope.showEdit;
