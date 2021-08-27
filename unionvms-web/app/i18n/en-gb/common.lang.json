@@ -113,6 +113,8 @@
     "status_probably_transmitted": "Prob. Transmitted",
     "status_unknown": "Unknown",
     "status_unprocessed": "Unprocessed",
+    "status_allowed": "Allowed",
+    "status_blocked": "Blocked",
     "tag_select_input_max_limit_reached" : "You can only add {1} item(s).",
     "time_hour_short" : "h",
     "time_minute_short" : "min",

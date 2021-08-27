@@ -15,7 +15,8 @@ angular.module('unionvmsWeb').directive('messageStatus', function(locale, $modal
 		replace: true,
 		scope: {
 	        isClickable: '=',
-	        ngModel: '='
+	        ngModel: '=',
+	        isResponseStatus: '='
 		},
 		templateUrl: 'directive/exchange/messageStatus/messageStatus.html',
 		link: function(scope, element, attrs, fn) {
@@ -35,6 +36,9 @@ angular.module('unionvmsWeb').directive('messageStatus', function(locale, $modal
 		    };
 
 		    scope.getLabelText = function(status){
+		        if( !angular.isDefined(status) || status === null){
+		            return "N/A";
+                }
 		        var label = locale.getString('common.status_' + status.toLowerCase());
 		        if (label === "%%KEY_NOT_FOUND%%"){
 		            label = status;
@@ -48,11 +52,15 @@ angular.module('unionvmsWeb').directive('messageStatus', function(locale, $modal
 		            case 'SUCCESSFUL' :
 					case 'OK':
 					case 'SENT':
+					case 'ALLOWED':
 		                cssClass = "label-success";
 		                break;
 		            case 'ERROR' :
 		            case 'FAILED' :
 		                cssClass = "label-danger";
+		                break;
+		            case 'BLOCKED':
+		                cssClass = "label-blocked";
 		                break;
 		            default:
 		                cssClass = "label-warning";
@@ -65,6 +73,34 @@ angular.module('unionvmsWeb').directive('messageStatus', function(locale, $modal
 
 		        return cssClass;
 		    };
+
+            scope.getResponseLabelClass = function(responseStatus){
+                var cssClass;
+                switch(responseStatus){
+                    case 'SUCCESSFUL' :
+                    case 'OK':
+                    case 'SENT':
+                    case 'ALLOWED':
+                        cssClass = "label-success";
+                        break;
+                    case 'ERROR' :
+                    case 'FAILED' :
+                        cssClass = "label-danger";
+                        break;
+                    case 'BLOCKED':
+                        cssClass = "label-blocked";
+                        break;
+                    default:
+                        cssClass = "label-warning";
+                        break;
+                }
+
+                if (angular.isDefined(scope.ngModel) && scope.isClickable === true){
+                    cssClass += ' clickable-status';
+                }
+
+                return cssClass;
+            };
 		}
 	};
 });
