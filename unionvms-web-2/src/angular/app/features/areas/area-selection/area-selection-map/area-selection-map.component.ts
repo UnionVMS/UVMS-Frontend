@@ -418,13 +418,15 @@ export class AreaSelectionMapComponent implements OnInit, OnChanges, OnDestroy {
         this.selectMapArea.emit({
           gid: result.data[0].gid,
           name: result.data[0].code,
-          areaType: typeof(this.selectedAreaType) === 'string' ? this.selectedAreaType : this.selectedAreaType.typeName
+          areaType: typeof(this.selectedAreaType) === 'string' ? this.selectedAreaType : this.selectedAreaType.typeName,
+          value: result.data[0].code
         });
       } else {
         // multiple results
         const temp = [...result.data];
         temp.forEach(item => {
           item.areaType = typeof(this.selectedAreaType) === 'string' ? this.selectedAreaType : this.selectedAreaType.typeName;
+          item.value = item.value;
         })
         this.selectMapArea.emit(temp);
         this.showMap = false;
