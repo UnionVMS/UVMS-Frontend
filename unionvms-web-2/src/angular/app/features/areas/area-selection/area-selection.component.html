@@ -79,7 +79,7 @@
               </div>
               <div class="card-body">
                 <div class="alert alert-secondary area-selection-item" *ngFor="let item of areas.value; let i = index" role="alert">
-                  <div> {{item.name}}({{item.areaType}})</div>
+                  <div> {{item.value}}({{item.areaType}})</div>
                   <span class="pull-right" [ngClass]="{'disabled-fa-icon' : !canEdit}" (click)="removeArea(i)">
                     <fa-icon [icon]="faTimes" [ngClass]="{'disabled-fa-icon' : !canEdit}"></fa-icon>
                   </span>
