@@ -12,6 +12,16 @@ copy of the GNU General Public License along with the IFDM Suite. If not, see <h
 describe('ActivityfiltersfieldsetCtrl', function () {
 
 	beforeEach(module('unionvmsWeb'));
+	
+    beforeEach(module(function($provide) {
+        $provide.service('componentUtilsService', function() {
+            return {
+                convertCodelistToCombolist: function() {
+                    return {};
+                }
+            }
+        })
+    }));
 
 	var scope, ctrl, mdrCacheServiceSpy, $httpBackend;
 

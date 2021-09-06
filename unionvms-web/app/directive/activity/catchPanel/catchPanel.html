@@ -18,15 +18,15 @@
                                     </legend>
                                     <div class="pie-container" ng-if="item.onBoard | hasData">
                                         <nvd3 options="options" data="item.onBoard"></nvd3>
-                                        <div class="text-center onboard-total">{{'activity.catch_panel_weight' | i18n}}: {{item.grandOnboardTotal}} {{unit}}</div>
+                                        <div class="text-center onboard-total">{{'activity.catch_panel_weight' | i18n}}: {{formatWeight(item.grandOnboardTotal)}} {{unit}}</div>
                                     </div>
                                     <div class="pie-container" ng-if="item.transhipment | hasData">
                                         <nvd3 options="options" data="item.transhipment"></nvd3>
-                                        <div class="text-center transhipment-total">{{'activity.catch_panel_weight' | i18n}}: {{item.grandTranshipmentTotal}} {{unit}}</div>
+                                        <div class="text-center transhipment-total">{{'activity.catch_panel_weight' | i18n}}: {{formatWeight(item.grandTranshipmentTotal)}} {{unit}}</div>
                                     </div>
                                     <div class="pie-container" ng-if="item.landing | hasData">
                                         <nvd3 options="options" data="item.landing"></nvd3>
-                                        <div class="text-center landing-total">{{'activity.catch_panel_weight' | i18n}}: {{item.grandLandingTotal}} {{unit}}</div>
+                                        <div class="text-center landing-total">{{'activity.catch_panel_weight' | i18n}}: {{formatWeight(item.grandLandingTotal)}} {{unit}}</div>
                                     </div>
                             </fieldset>
                         </div>

@@ -19,7 +19,7 @@ copy of the GNU General Public License along with the IFDM Suite. If not, see <h
  * @description
  *  A reusable tile that will display a table
  */
-angular.module('unionvmsWeb').directive('catchPanelTable', function() {
+angular.module('unionvmsWeb').directive('catchPanelTable', function(activityService) {
 
     return {
         restrict: 'E',
@@ -30,6 +30,12 @@ angular.module('unionvmsWeb').directive('catchPanelTable', function() {
             headers: '=?',
             title:'@'
         },
-        templateUrl: 'directive/activity/catchPanelTable/catchPanelTable.html'
+        templateUrl: 'directive/activity/catchPanelTable/catchPanelTable.html',
+        link: function(scope, element, attrs, fn) {
+        
+            scope.formatWeight = function(weight){
+                return activityService.formatWeight(weight);
+            };
+        }
     };
 });

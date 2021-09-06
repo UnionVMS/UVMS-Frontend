@@ -46,8 +46,16 @@ angular.module('unionvmsWeb').controller('AuditconfigurationCtrl',function($scop
 	var init = function() {
 		Settings.get(function(response) {
 			$scope.settings = response.data;
+			$scope.settingsEditable = [];
+            uvmsModules.forEach(function(module){
+                if (angular.isDefined($scope.settings[module]) && $scope.settings[module].hasManagePermission !== null 
+                            && angular.isDefined($scope.settings[module].hasManagePermission)) {
+                     $scope.settingsEditable[module] = $scope.settings[module].hasManagePermission;
+                } 
+            })
 			var modules = uvmsModules.filter(function(module) {
-				return $scope.settings[module] !== undefined && getNonGlobalSettings($scope.settings[module]).length > 0;
+				return $scope.settings[module] !== undefined && $scope.settings[module].settings !== undefined
+				    && getNonGlobalSettings($scope.settings[module].settings).length > 0;
 			});
 			$scope.tabs = ["systemMonitor", "globalSettings", "reporting", "activity"].concat(modules);
 

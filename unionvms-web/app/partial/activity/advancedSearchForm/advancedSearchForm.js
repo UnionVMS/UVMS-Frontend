@@ -28,7 +28,7 @@ copy of the GNU General Public License along with the IFDM Suite. If not, see <h
  * @description
  *  The controller for the advanced search form of the activity tab table
  */
-angular.module('unionvmsWeb').controller('AdvancedsearchformCtrl',function($scope, alertService, activityService, activityRestService, unitConversionService, $stateParams, mdrCacheService, vesselRestService, userService, locale, visibilityService, $interval){
+angular.module('unionvmsWeb').controller('AdvancedsearchformCtrl',function($scope, alertService, activityService, activityRestService, unitConversionService, $stateParams, mdrCacheService, vesselRestService, userService, locale, visibilityService, $interval, componentUtilsService){
     $scope.actServ = activityService;
     $scope.visServ = visibilityService;
     $scope.isFormVisible = true;
@@ -95,7 +95,7 @@ angular.module('unionvmsWeb').controller('AdvancedsearchformCtrl',function($scop
     $scope.getPurposeCodes = function(){
         $scope.codeLists.purposeCodes = [];
         mdrCacheService.getCodeList('FLUX_GP_PURPOSE').then(function(response){
-            var list = convertCodelistToCombolist(response, false, false);
+            var list = componentUtilsService.convertCodelistToCombolist(response, false, false);
             if (!userService.isAllowed('SHOW_DELETED_FA_REPORTS', 'Activity', true)){
                 list = _.reject(list, function(item){
                     return item.code === '3';
@@ -139,7 +139,7 @@ angular.module('unionvmsWeb').controller('AdvancedsearchformCtrl',function($scop
     $scope.getReportTypes = function(){
         $scope.codeLists.reportTypes = [];
         mdrCacheService.getCodeList('FLUX_FA_REPORT_TYPE').then(function(response){
-            $scope.codeLists.reportTypes = convertCodelistToCombolist(response, false, false);
+            $scope.codeLists.reportTypes = componentUtilsService.convertCodelistToCombolist(response, false, false);
         }, function(error){
             $scope.actServ.setAlert(true, 'activity.activity_error_getting_code_lists');
             $scope.visibleCombos.reportType = false;
@@ -158,7 +158,7 @@ angular.module('unionvmsWeb').controller('AdvancedsearchformCtrl',function($scop
         $scope.codeLists.gearTypes = [];
         mdrCacheService.getCodeList('GEAR_TYPE').then(function(response){
             var originalCodeList = angular.copy(response);
-            $scope.codeLists.gearTypes = convertCodelistToCombolist(originalCodeList, true, false, undefined, 'category');
+            $scope.codeLists.gearTypes = componentUtilsService.convertCodelistToCombolist(originalCodeList, true, false, undefined, 'category');
             // sort alphabetically by category and text
             $scope.codeLists.gearTypes.sort(function(a, b) {
                 return a.category.localeCompare(b.category) || a.text.localeCompare(b.text);
@@ -181,7 +181,7 @@ angular.module('unionvmsWeb').controller('AdvancedsearchformCtrl',function($scop
         $scope.codeLists.activityTypes = [];
         mdrCacheService.getCodeList('FLUX_FA_TYPE').then(function(response){
             var suportedCodes = ['DEPARTURE', 'ARRIVAL', 'AREA_ENTRY', 'AREA_EXIT', 'FISHING_OPERATION', 'LANDING', 'DISCARD', 'TRANSHIPMENT', 'RELOCATION', 'JOINED_FISHING_OPERATION'];
-            $scope.codeLists.activityTypes = convertCodelistToCombolist(response, true, true, suportedCodes);
+            $scope.codeLists.activityTypes = componentUtilsService.convertCodelistToCombolist(response, true, true, suportedCodes);
         }, function(error){
             $scope.actServ.setAlert(true, 'activity.activity_error_getting_code_lists');
             $scope.visibleCombos.activityType = false;
@@ -357,55 +357,6 @@ angular.module('unionvmsWeb').controller('AdvancedsearchformCtrl',function($scop
             var fnName = 'get' + list.substring(0,1).toUpperCase() + list.substring(1);
             $scope[fnName]();
         });
-    }
-
-    /**
-     * Convert code lists array into combobox list array
-     *
-     * @memberof AdvancedsearchformCtrl
-     * @private
-     * @param {Array} data - The input data array
-     * @param {Boolean} withTooltip - True if the item text and tooltip description should be different
-     * @parm {Boolean} useAbbreviations - Whether the item text should be fetched from the abbreviations lang file or not
-     * @param {Array} [suportedCodes] - An array containing the supported codes. This param is optional
-     * @returns {Array} An array suitable for combobox use
-     */
-    function convertCodelistToCombolist (data, withTooltip, useAbbreviations, suportedCodes, extraField){
-        var comboList = [];
-        angular.forEach(data, function(item) {
-            if (item.code === 'JOINED_FISHING_OPERATION'){
-                item.code = 'JOINT_FISHING_OPERATION';
-            }
-            var rec = {
-                code: item.code,
-                text: item.description
-            };
-
-            if (extraField) {
-                rec[extraField] = item[extraField];
-            }
-
-
-            if (withTooltip){
-                if (useAbbreviations){
-                    rec.text = locale.getString('abbreviations.activity_' + item.code);
-                } else {
-                    rec.text = item.code;
-                }
-
-                rec.desc = item.description;
-            }
-
-            if (angular.isDefined(suportedCodes)){
-                if (_.indexOf(suportedCodes, item.code) !== -1 || (item.code === 'JOINT_FISHING_OPERATION' && _.indexOf(suportedCodes, 'JOINED_FISHING_OPERATION') !== -1)){
-                    comboList.push(rec);
-                }
-            } else {
-                comboList.push(rec);
-            }
-        });
-
-        return comboList;
     }
 
     /**

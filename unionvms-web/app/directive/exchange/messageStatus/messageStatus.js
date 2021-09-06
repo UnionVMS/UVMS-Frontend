@@ -15,7 +15,8 @@ angular.module('unionvmsWeb').directive('messageStatus', function(locale, $modal
 		replace: true,
 		scope: {
 	        isClickable: '=',
-	        ngModel: '='
+	        ngModel: '=',
+	        isResponseStatus: '='
 		},
 		templateUrl: 'directive/exchange/messageStatus/messageStatus.html',
 		link: function(scope, element, attrs, fn) {
@@ -34,25 +35,51 @@ angular.module('unionvmsWeb').directive('messageStatus', function(locale, $modal
 		        }
 		    };
 
-		    scope.getLabelText = function(status){
-		        var label = locale.getString('common.status_' + status.toLowerCase());
+		    scope.getLabelText = function(){
+		        if (!angular.isDefined(scope.ngModel.status) || scope.ngModel.status === null){
+		            return "N/A";
+                }
+                var label = locale.getString('common.status_' + scope.ngModel.status.toLowerCase());
+                if (isResponseStatusDefined()) {
+                    if (scope.ngModel.responseStatus !== null && angular.isDefined(scope.ngModel.responseStatus)) {
+                        label = locale.getString('common.status_' + scope.ngModel.responseStatus.toLowerCase());
+                    } else {
+                        label='';
+                    }
+                }
+
 		        if (label === "%%KEY_NOT_FOUND%%"){
-		            label = status;
-		        }
+		           label = scope.ngModel.status;
+		           if (isResponseStatusDefined() && (scope.ngModel.responseStatus !== null && angular.isDefined(scope.ngModel.responseStatus))) {
+		               label = scope.ngModel.responseStatus;
+		            }
+		        } 
                 return label;
 		    };
+		    
+		    function isResponseStatusDefined() {
+		        return scope.isResponseStatus !== null && angular.isDefined(scope.isResponseStatus) && scope.isResponseStatus===true;
+		    }
 
-		    scope.getLabelClass = function(status){
+		    scope.getLabelClass = function(){
+		        var statusToCheck = scope.ngModel.status;
+		         if (isResponseStatusDefined() && (scope.ngModel.responseStatus !== null && angular.isDefined(scope.ngModel.responseStatus))) {
+                       statusToCheck = scope.ngModel.responseStatus;                   
+                 }
 		        var cssClass;
-		        switch(status){
+		        switch(statusToCheck){
 		            case 'SUCCESSFUL' :
 					case 'OK':
 					case 'SENT':
+					case 'ALLOWED':
 		                cssClass = "label-success";
 		                break;
 		            case 'ERROR' :
 		            case 'FAILED' :
 		                cssClass = "label-danger";
+		                break;
+		            case 'BLOCKED':
+		                cssClass = "label-blocked";
 		                break;
 		            default:
 		                cssClass = "label-warning";

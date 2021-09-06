@@ -8,7 +8,7 @@
             <tr class="species-row" ng-repeat="(column, value) in data track by $index">
                 <td ng-repeat="key in headers track by $index">
                     <div class="square" ng-if="key === 'Species' && value[key] !== 'TOTAL'" style="background-color: #{{speciesColors[value[key]]}};"></div>
-                    {{value[key] || '0'}}
+                    {{formatWeight(value[key]) || '0'}}
                 </td>
             </tr>
         </table>

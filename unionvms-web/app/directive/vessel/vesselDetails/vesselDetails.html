@@ -43,7 +43,7 @@
             </div>
             <div class="col-md-3 form-group smallerpadding" ng-class="{'has-error': (submitAttempted || vesselForm.gearType.$dirty) && vesselForm.gearType.$invalid}">
                 <label>{{ 'vessel.vessel_details_gear_type' | i18n }}</label>
-                <dropdown name="gearType" input-field-id="asset-input-gearType" ng-model="vessel.gearType" initialtext="{{ 'vessel.vessel_details_gear_type' | i18n }}" items="vesselGearTypes" ng-disabled="disableForm"></dropdown>
+                <grouped-combobox  name="gearType" ng-model="vessel.gearType" items="vesselGearTypes" initialtext="{{ 'vessel.vessel_details_gear_type' | i18n }}"  input-field-id="asset-input-gearType" ng-disabled="disableForm"></grouped-combobox>
             </div>
 
             <div class="col-md-2 form-group smallerpadding" ng-class="{'has-error': (submitAttempted || vesselForm.mmsi.$dirty) && vesselForm.mmsi.$invalid}">
