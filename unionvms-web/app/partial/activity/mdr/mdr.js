@@ -350,8 +350,7 @@ angular.module('unionvmsWeb').controller('MdrCtrl',function($scope, mdrRestServi
      * @param {Array} list - mdr code list
      */
     var loadValidityDates = function(list) {
-        var validityDates = _.pluck(list, 'validity');
-        validityDates = _.without(validityDates, null);
+        var validityDates = _.compact(_.pluck(list, 'validity'));
         var hasStartValidity;
         var hasEndValidity;
 
