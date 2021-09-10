@@ -82,7 +82,9 @@ angular.module('auth.router', ['ui.bootstrap', 'auth.controllers', 'ui.router', 
                     } else {
                         throw "loginStateDefinition should be a state name or a complete state configuration object";
                     }
-                } else {
+
+
+                            } else {
                     //define a default state to use
                     $stateProvider
                         .state('login', {
@@ -503,6 +505,8 @@ angular.module('auth.router', ['ui.bootstrap', 'auth.controllers', 'ui.router', 
 
             }])
     .config(['$urlRouterProvider', '$stateProvider', 'ACCESS', function ($urlRouterProvider, $stateProvider, ACCESS) {
+
+
         // Prevent $urlRouter from automatically intercepting URL changes;
         // this allows you to configure custom behavior in between
         // location changes and route synchronization:
@@ -524,7 +528,7 @@ angular.module('auth.router', ['ui.bootstrap', 'auth.controllers', 'ui.router', 
                                 userService.login($stateParams.jwt);
                         }
                         }]
-                    }
-                }
-            });
+            }
+            }
+    });
     }]);

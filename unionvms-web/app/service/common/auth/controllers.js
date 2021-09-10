@@ -97,17 +97,27 @@ angular.module('auth.controllers', ['ui.bootstrap', 'ui.router'])
 							userService.login(response.token);
                             //thought about going to the requested state but this is probably not the right place
                             $modalInstance.close();
-                        } else {
+                            } else {
 							$scope.messageDivClass = "alert alert-danger";
 							$scope.actionMessage = "There was a problem logging you in. No token received";
                         }
+
+                        if (response.status === 701) {
+							$log.log("_storeToken - status: ", status);
+							//userService.hasToChangePwd = true;
+							$rootScope.$broadcast('NeedChangePassword');
+                        } else if (response.status === 773) {
+							$log.log("_storeToken - status: ", status);
+							$rootScope.$broadcast('WarningChangePassword');
+                                    }
+
 					},
 					function (error) {
                         $scope.messageDivClass = "alert alert-danger";
                         $scope.actionMessage = error;
-                    }
-                );
-            };
+                                }
+                                );
+                    };
 
             $scope.resetPassword = function () {
                     return $modal.open({
@@ -401,12 +411,12 @@ angular.module('auth.controllers', ['ui.bootstrap', 'ui.router'])
 
     .factory('authenticateUser', ['$http', '$q', '$resource', '$log', '$localStorage',
         function ($http, $q, $resource, $log, $localStorage) {
-            return {
+                return {
                 authenticate: function (loginInfo) {
 
                         var message = "";
                         var deferred = $q.defer();
-                        var resource = $resource('authentication/authenticate');
+                        var resource = $resource('usm-administration/rest/authenticate');
                         resource.save({},loginInfo).$promise.then(
                             function(data){
                                 //$log.log(data);

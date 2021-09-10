@@ -16,7 +16,6 @@
     <changelist>-MARE</changelist>
     <revision>-SNAPSHOT</revision>
     <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
-	<focus-pom.java.version>1.8</focus-pom.java.version>
   </properties>
 
   <dependencyManagement>

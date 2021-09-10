@@ -1,63 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
 <web-app xmlns="http://java.sun.com/xml/ns/javaee"
-	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-	xsi:schemaLocation="http://java.sun.com/xml/ns/javaee http://java.sun.com/xml/ns/javaee/web-app_3_0.xsd"
-	version="3.0">
+	 xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	 xsi:schemaLocation="http://java.sun.com/xml/ns/javaee http://java.sun.com/xml/ns/javaee/web-app_3_0.xsd"
+	 version="3.0">
 
-    <listener>
-        <listener-class>eu.cec.digit.ecas.client.session.SingleSignOutHttpSessionListener</listener-class>
-    </listener>
-
-    <session-config>
-        <session-timeout>480</session-timeout>
-    </session-config>
-
-    <security-constraint>
-        <web-resource-collection>
-            <web-resource-name>logout</web-resource-name>
-            <description>Everyone can logout at anytime</description>
-            <url-pattern>/logout</url-pattern>
-        </web-resource-collection>
-        <user-data-constraint>
-            <transport-guarantee>NONE</transport-guarantee>
-        </user-data-constraint>
-    </security-constraint>
-
-    <security-constraint>
-        <web-resource-collection>
-            <web-resource-name>assets</web-resource-name>
-            <description>Everyone can get the static resources</description>
-            <url-pattern>/assets/*</url-pattern>
-        </web-resource-collection>
-        <user-data-constraint>
-            <transport-guarantee>NONE</transport-guarantee>
-        </user-data-constraint>
-    </security-constraint>
-
-    <security-constraint>
-        <web-resource-collection>
-            <web-resource-name>i18n</web-resource-name>
-            <description>Everyone can get the internationalisation resources</description>
-            <url-pattern>/i18n/*</url-pattern>
-        </web-resource-collection>
-        <user-data-constraint>
-            <transport-guarantee>NONE</transport-guarantee>
-        </user-data-constraint>
-    </security-constraint>
-
-    <security-constraint>
-        <web-resource-collection>
-            <web-resource-name>ecas-protected</web-resource-name>
-            <description>Requires users to be authenticated but does not require them to be authorized</description>
-            <url-pattern>/*</url-pattern>
-        </web-resource-collection>
-        <auth-constraint>
-            <description>allow users with any role</description>
-            <role-name>**</role-name>
-        </auth-constraint>
-        <user-data-constraint>
-            <transport-guarantee>NONE</transport-guarantee>
-        </user-data-constraint>
-    </security-constraint>
 </web-app>

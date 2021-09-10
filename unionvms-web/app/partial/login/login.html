@@ -22,5 +22,44 @@ copy of the GNU General Public License along with the IFDM Suite. If not, see <h
                     <h2 ng-bind-html="'login.subtitle' | i18n"></h2>
                 </div>
             </div>
+
+
+            <div class="formContainer">
+                <div class="row errorMessage">
+                    <div class="col-lg-6 col-md-8 col-sm-11">
+                        <span ng-bind="actionMessage"></span>
+                    </div>
+                </div>
+
+                <div class="row">
+                    <form novalidate name="loginForm">
+                    <div class="col-lg-2 col-md-3 col-sm-4">
+                            <div class="form-group" ng-class="{'has-error': (submitAttempted || loginForm.userName.$dirty) && loginForm.userName.$invalid}">
+                                <input class="form-control" id="userId" name="userName" placeholder="{{'login.username_placeholder' | i18n}}" ng-model="login.userName" required>
+                            </div>
+                        </div>
+
+                        <div class="col-lg-2 col-md-3 col-sm-4">
+                            <div class="form-group" ng-class="{'has-error': (submitAttempted || loginForm.password.$dirty) && loginForm.password.$invalid}">
+                                <input type="password" class="form-control" id="password" name="password" placeholder="{{'login.password_placeholder' | i18n}}" ng-model="login.password" required>
+                            </div>
+                        </div>
+
+                        <div class="col-lg-1 col-md-2 col-sm-3">
+                            <div class="form-group">
+                                <button class="btn btn-primary" type="submit" ng-click="performLogin(login)" ng-bind="'login.login_button_text' | i18n"></button>
+                            </div>
+                        </div>
+                    </form>
+
+                </div>
+
+                <div class="row">
+                    <div class="col-md-12">
+                        <a class="forgotPassword" ng-click="resetPassword()" ng-bind="'login.forgot_password_text' | i18n"></a>
+                    </div>
+                </div>
+            </div>
+
         </div>
 </div>
