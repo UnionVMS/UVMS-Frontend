@@ -156,6 +156,8 @@ angular.module('auth.user-service', ['auth.router'])
                 var roleName = '';
                 if(currentContext && currentContext.role && currentContext.role.roleName){
                     roleName = currentContext.role.roleName;
+                } else {
+                    roleName = $localStorage.roleName;
                 }
                 return roleName;
             };
@@ -164,6 +166,8 @@ angular.module('auth.user-service', ['auth.router'])
                 var scopeName = '';
                 if(currentContext && currentContext.scope && currentContext.scope.scopeName){
                     scopeName = currentContext.scope.scopeName;
+                } else {
+                    scopeName = $localStorage.scopeName;
                 }
                 return scopeName;
             };
