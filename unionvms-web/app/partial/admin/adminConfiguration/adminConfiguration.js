@@ -57,7 +57,7 @@ angular.module('unionvmsWeb').controller('AuditconfigurationCtrl',function($scop
 				return $scope.settings[module] !== undefined && $scope.settings[module].settings !== undefined
 				    && getNonGlobalSettings($scope.settings[module].settings).length > 0;
 			});
-			$scope.tabs = ["systemMonitor", "globalSettings"].concat(modules);
+			$scope.tabs = ["systemMonitor", "globalSettings", "activity"].concat(modules);
 
 			if(userService.isAllowed("CONFIGURE_MDR_SCHEDULER", "MDR Cache", true)){
 				$scope.tabs.push("mdr");
