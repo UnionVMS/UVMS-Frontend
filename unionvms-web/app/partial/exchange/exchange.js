@@ -610,7 +610,8 @@ angular.module('unionvmsWeb').controller('ExchangeCtrl',function($scope, $log, $
         forwardRule: 'RULE',
         recipient: 'RECIPIENT',
         dateFwd: 'DATE_FORWARDED',
-        status: 'STATUS'
+        status: 'STATUS',
+        responseStatus: 'RESPONSE_STATUS',
     };
 
     $scope.callServer = function(tableState, ctrl){
