@@ -93,7 +93,7 @@ angular.module('unionvmsWeb').controller('ActivityCtrl', function ($scope, local
         var predicateMapping = {
             activityType: 'ACTIVITY_TYPE',
             purposeCode: 'PURPOSE',
-            occurence: 'OCCURRENCE',
+            occurrence: 'OCCURRENCE',
             startDate: 'PERIOD_START',
             endDate: 'PERIOD_END',
             FAReportType: 'REPORT_TYPE',
