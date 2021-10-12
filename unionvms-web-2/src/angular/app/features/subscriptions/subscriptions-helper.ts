@@ -42,7 +42,7 @@ export const manualSubscriptionsInitialFormValues = {
   output: {
     messageType: 'FA_QUERY',
     consolidated: true,
-    vesselIds: ['CFR', 'IRCS', 'ICCAT', 'EXT_MARK', 'UVI'],
+    vesselIds: ['CFR'],
     queryStartDate: null,
     queryEndDate: null,
     history: null,
