@@ -36,32 +36,26 @@ export const NAVIGATION_TABS = [
   },
   {
     id: 7,
-    name: 'Sales',
-    href: `${environment.oldBaseURL}/#/sales`,
-    permissions: [300002] //viewSalesReports
-  },
-  {
-    id: 8,
     name: 'Exchange',
     href: `${environment.oldBaseURL}/#/exchange`,
     permissions: [249] //viewExchange
   },
   {
-    id: 9,
+    id: 8,
     name: 'Assets',
     href: `${environment.oldBaseURL}/#/assets`,
     permissions: [292] //viewVesselsAndMobileTerminals
   },
   {
-    id: 10,
+    id: 9,
     name: 'Alerts'
   },
   {
-    id: 11,
+    id: 10,
     name: 'User'
   },
   {
-    id: 12,
+    id: 11,
     name: 'Admin'
   }
 ];

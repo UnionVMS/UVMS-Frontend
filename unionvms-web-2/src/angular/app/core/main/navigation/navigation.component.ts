@@ -54,7 +54,7 @@ export class NavigationComponent implements OnInit {
       movementTab['permissions'] = [-1]; //tab is not shown
     }
 
-    let alarmsTab = NAVIGATION_TABS[9];
+    let alarmsTab = NAVIGATION_TABS[8];
     if(this.userPemissions.includes(208)) { //viewAlarmsHoldingTable
       alarmsTab['href'] = `${environment.oldBaseURL}/#/alerts/holdingtable`;
     } else if (this.userPemissions.includes(210)) { //viewAlarmsOpenTickets
@@ -65,7 +65,7 @@ export class NavigationComponent implements OnInit {
       alarmsTab['permissions'] = [-1]; //tab is not shown
     }
 
-    let usersTab = NAVIGATION_TABS[10];
+    let usersTab = NAVIGATION_TABS[9];
     if(this.userPemissions.includes(100001) || this.userPemissions.includes(100000)) { // manageUsers or viewUsers
       usersTab['href'] = `${environment.oldBaseURL}/#/usm/users`;
     } else if (this.userPemissions.includes(100004) || this.userPemissions.includes(100003)) { //manageOrganisations or viewOrganisations
@@ -89,7 +89,7 @@ export class NavigationComponent implements OnInit {
       usersTab['permissions'] = [-1]; //tab is not shown
     }
 
-    let adminTab = NAVIGATION_TABS[11];
+    let adminTab = NAVIGATION_TABS[10];
     if (this.userPemissions.includes(286)) { //viewAudit
       adminTab['href'] = `${environment.oldBaseURL}/#/admin/auditlog`;
     } else if (this.userPemissions.includes(214)) { //viewConfiguration
