@@ -198,7 +198,7 @@ angular.module('unionvmsWeb').controller('ExchangeCtrl',function($scope, $log, $
         }
     };
 
-    var faTypes = ['FA_QUERY', 'FA_REPORT','FA_RESPONSE'];
+    var faTypes = ['FA_QUERY', 'FA_REPORT','FA_RESPONSE','MOVEMENT_RESPONSE'];
 
     $scope.showDetailsButton = function(model){
         var visible = false;
