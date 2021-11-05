@@ -125,7 +125,7 @@ angular.module('unionvmsWeb').controller('VesselfieldsetCtrl',function($scope, l
         if ($scope.shared.searchVesselString !== ''){
             $scope.vesselSearchLoading = true;
             $scope.shared.vessels = [];
-            var searchableFields = ['FLAG_STATE', 'EXTERNAL_MARKING', 'NAME', 'IRCS', 'CFR'];
+            var searchableFields = ['FLAG_STATE', 'EXTERNAL_MARKING', 'NAME', 'IRCS', 'CFR','UVI','ICCAT','GEAR_TYPE'];
             var getVesselListRequest = new GetListRequest($scope.vesselPagination.page, $scope.vesselPagination.vesselsByPage, false, []);
             
             for (var i = 0; i < searchableFields.length; i++){
