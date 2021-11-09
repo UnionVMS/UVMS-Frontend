@@ -32,7 +32,7 @@ angular.module('unionvmsWeb')
 
     GetListRequest.prototype.DTOForVessel = function(){
         //Add * to all text searches for vessel
-        var wildcardSearchKeys = ['NAME', 'IRCS', 'CFR', 'EXTERNAL_MARKING', 'HOMEPORT', 'IMO', 'PRODUCER_NAME', 'PRODUCER_CODE', 'CONTACT_NAME', 'CONTACT_NUMBER', 'CONTACT_EMAIL', 'MMSI'];
+        var wildcardSearchKeys = ['NAME', 'IRCS', 'CFR', 'EXTERNAL_MARKING', 'HOMEPORT', 'IMO', 'PRODUCER_NAME', 'PRODUCER_CODE', 'CONTACT_NAME', 'CONTACT_NUMBER', 'CONTACT_EMAIL', 'MMSI','UVI','ICCAT','GEAR_TYPE'];
         var updatedCriterias = [],
             searchFieldKey, searchFieldValue;
 
@@ -164,6 +164,8 @@ angular.module('unionvmsWeb')
             countryCode: "FLAG_STATE",
             ircs: "IRCS",
             cfr: "CFR",
+            iccat: "ICCAT",
+            uvi: "UVI",
             gearType: "GEAR_TYPE",
             licenseType: "LICENSE_TYPE"
         };
