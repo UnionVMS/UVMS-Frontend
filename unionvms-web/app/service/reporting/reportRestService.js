@@ -237,6 +237,8 @@ angular.module('unionvmsWeb').factory('reportRestFactory', function($resource, $
                     console.error("Failed to put data for " + firstFeatureKey);
                     alert("Failed to send data to sever");
                 }, self)
+            } else {
+                reportRestFactory.sendDataForKMLExport(uuid, null);
             }
         },
         export: function(features){
